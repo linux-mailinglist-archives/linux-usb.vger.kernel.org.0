@@ -1,198 +1,191 @@
-Return-Path: <linux-usb+bounces-33626-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33627-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sDWtOp5fnWkDPAQAu9opvQ
-	(envelope-from <linux-usb+bounces-33626-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 09:21:50 +0100
+	id mLLeK5VinWlFPQQAu9opvQ
+	(envelope-from <linux-usb+bounces-33627-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 09:34:29 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 889B2183926
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 09:21:50 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31D08183D0C
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 09:34:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8595D3070951
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 08:21:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4683930D6390
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 08:32:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A37A5366DB1;
-	Tue, 24 Feb 2026 08:21:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF41E36683A;
+	Tue, 24 Feb 2026 08:32:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="OtokF0pM"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="ga1UQv7F";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="ga1UQv7F"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m21471.qiye.163.com (mail-m21471.qiye.163.com [117.135.214.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF21366806;
-	Tue, 24 Feb 2026 08:21:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.214.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC8436605D
+	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 08:32:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771921292; cv=none; b=c7wSE4hYou+7htxkKBpX3x3ocowippH+kD0AHV630QVegc3x/ERtAn8OA3Oel0DJtvfMIC0vYCKEJEMDvzzd9AKvH2xPCpXeFUhSCQlCD6CgXjPeyqlEYsHFpG9Z1r+MtvZBmXzHdQWfvm8J416A8wJavRiTV4od5pcnmpD4CIA=
+	t=1771921951; cv=none; b=tOejDKS2dOfEEc+vE2vgW9y+xznkDfg3lK/MsOchIjf42VPaiDyuqNjSZo8SHdEfK5bYh4f6V8a3a5p29p3Jr0hzuoLZFrwZy71gzMxTVcfjeiG/19k45syemGvL53voL3cfHFJbMOyEmQx1HPoqdOh/epPzR6M6zq79+pLo+zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771921292; c=relaxed/simple;
-	bh=jGNKoKMtgp1RUDE0JUj9nl9DZtqZbHM10+ockHI/Lug=;
-	h=Cc:Subject:To:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=P/KLlkIQh9Dl90OQ+njg4dzOQ/zbf6CwFmP9It6h0RhyWjK/3EXYe9AekiMM0lxaRmdjynzjbFU5jYbWCcidYa2PE4pu52hu0aHvhB6SjVYfsmaV+Xr6aKQ54mGMD/gmQNFz+kHJf6eoRokSfL5o6sVlnBBq/TV3sXJUrkplKUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=OtokF0pM; arc=none smtp.client-ip=117.135.214.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.14] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 34c7e7f42;
-	Tue, 24 Feb 2026 16:21:13 +0800 (GMT+08:00)
-Cc: shawn.lin@rock-chips.com, Bjorn Helgaas <bhelgaas@google.com>,
- "Vaibhaav Ram T . L" <vaibhaavram.tl@microchip.com>,
- Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
- Even Xu <even.xu@intel.com>, Xinpeng Sun <xinpeng.sun@intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Jiri Kosina <jikos@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Zhou Wang <wangzhou1@hisilicon.com>, Longfang Liu <liulongfang@huawei.com>,
- Vinod Koul <vkoul@kernel.org>, Lee Jones <lee@kernel.org>,
- Jijie Shao <shaojijie@huawei.com>, Jian Shen <shenjian15@huawei.com>,
- Sunil Goutham <sgoutham@marvell.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Heiner Kallweit <hkallweit1@gmail.com>,
- "David S . Miller" <davem@davemloft.net>,
- Jeff Hugo <jeff.hugo@oss.qualcomm.com>, Oded Gabbay <ogabbay@kernel.org>,
- Maciej Falkowski <maciej.falkowski@linux.intel.com>,
- Karol Wachowski <karol.wachowski@linux.intel.com>,
- Min Ma <mamin506@gmail.com>, Lizhi Hou <lizhi.hou@amd.com>,
- Andreas Noever <andreas.noever@gmail.com>,
- Mika Westerberg <westeri@kernel.org>, Tomasz Jeznach
- <tjeznach@rivosinc.com>, Will Deacon <will@kernel.org>,
- Xinliang Liu <xinliang.liu@linaro.org>, Tian Tao <tiantao6@hisilicon.com>,
- Davidlohr Bueso <dave@stgolabs.net>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Srujana Challa <schalla@marvell.com>, Bharat Bhushan
- <bbhushan2@marvell.com>, Antoine Tenart <atenart@kernel.org>,
- Herbert Xu <herbert@gondor.apana.org.au>, Raag Jadav <raag.jadav@intel.com>,
- Hans de Goede <hansg@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Andy Shevchenko <andy@kernel.org>,
- Manivannan Sadhasivam <mani@kernel.org>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Andi Shyti <andi.shyti@kernel.org>, Robert Richter <rric@kernel.org>,
- Mark Brown <broonie@kernel.org>, Nirmal Patel
- <nirmal.patel@linux.intel.com>, Kurt Schwemmer
- <kurt.schwemmer@microsemi.com>, Logan Gunthorpe <logang@deltatee.com>,
- Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>,
- Sakari Ailus <sakari.ailus@linux.intel.com>,
- Bingbu Cao <bingbu.cao@intel.com>, Ulf Hansson <ulf.hansson@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, Benjamin Tissoires <bentiss@kernel.org>,
- linux-input@vger.kernel.org, linux-i3c@lists.infradead.org,
- dmaengine@vger.kernel.org, netdev@vger.kernel.org, nic_swsd@realtek.com,
- linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-usb@vger.kernel.org, iommu@lists.linux.dev,
- linux-riscv@lists.infradead.org, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, linux-cxl@vger.kernel.org,
- linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-serial@vger.kernel.org, mhi@lists.linux.dev,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org,
- Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>,
- linux-spi@vger.kernel.org, Jonathan Derrick <jonathan.derrick@linux.dev>,
- linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
- Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org,
- linux-mmc@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH 01/37] PCI/MSI: Add Devres managed IRQ vectors allocation
-To: phasta@kernel.org
-References: <1771860581-82092-1-git-send-email-shawn.lin@rock-chips.com>
- <1771860581-82092-2-git-send-email-shawn.lin@rock-chips.com>
- <20260223160402.3ad8f079@kernel.org>
- <ec226aa1-5cc8-855f-8f90-1d7f89efe766@rock-chips.com>
- <07fc896007d86b731cbfb3cf6bbdf4e5315d7a77.camel@mailbox.org>
-From: Shawn Lin <shawn.lin@rock-chips.com>
-Message-ID: <d601ec05-ef38-5e8e-c643-c05010717ebe@rock-chips.com>
-Date: Tue, 24 Feb 2026 16:21:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+	s=arc-20240116; t=1771921951; c=relaxed/simple;
+	bh=YgFmx+v98zs8g17Xh6aLFsCHK5Rb1tvpJaqlxcX9gBw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gbT1Ojpb4kCu2QnpRsFQDpTKPjQfgTFpMIdDUFZh7D8X1ZcId4bGFs8uAb0S3Zt4v5FBsubrR1L+r3xnh9UOo5jQAc2mr8tGa8VroOVhFX1cQRFm24eNsyqnRU5wOvZAtWpe8XbJNuXCCqOnmezQc4IMojPUdZBplFZt5lc9V0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=ga1UQv7F; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=ga1UQv7F; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 69A943F108;
+	Tue, 24 Feb 2026 08:32:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1771921948; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=YFv0qgYpEEHKoKFpwPmGqyU5qAbeZQaG6tOk9+qgdCQ=;
+	b=ga1UQv7FLfUEGq2eDkzjPinRjmmZ6cJGR5fYoh6HBV2AQDNpkd3SO0rPsJ2XnsG6ty1QVF
+	plKm3SfRDg8+6osZkMTnjBfM+jqe5qzQe1+SbNNtgELJQv2lKgS4eztNICXQfCuW4HtAuL
+	a4NS2B+diD4Bwpal/NXiLmpVLCvninw=
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=ga1UQv7F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1771921948; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=YFv0qgYpEEHKoKFpwPmGqyU5qAbeZQaG6tOk9+qgdCQ=;
+	b=ga1UQv7FLfUEGq2eDkzjPinRjmmZ6cJGR5fYoh6HBV2AQDNpkd3SO0rPsJ2XnsG6ty1QVF
+	plKm3SfRDg8+6osZkMTnjBfM+jqe5qzQe1+SbNNtgELJQv2lKgS4eztNICXQfCuW4HtAuL
+	a4NS2B+diD4Bwpal/NXiLmpVLCvninw=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3CD2D3EA68;
+	Tue, 24 Feb 2026 08:32:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id rZ+gDRxinWkVRgAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Tue, 24 Feb 2026 08:32:28 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: gregkh@linuxfoundation.org,
+	kees@kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] usb: uss720: unify error handling in probe
+Date: Tue, 24 Feb 2026 09:32:20 +0100
+Message-ID: <20260224083220.1244727-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <07fc896007d86b731cbfb3cf6bbdf4e5315d7a77.camel@mailbox.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9c8ebcf01809cckunma66e3c5da3898b
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGkwYT1ZIQ05NT00aQhpOTEpWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEtKTE
-	tVSktLVUtZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=OtokF0pM0Rdmb7CoOmlCq/zfLcm40+tPTFk2ZLwxQS10TLzJue4pNlrDVsSPzZGK7GjnZ03zAIHAn5VDRN2uAWAEjdInG9Pdls9n5NtKIAxCt/aoY8MRgy7icqkMUtp0jEjJ+naa5XLLsJTKYxzikINqVGIROqqbjer5tDm2ofg=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=NX1TqWCCjq6xu1hXTAQXpYiiKKus6llHeXoiHdmvBy4=;
-	h=date:mime-version:subject:message-id:from;
+X-Spam-Flag: NO
+X-Spam-Score: -3.01
+X-Spam-Level: 
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rock-chips.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[rock-chips.com:s=default];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-33626-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_CC(0.00)[rock-chips.com,google.com,microchip.com,intel.com,linux.intel.com,kernel.org,bootlin.com,hisilicon.com,huawei.com,marvell.com,lunn.ch,gmail.com,davemloft.net,oss.qualcomm.com,amd.com,rivosinc.com,linaro.org,stgolabs.net,gondor.apana.org.au,linuxfoundation.org,microsemi.com,deltatee.com,arndb.de,vger.kernel.org,lists.infradead.org,realtek.com,lists.freedesktop.org,lists.linux.dev,ffwll.ch,semihalf.com,zonque.org,linux.dev];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-33627-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[88];
+	RCVD_COUNT_FIVE(0.00)[6];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[shawn.lin@rock-chips.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[rock-chips.com:+];
-	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[suse.com:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[rock-chips.com:mid,rock-chips.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 889B2183926
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,suse.com:mid,suse.com:dkim,suse.com:email]
+X-Rspamd-Queue-Id: 31D08183D0C
 X-Rspamd-Action: no action
 
-在 2026/02/24 星期二 15:47, Philipp Stanner 写道:
-> On Tue, 2026-02-24 at 10:08 +0800, Shawn Lin wrote:
->> 在 2026/02/24 星期二 8:04, Jakub Kicinski 写道:
->>> On Mon, 23 Feb 2026 23:29:40 +0800 Shawn Lin wrote:
->>>> pcim_alloc_irq_vectors() and pcim_alloc_irq_vectors_affinity() are created for
->>>> pci device drivers which rely on the devres machinery to help cleanup the IRQ
->>>> vectors.
->>>
->>> If you can please add this API with just a few users, and then convert
->>> remaining users via the subsystem trees in the next cycle.
->>> There's no need to risk wasting maintainer time on conflicts with
->>> conversions like this.
->>
->> Thanks for the suggestion, Jakub. I have little experience with
->> cross-subsystem cleanups like this, so your suggestion is very helpful.
-> 
-> 
-> When I removed the hybrid nature of pci_request_region() et al., I
-> concluded that there were so few users that doing them all in one run
-> was sufficient.
-> 
-> For larger reworks, like removing pcim_iomap_table(), a slower step-by-
-> step strategy is necessary for the reasons that Jakub details.
-> 
-> It is then smart to omit an easy to port subsystem / driver for the
-> ultimate patch series where one then removes the hybrid behavior from
-> PCI itself, after porting the last driver.
-> 
-> In general,  as Jakub details, those step-by-step cleanups are a bit
-> safer, since you can proof valid behavior early on and in case of an
-> explosion they are very easy to revert.
-> 
+There is a lot of code duplication.
+Unify it.
 
-Thank you, Philipp. I wish I had attended your talk at FOSDEM 2025 on
-removing pcim_iomap_table earlier. This first version was perhaps a bit 
-too aggressive. For v2, I think the plan should start with addressing 
-the switchtec and vmd drivers, since both of those, along with the new 
-API additions, can be handled entirely within the PCI subsystem scope.
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/misc/uss720.c | 27 ++++++++++++++-------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
 
-> 
-> P.
-> 
+diff --git a/drivers/usb/misc/uss720.c b/drivers/usb/misc/uss720.c
+index ec8bd968c4de..616c92ce5e1a 100644
+--- a/drivers/usb/misc/uss720.c
++++ b/drivers/usb/misc/uss720.c
+@@ -677,35 +677,32 @@ static int uss720_probe(struct usb_interface *intf,
+ 	struct parport_uss720_private *priv;
+ 	struct parport *pp;
+ 	unsigned char reg;
+-	int ret;
++	int ret = -ENODEV;
+ 
+ 	dev_dbg(&intf->dev, "probe: vendor id 0x%x, device id 0x%x\n",
+ 		le16_to_cpu(usbdev->descriptor.idVendor),
+ 		le16_to_cpu(usbdev->descriptor.idProduct));
+ 
+ 	/* our known interfaces have 3 alternate settings */
+-	if (intf->num_altsetting != 3) {
+-		usb_put_dev(usbdev);
+-		return -ENODEV;
+-	}
++	if (intf->num_altsetting != 3)
++		goto bail_out_early;
++
+ 	ret = usb_set_interface(usbdev, intf->altsetting->desc.bInterfaceNumber, 2);
+ 	dev_dbg(&intf->dev, "set interface result %d\n", ret);
+ 
+ 	interface = intf->cur_altsetting;
+ 
+-	if (interface->desc.bNumEndpoints < 2) {
+-		usb_put_dev(usbdev);
+-		return -ENODEV;
+-	}
++	if (interface->desc.bNumEndpoints < 2)
++		goto bail_out_early;
+ 
+ 	/*
+ 	 * Allocate parport interface 
+ 	 */
++	ret = -ENOMEM;
+ 	priv = kzalloc_obj(struct parport_uss720_private);
+-	if (!priv) {
+-		usb_put_dev(usbdev);
+-		return -ENOMEM;
+-	}
++	if (!priv)
++		goto bail_out_early;
++
+ 	priv->pp = NULL;
+ 	priv->usbdev = usbdev;
+ 	kref_init(&priv->ref_count);
+@@ -752,6 +749,10 @@ static int uss720_probe(struct usb_interface *intf,
+ 	kill_all_async_requests_priv(priv);
+ 	kref_put(&priv->ref_count, destroy_priv);
+ 	return -ENODEV;
++
++bail_out_early:
++	usb_put_dev(usbdev);
++	return ret;
+ }
+ 
+ static void uss720_disconnect(struct usb_interface *intf)
+-- 
+2.53.0
+
 
