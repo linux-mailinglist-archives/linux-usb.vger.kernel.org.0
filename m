@@ -1,281 +1,149 @@
-Return-Path: <linux-usb+bounces-33667-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33668-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4CvjOHvanWk0SQQAu9opvQ
-	(envelope-from <linux-usb+bounces-33667-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 18:06:03 +0100
+	id iNHaBxbdnWmuSQQAu9opvQ
+	(envelope-from <linux-usb+bounces-33668-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 18:17:10 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ED7C18A480
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 18:06:03 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 931E218A69C
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 18:17:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C30FC303B94C
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 17:05:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8544A30F1AF6
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 17:13:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A8C93A9629;
-	Tue, 24 Feb 2026 17:05:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA8123A9D93;
+	Tue, 24 Feb 2026 17:13:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KnX3JoV1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aTWq6Tyh"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5292BDC0B;
-	Tue, 24 Feb 2026 17:05:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FCD63A962E;
+	Tue, 24 Feb 2026 17:13:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771952752; cv=none; b=p8T5yfX6oIx0FIH70wEib3ZagfA4NYIWE1nHmZbfiGzKd17eFDnH++gVqWwVeWynXCgbCbP+lEH8gnBsf4PdsefViAvt3QxLcBTLEeAdWto9l8GVuy7IslTMxfIao254SjFeSBiE59RPVQDBHrJj/dYjy35LsW2wMnLpSD0LyfI=
+	t=1771953224; cv=none; b=GfjyVTtDdO8tSH/aXIne0m29VsfRVFh6DGEnQb9r1JwVI+5S+QpWhO9wmKp9lbrEhdg9nK5VMNIEhp0HZzVKSK6t0Gx3yVjzzvt0dUQb8xE2NAo36TkB8G9QFNW2vBp/VlmlT3Y1DoexpbdomhFGChwH7RZYNPlIJd93TBb7KmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771952752; c=relaxed/simple;
-	bh=GER6Gyyz5eCF6X89SXQDk16nKN8AHdPtJ7A5xe6CvkA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UMkNyu/d3UCZQGfHWm+CL+ylNiIYESX4R/qiPDMxbWb2YseEqaD0Xpr8iHMnlyC0nJLQ7PZfLjx52pqWzbUky/RD2a0FLQFqsuEL+VlIQ8H6RD0zAOITqzV7eWmUu3zfMbAmP4uzDuZ4hPzH1TDY2WEXO8SJn3WKThIdd5iY5Yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KnX3JoV1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB22C116D0;
-	Tue, 24 Feb 2026 17:05:50 +0000 (UTC)
+	s=arc-20240116; t=1771953224; c=relaxed/simple;
+	bh=miD05eK+0103K0nqV0VgvBQv0vF5WAuglrfoXelY66M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k1EuFrTf16gb8S6gDTbtdMozITJmvgOtyZUYu3pu5h9QGiXd/b6PRdG0TiIYMtUHlpnF6YVHDVs5h4hhtnE8ojc+4boLLRVCidGDJ+epnuVRYjFrQS6nnVw7hv/6f9UpQy4Bwj6izIdgVL+TWS+CBSrrw2oMVZd27yxltgeES34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aTWq6Tyh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CE31C116D0;
+	Tue, 24 Feb 2026 17:13:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771952752;
-	bh=GER6Gyyz5eCF6X89SXQDk16nKN8AHdPtJ7A5xe6CvkA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KnX3JoV1frtuDKYhkJ9ibXzDIvdBUuqnhfR2PMUoLR7MruwaxXazhC0Yw0mK4DNml
-	 sD99SJbrgozaJ3D2o7pePirq3IO8LHhngg+bRfzP01Rg19749PDWgQ8j+sKLpKogsq
-	 VbSYv06sJls6LKfzg3/bigCnPP87m9/OzeeVhONye31pMmsbU/6PHCHeYPIDK3sQs9
-	 0XwpY6sbXbbpSq//ryJtZ/8BotaspkdGeP1chMLqI6VaOEpNKyT53QOGfwXSuJSYsC
-	 Luqtkg++5L5/rfudRYCy/o0+3xx4Frt48bISxnJDZ4rU8LURaH8tIIL2jGOPXGLV3Q
-	 2sKq4FO9h4v0Q==
-From: Simon Horman <horms@kernel.org>
-To: mail@birger-koblitz.de
-Cc: Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org,
-	andrew+netdev@lunn.ch,
-	opensource@vdorst.com,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	pabeni@redhat.com,
-	kuba@kernel.org,
-	edumazet@google.com,
-	davem@davemloft.net
-Subject: Re: [net-next] r8152: Add 2500baseT EEE status/configuration support
-Date: Tue, 24 Feb 2026 17:02:08 +0000
-Message-ID: <20260224170206.146491-3-horms@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260223-b4-eee2g5-v1-1-7006b537b144@birger-koblitz.de>
-References: <20260223-b4-eee2g5-v1-1-7006b537b144@birger-koblitz.de>
+	s=k20201202; t=1771953223;
+	bh=miD05eK+0103K0nqV0VgvBQv0vF5WAuglrfoXelY66M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aTWq6TyhfT8xVGZ9JC9piET/yP5vfFHniNb9mu0CM8jwvVmrW+IOK/yHJJU4MYocG
+	 LuKN/56l0sWVn3L3SDAlKQ41JhoJ3P81g4G4FMWPch2FhI/W9EkJts+MSxjln1tPdn
+	 tUHcqdwJrdE61Uaj++we57CDoWXyyiJVyudtn432cMQJA18y0WbmmBMlijq6kHxFR2
+	 b2RpoUlW0G9CP10SZ8Ti6hRjp5Up1nnlOQz8fuXA+NBz/0sdL9bMI+hENaJzD4f1U/
+	 e+3UxUgrX9mbkGtF3kzMWwpoYVNCAys/HSI5rPQVuPZ2IPCvqTCosiOtY6zYoR1RwB
+	 35zDU8obSvw+g==
+Date: Tue, 24 Feb 2026 17:13:36 +0000
+From: Mark Brown <broonie@kernel.org>
+To: amitsd@google.com
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Lee Jones <lee@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+Subject: Re: [PATCH v7 4/6] lib/linear_ranges: Add
+ linear_range_get_selector_high_array
+Message-ID: <57891cf1-a7e2-42ac-98e4-25fd548ee765@sirena.org.uk>
+References: <20260218-max77759-charger-v7-0-e8d907ce69c5@google.com>
+ <20260218-max77759-charger-v7-4-e8d907ce69c5@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ajqSXpJyr7gIDnad"
+Content-Disposition: inline
+In-Reply-To: <20260218-max77759-charger-v7-4-e8d907ce69c5@google.com>
+X-Cookie: An apple a day makes 365 apples a year.
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [-2.76 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33667-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[horms@kernel.org,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-33668-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,linaro.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,gmail.com,linux-foundation.org,vger.kernel.org,lists.infradead.org];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.990];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[broonie@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linux.dev:url]
-X-Rspamd-Queue-Id: 5ED7C18A480
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sirena.org.uk:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 931E218A69C
 X-Rspamd-Action: no action
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
 
-For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
----
-r8152: Add 2500baseT EEE status/configuration support
+--ajqSXpJyr7gIDnad
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The r8152 driver supports the RTL8156, which is a 2.5Gbit Ethernet
-controller for USB 3.0, for which support is added for configuring and
-displaying the EEE advertisement status for 2.5GBit connections. The
-patch also corrects the determination of whether EEE is active to include
-the 2.5GBit connection status and make the determination dependent not on
-the desired speed configuration (tp->speed), but on the actual speed used
-by the controller.
+On Wed, Feb 18, 2026 at 09:59:12PM +0000, Amit Sunil Dhamne via B4 Relay wr=
+ote:
+> From: Amit Sunil Dhamne <amitsd@google.com>
+>=20
+> Add a helper function to find the selector for a given value in a linear
+> range array. The selector should be such that the value it represents
+> should be higher or equal to the given value.
 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 8d36162f36df..a831acd385cd 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
+Acked-by: Mark Brown <broonie@kernel.org>
 
-[ ... ]
+--ajqSXpJyr7gIDnad
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> @@ -8924,6 +8926,7 @@ static int r8152_get_eee(struct r8152 *tp, struct ethtool_keee *eee)
->  {
->  	__ETHTOOL_DECLARE_LINK_MODE_MASK(common);
->  	u16 val;
-> +	u16 speed = rtl8152_get_speed(tp);
+-----BEGIN PGP SIGNATURE-----
 
-Simon says: please declare local variables in reverse xmas tree order -
-            longest line to shortest.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmd3D8ACgkQJNaLcl1U
+h9BxqQf8DP6wjyYdfOSBrB5Xn9eXDFFW1jGwmmgn7p3tf87vwRhXtNxKhIkQmKV4
+4tQDBl6ZEV8G8obl3pRNVamOHkMoWofw7EG5hpLjz0k/lGLAWvDUg6SeZk6BsUd3
+04xpHoM4SxTGD01C8nt6yEjLplF0OkYS03haPQ6ldgh4hc0fW5/qlaDX8WSvvYzH
+vetuB1RA8iTews7LT8/YhArFzkJqhWyG12rKXgWXnPz2Joz0k2k279nlGs+lRVLV
+g0V5ali3JRtXREfFXSL28UuHCAAmBrYPR4KEF4paAdV7h8Gt3UB9KuU/Gi4HjRkV
+chKB8nn1mKHLgOU/N0yXycpQ/fr25w==
+=blQU
+-----END PGP SIGNATURE-----
 
->
->  	val = r8152_mmd_read(tp, MDIO_MMD_PCS, MDIO_PCS_EEE_ABLE);
->  	mii_eee_cap1_mod_linkmode_t(eee->supported, val);
-> @@ -8936,8 +8939,14 @@ static int r8152_get_eee(struct r8152 *tp, struct ethtool_keee *eee)
->
->  	eee->eee_enabled = tp->eee_en;
->
-> -	linkmode_and(common, eee->advertised, eee->lp_advertised);
-> -	eee->eee_active = phy_check_valid(tp->speed, tp->duplex, common);
-> +	if (speed & _1000bps)
-> +		linkmode_set_bit(ETHTOOL_LINK_MODE_1000baseT_Full_BIT, common);
-> +	if (speed & _100bps)
-> +		linkmode_set_bit(ETHTOOL_LINK_MODE_100baseT_Full_BIT, common);
-> +
-> +	linkmode_and(common, common, eee->advertised);
-> +	linkmode_and(common, common, eee->lp_advertised);
-> +	eee->eee_active = !linkmode_empty(common);
-
-Does this code read uninitialized memory? The 'common' bitmap is declared
-via __ETHTOOL_DECLARE_LINK_MODE_MASK(common), which expands to
-DECLARE_BITMAP -- an uninitialized stack array:
-
-unsigned long common[BITS_TO_LONGS(__ETHTOOL_LINK_MODE_MASK_NBITS)];
-
-The new code conditionally sets individual bits via linkmode_set_bit(),
-which calls __set_bit() to set a single bit position. This leaves all
-other bits in the array containing whatever garbage was on the stack.
-
-Then linkmode_and(common, common, eee->advertised) reads all the
-uninitialized bits when performing the bitwise AND operation.
-
-The old code was safe because it used linkmode_and(common,
-eee->advertised, eee->lp_advertised), which fully wrote 'common' from two
-initialized bitmaps before reading it.
-
-With uninitialized stack data, eee_active could be incorrectly reported as
-true if garbage bits happen to overlap with the advertised and
-lp_advertised bitmasks.
-
->
->  	return 0;
->  }
-> @@ -8948,7 +8957,10 @@ static int r8152_set_eee(struct r8152 *tp, struct ethtool_keee *eee)
->
->  	tp->eee_en = eee->eee_enabled;
->  	tp->eee_adv = val;
-> -
-> +	if (tp->support_2500full) {
-> +		val = linkmode_to_mii_eee_cap2_t(eee->advertised);
-> +		tp->eee_adv2 = val;
-> +	}
->  	rtl_eee_enable(tp, tp->eee_en);
-
-[Simon says: I note that Daniel Golle flagged this issue already]
-
-Is the user's 2500baseT EEE configuration actually applied to hardware?
-The code stores the user's preference in tp->eee_adv2, but
-rtl_eee_enable() never writes this value to the OCP_EEE_ADV2 register.
-
-For RTL_VER_10-15 (the 2500full-capable chips), rtl_eee_enable() calls
-r8156_eee_en() which unconditionally sets MDIO_EEE_2_5GT rather than using
-tp->eee_adv2:
-
-drivers/net/usb/r8152.c:r8156_eee_en() {
-    ...
-    if (enable) {
-        ...
-        set |= MDIO_EEE_2_5GT;
-    } else {
-        ...
-        clr |= MDIO_EEE_2_5GT;
-    }
-    ocp_data = (ocp_data & ~clr) | set;
-    ocp_reg_write(tp, OCP_EEE_ADV2, ocp_data);
-}
-
-Then rtl_eee_enable() writes only tp->eee_adv to OCP_EEE_ADV:
-
-drivers/net/usb/r8152.c:rtl_eee_enable() {
-    ...
-    case RTL_VER_10: ... case RTL_VER_15:
-        r8156_eee_en(tp, enable);
-        ...
-        ocp_reg_write(tp, OCP_EEE_ADV, tp->eee_adv);
-        break;
-}
-
-The OCP_EEE_ADV2 register is never updated with tp->eee_adv2. This means
-user attempts to selectively control 2500baseT EEE advertisement via
-ethtool are silently ignored.
-
-The cap1 path correctly writes tp->eee_adv to OCP_EEE_ADV. Shouldn't the
-cap2 path similarly write tp->eee_adv2 to OCP_EEE_ADV2?
-
->
->  	return 0;
->  }
-> @@ -8958,6 +8970,7 @@ static int r8153_get_eee(struct r8152 *tp, struct ethtool_keee *eee)
->  {
->  	__ETHTOOL_DECLARE_LINK_MODE_MASK(common);
->  	u16 val;
-> +	u16 speed = rtl8152_get_speed(tp);
->
->  	val = ocp_reg_read(tp, OCP_EEE_ABLE);
->  	mii_eee_cap1_mod_linkmode_t(eee->supported, val);
-
-[ ... ]
-
-> @@ -8968,10 +8981,29 @@ static int r8153_get_eee(struct r8152 *tp, struct ethtool_keee *eee)
->  	val = ocp_reg_read(tp, OCP_EEE_LPABLE);
->  	mii_eee_cap1_mod_linkmode_t(eee->lp_advertised, val);
->
-> +	if (tp->support_2500full) {
-> +		linkmode_set_bit(ETHTOOL_LINK_MODE_2500baseT_Full_BIT, eee->supported);
-> +
-> +		val = ocp_reg_read(tp, OCP_EEE_ADV2);
-> +		mii_eee_cap2_mod_linkmode_adv_t(eee->advertised, val);
-> +
-> +		val = ocp_reg_read(tp, OCP_EEE_LPABLE2);
-> +		mii_eee_cap2_mod_linkmode_adv_t(eee->lp_advertised, val);
-> +
-> +		if (speed & _2500bps)
-> +			linkmode_set_bit(ETHTOOL_LINK_MODE_2500baseT_Full_BIT, common);
-> +	}
-> +
->  	eee->eee_enabled = tp->eee_en;
->
-> -	linkmode_and(common, eee->advertised, eee->lp_advertised);
-> -	eee->eee_active = phy_check_valid(tp->speed, tp->duplex, common);
-> +	if (speed & _1000bps)
-> +		linkmode_set_bit(ETHTOOL_LINK_MODE_1000baseT_Full_BIT, common);
-> +	if (speed & _100bps)
-> +		linkmode_set_bit(ETHTOOL_LINK_MODE_100baseT_Full_BIT, common);
-> +
-> +	linkmode_and(common, common, eee->advertised);
-> +	linkmode_and(common, common, eee->lp_advertised);
-> +	eee->eee_active = !linkmode_empty(common);
-
-The same uninitialized memory issue exists here in r8153_get_eee. The
-'common' bitmap declared via __ETHTOOL_DECLARE_LINK_MODE_MASK is never
-zeroed before individual speed bits are conditionally set with
-linkmode_set_bit(). Then linkmode_and() reads the uninitialized garbage
-bits.
-
-This function affects RTL_VER_03 through RTL_VER_15, which is the majority
-of supported devices.
+--ajqSXpJyr7gIDnad--
 
