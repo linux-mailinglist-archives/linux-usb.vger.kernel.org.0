@@ -1,67 +1,66 @@
-Return-Path: <linux-usb+bounces-33620-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33619-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kLtDKvBMnWmhOQQAu9opvQ
-	(envelope-from <linux-usb+bounces-33620-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 08:02:08 +0100
+	id oM9JLfdMnWmhOQQAu9opvQ
+	(envelope-from <linux-usb+bounces-33619-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 08:02:15 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5889C182B06
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 08:02:08 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF873182B15
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 08:02:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E5F5E3048EC9
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 07:02:00 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 9C873301281B
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 07:01:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A61D730BBA9;
-	Tue, 24 Feb 2026 07:01:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 610BA30ACF1;
+	Tue, 24 Feb 2026 07:01:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QHOaY1D3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iG+xSD7h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48BEB30ACE6
-	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 07:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CA72BE7DD
+	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 07:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771916517; cv=none; b=nzuOfk8bC8XFiRAnLCzx7ou9Ii08Fp8ISVzMF2wlGrlJyPMBHsOyljEugd3pGOwLKBYB4c5tWPa6GKv6G/BUVedetElos0qemdekKfQcoOybHG9vglOcW9Y2rmDfAo0Sb7trTkwixq0ipImT29rO9yYqlGkNf30+JRFPEyAS6I4=
+	t=1771916516; cv=none; b=KHkWiwjvFvySXjYvcOPfnH6ap1MmD2l2CYGqbsVqnVCKLdaKn8l0q1tPNbRXTfKyGZhXSztdZ9IlYlQdbofwhcB4bCOqsAnoS/zwST/pexmBF715BGzJ9INDitT8HEfePdwA2GEBi9902DlBrUI7zTZ1LqaptiZQVrQmWQKNKrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771916517; c=relaxed/simple;
-	bh=OK/6qDvX3VbI4iiB3hsRjXZNgdaOQwtRHeYQ4xN7fvM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SxuczXukqvt7sABAW8rX7EpwjrcDL7vlygGfyabUDwCPVEv8+FZCSTKYlefOcHc/GVJ9NgY+twxCpURcp4UZxjVTFoTerLu36laKtwFI9lRseY7MPlXKKYHQvnB+BGrulXxgUvhpnVpZ9LSMm45MmUDQTPNFC3XmY9rV092b0GQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QHOaY1D3; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1771916516; c=relaxed/simple;
+	bh=ssR2ACQbzkKteKkJQaC4nDfQEv0fKbnfoZ9GNwGIHDw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XZuptWdsyPcGR3AXnxb4i9zbQlPdDR7sRob7zEEeIs8DF2im/ogWCWZc+qImT0uP+jQLwliTmUdro+o8SN/kqoOXeQDrGVixhPKcj505Qk3VlbUsGiq30kjDarJJ/3FxOLliBMwXw2VguoG9Dv+RUiYFoVZfGo7miTOTOuG9EMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iG+xSD7h; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771916517; x=1803452517;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=OK/6qDvX3VbI4iiB3hsRjXZNgdaOQwtRHeYQ4xN7fvM=;
-  b=QHOaY1D3V3a+5WhZ4nBJZqjCqJ3UuSit3wRJpVOK/TTNKGkRjZ875dEd
-   fcsTZPYpBG01tQrZS6gVHyKWwDpOoUk0UNrDLZvtmr6pg0IRrPRORDVPo
-   A7ViXDs1+WauaXlFMtNrlt94GtP7o2WeppMvWzLIg9hxxXZR+Ti7Cn6ZK
-   c1Y1Xh8VPdjgxRkt2Pd8boWfW23YBU4SniuOQQtu6aciWJXcNTRX71cGA
-   sK5/kTCPY31KHueGl88rx1NAw7H+BPKzauoVwIYMjVVlVMZa4tTbcrIvw
-   0z35HZgb6voCxVta8o4L8IOpiSUg5r5192mCY9U1bdxJmCgA+rjuH2LGF
+  t=1771916515; x=1803452515;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ssR2ACQbzkKteKkJQaC4nDfQEv0fKbnfoZ9GNwGIHDw=;
+  b=iG+xSD7hsxOrDs6oXQts1PpkxWR9yYMn6j+1bJm6+0aPPMSMF5W82Sad
+   F1ZQ+haOBz17BJ+MQ1Exs4FMyuIFI29daa7cYxKuJV/vvD0BqVKBK0LMK
+   5P2pVVfOHpDYgpHUmfAiYZ1bwwwEAwoOORGBpqCEvD7PGkuFFhrOIsHz/
+   uVq6ZBiAds6gLJlpehe8yypWVAHYYBvP43b2E/E+CLkyR+IKZsr8ovJrQ
+   q70pRkaAXAQ9ZnRt70+aysorpQz/toKNsGLCafjL/fK3gkaGSY9+D2KmW
+   BxBoUqy7zYGyA/mElkB1ECEbvIiYFpc7vlIKA0wR/PlmigwizehiTWSlh
    g==;
-X-CSE-ConnectionGUID: /KQcbJo6QqSqz8Esvq9Wjw==
-X-CSE-MsgGUID: QstGZSmLTbGj+B2EMfIeaQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11710"; a="72627995"
+X-CSE-ConnectionGUID: CMFUjc1IQTqra9hy8uYvnw==
+X-CSE-MsgGUID: infT80xVQuO6TN82vqLMZg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11710"; a="95539951"
 X-IronPort-AV: E=Sophos;i="6.21,308,1763452800"; 
-   d="scan'208";a="72627995"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 23:01:54 -0800
-X-CSE-ConnectionGUID: 9VPa4xb/SBKAan6Ay3nDyw==
-X-CSE-MsgGUID: mwUG2ZZuSpuSoQU1eXObRQ==
+   d="scan'208";a="95539951"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 23:01:53 -0800
+X-CSE-ConnectionGUID: 208KvUejQmCB4Wq1IUzsOg==
+X-CSE-MsgGUID: zNJyDI4YQ0CZXG0n8HCzhQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,308,1763452800"; 
-   d="scan'208";a="219313082"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa004.fm.intel.com with ESMTP; 23 Feb 2026 23:01:51 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 23 Feb 2026 23:01:51 -0800
 Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 86C8895; Tue, 24 Feb 2026 08:01:50 +0100 (CET)
+	id 8954F98; Tue, 24 Feb 2026 08:01:50 +0100 (CET)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: linux-usb@vger.kernel.org
 Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -69,10 +68,12 @@ Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Andreas Noever <andreas.noever@gmail.com>,
 	Rene Sapiens <rene.sapiens@linux.intel.com>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 0/2] thunderbolt: Disable CL states on older Titan Ridge firmware
-Date: Tue, 24 Feb 2026 08:01:48 +0100
-Message-ID: <20260224070150.3320641-1-mika.westerberg@linux.intel.com>
+Subject: [PATCH 1/2] thunderbolt: Read router NVM version before applying quirks
+Date: Tue, 24 Feb 2026 08:01:49 +0100
+Message-ID: <20260224070150.3320641-2-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260224070150.3320641-1-mika.westerberg@linux.intel.com>
+References: <20260224070150.3320641-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -87,7 +88,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -95,7 +96,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FREEMAIL_CC(0.00)[gmail.com,wunner.de,linux.intel.com];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-33620-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33619-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -107,25 +108,97 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-0.999];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:dkim]
-X-Rspamd-Queue-Id: 5889C182B06
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,linux.intel.com:mid]
+X-Rspamd-Queue-Id: DF873182B15
 X-Rspamd-Action: no action
 
-Hi,
+From: Rene Sapiens <rene.sapiens@linux.intel.com>
 
-There is known issue on Titan Ridge with older firmware that makes the link
-unstable if CL states are enabled. This series adds a quirk that disables
-them for older NVM firmware.
+The router NVM version is currently only available after the NVMem devices
+have been registered. This is too late for firmware-dependent quirks that
+are evaluated during tb_switch_add() before device registration.
 
-Rene Sapiens (2):
-  thunderbolt: Read router NVM version before applying quirks
-  thunderbolt: Disable CLx on Titan Ridge-based devices with old firmware
+Split router NVM handling into two phases:
+  - tb_switch_nvm_init() allocates the NVM object and reads the version
+  - tb_switch_nvm_add() registers the NVMem devices using the pre-read NVM
 
- drivers/thunderbolt/quirks.c |  7 +++++++
+This makes the NVM major/minor version available before tb_check_quirks()
+without changing when the NVMem devices are registered.
+
+Signed-off-by: Rene Sapiens <rene.sapiens@linux.intel.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
  drivers/thunderbolt/switch.c | 30 ++++++++++++++++++++++++++----
- 2 files changed, 33 insertions(+), 4 deletions(-)
+ 1 file changed, 26 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index e5b48a331c58..c2ad58b19e7b 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -347,7 +347,7 @@ static int nvm_write(void *priv, unsigned int offset, void *val, size_t bytes)
+ 	return ret;
+ }
+ 
+-static int tb_switch_nvm_add(struct tb_switch *sw)
++static int tb_switch_nvm_init(struct tb_switch *sw)
+ {
+ 	struct tb_nvm *nvm;
+ 	int ret;
+@@ -365,6 +365,26 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
+ 	if (ret)
+ 		goto err_nvm;
+ 
++	sw->nvm = nvm;
++	return 0;
++
++err_nvm:
++	tb_sw_dbg(sw, "NVM upgrade disabled\n");
++	sw->no_nvm_upgrade = true;
++	if (!IS_ERR(nvm))
++		tb_nvm_free(nvm);
++
++	return ret;
++}
++
++static int tb_switch_nvm_add(struct tb_switch *sw)
++{
++	struct tb_nvm *nvm = sw->nvm;
++	int ret;
++
++	if (!nvm)
++		return 0;
++
+ 	/*
+ 	 * If the switch is in safe-mode the only accessible portion of
+ 	 * the NVM is the non-active one where userspace is expected to
+@@ -383,14 +403,12 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
+ 			goto err_nvm;
+ 	}
+ 
+-	sw->nvm = nvm;
+ 	return 0;
+ 
+ err_nvm:
+ 	tb_sw_dbg(sw, "NVM upgrade disabled\n");
+ 	sw->no_nvm_upgrade = true;
+-	if (!IS_ERR(nvm))
+-		tb_nvm_free(nvm);
++	tb_nvm_free(nvm);
+ 
+ 	return ret;
+ }
+@@ -3311,6 +3329,10 @@ int tb_switch_add(struct tb_switch *sw)
+ 		return ret;
+ 	}
+ 
++	ret = tb_switch_nvm_init(sw);
++	if (ret)
++		return ret;
++
+ 	if (!sw->safe_mode) {
+ 		tb_switch_credits_init(sw);
+ 
 -- 
 2.50.1
 
