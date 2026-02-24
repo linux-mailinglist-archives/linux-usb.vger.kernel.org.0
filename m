@@ -1,159 +1,126 @@
-Return-Path: <linux-usb+bounces-33659-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33660-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WHS4DGyynWndRAQAu9opvQ
-	(envelope-from <linux-usb+bounces-33659-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 15:15:08 +0100
+	id yNEuKM7InWl6SAQAu9opvQ
+	(envelope-from <linux-usb+bounces-33660-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 16:50:38 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BA401883C3
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 15:15:07 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02C49189556
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 16:50:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 19675301488F
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 14:15:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 555E032205F8
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 15:42:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4C0E39E6F6;
-	Tue, 24 Feb 2026 14:14:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18D2739A808;
+	Tue, 24 Feb 2026 15:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KVFKOZyM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bm.lauterbach.com (bm.lauterbach.com [62.154.241.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605E3369982
-	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 14:14:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.154.241.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998323A1CE7
+	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 15:42:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771942498; cv=none; b=YgbmPPfUd8dgvTCb2TYyIwESZsFsaJ1aGZ2scuoKt+OG1mVENrMDX7yNhdIvy6fDsJRR2E/R9eZjfW61q9yjxk4E01/4qoh4JdwjLcXw/6f1LJFGfk2AzHrCydEifdZ5JY862gDi0ssCUbmxF2xvWq6vbkeWMq7bbf3eSqgZo4g=
+	t=1771947760; cv=none; b=Ixt281U5QTb5dtTU3207D5LeMIgmdE4CyZs/MHcowYJq3/YiDzlzbADyKmwgKMHr9IHJanvP3HW3F+GjMYMBKp1nVS7RUmMyAAHcQtHz4hN0QxQ05oCLCGB2vbA2Hunoc1dCcm/XOxkUfEvd8BCdcb11i+vgwqNDhx/+8wD+TA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771942498; c=relaxed/simple;
-	bh=1v6oe5frg772UT0hGnTgM7UB4v3DcFbsGu7hjDGuDk0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lVTGfOgQC4ox/ts46S6LQsAH1AFkQObEfuZlpLh9C+lSrkl1FhbukTT5KZnCR89Auo5OlBREfpNDb0n15W6V6w2CzBe00w8gfadMakkYTu/TuVRlsSyr5hVXRdS3JrTD7Y1y/8uqlCPkO++stG7HLWo+IBBFMl8pRUyd770qNGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com; spf=pass smtp.mailfrom=lauterbach.com; arc=none smtp.client-ip=62.154.241.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lauterbach.com
-Received: from ingpc2.intern.lauterbach.com (unknown [10.2.10.44])
-	(Authenticated sender: ingo.rohloff@lauterbach.com)
-	by bm.lauterbach.com (Postfix) with ESMTPSA id D08D21DC3F2BE;
-	Tue, 24 Feb 2026 15:14:46 +0100 (CET)
-From: Ingo Rohloff <ingo.rohloff@lauterbach.com>
-To: Thinh.Nguyen@synopsys.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	Ingo Rohloff <ingo.rohloff@lauterbach.com>
-Subject: [PATCH] usb: dwc3: Support for USB3340x ULPI PHY, via "snps,enable_xcvrdly_quirk"
-Date: Tue, 24 Feb 2026 15:14:38 +0100
-Message-ID: <20260224141438.39524-1-ingo.rohloff@lauterbach.com>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1771947760; c=relaxed/simple;
+	bh=LtBuy3+ILhpd9r3A1YFEiLPyBgB9AL/bN0WxkARZHF4=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Yk2ItFERi2q+jlhfcUhFD70umA5+De6J5XD69cWbU5UUoh2x9VpoYmLLFphHMovaZE+ZZL/lFvBU+xaSF6HIKfEkbBjZN/WVCqUKaOnPACOAniq2AeLN74BNQrqa45mj5pO/XnnWX9x2HV5+bATuSV0K/qsQEsbBNWKJjPmQI8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KVFKOZyM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 402A4C116D0
+	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 15:42:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771947760;
+	bh=LtBuy3+ILhpd9r3A1YFEiLPyBgB9AL/bN0WxkARZHF4=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=KVFKOZyMLBYOuKIuGx9Gvg7zRCYY6SsFEHLz7X0oZOU2iSsKfvMrDoG8D6JFdS5tz
+	 vqcNeO1X7rbzOZqy9XZokaOy0n27Zut7mv1YASOMPBpVvm5Vf3aHY6B1PR8asa6EdV
+	 7ekbax3MiRu/rMm9MhrJ4lhA4WZXCaftWuw9LJt4KEnlsLp6TuzZow4XU5knPiJZ83
+	 YnPX2nus+pM8LEKbxx0dVMv/kKe1HZDwkCAD1+dvd6hry4j5XQAasDYxQkUo5h4nlk
+	 MvYX6EdIxsfwT+xjxpsM4qAcgoQk6BxbEL/LtuFYXKMEu58u5CcxUr+pHLRe1qbVs+
+	 yZI8kUSXskYLQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 3AA1CCAB780; Tue, 24 Feb 2026 15:42:40 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 221103] xhci_hcd: System lockup under CPU load during usbfs
+ polling of USB devices on AMD platforms
+Date: Tue, 24 Feb 2026 15:42:40 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-221103-208809-wIqbQpUNKC@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-221103-208809@https.bugzilla.kernel.org/>
+References: <bug-221103-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Bm-Milter-Handled: 166a2dfb-2e12-4590-8fa5-72e30323519f
-X-Bm-Transport-Timestamp: 1771942486903
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-33660-lists,linux-usb=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33659-lists,linux-usb=lfdr.de];
-	DMARC_NA(0.00)[lauterbach.com];
-	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	FROM_NEQ_ENVFROM(0.00)[ingo.rohloff@lauterbach.com,linux-usb@vger.kernel.org];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NO_DN(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,lauterbach.com:mid,lauterbach.com:email,microchip.com:url]
-X-Rspamd-Queue-Id: 5BA401883C3
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_ONE(0.00)[1];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,harvard.edu:email]
+X-Rspamd-Queue-Id: 02C49189556
 X-Rspamd-Action: no action
 
-The Microchip USB3340x ULPI PHY requires a delay when switching to the
-high-speed transmitter.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221103
 
-Original description is/was in Xilinx Wiki under
-"USB Debug Guide for Zynq UltraScale+ and Versal Devices"
+--- Comment #24 from Alan Stern (stern@rowland.harvard.edu) ---
+In view of comment #17 plus the fact that the entire system freezes, this l=
+ooks
+more likely to be a PCI issue rather than a USB problem.  A broken USB host
+controller isn't the sort of thing you expect to take down the whole comput=
+er,
+but a broken PCI bus or controller could easily do so.
 
-Signed-off-by: Ingo Rohloff <ingo.rohloff@lauterbach.com>
----
- drivers/usb/dwc3/core.c | 20 ++++++++++++++++++++
- drivers/usb/dwc3/core.h |  2 ++
- 2 files changed, 22 insertions(+)
+--=20
+You may reply to this email to add a comment.
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 161a4d58b2ce..92ad701a9340 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -777,6 +777,23 @@ static int dwc3_hs_phy_setup(struct dwc3 *dwc, int index)
- 	if (dwc->ulpi_ext_vbus_drv)
- 		reg |= DWC3_GUSB2PHYCFG_ULPIEXTVBUSDRV;
- 
-+	/*
-+	 * Fixes High-speed negotiation issue with USB3340, see:
-+	 *    http://ww1.microchip.com/downloads/en/DeviceDoc/80000645A.pdf
-+	 *    "Device Enumeration Failure with Link IP Systems"
-+	 * According to documentation on the Internet,
-+	 * DWC3_GUSB2PHYCFG_XCVRDLY:
-+	 *    Adds a delay between the assertion of the
-+	 *    ULPI Transceiver Select signal (for HS) and
-+	 *    the assertion of the TxValid signal during a HS Chirp.
-+	 *
-+	 * This bit also needs to be set again when the device comes out
-+	 * of hibernation, this is currently not an issue since hibernation
-+	 * is not enabled.
-+	 */
-+	if (dwc->enable_xcvrdly_quirk)
-+		reg |= DWC3_GUSB2PHYCFG_XCVRDLY;
-+
- 	dwc3_writel(dwc, DWC3_GUSB2PHYCFG(index), reg);
- 
- 	return 0;
-@@ -1855,6 +1872,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
- 	dwc->dis_split_quirk = device_property_read_bool(dev,
- 				"snps,dis-split-quirk");
- 
-+	dwc->enable_xcvrdly_quirk = device_property_read_bool(dev,
-+				"snps,enable_xcvrdly_quirk");
-+
- 	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
- 	dwc->tx_de_emphasis = tx_de_emphasis;
- 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index a35b3db1f9f3..41418f3f85e1 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -302,6 +302,7 @@
- #define DWC3_GUSB2PHYCFG_SUSPHY		BIT(6)
- #define DWC3_GUSB2PHYCFG_ULPI_UTMI	BIT(4)
- #define DWC3_GUSB2PHYCFG_ENBLSLPM	BIT(8)
-+#define DWC3_GUSB2PHYCFG_XCVRDLY	BIT(9)
- #define DWC3_GUSB2PHYCFG_PHYIF(n)	(n << 3)
- #define DWC3_GUSB2PHYCFG_PHYIF_MASK	DWC3_GUSB2PHYCFG_PHYIF(1)
- #define DWC3_GUSB2PHYCFG_USBTRDTIM(n)	(n << 10)
-@@ -1403,6 +1404,7 @@ struct dwc3 {
- 	unsigned		dis_metastability_quirk:1;
- 
- 	unsigned		dis_split_quirk:1;
-+	unsigned		enable_xcvrdly_quirk:1;
- 	unsigned		async_callbacks:1;
- 	unsigned		sys_wakeup:1;
- 	unsigned		wakeup_configured:1;
--- 
-2.52.0
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
