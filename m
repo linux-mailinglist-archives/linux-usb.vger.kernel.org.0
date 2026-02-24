@@ -1,58 +1,105 @@
-Return-Path: <linux-usb+bounces-33645-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33646-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CD6dF2GNnWkXQgQAu9opvQ
-	(envelope-from <linux-usb+bounces-33645-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 12:37:05 +0100
+	id kDxjArOPnWlKQgQAu9opvQ
+	(envelope-from <linux-usb+bounces-33646-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 12:46:59 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA15B18664B
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 12:37:04 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5748186898
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 12:46:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5A8B530D4BF6
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 11:33:43 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E4BC1300CA3E
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 11:46:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DC5737D13A;
-	Tue, 24 Feb 2026 11:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 210A33803E3;
+	Tue, 24 Feb 2026 11:46:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="gh5+St6S"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VbHMgZ5l";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="a8EWh4N+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA80E37D10A;
-	Tue, 24 Feb 2026 11:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317D237FF4B
+	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 11:46:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771932819; cv=none; b=ByJxgKy5MBr/u+ip+LpHhq42ly3xi/56lilHOUWzjvln7rv9Sr88tVtjZft5niP8+kSLp9D1d70S5eWvmlQSVtN5R6x4qddaCrZ3bB35vL622hDefmuAy7RG0um7RFyyHfy3N9tTVT1TfYe+097JfijqSeHLqSFFfhZtV6kuxmg=
+	t=1771933610; cv=none; b=DNwjjRmSRAraE4itz2mwVcD9OkhyYRnpLpQ5asCLBbJUWVf2R6+3PTcUQznMHYC7gtlWmkw+rivUWchlzbnbLz4YJC4wRWCw0EftLrJch4ejHTEZQoaV34GfCp8hckwXYiuCwQ4pt4wP3lPNx6Fi1N34qzGnxS+bwWTmGYyjrUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771932819; c=relaxed/simple;
-	bh=ViFWYQQRZYNLeGhLYzhL/VKNYQiAGk3Jy3razAENlmw=;
+	s=arc-20240116; t=1771933610; c=relaxed/simple;
+	bh=bhvy8oe9cmU1vca4QHKXTqvHAeM6pxHdfMVdkDWGRtM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i0h544LVGS75K35fYxZIJTBXT84eXUl/iZ/Ia450/9TH4YuX/z7WLkjVTHhBR6jfwR4cJz1LAg5vXWQb8BIe6sA7AainnLa8p87+3sgDzrSYL+AOGYlXWfxBNQdaKnpRbRrK/mROdfxZFDHxVJ+7/PnnakKpIXG5+AYGDikQrro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=gh5+St6S; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1771932816;
-	bh=ViFWYQQRZYNLeGhLYzhL/VKNYQiAGk3Jy3razAENlmw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gh5+St6SGnu8AD94/BuNXZe1T1VphAruy5XD3/aswoOZs1Bj2QvU2+o6SqZ60cfGz
-	 OrVftyAzQXJYxxVcOQ7cVN2mTsDldDvG8TXv7WgCGDn+U0q9D6+2h8uAk3rZUI9zU/
-	 fBrF6oAIjnEo5CoACl4PHzmJoeYNVRNdjnQbgrRGogHjOSz4jVjM1SEXLihkcFI11c
-	 OBzROU7GWl1WZTFVtbYoCMxeGeluEAZkPdf2/1Ma6EKMuSjUx90+ChCXlamqQl/gTy
-	 fJslWDQ/38g2uwV3HQlvnWo7Eh3a6i2hECZp5fDlsYlrUXbccKpb6kkxBasumP5j0i
-	 4wHupLdCTLVSw==
-Received: from [IPV6:2a01:e0a:212:79f0:be92:a52a:153f:7a60] (unknown [IPv6:2a01:e0a:212:79f0:be92:a52a:153f:7a60])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: aferraris)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9AFC017E03E5;
-	Tue, 24 Feb 2026 12:33:35 +0100 (CET)
-Message-ID: <30bc5aeb-382b-49e0-824a-303230110313@collabora.com>
-Date: Tue, 24 Feb 2026 12:33:33 +0100
+	 In-Reply-To:Content-Type; b=cvTQ+CmpD1Uwr2koBTgUJffZz7kcQj5XKU9S57XAE7ZGNK8Tr3TbDxK6uhQATBF6lz2rbl0WvCkG5ySOYx8zKxsvvE6MDwLETVa17vUp1m4DqUoYVOUQWZPdUj2t/tNYpufkwOzmGqbYIzNpJv9UOp3mnmT5K+ftSNsnlsLWhwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VbHMgZ5l; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=a8EWh4N+; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61OAFYYs057310
+	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 11:46:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	tymcocPzSV9cCZXdLKcJBNN35FTMQW/hRXDDLBuZkN4=; b=VbHMgZ5leSwmsptb
+	ext4POx96LsS/q/rbrX6zjNh72QVJPFT2n8TKEMZ0skVFF13Yroo1Rij8U+lX/Dy
+	LVRDJWmGVEaO5yfYx9GbnXjqtbInqXsR2agAofx+a+Ux97343MkSFlfMe70YQIED
+	MFdLKhpHFUGS9N30lfQiGqCnPHrUe97qq6lwDeaeCRip3qmkYYUh+42sSL0rbnlt
+	D2qm79DJycCWOlW0tYejnPEDz6JACma7aSg5Jjxj3QwehtH2BSxUGIek+CYZr0yv
+	GYiCnFNAyl6MQTSI6mNVgzVY4a2zweTsfHTteIsySObwRFEwaELPcpR9l6wRBSYF
+	SXzkRQ==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ch9sa8942-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 11:46:48 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8c70cb31bcdso575129285a.1
+        for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 03:46:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1771933607; x=1772538407; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tymcocPzSV9cCZXdLKcJBNN35FTMQW/hRXDDLBuZkN4=;
+        b=a8EWh4N+E3QFufdDQHokd/UQfYqGu2nihPtSf7AsRcu2SWllrp2vu71CllrOHl64xC
+         PmADMayukDFaiOOaOXmhpg7s2JM1qCwL/IMZkb9+FBpA3mOT/JNV5HqDi5+rK2EnNhsw
+         JP0TCdkJztahdNK0G2vCct6cBD2WLyWG4ewrMCkiuzh91pWleI//+hRiMjtJa6nMj5Hf
+         mCgvnvp2jDJXVAQslSCRRU5AV+tzr5969iqazAEvETWO1afO3L7H8LFanmHUIqgAQoL1
+         Lmbxsden7OUX1KY5ksMQN5CxD5zsvOvKVQrq1WIAYoIr/WbsNsSfU1I02byQ3Ks5ynao
+         MW5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771933607; x=1772538407;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tymcocPzSV9cCZXdLKcJBNN35FTMQW/hRXDDLBuZkN4=;
+        b=QnI405EbHBYUT51qOakf1wyyRauKOl3r3hpBx+0Ss3nG36GdMs5y4AWipQWDe7nYtZ
+         S5UvGvaaDUgUobJuRL5ifQvGJAxXfC1lI1Wjt28mC6eCoCK0crgNGls2UNB8pnsXQmsE
+         T/sBVAf+oyElYeZH4uzZbHigiZZ0udpvGg6/yE0C5d0WcaY62qULZ0LpxLk8fd3C5l+b
+         kd3BBX9Io9pDZsgrfsl2XBWaQiYazrI4t2JAoWmm2LSvFAOYntanZdGS5mcPgW5OQYP+
+         39FRgoNcU6wYyPlBKFtwsF8sxxIV2rRhABniGyUSdAeB8yNpkve/DEWV4T6e5cGLrlFT
+         aX3A==
+X-Forwarded-Encrypted: i=1; AJvYcCXr8tdplJ+iNgigWVLVLZmvEcUIBF1tn4X81CQTUEuQLBn4nKDncDLYPEtgSUUQBwZsYDl0ROjFMq8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIJEsGKNoLPIlGVw3FAwaY8HhhdlSQnj5OTQcV8Iw3Ji5qCjn/
+	2pDhClahIydpOsSXNUeRSyFT1tzoLV360Iwj1TV5RGyIKhA85KTshcSiWO6AR6qy9TPK8yDMqqY
+	rc/iCxC6F6lKSzhDi94fZK84HfwQjiaJTxIq2UY0pIF+PREpKKBRWallc3TIrOVs=
+X-Gm-Gg: AZuq6aIiOtN/P1xBMX6LAdwhLfmL8YOXvWDvPdZnibgrGhrxHt+2BKaV17IDVjQRH/k
+	W9VG7ud7F2YVUPcqAZTPUKIErIMnBxDbIEz+0HsJmTPMMqW7YB3rsvMwpSzgfTcWHIvj7Ayu2Lp
+	mZcFOeC8imRGyaDOpBeUeSnWUgeVYpQm7wD52qlS7U9CpvghjuWSHa1gSwSUaQxgyMM0ZE7IL7p
+	KO+sGgqi8L1JypIFlBtBVQ7ploNbF7/cQO3fEhm9pV24CghmMHs1QU40m+z3kzMdWZWLd+TSg/9
+	AfzeuoMFB37P8QlRdusYLMvlw6OZR0KI1u5mSYAcDU+MkrPr9S9eGx5zBrhdILZOa3wHBS50jNH
+	MxKVmfTc2MWrqXqIuPPDhUbewXdMKUJoADYRlb56igHUZpB5w+JC8+ZZKW33XFMqbMEwpvRZ1m7
+	8/mTQ=
+X-Received: by 2002:a05:620a:6910:b0:8b2:ea2d:a5 with SMTP id af79cd13be357-8cb8cabef31mr1110164785a.7.1771933607498;
+        Tue, 24 Feb 2026 03:46:47 -0800 (PST)
+X-Received: by 2002:a05:620a:6910:b0:8b2:ea2d:a5 with SMTP id af79cd13be357-8cb8cabef31mr1110162485a.7.1771933607079;
+        Tue, 24 Feb 2026 03:46:47 -0800 (PST)
+Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9084f03911sm411180566b.65.2026.02.24.03.46.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Feb 2026 03:46:46 -0800 (PST)
+Message-ID: <8a2db0f2-c9f5-474f-afcc-53248da19297@oss.qualcomm.com>
+Date: Tue, 24 Feb 2026 12:46:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,153 +107,106 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Revert "tcpm: allow looking for role_sw device in the
- main node"
-To: Xu Yang <xu.yang_2@nxp.com>, badhri@google.com,
- heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
- dsimic@manjaro.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, jun.li@nxp.com
-References: <20260224110139.3812757-1-xu.yang_2@nxp.com>
-From: Arnaud Ferraris <arnaud.ferraris@collabora.com>
-Content-Language: en-US, fr
-Autocrypt: addr=arnaud.ferraris@collabora.com; keydata=
- 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
- L9jD4jU=
-In-Reply-To: <20260224110139.3812757-1-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH RFT v2 1/3] dt-bindings: usb: qcom,dwc3: Allow high-speed
+ interrupt on Glymur, Hamoa and Milos
+To: Abel Vesa <abel.vesa@oss.qualcomm.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: Pankaj Patil <pankaj.patil@oss.qualcomm.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20260223-dts-qcom-glymur-add-usb-support-v2-0-f4e0f38db21d@oss.qualcomm.com>
+ <20260223-dts-qcom-glymur-add-usb-support-v2-1-f4e0f38db21d@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20260223-dts-qcom-glymur-add-usb-support-v2-1-f4e0f38db21d@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI0MDA5MyBTYWx0ZWRfXyNef18nFk++h
+ p0yZWxW0Ueg/UMq2+T4MjJx3SoMVU36+EyCaGf5uoTMOr/EmPiNYYYeNhKqs8HSKJZsjBRRb19s
+ 6AlTlju4zJKva3ihohAi/CCFGK8AvjruxiDm3kH4/CTJ7bwhqVBvXHz/xzJb4gVHJvqaJjBiVq4
+ ghK2JXY78j6p9IvW7qvx8vg/O0Dcgl/eQfG+8Dbtu6PAyPcvWb4Kgp9Y7MRed5W3G0ruDhwgFmx
+ xsnJpZV0lJRZ0Oq2gb12tvWKL0ewRv/TLURMI2eJTnsRrNZUKgi97wc4EVDNIjks2iaWjHigR9t
+ ezqRLpJlqBrpi1jKMI1zmcK3BiSrNB24e3mkJxqTc32XT8YaiFtWHPTGCnOhcEX2KlBIlqcYNNk
+ 3+mAcJ9lR7ow1h1x6IkJl2QZ8SVUaVsjdp1NnEI3PCT0jTESmf3NERW2Os/A3I+tBqEJoNH0HZS
+ ozXowG2qLAj6hkzNamA==
+X-Proofpoint-ORIG-GUID: AFNCMDu2WXkQUBk5VTj6rykCZqyTmixN
+X-Authority-Analysis: v=2.4 cv=e7ELiKp/ c=1 sm=1 tr=0 ts=699d8fa8 cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=_K5XuSEh1TEqbUxoQ0s3:22
+ a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=iuyhanrI9R5_42HSFcsA:9 a=QEXdDO2ut3YA:10
+ a=bTQJ7kPSJx9SKPbeHEYW:22
+X-Proofpoint-GUID: AFNCMDu2WXkQUBk5VTj6rykCZqyTmixN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-24_01,2026-02-23_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 suspectscore=0 adultscore=0 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 clxscore=1015 phishscore=0 spamscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602240093
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[collabora.com:s=mail];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33645-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[collabora.com:+];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33646-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[arnaud.ferraris@collabora.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.998];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,collabora.com:mid,collabora.com:dkim,nxp.com:email]
-X-Rspamd-Queue-Id: EA15B18664B
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: A5748186898
 X-Rspamd-Action: no action
 
-Hi,
-
-Le 24/02/2026 à 12:01, Xu Yang a écrit :
-> This reverts commit 1366cd228b0c67b60a2c0c26ef37fe9f7cfedb7f.
-
-I believe a plain revert isn't the right solution here, as we'll get to 
-the same point as we were before 1366cd228b0c, where some devices 
-stopped working properly with newer kernels.
-
+On 2/23/26 4:37 PM, Abel Vesa wrote:
+> Some of the controllers found of these platforms can be tied up to a
+> single high-speed PHY, basically rendering them as USB 2.0 controllers.
+> So in this case, the interrupt to the Synopsys DesignWare Core is coming
+> from the high-speed PHY, so allow the interrupt to reflect that.
 > 
-> The fwnode_usb_role_switch_get() returns NULL only if no connection is
-> found, returns ERR_PTR(-EPROBE_DEFER) if connection is found but deferred
-> probe is needed, or a valid pointer of usb_role_switch.
-> 
-> When switching from NULL check to IS_ERR_OR_NULL(), usb_role_switch_get()
-> will return NULL pointer which will override ERR_PTR(-EPROBE_DEFER) which
-> is returned by fwnode_usb_role_switch_get(). Then usb role switch can't be
-> obtained because the defer probe info is lost. So the unique error should
-> not be regarded the same as NULL.
-> 
-> Fixes: 1366cd228b0c ("tcpm: allow looking for role_sw device in the main node")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> 
+> Acked-by: Rob Herring (Arm) <robh@kernel.org>
+> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
 > ---
-> Also correct a description in 1366cd228b0c ("tcpm: allow looking for
-> role_sw device in the main node"), if the ports are defined in the tcpc
-> main node, NULL pointer is returned by fwnode_usb_role_switch_get()
-> instead of an error.
-> ---
->   drivers/usb/typec/tcpm/tcpm.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 1d2f3af034c5..8e0e14a2704e 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -7890,7 +7890,7 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
->   	port->partner_desc.identity = &port->partner_ident;
->   
->   	port->role_sw = fwnode_usb_role_switch_get(tcpc->fwnode);
-> -	if (IS_ERR_OR_NULL(port->role_sw))
-> +	if (!port->role_sw)
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
+> index 7d784a648b7d..f879e2e104c4 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
+> @@ -500,7 +500,7 @@ allOf:
+>              - const: pwr_event
+>              - const: dp_hs_phy_irq
+>              - const: dm_hs_phy_irq
+> -            - const: ss_phy_irq
+> +            - enum: [hs_phy_irq, ss_phy_irq]
 
-It might be worth saving the error and restoring it after the call to 
-usb_role_switch_get() instead, something like:
+Since you're tracking this change, after it lands, could you please fix up hamoa
+(SPI 243) and milos (AFAICT SPI 349) too?
 
-	if (IS_ERR_OR_NULL(port->role_sw)) {
-		err = PTR_ERR(port->role_sw);
-		port->role_sw = usb_role_switch_get(port->dev);
-		if (!port->role_sw)
-			port->role_sw = ERR_PTR(err);
-	}
-
-
->   		port->role_sw = usb_role_switch_get(port->dev);
->   	if (IS_ERR(port->role_sw)) {
->   		err = PTR_ERR(port->role_sw);
-
-Best regards,
-Arnaud
-
+Konrad
 
