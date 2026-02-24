@@ -1,148 +1,154 @@
-Return-Path: <linux-usb+bounces-33665-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33666-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ELXEDLrMnWnfSAQAu9opvQ
-	(envelope-from <linux-usb+bounces-33665-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 17:07:22 +0100
+	id gOEiHPTPnWn4SAQAu9opvQ
+	(envelope-from <linux-usb+bounces-33666-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 17:21:08 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F2251898AB
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 17:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EACAF189BAD
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 17:21:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5F98130BB739
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 16:07:08 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 20E6030CA0D3
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 16:20:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2B923A783D;
-	Tue, 24 Feb 2026 16:07:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="XjtUVRc2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 426903A7F75;
+	Tue, 24 Feb 2026 16:20:10 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 526D423817E
-	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 16:07:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289643806B8;
+	Tue, 24 Feb 2026 16:20:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771949222; cv=none; b=eVXLxWLK8M6fCmtgWjtT7Sk1wF0Pzznq+3XnG9S7ZfowAudsRSQ+b2zTyotvcdrYebS9D+YYmQx9yIJcKZsyX4kduUFzR+Jgvxm0YCsxCitaeyqGiRfU+uQUJnHhXM8l/oYDxXKoq2TgEJ6kzgEiqjriup8UKfNdBs8Zj5NBo6A=
+	t=1771950009; cv=none; b=a/3p31JN+Ln/iVhYClMUdHR3BEsDFxCHW96XzI3tyXtY5LCkp2vrLjg86/BEWyjuipZvFv2s1Y0cqe8joQM+E2YLtk7p5dsjrQ890aFqnxiJG1LiGX7PXqsqORj6ZDEm+02lyVU/bnFW4xDNumuejjzP9warqWLYpTsupDig0IA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771949222; c=relaxed/simple;
-	bh=Rz/RdM3yxntj40tHMVbCBz56NDvGJst9qX9LJs3G5UE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iEnh1G9vmAgwvs2jMQIwpvYpjjWaThXpEPo6wrXwLDs9LzTKSmtVYQfgzyLJlHRDJuKTEqpzdp1EifEQL+vPl89bHJNJq7hbSqk07//6ioF6qfyBOeu7eTVBBbm7sa37uloWo5znl6JL6xVJOipVigD583hLc9xrnTT1F2QQCBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=XjtUVRc2; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-4398dd671daso85370f8f.0
-        for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 08:07:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1771949220; x=1772554020; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NGxEaLJuq5uhdbi4NUhV/UisDc0PwlBvhv5G70i3X38=;
-        b=XjtUVRc2mIgZyV6xY+H+xVP05SNicT0GcXeDkzNDOocnB1KH8fi5+ekThwecfmICpX
-         gC4yad+iQ86yDn9kJ97QX7nGBZzMgWp1Z6Lctthd6sHVPmivOHlaNyG6A2uB2woeBfFo
-         JcHP/J0YjAfgcFEisNbVS3m7sB/i2h9oaITgMsUMpW4nOsm2Bs9q8NAgpZU3irJfEBLn
-         hwWUcN5ZADdEHHhSco7v6t+S3rg5Fg92k9P1yTT1QcVMb2SOvP4gBhgomuH74dJcey76
-         fhqMXc5xEUsSLXp1JrG/hm5EM+eK4f7iSsi0Mqjewb4T3ftV9VixO7vLB4/hQBU/RXoq
-         QU/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771949220; x=1772554020;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NGxEaLJuq5uhdbi4NUhV/UisDc0PwlBvhv5G70i3X38=;
-        b=BwS3LSQK/iF0jniaM0dyhQg8BuwOkzFjUAVs3msofwhLUcobEP1jpXwhLlXmYsqnbW
-         4tW3Ihgrab8DIfAfX/qw5IW9PzKeQVPbplh8wBMFtCaujXuwDw10512Kl8SnkKD0HdyF
-         uLYjO5EP3p4wIaRkn8Zv4IrjrYvPpPriakN52W0d777RseOnx2K0XfY5n6e7/9iQiEJr
-         pvn2ncgh9fZIYQqm47nu+wwomY/FSLKblPst5/kD/Tk1KiscH8Gn7KTuqpm7d4fvAKgy
-         289E67GGwY/lwlbHP7wPDHL7L3ADewygCClrt9KPIPIa+4cnelZ9WdPVcRBbKqEOAz1E
-         /9Dg==
-X-Forwarded-Encrypted: i=1; AJvYcCVkMStmBWPM0xKG7tVIO6Brv4dv0b9KEY664an01/3fa//SoaVqoyS7nawZe03cHuUBiNA44/8nYhA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTQ6Q6Ou7+RrTjK31bRlJ1ZuKfGENmedfBF1hhCMQySNp4kbtA
-	VTE1icc6y+z/Mf8DkpXwEve38skDFdgWb5UDP7hT2G04Rody8qyZ/jDCyxzsgQTv9AE=
-X-Gm-Gg: ATEYQzxHwcQTDKUcsZ5LOxQ3QhXIBHXZWQyuDDCb+HePHYhq9VfrlUeYcngcR9Kna15
-	DUeZvkf/j0asg/JwLCQdjhLfJ5WY6nlk5iSqTIdsgUFQJiwsHxSMACuj9r4qYIso1C6zcyjLjll
-	pxv9Nv3JUIIas7LXtpGJCgOAo4rVCbbyI5hOAkdUz8YmT716jzZHgQGsAPDTDfefxK3zYxV08U6
-	T/zaV7eOrVlQt9lZtP7vIPxK4EZvG4ygtEXhML7wmd1jLgqU0bBecOTCI8zftMLAbp4cCglnlMA
-	Co7kasrTyxAG2dVS83sOLAJJJM506ptc6gr7+BHSKk1P2+5X3TJ427fgfNTjmUHUIizuaZBDEzz
-	94BWSpKjoFOZeWhrdluEbwGxur3Lfauy3W0/gBEoJV0WkBayFEtWKwExrgDMNbfSXVRE9Ynob/j
-	ygjwKzeHIoIXzdUn2c5xLKUIAaf70X4GYoCnwrq8IZrWwTx5n0MOuM89/emVxmES5Buug=
-X-Received: by 2002:a05:6000:3109:b0:436:d9b:cd02 with SMTP id ffacd0b85a97d-4396f113220mr22844467f8f.0.1771949219601;
-        Tue, 24 Feb 2026 08:06:59 -0800 (PST)
-Received: from ?IPV6:2001:a61:130a:c601:11aa:e71a:5113:31ca? ([2001:a61:130a:c601:11aa:e71a:5113:31ca])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970bfa1bdsm26324323f8f.3.2026.02.24.08.06.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Feb 2026 08:06:59 -0800 (PST)
-Message-ID: <3ebbf02b-8c55-41ae-90f0-49247aa14f3c@suse.com>
-Date: Tue, 24 Feb 2026 17:06:58 +0100
+	s=arc-20240116; t=1771950009; c=relaxed/simple;
+	bh=6G91BbTqFSYq68w6yhfkl+JDGrXisXHtlEgCseE/wwo=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=USqOVO1G8thfgen45iXNVM6Ww1j0fmbiTNzRg5c7dxMz8bF4y4wQ0aLX+j9GyfK2JA3wIrVqkYLQdlrzBkNRCizxSSmBL4mlSz2rAAu5ju1vSO5mAI3PlnyzZd0LFo3AZFrEeaA2khoswtV2yxqdIflZTG4g0REjoy8UHhwRGjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.224.107])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4fL2xC01QGzJ46C2;
+	Wed, 25 Feb 2026 00:19:43 +0800 (CST)
+Received: from dubpeml500005.china.huawei.com (unknown [7.214.145.207])
+	by mail.maildlp.com (Postfix) with ESMTPS id C0C2D40570;
+	Wed, 25 Feb 2026 00:20:04 +0800 (CST)
+Received: from localhost (10.203.177.15) by dubpeml500005.china.huawei.com
+ (7.214.145.207) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 24 Feb
+ 2026 16:20:01 +0000
+Date: Tue, 24 Feb 2026 16:20:00 +0000
+From: Jonathan Cameron <jonathan.cameron@huawei.com>
+To: Shawn Lin <shawn.lin@rock-chips.com>
+CC: Bjorn Helgaas <bhelgaas@google.com>, "Vaibhaav Ram T . L"
+	<vaibhaavram.tl@microchip.com>, Kumaravel Thiagarajan
+	<kumaravel.thiagarajan@microchip.com>, Even Xu <even.xu@intel.com>, Xinpeng
+ Sun <xinpeng.sun@intel.com>, Srinivas Pandruvada
+	<srinivas.pandruvada@linux.intel.com>, Jiri Kosina <jikos@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Zhou Wang
+	<wangzhou1@hisilicon.com>, Longfang Liu <liulongfang@huawei.com>, "Vinod
+ Koul" <vkoul@kernel.org>, Lee Jones <lee@kernel.org>, Jijie Shao
+	<shaojijie@huawei.com>, Jian Shen <shenjian15@huawei.com>, Sunil Goutham
+	<sgoutham@marvell.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "Heiner
+ Kallweit" <hkallweit1@gmail.com>, "David S . Miller" <davem@davemloft.net>,
+	Jeff Hugo <jeff.hugo@oss.qualcomm.com>, Oded Gabbay <ogabbay@kernel.org>,
+	Maciej Falkowski <maciej.falkowski@linux.intel.com>, Karol Wachowski
+	<karol.wachowski@linux.intel.com>, Min Ma <mamin506@gmail.com>, Lizhi Hou
+	<lizhi.hou@amd.com>, Andreas Noever <andreas.noever@gmail.com>, "Mika
+ Westerberg" <westeri@kernel.org>, Tomasz Jeznach <tjeznach@rivosinc.com>,
+	Will Deacon <will@kernel.org>, Xinliang Liu <xinliang.liu@linaro.org>, Tian
+ Tao <tiantao6@hisilicon.com>, Davidlohr Bueso <dave@stgolabs.net>, Srujana
+ Challa <schalla@marvell.com>, Bharat Bhushan <bbhushan2@marvell.com>, Antoine
+ Tenart <atenart@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>, Raag
+ Jadav <raag.jadav@intel.com>, "Hans de Goede" <hansg@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
+	<jirislaby@kernel.org>, Andy Shevchenko <andy@kernel.org>, Manivannan
+ Sadhasivam <mani@kernel.org>, Mika Westerberg
+	<mika.westerberg@linux.intel.com>, Andi Shyti <andi.shyti@kernel.org>, Robert
+ Richter <rric@kernel.org>, Mark Brown <broonie@kernel.org>, "Nirmal Patel"
+	<nirmal.patel@linux.intel.com>, Kurt Schwemmer
+	<kurt.schwemmer@microsemi.com>, Logan Gunthorpe <logang@deltatee.com>, Linus
+ Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, Sakari
+ Ailus <sakari.ailus@linux.intel.com>, Bingbu Cao <bingbu.cao@intel.com>, Ulf
+ Hansson <ulf.hansson@linaro.org>, Arnd Bergmann <arnd@arndb.de>, Benjamin
+ Tissoires <bentiss@kernel.org>, <linux-input@vger.kernel.org>,
+	<linux-i3c@lists.infradead.org>, <dmaengine@vger.kernel.org>, Philipp Stanner
+	<phasta@kernel.org>, <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+	<linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+	<linux-usb@vger.kernel.org>, <iommu@lists.linux.dev>,
+	<linux-riscv@lists.infradead.org>, David Airlie <airlied@gmail.com>, Simona
+ Vetter <simona@ffwll.ch>, <linux-cxl@vger.kernel.org>,
+	<linux-crypto@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
+	<linux-serial@vger.kernel.org>, <mhi@lists.linux.dev>, Andy Shevchenko
+	<andriy.shevchenko@linux.intel.com>, Jan Dabros <jsd@semihalf.com>,
+	<linux-i2c@vger.kernel.org>, Daniel Mack <daniel@zonque.org>, "Haojian
+ Zhuang" <haojian.zhuang@gmail.com>, <linux-spi@vger.kernel.org>, "Jonathan
+ Derrick" <jonathan.derrick@linux.dev>, <linux-pci@vger.kernel.org>,
+	<linux-gpio@vger.kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>,
+	<linux-media@vger.kernel.org>, <linux-mmc@vger.kernel.org>
+Subject: Re: [PATCH 01/37] PCI/MSI: Add Devres managed IRQ vectors
+ allocation
+Message-ID: <20260224162000.000001a5@huawei.com>
+In-Reply-To: <1771860581-82092-2-git-send-email-shawn.lin@rock-chips.com>
+References: <1771860581-82092-1-git-send-email-shawn.lin@rock-chips.com>
+	<1771860581-82092-2-git-send-email-shawn.lin@rock-chips.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: further issues in uss720 disconnect()
-To: Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- USB list <linux-usb@vger.kernel.org>
-References: <00b407f7-9adf-4666-bfc3-3c4fbbf7dce7@suse.com>
- <33708317-1a17-4d44-8dbd-423902db335c@rowland.harvard.edu>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <33708317-1a17-4d44-8dbd-423902db335c@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500009.china.huawei.com (7.191.174.84) To
+ dubpeml500005.china.huawei.com (7.214.145.207)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [1.54 / 15.00];
+	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	TO_DN_ALL(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33665-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[google.com,microchip.com,intel.com,linux.intel.com,kernel.org,bootlin.com,hisilicon.com,huawei.com,marvell.com,lunn.ch,gmail.com,davemloft.net,oss.qualcomm.com,amd.com,rivosinc.com,linaro.org,stgolabs.net,gondor.apana.org.au,linuxfoundation.org,microsemi.com,deltatee.com,arndb.de,vger.kernel.org,lists.infradead.org,realtek.com,lists.freedesktop.org,lists.linux.dev,ffwll.ch,semihalf.com,zonque.org,linux.dev];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33666-lists,linux-usb=lfdr.de];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_HAS_DN(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jonathan.cameron@huawei.com,linux-usb@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[86];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.953];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 9F2251898AB
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,rock-chips.com:email,huawei.com:mid]
+X-Rspamd-Queue-Id: EACAF189BAD
 X-Rspamd-Action: no action
 
-On 24.02.26 16:55, Alan Stern wrote:
-> On Tue, Feb 24, 2026 at 11:29:42AM +0100, Oliver Neukum wrote:
+On Mon, 23 Feb 2026 23:29:40 +0800
+Shawn Lin <shawn.lin@rock-chips.com> wrote:
 
->> we see that it will happily access kfreed memory.
->>
->> I think the driver needs a wait queue for asynchronous requests.
->> Or should I look for a way to use usb_kill_urb()?
->> What do you think?
-> 
-> Another possible solution: Keep track of the number of outstanding async
-> requests.  Then take a reference to priv->usbdev whenever the number
-> goes above 0 and release the reference whenever the number drops to 0.
+> pcim_alloc_irq_vectors() and pcim_alloc_irq_vectors_affinity() are created for
+> pci device drivers which rely on the devres machinery to help cleanup the IRQ
+> vectors.
 
-This seems a bit complicated. Why not just get a kref in every case?
+It might be worth adding some details on why we need the is_msi_managed
+flag in the first place vs just doing conventional devm_add_action_or_reset()
+with pci_free_irq_vectors().
 
-	Regards
-		Oliver
 
 
