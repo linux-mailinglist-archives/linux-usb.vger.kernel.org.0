@@ -1,126 +1,182 @@
-Return-Path: <linux-usb+bounces-33660-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33661-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yNEuKM7InWl6SAQAu9opvQ
-	(envelope-from <linux-usb+bounces-33660-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 16:50:38 +0100
+	id WNOTE4rJnWl9SAQAu9opvQ
+	(envelope-from <linux-usb+bounces-33661-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 16:53:46 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02C49189556
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 16:50:37 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC7CE1895ED
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 16:53:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 555E032205F8
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 15:42:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8805C30FBDA3
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 15:47:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18D2739A808;
-	Tue, 24 Feb 2026 15:42:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A4213A1A28;
+	Tue, 24 Feb 2026 15:47:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KVFKOZyM"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="J+XrR1eb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998323A1CE7
-	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 15:42:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF853A4F29
+	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 15:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771947760; cv=none; b=Ixt281U5QTb5dtTU3207D5LeMIgmdE4CyZs/MHcowYJq3/YiDzlzbADyKmwgKMHr9IHJanvP3HW3F+GjMYMBKp1nVS7RUmMyAAHcQtHz4hN0QxQ05oCLCGB2vbA2Hunoc1dCcm/XOxkUfEvd8BCdcb11i+vgwqNDhx/+8wD+TA8=
+	t=1771948024; cv=none; b=jMRo2IcGs7NvzjgH9h7nqksvZgDTZJ7bxXm/0icVne7pEAnqRrHJrl9eym+/MCD5sPreqoH0pswr0HIJTDTv+lfowYGTAmDswN6gSD82Wiy7B8mQsfu/LsVHkXnNkVyXcQemr3MSdyWI58U7YWdd+p/rudYdsPVqBnbfTYa3FPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771947760; c=relaxed/simple;
-	bh=LtBuy3+ILhpd9r3A1YFEiLPyBgB9AL/bN0WxkARZHF4=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Yk2ItFERi2q+jlhfcUhFD70umA5+De6J5XD69cWbU5UUoh2x9VpoYmLLFphHMovaZE+ZZL/lFvBU+xaSF6HIKfEkbBjZN/WVCqUKaOnPACOAniq2AeLN74BNQrqa45mj5pO/XnnWX9x2HV5+bATuSV0K/qsQEsbBNWKJjPmQI8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KVFKOZyM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 402A4C116D0
-	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 15:42:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771947760;
-	bh=LtBuy3+ILhpd9r3A1YFEiLPyBgB9AL/bN0WxkARZHF4=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=KVFKOZyMLBYOuKIuGx9Gvg7zRCYY6SsFEHLz7X0oZOU2iSsKfvMrDoG8D6JFdS5tz
-	 vqcNeO1X7rbzOZqy9XZokaOy0n27Zut7mv1YASOMPBpVvm5Vf3aHY6B1PR8asa6EdV
-	 7ekbax3MiRu/rMm9MhrJ4lhA4WZXCaftWuw9LJt4KEnlsLp6TuzZow4XU5knPiJZ83
-	 YnPX2nus+pM8LEKbxx0dVMv/kKe1HZDwkCAD1+dvd6hry4j5XQAasDYxQkUo5h4nlk
-	 MvYX6EdIxsfwT+xjxpsM4qAcgoQk6BxbEL/LtuFYXKMEu58u5CcxUr+pHLRe1qbVs+
-	 yZI8kUSXskYLQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 3AA1CCAB780; Tue, 24 Feb 2026 15:42:40 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 221103] xhci_hcd: System lockup under CPU load during usbfs
- polling of USB devices on AMD platforms
-Date: Tue, 24 Feb 2026 15:42:40 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-221103-208809-wIqbQpUNKC@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221103-208809@https.bugzilla.kernel.org/>
-References: <bug-221103-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1771948024; c=relaxed/simple;
+	bh=FmS6mT3TQDgW/UbzukgFcXe38SLDZTmQgb7H+tbASWk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QZtLzaM4/fYtHNp9AYIRL4sdHHsErgaMboBQvVJtrldRWDGwaGb9+gb2SZ1e6Kj8Vquigo7l7KDKMyquWtbKUePTJB3ggnwtPinTICyIeUpnqGN+pU5K0W8IJT7BBq2wFlnC04k7qV8Es4XmL3+cbEI9IQxstYzTTJHc4dszQ0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=J+XrR1eb; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-506a019a7f3so71653181cf.3
+        for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 07:47:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1771948022; x=1772552822; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lhkuQepQPneHK/qUGrckkXHtp6WWRJ5IG4Yd3zisi+I=;
+        b=J+XrR1ebFwnrdkN+m4jbcXlk92Y1W+UZw+mgFSpNUsaYw8PdOtAFHp22ZBwXTiJ807
+         Zlq67cWNiByjZZ8RBZCy9WIfEXyxcbpfY03YXUifjjI5NnrZTwNkYK3cpKthGZTDLOSX
+         zYR98ZeeyM3VJxDdvOkzHCTejDcgmt95NLFRzgookBfNTAMnia8Nh8r1oWR6gYPhXgcr
+         MOoh0zlzYQ1Okzqh16sfoBfnrGd1YkN+HclS2/+Wrlhig0O6BfeqRu+h2jS5j6IcTIUu
+         A0/VkWq+mpGNkNIWrfRr8MFCsRhQ+IZULo863qAb3mjVDs5SWeaByNFKgYJ4+vJxa6TH
+         TUwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771948022; x=1772552822;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lhkuQepQPneHK/qUGrckkXHtp6WWRJ5IG4Yd3zisi+I=;
+        b=sR70+C7E8OHFHTqZPkggCJ3lc1Oyfneb/io0qTddeyV3m9Fzm/1qsStu6177vfOTCO
+         G//gXViObmESNHP5Ga/wycaVJN/ncG93UeiSr32cTksSzeRin0UvlVQ/CvVhAH4+NgpU
+         rFwdPjMahH1VOg4fyr+Kn97XEOZxYHxGdqlJuh/n6VPCc6sajzYvuT0jYGHp9M74w/Eo
+         tqWmQeJ43CyCAtVbDqiQWxIOzLoZalVKtvbF3Ths6vZAroZi6iRI0P2mRZ48+dNoFvED
+         YQQBZBbnPdtxSgKrOeyCXqic+HHnU9TqSt/jy5B+/aTMWLwD1gsTVFKCii0FavWvTr5j
+         fFMw==
+X-Forwarded-Encrypted: i=1; AJvYcCVBGzf10JtYUpdh41ZVXY4I6L2b8nSe2y6M4/3d3rduemf4SREoUs9iCbP0jhykP8LUOpAQ0eBmZ7w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1rPVwnO2vTcFv4JFycWLb6nxfZscAmZw0Kujm4czYYVvLtKR2
+	2qM/5JBM1eLnP4gw9Ka9J5M6HDEZKA960NEgdzDadnVb2tT4As8MZOxUKO8+iv2qpg==
+X-Gm-Gg: AZuq6aIfsJOrZdiMnoFJGrAv8qhwPbb+wK5TeRX8KQjMgOfo6eZGV6iLp6g2oRxnPee
+	jOPnzQjd+zj4jj/v5jBwenHA8VVCh/kgfSVNKb0zbkz3V9GYkx04irW+wq8m3sYZG9kyT/1UpKn
+	Q1wm0ay6li/FTOVUwUZ8nJ6Ms8e7y0q/XzUxLQTqCQjzo1DcU7QNzmmV8MQufq8knZyYwMGH4A5
+	QPx/pQj5chsJKYOezOcB/g0SQQNM+kmGqi9vEFoDYZ/qmbFkJW9CtODXjgKJvnCENExHdRKVr1U
+	4FoN1xFsFYVt8HtdRKrqmS2bo7OxDy0/0j4WgFGlCAz5QaUtaIt2aae/wtVNe51QsmQhsE9E6hN
+	BnCstoVt0giHoyKCSzvTD2K29iQYQBMsABEOMWZ6FlOomqpV8TWJOPEz9xddHtXehvvUCLLwhD2
+	qnezwS2V4jKA7fgQYPU7yvVsZh
+X-Received: by 2002:a05:622a:15c3:b0:501:41c1:2aef with SMTP id d75a77b69052e-5070bc6b310mr176353581cf.42.1771948022382;
+        Tue, 24 Feb 2026 07:47:02 -0800 (PST)
+Received: from rowland.harvard.edu ([2601:19b:d01:d210::687c])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5070d6dd96fsm99469061cf.28.2026.02.24.07.47.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Feb 2026 07:47:01 -0800 (PST)
+Date: Tue, 24 Feb 2026 10:46:59 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Jimmy Hu <hhhuuu@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Dan Vacura <w36195@motorola.com>, Xu Yang <xu.yang_2@nxp.com>,
+	Frank Li <Frank.Li@nxp.com>,
+	Hans Verkuil <hverkuil+cisco@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+	badhri@google.com
+Subject: Re: [PATCH] usb: gadget: f_uvc: fix NULL pointer dereference during
+ unbind race
+Message-ID: <50314bb4-1539-452d-86d6-47887a9603a7@rowland.harvard.edu>
+References: <20260224083955.1375032-1-hhhuuu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260224083955.1375032-1-hhhuuu@google.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33660-lists,linux-usb=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
 	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33661-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_NO_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_ONE(0.00)[1];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,harvard.edu:email]
-X-Rspamd-Queue-Id: 02C49189556
+	RCPT_COUNT_SEVEN(0.00)[11];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,cisco];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[rowland.harvard.edu:mid,rowland.harvard.edu:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: BC7CE1895ED
 X-Rspamd-Action: no action
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221103
+On Tue, Feb 24, 2026 at 04:39:55PM +0800, Jimmy Hu wrote:
+> Commit b81ac4395bbe ("usb: gadget: uvc: allow for application to cleanly
+> shutdown") introduced two stages of synchronization waits totaling 1500ms
+> in uvc_function_unbind() to prevent several types of kernel panics.
+> However, this timing-based approach is insufficient during power
+> management (PM) transitions.
+> 
+> When the PM subsystem starts freezing user space processes, the
+> wait_event_interruptible_timeout() is aborted early, which allows the
+> unbind thread to proceed and nullify the gadget pointer
+> (cdev->gadget = NULL):
+> 
+> [  814.123447][  T947] configfs-gadget.g1 gadget.0: uvc: uvc_function_unbind()
+> [  814.178583][ T3173] PM: suspend entry (deep)
+> [  814.192487][ T3173] Freezing user space processes
+> [  814.197668][  T947] configfs-gadget.g1 gadget.0: uvc: uvc_function_unbind no clean disconnect, wait for release
+> 
+> When the PM subsystem resumes or aborts the suspend and tasks are
+> restarted, the V4L2 release path is executed and attempts to access the
+> already nullified gadget pointer, triggering a kernel panic:
+> 
+> [  814.292597][    C0] PM: pm_system_irq_wakeup: 479 triggered dhdpcie_host_wake
+> [  814.386727][ T3173] Restarting tasks ...
+> [  814.403522][ T4558] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000030
+> [  814.404021][ T4558] pc : usb_gadget_deactivate+0x14/0xf4
+> [  814.404031][ T4558] lr : usb_function_deactivate+0x54/0x94
+> [  814.404078][ T4558] Call trace:
+> [  814.404080][ T4558]  usb_gadget_deactivate+0x14/0xf4
+> [  814.404083][ T4558]  usb_function_deactivate+0x54/0x94
+> [  814.404087][ T4558]  uvc_function_disconnect+0x1c/0x5c
+> [  814.404092][ T4558]  uvc_v4l2_release+0x44/0xac
+> [  814.404095][ T4558]  v4l2_release+0xcc/0x130
+> 
+> The fix introduces a 'func_unbinding' flag in struct uvc_device to protect
+> critical sections:
+> 1. In uvc_function_disconnect(), it prevents accessing the nullified
+>    cdev->gadget pointer.
+> 2. In uvc_v4l2_release(), it ensures uvcg_free_buffers() is skipped
+>    if unbind is already in progress, avoiding races with concurrent
+>    bind operations or use-after-free on the video queue memory.
 
---- Comment #24 from Alan Stern (stern@rowland.harvard.edu) ---
-In view of comment #17 plus the fact that the entire system freezes, this l=
-ooks
-more likely to be a PCI issue rather than a USB problem.  A broken USB host
-controller isn't the sort of thing you expect to take down the whole comput=
-er,
-but a broken PCI bus or controller could easily do so.
+Sorry if the answer to this question is obvious to anybody familiar with 
+the driver...
 
---=20
-You may reply to this email to add a comment.
+The patch adds a flag that can be accessed by two different tasks 
+(disconnect and release).  Is there any synchronization to prevent these 
+tasks from racing and accessing the new flag concurrently?
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Alan Stern
 
