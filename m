@@ -1,149 +1,138 @@
-Return-Path: <linux-usb+bounces-33668-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33669-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iNHaBxbdnWmuSQQAu9opvQ
-	(envelope-from <linux-usb+bounces-33668-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 18:17:10 +0100
+	id CFKCFNfgnWnpSQQAu9opvQ
+	(envelope-from <linux-usb+bounces-33669-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 18:33:11 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 931E218A69C
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 18:17:09 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA88818A922
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 18:33:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8544A30F1AF6
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 17:13:46 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E0D393016EF6
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 17:33:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA8123A9D93;
-	Tue, 24 Feb 2026 17:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF2083A9D9E;
+	Tue, 24 Feb 2026 17:33:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aTWq6Tyh"
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="PP4smpnZ";
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="RCEn1jB7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FCD63A962E;
-	Tue, 24 Feb 2026 17:13:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576993A9627;
+	Tue, 24 Feb 2026 17:33:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771953224; cv=none; b=GfjyVTtDdO8tSH/aXIne0m29VsfRVFh6DGEnQb9r1JwVI+5S+QpWhO9wmKp9lbrEhdg9nK5VMNIEhp0HZzVKSK6t0Gx3yVjzzvt0dUQb8xE2NAo36TkB8G9QFNW2vBp/VlmlT3Y1DoexpbdomhFGChwH7RZYNPlIJd93TBb7KmU=
+	t=1771954384; cv=none; b=MDgKu+tMlJDX8sBmntWo5it8CyReHTFPzKRlUToZMqNuWFuAhBeqX3+pzy6WgMx36Xs+uFgxIpgGFQMshm07ZGXTO4vaY660f3xJJEm/nPfjGKVPFFqmHSaok7V7D8h4+CxFnqOs8sS4vdZPKg7jCD8sP/C51qc+YfxcOsM++Xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771953224; c=relaxed/simple;
-	bh=miD05eK+0103K0nqV0VgvBQv0vF5WAuglrfoXelY66M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k1EuFrTf16gb8S6gDTbtdMozITJmvgOtyZUYu3pu5h9QGiXd/b6PRdG0TiIYMtUHlpnF6YVHDVs5h4hhtnE8ojc+4boLLRVCidGDJ+epnuVRYjFrQS6nnVw7hv/6f9UpQy4Bwj6izIdgVL+TWS+CBSrrw2oMVZd27yxltgeES34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aTWq6Tyh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CE31C116D0;
-	Tue, 24 Feb 2026 17:13:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771953223;
-	bh=miD05eK+0103K0nqV0VgvBQv0vF5WAuglrfoXelY66M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aTWq6TyhfT8xVGZ9JC9piET/yP5vfFHniNb9mu0CM8jwvVmrW+IOK/yHJJU4MYocG
-	 LuKN/56l0sWVn3L3SDAlKQ41JhoJ3P81g4G4FMWPch2FhI/W9EkJts+MSxjln1tPdn
-	 tUHcqdwJrdE61Uaj++we57CDoWXyyiJVyudtn432cMQJA18y0WbmmBMlijq6kHxFR2
-	 b2RpoUlW0G9CP10SZ8Ti6hRjp5Up1nnlOQz8fuXA+NBz/0sdL9bMI+hENaJzD4f1U/
-	 e+3UxUgrX9mbkGtF3kzMWwpoYVNCAys/HSI5rPQVuPZ2IPCvqTCosiOtY6zYoR1RwB
-	 35zDU8obSvw+g==
-Date: Tue, 24 Feb 2026 17:13:36 +0000
-From: Mark Brown <broonie@kernel.org>
-To: amitsd@google.com
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Lee Jones <lee@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH v7 4/6] lib/linear_ranges: Add
- linear_range_get_selector_high_array
-Message-ID: <57891cf1-a7e2-42ac-98e4-25fd548ee765@sirena.org.uk>
-References: <20260218-max77759-charger-v7-0-e8d907ce69c5@google.com>
- <20260218-max77759-charger-v7-4-e8d907ce69c5@google.com>
+	s=arc-20240116; t=1771954384; c=relaxed/simple;
+	bh=SlyAmiLYNVOdbRvL1dnKOb9oLm9AHpOb9WRvlUv8Mhs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F5BheWduX4sUYsjpFwJA2qbz9pbJbDiksHxwFUzgt0QgiqEkc8ttep7ld50PflJCEkIQLZPYElwA2IKbHki+b8o4a5t8ZKL4Hq6o+Bp9OodrOuGV55sbOxuyaLXxl1VJvqXw0zAWmwC7wuDUCArnJ6sCHbS+ogN2ERlnxRRmGL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=PP4smpnZ; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=RCEn1jB7; arc=none smtp.client-ip=23.88.97.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1771954379;
+	bh=SlyAmiLYNVOdbRvL1dnKOb9oLm9AHpOb9WRvlUv8Mhs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PP4smpnZbOVhL66wZNf/q2vL5peac6l18u1aUrSCNoY9Pibcg2eW/yaIdHsqaZFih
+	 JM2HXceJdNtjBCZsSVkIOpKf7aysi9gNo9peSrw0hW6shU4MgKxpnNFfv/9J0TfdGj
+	 BbquhXnc9IHx5QS5iij8qt84Nka5Y3B0eXh5Y+Yxir0gMbXkANDsB0kZtgpFylRSZ3
+	 Qy0pVTTRy5Dw1YE7U7lSv3YRh0gX5+ycOfPaBrlr1wQ8IbvL51+QfD2OO8NpgS8m0n
+	 6PipoK4QM6a9NoVqrYL0wQ/Sm/4CpaWpz4W1vhNVf13KyBQAO/Iwplsk3RhCumoVXp
+	 MkDqiuxTmNc+A==
+Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
+	id 8A42E3F779; Tue, 24 Feb 2026 17:32:59 +0000 (UTC)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1771954377;
+	bh=SlyAmiLYNVOdbRvL1dnKOb9oLm9AHpOb9WRvlUv8Mhs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RCEn1jB7cfHNeX7awvzGIY1iAWsX6q13340Z4mtwNSWYTS13vmJlqJy6fzMjNzpsU
+	 pYJdDC3kFd8V43oXT2+mftao+xiqW+9fi34R+vrc2CpGzLdzCBQClyX0G7TVn+Zqgl
+	 9DJMCb+G5H+e4f98NXNXDhO28GVElQBPJlvdCe1/QIboOlgrdGdj1A8p9GggaWvIFs
+	 TlWfQRA0v26GKh98foGbpy5finaXzo1zSoOylbWBmRJWzDLQIRcjdr5/U1SsKR3mkY
+	 Mo9BfjGoDuwjg2dAUNV9lBYS1ruRWOBuoNqY/kOu1VVNxnyDKpY4g8hvzHbjj8DUa8
+	 MS8dRZWeXu9yQ==
+Received: from [IPV6:2a00:6020:47a3:e800:94d3:d213:724a:4e07] (unknown [IPv6:2a00:6020:47a3:e800:94d3:d213:724a:4e07])
+	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id 306B93F0B3;
+	Tue, 24 Feb 2026 17:32:57 +0000 (UTC)
+Message-ID: <557cb9f7-8caf-4aaa-ab9b-313d329fd216@birger-koblitz.de>
+Date: Tue, 24 Feb 2026 18:32:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ajqSXpJyr7gIDnad"
-Content-Disposition: inline
-In-Reply-To: <20260218-max77759-charger-v7-4-e8d907ce69c5@google.com>
-X-Cookie: An apple a day makes 365 apples a year.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next] r8152: Add 2500baseT EEE status/configuration
+ support
+To: Daniel Golle <daniel@makrotopia.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, =?UTF-8?Q?Ren=C3=A9_van_Dorst?=
+ <opensource@vdorst.com>
+References: <20260223-b4-eee2g5-v1-1-7006b537b144@birger-koblitz.de>
+ <aZz_0_Zt67XsOyTM@makrotopia.org>
+From: Birger Koblitz <mail@birger-koblitz.de>
+Content-Language: en-US
+In-Reply-To: <aZz_0_Zt67XsOyTM@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33668-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,linaro.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,gmail.com,linux-foundation.org,vger.kernel.org,lists.infradead.org];
-	RCPT_COUNT_TWELVE(0.00)[23];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	DKIM_TRACE(0.00)[birger-koblitz.de:+];
+	TAGGED_FROM(0.00)[bounces-33669-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	DMARC_NA(0.00)[birger-koblitz.de];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[broonie@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sirena.org.uk:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 931E218A69C
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.998];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,birger-koblitz.de:mid,birger-koblitz.de:dkim]
+X-Rspamd-Queue-Id: EA88818A922
 X-Rspamd-Action: no action
 
+Hi Daniel,
 
---ajqSXpJyr7gIDnad
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 24/02/2026 2:33 am, Daniel Golle wrote:
+>>   	tp->eee_en = eee->eee_enabled;
+>>   	tp->eee_adv = val;
+>> -
+>> +	if (tp->support_2500full) {
+>> +		val = linkmode_to_mii_eee_cap2_t(eee->advertised);
+>> +		tp->eee_adv2 = val;
+> 
+> eee_adv2 set here is never actually written to the hardware.
+> ie. you are never doing
+> ocp_reg_write(tp, OCP_EEE_ADV2, tp->eee_adv2);
+> for capable NICs.
+thanks for the feedback! You are of course right, the writing part was 
+forgotten when editing the patch. I will send a corrected v2.
 
-On Wed, Feb 18, 2026 at 09:59:12PM +0000, Amit Sunil Dhamne via B4 Relay wr=
-ote:
-> From: Amit Sunil Dhamne <amitsd@google.com>
->=20
-> Add a helper function to find the selector for a given value in a linear
-> range array. The selector should be such that the value it represents
-> should be higher or equal to the given value.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---ajqSXpJyr7gIDnad
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmd3D8ACgkQJNaLcl1U
-h9BxqQf8DP6wjyYdfOSBrB5Xn9eXDFFW1jGwmmgn7p3tf87vwRhXtNxKhIkQmKV4
-4tQDBl6ZEV8G8obl3pRNVamOHkMoWofw7EG5hpLjz0k/lGLAWvDUg6SeZk6BsUd3
-04xpHoM4SxTGD01C8nt6yEjLplF0OkYS03haPQ6ldgh4hc0fW5/qlaDX8WSvvYzH
-vetuB1RA8iTews7LT8/YhArFzkJqhWyG12rKXgWXnPz2Joz0k2k279nlGs+lRVLV
-g0V5ali3JRtXREfFXSL28UuHCAAmBrYPR4KEF4paAdV7h8Gt3UB9KuU/Gi4HjRkV
-chKB8nn1mKHLgOU/N0yXycpQ/fr25w==
-=blQU
------END PGP SIGNATURE-----
-
---ajqSXpJyr7gIDnad--
+Birger
 
