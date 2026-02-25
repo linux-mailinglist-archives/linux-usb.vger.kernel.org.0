@@ -1,313 +1,183 @@
-Return-Path: <linux-usb+bounces-33686-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33688-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kHxYCfKbnmkZWgQAu9opvQ
-	(envelope-from <linux-usb+bounces-33686-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 07:51:30 +0100
+	id QF+CLiycnmkZWgQAu9opvQ
+	(envelope-from <linux-usb+bounces-33688-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 07:52:28 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89C7319287A
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 07:51:29 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBF8F192898
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 07:52:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CC15830E239C
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 06:46:18 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id E63CE30259B1
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 06:52:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C8DC2BDC2F;
-	Wed, 25 Feb 2026 06:46:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 905502C0F91;
+	Wed, 25 Feb 2026 06:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fOuKXTg7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VBzfC6y1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-pg1-f196.google.com (mail-pg1-f196.google.com [209.85.215.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6646C2C0F7F
-	for <linux-usb@vger.kernel.org>; Wed, 25 Feb 2026 06:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F877296BD5
+	for <linux-usb@vger.kernel.org>; Wed, 25 Feb 2026 06:52:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772001978; cv=none; b=cEdVzc8hJ9Aohi8L8BY6GVry2jC0/aa2N53bTHIUn52++6Jg31Ruc1Ue+VYqF1IDHpKeh9ATqWaDpYq9FtyLvpPcV0naafYLpsZOZ90kukGvCvLZBQe2ZUi7sma+1NUkghPuNs1ZBne3l4TMjaRHH4iOXaL7ZMyicKglYqbqDHI=
+	t=1772002340; cv=none; b=KgYkTQcjNjd27qwEB9KntRKGujwIyMPEUOIMO7anMkUnNCwGkvAdZDu5VupNhCM8dsa+6C4p8vEq/g4Vmzsjshs0BwA3tFiXOKk8XFzueKlv/GYYYOtdtkZzvnhrXl1vO/qSRaCf2OqnAaDfcglB+IVyo4Opdtf3N6neud9PK00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772001978; c=relaxed/simple;
-	bh=KapOGnfYOh0PXxFD3beN+OUTsZGlUIANBotOvS5qfBU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=r825hKK9XIyYR8ZSH+SCDNcpWL2psJKHJ2IWJmgwK2QJu1bqtzePZk2YRiIlpVRILacG6QuM90zw4N46/WIUwLANBc9Vfxsh/KGIaMeGSasPeMy2fnbWAFrHuEr+e5SuiTl0UWTitTHTS/mebak1sPsdWcXBAaFY61WpIrx/naM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fOuKXTg7; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c6e1e748213so4075100a12.2
-        for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 22:46:15 -0800 (PST)
+	s=arc-20240116; t=1772002340; c=relaxed/simple;
+	bh=wWlnhUKYqV8Wx/7Onzg/8pKZVFcNwdYvLbRKD8COaVc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GpvfhLJPc4gxSrJrhGoNA5uaJoHxTcSq73oha7HNOcmCYgpFEE8dN3eNamUd5Bz8DhnlyWIhZkc7P9Ar2iYgVTu8o8789Cmp7ANTbzsVLrPpPLkXVRLH1Ej8LIEnhtDOHl3/R6jbISofoJ862Wt6NT26G5G0wKUM8IlTRuPhGTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VBzfC6y1; arc=none smtp.client-ip=209.85.215.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f196.google.com with SMTP id 41be03b00d2f7-c6e248aa446so2560978a12.1
+        for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 22:52:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772001975; x=1772606775; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QnjS8olMajKnP/sZl5vPFhjp48gpsJXv+tm2dwICITg=;
-        b=fOuKXTg7xdPgbuvDQh9UA4vsU2GLSCulXctaJ3hj1RVw7GEuVJaA0ySUC4PYUee2Ri
-         9s3TndCsOySG+Leu9bNlX3vCHgj+roHQsdRR6mp9w2l9TKvBIX7CFQmvYH/og0mt3m9D
-         yEl1HG1ncHxFdjbPpZDzq+QiLZKnXu4BKNvMDVEFRK4lySAcGylCnNEo503XHA0tLjXY
-         NXN/rE9B/b3IzNmKiGxmsQ9+hxtOttbiZgO34R/YnJzibTMowrsG7q2LN+tr6oiSDHTi
-         SZ8WDOG3sqC/PKSH/DflhYxC/QYIF2/sAgAe1cjtGMevef0QEfmUwbFPCl7TLWX+1f21
-         Ab4w==
+        d=gmail.com; s=20230601; t=1772002338; x=1772607138; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pDedFaVY+KaOvNB2BxP1xWzhD01NDhi5iX3Ein+K0U8=;
+        b=VBzfC6y1tatOMh7V65zNo4ttdmTWe25uBOx9JVQvyY3rWhLbYqjTa7ocg3QFnp2U4P
+         gL8NBL67BJuKRU3GnKtMRLHGBAh9hv0dynzCMdSp4/SA0Xvd09GRq7dXjCJsebe/CfYq
+         BLGRoIyF4s4Pf459H6joid/9zAPGmfeHCGA+Xma3E09K/J0+LyIW14jCza7njj+QtuNN
+         SFfWdMGV3MKzm74oxb4/LgyYO3EzZt9HuFKqpsLeca772omb8xpu53+vQUDaoBWDfMCP
+         9KS3iqbg5ZUw8GpvAxgNQlCkZQs7BTPo6elOaPv2X9t66KkXC3o8gxTaDEK0UG9iD1NS
+         G8lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772001975; x=1772606775;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QnjS8olMajKnP/sZl5vPFhjp48gpsJXv+tm2dwICITg=;
-        b=fmNpLJn8vd9vJ3XnyPC2KPZNYsLem4Ck1Cn0FuBdc21dJqgScTB12qVdsSCa90GBkq
-         K8nOYxdTTDD/evpWmJZlXFtZg1vQ/xxQi/Ju9ZiepMyp728Vd9LkHeCR1Jnvz9aSYZ24
-         1/G6vQXWB9pOdmEjiYf5NNwnlS6CP3MTKlzp86FlJZRxadRo/X1uq5T//UQFWC1RB7e6
-         GJ3dIB4nJInwmHxzZZbhmtKig3xux94OpjZJrbxx4UF/IcVYdh8xFijSV7YD2oog/l77
-         uP3nrIr3rkIxGPgq/53MpNu+rI0mcViIYJjBW9rn8w6esfaHYSVYslq72a+wI7d0obwz
-         v28A==
-X-Gm-Message-State: AOJu0YwjH4FgLcvX/BIkSdirPbR6MXtXzLMkMqIzPrF5JvOQgM+amF0y
-	AzT1ZrDlUKBKurW20KiseBOGC3C9RPBOQrGl4iY2JnXGLHx4BbJ8kD0+AqlseP0hG9nr6g7ROfC
-	apdFPAq+c9ylMVXXtIw==
-X-Received: from pgce1.prod.google.com ([2002:a05:6a02:1c1:b0:bd9:a349:94a5])
- (user=guanyulin job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:9d91:b0:394:6208:6623 with SMTP id adf61e73a8af0-39545ed01cfmr12186049637.27.1772001974577;
- Tue, 24 Feb 2026 22:46:14 -0800 (PST)
-Date: Wed, 25 Feb 2026 06:45:51 +0000
-In-Reply-To: <20260225064601.270301-1-guanyulin@google.com>
+        d=1e100.net; s=20230601; t=1772002338; x=1772607138;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pDedFaVY+KaOvNB2BxP1xWzhD01NDhi5iX3Ein+K0U8=;
+        b=nahqePe2KRqcNy/pv9ZsDHsbHUge/q7Nrm1ceIwGRWaPwayiQvIymHx1fxWX84LI9u
+         YgCyGQZeg1b3lSL387z+5T9excTjsXlm6GZAzggLmJ5jLScG2O7CIriSDd/HoHsWF7zX
+         U6O+wQ8lzpuL1sMDDizFCY1F0mgYAJjpof/ySCANZOq/P5GVy/RiYoEAGNHpV9jB32P1
+         r1sh/rTsKVm3T2k+S6X1RCOhNA/WYXK5INUFR9gMrWHjVMC4Y+djKHt/gRV3nXNWl+Hz
+         Gqi0TjBoPSyHKE1MQCD8L2qzjdhco5vKeXu40UUX3xir1jCRZFJ8t7lMIb2mPpUsjvjG
+         +RHw==
+X-Forwarded-Encrypted: i=1; AJvYcCWgr9Blwn6VKMwxuNjUSVBAUAg81oGvO/Q2zpaHkB4q1kq7lUecC9ev+5k48G8E6Pb6CZRC5OUcWX0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YybeiTq+V50gHEjVMsYqppAD1TYVQzQTt2uuy9Hl90Op+H+tkmK
+	JzWns33PZZQh2gss6P34bree4KIChYcy5sVbtXXOT7JSSC8715sTnWoK
+X-Gm-Gg: ATEYQzwCPYP/pbdZL3bjdGHZNWKrOhP8Y52frDmmZSpBHv6XVNpZYi96u5KtbcmM5CP
+	YMnSfF1Xr96jSCRVY8rGSMXrm6udggf0YMeoZYDs1qkNHcU5KrXPAGZYUqYlWwd24oG9K8Tq5S4
+	hg+hJ/l7829ewzsjDKm7GvnZCBeYESwXRldUtKGE3/pOHbejub5FQn61GkHvOOfwvOJ0wWAPLTX
+	lRyKz/UZ/RFO5VgfNNnnUbdfz4GeSen4TjWPxBgZmCQPuyxA5g/zxr8WLmq5fAeuA4JVzadXna5
+	rkYeu49kHpsDZ+D+PXQ9J+QcVuo/pCiCk9NhwxcYD/a10z/QNye/RY3jeoeflj+BcPvgfXq06Ja
+	VV3aUJl4IN+86sf+/jtSQ+SN032FLfjIr+bb+DzTtzb4WY6cHszT0/kbDUQ0WsoRfuL086zTJgX
+	WTyhbkMeoVJXFLvaj5P+IjoCfSpW80dTXdYAsPh/uasnOj5epkwekGPHOS08Y8yeLIXotED3Uow
+	wEHrGY=
+X-Received: by 2002:a05:6a21:b8f:b0:393:c607:9d3c with SMTP id adf61e73a8af0-39545f79318mr12151549637.47.1772002338417;
+        Tue, 24 Feb 2026 22:52:18 -0800 (PST)
+Received: from zeeshan-Standard-PC-Q35-ICH9-2009.. ([110.93.227.54])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3591349c87bsm434207a91.2.2026.02.24.22.52.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Feb 2026 22:52:17 -0800 (PST)
+From: Zeeshan Ahmad <zeeshanahmad022019@gmail.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Dan Carpenter <dan.carpenter@linaro.org>,
+	linux-usb@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zeeshan Ahmad <zeeshanahmad022019@gmail.com>
+Subject: [PATCH v3] usb: dwc3: qcom: simplify error check in dwc3_qcom_find_num_ports()
+Date: Wed, 25 Feb 2026 11:51:57 +0500
+Message-ID: <20260225065157.8952-1-zeeshanahmad022019@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260225064245.8833-1-zeeshanahmad022019@gmail.com>
+References: <20260225064245.8833-1-zeeshanahmad022019@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260225064601.270301-1-guanyulin@google.com>
-X-Mailer: git-send-email 2.53.0.414.gf7e9f6c205-goog
-Message-ID: <20260225064601.270301-3-guanyulin@google.com>
-Subject: [PATCH v1 2/2] ALSA: usb: qcom: manage offload device usage
-From: Guan-Yu Lin <guanyulin@google.com>
-To: gregkh@linuxfoundation.org, mathias.nyman@intel.com, perex@perex.cz, 
-	tiwai@suse.com, quic_wcheng@quicinc.com, broonie@kernel.org, arnd@arndb.de, 
-	harshit.m.mogalapalli@oracle.com, wesley.cheng@oss.qualcomm.com, 
-	dan.carpenter@linaro.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-sound@vger.kernel.org, Guan-Yu Lin <guanyulin@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33686-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[linaro.org,vger.kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-33688-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[15];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zeeshanahmad022019@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[guanyulin@google.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[google.com:+];
-	NEURAL_HAM(-0.00)[-0.999];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 89C7319287A
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: EBF8F192898
 X-Rspamd-Action: no action
 
-The Qualcomm USB audio offload driver currently does not report its offload
-activity to the USB core. This prevents the USB core from properly tracking
-active offload sessions, which could allow the device to auto-suspend while
-audio offloading is in progress.
+The platform_get_irq_byname_optional() function returns a non-zero
+IRQ number on success and a negative error code on failure. It
+never returns zero.
 
-Integrate usb_offload_get() and usb_offload_put() calls into the offload
-stream setup and teardown paths. Specifically, call usb_offload_get() when
-initializing the event ring and usb_offload_put() when freeing it.
+The current implementation in the modern dwc3-qcom driver checks for
+a return value less than or equal to zero. Since zero is not a
+valid return value, simplify the check to only look for negative
+error codes. This aligns the logic with the standard return contract
+of the platform IRQ APIs.
 
-Since the updated usb_offload_get() and usb_offload_put() APIs require the
-caller to hold the USB device lock, add the necessary device locking in
-handle_uaudio_stream_req() and qmi_stop_session() to satisfy this
-requirement.
-
-Cc: stable@vger.kernel.org
-Fixes: ef82a4803aab ("xhci: sideband: add api to trace sideband usage")
-Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
+Signed-off-by: Zeeshan Ahmad <zeeshanahmad022019@gmail.com>
 ---
- sound/usb/qcom/qc_audio_offload.c | 102 ++++++++++++++++++------------
- 1 file changed, 60 insertions(+), 42 deletions(-)
+v3:
+ - Fix missing version changelog in the v2 submission.
+v2:
+ - Targeted the modern dwc3-qcom.c driver instead of the legacy one 
+   as suggested by Thinh Nguyen.
+ - Audited the modern driver to confirm the same redundant error 
+   check exists there.
+ - Updated the commit message to specifically mention the modern 
+   dwc3-qcom driver.
 
-diff --git a/sound/usb/qcom/qc_audio_offload.c b/sound/usb/qcom/qc_audio_offload.c
-index cfb30a195364..1da243662327 100644
---- a/sound/usb/qcom/qc_audio_offload.c
-+++ b/sound/usb/qcom/qc_audio_offload.c
-@@ -699,6 +699,7 @@ static void uaudio_event_ring_cleanup_free(struct uaudio_dev *dev)
- 		uaudio_iommu_unmap(MEM_EVENT_RING, IOVA_BASE, PAGE_SIZE,
- 				   PAGE_SIZE);
- 		xhci_sideband_remove_interrupter(uadev[dev->chip->card->number].sb);
-+		usb_offload_put(dev->udev);
- 	}
- }
+ drivers/usb/dwc3/dwc3-qcom.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index 9ac75547820d..f43f73ac36ff 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -526,14 +526,14 @@ static int dwc3_qcom_find_num_ports(struct platform_device *pdev)
+ 	int irq;
  
-@@ -750,6 +751,7 @@ static void qmi_stop_session(void)
- 	struct snd_usb_substream *subs;
- 	struct usb_host_endpoint *ep;
- 	struct snd_usb_audio *chip;
-+	struct usb_device *udev;
- 	struct intf_info *info;
- 	int pcm_card_num;
- 	int if_idx;
-@@ -791,8 +793,13 @@ static void qmi_stop_session(void)
- 			disable_audio_stream(subs);
- 		}
- 		atomic_set(&uadev[idx].in_use, 0);
--		guard(mutex)(&chip->mutex);
--		uaudio_dev_cleanup(&uadev[idx]);
-+
-+		udev = uadev[idx].udev;
-+		if (udev) {
-+			guard(device)(&udev->dev);
-+			guard(mutex)(&chip->mutex);
-+			uaudio_dev_cleanup(&uadev[idx]);
-+		}
- 	}
- }
+ 	irq = platform_get_irq_byname_optional(pdev, "dp_hs_phy_1");
+-	if (irq <= 0)
++	if (irq < 0)
+ 		return 1;
  
-@@ -1183,11 +1190,15 @@ static int uaudio_event_ring_setup(struct snd_usb_substream *subs,
- 	er_pa = 0;
+ 	for (port_num = 2; port_num <= DWC3_QCOM_MAX_PORTS; port_num++) {
+ 		sprintf(irq_name, "dp_hs_phy_%d", port_num);
  
- 	/* event ring */
-+	ret = usb_offload_get(subs->dev);
-+	if (ret < 0)
-+		goto exit;
-+
- 	ret = xhci_sideband_create_interrupter(uadev[card_num].sb, 1, false,
- 					       0, uaudio_qdev->data->intr_num);
- 	if (ret < 0) {
- 		dev_err(&subs->dev->dev, "failed to fetch interrupter\n");
--		goto exit;
-+		goto put_offload;
+ 		irq = platform_get_irq_byname_optional(pdev, irq_name);
+-		if (irq <= 0)
++		if (irq < 0)
+ 			return port_num - 1;
  	}
  
- 	sgt = xhci_sideband_get_event_buffer(uadev[card_num].sb);
-@@ -1219,6 +1230,8 @@ static int uaudio_event_ring_setup(struct snd_usb_substream *subs,
- 	mem_info->dma = 0;
- remove_interrupter:
- 	xhci_sideband_remove_interrupter(uadev[card_num].sb);
-+put_offload:
-+	usb_offload_put(subs->dev);
- exit:
- 	return ret;
- }
-@@ -1483,6 +1496,7 @@ static int prepare_qmi_response(struct snd_usb_substream *subs,
- 	uaudio_iommu_unmap(MEM_EVENT_RING, IOVA_BASE, PAGE_SIZE, PAGE_SIZE);
- free_sec_ring:
- 	xhci_sideband_remove_interrupter(uadev[card_num].sb);
-+	usb_offload_put(subs->dev);
- drop_sync_ep:
- 	if (subs->sync_endpoint) {
- 		uaudio_iommu_unmap(MEM_XFER_RING,
-@@ -1528,6 +1542,7 @@ static void handle_uaudio_stream_req(struct qmi_handle *handle,
- 	u8 pcm_card_num;
- 	u8 pcm_dev_num;
- 	u8 direction;
-+	struct usb_device *udev = NULL;
- 	int ret = 0;
- 
- 	if (!svc->client_connected) {
-@@ -1597,50 +1612,53 @@ static void handle_uaudio_stream_req(struct qmi_handle *handle,
- 
- 	uadev[pcm_card_num].ctrl_intf = chip->ctrl_intf;
- 
--	if (req_msg->enable) {
--		ret = enable_audio_stream(subs,
--					  map_pcm_format(req_msg->audio_format),
--					  req_msg->number_of_ch, req_msg->bit_rate,
--					  datainterval);
--
--		if (!ret)
--			ret = prepare_qmi_response(subs, req_msg, &resp,
--						   info_idx);
--		if (ret < 0) {
--			guard(mutex)(&chip->mutex);
--			subs->opened = 0;
--		}
--	} else {
--		info = &uadev[pcm_card_num].info[info_idx];
--		if (info->data_ep_pipe) {
--			ep = usb_pipe_endpoint(uadev[pcm_card_num].udev,
--					       info->data_ep_pipe);
--			if (ep) {
--				xhci_sideband_stop_endpoint(uadev[pcm_card_num].sb,
--							    ep);
--				xhci_sideband_remove_endpoint(uadev[pcm_card_num].sb,
--							      ep);
-+	udev = subs->dev;
-+	scoped_guard(device, &udev->dev) {
-+		if (req_msg->enable) {
-+			ret = enable_audio_stream(subs,
-+						map_pcm_format(req_msg->audio_format),
-+						req_msg->number_of_ch, req_msg->bit_rate,
-+						datainterval);
-+
-+			if (!ret)
-+				ret = prepare_qmi_response(subs, req_msg, &resp,
-+							info_idx);
-+			if (ret < 0) {
-+				guard(mutex)(&chip->mutex);
-+				subs->opened = 0;
-+			}
-+		} else {
-+			info = &uadev[pcm_card_num].info[info_idx];
-+			if (info->data_ep_pipe) {
-+				ep = usb_pipe_endpoint(uadev[pcm_card_num].udev,
-+							info->data_ep_pipe);
-+				if (ep) {
-+					xhci_sideband_stop_endpoint(uadev[pcm_card_num].sb,
-+									ep);
-+					xhci_sideband_remove_endpoint(uadev[pcm_card_num].sb,
-+									ep);
-+				}
-+
-+				info->data_ep_pipe = 0;
- 			}
- 
--			info->data_ep_pipe = 0;
--		}
--
--		if (info->sync_ep_pipe) {
--			ep = usb_pipe_endpoint(uadev[pcm_card_num].udev,
--					       info->sync_ep_pipe);
--			if (ep) {
--				xhci_sideband_stop_endpoint(uadev[pcm_card_num].sb,
--							    ep);
--				xhci_sideband_remove_endpoint(uadev[pcm_card_num].sb,
--							      ep);
-+			if (info->sync_ep_pipe) {
-+				ep = usb_pipe_endpoint(uadev[pcm_card_num].udev,
-+							info->sync_ep_pipe);
-+				if (ep) {
-+					xhci_sideband_stop_endpoint(uadev[pcm_card_num].sb,
-+									ep);
-+					xhci_sideband_remove_endpoint(uadev[pcm_card_num].sb,
-+									ep);
-+				}
-+
-+				info->sync_ep_pipe = 0;
- 			}
- 
--			info->sync_ep_pipe = 0;
-+			disable_audio_stream(subs);
-+			guard(mutex)(&chip->mutex);
-+			subs->opened = 0;
- 		}
--
--		disable_audio_stream(subs);
--		guard(mutex)(&chip->mutex);
--		subs->opened = 0;
- 	}
- 
- response:
 -- 
-2.53.0.414.gf7e9f6c205-goog
+2.43.0
 
 
