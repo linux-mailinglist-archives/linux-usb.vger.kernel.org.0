@@ -1,260 +1,228 @@
-Return-Path: <linux-usb+bounces-33681-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33682-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YG3JHYhXnmkKUwQAu9opvQ
-	(envelope-from <linux-usb+bounces-33681-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 02:59:36 +0100
+	id 6Er8Fk5fnmmaUwQAu9opvQ
+	(envelope-from <linux-usb+bounces-33682-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 03:32:46 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA1B4190573
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 02:59:35 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id F16F9190EB4
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 03:32:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 67EF431EE5A2
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 01:48:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8FE913060BD4
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 02:32:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1C624A05D;
-	Wed, 25 Feb 2026 01:48:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05395288530;
+	Wed, 25 Feb 2026 02:32:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DtapZzeF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="unejiNui"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 431BF1F03DE
-	for <linux-usb@vger.kernel.org>; Wed, 25 Feb 2026 01:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771984081; cv=none; b=RfBv0RfsAtfVb86z7x/FNFZDzTEiMq/9GOOIXyNOesc2d8WoR9A7ZhEvlkTcPqZcD3/jXbMpIIvKwPcZewXFN4Quc3cohtewOtepZX4ecFgXbgzUfoDJMOodh5fMqBhX6mHeSpBa+5LBTr5DpxfUb3GSRbjViwDhrCon3Q7+RuM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771984081; c=relaxed/simple;
-	bh=MAGEEd13MCvi6LrJomw1tdWe/J4Nih2UdmE3xgcfTm4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bXKGD3TF8e6e6He8bYiGhG4L3SrSsJc44uRxNfaM+8Ot9J18bpDLl/tzXVcDrsHLeRs7+YQUVma9htwuSEpsLsho/KL553mYzqtxNDQyVJ5QX3XbD5FpeuBB2qr6odpZTDXoRgQcp9kEPP91pWQLWdnki/hQ8LOwrW69cWAtIlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DtapZzeF; arc=none smtp.client-ip=209.85.217.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f52.google.com with SMTP id ada2fe7eead31-5f5418c40daso411843137.0
-        for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 17:48:00 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D31228CA9
+	for <linux-usb@vger.kernel.org>; Wed, 25 Feb 2026 02:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771986728; cv=pass; b=qeI+VoeFHFSBRWLL4eWlJac4Xa73i+zAo9sK84ZzU1wHqjEkZPZSSF0lih5tML5In6F21elH0c1PIBZmOSO8U83Lv9uMaPkI8690F/jcA9qzEJ3IwMcOtcYDQ3lytbVn9GpKlYCvxHicbmzY9Tg9J68T8mBPOM+W3xBqAI5OikI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771986728; c=relaxed/simple;
+	bh=HMllSNLX/5sTo6GERROO6GON0rCra4+CbtOSEvH9L5w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BU/cMNDBZNEsXANH0sofLyz1PWKEE4+jPFxk2NLkpVLPSA0UvfGSbo4rzz/ffPPJIE/YX9JW1KRPsKW7uRc4WjlBHjPp1jOQqU+n30d6aordvjdsrfiDkla3H2oM4SmdpRfawXn5dDqPR8dog2zgX+s6h78sKQxVK3rVlFFsPhc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xwf.google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=unejiNui; arc=pass smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xwf.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-506a355aedfso220741cf.0
+        for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 18:32:07 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771986726; cv=none;
+        d=google.com; s=arc-20240605;
+        b=PXIndLi9HgnLoYbqCQbp/uyTVCfxolQtqAT2ifC3bjsP8qhJ3AjOSfD3lEqNIxc3RZ
+         /4QHhJe9hw3Mcy4XwVSbdID8cKf8c+Jgj4o2KMJa6XNKR2uGhz36CKFwFXxgIbBu7gAj
+         ppwqapK1yFYDEZ0z/hb2pRNdbn4ybcygZ+J4V9LFiQ6z6zHqD2ATDTMIV8YDuS7IppII
+         s0zjgFgQIjlSut/g3LxANjDCH0CBsysxmu5lufEowDJYxqMmOYhn44w9YYyoitPWloNp
+         FFJTohFj9ad0wudNNQ9RcbkmZG9tLUG4vZRM095+AF05S6xTm9x7+PM3TW4GLr5jES8C
+         VRAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:dkim-signature;
+        bh=/Oc0EL9P9H90t/kP213jAXvrzQURQZDfc9BINIduye0=;
+        fh=znz0d0IlmHfnDy4fb5/mmhGB6R7ztdVgAFgkAfN6PuI=;
+        b=Z9oYgWR2KPYmE29WNZvEdQnosvP5eizSq80RABCj74Omvik1vOgYRu4g12tt7NRVQ1
+         Dh/tCqE2fdvkztrwryTv2457rxU/pnB3sUvLhtVKuO+BO1mR7aismP53Z1zL0gAUzYrW
+         9eXQ6cUHi5xvFqaGMJcCP1egkUIlX5IHVz0geVt+MqZc71rz1JpHpq1a7a+5mdHhx+Fj
+         kGYImw1O5Csu6yCTnTDgUS/Abqh/Ubc1v49KzhIEn/WrMEejsEc8Y7RNMAzUfQoIqI5p
+         ZOsZleiAIjCxi0HeuF+brrBjzi82vCr29cxz43pA4sbIOK+Y0IYc3GMYvI8Y8Gr8WOR7
+         1kpQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771984079; x=1772588879; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bhdRsHb+agfbG472LK6KXfddMx+16zI/+slYVcbavrw=;
-        b=DtapZzeFzuw+2Ee4FtNaZyPyvN+sRGDtXiHIc6rUpua4MZJ7xomuX7BiGWFNLD5OTB
-         JeNFDuY2M6u2KBz3NbNKwB4YvudxisI+wudMcKeeWeYG7/gU1IXHUVxGXlWuhGqAJU7U
-         OjAEJPbIJXVvvAm1sxZHBLiSLwYqlxr3N2/plNTL8Aa45enjC5aZWrhH+wSlC7IQkWgv
-         tJ/avQYEnnSgNQIlvBe0Nx7LrJTzGv+nPgtDLU4GGZq1hjoB7aqIq4m9XpjOgZgOI1OM
-         f1zmMET3QOsfRlg/Rekf4dMlU2O0R5Z6uLg7ewIqBYORO7FM+zZCOfPC/mjPaedU1P1l
-         qlxQ==
+        d=google.com; s=20230601; t=1771986726; x=1772591526; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/Oc0EL9P9H90t/kP213jAXvrzQURQZDfc9BINIduye0=;
+        b=unejiNui+bHysnuemKK2PptMSAUKcP6mXp7AJH6V5WCk+1VZDfYfC4X315bSzv7x5w
+         +Sao94FGzB6cpIw2EGpgb7LNN7oHFkbseS291l+7zTyC3JEPPPB3dFk+AXmfFHexta0V
+         cx5n7SpbAP6WsLpLjB0brqmdORN9peAChfWIky0qdw8Kis4JV8fvoxV5T2ix+R78Wt16
+         jasAoz7CzoFOzx+DCPbL9tnGxiTZ9ul/SA0MWfdap39lDxj1G7JLT59c5ILqHOawLN/4
+         IAe+c/o+wnARGPYF8JmknnF355xI+UdvdraM14RJUNvBhXAhEldX7RiaKpuluKsvM8dy
+         hrmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771984079; x=1772588879;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bhdRsHb+agfbG472LK6KXfddMx+16zI/+slYVcbavrw=;
-        b=t9nsBYjaTi35m1u880M8awjV2Xu+2HdJ57Yv14wyEBDdfm/k7fT5mG3dRmN+DKCJ9X
-         Yi/KVDRmkCT0ucmi8ouvYOFU/PHhbcBazWWt6opY2SPSfqUc7YombsD3IMrkxTtFciej
-         cQ9mvQU5mXW8k7YxuKokfbnB/UmWKaXwjaSQbyNen/u9Fn0irpU1ZjWO9rfIB/t0sWXv
-         PFQ8+WFJci9kL8sYKbTHDS9junrvN2xfoAha+KNr22iHStrp4fVmoYExIKakk1UeSlt3
-         7ik1sk7IWD7K6ZTY2WFQySseDBFA+VTzsJAOs8YkzOvIw1gDnHgjnSwRKyq2LEJqLU8d
-         pkCw==
-X-Forwarded-Encrypted: i=1; AJvYcCVCy8vXNiEp8WG9ayI5oRu8op5W4kISOhnGDKOtR7z5v2lWspGh5ngIpCWT5Izw1lvnArX8TBvpHWQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFJ5D0wbje9/qshXx2OzTEn9GA/VtL/W5W413w2IKhVQ5zRIaQ
-	hPIwng6wHKKgrqhsjaaadpG0cBLfzFFR+wKRUjgjnLKUgm75s6j9doJY
-X-Gm-Gg: ATEYQzxLd3bkpy9Ex07EKrDvKsBasNbXAohhkcAovjoUyb6BXYePHyUOSORrsL8z4OY
-	+G0HLCbcd4Faj3qAnIGIH3Wkh+ZxxATPpYMR5wrhW2w1pcms+SQzmb+fk1xaIZiAl7mjpUBEfBM
-	w7DjBUxw3B9AuBYgb1Y68QpjqGnzrKvF500btNxOBVAcTaEqt2mwAQ+Hn+HZypkQTJxckHe1dP5
-	QCY8/U+Jk2Chf1z916EkFuO1Xu7h+2afZNzazl0k6b9OSLwwume+fPI5YMpKoPn6e1Rm2vJXYmc
-	Vs7TxaPmDbQjWZQ00DqXSzKUgLpVgA/ToUxXiXNiVjqHQmE6ndHSkzCA84Lql4LDXpCmXn3qTp7
-	VdkAXh06xb8ASPjiLnKfP0PgXbbUOnDEJuWRvsdspkEIxYIOZA4sS3oJcqLRikT0ah/ioXVXgJv
-	afLYtqUh2Wy+ikmuILAf8fUrnxp7gsC+iu0buU6pIAwnXKeqaUilnliLfHMRIZS4RCraodwDbjl
-	JQV
-X-Received: by 2002:a05:6102:26c3:b0:5ef:a1ea:bd33 with SMTP id ada2fe7eead31-5feffdf4bbbmr1123398137.9.1771984079132;
-        Tue, 24 Feb 2026 17:47:59 -0800 (PST)
-Received: from localhost.localdomain ([2804:14d:4c64:82a2:db88:7d47:d63:c87b])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-94de1869b3csm1767247241.13.2026.02.24.17.47.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Feb 2026 17:47:58 -0800 (PST)
-From: Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>
-To: krzysztof.kozlowski@oss.qualcomm.com,
-	gregkh@linuxfoundation.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	davidm@egauge.net
-Cc: ~lkcamp/patches@lists.sr.ht,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND v2] dt-bindings: usb: maxim,max3421: convert to DT schema
-Date: Tue, 24 Feb 2026 22:23:20 -0300
-Message-ID: <20260225014751.9121-1-rodrigo.gobbi.7@gmail.com>
-X-Mailer: git-send-email 2.48.1
+        d=1e100.net; s=20230601; t=1771986726; x=1772591526;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/Oc0EL9P9H90t/kP213jAXvrzQURQZDfc9BINIduye0=;
+        b=ErVTCMU4A06ccEtTOBDH5q7R9YLCefusuz6r/iReFQ5dXvmnYfIu0ryh/TZZyAi7Ia
+         1AwK/qLOOTuEwEKyRfBoTYx5xB3vJqXECeJVihc2eQade1ZN3L3SF5bZqikyohTi3hof
+         4ReoyPql6buBdhsGSarKgZoRKZO8q6guDVA8bpNZwj0ZC7QOIK9FgMNs5OW+viMupJdJ
+         R8ALV4d9/1krqwnC4+x/b+g+bpZ00ssdWgubX3wAtSTztzR8HaUsYp8YozD7X/75aRQ9
+         UuRBNyHqUnqe8FwnUHJC6ZglzE9BD/3jWsywqD1X6zwBRxDoJ0abMgEVNTC64AsWUctx
+         FApg==
+X-Forwarded-Encrypted: i=1; AJvYcCU9len38ir9j5ijgg/6g0RzlRJtt6W/p/NrjZTFJJcgFt27oJzYPp41B63BsVkxPbd7DQWycLHn/T0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxU5qMGu4sfnUsLgS3NZUYC4YlmFyUfy30ekmSwC1lo/BEddguM
+	iwpP2slvCvFjILr7GpwCOzGF5m4aohwtcMLO5U48pkCehLUNWWBX7cM+9oMrTWNV/eOlyzESojP
+	wZDnTiH/utwYZ55x4/tYTCOVTNMwuKx11mRlGfyVL
+X-Gm-Gg: ATEYQzzz93pRlW5cqY2htPAtHHMRI7LQdkdDHfoVuhw265NNPOjSwbnVSlNN6BJNOd9
+	RMIvQQpDZvhbcVZoLgdX4J3pFLUsegjsNCMSExLdk9+9/tNAYGgz1nkR4zD7wigyoKBfBnxyIlf
+	U5DbKr8OVjgBeIyPxkUpvTIOdWvsypHLcDHSqBQygg/mXAc60PoKNCQRM2HqWqOHQjLnetw4SVQ
+	QM6VavDrbZXedyce9kmF76LhdIO4IE5O3o8zcJxIsBNytkIoiShfri4dEgLcQNnaeeJMsoS7vPC
+	3bCAo7g/sQNvKzv1zgiWCBBVv4rk8Qp5KHM/LQ==
+X-Received: by 2002:a05:622a:30e:b0:507:358a:2b22 with SMTP id
+ d75a77b69052e-50738178b0bmr1176721cf.0.1771986725687; Tue, 24 Feb 2026
+ 18:32:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260224083955.1375032-1-hhhuuu@google.com> <50314bb4-1539-452d-86d6-47887a9603a7@rowland.harvard.edu>
+In-Reply-To: <50314bb4-1539-452d-86d6-47887a9603a7@rowland.harvard.edu>
+Reply-To: hhhuuu@xwf.google.com
+From: "Jimmy Hu (xWF)" <hhhuuu@xwf.google.com>
+Date: Wed, 25 Feb 2026 10:31:54 +0800
+X-Gm-Features: AaiRm535jFf_Wd3ZgoopxvcP7tMlUs04xRpSxf28KxL1dbAIqD_-iutvqH8Q2q8
+Message-ID: <CAJh=zj+qoLr40+sSMksRi5AG36GkO_kDk=axvPoEU76Md-NeCg@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: f_uvc: fix NULL pointer dereference during
+ unbind race
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Dan Vacura <w36195@motorola.com>, 
+	Xu Yang <xu.yang_2@nxp.com>, Frank Li <Frank.Li@nxp.com>, 
+	Hans Verkuil <hverkuil+cisco@kernel.org>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org, badhri@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[rodrigogobbi7@gmail.com,linux-usb@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33681-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33682-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	DKIM_TRACE(0.00)[google.com:+];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	REPLYTO_ADDR_EQ_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hhhuuu@xwf.google.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-0.999];
-	TO_DN_NONE(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.0:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email,analog.com:url]
-X-Rspamd-Queue-Id: CA1B4190573
+	TAGGED_RCPT(0.00)[linux-usb,cisco];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	HAS_REPLYTO(0.00)[hhhuuu@xwf.google.com]
+X-Rspamd-Queue-Id: F16F9190EB4
 X-Rspamd-Action: no action
 
-Convert legacy maxim,max3421.txt to proper format.
+On Tue, Feb 24, 2026 at 11:47=E2=80=AFPM Alan Stern <stern@rowland.harvard.=
+edu> wrote:
+>
+> On Tue, Feb 24, 2026 at 04:39:55PM +0800, Jimmy Hu wrote:
+> > Commit b81ac4395bbe ("usb: gadget: uvc: allow for application to cleanl=
+y
+> > shutdown") introduced two stages of synchronization waits totaling 1500=
+ms
+> > in uvc_function_unbind() to prevent several types of kernel panics.
+> > However, this timing-based approach is insufficient during power
+> > management (PM) transitions.
+> >
+> > When the PM subsystem starts freezing user space processes, the
+> > wait_event_interruptible_timeout() is aborted early, which allows the
+> > unbind thread to proceed and nullify the gadget pointer
+> > (cdev->gadget =3D NULL):
+> >
+> > [  814.123447][  T947] configfs-gadget.g1 gadget.0: uvc: uvc_function_u=
+nbind()
+> > [  814.178583][ T3173] PM: suspend entry (deep)
+> > [  814.192487][ T3173] Freezing user space processes
+> > [  814.197668][  T947] configfs-gadget.g1 gadget.0: uvc: uvc_function_u=
+nbind no clean disconnect, wait for release
+> >
+> > When the PM subsystem resumes or aborts the suspend and tasks are
+> > restarted, the V4L2 release path is executed and attempts to access the
+> > already nullified gadget pointer, triggering a kernel panic:
+> >
+> > [  814.292597][    C0] PM: pm_system_irq_wakeup: 479 triggered dhdpcie_=
+host_wake
+> > [  814.386727][ T3173] Restarting tasks ...
+> > [  814.403522][ T4558] Unable to handle kernel NULL pointer dereference=
+ at virtual address 0000000000000030
+> > [  814.404021][ T4558] pc : usb_gadget_deactivate+0x14/0xf4
+> > [  814.404031][ T4558] lr : usb_function_deactivate+0x54/0x94
+> > [  814.404078][ T4558] Call trace:
+> > [  814.404080][ T4558]  usb_gadget_deactivate+0x14/0xf4
+> > [  814.404083][ T4558]  usb_function_deactivate+0x54/0x94
+> > [  814.404087][ T4558]  uvc_function_disconnect+0x1c/0x5c
+> > [  814.404092][ T4558]  uvc_v4l2_release+0x44/0xac
+> > [  814.404095][ T4558]  v4l2_release+0xcc/0x130
+> >
+> > The fix introduces a 'func_unbinding' flag in struct uvc_device to prot=
+ect
+> > critical sections:
+> > 1. In uvc_function_disconnect(), it prevents accessing the nullified
+> >    cdev->gadget pointer.
+> > 2. In uvc_v4l2_release(), it ensures uvcg_free_buffers() is skipped
+> >    if unbind is already in progress, avoiding races with concurrent
+> >    bind operations or use-after-free on the video queue memory.
+>
+> Sorry if the answer to this question is obvious to anybody familiar with
+> the driver...
+>
+> The patch adds a flag that can be accessed by two different tasks
+> (disconnect and release).  Is there any synchronization to prevent these
+> tasks from racing and accessing the new flag concurrently?
+>
+> Alan Stern
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Signed-off-by: Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>
----
-Just resending this from last year [1] since it might not be on Greg's
-inbox anymore. Same as v2, just with review tag.
-Tks and regards.
+Hi Alan,
 
-[1] https://lore.kernel.org/linux-devicetree/20251107001812.10180-1-rodrigo.gobbi.7@gmail.com/
+Thanks for pointing that out. You're right, the boolean flag lacks
+proper synchronization for concurrent access.
+I will submit a V2 patch using atomic bit operations to ensure memory
+visibility and atomicity across tasks. The changes will include:
+* Replacing 'bool func_unbinding' with 'unsigned long flags' in struct
+uvc_device.
+* Using clear_bit() in uvc_function_bind() to reset the state.
+* Using set_bit() in uvc_function_unbind() to mark the unbinding phase.
+* Using test_bit() in uvc_function_disconnect() and uvc_v4l2_disable()
+for safe checks.
 
-Changelog:
-v2: https://lore.kernel.org/linux-devicetree/20251107001812.10180-1-rodrigo.gobbi.7@gmail.com/
-v1: https://lore.kernel.org/all/20251009182046.185520-1-rodrigo.gobbi.7@gmail.com/
+Does this approach look reasonable to you?
 
----
- .../devicetree/bindings/usb/maxim,max3421.txt | 23 -------
- .../bindings/usb/maxim,max3421.yaml           | 67 +++++++++++++++++++
- 2 files changed, 67 insertions(+), 23 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/maxim,max3421.txt
- create mode 100644 Documentation/devicetree/bindings/usb/maxim,max3421.yaml
-
-diff --git a/Documentation/devicetree/bindings/usb/maxim,max3421.txt b/Documentation/devicetree/bindings/usb/maxim,max3421.txt
-deleted file mode 100644
-index 90495b1aeec2..000000000000
---- a/Documentation/devicetree/bindings/usb/maxim,max3421.txt
-+++ /dev/null
-@@ -1,23 +0,0 @@
--Maxim Integrated SPI-based USB 2.0 host controller MAX3421E
--
--Required properties:
-- - compatible: Should be "maxim,max3421"
-- - spi-max-frequency: maximum frequency for this device must not exceed 26 MHz.
-- - reg: chip select number to which this device is connected.
-- - maxim,vbus-en-pin: <GPOUTx ACTIVE_LEVEL>
--   GPOUTx is the number (1-8) of the GPOUT pin of MAX3421E to drive Vbus.
--   ACTIVE_LEVEL is 0 or 1.
-- - interrupts: the interrupt line description for the interrupt controller.
--   The driver configures MAX3421E for active low level triggered interrupts,
--   configure your interrupt line accordingly.
--
--Example:
--
--	usb@0 {
--		compatible = "maxim,max3421";
--		reg = <0>;
--		maxim,vbus-en-pin = <3 1>;
--		spi-max-frequency = <26000000>;
--		interrupt-parent = <&PIC>;
--		interrupts = <42>;
--	};
-diff --git a/Documentation/devicetree/bindings/usb/maxim,max3421.yaml b/Documentation/devicetree/bindings/usb/maxim,max3421.yaml
-new file mode 100644
-index 000000000000..4639be7ab059
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/maxim,max3421.yaml
-@@ -0,0 +1,67 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/maxim,max3421.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MAXIM MAX3421e USB Peripheral/Host Controller
-+
-+maintainers:
-+  - David Mosberger <davidm@egauge.net>
-+
-+description: |
-+  The controller provides USB2.0 compliant with Full Speed or Low Speed when in
-+  the host mode. At peripheral, it operates at Full Speed. At both cases, it
-+  uses a SPI interface.
-+  Datasheet at:
-+    https://www.analog.com/media/en/technical-documentation/data-sheets/max3421e.pdf
-+
-+properties:
-+  compatible:
-+    const: maxim,max3421
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  spi-max-frequency:
-+    maximum: 26000000
-+
-+  maxim,vbus-en-pin:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    description:
-+      One of eight GPOUT pins to control external VBUS power and the polarity
-+      of the active level. It's an array of GPIO number and the active level of it.
-+    minItems: 2
-+    maxItems: 2
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - maxim,vbus-en-pin
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        usb@0 {
-+          compatible = "maxim,max3421";
-+          reg = <0>;
-+          maxim,vbus-en-pin = <3 1>;
-+          spi-max-frequency = <26000000>;
-+          interrupt-parent = <&gpio>;
-+          interrupts = <42>;
-+        };
-+    };
--- 
-2.48.1
-
+Best regards,
+Jimmy
 
