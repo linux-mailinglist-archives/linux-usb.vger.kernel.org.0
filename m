@@ -1,104 +1,104 @@
-Return-Path: <linux-usb+bounces-33691-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33692-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +CSmI1epnmntWgQAu9opvQ
-	(envelope-from <linux-usb+bounces-33691-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 08:48:39 +0100
+	id KEDwLhjYnmkTXgQAu9opvQ
+	(envelope-from <linux-usb+bounces-33692-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 12:08:08 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF49C193B40
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 08:48:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51F1319641C
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 12:08:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 63FBD3011511
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 07:48:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 38EAD3024A73
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 11:04:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22B301E5B7B;
-	Wed, 25 Feb 2026 07:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C850393DC8;
+	Wed, 25 Feb 2026 11:04:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="R9/SL0pF";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="WapxTVIp"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a7a7tTXF";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="sGFnE+4m"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7621A85C4A
-	for <linux-usb@vger.kernel.org>; Wed, 25 Feb 2026 07:48:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4033A3939C0
+	for <linux-usb@vger.kernel.org>; Wed, 25 Feb 2026 11:04:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772005696; cv=none; b=GusaxeYAr2ZN55A0wWAqJSTCYCfKFGKZMiwI4yrV7rAvigmLi9OtCjSiOLaLGqlEivy/pfF5nP6eKWECBoOsuvI//mjG1UNgr46L+E+Y0L1keMiH6qZ4In9+YTv8OUBd16sOw84S9jnXhQi+mKBzlKNP0zer370joT+L33wfIQo=
+	t=1772017451; cv=none; b=tackIpqj+xj3qVqtN7PepTtfdclVursSHBzxFCKY9mHQ7UJQC0020lomVqtOtVK+WvddhHKMm5zP3F+WzTMBjoPbDYQy6Y00xLSc9M/DcuuOGSuUi5/DkWVy38DwkJAoh1T7PwyDiAwnlEhdXHiDk/aSECytgvr38IZUjrZT/fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772005696; c=relaxed/simple;
-	bh=/tb7tVFuMJRtrPQxEwJyjr8HCiYG0DRMyfsOFaObgR4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Sdryz49WGwtsTIVx+VaDKFzfHJTRJwQAM0kghrhg5X1wiTjaOMTyK+M0Hr/kw7Kc+ZzlbRHbcBe64n88q2B7Tob+dg50SeOKNuvtw2kjId8NGzNqeK1Y7RCFBFAxDvycoNqb8BSikOmAB6bb4zZtMCyIHSNr5wz6EEocdW5M7jw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=R9/SL0pF; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=WapxTVIp; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1772017451; c=relaxed/simple;
+	bh=oVSQEEzCSa3CkJ0Q9yq/S9YoldK7hxGgwFsLTCf0tDc=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=fhnok+/dMOTWIF1Pn6BSYk3IiuefPvR8GGi1dO8BtR3mR6+qhXTtkdDBwxUIUG7wlHnujiPZpQAz0/k0NE7ovanj/tdefkw9NkUVee00M5QuU1+UhHbBr8wTi4lF0S/F6Hcgg3SLKSqVLzHl/pKie5nTbzIJ/fwr/ZrOB2v0oRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a7a7tTXF; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=sGFnE+4m; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772005693;
+	s=mimecast20190719; t=1772017448;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=KIFbR9N1epYqMk+/ts+pAMZXD1gwVSceo470CquD4QE=;
-	b=R9/SL0pFNQWicLMOYkLjfo/o7giyg5KxJdqae+/5sfJg4zrJFXyXquadDvrgIG90H2yJrz
-	0QIt60UAr+EUmmH053C9x4ciRLhzJG6qDXPiR5A5Ds+WeAtTZvb80WY4T6LTcJ0CgUjGJ3
-	71j+ofK9xv+jxBdVkcfIk7d0TrjUTpk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=fnXyv9FeSh66PWrhFp1PqKYS+k12gdJjAyfugiwsSHI=;
+	b=a7a7tTXFiADgIHr11xSzh2IBZgfDYthqH4t/nfpLM/Sl92H1riNzeq5Vh0/Ts+mkB22KfS
+	YxCHpOLuFv7WNEOIuSiGrLuQOUyswHuXX5MhDtrJynasDgMNpfHO1+0j5+Vx+mkI9MRac4
+	9dqDkY4FbnrCL1ITrZuUzGrHLTDNwaI=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-335-zx5MteiBOMe8x1Cbzi_S-g-1; Wed, 25 Feb 2026 02:48:12 -0500
-X-MC-Unique: zx5MteiBOMe8x1Cbzi_S-g-1
-X-Mimecast-MFC-AGG-ID: zx5MteiBOMe8x1Cbzi_S-g_1772005691
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-4376ec2b1cfso2438778f8f.0
-        for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 23:48:11 -0800 (PST)
+ us-mta-623-NtW1ZkXWOxWgoU9TsuWCTw-1; Wed, 25 Feb 2026 06:04:06 -0500
+X-MC-Unique: NtW1ZkXWOxWgoU9TsuWCTw-1
+X-Mimecast-MFC-AGG-ID: NtW1ZkXWOxWgoU9TsuWCTw_1772017445
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4837b6f6b93so48492085e9.3
+        for <linux-usb@vger.kernel.org>; Wed, 25 Feb 2026 03:04:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1772005690; x=1772610490; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=KIFbR9N1epYqMk+/ts+pAMZXD1gwVSceo470CquD4QE=;
-        b=WapxTVIpys6lrco3z+GsF1r7Y4iZ7Zo3M2mGBLEnGeQNmQHkJH90H9PKxbIqZjuDqq
-         GTHCJlRkJl61bAHDeEbCZRoe6yCBEUIpwKLgMVbYZyOpX6tC8CfQ+wwvWH94R0yznJrs
-         z5CZmVHp3LD/Zy3tj8aBbEnMpftTRLRPIrJpHiXJ43+YVyLtnniCNgiakagEOp9rDSO0
-         FW8IQ7JF96y7j74MYiVaHuBt6irWvQrAYVF2ExKOy0qLUKKV97Bm4KZ5VUR3MSPkJVem
-         xW2SI/psgvSgu/PwsXYyCfHl6BXYHAL4tqsZam/AJx/Ljzdr1ot8mpK9M980hIOU5cXP
-         9Qlg==
+        d=redhat.com; s=google; t=1772017445; x=1772622245; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=fnXyv9FeSh66PWrhFp1PqKYS+k12gdJjAyfugiwsSHI=;
+        b=sGFnE+4m8gn1GzpxBKKUWGOSLPPw/wPF/c3mpl4O3t5/99QFUTKi1BSjV+knkJJMqx
+         dDr4/aBBCmro0oLVsDrDPjpNBi+fSeYemC/+rwLTBwaWP2DMPWcRKwe5VDP+O7ROAkQa
+         K+DkqSthg6dHoxxSzDZdTM89fcBZrr5ettYa0ShFuVykatmTWxM7MPASUUYppc5bh8K7
+         xZ4BDL8sLyd2Qvgjs6fflPIwTK9oGMm4fBWf41S8BjJWb30hLwMg0VXMdX6HRkoO+pvf
+         jzE4rmS8JxHW1nFAF9novYirNbqrPFNnrQNFQ+R3hC6Njo2Rmabk0X7iYaI3LdKrYzNt
+         CG0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772005690; x=1772610490;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1772017445; x=1772622245;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KIFbR9N1epYqMk+/ts+pAMZXD1gwVSceo470CquD4QE=;
-        b=iK6R6DIqPUWmWmBQCbHMleWBwovGxvElmXK0OgrMOawji/N3pYr+NV7q1YKIX6Ku88
-         eM9K/dT6dMjbbIeYSjdqxNAm2x754XSlCxLDH/hmcbGYC1LXacxqfhwIBTOmIKqRCeL2
-         7P8+R8NM4/sguC72gxfN/A+159X8gbxAkaPzcW87MKITtCuB4dUKKNEMKU9rgDzMjz1V
-         D4NKw7hYKZ/ps6WSy0PSbOjursuel0Pi5uNjUlpAk/N39HG7iqb/gQiNY6QnERYKW2Sv
-         DYTRZ6N3/5O6Z4mneyD3+j+rF01NG5sR/KrOueXz9Qs6k9yk6BU7q1XTkpU199rbJKcl
-         KKHw==
-X-Forwarded-Encrypted: i=1; AJvYcCWjP0ylXTBEYviy7rUdNjNSBimVrYssx62gMBSsXFtvBbMJX0wd7hWrrewvwnF2B7cGWQIFl3tnY0c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIoDJdy2Ayl0H3F6/Gimu+2fGrzLYV4pSWUyiPbyBcAr1GPUZO
-	NA3ouiCbmZZta0kEJ2kzyiohIiEpxMhSyI/K+zexk35ba8GWcVNLEVTEa6+zDm63gcdRQeZ4UXf
-	jW44sjTDlHFM09up69G8haM4d2Bgc+cgjyB/sS9g3O2gNTz6pba18JE/UKMUWfqKtGgjH2A==
-X-Gm-Gg: ATEYQzyzh7Ey55XDhqfVM56PCJWYSvSBRFvaUu3jXZUxDuuKfdDF03svfrMjxToJCsh
-	5dwXeJY+11+nmtOn6o75DJknb/EzGbWEkKvGUn+m0SJB2pNXGaX9UIPBxO0V0Jm4M+GFd7bBG0J
-	LsqTOnhoVVDp9scHtyPEcRZQBZJURQEcCDzQKwEaPZAUKdzSq10g89rNg/CRzY8mkAakzNn8GYQ
-	5zvxDVlqYpAZvHSal4DhyU3Oc4lx0J9bmTzfjdpxUeB1zIy2/iYKdlTu5uzRCNjzciZaQZJhj1N
-	5p97ztka5wUv+ZdPAMrQmwuPr0wdtEIhytNCAyAj4DcGo3JS51WOwameslgjTFEUm5gmY51vKQu
-	zZoY2TqGmYta9dAow66B7tyfTbUlI8YyGVwva0n6nhE9rHn7j7PvvLpX4d8kqPLenfRWte7AB9g
-	40Yo65J4dTyb0LnqpO7rZgPY5bOu9nzEUgj+TVSMdAxjUrD0s9KvrwCLxR
-X-Received: by 2002:a05:6000:2912:b0:439:881a:6578 with SMTP id ffacd0b85a97d-4398fa91363mr2248201f8f.21.1772005690455;
-        Tue, 24 Feb 2026 23:48:10 -0800 (PST)
-X-Received: by 2002:a05:6000:2912:b0:439:881a:6578 with SMTP id ffacd0b85a97d-4398fa91363mr2248161f8f.21.1772005689924;
-        Tue, 24 Feb 2026 23:48:09 -0800 (PST)
+        bh=fnXyv9FeSh66PWrhFp1PqKYS+k12gdJjAyfugiwsSHI=;
+        b=ONoLlQdTKqtHwdiPWZywNQbwt8lgFbe/ZOh+viz3rpd3HZhtSFw7d1iqu9AKKQIP8q
+         lRXQKmDyw5odkONRFd7nKeit874gCzZq0XiPhzj19DIsxPTN+bHOg89NgWBai5lLMSqd
+         ionDCPN+3efJRO00PEmep7MxMfr5n/mltuMyo7uMWZ7T3Skp8M5gAMvk+T85seihIe2X
+         J/djCsKayZC4bW8s8h6A0O8y7Cg1SGfL70QMiug4vTbp/keV8gFY8axPPXyNPPXpv8eb
+         MASQLXsYbCb5goERa5BTqXFx6/uClWxS8btmE6usgq082hooFWCLn2LgJXW5IBkTPn7S
+         ajzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVUp7Mr4+tZ7Do6pGwKF1zNbefRqDT/KcBD4xV7ZXFIdduux+/yISbOhEsqcAUrr7tlVI8vr7k/4AY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmNhn6puLRW5juOQ8CtzUr5M9oA2pRgE9ovjHQY5nNSkx/zt2O
+	CgzhaWts89+ExgAE5IaKLPUQIsGBUp0CGg7Xdh/Q31EFSxd6CtaGaIMo3zuOO4Yk7V3L131ichu
+	4Am1OY8o2rPK/0xzgqoNgipYf3nm16HAFb1/MFGW5eWXlp3KqUC6CCotj2hRHFg==
+X-Gm-Gg: ATEYQzzVzn7ymMhQEWDBYctafgBcd43N7XUuDCtWejnLK/OrCdHdOW3/sR6ErZMN3US
+	NTL90T+E12r4v1eGx7gSwBMlXYvVMtpT/O4QQ61BulPbAoN6p4JsxRTvhUJ5AWnJcpGh8vofN81
+	rBQJIDpGqE6m4m1OGpR4J2RJJ7x37nwmuRJGKl9Y+ech4ppTzmgYBuEkexzfFta2uRnAXfnKBv8
+	Ngktmg6fnnzDhNa6oLzdyTv0L2y3yQ6Uvl4eRwiNR9v+mSAsitG018XWsj48m7I3/s7/D24LwzW
+	iBJhRMiltEJTVeJXb4jR1dBIRn1xTbw0TMYdXae1XTVfNMscsgMOHi09Ka2klq8YLVpWCHK3+L0
+	RaaeYRUcdiIiVXjSlY/iUACK7MsiHlRlnZ867X6tesaQOUeik4dtaPVdtVpMaDFpMYgU+JdW7uA
+	A/rcs+g04A8B5xAB5EYWXjmM5PaIjIhBwVX6z9v+IHdMFa43cbT0qPNAuO
+X-Received: by 2002:a05:600c:4692:b0:480:1c69:9d36 with SMTP id 5b1f17b1804b1-483bef53c1amr35967415e9.17.1772017445000;
+        Wed, 25 Feb 2026 03:04:05 -0800 (PST)
+X-Received: by 2002:a05:600c:4692:b0:480:1c69:9d36 with SMTP id 5b1f17b1804b1-483bef53c1amr35966775e9.17.1772017444439;
+        Wed, 25 Feb 2026 03:04:04 -0800 (PST)
 Received: from ?IPV6:2a01:cb00:8ef9:5300:877b:aaab:2ea7:8695? (2a01cb008ef95300877baaab2ea78695.ipv6.abo.wanadoo.fr. [2a01:cb00:8ef9:5300:877b:aaab:2ea7:8695])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970bfa015sm32337470f8f.8.2026.02.24.23.48.09
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4398fefa3f8sm3573108f8f.36.2026.02.25.03.04.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Feb 2026 23:48:09 -0800 (PST)
-Message-ID: <28cd2d03-6491-490d-89e2-19f81e9bad69@redhat.com>
-Date: Wed, 25 Feb 2026 08:48:08 +0100
+        Wed, 25 Feb 2026 03:04:04 -0800 (PST)
+Message-ID: <9c187cb6-6ab1-40f1-a1d8-d47012e3835b@redhat.com>
+Date: Wed, 25 Feb 2026 12:04:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -107,6 +107,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: commit 662dc80a5e86 breaks rmnet over usb
+From: Laurent Vivier <lvivier@redhat.com>
 To: Daniele Palmas <dnlplm@gmail.com>
 Cc: Koen Vandeputte <koen.vandeputte@citymesh.com>, oneukum@suse.com,
  andrew+netdev@lunn.ch, Eric Dumazet <edumazet@google.com>, kuba@kernel.org,
@@ -115,8 +116,8 @@ Cc: Koen Vandeputte <koen.vandeputte@citymesh.com>, oneukum@suse.com,
 References: <CAPh3n803k8JcBPV5qEzUB-oKzWkAs-D5CU7z=Vd_nLRCr5ZqQg@mail.gmail.com>
  <95ccf5a6-975b-4543-80a3-595f1ee20543@redhat.com>
  <CAGRyCJE85fLOahUR3PAUnS_jH4+qpBq37qpged=nvObbg1m+Qw@mail.gmail.com>
+ <28cd2d03-6491-490d-89e2-19f81e9bad69@redhat.com>
 Content-Language: en-US
-From: Laurent Vivier <lvivier@redhat.com>
 Autocrypt: addr=lvivier@redhat.com; keydata=
  xsFNBFYFJhkBEAC2me7w2+RizYOKZM+vZCx69GTewOwqzHrrHSG07MUAxJ6AY29/+HYf6EY2
  WoeuLWDmXE7A3oJoIsRecD6BXHTb0OYS20lS608anr3B0xn5g0BX7es9Mw+hV/pL+63EOCVm
@@ -159,15 +160,15 @@ Autocrypt: addr=lvivier@redhat.com; keydata=
  oDqSoLt5w9GoQQ6gDVP2ZjTWqwSRMLzNr37rJjZ1pt0DCMMTbiYIUcrhX8eveCJtY7NGWNyx
  FCRkhxRuGcpwPmRVDwOl39MB3iTsRighiMnijkbLXiKoJ5CDVvX5yicNqYJPKh5MFXN1bvsB
  kmYiStMRbrD0HoY1kx5/VozBtc70OU0EB8Wrv9hZD+Ofp0T3KOr1RUHvCZoLURfFhSQ=
-In-Reply-To: <CAGRyCJE85fLOahUR3PAUnS_jH4+qpBq37qpged=nvObbg1m+Qw@mail.gmail.com>
+In-Reply-To: <28cd2d03-6491-490d-89e2-19f81e9bad69@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -175,7 +176,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_TO(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-33691-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33692-lists,linux-usb=lfdr.de];
 	DKIM_TRACE(0.00)[redhat.com:+];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -184,100 +185,145 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[lvivier@redhat.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-0.998];
 	RCPT_COUNT_SEVEN(0.00)[10];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: BF49C193B40
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 51F1319641C
 X-Rspamd-Action: no action
 
-On 2/25/26 08:19, Daniele Palmas wrote:
-> Hello,
+On 2/25/26 08:48, Laurent Vivier wrote:
+> On 2/25/26 08:19, Daniele Palmas wrote:
+>> Hello,
+> 
+> Hello Daniele,
+> 
+>>
+>> Il giorno lun 23 feb 2026 alle ore 15:08 Laurent Vivier
+>> <lvivier@redhat.com> ha scritto:
+>>>
+>>> On 2/23/26 13:04, Koen Vandeputte wrote:
+>>>> Hi Laurent,
+>>>
+>>> Hi Koen,
+>>>
+>>>> I'm testing the latest openwrt state and found an issue probably
+>>>> caused by your usb mtu limit patch :-)
+>>>>
+>>>> I'm talking about this one:
+>>>> 662dc80a5e86 ("usbnet: limit max_mtu based on device's hard_mtu")
+>>>>
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/? 
+>>>> h=v6.12.74&id=662dc80a5e86b35bbf339e0b87b7cc3f07c09de1
+>>>>
+>>>>
+>>>> When using wwan0 iface normally, this makes sense, but the problem is
+>>>> when using QMI modems combined with the rmnet driver and aggregated
+>>>> frames.
+>>>>
+>>>> - The modem is configured to frame sizes of 16383 or 32767 using QMI
+>>>> - wwan0 (using qmi_wwan) is configured to match this frame size by
+>>>> setting it's MTU to the same value
+>>>> - Frames of this size are sent over to qmi_wwan driver (containing
+>>>> multiple data packets)
+>>>> - Frames are then forwarded to the rmnet driver
+>>>> - Frames get de-aggregated here and sent to the network stack for processing.
+>>>>
+>>>> The reason here is to reduce USB transfers heavily.
+>>>>
+>>>>
+>>>> As you see, it's perfectly possible here to use very large MTU sizes
+>>>> as the aggregation feature by rmnet relies on this.
+>>>> Also the modem can be perfectly configured to send very large aggregated frames.
+>>>>
+>>>> After your patch, wwan0 is limited to 1500 bytes it seems, effectively
+>>>> breaking aggregation.
+>>>>
+>>>> On my tests, download speeds are reduced from >300Mbps to ~.8Mbps
+>>>>
+>>>> I also made a build reverting this patch and all works well again.
+>>>>
+>>>>
+>>>> Is there any other solution to fix this?
+>>>> I guess it should be reverted otherwise :-)
+>>>
+>>> It's weird to be able to set an MTU that is not supported by the hardware.
+>>>
+>>> To restore performance I think the rx_usb_size should be decoupled from MTU max in 
+>>> qmi_wwan.
+>>>
+>>> Could you try something like:
+>>>
+>>> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+>>> index 3a4985b582cb..6b4796fac692 100644
+>>> --- a/drivers/net/usb/qmi_wwan.c
+>>> +++ b/drivers/net/usb/qmi_wwan.c
+>>> @@ -788,6 +788,8 @@ static int qmi_wwan_bind(struct usbnet *dev, struct usb_interface 
+>>> *intf)
+>>>                   usbnet_get_ethernet_addr(dev, cdc_ether->iMACAddress);
+>>>           }
+>>>
+>>> +       dev->rx_urb_size = 32768;
+>>> +
+>>
+>> So far userspace tools (e.g. also the most important one which is
+>> ModemManager) rely on changing the rx_urb_size by changing the MTU: I
+>> know this is ugly, but it is a behavior that has been there since a
+>> lot of time, not sure how many tools based on this assumption could
+>> break.
+>>
+>> There's also the chance that there are modems which require a higher
+>> rx_urb_size, so having this fixed could not work well.
+>>
+>> Unfortunately usbnet serves many drivers, I agree with Koen that a
+>> revert is the safest option.
+> 
+> And there is no intermediate driver (qmi_wwan or rmnet) that can define a max_mtu higher 
+> than that defined by usbnet?
 
-Hello Daniele,
+Perhaps we can remove the change from usbnet and move it to the device bind function?
 
-> 
-> Il giorno lun 23 feb 2026 alle ore 15:08 Laurent Vivier
-> <lvivier@redhat.com> ha scritto:
->>
->> On 2/23/26 13:04, Koen Vandeputte wrote:
->>> Hi Laurent,
->>
->> Hi Koen,
->>
->>> I'm testing the latest openwrt state and found an issue probably
->>> caused by your usb mtu limit patch :-)
->>>
->>> I'm talking about this one:
->>> 662dc80a5e86 ("usbnet: limit max_mtu based on device's hard_mtu")
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=v6.12.74&id=662dc80a5e86b35bbf339e0b87b7cc3f07c09de1
->>>
->>>
->>> When using wwan0 iface normally, this makes sense, but the problem is
->>> when using QMI modems combined with the rmnet driver and aggregated
->>> frames.
->>>
->>> - The modem is configured to frame sizes of 16383 or 32767 using QMI
->>> - wwan0 (using qmi_wwan) is configured to match this frame size by
->>> setting it's MTU to the same value
->>> - Frames of this size are sent over to qmi_wwan driver (containing
->>> multiple data packets)
->>> - Frames are then forwarded to the rmnet driver
->>> - Frames get de-aggregated here and sent to the network stack for processing.
->>>
->>> The reason here is to reduce USB transfers heavily.
->>>
->>>
->>> As you see, it's perfectly possible here to use very large MTU sizes
->>> as the aggregation feature by rmnet relies on this.
->>> Also the modem can be perfectly configured to send very large aggregated frames.
->>>
->>> After your patch, wwan0 is limited to 1500 bytes it seems, effectively
->>> breaking aggregation.
->>>
->>> On my tests, download speeds are reduced from >300Mbps to ~.8Mbps
->>>
->>> I also made a build reverting this patch and all works well again.
->>>
->>>
->>> Is there any other solution to fix this?
->>> I guess it should be reverted otherwise :-)
->>
->> It's weird to be able to set an MTU that is not supported by the hardware.
->>
->> To restore performance I think the rx_usb_size should be decoupled from MTU max in qmi_wwan.
->>
->> Could you try something like:
->>
->> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
->> index 3a4985b582cb..6b4796fac692 100644
->> --- a/drivers/net/usb/qmi_wwan.c
->> +++ b/drivers/net/usb/qmi_wwan.c
->> @@ -788,6 +788,8 @@ static int qmi_wwan_bind(struct usbnet *dev, struct usb_interface *intf)
->>                   usbnet_get_ethernet_addr(dev, cdc_ether->iMACAddress);
->>           }
->>
->> +       dev->rx_urb_size = 32768;
->> +
-> 
-> So far userspace tools (e.g. also the most important one which is
-> ModemManager) rely on changing the rx_urb_size by changing the MTU: I
-> know this is ugly, but it is a behavior that has been there since a
-> lot of time, not sure how many tools based on this assumption could
-> break.
-> 
-> There's also the chance that there are modems which require a higher
-> rx_urb_size, so having this fixed could not work well.
-> 
-> Unfortunately usbnet serves many drivers, I agree with Koen that a
-> revert is the safest option.
+diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+index a032c1ded406..836915e4abad 100644
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -235,6 +235,8 @@ int usbnet_generic_cdc_bind(struct usbnet *dev, struct usb_interface 
+*intf)
 
-And there is no intermediate driver (qmi_wwan or rmnet) that can define a max_mtu higher 
-than that defined by usbnet?
+  	if (header.usb_cdc_ether_desc && info->ether->wMaxSegmentSize) {
+  		dev->hard_mtu = le16_to_cpu(info->ether->wMaxSegmentSize);
++		if (dev->net->max_mtu > (dev->hard_mtu - dev->net->hard_header_len))
++			dev->net->max_mtu = dev->hard_mtu - dev->net->hard_header_len;
+  		/* because of Zaurus, we may be ignoring the host
+  		 * side link address we were given.
+  		 */
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index ed86ba87ca4e..295c3614878b 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -1829,11 +1829,9 @@ usbnet_probe(struct usb_interface *udev, const struct usb_device_id 
+*prod)
+  		if ((dev->driver_info->flags & FLAG_NOARP) != 0)
+  			net->flags |= IFF_NOARP;
+
+-		if (net->max_mtu > (dev->hard_mtu - net->hard_header_len))
+-			net->max_mtu = dev->hard_mtu - net->hard_header_len;
+-
+-		if (net->mtu > net->max_mtu)
+-			net->mtu = net->max_mtu;
++		/* maybe the remote can't receive an Ethernet MTU */
++		if (net->mtu > (dev->hard_mtu - net->hard_header_len))
++			net->mtu = dev->hard_mtu - net->hard_header_len;
+
+  	} else if (!info->in || !info->out)
+  		status = usbnet_get_endpoints(dev, udev);
+
+An other solution would be to add a FLAG_NOMAXMTU in qmi_wwan driver_info->flags to 
+disable the setting of max_mtu in usbnet_probe() to keep the change generic and qmi_wwan 
+the exception.
 
 Thanks,
 Laurent
