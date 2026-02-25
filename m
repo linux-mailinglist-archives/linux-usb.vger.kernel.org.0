@@ -1,172 +1,169 @@
-Return-Path: <linux-usb+bounces-33684-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33685-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SMx7JBuanmnXWQQAu9opvQ
-	(envelope-from <linux-usb+bounces-33684-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 07:43:39 +0100
+	id YM08HZWbnmkZWgQAu9opvQ
+	(envelope-from <linux-usb+bounces-33685-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 07:49:57 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19AD21926FF
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 07:43:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D5A1119285C
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 07:49:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 454343063B65
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 06:43:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B4DC730935DC
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 06:46:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 565713016F1;
-	Wed, 25 Feb 2026 06:43:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EF492C17A0;
+	Wed, 25 Feb 2026 06:46:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TAXANip5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LZGloXmg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A9A2D3A86
-	for <linux-usb@vger.kernel.org>; Wed, 25 Feb 2026 06:43:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F29E32BF3CC
+	for <linux-usb@vger.kernel.org>; Wed, 25 Feb 2026 06:46:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772001796; cv=none; b=NyrXhmB2EI9nRA8cTEs3Bc5ECQvVDfb3Ozh2du9PpvWr/9K29MftAZndGC8fXrpvkU/C/g/8p0NGmNnaZkvVfUfi9FLCiPDXDRW4exEKDEkVib0sJhuDi1CptYuNe+YRbGmoZDR72TvWpiO3LpnNKr6Raq2smMQwrcwYnvgFPk8=
+	t=1772001970; cv=none; b=qowUJnWc0+i9b2RNHVXVGRnOcBXHxs2VoniiOuISNX5Zx34MvVwkXOfVj7q/JYZE03f/5cZRiyX/HGsVNtfbIr/v6G3Y8wo+Kdt9TG6TxcrbgPKyrpNsy6xVyyyay+NvH/X/To99yf4XVpeeOzl0DJRau2tX5QNooGUJ2eaRC5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772001796; c=relaxed/simple;
-	bh=dGJkN6SnVshmKW6KFF4UVx9o8lSkn1Lt8gx8YuivxlU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GzqojfRwFJDVNJc5swi7aEHL9aPcsJsLbefjYoQTrqw9r75zievnGMwT6pXfk71Voe4QqaiJB7J9RTv7owt8Y3kcvwee15VL7gkDCPXqBn7nNldLpRXH40G0LNxT8NZPRu5v2Drc48m1+l7gDnvvU9PYXNAU3q+H2fBx2szLkGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TAXANip5; arc=none smtp.client-ip=209.85.221.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-43767807cf3so4677144f8f.1
-        for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 22:43:14 -0800 (PST)
+	s=arc-20240116; t=1772001970; c=relaxed/simple;
+	bh=FcYnhA40wSm/6OIMnGZ+9dkPjQW2cki8snS/gC9NApM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=QKG4IxJK5fz69SAEzLGG/IuUzRw5RgSxkImeBaLyhcktEkH0rIclI+d6PJvRXyNjLkivqoBQxlLNuYoVQAm26k8TYswpw7nhjQHcEoHEikXpXWbqM61mSHQ1xxIuiE+hPBcS7q3v3Ew1CwcCzou9I7mmUScCICb+1iNOF/54g9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LZGloXmg; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-354c0eb08ceso39813097a91.1
+        for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 22:46:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772001793; x=1772606593; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1j2htuqmQpTTkLQ6035xROAKmDGpEfPVgSnXewPmtLo=;
-        b=TAXANip539EJa5cTLIFPeinn+cIjUHCMCNoq4l21gl+9a7ZGhyXTDWWaYvQOPkpTiC
-         rhXOpZYgzs0817cpO+27SzJ4PF0+8cm0P6gEO5SNg54Q/s6md8m2ww+UNghYXXCYaHK2
-         +qdJkQPHfOoRxTZ/n2dH+ZLMHBaRiIkkRiigFzJIwEmMxvEIsth6+AW0PJ2r3YXXKazo
-         oNXdgMv/q1gT4deJhU1YQRqt5nXkuta3rRFHreEy49/YJwEirrNBqBoiwCA6+dhjBsxQ
-         /r9m3ng1qrLCVXovA9k29IsiX2eWR8bVgV36+ndRZPg1Rt8LPl92M9rY1KD42CMCxbnY
-         bazA==
+        d=google.com; s=20230601; t=1772001968; x=1772606768; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5csDQ2S42k5WJW49iQ3pOEtVJoAgPTcMFYf2ie1hhyA=;
+        b=LZGloXmgiuYUf41tkaofOLdwMV7tYHGZzn+/DsrT34NcueoczBVfKbb6WzSK/B12cs
+         X9HdWdvQRv758FCFYuCPa2CKJTrcfehLLpqQC5iF5YO2n/66imTK/lJSXLcWufsDMEUA
+         5qBBPLnhPDN92eDCXbFGT6h/rjC/fUOPxQFp5P0nSZL3Lj5kaqXV7hLTZ2X3n9DjM5sa
+         DDlN+K7e4eHoSSsT+XvXXjE0AQzMfZnyfRTIH5AGXceDux5c1X6dPvQr562laO0+XnVP
+         b4WHG3Lhrkd4xQltHDvD6NtzIktYQRpzy7uoSWszixuHFJUZzETYlus949t9+KY5dbc5
+         SsJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772001793; x=1772606593;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1j2htuqmQpTTkLQ6035xROAKmDGpEfPVgSnXewPmtLo=;
-        b=VB3T/57dZRElYNXbbMldvf35N8pzJHiQgfoZ2QeCGpaMrAiEnSB3RGOrLYHbYZNHL0
-         c5h7Wo8E8soi+IUqI1EJTRU89DSAP87a74/df67LhL/H2uiqPljikBZvHBz6v89xVL+q
-         5+ID0KokZywoV5C9s1Mb4yMbMnsVI+C+GM2NPQsXemSgjHyENHU5iVrOwQZCsnzcbINB
-         /ob55AeFqijcX5nzd3ANs2lzvpIpEwvkIDBiBJXtNr3TttpOF2JfuVspLXaoba/dX1ys
-         DGwvxob7yUcryYh42LmEHZncf+lhe6blBOOUfjII8VFqG1yOhO/4aSAakqDefbKGp0nd
-         lX7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWdON42zxRhNATsdKQrh5rwCzU+fUQ5SS1MSRVKHk7+nt+gk+OWCU1nh+nJ66Vng1IBUBb4eRtaRiw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXJufO9b0r1iEOauswJIbhAoygmXcRpuVQ9cNrq9VXZrH2JqCu
-	+ZzUoRMBFSE2HKs7Nc37MbrlbFBFnAbj4rHKwTzptuS6SFq7n+kWhW/q
-X-Gm-Gg: ATEYQzywxvrH4efiGBNYlVZwrN3p1/CR/+nILYAhtFCqv0Kiuln/dDxyVUUO/NS/XP2
-	6NxmZLIruzYVWVcwm/ToLCL8+XnCpxh3oUiJxPmEnXJb/Y6Fgsw6011pQbWRgUopibG8DGzGBmm
-	EX2Hz0MIlDJsdzCGvRIvJcVORBenFjUczc+1yttqhWrCCXIH82atPl9FdNZFBltuoABhuCSopM6
-	LVFw4OFQgNBMfk0xvqZn+fthsLqHTSdh15PqfineFtYuTTabM8DeDgonImV7VV1Hn9tO2zEZg2T
-	MphxQLE2YnNJVve+DIT64o66Tj7DIIc2LItvNb2w/MvaOkHDDYIw9Sb0mOIClJWld+ivr2LEjNC
-	rW7QSjX2urNGl5vfX5UGtY/VMWisqHnIdjcJ5GiOyK5frZM7VwaH2MBNdy/uDY7yIyp4+92neDr
-	l2c2yKkA4mo4vbrlXYm6ttRJkUBzUQ2ptstA/PrJtBm3WYURJR9r4+XJMWy9zgq0vnpr8P
-X-Received: by 2002:a05:6000:26c6:b0:437:7168:af4f with SMTP id ffacd0b85a97d-4398faf1376mr1688051f8f.27.1772001792676;
-        Tue, 24 Feb 2026 22:43:12 -0800 (PST)
-Received: from zeeshan-Standard-PC-Q35-ICH9-2009.. ([110.93.227.54])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43987f3ed03sm10954287f8f.16.2026.02.24.22.43.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Feb 2026 22:43:12 -0800 (PST)
-From: Zeeshan Ahmad <zeeshanahmad022019@gmail.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>,
-	linux-usb@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Zeeshan Ahmad <zeeshanahmad022019@gmail.com>
-Subject: [PATCH v2] usb: dwc3: qcom: simplify error check in dwc3_qcom_find_num_ports()
-Date: Wed, 25 Feb 2026 11:42:45 +0500
-Message-ID: <20260225064245.8833-1-zeeshanahmad022019@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260225001036.gg2ghnayekrhbcxh@synopsys.com>
-References: <20260225001036.gg2ghnayekrhbcxh@synopsys.com>
+        d=1e100.net; s=20230601; t=1772001968; x=1772606768;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5csDQ2S42k5WJW49iQ3pOEtVJoAgPTcMFYf2ie1hhyA=;
+        b=ofnZ91LIuqkYh5+GOot6AXrThTPQggSyx3iRDX6yDZxrz9AS+x4HGE9OxLSbzFTM2h
+         LOO64WQngXAlB7airNXn/aTkSiynbZfUep50LLSC3rN1Pa7aUB5JsLBC1f9zIyCIBwKV
+         2SN8axZy3MqV56apEZaC2F1srm8jkiH3fqB3xyGnzB5KFTnYA/Abd/QAQ2Dc/4Kf/5Oh
+         U0YAADqWLpdtGnRty6SJ/VbZ87E3oLKaQ5Q4jr2aFQHOnECRKtkEOe2+9b/YehEfKvON
+         ojNywc9wz0ok0tHIo5aL1B2fykMaFybsMP885YVLj/D6UDpFTT8sZH9ti2FkyAYgSucZ
+         tJgw==
+X-Gm-Message-State: AOJu0Yy6QH8Z8aGPQkWSxsJZ3Tq3b92YxO5QZ7Xovd4idM4dMpsEu+7M
+	VcSnxGrrMGOnCFu8lg/KCJ5coIFCZHA8UVgclKx7tItoTivknJYV4gUrvKXYM/z7B8t+CefoqsR
+	BB8mLppUnC0pAFJ61cg==
+X-Received: from pjbbv16.prod.google.com ([2002:a17:90a:f190:b0:352:de4e:4038])
+ (user=guanyulin job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:1b43:b0:34a:a65e:e6ad with SMTP id 98e67ed59e1d1-358ae7e9f7fmr11623755a91.1.1772001968119;
+ Tue, 24 Feb 2026 22:46:08 -0800 (PST)
+Date: Wed, 25 Feb 2026 06:45:49 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.414.gf7e9f6c205-goog
+Message-ID: <20260225064601.270301-1-guanyulin@google.com>
+Subject: [PATCH v1 0/2] usb: offload: Decouple interrupter lifecycle and
+ refactor usage tracking
+From: Guan-Yu Lin <guanyulin@google.com>
+To: gregkh@linuxfoundation.org, mathias.nyman@intel.com, perex@perex.cz, 
+	tiwai@suse.com, quic_wcheng@quicinc.com, broonie@kernel.org, arnd@arndb.de, 
+	harshit.m.mogalapalli@oracle.com, wesley.cheng@oss.qualcomm.com, 
+	dan.carpenter@linaro.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-sound@vger.kernel.org, Guan-Yu Lin <guanyulin@google.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-33685-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[linaro.org,vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-33684-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zeeshanahmad022019@gmail.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[guanyulin@google.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[google.com:+];
+	NEURAL_HAM(-0.00)[-0.999];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 19AD21926FF
+X-Rspamd-Queue-Id: D5A1119285C
 X-Rspamd-Action: no action
 
-The platform_get_irq_byname_optional() function returns a non-zero
-IRQ number on success and a negative error code on failure. It
-never returns zero.
+The current USB offload implementation couples the allocation of xHCI
+sideband interrupters with the device's offload usage counter. This
+coupling is conceptually incorrect, as hardware resource availability
+and power management state serve distinct purposes.
 
-The current implementation in the modern dwc3-qcom driver checks for
-a return value less than or equal to zero. Since zero is not a
-valid return value, simplify the check to only look for negative
-error codes. This aligns the logic with the standard return contract
-of the platform IRQ APIs.
+This series decouples these mechanisms by removing the usage counting
+logic from the xHCI sideband layer and shifting the responsibility
+to the consumer drivers. This allows interrupters to be managed
+independently of the device's active offload status.
 
-Signed-off-by: Zeeshan Ahmad <zeeshanahmad022019@gmail.com>
+Furthermore, this refactoring addresses a recursive locking issue.
+When a USB device is disconnected, the USB core invokes the driver's
+disconnect callback while holding the udev device lock. Previously,
+the xHCI sideband layer would call usb_offload_put(), which
+attempted to re-acquire the same udev lock, resulting in a deadlock.
+
+By shifting lock acquisition responsibility to the upper-level USB
+driver, we ensure that offload usage updates can be safely performed
+from contexts where the lock is already held. This standardizes the
+lock hierarchy and prevents potential deadlocks during teardown.
+
+Patch 1 performs the core refactoring by updating the offload APIs
+to require caller-held device locks and removing implicit usage
+counting from the interrupter paths.
+
+Patch 2 updates the Qualcomm USB audio offload driver to explicitly
+manage the usage counter during its stream lifecycle, serving as a
+derivative consumer of the new API contract. This also ensures the
+device remains active during playback, preventing premature
+autosuspend.
+
 ---
- drivers/usb/dwc3/dwc3-qcom.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes in v1:
+- Fix build error when building sound/usb/qcom/qc_audio_offload.o
+- Link to RFC v2: https://lore.kernel.org/all/20260213100736.2914690-1-guanyulin@google.com/
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 9ac75547820d..f43f73ac36ff 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -526,14 +526,14 @@ static int dwc3_qcom_find_num_ports(struct platform_device *pdev)
- 	int irq;
- 
- 	irq = platform_get_irq_byname_optional(pdev, "dp_hs_phy_1");
--	if (irq <= 0)
-+	if (irq < 0)
- 		return 1;
- 
- 	for (port_num = 2; port_num <= DWC3_QCOM_MAX_PORTS; port_num++) {
- 		sprintf(irq_name, "dp_hs_phy_%d", port_num);
- 
- 		irq = platform_get_irq_byname_optional(pdev, irq_name);
--		if (irq <= 0)
-+		if (irq < 0)
- 			return port_num - 1;
- 	}
- 
+Changes in RFC v2:
+- Move device locking to callers 
+- Decouple sideband from offload counting.
+- Link to RFC v1: https://lore.kernel.org/all/20260130074746.287750-1-guanyulin@google.com/
+---
+Guan-Yu Lin (2):
+  usb: offload: move device locking to callers in offload.c
+  ALSA: usb: qcom: manage offload device usage
+
+ drivers/usb/core/offload.c        |  34 ++++------
+ drivers/usb/host/xhci-sideband.c  |  14 +---
+ sound/usb/qcom/qc_audio_offload.c | 102 ++++++++++++++++++------------
+ 3 files changed, 73 insertions(+), 77 deletions(-)
+
 -- 
-2.43.0
+2.53.0.414.gf7e9f6c205-goog
 
 
