@@ -1,187 +1,180 @@
-Return-Path: <linux-usb+bounces-33694-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33695-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eJkOJn3inmmCXgQAu9opvQ
-	(envelope-from <linux-usb+bounces-33694-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 12:52:29 +0100
+	id YTd0IdTnnmk/XwQAu9opvQ
+	(envelope-from <linux-usb+bounces-33695-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 13:15:16 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBC05196E67
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 12:52:28 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D06B21971CF
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 13:15:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D4A1E301BC01
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 11:52:25 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4508E302D9EC
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Feb 2026 12:15:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E51B5396D24;
-	Wed, 25 Feb 2026 11:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KtQMfdW6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F07883ACF1E;
+	Wed, 25 Feb 2026 12:15:12 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f195.google.com (mail-qk1-f195.google.com [209.85.222.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457CC2FD69F
-	for <linux-usb@vger.kernel.org>; Wed, 25 Feb 2026 11:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32AC61F5842;
+	Wed, 25 Feb 2026 12:15:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772020344; cv=none; b=BRUsSeQspN2MgASlOL7RMeqrYXCoBJC03qz0yvCLNqvXNs88j/J1rbumo+bL+ayOI7lWmzEklPNpevbBL9nhuGI0GiCaRrnfiCQIm1qM1Fkr1G9rAgzIZsD1vG13qp8lvgNe/+QQpQ8TV46q6z/4Zpq0HioGH5Ae/oFWd9ARZKo=
+	t=1772021712; cv=none; b=mPZZ/xIon4fYbknx0FMd3Kp5DyrZ+CIXOlwUIQWa0ShRkCKJs0ZxrFZYK86PUyxsRS4pi7Cgn7d4fRpvAQHlt1zEgqXakEKRQSeLyC2VNAUuLKR0Ali0sx4/rbZhAj6w8zgH/AMc7s+x1M3byS4xQKwnnUOUbwzAShLRj5CrD+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772020344; c=relaxed/simple;
-	bh=aKpOtpB4MUuIsRLJHs1bLmZOtkzJaYfoJt/dGxVgNXY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b1SgzZjBYB1x35+ZJJAPZwovJPLnyQ3fP4sBCzJziQJMdEGToH4Fu1w3QHOfYkRUxE7h6i+MlZmc7m/Pkbguj0QfS3dSzcv8fSNF2DE5ql/2nAvPZvy0+hijJujQD6XZUTmqk+YpHscKJQHu0azSWGoqfCtg1KdGpP9zA3i59YE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KtQMfdW6; arc=none smtp.client-ip=209.85.222.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f195.google.com with SMTP id af79cd13be357-8cb3dfb3461so677497685a.3
-        for <linux-usb@vger.kernel.org>; Wed, 25 Feb 2026 03:52:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772020342; x=1772625142; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9N+5cRmg/VWwiWUJBlfDW4hUkqu3+KAj+K2RmGyc8Yk=;
-        b=KtQMfdW65SZW3Xkc7wdm3JA+Tb0dydMdnMjtsZOnQoBCCzAV6fd1mYbFFBT/GIikTj
-         AdaRbMauj1MLPuRAewSkQ+zH9osPX7MIoS3lOLnOyGPxxwmJWX1AlQ8Vhk1SVndTJdSL
-         CYCz8HVN/whtXiZXZ/rvjhYjwRfyU3HBKbouKsGianwMBRuNO6/1anTrdRVn81MRogNx
-         ait3eW0C28mg7EazOb78aVYnVGmyWeDWK7RtgJhQAlKlWRDl0aYtivgDpYPi+gZgWHyq
-         dS94ITRC+I5WBgS+vZFFn9boPyYuU/A6FUCT6fqOxZtkut+Ea1S49lYOGDiYOSfJWMLe
-         PjnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772020342; x=1772625142;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9N+5cRmg/VWwiWUJBlfDW4hUkqu3+KAj+K2RmGyc8Yk=;
-        b=JNHKPbTzUcbjZJuqiDEnbpVxRRdTe3bkP2V4KW88ThBy32b0t0MXdwXgPaxn8vFJIa
-         iyphNBnkIJuaThoBj+bUZwHVWu03tWhce4FeFUxbY715nW9+s1pTHQ8cOvvxyi/pRCbm
-         eBD7820jBGwtJP5PfTtCM7Lc4OM9i+TbOgv+8ffMIsdnqQA7VYiDbWIVgX5IOn18Yw5B
-         rkJXtl+vQZ0W8IVI4UeQkzzIDWQi1lvOzk8GjM2YL7G6Gvc01iv5A751C60Tgo6OyY6W
-         GEPwYaDcmk9uOxz1tzQ80ypycfxKkth17wI1ContZXxqrGnLVyoP/gVxDRIFHuuBRTMy
-         ADUA==
-X-Forwarded-Encrypted: i=1; AJvYcCX5jjVWYa5cSf8xX45t4UJvV7jsFN0JZ/Gv3uhjgV4JMspX61TUXfHZyynWlifyhHTRfYZkdodOvE4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuNDteNa5RNdPt9ZZquhM3MYuw2/hi+75TDjs+TZbA2ZbJ4gYw
-	FLLScaAbfcrwgERMKeC905dgNZFRjCHzdduGD1g1oJhm+quCJox7cOaR
-X-Gm-Gg: ATEYQzwdpUGWenK01o49mLTZdwbs64dmLSqgP+3cwvpERxTPOB0XQbkphls273Q8jq3
-	10zBQs6JZ3Qtdh9H7iR9vsxYRD38JhvMpl0M2RgOm/a3RoSQjUfbTzIgKNKyHa8NTb/v+1ng4XI
-	H2OrroLOyDXn+ovSSW5Z8yficrfXIdVOJkpox5oPctjC0Z+ExF/8D4B8eXYGppkmlsb94SILMRj
-	9WQs7pbXGyWsXl2Stt9X3WcfDY90hwjqyf0TYsifoQBigDx5bAeRpMCEf4ILOziwijSMWhwn30g
-	b7TfFiNAZ+KjZY+KSRufWhjRoRZpiO3m8RPumxaF1OStviLybPXk/tzwQeSlW/FxyGi03pS8nZz
-	UwYW2OrXG048O7EGE91j5/mP8anonIo+Uc0SvQZLnDWSV0PVmD806CzBHABQ3Z+Fu+T+jnSmiYG
-	SicHbprHWwyaGU5vyC0910wy9iApzyi4BFjMG+WJ+cXWSV1WWOr6SCy1pnrmnokLHiQNBzAp1kh
-	2gLBd5JNCkR
-X-Received: by 2002:a05:620a:2a02:b0:8aa:36b9:8056 with SMTP id af79cd13be357-8cb8ca65113mr1864782185a.41.1772020341937;
-        Wed, 25 Feb 2026 03:52:21 -0800 (PST)
-Received: from mango-teamkim.. ([129.170.197.108])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cb8d0ec694sm1251681485a.29.2026.02.25.03.52.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Feb 2026 03:52:21 -0800 (PST)
-From: pip-izony <eeodqql09@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Seungjin Bae <eeodqql09@gmail.com>,
-	Kyungtae Kim <Kyungtae.Kim@dartmouth.edu>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Kees Cook <kees@kernel.org>,
-	Yuping Luo <Yuping.Luo@csr.com>,
-	Felipe Balbi <balbi@ti.com>,
-	Michal Nazarewicz <mina86@mina86.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Barry Song <baohua@kernel.org>,
-	linux-usb@vger.kernel.org
-Subject: [PATCH] usb: gadget: f_mass_storage: Fix potential integer overflow in check_command_size_in_blocks()
-Date: Wed, 25 Feb 2026 06:49:58 -0500
-Message-ID: <20260225114957.1094146-2-eeodqql09@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1772021712; c=relaxed/simple;
+	bh=lfMqTA1aUdeM2rMnaquQA8d58gsfaOzsornyEBzxsbc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RysQ+2yjzT6H5LmFS+ILBUY4izrlm7dt6S2IMGTn8nkFAgjodG7ryQKmHDrUNG81D1esQJjQjVqxJd/SNKvOACF8PHiBXNd5kaH/SLc6fjoVKh4cYZQPoDfgkvIBgkuxUQsRae3xR7RpeJ6ynMfhkgsuEWCqoaZiu2HCLgDpg3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from duge-virtual-machine (unknown [112.53.146.143])
+	by APP-03 (Coremail) with SMTP id rQCowAAHItm2555pSx1OCQ--.33021S2;
+	Wed, 25 Feb 2026 20:14:48 +0800 (CST)
+Date: Wed, 25 Feb 2026 20:14:46 +0800
+From: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
+To: vkoul@kernel.org, gregkh@linuxfoundation.org, conor@kernel.org
+Cc: neil.armstrong@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
+	pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	alex@ghiti.fr, linux-phy@lists.infradead.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/4] Add USB support for Canaan K230
+Message-ID: <aZ7ntvit57TaPgyw@duge-virtual-machine>
+References: <20260121145526.14672-1-jiayu.riscv@isrc.iscas.ac.cn>
+ <aYCLGLvbKZy+WyxI@duge-virtual-machine>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aYCLGLvbKZy+WyxI@duge-virtual-machine>
+X-CM-TRANSID:rQCowAAHItm2555pSx1OCQ--.33021S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFyDXrWkCFyxGFWfGF4kZwb_yoW5WFW5pa
+	y2kF43CF4DJFWIqa97tw1rGF98ZFs5Jry5Gryaq3sxXa4UZr1UAwn3G3y5ZFyDJFs5Cryj
+	vF15GFy7GFyUAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvvb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4
+	A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
+	c7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+	14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+	IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
+	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
+	IFyTuYvjxUqiFxDUUUU
+X-CM-SenderInfo: 5mld534oul2uny6l223fol2u1dvotugofq/
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.54 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,dartmouth.edu,wanadoo.fr,kernel.org,csr.com,ti.com,mina86.com,rowland.harvard.edu,vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33695-lists,linux-usb=lfdr.de];
+	DMARC_NA(0.00)[iscas.ac.cn];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33694-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[eeodqql09@gmail.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: EBC05196E67
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jiayu.riscv@isrc.iscas.ac.cn,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.993];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCPT_COUNT_TWELVE(0.00)[15]
+X-Rspamd-Queue-Id: D06B21971CF
 X-Rspamd-Action: no action
 
-From: Seungjin Bae <eeodqql09@gmail.com>
+On Mon, Feb 02, 2026 at 07:31:36PM +0800, Jiayu Du wrote:
+> On Wed, Jan 21, 2026 at 10:55:21PM +0800, Jiayu Du wrote:
+> > Add support for the USB PHY and DWC2 IP which is used by Canaan K230,
+> > and made relevant changes to the DTS.
+> > 
+> > This series is based on the initial 100ask K230 DshanPi series [1] which
+> > is based on the clock and pinctrl series. Check the details in the link.
+> > 
+> > Link: https://lore.kernel.org/all/20260115060801.16819-1-jiayu.riscv@isrc.iscas.ac.cn/ [1]
+> > 
+> > Changes in v5:
+> > - Changed the year of Copyright to 2026.
+> > - Add blank line after the declaration of variables
+> > - Fix wrong alignment.
+> > - Link to v4: https://lore.kernel.org/all/20260120143243.71937-1-jiayu.riscv@isrc.iscas.ac.cn/
+> > 
+> > Changes in v4:
+> > - Shrink reg length to match the address/size-cells in k230-usb-phy yaml.
+> > - Move all PHY instance creation and initialization from xlate to probe.
+> > - Modify xlate function to only perform index lookup for PHY instances.
+> > - Define all register base offsets macros at the top of file instead of
+> >   hard-coding magic numbers directly in probe.
+> > - Link to v2: https://lore.kernel.org/all/20260115064223.21926-1-jiayu.riscv@isrc.iscas.ac.cn/
+> > 
+> > Changes in v3:
+> > - Please ignore v3.
+> > 
+> > Changes in v2:
+> > - Fold the child into the parent in dtsi.
+> > - Define one usbphy with phy-cells=1.
+> > - Delete the clock of the usbphy as it is not needed.
+> > - Link to v1: https://lore.kernel.org/all/20251230023725.15966-1-jiayu.riscv@isrc.iscas.ac.cn/
+> > 
+> > Jiayu Du (4):
+> >   dt-bindings: phy: Add Canaan K230 USB PHY
+> >   dt-bindings: usb: dwc2: Add support for Canaan K230 SoC
+> >   phy: usb: Add driver for Canaan K230 USB 2.0 PHY
+> >   riscv: dts: canaan: Add syscon and USB nodes for K230
+> > 
+> >  .../bindings/phy/canaan,k230-usb-phy.yaml     |  35 +++
+> >  .../devicetree/bindings/usb/dwc2.yaml         |   3 +
+> >  .../boot/dts/canaan/k230-canmv-dshanpi.dts    |  17 ++
+> >  arch/riscv/boot/dts/canaan/k230.dtsi          |  35 +++
+> >  drivers/phy/Kconfig                           |   1 +
+> >  drivers/phy/Makefile                          |   1 +
+> >  drivers/phy/canaan/Kconfig                    |  14 +
+> >  drivers/phy/canaan/Makefile                   |   2 +
+> >  drivers/phy/canaan/phy-k230-usb.c             | 284 ++++++++++++++++++
+> >  9 files changed, 392 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/phy/canaan,k230-usb-phy.yaml
+> >  create mode 100644 drivers/phy/canaan/Kconfig
+> >  create mode 100644 drivers/phy/canaan/Makefile
+> >  create mode 100644 drivers/phy/canaan/phy-k230-usb.c
+> > 
+> > -- 
+> > 2.52.0
+> > 
+> Hello Vinod, could you please take a look at this patch? Thank you!
+> 
+> Regards,
+> Jiayu Du
 
-The `check_command_size_in_blocks()` function calculates the data size
-in bytes by left shifting `common->data_size_from_cmnd` by the block
-size (`common->curlun->blkbits`). However, it does not validate whether
-this shift operation will cause an integer overflow.
+Hi Vinod, will you review this patch? Thank you again!
 
-Initially, the block size is set up in `fsg_lun_open()` , and the
-`common->data_size_from_cmnd` is set up in `do_scsi_command()`. During
-initialization, there is no integer overflow check for the interaction
-between two variables.
+Regards,
+Jiayu Du
 
-So if a malicious USB host sends a SCSI READ or WRITE command
-requesting a large amount of data (`common->data_size_from_cmnd`), the
-left shift operation can wrap around. This results in a truncated data
-size, which can bypass boundary checks and potentially lead to memory
-corruption or out-of-bounds accesses.
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-Fix this by ensuring that `common->data_size_from_cmnd` is not greater
-than `(U32_MAX >> common->curlun->blkbits)` before performing the shift.
-
-Fixes: 144974e7f9e3 ("usb: gadget: mass_storage: support multi-luns with different logic block size")
-Signed-off-by: Seungjin Bae <eeodqql09@gmail.com>
----
- drivers/usb/gadget/function/f_mass_storage.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index 6af96e2b44eb..12e7ef2e074e 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -1853,8 +1853,18 @@ static int check_command_size_in_blocks(struct fsg_common *common,
- 		int cmnd_size, enum data_direction data_dir,
- 		unsigned int mask, int needs_medium, const char *name)
- {
--	if (common->curlun)
--		common->data_size_from_cmnd <<= common->curlun->blkbits;
-+	unsigned int blkbits;
-+
-+	if (common->curlun) {
-+		blkbits = common->curlun->blkbits;
-+		if (cmnd_size > 10 &&
-+			common->data_size_from_cmnd > (U32_MAX >> blkbits)) {
-+			common->phase_error = 1;
-+			return -EINVAL;
-+		}
-+		common->data_size_from_cmnd <<= blkbits;
-+	}
-+
- 	return check_command(common, cmnd_size, data_dir,
- 			mask, needs_medium, name);
- }
--- 
-2.43.0
 
