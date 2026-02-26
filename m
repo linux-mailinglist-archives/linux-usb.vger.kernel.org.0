@@ -1,179 +1,123 @@
-Return-Path: <linux-usb+bounces-33736-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33737-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wHG6GEEvoGkrgAQAu9opvQ
-	(envelope-from <linux-usb+bounces-33736-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 12:32:17 +0100
+	id CNVkBLw5oGmagwQAu9opvQ
+	(envelope-from <linux-usb+bounces-33737-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 13:17:00 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B460D1A5100
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 12:32:16 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78F3E1A59E3
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 13:16:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7466E306F002
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 11:32:13 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 06EC7302F695
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 12:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 661A4372B59;
-	Thu, 26 Feb 2026 11:32:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 418F91FF1B4;
+	Thu, 26 Feb 2026 12:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cVlPfMkA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bm.lauterbach.com (bm.lauterbach.com [62.154.241.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B32C363C63
-	for <linux-usb@vger.kernel.org>; Thu, 26 Feb 2026 11:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.154.241.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E161D5CC9
+	for <linux-usb@vger.kernel.org>; Thu, 26 Feb 2026 12:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772105532; cv=none; b=C5JRzFVzn741loTFI+BgauVfo+cm7BoEcWqdITT8NYd6ghvHAHjxrXx2AwmanXhqdMRFpUE0KHYzHi+Q5A6ek0jXOFHOTroJoMtTr4hotTHwNqCOiB9lap5PJIYkiNIJgqCLbAH6m13Xc8Rkluxwmcvivhj25ohm6ePprJK86Q8=
+	t=1772108216; cv=none; b=kgzHQ0Zo9CLbgg5G5Msgh2yASNdRi1Szg8EGUaSGs2xBGjV3j2fgNrzOFXKvgl281J1siW23liKP3UWSlm2WGF9BxrrqHu21J1+vT02HnQl5RCKQZiHazJsrcLoxb23h/HoS1i2eqv2QcOZIlm7fBtoe8XY6k2crN16vXE/ELEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772105532; c=relaxed/simple;
-	bh=vHDrWu1363DVgA1wKFPFGleIZ3tTRBOo+yTaOxHok8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EJLYJXNwfqFbxb6uC1GjuDFfp+UMFaK3ExL06jTalnnHH3D9yCmPlpg5obsoCoFAwtiPPAWipYn9T9/6U89DkSyqBoPcvRyI9XvfD1d98e7ljmaOmETvcuDN+WmvgWaJsWz5XRDix6CeIUsE28w+xg4gzznOThoJBC5H2sVSN8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com; spf=pass smtp.mailfrom=lauterbach.com; arc=none smtp.client-ip=62.154.241.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lauterbach.com
-Received: from ingpc2.intern.lauterbach.com (unknown [10.2.10.44])
-	(Authenticated sender: ingo.rohloff@lauterbach.com)
-	by bm.lauterbach.com (Postfix) with ESMTPSA id C9317121710C2;
-	Thu, 26 Feb 2026 12:32:00 +0100 (CET)
-Date: Thu, 26 Feb 2026 12:32:00 +0100
-From: Ingo Rohloff <ingo.rohloff@lauterbach.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: dwc3: Support for USB3340x ULPI PHY, via
- "snps,enable_xcvrdly_quirk"
-Message-ID: <20260226123200.643e0ddd@ingpc2.intern.lauterbach.com>
-In-Reply-To: <20260226023935.ge3vlasodrrnhq6o@synopsys.com>
-References: <20260224141438.39524-1-ingo.rohloff@lauterbach.com>
-	<20260225000512.tle2eu4gkd4ut6bf@synopsys.com>
-	<20260225134959.39e775ff@ingpc2.intern.lauterbach.com>
-	<20260226023935.ge3vlasodrrnhq6o@synopsys.com>
-Organization: Lauterbach GmbH
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.50; x86_64-unknown-linux-gnu)
+	s=arc-20240116; t=1772108216; c=relaxed/simple;
+	bh=mEWt8pWpzCUMfEuyAOSWGqD/ieGzhnN8n63CU5ltZGk=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=GbI+x73qM7VbOUdCl+Fen8bH0KonyvFiZ6ywYUKvprcsflpbEnQDJnN4Y0e6smkO9HM6UcPTEcB1NVRkEmeS3zxLxriKgZB+8Bq8CT73PfYNjD+JAMiRuT2gqWE7WKwEX3Sh8RU78X8fc9PyKPazpjTmYt1eIOChbfvgoDBKwyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cVlPfMkA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 561CDC19424
+	for <linux-usb@vger.kernel.org>; Thu, 26 Feb 2026 12:16:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772108216;
+	bh=mEWt8pWpzCUMfEuyAOSWGqD/ieGzhnN8n63CU5ltZGk=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=cVlPfMkAMhNVsjQDQiy1zX//x+kmDuR1q99YI53POyxvvsZs09+N2YXXhIlLon3JF
+	 iwVBLG9KJhj0HZgI4e3vRO/wLKqtFmCeybvUx611E/m6hIcKqMzPIHXVkxiGvQkvuo
+	 m1jyLSZum/qjqAhlMnTRMjU66OEWimW6d0ROhyR6GsstKiO2ibMdaZWauCWIaKDHk2
+	 +L0zRYFFne9OSPwagMp0X6DOc1d0bh33bEWltgZokTRA+M/x/2UUnP0ylMjatpyStQ
+	 brCviayuWAG5NKio4fL8W/sEXTqbiKTzIpcOMbTbgd9inFaI4xDWALV37XdvrjJgdv
+	 p3Gp6PHCBGrSg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 4AED4C41612; Thu, 26 Feb 2026 12:16:56 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 221073] xHCI host controller dies on resume from s2idle on AMD
+ Strix Halo [1022:1587]
+Date: Thu, 26 Feb 2026 12:16:56 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: superveridical@gmail.com
+X-Bugzilla-Status: NEEDINFO
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-221073-208809-1R3Ei9QWoF@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-221073-208809@https.bugzilla.kernel.org/>
+References: <bug-221073-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Bm-Milter-Handled: 166a2dfb-2e12-4590-8fa5-72e30323519f
-X-Bm-Transport-Timestamp: 1772105520839
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.46 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-33737-lists,linux-usb=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33736-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	HAS_ORG_HEADER(0.00)[];
-	DMARC_NA(0.00)[lauterbach.com];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_THREE(0.00)[3];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NO_DN(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ingo.rohloff@lauterbach.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	R_DKIM_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,lauterbach.com:url,lauterbach.com:email,synopsys.com:email]
-X-Rspamd-Queue-Id: B460D1A5100
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_ONE(0.00)[1];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 78F3E1A59E3
 X-Rspamd-Action: no action
 
-Hello Thinh,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221073
 
-On Thu, 26 Feb 2026 02:39:46 +0000
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+--- Comment #12 from Alexander F (superveridical@gmail.com) ---
+Created attachment 309475
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D309475&action=3Dedit
+Z13 dmesg with xhci_hcd.quirks=3D0x80
 
-> > > Also, how are you passing this quirk? Through devicetree or software
-> > > node? I don't see the user of this property.
-> > >   
-> > 
-> > On the hardware I have got (Xilinx Ultrascale+ ZynqMP) I pass it via
-> > devicetree. I now added a 2nd commit, which adds documentation for the
-> > devicetree bindings.
-> >   
-> 
-> You should pass this via software node through the glue driver. I don't
-> think there's enough justification to create a new devicetree property
-> just for this.
+--=20
+You may reply to this email to add a comment.
 
-Please help me to understand:
-I think the glue driver you are referring to is the Xilinix specific one,
-so the one in `drivers/usb/dwc3/dwc3-xilinx.c`, which declares
-`dwc3_xlnx_driver`.
-
-Is this what you mean?
-
-I think I understand how to create a software node there and how to pass
-it to the main dwc3 driver.
-
-Do you mean to read in a dwc3_xlnx_driver specific device tree property
-and then pass this via software node to the main DWC3 driver?
-
-I am wondering if the dwc3_xlnx_driver is the right place for this.
-
-Please let me explain:
-
-The origin of the failing high-speed negotiation is not because
-of the ZynqMP specific hardware (so this particular specific DWC3
-implementation), but because of the externally connected 
-Microchip USB3340 ULPI PHY.
-
-Meaning: Any DWC3 implementation which is connected to this particular
-external ULPI PHY will have this high-speed negotiation problem.
-
-On the other hand: If you connect a different ULPI PHY to the ZynqMP
-DWC3 implementation, then this will work without any extra measures.
-The Xilinx evaluation boards use other ULPI PHYs (USB3320), which is
-why this problem didn't pop up with the Xilinx evaluation boards.
-
-It's luck, that the dwc3 controller has a bit which allows it
-to work together with this particular USB3340 ULPI PHY.
-
-The property in the device tree describes the circuit implemented
-on your hardware board:
-If you have an externally USB3340 ULPI PHY connected to a 
-DWC3 controller, then you have to set this new property.
-If you have a different High-Speed USB PHY then you might not need
-to set this property.
-Of course this property will also help if you have a different
-High-Speed PHY which has the same behavior as the USB3340 ULPI PHY
-and so also requires setting the XCVRDLY bit.
-
-I think any DWC3 implementation which allows to connect an external
-ULPI PHY is affected by this problem.
-
-So should I really move this property to the Xilinx specific glue driver?
-
-with best regards
-  Ingo
-
--------------------------------------------------------------------------
-Dipl.-Inform.
-Ingo ROHLOFF
-Senior Staff Embedded Systems Engineering
-phone +49 8102 9876-142 - ingo.rohloff@lauterbach.com
-
-Lauterbach Engineering GmbH & Co. KG
-Altlaufstrasse 40, 85635 Hoehenkirchen-Siegertsbrunn, GERMANY
-www.lauterbach.com
-
-Registered Office: Hoehenkirchen-Siegertsbrunn, Germany,
-Local Court: Munich, HRA 87406, VAT ID: DE246770537,
-Managing Directors: Lothar Lauterbach, Stephan Lauterbach, Dr. Thomas Ullmann
-
--------------------------------------------------------------------------
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
