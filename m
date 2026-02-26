@@ -1,368 +1,295 @@
-Return-Path: <linux-usb+bounces-33753-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33754-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IA2cDimQoGkokwQAu9opvQ
-	(envelope-from <linux-usb+bounces-33753-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 19:25:45 +0100
+	id GGQwA4SToGl+kwQAu9opvQ
+	(envelope-from <linux-usb+bounces-33754-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 19:40:04 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9561E1AD90D
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 19:25:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 657D81ADD45
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 19:40:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 62FA535246B5
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 17:13:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B883D31C6115
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 17:39:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 273A636896E;
-	Thu, 26 Feb 2026 17:13:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF68C355F2B;
+	Thu, 26 Feb 2026 17:39:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="XVUO7vuA";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="PjDsIFJs";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="XVUO7vuA";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="PjDsIFJs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RwugQ86/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5578D368953
-	for <linux-usb@vger.kernel.org>; Thu, 26 Feb 2026 17:13:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461613290D3;
+	Thu, 26 Feb 2026 17:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772125991; cv=none; b=MmkVxvVOKY8hc6LBU3uVHm7XbZ0/fexWkWDs0iK86NVz5jxO6lWghihz+U2GN9u0/ulcxCdo77bxoA0R5mnaSd46oQZxRfZTPYrRnQbd0L32E5LOSPI46sbRP8boWdUte/V2QSuUC0IyV38hZ3xcDkch+LACA0u8iiyPPeYLYQY=
+	t=1772127554; cv=none; b=a/n0sXJooMqTyN6QCfu75trfUmGXiPt6bp8h/nO+/aV2o6WQKfvzEIqN0v1KkWzqleXJ2waw4zUoERVCn5++llDv6ccti+8dBFtkScmm4EiJbebmGirHdrU2sRhHfLTz+KZ8geOzI/jX2Y1FOt+09MUSurkqJxxmVFbtz9hCyiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772125991; c=relaxed/simple;
-	bh=vuNF+CsgDhYGhajv9QOfHxvpySDi0aQnR8cDGX6FixI=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uJ1CnrGXQJ39dbD5ztSBDMRPw1Vf/LaoGluaYbhwhfKLOviTWTZuc4BHsW0cCtbWTaQYazP8xsoCVfsoGlk9Fc8MI/quTqxzosw2zMAK/LQ6pnRGbimvLYa1yWWiHxJR4mFor2u8qpiUTzgT7XKV7Q96uvFWQeWO1MJbS0Te9r8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=XVUO7vuA; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=PjDsIFJs; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=XVUO7vuA; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=PjDsIFJs; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id A6CA11FAA8;
-	Thu, 26 Feb 2026 17:13:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1772125988; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=chsq2oq74SxheHrAUdoA/OBtFxtpPWmDeHM3rlP8M3Q=;
-	b=XVUO7vuAJumaORaLN7Qb+0Mxsfpvc9lG8/D2D9hsSKk1cn+zam9mYFOrJPjCna4a6rcaSX
-	rV8FRfKJ3KLDVI+UiUXuzZLU6p18rPSaDZKgCXYbnhq+6T5mQUkhVXp3m1CV0BxAOkBR4S
-	K8Q9dKuPSteh1iEqi2zCRvAl+Z9so2A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1772125988;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=chsq2oq74SxheHrAUdoA/OBtFxtpPWmDeHM3rlP8M3Q=;
-	b=PjDsIFJswnEipvFHgf0wLq3ZFRNMQdjuPuHbX5a6FPU52YueUVMK6OUF7sSeEwzaFst/pd
-	bmmGkHN2b9y2mwCw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=XVUO7vuA;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=PjDsIFJs
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1772125988; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=chsq2oq74SxheHrAUdoA/OBtFxtpPWmDeHM3rlP8M3Q=;
-	b=XVUO7vuAJumaORaLN7Qb+0Mxsfpvc9lG8/D2D9hsSKk1cn+zam9mYFOrJPjCna4a6rcaSX
-	rV8FRfKJ3KLDVI+UiUXuzZLU6p18rPSaDZKgCXYbnhq+6T5mQUkhVXp3m1CV0BxAOkBR4S
-	K8Q9dKuPSteh1iEqi2zCRvAl+Z9so2A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1772125988;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=chsq2oq74SxheHrAUdoA/OBtFxtpPWmDeHM3rlP8M3Q=;
-	b=PjDsIFJswnEipvFHgf0wLq3ZFRNMQdjuPuHbX5a6FPU52YueUVMK6OUF7sSeEwzaFst/pd
-	bmmGkHN2b9y2mwCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3F86A3EA62;
-	Thu, 26 Feb 2026 17:13:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id SZJIDiR/oGl3SQAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Thu, 26 Feb 2026 17:13:08 +0000
-Date: Thu, 26 Feb 2026 18:13:07 +0100
-Message-ID: <87fr6na0nw.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Guan-Yu Lin <guanyulin@google.com>
-Cc: gregkh@linuxfoundation.org,
-	mathias.nyman@intel.com,
-	perex@perex.cz,
-	tiwai@suse.com,
-	quic_wcheng@quicinc.com,
-	broonie@kernel.org,
-	arnd@arndb.de,
-	harshit.m.mogalapalli@oracle.com,
-	wesley.cheng@oss.qualcomm.com,
-	dan.carpenter@linaro.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] ALSA: usb: qcom: manage offload device usage
-In-Reply-To: <20260225064601.270301-3-guanyulin@google.com>
-References: <20260225064601.270301-1-guanyulin@google.com>
-	<20260225064601.270301-3-guanyulin@google.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
+	s=arc-20240116; t=1772127554; c=relaxed/simple;
+	bh=nThCQLbabJ0yq+l47grbVRbkwAW8YTIAhiJzvLJHKX4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FLOaX5SSzwdUHZopKCYxseLYu2Pl7DjDptxhskAIiXStna2agefS3zvEI0K4B3v+utNPMJthciyO6TupUC50izexmTPjeAgOvZy83r/2kYaZxLQmhyijU+4hH4ih4MpZcGETia9ZONJuuSFuUHXJqigHrYPqYqtnT7R/HYQ9Ftg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RwugQ86/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDAD9C116C6;
+	Thu, 26 Feb 2026 17:39:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772127553;
+	bh=nThCQLbabJ0yq+l47grbVRbkwAW8YTIAhiJzvLJHKX4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RwugQ86/npjsesdwAJsYp2Ax+O2Pngm5aol5NZ55QZJ7T1ahJAkwWQQ2B2OMAFQNt
+	 vvdRAwhJN/5OBlwYrJcnz3QuG41dimSLOXm3zd42wyBClcB6Jzuawao30M0A6fJoSl
+	 feYmXZR44DaBYDiMJlCAwNdAB0WBYOYuDVDA7TYOYWvjFwrphLsqglbNvIypSPNKRw
+	 ZYdurlezM0nrCHqs2jwIg4uTT6CeqXx9YFGZc4ttk8y3B8bMsJY2EOu2jr/VPq5g/M
+	 8LDwDHr2kc2FsYyb6DGCJqN48VEKdUyIhPPYvEeWDR+m2tg7IgZbSCfM9N8iAIKG2N
+	 8WNUpBR13S4Ng==
+Date: Thu, 26 Feb 2026 17:39:09 +0000
+From: Simon Horman <horms@kernel.org>
+To: Birger Koblitz <mail@birger-koblitz.de>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, pabeni@redhat.com,
+	linux-kernel@vger.kernel.org, kuba@kernel.org,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	edumazet@google.com, opensource@vdorst.com
+Subject: Re: [net-next,v2] r8152: Add 2500baseT EEE status/configuration
+ support
+Message-ID: <aaCFPZ2JYur6hdha@horms.kernel.org>
+References: <20260224-b4-eee2g5-v2-1-cf5c83df036e@birger-koblitz.de>
+ <20260225194848.188081-2-horms@kernel.org>
+ <875598e7-5fa1-49b0-be14-181b18ae97fe@birger-koblitz.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Flag: NO
-X-Spam-Score: -3.51
-X-Spam-Level: 
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <875598e7-5fa1-49b0-be14-181b18ae97fe@birger-koblitz.de>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33753-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33754-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[suse.de:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tiwai@suse.de,linux-usb@vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[horms@kernel.org,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,suse.de:mid,suse.de:dkim]
-X-Rspamd-Queue-Id: 9561E1AD90D
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,horms.kernel.org:mid]
+X-Rspamd-Queue-Id: 657D81ADD45
 X-Rspamd-Action: no action
 
-On Wed, 25 Feb 2026 07:45:51 +0100,
-Guan-Yu Lin wrote:
+On Wed, Feb 25, 2026 at 11:02:17PM +0100, Birger Koblitz wrote:
+> Hi Simon,
 > 
-> The Qualcomm USB audio offload driver currently does not report its offload
-> activity to the USB core. This prevents the USB core from properly tracking
-> active offload sessions, which could allow the device to auto-suspend while
-> audio offloading is in progress.
+> Thanks for the thorough analysis!
 > 
-> Integrate usb_offload_get() and usb_offload_put() calls into the offload
-> stream setup and teardown paths. Specifically, call usb_offload_get() when
-> initializing the event ring and usb_offload_put() when freeing it.
+> On 25/02/2026 8:48 pm, Simon Horman wrote:
 > 
-> Since the updated usb_offload_get() and usb_offload_put() APIs require the
-> caller to hold the USB device lock, add the necessary device locking in
-> handle_uaudio_stream_req() and qmi_stop_session() to satisfy this
-> requirement.
+> > 
+> > > @@ -8922,7 +8924,8 @@ static void rtl8152_get_strings(struct net_device *dev, u32 stringset, u8 *data)
+> > > 
+> > >   static int r8152_get_eee(struct r8152 *tp, struct ethtool_keee *eee)
+> > >   {
+> > > -	__ETHTOOL_DECLARE_LINK_MODE_MASK(common);
+> > > +	__ETHTOOL_DECLARE_LINK_MODE_MASK(common) = {};
+> > > +	u16 speed = rtl8152_get_speed(tp);
+> > >   	u16 val;
+> > > 
+> > >   	val = r8152_mmd_read(tp, MDIO_MMD_PCS, MDIO_PCS_EEE_ABLE);
+> > 
+> > This isn't a bug, but the variable declarations are not in reverse
+> > Christmas tree order. Simon Horman's AI review raised this in v1, you
+> > acknowledged it and said it would be fixed in v2, but the ordering issue
+> > remains. The longest line should come first, followed by shorter lines.
+> > Should be:
+> > 
+> > 	__ETHTOOL_DECLARE_LINK_MODE_MASK(common) = {};
+> > 	u16 speed = rtl8152_get_speed(tp);
+> > 	u16 val;
+> > 
+> I do not understand what the AI is complaining about, here. The lines in the
+> v2 patch are in exactly the order you requested:
+> -	__ETHTOOL_DECLARE_LINK_MODE_MASK(common);
+> +	__ETHTOOL_DECLARE_LINK_MODE_MASK(common) = {};
+> +	u16 speed = rtl8152_get_speed(tp);
+>  	u16 val;
+> gives
+> 	__ETHTOOL_DECLARE_LINK_MODE_MASK(common) = {};
+> 	u16 speed = rtl8152_get_speed(tp);
+>  	u16 val;
+
+Sorry, there was supposed to be some commentary from me included in
+my previous email. But somehow it got lost.
+
+I agree the AI is wrong here.
+
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: ef82a4803aab ("xhci: sideband: add api to trace sideband usage")
-> Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
+> > (Reference: https://lore.kernel.org/all/20260224170206.146491-3-horms@kernel.org/)
+> > 
+> > [ ... ]
+> > 
+> > > @@ -8956,7 +8968,8 @@ static int r8152_set_eee(struct r8152 *tp, struct ethtool_keee *eee)
+> > > 
+> > >   static int r8153_get_eee(struct r8152 *tp, struct ethtool_keee *eee)
+> > >   {
+> > > -	__ETHTOOL_DECLARE_LINK_MODE_MASK(common);
+> > > +	__ETHTOOL_DECLARE_LINK_MODE_MASK(common) = {};
+> > > +	u16 speed = rtl8152_get_speed(tp);
+> > >   	u16 val;
+> > > 
+> > >   	val = ocp_reg_read(tp, OCP_EEE_ABLE);
+> > 
+> > Same reverse Christmas tree order issue here. The same pattern should be
+> > applied as in r8152_get_eee().
+> Same argument as above.
 
-Mostly it looks good to me, but a slight concern is the
-usb_offload_put() call in the error path of prepare_qmi_response().
-IIUC, the bitmap is cleared only at uaudio_event_ring_cleanup_free(),
-and you have also the usb_offload_put() call there.  I wonder whether
-this might lead to the refcount unbalance.
+Agreed.
 
-I'm not sure whether the original driver code handles it well, and
-this could be already a bug there calling
-xhci_sideband_remove_interrupter(), though.
+> > [ ... ]
+> > 
+> > > @@ -8968,10 +8981,29 @@ static int r8153_get_eee(struct r8152 *tp, struct ethtool_keee *eee)
+> > >   	val = ocp_reg_read(tp, OCP_EEE_LPABLE);
+> > >   	mii_eee_cap1_mod_linkmode_t(eee->lp_advertised, val);
+> > > 
+> > > +	if (tp->support_2500full) {
+> > > +		linkmode_set_bit(ETHTOOL_LINK_MODE_2500baseT_Full_BIT, eee->supported);
+> > > +
+> > > +		val = ocp_reg_read(tp, OCP_EEE_ADV2);
+> > > +		mii_eee_cap2_mod_linkmode_adv_t(eee->advertised, val);
+> > > +
+> > > +		val = ocp_reg_read(tp, OCP_EEE_LPABLE2);
+> > > +		mii_eee_cap2_mod_linkmode_adv_t(eee->lp_advertised, val);
+> > > +
+> > > +		if (speed & _2500bps)
+> > > +			linkmode_set_bit(ETHTOOL_LINK_MODE_2500baseT_Full_BIT, common);
+> > > +	}
+> > > +
+> > >   	eee->eee_enabled = tp->eee_en;
+> > > 
+> > > -	linkmode_and(common, eee->advertised, eee->lp_advertised);
+> > > -	eee->eee_active = phy_check_valid(tp->speed, tp->duplex, common);
+> > > +	if (speed & _1000bps)
+> > > +		linkmode_set_bit(ETHTOOL_LINK_MODE_1000baseT_Full_BIT, common);
+> > > +	if (speed & _100bps)
+> > > +		linkmode_set_bit(ETHTOOL_LINK_MODE_100baseT_Full_BIT, common);
+> > > +
+> > > +	linkmode_and(common, common, eee->advertised);
+> > > +	linkmode_and(common, common, eee->lp_advertised);
+> > > +	eee->eee_active = !linkmode_empty(common);
+> > > 
+> > >   	return 0;
+> > >   }
+> > 
+> > The eee_active determination logic is now duplicated between
+> > r8152_get_eee() and r8153_get_eee(). Both functions convert speed
+> > register bits to linkmode bits, AND with advertised and lp_advertised,
+> > and test emptiness in the same way. Would it make sense to factor this
+> > into a shared helper to reduce maintenance burden?
+> This could make sense, but I tried to make this as minimally intrusive as
+> possible and was already at a doubt whether I should even fix the RTL8152
+> version of get_eee() to correctly depend on the actual, not the desired
+> speed. Then I decided for fixing this incorrect behavior and have
+> consistency. The style of the existing code has plenty of duplicate code for
+> the different chip-versions and is already difficult to follow to this point
+> depending on the chip version. Personally, I find the readability improved
+> if the few lines of code are repeated instead of separating this out into
+> yet another nested function, and readability also helps code maintenance.
+> Plus, it is quite likely that these functions further diverge with e.g.
+> support for the RTL8157 (5GBit/s).
 
+Understood. I did think this point was worth raising.
+And I appreciate your feedback. We can let this one go for now.
 
-thanks,
-
-Takashi
-
-> ---
->  sound/usb/qcom/qc_audio_offload.c | 102 ++++++++++++++++++------------
->  1 file changed, 60 insertions(+), 42 deletions(-)
 > 
-> diff --git a/sound/usb/qcom/qc_audio_offload.c b/sound/usb/qcom/qc_audio_offload.c
-> index cfb30a195364..1da243662327 100644
-> --- a/sound/usb/qcom/qc_audio_offload.c
-> +++ b/sound/usb/qcom/qc_audio_offload.c
-> @@ -699,6 +699,7 @@ static void uaudio_event_ring_cleanup_free(struct uaudio_dev *dev)
->  		uaudio_iommu_unmap(MEM_EVENT_RING, IOVA_BASE, PAGE_SIZE,
->  				   PAGE_SIZE);
->  		xhci_sideband_remove_interrupter(uadev[dev->chip->card->number].sb);
-> +		usb_offload_put(dev->udev);
->  	}
->  }
->  
-> @@ -750,6 +751,7 @@ static void qmi_stop_session(void)
->  	struct snd_usb_substream *subs;
->  	struct usb_host_endpoint *ep;
->  	struct snd_usb_audio *chip;
-> +	struct usb_device *udev;
->  	struct intf_info *info;
->  	int pcm_card_num;
->  	int if_idx;
-> @@ -791,8 +793,13 @@ static void qmi_stop_session(void)
->  			disable_audio_stream(subs);
->  		}
->  		atomic_set(&uadev[idx].in_use, 0);
-> -		guard(mutex)(&chip->mutex);
-> -		uaudio_dev_cleanup(&uadev[idx]);
-> +
-> +		udev = uadev[idx].udev;
-> +		if (udev) {
-> +			guard(device)(&udev->dev);
-> +			guard(mutex)(&chip->mutex);
-> +			uaudio_dev_cleanup(&uadev[idx]);
-> +		}
->  	}
->  }
->  
-> @@ -1183,11 +1190,15 @@ static int uaudio_event_ring_setup(struct snd_usb_substream *subs,
->  	er_pa = 0;
->  
->  	/* event ring */
-> +	ret = usb_offload_get(subs->dev);
-> +	if (ret < 0)
-> +		goto exit;
-> +
->  	ret = xhci_sideband_create_interrupter(uadev[card_num].sb, 1, false,
->  					       0, uaudio_qdev->data->intr_num);
->  	if (ret < 0) {
->  		dev_err(&subs->dev->dev, "failed to fetch interrupter\n");
-> -		goto exit;
-> +		goto put_offload;
->  	}
->  
->  	sgt = xhci_sideband_get_event_buffer(uadev[card_num].sb);
-> @@ -1219,6 +1230,8 @@ static int uaudio_event_ring_setup(struct snd_usb_substream *subs,
->  	mem_info->dma = 0;
->  remove_interrupter:
->  	xhci_sideband_remove_interrupter(uadev[card_num].sb);
-> +put_offload:
-> +	usb_offload_put(subs->dev);
->  exit:
->  	return ret;
->  }
-> @@ -1483,6 +1496,7 @@ static int prepare_qmi_response(struct snd_usb_substream *subs,
->  	uaudio_iommu_unmap(MEM_EVENT_RING, IOVA_BASE, PAGE_SIZE, PAGE_SIZE);
->  free_sec_ring:
->  	xhci_sideband_remove_interrupter(uadev[card_num].sb);
-> +	usb_offload_put(subs->dev);
->  drop_sync_ep:
->  	if (subs->sync_endpoint) {
->  		uaudio_iommu_unmap(MEM_XFER_RING,
-> @@ -1528,6 +1542,7 @@ static void handle_uaudio_stream_req(struct qmi_handle *handle,
->  	u8 pcm_card_num;
->  	u8 pcm_dev_num;
->  	u8 direction;
-> +	struct usb_device *udev = NULL;
->  	int ret = 0;
->  
->  	if (!svc->client_connected) {
-> @@ -1597,50 +1612,53 @@ static void handle_uaudio_stream_req(struct qmi_handle *handle,
->  
->  	uadev[pcm_card_num].ctrl_intf = chip->ctrl_intf;
->  
-> -	if (req_msg->enable) {
-> -		ret = enable_audio_stream(subs,
-> -					  map_pcm_format(req_msg->audio_format),
-> -					  req_msg->number_of_ch, req_msg->bit_rate,
-> -					  datainterval);
-> -
-> -		if (!ret)
-> -			ret = prepare_qmi_response(subs, req_msg, &resp,
-> -						   info_idx);
-> -		if (ret < 0) {
-> -			guard(mutex)(&chip->mutex);
-> -			subs->opened = 0;
-> -		}
-> -	} else {
-> -		info = &uadev[pcm_card_num].info[info_idx];
-> -		if (info->data_ep_pipe) {
-> -			ep = usb_pipe_endpoint(uadev[pcm_card_num].udev,
-> -					       info->data_ep_pipe);
-> -			if (ep) {
-> -				xhci_sideband_stop_endpoint(uadev[pcm_card_num].sb,
-> -							    ep);
-> -				xhci_sideband_remove_endpoint(uadev[pcm_card_num].sb,
-> -							      ep);
-> +	udev = subs->dev;
-> +	scoped_guard(device, &udev->dev) {
-> +		if (req_msg->enable) {
-> +			ret = enable_audio_stream(subs,
-> +						map_pcm_format(req_msg->audio_format),
-> +						req_msg->number_of_ch, req_msg->bit_rate,
-> +						datainterval);
-> +
-> +			if (!ret)
-> +				ret = prepare_qmi_response(subs, req_msg, &resp,
-> +							info_idx);
-> +			if (ret < 0) {
-> +				guard(mutex)(&chip->mutex);
-> +				subs->opened = 0;
-> +			}
-> +		} else {
-> +			info = &uadev[pcm_card_num].info[info_idx];
-> +			if (info->data_ep_pipe) {
-> +				ep = usb_pipe_endpoint(uadev[pcm_card_num].udev,
-> +							info->data_ep_pipe);
-> +				if (ep) {
-> +					xhci_sideband_stop_endpoint(uadev[pcm_card_num].sb,
-> +									ep);
-> +					xhci_sideband_remove_endpoint(uadev[pcm_card_num].sb,
-> +									ep);
-> +				}
-> +
-> +				info->data_ep_pipe = 0;
->  			}
->  
-> -			info->data_ep_pipe = 0;
-> -		}
-> -
-> -		if (info->sync_ep_pipe) {
-> -			ep = usb_pipe_endpoint(uadev[pcm_card_num].udev,
-> -					       info->sync_ep_pipe);
-> -			if (ep) {
-> -				xhci_sideband_stop_endpoint(uadev[pcm_card_num].sb,
-> -							    ep);
-> -				xhci_sideband_remove_endpoint(uadev[pcm_card_num].sb,
-> -							      ep);
-> +			if (info->sync_ep_pipe) {
-> +				ep = usb_pipe_endpoint(uadev[pcm_card_num].udev,
-> +							info->sync_ep_pipe);
-> +				if (ep) {
-> +					xhci_sideband_stop_endpoint(uadev[pcm_card_num].sb,
-> +									ep);
-> +					xhci_sideband_remove_endpoint(uadev[pcm_card_num].sb,
-> +									ep);
-> +				}
-> +
-> +				info->sync_ep_pipe = 0;
->  			}
->  
-> -			info->sync_ep_pipe = 0;
-> +			disable_audio_stream(subs);
-> +			guard(mutex)(&chip->mutex);
-> +			subs->opened = 0;
->  		}
-> -
-> -		disable_audio_stream(subs);
-> -		guard(mutex)(&chip->mutex);
-> -		subs->opened = 0;
->  	}
->  
->  response:
-> -- 
-> 2.53.0.414.gf7e9f6c205-goog
-> 
+> > 
+> > > @@ -9512,6 +9544,7 @@ static int rtl_ops_init(struct r8152 *tp)
+> > >   	case RTL_VER_11:
+> > >   		tp->eee_en		= true;
+> > >   		tp->eee_adv		= MDIO_EEE_1000T | MDIO_EEE_100TX;
+> > > +		tp->eee_adv2		= MDIO_EEE_2_5GT;
+> > >   		fallthrough;
+> > >   	case RTL_VER_10:
+> > >   		ops->init		= r8156_init;
+> > 
+> > [ ... ]
+> > 
+> > > @@ -9537,6 +9570,7 @@ static int rtl_ops_init(struct r8152 *tp)
+> > >   	case RTL_VER_15:
+> > >   		tp->eee_en		= true;
+> > >   		tp->eee_adv		= MDIO_EEE_1000T | MDIO_EEE_100TX;
+> > > +		tp->eee_adv2		= MDIO_EEE_2_5GT;
+> > >   		ops->init		= r8156b_init;
+> > >   		ops->enable		= rtl8156b_enable;
+> > >   		ops->disable		= rtl8153_disable;
+> > 
+> > Does RTL_VER_15 support 2.5G links? Looking at the code, only RTL_VER_12
+> > and RTL_VER_13 set tp->support_2500full before falling through, but
+> > RTL_VER_15 does not. With this change, tp->eee_adv2 = MDIO_EEE_2_5GT is
+> > set for VER_15.
+> VER 15 supports 2.5GBit links. The existing code enabled 2.5GBit EEE
+> unconditionally in rtl_eee_enable():
+> 	case RTL_VER_10:
+> 	case RTL_VER_11:
+> 	case RTL_VER_12:
+> 	case RTL_VER_13:
+> 	case RTL_VER_15:
+> 		if (enable) {
+> 			r8156_eee_en(tp, true);
+> 			ocp_reg_write(tp, OCP_EEE_ADV, tp->eee_adv);
+> 		} else {
+> 			r8156_eee_en(tp, false);
+> 			ocp_reg_write(tp, OCP_EEE_ADV, 0);
+> 		}
+> 		break;
+> Note that previously r8156_eee_en() did not conditionally enable the 2.5GBit
+> advertisement depending on tp->eee_adv2, but always enabled it, also for VER
+> 15.
+
+Sorry, I missed that when reviewing the AI generated feedback.
+
+> > When r8156_eee_en() is called for a VER_15 device with EEE enabled:
+> > 
+> > static void r8156_eee_en(struct r8152 *tp, bool enable)
+> > {
+> > 	u16 config;
+> > 
+> > 	config = ocp_reg_read(tp, OCP_EEE_ADV2);
+> > 
+> > 	if (enable && (tp->eee_adv2 & MDIO_EEE_2_5GT))
+> > 		config |= MDIO_EEE_2_5GT;
+> > 
+> > The condition (tp->eee_adv2 & MDIO_EEE_2_5GT) will be true, causing
+> > MDIO_EEE_2_5GT to be written into the OCP_EEE_ADV2 hardware register.
+> > This would advertise 2.5G EEE capability to the link partner on a device
+> > that does not support 2.5Gbit links.
+> > 
+> > Should the eee_adv2 initialization be moved into the RTL_VER_12/13 block
+> > (before the fallthrough), or should RTL_VER_15 be given eee_adv2 = 0 to
+> > remain consistent with its lack of support_2500full?
+> No, see above.
+
+Ack.
+
+It looks like the AI was all false positives this time.
+And I'll mark it accordingly in the system. Thanks for looking over it.
 
