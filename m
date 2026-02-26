@@ -1,193 +1,194 @@
-Return-Path: <linux-usb+bounces-33729-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33730-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CO+bCEsWoGlifgQAu9opvQ
-	(envelope-from <linux-usb+bounces-33729-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 10:45:47 +0100
+	id 6H+XFBwYoGmzfgQAu9opvQ
+	(envelope-from <linux-usb+bounces-33730-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 10:53:32 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AE341A3ADC
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 10:45:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95AFB1A3CA7
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 10:53:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 35C74305E9CF
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 09:37:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 41D203032053
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 09:47:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B72314B6D;
-	Thu, 26 Feb 2026 09:37:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="haECMtEU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C387E3128B8;
+	Thu, 26 Feb 2026 09:47:53 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0280B313285
-	for <linux-usb@vger.kernel.org>; Thu, 26 Feb 2026 09:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB4D309EF2;
+	Thu, 26 Feb 2026 09:47:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772098628; cv=none; b=LZFiDqmMWY1y+yTPOWiIS00xAHeKF0Pfswn0FkG3ucP5B+IjQ397WdZJRUqsiWuK3/sGxXfFitCz30uQy6U+CHVxWT5F51ZS+7XEVMrk9kRLb4zMlHAicIjB+Pleu3hGYLBpQUwIz18KnjfrC7resXJo3LHHy84u+14E6sMJkaY=
+	t=1772099273; cv=none; b=s2uJBweTMh1qj3WrGgZaoLpE+2t6W6HERd/KrE/N29IVj8b1lG902QkSNIafcuFUVxpT5n9inrU4KWUodJ1KrJfkPIsslEqvLqoe1aXqLRH5z+DgfE+2YSzlZ+qO7hcr4uua8WOAkOqdM/qvza1J/BBnjSBebf4XTlBU6fgbB/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772098628; c=relaxed/simple;
-	bh=/8SafiZz8leGgW38Q3ywJXV5pr/MJBrog4/E22r0B7U=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=X5g16UbImc4ZqtJwGVMXYKupiK3j3VYnZX6XD0Vr44K5ZkrxhDZLdelVqGxlHQqeqrv10LBsNZST6kls1XqTWETc0ekn08fD0Vcrum0QRg9Mcv3w1TIG11/vpcaJFz3nHxdwK3W0LZr922MzUAaPse9nB/z4f/yrJ0eLpVnLl68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=haECMtEU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AE731C19423
-	for <linux-usb@vger.kernel.org>; Thu, 26 Feb 2026 09:37:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772098627;
-	bh=/8SafiZz8leGgW38Q3ywJXV5pr/MJBrog4/E22r0B7U=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=haECMtEUpOvCkmnZwLzvF+lhlzWbC2x5ujWKcJE8q96UUl79WYL8LVXe2CtoIxNU3
-	 IzFyHfmToAaf2IbwOCD91t6aqLOYFkVYyZFqcihoU2dwlN9yw4ylGaS64f6Wz2n8DQ
-	 b1I+FwyC/vL79B0ChQaVAHFYxFhl0w//Ph6CmtAFzxfriHuNiXuey18XH4KYY+Tkf5
-	 SDCTtoZ78WjbFxclgBMOrhMotRGkVrmlOowKu5qS5XQSGxeSshfhFTWfWx03ZUAyDp
-	 Z97zcgUta2EadoyqL6Wh69IXMiFdZpEipVrEYO3Z45fR9+6y78hwGc9UKIphU9RhJM
-	 bn8nV4dIdY3YA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id A7BBFC41612; Thu, 26 Feb 2026 09:37:07 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 221073] xHCI host controller dies on resume from s2idle on AMD
- Strix Halo [1022:1587]
-Date: Thu, 26 Feb 2026 09:37:07 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michal.pecio@gmail.com
-X-Bugzilla-Status: NEEDINFO
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-221073-208809-REZlSuazU8@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221073-208809@https.bugzilla.kernel.org/>
-References: <bug-221073-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1772099273; c=relaxed/simple;
+	bh=1c6a8aJIHyypz38b1YnXCC/an6Rqq1Bk01v4JZc7qDo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QGNAIt8rgS/xtHrMz3Dqhc+roldFdUNpzqkkAz1hthN5BnDZZXYGkNrG2UKPktFCv7FXIVkcEJUB+Y4ENy9+WhAdrB94gkAzGzoCoSnGcz3Pce0aJeT1K/t/kb6tWpTb8tboagfpdVAR8+Tj8FrUReudeuNNUHYO3f7XvYvKFLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 31edc81a12f811f1a21c59e7364eecb8-20260226
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.11,REQID:dcf6889c-e628-49a5-993f-f79dfd7d8883,IP:0,U
+	RL:0,TC:0,Content:-25,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:0
+X-CID-META: VersionHash:89c9d04,CLOUDID:f0b90d6a15fc457422d1b5ce0f70d904,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|898,TC:nil,Content:0|15|50,EDM:5
+	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
+	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 31edc81a12f811f1a21c59e7364eecb8-20260226
+X-User: dengjie03@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <dengjie03@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1414217319; Thu, 26 Feb 2026 17:47:42 +0800
+From: Jie Deng <dengjie03@kylinos.cn>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jie Deng <dengjie03@kylinos.cn>
+Subject: [PATCH] usb: core: new quirk to handle devices with zero configurations
+Date: Thu, 26 Feb 2026 17:47:37 +0800
+Message-Id: <20260226094737.1306471-1-dengjie03@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33729-lists,linux-usb=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_NO_DN(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	DMARC_NA(0.00)[kylinos.cn];
 	PRECEDENCE_BULK(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33730-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dengjie03@kylinos.cn,linux-usb@vger.kernel.org];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	RCPT_COUNT_THREE(0.00)[4];
 	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_ONE(0.00)[1];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 9AE341A3ADC
+X-Rspamd-Queue-Id: 95AFB1A3CA7
 X-Rspamd-Action: no action
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221073
+Some USB devices incorrectly report bNumConfigurations as 0 in their
+device descriptor, which causes the USB core to reject them during
+enumeration.
+logs:
+usb 1-2: device descriptor read/64, error -71
+usb 1-2: no configurations
+usb 1-2: can't read configurations, error -22
 
---- Comment #11 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-Thanks.
-This looks like we aren't getting IRQs or there is some problem with the IRQ
-handler.
+However, these devices actually work correctly when
+treated as having a single configuration.
 
-In dmesg (grep 0000:c4:00.4) we have the following:
+Add a new quirk USB_QUIRK_FORCE_ONE_CONFIG to handle such devices.
+When this quirk is set, assume the device has 1 configuration instead
+of failing with -EINVAL.
 
-// resuming the host controller and some root hub port manipulation
-[  +0.190938] xhci_hcd 0000:c4:00.4: Setting command ring address to 0xffff=
-e001
-[  +0.002557] xhci_hcd 0000:c4:00.4: xhci_resume: starting usb1 port pollin=
-g.
-[  +0.000192] xhci_hcd 0000:c4:00.4: xhci_hub_status_data: stopping usb2 po=
-rt
-polling
-[  +0.002367] xhci_hcd 0000:c4:00.4: xhci_hub_status_data: stopping usb1 po=
-rt
-polling
-[  +0.000194] xhci_hcd 0000:c4:00.4: Get port status 1-1 read: 0xe63, return
-0x507
-[  +0.000007] xhci_hcd 0000:c4:00.4: Get port status 1-1 read: 0xe63, return
-0x507
-[  +0.000005] xhci_hcd 0000:c4:00.4: clear USB_PORT_FEAT_SUSPEND
-[  +0.000001] xhci_hcd 0000:c4:00.4: PORTSC 0e63
-[  +0.000008] xhci_hcd 0000:c4:00.4: Set port 1-1 link state, portsc: 0xe63,
-write 0x10fe1
-[  +0.009957] xhci_hcd 0000:c4:00.4: Get port status 2-1 read: 0x2a0, return
-0x2a0
-[  +0.006769] xhci_hcd 0000:c4:00.4: Set port 1-1 link state, portsc: 0xfe3,
-write 0x10e01
-[  +0.013286] xhci_hcd 0000:c4:00.4: Get port status 1-1 read: 0x400e03, re=
-turn
-0x40503
-[  +0.000040] xhci_hcd 0000:c4:00.4: clear port1 suspend/resume change, por=
-tsc:
-0xe03
+This quirk is applied to the device with VID:PID 5131:2007 which
+exhibits this behavior.
 
-// About 5 seconds later, a control URB is unlinked.
-// This usually means timeout.
-// It was probably an attempt to resume some USB device.
-[  +4.026739] xhci_hcd 0000:c4:00.4: Cancel URB 000000003faffdb9, dev 1, ep
-0x0, starting at offset 0xffff5960
-[  +0.000065] xhci_hcd 0000:c4:00.4: // Ding dong!
+Signed-off-by: Jie Deng <dengjie03@kylinos.cn>
+---
+ Documentation/admin-guide/kernel-parameters.txt | 3 +++
+ drivers/usb/core/config.c                       | 7 ++++++-
+ drivers/usb/core/quirks.c                       | 5 +++++
+ include/linux/usb/quirks.h                      | 3 +++
+ 4 files changed, 17 insertions(+), 1 deletion(-)
 
-// We try to stop this control EP, but no confirmation in 5 seconds.
-[  +5.114893] xhci_hcd 0000:c4:00.4: Command timeout, USBSTS: 0x00000018 EI=
-NT
-PCD
-[  +0.000015] xhci_hcd 0000:c4:00.4: xHCI host not responding to stop endpo=
-int
-command
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index cb850e5290c2..63e6d3ebbd7a 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -8183,6 +8183,9 @@ Kernel parameters
+ 				p = USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT
+ 					(Reduce timeout of the SET_ADDRESS
+ 					request from 5000 ms to 500 ms);
++				r = USB_QUIRK_FORCE_ONE_CONFIG (Device
++					claims zero configurations,
++					forcing to 1);
+ 			Example: quirks=0781:5580:bk,0a5c:5834:gij
+ 
+ 	usbhid.mousepoll=
+diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+index 1cd5fa61dc76..f60fed224cbb 100644
+--- a/drivers/usb/core/config.c
++++ b/drivers/usb/core/config.c
+@@ -927,7 +927,12 @@ int usb_get_configuration(struct usb_device *dev)
+ 		dev->descriptor.bNumConfigurations = ncfg = USB_MAXCONFIG;
+ 	}
+ 
+-	if (ncfg < 1) {
++	if (dev->quirks & USB_QUIRK_FORCE_ONE_CONFIG) {
++		dev_info(ddev, "Device claims zero configurations,
++				forcing to 1\n");
++		dev->descriptor.bNumConfigurations = 1;
++		ncfg = 1;
++	} esle if (ncfg < 1) {
+ 		dev_err(ddev, "no configurations\n");
+ 		return -EINVAL;
+ 	}
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index e347236d83e8..74b20ef4e41d 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -140,6 +140,8 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
+ 			case 'p':
+ 				flags |= USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT;
+ 				break;
++			case 'r':
++				flags |= USB_QUIRK_FORCE_ONE_CONFIG;
+ 			/* Ignore unrecognized flag characters */
+ 			}
+ 		}
+@@ -589,6 +591,9 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	/* VCOM device */
+ 	{ USB_DEVICE(0x4296, 0x7570), .driver_info = USB_QUIRK_CONFIG_INTF_STRINGS },
+ 
++	/* Noji-MCS SmartCard Reader */
++	{ USB_DEVICE(0x5131, 0x2007), .driver_info = USB_QUIRK_FORCE_ONE_CONFIG },
++
+ 	/* INTEL VALUE SSD */
+ 	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
+diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
+index 2f7bd2fdc616..b3cc7beab4a3 100644
+--- a/include/linux/usb/quirks.h
++++ b/include/linux/usb/quirks.h
+@@ -78,4 +78,7 @@
+ /* skip BOS descriptor request */
+ #define USB_QUIRK_NO_BOS			BIT(17)
+ 
++/* Device claims zero configurations, forcing to 1 */
++#define USB_QUIRK_FORCE_ONE_CONFIG		BIT(18)
++
+ #endif /* __LINUX_USB_QUIRKS_H */
+-- 
+2.25.1
 
-The command ring shows a single command at 0xffffe000 as expected:
-
- 0 0x00000000ffffe000: Stop Ring Command: slot 1 sp 0 ep 1 flags C
-
-The event ring shows completion of a transfer at 0xffff5980, which is proba=
-bly
-the last TRB of the URB starting at 0xffff5960, and completion of a command=
- at
-0xffffe000.
-
- 0 0x00000000ffffd5f0: TRB 00000000ffff5980 status 'Success' len 0 slot 1 e=
-p 1
-type 'Transfer Event' flags e:C
- 0 0x00000000ffffd600: TRB 00000000ffff5990 status 'Stopped - Length Invali=
-d'
-len 0 slot 1 ep 1 type 'Transfer Event' flags e:C
- 0 0x00000000ffffd610: TRB 00000000ffffe000 status 'Success' len 0 slot 1 e=
-p 0
-type 'Command Completion Event' flags e:C
-
-So it seems that the HW performed the control transfer and then stopped the
-endpoint as requested, but we never learned about it.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
