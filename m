@@ -1,323 +1,132 @@
-Return-Path: <linux-usb+bounces-33726-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33727-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UELhJ9MOoGnbfQQAu9opvQ
-	(envelope-from <linux-usb+bounces-33726-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 10:13:55 +0100
+	id aBV1DQ8UoGlAfgQAu9opvQ
+	(envelope-from <linux-usb+bounces-33727-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 10:36:15 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 340B11A3365
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 10:13:54 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA9131A3839
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 10:36:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 08F4E30C8D0D
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 09:09:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8AF3C3130209
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 09:29:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 222A939900E;
-	Thu, 26 Feb 2026 09:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FlOhR1cB";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="fiNf8/ac"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEF133A0EBC;
+	Thu, 26 Feb 2026 09:28:26 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6568930C608
-	for <linux-usb@vger.kernel.org>; Thu, 26 Feb 2026 09:09:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.90])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE71F399036;
+	Thu, 26 Feb 2026 09:28:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=118.143.206.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772096955; cv=none; b=D0QZ1+DgN0tqe+PJZIvvRNbOnPbL9lJJlt4RtWxRElYpB7xV4qx5/kUFj34xmKaRAPl4uPJW941SpxhUWQxhMM9XYhdp+0rG5IggG3mxdLZwZR3y0J7z7kEZitQfowYAVAwiuM36yO9AKDsowxf0TsbDp7MY7ftF2Ff5o7ZqEX8=
+	t=1772098106; cv=none; b=pDM/J047t/6PRhh5H+VRGXxtm/xaQtIxVYlaoC+V+fM7inuYUM4Hm75rm+0LDiSvfutGrMpNRfYqmsmWQDUR3jPfc76BD7Qkx+N0wgvK5tQmykOHGQ0poKfHBLMCjs5KY0dz+o7OXjNQ2fqE7jY1P4NM+XBtbYcg/woZq8wzZio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772096955; c=relaxed/simple;
-	bh=qltUIzMojJ2OvidN3CUSmUUBPTAyMnwdssckTiQE9aA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=twgV1suI0Sf6ZjujwGszVp7PaLRDjY8gjKusq0Ve0HPEREFj2kaeHd5bOvbPjtXQDfIIRvRH9g4Y5x+ElWtSE7eCyCa+uwEfaa+1Ae/ySeT/yzdu697TTFf5LvF1GmM7nnencYTSXoFSDBS0kjZvBgzhpbZPaga5Y9ih9maqXxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FlOhR1cB; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=fiNf8/ac; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772096953;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=UsAnFN0hwUbuvioHE0pqsuIkZlEOesrcgpyhMU7ZUp4=;
-	b=FlOhR1cBHccZ+1p/RCuHqi8omQhoXWXLnVAuEO3MmKDmDDhmtjPsxTekwT1+RoXWGKkcGE
-	S72P1GePZDbMKb6Bk55u2+0AwxT9WX1dpI8cmuuvuyaElqLDgYMZqPipZwRu6OvLeJ1ybL
-	L2ssgDZ9aHJYdulYRvIYDnCQwNcuUGQ=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-589-AfcnzQWNPmOBmEhRCpv5fw-1; Thu, 26 Feb 2026 04:09:11 -0500
-X-MC-Unique: AfcnzQWNPmOBmEhRCpv5fw-1
-X-Mimecast-MFC-AGG-ID: AfcnzQWNPmOBmEhRCpv5fw_1772096950
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-482d8e6e13aso5383055e9.3
-        for <linux-usb@vger.kernel.org>; Thu, 26 Feb 2026 01:09:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1772096950; x=1772701750; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=UsAnFN0hwUbuvioHE0pqsuIkZlEOesrcgpyhMU7ZUp4=;
-        b=fiNf8/acPJeJNSQILF9lImp9vb3IyBtRQo5zfwo6QTB6msHSA5L1NaFu0rA5tMoqB/
-         3zgfceGzZCd9OTZoETFbqO89XXkphWK5ijpjx3SNp8ljilTr8BEasId/178vVqaAMO9B
-         HVFZJnCoeqWcuZq/m6B/1uHk9ozDNI/5a099ortUltXldZyqW4PlDTv/geFEEWZMA68W
-         9rNHN0buTiuTTZEu4JuCS9TVmWWJqq8V6e2SEGierzQ6yXENKbnVgYHakuY6x7WWVBZs
-         3SE/0OqJ603WlQh/FxlN1HLc4XeleeqhtxB3rKKqvYHuchfbrr3fhXSR4oEPzFrRtqbm
-         9bew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772096950; x=1772701750;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UsAnFN0hwUbuvioHE0pqsuIkZlEOesrcgpyhMU7ZUp4=;
-        b=Fag7+kZvLnJqy0MWBZTJvbBOhT1Uxw3kBLAt6e2SpgYVV9LHKzf9e/X/bm18d4FecN
-         J8WbNq8yVV/EokX0j8ZElXqBcFBi2h5lSV2BVng9x3avr3VUQVNClaivgXYYBOlA/9LA
-         fRJst+brVg+QsfsiF1PSXrwIsjoBNqkyEUQVqtKMe/V1vh3C8bSDkqdOoKY0SbgaAdua
-         5J9EbAIlrFBUNlHtwaVZYNPyRvBTF3KW6qDw44tjNqwX7L1FLSq3k7mHj/UKtGpFQ9QU
-         WzGCShSfK0yQnplJt2PYcUnjye7U6U4+1Qb5pDAh0UuECfk4Cqxn7+cklEkRNpTunYWg
-         Z6LQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV1surdzjocLeZHIdw5SLjSEiBeBEDOVSOTQZlwYhWrVzmMEBg9RYbfU1EgqbytsxHLdQhujV3nr2U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxSkF3SF4Mlwfl3fjptdNBcoj+Fq76O2kyJo7zp0ogBEYD1T7n
-	+IGNBpyedP1x6HHcbGjQ264+0NYXBoUC85rRbaVYx5BXCmE5ZIbniRObhX4r8ngBkIPeiThKvY/
-	ZlDRkv9UEtwTxS5pMvJWCXVEzJFxY8rRTug6rqcabNL273XjGbldd1GPhGdpOBjQ+2mLXLg==
-X-Gm-Gg: ATEYQzx+uWOot4kJ8lL8nrCh8x5Qi1z6p3UKFjlx0odvyBX7PCdCNE6PZlr5h2dgZG3
-	uJ7OHatkR96UEG4gJOim4kdzP96e3O/zQ38YIkVRbG9tBtBzKbK/LIRxXyAD4g8VsJ4SEBOQaM5
-	P+hEDR1J8uMtixne3lgjtWo9bRoYkyTdF6utgvHMZongqSlBODUCNWtNNYGRERK8h5pb9LKfv5F
-	uKa7ZfnWu3J8wKe6Ap3hiSqjZwESXcOcy2lrOWBMXoGnR1meHEMp+FXQRCHROcsE/ExIvkBAJm0
-	YxaBIUMQCTeaHIJiN/FeoiRQEoWO/RjSDkb7zwXOnRkBeZndeVHxK+WxvEa/rNwiYtReawujbEV
-	NzO0E1GHTI1lMsb+V2uFUeWOaqYrYxpJF0n1Ogt7BucFtMFft30iFRxgU1QdUWDi+79M8oekCA6
-	CfljycsGRph3TqF6qHSsv/EkoLYnwW+ya+w2nNuMnk4y1nWMAzmdriylI3
-X-Received: by 2002:a05:600c:3111:b0:483:612d:7a9a with SMTP id 5b1f17b1804b1-483a95622f5mr326792235e9.0.1772096949696;
-        Thu, 26 Feb 2026 01:09:09 -0800 (PST)
-X-Received: by 2002:a05:600c:3111:b0:483:612d:7a9a with SMTP id 5b1f17b1804b1-483a95622f5mr326791685e9.0.1772096949181;
-        Thu, 26 Feb 2026 01:09:09 -0800 (PST)
-Received: from ?IPV6:2a01:cb00:8ef9:5300:877b:aaab:2ea7:8695? (2a01cb008ef95300877baaab2ea78695.ipv6.abo.wanadoo.fr. [2a01:cb00:8ef9:5300:877b:aaab:2ea7:8695])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bd7031f3sm117403225e9.6.2026.02.26.01.09.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Feb 2026 01:09:08 -0800 (PST)
-Message-ID: <a481bb1e-d0a9-4545-bb8b-beb72506478a@redhat.com>
-Date: Thu, 26 Feb 2026 10:09:07 +0100
+	s=arc-20240116; t=1772098106; c=relaxed/simple;
+	bh=8gETV4BrYJMCYq16lBMm+D36kDpEAoQEeE8bWymmCWI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lvFTEyydXG3m1Feu8Q2ddqoYYuZtUToR9CFviDXPuE/88LenhScK7MRJIP2m1N2HUZVgbCrYvlKJYenIh8Dm7ACnljTDodq6cHnHqmFjt/5bUmPEwmdTliWTQTf1eUmRDVdZIaxPp/oxs83Rz0WXNULpD5f1CqLOk65ZrPlm6yE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=118.143.206.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
+X-CSE-ConnectionGUID: QropyfqKQWCBvs6mkB8INg==
+X-CSE-MsgGUID: m18cEuWIQdy4OrK/F56LLw==
+X-IronPort-AV: E=Sophos;i="6.21,312,1763395200"; 
+   d="scan'208";a="141931651"
+Date: Thu, 26 Feb 2026 17:27:01 +0800
+From: Dayu Jiang <jiangdayu@xiaomi.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Mathias Nyman <mathias.nyman@intel.com>, Longfang Liu
+	<liulongfang@huawei.com>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, yudongbin <yudongbin@xiaomi.com>, guhuinan
+	<guhuinan@xiaomi.com>, chenyu45 <chenyu45@xiaomi.com>, mahongwei3
+	<mahongwei3@xiaomi.com>, Dayu Jiang <jiangdayu@xiaomi.com>
+Subject: Re: [PATCH] usb: xhci: add xhci_halt() for HCE Handling
+Message-ID: <aaAR5VOtnMhvoCem@oa-jiangdayu.localdomain>
+References: <20260127110422.306711-1-jiangdayu@xiaomi.com>
+ <2026012708-liability-sincere-5ed4@gregkh>
+ <aXnNcQa5Ooq2wIX2@oa-jiangdayu.localdomain>
+ <2026012857-deprive-putdown-0ee8@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: commit 662dc80a5e86 breaks rmnet over usb
-To: Daniele Palmas <dnlplm@gmail.com>, Jakub Kicinski <kuba@kernel.org>
-Cc: Koen Vandeputte <koen.vandeputte@citymesh.com>, oneukum@suse.com,
- andrew+netdev@lunn.ch, Eric Dumazet <edumazet@google.com>,
- pabeni@redhat.com, netdev <netdev@vger.kernel.org>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CAPh3n803k8JcBPV5qEzUB-oKzWkAs-D5CU7z=Vd_nLRCr5ZqQg@mail.gmail.com>
- <95ccf5a6-975b-4543-80a3-595f1ee20543@redhat.com>
- <CAGRyCJE85fLOahUR3PAUnS_jH4+qpBq37qpged=nvObbg1m+Qw@mail.gmail.com>
- <20260225170155.0ae83ae9@kernel.org>
- <CAGRyCJGYLemYFDNw8cfcCHoxe8YqfRRgnJXgz03WVssKDYXhUA@mail.gmail.com>
-Content-Language: en-US
-From: Laurent Vivier <lvivier@redhat.com>
-Autocrypt: addr=lvivier@redhat.com; keydata=
- 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
-In-Reply-To: <CAGRyCJGYLemYFDNw8cfcCHoxe8YqfRRgnJXgz03WVssKDYXhUA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <2026012857-deprive-putdown-0ee8@gregkh>
+X-ClientProxiedBy: BJ-MBX02.mioffice.cn (10.237.8.122) To BJ-MBX03.mioffice.cn
+ (10.237.8.123)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [0.04 / 15.00];
+	DMARC_POLICY_QUARANTINE(1.50)[xiaomi.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.org];
-	TAGGED_FROM(0.00)[bounces-33726-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,oa-jiangdayu.localdomain:mid];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lvivier@redhat.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-0.999];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[3];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
+	FROM_NEQ_ENVFROM(0.00)[jiangdayu@xiaomi.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 340B11A3365
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33727-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[]
+X-Rspamd-Queue-Id: BA9131A3839
 X-Rspamd-Action: no action
 
-On 2/26/26 09:26, Daniele Palmas wrote:
-> Hello Jakub,
-> 
-> Il giorno gio 26 feb 2026 alle ore 02:01 Jakub Kicinski
-> <kuba@kernel.org> ha scritto:
->>
->> On Wed, 25 Feb 2026 08:19:46 +0100 Daniele Palmas wrote:
->>>> Could you try something like:
->>>>
->>>> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
->>>> index 3a4985b582cb..6b4796fac692 100644
->>>> --- a/drivers/net/usb/qmi_wwan.c
->>>> +++ b/drivers/net/usb/qmi_wwan.c
->>>> @@ -788,6 +788,8 @@ static int qmi_wwan_bind(struct usbnet *dev, struct usb_interface *intf)
->>>>                   usbnet_get_ethernet_addr(dev, cdc_ether->iMACAddress);
->>>>           }
->>>>
->>>> +       dev->rx_urb_size = 32768;
->>>> +
->>>
->>> So far userspace tools (e.g. also the most important one which is
->>> ModemManager) rely on changing the rx_urb_size by changing the MTU: I
->>> know this is ugly, but it is a behavior that has been there since a
->>> lot of time, not sure how many tools based on this assumption could
->>> break.
->>
->> What's the policy in ModemManager to change the rx_urb_size?
->> Increase it to make sure it can hold some specific cmd / packet?
->>
->> I wonder if having rx_urb_size max of (mtu, 32k) would break anything.
->>
-> 
-> Typically the host sends a QMI request to the modem for setting the
-> size of the maximum QMAP aggregated packets block. Then the modem
-> replies with the maximum size it supports and that one is then set by
-> the host through changing the MTU of the netdevice. Low-cat modems
-> usually support 4-8 KB, while 5G 16-32KB.
-> 
-> On ModemManager side this is currently fixed at 16KB, but one can use
-> other tools e.g. qmicli to set custom values as far as they are
-> supported by the modem.
-> 
->> Since we're talking about rx buffer config the right API to configure
->> it is likely ethtool -G rx-buf-len :(
->>
-> 
-> Thanks for the hint, I'll try to have a look at that to improve qmi_wwan.
-> 
->>> There's also the chance that there are modems which require a higher
->>> rx_urb_size, so having this fixed could not work well.
->>>
->>> Unfortunately usbnet serves many drivers, I agree with Koen that a
->>> revert is the safest option.
->>
->> Then again the usbnet driver is brittle enough as is, if it's just qmi
->> that needs this workaround we would be making common code less robust
->> for a benefit of a single "hack" (for lack of a better term)
-> 
-> Makes sense, also Laurent proposed a solution to keep his fix in
-> usbnet and make qmi_wwan the exception.
+Hi Greg,
 
-I was thinking to something like that (see below), but I'm not really able to test it. If 
-everyone thinks it's the path to follow, I can send a patch.
+I have updated the changelog text as requested and resubmitted the patch.
+https://lore.kernel.org/linux-usb/20260128100746.561626-1-jiangdayu@xiaomi.com/
+Please kindly review it and let me know if it is acceptable now.
 
 Thanks,
-Laurent
+Dayu Jiang
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 3a4985b582cb..05acac10cd2b 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -928,7 +928,7 @@ static int qmi_wwan_resume(struct usb_interface *intf)
-
-  static const struct driver_info	qmi_wwan_info = {
-  	.description	= "WWAN/QMI device",
--	.flags		= FLAG_WWAN | FLAG_SEND_ZLP,
-+	.flags		= FLAG_WWAN | FLAG_NOMAXMTU | FLAG_SEND_ZLP,
-  	.bind		= qmi_wwan_bind,
-  	.unbind		= qmi_wwan_unbind,
-  	.manage_power	= qmi_wwan_manage_power,
-@@ -937,7 +937,7 @@ static const struct driver_info	qmi_wwan_info = {
-
-  static const struct driver_info	qmi_wwan_info_quirk_dtr = {
-  	.description	= "WWAN/QMI device",
--	.flags		= FLAG_WWAN | FLAG_SEND_ZLP,
-+	.flags		= FLAG_WWAN | FLAG_NOMAXMTU | FLAG_SEND_ZLP,
-  	.bind		= qmi_wwan_bind,
-  	.unbind		= qmi_wwan_unbind,
-  	.manage_power	= qmi_wwan_manage_power,
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index ed86ba87ca4e..b72ba0803392 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1829,11 +1829,12 @@ usbnet_probe(struct usb_interface *udev, const struct 
-usb_device_id *prod)
-  		if ((dev->driver_info->flags & FLAG_NOARP) != 0)
-  			net->flags |= IFF_NOARP;
-
--		if (net->max_mtu > (dev->hard_mtu - net->hard_header_len))
-+		if ((dev->driver_info->flags & FLAG_NOMAXMTU) == 0 &&
-+		    net->max_mtu > (dev->hard_mtu - net->hard_header_len))
-  			net->max_mtu = dev->hard_mtu - net->hard_header_len;
-
--		if (net->mtu > net->max_mtu)
--			net->mtu = net->max_mtu;
-+		if (net->mtu > (dev->hard_mtu - net->hard_header_len))
-+			net->mtu = dev->hard_mtu - net->hard_header_len;
-
-  	} else if (!info->in || !info->out)
-  		status = usbnet_get_endpoints(dev, udev);
-diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
-index b0e84896e6ac..bbf799ccf3b3 100644
---- a/include/linux/usb/usbnet.h
-+++ b/include/linux/usb/usbnet.h
-@@ -132,6 +132,7 @@ struct driver_info {
-  #define FLAG_MULTI_PACKET	0x2000
-  #define FLAG_RX_ASSEMBLE	0x4000	/* rx packets may span >1 frames */
-  #define FLAG_NOARP		0x8000	/* device can't do ARP */
-+#define FLAG_NOMAXMTU		0x10000	/* allow max_mtu above hard_mtu */
-
-  	/* init device ... can sleep, or cause probe() failure */
-  	int	(*bind)(struct usbnet *, struct usb_interface *);
-
-
+On Wed, Jan 28, 2026 at 09:56:18AM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Jan 28, 2026 at 04:48:49PM +0800, Dayu Jiang wrote:
+> > On Tue, Jan 27, 2026 at 12:22:40PM +0100, Greg Kroah-Hartman wrote:
+> > > >  	if (status & STS_HCE) {
+> > > >  		xhci_warn(xhci, "WARNING: Host Controller Error\n");
+> > > > +		xhci_halt(xhci);
+> > > 
+> > > What is going to start things back up again?  And as you are calling
+> > > this function, why is the warning message needed anymore?  The
+> > > tracepoint information will give you that message now, right?
+> > When HCE is triggered, it indicates a critical hardware failure. 
+> > Aligning with the handling of HSE (STS_FATAL) by adding 
+> > xhci_halt() here is more reasonable: without xhci_halt(), the 
+> > USB controller may fall into an unpredictable and unstable state, 
+> > which could exacerbate system issues.  
+> > 
+> > Retaining the warning message is necessary because it is directly 
+> > visible in dmesg, whereas tracepoint information requires explicitly 
+> > enabling xHCI tracepoints. Additionally, if xhci_halt() is called in 
+> > xhci_irq() without the warning log, it would be impossible to 
+> > distinguish whether the halt was triggered by HCE or HSE.
+> > > 
+> > > And is this just papering over a hardware bug?  Should this really be
+> > > happening for any normal system?
+> > Yes, this issue has been reproducible on real-world hardware: HCE is 
+> > triggered in UAS Storage Device plug/unplug scenarios on Android 
+> > devices, which enters this error branch and causes an interrupt storm, 
+> > leading to severe system-level faults.
+> 
+> Great, please provide this information in the changelog text when you
+> resubmit this, thanks!
+> 
+> greg k-h
 
