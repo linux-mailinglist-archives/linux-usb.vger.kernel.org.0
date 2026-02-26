@@ -1,132 +1,131 @@
-Return-Path: <linux-usb+bounces-33727-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33728-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aBV1DQ8UoGlAfgQAu9opvQ
-	(envelope-from <linux-usb+bounces-33727-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 10:36:15 +0100
+	id EMrOKeQVoGlifgQAu9opvQ
+	(envelope-from <linux-usb+bounces-33728-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 10:44:04 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA9131A3839
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 10:36:14 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 226651A3A60
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 10:44:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8AF3C3130209
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 09:29:23 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A5F5E3156F83
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Feb 2026 09:30:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEF133A0EBC;
-	Thu, 26 Feb 2026 09:28:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79F172749E6;
+	Thu, 26 Feb 2026 09:30:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PCLC60KP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.90])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE71F399036;
-	Thu, 26 Feb 2026 09:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=118.143.206.90
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 085AB2D063A
+	for <linux-usb@vger.kernel.org>; Thu, 26 Feb 2026 09:30:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772098106; cv=none; b=pDM/J047t/6PRhh5H+VRGXxtm/xaQtIxVYlaoC+V+fM7inuYUM4Hm75rm+0LDiSvfutGrMpNRfYqmsmWQDUR3jPfc76BD7Qkx+N0wgvK5tQmykOHGQ0poKfHBLMCjs5KY0dz+o7OXjNQ2fqE7jY1P4NM+XBtbYcg/woZq8wzZio=
+	t=1772098218; cv=none; b=bAZA9hp3fnfA1uYsw6Dw9RaO38CEjRYSk+RL4aj6hjE39f07MFT5MoENUMGe/19yP0+h77WDPAghjMb/7TqdY4XnpaMKI0Cfb2A4Y5kCk1JJG/C+25eGiWUJGTba6d43O9DiRPYPiAjHGilaAinMW1+EcRUTHjFDjA3POPSuhUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772098106; c=relaxed/simple;
-	bh=8gETV4BrYJMCYq16lBMm+D36kDpEAoQEeE8bWymmCWI=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lvFTEyydXG3m1Feu8Q2ddqoYYuZtUToR9CFviDXPuE/88LenhScK7MRJIP2m1N2HUZVgbCrYvlKJYenIh8Dm7ACnljTDodq6cHnHqmFjt/5bUmPEwmdTliWTQTf1eUmRDVdZIaxPp/oxs83Rz0WXNULpD5f1CqLOk65ZrPlm6yE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=118.143.206.90
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
-X-CSE-ConnectionGUID: QropyfqKQWCBvs6mkB8INg==
-X-CSE-MsgGUID: m18cEuWIQdy4OrK/F56LLw==
-X-IronPort-AV: E=Sophos;i="6.21,312,1763395200"; 
-   d="scan'208";a="141931651"
-Date: Thu, 26 Feb 2026 17:27:01 +0800
-From: Dayu Jiang <jiangdayu@xiaomi.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Mathias Nyman <mathias.nyman@intel.com>, Longfang Liu
-	<liulongfang@huawei.com>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, yudongbin <yudongbin@xiaomi.com>, guhuinan
-	<guhuinan@xiaomi.com>, chenyu45 <chenyu45@xiaomi.com>, mahongwei3
-	<mahongwei3@xiaomi.com>, Dayu Jiang <jiangdayu@xiaomi.com>
-Subject: Re: [PATCH] usb: xhci: add xhci_halt() for HCE Handling
-Message-ID: <aaAR5VOtnMhvoCem@oa-jiangdayu.localdomain>
-References: <20260127110422.306711-1-jiangdayu@xiaomi.com>
- <2026012708-liability-sincere-5ed4@gregkh>
- <aXnNcQa5Ooq2wIX2@oa-jiangdayu.localdomain>
- <2026012857-deprive-putdown-0ee8@gregkh>
+	s=arc-20240116; t=1772098218; c=relaxed/simple;
+	bh=aYJEhtNlCp1nHZDQqRaQdiv8mU5MAIL2ULRySivW6lA=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Q5eYWGz2jaIhIYjJyH0tZHVhDQdk+2qA8y9Su1B9v44PZECiLuE+5F3VhaDf79svkIxjqu7YsEiLdxi7SMWgtmuYScT6l6SgkHGAvLLOQ0wcYFt7e2cnynTZtA+o2K9mrnVT1yQhmGKmXiMot6fRHqnWCTLTFwb7kFYsw7SCeF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PCLC60KP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E16FAC19422
+	for <linux-usb@vger.kernel.org>; Thu, 26 Feb 2026 09:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772098217;
+	bh=aYJEhtNlCp1nHZDQqRaQdiv8mU5MAIL2ULRySivW6lA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=PCLC60KPP2j/dqLZiruzABILEYBvImwRh/suvAO404GaHqJdIY7v3SFnB1NOxp+G8
+	 36Oy8vDcdUWtNBuwD+q3GZyI3ARbwjV06BonQ51+kQWH5klCWqle27Okb9EVu+mQrD
+	 fHjglx1eT2JZdyFcgqvUwaFQv/yS4/yVs9SEY1Nlo/TRfrC6wM6LSUtAkysguvz2r3
+	 xEu86XqmVAcjVqz+zH6wfw/47Kx+O9ogK5oSXN1ubvDePYEMdWTW4IH7tXO8PB+/n5
+	 k3uqGG0XCwMBOhAA/qYT/UUSe1ds6RFXnhmhRaCr6piJzMVp/gOfCQqFRlhDaKEj1T
+	 GiH4RattcPLGA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id D9C53CAB781; Thu, 26 Feb 2026 09:30:17 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 221073] xHCI host controller dies on resume from s2idle on AMD
+ Strix Halo [1022:1587]
+Date: Thu, 26 Feb 2026 09:30:17 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: superveridical@gmail.com
+X-Bugzilla-Status: NEEDINFO
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-221073-208809-qa3sTdoN3n@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-221073-208809@https.bugzilla.kernel.org/>
+References: <bug-221073-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2026012857-deprive-putdown-0ee8@gregkh>
-X-ClientProxiedBy: BJ-MBX02.mioffice.cn (10.237.8.122) To BJ-MBX03.mioffice.cn
- (10.237.8.123)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[xiaomi.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,oa-jiangdayu.localdomain:mid];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[3];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	FROM_NEQ_ENVFROM(0.00)[jiangdayu@xiaomi.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33727-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33728-lists,linux-usb=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[]
-X-Rspamd-Queue-Id: BA9131A3839
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NO_DN(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_ONE(0.00)[1];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 226651A3A60
 X-Rspamd-Action: no action
 
-Hi Greg,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221073
 
-I have updated the changelog text as requested and resubmitted the patch.
-https://lore.kernel.org/linux-usb/20260128100746.561626-1-jiangdayu@xiaomi.com/
-Please kindly review it and let me know if it is acceptable now.
+--- Comment #10 from Alexander F (superveridical@gmail.com) ---
+Also experience this issue on ASUS Z13 (2025) with Strix Halo
 
-Thanks,
-Dayu Jiang
+BIOS: 311
+OS: Gentoo Linux, sys-kernel/vanilla-kernel-6.19.3
 
-On Wed, Jan 28, 2026 at 09:56:18AM +0100, Greg Kroah-Hartman wrote:
-> On Wed, Jan 28, 2026 at 04:48:49PM +0800, Dayu Jiang wrote:
-> > On Tue, Jan 27, 2026 at 12:22:40PM +0100, Greg Kroah-Hartman wrote:
-> > > >  	if (status & STS_HCE) {
-> > > >  		xhci_warn(xhci, "WARNING: Host Controller Error\n");
-> > > > +		xhci_halt(xhci);
-> > > 
-> > > What is going to start things back up again?  And as you are calling
-> > > this function, why is the warning message needed anymore?  The
-> > > tracepoint information will give you that message now, right?
-> > When HCE is triggered, it indicates a critical hardware failure. 
-> > Aligning with the handling of HSE (STS_FATAL) by adding 
-> > xhci_halt() here is more reasonable: without xhci_halt(), the 
-> > USB controller may fall into an unpredictable and unstable state, 
-> > which could exacerbate system issues.  
-> > 
-> > Retaining the warning message is necessary because it is directly 
-> > visible in dmesg, whereas tracepoint information requires explicitly 
-> > enabling xHCI tracepoints. Additionally, if xhci_halt() is called in 
-> > xhci_irq() without the warning log, it would be impossible to 
-> > distinguish whether the halt was triggered by HCE or HSE.
-> > > 
-> > > And is this just papering over a hardware bug?  Should this really be
-> > > happening for any normal system?
-> > Yes, this issue has been reproducible on real-world hardware: HCE is 
-> > triggered in UAS Storage Device plug/unplug scenarios on Android 
-> > devices, which enters this error branch and causes an interrupt storm, 
-> > leading to severe system-level faults.
-> 
-> Great, please provide this information in the changelog text when you
-> resubmit this, thanks!
-> 
-> greg k-h
+The probability of it occurring on resume is between 1/3 and 1/10, resume w=
+ith
+the issue takes 10 seconds, and after that all devices (internal cameras) t=
+hat
+are connected to this particular bus disappear. The unbind/bind restores the
+devices.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
