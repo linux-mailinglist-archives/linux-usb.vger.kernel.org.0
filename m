@@ -1,89 +1,88 @@
-Return-Path: <linux-usb+bounces-33793-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33794-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QOmFAJDhoWmHwwQAu9opvQ
-	(envelope-from <linux-usb+bounces-33793-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 19:25:20 +0100
+	id cGJmIXznoWlRxAQAu9opvQ
+	(envelope-from <linux-usb+bounces-33794-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 19:50:36 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 746041BBF65
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 19:25:19 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D1231BC2D8
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 19:50:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 83661300EC8A
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 18:25:09 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id BFE29300B280
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 18:50:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C48F37B3EF;
-	Fri, 27 Feb 2026 18:25:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D7923A1A5F;
+	Fri, 27 Feb 2026 18:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iycdcgnA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ldbjhF9R"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDEA37755B
-	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 18:25:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CD2D385524
+	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 18:50:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772216708; cv=none; b=sriCgWo6layj1FsAehXKJ9QnjFc5KqP9f8ZMZqqXxlXDwZh1jgcwRvjYIDCq+45B3mjOWUq3KHIXFxiZ9MfybtZ0uhKcinNVpuOhpkiV0KPsYcVg0id+dgj4LBd/3MQkY/58dK6DMFM/lbYJWTJp1dGn7UPHP+vcmcg9UAg4eAI=
+	t=1772218228; cv=none; b=UWvvox72S0HOfXKQOCJhd70ISRQR1QAQUwZukhYkz6XYdCN4WKZ2ayGUS1tlCdpNhOI+0JqbgCrUAIdHTgjSg32Sbeh1EkcFjAYViJYNVH64+/iJkh6skRCt1V5jj2H+0x5fjS9RF8uJJyYtyxh2BbFnwerFWUsXCOvOEZAi+YU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772216708; c=relaxed/simple;
-	bh=lxCoA2uvMLy2TxnZo+jKDxVDjVgoo7OUvqvrpC4Rcls=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U+OzuyYbBsfkwA4UfZjGf1rxgr94sTYhpYhsgN+SEgFKzCsIqsRg9IAWqmqp4e0os8WOl5A0spnYwjr+sGEEUy1yRPqr+NnTAKjCom1W/V623D+UPdfLEN0YCay9Y1IV5zwnvU5ljy+Fh8AFnhITtHW/R4zSdZ/rzQufw1c1o0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iycdcgnA; arc=none smtp.client-ip=209.85.214.169
+	s=arc-20240116; t=1772218228; c=relaxed/simple;
+	bh=rcXXwVDn8PtIyZTbjdIUBV74Yapr6iYK767uNc75qvs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MOA3dpvcL0bQLCcTCLj0RrebPitH/14dxnm84sNYajHZslsUrEk8gvfyUlVfC+4gd9T94AsEv/d6oiO3/Ru/Oz0L5WHC1aWtz19md2/H2b7cs5vvE7Bqmqkb8rUZta4c/1aWWMTpSCJrDP0/PnIBZfd++S4eYr02EVDpecDiD9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ldbjhF9R; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ad9a9be502so16203075ad.0
-        for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 10:25:02 -0800 (PST)
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-35691a231a7so1470177a91.3
+        for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 10:50:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772216702; x=1772821502; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772218227; x=1772823027; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KWo54tPqkdRAAogk0aSIsm6ksATm/ufoE9BN+ZmicHI=;
-        b=iycdcgnAacKGMz1He3tf4L9FKZthxVnymZk/EgfIQeq1kNw0SzpMwzncsIWiVrW9Ld
-         sNpy65P+9mIaZAju9iL/SJVWvnEyuBSTc7LmqFTiyX6sT0yzSkm0MkqGZJx09EXFxlk2
-         rpT8pY1ARsK94u2oZ+rBkUmeI4MK2K4461WWUpGnlaBL8Uda+bpsSk4rWLZ1Ky9D8rFy
-         YKrQ8uqfKA4Zp+1bXFUTZeIMApHJNXvz5ZpFRHFGqKyRpx0tx+s+XUqFaG/zuXLQMJYF
-         nlevDhEfFmpcUIXXWqdT5Jh4UjsCjtvYVlQTlk1eU9Jb6Gh0C4QTiMBf3lWVcybBg9vx
-         IBcg==
+        bh=SUXyqxoJ4tx2lnBlJ6HcQTrpspqhTH+7c7HoWyI3mz0=;
+        b=ldbjhF9RLDODotKrZ4ZV6zy2PVu3Lx+RR57MXUTB/E7pPmi14W1sa0PFuLiE5o9FRP
+         w8ABnDI5NjeGIUpKtxkZ8EyHlc0XMTpfnVwMHN+mr+mh3/dncqxk2S3Nn3DhuNGns+2W
+         b5urTcckclG9RDSIPknG7alO19xOhsah+xO4MXh5OYbn4+SEe+J3JErZpRHPW53YxVxL
+         9d5P7HlO0W3xCzhV0Xdd42DKM8CY71u2B5SR2n53On5eyuGyKs5LPzyKJRp0j0f96fB0
+         S4QmDvz0ACeSL2PbU0susRHWrc9l6qp2SyOaqcT/pAuQsMOzLQ7cfnPvF4GzAvsAC11o
+         Rzyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772216702; x=1772821502;
+        d=1e100.net; s=20230601; t=1772218227; x=1772823027;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KWo54tPqkdRAAogk0aSIsm6ksATm/ufoE9BN+ZmicHI=;
-        b=Z42nH9f5A/kpnWk6MZ5U2RIz0S/MOwEfMgvwagsBXL0AZnTRL0YrRUS+EcaE985Kmz
-         PA4olEyBL5qkM8jjG++lxclGyNqYGG3NC7ybMfB9eRzfu3al50IzT4hYRDZHDiSDJtZr
-         TzJNwODGzDUzW0DoKMeA242EuWaIIsbDALrNhxupopJtif0IBX3WZWzH4aOCEpKkE4iQ
-         YOBoO98EyqXIremtEj0FhyN5SuQLFdvotpWN09v+3aBieCHXEzydei1HjYwhjwyaj4Ld
-         RLS7UtErfhvcYjW0rQPtGdbdiEn3bVr5+81NMXUfs7gtroRBjuU7RE3jv2+PND5YkRYX
-         t2dw==
-X-Gm-Message-State: AOJu0YyHPEEN4padoAXNaiP65B5Z8/ZOl4pMY3zBsAppTAyLRzrySs8J
-	oXP5e1SWAeKfIURaMIMHHhxRKJ/yC6xiAJ3+T1Rew2SfJpqheqHjwMiCPMGQAwUA
-X-Gm-Gg: ATEYQzxb6HL7TcZ/Jhqv1Ekf9t9RzIgdwlhYQdE5JCGB6jibWE86W3/2VhkU9pK22E5
-	bzEzfZeIjrBrErLoB9zmrgPOEoOzKTLvRnTF9ZdyaScQ+0FRsR8OHjyD9ZNExhk3vDZw7DBjyWQ
-	aV6wPz/vzH7L/fKqY7/Uis+YF/NqEv//JNIiYYHO9TG0FB10oJwvFaWc7T8C6TPg+sJ5S7GF7A0
-	/007QuZcUDyHd4e867AJcwRGzdsJHH1AWZcPPO7b9dRGjY9+EgdC3dAPbETbZOAI2I7Yw+i7W8t
-	JJt9m4Tje7r9Ygq98wwYi8JOVQqSd7KmXAy3JqXkE23gWNjjkMcmBs/eWjzI1Hlw2RRSbIlt39O
-	NF0nNIOXsLliro7g21Vsm9vHvoe31Y6s7wXNnWJtroWSrI+2loYs7o6wKnHxZ8IjvaXYKWu/U24
-	D0W2BiD07iqD415AJEhf5PX0UNMnOZcDOOZTZm/mtI8Q+w7XGsZCUeKKKAuldy+BWjpOFC69F2O
-	kw8WY+BJQ==
-X-Received: by 2002:a17:903:196b:b0:2ae:38d3:a6f1 with SMTP id d9443c01a7336-2ae38d3a70emr5176005ad.45.1772216701513;
-        Fri, 27 Feb 2026 10:25:01 -0800 (PST)
+        bh=SUXyqxoJ4tx2lnBlJ6HcQTrpspqhTH+7c7HoWyI3mz0=;
+        b=pXym5ZOMvWRkCSUvN80X8k6pPs88m7iO1zWrL848V5kP/TfM9LW1GOxSFnp5ZBLfuX
+         RooGDY7VP6qVhzzPXjxn2aFthGG7soI7F2xz6Q4YYIlBSsnJutEqIjvB6hRRU4uJeDM9
+         ceozm0EPp6BpB37WpoGb+pZJbaMUQc0Zda2GwWzjxA9r/sR9R9mrrb9gDI4PuPAI/Ls/
+         f/RRCsv2t3uBzAA+5xtChKuVzHb2uMz9SKwMKkjRVMa5nOkB7YbusPTDJZYyCv05I7M6
+         /Cek5YGAqgyFSAS4JeDdfsUR2Am1rbbfGiGLqINDxj+7LkuElcHxuOjXZJnJj7DweuEQ
+         dCRQ==
+X-Gm-Message-State: AOJu0YxWWK/IpBTfkhZWAOIsdg8PDUTMwDf684pZkdYQfSBSq0kctzG7
+	BHDllpO/PR7StkzfMD44HVMUGPAPWoJBnUDWnFPYcaR+FTfSabBRE8yi
+X-Gm-Gg: ATEYQzxCKsQ55j0wwAZKuKqhpPjTCPaiV9xZanNkbFfD/8l3lgXAGwPBtqsnPNDSgZs
+	ceJ8i5GmqfAkmNBZhbEXxh6Ce/VJC67dUnMI+mzlsflYQjTE0791sK+2getSrD4cXj++oLKWbm2
+	viKKW3R0IT2PnSROIsEXT99CeH55WBVKdFhBHeO6r8Lmg86IfS+dS49594iIM1AF4oYX6xo85Cf
+	LBHyf7STxkYOZD63jIFQ01pZjqVuuE+hoYtW3OQYVLyA3vhwOWxJH39m3kNQ8dKaAEuBeMJuI2b
+	Q7gRG00FxfvmOf0BB6j1LhZp5/fKUBwLIOyVH6vFrxY+U9Y1feaAb0fYe4TSPbkqWGdgdjeRrxB
+	sjZgH+XhZJ0Z15dHKtFRS3oynlEYDuf71jhTOMUyr14zOLWVIXO1G8iDwKg7jYrI84H7IvKMO5o
+	R7u7PNUligpHSfD9YuwzieebFzXuPY0gWmTh0VKUMkm+iioy46y5dKgVguxkdGeLnhlbtlr15wG
+	Mj3PsS4Hg==
+X-Received: by 2002:a17:90b:1f8f:b0:354:a57c:65db with SMTP id 98e67ed59e1d1-35965c926a7mr3096806a91.20.1772218227016;
+        Fri, 27 Feb 2026 10:50:27 -0800 (PST)
 Received: from HRD-WDG8GDY3.roa.hexagonmetrology.com ([49.43.203.209])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35912fe1040sm3541975a91.4.2026.02.27.10.24.59
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35912f5f29fsm5559002a91.1.2026.02.27.10.50.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Feb 2026 10:25:01 -0800 (PST)
+        Fri, 27 Feb 2026 10:50:26 -0800 (PST)
 From: Venkata Swamy Kassa <venkatswamy7@gmail.com>
 X-Google-Original-From: Venkata Swamy Kassa <venkata.swamy.kassa@hexagon.com>
 To: heikki.krogerus@linux.intel.com,
 	gregkh@linuxfoundation.org
 Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Venkata Swamy Kassa <venkata.swamy.kassa@hexagon.com>
-Subject: [PATCH] usb: typec: hd3ss3220: Add sysfs attribute for USB role state
-Date: Fri, 27 Feb 2026 18:24:54 +0000
-Message-ID: <20260227182454.761925-1-venkata.swamy.kassa@hexagon.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] usb: typec: hd3ss3220: Add sysfs interface for role state
+Date: Fri, 27 Feb 2026 18:50:19 +0000
+Message-ID: <20260227185021.767948-1-venkata.swamy.kassa@hexagon.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -97,113 +96,79 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_FROM(0.00)[bounces-33794-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33793-lists,linux-usb=lfdr.de];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[venkatswamy7@gmail.com,linux-usb@vger.kernel.org];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[5];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_THREE(0.00)[4];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,hexagon.com:mid,hexagon.com:email]
-X-Rspamd-Queue-Id: 746041BBF65
+	FREEMAIL_FROM(0.00)[gmail.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[venkatswamy7@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[hexagon.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 9D1231BC2D8
 X-Rspamd-Action: no action
 
-The HD3SS3220 driver correctly detects USB Type-C cable attach/detach
-events and propagates the role to the USB controller. However, there is
-no way for userspace to query the current role state (device/host/none).
+This patch series adds a sysfs interface to the HD3SS3220 Type-C controller
+driver, allowing userspace to query the current USB role state.
 
-This becomes problematic when using udev rules to trigger scripts on
-role changes. The driver generates kobject change events, but the event
-itself doesn't contain the role information. Userspace needs to read
-the current state to determine the appropriate action.
+Background
+==========
+The HD3SS3220 is a Type-C DRP (Dual Role Port) controller that detects cable
+attachment and determines the port role based on CC pin logic. The driver
+correctly propagates role changes to the USB controller via usb_role_switch,
+but there is no mechanism for userspace to query the current state.
 
-Add a 'usb_role' sysfs attribute that exposes the current USB role as
-a string ("device", "host", or "none"). Also ensure sysfs_notify() and
-kobject_uevent() are called when the role changes, enabling userspace
-applications to poll() on the sysfs file or receive udev events.
+Problem
+=======
+When implementing udev rules to automatically start/stop USB gadget functions
+based on cable connection:
 
-This is useful for systems that need to:
-- Start/stop USB gadget functions based on cable connection
-- Switch between host and device modes dynamically
-- Monitor USB Type-C port state from userspace
+1. In older kernels (5.15.x), the UDC subsystem emitted distinct "add" and
+   "remove" events that could be used to distinguish connect vs disconnect.
 
-Signed-off-by: Venkata Swamy Kassa <venkata.swamy.kassa@hexagon.com>
----
- drivers/usb/typec/hd3ss3220.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+2. In newer kernels (6.6.x), only "change" events are emitted on the usb_role
+   subsystem, with no way to distinguish the actual role from the event itself.
 
-diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-index 14a25e4cb034..92c118609e20 100644
---- a/drivers/usb/typec/hd3ss3220.c
-+++ b/drivers/usb/typec/hd3ss3220.c
-@@ -56,6 +56,28 @@ struct hd3ss3220 {
- 	bool poll;
- };
- 
-+/*
-+ * Sysfs attribute to show current USB role (device/host/none)
-+ */
-+static ssize_t usb_role_show(struct device *dev,
-+			     struct device_attribute *attr, char *buf)
-+{
-+	struct hd3ss3220 *hd3ss3220 = dev_get_drvdata(dev);
-+	const char *role_str = usb_role_string(hd3ss3220->role_state);
-+
-+	return sysfs_emit(buf, "%s\n", role_str);
-+}
-+static DEVICE_ATTR_RO(usb_role);
-+
-+static struct attribute *hd3ss3220_attrs[] = {
-+	&dev_attr_usb_role.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group hd3ss3220_attr_group = {
-+	.attrs = hd3ss3220_attrs,
-+};
-+
- static int hd3ss3220_set_power_opmode(struct hd3ss3220 *hd3ss3220, enum typec_pwr_opmode power_opmode)
- {
- 	int current_mode;
-@@ -172,6 +194,10 @@ static void hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
- 	}
- 
- 	hd3ss3220->role_state = role_state;
-+
-+	/* Notify userspace of usb_role change */
-+	sysfs_notify(&hd3ss3220->dev->kobj, NULL, "usb_role");
-+	kobject_uevent(&hd3ss3220->dev->kobj, KOBJ_CHANGE);
- }
- 
- static void output_poll_execute(struct work_struct *work)
-@@ -310,6 +336,12 @@ static int hd3ss3220_probe(struct i2c_client *client)
- 	if (ret < 0)
- 		goto err_unreg_port;
- 
-+	ret = devm_device_add_group(&client->dev, &hd3ss3220_attr_group);
-+	if (ret) {
-+		dev_err(&client->dev, "Failed to create sysfs attributes: %d\n", ret);
-+		goto err_unreg_port;
-+	}
-+
- 	hd3ss3220_set_role(hd3ss3220);
- 	ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL, &data);
- 	if (ret < 0)
+Userspace needs to read the current role to determine the appropriate action
+(start gadget for "device" role, stop gadget for "none" or "host" role).
+
+Solution
+========
+Patch 1: Add a 'usb_role' sysfs attribute that exposes the current role as
+         a string. Also call sysfs_notify() and kobject_uevent() on role
+         changes to enable poll() and udev notifications.
+
+Patch 2: Document the new sysfs attribute in Documentation/ABI/testing/.
+
+Testing
+=======
+Tested on Variscite VAR-SOM-MX8M-PLUS with TI HD3SS3220 Type-C controller.
+Cable connect/disconnect events correctly update the sysfs attribute and
+trigger udev rules.
+
+Venkata Swamy Kassa (2):
+  usb: typec: hd3ss3220: Add sysfs attribute for USB role state
+  Documentation: ABI: Add usb_role sysfs for hd3ss3220
+
+ Documentation/ABI/testing/sysfs-driver-hd3ss3220 | 14 ++++++++
+ drivers/usb/typec/hd3ss3220.c                    | 32 +++++++++++++++++
+ 2 files changed, 46 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-hd3ss3220
+
 -- 
 2.34.1
 
