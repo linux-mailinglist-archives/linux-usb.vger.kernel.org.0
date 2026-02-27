@@ -1,161 +1,173 @@
-Return-Path: <linux-usb+bounces-33771-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33772-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oDOwNY40oWmFrAQAu9opvQ
-	(envelope-from <linux-usb+bounces-33771-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 07:07:10 +0100
+	id CFwnFWVHoWkirwQAu9opvQ
+	(envelope-from <linux-usb+bounces-33772-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 08:27:33 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EADD1B309C
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 07:07:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E075E1B3DE2
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 08:27:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 608653030FF4
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 06:07:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 78E6E30902C5
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 07:22:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE1B3E95A9;
-	Fri, 27 Feb 2026 06:07:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D8552BD11;
+	Fri, 27 Feb 2026 07:22:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="q+cNVch/"
+	dkim=pass (2048-bit key) header.d=me.com header.i=@me.com header.b="AlxxlEOY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outbound.ms.icloud.com (p-west3-cluster1-host4-snip4-10.eps.apple.com [57.103.73.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06D0361DBB;
-	Fri, 27 Feb 2026 06:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C89332607
+	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 07:22:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.73.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772172425; cv=none; b=tB7Ed+m5bk36Mffsa9GYQmfacbT7IuxLBy8PMwuI6vOKtwGmYHuB8Z7housbK6xZUtJQ+N7gk38Xn2rE1t6XaQ93c4j0j4t4keox3fE0ey9K+4vrVm/P4BXoWwhZHYamboVX/hS/2rLVEaIAzrmtLgvB0F1kCNAcuWZ1QnqorRU=
+	t=1772176969; cv=none; b=rDqHCaxTusuKNTuqqQ1/Gbrw1Qubsz1Ih5TwTF5nEYE3H8Sd020QiavhLEKTeMrJuCbeKnToarZdRM3n9vuwS601TqycUETSQbUYyT7v7cCOd6kmhUL4ml4CWgGOxu7uG/6+vKu02jhpw73/D1yw6tRMw+X1Tr/UiLmWKWjY97Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772172425; c=relaxed/simple;
-	bh=GIu75fxn2gITTgLlJDiazqpWbQhvH+iRh5dVBHubTOA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C9vhs7DT9CgMnyR35OwayVaYcBysUVoyeo1xpYiXWlRzFpgdl3OHZtmfkaMVGGUInpLUHVAYIqJpImLH/mbGOv+C02aEoTAftn71KT8Dk2z8Sg4XS7gpAkat6ZMte3JjqXVPGLbwntZ7RuLR6j7o9s5iaEz3ev5OtjAuCHw5kD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=q+cNVch/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E1BC116C6;
-	Fri, 27 Feb 2026 06:07:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1772172424;
-	bh=GIu75fxn2gITTgLlJDiazqpWbQhvH+iRh5dVBHubTOA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q+cNVch/M4M9gcpY+VBBHOPT/p+9K8ARcEVZsl8aalkhDSdx2Wonj4qZ17hfJ+8IB
-	 xVG+AaWWqhFkQfnYBi4/PErSKeewBHEh/M0df+v/GR5kQ76pqe8HUzD+Z/GesKE98J
-	 j5m8vCViUp9b768WoXi2MzCbM4a7XEEnrorF9mc0=
-Date: Thu, 26 Feb 2026 22:06:56 -0800
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Jie Deng <dengjie03@kylinos.cn>
-Cc: Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: core: new quirk to handle devices with zero
- configurations
-Message-ID: <2026022652-padding-backlight-ae49@gregkh>
-References: <20260227060400.1480039-1-dengjie03@kylinos.cn>
+	s=arc-20240116; t=1772176969; c=relaxed/simple;
+	bh=w98eDsZkzjEe+Ffyv9Ip+o/RLVFx44efBAuFt2TydPk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nJnf2smilkFYYCC/Kwh61Kc2ck8oAaKOo7Op2Jx0qkMSYKaGxNbdWYOz/S3UgOSILunfqzJBuL7WpdpkyUkyZk9ZmKjw0MqpwQximBqJqpxXd11cPXdvaWhoN2OK6X5HSi7xb6cXlV5TyDjsfFt9+tCVarj3rP7sklnpPrawdGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=me.com; spf=pass smtp.mailfrom=me.com; dkim=pass (2048-bit key) header.d=me.com header.i=@me.com header.b=AlxxlEOY; arc=none smtp.client-ip=57.103.73.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=me.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=me.com
+Received: from outbound.ms.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-west-3a-10-percent-0 (Postfix) with ESMTPS id F037D180010F;
+	Fri, 27 Feb 2026 07:22:45 +0000 (UTC)
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai; t=1772176968; x=1774768968; bh=wsqdwjcS/G8vahkuU8zoCOVkVQ5Hgnn4VlKPjVEpLaM=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=AlxxlEOY3GXSVv04PIOkkmUsjbC45C1x+8KqUzngXSEIyEBy9d3rO1u+u5DQA2CbGY6R54pc5sbf7zB2tmTVYp3Zb3hGnmMAeJaaDvqdhd/Ba/iOuw9LMntT9swbIBBBHY2/wk5Sl5t+1MSrqdxl6KCZQFo70SvQ8RYHP6zDIaQz50DSYOrO3IUrA3zJN1KSnbIoLf427+CVvrVmWnEBITKKOGUpnjSbQYmFHJ8KjR4p36gmveSaHycues1mAw0iJw7Sv1oGmoIZzdf8iVAjjLKI7bJTCBDbvE6hK/uNfcJMF4ICK9BgIR5HrlqXzBMeIrqEu3/8BUQFXpETqxEeHQ==
+Received: from bimmer.. (unknown [17.57.154.37])
+	by p00-icloudmta-asmtp-us-west-3a-10-percent-0 (Postfix) with ESMTPSA id CF42C18000BE;
+	Fri, 27 Feb 2026 07:22:44 +0000 (UTC)
+From: tobgaertner <tob.gaertner@me.com>
+To: linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
+	oneukum@suse.com,
+	bjorn@mork.no,
+	Tobi Gaertner <tob.gaertner@me.com>
+Subject: [PATCH] net: usb: cdc_ncm: add ndpoffset to nframes bounds check
+Date: Thu, 26 Feb 2026 23:22:41 -0800
+Message-ID: <20260227072241.566212-1-tob.gaertner@me.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260227060400.1480039-1-dengjie03@kylinos.cn>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI3MDA2MSBTYWx0ZWRfX6Gv1WuhgHBuF
+ +s8G7wNPPaW6SVOYiY11y8wqYCQP7fOKdaBF8c3jnhiwQOiwXFaiRQDPJJ85Heip8ZKuUHmKHDQ
+ W1DUtLvgNpfPnurhhnTQXvSwPPUSe2gQXqxzR1jfKgEWDywTuhxer3VmHt4yHObRjC5Xt/Bqi3K
+ ZINci8y3td/6wBJ+QIwPL2Pd9nLJ4o9/CYypCeFeVH84pZwGbwSZzyzM+ooZds8cgCgfUT8+4l5
+ IImBHSJX0dB9leOaLlbzDaMEWVHZ6NlawaFxTl+4PCg8Pz484LQBWKH9xyMwABW21Cw+h1S7Rd4
+ UHyeMea1di5QnXSxY9LtHAw1cJKtZZwGgpmpL53IoJICOB2XZEFvERDOk7FiZs=
+X-Proofpoint-GUID: ulfFZAcguy4Rhl7WJyPVunenllPl93KH
+X-Proofpoint-ORIG-GUID: ulfFZAcguy4Rhl7WJyPVunenllPl93KH
+X-Authority-Info-Out: v=2.4 cv=K8Av3iWI c=1 sm=1 tr=0 ts=69a14646
+ cx=c_apl:c_apl_out:c_pps a=qkKslKyYc0ctBTeLUVfTFg==:117 a=HzLeVaNsDn8A:10
+ a=x7bEGLp0ZPQA:10 a=C3-SEi6G3EkA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=HHGDD-5mAAAA:8
+ a=X9ZKYl2M72dmM7fdp4sA:9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-27_01,2026-02-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 spamscore=0 phishscore=0
+ clxscore=1011 mlxlogscore=747 bulkscore=0 mlxscore=0 classifier=spam
+ authscore=0 adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602270061
+X-JNJ: AAAAAAABd3KSaJBbs9c6X/UwNWlOgP/5uiofsBdgGLg/Jz/ezut8NS9azSRLbjAJWR2euNReGH+oBW7Oyo2pNvbTjFYQOWK/ipLwvC2T3XFtjKu/xcKJEFCORGlR/cFVpbp23Fu875i3kmCBg4B6RpqwZpkKPQSF/IHOYhBkwoj8Vi+NculbFDENyARMPkzbo7f/efJG4GmnMiad+wABer2lNdiWtIvY10SVSLHcCcqSprP3bBBfqhe6wyFs8WgPemId/y/ayNErod/1UqH6oJXvtR08Nw8DxA3UXnlz+Pouy6XJ+SNYNn4Tib/Fg/hDe2RSEC4V82vM2LLMBkycwhxSnJ58nq5VBQNmCUU9JKYINliV1cWaOXtseaWO10+iZrx5jhejjjFZ/MeIb0AMtiSw0zmFbPupaQZjwfX2ALfCAUH/u+ynXOmQgAY6Dbws/sMTg9oueoI20RdAX+x3+f4+G00GIbngpy9fdtC8w9a/qlJtYSTn3sdMfevI9wDfnxYYklO1PLLmAP4ckEzoTgVdG79MaFGb/vHJzDZNls4kxnVxNBISNaj5w4Q7SLFXh2LFX+PYiUyD5ie+qTV5E7gwGQOPtpcD6YHGKO9Nadn6pm69xe4V0537X1jpyC4dNxLXJnFdVbOiIMK73BXJGP7VO+YgESLEOKSsyqGMkftYba15cg==
+X-Apple-Category-Label: Mjg5MDYwMTc4OiRjYXRlZ29yeSRfUGVyc29uYWws
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[me.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[me.com:s=1a1hai];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_FROM(0.00)[me.com];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,suse.com,mork.no,me.com];
+	TAGGED_FROM(0.00)[bounces-33772-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33771-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	NEURAL_HAM(-0.00)[-0.997];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[kylinos.cn:email,linuxfoundation.org:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7EADD1B309C
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tob.gaertner@me.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[me.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[me.com:mid,me.com:dkim,me.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E075E1B3DE2
 X-Rspamd-Action: no action
 
-On Fri, Feb 27, 2026 at 02:04:00PM +0800, Jie Deng wrote:
-> Some USB devices incorrectly report bNumConfigurations as 0 in their
-> device descriptor, which causes the USB core to reject them during
-> enumeration.
-> logs:
-> usb 1-2: device descriptor read/64, error -71
-> usb 1-2: no configurations
-> usb 1-2: can't read configurations, error -22
-> 
-> However, these devices actually work correctly when
-> treated as having a single configuration.
-> 
-> Add a new quirk USB_QUIRK_FORCE_ONE_CONFIG to handle such devices.
-> When this quirk is set, assume the device has 1 configuration instead
-> of failing with -EINVAL.
-> 
-> This quirk is applied to the device with VID:PID 5131:2007 which
-> exhibits this behavior.
-> 
-> Signed-off-by: Jie Deng <dengjie03@kylinos.cn>
-> ---
-> 
-> Changes in v2:
-> - Modify the sequence number of the quirks parameter
-> - Add the judgment condition of ncfg < 1
-> Link to v1: https://lore.kernel.org/linux-usb/
-> f7999b43-b6e2-44f4-b8e1-c2b5f5d04a5c@kylinos.cn/T/#mb5246d3b3e3bbb334c046bfa9a69b988f2d0688a
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 3 +++
->  drivers/usb/core/config.c                       | 7 ++++++-
->  drivers/usb/core/quirks.c                       | 5 +++++
->  include/linux/usb/quirks.h                      | 3 +++
->  4 files changed, 17 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index cb850e5290c2..7d907efe9f49 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -8183,6 +8183,9 @@ Kernel parameters
->  				p = USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT
->  					(Reduce timeout of the SET_ADDRESS
->  					request from 5000 ms to 500 ms);
-> +				q = USB_QUIRK_FORCE_ONE_CONFIG (Device
-> +					claims zero configurations,
-> +					forcing to 1);
->  			Example: quirks=0781:5580:bk,0a5c:5834:gij
->  
->  	usbhid.mousepoll=
-> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-> index 1cd5fa61dc76..832717549515 100644
-> --- a/drivers/usb/core/config.c
-> +++ b/drivers/usb/core/config.c
-> @@ -927,7 +927,12 @@ int usb_get_configuration(struct usb_device *dev)
->  		dev->descriptor.bNumConfigurations = ncfg = USB_MAXCONFIG;
->  	}
->  
-> -	if (ncfg < 1) {
-> +	if (ncfg < 1 && dev->quirks & USB_QUIRK_FORCE_ONE_CONFIG) {
-> +		dev_info(ddev, "Device claims zero configurations, "
-> +				"forcing to 1\n");
+From: Tobi Gaertner <tob.gaertner@me.com>
 
-Do not break a string like this, make it all one line please.
-checkpatch should have warned you about this?
+cdc_ncm_rx_verify_ndp16() and cdc_ncm_rx_verify_ndp32() validate that
+the NDP header and its DPE entries fit within the skb. The first check
+correctly accounts for ndpoffset:
 
-thanks,
+  if ((ndpoffset + sizeof(struct usb_cdc_ncm_ndp16)) > skb_in->len)
 
-greg k-h
+but the second check omits it:
+
+  if ((sizeof(struct usb_cdc_ncm_ndp16) +
+       ret * (sizeof(struct usb_cdc_ncm_dpe16))) > skb_in->len)
+
+This validates the DPE array size against the total skb length as if
+the NDP were at offset 0, rather than at ndpoffset. When the NDP is
+placed near the end of the NTB (large wNdpIndex), the DPE entries can
+extend past the skb data buffer even though the check passes.
+cdc_ncm_rx_fixup() then reads out-of-bounds memory when iterating
+the DPE array.
+
+Add ndpoffset to the nframes bounds check in both the NDP16 and NDP32
+verification functions.
+
+Found by coverage-guided fuzzing with QEMU system-mode emulation.
+
+Fixes: ff06ab13a4cc ("net: cdc_ncm: splitting rx_fixup for code reuse")
+Signed-off-by: Tobi Gaertner <tob.gaertner@me.com>
+---
+ drivers/net/usb/cdc_ncm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+index 5d123df0a..39d2ad95d 100644
+--- a/drivers/net/usb/cdc_ncm.c
++++ b/drivers/net/usb/cdc_ncm.c
+@@ -1675,7 +1675,7 @@ int cdc_ncm_rx_verify_ndp16(struct sk_buff *skb_in, int ndpoffset)
+ 					sizeof(struct usb_cdc_ncm_dpe16));
+ 	ret--; /* we process NDP entries except for the last one */
+ 
+-	if ((sizeof(struct usb_cdc_ncm_ndp16) +
++	if ((ndpoffset + sizeof(struct usb_cdc_ncm_ndp16) +
+ 	     ret * (sizeof(struct usb_cdc_ncm_dpe16))) > skb_in->len) {
+ 		netif_dbg(dev, rx_err, dev->net, "Invalid nframes = %d\n", ret);
+ 		ret = -EINVAL;
+@@ -1711,7 +1711,7 @@ int cdc_ncm_rx_verify_ndp32(struct sk_buff *skb_in, int ndpoffset)
+ 					sizeof(struct usb_cdc_ncm_dpe32));
+ 	ret--; /* we process NDP entries except for the last one */
+ 
+-	if ((sizeof(struct usb_cdc_ncm_ndp32) +
++	if ((ndpoffset + sizeof(struct usb_cdc_ncm_ndp32) +
+ 	     ret * (sizeof(struct usb_cdc_ncm_dpe32))) > skb_in->len) {
+ 		netif_dbg(dev, rx_err, dev->net, "Invalid nframes = %d\n", ret);
+ 		ret = -EINVAL;
+-- 
+2.43.0
+
 
