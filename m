@@ -1,204 +1,181 @@
-Return-Path: <linux-usb+bounces-33778-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33779-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id jmEnGFxnoWkUsgQAu9opvQ
-	(envelope-from <linux-usb+bounces-33778-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 10:43:56 +0100
+	id cJpACmF6oWkUtgQAu9opvQ
+	(envelope-from <linux-usb+bounces-33779-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 12:05:05 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5677A1B57F0
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 10:43:55 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 915D71B6570
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 12:05:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4BE0D3027306
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 09:43:54 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3F358302736F
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 11:04:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F36FE3939AA;
-	Fri, 27 Feb 2026 09:43:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AA31DpTh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E44E03E95A0;
+	Fri, 27 Feb 2026 11:04:42 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from bm.lauterbach.com (bm.lauterbach.com [62.154.241.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6D41F92E;
-	Fri, 27 Feb 2026 09:43:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6FBA32FA22
+	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 11:04:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.154.241.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772185432; cv=none; b=QTxSYLfWvW2Tbq2fYeebK3p0VLuCyNfGPiFemlsqjM0FnnqX7i6Cyp2scFDLE35w6ZZ1Q/VSm4esloThtzYQz8XZAYl8JEOAMk7tiPBdF8k46yrQZBGpXv9PTKr7WUnuM47fay+clhYGnyASvn9GPCm3/2qWCavOF2uRkc0edQk=
+	t=1772190282; cv=none; b=KSezVUXJscIG3ZQQEPLLzebTRvbPvN3MsVEqpvLS0ZQna4HtPemxb1KGzm5C8knuHgZ/wY5MOtmlE8QqUs5KNSB+MO2HssbV5d4h8AyrbYn04CsSuhW9tcMseCZS5z8aOqe9mcDW5vSFbNkGTM3D2ulON2k5qD0S2e/fwZgY1d8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772185432; c=relaxed/simple;
-	bh=S40WQZezzw027ipu4rm5m9j2CsiziwZ33LTZqtP2HtM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ATGnBMhLGMF0RmSdyqVmNn4y6nVF6ca9km5Ec5sWuEtJcLLHtsnHRruIFfjlTWBB4Jsyj9QJxAbjkOnPCSA1fF6RHUcjAK+lI8Uw6v2TA4NioXm3bH44sPvoRelijn017AQKbYA/CEncMiKi3qr/6Ul2NEFA1SPTZSZMzC38n9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AA31DpTh; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772185431; x=1803721431;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=S40WQZezzw027ipu4rm5m9j2CsiziwZ33LTZqtP2HtM=;
-  b=AA31DpTh/W69iIxIJrx65c78ikzBnrKrawauHroec/LJe9vMx3CKc2OZ
-   uG1y7Ig9umWX4BGcHFZAk49SxPNuDTYTo4hEzw2HTQvj+E6nLI4y/dKd3
-   4VujLlWAx5lzuMawTIfjLDLISZZw5bRX9vtzDkEke3RCCDDr4XglrQ3i4
-   /BBnXYI/vO70xPkmmELQtjkDFu8LrA+EZMmod6UjAH7HidxlaP1SOuSbO
-   RIuiy3pga10XXdzPL+E3VLtdEshonvaOFUvzRX2rcpcal0GnfIrdXRe4o
-   O9sdJYCEGT8oyJjqVNbRY2jyos2Dm+SZ7EmhnvBZ+uD8GANWPm1rIMy3c
-   w==;
-X-CSE-ConnectionGUID: pCSdgoVNTE2pOcHb99XDVQ==
-X-CSE-MsgGUID: apsbN1WPRHuv8Xt145wikA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11713"; a="73310517"
-X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
-   d="scan'208";a="73310517"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2026 01:43:51 -0800
-X-CSE-ConnectionGUID: j6A7cvkISx+xCrwLcfCYAg==
-X-CSE-MsgGUID: aHAGDWSfTo+vmda9BcsFbg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
-   d="scan'208";a="216751374"
-Received: from hrotuna-mobl2.ger.corp.intel.com (HELO [10.245.245.140]) ([10.245.245.140])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2026 01:43:47 -0800
-Message-ID: <9113319a-b82c-42c7-ba1a-19113a5edb80@linux.intel.com>
-Date: Fri, 27 Feb 2026 11:43:45 +0200
+	s=arc-20240116; t=1772190282; c=relaxed/simple;
+	bh=A0ppAcSej9kxsgncKKPoe2xhPs3IOda1FlbegBy6jME=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=l/eBjslUW7pQ/1H/+sMefE+Hffr4usEJxRUEmZlM0UfK2sPDWxhL1K9qGpk2CsivXlPlMVW4SxN71DvOtEmSzM8Ywfd666mz+RLgfgFW12OFR+dMiaDwbqJttp5ZZiugNbhgUl0knc5OhzqHTB1uTdmZuv9nLPR8gEOd/QNtpQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com; spf=pass smtp.mailfrom=lauterbach.com; arc=none smtp.client-ip=62.154.241.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lauterbach.com
+Received: from ingpc2.intern.lauterbach.com (unknown [10.2.10.44])
+	(Authenticated sender: ingo.rohloff@lauterbach.com)
+	by bm.lauterbach.com (Postfix) with ESMTPSA id D298ED6161BA;
+	Fri, 27 Feb 2026 12:04:36 +0100 (CET)
+Date: Fri, 27 Feb 2026 12:04:36 +0100
+From: Ingo Rohloff <ingo.rohloff@lauterbach.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, "linux-usb@vger.kernel.org"
+ <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] dt-bindings: usb: dwc3: Add property to insert
+ delay before TxValid.
+Message-ID: <20260227120436.6f4e68a9@ingpc2.intern.lauterbach.com>
+In-Reply-To: <20260227002003.gznbxapvqr3slc2o@synopsys.com>
+References: <20260225000512.tle2eu4gkd4ut6bf@synopsys.com>
+	<20260225130323.24606-1-ingo.rohloff@lauterbach.com>
+	<20260225130323.24606-3-ingo.rohloff@lauterbach.com>
+	<9d59395b-ae39-40b3-af21-75468ec34cd8@kernel.org>
+	<20260226171224.3ab6b68f@ingpc2.intern.lauterbach.com>
+	<20260226190432.jq6c3gxwy6dydwpc@synopsys.com>
+	<20260227002003.gznbxapvqr3slc2o@synopsys.com>
+Organization: Lauterbach GmbH
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.50; x86_64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: xhci: add xhci_halt() for HCE Handling
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Dayu Jiang <jiangdayu@xiaomi.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Longfang Liu <liulongfang@huawei.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- yudongbin <yudongbin@xiaomi.com>, guhuinan <guhuinan@xiaomi.com>,
- chenyu45 <chenyu45@xiaomi.com>, mahongwei3 <mahongwei3@xiaomi.com>,
- Niklas Neronin <niklas.neronin@linux.intel.com>
-References: <20260127110422.306711-1-jiangdayu@xiaomi.com>
- <2026012708-liability-sincere-5ed4@gregkh>
- <aXnNcQa5Ooq2wIX2@oa-jiangdayu.localdomain>
- <2026012857-deprive-putdown-0ee8@gregkh>
- <aaAR5VOtnMhvoCem@oa-jiangdayu.localdomain>
- <871991ab-6c8f-47d4-a5b4-b65751750e71@linux.intel.com>
- <20260226181715.ofgjiq3iq7d7dx6y@synopsys.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20260226181715.ofgjiq3iq7d7dx6y@synopsys.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Bm-Milter-Handled: 166a2dfb-2e12-4590-8fa5-72e30323519f
+X-Bm-Transport-Timestamp: 1772190276911
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	TAGGED_FROM(0.00)[bounces-33778-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33779-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_THREE(0.00)[3];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	HAS_ORG_HEADER(0.00)[];
+	DMARC_NA(0.00)[lauterbach.com];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	REDIRECTOR_URL(0.00)[urldefense.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[ingo.rohloff@lauterbach.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	R_DKIM_NA(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,urldefense.com:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5677A1B57F0
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,urldefense.com:url,lauterbach.com:url,lauterbach.com:email]
+X-Rspamd-Queue-Id: 915D71B6570
 X-Rspamd-Action: no action
 
-On 2/26/26 20:17, Thinh Nguyen wrote:
-> On Thu, Feb 26, 2026, Mathias Nyman wrote:
->> On 2/26/26 11:27, Dayu Jiang wrote:
->>> Hi Greg,
->>>
->>> I have updated the changelog text as requested and resubmitted the patch.
->>> https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/20260128100746.561626-1-jiangdayu@xiaomi.com/__;!!A4F2R9G_pg!ZSJNDKyOinm26qngopLW-axiQtwDAMely4bDqtqYDGv1ErWCtS6kZ6ZamdiKoZKuCyCk0IxMQK5g625GEIxYWFzKpAEiCUq7$
->>> Please kindly review it and let me know if it is acceptable now.
->>
->> I'll send it forward, but changed the commit message.
->> Does this modified version still describe the case accurately:
->>
->> usb: xhci: Prevent interrupt storm on host controller error (HCE)
->>
->> The xHCI controller reports a Host Controller Error (HCE) in UAS Storage
->> Device plug/unplug scenarios on Android devices, which is checked in
->> xhci_irq() function and causes an interrupt storm (since the interrupt
->> isn’t cleared), leading to severe system-level faults.
->>
->> When the xHC controller reports HCE in the interrupt handler, the driver
->> only logs a warning and assumes xHC activity will stop. The interrupt storm
->> does however continue until driver manually disables xHC interrupt and
->> stops the controller by calling xhci_halt().
->>
->> The change is made in xhci_irq() function where STS_HCE status is
->> checked, mirroring the existing error handling pattern used for
->> STS_FATAL errors.
->>
->> This only fixes the interrupt storm. Proper HCE recovery requires resetting
->> and re-initializing the xHC.
->>
+On Fri, 27 Feb 2026 00:20:10 +0000
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+> On Thu, Feb 26, 2026, Thinh Nguyen wrote:
+> > On Thu, Feb 26, 2026, Ingo Rohloff wrote:  
+> > > On Thu, 26 Feb 2026 11:51:27 +0100
+> > > Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > >   
+> > > > On 25/02/2026 14:03, Ingo Rohloff wrote:  
+> > > > > The Microchip USB3340x ULPI PHY requires a delay when switching
+> > > > > to the high-speed transmitter. See:
+> > > > >     https://urldefense.com/v3/__http://ww1.microchip.com/downloads/en/DeviceDoc/80000645A.pdf__;!!A4F2R9G_pg!YRzZkLTZr5Bhh57FiXmyq7e4wVPHUbXZdgH3a627O2kbzpOTPiw_1MKGc_zD5cr8_Y-r1h5XvyFL9c7YRNObAl-lmUNgSuU$ 
+> > > > >     Module 2 "Device Enumeration Failure with Link IP Systems"
+> > > > >  
+> > > > 
+> > > > So that's deducible from the compatible and you do not need this
+> > > > property at all?
+> > > >   
+> > >   
 > 
-> The controller is halted if there's an error like HCE. It's odd to try
-> to "halt" it again. Not sure how this will impact for other controllers.
+> After reading Ingo's comment again, I don't think we can simply deduct
+> whether this property is needed from just the Xilinx dwc3 compatible.
+> I think this one may need its own devicetree property.
 
-This is why I changed the commit message from:
+Krzystof gave me another idea though:
+In drivers/usb/dwc3/ulpi.c the dwc3 code will call dwc3_ulpi_init(),
+if the DWC3 controller is connected via ULPI to an USB ULPI PHY.
 
-"When the xHCI controller reports HCE in the interrupt handler, the driver
-currently only logs a warning and continues execution. However, HCE
-indicates a critical hardware failure that requires the controller to be
-halted. This ensures the controller is in a consistent state and prevents
-further operations on failed hardware."
+dwc3_ulpi_init() will call ulpi_register_interface(), which 
+(under the right circumstances) will call ulpi_read_id().
 
-to:
+At this point in time it would be easy to use
+dwc3_ulpi_read()/dwc3_ulpi_write() to read out the
+  USB ULPI PHY VendorID/ProductID
+by mimicking the behavior of ulpi_read_id() from drivers/usb/common/ulpi.c
 
-"When the xHC controller reports HCE in the interrupt handler, the driver
-only logs a warning and assumes xHC activity will stop. The interrupt storm
-does however continue until driver manually disables xHC interrupt and
-stops the controller by calling xhci_halt()."
+Based on the VendorID/ProductID we then could set
+   dwc3->enable_usb2_transceiver_delay
+if necessary.
 
-I can clarify it further by stating that .."assumes xHC activity will stop
-as stated in xHCI spec. On some xHC controllers an interrupt storm continues after
-HCE error, and only ceases after manually"..
+This approach means:
+* No new device tree property necessary.
+* Code autodetects the problematic combo of DWC3 + USB3340 ULPI PHY
+  and applies the necessary settings.
+* Will work for any combination of DWC3 IP + USB3340 ULPI PHY,
+  and not only for the  Xilinx specific DWC3 implementation.
+* Future proof: If there ever is another ULPI PHY, which needs special
+  settings in the DWC3 controller, you could then just extend the
+  code to detect this new ULPI PHY and apply the necessary settings.
 
-The host is messed up at this point, and we are not recovering it. I don't think
-there is any harm in a manual halt at this stage.
+Caveat:
+You have the code to read out the ULPI PHY VendorID/ProductID twice:
+* Once in ulpi_read_id() from drivers/usb/common/ulpi.c
+* Once in drivers/usb/dwc3/ulpi.c
 
-> Even if we don't have the full HCE recovery implemented, did we try to
-> just do HCRST, which is the first step of the recovery?
+I do not see any easy way to get access to the VendorID/ProductID
+from ulpi_read_id(); in particular because right now this function
+is only called if the ULPI PHY has a corresponding node in the
+device tree, which currently is not the case.
+Meaning right now ulpi_read_id() is NOT called.
 
-Specs state that HCRST might re-trigger the HCE if it's due to a "hard" fault,
-and driver needs to take action to prevent a HCE - HCRST recovery loop.
+with best regards
+  Ingo
 
-HCRST will clear all registers, so we need to reinitialize everything here,
-write back addresses of event rings, command rings, DCBAA, scratchpads
-dequeue pointers etc.
-
-I support taking this fix to prevent the interrupt storm, an issue seen in real
-life. And then solve proper recovery later.
-
-Niklas is actually working on decoupling memory allocation and xHC register
-initialization which will help future HCE recovery work.
-
-Thanks
-Mathias
+-- 
 
 
+-------------------------------------------------------------------------
+Dipl.-Inform.
+Ingo ROHLOFF
+Senior Staff Embedded Systems Engineering
+phone +49 8102 9876-142 - ingo.rohloff@lauterbach.com
+
+Lauterbach Engineering GmbH & Co. KG
+Altlaufstrasse 40, 85635 Hoehenkirchen-Siegertsbrunn, GERMANY
+www.lauterbach.com
+
+Registered Office: Hoehenkirchen-Siegertsbrunn, Germany,
+Local Court: Munich, HRA 87406, VAT ID: DE246770537,
+Managing Directors: Lothar Lauterbach, Stephan Lauterbach, Dr. Thomas
+Ullmann
+
+-------------------------------------------------------------------------
 
