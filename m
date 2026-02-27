@@ -1,59 +1,103 @@
-Return-Path: <linux-usb+bounces-33779-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33780-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cJpACmF6oWkUtgQAu9opvQ
-	(envelope-from <linux-usb+bounces-33779-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 12:05:05 +0100
+	id QEUXCYh6oWkUtgQAu9opvQ
+	(envelope-from <linux-usb+bounces-33780-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 12:05:44 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 915D71B6570
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 12:05:04 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CB051B6578
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 12:05:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3F358302736F
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 11:04:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 94FD23028352
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 11:05:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E44E03E95A0;
-	Fri, 27 Feb 2026 11:04:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C1B63ECBFA;
+	Fri, 27 Feb 2026 11:05:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GfTK60Fx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bm.lauterbach.com (bm.lauterbach.com [62.154.241.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6FBA32FA22
-	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 11:04:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.154.241.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B6A3ACF16
+	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 11:05:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772190282; cv=none; b=KSezVUXJscIG3ZQQEPLLzebTRvbPvN3MsVEqpvLS0ZQna4HtPemxb1KGzm5C8knuHgZ/wY5MOtmlE8QqUs5KNSB+MO2HssbV5d4h8AyrbYn04CsSuhW9tcMseCZS5z8aOqe9mcDW5vSFbNkGTM3D2ulON2k5qD0S2e/fwZgY1d8=
+	t=1772190340; cv=none; b=Nts39+UaLXDR1WPfEEFgG3U3G+vH/5Iylmbkh31VaBb1HBllshNpTZEn5TXUgpyhDKERDpGVQUpNdjHERz15VaFIvVLWR2tJUn0IXrsKEGjJXw6PgrkWh/rppwBoJqw7Vp4oHPzJ1/Xv9Nr6+Gj7QSYFGykt46Gxn+7kstWD3SM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772190282; c=relaxed/simple;
-	bh=A0ppAcSej9kxsgncKKPoe2xhPs3IOda1FlbegBy6jME=;
+	s=arc-20240116; t=1772190340; c=relaxed/simple;
+	bh=K7/dqLGhzaE4SqXmDnBlTcJ4PFnNjTIs0xCN2zVIBVE=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=l/eBjslUW7pQ/1H/+sMefE+Hffr4usEJxRUEmZlM0UfK2sPDWxhL1K9qGpk2CsivXlPlMVW4SxN71DvOtEmSzM8Ywfd666mz+RLgfgFW12OFR+dMiaDwbqJttp5ZZiugNbhgUl0knc5OhzqHTB1uTdmZuv9nLPR8gEOd/QNtpQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com; spf=pass smtp.mailfrom=lauterbach.com; arc=none smtp.client-ip=62.154.241.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lauterbach.com
-Received: from ingpc2.intern.lauterbach.com (unknown [10.2.10.44])
-	(Authenticated sender: ingo.rohloff@lauterbach.com)
-	by bm.lauterbach.com (Postfix) with ESMTPSA id D298ED6161BA;
-	Fri, 27 Feb 2026 12:04:36 +0100 (CET)
-Date: Fri, 27 Feb 2026 12:04:36 +0100
-From: Ingo Rohloff <ingo.rohloff@lauterbach.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, "linux-usb@vger.kernel.org"
- <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] dt-bindings: usb: dwc3: Add property to insert
- delay before TxValid.
-Message-ID: <20260227120436.6f4e68a9@ingpc2.intern.lauterbach.com>
-In-Reply-To: <20260227002003.gznbxapvqr3slc2o@synopsys.com>
-References: <20260225000512.tle2eu4gkd4ut6bf@synopsys.com>
-	<20260225130323.24606-1-ingo.rohloff@lauterbach.com>
-	<20260225130323.24606-3-ingo.rohloff@lauterbach.com>
-	<9d59395b-ae39-40b3-af21-75468ec34cd8@kernel.org>
-	<20260226171224.3ab6b68f@ingpc2.intern.lauterbach.com>
-	<20260226190432.jq6c3gxwy6dydwpc@synopsys.com>
-	<20260227002003.gznbxapvqr3slc2o@synopsys.com>
-Organization: Lauterbach GmbH
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.50; x86_64-unknown-linux-gnu)
+	 MIME-Version:Content-Type; b=u/mbS3fby1/qtMlWQwevcfN0J03SgPkYGLdRKti8nKvc44+tmRtWgUdKJLDpPfDUwWoOVZfvpV4O3TJKl71Wu1uTXpoC3w0lB98JshowD8kvT/ZKpdDM9pOYA2d8F5K+XQes83NuwVJybwmxQS43vyfZOnz1A/6bgNMPXVlfM/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GfTK60Fx; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-65a43a512b0so2244033a12.3
+        for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 03:05:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772190337; x=1772795137; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K7/dqLGhzaE4SqXmDnBlTcJ4PFnNjTIs0xCN2zVIBVE=;
+        b=GfTK60FxzU6UR293EF8r+RBBfdPPRDLGIDgjPEsE9uao6vnT08NhlKSCyXzd+ac1UB
+         FUaMfeTO0P6Q5DRbmEPqZ0ecwLOzlLke+9pH6ldmxak2ft9wF8W8LknVTTgNDLvR+eJJ
+         bsOYeyJHE3A2ZZY2Cnm6lzua0f+qlxOjCLISz2SnHlUhW1LdZyK8EpuqoEfOTyeXONXm
+         aFrOfORAjVzh0pZEgGH/8fmomyTvC8cfygJ7qtcTOo3xnTcOkpP/WzgxH8nx4csgfv32
+         ODA8STdC8dXpPwcRvT05jWl7QGE88Dv8O8KmY7jyH3T0YTfjtwHm7l26lQovjdEgrIhs
+         CQaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772190337; x=1772795137;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=K7/dqLGhzaE4SqXmDnBlTcJ4PFnNjTIs0xCN2zVIBVE=;
+        b=gz3wM9mmtthbPcNUFq4zFsXTW92r+TVZ6+wohKWFABlK6jg4YwR3EeBwMAHnFgCvCA
+         Zb/wULY2s+b48m7dI0qeArVLZm6AwK7T8i2jmgfwEiV8uLqmsvKu0bOd7LQksYYNBfnO
+         wiQSKqLhRNQ6wC2DF6jVDRSwQBpNB1AO5P62+R2qJ1bcY+n9ekvZ9Sits6/2fbb0T1Zb
+         foZyg5/wwX85UHKXwrYJaCU9DENqIZBvy43GzD+1H9dpNBVqPGc6z4vqO9vmKP+UYGz2
+         tLzjeWF1X529CCPfIv5HPtRrQImlZxhOUOioS48nQ0GzTUrmgDV4zzGyoj0MmBS9YxsL
+         bdYw==
+X-Forwarded-Encrypted: i=1; AJvYcCXN/cBWLUumPhtdDikBE/cBrkWYvMSXmCYoYjLzeV6wS3lcuLlxHeXitTarZHbUDLBAscJnBdzgqew=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2KGvUqEVKLgoDT2jSxvPo52kg9HhymBqT9nr+m0+L6W57nVgd
+	aoKkO584ECaxB2xZe8rv3S/GRa5zsmDqIRjddW3TrHKiT2y7bsbQnGu+
+X-Gm-Gg: ATEYQzze6+SGqncooFZYCbUOdzSSzDpOjEek0p2AOJ0m810cHKxPJKEeNd4JikuhLcN
+	QKfxSRr3EwrjMnjHilBUJYBU6trsEtajfzwUUlpA9hcAI1slO+K8hG4INRg4iBUIzQ4BpfkNTtq
+	z4BYhJDybPSBN9+D88VrDiq/9nm1MjxIewaLvsLy0t/96fPWcRgHJmrgoK71BGvG4nueNkMeg8l
+	eYansLi7O1MmnIXwXFtZ0GAlKRzx2qP1Dj49aKKTd/DInr89VLFe6KJP8nCE/LsUXPN1XzsTxVu
+	OLZmeKE0MvbiFsc9CNb44As9EVLZpg5ajF/FtJBrnqbvsLkCGXAIPdSIQIy/i/NYtLK/c+F3r13
+	Ro7Hi30MCikoQMvT63dnGrtngSeWEWsdqYlw6HCfGRueKlpaf2XF+F40VH3bd0VdW+xyjQt2fik
+	9Q794QTkbikcpX4iq1fUPYsE94kLVkYzbMYBVwkuxGvNA=
+X-Received: by 2002:a17:906:9fc8:b0:b88:4c99:bc0e with SMTP id a640c23a62f3a-b93763d2329mr153686166b.26.1772190336989;
+        Fri, 27 Feb 2026 03:05:36 -0800 (PST)
+Received: from foxbook (bfj19.neoplus.adsl.tpnet.pl. [83.28.47.19])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-65fac06dc16sm1199582a12.23.2026.02.27.03.05.34
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Fri, 27 Feb 2026 03:05:36 -0800 (PST)
+Date: Fri, 27 Feb 2026 12:05:30 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Dayu Jiang
+ <jiangdayu@xiaomi.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>, Longfang Liu
+ <liulongfang@huawei.com>, "linux-usb@vger.kernel.org"
+ <linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, yudongbin <yudongbin@xiaomi.com>, guhuinan
+ <guhuinan@xiaomi.com>, chenyu45 <chenyu45@xiaomi.com>, mahongwei3
+ <mahongwei3@xiaomi.com>, Niklas Neronin <niklas.neronin@linux.intel.com>
+Subject: Re: [PATCH] usb: xhci: add xhci_halt() for HCE Handling
+Message-ID: <20260227120530.13395d2f.michal.pecio@gmail.com>
+In-Reply-To: <9113319a-b82c-42c7-ba1a-19113a5edb80@linux.intel.com>
+References: <20260127110422.306711-1-jiangdayu@xiaomi.com>
+	<2026012708-liability-sincere-5ed4@gregkh>
+	<aXnNcQa5Ooq2wIX2@oa-jiangdayu.localdomain>
+	<2026012857-deprive-putdown-0ee8@gregkh>
+	<aaAR5VOtnMhvoCem@oa-jiangdayu.localdomain>
+	<871991ab-6c8f-47d4-a5b4-b65751750e71@linux.intel.com>
+	<20260226181715.ofgjiq3iq7d7dx6y@synopsys.com>
+	<9113319a-b82c-42c7-ba1a-19113a5edb80@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,120 +106,64 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Bm-Milter-Handled: 166a2dfb-2e12-4590-8fa5-72e30323519f
-X-Bm-Transport-Timestamp: 1772190276911
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.46 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33779-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_THREE(0.00)[3];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	HAS_ORG_HEADER(0.00)[];
-	DMARC_NA(0.00)[lauterbach.com];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	REDIRECTOR_URL(0.00)[urldefense.com];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ingo.rohloff@lauterbach.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	TO_DN_EQ_ADDR_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33780-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	R_DKIM_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,urldefense.com:url,lauterbach.com:url,lauterbach.com:email]
-X-Rspamd-Queue-Id: 915D71B6570
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,usbcmd.run:url]
+X-Rspamd-Queue-Id: 8CB051B6578
 X-Rspamd-Action: no action
 
-On Fri, 27 Feb 2026 00:20:10 +0000
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
-> On Thu, Feb 26, 2026, Thinh Nguyen wrote:
-> > On Thu, Feb 26, 2026, Ingo Rohloff wrote:  
-> > > On Thu, 26 Feb 2026 11:51:27 +0100
-> > > Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> > >   
-> > > > On 25/02/2026 14:03, Ingo Rohloff wrote:  
-> > > > > The Microchip USB3340x ULPI PHY requires a delay when switching
-> > > > > to the high-speed transmitter. See:
-> > > > >     https://urldefense.com/v3/__http://ww1.microchip.com/downloads/en/DeviceDoc/80000645A.pdf__;!!A4F2R9G_pg!YRzZkLTZr5Bhh57FiXmyq7e4wVPHUbXZdgH3a627O2kbzpOTPiw_1MKGc_zD5cr8_Y-r1h5XvyFL9c7YRNObAl-lmUNgSuU$ 
-> > > > >     Module 2 "Device Enumeration Failure with Link IP Systems"
-> > > > >  
-> > > > 
-> > > > So that's deducible from the compatible and you do not need this
-> > > > property at all?
-> > > >   
-> > >   
-> 
-> After reading Ingo's comment again, I don't think we can simply deduct
-> whether this property is needed from just the Xilinx dwc3 compatible.
-> I think this one may need its own devicetree property.
+On Fri, 27 Feb 2026 11:43:45 +0200, Mathias Nyman wrote:
+> On 2/26/26 20:17, Thinh Nguyen wrote:
+> > The controller is halted if there's an error like HCE. It's odd to
+> > try to "halt" it again. Not sure how this will impact for other
+> > controllers.
+> The host is messed up at this point, and we are not recovering it.
+> I don't think there is any harm in a manual halt at this stage.
 
-Krzystof gave me another idea though:
-In drivers/usb/dwc3/ulpi.c the dwc3 code will call dwc3_ulpi_init(),
-if the DWC3 controller is connected via ULPI to an USB ULPI PHY.
+Specifically, calling xhci_halt() clears the USBCMD.Run flag and
+all USBCMD interrupt enable flags. Seems relatively harmless. Clearing
+USBCMD.Run would be the first step of resetting the HC anyway, so the
+HW should expect it to happen afetr reporting HCE.
 
-dwc3_ulpi_init() will call ulpi_register_interface(), which 
-(under the right circumstances) will call ulpi_read_id().
+In case of HSE the HW should clear the Run bit by itself (4.10.2.6),
+but no such requirement seems to exist for HCE (4.24.1).
 
-At this point in time it would be easy to use
-dwc3_ulpi_read()/dwc3_ulpi_write() to read out the
-  USB ULPI PHY VendorID/ProductID
-by mimicking the behavior of ulpi_read_id() from drivers/usb/common/ulpi.c
+The call also sets XHCI_STATE_HALTED and CMD_RING_STATE_STOPPED flags,
+which helps with recovering stuck URBs. When class drivers time out
+and unlink them, the URBs are given back instantly without drama.
 
-Based on the VendorID/ProductID we then could set
-   dwc3->enable_usb2_transceiver_delay
-if necessary.
+I just tested the HSE case where xhci_halt() is already being called
+and it worked for me. If I remove xhci_halt() then the driver tries to
+issue Stop Endpoint commands, times out and calls hc_died(). Messy.
+I suspect that the same happened with HCE before this patch.
 
-This approach means:
-* No new device tree property necessary.
-* Code autodetects the problematic combo of DWC3 + USB3340 ULPI PHY
-  and applies the necessary settings.
-* Will work for any combination of DWC3 IP + USB3340 ULPI PHY,
-  and not only for the  Xilinx specific DWC3 implementation.
-* Future proof: If there ever is another ULPI PHY, which needs special
-  settings in the DWC3 controller, you could then just extend the
-  code to detect this new ULPI PHY and apply the necessary settings.
-
-Caveat:
-You have the code to read out the ULPI PHY VendorID/ProductID twice:
-* Once in ulpi_read_id() from drivers/usb/common/ulpi.c
-* Once in drivers/usb/dwc3/ulpi.c
-
-I do not see any easy way to get access to the VendorID/ProductID
-from ulpi_read_id(); in particular because right now this function
-is only called if the ULPI PHY has a corresponding node in the
-device tree, which currently is not the case.
-Meaning right now ulpi_read_id() is NOT called.
-
-with best regards
-  Ingo
-
--- 
-
-
--------------------------------------------------------------------------
-Dipl.-Inform.
-Ingo ROHLOFF
-Senior Staff Embedded Systems Engineering
-phone +49 8102 9876-142 - ingo.rohloff@lauterbach.com
-
-Lauterbach Engineering GmbH & Co. KG
-Altlaufstrasse 40, 85635 Hoehenkirchen-Siegertsbrunn, GERMANY
-www.lauterbach.com
-
-Registered Office: Hoehenkirchen-Siegertsbrunn, Germany,
-Local Court: Munich, HRA 87406, VAT ID: DE246770537,
-Managing Directors: Lothar Lauterbach, Stephan Lauterbach, Dr. Thomas
-Ullmann
-
--------------------------------------------------------------------------
+Regards,
+Michal
 
