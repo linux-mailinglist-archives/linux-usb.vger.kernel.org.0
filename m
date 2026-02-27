@@ -1,230 +1,252 @@
-Return-Path: <linux-usb+bounces-33781-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33783-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sEhmLWZ/oWkUtgQAu9opvQ
-	(envelope-from <linux-usb+bounces-33781-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 12:26:30 +0100
+	id iLWXDIOKoWnAuAQAu9opvQ
+	(envelope-from <linux-usb+bounces-33783-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 13:13:55 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C61B1B68A0
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 12:26:30 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 114DD1B6FAC
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 13:13:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 34242301ECD2
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 11:22:32 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 1EF1F3031235
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 12:13:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB9583EF0C3;
-	Fri, 27 Feb 2026 11:22:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77BFA3EDAD8;
+	Fri, 27 Feb 2026 12:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="QaUCd0vR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312643A1D0A
-	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 11:22:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C651E3A6413
+	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 12:13:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772191348; cv=none; b=hk7gGItY/pNWnt26p/NJUnuchBvVcnOaQ8va/j72sIgHRfQ1r283GCJ40iLlTFPkRAxvvrymqnCxw++2TTp2EMt9g6XNKw89JZKZ/gfToqJXPy9E/0WfnV8/kQ2//ICkYz8AC3nlvoI5zrmu+Hd8s9mR2lJrRH13M/lu8cGzzY8=
+	t=1772194431; cv=none; b=lNf4FF1vZHxQLddDrouHWjd1Bs7mIcWdG9YvT1ko2nwQqTX7D9+UPdsjkJPhZgseNao+3dS98CmRKOF/ShIIeDgbUSkHo+yRDUj8pcVyUQe+bUiNFIBdcUkfeK4d0TBR8UQzEu4EKiwWBtWGIbl5wCDetkxGI6/byJoG8ba3r4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772191348; c=relaxed/simple;
-	bh=DlLJLaL/ZKcggPk8WToHyIMnlav4U4KgOA3R6MQ4WNI=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=TryqRGyewSN0Pt5MHULDsjn2lNYsZkrj9/NrxTCs5L/S0HCSfWV63aoj8iUCjEHogWhp+f4ZLtpvQe1wA7f6JTLjn8GEEIdiqGNmzQT1VYb90w+lp61FeLFLkiumO5FFSh3UjMY+9LsdoqwNpdhb++bh+W4OSwsRfedzHg1h7Vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-45f07dad7a8so8562863b6e.0
-        for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 03:22:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772191346; x=1772796146;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wOpbA34JuaoEVyB7jjFGI/wMKC491jZlDU4MLpMCtMM=;
-        b=QG8TMFVvz27l+/TsCh4ukkiDKooy1FhVboOlic6fnd1+0fxe4ys/JB1GG+pNvE8DFy
-         4w3xRaSKIGrggsE95ckRc5r1tc4Dym5WhWfnuYOtlT528xXG3bSNKS3Qhbwd76Fhbga6
-         ZB1myizAI/azAJ1uIAC41pbF5reKkYHuHvhFLR8plNZ540LkVKYbX/+XMhNFv/bhm7JE
-         7yTrhGPIpzF/etV/I7jgFDyLrXCLq+SCnui7eVr+7tS0iadac1i4LuVNX/nnkdybYByY
-         Wpe4QWGcZw/FIx7SvRQLAZT7hFjexisaJheHm9pS2Iix1cg3b5uZjJRXrjQYDMzj+NL+
-         tbIg==
-X-Forwarded-Encrypted: i=1; AJvYcCWL+77JNm1a4RgGHgvYc47GgA0aLralsoDI6jUsNb/HpfdxiqAQ70mHJEAmLbBO1s39EYx9mfT5h0Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZ+TDiDpe1gpHCCGiA8F8fWiVSPtbi+kkIux8IuKCPZWqllWWi
-	4+PV815NcRz4R0X5bmnphQcqNmevAhW7c+L3Ey7ge4wNL33XthqLpY8xoBmkpEcpOMgN096pKHE
-	lGW48XDOQ9yBLPfiMPt7bHpfBHn3dTAw/3pe87Dv55ZQWnpzI7Qzb8rWN5Xw=
+	s=arc-20240116; t=1772194431; c=relaxed/simple;
+	bh=fuw5TqW0uCYgMUPW4G72GmVyI0XkEmW5jQki0ebvHN4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=K0Gj4SNOpsEqcH8L+XTBGOuixzlomQ9m1gPlDnhxxv8VlsTU/tLB7EDNXIwErHJrY/1vVcLMfM4+nQZfTCofFVtafotJAEWdLD+sli/xkIfpdhJhU054TLtKiiWxWUkM1BjhT6Njq4MosNlcRVOaubdQ2p/9Rnoj7ff/34C1sG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=QaUCd0vR; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20260227121341epoutp04f50d57144bfe605747441d714728a357~YGW-KePdO1403814038epoutp04G
+	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 12:13:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20260227121341epoutp04f50d57144bfe605747441d714728a357~YGW-KePdO1403814038epoutp04G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1772194421;
+	bh=GmKOooTu6Yy+DuO6Xz9QOh3O4n8UAd3CYEIsndynAZg=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=QaUCd0vRtlDCk4WSwsBxqgjeqvN7ESPr2DOFRF4xuBMWZWcbG19o2iFJlF9liUrLe
+	 2rKESwXImUJb/bD2TuLDD5NwzourGu5rW7zBsLvwmRNEF/m+yoqkc/C2TMmUPnOj8g
+	 C4LEVDStHGTbP2PGTX2+Haq9Q0k6AS1sWPEV1UOU=
+Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
+	20260227121340epcas5p111092699baab5569f97fae5359f8ea41~YGW_EZj6b1088610886epcas5p1V;
+	Fri, 27 Feb 2026 12:13:40 +0000 (GMT)
+Received: from epcas5p3.samsung.com (unknown [182.195.38.94]) by
+	epsnrtp03.localdomain (Postfix) with ESMTP id 4fMnKv188tz3hhT3; Fri, 27 Feb
+	2026 12:13:39 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20260227121338epcas5p4baebb406db37f07223545b2f85751bf2~YGW8kxQ2F0654806548epcas5p41;
+	Fri, 27 Feb 2026 12:13:38 +0000 (GMT)
+Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20260227121336epsmtip18c4d77b7d34df0d5c550292966be153f~YGW6Wvejz1055710557epsmtip1z;
+	Fri, 27 Feb 2026 12:13:36 +0000 (GMT)
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, akash.m5@samsung.com,
+	hongpooh.kim@samsung.com, eomji.oh@samsung.com, h10.kim@samsung.com,
+	shijie.cai@samsung.com, alim.akhtar@samsung.com, muhammed.ali@samsung.com,
+	thiagu.r@samsung.com, pritam.sutar@samsung.com, Selvarasu Ganesan
+	<selvarasu.g@samsung.com>, stable@vger.kernel.org
+Subject: [PATCH v3] usb: dwc3: gadget: Prevent EP resource conflicts during
+ StartTransfer
+Date: Fri, 27 Feb 2026 17:42:33 +0530
+Message-ID: <20260227121236.963-1-selvarasu.g@samsung.com>
+X-Mailer: git-send-email 2.46.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:2908:b0:679:e6eb:816 with SMTP id
- 006d021491bc7-679faf48137mr1528326eaf.60.1772191346216; Fri, 27 Feb 2026
- 03:22:26 -0800 (PST)
-Date: Fri, 27 Feb 2026 03:22:26 -0800
-In-Reply-To: <689daf88.050a0220.2d37a5.0001.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69a17e72.050a0220.305b49.00de.GAE@google.com>
-Subject: Re: [syzbot] [libertas?] INFO: task hung in lbs_remove_card
-From: syzbot <syzbot+c99d17aa44dbdba16ad2@syzkaller.appspotmail.com>
-To: libertas-dev@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20260227121338epcas5p4baebb406db37f07223545b2f85751bf2
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20260227121338epcas5p4baebb406db37f07223545b2f85751bf2
+References: <CGME20260227121338epcas5p4baebb406db37f07223545b2f85751bf2@epcas5p4.samsung.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.36 / 15.00];
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=f1500201919951cc];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
+	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-33783-lists,linux-usb=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,samsung.com:mid,samsung.com:dkim,samsung.com:email];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33781-lists,linux-usb=lfdr.de,c99d17aa44dbdba16ad2];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	SUBJECT_HAS_QUESTION(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[samsung.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[selvarasu.g@samsung.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,appspotmail.com:email,storage.googleapis.com:url,syzkaller.appspot.com:url]
-X-Rspamd-Queue-Id: 5C61B1B68A0
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[8]
+X-Rspamd-Queue-Id: 114DD1B6FAC
 X-Rspamd-Action: no action
 
-syzbot has found a reproducer for the following issue on:
+The below “No resource for ep” warning appears when a StartTransfer
+command is issued for bulk or interrupt endpoints in
+`dwc3_gadget_ep_enable` while a previous StartTransfer on the same
+endpoint is still in progress. The gadget functions drivers can invoke
+`usb_ep_enable` (which triggers a new StartTransfer command) before the
+earlier transfer has completed. Because the previous StartTransfer is
+still active, `dwc3_gadget_ep_disable` can skip the required
+`EndTransfer` due to `DWC3_EP_DELAY_STOP`, leading to the endpoint
+resources are busy for previous StartTransfer and warning ("No resource
+for ep") from dwc3 driver.
 
-HEAD commit:    bb375c251ab4 dt-bindings: usb: st,st-ohci-300x: convert to..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1141755a580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f1500201919951cc
-dashboard link: https://syzkaller.appspot.com/bug?extid=c99d17aa44dbdba16ad2
-compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1191555a580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=114a15c6580000
+Additionally, a race condition exists between dwc3_gadget_ep_disable()
+and dwc3_gadget_ep_queue() when manipulating dep->flags. When
+dwc3_gadget_ep_disable() calls dwc3_gadget_giveback(), the dwc->lock is
+temporarily released. If dwc3_gadget_ep_queue() runs in that window, it
+may set the DWC3_EP_TRANSFER_STARTED flag as part of
+dwc3_send_gadget_ep_cmd(). When ep_disable resumes, it unconditionally
+clears all flags except those explicitly masked, potentially clearing
+DWC3_EP_TRANSFER_STARTED even though a new transfer has started. This
+leads to "No resource for ep" warnings on subsequent StartTransfer
+attempts.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2475c3172471/disk-bb375c25.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/30449aa672dd/vmlinux-bb375c25.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/46d3937d1c16/bzImage-bb375c25.xz
+The underlying framework issue is that usb_ep_disable() is expected to
+complete pending requests before returning, but is allowed to be called
+from interrupt context where sleeping to wait for completion is not
+possible.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c99d17aa44dbdba16ad2@syzkaller.appspotmail.com
+As temporary workarounds for this framework limitation:
 
-INFO: task kworker/0:1:10 blocked for more than 143 seconds.
-      Not tainted syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/0:1     state:D stack:26840 pid:10    tgid:10    ppid:2      task_flags:0x4288060 flags:0x00080000
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5295 [inline]
- __schedule+0xeb1/0x41f0 kernel/sched/core.c:6907
- __schedule_loop kernel/sched/core.c:6989 [inline]
- schedule+0xdd/0x390 kernel/sched/core.c:7004
- lbs_wait_for_firmware_load+0x11e/0x1e0 drivers/net/wireless/marvell/libertas/firmware.c:116
- lbs_remove_card+0x84/0x390 drivers/net/wireless/marvell/libertas/main.c:913
- if_usb_disconnect+0xaf/0x2e0 drivers/net/wireless/marvell/libertas/if_usb.c:316
- usb_unbind_interface+0x1dd/0x9e0 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:573 [inline]
- device_remove+0x12a/0x180 drivers/base/dd.c:565
- __device_release_driver drivers/base/dd.c:1284 [inline]
- device_release_driver_internal+0x42e/0x600 drivers/base/dd.c:1307
- bus_remove_device+0x22f/0x440 drivers/base/bus.c:616
- device_del+0x376/0x9b0 drivers/base/core.c:3878
- usb_disable_device+0x367/0x810 drivers/usb/core/message.c:1418
- usb_disconnect+0x2e2/0x9a0 drivers/usb/core/hub.c:2345
- hub_port_connect drivers/usb/core/hub.c:5407 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
- port_event drivers/usb/core/hub.c:5871 [inline]
- hub_event+0x1d0c/0x4af0 drivers/usb/core/hub.c:5953
- process_one_work+0x9d7/0x1920 kernel/workqueue.c:3275
- process_scheduled_works kernel/workqueue.c:3358 [inline]
- worker_thread+0x5da/0xe40 kernel/workqueue.c:3439
- kthread+0x370/0x450 kernel/kthread.c:467
- ret_from_fork+0x6c3/0xcb0 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
+1. In __dwc3_gadget_ep_enable(), add a check for the
+   DWC3_EP_TRANSFER_STARTED flag before issuing a new StartTransfer.
+   This prevents a second StartTransfer on an already busy endpoint,
+   eliminating the resource conflict.
 
-Showing all locks held in the system:
-5 locks held by kworker/0:1/10:
- #0: ffff8881056afd48 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x1287/0x1920 kernel/workqueue.c:3250
- #1: ffffc900000afd18 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x93c/0x1920 kernel/workqueue.c:3251
- #2: ffff88810b795198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
- #2: ffff88810b795198 (&dev->mutex){....}-{4:4}, at: hub_event+0x1bd/0x4af0 drivers/usb/core/hub.c:5899
- #3: ffff88811c2c3198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
- #3: ffff88811c2c3198 (&dev->mutex){....}-{4:4}, at: usb_disconnect+0x10a/0x9a0 drivers/usb/core/hub.c:2336
- #4: ffff88811bcbf160 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
- #4: ffff88811bcbf160 (&dev->mutex){....}-{4:4}, at: __device_driver_lock drivers/base/dd.c:1106 [inline]
- #4: ffff88811bcbf160 (&dev->mutex){....}-{4:4}, at: device_release_driver_internal+0xaa/0x600 drivers/base/dd.c:1304
-2 locks held by kworker/1:0/23:
- #0: ffff88810006b548 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x1287/0x1920 kernel/workqueue.c:3250
- #1: ffffc9000018fd18 ((work_completion)(&fw_work->work)){+.+.}-{0:0}, at: process_one_work+0x93c/0x1920 kernel/workqueue.c:3251
-1 lock held by khungtaskd/30:
- #0: ffffffff896e05a0 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:312 [inline]
- #0: ffffffff896e05a0 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:850 [inline]
- #0: ffffffff896e05a0 (rcu_read_lock){....}-{1:3}, at: debug_show_all_locks+0x3d/0x184 kernel/locking/lockdep.c:6775
-2 locks held by getty/2917:
- #0: ffff888115dd90a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x24/0x80 drivers/tty/tty_ldisc.c:243
- #1: ffffc900000432f0 (&ldata->atomic_read_lock){+.+.}-{4:4}, at: n_tty_read+0x419/0x1500 drivers/tty/n_tty.c:2211
+2. In __dwc3_gadget_ep_disable(), preserve the DWC3_EP_TRANSFER_STARTED
+   flag when masking dep->flags if it is actually set, preventing the
+   race with dwc3_gadget_ep_queue() from corrupting the flag state.
 
-=============================================
+These changes eliminate the "No resource for ep" warnings and potential
+kernel panics caused by panic_on_warn.
 
-NMI backtrace for cpu 0
-CPU: 0 UID: 0 PID: 30 Comm: khungtaskd Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x100/0x190 lib/dump_stack.c:120
- nmi_cpu_backtrace.cold+0x12d/0x151 lib/nmi_backtrace.c:113
- nmi_trigger_cpumask_backtrace+0x1d7/0x230 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:161 [inline]
- __sys_info lib/sys_info.c:157 [inline]
- sys_info+0x141/0x190 lib/sys_info.c:165
- check_hung_uninterruptible_tasks kernel/hung_task.c:346 [inline]
- watchdog+0xd25/0x1050 kernel/hung_task.c:515
- kthread+0x370/0x450 kernel/kthread.c:467
- ret_from_fork+0x6c3/0xcb0 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 UID: 0 PID: 0 Comm: swapper/1 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
-RIP: 0010:pv_native_safe_halt+0xf/0x20 arch/x86/kernel/paravirt.c:63
-Code: ae b1 01 e9 13 e8 02 00 0f 1f 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 66 90 0f 00 2d d3 e1 1d 00 fb f4 <c3> cc cc cc cc 66 2e 0f 1f 84 00 00 00 00 00 66 90 90 90 90 90 90
-RSP: 0018:ffffc9000013fe00 EFLAGS: 00000242
-RAX: 000000000007f00b RBX: ffff8881022a1d00 RCX: ffffffff876898d5
-RDX: 0000000000000000 RSI: ffffffff8901db96 RDI: ffffffff87afa420
-RBP: 0000000000000001 R08: 0000000000000001 R09: ffffed103eae6725
-R10: ffff8881f573392b R11: 0000000000000000 R12: ffffed10204543a0
-R13: 0000000000000001 R14: ffffffff8aefe2d0 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8882687d3000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f983bef5900 CR3: 0000000116d22000 CR4: 00000000003506f0
-Call Trace:
- <TASK>
- arch_safe_halt arch/x86/include/asm/paravirt.h:73 [inline]
- default_idle+0x9/0x10 arch/x86/kernel/process.c:767
- default_idle_call+0x6c/0xb0 kernel/sched/idle.c:122
- cpuidle_idle_call kernel/sched/idle.c:191 [inline]
- do_idle+0x35b/0x4b0 kernel/sched/idle.c:332
- cpu_startup_entry+0x4f/0x60 kernel/sched/idle.c:430
- start_secondary+0x21d/0x2d0 arch/x86/kernel/smpboot.c:312
- common_startup_64+0x13e/0x148
- </TASK>
+dwc3 13200000.dwc3: No resource for ep1out
+WARNING: CPU: 0 PID: 700 at drivers/usb/dwc3/gadget.c:398 dwc3_send_gadget_ep_cmd+0x2f8/0x76c
+Call trace:
+dwc3_send_gadget_ep_cmd+0x2f8/0x76c
+__dwc3_gadget_ep_enable+0x490/0x7c0
+dwc3_gadget_ep_enable+0x6c/0xe4
+usb_ep_enable+0x5c/0x15c
+mp_eth_stop+0xd4/0x11c
+__dev_close_many+0x160/0x1c8
+__dev_change_flags+0xfc/0x220
+dev_change_flags+0x24/0x70
+devinet_ioctl+0x434/0x524
+inet_ioctl+0xa8/0x224
+sock_do_ioctl+0x74/0x128
+sock_ioctl+0x3bc/0x468
+__arm64_sys_ioctl+0xa8/0xe4
+invoke_syscall+0x58/0x10c
+el0_svc_common+0xa8/0xdc
+do_el0_svc+0x1c/0x28
+el0_svc+0x38/0x88
+el0t_64_sync_handler+0x70/0xbc
+el0t_64_sync+0x1a8/0x1ac
 
-
+Cc: stable@vger.kernel.org
+Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+
+Note: No Fixes tag is added because this is a workaround for the
+gadget framework issue where the gadget framework calls usb_ep_disable()
+in interrupt context without ensuring endpoint flushing completes.
+A proper fix requires refactoring the framework to make sure
+usb_ep_disable is invoked in process context.
+
+Changes in v3:
+ - Revised the commit message to detail the real gadget framework issue
+   pointed out by the reviewer.
+ - Merged the two fixes for the same ep wringing into one patch.
+Link to v2: https://lore.kernel.org/linux-usb/20251117155920.643-1-selvarasu.g@samsung.com/
+
+Changes in v2:
+- Removed change-id.
+- Updated commit message.
+Link to v1: https://lore.kernel.org/linux-usb/20251117152812.622-1-selvarasu.g@samsung.com/
+---
+ drivers/usb/dwc3/gadget.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 0a688904ce8c5..3af1bbfe3d92b 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -971,8 +971,9 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
+ 	 * Issue StartTransfer here with no-op TRB so we can always rely on No
+ 	 * Response Update Transfer command.
+ 	 */
+-	if (usb_endpoint_xfer_bulk(desc) ||
+-			usb_endpoint_xfer_int(desc)) {
++	if ((usb_endpoint_xfer_bulk(desc) ||
++			usb_endpoint_xfer_int(desc)) &&
++			!(dep->flags & DWC3_EP_TRANSFER_STARTED)) {
+ 		struct dwc3_gadget_ep_cmd_params params;
+ 		struct dwc3_trb	*trb;
+ 		dma_addr_t trb_dma;
+@@ -1096,6 +1097,23 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
+ 	 */
+ 	if (dep->flags & DWC3_EP_DELAY_STOP)
+ 		mask |= (DWC3_EP_DELAY_STOP | DWC3_EP_TRANSFER_STARTED);
++
++	/*
++	 * When dwc3_gadget_ep_disable() calls dwc3_gadget_giveback(),
++	 * the dwc->lock is temporarily released. If dwc3_gadget_ep_queue()
++	 * runs in that window it may set the DWC3_EP_TRANSFER_STARTED flag as
++	 * part of dwc3_send_gadget_ep_cmd. The original code cleared the flag
++	 * unconditionally in the mask operation, which could overwrite the
++	 * concurrent modification.
++	 *
++	 * As a workaround for the interrupt context constraint where we cannot
++	 * wait for endpoint flushing, preserve the DWC3_EP_TRANSFER_STARTED
++	 * flag if it is set, avoiding resource conflicts until the framework
++	 * is fixed to properly synchronize endpoint lifecycle management.
++	 */
++	if (dep->flags & DWC3_EP_TRANSFER_STARTED)
++		mask |= DWC3_EP_TRANSFER_STARTED;
++
+ 	dep->flags &= mask;
+ 
+ 	/* Clear out the ep descriptors for non-ep0 */
+-- 
+2.34.1
+
 
