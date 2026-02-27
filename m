@@ -1,221 +1,230 @@
-Return-Path: <linux-usb+bounces-33782-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33781-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0PtmBJyGoWlOuAQAu9opvQ
-	(envelope-from <linux-usb+bounces-33782-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 12:57:16 +0100
+	id sEhmLWZ/oWkUtgQAu9opvQ
+	(envelope-from <linux-usb+bounces-33781-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 12:26:30 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83B9B1B6D63
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 12:57:15 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C61B1B68A0
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 12:26:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7080730312E5
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 11:57:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 34242301ECD2
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 11:22:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 676C2346772;
-	Fri, 27 Feb 2026 11:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b="O46Yx7aw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB9583EF0C3;
+	Fri, 27 Feb 2026 11:22:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11020108.outbound.protection.outlook.com [52.101.201.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA084329E7D;
-	Fri, 27 Feb 2026 11:57:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.108
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772193433; cv=fail; b=e1H3SInjIymBr4WOag1sclIFnIKbtPrIhsCNwoJbVwZTdF99NT+w9n5KVgU8RvLc1+b741+joFQVCmuVOdPzOV9KyA/CcjrDrPit8BrP9EzianOuN77Ygl/vEZwkYR2QwZGhgSGpPVGEugxAVciL1/9sJV8iyol8cSjlWPn++6o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772193433; c=relaxed/simple;
-	bh=M4hqeLBRQm8+fSSaq+AOsl+ZtZXgWZWx7BAgleS7w9A=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=OP7ZTjRFLVq9E+yBuxQQtuAcHj5/i5+f/VvDczpUJYIzPUgq9nU6Z1ll/fGWNiSMvUtMSMqJ1BrIxhFRLz0dgMydNRFQs7MqOc7z9q6D+06Z+AJS4JHBHKlKW0uq4D8/2QuUnlIw8E1g1/cUN3zcNrn801WS26UIQE9YvvSRPY4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com; spf=pass smtp.mailfrom=inmusicbrands.com; dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b=O46Yx7aw; arc=fail smtp.client-ip=52.101.201.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inmusicbrands.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KW0b1SSJksi4VnYwJzvel/jS7/hTa/ctfdpTkDjXBp0N1+td3/A+EvMhCnM7GEtnoJPKB0NUDUtaT2fsuxuUcWP53NIOY+JjtW5KDztWn7QWzx+7jS91sVGCdWB+7DE+z+hk0Jg029fV482oX/mXw0eaS/ZOKLb8IiXd8AkJS6l4+ib7HC3ja/4ctArcCbQoFml3wUoc5NKZJB/O9MCJK4sGiPyfoIsdKTPZcQ+5bUXVS/4Jw3WE4bvW/deNbKcZ5Rm4XozPH8i+EM8chU0J73Tp8wDmtk+/2koVrTPbGrJzTsYQmzVx07BnOWS02nTjAAPC/pqdSW5jAjuvbnA0Ig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KeAb0QPcTCZdObxROPg2cEXk1lrkyggbmuFh68vjSbc=;
- b=CofpMTqpidHkrsI3aEZEJcb3WcRxJS++kmuIX7so+p2VQGtfx/ap2XqBdS4Boie1CZdqte2NXe3Bw48EnND+gzyvIMRipTh+1jAwY0rQ0gUMQNhwqqzD0UaSNMkBV8rPbGqyOeGaKF+t8s1AWb28hFYbMZqUsulvau8scoHESkFcj1Dq6KQ/jPTxFSy02H/7btVw46sERJad/HJOD8kilEJDidgm8UFHpixaLdhepMqPpN9zT9ufhHi342/8oWtD+vosykBJwF1GGjg3zCJzfoOQ+f9OCmnTWEjKfr1mLYG8RiT+A2Thn4xBig0JtawFf+dCFMjfqB2YRfnKxr8Z9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=inmusicbrands.com; dmarc=pass action=none
- header.from=inmusicbrands.com; dkim=pass header.d=inmusicbrands.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inmusicbrands.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KeAb0QPcTCZdObxROPg2cEXk1lrkyggbmuFh68vjSbc=;
- b=O46Yx7awFaxhyGuBF8PFUu3jxRFJYhlysfNgXaAigoWYrpGFO5d1awCqdTzV5+JLtyS9nTBCqCexePAHNX4QnYLYONBpRVC+BhzJtxJvjoQcVumhSTrqIWLh9A/EeUPOZGYcuuosSd+Yd8P983WHHYcgGahyUY37iwr9GPJT71c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=inmusicbrands.com;
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com (2603:10b6:303:1bd::18)
- by SA6PR08MB10522.namprd08.prod.outlook.com (2603:10b6:806:446::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.14; Fri, 27 Feb
- 2026 11:57:09 +0000
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::c887:c930:70aa:b156]) by MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::c887:c930:70aa:b156%6]) with mapi id 15.20.9654.014; Fri, 27 Feb 2026
- 11:57:09 +0000
-From: John Keeping <jkeeping@inmusicbrands.com>
-To: linux-usb@vger.kernel.org
-Cc: John Keeping <jkeeping@inmusicbrands.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Yuhao Jiang <danisjiang@gmail.com>,
-	Ben Hoff <hoff.benjamin.k@gmail.com>,
-	Michael Kelley <mhklinux@outlook.com>,
-	Terry Junge <linuxhid@cosmicgizmosystems.com>,
-	William Wu <william.wu@rock-chips.com>,
-	Peter Korsgaard <peter@korsgaard.com>,
-	Kees Cook <kees@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: f_hid: fix SuperSpeed descriptors
-Date: Fri, 27 Feb 2026 11:15:39 +0000
-Message-ID: <20260227111540.431521-1-jkeeping@inmusicbrands.com>
-X-Mailer: git-send-email 2.53.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P265CA0176.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:312::16) To MW4PR08MB8282.namprd08.prod.outlook.com
- (2603:10b6:303:1bd::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312643A1D0A
+	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 11:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.199
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772191348; cv=none; b=hk7gGItY/pNWnt26p/NJUnuchBvVcnOaQ8va/j72sIgHRfQ1r283GCJ40iLlTFPkRAxvvrymqnCxw++2TTp2EMt9g6XNKw89JZKZ/gfToqJXPy9E/0WfnV8/kQ2//ICkYz8AC3nlvoI5zrmu+Hd8s9mR2lJrRH13M/lu8cGzzY8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772191348; c=relaxed/simple;
+	bh=DlLJLaL/ZKcggPk8WToHyIMnlav4U4KgOA3R6MQ4WNI=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=TryqRGyewSN0Pt5MHULDsjn2lNYsZkrj9/NrxTCs5L/S0HCSfWV63aoj8iUCjEHogWhp+f4ZLtpvQe1wA7f6JTLjn8GEEIdiqGNmzQT1VYb90w+lp61FeLFLkiumO5FFSh3UjMY+9LsdoqwNpdhb++bh+W4OSwsRfedzHg1h7Vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-45f07dad7a8so8562863b6e.0
+        for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 03:22:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772191346; x=1772796146;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wOpbA34JuaoEVyB7jjFGI/wMKC491jZlDU4MLpMCtMM=;
+        b=QG8TMFVvz27l+/TsCh4ukkiDKooy1FhVboOlic6fnd1+0fxe4ys/JB1GG+pNvE8DFy
+         4w3xRaSKIGrggsE95ckRc5r1tc4Dym5WhWfnuYOtlT528xXG3bSNKS3Qhbwd76Fhbga6
+         ZB1myizAI/azAJ1uIAC41pbF5reKkYHuHvhFLR8plNZ540LkVKYbX/+XMhNFv/bhm7JE
+         7yTrhGPIpzF/etV/I7jgFDyLrXCLq+SCnui7eVr+7tS0iadac1i4LuVNX/nnkdybYByY
+         Wpe4QWGcZw/FIx7SvRQLAZT7hFjexisaJheHm9pS2Iix1cg3b5uZjJRXrjQYDMzj+NL+
+         tbIg==
+X-Forwarded-Encrypted: i=1; AJvYcCWL+77JNm1a4RgGHgvYc47GgA0aLralsoDI6jUsNb/HpfdxiqAQ70mHJEAmLbBO1s39EYx9mfT5h0Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZ+TDiDpe1gpHCCGiA8F8fWiVSPtbi+kkIux8IuKCPZWqllWWi
+	4+PV815NcRz4R0X5bmnphQcqNmevAhW7c+L3Ey7ge4wNL33XthqLpY8xoBmkpEcpOMgN096pKHE
+	lGW48XDOQ9yBLPfiMPt7bHpfBHn3dTAw/3pe87Dv55ZQWnpzI7Qzb8rWN5Xw=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR08MB8282:EE_|SA6PR08MB10522:EE_
-X-MS-Office365-Filtering-Correlation-Id: 29e8949a-1bee-4852-ecae-08de75f755be
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|376014|7416014|1800799024|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	sH+UBNceYiu+8c2GlY//pVbPNmmw9z42H3gi+f4RmP2MvIFaOb4YYry76wWaWsJTYBbijVas+5ILJn1h3DsrW9cZpC0vNId8lf8THzsLKalweHYhz9D20ccHlisj/jjLiU25WCXwGeagWtg8WLv7oCEnnDAB82Zf60ijEqxuNTdodPIqJfKfRmkOF09KCFR0zCrKXdbkqeelbxoCxvXGRWnkW0SMRvwgJifDqEbMd7eblT+2nnYgIqjDEfP34XeLlF9TjpTQ5vPLzpnW8k/S4L2cfxeIrSKEi7c6GxgV/imtqchHlHUvc4u5Z70HO22FrkPJ0HdKii6Z07orX2wXK2rzbvF/yuMADLqb/tJ+cY4gyBz24nJJwsgv7ACMAxoA+0rN48lTajTVLbhK8eKlCyWu2Sb+i+Mk1NeJANHhHPYijmVtUuw8Xk32QYpn+YRAoJAMjJM5DCvBC2v+McuESzUNWjdHNIXT8jQgEAuib9ZykNocsDLcJzJoFIaUbO5gNIdN8zMzeJEcOlTpdMXa+tdBiTKcdv/yfAVL9fHiG16Xcnej27JtStRNxJjlYNkkwKsdmyr9089NlGEB2rq92ZMabFu/wzqYx9V9Mv3yhMkd6PnZCPJl8tP/4tLMsSrpLnuDUI64GQplvtyxvLh9P+aJ6k945Bdtjt2G7cnPqCu33Fe8INNchlsVBiTDFPKbJqJk8ESjUDZNWTJaqEN6jl1ay3z0Wu2v2P3hK65NgAmOyRc4Y5JEiiLiOmtNNRajOyNBuSYM0469SzVWmS4NZdyB0sLxiBAVsWuchpBWhg4=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR08MB8282.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(7416014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?RPdfmWdOoBOZCUO/v8PtkSRZeQEWE3Z4McFiYv0GOCzENQg/ms4Bj6mSzjx0?=
- =?us-ascii?Q?u8O3odg0iIS1FLtIze8nm2WV1WoaNNewq1k9Nx+UOo1z7NoCIth1Qi2myKEu?=
- =?us-ascii?Q?pMg21si6v8BRx9XGmTEbdDXI2eJrFfWUzu+rkcD5jazZ1Gzx/xeURAnZolq7?=
- =?us-ascii?Q?SESD5I5+1kOIgaEwKRVKTpsSYj8Do+5TQyUD3l0phGPx4Rff2/hLFpu2EQDM?=
- =?us-ascii?Q?7IZ579G82oVdnwZ4wIPpTRpLtaeiVcAnEUyVkzY5HMCdllJE/PJGG587wQaN?=
- =?us-ascii?Q?G+NEsuHuliFtgb/jyyC0kdUQtQt/H+hY4EOsnVMzWtZyMwkGc2a+dXaxI4IS?=
- =?us-ascii?Q?dRl3YFRgGValjOs0FJojrZJSGkt7pFHIOlXv9osPm0ocDpbdzUz43Ioat1fX?=
- =?us-ascii?Q?drs30yY1/yZmZd69mzGkg9gtFsrVkrW0VCb/FEcDKveU0wco1+gN6glHHTfG?=
- =?us-ascii?Q?dVhh3Xl2bVc1gdOS/ssz2xL3hKc0l8WcUxDEhPn/6wKOEL0z8ThodmLCCRG6?=
- =?us-ascii?Q?jPT1yOLVktHIJRts8Y1D1KRHgI/VEB/TloN5IkvNrGrjpLHmmMS27as/ApB3?=
- =?us-ascii?Q?y1vDC5hHaY8CaJw/j+PfyHFxxJQYc91pUM0hsH13a4jccMrOxHV5W/d4CZmC?=
- =?us-ascii?Q?237EFOzPgyuh7LWyuYo9S9wnXOb5+iYRZrJhQPmY+h/8B+zkvp77L6a+3jqM?=
- =?us-ascii?Q?6yxX/UM3D/44NQjNmySAKKWZU91PJ4bzWYQ9d567YKH1BQsY9VZokUS/BE+k?=
- =?us-ascii?Q?HpOEToJ8hCWdUsI6lHVYHjUKtLABzyAkjKG1azn8X60iDdC9+0PD5tdsw8o8?=
- =?us-ascii?Q?Ge5nZwmWgbpipnAke1T4s+X6OSW3duSdBKJl6quwbkHy4BGFI/7T8roaOtaW?=
- =?us-ascii?Q?pjifdrYYkVCFQcg4BJp8yHDtAJPWci3aatOBPucLT2LmMG64YX0x1I2worHY?=
- =?us-ascii?Q?Akr5NcfIdSHBPdPKeK+tW6wMdeR8Oud07h859lpgW8AZ1GvPJC2d4rmETsB9?=
- =?us-ascii?Q?YFFfpSlc6vrMLMkKiaNWAf7adKeiIkvwxn5yoa076h7vztTwuLnKueYesVgi?=
- =?us-ascii?Q?sqgqi+QPAfUmQRp8z/iRZcSkE3WlU3DNlkqcLHiHvnmFY1dUk4aPufRUqm+Y?=
- =?us-ascii?Q?vuqDD2nuEpv/KgoYpjlXdUHf2AV/9EJqvSGuthNT3oXCZikbrxttwoH/Q6OV?=
- =?us-ascii?Q?TexbwuXPoIhMZof/gR8c1XhjJROv/cCfK4SQQmQ3MxLJKG29dT7+AEuj2Ts7?=
- =?us-ascii?Q?/kgnVfJHgt4IcrgOI6oFzHIkmkHVbhucEc0PIeqedvGv6ZAfGHFlJ/hr8NnP?=
- =?us-ascii?Q?D6Og1r8i8ft9q6pKlvu9nwZMMDqMZ030+g7wnhAY2POmeA9fM6kmcaJoNBzl?=
- =?us-ascii?Q?EN3nY9eSzrZp7BgTKpZRz0yBicnEta1G1sm7OmkneJCRXvo7e0NB/xSKsLsA?=
- =?us-ascii?Q?O6Uu9GN3JHdZiYz+wGYz9pkir9+MX4pMegRzWJ4IVUkhulkhoihE40R5ke29?=
- =?us-ascii?Q?Tunro/G7tM0KurqClMjw6Fuw5ts4pBfzN0bsJ9y5T+DrtzYqUV16EFPUnlnH?=
- =?us-ascii?Q?cdW/5qjTuACC2rPEee0KbmqrPqI05rsaYouG+x1XtBRbn4YhUu138RbAp6Dd?=
- =?us-ascii?Q?3TUL26XThMsrdEM8JbRr8HtGEWfj0IFOT/RsxS6+WIMsMHpE39pxVxf/JBRT?=
- =?us-ascii?Q?lffQGujSOKadGJDjMCMbabKczje0UhiZGM72mkOZ9Y3LbuKiHyvarG4NoKBw?=
- =?us-ascii?Q?xLPb16wA+VGCJfmu5cOuP8JrglEJFpg=3D?=
-X-OriginatorOrg: inmusicbrands.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 29e8949a-1bee-4852-ecae-08de75f755be
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR08MB8282.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2026 11:57:09.1147
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 24507e43-fb7c-4b60-ab03-f78fafaf0a65
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CG8cdk9/mvxd1qpySuwHOxMb7etY0QzxafHA251HGwq6aYFXXHN9aP+dTSqfX5+lCWUfFjepZOdapf3XvfZBrrr20bg0Nfe1dpWI4GCkN0I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA6PR08MB10522
+X-Received: by 2002:a05:6820:2908:b0:679:e6eb:816 with SMTP id
+ 006d021491bc7-679faf48137mr1528326eaf.60.1772191346216; Fri, 27 Feb 2026
+ 03:22:26 -0800 (PST)
+Date: Fri, 27 Feb 2026 03:22:26 -0800
+In-Reply-To: <689daf88.050a0220.2d37a5.0001.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69a17e72.050a0220.305b49.00de.GAE@google.com>
+Subject: Re: [syzbot] [libertas?] INFO: task hung in lbs_remove_card
+From: syzbot <syzbot+c99d17aa44dbdba16ad2@syzkaller.appspotmail.com>
+To: libertas-dev@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[inmusicbrands.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[inmusicbrands.com:s=selector2];
+X-Spamd-Result: default: False [-0.36 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=f1500201919951cc];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[inmusicbrands.com,linuxfoundation.org,kernel.org,gmail.com,outlook.com,cosmicgizmosystems.com,rock-chips.com,korsgaard.com,vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-33782-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[inmusicbrands.com:+];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33781-lists,linux-usb=lfdr.de,c99d17aa44dbdba16ad2];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	SUBJECT_HAS_QUESTION(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jkeeping@inmusicbrands.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-0.982];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 83B9B1B6D63
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,appspotmail.com:email,storage.googleapis.com:url,syzkaller.appspot.com:url]
+X-Rspamd-Queue-Id: 5C61B1B68A0
 X-Rspamd-Action: no action
 
-When adding dynamic configuration for bInterval, the value was removed
-from the static SuperSpeed endpoint descriptors but was not set from the
-configured value in hidg_bind().  Thus at SuperSpeed the interrupt
-endpoints have bInterval as zero which is not valid per the USB
-specification.
+syzbot has found a reproducer for the following issue on:
 
-Add the missing setting for SuperSpeed endpoints.
+HEAD commit:    bb375c251ab4 dt-bindings: usb: st,st-ohci-300x: convert to..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1141755a580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f1500201919951cc
+dashboard link: https://syzkaller.appspot.com/bug?extid=c99d17aa44dbdba16ad2
+compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1191555a580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=114a15c6580000
 
-Fixes: ea34925f5b2ee ("usb: gadget: hid: allow dynamic interval configuration via configfs")
-Signed-off-by: John Keeping <jkeeping@inmusicbrands.com>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2475c3172471/disk-bb375c25.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/30449aa672dd/vmlinux-bb375c25.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/46d3937d1c16/bzImage-bb375c25.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c99d17aa44dbdba16ad2@syzkaller.appspotmail.com
+
+INFO: task kworker/0:1:10 blocked for more than 143 seconds.
+      Not tainted syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/0:1     state:D stack:26840 pid:10    tgid:10    ppid:2      task_flags:0x4288060 flags:0x00080000
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5295 [inline]
+ __schedule+0xeb1/0x41f0 kernel/sched/core.c:6907
+ __schedule_loop kernel/sched/core.c:6989 [inline]
+ schedule+0xdd/0x390 kernel/sched/core.c:7004
+ lbs_wait_for_firmware_load+0x11e/0x1e0 drivers/net/wireless/marvell/libertas/firmware.c:116
+ lbs_remove_card+0x84/0x390 drivers/net/wireless/marvell/libertas/main.c:913
+ if_usb_disconnect+0xaf/0x2e0 drivers/net/wireless/marvell/libertas/if_usb.c:316
+ usb_unbind_interface+0x1dd/0x9e0 drivers/usb/core/driver.c:458
+ device_remove drivers/base/dd.c:573 [inline]
+ device_remove+0x12a/0x180 drivers/base/dd.c:565
+ __device_release_driver drivers/base/dd.c:1284 [inline]
+ device_release_driver_internal+0x42e/0x600 drivers/base/dd.c:1307
+ bus_remove_device+0x22f/0x440 drivers/base/bus.c:616
+ device_del+0x376/0x9b0 drivers/base/core.c:3878
+ usb_disable_device+0x367/0x810 drivers/usb/core/message.c:1418
+ usb_disconnect+0x2e2/0x9a0 drivers/usb/core/hub.c:2345
+ hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
+ port_event drivers/usb/core/hub.c:5871 [inline]
+ hub_event+0x1d0c/0x4af0 drivers/usb/core/hub.c:5953
+ process_one_work+0x9d7/0x1920 kernel/workqueue.c:3275
+ process_scheduled_works kernel/workqueue.c:3358 [inline]
+ worker_thread+0x5da/0xe40 kernel/workqueue.c:3439
+ kthread+0x370/0x450 kernel/kthread.c:467
+ ret_from_fork+0x6c3/0xcb0 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+
+Showing all locks held in the system:
+5 locks held by kworker/0:1/10:
+ #0: ffff8881056afd48 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x1287/0x1920 kernel/workqueue.c:3250
+ #1: ffffc900000afd18 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x93c/0x1920 kernel/workqueue.c:3251
+ #2: ffff88810b795198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+ #2: ffff88810b795198 (&dev->mutex){....}-{4:4}, at: hub_event+0x1bd/0x4af0 drivers/usb/core/hub.c:5899
+ #3: ffff88811c2c3198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+ #3: ffff88811c2c3198 (&dev->mutex){....}-{4:4}, at: usb_disconnect+0x10a/0x9a0 drivers/usb/core/hub.c:2336
+ #4: ffff88811bcbf160 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+ #4: ffff88811bcbf160 (&dev->mutex){....}-{4:4}, at: __device_driver_lock drivers/base/dd.c:1106 [inline]
+ #4: ffff88811bcbf160 (&dev->mutex){....}-{4:4}, at: device_release_driver_internal+0xaa/0x600 drivers/base/dd.c:1304
+2 locks held by kworker/1:0/23:
+ #0: ffff88810006b548 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x1287/0x1920 kernel/workqueue.c:3250
+ #1: ffffc9000018fd18 ((work_completion)(&fw_work->work)){+.+.}-{0:0}, at: process_one_work+0x93c/0x1920 kernel/workqueue.c:3251
+1 lock held by khungtaskd/30:
+ #0: ffffffff896e05a0 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:312 [inline]
+ #0: ffffffff896e05a0 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:850 [inline]
+ #0: ffffffff896e05a0 (rcu_read_lock){....}-{1:3}, at: debug_show_all_locks+0x3d/0x184 kernel/locking/lockdep.c:6775
+2 locks held by getty/2917:
+ #0: ffff888115dd90a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x24/0x80 drivers/tty/tty_ldisc.c:243
+ #1: ffffc900000432f0 (&ldata->atomic_read_lock){+.+.}-{4:4}, at: n_tty_read+0x419/0x1500 drivers/tty/n_tty.c:2211
+
+=============================================
+
+NMI backtrace for cpu 0
+CPU: 0 UID: 0 PID: 30 Comm: khungtaskd Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x100/0x190 lib/dump_stack.c:120
+ nmi_cpu_backtrace.cold+0x12d/0x151 lib/nmi_backtrace.c:113
+ nmi_trigger_cpumask_backtrace+0x1d7/0x230 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:161 [inline]
+ __sys_info lib/sys_info.c:157 [inline]
+ sys_info+0x141/0x190 lib/sys_info.c:165
+ check_hung_uninterruptible_tasks kernel/hung_task.c:346 [inline]
+ watchdog+0xd25/0x1050 kernel/hung_task.c:515
+ kthread+0x370/0x450 kernel/kthread.c:467
+ ret_from_fork+0x6c3/0xcb0 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 UID: 0 PID: 0 Comm: swapper/1 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
+RIP: 0010:pv_native_safe_halt+0xf/0x20 arch/x86/kernel/paravirt.c:63
+Code: ae b1 01 e9 13 e8 02 00 0f 1f 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 66 90 0f 00 2d d3 e1 1d 00 fb f4 <c3> cc cc cc cc 66 2e 0f 1f 84 00 00 00 00 00 66 90 90 90 90 90 90
+RSP: 0018:ffffc9000013fe00 EFLAGS: 00000242
+RAX: 000000000007f00b RBX: ffff8881022a1d00 RCX: ffffffff876898d5
+RDX: 0000000000000000 RSI: ffffffff8901db96 RDI: ffffffff87afa420
+RBP: 0000000000000001 R08: 0000000000000001 R09: ffffed103eae6725
+R10: ffff8881f573392b R11: 0000000000000000 R12: ffffed10204543a0
+R13: 0000000000000001 R14: ffffffff8aefe2d0 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8882687d3000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f983bef5900 CR3: 0000000116d22000 CR4: 00000000003506f0
+Call Trace:
+ <TASK>
+ arch_safe_halt arch/x86/include/asm/paravirt.h:73 [inline]
+ default_idle+0x9/0x10 arch/x86/kernel/process.c:767
+ default_idle_call+0x6c/0xb0 kernel/sched/idle.c:122
+ cpuidle_idle_call kernel/sched/idle.c:191 [inline]
+ do_idle+0x35b/0x4b0 kernel/sched/idle.c:332
+ cpu_startup_entry+0x4f/0x60 kernel/sched/idle.c:430
+ start_secondary+0x21d/0x2d0 arch/x86/kernel/smpboot.c:312
+ common_startup_64+0x13e/0x148
+ </TASK>
+
+
 ---
- drivers/usb/gadget/function/f_hid.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-index 8c855c00b8876..8812ebf33d14b 100644
---- a/drivers/usb/gadget/function/f_hid.c
-+++ b/drivers/usb/gadget/function/f_hid.c
-@@ -1207,9 +1207,11 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
- 	if (!hidg->interval_user_set) {
- 		hidg_fs_in_ep_desc.bInterval = 10;
- 		hidg_hs_in_ep_desc.bInterval = 4;
-+		hidg_ss_in_ep_desc.bInterval = 4;
- 	} else {
- 		hidg_fs_in_ep_desc.bInterval = hidg->interval;
- 		hidg_hs_in_ep_desc.bInterval = hidg->interval;
-+		hidg_ss_in_ep_desc.bInterval = hidg->interval;
- 	}
- 
- 	hidg_ss_out_comp_desc.wBytesPerInterval =
-@@ -1239,9 +1241,11 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
- 		if (!hidg->interval_user_set) {
- 			hidg_fs_out_ep_desc.bInterval = 10;
- 			hidg_hs_out_ep_desc.bInterval = 4;
-+			hidg_ss_out_ep_desc.bInterval = 4;
- 		} else {
- 			hidg_fs_out_ep_desc.bInterval = hidg->interval;
- 			hidg_hs_out_ep_desc.bInterval = hidg->interval;
-+			hidg_ss_out_ep_desc.bInterval = hidg->interval;
- 		}
- 		status = usb_assign_descriptors(f,
- 			    hidg_fs_descriptors_intout,
--- 
-2.53.0
-
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
