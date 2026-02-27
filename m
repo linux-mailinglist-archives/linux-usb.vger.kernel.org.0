@@ -1,78 +1,49 @@
-Return-Path: <linux-usb+bounces-33783-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33784-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iLWXDIOKoWnAuAQAu9opvQ
-	(envelope-from <linux-usb+bounces-33783-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 13:13:55 +0100
+	id sDgpB5qcoWl8ugQAu9opvQ
+	(envelope-from <linux-usb+bounces-33784-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 14:31:06 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 114DD1B6FAC
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 13:13:53 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DCFD1B7AD2
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 14:31:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 1EF1F3031235
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 12:13:53 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C15A7303E0A2
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 13:31:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77BFA3EDAD8;
-	Fri, 27 Feb 2026 12:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="QaUCd0vR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CC9927AC28;
+	Fri, 27 Feb 2026 13:30:58 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from bm.lauterbach.com (bm.lauterbach.com [62.154.241.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C651E3A6413
-	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 12:13:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DDF23A9B3
+	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 13:30:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.154.241.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772194431; cv=none; b=lNf4FF1vZHxQLddDrouHWjd1Bs7mIcWdG9YvT1ko2nwQqTX7D9+UPdsjkJPhZgseNao+3dS98CmRKOF/ShIIeDgbUSkHo+yRDUj8pcVyUQe+bUiNFIBdcUkfeK4d0TBR8UQzEu4EKiwWBtWGIbl5wCDetkxGI6/byJoG8ba3r4U=
+	t=1772199058; cv=none; b=YloMoJFRaB9A/KPNtjPXReviwn8i2jTYP2UWPhM0dHBgZowJ3o0ZvGWdOfFwIlQLs8CpdaBotM1nnHElf0qncmaci2JXAE27pZe/lUWOBxgn1O6KSbmuJov0bBs4UP5S1FVW5xRvP0lRhmb44DOCApGrx78/3WgZzGN4alKZxkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772194431; c=relaxed/simple;
-	bh=fuw5TqW0uCYgMUPW4G72GmVyI0XkEmW5jQki0ebvHN4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 References; b=K0Gj4SNOpsEqcH8L+XTBGOuixzlomQ9m1gPlDnhxxv8VlsTU/tLB7EDNXIwErHJrY/1vVcLMfM4+nQZfTCofFVtafotJAEWdLD+sli/xkIfpdhJhU054TLtKiiWxWUkM1BjhT6Njq4MosNlcRVOaubdQ2p/9Rnoj7ff/34C1sG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=QaUCd0vR; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20260227121341epoutp04f50d57144bfe605747441d714728a357~YGW-KePdO1403814038epoutp04G
-	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 12:13:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20260227121341epoutp04f50d57144bfe605747441d714728a357~YGW-KePdO1403814038epoutp04G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1772194421;
-	bh=GmKOooTu6Yy+DuO6Xz9QOh3O4n8UAd3CYEIsndynAZg=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=QaUCd0vRtlDCk4WSwsBxqgjeqvN7ESPr2DOFRF4xuBMWZWcbG19o2iFJlF9liUrLe
-	 2rKESwXImUJb/bD2TuLDD5NwzourGu5rW7zBsLvwmRNEF/m+yoqkc/C2TMmUPnOj8g
-	 C4LEVDStHGTbP2PGTX2+Haq9Q0k6AS1sWPEV1UOU=
-Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
-	20260227121340epcas5p111092699baab5569f97fae5359f8ea41~YGW_EZj6b1088610886epcas5p1V;
-	Fri, 27 Feb 2026 12:13:40 +0000 (GMT)
-Received: from epcas5p3.samsung.com (unknown [182.195.38.94]) by
-	epsnrtp03.localdomain (Postfix) with ESMTP id 4fMnKv188tz3hhT3; Fri, 27 Feb
-	2026 12:13:39 +0000 (GMT)
-Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-	20260227121338epcas5p4baebb406db37f07223545b2f85751bf2~YGW8kxQ2F0654806548epcas5p41;
-	Fri, 27 Feb 2026 12:13:38 +0000 (GMT)
-Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20260227121336epsmtip18c4d77b7d34df0d5c550292966be153f~YGW6Wvejz1055710557epsmtip1z;
-	Fri, 27 Feb 2026 12:13:36 +0000 (GMT)
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, akash.m5@samsung.com,
-	hongpooh.kim@samsung.com, eomji.oh@samsung.com, h10.kim@samsung.com,
-	shijie.cai@samsung.com, alim.akhtar@samsung.com, muhammed.ali@samsung.com,
-	thiagu.r@samsung.com, pritam.sutar@samsung.com, Selvarasu Ganesan
-	<selvarasu.g@samsung.com>, stable@vger.kernel.org
-Subject: [PATCH v3] usb: dwc3: gadget: Prevent EP resource conflicts during
- StartTransfer
-Date: Fri, 27 Feb 2026 17:42:33 +0530
-Message-ID: <20260227121236.963-1-selvarasu.g@samsung.com>
-X-Mailer: git-send-email 2.46.0.windows.1
+	s=arc-20240116; t=1772199058; c=relaxed/simple;
+	bh=tjcsZNUvMJGnO333zSqxhqgkb9YG/eZQrEiY+/uU7/s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RXR5YVfIsm3vxF0ztgnEVlUiW/57iFXLLDkjw0tP2kfA9fi2eXZOQk4nybFXfwCvU4RTLw6loLYtqAmpV/rsVjpATLe4N+rOwhh1U5Kq8ES6B8LAZwBRGI23iEuFkB3V6CB4mRZ3HBIOKDvAdUipl8vHD3AVTWnMRphW6Old3jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com; spf=pass smtp.mailfrom=lauterbach.com; arc=none smtp.client-ip=62.154.241.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lauterbach.com
+Received: from ingpc2.intern.lauterbach.com (unknown [10.2.10.44])
+	(Authenticated sender: ingo.rohloff@lauterbach.com)
+	by bm.lauterbach.com (Postfix) with ESMTPSA id 6D94861394CB;
+	Fri, 27 Feb 2026 14:30:48 +0100 (CET)
+From: Ingo Rohloff <ingo.rohloff@lauterbach.com>
+To: Thinh.Nguyen@synopsys.com
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	Ingo Rohloff <ingo.rohloff@lauterbach.com>
+Subject: [PATCH v3 0/1] usb: dwc3: Support for USB3340x ULPI PHY
+Date: Fri, 27 Feb 2026 14:30:37 +0100
+Message-ID: <20260227133038.45150-1-ingo.rohloff@lauterbach.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,173 +51,80 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20260227121338epcas5p4baebb406db37f07223545b2f85751bf2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20260227121338epcas5p4baebb406db37f07223545b2f85751bf2
-References: <CGME20260227121338epcas5p4baebb406db37f07223545b2f85751bf2@epcas5p4.samsung.com>
+X-Bm-Milter-Handled: 166a2dfb-2e12-4590-8fa5-72e30323519f
+X-Bm-Transport-Timestamp: 1772199048499
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
-	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33783-lists,linux-usb=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,samsung.com:mid,samsung.com:dkim,samsung.com:email];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[samsung.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[selvarasu.g@samsung.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33784-lists,linux-usb=lfdr.de];
+	DMARC_NA(0.00)[lauterbach.com];
 	PRECEDENCE_BULK(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[ingo.rohloff@lauterbach.com,linux-usb@vger.kernel.org];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[8]
-X-Rspamd-Queue-Id: 114DD1B6FAC
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lauterbach.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 3DCFD1B7AD2
 X-Rspamd-Action: no action
 
-The below “No resource for ep” warning appears when a StartTransfer
-command is issued for bulk or interrupt endpoints in
-`dwc3_gadget_ep_enable` while a previous StartTransfer on the same
-endpoint is still in progress. The gadget functions drivers can invoke
-`usb_ep_enable` (which triggers a new StartTransfer command) before the
-earlier transfer has completed. Because the previous StartTransfer is
-still active, `dwc3_gadget_ep_disable` can skip the required
-`EndTransfer` due to `DWC3_EP_DELAY_STOP`, leading to the endpoint
-resources are busy for previous StartTransfer and warning ("No resource
-for ep") from dwc3 driver.
+The problem only pops up if you combine a DWC3 controller with a
+Microchip USB3340 ULPI PHY.
 
-Additionally, a race condition exists between dwc3_gadget_ep_disable()
-and dwc3_gadget_ep_queue() when manipulating dep->flags. When
-dwc3_gadget_ep_disable() calls dwc3_gadget_giveback(), the dwc->lock is
-temporarily released. If dwc3_gadget_ep_queue() runs in that window, it
-may set the DWC3_EP_TRANSFER_STARTED flag as part of
-dwc3_send_gadget_ep_cmd(). When ep_disable resumes, it unconditionally
-clears all flags except those explicitly masked, potentially clearing
-DWC3_EP_TRANSFER_STARTED even though a new transfer has started. This
-leads to "No resource for ep" warnings on subsequent StartTransfer
-attempts.
+This patch uses the USB Vendor/Product ID of the ULPI PHY
+to detect the USB3340 model and then applies the necessary fix,
+if this model is found.
 
-The underlying framework issue is that usb_ep_disable() is expected to
-complete pending requests before returning, but is allowed to be called
-from interrupt context where sleeping to wait for completion is not
-possible.
+Benefits of this approach
+- Does not require any modification to existing device trees.
+- Should work for all DWC3 IP / USB3340 combinations, not only
+  for the Ultrascale+ ZyngMP DWC3 implementation, where this
+  problem was originally found.
+- Easy to extend in the future if a similar situation arises again.
 
-As temporary workarounds for this framework limitation:
+Caveats:
+- Replicates code from drivers/usb/common/ulpi.c
 
-1. In __dwc3_gadget_ep_enable(), add a check for the
-   DWC3_EP_TRANSFER_STARTED flag before issuing a new StartTransfer.
-   This prevents a second StartTransfer on an already busy endpoint,
-   eliminating the resource conflict.
-
-2. In __dwc3_gadget_ep_disable(), preserve the DWC3_EP_TRANSFER_STARTED
-   flag when masking dep->flags if it is actually set, preventing the
-   race with dwc3_gadget_ep_queue() from corrupting the flag state.
-
-These changes eliminate the "No resource for ep" warnings and potential
-kernel panics caused by panic_on_warn.
-
-dwc3 13200000.dwc3: No resource for ep1out
-WARNING: CPU: 0 PID: 700 at drivers/usb/dwc3/gadget.c:398 dwc3_send_gadget_ep_cmd+0x2f8/0x76c
-Call trace:
-dwc3_send_gadget_ep_cmd+0x2f8/0x76c
-__dwc3_gadget_ep_enable+0x490/0x7c0
-dwc3_gadget_ep_enable+0x6c/0xe4
-usb_ep_enable+0x5c/0x15c
-mp_eth_stop+0xd4/0x11c
-__dev_close_many+0x160/0x1c8
-__dev_change_flags+0xfc/0x220
-dev_change_flags+0x24/0x70
-devinet_ioctl+0x434/0x524
-inet_ioctl+0xa8/0x224
-sock_do_ioctl+0x74/0x128
-sock_ioctl+0x3bc/0x468
-__arm64_sys_ioctl+0xa8/0xe4
-invoke_syscall+0x58/0x10c
-el0_svc_common+0xa8/0xdc
-do_el0_svc+0x1c/0x28
-el0_svc+0x38/0x88
-el0t_64_sync_handler+0x70/0xbc
-el0t_64_sync+0x1a8/0x1ac
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
 ---
-
-Note: No Fixes tag is added because this is a workaround for the
-gadget framework issue where the gadget framework calls usb_ep_disable()
-in interrupt context without ensuring endpoint flushing completes.
-A proper fix requires refactoring the framework to make sure
-usb_ep_disable is invoked in process context.
-
 Changes in v3:
- - Revised the commit message to detail the real gadget framework issue
-   pointed out by the reviewer.
- - Merged the two fixes for the same ep wringing into one patch.
-Link to v2: https://lore.kernel.org/linux-usb/20251117155920.643-1-selvarasu.g@samsung.com/
+- Do not meantion what the DWC3_GUSB2PHYCFG_XCVRDLY does.
+- Do not use device tree property to set enable_usb2_transceiver_delay.
+  Instead autodetect if it's necessary to set enable_usb2_transceiver_delay.
+- Link to v2: https://lore.kernel.org/linux-usb/20260225130323.24606-1-ingo.rohloff@lauterbach.com/
 
-Changes in v2:
-- Removed change-id.
-- Updated commit message.
-Link to v1: https://lore.kernel.org/linux-usb/20251117152812.622-1-selvarasu.g@samsung.com/
 ---
- drivers/usb/dwc3/gadget.c | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
+Changes in v2:
+- Mention sources of information in commit message instead of code.
+- Renamed property to "snps,enable-usb2-transceiver-delay".
+- Renamed struct member to "enable_usb2_transceiver_delay".
+- Describe dt-bindings in a second commit.
+- Link to v1: https://lore.kernel.org/linux-usb/20260224141438.39524-1-ingo.rohloff@lauterbach.com/
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 0a688904ce8c5..3af1bbfe3d92b 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -971,8 +971,9 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
- 	 * Issue StartTransfer here with no-op TRB so we can always rely on No
- 	 * Response Update Transfer command.
- 	 */
--	if (usb_endpoint_xfer_bulk(desc) ||
--			usb_endpoint_xfer_int(desc)) {
-+	if ((usb_endpoint_xfer_bulk(desc) ||
-+			usb_endpoint_xfer_int(desc)) &&
-+			!(dep->flags & DWC3_EP_TRANSFER_STARTED)) {
- 		struct dwc3_gadget_ep_cmd_params params;
- 		struct dwc3_trb	*trb;
- 		dma_addr_t trb_dma;
-@@ -1096,6 +1097,23 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
- 	 */
- 	if (dep->flags & DWC3_EP_DELAY_STOP)
- 		mask |= (DWC3_EP_DELAY_STOP | DWC3_EP_TRANSFER_STARTED);
-+
-+	/*
-+	 * When dwc3_gadget_ep_disable() calls dwc3_gadget_giveback(),
-+	 * the dwc->lock is temporarily released. If dwc3_gadget_ep_queue()
-+	 * runs in that window it may set the DWC3_EP_TRANSFER_STARTED flag as
-+	 * part of dwc3_send_gadget_ep_cmd. The original code cleared the flag
-+	 * unconditionally in the mask operation, which could overwrite the
-+	 * concurrent modification.
-+	 *
-+	 * As a workaround for the interrupt context constraint where we cannot
-+	 * wait for endpoint flushing, preserve the DWC3_EP_TRANSFER_STARTED
-+	 * flag if it is set, avoiding resource conflicts until the framework
-+	 * is fixed to properly synchronize endpoint lifecycle management.
-+	 */
-+	if (dep->flags & DWC3_EP_TRANSFER_STARTED)
-+		mask |= DWC3_EP_TRANSFER_STARTED;
-+
- 	dep->flags &= mask;
- 
- 	/* Clear out the ep descriptors for non-ep0 */
--- 
-2.34.1
+---
+Ingo Rohloff (1):
+  usb: dwc3: Support USB3340x ULPI PHY high-speed negotiation.
+
+ drivers/usb/dwc3/core.c | 16 +++++++++++++++
+ drivers/usb/dwc3/core.h |  4 ++++
+ drivers/usb/dwc3/ulpi.c | 43 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 63 insertions(+)
+
+--
+2.52.0
 
 
