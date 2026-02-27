@@ -1,153 +1,172 @@
-Return-Path: <linux-usb+bounces-33768-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33769-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wMmUDvEIoWlXpwQAu9opvQ
-	(envelope-from <linux-usb+bounces-33768-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 04:01:05 +0100
+	id UAgnF8YdoWlhqQQAu9opvQ
+	(envelope-from <linux-usb+bounces-33769-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 05:29:58 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7653A1B2277
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 04:01:04 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA5E71B2B50
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 05:29:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5FA843042625
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 03:01:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 73B463073DBF
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 04:29:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71AC13033DD;
-	Fri, 27 Feb 2026 03:01:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7C77348457;
+	Fri, 27 Feb 2026 04:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DgiXu6QP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CE02AD2B;
-	Fri, 27 Feb 2026 03:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB1532A3C8
+	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 04:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772161262; cv=none; b=fI2/LYN3DW2Gtph4ECKoQOhmJtN+Afjoawxkms3ho9Imc8TltYAcc9z5vpjuryq0xyI+ccjJxlSC0KlYXeaGBoDNGk6j4uy9DAMRc9Y6eZBzujK+a0l6QTlUDZdCJ75goD6/t/gVCqTJEejQvvtHHmU+Bkc60YpCaBGaphanx/o=
+	t=1772166594; cv=none; b=n9oV3ezkBisj7NlK4x2OIXWHmVQ+Tn7B5rpoPkKmhHyPMO9yfc5JRKlB+IcKFMdtO9jML2k1JPvEmf+DF9Q9xQFNoxlJRvrPOk/DYEfy+hZSOYAPP+qWjcaty0LLbFnc6yvJSB9nq/AMRSShqOf5GsOthfDsb05t6Z+n3aRMbKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772161262; c=relaxed/simple;
-	bh=k8uyJxXsVM9xW01EPPPqln/FhyAypLJMpZtseMbPf7g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UpVLkocoXwTwkDROZRoFBmIal55Ou0Wzhjqjo7T/nEUjkzq60T9hKa/+z2YH8G5tK5CNH4j3sRbWpZ8mxHxPift9m8yoJKTTcK+gV0CzfIltvfNH92M/gEEkUv9cxSW3e+CvK7wvKs2rFlO5ooeNELINoy2666g4M2+k2CJRkMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 887237b2138811f1a21c59e7364eecb8-20260227
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.11,REQID:55760e7d-aab6-45b5-bb33-a302ff86109b,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:89c9d04,CLOUDID:eccfbb7d64ffaa8646a1906c4eda4d36,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|898,TC:nil,Content:0|15|
-	52,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0
-	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 887237b2138811f1a21c59e7364eecb8-20260227
-X-User: dengjie03@kylinos.cn
-Received: from [10.42.12.246] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <dengjie03@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 1263758377; Fri, 27 Feb 2026 11:00:55 +0800
-Message-ID: <b677a0c9-74d2-4a37-9b09-587ffe5061c9@kylinos.cn>
-Date: Fri, 27 Feb 2026 11:00:52 +0800
+	s=arc-20240116; t=1772166594; c=relaxed/simple;
+	bh=CzxqOeq7vmy3iLuwkGUtmwYzq6nhR2cUTexijQLMdLQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YdSkMGKgENyDNnza/UUDz7AnUvYtGKpEvY0fpKOmNoQhqQv6qrY+WllSJxzS0so0sq1edtQVu9jM5HHusy/P0z2xPnGDAkep+aVa1oDMrQplNy6P0Yc5EBFIPjFM4EzELaAhhDbr0OFPIYisPcZg5MlS6W+mIAVWUJecNVwBf9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DgiXu6QP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC41C116C6;
+	Fri, 27 Feb 2026 04:29:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1772166593;
+	bh=CzxqOeq7vmy3iLuwkGUtmwYzq6nhR2cUTexijQLMdLQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DgiXu6QPyhRE57KWGtt6WXDOmDE4BJsifX6k0oN7eVlBQ13xqDQ3by2VRhKywdrkG
+	 1Dr7RSNT1cSWQ9y42fTC29/SrEcxIF8jixIBkHrs1XLOuJ4fv/p1ZeSTWiQNZMwrve
+	 K4xaQL4V+UlSrwS06A2o35J6nfkPi1xLUwb4ZlHk=
+Date: Thu, 26 Feb 2026 20:29:45 -0800
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Oliver Neukum <oneukum@suse.com>, Nicholas Carlini <npc@anthropic.com>,
+	linux-usb@vger.kernel.org
+Subject: Re: Stack buffer overflow (write) in kvaser_usb_leaf_wait_cmd via
+ malicious USB
+Message-ID: <2026022617-disengage-spinning-c6bd@gregkh>
+References: <CAOt5ifARcQqqGc65hHXR2JNTDg0hT0cF55Kb-6USEsqjEPM1nA@mail.gmail.com>
+ <2026021847-acclaim-coil-fe7a@gregkh>
+ <a38ccefc-6233-4be4-bbae-0ae0d4f4499b@suse.com>
+ <eb96e0e4-b02a-48e5-ae07-bc31584f0855@rowland.harvard.edu>
+ <e63ee746-dee7-4b3c-9360-95e96fadb765@suse.com>
+ <862abc70-18ce-422c-bdf2-f02b984193c0@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: core: new quirk to handle devices with zero
- configurations
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260226094737.1306471-1-dengjie03@kylinos.cn>
- <2026022600-employee-unjustly-3db4@gregkh>
-From: Jie Deng <dengjie03@kylinos.cn>
-In-Reply-To: <2026022600-employee-unjustly-3db4@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <862abc70-18ce-422c-bdf2-f02b984193c0@rowland.harvard.edu>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.46 / 15.00];
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,kylinos.cn:mid];
-	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-0.999];
-	MID_RHS_MATCH_FROM(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	R_DKIM_NA(0.00)[];
-	DMARC_NA(0.00)[kylinos.cn];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dengjie03@kylinos.cn,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33769-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33768-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_THREE(0.00)[3]
-X-Rspamd-Queue-Id: 7653A1B2277
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: CA5E71B2B50
 X-Rspamd-Action: no action
 
+On Tue, Feb 24, 2026 at 01:43:24PM -0500, Alan Stern wrote:
+> On Tue, Feb 24, 2026 at 05:04:28PM +0100, Oliver Neukum wrote:
+> > 
+> > 
+> > On 24.02.26 16:52, Alan Stern wrote:
+> > > On Tue, Feb 24, 2026 at 09:44:35AM +0100, Oliver Neukum wrote:
+> > 
+> > > > What is the logic behind that? If we can trust that a device
+> > > > is what it claims to be and operates like it is supposed to
+> > > > be, why do we verify?
+> > > 
+> > > Greg said that we trust the hardware once a driver is bound to the
+> > > device.  However, the endpoint-verification tests occur before the
+> > > binding is complete.  At this point we do not yet fully trust the
+> > > hardware.
+> > 
+> > Why? If we do not trust the hardware, we cannot depend on it
+> > telling the truth about itself, can we?
+> 
+> The purpose of the endpoint testing is to avoid warnings triggered by 
+> driver submitting URBs to endpoints that are known not to exist.  Such 
+> submissions are generally considered to be signs of a bug in the driver, 
+> not of a deception by the device.
+> 
+> Legitimate example: A new revision of a device uses different endpoint 
+> numbers from the original version, but the driver isn't aware of this 
+> and doesn't check.  The problem would then lie in the driver, not in the 
+> revised device firmware.
+> 
+> Even if a device lies about itself, the tests will prevent these 
+> warnings from triggering.  (The endpoint in question might not in fact 
+> exist on the device, but as long as the device's descriptors claim that 
+> the endpoint does exist, usbcore won't know any better and so won't 
+> issue a warning.)
+> 
+> Of course we can't detect all cases in which a device lies about itself.  
+> The hope is that drivers will be robust enough to handle devices that do 
+> not behave as expected...
+> 
+> > > While it's always possible that some real device somewhere will fail
+> > > these tests, a much more likely reason for a failure is because the
+> > > driver is being fuzzed.  We do know that these fuzzing tests occur in
+> > > real life and that they will crash the kernel being tested if the tests
+> > > aren't present.
+> > 
+> > Now, if we are looking at regular hardware, we need to ask ourselves:
+> > Is it likelier that some devices are different from all others,
+> > or may they have a race condition with a small window that leads
+> > to faulty data packages rarely being generated?
+> 
+> ... such as by occasionally generating faulty data packets.  Drivers 
+> should be able to handle such things gracefully, without crashing the 
+> kernel.
 
-在 2026/2/26 22:28, Greg Kroah-Hartman 写道:
-> On Thu, Feb 26, 2026 at 05:47:37PM +0800, Jie Deng wrote:
->> Some USB devices incorrectly report bNumConfigurations as 0 in their
->> device descriptor, which causes the USB core to reject them during
->> enumeration.
->> logs:
->> usb 1-2: device descriptor read/64, error -71
->> usb 1-2: no configurations
->> usb 1-2: can't read configurations, error -22
->>
->> However, these devices actually work correctly when
->> treated as having a single configuration.
-> Really?  Don't devices like this violate the USB spec?
-These devices do not comply with the USB spec in terms
-of uploading the device descriptors.
->> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
->> index 1cd5fa61dc76..f60fed224cbb 100644
->> --- a/drivers/usb/core/config.c
->> +++ b/drivers/usb/core/config.c
->> @@ -927,7 +927,12 @@ int usb_get_configuration(struct usb_device *dev)
->>   		dev->descriptor.bNumConfigurations = ncfg = USB_MAXCONFIG;
->>   	}
->>   
->> -	if (ncfg < 1) {
->> +	if (dev->quirks & USB_QUIRK_FORCE_ONE_CONFIG) {
->> +		dev_info(ddev, "Device claims zero configurations,
->> +				forcing to 1\n");
->> +		dev->descriptor.bNumConfigurations = 1;
->> +		ncfg = 1;
-> But is the configuration descriptor actually present?  This feels odd to
-> me.
->
-> thanks,
->
-> greg k-h
+Given that I have to answer this type of question about every other week
+these days given the fuzzing reports we get sent to the
+security@kernel.org alias, I think I need to just write up a "here is
+the Linux USB threat model that we currently support" document to
+describe what the state is.
 
-The configuration descriptor exists. I connected this device to the 
-Windows system,
-and the device worked normally. By capturing the data packets during the 
-enumeration
-process of this device on both the Windows and Linux systems, it was 
-found that when
-the bNumConfigurations value was 0 on the Windows system, it would 
-default to using
-a single configuration to continue the enumeration. However, on the 
-Linux system,
-the enumeration would be terminated.
+We can then work from there, either agreeing that we need to "move" the
+level of interaction for which we trust / do not trust a device in the
+lifecycle of a USB device, or just be happy with where it currently is.
 
-Jie Deng
+That should work better with some groups that I know are working to do
+stuff to "harden" the USB device stack for some specific use cases,
+hopefully just using the existing user api that we have today that
+USBGuard uses, or possibly adding to that to handle some missing areas
+that we have not previously considered.
 
+thanks,
 
+greg k-h
 
