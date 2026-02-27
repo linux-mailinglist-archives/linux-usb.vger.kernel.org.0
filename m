@@ -1,199 +1,255 @@
-Return-Path: <linux-usb+bounces-33776-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33777-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yA5xA7taoWmDsQQAu9opvQ
-	(envelope-from <linux-usb+bounces-33776-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 09:50:03 +0100
+	id eAjzMVFloWkCsgQAu9opvQ
+	(envelope-from <linux-usb+bounces-33777-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 10:35:13 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E1781B4AD3
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 09:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2713B1B568F
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 10:35:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1D1483061450
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 08:49:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E0EF2305C8D1
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Feb 2026 09:34:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E04E3A0E85;
-	Fri, 27 Feb 2026 08:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F5313ACF13;
+	Fri, 27 Feb 2026 09:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nB99tzmi";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="OkKV0Rse"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A85930596F;
-	Fri, 27 Feb 2026 08:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD573939D1
+	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 09:34:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772182182; cv=none; b=WM7jdwXPO/i3UNuaSIwPL5tONYm70zwMwn480zI5NKMP5MLTc03bGHA2uiretWO/gr20jW8tJM8w2uZmicDNfkdGCayPdU05YaFFRZezLcQoI+d1WZqf3vzMTwLU14hWlwAO8KDEhnvbi8Z4KyTkBKQy2rFzfpubKex+ZmiosIw=
+	t=1772184895; cv=none; b=UyC2BVvq0elnvcEetDYPRi054/fCBumtvatMC+TG9SBVPp4QXClkhTJmqgN0XQM74MKEdwXJgGlxWTzPcyfgHjyxIbj+ElZIYA7wtIjbRWHzJDQcd8T2J7HkVN5EnaT0ud0cGu39XbCDv0rgOETGEu2M21UIwQHHpuZEEHMwtp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772182182; c=relaxed/simple;
-	bh=Pr4iY8kyDWtph24P2ejyrIR6PFoeSc2a33ApJ1aFi8M=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qRvNP3nJw2b04XBHxfS+GDDfDJuiICXk01yfnMW80Ir8OGYsLBbinidh/kCkUU9J/J93xlHQj8Dj8YhzoAEvlVHY6VGAFqHuc72CQwFlWLgKaujMs6fzFjGZrEFyaJdVqmyqtxmScrTRezSP0zcvlmTlY7fx5GHpbQXpsbcLVTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 3e762cbe13b911f1a21c59e7364eecb8-20260227
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.11,REQID:e08985d0-15de-4954-9495-b2f1a0236750,IP:0,U
-	RL:0,TC:0,Content:-25,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:0
-X-CID-META: VersionHash:89c9d04,CLOUDID:a537b2b7463751fd8a8aba70a92d0e63,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|898,TC:nil,Content:0|15|50,EDM:5
-	,IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-	,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 3e762cbe13b911f1a21c59e7364eecb8-20260227
-X-User: dengjie03@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <dengjie03@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 434580765; Fri, 27 Feb 2026 16:49:36 +0800
-From: Jie Deng <dengjie03@kylinos.cn>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jie Deng <dengjie03@kylinos.cn>
-Subject: [PATCH v3] usb: core: new quirk to handle devices with zero configurations
-Date: Fri, 27 Feb 2026 16:49:31 +0800
-Message-Id: <20260227084931.1527461-1-dengjie03@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1772184895; c=relaxed/simple;
+	bh=h7yhnVHgPNwIjcIUIO6Hvv4cSEJBOU2d+dRlhSV6N3w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y3vae9Di71/NBAeWvSGhbpfPnGkJ2M3dtE/uVt7Csqr20mmpA7ImwpnX+b9WFwofW4dmm0bEIo6URTbAd3GsVvWLoSVzUovtEElVoy4Pta6XCdd55LnyGra61I/P2AW/DLunl+Ft8uGAWxCGDGjEJL4scToK93Z3JNNMCgVX/FI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nB99tzmi; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=OkKV0Rse; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61R7fVUr2309061
+	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 09:34:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=UIcDBr2wve7pKgjAxBAKzoDu
+	LV8DKggSrjaVxuAmsK0=; b=nB99tzmi7eYpzGQ2WRHM8MBNGBUCmOcgSKnhch5A
+	Cf1Oz7b7oOR0EG8fqdOoq25UoaWGkpXior2+xVHfjLlJqEE564HgbgrU3aMDMwYU
+	GFF3CrFZ7gym9zwizcCSq+5KHOvU8zxYBbPC9gme/L9TYz/jO4S+L+1vqUzVMSsJ
+	K0c3NWoryVMeAzYKNJCk8d6d76IU8wL8jh3jwGJgC1xn0DWIe14vrW+0OwtuoPdq
+	xCnQPxDkTD8WweLrjoAxJYiUeoP1Yw9mS7DpZARW9x4aHLz2fjo6nbRexUTj7saE
+	nEyBBHL5+BMcA4/+lLconCVODaBOtdiYiff7k0JHy7lCDg==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ck73q0bh0-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 09:34:52 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8cb4e37a796so1304563785a.2
+        for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 01:34:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1772184891; x=1772789691; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UIcDBr2wve7pKgjAxBAKzoDuLV8DKggSrjaVxuAmsK0=;
+        b=OkKV0RsezzTT4kf+Np/9EbO971TcrXl7SUg9Fu8LiprMWJTZJU+pIQ1Et63w2aQBkX
+         DpiIV/0pfLO9+oZsnjbdDAznq5x9AFBrFEaRs1OeAkg7ahPpk32yzfG9bp4qMYtkBPxM
+         0vXbDxC47AJh+tzxhp5HMxX7vGB3ds5i1E0BisDCyhLVA5rlnY4lqQb95EG/k1mc4QRR
+         bqkUtUSlPtTFl1rTjVed6sC0ZUigjU/emhRSPX30ssZVPWw+XSF4FUPJK0ZL6AGv6p/4
+         mKZmCqjfIq5s/KyecZItq4YRa8R6+qGuZGSYHZLXMVJIUQHYM80X7s0oXtde0OA0+djV
+         5jlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772184891; x=1772789691;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UIcDBr2wve7pKgjAxBAKzoDuLV8DKggSrjaVxuAmsK0=;
+        b=SilR1Nhr2MGPgIqRo73shG3ImvNcdjjqI9Bs/aZhKDypv7EYV7hrdPscU4i/PwIQVW
+         XnFmF17aLrJyHnRdXxJcpIilVAvafHtkOkx1ZMl0wiGXtdHPvyq3jAAAs+TmGak7boTS
+         podfTtZgQGcsrccE8vp31C6eW9Y8fVWRhBPuyO5vO4hCAYzGmRNyC1NXY3utOjW2mkph
+         88FQnx1XMNERlJP0Y7pC7SIbj3PtPkKtm852A7PBJ5QuNj/VF11SPiWlXYj2clvclsII
+         X3DkIdHyTdp95LWWfOYqJmx5Vukn9xxRqxC3MYS2nxUpSBc9Vw/I3gKrdBsB9GJSWbKx
+         yuJg==
+X-Forwarded-Encrypted: i=1; AJvYcCVBfpLLCCpaMiyz7Plr0WDTTOBg7mAO2s4P6uzJZqu1HHYdqQ6amoPi/9XrEcrhLbZf5IkcD9tP9bk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOCvRN3Q1vjtjuTqcFyeIKZtFjOG7eqfF6JYRwcbOSH5AL48bN
+	uXZdofY9sFc/yT+kRUK4gbjXpagPzu7TYxWsfe1LPzkwYN19fQzRpAfNN+PEK/4yXle0XJw2v+Z
+	vqbmxQnmA8T5CR8XL6sTt+hjSJQc+vsjupp5mdjfAP3bQf3OcpsJHGDxQz1DHyxs=
+X-Gm-Gg: ATEYQzzhFVPUZJB47ZTl1R/hu6XBooFxs7m6TMYFsP+IOBxKY00gFC6SZtpNrb7+9lx
+	0xTjp1aK9LwCkPF8c+qPbfdxA9CaLpIAcGamFRPklWZ0zAoMDSOJkg4zI0kfTyW924RenvAH4Ee
+	aXtA7GPOD9DTPmaeX3fmjG8sl9yUUkcwZaNkawheptNpKUcrzdIIN0X1DzcIz39bVFe+Nczfcco
+	KITZsvCFJlToHIxOxhq4ENCdSeLPoUJBTGOCY0IdpX95D9b7am10GeczDJcaloYSRoM8/NdM2oJ
+	aeHB+eJErTsTx0F5ZLj0xQJ+w4z9BNwSXVks3GW0dHu0Z6YeWXUqE2z3dgETTOkWkMKC8t2pjpo
+	b2YuckAzqzXcVwhC4RzxvQdexd3Xi+U2naWvP
+X-Received: by 2002:a05:620a:4152:b0:8cb:bae9:9f46 with SMTP id af79cd13be357-8cbc8e2a446mr248699485a.77.1772184891356;
+        Fri, 27 Feb 2026 01:34:51 -0800 (PST)
+X-Received: by 2002:a05:620a:4152:b0:8cb:bae9:9f46 with SMTP id af79cd13be357-8cbc8e2a446mr248696385a.77.1772184890733;
+        Fri, 27 Feb 2026 01:34:50 -0800 (PST)
+Received: from oss.qualcomm.com ([86.121.162.109])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4399c70f8casm9909167f8f.14.2026.02.27.01.34.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Feb 2026 01:34:50 -0800 (PST)
+Date: Fri, 27 Feb 2026 11:34:48 +0200
+From: Abel Vesa <abel.vesa@oss.qualcomm.com>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Pankaj Patil <pankaj.patil@oss.qualcomm.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+Subject: Re: [PATCH RFT v2 3/3] arm64: dts: qcom: glymur-crd: Enable USB
+ support
+Message-ID: <tbzc4v7o22ns5gblcr2nlck5gjzqfsb2a2jna5jimslhselsin@7i2fu5wt6g2g>
+References: <20260223-dts-qcom-glymur-add-usb-support-v2-0-f4e0f38db21d@oss.qualcomm.com>
+ <20260223-dts-qcom-glymur-add-usb-support-v2-3-f4e0f38db21d@oss.qualcomm.com>
+ <42716b92-9814-4697-83f8-4983de0ce57e@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <42716b92-9814-4697-83f8-4983de0ce57e@oss.qualcomm.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI3MDA4MiBTYWx0ZWRfX1vl/2P9DSzBe
+ 13NgOyVYR6v30Ob0UxjTb2SzBBjSCfGgSYiayUdZAk98vjShpr+4rUaSwT7RaIOyXSB3p4uLaqI
+ zStIfUD9ws+iyi9opl6qkvbgPsr3DUHyZzJm1hd1JCePnXj0hztbGzmLL222kZcik8EEJYaIGOO
+ i5hJixl/xbFCgd2oe4Z6CcEKgXpotWeDnI1HF81YtJS04tYz7BNfSpHv3Gzxtg2UojBHB0t7F3u
+ BBv8cy+KwGgOykqZpBnw4fjyFm7CWQ1HHSxnFUVOVKumm5dcnVZeGBIdSUzYhacO71LagMvsm08
+ fhIUaqSJSaxYuPhu2M3TXr0m9y823gcZaQ9ikqLejTZgAONTC8YXRCANery3vRv7WdCTs+tIYUY
+ qkq14SkcbdflJhmUOsbzC/kNMuB3K7bnJl2qfAUJaNb1hpvbu7crVZ6R/FNwZ3akzGMxLpcF4UM
+ Wp1HH6IY8rVByEuZNGw==
+X-Authority-Analysis: v=2.4 cv=KL9XzVFo c=1 sm=1 tr=0 ts=69a1653c cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=oauzzCmhM186DRC0Y2yWPg==:17
+ a=kj9zAlcOel0A:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22
+ a=EUspDBNiAAAA:8 a=tGu0c17UIxBQEtl-8TEA:9 a=CjuIK1q_8ugA:10
+ a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-ORIG-GUID: XSRQpdQMQEBKFjTmnlLbEsyKzMFwS8sc
+X-Proofpoint-GUID: XSRQpdQMQEBKFjTmnlLbEsyKzMFwS8sc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-27_01,2026-02-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 clxscore=1015 malwarescore=0 priorityscore=1501 adultscore=0
+ bulkscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602270082
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
-	DMARC_NA(0.00)[kylinos.cn];
-	RCPT_COUNT_FIVE(0.00)[5];
-	FROM_NEQ_ENVFROM(0.00)[dengjie03@kylinos.cn,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	R_DKIM_NA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33777-lists,linux-usb=lfdr.de];
+	URIBL_MULTI_FAIL(0.00)[qualcomm.com:server fail,0.0.0.0:server fail,4f:server fail,sea.lore.kernel.org:server fail,oss.qualcomm.com:server fail,0.0.0.43:server fail];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33776-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.0:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oss.qualcomm.com:dkim,4f:email,0.0.0.43:email];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[]
-X-Rspamd-Queue-Id: 6E1781B4AD3
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[abel.vesa@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	NEURAL_HAM(-0.00)[-0.999];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 2713B1B568F
 X-Rspamd-Action: no action
 
-Some USB devices incorrectly report bNumConfigurations as 0 in their
-device descriptor, which causes the USB core to reject them during
-enumeration.
-logs:
-usb 1-2: device descriptor read/64, error -71
-usb 1-2: no configurations
-usb 1-2: can't read configurations, error -22
+On 26-02-25 13:16:23, Konrad Dybcio wrote:
+> On 2/23/26 4:37 PM, Abel Vesa wrote:
+> > From: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+> > 
+> > The Qualcomm Glymur Compute Reference Device comes with 3 Type-C ports,
+> > one USB Type-A, and a fingerprint reader connected over USB. Each of these
+> > 3 Type-C ports are connected to one of the USB combo PHYs and one of the
+> > M31 eUSB2 PHYs. The Type-A is connected to the USB Multi-port controller
+> > via one of the M31 eUSB2 PHYs and one USB3 UNI PHY. The fingerprint reader
+> > is connected to the USB_2 controller. All M31 eUSB2 PHYs have associated
+> > eUSB2 to USB 2.0 repeaters, which are either part of SMB2370 PMICs or
+> > dedicated NXP PTN3222.
+> > 
+> > So enable all needed controllers, PHYs and repeaters, while describing
+> > their supplies. Also describe the PMIC glink graph for Type-C connectors.
+> > 
+> > Signed-off-by: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+> > Co-developed-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
+> > Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
+> > ---
+> 
+> [...]
+> 
+> > +	pmic-glink {
+> > +		compatible = "qcom,glymur-pmic-glink";
+> > +		#address-cells = <1>;
+> > +		#size-cells = <0>;
+> > +
+> > +		connector@0 {
+> > +			compatible = "usb-c-connector";
+> > +			reg = <0>;
+> > +
+> > +			power-role = "dual";
+> 
+> there's a newline above here, but not in the corresponding places on
+> the nodes of other ports, I think we generally skip the newline here
 
-However, these devices actually work correctly when
-treated as having a single configuration.
+Will fix.
 
-Add a new quirk USB_QUIRK_FORCE_ONE_CONFIG to handle such devices.
-When this quirk is set, assume the device has 1 configuration instead
-of failing with -EINVAL.
+> 
+> [...]
+> 
+> > +&i2c5 {
+> > +	clock-frequency = <400000>;
+> > +
+> > +	status = "okay";
+> > +
+> > +	ptn3222_0: redriver@43 {
+> > +		compatible = "nxp,ptn3222";
+> > +		reg = <0x43>;
+> > +
+> > +		reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
+> > +
+> > +		vdd3v3-supply = <&vreg_l8b_e0_1p50>;
+> > +		vdd1v8-supply = <&vreg_l15b_e0_1p8>;
+> > +
+> > +		#phy-cells = <0>;
+> > +	};
+> > +
+> > +	ptn3222_1: redriver@4f {
+> 
+> At least on the schematics I have, this one is not present.. but there
+> were a lot of variants early on, could you check whether you can 
+> communicate with the chip at this address?
 
-This quirk is applied to the device with VID:PID 5131:2007 which
-exhibits this behavior.
+Good catch. Only 0x43 and 0x47 exist on the device I have remote access to.
 
-Signed-off-by: Jie Deng <dengjie03@kylinos.cn>
----
+Will drop this one in the next version.
 
-Changes in v3:
-- Modify the string format
-Link to v1: https://lore.kernel.org/linux-usb/20260226094737.1306471-1-dengjie03@kylinos.cn/
-Link to v2: https://lore.kernel.org/linux-usb/20260227060400.1480039-1-dengjie03@kylinos.cn/
----
- Documentation/admin-guide/kernel-parameters.txt | 3 +++
- drivers/usb/core/config.c                       | 6 +++++-
- drivers/usb/core/quirks.c                       | 5 +++++
- include/linux/usb/quirks.h                      | 3 +++
- 4 files changed, 16 insertions(+), 1 deletion(-)
+> 
+> The rest looks OK
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index cb850e5290c2..7d907efe9f49 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -8183,6 +8183,9 @@ Kernel parameters
- 				p = USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT
- 					(Reduce timeout of the SET_ADDRESS
- 					request from 5000 ms to 500 ms);
-+				q = USB_QUIRK_FORCE_ONE_CONFIG (Device
-+					claims zero configurations,
-+					forcing to 1);
- 			Example: quirks=0781:5580:bk,0a5c:5834:gij
- 
- 	usbhid.mousepoll=
-diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-index 1cd5fa61dc76..6a1fd967e0a6 100644
---- a/drivers/usb/core/config.c
-+++ b/drivers/usb/core/config.c
-@@ -927,7 +927,11 @@ int usb_get_configuration(struct usb_device *dev)
- 		dev->descriptor.bNumConfigurations = ncfg = USB_MAXCONFIG;
- 	}
- 
--	if (ncfg < 1) {
-+	if (ncfg < 1 && dev->quirks & USB_QUIRK_FORCE_ONE_CONFIG) {
-+		dev_info(ddev, "Device claims zero configurations, forcing to 1\n");
-+		dev->descriptor.bNumConfigurations = 1;
-+		ncfg = 1;
-+	} else if (ncfg < 1) {
- 		dev_err(ddev, "no configurations\n");
- 		return -EINVAL;
- 	}
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index e347236d83e8..7bd408db05f4 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -140,6 +140,8 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
- 			case 'p':
- 				flags |= USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT;
- 				break;
-+			case 'q':
-+				flags |= USB_QUIRK_FORCE_ONE_CONFIG;
- 			/* Ignore unrecognized flag characters */
- 			}
- 		}
-@@ -589,6 +591,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	/* VCOM device */
- 	{ USB_DEVICE(0x4296, 0x7570), .driver_info = USB_QUIRK_CONFIG_INTF_STRINGS },
- 
-+	/* Noji-MCS SmartCard Reader */
-+	{ USB_DEVICE(0x5131, 0x2007), .driver_info = USB_QUIRK_FORCE_ONE_CONFIG },
-+
- 	/* INTEL VALUE SSD */
- 	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
- 
-diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
-index 2f7bd2fdc616..b3cc7beab4a3 100644
---- a/include/linux/usb/quirks.h
-+++ b/include/linux/usb/quirks.h
-@@ -78,4 +78,7 @@
- /* skip BOS descriptor request */
- #define USB_QUIRK_NO_BOS			BIT(17)
- 
-+/* Device claims zero configurations, forcing to 1 */
-+#define USB_QUIRK_FORCE_ONE_CONFIG		BIT(18)
-+
- #endif /* __LINUX_USB_QUIRKS_H */
--- 
-2.25.1
-
+Thanks for reviewing!
 
