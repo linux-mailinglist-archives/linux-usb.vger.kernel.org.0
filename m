@@ -1,153 +1,129 @@
-Return-Path: <linux-usb+bounces-33809-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33810-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SB3SCXZRommF1wQAu9opvQ
-	(envelope-from <linux-usb+bounces-33809-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Feb 2026 03:22:46 +0100
+	id gIbULg5Yomlm2AQAu9opvQ
+	(envelope-from <linux-usb+bounces-33810-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Feb 2026 03:50:54 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 706BB1BFF54
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Feb 2026 03:22:45 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39D7A1C0086
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Feb 2026 03:50:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6BB2630768D4
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Feb 2026 02:22:31 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0C09230BB704
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Feb 2026 02:50:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 940E332E728;
-	Sat, 28 Feb 2026 02:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE5FA33B6EF;
+	Sat, 28 Feb 2026 02:50:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="RuEYukJz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BrrLchoa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BEE832549E
-	for <linux-usb@vger.kernel.org>; Sat, 28 Feb 2026 02:22:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60CC1332EAD;
+	Sat, 28 Feb 2026 02:50:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772245349; cv=none; b=jehUIMyn4It+pJPeYXWE/hcAc+L/dszmmtPhP+cZFsMB5Y2Sm9i2SVe8hArTV94nOBX7LkoecZfQacAqHZYvMn1litAIsLOgEpRuzD/KGPafCjttuSg/rEw87PUUzzGhOxWYxTGQmUcUbpOQbNoSyolTtdibW3hhNQzozGI70Yw=
+	t=1772247009; cv=none; b=kqjmxHRGxDebHW7Fmigs3kp58eqeEAOXmiy1J/HGf+g9KkXRdN4B9KJbQIN12UTe84gNWTuO807rF1s3EtfvRI87FwY4sgPT2ceY06HUUB5jEqjODIWILzg0YtrHMErzITgfe2IlgpOE3P/dFuG8OXwZyR5W/4kIp2Dx5fJ0550=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772245349; c=relaxed/simple;
-	bh=Gfn3aCNT8ZT1wK5WcGcj8Q5BH6obBRnkZU3amLAbYNQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mgGkf2Oap8nt5FvMxYDcrk/fu+x+pFTASXMXj6NN0+tWkk6oChSFUljUY49AlKuq/sUFfxtu+pELQsvGXxU5gBnuQoK/PheVdpc3mTKb/YyKdTqx9qpEigLd0VYrbOP/rzkgYW/TgUNOIzB34A4u0nkvVTbS0US0oiPftzAJcgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=RuEYukJz; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-896f5af3d8aso41036286d6.1
-        for <linux-usb@vger.kernel.org>; Fri, 27 Feb 2026 18:22:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1772245346; x=1772850146; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rh4u84aZJXhFp8ppWCmYPAvQ9O43Y7zAm+Txt0TtWbk=;
-        b=RuEYukJzLAMQ0EyEEjZlsbx7yqos0jWnOsM4oTKWRf8iifr45N63AK0qmNpSJpecvB
-         DzRmMYGNkyXYoCJxXPkLiG6BJ0gXZUMhyugTrsoNBtY1yp4L7npkf1kxE+SrGK4zUsh8
-         Up5ii2ixKTczYt4ex5IYZxxQ7b+nEVZChv6cvJjVSccs/AS4RKLvy5WGNf+IQcCNL+1i
-         aWh9g1lHiV+HUH4nEGKUvYvC9ZHx+VvNa4/TugPL1TpPqDfzdTAdsJ2xeJ56WHJM+CM0
-         pELRHlQgNawSZZRhQIb4C0GKYTXofI2DNt5EbYzwium9bsKtOOJxznt1jF8hLczw2naw
-         s7MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772245346; x=1772850146;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Rh4u84aZJXhFp8ppWCmYPAvQ9O43Y7zAm+Txt0TtWbk=;
-        b=JMy0+4G9gGGAZIy98XZr3zDTtY8RRav5NNq5P5dTTBYK5GHQXVX6cM4J6I5hGHTGxp
-         hO/v4vRD3J5PumSyhMDnlZ7B22TpSCv0OwEXs5TfpbtVLiflktB6aPWnEX64uQeOFCL3
-         +lOv4edm3LuNwc6yHJwr6JAtnfyilMqQpAdE+p9mbGm2ByJcFGuH4iUNC+H7pRuI0hoL
-         UHiEikh9GFXmgux6PLroTAfrddjwVtEh8SNooLKJXhN3Y/O/V1Vah/WlSEAa+GMFgMPq
-         68j5MFynQ4qOEz2Y6HX0U4kwGgnWu8LrmQRAVp2PjpZGaQCSgwDpNMBFpBZPvS1kDCdl
-         Pzpw==
-X-Forwarded-Encrypted: i=1; AJvYcCXYRpPhJvk0Q3UkCeNvkbBX1xrrX8dvNqkrtjjsbGpZA8YeFM72WYajoUUZKyWAUI9dn58lSS9Vucw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMS+aLPe8z+BVHN5kwB8gYR6aeRVLauK8faOcbeJSxoY9cI0to
-	zT+V7eGGvxhP3t863m2GWNYS0IP3mDxSv0oxGU51apCV/Oc8kL5uTQlBeNewu7JABw==
-X-Gm-Gg: ATEYQzwmT6IaeyUtE2kdEyPE3HePeNzdHeOxY13WZiqoPvvuw+In5GPeMbC1s33NSsw
-	j4NkBk2GgmbPSGcrLM1VyIs13CeqcGaH0a/PWV7g3HKP408tb9hZJxGbStIjd/+3YKTqbR/tJQA
-	W9Hk9EZ3Dbls2ZkesT+5rzs50SqT9batedAnQEMUEDbRXHbWE7kGDUsOzPySB8UsWGUM1DhyBfI
-	9XQuw6u99pVt3AsfmcUv0ErTEqqlE9zwHGsz7fterIWskYsVqetmb8piz8+BtbFDnWVcVil3L3z
-	OzkZNXuaEIJQgQxZpsIQNTFhMMCibjDq7cgkzE3zcFolzNyD7P1bzfGcrgv9S15tA/Sk8W8xliP
-	QRC+bLt4YRjJ5Jd6/+0AIjwviGk/Oev8IOWFQz08i3VYy6zJO12V/S6+/u7bpt983dd0HNt1f2v
-	LmWdDHcIA2oB8RpBJoEPoK6kdT
-X-Received: by 2002:a05:6214:62b:b0:895:4a0f:ea79 with SMTP id 6a1803df08f44-899d1e1c4c3mr75778976d6.44.1772245346458;
-        Fri, 27 Feb 2026 18:22:26 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::687c])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-899c7377b0csm58099466d6.31.2026.02.27.18.22.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Feb 2026 18:22:25 -0800 (PST)
-Date: Fri, 27 Feb 2026 21:22:23 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Oliver Neukum <oneukum@suse.com>, Nicholas Carlini <npc@anthropic.com>,
-	linux-usb@vger.kernel.org
-Subject: Re: Stack buffer overflow (write) in kvaser_usb_leaf_wait_cmd via
- malicious USB
-Message-ID: <f45e627b-66a7-424c-8491-8fed677ab9fc@rowland.harvard.edu>
-References: <CAOt5ifARcQqqGc65hHXR2JNTDg0hT0cF55Kb-6USEsqjEPM1nA@mail.gmail.com>
- <2026021847-acclaim-coil-fe7a@gregkh>
- <a38ccefc-6233-4be4-bbae-0ae0d4f4499b@suse.com>
- <eb96e0e4-b02a-48e5-ae07-bc31584f0855@rowland.harvard.edu>
- <e63ee746-dee7-4b3c-9360-95e96fadb765@suse.com>
- <862abc70-18ce-422c-bdf2-f02b984193c0@rowland.harvard.edu>
- <2026022617-disengage-spinning-c6bd@gregkh>
+	s=arc-20240116; t=1772247009; c=relaxed/simple;
+	bh=KlFFnao0DuPJ1Fmon/fxu0IpRoKOysu+4lTKUmPoc0Y=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=sj7ieKER1heLSTLUFMc9j0o9lhOOed7xAEw5i20eGSCrqhX49VdfhYfvOG+rxp3OnD9lOl2z4NHZXqEvTnbEjSFXii8QTZDfgW/J9ZdHvpRJO3T6G62T2752yRhK9fv46GU1oieUKKelsxhXtdsvGgadOrD8+gYdT7ToO7XtKcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BrrLchoa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3FCCC116C6;
+	Sat, 28 Feb 2026 02:50:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772247009;
+	bh=KlFFnao0DuPJ1Fmon/fxu0IpRoKOysu+4lTKUmPoc0Y=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=BrrLchoaQqwAmz2osT0o7MUOcoGazY3mNJknFtDIOILQBjnmy82/TuD42M05ZuCLO
+	 05tuKVxmaDe34H6ksdgf5trrXvWPSuC4AHkVTy5mBpGoWtE1XZWRJP69d2VZ12eBKx
+	 8B/OrMVlLCdysNrQcS1TcMxmvMy+6l9pvut9LIzKvQSwqYPD2wtUU6lhF0SUhJwfmD
+	 mIbVM5a1uoxRV0yj4t2LO57x/2VMcjc6EqiEE0a9ufY3+gnDv35ZwJQtv301GmZxSi
+	 GEUIsK0Ol+zIcV7xUyTacVOb4kk8iPU1qYs9nGisG6APtRGLUlp/2m1MDi6qrVYMAz
+	 +7hcLustx1aGQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9F8939EF96C;
+	Sat, 28 Feb 2026 02:50:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2026022617-disengage-spinning-c6bd@gregkh>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] r8152: Add 2500baseT EEE status/configuration
+ support
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177224701222.2846847.10778591223233826261.git-patchwork-notify@kernel.org>
+Date: Sat, 28 Feb 2026 02:50:12 +0000
+References: <20260224-b4-eee2g5-v2-1-cf5c83df036e@birger-koblitz.de>
+In-Reply-To: <20260224-b4-eee2g5-v2-1-cf5c83df036e@birger-koblitz.de>
+To: Birger Koblitz <mail@birger-koblitz.de>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, opensource@vdorst.com
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-usb@vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-33809-lists,linux-usb=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33810-lists,linux-usb=lfdr.de,netdevbpf];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NO_DN(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,rowland.harvard.edu:mid,rowland.harvard.edu:dkim]
-X-Rspamd-Queue-Id: 706BB1BFF54
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 39D7A1C0086
 X-Rspamd-Action: no action
 
-On Thu, Feb 26, 2026 at 08:29:45PM -0800, Greg KH wrote:
-> Given that I have to answer this type of question about every other week
-> these days given the fuzzing reports we get sent to the
-> security@kernel.org alias, I think I need to just write up a "here is
-> the Linux USB threat model that we currently support" document to
-> describe what the state is.
-> 
-> We can then work from there, either agreeing that we need to "move" the
-> level of interaction for which we trust / do not trust a device in the
-> lifecycle of a USB device, or just be happy with where it currently is.
-> 
-> That should work better with some groups that I know are working to do
-> stuff to "harden" the USB device stack for some specific use cases,
-> hopefully just using the existing user api that we have today that
-> USBGuard uses, or possibly adding to that to handle some missing areas
-> that we have not previously considered.
+Hello:
 
-I'll be keen to see the document when it's in close-to-final form!
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Alan Stern
+On Tue, 24 Feb 2026 18:40:14 +0100 you wrote:
+> The r8152 driver supports the RTL8156, which is a 2.5Gbit Ethernet controller for
+> USB 3.0, for which support is added for configuring and displaying the EEE
+> advertisement status for 2.5GBit connections.
+> 
+> The patch also corrects the determination of whether EEE is active to include
+> the 2.5GBit connection status and make the determination dependent not on the
+> desired speed configuration (tp->speed), but on the actual speed used by
+> the controller. For consistency, this is corrected also for the RTL8152/3.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v2] r8152: Add 2500baseT EEE status/configuration support
+    https://git.kernel.org/netdev/net-next/c/e8e83b67960c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
