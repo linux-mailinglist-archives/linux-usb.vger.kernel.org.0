@@ -1,57 +1,57 @@
-Return-Path: <linux-usb+bounces-33816-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33817-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YON7BDdYo2nW/AQAu9opvQ
-	(envelope-from <linux-usb+bounces-33816-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Feb 2026 22:03:51 +0100
+	id UIx9BeVho2myBQUAu9opvQ
+	(envelope-from <linux-usb+bounces-33817-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Feb 2026 22:45:09 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA61C1C8BE0
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Feb 2026 22:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F4C21C93A8
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Feb 2026 22:45:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 1C5F630098BE
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Feb 2026 21:03:50 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9225F300AB15
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Feb 2026 21:45:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E753314A65;
-	Sat, 28 Feb 2026 21:03:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78CB931715A;
+	Sat, 28 Feb 2026 21:45:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="F3CUBCYA"
+	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="sXV595Hi"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from ixit.cz (ixit.cz [185.100.197.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3876430BB3;
-	Sat, 28 Feb 2026 21:03:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75D382DECD3;
+	Sat, 28 Feb 2026 21:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.100.197.86
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772312627; cv=none; b=RRAguCwumHkleO5EN9X0ZlSxPuvKYKtuVQgbaGAbFLQN/e0gPpmGAGs1HBCh5X9ZmuwPiS17ORuF0XPMUP+BaUEKFmK9ElScVJmNo/APFURIhM7w99zM+4VXwBYTfRMFO13Hbica1amB8b6hHm8Xj8/DYJos+pcSPL8Eupa1C3Q=
+	t=1772315104; cv=none; b=V5SrXyeocZ5WMpWarehRfuiiRfmeRDu0VT7mobwRbK1X4/CQymdk+XeUvABPa89Z4LVXfnnGtXLopgtckeA8fBBCo2S+fKw/1JgWVZpqQ8VjUI7K5LEbO6V65nIiZ1fXQcaOOvHMq7vwKgVsTui7MAIBYn1xdEoacCs4KhtFE+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772312627; c=relaxed/simple;
-	bh=f1X0d8szpVcNS47HjkjsalKpp+R++CMXh81rv+Usazk=;
+	s=arc-20240116; t=1772315104; c=relaxed/simple;
+	bh=VaID4i4o0NQpAGtHAlflHsSfixg3ee6S7yHjz8lphug=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L6u0Y/Dl1QYuxPz84gph6uPrvHLU850B+AsNAaP4phX4QjA5PtRGvHMGbCj4KewmRDp9B/KETmt3B6jgU5HGxcFkQgxyUAZsGCoLiZlalZ1WQ7DHrX1V/hGoRuXSsTW5srh51YJCtRQnahPOt3N5mC5EVVlZN+yd6Y1rPzSVvD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz; spf=pass smtp.mailfrom=ixit.cz; dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b=F3CUBCYA; arc=none smtp.client-ip=185.100.197.86
+	 In-Reply-To:Content-Type; b=r4t5goR/ywntAb1qNuGTbVo6LdQqgLFB6vzganDadXVqZjhTzSE4mH1BGJzbKBlBDvWpwrL9oCIn1bX0ziI0L8Y6C3Dednno3oHEvyL2n23x5FGY3PO6aYQmhG37Sfmn3/8Mu8t/Rzt+NOTFgs4qmw2o/SKY9N3T6E/kAlWXGZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz; spf=pass smtp.mailfrom=ixit.cz; dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b=sXV595Hi; arc=none smtp.client-ip=185.100.197.86
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ixit.cz
 Received: from [IPV6:2a02:f000:10bd:e301::1d7] (unknown [IPv6:2a02:f000:10bd:e301::1d7])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by ixit.cz (Postfix) with ESMTPSA id E7766534153D;
-	Sat, 28 Feb 2026 22:03:40 +0100 (CET)
+	by ixit.cz (Postfix) with ESMTPSA id DEFAD5340619;
+	Sat, 28 Feb 2026 22:44:57 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-	t=1772312621;
+	t=1772315098;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=f9nwROOEdN1knLcz9S/L2UxsVXpydRoKkyH0kFoDWio=;
-	b=F3CUBCYAllBDPa7hleaqJA5o2TgHD2rW2sGPdVhayB2EAtWdj5TT1nbBrm1isqkL1CI/Is
-	wTA7MxGqWKE9CntGC7eZJWzldMllq39FlYSr1Fe4KET4qdPV0KczV4kYO1dBuL3d6d8qQM
-	3eovy2Cw6PZn9F7K1At/xZMwyukgH10=
-Message-ID: <70b558ea-a12e-4170-9b8e-c951131249af@ixit.cz>
-Date: Sat, 28 Feb 2026 22:03:40 +0100
+	bh=thG17fqykzjbDyWkNHFawoRP9z41p6sKMvCZgjdLFUI=;
+	b=sXV595HiGY/VBAwFWDa0woStTkbBx0QxkBAWiCgGZaIn1E8Bku22go9Dk2s+8Sq0uVIV5m
+	LIRVYE/K+1Qq6t0j1jjJ4PkNgPJbIEMH5jnyXGGTzBxlpUhxzzW+TgjaruZC+xwiM4bJsd
+	Q6QMXKUbkpLvWgArKqq5nL7hujD5Efo=
+Message-ID: <795ea759-7eaf-4f78-81f4-01ffbf2d7961@ixit.cz>
+Date: Sat, 28 Feb 2026 22:44:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,13 +59,16 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] usb: gadget: Fix g_ncm regression and atomic sleep
- in f_ncm
+Subject: Re: [PATCH 3/3] usb: gadget: f_ncm: align net_device lifecycle with
+ bind/unbind
 To: Kuen-Han Tsai <khtsai@google.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@kernel.org, kernel test robot <oliver.sang@intel.com>
-References: <20260221-legacy-ncm-v2-0-dfb891d76507@google.com>
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Felipe Balbi
+ <balbi@ti.com>, Prashanth K <prashanth.k@oss.qualcomm.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Andrzej Pietrasiewicz <andrzej.p@samsung.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, stable@kernel.org
+References: <20251230-ncm-refactor-v1-0-793e347bc7a7@google.com>
+ <20251230-ncm-refactor-v1-3-793e347bc7a7@google.com>
 Content-Language: en-US
 From: David Heidelberg <david@ixit.cz>
 Autocrypt: addr=david@ixit.cz; keydata=
@@ -111,7 +114,7 @@ Autocrypt: addr=david@ixit.cz; keydata=
  zRKcgRumz2Tc1ouHj6qINlzEe3a5ldctIn/dvR1l2Ko7GBTG+VGp9U5NOAEkGpxHG9yg6eeY
  fFYnMme51H/HKiyUlFiE3yd5LSmv8Dhbf+vsI4x6BOOOq4Iyop/Exavj1owGxW0hpdUGcCl1
  ovlwVPO/6l/XLAmSGwdnGqok5eGZQzSst0tj9RC9O0dXO1TZocOsf0tJ8dR2egX4kxM=
-In-Reply-To: <20260221-legacy-ncm-v2-0-dfb891d76507@google.com>
+In-Reply-To: <20251230-ncm-refactor-v1-3-793e347bc7a7@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
@@ -123,89 +126,93 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-33817-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33816-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	DKIM_TRACE(0.00)[ixit.cz:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[david@ixit.cz,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: AA61C1C8BE0
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,ixit.cz:mid,ixit.cz:dkim]
+X-Rspamd-Queue-Id: 8F4C21C93A8
 X-Rspamd-Action: no action
 
-Hello Kuen-Han,
-
-sadly this series is not enough to fully fix the usb issue encountered 
-on qcom sdm845 platform (namely Pixel 3, OnePlus 6/6T etc.).
-
-I didn't debugged deeply, but without these patches interface (indicated 
-by NM icon) goes on/off/on/off indefinitely. With your patches it seems 
-stable, but I'm not getting the DHCP address from the phone, which isn't 
-issue at all when I revert the 56a512a9b4107079f68701e7d55da8507eb963d9
-("usb: gadget: f_ncm: align net_device lifecycle with bind/unbind").
-
-I think reverting the original patch would make more sense and then 
-follow up with new one.
-
-Feel free to add me into CC and I'll happily test on the sdm845 mobile 
-devices for you.
-
-David
-
-On 21/02/2026 15:48, Kuen-Han Tsai wrote:
-> Commit 56a512a9b410 ("usb: gadget: f_ncm: align net_device lifecycle
-> with bind/unbind") addressed a lifetime mismatch where the network
-> interface outlived the parent gadget. However, this introduced two
-> regressions:
+On 30/12/2025 11:13, Kuen-Han Tsai wrote:
+> Currently, the net_device is allocated in ncm_alloc_inst() and freed in
+> ncm_free_inst(). This ties the network interface's lifetime to the
+> configuration instance rather than the USB connection (bind/unbind).
 > 
-> 1. A NULL pointer dereference in the legacy g_ncm driver. The legacy
->     driver attempts to access the net_device during its binding process
->     before the NCM function driver is fully initialized.
+> This decoupling causes issues when the USB gadget is disconnected where
+> the underlying gadget device is removed. The net_device can outlive its
+> parent, leading to dangling sysfs links and NULL pointer dereferences
+> when accessing the freed gadget device.
 > 
-> 2. A "sleeping function called from atomic context" error in f_ncm.
->     The current implementation holds a mutex which might sleep within
->     an atomic context.
+> Problem 1: NULL pointer dereference on disconnect
+>   Unable to handle kernel NULL pointer dereference at virtual address
+>   0000000000000000
+>   Call trace:
+>     __pi_strlen+0x14/0x150
+>     rtnl_fill_ifinfo+0x6b4/0x708
+>     rtmsg_ifinfo_build_skb+0xd8/0x13c
+>     rtmsg_ifinfo+0x50/0xa0
+>     __dev_notify_flags+0x4c/0x1f0
+>     dev_change_flags+0x54/0x70
+>     do_setlink+0x390/0xebc
+>     rtnl_newlink+0x7d0/0xac8
+>     rtnetlink_rcv_msg+0x27c/0x410
+>     netlink_rcv_skb+0x134/0x150
+>     rtnetlink_rcv+0x18/0x28
+>     netlink_unicast+0x254/0x3f0
+>     netlink_sendmsg+0x2e0/0x3d4
 > 
-> To resolve these, store the configuration parameters (qmult, host_addr,
-> dev_addr) in opts_net until the network device is ready for g_ncm.
-> Additionally, remove the net_device pointer from the f_ncm_opts
-> structure. This eliminates the race condition with configfs and allows
-> dropping the mutex, preventing the atomic sleep issue.
+> Problem 2: Dangling sysfs symlinks
+>   console:/ # ls -l /sys/class/net/ncm0
+>   lrwxrwxrwx ... /sys/class/net/ncm0 ->
+>   /sys/devices/platform/.../gadget.0/net/ncm0
+>   console:/ # ls -l /sys/devices/platform/.../gadget.0/net/ncm0
+>   ls: .../gadget.0/net/ncm0: No such file or directory
 > 
+> Move the net_device allocation to ncm_bind() and deallocation to
+> ncm_unbind(). This ensures the network interface exists only when the
+> gadget function is actually bound to a configuration.
+> 
+> To support pre-bind configuration (e.g., setting interface name or MAC
+> address via configfs), cache user-provided options in f_ncm_opts
+> using the gether_opts structure. Apply these cached settings to the
+> net_device upon creation in ncm_bind().
+> 
+> Preserve the use-after-free fix from commit 6334b8e4553c ("usb: gadget:
+> f_ncm: Fix UAF ncm object at re-bind after usb ep transport error").
+> Check opts->net in ncm_set_alt() and ncm_disable() to ensure
+> gether_disconnect() runs only if a connection was established.
+> 
+> Fixes: 40d133d7f542 ("usb: gadget: f_ncm: convert to new function interface with backward compatibility")
+> Cc: stable@kernel.org
 > Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
 > ---
-> Changes in v2:
-> - Remove the RFC tag.
-> - Fix NPE in gncm reported by the kernel test bot.
-> - Fix a "sleeping function called from atomic context" error.
-> - Link to v1: https://lore.kernel.org/r/20260214-legacy-ncm-v1-1-139c5bcc6636@google.com
+>   drivers/usb/gadget/function/f_ncm.c | 128 ++++++++++++++++++------------------
+>   drivers/usb/gadget/function/u_ncm.h |   4 +-
+>   2 files changed, 66 insertions(+), 66 deletions(-)
 > 
-> ---
-> Kuen-Han Tsai (2):
->        usb: legacy: ncm: Fix NPE in gncm_bind
->        usb: gadget: f_ncm: Fix atomic context locking issue
-> 
->   drivers/usb/gadget/function/f_ncm.c            | 29 +++++++++++---------------
->   drivers/usb/gadget/function/u_ether_configfs.h | 11 +---------
->   drivers/usb/gadget/function/u_ncm.h            |  1 -
->   drivers/usb/gadget/legacy/ncm.c                | 13 +++++++++---
->   4 files changed, 23 insertions(+), 31 deletions(-)
-> ---
-> base-commit: da87d45b195148d670ab995367d52aa9e8a9a1fa
-> change-id: 20260214-legacy-ncm-8c001295b343
-> 
-> Best regards,
+
+Just for sure writing here too, this patch (even including fixes from 
+next-20260227) breaks Snapdragon 845 USB, and also I seen someone from 
+MSM8960, so likely it applies on bigger variety of Qualcomm generations.
+
+Ref:
+https://lore.kernel.org/all/70b558ea-a12e-4170-9b8e/c951131249af@ixit.cz/
+
+David
 
 -- 
 David Heidelberg
