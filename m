@@ -1,150 +1,164 @@
-Return-Path: <linux-usb+bounces-33845-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33846-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mA76HU1opGlcfgUAu9opvQ
-	(envelope-from <linux-usb+bounces-33845-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 17:24:45 +0100
+	id qD6FET9rpGlegQUAu9opvQ
+	(envelope-from <linux-usb+bounces-33846-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 17:37:19 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E36971D09E3
-	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 17:24:44 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A68A31D0A8D
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 17:37:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0E61B301AB8B
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2026 16:23:59 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6BE35300DA6A
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2026 16:37:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0026C31B803;
-	Sun,  1 Mar 2026 16:23:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ACE2336EC5;
+	Sun,  1 Mar 2026 16:37:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="tgzNRw+A"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kDNx6L3A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E769C18FDDE;
-	Sun,  1 Mar 2026 16:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEDF2311C36
+	for <linux-usb@vger.kernel.org>; Sun,  1 Mar 2026 16:37:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772382237; cv=none; b=m5TCoZ5GpQTIVWOHoc8qcjax142ZIhZqbPuAhX3L+7J4yBQdYNViT07RM0fUnKXSmqKycXzU57mjpFh7V0ULUW2ROy/F4ZGNAf6saxuihljBn29DZD08IMoNrrSUmgrwEj6qkFqwjPRwSAdi6GOGlXaIvPq1Z3iJXXAF3i2Y/wU=
+	t=1772383029; cv=none; b=gqrWoicnForfEE8kZaGmFZG5fBsqIL0mSPeXH0atYwK+XqwReZyBOt3nM+//PKGA0zo4CGyfduA3ZUrZuOdmgATqUOhXkFcSRQcEQCD178p69iyZh9tEDAsvA7XwdXXIcKXsFtwMrHqaL9TKTFtTWRd6rpShN00HoYUTTZuNkxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772382237; c=relaxed/simple;
-	bh=1peXaOKLXDqhKblU2d714uATIQ5s3e1Bk1VZQgeW5Wc=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=KZev4bW0dnMRgcGKoRXnJ+6n7pbHp4lzDbUAuil8O+zSQOMXqtxP2PglxmpCr7a2Pdoth76LYRYXvjAtQ3KCyRWXJRxKYMgla1pXu+QMbdLa6IH8OSMD9ihjFJNmRMqUL6BKoWeIZGbslEBOBhZoPZ8ZJaWZs2+va5xK0Ppa/XM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=tgzNRw+A; arc=none smtp.client-ip=162.62.58.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1772382231; bh=mS8E0TrCr1YxiKgMwotf52407XP0k3WZtbN83DURWvE=;
-	h=From:To:Cc:Subject:Date;
-	b=tgzNRw+Ag04+Go7Q4AxRgSEB3Y5lWeMfHq8NjXT8mzg0m6yE9AT0lzLLOriZr4t/3
-	 kGOn4PZCZFsI4EaUbF/QQpgeQia83ScXRU2SLvtb0W6XfLbzdjL0Uc2jmtzYuuFd0K
-	 +aivWLceuH4VdztuGbost4WT8dZ6boBFnuBVzlfk=
-Received: from admin.. ([2001:da8:205:20a0:6eeb:b6ff:fe15:94a7])
-	by newxmesmtplogicsvrszc43-0.qq.com (NewEsmtp) with SMTP
-	id 5F08CAA5; Mon, 02 Mar 2026 00:23:48 +0800
-X-QQ-mid: xmsmtpt1772382228twxwc02up
-Message-ID: <tencent_05D6B6FBD5DE2A537EBE395A85B021506009@qq.com>
-X-QQ-XMAILINFO: MRMtjO3A6C9XFpEWwej/shdZIhqlksRx6yYziZ/NTIMyDQDLbBghwo0MY1jq0z
-	 CUGTvy+X9YKDk4silcSc5J9DbEq4Cfg28JUGAm6J962ir60Y6yjF6M9VG9X9WoMlyA6gG56jaehq
-	 XarMa08hLKyVrkgd7s2r/LrF+n7xPV2Xz45LmWGWlShzObVzIeHTSmhtwtHRcaVlbZsDzyF2puwJ
-	 FSp9Q4Mfb7YXvn4wvBlIzWICqumEQ/5OLUQPN4qhueAFWBt5PT+j0/+z4ebghCrfLWq5WpUaGrNH
-	 9P0SWdwueTed3tAOb+Zow6cLyVq+nVwBkQ/KO5PY9irptlimhXZwOD366DKC2+mH3ZTKyyLtXcO8
-	 FlFdTbt4zbvArSKU8q88Zlf2PMpHsBCwIeGeTfZ1Zq0j0KiVv1SH6FXuhbJAF1b2rkbCqH5/vuwi
-	 QQGxPnA9ic2tQEsWN/ok9hyUd01v6lEoAu7NYYDlZonzkB/KWG02vVxi6jnaoGOpi/lCBBdJM8b3
-	 hfyzZ+CipeO1eqzJNHXKQjl/wHKmI6a+P8QsMzUjW8IBVF53+ws7+d09a4Q9Tisb5xYe4J5c+JSP
-	 LxjL9Ym2spexbLEbhSTVpgBWfxEQ3ssHkDvpJQYkt3nw4vPcOXr/Ha/hJv/wg56YxzQv7u1btldJ
-	 t3raV4xm8Oi4OO7YE8Bmij8w3cmtJbY4BhrX/fGY722AezT1zj2gnsdl4v86G0RHONk6GNN1CvzS
-	 SIk43nVLn/fE6i96DsVbPCJ1ZnnODMQOzuexxVnSORtx/Ij9nw8q1bbc98lu1Cuu7s7BM+EgdCUy
-	 84RBW2JOL1iiKNRzhqo3zaVLWAhvAtZEazhM2ijDD8YQ/7MtkwDjkMnSnwJP4diq0ElQrXbAls2W
-	 8ZPOe4iUZqzE8Q5XWvv9lzqlBpfHWnuuAV3I1pDVxvsl6gYy3svD+6NUciKnTj9uOmJdwrcqWkgm
-	 7f09TL9umSJCmD7d5WdVIXAgHa45KJRwdsw8x9abkNP5RJp0fZC2fToaV5noyB2osrb9Y73SK5nR
-	 3emiaU3np0Xu3wSBywRWF1YnSZ8ApH7SooI/DwTEkOmdKsu6OlgO8fLnsfAP9yjPcK32D5Tg5eQ6
-	 bao3xW
-X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
-From: Zhaoyang Yu <2426767509@qq.com>
-To: daniel@zonque.org,
-	haojian.zhuang@gmail.com,
-	robert.jarzmik@free.fr,
-	gregkh@linuxfoundation.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Zhaoyang Yu <2426767509@qq.com>
-Subject: [PATCH] USB: pxa27x_udc: check return value of clk_enable
-Date: Sun,  1 Mar 2026 16:23:47 +0000
-X-OQ-MSGID: <20260301162347.267365-1-2426767509@qq.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1772383029; c=relaxed/simple;
+	bh=oFJcuj7s/WSXgtE/fyI6JR5pN5bvxBGTF/OtY3SgvWI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fzOA6z8NSR8JCqxIOh36x1bpvm/AggmtRkaOXhAjyc87R+AD4gKKB+Af4t6zuwSiB0UhYBZzfdHD8oM5zYOmwtijrWoJMMVpUPCvm9JAwcex3FV7BeGoCkS1mvL4GFB8ZmEl8LsjNVf2M6A+8HOvCb0XLNwZJz8Lp0gOG/iqJtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kDNx6L3A; arc=none smtp.client-ip=209.85.208.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-389e4330e32so53216051fa.0
+        for <linux-usb@vger.kernel.org>; Sun, 01 Mar 2026 08:37:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772383026; x=1772987826; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=chfWZCrwegHuS+IaibQUlGs9qTPZhd3l1r8kvwtttAg=;
+        b=kDNx6L3Ax7ZNiHAXoFgPYfjHo+XPySUCg3BzU/Idcb0hQ30z5jgwRGSxLZw8afL6iu
+         S6IYYknitwHBxK+ML9LvAjTQkZNvIQJEXCANgJDTYkGzYvpddiwdQEa2lksrEUfDRbYa
+         NFFaiYFp7zNr/XmfjG2OsBPNoX6hGqM0Ms3RiEc9OWu+TH/ynn3LoLdXW3FYMPp38pxF
+         lciytcc6CVMEQh24THT8Kp0GjO09CskLCVji79wjZGRMVJwfwgDptoe5757BSXbTnH4f
+         6pF+GDnNcmU88wkpIp7r2x/bcfuUuqAQUOjU4eEM6ZB9VJcViho6FTWcF2o9HN6HL5J1
+         lIfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772383026; x=1772987826;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=chfWZCrwegHuS+IaibQUlGs9qTPZhd3l1r8kvwtttAg=;
+        b=MCyGb51cyjEd1OyaJrTVJ5eaL7tiNZzAiNxJ255VqMwFCgxzhrGDN+lOZjhKmk2Ctx
+         OcwEF67MI+v4FiL30tAPNXKOLHTP8JnUj2nDaTPACwCy9ujPXgapKpclG7OqbRTcrHL6
+         vcRFLEtQSfRQJlDXbFJvdc7zVg3kKRveGPXvw4m0Pqe7uNC6rj0K0/jO2+vEmpi4yEyu
+         i6cTSCfazNvrtJBJqcKKTzpvUDs9+xybelXf7GZSAF9agBfs3ND6SywC8lXmpiGxAMAb
+         8JfQ/aiypichOyUud2q8M1DLDktjGun9Y3pjPtLLvJJdjoHz8WFTQq8Ow2UJAhZ3kaAO
+         0nKg==
+X-Forwarded-Encrypted: i=1; AJvYcCWfq5Sn2/ZST2jP3hMjirB7u6cikiuvGa4Cxu7RTEHofgU9CsgqTjhBA/U/w1GSCmn/nvix1hti1QI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwE0PdK4VKSltei33K9fY8Pl2cIFNXSfRkz+JoybF77GwhQZA0u
+	rkUTzmcOclKrfZnoZuQ7Rc2uMwC5H/6JhIDsQUhpSnXjCCOEHGNI2I9s
+X-Gm-Gg: ATEYQzw97xrnl1+I1RYORhzwNHATHxwSLwFRrCk4OMUQaJf/btbFdxPChcDQlOV4ca3
+	Qlk2Iw9+k6zAFLODq9Bp0T1oIkkviD/a2IM/Cl+t6xnDdgVwRLQN/lbVbH1V8O28Xx0Q9rqetzW
+	Ij7Kdo3O3HxYBhczYrYh9aHQQrfvNe5G8+cpCPSEDBqY8bjdfV0Tq11us23qTlCTdEoA97JQf01
+	eg5eeV4C/K3MM5iGriM600+w63r/bmTylc00vTs5xbhOJ4LsLxKiEjt7qOQVVfoYU9P8j2sxj9A
+	JJ5NSQ2CEDIAsphl1+rhdM+0svC4nU9/qlMVD+qRfe6IbHkKiY4Xtma0KQtG/7MySXBINrMA1JA
+	a8iGr9XtXYfDdtwtspIBCG/pc1br4fiKihG2bK5VyOo8zBElC+6C1co+ZBbTwKhrGcxA+bzzEqK
+	IsVbo93AbVffZZHhiA+kjP/UsGlxEZNqUNf/VFxM64Oue2f4UJFl+DyGnwtUvGg4yeNeLmKJk+c
+	R53
+X-Received: by 2002:a2e:914d:0:b0:389:fb69:9e65 with SMTP id 38308e7fff4ca-389ff356058mr42360521fa.31.1772383025715;
+        Sun, 01 Mar 2026 08:37:05 -0800 (PST)
+Received: from ?IPV6:2a00:1fa0:45b:6e70:24a:6543:9307:8962? ([2a00:1fa0:45b:6e70:24a:6543:9307:8962])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a115bd2384sm1095553e87.10.2026.03.01.08.37.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 Mar 2026 08:37:05 -0800 (PST)
+Message-ID: <554c1dc9-cb75-4777-ad98-97243808245d@gmail.com>
+Date: Sun, 1 Mar 2026 19:37:02 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB: pxa27x_udc: check return value of clk_enable
+To: Zhaoyang Yu <2426767509@qq.com>, daniel@zonque.org,
+ haojian.zhuang@gmail.com, robert.jarzmik@free.fr, gregkh@linuxfoundation.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <tencent_05D6B6FBD5DE2A537EBE395A85B021506009@qq.com>
+Content-Language: en-US
+From: Sergey Shtylyov <sergei.shtylyov@gmail.com>
+In-Reply-To: <tencent_05D6B6FBD5DE2A537EBE395A85B021506009@qq.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[qq.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[qq.com:s=s201512];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-33845-lists,linux-usb=lfdr.de];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33846-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[lists.infradead.org,vger.kernel.org,qq.com];
+	FREEMAIL_TO(0.00)[qq.com,zonque.org,gmail.com,free.fr,linuxfoundation.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[zonque.org,gmail.com,free.fr,linuxfoundation.org];
-	RCVD_COUNT_THREE(0.00)[4];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[qq.com];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[2426767509@qq.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[qq.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sergeishtylyov@gmail.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCPT_COUNT_SEVEN(0.00)[8];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qq.com:mid,qq.com:dkim,qq.com:email]
-X-Rspamd-Queue-Id: E36971D09E3
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qq.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A68A31D0A8D
 X-Rspamd-Action: no action
 
-clk_enable() may fail according to the API contract.
-Previously, udc_enable() ignored its return value.
-This patch checks the return value and logs an error
-without continuing initialization if clk_enable fails.
+On 3/1/26 7:23 PM, Zhaoyang Yu wrote:
 
-Signed-off-by: Zhaoyang Yu <2426767509@qq.com>
----
- drivers/usb/gadget/udc/pxa27x_udc.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+> clk_enable() may fail according to the API contract.
+> Previously, udc_enable() ignored its return value.
+> This patch checks the return value and logs an error
+> without continuing initialization if clk_enable fails.
+> 
+> Signed-off-by: Zhaoyang Yu <2426767509@qq.com>
+> ---
+>  drivers/usb/gadget/udc/pxa27x_udc.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/pxa27x_udc.c b/drivers/usb/gadget/udc/pxa27x_udc.c
+> index 897f53601b5b..69fcecaf6061 100644
+> --- a/drivers/usb/gadget/udc/pxa27x_udc.c
+> +++ b/drivers/usb/gadget/udc/pxa27x_udc.c
+> @@ -1696,7 +1696,13 @@ static void udc_enable(struct pxa_udc *udc)
+>  	if (udc->enabled)
+>  		return;
+>  
+> -	clk_enable(udc->clk);
+> +	int ret;
 
-diff --git a/drivers/usb/gadget/udc/pxa27x_udc.c b/drivers/usb/gadget/udc/pxa27x_udc.c
-index 897f53601b5b..69fcecaf6061 100644
---- a/drivers/usb/gadget/udc/pxa27x_udc.c
-+++ b/drivers/usb/gadget/udc/pxa27x_udc.c
-@@ -1696,7 +1696,13 @@ static void udc_enable(struct pxa_udc *udc)
- 	if (udc->enabled)
- 		return;
- 
--	clk_enable(udc->clk);
-+	int ret;
-+
-+	ret = clk_enable(udc->clk);
-+	if (ret) {
-+		dev_err(udc->dev, "clk_enable failed: %d\n", ret);
-+		return;
-+	}
- 	udc_writel(udc, UDCICR0, 0);
- 	udc_writel(udc, UDCICR1, 0);
- 	udc_clear_mask_UDCCR(udc, UDCCR_UDE);
--- 
-2.34.1
+   Please don't declare variables amidst of a function. IIRC, the Linux coding
+style doesn't allow for this C++-ism...
+
+[...]
+
+MBR, Sergey
 
 
