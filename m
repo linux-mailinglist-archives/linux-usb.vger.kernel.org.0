@@ -1,59 +1,57 @@
-Return-Path: <linux-usb+bounces-33828-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33829-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CNRyGtKYo2neHgUAu9opvQ
-	(envelope-from <linux-usb+bounces-33828-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 02:39:30 +0100
+	id qFmnFTeoo2mWJAUAu9opvQ
+	(envelope-from <linux-usb+bounces-33829-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 03:45:11 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52F441CB3F0
-	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 02:39:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C64941CDE00
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 03:45:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id ABED030439D6
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2026 01:37:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 35F393262FF5
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2026 01:37:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 405512F260F;
-	Sun,  1 Mar 2026 01:36:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D04462F4A14;
+	Sun,  1 Mar 2026 01:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aX7Aecg/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pyXlL3VW"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F672C11D3;
-	Sun,  1 Mar 2026 01:36:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8742DFA2F;
+	Sun,  1 Mar 2026 01:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772328983; cv=none; b=JcHhZxCdxl1iJVX3M1fBU1xRKBSqfwPWJgCLWVxsViVM+Km7295ntehY5GnRPOryhQajW5H79s0AMz6rSQWUfn1UoRJzvMwkq1l66t2GPpE2au1RjP4AFB7RbtgHAKyDaQPCI5cRisW5mACROEg5f3NfY5nakIoX+0g0M6kKvkU=
+	t=1772328995; cv=none; b=UOmnNIbOVB7Bd59t2oOcw8EEwrFPNGw5puN5ahPGr5tcMao6s6WPo0Cgbf0QPs+fsR33T4utF7pTRzZxaeMCF1y98IoM/bHQgmhVptVp5Gwf3Vf1K+7tGSWx4Pbn1GwSx3rAZ1JE9vN+gipw6sjLV4iLJl2sJ+OQQPwhPmjn/QA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772328983; c=relaxed/simple;
-	bh=V90oJ1OWeqkKX9NpQRWU3cgiCRxBkuEE0oz7GTQkgNM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J5NVTRdg3QUtQ3lYbEEIviLh/tEj7g65k934wrAo8jIHRCRUyFXrJEz24/GK9o8vQ/YTwl6m4Nc6X1ocvoWWiXKfRJw7d2kWKW3UfZZ7LDL442B4RWTWH8CyrgMVxevpOgcflXTBO5vbLq8qw2Tk5W7FxG+eosoKNGKasuOZ6sU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aX7Aecg/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9BC9C19421;
-	Sun,  1 Mar 2026 01:36:22 +0000 (UTC)
+	s=arc-20240116; t=1772328995; c=relaxed/simple;
+	bh=fgMY/FfoG3d93MvsOo/ErI3rU1hYiCm2fQTtsVBVS9Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B8gw62oLGkVfUGLkyD1fcJj7ebpQATd/MfOukWZ/3aOxMwPvKug4D+TwGi4buX8g5RE1dTveCSB+5PjI4X2xO/K5ny3qSAUmld5r2Rv/64/iFIddhGNPFbzDwL0Z2H6wHdT3n5gMP473eJx++YIfr2aOHRhaseaPimEWhWU8zVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pyXlL3VW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F859C19425;
+	Sun,  1 Mar 2026 01:36:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772328983;
-	bh=V90oJ1OWeqkKX9NpQRWU3cgiCRxBkuEE0oz7GTQkgNM=;
+	s=k20201202; t=1772328995;
+	bh=fgMY/FfoG3d93MvsOo/ErI3rU1hYiCm2fQTtsVBVS9Y=;
 	h=From:To:Cc:Subject:Date:From;
-	b=aX7Aecg/qVjAjs1k+3Yp9y8TZHs9ImkKe6X5X6Ah3Qbi/XiopwX+p8Vdm/H0pSRy1
-	 pnNJI+imX66LwmjKTOR/wxbwaOodshnE9FSbOXuXiSk+ERce+zjiOseBuXRi7MIPBF
-	 1Xg+dDvc50wNDfxxQRJymMREF9U1MPJL8MCUF7LYxCxF5fcbgI8d5e8ZNLdP9LaLUz
-	 rhqcTVynk+TVYHr/62E9KqsYcJshmmqmpFIbHKxv0SdLD6Yb9qbB8f6p9IBVJNgteu
-	 zWbI3zcjGm7HNaifGgH3Q88FBNE/AdD9ivbmqM84foaZHJc6VpAQafuZDzKFUhPZF8
-	 o4jfFBD+pmgGA==
+	b=pyXlL3VWl1BPqU4Lyj0JrkrAExIDSoF09RvEaNkPokkWCPOn+0ZO2OWJlLh744Vqi
+	 jzEukFLaVGNB9/c10UYP+mhrxEFc2Hcnm2H/FS1gHjDE7f+DJ/Sq55/Xhw5ZSLtAVd
+	 OGNi0Tqi2zo3ZVC2yXVrfD74DE1hS1F6kkOXc5Gd2msT2cJsErYbGStOQANnqT4sLK
+	 reV4UMHiLZ8Ifrzj8C7Gm/GvdYdW+24BqitQrHAZi2DA8J77mS0hc+x4Gg8/wbhIHy
+	 DGyhLzLXm9SQ/wl1XimtgYp6FGF6kEOthr1PgCZYo/EXFjedG5Q52U0EFtZMWNDZPr
+	 hn2XBc28d6/0Q==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
-	prashanth.k@oss.qualcomm.com
+	jszhang@kernel.org
 Cc: stable <stable@kernel.org>,
-	Samuel Wu <wusamuel@google.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-usb@vger.kernel.org
-Subject: FAILED: Patch "usb: dwc3: gadget: Move vbus draw to workqueue context" failed to apply to 6.6-stable tree
-Date: Sat, 28 Feb 2026 20:36:21 -0500
-Message-ID: <20260301013621.1696300-1-sashal@kernel.org>
+Subject: FAILED: Patch "usb: dwc2: fix resume failure if dr_mode is host" failed to apply to 6.6-stable tree
+Date: Sat, 28 Feb 2026 20:36:33 -0500
+Message-ID: <20260301013633.1696541-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -66,32 +64,33 @@ X-stable: review
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33828-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TAGGED_FROM(0.00)[bounces-33829-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 52F441CB3F0
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,msgid.link:url]
+X-Rspamd-Queue-Id: C64941CDE00
 X-Rspamd-Action: no action
 
 The patch below does not apply to the 6.6-stable tree.
@@ -104,125 +103,47 @@ Sasha
 
 ------------------ original commit in Linus's tree ------------------
 
-From 54aaa3b387c2f580a99dc86a9cc2eb6dfaf599a7 Mon Sep 17 00:00:00 2001
-From: Prashanth K <prashanth.k@oss.qualcomm.com>
-Date: Wed, 4 Feb 2026 11:11:55 +0530
-Subject: [PATCH] usb: dwc3: gadget: Move vbus draw to workqueue context
+From a52e4f2dff413b58c7200e89bb6540bd995e1269 Mon Sep 17 00:00:00 2001
+From: Jisheng Zhang <jszhang@kernel.org>
+Date: Thu, 29 Jan 2026 10:15:34 +0800
+Subject: [PATCH] usb: dwc2: fix resume failure if dr_mode is host
 
-Currently dwc3_gadget_vbus_draw() can be called from atomic
-context, which in turn invokes power-supply-core APIs. And
-some these PMIC APIs have operations that may sleep, leading
-to kernel panic.
+commit 13b1f8e25bfd1 ("usb: dwc2: Force mode optimizations") removed the
+dwc2_force_mode(hsotg, true) in dwc2_force_dr_mode() if dr_mode is host.
 
-Fix this by moving the vbus_draw into a workqueue context.
+But this brings a bug: the controller fails to resume back as host,
+further debugging shows that the controller is resumed as peripheral.
+The reason is dwc2_force_dr_mode() missed the host mode forcing, and
+when resuming from s2ram, GINTSTS is 0 by default, dwc2_is_device_mode
+in dwc2_resume() misreads this as the controller is in peripheral mode.
 
-Fixes: 99288de36020 ("usb: dwc3: add an alternate path in vbus_draw callback")
+Fix the resume failure by adding back the dwc2_force_mode(hsotg, true).
+
+Then an obvious question is: why this bug hasn't been observed and fixed
+for about six years? There are two resons: most dwc2 platforms set the
+dr_mode as otg; Some platforms don't have suspend & resume support yet.
+
+Fixes: 13b1f8e25bfd1 ("usb: dwc2: Force mode optimizations")
 Cc: stable <stable@kernel.org>
-Tested-by: Samuel Wu <wusamuel@google.com>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
-Link: https://patch.msgid.link/20260204054155.3063825-1-prashanth.k@oss.qualcomm.com
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Link: https://patch.msgid.link/20260129021534.10411-1-jszhang@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc3/core.c   | 19 ++++++++++++++++++-
- drivers/usb/dwc3/core.h   |  4 ++++
- drivers/usb/dwc3/gadget.c |  8 +++-----
- 3 files changed, 25 insertions(+), 6 deletions(-)
+ drivers/usb/dwc2/core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index c07ffe82c8504..161a4d58b2cec 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -2155,6 +2155,20 @@ static int dwc3_get_num_ports(struct dwc3 *dwc)
- 	return 0;
- }
- 
-+static void dwc3_vbus_draw_work(struct work_struct *work)
-+{
-+	struct dwc3 *dwc = container_of(work, struct dwc3, vbus_draw_work);
-+	union power_supply_propval val = {0};
-+	int ret;
-+
-+	val.intval = 1000 * (dwc->current_limit);
-+	ret = power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
-+
-+	if (ret < 0)
-+		dev_dbg(dwc->dev, "Error (%d) setting vbus draw (%d mA)\n",
-+			ret, dwc->current_limit);
-+}
-+
- static struct power_supply *dwc3_get_usb_power_supply(struct dwc3 *dwc)
+diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
+index c3d24312db0fe..f375c5185bfe2 100644
+--- a/drivers/usb/dwc2/core.c
++++ b/drivers/usb/dwc2/core.c
+@@ -578,6 +578,7 @@ void dwc2_force_dr_mode(struct dwc2_hsotg *hsotg)
  {
- 	struct power_supply *usb_psy;
-@@ -2169,6 +2183,7 @@ static struct power_supply *dwc3_get_usb_power_supply(struct dwc3 *dwc)
- 	if (!usb_psy)
- 		return ERR_PTR(-EPROBE_DEFER);
- 
-+	INIT_WORK(&dwc->vbus_draw_work, dwc3_vbus_draw_work);
- 	return usb_psy;
- }
- 
-@@ -2395,8 +2410,10 @@ void dwc3_core_remove(struct dwc3 *dwc)
- 
- 	dwc3_free_event_buffers(dwc);
- 
--	if (dwc->usb_psy)
-+	if (dwc->usb_psy) {
-+		cancel_work_sync(&dwc->vbus_draw_work);
- 		power_supply_put(dwc->usb_psy);
-+	}
- }
- EXPORT_SYMBOL_GPL(dwc3_core_remove);
- 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 08cc6f2b5c236..a35b3db1f9f3e 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1058,6 +1058,8 @@ struct dwc3_glue_ops {
-  * @role_switch_default_mode: default operation mode of controller while
-  *			usb role is USB_ROLE_NONE.
-  * @usb_psy: pointer to power supply interface.
-+ * @vbus_draw_work: Work to set the vbus drawing limit
-+ * @current_limit: How much current to draw from vbus, in milliAmperes.
-  * @usb2_phy: pointer to USB2 PHY
-  * @usb3_phy: pointer to USB3 PHY
-  * @usb2_generic_phy: pointer to array of USB2 PHYs
-@@ -1244,6 +1246,8 @@ struct dwc3 {
- 	enum usb_dr_mode	role_switch_default_mode;
- 
- 	struct power_supply	*usb_psy;
-+	struct work_struct	vbus_draw_work;
-+	unsigned int		current_limit;
- 
- 	u32			fladj;
- 	u32			ref_clk_per;
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 384963151eced..c65291e7b8d90 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -3124,8 +3124,6 @@ static void dwc3_gadget_set_ssp_rate(struct usb_gadget *g,
- static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
--	union power_supply_propval	val = {0};
--	int				ret;
- 
- 	if (dwc->usb2_phy)
- 		return usb_phy_set_power(dwc->usb2_phy, mA);
-@@ -3133,10 +3131,10 @@ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
- 	if (!dwc->usb_psy)
- 		return -EOPNOTSUPP;
- 
--	val.intval = 1000 * mA;
--	ret = power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
-+	dwc->current_limit = mA;
-+	schedule_work(&dwc->vbus_draw_work);
- 
--	return ret;
-+	return 0;
- }
- 
- /**
+ 	switch (hsotg->dr_mode) {
+ 	case USB_DR_MODE_HOST:
++		dwc2_force_mode(hsotg, true);
+ 		/*
+ 		 * NOTE: This is required for some rockchip soc based
+ 		 * platforms on their host-only dwc2.
 -- 
 2.51.0
 
