@@ -1,152 +1,143 @@
-Return-Path: <linux-usb+bounces-33842-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33843-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KJBrO+Wjo2mRIwUAu9opvQ
-	(envelope-from <linux-usb+bounces-33842-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 03:26:45 +0100
+	id YFOHBj3bo2kNQAUAu9opvQ
+	(envelope-from <linux-usb+bounces-33843-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 07:22:53 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50A521CD8D0
-	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 03:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6943B1CE9B9
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 07:22:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C46FD3329137
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2026 02:03:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CE55D3020A46
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2026 06:22:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 373233016EE;
-	Sun,  1 Mar 2026 02:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WCXgYwMd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 832183148CF;
+	Sun,  1 Mar 2026 06:22:33 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B973C2FC011;
-	Sun,  1 Mar 2026 02:03:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19CE5286D7D
+	for <linux-usb@vger.kernel.org>; Sun,  1 Mar 2026 06:22:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772330598; cv=none; b=LF55Qg6PmeMETOcF9wHJryGyWxLM0ttbh2g3+Zm1R+HDcmwQzQWQbRlZyRAphfgsjycdi7fW8uBSLtysTVMv9yNsELFhOnMbVMdAn3SWJQFTMUcdy0EdEy15iTOVciDnI8xQQ7wpWs6L2PYF4HkS07j0K1+3rw9jDXFWOPqnA78=
+	t=1772346153; cv=none; b=S/Si9JAn7ADBwTuvRBFFXQO1HWm87+ESHCYyfTxoS/UJV56LQ/Q5ZDQIHkohnAEddvqigQA0K9m6B1ulujS9+pd9X5+vdGfzjPEsXxVdGLkVtrLSDbmFSEFDCz35lqZprvl0lDsJKty7HOsfNPC06XPOaOsOO952pcSQpQemrBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772330598; c=relaxed/simple;
-	bh=Ab15j7H21BT3eK7YbjkUq4fU6YmYPpWrDF2PCJMGp9g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZwBtZGSxm1E1BHXHXbuluG5Mib8ktYlpcIW1KEepLShi4IA441H7ToSrXOrvIC+Cp7X2CWCNLDru+W4OogxzykbHLNLP5FVHGcFpn3Y5OCk8yf+O2Q0S+UZjCHAmIMqzq8ZPJOwu0yXe3a7xbfEJKs3vWVCvE+zSs6KxY0EVfok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WCXgYwMd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AECCC19425;
-	Sun,  1 Mar 2026 02:03:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772330598;
-	bh=Ab15j7H21BT3eK7YbjkUq4fU6YmYPpWrDF2PCJMGp9g=;
-	h=From:To:Cc:Subject:Date:From;
-	b=WCXgYwMd/b5L5N6Rja4KDXaWLv5rUUboW8rz5w+vZKE/AdF9rWA0kiqhbca/Qae/I
-	 lDa3TtvP3K887lu0SzBGNl6Iorh/u87EbXmg+UmQllGkRKE3XA8KgYM4VnLnt5DVTA
-	 CLqESEAfD8lonHycJrbUOyXJcJyKV1xVnOqRP9CyXnWq8jkvni8jZmHPijG0VQ5rdv
-	 qCXPYiEVM+1ed9Sp7Ebn1ZR3H0Pg1jrwxJv3zUpvxLCFLSKNVxTHsnE6oDDungb4AA
-	 ev0rxQxX6cPE7og7c7lzTRiIx2mclq11XTxjTiOs2Le54f7Vy4tV84DwKduROcFzfQ
-	 Mk8Axv/7IFv8A==
-From: Sasha Levin <sashal@kernel.org>
-To: stable@vger.kernel.org,
-	jszhang@kernel.org
-Cc: stable <stable@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Subject: FAILED: Patch "usb: dwc2: fix resume failure if dr_mode is host" failed to apply to 5.10-stable tree
-Date: Sat, 28 Feb 2026 21:03:16 -0500
-Message-ID: <20260301020316.1731307-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1772346153; c=relaxed/simple;
+	bh=spGUCmiK4pUf3x7l/ulh4b36jPDkAtOW+Vm0Wq22Ycc=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=f7uQfui2/jsXjaV6a0RAWb4VJHqbYFHPvcEJIN/COCSr8JK3dC1EzYN4fxX6y32B/aAVdv2joeNM8NQBZg7RE8w9/uS9n0VL3+Fi+xGCatdVPVkCkyiSFqnobQrpZcAHk8W2OpbjFPdOxw2Yx24CuCU0AT6tMb9ZiXadr5n/xNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-679c44ae7abso88598406eaf.1
+        for <linux-usb@vger.kernel.org>; Sat, 28 Feb 2026 22:22:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772346151; x=1772950951;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VTqvGwRrEgZP0aDTqKDifd3G2AqaoNfo5cgh3uDMDYI=;
+        b=i3sAk26YdnR/JnbwD5L0bbmcG1K9elRTfBrvu4H/JsxGoF5DzbFx8yxDROlQ1KzSyp
+         2GR3nDWEs/CatY1Fo8IAb7OMEFBaFGhTHyJVm7804lB1Gi31Y6DoouUQ8MCKC8absI1r
+         9I9F3oF7GO7mreIKFGOfyD/CzGnIei1IG9jr6Jq/MhS7qq03lkCOjFV6eRxY7FDrl/C0
+         YLEYXhA5ziATDDkwIRvT4ZqRiExYO12tbGuc/9M/qW/jHdHb01NsME/Ckl/upKJ+O6Gd
+         yvajv3C6EWFaDe0PDqEb5oT0hdNoaAFD3TK/QWPcFIez0eULFLqK+GBmaO6GggBT15nz
+         jFBw==
+X-Forwarded-Encrypted: i=1; AJvYcCUdWfdNgMspVOB3MUPH4VsRI0iHzw/IoXHfLKi8gq1J9GNam5Ros7sVHTVTU123y5Plxq0Mzo8lA+8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCTUJr1lkBGxvbSw2hxgDdOJZVtDcMq+EWtGw691wL4LeASId8
+	0nGqvbimhRwXMcT+cLyUYybn6WdqnqLLxvbN747UUpeiB/Kje0gKSeHDiQfjpIpNyFtBIDgrfcy
+	Vrv0o+UC8ucmVfzbQbu1+rhv0XmVmT62sf26jK9dqScCb6dV8ujGZrQ1NA4k=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Patchwork-Hint: ignore
-X-stable: review
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6820:985:b0:679:f3c6:6f26 with SMTP id
+ 006d021491bc7-679f3c67070mr7088328eaf.38.1772346151274; Sat, 28 Feb 2026
+ 22:22:31 -0800 (PST)
+Date: Sat, 28 Feb 2026 22:22:31 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69a3db27.050a0220.3a55be.0052.GAE@google.com>
+Subject: [syzbot] Monthly usb report (Mar 2026)
+From: syzbot <syzbot+list2ca2bc194bf5b27fd5ca@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-1.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33842-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-33843-lists,linux-usb=lfdr.de,list2ca2bc194bf5b27fd5ca];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 50A521CD8D0
+	FROM_HAS_DN(0.00)[];
+	REDIRECTOR_URL(0.00)[goo.gl];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[googlegroups.com:email,goo.gl:url,syzkaller.appspot.com:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6943B1CE9B9
 X-Rspamd-Action: no action
 
-The patch below does not apply to the 5.10-stable tree.
-If someone wants it applied there, or to any other stable or longterm
-tree, then please email the backport, including the original git commit
-id to <stable@vger.kernel.org>.
+Hello usb maintainers/developers,
 
-Thanks,
-Sasha
+This is a 31-day syzbot report for the usb subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/usb
 
------------------- original commit in Linus's tree ------------------
+During the period, 3 new issues were detected and 0 were fixed.
+In total, 83 issues are still open and 413 have already been fixed.
 
-From a52e4f2dff413b58c7200e89bb6540bd995e1269 Mon Sep 17 00:00:00 2001
-From: Jisheng Zhang <jszhang@kernel.org>
-Date: Thu, 29 Jan 2026 10:15:34 +0800
-Subject: [PATCH] usb: dwc2: fix resume failure if dr_mode is host
+Some of the still happening issues:
 
-commit 13b1f8e25bfd1 ("usb: dwc2: Force mode optimizations") removed the
-dwc2_force_mode(hsotg, true) in dwc2_force_dr_mode() if dr_mode is host.
+Ref  Crashes Repro Title
+<1>  7466    Yes   KASAN: use-after-free Read in v4l2_fh_init
+                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
+<2>  5143    Yes   WARNING in usb_free_urb
+                   https://syzkaller.appspot.com/bug?extid=b466336413a1fba398a5
+<3>  3627    Yes   KASAN: use-after-free Read in v4l2_fh_open
+                   https://syzkaller.appspot.com/bug?extid=b2391895514ed9ef4a8e
+<4>  2462    Yes   INFO: task hung in usbdev_open (2)
+                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+<5>  2456    Yes   possible deadlock in input_inject_event
+                   https://syzkaller.appspot.com/bug?extid=79c403850e6816dc39cf
+<6>  2169    Yes   INFO: task hung in jbd2_journal_commit_transaction (5)
+                   https://syzkaller.appspot.com/bug?extid=3071bdd0a9953bc0d177
+<7>  1865    Yes   WARNING in usb_tx_block/usb_submit_urb
+                   https://syzkaller.appspot.com/bug?extid=355c68b459d1d96c4d06
+<8>  1417    Yes   KASAN: use-after-free Read in em28xx_init_extension (2)
+                   https://syzkaller.appspot.com/bug?extid=99d6c66dbbc484f50e1c
+<9>  1403    Yes   WARNING in enable_work
+                   https://syzkaller.appspot.com/bug?extid=7053fbd8757fecbbe492
+<10> 1051    No    KASAN: vmalloc-out-of-bounds Read in kcov_remote_start
+                   https://syzkaller.appspot.com/bug?extid=8a173e13208949931dc7
 
-But this brings a bug: the controller fails to resume back as host,
-further debugging shows that the controller is resumed as peripheral.
-The reason is dwc2_force_dr_mode() missed the host mode forcing, and
-when resuming from s2ram, GINTSTS is 0 by default, dwc2_is_device_mode
-in dwc2_resume() misreads this as the controller is in peripheral mode.
-
-Fix the resume failure by adding back the dwc2_force_mode(hsotg, true).
-
-Then an obvious question is: why this bug hasn't been observed and fixed
-for about six years? There are two resons: most dwc2 platforms set the
-dr_mode as otg; Some platforms don't have suspend & resume support yet.
-
-Fixes: 13b1f8e25bfd1 ("usb: dwc2: Force mode optimizations")
-Cc: stable <stable@kernel.org>
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Link: https://patch.msgid.link/20260129021534.10411-1-jszhang@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc2/core.c | 1 +
- 1 file changed, 1 insertion(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
-index c3d24312db0fe..f375c5185bfe2 100644
---- a/drivers/usb/dwc2/core.c
-+++ b/drivers/usb/dwc2/core.c
-@@ -578,6 +578,7 @@ void dwc2_force_dr_mode(struct dwc2_hsotg *hsotg)
- {
- 	switch (hsotg->dr_mode) {
- 	case USB_DR_MODE_HOST:
-+		dwc2_force_mode(hsotg, true);
- 		/*
- 		 * NOTE: This is required for some rockchip soc based
- 		 * platforms on their host-only dwc2.
--- 
-2.51.0
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
 
-
-
+You may send multiple commands in a single email message.
 
