@@ -1,59 +1,57 @@
-Return-Path: <linux-usb+bounces-33841-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33842-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oGSmHYeuo2nUJwUAu9opvQ
-	(envelope-from <linux-usb+bounces-33841-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 04:12:07 +0100
+	id KJBrO+Wjo2mRIwUAu9opvQ
+	(envelope-from <linux-usb+bounces-33842-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 03:26:45 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DF9B1CE508
-	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 04:12:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50A521CD8D0
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 03:26:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CE118350CE77
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2026 02:02:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C46FD3329137
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2026 02:03:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B315A2FE598;
-	Sun,  1 Mar 2026 02:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 373233016EE;
+	Sun,  1 Mar 2026 02:03:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JAPZj5WU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WCXgYwMd"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410392FB969;
-	Sun,  1 Mar 2026 02:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B973C2FC011;
+	Sun,  1 Mar 2026 02:03:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772330548; cv=none; b=DdYPvdUDBcKCK68eWEDpvRfyQODn7vrm1Vim8h7hCo6TSBv4U7rXYlHrko5j1BJoR5TyMTiiE9pm+HYVkAeUuO60B/MDvFBCSOBMksQYE4cC3cMP2fjdl7vk4Uiuugd+n6hGkGnfR+SzFpjPCMMnIWkm4R3js40BQwH01/7a1rY=
+	t=1772330598; cv=none; b=LF55Qg6PmeMETOcF9wHJryGyWxLM0ttbh2g3+Zm1R+HDcmwQzQWQbRlZyRAphfgsjycdi7fW8uBSLtysTVMv9yNsELFhOnMbVMdAn3SWJQFTMUcdy0EdEy15iTOVciDnI8xQQ7wpWs6L2PYF4HkS07j0K1+3rw9jDXFWOPqnA78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772330548; c=relaxed/simple;
-	bh=KmH3hkbiOh3+edAF/MqRkL0Vdzpm6Hb8w7j2lmfhbv8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A91mmqI2P0pFl941+MNiXD5qxhPJ9UZchhtzW4ctiKl1fcywEgmY5ZupV7ruSpu2s1IZ/P3GE9CksAbmyFdw5PEbGXQ2E5wAy+AQOYJy1XGRlB701oCLyn9+d6HfqV+UJXU3ZEwbXvOdnBYDz+NEU6alGVm4qCTMZG/HTiuYzKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JAPZj5WU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B428C19421;
-	Sun,  1 Mar 2026 02:02:27 +0000 (UTC)
+	s=arc-20240116; t=1772330598; c=relaxed/simple;
+	bh=Ab15j7H21BT3eK7YbjkUq4fU6YmYPpWrDF2PCJMGp9g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZwBtZGSxm1E1BHXHXbuluG5Mib8ktYlpcIW1KEepLShi4IA441H7ToSrXOrvIC+Cp7X2CWCNLDru+W4OogxzykbHLNLP5FVHGcFpn3Y5OCk8yf+O2Q0S+UZjCHAmIMqzq8ZPJOwu0yXe3a7xbfEJKs3vWVCvE+zSs6KxY0EVfok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WCXgYwMd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AECCC19425;
+	Sun,  1 Mar 2026 02:03:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772330548;
-	bh=KmH3hkbiOh3+edAF/MqRkL0Vdzpm6Hb8w7j2lmfhbv8=;
+	s=k20201202; t=1772330598;
+	bh=Ab15j7H21BT3eK7YbjkUq4fU6YmYPpWrDF2PCJMGp9g=;
 	h=From:To:Cc:Subject:Date:From;
-	b=JAPZj5WU4nLeT5NQtrZCDDLsUMYbgaZH3wLo8HBaYNVGYP4YpPbcbS9NtDqlRkPvy
-	 akt7e8vumhjGg3His2mEDWcPWVRvE+eL1c3yWUY1iep/VM1Ha8qgkrF8h+liMABMgz
-	 I/ap88qlif9tjf1WGv2j7WxX+ZF0Mo0RPxA6xbZ6/SCJLW7eLwQQaKZw2JOeJyn3tI
-	 WGm+yu4Gt0HdPx3gCo9WTxbL3vKQhIMjeJHhWiAamcNlUCDo3IWyc9czMsGiSRWbss
-	 STNgkvuzTh21+K7WY0argdmsBfKP5Y0AGg/6Ri9Ik/Pl76UHafVML/P1UoXqge8tbe
-	 yukmORmZJHyBQ==
+	b=WCXgYwMd/b5L5N6Rja4KDXaWLv5rUUboW8rz5w+vZKE/AdF9rWA0kiqhbca/Qae/I
+	 lDa3TtvP3K887lu0SzBGNl6Iorh/u87EbXmg+UmQllGkRKE3XA8KgYM4VnLnt5DVTA
+	 CLqESEAfD8lonHycJrbUOyXJcJyKV1xVnOqRP9CyXnWq8jkvni8jZmHPijG0VQ5rdv
+	 qCXPYiEVM+1ed9Sp7Ebn1ZR3H0Pg1jrwxJv3zUpvxLCFLSKNVxTHsnE6oDDungb4AA
+	 ev0rxQxX6cPE7og7c7lzTRiIx2mclq11XTxjTiOs2Le54f7Vy4tV84DwKduROcFzfQ
+	 Mk8Axv/7IFv8A==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
-	haotienh@nvidia.com
+	jszhang@kernel.org
 Cc: stable <stable@kernel.org>,
-	Wayne Chang <waynec@nvidia.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	linux-tegra@vger.kernel.org
-Subject: FAILED: Patch "usb: gadget: tegra-xudc: Add handling for BLCG_COREPLL_PWRDN" failed to apply to 5.10-stable tree
-Date: Sat, 28 Feb 2026 21:02:25 -0500
-Message-ID: <20260301020226.1730162-1-sashal@kernel.org>
+	linux-usb@vger.kernel.org
+Subject: FAILED: Patch "usb: dwc2: fix resume failure if dr_mode is host" failed to apply to 5.10-stable tree
+Date: Sat, 28 Feb 2026 21:03:16 -0500
+Message-ID: <20260301020316.1731307-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -66,33 +64,32 @@ X-stable: review
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33841-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-33842-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nvidia.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,msgid.link:url,linuxfoundation.org:email]
-X-Rspamd-Queue-Id: 9DF9B1CE508
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: 50A521CD8D0
 X-Rspamd-Action: no action
 
 The patch below does not apply to the 5.10-stable tree.
@@ -105,73 +102,47 @@ Sasha
 
 ------------------ original commit in Linus's tree ------------------
 
-From 1132e90840abf3e7db11f1d28199e9fbc0b0e69e Mon Sep 17 00:00:00 2001
-From: Haotien Hsu <haotienh@nvidia.com>
-Date: Sat, 24 Jan 2026 01:31:21 +0800
-Subject: [PATCH] usb: gadget: tegra-xudc: Add handling for BLCG_COREPLL_PWRDN
+From a52e4f2dff413b58c7200e89bb6540bd995e1269 Mon Sep 17 00:00:00 2001
+From: Jisheng Zhang <jszhang@kernel.org>
+Date: Thu, 29 Jan 2026 10:15:34 +0800
+Subject: [PATCH] usb: dwc2: fix resume failure if dr_mode is host
 
-The COREPLL_PWRDN bit in the BLCG register must be set when the XUSB
-device controller is powergated and cleared when it is unpowergated.
-If this bit is not explicitly controlled, the core PLL may remain in an
-incorrect power state across suspend/resume or ELPG transitions.
-Therefore, update the driver to explicitly control this bit during
-powergate transitions.
+commit 13b1f8e25bfd1 ("usb: dwc2: Force mode optimizations") removed the
+dwc2_force_mode(hsotg, true) in dwc2_force_dr_mode() if dr_mode is host.
 
-Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB device mode controller")
+But this brings a bug: the controller fails to resume back as host,
+further debugging shows that the controller is resumed as peripheral.
+The reason is dwc2_force_dr_mode() missed the host mode forcing, and
+when resuming from s2ram, GINTSTS is 0 by default, dwc2_is_device_mode
+in dwc2_resume() misreads this as the controller is in peripheral mode.
+
+Fix the resume failure by adding back the dwc2_force_mode(hsotg, true).
+
+Then an obvious question is: why this bug hasn't been observed and fixed
+for about six years? There are two resons: most dwc2 platforms set the
+dr_mode as otg; Some platforms don't have suspend & resume support yet.
+
+Fixes: 13b1f8e25bfd1 ("usb: dwc2: Force mode optimizations")
 Cc: stable <stable@kernel.org>
-Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
-Link: https://patch.msgid.link/20260123173121.4093902-1-waynec@nvidia.com
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Link: https://patch.msgid.link/20260129021534.10411-1-jszhang@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/udc/tegra-xudc.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/usb/dwc2/core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-index 9d2007f448c04..7f7251c10e952 100644
---- a/drivers/usb/gadget/udc/tegra-xudc.c
-+++ b/drivers/usb/gadget/udc/tegra-xudc.c
-@@ -3392,17 +3392,18 @@ static void tegra_xudc_device_params_init(struct tegra_xudc *xudc)
+diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
+index c3d24312db0fe..f375c5185bfe2 100644
+--- a/drivers/usb/dwc2/core.c
++++ b/drivers/usb/dwc2/core.c
+@@ -578,6 +578,7 @@ void dwc2_force_dr_mode(struct dwc2_hsotg *hsotg)
  {
- 	u32 val, imod;
- 
-+	val = xudc_readl(xudc, BLCG);
- 	if (xudc->soc->has_ipfs) {
--		val = xudc_readl(xudc, BLCG);
- 		val |= BLCG_ALL;
- 		val &= ~(BLCG_DFPCI | BLCG_UFPCI | BLCG_FE |
- 				BLCG_COREPLL_PWRDN);
- 		val |= BLCG_IOPLL_0_PWRDN;
- 		val |= BLCG_IOPLL_1_PWRDN;
- 		val |= BLCG_IOPLL_2_PWRDN;
--
--		xudc_writel(xudc, val, BLCG);
-+	} else {
-+		val &= ~BLCG_COREPLL_PWRDN;
- 	}
-+	xudc_writel(xudc, val, BLCG);
- 
- 	if (xudc->soc->port_speed_quirk)
- 		tegra_xudc_limit_port_speed(xudc);
-@@ -3953,6 +3954,7 @@ static void tegra_xudc_remove(struct platform_device *pdev)
- static int __maybe_unused tegra_xudc_powergate(struct tegra_xudc *xudc)
- {
- 	unsigned long flags;
-+	u32 val;
- 
- 	dev_dbg(xudc->dev, "entering ELPG\n");
- 
-@@ -3965,6 +3967,10 @@ static int __maybe_unused tegra_xudc_powergate(struct tegra_xudc *xudc)
- 
- 	spin_unlock_irqrestore(&xudc->lock, flags);
- 
-+	val = xudc_readl(xudc, BLCG);
-+	val |= BLCG_COREPLL_PWRDN;
-+	xudc_writel(xudc, val, BLCG);
-+
- 	clk_bulk_disable_unprepare(xudc->soc->num_clks, xudc->clks);
- 
- 	regulator_bulk_disable(xudc->soc->num_supplies, xudc->supplies);
+ 	switch (hsotg->dr_mode) {
+ 	case USB_DR_MODE_HOST:
++		dwc2_force_mode(hsotg, true);
+ 		/*
+ 		 * NOTE: This is required for some rockchip soc based
+ 		 * platforms on their host-only dwc2.
 -- 
 2.51.0
 
