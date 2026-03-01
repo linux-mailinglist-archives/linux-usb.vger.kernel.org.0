@@ -1,58 +1,59 @@
-Return-Path: <linux-usb+bounces-33827-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33828-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kMSXO5Gbo2k3IQUAu9opvQ
-	(envelope-from <linux-usb+bounces-33827-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 02:51:14 +0100
+	id CNRyGtKYo2neHgUAu9opvQ
+	(envelope-from <linux-usb+bounces-33828-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 02:39:30 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FD871CC071
-	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 02:51:12 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52F441CB3F0
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 02:39:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 7F81230511A0
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2026 01:37:17 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id ABED030439D6
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2026 01:37:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C15F2D73B9;
-	Sun,  1 Mar 2026 01:36:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 405512F260F;
+	Sun,  1 Mar 2026 01:36:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GoRmxB8l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aX7Aecg/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF6913B58A;
-	Sun,  1 Mar 2026 01:36:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F672C11D3;
+	Sun,  1 Mar 2026 01:36:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772328978; cv=none; b=noynSSTGHAWh/qXn6LLBVrc/0Zo5Q4muekR+tm5ht2f/KCjXPcXmVAmMP2vBlIQ7DIp6IiHwj0kCrAlrWXAPNlAVo15LLJfgNX84H8Cvz/bgJnVq0fhns00KhWAu5rqVQ7XOh6q1TeupfYGFf4NW1vqHi7KPfpQBsv9OBKFhOoE=
+	t=1772328983; cv=none; b=JcHhZxCdxl1iJVX3M1fBU1xRKBSqfwPWJgCLWVxsViVM+Km7295ntehY5GnRPOryhQajW5H79s0AMz6rSQWUfn1UoRJzvMwkq1l66t2GPpE2au1RjP4AFB7RbtgHAKyDaQPCI5cRisW5mACROEg5f3NfY5nakIoX+0g0M6kKvkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772328978; c=relaxed/simple;
-	bh=CRcxW/3ifUR6a9kx1DDduMjUYzLtSw3J6EFCiP8Cd1s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JrJZRVGLzz/tSrgJujoOAnXEJdklHfo3IxLQouPftuuZ7feOMpNqdhgz16QkmtXBczCkr42NwbFZpDDcQhgNoChKxvPURvPz6c8tDMtzGTlCS3JFUbBWwOyqadCSVsh8dA3p9V47eSI8MwpdUzI5IO3sCtXo3xI5FEPp1n7G6O4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GoRmxB8l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC35FC19424;
-	Sun,  1 Mar 2026 01:36:17 +0000 (UTC)
+	s=arc-20240116; t=1772328983; c=relaxed/simple;
+	bh=V90oJ1OWeqkKX9NpQRWU3cgiCRxBkuEE0oz7GTQkgNM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J5NVTRdg3QUtQ3lYbEEIviLh/tEj7g65k934wrAo8jIHRCRUyFXrJEz24/GK9o8vQ/YTwl6m4Nc6X1ocvoWWiXKfRJw7d2kWKW3UfZZ7LDL442B4RWTWH8CyrgMVxevpOgcflXTBO5vbLq8qw2Tk5W7FxG+eosoKNGKasuOZ6sU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aX7Aecg/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9BC9C19421;
+	Sun,  1 Mar 2026 01:36:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772328978;
-	bh=CRcxW/3ifUR6a9kx1DDduMjUYzLtSw3J6EFCiP8Cd1s=;
+	s=k20201202; t=1772328983;
+	bh=V90oJ1OWeqkKX9NpQRWU3cgiCRxBkuEE0oz7GTQkgNM=;
 	h=From:To:Cc:Subject:Date:From;
-	b=GoRmxB8lSoQQAX1ng3Sa5hokUCHQQQSnrwy3rCdw9WQ4UhuLMMRai7fhU90Hsr3sZ
-	 DLgtxqucQdOwXmjwBff6Ijm8t3JGCmnwc+3EQqkTvAEB0hI4WLZYa5f/ktttMiWoNG
-	 CQm37JCX8exBBXsQ0S7Pbsn4UBWCXQoUxNAOQwGesEJosEPyBMNoYhZnaTUKKVBnub
-	 cjfAtpkEdavb6PMjVKq+TSMU0PLyxJdKHQ1NcwKErIaf/YJkO9t8JQyfe9D+B0EDHW
-	 ew0I1m+9A4/UNMkqE0+lI4bl/RiKvO+3xtqYlwDz2P6dYNqdMXJIAviB3xm8lV73qX
-	 UeH7lhC5qHwYA==
+	b=aX7Aecg/qVjAjs1k+3Yp9y8TZHs9ImkKe6X5X6Ah3Qbi/XiopwX+p8Vdm/H0pSRy1
+	 pnNJI+imX66LwmjKTOR/wxbwaOodshnE9FSbOXuXiSk+ERce+zjiOseBuXRi7MIPBF
+	 1Xg+dDvc50wNDfxxQRJymMREF9U1MPJL8MCUF7LYxCxF5fcbgI8d5e8ZNLdP9LaLUz
+	 rhqcTVynk+TVYHr/62E9KqsYcJshmmqmpFIbHKxv0SdLD6Yb9qbB8f6p9IBVJNgteu
+	 zWbI3zcjGm7HNaifGgH3Q88FBNE/AdD9ivbmqM84foaZHJc6VpAQafuZDzKFUhPZF8
+	 o4jfFBD+pmgGA==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
-	thomas.richard@bootlin.com
+	prashanth.k@oss.qualcomm.com
 Cc: stable <stable@kernel.org>,
-	Peter Chen <peter.chen@kernel.org>,
+	Samuel Wu <wusamuel@google.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-usb@vger.kernel.org
-Subject: FAILED: Patch "usb: cdns3: fix role switching during resume" failed to apply to 6.6-stable tree
-Date: Sat, 28 Feb 2026 20:36:16 -0500
-Message-ID: <20260301013616.1696199-1-sashal@kernel.org>
+Subject: FAILED: Patch "usb: dwc3: gadget: Move vbus draw to workqueue context" failed to apply to 6.6-stable tree
+Date: Sat, 28 Feb 2026 20:36:21 -0500
+Message-ID: <20260301013621.1696300-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -65,33 +66,32 @@ X-stable: review
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33827-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33828-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linuxfoundation.org:email,msgid.link:url]
-X-Rspamd-Queue-Id: 0FD871CC071
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: 52F441CB3F0
 X-Rspamd-Action: no action
 
 The patch below does not apply to the 6.6-stable tree.
@@ -104,91 +104,125 @@ Sasha
 
 ------------------ original commit in Linus's tree ------------------
 
-From 87e4b043b98a1d269be0b812f383881abee0ca45 Mon Sep 17 00:00:00 2001
-From: "Thomas Richard (TI)" <thomas.richard@bootlin.com>
-Date: Fri, 30 Jan 2026 11:05:45 +0100
-Subject: [PATCH] usb: cdns3: fix role switching during resume
+From 54aaa3b387c2f580a99dc86a9cc2eb6dfaf599a7 Mon Sep 17 00:00:00 2001
+From: Prashanth K <prashanth.k@oss.qualcomm.com>
+Date: Wed, 4 Feb 2026 11:11:55 +0530
+Subject: [PATCH] usb: dwc3: gadget: Move vbus draw to workqueue context
 
-If the role change while we are suspended, the cdns3 driver switches to the
-new mode during resume. However, switching to host mode in this context
-causes a NULL pointer dereference.
+Currently dwc3_gadget_vbus_draw() can be called from atomic
+context, which in turn invokes power-supply-core APIs. And
+some these PMIC APIs have operations that may sleep, leading
+to kernel panic.
 
-The host role's start() operation registers a xhci-hcd device, but its
-probe is deferred while we are in the resume path. The host role's resume()
-operation assumes the xhci-hcd device is already probed, which is not the
-case, leading to the dereference. Since the start() operation of the new
-role is already called, the resume operation can be skipped.
+Fix this by moving the vbus_draw into a workqueue context.
 
-So skip the resume operation for the new role if a role switch occurs
-during resume. Once the resume sequence is complete, the xhci-hcd device
-can be probed in case of host mode.
-
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000208
-Mem abort info:
-...
-Data abort info:
-...
-[0000000000000208] pgd=0000000000000000, p4d=0000000000000000
-Internal error: Oops: 0000000096000004 [#1]  SMP
-Modules linked in:
-CPU: 0 UID: 0 PID: 146 Comm: sh Not tainted
-6.19.0-rc7-00013-g6e64f4aabfae-dirty #135 PREEMPT
-Hardware name: Texas Instruments J7200 EVM (DT)
-pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : usb_hcd_is_primary_hcd+0x0/0x1c
-lr : cdns_host_resume+0x24/0x5c
-...
-Call trace:
- usb_hcd_is_primary_hcd+0x0/0x1c (P)
- cdns_resume+0x6c/0xbc
- cdns3_controller_resume.isra.0+0xe8/0x17c
- cdns3_plat_resume+0x18/0x24
- platform_pm_resume+0x2c/0x68
- dpm_run_callback+0x90/0x248
- device_resume+0x100/0x24c
- dpm_resume+0x190/0x2ec
- dpm_resume_end+0x18/0x34
- suspend_devices_and_enter+0x2b0/0xa44
- pm_suspend+0x16c/0x5fc
- state_store+0x80/0xec
- kobj_attr_store+0x18/0x2c
- sysfs_kf_write+0x7c/0x94
- kernfs_fop_write_iter+0x130/0x1dc
- vfs_write+0x240/0x370
- ksys_write+0x70/0x108
- __arm64_sys_write+0x1c/0x28
- invoke_syscall+0x48/0x10c
- el0_svc_common.constprop.0+0x40/0xe0
- do_el0_svc+0x1c/0x28
- el0_svc+0x34/0x108
- el0t_64_sync_handler+0xa0/0xe4
- el0t_64_sync+0x198/0x19c
-Code: 52800003 f9407ca5 d63f00a0 17ffffe4 (f9410401)
----[ end trace 0000000000000000 ]---
-
+Fixes: 99288de36020 ("usb: dwc3: add an alternate path in vbus_draw callback")
 Cc: stable <stable@kernel.org>
-Fixes: 2cf2581cd229 ("usb: cdns3: add power lost support for system resume")
-Signed-off-by: Thomas Richard (TI) <thomas.richard@bootlin.com>
-Acked-by: Peter Chen <peter.chen@kernel.org>
-Link: https://patch.msgid.link/20260130-usb-cdns3-fix-role-switching-during-resume-v1-1-44c456852b52@bootlin.com
+Tested-by: Samuel Wu <wusamuel@google.com>
+Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
+Link: https://patch.msgid.link/20260204054155.3063825-1-prashanth.k@oss.qualcomm.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/cdns3/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/dwc3/core.c   | 19 ++++++++++++++++++-
+ drivers/usb/dwc3/core.h   |  4 ++++
+ drivers/usb/dwc3/gadget.c |  8 +++-----
+ 3 files changed, 25 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-index 1243a5cea91b5..f0e32227c0b79 100644
---- a/drivers/usb/cdns3/core.c
-+++ b/drivers/usb/cdns3/core.c
-@@ -551,7 +551,7 @@ int cdns_resume(struct cdns *cdns)
- 		}
- 	}
- 
--	if (cdns->roles[cdns->role]->resume)
-+	if (!role_changed && cdns->roles[cdns->role]->resume)
- 		cdns->roles[cdns->role]->resume(cdns, power_lost);
- 
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index c07ffe82c8504..161a4d58b2cec 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -2155,6 +2155,20 @@ static int dwc3_get_num_ports(struct dwc3 *dwc)
  	return 0;
+ }
+ 
++static void dwc3_vbus_draw_work(struct work_struct *work)
++{
++	struct dwc3 *dwc = container_of(work, struct dwc3, vbus_draw_work);
++	union power_supply_propval val = {0};
++	int ret;
++
++	val.intval = 1000 * (dwc->current_limit);
++	ret = power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
++
++	if (ret < 0)
++		dev_dbg(dwc->dev, "Error (%d) setting vbus draw (%d mA)\n",
++			ret, dwc->current_limit);
++}
++
+ static struct power_supply *dwc3_get_usb_power_supply(struct dwc3 *dwc)
+ {
+ 	struct power_supply *usb_psy;
+@@ -2169,6 +2183,7 @@ static struct power_supply *dwc3_get_usb_power_supply(struct dwc3 *dwc)
+ 	if (!usb_psy)
+ 		return ERR_PTR(-EPROBE_DEFER);
+ 
++	INIT_WORK(&dwc->vbus_draw_work, dwc3_vbus_draw_work);
+ 	return usb_psy;
+ }
+ 
+@@ -2395,8 +2410,10 @@ void dwc3_core_remove(struct dwc3 *dwc)
+ 
+ 	dwc3_free_event_buffers(dwc);
+ 
+-	if (dwc->usb_psy)
++	if (dwc->usb_psy) {
++		cancel_work_sync(&dwc->vbus_draw_work);
+ 		power_supply_put(dwc->usb_psy);
++	}
+ }
+ EXPORT_SYMBOL_GPL(dwc3_core_remove);
+ 
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 08cc6f2b5c236..a35b3db1f9f3e 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1058,6 +1058,8 @@ struct dwc3_glue_ops {
+  * @role_switch_default_mode: default operation mode of controller while
+  *			usb role is USB_ROLE_NONE.
+  * @usb_psy: pointer to power supply interface.
++ * @vbus_draw_work: Work to set the vbus drawing limit
++ * @current_limit: How much current to draw from vbus, in milliAmperes.
+  * @usb2_phy: pointer to USB2 PHY
+  * @usb3_phy: pointer to USB3 PHY
+  * @usb2_generic_phy: pointer to array of USB2 PHYs
+@@ -1244,6 +1246,8 @@ struct dwc3 {
+ 	enum usb_dr_mode	role_switch_default_mode;
+ 
+ 	struct power_supply	*usb_psy;
++	struct work_struct	vbus_draw_work;
++	unsigned int		current_limit;
+ 
+ 	u32			fladj;
+ 	u32			ref_clk_per;
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 384963151eced..c65291e7b8d90 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3124,8 +3124,6 @@ static void dwc3_gadget_set_ssp_rate(struct usb_gadget *g,
+ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
+ {
+ 	struct dwc3		*dwc = gadget_to_dwc(g);
+-	union power_supply_propval	val = {0};
+-	int				ret;
+ 
+ 	if (dwc->usb2_phy)
+ 		return usb_phy_set_power(dwc->usb2_phy, mA);
+@@ -3133,10 +3131,10 @@ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
+ 	if (!dwc->usb_psy)
+ 		return -EOPNOTSUPP;
+ 
+-	val.intval = 1000 * mA;
+-	ret = power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
++	dwc->current_limit = mA;
++	schedule_work(&dwc->vbus_draw_work);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ /**
 -- 
 2.51.0
 
