@@ -1,59 +1,58 @@
-Return-Path: <linux-usb+bounces-33836-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33837-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8JesIGueo2k3IQUAu9opvQ
-	(envelope-from <linux-usb+bounces-33836-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 03:03:23 +0100
+	id AJHqEKeso2kmJwUAu9opvQ
+	(envelope-from <linux-usb+bounces-33837-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 04:04:07 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0D271CCBD5
-	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 03:03:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 937351CE2C8
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 04:04:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6BDF330EBAE5
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2026 01:53:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 97CBB3191BB5
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2026 01:54:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D0030B50D;
-	Sun,  1 Mar 2026 01:52:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40E1303A18;
+	Sun,  1 Mar 2026 01:53:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MRmTCWtK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HvOtWyDU"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F361D2F12CE;
-	Sun,  1 Mar 2026 01:52:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 436CC274B5F;
+	Sun,  1 Mar 2026 01:53:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772329952; cv=none; b=PnhloobhJ2dLpHujlO6ala67NkdUUJ0gOUH1BN/YAjQISZMO1uGVbl2E7XG0xo2ulf5pde3OUUW0t05X/66XN+Gm1WrlcjPJkJUnGoPL7E46hgJQnrmDBF57so8VSjn93FNoIzsyy5QmGI2GDQmHWm8bhvEuNUJAIqa+xME2+1s=
+	t=1772330008; cv=none; b=OTS+81kTEHFsVAEyEUxzuAzuEI+CLQXDrVZMFmgGHa4BgDCQlGKbP7DnXuK5PUMxhmDnXtcx2c1KqcyngxclIjKMksXNuPe1BpBN6+NbOJlbhXs6illhJHdlJ9Qc08T5Hu6ds5+bhf8QzzEZQv6TfiDisLTf8LO9ybccjlYyEwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772329952; c=relaxed/simple;
-	bh=lK7j4WZSSl7gy8lpJIYfmQvgTUHcfSKUjQ0FZWdvr1s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SYY9//xZiuPD5IUWBBDUxf7hvnqC/RLzGqtIjvoRFQBMJNseIIng0lh9X2JZSeybvGC/903MIjWfx4VPbXvVnMcgn/4UUttqC0lk1BVBetKBl9hZkAppLtxDC/G0tFr08S8Zs2oKlPeaoXGwPMuHrDHiXNf/qkRQFYuZc6jtiP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MRmTCWtK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E48B4C19424;
-	Sun,  1 Mar 2026 01:52:30 +0000 (UTC)
+	s=arc-20240116; t=1772330008; c=relaxed/simple;
+	bh=+MlxvMgIvOcV4f0uiMnm4b4Bu4lgt491hACDl2oRdTA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=by11n2Jp0ze8R1I2QDsvTH/6Zbui/1qH+X25i9qikLacfBVG8ao5ct6+RvOPVJg7fLwAiZVDeL3il0c597vPQxVVD2XKJMoPxFZi70JNb6bCuPJ4jqGYtbu0qib8elzY+n2fZI9zptnQKvvuIwFRKO+ZVnI+Jw5WSfg+fnenaXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HvOtWyDU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C7CC19424;
+	Sun,  1 Mar 2026 01:53:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772329951;
-	bh=lK7j4WZSSl7gy8lpJIYfmQvgTUHcfSKUjQ0FZWdvr1s=;
+	s=k20201202; t=1772330008;
+	bh=+MlxvMgIvOcV4f0uiMnm4b4Bu4lgt491hACDl2oRdTA=;
 	h=From:To:Cc:Subject:Date:From;
-	b=MRmTCWtK9fsBCn2EYEBhfvchR7C9Ukst8JDhGjW45g4KFuLWFKKhNXMbg60DL8BAK
-	 fzj6FK3Walb0Li1GqirPXiCVCvOjXEZAzBy+6ENWwipYWiaFttsx64nuPDx0nLq2a3
-	 2HRE2ooLC2TYhqOPYGamlTU2rNfZXAf3FpgymCDlPT0oT+WzDNnsywrOfEnkLF7hbs
-	 30YbvzfuvhBKZpnmjfL9BkqfiFdPbADp/8OZ2PLiz6U5PnLm5KVkCEV8vAcI0Tk33H
-	 I9JthquljMC9S1crXa8ZOTshToaAB3eUCBydvRxj47JPTt5FkYaSkH9GR4Rkkv8ZzH
-	 ychSIu2BaqvQg==
+	b=HvOtWyDUPk/h8mmcXKDyYD4tcFu/e28vfmQXh7tUMUMVTqCf7iAovOe2zAN0wyTO4
+	 1QOKc9q0CSVfkmMPVgM/1FprI7xLr9Po9Q8RCxCqYN7SmTsqdPrMDY8yfbYN9hDhX4
+	 g0z9VxFEgQ0HEjiqfmR2LjnXh0y1ioCRQ8JDXcAHtVFkkmfMmOOYcVo9PemeknOX/j
+	 G8NOMrIGnaamP3gRjcBQP/MjNffTwQk2ezPh8zcvweW/scRGca38YsrQw5PtYUb9lg
+	 6eV2Dx7CZoCizvdaIrohuNUYZH8AAtlPTYfbD7UzBS6iHexM3ufwUhcmHxpDCR1doo
+	 LvBpK/i8HROSQ==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
-	haotienh@nvidia.com
+	thomas.richard@bootlin.com
 Cc: stable <stable@kernel.org>,
-	Wayne Chang <waynec@nvidia.com>,
+	Peter Chen <peter.chen@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	linux-tegra@vger.kernel.org
-Subject: FAILED: Patch "usb: gadget: tegra-xudc: Add handling for BLCG_COREPLL_PWRDN" failed to apply to 5.15-stable tree
-Date: Sat, 28 Feb 2026 20:52:29 -0500
-Message-ID: <20260301015229.1719032-1-sashal@kernel.org>
+	linux-usb@vger.kernel.org
+Subject: FAILED: Patch "usb: cdns3: fix role switching during resume" failed to apply to 5.15-stable tree
+Date: Sat, 28 Feb 2026 20:53:25 -0500
+Message-ID: <20260301015326.1720215-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -66,33 +65,33 @@ X-stable: review
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33836-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33837-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[msgid.link:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,nvidia.com:email,linuxfoundation.org:email]
-X-Rspamd-Queue-Id: F0D271CCBD5
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,msgid.link:url,bootlin.com:email]
+X-Rspamd-Queue-Id: 937351CE2C8
 X-Rspamd-Action: no action
 
 The patch below does not apply to the 5.15-stable tree.
@@ -105,73 +104,91 @@ Sasha
 
 ------------------ original commit in Linus's tree ------------------
 
-From 1132e90840abf3e7db11f1d28199e9fbc0b0e69e Mon Sep 17 00:00:00 2001
-From: Haotien Hsu <haotienh@nvidia.com>
-Date: Sat, 24 Jan 2026 01:31:21 +0800
-Subject: [PATCH] usb: gadget: tegra-xudc: Add handling for BLCG_COREPLL_PWRDN
+From 87e4b043b98a1d269be0b812f383881abee0ca45 Mon Sep 17 00:00:00 2001
+From: "Thomas Richard (TI)" <thomas.richard@bootlin.com>
+Date: Fri, 30 Jan 2026 11:05:45 +0100
+Subject: [PATCH] usb: cdns3: fix role switching during resume
 
-The COREPLL_PWRDN bit in the BLCG register must be set when the XUSB
-device controller is powergated and cleared when it is unpowergated.
-If this bit is not explicitly controlled, the core PLL may remain in an
-incorrect power state across suspend/resume or ELPG transitions.
-Therefore, update the driver to explicitly control this bit during
-powergate transitions.
+If the role change while we are suspended, the cdns3 driver switches to the
+new mode during resume. However, switching to host mode in this context
+causes a NULL pointer dereference.
 
-Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB device mode controller")
+The host role's start() operation registers a xhci-hcd device, but its
+probe is deferred while we are in the resume path. The host role's resume()
+operation assumes the xhci-hcd device is already probed, which is not the
+case, leading to the dereference. Since the start() operation of the new
+role is already called, the resume operation can be skipped.
+
+So skip the resume operation for the new role if a role switch occurs
+during resume. Once the resume sequence is complete, the xhci-hcd device
+can be probed in case of host mode.
+
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000208
+Mem abort info:
+...
+Data abort info:
+...
+[0000000000000208] pgd=0000000000000000, p4d=0000000000000000
+Internal error: Oops: 0000000096000004 [#1]  SMP
+Modules linked in:
+CPU: 0 UID: 0 PID: 146 Comm: sh Not tainted
+6.19.0-rc7-00013-g6e64f4aabfae-dirty #135 PREEMPT
+Hardware name: Texas Instruments J7200 EVM (DT)
+pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : usb_hcd_is_primary_hcd+0x0/0x1c
+lr : cdns_host_resume+0x24/0x5c
+...
+Call trace:
+ usb_hcd_is_primary_hcd+0x0/0x1c (P)
+ cdns_resume+0x6c/0xbc
+ cdns3_controller_resume.isra.0+0xe8/0x17c
+ cdns3_plat_resume+0x18/0x24
+ platform_pm_resume+0x2c/0x68
+ dpm_run_callback+0x90/0x248
+ device_resume+0x100/0x24c
+ dpm_resume+0x190/0x2ec
+ dpm_resume_end+0x18/0x34
+ suspend_devices_and_enter+0x2b0/0xa44
+ pm_suspend+0x16c/0x5fc
+ state_store+0x80/0xec
+ kobj_attr_store+0x18/0x2c
+ sysfs_kf_write+0x7c/0x94
+ kernfs_fop_write_iter+0x130/0x1dc
+ vfs_write+0x240/0x370
+ ksys_write+0x70/0x108
+ __arm64_sys_write+0x1c/0x28
+ invoke_syscall+0x48/0x10c
+ el0_svc_common.constprop.0+0x40/0xe0
+ do_el0_svc+0x1c/0x28
+ el0_svc+0x34/0x108
+ el0t_64_sync_handler+0xa0/0xe4
+ el0t_64_sync+0x198/0x19c
+Code: 52800003 f9407ca5 d63f00a0 17ffffe4 (f9410401)
+---[ end trace 0000000000000000 ]---
+
 Cc: stable <stable@kernel.org>
-Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
-Link: https://patch.msgid.link/20260123173121.4093902-1-waynec@nvidia.com
+Fixes: 2cf2581cd229 ("usb: cdns3: add power lost support for system resume")
+Signed-off-by: Thomas Richard (TI) <thomas.richard@bootlin.com>
+Acked-by: Peter Chen <peter.chen@kernel.org>
+Link: https://patch.msgid.link/20260130-usb-cdns3-fix-role-switching-during-resume-v1-1-44c456852b52@bootlin.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/udc/tegra-xudc.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/usb/cdns3/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-index 9d2007f448c04..7f7251c10e952 100644
---- a/drivers/usb/gadget/udc/tegra-xudc.c
-+++ b/drivers/usb/gadget/udc/tegra-xudc.c
-@@ -3392,17 +3392,18 @@ static void tegra_xudc_device_params_init(struct tegra_xudc *xudc)
- {
- 	u32 val, imod;
- 
-+	val = xudc_readl(xudc, BLCG);
- 	if (xudc->soc->has_ipfs) {
--		val = xudc_readl(xudc, BLCG);
- 		val |= BLCG_ALL;
- 		val &= ~(BLCG_DFPCI | BLCG_UFPCI | BLCG_FE |
- 				BLCG_COREPLL_PWRDN);
- 		val |= BLCG_IOPLL_0_PWRDN;
- 		val |= BLCG_IOPLL_1_PWRDN;
- 		val |= BLCG_IOPLL_2_PWRDN;
--
--		xudc_writel(xudc, val, BLCG);
-+	} else {
-+		val &= ~BLCG_COREPLL_PWRDN;
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+index 1243a5cea91b5..f0e32227c0b79 100644
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -551,7 +551,7 @@ int cdns_resume(struct cdns *cdns)
+ 		}
  	}
-+	xudc_writel(xudc, val, BLCG);
  
- 	if (xudc->soc->port_speed_quirk)
- 		tegra_xudc_limit_port_speed(xudc);
-@@ -3953,6 +3954,7 @@ static void tegra_xudc_remove(struct platform_device *pdev)
- static int __maybe_unused tegra_xudc_powergate(struct tegra_xudc *xudc)
- {
- 	unsigned long flags;
-+	u32 val;
+-	if (cdns->roles[cdns->role]->resume)
++	if (!role_changed && cdns->roles[cdns->role]->resume)
+ 		cdns->roles[cdns->role]->resume(cdns, power_lost);
  
- 	dev_dbg(xudc->dev, "entering ELPG\n");
- 
-@@ -3965,6 +3967,10 @@ static int __maybe_unused tegra_xudc_powergate(struct tegra_xudc *xudc)
- 
- 	spin_unlock_irqrestore(&xudc->lock, flags);
- 
-+	val = xudc_readl(xudc, BLCG);
-+	val |= BLCG_COREPLL_PWRDN;
-+	xudc_writel(xudc, val, BLCG);
-+
- 	clk_bulk_disable_unprepare(xudc->soc->num_clks, xudc->clks);
- 
- 	regulator_bulk_disable(xudc->soc->num_supplies, xudc->supplies);
+ 	return 0;
 -- 
 2.51.0
 
