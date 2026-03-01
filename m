@@ -1,57 +1,57 @@
-Return-Path: <linux-usb+bounces-33818-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33819-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id /R6sNxKTo2khHQUAu9opvQ
-	(envelope-from <linux-usb+bounces-33818-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 02:14:58 +0100
+	id 2MTdL0+To2khHQUAu9opvQ
+	(envelope-from <linux-usb+bounces-33819-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 02:15:59 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B27A1C9F6A
-	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 02:14:58 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5899E1CA02E
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Mar 2026 02:15:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 8DAEF300D769
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2026 01:14:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 516C03019FE4
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2026 01:15:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00978223328;
-	Sun,  1 Mar 2026 01:14:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98CBA23B63C;
+	Sun,  1 Mar 2026 01:15:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="At1JQEJB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PRq8CgWY"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B1A20E702;
-	Sun,  1 Mar 2026 01:14:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A0422F77B;
+	Sun,  1 Mar 2026 01:15:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772327695; cv=none; b=La+GTvUmH/8asQu4puaYPrtjkDCLlAzUdNf7UenUNNScRnFUCsEALdW8zg1udVm4XDFmb6C/Lxisi2E4WAFb5zmMoqIVvADOoep7pe3h5wmtUvm9YqnRxt1XZQN3NOZMPOThc+3kqMhKAjerNcoiuQZm0RyQEDD+ztapvVASH7A=
+	t=1772327732; cv=none; b=XiokUOK08tgZOqCAMepF+Vzm0jUsJyc7Xs0uRcLL9fGDHU1lXX9m+D5w10qLPQ80psp6Ja9UeJSoDu24gzU3A/IZd1T7GXkI8ZrT7jUFCSC9qkdZhniLghE0dNWrcdIyr0GqI9sCdryJ17HkYm9haOGqlIq/Cho5nZXnLX9m7mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772327695; c=relaxed/simple;
-	bh=GN0Q5iUDTP+saHWp3xheb9WN7AbBXhif5EZo43HEVzI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CxiEiQEjPpgorpuhm05VNGYdolpbzUKGE6nsbZEMk0LigydjBzzJb5c12kd5nt/sGfkzJQnD9NSAQTlwA9jTKxYUQ0DtLttrKqCzucR64psfghr/fggG0/SRxYY0azki9LzpupdLEL4trS6aSG0Ya8W+4m0plMS26PNtwFh6Beo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=At1JQEJB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E588C19421;
-	Sun,  1 Mar 2026 01:14:54 +0000 (UTC)
+	s=arc-20240116; t=1772327732; c=relaxed/simple;
+	bh=Lz/LoDr+Xg1gukxdXR4t0cehPQPNtkKHTIIcJaKfMNY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HFbnr9zRs9649i9qmw36SPrE6cJk4QPGycllJxH0Q36wJ/kpSpNOjMeM0mzFsVbjf4lAYUXBxCXP6cQBK7M1wZ8LcIKW/OK0kIUG/PTkslbhtGODBqxaEjLowwXes1l1cTCuGmef+FYJFkX2z7oPUpH4Mje5XstrCjZQShf+EZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PRq8CgWY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 714C4C19421;
+	Sun,  1 Mar 2026 01:15:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772327695;
-	bh=GN0Q5iUDTP+saHWp3xheb9WN7AbBXhif5EZo43HEVzI=;
+	s=k20201202; t=1772327732;
+	bh=Lz/LoDr+Xg1gukxdXR4t0cehPQPNtkKHTIIcJaKfMNY=;
 	h=From:To:Cc:Subject:Date:From;
-	b=At1JQEJBj87K7+DcQh0248AZ5gL/9Db/e5JSzKLtdUvlJBcgVp9dQE3rLjPhX04RG
-	 +7TVu1qly9ANhigRIZhRGGjBsLfyD2eat1f0gp2kGfmScZ7pGc0A4a0MQwA8g2VO7m
-	 rRpztCzbzz3DTXYUQJliwa9b0qyFoc/P6E2UU43wc4daq2gqiOVtds8aRF1FPu70Iw
-	 WScbkgBGCjyZ7Iz2a3flk55/n81BeSaVb6ynSjW6Gooc/XEBUeLVeKgaQb1O2WvRnZ
-	 sLUgshSTIbTIxWqjb3g9dzAnzn+Tlsel9gC1HGH5/HyFRX5pZe41/0RPnHM+lPbd0S
-	 BhcF2zxPLDF1Q==
+	b=PRq8CgWYLkToCiXdJXMW/upgH+dEMyyF+8M+ePvp0K8YIJboAaE4sx5tN5QY/fZdy
+	 ateibrSAOWsW/4k54SvN7zHHhPMFClSP9U0lYA47Xarysz3SaDxQGSiTNObEWZfCRg
+	 GdXzBwNFW6SxV/NwyMq6auIy1XiAo2jg/san9TQDbYZ2wDGhUH0R2ozUHpZMvbjscj
+	 TYHHSdClSx7eOnHea0V1cIx19MitfP+367N5y84XncZnaKV8N267wLCPKE4I72Y8SU
+	 sad/KQLdCaeTrVAfC2cfmxTkQv/MRxJqrSNHmY78S8KxsG9J8pQE14UjxZNICbt/6K
+	 5v453KVhQ3K3g==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	khtsai@google.com
 Cc: stable@kernel.org,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-usb@vger.kernel.org
-Subject: FAILED: Patch "usb: gadget: f_ncm: align net_device lifecycle with bind/unbind" failed to apply to 6.19-stable tree
-Date: Sat, 28 Feb 2026 20:14:52 -0500
-Message-ID: <20260301011453.1667597-1-sashal@kernel.org>
+Subject: FAILED: Patch "usb: gadget: f_ncm: align net_device lifecycle with bind/unbind" failed to apply to 6.18-stable tree
+Date: Sat, 28 Feb 2026 20:15:29 -0500
+Message-ID: <20260301011530.1668853-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -68,18 +68,18 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33818-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33819-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
@@ -89,11 +89,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
 	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[msgid.link:url]
-X-Rspamd-Queue-Id: 7B27A1C9F6A
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,msgid.link:url,linuxfoundation.org:email]
+X-Rspamd-Queue-Id: 5899E1CA02E
 X-Rspamd-Action: no action
 
-The patch below does not apply to the 6.19-stable tree.
+The patch below does not apply to the 6.18-stable tree.
 If someone wants it applied there, or to any other stable or longterm
 tree, then please email the backport, including the original git commit
 id to <stable@vger.kernel.org>.
