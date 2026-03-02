@@ -1,198 +1,118 @@
-Return-Path: <linux-usb+bounces-33867-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33868-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mAQ3IrtopWmx+wUAu9opvQ
-	(envelope-from <linux-usb+bounces-33867-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Mar 2026 11:38:51 +0100
+	id gODjKUhppWntAAYAu9opvQ
+	(envelope-from <linux-usb+bounces-33868-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Mar 2026 11:41:12 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9DDF1D6AE8
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Mar 2026 11:38:50 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1D151D6B2C
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Mar 2026 11:41:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 443DC303AF24
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2026 10:29:01 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 0D2253019473
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2026 10:41:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E36D03921D6;
-	Mon,  2 Mar 2026 10:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FmXzMFLK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 081633328FC;
+	Mon,  2 Mar 2026 10:41:08 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.dnamail.fi (sender001.dnamail.fi [83.102.40.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF4A394470
-	for <linux-usb@vger.kernel.org>; Mon,  2 Mar 2026 10:28:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F54713AF2;
+	Mon,  2 Mar 2026 10:41:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.102.40.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772447316; cv=none; b=HpEks9Xx2WkIqAjtXJpFPe5tjqIOPcxsEOzDM9bKdjHlRAwNuFsgg/SVSDIcZX7zeIQqcMneB2qHqxJDNHQqrjFp3aA8BZDQ3Ek0QTiO0BxAMt7t6J2ADiOCpRWsiboXcJ4BwuphusLsLO8PQ2CV/im+MSHn7CELUyUoYNlDsy8=
+	t=1772448066; cv=none; b=KYEcZGkmMQLUS+PdYMH/Tk4weEqDm6Qmik3ifXaGJmsWyQgaDEKz/1ttgfbNibQcuq6gUMbrw/V9twU6Jox1WKvUTKcahvrdiRsG70vQENis9A+M/Vn4vjXm6TVytvXl7lu0RdyM0IxiUZFxDCFXmRy/ZOHyHv0Seiud363Cfhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772447316; c=relaxed/simple;
-	bh=3Ek4YwwN0iALLUmx6aIRwN9VWVamLWFry2CPHmZdgR0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fjpGMw26P8GQ/CYrLWxrmYHFVM5JXQLjs/4euK8k1kP3imn+CqP0uF3qnKlob3rTjLO97CEBR9UG3i+Nv5obB99EAJa23gH35BzTTq+VWQa/iM6691gfIBmR152+tOSawzQlbTc/MmL5p7TrbdJX5dc9PXnG2ZaBVr8u/L2rmfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FmXzMFLK; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772447314;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=hvw7wOLhNfMOHZ6J4wCB8Ewfi6ITUfrSGx/wZCr55HM=;
-	b=FmXzMFLK7OcQihLO77/gfYzW5mLNb0EEqoqF497VySKFLBgPMqVoDRoBiKE5Jt0CJDnBZG
-	Jlf0QbuewkTvs2E1B2rZbMdnH3n51ogXffd+14Gm2Bai9m5d5KJeEZx68HWL4bocazMDWR
-	S86aAaqF7bTb915riPa6wOkaV3wZ5Sk=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-685-T1xHSYiONteNIYVSDCg0Hg-1; Mon,
- 02 Mar 2026 05:28:31 -0500
-X-MC-Unique: T1xHSYiONteNIYVSDCg0Hg-1
-X-Mimecast-MFC-AGG-ID: T1xHSYiONteNIYVSDCg0Hg_1772447310
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 09B461800451;
-	Mon,  2 Mar 2026 10:28:30 +0000 (UTC)
-Received: from lenovo-t14s.redhat.com (unknown [10.45.224.171])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 806981800296;
-	Mon,  2 Mar 2026 10:28:27 +0000 (UTC)
-From: Laurent Vivier <lvivier@redhat.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	Daniele Palmas <dnlplm@gmail.com>,
-	Stefano Brivio <sbrivio@redhat.com>,
-	Koen Vandeputte <koen.vandeputte@citymesh.com>,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Laurent Vivier <lvivier@redhat.com>
-Subject: [PATCH] qmi_wwan: allow max_mtu above hard_mtu to control rx_urb_size
-Date: Mon,  2 Mar 2026 11:28:25 +0100
-Message-ID: <20260302102825.274385-1-lvivier@redhat.com>
+	s=arc-20240116; t=1772448066; c=relaxed/simple;
+	bh=fmOaqZzKZxuokX0Nx7UkO3kTPhruVKwQgRYwMInAm1M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oz7SrgIbfLkcqB5mfm+O1B1QF3BdGXLfvDsDBuM7zke4TDXK9TCg9+i7E5+6L9KXqcp4kMGmn6q2q0/u0clSIVRVz7ENFPRIrjmfKa2qCjqxv9+VeZojmlV4l30rBAs3kuJrsz/0bDlp2QX0OwWSG7JzOYvfCjU66Wdz6kAcbks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com; spf=fail smtp.mailfrom=linux.intel.com; arc=none smtp.client-ip=83.102.40.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.intel.com
+Received: from localhost (localhost [127.0.0.1])
+	by smtp.dnamail.fi (Postfix) with ESMTP id DFB1E2113E12;
+	Mon,  2 Mar 2026 12:35:39 +0200 (EET)
+X-Virus-Scanned: X-Virus-Scanned: amavis at smtp.dnamail.fi
+Received: from smtp.dnamail.fi ([83.102.40.178])
+ by localhost (dmail-psmtp01.s.dnaip.fi [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id K8OIgSudRMgB; Mon,  2 Mar 2026 12:35:38 +0200 (EET)
+Received: from [10.10.10.2] (82-203-162-4.bb.dnainternet.fi [82.203.162.4])
+	by smtp.dnamail.fi (Postfix) with ESMTP id 122D32113E16;
+	Mon,  2 Mar 2026 12:35:33 +0200 (EET)
+Message-ID: <f3b17482-0358-443b-a8f1-1da3d3b2a4b9@linux.intel.com>
+Date: Mon, 2 Mar 2026 12:35:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: typec: hd3ss3220: Add sysfs attribute for USB role
+ state
+To: Venkata Swamy Kassa <venkatswamy7@gmail.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Venkata Swamy Kassa <venkata.swamy.kassa@hexagon.com>,
+ gregkh@linuxfoundation.org
+References: <20260227182454.761925-1-venkata.swamy.kassa@hexagon.com>
+Content-Language: en-US
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+In-Reply-To: <20260227182454.761925-1-venkata.swamy.kassa@hexagon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-1.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[intel.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[redhat.com:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33867-lists,linux-usb=lfdr.de];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,redhat.com,citymesh.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lvivier@redhat.com,linux-usb@vger.kernel.org];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-33868-lists,linux-usb=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	NEURAL_HAM(-0.00)[-0.995];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.842];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_DKIM_NA(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,citymesh.com:email]
-X-Rspamd-Queue-Id: B9DDF1D6AE8
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E1D151D6B2C
 X-Rspamd-Action: no action
 
-Commit c7159e960f14 ("usbnet: limit max_mtu based on device's hard_mtu")
-capped net->max_mtu to the device's hard_mtu in usbnet_probe(). While
-this correctly prevents oversized packets on standard USB network
-devices, it breaks the qmi_wwan driver.
+> The HD3SS3220 driver correctly detects USB Type-C cable attach/detach
+> events and propagates the role to the USB controller. However, there is
+> no way for userspace to query the current role state (device/host/none).
+> 
+> This becomes problematic when using udev rules to trigger scripts on
+> role changes. The driver generates kobject change events, but the event
+> itself doesn't contain the role information. Userspace needs to read
+> the current state to determine the appropriate action.
+> 
+> Add a 'usb_role' sysfs attribute that exposes the current USB role as
+> a string ("device", "host", or "none"). Also ensure sysfs_notify() and
+> kobject_uevent() are called when the role changes, enabling userspace
+> applications to poll() on the sysfs file or receive udev events.
+> 
+> This is useful for systems that need to:
+> - Start/stop USB gadget functions based on cable connection
+> - Switch between host and device modes dynamically
+> - Monitor USB Type-C port state from userspace
+You use the "data_role" sysfs attribute file for this.
 
-qmi_wwan relies on userspace (e.g. ModemManager) setting a large MTU on
-the wwan0 interface to configure rx_urb_size via usbnet_change_mtu().
-QMI modems negotiate USB transfer sizes of 16,383 or 32,767 bytes, and
-the USB receive buffers must be sized accordingly. With max_mtu capped
-to hard_mtu (~1500 bytes), userspace can no longer raise the MTU, the
-receive buffers remain small, and download speeds drop from >300 Mbps
-to ~0.8 Mbps.
-
-Introduce a FLAG_NOMAXMTU driver flag that allows individual usbnet
-drivers to opt out of the max_mtu cap. Set this flag in qmi_wwan's
-driver_info structures to restore the previous behavior for QMI devices,
-while keeping the safety fix in place for all other usbnet drivers.
-
-Fixes: c7159e960f14 ("usbnet: limit max_mtu based on device's hard_mtu")
-Reported-by: Koen Vandeputte <koen.vandeputte@citymesh.com>
-Tested-by: Daniele Palmas <dnlplm@gmail.com>
-Signed-off-by: Laurent Vivier <lvivier@redhat.com>
----
- drivers/net/usb/qmi_wwan.c | 4 ++--
- drivers/net/usb/usbnet.c   | 7 ++++---
- include/linux/usb/usbnet.h | 1 +
- 3 files changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 3a4985b582cb..05acac10cd2b 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -928,7 +928,7 @@ static int qmi_wwan_resume(struct usb_interface *intf)
- 
- static const struct driver_info	qmi_wwan_info = {
- 	.description	= "WWAN/QMI device",
--	.flags		= FLAG_WWAN | FLAG_SEND_ZLP,
-+	.flags		= FLAG_WWAN | FLAG_NOMAXMTU | FLAG_SEND_ZLP,
- 	.bind		= qmi_wwan_bind,
- 	.unbind		= qmi_wwan_unbind,
- 	.manage_power	= qmi_wwan_manage_power,
-@@ -937,7 +937,7 @@ static const struct driver_info	qmi_wwan_info = {
- 
- static const struct driver_info	qmi_wwan_info_quirk_dtr = {
- 	.description	= "WWAN/QMI device",
--	.flags		= FLAG_WWAN | FLAG_SEND_ZLP,
-+	.flags		= FLAG_WWAN | FLAG_NOMAXMTU | FLAG_SEND_ZLP,
- 	.bind		= qmi_wwan_bind,
- 	.unbind		= qmi_wwan_unbind,
- 	.manage_power	= qmi_wwan_manage_power,
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index ed86ba87ca4e..b72ba0803392 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1829,11 +1829,12 @@ usbnet_probe(struct usb_interface *udev, const struct usb_device_id *prod)
- 		if ((dev->driver_info->flags & FLAG_NOARP) != 0)
- 			net->flags |= IFF_NOARP;
- 
--		if (net->max_mtu > (dev->hard_mtu - net->hard_header_len))
-+		if ((dev->driver_info->flags & FLAG_NOMAXMTU) == 0 &&
-+		    net->max_mtu > (dev->hard_mtu - net->hard_header_len))
- 			net->max_mtu = dev->hard_mtu - net->hard_header_len;
- 
--		if (net->mtu > net->max_mtu)
--			net->mtu = net->max_mtu;
-+		if (net->mtu > (dev->hard_mtu - net->hard_header_len))
-+			net->mtu = dev->hard_mtu - net->hard_header_len;
- 
- 	} else if (!info->in || !info->out)
- 		status = usbnet_get_endpoints(dev, udev);
-diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
-index b0e84896e6ac..bbf799ccf3b3 100644
---- a/include/linux/usb/usbnet.h
-+++ b/include/linux/usb/usbnet.h
-@@ -132,6 +132,7 @@ struct driver_info {
- #define FLAG_MULTI_PACKET	0x2000
- #define FLAG_RX_ASSEMBLE	0x4000	/* rx packets may span >1 frames */
- #define FLAG_NOARP		0x8000	/* device can't do ARP */
-+#define FLAG_NOMAXMTU		0x10000	/* allow max_mtu above hard_mtu */
- 
- 	/* init device ... can sleep, or cause probe() failure */
- 	int	(*bind)(struct usbnet *, struct usb_interface *);
--- 
-2.53.0
-
+--
+heikki
 
