@@ -1,188 +1,272 @@
-Return-Path: <linux-usb+bounces-33858-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33859-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ADLTE+5UpWnR9AUAu9opvQ
-	(envelope-from <linux-usb+bounces-33858-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Mar 2026 10:14:22 +0100
+	id eKd4DblXpWlR9wUAu9opvQ
+	(envelope-from <linux-usb+bounces-33859-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Mar 2026 10:26:17 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B511C1D55D9
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Mar 2026 10:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8901C1D586E
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Mar 2026 10:26:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D79013043BC5
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2026 09:10:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 63D913038526
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2026 09:21:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA1C338E5E1;
-	Mon,  2 Mar 2026 09:10:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="kq6yykSq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DAC638F620;
+	Mon,  2 Mar 2026 09:21:42 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
+Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11022135.outbound.protection.outlook.com [52.101.126.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC69638D009;
-	Mon,  2 Mar 2026 09:10:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772442649; cv=none; b=sOJGPFxzG6ZFy5mNOohPBzXWmizqof4ekx596vccJdZOzqjTNU0i9HOCXYUUjqEEUVUGNJj7keeuURhrgu803q6jPFTF+0z6BxTrskqfXFBUYlddQzPHyHqIsKw2R5RnOei1/adO74MuGqtphH5QMeGfp9GdK2AFeHg1a33guvc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772442649; c=relaxed/simple;
-	bh=EbiUbBamIZ6iQCnBuNSz7FJjjmgw1YlSiC2B9C7jRP4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k4o4ZljERrGKtlw+kzQrUGjSfCKKifP0cSID63+975nP/UIvPqz3HoMg+OQsMyMW+SmKq2Ww3lKZPiR2XAkboAehYTCtkoGD0A566hR4D1welXDxUIMMD/o02vbKAhFDdYP9mciA63C+uUavszCapvSeTj2P9yPTMWdYtOXOjoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=kq6yykSq; arc=none smtp.client-ip=193.136.128.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 31F2B600298F;
-	Mon,  2 Mar 2026 09:10:46 +0000 (WET)
-X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
-Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
- by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with LMTP id 9zY3EXe9AjZ4; Mon,  2 Mar 2026 09:10:43 +0000 (WET)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [IPv6:2001:690:2100:1::b3dd:b9ac])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 40B36600298D;
-	Mon,  2 Mar 2026 09:10:42 +0000 (WET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
-	s=mail2; t=1772442643;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ALlF6/vIv/5xuYr1Gfj3RVY3fMyDzf4HKQYtSC25+Y4=;
-	b=kq6yykSqCccGOyxQkZiYYRl4InB8BhUZ8Xs18tk1CsbLkx6x53sO9TssNNE4IQhab0mX6+
-	mb3f/niCWn5KWXeAD5nzC5awUAM303Ro18H9t/o5YH1z0MZuCK+pPUcOAct8XEZBfweJ6/
-	JaPuliwJ/uWR9AkGnIhkO7AEN5brKWsABtzVwup+36oZZO+MKN9STQ6AJeRxjf2235/aaf
-	Tvs7tkK8V+ZBYxYPq4cpM8wrosSRCEkYKrXw7A2U4RMH61DqyiywtVGIWr7xu6PDJDTPwS
-	rMiYO2GxfTgSTrUCfVfRW0WGtlsN4J0d2zzg9YBFMz81nTzxt0XULAhWB7ZrSw==
-Received: from [IPV6:2001:8a0:fbec:a900:2c09:2fb0:9be7:36e0] (unknown [IPv6:2001:8a0:fbec:a900:2c09:2fb0:9be7:36e0])
-	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id D502136013D;
-	Mon,  2 Mar 2026 09:10:40 +0000 (WET)
-Message-ID: <1663dc81-0685-4de9-8cf7-6065a644e7af@tecnico.ulisboa.pt>
-Date: Mon, 2 Mar 2026 09:10:29 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469A619E992;
+	Mon,  2 Mar 2026 09:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.135
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772443302; cv=fail; b=C0NgH6BXSIy/ors/EYg2R4FfW94Q9DM1bt+gSEFqnTPMOGcWwuRPaNAO4LexrhcxkPuaJjsIDBc7iKXNj+qJFiIfxs5SPVSWNE3KiSqN2iYZ/6LKrBoezy4qp3bc0kczb6P/f7KxCiLhHUtkU4o/0L1uAGr7VuxZmyKAl9CfNFU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772443302; c=relaxed/simple;
+	bh=1Z33Phu7x3CHh40xblQ7jTQS9QTU0sjq5hisA3ndeqk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fJr5aRwmj3rCIxsu1OMBp+V1BkoSbamq+bVz42OcFL+QNoyFsBzjv718/zDE81HyJ8GiSg5b7WsOUWoCuIIs09bJWvTP1RoCS7VrMGQBDQvvZLU5/yJgdeVunY2OmPLXtSZiEMUlbjwnNz/vImQIjFFHG/1glB6I50jRHu7gdRA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com; spf=pass smtp.mailfrom=cixtech.com; arc=fail smtp.client-ip=52.101.126.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cixtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rew/JxKcmqxAsvH2OAWey8ZkBey6uvdCiKVp9yIOqAmyjN/ZUhZehE+hdsodz4+aRFSG55cn+WoRArF8EaOpteMZ1Zp+AFO/Hq75byfOLvOTqF1Q1BASNL7ELkPuqlCdiDKN/XWWuAcTk8g1zW6Zm5EB+WPRdrXXIgGbK1cjOKcIcMA9zJLU9XG6VyrTl1wQAJSQlt4YdXL3GgqCMlApf3WxT9b0o9Xzas00pmHnAV1YI66vvl7X/nydjG5Ua7lO+hw5BYpL0ix/i8UUdDVXi/uDkPBaidSPSF3wkMHYoYEYqmIsmOFq5EaanMcPwFMy0yLQe+LtqUYAeyKWDOFORg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OUT0+/ccuLv2+gHeJELvNl11n+NhhWBnn0AP0Bf2zPA=;
+ b=RndpDSTbADwe1lHpdyhpnaZ/jQVxfDwrhmeUCRvxdUz73qmdexc5qUYF1rLVQFRce8E+Q1wYfdoDIEwKnBjJFgWfBSRLVxZhSTV0ugW8cjRHIWxuTM+0v/gh+rQFAl+Krys6ZygO6FBarCgzqsjbmrOwJfpnsVHtNBtYp4wjgsca4xT/9gZT4R3Tj5Am6E8nIa3RNNzi+zndeOnk+v0rOUOLuCm3ehwcQPDJHj5Ut1xXGYIa74Nt0u9uKQRiV+PI2xWWoecRrcbW0Z7uzmSRFqgbvucHWyBUAbmHFcQ8yJSRFgaamXcSky151wA2R5zk74R3qJQarieeInMSPHrgIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 222.71.101.198) smtp.rcpttodomain=cadence.com smtp.mailfrom=cixtech.com;
+ dmarc=bestguesspass action=none header.from=cixtech.com; dkim=none (message
+ not signed); arc=none (0)
+Received: from PS2PR01CA0024.apcprd01.prod.exchangelabs.com
+ (2603:1096:300:2d::36) by KL1PR0601MB5823.apcprd06.prod.outlook.com
+ (2603:1096:820:b6::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.20; Mon, 2 Mar
+ 2026 09:21:35 +0000
+Received: from OSA0EPF000000CA.apcprd02.prod.outlook.com
+ (2603:1096:300:2d:cafe::a3) by PS2PR01CA0024.outlook.office365.com
+ (2603:1096:300:2d::36) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.21 via Frontend Transport; Mon,
+ 2 Mar 2026 09:21:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 222.71.101.198)
+ smtp.mailfrom=cixtech.com; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none header.from=cixtech.com;
+Received-SPF: Pass (protection.outlook.com: domain of cixtech.com designates
+ 222.71.101.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=222.71.101.198; helo=smtprelay.cixcomputing.com; pr=C
+Received: from smtprelay.cixcomputing.com (222.71.101.198) by
+ OSA0EPF000000CA.mail.protection.outlook.com (10.167.240.56) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9654.16 via Frontend Transport; Mon, 2 Mar 2026 09:21:33 +0000
+Received: from nchen-desktop (unknown [172.16.64.25])
+	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id 21D3041604EA;
+	Mon,  2 Mar 2026 17:21:33 +0800 (CST)
+Date: Mon, 2 Mar 2026 17:21:25 +0800
+From: Peter Chen <peter.chen@cixtech.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	gregkh@linuxfoundation.org, pawell@cadence.com, rogerq@kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, cix-kernel-upstream@cixtech.com
+Subject: Re: [PATCH 2/2] dt-bindings: usb: cdns,usb3: Add support for USBSSP
+Message-ID: <aaVWlfMPSZgy55Cc@nchen-desktop>
+References: <20260302030339.324196-1-peter.chen@cixtech.com>
+ <20260302030339.324196-3-peter.chen@cixtech.com>
+ <20260302-vengeful-delicate-macaw-e8dc8c@quoll>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/6] Fixes to Tegra USB role switching and phy handling
-To: Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>, JC Kuo <jckuo@nvidia.com>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Neil Armstrong <neil.armstrong@linaro.org>
-Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- devicetree@vger.kernel.org, stable@vger.kernel.org
-References: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
-Content-Language: en-US
-From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-In-Reply-To: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260302-vengeful-delicate-macaw-e8dc8c@quoll>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: OSA0EPF000000CA:EE_|KL1PR0601MB5823:EE_
+X-MS-Office365-Filtering-Correlation-Id: c37b7508-6d33-4e46-8885-08de783d192e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|376014|7416014|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	VykWYn/Znw/vC54L+DtQsOUj3nOqQ/uL+7R2jB7x8NCDtdX1nvF3jGFZH0r1ZFR0yshE3LtWCsnJrEnUWdY7eToJbgo3+/9ZU3gNLB74/fnlqvOOOYxVqqpXuKO95BxUlhKr8l+wHRIDaUqX1hO6MWlRxy1y32CCLN74lfYJ7hnL6AMH+rZvzJej3djoSGKQKt9FTVsDNLxA8IGjWKg5mIWGD2eU8Nma7Q8fR0JT57Q2oPI9eG3Phq5kFOZHGTPUqR+iWyOhXGYu2cn7M62MR/Jgb4rmhxzttW620ElZdcvrBu619TLovA0A0tjgzFockgaiXoNLLWTml5noGykqo0xZiejIUakPCv9LZ8G4JiavgvoUsvVjEVo4gubpdWRwotRjEEtn+qWeJE8hwGR9Tps5Mqq2GVw/Q3PyaxohP1bQllhiU/cctDiI3LKMyiG1a+yhCjthyjIRX8TxuxBMfL1L+nVMSQQai+2DoWET2AD1O++RxKF+WStd+Hr6MxVGDBWA2t47u54Zdjx/dS0s6+OyFi/cRMNVWqtUKDunVCLu17XDdP0F8j7F5a1KfpBu4rBbkN8TzXVY/YL9q0wRYxGgR4NciR8UeAI1LheBu1OLpWNX0wbpI3PMKZanILDiiP2HIVXOQtZPhAxkLpnjubU6CIbNdJPmdNqHbGdMJjQCt82lFFeNr59BoaODeK0DpHuPbMwQpSDHPpydEM5B7zP0kLLxD00S+3VeQ717YPcLaxaINvat2DAaCjyh+VGuLlY6N0uEyLBSrzyVIz8UQbYCxTVsTHpCRwCEvApieQE=
+X-Forefront-Antispam-Report:
+	CIP:222.71.101.198;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtprelay.cixcomputing.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(7416014)(82310400026);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	ah6TWnoiL+0AyubhECioHp7ERkGzbvizJfFiSl88qSQ1YBTkysvIWhUwteUe+7cfiqixfrO0z7tAjwJulIWbyeo3z52fpcl9M6uZqLGqSxBiNU155RXrquYWAzZlMInG3fgh65u6rNQqv/rLk35rYmR+Lz2TSfSYiPwOE/2y5Yzs05e11JKir1u58ugbyRtimPNrrqGqISjUqnM0+WsJGg1V9gwweLBSYJ8Oi1yhws90kjO4sNwQWQeMtInHIkceIG9THwKSQ5su7UQ8CpvhCJu5m1M/E5BPdT3eHe5DQqi8GmnNxAoolZIAqWiHVNCZNy/agMVySLJi6wLcvkw9kY1VKXUKjcYvpHTslfKh6pWLn3nnq7mvv+vmKqBawxM4W+VPEZqjEXjBU+BrSkTSxFQgBwBGMr3L2sqxl42mWyuBvRlfux5enh2htXZky1IV
+X-OriginatorOrg: cixtech.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2026 09:21:33.9841
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c37b7508-6d33-4e46-8885-08de783d192e
+X-MS-Exchange-CrossTenant-Id: 0409f77a-e53d-4d23-943e-ccade7cb4811
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0409f77a-e53d-4d23-943e-ccade7cb4811;Ip=[222.71.101.198];Helo=[smtprelay.cixcomputing.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	OSA0EPF000000CA.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB5823
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [2.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[tecnico.ulisboa.pt,quarantine];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_RHS_NOT_FQDN(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[tecnico.ulisboa.pt:s=mail2];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-33859-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33858-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[intel.com,linuxfoundation.org,gmail.com,nvidia.com,kernel.org,linaro.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tecnico.ulisboa.pt:mid,tecnico.ulisboa.pt:dkim,ulisboa.pt:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[7];
+	DMARC_NA(0.00)[cixtech.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[diogo.ivo@tecnico.ulisboa.pt,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[tecnico.ulisboa.pt:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: B511C1D55D9
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[peter.chen@cixtech.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.911];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[cixtech.com:email,checkpatch.pl:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,cadence.com:email]
+X-Rspamd-Queue-Id: 8901C1D586E
 X-Rspamd-Action: no action
 
-Hello,
+On 26-03-02 08:28:07, Krzysztof Kozlowski wrote:
+> 
+> On Mon, Mar 02, 2026 at 11:03:34AM +0800, Peter Chen wrote:
+> > Extend the Cadence USBSS DRD binding to also cover the USBSSP
+> > controller by adding "cdns,usbssp" to the compatible enum.
+> >
+> > The USBSSP is the next-generation Cadence USB controller IP. It adds
+> > SuperSpeed Plus (USB 3.1 gen2x1, 10 Gbps) support and uses an
+> > XHCI-based device controller. The register layout and resource model
+> > (otg/xhci/dev memory regions; host/peripheral/otg interrupts) are
+> > identical to the USBSS, so both controllers share the same binding
+> > and the same platform driver (cdns3-plat.c).
+> >
+> > Changes to the binding:
+> > - compatible: const -> enum with cdns,usb3 and cdns,usbssp
+> > - maximum-speed: add super-speed-plus
+> > - Add USBSSP example
+> >
+> > This patch was developed with assistance from Anthropic Claude Opus 4.6.
+> 
+> Use proper tag, but expect pushback of microslop crap.
 
-Gentle ping on this series.
+Krzysztof, thanks for your reply.
+
+I tried to add Assisted-by or Co-developed-by tag, neither can pass
+checkpatch.pl check, it needs a valid email address. See below:
+
+ERROR: Unrecognized email address: 'Claude (Anthropic Claude Opus 4.6)'
+#45:
+Assisted-by: Claude (Anthropic Claude Opus 4.6)
+
+> 
+> >
+> > Signed-off-by: Peter Chen <peter.chen@cixtech.com>
+> > ---
+> >  .../devicetree/bindings/usb/cdns,usb3.yaml    | 36 +++++++++++++++++--
+> >  1 file changed, 33 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> > index f454ddd9bbaa..f79333e7fc1f 100644
+> > --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> > @@ -4,14 +4,22 @@
+> >  $id: http://devicetree.org/schemas/usb/cdns,usb3.yaml#
+> >  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> >
+> > -title: Cadence USBSS-DRD controller
+> > +title: Cadence USBSS/USBSSP DRD controller
+> >
+> >  maintainers:
+> >    - Pawel Laszczak <pawell@cadence.com>
+> >
+> > +description:
+> > +  Cadence USB dual-role controllers. USBSS (cdns,usb3) supports up to
+> > +  SuperSpeed (USB 3.0). USBSSP (cdns,usbssp) is the next generation with
+> > +  SuperSpeed Plus (USB 3.1 gen2x1) and XHCI-based device controller. Both
+> > +  share the same register layout and resource model.
+> 
+> So are compatible or not?
+> 
+
+Sorry for the misleading description. They are NOT fully compatible.
+The register layout (OTG/XHCI/Device) and interrupts
+(OTG/XHCI/Device/Wakeup) are the same, but register contents are
+different, esp, the device (gadget) controllers are architecturally different:
+
+- USBSS uses a custom gadget controller (cdns3_gadget_init)
+- USBSSP uses an XHCI-based gadget controller (cdnsp_gadget_init)
+
+I will fix the description in v2 to clearly state this difference.
+
+> > +
+> >  properties:
+> >    compatible:
+> > -    const: cdns,usb3
+> > +    enum:
+> > +      - cdns,usb3
+> > +      - cdns,usbssp
+> 
+> Why do we need another generic compatible?
+> 
+> And why do you add it now to each of device schemas using this one?
+
+Like explain above, the USBSSP has a different device/gadget controller
+architecture from USBSS. The platform driver uses the compatible string
+to select the correct gadget init function:
+
+  if (device_get_match_data(dev) == &cdnsp_plat)
+      cdns->gadget_init = cdnsp_gadget_init;
+  else
+      cdns->gadget_init = cdns3_gadget_init;
+
+Without a distinct compatible, the driver cannot know which gadget
+controller is present. This is a Cadence IP-level distinction (not
+SoC-specific), so a generic compatible seems appropriate here. But
+please let me know if you'd prefer a different approach.
+
+> >
+> >  examples:
+> >    - |
+> > +    // USBSS example (SuperSpeed)
+> >      #include <dt-bindings/interrupt-controller/arm-gic.h>
+> >      bus {
+> >          #address-cells = <2>;
+> > @@ -109,3 +118,24 @@ examples:
+> >              dr_mode = "otg";
+> >          };
+> >      };
+> > +  - |
+> > +    // USBSSP example (SuperSpeed Plus)
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    bus {
+> 
+> No, drop entire example. It's the same as other.
+> 
+
+I original thought the user may copy SS binding doc to their
+SSP dts file, and forget to change maximum-speed property,
+so the maximum speed will be fixed at SS. If we don't need
+to worry about it, I will delete at v2.
+
+-- 
 
 Best regards,
-Diogo
-
-On 1/27/26 15:11, Diogo Ivo wrote:
-> Hello,
-> 
-> This patch series contains fixes/improvements for USB role switching on the
-> Tegra210 and Tegra186 SoCs.
-> 
-> The first patch addresses a wrong check on the logic that disables the
-> VBUS regulator.
-> 
-> The second patch removes a redundant mutex lock when setting the PHY
-> mode.
-> 
-> The third patch guarantees proper ordering of events when switching PHY
-> roles.
-> 
-> The remaining patches are included to standardize the PHY .set_mode()
-> callback between Tegra186 and Tegra210.
-> 
-> With this patch series this feature can only be controlled from userspace,
-> by writing the desired role to sysfs as
-> 
-> echo "role" > /sys/class/usb_role/usb2-0-role-switch/role
-> 
-> with role being one of {device, host, none}.
-> 
-> Further patches will enable automatic role switching via the 'cros_ec_typec'
-> driver which is currently broken on Smaug.
-> 
-> Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-> ---
-> Changes in v2:
-> - Remove DT patches already taken to be upstreamed
-> - Add standardization between Tegra210 and Tegra186
-> - Address review comments from v1, detailed descriptions in each patch
-> - Link to v1: https://lore.kernel.org/r/20251204-diogo-tegra_phy-v1-0-51a2016d0be8@tecnico.ulisboa.pt
-> 
-> ---
-> Diogo Ivo (6):
->        phy: tegra: xusb: Fix USB2 port regulator disable logic
->        usb: xhci: tegra: Remove redundant mutex when setting phy mode
->        phy: tegra: xusb: Fix ordering issue when switching roles on USB2 ports
->        phy: tegra: xusb: Add ID override support to padctl
->        phy: tegra: xusb: Move .set_mode() to a shared location
->        phy: tegra: xusb: Move T186 .set_mode() to common implementation
-> 
->   drivers/phy/tegra/xusb-tegra186.c   | 73 +++++----------------------------
->   drivers/phy/tegra/xusb-tegra210.c   | 42 +------------------
->   drivers/phy/tegra/xusb.c            | 80 +++++++++++++++++++++++++++++++++++++
->   drivers/phy/tegra/xusb.h            |  4 ++
->   drivers/usb/gadget/udc/tegra-xudc.c |  4 ++
->   drivers/usb/host/xhci-tegra.c       | 14 ++++---
->   include/linux/phy/tegra/xusb.h      |  3 ++
->   7 files changed, 111 insertions(+), 109 deletions(-)
-> ---
-> base-commit: b02a5530af8abe0d3cd4852ba48990716e962934
-> change-id: 20251201-diogo-tegra_phy-86c89cab7377
-> 
-> Best regards,
+Peter
 
