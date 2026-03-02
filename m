@@ -1,255 +1,150 @@
-Return-Path: <linux-usb+bounces-33865-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33866-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aHy0EW5jpWmx+wUAu9opvQ
-	(envelope-from <linux-usb+bounces-33865-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Mar 2026 11:16:14 +0100
+	id QHi+C1RopWmx+wUAu9opvQ
+	(envelope-from <linux-usb+bounces-33866-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Mar 2026 11:37:08 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id F15FB1D63DF
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Mar 2026 11:16:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80D9B1D6A77
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Mar 2026 11:37:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C06CF301A797
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2026 10:15:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1611A30D1915
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2026 10:27:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45B572765E2;
-	Mon,  2 Mar 2026 10:15:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B6F23A1A41;
+	Mon,  2 Mar 2026 10:27:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iYGDt6uG"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AYosUoW4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF1A3093AE
-	for <linux-usb@vger.kernel.org>; Mon,  2 Mar 2026 10:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772446549; cv=pass; b=GuYG6UGxjpnVVg4IP54Pmdxeu/om6pTiCwzZOX0ugUeDzN5wJ3rLVFcPHOuNBUJdxiw7/EpgYtCoTKAiR3TvKqhzcsvfbmhMAPOEknX9ThN3yNV95nsxzVOXDIPfk7+xlXnyY0JMHHPYE4zm0CeCAKi38L7CBSw08uU56H2D7Bg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772446549; c=relaxed/simple;
-	bh=Q/v+YTY51gie4NugySLqDaxDDXm98p+rlbUG/WfXHzs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BhWB/aMrUUZpW7S+piBIoO179kQlOTMHf6d4Wibgf2RQ2gsSiJIS0nly3CWwUCuJDxKZR6Fo8Vhqm/FAr30vJm4vEcnG+0DnShWoxeSOoKHIgpSPSrSE/Iudby4iOsAoAbi7vY0q8YWLBsuXSOE3MkLkisXMJzvwxp93k4/1pRQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iYGDt6uG; arc=pass smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-65f3a35ff13so20835a12.0
-        for <linux-usb@vger.kernel.org>; Mon, 02 Mar 2026 02:15:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772446547; cv=none;
-        d=google.com; s=arc-20240605;
-        b=PRohoq4FAs7l0IsUNZff6z64PUXs2tEipy7GOKpcjiU9P0PY1MMulbFGd3uuf/a8Um
-         l5WnXc4iRuoxHQSeEkePQgs0vS0E28/8qTLkbCzXLl02yzxm1wiloRCiQoeWfmza5IBY
-         Zj7YXQu0EuQ2yynuep6zJjKtcNNaeT1GXmr6jKgnUhguooOH3DsCr1ffb7ahvWCx0gKE
-         nK15/WjwCx78Saf5FRn4BK2PfBB3dWyyur7NbybY2neCpSQD034cD3B+fmYTzS+izBtl
-         vceG9UhBYZn6qAZYxy7uc4Hg7t1K8U+QPE8Ln09YGAyq2XlcmfkX6yhM60ZZPBMAWY00
-         7WLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=/24R/TATeaI405YdlfVqYjzvmezGNW8YW44Qqiri2dQ=;
-        fh=V8eRlD4MFqWx8sK6RF+g/kzBPNmjKa9aFDjCRnGi1R8=;
-        b=MD651w+xNz0lIu6k+pvP/PfwEXHpGfpiMd1o7zR3GD5A/je7j/dHP84QDGzqnAHKtq
-         8NhUsawfWA0YZU+Y4WQt79n/Q0KTfvCiyuC+fgOiU9ZSs4TkFhc2BhGZaajvlY9x8vui
-         EdfgIRSNUXtlR9PvnaJiKbVqk0qXIspdhI2lCZNHGI7mC+znmqKUfQorhqO2+NPCu5Y6
-         m4WT2ngMNwv5eCZv31UzyMoxswRJs+O7sf8E5RAc6cEadEn/cn1Rxh7BhRiRQw8dbEil
-         L7YZqtEGTDOhtnHynJd8Yf0xGVzRdXviujjSTUZv3ZGF1wri6WB6KESsPzCVV3Jq+v/t
-         qE/A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E042D392828
+	for <linux-usb@vger.kernel.org>; Mon,  2 Mar 2026 10:27:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772447262; cv=none; b=PVsX6EDPrYXXFCHGycw/m5L4bCMMGeX7Lk5A7InauTNj9loDXgYgqvawgZC2zNUZ+SiKRrQMgp9fC5Hxzw0fgfwpFgOE6sHrzZI604UYFEIHQysr7m/uZmG1pScFgiWFPzApP8GgtN0oyk8JDaNAAM4jGcdTbrlmc9TKoj+nUmU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772447262; c=relaxed/simple;
+	bh=GjDGPMlDcf/MXxjNRrknNuVswFh75rCI363yIZeLzcw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BpEkhQsuSL/ojR/ZjQ9YyaANP5OtAFoFb3E1KScB9pFS4DdnZ9LMQwFCTQMr6w/yeVEQODHpKV3E4fC5FcyLs7ofaSqb570a4TyW6P6QePUFAdEz4jKhoZo5QerlOjwLQ+iaQPN6wo/K4FPkSH0jf+pAoUa5ay9QPMudsuUYaEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AYosUoW4; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4837634de51so17044965e9.1
+        for <linux-usb@vger.kernel.org>; Mon, 02 Mar 2026 02:27:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772446547; x=1773051347; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/24R/TATeaI405YdlfVqYjzvmezGNW8YW44Qqiri2dQ=;
-        b=iYGDt6uGMKhpzXK4AjcnjgJOTUb6xK5eBKzKwkFn5QvhSICEeRsgDwINrmyMHka6x1
-         BTXon2oqWAQ5SDVgPggiObQ/RlF97Mxy9K3rgZE3eXobgr6oWgX67VZDDGoZ8dJt5MBA
-         gsULODzN1vBtFr3BPX0o3R0zXqgMYOA0DNOMVhtGFkMiOBIuCiYRw57iRXt00vtl9SpG
-         E26HutVU/6Cfsd+pc6kG7rMQsi7FHcrfa3BT0vs31PrwK/WWH/RnIB362BDajFwPocAG
-         DSCquw9gCc0k6Y/GLLHo56oSbXTVaglSiw1tbMWK6lsmwCHCqDEqoaQrshSBeOI6saao
-         yvHA==
+        d=suse.com; s=google; t=1772447259; x=1773052059; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mac6iCuh/FaCEK5onqKP3LNwRHPgUG6JylTUvWKnd9c=;
+        b=AYosUoW4daR8bCmOB3yCVseWGZHUossoZQp7lDSe6ybSMlP334+JRt6yM0HwCP2gC8
+         qMClbS0irnF79MxCqPrBp0J7c7m86QaUxG0zLZ363Wpk58+E6B3UMMf2cWC5IDZLHNz4
+         M1F4GSzF2ievY5CGkVtNPEwCwLfnh0J+BnlobV4YSWVA0mwrk5Q0b4wPj32iG9qaJsCz
+         JWzcfuwm3oz5+bOBI1brdrwD4lrtWK69fEMLJL+mrZYJsexBk1PTRRV/DrFBx5YEiKnB
+         4Ppa7yACM9esNd3de0KOU8xcK+cy9LlIIm5ccdWS3btZvBACUVvW526p1NF0Taa9isDX
+         Xu8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772446547; x=1773051347;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/24R/TATeaI405YdlfVqYjzvmezGNW8YW44Qqiri2dQ=;
-        b=lPjQ5oUAbxOlqcAv6NcOxKbbzSj3putovMa/UJs8UMSJf40EM2dqiHEtzf+4YzH+ZP
-         lj3Ybahgor8+9yzbPrf3pgeUM32mazSDsqyUvvZxenNAKiOPoAyrXXLLzGAsAStMu1JJ
-         ibDOOXIWwe113Ovnry/EVBUVHXwtHsdMU0doEZ4NbowgciiafZzeBzVKpWRjuquziOlB
-         G3jMX6O9PZmEhYHug29yDYm9TnD04L1mje51MlkPAsWBJtQpd9Z+mp9oQ6YK8ZMCBarD
-         Iof5/TnnK8jrfjvgbHsSCiOF5UeIKnMM0AmviQqVjZOAV7RY7WnPLbHsnZcL5NHCmLSs
-         RT+A==
-X-Forwarded-Encrypted: i=1; AJvYcCXGCgv3TGlk2PsJOWRRNKsl9IlS/m8N4O98gDOW/Mvurf4IGACNiyw/kZLJsRya9BcxEJHjmVN0jW0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+zRH9bST0ghQWjlyovtjIZ1jlZFl8wVSRFkqmiKINfewkYbKj
-	SPGEKdLSnA5HpochK/XudFsXlQpWNRjGmct4ccw2TKjYb2e/ecS/zLKDTrGVhlZ7r70cZfUUF8g
-	ziK27r5NiwI2q7ReLnZO0QbVxov3usEGMJV+lG4yEM8gxndGp3N+sAZVk
-X-Gm-Gg: ATEYQzxuGmJIET1kLuDgc8IZeS1q2BzNFowGkDRpf0vVuhjuRGHg5vEoNz7QuHisN2f
-	x7QoDu4bHHFZUGna6+0xvmyZ6QkPTJJXszef7Gu/Ma3J8e/ophHDZ8/xzh8vTyBJthaTGCd4tHd
-	f/PAjWL08DQhSnOM9pNH4FTvmTVoVzE4sQdUq7IMLjkoFvhrQvJRVGC1AmM0XK8UGB/jXQDZJKL
-	BKy5rRp5JyStH+WVMB4HAwt1GZw1gDJbiCkaMFfVGZyLHrpqvLwnRQqhxW5pY1MAFIApDhqxEWh
-	xIWzsRTRFVWTa7nYEpnJn7ZsI8OHKrg+gA==
-X-Received: by 2002:aa7:d88d:0:b0:65a:3032:5f99 with SMTP id
- 4fb4d7f45d1cf-66008e11ba7mr172885a12.14.1772446546129; Mon, 02 Mar 2026
- 02:15:46 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772447259; x=1773052059;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mac6iCuh/FaCEK5onqKP3LNwRHPgUG6JylTUvWKnd9c=;
+        b=BFDWDs0TdAXV38CdsE9LpcqmfXPgDYdUyGaCJ2nJPdqsuP1yH6LfFNPDCPJcUTI3Jh
+         L6Dm8Xg4/iU8PYGbOptjfSzuqE5+2jQ0hjOQj9oCQAXSFdisx3q3ESGuEB4OqFqGXD/h
+         yuSkA695gCGyZXGcmECNUBrCBfF//T6LW4HnLQAnDCF9EMf3D5RahJ/Uaf0ZEU+TkpYC
+         VMv6kUwgDH1baSiP0MP2JSO2mH6qYlThzOoF/hli+HFVWc97voYx4iqd40+L+9P/R5l6
+         wTNu5SWia0fyP8DLsuXgyE/mNO5uFIqfnv4NLZmum3LmQIaaRdxYpkCB2DU79gpSwat0
+         eyhg==
+X-Forwarded-Encrypted: i=1; AJvYcCVjYuFzBW/djuCPNsGeR9S3COEIFA+hZyhomZr6QspHqPGJQlLdCSEUiDH5R+iwfsNuxNwhHlb26aM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YziB9dFsB/yMiLSBg9IJe8G5xc+usgwiuaW9+KNf7Xs1SpIChDg
+	yOUdBTF07yqbWIcA62aS9/yCLrvLhaTGN5NzKc5Fx0ysHXG23Psf95wLwKj0TWo07Wc=
+X-Gm-Gg: ATEYQzy8oZIYx24ofOUksfIXAgqwMB6UydQ/i89ypYZgGhbZWPdOKzsO5bfTfMdbBdK
+	40tSFndl8CipQoS2Ng9oghJcM3s0hAgtSScI0pYN8+2DY4Ap869TD6gOtmU2XmuHLl6BFV0m1Bv
+	JnUk6HL7Oq8vDh2w+f6ZJnus/uAyNTx1JixkybJPr6aBmsujVcA5v7sd4sWe65B/M/MJ4BIeOxY
+	v1e/RMzPiertX4/R3ZoGsXOejGf+PnfnKJQ7P+lkQWPSg8e44U+N2P26crwkBkhOC1XM8RO03DR
+	D9BRCwYh2WPY4/+jCyHwAiX9MyYjRcGmytlixgXcmGF7RhT455Hc52QjCH6ru65cKFwafPSsoRQ
+	z4YAY/Bu3XKcgoC7XUB1GPldWJGeN5BU3sElbGlOUZnO5LicfrHPZUAV8W+xmwJ5HEr1De+N1na
+	5HDSdaqNYbb8izLWUXYTZ5N99LSrzm/vCgGnkCRtWoFQ0JKv2ClKT5tO55UW7BMMry
+X-Received: by 2002:a05:600c:46c4:b0:483:7ae2:1737 with SMTP id 5b1f17b1804b1-483c9c1bbe9mr210916375e9.17.1772447259308;
+        Mon, 02 Mar 2026 02:27:39 -0800 (PST)
+Received: from ?IPV6:2001:a61:1346:4701:62aa:40c:8866:519d? ([2001:a61:1346:4701:62aa:40c:8866:519d])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bfcbd781sm237871075e9.8.2026.03.02.02.27.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Mar 2026 02:27:39 -0800 (PST)
+Message-ID: <46b003fb-c3b2-4ad6-a3a5-c73e2e248a26@suse.com>
+Date: Mon, 2 Mar 2026 11:27:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260221-legacy-ncm-v2-0-dfb891d76507@google.com> <70b558ea-a12e-4170-9b8e-c951131249af@ixit.cz>
-In-Reply-To: <70b558ea-a12e-4170-9b8e-c951131249af@ixit.cz>
-From: Kuen-Han Tsai <khtsai@google.com>
-Date: Mon, 2 Mar 2026 18:15:19 +0800
-X-Gm-Features: AaiRm50vMX_eo6_AJXZzLpaCWOHLyvOuYGZscw5qv7DwPuU-RrZcIb6Bq7AGNKA
-Message-ID: <CAKzKK0p0d1MCuOm1O3JCz3mF8jr+vV3NnDN9Wuc_A2OCgiRz_A@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] usb: gadget: Fix g_ncm regression and atomic sleep
- in f_ncm
-To: David Heidelberg <david@ixit.cz>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@kernel.org, 
-	kernel test robot <oliver.sang@intel.com>, LI Qingwu <qing-wu.li@leica-geosystems.com.cn>, 
-	Ernest Van Hoecke <ernestvanhoecke@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: cdc-acm: Restore CAP_BRK functionnality to CH343
+To: Marc Zyngier <maz@kernel.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20260301124440.1192752-1-maz@kernel.org>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20260301124440.1192752-1-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,kernel.org,intel.com,leica-geosystems.com.cn,gmail.com];
-	TAGGED_FROM(0.00)[bounces-33865-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[google.com:+];
-	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[khtsai@google.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-33866-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.990];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: F15FB1D63DF
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,suse.com:mid,suse.com:dkim,suse.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 80D9B1D6A77
 X-Rspamd-Action: no action
 
-Hi David, Greg,
-
-Thanks for testing. I'm sorry the patches are causing trouble on your setup=
-.
-
-On Sun, Mar 1, 2026 at 5:03=E2=80=AFAM David Heidelberg <david@ixit.cz> wro=
-te:
->
-> Hello Kuen-Han,
->
-> sadly this series is not enough to fully fix the usb issue encountered
-> on qcom sdm845 platform (namely Pixel 3, OnePlus 6/6T etc.).
->
-> I didn't debugged deeply, but without these patches interface (indicated
-> by NM icon) goes on/off/on/off indefinitely. With your patches it seems
-> stable, but I'm not getting the DHCP address from the phone, which isn't
-> issue at all when I revert the 56a512a9b4107079f68701e7d55da8507eb963d9
-> ("usb: gadget: f_ncm: align net_device lifecycle with bind/unbind").
->
-> I think reverting the original patch would make more sense and then
-> follow up with new one.
-
-The net_device lifecycle change puts us in a dilemma:
-
-1. If we revert the original patch entirely, the NULL pointer
-dereference and dangling sysfs references come back on Android.
-
-2. If we only clear the parent gadget pointer during unbind without
-unregistering the net_device, the sysfs entries still dangle.
-
-3. If we clear the pointer and unregister the net_device without
-freeing it, the device cannot be re-registered unless it is
-uninitialized.
-
-4. If we fully unregister and recreate the net_device on each bind, it
-breaks DHCP on your setup.
-
-Greg, do you have any thoughts on the best way to untangle this? I am
-fully willing to submit a revert for this series to restore the
-expected behavior while we figure out a proper architectural fix.
-
->
-> Feel free to add me into CC and I'll happily test on the sdm845 mobile
-> devices for you.
->
-> David
-
-David, could you share exactly what OS you are using (e.g.,
-postmarketOS with an sdm845/6.18-dev tree)? Also, could you provide
-some instructions on how to build the code and reproduce this problem
-on a Pixel 3? If you have the time, it would be incredibly helpful if
-you could dive into this a bit deeper on your device to see exactly
-how the DHCP daemon is failing.
-
-Regards,
-Kuen-Han
 
 
->
-> On 21/02/2026 15:48, Kuen-Han Tsai wrote:
-> > Commit 56a512a9b410 ("usb: gadget: f_ncm: align net_device lifecycle
-> > with bind/unbind") addressed a lifetime mismatch where the network
-> > interface outlived the parent gadget. However, this introduced two
-> > regressions:
-> >
-> > 1. A NULL pointer dereference in the legacy g_ncm driver. The legacy
-> >     driver attempts to access the net_device during its binding process
-> >     before the NCM function driver is fully initialized.
-> >
-> > 2. A "sleeping function called from atomic context" error in f_ncm.
-> >     The current implementation holds a mutex which might sleep within
-> >     an atomic context.
-> >
-> > To resolve these, store the configuration parameters (qmult, host_addr,
-> > dev_addr) in opts_net until the network device is ready for g_ncm.
-> > Additionally, remove the net_device pointer from the f_ncm_opts
-> > structure. This eliminates the race condition with configfs and allows
-> > dropping the mutex, preventing the atomic sleep issue.
-> >
-> > Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
-> > ---
-> > Changes in v2:
-> > - Remove the RFC tag.
-> > - Fix NPE in gncm reported by the kernel test bot.
-> > - Fix a "sleeping function called from atomic context" error.
-> > - Link to v1: https://lore.kernel.org/r/20260214-legacy-ncm-v1-1-139c5b=
-cc6636@google.com
-> >
-> > ---
-> > Kuen-Han Tsai (2):
-> >        usb: legacy: ncm: Fix NPE in gncm_bind
-> >        usb: gadget: f_ncm: Fix atomic context locking issue
-> >
-> >   drivers/usb/gadget/function/f_ncm.c            | 29 +++++++++++------=
----------
-> >   drivers/usb/gadget/function/u_ether_configfs.h | 11 +---------
-> >   drivers/usb/gadget/function/u_ncm.h            |  1 -
-> >   drivers/usb/gadget/legacy/ncm.c                | 13 +++++++++---
-> >   4 files changed, 23 insertions(+), 31 deletions(-)
-> > ---
-> > base-commit: da87d45b195148d670ab995367d52aa9e8a9a1fa
-> > change-id: 20260214-legacy-ncm-8c001295b343
-> >
-> > Best regards,
->
-> --
-> David Heidelberg
->
+On 01.03.26 13:44, Marc Zyngier wrote:
+> The CH343 USB/serial adapter is as buggy as it is popular (very).
+> One of its quirks is that despite being capable of signalling a
+> BREAK condition, it doesn't advertise it.
+> 
+> This used to work nonetheless until 66aad7d8d3ec5 ("usb: cdc-acm:
+> return correct error code on unsupported break") applied some
+> reasonable restrictions, preventing breaks from being emitted on
+> devices that do not advertise CAP_BRK.
+> 
+> Add a quirk for this particular device, so that breaks can still
+> be produced on some of my machines attached to my console server.
+> 
+> Fixes: 66aad7d8d3ec5 ("usb: cdc-acm: return correct error code on unsupported break")
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Cc: stable@vger.kernel.org
+> Cc: Oliver Neukum <oneukum@suse.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Acked-by: Oliver Neukum <oneukum@suse.com>
 
