@@ -1,195 +1,140 @@
-Return-Path: <linux-usb+bounces-33908-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33909-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yA6NKBfTpmk3XQAAu9opvQ
-	(envelope-from <linux-usb+bounces-33908-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 13:24:55 +0100
+	id 0Fb1EJPkpmlkZAAAu9opvQ
+	(envelope-from <linux-usb+bounces-33909-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 14:39:31 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 391221EF594
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 13:24:54 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B43031F06AC
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 14:39:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 44FEC318F933
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2026 11:56:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A390630602E1
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2026 13:37:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C71AE33DED9;
-	Tue,  3 Mar 2026 11:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b="ZT+Y1YEg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9E062D7817;
+	Tue,  3 Mar 2026 13:37:42 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m32124.qiye.163.com (mail-m32124.qiye.163.com [220.197.32.124])
+Received: from bm.lauterbach.com (bm.lauterbach.com [62.154.241.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC5D033C53A;
-	Tue,  3 Mar 2026 11:56:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12ECA26B760
+	for <linux-usb@vger.kernel.org>; Tue,  3 Mar 2026 13:37:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.154.241.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772538999; cv=none; b=NUGxnEuobRdvMu9Aqslqr9h2+2WgfgS6QEA1G7Q6bT4qEu8oeIyjewJbaexf6phi5qH2UDMAoMO9feu7k1WHf8hgnQmvDnlLTDIBSj349Aw1cJE2GzZZFI1sdl8UmzA1amH2Ulmi6L1fStECj/KVG6s6emf34EvwW9CllmXbXXg=
+	t=1772545062; cv=none; b=ePrL0jJamzwaK8KtOLVNwOnvVdsoTj4aUsZPoeUTOmG7rrf8OKiXtG2RpQ4ZMb+c9QT8P644P0OhW+dlL4/3BlDP0mzIZGozkJcxUdxR40SCov1q4abv+Di0UQNpDLUXnqhbUOW7cdRNdJpAnzj1tf6OvcZxWIG58X5An/7Msc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772538999; c=relaxed/simple;
-	bh=SyqIbHM8aYosfnevBVq5CkMExkOZcqZOdFPhjtX8BWU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lizwfcBQNs3gV19GJW0cr4UL0sO2c3jSeVaT/9omGliSD8wXiWA5Jm+B2lVH8xt+K9VgneSZYmxC0PHbyoTwHqB8adpCGKSv/pIG9BjcPDa7znYMCSCaz05KvIm74FoCoKGuv7M3jDcuHsG8jT+R49Qd+bLJIzB+jDdThq4otfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=ZT+Y1YEg; arc=none smtp.client-ip=220.197.32.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leap-io-kernel.com
-Received: from localhost (unknown [222.130.22.244])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 35979e383;
-	Tue, 3 Mar 2026 19:41:08 +0800 (GMT+08:00)
-Date: Tue, 3 Mar 2026 19:41:05 +0800
-From: BaiKefan <baikefan@leap-io-kernel.com>
-To: si.yanteng@linux.dev, seakeel@gmail.com
-Cc: linux-usb@vger.kernel.org, alexs@kernel.org, dzm91@hust.edu.cn,
- corbet@lwn.net, linux-doc@vger.kernel.org, doubled@leap-io-kernel.com
-Subject: Re: [PATCH v5 0/8] Add Chinese translation for USB subsystem
-Message-ID: <20260303194105.00004696@leap-io-kernel.com>
-In-Reply-To: <cover.1765180570.git.baikefan@leap-io-kernel.com>
-References: <cover.1765180570.git.baikefan@leap-io-kernel.com>
+	s=arc-20240116; t=1772545062; c=relaxed/simple;
+	bh=LHKpa7WvmeFd6PC+bnlBQbwfklUNHPOXZ8BzfiGO/VY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b+17vOXg+nuE3YU6C0AZu5HfRBAKq4nCW6jFyEgQHLZfd5VXyIwuykpKGP+bv4KxikqM6cuz1rjuIXembBY2wVrVvH6hV4rnHm+kEs9qWKNKjITpJeTScACMMeOWlMI8psgqMMGK78cyoh4QknXAW1H3o//MLT+pYRyy+swjK3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com; spf=pass smtp.mailfrom=lauterbach.com; arc=none smtp.client-ip=62.154.241.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lauterbach.com
+Received: from ingpc2.intern.lauterbach.com (unknown [10.2.10.44])
+	(Authenticated sender: ingo.rohloff@lauterbach.com)
+	by bm.lauterbach.com (Postfix) with ESMTPSA id 29940DD8C542;
+	Tue, 03 Mar 2026 14:37:32 +0100 (CET)
+From: Ingo Rohloff <ingo.rohloff@lauterbach.com>
+To: Thinh.Nguyen@synopsys.com
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	Ingo Rohloff <ingo.rohloff@lauterbach.com>
+Subject: [PATCH v4 0/1] usb: dwc3: Support for USB3340x ULPI PHY
+Date: Tue,  3 Mar 2026 14:37:19 +0100
+Message-ID: <20260303133720.17167-1-ingo.rohloff@lauterbach.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9cb3807f8509d5kunm56864188b56e57
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCTkIaVh8YSRlJGktJSR1CQ1YVFAkWGhdVEwETFh
-	oSFyQUDg9ZV1kYEgtZQVlJSUlVSkhLVUlJVUlPT1lXWRYaDxIVHRRZQVlPS0hVSktISk5MSVVKS0
-	tVSkJLS1kG
-DKIM-Signature: a=rsa-sha256;
-	b=ZT+Y1YEgh8EsbngBkNJxjrEVYU/HzRnQpfDGIgkAeRwrtOIyleo7NDiuq3mpgI/DplWFhQBOzU2yIAYtsOR1aBrgxS2qwBmNa+3HjSkHwBAMqngeovUNs9bfdXLUT2UE3tiILQz8sMxppT7gt5Z01vgqx5qy/fbO20Fk/K40rK4KKooQLkoxA+O6JkCZekvFcKWf/AgnGo3uOp9RFk00XSblYg1nzZCxYXg32M1hFq6Q2QXWSdLqKfrS6G+Wikduhoa39+YrWgLvB5bp29JyIZB22Aq8ychcf01Am4xMzbl3/0psrKohO1dzaOMyX8TzDJsnKGRkEVvsdxQZc8JK1Q==; c=relaxed/relaxed; s=default; d=leap-io-kernel.com; v=1;
-	bh=DqHwu/DaLy1ZvOsiGkbWdbgMUVttdNMR6+KD5aqpmrc=;
-	h=date:mime-version:subject:message-id:from;
-X-Rspamd-Queue-Id: 391221EF594
+X-Bm-Milter-Handled: 166a2dfb-2e12-4590-8fa5-72e30323519f
+X-Bm-Transport-Timestamp: 1772545052219
+X-Rspamd-Queue-Id: B43031F06AC
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[leap-io-kernel.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[leap-io-kernel.com:s=default];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33908-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[leap-io-kernel.com:+];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[linux.dev,gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_NONE(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33909-lists,linux-usb=lfdr.de];
+	DMARC_NA(0.00)[lauterbach.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[baikefan@leap-io-kernel.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[ingo.rohloff@lauterbach.com,linux-usb@vger.kernel.org];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.898];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-Hi Yanteng and Alexs, 
+The problem only pops up if you combine a DWC3 controller with a
+Microchip USB3340 ULPI PHY.
 
-A few months ago, I submitted a patch for the Chinese translation of
-the USB documentation. 
+This patch uses the USB Vendor/Product ID of the ULPI PHY
+to detect the USB3340 model and then applies the necessary fix,
+if this model is found.
 
-Following your suggestion, I forwarded it to the USB subsystem
-maintainer for further review, but I haven’t received any response yet.
+Benefits of this approach
+- Does not require any modification to existing device trees.
+- Should work for all DWC3 IP / USB3340 combinations, not only
+  for the Ultrascale+ ZyngMP DWC3 implementation, where this
+  problem was originally found.
+- Easy to extend in the future if a similar situation arises again.
 
-Could you please advise on the next steps? Should I follow up with the
-maintainer, or is there another recommended approach to help move this
-patch forward? 
+Caveats:
+- Replicates code from drivers/usb/common/ulpi.c
 
-Thank you for your assistance! 
+Signed-off-by: Ingo Rohloff <ingo.rohloff@lauterbach.com>
+---
+Changes in v4:
+- Rename dwc3_ulpi_detect_quirks()   -> dwc3_ulpi_detect_config()
+- Rename dwc3_hs_apply_ulpi_quirks() -> dwc3_ulpi_apply_config()
+- Call dwc3_ulpi_apply_config() each time dwc3_core_init() is called.
+  Makes sure config is applied when resuming.
+- Link to v3: https://lore.kernel.org/linux-usb/20260227133038.45150-1-ingo.rohloff@lauterbach.com/
 
-Best regards, 
-Kefan
+---
+Changes in v3:
+- Do not mention what the DWC3_GUSB2PHYCFG_XCVRDLY does.
+- Do not use device tree property to set enable_usb2_transceiver_delay.
+  Instead autodetect if it's necessary to set enable_usb2_transceiver_delay.
+- Link to v2: https://lore.kernel.org/linux-usb/20260225130323.24606-1-ingo.rohloff@lauterbach.com/
 
+---
+Changes in v2:
+- Mention sources of information in commit message instead of code.
+- Renamed property to "snps,enable-usb2-transceiver-delay".
+- Renamed struct member to "enable_usb2_transceiver_delay".
+- Describe dt-bindings in a second commit.
+- Link to v1: https://lore.kernel.org/linux-usb/20260224141438.39524-1-ingo.rohloff@lauterbach.com/
 
+---
 
-On Mon,  8 Dec 2025 17:25:30 +0800
-Kefan Bai <baikefan@leap-io-kernel.com> wrote:
+Ingo Rohloff (1):
+  usb: dwc3: Support USB3340x ULPI PHY high-speed negotiation.
 
-> This patch set adds Chinese translations for the USB documentation.
-> 
-> Changes in v5:
->  - Ensuring that the index.rst entries, including acm, authorization,
->    chipidea, dwc3, ehci, and usbmon, are placed in the correct patches
->    to prevent build errors when patches are applied individually.
->  - Remove extra spaces in chipidea.rst.
->  - Send these translation patches to linux-usb@vger.kernel.org for
-> review by Chinese-speaking developers, per Alex and Yanteng's
-> recommendation.
-> 
-> Changes in v4:
->  - shorten those overlong title underline/overline symbols
->  - Remove CREDITS section from index.rst
->  - Link to v4:
-> https://lore.kernel.org/all/cover.1764674650.git.baikefan@leap-io-kernel.com/
-> 
-> Changes in v3:
->  - Updated the signoff to my full legal name,
->    as requested by Jonathan Corbet.
->  - Reviewed and fixed the RST syntax to resolve the patch issues
->    noted by Alex Shi.
->  - Kept the number of translated files to eight
->    to make submission and review smoother.
->  - Link to v3:
-> https://lore.kernel.org/all/cover.1763984424.git.baikefan@leap-io-kernel.com/
-> 
-> Changes in v2:
->  - Update [PATCH 01/25] docs/zh_CN: Add index.rst translation
->    to include corresponding updates in
->    Documentation/translations/zh_CN/subsystem-apis.rst.
->  - Link to v2:
-> https://lore.kernel.org/all/cover.1763897036.git.baikefan@leap-io-kernel.com/
-> 
-> v1:
->  - Link:
-> https://lore.kernel.org/all/20251123074540.34161-1-baikefan@leap-io-kernel.com/
-> 
-> Kefan Bai (8):
->   docs/zh_CN: Add index.rst translation
->   docs/zh_CN: Add acm.rst translation
->   docs/zh_CN: Add authorization.rst translation
->   docs/zh_CN: Add chipidea.rst translation
->   docs/zh_CN: Add dwc3.rst translation
->   docs/zh_CN: Add ehci.rst translation
->   docs/zh_CN: Add usbmon.rst translation
->   docs/zh_CN: Add CREDITS translation
-> 
->  .../translations/zh_CN/subsystem-apis.rst     |   2 +-
->  Documentation/translations/zh_CN/usb/CREDITS  | 153 +++++++
->  Documentation/translations/zh_CN/usb/acm.rst  | 137 +++++++
->  .../translations/zh_CN/usb/authorization.rst  | 125 ++++++
->  .../translations/zh_CN/usb/chipidea.rst       | 142 +++++++
->  Documentation/translations/zh_CN/usb/dwc3.rst |  60 +++
->  Documentation/translations/zh_CN/usb/ehci.rst | 216 ++++++++++
->  .../translations/zh_CN/usb/index.rst          |  54 +++
->  .../translations/zh_CN/usb/usbmon.rst         | 380
-> ++++++++++++++++++ 9 files changed, 1268 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/translations/zh_CN/usb/CREDITS
->  create mode 100644 Documentation/translations/zh_CN/usb/acm.rst
->  create mode 100644
-> Documentation/translations/zh_CN/usb/authorization.rst create mode
-> 100644 Documentation/translations/zh_CN/usb/chipidea.rst create mode
-> 100644 Documentation/translations/zh_CN/usb/dwc3.rst create mode
-> 100644 Documentation/translations/zh_CN/usb/ehci.rst create mode
-> 100644 Documentation/translations/zh_CN/usb/index.rst create mode
-> 100644 Documentation/translations/zh_CN/usb/usbmon.rst
-> 
-> --
-> 2.52.0
-> 
-> 
-> 
+ drivers/usb/dwc3/core.c | 16 +++++++++++++++
+ drivers/usb/dwc3/core.h |  4 ++++
+ drivers/usb/dwc3/ulpi.c | 44 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 64 insertions(+)
+
+--
+2.52.0
 
 
