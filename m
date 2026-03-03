@@ -1,143 +1,137 @@
-Return-Path: <linux-usb+bounces-33922-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33923-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iPatCisQp2k0cwAAu9opvQ
-	(envelope-from <linux-usb+bounces-33922-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 17:45:31 +0100
+	id wCSlL3gTp2mfdQAAu9opvQ
+	(envelope-from <linux-usb+bounces-33923-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 17:59:36 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C89541F40AE
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 17:45:30 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C3C31F43FF
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 17:59:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0F4303038295
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2026 16:38:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D6D2730120D0
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2026 16:59:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC33A3264D6;
-	Tue,  3 Mar 2026 16:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81F773E716C;
+	Tue,  3 Mar 2026 16:59:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L+PIsnkD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KGkTFRo7"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58977370D5C;
-	Tue,  3 Mar 2026 16:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1200D34F46E
+	for <linux-usb@vger.kernel.org>; Tue,  3 Mar 2026 16:59:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772555866; cv=none; b=NTMGQEupXZu+664ilpsL97yQeUnbA/7ZGu/nzXZS27rt0ft5/IUwFi80nsPzIk+eMUQCi3E2kfLtqHd2ACGXaS2C7rJjgu+C3dYaTUQ1OlFdV+9AAh/rP2io7Qm7bd4v9fgmxJTxzSWuZgZ2N0O5eOVFuN7RGeUTek/WiQmxagE=
+	t=1772557151; cv=none; b=FFvWBoPWN1qxgnBZ78kOResvmuYqS4LNb4IlokcIIicLEONVMbTTUyZt23zOF4nSggAau6U+/qlpvzgK0AWiAtXVzxaWQdw2dN4Yp3m+SzqlLtcpL8vvt0CUoSo36x+EJAnCPxbwOm/AC/bpl35/Od8bwDzP6Q0tAT+mOgVJN4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772555866; c=relaxed/simple;
-	bh=4zCxRWHuSkku0YSduihXnooyBIGPdu7ySKeLPFfTZ40=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PTwcS9PcH6n7b6YJKC+E8j8r8z5pFOLSFFWsOIWs18lRJlrdc+2C+xoxAqL8S9XVYNE4DKASImFtGuW9tHev4kdQvLo84oF7jqxs/dZoQHWRamtjtNhWglFHvZ4m1B7xYUrP1FBGJQLH3Vj4/66n80HTia0bfq17OUFK9YGG3gE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L+PIsnkD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AC21C116C6;
-	Tue,  3 Mar 2026 16:37:43 +0000 (UTC)
+	s=arc-20240116; t=1772557151; c=relaxed/simple;
+	bh=LPJK95eeqIgBDa2TPB72zFz846Bjui0lvWveSpoycnY=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XrNZQKUbvylPi0J8d2bGNj05RaMhMLy3H+RiXtt3gRrqOlG1d/SZQVx5tsRifPXgAOjP4BRwzZlLMQPEI1k64PBb+QfCopk//SStB+hB8YojHhWNCimnQByUtq+GYNC6cY3x9y2BzKFyNR+p4WbAuBye3qfpQlugAQdghvAl++c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KGkTFRo7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E8DC1C19425
+	for <linux-usb@vger.kernel.org>; Tue,  3 Mar 2026 16:59:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772555866;
-	bh=4zCxRWHuSkku0YSduihXnooyBIGPdu7ySKeLPFfTZ40=;
-	h=From:To:Cc:Subject:Date:From;
-	b=L+PIsnkDLRWMzQhLSe6Aw4kJcPUMaGafo8ac3Pb55w324b0Gp8p+zD+agjL3lcOrz
-	 An9/pHCZGP2GME+b9fbPG4nyQqlVNKyQ7UOaXDd8AXXb8rKqDrAE3DJg8FpiI/9UUk
-	 KFahwsm1N0WWea/cmzP7pUQy+1m9uhCYX+n3c3GIzP84Vxkyd2YFALuDaQDFFk7bpH
-	 fpxMTwCL4DL9ajWIdlNBFYXjYae0fsIcp+XGjjuMlDUfbro/oMWpTfn7yMja7+xgjW
-	 SFJhq8G3Dr2vP5G7F3BvRCK6kqB4AulRQs76CjLmavO7FWNMAbUqSYl41EiI4jqBxG
-	 rFOSwfAHYPVYg==
-From: Conor Dooley <conor@kernel.org>
+	s=k20201202; t=1772557150;
+	bh=LPJK95eeqIgBDa2TPB72zFz846Bjui0lvWveSpoycnY=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=KGkTFRo7vujsFSVzFC47t7KqkWuV1DO9briteCzzzVvHdMN+DUIXB2KmO6Rba9Y7K
+	 dL1TDZu8G8ujuAiywjeXbeywOPmGkfH8UWW3ngmltE5J5g2eID//q27UHz9w9Bsfzr
+	 b08whWhUbPL0so8CJSavTatdYqQxd1dj7J6ddEXxrGkg8pbtJ/W2N9ZBYnmWfYWHHb
+	 18GpAzjEEKpcJb7mH8tS8DijIfUd9aU4++jdvPELzg7dd8IyXNuN3A6liYc775KHDs
+	 BJ+mVre5vDD8zCjD8dmCBkCld5XnsLd8a+mXA1HHwJEPbho7aKna5kcNxiykZzmtfn
+	 G5Zal+uIby0ig==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id DEFA1C53BC7; Tue,  3 Mar 2026 16:59:10 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
-Cc: conor@kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1] dt-bindings: usb: mpfs-musb: permit resets
-Date: Tue,  3 Mar 2026 16:37:39 +0000
-Message-ID: <20260303-backspace-unhearing-c6cc8cbddbba@spud>
-X-Mailer: git-send-email 2.51.0
+Subject: [Bug 221073] xHCI host controller dies on resume from s2idle on AMD
+ Strix Halo [1022:1587]
+Date: Tue, 03 Mar 2026 16:59:10 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: superveridical@gmail.com
+X-Bugzilla-Status: NEEDINFO
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-221073-208809-2IDhRBesqC@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-221073-208809@https.bugzilla.kernel.org/>
+References: <bug-221073-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1478; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=dpcvPwQiXhJxptNJ0T8pgqXJ5w228xDV3ANyBjxePt4=; b=owGbwMvMwCVWscWwfUFT0iXG02pJDJnL+YJZ/3FZeV7jE3xefTLpbaKVbNW2c+UWZRrMHPd+7 H/PeU+5o5SFQYyLQVZMkSXxdl+L1Po/Ljuce97CzGFlAhnCwMUpABM5No2R4WCT8dZZwrGRv3wD PH6k3Cmb5X0s0mbLu13+rLr1xancLowMDzoTJNKLFGfnzZFYf8z8R9rv5D6VHJelMvz3XrWtelv BDgA=
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: C89541F40AE
+X-Rspamd-Queue-Id: 3C3C31F43FF
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-33922-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-33923-lists,linux-usb=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,microchip.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,infradead.org:email]
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NO_DN(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-0.988];
+	RCPT_COUNT_ONE(0.00)[1];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-From: Conor Dooley <conor.dooley@microchip.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221073
 
-The musb IP on mpfs and pic64gx has a reset pin, but until now this has
-been undocumented because platform firmware takes the block out of reset
-on first-party boards (or those using modified versions of the vendor
-firmware), but not all boards may take this approach. Permit providing a
-reset in devicetree for Linux, or other devicetree-consuming software,
-to use.
+--- Comment #27 from Alexander F (superveridical@gmail.com) ---
+>Maybe the issues with resume taking 10 seconds in comment #19 can be
+>considered separately in a different bug?
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-CC: Conor Dooley <conor.dooley@microchip.com>
-CC: Daire McNamara <daire.mcnamara@microchip.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Rob Herring <robh@kernel.org>
-CC: Krzysztof Kozlowski <krzk+dt@kernel.org>
-CC: linux-riscv@lists.infradead.org
-CC: linux-usb@vger.kernel.org
-CC: devicetree@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
----
- Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+The initial bug reporter's dmesg has it. My dmesg has it. User uioped1's dm=
+esg
+on github has it. User Neilson_Soult on the Framework forum has it. So it l=
+ooks
+like it's your issue that could be a different bug.=20
 
-diff --git a/Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml b/Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
-index a812317d80893..c4e1c2d73bdb3 100644
---- a/Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
-+++ b/Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
-@@ -37,6 +37,9 @@ properties:
-   clocks:
-     maxItems: 1
- 
-+  resets:
-+    maxItems: 1
-+
-   microchip,ext-vbus-drv:
-     description:
-       Some ULPI USB PHYs do not support an internal VBUS supply and driving
--- 
-2.51.0
+Have you tried the 0x40 quirk?
 
+PS: I forgot to mention that I suspect that the instability I've mentioned =
+in
+my comment could have environmental nature, and my device could be perfectly
+fine, just prone to ESD / static charge build up -- it's been cold here, the
+air is unusually dry, with the resulting static build up. (I've been zapping
+things)
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
