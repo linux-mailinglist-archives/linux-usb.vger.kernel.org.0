@@ -1,232 +1,131 @@
-Return-Path: <linux-usb+bounces-33929-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33930-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yEEpGFxlp2mghAAAu9opvQ
-	(envelope-from <linux-usb+bounces-33929-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 23:49:00 +0100
+	id UHNfI5xnp2mghAAAu9opvQ
+	(envelope-from <linux-usb+bounces-33930-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 23:58:36 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2BD61F828F
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 23:48:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E60541F839A
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 23:58:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6D169307C9C1
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2026 22:48:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 87C1C30432F5
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2026 22:57:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0557E3909AC;
-	Tue,  3 Mar 2026 22:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 992C239020B;
+	Tue,  3 Mar 2026 22:57:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u7XF/96H"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5626B370D52
-	for <linux-usb@vger.kernel.org>; Tue,  3 Mar 2026 22:48:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C663644CB
+	for <linux-usb@vger.kernel.org>; Tue,  3 Mar 2026 22:57:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772578109; cv=none; b=SoxmCmhADUmszRrvDpQ80jytK33iCu8Yd+1I+LVZif6e9TmTtOqcRS/UiULCWub81uDcXEWpVM7llKwYMfnee+7AM2izqv2SaURJ989drJCBVNVb4gjCdCZr82Y/LWJ5UKl9MctW5qAOZAM7fzfb2bvcYDNTuuyvMfTIJfpP/Jg=
+	t=1772578654; cv=none; b=b3lRau5jUDvbn2c/Qog2rCmmpPx8g+/TtvAy5A3M5Oa2UHLTGCCyDAuOSui+PxArpyz61FiJlM+4IxuFxS9hKdNBkauFDx4FtneENPxwh7MU4HtrjcG+W/SO3j8tCSog7CSzZS5bCCDlEdEI0eVnG7fpSI/plcmptRzvZxTI8ko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772578109; c=relaxed/simple;
-	bh=SLzG06fmnXklYyYJYWanS18GEPD4baSzZphAPsqBB6c=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=JIB5+ylL1WvD6QVX/PXsVI21g38f6Dc0Vo3+2Mat0PzQQbQpvWZzpjfISvfzpMablROwtJ2WI7mXGi6byqDPabCeIMleyWc1l09UOBKu9VaqltMdZ8/tzOAxjsnuGSYnjWtTVf2yh1JC18YjdGNK8miAhXduhSC7wTWshdqBjPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-7d4c3d9dd70so103317023a34.1
-        for <linux-usb@vger.kernel.org>; Tue, 03 Mar 2026 14:48:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772578107; x=1773182907;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zyfmorJRasI8+9qvadPfl1VjzCk+3pZrlG6H9/L3uPY=;
-        b=VSiJY2s69qrqaDSI1pKazY0P0BcAHbnrmki+Rfe5LNHIPKgrP4GiPlmzzTRoxnZC7a
-         Y1XS9I6mwcEjJzBGqUrtxa6ipG/PQ2/zYFK3rUL0fRGyjjQrCVL+yF/H9LenuaBUlbfr
-         6NwxBFp9J6intTZhI9jh32S8WTGDBRP2JQf4lnpj8eaiNAhDhgNXt61NkhZy1VkScctn
-         j4qKQp7yxaE1AuArIH7P6oLt0s0I1XLGS4OQaryy+pMk1JaDWc7eGrI4NDiunTP76OWz
-         hbgQMqMsne97DYeJIXwvbR6kScyK3u/0JrcLeaQ9WsuSQxSFrh5P40YK7jhRegcBaatO
-         ByPA==
-X-Forwarded-Encrypted: i=1; AJvYcCUYvI57GH7pXkS2S53MOOKsluErLG0Ew7MZWvkWTWBFucGojWbtkaDA0vfq4CzFa7QYvjSc5ygbweo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTDPtiKvupxAvgwrWTRY1mTTjgO9CWlG80a9sJMbCBkb3VlDra
-	SR34oRDvk88Wn/dCg3aeRv7AQAXH6ebHVfc1Nh/hI+JGXQ/jswMXVLCErk1nevOUcWYftO4AUr6
-	yLrfYIiVss82ykGJ1+92Bl4Wi4GuVUJ5wM+Q9ehGjwlQN904PymxhPd4DvCA=
+	s=arc-20240116; t=1772578654; c=relaxed/simple;
+	bh=q/BrtncYK+iqZ+NcUoeS1VRIBWfsDEGd5IHRRZiJ7UI=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ejzKYgoLorpoM1kAjsf5sRGGFMtSc7w7NhzOWImHLZy7wxFmRDHqHfK0cXgopmiFTPw9JIa/AeP3PVPjBIZcIIgpBVnANWsKnOBlpwhcGGQZD9JrNkMRG2Mi1fm78v6CGP2QAbh4IADP9YOe9AVSdO6cB+cKLpdnVvMW9YYoOsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u7XF/96H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D3330C2BCB1
+	for <linux-usb@vger.kernel.org>; Tue,  3 Mar 2026 22:57:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772578653;
+	bh=q/BrtncYK+iqZ+NcUoeS1VRIBWfsDEGd5IHRRZiJ7UI=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=u7XF/96HtnXjWZXUWfvf5Cx+tREqCPefFxg3osLmaRT2hGEIwmV6QUpuHc1k7zDbI
+	 1ibPtj7xktliTAYuJrFesZeiggJFwfNjG2m+8ARp6L0vE2YGGHfC+Wjk5R2DYa1MqU
+	 fFgWASDluQ46sEHsIWGMki0gHDQ7Fbk1pCSdjErvRXu9yj+X4CKFWjaPTlZnSuMcRj
+	 VoL671+YWdKjtD52Mb9gBpwVG6DwBJQk+jeB26LcMKzdkDMMZU9KP2114a36vUjKBl
+	 Znhbnh6hPsz5rKh2ThhxF15lPgd2JlfMTYiSd/68weCiftHBHBhmZ5erwliFbKkZzT
+	 ojUTRauxbIiTw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id CBF38C4160E; Tue,  3 Mar 2026 22:57:33 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 221073] xHCI host controller dies on resume from s2idle on AMD
+ Strix Halo [1022:1587]
+Date: Tue, 03 Mar 2026 22:57:33 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: superveridical@gmail.com
+X-Bugzilla-Status: NEEDINFO
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.isobsolete attachments.created
+Message-ID: <bug-221073-208809-5eb2Uum9Ts@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-221073-208809@https.bugzilla.kernel.org/>
+References: <bug-221073-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a4a:ec4c:0:b0:679:e765:dafc with SMTP id
- 006d021491bc7-67b177035f1mr104406eaf.19.1772578107324; Tue, 03 Mar 2026
- 14:48:27 -0800 (PST)
-Date: Tue, 03 Mar 2026 14:48:27 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69a7653b.050a0220.21ae90.000f.GAE@google.com>
-Subject: [syzbot] [wireless?] WARNING: refcount bug in rsi_91x_deinit
-From: syzbot <syzbot+ba76f6da746fd674d311@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: D2BD61F828F
+X-Rspamd-Queue-Id: E60541F839A
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.36 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=f1500201919951cc];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-33929-lists,linux-usb=lfdr.de,ba76f6da746fd674d311];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FROM_NO_DN(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	MISSING_XM_UA(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	SUBJECT_HAS_QUESTION(0.00)[];
-	REDIRECTOR_URL(0.00)[goo.gl];
+	NEURAL_HAM(-0.00)[-0.995];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[goo.gl:url,googlegroups.com:email,appspotmail.com:email,storage.googleapis.com:url,syzkaller.appspot.com:url,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	TAGGED_FROM(0.00)[bounces-33930-lists,linux-usb=lfdr.de];
+	TO_DN_NONE(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+]
 X-Rspamd-Action: no action
 
-Hello,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221073
 
-syzbot found the following issue on:
+Alexander F (superveridical@gmail.com) changed:
 
-HEAD commit:    bb375c251ab4 dt-bindings: usb: st,st-ohci-300x: convert to..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1416c5aa580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f1500201919951cc
-dashboard link: https://syzkaller.appspot.com/bug?extid=ba76f6da746fd674d311
-compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #309514|0                           |1
+        is obsolete|                            |
 
-Unfortunately, I don't have any reproducer for this issue yet.
+--- Comment #29 from Alexander F (superveridical@gmail.com) ---
+Created attachment 309536
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D309536&action=3Dedit
+Z13 dmesg with xhci_hcd.quirks=3D0x40 (fixed)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2475c3172471/disk-bb375c25.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/30449aa672dd/vmlinux-bb375c25.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/46d3937d1c16/bzImage-bb375c25.xz
+I apologize -- my previous attachment was truncated.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ba76f6da746fd674d311@syzkaller.appspotmail.com
+--=20
+You may reply to this email to add a comment.
 
-------------[ cut here ]------------
-refcount_t: addition on 0; use-after-free.
-WARNING: lib/refcount.c:25 at refcount_warn_saturate+0x111/0x130 lib/refcount.c:25, CPU#0: kworker/0:1/10
-Modules linked in:
-CPU: 0 UID: 0 PID: 10 Comm: kworker/0:1 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:refcount_warn_saturate+0x111/0x130 lib/refcount.c:25
-Code: cc e8 43 d8 e5 fe 48 8d 3d 4c 6c 28 08 67 48 0f b9 3a e8 32 d8 e5 fe 5b 5d e9 cb 88 9f 04 e8 26 d8 e5 fe 48 8d 3d 3f 6c 28 08 <67> 48 0f b9 3a e8 15 d8 e5 fe 5b 5d c3 cc cc cc cc 48 89 df e8 46
-RSP: 0018:ffffc900000aef30 EFLAGS: 00010246
-RAX: 0000000000100000 RBX: ffff88811d6f9d28 RCX: ffffc90015361000
-RDX: 0000000000100000 RSI: ffffffff82cbe1da RDI: ffffffff8af44e20
-RBP: 0000000000000002 R08: 0000000000000005 R09: 0000000000000004
-R10: 0000000000000002 R11: ffff8881f5639708 R12: ffff88811bdf0000
-R13: ffff88811d6f9d28 R14: 0000000000000000 R15: 0000000000000002
-FS:  0000000000000000(0000) GS:ffff8882686d3000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f04409cb6b0 CR3: 0000000121146000 CR4: 00000000003506f0
-Call Trace:
- <TASK>
- __refcount_add include/linux/refcount.h:289 [inline]
- __refcount_inc include/linux/refcount.h:366 [inline]
- refcount_inc include/linux/refcount.h:383 [inline]
- get_task_struct include/linux/sched/task.h:116 [inline]
- kthread_stop+0x602/0x680 kernel/kthread.c:785
- rsi_kill_thread drivers/net/wireless/rsi/rsi_common.h:78 [inline]
- rsi_91x_deinit+0x102/0x1f0 drivers/net/wireless/rsi/rsi_91x_main.c:405
- rsi_probe+0xd27/0x1aa0 drivers/net/wireless/rsi/rsi_91x_usb.c:861
- usb_probe_interface+0x303/0x8f0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:583 [inline]
- really_probe+0x241/0xa60 drivers/base/dd.c:661
- __driver_probe_device+0x1de/0x400 drivers/base/dd.c:803
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:833
- __device_attach_driver+0x1ff/0x3e0 drivers/base/dd.c:961
- bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:500
- __device_attach+0x1e4/0x4d0 drivers/base/dd.c:1033
- device_initial_probe+0xaf/0xd0 drivers/base/dd.c:1088
- bus_probe_device+0x64/0x160 drivers/base/bus.c:574
- device_add+0x11d9/0x1950 drivers/base/core.c:3689
- usb_set_configuration+0xd97/0x1c60 drivers/usb/core/message.c:2208
- usb_generic_driver_probe+0xa1/0xe0 drivers/usb/core/generic.c:250
- usb_probe_device+0xef/0x400 drivers/usb/core/driver.c:291
- call_driver_probe drivers/base/dd.c:583 [inline]
- really_probe+0x241/0xa60 drivers/base/dd.c:661
- __driver_probe_device+0x1de/0x400 drivers/base/dd.c:803
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:833
- __device_attach_driver+0x1ff/0x3e0 drivers/base/dd.c:961
- bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:500
- __device_attach+0x1e4/0x4d0 drivers/base/dd.c:1033
- device_initial_probe+0xaf/0xd0 drivers/base/dd.c:1088
- bus_probe_device+0x64/0x160 drivers/base/bus.c:574
- device_add+0x11d9/0x1950 drivers/base/core.c:3689
- usb_new_device.cold+0x685/0x115c drivers/usb/core/hub.c:2695
- hub_port_connect drivers/usb/core/hub.c:5567 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
- port_event drivers/usb/core/hub.c:5871 [inline]
- hub_event+0x314d/0x4af0 drivers/usb/core/hub.c:5953
- process_one_work+0x9d7/0x1920 kernel/workqueue.c:3275
- process_scheduled_works kernel/workqueue.c:3358 [inline]
- worker_thread+0x5da/0xe40 kernel/workqueue.c:3439
- kthread+0x370/0x450 kernel/kthread.c:467
- ret_from_fork+0x6c3/0xcb0 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	cc                   	int3
-   1:	e8 43 d8 e5 fe       	call   0xfee5d849
-   6:	48 8d 3d 4c 6c 28 08 	lea    0x8286c4c(%rip),%rdi        # 0x8286c59
-   d:	67 48 0f b9 3a       	ud1    (%edx),%rdi
-  12:	e8 32 d8 e5 fe       	call   0xfee5d849
-  17:	5b                   	pop    %rbx
-  18:	5d                   	pop    %rbp
-  19:	e9 cb 88 9f 04       	jmp    0x49f88e9
-  1e:	e8 26 d8 e5 fe       	call   0xfee5d849
-  23:	48 8d 3d 3f 6c 28 08 	lea    0x8286c3f(%rip),%rdi        # 0x8286c69
-* 2a:	67 48 0f b9 3a       	ud1    (%edx),%rdi <-- trapping instruction
-  2f:	e8 15 d8 e5 fe       	call   0xfee5d849
-  34:	5b                   	pop    %rbx
-  35:	5d                   	pop    %rbp
-  36:	c3                   	ret
-  37:	cc                   	int3
-  38:	cc                   	int3
-  39:	cc                   	int3
-  3a:	cc                   	int3
-  3b:	48 89 df             	mov    %rbx,%rdi
-  3e:	e8                   	.byte 0xe8
-  3f:	46                   	rex.RX
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
