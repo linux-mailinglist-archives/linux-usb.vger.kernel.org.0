@@ -1,687 +1,343 @@
-Return-Path: <linux-usb+bounces-33927-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33928-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yNhIIPEVp2ncdQAAu9opvQ
-	(envelope-from <linux-usb+bounces-33927-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 18:10:09 +0100
+	id IPI3FYkmp2mSfAAAu9opvQ
+	(envelope-from <linux-usb+bounces-33928-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 19:20:57 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECBE41F46F3
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 18:10:08 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id F081D1F5341
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 19:20:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 31D873067850
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2026 17:08:46 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 11E91300D1CA
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2026 18:20:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C4EC48AE31;
-	Tue,  3 Mar 2026 17:08:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E19773CD8DA;
+	Tue,  3 Mar 2026 18:20:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WMqUrCQT"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="iZCBakYO";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="bN0OLIW1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1103C278D;
-	Tue,  3 Mar 2026 17:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755BB3A6EED
+	for <linux-usb@vger.kernel.org>; Tue,  3 Mar 2026 18:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772557717; cv=none; b=fwb5GuzHeIJPa3wY29PIAAsFrzwXRfT8GjJRJQlHRcPIJlNC0HTS5JsfOinj+QXdcsWdr9utycCRKUNF3AxGuvnbcm0UGnuU+Hi82YFjzODrFl9SGCSu/pihOD3Yiy3vDUclY2WuAHlmhqg7Syz/lzHsa6ACGOdyt70iFeb3Cks=
+	t=1772562049; cv=none; b=FwUmBQ1GfaEkYHl/jHWCByttIOgSNi9Lt7gXxih4EjCdbx0SCfGktQJXLh/Pj403wdHiP6HLRtAj5/5B7X0gmgmveefR5Xs5rilBMkg/jVgI03bAUmbKO5XXpOwFBr9tcVNQFKQ/3IC0ST8OgTq1dXM5Chkl7dadqyG8kgfRS/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772557717; c=relaxed/simple;
-	bh=5DDR9N2RtjyHXUC2ckTtft4E3KUUe+nALLz2dcoHg90=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TQclU8s7jAUs6+I7cIZrgE5VH8kJg2LlKBGdlXAkvOlLj0DltRQFJbwDYSrwtYyKHv/dSf1Wa24Ncos10zfpPZgg+gTj1/7KOpKdibJzQroPVKah4v0JvuWM63XYBv38eElEieoqVCdghP+EYYXkyJ45lmzQQiWzVOysbsIQk1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WMqUrCQT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56485C19425;
-	Tue,  3 Mar 2026 17:08:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772557717;
-	bh=5DDR9N2RtjyHXUC2ckTtft4E3KUUe+nALLz2dcoHg90=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WMqUrCQT4LUDxb34fAT6LvtJzGfUG9XmnVSUvwD7k0uqwc0hbI+vdWL+5HFsve17O
-	 HeMU3D9FjBPI+MzfcdIvVcLB1TlM4RlGKeYXYWTImNFEzckOIlY4koISPGv5ApLztJ
-	 nGUj/EYIlIJ+XdR3DjbUERmIpm/x1hPaFgn2GOkG6dpmz7X/MHIklx5IB93p/zUi/d
-	 H2fRX7uexWydQHwtYTkEpI+jM28KGUF3BRCOGQXdtH8+PHtESlBY3WScsJhc8rQ30/
-	 pad5U1YBNbAbMbpqsbtpRZoJ2nY6yY3CzuStr7vjHfcxcJLtj/ec3qUWD0AnRvFidj
-	 SIRJ616YPzfkg==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vxTEZ-000000001CG-0MTB;
-	Tue, 03 Mar 2026 18:08:35 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Dave Penkler <dpenkler@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Johan Hovold <johan@kernel.org>
-Subject: [PATCH 2/2] gpib: rename driver symbol prefix
-Date: Tue,  3 Mar 2026 18:07:22 +0100
-Message-ID: <20260303170722.4516-3-johan@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260303170722.4516-1-johan@kernel.org>
-References: <20260303170722.4516-1-johan@kernel.org>
+	s=arc-20240116; t=1772562049; c=relaxed/simple;
+	bh=rhpJVHsNMSBq/uKWUJGwa5xV7NWpvwC0ce/Cos+r8I4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VuhRwhEub+5Jeq7smYEZX9wPkmmkSXlwUFLxFmjbC5P5msDXtaD+5HkEoUY+3oSF0jAWb0eoFWlAYFJUTOSSYXJrxfKIomfJJ04K+JvX0eIZEJ2SEdBy5bHU9c6YjHtFACzorwr3rJ5vImRyl6g0NvTuSf4fn2r/yZ1huiNxFRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=iZCBakYO; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=bN0OLIW1; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 623H0S8m3669966
+	for <linux-usb@vger.kernel.org>; Tue, 3 Mar 2026 18:20:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	lC7ky6mebZgpVjcxW/hjFp1ho4+jRsSmj2aDV+XPb24=; b=iZCBakYOEbZ6mvYI
+	Bu5bl96LYCoz0BiaixVhxoSSVcR+TJAn+ZIHMRLBGZ7Df1A4uyX8yEWZDJJ1e+Qy
+	/H8K03DnIPqp3yDOrUtovY/3VxKc6FjBzs5wsQgBhSnkAUDUYNFJoU2h44VV2pDg
+	bQHX5WjYwK+iBDFAeOjMqrXmpkJ/+5c119rcwG4OcId6x7MGMeh62UqxaDAX3oSN
+	UJ3mk5pLQ9Oyxxs6SSFkzneFvqDR6luXT7SWBmjuJvrL2qiyM6xaUogwzftUgc/j
+	0Z9Iv7n7stTP5CMTBNuKFcYMU4rbpb+h+xMqcINW2HP5ZF+Bo0b2tfFh/RTr7Gsz
+	DBaiHw==
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cnswe2ebm-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 03 Mar 2026 18:20:46 +0000 (GMT)
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2ae66ee7354so3195425ad.0
+        for <linux-usb@vger.kernel.org>; Tue, 03 Mar 2026 10:20:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1772562046; x=1773166846; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lC7ky6mebZgpVjcxW/hjFp1ho4+jRsSmj2aDV+XPb24=;
+        b=bN0OLIW13CmnUXWDfNOHMyU1pttocJaVHjGpFVK9hchXUBZMdSbzA1CCftqN/QMY9R
+         qLKHXdW8dtoYhSZuAggTMl9Q3vXKrfqDvU4ay8VCEIK+jU8IKpnEznR6WmazxrWoLnQM
+         Hh/g3jKjnhk/hGzXEGoWlsFFRm0ows8QaA9ng5RbglAbYFFSX+QkRBbJjk9cLQVirYwH
+         YnFU7ZvaSK1XKCgStTgxOJ503mEVQenETCaLdXlAdmlJ5gqKTCLy3ypLtUyIrbPx55Od
+         uLhufmiPp22EKo6xMDTPHcDGxFGEjvmhWPUE+KX7g1WPqy2J9058U11Mefr34oZkwCNc
+         UsMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772562046; x=1773166846;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lC7ky6mebZgpVjcxW/hjFp1ho4+jRsSmj2aDV+XPb24=;
+        b=Zd535TdpryiqAQBtX8JGBRX5bravC2VMa3T7c0VA5JnfNSq5iG/QCaqSqJVbuVdJSC
+         4PUaHwicHegNZdWf45WO6Rh0BAN0oMESA5siMd9wlnof9v/9OLRELTpTZSYqNlqprupm
+         qzFbn9FXKQtVbQSFf1DJUCRac43sNolCsjUTKiBQxKcpOUtZmI55+A+k5YThUnFM3BLp
+         ft6XyjFtYbInqliL44ukJpxzFKAmxVgeXZ9yy9OrybVwN1cBgZhjI4YGRm3deZhKPfqM
+         7qH0YJ0hm8ni0OPREQolsG7/J6Q6R3+Wr21gRkMwnwFJyo6HJ8yXw58z5PD5LDiXDhC4
+         sd1g==
+X-Forwarded-Encrypted: i=1; AJvYcCV0E6efDrAUYj6IwMEaADDnugCNCv4O/qB8Peor2CSk9r3Y8REimDpcviWwyXMUpWB/yvY0bbJMDK4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdErlpic/GM6QRqJnP0c63nXSMW8NYEfPyl7b3AsoiBLxYFSke
+	WQjqoRcYlMXPRvZGjGutEyCUlIM7aEfgBDG/+WXqGzEKsOzAv5lj2CAETVlH1xTDolgr629Qm1j
+	mXlZIbAy7XL63YitoYwSFeDI2WdMS+fdLf0V2+XzxceS/eKTlBOzzx8xI5ZUE5P8=
+X-Gm-Gg: ATEYQzyUeyr3nPcCSJ8s0DwnlppHjWznNEMwMWzhnq0Rsv/iXQn2hHCRT0p66PWOHdZ
+	KLEpI45C/Dokh+gikm2We8Azb/c8YMyFpzxyd9OEGgMfnV7lETPatkAYqzEURtvhYPlEFxPGv8p
+	ReN7Hcvr/Q1YXx3GA0UepNitWW39bwmRudYutoEhc03JeigJ88fH0ShWA83M90EGamHUgtyh7eA
+	s6kDH7/EfvGBmpH0V+ySv6WpcFz/kYkeyE8aOsLqadrCMLYSVQDQl+GoFRKwNtxiNVIHg1AAU74
+	nknR8HTcsKvRM8pynZ39nMSYhI/eCuIj6s3PizNLpSzZe8jejKZfdt24kYW1YUYYOHnivWLYHZJ
+	EycRa2maSobZc/W83WARjAw51HjK4xfGZwqEM5vs9wb0=
+X-Received: by 2002:a17:902:cf11:b0:2ae:567f:fd7e with SMTP id d9443c01a7336-2ae5680013bmr64718765ad.4.1772562045578;
+        Tue, 03 Mar 2026 10:20:45 -0800 (PST)
+X-Received: by 2002:a17:902:cf11:b0:2ae:567f:fd7e with SMTP id d9443c01a7336-2ae5680013bmr64718395ad.4.1772562045070;
+        Tue, 03 Mar 2026 10:20:45 -0800 (PST)
+Received: from [192.168.1.5] ([106.222.228.2])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae5276097asm83093585ad.34.2026.03.03.10.20.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Mar 2026 10:20:44 -0800 (PST)
+Message-ID: <0248dc51-1036-426c-b1de-dbc71696e2c1@oss.qualcomm.com>
+Date: Tue, 3 Mar 2026 23:50:39 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: ECBE41F46F3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFT v3 2/3] arm64: dts: qcom: glymur: Add USB related
+ nodes
+To: Abel Vesa <abel.vesa@oss.qualcomm.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: Pankaj Patil <pankaj.patil@oss.qualcomm.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+References: <20260302-dts-qcom-glymur-add-usb-support-v3-0-883eb2691a0d@oss.qualcomm.com>
+ <20260302-dts-qcom-glymur-add-usb-support-v3-2-883eb2691a0d@oss.qualcomm.com>
+From: Akhil P Oommen <akhilpo@oss.qualcomm.com>
+Content-Language: en-US
+In-Reply-To: <20260302-dts-qcom-glymur-add-usb-support-v3-2-883eb2691a0d@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: 9aUfF4pCj8s6oSNoy4mYIcL-O_rAGWG6
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDE0OCBTYWx0ZWRfX/R/BiKKxVljj
+ q/pfPoZCuTZDsVBWFKTLfM36Nh2jgpvdPXaNjr4PwAbc8QV/uVb0P3D1S00svljIKWeV0BEIU3Y
+ 3kdtljsqysz2Foa90TuNpgJKhcoT4tZDwnQou9U+irGTpgZcWAYfjdUR9RmbjUD+BIVktu0Pd0P
+ /jJC/6uJaYn7MK+IQD3aePnhp2kmiLKXnh6k4FUuVkQDRiR2oZ5rK4fSaZP1CmY6jAU1AxRo/SO
+ /RZ9jWTK6HqfaQuGVxSVgZAgQtGgfAy9m7KJHuUwWozgW0X0OmbEbsWHaytw04tu8+GvBt9d0OC
+ MChOrEk8T/M2G1KgBwAggvaGs8NlVTJWhcD5MfY6v4BhAvb0I2LJ0wKE2eJHYbKKd4QAch5wz3x
+ GZno3gVEo46Sio1a4iguMw8Oltc0OuYm1q+Fto6ePJDi82qqw394CSDPJvELQ+VYB8EcErBiUuf
+ EnhOc3bFwM55zptlfYA==
+X-Authority-Analysis: v=2.4 cv=TtHrRTXh c=1 sm=1 tr=0 ts=69a7267e cx=c_pps
+ a=cmESyDAEBpBGqyK7t0alAg==:117 a=5paVSw64R4kEUMRm3sSMUA==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
+ a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=4XyrqKlbJ5bOH_rkkigA:9 a=QEXdDO2ut3YA:10
+ a=1OuFwYUASf3TG4hYMiVC:22
+X-Proofpoint-GUID: 9aUfF4pCj8s6oSNoy4mYIcL-O_rAGWG6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-03_02,2026-03-03_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 malwarescore=0 phishscore=0 suspectscore=0 adultscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 bulkscore=0 clxscore=1011
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603030148
+X-Rspamd-Queue-Id: F081D1F5341
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33927-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33928-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:dkim,oss.qualcomm.com:mid,qualcomm.com:dkim,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,a400000:email,af00000:email];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[akhilpo@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Action: no action
 
-The LPVO driver apparently includes a more or less verbatim copy of the
-USB skeleton driver.
+<< Snip >>
 
-Replace the "skel_" symbol prefix with "lpvo_" and rename the "usb_skel"
-struct "lpvo" to avoid symbol name clashes and make this a bit more
-palatable.
+> +
+> +		usb_hs: usb@a2f8800 {
+> +			compatible = "qcom,glymur-dwc3", "qcom,snps-dwc3";
+> +			reg = <0x0 0x0a200000 0x0 0xfc100>;
+> +
+> +			clocks = <&gcc GCC_CFG_NOC_USB2_PRIM_AXI_CLK>,
+> +				 <&gcc GCC_USB20_MASTER_CLK>,
+> +				 <&gcc GCC_AGGRE_USB2_PRIM_AXI_CLK>,
+> +				 <&gcc GCC_USB20_SLEEP_CLK>,
+> +				 <&gcc GCC_USB20_MOCK_UTMI_CLK>,
+> +				 <&gcc GCC_CFG_NOC_USB_ANOC_AHB_CLK>,
+> +				 <&gcc GCC_CFG_NOC_USB_ANOC_SOUTH_AHB_CLK>;
+> +			clock-names = "cfg_noc",
+> +				      "core",
+> +				      "iface",
+> +				      "sleep",
+> +				      "mock_utmi",
+> +				      "noc_aggr_north",
+> +				      "noc_aggr_south";
+> +
+> +			assigned-clocks = <&gcc GCC_USB20_MOCK_UTMI_CLK>,
+> +					  <&gcc GCC_USB20_MASTER_CLK>;
+> +			assigned-clock-rates = <19200000>, <200000000>;
+> +
+> +			interrupts-extended = <&intc GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&intc GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 92 IRQ_TYPE_EDGE_BOTH>,
+> +					      <&pdc 57 IRQ_TYPE_EDGE_BOTH>,
+> +					      <&intc GIC_SPI 239 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "dwc_usb3",
+> +					  "pwr_event",
+> +					  "dp_hs_phy_irq",
+> +					  "dm_hs_phy_irq",
+> +					  "hs_phy_irq";
+> +
+> +			resets = <&gcc GCC_USB20_PRIM_BCR>;
+> +
+> +			power-domains = <&gcc GCC_USB20_PRIM_GDSC>;
+> +			required-opps = <&rpmhpd_opp_nom>;
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/gpib/lpvo_usb_gpib/lpvo_usb_gpib.c | 206 ++++++++++-----------
- 1 file changed, 101 insertions(+), 105 deletions(-)
+Please ensure that the rail (CX rail?) is scaled. Otherwise, it will
+impact other subsystems using the same rail (eg: GPU).
 
-diff --git a/drivers/gpib/lpvo_usb_gpib/lpvo_usb_gpib.c b/drivers/gpib/lpvo_usb_gpib/lpvo_usb_gpib.c
-index ee781d2f0b8e..389dde5a8481 100644
---- a/drivers/gpib/lpvo_usb_gpib/lpvo_usb_gpib.c
-+++ b/drivers/gpib/lpvo_usb_gpib/lpvo_usb_gpib.c
-@@ -51,10 +51,10 @@ MODULE_DESCRIPTION("GPIB driver for LPVO usb devices");
-  *
-  */
- 
--static const struct usb_device_id skel_table[] = {
-+static const struct usb_device_id lpvo_table[] = {
- 	{ }					   /* Terminating entry */
- };
--MODULE_DEVICE_TABLE(usb, skel_table);
-+MODULE_DEVICE_TABLE(usb, lpvo_table);
- 
- /*
-  *   ***  Diagnostics and Debug  ***
-@@ -182,15 +182,11 @@ static int usb_minors[MAX_DEV];			   /* usb minors */
- static int assigned_usb_minors;		   /* mask of filled slots */
- static struct mutex minors_lock;     /* operations on usb_minors are to be protected */
- 
--/*
-- * usb-skeleton prototypes
-- */
--
--struct usb_skel;
--static ssize_t skel_do_write(struct usb_skel *, const char *, size_t);
--static ssize_t skel_do_read(struct usb_skel *, char *, size_t);
--static int skel_do_open(struct gpib_board *, int);
--static int skel_do_release(struct gpib_board *);
-+struct lpvo;
-+static ssize_t lpvo_do_write(struct lpvo *, const char *, size_t);
-+static ssize_t lpvo_do_read(struct lpvo *, char *, size_t);
-+static int lpvo_do_open(struct gpib_board *, int);
-+static int lpvo_do_release(struct gpib_board *);
- 
- /*
-  *  usec_diff : take difference in MICROsec between two 'timespec'
-@@ -218,7 +214,7 @@ static inline int usec_diff(struct timespec64 *a, struct timespec64 *b)
- 
- static int write_loop(void *dev, char *msg, int leng)
- {
--	return skel_do_write(dev, msg, leng);
-+	return lpvo_do_write(dev, msg, leng);
- }
- 
- /**
-@@ -246,7 +242,7 @@ static int send_command(struct gpib_board *board, char *msg, int leng)
- 	if (retval < 0)
- 		return retval;
- 
--	nchar = skel_do_read(GPIB_DEV, buffer, 64);
-+	nchar = lpvo_do_read(GPIB_DEV, buffer, 64);
- 
- 	if (nchar < 0) {
- 		dev_err(board->gpib_dev, " return from read: %d\n", nchar);
-@@ -310,7 +306,7 @@ static int one_char(struct gpib_board *board, struct char_buf *b)
- 		return b->inbuf[b->last - b->nchar--];
- 	}
- 	ktime_get_real_ts64 (&before);
--	b->nchar = skel_do_read(GPIB_DEV, b->inbuf, INBUF_SIZE);
-+	b->nchar = lpvo_do_read(GPIB_DEV, b->inbuf, INBUF_SIZE);
- 	b->last = b->nchar;
- 	ktime_get_real_ts64 (&after);
- 
-@@ -445,12 +441,12 @@ static int usb_gpib_attach(struct gpib_board *board, const struct gpib_board_con
- 	if (!board->private_data)
- 		return -ENOMEM;
- 
--	retval = skel_do_open(board, usb_minors[j]);
-+	retval = lpvo_do_open(board, usb_minors[j]);
- 
--	DIA_LOG(1, "Skel open: %d\n", retval);
-+	DIA_LOG(1, "lpvo open: %d\n", retval);
- 
- 	if (retval) {
--		dev_err(board->gpib_dev, "skel open failed.\n");
-+		dev_err(board->gpib_dev, "lpvo open failed.\n");
- 		kfree(board->private_data);
- 		board->private_data = NULL;
- 		return -ENODEV;
-@@ -517,8 +513,8 @@ static void usb_gpib_detach(struct gpib_board *board)
- 			write_loop(GPIB_DEV, USB_GPIB_OFF, strlen(USB_GPIB_OFF));
- 			msleep(100);
- 			DIA_LOG(1, "%s", "GPIB off\n");
--			retval = skel_do_release(board);
--			DIA_LOG(1, "skel release -> %d\n", retval);
-+			retval = lpvo_do_release(board);
-+			DIA_LOG(1, "lpvo release -> %d\n", retval);
- 		}
- 		kfree(board->private_data);
- 		board->private_data = NULL;
-@@ -772,8 +768,8 @@ static int usb_gpib_read(struct gpib_board *board,
- 		if (retval < 0)
- 			return retval;
- 
--		retval = skel_do_read(GPIB_DEV, inbuf, 1);
--		retval += skel_do_read(GPIB_DEV, inbuf + 1, 1);
-+		retval = lpvo_do_read(GPIB_DEV, inbuf, 1);
-+		retval += lpvo_do_read(GPIB_DEV, inbuf + 1, 1);
- 
- 		ktime_get_real_ts64 (&after);
- 
-@@ -1197,12 +1193,12 @@ static int write_latency_timer(struct usb_device *udev)
-  *  written by Greg Kroah-Hartman and available in the kernel tree.	     *
-  *									     *
-  *  Functions skel_open() and skel_release() have been rewritten and named   *
-- *  skel_do_open() and skel_do_release() to process the attach and detach    *
-+ *  lpvo_do_open() and lpvo_do_release() to process the attach and detach    *
-  *  requests coming from gpib_config.					     *
-  *									     *
-- *  Functions skel_read() and skel_write() have been split into a	     *
-- *  skel_do_read() and skel_do_write(), that cover the kernel stuff of read  *
-- *  and write operations, and the original skel_read() and skel_write(),     *
-+ *  Functions lpvo_read() and lpvo_write() have been split into a	     *
-+ *  lpvo_do_read() and lpvo_do_write(), that cover the kernel stuff of read  *
-+ *  and write operations, and the original lpvo_read() and lpvo_write(),     *
-  *  that handle communication with user space and call their _do_ companion. *
-  *									     *
-  *  Only the _do_ versions are used by the lpvo_usb_gpib driver; other ones  *
-@@ -1230,7 +1226,7 @@ static int write_latency_timer(struct usb_device *udev)
- #include <linux/mutex.h>
- 
- /* Get a minor range for your devices from the usb maintainer */
--#define USB_SKEL_MINOR_BASE	   192
-+#define USB_LPVO_MINOR_BASE	   192
- 
- /*   private defines   */
- 
-@@ -1245,7 +1241,7 @@ static int write_latency_timer(struct usb_device *udev)
- #define USER_DEVICE 1		      /* compile for device(s) in user space */
- 
- /* Structure to hold all of our device specific stuff */
--struct usb_skel {
-+struct lpvo {
- 	struct usb_device     *udev;		     /* the usb device for this device */
- 	struct usb_interface  *interface;	     /* the interface for this device */
- 	struct semaphore      limit_sem;	     /* limiting the number of writes in progress */
-@@ -1265,14 +1261,14 @@ struct usb_skel {
- 	wait_queue_head_t     bulk_in_wait;	     /* to wait for an ongoing read */
- };
- 
--#define to_skel_dev(d) container_of(d, struct usb_skel, kref)
-+#define to_lpvo_dev(d) container_of(d, struct lpvo, kref)
- 
--static struct usb_driver skel_driver;
--static void skel_draw_down(struct usb_skel *dev);
-+static struct usb_driver lpvo_driver;
-+static void lpvo_draw_down(struct lpvo *dev);
- 
--static void skel_delete(struct kref *kref)
-+static void lpvo_delete(struct kref *kref)
- {
--	struct usb_skel *dev = to_skel_dev(kref);
-+	struct lpvo *dev = to_lpvo_dev(kref);
- 
- 	usb_free_urb(dev->bulk_in_urb);
- 	usb_put_dev(dev->udev);
-@@ -1281,16 +1277,16 @@ static void skel_delete(struct kref *kref)
- }
- 
- /*
-- * skel_do_open() - to be called by usb_gpib_attach
-+ * lpvo_do_open() - to be called by usb_gpib_attach
-  */
- 
--static int skel_do_open(struct gpib_board *board, int subminor)
-+static int lpvo_do_open(struct gpib_board *board, int subminor)
- {
--	struct usb_skel *dev;
-+	struct lpvo *dev;
- 	struct usb_interface *interface;
- 	int retval = 0;
- 
--	interface = usb_find_interface(&skel_driver, subminor);
-+	interface = usb_find_interface(&lpvo_driver, subminor);
- 	if (!interface) {
- 		dev_err(board->gpib_dev, "can't find device for minor %d\n", subminor);
- 		retval = -ENODEV;
-@@ -1318,12 +1314,12 @@ static int skel_do_open(struct gpib_board *board, int subminor)
- }
- 
- /*
-- * skel_do_release() - to be called by usb_gpib_detach
-+ * lpvo_do_release() - to be called by usb_gpib_detach
-  */
- 
--static int skel_do_release(struct gpib_board *board)
-+static int lpvo_do_release(struct gpib_board *board)
- {
--	struct usb_skel *dev;
-+	struct lpvo *dev;
- 
- 	dev = GPIB_DEV;
- 	if (!dev)
-@@ -1336,7 +1332,7 @@ static int skel_do_release(struct gpib_board *board)
- 	mutex_unlock(&dev->io_mutex);
- 
- 	/* decrement the count on our device */
--	kref_put(&dev->kref, skel_delete);
-+	kref_put(&dev->kref, lpvo_delete);
- 	return 0;
- }
- 
-@@ -1344,9 +1340,9 @@ static int skel_do_release(struct gpib_board *board)
-  * read functions
-  */
- 
--static void skel_read_bulk_callback(struct urb *urb)
-+static void lpvo_read_bulk_callback(struct urb *urb)
- {
--	struct usb_skel *dev;
-+	struct lpvo *dev;
- 	unsigned long flags;
- 
- 	dev = urb->context;
-@@ -1370,7 +1366,7 @@ static void skel_read_bulk_callback(struct urb *urb)
- 	wake_up_interruptible(&dev->bulk_in_wait);
- }
- 
--static int skel_do_read_io(struct usb_skel *dev, size_t count)
-+static int lpvo_do_read_io(struct lpvo *dev, size_t count)
- {
- 	int rv;
- 
-@@ -1381,7 +1377,7 @@ static int skel_do_read_io(struct usb_skel *dev, size_t count)
- 					  dev->bulk_in_endpoint_addr),
- 			  dev->bulk_in_buffer,
- 			  min(dev->bulk_in_size, count),
--			  skel_read_bulk_callback,
-+			  lpvo_read_bulk_callback,
- 			  dev);
- 	/* tell everybody to leave the URB alone */
- 	spin_lock_irq(&dev->err_lock);
-@@ -1406,10 +1402,10 @@ static int skel_do_read_io(struct usb_skel *dev, size_t count)
- }
- 
- /*
-- * skel_do_read() - read operations from lpvo_usb_gpib
-+ * lpvo_do_read() - read operations from lpvo_usb_gpib
-  */
- 
--static ssize_t skel_do_read(struct usb_skel *dev, char *buffer, size_t count)
-+static ssize_t lpvo_do_read(struct lpvo *dev, char *buffer, size_t count)
- {
- 	int rv;
- 	bool ongoing_io;
-@@ -1487,7 +1483,7 @@ static ssize_t skel_do_read(struct usb_skel *dev, char *buffer, size_t count)
- 			 * it seems that requests for less than dev->bulk_in_size
- 			 *  are not accepted
- 			 */
--			rv = skel_do_read_io(dev, dev->bulk_in_size);
-+			rv = lpvo_do_read_io(dev, dev->bulk_in_size);
- 			if (rv < 0)
- 				goto exit;
- 			else
-@@ -1534,10 +1530,10 @@ static ssize_t skel_do_read(struct usb_skel *dev, char *buffer, size_t count)
- 		 * asked for by the lpvo_usb_gpib layer.
- 		 */
- //		  if (available < count)
--//			  skel_do_read_io(dev, dev->bulk_in_size);
-+//			  lpvo_do_read_io(dev, dev->bulk_in_size);
- 	} else {
- 		/* no data in the buffer */
--		rv = skel_do_read_io(dev, dev->bulk_in_size);
-+		rv = lpvo_do_read_io(dev, dev->bulk_in_size);
- 		if (rv < 0)
- 			goto exit;
- 		else
-@@ -1557,9 +1553,9 @@ static ssize_t skel_do_read(struct usb_skel *dev, char *buffer, size_t count)
-  * write functions
-  */
- 
--static void skel_write_bulk_callback(struct urb *urb)
-+static void lpvo_write_bulk_callback(struct urb *urb)
- {
--	struct usb_skel *dev;
-+	struct lpvo *dev;
- 	unsigned long flags;
- 
- 	dev = urb->context;
-@@ -1584,10 +1580,10 @@ static void skel_write_bulk_callback(struct urb *urb)
- }
- 
- /*
-- * skel_do_write() - write operations from lpvo_usb_gpib
-+ * lpvo_do_write() - write operations from lpvo_usb_gpib
-  */
- 
--static ssize_t skel_do_write(struct usb_skel *dev, const char *buffer, size_t count)
-+static ssize_t lpvo_do_write(struct lpvo *dev, const char *buffer, size_t count)
- {
- 	int retval = 0;
- 	struct urb *urb = NULL;
-@@ -1655,7 +1651,7 @@ static ssize_t skel_do_write(struct usb_skel *dev, const char *buffer, size_t co
- 	/* initialize the urb properly */
- 	usb_fill_bulk_urb(urb, dev->udev,
- 			  usb_sndbulkpipe(dev->udev, dev->bulk_out_endpoint_addr),
--			  buf, writesize, skel_write_bulk_callback, dev);
-+			  buf, writesize, lpvo_write_bulk_callback, dev);
- 	urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
- 	usb_anchor_urb(urb, &dev->submitted);
- 
-@@ -1694,9 +1690,9 @@ static ssize_t skel_do_write(struct usb_skel *dev, const char *buffer, size_t co
- 
- #if USER_DEVICE	 /* conditional compilation of user space device */
- 
--static int skel_flush(struct file *file, fl_owner_t id)
-+static int lpvo_flush(struct file *file, fl_owner_t id)
- {
--	struct usb_skel *dev;
-+	struct lpvo *dev;
- 	int res;
- 
- 	dev = file->private_data;
-@@ -1705,7 +1701,7 @@ static int skel_flush(struct file *file, fl_owner_t id)
- 
- 	/* wait for io to stop */
- 	mutex_lock(&dev->io_mutex);
--	skel_draw_down(dev);
-+	lpvo_draw_down(dev);
- 
- 	/* read out errors, leave subsequent opens a clean slate */
- 	spin_lock_irq(&dev->err_lock);
-@@ -1718,16 +1714,16 @@ static int skel_flush(struct file *file, fl_owner_t id)
- 	return res;
- }
- 
--static int skel_open(struct inode *inode, struct file *file)
-+static int lpvo_open(struct inode *inode, struct file *file)
- {
--	struct usb_skel *dev;
-+	struct lpvo *dev;
- 	struct usb_interface *interface;
- 	int subminor;
- 	int retval = 0;
- 
- 	subminor = iminor(inode);
- 
--	interface = usb_find_interface(&skel_driver, subminor);
-+	interface = usb_find_interface(&lpvo_driver, subminor);
- 	if (!interface) {
- 		pr_err("can't find device for minor %d\n", subminor);
- 		retval = -ENODEV;
-@@ -1754,9 +1750,9 @@ static int skel_open(struct inode *inode, struct file *file)
- 	return retval;
- }
- 
--static int skel_release(struct inode *inode, struct file *file)
-+static int lpvo_release(struct inode *inode, struct file *file)
- {
--	struct usb_skel *dev;
-+	struct lpvo *dev;
- 
- 	dev = file->private_data;
- 	if (!dev)
-@@ -1769,7 +1765,7 @@ static int skel_release(struct inode *inode, struct file *file)
- 	mutex_unlock(&dev->io_mutex);
- 
- 	/* decrement the count on our device */
--	kref_put(&dev->kref, skel_delete);
-+	kref_put(&dev->kref, lpvo_delete);
- 	return 0;
- }
- 
-@@ -1777,10 +1773,10 @@ static int skel_release(struct inode *inode, struct file *file)
-  * user space access to read function
-  */
- 
--static ssize_t skel_read(struct file *file, char __user *buffer, size_t count,
-+static ssize_t lpvo_read(struct file *file, char __user *buffer, size_t count,
- 			 loff_t *ppos)
- {
--	struct usb_skel *dev;
-+	struct lpvo *dev;
- 	char *buf;
- 	ssize_t rv;
- 
-@@ -1790,7 +1786,7 @@ static ssize_t skel_read(struct file *file, char __user *buffer, size_t count,
- 	if (!buf)
- 		return -ENOMEM;
- 
--	rv = skel_do_read(dev, buf, count);
-+	rv = lpvo_do_read(dev, buf, count);
- 
- 	if (rv > 0) {
- 		if (copy_to_user(buffer, buf, rv)) {
-@@ -1806,10 +1802,10 @@ static ssize_t skel_read(struct file *file, char __user *buffer, size_t count,
-  * user space access to write function
-  */
- 
--static ssize_t skel_write(struct file *file, const char __user *user_buffer,
-+static ssize_t lpvo_write(struct file *file, const char __user *user_buffer,
- 			  size_t count, loff_t *ppos)
- {
--	struct usb_skel *dev;
-+	struct lpvo *dev;
- 	char *buf;
- 	ssize_t rv;
- 
-@@ -1824,20 +1820,20 @@ static ssize_t skel_write(struct file *file, const char __user *user_buffer,
- 		return -EFAULT;
- 	}
- 
--	rv = skel_do_write(dev, buf, count);
-+	rv = lpvo_do_write(dev, buf, count);
- 	kfree(buf);
- 	return rv;
- }
- #endif
- 
--static const struct file_operations skel_fops = {
-+static const struct file_operations lpvo_fops = {
- 	.owner =	THIS_MODULE,
- #if USER_DEVICE
--	.read =	   skel_read,
--	.write =   skel_write,
--	.open =	   skel_open,
--	.release = skel_release,
--	.flush =   skel_flush,
-+	.read =	   lpvo_read,
-+	.write =   lpvo_write,
-+	.open =	   lpvo_open,
-+	.release = lpvo_release,
-+	.flush =   lpvo_flush,
- 	.llseek =  noop_llseek,
- #endif
- };
-@@ -1847,17 +1843,17 @@ static const struct file_operations skel_fops = {
-  * and to have the device registered with the driver core
-  */
- #if USER_DEVICE
--static struct usb_class_driver skel_class = {
-+static struct usb_class_driver lpvo_class = {
- 	.name =		       "lpvo_raw%d",
--	.fops =		       &skel_fops,
--	.minor_base =	     USB_SKEL_MINOR_BASE,
-+	.fops =		       &lpvo_fops,
-+	.minor_base =	     USB_LPVO_MINOR_BASE,
- };
- #endif
- 
--static int skel_probe(struct usb_interface *interface,
-+static int lpvo_probe(struct usb_interface *interface,
- 		      const struct usb_device_id *id)
- {
--	struct usb_skel *dev;
-+	struct lpvo *dev;
- 	struct usb_endpoint_descriptor *bulk_in, *bulk_out;
- 	int retval;
- 	char *device_path;
-@@ -1916,7 +1912,7 @@ static int skel_probe(struct usb_interface *interface,
- 
- #if USER_DEVICE
- 	/* we can register the device now, as it is ready */
--	retval = usb_register_dev(interface, &skel_class);
-+	retval = usb_register_dev(interface, &lpvo_class);
- 	if (retval) {
- 		/* something prevented us from registering this driver */
- 		dev_err(&interface->dev,
-@@ -1934,14 +1930,14 @@ static int skel_probe(struct usb_interface *interface,
- 
- error:
- 	/* this frees allocated memory */
--	kref_put(&dev->kref, skel_delete);
-+	kref_put(&dev->kref, lpvo_delete);
- 
- 	return retval;
- }
- 
--static void skel_disconnect(struct usb_interface *interface)
-+static void lpvo_disconnect(struct usb_interface *interface)
- {
--	struct usb_skel *dev;
-+	struct lpvo *dev;
- 	int minor = interface->minor;
- 
- 	usb_gpib_exit_module(minor);	  /* first, disactivate the lpvo */
-@@ -1951,7 +1947,7 @@ static void skel_disconnect(struct usb_interface *interface)
- 
- #if USER_DEVICE
- 	/* give back our minor */
--	usb_deregister_dev(interface, &skel_class);
-+	usb_deregister_dev(interface, &lpvo_class);
- #endif
- 
- 	/* prevent more I/O from starting */
-@@ -1962,10 +1958,10 @@ static void skel_disconnect(struct usb_interface *interface)
- 	usb_kill_anchored_urbs(&dev->submitted);
- 
- 	/* decrement our usage count */
--	kref_put(&dev->kref, skel_delete);
-+	kref_put(&dev->kref, lpvo_delete);
- }
- 
--static void skel_draw_down(struct usb_skel *dev)
-+static void lpvo_draw_down(struct lpvo *dev)
- {
- 	int time;
- 
-@@ -1975,34 +1971,34 @@ static void skel_draw_down(struct usb_skel *dev)
- 	usb_kill_urb(dev->bulk_in_urb);
- }
- 
--static int skel_suspend(struct usb_interface *intf, pm_message_t message)
-+static int lpvo_suspend(struct usb_interface *intf, pm_message_t message)
- {
--	struct usb_skel *dev = usb_get_intfdata(intf);
-+	struct lpvo *dev = usb_get_intfdata(intf);
- 
- 	if (!dev)
- 		return 0;
--	skel_draw_down(dev);
-+	lpvo_draw_down(dev);
- 	return 0;
- }
- 
--static int skel_resume(struct usb_interface *intf)
-+static int lpvo_resume(struct usb_interface *intf)
- {
- 	return 0;
- }
- 
--static int skel_pre_reset(struct usb_interface *intf)
-+static int lpvo_pre_reset(struct usb_interface *intf)
- {
--	struct usb_skel *dev = usb_get_intfdata(intf);
-+	struct lpvo *dev = usb_get_intfdata(intf);
- 
- 	mutex_lock(&dev->io_mutex);
--	skel_draw_down(dev);
-+	lpvo_draw_down(dev);
- 
- 	return 0;
- }
- 
--static int skel_post_reset(struct usb_interface *intf)
-+static int lpvo_post_reset(struct usb_interface *intf)
- {
--	struct usb_skel *dev = usb_get_intfdata(intf);
-+	struct lpvo *dev = usb_get_intfdata(intf);
- 
- 	/* we are sure no URBs are active - no locking needed */
- 	dev->errors = -EPIPE;
-@@ -2011,16 +2007,16 @@ static int skel_post_reset(struct usb_interface *intf)
- 	return 0;
- }
- 
--static struct usb_driver skel_driver = {
-+static struct usb_driver lpvo_driver = {
- 	.name =			NAME,
--	.probe =		skel_probe,
--	.disconnect =		skel_disconnect,
--	.suspend =		skel_suspend,
--	.resume =		skel_resume,
--	.pre_reset =		skel_pre_reset,
--	.post_reset =		skel_post_reset,
--	.id_table =		skel_table,
-+	.probe =		lpvo_probe,
-+	.disconnect =		lpvo_disconnect,
-+	.suspend =		lpvo_suspend,
-+	.resume =		lpvo_resume,
-+	.pre_reset =		lpvo_pre_reset,
-+	.post_reset =		lpvo_post_reset,
-+	.id_table =		lpvo_table,
- 	.supports_autosuspend = 1,
- };
- 
--module_usb_driver(skel_driver);
-+module_usb_driver(lpvo_driver);
--- 
-2.52.0
+Similar discussion here for SM8750 but not sure if there is a plan to
+fix :
+https://lore.kernel.org/lkml/e70cfecc-b2c7-4f09-8d87-6a7e0160769b@oss.qualcomm.com/
+
+-Akhil.
+
+> +
+> +			iommus = <&apps_smmu 0x0ce0 0x0>;
+> +
+> +			interconnects = <&aggre3_noc MASTER_USB2 QCOM_ICC_TAG_ALWAYS
+> +					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>,
+> +					<&hsc_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
+> +					 &config_noc SLAVE_USB2 QCOM_ICC_TAG_ACTIVE_ONLY>;
+> +			interconnect-names = "usb-ddr",
+> +					     "apps-usb";
+> +
+> +			phys = <&usb_hs_phy>;
+> +			phy-names = "usb2-phy";
+> +
+> +			snps,hird-threshold = /bits/ 8 <0x0>;
+> +			snps,dis-u1-entry-quirk;
+> +			snps,dis-u2-entry-quirk;
+> +			snps,is-utmi-l1-suspend;
+> +			snps,usb3_lpm_capable;
+> +			snps,has-lpm-erratum;
+> +			tx-fifo-resize;
+> +			snps,dis_u2_susphy_quirk;
+> +			snps,dis_enblslpm_quirk;
+> +
+> +			dr_mode = "host";
+> +
+> +			maximum-speed = "high-speed";
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		usb_mp: usb@a400000 {
+> +			compatible = "qcom,glymur-dwc3-mp", "qcom,snps-dwc3";
+> +			reg = <0x0 0x0a400000 0x0 0xfc100>;
+> +
+> +			clocks = <&gcc GCC_CFG_NOC_USB3_MP_AXI_CLK>,
+> +				 <&gcc GCC_USB30_MP_MASTER_CLK>,
+> +				 <&gcc GCC_AGGRE_USB3_MP_AXI_CLK>,
+> +				 <&gcc GCC_USB30_MP_SLEEP_CLK>,
+> +				 <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
+> +				 <&gcc GCC_CFG_NOC_USB_ANOC_AHB_CLK>,
+> +				 <&gcc GCC_CFG_NOC_USB_ANOC_SOUTH_AHB_CLK>;
+> +			clock-names = "cfg_noc",
+> +				      "core",
+> +				      "iface",
+> +				      "sleep",
+> +				      "mock_utmi",
+> +				      "noc_aggr_north",
+> +				      "noc_aggr_south";
+> +
+> +			interrupts-extended = <&intc GIC_SPI 132 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&intc GIC_SPI 345 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&intc GIC_SPI 346 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&intc GIC_SPI 162 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&intc GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 12 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 11 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 14 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 13 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 78 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 77 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "dwc_usb3",
+> +					  "pwr_event_1",
+> +					  "pwr_event_2",
+> +					  "hs_phy_1",
+> +					  "hs_phy_2",
+> +					  "dp_hs_phy_1",
+> +					  "dm_hs_phy_1",
+> +					  "dp_hs_phy_2",
+> +					  "dm_hs_phy_2",
+> +					  "ss_phy_1",
+> +					  "ss_phy_2";
+> +
+> +			resets = <&gcc GCC_USB30_MP_BCR>;
+> +			power-domains = <&gcc GCC_USB30_MP_GDSC>;
+> +
+> +			iommus = <&apps_smmu 0xda0 0x0>;
+> +
+> +			phys = <&usb_mp_hsphy0>,
+> +			       <&usb_mp_qmpphy0>,
+> +			       <&usb_mp_hsphy1>,
+> +			       <&usb_mp_qmpphy1>;
+> +			phy-names = "usb2-0",
+> +				    "usb3-0",
+> +				    "usb2-1",
+> +				    "usb3-1";
+> +
+> +			snps,hird-threshold = /bits/ 8 <0x0>;
+> +			snps,dis-u1-entry-quirk;
+> +			snps,dis-u2-entry-quirk;
+> +			snps,is-utmi-l1-suspend;
+> +			snps,usb3_lpm_capable;
+> +			snps,has-lpm-erratum;
+> +			tx-fifo-resize;
+> +			snps,dis_u2_susphy_quirk;
+> +			snps,dis_enblslpm_quirk;
+> +
+> +			dr_mode = "host";
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +
+>  		dispcc: clock-controller@af00000 {
+>  			compatible = "qcom,glymur-dispcc";
+>  			reg = <0x0 0x0af00000 0x0 0x20000>;
+> 
 
 
