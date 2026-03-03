@@ -1,168 +1,169 @@
-Return-Path: <linux-usb+bounces-33897-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33898-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GGtJEAVSpmkbOAAAu9opvQ
-	(envelope-from <linux-usb+bounces-33897-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 04:14:13 +0100
+	id IC13NrmPpmnxRAAAu9opvQ
+	(envelope-from <linux-usb+bounces-33898-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 08:37:29 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F9861E85C7
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 04:14:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 368E81EA3D6
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Mar 2026 08:37:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B880D30A782B
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2026 03:13:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 89D9730B312E
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2026 07:36:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FFCB37CD42;
-	Tue,  3 Mar 2026 03:13:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="bjPVo1dI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F90427E1C5;
+	Tue,  3 Mar 2026 07:35:59 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4AB36AB53
-	for <linux-usb@vger.kernel.org>; Tue,  3 Mar 2026 03:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DB202FF641;
+	Tue,  3 Mar 2026 07:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772507600; cv=none; b=ZMpXcAT1l69+49Zd49qT9YR5X4czIhl8wdNm1Cdi0hwXIaSncu3zfIac892sNoSwMNCumotYgvphogRtuH0NX2Z9ai5sQjlrmfKapxWu5JEc/ryyUg9n53EJKcAntkVFArxznF0TMUmIirlwCiYyHajWnd8GZHCTtHtCAnopTNg=
+	t=1772523358; cv=none; b=km+jayQmU9+jNQra+E5W1Bnm+bQ/V9LkKvRqZVNZST3KkridZQEr7fHZ1VCSlojwpxfMCiECKXFGyWdcgmVTDbQrrG7cExpXHBs6n8OLWsfpg0s1Pkd+7X8F7/gWgIoUBf5+n9IFOwcxf1tGmuRfm4lf9C2eNcurRy1ZPCLUJ7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772507600; c=relaxed/simple;
-	bh=J/wbZ3lgW3msxO7LaS0KZ+mkgRbUNZk5yqvbBEyMgq4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LAIWRzJzcdnFtYTF3KP62nD5GcF6r0oO1LpplgluAPtq7h3x25VfETxbNpYjigk5Onmc4ss9S0EIkBWEHxXtzFuvBI5rmES4ODZgXKCqBzLD27HvZmBlkPlGU5PHc+mDdxHbOYXJ4cNqqX9tS5LKTAv/XCCvx45GRY66fJyJaz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=bjPVo1dI; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-899ee87355dso26724896d6.1
-        for <linux-usb@vger.kernel.org>; Mon, 02 Mar 2026 19:13:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1772507597; x=1773112397; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IPhDnEnpTuhlV04Z4H/JUX4Cviq4H3q8eoCXXmUr+z8=;
-        b=bjPVo1dINYMJ3T2SS7HKqm1sdbJ1qrZghDgyh/PHiBOnxTmOtMn3fZwdRZ2ydFBtpY
-         q1XkFgRomPRzCW8XTzuzse/Aso+ixNemYIS/hzElFHrLprGcPee0Wvsirxpf+YIAckv0
-         cSr5kC8rUiAbSZIoTXDyHi5qrGdu+mDzKnh5VERApskgYQX/ZmvlIdRXvRXlxlfkejiU
-         ju/QdgcCA1zHTA9m8HGSDD3mNxs68y/y5ImWLru9ng0/z/wtAKtMVHjYIdi94OgW8G+S
-         HkwgSqwSM0/q8L9Dw/r+KGLGwOfBKQdeebVACo3yi1bPh3LrTDvVntB1RsQnAyp+nbDK
-         vUEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772507597; x=1773112397;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IPhDnEnpTuhlV04Z4H/JUX4Cviq4H3q8eoCXXmUr+z8=;
-        b=gGaCVZea99YoxHodgWFOshqf9F1Y5rdAt7HPGN2tRO5BEqz5D59Jp886HIb4ytWIzi
-         TdX7kSMNY7GIkoj3EnKOm0IJmSgGWhvX2wH8hGEWNn0DC4W1RFK0jJPjiEHDcw9e7Wuo
-         BYerg7E8uG+H6T41U8RGGZkm7YrYvxmWUhnBRnogAsSHrK9x1m4CeGR6v180DORN8OMc
-         gLsjsxqboZhGnCeE8VGdNZ1PL9FWpEizn32lG4/h8OdCEDtC+LBSeYzcLyF4U/mO7ttb
-         xSi5Qq9eBOU4jEfmbdQR4tCkl4AMXUmX+49HoAHGR423pacgV5PXOfYkPVQnZWEFPD9P
-         jqqw==
-X-Forwarded-Encrypted: i=1; AJvYcCXStKPFlh97wd+BMqAjmyimL4G7r5Z0wQyqoERnUjI4Q3LWCedGGaCM4nEsu2Lnj0ZaHgc+XIv6X9o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiJ/vvJ6AxwhzqiGa3aELh/+Gjalg0Or7rSA0hPt+4BZUUoRt3
-	N72EU8TIuMokF8g5meDT0DtXtHvpMdxLsI4ZDtJIorTNz6oidFNzOaX7ah1dxjniFQ==
-X-Gm-Gg: ATEYQzz/HDmI8scg56s4AJUhksATHyiX9xwVjd+5bOHmOD/w862NgXzdspXCfIUpH2K
-	owQm8woYY9r1kiK0gVbMaET79jKvz06pDBmPxXjWMtd54c7aEq+wtOFzhar4YpkhM/OUf+4IInG
-	52smVcxYeGrRlMVNdpxlDbSyi0YAEg0ahBtrMOahibb7NbsnW1ytWcyivJYwnZPgqQd4Q6bHJNn
-	YV/AFdAiDtA5tFJ2OGOcqMLou8QL+WiFEB8sCH332HvSFZX+VF+IZdw6Fuvu+XIjQFUCQwrphf6
-	OGwn3G6Ebnt8y5w2ZbABCYZXbNCyTHr2lnf45Lh6p742lwi7rNs7zLEbeWw6Ufpr4sOcThrS4Ja
-	gEFpXRzfX6zb5VK/8i9wjb3pVaaH/8OrhLx2Xf2KPuztMGXiMOsq97vRKURnYzFngeZf5Zbd9V6
-	+cXTm+lFU+F8DFtH5iIQWKTky0
-X-Received: by 2002:a05:6214:f68:b0:89a:5b:bf51 with SMTP id 6a1803df08f44-89a005bd081mr67949786d6.11.1772507597030;
-        Mon, 02 Mar 2026 19:13:17 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::687c])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-899f4fb20a3sm52594846d6.31.2026.03.02.19.13.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2026 19:13:16 -0800 (PST)
-Date: Mon, 2 Mar 2026 22:13:13 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: UAF Researcher <fanwu01@zju.edu.cn>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: renesas_usbhs: fix race between device remove and
- ISR
-Message-ID: <db402599-e105-45d7-82b1-0216b6f5e729@rowland.harvard.edu>
-References: <20260303004550.67219-1-fanwu01@zju.edu.cn>
+	s=arc-20240116; t=1772523358; c=relaxed/simple;
+	bh=6RkYdmxbx+pPZJYPNhL0TiA+j/uhNhn1kXS00ieT6qM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=abdFNH1N3Q+lRK3TTaVxY9cio7FgxxLohg/jvL7RgnU31bKQGVAGhaANIyYx8EhpwFdjDAS2Hr8tGNQfSVUXpvl7BBEU1/WqH8JEeG8Y9JGfgPR9zW73n17XHWPXFXORRicSGV61/AcZn7JNzhmI3xr8PuQs074QqKRi9ahdXgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=206.189.21.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [10.98.66.117])
+	by mtasvr (Coremail) with SMTP id _____wA3UIZKj6ZpXW79AA--.4295S3;
+	Tue, 03 Mar 2026 15:35:39 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.98.66.117])
+	by mail-app2 (Coremail) with SMTP id zC_KCgDnSz5Jj6Zpg3EXBg--.6544S2;
+	Tue, 03 Mar 2026 15:35:38 +0800 (CST)
+From: Fan Wu <fanwu01@zju.edu.cn>
+To: yoshihiro.shimoda.uh@renesas.com,
+	stern@rowland.harvard.edu,
+	gregkh@linuxfoundation.org
+Cc: claudiu.beznea.uj@bp.renesas.com,
+	prabhakar.mahadev-lad.rj@bp.renesas.com,
+	kuninori.morimoto.gx@renesas.com,
+	geert+renesas@glider.be,
+	linux-usb@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Fan Wu <fanwu01@zju.edu.cn>
+Subject: [PATCH v2] usb: renesas_usbhs: fix use-after-free in ISR during device removal
+Date: Tue,  3 Mar 2026 07:33:44 +0000
+Message-Id: <20260303073344.34577-1-fanwu01@zju.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <db402599-e105-45d7-82b1-0216b6f5e729@rowland.harvard.edu>
+References: <db402599-e105-45d7-82b1-0216b6f5e729@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260303004550.67219-1-fanwu01@zju.edu.cn>
-X-Rspamd-Queue-Id: 8F9861E85C7
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zC_KCgDnSz5Jj6Zpg3EXBg--.6544S2
+X-CM-SenderInfo: qrstjiaswqq6lmxovvfxof0/
+X-CM-DELIVERINFO: =?B?aYjHSgXKKxbFmtjJiESix3B1w3vZ3A9ovKVTomAyoQazvoRs/NHSP8GI2EvgeEEW7R
+	sfncp7Oa4RjKRyNF7NkJaR8oIeD53r/O4AKTiBwD/dtqtv2NTNgAaF/ubij9N4b2NUrcwH
+	/wVBClYzN2bJohOYX+0=
+X-Coremail-Antispam: 1Uk129KBj93XoW7ArWUAw4xuFy5Jw1UZr15ZFc_yoW8tw1xpr
+	W8Gay5GrW0qr1j9F43Aw48ZF1ruanYgrWUu3s2k3yfZw1aya4DAr1F9a4jgFy5A3srtanF
+	krnay3Wrua4DCrXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUP0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc804V
+	CY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AK
+	xVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48Icx
+	kI7VAKI48JM4x0Y48IcxkI7VAKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7
+	MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+	0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
+	wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+	W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+	cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU85l1PUUUUU==
+X-Rspamd-Queue-Id: 368E81EA3D6
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [1.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33897-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_FROM(0.00)[bounces-33898-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[zju.edu.cn];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[fanwu01@zju.edu.cn,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.960];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb,renesas];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,rowland.harvard.edu:dkim,rowland.harvard.edu:mid,zju.edu.cn:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[harvard.edu:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,zju.edu.cn:mid,zju.edu.cn:email]
 X-Rspamd-Action: no action
 
-On Tue, Mar 03, 2026 at 12:45:50AM +0000, UAF Researcher wrote:
-> From: Fan Wu <fanwu01@zju.edu.cn>
-> 
-> In usbhs_remove(), the pipe array info->pipe is freed by calling
-> usbhs_pipe_remove(priv). However, the interrupt handler usbhs_interrupt()
-> is registered using devm_request_irq(). The devres cleanup, which
-> includes freeing the IRQ, happens after usbhs_remove() returns.
-> 
-> If a hardware interrupt fires or a pending ISR executes after
-> usbhs_pipe_remove() but before devres cleanup, the ISR will access the
-> freed info->pipe array via the usbhs_for_each_pipe_with_dcp() macro,
-> leading to a slab-use-after-free.
+In usbhs_remove(), the driver frees resources (including the pipe array)
+while the interrupt handler (usbhs_interrupt) is still registered. If an
+interrupt fires after usbhs_pipe_remove() but before the driver is fully
+unbound, the ISR may access freed memory, causing a use-after-free.
 
-...
+Fix this by calling devm_free_irq() before freeing resources. This ensures
+the interrupt handler is both disabled and synchronized (waits for any
+running ISR to complete) before usbhs_pipe_remove() is called.
 
->  drivers/usb/renesas_usbhs/common.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
-> index cf4a0367d..404220ceb 100644
-> --- a/drivers/usb/renesas_usbhs/common.c
-> +++ b/drivers/usb/renesas_usbhs/common.c
-> @@ -815,6 +815,10 @@ static void usbhs_remove(struct platform_device *pdev)
->  
->  	usbhs_platform_call(priv, hardware_exit, pdev);
->  	reset_control_assert(priv->rsts);
-> +
-> +	/* Disable IRQ before freeing resources to prevent UAF in ISR */
-> +	disable_irq(priv->irq);
+Fixes: f1407d5c6624 ("usb: renesas_usbhs: Add Renesas USBHS common code")
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Fan Wu <fanwu01@zju.edu.cn>
+---
 
-Don't you also need to call synchronize_irq(priv->irq) here?  Otherwise 
-there still could be pending interrupt requests that will be handled 
-later, causing the use-after-free problem.
+v2:
+  - Replace disable_irq() with devm_free_irq() as suggested by
+    Alan Stern. While disable_irq() only masks the interrupt line,
+    devm_free_irq() (via free_irq()) implicitly calls synchronize_irq()
+    to wait for any in-progress handler to complete, and also ensures
+    the interrupt is fully unregistered. This prevents both future
+    interrupts and pending handlers from accessing freed resources.
+  - Verified the fix in a QEMU environment with KASAN enabled.
+    By injecting a delay in usbhs_remove() and using a high-frequency
+    timer to simulate concurrent ISR execution, the original UAF
+    report was reliably reproduced and is now confirmed to be
+    eliminated with this patch.
 
-Alan Stern
+ drivers/usb/renesas_usbhs/common.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
+index cf4a0367d6d6..8c93bde4b816 100644
+--- a/drivers/usb/renesas_usbhs/common.c
++++ b/drivers/usb/renesas_usbhs/common.c
+@@ -815,6 +815,15 @@ static void usbhs_remove(struct platform_device *pdev)
+ 
+ 	usbhs_platform_call(priv, hardware_exit, pdev);
+ 	reset_control_assert(priv->rsts);
++
++	/*
++	 * Explicitly free the IRQ to ensure the interrupt handler is
++	 * disabled and synchronized before freeing resources.
++	 * devm_free_irq() calls free_irq() which waits for any running
++	 * ISR to complete, preventing UAF.
++	 */
++	devm_free_irq(&pdev->dev, priv->irq, priv);
++
+ 	usbhs_mod_remove(priv);
+ 	usbhs_fifo_remove(priv);
+ 	usbhs_pipe_remove(priv);
+-- 
+2.34.1
+
 
