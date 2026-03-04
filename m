@@ -1,142 +1,170 @@
-Return-Path: <linux-usb+bounces-33993-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33994-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KMP7LFphqGmduAAAu9opvQ
-	(envelope-from <linux-usb+bounces-33993-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 17:44:10 +0100
+	id 4M5mMLluqGkkugAAu9opvQ
+	(envelope-from <linux-usb+bounces-33994-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 18:41:13 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B69C204846
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 17:44:10 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35FF82054B5
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 18:41:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 724CE3047BE6
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 16:40:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EC3E930A786E
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 17:35:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2714B3491D0;
-	Wed,  4 Mar 2026 16:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C86BB3C6A59;
+	Wed,  4 Mar 2026 17:35:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iE4C/YVr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bdK/V5fe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FC634B40E
-	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 16:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F78A3C6A27
+	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 17:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772642420; cv=none; b=hdWM437APo9ejbiA8mE5uoIdtP+iDMtGtM1ewZeWlsDtGDl27SwyTPZWJQqYRVBTH/YfgLokZ+HkIEw3yNEOoGeqopNx8T1riYtRoOwOVniRCGAI+hZXtdZM/ZoHTUbmZgPF3YDgFY2t7/M2+ZdadRwKdHORIGMYsfmIA/a4Z08=
+	t=1772645745; cv=none; b=cczAZpkan3OLpbH6MEOo9Y4o8M/40GPyJLWNIQTKJRgi6LytjbqAqiCFRKGg42N/3JD47hv5vr8z1msfLTriJVkLRqi2wacRjRCrtp8lw975J6iXjx7X0jpjpdTzXNOZGv1o+k49/Hg7qAWPmHtQwu1pKXEvZXDkZPWCpe8YF/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772642420; c=relaxed/simple;
-	bh=FsT+3FFScmB8SlYxcMmKlpTKNdaoaGpGpeXp+dHupc4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KYITw9OS6HMR1TX739JTphjabJhPXYQMIeceY/SXy12XB35LWURlV6xXDUwBTdLWbqUtVN8F6F2T48jcw4/Dum7bdOYyhOB5L+B0kAuz/C6vik9OoSL7C5NijS2xGfHy6VvrvLeowDFW2N/j5y9d6994rgyJ7qBiKjNocQHcl2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iE4C/YVr; arc=none smtp.client-ip=209.85.218.49
+	s=arc-20240116; t=1772645745; c=relaxed/simple;
+	bh=VlEH3lAnxtUSxpMHwf0dxl3KstRwnQssP0ryb48SfxM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=puWE+pFzVolEhOTJ2s2jZwZDzLfP4bjOIYfuOvl1jufJn+5+SDkUBxoLMUEW0Ws7kraS1tz1fUfMlp8oodUgGyO79vI5MCj1smcKsNT5hU+w03cK+HgNwa4Rwf9MI8PLvIph6xwiTFDTz+eBMf4uENgaLHaZT3YjhnDzqp7CI3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bdK/V5fe; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b935a74b7c2so958988966b.3
-        for <linux-usb@vger.kernel.org>; Wed, 04 Mar 2026 08:40:19 -0800 (PST)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-827546f228aso5059784b3a.0
+        for <linux-usb@vger.kernel.org>; Wed, 04 Mar 2026 09:35:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772642418; x=1773247218; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vFp7+8u1mcsIBQLp5yuMxG9gRreMy+i2vT2Slu4M/9A=;
-        b=iE4C/YVrchy5UDBMEwPZVqCPqozqdkwBBB+WnU3BaU7C5nKOEsVdmOzHTWOdimG2X8
-         1zCwxKvfAb37pozJTy4khDHHPu/lOMSbC7Bs7FrEyrVVkyo7Kf1iqWjVmd/cV8/zYEli
-         cwmzpD1UtGzj7+vnYHxU7UNWn+Mg5UTkfV2l8yPBLW8S3bP7ho4j8I1RDbikpadtHVxQ
-         23i8qCbZH0iVoCvVAuLKYMXES2G20ObLS177Z5/PKmLdEPVZvY8zF7Snw1Yf68w++J7O
-         0OK8TWXGLPWy6X3pTncq1CbPEf7BzFdZ8GQhzgMupujvGs90B1D+VDPLWDEvIxVrA9Go
-         I6hQ==
+        d=gmail.com; s=20230601; t=1772645744; x=1773250544; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=92zh51YpPKp93KuezxDm90TJZ2/tmL+TqtOQmshr6EU=;
+        b=bdK/V5fe1529VnHbFxFywbfK/gC87aH3xuKD9Ibo/OEXooF7r0Dj8FwGYHBGBUkaaj
+         cNj0KYGeM3OsHLSm9Ee2Xtle5AErD778BjI5mcX5TlWQMyE18yoRrLrIDvc8qc8eZ9kA
+         IGKlCy4brZ3CvoyJnr8p+7nSJJad1+8wYoj+I9kCU2vG/Wpszy7x8sZT36VHB9n27s36
+         l4fMasFUIjnhq65jPMYL4eXRFWc7MB5i6s8ZiNf3Mb4sCPJakbqllW1oDhSfCy7NsRUx
+         ZODBPZAgDkbwiWoE9XTLGoFGjp7eFmd7e4bcAPjN1ua3/L/85RWC5eDcobrnCAuw2c2h
+         k3lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772642418; x=1773247218;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=vFp7+8u1mcsIBQLp5yuMxG9gRreMy+i2vT2Slu4M/9A=;
-        b=qv8zbIJsIHjn2Xb40m9Oas6qk4qenHRPE6rUGiSsP71BTVz3QHEdG0dzS0Xd57uAME
-         ASyI5o0K/RwhvmGOY8Rs+TSTRpkkdqE2Gf+XeCiS6VaRWUKvEa6KmjC4+PZEp2PQFxLt
-         p39nIIxKE3yI0IPJ2GcE4jAfWCTPYdBd77vS5P5OV/5XX3EzpF/6WstXWyhVL66lLGRV
-         Tfo2XZH2oFlygYdQHlzDZivadEECtwnMNyyK7xq0dK4UmXEfeRDbb9r/Hb8rou1ohPOY
-         2a1g+GZEJitNBdkzQWf1dkyXZrVwcYOvYMa4mpcJjhYu1H/IKQ3xXspLZMDCXn8IXnqt
-         0aMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUFFrTqUX555R70YUE+/WxPOm16WKWYPJJG6ut3B23Knw4bnLNctuiERA0pS8YjfKKiNBFJp5GPvH0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXzuF965BMSeCDuqnhXXdBHVGyvhKkVRvVmn/REbm/UroS4uR2
-	kd+U4isqC3uQGLzB6VIccS7KnYxYx1KdUE1nDdOBu8fwQbYTmNHQmxngIbSqpw==
-X-Gm-Gg: ATEYQzxUI84Nn8/SVEk/PtKQRK/bAg6XbSr7EtgjfkYq7uiARi/4y7lfyJ5KGTh5k3A
-	ePJTTrabYcfMF1giVXBCWvwuVe+J9wLV6tSpj/glg0Mis/nWraeATe21f2HOgEuaPxXJ6WBNwtb
-	1Y3JCMDNnuRdv2ouS4+eTTUQa0QfqMUZNEKFloK8bvRIoaH6dvmlMCgfR325MGUe8YQgKxpkmAm
-	o1sPDHlvbpUEFzEWMn6APpEEOcLpeq7kav9ZJVHLgea4bdUWzhKOr1FuVGEJRdVCu7fOOykWZZw
-	/wtRmCt/8P0ufq2YyRZA+CMgbOrZaeDPFVOSgzhyhNGaDWZTgzzBL9yjts6RN0gAoasrDpqJDDM
-	1dQ/PA5HjNIJlHIOjmOULz9tqdK+zjdwn3a4d1P+zRjirGzFCpozDl8HZQDT/aUwR02TK5DssOr
-	HHjpxTQqjy89gPRhdBDZRR6Nls7iUwy8R5
-X-Received: by 2002:a17:907:e8e:b0:b93:80f3:b36b with SMTP id a640c23a62f3a-b93f11ec4d2mr169610866b.7.1772642417606;
-        Wed, 04 Mar 2026 08:40:17 -0800 (PST)
-Received: from foxbook (bfj19.neoplus.adsl.tpnet.pl. [83.28.47.19])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b935aee519asm769668066b.64.2026.03.04.08.40.16
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 04 Mar 2026 08:40:17 -0800 (PST)
-Date: Wed, 4 Mar 2026 17:40:13 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, Rai Amardeep
- <amardeep.rai@intel.com>
-Subject: Re: [PATCH 23/23] usb: xhci: Add debugfs support for xHCI Port Link
- Info (PORTLI) register.
-Message-ID: <20260304174013.16c2adc1.michal.pecio@gmail.com>
-In-Reply-To: <d26eb83b-e67c-4319-82fb-9aba76bb2b76@linux.intel.com>
-References: <20251119142417.2820519-1-mathias.nyman@linux.intel.com>
-	<20251119142417.2820519-24-mathias.nyman@linux.intel.com>
-	<20260304103856.48b785fd.michal.pecio@gmail.com>
-	<d26eb83b-e67c-4319-82fb-9aba76bb2b76@linux.intel.com>
+        d=1e100.net; s=20230601; t=1772645744; x=1773250544;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=92zh51YpPKp93KuezxDm90TJZ2/tmL+TqtOQmshr6EU=;
+        b=WtWnlxs960ctqIxn4LVMbnOGlfc6NdmWMIVntUFFbsCB2bo9yKQR6qOIrCRWQE/0II
+         A81hSV6fpyYZg18FYehsMEiTRtxVSo0tjdPqf9HTsdDh/s18wMbhAZQ3vLOwMXerQx1k
+         vJBS6tFNGoNEb9clj+fhvWysqr4gmaCRWjk2IDIIcAStPYnFWFTHH/yB8DiCHpZW6zF0
+         AxwlddAFqv6D8TeXqIQX3KBCqLDwAipWTPGjXUPLpNj0sLsD9RkyR1E+khGLcB7566H4
+         E8yUU9MxN8ALBR/JaBfxiwctotgz2a9Je16IBS3ODTyb+3jT9FUNcZrc0xjKhA9ZNRfs
+         MzQw==
+X-Gm-Message-State: AOJu0Yw6FLTZPwoB1H6mSVBRq/gdb5o/93/TVt0EKweDfqHdh+ctXeE5
+	6t4MVXhZebiSZ4uF8/TIHArcvraJ7xf4bkWW8QBmGSJ3UrnlKl+jG0DWGM0CtA==
+X-Gm-Gg: ATEYQzwksrLH48cOtCH7beObWi7/KnJSDIpXKYqHnNfvoWm/F2jJCly9pZad9x8Xghh
+	Z0OW9uUvKUzMxpayHpiDJpHiNjtI1D6ciKa/H9T3/lGSNCv13f3Pb66uPLty+Ml/tg2nm9QkJvy
+	sobYEqF0j6rpWTKnB95Ix22LyxfC+zykB/dYx2oorzf9xuF47v5VZZ8riS0wfBjqD3Hye9JHF2D
+	wfdNq5PREQ9RoXIVwmurBRO2qE7ngeDhNLF6zOYEUeN/sk5bvdN5HmdBme1QUvo12N6mUdrWqQR
+	Zedj/jJkCf8xWwdCMJJGbV5MmyeeMPS13PEJ05njwPZFMcKYMboT/BHXJJMKoaKA7pPIWAhlo3T
+	d0u0tXs+aYDGZ8wptn3F5C0b//v7Myn0uY1V9Ng0ffSWZk6sa4WlPgziaXBDaSTJOEKgf8axTtt
+	5LvWsyU9SaSMvLG7fS4TQq8z4mW2BXgpXe3sn16EYavLbxsBfnTNfq1LGXDSXZ5ptDniaBBsu8L
+	Nd9sZIEGlWqeSJQsRiL1M6eLQ117g==
+X-Received: by 2002:a05:6a20:4327:b0:394:8455:d1a8 with SMTP id adf61e73a8af0-3982ddb7520mr2712238637.13.1772645743652;
+        Wed, 04 Mar 2026 09:35:43 -0800 (PST)
+Received: from [192.168.1.109] (c-73-37-64-97.hsd1.or.comcast.net. [73.37.64.97])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c70fa8059bcsm17463809a12.18.2026.03.04.09.35.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Mar 2026 09:35:43 -0800 (PST)
+Message-ID: <e8e05846-1af7-4cdf-8167-e566cf7db8c8@gmail.com>
+Date: Wed, 4 Mar 2026 09:35:42 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] usb: core: remove unnecessary goto in
+ usb_create_newid_files()
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260304155812.4559-1-marusik.adamenko@gmail.com>
+ <2026030412-trace-sneer-60bf@gregkh>
+Content-Language: en-US
+From: Mark Adamenko <marusik.adamenko@gmail.com>
+In-Reply-To: <2026030412-trace-sneer-60bf@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 1B69C204846
+X-Rspamd-Queue-Id: 35FF82054B5
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33993-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
 	TO_DN_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-33994-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCPT_COUNT_THREE(0.00)[3];
+	FROM_HAS_DN(0.00)[];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	FROM_NEQ_ENVFROM(0.00)[marusikadamenko@gmail.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Wed, 4 Mar 2026 16:25:45 +0200, Mathias Nyman wrote:
-> I was able to fake a similar scenario by leaving out a port in
-> xhci_add_in_port(). It triggered the same oops.
+Thanks for responding,
+I wasn't suggested by any tool. I was advised that if I want to become a 
+contributor, I should start by finding something small, so I came across 
+this file and found the goto. I understand it's not a big change, but 
+the kernel style guide says:
+"The goto statement comes in handy when a function exits from multiple 
+locations and some common work such as cleanup has to be done. If there 
+is no cleanup needed then just return directly."
+The original function only exits at the exit case and at the end of the 
+function, without extra cleanup.
+
+On 3/4/26 08:11, Greg KH wrote:
+> On Wed, Mar 04, 2026 at 07:58:12AM -0800, Mark Adamenko wrote:
+>> The goto to 'exit' only returns the already initialized variable
+>> 'error', which would be 0. At that point it could not yet be anything
+>> else. Replacing with an early return 0 removes the
+>> need for the label entirely.
 > 
-> The null pointer check you suggested below fixes it for me. Does it
-> work for you?
+> Odd text wrapping :(
+> 
+>>
+>> Signed-off-by: Mark Adamenko <marusik.adamenko@gmail.com>
+>> ---
+>> v3: fix missing return statement at end of function
+>> ---
+> 
+> You forgot the other versions listed here :(
+> 
+>>   drivers/usb/core/driver.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> But first, why?  There's no real need for this change, why make it at
+> all?  It follows the "standard" way of jumping to the end of the
+> function to exit.  What tool asked you to make this change?
+> 
+> thanks,
+> 
+> greg k-h
 
-It should, it's practically identical to my own.
-
-I added "unused" to the printf.
 
