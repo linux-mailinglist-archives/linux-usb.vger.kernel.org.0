@@ -1,120 +1,142 @@
-Return-Path: <linux-usb+bounces-33992-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33993-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qBk/NvVdqGmZtgAAu9opvQ
-	(envelope-from <linux-usb+bounces-33992-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 17:29:41 +0100
+	id KMP7LFphqGmduAAAu9opvQ
+	(envelope-from <linux-usb+bounces-33993-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 17:44:10 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62C8E20445E
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 17:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B69C204846
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 17:44:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E5792302C931
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 16:11:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 724CE3047BE6
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 16:40:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F16B234CFB3;
-	Wed,  4 Mar 2026 16:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2714B3491D0;
+	Wed,  4 Mar 2026 16:40:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yAh+Tg1u"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iE4C/YVr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 806DD33E7;
-	Wed,  4 Mar 2026 16:11:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FC634B40E
+	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 16:40:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772640706; cv=none; b=VQ179dcXXKFej/V5q6gG186Y+OUMKZxkxR4uoOUTkLiTcYses3oYQcbKhltXDmmvPDfsKMKr8cGLuuGw7JrJd1tMZiEsOYZNDFdU1rcyiMYtLW3lHNxAIM8Ht+3QQx2kcU/NwhBZJfFKhy9acYBYmm0DuDyZ42qXMyV4epuMWK4=
+	t=1772642420; cv=none; b=hdWM437APo9ejbiA8mE5uoIdtP+iDMtGtM1ewZeWlsDtGDl27SwyTPZWJQqYRVBTH/YfgLokZ+HkIEw3yNEOoGeqopNx8T1riYtRoOwOVniRCGAI+hZXtdZM/ZoHTUbmZgPF3YDgFY2t7/M2+ZdadRwKdHORIGMYsfmIA/a4Z08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772640706; c=relaxed/simple;
-	bh=qk4doE/6U6idW6ZjQOxlCDoRpBaNMvr1KYawbH7dg44=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=guABQQACf5DxLEG/vh4mqCQsiYZVzELhbtZTyuG6GLF3qxne2vRm5XYm2sxi52p8tlrWAgSGvOf4NhSjIMDwVTlFTDQpD1JMNUQAfQdO09YO90RxNlPr25SzZ81J8WtCBRiYp0HB+h6JzOmViPX1429b1m9iq3W8GtJ0prZUI6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yAh+Tg1u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD2C9C4CEF7;
-	Wed,  4 Mar 2026 16:11:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1772640706;
-	bh=qk4doE/6U6idW6ZjQOxlCDoRpBaNMvr1KYawbH7dg44=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=yAh+Tg1uQeXE0vS0SKwy26+9UAlLOYPZAVhAQzt3Z7EfLFGq9u0vAZwexwyebYehb
-	 P2jonRbK8cWJ2oc5rSEiGGU8YrGL0e9byL/U0kjIJM6ruWBRtTSxCVt5Vzc6qc9C/m
-	 JTAkgjgi28ildUqEYWgE7mhCi2btsqxkwwIf1E2M=
-Date: Wed, 4 Mar 2026 17:11:32 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Mark Adamenko <marusik.adamenko@gmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: core: remove unnecessary goto in
- usb_create_newid_files()
-Message-ID: <2026030412-trace-sneer-60bf@gregkh>
-References: <20260304155812.4559-1-marusik.adamenko@gmail.com>
+	s=arc-20240116; t=1772642420; c=relaxed/simple;
+	bh=FsT+3FFScmB8SlYxcMmKlpTKNdaoaGpGpeXp+dHupc4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KYITw9OS6HMR1TX739JTphjabJhPXYQMIeceY/SXy12XB35LWURlV6xXDUwBTdLWbqUtVN8F6F2T48jcw4/Dum7bdOYyhOB5L+B0kAuz/C6vik9OoSL7C5NijS2xGfHy6VvrvLeowDFW2N/j5y9d6994rgyJ7qBiKjNocQHcl2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iE4C/YVr; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b935a74b7c2so958988966b.3
+        for <linux-usb@vger.kernel.org>; Wed, 04 Mar 2026 08:40:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772642418; x=1773247218; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vFp7+8u1mcsIBQLp5yuMxG9gRreMy+i2vT2Slu4M/9A=;
+        b=iE4C/YVrchy5UDBMEwPZVqCPqozqdkwBBB+WnU3BaU7C5nKOEsVdmOzHTWOdimG2X8
+         1zCwxKvfAb37pozJTy4khDHHPu/lOMSbC7Bs7FrEyrVVkyo7Kf1iqWjVmd/cV8/zYEli
+         cwmzpD1UtGzj7+vnYHxU7UNWn+Mg5UTkfV2l8yPBLW8S3bP7ho4j8I1RDbikpadtHVxQ
+         23i8qCbZH0iVoCvVAuLKYMXES2G20ObLS177Z5/PKmLdEPVZvY8zF7Snw1Yf68w++J7O
+         0OK8TWXGLPWy6X3pTncq1CbPEf7BzFdZ8GQhzgMupujvGs90B1D+VDPLWDEvIxVrA9Go
+         I6hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772642418; x=1773247218;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=vFp7+8u1mcsIBQLp5yuMxG9gRreMy+i2vT2Slu4M/9A=;
+        b=qv8zbIJsIHjn2Xb40m9Oas6qk4qenHRPE6rUGiSsP71BTVz3QHEdG0dzS0Xd57uAME
+         ASyI5o0K/RwhvmGOY8Rs+TSTRpkkdqE2Gf+XeCiS6VaRWUKvEa6KmjC4+PZEp2PQFxLt
+         p39nIIxKE3yI0IPJ2GcE4jAfWCTPYdBd77vS5P5OV/5XX3EzpF/6WstXWyhVL66lLGRV
+         Tfo2XZH2oFlygYdQHlzDZivadEECtwnMNyyK7xq0dK4UmXEfeRDbb9r/Hb8rou1ohPOY
+         2a1g+GZEJitNBdkzQWf1dkyXZrVwcYOvYMa4mpcJjhYu1H/IKQ3xXspLZMDCXn8IXnqt
+         0aMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUFFrTqUX555R70YUE+/WxPOm16WKWYPJJG6ut3B23Knw4bnLNctuiERA0pS8YjfKKiNBFJp5GPvH0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXzuF965BMSeCDuqnhXXdBHVGyvhKkVRvVmn/REbm/UroS4uR2
+	kd+U4isqC3uQGLzB6VIccS7KnYxYx1KdUE1nDdOBu8fwQbYTmNHQmxngIbSqpw==
+X-Gm-Gg: ATEYQzxUI84Nn8/SVEk/PtKQRK/bAg6XbSr7EtgjfkYq7uiARi/4y7lfyJ5KGTh5k3A
+	ePJTTrabYcfMF1giVXBCWvwuVe+J9wLV6tSpj/glg0Mis/nWraeATe21f2HOgEuaPxXJ6WBNwtb
+	1Y3JCMDNnuRdv2ouS4+eTTUQa0QfqMUZNEKFloK8bvRIoaH6dvmlMCgfR325MGUe8YQgKxpkmAm
+	o1sPDHlvbpUEFzEWMn6APpEEOcLpeq7kav9ZJVHLgea4bdUWzhKOr1FuVGEJRdVCu7fOOykWZZw
+	/wtRmCt/8P0ufq2YyRZA+CMgbOrZaeDPFVOSgzhyhNGaDWZTgzzBL9yjts6RN0gAoasrDpqJDDM
+	1dQ/PA5HjNIJlHIOjmOULz9tqdK+zjdwn3a4d1P+zRjirGzFCpozDl8HZQDT/aUwR02TK5DssOr
+	HHjpxTQqjy89gPRhdBDZRR6Nls7iUwy8R5
+X-Received: by 2002:a17:907:e8e:b0:b93:80f3:b36b with SMTP id a640c23a62f3a-b93f11ec4d2mr169610866b.7.1772642417606;
+        Wed, 04 Mar 2026 08:40:17 -0800 (PST)
+Received: from foxbook (bfj19.neoplus.adsl.tpnet.pl. [83.28.47.19])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b935aee519asm769668066b.64.2026.03.04.08.40.16
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 04 Mar 2026 08:40:17 -0800 (PST)
+Date: Wed, 4 Mar 2026 17:40:13 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, Rai Amardeep
+ <amardeep.rai@intel.com>
+Subject: Re: [PATCH 23/23] usb: xhci: Add debugfs support for xHCI Port Link
+ Info (PORTLI) register.
+Message-ID: <20260304174013.16c2adc1.michal.pecio@gmail.com>
+In-Reply-To: <d26eb83b-e67c-4319-82fb-9aba76bb2b76@linux.intel.com>
+References: <20251119142417.2820519-1-mathias.nyman@linux.intel.com>
+	<20251119142417.2820519-24-mathias.nyman@linux.intel.com>
+	<20260304103856.48b785fd.michal.pecio@gmail.com>
+	<d26eb83b-e67c-4319-82fb-9aba76bb2b76@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260304155812.4559-1-marusik.adamenko@gmail.com>
-X-Rspamd-Queue-Id: 62C8E20445E
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 1B69C204846
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33992-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33993-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	NEURAL_HAM(-0.00)[-0.996];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_THREE(0.00)[4];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Wed, Mar 04, 2026 at 07:58:12AM -0800, Mark Adamenko wrote:
-> The goto to 'exit' only returns the already initialized variable
-> 'error', which would be 0. At that point it could not yet be anything
-> else. Replacing with an early return 0 removes the
-> need for the label entirely.
-
-Odd text wrapping :(
-
+On Wed, 4 Mar 2026 16:25:45 +0200, Mathias Nyman wrote:
+> I was able to fake a similar scenario by leaving out a port in
+> xhci_add_in_port(). It triggered the same oops.
 > 
-> Signed-off-by: Mark Adamenko <marusik.adamenko@gmail.com>
-> ---
-> v3: fix missing return statement at end of function
-> ---
+> The null pointer check you suggested below fixes it for me. Does it
+> work for you?
 
-You forgot the other versions listed here :(
+It should, it's practically identical to my own.
 
->  drivers/usb/core/driver.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-
-But first, why?  There's no real need for this change, why make it at
-all?  It follows the "standard" way of jumping to the end of the
-function to exit.  What tool asked you to make this change?
-
-thanks,
-
-greg k-h
+I added "unused" to the printf.
 
