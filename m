@@ -1,1617 +1,323 @@
-Return-Path: <linux-usb+bounces-33945-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33946-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gGpjETjpp2mDlgAAu9opvQ
-	(envelope-from <linux-usb+bounces-33945-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 09:11:36 +0100
+	id IKIIJnvsp2mWlwAAu9opvQ
+	(envelope-from <linux-usb+bounces-33946-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 09:25:31 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED5911FC4A0
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 09:11:35 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 315E81FC8F8
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 09:25:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A989A304FF44
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 08:10:23 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 33F5130233DB
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 08:22:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49088305E10;
-	Wed,  4 Mar 2026 08:10:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B746390208;
+	Wed,  4 Mar 2026 08:22:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gzW2+RJ8"
+	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="pl7mtPe/";
+	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="usgQeWjq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0014ca01.pphosted.com (mx0a-0014ca01.pphosted.com [208.84.65.235])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A0E38425B
-	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 08:10:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772611816; cv=none; b=IavDq4yqx11so3gX0olQTAwyvdmCEckDwqnTXiE/QTN+YZlQpKxaMI0UIYsGxhJnDw4lxEpCdpAwsCqWYlqtZbA7WjR12QNzEjw/Sy0XO11VhGE3TMQB5i7We/SYK4XMpgA44aQsG+D+StaKKZI2/HwDMLxkarSqrsD2o4BKJpk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772611816; c=relaxed/simple;
-	bh=v94bgH61fJQukLHkdFnj051izB/sPgRTJ23tlEdzKbw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C1oeCfshme+X0Vw4PiR2Ik0xpsTvfXotUTc//nzvB0sxxWWOgisbkhjDIo2xPWEUi41RkLWpnmdFZsCS49NsCEibkjeQZ56y63ABlOMGRVCwwmldNE6ATuZocPsumzvBc9Wdcko9cupeiL+ldVKumRfKePCXTzzkxPE6N6fDI74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gzW2+RJ8; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-826c49b7628so4184372b3a.0
-        for <linux-usb@vger.kernel.org>; Wed, 04 Mar 2026 00:10:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772611813; x=1773216613; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KJLU60NLNYTzHbiohHOjnLqPWm1YJ/db69gOfRNXmpE=;
-        b=gzW2+RJ8tCiUQ/TvWOlz/q1k0EHkIKSGfnG6eZno8LNTiEwqGUEQzMkxu5uNQwUGHH
-         RfF6WEHQrf2wKHvOhlKLIYrofC5WjY9I0Rv30SrN45FoO07b3o/IDzqMXYqaoGqed5X4
-         /hn56bhqKy+N3JunbfhaxEBdn4IjF2Wpj7x4/SR9hqkBHCt31z/rylQEgqVReig0k9PM
-         nT/FOfpCnNB3I+vXvPVugJogfTjSijXnyjK8aA+SGeQ9Pwnlw6beXPQ3MrftywqfrqHw
-         blcscIoUxc5yoBEH4TOksVDdORaWWpHLMyWK9RFjIMFAPfKTinYvI6IfQ4KrUxooyAUG
-         UaEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772611813; x=1773216613;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=KJLU60NLNYTzHbiohHOjnLqPWm1YJ/db69gOfRNXmpE=;
-        b=S78H6ExZy/yASBvngOq03RoFBYHZrmdzuAfI9fwSf2saAVYHlzuhpKefrJiL8Ef4I8
-         jF2h6J0oyzsFSQ99L/RWZXPeCwHjl/fZZ5Mt6ASEM9IFMJZct4q0RL48yM5L11RMN/xl
-         NLClzAoIicJEJjS9vhVwuI461bOM2b6nwei10Er+Lr3AMT0KAqfoa3Cm7rO/7SWxhF/B
-         2r5Kq5n85xEgymYpSV98qPH2MSlvpLzq218vqsNrjQu9gubd96zI6aLaZdbezwD+VbGR
-         bO1phDDICZYP9B3nUUOyZRk7cSAhDmGPW1rxWZfSgK2peoNSeudI5DzoVqON4JINTOrp
-         eiFA==
-X-Forwarded-Encrypted: i=1; AJvYcCUG54S5gozJNV5CHzHVbGFfpM6ZvrNBQ1/OFqyCW5ahoqgEIpmvND7wf7mClUiUAsoe+aK7jwAn1rQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJduqOzwEEtGa8/O/jL0Bc2ZNPAS2LDHB/DZi/kw4SZZBYvF3+
-	CPD7ipjql9z1B7nPnfoz0Vb+9TasHpDhRE/Clf7NcERIFdLPoOc0VYSK
-X-Gm-Gg: ATEYQzxWIJNpGunXTXKSvVrOJGmvRbgN2UjNaCDNx02PHcwfMibruiWTBTQWem0Nx6Z
-	lXpJti3d2nrQDlmubjv6FzgBX9MuB9pr/x53KvS3uyDujlnsQS03exr1MdXZTY+tkiAvdtEStie
-	ThIymJe5nZMH6ECShfmVFYrEIkrI/0WQH760nGms1+ZXubVkMzMqo6kb3mXQobXUbABli0TZZLP
-	saDjv3Si2s2g/tB29+7QrC3vG7ndiAAX6K5Q0th+H9Luv8Ccy5qlTHdjH81sse8yefn00pN6sUe
-	wPXAKVnmrhk4xx0+mQ41IVdt96dwkCI/SXHkLE5T1bFjzZV/RCncGoNRGqBeQ0NlfEYVItaHVFb
-	GZJQG1UbFIB5RmPvDpE8O6CQhDRLct1m9NXLKMdIuCK/PXOqrrZq3Y7H/H0Sa/k15oCF18Tr2OX
-	u6Xe4Ik4JHb0QWnAVHXp67bhedKvKPmARaze5lWAJMA2VCfv7iXKxzBUr8qcuwf7tiI5y7JHs5i
-	FlysGKQQmADc6EVCC31wGOBRCWzkQ==
-X-Received: by 2002:a05:6a00:ad81:b0:81c:c98c:aeb7 with SMTP id d2e1a72fcca58-8297292e796mr1118933b3a.7.1772611813138;
-        Wed, 04 Mar 2026 00:10:13 -0800 (PST)
-Received: from cs00-MS-7C09.. (2001-b400-e3a6-5f19-e04e-f2fb-c530-be39.emome-ip6.hinet.net. [2001:b400:e3a6:5f19:e04e:f2fb:c530:be39])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-829722d0045sm1174632b3a.23.2026.03.04.00.10.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 00:10:12 -0800 (PST)
-From: hsyemail2@gmail.com
-X-Google-Original-From: syhuang3@nuvoton.com
-To: Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Sheng-Yuan Huang <syhuang3@nuvoton.com>
-Subject: [PATCH v5] USB: serial: nct_usb_serial: add support for Nuvoton USB adapter
-Date: Wed,  4 Mar 2026 16:09:29 +0800
-Message-ID: <20260304080929.10179-1-syhuang3@nuvoton.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <aPem-8w3LLkP_r2d@hovoldconsulting.com>
-References: <aPem-8w3LLkP_r2d@hovoldconsulting.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6281A390211;
+	Wed,  4 Mar 2026 08:22:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=208.84.65.235
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772612571; cv=fail; b=kRqp+rFz/EGj3p1opk4hBUcpB32hqlbiU61bMh7J76MvXOagBMEe6fURa1ZvESNNW3yw1uLkJXAMEXXo8UxWOYYcBrxRhforjU1PM+L9hna9JciIT2crPXMn6j2xJiJpzGr/Ur7RHLPxUWCOjQ9ODcaHQnz4A+lFFZlDGhKWS2A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772612571; c=relaxed/simple;
+	bh=GLyvrjokaMFHjR9cuzPtxhlSJLX/ddw0wkW7e1SZeog=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=pP5PuuDhMGiLXONQCuKPKtQa9+4dRdd+8xxnP/giBlXL4QygVgfCr1713/8TZ/DCtROA8He/rasRUOlfKb53O2Sn957rTED2gVweU6KhzzeWtvpFfyB4P+IDxmY1IBr+YyhbEOyJet+0nULMGztIaxGbtplckpyrESHsAv7sJW8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cadence.com; spf=pass smtp.mailfrom=cadence.com; dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b=pl7mtPe/; dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b=usgQeWjq; arc=fail smtp.client-ip=208.84.65.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cadence.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cadence.com
+Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
+	by mx0a-0014ca01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62410akQ260326;
+	Wed, 4 Mar 2026 00:22:28 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=proofpoint;
+	 bh=GLyvrjokaMFHjR9cuzPtxhlSJLX/ddw0wkW7e1SZeog=; b=pl7mtPe/Wg+F
+	oYpeCx9y4n+z/k0TazsmqGeF6CG9dZODXKMvo/1Fft8BvPj5GkcT53pB/NxDrPFH
+	zTEsP9qCY7uauVT9kI3r8fPTMtdI3SwgUn2TC1eoif3/Niyg90kC6rGhpx4yIfBy
+	sbZZpW52pZZ8iQ49xqZNwKTR4JEYQk3BJvcGo/liJvy65RPgPCva972C5Qf8vMxy
+	pKLbHIzpHdITRISUA5KpV2Z2QbhUvPhYDlzuiUIiIWgLIg8uDoE11AMopg+r9aoK
+	RsAcDAS+dDFCI/7XKA74GhrfTB2sqO0qlsDfIKdiLXTcBs+Ip9WTdCobQg84MjQU
+	OdQck25Pxg==
+Received: from co1pr03cu002.outbound.protection.outlook.com (mail-westus2azon11010003.outbound.protection.outlook.com [52.101.46.3])
+	by mx0a-0014ca01.pphosted.com (PPS) with ESMTPS id 4cp3nckhcb-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Wed, 04 Mar 2026 00:22:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=i4TBbtfZhvWpe5WGak6ULPDS0mTexfaNmnmYsrR3ZCkS0AsBDQthYscviIMSAQuM0GrTFshJ/e6MWxj9+WhVQLBt8thTgDSgYk/yy+p/2MPMpmk8qKb1IYWfGiXxMJPKLsp2doKN2473VR+ZsXv6iD6nFpo0asn6/zjPMULCr4jX/EwmDG4sncpa7B4yJ8nEcgpdRRtXs+B+NmO31tImLow/Dv1fT4YFELdQz39EiXXJpVJCsgK++YlGMKKtZjFGxhoaPHg4r+GH6o5r3xCZUnb7+zCr0KwyYeKFRCC4hENWJ3DQCpVo5GeCZh4XgsFy4w1h9xoQR/idooTcuXB80A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GLyvrjokaMFHjR9cuzPtxhlSJLX/ddw0wkW7e1SZeog=;
+ b=fdYmD4OzfWSBsvjw0JBK0izdWs4lH7QZ9GQRqyjdvXXpGwvvFIaJp24stnwPnKHTJ2nramqFuuJonDkf0EitZ2B6Dq1C8QK9ty92FyoCjrF85ngfjUJqkxbTt02kN+NvFjA5+jOUzo42iAn8+p/pTWR6Tij9JIHLJttIglGeMCmbp59f6osFKI/NpSMhb1w6eeP+OfBPPCWVXO/xnRMVqxgTtABl9slzWRwjWK1KP1oLuuo1DuP03y6PQheWxChl/x1dnrOEyIGBm5FgnfSN0JFeIIOcO7zQ5eoX+r9e6lN3gr3qGkj51FEV3P/TinoHtQi7RPKafQsk9o570gGdDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GLyvrjokaMFHjR9cuzPtxhlSJLX/ddw0wkW7e1SZeog=;
+ b=usgQeWjqtSOXdG3uNqfq77hyFPa8zPwqiVfGbcxCve9Tt4At/Z9o4tqzK3GnK9ue9SCvL7Udcx6erMfbpwPlZcUdaITc9Abyh1m9EVj5GJCBEaQYqlA/Pn4rvPuoTSLjwYM3agGXRgSwuTuYFZ+RyKOyysUn/57/Kjd1j+rg3T6xkKlfpAItP/6Fd/xRAsxo7v6c4nBvywvvIs0Hl2ug7Sqpo5j875wwHr5A5A/2POYlpwnsLjM8Pn4Jxg8Rp9aDlLOqysvPH7Ju0Qw2BprJ2MikKhG6ktawTr9O9+yD+/WN0hj2rJHtSbfcGCx7vfoI1WSHVApj9bRYEOIwsHjYfw==
+Received: from PH7PR07MB9538.namprd07.prod.outlook.com (2603:10b6:510:203::19)
+ by SA1PR07MB8387.namprd07.prod.outlook.com (2603:10b6:806:1ae::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.17; Wed, 4 Mar
+ 2026 08:22:25 +0000
+Received: from PH7PR07MB9538.namprd07.prod.outlook.com
+ ([fe80::9088:4354:91a3:3bbe]) by PH7PR07MB9538.namprd07.prod.outlook.com
+ ([fe80::9088:4354:91a3:3bbe%7]) with mapi id 15.20.9654.022; Wed, 4 Mar 2026
+ 08:22:25 +0000
+From: Pawel Laszczak <pawell@cadence.com>
+To: Peter Chen <peter.chen@cixtech.com>
+CC: "robh@kernel.org" <robh@kernel.org>,
+        "krzk+dt@kernel.org"
+	<krzk+dt@kernel.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rogerq@kernel.org" <rogerq@kernel.org>,
+        "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        "cix-kernel-upstream@cixtech.com"
+	<cix-kernel-upstream@cixtech.com>
+Subject: RE: [PATCH 0/2] usb: cdns3: USBSSP platform driver support
+Thread-Topic: [PATCH 0/2] usb: cdns3: USBSSP platform driver support
+Thread-Index: AQHcqfE1a3W1H1W0+kyrxldUiPBBWrWcabwAgAA6ooCAAWcOAA==
+Date: Wed, 4 Mar 2026 08:22:25 +0000
+Message-ID:
+ <PH7PR07MB95386226F5CA1AD596699C66DD7CA@PH7PR07MB9538.namprd07.prod.outlook.com>
+References: <20260302030339.324196-1-peter.chen@cixtech.com>
+ <PH7PR07MB9538DF65B6E13761C630615ADD7FA@PH7PR07MB9538.namprd07.prod.outlook.com>
+ <aaa97U38DByYYDcC@nchen-desktop>
+In-Reply-To: <aaa97U38DByYYDcC@nchen-desktop>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR07MB9538:EE_|SA1PR07MB8387:EE_
+x-ms-office365-filtering-correlation-id: 5b90108d-a319-4a12-42e5-08de79c72a9a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|7416014|376014|1800799024|38070700021;
+x-microsoft-antispam-message-info:
+ N37FY7zN0KWn3x6nrL3p62osr4rwSSLSLWJAmqs0tN08uQBkPNs5hVwRUPGeVrzRWanarpL+xnst8vquwdNtso983gsDQA/M7jGdolcQEESZxVcX4J/My2KjFR0c6++EU9xpC7jMmeOOxWpmBaDmjOfgcfUEIDfh/XCMRPkjesaH3a2G2SjmeGwEh/CjnMqyIBnz7aSAJPqkkcGsQ6IXr/OQwKSgv/3LRRBsXkAuEJFTZBbIjrNiVtOR5u0m1OOLLlgWUV7uekzMv0c2pYtv+k+bqgb+Sj1VrlfwTYQnh/9Wqk5n5+kiiPajkoohKgaCg8O+unl6TVgfkYym5WhK5cXyQpUxdDnt3Yi1Jh8mJIMBo/aPFQmacjc5/rL0YvhSuHVU+nUYmgRFaCfQpLu+NQeta4Eyev6oMCQxSCjKYQ75FV9nG50+UPzBGpiszwGE6QEmhMk2GIV8tCxIuwEdIgSV4vdVEfLvvNM0sIxvBWBZRnE+BfCQmourmLITXpRL8LkxfgcDpb1B7VsRRjbF5GHqxM+7HFS1SsRwLiGErNf7pP0mXCwPe4Fg+FzTvhIs0bENAuOlxU4Cfkl08Hq5RmWseCp4C2Rn1xD4In/4Uf0zFeZ0wXeOu0dK6IQflYBec/dN8/WYWcRnGMKcLmWuoI9roQCB4yyZgy3lhJjGvMtae/ehAuz6nk8AyH0S+ASNl1CADCPFbnGs8z8TRLbdfUxhYGokyUQ8DmgoYqghwv8hGGbZ8ZY8HPFpJsp56FY/
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR07MB9538.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?dzdCV3YzbFVGTElQQnpXVk1QQmJWTDdManYvcjdZYXh5QUxjcWU1UUsyS1M3?=
+ =?utf-8?B?S0VqYXV1NjYwN3J0Mit5L2dUWkQ5Z0R3VVcwaVI5ZGJPZldCZ0dWdGdjeVNr?=
+ =?utf-8?B?eXNyVnVPbGFZNG9tVmdPaXJ5c25MOXBwRTNoV0hmZXZjSzk4Q1p5S0I0bzRq?=
+ =?utf-8?B?MlhKRjM0MVlsd0VwSjJCY3JYSXdzL1A0Rkh6Y0o4SkQ2U095NVlHNDRrMTJC?=
+ =?utf-8?B?NGlVcFFDRm0zbnpJd3ZqbGhXSC9PczU2VFFzb1VJcnVqZVMva2NBQWM0QmxI?=
+ =?utf-8?B?RHNLMDQxQWhZdk05eG12K05UUTVkR1cxOU9vODJ2SWsyQlFhNVM2eW5Wcmpy?=
+ =?utf-8?B?dmQwNko3QkJ0ZG9xM3c2c05FWHV6SEJ5b2UyTGFWQ0x5MUt2YjFmQkxwZHpG?=
+ =?utf-8?B?SFNoUXgyQXMwY09zMGxUajBUdlFSOW5lTm1HN2dNYnVjU243RUtQeW41Skd5?=
+ =?utf-8?B?clRIWXdXNmRYOUp6cXQ5dWprdjZydmtaeFM0RS9NdkNQcG5jTE5pWTA5RHE1?=
+ =?utf-8?B?bHV1cnJiZ0FzYW5SdThFS2ZTZWhyMmRDQ2l6Mjc3cDdCeWdPQ3YrQUpIbHE5?=
+ =?utf-8?B?TUlHTVdCWTJEakNJR0h5dVl0Ty9BWTdiTkdJT2tVeVBqUnBtdWwvSWFnZUMx?=
+ =?utf-8?B?ZjZuRmtqRlUyR0xHajNyY0VOREdsaDZlVlQvUE1GWlpHWWVNS1NrSUovdlZp?=
+ =?utf-8?B?a05FaGp1bGhPM1dxL3c4ay9aQXpPaEI5cC9lNTNSc0dyMDN3azA2dngrZDBE?=
+ =?utf-8?B?bTdxZ3U2d2wyL3VCRUFFM293YmYyemgyYVd2aWNsaXBJTW1LRG5GbnZyVHpL?=
+ =?utf-8?B?bVVtS3l2QWpIM0lPRjBGSEk1dncvNHprVVBTZFdsSG5sMGFtQXVjZk1GdHlP?=
+ =?utf-8?B?T2FnY3d3Z1Z2UXZwODlOUXdaaEZNclNwbm5acVZYMG9PNEtReUJoZGJDMm1u?=
+ =?utf-8?B?d01EaDRVVlc1a1pLbVpMbk81cmRoQUNCRWhiT2x5MGtnb2pGZnZiUGtsclAr?=
+ =?utf-8?B?cHE2SlRzaGgrTVB0TFR4ZnBxRHg1NGxMWkRBVkZBYUVmSmx1TFVlOG9PaUxi?=
+ =?utf-8?B?UmlCdUR3ekFlSjNHM0NsOXVlY00wL3IreGcyQnFSNU5OaCtpSExuckQ0Qkla?=
+ =?utf-8?B?SnR0Q1M4ejZSSXREYmZBVHMrZFZTc1Iva256Z0pFOHgxVzh6cXZHVm1BTHNS?=
+ =?utf-8?B?M0JLR0N5VXZNQ0xDVGxRVUxxRXRHdTNKTjIxeXJwTldrQXJrVzFoZ290cGFC?=
+ =?utf-8?B?MlNSSGpwbVlqQ1RCRGJ2eEpZb0FBNTBzM2ZQNEpRdml3cDBKLzFPeDR3MUp4?=
+ =?utf-8?B?alByQXNsY09OZ3laUjc4azRQbjN0RXZQMEt5YmYva1hyZzFmR2Vhc1F3cUJT?=
+ =?utf-8?B?N0R1QkpqTFkzVzc0UGRUamk3SzQyZnhYWWdEeFJEalgrRVdZbGUwNTY5aUgw?=
+ =?utf-8?B?QW1vdHMzdFM1Tm43NVErTDN2ZENrbWJETDU3L0s4TVdCUzE1WDBiZE9tUXNm?=
+ =?utf-8?B?UmpPc0oxSDFmSUVESXVjVzloTHNQck52TWpNbWhMMHNkcFhLekdGcS9yeEUz?=
+ =?utf-8?B?Sk9TYTVXMzR0c2IxOWFCeVRxd0x4dE9Cb0YrM01aTTVRcWxGSEhmZGovbm5p?=
+ =?utf-8?B?MEtURzhvTk53eHlMUGJwMUQvM25wQUc4Tk1GK1ZVM3psc25zemxjd0NEMVhy?=
+ =?utf-8?B?RGhucmFhd2tPaHgvNDlFOEpaeWp4S09lNzJ0NEFPZjhTQWw0QTJoNit1S1Ex?=
+ =?utf-8?B?VDYzNCtjQUpQSENKaHNsZkxRenpDWWZJcGY0NmlVWGFUMzdhK2VuOFJlZ01T?=
+ =?utf-8?B?dVRVbmM4OWg5d3FNWUtpUXU2dC8veTdRZDVnTnpVdFVkaGlyK2R1WG44Wnkx?=
+ =?utf-8?B?NG1SNmpPdUlHRzRsTndydHhaV0Rac096TlJJOHBzd1dtU3ExSVc5YzJoN2t2?=
+ =?utf-8?B?NFptajJnWUhxdkJmTHZRajlwOUFwSEx2aDYycXZ0SHZsQTh2NU0xNHUrWUFi?=
+ =?utf-8?B?NWRvRkU0MHlGT1V2NHRwdXZ1VUx6L1FpUm5BY09CZldVQ0JRS0dpeWNrQndi?=
+ =?utf-8?B?U2EwMkxKTFdMc3J0azRDYWg0TUpTU1hxTTM1Uld5NTczTS9tSFJTNkdkOUlR?=
+ =?utf-8?B?VVBwak9OdjlWOVUyOW05K1paSm84N2xtUUFsRm1neW0yQ2UrSE95ck50ZDF0?=
+ =?utf-8?B?a2dpanFUNlAvM2hRa3JLUnBEUWJzMHRHMzVhZUhtUDdIY0JOdlJlZE5tYk04?=
+ =?utf-8?B?SDdXL253L1hkL21NTytyejl3NzErY21WVXMyNldmb1QzSm9hYnFoRFRpUVJL?=
+ =?utf-8?B?Und6YWxCcmdHS0ZhWkM0dHA3OGJ5MDV4RktGRkw4Y1JMMEh4aytHQT09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: ED5911FC4A0
+X-Exchange-RoutingPolicyChecked:
+	qB07eIR4xqXzhukIE/Un5d0GnvBTVmtpHICz/frW5aWDj7a8bd9V5MsKdfw7TWipTCe1OCk9jV/6kSWIxCTGmyNwABVTGsXbuE4zu40RMKIEkHJqoeejyI3C9cwvBj1E9AwypU1454N+WpWU/0zynDeGcFa3CrXUCJtw2nasqBk/vaFS0PetCqnjecKvkdDApN4ZmsBQXPyZD3hmRAAeOH1uTa84ARm+g7WglLgn6xyGMUSA73yj1TL+9llAeJNzJpygmquspjlZ5GYq3W0DlO1v1bciw3q12eouybE/E2xvzf4zpmgPTReF/ELg3Z6zP10yu2lXur/ZOymtn7Hl2Q==
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR07MB9538.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b90108d-a319-4a12-42e5-08de79c72a9a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2026 08:22:25.2510
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZwiJ8KzykuMXuMykWsnvapmV0sd6rIwpR4e/cP4OS1wTnN091DSwsRr5sIKy24viLMOg7DXLQ3HguYw9SU7cK7BEBJYAKo5eVivgh8/4yfI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR07MB8387
+X-Proofpoint-GUID: 4QheJaJGqpAh7BzgHYHMlx0v4LiFLMTB
+X-Proofpoint-ORIG-GUID: 4QheJaJGqpAh7BzgHYHMlx0v4LiFLMTB
+X-Authority-Analysis: v=2.4 cv=JJg2csKb c=1 sm=1 tr=0 ts=69a7ebc4 cx=c_pps
+ a=AKd2An130fSphkJyqL6rzg==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Yq5XynenixoA:10 a=Zpq2whiEiuAA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=W8fx6O4W8wtO2w6lYej3:22 a=jPItpJ3sizTKmla2ehJN:22 a=uherdBYGAAAA:8
+ a=_EeEMxcBAAAA:8 a=OLL_FvSJAAAA:8 a=Br2UW1UjAAAA:8 a=qBPnistlM9Jsw9ESUJoA:9
+ a=QEXdDO2ut3YA:10 a=oIrB72frpwYPwTMnlWqB:22 a=WmXOPjafLNExVIMTj843:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA0MDA2NCBTYWx0ZWRfX4Cr5KrLBmjh/
+ jXSibXBPHwZj7rFZfK65PEYUPC2eiFpTCQthu3OMbX3HBBApSzhJU68dQ2sgnIj+KMA4Y6EJznG
+ I9goy6Q4S152X0e7w0foi5p5wQ5ARgKscST621kjcePaStjIsAtAajnKARDU3RiO12xXL02XtWG
+ tv2U+WSzutswfZf36sexvFcwVSBvpxBP8zIt7yohzxP61O7m1zS/I7XCX8ZbLFIgGbx9A4LIsfh
+ EfRJeOeFr3IpAhLHD773+haD4laFodhyJcSh61ujFCJ/1Sexq7Kb+hu+6dAbtGkBHaU0T9seNfp
+ KnI3J3dRC8y+rC2eDw1PIb85/5ekMECEDcjZXjRpydsmpE44wboicRgmcT/M+CZiE+0j142R2mr
+ IK0d9KpZv9Rn90/9Dwi1zC7Jk3jV7i6BJQch0b1DSqmpal7MUT39HoXEpOxkKSfu+J/oZu+Lmg9
+ jGDVUbBP7EBl7LHXwbQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-04_04,2026-03-03_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check
+ score=0 clxscore=1015 lowpriorityscore=0 phishscore=0 suspectscore=0
+ spamscore=0 malwarescore=0 impostorscore=0 priorityscore=1501 bulkscore=0
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
+ definitions=main-2603040064
+X-Rspamd-Queue-Id: 315E81FC8F8
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+X-Spamd-Result: default: False [-0.06 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[cadence.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[cadence.com:s=proofpoint,cadence.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-33946-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33945-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[urldefense.com:url,cadence.com:dkim,cadence.com:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	FROM_NO_DN(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[cadence.com:+];
+	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hsyemail2@gmail.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[pawell@cadence.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,nuvoton.com:mid,nuvoton.com:email]
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	REDIRECTOR_URL(0.00)[urldefense.com];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Action: no action
 
-From: Sheng-Yuan Huang <syhuang3@nuvoton.com>
-
-Add support for the Nuvoton USB-to-serial adapter, which provides
-multiple serial ports over a single USB interface.
-
-The device exposes one control endpoint, one bulk-in endpoint, and
-one bulk-out endpoint for data transfer. Port status is reported via
-an interrupt-in or bulk-in endpoint, depending on device configuration.
-
-This driver implements basic TTY operations.
-
-Signed-off-by: Sheng-Yuan Huang <syhuang3@nuvoton.com>
----
-v5:
- - Document protocol and code comments
- - Use .prepare_write_buffer helper to frame device packets
- - Use generic usb-serial helpers for write handling
- - Use usb_control_msg_recv/send for control operations
- - Add hw-index-to-port lookup table for constant-time mapping
- - Move endpoint/resource setup into calc_num_ports and attach phase
- - Fix URB lifecycle (use open_count: start URBs on first open, stop on last close)
-
- drivers/usb/serial/Kconfig          |   10 +
- drivers/usb/serial/Makefile         |    1 +
- drivers/usb/serial/nct_usb_serial.c | 1416 +++++++++++++++++++++++++++
- 3 files changed, 1427 insertions(+)
- create mode 100644 drivers/usb/serial/nct_usb_serial.c
-
-diff --git a/drivers/usb/serial/Kconfig b/drivers/usb/serial/Kconfig
-index ef8d1c73c754..96a022bb9b21 100644
---- a/drivers/usb/serial/Kconfig
-+++ b/drivers/usb/serial/Kconfig
-@@ -443,6 +443,16 @@ config USB_SERIAL_NAVMAN
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called navman.
- 
-+config USB_SERIAL_NUV_MULTI_UART
-+	tristate "USB Nuvoton Multi-Ports Serial Driver"
-+	depends on USB_SERIAL
-+	help
-+	Say Y here if you want to use a Nuvoton Multi-Ports USB to
-+	serial converter device
-+	
-+	To compile this driver as a module, choose M here: the
-+	module will be called nct_usb_serial.
-+
- config USB_SERIAL_PL2303
- 	tristate "USB Prolific 2303 Single Port Serial Driver"
- 	help
-diff --git a/drivers/usb/serial/Makefile b/drivers/usb/serial/Makefile
-index c7bb1a88173e..c07919a52076 100644
---- a/drivers/usb/serial/Makefile
-+++ b/drivers/usb/serial/Makefile
-@@ -41,6 +41,7 @@ obj-$(CONFIG_USB_SERIAL_MOS7720)		+= mos7720.o
- obj-$(CONFIG_USB_SERIAL_MOS7840)		+= mos7840.o
- obj-$(CONFIG_USB_SERIAL_MXUPORT)		+= mxuport.o
- obj-$(CONFIG_USB_SERIAL_NAVMAN)			+= navman.o
-+obj-$(CONFIG_USB_SERIAL_NUV_MULTI_UART)		+= nct_usb_serial.o
- obj-$(CONFIG_USB_SERIAL_OMNINET)		+= omninet.o
- obj-$(CONFIG_USB_SERIAL_OPTICON)		+= opticon.o
- obj-$(CONFIG_USB_SERIAL_OPTION)			+= option.o
-diff --git a/drivers/usb/serial/nct_usb_serial.c b/drivers/usb/serial/nct_usb_serial.c
-new file mode 100644
-index 000000000000..d2d537da8db7
---- /dev/null
-+++ b/drivers/usb/serial/nct_usb_serial.c
-@@ -0,0 +1,1416 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2024-2025 Nuvoton Corp
-+ * Copyright (C) 2024-2025 Sheng-Yuan Huang <syhuang3@nuvoton.com>
-+ *
-+ * Nuvoton USB to serial adapter driver
-+ *
-+ * This device interface consists of one control endpoint for configuration,
-+ * one bulk-out endpoint used for transmitting data for all serial ports,
-+ * and one bulk-in endpoint for receiving data from all serial ports.
-+ * The status of the ports may be reported via either an interrupt endpoint
-+ * or the bulk-in endpoint, depending on the device configuration.
-+ *
-+ * The number of serial ports is configurable in firmware and reported to
-+ * the driver via a vendor command at probe time.
-+ *
-+ * Host-device handshake sequence:
-+ *   1. Host sends SET_INIT to initialize the device.
-+ *   2. Host sends GET_PORTS_SUPPORT to query enabled ports (bitmask).
-+ *   3. For each port open: Host sends SET_OPEN_PORT.
-+ *   4. Host sends SET_CONFIG/SET_BAUD to configure UART parameters.
-+ *   5. For each port close: Host sends SET_CLOSE_PORT.
-+ */
-+
-+#include <linux/bitops.h>
-+#include <linux/errno.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/moduleparam.h>
-+#include <linux/serial.h>
-+#include <linux/slab.h>
-+#include <linux/spinlock.h>
-+#include <linux/tty.h>
-+#include <linux/tty_driver.h>
-+#include <linux/tty_port.h>
-+#include <linux/tty_flip.h>
-+#include <linux/uaccess.h>
-+#include <linux/usb.h>
-+#include <linux/usb/serial.h>
-+#include <linux/kfifo.h>
-+#define NCT_WRITE_FIFO_SIZE 1024
-+
-+#define NCT_VENDOR_ID			0x0416
-+#define NCT_PRODUCT_ID			0x200b
-+#define NCT_USB_CLASS			0xff
-+#define NCT_USB_SUBCLASS		0x0
-+#define NCT_USB_PROTOCOL		0x1
-+
-+#define NCT_MAX_VENDOR_READ_SIZE	8
-+
-+static const struct usb_device_id id_table[] = {
-+	{USB_DEVICE_AND_INTERFACE_INFO(NCT_VENDOR_ID, NCT_PRODUCT_ID,
-+				       NCT_USB_CLASS, NCT_USB_SUBCLASS,
-+				       NCT_USB_PROTOCOL)},
-+	{} /* Terminating entry */
-+};
-+
-+MODULE_DEVICE_TABLE(usb, id_table);
-+
-+#define NCT_MAX_SEND_BULK_SIZE 128
-+/* The port does not exist in FW (for device status). */
-+#define NCT_EMPTY_PORT	0xff
-+
-+/* Hardware configuration */
-+#define NCT_MAX_NUM_COM_DEVICES		8
-+
-+#define NCT_DEFAULT_BAUD		14 /* 115200 */
-+static const unsigned int NCT_BAUD_SUP[] = {
-+	/* It should be the same as FW's baud-rate table. */
-+	B0,	B50,	B75,	B150,	B300,	B600,	B1200,
-+	B1800,	B2400,	B4800,	B9600,	B19200,	B38400,	B57600,
-+	B115200, B230400, B460800, B921600, B1500000
-+};
-+
-+/* USB request */
-+#define NCT_VENDOR_COM_READ_REQUEST_TYPE	0xc0
-+#define NCT_VENDOR_COM_WRITE_REQUEST_TYPE	0x40
-+#define NCT_VENDOR_COM_READ_REQUEST		0x01
-+#define NCT_VENDOR_COM_WRITE_REQUEST		0x01
-+/* Index definition */
-+#define NCT_VCOM_INDEX_GLOBAL	0x0f
-+
-+/* Command */
-+#define NCT_VCOM_GET_NUM_PORTS		0
-+#define NCT_VCOM_GET_PORTS_SUPPORT	1
-+#define NCT_VCOM_GET_BAUD		2
-+#define NCT_VCOM_SET_INIT		3
-+#define NCT_VCOM_SET_CONFIG		4
-+#define NCT_VCOM_SET_BAUD		5
-+#define NCT_VCOM_SET_HCR		6
-+#define NCT_VCOM_SET_OPEN_PORT		7
-+#define NCT_VCOM_SET_CLOSE_PORT		8
-+#define NCT_VCOM_SILENT			9
-+/* Use bulk-in status instead of interrupt-in status */
-+#define NCT_VCON_SET_BULK_IN_STATUS	10
-+
-+struct nct_vendor_cmd {
-+	/* bits[3:0]: index, bits[11:4]: cmd, bits[15:12]: reserved */
-+	__le16 val;
-+};
-+
-+#define NCT_CMD_INDEX_MASK	0x000f
-+#define NCT_CMD_CMD_MASK	0x0ff0
-+#define NCT_CMD_CMD_SHIFT	4
-+
-+static inline __le16 nct_build_cmd(u8 cmd_code, u8 index)
-+{
-+	return cpu_to_le16(((u16)cmd_code << NCT_CMD_CMD_SHIFT) |
-+			   (index & NCT_CMD_INDEX_MASK));
-+}
-+
-+static inline u8 nct_get_cmd_index(__le16 val)
-+{
-+	return le16_to_cpu(val) & NCT_CMD_INDEX_MASK;
-+}
-+
-+static inline u8 nct_get_cmd_cmd(__le16 val)
-+{
-+	return (le16_to_cpu(val) & NCT_CMD_CMD_MASK) >> NCT_CMD_CMD_SHIFT;
-+}
-+
-+#define NCT_HDR_MAGIC		0xa5
-+#define NCT_HDR_MAGIC2		0x5a
-+#define NCT_HDR_MAGIC_STATUS	0x5b
-+
-+struct nct_packet_header {
-+	u8 magic;
-+	u8 magic2;
-+	__le16 len_and_idx;  /* bits[3:0]: idx, bits[15:4]: len */
-+} __packed;
-+
-+#define NCT_HDR_IDX_MASK	0x000f
-+#define NCT_HDR_LEN_MASK	0xfff0
-+#define NCT_HDR_LEN_SHIFT	4
-+
-+static inline void nct_set_hdr_idx_len(struct nct_packet_header *hdr,
-+				       u8 idx, u16 len)
-+{
-+	hdr->len_and_idx = cpu_to_le16((len << NCT_HDR_LEN_SHIFT) |
-+				       (idx & NCT_HDR_IDX_MASK));
-+}
-+
-+static inline u8 nct_get_hdr_idx(const struct nct_packet_header *hdr)
-+{
-+	return le16_to_cpu(hdr->len_and_idx) & NCT_HDR_IDX_MASK;
-+}
-+
-+static inline u16 nct_get_hdr_len(const struct nct_packet_header *hdr)
-+{
-+	return (le16_to_cpu(hdr->len_and_idx) & NCT_HDR_LEN_MASK) >>
-+		NCT_HDR_LEN_SHIFT;
-+}
-+
-+/* The definitions are for the fields of nct_ctrl_msg. */
-+#define NCT_VCOM_1_STOP_BIT		0
-+#define NCT_VCOM_2_STOP_BITS		1
-+#define NCT_VCOM_PARITY_NONE		0
-+#define NCT_VCOM_PARITY_ODD		1
-+#define NCT_VCOM_PARITY_EVEN		2
-+#define NCT_VCOM_DL5			0
-+#define NCT_VCOM_DL6			1
-+#define NCT_VCOM_DL7			2
-+#define NCT_VCOM_DL8			3
-+#define NCT_VCOM_DISABLE_FLOW_CTRL	0
-+#define NCT_VCOM_XOFF			1
-+#define NCT_VCOM_RTS_CTS		2
-+
-+struct nct_ctrl_msg {
-+	__le16 val;
-+};
-+
-+#define NCT_CTRL_STOP_BIT_MASK		0x0001
-+#define NCT_CTRL_PARITY_MASK		0x0006
-+#define NCT_CTRL_PARITY_SHIFT		1
-+#define NCT_CTRL_DATA_LEN_MASK		0x0018
-+#define NCT_CTRL_DATA_LEN_SHIFT		3
-+#define NCT_CTRL_FLOW_MASK		0x0060
-+#define NCT_CTRL_FLOW_SHIFT		5
-+#define NCT_CTRL_SPD_MASK		0x0f80
-+#define NCT_CTRL_SPD_SHIFT		7
-+#define NCT_CTRL_RESERVED_MASK		0xf000
-+#define NCT_CTRL_RESERVED_SHIFT		12
-+
-+static inline __le16 nct_build_ctrl_msg(u8 stop_bit, u8 parity, u8 data_len,
-+					u8 flow, u8 spd)
-+{
-+	u16 val = 0;
-+
-+	val |= (stop_bit & NCT_CTRL_STOP_BIT_MASK);
-+	val |= ((parity & (NCT_CTRL_PARITY_MASK >> NCT_CTRL_PARITY_SHIFT)) <<
-+		NCT_CTRL_PARITY_SHIFT);
-+	val |= ((data_len &
-+		 (NCT_CTRL_DATA_LEN_MASK >> NCT_CTRL_DATA_LEN_SHIFT)) <<
-+		NCT_CTRL_DATA_LEN_SHIFT);
-+	val |= ((flow & (NCT_CTRL_FLOW_MASK >> NCT_CTRL_FLOW_SHIFT)) <<
-+		NCT_CTRL_FLOW_SHIFT);
-+	val |= ((spd & (NCT_CTRL_SPD_MASK >> NCT_CTRL_SPD_SHIFT)) <<
-+		NCT_CTRL_SPD_SHIFT);
-+
-+	return cpu_to_le16(val);
-+}
-+
-+#define NCT_USR_RDR	0x01
-+#define NCT_USR_ORR	0x02
-+#define NCT_USR_PBER	0x04
-+#define NCT_USR_NSER	0x08
-+#define NCT_USR_SBD	0x10
-+#define NCT_USR_TBRE	0x20
-+#define NCT_USR_TSRE	0x40
-+#define NCT_USR_RFEI	0x80
-+#define NCT_HSR_TCTS	0x01
-+#define NCT_HSR_TDSR	0x02
-+#define NCT_HSR_FERI	0x04
-+#define NCT_HSR_TDCD	0x08
-+#define NCT_HSR_CTS	0x10
-+#define NCT_HSR_DSR	0x20
-+#define NCT_HSR_RI	0x40
-+#define NCT_HSR_DCD	0x80
-+#define NCT_HCR_DTR	0x01
-+#define NCT_HCR_RTS	0x02
-+
-+#define NCT_UART_STATE_MSR_MASK (NCT_HSR_TCTS | NCT_HSR_TDSR | \
-+				 NCT_HSR_TDCD | NCT_HSR_DCD)
-+
-+struct nct_port_status {
-+	u8 index;
-+	u8 usr;
-+	u8 hsr;
-+	u8 hcr;
-+};
-+
-+struct nct_serial {
-+	/* Protects the private data in structure 'nct_serial'. */
-+	spinlock_t serial_lock;
-+	unsigned int open_count;
-+
-+	/* Reading data information */
-+	struct nct_tty_port *cur_port;
-+	int cur_len;
-+
-+	bool use_bulk_status;
-+	u8 en_device_mask;
-+	u8 last_assigned_hw_idx;
-+	struct usb_endpoint_descriptor *bulk_out_ep;
-+	struct usb_serial_port *port_by_hw_idx[NCT_MAX_NUM_COM_DEVICES];
-+};
-+
-+struct nct_tty_port {
-+	u8 hw_idx;
-+	u8 usr;
-+	u8 hsr;
-+	u8 hcr;
-+	/*
-+	 * Flow control - stop writing data to device.
-+	 * 0: Write enable, 1: Stop writing
-+	 */
-+	bool flow_stop_wrt;
-+
-+	spinlock_t port_lock; /* Protects the port data. */
-+	bool write_urb_in_use;
-+};
-+
-+/* Functions */
-+
-+/* Read from USB control pipe */
-+static int nct_vendor_read(struct usb_interface *intf,
-+			   struct nct_vendor_cmd cmd, void *buf,
-+			   int size)
-+{
-+	struct usb_device *udev = interface_to_usbdev(intf);
-+	int ret;
-+
-+	if (size > NCT_MAX_VENDOR_READ_SIZE)
-+		return -EINVAL;
-+
-+	ret = usb_control_msg_recv(udev, 0,
-+				   NCT_VENDOR_COM_READ_REQUEST,
-+				   NCT_VENDOR_COM_READ_REQUEST_TYPE,
-+				   le16_to_cpu(cmd.val),
-+				   intf->cur_altsetting->desc.bInterfaceNumber,
-+				   buf, size, 100, GFP_KERNEL);
-+
-+	return ret;
-+}
-+
-+static int nct_vendor_write(struct usb_interface *intf,
-+			    struct nct_vendor_cmd cmd, u16 val)
-+{
-+	struct device *dev = &intf->dev;
-+	struct usb_device *udev = interface_to_usbdev(intf);
-+	__le16 le_val = cpu_to_le16(val);
-+	int ret;
-+
-+	ret = usb_control_msg_send(udev, 0,
-+				   NCT_VENDOR_COM_WRITE_REQUEST,
-+				   NCT_VENDOR_COM_WRITE_REQUEST_TYPE,
-+				   le16_to_cpu(cmd.val),
-+				   intf->cur_altsetting->desc.bInterfaceNumber,
-+				   &le_val, sizeof(le_val), 100, GFP_KERNEL);
-+	if (ret)
-+		dev_err(dev, "failed to write [%04x]: %d\n",
-+			nct_get_cmd_cmd(cmd.val), ret);
-+
-+	return ret;
-+}
-+
-+/*
-+ * Prepare write buffer by extracting data from core write FIFO and
-+ * adding header
-+ */
-+static int nct_prepare_write_buffer(struct usb_serial_port *port,
-+				    void *dest, size_t size)
-+{
-+	unsigned int count;
-+	struct nct_packet_header hdr;
-+	struct nct_tty_port *tport = usb_get_serial_port_data(port);
-+
-+	if (size <= sizeof(hdr))
-+		return 0;
-+
-+	/* Leave room for header */
-+	count = kfifo_out_locked(&port->write_fifo, dest + sizeof(hdr),
-+				 size - sizeof(hdr), &port->lock);
-+
-+	if (!count)
-+		return 0;
-+
-+	hdr.magic = NCT_HDR_MAGIC;
-+	hdr.magic2 = NCT_HDR_MAGIC2;
-+	nct_set_hdr_idx_len(&hdr, tport->hw_idx, count);
-+
-+	/*
-+	 * Copy header into buffer (use memcpy to avoid aliasing/unaligned
-+	 * access).
-+	 */
-+	memcpy(dest, &hdr, sizeof(hdr));
-+
-+	return count + sizeof(hdr);
-+}
-+
-+static u16 nct_set_baud(struct usb_interface *intf, u16 index,
-+			unsigned int cflag, bool *found)
-+{
-+	struct nct_vendor_cmd cmd;
-+	struct nct_ctrl_msg msg;
-+	u16 i;
-+	u8 spd = NCT_DEFAULT_BAUD;
-+
-+	*found = false;
-+	cmd.val = nct_build_cmd(NCT_VCOM_SET_BAUD, index);
-+	for (i = 0; i < ARRAY_SIZE(NCT_BAUD_SUP); i++) {
-+		if ((cflag & CBAUD) != NCT_BAUD_SUP[i])
-+			continue;
-+
-+		spd = i;
-+		/*
-+		 * Create control message
-+		 * Note: The NCT_VCOM_SET_BAUD only set the baud rate
-+		 */
-+		msg.val = nct_build_ctrl_msg(0, 0, 0, 0, spd);
-+		if (nct_vendor_write(intf, cmd, le16_to_cpu(msg.val)))
-+			dev_err(&intf->dev, "set index %d speed error\n",
-+				index);
-+		else
-+			*found = true;
-+
-+		break;
-+	}
-+
-+	return spd;
-+}
-+
-+static void nct_set_termios(struct tty_struct *tty,
-+			    struct usb_serial_port *port,
-+			    const struct ktermios *old)
-+{
-+	struct nct_tty_port *tport = usb_get_serial_port_data(port);
-+	struct usb_serial *serial = port->serial;
-+	struct usb_interface *intf = serial->interface;
-+	struct ktermios *termios = &tty->termios;
-+	struct nct_ctrl_msg msg;
-+	struct nct_vendor_cmd cmd;
-+	u8 stop_bit;
-+	u8 parity;
-+	u8 data_len;
-+	u8 flow;
-+	bool baud_found = false;
-+	speed_t old_baud;
-+
-+	/* Device does not support CMSPAR. */
-+	termios->c_cflag &= ~CMSPAR;
-+
-+	cmd.val = nct_build_cmd(NCT_VCOM_SET_CONFIG, tport->hw_idx);
-+
-+	/* Set stop bit */
-+	if (C_CSTOPB(tty))
-+		stop_bit = NCT_VCOM_2_STOP_BITS;
-+	else
-+		stop_bit = NCT_VCOM_1_STOP_BIT;
-+
-+	/* Set parity */
-+	if (C_PARENB(tty)) {
-+		if (C_PARODD(tty))
-+			parity = NCT_VCOM_PARITY_ODD;
-+		else
-+			parity = NCT_VCOM_PARITY_EVEN;
-+	} else {
-+		parity = NCT_VCOM_PARITY_NONE;
-+	}
-+
-+	/* Set data bit length */
-+	switch (C_CSIZE(tty)) {
-+	case CS5:
-+		data_len = NCT_VCOM_DL5;
-+		break;
-+	case CS6:
-+		data_len = NCT_VCOM_DL6;
-+		break;
-+	case CS7:
-+		data_len = NCT_VCOM_DL7;
-+		break;
-+	case CS8:
-+	default:
-+		data_len = NCT_VCOM_DL8;
-+		break;
-+	}
-+
-+	/* Set flow control */
-+	if (C_CRTSCTS(tty))
-+		flow = NCT_VCOM_RTS_CTS;
-+	else if (I_IXON(tty))
-+		flow = NCT_VCOM_XOFF;
-+	else
-+		flow = NCT_VCOM_DISABLE_FLOW_CTRL;
-+
-+	tty_port_set_cts_flow(tty->port, C_CRTSCTS(tty));
-+
-+	/* Create control message (spd=0: speed set separately via SET_BAUD) */
-+	msg.val = nct_build_ctrl_msg(stop_bit, parity, data_len, flow, 0);
-+	nct_vendor_write(intf, cmd, le16_to_cpu(msg.val));
-+
-+	/*
-+	 * Set baud rate if speed changed.
-+	 * Always call tty_encode_baud_rate() to keep kernel's baud rate
-+	 * synchronized with the device, especially during initial open
-+	 * when the device uses its default baud rate.
-+	 */
-+	if (!old || old->c_ospeed != termios->c_ospeed)
-+		nct_set_baud(intf, tport->hw_idx, termios->c_cflag, &baud_found);
-+
-+	if (baud_found) {
-+		tty_encode_baud_rate(tty, tty_get_baud_rate(tty),
-+				     tty_get_baud_rate(tty));
-+	} else {
-+		if (old && tty_termios_baud_rate(old))
-+			old_baud = tty_termios_baud_rate(old);
-+		else
-+			old_baud = 115200; /* Sync with device default */
-+
-+		tty_encode_baud_rate(tty, old_baud, old_baud);
-+	}
-+}
-+
-+static int nct_break(struct tty_struct *tty, int break_state)
-+{
-+	struct usb_serial_port *port = tty->driver_data;
-+	struct nct_tty_port *tport = usb_get_serial_port_data(port);
-+	struct usb_serial *serial = port->serial;
-+	struct usb_interface *intf = serial->interface;
-+	struct nct_vendor_cmd cmd;
-+
-+	cmd.val = nct_build_cmd(NCT_VCOM_SILENT, tport->hw_idx);
-+
-+	return nct_vendor_write(intf, cmd, 0);
-+}
-+
-+static int nct_tiocmset_helper(struct tty_struct *tty, unsigned int set,
-+			       unsigned int clear)
-+{
-+	struct usb_serial_port *port = tty->driver_data;
-+	struct nct_tty_port *tport = usb_get_serial_port_data(port);
-+	struct usb_serial *serial = port->serial;
-+	struct usb_interface *intf = serial->interface;
-+	struct nct_ctrl_msg msg;
-+	struct nct_vendor_cmd cmd;
-+	u8 hcr;
-+
-+	spin_lock_irq(&tport->port_lock);
-+	hcr = tport->hcr;
-+
-+	if (set & TIOCM_RTS)
-+		hcr |= NCT_HCR_RTS;
-+	if (set & TIOCM_DTR)
-+		hcr |= NCT_HCR_DTR;
-+	if (clear & TIOCM_RTS)
-+		hcr &= ~NCT_HCR_RTS;
-+	if (clear & TIOCM_DTR)
-+		hcr &= ~NCT_HCR_DTR;
-+
-+	tport->hcr = hcr;
-+	cmd.val = nct_build_cmd(NCT_VCOM_SET_HCR, tport->hw_idx);
-+	msg.val = cpu_to_le16(hcr);
-+	spin_unlock_irq(&tport->port_lock);
-+
-+	return nct_vendor_write(intf, cmd, le16_to_cpu(msg.val));
-+}
-+
-+static int nct_tiocmget(struct tty_struct *tty)
-+{
-+	struct usb_serial_port *port = tty->driver_data;
-+	struct nct_tty_port *tport = usb_get_serial_port_data(port);
-+	unsigned int res;
-+	u8 hcr, hsr;
-+
-+	spin_lock_irq(&tport->port_lock);
-+	hcr = tport->hcr;
-+	hsr = tport->hsr;
-+	spin_unlock_irq(&tport->port_lock);
-+	res = ((hcr & NCT_HCR_DTR) ? TIOCM_DTR : 0) |
-+	      ((hcr & NCT_HCR_RTS) ? TIOCM_RTS : 0) |
-+	      ((hsr & NCT_HSR_CTS) ? TIOCM_CTS : 0) |
-+	      ((hsr & NCT_HSR_DSR) ? TIOCM_DSR : 0) |
-+	      ((hsr & NCT_HSR_RI) ? TIOCM_RI : 0) |
-+	      ((hsr & NCT_HSR_DCD) ? TIOCM_CD : 0);
-+
-+	return res;
-+}
-+
-+static void nct_rx_throttle(struct tty_struct *tty)
-+{
-+	/* Handle RTS line for RTS/CTS flow control */
-+	if (C_CRTSCTS(tty))
-+		nct_tiocmset_helper(tty, 0, TIOCM_RTS);
-+}
-+
-+static void nct_rx_unthrottle(struct tty_struct *tty)
-+{
-+	/* Handle RTS line for RTS/CTS flow control */
-+	if (C_CRTSCTS(tty))
-+		nct_tiocmset_helper(tty, TIOCM_RTS, 0);
-+}
-+
-+static int nct_serial_write(struct tty_struct *tty,
-+			    struct usb_serial_port *port,
-+			    const unsigned char *buf,
-+			    int count)
-+{
-+	struct nct_tty_port *tport = usb_get_serial_port_data(port);
-+	unsigned int written;
-+	int ret;
-+
-+	/* Flow control */
-+	if (tty_port_cts_enabled(tty->port))
-+		if (tport->flow_stop_wrt)
-+			return 0;
-+
-+	if (!port)
-+		return -ENXIO;
-+
-+	/* Copy into core write FIFO */
-+	written = kfifo_in_locked(&port->write_fifo, buf, count, &port->lock);
-+
-+	if (written) {
-+		ret = usb_serial_generic_write_start(port, GFP_ATOMIC);
-+		if (ret && ret != -EBUSY)
-+			dev_err(&port->dev,
-+				"usb_serial_generic_write_start failed: %d\n",
-+				ret);
-+	}
-+
-+	return written;
-+}
-+
-+static unsigned int nct_write_room(struct tty_struct *tty)
-+{
-+	struct usb_serial_port *port = tty->driver_data;
-+	struct nct_tty_port *tport = usb_get_serial_port_data(port);
-+	unsigned long flags;
-+	unsigned int room;
-+
-+	spin_lock_irqsave(&tport->port_lock, flags);
-+	room = kfifo_avail(&port->write_fifo);
-+	spin_unlock_irqrestore(&tport->port_lock, flags);
-+	return room;
-+}
-+
-+static unsigned int nct_chars_in_buffer(struct tty_struct *tty)
-+{
-+	struct usb_serial_port *port = tty->driver_data;
-+	unsigned int qlen;
-+
-+	/* Get queued bytes in core write FIFO */
-+	qlen = kfifo_len(&port->write_fifo);
-+	return qlen;
-+}
-+/*
-+ *  Starts reads urb on all ports. It is to avoid potential issues caused by
-+ *  multiple ports being opened almost simultaneously.
-+ *  It must be called AFTER startup, with urbs initialized.
-+ *  Returns 0 if successful, non-zero error otherwise.
-+ */
-+static int nct_startup_device(struct usb_serial *serial)
-+{
-+	int ret;
-+	struct nct_serial *serial_priv = usb_get_serial_data(serial);
-+	struct usb_serial_port *port;
-+	unsigned long flags;
-+	bool first_open = false;
-+
-+	/* Start URBs on first open */
-+	spin_lock_irqsave(&serial_priv->serial_lock, flags);
-+	if (serial_priv->open_count++ == 0)
-+		first_open = true;
-+	spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
-+
-+	/* Only the first open submits read_urb and, if needed, interrupt_in_urb. */
-+	if (!first_open)
-+		return 0;
-+
-+	/* Start reading from bulk in endpoint */
-+	port = serial->port[0];
-+	ret = usb_submit_urb(port->read_urb, GFP_KERNEL);
-+	if (ret) {
-+		dev_err(&port->dev, "failed to submit read urb: %d\n", ret);
-+		goto err_rollback;
-+	}
-+
-+	/* For getting status from interrupt-in */
-+	if (!serial_priv->use_bulk_status) {
-+		/* Start reading from interrupt pipe */
-+		port = serial->port[0];
-+		ret = usb_submit_urb(port->interrupt_in_urb, GFP_KERNEL);
-+		if (ret) {
-+			dev_err(&port->dev,
-+				"failed to submit interrupt urb: %d\n",
-+				ret);
-+			goto err_kill_read;
-+		}
-+	}
-+
-+	return 0;
-+
-+err_kill_read:
-+	usb_kill_urb(serial->port[0]->read_urb);
-+err_rollback:
-+	spin_lock_irqsave(&serial_priv->serial_lock, flags);
-+	if (serial_priv->open_count)
-+		serial_priv->open_count--;
-+	if (!serial_priv->open_count) {
-+		serial_priv->cur_port = NULL;
-+		serial_priv->cur_len = 0;
-+	}
-+	spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
-+	return ret;
-+}
-+
-+static void nct_shutdown_device(struct usb_serial *serial)
-+{
-+	struct nct_serial *serial_priv = usb_get_serial_data(serial);
-+	unsigned long flags;
-+	bool last_close = false;
-+
-+	spin_lock_irqsave(&serial_priv->serial_lock, flags);
-+	if (serial_priv->open_count) {
-+		serial_priv->open_count--;
-+		if (!serial_priv->open_count) {
-+			last_close = true;
-+			serial_priv->cur_port = NULL;
-+			serial_priv->cur_len = 0;
-+		}
-+	}
-+	spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
-+
-+	if (!last_close)
-+		return;
-+
-+	usb_kill_urb(serial->port[0]->read_urb);
-+	if (!serial_priv->use_bulk_status)
-+		usb_kill_urb(serial->port[0]->interrupt_in_urb);
-+}
-+
-+static int nct_open(struct tty_struct *tty, struct usb_serial_port *port)
-+{
-+	struct nct_vendor_cmd cmd;
-+	struct nct_ctrl_msg msg;
-+	struct nct_tty_port *tport = usb_get_serial_port_data(port);
-+	struct usb_serial *serial = port->serial;
-+	struct usb_interface *intf = serial->interface;
-+	int ret;
-+
-+	if (!port->serial)
-+		return -ENXIO;
-+
-+	/* Be sure the device is started up */
-+	if (nct_startup_device(port->serial) != 0)
-+		return -ENXIO;
-+
-+	cmd.val = nct_build_cmd(NCT_VCOM_SET_OPEN_PORT, tport->hw_idx);
-+	msg.val = cpu_to_le16(0);
-+	ret = nct_vendor_write(intf, cmd, le16_to_cpu(msg.val));
-+	if (ret) {
-+		dev_err(&port->dev, "Failed to open port: %d\n", ret);
-+		nct_shutdown_device(serial);
-+		return ret;
-+	}
-+
-+	wake_up_interruptible(&port->port.open_wait);
-+
-+	/*
-+	 * Delay 1ms for firmware to configure hardware after opening the port.
-+	 * (Especially at high speed)
-+	 */
-+	usleep_range(1000, 2000);
-+	return 0;
-+}
-+
-+static void nct_close(struct usb_serial_port *port)
-+{
-+	struct nct_tty_port *tport = usb_get_serial_port_data(port);
-+	struct usb_serial *serial = port->serial;
-+	struct usb_interface *intf = serial->interface;
-+	struct nct_ctrl_msg msg;
-+	struct nct_vendor_cmd cmd;
-+
-+	mutex_lock(&port->serial->disc_mutex);
-+	/* If disconnected, don't send the close-command to the firmware */
-+	if (port->serial->disconnected)
-+		goto exit;
-+
-+	/* Send 'Close Port' to the device */
-+	cmd.val = nct_build_cmd(NCT_VCOM_SET_CLOSE_PORT, tport->hw_idx);
-+	msg.val = cpu_to_le16(0);
-+	nct_vendor_write(intf, cmd, le16_to_cpu(msg.val));
-+
-+exit:
-+	nct_shutdown_device(port->serial);
-+	mutex_unlock(&port->serial->disc_mutex);
-+}
-+
-+static void nct_update_status(struct usb_serial *serial, unsigned char *data)
-+{
-+	struct nct_port_status *nps = (struct nct_port_status *)data;
-+	struct usb_interface *intf = serial->interface;
-+	struct nct_serial *serial_priv = usb_get_serial_data(serial);
-+	struct nct_tty_port *tport;
-+	struct tty_struct *tty;
-+	struct usb_serial_port *port;
-+	unsigned long flags;
-+
-+	if (nps->index >= NCT_MAX_NUM_COM_DEVICES) {
-+		if (nps->index != NCT_EMPTY_PORT) /* Un-used port */
-+			dev_warn(&intf->dev, "receive wrong H/W index\n");
-+		return;
-+	}
-+	if (!(nps->hsr & (NCT_UART_STATE_MSR_MASK | NCT_HSR_CTS)))
-+		return; /* No state changes */
-+
-+	port = serial_priv->port_by_hw_idx[nps->index];
-+	if (!port)
-+		return;
-+
-+	tport = usb_get_serial_port_data(port);
-+	if (!tport)
-+		return;
-+
-+	spin_lock_irqsave(&tport->port_lock, flags);
-+	tport->usr = nps->usr;
-+	tport->hsr = nps->hsr;
-+	tport->hcr = nps->hcr;
-+	spin_unlock_irqrestore(&tport->port_lock, flags);
-+
-+	if (serial->disconnected) {
-+		dev_err(&intf->dev,
-+			"device disconnected, skip status update\n");
-+		return;
-+	}
-+
-+	tty = tty_port_tty_get(&port->port);
-+	if (!tty)
-+		return; /* The port has been closed. */
-+
-+	if (nps->hsr & NCT_UART_STATE_MSR_MASK) {
-+		if (nps->hsr & NCT_HSR_DCD) {
-+			struct tty_ldisc *ld = tty_ldisc_ref(tty);
-+
-+			if (ld) {
-+				if (ld->ops->dcd_change)
-+					ld->ops->dcd_change(tty, 0x01);
-+				tty_ldisc_deref(ld);
-+			}
-+			wake_up_interruptible(&tty->port->open_wait);
-+		}
-+	}
-+
-+	/* Flow control */
-+	if (tty_port_cts_enabled(&port->port)) {
-+		if ((nps->hsr & NCT_HSR_CTS)) {
-+			if (tport->flow_stop_wrt)
-+				tport->flow_stop_wrt = false;
-+		} else {
-+			tport->flow_stop_wrt = true;
-+		}
-+	}
-+
-+	tty_kref_put(tty);
-+}
-+
-+/*
-+ * nct_usb_serial_read - process incoming bulk-in data.
-+ *
-+ * The device multiplexes all UART ports over a single bulk-in endpoint.
-+ * Each data segment is prefixed with a 4-byte header:
-+ *
-+ *   byte 0: magic (0xa5)
-+ *   byte 1: magic2
-+ *           0x5a = data packet
-+ *           0x5b = status packet
-+ *   bytes 2-3: length and index (little-endian 16-bit)
-+ *           bits [3:0]  = port index (1-based, valid range 1-7; 0 is reserved)
-+ *           bits [15:4] = payload length in bytes
-+ *
-+ * Multiple packets for different ports may be concatenated within a
-+ * single URB. The driver allows a packet's payload to span across URB
-+ * boundaries. In that case, the driver records the remaining length (cur_len)
-+ * and target port (cur_port) to reassemble the data on subsequent URBs.
-+ *
-+ * Status packets (magic2 = 0x5b) carry an array of 4-byte per-port
-+ * status structures instead of UART data:
-+ *
-+ *   byte 0: port index (1-based; 0 = reserved, 0xff = unused entry)
-+ *   byte 1: UART status (USR)
-+ *           bit0: RX data ready
-+ *           bit1: overrun error
-+ *           bit2: parity error
-+ *           bit3: framing error
-+ *           bit4: break detected
-+ *           bit5: TX buffer empty
-+ *           bit6: TX shift register empty
-+ *           bit7: RX FIFO error
-+ *   byte 2: modem status (MSR)
-+ *           bit0: CTS change
-+ *           bit1: DSR change
-+ *           bit2: RI change
-+ *           bit3: DCD change
-+ *           bit4: CTS level
-+ *           bit5: DSR level
-+ *           bit6: RI level
-+ *           bit7: DCD level
-+ *   byte 3: modem control (MCR)
-+ *           bit0: DTR level
-+ *           bit1: RTS level
-+ */
-+static void nct_usb_serial_read(struct urb *urb)
-+{
-+	struct usb_serial_port *port = urb->context;
-+	struct usb_serial *serial = port->serial;
-+	struct usb_interface *intf = serial->interface;
-+	struct nct_serial *serial_priv = usb_get_serial_data(serial);
-+	struct nct_tty_port *tport;
-+	struct nct_packet_header *hdr = NULL;
-+	unsigned char *data = urb->transfer_buffer;
-+	int i, j;
-+	int actual_len = urb->actual_length;
-+	int len = 0;
-+	u8 hdr_idx;
-+	struct nct_port_status *nps;
-+	unsigned long flags;
-+
-+	if (!urb->actual_length)
-+		return;
-+
-+again:
-+	spin_lock_irqsave(&serial_priv->serial_lock, flags);
-+	tport = serial_priv->cur_port;
-+	if (!tport) {
-+		/*
-+		 * Handle a new data packet (i.e., it is not
-+		 * the remaining data without a header).
-+		 * The packet does not need reassembly at this point.
-+		 */
-+		for (i = 0; i < urb->actual_length; i++) {
-+			if (i + sizeof(struct nct_packet_header) >
-+			    urb->actual_length) {
-+				/* Not enough data for a header */
-+				spin_unlock_irqrestore(&serial_priv->serial_lock,
-+						       flags);
-+				return;
-+			}
-+
-+			hdr = (struct nct_packet_header *)data;
-+			/* Decode the header */
-+
-+			/*
-+			 * Status data is also transmitted via bulk-in
-+			 * pipe.
-+			 * Current FW reports a fixed 24-byte status payload.
-+			 */
-+			if (serial_priv->use_bulk_status &&
-+			    hdr->magic == NCT_HDR_MAGIC &&
-+			    hdr->magic2 == NCT_HDR_MAGIC_STATUS &&
-+			    nct_get_hdr_len(hdr) == 24 &&
-+			    actual_len >= 28) {
-+				/*
-+				 * Notice: actual_len will be decreased,
-+				 * it is equal to urb->actual_length
-+				 * only at the beginning.
-+				 */
-+
-+				/*
-+				 * Status report.
-+				 * It should be a standalone package in
-+				 * one URB.
-+				 */
-+				data += sizeof(struct nct_packet_header);
-+				actual_len -= sizeof(struct nct_packet_header);
-+
-+				nps = (struct nct_port_status *)data;
-+				if ((actual_len % sizeof(*nps)) != 0) {
-+					dev_err(&intf->dev,
-+						"bad status len: %d\n",
-+						actual_len);
-+					spin_unlock_irqrestore(
-+						&serial_priv->serial_lock,
-+						flags);
-+					return;
-+				}
-+
-+				for (j = 0; j < (actual_len / sizeof(*nps));
-+				     j++) {
-+					nct_update_status(serial,
-+							  (unsigned char *)nps);
-+					nps++;
-+				}
-+
-+				spin_unlock_irqrestore(&serial_priv->serial_lock,
-+						       flags);
-+				return;
-+			}
-+
-+			hdr_idx = nct_get_hdr_idx(hdr);
-+			if (hdr->magic == NCT_HDR_MAGIC &&
-+			    hdr->magic2 == NCT_HDR_MAGIC2 &&
-+			    hdr_idx > 0 &&
-+			    hdr_idx < NCT_MAX_NUM_COM_DEVICES &&
-+			    nct_get_hdr_len(hdr) <= 512)
-+				break;
-+
-+			data++;
-+			actual_len--;
-+			if (!actual_len) {
-+				dev_err(&intf->dev,
-+					"decode serial packet size failed\n");
-+				spin_unlock_irqrestore(&serial_priv->serial_lock,
-+						       flags);
-+				return;
-+			}
-+		}
-+		/*
-+		 * Resolve TTY port by the idx in header and ensure it is valid.
-+		 * Record it for two purposes:
-+		 *   (1) If the current packet payload is incomplete, the next URB
-+		 *       continues payload bytes without a new header.
-+		 *   (2) Route received bytes to the correct TTY port.
-+		 */
-+		port = serial_priv->port_by_hw_idx[nct_get_hdr_idx(hdr)];
-+		if (!port) {
-+			dev_err(&intf->dev,
-+				"decode serial packet index failed\n");
-+			spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
-+			return;
-+		}
-+
-+		tport = usb_get_serial_port_data(port);
-+		if (!tport) {
-+			spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
-+			return;
-+		}
-+		/*
-+		 * Calculate the data length.
-+		 * Then, check if the length specified in the header matches
-+		 * the data length. If not, it indicates that the data we
-+		 * received spans across two (or more) packets.
-+		 */
-+		actual_len -= sizeof(struct nct_packet_header);
-+		data += sizeof(struct nct_packet_header);
-+		/* actual_len: the data length of the data we got this time */
-+		if (nct_get_hdr_len(hdr) > actual_len) {
-+			/*
-+			 * It means the length specified in the header (the
-+			 * custom header) is greater than the length of the
-+			 * data we received.
-+			 * Therefore, the data received this time belongs to a
-+			 * single packet payload segment (i.e. no next header in this URB).
-+			 */
-+			len = actual_len;
-+			/*
-+			 * cur_len: Record how many data does not handle yet
-+			 */
-+			serial_priv->cur_len = nct_get_hdr_len(hdr) - len;
-+			/*
-+			 * Record the current port. When we receive the
-+			 * remaining data for this packet next time
-+			 */
-+			serial_priv->cur_port = tport;
-+		} else {
-+			/*
-+			 * The received data crosses packet boundaries (does not belong
-+			 * to the same header). We only handle data by
-+			 * the length in header. And we will handle
-+			 * another packet when 'goto "again" '.
-+			 */
-+			len = nct_get_hdr_len(hdr);
-+		}
-+	} else { /* Handling remaining data that crosses packet boundaries */
-+		if (serial_priv->cur_len > actual_len) {
-+			/*
-+			 * The unhandled part of the data exceeds the data we
-+			 * received this time. We only handle the data we
-+			 * have, expecting more data to be received later.
-+			 */
-+			len = actual_len;
-+		} else {
-+			/*
-+			 * This means the packet has been fully handled.
-+			 * Clear 'cur_port' as no additional data needs to be
-+			 * attached to the current packet.
-+			 */
-+			len = serial_priv->cur_len;
-+			serial_priv->cur_port = NULL;
-+		}
-+		serial_priv->cur_len -= len;
-+	}
-+	spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
-+	tty_insert_flip_string(&port->port, data, len);
-+	data += len;
-+	/*
-+	 * Send data to the tty device (according to the port identified above).
-+	 */
-+	tty_flip_buffer_push(&port->port);
-+	actual_len -= len;
-+
-+	/*
-+	 * It means that the data we received this time contains two or
-+	 * more data packets, so it needs to continue processing the next
-+	 * data packets.
-+	 */
-+	if (actual_len > 0)
-+		goto again;
-+}
-+
-+static void nct_process_read_bulk(struct urb *urb)
-+{
-+	struct usb_serial_port *port =  urb->context;
-+	struct nct_serial *serial_priv = usb_get_serial_data(port->serial);
-+	bool stopped = false;
-+	int status = urb->status;
-+	int ret;
-+
-+	switch (status) {
-+	case 0:
-+		nct_usb_serial_read(urb);
-+		break;
-+	case -ENOENT:
-+	case -ECONNRESET:
-+	case -ESHUTDOWN:
-+		if (!(status == -ENOENT
-+		      && serial_priv
-+		      && serial_priv->open_count
-+		      && !port->serial->disconnected)) {
-+			dev_dbg(&port->dev, "urb halted, status=%d\n", status);
-+			stopped = true;
-+		}
-+		break;
-+	case -EPIPE:
-+		dev_err(&port->dev, "urb stalled (EPIPE)\n");
-+		stopped = true;
-+		break;
-+	default:
-+		dev_dbg(&port->dev, "nonzero urb status: %d\n", status);
-+		break;
-+	}
-+
-+	if (stopped)
-+		return;
-+
-+	ret = usb_submit_urb(urb, GFP_ATOMIC);
-+	if (ret != 0 && ret != -EPERM)
-+		dev_err(&port->dev,
-+			"failed resubmitting urb, ret=%d\n",
-+			ret);
-+}
-+
-+static void nct_read_bulk_callback(struct urb *urb)
-+{
-+	struct usb_serial_port *port = urb->context;
-+
-+	/* Do not resubmit if the urb is being killed */
-+	if (urb->status == -ESHUTDOWN)
-+		return;
-+
-+	if (!port || !port->serial)
-+		return;
-+
-+	if (port->serial->disconnected)
-+		return;
-+
-+	/* Processing data */
-+	nct_process_read_bulk(urb);
-+}
-+
-+static int nct_calc_num_ports(struct usb_serial *serial,
-+			      struct usb_serial_endpoints *epds)
-+{
-+	struct nct_vendor_cmd cmd;
-+	u8 buf[8];
-+	struct nct_serial *serial_priv = usb_get_serial_data(serial);
-+	struct usb_interface *intf = serial->interface;
-+	struct usb_host_interface *iface_desc = intf->cur_altsetting;
-+	struct usb_endpoint_descriptor *bulk_in = NULL;
-+	struct usb_endpoint_descriptor *bulk_out = NULL;
-+	struct usb_endpoint_descriptor *int_in = NULL;
-+	int ret;
-+	int i;
-+	int num_ports;
-+
-+	/* Send init command */
-+	cmd.val = nct_build_cmd(NCT_VCOM_SET_INIT, NCT_VCOM_INDEX_GLOBAL);
-+	ret = nct_vendor_write(intf, cmd, 0);
-+	if (ret) {
-+		dev_err(&intf->dev, "set COM init error\n");
-+		return ret;
-+	}
-+
-+	/* Get ports' index supported by the device(/FW) */
-+	cmd.val = nct_build_cmd(NCT_VCOM_GET_PORTS_SUPPORT, NCT_VCOM_INDEX_GLOBAL);
-+	ret = nct_vendor_read(intf, cmd, buf, 1);
-+	if (ret) {
-+		dev_err(&intf->dev,
-+			"get COM port index error\n");
-+		return ret;
-+	}
-+
-+	if (!serial_priv) {
-+		serial_priv = kzalloc_obj(*serial_priv, GFP_KERNEL);
-+		if (!serial_priv)
-+			return -ENOMEM;
-+		spin_lock_init(&serial_priv->serial_lock);
-+		usb_set_serial_data(serial, serial_priv);
-+	}
-+	serial_priv->en_device_mask = buf[0];
-+	serial_priv->last_assigned_hw_idx = 0; /* Note: hw_idx is based on 1 */
-+
-+	for (i = 0, num_ports = 0; i < NCT_MAX_NUM_COM_DEVICES; i++) {
-+		if (!(buf[0] & BIT(i)))
-+			continue;	/* The port is disabled */
-+
-+		num_ports++;
-+	}
-+
-+	for (i = 0; i < iface_desc->desc.bNumEndpoints; i++) {
-+		struct usb_endpoint_descriptor *endpoint =
-+			&iface_desc->endpoint[i].desc;
-+
-+		if (!bulk_in && usb_endpoint_is_bulk_in(endpoint))
-+			bulk_in = endpoint;
-+		if (!bulk_out && usb_endpoint_is_bulk_out(endpoint))
-+			bulk_out = endpoint;
-+		if (!int_in && usb_endpoint_is_int_in(endpoint))
-+			int_in = endpoint;
-+	}
-+
-+	if (!bulk_in || !bulk_out)
-+		return -ENODEV;
-+
-+	for (i = 0; i < num_ports; i++) {
-+		epds->bulk_in[i] = bulk_in;
-+		epds->bulk_out[i] = bulk_out;
-+		if (int_in && i == 0)
-+			epds->interrupt_in[i] = int_in;
-+	}
-+	epds->num_bulk_out = num_ports;
-+
-+	return num_ports;
-+}
-+
-+static int nct_attach(struct usb_serial *serial)
-+{
-+	struct nct_serial *serial_priv = usb_get_serial_data(serial);
-+
-+	if (!serial_priv)
-+		return -ENODEV;
-+
-+	serial_priv->use_bulk_status = true;
-+	if (serial->port[0] && serial->port[0]->interrupt_in_urb)
-+		serial_priv->use_bulk_status = false;
-+
-+	return 0;
-+}
-+
-+static int nct_port_probe(struct usb_serial_port *port)
-+{
-+	struct nct_tty_port *tport;
-+	struct usb_serial *serial = port->serial;
-+	struct nct_serial *serial_priv = usb_get_serial_data(serial);
-+	unsigned long flags;
-+	int i, ret;
-+	unsigned int fifo_state;
-+
-+	tport = kzalloc_obj(*tport, GFP_KERNEL);
-+	if (!tport)
-+		return -ENOMEM;
-+
-+	/* Assign hw_idx */
-+	spin_lock_init(&tport->port_lock);
-+
-+	spin_lock_irqsave(&serial_priv->serial_lock, flags);
-+	for (i = serial_priv->last_assigned_hw_idx + 1;
-+	     i < NCT_MAX_NUM_COM_DEVICES; i++) {
-+		if ((serial_priv->en_device_mask & (1 << i)) == 0)
-+			continue; /* The port is disabled */
-+
-+		tport->hw_idx = i;
-+		serial_priv->last_assigned_hw_idx = i;
-+		break;
-+	}
-+	spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
-+
-+	usb_set_serial_port_data(port, tport);
-+
-+	spin_lock_irqsave(&serial_priv->serial_lock, flags);
-+	serial_priv->port_by_hw_idx[tport->hw_idx] = port;
-+	spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
-+
-+	fifo_state = kfifo_initialized(&port->write_fifo);
-+
-+	/*
-+	 * Keep the FIFO if it is already initialized.
-+	 */
-+	if (fifo_state)
-+		return 0;
-+	ret = kfifo_alloc(&port->write_fifo, NCT_WRITE_FIFO_SIZE, GFP_KERNEL);
-+	if (ret) {
-+		kfree(tport);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void nct_interrupt_in_callback(struct urb *urb)
-+{
-+	struct usb_serial_port *port = urb->context;
-+	int status = urb->status;
-+	struct usb_serial *serial = port->serial;
-+	unsigned char *data = urb->transfer_buffer;
-+	int retval;
-+	int i;
-+	int actual_len = urb->actual_length;
-+	struct nct_port_status *nps;
-+
-+	switch (status) {
-+	case 0:
-+		/* Success */
-+		if ((actual_len % sizeof(*nps)) != 0)
-+			return;
-+
-+		nps = (struct nct_port_status *)data;
-+		for (i = 0; i < (actual_len / sizeof(*nps)); i++) {
-+			nct_update_status(serial, (unsigned char *)nps);
-+			nps++;
-+		}
-+		break;
-+
-+	case -ECONNRESET:
-+	case -ENOENT:
-+	case -ESHUTDOWN:
-+		/* This urb is terminated, clean up */
-+		return;
-+	default:
-+		break;
-+	}
-+	retval = usb_submit_urb(urb, GFP_ATOMIC);
-+	if (retval)
-+		dev_err(&port->dev, "submit intr URB failed, ret=%d\n",
-+			retval);
-+}
-+
-+static void nct_disconnect(struct usb_serial *serial)
-+{
-+	struct nct_serial *serial_priv = usb_get_serial_data(serial);
-+	unsigned long flags;
-+
-+	/* Reset status */
-+	spin_lock_irqsave(&serial_priv->serial_lock, flags);
-+	serial_priv->open_count = 0;
-+	serial_priv->cur_port = NULL;
-+	serial_priv->cur_len = 0;
-+	spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
-+
-+}
-+
-+static void nct_port_remove(struct usb_serial_port *port)
-+{
-+	struct nct_tty_port *priv = usb_get_serial_port_data(port);
-+	struct nct_serial *serial_priv = usb_get_serial_data(port->serial);
-+	unsigned long flags;
-+
-+	if (priv) {
-+		spin_lock_irqsave(&serial_priv->serial_lock, flags);
-+		if (priv->hw_idx < NCT_MAX_NUM_COM_DEVICES)
-+			serial_priv->port_by_hw_idx[priv->hw_idx] = NULL;
-+		spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
-+	}
-+	kfree(priv);
-+}
-+
-+static void nct_release(struct usb_serial *serial)
-+{
-+	struct nct_serial *serial_priv;
-+
-+	serial_priv = usb_get_serial_data(serial);
-+	kfree(serial_priv);
-+}
-+
-+static int nct_suspend(struct usb_serial *serial, pm_message_t message)
-+{
-+	struct nct_serial *serial_priv = usb_get_serial_data(serial);
-+	int i;
-+
-+	/* Stop all URBs */
-+	usb_kill_urb(serial->port[0]->read_urb);
-+	for (i = 0; i < serial->type->num_ports; i++)
-+		usb_kill_urb(serial->port[i]->write_urb);
-+
-+	if (!serial_priv->use_bulk_status)
-+		usb_kill_urb(serial->port[0]->interrupt_in_urb);
-+
-+	return 0;
-+}
-+
-+static int nct_resume(struct usb_serial *serial)
-+{
-+	struct nct_serial *serial_priv = usb_get_serial_data(serial);
-+	struct usb_interface *intf = serial->interface;
-+	unsigned long flags;
-+	int ret;
-+
-+	/* Reset driver internal state */
-+	spin_lock_irqsave(&serial_priv->serial_lock, flags);
-+	serial_priv->cur_port = NULL;
-+	serial_priv->cur_len = 0;
-+	spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
-+
-+	/* Resubmit URBs */
-+	if (!serial_priv->open_count)
-+		return 0;
-+
-+	ret = usb_submit_urb(serial->port[0]->read_urb, GFP_KERNEL);
-+	if (ret)
-+		dev_err(&intf->dev, "submit read URB failed, ret=%d\n",
-+			ret);
-+
-+	if (!serial_priv->use_bulk_status) {
-+		ret = usb_submit_urb(serial->port[0]->interrupt_in_urb,
-+				     GFP_KERNEL);
-+		if (ret)
-+			dev_err(&intf->dev,
-+				"submit interrupt URB failed, ret=%d\n",
-+				ret);
-+	}
-+
-+	return 0;
-+}
-+
-+static struct usb_serial_driver nct_usb_serial_device = {
-+	.driver	= {
-+		.name =		"nct_mtuart",
-+	},
-+	.description =		"Nuvoton USB to serial adapter",
-+	.id_table =		id_table,
-+	.num_bulk_in =		1,
-+	.num_bulk_out =		1,
-+	.open =			nct_open,
-+	.close =		nct_close,
-+	.write =		nct_serial_write,
-+	.write_room =		nct_write_room,
-+	.write_bulk_callback =	usb_serial_generic_write_bulk_callback,
-+	.prepare_write_buffer =	nct_prepare_write_buffer,
-+	.read_bulk_callback =	nct_read_bulk_callback,
-+	.read_int_callback =	nct_interrupt_in_callback,
-+	.chars_in_buffer =	nct_chars_in_buffer,
-+	.throttle =		nct_rx_throttle,
-+	.unthrottle =		nct_rx_unthrottle,
-+	.attach =		nct_attach,
-+	.calc_num_ports =	nct_calc_num_ports,
-+	.set_termios =		nct_set_termios,
-+	.break_ctl =		nct_break,
-+	.tiocmget =		nct_tiocmget,
-+	.tiocmset =		nct_tiocmset_helper,
-+	.disconnect =		nct_disconnect,
-+	.release =		nct_release,
-+	.port_probe =		nct_port_probe,
-+	.port_remove =		nct_port_remove,
-+	.suspend =		nct_suspend,
-+	.resume =		nct_resume,
-+};
-+
-+static struct usb_serial_driver * const nct_serial_drivers[] = {
-+	&nct_usb_serial_device, NULL
-+};
-+
-+module_usb_serial_driver(nct_serial_drivers, id_table);
-+MODULE_DESCRIPTION("Nuvoton USB to serial adaptor driver");
-+MODULE_AUTHOR("Sheng-Yuan Huang <syhuang3@nuvoton.com>");
-+MODULE_LICENSE("GPL v2");
-+
--- 
-2.43.0
-
+Pg0KPk9uIDI2LTAzLTAzIDA3OjM0OjU0LCBQYXdlbCBMYXN6Y3phayB3cm90ZToNCj4+IFtTb21l
+IHBlb3BsZSB3aG8gcmVjZWl2ZWQgdGhpcyBtZXNzYWdlIGRvbid0IG9mdGVuIGdldCBlbWFpbCBm
+cm9tDQo+cGF3ZWxsQGNhZGVuY2UuY29tLiBMZWFybiB3aHkgdGhpcyBpcyBpbXBvcnRhbnQgYXQN
+Cj5odHRwczovL3VybGRlZmVuc2UuY29tL3YzL19faHR0cHM6Ly9ha2EubXMvTGVhcm5BYm91dFNl
+bmRlcklkZW50aWZpY2F0aW9uX187IQ0KPiFFSHNjbVMxeWdpVTFsQSFBTVhDb2tRb3B6aGU3ems2
+a0tQRmVMTHAtDQo+eXVoMWlzNnhhVV9xZTU2aVhMWVY5ajViRVZfalVPVjIzaVUwN0oyVk12VVZm
+ODlMaFI2MEFLUEhlcUIkICBdDQo+Pg0KPj4gRVhURVJOQUwgRU1BSUwNCj4+DQo+PiA+DQo+PiA+
+SGkgUGF3ZWwsDQo+PiA+DQo+PiA+VGhlIENhZGVuY2UgVVNCU1NQIChDRE5TUCkgY29udHJvbGxl
+ciB3YXMgcHJldmlvdXNseSBvbmx5IGFjY2Vzc2libGUNCj4+ID50aHJvdWdoIFBDSSwgY291cGxp
+bmcgdGhlIGdhZGdldCBkcml2ZXIgd2l0aCB0aGUgUENJIGdsdWUgbGF5ZXIgaW50byBhIHNpbmds
+ZQ0KPj4gPm1vbm9saXRoaWMgbW9kdWxlIChjZG5zcC11ZGMtcGNpKS4gVGhpcyBwcmV2ZW50ZWQg
+dXNpbmcgdGhlIENETlNQIElQIG9uDQo+PiA+U29DL3BsYXRmb3JtIGRlc2lnbnMgdGhhdCBleHBv
+c2UgdGhlIGNvbnRyb2xsZXIgdGhyb3VnaCBkZXZpY2UgdHJlZSwgZWcsIENJWA0KPj4gPlNreTEg
+U29DLg0KPj4gPg0KPj4gPkluIHRoaXMgc2VyaWVzLCBpdCByZXN0cnVjdHVyZXMgdGhlIGRyaXZl
+ciB0byBkZWNvdXBsZSB0aGUgQ0ROU1AgZ2FkZ2V0IGZyb20NCj4+ID5QQ0ksIGFuZCByZWZhY3Rv
+ciBjZG5zcC1wY2kuYyBpbnRvIGEgdGhpbiBQQ0ktdG8tcGxhdGZvcm0gd3JhcHBlciAoc2ltaWxh
+ciB0bw0KPj4gPmNkbnMzLXBjaS13cmFwLmMpIHRoYXQgcmVnaXN0ZXJzIGEgcGxhdGZvcm0gZGV2
+aWNlIGFuZCBwYXNzZXMgUENJIHJlc291cmNlcw0KPj4gPmFuZCBwbGF0Zm9ybSBkYXRhIHRvIHRo
+ZSBjb21tb24gcGxhdGZvcm0gZHJpdmVyLiBTbywgcGxlYXNlIGhlbHAgdGVzdCBpdCBpbg0KPj4g
+PnlvdXIgcGxhdGZvcm0uDQo+PiA+DQo+PiA+VGhlIGNoYW5nZXMgYXJlIHRlc3RlZCB3aXRoIHJh
+bmRvbSBjb25maWd1cmF0aW9uIGNvbWJpbmF0aW9uIHRlc3RzLg0KPj4gPg0KPj4gPj09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KPj4g
+PkFMTCBURVNUUyBDT01QTEVURS4gU3VtbWFyeToNCj4+ID49PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCj4+ID5TdGFydGluZyBjZG5z
+MyBjb25maWcgY29tYmluYXRpb24gdGVzdHMuLi4NCj4+ID5UaW1lc3RhbXA6IDIwMjblubQgMDPm
+nIggMDLml6Ug5pif5pyf5LiAIDA5OjM0OjQ3IENTVA0KPj4gPg0KPj4gPlBBU1M6IGFsbC1idWls
+dGluIChTVVBQT1JUPXkgQ0ROUzM9eSBHQURHRVQ9eSBIT1NUPXkgQ0ROU1A9eQ0KPj4gPkNETlNQ
+X0c9eSBDRE5TUF9IPXkpDQo+PiA+UEFTUzogc3VwcG9ydC15X2NkbnMzLW1fZ2FkZ2V0LXkgKFNV
+UFBPUlQ9eSBDRE5TMz1tIEdBREdFVD15DQo+PiA+SE9TVD15IENETlNQPXkgQ0ROU1BfRz15IENE
+TlNQX0g9eSkNCj4+ID5QQVNTOiBzdXBwb3J0LXlfY2RuczMtbV9nYWRnZXQtbiAoU1VQUE9SVD15
+IENETlMzPW0gR0FER0VUPW4NCj4+ID5IT1NUPXkgQ0ROU1A9eSBDRE5TUF9HPXkgQ0ROU1BfSD15
+KQ0KPj4gPlBBU1M6IHN1cHBvcnQteV9jZG5zcC1tX2dhZGdldC15IChTVVBQT1JUPXkgQ0ROUzM9
+eSBHQURHRVQ9eSBIT1NUPXkNCj4+ID5DRE5TUD1tIENETlNQX0c9eSBDRE5TUF9IPXkpDQo+PiA+
+UEFTUzogYWxsLW1vZHVsZSAoU1VQUE9SVD1tIENETlMzPW0gR0FER0VUPXkgSE9TVD15IENETlNQ
+PW0NCj4+ID5DRE5TUF9HPXkgQ0ROU1BfSD15KQ0KPj4gPlBBU1M6IG5vLWNkbnMzIChTVVBQT1JU
+PXkgQ0ROUzM9biBHQURHRVQ9biBIT1NUPW4gQ0ROU1A9eQ0KPj4gPkNETlNQX0c9eSBDRE5TUF9I
+PXkpDQo+PiA+UEFTUzogbm8tZ2FkZ2V0IChTVVBQT1JUPXkgQ0ROUzM9eSBHQURHRVQ9biBIT1NU
+PXkgQ0ROU1A9eQ0KPj4gPkNETlNQX0c9biBDRE5TUF9IPXkpDQo+PiA+UEFTUzogc3VwcG9ydC15
+X2JvdGgtbV9nYWRnZXQteSAoU1VQUE9SVD15IENETlMzPW0gR0FER0VUPXkgSE9TVD15DQo+PiA+
+Q0ROU1A9bSBDRE5TUF9HPXkgQ0ROU1BfSD15KQ0KPj4gPlBBU1M6IG1pbmltYWwtbW9kdWxlIChT
+VVBQT1JUPW0gQ0ROUzM9bSBHQURHRVQ9biBIT1NUPW4gQ0ROU1A9bQ0KPj4gPkNETlNQX0c9biBD
+RE5TUF9IPW4pDQo+PiA+DQo+PiA+VGhpcyBwYXRjaCB3YXMgZGV2ZWxvcGVkIHdpdGggYXNzaXN0
+YW5jZSBmcm9tIEFudGhyb3BpYyBDbGF1ZGUgT3B1cyA0LjYuDQo+PiA+DQo+Pg0KPj4gSSBjYW4g
+Y29tcGlsZSB0aGUga2VybmVsIGJ1dCB3aGVuIEkgdHJ5IHRvIGluc3RhbGwgbW9kdWxlcyB3aXRo
+DQo+PiBtYWtlIG1vZHVsZXNfaW5zdGFsbCBJIGdldCBlcnJvcjoNCj4+DQo+PiBERVBNT0QgIC9s
+aWIvbW9kdWxlcy83LjAuMC1yYzEtbmV3LXBjaS1wbGF0LXN1cHBvcnQtbmV4dC0yMDI2MDIyNysN
+Cj4+IGRlcG1vZDogRVJST1I6IEN5Y2xlIGRldGVjdGVkOiBjZG5zX3VzYl9jb21tb24gLT4gY2Ru
+c3AgLT4NCj5jZG5zX3VzYl9jb21tb24NCj4+IGRlcG1vZDogRVJST1I6IEN5Y2xlIGRldGVjdGVk
+OiB1ZGNfY29yZQ0KPj4gZGVwbW9kOiBFUlJPUjogRm91bmQgMiBtb2R1bGVzIGluIGRlcGVuZGVu
+Y3kgY3ljbGVzIQ0KPj4gbWFrZVsyXTogKioqIFtzY3JpcHRzL01ha2VmaWxlLm1vZGluc3Q6MTMy
+OiBkZXBtb2RdIEVycm9yIDENCj4+DQo+PiBJdCBvY2N1cnMgZXZlbiB3aXRoIG1pbmltYWwgY29u
+ZmlndXJhdGlvbjoNCj4+IENPTkZJR19VU0JfQ0ROU19TVVBQT1JUPW0NCj4+ICMgQ09ORklHX1VT
+Ql9DRE5TMyBpcyBub3Qgc2V0DQo+PiBDT05GSUdfVVNCX0NETlNQPW0NCj4+IENPTkZJR19VU0Jf
+Q0ROU1BfR0FER0VUPXkNCj4+DQo+DQo+VGhhbmtzIGZvciB0ZXN0aW5nLiBJdCBuZWVkcyB0byBs
+ZXQgY2RuczMocCkgcGxhdGZvcm0gZHJpdmVyIGFzDQo+c3RhbmRhbG9uZSBtb2R1bGUgdG8gZml4
+IGl0LiBXb3VsZCB5b3UgcGxlYXNlIHRyeSBiZWxvdyBmaXggb24gdG9wDQo+b2YgbXkgcGF0Y2gg
+c2V0Og0KPg0KPmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9jZG5zMy9NYWtlZmlsZSBiL2RyaXZl
+cnMvdXNiL2NkbnMzL01ha2VmaWxlDQo+aW5kZXggMGU5YjIwZTc5OWQwLi42MzQ4NGYxNDViYjkg
+MTAwNjQ0DQo+LS0tIGEvZHJpdmVycy91c2IvY2RuczMvTWFrZWZpbGUNCj4rKysgYi9kcml2ZXJz
+L3VzYi9jZG5zMy9NYWtlZmlsZQ0KPkBAIC0zLDEyICszLDE0IEBADQo+IENGTEFHU19jZG5zMy10
+cmFjZS5vCQkJCTo9IC1JJChzcmMpDQo+IENGTEFHU19jZG5zcC10cmFjZS5vCQkJCTo9IC1JJChz
+cmMpDQo+DQo+LWNkbnMtdXNiLWNvbW1vbi15CQkJCTo9IGNvcmUubyBkcmQubyBjZG5zMy1wbGF0
+Lm8NCj4rY2Rucy11c2ItY29tbW9uLXkJCQkJOj0gY29yZS5vIGRyZC5vDQo+DQo+IGlmZXEgKCQo
+Q09ORklHX1VTQiksbSkNCj4gb2JqLW0JCQkJCQkrPSBjZG5zLXVzYi1jb21tb24ubw0KPitvYmot
+bQkJCQkJCSs9IGNkbnMzLXBsYXQubw0KPiBlbHNlDQo+IG9iai0kKENPTkZJR19VU0JfQ0ROU19T
+VVBQT1JUKQkJCSs9IGNkbnMtdXNiLWNvbW1vbi5vDQo+K29iai0kKENPTkZJR19VU0JfQ0ROU19T
+VVBQT1JUKQkJCSs9IGNkbnMzLXBsYXQubw0KPiBlbmRpZg0KPg0KPiBjZG5zLXVzYi1jb21tb24t
+JChDT05GSUdfVVNCX0NETlNfSE9TVCkgCSs9IGhvc3Qubw0KPg0KDQpXaXRoIHRoaXMgZml4LCB0
+aGUgbW9kdWxlcyBpbnN0YWxsYXRpb24gd29ya3MgY29ycmVjdGx5Lg0KDQpJIGhhdmUgYW4gYWRk
+aXRpb25hbCBjb21tZW50IHJlZ2FyZGluZyB0aGUgZ3JvdXBpbmcgb2YgVVNCU1NQIGFuZCBDRE5T
+Mw0Kb3B0aW9ucy4gQ3VycmVudGx5LCB0aGV5IGFyZSBub3QgZ3JvdXBlZCB0b2dldGhlciBpbiBt
+ZW51Y29uZmlnLA0Kd2hpY2ggbG9va3MgYSBiaXQgdW50aWR5LiANCkl0IG1pZ2h0IGJlIGJldHRl
+ciB0byBtb3ZlIHNvbWUgb2YgdGhlIEtjb25maWcgY29uZmlndXJhdGlvbiBoaWdoZXIgdXANCnRv
+IGVuc3VyZSB0aGV5IGFyZSBwcm9wZXJseSBncm91cGVkIGluIHRoZSBtZW51Lg0KDQpSZWdhcmRz
+DQpQYXdlbA0KDQo+QmVzaWRlcywgd291bGQgeW91IHBsZWFzZSBjb21tZW50IFsxXSwgdGhlIGtl
+eSBwb2ludCBpcyBjb3VsZCB3ZQ0KPmtlZXAgb25lIHBsYXRmb3JtIGRyaXZlciB3aXRoIG9uZSBj
+b21wYXRpYmxlIHN0cmluZywgYW5kIGNkbnMzIG9yIGNkbnNwDQo+cGxhdGZvcm0gaXMgZGVjaWRl
+ZCBhdCBydW50aW1lPw0KPg0KPlsxXQ0KPmh0dHBzOi8vdXJsZGVmZW5zZS5jb20vdjMvX19odHRw
+czovL3d3dy5zcGluaWNzLm5ldC9saXN0cy9rZXJuZWwvbXNnNjA3MjQ4MC4NCj5odG1sX187ISFF
+SHNjbVMxeWdpVTFsQSFBTVhDb2tRb3B6aGU3ems2a0tQRmVMTHAtDQo+eXVoMWlzNnhhVV9xZTU2
+aVhMWVY5ajViRVZfalVPVjIzaVUwN0oyVk12VVZmODlMaFI2MERDTWJCeHokDQo+DQo+LS0NCj4N
+Cj5CZXN0IHJlZ2FyZHMsDQo+UGV0ZXINCg==
 
