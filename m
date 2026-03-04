@@ -1,96 +1,87 @@
-Return-Path: <linux-usb+bounces-33989-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33990-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mK5bOjVYqGk5tgAAu9opvQ
-	(envelope-from <linux-usb+bounces-33989-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 17:05:09 +0100
+	id MEvzLOVbqGmZtgAAu9opvQ
+	(envelope-from <linux-usb+bounces-33990-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 17:20:53 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55751203AAC
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 17:05:09 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B0122041B1
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 17:20:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E65463024B16
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 15:58:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C0ABC31E9A07
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 15:58:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87253359A91;
-	Wed,  4 Mar 2026 15:58:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F282835B63B;
+	Wed,  4 Mar 2026 15:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PlLIigVp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UgDpCbj/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20C4D23D7E6
-	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 15:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8917935B12B
+	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 15:58:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772639888; cv=none; b=OWVge2ak5Uip0TR/o1cFju0NSG7GYGXHGou3cD9UkKhMJoL1N3TPeih+qkHFkTMckEqqE7qRT/6afAHDz4yxhKLpjcz6oThYoySDP43eJhIReHQlbt2BEVPC+ASszL6zZcud2O8w+Udw+OrLCns3yxaPZYbD4yArm1EI59RN+Q8=
+	t=1772639904; cv=none; b=kBv0riqkRkCVkeqbaeAc4NgpFfBEZbX3yoemimgieqdwU5NsTsKGg2rQ9ntitz23l5i7hRoKfgb0RBmNrjwqfAukSrCZUaxpjItuixWovvF1zeQThg3ZRFBueG5gwLReDAu34ryCaMh+Tgo8yMq1eRUGKX+EvomKBubFTRJKcl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772639888; c=relaxed/simple;
-	bh=mPXwZWa4eHz0YL3YTSq6W6+iPPLg7SeIK3t2yr84HCg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Zrf2VyFyrksDtz4nciVu86XCNNBW5JXx0VNcFub2MAy4auKOooN4YVWG36bufWksOEWEh0OzPgpMIs0zTOa944Dpp/ur7h9r25qf1KZJGUdPDxDgMktF9ij3gIE/a+gIaB+BYR5HYOKvTRhKpS6iGvdBbh+cnzbfEZD1GF5IiWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PlLIigVp; arc=none smtp.client-ip=209.85.221.47
+	s=arc-20240116; t=1772639904; c=relaxed/simple;
+	bh=MpMb9Xcs4/CrTop1yaufH8JVWEJ4IiYczfsYxp0w4Qg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e7Y7KepJUnpKoV+KdkF+p+nU29ZbOo/rWrKFgSf1BLjy8eaIVTg3PcsGFJWq1Ee89nJoUNaWkmVI7ogi+CKS3sFNU+gazRq35Xr3dTUC0kIWn+L1I7jqpeBTEZEyJ5NpxVUdTNiN0JZaNdhbeaMTLRX398dIqRuWkJVbZHHG0AA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UgDpCbj/; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-439baf33150so2580503f8f.0
-        for <linux-usb@vger.kernel.org>; Wed, 04 Mar 2026 07:58:05 -0800 (PST)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8296dabef74so977066b3a.1
+        for <linux-usb@vger.kernel.org>; Wed, 04 Mar 2026 07:58:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772639884; x=1773244684; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772639903; x=1773244703; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9+/LHtNh7an4h28r1sY/9YG7bYLPolTGox4UZl5BWIM=;
-        b=PlLIigVpWDllFdvaVf4UYeD1oAu8eFR3DGBgb28h9rLwEOnkaaJiScO/BJ/L3ibjWB
-         W9MoWXxe6uzf+TM4MfBLwuPhan0jK3/gH2885fctsAjvWqxzDYIJr+9NwFKZwKKUGDPW
-         O1PRU/KugGG//QPeHgFFEsQN+6h/vwEW3+HetKLPk+GiFIJRoJNT7rz7zbO5fepBCjwo
-         oVtGy+CQvQ5zJaetmoYCpxsJJcwXs/HtBou8e8FRTJ0YOYBQElW8y2iWLiB3pHGiVXhF
-         p5NbqS3vT1WJy56gbQm63t1oZI0w0avFcGWlb+a/lOz/5orVW899hL7UwOm9nxxkMeZF
-         DG7A==
+        bh=aOnCrhdJegN14Pwp5FsJabv2Wi4xLhwtkHY2ui0eSo0=;
+        b=UgDpCbj/WEK1OPynkrqQyq3A5N+zhmyXTtRQ1Ojbasq9Pc1AKlgmjs0OTc8MFou7aC
+         8/EA/EV1R9H9g/NKh/JoLSrrHp1qBpI33ciZrw1h+Yk1e2JlPCIzNBLSuLx7zkDUxbeM
+         aHLUeJdXviuVSKh9EFVikJ19s4/XeBvatzGPNksyY8Qk534fISwIlqzcmLGw0/usOhdc
+         Sd/MWcp58jm62WWFMkm6kBKkngrpl5PNty7Js8lUWD64SCdQxgsB1tsLa7sh4VB07h3p
+         p/eZiLCO8WqRCIkrKtv+YmSaAeYWjJYXnuNP9OjLI5rz2EmOQ45+O9vIYqWZMUsGM6sm
+         X4Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772639884; x=1773244684;
+        d=1e100.net; s=20230601; t=1772639903; x=1773244703;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9+/LHtNh7an4h28r1sY/9YG7bYLPolTGox4UZl5BWIM=;
-        b=g9rgK/3Usos2mGj0ywERb7JDdRF7dFYAbNV9NOLbTrC/m4mmgKtMw0VFJVTltT8C5w
-         u8lUYk1BxZZvucGj42fyKusuEgeSpgk4vgcaan+2+CV5d7hnLG7Boo2hXCXW8sjaAOsZ
-         E64AHoWwaaVjeRPfwogB4u8KRFSm51nkqPgMQIQzTFShymyDgTCcttZzgC+GmmQmNvrg
-         Q8A7Bz3N2yY3QaZ+6artdTvzDfKKr1FAGgFr06CCuHVm4mS5EJMs735NvvLdEeGkfKTD
-         JEU0roPf/Li3N15DvCXOY4pXeRS5bZ7YLztictbVt4cwk0es6FZaeTEGc0Y+xEbCWkzV
-         bC5w==
-X-Gm-Message-State: AOJu0YyqCPj59DljNSJcc4/6GhpYUj6ry/9eKDdntJoHabaVDGjuH8H2
-	z5oFxbsbClt3eLlFNFGlRBwykOffs7QdaSOdnVGFEkQQ10mLuJaf54i4
-X-Gm-Gg: ATEYQzyjoudjojdzaonYUNbCmbO8TUacTgcjvFiEyYtywKOvuaCSsRJoUZ477ggPZcP
-	OktpVl5C/Qg+Bo7yM7bGZn8Vk254mK4ohC0moYVLCIzlB1+LYw03pUVQiwJMbon/DX7aoRadtFg
-	lN2IgfI8WzuWrZ+nV0asWDny4L6PG/JW96qfQXPHFc6dXZrQH7zrZWWt1zZ5kqIn9l0HI3snNzA
-	r9HzKiS8BGF8856o8kpETqRmJb0F9MIv/tlPbRqWt6fhixdOWpbbjxyWAsj86wqRr3Qv+Ak/IOj
-	DHMibHbGc8oPKRjjYxeZ5mtQIQyhrJ3wAjbX39WjlnTaKt5kONbyiuJc89W8TaR7IZktczAKpu8
-	xQuRpYsowRq8TG60PM8fRyOeykhZbmJSPaEOwifn0xARFaMJk2Z8s+4kb+/a8r5oUbJ2KwULI8q
-	7sEfMcKRMoAZzPcVOluPZTcHfH8/KRIA9m5w==
-X-Received: by 2002:a05:6000:2302:b0:439:bb42:dbde with SMTP id ffacd0b85a97d-439c8ad48dfmr4505539f8f.23.1772639884340;
-        Wed, 04 Mar 2026 07:58:04 -0800 (PST)
-Received: from fedora-dev ([2a01:5a8:304:153c:d983:1bac:a686:ee59])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439abdf5430sm33027380f8f.5.2026.03.04.07.58.03
+        bh=aOnCrhdJegN14Pwp5FsJabv2Wi4xLhwtkHY2ui0eSo0=;
+        b=KK1JeAyT24Bt9K3s/ni10ixuG7/AwNGg9IRIx4t7Fl440EfcdK/9Ss2/ZwPJJ+9x5W
+         asDGSCzuQ8caOyHCfMaXOnNn4CSPo/JgJwP+U/D2U/kDWwb6LN9kHS/+1CvYU1Jguku8
+         w+7mFNWOK3r7n+l5+r4UGeTn4NpoYOulkkgyAPIcIKNiM4AO3oKGQ/XUnDnC/GRWwMkK
+         5tHdnIBalrlJdpF3j2WaV5gvmNAzsM+ENm0uGVn6yHIBEipToapThbW/RhwINlTGhmS8
+         dFY5DTyyGSlhZzVwWOHh6LwqpB2gVnnt+zltMB1E1EmNdtEea8l/s3PzNooATeeW5sk8
+         XsYQ==
+X-Gm-Message-State: AOJu0Yw55xmUaYVHRo6RaMP/LglShQXT22TcS3/ZdBZOugDAi5CEd7Oz
+	dZ89nTtNOWtD0MvFUcEBzy5csxQbXxBInNk0gcJu4YP1alOBEEBbwR1AxUKwlVk5
+X-Gm-Gg: ATEYQzwBVJwsa94kbgKYm3Qy0xSIOa5J+QXhyBfhHVGYIUkG1a5ESBYUjeCeTNs9Mdc
+	InwiXZE89uiiZd/Y7YtBffD63Y2Ov4xAlOih61TN/wGV6K/Iv1c6nNBSmMfyRi+UW810K0/Asy/
+	9wNiEbSfJ2wqxdeVvd708Cd3BE0vaaCjslfQ269iAsUV4i63Pv7D/YtGlnZxlSKQZsKPtrLZiM0
+	JSqNoWzET9LnK1p1ZUV+tdcWhjjdPN233XqZh8z9SBcfSjN2pRXhSPUmc8IVpXxmItwYq22A5uE
+	ZkYOr1wrl3PsnMC1AEpP2Wml68374KKlVM9sY1mz5cBYw+ueILqdffxT6crwo1HIyKJfC3VEp7+
+	t9rVYdLLR08wREgN94Sv+wL29s3N9gWEO2f8IJszQGh5BA25UU8VXm1JI5M6AIcp3fXChAeFxc+
+	iTzxmKLvD6gPkMXEsP/HUBh38bghqT95FFWZ4HW1Qk1de03J4/2Zzl7dNSE3Q1g8g3dL5hyAaqD
+	uuatQPAamdl5UC6Opov8KDSO8A=
+X-Received: by 2002:a17:90b:1dcf:b0:359:7ae5:89e7 with SMTP id 98e67ed59e1d1-359a69c10ecmr2293681a91.4.1772639902574;
+        Wed, 04 Mar 2026 07:58:22 -0800 (PST)
+Received: from tower (c-73-37-64-97.hsd1.or.comcast.net. [73.37.64.97])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8273a05e831sm19096426b3a.58.2026.03.04.07.58.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 07:58:03 -0800 (PST)
-From: "Nikola Z. Ivanov" <zlatistiv@gmail.com>
-To: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	enelsonmoore@gmail.com,
-	kees@kernel.org,
-	oneukum@suse.com,
-	n.zhandarovich@fintech.ru
-Cc: linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
+        Wed, 04 Mar 2026 07:58:22 -0800 (PST)
+From: Mark Adamenko <marusik.adamenko@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
 	linux-kernel@vger.kernel.org,
-	"Nikola Z. Ivanov" <zlatistiv@gmail.com>,
-	syzbot+48dc1e8dfc92faf1124c@syzkaller.appspotmail.com
-Subject: [PATCH net] net: usb: aqc111: Do not perform PM inside runtime suspend callback
-Date: Wed,  4 Mar 2026 17:57:34 +0200
-Message-ID: <20260304155734.110734-1-zlatistiv@gmail.com>
+	Mark Adamenko <marusik.adamenko@gmail.com>
+Subject: [PATCH v3] usb: core: remove unnecessary goto in usb_create_newid_files()
+Date: Wed,  4 Mar 2026 07:58:12 -0800
+Message-ID: <20260304155812.4559-1-marusik.adamenko@gmail.com>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -99,123 +90,73 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 55751203AAC
+X-Rspamd-Queue-Id: 5B0122041B1
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,syzkaller.appspotmail.com];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-33989-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,gmail.com,suse.com,fintech.ru];
+	TAGGED_FROM(0.00)[bounces-33990-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zlatistiv@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com];
+	TO_DN_SOME(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	RCPT_COUNT_THREE(0.00)[4];
+	FROM_NEQ_ENVFROM(0.00)[marusikadamenko@gmail.com,linux-usb@vger.kernel.org];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb,netdev,48dc1e8dfc92faf1124c];
-	NEURAL_HAM(-0.00)[-0.999];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,syzkaller.appspot.com:url,appspotmail.com:email]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-syzbot reports "task hung in rpm_resume"
+The goto to 'exit' only returns the already initialized variable
+'error', which would be 0. At that point it could not yet be anything
+else. Replacing with an early return 0 removes the
+need for the label entirely.
 
-This is caused by aqc111_suspend calling
-the PM variant of its write_cmd routine.
-
-The simplified call trace looks like this:
-
-rpm_suspend()
-  usb_suspend_both() - here udev->dev.power.runtime_status == RPM_SUSPENDING
-    aqc111_suspend() - called for the usb device interface
-      aqc111_write32_cmd()
-        usb_autopm_get_interface()
-          pm_runtime_resume_and_get()
-            rpm_resume() - here we call rpm_resume() on our parent
-              rpm_resume() - Here we wait for a status change that will never happen.
-
-At this point we block another task which holds
-rtnl_lock and locks up the whole networking stack.
-
-Fix this by replacing the write_cmd calls with their _nopm variants
-in the case where we are inside a runtime suspend call.
-
-Reported-by: syzbot+48dc1e8dfc92faf1124c@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=48dc1e8dfc92faf1124c
-Fixes: e58ba4544c77 ("net: usb: aqc111: Add support for wake on LAN by MAGIC packet")
-Signed-off-by: Nikola Z. Ivanov <zlatistiv@gmail.com>
+Signed-off-by: Mark Adamenko <marusik.adamenko@gmail.com>
 ---
-This patch is untested!
-I do not have access to a real device to test it,
-testing on real hardware would be appreciated,
-if anyone has a device laying around.
+v3: fix missing return statement at end of function
+---
+ drivers/usb/core/driver.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I have found no reason for the PM variants to be
-used in the ->suspend callback when it comes
-to the device driver.
-
-The PM docs suggest that PM should not be done
-during runtime suspend, but I cannot find a
-definitive answer for system suspend, hence the
-conditional if(PMSG_IS_AUTO(message))
-
- drivers/net/usb/aqc111.c | 25 +++++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
-index cbffa9ae1bb6..2f0d66c7ade0 100644
---- a/drivers/net/usb/aqc111.c
-+++ b/drivers/net/usb/aqc111.c
-@@ -1395,14 +1395,27 @@ static int aqc111_suspend(struct usb_interface *intf, pm_message_t message)
- 		aqc111_write16_cmd_nopm(dev, AQ_ACCESS_MAC,
- 					SFR_MEDIUM_STATUS_MODE, 2, &reg16);
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index 2574e65bc640..752ff84a8dc1 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -186,7 +186,7 @@ static int usb_create_newid_files(struct usb_driver *usb_drv)
+ 	int error = 0;
  
--		aqc111_write_cmd(dev, AQ_WOL_CFG, 0, 0,
--				 WOL_CFG_SIZE, &wol_cfg);
--		aqc111_write32_cmd(dev, AQ_PHY_OPS, 0, 0,
--				   &aqc111_data->phy_cfg);
-+		if (PMSG_IS_AUTO(message)) {
-+			aqc111_write_cmd_nopm(dev, AQ_WOL_CFG, 0, 0,
-+					      WOL_CFG_SIZE, &wol_cfg);
-+			aqc111_write32_cmd_nopm(dev, AQ_PHY_OPS, 0, 0,
-+						&aqc111_data->phy_cfg);
-+		} else {
-+			aqc111_write_cmd(dev, AQ_WOL_CFG, 0, 0,
-+					 WOL_CFG_SIZE, &wol_cfg);
-+			aqc111_write32_cmd(dev, AQ_PHY_OPS, 0, 0,
-+					   &aqc111_data->phy_cfg);
-+		}
- 	} else {
- 		aqc111_data->phy_cfg |= AQ_LOW_POWER;
--		aqc111_write32_cmd(dev, AQ_PHY_OPS, 0, 0,
--				   &aqc111_data->phy_cfg);
+ 	if (usb_drv->no_dynamic_id)
+-		goto exit;
++		return 0;
+ 
+ 	if (usb_drv->probe != NULL) {
+ 		error = driver_create_file(&usb_drv->driver,
+@@ -199,7 +199,7 @@ static int usb_create_newid_files(struct usb_driver *usb_drv)
+ 						&driver_attr_new_id);
+ 		}
+ 	}
+-exit:
 +
-+		if (PMSG_IS_AUTO(message)) {
-+			aqc111_write32_cmd_nopm(dev, AQ_PHY_OPS, 0, 0,
-+						&aqc111_data->phy_cfg);
-+		} else {
-+			aqc111_write32_cmd(dev, AQ_PHY_OPS, 0, 0,
-+					   &aqc111_data->phy_cfg);
-+		}
+ 	return error;
+ }
  
- 		/* Disable RX path */
- 		aqc111_read16_cmd_nopm(dev, AQ_ACCESS_MAC,
 -- 
 2.53.0
 
