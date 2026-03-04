@@ -1,72 +1,72 @@
-Return-Path: <linux-usb+bounces-33941-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33942-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KAoMF3nbp2kRkQAAu9opvQ
-	(envelope-from <linux-usb+bounces-33941-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 08:12:57 +0100
+	id 2PD/Nofbp2kRkQAAu9opvQ
+	(envelope-from <linux-usb+bounces-33942-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 08:13:11 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B77561FB6B4
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 08:12:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 22A2B1FB6CA
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 08:13:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E5C1330EC842
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 07:11:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 516683001494
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 07:11:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8733C37B02B;
-	Wed,  4 Mar 2026 07:11:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 388CE37F8C7;
+	Wed,  4 Mar 2026 07:11:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cQo5Hacn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="meu+fw15"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E6337F8B2
-	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 07:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C7537EFFA
+	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 07:11:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772608289; cv=none; b=VdO0DBTMCYolro0ZUBfJm3XBwK/fIjxFYZX4txgZ0S16MWlvILxIrlpFw3qEQ9m7DlBaIVu+rAtT6iIVy+ceO/Q3CvECoVOFgQ/PyTpKqcR3xQgMEwbAqiJeks8nquYBqTUz11qZDDbLx1XSIak2mwiEzGus1E+C1WeggUtrq3w=
+	t=1772608289; cv=none; b=WqXqTQ1uTWf+c0pdYrKNfawHeyu6FrpEU7lfmbXsDNhen/EaZNDk7go6pBnOcFnzLoIVf2bs7nnJCaQZLsCR6E62641Rsx10Kh/53+d0KwuqKfqjlnOAaM+rBmjUy5pERfitfi7eA7lXQUaAWYStYw/Q3H2CqtBZgQLISivryIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1772608289; c=relaxed/simple;
-	bh=CGO0VfQC6nWNWzuPE6zNy8nqRc46IAy8DWObfpSsHuI=;
+	bh=VjRaSPsUVE+x/Xi7XlDdoEy4TQXTYs9VwSowe6Il3dE=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=n+mkC8rONhhsBfOKVswceDm/zQvvH0gdXvpxZw4Q7/1rtfJxHup8ND7EX+xaMMGJdtMNFh3QE1HEJXbOH0wKy61cILoeNPrTNma585NJcSfvex4W7c87rV12WkzY49OH3YdlJps3TaDZE8o6k0qQlAPZ8s4FvB0sYG7EmbJgd4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cQo5Hacn; arc=none smtp.client-ip=209.85.210.201
+	 To:Cc:Content-Type; b=rdAZXLkrUbcUlBxnHZY3Y8jHoBUtcXg8iyj/6rp4H/06xiHwQxYlRfRAHyN0GyGCjWpGLwmBJvxnMflD7rZhRbqjhT2P/ynvLbwwUdkKMIOtIAvcg28TVqep+lzBNl6IEoCYAM6pqC88ps4haVA3oZ3b+U9v/qhR9NCEyJZOZsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=meu+fw15; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82740488112so16128919b3a.2
-        for <linux-usb@vger.kernel.org>; Tue, 03 Mar 2026 23:11:26 -0800 (PST)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-35979a03106so3883572a91.1
+        for <linux-usb@vger.kernel.org>; Tue, 03 Mar 2026 23:11:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772608286; x=1773213086; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1772608288; x=1773213088; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QMXsEKlWRclFBEv0xYibqErY/p3FsrhNFarJ+RqhwzI=;
-        b=cQo5Hacnt6ZzNcHOr8W9ZBhh8oDCcUQNYhWRaNTb/HGjIKTg2rOZkkeXUz0cgVMl/h
-         VsCnkeuSof5esSqgqKBJNnC0GioUbsl6SMHJf53QFhF4v7zT2RCnAjQpqGaYsq2vSkPX
-         MluvcskRc6U3CLhqDMv8jbjdAs5Luzsaq62iV39OjBmLDu/rTx4WV4VQBE2Hgm3mcfXZ
-         D8KHAHrT51l6wXKPa2uJ5pnpDR7FUr6yhStj2DigvdB1Sp5sA6M99jEbjCFzpEJV/Q/h
-         vQkGev4mUUGYHGuJQF4MFiPtHa4TSsN6CRmYFk1kSdtSgYCeN9qAUbbhwbldWSSfcJbg
-         uZZw==
+        bh=ABqRA1fkx2Iasdc5RcVowDEiALyuzvn89TbSr3zsxLo=;
+        b=meu+fw15IOUmVHUtGr/8FJtXmeWeDnXvLHLUNJVrGvhZFR5dQQUtkPIiBurTJDzJr1
+         IT6t0lBF+BA2Tk626CCAfx8y6/p5T1sxRLch6UT+7q0jT9pTbP3sd6M+XRSaDBvgxcZt
+         4E8dyiRVbDtN6VEro81UHXdttZD+Wk6icCtmCqgRyJp0iNTp2t/UnXvKAlgcq6/gk6u6
+         h2qJk/f/8JdLz+o/aEydpIvizMFJwdE8IjTQk2q9EGEMJNcKyqGn/ZIVS59fJQXPEFKz
+         DbBJXVTtR1bMQjulxct4IvxHO958emg6bsHBzBfxhrPiGUF0ZkV4APOsHPQjusL7X79y
+         Wsqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772608286; x=1773213086;
+        d=1e100.net; s=20230601; t=1772608288; x=1773213088;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QMXsEKlWRclFBEv0xYibqErY/p3FsrhNFarJ+RqhwzI=;
-        b=H5NXCgn5cNlzTiB8utnMklaz7wKKmiA0ZOSduTZoEE8S/7gRtPMx9fiylJ/cT2xvKy
-         l8nLWeXFV9YaF6674Zw4t+0EQY4nkeijPh3ok27WEUo8cowZBxJfTJC5SzXQmdSCoZC6
-         KveCjUiSuYKd7pEjxmonn8mXWrZky3QmR1eUrrWDsmHKqmmE+f8R+Ct62+N6SvNdXYko
-         WLn7Ra5g19j9u/DczIo7CrL5X1eS3YnMNVFrgd3XGNRVvI4BHVkft+o+y1NyGsQuXFKO
-         vjyWWzlXLC3XNrotsamkQXXmcBW2Poe+5XSGZKALrTEUGFxLlrPhymdXcDonG/u6IYei
-         bTYA==
-X-Forwarded-Encrypted: i=1; AJvYcCVYAOwRY1gurfgx7xLhv1BbC7B/IVC+MUODnJXNsC0AngcWRwc0FdRC2Ov/PsysKY1q0xlGWQbH7WM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJXWyvcVVCr73JWhcEdV+3pp+3uIO2rGbrNo2shJPOoxSiFlA8
-	URId0DceD8Ky9Ly0+leNR/pqpuRR1ZA+nVMtaVMWCG4XU/wy2/Cs51ak1HLfHIrKrlelpiQGD3d
-	yTfgNRg==
-X-Received: from pfbeg26.prod.google.com ([2002:a05:6a00:801a:b0:827:1746:d143])
- (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1407:b0:827:4372:dd15
- with SMTP id d2e1a72fcca58-82972c6bcf1mr1196817b3a.40.1772608285814; Tue, 03
- Mar 2026 23:11:25 -0800 (PST)
-Date: Wed, 04 Mar 2026 15:10:56 +0800
+        bh=ABqRA1fkx2Iasdc5RcVowDEiALyuzvn89TbSr3zsxLo=;
+        b=rtiFlr2L7TCIdYgYQ2Dtmbvk3wjzqUEej/qEz7TfcMF5GJ1PLWl72bwDxQ2zGt2ca5
+         irv6ckoUmL442RfQr9z62LO+iMl0aOm/A+txtAtkn/I0No7ZsLObQxCpRiWPFl74hFAt
+         IJUUzcN1xomMBplXFgJHH+UkRNfW8982GalNhXwn/uJdlS5L+GWpSULHxeERU5+GdjKx
+         qrsk2gIyZDelZTjfPCmSKTMIUkqnpuag2/JqYXVhUzTlBRpKKThKoqPNgHfMabMXKQ0B
+         k8QznMWoSaoi1QE3zlV1Us/l+RCTjgm1mWObHWOS2tmt4QrbVvix7lbrHsK2zmeQ+khH
+         6BAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWyjf/IXbR6ee2u0Eo7zgzPShhALry1QvqnULpW6lbcLR+GolUfFejNwtbloEE9+7ymI4vkD999qkk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxzC7RG+LvplRjQOg0xaI5t6xscAly5f7mVLgbxrT4IdQm9IiW
+	obk7PwTHG74ttPnY5OGPaqEE089HS3FHyYGGEtXG9kCdw5U613pxJuiyqSCiZy0SN5Y/jA94hvs
+	7Ur1DFw==
+X-Received: from pjbqb9.prod.google.com ([2002:a17:90b:2809:b0:34c:fbee:f264])
+ (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3c08:b0:34e:63c1:4a08
+ with SMTP id 98e67ed59e1d1-359a6a3d351mr1043777a91.20.1772608287803; Tue, 03
+ Mar 2026 23:11:27 -0800 (PST)
+Date: Wed, 04 Mar 2026 15:10:57 +0800
 In-Reply-To: <20260304-f-ncm-revert-v1-0-57c9157b58af@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -76,21 +76,20 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260304-f-ncm-revert-v1-0-57c9157b58af@google.com>
 X-Developer-Key: i=khtsai@google.com; a=ed25519; pk=abA4Pw6dY2ZufSbSXW9mtp7xiv1AVPtgRhCFWJSEqLE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772608275; l=3155;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772608275; l=2006;
  i=khtsai@google.com; s=20250916; h=from:subject:message-id;
- bh=CGO0VfQC6nWNWzuPE6zNy8nqRc46IAy8DWObfpSsHuI=; b=jO1UL/EGG5ELG8XF3Gtcfb0vrHo+J0K8ptP+j/cvNWgHW/xcPSgC8Hl/GMAHxCoCuYDvQ/EtK
- xdszOmeBI9mAQbYLlmzCsMa/fZRPhKkoPMJbERjpLLHPenBePCS0ikm
+ bh=VjRaSPsUVE+x/Xi7XlDdoEy4TQXTYs9VwSowe6Il3dE=; b=pJZFknIy24tS5KJDQEopYNQRXWsddLGd1VE5BBECEtLIwn1SKJ44tqLj+6ss2j5SPAszQK6T8
+ SJ+c3gfepyHBP/VtLSU2xfqnWpAEYBoKKKjhOfYs4HaFIZG/+g3uam4
 X-Mailer: b4 0.14.3
-Message-ID: <20260304-f-ncm-revert-v1-4-57c9157b58af@google.com>
-Subject: [PATCH 4/6] Revert "usb: gadget: u_ether: Add auto-cleanup helper for
- freeing net_device"
+Message-ID: <20260304-f-ncm-revert-v1-5-57c9157b58af@google.com>
+Subject: [PATCH 5/6] Revert "usb: gadget: u_ether: use <linux/hex.h> header file"
 From: Kuen-Han Tsai <khtsai@google.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: David Heidelberg <david@ixit.cz>, Ernest Van Hoecke <ernest.vanhoecke@toradex.com>, 
 	LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>, linux-usb@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, Kuen-Han Tsai <khtsai@google.com>
 Content-Type: text/plain; charset="utf-8"
-X-Rspamd-Queue-Id: B77561FB6B4
+X-Rspamd-Queue-Id: 22A2B1FB6CA
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
@@ -101,7 +100,7 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33941-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33942-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -120,7 +119,7 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[ixit.cz:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-This reverts commit 0c0981126b99288ed354d3d414c8a5fd42ac9e25.
+This reverts commit 7a7930c0f934fb0c46de6e7ca08e14e11df35dd6.
 
 This commit is being reverted as part of a series-wide revert.
 
@@ -149,49 +148,21 @@ Closes: https://lore.kernel.org/linux-usb/70b558ea-a12e-4170-9b8e-c951131249af@i
 Fixes: 56a512a9b410 ("usb: gadget: f_ncm: align net_device lifecycle with bind/unbind")
 Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
 ---
- drivers/usb/gadget/function/u_ether.c | 15 ---------------
- drivers/usb/gadget/function/u_ether.h |  2 --
- 2 files changed, 17 deletions(-)
+ drivers/usb/gadget/function/u_ether_configfs.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 338f6e2a85a9..15685b2f8887 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -1126,21 +1126,6 @@ void gether_cleanup(struct eth_dev *dev)
- }
- EXPORT_SYMBOL_GPL(gether_cleanup);
+diff --git a/drivers/usb/gadget/function/u_ether_configfs.h b/drivers/usb/gadget/function/u_ether_configfs.h
+index 217990a266b2..39d3a261496d 100644
+--- a/drivers/usb/gadget/function/u_ether_configfs.h
++++ b/drivers/usb/gadget/function/u_ether_configfs.h
+@@ -14,7 +14,6 @@
+ #define __U_ETHER_CONFIGFS_H
  
--void gether_unregister_free_netdev(struct net_device *net)
--{
--	if (!net)
--		return;
--
--	struct eth_dev *dev = netdev_priv(net);
--
--	if (net->reg_state == NETREG_REGISTERED) {
--		unregister_netdev(net);
--		flush_work(&dev->work);
--	}
--	free_netdev(net);
--}
--EXPORT_SYMBOL_GPL(gether_unregister_free_netdev);
--
- /**
-  * gether_connect - notify network layer that USB link is active
-  * @link: the USB link, set up with endpoints, descriptors matching
-diff --git a/drivers/usb/gadget/function/u_ether.h b/drivers/usb/gadget/function/u_ether.h
-index a212a8ec5eb1..63a0240df4d7 100644
---- a/drivers/usb/gadget/function/u_ether.h
-+++ b/drivers/usb/gadget/function/u_ether.h
-@@ -283,8 +283,6 @@ int gether_get_ifname(struct net_device *net, char *name, int len);
- int gether_set_ifname(struct net_device *net, const char *name, int len);
- 
- void gether_cleanup(struct eth_dev *dev);
--void gether_unregister_free_netdev(struct net_device *net);
--DEFINE_FREE(free_gether_netdev, struct net_device *, gether_unregister_free_netdev(_T));
- 
- void gether_setup_opts_default(struct gether_opts *opts, const char *name);
- void gether_apply_opts(struct net_device *net, struct gether_opts *opts);
+ #include <linux/cleanup.h>
+-#include <linux/hex.h>
+ #include <linux/if_ether.h>
+ #include <linux/mutex.h>
+ #include <linux/netdevice.h>
 
 -- 
 2.53.0.473.g4a7958ca14-goog
