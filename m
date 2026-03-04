@@ -1,157 +1,147 @@
-Return-Path: <linux-usb+bounces-33954-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33955-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6FF0KR/4p2l1nAAAu9opvQ
-	(envelope-from <linux-usb+bounces-33954-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 10:15:11 +0100
+	id sJZBMVT4p2mtmwAAu9opvQ
+	(envelope-from <linux-usb+bounces-33955-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 10:16:04 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 516BE1FD65A
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 10:15:11 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCCEB1FD694
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 10:16:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 76E01302DA8E
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 09:15:10 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B41EE300ADA0
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 09:15:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB1633947B1;
-	Wed,  4 Mar 2026 09:15:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37E9F394789;
+	Wed,  4 Mar 2026 09:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LSwt2STH"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jd5U/qLb"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 562BC364EA7
-	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 09:15:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50E4386578;
+	Wed,  4 Mar 2026 09:15:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772615707; cv=none; b=Yz9GelO4GXOilSchqP+gjK3QCsJIBVztH2IGBiDuxPJHTi3HR5MolvoHL90NKGC+fZxYDH6G2mrkgNOAVT2xPIvqGbZkyygM3TJfWv2sZCTEshNxC2ykfwahrnlsoMa7eOgCt5HwiiZB9cNtOlHWmEY97KzfC5uWoXpi8I8JfKo=
+	t=1772615743; cv=none; b=F4kecS+uTZuj/RQJP6sRuXqdBAI07v7Rarw51yv9WbzWQNkfRMlPEaCI8ORQO+jYLoTe0TD73Ed30VL53ZouhqN8841xiQ4tr1bwPpKVKhXdOdtQGalW1Bvet7jykwRc7exd3CrqAuKGF9FeCN3x1AG/afGCONoUbCTgI1rKcMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772615707; c=relaxed/simple;
-	bh=61e3xMCym/s1xbOCzNo2WAqD+5UDm1q0+oFhYXpddgE=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bC7rOwZuqmdQToq00UYQ2F7mOpnETNuV3J8Q4lBBMqZgjYFeJJp5MSvK/R/MFQ92p367mDpDqI3gKDHDWcDetoD7LbjVEfIePxiBN6mmV8gUuFpcDqSevCTegAMqDpi5pBq+kZAQBHlN40axVPq78RS0ax+V4KtcMl04+MTKquo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LSwt2STH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DC538C2BCB0
-	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 09:15:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772615706;
-	bh=61e3xMCym/s1xbOCzNo2WAqD+5UDm1q0+oFhYXpddgE=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=LSwt2STHyvGSz2Gkj2g7HKkqLNLJ6xaOTcckTORNXMNoFjHJ9Q96cy/q8bEfLanjW
-	 6pROvuoPlKdkG2E22oIFikTI5AWBV12A998gOGgDDXEmoAh7AENbgkR9Zv+uoYXwTx
-	 b/BIejg8D7wt1OpfHukh2CvyXD729AiSW60RsSNlS5cVjzl4HyG1Wh9zahYoFcvLXc
-	 B8bfMh9HmHbHtjb2JaVRRnfYE/uo+lEZtJz/Ac3IIRm+IyS5m15Ax0p2V+75ubfKmA
-	 aYgxRpB4mOI+lPww/lC8HOK+SyxSMDzAbfsjjAHCGTBXNavps/VJCDxyxPNQZfySy+
-	 c2M5Z/e8Hk91w==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id D16A7C53BC7; Wed,  4 Mar 2026 09:15:06 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 221073] xHCI host controller dies on resume from s2idle on AMD
- Strix Halo [1022:1587]
-Date: Wed, 04 Mar 2026 09:15:06 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: NEEDINFO
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-221073-208809-NiiaGhDjkn@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221073-208809@https.bugzilla.kernel.org/>
-References: <bug-221073-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1772615743; c=relaxed/simple;
+	bh=WWNtgtdNdNhc+6m21fLPGumG/MYIxLI/PfXVCkc41/o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jUdb28Wgfc9AZctINqBSmo564zpEcPk4807y+nfDSo1p+Qn6E0ITZdW9A92gW3xapwBUOdW9Wg9JEaoyDxykd/WxK9YGDpXq5xBjhWWbFiOsM4On5/zwRZ95OgOZQmJATVhDZr2W8cbY3VzNv4Ev07FiX9HzIlkLBB+HbwiOciA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=jd5U/qLb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89A5C2BC87;
+	Wed,  4 Mar 2026 09:15:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1772615743;
+	bh=WWNtgtdNdNhc+6m21fLPGumG/MYIxLI/PfXVCkc41/o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jd5U/qLbohn8Fqrmi+w8agysAb7RueB+VUIlFbxfkeI3FVF3m2e0iuh6FdrHJYOyR
+	 vytdwUKgQB997YBc+4qMh4eofCYrxLSIkSacXu5CpdyrqeQh8xzewDlPu40yQKH+2o
+	 cjJBf8fXb45K32wCXJpcZ5N/+rcefslyNX2TtBLs=
+Date: Wed, 4 Mar 2026 10:15:30 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Gui-Dong Han <hanguidong02@gmail.com>
+Cc: oneukum@suse.com, robert.hodaszi@digi.com, kees@kernel.org,
+	linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+	Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: Re: [BUG] usb: cdc-wdm: Missing barriers in ad-hoc lockless buffer
+Message-ID: <2026030447-remake-bondless-d00c@gregkh>
+References: <CALbr=LbrUZn_cfp7CfR-7Z5wDTHF96qeuM=3fO2m-q4cDrnC4A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 516BE1FD65A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALbr=LbrUZn_cfp7CfR-7Z5wDTHF96qeuM=3fO2m-q4cDrnC4A@mail.gmail.com>
+X-Rspamd-Queue-Id: CCCEB1FD694
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33954-lists,linux-usb=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33955-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[suse.com,digi.com,kernel.org,vger.kernel.org,gmail.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FROM_NO_DN(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-0.988];
-	RCPT_COUNT_ONE(0.00)[1];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,linuxfoundation.org:dkim]
 X-Rspamd-Action: no action
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221073
+On Wed, Mar 04, 2026 at 04:41:32PM +0800, Gui-Dong Han wrote:
+> Hello maintainers,
+> 
+> I would like to report a potential concurrency bug in
+> drivers/usb/class/cdc-wdm.c.
+> 
+> The driver implements an ad-hoc lockless buffer using desc->ubuf and
+> desc->length. In wdm_read(), the read side checks
+> READ_ONCE(desc->length) outside the spinlock. However, the write side
+> in wdm_in_callback() updates the buffer and length without WRITE_ONCE
+> and any memory barriers.
+> 
+> Due to compiler optimization or CPU out-of-order execution, the
+> desc->length update can be reordered before the memmove. If this
+> happens, wdm_read() can see the new length and call copy_to_user() on
+> uninitialized memory. This also violates LKMM data race rules [1].
+> 
+> Additionally, the driver relies heavily on set_bit() and test_bit() on
+> desc->flags for synchronization. These bit operations do not provide
+> implicit barriers, which might lead to similar ordering issues.
+> 
+> Proposed solutions:
+> 1. Short-term: Add WRITE_ONCE() and smp_wmb() on the write side, and
+> smp_rmb() on the read side.
+> 2. Long-term: Replace the ad-hoc buffer with kfifo. This is a classic
+> single-reader (holding desc->rlock) and single-writer (holding
+> desc->iuspin) scenario, making it a perfect fit for kfifo.
+> 
+> I discovered this issue while studying the driver's code. The presence
+> of a READ_ONCE() on the read side without a matching WRITE_ONCE() on
+> the write side caught my attention as a potential data race under the
+> LKMM. In my opinion, implementing ad-hoc lockless algorithms directly
+> within individual drivers is highly error-prone. To avoid these subtle
+> memory ordering and barrier bugs, drivers should rely on established,
+> well-tested kernel libraries like kfifo to handle this type of
+> concurrency.
+> 
+> I am currently trying to reproduce the issue via stress testing on
+> ARM64, though the race window is tight. I will also attempt a kfifo
+> refactoring. However, since I am not familiar with this specific
+> driver, I welcome anyone else to take over the kfifo conversion to
+> eliminate these potential bugs and simplify the code.
+> 
+> Thank you for your attention to this matter.
 
---- Comment #31 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-you lspci showed MSI-X are used for this controller.
-c1:00.4 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Strix Halo
-USB 3.1 xHCI [1022:1587] (prog-if 30 [XHCI])
-        ...
-        Capabilities: [a0] MSI: Enable- Count=3D1/1 Maskable- 64bit+
-        Capabilities: [c0] MSI-X: Enable+ Count=3D1 Masked-
+Patches to help resolve this would be great, and yes, moving to kfifo
+might make this work much better overall.
 
-Are the other xHCI hosts also using MSI-X, or just this one?
+thanks,
 
-Are there any changes in any of the PCI MSI and MSI-X capabilities fields=20
-after resume, like address field?
-check with lspci -vvv before and after resume.
-
-Does moving the xHC irq to CPU0 before suspend help?
-(check actual xhci irq number from /proc/interrupts, assume 25 in example)
-echo 1 > /proc/irq/25/smp_affinity
-
-Another thing to try would be to force MSI interrupt instead of MSI-X.
-Not sure if there is an easy way to do this, couldn't find a kernel paramet=
-er
-for it.
-
-One way to do it is to modify xhci driver:
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 585b2f3117b0..3acb6ad86f4e 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -167,7 +167,7 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
-
-        /* TODO: Check with MSI Soc for sysdev */
-        xhci->nvecs =3D pci_alloc_irq_vectors(pdev, 1, xhci->nvecs,
--                                           PCI_IRQ_MSIX | PCI_IRQ_MSI);
-+                                           PCI_IRQ_MSI);
-        if (xhci->nvecs < 0) {
-                xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-                               "failed to allocate IRQ vectors");
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+greg k-h
 
