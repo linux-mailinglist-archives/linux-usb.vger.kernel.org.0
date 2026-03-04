@@ -1,222 +1,134 @@
-Return-Path: <linux-usb+bounces-34022-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34023-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2JurNZCzqGliwgAAu9opvQ
-	(envelope-from <linux-usb+bounces-34022-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 23:34:56 +0100
+	id AJskDgy0qGliwgAAu9opvQ
+	(envelope-from <linux-usb+bounces-34023-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 23:37:00 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80E0B208AB9
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 23:34:56 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAB14208B5D
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 23:36:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 83C82302ECA8
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 22:34:46 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 65DC230098AD
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 22:36:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00F5239EF3E;
-	Wed,  4 Mar 2026 22:34:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FAF13947A7;
+	Wed,  4 Mar 2026 22:36:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="ku9gb9XW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VB1rrzkJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013032.outbound.protection.outlook.com [40.107.159.32])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5CD3845A6;
-	Wed,  4 Mar 2026 22:34:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772663677; cv=fail; b=C462VNfXjWXNtw4XLcAvUmEhC0WjiwKWqkoYYvsXjL4smgZXeFpbYE5hDMtDeeUvi1spUIGC1J2sm9pBiNIEynHhQYlWur3eMXVvfP2DcVH21SUHlR+q/ra+wT+gf5GAYm6gYQSrFwUSU6BryrNYCFw68QmJVKu2cOTzy92ULIk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772663677; c=relaxed/simple;
-	bh=GWAbWcZY/OK8C4Wjz+zwEnodsIjuJYj8OcCwXWcS094=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=FfqsectsPW7/oiYGMfyUbB6+iS8kjHwiuIsaHj24rOzFneSPBt8rAmNhHaPufF/okXU+zILiizCYPnnErpq413XuHgpgi5nL/qI6D0mZr57yUdQgKebvq6zkiVke9QgU3n5+CjhWafjBN6NXLoi1e+OdkHIs+IXjmQS//kr/Fpw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=ku9gb9XW; arc=fail smtp.client-ip=40.107.159.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AzPLJK80uR2+uzgdBGD8p0jpObU5dSZNFV3wAePQgiMz93x35gT7bNUzBQcOAZqlpSJSYYerUZFSS1Titk0rMm7JzFFs0LsfVMxa9kCl3f2DLsyRgqsvhGO/JpgBu45c21wfn6/kfdxabhUIIaI+VUgs4avk5uP8NVSa3LVSYqcT+U5RKFsdGd8qwlcAbNlPVOUPtYZz1u5kV3S2++K+qSQDGU9YKhTBoSpmHlD03+K7VHN5AbtDlkkg7dVMG4BCHeWZMrxVwqpJ9vA1K5gRztVJL7F0qYOdgNXgTFkKRNigSosBn90eNtckVUSqvo+vQ5optFmcrBlnGuTrGCj1Og==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JXrErA0sMeKWmsOp3wui/g3AkoTupSMFZLHGNvdpKz0=;
- b=c1jW/pJKuqzPuMqRHBH1MK6xtragAz2dTL9LBPxl+R5NGLzanJBkNvCZ0jI0PxSyFruQlqpmdifzeTb7HN+aXjMNHd/xa3EiUDUj/bvtQrgVmyNrtdkxhUBk5yX72Gq7rp5eCZsPDIsYb+JsBO0aPJb5DieMONJ75Wo2BtNwhm4Q5ktHZZgwvUx7FgAj9ZItoSYUvX+oHKGoWzMY5ZngCGMAf8A9YLb6iWT9EydzuWxqUC/BdbTyD/JOuqfaD5suZmUO6HnmYnK1pPafg4xNqMDPO778SenSFlGAKOL9WrrUzbM0HYD7AaSOc8YuVvFsYo8rZ1ClVoxnklYfu4cEiQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JXrErA0sMeKWmsOp3wui/g3AkoTupSMFZLHGNvdpKz0=;
- b=ku9gb9XWLdEYu3J2MGZQ/GqPLS1ufQRkGJ2Cc4feC05GfUqZLD75O411Vd9tBrTvC4bvftiiXHlQiUQtcIVlzdkKw5D8uW4pb6JCfy2cTeenbIvv5SwykHDHbKrNdEvVJTT+vRiB67YaHEKtJ9pGuk3dR+ArCBMu/NrJnqC0NilSjk2hfZiO+TOwU+Ky48MbMoDrHeSh4fs/B5T0eTL4X/C0SHAwHKVF9ApnNXvIm1CTRyO80uHwFk/79rVWyPiUSLlMLe7zjFUgobKEQbS7XQTQl6mmBFvQ3VNAyolDmE7xkNoL3kkqAysIUR7urH5+8ravyl4GEM1zhy0EP9i2JQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
- by AM8PR04MB7859.eurprd04.prod.outlook.com (2603:10a6:20b:24c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.21; Wed, 4 Mar
- 2026 22:34:32 +0000
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9678.016; Wed, 4 Mar 2026
- 22:34:32 +0000
-Date: Thu, 5 Mar 2026 00:34:27 +0200
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	linux-can@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, spacemit@lists.linux.dev,
-	UNGLinuxDriver@microchip.com,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Heiko Stuebner <heiko@sntech.de>, Shawn Guo <shawn.guo@linaro.org>,
-	Yixun Lan <dlan@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Shawn Lin <shawn.lin@rock-chips.com>,
-	Kevin Xie <kevin.xie@starfivetech.com>
-Subject: Re: [PATCH phy-next 02/22] PCI: add missing headers transitively
- included by <linux/phy/phy.h>
-Message-ID: <20260304223427.scaf27g25creiryo@skbuf>
-References: <20260304175735.2660419-3-vladimir.oltean@nxp.com>
- <20260304222408.GA40990@bhelgaas>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260304222408.GA40990@bhelgaas>
-X-ClientProxiedBy: WA0P291CA0022.POLP291.PROD.OUTLOOK.COM
- (2603:10a6:1d0:1::22) To AM9PR04MB8585.eurprd04.prod.outlook.com
- (2603:10a6:20b:438::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B3C397692
+	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 22:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772663814; cv=none; b=blzp6vyzkcK1jNZQGFHVLCirW8Qxhlj6Q88bW5BUnpO36AnLYdvQg7nxSf52QibCBY9/10LzmB3oKHAIDu1qZLDEL/kc05EaZriNYLqtza9v6JwSMERH7ln4/X4HlE2LRj/U80ueN0aoRpVjEYhBR9XSzUQm6H8srlV9tSMBIJU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772663814; c=relaxed/simple;
+	bh=paAv0E/5K53TvhL84GH5FKFLlwAbkn3AE+a/N13tbFY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qjBoxjPCJ5dB7mlFGzOEvFu13ZhlOO7YVlvDitAL4vXiKmFu72dcjc8Vi34sXAWBB3cyHzwdMGysvTqbB6hoqZ+sc7JuteFudl/Jukcz5U7KjS58NoM+GgIjcpNMQHExTCTcTZpajaRw/aXx7R3H0cr4GFlGMAlrSs7HxQOiG3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VB1rrzkJ; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772663813; x=1804199813;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=paAv0E/5K53TvhL84GH5FKFLlwAbkn3AE+a/N13tbFY=;
+  b=VB1rrzkJycjeNsD6YgNdOnSOFt8zhYWzqKuEfo7MVsa7a7eDY0dqbZUY
+   DeIVUQ6VhEzccizLIoLXjHo5JQkWJtjs63eIqSIkolwdZ6hdqCiCe7R5m
+   rpp2b6xz8DyIgLZMqVCBrnf/TfETw0S2OR6oTwAJ6FaUz+YAbfwCfw7J1
+   B4TicDVNlYxqL363I7kpeMvaTVRvsaVMmAbsr+me8G5oX30BZuIgKpb5A
+   iNl6Z0CQ2mzf/2SqicXTlE+QLjWBQG3XVL5ziQ0yuZqb0zekx7T5Gz63D
+   tqDSCBqRguWWT9jX67Mx2MFuml8LY/7fHwRXkvnVLWg+qzwVVUkEPkMlb
+   g==;
+X-CSE-ConnectionGUID: GQyG8guVQay6vojtV5PX0w==
+X-CSE-MsgGUID: bEiKYyZeQ/WHBHvdPimiIw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="72938929"
+X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
+   d="scan'208";a="72938929"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 14:36:52 -0800
+X-CSE-ConnectionGUID: 01BxS0pSRJuRe1R7aMHsqw==
+X-CSE-MsgGUID: 959NWOfGTEaCpRDmbBgbcQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
+   d="scan'208";a="223148883"
+Received: from egrumbac-mobl6.ger.corp.intel.com (HELO mnyman-desk.intel.com) ([10.245.245.180])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 14:36:51 -0800
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/3] xhci fixes for usb-linus
+Date: Thu,  5 Mar 2026 00:36:36 +0200
+Message-ID: <20260304223639.3882398-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|AM8PR04MB7859:EE_
-X-MS-Office365-Filtering-Correlation-Id: d42453c5-5530-4e99-d982-08de7a3e34b9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|10070799003|7416014|1800799024|366016|19092799006;
-X-Microsoft-Antispam-Message-Info:
-	T2j0ynHVVUYIV9sAgspMauLSM7QGiEPxOPUXg+mSaegq9CE1l0ne6LdiBpt1z8hrW1uF9bcn8qvt7FeOuonKdUtFLaSjvsdSMPqkiL1Tp0dSeYXvfS8rUyv5cK1tFOrsGxhKo36XAsG0qvgDDwswKIxtBxXzNynfzcIvLXyeiq/n6DErGMzL+j+kCVGVMQY768KQuFS+AHxP+NwMQv62u1Qz85PI/OFsemxFaVGQJJckxq5LIEP+TDiYC4PjbNOIFTmedk+8KmjqgUm76f6xZz1sySPMHf1lrUoahF9eZ4SAtlmvhYf+kIk0uyzbBCZDocetqGoqdoTdbYfPscP2wHfBNnATsvp4XSMXMIgSLLJGOf5Qt4oWjsKhD1YBxElKd74+pMw6A2H6kY/nnpyiY8RjRt3c/VFVT+x/exFd/9YNKAiINCiQcOoxNUAScDKuNWDtjaorxJnFXDwvDDn1l0KFz9povdJMq0XYrSXf2bnGWECKwREb/8RT+jsCc2mJpJKQBNds+YtrAVEZsBN+xUBSjBnFYKCPteUuykqhsItqyBQgkCm3VT03d1s7v24jm1hrLnhlMsose24Ye+3iXvBMxba8W+OH8eag0cu//mYU/SN7AbD7blt3PXkkrLjahALJ/J7B8PgyFCjW2xx54K5Yr98rQCPyhZk1yO50zipV4WXi8+CU0F0mUeUpV49vi82Qr6v0qedgI64Hx4wrvA59Qy5BkCzgcn4/Dd7nx/I=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(10070799003)(7416014)(1800799024)(366016)(19092799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?RRVR5C/RocM+30f+wt84C9y6nmWaq/vKT8ZEDg3Vkw/B6kcy6USWfA2ua7nD?=
- =?us-ascii?Q?78rTEUiXq2QQNzYghPQLNqYi1PNm8eUibz/ugen0Sh9pyqFiFeWJsWbHxq59?=
- =?us-ascii?Q?La8aaYZqcOgPbEO94wi/XmsQF/8Q+iJhd+6s3t3yviFpyrj/eoEf2o8yRZtT?=
- =?us-ascii?Q?UwVWLqB6039oAYNXdPYmVOV/L5y/wJjg0m4qHEk1mrbJKjAoCKGmFXMAWzuP?=
- =?us-ascii?Q?JjuCBuolxr0vFVpA+cvDti6YAdP/CwBWii5vWhdZJyUE88+u+3GJ3KFMMhEV?=
- =?us-ascii?Q?sFGfZ6THXZbxpamvbrIbKZ+7S/VjIw1t9JjYJVez7MmCVnMfVwMVqXSRyUNZ?=
- =?us-ascii?Q?B/Xl5hVcbhUusJ5kemudV2EjMrYmhNc/ABzUDGw+4nxUAxmKVt3yYkwZZh4T?=
- =?us-ascii?Q?Hx4aZ9TK51tpVhbcNaAgtp32taYAN+Zxsxj+OgI7+zIVkn+QO0JPxZU8Gwdv?=
- =?us-ascii?Q?vCIl/i75ruO2J3IppM9kCK16em4paTOumi16X/+/+uDflj3nAxDbYkMZYrFw?=
- =?us-ascii?Q?9x47d85BmUr+slx/v7Z2f2BSbi8gyRkpAnsB52KzajetmfVGhgF6atxd8znX?=
- =?us-ascii?Q?bGIs3QsrUvshvbtj0sjz4algeVAH0PSn04MEfJX2jzv3hiMB4cHC/O+0mScE?=
- =?us-ascii?Q?0ZJ6EGcl/ryLVA8TQ5y9GcTh51EwlkdWVI3+jnbFC+7LodhRWq87sUU6fqA+?=
- =?us-ascii?Q?JaDboRGutF83vBFb6HcbpGnr60aAabzxCRQYzHBlEU/NDTZIROrG8JNocO5K?=
- =?us-ascii?Q?3DwIe+d6NavoapFS3D52ImcCC6Kyveve8tlTEsN3yak5rJH1TattvIC8jIR6?=
- =?us-ascii?Q?OTVg/rdBkUA776gO6qOv6duWw2MVHsfwq0BRzVz7NhlIpB+fHqJWtvEEIx0X?=
- =?us-ascii?Q?xVN9Y3dXMQQUyGTPwwbn4SzY7bYm1BcAbqBT2FMkZkHCezgWkiWTyRr2qKUT?=
- =?us-ascii?Q?nxKtoQ8Vmf5Vur/qa0ipbXNyox4Bnyyh1f7rXQUxveS3Y51PK0CuhAKKXlis?=
- =?us-ascii?Q?ZJS8Rb7RgwkECLydkCCIOlaCtdTtogKTN5vJ3WGB0DwsJ8gQptz6emZyvdo7?=
- =?us-ascii?Q?JYk9FJy3DqOo/bbmLweMKKNMwoAO1dwkFagveHhyGLktK7gofKPAb1uqSng3?=
- =?us-ascii?Q?AQBYODKnp2CQLs26umveBOYHiAS8gsqamnvLlhZ0InCtLCDW1Zg2PpWpSptm?=
- =?us-ascii?Q?2JsMV4PQ7/KFE3TaxezYa65DDUa0/hcQkXzMn1HO3BclloEADcxe24ICDj4R?=
- =?us-ascii?Q?rAzZslyVg9Nhhb8ixFGfwbDVrjGzCMe/nDL/vusqlbdcvWHoYq0HDz5lU0BA?=
- =?us-ascii?Q?N/O/VL8ujI4GS1QxhHuG0u15lOYsf7BMkP4Nqoc9OVmHZH+mcjoUkqx1F3y3?=
- =?us-ascii?Q?rcaA6UeToxHirSYVh+sEENgdEJErvLCTFPOHyAc8BOlrcWmEb31kZ4QksDqp?=
- =?us-ascii?Q?9V/o7x2nFJKDRhf0bV2bbokMpWTLpQw6C3NjmObSgDHX+Hdwmg2EdfWWlGYA?=
- =?us-ascii?Q?ZBrjLR2nlTE9piLkJXed/q0RoZjPIVOpfLUYKq0sd1Ed+2f5MgCBkorA7Y4w?=
- =?us-ascii?Q?KQbvnPvUSuKB+mha50Een23p/wR7azT5QFTETiYE3ii4818pHG7BKDfFruCB?=
- =?us-ascii?Q?RRetR+lsw+0mrwINwn7mm5sLq2KkQS4q8MKKzbxYUDESOyPZHWbuyqnHG9wu?=
- =?us-ascii?Q?fcj/Wux5kj1ZmsEeM1/K9uVJ/QooyXU4lKsCquqgNz3FVKsZuRINgRKm5FvU?=
- =?us-ascii?Q?s071hqwGW8BEoA2c3NkI3LBaAktbrL2u6kxoDHd3Co2GGmx+5+D9IR+nYL6N?=
-X-MS-Exchange-AntiSpam-MessageData-1: pf5ZiVDe1d6vJ1IBJK/L6Nb9wj//e7IIlXA=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d42453c5-5530-4e99-d982-08de7a3e34b9
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2026 22:34:32.5473
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +PcMVcOV3Ik6ptoE4VsCcvoQ2sjRW8sUQ7x3sTlEGffiS/HBjAc2+VhWf33xxqwko6TTz2bjvVPHe6kHiGGwCw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7859
-X-Rspamd-Queue-Id: 80E0B208AB9
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: CAB14208B5D
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
-	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34022-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34023-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[36];
-	FREEMAIL_CC(0.00)[lists.infradead.org,kernel.org,linaro.org,lists.freedesktop.org,vger.kernel.org,lists.linux.dev,microchip.com,google.com,sntech.de,gmail.com,nvidia.com,rock-chips.com,starfivetech.com];
-	DKIM_TRACE(0.00)[nxp.com:+];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[vladimir.oltean@nxp.com,linux-usb@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[3];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:dkim,nxp.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,intel.com:dkim]
 X-Rspamd-Action: no action
 
-On Wed, Mar 04, 2026 at 04:24:08PM -0600, Bjorn Helgaas wrote:
-> Update subject line to match history:
-> 
->   PCI: Add missing headers transitively included by <linux/phy/phy.h>
+Hi Greg
 
-My case-insensitive brain didn't understand what you mean by this.
-I had to power on my case-sensitive part :-/
+Three small fixes sorting out a memory leak, null pointer, and interrupt
+storm triggered in rarely run error paths, or in debugfs reads
 
-> On Wed, Mar 04, 2026 at 07:57:15PM +0200, Vladimir Oltean wrote:
-> > The tegra as well as a few dwc PCI controller drivers uses PM runtime
-> > operations without including the required <linux/pm_runtime.h> header.
-> > 
-> > Similarly, pcie-rockchip-host, pcie-starfive as well as a few dwc PCI
-> > controllers use the regulator consumer API without including
-> > <linux/regulator/consumer.h>.
-> > 
-> > It seems these function prototypes were indirectly provided by
-> > <linux/phy/phy.h>, mostly by mistake (none of the functions it exports
-> > need it).
-> > 
-> > Before the PHY header can drop the unnecessary includes, make sure the
-> > PCI controller drivers include what they use.
-> > 
-> > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> 
-> With the subject line update:
-> 
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+Thanks
+Mathias
 
-Thanks for looking!
+
+Dayu Jiang (1):
+  usb: xhci: Prevent interrupt storm on host controller error (HCE)
+
+Mathias Nyman (1):
+  xhci: Fix NULL pointer dereference when reading portli debugfs files
+
+Zilin Guan (1):
+  usb: xhci: Fix memory leak in xhci_disable_slot()
+
+ drivers/usb/host/xhci-debugfs.c | 10 +++++++++-
+ drivers/usb/host/xhci-ring.c    |  1 +
+ drivers/usb/host/xhci.c         |  4 ++--
+ 3 files changed, 12 insertions(+), 3 deletions(-)
+
+-- 
+2.43.0
+
 
