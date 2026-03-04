@@ -1,131 +1,163 @@
-Return-Path: <linux-usb+bounces-33986-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33987-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uCjxGUJYqGlQtgAAu9opvQ
-	(envelope-from <linux-usb+bounces-33986-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 17:05:22 +0100
+	id AKvfHwRaqGlxtgAAu9opvQ
+	(envelope-from <linux-usb+bounces-33987-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 17:12:52 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEA81203ABB
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 17:05:21 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5FAC203E97
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 17:12:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C4B9C328D06A
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 15:40:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8C52D33FBCD7
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 15:45:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A38AB34F484;
-	Wed,  4 Mar 2026 15:35:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D6A35CB68;
+	Wed,  4 Mar 2026 15:42:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gOoDmoGy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iPHsC22g"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DB0C34BA21
-	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 15:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E088732ABCA
+	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 15:42:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772638535; cv=none; b=kUIMgkKzY8KVme5QD1NSJn/wpojHHYyuGaY+md6devue6wZYCAj1JbhBOkSkCJgU3KtlKPHF1V3wgIs313qPdsKp5Vqhrm+3VmZxxYBcsLOwzADM+MsVr3cHW/u82c3mNKXLaxpHzE+yWYxckkDWOzpF5VIO0TKPheZNsd87KMY=
+	t=1772638979; cv=none; b=e7KO8bpMKxftuKKD9HNmHsbE1WFCGpvdpGeu7Hr/c+cGKUqTEaN2EJYjwPL4EUS8dCmtZ499u/2YY8qnFWZzkjbGN5RtXzGpfKc/XGfPTVO9fdeqUaVq0ZTqEeIWKx21b/nGAOhozDCXGh6SXfaYJW6jbdS8AZB0WK2nStga2nA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772638535; c=relaxed/simple;
-	bh=J1cxwXMs2xeUzTohEKnOqx2b/dPmJZS4nycRD65DbLs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gz0DhXIlKJIFs8gJUZhWIbz5qFPLYs6OGjNsxDIzc9gae8fxo9saOYoYHstjdQg/OUumnUTdJrHgpJ94/RNISaum+LM6IbaBYhGp/FboLyZu51+H7vuV8lM8SULXoWtkmxxIhVtrwiou7HmhWCsYyoqmOPmr3vql75Ur5YJdOlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gOoDmoGy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48B88C4CEF7;
-	Wed,  4 Mar 2026 15:35:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1772638534;
-	bh=J1cxwXMs2xeUzTohEKnOqx2b/dPmJZS4nycRD65DbLs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gOoDmoGyvNAT5Y/1+kwlVXpJg4ViUsiy6l8vWMl0nQRf/8ZaXuW8Wii2FXeRd8Mex
-	 4ZS7IRrIynEd1RY8ot6KiKsWhf7HoB2XfAR6YSLZka4MqNLdrpZI4oRfFi8ByOcnX4
-	 6HcttYI+iAm7VnYuoN+fC7KbThxC+Zk86ffTcT+o=
-Date: Wed, 4 Mar 2026 16:35:21 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Gui-Dong Han <hanguidong02@gmail.com>
-Cc: Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-	Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: Re: [PATCH] usb: class: cdc-wdm: fix reordering issue in read code
- path
-Message-ID: <2026030408-concept-relish-4ab2@gregkh>
-References: <20260304130116.1721682-1-oneukum@suse.com>
- <CALbr=LZLTrAHLVeE2twUoHb=S=RCEnhZMjp77E-ZUU2_Krtb6g@mail.gmail.com>
+	s=arc-20240116; t=1772638979; c=relaxed/simple;
+	bh=HtPb39DNehF0QWemJ+b+lT+x3hgbR04jVkvsXQHYQQo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=s0StmIcacrQhiagygj2uFG0ci70mRxiYQunnyhPc0AzTTfMbj9W7ax/yznSPL/bZzf1rgasEHaLBre7nYCZt7CqsfYko0sLbNdvdkiHAlFJEbja+rwqEj2vO6M8TNB/RxXmN9z0vLzJe1iKfhZLNLuJdNcegGn04lfJXjOgssUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iPHsC22g; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2addb31945aso51365555ad.1
+        for <linux-usb@vger.kernel.org>; Wed, 04 Mar 2026 07:42:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772638977; x=1773243777; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4TjlFikyBnPQa3i9X3yH8EGu5EvTUdPSojCgwU8GdFA=;
+        b=iPHsC22gnsBhancnIVu7Bnn+0ohuwF/HqIEBe7FjrEbxCsmIwqcMxCClwgu8Nb7Txo
+         6zs4HekLGQmOTAYD28OVhHXC/LWbKrC5NLstPpwF6ll9QrdC5e/7gams0JkC1ffmVYQ7
+         Wfi99b4MaBOOQUtFVPELzfEAAem4SYBSZLF+Yapzht5aJu0aTmNsYKhdH4iLpc3UC9IH
+         CAToJKZDOu4qaZ5WItauzFxO5hjvNqeKeddFRwiJCQbrPe2BjfQoVpfaYwt4C7j1+CNJ
+         Gs/MLTQGsZR3O8qhT3/Pc8+2FgZ/zeP5fXU3ZNBPEDDAfc+uYCiDqzCHRwv+D1dKy9O3
+         mlKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772638977; x=1773243777;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4TjlFikyBnPQa3i9X3yH8EGu5EvTUdPSojCgwU8GdFA=;
+        b=AUKIOzwzTbDPEfoEXFOoyBWUYxe0dIQNRiUMeyuw7KYm4Z+tzfTwLH5KlYmdAUlh1T
+         WJArbmekZws8xvXISSmxsA/zV1WDJJTvV4DtH9zix/gTl5nDtwVG6gBP4L5qZGe8nmA9
+         2WGSb7Oe7DBJ8Eu05zN4h3cgemi8tP9haMoNYqA64e6cSYk9H3Mg8du/bPrpD28aRRF4
+         hemCer1tqMBjaF+bK4R1v1cKTxqgRcl58OBvDVdLNFq/qjIR0XciRPzZS82PGwKf+fG/
+         z72sXH2PcF2IYZ/VxTQ3KAA0/GfJBVy0NdLDnJ9yHnm57H0PC5Jew0DAva7tcBIZz3ok
+         IWuQ==
+X-Gm-Message-State: AOJu0Yx3R5jwLHXMgJf0obaQK1fVJwtFrLS+JvLdowS0cguXaQ+ReiD1
+	UEElQMwuTd61NghR1IS862qO2NptaUVDI34vGEzvvWUnQsWClcxa9Mt7sDUDZDN1
+X-Gm-Gg: ATEYQzwkfdti6aiKmhp0ADoUr26QV7vTp/9Tw1JlHCZEB4afxV9RHeVOPybhcJnE/Ko
+	kw5J+B/YEAPpiIaBS/DE3vqzxrzJJl8a9DjtHEed3URTCwIp6UZD6Zt+xNNm7mlVW4aVmMxmgyc
+	hOFhUfyEHgnzvjEOUCMVAjJUrC+OD+4lOZh+jSZLBLuDvCibln+3Pq94LOfAjpYhwBKNz3eB8hx
+	r2R6zJvXsdO3kF1U4tLzhXrOSPWk7YHoMmfqcn9wPGptHRTrs1Z+lvA2PTzTXT6vz8BdeYm5meJ
+	hpNUIUN33fTDKH2gaVyhqPu22yTnwOpxt13LE9dNDzbiP8s9G+FSO6N3Uo6CHx7tePsbL6PsbfS
+	bXnaJ83NbjUM2N2wDyi2I6M4pmceJjfHLHIbAtY66zxwg5IFwDgce3pP2l6H3UufiWStx7kC+i/
+	PGUhCzgQ9As+U2oXDNGVAKFed/W+53z4wxpQYwBcC09H7frvFf57H27qo2IxAi3s5lnAUCJph/v
+	ZAJvvGP4LMgLhzw
+X-Received: by 2002:a17:903:2c04:b0:2ae:4fc2:d951 with SMTP id d9443c01a7336-2ae6aaae1e1mr27463395ad.27.1772638976926;
+        Wed, 04 Mar 2026 07:42:56 -0800 (PST)
+Received: from tower (c-73-37-64-97.hsd1.or.comcast.net. [73.37.64.97])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb5b36e1sm199354965ad.9.2026.03.04.07.42.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2026 07:42:56 -0800 (PST)
+From: Mark Adamenko <marusik.adamenko@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	Mark Adamenko <marusik.adamenko@gmail.com>
+Subject: [PATCH v2] usb: core: remove unnecessary goto in usb_create_newid_files()
+Date: Wed,  4 Mar 2026 07:42:16 -0800
+Message-ID: <20260304154216.2750-1-marusik.adamenko@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALbr=LZLTrAHLVeE2twUoHb=S=RCEnhZMjp77E-ZUU2_Krtb6g@mail.gmail.com>
-X-Rspamd-Queue-Id: BEA81203ABB
+X-Rspamd-Queue-Id: D5FAC203E97
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33987-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33986-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[suse.com,vger.kernel.org,gmail.com];
-	RCPT_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.995];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	FROM_NEQ_ENVFROM(0.00)[marusikadamenko@gmail.com,linux-usb@vger.kernel.org];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[5];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,linuxfoundation.org:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Wed, Mar 04, 2026 at 09:43:47PM +0800, Gui-Dong Han wrote:
-> On Wed, Mar 4, 2026 at 9:01 PM Oliver Neukum <oneukum@suse.com> wrote:
-> >
-> > Quoting the bug report:
-> >
-> > Due to compiler optimization or CPU out-of-order execution, the
-> > desc->length update can be reordered before the memmove. If this
-> > happens, wdm_read() can see the new length and call copy_to_user() on
-> > uninitialized memory. This also violates LKMM data race rules [1].
-> >
-> > Fix it by using WRITE_ONCE and memory barriers.
-> >
-> > Fixes: afba937e540c9 ("USB: CDC WDM driver")
-> 
-> Closes: https://lore.kernel.org/linux-usb/CALbr=LbrUZn_cfp7CfR-7Z5wDTHF96qeuM=3fO2m-q4cDrnC4A@mail.gmail.com/
-> Reported-by: Gui-Dong Han <hanguidong02@gmail.com>
-> 
-> Looks good for the immediate fix.
-> 
-> As a long-term solution, refactoring this to use kfifo would be much
-> better. The race condition I reported is just one example of how this
-> ad-hoc lockless implementation can fail. Hand-rolling lockless
-> algorithms is highly error-prone and likely hides other subtle bugs.
+The goto to 'exit' only returns the already initialized variable
+'error', which would be 0. At that point it could not yet be anything
+else. Replacing with an early return 0 removes the
+need for the label entirely.
 
-Again, great, please submit patches to do this.  It was done "recently"
-for the tty layer, so perhaps take a look at that work to see how it can
-be done, and the issues involved.  I'd be interested if it changes the
-throughput and code size any (probably not on throughput given the slow
-speeds of USB, but code size might be more interesting...)
+Signed-off-by: Mark Adamenko <marusik.adamenko@gmail.com>
+---
+v2: fix missing return statement at end of function
+---
+ drivers/usb/core/driver.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-thanks,
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index 2574e65bc640..752ff84a8dc1 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -186,7 +186,7 @@ static int usb_create_newid_files(struct usb_driver *usb_drv)
+ 	int error = 0;
+ 
+ 	if (usb_drv->no_dynamic_id)
+-		goto exit;
++		return 0;
+ 
+ 	if (usb_drv->probe != NULL) {
+ 		error = driver_create_file(&usb_drv->driver,
+@@ -199,7 +199,7 @@ static int usb_create_newid_files(struct usb_driver *usb_drv)
+ 						&driver_attr_new_id);
+ 		}
+ 	}
+-exit:
++
+ 	return error;
+ }
+ 
+-- 
+2.53.0
 
-greg k-h
 
