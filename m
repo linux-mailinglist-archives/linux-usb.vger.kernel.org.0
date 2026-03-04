@@ -1,155 +1,200 @@
-Return-Path: <linux-usb+bounces-33979-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33980-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yO5EJzdEqGkfsAAAu9opvQ
-	(envelope-from <linux-usb+bounces-33979-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 15:39:51 +0100
+	id UJecA7VBqGn8rgAAu9opvQ
+	(envelope-from <linux-usb+bounces-33980-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 15:29:09 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 068DB201B81
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 15:39:50 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BADE201773
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 15:29:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 571C732D2F70
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 14:13:16 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0E60B30A0C6E
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 14:25:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C99AE3A257F;
-	Wed,  4 Mar 2026 14:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4388936C9D5;
+	Wed,  4 Mar 2026 14:25:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="O8xR+BCn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RX/wsVZV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E65F3BE15E
-	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 14:09:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D4DB3368AC
+	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 14:25:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772633348; cv=none; b=Hx9XbbenAQ3yzZ3I6OicE1S4znLEg3rJ1xmWu06h9Ba7dzbLb2rR19Ga13Mgv9iPDk1opk8p2GPmQjbhrU+McSHfof38E0eblVBuVL6r+aD6KjETFCMczEkCXHn/CHZ+HmSMspEcfmTtgmyxI/8yLXG7Ao+6uPX2V97QOuZquzU=
+	t=1772634350; cv=none; b=XVNxZCnR0cIwtDQuO+xrSV3XXr+nqOXaMPXRL6YGX5FgdCfQ+lHt8eVNwB+NwOu74KefOe3UrHmuU9A1eVQVwJENXzSXveuPpwFheg5ynG7AEHimw03jYvnGldkzovNGNGyjYcqqEMZUqoUHZC+B+2DygXAXefQgZM9IC61kYiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772633348; c=relaxed/simple;
-	bh=vhHeJAx7W8kHc4oy1VY3wntPPakACgR2tD6XyQ7k04Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iPTBc9VMtKf7SotXdBuh9oKpXvQZyKSHiOiK2QlKOfmWevgX38KXG5bIsMzj7YrzEyQZHfT7+zNdQiZyYycDjZHDC6QIZLQrqF4vUWXWHK6drMzdexbFYdhgNghzks+2xKp+wWxnQMD2i9qaNKW1XfeJwkY6S0jZyU1AvzhrvRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=O8xR+BCn; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-439b73f4ab4so3617994f8f.1
-        for <linux-usb@vger.kernel.org>; Wed, 04 Mar 2026 06:09:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1772633345; x=1773238145; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ok3awQoCogW8S1ShAt8XB88e4Wbk0ya1rAC1/rcGv44=;
-        b=O8xR+BCnTzkscLIf+0KyTFR047K2UG6PFLpNY+KkAa36y2EoQTSmnJrbTCs9Iiq0tj
-         xi2fe1trBbJWIQIAtuPtZhsvAvVvyEFa20vayj8MItd6VRrWKfBTdFCCObJp+72Eb8/J
-         fZ9I50XW9n1xC3t8HoPMuB5hdVC9jDUfY4OSNLlscbM5/sugd2qPF5x/uBSykbtfKZmY
-         MuKT3K1DNJmJoyztBDNjlgM9QDEWTzTv2Elwtyx/StxISVvQAHLMTRUagW1IbCiBmN9d
-         iuoXIO9wiTCltFMOOpfmoIaSbW//LAcMd2P6PN6wt5h64f+Ac2eNA/fRwyaz1zOK6KEo
-         U2NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772633345; x=1773238145;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ok3awQoCogW8S1ShAt8XB88e4Wbk0ya1rAC1/rcGv44=;
-        b=j9icilYW/qpbpgp3y7j30aMGRD97SOag50c0t74z/TINycF8SGidcaWFZwtlf8eEBP
-         Ug56hWMGlJ3RsnsqUvVjTOyvh/IqbaLDfNF0dOnMkoYx0rhNrvmJK63S6W8wbAD/RcKQ
-         07SXhuaX5zHqvGkKAcJNHXt2m7tTJnLgZogV4SLLR3WzNyX5lP9s3DkeCmfpPS+spsrf
-         ed0LqKzWO+MGXRME59UmHGEgzOSe4ycKPBkUeqpB1dX9OouCnCVAD1+IYlXIU5+KP7Kk
-         NVLO31IJkQytKBPX0qBMzcDXweO1tY4f9qzP6MoO3Aqb+TTJz6mhcNetdHgs8JiU2Ng5
-         EKDw==
-X-Forwarded-Encrypted: i=1; AJvYcCUobOmmoepPiZMOwN897Fo6nB/0KfpgN6emzkI4/24tfzfI0z5yZpNDYtog+xJPkCrdwlgcrS6tYps=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMPT+XBLeP9/c5bO9gyVFDnVGvdBbglBxgWLgL0JZVa6vc4vnS
-	dQSfsyExlTtY1Z5gHkWchXg2fxFuBOsMXJfU69wECJrUqfevXF/D+4yFz7PykzpMjEiJrmobtQU
-	4O3O2
-X-Gm-Gg: ATEYQzwzJxKMWv6jMpBvkhkBoayuzv/pUjwGqK9fSEI/JuEdgC6SRKjiRTUf3aI42W+
-	TRgwTBobDlw/ck96BcdLP41IWoI5At0p9OKLiqscgBkxm7HF0iBA31tiw4lBGn98mi/2qSTtp3I
-	z51QoOu9pxqslZMmoxQkZF2FDtkGiEULwQTg+br/6zYl+XY7LDWobjAf2WMVAMFcC2NCDYEYeF7
-	Mr18BqDLs97Y2EEcBfClXBnkNAh2zfdY6JJ/Ts7jbdbg4qg/T0OVLh/06o6/PlTOOGwuYspLdbt
-	flRSOqyZza0ubDYlwdb2aWjqM9vGGmdTJ4svZf5Ii7wtsWJsuYlU3KXV5pIFKTOptz/MHXGdn/g
-	HcfSc/e8wP5GsldAfPn+hCOpbykQucjoCkFhqtP0TjxmAl8J/8fwHSFWyK1VW2tQeKYR6GLHrly
-	edWDF3pQL+UAEwJf3/ASCO6/Ug8pTv
-X-Received: by 2002:a05:6000:2507:b0:439:b736:bd0e with SMTP id ffacd0b85a97d-439c80144a0mr4302991f8f.44.1772633342475;
-        Wed, 04 Mar 2026 06:09:02 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439ab6ebe56sm32626121f8f.15.2026.03.04.06.09.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 06:09:01 -0800 (PST)
-Date: Wed, 4 Mar 2026 17:08:58 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Zeeshan Ahmad <zeeshanahmad022019@gmail.com>
-Cc: smatch@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: Smatch: False positive in __dwc3_gadget_kick_transfer()
-Message-ID: <aag8-unh5oLLajDh@stanley.mountain>
-References: <20260304090408.36774-1-zeeshanahmad022019@gmail.com>
+	s=arc-20240116; t=1772634350; c=relaxed/simple;
+	bh=LhgZBq4TGceRNjY0wD5X4IaCKxC72XoA+iFeCuk7CXM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rFN5rHSKw9AMvmsR7jcGaRAacBYwEFo70sZdLZqCuuGXtNRJdCTWAgNwk4egRaHrYpurhkK+MrI/YXtB8l/np/EW852nnCgFhYeB7MBAe0lxEwtrqX1Sv5Aop1DgLUiZ10/wvbx89UEFIS68GMA6HqMrX8VoW+cEdq3YpYsKy00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RX/wsVZV; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772634349; x=1804170349;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LhgZBq4TGceRNjY0wD5X4IaCKxC72XoA+iFeCuk7CXM=;
+  b=RX/wsVZVDXT+ZF4YSWNKGMUqRukyVLANKMg1IppK8n1RR7JU10TRy+9k
+   RshsFW0A93UcARliffF3/55kAC8xLVQU1fIohN5bpmIe9WXscEzHFYKmE
+   lYm0qwHs4qCH1ctHYQ2txPE3WbW1t8hXe0NDmZ1D+hyssNiIxZIUk5pRD
+   UB5GbsDOU8LkHED6O9aqSB7qN7a9vrANExXwBWR22mGCldqWczM0PQz4A
+   Qs4zHN55jYFIfFAHfGEJ/YwADkKez5Horfyn8gDfJlJhBaeJVfTkRfNXZ
+   LIU04s+STH0lzRyiwL4pkcCjpd9tF0msgMvLL157+yRy6foxWQKX59By6
+   A==;
+X-CSE-ConnectionGUID: eBc0AgtbRJ6QRhWCCma7Aw==
+X-CSE-MsgGUID: 3eBmmYVLTeKD78VDgdvVEg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="77299220"
+X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
+   d="scan'208";a="77299220"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 06:25:49 -0800
+X-CSE-ConnectionGUID: QeVzfo3KRFycGwvYTsZ35w==
+X-CSE-MsgGUID: 5p74+rwCTGusdUg9TbChiA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
+   d="scan'208";a="222517795"
+Received: from egrumbac-mobl6.ger.corp.intel.com (HELO [10.245.245.180]) ([10.245.245.180])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 06:25:48 -0800
+Message-ID: <d26eb83b-e67c-4319-82fb-9aba76bb2b76@linux.intel.com>
+Date: Wed, 4 Mar 2026 16:25:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260304090408.36774-1-zeeshanahmad022019@gmail.com>
-X-Rspamd-Queue-Id: 068DB201B81
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 23/23] usb: xhci: Add debugfs support for xHCI Port Link
+ Info (PORTLI) register.
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ Rai Amardeep <amardeep.rai@intel.com>
+References: <20251119142417.2820519-1-mathias.nyman@linux.intel.com>
+ <20251119142417.2820519-24-mathias.nyman@linux.intel.com>
+ <20260304103856.48b785fd.michal.pecio@gmail.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20260304103856.48b785fd.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 9BADE201773
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-33980-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33979-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_THREE(0.00)[4];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dan.carpenter@linaro.org,linux-usb@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	NEURAL_HAM(-0.00)[-0.996];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,stanley.mountain:mid,linaro.org:dkim]
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,intel.com:dkim,intel.com:email]
 X-Rspamd-Action: no action
 
-On Wed, Mar 04, 2026 at 02:04:08PM +0500, Zeeshan Ahmad wrote:
-> Hi Dan,
+On 3/4/26 11:42, Michal Pecio wrote:
+> On Wed, 19 Nov 2025 16:24:17 +0200, Mathias Nyman wrote:
+>> From: "Rai, Amardeep" <amardeep.rai@intel.com>
+>>
+>> Each xHCI roothub port has a Port Link Info (PORTLI) register that is
+>> used by USB3 and eUSB2V2 ports.
+>>
+>> USB3 ports show link error count, rx lane count, and tx lane count.
+>>
+>> eUSB2V2 ports show Rx Data Rate (RDR) and Tx Data Rate (TDR).
+>>
+>> Rx/Tx Data Rate is a multiple of USB2 2.0 HS 480 Mb/s data rates,
+>> and is only valid if a eUSB2V2 device is connected (CCS=1).
+>>
+>> 0 = "USB 2.0 HS" normal HS 480 Mb/s, no eUSB2V2 in use
+>> 1 = "HS1" Assymetric eUSB2V2 where this direction runs normal 480Mb/s
+>> 2 = "HS2" 960Mb/s
+>> ...
+>> 10 = "HS10" 4.8 Gb/s, max eUSB2V2 rate
+>>
+>> PORTLI is Reserved and preserve "RsvdP" for normal USB2 ports
+>>
+>> Sample output of USB3 port PORTLI:
+>> cat /sys/kernel/debug/usb/xhci/0000:00:14.0/ports/port14/portli
+>> 0x00000000 LEC=0 RLC=0 TLC=0
+>>
+>> Signed-off-by: Rai, Amardeep <amardeep.rai@intel.com>
+>> Co-developed-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 > 
-> I am performing a logic audit of the DWC3 driver and encountered a 
-> consistent Smatch warning in drivers/usb/dwc3/gadget.c that appears 
-> to be a false positive.
+> Hi,
 > 
-> The warning:
-> drivers/usb/dwc3/gadget.c:1691 __dwc3_gadget_kick_transfer() warn: missing error code? 'ret'
+> This patch causes an oops when there are more port registers counted in
+> xhci->max_ports than ports reported by Supported Protocol capabilities.
+> On my HW it's due to max_ports being more than maximum port number, but
+> it seems that gaps between ports of different speeds are also possible.
 > 
-> The code:
-> 1680:         ret = dwc3_prepare_trbs(dep);
-> 1681:         if (ret < 0)
-> 1682:                 return ret;
-> ...
-> 1690:         if (!ret && !starting)
-> 1691:                 return ret;
+>> +static int xhci_portli_show(struct seq_file *s, void *unused)
+>> +{
+>> +	struct xhci_port	*port = s->private;
+>> +	struct xhci_hcd		*xhci = hcd_to_xhci(port->rhub->hcd);
+> 
+> In such cases port->rhub will be NULL so we can't reach xhci. One
+> obvious solution (which works for me) is an explicit NULL check here
+> and another seq_printf just for this case, followed by early return.
+> 
 
-Just do "return 0;"  It's more readable, since it removes a level of
-indirection and we don't have to think about what ret is.
+Thanks for reporting and debugging this.
 
-I always recall a discuss between my managers:
-Q: But if we do that then how will they know where the zero comes from?
-A: We'll make our zeroes will *extra* round.  :P
+I was able to fake a similar scenario by leaving out a port in xhci_add_in_port().
+It triggered the same oops.
 
-regards,
-dan carpenter
+The null pointer check you suggested below fixes it for me. Does it work for you?
+
+diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
+index c1eb1036ede9..5ff5b761bccf 100644
+--- a/drivers/usb/host/xhci-debugfs.c
++++ b/drivers/usb/host/xhci-debugfs.c
+@@ -386,11 +386,19 @@ static const struct file_operations port_fops = {
+  static int xhci_portli_show(struct seq_file *s, void *unused)
+  {
+  	struct xhci_port	*port = s->private;
+-	struct xhci_hcd		*xhci = hcd_to_xhci(port->rhub->hcd);
++	struct xhci_hcd		*xhci;
+  	u32			portli;
+  
+  	portli = readl(&port->port_reg->portli);
+  
++	/* port without protocol capability isn't added to a roothub */
++	if (!port->rhub) {
++		seq_printf(s, "0x%08x\n", portli);
++		return 0;
++	}
++
++	xhci = hcd_to_xhci(port->rhub->hcd);
++
+  	/* PORTLI fields are valid if port is a USB3 or eUSB2V2 port */
+  	if (port->rhub == &xhci->usb3_rhub)
+  		seq_printf(s, "0x%08x LEC=%u RLC=%u TLC=%u\n", portli,
+
+Thanks
+Mathias
 
 
