@@ -1,299 +1,195 @@
-Return-Path: <linux-usb+bounces-33970-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33971-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CMD+H30TqGnUngAAu9opvQ
-	(envelope-from <linux-usb+bounces-33970-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 12:11:57 +0100
+	id oHURJJkZqGmgnwAAu9opvQ
+	(envelope-from <linux-usb+bounces-33971-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 12:38:01 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01FD11FEC1C
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 12:11:56 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0079D1FF19E
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Mar 2026 12:38:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BDE693138F56
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 11:08:05 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 18855304951F
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2026 11:37:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D087039FCA5;
-	Wed,  4 Mar 2026 11:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 782653537E8;
+	Wed,  4 Mar 2026 11:37:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YC2DJm5L"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="bMrzTd98"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011061.outbound.protection.outlook.com [40.107.130.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F851C84AB
-	for <linux-usb@vger.kernel.org>; Wed,  4 Mar 2026 11:08:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772622484; cv=none; b=f70LfJ4Opat6Oys3u2Svqi9nwvDs0bNdLP/3PFpNGbJpvZovRxEEksdmWxXSc6m/vwCJhVFKMy4k4XtOo9GXHH5CNZN/4BeZ3e3fkhiQBhkgzKhKqIgLaVpL0AWipHufUVaHSGka7sfYiM8cLo/GQutbVrVStjlJQBkrk1u//Lk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772622484; c=relaxed/simple;
-	bh=MqR618vUskxcz9JqcOuaxzLICh5XKOW1wOrrjJ073Q0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NsyyLduOyUZtkPhxPoa1FFB0/9yGF74SMKsrNwLO2WW5xE5+Bc7miOX2mdsVQOJ3nQRmYY8ureInzHBRh7yzCd5vqNuuzKMMBJZFlL/9nzzvtTjK/zpwHdaTnsCqLskWbgHbBtmNrRPBbtvtyothCrnGBgx7NhSZCGMZ/LI3560=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YC2DJm5L; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4836f4cbe0bso56701455e9.3
-        for <linux-usb@vger.kernel.org>; Wed, 04 Mar 2026 03:08:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1772622481; x=1773227281; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XTucieT2brvHlyNLxWqi/FWnFz/6i/21uMod3Iz4R3A=;
-        b=YC2DJm5LSLHcGO2N2TTvbQmdRYr86ndVQ+6QJm36iupRYwB0VC5ansexQnKPXpoYQ+
-         xjyKbwhjsuEKNssqaqVgU68CxenZvJ0AHTn/2ihza1srxpcxLa/6hyLiz+XgfW0WMsdK
-         mFMzwhY7eaCyZSjNOHZHO3BP1tbssxXmP0loXjV+EANs9hBLVpRj7hOrsum5pW+21TYH
-         mIC7MHuh2eeUoXKNkZvKmObqbbZLba0Ysr0H2hNrn4FpYre9EJZVVerirq4SMLpX7t3R
-         Q2LOQfLNY1lkh+onyGncM7LX+329zihcj2BqPQN4DTxtfji14IG5u/k/OZOu2zQ/0Hrc
-         y2EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772622481; x=1773227281;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XTucieT2brvHlyNLxWqi/FWnFz/6i/21uMod3Iz4R3A=;
-        b=lkIO0Y/j3AhtDF94BEbDZ/JlOVOPg7/vjS91Y6JCwKr8wMjfpief48SOkKIFRcEIr/
-         lC24+WHA8+91kHQx6aD5rYPjFx+psbd9xYxPH5IQBkoKM8jo4IMIqcXd2UkiWxi6T04V
-         Pn66JlvpAtl5WiyyrDGTPietP9mYKSR7CBpPTWtOE3aFDiYjh2aD6/zGhtKDF1RMjPuz
-         zB9wzgD7KUPUp4PHjnpUdU6e5f0z9m843vZd/RqRZVG8Ar6ZA6Z4sUCoKtFdYpo0DDxf
-         FJ39CbGCjsJnhOkg2zD3rdMcCVIl6dFxWxoJH6aK5hXE9WiLXO5U0mIi+Bk+8YRX5N1q
-         P3TQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV2twYrPF1MQ96Q9MG8vzWZZJJnsIArRfemjL50sNd8y9nSDvhmfekIsHapIiHv9xKukonuWNeEwWw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxO2ao8vsMtl2JiZFKoDa1fnwkYMGNquLTzZ06aLbU7EvhGhd+5
-	9efG2lbehdCvfxn8TzU2RxjM/sDcjsaJAZmh/hfo/BEA1fecMoaMSn4k5IPR3G2sn7E4TXENtFb
-	N5Siq
-X-Gm-Gg: ATEYQzxn18WNQEVXqEulH37kEhin8cFire62vxKbN+AYoxB/qJXb+AewI0wvPZbAPxx
-	o9CPUspCmXtheN3w04TEKqXRyj5JYY9CwdfAdSAjPcRKCmtOAOABuz1REEOtKyrhZekHCjenQOQ
-	WluvpILYQ0Jk0d1sOhca0mhH+vcsAFjOEQna3bNW82cmYPsgESHRkqwDg4LnFWPAXMAdcl8ULEf
-	/qHjuzovdzw9/MnablcThls7/8BHoZ7K7TnY8hK180fvIXhfjkyWq4c3bX0+qk5HYExDLcgk5qf
-	tmtJ95xQAzWJ/byTcS6PN0Gg4J8YKI/whwhQttZ6exVQtxSqdQs1uWcOtPUpwUgVKzstCYzyTLb
-	0pGtiZbj+3u/NvS1M3a0z8x4Mvv1SGKID1J5Vz5gAS4hlDhCfM+pa94dgWOlwYV42JpAnS6ikx4
-	P7l8QPOG710JaSpJz3/1tlhJYw4NXZn0zOvXtQ7/l++deAVWETWBjPn2uWYTkv8Flzu8mO
-X-Received: by 2002:a05:600c:3b29:b0:483:7980:4687 with SMTP id 5b1f17b1804b1-48519899381mr28044505e9.17.1772622480990;
-        Wed, 04 Mar 2026 03:08:00 -0800 (PST)
-Received: from ?IPV6:2a02:3033:26c:d55c:3b10:49f7:caf4:851f? ([2a02:3033:26c:d55c:3b10:49f7:caf4:851f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851acfe884sm10583145e9.7.2026.03.04.03.08.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Mar 2026 03:08:00 -0800 (PST)
-Message-ID: <cb5abe7e-8795-46d0-b5cd-66e1bf34fd49@suse.com>
-Date: Wed, 4 Mar 2026 12:07:59 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A100C3537FB;
+	Wed,  4 Mar 2026 11:37:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.61
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772624250; cv=fail; b=LCkFSNQST2kImxcq6IIcSAc4JvPplrxipJwfWyXb0SqEmEe/B/8J/lvqg5RZEAJauUSrHQ0TjRcKCn0JFou6OUtV8PpyCOC3J+4Txv6EPNn4KhbxsH3L0WeaYECytqWfPIqYTdCSsPWD39ij2biTgUTaKM+T7o+OxA9iA9/upXE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772624250; c=relaxed/simple;
+	bh=wobOHRFc1ubppAXe6M1GTUmSJXZssWt4NfUNCTx9+nI=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=HSp1zqLCHxQW/sV3LIUtutWbbDEb9SrMhKSlZ3XYHCWJddRcdM4GQnQSWZK/evjyqrTUDqsyVXU52ItUptvsYQbOLholCU/j4eRrxslyyuybkVZc0e+drQ/V3Xuq5I/2IDrxhXS34R8OFYfbO+yNrI0PBiAsN+S9rjIH4yN3iJw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=bMrzTd98; arc=fail smtp.client-ip=40.107.130.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vlf3ig3wMbanFc6R6cKVQ7kb98mIwxi+1qLOyQhTs+BFkGV780/PWTFYXR5Ng7DoFDhcbitDE05rVs6qq6jWcvT4XP05Y2UERC37wTs/d7t699IB/Ndtc0ulLnYuWQrv4oe8Z6qgsrEw+iDWPmF0VcI0sjdqRDBsJ8234h57ySQ6jhdimsowk5WsfulhzQfFsyah8YPSMG8/Z3T6lbPPgs4uZJhVNWrZJe1HUinVpTRjrdcK+If4R7lIItp1wMlawFNeZ71EifZI4Mii8fWPQe4HqQtp8B+Bbvb7yx+CZ5+ibMwBqx0Ntkv7k6EOVLDAYU/IbZb2QkVnI7dubCMtXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Jq5QwCCDwOg8rmKhl6n7Wlnag5itzRNs4EmCyP41MA8=;
+ b=ZqdIpbx1mwFMTosei+cx+W9T7NzC434YraD3eM71v4cYYa1bUEYeLSVrQ9lpP2+JhPOgSD936B0Li4Ckdu4+nV0ualzjVUsYbAeuqDUnkQmAto8P5bLFQaUBlgbgF3WFgz+XHBkeZBur1emy/QAKR63pff2wT8KmS5989VyOsOuwrFtlFcJinmFktrxQVlGk5hFkq7iDtrNul0zr5wtW3CpwyuJr0JCGxSV3wAjD60okMc6NiQi+fXa+dFmLcqa/sdz06WU7hXv9HdwOFKKqz78lGIC+uAnuyNdDD88Ia2loJ1Kx7QtmOCZ0frPjz5twOUAnR3CWZbD7Ldh+g5XPdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Jq5QwCCDwOg8rmKhl6n7Wlnag5itzRNs4EmCyP41MA8=;
+ b=bMrzTd98beVBfh82Msj/WYHMXM5o4p9zqAnM2kT4qmR7rvTyMllLbELMKBdf31GLR4BpYnuH37EDuwrkErP/AO7vQNdMGi/SW2AoV3C9oHR7W2LocyMQ8Bb3ky7XbTBLfFbaFroZCVfqRm7u1/AZz6sMO7a5xIXFDoi5LSotphQjyK9aUxhXfN/HpR35BMO7MOxQzD4NwmanncJE6m0pu//GT+S7k1HcSgc8mR3oN9XGC1eNB/UaGUUjAMpCdqyxcbTFz/UUIzPW3wXswPvgxHlCzJaJbVT2BULJVs896cXFyQxIG+zt7fjLkxsWR1YvFA4fuPAT4lRZd0Ze7Ic8yA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB8829.eurprd04.prod.outlook.com (2603:10a6:102:20c::17)
+ by AM9PR04MB7588.eurprd04.prod.outlook.com (2603:10a6:20b:2dd::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.22; Wed, 4 Mar
+ 2026 11:37:26 +0000
+Received: from PAXPR04MB8829.eurprd04.prod.outlook.com
+ ([fe80::52de:f9c9:8c2e:7dd5]) by PAXPR04MB8829.eurprd04.prod.outlook.com
+ ([fe80::52de:f9c9:8c2e:7dd5%5]) with mapi id 15.20.9654.022; Wed, 4 Mar 2026
+ 11:37:26 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: Thinh.Nguyen@synopsys.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] usb: dwc3: fix a kernel-doc issue
+Date: Wed,  4 Mar 2026 19:39:15 +0800
+Message-Id: <20260304113916.856841-1-xu.yang_2@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MA0PR01CA0065.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:ad::9) To PAXPR04MB8829.eurprd04.prod.outlook.com
+ (2603:10a6:102:20c::17)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] USB: serial: nct_usb_serial: add support for Nuvoton
- USB adapter
-To: hsyemail2@gmail.com, Johan Hovold <johan@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- Sheng-Yuan Huang <syhuang3@nuvoton.com>
-References: <aPem-8w3LLkP_r2d@hovoldconsulting.com>
- <20260304080929.10179-1-syhuang3@nuvoton.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20260304080929.10179-1-syhuang3@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 01FD11FEC1C
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8829:EE_|AM9PR04MB7588:EE_
+X-MS-Office365-Filtering-Correlation-Id: d49b22f1-fcfd-4f76-550a-08de79e268ea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|52116014|19092799006|1800799024|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	xk9K2i0ctpLlfGiJPQ2MmRmWJkm+INAGDZQfply529mp8rCFpk17kOFFpMeHdaMJCTR+R8eyPaTvd60YmqSHomC35fk+vdLOqEP5E5wVPjkS1ec/6M/O4rRlptJT0kRY6T7vX15pVYQc0lDoiedwMju+anBmbuH6AJaXio7qTPjs5EKzIxsqRNtAV3yXiJA1g9CEhbb9G1C8z2ewyMxGScjULoZtReDGrUXUKUR5G7zyTbfeO1VnjGNR4eIjgmzXAorp2vtTFWnLknMzZ2YJ2En0ffBZGommHMiExiWgzmgishuo1rXhK38RNbRed0lU8EDtvz3Bw/CP6TjAtKDyQj4qsZr58J82v+gpW6z2IQ78fh5LGyONVvKoFUArLKAd/TBt2Qcx7yWZkeX6EThHloq6qwauyzBgf2Qqp5V9QLHuh4RQzO8Lew0Vm9X2x0ev0522zbuEoLXVIi5yLdFe7iLMM14m0bjxP9TnexnYU8aQ4dbQrFXEJIT44H/6EmaSS21dA4eaDIWa6Zj6S2oxgJDSzyT7JC4FnoxAmvZcsrIiZDXmyTe3tF3JUoMPT6j7qz/OcCLqgIRwZVfXj9x3Tr/ugAGEKNMO26fG/u3I+2ixQO/hb5MOCbKdUeXve0l1Fq7iy4CA7TSMBwiEusvk5IohTmfe9B73SPi1zoEKDE/s8+Q9LFYivGRyn6wdIHg2mqIWbg5cNJQwirhDCcsA+QkdEtwVSdi3IfS621c/+XFdcGzHpGRag8pYbs371ZJ1NdLZyYl0TBOUtjmCBS5ghF27q544g8GCnR2imRM9Li8=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8829.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(19092799006)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?OXiZatGij27cEuer0actrH5Phbn1di+CU6IXuLst2dGek7dS8KDw0J/Nudw+?=
+ =?us-ascii?Q?og2xqvk6IYFcysiH3B3W7y/o3Jng44plZG21uywrDtmirPNyTiBXQRUEZM6V?=
+ =?us-ascii?Q?DLDu7ktIlRjTSu0+Lp5yY3Lh9uGa28qWPx0yuvhTjiGt+tESRipQN5EFFKV8?=
+ =?us-ascii?Q?0FwbIKlLfNRlhfPYV1uNlTpfKQxx3EiB7pVzyQY23TcpkRErE9RrPPCFwQaZ?=
+ =?us-ascii?Q?/cYusaTEvwz0dR4VXCisnjcDkmAfd6ND6JcIR77j6KgoqGTlfYPg2Ms3xkXY?=
+ =?us-ascii?Q?od77GwcUwFQU0JucSqJSBSdPV4YTJP6jh81HafpB5TUdYKyZhEaHjDOMzr7e?=
+ =?us-ascii?Q?Z6cwA2k2K/PKYqOSOCs8hSR4ZC56seCyK1OfCrIddaF8d3M6P6aMwm17pncx?=
+ =?us-ascii?Q?l6yzvyQ55hh8UNxy2gBkZU698h+gMCsWd6Ynoe7Ut9LPLfj6kvwm71G8oe3S?=
+ =?us-ascii?Q?W8YdB3Md4p//IU7eXL/7jh7ZxUWAgmm1lIOhdIPk/0wk6q7W1nNwsIrs4Ly3?=
+ =?us-ascii?Q?wmaPuR8iTKFgJfGgYbmEaWb7Os80GhQpI+VnABCxDpqkXOwnUPYLT9DgzzU/?=
+ =?us-ascii?Q?SL/Ew6EDGbcwS4/wjTGWua+V4mrCMjzQJJrcvyhKNGs+5r7dz+icO9uKvOvK?=
+ =?us-ascii?Q?j0apMMplxpvjdzeIUo41t8xexqpJFU5PM7K2hfkVPrBKj3UoTUXOxLry8s3/?=
+ =?us-ascii?Q?8QPSy+jk9sNn/A1OeAJvXH1vu3cQCkz2doy3/R5anrGL7UnrYDASrGoF2ou5?=
+ =?us-ascii?Q?1w1fyaj9b+4OjFTG7Ldewv8avsCLVoBN5Qo7ENa22xkKLb2vmzDVKJu1/Gs+?=
+ =?us-ascii?Q?oK0AhUfvJjUcSuqF+qHhSetEC/LfDT3DBdo1Zy8tKVkW26/Gw5pUIsOMUEO2?=
+ =?us-ascii?Q?WNe62mdTJAlnZ3f8pzRirV8yGwypi91svmGLXtixdlfA2aH7T4dMckZlIF+r?=
+ =?us-ascii?Q?Bl5PvFrlSsjl5K7bYFU2NDOS8Liibi+Xrwqi9xzBODrmzFrKGrVNLq3l49de?=
+ =?us-ascii?Q?6oLV2bJdNj9qXg8Dh3aD0ZCFq0PYCh6EZrmVtxl2SLhqvxjKnrRDFwh5p7Ex?=
+ =?us-ascii?Q?d8Ae6rJ/LxJ1d3jnYWD7CK/b9jW3XS0HIySgyesG3i0fF1l86AhrsM/RdHJ7?=
+ =?us-ascii?Q?2bQkdmFpTWrTl1+2Llv2aP4hxvO/ejb7XvB87+jV+BUbvjTh+sr9m7cs/pHL?=
+ =?us-ascii?Q?WOjjWfZ7XGbZ+vRNpa5273N2uPLHTvdS3xYwE2gLcP1OCTScpTNFrIJuTbGl?=
+ =?us-ascii?Q?ZAbThJ3LaPw8VLDegH4gKGgytrEaLDSmoeO2AMIBsuUxX6ucC+nQ2lZVCAUP?=
+ =?us-ascii?Q?rSn3wYQESgdqIKr5cqBjKSPQ4rI9EoQ7NPrTF7Qh2VDipQFZe0W2IlJohjM4?=
+ =?us-ascii?Q?8/VwqeuEs1/A4FNffshfXkxK2EaSAB7cTZBt49XbFtvHhnMrlbxzMr1zAuxd?=
+ =?us-ascii?Q?UEX4U4HAjsZtXSr+Q8X6cleEMB95/p3/e/eKQHT0nGcTOhrHuCaAxru+FSc2?=
+ =?us-ascii?Q?4LpVC7D0rkAHLHICg5HaZQwXzPmWseSjicQJjlIz7dBxVoYdbIvgaLzy5ZGp?=
+ =?us-ascii?Q?jeMG0AyRpAlQkU0IwinpquOkgiROcxUNlCz3kwypwi9pHpySC2zOfnMg97GR?=
+ =?us-ascii?Q?zXXBK2VKhhYFdYsefcjgQGnC0BcBhZWoo9ScA1jqrjq1aV6hGa/sj0ZJKHgr?=
+ =?us-ascii?Q?MjdA0ehI/YWFGFaFtHufX3FTWrkA0QPHUP7cL2TuSlqp/d8jpLTqAdi87C1d?=
+ =?us-ascii?Q?zN5mBoC2rQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d49b22f1-fcfd-4f76-550a-08de79e268ea
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8829.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2026 11:37:26.6486
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2563ROJasq/B17qZLEC0lPZsCNS3HzJLKAZsuK6rr4MOxGpK42cZAErOv9FUosVr6cZR4cO+maKa2rXG9EZRjw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7588
+X-Rspamd-Queue-Id: 0079D1FF19E
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
+	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33970-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.org,linuxfoundation.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33971-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[nxp.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-0.999];
+	FROM_NEQ_ENVFROM(0.00)[xu.yang_2@nxp.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,suse.com:dkim,suse.com:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,nxp.com:dkim,nxp.com:email,nxp.com:mid]
 X-Rspamd-Action: no action
 
-Hi,
+Add '*' to needs_full_reinit comment line to fix a kernel-doc issue.
 
-thank you for the submission.
+Fixes: a717321ad7c4 ("usb: dwc3: add needs_full_reinit flag")
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-On 04.03.26 09:09, hsyemail2@gmail.com wrote:
+---
+Change in v2:
+ - improve the commit message
+ - add fix tag
+---
+ drivers/usb/dwc3/core.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +static int nct_tiocmset_helper(struct tty_struct *tty, unsigned int set,
-> +			       unsigned int clear)
-> +{
-> +	struct usb_serial_port *port = tty->driver_data;
-> +	struct nct_tty_port *tport = usb_get_serial_port_data(port);
-> +	struct usb_serial *serial = port->serial;
-> +	struct usb_interface *intf = serial->interface;
-> +	struct nct_ctrl_msg msg;
-> +	struct nct_vendor_cmd cmd;
-> +	u8 hcr;
-> +
-> +	spin_lock_irq(&tport->port_lock);
-> +	hcr = tport->hcr;
-> +
-> +	if (set & TIOCM_RTS)
-> +		hcr |= NCT_HCR_RTS;
-> +	if (set & TIOCM_DTR)
-> +		hcr |= NCT_HCR_DTR;
-> +	if (clear & TIOCM_RTS)
-> +		hcr &= ~NCT_HCR_RTS;
-> +	if (clear & TIOCM_DTR)
-> +		hcr &= ~NCT_HCR_DTR;
-> +
-> +	tport->hcr = hcr;
-> +	cmd.val = nct_build_cmd(NCT_VCOM_SET_HCR, tport->hw_idx);
-> +	msg.val = cpu_to_le16(hcr);
-> +	spin_unlock_irq(&tport->port_lock);
-
-What exactly are you locking with that spinlock against?
-You are keeping it held after setting tport->hcr
-
-> +	return nct_vendor_write(intf, cmd, le16_to_cpu(msg.val));
-> +}
-
-> + *  Starts reads urb on all ports. It is to avoid potential issues caused by
-> + *  multiple ports being opened almost simultaneously.
-> + *  It must be called AFTER startup, with urbs initialized.
-> + *  Returns 0 if successful, non-zero error otherwise.
-> + */
-> +static int nct_startup_device(struct usb_serial *serial)
-> +{
-> +	int ret;
-> +	struct nct_serial *serial_priv = usb_get_serial_data(serial);
-> +	struct usb_serial_port *port;
-> +	unsigned long flags;
-> +	bool first_open = false;
-> +
-> +	/* Start URBs on first open */
-> +	spin_lock_irqsave(&serial_priv->serial_lock, flags);
-> +	if (serial_priv->open_count++ == 0)
-> +		first_open = true;
-> +	spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
-
-And here we have a problem. At this time a concurrent opener
-can run and read open_count
-> +
-> +	/* Only the first open submits read_urb and, if needed, interrupt_in_urb. */
-> +	if (!first_open)
-> +		return 0;
-
-That means that a concurrent opener can return here, without the URB
-having been submitted.
-
-> +	/* Start reading from bulk in endpoint */
-> +	port = serial->port[0];
-> +	ret = usb_submit_urb(port->read_urb, GFP_KERNEL);
-> +	if (ret) {
-> +		dev_err(&port->dev, "failed to submit read urb: %d\n", ret);
-> +		goto err_rollback;
-
-Here you handle errors.
-
-> +	}
-> +
-> +	/* For getting status from interrupt-in */
-> +	if (!serial_priv->use_bulk_status) {
-> +		/* Start reading from interrupt pipe */
-> +		port = serial->port[0];
-> +		ret = usb_submit_urb(port->interrupt_in_urb, GFP_KERNEL);
-> +		if (ret) {
-> +			dev_err(&port->dev,
-> +				"failed to submit interrupt urb: %d\n",
-> +				ret);
-> +			goto err_kill_read;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +
-> +err_kill_read:
-> +	usb_kill_urb(serial->port[0]->read_urb);
-> +err_rollback:
-> +	spin_lock_irqsave(&serial_priv->serial_lock, flags);
-
-Taking the lock again
-
-> +	if (serial_priv->open_count)
-> +		serial_priv->open_count--;
-
-Too late
-
-> +	if (!serial_priv->open_count) {
-> +		serial_priv->cur_port = NULL;
-> +		serial_priv->cur_len = 0;
-> +	}
-> +	spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
-> +	return ret;
-> +}
-
-If a second call to open() races with a primary open() that fails,
-we'll end up with the first open() failing, as it should, but the
-second one succeeds, although it also has to fail with an error return.
-
-It seems to me that the obvious fix is to add a mutex that needs to be held
-throughout nct_startup_device() and nct_shutdown_device()
-
-
-> +static int nct_open(struct tty_struct *tty, struct usb_serial_port *port)
-> +{
-> +	struct nct_vendor_cmd cmd;
-> +	struct nct_ctrl_msg msg;
-> +	struct nct_tty_port *tport = usb_get_serial_port_data(port);
-> +	struct usb_serial *serial = port->serial;
-> +	struct usb_interface *intf = serial->interface;
-> +	int ret;
-> +
-> +	if (!port->serial)
-> +		return -ENXIO;
-> +
-> +	/* Be sure the device is started up */
-> +	if (nct_startup_device(port->serial) != 0)
-> +		return -ENXIO;
-> +
-> +	cmd.val = nct_build_cmd(NCT_VCOM_SET_OPEN_PORT, tport->hw_idx);
-> +	msg.val = cpu_to_le16(0);
-> +	ret = nct_vendor_write(intf, cmd, le16_to_cpu(msg.val));
-
-Likewise. If two calls to open() are racing, the second one will
-return before you send NCT_VCOM_SET_OPEN_PORT to the device.
-
-> +	if (ret) {
-> +		dev_err(&port->dev, "Failed to open port: %d\n", ret);
-> +		nct_shutdown_device(serial);
-> +		return ret;
-> +	}
-> +
-> +	wake_up_interruptible(&port->port.open_wait);
-> +
-> +	/*
-> +	 * Delay 1ms for firmware to configure hardware after opening the port.
-> +	 * (Especially at high speed)
-> +	 */
-> +	usleep_range(1000, 2000);
-> +	return 0;
-> +}
-
-	Regards
-		Oliver
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 67bcc8dccc89..7adb8e74bd84 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1120,7 +1120,7 @@ struct dwc3_glue_ops {
+  * @usb2_lpm_disable: set to disable usb2 lpm for host
+  * @usb2_gadget_lpm_disable: set to disable usb2 lpm for gadget
+  * @needs_full_reinit: set to indicate the core may lose power and need full
+-			initialization during system pm
++ *			initialization during system pm
+  * @disable_scramble_quirk: set if we enable the disable scramble quirk
+  * @u2exit_lfps_quirk: set if we enable u2exit lfps quirk
+  * @u2ss_inp3_quirk: set if we enable P3 OK for U2/SS Inactive quirk
+-- 
+2.34.1
 
 
