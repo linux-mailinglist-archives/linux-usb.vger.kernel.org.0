@@ -1,197 +1,406 @@
-Return-Path: <linux-usb+bounces-34055-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34057-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wMWZMDtUqWkj4wAAu9opvQ
-	(envelope-from <linux-usb+bounces-34055-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 11:00:27 +0100
+	id gDw0KEJVqWkj4wAAu9opvQ
+	(envelope-from <linux-usb+bounces-34057-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 11:04:50 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BDC520F302
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 11:00:27 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C66E20F4EA
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 11:04:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0DF0330CD14C
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 09:54:09 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 552773069E78
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 10:03:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 075B037C913;
-	Thu,  5 Mar 2026 09:53:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6470E37F724;
+	Thu,  5 Mar 2026 10:02:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="kuQ6wgoy"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="h93VbNG0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D953783B5;
-	Thu,  5 Mar 2026 09:53:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772704406; cv=pass; b=JTqu1JzKzrEzlhqVc5TyrK72gmp9gf3LB7fpV/hILgcf5X0LvNfh6S1kLmSfYs9Chwsj4oQAbG/DI33xZ9M/OdpcZxiWjSyJGguqw80WKKrV+fvAJG11De/ctvvDNT9CtArh7iR8MI1RI7Q3SnY9fq3mRBlbin2Q9UOJGiA4cTo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772704406; c=relaxed/simple;
-	bh=D7W50Gyx79F1BQJBBcvSYt9GNLrXBM4NZSb+Xw2SOq4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WAP5e7WHh5z6I+QPBlkK/PtDYW/R11767JXN7MpMcBf8W5LTMYV0QwEscS97mdzAF7pSouj+YqEpNtdnml6aYS/h8PcNrQkKLdo0QxwgDh6CYN5224CmjtZlkOkRH4/Vq6XIe2r2IGTEFh+76G1ZMCXmViKX6mG1g1Eka/IwyTg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=kuQ6wgoy; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1772704388; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=ILbpyWSpgsHBsljKSeJYbS7Vw03gooRrhFM0zfvSJ0mMnsLhlex4dZfvu0oPRIpkKO47xszQ2NfzHWwj0pqoFXT4WttLKvDbi1tiW3nCRR4ojr4Vznpxn72wH7dC+ms4XVRbfVzqDJCc2LgWtNUaXznEcvPGtkEc57jsG4V4QXU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1772704388; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=nzu6bAtb37Rscm3wTe12q1wA4WbiMxsyc0YgbMDmKhU=; 
-	b=mYJnA6goY8gyGl8bcxdTO/ByoiY0b4sP3KBwTqzQqQEu2c5WKfTddS9Fe6+yv32bTaxDKYI77aHYbYDm3y0nylvB+35tg6Dif1cn+oIsHiwDCXjvuTbZTh5SotriBERyVv4hZBgBiBYR/T0QbFyyAxO9Bo5rJckG1guguTRV57Q=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1772704388;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=nzu6bAtb37Rscm3wTe12q1wA4WbiMxsyc0YgbMDmKhU=;
-	b=kuQ6wgoyu9T6YeGL0SUqZ9zx8isgTeA+3UHBcaeWieFRMa3K4z+NnEetspD5wWZI
-	TL1RG3LK6Yh1ZgrkSKhInXGy6ScbB4h0qNcCIN3ps5vMT5cv/qWX4tybyGlWVkJHBrt
-	Vz08HTmqhf50ivIQbgSUcJHFeQhtd9qRZpIk3S4c=
-Received: by mx.zohomail.com with SMTPS id 1772704385504238.17185557574544;
-	Thu, 5 Mar 2026 01:53:05 -0800 (PST)
-Received: by venus (Postfix, from userid 1000)
-	id 8DA0C180891; Thu, 05 Mar 2026 10:52:59 +0100 (CET)
-Date: Thu, 5 Mar 2026 10:52:59 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-rockchip@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org, spacemit@lists.linux.dev, 
-	UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH phy-next 19/22] power: supply: cpcap-charger: include
- missing <linux/property.h>
-Message-ID: <aalSUJI5jFG2kJBL@venus>
-References: <20260304175735.2660419-1-vladimir.oltean@nxp.com>
- <20260304175735.2660419-20-vladimir.oltean@nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DC937B402
+	for <linux-usb@vger.kernel.org>; Thu,  5 Mar 2026 10:02:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.34.216
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772704943; cv=none; b=DcoHRbRxYMHD4/y3xdgu8QDILhguWdAfkJIqVdlOcKWxigv6/bSmzTqbuSOMlR07wt93uGkES7xps3YGcOaFiIzx05cBaeHnP68b66B831BzHtW2u1k+iN9OQ8NeJgGhIugDNUeM7f9XNtmZDXtvc2DBm6z30DSlFl5lad/rpXw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772704943; c=relaxed/simple;
+	bh=k5pabxdiMtld13KRX0BEpy5Cx6+JXZwCjNttHWa2Gmw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Yl72L2nfiBUy+ZFLugenhO65ZqYURwVDJ3xx0lXQq/xSTX/jz/H52szAtyem4orJUhba1gaLs4agTz8DuA2JAADAlFrJlcWDVGUkeV3UGLmBDJc5mEBEcf0i4InQCLOkWoFHoT0yx+TCQRL+JAVdv46nNRtCfN6TCJeVo+gqLyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=h93VbNG0; arc=none smtp.client-ip=54.206.34.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1772704902;
+	bh=/8FEOIakysfUtP5bxBnNKJK28jt9QeKGj+wU/FrTG4I=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=h93VbNG0GDPrS1QcHtC8zsp4w6BvKiz4w2K4Yi/L4LZ1DQrcwmnW9onCyMmlEU3mA
+	 qjxn4hNMHpLv6olFrE4d3u38ML53Ir+O8byo7VAigaNTIuB00S+WGfik2vMXj2b07z
+	 vUqvUJqQUdMcOCR5dzpQ9qEuFqIyh9IpC/Wh10zg=
+X-QQ-mid: zesmtpip3t1772704887t28dea4e8
+X-QQ-Originating-IP: qcAKa7rfAMQsulvjySSQOx936A3PfaUOMl0hL+J4g0A=
+Received: from uos-PC ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 05 Mar 2026 18:01:25 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 5180606391748060818
+EX-QQ-RecipientCnt: 6
+From: raoxu <raoxu@uniontech.com>
+To: raoxu@uniontech.com
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	mathias.nyman@linux.intel.com,
+	michal.pecio@gmail.com,
+	niklas.neronin@linux.intel.com
+Subject: [RESEND PATCH v13 1/2] usb: xhci: refactor IRQ/interrupter plumbing for multi-vector support
+Date: Thu,  5 Mar 2026 18:01:23 +0800
+Message-ID: <B651758378034E76+20260305100123.703595-1-raoxu@uniontech.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <8338541D6B5694ED+20260305095256.691595-1-raoxu@uniontech.com>
+References: <8338541D6B5694ED+20260305095256.691595-1-raoxu@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2vxe7ox52jklnq2g"
-Content-Disposition: inline
-In-Reply-To: <20260304175735.2660419-20-vladimir.oltean@nxp.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-0.2.1.1.4.3/272.682.15
-X-ZohoMailClient: External
-X-Rspamd-Queue-Id: 7BDC520F302
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: NggUrcEvgzeDdSMDqXlaXDSBQpn4uimL8RMFttw5vwN7ywk4tNE2+YQb
+	YT0U+wbOVDSVQ+maP+Ylutm9stesCULSU/Y9R9Y1AlQkqRNZEQOGgMeqGHf78ywDUjxEfFR
+	4iU6oM3EOOocmnOvbwap2BsmPJuAFnHGj6h1zuHqYuX2p0JbztyBAuzBIV3CLYvJLvTrwOZ
+	66JeVTUp4drmxCFNDTZwAArYutg0CB/w/eWPNY0LDcSshpay+uj86zka3Tbwb1hyeslCz4V
+	RiOTEbs3PYo5Mb7eEeXDtwVokQvO2wXROxM2EMZaHr7RyFwxsidJPT/45MwU+oO4poP2bc8
+	a5S+k0KYeTCiIZXBqtq1Td6oBMsbvqoabMRzUCiZFRQsK85ISn/qRmQm2o+yL1GaJk3nyiq
+	QkAFP+De9OvBKBrMIR9ZARWzNvenpLQ0cazslbkei0TIJzBD1u0pqQo/xRR1H/xLhTLdvdD
+	SLjUq9yi8FjN5y87LS5wUVKB6BX85yk0nZYPMizdfNcgahTdehHe58rX/IQuIp7zM26xWac
+	a7U/AK3Ed7ljLRUSqlUhYN6s0zN9KHYSj41n3CLUMsSdZpHBfBsmK5EkXtTWxnewLPI119X
+	uKUFVS4d1h/P+vHWc3nzDilfGFRQnLvb5gP8m63ZX6Bw6mPoB4bCnUn644Ktna0t4ZgFk8S
+	Zohtd1kazsD5nKemBawSvNRpYttHBjXLIZGOPCTVeYUrfjs2y9V4ug2q211VJiB814E78Hw
+	+qUqXEomkCaZqBtncG84u1l/ec3UMw7pp7pFmTC5Ajz0vHj+fY8r/LcLfPpWZSp2jBgqoe2
+	8sYNb4ilv3I27eAqO8RVKm4sWE0CveaRYD9TPRWg5wbRghYDXughi75/boZODtQKZXZkuQ1
+	31cpvCLkO/BSHQOpsHHKROilxsd5hLA4vskvvJ1Qx/Q/N7fhxkkLN6N6O3VGzM9HM9GjV2z
+	WlLmlYe/u+yDM8IpTaZ5de91Q42id7E2N3vyNMrFPSlLS2LKNwwo6biKmLxNfMC9WG6yyf7
+	3HBTnMOpvUe4Chf6xujwOd6rXX7bA=
+X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
+X-QQ-RECHKSPAM: 0
+X-Rspamd-Queue-Id: 3C66E20F4EA
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-3.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[collabora.com:s=zohomail];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34055-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,linux.intel.com,gmail.com];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[24];
-	DKIM_TRACE(0.00)[collabora.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sebastian.reichel@collabora.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-34057-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[uniontech.com:+];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:email,collabora.com:dkim,collabora.com:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,uniontech.com:dkim,uniontech.com:email,uniontech.com:mid]
 X-Rspamd-Action: no action
 
+From: Xu Rao <raoxu@uniontech.com>
 
---2vxe7ox52jklnq2g
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH phy-next 19/22] power: supply: cpcap-charger: include
- missing <linux/property.h>
-MIME-Version: 1.0
+Prepare xHCI for multiple IRQ vectors/interrupters without changing the
+current behavior.
 
-Hi,
+Introduce a per-vector irq context (hcd + intr_num) to use as request_irq()
+dev_id, and track the active vector count in xhci->irqs_enabled.  Use this
+single bound to enable/disable interrupters consistently across run/stop/
+resume and to sync/free IRQs.
 
-On Wed, Mar 04, 2026 at 07:57:32PM +0200, Vladimir Oltean wrote:
-> This file uses dev_fwnode() without including the proper header for it,
-> relying on transitive header inclusion from:
->=20
-> drivers/power/supply/cpcap-charger.c
-> - include/linux/phy/omap_usb.h
->   - include/linux/usb/phy_companion.h
->     - include/linux/usb/otg.h
->       - include/linux/phy/phy.h
->         - drivers/phy/phy-provider.h
->           - include/linux/of.h
->             - include/linux/property.h
->=20
-> With the future removal of drivers/phy/phy-provider.h from
-> include/linux/phy/phy.h, this transitive inclusion would break.
->=20
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
-> Cc: Sebastian Reichel <sre@kernel.org>
-> ---
+Legacy IRQ fallback also keeps irqs_enabled >= 1 so interrupter 0 remains
+functional when MSI/MSI-X is unavailable.
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+No functional change intended: still uses interrupter 0 only.
 
--- Sebastian
+Signed-off-by: Xu Rao <raoxu@uniontech.com>
 
->  drivers/power/supply/cpcap-charger.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/=
-cpcap-charger.c
-> index d0c3008db534..24221244b45b 100644
-> --- a/drivers/power/supply/cpcap-charger.c
-> +++ b/drivers/power/supply/cpcap-charger.c
-> @@ -21,6 +21,7 @@
->  #include <linux/mod_devicetable.h>
->  #include <linux/platform_device.h>
->  #include <linux/power_supply.h>
-> +#include <linux/property.h>
->  #include <linux/regmap.h>
-> =20
->  #include <linux/gpio/consumer.h>
-> --=20
-> 2.43.0
->=20
+---
+ drivers/usb/host/xhci-pci.c  | 29 +++++++++++++++++++++------
+ drivers/usb/host/xhci-ring.c |  9 +++++++--
+ drivers/usb/host/xhci.c      | 38 +++++++++++++++++++++++++++---------
+ drivers/usb/host/xhci.h      | 16 ++++++++++++++-
+ 4 files changed, 74 insertions(+), 18 deletions(-)
 
---2vxe7ox52jklnq2g
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 585b2f3117b0..3e019f2811e7 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -116,12 +116,12 @@ static const struct xhci_driver_overrides xhci_pci_overrides __initconst = {
+ static void xhci_msix_sync_irqs(struct xhci_hcd *xhci)
+ {
+ 	struct usb_hcd *hcd = xhci_to_hcd(xhci);
++	int i;
 
------BEGIN PGP SIGNATURE-----
+ 	if (hcd->msix_enabled) {
+ 		struct pci_dev *pdev = to_pci_dev(hcd->self.controller);
+-
+-		/* for now, the driver only supports one primary interrupter */
+-		synchronize_irq(pci_irq_vector(pdev, 0));
++		for (i = 0; i < xhci->irqs_enabled; i++)
++			synchronize_irq(pci_irq_vector(pdev, i));
+ 	}
+ }
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmmpUncACgkQ2O7X88g7
-+prvUBAAiDlamBegg+ohGQtBVAORFIULNrYOBZOk8AG1Qluc6NS+fOqK9Cpw1hjn
-4u0f9h1GsBhjBMOb0dS/kxcNWI+xKiTxrMzu4llAu0C9WimbA0CieynGh2b2a3Ja
-R/9RQ6pXqPuVZk+7oVlT6gk++/w8TU83M31vyXL0Kx786QzieoSbOvgyZqhEwLez
-W41hmnYSkPas6nVkhjp0mnP7eqYQRhXLBeFJgUWhgXvy5YMVAfRrso3DK5JA7hB3
-4q8qNISMg2IrcIDMdDaTKVq+3+Ba1z8pRgr4WpIaOpH+Gsq8e8tzt/SEsGt/4SIY
-bKuAPMOCmsYuR8RskVyUWJiWX4qt4/YIRU01cg2xxXP404xIKR49X9Z12aEOKjg8
-DoBnNzlrSRN/RP85te7hG74Mbc/eVL2fJM9dL+7yZylsv03FFoeii0d+a50bbrQT
-QfQy75KNMSMkb7BDrpalL0DhG9bJoZn96pso0p4aD+viqdbpIybrsgMhuUv9DKVS
-2rIsnhe/N1gPds7wwpt/4shjn93YGbngre66mxi0y0YvvBQqc3eCf4YbPkGttJ0g
-18vYhd7giJO8RE2ApEXsQzT6eKtQFPh01zUJhxvemKoAb6hr3Tptep+/2bn4BVzY
-k3rY5iRgS6ono6DZg08TuLXoB3Ck/kz2OE+ntIibQIQNa0GY/4w=
-=oTrF
------END PGP SIGNATURE-----
+@@ -130,11 +130,17 @@ static void xhci_cleanup_msix(struct xhci_hcd *xhci)
+ {
+ 	struct usb_hcd *hcd = xhci_to_hcd(xhci);
+ 	struct pci_dev *pdev = to_pci_dev(hcd->self.controller);
++	int i;
 
---2vxe7ox52jklnq2g--
+ 	if (hcd->irq > 0)
+ 		return;
+
+-	free_irq(pci_irq_vector(pdev, 0), xhci_to_hcd(xhci));
++	for (i = 0; i < xhci->irqs_enabled; i++)
++		free_irq(pci_irq_vector(pdev, i), &xhci->irq_ctx[i]);
++
++	xhci->irqs_enabled = 0;
++	memset(xhci->irq_ctx, 0, sizeof(xhci->irq_ctx));
++
+ 	pci_free_irq_vectors(pdev);
+ 	hcd->msix_enabled = 0;
+ }
+@@ -145,6 +151,7 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
+ 	struct pci_dev *pdev = to_pci_dev(hcd->self.controller);
+ 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+ 	int ret;
++	struct xhci_irq_ctx *ctx;
+
+ 	/*
+ 	 * Some Fresco Logic host controllers advertise MSI, but fail to
+@@ -174,11 +181,17 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
+ 		goto legacy_irq;
+ 	}
+
+-	ret = request_irq(pci_irq_vector(pdev, 0), xhci_msi_irq, 0, "xhci_hcd",
+-			  xhci_to_hcd(xhci));
++	memset(xhci->irq_ctx, 0, sizeof(xhci->irq_ctx));
++	xhci->irqs_enabled = 0;
++
++	ctx = &xhci->irq_ctx[0];
++	ctx->hcd = hcd;
++	ctx->intr_num = 0;
++	ret = request_irq(pci_irq_vector(pdev, 0), xhci_msi_irq, 0, "xhci_hcd", ctx);
+ 	if (ret)
+ 		goto free_irq_vectors;
+
++	xhci->irqs_enabled = 1;
+ 	hcd->msi_enabled = 1;
+ 	hcd->msix_enabled = pdev->msix_enabled;
+ 	return 0;
+@@ -186,6 +199,7 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
+ free_irq_vectors:
+ 	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "disable %s interrupt",
+ 		       pdev->msix_enabled ? "MSI-X" : "MSI");
++	xhci->irqs_enabled = 0;
+ 	pci_free_irq_vectors(pdev);
+
+ legacy_irq:
+@@ -198,6 +212,9 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
+ 		snprintf(hcd->irq_descr, sizeof(hcd->irq_descr), "%s:usb%d",
+ 			 hcd->driver->description, hcd->self.busnum);
+
++	/* legacy IRQ path still needs interrupter 0 */
++	xhci->irqs_enabled = 1;
++
+ 	/* fall back to legacy interrupt */
+ 	ret = request_irq(pdev->irq, &usb_hcd_irq, IRQF_SHARED, hcd->irq_descr, hcd);
+ 	if (ret) {
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 9315ba18310d..3ea134c07c5f 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -3220,9 +3220,14 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+ 	return ret;
+ }
+
+-irqreturn_t xhci_msi_irq(int irq, void *hcd)
++irqreturn_t xhci_msi_irq(int irq, void *data)
+ {
+-	return xhci_irq(hcd);
++	struct xhci_irq_ctx *ctx = data;
++
++	/* For now only vector 0 is requested; keep behavior unchanged. */
++	if (!ctx || !ctx->hcd)
++		return IRQ_NONE;
++	return xhci_irq(ctx->hcd);
+ }
+ EXPORT_SYMBOL_GPL(xhci_msi_irq);
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index b3ba16b9718c..18d3093b688a 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -547,6 +547,7 @@ static int xhci_init(struct usb_hcd *hcd)
+ {
+ 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+ 	int retval;
++	int i;
+
+ 	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Starting %s", __func__);
+ 	spin_lock_init(&xhci->lock);
+@@ -576,9 +577,21 @@ static int xhci_init(struct usb_hcd *hcd)
+ 	/* Set USB 3.0 device notifications for function remote wake */
+ 	xhci_set_dev_notifications(xhci);
+
+-	/* Initialize the Primary interrupter */
+-	xhci_add_interrupter(xhci, 0);
+-	xhci->interrupters[0]->isoc_bei_interval = AVOID_BEI_INTERVAL_MAX;
++	/* Since only the main interrupt is used, secondary_irqs_alloc is set to 0. */
++	xhci->secondary_irqs_alloc = 0;
++
++	/*
++	 * Initialize all allocated interrupters here.
++	 * Use allocated count as loop bound to avoid touching non-allocated
++	 * or non-operational interrupters.
++	 */
++	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Add allocated interrupters");
++	for (i = 0; i < xhci->secondary_irqs_alloc + 1; i++) {
++		if (!xhci->interrupters[i])
++			continue;
++		xhci_add_interrupter(xhci, i);
++		xhci->interrupters[i]->isoc_bei_interval = AVOID_BEI_INTERVAL_MAX;
++	}
+
+ 	/* Initializing Compliance Mode Recovery Data If Needed */
+ 	if (xhci_compliance_mode_recovery_timer_quirk_check()) {
+@@ -594,9 +607,9 @@ static int xhci_init(struct usb_hcd *hcd)
+
+ static int xhci_run_finished(struct xhci_hcd *xhci)
+ {
+-	struct xhci_interrupter *ir = xhci->interrupters[0];
+ 	unsigned long	flags;
+ 	u32		temp;
++	int		i;
+
+ 	/*
+ 	 * Enable interrupts before starting the host (xhci 4.2 and 5.5.2).
+@@ -609,8 +622,10 @@ static int xhci_run_finished(struct xhci_hcd *xhci)
+ 	temp |= (CMD_EIE);
+ 	writel(temp, &xhci->op_regs->command);
+
+-	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Enable primary interrupter");
+-	xhci_enable_interrupter(ir);
++	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Enable all interrupters");
++	for (i = 0; i < xhci->irqs_enabled; i++)
++		if (xhci->interrupters[i])
++			xhci_enable_interrupter(xhci->interrupters[i]);
+
+ 	if (xhci_start(xhci)) {
+ 		xhci_halt(xhci);
+@@ -707,7 +722,7 @@ void xhci_stop(struct usb_hcd *hcd)
+ {
+ 	u32 temp;
+ 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+-	struct xhci_interrupter *ir = xhci->interrupters[0];
++	int i;
+
+ 	mutex_lock(&xhci->mutex);
+
+@@ -742,7 +757,9 @@ void xhci_stop(struct usb_hcd *hcd)
+ 			"// Disabling event ring interrupts");
+ 	temp = readl(&xhci->op_regs->status);
+ 	writel((temp & ~0x1fff) | STS_EINT, &xhci->op_regs->status);
+-	xhci_disable_interrupter(xhci, ir);
++	for (i = 0; i < xhci->irqs_enabled; i++)
++		if (xhci->interrupters[i])
++			xhci_disable_interrupter(xhci, xhci->interrupters[i]);
+
+ 	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "cleaning up memory");
+ 	xhci_mem_cleanup(xhci);
+@@ -1087,6 +1104,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
+ 	bool			comp_timer_running = false;
+ 	bool			pending_portevent = false;
+ 	bool			suspended_usb3_devs = false;
++	int			i;
+
+ 	if (!hcd->state)
+ 		return 0;
+@@ -1180,7 +1198,9 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
+ 		xhci_dbg(xhci, "// Disabling event ring interrupts\n");
+ 		temp = readl(&xhci->op_regs->status);
+ 		writel((temp & ~0x1fff) | STS_EINT, &xhci->op_regs->status);
+-		xhci_disable_interrupter(xhci, xhci->interrupters[0]);
++		for (i = 0; i < xhci->irqs_enabled; i++)
++			if (xhci->interrupters[i])
++				xhci_disable_interrupter(xhci, xhci->interrupters[i]);
+
+ 		xhci_dbg(xhci, "cleaning up memory\n");
+ 		xhci_mem_cleanup(xhci);
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 2b0796f6d00e..90d4ba6b3573 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -45,6 +45,9 @@
+  */
+ #define MAX_HC_INTRS		128
+
++/* Software cap for secondary interrupters; not a hardware limit. */
++#define MAX_SECONDARY_INTRNUM	4
++
+ /*
+  * xHCI register interface.
+  * This corresponds to the eXtensible Host Controller Interface (xHCI)
+@@ -1497,6 +1500,11 @@ struct xhci_hub {
+ 	u8			min_rev;
+ };
+
++struct xhci_irq_ctx {
++	struct usb_hcd	*hcd;
++	unsigned int	intr_num;
++};
++
+ /* There is one xhci_hcd structure per controller */
+ struct xhci_hcd {
+ 	struct usb_hcd *main_hcd;
+@@ -1533,6 +1541,12 @@ struct xhci_hcd {
+ 	/* data structures */
+ 	struct xhci_device_context_array *dcbaa;
+ 	struct xhci_interrupter **interrupters;
++	/* Number of secondary interrupters successfully allocated */
++	unsigned int		secondary_irqs_alloc;
++	/* Number of IRQ vectors successfully requested (includes vector 0) */
++	unsigned int		irqs_enabled;
++	/* MSI/MSI-X vector contexts. Vector 0 uses [0], secondary use [1..] */
++	struct xhci_irq_ctx	irq_ctx[MAX_SECONDARY_INTRNUM + 1];
+ 	struct xhci_ring	*cmd_ring;
+ 	unsigned int            cmd_ring_state;
+ #define CMD_RING_STATE_RUNNING         (1 << 0)
+@@ -1895,7 +1909,7 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup);
+ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume);
+
+ irqreturn_t xhci_irq(struct usb_hcd *hcd);
+-irqreturn_t xhci_msi_irq(int irq, void *hcd);
++irqreturn_t xhci_msi_irq(int irq, void *data);
+ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev);
+ int xhci_alloc_tt_info(struct xhci_hcd *xhci,
+ 		struct xhci_virt_device *virt_dev,
+--
+2.50.1
+
 
