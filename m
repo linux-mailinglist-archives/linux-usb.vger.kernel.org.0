@@ -1,219 +1,197 @@
-Return-Path: <linux-usb+bounces-34056-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34055-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IOyjGGdTqWkj4wAAu9opvQ
-	(envelope-from <linux-usb+bounces-34056-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 10:56:55 +0100
+	id wMWZMDtUqWkj4wAAu9opvQ
+	(envelope-from <linux-usb+bounces-34055-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 11:00:27 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE94D20F1ED
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 10:56:54 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BDC520F302
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 11:00:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 031B3305653B
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 09:54:21 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0DF0330CD14C
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 09:54:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A893C37AA7A;
-	Thu,  5 Mar 2026 09:53:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 075B037C913;
+	Thu,  5 Mar 2026 09:53:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="RXiDXQ18"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="kuQ6wgoy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9CC3783B5
-	for <linux-usb@vger.kernel.org>; Thu,  5 Mar 2026 09:53:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772704427; cv=none; b=NywHHdbmuc/j6oiQ+a4JTzJDnbXa1/wzl7A9xJ8FMdnJWYZFrHF9PR7+V08DQ1HrkhO/AiWtTcRzMlUo05ePWX2QpN3Tg88778mxw34lFKNTzm8SMVwa5P63l7rzDpn6U0k4XCQYld8IE+FJRD+c6+Pdrm0y8KBPx4i4iin+vYc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772704427; c=relaxed/simple;
-	bh=sG60QjrCMm5xsvTaLTxtbMCn0kIVdTMRy5Wl3mbmv00=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VuhwvPWhjoME1E9v6SlLIdXhXWcccoetMbmg+rlRgFrdi6qJu8KXBOat7FUb83scTjQtN9pn0NVVLxuNPS0okK40ED/CjdGInqijmnHffyIKuubI69C5ZhPRgnimBpe+jtr/VElOzQ80WLjNkrGsOanOwgjmmAZX4YV8Z/Eyirs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=RXiDXQ18; arc=none smtp.client-ip=54.204.34.129
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1772704401;
-	bh=Ma5atvt63uXsv26j3mB++QPkdyCIJdGnN5ymHu73+r4=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=RXiDXQ18FbunE3vln4XylCL59iAQgu9t/b19dEqZz1KKLUn8y3LiYl/uoOiABaoAf
-	 VJPFLM/MmZpkDIARYTbTlAPhES3G8D1bCgauB1oiKXcATJKuHQKtK2s1CKgeMu130l
-	 2YYfw2BlBHXIIEEfCjEPmD6aTv6VDgcmo5s2mPc0=
-X-QQ-mid: zesmtpip4t1772704386tf6f9e72d
-X-QQ-Originating-IP: bXXFYcn3Ev4pfRuCsdxhWqo5harfCYIpuPXClP5ZQSc=
-Received: from uos-PC ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 05 Mar 2026 17:53:05 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 3191242563000423774
-EX-QQ-RecipientCnt: 6
-From: raoxu <raoxu@uniontech.com>
-To: mathias.nyman@linux.intel.com
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	michal.pecio@gmail.com,
-	niklas.neronin@linux.intel.com,
-	raoxu@uniontech.com
-Subject: [RESEND PATCH v13 0/2] usb: xhci: route device to secondary interrupters
-Date: Thu,  5 Mar 2026 17:52:56 +0800
-Message-ID: <8338541D6B5694ED+20260305095256.691595-1-raoxu@uniontech.com>
-X-Mailer: git-send-email 2.50.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D953783B5;
+	Thu,  5 Mar 2026 09:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772704406; cv=pass; b=JTqu1JzKzrEzlhqVc5TyrK72gmp9gf3LB7fpV/hILgcf5X0LvNfh6S1kLmSfYs9Chwsj4oQAbG/DI33xZ9M/OdpcZxiWjSyJGguqw80WKKrV+fvAJG11De/ctvvDNT9CtArh7iR8MI1RI7Q3SnY9fq3mRBlbin2Q9UOJGiA4cTo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772704406; c=relaxed/simple;
+	bh=D7W50Gyx79F1BQJBBcvSYt9GNLrXBM4NZSb+Xw2SOq4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WAP5e7WHh5z6I+QPBlkK/PtDYW/R11767JXN7MpMcBf8W5LTMYV0QwEscS97mdzAF7pSouj+YqEpNtdnml6aYS/h8PcNrQkKLdo0QxwgDh6CYN5224CmjtZlkOkRH4/Vq6XIe2r2IGTEFh+76G1ZMCXmViKX6mG1g1Eka/IwyTg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=kuQ6wgoy; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1772704388; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=ILbpyWSpgsHBsljKSeJYbS7Vw03gooRrhFM0zfvSJ0mMnsLhlex4dZfvu0oPRIpkKO47xszQ2NfzHWwj0pqoFXT4WttLKvDbi1tiW3nCRR4ojr4Vznpxn72wH7dC+ms4XVRbfVzqDJCc2LgWtNUaXznEcvPGtkEc57jsG4V4QXU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1772704388; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=nzu6bAtb37Rscm3wTe12q1wA4WbiMxsyc0YgbMDmKhU=; 
+	b=mYJnA6goY8gyGl8bcxdTO/ByoiY0b4sP3KBwTqzQqQEu2c5WKfTddS9Fe6+yv32bTaxDKYI77aHYbYDm3y0nylvB+35tg6Dif1cn+oIsHiwDCXjvuTbZTh5SotriBERyVv4hZBgBiBYR/T0QbFyyAxO9Bo5rJckG1guguTRV57Q=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1772704388;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=nzu6bAtb37Rscm3wTe12q1wA4WbiMxsyc0YgbMDmKhU=;
+	b=kuQ6wgoyu9T6YeGL0SUqZ9zx8isgTeA+3UHBcaeWieFRMa3K4z+NnEetspD5wWZI
+	TL1RG3LK6Yh1ZgrkSKhInXGy6ScbB4h0qNcCIN3ps5vMT5cv/qWX4tybyGlWVkJHBrt
+	Vz08HTmqhf50ivIQbgSUcJHFeQhtd9qRZpIk3S4c=
+Received: by mx.zohomail.com with SMTPS id 1772704385504238.17185557574544;
+	Thu, 5 Mar 2026 01:53:05 -0800 (PST)
+Received: by venus (Postfix, from userid 1000)
+	id 8DA0C180891; Thu, 05 Mar 2026 10:52:59 +0100 (CET)
+Date: Thu, 5 Mar 2026 10:52:59 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org, spacemit@lists.linux.dev, 
+	UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH phy-next 19/22] power: supply: cpcap-charger: include
+ missing <linux/property.h>
+Message-ID: <aalSUJI5jFG2kJBL@venus>
+References: <20260304175735.2660419-1-vladimir.oltean@nxp.com>
+ <20260304175735.2660419-20-vladimir.oltean@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: MIq1RSCuHBVZ1XhVT22Kxhu4esBV1fihu8s/tH7WwyAGoyYwRt6D/fVs
-	lrkclSC1/il+SVkkboi5pdWqbf+6s6IcKR4jmtC0fOA17Ert5vVoj9JNWtx13W6wQFosW7D
-	K7B2YcrQlFlMZL/p7OpXdKxXU00Ou0YR9BEVkAIILciYqo/SPNwbWHvYN22h1tpq5UdMZmW
-	TGi+qmGMNYQsKWoCll6A+bOM60Flwa7Z/hJM/XaqqqeXtdeJ7PvZE0PUOmENXJyvXM+5Xq2
-	BTP9g5FI0nYnaerhJr74CINijo241YdcnGPvv4AAXhnuThdIHmvo6ttE8DsrmS0N0BZXzMx
-	weo1ihfsXn/wLGaW0oyEZEeAUtaMK8aBXSCA7HysGJCbjhG1//ijV1B0u0pvhTktvSdaIOL
-	TRDN5tvlBIMnfPursVa45Fu5rUcTrp7rUFFi5kR3HZE2GOddWALKam5gJdH1W87s5LoPN0P
-	GdGosu1KBB5NdpuzcdvrOWGz12C5TC4LCL0LvuV/Unx65YNfYFVo3Gqc8Evqfa3c0VU+r7N
-	lTMV8uQApmozG7+y7P+CGx5SCA5u55RIY/SSxigq+Bvq5LvlA35EFvWCSuWdSP10ZTtX27r
-	RuveyXTxHnJO+4i5BAJhhQeF6cVx2qL+U+7RDlUdmQFc2c5b6VX83/Eqiwk/QveZ8l/igET
-	NM4/dZuRVYwr4i236AmaRpkg24bafwYqntYhkqVnt2exVt2TWYVXCI/CiRTavMe+D+gtE96
-	1EFo86meOr6ASX5VtUTprEflIhNb6Kg4Q4NGEMOW0nXCNvgsVSKulBxuodMtSQ/T3lqGyhi
-	p5/aODki8/bnNk0uA9e8O8Jy9RDNwW1zBYZmkFbejQU/BwuX7VbYvj2mDedGON2RomuGYPV
-	xS4hnIGaRfx4ZKoniz7FKU0egyeKrCGg1Ljon6+WmRHyNky96+I63eKsfG80X73WwTq7I+8
-	0DFvV7223kuSeqGb1m0k3QO6CdTaBJByVVyHnj/Tm/2vtqcCisYg/9S/NK+LTh2u5XX9HBs
-	Ci3bGPraTcWN5dkd1SGwTqrebmehs=
-X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
-X-QQ-RECHKSPAM: 0
-X-Rspamd-Queue-Id: BE94D20F1ED
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2vxe7ox52jklnq2g"
+Content-Disposition: inline
+In-Reply-To: <20260304175735.2660419-20-vladimir.oltean@nxp.com>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-0.2.1.1.4.3/272.682.15
+X-ZohoMailClient: External
+X-Rspamd-Queue-Id: 7BDC520F302
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
+X-Spamd-Result: default: False [-3.76 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_DKIM_ALLOW(-0.20)[collabora.com:s=zohomail];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com,linux.intel.com,uniontech.com];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34056-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-34055-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[uniontech.com:+];
-	TO_DN_NONE(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[24];
+	DKIM_TRACE(0.00)[collabora.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sebastian.reichel@collabora.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,uniontech.com:dkim,uniontech.com:email,uniontech.com:mid]
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:email,collabora.com:dkim,collabora.com:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-From: Xu Rao <raoxu@uniontech.com>
 
-This series is split into two steps: patch 1/2 refactors xHCI IRQ and
-interrupter handling to make multi-vector operation possible without
-changing behavior; patch 2/2 then enables a small capped set of secondary
-interrupters/vectors and routes transfer completions per device (slot) to
-reduce contention on interrupter 0.
+--2vxe7ox52jklnq2g
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH phy-next 19/22] power: supply: cpcap-charger: include
+ missing <linux/property.h>
+MIME-Version: 1.0
 
-This feature is disabled by default: only the primary interrupter is used,
-keeping the existing behavior unchanged.  To enable multiple interrupters,
-set the GRUB kernel command line parameter xhci_hcd.secondary_intr=1.
+Hi,
 
-Xu Rao (2):
-  usb: xhci: refactor IRQ/interrupter plumbing for multi-vector support
-  usb: xhci: enable secondary interrupters and route transfers per slot
+On Wed, Mar 04, 2026 at 07:57:32PM +0200, Vladimir Oltean wrote:
+> This file uses dev_fwnode() without including the proper header for it,
+> relying on transitive header inclusion from:
+>=20
+> drivers/power/supply/cpcap-charger.c
+> - include/linux/phy/omap_usb.h
+>   - include/linux/usb/phy_companion.h
+>     - include/linux/usb/otg.h
+>       - include/linux/phy/phy.h
+>         - drivers/phy/phy-provider.h
+>           - include/linux/of.h
+>             - include/linux/property.h
+>=20
+> With the future removal of drivers/phy/phy-provider.h from
+> include/linux/phy/phy.h, this transitive inclusion would break.
+>=20
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
+> Cc: Sebastian Reichel <sre@kernel.org>
+> ---
 
-Signed-off-by: Xu Rao <raoxu@uniontech.com>
----
-Changelog:
-v1 -> v2:
-  - Bind interrupters to endpoints at enable time instead of selecting
-    per transfer.
-  - Store the selected interrupter in struct xhci_virt_ep and program
-    TRB_INTR_TARGET() from the bound interrupter.
-  - Use a single IRQ handler for both primary and secondary vectors,
-    with STS_EINT handling restricted to interrupter 0.
-  - Keep a common dev_id for IRQ registration to match the existing
-    xhci_cleanup_msix() teardown constraints and avoid dev_id
-    lifetime issues.
-  - Clarify secondary interrupter teardown to avoid double-free or
-    use-after-free during xHCI removal.
-v2 -> v3:
-  - modify commit information
-v3 -> v4:
-  - Bind interrupters per USB device (slot) via struct xhci_virt_device,
-    program TRB_INTR_TARGET() from vdev->interrupter for bulk/ctrl/isoc.
-  - Drop xfer_interrupters and unify on xhci->interrupters[] for both
-    primary and secondary event rings and IRQ routing.
-  - Allocate secondary interrupters in xhci_mem_init; on any allocation
-    failure, rollback and continue with primary interrupter only.
-  - Cap secondary interrupter creation with MAX_SECONDARY_INTRNUM,
-    defaulting to 4.
-  - Route xhci_msi_irq by irq handler_data token (intr_num + 1) to keep
-    correct interrupter selection across resume/power_lost.
-  - Apply MSI-X affinity hints for secondary vectors.
-v4 -> v5:
-  - Fix min() signedness build error reported by 0day CI.
-  - Rebase onto v6.19-rc2.
-v5 -> v6:
-  - Route secondary MSI/MSI-X IRQs by storing struct xhci_interrupter in
-    irq handler_data, instead of using an (intr_num + 1) token mapping.
-  - Program Slot Context Interrupter Target (tt_info[31:22]) from
-    vdev->interrupter to keep slot default routing aligned with TRB
-    TRB_INTR_TARGET() selection.
-v6 -> v7:
-  - Add xhci_quiesce_interrupter() and use it for secondary
-    interrupters in xhci_stop() and the power_lost path of xhci_resume(),
-    ensuring IMAN.IP (RW1C) and ERDP.EHB are properly cleared.
-v7 -> v8:
-  - Sync secondary MSI/MSI-X vectors in xhci_msix_sync_irqs() with
-    synchronize_irq().
-  - Fix build errors by adding missing header includes for the IRQ helper APIs.
-v8 -> v9:
-  - Use PCI_IRQ_AFFINITY to let PCI core spread MSI/MSI-X vectors across CPUs.
-  - Route each MSI/MSI-X vector to its interrupter via per-vector irq_ctx dev_id.
-  - Fix modpost error: xhci_msix_set_handler_data undefined (0-day CI).
-    https://lore.kernel.org/oe-kbuild-all/202601171743.omq3DpnM-lkp@intel.com/
-  - Rebase onto v6.19-rc6.
-v9 -> v10:
-  - refactor IRQ/interrupter plumbing for multi-vector support.
-  - add xhci_handle_slot_secondary_events to handle secondary event ring.
-v10 -> v11:
-  - Fix build warnings:-Wsometimes-uninitialized.
-    Closes: https://lore.kernel.org/oe-kbuild-all/202601262208.UybEjc9X-lkp@intel.com/
-v11 -> v12:
-  - Patch 1/2: Keep the "Add allocated interrupters" initialization in
-    xhci_init() to preserve the existing initialization flow, and fix
-    intr_num to use the proper type. Also drop the meaningless code move in
-    xhci_msix_sync_irqs() (no functional change).
-  - Patch 2/2: Make secondary MSI/MSI-X vector request_irq() failures
-    non-fatal by rolling back any secondary vectors already requested and
-    falling back to primary-only operation. Refresh comments and add extra
-    guard conditions in xhci_handle_slot_secondary_events() to better handle
-    corner cases when draining secondary ring.
-v12 -> v13:
-  - Introduce a GRUB/module parameter to keep several interrupters disabled
-    by default, enabling them only when explicitly requested.The commit
-    information was also modified accordingly.
----
- drivers/usb/host/xhci-mem.c  |  43 ++++++++++
- drivers/usb/host/xhci-pci.c  |  68 +++++++++++++--
- drivers/usb/host/xhci-ring.c | 156 +++++++++++++++++++++++++++++------
- drivers/usb/host/xhci.c      |  48 +++++++++--
- drivers/usb/host/xhci.h      |  26 +++++-
- 5 files changed, 297 insertions(+), 44 deletions(-)
----
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
+-- Sebastian
+
+>  drivers/power/supply/cpcap-charger.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/=
+cpcap-charger.c
+> index d0c3008db534..24221244b45b 100644
+> --- a/drivers/power/supply/cpcap-charger.c
+> +++ b/drivers/power/supply/cpcap-charger.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/power_supply.h>
+> +#include <linux/property.h>
+>  #include <linux/regmap.h>
+> =20
+>  #include <linux/gpio/consumer.h>
+> --=20
+> 2.43.0
+>=20
+
+--2vxe7ox52jklnq2g
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmmpUncACgkQ2O7X88g7
++prvUBAAiDlamBegg+ohGQtBVAORFIULNrYOBZOk8AG1Qluc6NS+fOqK9Cpw1hjn
+4u0f9h1GsBhjBMOb0dS/kxcNWI+xKiTxrMzu4llAu0C9WimbA0CieynGh2b2a3Ja
+R/9RQ6pXqPuVZk+7oVlT6gk++/w8TU83M31vyXL0Kx786QzieoSbOvgyZqhEwLez
+W41hmnYSkPas6nVkhjp0mnP7eqYQRhXLBeFJgUWhgXvy5YMVAfRrso3DK5JA7hB3
+4q8qNISMg2IrcIDMdDaTKVq+3+Ba1z8pRgr4WpIaOpH+Gsq8e8tzt/SEsGt/4SIY
+bKuAPMOCmsYuR8RskVyUWJiWX4qt4/YIRU01cg2xxXP404xIKR49X9Z12aEOKjg8
+DoBnNzlrSRN/RP85te7hG74Mbc/eVL2fJM9dL+7yZylsv03FFoeii0d+a50bbrQT
+QfQy75KNMSMkb7BDrpalL0DhG9bJoZn96pso0p4aD+viqdbpIybrsgMhuUv9DKVS
+2rIsnhe/N1gPds7wwpt/4shjn93YGbngre66mxi0y0YvvBQqc3eCf4YbPkGttJ0g
+18vYhd7giJO8RE2ApEXsQzT6eKtQFPh01zUJhxvemKoAb6hr3Tptep+/2bn4BVzY
+k3rY5iRgS6ono6DZg08TuLXoB3Ck/kz2OE+ntIibQIQNa0GY/4w=
+=oTrF
+-----END PGP SIGNATURE-----
+
+--2vxe7ox52jklnq2g--
 
