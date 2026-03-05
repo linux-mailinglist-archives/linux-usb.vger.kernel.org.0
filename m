@@ -1,222 +1,147 @@
-Return-Path: <linux-usb+bounces-34122-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34123-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iHlwKfTYqWl5GAEAu9opvQ
-	(envelope-from <linux-usb+bounces-34122-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 20:26:44 +0100
+	id qGqECTfzqWkdIgEAu9opvQ
+	(envelope-from <linux-usb+bounces-34123-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 22:18:47 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5455621780B
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 20:26:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 749D1218770
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 22:18:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 6DD7330059A2
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 19:26:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8314C303A877
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 21:18:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EACB378829;
-	Thu,  5 Mar 2026 19:26:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FA4235DA44;
+	Thu,  5 Mar 2026 21:18:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IzWmUGM4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NQK+RLlK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698E72E975E
-	for <linux-usb@vger.kernel.org>; Thu,  5 Mar 2026 19:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F338C306B05;
+	Thu,  5 Mar 2026 21:18:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772738799; cv=none; b=aksFEhNBtTtaQHp/TkBNWRGpafZpdfvj7btwMd+PnWmK3QAdLnMOxJl1bf+jgcIFVsvuGmyPAyVE/cb/P2SpA/PhDSAQELf8v9IRcIT28ZBxU1H+ywz70w2vocRomcKkFv29w9FOIzixcWg2d6vsEBQdCVKaBx+jsv05y9orjSA=
+	t=1772745517; cv=none; b=Sb5XgdF5j6SIQHaZtB85jZHeVrRWWslnsooIcfNWYMFCyjjp/1Aww5Q/BBfsamH93HF4mbUxe+e8l9hLo5xnMrJdppYN4jHp2OTLCBELTMHQQTGD87LlaJAyU4DM+IyqJYaYZMK897QmR+fKxPmofh/atIRzw1BrzERASyOoMww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772738799; c=relaxed/simple;
-	bh=PzyjblgYycUjNzg8ivB+UJW6BN03Bu4LIGuKMJS9mC0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lgEjpKQWhtv9SM/qsJzeZ5bRPYawJih7N3HAcLOa5gR9IRGUAhQiBnHsqNqjLFKo+UbyDeiabt8wHFdk1STxoOORbWFgBAq4VGf4UkM1IwAXlJFfAcO4vAPGzIuqvlHfZvYDx2uXBe2JwYpJ0np9jiU6PFXbF0OxKngiz1EXb4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IzWmUGM4; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b9358dd7f79so344262666b.1
-        for <linux-usb@vger.kernel.org>; Thu, 05 Mar 2026 11:26:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772738797; x=1773343597; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E3usv8RpEZJ2/rRArBDxZ4kIUBE+5QDg7+T72w+q6lA=;
-        b=IzWmUGM4RZEF/aQxqGxP2MPcqtMZjuF6TITe6ZzdGKaAWx9O3LfjchTffQLSmcmy44
-         00HqlSDcCxosAYJnJfPmUobK4A+Tg2SVmpEe2nnVXjpSWjVpd2nojCJ91nIrOk1PmcfZ
-         cyt8I8Brn03WoJA4f+Pc4a9ppu4UWUvfZ2jg+gsExgwgSuryaM5KBFFPjYRIO5HKiXsb
-         XtsFmZ90d7X+zh/+fD5IYrlLHhCOLi9oJvCZSMRdj0IIEW/O+7D0wmncj3AOxwLToQb1
-         39gjnqOObVnP0skG9+qK2WiU7nwg1nfMaCimKTIFwJEdk9s0gOB6LVW1Ck3FUpdr5dFm
-         6e2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772738797; x=1773343597;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=E3usv8RpEZJ2/rRArBDxZ4kIUBE+5QDg7+T72w+q6lA=;
-        b=OI6AJxDhBBZelg7XbaV9zoyaREBk/oLSCqv0qS0GWtm9sa1SbZMIQIzpS9i1ai5ULW
-         fJl3GaXsD/7Fk9LyoIT0dw+YnV2AL63gBnDojH8EI6xXhNCh2i10Uw3hHkTNjM8PpzQL
-         mVEc97xFoaM9Nk1e/rbwrmRjCh4vsqIuUMoIY75ZphamA7HDJxSVOlVTE2R0zhBSZqBD
-         h8M6rUsMqdrDI8bt32gg0WdXhgEPpZt3wifBLl/mXWuoLeEj/ZGXaVBE9a4lzPQulyrv
-         BvRHna9oW6k//919nPtopMNwl42XA0t9Kxvspc8RrFjhIHCJ6xFdS8uE2UuFWI4cr1Z1
-         r60w==
-X-Forwarded-Encrypted: i=1; AJvYcCXenkEhGLHT7eJD/wSGqKwmRZi6nKADzhlaZYAU/+bCD9UPCUs0fRf97AIuCOPwsNIkFHGQcBLDP1w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRqd03fdWsepPeMSjyJEzJ/r5on7dJHnT3sSOGKuBSGgY3ltPs
-	rx9Xlg3a3lTGKp1jFsCwUVZpkiiUIS08nUU7/gp/2uaa8HTTm0A+liNT
-X-Gm-Gg: ATEYQzyPICnE81oN/ySZZeEOdGd/2vZSSSMpln8woHb9Z0jPaYY4ncb04LnxKqvfYCj
-	jOfPoUhdgEzRuNdfdNkEvF+MMan8Yno+/VqPk8wFx+U2dkqjij18i2h1YK0jQm2hw+Tx8ewyc6o
-	pUw/9HfLIYm02gc6Q6CtFCUpBl4dZ08ljD2Q3J+TsNwVEHvQCcsUToIAxJxOchCOf7aOKnhVd1o
-	kgntov6buS/c/a/1uUz/N7je5AQuavlJR57u5JQucf8mRW7B5ld5v2ePOJdELjmIIn+ZzwmHo5Q
-	HuA+stDNFtrzSVpmqGWswz9I/J8nY0pQmMd4T79vAPm5M76/izG5hYGJcB6b6Ni/jPHeKBX5VFm
-	PGye+c2eim4NZa317zDjEvkA9U89l1SKzhhWrTrKN2i+FRG/b/61tzw7Wf+6eRwb4SRrLAA22Dw
-	vI6IMBpVWI+oBk4uF/5mpFk7NPnK5vQg0j
-X-Received: by 2002:a17:906:478f:b0:b93:5b12:7b92 with SMTP id a640c23a62f3a-b93f1432bd7mr456411366b.40.1772738796557;
-        Thu, 05 Mar 2026 11:26:36 -0800 (PST)
-Received: from foxbook (bfj19.neoplus.adsl.tpnet.pl. [83.28.47.19])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b935ae65662sm952723766b.41.2026.03.05.11.26.35
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Thu, 05 Mar 2026 11:26:36 -0800 (PST)
-Date: Thu, 5 Mar 2026 20:26:32 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Niklas Neronin <niklas.neronin@linux.intel.com>
-Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org,
- raoxu@uniontech.com, Thinh.Nguyen@synopsys.com, Andy Shevchenko
- <andriy.shevchenko@intel.com>
-Subject: Re: [RFC PATCH 03/12] usb: xhci: simplify USBSTS register reset
-Message-ID: <20260305202632.5a2d0d0d.michal.pecio@gmail.com>
-In-Reply-To: <20260305144824.3264408-4-niklas.neronin@linux.intel.com>
-References: <20260305144824.3264408-1-niklas.neronin@linux.intel.com>
-	<20260305144824.3264408-4-niklas.neronin@linux.intel.com>
+	s=arc-20240116; t=1772745517; c=relaxed/simple;
+	bh=6H2FBr+h/R7p6UFbOa1JlXKs8KnLDNSITprKGuUVwgk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hEyqf+X4Vva3nONPMFWYknelvLzeJ95aFqnmqx9TJlPkFZmURxuN2ZesgVRZETAQtzKDmePQe1w0Ge4oM1gLKM73+KSprexlIgWvwVMEd3tOVAULBgfe9YfIAdYZh5L8JYx57Z4XXUgcPf+qh3F0qhqwlWiONQd3t8L3UemDi00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NQK+RLlK; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772745516; x=1804281516;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6H2FBr+h/R7p6UFbOa1JlXKs8KnLDNSITprKGuUVwgk=;
+  b=NQK+RLlKZh/uTXhOH1O2a3FpRQcrmb2zfqeCPdpDagW7dFHa0fbDyKrh
+   xAZTrIa5ROEYcNBkM1/KJRWwk55LCJB/lNpFAlBbu2tbZnftgcUt5CbkZ
+   Qwkpew1wbefUkHWK8T8jlczH2CorR27ZCENUxGfxFSRw3sZDC9L0uMrvv
+   VJQaXXsXz/Q3PKUIGlolP4yFGmshzbW5HhSCZHhcALqxN5ujVLm1OTAMc
+   HMmE7wVPgXj8KgqsxgyO4eZqeR8Z+D4mekD5IyzRWgJLmQWkra4a+QtzX
+   RArxInAVqjj2iKZgLdNvC93ZzRJSZSFvvppNWX3z/gKmQQRgqKwnHwzHd
+   g==;
+X-CSE-ConnectionGUID: +kjADFt5SiSJWdYxjsyEAg==
+X-CSE-MsgGUID: 3rmXB9+iRXCItS69V9tNug==
+X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="73921730"
+X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
+   d="scan'208";a="73921730"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 13:18:35 -0800
+X-CSE-ConnectionGUID: Jpr2x9n2RTi0MZCT//8IMQ==
+X-CSE-MsgGUID: 4QmsBi6TSGeHgZbJNENP6g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
+   d="scan'208";a="223505518"
+Received: from fpallare-mobl4.ger.corp.intel.com (HELO [10.245.244.90]) ([10.245.244.90])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 13:18:32 -0800
+Message-ID: <aad2d38e-a0ef-49b1-a82e-f3a9b4750612@linux.intel.com>
+Date: Thu, 5 Mar 2026 23:18:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 5455621780B
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: hcd: queue wakeup_work to system_freezable_wq
+ workqueue
+To: Alan Stern <stern@rowland.harvard.edu>, Xu Yang <xu.yang_2@nxp.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, gregkh@linuxfoundation.org,
+ tglx@kernel.org, mingo@kernel.org, claudiu.beznea.uj@bp.renesas.com,
+ kees@kernel.org, bigeasy@linutronix.de, ulf.hansson@linaro.org,
+ rafael.j.wysocki@intel.com, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
+References: <20260304115729.857136-1-xu.yang_2@nxp.com>
+ <c35d4aae-038f-428c-9b69-09230043dd60@rowland.harvard.edu>
+ <dia6g5nbekt6brmi73dovchyklugjnd6ok3tsifbd6nfcjnnvd@xus2sw5wodhe>
+ <b5a3d627-8cc5-41a9-848a-1e67c96bc191@rowland.harvard.edu>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <b5a3d627-8cc5-41a9-848a-1e67c96bc191@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 749D1218770
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34122-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	TAGGED_FROM(0.00)[bounces-34123-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,intel.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,intel.com:dkim]
 X-Rspamd-Action: no action
 
-On Thu,  5 Mar 2026 15:48:15 +0100, Niklas Neronin wrote:
-> The current code clears the USB Status Register (USBSTS) and then sets
-> the Enable Interrupt (EINT) bit to '1'. A mask (~0x1fff) is used to
-> avoid modifying reserved bits 31:13, but it also inadvertently
-> excludes reserved bits 7:5, 1. These fields are defined as RsvdZ, so
-> writing '0' to them has no effect.
+On 3/5/26 17:47, Alan Stern wrote:
 
-This paragraph is misleading because it suggests that treatment of bits
-31:13 was correct and treatment of bits 7:5 was harmlessly wrong.
+> 
+>>> A better question to ask would be: Why does xhci_resume() call
+>>> usb_hcd_resume_root_hub()?  That does not seem like the right thing to
+>>> do -- at least, not in this scenario.  The proper time to resume the
+>>> root hub after a system sleep is when the PM core calls its resume
+>>> routine.
+>>
+>> Good question, it seems like commit 79989bd4ab86 ("xhci: always resume
+>> roothubs if xHC was reset during resume") is added to fix some issues.
+> 
+> The changelog for that commit says that it was meant to take care of
+> problems during runtime resume, but it also affects system resume.  This
+> appears to be an oversight.
 
-In reality, bits 7:5 were done correctly, while preserving bits 31:13
-was a bug. They should be written as zero just like 7:5.
+That is possible
 
-Table 5-3 is completely clear:
-Software shall use =E2=80=980=E2=80=99 for writes to these bits.
+We should probably limit the all the usb_hcd_resume_root_hub() calls in
+xhci_resume() to runtime resume cases only.
 
-> According to the xHCI specification, section 5.1.1:
-> "System software shall mask all reserved fields (Rsvd, RsvdP or RsvdZ) to
->  '0' before evaluating a register or data structure value. This will enab=
-le
->  current system software to run with future xHCI implementations that
->  define the reserved fields."
+There is a similar case further down in xhci_resume() where driver is looking
+for pending port events.
 
-This quote seems irrelevant. We aren't evaluating anything here, just
-changing one bit.
+Thanks
+Mathias
 
-It obviously doesn't apply to the case of read-modify-write, because if
-we mask RsvdP bits to zero and then write back, that's a bug too.
 
->=20
-> Given this, it is safe to write zero to all bits of USBSTS except EINT.
-> This allows the mask and the register read to be removed, simplifying the
-> code, avoiding potential future issues and removing unexplained hex.
->=20
-> USB Status Register; xHCI Specification, version 1.2 section 5.4.2
->=20
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
-> ---
->  drivers/usb/host/xhci.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index a288f59c604c..ad095768ed48 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -705,7 +705,6 @@ EXPORT_SYMBOL_GPL(xhci_run);
->   */
->  void xhci_stop(struct usb_hcd *hcd)
->  {
-> -	u32 temp;
->  	struct xhci_hcd *xhci =3D hcd_to_xhci(hcd);
->  	struct xhci_interrupter *ir =3D xhci->interrupters[0];
-> =20
-> @@ -740,8 +739,7 @@ void xhci_stop(struct usb_hcd *hcd)
-> =20
->  	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
->  			"// Disabling event ring interrupts");
-> -	temp =3D readl(&xhci->op_regs->status);
-> -	writel((temp & ~0x1fff) | STS_EINT, &xhci->op_regs->status);
-
-Makes sense,
-
-> +	writel(STS_EINT, &xhci->op_regs->status);
-
-but what is actually the point of clearing this bit here at all?
-
-This is USBSTS.EINT, not USBCMD.INTE. Per 5.4.2 (including notes),
-this bit has no effect on anything, it's only for SW's convenience.
-And we are shutting down the driver right now.
-
->  	xhci_disable_interrupter(xhci, ir);
-> =20
->  	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "cleaning up memory");
-> @@ -1174,8 +1172,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_l=
-ost, bool is_auto_resume)
->  			return retval;
-> =20
->  		xhci_dbg(xhci, "// Disabling event ring interrupts\n");
-> -		temp =3D readl(&xhci->op_regs->status);
-> -		writel((temp & ~0x1fff) | STS_EINT, &xhci->op_regs->status);
-> +		writel(STS_EINT, &xhci->op_regs->status);
->  		xhci_disable_interrupter(xhci, xhci->interrupters[0]);
-
-This runs right after xhci_reset(), so I suspect this whole block is
-pointless. Apparently copy-pasted with other stuff from xhci_stop().
-
-> =20
->  		xhci_dbg(xhci, "cleaning up memory\n");
-> --=20
-> 2.50.1
->=20
 
