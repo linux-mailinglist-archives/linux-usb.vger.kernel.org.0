@@ -1,51 +1,52 @@
-Return-Path: <linux-usb+bounces-34067-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34068-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qKh/FiFnqWlN6wAAu9opvQ
-	(envelope-from <linux-usb+bounces-34067-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 12:21:05 +0100
+	id AKZCISdnqWlN6wAAu9opvQ
+	(envelope-from <linux-usb+bounces-34068-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 12:21:11 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C087F21083D
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 12:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 31168210844
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 12:21:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B1A1130525FE
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 11:15:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C633A3058E39
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 11:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCDDF38836F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E003A388396;
 	Thu,  5 Mar 2026 11:15:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GHk6dSF3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EuCYM3Le"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF303845CF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6006738642F;
 	Thu,  5 Mar 2026 11:15:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772709328; cv=none; b=fz86w1lGCxVZP9ZWuJECM/rhD5HOTAxtGqTCeiQD/a4iOfgKH8p5VUDYfTKHF9BVFFAfCb8vfWf3nZIKcUtaHhTSmrom9cxx4T/RuYtDjWgVdB5/PdK4lDAOKSl5dEWBROot17LYB0a8VQcOL38XBgGhxEU920oWUA9OWFHDYMQ=
+	t=1772709328; cv=none; b=SzSU93PgA33ivZ6ZZSUprm9/81XOJ0szuBms4y6PyrlNcJvHd21nIgw0DBuZ3fix7IkVj9xwu0i3bMvEOgvy5jAwJ7vCjVI7ISreU4AzaZOcZ6ZbcLCa3XsSum2yMENpVMKLh66KojG0Egfte8Pzr/JMoD6MrJfFgbc/9ZfivRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1772709328; c=relaxed/simple;
-	bh=fNCpqWa805aA4ypNNtrZcmOLXAGPYsiL3MrOXZwOok4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LmfnW1ZSJb7uk8PIFVk8hvvCF7AZYeDOJEybZapmpX90qui+pbiD1aNC7NOo/axEEveqc/HqTHYGuFc+b2hZ1ThE0Ki3vOv3rJHTn1A2d+Cy18lN6TzGd+M7R7CCGPfoKzZYjQ5swG5Wk3TciBx85lZBqov0C2BqlmnjUU8pw/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GHk6dSF3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06950C116C6;
+	bh=hGq0+CM200unysQdJAyOZo6M3b9G1AjRQPl31InwpJw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jCUs5ZxqieVbC+mQRomu17e4SPDIWvPxTSbcPRiU78oG/3vsfKuWiUaLSTTmzqEd+/MSV3+81zo94NlAkA1pq16J/A03/8Xj2YgWzxfxFK7RDEGeX32fDoPpYX41GXYGW6h2fjy5d6hgDg0mgKIPT+YgmgpkAxxO/DNfyVFWbvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EuCYM3Le; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10510C2BCAF;
 	Thu,  5 Mar 2026 11:15:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1772709328;
-	bh=fNCpqWa805aA4ypNNtrZcmOLXAGPYsiL3MrOXZwOok4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=GHk6dSF3M7G+vadbbVx6FVNmNUoNiR9X+0RhaulbyK44u2UmEXAbItSPzXldfW/qT
-	 Dfh940JoJLePS7XaO+86i2ypPaYmQCmKglVwc7dKq54cOXee5E2fXKygEvo6Jbk676
-	 9OHSk5OFs6HmszE/++axMRo5YfhFjtKtarIENiKXg5jbFeAdFDAJB8SNS4E3QF14S5
-	 RgsmjhA2Iaw+sLQBvVQvKnEvT9hXQQxDewm6f+eOhII3Y4+ywWyGhcT7lp3AXkMqcj
-	 BZWY1H54WhLNZxrhNw3JUwRrGDeUyBwwWbX6waYG2jKplEFtCCXRwxte5mbo0FaWek
-	 +NNz2Mju5Y4Iw==
+	bh=hGq0+CM200unysQdJAyOZo6M3b9G1AjRQPl31InwpJw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=EuCYM3Le5f0YUBWsPJ86WUx8jv/W1aLzD5iFbpHizrClP8/S/zrKC76bJCpRWFC0a
+	 DsKr1OH77PEsSuV+dGtOJUiS3hqAGlQAJ7bQMLTZqyYOZ8GyMfWFVp74x/nEVS0j4K
+	 SFErcwR5ru557L6T7r8cBUaoX70RdLstc/BRyZBvTYqT1DFYb377EqHV4uHJQoyJj5
+	 WkCFOFsH34TNlYIOfRzlOGsmmB2Vd90HZDSZvch3Wa+lvAbVxcfVckSUOmzM3u5UYm
+	 TnGCDkS3ICugOEY6hJtWTrjF8HdltnRMkFH5kNpKikmHqquf2epKRQfm/X3Oufz4w0
+	 seAw90+TTAy8w==
 Received: from johan by xi.lan with local (Exim 4.98.2)
 	(envelope-from <johan@kernel.org>)
-	id 1vy6ft-000000004nb-3fY0;
+	id 1vy6ft-000000004nd-3lOW;
 	Thu, 05 Mar 2026 12:15:25 +0100
 From: Johan Hovold <johan@kernel.org>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -54,10 +55,12 @@ Cc: Lixu Zhang <lixu.zhang@intel.com>,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Johan Hovold <johan@kernel.org>
-Subject: [PATCH 0/5] USB: drop redundant references
-Date: Thu,  5 Mar 2026 12:15:06 +0100
-Message-ID: <20260305111511.18386-1-johan@kernel.org>
+Subject: [PATCH 1/5] USB: cypress_cy7c63: drop redundant device reference
+Date: Thu,  5 Mar 2026 12:15:07 +0100
+Message-ID: <20260305111511.18386-2-johan@kernel.org>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260305111511.18386-1-johan@kernel.org>
+References: <20260305111511.18386-1-johan@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,7 +68,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: C087F21083D
+X-Rspamd-Queue-Id: 31168210844
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
@@ -78,7 +81,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34067-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-34068-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	MIME_TRACE(0.00)[0:+];
@@ -101,27 +104,37 @@ device while the interface is bound to a driver and there is no need to
 take additional references unless the structures are needed after
 disconnect.
 
-Drop redundant references to reduce cargo culting, make it easier to
-spot drivers where an extra reference is needed, and reduce the risk of
-memory leaks when drivers fail to release them.
+Drop the redundant device reference to reduce cargo culting, make it
+easier to spot drivers where an extra reference is needed, and reduce
+the risk of memory leaks when drivers fail to release it.
 
-Johan
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/misc/cypress_cy7c63.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-
-Johan Hovold (5):
-  USB: cypress_cy7c63: drop redundant device reference
-  USB: cytherm: drop redundant device reference
-  USB: ljca: drop redundant interface reference
-  USB: trancevibrator: drop redundant device reference
-  USB: usbsevseg: drop redundant device reference
-
- drivers/usb/misc/cypress_cy7c63.c |  4 +---
- drivers/usb/misc/cytherm.c        |  4 +---
- drivers/usb/misc/trancevibrator.c |  3 +--
- drivers/usb/misc/usb-ljca.c       | 15 +++++----------
- drivers/usb/misc/usbsevseg.c      |  3 +--
- 5 files changed, 9 insertions(+), 20 deletions(-)
-
+diff --git a/drivers/usb/misc/cypress_cy7c63.c b/drivers/usb/misc/cypress_cy7c63.c
+index 99185fc3e9df..4a7f955ba85b 100644
+--- a/drivers/usb/misc/cypress_cy7c63.c
++++ b/drivers/usb/misc/cypress_cy7c63.c
+@@ -215,7 +215,7 @@ static int cypress_probe(struct usb_interface *interface,
+ 	if (!dev)
+ 		goto error_mem;
+ 
+-	dev->udev = usb_get_dev(interface_to_usbdev(interface));
++	dev->udev = interface_to_usbdev(interface);
+ 
+ 	/* save our data pointer in this interface device */
+ 	usb_set_intfdata(interface, dev);
+@@ -239,8 +239,6 @@ static void cypress_disconnect(struct usb_interface *interface)
+ 	 * device files have been removed */
+ 	usb_set_intfdata(interface, NULL);
+ 
+-	usb_put_dev(dev->udev);
+-
+ 	dev_info(&interface->dev,
+ 		 "Cypress CY7C63xxx device now disconnected\n");
+ 
 -- 
 2.52.0
 
