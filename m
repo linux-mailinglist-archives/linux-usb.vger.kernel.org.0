@@ -1,146 +1,168 @@
-Return-Path: <linux-usb+bounces-34119-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34120-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GB/FNfW6qWnNDQEAu9opvQ
-	(envelope-from <linux-usb+bounces-34119-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 18:18:45 +0100
+	id QB/UMO++qWnNDQEAu9opvQ
+	(envelope-from <linux-usb+bounces-34120-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 18:35:43 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 828492160C1
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 18:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 632D8216542
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 18:35:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E10CC3017278
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 17:18:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1A08B307C411
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 17:33:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A703E3D89;
-	Thu,  5 Mar 2026 17:18:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D647F3E51E1;
+	Thu,  5 Mar 2026 17:33:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VZhSzA1P"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AOXYxVNw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79103DBD6D;
-	Thu,  5 Mar 2026 17:18:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EB963E123E;
+	Thu,  5 Mar 2026 17:33:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772731119; cv=none; b=AdmC4ZmTttEnLftzUYdmzuTHmi1/oNAElYawTkmHBXhsfEzr72/GzICqB3OsF0WZKPj6tVc8VvM+0ll1iNtj4DX3SHi996NYwy0iGfJoh+l8+JzjGcy0lF6qy3b87YWm8MUXdqiFvlxELxdIHAtcxtDpsPdVV95lxtpMVQy28VQ=
+	t=1772731999; cv=none; b=pJ0jenRoCkM5qHmOqqANqGgVr0SlwFJEqnhSP64kIe5VUNTSo67WtUvBQUfmmwj8x0toeF12ToLW9lkV0HTSOKM4sVzV4qKCw7hFpRROyAaUY6qm7KLbQCszm4OLoAlaWNi1Jn19SbJ6AvXjgoUWezA5frhHcUOpNa3vlYoHxjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772731119; c=relaxed/simple;
-	bh=ISvSRJh68MMZC9CgEP5gCnJP8dBeh+Gpn2Er1GrHs+s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QoA8RI2GXKgRHq8OKdhvy5H+v/KmwAlzqPQdY9lymemegh3pFa+nIdGSWYS1e2qndjtTTD5U8yNQu9ATN51y2F047HHm498d+OerBrZUwNCTP/6QDF/xbqCSYcXBXZ4gC/crYtliaSi5ACrgh13mGoWDh0oWLw8zrT70yC3q5DA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VZhSzA1P; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1772731999; c=relaxed/simple;
+	bh=zlKTPf/6gQvJLZmSYP53dNkhZpD9yNiFsgU5DumVukk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HJwZiABpgRClyYYruxdL5C6vSvCj4fpTKMls7xS68b65P1RafUX54PFIKWNBAMknhLsE9ttVIQBusRfbyf2vWnRkcVTyLSCKe9a7GGBy2NiIBrKL7Kf4KbU8DSBDwDkfxrBEVG0h3BoqIVI9qDU35hfI5BsKJaL7JGYinKv67nY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AOXYxVNw; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772731118; x=1804267118;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ISvSRJh68MMZC9CgEP5gCnJP8dBeh+Gpn2Er1GrHs+s=;
-  b=VZhSzA1PgEIVd88QXIBhVSAZE2854K4zCJCLO9FR8r+N/etxOzV8rubu
-   HNrDDOeD9LOjzRE7XrdIygd5Re2/2Rffjv6PAv9LaF8zS70+CC8S4cNic
-   9JxKvzKJUpMYdzw9tin72Rr310iYhse7xBc5RBR2KUmV32/FnlmQc4n5w
-   A3Acw8WGuwHmQPLf9Vk6zt/GzxPv9cZ1cf4K1GGaqabjyvFwLip+fpX24
-   vKeZLdXbFaZ9FnuIxha65tO7pHQIA8bt9sY9p/MyO2Oj3XMTBii9EpFOr
-   bS+gi7oVmsUzgGLTqtjdewNUJktmJX/OCYgXyMewa5je5ntN6hBr5Gv5V
-   Q==;
-X-CSE-ConnectionGUID: dzxot+HpS3Oo4Pub6KZJog==
-X-CSE-MsgGUID: Gw1A422OQCCD5ay1Bp4pyw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="73874990"
+  t=1772731998; x=1804267998;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zlKTPf/6gQvJLZmSYP53dNkhZpD9yNiFsgU5DumVukk=;
+  b=AOXYxVNwOVhsUskQdpybcFms7o/Acof+xKts9SuVdv+DAbjHtZtrAYqf
+   BHEMX0wzT7mf1W78EqJD9xkKzDiTWlcbOlq8fEKmzm/jnUDDTQ204h8Xm
+   MxnUIJrpWaJrWQ1j7RjUtvowBGuYdF8vbpBgAolpZ2j0uhKC8sT8XlaBq
+   sciun6T3PykAaEin647KJZRy36+U4ZsBJJuHx1zzivuzxnwpg1afCwQga
+   NIRsb53zqesC1QIVn0FTWgL5mIrGKbuHhWSQIEn2AsnI/Cpvf5yiAF6jD
+   1NVGTNsQzWxDAHUsKJeKZOfRyhr1cjihi7aBHDM6s2cJTRRRplU//jH9x
+   w==;
+X-CSE-ConnectionGUID: zblxQukgThu12ST8ZKNk4A==
+X-CSE-MsgGUID: KZ4IrN0ESJevwSqPJaU4Wg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="84159295"
 X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
-   d="scan'208";a="73874990"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 09:18:37 -0800
-X-CSE-ConnectionGUID: gzw3uIWBQSyZiGYXk5nGgg==
-X-CSE-MsgGUID: RTwvVgV5SH+x079UI+6R8w==
+   d="scan'208";a="84159295"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 09:33:17 -0800
+X-CSE-ConnectionGUID: aDZxcSIpS5a9VFa8M0hmCQ==
+X-CSE-MsgGUID: b7TP+LztRIGtCs8PzxzU8Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
-   d="scan'208";a="217884314"
-Received: from smtp.ostc.intel.com ([10.54.29.231])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 09:18:36 -0800
-Received: from ray2.sr71.net (unknown [10.125.109.20])
-	by smtp.ostc.intel.com (Postfix) with ESMTP id 211996362;
-	Thu,  5 Mar 2026 09:18:36 -0800 (PST)
-From: Dave Hansen <dave.hansen@linux.intel.com>
-To: linux-kernel@vger.kernel.org
-Cc: Dave Hansen <dave.hansen@linux.intel.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	linux-usb@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: Remove bouncing maintaner, mark thunderbold DMA test as orphan
-Date: Thu,  5 Mar 2026 09:18:37 -0800
-Message-ID: <20260305171837.3114157-1-dave.hansen@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
+   d="scan'208";a="218879177"
+Received: from gabaabhi-mobl2.amr.corp.intel.com (HELO [10.125.109.20]) ([10.125.109.20])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 09:33:17 -0800
+Message-ID: <61f7f7a3-4e7e-48b7-bc12-5f92f9cf18bf@intel.com>
+Date: Thu, 5 Mar 2026 09:33:24 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 828492160C1
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] MAINTAINERS: Remove bouncing maintaner, mark thunderbold
+ DMA test as orphan
+To: Dave Hansen <dave.hansen@linux.intel.com>, linux-kernel@vger.kernel.org
+Cc: Andreas Noever <andreas.noever@gmail.com>,
+ Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat
+ <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
+References: <20260305171837.3114157-1-dave.hansen@linux.intel.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20260305171837.3114157-1-dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 632D8216542
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linux.intel.com,gmail.com,kernel.org,vger.kernel.org];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-34119-lists,linux-usb=lfdr.de];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34120-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dave.hansen@linux.intel.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,intel.com:dkim,intel.com:email,linux.intel.com:mid]
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dave.hansen@intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,intel.com:dkim,intel.com:email,intel.com:mid]
 X-Rspamd-Action: no action
 
-This maintainer's email is now bouncing. Remove them and mark
-the code as an orphan for now.
+On 3/5/26 09:18, Dave Hansen wrote:
+> This maintainer's email is now bouncing. Remove them and mark
+> the code as an orphan for now.
 
-Cc: Andreas Noever <andreas.noever@gmail.com>
-Cc: Mika Westerberg <westeri@kernel.org>
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- MAINTAINERS | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+... and I'm a doofus. I'm not sending things via my normal workflow and
+I missed:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 61bf550fd37c2..c32d76a949979 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -26300,9 +26300,8 @@ F:	drivers/media/i2c/thp7312.c
- F:	include/uapi/linux/thp7312.h
- 
- THUNDERBOLT DMA TRAFFIC TEST DRIVER
--M:	Isaac Hazan <isaac.hazan@intel.com>
- L:	linux-usb@vger.kernel.org
--S:	Maintained
-+S:	Orphan
- F:	drivers/thunderbolt/dma_test.c
- 
- THUNDERBOLT DRIVER
--- 
-2.43.0
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
 
 
