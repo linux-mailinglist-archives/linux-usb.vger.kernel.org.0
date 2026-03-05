@@ -1,335 +1,219 @@
-Return-Path: <linux-usb+bounces-34053-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34056-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mPZnNp9SqWm95AAAu9opvQ
-	(envelope-from <linux-usb+bounces-34053-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 10:53:35 +0100
+	id IOyjGGdTqWkj4wAAu9opvQ
+	(envelope-from <linux-usb+bounces-34056-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 10:56:55 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DE8C20F0B0
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 10:53:35 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE94D20F1ED
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 10:56:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1F27131190DF
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 09:45:41 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 031B3305653B
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 09:54:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9CB636654F;
-	Thu,  5 Mar 2026 09:45:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A893C37AA7A;
+	Thu,  5 Mar 2026 09:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=est.tech header.i=@est.tech header.b="hbJgWFSJ"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="RXiDXQ18"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011060.outbound.protection.outlook.com [52.101.65.60])
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75BDE34EEE2;
-	Thu,  5 Mar 2026 09:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.60
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772703938; cv=fail; b=dwhfpdJxcUldouDkb+xzvIzhY5exLk1TiwgV6fo7g+VXswPbIfLsBHanc2vX9OQfxXhJ2aKYQp17BuOxwNrZ5E+bA26aFJcaogz/EUmX24YR6kC7pEgpbcOlXID85KRMU8hvaP9cMyUKWGmlWoVqPuZYSDqrT5/hKJFuTbeD5mA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772703938; c=relaxed/simple;
-	bh=YDXodeREeoZBXiudKjM2+ffQ4epdBdlEfrnMGr+U/n8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=HIWC8arSEDAFSTHjs8exm2vzjO9XNieBtAzbjdVlavm58VzRv1i2U8LjmUsrrHryt5Y6dh1JsO3SOU3uhRwu/FuafeiuH2xdeypHaSW+nHikC/a0Qu7MiMonEKS0J2vxxULxpMrff9A3CjS2GaoSpTaPq5nIW0Pg6c6XLVCW41s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=fail (2048-bit key) header.d=est.tech header.i=@est.tech header.b=hbJgWFSJ reason="signature verification failed"; arc=fail smtp.client-ip=52.101.65.60
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jpgsIcFWM7Qns5MfyMf2ItV4LJIEZe460BUGCEvQugHMlAhQFIAQjvRme2PxqM98f752jGhun37q6hwAkS/glFfbgi0zZW/xEwgVG7nuC3Ong1XKajE7+eNblzjbVA996I0nEsfym6lYqBu4pvNRlbSbJCw4vOsAw6cEAvjzeUPzxF73vae8uVqcixgZq0F5rSaH1AG5Uc5xWyw4tF7EZ+laY9QFc8RMT65KuDe7vvv55H3pX0DpSkb3TOQe+j/DDjxfqt83P8Jeso13HOnDy5DBN9dwnxl0HQnUjrxHmw3qTYGr+xiRyndEkrxf9lDUHn8PBruKA/HncwyBkBNPeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rICrF1WaucgmxWPRx12C5aCjvqAwYMUihBK/qX2DUUo=;
- b=SxsuqMC47eMnPSo4UnKtebwut3t/+zbIcyFXTqIR54tigaVsd3nUemGMwcMoCixAJnOpDoyVNmenWpV3k5sGAedNsyfotd7IGsKm4ztQznHvYzFYlgf9KLU606ZPzPGwxBFnuxGMmTv0oVUCoTiPd+4Zywm7yLy2hKkrIChmof9YohKtAxM1uGEBjO88SgsFgVSsAejc43zbfYNHl8Sh2/97a59SrXGgHp587BtY3Y1vVt6DOd0/k8ZiDKh+Ojiv1+YTv2V2dnit+E2ZU0mxX6tmYl5f1PpKcFrqcVxC60oJZvnw8ZIdKlvz+A5LARlyxc1UXk9141iTKlgbcmhl/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
- dkim=pass header.d=est.tech; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rICrF1WaucgmxWPRx12C5aCjvqAwYMUihBK/qX2DUUo=;
- b=hbJgWFSJ27iHs7sIY9jJF+6hUgXlMNqX7vF+rUJPQlhIyEVGYhgDhdIbfWNbXAXcDPRz5V/dsmp9MfAGZTnK4p1nNK16cNWDA1OuFEQdWMI0mp8lBbCs6hUWcuxnpKY6AbtzhvOzpBYGTu9WcTk6EqJLW26HKByAEGLOl2faxU/nPDoNuTONiVjQ4l489r+mA3jFaWot5iHmg6iJd3Hqj2gG1eq9Rcf39E0oIZt8gfipTcS8oghjFw+xb8BBR5Ws845ueHsInBBVqGTwW9oxo7Kskk14mb0bq4iiyFJ6Ejj3ThQCa03uWRq4qtbzwMJmXG6dXpoK84NH8qdGUssZdw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=est.tech;
-Received: from GVXP189MB2053.EURP189.PROD.OUTLOOK.COM (2603:10a6:150:6c::22)
- by DU2P189MB2541.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:494::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.17; Thu, 5 Mar
- 2026 09:45:32 +0000
-Received: from GVXP189MB2053.EURP189.PROD.OUTLOOK.COM
- ([fe80::9996:4371:88cd:bc04]) by GVXP189MB2053.EURP189.PROD.OUTLOOK.COM
- ([fe80::9996:4371:88cd:bc04%6]) with mapi id 15.20.9654.022; Thu, 5 Mar 2026
- 09:45:31 +0000
-Date: Thu, 5 Mar 2026 10:45:30 +0100
-From: Ravineet Singh <ravineet.a.singh@est.tech>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Mike Looijmans <mike.looijmans@topic.nl>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, jura@vukad.in, malin.jonsson@est.tech
-Subject: Re: [PATCH] usb: dwc3: gadget: Inform system of suspended state
-Message-ID: <2j6o5atwkm5wl25adcusadiadme7gqpx4vqmscl42wnxgjyh7b@b5om47iesajo>
-References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.c5f44c79-75b2-43c1-a791-806fe8b693cd@emailsignatures365.codetwo.com>
- <20240603131304.233403-1-mike.looijmans@topic.nl>
- <20240604010256.4dxamwvcjxug6xfb@synopsys.com>
- <0fceefc4-2b3c-41a4-a6ac-d0b6dbacc1f7@topic.nl>
- <20240604230624.dk3pssivd7g3qb7p@synopsys.com>
- <23bf65a8-b3b2-459e-bee7-ca7c4e4993de@topic.nl>
- <20240606002909.f6a7fwfh7ccb6pxq@synopsys.com>
-Content-Type: multipart/mixed; boundary="em3xqypvsvj66tfm"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240606002909.f6a7fwfh7ccb6pxq@synopsys.com>
-X-ClientProxiedBy: GV2PEPF0002395B.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:158:400::355) To GVXP189MB2053.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:150:6c::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9CC3783B5
+	for <linux-usb@vger.kernel.org>; Thu,  5 Mar 2026 09:53:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772704427; cv=none; b=NywHHdbmuc/j6oiQ+a4JTzJDnbXa1/wzl7A9xJ8FMdnJWYZFrHF9PR7+V08DQ1HrkhO/AiWtTcRzMlUo05ePWX2QpN3Tg88778mxw34lFKNTzm8SMVwa5P63l7rzDpn6U0k4XCQYld8IE+FJRD+c6+Pdrm0y8KBPx4i4iin+vYc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772704427; c=relaxed/simple;
+	bh=sG60QjrCMm5xsvTaLTxtbMCn0kIVdTMRy5Wl3mbmv00=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VuhwvPWhjoME1E9v6SlLIdXhXWcccoetMbmg+rlRgFrdi6qJu8KXBOat7FUb83scTjQtN9pn0NVVLxuNPS0okK40ED/CjdGInqijmnHffyIKuubI69C5ZhPRgnimBpe+jtr/VElOzQ80WLjNkrGsOanOwgjmmAZX4YV8Z/Eyirs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=RXiDXQ18; arc=none smtp.client-ip=54.204.34.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1772704401;
+	bh=Ma5atvt63uXsv26j3mB++QPkdyCIJdGnN5ymHu73+r4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=RXiDXQ18FbunE3vln4XylCL59iAQgu9t/b19dEqZz1KKLUn8y3LiYl/uoOiABaoAf
+	 VJPFLM/MmZpkDIARYTbTlAPhES3G8D1bCgauB1oiKXcATJKuHQKtK2s1CKgeMu130l
+	 2YYfw2BlBHXIIEEfCjEPmD6aTv6VDgcmo5s2mPc0=
+X-QQ-mid: zesmtpip4t1772704386tf6f9e72d
+X-QQ-Originating-IP: bXXFYcn3Ev4pfRuCsdxhWqo5harfCYIpuPXClP5ZQSc=
+Received: from uos-PC ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 05 Mar 2026 17:53:05 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 3191242563000423774
+EX-QQ-RecipientCnt: 6
+From: raoxu <raoxu@uniontech.com>
+To: mathias.nyman@linux.intel.com
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	michal.pecio@gmail.com,
+	niklas.neronin@linux.intel.com,
+	raoxu@uniontech.com
+Subject: [RESEND PATCH v13 0/2] usb: xhci: route device to secondary interrupters
+Date: Thu,  5 Mar 2026 17:52:56 +0800
+Message-ID: <8338541D6B5694ED+20260305095256.691595-1-raoxu@uniontech.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GVXP189MB2053:EE_|DU2P189MB2541:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6a0c7bfa-8c80-4ebf-d1fa-08de7a9bf107
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|10070799003|366016|6049299003|4053099003;
-X-Microsoft-Antispam-Message-Info:
-	H5OiLP5d9KzRTJeRPY/rxq2e/4BGX/nEHKqqqwNRUYaDKfc4hw1cZxhCvK35j6vY7NFyTlAnZVENv7bBn4StEjWB/DJCVyPpl++1EKN3vh3zmsFRkb2A3VRSMWXzWS/ZQagi0ZXcFuxoyfyhEO0zTlKj7uYGjcNvlOyftQHsHEfHR5Jxt8c4KUyYdfE1KJ483TCzZvhrSu12+a2ZEmxiTdcJ9U5kXAk3TJrYRxKnBD1jhxaOKo2ajfwxcw/7mt2aGmt2ZPig8wPlawx63EhHrPZMwlA1HguRc3+L7e5KxPEY7Zp/7VTfrvncgnpTUdzFKFudAxNo6XJ7DlJKef+BLFnhnCM16rF27Ev1J66kAJYg460EsB7KZm/sJl9kX9ijfuiwAD8HOm14nxPRRSbMyP7JXmmCoK0sIUdkrqjrLY3o7zDgquSJsAfoye6mm+5ceB4rc3MnAveSShdUKRYVn8y05pjjufwr3EeOiaRD9UcDeBFO9iqoCsNS6E7iuf4PgRDNmiv9smk35ERQg7xI+B9CLO/wOPML2gkhP8raYQ+TdS63K66i53cslEktn3AQGnHig6+14jONOd800veWk5J25ygYvOlYzWcvxILIR8ieY8V/oOBn4JSuXVoOhH/xJWiD294FiaFuI6A8DioU78BGPTL3aXxION4/N1nefcnLzdT/QaWyNyWvSXbuGX8+MVDi8AuwdJZURsUgbGaaQUu26fWQxY/eNn4GpNDvjizdjGTTVC6+B9nPLzkT0/UT
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GVXP189MB2053.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(10070799003)(366016)(6049299003)(4053099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?iso-8859-1?Q?xSe6zPq/Vbs/4ownFLq1QL/rQCKNta94vA2U+K6OTKlxQaIl+gN6lLcZSY?=
- =?iso-8859-1?Q?erzYP+imI0eiyGWE6BNACpQlSXkk6NyOASx1YSKHZT+hbClq+YWhRZ2C6Z?=
- =?iso-8859-1?Q?cND0ln9RDTDJjG7+fpwmZUZq6edy0nOKoVgr4EumX7l0pKP7ZpAcDnxLXw?=
- =?iso-8859-1?Q?OuETq+jym7BFGoXLPrceAqG5O6jmWpRJoslX8YX8wvsV+vDuIOeeLS0iIQ?=
- =?iso-8859-1?Q?L7HeEeAXYgYrnMVIc6UgQnEn4NnKiXLErVBPiPQq19IRGz3sGRRquE7+kY?=
- =?iso-8859-1?Q?2ooD2Rhh7MrjmovDCoQkDXQNvOBBPac4UQHVOYx5LfC231Csh7k3V1Rm3O?=
- =?iso-8859-1?Q?5Trk0TSFIAMK+pBM9+jcXK552vLFKvTcKDVYyp6pNFu2FkTC93dBlpNo8o?=
- =?iso-8859-1?Q?BWqCx49qohV9mMHWYad9kkGqgkC7HKD4GOK24vfTUSWQg9sBEPhDTb3334?=
- =?iso-8859-1?Q?Cf9gZHI55vEL9HrwuTGRwNmg9UR08VznzH0v7DHnPvP0qn/U6vZTOQrcPU?=
- =?iso-8859-1?Q?Ic49+naCdmZ3efko2naYEoPxRtFEpbLCMPPgfB9U9dgBtKlsxrUzdmwVrO?=
- =?iso-8859-1?Q?VviKt9revsMjNb2dnUk3n8XKyCuef6CCFuF1t8jy54KW8PK6GprvN6U29+?=
- =?iso-8859-1?Q?6LQbL4/4U1sAU/M6zriXmlemZ1VZxR4IhNxZHpqVoBoKq2QziT+kGwWzAE?=
- =?iso-8859-1?Q?p2/FNAqrGXy3tlR3cFjrSfObZL1HbRkSUsYMjKEVjC3ig5R25fA7vLCzri?=
- =?iso-8859-1?Q?gdtKfV61/ts73rW3ZIpgamNO4C5ZHWPxOzliXzgGSZEZpv/p1fbRtV0/vq?=
- =?iso-8859-1?Q?z0v4YpHTwYiBz7wCUubmxiyIVn9MFUObYpABKodRNO8kBY4DqlZh4eNgCm?=
- =?iso-8859-1?Q?qOuAftInHeOFc9uLSz4aS3VEB0VIEQmcIFZKMLepEqMMxja0wtnKi/4bL7?=
- =?iso-8859-1?Q?wYw5dnVSGliDbaiXRjlBoa8xoEqJvzCuI7wNUzs82dqzSuKEjG0ccwHL+F?=
- =?iso-8859-1?Q?l+080YycSVptiQdwwgq+SUzvD9B/lry90/ZSz6Rwu79unmdpZ+nFTMbCbI?=
- =?iso-8859-1?Q?++MdaMWhQc1oPjGZbqm9VAE40HV7an6sMNslXS/aGYk7zZbAEkPlbONgOp?=
- =?iso-8859-1?Q?g+ZznntH88NHFQiwOgzBfkGGs3EfbsqUENslJE0UuBCSkg9f2U5YzhWJmk?=
- =?iso-8859-1?Q?3/xwOo7jLGGPjQRVkQuJ45aesYHNIf4qoIU906JXGeyZbMzIl4JhUYcLOE?=
- =?iso-8859-1?Q?m6GwPOeGKgQaKeIzc85si/2b+0CvMLrValBES23NLvTTnTyr7rqOroGjN/?=
- =?iso-8859-1?Q?WkGgOZKBBJmxgIGNRP9Zg4njq6WEO6fGICLhPWgcay46IblYmgzr2DJX4M?=
- =?iso-8859-1?Q?u9OK7TzToXTEIb1tvdGk0k82myxd+SJY9eV4w4QOggNkRAmW82fLVOBSgv?=
- =?iso-8859-1?Q?j7cJyBddl//NMy7thExyvY6302QfoAGai2FiRfwHT9zo+dN77QkEqR8fD4?=
- =?iso-8859-1?Q?YcemE150tRfLEZASI0XfVurlCzcQ5idsXpjbTk9FD6oDsQj8TDL1TW5qgL?=
- =?iso-8859-1?Q?WmGUYDIFBGZQAdqJDeTFQ+VNEa6ta9oqYe+v3iRQCOfAR/HOYonmCQwTi6?=
- =?iso-8859-1?Q?oFQHDYSnV5FkjHW9cRfBWOBjOlqBymjPFJGzXnGDC6et+9xwMQSgT4WaRo?=
- =?iso-8859-1?Q?+MfuPg8hzRnQvPZt9hlH0tgVN6ujaCXJFV2qfZVEo22oZwYe837T3V/Hl/?=
- =?iso-8859-1?Q?DMvxUYWlRhUirlUh+mAFiaRpfr/R7zuzYYsAt0W0x9E1dR2ryFE6OPIurI?=
- =?iso-8859-1?Q?f/8XW4IreVEyiCDmMfmKltV0o/JpkwMBE3ynKGOeoLDOz5+DWBcc?=
-X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a0c7bfa-8c80-4ebf-d1fa-08de7a9bf107
-X-MS-Exchange-CrossTenant-AuthSource: GVXP189MB2053.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2026 09:45:31.7653
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i3m5fDkS+bDTNWTi6wztuDiTXjcPV7GWVjDYtftoUEFQu7fzFBc+kzTQUgxcDijGPhXQG6vWqccqaQSwQGTs/R6U5xIaZJaTyp7hY+r0qt0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2P189MB2541
-X-Rspamd-Queue-Id: 3DE8C20F0B0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: MIq1RSCuHBVZ1XhVT22Kxhu4esBV1fihu8s/tH7WwyAGoyYwRt6D/fVs
+	lrkclSC1/il+SVkkboi5pdWqbf+6s6IcKR4jmtC0fOA17Ert5vVoj9JNWtx13W6wQFosW7D
+	K7B2YcrQlFlMZL/p7OpXdKxXU00Ou0YR9BEVkAIILciYqo/SPNwbWHvYN22h1tpq5UdMZmW
+	TGi+qmGMNYQsKWoCll6A+bOM60Flwa7Z/hJM/XaqqqeXtdeJ7PvZE0PUOmENXJyvXM+5Xq2
+	BTP9g5FI0nYnaerhJr74CINijo241YdcnGPvv4AAXhnuThdIHmvo6ttE8DsrmS0N0BZXzMx
+	weo1ihfsXn/wLGaW0oyEZEeAUtaMK8aBXSCA7HysGJCbjhG1//ijV1B0u0pvhTktvSdaIOL
+	TRDN5tvlBIMnfPursVa45Fu5rUcTrp7rUFFi5kR3HZE2GOddWALKam5gJdH1W87s5LoPN0P
+	GdGosu1KBB5NdpuzcdvrOWGz12C5TC4LCL0LvuV/Unx65YNfYFVo3Gqc8Evqfa3c0VU+r7N
+	lTMV8uQApmozG7+y7P+CGx5SCA5u55RIY/SSxigq+Bvq5LvlA35EFvWCSuWdSP10ZTtX27r
+	RuveyXTxHnJO+4i5BAJhhQeF6cVx2qL+U+7RDlUdmQFc2c5b6VX83/Eqiwk/QveZ8l/igET
+	NM4/dZuRVYwr4i236AmaRpkg24bafwYqntYhkqVnt2exVt2TWYVXCI/CiRTavMe+D+gtE96
+	1EFo86meOr6ASX5VtUTprEflIhNb6Kg4Q4NGEMOW0nXCNvgsVSKulBxuodMtSQ/T3lqGyhi
+	p5/aODki8/bnNk0uA9e8O8Jy9RDNwW1zBYZmkFbejQU/BwuX7VbYvj2mDedGON2RomuGYPV
+	xS4hnIGaRfx4ZKoniz7FKU0egyeKrCGg1Ljon6+WmRHyNky96+I63eKsfG80X73WwTq7I+8
+	0DFvV7223kuSeqGb1m0k3QO6CdTaBJByVVyHnj/Tm/2vtqcCisYg/9S/NK+LTh2u5XX9HBs
+	Ci3bGPraTcWN5dkd1SGwTqrebmehs=
+X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
+X-QQ-RECHKSPAM: 0
+X-Rspamd-Queue-Id: BE94D20F1ED
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.04 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	R_DKIM_REJECT(1.00)[est.tech:s=selector1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain,text/x-diff];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34053-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[est.tech];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	DKIM_TRACE(0.00)[est.tech:-];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:+];
-	HAS_ATTACHMENT(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com,linux.intel.com,uniontech.com];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FROM_NEQ_ENVFROM(0.00)[ravineet.a.singh@est.tech,linux-usb@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34056-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.810];
+	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[uniontech.com:+];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	REDIRECTOR_URL(0.00)[urldefense.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[est.tech:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,urldefense.com:url]
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,uniontech.com:dkim,uniontech.com:email,uniontech.com:mid]
 X-Rspamd-Action: no action
 
---em3xqypvsvj66tfm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+From: Xu Rao <raoxu@uniontech.com>
 
-Hi.
+This series is split into two steps: patch 1/2 refactors xHCI IRQ and
+interrupter handling to make multi-vector operation possible without
+changing behavior; patch 2/2 then enables a small capped set of secondary
+interrupters/vectors and routes transfer completions per device (slot) to
+reduce contention on interrupter 0.
 
-Sorry to resurrect this old thread but as far as I can see,
-this issue was dropped.
-As we have the same issue, not receiving a disconnect when cable is disconnected,
-we altered the patch and this version works for us.
+This feature is disabled by default: only the primary interrupter is used,
+keeping the existing behavior unchanged.  To enable multiple interrupters,
+set the GRUB kernel command line parameter xhci_hcd.secondary_intr=1.
 
-Any thought on the patch?
+Xu Rao (2):
+  usb: xhci: refactor IRQ/interrupter plumbing for multi-vector support
+  usb: xhci: enable secondary interrupters and route transfers per slot
 
-Regards
-/Ravineet
-
-
-
-On Thu, Jun 06, 2024 at 12:29:13AM +0000, Thinh Nguyen wrote:
-> On Wed, Jun 05, 2024, Mike Looijmans wrote:
-> > On 05-06-2024 01:06, Thinh Nguyen wrote:
-> > > Hi,
-> > >
-> > > On Tue, Jun 04, 2024, Mike Looijmans wrote:
-> > > > On 04-06-2024 03:03, Thinh Nguyen wrote:
-> > > > > Hi,
-> > > > >
-> > > > > On Mon, Jun 03, 2024, Mike Looijmans wrote:
-> > > > > > When disconnecting the USB cable on an LS1028 device, nothing happens
-> > > > > > in userspace, which keeps thinking everything is still up and running.
-> > > > > > Turns out that the DWC3 controller only sends DWC3_DEVICE_EVENT_SUSPEND
-> > > > > > in that case, and not a DWC3_DEVICE_EVENT_DISCONNECT as one would
-> > > > > > expect. As a result, sysfs attribute "state" remains "configured"
-> > > > > > until something resets it.
-> > > > > >
-> > > > > > Forward the "suspended" state to sysfs, so that the "state" at least
-> > > > > > changes into "suspended" when one removes the cable, and hence also
-> > > > > > matches the gadget's state when really suspended.
-> > > > > On disconnection, did you see disconnect interrupt? If so, it should
-> > > > > transition to USB_STATE_NOATTACHED. This change doesn't seem to directly
-> > > > > address your issue. Can you provide the driver tracepoints?
-> > > > The device doesn't issue a disconnect event, I didn't have tracing enabled
-> > > > in the kernel but added some dev_info() calls to determine what was going
-> > > > on. Added this to dwc3_process_event_entry():
-> > > >
-> > > > dev_info(dwc->dev, "event: 0x%x type=0x%x", event->raw, event->type.type);
-> > > >
-> > > > When disconnecting the cable from the host, I see this:
-> > > >
-> > > > [   50.841411] dwc3 3110000.usb: event: 0x6084 type=0x42
-> > > > [   50.841457] dwc3 3110000.usb: event: 0x4086 type=0x43
-> > > > [   50.841494] dwc3 3110000.usb: event: 0x6084 type=0x42
-> > > > [   50.841534] dwc3 3110000.usb: event: 0x4086 type=0x43
-> > > > [   50.841571] dwc3 3110000.usb: event: 0x4086 type=0x43
-> > > > [   52.650990] dwc3 3110000.usb: event: 0x30601 type=0x0
-> > > >
-> > > > The "0x4086" and "0x6084" messages are endpoint events that occur all the
-> > > > time while connected. The last event is the "suspend" one. After that, total
-> > > > silence.
-> > > >
-> > > > If you need traces, please point me to a description on how to obtain them.
-> > > >
-> > > >
-> > > Let me know if you run into issues following this instructions to
-> > > capture the tracepoints:
-> > > https://urldefense.com/v3/__https://docs.kernel.org/driver-api/usb/dwc3.html*required-information__;Iw!!A4F2R9G_pg!epxtPmXHiizMg5_5igEYiKU483OZb1zcYK1M3afqXxIfgsw_cU_kdz9Rlpf1w-30JF0v4UUkxBViJtx4Prv3ZWchjKNHkKE$
-> > >
-> > >  From the patch you provided, you only apply the change for the usb
-> > > suspend. But did your device go through system suspend? If that's the
-> > > case, then the dwc3 driver will cause a soft-disconnect. Currently that
-> > > will not prompt a state change. We need the tracepoint to know more
-> > > detail.
-> > >
-> > > Until we have the tracepoints, you can experiment with this test patch.
-> > > If my suspiction is correct, then this may resolve your issue:
-> > >
-> > > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > > index 89fc690fdf34..29dbb889a0e2 100644
-> > > --- a/drivers/usb/dwc3/gadget.c
-> > > +++ b/drivers/usb/dwc3/gadget.c
-> > > @@ -2682,6 +2682,8 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
-> > >           */
-> > >          ret = dwc3_gadget_run_stop(dwc, false);
-> > > +       usb_gadget_set_state(dwc->gadget, USB_STATE_NOTATTACHED);
-> > > +
-> > >          /*
-> > >           * Stop the gadget after controller is halted, so that if needed, the
-> > >           * events to update EP0 state can still occur while the run/stop
-> >
-> > I tried the patch above, but it doesn't work. Apparently
-> > dwc3_gadget_soft_disconnect() doesn't get called when I unplug the cable.
-> >
->
-> Thanks for testing. There's no system suspend, so that's expected.
->
-> BR,
-> Thinh
-
---em3xqypvsvj66tfm
-Content-Type: text/x-diff; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-usb-dwc3-gadget-set-device-in-disconnected-state-whe.patch"
-
-From a689256e5d6cacdea09299014746522ae928f7c5 Mon Sep 17 00:00:00 2001
-From: Ravineet Singh <ravineet.a.singh@est.tech>
-Date: Mon, 2 Mar 2026 16:44:46 +0100
-Subject: [PATCH] usb: dwc3: gadget: set device in disconnected state when
- unplugged
-
-When a USB cable is disconnected on an LS1028 device, the DWC3
-controller only sends DWC3_DEVICE_EVENT_SUSPEND and not a
-DWC3_DEVICE_EVENT_DISCONNECT.
-
-Set device in disconnected state by issuing
-DWC3_DEVICE_EVENT_DISCONNECT.
-
-Signed-off-by: Ravineet Singh <ravineet.a.singh@est.tech>
+Signed-off-by: Xu Rao <raoxu@uniontech.com>
 ---
- drivers/usb/dwc3/gadget.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+Changelog:
+v1 -> v2:
+  - Bind interrupters to endpoints at enable time instead of selecting
+    per transfer.
+  - Store the selected interrupter in struct xhci_virt_ep and program
+    TRB_INTR_TARGET() from the bound interrupter.
+  - Use a single IRQ handler for both primary and secondary vectors,
+    with STS_EINT handling restricted to interrupter 0.
+  - Keep a common dev_id for IRQ registration to match the existing
+    xhci_cleanup_msix() teardown constraints and avoid dev_id
+    lifetime issues.
+  - Clarify secondary interrupter teardown to avoid double-free or
+    use-after-free during xHCI removal.
+v2 -> v3:
+  - modify commit information
+v3 -> v4:
+  - Bind interrupters per USB device (slot) via struct xhci_virt_device,
+    program TRB_INTR_TARGET() from vdev->interrupter for bulk/ctrl/isoc.
+  - Drop xfer_interrupters and unify on xhci->interrupters[] for both
+    primary and secondary event rings and IRQ routing.
+  - Allocate secondary interrupters in xhci_mem_init; on any allocation
+    failure, rollback and continue with primary interrupter only.
+  - Cap secondary interrupter creation with MAX_SECONDARY_INTRNUM,
+    defaulting to 4.
+  - Route xhci_msi_irq by irq handler_data token (intr_num + 1) to keep
+    correct interrupter selection across resume/power_lost.
+  - Apply MSI-X affinity hints for secondary vectors.
+v4 -> v5:
+  - Fix min() signedness build error reported by 0day CI.
+  - Rebase onto v6.19-rc2.
+v5 -> v6:
+  - Route secondary MSI/MSI-X IRQs by storing struct xhci_interrupter in
+    irq handler_data, instead of using an (intr_num + 1) token mapping.
+  - Program Slot Context Interrupter Target (tt_info[31:22]) from
+    vdev->interrupter to keep slot default routing aligned with TRB
+    TRB_INTR_TARGET() selection.
+v6 -> v7:
+  - Add xhci_quiesce_interrupter() and use it for secondary
+    interrupters in xhci_stop() and the power_lost path of xhci_resume(),
+    ensuring IMAN.IP (RW1C) and ERDP.EHB are properly cleared.
+v7 -> v8:
+  - Sync secondary MSI/MSI-X vectors in xhci_msix_sync_irqs() with
+    synchronize_irq().
+  - Fix build errors by adding missing header includes for the IRQ helper APIs.
+v8 -> v9:
+  - Use PCI_IRQ_AFFINITY to let PCI core spread MSI/MSI-X vectors across CPUs.
+  - Route each MSI/MSI-X vector to its interrupter via per-vector irq_ctx dev_id.
+  - Fix modpost error: xhci_msix_set_handler_data undefined (0-day CI).
+    https://lore.kernel.org/oe-kbuild-all/202601171743.omq3DpnM-lkp@intel.com/
+  - Rebase onto v6.19-rc6.
+v9 -> v10:
+  - refactor IRQ/interrupter plumbing for multi-vector support.
+  - add xhci_handle_slot_secondary_events to handle secondary event ring.
+v10 -> v11:
+  - Fix build warnings:-Wsometimes-uninitialized.
+    Closes: https://lore.kernel.org/oe-kbuild-all/202601262208.UybEjc9X-lkp@intel.com/
+v11 -> v12:
+  - Patch 1/2: Keep the "Add allocated interrupters" initialization in
+    xhci_init() to preserve the existing initialization flow, and fix
+    intr_num to use the proper type. Also drop the meaningless code move in
+    xhci_msix_sync_irqs() (no functional change).
+  - Patch 2/2: Make secondary MSI/MSI-X vector request_irq() failures
+    non-fatal by rolling back any secondary vectors already requested and
+    falling back to primary-only operation. Refresh comments and add extra
+    guard conditions in xhci_handle_slot_secondary_events() to better handle
+    corner cases when draining secondary ring.
+v12 -> v13:
+  - Introduce a GRUB/module parameter to keep several interrupters disabled
+    by default, enabling them only when explicitly requested.The commit
+    information was also modified accordingly.
+---
+ drivers/usb/host/xhci-mem.c  |  43 ++++++++++
+ drivers/usb/host/xhci-pci.c  |  68 +++++++++++++--
+ drivers/usb/host/xhci-ring.c | 156 +++++++++++++++++++++++++++++------
+ drivers/usb/host/xhci.c      |  48 +++++++++--
+ drivers/usb/host/xhci.h      |  26 +++++-
+ 5 files changed, 297 insertions(+), 44 deletions(-)
+---
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 6e90f2ad0426..94e191a9ceb8 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4440,9 +4440,22 @@ static void dwc3_gadget_suspend_interrupt(struct dwc3 *dwc,
- {
- 	enum dwc3_link_state next = evtinfo & DWC3_LINK_STATE_MASK;
- 
--	if (!dwc->suspended && next == DWC3_LINK_STATE_U3) {
--		dwc->suspended = true;
--		dwc3_suspend_gadget(dwc);
-+	if (next == DWC3_LINK_STATE_U3) {
-+		u8 speed;
-+		u32 reg;
-+
-+		reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-+		speed = reg & DWC3_DSTS_CONNECTSPD;
-+		if (dwc->gadget->speed != USB_SPEED_UNKNOWN &&
-+		    speed == USB_SPEED_UNKNOWN) {
-+			dwc3_gadget_disconnect_interrupt(dwc);
-+			return;
-+		}
-+
-+		if (!dwc->suspended) {
-+			dwc->suspended = true;
-+			dwc3_suspend_gadget(dwc);
-+		}
- 	}
- 
- 	dwc->link_state = next;
--- 
-2.43.0
-
-
---em3xqypvsvj66tfm--
 
