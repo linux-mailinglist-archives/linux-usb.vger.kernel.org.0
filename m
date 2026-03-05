@@ -1,89 +1,88 @@
-Return-Path: <linux-usb+bounces-34043-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34044-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sCJ0CUs3qWlk3AAAu9opvQ
-	(envelope-from <linux-usb+bounces-34043-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 08:56:59 +0100
+	id iKr7DfM+qWnK3QAAu9opvQ
+	(envelope-from <linux-usb+bounces-34044-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 09:29:39 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7650720D043
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 08:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96A4B20D755
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 09:29:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BAB8C3038517
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 07:56:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2665E3050D57
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 08:29:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81DEF337BBC;
-	Thu,  5 Mar 2026 07:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0224A374745;
+	Thu,  5 Mar 2026 08:29:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152B2336EEE
-	for <linux-usb@vger.kernel.org>; Thu,  5 Mar 2026 07:56:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60545372EF7
+	for <linux-usb@vger.kernel.org>; Thu,  5 Mar 2026 08:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772697377; cv=none; b=MJbz/Vmj2mkIvl6PaEMnkXXXaiIsrogZYOxx3+jySoGnVED97nBb1ziJvbId7DluELIpHJzjw9h/h2WkeCRKgaFh2HJvPDL+elsUhVzY+aElXMvz1DCNK0htFVUYA93e5hlZyVitFEnADb+C89DGukf4a69EQo7WJn4IEXTFb94=
+	t=1772699344; cv=none; b=GECuNY+j/VXgSr0dJDXOTPYzrsN++Qk9pOf+S8koz/ipvtqL/lRdx1G52WYPLS8yh9t0LSHefDuDoaPei/7v4aw8guSfKZVrZdW3zXI3GRLq8wgbdvyQcyvbw5ytniOLB4dBmixWATRF9UkQ3p99+ibmFMaKstwZc+MmjvIkSso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772697377; c=relaxed/simple;
-	bh=urVD1xPdaF3hV5GqXqVqTidMinFWi7P2lc2J0G3o7gY=;
+	s=arc-20240116; t=1772699344; c=relaxed/simple;
+	bh=hefLtFvtSppGuVWRD/xSsfWMjnGgnQggEUG9Y7OFLDc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GPdQq9ETX9FTFOqmjVUBP1yI5VMTzpc+n/NJcxsB54gaTK8R31dGUo0rWM5YepXOdUmyVl6rqFTWwtbUWoBusbyvJQf2IQReEC+5JUPUjgNQZMVmFEdcmN/2+4WQKcsqvuRcC4i+A3KXWhS2paX8eXFOq0pz3DZYrWBz6DSmEdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.170
+	 To:Cc:Content-Type; b=ZGzOMc0xW+QboeFQOxhuGqYIKTo5r/ijiRAwr3hgwWJesDSbbLp8PtRovHhSlIisk6NRTJSBoHFHINi0FguSZc6LoDwnp/GuibjVizyBQkS6P1MJrvLOVnyFrkZ3vLSjXq0X6raCNYHy3fNiVyvNALoGUwhYxUg+iNnPXXgE6EI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-45effa36240so5775799b6e.1
-        for <linux-usb@vger.kernel.org>; Wed, 04 Mar 2026 23:56:15 -0800 (PST)
+Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-56a981f44c9so3435364e0c.2
+        for <linux-usb@vger.kernel.org>; Thu, 05 Mar 2026 00:29:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772697375; x=1773302175;
+        d=1e100.net; s=20230601; t=1772699342; x=1773304142;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7xyHjzGnphi32H4Bte19x6wQV76UaiJqzbc3zMkJKs8=;
-        b=LYIhYLDIL+hUlHhvZMaSJZFTnrGg8wLFbPeV9lK4ZcCJHRxQdo5MiITsncPXKKEpbc
-         E6e69GyDTYBq7MzrJVk+QfZVQm3YsTTZ1O3htB4X3G7JXH0V9FvpZzN6YsYgj2URO4rg
-         F6oarYZ7F0nFvJK/EDDzes2MtXK9KUVqeAaX1yu44xHGAOh/px87Q3xqxPNDcclAojqP
-         Z8YfvQGnlQH1JuO5OZICliGpNxUkU1WeT5rvycW/9xYXAu1nYtvA/FenpSbhW2fMbq6c
-         NXekEA+8/C5T/POvM/bnotht4U6OJOYN5qFB/zSKvLSMD+uJ588z5CBd0A1ZWPIJEMRR
-         EHOA==
-X-Forwarded-Encrypted: i=1; AJvYcCXAP4yFWMxv3c/HqvAlwEZBHzygjDLAIPygLUCF42sXZiydYCI+LE6FuLRIThjvFo62GCeWHUi1jUU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyYIYJ0S3erneVofXBkOzhg21GU5TDtIUsLLfifrKh3kEttmGa
-	bayJadR2r5V43Mbq0/t6r+R124ykB34Uy7z3eHPNUnmU6/ChV68JwUcbZveopKPW
-X-Gm-Gg: ATEYQzxUfQdyx6NrMtDrmyANjGuKHYqsLE/edqZBlAIGNKYD3yOqq6HJOlTpVuoGMwo
-	6dQ94ftSqBssm8tQoSx11xgIZK2NwTX2rCDSmddFyxki/ICuEP47MhSy1XUspezdLkzG17aSOK5
-	lP59yF5BKknBGtPc7fcgv8IicB7ZQdtVwYOwf/w6efFv4NN9fJCPp5N/NMBR8JROZ4gNd8S6TtK
-	Y9az6U1ASnGTnBWQQlCjlYcKCbAKiUAcbWWGidpG/7XjXiQJzjeak0ViICY2I6Y/QHXYftuV560
-	5OqMvxIddKDuNrUCjjDIAywqP34UmHMxqig6a8r38UZ63gUQE1Cjy3A25Mhbx9B9B79HgIbZzcl
-	gC/51Owwl/YVL/gZbK40LSD5ZR4k4JlBVBTmaQXwp8LVjJyVX81tQvW9dXEw5UIpi1c55toFsyc
-	gu8umq/3FyWH079yrDZMf7iPbnCti72GGehsb553YoPPcCAK9hSMpUAywu/uhtQaTK1v4hZZs=
-X-Received: by 2002:a05:6808:2202:b0:463:bef4:c9d5 with SMTP id 5614622812f47-4651ab4e034mr2525497b6e.6.1772697374988;
-        Wed, 04 Mar 2026 23:56:14 -0800 (PST)
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com. [209.85.160.54])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-464bb605f15sm13235667b6e.20.2026.03.04.23.56.14
+        bh=ZlLnToI6SbxsSn7ypnmaqq1RX+miw2VMTyDHKi+gwbk=;
+        b=AYC9TUeNz9lByAG0szFGEsMO/LcaQFOCUZ+IqAaxxCFYoGMEAYpi2bZRkaF5A/zRH/
+         5pKxJCwuaqzqx+XoYqQpada5k2+UoUbovaWjCft/svgjkGNM7+AHjW+StW5+bH9QHzIT
+         K4Gy9D7SIbwM+kqJznVu9xVYi4dRDahREFOeOVfZQ6oYkIV4d5uAUJRjBDX8Q/nVjQuB
+         ChTbeDRxSqCeOVfh6Zs8CsE3hQUnwq4vno0tLrOjEMqO2WJIgl81aWfmlHm/+XD89x/L
+         Xmf/gi7+yTuT68FTYYdvlj6hUDP8xZDAf55AzUgzqk7yH4lLllYUXccEN/CedYzF05uo
+         FqoA==
+X-Forwarded-Encrypted: i=1; AJvYcCXipIk0GNW+9b6NVBzYWIQ+7H/jmUzlKtUKf4ZFyOPZTRQeStWnVyx72AVPskCpsgtwQtIR9FS+1Ts=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyvqr4x3Hr9F+NIZt/wEwSsVQkvnZgtBK3/u6TCpH0RryFo/jx/
+	YGpdmc+0s4hUlvpnTqxO8OFz4zPi+OHx5+FFXO5lbFcVIda/3qLplHoGxbycxc3l
+X-Gm-Gg: ATEYQzwCTcPr8JCnZE3b/nrFxGepA1BnTt62+qSSvSPonAhsEdvgSoSGL1nltFpAtYo
+	P72SLd3Ph6prUG+avhXZSWC/9K+LzwYYmkKFuh4uAWh1eSf/BRMI/Fd9oCC2TED7BqQ/grTSzsa
+	2b2xH19DtSpHsf+jxBFY+AeCxyzTTHT+NDcU72oFQoLjv24tu94H3s2tfPNFQFJQEw3KKffsYMt
+	eZf2xREavUurEtG2shJy3Lj51LuGyxU4Ltq1OJziE6iqJ2K2e2Jg4bL0I8DKqdW/vyEuv6hQNxd
+	1lQ3gLX7G3rRxOLcDCryQG3gwSGxSUCy+sVYwVlS6P+FNz7glW1DMwDXFGOTZIsAycAR+sIko2U
+	hZ5CCP5CkXHZdQs490PEptTZxLu962ks1JUKoc8kUzb+qMXDjw37w5JQWMsIDOg3qoQU3cGKsQ+
+	CuZ5Wgd/1Zrb28rPwI9r4h3tprahEzs1Tb2yGAHtCWyUSLy/Y3b4gapjZTLTgz
+X-Received: by 2002:a05:6122:2a56:b0:56a:995d:8a55 with SMTP id 71dfb90a1353d-56ae777ec13mr2420704e0c.12.1772699342378;
+        Thu, 05 Mar 2026 00:29:02 -0800 (PST)
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-94df644d593sm20257273241.7.2026.03.05.00.29.01
         for <linux-usb@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Mar 2026 23:56:14 -0800 (PST)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-40438e0cba6so1931030fac.1
-        for <linux-usb@vger.kernel.org>; Wed, 04 Mar 2026 23:56:14 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVBJokIAqTwixNiFBgK7acEPOu4zyXEfPimL98PgPcdNvrfjx5zlkhJFN/UhB3w5XrPkh3ToVnpsAw=@vger.kernel.org
-X-Received: by 2002:a05:6102:32c1:b0:5ff:a16b:93f9 with SMTP id
- ada2fe7eead31-5ffaae2d5b0mr1883200137.21.1772696877960; Wed, 04 Mar 2026
- 23:47:57 -0800 (PST)
+        Thu, 05 Mar 2026 00:29:01 -0800 (PST)
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-94dda16ff9fso2333504241.1
+        for <linux-usb@vger.kernel.org>; Thu, 05 Mar 2026 00:29:01 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXdi33Imj83zxpw2E061Wl6pEn8jHYf8v8+nHohCTWFCCk/tgKttsYDUZ73YMkvQTl9mffnflyZ3Lo=@vger.kernel.org
+X-Received: by 2002:a05:6102:1607:b0:5ff:c64d:228c with SMTP id
+ ada2fe7eead31-5ffc64d2600mr724913137.22.1772699340961; Thu, 05 Mar 2026
+ 00:29:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260304175735.2660419-1-vladimir.oltean@nxp.com> <20260304175735.2660419-14-vladimir.oltean@nxp.com>
-In-Reply-To: <20260304175735.2660419-14-vladimir.oltean@nxp.com>
+References: <20260304175735.2660419-1-vladimir.oltean@nxp.com> <20260304175735.2660419-13-vladimir.oltean@nxp.com>
+In-Reply-To: <20260304175735.2660419-13-vladimir.oltean@nxp.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 5 Mar 2026 08:47:47 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUNtqsui3ek1RYCTyiuDLRajpSBMnrdzED6wu6i7-QcuA@mail.gmail.com>
-X-Gm-Features: AaiRm514iMGAdfTBAVsgfVfK-GGHy9jHY4ezK-Lp3w09-JWpnENLQ0I4lkIFgvE
-Message-ID: <CAMuHMdUNtqsui3ek1RYCTyiuDLRajpSBMnrdzED6wu6i7-QcuA@mail.gmail.com>
-Subject: Re: [PATCH phy-next 13/22] phy: introduce phy_get_max_link_rate()
- helper for consumers
+Date: Thu, 5 Mar 2026 09:28:50 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV+7n==crPmitH-JCwtJiH+7LaPKZQYU4ZqX_duo3_7Eg@mail.gmail.com>
+X-Gm-Features: AaiRm50Kgxrt1IEt_9GEmeNyCIrylErpUd7qkh7D4FIoK_FYituUB8DTITetq4c
+Message-ID: <CAMuHMdV+7n==crPmitH-JCwtJiH+7LaPKZQYU4ZqX_duo3_7Eg@mail.gmail.com>
+Subject: Re: [PATCH phy-next 12/22] phy: move provider API out of public <linux/phy/phy.h>
 To: Vladimir Oltean <vladimir.oltean@nxp.com>
 Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>, 
 	Neil Armstrong <neil.armstrong@linaro.org>, dri-devel@lists.freedesktop.org, 
@@ -96,85 +95,110 @@ Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>,
 	linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev, 
 	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org, 
 	netdev@vger.kernel.org, spacemit@lists.linux.dev, 
-	UNGLinuxDriver@microchip.com, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Andy Yan <andy.yan@rock-chips.com>, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	Vincent Mailhol <mailhol@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Markus Schneider-Pargmann <msp@baylibre.com>, Magnus Damm <magnus.damm@gmail.com>
+	UNGLinuxDriver@microchip.com
 Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 7650720D043
+X-Rspamd-Queue-Id: 96A4B20D755
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[lists.infradead.org,kernel.org,linaro.org,lists.freedesktop.org,vger.kernel.org,lists.linux.dev,microchip.com,intel.com,ideasonboard.com,kwiboo.se,gmail.com,linux.intel.com,suse.de,ffwll.ch,rock-chips.com,pengutronix.de,bootlin.com,tuxon.dev,baylibre.com];
-	TAGGED_FROM(0.00)[bounces-34043-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[linux-m68k.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34044-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[42];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[linux-m68k.org];
+	RCPT_COUNT_TWELVE(0.00)[24];
 	MIME_TRACE(0.00)[0:+];
 	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-usb@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-0.970];
-	TAGGED_RCPT(0.00)[linux-usb];
+	RCVD_COUNT_FIVE(0.00)[6];
 	R_DKIM_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[glider.be:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,mail.gmail.com:mid,nxp.com:email,linux-m68k.org:email]
+	NEURAL_HAM(-0.00)[-0.967];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,ti.com:url,ti.com:email,linux-m68k.org:email,nxp.com:email,mail.gmail.com:mid]
 X-Rspamd-Action: no action
 
 Hi Vladimir,
 
-On Wed, 4 Mar 2026 at 19:00, Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
-> Consumer drivers shouldn't dereference struct phy, not even to get to
-> its attributes.
+On Wed, 4 Mar 2026 at 19:03, Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+> The major goal is to hide the contents of struct phy from consumer
+> drivers.
 >
-> We have phy_get_bus_width() as a precedent for getting the bus_width
-> attribute, so let's add phy_get_max_link_rate() and use it in DRM and
-> CAN drivers.
+> The idea with "phy-props.h" is that both consumers and providers make
+> use of some data types. So both headers include "phy-props.h".
+>
+> Two slight points of contention.
+>
+> 1. phy_set_bus_width(): Vinod explains that despite the current caller
+>    situation (9 providers, 1 consumer), it is a consumer API function.
+>
+>    The use case is that the controller (for example UFS) may have
+>    limitations and should set the expected lanes to be used and width on
+>    those lanes. A number of Generic PHYs can support multiple lanes and
+>    multiple width so this is way for controller telling I am using this
+>    configuration.
+>
+> 2. phy-provider.h should go to include/linux/phy/ or to drivers/phy/?
+>    We do have 3 PHY providers outside of drivers/phy/:
+>
+>    drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_dphy.c
+>    drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
+>    drivers/pinctrl/tegra/pinctrl-tegra-xusb.c
+>
+>    but the practice is not encouraged, and with time, these should be
+>    moved to the subsystem. This is not something that I can do now.
+>
+> For temporary compatibility, keep including the provider header. This
+> will be removed when abuses are all gotten rid of.
 >
 > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
 Thanks for your patch!
 
->  drivers/net/can/rcar/rcar_canfd.c                   | 2 +-
+> --- /dev/null
+> +++ b/drivers/phy/phy-provider.h
 
-For the Renesas part:
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> --- a/drivers/phy/phy-core.c
-> +++ b/drivers/phy/phy-core.c
-> @@ -640,6 +640,12 @@ void phy_set_bus_width(struct phy *phy, int bus_width)
->  }
->  EXPORT_SYMBOL_GPL(phy_set_bus_width);
+> --- a/include/linux/phy/phy.h
+> +++ b/include/linux/phy/phy.h
+> @@ -1,246 +1,38 @@
+>  /* SPDX-License-Identifier: GPL-2.0-or-later */
+>  /*
+> - * phy.h -- generic phy header file
+> + * phy.h -- Generic PHY consumer API
+>   *
+>   * Copyright (C) 2013 Texas Instruments Incorporated - http://www.ti.com
+>   *
+>   * Author: Kishon Vijay Abraham I <kishon@ti.com>
+>   */
 >
-> +u32 phy_get_max_link_rate(struct phy *phy)
-> +{
-> +       return phy->attrs.max_link_rate;
-> +}
-> +EXPORT_SYMBOL_GPL(phy_get_max_link_rate);
+> -#ifndef __DRIVERS_PHY_H
+> -#define __DRIVERS_PHY_H
+> +#ifndef __PHY_CONSUMER_H
+> +#define __PHY_CONSUMER_H
+>
+> -#include <linux/err.h>
+> -#include <linux/of.h>
+> -#include <linux/device.h>
+> -#include <linux/pm_runtime.h>
+> -#include <linux/regulator/consumer.h>
+> +#include <linux/phy/phy-props.h>
+>
+> -#include <linux/phy/phy-dp.h>
+> -#include <linux/phy/phy-hdmi.h>
+> -#include <linux/phy/phy-lvds.h>
+> -#include <linux/phy/phy-mipi-dphy.h>
+> +#include "../../drivers/phy/phy-provider.h"
 
-Any specific reason you are not making this a simple static inline
-function, like phy_get_bus_width()?
-
-> +
->  /**
->   * _of_phy_get() - lookup and obtain a reference to a phy by phandle
->   * @np: device_node for which to get the phy
+Shouldn't there be one more "../"?
+Interestingly, it compiles with/without.
 
 Gr{oetje,eeting}s,
 
