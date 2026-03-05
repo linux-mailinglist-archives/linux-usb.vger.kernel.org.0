@@ -1,193 +1,120 @@
-Return-Path: <linux-usb+bounces-34092-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34093-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CKpUNfOEqWkd9gAAu9opvQ
-	(envelope-from <linux-usb+bounces-34092-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 14:28:19 +0100
+	id 4MMqIpSHqWki+gAAu9opvQ
+	(envelope-from <linux-usb+bounces-34093-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 14:39:32 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C5F4212968
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 14:28:19 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCFC2212A8E
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 14:39:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8FB933021E47
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 13:27:08 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 193BD302486D
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 13:39:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 849EF379EC4;
-	Thu,  5 Mar 2026 13:27:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C0963A4F36;
+	Thu,  5 Mar 2026 13:39:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TcEHA+Cm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DWuzWEjx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54FA3346A5
-	for <linux-usb@vger.kernel.org>; Thu,  5 Mar 2026 13:27:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772717226; cv=pass; b=nG6MmT/ub2BiYZPpBYLDSeRijiQe1AU/lIaNpgsaJ+N7fs5xkr1fyiSTyQbdABxO1C5M8Nj5/9DmPox4Z3no/oY1gmLhmtfVrgL5jzSPo8wrY0mDKsVE6BXoghpham0MIfjm8bHj6Ch9urhfnYni6alOhmCoaa0HEZJaXKeGM9M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772717226; c=relaxed/simple;
-	bh=xFjuTMci+55P26kE4Dvurtiga89AOfw6x1SicyyIIVE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bNtQafZj4IRifEnVnswVrPQ93rf1KZVrowtsO6F2+NkQcznohwCkjVB4thP4LbWYkFPD0Xnue05oHUhUd6KLeswa1iGhzqgE/3a29Ys5C3hCo6tfoeQIp82rmHaCPUEvi2eDt7p+e7EyMVFQmk6HEx/GtW33vg/8MAhDJSI60FI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TcEHA+Cm; arc=pass smtp.client-ip=209.85.160.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-413c2977db8so2040337fac.3
-        for <linux-usb@vger.kernel.org>; Thu, 05 Mar 2026 05:27:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772717223; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZMAohRmKfZuN0HXu2RhKZlG4P+zhtdLiGIIsDQ1dAgRqSl7JsllNTnuDgHnRqCgwpK
-         ULQ2DfH3Mv+wxHFvJDCOOCQgjqBnQ3u8WyfCYLTfpLkxA3vRAqxUKl75lOmMR97MSsz7
-         VAnldrpvVAxupD+3FXLzmWWKghS5JzjCPNfhFpRJs0fRrUhVP3SYYAqw0y4ZoQar7FOF
-         3FDQ63fyqQkWQTGh1ueeaV0on32adqmhzj+FbEBsDkUzuDg6pfoXb32DDsiLQ2NyelQt
-         fk9spOVWQ+MyLevA8Cd4looBX+36SgH5wwKQEK26ESrMMNTwi1dqfLbGlnsLxqivkmIe
-         9Kpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=xFjuTMci+55P26kE4Dvurtiga89AOfw6x1SicyyIIVE=;
-        fh=4ARh6XXBDSKs43tdKA83hxvKALfMLelQr96nt641Ih8=;
-        b=V8EdGcd533SZw5CPs9zmSIptnps2QRc7dMy+cKFsUFxaNpMAvT9AvpdFoIfoNroNwz
-         nphClvWHT12kK8vQycaJOeEin0J5UR7YAV5XaCW/AKUd9ZiVN7lsh/F285arPxPmvuow
-         tgb5etdJAfy7zC6A5bCOXDqZLooftT/P1+KfpWUB7uo8CV1VRRX8sgg3FWn/rycofI6L
-         sygLSufnRbsQ7AMFZAwxEAwVJmfGQzsoI5mX9VMmm9BX44SQROZhoTfGuFnIdRFDMyrS
-         T2u0DGHYTh5yfFgIRToO576m4xVm4DgCbKIGlEFn2VtRQCK+nXVcZBfE/Fs4xYhfq2z/
-         6ADQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772717223; x=1773322023; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xFjuTMci+55P26kE4Dvurtiga89AOfw6x1SicyyIIVE=;
-        b=TcEHA+CmtWgsoGak6PnsA1B0X78btx9X5BwVtvvcYkHLpnq3nSsQ+KRTO4OG3grQAP
-         yRw6mx1eVaW6I+U2ccuPpCmsC7wx7EjlhGVRtAM970xtVzv0u28mjQH34e+wBaStjWjZ
-         3XMH8LicifEzhh9xmgBtiK+vz1+5FMmrrLkTIOw4qImb2ENjCGdnwAyd7OIgNmAPVQAt
-         YKu4b89GEhHuMxCYDRuEjAxKlWIRq8eQrFFa1Y7FcUP1WDyHXGspKRHauGitUDW+Z1Gi
-         Hdrh8q8T4e8QM+4VPhwWqab9lrFV0nZHKpeECYK5K/4EEDiVW9ey61NnCZ7rqJkK0LCk
-         8atw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772717223; x=1773322023;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=xFjuTMci+55P26kE4Dvurtiga89AOfw6x1SicyyIIVE=;
-        b=e0pjFbFMt8ulXXV38FgwXfMf4x10mIUcjygPdxwe9zKYEc8vOPRgdxIc+WlAGulC11
-         u09kEK9Tdf1+r34lePQHNL/s0avTzmNPfVZfbzsRAGRSsi7f1cxYIJ/+HkoYvrnTg66U
-         T8K4sJyPfRV3aqzb6ugeQ9YhlmsSUm6re+445GKsA3hxehKx828neB9TTVqGYgqjADrh
-         HCPHQFKGS7HYGOauY5Rd16/EtKHMQPCBOLsH4A2O4zjzrg8REBzunY0MB92Bcbt05VGD
-         ZLJCf61iubc6UtE/YeqizIcB4cP67OOOV+kzHS1m996PTVb/1MOaAX37gm02QVqbj9vz
-         F9ZA==
-X-Forwarded-Encrypted: i=1; AJvYcCVPAUfSF8+TUSTs/rhKjzi6xMIvjuaLJtd58eXopc6b9aDFzDagGs/SoYDi337P2JMIe1oKMwnQNzU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIAvISi4w8FO0zDBWztZKixWNi0esJt48+/NI/dSQMwFshNuxR
-	Dk+/vZYdx6KAS8PsJfnbHuxRLpA2CueBH00t1CJ3mmtF7jb4izrjI5vfMTP/+laIxN9J6ezrmeh
-	QIAUuiSmaZ8f1DiprA/cc6re3+G82O9o=
-X-Gm-Gg: ATEYQzydWGgWGf3qXdXB2hbUPgJoVGkZ09USi6BL/r99G1tqWCbzvdr10+nIqYi/28R
-	AEoV0ks1zlMSnv1QkzxKTPjdfLwg7DKv+/3kbiqwTPHisFoRpqsz+wNY8eOUu5TASFLltBVu76D
-	w+eAfK1OR2bUInO2PdVmdinhV+/GXXiuIernsTnLTyowkpmNkGfdpLbkCyhK8LI7spKO0hAzsE7
-	kGFp8JzdIWSa5muhAevOP6iaQxd/RTLWzxUZNutWYvl1ghV9oyAkZ7YwoFlrATUYMfqyIk2+8G2
-	t3PzXaFfu0FqEesnbbwFkyx4ZSMHb44TM0T9V1eFQb2gg1QW4XUpkTGtkwHiZo8A1jC7dhIqJyQ
-	=
-X-Received: by 2002:a05:6870:f295:b0:404:27f6:c993 with SMTP id
- 586e51a60fabf-416ab5c0a1bmr3328083fac.21.1772717223530; Thu, 05 Mar 2026
- 05:27:03 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1411E227B8E;
+	Thu,  5 Mar 2026 13:39:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772717961; cv=none; b=pUFza/JqaeY08nP3epuFE8MKEocGpXU5Zm2TmygSOa5TqWkRu+xkeOXA6Ym0ZrH9vuAYKDzovtWo3Oqe76RoEEHOJ/U9lxZI8wtCsK016a8FmLigQ23JIfJQK/Rws/06254O5beaYwMmyI6MPfSMgfBIvUR7TuMso1DjbQU66dA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772717961; c=relaxed/simple;
+	bh=wKmaOcpbZKABxsDW2oisUAj5dZhNuu4mWbIioyRCYUk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cKkADmG9mAi9T1KJg7FfzjnBZf5piUGAXLfW3KN9z8mAsTeP9nhLhemlfGeJD7ug8mshdbXjD6bqifzq/ksB6zkjA0ua44SlW0+XA6UFODIi+VBWHUh8zUpd71V08lYNB0+tHbIp3Xrw8Lm5KM5YTqZq7aXNJ8Ef+hflwLVRKcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DWuzWEjx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFC14C116C6;
+	Thu,  5 Mar 2026 13:39:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772717960;
+	bh=wKmaOcpbZKABxsDW2oisUAj5dZhNuu4mWbIioyRCYUk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=DWuzWEjxxyLCCpokXa/LrYbnyIWiHnC9oLnkbiXvlg3n+q4QnX7Qnp/5Ezvyq1LN6
+	 TPvV+FIz9xPTML824xUEcm7yYceNCt7Mw+e0VGJppJWyU6FU4VwjWL+7JE+36cNaqd
+	 4e7M/nZWAtsCLSvDQ4xYvdUcymgS30ALzN1wXLcnUIygADAfGRuTHVyfoBUx0C/2hA
+	 1losxmp3jj2XM3meOSTbYAp8ijXCwXVCIsaMs225DoA9lA84NTXN/VCPPcMVf19FSS
+	 MzBwj1LP9FxW7IHSJ/dytTRbXOqs0dWeqzA28O7Ml3zC5//1MZH+EOsID0tZC3/v6Q
+	 2WjCsHs+4DVqw==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vy8v8-000000000mD-1vOf;
+	Thu, 05 Mar 2026 14:39:18 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Bastien Nocera <hadess@hadess.net>,
+	Valentina Manea <valentina.manea.m@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Hongren Zheng <i@zenithal.me>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan@kernel.org>
+Subject: [PATCH 0/2] USB: drop further redundant device references
+Date: Thu,  5 Mar 2026 14:38:49 +0100
+Message-ID: <20260305133851.2952-1-johan@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CALbr=LbrUZn_cfp7CfR-7Z5wDTHF96qeuM=3fO2m-q4cDrnC4A@mail.gmail.com>
- <f8c304be-c061-4656-b7ba-83150c2b8746@suse.com> <CALbr=Lb6Vir4+O-=8-iL7M8=Gqgm=VUp6s+XGVC75QixFaSmOA@mail.gmail.com>
- <678e1fc6-356d-426a-aec0-f0bf46c7d3af@suse.com>
-In-Reply-To: <678e1fc6-356d-426a-aec0-f0bf46c7d3af@suse.com>
-From: Gui-Dong Han <hanguidong02@gmail.com>
-Date: Thu, 5 Mar 2026 21:26:52 +0800
-X-Gm-Features: AaiRm53PiiMcdxLTlkbHzzk0LDbe28FsgBHujavBVQxHqf7NkO9MrZLs0N6eX9M
-Message-ID: <CALbr=LZVqqYmV_1qZvh2-5pizrkDE=kqUW_Yb6GWPu65gVFnLg@mail.gmail.com>
-Subject: Re: [BUG] usb: cdc-wdm: Missing barriers in ad-hoc lockless buffer
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, robert.hodaszi@digi.com, kees@kernel.org, 
-	linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	Jia-Ju Bai <baijiaju1990@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 3C5F4212968
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: DCFC2212A8E
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34092-lists,linux-usb=lfdr.de];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,digi.com,kernel.org,vger.kernel.org,gmail.com];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MISSING_XM_UA(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[hadess.net,gmail.com,kernel.org,zenithal.me,vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34093-lists,linux-usb=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hanguidong02@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,suse.com:email]
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Thu, Mar 5, 2026 at 8:44=E2=80=AFPM Oliver Neukum <oneukum@suse.com> wro=
-te:
->
->
->
-> On 05.03.26 13:28, Gui-Dong Han wrote:
->
-> > Specifically, wdm_read() accesses ->length and then ->flags, often
-> > without holding ->iuspin. Similarly, wdm_in_callback() involves
-> > multiple accesses to both.
-> >
-> > I am indeed nervous about this pattern. Without barriers, changes to
-> > these associated fields made on one CPU might be observed in a
-> > completely different order on another CPU.
->
-> OK, I rechecked. And indeed it seems to me like setting WDM_OVERFLOW
-> and WDM_READ could be reordered with respect to each other in
-> wdm_in_callback() and that must not happen.
-> What do you think?
+We have a couple of drivers binding to USB devices that also take an
+unnecessary extra reference to their devices.
 
-Hi Oliver,
+Johan
 
-Based on my shallow understanding, reordering issues typically happen
-between different memory addresses, not within the same one.
 
-For a single variable, hardware cache coherence guarantees the
-modification order. For example, if a CPU writes 1, 2, and 4 to int a,
-other CPUs will definitely observe the changes in that exact 1-2-4
-sequence. So set_bit() operations on the same desc->flags should be
-safe from being observed out-of-order.
+Johan Hovold (2):
+  USB: apple-mfi-fastcharge: drop redundant device reference
+  USB: usbip: drop redundant device reference
 
-The real danger of weak memory architectures lies in accessing
-associated variables. For instance, if we write 1 to int a and then 2
-to int b, another CPU might observe b =3D=3D 2 before a =3D=3D 1. This is
-exactly the situation I pointed out in my original report regarding
-the lack of barriers between desc->ubuf and desc->length.
+ drivers/usb/misc/apple-mfi-fastcharge.c | 3 +--
+ drivers/usb/usbip/stub_dev.c            | 5 +----
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-Honestly, lockless algorithm design is incredibly hard, which is why
-drivers should probably just rely on well-tested libraries instead of
-rolling their own. I am definitely no expert in this dark art, just
-know enough to be dangerous :)
+-- 
+2.52.0
 
-Thanks.
 
