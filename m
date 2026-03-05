@@ -1,175 +1,146 @@
-Return-Path: <linux-usb+bounces-34071-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34072-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qKUADEFpqWlN6wAAu9opvQ
-	(envelope-from <linux-usb+bounces-34071-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 12:30:09 +0100
+	id YNoBI7ZqqWnH7AAAu9opvQ
+	(envelope-from <linux-usb+bounces-34072-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 12:36:22 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D208210965
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 12:30:07 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04B43210A43
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 12:36:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E719C301F5D6
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 11:30:04 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id ADE743041D4B
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 11:36:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFB3F386C32;
-	Thu,  5 Mar 2026 11:30:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73FA618DB26;
+	Thu,  5 Mar 2026 11:35:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KropPouS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D67D3783AA
-	for <linux-usb@vger.kernel.org>; Thu,  5 Mar 2026 11:30:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C950938E137
+	for <linux-usb@vger.kernel.org>; Thu,  5 Mar 2026 11:35:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772710203; cv=none; b=qZZRDblrCQr7FV34EP+Sg/0j7ulyzTncn8TuKPRP/R6qyh9Osnrz0JW2leNK2qMs1jMqFdD8HLoe79fg4iXlU8oiFPzdSQAAf/6UM6AGCgzxrNDNdt/thCybXgX8KT9ysh3a0n9izu31wA33bJXOLdzv10WO/+V9pwpItQ+ewwY=
+	t=1772710558; cv=none; b=cvJ1jT09el8lNrJlImXzXy+iXCMsFJhFaLd9laHwVepsa/Y58b2vd/GvyNpXuoyMceSl2TBCoRIM4SAkyq6Lnt11EnEbmW+/wVz5blilW5dPUWoHT/iBZLdmhpnMfh4XpITH60SfBhExf/z4tIu7YZUtpiX6108I5yxPdNnsMMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772710203; c=relaxed/simple;
-	bh=i49Cs4XafC1S95n14RluXR/r2KJdT5Jfa5LHpWXYbe4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L5Xlb0916nBrlTSY77FiRH5owb59qXtGyUjK7FwmGie13LEVdm2EZ3cGQdngJ8GUjEuj1yXVaG7szmG6/S5XtBWT2jGZ83tGXrbT1dUF6XwcThAir4ZGobbFGD4btl3Q3hyIvuit8LFrueIVoVM7cbApLJHoL/BBa9DUTxTy400=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1vy6td-0000OG-Ap; Thu, 05 Mar 2026 12:29:37 +0100
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1vy6tb-003sKU-10;
-	Thu, 05 Mar 2026 12:29:36 +0100
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1vy6tc-00000002JRi-2K2H;
-	Thu, 05 Mar 2026 12:29:36 +0100
-Date: Thu, 5 Mar 2026 12:29:36 +0100
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
-	Matthias Kaehlcke <mka@chromium.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, huang.ze@linux.dev
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v5 0/4] Add onboard-dev USB hub host managed vbus
- handling support
-Message-ID: <shnrtu77frks3yd5r66tzpeca3bxxuu4jpfaqxzerc3tl7j6hr@4ewe2trbh746>
-References: <20260223-v6-16-topic-usb-onboard-dev-v5-0-28d3018a8026@pengutronix.de>
+	s=arc-20240116; t=1772710558; c=relaxed/simple;
+	bh=SUNuXZEpVqcqVDtCShUO58rZJUiJF3OIxFPd0QSnkTw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ch3xpns+mzATlirNq4+MRJbBvBGIvwCgAH45tfVgpzVxq+PDOqDwApjIBCaNFIfMW0P9qIQhqTg3hj75WZbdLgcAr9h83Wf40u1zai4LmoYIvcw/NVoyqR6Mz4xg9HSbaq3nfLhC/6vxkxKf7ne0Zm/O6nV0KUimds5wSOfpnFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KropPouS; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-483a233819aso78123785e9.3
+        for <linux-usb@vger.kernel.org>; Thu, 05 Mar 2026 03:35:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1772710555; x=1773315355; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8p5Rgp/dBX+nd9RSWXnx5Nf8wLWcN1gvPdv6yAlGWHc=;
+        b=KropPouSndROntIv/pSTbjo8AkAn9DebixCtmJWzYCw28xGmbiJynb/OZ+BaHqLWAq
+         FYDi5hvt9611nVYiVZaZXAB5A2nTx2xn3zWRjFUBbj0PLuiFJYfns7dR5tMeUD+PRgkC
+         or4b/+4f9zb2Wx2ki8ZlyNI1EkIHnt0YMN2cUwIGPGDxzAzmYOoop+UFCSpiHSFK42NZ
+         801kDLXO78darVRjbaK3wEoQ6loIIxm7Pnp6RwFPRf+y+nrBuQlXRLj3wnzoO4NVXElY
+         uRnQPvDL61wEr/FReIQLluFnHCuKp5KZ9YlFaQNbl0jARu+zwPjB6YGKVp61wSsPwBbA
+         B57Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772710555; x=1773315355;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8p5Rgp/dBX+nd9RSWXnx5Nf8wLWcN1gvPdv6yAlGWHc=;
+        b=PJL4uRhNZ81yPFY1RAsycjFfGXtqNOYMyLDS49UfT/QtvQDtEUPaBwVQ4iJV8wyPfp
+         GnZTntb26cmk/ox+2KAiEg/6SrLr3SJZVOxOnOcapEgxisdjs4j6y7MrR1KG+SqidtjQ
+         M5kq7t2vhcRNUmO4azhOCzKpDwCKlwrjLSWXEX1uqJhPeOAUSvRCGJ6tnIQvavAQJIm/
+         QlF671J0f+7CNxUiz7WrtwVf06d5UiPV++7V4mVyJb9eVjAqDyBPZiG7I2tWXLT98YBE
+         vb2Om70tuuSGEzzcKgZGoghEn5mgm2du06SprawvbpxpIoejTha5OrD1durAABpUAfRq
+         mbzg==
+X-Forwarded-Encrypted: i=1; AJvYcCWq0JtehwsvdVgDCYd9YviYFrETlcT32P2kBG8ShzvfSTc4l6+RnouGsJkr6L3zDtSqiCqFFdbHJps=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH1smFwr6+bAHTNvfd/LSN7BRn8YNXLMNeot8ob13KD4gAVGca
+	y8v9U4ywQ2qCL5jLBDtbOXUPIfwiCWy/ZgRT1j4t9BzXXljT+aR+RgOlQalYIPihk9c=
+X-Gm-Gg: ATEYQzy4OPVqawq3T7mQuVfU+ao2Vc/pQjNeTHJCYHfFgJluvCAkSnd+w3ZZ49Y9Gsr
+	qDaeTMQwbb5lkmVKutegpJqBlnsbXAUDhbCJVcE6fZAzGV+mjMnJtkeBEUqGhVhP+XcfEH5/fBD
+	gwFm0sgtK23xwiPxRJN1DgIMXN0/zOIaXv9QcI4QAJmpHVTIvPJ+9dKoUATM0wndn/T9mBpHIVd
+	uQ4Rq1mqSVXbTpCoggMk57ffQf8QdMstPEzbmOQMisoMP33iqeRyTZN0BVNTjOh/fakz0Xda3cS
+	A9IKq5Cx8OriGeCaZW8DWkVTQRI3ttwdtZHN5l1/OfjwODgi1vCsspS1h9938Zqt8IjBv02U8bo
+	Mr7gPjCNbJeHKIyEa+/SU4Z+0noKKiZCPk2ZCDgxk4+llqdA2zHai3PuE1OTo0x0sd+PbP75E/K
+	Do8sA//lxX+mLturJxg2x72PY1FpVGEHyM6hGIq06ksynEM+SCt+oMMc+jk3cyRjs5M2c=
+X-Received: by 2002:a05:600c:4f4c:b0:477:5c58:3d42 with SMTP id 5b1f17b1804b1-48519849bd4mr100264715e9.10.1772710555188;
+        Thu, 05 Mar 2026 03:35:55 -0800 (PST)
+Received: from ?IPV6:2001:a61:1363:9e01:43f1:e533:276c:e9a1? ([2001:a61:1363:9e01:43f1:e533:276c:e9a1])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851fad27dbsm31071765e9.2.2026.03.05.03.35.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Mar 2026 03:35:54 -0800 (PST)
+Message-ID: <f8c304be-c061-4656-b7ba-83150c2b8746@suse.com>
+Date: Thu, 5 Mar 2026 12:35:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260223-v6-16-topic-usb-onboard-dev-v5-0-28d3018a8026@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Rspamd-Queue-Id: 2D208210965
+User-Agent: Mozilla Thunderbird
+Subject: Re: [BUG] usb: cdc-wdm: Missing barriers in ad-hoc lockless buffer
+To: Gui-Dong Han <hanguidong02@gmail.com>,
+ Greg KH <gregkh@linuxfoundation.org>, oneukum@suse.com
+Cc: robert.hodaszi@digi.com, kees@kernel.org, linux-usb@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, Jia-Ju Bai <baijiaju1990@gmail.com>
+References: <CALbr=LbrUZn_cfp7CfR-7Z5wDTHF96qeuM=3fO2m-q4cDrnC4A@mail.gmail.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <CALbr=LbrUZn_cfp7CfR-7Z5wDTHF96qeuM=3fO2m-q4cDrnC4A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 04B43210A43
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.54 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[pengutronix.de];
-	FREEMAIL_TO(0.00)[linuxfoundation.org,kernel.org,gmail.com,chromium.org,linux.dev];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34071-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[13];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_SPAM(0.00)[0.014];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[m.felsch@pengutronix.de,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[digi.com,kernel.org,vger.kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-34072-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org,suse.com];
+	DKIM_TRACE(0.00)[suse.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	R_DKIM_NA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,linux.dev:email]
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim,suse.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
+
+On 04.03.26 09:41, Gui-Dong Han wrote:
+> Additionally, the driver relies heavily on set_bit() and test_bit() on
+> desc->flags for synchronization. These bit operations do not provide
+> implicit barriers, which might lead to similar ordering issues.
 
 Hi,
 
-+To: huang.ze@linux.dev
+going through the driver it seems to me like all relevant cases
+are covered by the iuspin spinlock. Do you have any concrete suspicions
+or do you generally distrust this style?
 
-On 26-02-23, Marco Felsch wrote:
-> Hi,
-> 
-> the whole purpose of this series is to make it possible to control the
-> USB VBUS regulators of an USB hub via host managed regulators.
-> 
-> Regards,
->   Marco
-> 
-> ---
-> Changes in v5:
-> - Link to v4: https://lore.kernel.org/r/20250911-v6-16-topic-usb-onboard-dev-v4-0-1af288125d74@pengutronix.de
-> - rebase on top of v7.0-rc1
-> - dt-bindings: fix typo
-> - dt-bindings: move example into usb-device.yaml
-> 
-> Changes in v4:
-> - dt-bindings: change to vbus-supply and shift doc to usb-device.yaml
-> - onboard_dev: make use of new regulator API to parse child device
->                regulators.
-> - onboard_dev: drop hard coded downstream port number and make it more
->                dynamic
-> - onboard_dev: drop limiting support to SMSC hubs
-> - Link to v3: https://lore.kernel.org/r/20250821-v6-16-topic-usb-onboard-dev-v3-0-6d2b38a5d818@pengutronix.de
-> 
-> Changes in v3:
-> - fix dt-bindings issues
-> - Link to v2: https://lore.kernel.org/all/20250327172803.3404615-1-m.felsch@pengutronix.de/
-> 
-> Changes in v2:
-> - fix compile time errors in case the module builds
-> - Link to v1: https://lore.kernel.org/all/20240807-b4-v6-10-topic-usb-onboard-dev-v1-0-f33ce21353c9@pengutronix.de/
-> 
-> ---
-> Marco Felsch (4):
->       usb: port: track the disabled state
->       usb: hub: add infrastructure to pass onboard_dev port features
->       dt-bindings: usb: usb-device: add usb hub port vbus-supply suppport
->       usb: misc: onboard_dev: add hub downstream port host vbus-supply handling
-> 
->  .../devicetree/bindings/usb/usb-device.yaml        |  15 +++
->  drivers/usb/core/hub.c                             |  55 +++++++++-
->  drivers/usb/core/hub.h                             |   4 +
->  drivers/usb/core/port.c                            |   6 ++
->  drivers/usb/misc/onboard_usb_dev.c                 | 117 +++++++++++++++++++++
->  include/linux/usb.h                                |   3 +
->  6 files changed, 198 insertions(+), 2 deletions(-)
-> ---
-> base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
-> change-id: 20250821-v6-16-topic-usb-onboard-dev-b8d4d1d8a086
-> 
-> Best regards,
-> -- 
-> Marco Felsch <m.felsch@pengutronix.de>
-> 
+	Regards
+		Oliver
 
--- 
-#gernperDu 
-#CallMeByMyFirstName
-
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | https://www.pengutronix.de/ |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-9    |
 
