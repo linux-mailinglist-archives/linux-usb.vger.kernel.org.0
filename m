@@ -1,90 +1,77 @@
-Return-Path: <linux-usb+bounces-34097-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34098-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4B9vIhCZqWm7AgEAu9opvQ
-	(envelope-from <linux-usb+bounces-34097-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 15:54:08 +0100
+	id OPVzMXqZqWm7AgEAu9opvQ
+	(envelope-from <linux-usb+bounces-34098-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 15:55:54 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D97E213E92
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 15:54:07 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91EEC213EDC
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Mar 2026 15:55:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 5EF3C30A86C7
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 14:41:37 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 55BCC3064F38
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2026 14:48:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45CA3A7F74;
-	Thu,  5 Mar 2026 14:41:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6AF3A874B;
+	Thu,  5 Mar 2026 14:48:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AcRDw8Uy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lHj7R5tm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF1E39F177
-	for <linux-usb@vger.kernel.org>; Thu,  5 Mar 2026 14:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BD039E6F4
+	for <linux-usb@vger.kernel.org>; Thu,  5 Mar 2026 14:48:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772721686; cv=none; b=F7kkfAd5nFWZWITcN1X88oAt1ewDr8j9S88zWE1qp74I9+V86kwCPNRbqM09QeGeSVvccsgu7IlpD99lxPzwpwFgj3C5xVQC2j/pDtmLcFxWSx1R3pQNtQtFOQv22586LEoiTs81TsxC51YFkhxCwQGLcpn800Ox9xsuQ8Lp+YI=
+	t=1772722133; cv=none; b=Hy4U+L1urxUAUm3eTq3utXccEbaeSDFmxk4Y+1vewGZkmORbacW9DHTAbZJ9fLI9pYD5WZNAlWcO954jjdFbE1Go8LIkPRqJNSZ0PdMG4H/2+HIJd4IZmd4kATrK39foVVLdTNOrh2D8448HJzE8n39N+iXLqpRheZiG+Lmy3gE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772721686; c=relaxed/simple;
-	bh=fE+vZeSt6bldS9UtZkxfXCaEgvCLnrabSq8b9wxTLhs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T1+MZo1JtMs/m1O9nISLLrRbUtA2yzq96UBR3XKLK4Mv3+/YCy78xKVeLHQTnnW767rV/j9SN9Fzazfhl/GqMXRPlEmKOce20iT/iYaW7z+pxfQ8OjnLwRqjQm1DgdZ78gmFFiy9OUTvNf71qE3mDJ9WVtvIQYqhYeA7K6mLBiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AcRDw8Uy; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-82995242934so67438b3a.0
-        for <linux-usb@vger.kernel.org>; Thu, 05 Mar 2026 06:41:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772721684; x=1773326484; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FA8mu7UMK7lk8WkAY9QqV/IxQUyPyzGI/S0j94sfONc=;
-        b=AcRDw8UyO6Tm2DDFJ4tWWMl15Bu1hMMytiO3dqouQ89qmz3nO6ZKssoSSdxEraol89
-         EBWCRmLr8J8T4GMrfk/Pr8IQMs/wP7aFDoHMRtdaUGUlQJHUTs2jVhNOiKDkc8v/J05i
-         9peNyHUgER7iWkBiqKdOiNxozn2kJv251SY9DmJKNl7uytE/pmYgpOwFyv7rUyFyRc0h
-         LiSxwXEiZ2Sn1Pm90YcA5mO/8A6weORnYAi7Sy77HtgThcTPB8iCaDyo/kcbE8VFlbmj
-         oD5oMMyNDejJ3MWAp8ZHkWFRTUJCT+vh062i09VSgrShHHPjG3FrgCI6MwHDqU13TUsA
-         ijDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772721684; x=1773326484;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FA8mu7UMK7lk8WkAY9QqV/IxQUyPyzGI/S0j94sfONc=;
-        b=ArkyHLcR3Yr/QOdtj0h9DuvF4XOzqJhNelOf9qF4vmPwbkWC+J74qDB/blcC2Ctk/3
-         wT/d/fG/r4S5Yrl0QvgzNHEpfHFLk1a+4A0SvsXAPDZryLGmZlnyvKW84FC5PLJ+PPp5
-         zMsRVeiPc326/jWK+zUbRaOFeYQtZisBB/ReJa9VEz2JO3G8p4/FWsyB7zjBBcsfFOVk
-         CILStkpXJkhf9uxrCh9CjAj2VRRjhy3PKxN83KESWdj1NX7yN0DQwlU0XZNEwJMT6tdg
-         0kzL2wuCC8AMT8fa/s/uFkxfF37sL6z89j67psDe0rXaRmArDEK5WeeHWt5GhgxjzU4t
-         qKkw==
-X-Forwarded-Encrypted: i=1; AJvYcCUbwPW6FE6YPcrbjWT7awouHU8+6hBHlY8DDB1yRNCFvmpGRplq7+r67KtDoQDz1T8VxCJQTEQ2FhQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxzj/JcJFFQvEEwENl32hKJzk7/OtAIlx1hd/jBfmqyzq6kpzU+
-	0SZV/vxN7YdiMsCjZEVbCNCtx21nHJi5Ko+CYU+6G1nIZAN3TYOBO7eY
-X-Gm-Gg: ATEYQzxyBZy1vdJ1E6YAJ7HMF8d1m3hrovOzGGqogJ2j80nuNRyufAw2xerBo6h5v5r
-	+Smav/SYVpWMPxl4Nij6gOOJ70PubQUYL7SIHCsDj1IoTJ9lCiEfNfs3NqJN8DqY5CGXqJJwmNE
-	Q0r1zsThH2jdrn7jKhmrFYUMBNiQ/S78RksGCyynjaogHUOKrs51mWbhYg3RroiKwnLZM1lHOUy
-	pKGas+p5eMHZ57spXqayPqTHsErgQp1kWiotjClW27pwpaG5+3yINvfbnld/k8sfPUzRhZcITN4
-	XJdHSJN45GCrVnrus1HpevC5j1s4U2PcZlNBC6frgfbwyPUTSgUK12B08irf+OKncP9VzuWM6C2
-	t21XYSHCmztRt6PEC0BTPneF1ZDMIy0Z+OfftZ0DLvFrogU4vumVLDWVim0dvn8ZtHUhYdWWbuf
-	7BixjUHl086pMKJwHNB/mpFMVn8Vm2
-X-Received: by 2002:a05:6a21:9983:b0:366:14b0:4afe with SMTP id adf61e73a8af0-398426017c8mr2476782637.37.1772721684447;
-        Thu, 05 Mar 2026 06:41:24 -0800 (PST)
-Received: from nuvole ([109.166.36.159])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c73818d94a4sm3801271a12.17.2026.03.05.06.41.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2026 06:41:24 -0800 (PST)
-From: Pengyu Luo <mitltlatltl@gmail.com>
-To: Pengyu Luo <mitltlatltl@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: kernel test robot <lkp@intel.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: ucsi: huawei_gaokun: make gaokun_ucsi_ops static
-Date: Thu,  5 Mar 2026 22:40:36 +0800
-Message-ID: <20260305144054.27848-1-mitltlatltl@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1772722133; c=relaxed/simple;
+	bh=0Uk/XQSyG0J1DZhygl51BmN+liwawL+FVk+evHv/0f4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IzDk66JnGob8LtC4cLwBaFWSZ3oLB8QIYCnNq4aHHKgaKKSacraLIo2JfMF++P5afeKoQukgj8j8Fsy1tnpZm5dN8cN61elTpFPce/KNI9DMCh0rD1/cAm5t8ezDxOHlYCuW5q1zyNmYnnSRGy60BXWcSQu3P043TKKtD4/KcNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lHj7R5tm; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772722133; x=1804258133;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0Uk/XQSyG0J1DZhygl51BmN+liwawL+FVk+evHv/0f4=;
+  b=lHj7R5tmxUp8AsgeFI2rcckfvyRKxT7Shy2p4bI+xaGupsh+fuq8mM60
+   6Xm+BErWiMreGs11WtAMK/24lzoCZxuj+uZiDfEwWM3J40pBP4R4IulHs
+   ce6XOwsvms2s0xDjZzOSzrdCNvSkIsVFukOVqtoiN4HIafmHU5FI88nob
+   vZ1l3M1GnVYi35Dc2k31CXBO4TqERkZo1PbGvvtcb4JZHmQvFagboojTu
+   C+DWOHT7YmlXV9yAsoVENr7TZnLOgVJvZLF06b0xcdyQMQAznNeEWR4K8
+   lbOMTW2pLW1q9BKCnmffFDPiGWMZuThvg8ktaz/ZF4XTLGoqwzvIqslmt
+   A==;
+X-CSE-ConnectionGUID: 3XwDzuPqTQCVQrEK2Vme1A==
+X-CSE-MsgGUID: j1tgRRdxR8a3kq2c05wpjQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="77411839"
+X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
+   d="scan'208";a="77411839"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 06:48:52 -0800
+X-CSE-ConnectionGUID: l/UbBPzqQym5TbNFw+l8yg==
+X-CSE-MsgGUID: lXmpG45MQauMa+iYNDNgLQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
+   d="scan'208";a="218659780"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa009.jf.intel.com with ESMTP; 05 Mar 2026 06:48:50 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1058)
+	id 3DEB795; Thu, 05 Mar 2026 15:48:49 +0100 (CET)
+From: Niklas Neronin <niklas.neronin@linux.intel.com>
+To: mathias.nyman@linux.intel.com
+Cc: linux-usb@vger.kernel.org,
+	raoxu@uniontech.com,
+	Thinh.Nguyen@synopsys.com,
+	Niklas Neronin <niklas.neronin@linux.intel.com>
+Subject: [RFC PATCH 00/12] usb: xhci: groundwork for secondary interrupters
+Date: Thu,  5 Mar 2026 15:48:12 +0100
+Message-ID: <20260305144824.3264408-1-niklas.neronin@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -92,65 +79,70 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 8D97E213E92
+X-Rspamd-Queue-Id: 91EEC213EDC
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-34097-lists,linux-usb=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,linux.intel.com,linuxfoundation.org];
 	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34098-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mitltlatltl@gmail.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,intel.com:dkim]
 X-Rspamd-Action: no action
 
-The gaokun_ucsi_ops structure is only used within its translation unit
-and is not referenced from any other file. Add the 'static' qualifier
-to avoid unnecessary symbol export.
+Prepare the xhci driver for supporting secondary interrupters. It does not
+enable them yet, but removes several obstacles in the current design.
 
-Fixes: 00327d7f2c8c ("usb: typec: ucsi: add Huawei Matebook E Go ucsi driver")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202603050203.KD4RWA00-lkp@intel.com
-Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
----
- drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Key changes:
+ * Avoid freeing and reallocating structures during hibernation resume.
+ * Consolidate interrupter initialization into a single place.
+ * Add the ability to distinguish different interrupter types.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-index c5965656b..ca749fde4 100644
---- a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-+++ b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-@@ -193,7 +193,7 @@ static void gaokun_ucsi_connector_status(struct ucsi_connector *con)
- 	gaokun_set_orientation(con, &uec->ports[idx]);
- }
- 
--const struct ucsi_operations gaokun_ucsi_ops = {
-+static const struct ucsi_operations gaokun_ucsi_ops = {
- 	.read_version = gaokun_ucsi_read_version,
- 	.read_cci = gaokun_ucsi_read_cci,
- 	.poll_cci = gaokun_ucsi_read_cci,
+These changes lay the foundation needed before secondary interrupters
+can be introduced.
+
+Niklas Neronin (12):
+  usb: xhci: simplify CMRT initialization logic
+  usb: xhci: relocate Restore/Controller error check
+  usb: xhci: simplify USBSTS register reset
+  usb: xhci: move reserving command ring trb
+  usb: xhci: move ring initialization
+  usb: xhci: move initialization for lifetime objects
+  usb: xhci: split core allocation and initialization
+  usb: xhci: improve debug messages during suspend
+  usb: xhci: optimize resuming from S4 (suspend-to-RAM)
+  usb: xhci: add interrupter type
+  usb: xhci: prepare for multiple interrupters
+  usb: xhci: prepare IRQ handler for multiple interrupters
+
+ drivers/usb/host/xhci-mem.c      |  33 ++---
+ drivers/usb/host/xhci-pci.c      |   6 +-
+ drivers/usb/host/xhci-ring.c     |  19 ++-
+ drivers/usb/host/xhci-sideband.c |   1 +
+ drivers/usb/host/xhci.c          | 205 +++++++++++++++----------------
+ drivers/usb/host/xhci.h          |  13 +-
+ 6 files changed, 150 insertions(+), 127 deletions(-)
+
 -- 
-2.53.0
+2.50.1
 
 
