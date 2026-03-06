@@ -1,202 +1,164 @@
-Return-Path: <linux-usb+bounces-34135-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34136-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8H3JDkJIqmlkOgEAu9opvQ
-	(envelope-from <linux-usb+bounces-34135-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 04:21:38 +0100
+	id 4Bj2JH1KqmlkOgEAu9opvQ
+	(envelope-from <linux-usb+bounces-34136-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 04:31:09 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A83D21B018
-	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 04:21:37 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31CB121B1D2
+	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 04:31:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 644913074E35
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2026 03:17:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D4DD6302F3AE
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2026 03:30:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C39EB36B067;
-	Fri,  6 Mar 2026 03:17:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C721342C9E;
+	Fri,  6 Mar 2026 03:30:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HlwN4eXQ"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="x/9//8zZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E002264B0
-	for <linux-usb@vger.kernel.org>; Fri,  6 Mar 2026 03:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6F123FC5A;
+	Fri,  6 Mar 2026 03:30:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772767020; cv=none; b=GsDb30qQFNCjoWaOcLC9UxjOqe/Hp6GuysZZRvc4c8poxL35Zi+u0663vLscO+D8idFXvdsIjuMsc+PwEkM7cG/QXbBCdZShTuS8UsG4g0/9p/o6YALbX+4WZUN514i4HDT/g7oBr6SvSvMhceV4kv68fS7EDgqkywqYjeV8g98=
+	t=1772767856; cv=none; b=E7Iq8R88YMtx+Dsr8SzbjBk8CsPiJj/wfVMMHzZGF5MSa3tIpu+BM0mVFOwNrRGfMJfTDrORr/8GCXNJSr/ESzIfKKbgz7S/+Y2mOBHkauwIQH2LC/8xbTjOHjvb70ScmPrcR1SySawamjOEcD2prlut26ow7usuDKl+NGWmajM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772767020; c=relaxed/simple;
-	bh=m68gnYmctKVpeghMNZk6qG10siwQrI61Fd4jyCWFufU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XlDcD5enclWIG8Ry0nEVxqi2JHTl2MCnfoX76YKGU5P59Y8kvrZPQTH2u88g/4TxrfYfKld/QTVJxwfoTmB21ElgiS1j9wU0TjA4/uM4vUyUdc42XRz/ntYhXDzu3J/HdUBqGPnIPJ41XOYAW5nA37bW9MmqKgrn38qyMwvs91w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HlwN4eXQ; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ae527552acso18993955ad.0
-        for <linux-usb@vger.kernel.org>; Thu, 05 Mar 2026 19:16:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772767018; x=1773371818; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AoG/ryHBSZlzW7QNKPkSRF4IaoRTutm96Nzl+aL2qjM=;
-        b=HlwN4eXQNE3ekE3YOv9efdQMuAI0mQ2cc5dTNpBIBDLPo+6ShBts0/5ABLbvDp8pzX
-         MZ3tCAsrQaBmgOYvac5Q4EZlVQvfiIGl/1SRZLm7N7+ri46+l6hz1jJZRXLENenY4Oni
-         7hBj60f3P6SjFhKYURdJs6Bao8NaubdHjoHRvxDSa8rwqMkz3tK/YQHD7fO93QuIP5P/
-         PBG3xUXkC3IndBqcOVzl7bCnwYkHd5NDSzd7ClWdTHk6f2l70mU7qrrk3oIUhlxUEmRc
-         QVObJT9g2qcbOKbNl8MqaNAlxq9RREAl280Y+gRWY/EYAJEeGP+6EPexivkKdBW7Emoe
-         H2Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772767018; x=1773371818;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AoG/ryHBSZlzW7QNKPkSRF4IaoRTutm96Nzl+aL2qjM=;
-        b=DPwPITfAuWGngSmgd93dBFJfCo18IEHlhfXX/MUzVTetgojUEfMuK0rNIoGaeTdLv4
-         U7zSVw9jxffUZIbtPFY5vIn/sSULkHegZDj33Ncj6tJeJn+3KQGhHy85QJoVjhGcNVO/
-         Zmy9mCy19K2hD8BuDX6o5uUKM946e+SU3TlfbkBREXt09HQ0P+p0Qwy2vhbMBr4V2DJQ
-         nF1vm687CUvyq6XIs9NMF7n/6m8FKtG052rg62OCtund8kkZUM2UyqvSgD8AY4/VuUMF
-         du5+W8bDUY/fCfmmpDhAG6LB0Z4VcWJC19x9VmdtGWZubgmmLTU//akDk3K2IXSzjPsM
-         A0FA==
-X-Gm-Message-State: AOJu0YwLodAuOFUuImA1TlQM5sIwZ7A/HJhuQGmRfUfZu3XYKq4QDuW1
-	73ESO0BQ7WF75Li1WKA27pU2ytUTWQFt9JDD+Tc68Mmfgvf9rZkhJOne4GS5VqDR
-X-Gm-Gg: ATEYQzwsyAFKFYzxXMI2fj2xf2F4WxwP/RUpDZg/czGsgUyXFRMyWSa5IIkycGvK9pV
-	b/P1e5h6zkOL2AtVeZksn5AOZ7IRHwKqRI8nauQPy49Ljf/0iN1vMtFaTfBYPI2Gp/lckOXQn7G
-	wzFXg2dQq6cYdf5upUn0vlWvesj7s0NU0wPHY0gEO5YOlJ/R6rlbQ/ya6vSlC33gf2laiSza98Y
-	PD51EUKq/LhwH5B8hV5vZqJodrQKYX2uxe0IiUu6FlBqt9iPhpTB1xhwImZxqRTYkFv8IfgX4oD
-	Kep0CoYo6RHbxJq/jnGuvyhqZJ6hJoWAtcN/qLsq8Y2b8WBjiV7RmDxoIPJqJqg5hCp7Ii+XiWA
-	aW10/LAjadiDHyS5jDDVy3GpXy6lLVH6qmsfIUrK53KvmBcqkqOytwZnNDHMU8MFJbV/ptSZRXS
-	TEq7c59KSD0Ntptf8dlzRWCdDQaiBIYbIh5nUXHUn73tiT3mI8uqq0GB0=
-X-Received: by 2002:a17:903:1b6c:b0:2ae:5345:89ee with SMTP id d9443c01a7336-2ae823fee84mr8684175ad.1.1772767017919;
-        Thu, 05 Mar 2026 19:16:57 -0800 (PST)
-Received: from ryzen ([2601:644:8000:56f5::8bd])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae83f7864dsm1749235ad.49.2026.03.05.19.16.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2026 19:16:57 -0800 (PST)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-usb@vger.kernel.org
-Cc: Badhri Jagan Sridharan <badhri@google.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-hardening@vger.kernel.org (open list:KERNEL HARDENING (not covered by other areas):Keyword:\b__counted_by(_le|_be)?\b)
-Subject: [PATCH] usb: typec: tcpm: kzalloc + kcalloc to kzalloc_flex
-Date: Thu,  5 Mar 2026 19:16:39 -0800
-Message-ID: <20260306031639.46942-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1772767856; c=relaxed/simple;
+	bh=9JD6kBkSfcMgcL1f24JUH05YEvcrs2BAYO8Lh88O1+4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kGDcSECwptAtrSBCgBAUtTpZOcANHuHHo6obL7KxWG4HhR1bSpK4KTB1t+WLvQ8rerL79whcKFOqmK+dINizpmpyYgGFFoUSjxfRA04JE1RYe5FdgCstjNC6bx5FXxXjeAtnkQ/JrRT02qtto2dx8N4elWzZ9UXUlB4tW1zwTDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=x/9//8zZ; arc=none smtp.client-ip=54.243.244.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1772767815;
+	bh=glyq+F+BtseRvj5gR/MbcEWW00ve4s02FxEWiBBWcqQ=;
+	h=From:Date:Subject:MIME-Version:Message-Id:To;
+	b=x/9//8zZ9FY3CAjeSOywIFkPhN1s4xyqiVo3M+NdhM/tnQ+3XN3CCRzTFdh2UuRS0
+	 ZgXvfLEUCBeR7T4MIj7ScZZy8LNaCkjBkpuIG1nqIaN7t8MEJBsYkQM3OGuiX7KODa
+	 ev7Dq+Y9rcP7doprN9d5uk5IeO1bAVkzztf8xA9M=
+X-QQ-mid: esmtpgz14t1772767813tef51b2a8
+X-QQ-Originating-IP: q5sbB4QY4DiPKFW1XvuMDhNDZLnpT6hQegF4Oki3utY=
+Received: from LT-PANJUNZHONG.dc.com ( [120.237.158.181])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 06 Mar 2026 11:30:12 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 3452352524430289917
+EX-QQ-RecipientCnt: 7
+From: Junzhong Pan <panjunzhong@linux.spacemit.com>
+Date: Fri, 06 Mar 2026 11:30:09 +0800
+Subject: [PATCH] usb: gadget: uvc: fix interval_duration calculation
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 8A83D21B018
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260306-fix-uvc-interval-v1-1-9a2df6859859@linux.spacemit.com>
+X-B4-Tracking: v=1; b=H4sIAEBKqmkC/x2MQQqAIBAAvyJ7bsE0JPpKdDDdaiEstCQI/550H
+ JiZFxJFpgSDeCFS5sRHqNA2Atxmw0rIvjIoqYzU0uDCD97ZIYeLYrY7Su+08bOnrieo2RmpOv9
+ ynEr5ABtuZidiAAAA
+X-Change-ID: 20260306-fix-uvc-interval-0dc36dbde48e
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Frank Li <Frank.Li@nxp.com>, Xu Yang <xu.yang_2@nxp.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, Junzhong Pan <panjunzhong@linux.spacemit.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772767812; l=1195;
+ i=panjunzhong@linux.spacemit.com; s=20260306; h=from:subject:message-id;
+ bh=9JD6kBkSfcMgcL1f24JUH05YEvcrs2BAYO8Lh88O1+4=;
+ b=Ml0gZ8h12QkGWcIz9pcDjz8GbJKk2RitH5gEqV+Tw3Lr7CL+GPow8qBIdunAa8L5QXBgYUuh6
+ q7E2l+sfDRtA0e5+Xf1wJAT8yqzNhHXgNrGIO3dQAFM03gnxxx65IRJ
+X-Developer-Key: i=panjunzhong@linux.spacemit.com; a=ed25519;
+ pk=bY08BOg2T9H93/jG8fEE/tVmdXoQQMp9M2rtzPFoyJg=
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz5b-2
+X-QQ-XMAILINFO: ME/Ngba2Rsnv8Y3zloXp1i7IPbHLqbocAzRR3qbaMa13gIcGZKyzKB8i
+	MWIEzHTsg7e2uN1SW8bytzLmKErCo1PAGjQTvMm6/ybgZbW1UW2n8i91PHUo1jlC4AvUKua
+	tFs9otJ3zs3aWCXZ3O7udtmNhsZtvZvzOWGpAba/cysPqnuj54YAEhQvaGc6LFC0paj30wz
+	fsGJefHKF9KJ2avkMu/tP+6SXad1EzX77GNP3byj/AFFu4dm9HbwYoBPugbOi9RYsZ+5/pU
+	xLhzu5dcF38JlnMWZbjqTdqsyJG2nKPj3J3vHwpLly1AqrzdXQ0Se9Pm9MO/BwfM2vPlip5
+	xlB2i1fKX49VA0dPGMrO7hP2kYcPBByYXBpU4L7C8lwO+6aBiZeaX/H/lsRWH4pf9Apcras
+	FIj9+kUQXwEJ7aQ8r/8WTpv5EcqI5+AtkJJbLwgMPW0kyt0ondqKlSvjhQU7ugirXnsuQ5k
+	6c0i3x49S/u1dAPp+Hb44JchhodQofdTC4kjfPNt4/vhuGLmdv6zTl2DmAT0wygwAZ2AFbF
+	BYWfPyIAKMcujQOVMh11bBD5S876eMEVJ1a0Iujp+jo2337ZD4orz33UY9qJoopbQEqIPYe
+	g0Gen+xVdJ5Q/PmfD2QS5urZzaz/zzu/PT3SYMvzA0ckSDXo+ao0Oq3Fkr//+paDsMIG59g
+	iPkIivDIqD7IcMcqic+qS3XzUNofrA8K4l3t5/7L+bkr6MrEG4UygpAQsw1bHB87baiDce4
+	Oel9sTcTmx9zGt3njm2NSBjLVXtCb5hPp4C/l6xnKArcsAkgQ7CCfKRunZ30HHRCikayNwo
+	i55vxZy/EdCwgafu8TJFK2ioFXcRBtHRah8JXxoxpL3fmvxWhjK/l9DF/bXEL+BVhAcYJ3H
+	i7Z7irFKaqxdxKCgEXNNDQ1/m6wG/+lD5yWI+x28mCMTyFkhAP/uN3xPy6DNnThpbiqjEqs
+	lLYeqbwrUBBSjfviIYFNxRIKl4s9I2lzQvEZtWtlKeOkE298xAMC1kmmf6+VTBT3qHHgbrc
+	fghKAlGdwkPzRweOmGTwGk6QJT9iUwbjjHTGQtzN1T09sNehsiqJonazuL9b9HlYBRVJCcg
+	F+nylkDThJz9KbNwwYWeFgmgPZ/nZ0dfrCI+RO1xITu
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+X-QQ-RECHKSPAM: 0
+X-Rspamd-Queue-Id: 31CB121B1D2
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[linux.spacemit.com:s=mxsw2412];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34135-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rosenp@gmail.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[gmail.com:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[panjunzhong@linux.spacemit.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[spacemit.com];
+	PRECEDENCE_BULK(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34136-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	DKIM_TRACE(0.00)[linux.spacemit.com:+]
 X-Rspamd-Action: no action
 
-Simplifies allocation and allows using __counted_by for extra runtime
-analysis.
+To correctly convert bInterval as interval_duration:
+  interval_duration = 2^(bInterval-1) * frame_interval
 
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
+Current code uses a wrong left shift operand, computing 2^bInterval
+instead of 2^(bInterval-1).
+
+Fixes: 010dc57cb516 ("usb: gadget: uvc: fix interval_duration calculation")
+Cc: stable@vger.kernel.org
+Signed-off-by: Junzhong Pan <panjunzhong@linux.spacemit.com>
 ---
- drivers/usb/typec/tcpm/tcpm.c | 19 +++++--------------
- 1 file changed, 5 insertions(+), 14 deletions(-)
+ drivers/usb/gadget/function/uvc_video.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 1d2f3af034c5..272f9187b12d 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -605,9 +605,9 @@ struct altmode_vdm_event {
- 	struct kthread_work work;
- 	struct tcpm_port *port;
- 	u32 header;
--	u32 *data;
- 	int cnt;
- 	enum tcpm_transmit_type tx_sop_type;
-+	u32 data[] __counted_by(cnt);
- };
- 
- static const char * const pd_rev[] = {
-@@ -1653,7 +1653,6 @@ static void tcpm_queue_vdm_work(struct kthread_work *work)
- 	tcpm_queue_vdm(port, event->header, event->data, event->cnt, event->tx_sop_type);
- 
- port_unlock:
--	kfree(event->data);
- 	kfree(event);
- 	mutex_unlock(&port->lock);
- }
-@@ -1662,35 +1661,27 @@ static int tcpm_queue_vdm_unlocked(struct tcpm_port *port, const u32 header,
- 				   const u32 *data, int cnt, enum tcpm_transmit_type tx_sop_type)
- {
- 	struct altmode_vdm_event *event;
--	u32 *data_cpy;
- 	int ret = -ENOMEM;
- 
--	event = kzalloc_obj(*event);
-+	event = kzalloc_flex(*event, data, cnt);
- 	if (!event)
- 		goto err_event;
- 
--	data_cpy = kcalloc(cnt, sizeof(u32), GFP_KERNEL);
--	if (!data_cpy)
--		goto err_data;
--
- 	kthread_init_work(&event->work, tcpm_queue_vdm_work);
-+	event->cnt = cnt;
- 	event->port = port;
- 	event->header = header;
--	memcpy(data_cpy, data, sizeof(u32) * cnt);
--	event->data = data_cpy;
--	event->cnt = cnt;
-+	memcpy(event->data, data, sizeof(u32) * cnt);
- 	event->tx_sop_type = tx_sop_type;
- 
- 	ret = kthread_queue_work(port->wq, &event->work);
- 	if (!ret) {
- 		ret = -EBUSY;
--		goto err_queue;
-+		goto err_data;
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index 7cea641b06b4..2f9700b3f1b6 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -513,7 +513,7 @@ uvc_video_prep_requests(struct uvc_video *video)
+ 		return;
  	}
  
- 	return 0;
- 
--err_queue:
--	kfree(data_cpy);
- err_data:
- 	kfree(event);
- err_event:
+-	interval_duration = 2 << (video->ep->desc->bInterval - 1);
++	interval_duration = 1 << (video->ep->desc->bInterval - 1);
+ 	if (cdev->gadget->speed < USB_SPEED_HIGH)
+ 		interval_duration *= 10000;
+ 	else
+
+---
+base-commit: 5ee8dbf54602dc340d6235b1d6aa17c0f283f48c
+change-id: 20260306-fix-uvc-interval-0dc36dbde48e
+
+Best regards,
 -- 
-2.53.0
+Junzhong Pan <panjunzhong@linux.spacemit.com>
 
 
