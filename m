@@ -1,66 +1,64 @@
-Return-Path: <linux-usb+bounces-34131-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34132-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qGyUKaQkqmkPMAEAu9opvQ
-	(envelope-from <linux-usb+bounces-34131-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 01:49:40 +0100
+	id GIGfCPgmqmkPMAEAu9opvQ
+	(envelope-from <linux-usb+bounces-34132-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 01:59:36 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68EF1219FD1
-	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 01:49:40 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 782C421A147
+	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 01:59:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8D9EF302D084
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2026 00:49:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 380C430A0042
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2026 00:58:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8EE62ED860;
-	Fri,  6 Mar 2026 00:49:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6BB2F8BC3;
+	Fri,  6 Mar 2026 00:58:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VmSIkcp9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OoOHHlN2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3773729AB1D;
-	Fri,  6 Mar 2026 00:49:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077718460;
+	Fri,  6 Mar 2026 00:58:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772758172; cv=none; b=C/+1I2ZJZW9Z/04VdJLiKwZ12uLXV71kZKnFLJiCLRxpWLA+4jti9TjTiHX9XmqETlqX2LvVLBAL9dQjtlxy5Zx74F1D8EV9ny9MTpBmAgLh0YhnQcaKKXPXM6TkxAI4gfIhUG2GrJKm80O1VMAz+PSQrdSNDvgsKQiIjAYvSxw=
+	t=1772758689; cv=none; b=TPfwrOVAoKk5BCGAm4LwNKJhBNS9kuidUaPCcAfF0qzPLyxI0Sk+0zBEOhF8o4hSBtqPPVFEIfdbwNON2lkQ+vPCurZ3+Kpsh+HW+iWRsvM2mul4IFepnCUMvppYOBtmrgoxmc+0AEaSUpOace7XK5bP0COhAfdpOYvs/26gYak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772758172; c=relaxed/simple;
-	bh=5A5Yia5OYLhpJCA/C/eC/7f0iO9+TomhzVwGDZoNhvI=;
+	s=arc-20240116; t=1772758689; c=relaxed/simple;
+	bh=5e5Gf2h2zDHX7apPUfsiiaIYOEsHOzeJp7URjsOvOeo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VDVcqm7v45/HFrqlIyksc8XC+Rd7kkxYfLZMx8lp7kprXCAmQOAvPQpC5HNnEaBquPz1Wy3FPxVY8Lxyk8TuG3CAiBT/Ev2ZAlixVS4XlWe2Bi1zBBU7F+gDEEKdRdOvN7wZAT7bhqxyybCE02RSaLDUoeAoN9tlZ6GLMiMh10c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VmSIkcp9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8AC6C116C6;
-	Fri,  6 Mar 2026 00:49:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=EZSz/KsaNA1iOVn5X6gX8ywSkLcZcwWOUoXkCcVnvCeXU8OI0MnGt3iVlYRWtYZ1PWwuKLWWTKPMGQe4jWbB0uNQJ9B0gHnj2XQKgt8LZvtQiyyTnftoMmD2hmFUZwnKV6vHyRQLFKuqRlEGGjJKyA1nfnqnlaTCdiWiNXKYkB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OoOHHlN2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BA50C116C6;
+	Fri,  6 Mar 2026 00:58:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772758171;
-	bh=5A5Yia5OYLhpJCA/C/eC/7f0iO9+TomhzVwGDZoNhvI=;
+	s=k20201202; t=1772758688;
+	bh=5e5Gf2h2zDHX7apPUfsiiaIYOEsHOzeJp7URjsOvOeo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VmSIkcp9pf7hAh8fBXfNRO7uexpwCS64qEGv0cm98HL9jgdIhv9xNJWjQfrd4ETP+
-	 oKLDoHF048TPDfPcbo8Xqo9iswfY0FoShoZwkckBGrvGFbJ4bRUNHqsGl4d7xr3Wtg
-	 qzm8i9uDBrGuZJuK7jxrO5z+lVsjzDi5wI1V7K1cv3MIVuwp062t8JSdldb8Xv1tSN
-	 tbp8THxPkjm0RX/0yhSA5wRsBVFN/M0/m8G79RwMSRYbwVS19yd5kCmSqttwb3l5PP
-	 H+bVoWHhppHRQbvrsqp6PWhJh3PdDhogL9qX481F0M7yMvUuV1o3EDuu6BP3v1dg5J
-	 boZ2MPVR9FYBA==
-Date: Thu, 5 Mar 2026 18:49:31 -0600
-From: Rob Herring <robh@kernel.org>
-To: Charan Pedumuru <charan.pedumuru@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	b=OoOHHlN2mmz7PSHA3p3oT4sfYJRXhl6mYzO85N5WRXjS4mwci81iI7CezfIdqJybH
+	 oajV1VIWMEvPk3k9SeJvJrhLCZptoaE5Zxe2/vpH4YGY6iJm8BDCljtGKd4Bur4+qk
+	 F3FvKSvA1kVLle6rvIo15DFhtSNiI0vHN2uQlpRk4PmRYN55qIALKD/brslMcdOEwS
+	 cVUOoYa/c/8hoxPScmhyBvmcQ4+8hUL2WzQ9lmmnO2YFLAHg1fi1uLLU808n/pMu/o
+	 PUCfgdu/Vt0BmICoDowB5bFoNO2ytUEY6Yb83YhmbMNm6MpvUlIFqdNm1ewOgliObX
+	 dd5N4bVm8K+4w==
+Date: Thu, 5 Mar 2026 18:58:07 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Badhri Jagan Sridharan <badhri@google.com>
+Cc: Amit Sunil Dhamne <amitsd@google.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] dt-bindings: usb: atmel,at91sam9rl-udc: convert
- to DT schema
-Message-ID: <20260306004931.GA875708-robh@kernel.org>
-References: <20260224-atmel-usb-v2-0-6d6a615c9c47@gmail.com>
- <20260224-atmel-usb-v2-4-6d6a615c9c47@gmail.com>
+	Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 1/3] dt-bindings: connector: Add SPR AVS Sink APDO
+ definitions
+Message-ID: <177275868690.887629.16208159676173007840.robh@kernel.org>
+References: <20260226055311.2591357-1-badhri@google.com>
+ <20260226055311.2591357-2-badhri@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -69,8 +67,8 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260224-atmel-usb-v2-4-6d6a615c9c47@gmail.com>
-X-Rspamd-Queue-Id: 68EF1219FD1
+In-Reply-To: <20260226055311.2591357-2-badhri@google.com>
+X-Rspamd-Queue-Id: 782C421A147
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -78,37 +76,44 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34131-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-34132-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RCVD_COUNT_THREE(0.00)[4];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.997];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Tue, Feb 24, 2026 at 01:13:01PM +0000, Charan Pedumuru wrote:
-> Convert Atmel High-Speed USB Device Controller (USBA) binding to DT schema.
-> Changes during conversion:
-> - Include "#address-cells" and "#size-cells" in the properties since they
->   are required by existing in-tree DTS definitions.
 
-The DTS files are wrong unless there are child nodes and there aren't. 
-Drop those.
+On Thu, 26 Feb 2026 05:53:09 +0000, Badhri Jagan Sridharan wrote:
+> USB Power Delivery 3.2 introduces a new power supply type SPR AVS.
+> Add macro definitions for the USB Power Delivery (PD)
+> Standard Power Range (SPR) Adjustable Voltage Supply (AVS) as a
+> Sink Augmented Power Data Object (APDO) in the device tree bindings.
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> ---
+>  .../bindings/connector/usb-connector.yaml      |  5 +++--
+>  include/dt-bindings/usb/pd.h                   | 18 ++++++++++++++++++
+>  2 files changed, 21 insertions(+), 2 deletions(-)
+> 
+
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
+
 
