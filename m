@@ -1,307 +1,200 @@
-Return-Path: <linux-usb+bounces-34157-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34156-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2CbtDpDRqmn3XQEAu9opvQ
-	(envelope-from <linux-usb+bounces-34157-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 14:07:28 +0100
+	id 8B8BKzrSqmn3XQEAu9opvQ
+	(envelope-from <linux-usb+bounces-34156-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 14:10:18 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4E052215F9
-	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 14:07:27 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 071B4221678
+	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 14:10:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 93D73303A3CF
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2026 13:07:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AD850303CEAF
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2026 13:06:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E50C3939AE;
-	Fri,  6 Mar 2026 13:06:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D95C83939BE;
+	Fri,  6 Mar 2026 13:06:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="m5pqdISy"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="N+M+CvFV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010017.outbound.protection.outlook.com [52.101.84.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE62B38F25B
-	for <linux-usb@vger.kernel.org>; Fri,  6 Mar 2026 13:06:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772802417; cv=none; b=sAyADLUuNhBrc1f+/FAoul2zYbnU+8t3m0QPqP1zyjmWnqXSt8BojJ3CzkGY5KUjydHbdxDhAwph4+3FKLw9ITjEQAevA7jBf6J31Rv9F5nmq3yzq03SutgJmgBkCHlX3RnD+RGOfVsSPuNthO9JSYtu+nD8LHohDpQfGr55JgA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772802417; c=relaxed/simple;
-	bh=sub6SrAvM26hT3A2v1j2XexzqEbSiD12Hc10869wByM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=Z2CDvHgodAXkwRFtAWO6qEEkKX5iIBy/D3XGsVZRCvdDRHE0O9dNGFkePqVbzoY4ZiHNwh9M/6AYbJn7ZZIlJhQagK0fhp1xgxwaiRbpSEGn65bMJP21bUjvJn3AbpFQRPiLyi+ifIcTxhesUqrLsdr7kSpL8POuIdV7lAeSvHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=m5pqdISy; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20260306130651epoutp0259b5893a45fa25aa886b137ad27eb34d~aQmaGZ-1D1499614996epoutp02F
-	for <linux-usb@vger.kernel.org>; Fri,  6 Mar 2026 13:06:51 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20260306130651epoutp0259b5893a45fa25aa886b137ad27eb34d~aQmaGZ-1D1499614996epoutp02F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1772802411;
-	bh=n3LMl5Zi4sPPlfpsm0WvuuN09+O7qYxWpTXVegp0u14=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=m5pqdISyFXDRuxBalvh5BrUf7MmOCfvNnphXnL9LDFPUG2g2Ln/D/ocC+tqnT3GkH
-	 dC3sOpEnfT7g1t28X3O6L7rDNC6MRZqgFKDF7ly4qlZuLVTJtNyuS9L4WSH0SWcgMd
-	 qXJSquMN0MiMME3hNRsBOFXqPofsol9tWUjONtBY=
-Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
-	20260306130651epcas5p3b0853477fb4af80b127ecabfec9c7ba8~aQmZxUpm90362403624epcas5p3v;
-	Fri,  6 Mar 2026 13:06:51 +0000 (GMT)
-Received: from epcas5p1.samsung.com (unknown [182.195.38.87]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4fS6B20lPzz2SSKX; Fri,  6 Mar
-	2026 13:06:50 +0000 (GMT)
-Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20260306130649epcas5p192fe5f950447e3c51232a2a9bb2821bb~aQmX2Lpxm1152411524epcas5p1S;
-	Fri,  6 Mar 2026 13:06:49 +0000 (GMT)
-Received: from [107.122.5.126] (unknown [107.122.5.126]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20260306130642epsmtip1ba292795323ba4ed525b25da8cf5b772~aQmSPjo3m1863218632epsmtip1c;
-	Fri,  6 Mar 2026 13:06:42 +0000 (GMT)
-Message-ID: <08273adc-d8cf-48b3-ba45-853d363af0e6@samsung.com>
-Date: Fri, 6 Mar 2026 18:36:31 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263CC1F4181;
+	Fri,  6 Mar 2026 13:06:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772802409; cv=fail; b=Wa7odwtzRuwodRHE7EDocnmiadmDIXf4CEsuu6n/8KvD1+AzkyVlLcNqestPXBsLAhyeKBzOK9Gi2RKpufrlL7KJm186MMJ1EBD/NC3hl7H0hRdw3tELYH8TwDQmRvnsUMyc0YtLICoUxfVEa/3GtVkNA/g5EdpOKlkUAl1njA0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772802409; c=relaxed/simple;
+	bh=DFHpS8wrGLwTtJB6ZrpmYiVGI0vRRP9QoX83ZxZYhDg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=SE73XB/JTY9JHzCAa678BdlH+GcOHpTfFlDoYcDulBO0oz9B6lDqw5ODkjtNoyBCdAkxjpmbB6OQD1mf4ytkERh/woDtux6qi0DkuUqgXkYwGQ1uo9byqH3rg7/1NJQ2j+l0iMzTMB1VnVR5BSk7wIpYkzoVy0XGGZDvjcnLzQM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=N+M+CvFV; arc=fail smtp.client-ip=52.101.84.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BUufr0a2CxWroACoC0VGpBjaGzg6zlFWBsUeGHPLpeN+/Ho7RJzFPz2Exvt3Y8Edp38v6BsUcSmfVtFtEXTiAPo07/vLRvejTWRiUgpF37L/59b66trBsZMCSebH9VrDqYKLA6p2j1K2Mh5U8G5+jHntUhKkICwEv/8gIcpC7TpDxwoisDXCFW3dlHbS2frKq14jttAOC/CYBzjwH982ayQ8Yzrdk0MtsaYkUYQJYp2HV4Aj+1aYcVhBQMD+HThn8LUPBT+FDYs7b5aRRvXHmHdTMKLu27yHCXMxHFTFqHDYdAPZ5d65WqGY1RtFCxZ3mOjmzecDWer+nhjExyXZkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y3Wm86uYlGdv4LY1I/C5jtWegO/XTbwWQa3y/jTLQ48=;
+ b=Gca2JibTiouhRv6YhzEjxY4GUH4+A2wMMOS+qvnMfEc4FY+cbJH10aFPaNOUeaKksGgUbIm1ZNLyPWGhChB9eeyccBIUS4iAe55W0gg2xbs7KCL7eeFXHzyCKDWq915RCzvDHSlTSefkZKx7OqTc6oxe7BXwHThFRJU5Pyejh57X7ybKMbG1Bgyubsyj9KhXTmzNX6v7UXYjRdJF0vlOlKW6wkzoyLZt9+3hvGxs409NFnJMy8rUuN+4J1VAp4ilMX/25XeJQJbH6jLs2oHpeJ4GBFwBMmay4c39IWrSpTKZZCkYQ3YNBySSsu2IlrY6fq8ha6OA9UJ/nfiZ57bxFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y3Wm86uYlGdv4LY1I/C5jtWegO/XTbwWQa3y/jTLQ48=;
+ b=N+M+CvFVUnvVFZQel/sy1TYU6MRYacg1H5PZboUIA3ZMgjoeal+G/uDtWM62Atx/a2ebIGRD8FTDN91KMubyojepsKbQnxSrach7i63R4ioXBg+2nkrC8h7eYE6C/hlUQi9IQeH7k4GM/vQvCPIfYdEYzvOOVxmEczPTITy2AuXcxktxHgncMMt2gJ9E6cM2fVyC2j8oNEesNOND0stbzsyUrjmW9XUOFurhBZF4BXhOLn1oGWIpesOw+52mHPcAgXdFvGglFp7XR6JY1aOBVI4o50ZMRWA37NNLPXXYlaRyTv+DHh/Ye4n/TKNRk72t8OabV/4vA9EJeiCKnMc3wg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
+ by VI0PR04MB10853.eurprd04.prod.outlook.com (2603:10a6:800:26c::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.17; Fri, 6 Mar
+ 2026 13:06:42 +0000
+Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
+ ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
+ ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9678.017; Fri, 6 Mar 2026
+ 13:06:42 +0000
+Date: Fri, 6 Mar 2026 15:06:39 +0200
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: Shawn Lin <shawn.lin@rock-chips.com>
+Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-can@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, spacemit@lists.linux.dev,
+	UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH phy-next 20/22] phy: include PHY provider header
+Message-ID: <20260306130639.ae2d2aqcqambnta6@skbuf>
+References: <20260304175735.2660419-1-vladimir.oltean@nxp.com>
+ <20260304175735.2660419-21-vladimir.oltean@nxp.com>
+ <20260304175735.2660419-1-vladimir.oltean@nxp.com>
+ <20260304175735.2660419-21-vladimir.oltean@nxp.com>
+ <7b44322a-5ec9-860e-6698-bbdc62b9a292@rock-chips.com>
+ <7b44322a-5ec9-860e-6698-bbdc62b9a292@rock-chips.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7b44322a-5ec9-860e-6698-bbdc62b9a292@rock-chips.com>
+ <7b44322a-5ec9-860e-6698-bbdc62b9a292@rock-chips.com>
+X-ClientProxiedBy: BE1P281CA0250.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:8b::17) To AM9PR04MB8585.eurprd04.prod.outlook.com
+ (2603:10a6:20b:438::13)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] usb: dwc3: gadget: Prevent EP resource conflicts
- during StartTransfer
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>, "dh10.jung@samsung.com"
-	<dh10.jung@samsung.com>, "akash.m5@samsung.com" <akash.m5@samsung.com>,
-	"hongpooh.kim@samsung.com" <hongpooh.kim@samsung.com>,
-	"eomji.oh@samsung.com" <eomji.oh@samsung.com>, "h10.kim@samsung.com"
-	<h10.kim@samsung.com>, "shijie.cai@samsung.com" <shijie.cai@samsung.com>,
-	"alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-	"muhammed.ali@samsung.com" <muhammed.ali@samsung.com>,
-	"thiagu.r@samsung.com" <thiagu.r@samsung.com>, "pritam.sutar@samsung.com"
-	<pritam.sutar@samsung.com>, "stable@vger.kernel.org"
-	<stable@vger.kernel.org>
-Content-Language: en-US
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-In-Reply-To: <20260303003955.5lbb6xdrg7tp3zzi@synopsys.com>
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20260306130649epcas5p192fe5f950447e3c51232a2a9bb2821bb
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20260227121338epcas5p4baebb406db37f07223545b2f85751bf2
-References: <CGME20260227121338epcas5p4baebb406db37f07223545b2f85751bf2@epcas5p4.samsung.com>
-	<20260227121236.963-1-selvarasu.g@samsung.com>
-	<20260228002711.e442cuxwld4s2f66@synopsys.com>
-	<20260303003955.5lbb6xdrg7tp3zzi@synopsys.com>
-X-Rspamd-Queue-Id: D4E052215F9
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|VI0PR04MB10853:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9b5fb674-c7f8-4402-55ad-08de7b813625
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|366016|7416014|10070799003|1800799024|19092799006|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	LyEnsBSXm1a7qJFsrROgPhByZ2ZLoO/030b524ANNAbRvOI4WLMBuV8vzikOa8hUqSTLNVvVU97DpV2dsMySUCi2PSIwUR2gFnWE0YLOvaM87PJl51BWj1TvgFMQd2KprqhoSlHDERuTYuXn1IkCVuIzViXeaUbUX4ATu+8FpvdqyZSsI9u2K6XnSd2+iNRUotch6Ot9c32NFGvEPCXl8v1T9+iHWeVLsIVzYIR8LbtAv4JZv7pVLIqB5uxfzst9uGE8Kb0H4QpcHoCd48rUWZ6Uv9K3eoVfaDj1IYbv0kOxdQTUnTmOCmhYf3U0TX9ndyU10CnrUmFKdbfujwIAKSwCBrbty66bFdxT1uzXOJHnjto1Eo+dQnvxVhi4Kd8rmGRPc2rduzmQ8+i9iIYBM0w80CquE3FyW3UsVQE132uspdcc2OUq7oGQhOKDl96TSa1j4eIKHTr28koksE3XHOz/odln8J6551VZC9tCLGtPbxZllfFeIWFDKCbYZdTu8GuGocaAZgSF+1KP+sleiBKZFBkeNu/4a9BZNlI3GghUSlB0wPnrM1Sgm5h7nh4xDQPyuSrFgtD6n8hCDV/5hftsS4BacIQsO3tDOYskacnET4kseFD1omtRP52/P2mV57KtFcRSV3jtTmGoC5r/vb/KUyJ8q6CbEqaN1GxOO912RHatSS1zLLdgGICdA45SwIG5iRDD9ey8hcmrNw78B3vyfPippZDsASSzm8LhVpA=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(7416014)(10070799003)(1800799024)(19092799006)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?FvDsrmLcpE/S3YUr29BmnCra7Co7/teURt0RuScml/44oIOM8yeuFpqcGZCk?=
+ =?us-ascii?Q?F04C2VlVDyqfXQ5c2889PqVw3WxIoe0K4znukd5b57zF5J9AyqEZChcHGHai?=
+ =?us-ascii?Q?XIDdt1A0JlgRCf4WlrkHEhJQ+79lriMzI6NjbPzUM46UUrjxViSlnk8KhUT+?=
+ =?us-ascii?Q?exBzbJ1TBP3bNwXL7oO9oU5MGJba7FS9iGm0BSAXCl64eDdkEM7zeRRWOwAS?=
+ =?us-ascii?Q?2EcMDbj9s0I0VRQ9SKBK2JSxVECLwIC+SK34xImQyMyfdmtqdqk4oO9+DOcY?=
+ =?us-ascii?Q?H+e7ru/BY43j4Yrh8AnjE1R5DtdZleJFnEhDizATfJ6ybaIp8DWMd84DzlZ3?=
+ =?us-ascii?Q?qBJQrCSL7huoSWwwWqpiUhRrcaTSdg3jOYPibCnChDI4vzftUk9wxl9gAz5P?=
+ =?us-ascii?Q?VKwWSC3K1aVlDMfPqhto/zwNJ3tRUh2i5E48FhU8U8Tw8WAcsdaip/mBeONr?=
+ =?us-ascii?Q?8b2HFUdYglirJu84dZB8dbNBStl3DWsKWuL9hk7aBINHJFKSO1Gapjg61ouK?=
+ =?us-ascii?Q?9vQql/iUm1Xxo/12kPu0le+AWubOgpedJf43AsUcSHTGt2WHwZuPMPqgb2PI?=
+ =?us-ascii?Q?fCLeOgEs6Sc8piWzvJ79qqEKmKz/fcQEPqU1jPuF/GEKuaXqUn8olGJeqFlG?=
+ =?us-ascii?Q?ytxEuCkkiulta4JSK7oowtLltlTjvxdVK9pHBG1gNBq8UliPo/ab3Fnlh6si?=
+ =?us-ascii?Q?4WwBwfBOS9h0AbBSo9A0WKfm2kWim6xipOlSSBz38JnCmhkldWroPEchqgso?=
+ =?us-ascii?Q?eKI6xGEJEZu4oelhKVjc9k3JCxMJ3/os78BO/h1QNH4Gv27Y7gRKhHSlqVMB?=
+ =?us-ascii?Q?QqJOCNGM6XfPkehkxaVeVK77NDpDPzC1n9Ofnsx/8/fYlgN7tWr60aq4ZkqL?=
+ =?us-ascii?Q?lkG+kfFDyOFZzON6WlKEwXQdbRGYN/9yVnUTmvegbxWz33QLDoQRPQRlIwGd?=
+ =?us-ascii?Q?KnwpP1/a4KI17g3ohO/ZWKerZebr/e6MOiFB3z+C8k3SsK8TyuEpRTLWSNXs?=
+ =?us-ascii?Q?TQccPTTr9RDlBMbpxRvGWImecQHT9RTvdcQv7lXCK1Iwl00VZ0msEFj5UCRX?=
+ =?us-ascii?Q?Wr3erHN1gT6zC+WFWbGkoBt9B9MoWu+TioV47/5UKiFe35PucgJdsgbCmeaY?=
+ =?us-ascii?Q?9P/q+s+7X1xoPFDT1oFhUiFMqtGJ6iViwsXQTT2YvBqXOckHXghncPGs7I2p?=
+ =?us-ascii?Q?mtYV6LbGwuvkBP0qtVNrjArwokOPV3alu6LLmDo4MzNQ/fM9tRAeVNw3rC9f?=
+ =?us-ascii?Q?ChkIdUjs8EUCNq8+5fYdlgjxOIYwv3cxoNR4zzW7cmbEMtW7BhIr19ydT6E1?=
+ =?us-ascii?Q?YSr4IOnzp+xrpMK9h5eLW9kjw38qRyf9Ns7dD5IoKSLKI5UZPPIsUEZBCWXc?=
+ =?us-ascii?Q?SNPxD/aPrn3X+Qp3FBHkqIq1n9Et12t5hfluglfsOXFiYKuSXfMcEX632b4U?=
+ =?us-ascii?Q?IuyR/XoCKCceeV8RRvumWO/xc4DPS6tFGCKUCjz2AJL3OrKCprYeh3Fi3CJz?=
+ =?us-ascii?Q?YQe69pA6swlLA3F2xK8aX7uhQoUzKMDEqHrNHCiSK175nszO6nh8D1rNMG/Q?=
+ =?us-ascii?Q?yTXIvZwLtfdkYruZoN60gObuv26bkSPXIaj2rPTD9z5Vwh5kLGt2cOtUEPd7?=
+ =?us-ascii?Q?bT1/EviLVtXhJn6bWu8Bebk+fM1MxOrD5dOO0vVExtt55MbRp5YXS0vz285I?=
+ =?us-ascii?Q?6tGd0dzsD8ZEvN4qnQhULvzmw97uVVg2G8MwaE2nZ4+yqhK8LXaNM7EJfC0I?=
+ =?us-ascii?Q?7WUJpztzTXApIZtVnLWklZsJXIzu9VchVK2zQRt0cXS9JUL+XCZz1p/WB+D/?=
+X-MS-Exchange-AntiSpam-MessageData-1: O78bT1dWZ/9JsXGWgO17oYNKauK4gWgfB4Q=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b5fb674-c7f8-4402-55ad-08de7b813625
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2026 13:06:42.6084
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Sv6bop/3BCPYVPLa+u3xDqHTp0OZLlyg9fCSuCQPFNITsrYikxZGhRjxhAkbO4BjYlKKlANsd8jBI5BmT8HQ9A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB10853
+X-Rspamd-Queue-Id: 071B4221678
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[samsung.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34157-lists,linux-usb=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[urldefense.com:url,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,samsung.com:dkim,samsung.com:email,samsung.com:mid];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	REDIRECTOR_URL(0.00)[urldefense.com];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[selvarasu.g@samsung.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34156-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[24];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[vladimir.oltean@nxp.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[nxp.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_SEVEN(0.00)[8]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[rock-chips.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,nxp.com:dkim]
 X-Rspamd-Action: no action
 
+Hi Shawn,
 
-On 3/3/2026 6:09 AM, Thinh Nguyen wrote:
-> On Sat, Feb 28, 2026, Thinh Nguyen wrote:
->> On Fri, Feb 27, 2026, Selvarasu Ganesan wrote:
->>> The below “No resource for ep” warning appears when a StartTransfer
->>> command is issued for bulk or interrupt endpoints in
->>> `dwc3_gadget_ep_enable` while a previous StartTransfer on the same
->>> endpoint is still in progress. The gadget functions drivers can invoke
->>> `usb_ep_enable` (which triggers a new StartTransfer command) before the
->>> earlier transfer has completed. Because the previous StartTransfer is
->>> still active, `dwc3_gadget_ep_disable` can skip the required
->>> `EndTransfer` due to `DWC3_EP_DELAY_STOP`, leading to the endpoint
->>> resources are busy for previous StartTransfer and warning ("No resource
->>> for ep") from dwc3 driver.
->>>
->>> Additionally, a race condition exists between dwc3_gadget_ep_disable()
->>> and dwc3_gadget_ep_queue() when manipulating dep->flags. When
->>> dwc3_gadget_ep_disable() calls dwc3_gadget_giveback(), the dwc->lock is
->>> temporarily released. If dwc3_gadget_ep_queue() runs in that window, it
->>> may set the DWC3_EP_TRANSFER_STARTED flag as part of
->>> dwc3_send_gadget_ep_cmd(). When ep_disable resumes, it unconditionally
->>> clears all flags except those explicitly masked, potentially clearing
->>> DWC3_EP_TRANSFER_STARTED even though a new transfer has started. This
->>> leads to "No resource for ep" warnings on subsequent StartTransfer
->>> attempts.
->>>
->>> The underlying framework issue is that usb_ep_disable() is expected to
->>> complete pending requests before returning, but is allowed to be called
->>> from interrupt context where sleeping to wait for completion is not
->>> possible.
->>>
->>> As temporary workarounds for this framework limitation:
->>>
->>> 1. In __dwc3_gadget_ep_enable(), add a check for the
->>>     DWC3_EP_TRANSFER_STARTED flag before issuing a new StartTransfer.
->>>     This prevents a second StartTransfer on an already busy endpoint,
->>>     eliminating the resource conflict.
->>>
->>> 2. In __dwc3_gadget_ep_disable(), preserve the DWC3_EP_TRANSFER_STARTED
->>>     flag when masking dep->flags if it is actually set, preventing the
->>>     race with dwc3_gadget_ep_queue() from corrupting the flag state.
->>>
->>> These changes eliminate the "No resource for ep" warnings and potential
->>> kernel panics caused by panic_on_warn.
->>>
->>> dwc3 13200000.dwc3: No resource for ep1out
->>> WARNING: CPU: 0 PID: 700 at drivers/usb/dwc3/gadget.c:398 dwc3_send_gadget_ep_cmd+0x2f8/0x76c
->>> Call trace:
->>> dwc3_send_gadget_ep_cmd+0x2f8/0x76c
->>> __dwc3_gadget_ep_enable+0x490/0x7c0
->>> dwc3_gadget_ep_enable+0x6c/0xe4
->>> usb_ep_enable+0x5c/0x15c
->>> mp_eth_stop+0xd4/0x11c
->>> __dev_close_many+0x160/0x1c8
->>> __dev_change_flags+0xfc/0x220
->>> dev_change_flags+0x24/0x70
->>> devinet_ioctl+0x434/0x524
->>> inet_ioctl+0xa8/0x224
->>> sock_do_ioctl+0x74/0x128
->>> sock_ioctl+0x3bc/0x468
->>> __arm64_sys_ioctl+0xa8/0xe4
->>> invoke_syscall+0x58/0x10c
->>> el0_svc_common+0xa8/0xdc
->>> do_el0_svc+0x1c/0x28
->>> el0_svc+0x38/0x88
->>> el0t_64_sync_handler+0x70/0xbc
->>> el0t_64_sync+0x1a8/0x1ac
->>>
->>> Cc: stable@vger.kernel.org
->>> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
->>> ---
->>>
->>> Note: No Fixes tag is added because this is a workaround for the
->>> gadget framework issue where the gadget framework calls usb_ep_disable()
->>> in interrupt context without ensuring endpoint flushing completes.
->>> A proper fix requires refactoring the framework to make sure
->>> usb_ep_disable is invoked in process context.
->>>
->>> Changes in v3:
->>>   - Revised the commit message to detail the real gadget framework issue
->>>     pointed out by the reviewer.
->>>   - Merged the two fixes for the same ep wringing into one patch.
->>> Link to v2: https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/20251117155920.643-1-selvarasu.g@samsung.com/__;!!A4F2R9G_pg!cQzQQ5kAWF6CE5hQe7VqFdnaxqwzsTB1ZGNT1GvCH28GoB_nESZR5Y2jtxdZBls6wBIM4OtpvG4dSaylvNC3qbh547k$
->>>
->>> Changes in v2:
->>> - Removed change-id.
->>> - Updated commit message.
->>> Link to v1: https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/20251117152812.622-1-selvarasu.g@samsung.com/__;!!A4F2R9G_pg!cQzQQ5kAWF6CE5hQe7VqFdnaxqwzsTB1ZGNT1GvCH28GoB_nESZR5Y2jtxdZBls6wBIM4OtpvG4dSaylvNC38z-CRD4$
->>> ---
->>>   drivers/usb/dwc3/gadget.c | 22 ++++++++++++++++++++--
->>>   1 file changed, 20 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>> index 0a688904ce8c5..3af1bbfe3d92b 100644
->>> --- a/drivers/usb/dwc3/gadget.c
->>> +++ b/drivers/usb/dwc3/gadget.c
->>> @@ -971,8 +971,9 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
->>>   	 * Issue StartTransfer here with no-op TRB so we can always rely on No
->>>   	 * Response Update Transfer command.
->>>   	 */
->>> -	if (usb_endpoint_xfer_bulk(desc) ||
->>> -			usb_endpoint_xfer_int(desc)) {
->>> +	if ((usb_endpoint_xfer_bulk(desc) ||
->>> +			usb_endpoint_xfer_int(desc)) &&
->>> +			!(dep->flags & DWC3_EP_TRANSFER_STARTED)) {
->>>   		struct dwc3_gadget_ep_cmd_params params;
->>>   		struct dwc3_trb	*trb;
->>>   		dma_addr_t trb_dma;
->>> @@ -1096,6 +1097,23 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
->>>   	 */
->>>   	if (dep->flags & DWC3_EP_DELAY_STOP)
->>>   		mask |= (DWC3_EP_DELAY_STOP | DWC3_EP_TRANSFER_STARTED);
->>> +
->>> +	/*
->>> +	 * When dwc3_gadget_ep_disable() calls dwc3_gadget_giveback(),
->>> +	 * the dwc->lock is temporarily released. If dwc3_gadget_ep_queue()
->>> +	 * runs in that window it may set the DWC3_EP_TRANSFER_STARTED flag as
->>> +	 * part of dwc3_send_gadget_ep_cmd. The original code cleared the flag
->>> +	 * unconditionally in the mask operation, which could overwrite the
->>> +	 * concurrent modification.
->>> +	 *
->>> +	 * As a workaround for the interrupt context constraint where we cannot
->>> +	 * wait for endpoint flushing, preserve the DWC3_EP_TRANSFER_STARTED
->>> +	 * flag if it is set, avoiding resource conflicts until the framework
->>> +	 * is fixed to properly synchronize endpoint lifecycle management.
->>> +	 */
->>> +	if (dep->flags & DWC3_EP_TRANSFER_STARTED)
->>> +		mask |= DWC3_EP_TRANSFER_STARTED;
->>> +
->>>   	dep->flags &= mask;
->>>   
->>>   	/* Clear out the ep descriptors for non-ep0 */
->>> -- 
->>> 2.34.1
->>>
->> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->>
-> Oh wait, don't pick this patch up yet.
->
-> This will cause a regression for UAS device. When switching alt-setting
-> interface for BOT to UASP, the device needs to issue a Start Transfer
-> command.
->
-> This workaround won't work. Can we fix the usb_ep_disable() interface
-> and rework this instead?
->
-> BR,
-> Thinh
+On Thu, Mar 05, 2026 at 11:22:52AM +0800, Shawn Lin wrote:
+> For rockchip parts:
+> 
+> Acked-by: Shawn Lin <shawn.lin@rock-chips.com>
 
-Hi Thinh,
+Thank you for the review.
 
-We’re trying to see how this change could cause a regression for UAS 
-devices.
-Could you explain why the workaround might be a problem for UAS? Are you 
-concerned that it could miss a valid StartTransfer when a previous 
-transfer finishes later than expected as part of ep_disable?
+This is a large patch, please trim the quoted portion when replying.
+I had to scroll through a lot of text to make sure you didn't have
+anything else to say.
 
-If we don’t use this temporary fix, the driver can still report “EP 
-resource busy” when an earlier StartTransfer hasn’t finished 
-before ep_disable returns. That can happen when a UAS device needs to 
-start a new transfer during ep_enable while the prior transfer is still 
-pending.
-
-The patch simply blocks a second StartTransfer when the same endpoint 
-already has a transfer in progress to prevent a “EP resource busy” issue.
-
-And it can cause a new StartTransfer to be issued later from ep_queue 
-while the starttransfer that should have been started during ep_enable 
-is skipped.
-
-Thanks,
-Selva
+I will split this patch up in v2. It's so large that it didn't pass
+through the linux-phy mailing list moderation, thus it didn't make it to
+patchwork and the incomplete series didn't get build tested.
 
