@@ -1,136 +1,307 @@
-Return-Path: <linux-usb+bounces-34155-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34157-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +AyZEU/Rqmn3XQEAu9opvQ
-	(envelope-from <linux-usb+bounces-34155-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 14:06:23 +0100
+	id 2CbtDpDRqmn3XQEAu9opvQ
+	(envelope-from <linux-usb+bounces-34157-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 14:07:28 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8BD5221584
-	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 14:06:22 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4E052215F9
+	for <lists+linux-usb@lfdr.de>; Fri, 06 Mar 2026 14:07:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6DEFE313C38A
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2026 13:00:43 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 93D73303A3CF
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2026 13:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67A0639281E;
-	Fri,  6 Mar 2026 13:00:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E50C3939AE;
+	Fri,  6 Mar 2026 13:06:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nzXGg6rV"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="m5pqdISy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E344B2E54BD;
-	Fri,  6 Mar 2026 13:00:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE62B38F25B
+	for <linux-usb@vger.kernel.org>; Fri,  6 Mar 2026 13:06:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772802039; cv=none; b=rS3zqM4mYm+5R/+E2zIVl9cn6ZRsPlQ8PpdGuWz9AZapTF7d/y1hE04FE9J/yvM7oqra9U9zZDKwGE3Et6480o9cjj/6Go2v+KJOSC/+0bGKRnzgIJ2WvX3fgjUKy80E2tR7vBcmGmwNo7cSX8bI3zXSnwyOflCwP5ZSo8gEcuU=
+	t=1772802417; cv=none; b=sAyADLUuNhBrc1f+/FAoul2zYbnU+8t3m0QPqP1zyjmWnqXSt8BojJ3CzkGY5KUjydHbdxDhAwph4+3FKLw9ITjEQAevA7jBf6J31Rv9F5nmq3yzq03SutgJmgBkCHlX3RnD+RGOfVsSPuNthO9JSYtu+nD8LHohDpQfGr55JgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772802039; c=relaxed/simple;
-	bh=SUilmRyxi9rSQ2L8Zu1tUGBe9n/KlEBwjbmt8lTSZZs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kf7qaBjA3m87qdZsHg44Q+pJlk6ivrP92XjNEe0D5lsGcRrlLgfpKFs3BDNsoljQydbXLJ7BjnI7kt2ZlVAfJaCyXhF/kyMdUs8+OG9GUckkNJd398yxJFebBrRJQ1va341dF2/u7pdSM2UvtfJGVoV4I7Qn6tSwtXv30+bIBgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nzXGg6rV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C1EC4CEF7;
-	Fri,  6 Mar 2026 13:00:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772802038;
-	bh=SUilmRyxi9rSQ2L8Zu1tUGBe9n/KlEBwjbmt8lTSZZs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nzXGg6rVmEJJG6AygVVVyC5TblHizjVm0/fiTm/TAugIDMsSYhg5s5vU4fdpnvQL1
-	 lLWB1P9pUgPZ5fFLbjxnh1Zh5swrJmEEomAzl+WOu1XH1rti0ulKpuzmiW3Def6Wxh
-	 fJvIYXw2QUG/UOyUol8+3BsSYK/JVrghOF4O1WOl4LeRazwSx4EqT6Xi0+MOv/gZmq
-	 ouHiiLJdgZyKoRETncAhoajKoboLNKuG9Gxi+M3qEK/YV4mfAXfIQbjX7vkB50oeTF
-	 jT+H55kOfCxtBjluOlRP2ToS/1wBfsDU6t+vWPukoJicc4pdk3P4VtAvRJukRjaqeg
-	 suq05TtmZZeWQ==
-Date: Fri, 6 Mar 2026 13:00:31 +0000
-From: Lee Jones <lee@kernel.org>
-To: amitsd@google.com
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Mark Brown <broonie@kernel.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH v8 3/6] mfd: max77759: add register bitmasks and modify
- irq configs for charger
-Message-ID: <20260306130031.GK183676@google.com>
-References: <20260224-max77759-charger-v8-0-eb86bd570e9c@google.com>
- <20260224-max77759-charger-v8-3-eb86bd570e9c@google.com>
+	s=arc-20240116; t=1772802417; c=relaxed/simple;
+	bh=sub6SrAvM26hT3A2v1j2XexzqEbSiD12Hc10869wByM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=Z2CDvHgodAXkwRFtAWO6qEEkKX5iIBy/D3XGsVZRCvdDRHE0O9dNGFkePqVbzoY4ZiHNwh9M/6AYbJn7ZZIlJhQagK0fhp1xgxwaiRbpSEGn65bMJP21bUjvJn3AbpFQRPiLyi+ifIcTxhesUqrLsdr7kSpL8POuIdV7lAeSvHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=m5pqdISy; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20260306130651epoutp0259b5893a45fa25aa886b137ad27eb34d~aQmaGZ-1D1499614996epoutp02F
+	for <linux-usb@vger.kernel.org>; Fri,  6 Mar 2026 13:06:51 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20260306130651epoutp0259b5893a45fa25aa886b137ad27eb34d~aQmaGZ-1D1499614996epoutp02F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1772802411;
+	bh=n3LMl5Zi4sPPlfpsm0WvuuN09+O7qYxWpTXVegp0u14=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=m5pqdISyFXDRuxBalvh5BrUf7MmOCfvNnphXnL9LDFPUG2g2Ln/D/ocC+tqnT3GkH
+	 dC3sOpEnfT7g1t28X3O6L7rDNC6MRZqgFKDF7ly4qlZuLVTJtNyuS9L4WSH0SWcgMd
+	 qXJSquMN0MiMME3hNRsBOFXqPofsol9tWUjONtBY=
+Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
+	20260306130651epcas5p3b0853477fb4af80b127ecabfec9c7ba8~aQmZxUpm90362403624epcas5p3v;
+	Fri,  6 Mar 2026 13:06:51 +0000 (GMT)
+Received: from epcas5p1.samsung.com (unknown [182.195.38.87]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4fS6B20lPzz2SSKX; Fri,  6 Mar
+	2026 13:06:50 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20260306130649epcas5p192fe5f950447e3c51232a2a9bb2821bb~aQmX2Lpxm1152411524epcas5p1S;
+	Fri,  6 Mar 2026 13:06:49 +0000 (GMT)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20260306130642epsmtip1ba292795323ba4ed525b25da8cf5b772~aQmSPjo3m1863218632epsmtip1c;
+	Fri,  6 Mar 2026 13:06:42 +0000 (GMT)
+Message-ID: <08273adc-d8cf-48b3-ba45-853d363af0e6@samsung.com>
+Date: Fri, 6 Mar 2026 18:36:31 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] usb: dwc3: gadget: Prevent EP resource conflicts
+ during StartTransfer
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>, "dh10.jung@samsung.com"
+	<dh10.jung@samsung.com>, "akash.m5@samsung.com" <akash.m5@samsung.com>,
+	"hongpooh.kim@samsung.com" <hongpooh.kim@samsung.com>,
+	"eomji.oh@samsung.com" <eomji.oh@samsung.com>, "h10.kim@samsung.com"
+	<h10.kim@samsung.com>, "shijie.cai@samsung.com" <shijie.cai@samsung.com>,
+	"alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+	"muhammed.ali@samsung.com" <muhammed.ali@samsung.com>,
+	"thiagu.r@samsung.com" <thiagu.r@samsung.com>, "pritam.sutar@samsung.com"
+	<pritam.sutar@samsung.com>, "stable@vger.kernel.org"
+	<stable@vger.kernel.org>
+Content-Language: en-US
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <20260303003955.5lbb6xdrg7tp3zzi@synopsys.com>
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260224-max77759-charger-v8-3-eb86bd570e9c@google.com>
-X-Rspamd-Queue-Id: C8BD5221584
+X-CMS-MailID: 20260306130649epcas5p192fe5f950447e3c51232a2a9bb2821bb
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20260227121338epcas5p4baebb406db37f07223545b2f85751bf2
+References: <CGME20260227121338epcas5p4baebb406db37f07223545b2f85751bf2@epcas5p4.samsung.com>
+	<20260227121236.963-1-selvarasu.g@samsung.com>
+	<20260228002711.e442cuxwld4s2f66@synopsys.com>
+	<20260303003955.5lbb6xdrg7tp3zzi@synopsys.com>
+X-Rspamd-Queue-Id: D4E052215F9
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_RHS_MATCH_TO(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[23];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34155-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[kernel.org,linaro.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,gmail.com,linux-foundation.org,vger.kernel.org,lists.infradead.org];
-	RCVD_COUNT_THREE(0.00)[4];
-	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[samsung.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lee@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-34157-lists,linux-usb=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[urldefense.com:url,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,samsung.com:dkim,samsung.com:email,samsung.com:mid];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	REDIRECTOR_URL(0.00)[urldefense.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[selvarasu.g@samsung.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCVD_COUNT_SEVEN(0.00)[8]
 X-Rspamd-Action: no action
 
-On Tue, 24 Feb 2026, Amit Sunil Dhamne via B4 Relay wrote:
 
-> From: Amit Sunil Dhamne <amitsd@google.com>
-> 
-> Add register bitmasks for charger function.
-> In addition split the charger IRQs further such that each bit represents
-> an IRQ downstream of charger regmap irq chip. In addition populate the
-> ack_base to offload irq ack to the regmap irq chip framework.
-> 
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> Reviewed-by: André Draszik <andre.draszik@linaro.org>
-> ---
->  drivers/mfd/max77759.c       |  91 ++++++++++++++++++++--
->  include/linux/mfd/max77759.h | 176 ++++++++++++++++++++++++++++++++++++-------
->  2 files changed, 230 insertions(+), 37 deletions(-)
+On 3/3/2026 6:09 AM, Thinh Nguyen wrote:
+> On Sat, Feb 28, 2026, Thinh Nguyen wrote:
+>> On Fri, Feb 27, 2026, Selvarasu Ganesan wrote:
+>>> The below “No resource for ep” warning appears when a StartTransfer
+>>> command is issued for bulk or interrupt endpoints in
+>>> `dwc3_gadget_ep_enable` while a previous StartTransfer on the same
+>>> endpoint is still in progress. The gadget functions drivers can invoke
+>>> `usb_ep_enable` (which triggers a new StartTransfer command) before the
+>>> earlier transfer has completed. Because the previous StartTransfer is
+>>> still active, `dwc3_gadget_ep_disable` can skip the required
+>>> `EndTransfer` due to `DWC3_EP_DELAY_STOP`, leading to the endpoint
+>>> resources are busy for previous StartTransfer and warning ("No resource
+>>> for ep") from dwc3 driver.
+>>>
+>>> Additionally, a race condition exists between dwc3_gadget_ep_disable()
+>>> and dwc3_gadget_ep_queue() when manipulating dep->flags. When
+>>> dwc3_gadget_ep_disable() calls dwc3_gadget_giveback(), the dwc->lock is
+>>> temporarily released. If dwc3_gadget_ep_queue() runs in that window, it
+>>> may set the DWC3_EP_TRANSFER_STARTED flag as part of
+>>> dwc3_send_gadget_ep_cmd(). When ep_disable resumes, it unconditionally
+>>> clears all flags except those explicitly masked, potentially clearing
+>>> DWC3_EP_TRANSFER_STARTED even though a new transfer has started. This
+>>> leads to "No resource for ep" warnings on subsequent StartTransfer
+>>> attempts.
+>>>
+>>> The underlying framework issue is that usb_ep_disable() is expected to
+>>> complete pending requests before returning, but is allowed to be called
+>>> from interrupt context where sleeping to wait for completion is not
+>>> possible.
+>>>
+>>> As temporary workarounds for this framework limitation:
+>>>
+>>> 1. In __dwc3_gadget_ep_enable(), add a check for the
+>>>     DWC3_EP_TRANSFER_STARTED flag before issuing a new StartTransfer.
+>>>     This prevents a second StartTransfer on an already busy endpoint,
+>>>     eliminating the resource conflict.
+>>>
+>>> 2. In __dwc3_gadget_ep_disable(), preserve the DWC3_EP_TRANSFER_STARTED
+>>>     flag when masking dep->flags if it is actually set, preventing the
+>>>     race with dwc3_gadget_ep_queue() from corrupting the flag state.
+>>>
+>>> These changes eliminate the "No resource for ep" warnings and potential
+>>> kernel panics caused by panic_on_warn.
+>>>
+>>> dwc3 13200000.dwc3: No resource for ep1out
+>>> WARNING: CPU: 0 PID: 700 at drivers/usb/dwc3/gadget.c:398 dwc3_send_gadget_ep_cmd+0x2f8/0x76c
+>>> Call trace:
+>>> dwc3_send_gadget_ep_cmd+0x2f8/0x76c
+>>> __dwc3_gadget_ep_enable+0x490/0x7c0
+>>> dwc3_gadget_ep_enable+0x6c/0xe4
+>>> usb_ep_enable+0x5c/0x15c
+>>> mp_eth_stop+0xd4/0x11c
+>>> __dev_close_many+0x160/0x1c8
+>>> __dev_change_flags+0xfc/0x220
+>>> dev_change_flags+0x24/0x70
+>>> devinet_ioctl+0x434/0x524
+>>> inet_ioctl+0xa8/0x224
+>>> sock_do_ioctl+0x74/0x128
+>>> sock_ioctl+0x3bc/0x468
+>>> __arm64_sys_ioctl+0xa8/0xe4
+>>> invoke_syscall+0x58/0x10c
+>>> el0_svc_common+0xa8/0xdc
+>>> do_el0_svc+0x1c/0x28
+>>> el0_svc+0x38/0x88
+>>> el0t_64_sync_handler+0x70/0xbc
+>>> el0t_64_sync+0x1a8/0x1ac
+>>>
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+>>> ---
+>>>
+>>> Note: No Fixes tag is added because this is a workaround for the
+>>> gadget framework issue where the gadget framework calls usb_ep_disable()
+>>> in interrupt context without ensuring endpoint flushing completes.
+>>> A proper fix requires refactoring the framework to make sure
+>>> usb_ep_disable is invoked in process context.
+>>>
+>>> Changes in v3:
+>>>   - Revised the commit message to detail the real gadget framework issue
+>>>     pointed out by the reviewer.
+>>>   - Merged the two fixes for the same ep wringing into one patch.
+>>> Link to v2: https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/20251117155920.643-1-selvarasu.g@samsung.com/__;!!A4F2R9G_pg!cQzQQ5kAWF6CE5hQe7VqFdnaxqwzsTB1ZGNT1GvCH28GoB_nESZR5Y2jtxdZBls6wBIM4OtpvG4dSaylvNC3qbh547k$
+>>>
+>>> Changes in v2:
+>>> - Removed change-id.
+>>> - Updated commit message.
+>>> Link to v1: https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/20251117152812.622-1-selvarasu.g@samsung.com/__;!!A4F2R9G_pg!cQzQQ5kAWF6CE5hQe7VqFdnaxqwzsTB1ZGNT1GvCH28GoB_nESZR5Y2jtxdZBls6wBIM4OtpvG4dSaylvNC38z-CRD4$
+>>> ---
+>>>   drivers/usb/dwc3/gadget.c | 22 ++++++++++++++++++++--
+>>>   1 file changed, 20 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>> index 0a688904ce8c5..3af1bbfe3d92b 100644
+>>> --- a/drivers/usb/dwc3/gadget.c
+>>> +++ b/drivers/usb/dwc3/gadget.c
+>>> @@ -971,8 +971,9 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
+>>>   	 * Issue StartTransfer here with no-op TRB so we can always rely on No
+>>>   	 * Response Update Transfer command.
+>>>   	 */
+>>> -	if (usb_endpoint_xfer_bulk(desc) ||
+>>> -			usb_endpoint_xfer_int(desc)) {
+>>> +	if ((usb_endpoint_xfer_bulk(desc) ||
+>>> +			usb_endpoint_xfer_int(desc)) &&
+>>> +			!(dep->flags & DWC3_EP_TRANSFER_STARTED)) {
+>>>   		struct dwc3_gadget_ep_cmd_params params;
+>>>   		struct dwc3_trb	*trb;
+>>>   		dma_addr_t trb_dma;
+>>> @@ -1096,6 +1097,23 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
+>>>   	 */
+>>>   	if (dep->flags & DWC3_EP_DELAY_STOP)
+>>>   		mask |= (DWC3_EP_DELAY_STOP | DWC3_EP_TRANSFER_STARTED);
+>>> +
+>>> +	/*
+>>> +	 * When dwc3_gadget_ep_disable() calls dwc3_gadget_giveback(),
+>>> +	 * the dwc->lock is temporarily released. If dwc3_gadget_ep_queue()
+>>> +	 * runs in that window it may set the DWC3_EP_TRANSFER_STARTED flag as
+>>> +	 * part of dwc3_send_gadget_ep_cmd. The original code cleared the flag
+>>> +	 * unconditionally in the mask operation, which could overwrite the
+>>> +	 * concurrent modification.
+>>> +	 *
+>>> +	 * As a workaround for the interrupt context constraint where we cannot
+>>> +	 * wait for endpoint flushing, preserve the DWC3_EP_TRANSFER_STARTED
+>>> +	 * flag if it is set, avoiding resource conflicts until the framework
+>>> +	 * is fixed to properly synchronize endpoint lifecycle management.
+>>> +	 */
+>>> +	if (dep->flags & DWC3_EP_TRANSFER_STARTED)
+>>> +		mask |= DWC3_EP_TRANSFER_STARTED;
+>>> +
+>>>   	dep->flags &= mask;
+>>>   
+>>>   	/* Clear out the ep descriptors for non-ep0 */
+>>> -- 
+>>> 2.34.1
+>>>
+>> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+>>
+> Oh wait, don't pick this patch up yet.
+>
+> This will cause a regression for UAS device. When switching alt-setting
+> interface for BOT to UASP, the device needs to issue a Start Transfer
+> command.
+>
+> This workaround won't work. Can we fix the usb_ep_disable() interface
+> and rework this instead?
+>
+> BR,
+> Thinh
 
-Does this patch have any dependents or dependencies?
+Hi Thinh,
 
--- 
-Lee Jones [李琼斯]
+We’re trying to see how this change could cause a regression for UAS 
+devices.
+Could you explain why the workaround might be a problem for UAS? Are you 
+concerned that it could miss a valid StartTransfer when a previous 
+transfer finishes later than expected as part of ep_disable?
+
+If we don’t use this temporary fix, the driver can still report “EP 
+resource busy” when an earlier StartTransfer hasn’t finished 
+before ep_disable returns. That can happen when a UAS device needs to 
+start a new transfer during ep_enable while the prior transfer is still 
+pending.
+
+The patch simply blocks a second StartTransfer when the same endpoint 
+already has a transfer in progress to prevent a “EP resource busy” issue.
+
+And it can cause a new StartTransfer to be issued later from ep_queue 
+while the starttransfer that should have been started during ep_enable 
+is skipped.
+
+Thanks,
+Selva
 
