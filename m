@@ -1,84 +1,84 @@
-Return-Path: <linux-usb+bounces-34176-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34177-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iCjIJx7tq2lziAEAu9opvQ
-	(envelope-from <linux-usb+bounces-34176-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 07 Mar 2026 10:17:18 +0100
+	id OBG/ATHtq2lziAEAu9opvQ
+	(envelope-from <linux-usb+bounces-34177-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 07 Mar 2026 10:17:37 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4844922ADB1
-	for <lists+linux-usb@lfdr.de>; Sat, 07 Mar 2026 10:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 844A922ADC8
+	for <lists+linux-usb@lfdr.de>; Sat, 07 Mar 2026 10:17:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 40EC530457CC
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Mar 2026 09:16:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 803353034CBF
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Mar 2026 09:16:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F89C38946E;
-	Sat,  7 Mar 2026 09:16:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 975411C84AB;
+	Sat,  7 Mar 2026 09:16:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bphnJWki"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="etzpPrPG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938BB38946C
-	for <linux-usb@vger.kernel.org>; Sat,  7 Mar 2026 09:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C073389E1D
+	for <linux-usb@vger.kernel.org>; Sat,  7 Mar 2026 09:16:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772874997; cv=none; b=d1q3NQsdViUUBIvic+kdeBlFDGqlTUthgL1QC1NHjBplxbw9fuFLIX1MBf6NANLWZgroyYHu2ffWRL8c8/X4tD2fRI0XnpcdSU0uxPMuZBwGS8poLdjSaWLk+Az6unBBXsi9taCcipKcbPtQarObR3cz5OcH1TCcGlJ6Dkl7J3w=
+	t=1772875003; cv=none; b=oE4EcbgNut/onWGmSTh0iGKLVACQWV4NLYZoeT0VezKl/4B/xoEmxYH4igX7Z/HgSvQ0kFBwVZx2KqC2NL/3h6iw8rpj9dxi/ByD62Z4RLAUddFyO13nwUmyNH7kEWFlvx5V91g7JB0jisVhmfrMsVLfQAZkVnSg2ALb/y96OBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772874997; c=relaxed/simple;
-	bh=dloQM5j6GGXl6pXKT9QuqBOKOBUfSZKFqBxV9h0h6lc=;
+	s=arc-20240116; t=1772875003; c=relaxed/simple;
+	bh=cH8XHDO7Gb80UhJfjApmC6lvcN1SnHge5zBEZqU9hRU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qAatzbq+8LW9V/PuusV9cfD6nEcd5+dtEQlAfiVrKx/LbCfkTTnAONJ5ksBqBrgd4kD/WVB/RMSb+2ZxOlrafaNOlZuDB26ilcVwJSpWKXEkeC31DXaaj8cd6/rTYOE9cic/x8bGXrVxhTvRAhWwjCGGoMuqtNcIQqU0nP2Pw3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bphnJWki; arc=none smtp.client-ip=209.85.214.178
+	 In-Reply-To:To:Cc; b=KPtPjRKyfgRFCJDCpH9wOlWLN80J77wLdKbz1E5pEOFtOlXIjgyeHAWCMC4pzKVzEYwPwpSbVvuy4ExSTqMHEQeHoEH+rcFLOYn1Uu2UTxxPQEIueGMbWggsSvBoTBtrGScuVeRcZwkZWYOucqGr9oqZOM8RivnYbpCmlawnv7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=etzpPrPG; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2ae4d48dc2fso29610135ad.3
-        for <linux-usb@vger.kernel.org>; Sat, 07 Mar 2026 01:16:35 -0800 (PST)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2a871daa98fso75643695ad.1
+        for <linux-usb@vger.kernel.org>; Sat, 07 Mar 2026 01:16:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772874995; x=1773479795; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772875000; x=1773479800; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bW3VZiLdDmix0hxhYvm5DhZwcyWfk2K5eWWffGvWYiM=;
-        b=bphnJWkij258Koozowl+Gl5dieGHmXci+R44bFLd6RvAX/kmlpIMVCsv9V1pxpBAXB
-         suUt0TOjb3LXLMRXNMMMPrMyqAuhO2a249SRCmaf3r/frFOqCdbARKCYfH0ezIAuCO85
-         FJrnKlN5ePGHJu2gyKncnYwRpc/6TBFXRN1paZb1mLq5+3WKieAqJjyewSabecLnyXek
-         3UMaRxdO9b7aaNLlrUZWuai45qsPwpp3FwaovJpdXE7CNZBSL1PnarA8PEXgzc+IBFCy
-         ElRFyt5c7ZrnroLZo8zYP8ItOviZ9LhVHVQFgmermdZl+TPAmJme5g6g49glH0A7RHpx
-         kmwg==
+        bh=OPJqfUemt+ZKLj6gPNDYrb4MQbmVYu6fyinUsFcbIMs=;
+        b=etzpPrPGWmZMc6eJYL/dYyinbx01HcmnE1OBJXbt9zXbG+5wazbGypFBDk1HXlzSpd
+         +KWMGBYQEvn0ObbAgbroHaDpjdEEgD2F2lPBh4eRfAL1ILDCi9Q1c9zln9yPFKLrAuZe
+         hOxvwHl1YyJ+Rr76HpXBo67/G2tkF1Pfic2lzAyJgwrx5Z8tY+z492Qo8eIo+YsR2ON9
+         /yeCWbLoERBDHhkzZAmMtOJcO/KKNaZxkhmCj/fhedNsLN5mxeTmJPTNxQc/sZ4HYF2C
+         iKR+AmLWf/s/fnVkLfYaKL922hA2qOb+bl9o+eQW247PctAQ9l94/NEyBVYCa2olbTX5
+         qlUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772874995; x=1773479795;
+        d=1e100.net; s=20230601; t=1772875000; x=1773479800;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=bW3VZiLdDmix0hxhYvm5DhZwcyWfk2K5eWWffGvWYiM=;
-        b=hP0KahcEerMdSbBX+BQSqk11nAOOnniUdFGQaMq3cXWhvHncAenW/v+GgkY0amppVc
-         immgWfO0B0Gr0pCsgQ/teNBDTbWzsatwfZNkFuS55srzqrpTKRBBXrDrrMPJM+qcfh+T
-         tmx8q7ZXIVvbiAPgEY5hGXSWmVcUaAfqlCBOirygrx87CqqHvss3obtQK70a0gJ/LEtw
-         feBwWPgmJL4VSEKucRov5Q1VpMDxPV+3PPZ5lSE3loYskY0J6D8aVCVfTQiRM/yd747e
-         SUrNsNfmO0uidRydY2LlCPEN90yf3ReP01pTaLqR8vbzgc9umEAXrFRRI89yTxikFKMs
-         FcUw==
-X-Gm-Message-State: AOJu0YwKRo3GCRkjCZsYyljgLxyagaAvhRwOsvx1q1MBXydgeXohoFgk
-	EokDlijzyrVcax36wFQz/7IPks8qziRB0LaHnsTPb+2VsVBHVUDmi7Ia
-X-Gm-Gg: ATEYQzwunXanLLahJZcQUhSK3YTiH+gQYJ37ijloYKQff80oq7wFcQQp6powNEHIOi3
-	VXsae+EoPaLZRK7i400sCbMBdVRPveXiKOz1BaOG4+bAonWZ7/bfVmn2+f4KfNXqwHY4/SfZ4iv
-	vplFG0gTJq4Vp7gH8gT6QjpBcsMfakjEIpCVbVkk6hNBRs6kd+rsnewIywjJissqmVAs28xdpv9
-	l8qgQv1dUuvS4WSHxS5HD7e3ry+FIVigKzgXY/1ReCSgNK5sseDEso4zlXsy8XuvCScQeCIJUtG
-	m3CckSJmcD95KGub5YBA6gUOOsc9G8dOBdqwo1aT3bxFTaHrh6eFJhZ8W2tfaHW+IszigVNW/gX
-	09ywKAeDghvfLoFX/u0skPIAFBf7W37Lw9hIy3Nfzm4PrnWyUOsKSyCSrD3ouZhPfP2boJR9UDT
-	hbmUluAbjpM1qIAdiDXlQ73F87ystkF4GKzQyoMiBQ4N6TbhxzSLVbkg==
-X-Received: by 2002:a17:903:120f:b0:2ae:670e:309f with SMTP id d9443c01a7336-2ae824f4d5fmr50056685ad.34.1772874994942;
-        Sat, 07 Mar 2026 01:16:34 -0800 (PST)
+        bh=OPJqfUemt+ZKLj6gPNDYrb4MQbmVYu6fyinUsFcbIMs=;
+        b=WvKoxWZN5/1heg3D5TDXKRKL6tS5bWq+NIx7V2ujopvzVp+9jqI8da8m95UsJ0K15O
+         KP3iqTc1GAKTmKVrqrVNeGZTFh+62GRh4WlAI0tA7y+g7a0+EbVCqQVUAfUPq1l6CJJX
+         ++WZHoM80jFOygNdWiVJ/jvF3BjudJi2fmaya+jjw5DPz14Ozy3k9IojpShDF0zORQQ7
+         GDgKON87m5ItS3HwIWIiy490i/PxSr0eQygboHsWKwxtGEvdHnFr5RmIai9IR8tQ6NQx
+         MYiLelfbtvw+mS530t85TMbEppfqRFSxmaFT26Vc8uQXWX09jd3Yai28BM6+Ztas0not
+         ptIQ==
+X-Gm-Message-State: AOJu0YwsmVgtvh33e7gz5mE38pwrkaCdbALDZtIEpbYhdakCxHZL+dFr
+	y9sj8zuYtsCoglHJ0Ug6Uu1JJIIuX3LxCcwP04mXgSw7A2lUq3ZzytuT
+X-Gm-Gg: ATEYQzwvdBVV4wiXc3RM56+BqD5qZtmT03jpnNTwgl/zEWsCMfy5FXLt1+LgaqjhISx
+	PUrUZ/ppsWtZ7LlvWErSvq5NMMoHOS8LUsZl5ZvbnVp7kqrXyl1FlFcSu8DsWExIuUw0mDTMUG2
+	x90PZaCMj0Z77JYbsK+Tka869wdWQQWQoe4JhOnFbmEE4SCJCNL0/6bpaRU+diFg3W6Iud12dX2
+	BbuckNCHbikBQ6QXfMWzH+t414OISKL6naWjr/4WGOZC+jnRtcECx6SmSa1pv4+/SRVfk3fvFTo
+	0t4Xxk1P7mM3k9QLS5yEWUkBBlfA80Tyak9k8O6q56JknhDER1NUM9FTT1FbDJpTpOFVL6ghyI+
+	wHyR3grOJhllfcnwmqw3uoxM2r6jbS53X5vc5XA+Ly/ok6mN4lvQsU7eJpW1m1pUEdhw23Izc/b
+	1X22tGJUQwtE5aqF63L+22695M0SK1Rt6D1oj0Zivzy7A=
+X-Received: by 2002:a17:902:e5ca:b0:2ae:50ec:fa35 with SMTP id d9443c01a7336-2ae823a90f0mr55806145ad.24.1772874999680;
+        Sat, 07 Mar 2026 01:16:39 -0800 (PST)
 Received: from Black-Pearl.localdomain ([27.7.215.222])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-2ae83f74e4fsm45569385ad.58.2026.03.07.01.16.30
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-2ae83f74e4fsm45569385ad.58.2026.03.07.01.16.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Mar 2026 01:16:34 -0800 (PST)
+        Sat, 07 Mar 2026 01:16:39 -0800 (PST)
 From: Charan Pedumuru <charan.pedumuru@gmail.com>
-Date: Sat, 07 Mar 2026 09:16:19 +0000
-Subject: [PATCH v3 2/5] dt-bindings: usb: generic-ohci: add AT91RM9200 OHCI
- binding support
+Date: Sat, 07 Mar 2026 09:16:20 +0000
+Subject: [PATCH v3 3/5] dt-bindings: usb: generic-ehci: fix schema
+ structure and add at91sam9g45 constraints
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -87,7 +87,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260307-atmel-usb-v3-2-3dc48fe772be@gmail.com>
+Message-Id: <20260307-atmel-usb-v3-3-3dc48fe772be@gmail.com>
 References: <20260307-atmel-usb-v3-0-3dc48fe772be@gmail.com>
 In-Reply-To: <20260307-atmel-usb-v3-0-3dc48fe772be@gmail.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -101,7 +101,7 @@ Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
  Charan Pedumuru <charan.pedumuru@gmail.com>
 X-Mailer: b4 0.14.3
-X-Rspamd-Queue-Id: 4844922ADB1
+X-Rspamd-Queue-Id: 844A922ADC8
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -112,7 +112,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34176-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-34177-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -131,75 +131,82 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-Add binding support for the Atmel AT91RM9200 OHCI USB host controller
-to the generic OHCI schema.
+Add clock and phy constraints for atmel,at91sam9g45-ehci and reorganize
+the allOf section to fix dtbs_check warnings.
 
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
 ---
- .../devicetree/bindings/usb/generic-ohci.yaml      | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ .../devicetree/bindings/usb/generic-ehci.yaml      | 46 ++++++++++++++++------
+ 1 file changed, 33 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-index 961cbf85eeb5..a8a94b9c1fee 100644
---- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-@@ -55,6 +55,7 @@ properties:
-           - ti,ohci-omap3
-       - items:
-           - enum:
-+              - atmel,at91rm9200-ohci
-               - cavium,octeon-6335-ohci
-               - nintendo,hollywood-usb-ohci
-               - nxp,ohci-nxp
-@@ -137,6 +138,16 @@ properties:
-       The associated ISP1301 device. Necessary for the UDC controller for
-       connecting to the USB physical layer.
+diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+index 601f097c09a6..55a5aa7d7a54 100644
+--- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
++++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+@@ -9,19 +9,6 @@ title: USB EHCI Controller
+ maintainers:
+   - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  
-+  atmel,vbus-gpio:
-+    description: GPIO used to control or sense the USB VBUS power.
-+    minItems: 1
-+    maxItems: 3
-+
-+  atmel,oc-gpio:
-+    description: GPIO used to signal USB overcurrent condition.
-+    minItems: 1
-+    maxItems: 3
-+
- required:
-   - compatible
+-allOf:
+-  - $ref: usb-hcd.yaml
+-  - if:
+-      properties:
+-        compatible:
+-          not:
+-            contains:
+-              const: ibm,usb-ehci-440epx
+-    then:
+-      properties:
+-        reg:
+-          maxItems: 1
+-
+ properties:
+   compatible:
+     oneOf:
+@@ -167,6 +154,39 @@ required:
    - reg
-@@ -144,6 +155,28 @@ required:
+   - interrupts
  
- allOf:
-   - $ref: usb-hcd.yaml
++allOf:
++  - $ref: usb-hcd.yaml
++  - if:
++      properties:
++        compatible:
++          not:
++            contains:
++              const: ibm,usb-ehci-440epx
++    then:
++      properties:
++        reg:
++          maxItems: 1
 +  - if:
 +      properties:
 +        compatible:
 +          contains:
-+            const: atmel,at91rm9200-ohci
++            const: atmel,at91sam9g45-ehci
 +    then:
 +      properties:
 +        clock-names:
 +          items:
-+            - const: ohci_clk
-+            - const: hclk
-+            - const: uhpck
++            - const: usb_clk
++            - const: ehci_clk
++
++        phy_type:
++          enum:
++            - utmi
++            - hsic
 +
 +      required:
 +        - clocks
 +        - clock-names
 +
-+    else:
-+      properties:
-+        atmel,vbus-gpio: false
-+        atmel,oc-gpio: false
-+
-   - if:
-       not:
-         properties:
+ unevaluatedProperties: false
+ 
+ examples:
 
 -- 
 2.53.0
