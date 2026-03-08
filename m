@@ -1,188 +1,143 @@
-Return-Path: <linux-usb+bounces-34225-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34226-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EG3mMm5lrWlp2QEAu9opvQ
-	(envelope-from <linux-usb+bounces-34225-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 13:02:54 +0100
+	id WFD+K2JlrWme2AEAu9opvQ
+	(envelope-from <linux-usb+bounces-34226-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 13:02:42 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BE09230195
-	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 13:02:54 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13230230179
+	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 13:02:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 543E930E03A4
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2026 11:52:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 61FBC3028B20
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2026 12:02:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CECB1289E17;
-	Sun,  8 Mar 2026 11:47:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8D8F36E476;
+	Sun,  8 Mar 2026 12:02:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m3IVNvXO"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="FFzDtZuY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1FD27F749
-	for <linux-usb@vger.kernel.org>; Sun,  8 Mar 2026 11:47:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F45236C0C4;
+	Sun,  8 Mar 2026 12:02:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772970463; cv=none; b=Q7X8zSUHhnR4leD5tL+RuYPAiW2IqaUygqKpbGFhAsLmxkGYEysN75RWYU30OyDVizQPYPf4kY1us9OF7jHACh97rARwdk3c3V/sjpRxGQ9mZOGmVCWCUlkf7PF+AjjGwsZO90N8wxcEFUpx/iBslpACPhrrTWXzaT769WJdiSM=
+	t=1772971325; cv=none; b=dVpGj7ZKq3p/q3j8J1hKywYehkfVy7WuWEokYHNkBGeVuSfuhGEbTRLrgRZ7WvMCusJrf5ZjmrLt9tDX1Ls+ycLExN1v7TfdHTB+kW3QiI9p6ySbA/jBF5Dxx9IcOUVg52ytESkSqV9JcmHi1RockLh/ApA4A3C/ZF/djvGfjz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772970463; c=relaxed/simple;
-	bh=8YK8p5kfmHmveYxQYTvTXtMT2hlEO3bGFLReMqW+v9s=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Mmmqs5l0T2MYUljC1yyji+89Ca5sy/6A87oCULSNfmDBr5MWuLMslnyIK4SL4+tklcHsdE4j3GTTPVUNVCi+U31jRbfiWFND4oNzPCys6RV4wZxdptlF0o9jyy/Xw9Ke6M0vE4qw0nf2LrXmOo/z/a5lalqmvgMIUiA+b3Yuo/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m3IVNvXO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F2D3CC2BCAF
-	for <linux-usb@vger.kernel.org>; Sun,  8 Mar 2026 11:47:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772970463;
-	bh=8YK8p5kfmHmveYxQYTvTXtMT2hlEO3bGFLReMqW+v9s=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=m3IVNvXOqAycH7NNpMbfKOPqYJxGIACQSH44uhFBoZ9u4uVCgXOlqV1uiaeppNpxr
-	 SdlMlbZiPfID3F3XztMdSR2f3A0WpI7uyN6VXVjWG0G6yRnVpcpVruy6IwE4N+7QXi
-	 HGVnQHuSJHq2q8EQQCL3XCTm9qPbVqMZyx7g7pVu/j3ADWYWB+djV26uFwVDtJvZG1
-	 l3bbG2aXdt6t/OscLLIJQY6TTVlDq4o6TVP+LkT56iSTQVoBvDjr9gPPAnTX7Cdmp5
-	 PHlepXiN+S1W27LIFKRKTFAOQaXo1G4Fna4e0qYQnBvQAvHtPzUW6rDhtDHRN3R/Ow
-	 anQfUaTuOBecw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id E7190C41612; Sun,  8 Mar 2026 11:47:42 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 221184] mouse/keyboard (connected via hub) usb reset under
- system load with weak cpu
-Date: Sun, 08 Mar 2026 11:47:42 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mitchell.liam@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-221184-208809-HkmQ9nCqpF@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221184-208809@https.bugzilla.kernel.org/>
-References: <bug-221184-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1772971325; c=relaxed/simple;
+	bh=Bq7Wkz/Cpwn1dgha1SO/prRohbZTrXxPYbLnSfgU+/s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bD7dDMpVFszWvyrcajM6dQaSWRydPCJ6VlgIzppqiaWuHkfxgCLas9vmAQMdXiOYg0o2fiR6GNTX/Ydb+dQMBwi/p3Maq/2xO3BkBXDEzeqWSqQgx7lWV+jWwkP4233ntQrqHBov6HzVUgkwoF+02u4BsCY21Y9rcSDjOZe0Fkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=FFzDtZuY; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=g77KuUu7tZV2EWc/eRT4uXRlFQCkO7bU5cTH+0cVCG0=; b=FFzDtZuYkC0DnUyz163rl2C0J7
+	BlNREDfLbFSqsCDGG7wyqYQIkW9dVN3DggsHpt6BqHwHaaJCJYr5hlnQvXRkPPQ41ar85DzFhMEmB
+	gFC6oC5eK9H+7BsTfL2Qaie+4PSNMBteqELve/Q0cUSwwEHPGq6uEDlwML0R5lJ8E5ebW00T/Vzut
+	DuJXep+nuwECH8QlUkCKWVPiRO/PGZMUciO0bD5lSEzEqQr2CySIpJWpeB2FiLZRSgN1aKy5u1pjb
+	388/H2D8TPVbJxV+5QHfwZsd8BBR1NJAj5Afn5lTxCrADySNQUKbR+nvc2uheAu2RvUMjRHBcPj35
+	vAoAoQ0w==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57616)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1vzCpK-000000002nH-1IFO;
+	Sun, 08 Mar 2026 12:01:42 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1vzCpF-000000003JS-0B1B;
+	Sun, 08 Mar 2026 12:01:37 +0000
+Date: Sun, 8 Mar 2026 12:01:36 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: vladimir.oltean@nxp.com
+Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-can@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, spacemit@lists.linux.dev,
+	UNGLinuxDriver@microchip.com,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Shawn Lin <shawn.lin@rock-chips.com>
+Subject: Re: [PATCH v2 phy-next 22/24] phy: include PHY provider header (2/2)
+Message-ID: <aa1lIBO3j_apIPjb@shell.armlinux.org.uk>
+References: <20260308114009.2546587-1-vladimir.oltean@nxp.com>
+ <20260308114009.2546587-23-vladimir.oltean@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 4BE09230195
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260308114009.2546587-23-vladimir.oltean@nxp.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Rspamd-Queue-Id: 13230230179
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_REJECT(1.00)[armlinux.org.uk:s=pandora-2019];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[armlinux.org.uk : SPF not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	MIME_TRACE(0.00)[0:+];
-	FROM_NO_DN(0.00)[];
-	RCPT_COUNT_ONE(0.00)[1];
-	MISSING_XM_UA(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.989];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	TAGGED_FROM(0.00)[bounces-34225-lists,linux-usb=lfdr.de];
-	TO_DN_NONE(0.00)[];
+	DKIM_TRACE(0.00)[armlinux.org.uk:-];
+	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+]
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34226-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	NEURAL_SPAM(0.00)[0.598];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[26];
+	FROM_NEQ_ENVFROM(0.00)[linux@armlinux.org.uk,linux-usb@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[]
 X-Rspamd-Action: no action
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221184
+On Sun, Mar 08, 2026 at 01:40:07PM +0200, vladimir.oltean@nxp.com wrote:
+> diff --git a/drivers/phy/qualcomm/phy-qcom-sgmii-eth.c b/drivers/phy/qualcomm/phy-qcom-sgmii-eth.c
+> index 5b1c82459c12..4f8ffc6524ab 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-sgmii-eth.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-sgmii-eth.c
+> @@ -7,10 +7,11 @@
+>  #include <linux/ethtool.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> -#include <linux/phy/phy.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+>  
+> +#include "../phy-provider.h"
+> +
 
-Liam Mitchell (mitchell.liam@gmail.com) changed:
+As we know, this will conflict with my patch in net-next. I guess Vinod
+hasn't (yet?) merged the commit that Jakub provided.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mitchell.liam@gmail.com
-
---- Comment #10 from Liam Mitchell (mitchell.liam@gmail.com) ---
-Thanks for trying it out!
-
-I prompted a script to analyze your logs, producing the following:
-
-USB ACTUAL OBSERVED DATA (Total log duration: 117.8s)
-Times are in milliseconds, formatted as min/max/average
-Interface  | Errors | Resets | Submit-Error | Error-Resubmit | Reset-Submit=
- |
-Total Wait
------------+--------+--------+--------------+----------------+-------------=
--+-----------
-Ii:4:003:1 | 36     | 12     | 16/5678/814  | 16/458/67      | 93/221/144  =
- |
-2430ms=20=20=20
-Ii:4:003:2 | 33     | 12     | 18/4098/859  | 16/457/70      | 93/221/144  =
- |
-2321ms=20=20=20
-Ii:4:004:1 | 32     | 8      | 38/2973/855  | 17/291/70      | 93/99/96    =
- |
-2245ms=20=20=20
-Ii:4:004:2 | 30     | 8      | 2/2139/354   | 16/277/38      | 93/99/96    =
- |
-1142ms=20=20=20
-
-Legend: 4:003 =3D Novatek Microelectronics Corp., 4:004 =3D Logitech, Inc.
-
-It shows 20 resets and about 2s of device downtime in the 2 minute period.
-
-I then prompted for a script to use the actual submit-error times to estima=
-te
-the resets and total wait time for 3 models:
-- baseline: current error handling, 13/26/52/104/104ms backoff retry, reset=
- on
-error at 1-1.5s
-- 500ms tolerance, the above with my patch ignoring one proto error every
-500ms, resubmitting immediately
-- 200ms tolerance, the above with shorter window
-
-USBHID ERROR HANDLING MODELS (Predicted Resets / Total wait time)
-Interface  | Baseline   | 500ms tolerance | 200ms tolerance
------------+------------+-----------------+----------------
-Ii:4:003:1 | 5 / 2280ms | 0 / 507ms       | 0 / 117ms
-Ii:4:003:2 | 5 / 1994ms | 0 / 507ms       | 0 / 117ms
-Ii:4:004:1 | 8 / 2007ms | 1 / 512ms       | 0 / 195ms
-Ii:4:004:2 | 8 / 1903ms | 1 / 382ms       | 0 / 143ms
-
-The baseline numbers don't exactly match the actual but it looks close enou=
-gh
-to me for comparison.
-
-It predicts what you reported, has positive impact but doesn't fully solve =
-the
-issue.
-
-Try modifying the 500ms to 200 or other and see if there is a noticeable
-difference.
-
-The window shouldn't go lower than 100 or so to prevent the system being
-locked.
-
-Somewhere there is a number that balances making unreliable devices useful =
-with
-protecting the system from locking and resetting devices that need it.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
