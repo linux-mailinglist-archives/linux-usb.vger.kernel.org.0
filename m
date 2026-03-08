@@ -1,126 +1,166 @@
-Return-Path: <linux-usb+bounces-34246-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34247-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eCN8EAXqrWnx9QEAu9opvQ
-	(envelope-from <linux-usb+bounces-34246-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 22:28:37 +0100
+	id 2LrgE8f4rWlK+QEAu9opvQ
+	(envelope-from <linux-usb+bounces-34247-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 23:31:35 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FAF9232539
-	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 22:28:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E3248232709
+	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 23:31:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 34A35300F9C9
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2026 21:28:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7CEDE3034DC8
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2026 22:22:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D3134DB79;
-	Sun,  8 Mar 2026 21:28:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W1P6IFmT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78479359A81;
+	Sun,  8 Mar 2026 22:22:25 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9788214A62B
-	for <linux-usb@vger.kernel.org>; Sun,  8 Mar 2026 21:28:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1B51DE8BE;
+	Sun,  8 Mar 2026 22:22:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773005313; cv=none; b=V7tv8htQZZQDlauxZz9pEoqInnDSNvsH73qHFlJNWOPMn3PvAFxVBLVW4mNncWZlN+qMipfpyFb0nIw74tT9fn96jFN7RpnBRTCBPu2qurrdVzxzpr4ZrMb2DuOwBc9X0rFvjueNcqT/xdoQ+B53VicY3MFkV+k6Ezf6WsKWypU=
+	t=1773008545; cv=none; b=XiPQ897q5YcKhwCBWmWXV8ph3Aid/93nf7n5QspfGzVLVFyJ/5JVw8tVy9J1opydiemuGpcMFfkOLPBJgPr7zNBYBOi7WDhg2sU3JbhCa04V/rmbKlRzAC+p0SaMf2HJc7iIUg8aMwwJJ22XAkuUFKABJuKEdpWvsFDqOzdQKH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773005313; c=relaxed/simple;
-	bh=Tw1KuL5gD6bldntSmAWVx4oc480+dSip3tpIOnpanuM=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nHJ6YMtYxefB2uR3rj+go4cx2bHoVprB25ka4TPvSGkKL5Ya/3mxgRkV++FicnOakWUoypuksX2zgmImX2zOhqXRuHQ+gUY92fRbOvk2M2s5RNVs9oNFd8W5nJmuu12XSZ6MXui8ejx3Zv7M/I84ToNpbf9j4zRWNdq2zJvwMDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W1P6IFmT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2E03FC116C6
-	for <linux-usb@vger.kernel.org>; Sun,  8 Mar 2026 21:28:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773005313;
-	bh=Tw1KuL5gD6bldntSmAWVx4oc480+dSip3tpIOnpanuM=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=W1P6IFmT6vJnK4A74ON5UT1BD+Pmr8xPB8Taoao2Zr+hNv4PpRXnvwS4q3g215+RQ
-	 K+7w8ZxIqwLdNin8Ui+ozqHTWk0G/xrMQjzptvo4JCVuElhVZpoi8ezFiAs7qP2aso
-	 qrvWqs/AQinIjRqQ/CsknXDeXXm62OXoth5gHsScM+OVwW52x3ulemC+qc9lGwzp4W
-	 2Og4v1YIn3WkqAIjyYd7fT38hO5G4zXgfpCArXbNy03AHf2cnbE2Iv/Hm6IWRJLOxv
-	 9IH0+15Ur5NDocn76aYmi5qrL7sg4Ze1ahb1qF1vHyF/gRMnPJIP6mfkrVq0Fd1PQk
-	 7GOXIM5I1OBIg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 23C2CC53BC5; Sun,  8 Mar 2026 21:28:33 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 221184] mouse/keyboard (connected via hub) usb reset under
- system load with weak cpu
-Date: Sun, 08 Mar 2026 21:28:32 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-221184-208809-5UilaWB4OI@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221184-208809@https.bugzilla.kernel.org/>
-References: <bug-221184-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
+	s=arc-20240116; t=1773008545; c=relaxed/simple;
+	bh=n8fdsNpksQMyzDLZEkSIk2mSFJWH1PAnAyRdAAkVywk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=CMgBcMVhsuOLuwMxHF54Ytpp1e+83IjoZ62tEipsmr/13AbztmpOxwvt53sKRW1xQZHHB+joRtvphzzSRahATe/CPQdh+op/9FvQd9XbKXIlDU8FXpTD0G21edL8cL6+vpeMa+2Fra8odSRkPK1Vyd849vKOrxTepFiTEbrbYAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com; spf=pass smtp.mailfrom=perches.com; arc=none smtp.client-ip=216.40.44.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perches.com
+Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay06.hostedemail.com (Postfix) with ESMTP id 42DD81B91B3;
+	Sun,  8 Mar 2026 22:22:21 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id BD6C56000E;
+	Sun,  8 Mar 2026 22:22:14 +0000 (UTC)
+Message-ID: <9fd14d166e860f26febfbc9061a6dcae6a166961.camel@perches.com>
+Subject: Re: [PATCH v2 phy-next 24/24] MAINTAINERS: add regexes for linux-phy
+From: Joe Perches <joe@perches.com>
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>, Neil
+ Armstrong <neil.armstrong@linaro.org>, dri-devel@lists.freedesktop.org, 
+	freedreno@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org, 
+	linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev, 
+	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, 	spacemit@lists.linux.dev,
+ UNGLinuxDriver@microchip.com
+Date: Sun, 08 Mar 2026 15:22:13 -0700
+In-Reply-To: <20260308205623.5trrqdmdrzj744hi@skbuf>
+References: <20260308114009.2546587-1-vladimir.oltean@nxp.com>
+	 <20260308114009.2546587-25-vladimir.oltean@nxp.com>
+	 <ca170cbaf2f8bcbc89bbda68914d8e0d7640f0e7.camel@perches.com>
+	 <20260308191017.kcyi7ka5pktq5jl4@skbuf>
+	 <8c4c5d0c5d014d5cc19eb10906ca1bd83ffb3ce5.camel@perches.com>
+	 <20260308205623.5trrqdmdrzj744hi@skbuf>
+Content-Type: text/plain; charset="ISO-8859-1"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 8FAF9232539
+X-Stat-Signature: zgtxuwsb3363ai68tf6p7s8zp8seinzy
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19wsONHcaef5rI729O90pckRr9dLrQEYXs=
+X-HE-Tag: 1773008534-677296
+X-HE-Meta: U2FsdGVkX19zIqgNUKb+c+5Mu7Q3C+Gpl/B+X8eI5i6bGv7WE3zpj355qMm6YCbRSW7Vrhs2aumEBIt791syA8wOI3oaCj+46xwg3qNvWJkp2gLycZfqNtZEDdNuGCB0y349Wog5E09dSEbmxlYo3wEry6L0kQTHpHQi1eemnMz3eHRJ8lW0g+PBe0pZnw/seBVjwauSFyG+tNp9GhFkZXlt5WBWbJRv4eXsvXAwTvZLp/ToUvk9BlaA2J9NhuyWc4djQ+wNnPyIbjEf3YbjCt97pmlbZeZatO9Oxpnpbki4SgQq7YX4GOxv15JoA/1s08cXIoR5CaQiUuDxwOWahT02urVywBVxEzsYACoHDQg9R+OY8J92EbaYAELi/zOh
+X-Rspamd-Queue-Id: E3248232709
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [7.34 / 15.00];
+	URIBL_BLACK(7.50)[perches.com:mid];
 	MAILLIST(-0.15)[generic];
+	BAD_REP_POLICIES(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34246-lists,linux-usb=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	DMARC_NA(0.00)[perches.com];
+	TAGGED_FROM(0.00)[bounces-34247-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	GREYLIST(0.00)[pass,body];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[24];
+	MIME_TRACE(0.00)[0:+];
+	NEURAL_SPAM(0.00)[0.280];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_NO_DN(0.00)[];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[joe@perches.com,linux-usb@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	R_DKIM_NA(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-0.988];
-	RCPT_COUNT_ONE(0.00)[1];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,harvard.edu:email]
-X-Rspamd-Action: no action
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	R_SPF_ALLOW(0.00)[+ip4:172.234.253.10:c];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[perl.org:url,perches.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Action: add header
+X-Spam: Yes
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221184
+On Sun, 2026-03-08 at 22:56 +0200, Vladimir Oltean wrote:
+> On Sun, Mar 08, 2026 at 12:25:32PM -0700, Joe Perches wrote:
+> > On Sun, 2026-03-08 at 21:10 +0200, Vladimir Oltean wrote:
+> On Sun, Mar 08, 2026 at 11:40:44AM -0700, Joe Perches wrote:
+> > > Perhaps if matching only the include uses:
+> > > > (/ is escaped because get_maintainer is stupid)
+> > > > something like:
+> > > >=20
+> > > > K:	include\s*\<linux\/phy\/phy(?:-common-props|-provider)?\.h\>
+>=20
+> > > Why is get_maintainer stupid?
+> >=20
+> > The get_maintainer code used to match keywords is
+> >=20
+> 	    foreach my $line (keys %keyword_hash) {
+> 		if ($text =3D~ m/$keyword_hash{$line}/x) {
+> >=20
+> > so it seems the first / in the K: <foo> regex would terminate
+> > the match.
+> >=20
+> > It might have been better to use a different delimiter.
+> > Maybe:
+> >=20
+> 		if ($text =3D~ m{$keyword_hash{$line}}/x
+>=20
+> So why does it match in my example?
 
---- Comment #15 from Alan Stern (stern@rowland.harvard.edu) ---
-The new usbmon trace clearly shows the same errors as the earlier one.  It =
-even
-shows at least one reset (I didn't look through the whole file).  So althou=
-gh
-the newer OS may behave somewhat worse than the earlier one, it did not
-introduce a new bug.
+Not sure really.  But it does match exactly.
+Maybe the regex code scans forward until the last /
+as the / character is not a "real" metacharacter.
 
---=20
-You may reply to this email to add a comment.
+I added some test code and it produced:
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+line:	<+#include <linux/phy/phy.h>>
+kw:	<(?:linux/phy/phy\.h|phy-props\.h|phy-provider\.h)>
+test:	<^[+-].*(?:linux/phy/phy\.h|phy-props\.h|phy-provider\.h)>
+match:	<+#include <linux/phy/phy.h>
+
+From https://perldoc.perl.org/perlrequick
+
+Not all characters can be used 'as is' in a match.
+Some characters, called metacharacters, are considered special,
+and reserved for use in regex notation. The metacharacters are
+
+{}[]()^$.|*+?\
+
+A metacharacter can be matched literally by putting a backslash before it:
+
+"2+2=3D4" =3D~ /2+2/;    # doesn't match, + is a metacharacter
+"2+2=3D4" =3D~ /2\+2/;   # matches, \+ is treated like an ordinary +
+'C:\WIN32' =3D~ /C:\\WIN/;                       # matches
+"/usr/bin/perl" =3D~ /\/usr\/bin\/perl/;  # matches
+
+In the last regex, the forward slash '/' is also backslashed, because it is=
+ used to delimit the regex.
 
