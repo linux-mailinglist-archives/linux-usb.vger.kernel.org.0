@@ -1,128 +1,150 @@
-Return-Path: <linux-usb+bounces-34237-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34238-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id crIEM8ygrWnp5AEAu9opvQ
-	(envelope-from <linux-usb+bounces-34237-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 17:16:12 +0100
+	id 4I+XNPSgrWnp5AEAu9opvQ
+	(envelope-from <linux-usb+bounces-34238-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 17:16:52 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A13E2310B4
-	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 17:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E54D2310BC
+	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 17:16:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 62CF53015CB1
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2026 16:16:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AFF40300D315
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2026 16:16:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C1B8283FC8;
-	Sun,  8 Mar 2026 16:16:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45A7313E17;
+	Sun,  8 Mar 2026 16:16:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EjU4+LjN"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wsCG/I9S"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF94154739
-	for <linux-usb@vger.kernel.org>; Sun,  8 Mar 2026 16:16:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3483154739
+	for <linux-usb@vger.kernel.org>; Sun,  8 Mar 2026 16:16:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772986568; cv=none; b=tM8yLKwKkYqdrU2AHWntNoRwNWEtTET2R1kL3874On7q74HSjHa6RvE0yPPlAGIfIq08KeubHmx3h39Ekno4WKDb6SB1iIsQy+xhShjdtsieNj9E6mZe4B4zmg0cRAwNcEkvHhVVA/LDFxApWloI4LnRkUepHUxdAA6X43NQ7/k=
+	t=1772986606; cv=none; b=hi46YSccFvEXXth3aYvH8yR1k4OkrU5S1AxUv12tuwtTPVCP4RWQhQVOFDUnW1DbzXKSiahixkriyxgBIKrcuZhHh0EOvbBn6IgMGxkOeIAZ7MtYcr/3cs3OmgTTeY0nvdjUvqf4dR8TsZUspHndlS6KjZiAu0L4vPxRiVzhapY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772986568; c=relaxed/simple;
-	bh=JwBUYItFooU/1Y7t508nYZM4YxoDc3wauH8OB3eFgCQ=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UewwGxm6HcIwIqY71stwmJ4jii94k2+O3y1SZhEWLL0Zb0KfSDT5WLwUtDwMX+dG3mTHWM6EnPewDAModygrMTj5+3XyuUMkl58b66eyBJzTqgIB5cjkXDG1r/jOue+ithpkOTcmaKBu/nnvvNfgsB2KFYNzKugweF4zWqFxq7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EjU4+LjN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7DFAAC2BC9E
-	for <linux-usb@vger.kernel.org>; Sun,  8 Mar 2026 16:16:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772986567;
-	bh=JwBUYItFooU/1Y7t508nYZM4YxoDc3wauH8OB3eFgCQ=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=EjU4+LjNfk11LndiRXIoDumk0EDzuT2FWCnsiKwkt6x3pM8VoX/V9dt0gH7c+DytN
-	 YHhs5aPdhnTy2fszchPXHu5Su/OmFTfAI7moDQoc+A+OFcu2kCaGs65k6ZDPp4tgah
-	 8I+xSkMqL6Q48crol1fYad6agedRBMWdAei15JkkrsE0aGF4bJ0lr4OInzkr4DjUVK
-	 wpNQWWDDh9mlCTICyVurYQJr1XHivEnIXoIxyRDbKgKtGzYFlk4pJntACQ1Z5NJJma
-	 tBTCh/SIXLHAHi7296ya2+jzYozCnnxZswyuOybH8fQlfo7nV0NxCm5NgT1FJUqTyv
-	 O8eQIGLbpcYZA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 5E653C4160E; Sun,  8 Mar 2026 16:16:07 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 221184] mouse/keyboard (connected via hub) usb reset under
- system load with weak cpu
-Date: Sun, 08 Mar 2026 16:16:07 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: roxmail@list.ru
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-221184-208809-iVtjiGzBDA@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221184-208809@https.bugzilla.kernel.org/>
-References: <bug-221184-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1772986606; c=relaxed/simple;
+	bh=/nUK0TRJYMQ09AmMOIFmcQhbrJOCpgLyfN8UElFUDng=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kvfaERvxWokF0dX6XWpSaAXuxzrf91AINcHdULumFZQcBYsqLfbKJLUbVYExPYCx+UJPV/N1xxjFY6OIL1mLXU/8BxR6IHntszK9CJWz3BDcJPvPR12DZO82nx+8x+frJ6M/fQT2oeXP3ukejSNO36fww1szq84/ov4xhMUw8zM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wsCG/I9S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 739E2C116C6;
+	Sun,  8 Mar 2026 16:16:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1772986605;
+	bh=/nUK0TRJYMQ09AmMOIFmcQhbrJOCpgLyfN8UElFUDng=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=wsCG/I9SoyixOEME1LmFu0yhtvkfbqT98BeOIXly+ZZmC4HRG/QcxTE9t6hEYBgl8
+	 fpJC3wgmsI75SykB0bSijUkuxAKsLpBVFSdwANxJXRmNfQ+C9Jp2JH8KzIVdw2H8ol
+	 wSFdKlr2bnQrVBHP8OW8utrH0JxSpdDQuhWo2oN0=
+Date: Sun, 8 Mar 2026 17:16:43 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Nils Reuter <nils.reuter@gmx.net>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [BUG] UAS protocol hangs on Realtek RTL9210B (0bda:9210,
+ bcdDevice f0.01)
+Message-ID: <2026030817-cupping-reason-0bb9@gregkh>
+References: <151d1ec4-275a-43d6-bc06-26e013695b7b@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 2A13E2310B4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <151d1ec4-275a-43d6-bc06-26e013695b7b@gmx.net>
+X-Rspamd-Queue-Id: 2E54D2310BC
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWO(0.00)[2];
+	TAGGED_FROM(0.00)[bounces-34238-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmx.net];
+	FROM_HAS_DN(0.00)[];
+	NEURAL_SPAM(0.00)[0.012];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MIME_TRACE(0.00)[0:+];
-	FROM_NO_DN(0.00)[];
-	RCPT_COUNT_ONE(0.00)[1];
-	MISSING_XM_UA(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.987];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	TAGGED_FROM(0.00)[bounces-34237-lists,linux-usb=lfdr.de];
-	TO_DN_NONE(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+]
+	TO_DN_SOME(0.00)[]
 X-Rspamd-Action: no action
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221184
+On Sun, Mar 08, 2026 at 03:10:54PM +0100, Nils Reuter wrote:
+> Hello,
+> 
+> I would like to report a persistent UAS protocol issue with a Realtek
+> RTL9210B based M.2 enclosure.
+> 
+> *Hardware Environment:*
+> 
+>  *
+> 
+>    Enclosure: Ugreen SKU 15813 (Model CM767)
+> 
+>  *
+> 
+>    Bridge Chip: Realtek RTL9210B (ID 0bda:9210, bcdDevice f0.01)
+> 
+>  *
+> 
+>    Drive: Transcend TS512GMTS430S (SATA M.2)
+> 
+>  *
+> 
+>    System: Debian / OpenMediaVault (Linux omv 6.18.12+deb13-amd64)
+> 
+>  *
+> 
+>    Kernel: 6.18.12-amd64
+> 
+> *Problem Description:* Under heavy I/O load (e.g., backup operations), the
+> device experience UAS protocol hangs. The kernel log shows multiple
+> |uas_eh_abort_handler| events, followed by SCSI read/write errors and a
+> device reset (error -71). Eventually, the device is offlined or remounted as
+> read-only.
+> 
+> SMART logs show incrementing UDMA CRC errors (Attribute 199) during these
+> events, even though the hardware (cable/SSD) tests fine on other platforms.
+> 
+> *Logs:*
+> 
+> |[timestamp] sd 1:0:0:0: [sdb] tag#18 uas_eh_abort_handler 0 uas-tag 15
+> inflight: CMD IN [timestamp] usb 2-1-port3: cannot reset (err = -71)
+> [timestamp] sd 1:0:0:0: Device offlined - not ready after error recovery |
+> 
+> *Workaround:* The device works perfectly stable when UAS is disabled via
+> usb-storage quirks: |options usb-storage quirks=0bda:9210:u|
+> 
+> *Request:* Please consider adding this device (0bda:9210 with bcdDevice
+> f0.01) to the kernel's UAS quirks list to ensure out-of-the-box stability
+> for other users.
 
---- Comment #14 from Roman Elshin (roxmail@list.ru) ---
-Created attachment 309575
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D309575&action=3Dedit
-usbmon log from debian sid
+Can you submit a patch that adds this quirk to the kernel so you get
+credit for adding it?
 
-debian sid kernel: 6.18.15+deb14-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.18.1=
-5-1
-(2026-02-27) x86_64 GNU/Linux
+thanks,
 
-System booted from sata ssd (previous logs was from 32bit debian-11 and hdd)
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+greg k-h
 
