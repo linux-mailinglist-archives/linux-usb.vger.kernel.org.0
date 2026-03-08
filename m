@@ -1,148 +1,128 @@
-Return-Path: <linux-usb+bounces-34236-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34237-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cJqMJ5aerWl75AEAu9opvQ
-	(envelope-from <linux-usb+bounces-34236-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 17:06:46 +0100
+	id crIEM8ygrWnp5AEAu9opvQ
+	(envelope-from <linux-usb+bounces-34237-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 17:16:12 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CFFA231043
-	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 17:06:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A13E2310B4
+	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 17:16:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0E2FF3013EF8
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2026 16:06:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 62CF53015CB1
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2026 16:16:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCDD5313E07;
-	Sun,  8 Mar 2026 16:06:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C1B8283FC8;
+	Sun,  8 Mar 2026 16:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="I8pZ9D50"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EjU4+LjN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88EED26C3BD
-	for <linux-usb@vger.kernel.org>; Sun,  8 Mar 2026 16:06:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF94154739
+	for <linux-usb@vger.kernel.org>; Sun,  8 Mar 2026 16:16:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772985987; cv=none; b=sEKsr0YXwkG2nQQhMV2UA45XzkVfJ3zcApB6z1Jl63TocS/O2Aq7erYK44eGnvm3Icjnyaj1t1BgkCOEKP/X08R9w3kK92fMA19KxL5Z/RrS0XF+3kA2bseisguoiWOnOvZbsVV/gG3c8wo4sHFGvcGSjCR4VJd7xBzEFGKT2E4=
+	t=1772986568; cv=none; b=tM8yLKwKkYqdrU2AHWntNoRwNWEtTET2R1kL3874On7q74HSjHa6RvE0yPPlAGIfIq08KeubHmx3h39Ekno4WKDb6SB1iIsQy+xhShjdtsieNj9E6mZe4B4zmg0cRAwNcEkvHhVVA/LDFxApWloI4LnRkUepHUxdAA6X43NQ7/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772985987; c=relaxed/simple;
-	bh=gJZ+q3YD6LONyc7m2ciY9V6qsSwawGkHbIDpc3vZxFI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g4mTOpe8VeYwUsaOOyivNl48UmbB7hTko+1FKvRacgCB4w79xETBfdCG5t4+fWpa9W98mTvxDHQ30HF5vs+KCv27i/sG294/bUDaz344UpTdMxoUjaMXzwPO6S3FkU+PoOXpJD0m9NilIkbFZ7z5GEl+qZXdDp3cy3J4SWa66m0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=I8pZ9D50; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4852e09e23dso10166155e9.0
-        for <linux-usb@vger.kernel.org>; Sun, 08 Mar 2026 09:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1772985983; x=1773590783; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0+oeMLB3/japs3sjO+LPad0LBSfq76o6HaAy/Tr8FiQ=;
-        b=I8pZ9D509TlhOSAS7Jrrok2/ln0pwedIGOfqm/GrrKkLVxcfjP4VO1QMAGensdO6yz
-         UZ/puwARIbXnNATyeE69MnEMZqhUUqtKRHdQVtGwlB5E09fGuqNiL0z+SJou0ISoPx1x
-         BU0rRBx/cEksDYr9FO4IUUmAdwy1Y+nKrrbAcq5UpAoLRB6A6XDoPpg/bDFSvAIfbE4Q
-         UUJ7Pjg6GXoQCti8dB9cF+BL2B0I7eqUY+aHBbVwvUqKA27cBz4dETfht5UAjolNCfk7
-         ONDjja0+r1HK9xHrwFYbSY2mowDG9qHIwcMPCvDZL10HwsV1Q3y9jyWFHOXU3TEOpYJh
-         O8tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772985983; x=1773590783;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0+oeMLB3/japs3sjO+LPad0LBSfq76o6HaAy/Tr8FiQ=;
-        b=K3k84juUk7qnfmVWZSgHf6yMR3IFITqOrjE81TuLzacs5SRbQ2xUsMC/4guY0/4rby
-         bB6DXkfBU8TlMGuIaR+HRXywK1KQzIBexA9q2SzzlbuV8lMTXMvyU2XLRu2NLcyUiCxn
-         7BQZhaP6OiuhnZAi6K25StaL0JciWvm3GQbysU4VBZo06aJhxWB6AWNgSlquxyuXq6b8
-         w9x/xTtlYuiLAgXnxUvTMq7NjqN9w/+utt+KvJdInKnnWUYd4z5pAu6C9TP3Lv/1nxjC
-         LXGWXykIwF4Wnq3uIOwHURjHmCp7taGaFkbUdnEE7gu10ubv7fyojH9oQKMr/rVUzAk1
-         +tNA==
-X-Gm-Message-State: AOJu0Yw44Mxyg0Goq4jZdccLOKWbOjreoWwc29kZBZP/WeGc9FpF0jfO
-	Gdnv0kIZ1dSqBVVwXmH1h0RHsUJgxE/LKRYX4NNuu4ggkVtt3Tz40WQ04ihDFGSjh+g=
-X-Gm-Gg: ATEYQzw2NPA+tGWlyJ/JCvXWS7QW6BUX0Nq8o/47dRQm7RUXxutIOGMgqr8f2wStb6t
-	PS4a3xZSAc4WVCwv/JbXGxz7aii5oRQBP6I3DgCch1dvsBp4Uprv6go7USPeMX8RkB4v0Naq1jK
-	rn+IR2+e6HQZwgCelIrdpy4nQPUeQ9+lM39jDwisnK41MDFh1rhcdJDGPcWZjS5OWdpr4w6kkdI
-	zioj8Ld5owDKiu1p2+c1IdEam8trKU9a8ISzrYn7uVZDOmqbwSAv6Av3nGiVF5t/zXq1TcUJcFc
-	tnfPvSNefqN9Dd5MFxuIiqsWzuYbHG0/CNiz66zlheURbu/v+xNq6dnLuzAvKwLf7+HJMfT9iJf
-	bOw8zTNElohmhN5pc/OpU+EzoK+rJGsmXVXhQd+9U9ibtus8TO8k1+CM1baxMUZGzFwCP1FXyy4
-	vQQBjfv48HcTykkQ+XtJYJTwT/qL42rA==
-X-Received: by 2002:a05:600c:1c0d:b0:485:38fc:7069 with SMTP id 5b1f17b1804b1-48538fc72d5mr34821405e9.23.1772985982454;
-        Sun, 08 Mar 2026 09:06:22 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.98])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48536150e61sm70428805e9.1.2026.03.08.09.06.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Mar 2026 09:06:21 -0700 (PDT)
-Message-ID: <0d324ec5-a13d-4fdd-818d-85eea60773b9@tuxon.dev>
-Date: Sun, 8 Mar 2026 18:06:20 +0200
+	s=arc-20240116; t=1772986568; c=relaxed/simple;
+	bh=JwBUYItFooU/1Y7t508nYZM4YxoDc3wauH8OB3eFgCQ=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=UewwGxm6HcIwIqY71stwmJ4jii94k2+O3y1SZhEWLL0Zb0KfSDT5WLwUtDwMX+dG3mTHWM6EnPewDAModygrMTj5+3XyuUMkl58b66eyBJzTqgIB5cjkXDG1r/jOue+ithpkOTcmaKBu/nnvvNfgsB2KFYNzKugweF4zWqFxq7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EjU4+LjN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7DFAAC2BC9E
+	for <linux-usb@vger.kernel.org>; Sun,  8 Mar 2026 16:16:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772986567;
+	bh=JwBUYItFooU/1Y7t508nYZM4YxoDc3wauH8OB3eFgCQ=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=EjU4+LjNfk11LndiRXIoDumk0EDzuT2FWCnsiKwkt6x3pM8VoX/V9dt0gH7c+DytN
+	 YHhs5aPdhnTy2fszchPXHu5Su/OmFTfAI7moDQoc+A+OFcu2kCaGs65k6ZDPp4tgah
+	 8I+xSkMqL6Q48crol1fYad6agedRBMWdAei15JkkrsE0aGF4bJ0lr4OInzkr4DjUVK
+	 wpNQWWDDh9mlCTICyVurYQJr1XHivEnIXoIxyRDbKgKtGzYFlk4pJntACQ1Z5NJJma
+	 tBTCh/SIXLHAHi7296ya2+jzYozCnnxZswyuOybH8fQlfo7nV0NxCm5NgT1FJUqTyv
+	 O8eQIGLbpcYZA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 5E653C4160E; Sun,  8 Mar 2026 16:16:07 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 221184] mouse/keyboard (connected via hub) usb reset under
+ system load with weak cpu
+Date: Sun, 08 Mar 2026 16:16:07 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: roxmail@list.ru
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-221184-208809-iVtjiGzBDA@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-221184-208809@https.bugzilla.kernel.org/>
+References: <bug-221184-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/5] arm: dts: at91: remove unused
- #address-cells/#size-cells from sam9x60 udc node
-To: Charan Pedumuru <charan.pedumuru@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Herve Codina <herve.codina@bootlin.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20260307-atmel-usb-v3-0-3dc48fe772be@gmail.com>
- <20260307-atmel-usb-v3-1-3dc48fe772be@gmail.com>
-Content-Language: en-US
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20260307-atmel-usb-v3-1-3dc48fe772be@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 1CFFA231043
+X-Rspamd-Queue-Id: 2A13E2310B4
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[tuxon.dev:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34236-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[tuxon.dev];
-	FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org,kernel.org,bootlin.com,microchip.com];
-	DKIM_TRACE(0.00)[tuxon.dev:+];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MIME_TRACE(0.00)[0:+];
+	FROM_NO_DN(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	MISSING_XM_UA(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.987];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[claudiu.beznea@tuxon.dev,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	NEURAL_HAM(-0.00)[-0.969];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
+	TAGGED_RCPT(0.00)[linux-usb];
+	TAGGED_FROM(0.00)[bounces-34237-lists,linux-usb=lfdr.de];
+	TO_DN_NONE(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+]
 X-Rspamd-Action: no action
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221184
 
+--- Comment #14 from Roman Elshin (roxmail@list.ru) ---
+Created attachment 309575
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D309575&action=3Dedit
+usbmon log from debian sid
 
-On 3/7/26 11:16, Charan Pedumuru wrote:
-> The UDC node does not define any child nodes, so the "#address-cells" and
-> "#size-cells" properties are unnecessary. Remove these unused properties
-> to simplify the devicetree node and keep it consistent with DT conventions.
-> 
-> Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
+debian sid kernel: 6.18.15+deb14-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.18.1=
+5-1
+(2026-02-27) x86_64 GNU/Linux
 
-Reviewed-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+System booted from sata ssd (previous logs was from 32bit debian-11 and hdd)
 
-Applied to at91-dt, thanks!
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
