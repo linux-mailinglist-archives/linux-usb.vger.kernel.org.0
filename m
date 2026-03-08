@@ -1,165 +1,252 @@
-Return-Path: <linux-usb+bounces-34191-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34192-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gE/INVKsrGldsgEAu9opvQ
-	(envelope-from <linux-usb+bounces-34191-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 07 Mar 2026 23:53:06 +0100
+	id aerkATj3rGmkwgEAu9opvQ
+	(envelope-from <linux-usb+bounces-34192-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 05:12:40 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E6E522DEEB
-	for <lists+linux-usb@lfdr.de>; Sat, 07 Mar 2026 23:53:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FAEF22E73F
+	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 05:12:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4799B300D68A
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Mar 2026 22:53:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6EECA302DB7C
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2026 04:12:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 428EF2D7DF3;
-	Sat,  7 Mar 2026 22:53:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="p0mw1HKA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C2A72C234A;
+	Sun,  8 Mar 2026 04:12:29 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F1D823EA85
-	for <linux-usb@vger.kernel.org>; Sat,  7 Mar 2026 22:53:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6002124A07C
+	for <linux-usb@vger.kernel.org>; Sun,  8 Mar 2026 04:12:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772923981; cv=none; b=om+58UO/xcqcjtx+DGtioaEymvuVngwgxWAbYqmsAB/LO9xmZXGde3+J5O/3TW1rPHluI33y3LFqwfEJCt9qiGfXx0FMgOitGUSoYsNOGnxzjyZzy4MjcOga41PQ4phsA/SKHEjmWQyATDwnRtH6DHvDQShXTz2FPZGxcQaSJrE=
+	t=1772943148; cv=none; b=lYBg2GK1F9qnVKWg1+qoZVczuKkeOGQy6/hiROQWx3Vp/9TQH7yu7LOZ1tH/v9WyKmmuhqammTxH1e/plbhiAbe54Uadp7rge+0LGSIc4fWIg8QVC6cpKxM5qDekZcXQVJLU2p8mFIgZzbVONFj5jGH6GsNyAVA9o8yWQ3+AMmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772923981; c=relaxed/simple;
-	bh=onuSXtg6F2LCy0LxbZ/34VrpJdyeiEFGVxLttUdYP3s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BaM7as25fPk9S8J/2jqKXMANqdjQ5nfBful083CGL9ppXHKQ8QRsNAJtNqs1E5vY4mEOY3+HkluUCPSARGFZ8eZi7NoSxAsZdCQI1uNqd/xvBZfhbUfibzTyo6HVhhPPPKb2EXIiruv8j/EAoc5S/r6Pd5YNkZj50D+UM2wkVvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=p0mw1HKA; arc=none smtp.client-ip=209.85.222.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-8cd7a75c680so53487885a.1
-        for <linux-usb@vger.kernel.org>; Sat, 07 Mar 2026 14:53:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1772923979; x=1773528779; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=csKDsiBXgnWt/0Smw1tLZwTuHlhZeD6UkDDjhH+moI4=;
-        b=p0mw1HKAR0Ynllgi5cdAuMq576fHQl1VVQrNmwJrauVgoxvG57fP0zssEdbRxToTFQ
-         d7hNkJpl2mUGvbKbCufFNMF+MPQvdgii73IT9eLLf/ieDE/epwjgzzYzMkhicetwsiGS
-         f+8lKnLhWkxZZunFJmlzvbd+YJ7pb/DJaSmhUBvr1uTSODhtiFypOSBM25IZMpf9xuoY
-         j48cMoTH3mw93SHGEB6+k9I28PYGDwCtVpSrXGQu76exfpCruvyCFWqieZ9OExotCJWT
-         hRmGQDlDOaSKNxBsTN2E7R/+LzKScydN7z1pU0kklkYL6BA5elyttSDLsvJYHxmlOXNe
-         LyUQ==
+	s=arc-20240116; t=1772943148; c=relaxed/simple;
+	bh=qYRRhJ/rjVX6gADAftLWWxxgi7AUGT+kfAfgu9FnizM=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=SEabc64uUAUKOhXu4fLdrl/joOoeaacjIkVtYWbTrsbZnKc8HhZvF5N/kmLPu3o79Ync/j7Fb6PNLAPAPGuct9PndEyY5e+5AhWKfnr6+xE+avL/vyzGSYMHwH90do0s61d2nwfyOTphzVjd6cCk0SsYYO8QeX/02qu3N0deaPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-679caf7ec07so171677831eaf.1
+        for <linux-usb@vger.kernel.org>; Sat, 07 Mar 2026 20:12:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772923979; x=1773528779;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=csKDsiBXgnWt/0Smw1tLZwTuHlhZeD6UkDDjhH+moI4=;
-        b=O/vH/7OsmoaXCje41kfI5PMgTOlJWSp4iGypORP62cpRHVOTNU94tEoot1spcJbTwh
-         hafRYNvrS+5eslj1vC2QnUp4gUlhfcVP4gzwJ2MD7WIdGTuL5irPJIGZF66ebMtqGaXE
-         v72HPhS9bWOvCuhz95qPVTVSy6Vz5iEdXo6LLTNBmx2H7MBTWHzJH3EZk533VdeHwFe6
-         HU3zI6DWUMvouWXbOR4daQkCj+0J++A2tEH6Igntp4Dxoz7jGMTvQzD9usmAybTvkZ9z
-         a4ueXzqKMuiSPtf7PH3PaFfYdmK/KGpw153cV1uvPkCnQRYCuknxIWUev+3eEZBTH9ez
-         UW3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWVnmBV1cwW/dSatyjeLqfXeXbPZWYS6rwyBCwTN/RpVCUqCLEqETNaEV+J4WeNh3HrlhrwaCdXT38=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yya3qDwKKrG7ic0lvHfbwevyGgw0gLev+WRPUbvXJV/8H3/wqfN
-	QrXKmkRnRHqrY3+S2/8cd78Ok3Zw2v/bM0tm533mvQbuASk4lHE/X7G5SW0bYxU2cw==
-X-Gm-Gg: ATEYQzzfQwSuC8SkLnW/kIDj4JwlVPmPlyCH4jCOH4DegzOQorRyUqKvsDGorNZLOn6
-	kjH50yuyvhh1auetIgVcLwcQFd+Qu1bMUFqngPMH/unAgiqUL16Qfwz/TGd6HJG2rnd7tqOeht2
-	uLox8d/GZFAjCC5zlIASGO1RL+V8EnGc11IAe0cET6Gb6x9TdkcGZ3s6aSFf1g/LHcEKIp0Y9U/
-	nIyrIytYdmAkCm1EBaIJnrQ06nevzYfejP1VoSFPK6qayOiHW0V43Y4Du0dI7YFaVdnPoxp7Hqi
-	9q000fvBfWJBkiNpHi1mFRF+wN5e5wKvocMKSEvdQD5upip1IjklyE6Ff6P71Qd47jpRILnPsCa
-	XF2Jkf1LXFFFqL+fa116KVI9yp9gSROogfjiDJtw3WYRlgKVQMyciNwveuxJ0ZN5Se+Q7cPdOAQ
-	uMRvy+frSgCMGHcrsz+U/3TllR
-X-Received: by 2002:a05:620a:580f:b0:8cd:75a9:eab9 with SMTP id af79cd13be357-8cd75a9ec10mr410940685a.14.1772923979416;
-        Sat, 07 Mar 2026 14:52:59 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::687c])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cd7e857037sm90933585a.20.2026.03.07.14.52.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Mar 2026 14:52:57 -0800 (PST)
-Date: Sat, 7 Mar 2026 17:52:54 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Liam Mitchell <mitchell.liam@gmail.com>
-Cc: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
-	Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usbhid: tolerate intermittent errors
-Message-ID: <6cbc6c70-8252-43d0-8701-e1613ddc769f@rowland.harvard.edu>
-References: <20260307-usbhid-eproto-v2-1-e5a8abce4652@gmail.com>
+        d=1e100.net; s=20230601; t=1772943146; x=1773547946;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zA1wgT+unS1d+T7tI8dP5Kbt/EPIFkFNGoMj1Twx1A8=;
+        b=WeGKgN9LuFxXIEoogOFzjGOqA/GN/tQeddla96RVARm97F81ksqvmtQoTSgUpAzWXO
+         Dq4MgDgut0SfKwKK72ke9kD9TuSlKxpOTruH7z+pgyn+ZlVDjeIKRhJW2BIH7NcmmkMA
+         EEX6nbYLp7GEDyHbbRwEcZ3FYYRAbke0ptDaOYrgx/gPpIrw9kXvP9yZM8jKAZOmxyJx
+         J3SOCJ4K0jiU27rQsZNxiuTkFBsoZ5HVbktsmX+uHtJjTLl6Z35Jha6MbhKyhu2osiEX
+         Gh32WtrYVYWbuXiPs7j66FhCHRwyseMcVcvqYWuzoyVf/HdNc8Jcz0CeL9zxCNJ70Jus
+         gTNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVIvomWY5A6cG7aEZSKBO0QrIgGxYwgJKjKeuZJokf/8NmkrEZvyud4te8bn3Vape8UQB/554wY7k4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy33MEGwc7exA3llc0xGZycQ5S9EtAFaclx07DaeTUeEso3tMh4
+	AyhrBKgz+WLmCkbZsfEXGls3AHt0+zDkKh8XkhhrkzUsPy8kfvgKw9ImvMz2nyy+wlYb81PX3pp
+	SPLPGiaTFprSIZYfeO1QcGDW5T3Lgl3tSBJvxGsfNUwSkvVNXcxnAHwkhkLo=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260307-usbhid-eproto-v2-1-e5a8abce4652@gmail.com>
-X-Rspamd-Queue-Id: 4E6E522DEEB
+X-Received: by 2002:a05:6820:4b92:b0:679:975b:f227 with SMTP id
+ 006d021491bc7-67b9bd2e167mr4624023eaf.42.1772943146303; Sat, 07 Mar 2026
+ 20:12:26 -0800 (PST)
+Date: Sat, 07 Mar 2026 20:12:26 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69acf72a.050a0220.310d8.0004.GAE@google.com>
+Subject: [syzbot] [sound?] general protection fault in snd_scarlett2_init
+From: syzbot <syzbot+ae893a8901067fde2741@syzkaller.appspotmail.com>
+To: g@b4.vu, linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-usb@vger.kernel.org, perex@perex.cz, syzkaller-bugs@googlegroups.com, 
+	tiwai@suse.com
+Content-Type: text/plain; charset="UTF-8"
+X-Rspamd-Queue-Id: 3FAEF22E73F
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=f1500201919951cc];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34191-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.939];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-34192-lists,linux-usb=lfdr.de,ae893a8901067fde2741];
+	SUBJECT_HAS_QUESTION(0.00)[];
+	REDIRECTOR_URL(0.00)[goo.gl];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,rowland.harvard.edu:dkim,rowland.harvard.edu:mid]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.949];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[googlegroups.com:email,storage.googleapis.com:url,syzkaller.appspot.com:url,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Sat, Mar 07, 2026 at 07:57:09PM +0100, Liam Mitchell wrote:
-> Modifies usbhid error handling to tolerate intermittent protocol
-> errors, avoiding URB resubmission delay and device reset.
-> 
-> ---
-> Protocol errors like EPROTO can occur randomly, sometimes frequently and are often not fixed by a device reset.
-> 
-> The current error handling will only resubmit the URB after at least 13ms delay and may reset the USB device if another error occurs 1-1.5s later, regardless of error type or count.
-> 
-> These delays and device resets increase the chance that input events will be missed and that users see symptoms like missed or sticky keyboard keys.
-> 
-> This patch allows one protocol error per 500ms to be tolerated and have the URB re-submitted immediately.
-> 
-> 500ms was chosen to be well above the error rate of a malfunctioning
-> device but low enough to be useful for users with devices noisier than
-> mine.
-> 
-> Signed-off-by: Liam Mitchell <mitchell.liam@gmail.com>
-> Link: https://lore.kernel.org/linux-input/CAOQ1CL6Q+4GNy=kgisLzs0UBXFT3b02PG8t-0rPuW-Wf6NhQ6g@mail.gmail.com/
-> ---
+Hello,
 
-Liam, take a look at
+syzbot found the following issue on:
 
-	https://bugzilla.kernel.org/show_bug.cgi?id=221184
+HEAD commit:    bb375c251ab4 dt-bindings: usb: st,st-ohci-300x: convert to..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=138f1b5a580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f1500201919951cc
+dashboard link: https://syzkaller.appspot.com/bug?extid=ae893a8901067fde2741
+compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14ffb006580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12ebbb5a580000
 
-On Roman's system, these protocol errors occur fairly regularly, 
-apparently caused by high system load.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2475c3172471/disk-bb375c25.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/30449aa672dd/vmlinux-bb375c25.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/46d3937d1c16/bzImage-bb375c25.xz
 
-Do you think a better approach might be to reduce the 13-ms delay to 
-just 1 or 2 ms, and perform a reset only there has been no successful 
-communication for about one second?  This might perhaps be _too_ lenient 
-sometimes, but I don't think such situations will arise in practice.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ae893a8901067fde2741@syzkaller.appspotmail.com
 
-The reason for having at least a small delay is to avoid getting into a 
-tight resubmit/error loop in cases where the device has been unplugged.
+usb 4-1: 0:6 : does not exist
+usb 4-1: 0:7 : does not exist
+usb 4-1: 0:8 : does not exist
+usb 4-1: 0:9 : does not exist
+usb 4-1: 0:10 : does not exist
+usb 4-1: Focusrite Scarlett Gen 3 Mixer Driver enabled (pid=0x8215); report any issues to https://github.com/geoffreybennett/scarlett-gen2/issues
+Oops: general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 1 UID: 0 PID: 28 Comm: kworker/1:1 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_endpoint_num include/uapi/linux/usb/ch9.h:479 [inline]
+RIP: 0010:scarlett2_find_fc_interface sound/usb/mixer_scarlett2.c:8261 [inline]
+RIP: 0010:scarlett2_init_private sound/usb/mixer_scarlett2.c:8295 [inline]
+RIP: 0010:snd_scarlett2_controls_create sound/usb/mixer_scarlett2.c:8684 [inline]
+RIP: 0010:snd_scarlett2_init.cold+0xbad/0x6c79 sound/usb/mixer_scarlett2.c:9407
+Code: 84 c0 74 06 0f 8e ca 0b 00 00 48 8b 44 24 20 48 8d 7b 02 48 89 fa 40 88 a8 48 02 00 00 b8 ff ff 37 00 48 c1 ea 03 48 c1 e0 2a <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 9e 0b 00 00
+RSP: 0018:ffffc900001e68d8 EFLAGS: 00010286
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffffff81543c4b
+RDX: 0000000000000000 RSI: ffffffff81543c5d RDI: 0000000000000002
+RBP: 0000000000000001 R08: 0000000000000001 R09: 00000000000000ff
+R10: 00000000000000ff R11: 0000000000000000 R12: ffff88811dd24804
+R13: dffffc0000000000 R14: ffff88811dd248a8 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff8882687d3000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000558c34efbe88 CR3: 00000000094ae000 CR4: 00000000003506f0
+Call Trace:
+ <TASK>
+ snd_usb_mixer_apply_create_quirk+0x1c21/0x2b80 sound/usb/mixer_quirks.c:4446
+ snd_usb_create_mixer+0x7a2/0x1910 sound/usb/mixer.c:3641
+ usb_audio_probe+0xf6d/0x3a90 sound/usb/card.c:1033
+ usb_probe_interface+0x303/0x8f0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:583 [inline]
+ really_probe+0x241/0xa60 drivers/base/dd.c:661
+ __driver_probe_device+0x1de/0x400 drivers/base/dd.c:803
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:833
+ __device_attach_driver+0x1ff/0x3e0 drivers/base/dd.c:961
+ bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:500
+ __device_attach+0x1e4/0x4d0 drivers/base/dd.c:1033
+ device_initial_probe+0xaf/0xd0 drivers/base/dd.c:1088
+ bus_probe_device+0x64/0x160 drivers/base/bus.c:574
+ device_add+0x11d9/0x1950 drivers/base/core.c:3689
+ usb_set_configuration+0xd97/0x1c60 drivers/usb/core/message.c:2208
+ usb_generic_driver_probe+0xa1/0xe0 drivers/usb/core/generic.c:250
+ usb_probe_device+0xef/0x400 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:583 [inline]
+ really_probe+0x241/0xa60 drivers/base/dd.c:661
+ __driver_probe_device+0x1de/0x400 drivers/base/dd.c:803
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:833
+ __device_attach_driver+0x1ff/0x3e0 drivers/base/dd.c:961
+ bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:500
+ __device_attach+0x1e4/0x4d0 drivers/base/dd.c:1033
+ device_initial_probe+0xaf/0xd0 drivers/base/dd.c:1088
+ bus_probe_device+0x64/0x160 drivers/base/bus.c:574
+ device_add+0x11d9/0x1950 drivers/base/core.c:3689
+ usb_new_device.cold+0x685/0x115c drivers/usb/core/hub.c:2695
+ hub_port_connect drivers/usb/core/hub.c:5567 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
+ port_event drivers/usb/core/hub.c:5871 [inline]
+ hub_event+0x314d/0x4af0 drivers/usb/core/hub.c:5953
+ process_one_work+0x9d7/0x1920 kernel/workqueue.c:3275
+ process_scheduled_works kernel/workqueue.c:3358 [inline]
+ worker_thread+0x5da/0xe40 kernel/workqueue.c:3439
+ kthread+0x370/0x450 kernel/kthread.c:467
+ ret_from_fork+0x6c3/0xcb0 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:usb_endpoint_num include/uapi/linux/usb/ch9.h:479 [inline]
+RIP: 0010:scarlett2_find_fc_interface sound/usb/mixer_scarlett2.c:8261 [inline]
+RIP: 0010:scarlett2_init_private sound/usb/mixer_scarlett2.c:8295 [inline]
+RIP: 0010:snd_scarlett2_controls_create sound/usb/mixer_scarlett2.c:8684 [inline]
+RIP: 0010:snd_scarlett2_init.cold+0xbad/0x6c79 sound/usb/mixer_scarlett2.c:9407
+Code: 84 c0 74 06 0f 8e ca 0b 00 00 48 8b 44 24 20 48 8d 7b 02 48 89 fa 40 88 a8 48 02 00 00 b8 ff ff 37 00 48 c1 ea 03 48 c1 e0 2a <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 9e 0b 00 00
+RSP: 0018:ffffc900001e68d8 EFLAGS: 00010286
 
-Alan Stern
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffffff81543c4b
+RDX: 0000000000000000 RSI: ffffffff81543c5d RDI: 0000000000000002
+RBP: 0000000000000001 R08: 0000000000000001 R09: 00000000000000ff
+R10: 00000000000000ff R11: 0000000000000000 R12: ffff88811dd24804
+R13: dffffc0000000000 R14: ffff88811dd248a8 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff8882687d3000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4cb1355900 CR3: 00000001175e2000 CR4: 00000000003506f0
+----------------
+Code disassembly (best guess):
+   0:	84 c0                	test   %al,%al
+   2:	74 06                	je     0xa
+   4:	0f 8e ca 0b 00 00    	jle    0xbd4
+   a:	48 8b 44 24 20       	mov    0x20(%rsp),%rax
+   f:	48 8d 7b 02          	lea    0x2(%rbx),%rdi
+  13:	48 89 fa             	mov    %rdi,%rdx
+  16:	40 88 a8 48 02 00 00 	mov    %bpl,0x248(%rax)
+  1d:	b8 ff ff 37 00       	mov    $0x37ffff,%eax
+  22:	48 c1 ea 03          	shr    $0x3,%rdx
+  26:	48 c1 e0 2a          	shl    $0x2a,%rax
+* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2e:	48 89 fa             	mov    %rdi,%rdx
+  31:	83 e2 07             	and    $0x7,%edx
+  34:	38 d0                	cmp    %dl,%al
+  36:	7f 08                	jg     0x40
+  38:	84 c0                	test   %al,%al
+  3a:	0f 85 9e 0b 00 00    	jne    0xbde
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
