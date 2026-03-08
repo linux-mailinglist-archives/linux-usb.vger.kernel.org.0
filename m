@@ -1,150 +1,118 @@
-Return-Path: <linux-usb+bounces-34240-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34241-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cEslKTq4rWkZ6gEAu9opvQ
-	(envelope-from <linux-usb+bounces-34240-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 18:56:10 +0100
+	id GEieKd3CrWmf7AEAu9opvQ
+	(envelope-from <linux-usb+bounces-34241-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 19:41:33 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 174562317D8
-	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 18:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 09CEA231BF0
+	for <lists+linux-usb@lfdr.de>; Sun, 08 Mar 2026 19:41:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 59525300EFAD
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2026 17:56:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 79D30303466B
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2026 18:41:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D06EB385522;
-	Sun,  8 Mar 2026 17:56:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I+kC/dI/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93AAB395D8D;
+	Sun,  8 Mar 2026 18:41:02 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6039233D4FF
-	for <linux-usb@vger.kernel.org>; Sun,  8 Mar 2026 17:56:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 020F930AACB;
+	Sun,  8 Mar 2026 18:41:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772992565; cv=none; b=TTn9+5cIv6l0/ZNaQTlADqpIi5dYkQMR3R0tppu90bFUTOb6EXk7rnvhCiIwe+0KnZ8GD8Or12iNtyjcPp8iQH2WQB0Ni3YauRzEBJqEx8TpjKpfjplqf2MkuJyxTY5O/sDIxd6YAIZOTh3cgSmbjerAuLOicBvtqcPmms4Fyow=
+	t=1772995262; cv=none; b=HYnBGHKS+lQ4Nh1imHQlJD0ZZ6nx3OnRYkifMyfD3LyWy/2vuH7dTVlL1tmbn0I889Cx3KIR+SMi34MbXng+Cl8J2XkvTrS870cBS8XIfduMKsAmJwffxSVkbhA8U9cvQpIpo/ZyhzlS32ZJfcl48GowB2TYibn6wy5BlCm9kkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772992565; c=relaxed/simple;
-	bh=Tazz66W0uB8xKME9ef/M9auzneenawq7+FcolqGIgt4=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=sGRQOxUZkDVLKQVk0xBBQa7lAH0nRYQSxkSyzj0vZ0UaBykdflMNba7qoOeJ6ngRJ1ronKYBalqlN9WjWHfOWfXMQx1tJaY7frNipICAz9ADDrJCaofrfpI80bXQiiSg8R6kYavWqRwtefBRl1RDP7Cq91BvwARFCIXMBGRgWWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I+kC/dI/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 26736C2BCB2
-	for <linux-usb@vger.kernel.org>; Sun,  8 Mar 2026 17:56:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772992565;
-	bh=Tazz66W0uB8xKME9ef/M9auzneenawq7+FcolqGIgt4=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=I+kC/dI/qfhZS6xE3gcXXb8XBdFTpiZzQ+4pPFZvZfSbNthGLRhCWzoy4wI6V/NVQ
-	 nplUARbOoAgiJicTxG/PLIDWM0aYuS7NUSg5nKMX8z8G9UXENUGgcRgfHA9IyJpnNY
-	 v6aMQZNWE3fOw8hA7WckcuLxxML9fpzf8pvRGLWPOKQBi2nlqnvImrOyRuIjAAN3+k
-	 +mU3EG3gWmHoo9/9ToZ7Uls8TRrliov7xLq3xdBCZRpTa5rbUZaFQRpw3R0NmpP3Hm
-	 5u5JKK4TkXN1mfqmwMgB68uKMNNQ2norMT10f5ZadSlKf4VCxisWhACYdJ+RTocX1Q
-	 Z8nweoTEy0d8Q==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 1DCFBC4160E; Sun,  8 Mar 2026 17:56:05 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 221103] xhci_hcd: System lockup under CPU load during usbfs
- polling of USB devices on AMD platforms
-Date: Sun, 08 Mar 2026 17:56:04 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: gtschemer@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-221103-208809-3bzU6WSGwQ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221103-208809@https.bugzilla.kernel.org/>
-References: <bug-221103-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
+	s=arc-20240116; t=1772995262; c=relaxed/simple;
+	bh=ZclR3MgADbuk8gJW1YDMUHbgzO8DIPC3p7HfmBQ2uv0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PgxHPiKsBanMGjkCgr5ygkGLjCp6Ccvt7qyGpv7IBnYvGZAydaT6kuIz5cs+WzxC1FNshwdEcU88HPRZB1R4ovx66h+q2jpDAdCJCV2zS5lYBmXOTD9Kd6yiIxts/MJQB3DUQO/ixxGLK+jbtSnIvtr43TAv3TTnZu3hnYmE/OU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com; spf=pass smtp.mailfrom=perches.com; arc=none smtp.client-ip=216.40.44.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perches.com
+Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id D43C38CD9E;
+	Sun,  8 Mar 2026 18:40:51 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf19.hostedemail.com (Postfix) with ESMTPA id 6CBA920025;
+	Sun,  8 Mar 2026 18:40:45 +0000 (UTC)
+Message-ID: <ca170cbaf2f8bcbc89bbda68914d8e0d7640f0e7.camel@perches.com>
+Subject: Re: [PATCH v2 phy-next 24/24] MAINTAINERS: add regexes for linux-phy
+From: Joe Perches <joe@perches.com>
+To: vladimir.oltean@nxp.com, linux-phy@lists.infradead.org
+Cc: Vinod Koul <vkoul@kernel.org>, Neil Armstrong
+ <neil.armstrong@linaro.org>, 	dri-devel@lists.freedesktop.org,
+ freedreno@lists.freedesktop.org, 	linux-arm-kernel@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, 	linux-can@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev, 
+	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, 	spacemit@lists.linux.dev,
+ UNGLinuxDriver@microchip.com
+Date: Sun, 08 Mar 2026 11:40:44 -0700
+In-Reply-To: <20260308114009.2546587-25-vladimir.oltean@nxp.com>
+References: <20260308114009.2546587-1-vladimir.oltean@nxp.com>
+	 <20260308114009.2546587-25-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset="ISO-8859-1"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 174562317D8
+X-Stat-Signature: mibobo4wkbramau4qyjthmehkiqudojz
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/1oqpGv8s8V8RuGZRFC80nZh9ljOj3ohI=
+X-HE-Tag: 1772995245-174125
+X-HE-Meta: U2FsdGVkX1+4XRzz60ugpVFQWsQctyjPh9D8dWNkk9O80wKikqTLI//fEpSwY7VKkjTAQqCbvy/bDztttYzuNBQP3PDd6DE18CINvDdnHew5cXtwNDDJn4KiBH3EXroYIs/0V5C/aytRQmLMTGCZZlkmVqa0mog1lMlvYoTUOPxP3MIGj9+OItuBdGt7SwG+E1NN8A/Yc9Sq4U8TJPe/XcW25BuE6rH2bXBjLakvy2b4imYLaL6YRBqKlFvDSAukFbzkOlERn3vJJPcvYBJiMotKjWx2PYK5v4pDPHYsRlN9R//2k7hsjvl6B3t7ELpdAjuD6CN+C7OKO7KQLV3bHimDBNhwcxGB9M1yVBNLk9v9/I7LPCcJRUT7SR2W+eai
+X-Rspamd-Queue-Id: 09CEA231BF0
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34240-lists,linux-usb=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34241-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FROM_NO_DN(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[perches.com];
+	RCPT_COUNT_TWELVE(0.00)[24];
+	MIME_TRACE(0.00)[0:+];
+	NEURAL_SPAM(0.00)[0.421];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[joe@perches.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_DKIM_NA(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-0.991];
-	RCPT_COUNT_ONE(0.00)[1];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221103
+On Sun, 2026-03-08 at 13:40 +0200, vladimir.oltean@nxp.com wrote:
+> diff --git a/MAINTAINERS b/MAINTAINERS
+[]
+> @@ -10713,6 +10713,17 @@ F:	Documentation/devicetree/bindings/phy/
+> +K:	(?:linux/phy/phy\.h|phy-props\.h|phy-provider\.h)
 
-S. Davar (gtschemer@gmail.com) changed:
+phy-props.h and phy-provider.h don't seem to exist.
+Are these going to be added later?
+Maybe this should be phy-common-props.h ?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |gtschemer@gmail.com
+Perhaps if matching only the include uses:
+(/ is escaped because get_maintainer is stupid)
+something like:
 
---- Comment #25 from S. Davar (gtschemer@gmail.com) ---
-I have been supporting users on an atomic distribution, so no one has tried=
- the
-test patch.
-
-However, 4+ users who had this freeze behavior on ASUS motherboards with Ry=
-zen
-5 / 7 / 9 CPUs seem to have 100% success manually setting all the xHCI
-controllers to "on" instead of "auto".
-
-All of those users froze very quickly with the usb_poll test, and never fro=
-ze
-after changing the xHCI power control behavior.  Most have a B650M or simil=
-ar
-motherboard.
-
-
-Was anyone with the freeze able to try the test patch?  Also, are there any
-concerns that a small delay might still be unreliable, e.g. long enough in =
-some
-cases but not long enough in others?  Could it potentially cause a performa=
-nce
-hit in some cases, or is it expected to be called rarely enough that it doe=
-sn't
-matter?
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+K:	include\s*\<linux\/phy\/phy(?:-common-props|-provider)?\.h\>
 
