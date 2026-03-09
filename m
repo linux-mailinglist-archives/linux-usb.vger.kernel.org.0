@@ -1,226 +1,143 @@
-Return-Path: <linux-usb+bounces-34278-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34279-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6N8PKDKhrmm2GwIAu9opvQ
-	(envelope-from <linux-usb+bounces-34278-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 11:30:10 +0100
+	id aGd5EcqhrmkLHAIAu9opvQ
+	(envelope-from <linux-usb+bounces-34279-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 11:32:42 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 036D9237181
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 11:30:09 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5146237247
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 11:32:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 53D9A304DC9E
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 10:29:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D3D70305982C
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 10:31:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1677362129;
-	Mon,  9 Mar 2026 10:29:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6723A36404E;
+	Mon,  9 Mar 2026 10:31:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ZkbPnOen";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="FtdzbZSr";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="gwKx+tcU";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="krRm5Ibx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DpiizBu5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CFE339020F
-	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 10:29:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0D334EF09
+	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 10:31:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773052152; cv=none; b=BtGOBNAIYOkmtru+GEOhCk7Nz8x4Pzuwiau7jUoCoH2WS5xjTDTN9WuY6Gh6KcgW1ahfcxE7rK5uCtCxxNg+Ri7sFLPc46nix/TK6hfjvcEkbmYkLH7HDU2jgVa4GhChMq2OcSqmNPyyZjr4Sg8bSMv+mCxnouUhxj66m2zNjxk=
+	t=1773052263; cv=none; b=Cw0MuWwo1Ym987OrJ8rpepoxpuykXy5y+nBw+KD3apkdP2Dhy2yVkKOs2po/OoqxV/Co726sUX7PBV06LVU69gcekVrFJ5KIGHW76UPN0IykYc+QxDPCtdMqglg6VuKf6ad8hTRY5IItkOSH9NLCJKdNz5QYaa0kf0RBnSU4ehA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773052152; c=relaxed/simple;
-	bh=vP5GpcwPngThlYOaQcpEC4g8S9lFe6VEs63geMSLyUA=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B37RQcOHLxAzDbEdDRK4iFGrahpcK2Pwr1ess9b6985xpg5h+JzLCs4uO9Dk4CpWkIIYTSizEfU9BxZqPNiSTP48TVDutDkRwvD7lxtZoAWY+FDaoVJHd3f7qe5j/JEfk4vwQlaqtWKomnutZ2SCp67ZU810JSQAk8ZKBntvJ/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ZkbPnOen; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=FtdzbZSr; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=gwKx+tcU; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=krRm5Ibx; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id B1E845BD4B;
-	Mon,  9 Mar 2026 10:29:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773052148; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2DzZXy3VmQDvkmf0CzfUL4/qtJz72VEQ8P/Q5zsg9Tw=;
-	b=ZkbPnOenbnxI+eZlbULAD7ziVN0mooncRSnXPnwFKMncM3sw2JQxvQiKw1YeiBiSynMz9m
-	SNsBBJZc1KiYw4KtV4fynk1IqO6Z6wWYCd0/CPOJ1u94Yv+C55Rk1AC8YjaTgUPXS9GLKQ
-	gOkum24DVc/NK0Fc+S6SfWiVhzXoGwk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773052148;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2DzZXy3VmQDvkmf0CzfUL4/qtJz72VEQ8P/Q5zsg9Tw=;
-	b=FtdzbZSrEbKzalUevRzIiaLD337Z+15nLvIATSddYENZng5acd8cU8ovkO7a/Y26gTxKh4
-	RGVxen7+93lMmrBg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773052147; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2DzZXy3VmQDvkmf0CzfUL4/qtJz72VEQ8P/Q5zsg9Tw=;
-	b=gwKx+tcUdXY/0JtHIv2FMVi6dUOJCZS8RRkPDuo7tDJN2R0i5YqdxFzxAgYaPK5x35bWmF
-	F9R7jUWFXy9j3qxSuQvMW9JBrmgkTuqI28CEoTRRM5S4YWjfFyoReZn+olDuqSWuDOku0e
-	7x41FTlDCkqqIkG3gtl+kGU6HR/Vp3w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773052147;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2DzZXy3VmQDvkmf0CzfUL4/qtJz72VEQ8P/Q5zsg9Tw=;
-	b=krRm5IbxwWGPKIbW5VmZp9u5SLbCHJq1AQ1VsVAbACFdM/YMLiBM0lTyz7yQ+i25oI0/7Q
-	KNjrKXLAjM+HGiBw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 762353EE55;
-	Mon,  9 Mar 2026 10:29:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id bSu3G/OgrmlWPAAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Mon, 09 Mar 2026 10:29:07 +0000
-Date: Mon, 09 Mar 2026 11:29:07 +0100
-Message-ID: <87cy1dnvnw.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Edward Adam Davis <eadavis@qq.com>
-Cc: g@b4.vu,
-	linux-kernel@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	perex@perex.cz,
-	syzbot+ae893a8901067fde2741@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com,
-	tiwai@suse.com
-Subject: Re: [PATCH v2] ALSA: scarlett2: Add the number of endpoints checked was 0
-In-Reply-To: <87h5qpnwu5.wl-tiwai@suse.de>
-References: <87y0k1toaz.wl-tiwai@suse.de>
-	<tencent_986ED56EFECC99E7EF86D412F6064FC99906@qq.com>
-	<87h5qpnwu5.wl-tiwai@suse.de>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
+	s=arc-20240116; t=1773052263; c=relaxed/simple;
+	bh=tDwWyZJrqAc9CGLVm3aBcFqqW7pGbRTGAnRP4oaZ5fs=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=llcxQpRT0IYJPMLArUoOM3lCu7Bl/oKCSa3GiuItcZHuPpyO11/XqK/129UNu29tD2YU+Dburaq3H4/JrFsg6lNL9d0a+tvR2l/BpSV7gliTwDbMXyVFxH9xof4MkmpbxzbSj9Eh6GcHnUZMvbhsY83ftnMM6Olkm/2jcchXvvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DpiizBu5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9107EC2BCB1
+	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 10:31:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773052262;
+	bh=tDwWyZJrqAc9CGLVm3aBcFqqW7pGbRTGAnRP4oaZ5fs=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=DpiizBu5vNhocwcV4AhypGhykYkTfvOEG1ndFD31pu7GF9Pefgtm2kxbwvR2nB6Xo
+	 tdd02KMsQG3cnNKTqRKaztBWQHDICEfFkFVxZioxbAr9oJKvUt0+HLx+zY0vIb6Dnr
+	 2aB1kr9GvdNQTO1l3HIY882Hlf7lMeguTJCFxoDCIDDoeMXuZG/DQ/nqSAgcOq6yVS
+	 fQhMYMobPKtLnsVIhCuN2h+tNAHgRDBgG5vcKJSMYny5psEOTPt3yXnLoBrkNGu82P
+	 agXB/fflCs45Ovx3c+tYc9R1VewQ7t7pDQpPJR8W5dSLJbQ+X1bQBDWE69LX0hUN/+
+	 9+9Y+fUN2cjmQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 89B6AC3279F; Mon,  9 Mar 2026 10:31:02 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 221073] xHCI host controller dies on resume from s2idle on AMD
+ Strix Halo [1022:1587]
+Date: Mon, 09 Mar 2026 10:31:02 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Status: NEEDINFO
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-221073-208809-zri3Lu2qNX@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-221073-208809@https.bugzilla.kernel.org/>
+References: <bug-221073-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Score: -1.80
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 036D9237181
+MIME-Version: 1.0
+X-Rspamd-Queue-Id: A5146237247
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34278-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[qq.com];
+	TAGGED_FROM(0.00)[bounces-34279-lists,linux-usb=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tiwai@suse.de,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.968];
-	TAGGED_RCPT(0.00)[linux-usb,ae893a8901067fde2741];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid,syzkaller.appspot.com:url,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,qq.com:email,appspotmail.com:email]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NO_DN(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-0.989];
+	RCPT_COUNT_ONE(0.00)[1];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Mon, 09 Mar 2026 11:03:46 +0100,
-Takashi Iwai wrote:
-> 
-> On Mon, 09 Mar 2026 10:57:03 +0100,
-> Edward Adam Davis wrote:
-> > 
-> > The user constructed a corrupted USB device, causing the USB device
-> > enumeration phase to fail to resolve any endpoints. This resulted in
-> > a null pointer dereference reported in [1] when the USB sound card
-> > driver executed probe to initialize the mixer. 
-> > 
-> > To avoid the problem reported in [1], a check was added to ensure that
-> > the number of endpoints contained in the interface was 0 when creating
-> > mixer controls for the Focusrite Scarlett 2nd/3rd Gen USB sound card.
-> > 
-> > [1]
-> > KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-> > RIP: 0010:usb_endpoint_num include/uapi/linux/usb/ch9.h:479 [inline]
-> > RIP: 0010:scarlett2_find_fc_interface sound/usb/mixer_scarlett2.c:8261 [inline]
-> > RIP: 0010:scarlett2_init_private sound/usb/mixer_scarlett2.c:8295 [inline]
-> > RIP: 0010:snd_scarlett2_controls_create sound/usb/mixer_scarlett2.c:8684 [inline]
-> > RIP: 0010:snd_scarlett2_init.cold+0xbad/0x6c79 sound/usb/mixer_scarlett2.c:9407
-> > Call Trace:
-> >  snd_usb_mixer_apply_create_quirk+0x1c21/0x2b80 sound/usb/mixer_quirks.c:4446
-> >  snd_usb_create_mixer+0x7a2/0x1910 sound/usb/mixer.c:3641
-> >  usb_audio_probe+0xf6d/0x3a90 sound/usb/card.c:1033
-> > 
-> > Reported-by: syzbot+ae893a8901067fde2741@syzkaller.appspotmail.com
-> > Closes: https://syzkaller.appspot.com/bug?extid=ae893a8901067fde2741 
-> > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
-> > ---
-> > v1 -> v2: move the check to scarlett2
-> > 
-> >  sound/usb/mixer_scarlett2.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> > 
-> > diff --git a/sound/usb/mixer_scarlett2.c b/sound/usb/mixer_scarlett2.c
-> > index ef3150581eab..4b300226f16c 100644
-> > --- a/sound/usb/mixer_scarlett2.c
-> > +++ b/sound/usb/mixer_scarlett2.c
-> > @@ -9393,6 +9393,15 @@ int snd_scarlett2_init(struct usb_mixer_interface *mixer)
-> >  		return 0;
-> >  	}
-> >  
-> > +	if (get_iface_desc(mixer->hostif)->bNumEndpoints == 0) {
-> > +		usb_audio_err(chip,
-> > +			"%s: There are no endpoints for %04x:%04x\n",
-> > +			__func__,
-> > +			USB_ID_VENDOR(chip->usb_id),
-> > +			USB_ID_PRODUCT(chip->usb_id));
-> > +		return 0;
-> 
-> This should be an error.  It's obviously a broken descriptor, and this
-> is the code specific to the certain configuration.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221073
 
-... and that check alone doesn't cover all cases, I'm afraid.  The
-scarlett2 driver code parses over multiple interfaces.
+--- Comment #34 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+Created attachment 309583
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D309583&action=3Dedit
+debug suspend/resume
 
-I guess rather a patch like below should cover better.
+There are some error flags set on DevSta and changes to MSI capabilities of
+other functions on c4:00 device, but IDK if it means anything. Though it wo=
+uld
+be suspicious if those changes only occur during problematic resumes.
 
+Mathias suggested that CMD_INTE may be getting cleared inadvertently. I don=
+'t
+see how it could happen, but just in case here's patch which logs xHCI
+registers relevant to interrupts during suspend, resume and on command time=
+out.
 
-thanks,
+It also checks for pending commands on suspend (shouldn't happen, but who
+knows) and explicitly disables and reenables IRQ generation at xHCI layer. I
+gave it a quick test and it seems to be OK, but you could also try without
+those two blocks which manipulate CMD_EIE in xhci->op_regs->command.
 
-Takashi
+I also tried removing only the part which enables interrupts on resume and =
+got
+a failure similar to yours, as expected.
 
---- a/sound/usb/mixer_scarlett2.c
-+++ b/sound/usb/mixer_scarlett2.c
-@@ -8251,6 +8251,8 @@ static int scarlett2_find_fc_interface(struct usb_device *dev,
- 
- 		if (desc->bInterfaceClass != 255)
- 			continue;
-+		if (desc->bNumEndpoints < 1)
-+			continue;
- 
- 		epd = get_endpoint(intf->altsetting, 0);
- 		private->bInterfaceNumber = desc->bInterfaceNumber;
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
