@@ -1,154 +1,224 @@
-Return-Path: <linux-usb+bounces-34308-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34309-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iGabERvarmmKJQIAu9opvQ
-	(envelope-from <linux-usb+bounces-34308-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 15:32:59 +0100
+	id IBf+Lr/frmmoJgIAu9opvQ
+	(envelope-from <linux-usb+bounces-34309-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 15:57:03 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C850D23A909
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 15:32:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2391223B146
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 15:57:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CE7BD307AA06
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 14:29:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9A631304077F
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 14:55:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09D023D301D;
-	Mon,  9 Mar 2026 14:29:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD3F63D648A;
+	Mon,  9 Mar 2026 14:55:04 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21D733B893E;
-	Mon,  9 Mar 2026 14:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A263D34B2
+	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 14:55:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773066551; cv=none; b=nfmFJabHZICUEuF0l8RJZdV5X3aZrVSLXQjWi7yWShEhAcH453gocIciB//dQIKH7EtdHD0s+Hr/DTFEUOgdKTBo5Plj4E0Q410IjwgCUN3H1WtIEOkn+1Fsmy9UaR0K8UOdLdpZUd2U4vkipE/ymHxt4szX4LtvLo1zQaHmkNo=
+	t=1773068104; cv=none; b=WXgJQDoBch/gjGJQZ9nwexewENlR1NK/4jW+Sn+2k6R02rgpjHLY2gFxzByxkK+P17wrVQ4wTQ+9u8RDT88/jB4bwJaMUANbpSA+F0XgIDGjVQrqOo9dahGYlWdS5/33KQi0uJNJDnOQ0YiuHFCoHpZypQjC3Z7pIzp9US3OAMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773066551; c=relaxed/simple;
-	bh=gEkXNg6CdBbBCtNDi4rMq0WdvbKKOUxETo8K6bNi5VM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=q3xEQkgJr+BebyNrN4ZZ17mckYmO8TtAcxc7vM772XjSgi8fPsMtHsftxK9IhUcPcjNBS7OngqW3q0cgc2e0PXGhrG9UD4dkwxrqO6JlI5BlWmzYJNpge9YVTeetsdWj3GFyYho1+SXfipPkjynh4sEfnXyRnIrLn15ts2w/gjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=207.46.229.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.98.66.117])
-	by mtasvr (Coremail) with SMTP id _____wA3LGcn2a5pqPYiAQ--.44858S3;
-	Mon, 09 Mar 2026 22:28:56 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.98.66.117])
-	by mail-app1 (Coremail) with SMTP id yy_KCgDXUNom2a5pS_CMBg--.53191S2;
-	Mon, 09 Mar 2026 22:28:54 +0800 (CST)
-From: Fan Wu <fanwu01@zju.edu.cn>
-To: Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Fan Wu <fanwu01@zju.edu.cn>
-Subject: [PATCH] USB: serial: opticon: fix UAF in write callback during port removal
-Date: Mon,  9 Mar 2026 14:27:57 +0000
-Message-Id: <20260309142757.589802-1-fanwu01@zju.edu.cn>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1773068104; c=relaxed/simple;
+	bh=WCsSkQZ7J5MihV9wnmZ3L7wGLXb3UllWGXh1c9gEvGA=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=ivAs7gCzGIiejhEjvZfnVqGSemle0k8eu5ByvV6jTBrcVleotc3OBf9ddKI8VtpdYpJm+D1ALGweZLlD+QfDQDvF3sJujuEAtpdoYqjv3MX/2rjmoBV9AYdGHh1eoNjOcT9JsQdJdOR7nbaJRyVmRrdvFWPLmTEik8oWnfWjfC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-67bb43260a2so10287504eaf.3
+        for <linux-usb@vger.kernel.org>; Mon, 09 Mar 2026 07:55:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773068102; x=1773672902;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7LRF7kHjuijXcRNK8QQ3FqtWpzqp8sTLS+LWZM9q8u0=;
+        b=kYPjbBgTFnVrp1x3m4IozGtr7wALEVqvx8nBVmXdW50WaGx0h0urpbezrobUMT94Qd
+         00vb6Z4TtlVwIqwUBMVNmAVoBnaAYAco1pialwVgQyUarbgY6oDuNva3H3RzHeTHflId
+         IfBAQzWukZxF24DWtYTmeVfZhjl9ahD+M0fX++vFxhaqqOjlXX0ORVN5tqljFFEX6v/e
+         TbRoG8Tuz+eKmTxFtRL+b5iM3iED84yoxJBemQHP/qUVn62ySlSF8pvpbJlVp4aDG/2j
+         XZrEB9PHzOipQQdlBlQDREFCSknZLQrY5kYbPldt5rmtceItFflhKIagXKT/fjLwXhjF
+         pQBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWk+wy+tPehW/5kF0AW3Q8YMPL9QINzX6Hui4oDsqBaG+p57C5ulHnP8pwnyMtCyVIHC/nB123n5G0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUfAPE4Zrl0ED54DguUvvh7UqXlrdIFWAqfGBcUmzm8Y4/jOHG
+	7wUYLgN607PgitvG9AVlnKNTQ769A52Xi57xGC2QivVzvaBIBiOZu9VRqzTZHxKSq8g5T1xwIak
+	THyV9zL4SHWsXWPwkjvCCcUzvOl5eiEEw+mi7cOGyqfjeLxTS4dPIJh5BTI4=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:yy_KCgDXUNom2a5pS_CMBg--.53191S2
-X-CM-SenderInfo: qrstjiaswqq6lmxovvfxof0/
-X-CM-DELIVERINFO: =?B?nQ48iQXKKxbFmtjJiESix3B1w3vZ3A9ovKVTomAyoQazvoRs/NHSP8GI2EvgeEEW7R
-	sfnTvtdAQ+gzDzcUufjJMvYC0gZ/v+e8PQo0P2J8rX3FFi7CN96yV0USBkG2sgPwU49zsO
-	4gkRxQ3sT2+7yyLW/V6p9E6mavGmQbzmcFsnzP86
-X-Coremail-Antispam: 1Uk129KBj93XoW7CFyrXr4rAFW5ur1xGFyrXwc_yoW8Ar1fpa
-	yakFW3GF10qr13Xr1DJF1DXFyUWw4UJFy2gF92grWrXr1ava18Ja4IywnYyryxJF9rtrZI
-	934qv3yrGFy5trbCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Gb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc804V
-	CY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AK
-	xVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48Icx
-	kI7VAKI48JM4x0Y48IcxkI7VAKI48G6xCjnVAKz4kxMxAIw28IcxkI7VAKI48JMxC20s02
-	6xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_Jr
-	I_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v2
-	6r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj4
-	0_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8
-	JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Tv3UUUUUU==
-X-Rspamd-Queue-Id: C850D23A909
+X-Received: by 2002:a05:6820:62a:b0:674:3230:ff11 with SMTP id
+ 006d021491bc7-67b9bd5b792mr7859646eaf.64.1773068102197; Mon, 09 Mar 2026
+ 07:55:02 -0700 (PDT)
+Date: Mon, 09 Mar 2026 07:55:02 -0700
+In-Reply-To: <e9d9d118-e6fc-42de-847d-e58eaf7bcba5@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69aedf46.050a0220.310d8.0027.GAE@google.com>
+Subject: Re: [syzbot] [usb?] general protection fault in usb_gadget_udc_reset (4)
+From: syzbot <syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Rspamd-Queue-Id: 2391223B146
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [-0.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	DMARC_NA(0.00)[zju.edu.cn];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34308-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	PRECEDENCE_BULK(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.631];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	FROM_NEQ_ENVFROM(0.00)[fanwu01@zju.edu.cn,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-34309-lists,linux-usb=lfdr.de,19bed92c97bee999e5db];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	SUBJECT_HAS_QUESTION(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,zju.edu.cn:mid,zju.edu.cn:email]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.900];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[syzkaller.appspot.com:url,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-The opticon driver anchors write URBs to priv->anchor in opticon_write()
-and frees priv in opticon_port_remove() without first killing these
-anchored URBs. The completion callback opticon_write_control_callback()
-may dereference priv via usb_get_serial_port_data() and access
-priv->lock, priv->outstanding_urbs, and priv->outstanding_bytes after
-it has been freed.
+Hello,
 
-If a write URB is in flight when the port is removed:
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+general protection fault in usb_gadget_udc_reset
 
-    CPU 0 (remove path)              CPU 1 (URB completion)
-    ---------------------            ---------------------
-    opticon_port_remove()
-      kfree(priv)  <--+
-                     |  --> opticon_write_control_callback()
-                     |        priv = usb_get_serial_port_data()
-                     |        spin_lock_irqsave(&priv->lock)
-                     |        --priv->outstanding_urbs  // possible UAF
-    return           |
-                     usb_free_urb()
+raw-gadget.0 gadget.1: Reset #2
+usb 2-1: device descriptor read/64, error -32
+gadget gadget.1: Reset #1, driver 0000000000000000
+Oops: general protection fault, probably for non-canonical address 0xdffffc0000000008: 0000 [#1] SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x0000000000000040-0x0000000000000047]
+CPU: 0 UID: 0 PID: 5814 Comm: kworker/0:3 Not tainted syzkaller #0 PREEMPT_{RT,(full)} 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_gadget_udc_reset+0x42/0x80 drivers/usb/gadget/udc/core.c:1201
+Code: 01 00 00 4c 89 f7 48 c7 c6 a0 d2 fb 8b 4c 89 fa e8 23 5b fd ff 49 83 c7 40 4c 89 f8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <80> 3c 08 00 74 08 4c 89 ff e8 f0 da fb 00 4d 8b 1f 48 89 df 2e 2e
+RSP: 0018:ffffc90004be64c0 EFLAGS: 00010202
+RAX: 0000000000000008 RBX: ffff888029e78c40 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffff8880348cba6c R08: 0000000000000000 R09: 0000000000000000
+R10: dffffc0000000000 R11: fffff5200097cc01 R12: ffff888029e78c40
+R13: 1ffff110053ee2a1 R14: ffff888029e78d58 R15: 0000000000000040
+FS:  0000000000000000(0000) GS:ffff88812633d000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f16fca6890f CR3: 000000003df2e000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ set_link_state+0x80b/0x1220 drivers/usb/gadget/udc/dummy_hcd.c:469
+ dummy_hub_control+0xa09/0x1a00 drivers/usb/gadget/udc/dummy_hcd.c:-1
+ rh_call_control drivers/usb/core/hcd.c:652 [inline]
+ rh_urb_enqueue drivers/usb/core/hcd.c:817 [inline]
+ usb_hcd_submit_urb+0xdbe/0x1b50 drivers/usb/core/hcd.c:1538
+ usb_start_wait_urb+0x12b/0x510 drivers/usb/core/message.c:59
+ usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
+ usb_control_msg+0x232/0x3e0 drivers/usb/core/message.c:154
+ set_port_feature drivers/usb/core/hub.c:466 [inline]
+ hub_port_reset+0x3c7/0x1820 drivers/usb/core/hub.c:3083
+ hub_port_init+0x299/0x28c0 drivers/usb/core/hub.c:4939
+ usb_reset_and_verify_device+0x105d/0x1af0 drivers/usb/core/hub.c:6215
+ usb_reset_device+0x551/0xb40 drivers/usb/core/hub.c:6410
+ sd_config+0x27f/0x15b0 drivers/media/usb/gspca/se401.c:221
+ gspca_dev_probe2+0x81e/0x1450 drivers/media/usb/gspca/gspca.c:1529
+ usb_probe_interface+0x668/0xc90 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x267/0xaf0 drivers/base/dd.c:661
+ __driver_probe_device+0x18c/0x320 drivers/base/dd.c:803
+ driver_probe_device+0x4f/0x240 drivers/base/dd.c:833
+ __device_attach_driver+0x2d4/0x4c0 drivers/base/dd.c:961
+ bus_for_each_drv+0x25b/0x2f0 drivers/base/bus.c:500
+ __device_attach+0x2c8/0x450 drivers/base/dd.c:1033
+ device_initial_probe+0xa1/0xd0 drivers/base/dd.c:1088
+ bus_probe_device+0x12d/0x220 drivers/base/bus.c:574
+ device_add+0x7b6/0xb80 drivers/base/core.c:3689
+ usb_set_configuration+0x1a87/0x2110 drivers/usb/core/message.c:2208
+ usb_generic_driver_probe+0x8d/0x150 drivers/usb/core/generic.c:250
+ usb_probe_device+0x1c4/0x3b0 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x267/0xaf0 drivers/base/dd.c:661
+ __driver_probe_device+0x18c/0x320 drivers/base/dd.c:803
+ driver_probe_device+0x4f/0x240 drivers/base/dd.c:833
+ __device_attach_driver+0x2d4/0x4c0 drivers/base/dd.c:961
+ bus_for_each_drv+0x25b/0x2f0 drivers/base/bus.c:500
+ __device_attach+0x2c8/0x450 drivers/base/dd.c:1033
+ device_initial_probe+0xa1/0xd0 drivers/base/dd.c:1088
+ bus_probe_device+0x12d/0x220 drivers/base/bus.c:574
+ device_add+0x7b6/0xb80 drivers/base/core.c:3689
+ usb_new_device+0x9f8/0x16e0 drivers/usb/core/hub.c:2695
+ hub_port_connect drivers/usb/core/hub.c:5567 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
+ port_event drivers/usb/core/hub.c:5871 [inline]
+ hub_event+0x2a49/0x4f60 drivers/usb/core/hub.c:5953
+ process_one_work kernel/workqueue.c:3275 [inline]
+ process_scheduled_works+0xb02/0x1830 kernel/workqueue.c:3358
+ worker_thread+0xa50/0xfc0 kernel/workqueue.c:3439
+ kthread+0x388/0x470 kernel/kthread.c:436
+ ret_from_fork+0x51e/0xb90 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:usb_gadget_udc_reset+0x42/0x80 drivers/usb/gadget/udc/core.c:1201
+Code: 01 00 00 4c 89 f7 48 c7 c6 a0 d2 fb 8b 4c 89 fa e8 23 5b fd ff 49 83 c7 40 4c 89 f8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <80> 3c 08 00 74 08 4c 89 ff e8 f0 da fb 00 4d 8b 1f 48 89 df 2e 2e
+RSP: 0018:ffffc90004be64c0 EFLAGS: 00010202
+RAX: 0000000000000008 RBX: ffff888029e78c40 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffff8880348cba6c R08: 0000000000000000 R09: 0000000000000000
+R10: dffffc0000000000 R11: fffff5200097cc01 R12: ffff888029e78c40
+R13: 1ffff110053ee2a1 R14: ffff888029e78d58 R15: 0000000000000040
+FS:  0000000000000000(0000) GS:ffff88812633d000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f16fca6890f CR3: 000000003df2e000 CR4: 00000000003526f0
+----------------
+Code disassembly (best guess):
+   0:	01 00                	add    %eax,(%rax)
+   2:	00 4c 89 f7          	add    %cl,-0x9(%rcx,%rcx,4)
+   6:	48 c7 c6 a0 d2 fb 8b 	mov    $0xffffffff8bfbd2a0,%rsi
+   d:	4c 89 fa             	mov    %r15,%rdx
+  10:	e8 23 5b fd ff       	call   0xfffd5b38
+  15:	49 83 c7 40          	add    $0x40,%r15
+  19:	4c 89 f8             	mov    %r15,%rax
+  1c:	48 c1 e8 03          	shr    $0x3,%rax
+  20:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
+  27:	fc ff df
+* 2a:	80 3c 08 00          	cmpb   $0x0,(%rax,%rcx,1) <-- trapping instruction
+  2e:	74 08                	je     0x38
+  30:	4c 89 ff             	mov    %r15,%rdi
+  33:	e8 f0 da fb 00       	call   0xfbdb28
+  38:	4d 8b 1f             	mov    (%r15),%r11
+  3b:	48 89 df             	mov    %rbx,%rdi
+  3e:	2e                   	cs
+  3f:	2e                   	cs
 
-Fix this by calling usb_kill_anchored_urbs(&priv->anchor) before
-kfree(priv) so that all in-flight URBs have finished before the private
-data is freed.
 
-Note that opticon_close() already correctly kills anchored URBs; this
-fix addresses the port_remove path which was overlooked.
+Tested on:
 
-Fixes: 648d4e16567e ("USB: serial: opticon: add write support")
-Signed-off-by: Fan Wu <fanwu01@zju.edu.cn>
----
- drivers/usb/serial/opticon.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/serial/opticon.c b/drivers/usb/serial/opticon.c
-index e2bed477ad57..80e332e14384 100644
---- a/drivers/usb/serial/opticon.c
-+++ b/drivers/usb/serial/opticon.c
-@@ -370,6 +370,7 @@ static void opticon_port_remove(struct usb_serial_port *port)
- {
- 	struct opticon_private *priv = usb_get_serial_port_data(port);
- 
-+	usb_kill_anchored_urbs(&priv->anchor);
- 	kfree(priv);
- }
- 
--- 
-2.34.1
+commit:         65169048 Merge tag 'spi-fix-v7.0-rc2' of git://git.ker..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=144e6016580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692
+dashboard link: https://syzkaller.appspot.com/bug?extid=19bed92c97bee999e5db
+compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=131c375a580000
 
 
