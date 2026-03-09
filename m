@@ -1,56 +1,56 @@
-Return-Path: <linux-usb+bounces-34319-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34320-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GC9BE+fxrmnZKgIAu9opvQ
-	(envelope-from <linux-usb+bounces-34319-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 17:14:31 +0100
+	id sCB/I0DzrmnZKgIAu9opvQ
+	(envelope-from <linux-usb+bounces-34320-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 17:20:16 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9856623C8D3
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 17:14:30 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0096823C9CD
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 17:20:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 184493053DC5
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 16:08:42 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 24660300901F
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 16:20:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F31F33CC9E6;
-	Mon,  9 Mar 2026 16:08:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A5C83E8C4C;
+	Mon,  9 Mar 2026 16:20:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vKbTLHnX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OVV4lxbB"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 816BC3BFE21
-	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 16:08:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC293E716F
+	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 16:20:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773072519; cv=none; b=PgBZH4K1lAXg2UEZ0w//qhV8hKOl2hUtUUI3eWzcGDnYFY4GTooqjbtRuRR2aWGAXJVHcT2rxlDjsJ5eLpTSVrV5rztXoBuM/h2Brj+XfGoZdvw518P4yVlm17u3+kLM09916G6/JwQ/qRiVw2JAXmOqDQs4U/j+drPrNNylUEY=
+	t=1773073203; cv=none; b=hsksBKMMgZMOHpYSMciSIl9RD0569GaOIEeZEI6A/iTxTTi7pATiale5VNp+aXc0Fdj191eypKSErFP9XI/Gf54MQdGdhX1aYC0o5Pq2sqjnDi5Nzma7+1zD3fYEkLiJwXREPS3q/vfQQVPhP16vC70HNUOB85qE289YkJvBcI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773072519; c=relaxed/simple;
-	bh=K/BM2/Gp+Dqs8xtTnizuLd4jsSem+mnjssqgGG2c41I=;
+	s=arc-20240116; t=1773073203; c=relaxed/simple;
+	bh=6LsjoSGHG+IZH+Mc2scDSatAsuCCFmJ5mTWT8JAPmJk=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=h9lZFXGaZCrkoyRphKCKn6HU60cmBNJHJW4g9E7nms2jtazSwk79tL65aBzDOABeWE+EhInGo3hujc5zq3ghwTMXxifAcqrSDgrjv7xv/m9CPsHeB4i4NHaUTslpRacEBm9gSW2C/DGB8duY6mLRkGilfnrp5bOxD+pOH5Er618=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vKbTLHnX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E0D8C4CEF7
-	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 16:08:39 +0000 (UTC)
+	 Content-Type:MIME-Version; b=uqy//PGFCTjKwfoFp1SZK5Kf/6C5fPyiOSP9hhJfvkRwEjebWDsZItxJszU9PSZYS7t4H6tiFvmu7oqactQBIGLAC0UNEjvB4Okt8IEF5wSZGHt6Dcu5tO7fuLc4u7SywYVvnroqteIaTnydWBmBvwsebtJNna00VOFoiRIBBQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OVV4lxbB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 20025C4CEF7
+	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 16:20:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773072519;
-	bh=K/BM2/Gp+Dqs8xtTnizuLd4jsSem+mnjssqgGG2c41I=;
+	s=k20201202; t=1773073203;
+	bh=6LsjoSGHG+IZH+Mc2scDSatAsuCCFmJ5mTWT8JAPmJk=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=vKbTLHnXd7LQ/c7S8erBdYjlNKT6A09Le9RJAAqlb9eNtEiLDrOOIR9CUn3gyz4v4
-	 oeZ1Gz4BVkG+SsllHVjdoMXj6mtdX+XDVIRoHw164OahjKaj3BIAaunj09g6YsjdZq
-	 /8o337kpCd2CMp5t1uFMmh2LUokurKl27Pr5Yp7UG2svwMgoEPOHxmLF2Ri0AC34gJ
-	 jBe5guxrQHiOt05V00YoDyf+aqQ/1CwsZJK2k7hM8eqWCcAF0PO6Qo1TwaCIvyo/EQ
-	 DVxlwZv9uGL7tMXjuHM2WnCARfvuAgmlLu5/ayaoF6IqHR7zdSsLXplST0BDPU2Q5T
-	 NdYJRrUz3+LfA==
+	b=OVV4lxbBSSFOFIrFDvoGawUsWUFqXQj0+me///qjsmZAI18ZwIA7E69RX0Bs4zl6E
+	 lxCnHzWt4jtyicqmPrJ7nuZT/g6dMP5Tqv40xBAfBHH6IqkAQOXX0FNXE3UXtT7OSI
+	 d3LGaGwq73cSWQfwSpJDjKY3c7W8o0Wv7L+T5Sbv3aMMW9MYsXcKnGey99p5BRpuNn
+	 o6+3Iw4GHps3dilTlNp8uKwgu6GKiy/VohZUSUVuZZDfoaRksvVXys7StjuCyx2Jo1
+	 EN40QXHJM8+C3blZOhxC865uBNiigAxCG2ovBKbMTPfHmZXYTScyZLp3AB5YA9Sx9w
+	 8UNXSDud3R7WA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 02A0DC3279F; Mon,  9 Mar 2026 16:08:39 +0000 (UTC)
+	id 0A8EEC3279F; Mon,  9 Mar 2026 16:20:03 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
-Subject: [Bug 221184] mouse/keyboard (connected via hub) usb reset under
- system load with weak cpu
-Date: Mon, 09 Mar 2026 16:08:38 +0000
+Subject: [Bug 220936] ASMedia ASM4242 USB 3.2 xHCI Controller gives command
+ timeout
+Date: Mon, 09 Mar 2026 16:20:02 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -59,16 +59,16 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Who: stuart.a.hayhurst@gmail.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-221184-208809-KhDFbPwRVP@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221184-208809@https.bugzilla.kernel.org/>
-References: <bug-221184-208809@https.bugzilla.kernel.org/>
+Message-ID: <bug-220936-208809-A18zplkrP7@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220936-208809@https.bugzilla.kernel.org/>
+References: <bug-220936-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Bugzilla-URL: https://bugzilla.kernel.org/
@@ -79,47 +79,54 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 9856623C8D3
+X-Rspamd-Queue-Id: 0096823C9CD
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34319-lists,linux-usb=lfdr.de];
 	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_TLS_LAST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FROM_NO_DN(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.987];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-0.988];
-	RCPT_COUNT_ONE(0.00)[1];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,harvard.edu:email]
+	TAGGED_FROM(0.00)[bounces-34320-lists,linux-usb=lfdr.de];
+	TO_DN_NONE(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+]
 X-Rspamd-Action: no action
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221184
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220936
 
---- Comment #25 from Alan Stern (stern@rowland.harvard.edu) ---
-The change was correct, in the sense that it made the kernel do the right t=
-hing
-whereas before it would sometimes do the wrong thing.
+--- Comment #2 from Stuart Hayhurst (stuart.a.hayhurst@gmail.com) ---
+I had another go at troubleshooting, disabling ASPM doesn't seem to help.
 
-Making the mouse more difficult to use was an unfortunate side effect.  Fix=
-ing
-that difficulty is the subject of Liam's work.  Try his new patch from comm=
-ent
-#23; I expect it will improve your situation a lot.
+If I can get a device connected without the controller giving up, when I un=
+plug
+it I get:
+```
+[  243.504068] xhci_hcd 0000:77:00.0: WARN Set TR Deq Ptr cmd failed due to
+incorrect slot or ep state.
+```
+
+When I shut the computer down, if the controller hasn't already given up I =
+see
+the previously mentioned warning about command timeouts. Sometimes it throw=
+s it
+when plugging a device in, but this isn't as reliable.
+
+I tested it on Windows 11, and everything seems to work flawlessly.
 
 --=20
 You may reply to this email to add a comment.
