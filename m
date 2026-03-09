@@ -1,143 +1,173 @@
-Return-Path: <linux-usb+bounces-34279-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34280-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aGd5EcqhrmkLHAIAu9opvQ
-	(envelope-from <linux-usb+bounces-34279-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 11:32:42 +0100
+	id IJiOCV+irmk9HAIAu9opvQ
+	(envelope-from <linux-usb+bounces-34280-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 11:35:11 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5146237247
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 11:32:41 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2164F2372EC
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 11:35:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D3D70305982C
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 10:31:03 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 46C5B301220A
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 10:33:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6723A36404E;
-	Mon,  9 Mar 2026 10:31:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CCB738F246;
+	Mon,  9 Mar 2026 10:33:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DpiizBu5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C2Po0qCA"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0D334EF09
-	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 10:31:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFEA87262E;
+	Mon,  9 Mar 2026 10:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773052263; cv=none; b=Cw0MuWwo1Ym987OrJ8rpepoxpuykXy5y+nBw+KD3apkdP2Dhy2yVkKOs2po/OoqxV/Co726sUX7PBV06LVU69gcekVrFJ5KIGHW76UPN0IykYc+QxDPCtdMqglg6VuKf6ad8hTRY5IItkOSH9NLCJKdNz5QYaa0kf0RBnSU4ehA=
+	t=1773052422; cv=none; b=rVmqNWhM2e+jyTkX6gMC00ZF4+FjEOePa+o/FgBBfxhqnD+QOoz4YBNBkgdz/B1x7mQYxA6MXbvEPXXrV9FAv0jTON8t87ofyYmeRmx/5Qd3qrhDzVSENyvFmgHUYUANSQoC/fpn6R87H5btlcfxakCgcWVr7x23QQ9TDu2v8Ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773052263; c=relaxed/simple;
-	bh=tDwWyZJrqAc9CGLVm3aBcFqqW7pGbRTGAnRP4oaZ5fs=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=llcxQpRT0IYJPMLArUoOM3lCu7Bl/oKCSa3GiuItcZHuPpyO11/XqK/129UNu29tD2YU+Dburaq3H4/JrFsg6lNL9d0a+tvR2l/BpSV7gliTwDbMXyVFxH9xof4MkmpbxzbSj9Eh6GcHnUZMvbhsY83ftnMM6Olkm/2jcchXvvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DpiizBu5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9107EC2BCB1
-	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 10:31:02 +0000 (UTC)
+	s=arc-20240116; t=1773052422; c=relaxed/simple;
+	bh=T0tIkr/NeK7n2B0rGmYxOgjcsF4ABmlarjy5SxolQFQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=k5kkLnibxQEZn6V8RCBZv3CM5xZzDw49QvtcstCq0Gy4DwlVrO/xsjp4v9ySWlaJ7gMhV1IONN5ojVAqUNuhEovwHfEAOCxSY4E8vCKpG4VzOKsatc0ntYTpjDP6QwiH5kxotgIh1F9OCc25QtHSyoD92kP5BTAnDbiv5s5TRlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C2Po0qCA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 780BBC4CEF7;
+	Mon,  9 Mar 2026 10:33:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773052262;
-	bh=tDwWyZJrqAc9CGLVm3aBcFqqW7pGbRTGAnRP4oaZ5fs=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=DpiizBu5vNhocwcV4AhypGhykYkTfvOEG1ndFD31pu7GF9Pefgtm2kxbwvR2nB6Xo
-	 tdd02KMsQG3cnNKTqRKaztBWQHDICEfFkFVxZioxbAr9oJKvUt0+HLx+zY0vIb6Dnr
-	 2aB1kr9GvdNQTO1l3HIY882Hlf7lMeguTJCFxoDCIDDoeMXuZG/DQ/nqSAgcOq6yVS
-	 fQhMYMobPKtLnsVIhCuN2h+tNAHgRDBgG5vcKJSMYny5psEOTPt3yXnLoBrkNGu82P
-	 agXB/fflCs45Ovx3c+tYc9R1VewQ7t7pDQpPJR8W5dSLJbQ+X1bQBDWE69LX0hUN/+
-	 9+9Y+fUN2cjmQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 89B6AC3279F; Mon,  9 Mar 2026 10:31:02 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 221073] xHCI host controller dies on resume from s2idle on AMD
- Strix Halo [1022:1587]
-Date: Mon, 09 Mar 2026 10:31:02 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michal.pecio@gmail.com
-X-Bugzilla-Status: NEEDINFO
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-221073-208809-zri3Lu2qNX@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221073-208809@https.bugzilla.kernel.org/>
-References: <bug-221073-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1773052422;
+	bh=T0tIkr/NeK7n2B0rGmYxOgjcsF4ABmlarjy5SxolQFQ=;
+	h=From:Subject:Date:To:Cc:From;
+	b=C2Po0qCAWyI3MCSIY6cu5UE0HPuJZjBEO6uUGeMiRFLDQ1VtdmNY+ibXzqc8dkPrq
+	 nUZyHhSjMiThGzxc1TKVdXaJKzCwda5jY1fb/VgakMbPHU8nSvJVkf25olHX42fxwZ
+	 gDZ08HVhk83Q6IjIpZwD7EPT824suEunh2cRO9CqsZapib3utG7KCcp1WxfvVREZdT
+	 s/dUfc/W+JWQG4Xzj8oh7/NcILi6/SU71fXzpom30PlEnLKDnKKQD6fdsQt/6KzQHB
+	 0aCcsMv/niDyCDG+YNMt3zjxzCKZ0GN/k4c3UcNAb/JMzqgfFNZFdbTmGY2vvRaAQr
+	 Gc3tx5dT/Hfvg==
+From: Konrad Dybcio <konradybcio@kernel.org>
+Subject: [RFC/RFT PATCH 0/3] Prepwork for non-PCIe NHI/TBT hosts
+Date: Mon, 09 Mar 2026 11:32:58 +0100
+Message-Id: <20260309-topic-usb4_nonpcie_prepwork-v1-0-d901d85fc794@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: A5146237247
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MWwqAIBBA0a3EfCfYA7O2EiFlYw2BivaCaO9Jn
+ 4cL94GIgTBClz0Q8KRIziYUeQZ6He2CjOZkKHkpeMVbtjtPmh1xqpV11mtC5QP6y4WNSSFlYRr
+ RTtJAOqRg6P7v/fC+H8rn0RhtAAAA
+X-Change-ID: 20260309-topic-usb4_nonpcie_prepwork-86881f769b8f
+To: Andreas Noever <andreas.noever@gmail.com>, 
+ Mika Westerberg <westeri@kernel.org>, 
+ Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ usb4-upstream@oss.qualcomm.com, 
+ Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773052420; l=2468;
+ i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
+ bh=T0tIkr/NeK7n2B0rGmYxOgjcsF4ABmlarjy5SxolQFQ=;
+ b=kQbLx/0U0HXZgY45NpqALi6JrS9uF6YBbL4hZc3iREf3QiR6FYqzNHqDB0g0ZPzoWvUyjYlWV
+ iaF+1g+Mb+hDg2PjOCeAX7mOkyd6q4LImAhCDR6V+56TfcjvP82lwds
+X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Rspamd-Queue-Id: 2164F2372EC
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34279-lists,linux-usb=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-34280-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_NO_DN(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-0.968];
 	PRECEDENCE_BULK(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[konradybcio@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-0.989];
-	RCPT_COUNT_ONE(0.00)[1];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,qualcomm.com:email]
 X-Rspamd-Action: no action
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221073
+Currently, the NHI driver (and other parts of the TBT framework) make
+multiple assumptions about the host router being a PCIe device. This
+series tries to decouple them by moving the 'struct pci_device' out of
+the NHI code and introduce NHI-on-PCIe-specific abstractions where
+necessary (with no functional change).
 
---- Comment #34 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-Created attachment 309583
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D309583&action=3Dedit
-debug suspend/resume
+The intended usage of the new nhi_probe_common() is pretty similar to
+other bus frameworks (I2C, SPI, USB..), i.e.:
 
-There are some error flags set on DevSta and changes to MSI capabilities of
-other functions on c4:00 device, but IDK if it means anything. Though it wo=
-uld
-be suspicious if those changes only occur during problematic resumes.
+static int foo_bar_probe() {
+	// get SoC-specifc resources (clks, regulators..)
 
-Mathias suggested that CMD_INTE may be getting cleared inadvertently. I don=
-'t
-see how it could happen, but just in case here's patch which logs xHCI
-registers relevant to interrupts during suspend, resume and on command time=
-out.
+	// power things on
 
-It also checks for pending commands on suspend (shouldn't happen, but who
-knows) and explicitly disables and reenables IRQ generation at xHCI layer. I
-gave it a quick test and it seems to be OK, but you could also try without
-those two blocks which manipulate CMD_EIE in xhci->op_regs->command.
+	// set some implementation-specific registers
 
-I also tried removing only the part which enables interrupts on resume and =
-got
-a failure similar to yours, as expected.
+	// register NHI and all the sub-devices
+	ret = nhi_probe_common(&my_usb4->nhi)
+	...
 
---=20
-You may reply to this email to add a comment.
+	// cleanup boilerplate
+}
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Instead of the previously-suggested aux/fauxbus, the NHI device remains
+the same 'struct dev' as the PCIe/platform/[...] device that provides
+it. This is in line with some other buses and it makes things easier
+from the PM perspective.
+
+Compile-tested only for the PCIe case. The Qualcomm USB4 driver that
+leverages this patchset is unfortunately still work in progress and
+will be shared at a later time. Nonetheless, we need to get this
+non-PCIe topic sorted.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+---
+Konrad Dybcio (3):
+      thunderbolt: Move pci_device out of tb_nhi
+      thunderbolt: Separate out common NHI bits
+      thunderbolt: Add some more descriptive probe error messages
+
+ drivers/thunderbolt/Makefile    |   2 +-
+ drivers/thunderbolt/acpi.c      |  14 +-
+ drivers/thunderbolt/ctl.c       |  14 +-
+ drivers/thunderbolt/domain.c    |   2 +-
+ drivers/thunderbolt/eeprom.c    |   2 +-
+ drivers/thunderbolt/icm.c       |  25 +-
+ drivers/thunderbolt/nhi.c       | 494 ++++++---------------------------------
+ drivers/thunderbolt/nhi.h       |  32 +++
+ drivers/thunderbolt/nhi_ops.c   |  31 ++-
+ drivers/thunderbolt/nhi_pci.c   | 496 ++++++++++++++++++++++++++++++++++++++++
+ drivers/thunderbolt/nhi_pci.h   |  22 ++
+ drivers/thunderbolt/switch.c    |  41 +---
+ drivers/thunderbolt/tb.c        |  76 +-----
+ drivers/thunderbolt/tb.h        |  10 +-
+ drivers/thunderbolt/usb4_port.c |   2 +-
+ include/linux/thunderbolt.h     |   5 +-
+ 16 files changed, 699 insertions(+), 569 deletions(-)
+---
+base-commit: fc7b1a72c6cd5cbbd989c6c32a6486e3e4e3594d
+change-id: 20260309-topic-usb4_nonpcie_prepwork-86881f769b8f
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+
 
