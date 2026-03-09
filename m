@@ -1,206 +1,386 @@
-Return-Path: <linux-usb+bounces-34269-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34270-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CBebDpWPrmnVGAIAu9opvQ
-	(envelope-from <linux-usb+bounces-34269-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 10:15:01 +0100
+	id MM1iCSyRrmk7GQIAu9opvQ
+	(envelope-from <linux-usb+bounces-34270-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 10:21:48 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92749235FAA
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 10:15:00 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79D2C236136
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 10:21:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 81DE5303DD72
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 09:12:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B22523036D64
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 09:19:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFC4C37757E;
-	Mon,  9 Mar 2026 09:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 056C53793B7;
+	Mon,  9 Mar 2026 09:19:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="cVZaBhmg"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="d4bw/dK6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C197B376BF2;
-	Mon,  9 Mar 2026 09:12:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B828A3783C9
+	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 09:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773047577; cv=none; b=JbSS4RGiK+ai7j9OjoSJduxn512w2uUw9OqAUbr35u3weph0KOsjBxcdacutUkBLpEeDg4XauMe1DyZBUvlEUSwFg0rWidg4vK66oTygTlvgODn9tu3dQiWSTbRbCWULtTSqWGCF3CBuX/JkktpBNGPZ6OxJCgP272agsIiEBK4=
+	t=1773047947; cv=none; b=pmx9CtjrgwkLKfdTJuzK4qP42V8Gpx6kdCaIuPhSDFIsY2K4jeyziWCaAoavOaD679iNPha3wAvs00kozxbXnsWf+YIP0zy7JVLdcDtVjuKhD07fr53WkB4gzMzoAUnIcZjO6wmpp0tI77OXLezN6shlqCqbmMIDiKNaPx6DsSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773047577; c=relaxed/simple;
-	bh=XU/OZsnAkXJsAREhmH0zo/e2f3R9pWNOu/At/zSzQSU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KPBlSCY+X2tW5prPcm2Hf4qkUkbPLGoHtV9n7KErBYCdSMHoCKQXQqc37UtgiEnmFqKjZ7a4wKED7ysG10cjE6PJJjogixBxn3pgTjnuYC4d4lnGcF0fNCLQZQqTZwnjG7nE1HCwQKtIMgoxHn/jv5Rl8oKbDTF/05P31zAwnIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=cVZaBhmg; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1773047573;
-	bh=XU/OZsnAkXJsAREhmH0zo/e2f3R9pWNOu/At/zSzQSU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cVZaBhmgCJEZXkbimKfFG584G5rKotRs3MKd0Ejg91SDHArdz4fp+TqxhGWXvvGGi
-	 Mn5a3f62I9ybOGiAjEmUU92MSBK1/ywM6tt/Oat3z+Ojp0tdMnqLcYgOwj30cAfVn5
-	 hP0+UVMjULwU5/cfF6+6fT2hLn99ANuKNDm0qMTBnn9MRPaAFTUHP5cNmrYi5xLbki
-	 bYgEr1yLrjhByTwlYAvLXKv8aWRLicyPMUVF4EFQPVcCeCxwih8zKoOVb0k8RPo4AE
-	 SKPcXqlaXs2nvcyChFwtvJs/FqMyz77EsJAk4M9vfi1GIRNMTLNrgqQ0YpytRmUhew
-	 8khXgb1tqisVA==
-Received: from [192.168.1.39] (82-65-172-229.subs.proxad.net [82.65.172.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: aferraris)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id D94EC17E01B1;
-	Mon,  9 Mar 2026 10:12:52 +0100 (CET)
-Message-ID: <0b3b80ac-5cc2-4c19-a8f1-b8b44992eec4@collabora.com>
-Date: Mon, 9 Mar 2026 10:12:52 +0100
+	s=arc-20240116; t=1773047947; c=relaxed/simple;
+	bh=CncL9gUcdJL6wlW5tkcGvRzvFuDGtQP6+c+HDcnsN/A=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=ZLKG9r/RNutzv+U2lw6K1HwNJlHBZrD6sIxqd4re9d21exds68eiSrwxWY434/Eue5s/HMuyfaOXjoHbsWNCZqe1bkS1Jan2Us3Dg4Ik2pNAfxaMth2e0Ei9KXvZdcaFlCg6nRHsMkpgfihpNjQkV+9CjAwdyP2CP7/DxeBGnMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=d4bw/dK6; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-439bc14dcf4so4924170f8f.1
+        for <linux-usb@vger.kernel.org>; Mon, 09 Mar 2026 02:19:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1773047940; x=1773652740; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kNiLR6YNrMRtTldTWTQRiLTdnMm5k8O8M4DvpvHP74I=;
+        b=d4bw/dK6zVqZDdZTt12+IDmKf/RFmlRClqU3NCeMemKHCYqMLQGLcBHuqQc2BcWOeD
+         MXOLsFYj6TQwgG9d1ew4SkOgDEe3IxZWa8agXhd6YzzlHAvxlPV7zRMucd8EK5v6aeJX
+         euk/7xwAo8P7CEl3x9SHefS77U8Yxi0nmtZNqbpt2kkmWh1GnCE/QKraHW/3x9H3z+eu
+         Hgh8UVKxo75IMc3SnJVjy3eWFqYuMZouwGJ3APuDh1aMYpa7dmq2cnpGcTxaxURf3yju
+         ms2CccJlDvP945saycvwiiUZr1WiiL7+9v2UEYTcmobp9tF3vIAtjiGYalZ6Cr3d5R/U
+         YqKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773047940; x=1773652740;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kNiLR6YNrMRtTldTWTQRiLTdnMm5k8O8M4DvpvHP74I=;
+        b=DF43phqEK9pWLc8C9rzPQ9gxed2p5T36vsuW8H7V6M40dMWVXNK7myFOhOtju3sdKz
+         X6QLi0s1MjAKeAwMb5YWmNzWnDFvXPSlrcbOttL5uPkS4kz9bNe2XrwTyTolLTZk5Mu6
+         mWA2jnsNoEIQr+YgX+Sg1rFfr5uredjpQgGIR2K6tSt9NJQQBvrM2wn43HEhYcq7oTuI
+         82yaEhDLZuSXUAfdE2v0KPAlSpqCgUPVAqCDRhRogQpc/wR1mTkhNOAZ/S6MtmzK9LoL
+         HVxv5Z2qFH6JG2r3xwyXEyxEZKfRSYTXrqNItyQNVLgfLhIDQl/shddwTnHfP8Fqjb8x
+         G5Zw==
+X-Forwarded-Encrypted: i=1; AJvYcCV+GCk8mFMEBo7/Q+IdnxBWYHjKPpydOKopGJ+eftymbgfzEI1WHpd7X6dmFWK/9U1ox4mXfgdE9RE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzo7gitd+x2q9tNf0igkIUfkarCi1wfYzAev7B014LRfkJTdLSG
+	/Od3boZaZIqD7hxlK+2T6zzzJ8oWvAntDZHr9aYS/G03EAKlE+xpWGEspQnrhD1r89E=
+X-Gm-Gg: ATEYQzw6ombC/zLzYZf6RHgVvFUqDp8UdeHKvXig7u5VA10MWMK/WJcGSl41NX983AE
+	bN2DO1OpQWwOBmUMyEPHKPk7MGA8zeCl3tyT68cNjUNfOCBHDClxrLZwFURsx6+AXWwN0/M5g9H
+	xe2HzHJEzA1tcfk5oSo+MkvheUMSUTM4q6KrpfTkizsEMf5XwNn7A42umZebJvv1b64DOkwdnSZ
+	vC1BDKthH8NmMV/gH7uXMKWvbeMJvz4M2umnWZ9vyLXpcnXUjxjE4GHOFzGT+6u4d3MSo42t4YN
+	lVmm8f3lcx8D85sM/hvlZUZw07EGexRjURQ/8bOlCWsK40f5jYBz4Ga+YlNJkWPlacfUpV3Y6qQ
+	AZwQOHaudMwmTtzONiGACdP1Y0zvP9CafDsbnDH/jgeezvni0sXSZtfG/QD9FieGn23Q1+oWTvG
+	Ii3yvx96+zwfazlkE=
+X-Received: by 2002:a05:6000:603:b0:439:909f:c5a3 with SMTP id ffacd0b85a97d-439da3277d9mr17145973f8f.4.1773047939930;
+        Mon, 09 Mar 2026 02:18:59 -0700 (PDT)
+Received: from localhost ([195.52.25.213])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439dada9116sm23029936f8f.14.2026.03.09.02.18.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 02:18:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] usb: roles: get usb role switch from parent only
- for usb-b-connector
-To: Xu Yang <xu.yang_2@nxp.com>, badhri@google.com,
- heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
- dsimic@manjaro.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, jun.li@nxp.com
-References: <20260309074313.2809867-1-xu.yang_2@nxp.com>
- <20260309074313.2809867-3-xu.yang_2@nxp.com>
-From: Arnaud Ferraris <arnaud.ferraris@collabora.com>
-Content-Language: en-US, fr
-Autocrypt: addr=arnaud.ferraris@collabora.com; keydata=
- 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
- L9jD4jU=
-In-Reply-To: <20260309074313.2809867-3-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 92749235FAA
+Mime-Version: 1.0
+Content-Type: multipart/signed;
+ boundary=840703edd9f3f1e1e79a02bb78a8d4f69f696b0531524c2c45c8075436e0;
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Mon, 09 Mar 2026 10:18:50 +0100
+Message-Id: <DGY51AQLSNAD.3LE77TJER4LGF@baylibre.com>
+Cc: "Vinod Koul" <vkoul@kernel.org>, "Neil Armstrong"
+ <neil.armstrong@linaro.org>, <dri-devel@lists.freedesktop.org>,
+ <freedreno@lists.freedesktop.org>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-arm-msm@vger.kernel.org>, <linux-can@vger.kernel.org>,
+ <linux-gpio@vger.kernel.org>, <linux-ide@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+ <linux-pci@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+ <linux-riscv@lists.infradead.org>, <linux-rockchip@lists.infradead.org>,
+ <linux-samsung-soc@vger.kernel.org>, <linux-sunxi@lists.linux.dev>,
+ <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+ <netdev@vger.kernel.org>, <spacemit@lists.linux.dev>,
+ <UNGLinuxDriver@microchip.com>, "Andrzej Hajda" <andrzej.hajda@intel.com>,
+ "Robert Foss" <rfoss@kernel.org>, "Laurent Pinchart"
+ <Laurent.pinchart@ideasonboard.com>, "Jonas Karlman" <jonas@kwiboo.se>,
+ "Jernej Skrabec" <jernej.skrabec@gmail.com>, "Maarten Lankhorst"
+ <maarten.lankhorst@linux.intel.com>, "Maxime Ripard" <mripard@kernel.org>,
+ "Thomas Zimmermann" <tzimmermann@suse.de>, "David Airlie"
+ <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>, "Andy Yan"
+ <andy.yan@rock-chips.com>, "Marc Kleine-Budde" <mkl@pengutronix.de>,
+ "Vincent Mailhol" <mailhol@kernel.org>, "Nicolas Ferre"
+ <nicolas.ferre@microchip.com>, "Alexandre Belloni"
+ <alexandre.belloni@bootlin.com>, "Claudiu Beznea"
+ <claudiu.beznea@tuxon.dev>, "Markus Schneider-Pargmann" <msp@baylibre.com>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>, "Magnus Damm"
+ <magnus.damm@gmail.com>
+Subject: Re: [PATCH v2 phy-next 14/24] phy: introduce
+ phy_get_max_link_rate() helper for consumers
+From: "Markus Schneider-Pargmann" <msp@baylibre.com>
+To: <vladimir.oltean@nxp.com>, <linux-phy@lists.infradead.org>
+X-Mailer: aerc 0.21.0
+References: <20260308114009.2546587-1-vladimir.oltean@nxp.com>
+ <20260308114009.2546587-15-vladimir.oltean@nxp.com>
+In-Reply-To: <20260308114009.2546587-15-vladimir.oltean@nxp.com>
+X-Rspamd-Queue-Id: 79D2C236136
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.76 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[collabora.com:s=mail];
+	MV_CASE(0.50)[];
+	R_DKIM_ALLOW(-0.20)[baylibre-com.20230601.gappssmtp.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34269-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[43];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-34270-lists,linux-usb=lfdr.de];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	DMARC_NA(0.00)[baylibre.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[collabora.com:+];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FREEMAIL_CC(0.00)[kernel.org,linaro.org,lists.freedesktop.org,lists.infradead.org,vger.kernel.org,lists.linux.dev,microchip.com,intel.com,ideasonboard.com,kwiboo.se,gmail.com,linux.intel.com,suse.de,ffwll.ch,rock-chips.com,pengutronix.de,bootlin.com,tuxon.dev,baylibre.com,glider.be];
+	DKIM_TRACE(0.00)[baylibre-com.20230601.gappssmtp.com:+];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.925];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[arnaud.ferraris@collabora.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[msp@baylibre.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	TAGGED_RCPT(0.00)[linux-usb,renesas];
+	NEURAL_HAM(-0.00)[-0.998];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:email,collabora.com:dkim,collabora.com:email,collabora.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
+--840703edd9f3f1e1e79a02bb78a8d4f69f696b0531524c2c45c8075436e0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
+Hi,
 
-Le 09/03/2026 à 08:43, Xu Yang a écrit :
-> usb_role_switch_is_parent() was walking up to the parent node and checking
-> for the "usb-role-switch" property regardless of the type of the passed
-> fwnode. This could cause unrelated device nodes to be probed as potential
-> role switch parent, leading to spurious matches and "-EPROBE_DEFER" being
-> returned infinitely.
-> 
-> Till now only Type-B connector node will have a parent node which may
-> present "usb-role-switch" property and register the role switch device.
-> For Type-C connector node, its parent node will always be a Type-C chip
-> device which will never register the role switch device. However, it may
-> still present a non-boolean "usb-role-switch = <&usb_controller>" property
-> for historical compatibility.
-> 
-> So restrict the helper to only operate on Type-B connector when attempting
-> to get the role switch from parent node.
-> 
-> Fixes: 6fadd72943b8 ("usb: roles: get usb-role-switch from parent")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> 
+On Sun Mar 8, 2026 at 12:39 PM CET, vladimir.oltean wrote:
+> Consumer drivers shouldn't dereference struct phy, not even to get to
+> its attributes.
+>
+> We have phy_get_bus_width() as a precedent for getting the bus_width
+> attribute, so let's add phy_get_max_link_rate() and use it in DRM and
+> CAN drivers.
+>
+> In CAN drivers, the transceiver is acquired through devm_phy_optional_get=
+()
+> and NULL is given by the API as a non-error case, so the PHY API should
+> also tolerate NULL coming back to it. This means we can further simplify
+> the call sites that test for the NULL quality of the transceiver.
+
+Thanks for adding this.
+
+>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 > ---
-> Changes in v2:
->   - new patch
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> Cc: Robert Foss <rfoss@kernel.org>
+> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+> Cc: Jonas Karlman <jonas@kwiboo.se>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Simona Vetter <simona@ffwll.ch>
+> Cc: Andy Yan <andy.yan@rock-chips.com>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: Vincent Mailhol <mailhol@kernel.org>
+> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+> Cc: Markus Schneider-Pargmann <msp@baylibre.com>
+> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: Magnus Damm <magnus.damm@gmail.com>
+>
+> v1->v2: make phy_get_bus_width() NULL-tolerant to simplify CAN callers
 > ---
->   drivers/usb/roles/class.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-> index b8e28ceca51e..edec139b68b5 100644
-> --- a/drivers/usb/roles/class.c
-> +++ b/drivers/usb/roles/class.c
-> @@ -139,9 +139,14 @@ static void *usb_role_switch_match(const struct fwnode_handle *fwnode, const cha
->   static struct usb_role_switch *
->   usb_role_switch_is_parent(struct fwnode_handle *fwnode)
->   {
-> -	struct fwnode_handle *parent = fwnode_get_parent(fwnode);
-> +	struct fwnode_handle *parent;
->   	struct device *dev;
->   
-> +	if (!fwnode_device_is_compatible(fwnode, "usb-b-connector"))
-> +		return NULL;
-> +
-> +	parent = fwnode_get_parent(fwnode);
-> +
->   	if (!fwnode_property_present(parent, "usb-role-switch")) {
->   		fwnode_handle_put(parent);
->   		return NULL;
+>  drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c | 4 ++--
+>  drivers/gpu/drm/bridge/synopsys/dw-dp.c             | 2 +-
+>  drivers/net/can/at91_can.c                          | 3 +--
+>  drivers/net/can/flexcan/flexcan-core.c              | 3 +--
+>  drivers/net/can/m_can/m_can_platform.c              | 3 +--
 
-Tested-by: Arnaud Ferraris <arnaud.ferraris@collabora.com>
+For m_can:
+Acked-by: Markus Schneider-Pargmann <msp@baylibre.com>
 
-Cheers,
-Arnaud
+Best
+Markus
+
+>  drivers/net/can/rcar/rcar_canfd.c                   | 3 +--
+>  drivers/phy/phy-core.c                              | 9 +++++++++
+>  include/linux/phy/phy.h                             | 6 ++++++
+>  8 files changed, 22 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c b/driver=
+s/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+> index a8b6ae58cb0a..ed7ed82ddb64 100644
+> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+> @@ -1300,7 +1300,7 @@ static u32 cdns_mhdp_get_training_interval_us(struc=
+t cdns_mhdp_device *mhdp,
+> =20
+>  static void cdns_mhdp_fill_host_caps(struct cdns_mhdp_device *mhdp)
+>  {
+> -	unsigned int link_rate;
+> +	u32 link_rate;
+> =20
+>  	/* Get source capabilities based on PHY attributes */
+> =20
+> @@ -1308,7 +1308,7 @@ static void cdns_mhdp_fill_host_caps(struct cdns_mh=
+dp_device *mhdp)
+>  	if (!mhdp->host.lanes_cnt)
+>  		mhdp->host.lanes_cnt =3D 4;
+> =20
+> -	link_rate =3D mhdp->phy->attrs.max_link_rate;
+> +	link_rate =3D phy_get_max_link_rate(mhdp->phy);
+>  	if (!link_rate)
+>  		link_rate =3D drm_dp_bw_code_to_link_rate(DP_LINK_BW_8_1);
+>  	else
+> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-dp.c b/drivers/gpu/drm/br=
+idge/synopsys/dw-dp.c
+> index 4ab6922dd79c..79c72ee8e263 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/dw-dp.c
+> +++ b/drivers/gpu/drm/bridge/synopsys/dw-dp.c
+> @@ -536,7 +536,7 @@ static int dw_dp_link_parse(struct dw_dp *dp, struct =
+drm_connector *connector)
+> =20
+>  	link->revision =3D link->dpcd[DP_DPCD_REV];
+>  	link->rate =3D min_t(u32, min(dp->plat_data.max_link_rate,
+> -				    dp->phy->attrs.max_link_rate * 100),
+> +				    phy_get_max_link_rate(dp->phy) * 100),
+>  			   drm_dp_max_link_rate(link->dpcd));
+>  	link->lanes =3D min_t(u8, phy_get_bus_width(dp->phy),
+>  			    drm_dp_max_lane_count(link->dpcd));
+> diff --git a/drivers/net/can/at91_can.c b/drivers/net/can/at91_can.c
+> index 58da323f14d7..7749da0a58f6 100644
+> --- a/drivers/net/can/at91_can.c
+> +++ b/drivers/net/can/at91_can.c
+> @@ -1125,8 +1125,7 @@ static int at91_can_probe(struct platform_device *p=
+dev)
+> =20
+>  	can_rx_offload_add_timestamp(dev, &priv->offload);
+> =20
+> -	if (transceiver)
+> -		priv->can.bitrate_max =3D transceiver->attrs.max_link_rate;
+> +	priv->can.bitrate_max =3D phy_get_max_link_rate(transceiver);
+> =20
+>  	if (at91_is_sam9263(priv))
+>  		dev->sysfs_groups[0] =3D &at91_sysfs_attr_group;
+> diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/fle=
+xcan/flexcan-core.c
+> index f5d22c61503f..093e48b8da58 100644
+> --- a/drivers/net/can/flexcan/flexcan-core.c
+> +++ b/drivers/net/can/flexcan/flexcan-core.c
+> @@ -2210,8 +2210,7 @@ static int flexcan_probe(struct platform_device *pd=
+ev)
+>  	priv->reg_xceiver =3D reg_xceiver;
+>  	priv->transceiver =3D transceiver;
+> =20
+> -	if (transceiver)
+> -		priv->can.bitrate_max =3D transceiver->attrs.max_link_rate;
+> +	priv->can.bitrate_max =3D phy_get_max_link_rate(transceiver);
+> =20
+>  	if (priv->devtype_data.quirks & FLEXCAN_QUIRK_NR_IRQ_3) {
+>  		priv->irq_boff =3D platform_get_irq(pdev, 1);
+> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_c=
+an/m_can_platform.c
+> index 56da411878af..2a0f163a683a 100644
+> --- a/drivers/net/can/m_can/m_can_platform.c
+> +++ b/drivers/net/can/m_can/m_can_platform.c
+> @@ -131,8 +131,7 @@ static int m_can_plat_probe(struct platform_device *p=
+dev)
+>  		goto probe_fail;
+>  	}
+> =20
+> -	if (transceiver)
+> -		mcan_class->can.bitrate_max =3D transceiver->attrs.max_link_rate;
+> +	mcan_class->can.bitrate_max =3D phy_get_max_link_rate(transceiver);
+> =20
+>  	priv->base =3D addr;
+>  	priv->mram_base =3D mram_addr;
+> diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rca=
+r_canfd.c
+> index eaf8cac78038..9062db48d477 100644
+> --- a/drivers/net/can/rcar/rcar_canfd.c
+> +++ b/drivers/net/can/rcar/rcar_canfd.c
+> @@ -1884,8 +1884,7 @@ static int rcar_canfd_channel_probe(struct rcar_can=
+fd_global *gpriv, u32 ch,
+>  	priv->transceiver =3D transceiver;
+>  	priv->channel =3D ch;
+>  	priv->gpriv =3D gpriv;
+> -	if (transceiver)
+> -		priv->can.bitrate_max =3D transceiver->attrs.max_link_rate;
+> +	priv->can.bitrate_max =3D phy_get_max_link_rate(transceiver);
+>  	priv->can.clock.freq =3D fcan_freq;
+>  	dev_info(dev, "can_clk rate is %u\n", priv->can.clock.freq);
+> =20
+> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+> index 0d0be494cfd7..737a760d97d1 100644
+> --- a/drivers/phy/phy-core.c
+> +++ b/drivers/phy/phy-core.c
+> @@ -647,6 +647,15 @@ void phy_set_bus_width(struct phy *phy, int bus_widt=
+h)
+>  }
+>  EXPORT_SYMBOL_GPL(phy_set_bus_width);
+> =20
+> +u32 phy_get_max_link_rate(struct phy *phy)
+> +{
+> +	if (!phy)
+> +		return 0;
+> +
+> +	return phy->attrs.max_link_rate;
+> +}
+> +EXPORT_SYMBOL_GPL(phy_get_max_link_rate);
+> +
+>  /**
+>   * _of_phy_get() - lookup and obtain a reference to a phy by phandle
+>   * @np: device_node for which to get the phy
+> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+> index a7e2432ca1ae..34b656084caf 100644
+> --- a/include/linux/phy/phy.h
+> +++ b/include/linux/phy/phy.h
+> @@ -57,6 +57,7 @@ int phy_notify_disconnect(struct phy *phy, int port);
+>  int phy_notify_state(struct phy *phy, union phy_notify state);
+>  int phy_get_bus_width(struct phy *phy);
+>  void phy_set_bus_width(struct phy *phy, int bus_width);
+> +u32 phy_get_max_link_rate(struct phy *phy);
+>  #else
+>  static inline struct phy *phy_get(struct device *dev, const char *string=
+)
+>  {
+> @@ -256,6 +257,11 @@ static inline int phy_get_bus_width(struct phy *phy)
+>  static inline void phy_set_bus_width(struct phy *phy, int bus_width)
+>  {
+>  }
+> +
+> +static inline u32 phy_get_max_link_rate(struct phy *phy)
+> +{
+> +	return 0;
+> +}
+>  #endif /* IS_ENABLED(CONFIG_GENERIC_PHY) */
+> =20
+>  #endif /* __PHY_CONSUMER_H */
+
+
+--840703edd9f3f1e1e79a02bb78a8d4f69f696b0531524c2c45c8075436e0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iKMEABYKAEsWIQSJYVVm/x+5xmOiprOFwVZpkBVKUwUCaa6QehsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIRHG1zcEBiYXlsaWJyZS5jb20ACgkQhcFWaZAVSlO3
+cwEAzFZFZ21Yi1E3bmSFVrYlzos6oRC2RIJXE4meDDVCTjUA/2INMu045NS1yRGm
+V6PI/m62S0rUjMso1TupNVful6QE
+=gdIq
+-----END PGP SIGNATURE-----
+
+--840703edd9f3f1e1e79a02bb78a8d4f69f696b0531524c2c45c8075436e0--
 
