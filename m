@@ -1,211 +1,135 @@
-Return-Path: <linux-usb+bounces-34322-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34323-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UG2pAq//rmkLLgIAu9opvQ
-	(envelope-from <linux-usb+bounces-34322-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 18:13:19 +0100
+	id oGBGO70Cr2lmLgIAu9opvQ
+	(envelope-from <linux-usb+bounces-34323-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 18:26:21 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A00AD23D75E
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 18:13:18 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E15B23DA1D
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 18:26:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4E13F30ADD5C
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 17:06:16 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 39F7330429BD
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 17:24:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8EAF3D9041;
-	Mon,  9 Mar 2026 17:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67A373E7144;
+	Mon,  9 Mar 2026 17:24:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="E2KeOkiU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lxDX7G3Y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010010.outbound.protection.outlook.com [52.101.84.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8925B3CB2F9;
-	Mon,  9 Mar 2026 17:06:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773075967; cv=fail; b=N8TsfTcHc1IRr6BF6Acbs+6Di2avjNnHikVObTcSCoRqjfWnusNWOyjSZNArRG1lzpiYMizfEzrvqYjvZJaQRkMNFXtOTTUZwOebGPuh65yV7tm+0QLu2Pfjpao7g+GkxnkMjNExTzmvfXW9KJby8D/F4k8QaqmxiEedUTOwVjo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773075967; c=relaxed/simple;
-	bh=k8vsZk9e59MtTk7FkUg6JNfZLBkVFlqCaPPEBpyKsMs=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 Content-Type:MIME-Version; b=gG703jrfPS7oC8M4NvoeKpxq1FDU2V0NA2hdzJLVkE1LVVUPLYkRgEJ02jdrblOC7xz5huB0bvSqttOwScIuXrVyT2ILmYk+D92G51xy2ahcVdzGFR4MF8zUcPFvFZgnakAEOPmBo0NOC/Z6tLUAlH+lSsRpfNmItIiiRxB22v8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=E2KeOkiU; arc=fail smtp.client-ip=52.101.84.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HZ+/RvyDhf1jfb5FPaGh1Cvxv3+CIQe5Fp5RbzNOQfeHG5CjuCxjL525ufUN6irjG1e3sUFXUNt8rG4SuACyfMfyboF21pbTDTi1vK2F1VrQdL41vss0xt5YXc0Qtvu/eLgDETsqfkw/o8LrzNKoG1q9lqUbn7GV/JuQSvFF0C5Ate4uUViCldP/cCtegkloArwkkcTuiZykLl6/9nZxrqU2kmd8Xi//JpZfK8A2nqjri8r1r9KVCF65m+i9FqIuHGZJYGGc7LK8/AB5Ru+PPcxXsFKGwWyNU0lwj/AuxjvR+BPU4N7nHfzp11EdNMrpAikwxmLXKNyPlgfLKSns+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B2UVRm/ImFraOl+d3LT0onnMZcS6zkb8mZVB9OXos+4=;
- b=xg6cjC4ICyzP+5OnknBOD4MGIvS+p+zloqiGPN0kgjzxNN/m/5lyc4wr3YL8qF9zRVwlxzbtUftUZhtrdxV7tanzlM+uQOsTubLwOCJdHY8SYcAxBj+9bfqzN4iMZbjNhtkKQPat6jfVuVRPQj2md0dpce6aSbLK1xdmx2KJkujFoOkGaNUp9sSkNwggH17NboATk5xjicDNk+LeDr9ZBI1sy7v02tLa3gUYqzLccoO4rGYCl2bM85aFf818mPIBsO5SkFNtd4oKLC2CoB+ewbwXvoW7y9IghMBvjgbsCvHWzfvNZTfojs5ZA6RjUSaS3eLBzbPW1O6C5arewvtUkQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B2UVRm/ImFraOl+d3LT0onnMZcS6zkb8mZVB9OXos+4=;
- b=E2KeOkiUs4OAN1WrRg4FRaQutHUqWO/bitatTkFIVmEwHE9C/2SNgjH58Kv3LoPKfg7yPeVQh/s17retvR1tO/ea9+U+4UgVGi/Zkp0NDzCTdw1p4a2jLhPXy9fQaezJcT5OCAh1w1x3pymuwfijQeVH4REJ+WnP4KdUDlYZUu+WOCA/4Ac1hSNlaaO6DIP46nteq8DK/xF4ax3MRhvQwzi7XsiDjrBKZ/2gYYXOWkIawPZLBvl8IYKyIddTwv/6jXlTxtfe3pHs/6CUiez2oqnPhK8cxjD2GrR6lG/n7Vq0vNoxTODaMUZp7IF0eq40A3pqTh77dW6LMDaYGrL0ow==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PA4PR04MB9366.eurprd04.prod.outlook.com (2603:10a6:102:2a9::8)
- by AS8PR04MB9009.eurprd04.prod.outlook.com (2603:10a6:20b:42d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.25; Mon, 9 Mar
- 2026 17:05:59 +0000
-Received: from PA4PR04MB9366.eurprd04.prod.outlook.com
- ([fe80::75e4:8143:ddbc:6588]) by PA4PR04MB9366.eurprd04.prod.outlook.com
- ([fe80::75e4:8143:ddbc:6588%6]) with mapi id 15.20.9678.017; Mon, 9 Mar 2026
- 17:05:59 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Peter Chen <peter.chen@kernel.org>, 
- Pawel Laszczak <pawell@cadence.com>, Roger Quadros <rogerq@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Magnus Damm <magnus.damm@gmail.com>, 
- Marek Vasut <marex@denx.de>, 
- Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
- linux-usb@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, linux@ew.tq-group.com
-In-Reply-To: <20260226153859.665901-1-alexander.stein@ew.tq-group.com>
-References: <20260226153859.665901-1-alexander.stein@ew.tq-group.com>
-Subject: Re: (subset) [PATCH v3 0/5] Support TQMa8QM
-Message-Id: <177307595569.1726944.11310104344388663928.b4-ty@nxp.com>
-Date: Mon, 09 Mar 2026 13:05:55 -0400
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.2
-X-ClientProxiedBy: SA1P222CA0064.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:2c1::15) To PA4PR04MB9366.eurprd04.prod.outlook.com
- (2603:10a6:102:2a9::8)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3DC1DE2AD
+	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 17:24:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773077092; cv=none; b=HagYq7EqmQSUGgsm16z+QOUOgUHXygn0xAz+EasQT7H72S/pLJ5Zwor8Y01VwpMhihH2fbiyUY5L3D6YkvKlnf/ce4I16wQSCjZAvclUPOPV+Pc/lCZUYIxXY2vD7LuvETY4VkYlgYRN07cdp4Fg563ycIS5RHFtnrqFKxtypq0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773077092; c=relaxed/simple;
+	bh=Rrv/FfcfI7NyUkx2v28ksa+w+doKLvQ/ecE8F8/apOU=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=u5X0Z+iyZEz3RR5b9zZ6DLB4tS6z8j7pknCJcJC+iHQl+8MQSEsS/w4i0TvRDtd6cmYSrINvb8zttcd8vrdbiceSbsN2z9Ce81HRXj+9zQGxIvFqJ/wc/ZzlcgPEyCm1vzaklG7gDGADv8S29kdQMfWzlFbnxR3DuMyiExaR/9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lxDX7G3Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7FF58C19423
+	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 17:24:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773077091;
+	bh=Rrv/FfcfI7NyUkx2v28ksa+w+doKLvQ/ecE8F8/apOU=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=lxDX7G3YCKdHdiEDGe/abUrv04/D1JFeL51MYAZ/zHibRQzpkA1Nb5qar1HmMAB6+
+	 KK9Qxja3YWGU8b3MT/wG7Arkw6uo4dk4Qpi+iObY9NlSyq3OjaGUkHx6kcljWN1p54
+	 hWApZcRqHf4JoeIVhzgFbUd/cdGxKEqdQhIm2//qSGBeSJVeo0giZ/3Ww/Fcd/a7X6
+	 fZqix0Eko1DM8vbp4XJTc4cty2WYAW79nv+sVAhHvuzy03OjPMkXQMare2ic80VqDZ
+	 ZuFUGeRpNHz27tPj9JURM65ceEKcgigL1yEQ7/Px+5ktVujDK6Z+sXLA1/fxVbGKfc
+	 aqTzvQ5DXSJ+g==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 18931C3279F; Mon,  9 Mar 2026 17:24:45 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 221184] mouse/keyboard (connected via hub) usb reset under
+ system load with weak cpu
+Date: Mon, 09 Mar 2026 17:24:39 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: roxmail@list.ru
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-221184-208809-qrQzRp2luK@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-221184-208809@https.bugzilla.kernel.org/>
+References: <bug-221184-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR04MB9366:EE_|AS8PR04MB9009:EE_
-X-MS-Office365-Filtering-Correlation-Id: be0206fa-32fc-4cde-e108-08de7dfe22e0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|19092799006|376014|7416014|52116014|38350700014|921020;
-X-Microsoft-Antispam-Message-Info:
-	BbMCrBPgU5WmU8nJQGGXEOtgfFHD0mbaa8iT+iFEv9xIXVmvNpBLynMj1YZ1qMWjjsfgTIrYQ9xWUx3ZxiwLj+zxnz4vQDVJBUjEyJS5kYHe8C5FJhnz3GbDxsfHmZhLGoRlpK/atgKd3VAXUE6W4broLWNH459JjLnPWzMuezaL/NZhLlvZqCGZRwQ11krUzaChuS4Qnp5wnCA9EAVBkUz4R+c35gDzQtyo6kGtPv7wubu9E5En/xJOEm2L9LZw29+bq//fwWOgsFHugjJeF0rfXRUPyIB7LTjsWZzvWA/TLAz4rZB03DR5l0J0VA2dqwyVma1+QcEySCMddj9i0PiNdd6Q489kJ3vr6gMlCX7eTqj2KILdPKLBSk8LpUpO6FTTYxvRPCuppj6HpoquApXKlqT1EQgA/w9naC3mTu4X18YjFLquiuAj5HShehJEhEaAkHvqF8BVQBPkZqomnXovGV3KO7cYnhm2YsXRTuD1rCz6VapqKpAPPV6UoUm56/w+1vCXZopKEfn5WJ3dX9AQ0FQS57sWf+LTKz0wvn49U7bELlQ6CaiTMr7IiGNARYxXA6Ugc7EyZXOA2QkkFlAZ2JtmH7luIxwf6knnIWxXrdKz/COCCGet48Na7gNtNKnjBtuQYRZ4dwtGQdUy9C3joutpGx470a3up0wMMIa2yDxoEdBfGx56iYbcdAVXNKhvdIkrc8F9YVrKid6LhF9tn6VBMZoSp/QlX5ZmVc3KeJoPYLMrJ93pg1jEdTTxJpKl389Yh9rYx/Snw3P6H0wDDRP9JBfpda8wYlAv9fM8MBA/tS2FErK5YQM8vH8H
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9366.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(19092799006)(376014)(7416014)(52116014)(38350700014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?d3NSa2FkT1E4Wis1WGxGcTQ0R1lQMHJMb3hLY0N5UUdiRXN1dXJjdklJUWZn?=
- =?utf-8?B?a2l2QXFFVVVRVnRsRkRJaUg2eEdVbllVY2FFSWJVZWlCQ1hLRkdkZHpnTGcw?=
- =?utf-8?B?R2srQ21zVzhNN0s2Y1R4a1NOZ1g2akswNFpGZDJWVVdWblBzTTZ5WDVPTklP?=
- =?utf-8?B?dWdiU2FCaDFFUTZEZjJnT2xRRWlFSlpPd1ltejNrRE81WU82UmJiSG5lWG1W?=
- =?utf-8?B?aU0wb0dzbXpzNG8ySVdwd01zNG5NNWJCU0pOZkVsVjlVaEpjM2luVnRYbnkr?=
- =?utf-8?B?L3orNm14Vy9sNDZZa2VHbG5SVmNYeEFydG5KTnN6RlBsM1pabkp5dm8vS0dr?=
- =?utf-8?B?UVQwOWU1NXVPZ2JmV3VYdnF0bDM1N24weUR3eG1DeHFHM0cwOHo4ZnJnYVNn?=
- =?utf-8?B?Q0dSZ01TQmVKc0wyeGlkZERKMkhKczBZU1E5Z2pQTEw5YmxYV0JTSG9Tamg4?=
- =?utf-8?B?dUtzV3ZqbS9ERFdVaEdQZmdjV2p6cmhIU0EvSXc3ZWtDTGxDWk00V3cwNE9B?=
- =?utf-8?B?M0ZtWjVRV0EzV2laZXNiV3lnWDFZYXkzUU9lQldZM2NRUFJ5RWlUcmJYRDVH?=
- =?utf-8?B?bEhCM2pIWVNQN1U3MXpHbzgxWXByTDNhOEY1cGxRSituWGU5VHJIZnduaWor?=
- =?utf-8?B?a2FBd3NQaDV6eUR4Uzc0VEN6b3J2a0VuNnU0eDBKQktVL2lJNXBlWm9kTVlC?=
- =?utf-8?B?Z0NXdWMrYVd4WlFCSXZpTFg3SGxOTURIRjhUNDA4cjF2Sy9EMEI0T2QwMjAr?=
- =?utf-8?B?YzNxdlhMbjc5UHdZSmh1clJsS0RsUEdEMC9LVzY1aE5ZcXN4QldOWXkwZVlF?=
- =?utf-8?B?bEdvSjZBSnJQRFY0WkJEdWo2MWtHVElhMm9vUzhxZXpvRlNuUHZFZlMwVWxm?=
- =?utf-8?B?aExzWDVQWGlqNXRjdXRzcGpmOXZqdjBGKzBtTktmODQ4dGJDc1ZhUEl5MTNn?=
- =?utf-8?B?U2xtUEtjc2Q5VDhzOG1yUlBGenRPelFRVEhFdG1zay9YendjcUVqR2JweHRM?=
- =?utf-8?B?cVg2TFdYakI1YTZ4aEU2cGFxYWVNMDU4dldLa042cCtCOVRlNDFYaStFNzhl?=
- =?utf-8?B?RWJLbkxoT1F5VkoxT3lkWDBoak5aVzlDTE4vOW84N2ZsdW52Q25kVmJUckpZ?=
- =?utf-8?B?R003cFNBTENrb2FsSEFyL2htZFI2RHlBZmYvVkZXT2gyZ08vRGVZNUxhcU9t?=
- =?utf-8?B?RTJFR1N4aXNRdkZ0Vi9odTdrZ1o3OEptd2FmSVgrS0xpeW1FSTNMRXJPQ2VH?=
- =?utf-8?B?L3BkYm9zekl2amhNbFN2T09GOVlnVVN4OUkwVGVMeUZ3Zy9YaXVYSy9HNFlW?=
- =?utf-8?B?NmxFSkNiWWFRMnlXeXhvWVpkRTM1d1pZV1p5VmxJKzBPckRKYlRIb21zdjJv?=
- =?utf-8?B?YXZCRDN2Y2ZpLzhZYUhyREVsZDhkYnFmTW1zZkF0NHNrVlBsSnJuSTJKK3F4?=
- =?utf-8?B?TkR6TzF0QThCWDVuTGN6UnJFaDlnMUJ2NFhaMFZ4eDdOU0lFVkVDOTM5ZHQz?=
- =?utf-8?B?UHhIUHlwdG54eG15eU84Y3h4c3BNRnlINWhBZ1cwZHZaUHhSdDk4YnhBY3Ja?=
- =?utf-8?B?N3hKUzdsaVNrSG9GbTN5NTJDN1g2dmFNQmhYZ1BWTnp3RnpxeEhXemk3dDls?=
- =?utf-8?B?cVN1UHExcWJNYnNjdFJYWFNxc1kvWm9JZmN5TDdBRFFHcHlETmw1UEpEbk9a?=
- =?utf-8?B?YU1GVjdLc1NnZ2FKQkc3UHltOXUxaFgxR3JOZGFEOExjTFhwdWJWTWc3TVlu?=
- =?utf-8?B?UlpocmVCZW9GcDcrWEhzMVoyaVZNUmpWZy8yR2RweDVLemVRZ2lBcFBTcTNv?=
- =?utf-8?B?QTFBVU5lc244d04weEQxVUFZWVJZVU9rZFo2R3oxSXU2aXJaaE92SmwvSFY1?=
- =?utf-8?B?dDhkcUlkdUJWQUNkTHpoamVkbWJ4NENpVUgxNFZ3UzFhbnRkNy9VUXpVQ2hC?=
- =?utf-8?B?MDJlMjJLdHZKc3grUDJFbUdGN1NrRnJKUGRseStzbHgzdWJ5VDgrQnBONkVj?=
- =?utf-8?B?SUlHMzhMVnovSTJ3dlZUcit4YVFKcE8rUVZWd3IvekZ1cm1ac0R6NTl2NldF?=
- =?utf-8?B?RExnUHVjYm95ZGY3aERPQythR3hJMHo1c0RIMWdVSVpOQXZsbFRsNFBVU2Nl?=
- =?utf-8?B?NHlKMktJQ01KUmNJU2tyK1lhMHJJMXQ5Z2tZUUYxOGZGYUJ2NUs3dElxaWRu?=
- =?utf-8?B?SjZYa3pTeThQR1RaMFlBaFFaRUlsR3lxWC83UkhkV3g1a2dBU2ZRL1ArR0dq?=
- =?utf-8?B?TUhNNkpqR1Ric1ptcVNKMWdHY0FhSUh3UXVpWTVtRGRydkQrV25BamJnT2dM?=
- =?utf-8?Q?KcFuP4GHm44m8gngco?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be0206fa-32fc-4cde-e108-08de7dfe22e0
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9366.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2026 17:05:59.5545
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: p78LOTnfZ9BQ3Slla7Uq5mG/FxZcw8WuDW8jlLX9mTUh0RGpxmUhcMAVWUEvdjR9FAEfdpVnS+j/JPTv6Fy3Zg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9009
-X-Rspamd-Queue-Id: A00AD23D75E
+X-Rspamd-Queue-Id: 6E15B23DA1D
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
-	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34322-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-34323-lists,linux-usb=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,glider.be,baylibre.com,cadence.com,linuxfoundation.org,pengutronix.de,gmail.com,denx.de,ew.tq-group.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[25];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NO_DN(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Frank.Li@nxp.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[nxp.com:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:dkim,nxp.com:email,nxp.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	RCPT_COUNT_ONE(0.00)[1];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221184
 
-On Thu, 26 Feb 2026 16:38:49 +0100, Alexander Stein wrote:
-> this series adds support for TQ's TQMa8QM. The first 2 patches are prepatory:
-> 1. Add support for USB devices in cdns USB3 host controller, namely
-> onboard-devices as USB hubs. Implemented similarily to snps,dwc3-common.yaml.
-> 
-> 2. Add DMA IRQ for PCIe controller. Similar to commit 0b4c46f9ad79c
-> ("arm64: dts: imx8qm-ss-hsio: Wire up DMA IRQ for PCIe") which was only tested
-> on imx8qxp which just has one PCIe controller.
-> 
-> [...]
+--- Comment #26 from Roman Elshin (roxmail@list.ru) ---
+(In reply to Liam Mitchell from comment #23)
+> Here is V3 of the patch if you want to test:
+> https://lore.kernel.org/linux-usb/20260309-usbhid-eproto-v3-1-
+> 23bd841dfc91@gmail.com/T/#u
 
-Applied, thanks!
+Thanks it seems to work!, but at hub removing:
 
-[2/5] arm64: dts: imx8qm-ss-hsio: Wire up DMA IRQ for PCIe
-      commit: f21b3840141c3fb3cd469eca2dbb557b4f55210c
+[  859.967317] hid-generic 0003:046D:C53F.0008: can't resubmit intr,
+0000:00:1d.7-5.4/input0, status -19
+[  859.967329] hid-generic 0003:0603:00F5.0007: can't resubmit intr,
+0000:00:1d.7-5.3/input1, status -19
+[  859.967336] hid-generic 0003:046D:C53F.0009: can't resubmit intr,
+0000:00:1d.7-5.4/input1, status -19=20
 
-Best regards,
--- 
-Frank Li <Frank.Li@nxp.com>
+at dmesg.
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
