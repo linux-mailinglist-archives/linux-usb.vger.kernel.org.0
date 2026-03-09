@@ -1,211 +1,153 @@
-Return-Path: <linux-usb+bounces-34266-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34267-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QGTdN82ArmlfFQIAu9opvQ
-	(envelope-from <linux-usb+bounces-34266-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 09:11:57 +0100
+	id AKkJIGeJrmnKFgIAu9opvQ
+	(envelope-from <linux-usb+bounces-34267-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 09:48:39 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 650472355D1
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 09:11:57 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBB71235AAE
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 09:48:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 16F803007CB7
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 08:11:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D5BA2301980C
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 08:45:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AF2B36656C;
-	Mon,  9 Mar 2026 08:11:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="oTynYmyt";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Ia2Xpvmi";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="oTynYmyt";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Ia2Xpvmi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDE7333DEE2;
+	Mon,  9 Mar 2026 08:45:45 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C42636B056
-	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 08:11:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A88310636;
+	Mon,  9 Mar 2026 08:45:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773043897; cv=none; b=Vsck6Uh4FtIJIvoxGfR2jwbwpxDwPJAnhdkexcDdwAHQgNc8rP1rRJrRkWgOB1kpj19/qM1BS0ejCzphsGEoYbfyUOY0YZuHmnzJN73QtRRIg6vvKYQO+AfdsUESA8Gvrmzc3TtsmmBCsIXMOBC7hF5/FlwPER4/Zx8dHzw1TKU=
+	t=1773045945; cv=none; b=Jjt2lgxPLVFgWjLElS45YO4HYiRWTp2sqfijtu2xSJf1tmZ0vVJXQj+FBHwl3VPHTzpuaWnIHibhzNHazMn7AYWX3fGutvRGtv+HMNV4OYWLKvFK/F7uHVwBy5SV+AXubwicZ94LwxA9+AbBowno5i7lqBrTBVZzCOYD9dCgQnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773043897; c=relaxed/simple;
-	bh=8Wr+QHGi2xKFzk++2DxKsRg1oRjab/yYDMRypPaMk/U=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SxY4ZK451o5iQvq0z70RmPzB+WEFZpQQlqKKuObjxtHzfMjPKffSuEtzAXnc2nr+ERPQIV/lFtETYKAU3SNLNm7yRCXv8s9MfU5RlnMXTgeeRqzT305Rv5gQbZmqF38h8PfvDdd1RNtjDgHR6C1TsiuZ+VeGC76Cd8vD7QN3oqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=oTynYmyt; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Ia2Xpvmi; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=oTynYmyt; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Ia2Xpvmi; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id A518F4D206;
-	Mon,  9 Mar 2026 08:11:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773043893; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6LfKcwrC+MnzBTWAPUwiLkszFKYg84zL7JEONpljn3I=;
-	b=oTynYmytO9kFu0cL7j7PzOfcphed01RinVZUnnFur5j6gXjx82OGmpQ7D+LJ0aJLVgc5+v
-	invi+CpwII6ND2zskEcMEetY7pPdGcZUiyb1nk6A95I6CYoW7uR2/hcicJEphYhm+wAdpD
-	0qVQpXWScMi/5vYsmdtPRnEzzpQRbhE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773043893;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6LfKcwrC+MnzBTWAPUwiLkszFKYg84zL7JEONpljn3I=;
-	b=Ia2XpvmiOPQPSNnJI0f27Z7vTFp0Ihaz2CmTrNegJhdPJ28BciTszWp8QVdrIs27MhV8Ll
-	BxwCKpYQlNLWkwAg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=oTynYmyt;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=Ia2Xpvmi
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773043893; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6LfKcwrC+MnzBTWAPUwiLkszFKYg84zL7JEONpljn3I=;
-	b=oTynYmytO9kFu0cL7j7PzOfcphed01RinVZUnnFur5j6gXjx82OGmpQ7D+LJ0aJLVgc5+v
-	invi+CpwII6ND2zskEcMEetY7pPdGcZUiyb1nk6A95I6CYoW7uR2/hcicJEphYhm+wAdpD
-	0qVQpXWScMi/5vYsmdtPRnEzzpQRbhE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773043893;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6LfKcwrC+MnzBTWAPUwiLkszFKYg84zL7JEONpljn3I=;
-	b=Ia2XpvmiOPQPSNnJI0f27Z7vTFp0Ihaz2CmTrNegJhdPJ28BciTszWp8QVdrIs27MhV8Ll
-	BxwCKpYQlNLWkwAg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5F69E3EDCA;
-	Mon,  9 Mar 2026 08:11:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id Db/tFbWArmkkFQAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Mon, 09 Mar 2026 08:11:33 +0000
-Date: Mon, 09 Mar 2026 09:11:32 +0100
-Message-ID: <87y0k1toaz.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Edward Adam Davis <eadavis@qq.com>
-Cc: syzbot+ae893a8901067fde2741@syzkaller.appspotmail.com,
-	g@b4.vu,
+	s=arc-20240116; t=1773045945; c=relaxed/simple;
+	bh=CZtTpLHyhvrnHzeaIe1WIUoGeBW7ghthVW8GIXGbuwg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Q7KnssxVWa7gm3XhC00zkJRk0eQ8o7viMolUbvygogpcCQCxdXjzqsNd07NYhqFAcwv6BJ5GTx0nl+WLqLIOFI8YcZyrJNUsI90SGEySlOCV3E53ESZXS3svDm5PUaVnSK3D3OEjXWym2yoIklml7hf8iba7agmz1VUwJqNbBE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from localhost.localdomain (unknown [210.73.43.101])
+	by APP-05 (Coremail) with SMTP id zQCowABn9gmqiK5pUnDxCQ--.43647S2;
+	Mon, 09 Mar 2026 16:45:31 +0800 (CST)
+From: Pengpeng Hou <pengpeng.hou@isrc.iscas.ac.cn>
+To: peter.chen@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	perex@perex.cz,
-	syzkaller-bugs@googlegroups.com,
-	tiwai@suse.com
-Subject: Re: [PATCH] ALSA: usb-audio: Add the number of endpoints checked was 0
-In-Reply-To: <tencent_251BAA25F2BA69BB9533A19E651B204B3208@qq.com>
-References: <69acf72a.050a0220.310d8.0004.GAE@google.com>
-	<tencent_251BAA25F2BA69BB9533A19E651B204B3208@qq.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
+	18291782795@163.com,
+	Pengpeng Hou <pengpeng.hou@isrc.iscas.ac.cn>
+Subject: [PATCH] usb: chipidea: scope ci_ulpi_resume() to CONFIG_PM
+Date: Mon,  9 Mar 2026 08:45:23 +0000
+Message-Id: <20260309084523.718431-1-pengpeng.hou@isrc.iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Flag: NO
-X-Spam-Score: -2.01
-X-Spam-Level: 
-X-Rspamd-Queue-Id: 650472355D1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowABn9gmqiK5pUnDxCQ--.43647S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tw1UXw4UCryDtry5Ar1fZwb_yoW8GF48pF
+	4UAr48CFWkJ3Wagw40y3yrC3W3Jan2yFWxJrWfK398ZFnxGa1UWF1fJ34fJF1DGryjgw13
+	tr4fGa4kuF1agFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY1x0262kKe7AKxVWU
+	AVWUtwCY02Avz4vE14v_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+	14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+	IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
+	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
+	IFyTuYvjfU1vtCDUUUU
+X-CM-SenderInfo: pshqw1hhqjhx1rx6x21ufox2xfdvhtffof0/
+X-Rspamd-Queue-Id: CBB71235AAE
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34266-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[qq.com];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-34267-lists,linux-usb=lfdr.de];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tiwai@suse.de,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[iscas.ac.cn];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,163.com,isrc.iscas.ac.cn];
+	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[pengpeng.hou@isrc.iscas.ac.cn,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.967];
-	TAGGED_RCPT(0.00)[linux-usb,ae893a8901067fde2741];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid,appspotmail.com:email,syzkaller.appspot.com:url,qq.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	PRECEDENCE_BULK(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.684];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[iscas.ac.cn:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,isrc.iscas.ac.cn:mid]
 X-Rspamd-Action: no action
 
-On Mon, 09 Mar 2026 08:32:29 +0100,
-Edward Adam Davis wrote:
-> 
-> The user constructed a corrupted USB device, causing the USB device
-> enumeration phase to fail to resolve any endpoints. This resulted in
-> a null pointer dereference reported in [1] when the USB sound card
-> driver executed probe to initialize the mixer. 
-> 
-> To avoid the problem reported in [1], a check was added to ensure that
-> the number of endpoints contained in the interface was 0 when checking
-> the mixer status.
-> 
-> [1]
-> KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-> RIP: 0010:usb_endpoint_num include/uapi/linux/usb/ch9.h:479 [inline]
-> RIP: 0010:scarlett2_find_fc_interface sound/usb/mixer_scarlett2.c:8261 [inline]
-> RIP: 0010:scarlett2_init_private sound/usb/mixer_scarlett2.c:8295 [inline]
-> RIP: 0010:snd_scarlett2_controls_create sound/usb/mixer_scarlett2.c:8684 [inline]
-> RIP: 0010:snd_scarlett2_init.cold+0xbad/0x6c79 sound/usb/mixer_scarlett2.c:9407
-> Call Trace:
->  snd_usb_mixer_apply_create_quirk+0x1c21/0x2b80 sound/usb/mixer_quirks.c:4446
->  snd_usb_create_mixer+0x7a2/0x1910 sound/usb/mixer.c:3641
->  usb_audio_probe+0xf6d/0x3a90 sound/usb/card.c:1033
-> 
-> Reported-by: syzbot+ae893a8901067fde2741@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=ae893a8901067fde2741 
-> Tested-by: syzbot+ae893a8901067fde2741@syzkaller.appspotmail.com
-> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
-> ---
->  sound/usb/mixer.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/sound/usb/mixer.c b/sound/usb/mixer.c
-> index ac8c71ba9483..bd28caec3004 100644
-> --- a/sound/usb/mixer.c
-> +++ b/sound/usb/mixer.c
-> @@ -3563,8 +3563,12 @@ static int snd_usb_mixer_status_create(struct usb_mixer_interface *mixer)
->  	int buffer_length;
->  	unsigned int epnum;
->  
-> +	epnum = get_iface_desc(mixer->hostif)->bNumEndpoints;
-> +	if (epnum == 0)
-> +		return -EINVAL;
-> +
->  	/* we need one interrupt input endpoint */
-> -	if (get_iface_desc(mixer->hostif)->bNumEndpoints < 1)
-> +	if (epnum < 1)
->  		return 0;
+In current linux.git (1954c4f01220), ci_ulpi_resume() is defined
+and declared unconditionally. However, its only in-tree caller is within
+ci_controller_resume() in drivers/usb/chipidea/core.c, which is already
+guarded by #ifdef CONFIG_PM.
 
-The change looks wrong.  We don't want to return an error here, as
-mixer->urb is optional.  And the second check introduced above is
-utterly nonsense; epnum is an unsigned int, so epnum < 1 means only
-epnum == 0.
+Match the helper scope to its caller by wrapping the definition in
+CONFIG_PM and providing a no-op stub in the header. This fixes the
+config-scope mismatch and avoids unnecessary code inclusion when
+power management is disabled.
 
-The problem is rather in the scarlett2 side, and it should have a
-check there, not in the core function.
+Signed-off-by: Pengpeng Hou <pengpeng.hou@isrc.iscas.ac.cn>
+---
+diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
+--- a/drivers/usb/chipidea/ci.h
++++ b/drivers/usb/chipidea/ci.h
+@@
+ int ci_ulpi_init(struct ci_hdrc *ci);
+ void ci_ulpi_exit(struct ci_hdrc *ci);
++#ifdef CONFIG_PM
+ int ci_ulpi_resume(struct ci_hdrc *ci);
++#else
++static inline int ci_ulpi_resume(struct ci_hdrc *ci)
++{
++	return 0;
++}
++#endif
+ 
+ u32 hw_read_intr_enable(struct ci_hdrc *ci);
+diff --git a/drivers/usb/chipidea/ulpi.c b/drivers/usb/chipidea/ulpi.c
+--- a/drivers/usb/chipidea/ulpi.c
++++ b/drivers/usb/chipidea/ulpi.c
+@@
+ void ci_ulpi_exit(struct ci_hdrc *ci)
+ {
+ 	if (ci->ulpi) {
+ 		ulpi_unregister_interface(ci->ulpi);
+ 		ci->ulpi = NULL;
+ 	}
+ }
+ 
++#ifdef CONFIG_PM
+ int ci_ulpi_resume(struct ci_hdrc *ci)
+ {
+ 	int cnt = 100000;
+@@
+ 
+ 	return -ETIMEDOUT;
+ }
++#endif
 
-
-thanks,
-
-Takashi
 
