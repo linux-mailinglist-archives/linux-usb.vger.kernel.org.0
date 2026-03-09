@@ -1,202 +1,174 @@
-Return-Path: <linux-usb+bounces-34272-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34273-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ADwROmyYrmmBGgIAu9opvQ
-	(envelope-from <linux-usb+bounces-34272-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 10:52:44 +0100
+	id cJLuCSearmmqGgIAu9opvQ
+	(envelope-from <linux-usb+bounces-34273-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 11:00:07 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43B7C2368DC
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 10:52:43 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A5B8236AB0
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 11:00:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 57D973028822
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 09:52:42 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 59020300BE11
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 09:57:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B0AE387368;
-	Mon,  9 Mar 2026 09:52:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70251387372;
+	Mon,  9 Mar 2026 09:57:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="RonxrFUB"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="bCq0ukIR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011056.outbound.protection.outlook.com [52.101.65.56])
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CFDF38551E;
-	Mon,  9 Mar 2026 09:52:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.56
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773049953; cv=fail; b=dfALGbthPhkuEl+ypGXjDJcxwFWX9zn8ASunt4m1mDj+X8YRltbBorPXWNMfglKv91EnQ+H63lNok6yFdUZz/i2p+w1nPKxFERI0YUgxe0yAtBK9aXtFBMY8lgG66yridyrSqTlCrXaqglJH8EwoEbmWwlrvb7UKowexumusZQk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773049953; c=relaxed/simple;
-	bh=vqTZpDkWsfr8roJkFYj1vBBazghep0WLPy6htPV2ajs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=mmjVIbuj3qd4EbWgAQVDfRdVvc2fEOmdFkgf4bmx7WFWOCCY4nhI9zr5Mq+7i3KYXSnq7QFNRaIoVp5tJph297JB3pAXn7C0jUvEqOCd1wcs3VZT9R1fK0MZ97w/Du6k3pYUJUoiZQhe5/ugX8gdg6WbePjRM1AUSWvSHgNSri8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=RonxrFUB; arc=fail smtp.client-ip=52.101.65.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LYvL9KFaWMTOCTbH9FITkjwiDk216WwTZ4QhlBYnSSGNj2Q7/izFtAmUQs5N+cXyw5atm/fkZf7NLVpPxghyosVJdo/ebzq7Iq/EtwSAb7Lq1raxd1TPPjGfgUJztRaxH2XsNBhtGmj+d2CneU7172SKRBF7PFwI9vae778hOniXXb/22WS+jQwxnkaPI0ZrljZk5R+Z+lkPmWcxDve2MgOEyi9HHjAwknfw5+L0TlwhXiHLB5f67YN8j52Fzozk0lDGQK2E7MH2FU884tcrDSWXwHw8GeMmTFbHUoE0GHQASgHLxAbIIY5wwnxgwqEJepEWSsFwetrcfyquBPVzGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vqTZpDkWsfr8roJkFYj1vBBazghep0WLPy6htPV2ajs=;
- b=fieecVfmFVxRFcvWBkE9r4eXW5HErDW1BrP41heyJJHyDQkXPMM9D/JTmb8zOGCs6soI486eKPvUBr/nY3TXlIhPQAjno9xzjzAQNqClx4USAwADmNu68yZKsdtXcu6gLi57NlsuFuBZ7ZGujo4pSdHnzfPSvlq7EvWyaPW6OFe+H7m2MqjsUaX5fXWf58wfL/0S35w0dLA2gCiuNbcTUb9YqKm1Iqvscq/mRSeOvFDE7dqFOu0eAmS/HGIsmYPNjekTkkhpgi7B41Nec86KwfRkOMmLB6/rYre/gMug9TyccTEtH2qgyJK6hP44Pc5P++aQXudh2WGBrXlgHuMEbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
- dkim=pass header.d=est.tech; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vqTZpDkWsfr8roJkFYj1vBBazghep0WLPy6htPV2ajs=;
- b=RonxrFUBn0sZ1uSeadiKNFl2dqgyuQgoncp5yTierVqbLtmw04b1JvHK87DblBs9wRIH42O0zcXCC+VSWTapde3PsCEK18OG4knehAiKWKJaFgODExadhlKcC5qN0IO/lGMQX1GiBWoopGfAB3EgyD/0ZE6P2hIn5gSXiCZQQHl/rG3FI1jYarud6yzjFuYUgfeEljKBXvPGL4W3av/D/SQ1DN7v8IydHswXNY/4HJaZsyO8Myyvesad5PuI+gYlW3WPJGmtVbkL50wGbO8hmYf+VkDDglXFi4uhe4VDE/RGhK3urNv4uOXqVFywsCuRFzoTB+ccH9kpIABNMNgdCA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=est.tech;
-Received: from GVXP189MB2053.EURP189.PROD.OUTLOOK.COM (2603:10a6:150:6c::22)
- by PA3P189MB3368.EURP189.PROD.OUTLOOK.COM (2603:10a6:102:4da::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.22; Mon, 9 Mar
- 2026 09:52:23 +0000
-Received: from GVXP189MB2053.EURP189.PROD.OUTLOOK.COM
- ([fe80::9996:4371:88cd:bc04]) by GVXP189MB2053.EURP189.PROD.OUTLOOK.COM
- ([fe80::9996:4371:88cd:bc04%6]) with mapi id 15.20.9678.023; Mon, 9 Mar 2026
- 09:52:23 +0000
-Date: Mon, 9 Mar 2026 10:52:22 +0100
-From: Ravineet Singh <ravineet.a.singh@est.tech>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Mike Looijmans <mike.looijmans@topic.nl>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "jura@vukad.in" <jura@vukad.in>, 
-	"malin.jonsson@est.tech" <malin.jonsson@est.tech>
-Subject: Re: [PATCH] usb: dwc3: gadget: Inform system of suspended state
-Message-ID: <s7bwd452qn7c4jblrfvbjwlhij3vuyqxzzij5yavbd2errhtfj@bxou7mag2wf4>
-References: <20240603131304.233403-1-mike.looijmans@topic.nl>
- <20240604010256.4dxamwvcjxug6xfb@synopsys.com>
- <0fceefc4-2b3c-41a4-a6ac-d0b6dbacc1f7@topic.nl>
- <20240604230624.dk3pssivd7g3qb7p@synopsys.com>
- <23bf65a8-b3b2-459e-bee7-ca7c4e4993de@topic.nl>
- <20240606002909.f6a7fwfh7ccb6pxq@synopsys.com>
- <2j6o5atwkm5wl25adcusadiadme7gqpx4vqmscl42wnxgjyh7b@b5om47iesajo>
- <20260306020621.4o52wfl2ej4dxvdg@synopsys.com>
- <jr5jzgvstxr7galevtc7p45q4jx7pk62itv2yki7fw6rlivltz@z6vkp5k5sfj6>
- <20260306230452.rfnxcqhy4ehjuubc@synopsys.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260306230452.rfnxcqhy4ehjuubc@synopsys.com>
-X-ClientProxiedBy: GV3PEPF0001DBC0.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:158:401::6b2) To GVXP189MB2053.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:150:6c::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2338E2EBBA4;
+	Mon,  9 Mar 2026 09:57:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773050235; cv=none; b=RmgK+G6RdxCx+2CXl5ljQzaDuk1d+I1T5tDuoRoFyGp5KqSzXfTxCjnlk+t/wKrWjRgbaaRV83Fa0H2VyKo5kk6kB2ayUkeqVxiyIjzH0U9UtunfHvRmnVJXYndtPYAvtcMMxXl3fj3xf5p5FCJbd8RF7WUjf4kDF7rJV7kQ4y8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773050235; c=relaxed/simple;
+	bh=nilGiojBhkkXdxQZ8C26ern1sePJDJzOgiB3jddkbY8=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=JNBa7QFMPHRzhGhPBhLRkM/c3v2qbErtedyzv4Ol75eWGFjMPJk+3PLe2VE44Xvqb7fZCZqLPugWjbf2QE/qg3Oo1++6Jgt50UFMhts11j23meVU5+PdZW6KCabHo120WWEFgXGMPw1TlAFiYP7KAclYg7cPWtSx8ZmQDnqubCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=bCq0ukIR; arc=none smtp.client-ip=162.62.57.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1773050226; bh=xbBsGMnzY1+YP8Pc5d3LS1Kx+Nv7ccQ2pvVnZWDMoJ0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=bCq0ukIRCqT5UuqatO6McUJWuRRk8Aaw9WJe8uLFex1opIvsx1xw5MWj86JX79zjj
+	 KCvJsb+bra/8vfum8Gy3FYkKe9bKu+bbyU0gY5JkwqLHwwvnkk6z7qvMZqjh6aR/MO
+	 ybB8iG3Ll+BOZFIXDcmdZVmBZHtfKZK1BDFUa9MU=
+Received: from lxu-ped-host.. ([111.198.231.89])
+	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
+	id E4314CC3; Mon, 09 Mar 2026 17:57:03 +0800
+X-QQ-mid: xmsmtpt1773050223twllwpqa0
+Message-ID: <tencent_986ED56EFECC99E7EF86D412F6064FC99906@qq.com>
+X-QQ-XMAILINFO: MRMtjO3A6C9XsF6vvQCk04sddRl4ZO54ea49qQyCZrGe9fEfoz0VBA1PApPMkG
+	 +s3TpWCQLJtwoX887jBKlc7tfN4dGCxUNQY06eUaDyNQVhSMTdPLJxQECRYUvI7jLRd2hbd29QvZ
+	 wuMUwK+H+Z79KeRnkSgQA7Oki42460WZsiteYcmsZK2sGjfTo5tun3BudhrsyLaH8/8kS60xi3Zi
+	 W5SuOyZW1K+YN68RlbCOA8PFOCsmiP/TQzeUo6c6I73O7GbppmCxqeTUjaOpThO8dG1jNjAad8RA
+	 v1+ZTAzpH5awqMiwphskYbEoERMvhlYaqS63xzm2JevKi94jMLmiXY/s65mRW9fYI0TsJXtIeNQa
+	 LelTE5fXrjAqNvRse3vumXU8HeGU5Y9eVqUGyAeOai9yKPdfg1WN/SkBP4lrtu5EHSMkHNjE2e26
+	 E36GbQORu8sAd4dll6kAa2i3V2hdi1UPpuCrl8H2ZU+WGZcLGsEHe0ggxyhyp9dJ77CqroYm8I8Z
+	 SJiRADBY5wcungSvr0D01/2tpiVzpH4xdPLGreRX9aEbeRgGCN3yqxnuXCO5QzO0ObCC5b+LqilH
+	 kY/+xTkO3oam+Ic/LhLYcqYWFWBnxDaXfuXjTK3x51Z9M5Fd8G49I3vI55F8CUHKLHG7BHaZggMA
+	 zQy9KWpSFCAZdnJ/Sn2FDah8JMfEAzM3zZSqDe6H/DKPYEg71VsORh9xLXItK7P1NGeVMcwOTms5
+	 a40KCNLyHpYkPWp1Mmu9WH72fIUPfZekwnBBnowh/lxjWflZU8lqPvQFkWV0RJE89gFeMRXbWVwa
+	 XxjF4Xzgh3TxxymVU1x8IWgrfnSsaXqFOydvR9d2fl8/AdE5ZatTr+SsFhKYBOJnyEnsj/kzHR0o
+	 /unMKj9RVbHO4KyXbCYxcS3ahfGzX+kFHe4iWJvbTQIiTzeHPLQ5CPXnOOUvmepakiGTTsaI81XA
+	 zZ6xLYsTJs9VpMwQBWn3pbzO2YO9aIJZ7nTb0AqWLaB0qhRGd1d+59BTHnbnG+MoeDc7WnPBfvzD
+	 un1vbqI2gLjDisJVXQwa8hsYfSEJo=
+X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
+From: Edward Adam Davis <eadavis@qq.com>
+To: tiwai@suse.de
+Cc: eadavis@qq.com,
+	g@b4.vu,
+	linux-kernel@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	perex@perex.cz,
+	syzbot+ae893a8901067fde2741@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com,
+	tiwai@suse.com
+Subject: [PATCH v2] ALSA: scarlett2: Add the number of endpoints checked was 0
+Date: Mon,  9 Mar 2026 17:57:03 +0800
+X-OQ-MSGID: <20260309095702.545842-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <87y0k1toaz.wl-tiwai@suse.de>
+References: <87y0k1toaz.wl-tiwai@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GVXP189MB2053:EE_|PA3P189MB3368:EE_
-X-MS-Office365-Filtering-Correlation-Id: 454e1e60-35b1-498e-d362-08de7dc18ffe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|10070799003|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	dim1qYX1H63pm9ZEWI33v5HEvJWELkXaO+YxgN+1gxxMO3/4ZqELMxOLCjJRqZeC7Zmq+sfkeFjKkOmC4GToIVR/W0/CX7wrYL0nA5agqOQXeMbdSl6yMFsME0M2zI0C57Ay+LnyX6J/3BKadiFb+eVkfbP0kvotc1K1QoImDyBiGGL5S6tFsdk9lBSNfkjk7tCjtDStD749JXT8RXkmNaJzKGOj1Hzz+O3zLC/8YNuBPn96Blem7ixdcZgnbNEnbbvs2jIQ6asZ9TTr3hIOX6PMu8iEkC5nBLm5A0zB+fhA+fTtCmgEDyMs84UwYvpVSYMG9OJVK8EvEZC5GxYqdoVZ12wIoUON0y4Jh7gOe8R017iPVBrpKleKZqPHgn7qAJg6+qi0T5Ziv+78YIYjEdewLBpLxRmwvaJBXKUAMUZGfXfUWlx9Dr9lqPIWtT09UUwqD3kOmLte7glXwI0wHHBJk62ED00xpbyInAElF+LEomeOhXNRnJO+r/RyFy5PQfjqIL7Vi+bLzx3Veu1eWj3WZVbyBWEtrcW84HTESEmASi82/SkT0xvRcOV6zOd+OdVgnctkpI8x+SmPrF8wnntysO17Z2G4Gun6en+DREqImGiVckIrGezZanjoVEVWig4DARwis+3+GHwutGCrFutjHexvTA98kGZixpZC/5qKGWQMzGVxXjtm2IP+eJrTvMTT7Z/uzkmFJP5EVLzf6OP2sHGH7Ed9HGlpC0XgJ5M=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GVXP189MB2053.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ICA1g46NsCPz1Q1RPxSJCgHpriln+zqGzpNBnUx7Ri+5M7UcNrYH0UBxurY7?=
- =?us-ascii?Q?m2pJF2HFKBnmr/TfhO3CzatPbLXVtKQNSxKa25mzZ74bBev6DmkWQPPDfDw+?=
- =?us-ascii?Q?MlKb3KRKwNMXk8hE0qllau4v4Ozy1FfMOyGL9EitO3pVV8KBNKh1X1ZFRa9/?=
- =?us-ascii?Q?EAo/NGLGgL97vTIgLMdrD3ODPtdwHKtTmrjOAOuBzMwa8/vbvt1MimGvfp1y?=
- =?us-ascii?Q?8P33QMqUIKARBZ4AYfOO47jY6JPB3nBnERPou1wGhI2P0UBC5xnnX4HnnEDj?=
- =?us-ascii?Q?8HlOrPSnWPzEhpK0zIdRU9d3FFFLwsar030Lvt9OzjFpAoYTJg9SgiW1vBcj?=
- =?us-ascii?Q?TVOmdbC4oLYLRExLInCOdw3gOUNturco4L+1B11ubpyWVxibSgSF4D5+Iela?=
- =?us-ascii?Q?Im2dxPYDRBIUXX7Oav8EvznOspCNbgOac4eeoi3dr//j0z9W1plDbdW5lUo6?=
- =?us-ascii?Q?eFa8f8yXI4CrloFkFZTY/Lv4h+k+WTcCyf6L1m+SF3HKrPCsg38qRnzTksxl?=
- =?us-ascii?Q?HMgvkUS/aJAtxWCKjpV6mI3EpSoVqIArDQb/XBZa53Kd+30XxX6Kp24PkLcD?=
- =?us-ascii?Q?/KeDtBoqhS4xxzhLWR+6NN6vJkPTaDeYTDtgfhCVogFGZFx/xkuRplfOsH2d?=
- =?us-ascii?Q?CkyhO49ixGXqwd9plRxLdMzvJ66HQ5C6DTFRJkfwmWfo3WafeFbtKUeHwb8C?=
- =?us-ascii?Q?3JHBFhXzJgeCk4XPsmvSPEk4/cpMnY0A7u00NWrFZM+/MPz8K0K1ZGwl7y4n?=
- =?us-ascii?Q?gTIX3rdT8extfLe06WBSJVm7gp6aNUnNTEt3mKPkmyK+iMB9xdqfUsX0U+w2?=
- =?us-ascii?Q?TrnOl7AYc8DW8jq9bXo+IBzJahXCG7axLKq8VJyR+C+E40FkyAuMXK/qjeC4?=
- =?us-ascii?Q?qSv198+DlbZfj2iMFPLB91t7AdSQCzFL6yzw9fs7DLluJspvrw48U+zDLs0J?=
- =?us-ascii?Q?50HvVKV9h1+ilB73tHYOxgKbWig9nT7ldrkcf1HearZAd1eHJMZutL+pc6oK?=
- =?us-ascii?Q?GEhKLO5TUmKlT2ED5X8O6mLEOdx6mBpq5ZYc1cGvTB6D+uFng/hl+gaQrfXM?=
- =?us-ascii?Q?5ANUzWuv6YZNqoSau3lwYa48RvS59uMenCttO3gfJvzpCe78bRr8FghCgsUL?=
- =?us-ascii?Q?ZQjjGLC6194phNZvvwN9RazLjKfUuizC+NdVOhUz23g8ZLsUhmcZ0DeFMKMp?=
- =?us-ascii?Q?UYmXNjXsIjcLKTwWYmFRR8sS1PgCmQoX9JGnJpHCWFyrik7w8Jb6QZoQaML1?=
- =?us-ascii?Q?utZFASitopb87Ft50djDVWtOvGdZrKg/Lq+5H7Qr2kOp+xqpSiWEX24j205n?=
- =?us-ascii?Q?2q11m5sz0otEHL0Qx8glCUE6V/KW/Qqw6I/AmftxYgIuAP5lu0+wsoNnc36e?=
- =?us-ascii?Q?muwmS5emCVHmXLbJSaJ8xeXEHp2r6d7uxeBsAqVkLV/TcBpwBg8XaK8LvSnG?=
- =?us-ascii?Q?FLL63ZZ0aJm3ubNAwyMYVB0n96ZKCWPIUKWp1YuXYCJ1WZpOF4oIFGNdJAt0?=
- =?us-ascii?Q?/P5raDiQKmN/6Xvr1+Lg3GjEc2LF1XE6U10O4DQw/SRO4D98OIvPpfRLcSCx?=
- =?us-ascii?Q?qHsUV1yptGDBrznlyW0kFN9KGzqgRaOfy5W+ay260aVOZguyMlT+G25SkXIu?=
- =?us-ascii?Q?nw3bvnYW0zF7oNx8YS0FE4Shd4BmkmRQqlpddTPbZjwY0uyb6rf237FV9S4V?=
- =?us-ascii?Q?gRrOPYlJV+wtQiWZlGiYTU7EugIWeXJw16nmJp+Atxsngj1UNc52Yx0fDnb5?=
- =?us-ascii?Q?bNNYcs/WsKP3yguaHbRMhIV/0ql57tytLjFuDm/A4loRNargqh7a?=
-X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: 454e1e60-35b1-498e-d362-08de7dc18ffe
-X-MS-Exchange-CrossTenant-AuthSource: GVXP189MB2053.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2026 09:52:23.2919
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3TcgcZO+nNt/jkuAUFsPQ7ubZePU3hrkJXP8W8uBZqbQCxoL0tyfwn0hC01LVysK9LtghTEiiA+bIoShBCwktWRAab3EMNROsrUiLnJtkjo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA3P189MB3368
-X-Rspamd-Queue-Id: 43B7C2368DC
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 5A5B8236AB0
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[est.tech:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[qq.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
+	R_DKIM_ALLOW(-0.20)[qq.com:s=s201512];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34272-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[est.tech];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[est.tech:+];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34273-lists,linux-usb=lfdr.de];
+	TO_DN_NONE(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ravineet.a.singh@est.tech,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[qq.com,b4.vu,vger.kernel.org,perex.cz,syzkaller.appspotmail.com,googlegroups.com,suse.com];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[eadavis@qq.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.955];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,est.tech:dkim]
+	PRECEDENCE_BULK(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.993];
+	DKIM_TRACE(0.00)[qq.com:+];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	FREEMAIL_FROM(0.00)[qq.com];
+	TAGGED_RCPT(0.00)[linux-usb,ae893a8901067fde2741];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,appspotmail.com:email,syzkaller.appspot.com:url,qq.com:dkim,qq.com:email,qq.com:mid]
 X-Rspamd-Action: no action
 
-On Fri, Mar 06, 2026 at 11:05:00PM +0000, Thinh Nguyen wrote:
-> On Fri, Mar 06, 2026, Ravineet Singh wrote:
-> > Understood, my bad, will send a RFC patch in the future.
-> >
-> > Regdumps (without the patch) are attached.
->
-> Please no top-post.
->
-> This looks like an issue with the integration of the controller and the
-> phy/connector. Your phy vbus detection logic needs to properly assert
-> the proper signals (e.g. vbusvalid/powerpresent etc.) on
-> connection/disconnection detection.
->
-> It's best to fix it there. Forcing every U3/L2 transition to be treated
-> as if it's a disconnection is problematic. If there's a real U3/L2 state
-> change and then the host resumes, the device and host are out of sync.
->
-> I don't see a good workaround for this.
->
-> BR,
-> Thinh
-Understood, thanks!
+The user constructed a corrupted USB device, causing the USB device
+enumeration phase to fail to resolve any endpoints. This resulted in
+a null pointer dereference reported in [1] when the USB sound card
+driver executed probe to initialize the mixer. 
 
-BR
-Ravineet
+To avoid the problem reported in [1], a check was added to ensure that
+the number of endpoints contained in the interface was 0 when creating
+mixer controls for the Focusrite Scarlett 2nd/3rd Gen USB sound card.
+
+[1]
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+RIP: 0010:usb_endpoint_num include/uapi/linux/usb/ch9.h:479 [inline]
+RIP: 0010:scarlett2_find_fc_interface sound/usb/mixer_scarlett2.c:8261 [inline]
+RIP: 0010:scarlett2_init_private sound/usb/mixer_scarlett2.c:8295 [inline]
+RIP: 0010:snd_scarlett2_controls_create sound/usb/mixer_scarlett2.c:8684 [inline]
+RIP: 0010:snd_scarlett2_init.cold+0xbad/0x6c79 sound/usb/mixer_scarlett2.c:9407
+Call Trace:
+ snd_usb_mixer_apply_create_quirk+0x1c21/0x2b80 sound/usb/mixer_quirks.c:4446
+ snd_usb_create_mixer+0x7a2/0x1910 sound/usb/mixer.c:3641
+ usb_audio_probe+0xf6d/0x3a90 sound/usb/card.c:1033
+
+Reported-by: syzbot+ae893a8901067fde2741@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=ae893a8901067fde2741 
+Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+---
+v1 -> v2: move the check to scarlett2
+
+ sound/usb/mixer_scarlett2.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/sound/usb/mixer_scarlett2.c b/sound/usb/mixer_scarlett2.c
+index ef3150581eab..4b300226f16c 100644
+--- a/sound/usb/mixer_scarlett2.c
++++ b/sound/usb/mixer_scarlett2.c
+@@ -9393,6 +9393,15 @@ int snd_scarlett2_init(struct usb_mixer_interface *mixer)
+ 		return 0;
+ 	}
+ 
++	if (get_iface_desc(mixer->hostif)->bNumEndpoints == 0) {
++		usb_audio_err(chip,
++			"%s: There are no endpoints for %04x:%04x\n",
++			__func__,
++			USB_ID_VENDOR(chip->usb_id),
++			USB_ID_PRODUCT(chip->usb_id));
++		return 0;
++	}
++
+ 	usb_audio_info(chip,
+ 		"Focusrite %s Mixer Driver enabled (pid=0x%04x); "
+ 		"report any issues to "
+-- 
+2.43.0
+
 
