@@ -1,172 +1,154 @@
-Return-Path: <linux-usb+bounces-34307-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34308-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id r6OxCk7YrmmKJQIAu9opvQ
-	(envelope-from <linux-usb+bounces-34307-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 15:25:18 +0100
+	id iGabERvarmmKJQIAu9opvQ
+	(envelope-from <linux-usb+bounces-34308-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 15:32:59 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87DD123A79A
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 15:25:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C850D23A909
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 15:32:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 72F9E30162A8
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 14:25:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CE7BD307AA06
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 14:29:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 501B23D330E;
-	Mon,  9 Mar 2026 14:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Hu+PzubT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09D023D301D;
+	Mon,  9 Mar 2026 14:29:12 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D27C3CF66E
-	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 14:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21D733B893E;
+	Mon,  9 Mar 2026 14:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773066314; cv=none; b=RhVRjSh3Citi5VJX1n0VRyP/mByB7a0Cf65vUM7ZmRpaCutyN198MAXmcH2gkinwXSG1zLVqn6PMqtbtd6C2NzydBYq7oiP7VfRcENPF91Isuo4bHkQ2qziUpzIZtrsH35dQFJRvWCi1HfIzb2SF8ptW3PJZHhk63ym/SQerJME=
+	t=1773066551; cv=none; b=nfmFJabHZICUEuF0l8RJZdV5X3aZrVSLXQjWi7yWShEhAcH453gocIciB//dQIKH7EtdHD0s+Hr/DTFEUOgdKTBo5Plj4E0Q410IjwgCUN3H1WtIEOkn+1Fsmy9UaR0K8UOdLdpZUd2U4vkipE/ymHxt4szX4LtvLo1zQaHmkNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773066314; c=relaxed/simple;
-	bh=E1cH4QUcFzrMFXyxenhZ3EBIIeHiyY/JGTBN2yiS09k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J345pM6n6lovwFxiH7AiaxRpgNATR/T6VtZOIC3jBjxz45JQOZFs9DtOwlBYJaLaG+SY24np5Jvd3NejKPbvLhTLR+1nYX1oSRb95RcOacIlrulzrgZ1poCYEaANl5yPT2iUbZi2cmdexL/M2QGoJFOVMuN5lpCSTQ/q3gaWOCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Hu+PzubT; arc=none smtp.client-ip=209.85.222.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-8cd90401034so44063185a.0
-        for <linux-usb@vger.kernel.org>; Mon, 09 Mar 2026 07:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1773066312; x=1773671112; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K8TM6Fc3J8ohQ1tZNdTZAHIM+VRp5pd4c6FXTXs4zbo=;
-        b=Hu+PzubTROlN2b+JY9k8w48bHqhk1+2gr+WHiYphh6t9+Zketrz9nTHE6f2Fy37H/u
-         Yx37ZZAs6FgQowwrprKMj0WyOs5Rn+j4eYt70UiB6k4Ld8iK7yysRMBE3m0/J9IOeHRv
-         1w1Do5BN3EP5E7DlGG4TuMPP/8M+23lfN84kLaVfpXaMD5IytQxQt/nTeMqPOX6ZZOl8
-         ZI8bETNMW0mzweikuoVT0+SzrxSW3r1GlxKyvTOvY4olwpad62q0uuuczWGhifRFQYoS
-         sr5p/qqtftcBj5loOI0WZbTtsNN0PTwMTHtgYk8Esym2YWTq1NQmJH0N4eeo/V6TxaCX
-         +kMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773066312; x=1773671112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K8TM6Fc3J8ohQ1tZNdTZAHIM+VRp5pd4c6FXTXs4zbo=;
-        b=fPYiZxDTKH10Qa3D+ITV5THW1oXrXtLHuR0xDJtmKs+aos25fZevkGQUw8e3e5qVsx
-         VkHzczlI302pmv8/TXfjT0jSZ3gUzAAo/H6FmYweobeEjA7fOPz5r0eIAuNR3J5PciJP
-         siZqzcs/lsDLnk01nhEgkm7p7c+HSvqVT5FEYIF3N7pAKCg0XM3didQ339cnzGVGXxKa
-         7Atzf8x18EB7KmZm/a1JE7Td61HBZBxTRJfkD8UkYKbzbBokfEH/9sKK4lWLmjut/f1a
-         ynPvaqGuXXq4da0na55CX+GTV/bNi85MPHQdJSXXLDibNlZoWp2VF6xYXxRbJa/tGNO+
-         mjyw==
-X-Forwarded-Encrypted: i=1; AJvYcCV038EGmRwl3UJjf8Pj1WEP5bWNkrXKS4L6vo1fifBScKI85gPKjLfhcnYLOipOfxvez0128WmxKT0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyG6gs1XrolaeMGT2svaKz7E+3au/ODKGQ5Y0bim/d1Bj0TG6K3
-	8eVisILMFqrXPKKfL8t5XM+dhHItvjD7ILctPq9j7ajj8/B5V+6bDmfyVrOX2++fuw==
-X-Gm-Gg: ATEYQzyaEoGj15euoWSkkDcPitflQNBjaVIIMu2pSHx0AcnZG9QAHzachD78CNtJIQc
-	Dcwvj3D92lODiTIfpDX9oFNd28d9sIFNnO0w2KHmkaSLSobXlwHWHD6JdiYrBsxv2mi8puXBf5x
-	tnd76dWlUjLZbP15BbEtVfBQbOhf7ip43N60btpFM1ACc1ef0jb+d+1kQjz9IJR8ugqLNOjc2wy
-	FWlwirWhBqkSla6DewKxBIgHvKSTX0AvDxTv/vYOf+MzD/5IIKz0doxEZDU4z65khufLBvx4DT9
-	emWdoB+lQBJnWtSfty3GFqoLa/E3gpAr+B1KA0ioZaoZRnxXRHbp40jhP7vpdD7SudGVHJ7D4cc
-	qB0w8yE50AUJxcVcWN6FcnlJ1q00WXKWqK2grLuvK2dxOUTAd4KPMg3yP4Tf3Y+C5cvTcUQDa4N
-	1xnQ8V5chgML7PSsdMFwMCQMqs0M056gfB2IP+65BazA==
-X-Received: by 2002:a05:620a:199b:b0:8c8:82a1:11bf with SMTP id af79cd13be357-8cd6d336123mr1386944485a.2.1773066312377;
-        Mon, 09 Mar 2026 07:25:12 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cd6f4840b1sm690980185a.1.2026.03.09.07.25.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2026 07:25:11 -0700 (PDT)
-Date: Mon, 9 Mar 2026 10:25:09 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: syzbot <syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] general protection fault in usb_gadget_udc_reset
- (4)
-Message-ID: <e9d9d118-e6fc-42de-847d-e58eaf7bcba5@rowland.harvard.edu>
-References: <6f521b75-5e13-43b6-9e1d-d2a052c68597@rowland.harvard.edu>
- <69ad9d3d.050a0220.310d8.000e.GAE@google.com>
+	s=arc-20240116; t=1773066551; c=relaxed/simple;
+	bh=gEkXNg6CdBbBCtNDi4rMq0WdvbKKOUxETo8K6bNi5VM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=q3xEQkgJr+BebyNrN4ZZ17mckYmO8TtAcxc7vM772XjSgi8fPsMtHsftxK9IhUcPcjNBS7OngqW3q0cgc2e0PXGhrG9UD4dkwxrqO6JlI5BlWmzYJNpge9YVTeetsdWj3GFyYho1+SXfipPkjynh4sEfnXyRnIrLn15ts2w/gjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=207.46.229.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [10.98.66.117])
+	by mtasvr (Coremail) with SMTP id _____wA3LGcn2a5pqPYiAQ--.44858S3;
+	Mon, 09 Mar 2026 22:28:56 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.98.66.117])
+	by mail-app1 (Coremail) with SMTP id yy_KCgDXUNom2a5pS_CMBg--.53191S2;
+	Mon, 09 Mar 2026 22:28:54 +0800 (CST)
+From: Fan Wu <fanwu01@zju.edu.cn>
+To: Johan Hovold <johan@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Fan Wu <fanwu01@zju.edu.cn>
+Subject: [PATCH] USB: serial: opticon: fix UAF in write callback during port removal
+Date: Mon,  9 Mar 2026 14:27:57 +0000
+Message-Id: <20260309142757.589802-1-fanwu01@zju.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69ad9d3d.050a0220.310d8.000e.GAE@google.com>
-X-Rspamd-Queue-Id: 87DD123A79A
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:yy_KCgDXUNom2a5pS_CMBg--.53191S2
+X-CM-SenderInfo: qrstjiaswqq6lmxovvfxof0/
+X-CM-DELIVERINFO: =?B?nQ48iQXKKxbFmtjJiESix3B1w3vZ3A9ovKVTomAyoQazvoRs/NHSP8GI2EvgeEEW7R
+	sfnTvtdAQ+gzDzcUufjJMvYC0gZ/v+e8PQo0P2J8rX3FFi7CN96yV0USBkG2sgPwU49zsO
+	4gkRxQ3sT2+7yyLW/V6p9E6mavGmQbzmcFsnzP86
+X-Coremail-Antispam: 1Uk129KBj93XoW7CFyrXr4rAFW5ur1xGFyrXwc_yoW8Ar1fpa
+	yakFW3GF10qr13Xr1DJF1DXFyUWw4UJFy2gF92grWrXr1ava18Ja4IywnYyryxJF9rtrZI
+	934qv3yrGFy5trbCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUU9Gb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc804V
+	CY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AK
+	xVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48Icx
+	kI7VAKI48JM4x0Y48IcxkI7VAKI48G6xCjnVAKz4kxMxAIw28IcxkI7VAKI48JMxC20s02
+	6xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_Jr
+	I_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v2
+	6r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj4
+	0_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8
+	JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Tv3UUUUUU==
+X-Rspamd-Queue-Id: C850D23A909
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,appspotmail.com:email,rowland.harvard.edu:dkim,rowland.harvard.edu:mid];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34307-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,19bed92c97bee999e5db];
-	SUBJECT_HAS_QUESTION(0.00)[]
+	DMARC_NA(0.00)[zju.edu.cn];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34308-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	PRECEDENCE_BULK(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.631];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[fanwu01@zju.edu.cn,linux-usb@vger.kernel.org];
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,zju.edu.cn:mid,zju.edu.cn:email]
 X-Rspamd-Action: no action
 
-On Sun, Mar 08, 2026 at 09:01:01AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-> 
-> Reported-by: syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com
-> Tested-by: syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         65169048 Merge tag 'spi-fix-v7.0-rc2' of git://git.ker..
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> console output: https://syzkaller.appspot.com/x/log.txt?x=133f3fe6580000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692
-> dashboard link: https://syzkaller.appspot.com/bug?extid=19bed92c97bee999e5db
-> compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=178dc8ba580000
-> 
-> Note: testing is done by a robot and is best-effort only.
+The opticon driver anchors write URBs to priv->anchor in opticon_write()
+and frees priv in opticon_port_remove() without first killing these
+anchored URBs. The completion callback opticon_write_control_callback()
+may dereference priv via usb_get_serial_port_data() and access
+priv->lock, priv->outstanding_urbs, and priv->outstanding_bytes after
+it has been freed.
 
-That's not very helpful.  Let's try a slightly different approach.
+If a write URB is in flight when the port is removed:
 
-Alan Stern
+    CPU 0 (remove path)              CPU 1 (URB completion)
+    ---------------------            ---------------------
+    opticon_port_remove()
+      kfree(priv)  <--+
+                     |  --> opticon_write_control_callback()
+                     |        priv = usb_get_serial_port_data()
+                     |        spin_lock_irqsave(&priv->lock)
+                     |        --priv->outstanding_urbs  // possible UAF
+    return           |
+                     usb_free_urb()
 
-#syz test: upstream 651690480a96
+Fix this by calling usb_kill_anchored_urbs(&priv->anchor) before
+kfree(priv) so that all in-flight URBs have finished before the private
+data is freed.
 
-Index: usb-devel/drivers/usb/gadget/udc/core.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/udc/core.c
-+++ usb-devel/drivers/usb/gadget/udc/core.c
-@@ -1192,7 +1192,9 @@ EXPORT_SYMBOL_GPL(usb_udc_vbus_handler);
- void usb_gadget_udc_reset(struct usb_gadget *gadget,
- 		struct usb_gadget_driver *driver)
+Note that opticon_close() already correctly kills anchored URBs; this
+fix addresses the port_remove path which was overlooked.
+
+Fixes: 648d4e16567e ("USB: serial: opticon: add write support")
+Signed-off-by: Fan Wu <fanwu01@zju.edu.cn>
+---
+ drivers/usb/serial/opticon.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/serial/opticon.c b/drivers/usb/serial/opticon.c
+index e2bed477ad57..80e332e14384 100644
+--- a/drivers/usb/serial/opticon.c
++++ b/drivers/usb/serial/opticon.c
+@@ -370,6 +370,7 @@ static void opticon_port_remove(struct usb_serial_port *port)
  {
-+	dev_info(&gadget->dev, "Reset #1, driver %p\n", driver);
- 	driver->reset(gadget);
-+	dev_info(&gadget->dev, "Reset #2\n");
- 	usb_gadget_set_state(gadget, USB_STATE_DEFAULT);
+ 	struct opticon_private *priv = usb_get_serial_port_data(port);
+ 
++	usb_kill_anchored_urbs(&priv->anchor);
+ 	kfree(priv);
  }
- EXPORT_SYMBOL_GPL(usb_gadget_udc_reset);
+ 
+-- 
+2.34.1
 
 
