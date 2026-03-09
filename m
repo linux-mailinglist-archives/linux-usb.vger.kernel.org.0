@@ -1,307 +1,168 @@
-Return-Path: <linux-usb+bounces-34260-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34261-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aO0mKSlbrmkMCgIAu9opvQ
-	(envelope-from <linux-usb+bounces-34260-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 06:31:21 +0100
+	id YPE8HEF4rmlwFAIAu9opvQ
+	(envelope-from <linux-usb+bounces-34261-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 08:35:29 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B88E233EAE
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 06:31:20 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA209234D7C
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Mar 2026 08:35:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 906F3300CA32
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 05:31:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9B3863055976
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2026 07:32:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70A933128CC;
-	Mon,  9 Mar 2026 05:31:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEFEA367F42;
+	Mon,  9 Mar 2026 07:32:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OmmBfnpW"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="ReIk3GZM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8D21E5724
-	for <linux-usb@vger.kernel.org>; Mon,  9 Mar 2026 05:31:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC0B368953;
+	Mon,  9 Mar 2026 07:32:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773034275; cv=none; b=CWcelRR/Z82AiGLxyk/h0CxpS8/kNVMt7JW0VLP76b15RWHVp0Gkig8oA498FbUBYY6CAcN/MqjTVh4Cojw5C9yck2aKE7CJgopk5r3yr+SDij4aeYhjO8SBTu5s9UuLgPAs1qU0IquXKdy52OjjO5rLzUuKYPOW4+/mx3NhnI4=
+	t=1773041565; cv=none; b=j9ZVrZaFYOUKRNsDxmCY2WExTwhGWz5TS3Kg5wXXSR/a1Cl/HUMIFn/itvEOKmMPVP7Bgj9g7YG3I8cvSq4Le93BUNAyfsQ++IF+g+bYvxClWt2mx/THdRLCxOuNxYv/ceRE9QtQZaM8GLUutrICXrGhQmTsvgCANfzcq4WA8Rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773034275; c=relaxed/simple;
-	bh=sL41Qlw2uVKdjiA6AJ3MSq6wQiEX+X0x+5AelMD1nY8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=nzkBRb5cI2awClzNFdeAnM3UVhRad2dFD/XwP/vzVmMqTMK0LZYEB0sH/pkV6Pq/lItgvlnIIUlnnfut4YoYVJ+UuKriOq2vs2I2SepWAJC/gl/PaTPHbUgTWD+5SuBA6NQbNsLnnJMxKCKuL3Pl+0RBpUPq1f1PVb7uYzfhcWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hhhuuu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OmmBfnpW; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hhhuuu.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c73939e0314so1926679a12.1
-        for <linux-usb@vger.kernel.org>; Sun, 08 Mar 2026 22:31:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773034272; x=1773639072; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4e2d0zR+YICG3x4BqXaU4k+VrwxgDuOe9nAJceukt/M=;
-        b=OmmBfnpWTC/uZZv0AfUv8P4oYphTRHEJgyuk62j/dWLNcrWAsq6TmH+XWMPC2UOvvs
-         n8+uiN/cu0V/9KaV4SMJezu17/3QoVewT88Lohj8gkzvoKNqqH/wHpCAaiW4UYDtxDOL
-         2pfRylE+zd+iMLhNaVt1UWiJ9iUnfd6WsvQUuW4cQ6bPnnNWK214ykuVQCDekqqBHiXR
-         NXSWKYWYBEkb/z099pRNZNwQR9ajRQisKqsGTU+w374Vz2/LzKwz2YiX7PLUksNGrnA7
-         iMqxfYoDuCkgYZobJWXQFzvplWlVBbitA1s1iQzkuoF2C/DqRwVfudiHaSbyG/2b/paf
-         5w0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773034272; x=1773639072;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4e2d0zR+YICG3x4BqXaU4k+VrwxgDuOe9nAJceukt/M=;
-        b=LX3begNfNcJAQAEEgIFxDkG13bBPeAZgJFcn9b7C0D+TjF2dJnKndwmrfZ67pjB7mM
-         5WCUgIcF2jRJ/ZH5juzldsRUgaJJhxHhgcDUnOeiVJOAQYRTzpZkJI7kU4Vi2pLN62fn
-         XmnJkO/7twHH3aVKu+CAdNFgsxis2YXQ8A52slcQweeBn4IuZe1VcrcjB927fJg48adE
-         0eqmACoG+PA0B3MNRk0I9RtgtjWazjoL+Bz1tZ5mpXEqhAHWJz/c8LV6/W+fEij70dNp
-         VYt8wRf++S9zjoHhcEOjAv89/hrwrI5Mt3kzny3xbbnaK35Qy6H9c7nF/4fGb0gz2n46
-         Jg8g==
-X-Forwarded-Encrypted: i=1; AJvYcCX6KnMTLpXP2Us4EcIhTvaHIn7NVXj/yyp6oO+qYZG7BQXg1QKf7blcuklNYrlDnMx7f5kKskIGAHA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBieI555bOde8XzA0M++mSKYdvAjKcDE/PMTB5rpgMIQAGWz4y
-	a+kIoX8XaPQ54VJLk1QPUjNyVNjNm40dVzvpjapx+YVtWILCMBlDqwCakJN8DsaRJ8ws3b/qgGH
-	pkN6WpA==
-X-Received: from pgbdn1.prod.google.com ([2002:a05:6a02:e01:b0:c6e:8a54:4017])
- (user=hhhuuu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:6e92:b0:398:9301:b9d3
- with SMTP id adf61e73a8af0-3989301d42bmr1618729637.7.1773034272326; Sun, 08
- Mar 2026 22:31:12 -0700 (PDT)
-Date: Mon,  9 Mar 2026 13:31:07 +0800
-In-Reply-To: <20260224083955.1375032-1-hhhuuu@google.com>
+	s=arc-20240116; t=1773041565; c=relaxed/simple;
+	bh=AWFU9eSZdANBFGv2dNLetCdbSQN+C5pPC0+pMVGgRqE=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=DmQTam+7LvpC2Jc3GjDFbX6osp67wIu8JLXsEMgVCGU8iwXIrUljQKyLHwmdUaJTtLif9pKTEF/7jIgkgJD+KuCzqaekQ4pbv0DFZ5q4o2krdQHRFfdVDEHWsinghqQN79d7g6kYvYdn+rMzTnbw9rEaA9vL8brkCEUa+6NSNvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=ReIk3GZM; arc=none smtp.client-ip=162.62.57.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1773041551; bh=Mb3mrLLhazoKaVlGHpGuWLgJFSK9E6hT7xlTEjAaAWM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=ReIk3GZMBzQevffP+PSh8vXLYqikFywjnoi+VHNgjwGUqZQZ+ZQNYGmBza6lfto0y
+	 J61YD2Grn6Hma1j96X70/NUnrMV51dOVRS0T2w99VVD7gxWJtVwy0zW7QVMZXErTPv
+	 WsW1yXkArrkaDk+0RfBE7dTgFilTY5Q3EGsTBcZ8=
+Received: from lxu-ped-host.. ([111.198.231.89])
+	by newxmesmtplogicsvrszc41-0.qq.com (NewEsmtp) with SMTP
+	id 81C2AC9F; Mon, 09 Mar 2026 15:32:28 +0800
+X-QQ-mid: xmsmtpt1773041548t58i0fpci
+Message-ID: <tencent_251BAA25F2BA69BB9533A19E651B204B3208@qq.com>
+X-QQ-XMAILINFO: MMhobhVxpxw2M+h4Pou3ogAm24ZYV3r5PM6E+OocHbkcziIfuoflNX9oMP9BeY
+	 gMxiIw3E7NhJrD4JW4xXB+0vrAqYZNhtQHXyU1eHXccLdi4qMKq9XJIQAHObl+74DWhl/AIA6C37
+	 I6g60SsjxSdU8YWuDn+tb7J2RI+avdVXHE59SRt28azzKVKnDqhbego3MWxJHcv+TM8hry83AkYZ
+	 OByOyvhMyWudeFXXHlJmpLZLRmi14/1L/c16p1S/W+8Ncadgpefr+fawM4le6RVnrpVefW4OkBQ0
+	 UuFUXqi5CySuCJkYx4cZEop7FSs1KqnsZqHCsWtrlL9+I2GVY/20wg4JVM0vc0vgHzplM+e0m8yx
+	 mKKSqfvI1LXNifxU3Ky8WHvf7nNxxP2gjWM1QtLDJhRNgyC8WBMuenoDHn4azIzpVKXLFr7w9UoW
+	 7O9cBCsvzdn4sYV12pTXFu8OQi+1yG9+7KJS+T+BZzSqDvpCQVm+zUjZ/hleoTsgflhaikYr6z6E
+	 QEVXokTNmTSrN80/0JwKIt//OFuX0huC66VIp1VXtn7bsYvoXlWU4guucjgMHqtPVz9uV4FczExF
+	 oAb2LQLh0uM5OYJMp+HotCx5wcG/EjflSeuUUILHybb8RJt/YJs6TPD35PYaI3fLHqv5hXqBV2Hg
+	 tZXofiPehMLMWYiJnwO3TxDvPFmlyDJVm3rS+4Z1jSD5Ug5GuVMuNExxZLLxT4ARAsHyach63+1Q
+	 bOZXKSuD9MmII+ZZF3g65G3zA6p09na+Y8b3mC6GQeTbtxGhn3zMQ/rMfsrcg/CjZ69BfnWgI9Re
+	 7x3bDgjocTcesrCbxTF4d98J04epTdXIqPhmXjBQYc0y27hDMq9+DPeUVYgZKgjNl0jxSFj4XdL/
+	 mlcUkjO82aWeoHzWST4ZMZPvLDG6fanDnEJMccRK/WfPYUkLHvHvzdv3cmGeYtzJLzHQ8Li8OoVM
+	 mBec+6ToeOPtCJT+YXun/3Fg13KOKe3Po0ks1XHeeTM3zP4gNOdiZPp11AME84NqsumuJOxttu44
+	 lTawsUqB+JRV5NfCIo5CBLQNbpgxGm6vaf1RtlVpYwcYYtB7OE
+X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
+From: Edward Adam Davis <eadavis@qq.com>
+To: syzbot+ae893a8901067fde2741@syzkaller.appspotmail.com
+Cc: g@b4.vu,
+	linux-kernel@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	perex@perex.cz,
+	syzkaller-bugs@googlegroups.com,
+	tiwai@suse.com
+Subject: [PATCH] ALSA: usb-audio: Add the number of endpoints checked was 0
+Date: Mon,  9 Mar 2026 15:32:29 +0800
+X-OQ-MSGID: <20260309073228.539672-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <69acf72a.050a0220.310d8.0004.GAE@google.com>
+References: <69acf72a.050a0220.310d8.0004.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260224083955.1375032-1-hhhuuu@google.com>
-X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
-Message-ID: <20260309053107.2591494-1-hhhuuu@google.com>
-Subject: [PATCH v2] usb: gadget: f_uvc: fix NULL pointer dereference during
- unbind race
-From: Jimmy Hu <hhhuuu@google.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Alan Stern <stern@rowland.harvard.edu>, Dan Vacura <w36195@motorola.com>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org, badhri@google.com, Jimmy Hu <hhhuuu@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 3B88E233EAE
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: CA209234D7C
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[qq.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[qq.com:s=s201512];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34260-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34261-lists,linux-usb=lfdr.de];
+	TO_DN_NONE(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[eadavis@qq.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hhhuuu@google.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[google.com:+];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	NEURAL_HAM(-0.00)[-0.932];
-	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,harvard.edu:email]
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.984];
+	DKIM_TRACE(0.00)[qq.com:+];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	FREEMAIL_FROM(0.00)[qq.com];
+	TAGGED_RCPT(0.00)[linux-usb,ae893a8901067fde2741];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[appspotmail.com:email,syzkaller.appspot.com:url,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,qq.com:dkim,qq.com:email,qq.com:mid]
 X-Rspamd-Action: no action
 
-Commit b81ac4395bbe ("usb: gadget: uvc: allow for application to cleanly
-shutdown") introduced two stages of synchronization waits totaling 1500ms
-in uvc_function_unbind() to prevent several types of kernel panics.
-However, this timing-based approach is insufficient during power
-management (PM) transitions.
+The user constructed a corrupted USB device, causing the USB device
+enumeration phase to fail to resolve any endpoints. This resulted in
+a null pointer dereference reported in [1] when the USB sound card
+driver executed probe to initialize the mixer. 
 
-When the PM subsystem starts freezing user space processes, the
-wait_event_interruptible_timeout() is aborted early, which allows the
-unbind thread to proceed and nullify the gadget pointer
-(cdev->gadget = NULL):
+To avoid the problem reported in [1], a check was added to ensure that
+the number of endpoints contained in the interface was 0 when checking
+the mixer status.
 
-[  814.123447][  T947] configfs-gadget.g1 gadget.0: uvc: uvc_function_unbind()
-[  814.178583][ T3173] PM: suspend entry (deep)
-[  814.192487][ T3173] Freezing user space processes
-[  814.197668][  T947] configfs-gadget.g1 gadget.0: uvc: uvc_function_unbind no clean disconnect, wait for release
+[1]
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+RIP: 0010:usb_endpoint_num include/uapi/linux/usb/ch9.h:479 [inline]
+RIP: 0010:scarlett2_find_fc_interface sound/usb/mixer_scarlett2.c:8261 [inline]
+RIP: 0010:scarlett2_init_private sound/usb/mixer_scarlett2.c:8295 [inline]
+RIP: 0010:snd_scarlett2_controls_create sound/usb/mixer_scarlett2.c:8684 [inline]
+RIP: 0010:snd_scarlett2_init.cold+0xbad/0x6c79 sound/usb/mixer_scarlett2.c:9407
+Call Trace:
+ snd_usb_mixer_apply_create_quirk+0x1c21/0x2b80 sound/usb/mixer_quirks.c:4446
+ snd_usb_create_mixer+0x7a2/0x1910 sound/usb/mixer.c:3641
+ usb_audio_probe+0xf6d/0x3a90 sound/usb/card.c:1033
 
-When the PM subsystem resumes or aborts the suspend and tasks are
-restarted, the V4L2 release path is executed and attempts to access the
-already nullified gadget pointer, triggering a kernel panic:
-
-[  814.292597][    C0] PM: pm_system_irq_wakeup: 479 triggered dhdpcie_host_wake
-[  814.386727][ T3173] Restarting tasks ...
-[  814.403522][ T4558] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000030
-[  814.404021][ T4558] pc : usb_gadget_deactivate+0x14/0xf4
-[  814.404031][ T4558] lr : usb_function_deactivate+0x54/0x94
-[  814.404078][ T4558] Call trace:
-[  814.404080][ T4558]  usb_gadget_deactivate+0x14/0xf4
-[  814.404083][ T4558]  usb_function_deactivate+0x54/0x94
-[  814.404087][ T4558]  uvc_function_disconnect+0x1c/0x5c
-[  814.404092][ T4558]  uvc_v4l2_release+0x44/0xac
-[  814.404095][ T4558]  v4l2_release+0xcc/0x130
-
-This patch introduces the following safeguards:
-
-1. State Synchronization (flag + mutex)
-Introduced a 'func_unbound' flag in struct uvc_device. This allows
-uvc_function_disconnect() to safely skip accessing the nullified
-cdev->gadget pointer. As suggested by Alan Stern, this flag is protected
-by a new mutex (uvc->lock) to ensure proper memory ordering and prevent
-instruction reordering or speculative loads.
-
-2. Lifecycle Management (kref)
-Introduced kref to manage the struct uvc_device lifecycle. This prevents
-Use-After-Free (UAF) by ensuring the structure is only freed after the
-final reference, including the V4L2 release path, is dropped.
-
-Fixes: b81ac4395bbe ("usb: gadget: uvc: allow for application to cleanly shutdown")
-Cc: <stable@vger.kernel.org>
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Jimmy Hu <hhhuuu@google.com>
+Reported-by: syzbot+ae893a8901067fde2741@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=ae893a8901067fde2741 
+Tested-by: syzbot+ae893a8901067fde2741@syzkaller.appspotmail.com
+Signed-off-by: Edward Adam Davis <eadavis@qq.com>
 ---
-v1 -> v2:
-- Renamed 'func_unbinding' to 'func_unbound' for clearer state semantics.
-- Added a mutex (uvc->lock) to protect the 'func_unbound' flag and ensure
-  proper memory ordering, as suggested by Alan Stern.
-- Integrated kref to manage the struct uvc_device lifecycle, allowing the 
-  removal of redundant buffer cleanup skip logic in uvc_v4l2_disable().
-  
-v1: https://patchwork.kernel.org/project/linux-usb/patch/20260224083955.1375032-1-hhhuuu@google.com/
+ sound/usb/mixer.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
- drivers/usb/gadget/function/f_uvc.c    | 27 +++++++++++++++++++++++++-
- drivers/usb/gadget/function/uvc.h      |  4 ++++
- drivers/usb/gadget/function/uvc_v4l2.c |  2 ++
- 3 files changed, 32 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 494fdbc4e85b..485cd91770d5 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -413,8 +413,17 @@ uvc_function_disconnect(struct uvc_device *uvc)
- {
- 	int ret;
+diff --git a/sound/usb/mixer.c b/sound/usb/mixer.c
+index ac8c71ba9483..bd28caec3004 100644
+--- a/sound/usb/mixer.c
++++ b/sound/usb/mixer.c
+@@ -3563,8 +3563,12 @@ static int snd_usb_mixer_status_create(struct usb_mixer_interface *mixer)
+ 	int buffer_length;
+ 	unsigned int epnum;
  
-+	mutex_lock(&uvc->lock);
-+	if (uvc->func_unbound) {
-+		pr_info("uvc: unbound, skipping function deactivate\n");
-+		goto unlock;
-+	}
++	epnum = get_iface_desc(mixer->hostif)->bNumEndpoints;
++	if (epnum == 0)
++		return -EINVAL;
 +
- 	if ((ret = usb_function_deactivate(&uvc->func)) < 0)
- 		uvcg_info(&uvc->func, "UVC disconnect failed with %d\n", ret);
-+
-+unlock:
-+	mutex_unlock(&uvc->lock);
- }
- 
- /* --------------------------------------------------------------------------
-@@ -659,6 +668,9 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 	int ret = -EINVAL;
- 
- 	uvcg_info(f, "%s()\n", __func__);
-+	mutex_lock(&uvc->lock);
-+	uvc->func_unbound = false;
-+	mutex_unlock(&uvc->lock);
- 
- 	opts = fi_to_f_uvc_opts(f->fi);
- 	/* Sanity check the streaming endpoint module parameters. */
-@@ -974,6 +986,13 @@ static struct usb_function_instance *uvc_alloc_inst(void)
- 	return &opts->func_inst;
- }
- 
-+void uvc_device_release(struct kref *kref)
-+{
-+	struct uvc_device *uvc = container_of(kref, struct uvc_device, kref);
-+
-+	kfree(uvc);
-+}
-+
- static void uvc_free(struct usb_function *f)
- {
- 	struct uvc_device *uvc = to_uvc(f);
-@@ -982,7 +1001,7 @@ static void uvc_free(struct usb_function *f)
- 	if (!opts->header)
- 		config_item_put(&uvc->header->item);
- 	--opts->refcnt;
--	kfree(uvc);
-+	kref_put(&uvc->kref, uvc_device_release);
- }
- 
- static void uvc_function_unbind(struct usb_configuration *c,
-@@ -994,6 +1013,9 @@ static void uvc_function_unbind(struct usb_configuration *c,
- 	long wait_ret = 1;
- 
- 	uvcg_info(f, "%s()\n", __func__);
-+	mutex_lock(&uvc->lock);
-+	uvc->func_unbound = true;
-+	mutex_unlock(&uvc->lock);
- 
- 	kthread_cancel_work_sync(&video->hw_submit);
- 
-@@ -1046,8 +1068,11 @@ static struct usb_function *uvc_alloc(struct usb_function_instance *fi)
- 	if (uvc == NULL)
- 		return ERR_PTR(-ENOMEM);
- 
-+	kref_init(&uvc->kref);
-+	mutex_init(&uvc->lock);
- 	mutex_init(&uvc->video.mutex);
- 	uvc->state = UVC_STATE_DISCONNECTED;
-+	uvc->func_unbound = true;
- 	init_waitqueue_head(&uvc->func_connected_queue);
- 	opts = fi_to_f_uvc_opts(fi);
- 
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index 676419a04976..22b70f25607d 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -155,6 +155,9 @@ struct uvc_device {
- 	enum uvc_state state;
- 	struct usb_function func;
- 	struct uvc_video video;
-+	struct kref kref;
-+	struct mutex lock;
-+	bool func_unbound;
- 	bool func_connected;
- 	wait_queue_head_t func_connected_queue;
- 
-@@ -209,5 +212,6 @@ static inline struct uvc_file_handle *file_to_uvc_file_handle(struct file *filp)
- extern void uvc_function_setup_continue(struct uvc_device *uvc, int disable_ep);
- extern void uvc_function_connect(struct uvc_device *uvc);
- extern void uvc_function_disconnect(struct uvc_device *uvc);
-+extern void uvc_device_release(struct kref *kref);
- 
- #endif /* _UVC_GADGET_H_ */
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index ed48d38498fb..2dae27f05e2a 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -671,6 +671,7 @@ uvc_v4l2_open(struct file *file)
- 	if (handle == NULL)
- 		return -ENOMEM;
- 
-+	kref_get(&uvc->kref);
- 	v4l2_fh_init(&handle->vfh, vdev);
- 	v4l2_fh_add(&handle->vfh, file);
- 
-@@ -695,6 +696,7 @@ uvc_v4l2_release(struct file *file)
- 	v4l2_fh_del(&handle->vfh, file);
- 	v4l2_fh_exit(&handle->vfh);
- 	kfree(handle);
-+	kref_put(&uvc->kref, uvc_device_release);
- 
- 	return 0;
- }
-
-base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+ 	/* we need one interrupt input endpoint */
+-	if (get_iface_desc(mixer->hostif)->bNumEndpoints < 1)
++	if (epnum < 1)
+ 		return 0;
+ 	ep = get_endpoint(mixer->hostif, 0);
+ 	if (!usb_endpoint_dir_in(ep) || !usb_endpoint_xfer_int(ep))
 -- 
-2.53.0.473.g4a7958ca14-goog
+2.43.0
 
 
