@@ -1,155 +1,142 @@
-Return-Path: <linux-usb+bounces-34386-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34387-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UFpgJ37Zr2kzdAIAu9opvQ
-	(envelope-from <linux-usb+bounces-34386-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:42:38 +0100
+	id oOuAKtrcr2kzdAIAu9opvQ
+	(envelope-from <linux-usb+bounces-34387-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:56:58 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43A8B24776D
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:42:38 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3601A247BA2
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:56:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 82B7530325CA
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 08:42:27 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7AFA83003361
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 08:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1830032F770;
-	Tue, 10 Mar 2026 08:42:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ADCA43C041;
+	Tue, 10 Mar 2026 08:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GTvciSqq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="arGnJWmx"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E53F430B8D
-	for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 08:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEC13EDAB3;
+	Tue, 10 Mar 2026 08:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773132140; cv=none; b=DsEfg6QVSDTJB3XadRFO8Ovj9I5H2/oWcC5Kz+p5gjH1iGjnwOl2U0x0JEV/Ftogw452PFK90NYKwn/1rXpoRskC9F8bqwvgr0qYFtF7Obj+PatjLGrOT67d4FX27iUgHtKWh+5uP5LLRhCw2yiUa5M0fHc3cIxwV/ZQInimnDI=
+	t=1773133011; cv=none; b=j+ki8FCsNy875/LtGBzghK/udJpRdbV9Wt0Jebn0cyRmjow2Z7gJ0yzhdcO9ad7Q8zSeR4iBjjCOeKg/7VwPcN4hn/D4w+bva8kiebW5YuidlvVifpTSTzupiHLnaEdpgJmhPCzR24OcuavDydoB4gO6NN3qD6GfTQxt1JgSFas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773132140; c=relaxed/simple;
-	bh=+hdxOVwm077ylsjLu0wR0T6SVFeW4T69FussqsDDRHA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DNe4no7rUWWTEn+TeqWnHg6W8KAcZ7tXbMdkzn+Dd68tjATDc2y+FAUfibpdUN7WOhwoOqFsFbv3XbmEOwxL3y7VmSXTdpjjYnjsQyUwiJPwHk/Szd+RrfGhB/XDas2Xze3hr8TnqohagS8Mh6ao3tw/gJJRq3dS1PaB1m9usbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GTvciSqq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D549C2BCF7
-	for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 08:42:20 +0000 (UTC)
+	s=arc-20240116; t=1773133011; c=relaxed/simple;
+	bh=1PWoJHaon6nzdJBMh/5s/5A0x05ZpBntcw1fR6glc8Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IxrXBaXaN4tJbp2xy8V81o/40M0rJ7jsPYBJHzTDK0eW8DlYnvh9VzWp7iAX2eoLsn8H3TaH9AhpgZwZbtcX4bhbatYV9kVVGz5lohYd9mTqV+jlqw/N0eMWl+17Pau+xiA+SeLlE/ifa5g3GqTZ9NPNLkjJ9sWLYzv9gbD+HbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=arGnJWmx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DD4CC19423;
+	Tue, 10 Mar 2026 08:56:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773132140;
-	bh=+hdxOVwm077ylsjLu0wR0T6SVFeW4T69FussqsDDRHA=;
-	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
-	b=GTvciSqq+x8/zCMOtuyLli8n1vUX944BWGl817kV9StHpWn/ZCnegugKuRQsP31zc
-	 BzAgQT7AReGa+w9FNTeP0MAZpzB8BrfJNqjl8scrI0LyBvBQY7rG+irphiVi9e9Pay
-	 H9kcdpBYkJtzeYMnQcffp0/6DqalOD85Ero6OlpmOhuOcyq6hlw5qVhAebzG2/YIXB
-	 DnMhuDw8gGVkaM59hP3I087c+z0UZ4KsUJrbnznXy+njrrp6YDnmMQ++sMxHFuRr6G
-	 HFUyohjET/eAy2mVYsy+9Qp1f3+sfdypP6FF2U5DFevqkN4m7+QA91ws+sAjszCwIj
-	 fWqe+XRjm8C8A==
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-38a3fd333eeso31796431fa.1
-        for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 01:42:20 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV9u0hQjH5S04Wh6quDfw3gy6RUdnaweGDghd97VEQ1EIBwsSrt3ygbk3Eyhj6sfCj40BSRXFj5MGg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvBhRciiIp8havsFJuDq+roOk1l/NnH6P8wlUVz+faQ5rN5FxB
-	LobB9X7J+H/nISXmy917BiIazDyUu7bnQ8T9KYi2V+c+gESy/I5urE2kheiTrB3c1Q1fQDtgbGf
-	FDIPBDEZFwFcrtmTMKXyGuwnilD1a6bQ=
-X-Received: by 2002:a2e:880b:0:b0:388:4329:c054 with SMTP id
- 38308e7fff4ca-38a5d04ed61mr6094121fa.15.1773132138304; Tue, 10 Mar 2026
- 01:42:18 -0700 (PDT)
+	s=k20201202; t=1773133010;
+	bh=1PWoJHaon6nzdJBMh/5s/5A0x05ZpBntcw1fR6glc8Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=arGnJWmx1ZjZDejaTOe3qsJV164WQsdvrO0l22Snjl0d+TMWSeiJvardY2wUqFLqx
+	 Drr4SlA9ZD3DYt6/F8sPcTjyiaCKQAwQDM0nVfESKY6gwL70MaBHGca6Ghytv5+FM4
+	 fRdvBFbTlVBGaTZ5jPBtYkBu6lKtnp1Dna3e96FZpem7PuABgeT4Il9HipJng8U+fF
+	 /5AESGuZh4XBnqcPTQi+kCwnv9o8u3QXS56ljNhe1C9b+gHxOMxrYaTZEh5RTTP+K1
+	 t7mpUGogxyOQ34vrqv+hikNfTMzEd6EUb67sMLy1benzxfk+ZA2JYTw2cSsY5CbCxD
+	 RPZAGLC2Ssufw==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vzstU-000000007qz-0FJm;
+	Tue, 10 Mar 2026 09:56:48 +0100
+Date: Tue, 10 Mar 2026 09:56:48 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Fan Wu <fanwu01@zju.edu.cn>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: opticon: fix UAF in write callback during
+ port removal
+Message-ID: <aa_c0B9E7MPm_yqL@hovoldconsulting.com>
+References: <20260309142757.589802-1-fanwu01@zju.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260309190842.927634-1-vladimir.oltean@nxp.com> <20260309190842.927634-22-vladimir.oltean@nxp.com>
-In-Reply-To: <20260309190842.927634-22-vladimir.oltean@nxp.com>
-Reply-To: wens@kernel.org
-From: Chen-Yu Tsai <wens@kernel.org>
-Date: Tue, 10 Mar 2026 16:42:04 +0800
-X-Gmail-Original-Message-ID: <CAGb2v649jsoT9Uw5=gg5Zzxmgd4E04f8B8St_vUseP3JOrGG5g@mail.gmail.com>
-X-Gm-Features: AaiRm50ffNFGTkd49hJolMVvUoYaIAAtO7JRlAyrrCfXMo0y-iPLjdkpqATmeN0
-Message-ID: <CAGb2v649jsoT9Uw5=gg5Zzxmgd4E04f8B8St_vUseP3JOrGG5g@mail.gmail.com>
-Subject: Re: [PATCH v3 phy-next 21/24] phy: include PHY provider header (1/2)
-To: Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, dri-devel@lists.freedesktop.org, 
-	freedreno@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-rockchip@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org, spacemit@lists.linux.dev, 
-	UNGLinuxDriver@microchip.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 43A8B24776D
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260309142757.589802-1-fanwu01@zju.edu.cn>
+X-Rspamd-Queue-Id: 3601A247BA2
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34386-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_TWELVE(0.00)[25];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-34387-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	REPLYTO_ADDR_EQ_FROM(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wens@kernel.org,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	HAS_REPLYTO(0.00)[wens@kernel.org];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,nxp.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,hovoldconsulting.com:mid,zju.edu.cn:email]
 X-Rspamd-Action: no action
 
-On Tue, Mar 10, 2026 at 3:10=E2=80=AFAM Vladimir Oltean <vladimir.oltean@nx=
-p.com> wrote:
->
-> The majority of PHY drivers are PHY providers (obviously).
->
-> Some are providers *and* consumers (phy-meson-axg-mipi-dphy,
-> phy-meson-axg-pcie). These are the Amlogic AXG SoCs, which split the
-> physical layer into two chained PHYs: the digital layer and the analog
-> layer. The DSI or PCIe controller interacts only with the digital PHY,
-> presumably for simplicity.
->
-> The rest of PHY drivers which include <linux/phy/phy.h> do so because
-> they call phy_set_bus_width(), a consumer function.
->
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
-> Conflicts in drivers/phy/canaan/phy-k230-usb.c with commit 8787fa1da603
-> ("phy: usb: Add driver for Canaan K230 USB 2.0 PHY").
-> Conflicts in drivers/phy/eswin/phy-eic7700-sata.c with commit
-> 67ee9ccaa34a ("phy: eswin: Create eswin directory and add EIC7700 SATA
-> PHY driver")
->
-> Both drivers are newly added in linux-phy/next and not present in
-> v7.0-rc1. The recommendation is to drop the changes in this patch and
-> readd them when merging into linux-phy/next.
->
-> v2->v3: add conflict resolution details
-> v1->v2: split in two parts to pass through linux-phy mailing list
-> moderation
-> ---
->  drivers/phy/allwinner/phy-sun4i-usb.c                 | 3 ++-
->  drivers/phy/allwinner/phy-sun50i-usb3.c               | 3 ++-
->  drivers/phy/allwinner/phy-sun6i-mipi-dphy.c           | 4 ++--
->  drivers/phy/allwinner/phy-sun9i-usb.c                 | 3 ++-
+On Mon, Mar 09, 2026 at 02:27:57PM +0000, Fan Wu wrote:
+> The opticon driver anchors write URBs to priv->anchor in opticon_write()
+> and frees priv in opticon_port_remove() without first killing these
+> anchored URBs. The completion callback opticon_write_control_callback()
+> may dereference priv via usb_get_serial_port_data() and access
+> priv->lock, priv->outstanding_urbs, and priv->outstanding_bytes after
+> it has been freed.
+> 
+> If a write URB is in flight when the port is removed:
+> 
+>     CPU 0 (remove path)              CPU 1 (URB completion)
+>     ---------------------            ---------------------
+>     opticon_port_remove()
+>       kfree(priv)  <--+
+>                      |  --> opticon_write_control_callback()
+>                      |        priv = usb_get_serial_port_data()
+>                      |        spin_lock_irqsave(&priv->lock)
+>                      |        --priv->outstanding_urbs  // possible UAF
+>     return           |
+>                      usb_free_urb()
 
-Acked-by: Chen-Yu Tsai <wens@kernel.org> # allwinner
+This cannot happen as ports are always shut down before being
+deregistered (see usb_serial_disconnect()).
+
+It used to be possible to trigger something like this by manually
+unbinding a port device through sysfs as root but even that's no longer
+possible since commit fdb838efa31e ("USB: serial: suppress driver bind
+attributes").
+
+> Fix this by calling usb_kill_anchored_urbs(&priv->anchor) before
+> kfree(priv) so that all in-flight URBs have finished before the private
+> data is freed.
+> 
+> Note that opticon_close() already correctly kills anchored URBs; this
+> fix addresses the port_remove path which was overlooked.
+> 
+> Fixes: 648d4e16567e ("USB: serial: opticon: add write support")
+> Signed-off-by: Fan Wu <fanwu01@zju.edu.cn>
+
+How was this potential issue found? Are you using some kind of LLM or
+other tool?
+
+Johan
 
