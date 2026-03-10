@@ -1,169 +1,154 @@
-Return-Path: <linux-usb+bounces-34389-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34390-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EEb8JVPhr2nkdAIAu9opvQ
-	(envelope-from <linux-usb+bounces-34389-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 10:16:03 +0100
+	id ABOSNxror2nkdAIAu9opvQ
+	(envelope-from <linux-usb+bounces-34390-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 10:44:58 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9D512481EA
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 10:16:02 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E538248BC2
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 10:44:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5A454307CCDA
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:09:18 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B205C300E5A6
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 242CD441033;
-	Tue, 10 Mar 2026 09:08:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="2P8w16KW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 295B03CCA03;
+	Tue, 10 Mar 2026 09:44:54 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B2A43CEED;
-	Tue, 10 Mar 2026 09:08:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7489732AABC;
+	Tue, 10 Mar 2026 09:44:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773133703; cv=none; b=Gp0g6QAKNC+q4R71GJDY4Bwh+N0dw3YEcAGoF1JEDQqm+Ru7049zgtgRjTUUfxwfy7KOiZMOXF3ITMXwYd/QmaFY/UbofRC9O0jobsKttz6y7GhU4itPlUaT0ABEXmnZDENjtj26yv2JseLVm3Qv8n1w5yu49G0MvQJoT2CmAtk=
+	t=1773135893; cv=none; b=HwUC9Gtjl9lBRy9FltAaQmHYGaM/3PoEtxyG9UqSgV+ZDk/hkCvcjG8qbkEg13GU9K4tPrwLyy/RbrUmkX7BstypkTBNfEB9305vQPqKIg3IPOqMFc5Rvvw5L0w8BZns9Q8s1V6G8no10Rem1Mvd2O5133PV2hRXuymwrS8R99s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773133703; c=relaxed/simple;
-	bh=kvP+A80lUtHD0JXSxM0RjhmHdTQdCORerkk2CLjcP+8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fAjTwIkRyvEbocybuLg3AQmxVbCkE7XvgDWfzoGFde/ROmAczQ5SUbllpyy2u4DyJoQW32W5W22I5yypCZAlF5jeLlvEsvxxX1MMdHvE2BZgMkFJQZoiSG1bWC5v09yNIqfNiOmcGAoXcgBC+CeJ0VTL10vmr2II3Gr5Kn2D5Ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=2P8w16KW; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=x+sKkqEen+FTZVcatdq7BWmJBRObIwAqW8MBSeFsbCg=; b=2P8w16KW4mcJ4VoQcD9GwW+Aaw
-	LPnWPTjV+iBSgpGU8VvlZBgivFQ41jbbUv9xPLTe0UGiC2O/TtxW9n87YjtaKXtEvok+d9X3m90n3
-	88MyVWdnk4KdCug4lCgmQ65VmF5YA3tIEvuVR5jNAJV+kyyiI3aJ/12D7cJW361aI64t62QfKt+G8
-	DpRgtf8aKTCqaf2K91HStN6cfzfIMJzfn16r4ZEdGteuKTcM5375CxPjFb+Zcjq9TyhP53oWNANrb
-	QG5VUTphEsm3do+5av7k096Uzt/+LkiRWIWXHy5//oKgMhx3VYbZAmsubGNimoJORazjXzWfE9QP0
-	iOm5zq+A==;
-From: Heiko Stuebner <heiko@sntech.de>
-To: Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>,
- Neil Armstrong <neil.armstrong@linaro.org>, dri-devel@lists.freedesktop.org,
- freedreno@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
- linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org, spacemit@lists.linux.dev,
- UNGLinuxDriver@microchip.com, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
-Subject:
- Re: [PATCH v3 phy-next 10/24] drm/rockchip: dw_hdmi: avoid direct dereference
- of phy->dev.of_node
-Date: Tue, 10 Mar 2026 10:08:07 +0100
-Message-ID: <2772778.X9hSmTKtgW@phil>
-In-Reply-To: <20260310083752.ms6u4qpy3snl4h6w@skbuf>
-References:
- <20260309190842.927634-1-vladimir.oltean@nxp.com> <2218670.OBFZWjSADL@phil>
- <20260310083752.ms6u4qpy3snl4h6w@skbuf>
+	s=arc-20240116; t=1773135893; c=relaxed/simple;
+	bh=hI0dne9jQVWOgWxjBcM5qU1QirGsxqAOypSUU2QcVB0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CssZ+f88RzUrVzJuEBwzpCUM77CdADkXc9g8ONGcnm1b41pVDbf3TWBET+t0u/UYJR7d+ZPeNvnJBvl/JzR8F4cXVMLlXOufFmtZ1pNDXd3pVyfrhq7d7t6e2mEUFbyo5If/NFfaZ7BV1DoGVLTbrvgNkAh4n6l0C3iXKYT79+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: c3177e781c6511f1a21c59e7364eecb8-20260310
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD
+	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
+	ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.11,REQID:0e9fa118-5cb6-454b-84fc-48d2c4519507,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-30,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:-20
+X-CID-INFO: VERSION:1.3.11,REQID:0e9fa118-5cb6-454b-84fc-48d2c4519507,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-30,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-20
+X-CID-META: VersionHash:89c9d04,CLOUDID:c618299d81eb7c6eb166632c40e6cf7e,BulkI
+	D:2603101744438SHHYFXJ,BulkQuantity:0,Recheck:0,SF:10|38|66|78|102|127|898
+	,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil
+	,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: c3177e781c6511f1a21c59e7364eecb8-20260310
+X-User: aichao@kylinos.cn
+Received: from huangwei.. [(112.64.161.44)] by mailgw.kylinos.cn
+	(envelope-from <aichao@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1087975684; Tue, 10 Mar 2026 17:44:41 +0800
+From: Ai Chao <aichao@kylinos.cn>
+To: gregkh@linuxfoundation.org,
+	b-liu@ti.com,
+	johan@kernel.org,
+	badhri@google.com,
+	heikki.krogerus@linux.intel.com,
+	valentina.manea.m@gmail.com,
+	shuah@kernel.org,
+	i@zenithal.me,
+	tiwai@suse.de,
+	kees@kernel.org,
+	christophe.jaillet@wanadoo.fr,
+	prashanth.k@oss.qualcomm.com,
+	khtsai@google.com,
+	dan.carpenter@linaro.org,
+	tglx@kernel.org,
+	mingo@kernel.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ai Chao <aichao@kylinos.cn>
+Subject: [PATCH 0/6] Use safer strscpy() instead of strcpy()
+Date: Tue, 10 Mar 2026 17:44:28 +0800
+Message-Id: <20260310094434.3639602-1-aichao@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Rspamd-Queue-Id: A9D512481EA
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4E538248BC2
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [1.54 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[sntech.de,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[sntech.de:s=gloria202408];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34389-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	TAGGED_FROM(0.00)[bounces-34390-lists,linux-usb=lfdr.de];
+	DMARC_NA(0.00)[kylinos.cn];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[32];
-	FREEMAIL_CC(0.00)[lists.infradead.org,kernel.org,linaro.org,lists.freedesktop.org,vger.kernel.org,lists.linux.dev,microchip.com,rock-chips.com,linux.intel.com,suse.de,gmail.com,ffwll.ch];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[linuxfoundation.org,ti.com,kernel.org,google.com,linux.intel.com,gmail.com,zenithal.me,suse.de,wanadoo.fr,oss.qualcomm.com,linaro.org];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[aichao@kylinos.cn,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heiko@sntech.de,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[sntech.de:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.995];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sntech.de:dkim,sntech.de:email,nxp.com:email,suse.de:email,ffwll.ch:email,rock-chips.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,intel.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-Am Dienstag, 10. M=C3=A4rz 2026, 09:37:52 Mitteleurop=C3=A4ische Normalzeit=
- schrieb Vladimir Oltean:
-> On Tue, Mar 10, 2026 at 09:24:43AM +0100, Heiko Stuebner wrote:
-> > Am Montag, 9. M=C3=A4rz 2026, 20:08:28 Mitteleurop=C3=A4ische Normalzei=
-t schrieb Vladimir Oltean:
-> > > The dw_hdmi-rockchip driver validates pixel clock rates against the
-> > > HDMI PHY's internal clock provider on certain SoCs like RK3328.
-> > > This is currently achieved by dereferencing hdmi->phy->dev.of_node
-> > > to obtain the provider node, which violates the Generic PHY API's
-> > > encapsulation (the goal is for struct phy to be an opaque pointer).
-> > >=20
-> > > Refactor dw_hdmi_rockchip_bind() to perform a manual phandle lookup
-> > > on the "hdmi" PHY index within the controller's DT node. This provides
-> > > a parallel path to the clock provider's OF node without relying on the
-> > > internal structure of the struct phy handle.
-> > >=20
-> > > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> > > ---
-> > > Cc: Sandy Huang <hjc@rock-chips.com>
-> > > Cc: "Heiko St=C3=BCbner" <heiko@sntech.de>
-> > > Cc: Andy Yan <andy.yan@rock-chips.com>
-> > > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> > > Cc: Maxime Ripard <mripard@kernel.org>
-> > > Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> > > Cc: David Airlie <airlied@gmail.com>
-> > > Cc: Simona Vetter <simona@ffwll.ch>
-> > >=20
-> > > v1->v3: none
-> > > ---
-> >=20
-> > [...]
-> >=20
-> > > @@ -588,13 +589,17 @@ static int dw_hdmi_rockchip_bind(struct device =
-*dev, struct device *master,
-> > >  		return dev_err_probe(hdmi->dev, ret, "failed to get phy\n");
-> > >  	}
-> > > =20
-> > > -	if (hdmi->phy) {
-> >=20
-> > nit: a comment would be nice here. I.e. hdmi->phy being an opaque point=
-er
-> > so checking hdmi->phy !=3D NULL is not possible.
-> >=20
-> > With that being a "goal", I assume that information is not widely spread
-> > so this would prevent the next developer trying to change it back to
-> > "if (hdmi->phy)" while that handling change trickles down.
->=20
-> Testing the NULL quality of "struct phy *phy" is still possible and legal.
-> It means that you called an "optional" variant of phy_get(), and there
-> was no PHY.
+This patch series introduces wrapper functions strscpy().
 
-ok, I'll keep that in mind :-)
+Use a safer function strscpy() instead of strcpy() for copying to arrays.
 
+Only idiomatic code replacement, and no functional changes.
 
-Heiko
+Summary:
 
+ - Patch 1 USB: serial: ti_usb_3410_5052: Use safer strscpy() instead of strcpy()
+ - Patch 2 usb: musb: Use safer strscpy() instead of strcpy()
+ - Patch 3 usb: gadget: functionfs: Use safer strscpy() instead of strcpy()
+ - Patch 4 usb: typec: tcpm: Use safer strscpy() instead of strcpy()
+ - Patch 5 usb: gadget: udc: Use safer strscpy() instead of strcpy()
+ - Patch 6 usbip: vhci_sysfs: Use safer strscpy() instead of strcpy()
+
+ drivers/usb/gadget/function/f_midi2.c  |  6 +++---
+ drivers/usb/gadget/function/u_serial.c |  2 +-
+ drivers/usb/gadget/udc/snps_udc_core.c |  2 +-
+ drivers/usb/musb/musb_core.c           |  2 +-
+ drivers/usb/serial/ti_usb_3410_5052.c  | 16 ++++++++--------
+ drivers/usb/typec/tcpm/tcpm.c          |  6 +++---
+ drivers/usb/usbip/vhci_sysfs.c         |  2 +-
+ 7 files changed, 18 insertions(+), 18 deletions(-)
+
+-- 
+2.34.1
 
 
