@@ -1,205 +1,169 @@
-Return-Path: <linux-usb+bounces-34388-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34389-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CH7IFbjgr2nkdAIAu9opvQ
-	(envelope-from <linux-usb+bounces-34388-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 10:13:28 +0100
+	id EEb8JVPhr2nkdAIAu9opvQ
+	(envelope-from <linux-usb+bounces-34389-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 10:16:03 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC61F248119
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 10:13:27 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9D512481EA
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 10:16:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3431431621F1
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:05:46 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5A454307CCDA
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:09:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13C0B46AF32;
-	Tue, 10 Mar 2026 09:02:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 242CD441033;
+	Tue, 10 Mar 2026 09:08:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z7Wl+Wt+"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="2P8w16KW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E5543E9C5;
-	Tue, 10 Mar 2026 09:02:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B2A43CEED;
+	Tue, 10 Mar 2026 09:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773133354; cv=none; b=GRLrd6FmDpALb/MK3ut1XyVRBAxMZvTCuwqChBaKSwzgIf+U/CqC2nd2fG60JV7JjQ+Pf8aWeF+x59EK3TJuJtigrprn2jqwBCPguTBSM3uLFRHPM7gWW/XCHVOWsaIKteUFoS2ve1UVmMzhOcLfBhwcDyevxcDl6kLxSgQAGBo=
+	t=1773133703; cv=none; b=Gp0g6QAKNC+q4R71GJDY4Bwh+N0dw3YEcAGoF1JEDQqm+Ru7049zgtgRjTUUfxwfy7KOiZMOXF3ITMXwYd/QmaFY/UbofRC9O0jobsKttz6y7GhU4itPlUaT0ABEXmnZDENjtj26yv2JseLVm3Qv8n1w5yu49G0MvQJoT2CmAtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773133354; c=relaxed/simple;
-	bh=dyZoKH8XDotOwtrxv1ftKGKj6+/9NDQwSTPynUEi6wA=;
+	s=arc-20240116; t=1773133703; c=relaxed/simple;
+	bh=kvP+A80lUtHD0JXSxM0RjhmHdTQdCORerkk2CLjcP+8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=X9quCxnuZPEP8j8fmkzk7OX1mwXdhyK/yM4a8GGnDqn51D1upJt+kdf03ZXQRIkEZ7LDymoYYjX5e+9sD1q8zvnAQ4bzI60jaMhtqHfrJmUm0uG/uNrkdL4ZjY9WBAXKAAW1IFG7LwcxGACkecLQZlJhp7ZHe/tiV1Yhukfi6Qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z7Wl+Wt+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21AE0C19423;
-	Tue, 10 Mar 2026 09:02:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773133354;
-	bh=dyZoKH8XDotOwtrxv1ftKGKj6+/9NDQwSTPynUEi6wA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Z7Wl+Wt+VvjrSQxXCnMiOg9eFoexHeAJCd9CBue3j/Xm20VQ7OrVrOgLExrUWVt4+
-	 Bxgd4XoH49SGxgcLJA4R28P/ymZl0WJfW+i9ZQCJ94gpF1r5/IF+I0luzFJEYigUph
-	 EFrWeE0I1JHQyMC+3hsIa72BS6kwe4YNgqKeNxxHkI3X7uV9O5Fa/V0K6itA1Sjy7U
-	 n8pW2QZPW/ksl0nGUAQbxiuVOBpY375Uf93DtNZ9ER1nWfXBgTqOZbSmefu/IZYPaa
-	 NL+whxGsACY76k5ni9twbvqhtDLOqdcmhnbDTb17t/gWMm/5sS98d9vgTg0OsW4BTZ
-	 Dy7E5ek3BS47g==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Valentin Spreckels <valentin@spreckels.dev>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.19-5.15] net: usb: r8152: add TRENDnet TUC-ET2G
-Date: Tue, 10 Mar 2026 05:01:33 -0400
-Message-ID: <20260310090145.2709021-33-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260310090145.2709021-1-sashal@kernel.org>
-References: <20260310090145.2709021-1-sashal@kernel.org>
+	 MIME-Version:Content-Type; b=fAjTwIkRyvEbocybuLg3AQmxVbCkE7XvgDWfzoGFde/ROmAczQ5SUbllpyy2u4DyJoQW32W5W22I5yypCZAlF5jeLlvEsvxxX1MMdHvE2BZgMkFJQZoiSG1bWC5v09yNIqfNiOmcGAoXcgBC+CeJ0VTL10vmr2II3Gr5Kn2D5Ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=2P8w16KW; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
+	bh=x+sKkqEen+FTZVcatdq7BWmJBRObIwAqW8MBSeFsbCg=; b=2P8w16KW4mcJ4VoQcD9GwW+Aaw
+	LPnWPTjV+iBSgpGU8VvlZBgivFQ41jbbUv9xPLTe0UGiC2O/TtxW9n87YjtaKXtEvok+d9X3m90n3
+	88MyVWdnk4KdCug4lCgmQ65VmF5YA3tIEvuVR5jNAJV+kyyiI3aJ/12D7cJW361aI64t62QfKt+G8
+	DpRgtf8aKTCqaf2K91HStN6cfzfIMJzfn16r4ZEdGteuKTcM5375CxPjFb+Zcjq9TyhP53oWNANrb
+	QG5VUTphEsm3do+5av7k096Uzt/+LkiRWIWXHy5//oKgMhx3VYbZAmsubGNimoJORazjXzWfE9QP0
+	iOm5zq+A==;
+From: Heiko Stuebner <heiko@sntech.de>
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>, dri-devel@lists.freedesktop.org,
+ freedreno@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
+ linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+ linux-usb@vger.kernel.org, netdev@vger.kernel.org, spacemit@lists.linux.dev,
+ UNGLinuxDriver@microchip.com, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Subject:
+ Re: [PATCH v3 phy-next 10/24] drm/rockchip: dw_hdmi: avoid direct dereference
+ of phy->dev.of_node
+Date: Tue, 10 Mar 2026 10:08:07 +0100
+Message-ID: <2772778.X9hSmTKtgW@phil>
+In-Reply-To: <20260310083752.ms6u4qpy3snl4h6w@skbuf>
+References:
+ <20260309190842.927634-1-vladimir.oltean@nxp.com> <2218670.OBFZWjSADL@phil>
+ <20260310083752.ms6u4qpy3snl4h6w@skbuf>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.19.6
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: CC61F248119
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Rspamd-Queue-Id: A9D512481EA
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[sntech.de,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[sntech.de:s=gloria202408];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34388-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-34389-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[32];
+	FREEMAIL_CC(0.00)[lists.infradead.org,kernel.org,linaro.org,lists.freedesktop.org,vger.kernel.org,lists.linux.dev,microchip.com,rock-chips.com,linux.intel.com,suse.de,gmail.com,ffwll.ch];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[heiko@sntech.de,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[sntech.de:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,msgid.link:url,spreckels.dev:email]
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sntech.de:dkim,sntech.de:email,nxp.com:email,suse.de:email,ffwll.ch:email,rock-chips.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,intel.com:email]
 X-Rspamd-Action: no action
 
-From: Valentin Spreckels <valentin@spreckels.dev>
+Am Dienstag, 10. M=C3=A4rz 2026, 09:37:52 Mitteleurop=C3=A4ische Normalzeit=
+ schrieb Vladimir Oltean:
+> On Tue, Mar 10, 2026 at 09:24:43AM +0100, Heiko Stuebner wrote:
+> > Am Montag, 9. M=C3=A4rz 2026, 20:08:28 Mitteleurop=C3=A4ische Normalzei=
+t schrieb Vladimir Oltean:
+> > > The dw_hdmi-rockchip driver validates pixel clock rates against the
+> > > HDMI PHY's internal clock provider on certain SoCs like RK3328.
+> > > This is currently achieved by dereferencing hdmi->phy->dev.of_node
+> > > to obtain the provider node, which violates the Generic PHY API's
+> > > encapsulation (the goal is for struct phy to be an opaque pointer).
+> > >=20
+> > > Refactor dw_hdmi_rockchip_bind() to perform a manual phandle lookup
+> > > on the "hdmi" PHY index within the controller's DT node. This provides
+> > > a parallel path to the clock provider's OF node without relying on the
+> > > internal structure of the struct phy handle.
+> > >=20
+> > > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> > > ---
+> > > Cc: Sandy Huang <hjc@rock-chips.com>
+> > > Cc: "Heiko St=C3=BCbner" <heiko@sntech.de>
+> > > Cc: Andy Yan <andy.yan@rock-chips.com>
+> > > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> > > Cc: Maxime Ripard <mripard@kernel.org>
+> > > Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> > > Cc: David Airlie <airlied@gmail.com>
+> > > Cc: Simona Vetter <simona@ffwll.ch>
+> > >=20
+> > > v1->v3: none
+> > > ---
+> >=20
+> > [...]
+> >=20
+> > > @@ -588,13 +589,17 @@ static int dw_hdmi_rockchip_bind(struct device =
+*dev, struct device *master,
+> > >  		return dev_err_probe(hdmi->dev, ret, "failed to get phy\n");
+> > >  	}
+> > > =20
+> > > -	if (hdmi->phy) {
+> >=20
+> > nit: a comment would be nice here. I.e. hdmi->phy being an opaque point=
+er
+> > so checking hdmi->phy !=3D NULL is not possible.
+> >=20
+> > With that being a "goal", I assume that information is not widely spread
+> > so this would prevent the next developer trying to change it back to
+> > "if (hdmi->phy)" while that handling change trickles down.
+>=20
+> Testing the NULL quality of "struct phy *phy" is still possible and legal.
+> It means that you called an "optional" variant of phy_get(), and there
+> was no PHY.
 
-[ Upstream commit 15fba71533bcdfaa8eeba69a5a5a2927afdf664a ]
+ok, I'll keep that in mind :-)
 
-The TRENDnet TUC-ET2G is a RTL8156 based usb ethernet adapter. Add its
-vendor and product IDs.
 
-Signed-off-by: Valentin Spreckels <valentin@spreckels.dev>
-Link: https://patch.msgid.link/20260226195409.7891-2-valentin@spreckels.dev
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+Heiko
 
-LLM Generated explanations, may be completely bogus:
-
-## Analysis
-
-### What the commit does
-
-This commit adds USB vendor and product IDs for the TRENDnet TUC-ET2G
-USB ethernet adapter (vendor ID `0x20f4`, product ID `0xe02b`) to the
-existing `r8152` driver. The device uses the RTL8156 chipset, which is
-already fully supported by the driver.
-
-### Changes
-
-1. **`include/linux/usb/r8152.h`**: Adds `#define VENDOR_ID_TRENDNET
-   0x20f4`
-2. **`drivers/net/usb/r8152.c`**: Adds `{ USB_DEVICE(VENDOR_ID_TRENDNET,
-   0xe02b) }` to the device table
-
-### Stable kernel criteria
-
-- **New device ID to existing driver**: This is a textbook example of
-  the "NEW DEVICE IDs" exception explicitly listed in stable kernel
-  rules. The r8152 driver already exists in all stable trees, and the
-  RTL8156 chipset is already supported.
-- **Obviously correct**: Two lines — a vendor ID define and a device
-  table entry.
-- **No risk of regression**: Adding a USB device ID cannot break
-  existing functionality. It only enables matching for a new device.
-- **Small and contained**: 2 lines of actual change across 2 files.
-- **Fixes a real problem**: Without this, users with TRENDnet TUC-ET2G
-  adapters cannot use them with the r8152 driver (the device won't be
-  claimed).
-
-### Risk assessment
-
-**Zero risk.** This is the most minimal possible change — adding
-identifiers so the kernel recognizes a device. No code paths are
-changed, no logic is modified.
-
-### Verification
-
-- Confirmed `VENDOR_ID_TRENDNET` is a new define not previously in the
-  header by examining the diff context showing the existing vendor IDs.
-- The RTL8156 chipset support already exists in the r8152 driver (the
-  driver handles RTL8152/8153/8156 variants).
-- The change pattern matches dozens of similar device ID additions that
-  are routinely backported to stable (e.g., other vendor IDs already in
-  the table: Lenovo, Linksys, NVIDIA, TP-Link, D-Link, Dell, ASUS).
-- No dependencies on other commits — this is fully self-contained.
-
-**YES**
-
- drivers/net/usb/r8152.c   | 1 +
- include/linux/usb/r8152.h | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 6b107cf5f37bd..9eda892beb1f8 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -10062,6 +10062,7 @@ static const struct usb_device_id rtl8152_table[] = {
- 	{ USB_DEVICE(VENDOR_ID_DLINK,   0xb301) },
- 	{ USB_DEVICE(VENDOR_ID_DELL,    0xb097) },
- 	{ USB_DEVICE(VENDOR_ID_ASUS,    0x1976) },
-+	{ USB_DEVICE(VENDOR_ID_TRENDNET, 0xe02b) },
- 	{}
- };
- 
-diff --git a/include/linux/usb/r8152.h b/include/linux/usb/r8152.h
-index 2ca60828f28bb..1502b2a355f98 100644
---- a/include/linux/usb/r8152.h
-+++ b/include/linux/usb/r8152.h
-@@ -32,6 +32,7 @@
- #define VENDOR_ID_DLINK			0x2001
- #define VENDOR_ID_DELL			0x413c
- #define VENDOR_ID_ASUS			0x0b05
-+#define VENDOR_ID_TRENDNET		0x20f4
- 
- #if IS_REACHABLE(CONFIG_USB_RTL8152)
- extern u8 rtl8152_get_version(struct usb_interface *intf);
--- 
-2.51.0
 
 
