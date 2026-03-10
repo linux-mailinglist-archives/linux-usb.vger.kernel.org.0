@@ -1,502 +1,768 @@
-Return-Path: <linux-usb+bounces-34482-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34483-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OJWJMMg+sGmohQIAu9opvQ
-	(envelope-from <linux-usb+bounces-34482-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 16:54:48 +0100
+	id AI0nAFI7sGmDhQIAu9opvQ
+	(envelope-from <linux-usb+bounces-34483-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 16:40:02 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74027254101
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 16:54:48 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90FCE253C14
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 16:40:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C734032AAF3D
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 15:08:08 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 87ABC305415D
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 15:38:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E12A31AABF;
-	Tue, 10 Mar 2026 15:07:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C06E3A3E6C;
+	Tue, 10 Mar 2026 15:37:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b="KELOA0oT"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="OK+rZL4d";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ZChLOkZu";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="OK+rZL4d";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ZChLOkZu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EC692F3C3D;
-	Tue, 10 Mar 2026 15:07:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.148.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773155266; cv=fail; b=Exx5Jo29t21AuKh+iutjP1O0HSCp0cTKN3jSHmESFmCb82jBvH+v87T3MZm+bogwy5fCEt/ScOWfrDBE0q/gXILAo2WOUwSGCsx6TOM5xnEWqM1XvaJ02V2loLjfC1/KZvyH/07kYjIsvP8z+FOjzpi4YU5PwT7wXUh9rvWy6Vc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773155266; c=relaxed/simple;
-	bh=/dx0jFElRQCzuElB3xkafsU3B0B1oyWjkQOIQutQeyI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=XvIzuLJd9pgigyrZaF66ydVCQRo34iBy9HdYHT49IspRGBNycsAf49AW5GexfaGq9kDM/ymfmbZr1YSFyBY+u4RZx/6nqQDnrJPmYgfJqx7FMX+cNoupQNpu9RbsfHl1qgx6rBo4HwICn9plRvu7mftXOWCLOB5peV/i7nPl6Xo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b=KELOA0oT; arc=fail smtp.client-ip=67.231.148.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
-Received: from pps.filterd (m0431384.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62A6bbZM1846057;
-	Tue, 10 Mar 2026 08:07:37 -0700
-Received: from mw6pr02cu001.outbound.protection.outlook.com (mail-westus2azon11022097.outbound.protection.outlook.com [52.101.48.97])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4cte6uhnn4-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 10 Mar 2026 08:07:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mABx9NN/5C+R6XHBdjNDb3cqTt37N6+Lar2wFnkT+YKPW+7caZRxdlkyGoYWJVV34i1xL6Be3Uv+wdsBOsMeEeoZX6InTXp6Vr1/SBGCEtDSnBF3i1ugY/CsbBA27kt6TykgNOzCrawQ6wZVe7x7Olk7qrOs9lazKmLcev5rYwe1JJWWKapAPeBonzYR/63JGzpeFfnanR0y47drlaRoWbhzGwrsXnaxewmI7af71eZQj7uiMhBo0YjtY7LHb0H8GjM3md5s79rOv7G5McY73MQx5OPDZNkkeTa6t5oW1jbZnUAjKLqQEQtkRgJUKceTKdRT/TB47nHzyuFMz4VlmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/dx0jFElRQCzuElB3xkafsU3B0B1oyWjkQOIQutQeyI=;
- b=zRq8Ech820q8slEFhIannEobkplOx9ojLx3RImupb6UKASMVdgxjWVpSuQAoAZhZbggPjA6/anCxhJ8XiUhQHfyiOYi1rdpERFg13d09QB+HW09msnq948Okc2ZAkQtRCFDBTjbuZcFBGZmzZEtOoWSKooLaHUeKkZNN2vAqm1vQYfaQx00HV50btNkUCt0DJkVZYZLFP6EcWPqJ+3f4R6q+K7A9Tml3n11SN/EXtFe4S1rEtdgAn6zr8zPDy5apOeiaez6FiQ9Si/7dryxiuvjJ/yqEnNVY6wlig/yR1R0CcBWXOokCiLOnDwMqfElPWctTOhS+xkO+jbkmiSX0RQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/dx0jFElRQCzuElB3xkafsU3B0B1oyWjkQOIQutQeyI=;
- b=KELOA0oT2dz9pXYGVjzVlBVL6naqUFQRhiiusj3iCuZqAMScT7fJUF30V7icKDopFXbPSpFvX8U3tNZLBHb2ChgmIIjSeQpmDFhpXCRUExhtOvv4Qtsjbr8RVANEPClR7emCMQJH55NUST/sosG2qIaL0sRow5JvI52ArCouJks=
-Received: from BN9PR18MB4251.namprd18.prod.outlook.com (2603:10b6:408:11c::10)
- by SN7PR18MB4400.namprd18.prod.outlook.com (2603:10b6:806:106::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.25; Tue, 10 Mar
- 2026 15:07:29 +0000
-Received: from BN9PR18MB4251.namprd18.prod.outlook.com
- ([fe80::8581:a781:5bfd:fc1b]) by BN9PR18MB4251.namprd18.prod.outlook.com
- ([fe80::8581:a781:5bfd:fc1b%4]) with mapi id 15.20.9678.024; Tue, 10 Mar 2026
- 15:07:29 +0000
-From: Elad Nachman <enachman@marvell.com>
-To: Philipp Hahn <phahn-oss@avm.de>,
-        "amd-gfx@lists.freedesktop.org"
-	<amd-gfx@lists.freedesktop.org>,
-        "apparmor@lists.ubuntu.com"
-	<apparmor@lists.ubuntu.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
-        "cocci@inria.fr"
-	<cocci@inria.fr>,
-        "dm-devel@lists.linux.dev" <dm-devel@lists.linux.dev>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "gfs2@lists.linux.dev" <gfs2@lists.linux.dev>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org"
-	<kvm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>,
-        "linux-block@vger.kernel.org"
-	<linux-block@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org"
-	<linux-bluetooth@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org"
-	<linux-btrfs@vger.kernel.org>,
-        "linux-cifs@vger.kernel.org"
-	<linux-cifs@vger.kernel.org>,
-        "linux-clk@vger.kernel.org"
-	<linux-clk@vger.kernel.org>,
-        "linux-erofs@lists.ozlabs.org"
-	<linux-erofs@lists.ozlabs.org>,
-        "linux-ext4@vger.kernel.org"
-	<linux-ext4@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org"
-	<linux-fsdevel@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org"
-	<linux-gpio@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org"
-	<linux-hyperv@vger.kernel.org>,
-        "linux-input@vger.kernel.org"
-	<linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "linux-leds@vger.kernel.org"
-	<linux-leds@vger.kernel.org>,
-        "linux-media@vger.kernel.org"
-	<linux-media@vger.kernel.org>,
-        "linux-mips@vger.kernel.org"
-	<linux-mips@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-rockchip@lists.infradead.org" <linux-rockchip@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org"
-	<linux-security-module@vger.kernel.org>,
-        "linux-sh@vger.kernel.org"
-	<linux-sh@vger.kernel.org>,
-        "linux-sound@vger.kernel.org"
-	<linux-sound@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com"
-	<linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "ntfs3@lists.linux.dev"
-	<ntfs3@lists.linux.dev>,
-        "samba-technical@lists.samba.org"
-	<samba-technical@lists.samba.org>,
-        "sched-ext@lists.linux.dev"
-	<sched-ext@lists.linux.dev>,
-        "target-devel@vger.kernel.org"
-	<target-devel@vger.kernel.org>,
-        "tipc-discussion@lists.sourceforge.net"
-	<tipc-discussion@lists.sourceforge.net>,
-        "v9fs@lists.linux.dev"
-	<v9fs@lists.linux.dev>
-CC: Igor Russkikh <irusskikh@marvell.com>,
-        Andrew Lunn
-	<andrew+netdev@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni
-	<pabeni@redhat.com>,
-        Pavan Chebbi <pavan.chebbi@broadcom.com>,
-        Michael Chan
-	<mchan@broadcom.com>,
-        Potnuri Bharat Teja <bharat@chelsio.com>,
-        Tony Nguyen
-	<anthony.l.nguyen@intel.com>,
-        Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-        Taras Chornyi <taras.chornyi@plvision.eu>,
-        Maxime Coquelin
-	<mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-        Keyur Chudgar
-	<keyur@os.amperecomputing.com>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Subject: RE: [EXTERNAL] [PATCH 38/61] net: Prefer IS_ERR_OR_NULL over manual
- NULL check
-Thread-Topic: [EXTERNAL] [PATCH 38/61] net: Prefer IS_ERR_OR_NULL over manual
- NULL check
-Thread-Index: AQHcsIkeZ/xggwHfFkuIUZ5RP4ycHrWn3KSw
-Date: Tue, 10 Mar 2026 15:07:29 +0000
-Message-ID:
- <BN9PR18MB425115D21F4E30DD480F56E7DB46A@BN9PR18MB4251.namprd18.prod.outlook.com>
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
- <20260310-b4-is_err_or_null-v1-38-bd63b656022d@avm.de>
-In-Reply-To: <20260310-b4-is_err_or_null-v1-38-bd63b656022d@avm.de>
-Accept-Language: en-US, he-IL
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR18MB4251:EE_|SN7PR18MB4400:EE_
-x-ms-office365-filtering-correlation-id: abfe42a5-442b-464d-4fff-08de7eb6bf6d
-x-ld-processed: 70e1fb47-1155-421d-87fc-2e58f638b6e0,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|7416014|1800799024|366016|921020|38070700021|18002099003|22082099003|56012099003;
-x-microsoft-antispam-message-info:
- lIcbvYB7WZbatPehR+tNCJXPsytgVz8ncaoaPmz12te01Q/D8LntZ8ctwi/EnN5SuXfgyt4wvlVvLhS+kzTTqQbPvfu3V4oA6r7A6r20z3gkG2dEUsOF18S7doEjcQF03RVb0K3hXr2nUGU7lcvU1C7QUnvLucoPiyXTZWdmVLWoFy4N3zboFt3WoUrcPDdUzBB+ZyibNSiRWW9aZs4bQxl+D2q0Zjc7BZRUmN8HwMWccM+ZMz4k7Ai7aVgSyqUDVUb+45LckE4oFqoFWhsXVffS7dcVMCaiDN3dWIgZg5ar4Kkz12uCTLSjUVrrl3cB01yhuS2jZyRtP00RlqAyo5s6MpwWSqR7cDG/r8r7mxVUKzFEMaDveSXVhaM8Bpx2nd0oa02Mehcfxzz3GFeggrniABU7i+IGs9KQEr2WEc0hHiShki5HIl11CsGAZjEj2YMM+6YzTXapBW8UkSK4NQuH7rVoMNv1j9tXI0RYNIobvBi1sIuuIXbuo+09gN6zWeO+Gg3PUMfge6pUtgRBe6vzyb+yFSC1LrINVjgq7tfDapRDvnC+ifzj3pMRFf2dYuwemnqzszpKPVXxEkRitBoAS0L00MZLqvL37OkZMvMLIRN0aKTpszr4qULcuousalYR0aX0l7A3dR++sS+LbSvtM7PsvGJNBzSRF5BYM1/K3sdI2FGn3h6/4gQKgXS2z7o6Kl/mvN3OTYS5RAVfQIrEvC4oasmzWn6zSlWi9jCB4OshPprQEf6Ha2katbsGiQXryezqWn5/pNhp2KrNeLHssFiyD45DNGGFFvOESmKFOEV5e5kqdPYGFJ25fFbj
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR18MB4251.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(921020)(38070700021)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?bGp5R0N1UkppWkZkNk9kZWFoeC9Ta0F5VHNMcTh1eTVONkI2WXR4Q0doUE52?=
- =?utf-8?B?U3FWcHVqZkhXOTlERDk3RWF5bDZMRitXK1YxY3ZKY25uQXNsY20xOHVFdGhI?=
- =?utf-8?B?b2tDUkZEZVZMRjdZTHcyZjdiMkYzUE1RRjdacG43eWZQalUvOWx4dDBZUytO?=
- =?utf-8?B?a1IrZ1lrQ2hoZjRQbWF4R3BsZXNyS3ZMdHIyeE1ZYjlnZG1LTlVISExkamtU?=
- =?utf-8?B?NEpVSVZsc0NMZ042L3FScmhvMlRCWEhHeUxIbFJqTWpPd013NXhRYW9MYVN2?=
- =?utf-8?B?a2R3YytreGwwWXJrdDgzMjhMbDB2ZERPa0dCcEQ4ZGRQQTJYVFlQVHFKeFBw?=
- =?utf-8?B?TTBFbkQ1djJNY2FrSU16WWxaandGMlFhU0NkREZiUGdaSk9JcWEyTVVJcnFw?=
- =?utf-8?B?RVJrRTBXSFdoVGswNHZoOFRwYm9rd2Z3eEhETVYzaDBYbEkxZldHTG5PaWhJ?=
- =?utf-8?B?MndCUS9yUlFyZTFieVM0UVVja2ZLR01IUTdxN0dpVXlNakt6NjhCUkpuZ0Q1?=
- =?utf-8?B?NHdETUpJY1I5YlZ5QkM2MUFENU1IUVFJUkVWNFh2QU9kNDF6SFN5em5KZEZ3?=
- =?utf-8?B?OHFZa1pWVGUyZ3ZxQ09ObEpLNFpJdXdad1ltOHRQTlpxSEoyZWowS3lIbUVL?=
- =?utf-8?B?c21XT3dXVnNsOGlqNmZ2NExRS0l4MGZSejFaZXdueDRCdklkUllFdlROOUds?=
- =?utf-8?B?YTB1TXZybGQ4TnczRk9kbWJ6NGcxdnA2SWI0NVo2Wk5Lc2NnaVA2TEVtL251?=
- =?utf-8?B?U0hISFhwQlpCakJuQjZka25QOHF2ZVpYZnVhYTJCZXhwZW5qTGsyRFNyRlVZ?=
- =?utf-8?B?Ty9IbHcvOUZBeC9Xa3Y4akVKN05RMlc5UnJ5Z1grZzFsWU91L2N6aUxyL1lC?=
- =?utf-8?B?dWtobVpid1RBallLeE5xVTFndnhBTnJmVG1STklWSWlta3pha2NJTHVKcG01?=
- =?utf-8?B?LzA4THV2amZnM21zWmdBU0FlSmRKS1BGcTFKTGJWbDZIWEVpNEF6Zy9kalc1?=
- =?utf-8?B?d3kxbTBsUVl1R1F6cUFudHVyZ2Z6OXJuNWt0NWlsOEFNMDFqdEVFeWo2WGlI?=
- =?utf-8?B?Z0ozelJEQm0yRUg3ZytUYzdrQnI3Q0lzV2dWc2F4NHBsV2p3Sk9EWmJCUEZ1?=
- =?utf-8?B?R1Z2WnN2bnZkL284M1VtZ1BQYURYbS9yTFArUDBoTXZ3L1R2Q3N4WUo5OFla?=
- =?utf-8?B?RDVhYVZyc3YxbU5sbkorV2dUdWdLYmRjbkFCeXQ5U0FndnJFcFpteURxRVJS?=
- =?utf-8?B?SlFnSTczSzA0dnZEem1PdWxpR1JSd0NNOWp5c0xJRUdXQ2NXRmxKYWRVWFNC?=
- =?utf-8?B?MG5EOU1OM0RoblBPeVpRU1pqUmlGTFgyM0hhOWpVQUsxQXhKVCt4cDJlVkhD?=
- =?utf-8?B?NmxmUldEcG05eUZBWDZWQVV6aGVTTXVrNkdZNC9ZWTloRk9Ec3pLb3QxT1Q1?=
- =?utf-8?B?azhISDVVN1lTcVZ6bDlLS0ozY1crMkdsNTdicjJvRzBPSVdJZkdTYnhDR241?=
- =?utf-8?B?K0U0QzM5S0Z2Rk9CUlp4Wjc5V2dwbW9GcmRxckZSWi9Hb2d5UTF3TnZ0cHFQ?=
- =?utf-8?B?UnVOQXNBZ0czRDZaZnIxaGd1V2xtcWhGdlhFTEhUWWdlUEpzcXRWWm9jYkxx?=
- =?utf-8?B?WHVYSUIrY0FQMk9MRTBLcUw0eEZ0V05VTGFqeFJaa3Jmcmo5ZzlYWWgwSXAz?=
- =?utf-8?B?bDh0eHo3VkphcTBMcEdKZE84S0dOMEZuK21zcEdkU0lhYUFoS3JYemVnRTZ5?=
- =?utf-8?B?NlRVeWJ6RGtyZzdBUDJsTFFWZnYwWlBsY1RtTEZtTDRLc2pVWGxFQnBqZ0tZ?=
- =?utf-8?B?VEMxbjhCNXpkMkF1ZVprR0Mxa0tuTG8zTElMaENKK3JiYlNaRUxKNnZJTHkr?=
- =?utf-8?B?eElvSkw1bTlJTDE3NUNCV2tjME92SE5DZm9nK3ovZVA3MW9zUWMxaDVXa3FN?=
- =?utf-8?B?K3hEczVUbkJkZS9RMklUcFlzMHU2OHBBSjl3bUwybCtJdVRRSGxkdTlGU1Bm?=
- =?utf-8?B?RmJHTEhaRFFCMWZRNEE0UEF6VU02c2d4WWt5T3BiQ3ozclRDOWEzU1dsUVVC?=
- =?utf-8?B?cmFiTWIrQVBzYUI1MUw1UFFVVEgzNFBxSzRTM3hTekY3bTJLMFNUWGZ5VWlS?=
- =?utf-8?B?VEk2VStnMmk2YTJZd2ZEeUgva1h3RmZyYjJKUlhXUDhBSkJ1Z09IMlljR2g0?=
- =?utf-8?B?ZkxZMmpvaVMxcFA3MzI2MEZpNFF0VWR1SlFyU2lqUVdyT1V6NmY0a0Z4SEdi?=
- =?utf-8?B?TDJ1cEYrSS9KUGtEcmNsQkU0bTJ5d0JjeXd2cjlrTkY2Q3RscS96QzBjQXhW?=
- =?utf-8?B?NFhDek1wL2FGM0ZScmhGbnVKSXg0V25Dbmtkd3ludDZMTDlGUGJqUT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E429F39DBF1
+	for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 15:37:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773157050; cv=none; b=BX1+f6bUP3W83rQCM13EVS4zrk929WuHKYJoHEcciVJmKvllYE4I8Wo3Z2biuI2wbq7bfq/giXaagcyuEoei6XPlohH5WBpB7b48dFCPq6BlmGMXuhfJOGPpChwA7GmmYCPOAl7pX52J5zVLw9K4HLhFHWDM5/uoIk6tgYoLkSo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773157050; c=relaxed/simple;
+	bh=nO8/yHyaWhR7JdqziL6VRDgABIAhYAr8IqmNbwcCdsg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qkOt81YPKtxX2b7TZke0l9CLHQdH4kd3igbo05fNuFWVdOxIgKzzEwzLqjlDi2b9Fmgob8kPcmrPhEY8ZFHfkDvJXhF+zKbejTYa0GADJXbPLqlq/NCpt2NWqKdidPILg07cSEb4w5e42YZtSRwUbtFkSsBCP3pzU0Qw9H175xY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=OK+rZL4d; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ZChLOkZu; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=OK+rZL4d; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ZChLOkZu; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 365393E783;
+	Tue, 10 Mar 2026 15:37:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1773157046; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5WH5etI920qUPxE1d1L7Q+bHd5Betyr8Gc/npmYrBJQ=;
+	b=OK+rZL4dcnTcomSXHKXQUsQmVO14bCk9w+uqYgbG1zFM4QbTLFipLhu9zlhv3yr4AbSkMF
+	fMEnQXR04LBFbwvueQXfArorh0VVpQE5Zp3enbl1mFDFxsc1raHOP13fQ5LBYErJTZxo2X
+	q+Gpbq/XCprk4rvqzon75wOrUvyRyHk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1773157046;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5WH5etI920qUPxE1d1L7Q+bHd5Betyr8Gc/npmYrBJQ=;
+	b=ZChLOkZuVRQnCQ0XJrrYpvJIii6xs7EA77hP5OkIQAdRjp5+8MGsgjbpB8k74YLrxAKhwb
+	76pmeiCjNtyD94Dg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1773157046; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5WH5etI920qUPxE1d1L7Q+bHd5Betyr8Gc/npmYrBJQ=;
+	b=OK+rZL4dcnTcomSXHKXQUsQmVO14bCk9w+uqYgbG1zFM4QbTLFipLhu9zlhv3yr4AbSkMF
+	fMEnQXR04LBFbwvueQXfArorh0VVpQE5Zp3enbl1mFDFxsc1raHOP13fQ5LBYErJTZxo2X
+	q+Gpbq/XCprk4rvqzon75wOrUvyRyHk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1773157046;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5WH5etI920qUPxE1d1L7Q+bHd5Betyr8Gc/npmYrBJQ=;
+	b=ZChLOkZuVRQnCQ0XJrrYpvJIii6xs7EA77hP5OkIQAdRjp5+8MGsgjbpB8k74YLrxAKhwb
+	76pmeiCjNtyD94Dg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 663433F519;
+	Tue, 10 Mar 2026 15:37:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id GGWpFbM6sGlKXwAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Tue, 10 Mar 2026 15:37:23 +0000
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+To: netdev@vger.kernel.org
+Cc: rbm@suse.com,
+	Fernando Fernandez Mancera <fmancera@suse.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Leon Romanovsky <leon@kernel.org>,
+	Zhu Yanjun <zyjzyj2000@gmail.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Mark Bloch <mbloch@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Boris Pismenny <borisp@nvidia.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Petr Machata <petrm@nvidia.com>,
+	Simon Horman <horms@kernel.org>,
+	Edward Cree <ecree.xilinx@gmail.com>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Harald Welte <laforge@gnumonks.org>,
+	Antonio Quartulli <antonio@openvpn.net>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	Oliver Neukum <oliver@neukum.org>,
+	David Ahern <dsahern@kernel.org>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Parav Pandit <parav@nvidia.com>,
+	Edward Srouji <edwards@nvidia.com>,
+	Vlad Dumitrescu <vdumitrescu@nvidia.com>,
+	Kees Cook <kees@kernel.org>,
+	Jianbo Liu <jianbol@nvidia.com>,
+	Gal Pressman <gal@nvidia.com>,
+	Guillaume Nault <gnault@redhat.com>,
+	Cosmin Ratiu <cratiu@nvidia.com>,
+	Carolina Jubran <cjubran@nvidia.com>,
+	Alexandre Cassen <acassen@corp.free.fr>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	linux-rdma@vger.kernel.org (open list:INFINIBAND SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list),
+	oss-drivers@corigine.com (open list:NETRONOME ETHERNET DRIVERS),
+	linux-net-drivers@amd.com (open list:SFC NETWORK DRIVER),
+	osmocom-net-gprs@lists.osmocom.org (open list:GTP (GPRS Tunneling Protocol)),
+	linux-usb@vger.kernel.org (open list:USB CDC ETHERNET DRIVER),
+	wireguard@lists.zx2c4.com (open list:WIREGUARD SECURE NETWORK TUNNEL),
+	linux-wireless@vger.kernel.org (open list:INTEL PRO/WIRELESS 2100, 2200BG, 2915ABG NETWOR...),
+	bridge@lists.linux.dev (open list:ETHERNET BRIDGE)
+Subject: [PATCH 05/10 net-next v2] drivers: net: drop ipv6_stub usage and use direct function calls
+Date: Tue, 10 Mar 2026 16:34:28 +0100
+Message-ID: <20260310153506.5181-6-fmancera@suse.de>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260310153506.5181-1-fmancera@suse.de>
+References: <20260310153506.5181-1-fmancera@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked:
-	XTdsE3xw+r72za5XcswWbolKIfSFnh0plbDzuAgMAiCvxvFRvqD4Q2UBVPEeRsz2ZNnBbMFh0KGCXNGdSSC4lKg+4MbKI2a6IKAAg7I2RWHFRcI8csV2clUn0ix3os1yRI0K1UyuLW4ZMRDU/z5gZKErjJpzV5OPrJGEblGs0S90sIBuLMx+uq1elsmC9tMaZyVRanSwdaA1svC0+K1dEGFUVKecmpB+bSo0VjPP9CrOqz5ozfxrSGeUUN7FVws54fURoK6qP4keGM8HmkS6a2RFHQ9ow73UPonWGaN4t/J1HV6zDLeYmqGHYUTpIkQhKUb5Cs926YA+29w2sidS2w==
-X-OriginatorOrg: marvell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR18MB4251.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: abfe42a5-442b-464d-4fff-08de7eb6bf6d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2026 15:07:29.3787
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9il1EPukTYTVtWi+TL/GFX7Py26khauNltMzlXd0UBcwHwqH3ZQ0OC7MWbPWsQ9Be1ZksBhAUydMhKY+ShO3/w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR18MB4400
-X-Authority-Analysis: v=2.4 cv=SPlPlevH c=1 sm=1 tr=0 ts=69b033b9 cx=c_pps
- a=kzsVodbpLl5/Zj7uDz6sWQ==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=Yq5XynenixoA:10 a=-AAbraWEqlQA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=l0iWHRpgs5sLHlkKQ1IR:22 a=TtqV-g6YmW1Jfm2GSLaY:22 a=M5GUcnROAAAA:8
- a=J1Y8HTJGAAAA:8 a=1XWaLZrsAAAA:8 a=VwQbUJbxAAAA:8 a=20KFwNOVAAAA:8
- a=Q-fNiiVtAAAA:8 a=AGRr4plBAAAA:8 a=QyXUC8HyAAAA:8 a=g8kJ_gb0AAAA:8
- a=pGLkceISAAAA:8 a=8b9GpE9nAAAA:8 a=vzhER2c_AAAA:8 a=PHq6YzTAAAAA:8
- a=lTbjQzD5AAAA:8 a=phlkwaE_AAAA:8 a=JfrnYn6hAAAA:8 a=e5mUnYsNAAAA:8
- a=fxJcL_dCAAAA:8 a=voM4FWlXAAAA:8 a=37rDS-QxAAAA:8 a=hGzw-44bAAAA:8
- a=FP58Ms26AAAA:8 a=2Y-fJpPwltZ1yrNfleAA:9 a=lqcHg5cX4UMA:10 a=QEXdDO2ut3YA:10
- a=OBjm3rFKGHvpk9ecZwUJ:22 a=y1Q9-5lHfBjTkpIzbSAN:22 a=bOnWt3ThIoLzEnqt84vq:22
- a=ecSNLfPMzbq-p5zXJZOg:22 a=T3LWEMljR5ZiDmsYVIUa:22 a=0YTRHmU2iG2pZC6F1fw2:22
- a=ZKzU8r6zoKMcqsNulkmm:22 a=w8YF5asEQ23juLwKoPR8:22 a=uKTQOUHymn4LaG7oTSIC:22
- a=1CNFftbPRP8L7MoqJWF3:22 a=Vxmtnl_E_bksehYqCbjh:22 a=IC2XNlieTeVoXbcui8wp:22
- a=k1Nq6YrhK2t884LQW06G:22 a=HvKuF1_PTVFglORKqfwH:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEwMDEzMSBTYWx0ZWRfX7sIdcLwRou48
- STpxAdzmTIFltfom6/gddPw+Hxt9YSeBSTr+FMrnQf4BYblVl1Swt32zRHGMP3M56MuSpUdsJn2
- zcRM+5GZReGqVXZ1Lux3ordmUOsRbt2ILzhaZgg/hq2THhMuyKU0O7scmOhy/0pcF74LOBuYP4X
- NBLWL06/vzs1LA/Teh6R1KJv7s1CUg1K8nJn7/gl5JVuMQieBGKwXj1ESX3XnXH73JQZD04dgFY
- T03/TZRF9WRI2XRqxnxVzVADrXT4QTWIx+thXyhI1HOKPUBg2U3fO3JX9Pk2c+tLOnox3snDfQt
- oajcgiAYPtUue/w0H5Y+ZKsdaUYTykSr3B+gTizfFHP4NlW73Yu7TyneBaFu+31qfNk/OleAsT6
- 54ZBqPVMyCS0LZDYcuBHHhbU1CBkjLFEARuwqU31rD7NEhGdSAGwcRjcfuJJYE2zhXGIE3cAYWl
- TwfQXHWoP9LqfePUJ2Q==
-X-Proofpoint-GUID: Nl5W4I-io87qvTSFXJtlxRwMkjWAYvb0
-X-Proofpoint-ORIG-GUID: Nl5W4I-io87qvTSFXJtlxRwMkjWAYvb0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-10_03,2026-03-09_02,2025-10-01_01
-X-Rspamd-Queue-Id: 74027254101
+Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Spam-Score: -5.30
+X-Spam-Level: 
+X-Rspamd-Queue-Id: 90FCE253C14
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.44 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MIME_BASE64_TEXT_BOGUS(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[marvell.com,none];
-	R_DKIM_ALLOW(-0.20)[marvell.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	MAILLIST(-0.15)[generic];
-	MIME_BASE64_TEXT(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34482-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo];
+	FREEMAIL_CC(0.00)[suse.com,suse.de,ziepe.ca,kernel.org,gmail.com,nvidia.com,lunn.ch,davemloft.net,google.com,redhat.com,netfilter.org,gnumonks.org,openvpn.net,queasysnail.net,neukum.org,zx2c4.com,blackwall.org,corp.free.fr,fomichev.me,vger.kernel.org,corigine.com,amd.com,lists.osmocom.org];
+	RCPT_COUNT_TWELVE(0.00)[44];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[marvell.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,broadcom.com,chelsio.com,intel.com,plvision.eu,gmail.com,foss.st.com,os.amperecomputing.com,armlinux.org.uk];
-	DKIM_TRACE(0.00)[marvell.com:+];
+	TAGGED_FROM(0.00)[bounces-34483-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[enachman@marvell.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[fmancera@suse.de,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[73];
+	DKIM_TRACE(0.00)[suse.de:+];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb,netdev];
 	NEURAL_HAM(-0.00)[-1.000];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,suse.de:dkim,suse.de:email,suse.de:mid]
 X-Rspamd-Action: no action
 
-PiANCj4gDQo+IEZyb206IFBoaWxpcHAgSGFobiA8cGhhaG4tb3NzQGF2bS5kZT4NCj4gU2VudDog
-VHVlc2RheSwgTWFyY2ggMTAsIDIwMjYgMTo0OSBQTQ0KPiBUbzogYW1kLWdmeEBsaXN0cy5mcmVl
-ZGVza3RvcC5vcmc7IGFwcGFybW9yQGxpc3RzLnVidW50dS5jb207IGJwZkB2Z2VyLmtlcm5lbC5v
-cmc7IGNlcGgtZGV2ZWxAdmdlci5rZXJuZWwub3JnOyBjb2NjaUBpbnJpYS5mcjsgZG0tZGV2ZWxA
-bGlzdHMubGludXguZGV2OyBkcmktZGV2ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnOyBnZnMyQGxp
-c3RzLmxpbnV4LmRldjsgaW50ZWwtZ2Z4QGxpc3RzLmZyZWVkZXNrdG9wLm9yZzsgaW50ZWwtd2ly
-ZWQtbGFuQGxpc3RzLm9zdW9zbC5vcmc7IGlvbW11QGxpc3RzLmxpbnV4LmRldjsga3ZtQHZnZXIu
-a2VybmVsLm9yZzsgbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnOyBsaW51eC1i
-bG9ja0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWJsdWV0b290aEB2Z2VyLmtlcm5lbC5vcmc7IGxp
-bnV4LWJ0cmZzQHZnZXIua2VybmVsLm9yZzsgbGludXgtY2lmc0B2Z2VyLmtlcm5lbC5vcmc7IGxp
-bnV4LWNsa0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWVyb2ZzQGxpc3RzLm96bGFicy5vcmc7IGxp
-bnV4LWV4dDRAdmdlci5rZXJuZWwub3JnOyBsaW51eC1mc2RldmVsQHZnZXIua2VybmVsLm9yZzsg
-bGludXgtZ3Bpb0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWh5cGVydkB2Z2VyLmtlcm5lbC5vcmc7
-IGxpbnV4LWlucHV0QHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9y
-ZzsgbGludXgtbGVkc0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LW1lZGlhQHZnZXIua2VybmVsLm9y
-ZzsgbGludXgtbWlwc0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LW1tQGt2YWNrLm9yZzsgbGludXgt
-bW9kdWxlc0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LW10ZEBsaXN0cy5pbmZyYWRlYWQub3JnOyBs
-aW51eC1uZnNAdmdlci5rZXJuZWwub3JnOyBsaW51eC1vbWFwQHZnZXIua2VybmVsLm9yZzsgbGlu
-dXgtcGh5QGxpc3RzLmluZnJhZGVhZC5vcmc7IGxpbnV4LXBtQHZnZXIua2VybmVsLm9yZzsgbGlu
-dXgtcm9ja2NoaXBAbGlzdHMuaW5mcmFkZWFkLm9yZzsgbGludXgtczM5MEB2Z2VyLmtlcm5lbC5v
-cmc7IGxpbnV4LXNjc2lAdmdlci5rZXJuZWwub3JnOyBsaW51eC1zY3RwQHZnZXIua2VybmVsLm9y
-ZzsgbGludXgtc2VjdXJpdHktbW9kdWxlQHZnZXIua2VybmVsLm9yZzsgbGludXgtc2hAdmdlci5r
-ZXJuZWwub3JnOyBsaW51eC1zb3VuZEB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LXN0bTMyQHN0LW1k
-LW1haWxtYW4uc3Rvcm1yZXBseS5jb207IGxpbnV4LXRyYWNlLWtlcm5lbEB2Z2VyLmtlcm5lbC5v
-cmc7IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LXdpcmVsZXNzQHZnZXIua2VybmVs
-Lm9yZzsgbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsgbnRmczNAbGlzdHMubGludXguZGV2OyBzYW1i
-YS10ZWNobmljYWxAbGlzdHMuc2FtYmEub3JnOyBzY2hlZC1leHRAbGlzdHMubGludXguZGV2OyB0
-YXJnZXQtZGV2ZWxAdmdlci5rZXJuZWwub3JnOyB0aXBjLWRpc2N1c3Npb25AbGlzdHMuc291cmNl
-Zm9yZ2UubmV0OyB2OWZzQGxpc3RzLmxpbnV4LmRldjsgUGhpbGlwcCBIYWhuIDxwaGFobi1vc3NA
-YXZtLmRlPg0KPiBDYzogSWdvciBSdXNza2lraCA8aXJ1c3NraWtoQG1hcnZlbGwuY29tPjsgQW5k
-cmV3IEx1bm4gPGFuZHJldytuZXRkZXZAbHVubi5jaD47IERhdmlkIFMuIE1pbGxlciA8ZGF2ZW1A
-ZGF2ZW1sb2Z0Lm5ldD47IEVyaWMgRHVtYXpldCA8ZWR1bWF6ZXRAZ29vZ2xlLmNvbT47IEpha3Vi
-IEtpY2luc2tpIDxrdWJhQGtlcm5lbC5vcmc+OyBQYW9sbyBBYmVuaSA8cGFiZW5pQHJlZGhhdC5j
-b20+OyBQYXZhbiBDaGViYmkgPHBhdmFuLmNoZWJiaUBicm9hZGNvbS5jb20+OyBNaWNoYWVsIENo
-YW4gPG1jaGFuQGJyb2FkY29tLmNvbT47IFBvdG51cmkgQmhhcmF0IFRlamEgPGJoYXJhdEBjaGVs
-c2lvLmNvbT47IFRvbnkgTmd1eWVuIDxhbnRob255Lmwubmd1eWVuQGludGVsLmNvbT47IFByemVt
-ZWsgS2l0c3plbCA8cHJ6ZW15c2xhdy5raXRzemVsQGludGVsLmNvbT47IFRhcmFzIENob3JueWkg
-PHRhcmFzLmNob3JueWlAcGx2aXNpb24uZXU+OyBNYXhpbWUgQ29xdWVsaW4gPG1jb3F1ZWxpbi5z
-dG0zMkBnbWFpbC5jb20+OyBBbGV4YW5kcmUgVG9yZ3VlIDxhbGV4YW5kcmUudG9yZ3VlQGZvc3Mu
-c3QuY29tPjsgSXlhcHBhbiBTdWJyYW1hbmlhbiA8aXlhcHBhbkBvcy5hbXBlcmVjb21wdXRpbmcu
-Y29tPjsgS2V5dXIgQ2h1ZGdhciA8a2V5dXJAb3MuYW1wZXJlY29tcHV0aW5nLmNvbT47IFF1YW4g
-Tmd1eWVuIDxxdWFuQG9zLmFtcGVyZWNvbXB1dGluZy5jb20+OyBIZWluZXIgS2FsbHdlaXQgPGhr
-YWxsd2VpdDFAZ21haWwuY29tPjsgUnVzc2VsbCBLaW5nIDxsaW51eEBhcm1saW51eC5vcmcudWs+
-DQo+IFN1YmplY3Q6IFtFWFRFUk5BTF0gW1BBVENIIDM4LzYxXSBuZXQ6IFByZWZlciBJU19FUlJf
-T1JfTlVMTCBvdmVyIG1hbnVhbCBOVUxMIGNoZWNrDQo+IFpqUWNtUVJZRnBmcHRCYW5uZXJFbmQN
-Cj4gUHJlZmVyIHVzaW5nIElTX0VSUl9PUl9OVUxMKCkgb3ZlciB1c2luZyBJU19FUlIoKSBhbmQg
-YSBtYW51YWwgTlVMTA0KPiBjaGVjay4NCj4gDQo+IENoYW5nZSBnZW5lcmF0ZWQgd2l0aCBjb2Nj
-aW5lbGxlLg0KPiANCj4gVG86IElnb3IgUnVzc2tpa2ggPG1haWx0bzppcnVzc2tpa2hAbWFydmVs
-bC5jb20+DQo+IFRvOiBBbmRyZXcgTHVubiA8bWFpbHRvOmFuZHJldytuZXRkZXZAbHVubi5jaD4N
-Cj4gVG86ICJEYXZpZCBTLiBNaWxsZXIiIDxtYWlsdG86ZGF2ZW1AZGF2ZW1sb2Z0Lm5ldD4NCj4g
-VG86IEVyaWMgRHVtYXpldCA8bWFpbHRvOmVkdW1hemV0QGdvb2dsZS5jb20+DQo+IFRvOiBKYWt1
-YiBLaWNpbnNraSA8bWFpbHRvOmt1YmFAa2VybmVsLm9yZz4NCj4gVG86IFBhb2xvIEFiZW5pIDxt
-YWlsdG86cGFiZW5pQHJlZGhhdC5jb20+DQo+IFRvOiBQYXZhbiBDaGViYmkgPG1haWx0bzpwYXZh
-bi5jaGViYmlAYnJvYWRjb20uY29tPg0KPiBUbzogTWljaGFlbCBDaGFuIDxtYWlsdG86bWNoYW5A
-YnJvYWRjb20uY29tPg0KPiBUbzogUG90bnVyaSBCaGFyYXQgVGVqYSA8bWFpbHRvOmJoYXJhdEBj
-aGVsc2lvLmNvbT4NCj4gVG86IFRvbnkgTmd1eWVuIDxtYWlsdG86YW50aG9ueS5sLm5ndXllbkBp
-bnRlbC5jb20+DQo+IFRvOiBQcnplbWVrIEtpdHN6ZWwgPG1haWx0bzpwcnplbXlzbGF3LmtpdHN6
-ZWxAaW50ZWwuY29tPg0KPiBUbzogVGFyYXMgQ2hvcm55aSA8bWFpbHRvOnRhcmFzLmNob3JueWlA
-cGx2aXNpb24uZXU+DQo+IFRvOiBNYXhpbWUgQ29xdWVsaW4gPG1haWx0bzptY29xdWVsaW4uc3Rt
-MzJAZ21haWwuY29tPg0KPiBUbzogQWxleGFuZHJlIFRvcmd1ZSA8bWFpbHRvOmFsZXhhbmRyZS50
-b3JndWVAZm9zcy5zdC5jb20+DQo+IFRvOiBJeWFwcGFuIFN1YnJhbWFuaWFuIDxtYWlsdG86aXlh
-cHBhbkBvcy5hbXBlcmVjb21wdXRpbmcuY29tPg0KPiBUbzogS2V5dXIgQ2h1ZGdhciA8bWFpbHRv
-OmtleXVyQG9zLmFtcGVyZWNvbXB1dGluZy5jb20+DQo+IFRvOiBRdWFuIE5ndXllbiA8bWFpbHRv
-OnF1YW5Ab3MuYW1wZXJlY29tcHV0aW5nLmNvbT4NCj4gVG86IEhlaW5lciBLYWxsd2VpdCA8bWFp
-bHRvOmhrYWxsd2VpdDFAZ21haWwuY29tPg0KPiBUbzogUnVzc2VsbCBLaW5nIDxtYWlsdG86bGlu
-dXhAYXJtbGludXgub3JnLnVrPg0KPiBDYzogbWFpbHRvOm5ldGRldkB2Z2VyLmtlcm5lbC5vcmcN
-Cj4gQ2M6IG1haWx0bzpsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IENjOiBtYWlsdG86
-aW50ZWwtd2lyZWQtbGFuQGxpc3RzLm9zdW9zbC5vcmcNCj4gQ2M6IG1haWx0bzpsaW51eC1zdG0z
-MkBzdC1tZC1tYWlsbWFuLnN0b3JtcmVwbHkuY29tDQo+IENjOiBtYWlsdG86bGludXgtYXJtLWtl
-cm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnDQo+IENjOiBtYWlsdG86bGludXgtdXNiQHZnZXIua2Vy
-bmVsLm9yZw0KPiBTaWduZWQtb2ZmLWJ5OiBQaGlsaXBwIEhhaG4gPG1haWx0bzpwaGFobi1vc3NA
-YXZtLmRlPg0KPiAtLS0NCj4gIGRyaXZlcnMvbmV0L2V0aGVybmV0L2FxdWFudGlhL2F0bGFudGlj
-L2FxX3JpbmcuYyAgICAgICAgfCAyICstDQo+ICBkcml2ZXJzL25ldC9ldGhlcm5ldC9icm9hZGNv
-bS90ZzMuYyAgICAgICAgICAgICAgICAgICAgIHwgMiArLQ0KPiAgZHJpdmVycy9uZXQvZXRoZXJu
-ZXQvY2hlbHNpby9jeGdiNC9jeGdiNF90Y19mbG93ZXIuYyAgICB8IDMgKy0tDQo+ICBkcml2ZXJz
-L25ldC9ldGhlcm5ldC9pbnRlbC9pY2UvZGV2bGluay9kZXZsaW5rLmMgICAgICAgIHwgMiArLQ0K
-PiAgZHJpdmVycy9uZXQvZXRoZXJuZXQvbWFydmVsbC9wcmVzdGVyYS9wcmVzdGVyYV9yb3V0ZXIu
-YyB8IDIgKy0NCj4gIGRyaXZlcnMvbmV0L2V0aGVybmV0L3N0bWljcm8vc3RtbWFjL3N0bW1hY19t
-YWluLmMgICAgICAgfCAyICstDQo+ICBkcml2ZXJzL25ldC9tZGlvL21kaW8teGdlbmUuYyAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIHwgMiArLQ0KPiAgZHJpdmVycy9uZXQvdXNiL3I4MTUyLmMg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IDIgKy0NCj4gIDggZmlsZXMgY2hhbmdl
-ZCwgOCBpbnNlcnRpb25zKCspLCA5IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvbmV0L2V0aGVybmV0L2FxdWFudGlhL2F0bGFudGljL2FxX3JpbmcuYyBiL2RyaXZlcnMv
-bmV0L2V0aGVybmV0L2FxdWFudGlhL2F0bGFudGljL2FxX3JpbmcuYw0KPiBpbmRleCBlMjcwMzI3
-ZTQ3ZmQ4MDRjYzhlZTVjZmQ1M2VkMWI5OTNjOTU1YzQxLi40M2VkZWYzNWM0YjFmZjYwNmIyZjE1
-MTlhMDdmYWQ0YzlhOTkwYWQ0IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL25ldC9ldGhlcm5ldC9h
-cXVhbnRpYS9hdGxhbnRpYy9hcV9yaW5nLmMNCj4gKysrIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQv
-YXF1YW50aWEvYXRsYW50aWMvYXFfcmluZy5jDQo+IEBAIC04MTAsNyArODEwLDcgQEAgc3RhdGlj
-IGludCBfX2FxX3JpbmdfeGRwX2NsZWFuKHN0cnVjdCBhcV9yaW5nX3MgKnJ4X3JpbmcsDQo+ICAJ
-CX0NCj4gDQo+ICAJCXNrYiA9IGFxX3hkcF9ydW5fcHJvZyhhcV9uaWMsICZ4ZHAsIHJ4X3Jpbmcs
-IGJ1ZmYpOw0KPiAtCQlpZiAoSVNfRVJSKHNrYikgfHwgIXNrYikNCj4gKwkJaWYgKElTX0VSUl9P
-Ul9OVUxMKHNrYikpDQo+ICAJCQljb250aW51ZTsNCj4gDQo+ICAJCWlmIChwdHBfaHd0c3RhbXBf
-bGVuID4gMCkNCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2V0aGVybmV0L2Jyb2FkY29tL3Rn
-My5jIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvYnJvYWRjb20vdGczLmMNCj4gaW5kZXggMjMyOGZj
-ZTMzNjQ0N2ViNGE3OTZmOTMwMGNjYzBhYjUzNmZmMGEzNS4uOGVkNzlmMzRmMDNkODExODRkY2Mx
-MmU2ZWFmZjAwOWNiOGY3NzU2ZSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9uZXQvZXRoZXJuZXQv
-YnJvYWRjb20vdGczLmMNCj4gKysrIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvYnJvYWRjb20vdGcz
-LmMNCj4gQEAgLTc5NDMsNyArNzk0Myw3IEBAIHN0YXRpYyBpbnQgdGczX3Rzb19idWcoc3RydWN0
-IHRnMyAqdHAsIHN0cnVjdCB0ZzNfbmFwaSAqdG5hcGksDQo+IA0KPiAgCXNlZ3MgPSBza2JfZ3Nv
-X3NlZ21lbnQoc2tiLCB0cC0+ZGV2LT5mZWF0dXJlcyAmDQo+ICAJCQkJICAgIH4oTkVUSUZfRl9U
-U08gfCBORVRJRl9GX1RTTzYpKTsNCj4gLQlpZiAoSVNfRVJSKHNlZ3MpIHx8ICFzZWdzKSB7DQo+
-ICsJaWYgKElTX0VSUl9PUl9OVUxMKHNlZ3MpKSB7DQo+ICAJCXRuYXBpLT50eF9kcm9wcGVkKys7
-DQo+ICAJCWdvdG8gdGczX3Rzb19idWdfZW5kOw0KPiAgCX0NCj4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvbmV0L2V0aGVybmV0L2NoZWxzaW8vY3hnYjQvY3hnYjRfdGNfZmxvd2VyLmMgYi9kcml2ZXJz
-L25ldC9ldGhlcm5ldC9jaGVsc2lvL2N4Z2I0L2N4Z2I0X3RjX2Zsb3dlci5jDQo+IGluZGV4IDMz
-MDdlNTA0MjY4MTkwODdhZDk4NTE3OGM0YTUzODNmMTZiOGU3YjQuLjFjOGE2NDQ1ZDRiMmUzNTM1
-ZDhmMWI3OTA4ZGQwMmQ4ZGQyZjIzZmEgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvbmV0L2V0aGVy
-bmV0L2NoZWxzaW8vY3hnYjQvY3hnYjRfdGNfZmxvd2VyLmMNCj4gKysrIGIvZHJpdmVycy9uZXQv
-ZXRoZXJuZXQvY2hlbHNpby9jeGdiNC9jeGdiNF90Y19mbG93ZXIuYw0KPiBAQCAtMTAzMiw4ICsx
-MDMyLDcgQEAgc3RhdGljIHZvaWQgY2hfZmxvd2VyX3N0YXRzX2hhbmRsZXIoc3RydWN0IHdvcmtf
-c3RydWN0ICp3b3JrKQ0KPiAgCWRvIHsNCj4gIAkJcmhhc2h0YWJsZV93YWxrX3N0YXJ0KCZpdGVy
-KTsNCj4gDQo+IC0JCXdoaWxlICgoZmxvd2VyX2VudHJ5ID0gcmhhc2h0YWJsZV93YWxrX25leHQo
-Jml0ZXIpKSAmJg0KPiAtCQkgICAgICAgIUlTX0VSUihmbG93ZXJfZW50cnkpKSB7DQo+ICsJCXdo
-aWxlICghSVNfRVJSX09SX05VTEwoKGZsb3dlcl9lbnRyeSA9IHJoYXNodGFibGVfd2Fsa19uZXh0
-KCZpdGVyKSkpKSB7DQo+ICAJCQlyZXQgPSBjeGdiNF9nZXRfZmlsdGVyX2NvdW50ZXJzKGFkYXAt
-PnBvcnRbMF0sDQo+ICAJCQkJCQkJZmxvd2VyX2VudHJ5LT5maWx0ZXJfaWQsDQo+ICAJCQkJCQkJ
-JnBhY2tldHMsICZieXRlcywNCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2V0aGVybmV0L2lu
-dGVsL2ljZS9kZXZsaW5rL2RldmxpbmsuYyBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L2ludGVsL2lj
-ZS9kZXZsaW5rL2RldmxpbmsuYw0KPiBpbmRleCA2YzcyYmQxNWRiNmQ3NWExZDRmYTA0ZWY4ZmVm
-YmQyNmZiNmU4NGJkLi4zZDA4YjkxODdmZDc2Y2EzMTk4YWYyODExMWI2ZjFjMTc2NWVhMDFlIDEw
-MDY0NA0KPiAtLS0gYS9kcml2ZXJzL25ldC9ldGhlcm5ldC9pbnRlbC9pY2UvZGV2bGluay9kZXZs
-aW5rLmMNCj4gKysrIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvaW50ZWwvaWNlL2RldmxpbmsvZGV2
-bGluay5jDQo+IEBAIC03OTEsNyArNzkxLDcgQEAgc3RhdGljIHZvaWQgaWNlX3RyYXZlcnNlX3R4
-X3RyZWUoc3RydWN0IGRldmxpbmsgKmRldmxpbmssIHN0cnVjdCBpY2Vfc2NoZWRfbm9kZQ0KPiAg
-CQkJCQkJICBub2RlLT5wYXJlbnQtPnJhdGVfbm9kZSk7DQo+ICAJfQ0KPiANCj4gLQlpZiAocmF0
-ZV9ub2RlICYmICFJU19FUlIocmF0ZV9ub2RlKSkNCj4gKwlpZiAoIUlTX0VSUl9PUl9OVUxMKHJh
-dGVfbm9kZSkpDQo+ICAJCW5vZGUtPnJhdGVfbm9kZSA9IHJhdGVfbm9kZTsNCj4gDQo+ICB0cmF2
-ZXJzZV9jaGlsZHJlbjoNCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2V0aGVybmV0L21hcnZl
-bGwvcHJlc3RlcmEvcHJlc3RlcmFfcm91dGVyLmMgYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9tYXJ2
-ZWxsL3ByZXN0ZXJhL3ByZXN0ZXJhX3JvdXRlci5jDQo+IGluZGV4IGIwMzZiMTczYTMwOGI1Zjk5
-NGFkODUzOGViMDEwZmEyNzE5Njk4OGMuLjQ0OTI5MzhlOGEzZGE5MWQzMmVmZThkNDVjY2JlMmVi
-NDM3YzBlNDkgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvbmV0L2V0aGVybmV0L21hcnZlbGwvcHJl
-c3RlcmEvcHJlc3RlcmFfcm91dGVyLmMNCj4gKysrIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvbWFy
-dmVsbC9wcmVzdGVyYS9wcmVzdGVyYV9yb3V0ZXIuYw0KPiBAQCAtMTA2MSw3ICsxMDYxLDcgQEAg
-c3RhdGljIHZvaWQgX19wcmVzdGVyYV9rX2FyYl9od19zdGF0ZV91cGQoc3RydWN0IHByZXN0ZXJh
-X3N3aXRjaCAqc3csDQo+ICAJCW4gPSBOVUxMOw0KPiAgCX0NCj4gDQo+IC0JaWYgKCFJU19FUlIo
-bikgJiYgbikgew0KPiArCWlmICghSVNfRVJSX09SX05VTEwobikpIHsNCj4gIAkJbmVpZ2hfZXZl
-bnRfc2VuZChuLCBOVUxMKTsNCj4gIAkJbmVpZ2hfcmVsZWFzZShuKTsNCj4gIAl9IGVsc2Ugew0K
-PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvZXRoZXJuZXQvc3RtaWNyby9zdG1tYWMvc3RtbWFj
-X21haW4uYyBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L3N0bWljcm8vc3RtbWFjL3N0bW1hY19tYWlu
-LmMNCj4gaW5kZXggNjgyN2M5OWJkZThjMjJkYjQyYjM2M2QyZDM2YWQ2ZjI2MDc1ZWQ1MC4uMzU2
-YTRlOWNlMDRiMWZjZjg3ODZkNzI3NGQzMWFjZTQwNGJlMmNmNiAxMDA2NDQNCj4gLS0tIGEvZHJp
-dmVycy9uZXQvZXRoZXJuZXQvc3RtaWNyby9zdG1tYWMvc3RtbWFjX21haW4uYw0KPiArKysgYi9k
-cml2ZXJzL25ldC9ldGhlcm5ldC9zdG1pY3JvL3N0bW1hYy9zdG1tYWNfbWFpbi5jDQo+IEBAIC0x
-Mjc1LDcgKzEyNzUsNyBAQCBzdGF0aWMgaW50IHN0bW1hY19pbml0X3BoeShzdHJ1Y3QgbmV0X2Rl
-dmljZSAqZGV2KQ0KPiAgCS8qIFNvbWUgRFQgYmluZGluZ3MgZG8gbm90IHNldC11cCB0aGUgUEhZ
-IGhhbmRsZS4gTGV0J3MgdHJ5IHRvDQo+ICAJICogbWFudWFsbHkgcGFyc2UgaXQNCj4gIAkgKi8N
-Cj4gLQlpZiAoIXBoeV9md25vZGUgfHwgSVNfRVJSKHBoeV9md25vZGUpKSB7DQo+ICsJaWYgKElT
-X0VSUl9PUl9OVUxMKHBoeV9md25vZGUpKSB7DQo+ICAJCWludCBhZGRyID0gcHJpdi0+cGxhdC0+
-cGh5X2FkZHI7DQo+ICAJCXN0cnVjdCBwaHlfZGV2aWNlICpwaHlkZXY7DQo+IA0KPiBkaWZmIC0t
-Z2l0IGEvZHJpdmVycy9uZXQvbWRpby9tZGlvLXhnZW5lLmMgYi9kcml2ZXJzL25ldC9tZGlvL21k
-aW8teGdlbmUuYw0KPiBpbmRleCBhOGY5MWE0YjdmZWQwOTI3ZWUxNGU0MDgwMDBjZDNhMmJmYjli
-MDlhLi4wOWIzMGI1NjMyOTVjNjA4NWRjMTM1OGFjMzYxMzAxZTVjZjZiMmE4IDEwMDY0NA0KPiAt
-LS0gYS9kcml2ZXJzL25ldC9tZGlvL21kaW8teGdlbmUuYw0KPiArKysgYi9kcml2ZXJzL25ldC9t
-ZGlvL21kaW8teGdlbmUuYw0KPiBAQCAtMjY1LDcgKzI2NSw3IEBAIHN0cnVjdCBwaHlfZGV2aWNl
-ICp4Z2VuZV9lbmV0X3BoeV9yZWdpc3RlcihzdHJ1Y3QgbWlpX2J1cyAqYnVzLCBpbnQgcGh5X2Fk
-ZHIpDQo+ICAJc3RydWN0IHBoeV9kZXZpY2UgKnBoeV9kZXY7DQo+IA0KPiAgCXBoeV9kZXYgPSBn
-ZXRfcGh5X2RldmljZShidXMsIHBoeV9hZGRyLCBmYWxzZSk7DQo+IC0JaWYgKCFwaHlfZGV2IHx8
-IElTX0VSUihwaHlfZGV2KSkNCj4gKwlpZiAoSVNfRVJSX09SX05VTEwocGh5X2RldikpDQo+ICAJ
-CXJldHVybiBOVUxMOw0KPiANCj4gIAlpZiAocGh5X2RldmljZV9yZWdpc3RlcihwaHlfZGV2KSkN
-Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3VzYi9yODE1Mi5jIGIvZHJpdmVycy9uZXQvdXNi
-L3I4MTUyLmMNCj4gaW5kZXggMGM4M2JiYmVhMmU3YzMyMmVlNjMzOTg5M2UyODEyMzc2NjNiZDNh
-ZS4uNzNmMTdlYmQ3ZDQwMDA3ZWVjNTAwNGY4ODdhNDYyNDlkZWZkMjhhYiAxMDA2NDQNCj4gLS0t
-IGEvZHJpdmVycy9uZXQvdXNiL3I4MTUyLmMNCj4gKysrIGIvZHJpdmVycy9uZXQvdXNiL3I4MTUy
-LmMNCj4gQEAgLTIyMTgsNyArMjIxOCw3IEBAIHN0YXRpYyB2b2lkIHI4MTUyX2NzdW1fd29ya2Fy
-b3VuZChzdHJ1Y3QgcjgxNTIgKnRwLCBzdHJ1Y3Qgc2tfYnVmZiAqc2tiLA0KPiANCj4gIAkJZmVh
-dHVyZXMgJj0gfihORVRJRl9GX1NHIHwgTkVUSUZfRl9JUFY2X0NTVU0gfCBORVRJRl9GX1RTTzYp
-Ow0KPiAgCQlzZWdzID0gc2tiX2dzb19zZWdtZW50KHNrYiwgZmVhdHVyZXMpOw0KPiAtCQlpZiAo
-SVNfRVJSKHNlZ3MpIHx8ICFzZWdzKQ0KPiArCQlpZiAoSVNfRVJSX09SX05VTEwoc2VncykpDQo+
-ICAJCQlnb3RvIGRyb3A7DQo+IA0KPiAgCQlfX3NrYl9xdWV1ZV9oZWFkX2luaXQoJnNlZ19saXN0
-KTsNCj4gDQo+IC0tDQo+IDIuNDMuMA0KPiANCj4NCg0KQWNrZWQtYnk6IEVsYWQgTmFjaG1hbiA8
-ZW5hY2htYW5AbWFydmVsbC5jb20+DQo=
+As IPv6 is built-in only, the ipv6_stub infrastructure is no longer
+necessary.
+
+Convert all drivers currently utilizing ipv6_stub to make direct
+function calls. The fallback functions introduced previously will
+prevent linkage errors when CONFIG_IPV6 is disabled.
+
+Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+---
+v2: no changes
+---
+ drivers/infiniband/core/addr.c                  |  3 +--
+ drivers/infiniband/sw/rxe/rxe_net.c             |  6 +++---
+ .../ethernet/mellanox/mlx5/core/en/rep/neigh.c  | 12 ++++++++----
+ .../net/ethernet/mellanox/mlx5/core/en/tc_tun.c |  3 +--
+ .../mellanox/mlx5/core/en/tc_tun_encap.c        |  2 +-
+ .../mellanox/mlx5/core/en_accel/ipsec.c         |  1 -
+ .../net/ethernet/mellanox/mlx5/core/en_rep.c    |  1 -
+ drivers/net/ethernet/mellanox/mlx5/core/en_tc.c |  1 -
+ .../ethernet/mellanox/mlxsw/spectrum_router.c   |  9 +++++----
+ .../net/ethernet/mellanox/mlxsw/spectrum_span.c |  3 ++-
+ .../net/ethernet/netronome/nfp/flower/action.c  |  2 +-
+ .../ethernet/netronome/nfp/flower/tunnel_conf.c |  9 ++++-----
+ drivers/net/ethernet/sfc/tc_counters.c          |  2 +-
+ drivers/net/ethernet/sfc/tc_encap_actions.c     |  5 ++---
+ drivers/net/geneve.c                            |  1 -
+ drivers/net/gtp.c                               |  2 +-
+ drivers/net/ovpn/peer.c                         |  3 +--
+ drivers/net/ovpn/udp.c                          |  3 +--
+ drivers/net/usb/cdc_mbim.c                      | 17 +++++++++--------
+ drivers/net/vrf.c                               |  3 ++-
+ drivers/net/vxlan/vxlan_core.c                  | 11 +++++------
+ drivers/net/vxlan/vxlan_multicast.c             |  6 ++----
+ drivers/net/wireguard/socket.c                  |  3 +--
+ drivers/net/wireless/intel/ipw2x00/ipw2100.c    |  2 +-
+ net/bridge/br_arp_nd_proxy.c                    |  3 +--
+ 25 files changed, 53 insertions(+), 60 deletions(-)
+
+diff --git a/drivers/infiniband/core/addr.c b/drivers/infiniband/core/addr.c
+index 866746695712..48d4b06384ec 100644
+--- a/drivers/infiniband/core/addr.c
++++ b/drivers/infiniband/core/addr.c
+@@ -41,7 +41,6 @@
+ #include <net/neighbour.h>
+ #include <net/route.h>
+ #include <net/netevent.h>
+-#include <net/ipv6_stubs.h>
+ #include <net/ip6_route.h>
+ #include <rdma/ib_addr.h>
+ #include <rdma/ib_cache.h>
+@@ -411,7 +410,7 @@ static int addr6_resolve(struct sockaddr *src_sock,
+ 	fl6.saddr = src_in->sin6_addr;
+ 	fl6.flowi6_oif = addr->bound_dev_if;
+ 
+-	dst = ipv6_stub->ipv6_dst_lookup_flow(addr->net, NULL, &fl6, NULL);
++	dst = ip6_dst_lookup_flow(addr->net, NULL, &fl6, NULL);
+ 	if (IS_ERR(dst))
+ 		return PTR_ERR(dst);
+ 
+diff --git a/drivers/infiniband/sw/rxe/rxe_net.c b/drivers/infiniband/sw/rxe/rxe_net.c
+index 0bd0902b11f7..cbc646a30003 100644
+--- a/drivers/infiniband/sw/rxe/rxe_net.c
++++ b/drivers/infiniband/sw/rxe/rxe_net.c
+@@ -138,9 +138,9 @@ static struct dst_entry *rxe_find_route6(struct rxe_qp *qp,
+ 	memcpy(&fl6.daddr, daddr, sizeof(*daddr));
+ 	fl6.flowi6_proto = IPPROTO_UDP;
+ 
+-	ndst = ipv6_stub->ipv6_dst_lookup_flow(sock_net(recv_sockets.sk6->sk),
+-					       recv_sockets.sk6->sk, &fl6,
+-					       NULL);
++	ndst = ip6_dst_lookup_flow(sock_net(recv_sockets.sk6->sk),
++				   recv_sockets.sk6->sk, &fl6,
++				   NULL);
+ 	if (IS_ERR(ndst)) {
+ 		rxe_dbg_qp(qp, "no route to %pI6\n", daddr);
+ 		return NULL;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/rep/neigh.c b/drivers/net/ethernet/mellanox/mlx5/core/en/rep/neigh.c
+index d220b045b331..56930bad94eb 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/rep/neigh.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/rep/neigh.c
+@@ -10,6 +10,7 @@
+ #include <linux/notifier.h>
+ #include <net/netevent.h>
+ #include <net/arp.h>
++#include <net/ndisc.h>
+ #include "neigh.h"
+ #include "tc.h"
+ #include "en_rep.h"
+@@ -18,8 +19,10 @@
+ 
+ static unsigned long mlx5e_rep_ipv6_interval(void)
+ {
+-	if (IS_ENABLED(CONFIG_IPV6) && ipv6_stub->nd_tbl)
+-		return NEIGH_VAR(&ipv6_stub->nd_tbl->parms, DELAY_PROBE_TIME);
++	struct neigh_table *tbl = ipv6_get_nd_tbl();
++
++	if (IS_ENABLED(CONFIG_IPV6) && ipv6_mod_enabled())
++		return NEIGH_VAR(&tbl->parms, DELAY_PROBE_TIME);
+ 
+ 	return ~0UL;
+ }
+@@ -217,7 +220,7 @@ static int mlx5e_rep_netevent_event(struct notifier_block *nb,
+ 	case NETEVENT_NEIGH_UPDATE:
+ 		n = ptr;
+ #if IS_ENABLED(CONFIG_IPV6)
+-		if (n->tbl != ipv6_stub->nd_tbl && n->tbl != &arp_tbl)
++		if (n->tbl != ipv6_get_nd_tbl() && n->tbl != &arp_tbl)
+ #else
+ 		if (n->tbl != &arp_tbl)
+ #endif
+@@ -238,7 +241,8 @@ static int mlx5e_rep_netevent_event(struct notifier_block *nb,
+ 		 * done per device delay prob time parameter.
+ 		 */
+ #if IS_ENABLED(CONFIG_IPV6)
+-		if (!p->dev || (p->tbl != ipv6_stub->nd_tbl && p->tbl != &arp_tbl))
++		if (!p->dev ||
++		    (p->tbl != ipv6_get_nd_tbl() && p->tbl != &arp_tbl))
+ #else
+ 		if (!p->dev || p->tbl != &arp_tbl)
+ #endif
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c
+index a14f216048cd..de74dbfe7b20 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c
+@@ -453,8 +453,7 @@ static int mlx5e_route_lookup_ipv6_get(struct mlx5e_priv *priv,
+ 
+ 	if (tunnel && tunnel->get_remote_ifindex)
+ 		attr->fl.fl6.flowi6_oif = tunnel->get_remote_ifindex(dev);
+-	dst = ipv6_stub->ipv6_dst_lookup_flow(dev_net(dev), NULL, &attr->fl.fl6,
+-					      NULL);
++	dst = ip6_dst_lookup_flow(dev_net(dev), NULL, &attr->fl.fl6, NULL);
+ 	if (IS_ERR(dst))
+ 		return PTR_ERR(dst);
+ 
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c
+index bfd401bee9e8..ce2a27124642 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c
+@@ -402,7 +402,7 @@ void mlx5e_tc_update_neigh_used_value(struct mlx5e_neigh_hash_entry *nhe)
+ 		tbl = &arp_tbl;
+ #if IS_ENABLED(CONFIG_IPV6)
+ 	else if (m_neigh->family == AF_INET6)
+-		tbl = ipv6_stub->nd_tbl;
++		tbl = ipv6_get_nd_tbl();
+ #endif
+ 	else
+ 		return;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c
+index 64e13747084e..a52e12c3c95a 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c
+@@ -36,7 +36,6 @@
+ #include <linux/inetdevice.h>
+ #include <linux/netdevice.h>
+ #include <net/netevent.h>
+-#include <net/ipv6_stubs.h>
+ 
+ #include "en.h"
+ #include "eswitch.h"
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
+index 1db4ecb2356f..5ec5cae8d229 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
+@@ -38,7 +38,6 @@
+ #include <net/pkt_cls.h>
+ #include <net/act_api.h>
+ #include <net/devlink.h>
+-#include <net/ipv6_stubs.h>
+ 
+ #include "eswitch.h"
+ #include "en.h"
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+index 1434b65d4746..4e4ee1d520ce 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+@@ -40,7 +40,6 @@
+ #include <linux/refcount.h>
+ #include <linux/completion.h>
+ #include <net/arp.h>
+-#include <net/ipv6_stubs.h>
+ #include <net/bareudp.h>
+ #include <net/bonding.h>
+ #include <net/dst_metadata.h>
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+index 7bd87d0547d8..8531216f6389 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+@@ -2458,7 +2458,7 @@ static void mlxsw_sp_router_neigh_ent_ipv6_process(struct mlxsw_sp *mlxsw_sp,
+ 	}
+ 
+ 	dev = mlxsw_sp_rif_dev(mlxsw_sp->router->rifs[rif]);
+-	n = neigh_lookup(&nd_tbl, &dip, dev);
++	n = neigh_lookup(ipv6_get_nd_tbl(), &dip, dev);
+ 	if (!n)
+ 		return;
+ 
+@@ -3022,7 +3022,8 @@ static int mlxsw_sp_neigh_rif_made_sync(struct mlxsw_sp *mlxsw_sp,
+ 		goto err_arp;
+ 
+ #if IS_ENABLED(CONFIG_IPV6)
+-	neigh_for_each(&nd_tbl, mlxsw_sp_neigh_rif_made_sync_each, &rms);
++	neigh_for_each(ipv6_get_nd_tbl(),
++		       mlxsw_sp_neigh_rif_made_sync_each, &rms);
+ #endif
+ 	if (rms.err)
+ 		goto err_nd;
+@@ -5124,7 +5125,7 @@ mlxsw_sp_nexthop_obj_init(struct mlxsw_sp *mlxsw_sp,
+ 	case AF_INET6:
+ 		memcpy(&nh->gw_addr, &nh_obj->ipv6, sizeof(nh_obj->ipv6));
+ #if IS_ENABLED(CONFIG_IPV6)
+-		nh->neigh_tbl = &nd_tbl;
++		nh->neigh_tbl = ipv6_get_nd_tbl();
+ #endif
+ 		break;
+ 	}
+@@ -6980,7 +6981,7 @@ static int mlxsw_sp_nexthop6_init(struct mlxsw_sp *mlxsw_sp,
+ 	nh->nh_weight = rt->fib6_nh->fib_nh_weight;
+ 	memcpy(&nh->gw_addr, &rt->fib6_nh->fib_nh_gw6, sizeof(nh->gw_addr));
+ #if IS_ENABLED(CONFIG_IPV6)
+-	nh->neigh_tbl = &nd_tbl;
++	nh->neigh_tbl = ipv6_get_nd_tbl();
+ #endif
+ 
+ 	err = mlxsw_sp_nexthop_counter_enable(mlxsw_sp, nh);
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_span.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_span.c
+index ae63d549b542..f05ccf3db876 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_span.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_span.c
+@@ -576,7 +576,8 @@ mlxsw_sp_span_entry_gretap6_parms(struct mlxsw_sp *mlxsw_sp,
+ 	l3edev = mlxsw_sp_span_gretap6_route(to_dev, &saddr.addr6, &gw.addr6);
+ 	return mlxsw_sp_span_entry_tunnel_parms_common(l3edev, saddr, daddr, gw,
+ 						       tparm.hop_limit,
+-						       &nd_tbl, sparmsp);
++						       ipv6_get_nd_tbl(),
++						       sparmsp);
+ }
+ 
+ static int
+diff --git a/drivers/net/ethernet/netronome/nfp/flower/action.c b/drivers/net/ethernet/netronome/nfp/flower/action.c
+index aca2a7417af3..ae2f8b31adfb 100644
+--- a/drivers/net/ethernet/netronome/nfp/flower/action.c
++++ b/drivers/net/ethernet/netronome/nfp/flower/action.c
+@@ -470,7 +470,7 @@ nfp_fl_set_tun(struct nfp_app *app, struct nfp_fl_set_tun *set_tun,
+ 
+ 		flow.daddr = ip_tun->key.u.ipv6.dst;
+ 		flow.flowi4_proto = IPPROTO_UDP;
+-		dst = ipv6_stub->ipv6_dst_lookup_flow(net, NULL, &flow, NULL);
++		dst = ip6_dst_lookup_flow(net, NULL, &flow, NULL);
+ 		if (!IS_ERR(dst)) {
+ 			set_tun->ttl = ip6_dst_hoplimit(dst);
+ 			dst_release(dst);
+diff --git a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
+index 0cef0e2b85d0..053265e135f6 100644
+--- a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
++++ b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
+@@ -277,7 +277,7 @@ void nfp_tunnel_keep_alive_v6(struct nfp_app *app, struct sk_buff *skb)
+ 		if (!netdev)
+ 			continue;
+ 
+-		n = neigh_lookup(&nd_tbl, ipv6_add, netdev);
++		n = neigh_lookup(ipv6_get_nd_tbl(), ipv6_add, netdev);
+ 		if (!n)
+ 			continue;
+ 
+@@ -650,7 +650,7 @@ static void nfp_tun_neigh_update(struct work_struct *work)
+ 		flow6.daddr = *(struct in6_addr *)n->primary_key;
+ 		if (!neigh_invalid) {
+ 			struct dst_entry *dst;
+-			/* Use ipv6_dst_lookup_flow to populate flow6->saddr
++			/* Use ip6_dst_lookup_flow to populate flow6->saddr
+ 			 * and other fields. This information is only needed
+ 			 * for new entries, lookup can be skipped when an entry
+ 			 * gets invalidated - as only the daddr is needed for
+@@ -730,7 +730,7 @@ nfp_tun_neigh_event_handler(struct notifier_block *nb, unsigned long event,
+ 		return NOTIFY_DONE;
+ 	}
+ #if IS_ENABLED(CONFIG_IPV6)
+-	if (n->tbl != ipv6_stub->nd_tbl && n->tbl != &arp_tbl)
++	if (n->tbl != ipv6_get_nd_tbl() && n->tbl != &arp_tbl)
+ #else
+ 	if (n->tbl != &arp_tbl)
+ #endif
+@@ -815,8 +815,7 @@ void nfp_tunnel_request_route_v6(struct nfp_app *app, struct sk_buff *skb)
+ 	flow.flowi6_proto = IPPROTO_UDP;
+ 
+ #if IS_ENABLED(CONFIG_INET) && IS_ENABLED(CONFIG_IPV6)
+-	dst = ipv6_stub->ipv6_dst_lookup_flow(dev_net(netdev), NULL, &flow,
+-					      NULL);
++	dst = ip6_dst_lookup_flow(dev_net(netdev), NULL, &flow, NULL);
+ 	if (IS_ERR(dst))
+ 		goto fail_rcu_unlock;
+ #else
+diff --git a/drivers/net/ethernet/sfc/tc_counters.c b/drivers/net/ethernet/sfc/tc_counters.c
+index d168282f30bf..d8a5f9fd1007 100644
+--- a/drivers/net/ethernet/sfc/tc_counters.c
++++ b/drivers/net/ethernet/sfc/tc_counters.c
+@@ -112,7 +112,7 @@ static void efx_tc_counter_work(struct work_struct *work)
+ 					 encap->neigh->egdev);
+ 		else
+ #if IS_ENABLED(CONFIG_IPV6)
+-			n = neigh_lookup(ipv6_stub->nd_tbl,
++			n = neigh_lookup(ipv6_get_nd_tbl(),
+ 					 &encap->neigh->dst_ip6,
+ 					 encap->neigh->egdev);
+ #else
+diff --git a/drivers/net/ethernet/sfc/tc_encap_actions.c b/drivers/net/ethernet/sfc/tc_encap_actions.c
+index da35705cc5e1..63d8f794b869 100644
+--- a/drivers/net/ethernet/sfc/tc_encap_actions.c
++++ b/drivers/net/ethernet/sfc/tc_encap_actions.c
+@@ -149,8 +149,7 @@ static int efx_bind_neigh(struct efx_nic *efx,
+ #if IS_ENABLED(CONFIG_IPV6)
+ 			struct dst_entry *dst;
+ 
+-			dst = ipv6_stub->ipv6_dst_lookup_flow(net, NULL, &flow6,
+-							      NULL);
++			dst = ip6_dst_lookup_flow(net, NULL, &flow6, NULL);
+ 			rc = PTR_ERR_OR_ZERO(dst);
+ 			if (rc) {
+ 				NL_SET_ERR_MSG_MOD(extack, "Failed to lookup route for IPv6 encap");
+@@ -531,7 +530,7 @@ static int efx_neigh_event(struct efx_nic *efx, struct neighbour *n)
+ 	if (n->tbl == &arp_tbl) {
+ 		keysize = sizeof(keys.dst_ip);
+ #if IS_ENABLED(CONFIG_IPV6)
+-	} else if (n->tbl == ipv6_stub->nd_tbl) {
++	} else if (n->tbl == ipv6_get_nd_tbl()) {
+ 		ipv6 = true;
+ 		keysize = sizeof(keys.dst_ip6);
+ #endif
+diff --git a/drivers/net/geneve.c b/drivers/net/geneve.c
+index 01cdd06102e0..c6563367d382 100644
+--- a/drivers/net/geneve.c
++++ b/drivers/net/geneve.c
+@@ -12,7 +12,6 @@
+ #include <linux/module.h>
+ #include <linux/etherdevice.h>
+ #include <linux/hash.h>
+-#include <net/ipv6_stubs.h>
+ #include <net/dst_metadata.h>
+ #include <net/gro_cells.h>
+ #include <net/rtnetlink.h>
+diff --git a/drivers/net/gtp.c b/drivers/net/gtp.c
+index e8949f556209..70b9e58b9b78 100644
+--- a/drivers/net/gtp.c
++++ b/drivers/net/gtp.c
+@@ -374,7 +374,7 @@ static struct rt6_info *ip6_route_output_gtp(struct net *net,
+ 	fl6->saddr		= *saddr;
+ 	fl6->flowi6_proto	= sk->sk_protocol;
+ 
+-	dst = ipv6_stub->ipv6_dst_lookup_flow(net, sk, fl6, NULL);
++	dst = ip6_dst_lookup_flow(net, sk, fl6, NULL);
+ 	if (IS_ERR(dst))
+ 		return ERR_PTR(-ENETUNREACH);
+ 
+diff --git a/drivers/net/ovpn/peer.c b/drivers/net/ovpn/peer.c
+index 3716a1d82801..6dd11c71204b 100644
+--- a/drivers/net/ovpn/peer.c
++++ b/drivers/net/ovpn/peer.c
+@@ -821,8 +821,7 @@ static struct in6_addr ovpn_nexthop_from_rt6(struct ovpn_priv *ovpn,
+ 		.daddr = dest,
+ 	};
+ 
+-	entry = ipv6_stub->ipv6_dst_lookup_flow(dev_net(ovpn->dev), NULL, &fl,
+-						NULL);
++	entry = ip6_dst_lookup_flow(dev_net(ovpn->dev), NULL, &fl, NULL);
+ 	if (IS_ERR(entry)) {
+ 		net_dbg_ratelimited("%s: no route to host %pI6c\n",
+ 				    netdev_name(ovpn->dev), &dest);
+diff --git a/drivers/net/ovpn/udp.c b/drivers/net/ovpn/udp.c
+index 272b535ecaad..059e896b4a2f 100644
+--- a/drivers/net/ovpn/udp.c
++++ b/drivers/net/ovpn/udp.c
+@@ -14,7 +14,6 @@
+ #include <net/addrconf.h>
+ #include <net/dst_cache.h>
+ #include <net/route.h>
+-#include <net/ipv6_stubs.h>
+ #include <net/transp_v6.h>
+ #include <net/udp.h>
+ #include <net/udp_tunnel.h>
+@@ -251,7 +250,7 @@ static int ovpn_udp6_output(struct ovpn_peer *peer, struct ovpn_bind *bind,
+ 		dst_cache_reset(cache);
+ 	}
+ 
+-	dst = ipv6_stub->ipv6_dst_lookup_flow(sock_net(sk), sk, &fl, NULL);
++	dst = ip6_dst_lookup_flow(sock_net(sk), sk, &fl, NULL);
+ 	if (IS_ERR(dst)) {
+ 		ret = PTR_ERR(dst);
+ 		net_dbg_ratelimited("%s: no route to host %pISpc: %d\n",
+diff --git a/drivers/net/usb/cdc_mbim.c b/drivers/net/usb/cdc_mbim.c
+index dbf01210b0e7..877fb0ed7d3d 100644
+--- a/drivers/net/usb/cdc_mbim.c
++++ b/drivers/net/usb/cdc_mbim.c
+@@ -20,7 +20,6 @@
+ #include <linux/usb/cdc_ncm.h>
+ #include <net/ipv6.h>
+ #include <net/addrconf.h>
+-#include <net/ipv6_stubs.h>
+ #include <net/ndisc.h>
+ 
+ /* alternative VLAN for IP session 0 if not untagged */
+@@ -302,6 +301,7 @@ static struct sk_buff *cdc_mbim_tx_fixup(struct usbnet *dev, struct sk_buff *skb
+ 	return NULL;
+ }
+ 
++#if IS_ENABLED(CONFIG_IPV6)
+ /* Some devices are known to send Neighbor Solicitation messages and
+  * require Neighbor Advertisement replies.  The IPv6 core will not
+  * respond since IFF_NOARP is set, so we must handle them ourselves.
+@@ -342,12 +342,11 @@ static void do_neigh_solicit(struct usbnet *dev, u8 *buf, u16 tci)
+ 	is_router = !!READ_ONCE(in6_dev->cnf.forwarding);
+ 	in6_dev_put(in6_dev);
+ 
+-	/* ipv6_stub != NULL if in6_dev_get returned an inet6_dev */
+-	ipv6_stub->ndisc_send_na(netdev, &iph->saddr, &msg->target,
+-				 is_router /* router */,
+-				 true /* solicited */,
+-				 false /* override */,
+-				 true /* inc_opt */);
++	ndisc_send_na(netdev, &iph->saddr, &msg->target,
++		      is_router /* router */,
++		      true /* solicited */,
++		      false /* override */,
++		      true /* inc_opt */);
+ out:
+ 	dev_put(netdev);
+ }
+@@ -362,7 +361,7 @@ static bool is_neigh_solicit(u8 *buf, size_t len)
+ 		msg->icmph.icmp6_code == 0 &&
+ 		msg->icmph.icmp6_type == NDISC_NEIGHBOUR_SOLICITATION);
+ }
+-
++#endif /* IPV6 */
+ 
+ static struct sk_buff *cdc_mbim_process_dgram(struct usbnet *dev, u8 *buf, size_t len, u16 tci)
+ {
+@@ -378,8 +377,10 @@ static struct sk_buff *cdc_mbim_process_dgram(struct usbnet *dev, u8 *buf, size_
+ 			proto = htons(ETH_P_IP);
+ 			break;
+ 		case 0x60:
++#if IS_ENABLED(CONFIG_IPV6)
+ 			if (is_neigh_solicit(buf, len))
+ 				do_neigh_solicit(dev, buf, tci);
++#endif
+ 			proto = htons(ETH_P_IPV6);
+ 			break;
+ 		default:
+diff --git a/drivers/net/vrf.c b/drivers/net/vrf.c
+index 8c009bcaa8e7..68edb47cc4eb 100644
+--- a/drivers/net/vrf.c
++++ b/drivers/net/vrf.c
+@@ -616,7 +616,8 @@ static int vrf_finish_output6(struct net *net, struct sock *sk,
+ 	nexthop = rt6_nexthop(dst_rt6_info(dst), &ipv6_hdr(skb)->daddr);
+ 	neigh = __ipv6_neigh_lookup_noref(dst->dev, nexthop);
+ 	if (unlikely(!neigh))
+-		neigh = __neigh_create(&nd_tbl, nexthop, dst->dev, false);
++		neigh = __neigh_create(ipv6_get_nd_tbl(), nexthop,
++				       dst->dev, false);
+ 	if (!IS_ERR(neigh)) {
+ 		sock_confirm_neigh(skb, neigh);
+ 		ret = neigh_output(neigh, skb, false);
+diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
+index 17c941aac32d..4ab94dfe0d12 100644
+--- a/drivers/net/vxlan/vxlan_core.c
++++ b/drivers/net/vxlan/vxlan_core.c
+@@ -19,7 +19,6 @@
+ #include <net/arp.h>
+ #include <net/ndisc.h>
+ #include <net/gro.h>
+-#include <net/ipv6_stubs.h>
+ #include <net/ip.h>
+ #include <net/icmp.h>
+ #include <net/rtnetlink.h>
+@@ -2045,7 +2044,7 @@ static int neigh_reduce(struct net_device *dev, struct sk_buff *skb, __be32 vni)
+ 	    ipv6_addr_is_multicast(&msg->target))
+ 		goto out;
+ 
+-	n = neigh_lookup(ipv6_stub->nd_tbl, &msg->target, dev);
++	n = neigh_lookup(ipv6_get_nd_tbl(), &msg->target, dev);
+ 
+ 	if (n) {
+ 		struct vxlan_rdst *rdst = NULL;
+@@ -2130,15 +2129,15 @@ static bool route_shortcircuit(struct net_device *dev, struct sk_buff *skb)
+ 	{
+ 		struct ipv6hdr *pip6;
+ 
+-		/* check if nd_tbl is not initiliazed due to
+-		 * ipv6.disable=1 set during boot
++		/* check if ipv6.disable=1 set during boot was set
++		 * during booting so nd_tbl is not initialized
+ 		 */
+-		if (!ipv6_stub->nd_tbl)
++		if (!ipv6_mod_enabled())
+ 			return false;
+ 		if (!pskb_may_pull(skb, sizeof(struct ipv6hdr)))
+ 			return false;
+ 		pip6 = ipv6_hdr(skb);
+-		n = neigh_lookup(ipv6_stub->nd_tbl, &pip6->daddr, dev);
++		n = neigh_lookup(ipv6_get_nd_tbl(), &pip6->daddr, dev);
+ 		if (!n && (vxlan->cfg.flags & VXLAN_F_L3MISS)) {
+ 			union vxlan_addr ipa = {
+ 				.sin6.sin6_addr = pip6->daddr,
+diff --git a/drivers/net/vxlan/vxlan_multicast.c b/drivers/net/vxlan/vxlan_multicast.c
+index a7f2d67dc61b..b0e80bca855c 100644
+--- a/drivers/net/vxlan/vxlan_multicast.c
++++ b/drivers/net/vxlan/vxlan_multicast.c
+@@ -39,8 +39,7 @@ int vxlan_igmp_join(struct vxlan_dev *vxlan, union vxlan_addr *rip,
+ 
+ 		sk = sock6->sock->sk;
+ 		lock_sock(sk);
+-		ret = ipv6_stub->ipv6_sock_mc_join(sk, ifindex,
+-						   &ip->sin6.sin6_addr);
++		ret = ipv6_sock_mc_join(sk, ifindex, &ip->sin6.sin6_addr);
+ 		release_sock(sk);
+ #endif
+ 	}
+@@ -73,8 +72,7 @@ int vxlan_igmp_leave(struct vxlan_dev *vxlan, union vxlan_addr *rip,
+ 
+ 		sk = sock6->sock->sk;
+ 		lock_sock(sk);
+-		ret = ipv6_stub->ipv6_sock_mc_drop(sk, ifindex,
+-						   &ip->sin6.sin6_addr);
++		ret = ipv6_sock_mc_drop(sk, ifindex, &ip->sin6.sin6_addr);
+ 		release_sock(sk);
+ #endif
+ 	}
+diff --git a/drivers/net/wireguard/socket.c b/drivers/net/wireguard/socket.c
+index 253488f8c00f..c362c78d908e 100644
+--- a/drivers/net/wireguard/socket.c
++++ b/drivers/net/wireguard/socket.c
+@@ -136,8 +136,7 @@ static int send6(struct wg_device *wg, struct sk_buff *skb,
+ 			if (cache)
+ 				dst_cache_reset(cache);
+ 		}
+-		dst = ipv6_stub->ipv6_dst_lookup_flow(sock_net(sock), sock, &fl,
+-						      NULL);
++		dst = ip6_dst_lookup_flow(sock_net(sock), sock, &fl, NULL);
+ 		if (IS_ERR(dst)) {
+ 			ret = PTR_ERR(dst);
+ 			net_dbg_ratelimited("%s: No route to %pISpfsc, error %d\n",
+diff --git a/drivers/net/wireless/intel/ipw2x00/ipw2100.c b/drivers/net/wireless/intel/ipw2x00/ipw2100.c
+index 248a051da52d..c11428485dcc 100644
+--- a/drivers/net/wireless/intel/ipw2x00/ipw2100.c
++++ b/drivers/net/wireless/intel/ipw2x00/ipw2100.c
+@@ -4838,7 +4838,7 @@ static int ipw2100_system_config(struct ipw2100_priv *priv, int batch_mode)
+ 
+ /* If IPv6 is configured in the kernel then we don't want to filter out all
+  * of the multicast packets as IPv6 needs some. */
+-#if !defined(CONFIG_IPV6) && !defined(CONFIG_IPV6_MODULE)
++#if !defined(CONFIG_IPV6)
+ 	cmd.host_command = ADD_MULTICAST;
+ 	cmd.host_command_sequence = 0;
+ 	cmd.host_command_length = 0;
+diff --git a/net/bridge/br_arp_nd_proxy.c b/net/bridge/br_arp_nd_proxy.c
+index 1e2b51769eec..494bf69a3017 100644
+--- a/net/bridge/br_arp_nd_proxy.c
++++ b/net/bridge/br_arp_nd_proxy.c
+@@ -17,7 +17,6 @@
+ #include <linux/if_vlan.h>
+ #include <linux/inetdevice.h>
+ #include <net/addrconf.h>
+-#include <net/ipv6_stubs.h>
+ #if IS_ENABLED(CONFIG_IPV6)
+ #include <net/ip6_checksum.h>
+ #endif
+@@ -455,7 +454,7 @@ void br_do_suppress_nd(struct sk_buff *skb, struct net_bridge *br,
+ 		return;
+ 	}
+ 
+-	n = neigh_lookup(ipv6_stub->nd_tbl, &msg->target, vlandev);
++	n = neigh_lookup(ipv6_get_nd_tbl(), &msg->target, vlandev);
+ 	if (n) {
+ 		struct net_bridge_fdb_entry *f;
+ 
+-- 
+2.53.0
+
 
