@@ -1,260 +1,169 @@
-Return-Path: <linux-usb+bounces-34504-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34505-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mMJ3GaSWsGkukgIAu9opvQ
-	(envelope-from <linux-usb+bounces-34504-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 23:09:40 +0100
+	id wAIdFhuXsGkukgIAu9opvQ
+	(envelope-from <linux-usb+bounces-34505-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 23:11:39 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C37E5258B8F
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 23:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B60E9258C23
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 23:11:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EE1D73193E7B
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 22:08:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2239E31B4C50
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 22:10:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D49393CFF7D;
-	Tue, 10 Mar 2026 22:08:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7BCB3DE43B;
+	Tue, 10 Mar 2026 22:10:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EtvotgDf"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eYgnBMFK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDACF3B19B8
-	for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 22:08:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3F836A01F
+	for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 22:10:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773180510; cv=none; b=KhPUyGzfKDkHKB9d361OFqgjQmxIH5CDLgI8My3aHjnsUtP7fZrw7f21diA5NtCbA/gj6qCuk8fsm+A1yrAELGRbOV+tRg4gHN6DPBpM3iDXeckABoBho749aIYPo6J5+Gj2Mtrw4h7w4zOzWh14PDvUDB5wwCC1YJ/WAkgXpwc=
+	t=1773180625; cv=none; b=JBP8JhyS2KIlbikyFYGOnmajkiMnNp8+B39Wl54V7/7Fe/Q314i0aDm3hA41s/OyYArqIpupuVetJZc0wPERFGgRjnOj9zkPjzr+eg/jrZ/oNBw3CyaJZKK5AttmWJy1cfV90mqKh0TaxqI3noUyMyt8b8R2TO+/LQshS8lFJ80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773180510; c=relaxed/simple;
-	bh=EkT3jVK1vb20RIv1qVCCL85jx8kkGbuMtERBRD038OA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CKGrzLQvYT/6/sORMAbLmCZWlqKD0kbqditrBKswCVh65CtTE4LzKUglfgH2i31FEqNTp+3Ac9oI2ZXPfGNbjBC4p8uzv+y68qvVIaPDwH7uxRyOMAkluS3H9qU3/vJt50tB0LBILdHRjizjaV56Js0/eCuGsEqjFS9u4sZ6JxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=EtvotgDf; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6630858b4ceso516070a12.3
-        for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 15:08:28 -0700 (PDT)
+	s=arc-20240116; t=1773180625; c=relaxed/simple;
+	bh=lpiVfMmvMEbc7WpKs/pV2ZfJ12nTPxcYx+2IFGJVlG4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=po4A2eLnai9nDA6EZQUQrHfBnsNuNy9qtfIiYrnU42roIBHW6AozOBQep8c7LY4tL2RvjzZ4O/w4XKwZhmjN42XgtPa8xlNRtVOWpskwcp8FrSGueIFYIEWfchjjmi/xboUTYDyMGFBE+TKiLRfbM6F/ysQpJ306NUXkMrbGfXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eYgnBMFK; arc=none smtp.client-ip=209.85.160.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-40946982a78so3396343fac.2
+        for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 15:10:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1773180507; x=1773785307; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7T57TbUh1a9gPuEhl9gX+JZqR5FWHQ6K3iwhXdSBh1Y=;
-        b=EtvotgDfEkRNVUDvQFZ1KnBnuWl9bV9ApZ5oSgYJE6S1RoY9boauLx5vpKxlZwhwn+
-         0f6R1bkJGjimOwWOPlkzfUbHcNygR53g29nhAMmIH1uDYhTQxsmz+9Xee7nFC/voIlcC
-         JDJWrhLzIDkaOBc364z9UDgnB78Oolqk475UE=
+        d=linuxfoundation.org; s=google; t=1773180623; x=1773785423; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rUlyMjmWtaDm2hBhXkC/tuotxM3BPDdGyXsYclogIX0=;
+        b=eYgnBMFKWVHouQ58+dgZgkB4xTILOjVIUEmpgWBPiyS8/3U4xC3EO6DH/oU/e6tPO3
+         QCfvCsjk5UgYHWDiJoPsObYkn2cNxBb9IQmejwzWSQsu5AqfKtGI2jcRyCEL28sCsXcb
+         cxl5khi+GRRdDThB7UOCZvhkH9H2McSlu/5/U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773180507; x=1773785307;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7T57TbUh1a9gPuEhl9gX+JZqR5FWHQ6K3iwhXdSBh1Y=;
-        b=eHdCLjXfhgzYsLp3N/rKfJQfCwxkttWS7ZNqhXh/OfTuTEMFFlhSgOj/fLsa9/TQfN
-         qlOwX/PMb6CDicYHtgGTF0L6difJYdW9nOwHmEjdjsJHyUPRtqJEzqKv7pAJQ6nZShTY
-         +z+eC/wfdg+aYC5L8TJs6YYmAIHav+c1bE7vaf5/FDkNiSMVkP9Y4s9pE0/UeolMwulw
-         yMedzL+lskL5dXoAOBqrU9fKK8CNuH3v53UEA4NsdCA9wjrFVxsmsxP0xkr6tIYmN/Fq
-         T1jb73oRQ1UNtmiocAWDKIVkt3w1/MD/N+rUiGhHWKDt8IZR8PkmlPt13ykdP1C7E95B
-         tVCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWz3VpGoZbYODy45dnvkSLTAg6IS0ZeVldIlKl6/+fCHAC8PkiLQgx28rv2jTyH81E0JsQa5cpddBQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywEJ2z3saJJEHZNqiuLyTxN6uB6wsGgHKm7jU0YcKbTDhEPPBU
-	U0tjtmxkGICQLMcwb6J7z5X7bjjI9ifWCR/mcuO73ToNbLeKpu1/ChjD0RdG1e2QqoturTWoETG
-	rIj4g7ll4
-X-Gm-Gg: ATEYQzxB+a2AYet6XjYwNLLOIf/haKkhdIUVr/Rncc69HlQoXZVkWHCXpjIm7iSB/YY
-	iB7pI3bghh4On6D0JD+apc71UsKPJJvxJpU7eA5RHNf5m1x+9Q/ACMETMBJ7LBIKpbJKGdow7Vy
-	TmwFhc6EWtm9FOV1SSoxK2PQGJkUR6xT7Vjg9seHfqzun/R4OHULVDAxq4ICujmS81D1tXSSimr
-	gDLm33TGAO3gAVQhHGJi6+TZjyTvUykphFm3gBUIcZ5ppqoe78XZsVmc4NnPzl6Tpqi3hG1uX3A
-	miLZd0/G/XIXsR97Jrbhepg1/nJ/TAQo+0m2Y7xIKSotTC38+ztQcwXBVGcGpuhFUFuI9rzY4SK
-	L5LN7o76bWOL1k7wFn8Q39+0jYdYyqbmXLSAAkyFCevODs3VJPXIiWjsjeWJsZRXl7/xLS2guRT
-	MGZ0y1NPlGKOkVMQwvUa+QIoW0/mmn0Xp6xNeN22aM24VOXVTc6lb7bqi7vNG4
-X-Received: by 2002:a17:907:7ba4:b0:b87:d255:39ff with SMTP id a640c23a62f3a-b972e50894cmr8125566b.32.1773180506538;
-        Tue, 10 Mar 2026 15:08:26 -0700 (PDT)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b972e14aa2esm5245466b.38.2026.03.10.15.08.25
-        for <linux-usb@vger.kernel.org>
+        d=1e100.net; s=20230601; t=1773180623; x=1773785423;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rUlyMjmWtaDm2hBhXkC/tuotxM3BPDdGyXsYclogIX0=;
+        b=WYgkRaZlq3psIyanaIkK0UU1Eq/3n4bnHVA5z5NDtcue/arvhMafcwhWn76an2xbwH
+         7nay6zZ9RhZ5EfYe/ezM9DlsichRRzpiKLF/4n8/FtX558CxESDUsXF2AYAj1TNq/7LK
+         0ujQnZ4rx7HBKoUR6QdDytzigs5i2GKsS4JYerRrNMka2mihouB3q7oTkzRrArV4Tpws
+         040lYsnZhnY25ywH17tFIQvtFG0UVaIWpPOUaMXJuFjq88SyTFlTJrvIusry8eZA0d7/
+         p/Phf+H0Ng1TwuGEIecB2/3HoEukMDupDNQVV5R1KRndi/Gez9ekpbUFlJjtqOSp8oTz
+         ylBw==
+X-Gm-Message-State: AOJu0YxN7+X33ASOWf0MrkFBCOMAOs7IoWpRG9JirhD62DCY5TTNWsFA
+	1J1uySAWPaUPkDE4bCPxIbauXzArNqKIg49xg37rRZvthpegKDO/GOb0AjaJVB9jRM4=
+X-Gm-Gg: ATEYQzw1tUdCigGIQ6EBflIU9plOTkl2SKRsT1nOSahyvT4zkBj60xjPHt1ePNOXuhG
+	skDrRIEHRE+6WUfVuKjJx5Y57QimVUoKRKY41oEmjdJQ9Mmd3j4+j5J3XCvHhk6PPaSNJ8uRDd9
+	rpgRPINe196FXJ2IRxEa3ZTa8evELQIMORhxfkSvw94QDJfAGK3aWPjXlZwDkgU8iLeSO6r7WGH
+	C1de5McPMipsnDSiwYRsSwFabvBM0A8Jpe8XHRZCo0EApBh+tfPakgJQ+uEeJyapXJ/GqusD0+Q
+	Ai5DuyRA4b7yyhVb4+i6Rr4CJOJ/ums/cAujz6AlNSUTYe0l/cOr4p0OImzh/MrehNXUwnR5PIZ
+	Q/ov+9KxblJAbqFuMM0qsHwHbmEWTSPrtlRDILyctZd2968ZCNzLFNZfug/6jzkGvs29lsIBfcY
+	Qb0se8DSlwS6H2o20ANQ36MCgJ74/XzcUKQ8k=
+X-Received: by 2002:a05:6870:8e07:b0:3e0:de76:31e5 with SMTP id 586e51a60fabf-4177c8b4e62mr340891fac.25.1773180622827;
+        Tue, 10 Mar 2026 15:10:22 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4177e72b40asm215404fac.20.2026.03.10.15.10.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Mar 2026 15:08:25 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b941762394aso660417266b.1
-        for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 15:08:25 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVYNO4kP4BcNR33zGgsFvsNFc+v3WllSS4MQiCWtoOe+9rdl3aJtZqm+gAQUayyM1JGXpSzJWgNYUw=@vger.kernel.org
-X-Received: by 2002:a17:906:fe05:b0:b93:6bb6:cb3d with SMTP id
- a640c23a62f3a-b972e5db7damr7346366b.58.1773180504840; Tue, 10 Mar 2026
- 15:08:24 -0700 (PDT)
+        Tue, 10 Mar 2026 15:10:22 -0700 (PDT)
+Message-ID: <b49bc467-8c51-41fc-a7ee-5770a9720deb@linuxfoundation.org>
+Date: Tue, 10 Mar 2026 16:10:20 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6733bdfb-3e88-479f-8956-ab09c04c433e@linux.dev>
- <fba86ac0-e13e-4c54-9515-c091b24f9f80@linux.dev> <CANiDSCtLj-N+M+JmP3C_y=vNtSy-UN7XtkXaZ=dLN6f0kd7rYg@mail.gmail.com>
- <d5793f17-61cf-42be-b2fe-7d1549310989@linux.dev>
-In-Reply-To: <d5793f17-61cf-42be-b2fe-7d1549310989@linux.dev>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Tue, 10 Mar 2026 23:08:12 +0100
-X-Gmail-Original-Message-ID: <CANiDSCt4dkbXQ7TJpvL-1e5er571rRq0ofnO0SRU9SsEXUrhYA@mail.gmail.com>
-X-Gm-Features: AaiRm50XOVm87K1Q-vDN0LsYBCOyd5MoJTfNKT6h6Cl9SSOIuVJLMmVYf5OnOJE
-Message-ID: <CANiDSCt4dkbXQ7TJpvL-1e5er571rRq0ofnO0SRU9SsEXUrhYA@mail.gmail.com>
-Subject: Re: [BUG] uvc_status_stop hangs if called from async_ctrl.work
-To: Sean Anderson <sean.anderson@linux.dev>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede <hansg@kernel.org>, 
-	linux-media@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: C37E5258B8F
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6/6] usbip: vhci_sysfs: Use safer strscpy() instead of
+ strcpy()
+To: Ai Chao <aichao@kylinos.cn>, gregkh@linuxfoundation.org, b-liu@ti.com,
+ johan@kernel.org, badhri@google.com, heikki.krogerus@linux.intel.com,
+ valentina.manea.m@gmail.com, shuah@kernel.org, i@zenithal.me, tiwai@suse.de,
+ kees@kernel.org, christophe.jaillet@wanadoo.fr,
+ prashanth.k@oss.qualcomm.com, khtsai@google.com, dan.carpenter@linaro.org,
+ tglx@kernel.org, mingo@kernel.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20260310094434.3639602-1-aichao@kylinos.cn>
+ <20260310094434.3639602-7-aichao@kylinos.cn>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20260310094434.3639602-7-aichao@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: B60E9258C23
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=google];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34504-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34505-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[kylinos.cn,linuxfoundation.org,ti.com,kernel.org,google.com,linux.intel.com,gmail.com,zenithal.me,suse.de,wanadoo.fr,oss.qualcomm.com,linaro.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[chromium.org:+];
-	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ribalda@chromium.org,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[skhan@linuxfoundation.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linux.dev:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,linuxfoundation.org:mid,kylinos.cn:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-Hi Sean
+On 3/10/26 03:44, Ai Chao wrote:
+> Use a safer function strscpy() instead of strcpy() for copying to
+> arrays.
+> 
+> Only idiomatic code replacement, and no functional changes.
 
-On Tue, 10 Mar 2026 at 22:23, Sean Anderson <sean.anderson@linux.dev> wrote:
->
-> On 3/10/26 16:56, Ricardo Ribalda wrote:
-> > Hi Sean
-> >
-> > Thanks for the report.
-> >
-> > I have not been able to repro with qv4l2 on my computer :(.
-> >
-> > Could you try if this patch works for you? Not saying that it is
-> > beautiful patch, or the way to do it.... but it will let me know if I
-> > am looking in the right place.
-> >
-> >
-> > diff --git a/drivers/media/usb/uvc/uvc_status.c
-> > b/drivers/media/usb/uvc/uvc_status.c
-> > index 231cfee8e7c2..cca2aed162c3 100644
-> > --- a/drivers/media/usb/uvc/uvc_status.c
-> > +++ b/drivers/media/usb/uvc/uvc_status.c
-> > @@ -340,7 +340,9 @@ static void uvc_status_stop(struct uvc_device *dev)
-> >          * Cancel any pending asynchronous work. If any status event was queued,
-> >          * process it synchronously.
-> >          */
-> > -       if (cancel_work_sync(&w->work))
-> > +       if (&w->work == current_work())
-> > +               cancel_work(&w->work);
-> > +       else if (cancel_work_sync(&w->work))
-> >                 uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
-> >
-> >         /* Kill the urb. */
-> > @@ -352,7 +354,7 @@ static void uvc_status_stop(struct uvc_device *dev)
-> >          * cancelled before returning or it could then race with a future
-> >          * uvc_status_start() call.
-> >          */
-> > -       if (cancel_work_sync(&w->work))
-> > +       if (&w->work != current_work() && cancel_work_sync(&w->work))
-> >                 uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
-> >
-> >         /*
->
-> I don't think this works since the urb will be rescheduled as flush_status
-> is set to false again. However, the following patch works for me:
+It is a functional change since it calls a new routine. Get rid
+of this line from change log.
 
-It does not work, in the sense that the urb is re submited... but if
-would have confirmed the rootcause of the lockdep. But you have
-already proven that with your patch, which I think is correct :).
-Thanks for that
+How did you test this patch? I am curious because of you are
+describing the change as "idiomatic code replacement"
 
-Can you resend it as a proper patch?
+> 
+> Signed-off-by: Ai Chao <aichao@kylinos.cn>
+> ---
+>   drivers/usb/usbip/vhci_sysfs.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
+> index bfc10f665e52..5bc8c47788d4 100644
+> --- a/drivers/usb/usbip/vhci_sysfs.c
+> +++ b/drivers/usb/usbip/vhci_sysfs.c
+> @@ -463,7 +463,7 @@ static void set_status_attr(int id)
+>   
+>   	status = status_attrs + id;
+>   	if (id == 0)
+> -		strcpy(status->name, "status");
+> +		strscpy(status->name, "status");
+>   	else
+>   		snprintf(status->name, MAX_STATUS_NAME+1, "status.%d", id);
+>   	status->attr.attr.name = status->name;
 
-You probably want to add:
-Fixes: a32d9c41bdb8 ("media: uvcvideo: Make power management granular")
+thanks,
+-- Shuah
 
-I will try to review with extra care and a big cup of tea tomorrow morning.
-
-Thanks!
-
->
-> diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
-> index 231cfee8e7c2c..2a23606c7f4c6 100644
-> --- a/drivers/media/usb/uvc/uvc_status.c
-> +++ b/drivers/media/usb/uvc/uvc_status.c
-> @@ -316,6 +316,14 @@ static int uvc_status_start(struct uvc_device *dev, gfp_t flags)
->         if (!dev->int_urb)
->                 return 0;
->
-> +       /*
-> +        * If the work called uvc_status_stop it may still be running. Wait for
-> +        * it to finish before we submit the urb.
-> +        */
-> +       cancel_work_sync(&dev->async_ctrl.work);
-> +
-> +       /* Clear the flush status if we were previously stopped */
-> +       smp_store_release(&dev->flush_status, false);
->         return usb_submit_urb(dev->int_urb, flags);
->  }
->
-> @@ -336,6 +344,14 @@ static void uvc_status_stop(struct uvc_device *dev)
->          */
->         smp_store_release(&dev->flush_status, true);
->
-> +       /*
-> +        * We will deadlock if we are currently in the work function.
-> +        * Fortunately, we know that the URB is already dead and that no
-> +        * further work can be queued, so there's nothing left for us to do.
-> +        */
-> +       if (current_work() == &w->work)
-> +               return;
-> +
->         /*
->          * Cancel any pending asynchronous work. If any status event was queued,
->          * process it synchronously.
-> @@ -354,15 +370,6 @@ static void uvc_status_stop(struct uvc_device *dev)
->          */
->         if (cancel_work_sync(&w->work))
->                 uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
-> -
-> -       /*
-> -        * From this point, there are no events on the queue and the status URB
-> -        * is dead. No events will be queued until uvc_status_start() is called.
-> -        * The barrier is needed to make sure that flush_status is visible to
-> -        * uvc_ctrl_status_event_work() when uvc_status_start() will be called
-> -        * again.
-> -        */
-> -       smp_store_release(&dev->flush_status, false);
->  }
->
->  int uvc_status_resume(struct uvc_device *dev)
-> --
->
-> The first cancel_work_sync also seems superfluous to me, since we have to cancel
-> again anyway.
-
-It has been a while since we did this, but I believe that since we did
-not use locks, the only way to guarantee the event queue was flushed
-and the URB was killed was to have the double cancel_work() in that
-order.
-
->
-> --Sean
-
-
-
--- 
-Ricardo Ribalda
 
