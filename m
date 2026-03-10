@@ -1,189 +1,140 @@
-Return-Path: <linux-usb+bounces-34492-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34493-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4EK7A2ZmsGloigIAu9opvQ
-	(envelope-from <linux-usb+bounces-34492-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 19:43:50 +0100
+	id YJJ9OvNmsGloigIAu9opvQ
+	(envelope-from <linux-usb+bounces-34493-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 19:46:11 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A587A25693F
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 19:43:49 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95AB62569E9
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 19:46:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EE99330928C8
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 18:41:59 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 556E13048906
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 18:44:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A06E3B2FC7;
-	Tue, 10 Mar 2026 18:40:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79EDF3B6373;
+	Tue, 10 Mar 2026 18:42:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kH0xiiWz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bm31HsKw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEAB3B8924
-	for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 18:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 831E43C342A
+	for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 18:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773168056; cv=none; b=F/ybRZk1YQJVgR/ZdCcvhwfxC2w7p1Wf38vNHJ55FJzRiDDd9YtoD9wvl6CzufNnn8SWjpfBbJnn0YvENWDQbpIzUTxFrUo068FbQAKqwR+XP2M4pAKsCY7vbw2rxzTfFvPFbikIRF2O8HY+yu/wW6vBh4il1qblE6yBhuWF+jw=
+	t=1773168166; cv=none; b=rX/F4Ji9SIQZnKqWjkIHCjgtNh/1PBJwPlG4gDxmzw4f/yF/sc5gaisDwRaslZ05RoBp2SVnBScDjF5jD4lfBUJufvb6ISYlELvtYfQK3gvFHoizJonizHz9b8x8IYGHYXLaj6AmMvyQ6lSfn9WkBT/3XdKZWzJb5yZp7QoPsv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773168056; c=relaxed/simple;
-	bh=67BO0RZg8rxb/E50RmGcBJlsPR5Ae9xmCy+Q7v8QtDY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iHFZp66lSky4Y6UYkGvBC9386MVSDJzz9T+Xk5xpYVwa2Lqxzstbf3TLyzOo2TxtrOO7cO/M/49W2Y7DiX75ajsxz7b7pQgzlO+BPfPKv8iz3MJyImemVuLRdgTyMob2hObVmfJOgG0MEIlcDR3MULtu7BEA4eDyy0UtCl5F+5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kH0xiiWz; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c736261ee8dso3400310a12.1
-        for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 11:40:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773168050; x=1773772850; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bjFZ9oZWWc3RZ4UdO5rq+AZbr7uPDX73K58gh1+yuH0=;
-        b=kH0xiiWz4KeHg8qM+UQYFRGEoaB5YhGQ1/l342lI48vVjCWqHFWSBUDJtSv8g6YdEb
-         WUvbLXs80bxV+xnMTu2IxnxqQ1WawTtw06PwWKuvZNeHk5D3euuYdO1/s0++E4FpGP2z
-         +c3ttwFV6WwPOQpNHM7WUIHZNaqG5koiMMCxTax1rBk+j7pB0850FJbGseMzgmcav/Sc
-         D4sAVnEuBVkUt07E/ANMW8DM/NJ+n/hx2N6JUcXYsLZYrFMsnwCK7vKttbH8x8ketzgA
-         AEJgLDRmf5idGKEt1ix0VwO4x51qzzz9/bjh5SLZJM6RE+ISqePxLY2ZYvsw4O/i3F73
-         NyLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773168050; x=1773772850;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bjFZ9oZWWc3RZ4UdO5rq+AZbr7uPDX73K58gh1+yuH0=;
-        b=rs67sS69GQ3wQbArBuzHTYtdB4EovkYoEggrmfh/p2zEqDuuaFjUn0AKrwvBAmZjDR
-         nkwX/FEagCcwGjVdA3Ltp0ILD5YJL9kByzhyqrnVqBBNLEnABxlxow+T6pbIq+/EkHPa
-         C/Ffub3UCfaEIqak7Gfpfa679njQkhG8UYgDKKtZ9EvHz81IFBTtyDJF9XPBc/4uEQP5
-         Id6iNaDq5oO2C0xwzr6n6P1bksVNOGShBcM4W7YvZyv2t1mm6DI4J3+BGrSLF4yMTE9y
-         6Up96kPws0lfy3kwJvdxhpJI05z8nJ5j9fGBTc20dg5fTJQcg+ACCDH/WHnMOmVjdrkf
-         TQ9g==
-X-Forwarded-Encrypted: i=1; AJvYcCXsmYnVHDiNREs1f93aal9pmYLPXQ5A6p/PbV+27SXax8aG0eXt1v81282nWjcjAiBnQqiIVsXHhnY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/4ZSfhRfSRhs+cYuCtDytmELbT54jHnGO+VeXjYlJZU5Jh4+b
-	2PHnjUHuL9GNfQFXAw7iylYnoaGuPf1kbPtw/IYQQarpPLnkyqmzj6TX
-X-Gm-Gg: ATEYQzxst4iRb4z4yKaMSq1hjzMc2APpIKHtTDXh86HerWai5CHXgTQSFFuO+pknGVN
-	qmZidNSQHT6YOZm52gFr45wclrm0U3+40B84VpCP1dr9l8I9+SxAymnLGsNvuSSJQctoS5v+3xJ
-	TIMx+6ONw6tm9QZ83clzZtpWZbOBr8TxEW7mYqDv5qjL1qXfgYeJSDEjOxPH0yfghRV8RKtPz04
-	dsZh23ZVKU7NYXHK3j7OYcuigvgh1a7/klkLYDlHvrYXPidBQa1C8b7La6FHdv+xfpFqeeBqINg
-	fQIw25PNZqq/QDbRt+DKxepa3Z6Fhw0w8OWIlXlinTwwcPRR/dCpwhrVRFqbh7mqDv+2l7XuMz5
-	sFssvkeS2joPlyEP2Wof/kXEzmqqTkn1Z/2nYOIdVbeuFEU2+xyWQGp5eYqtEd4exnbcAYBzh02
-	4Tk+jntxKRHNYZ3QlTlSriXIAyRcMv4yyOFpd1lercJNOumA==
-X-Received: by 2002:a17:903:28c8:b0:2ae:5671:7071 with SMTP id d9443c01a7336-2ae8252cf0fmr96662285ad.43.1773168050081;
-        Tue, 10 Mar 2026 11:40:50 -0700 (PDT)
-Received: from google.com ([2402:7500:a44:85b:2953:97d3:b283:95c3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae83e58592sm220535625ad.14.2026.03.10.11.40.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2026 11:40:49 -0700 (PDT)
-Date: Wed, 11 Mar 2026 02:40:36 +0800
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
-	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr,
-	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
-	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
-	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
-	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-	ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
-	sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev
-Subject: Re: [PATCH 00/61] treewide: Use IS_ERR_OR_NULL over manual NULL
- check - refactor
-Message-ID: <abBlpGKO842B3yl9@google.com>
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+	s=arc-20240116; t=1773168166; c=relaxed/simple;
+	bh=eccCeUdOUcR/ocVoNYEfOg4MmqLi+0hMJ5zD0xFd/7U=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=r8OjGXlSTJbXqHBUQjXNtfeOx4Z07iGRsarnd3l2B4q0vyh0uatoXsnhEO1k8hywGzBpRajbJg53mCyQ8vRogYzvJSoV2Pi0c1xeaNrrBKvOJXXYc+1wlz1Bdt3D0jvOk6RAzefovL0Ugs1K3pNDSWAcArTeWiqMPBN/MHcy5W4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bm31HsKw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0872FC2BC87
+	for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 18:42:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773168166;
+	bh=eccCeUdOUcR/ocVoNYEfOg4MmqLi+0hMJ5zD0xFd/7U=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Bm31HsKwbVTsHc3qrvl5/KeVx1CJdkPwP+WyQ2SjaWYiwBUI1CFr3MmFkfEm1B3U9
+	 HvLk1vzA6X2Z1X3gmPAOrXIzjuQYDAeqZ/7XvBUy9QPF2h3W0wRWy0hHtjfTUeymY/
+	 Z3BBI3j3IDKWxOEuf/JGG4iFfDdt1VGV5dDLYiD+l4MYb0yeRsLk1xceybDz7GZBs0
+	 YbWgQq4O3vebFXeWFL1GT7AkeTpUVhMy+Aq/QXCzbHJ26ce+Eg7AfggLelZ18GH6GM
+	 jVXmbautOfSWaQyXNM/fbZnzviQjJ82zdD35T+5w6zyvc7dxZHMgXhehKhyvQa6pC0
+	 5/jOztLRnslBQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id E6AC3C41614; Tue, 10 Mar 2026 18:42:45 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 217475] Foxconn / Hon Hai Bluetooth adapter 0489:e0cd stops
+ working on ThinkPad T14s AMD Gen1
+Date: Tue, 10 Mar 2026 18:42:45 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-217475-208809-UJv1QRv110@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217475-208809@https.bugzilla.kernel.org/>
+References: <bug-217475-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
-X-Rspamd-Queue-Id: A587A25693F
+X-Rspamd-Queue-Id: 95AB62569E9
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34492-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34493-lists,linux-usb=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FROM_NO_DN(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[visitorckw@gmail.com,linux-usb@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[54];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	RCPT_COUNT_ONE(0.00)[1];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-Hi Philipp,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217475
 
-On Tue, Mar 10, 2026 at 12:48:26PM +0100, Philipp Hahn wrote:
-> While doing some static code analysis I stumbled over a common pattern,
-> where IS_ERR() is combined with a NULL check. For that there is
-> IS_ERR_OR_NULL().
-> 
-> I've written a Coccinelle patch to find and patch those instances.
-> The patches follow grouped by subsystem.
-> 
-> Patches 55-58 may be dropped as they have a (minor?) semantic change:
-> They use WARN_ON() or WARN_ON_ONCE(), but only in the IS_ERR() path, not
-> for the NULL check. Iff it is okay to print the warning also for NULL,
-> then the patches can be applied.
-> 
-> While generating the patch set `checkpatch` complained about mixing
-> [un]likely() with IS_ERR_OR_NULL(), which already uses likely()
-> internally. I found and fixed several locations, where that combination
-> has been used.
+Micha=C5=82 Pecio (michal.pecio@gmail.com) changed:
 
-Thanks for the patchset. However, I think we need a explanation for why
-switching to IS_ERR_OR_NULL() is an improvement over the existing code.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |michal.pecio@gmail.com
 
-IMHO, the necessity of IS_ERR_OR_NULL() often highlights a confusing or
-flawed API design. It usually implies that the caller is unsure whether
-a failure results in an error pointer or a NULL pointer. Rather than
-doing a treewide conversion of this pattern, I believe it would be much
-more meaningful to review these instances case-by-case and fix the
-underlying APIs or caller logic instead.
+--- Comment #7 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+Does it mean that with this patch you no longer need to disable autosuspend=
+ and
+all those problems are gone?
 
-Additionally, a treewide refactoring like this has the practical
-drawback of creating unnecessary merge conflicts when backporting to
-stable trees.
+It makes some sense, as it seems that btusb_probe() only stores a pointer to
+btusb_mtk_setup() and then enables autosuspend, so somebody else may later =
+call
+that function on a suspendend device. Other BT drivers may be affected too.
 
-Regards,
-Kuan-Wei
+If you got this far, please email your findings to bluetooth maintainers
+responsible for this driver (run ./scripts/get_maintainer on the buggy file=
+).
+If they find your solution acceptable you may be asked to email the patch t=
+oo.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
