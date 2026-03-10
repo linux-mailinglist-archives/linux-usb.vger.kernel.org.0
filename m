@@ -1,162 +1,121 @@
-Return-Path: <linux-usb+bounces-34383-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34384-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eNjdIXLVr2kfcgIAu9opvQ
-	(envelope-from <linux-usb+bounces-34383-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:25:22 +0100
+	id gGkBEN/Xr2kfcgIAu9opvQ
+	(envelope-from <linux-usb+bounces-34384-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:35:43 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C3C0247492
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:25:21 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8092624760F
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:35:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id ABDCD30074FC
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 08:25:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 421B6306D8C1
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 08:35:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD3DE3F0776;
-	Tue, 10 Mar 2026 08:25:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7505D40B6EB;
+	Tue, 10 Mar 2026 08:35:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="JuC/yhxD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kHl2akS4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4D13B8D6B;
-	Tue, 10 Mar 2026 08:24:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0477C34B1B4;
+	Tue, 10 Mar 2026 08:35:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773131100; cv=none; b=XpJvxGBoIUnUylry7mynfLhUo5YFehiWv2z6dmzq1hEab2YxbbY4b8C97RRQr8daNQtm3gvljH8x69Gm94BscTVGgES/4EGMuouu1LE5gfkhq+1XQ3mzgCuo7lyJ9xgtglbJg1DcMvJrsJEPfbs44FSr72EdsUJ1nsMnDqX7DRo=
+	t=1773131737; cv=none; b=fg7NhfqAqdD7ef3y/JTsqKrsdbciP3nmgpsJAe96xjJel9U4+KPnr6Fd5JvNN/QbyDvxW0SXGWiJvoOzyi+YbqqJ7gL0LMOHcfCsjE1N8caWQ/NthQhr6SZ8yiThVxf8EbLwoPe2oMFdEQ0N683tVUki2NtG0n9feQdK9UimEBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773131100; c=relaxed/simple;
-	bh=XRYHG+1OFO9B3BzHm+YXgweT4NhjII3UvBtiXddp6VI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OGb3OegcJxbwICanihnWiL/HDrBg0uTIOyjecOXd47iLlptCnlGxoFDFlGtOo+q54VtLXW05Txa8L+24sJLJYKbSQpB9tsQl73xJGznplLe3Sk1yWkykN79gFh5xvG39hBqUDEJfW7H0Ajktw2/Trk4utb0AfYHdn23SfLuedRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=JuC/yhxD; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=2W8R6JKoSWBQ/NVWe1VH8DTpdfOcfJODkzczD104anE=; b=JuC/yhxDoPy5BzKCllx+4lcx/F
-	aT/7U8Uk8l3EzePnMXUbbxXawsxzRHryg8fghP2VOHv5kHVBckllNBimOOiJ0d8LfnHjtGmniMUoP
-	q+tI4zY5GQIiNsEUe+qxnask3JoIfvvZdpBRFnoZGdldxQgpw2opTa6+/x5nJBA//K40leHf2j3eZ
-	QL1kjydLamseRW0i8hF8yC9BA+ISD2o9MPNpUsGC0DfntkB9k4h7pa/Fd+8ADCPiSf0DDEzQCBI5M
-	9HJQrDTSAcTC9UmZ18rrV1bkPrtisS78iMGtNExAIokgAvG70PlOoOoPpo/Lna+ZPaU1pgFFTLn9P
-	iDkZROYQ==;
-From: Heiko Stuebner <heiko@sntech.de>
-To: linux-phy@lists.infradead.org, Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: Vinod Koul <vkoul@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>,
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
- linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
- linux-can@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-sunxi@lists.linux.dev,
- linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, spacemit@lists.linux.dev,
- UNGLinuxDriver@microchip.com, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
-Subject:
- Re: [PATCH v3 phy-next 10/24] drm/rockchip: dw_hdmi: avoid direct dereference
- of phy->dev.of_node
-Date: Tue, 10 Mar 2026 09:24:43 +0100
-Message-ID: <2218670.OBFZWjSADL@phil>
-In-Reply-To: <20260309190842.927634-11-vladimir.oltean@nxp.com>
-References:
- <20260309190842.927634-1-vladimir.oltean@nxp.com>
- <20260309190842.927634-11-vladimir.oltean@nxp.com>
+	s=arc-20240116; t=1773131737; c=relaxed/simple;
+	bh=L0E3w9zz9+3G8d3U3XT56Z/e+omxT2atQ1a1ORBmC9Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pm6/+97lKmHgxniZ5rn9IoXfaMLJyZ5EXRJARUNX6QLmj6FZZyknpXYQ4Bvpw9NKa63knd4vS5zOW3YxVZLg4+mMxl+ctSsdnKrNd0u7Z8APDIhqAICb39yBR7CENbrQMkDd+MkAscPBEptpQLbLduIIgXSNmSRb6WzRZE+Pa8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kHl2akS4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE16FC19423;
+	Tue, 10 Mar 2026 08:35:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773131736;
+	bh=L0E3w9zz9+3G8d3U3XT56Z/e+omxT2atQ1a1ORBmC9Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kHl2akS4R4fI7YPDFd2wfPm8OTyt8Bo873UETN0N7azbsQNkRrTMEfX2myfCAyNeM
+	 eqkqJqd0ppQa+s2V7i0jTbcnQKCsLWjivKCi/YU8nsHHvUP69cCxfBq2grgdjiVzUb
+	 3J8Mf+IwtDxPu4PL3FQ2wp3nvOYxNiIQofIuHuehxMqW71mpYlhZpQ/XupTaoB0lxt
+	 n6LH6NO/U9GNiDHPKkbI00JRsEFsBMbGoiv+Q+W//Y7alz5uAZBIIHMBg9VtWkaF/e
+	 eYTQy48sr38ulLegRnJSxi116IGacC40t8ezmf6Gl9e6MoZ85+NSaI0JXdilmNS830
+	 iCA879NXkkrjQ==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vzsYw-000000006ic-12mM;
+	Tue, 10 Mar 2026 09:35:34 +0100
+Date: Tue, 10 Mar 2026 09:35:34 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bastien Nocera <hadess@hadess.net>,
+	Valentina Manea <valentina.manea.m@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] USB: usbip: drop redundant device reference
+Message-ID: <aa_X1qNsCGll04zj@hovoldconsulting.com>
+References: <20260305133851.2952-1-johan@kernel.org>
+ <20260305133851.2952-3-johan@kernel.org>
+ <9d727cd2-701e-4c5b-9646-82874f2d0a4a@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Rspamd-Queue-Id: 8C3C0247492
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9d727cd2-701e-4c5b-9646-82874f2d0a4a@linuxfoundation.org>
+X-Rspamd-Queue-Id: 8092624760F
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[sntech.de,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
-	R_DKIM_ALLOW(-0.20)[sntech.de:s=gloria202408];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34383-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,hadess.net,gmail.com,kernel.org,zenithal.me,vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_FROM(0.00)[bounces-34384-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[32];
-	FREEMAIL_CC(0.00)[kernel.org,linaro.org,lists.freedesktop.org,lists.infradead.org,vger.kernel.org,lists.linux.dev,microchip.com,rock-chips.com,linux.intel.com,suse.de,gmail.com,ffwll.ch];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heiko@sntech.de,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[sntech.de:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,nxp.com:email,rock-chips.com:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,intel.com:email,ffwll.ch:email,sntech.de:dkim,sntech.de:email]
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,hovoldconsulting.com:mid]
 X-Rspamd-Action: no action
 
-Am Montag, 9. M=C3=A4rz 2026, 20:08:28 Mitteleurop=C3=A4ische Normalzeit sc=
-hrieb Vladimir Oltean:
-> The dw_hdmi-rockchip driver validates pixel clock rates against the
-> HDMI PHY's internal clock provider on certain SoCs like RK3328.
-> This is currently achieved by dereferencing hdmi->phy->dev.of_node
-> to obtain the provider node, which violates the Generic PHY API's
-> encapsulation (the goal is for struct phy to be an opaque pointer).
->=20
-> Refactor dw_hdmi_rockchip_bind() to perform a manual phandle lookup
-> on the "hdmi" PHY index within the controller's DT node. This provides
-> a parallel path to the clock provider's OF node without relying on the
-> internal structure of the struct phy handle.
->=20
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
-> Cc: Sandy Huang <hjc@rock-chips.com>
-> Cc: "Heiko St=C3=BCbner" <heiko@sntech.de>
-> Cc: Andy Yan <andy.yan@rock-chips.com>
-> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Simona Vetter <simona@ffwll.ch>
->=20
-> v1->v3: none
-> ---
+On Mon, Mar 09, 2026 at 02:26:03PM -0600, Shuah Khan wrote:
+> On 3/5/26 06:38, Johan Hovold wrote:
+> > Driver core holds a reference to the USB device while it is bound to a
+> > driver and there is no need to take additional references unless the
+> > structure is needed after disconnect.
+> 
+> In this case it is necessary for stub driver to hang on to the reference
+> to maintain exported device status.
 
-[...]
+But the driver does not hold on to the reference taken at probe after
+disconnect returns. The stub device itself is even freed at disconnect
+and cannot be used to release the reference.
 
-> @@ -588,13 +589,17 @@ static int dw_hdmi_rockchip_bind(struct device *dev=
-, struct device *master,
->  		return dev_err_probe(hdmi->dev, ret, "failed to get phy\n");
->  	}
-> =20
-> -	if (hdmi->phy) {
+Which exported device status are you referring to here?
 
-nit: a comment would be nice here. I.e. hdmi->phy being an opaque pointer
-so checking hdmi->phy !=3D NULL is not possible.
-
-With that being a "goal", I assume that information is not widely spread
-so this would prevent the next developer trying to change it back to
-"if (hdmi->phy)" while that handling change trickles down.
-
-
-apart from that:
-
-Reviewed-by: Heiko Stueber <heiko@sntech.de>
-
-
-
+Johan
 
