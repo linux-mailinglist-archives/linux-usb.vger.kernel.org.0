@@ -1,142 +1,205 @@
-Return-Path: <linux-usb+bounces-34387-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34388-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oOuAKtrcr2kzdAIAu9opvQ
-	(envelope-from <linux-usb+bounces-34387-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:56:58 +0100
+	id CH7IFbjgr2nkdAIAu9opvQ
+	(envelope-from <linux-usb+bounces-34388-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 10:13:28 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3601A247BA2
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:56:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC61F248119
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 10:13:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7AFA83003361
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 08:56:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3431431621F1
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 09:05:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ADCA43C041;
-	Tue, 10 Mar 2026 08:56:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13C0B46AF32;
+	Tue, 10 Mar 2026 09:02:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="arGnJWmx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z7Wl+Wt+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEC13EDAB3;
-	Tue, 10 Mar 2026 08:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E5543E9C5;
+	Tue, 10 Mar 2026 09:02:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773133011; cv=none; b=j+ki8FCsNy875/LtGBzghK/udJpRdbV9Wt0Jebn0cyRmjow2Z7gJ0yzhdcO9ad7Q8zSeR4iBjjCOeKg/7VwPcN4hn/D4w+bva8kiebW5YuidlvVifpTSTzupiHLnaEdpgJmhPCzR24OcuavDydoB4gO6NN3qD6GfTQxt1JgSFas=
+	t=1773133354; cv=none; b=GRLrd6FmDpALb/MK3ut1XyVRBAxMZvTCuwqChBaKSwzgIf+U/CqC2nd2fG60JV7JjQ+Pf8aWeF+x59EK3TJuJtigrprn2jqwBCPguTBSM3uLFRHPM7gWW/XCHVOWsaIKteUFoS2ve1UVmMzhOcLfBhwcDyevxcDl6kLxSgQAGBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773133011; c=relaxed/simple;
-	bh=1PWoJHaon6nzdJBMh/5s/5A0x05ZpBntcw1fR6glc8Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IxrXBaXaN4tJbp2xy8V81o/40M0rJ7jsPYBJHzTDK0eW8DlYnvh9VzWp7iAX2eoLsn8H3TaH9AhpgZwZbtcX4bhbatYV9kVVGz5lohYd9mTqV+jlqw/N0eMWl+17Pau+xiA+SeLlE/ifa5g3GqTZ9NPNLkjJ9sWLYzv9gbD+HbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=arGnJWmx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DD4CC19423;
-	Tue, 10 Mar 2026 08:56:50 +0000 (UTC)
+	s=arc-20240116; t=1773133354; c=relaxed/simple;
+	bh=dyZoKH8XDotOwtrxv1ftKGKj6+/9NDQwSTPynUEi6wA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=X9quCxnuZPEP8j8fmkzk7OX1mwXdhyK/yM4a8GGnDqn51D1upJt+kdf03ZXQRIkEZ7LDymoYYjX5e+9sD1q8zvnAQ4bzI60jaMhtqHfrJmUm0uG/uNrkdL4ZjY9WBAXKAAW1IFG7LwcxGACkecLQZlJhp7ZHe/tiV1Yhukfi6Qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z7Wl+Wt+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21AE0C19423;
+	Tue, 10 Mar 2026 09:02:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773133010;
-	bh=1PWoJHaon6nzdJBMh/5s/5A0x05ZpBntcw1fR6glc8Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=arGnJWmx1ZjZDejaTOe3qsJV164WQsdvrO0l22Snjl0d+TMWSeiJvardY2wUqFLqx
-	 Drr4SlA9ZD3DYt6/F8sPcTjyiaCKQAwQDM0nVfESKY6gwL70MaBHGca6Ghytv5+FM4
-	 fRdvBFbTlVBGaTZ5jPBtYkBu6lKtnp1Dna3e96FZpem7PuABgeT4Il9HipJng8U+fF
-	 /5AESGuZh4XBnqcPTQi+kCwnv9o8u3QXS56ljNhe1C9b+gHxOMxrYaTZEh5RTTP+K1
-	 t7mpUGogxyOQ34vrqv+hikNfTMzEd6EUb67sMLy1benzxfk+ZA2JYTw2cSsY5CbCxD
-	 RPZAGLC2Ssufw==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vzstU-000000007qz-0FJm;
-	Tue, 10 Mar 2026 09:56:48 +0100
-Date: Tue, 10 Mar 2026 09:56:48 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Fan Wu <fanwu01@zju.edu.cn>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: opticon: fix UAF in write callback during
- port removal
-Message-ID: <aa_c0B9E7MPm_yqL@hovoldconsulting.com>
-References: <20260309142757.589802-1-fanwu01@zju.edu.cn>
+	s=k20201202; t=1773133354;
+	bh=dyZoKH8XDotOwtrxv1ftKGKj6+/9NDQwSTPynUEi6wA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Z7Wl+Wt+VvjrSQxXCnMiOg9eFoexHeAJCd9CBue3j/Xm20VQ7OrVrOgLExrUWVt4+
+	 Bxgd4XoH49SGxgcLJA4R28P/ymZl0WJfW+i9ZQCJ94gpF1r5/IF+I0luzFJEYigUph
+	 EFrWeE0I1JHQyMC+3hsIa72BS6kwe4YNgqKeNxxHkI3X7uV9O5Fa/V0K6itA1Sjy7U
+	 n8pW2QZPW/ksl0nGUAQbxiuVOBpY375Uf93DtNZ9ER1nWfXBgTqOZbSmefu/IZYPaa
+	 NL+whxGsACY76k5ni9twbvqhtDLOqdcmhnbDTb17t/gWMm/5sS98d9vgTg0OsW4BTZ
+	 Dy7E5ek3BS47g==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Valentin Spreckels <valentin@spreckels.dev>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.19-5.15] net: usb: r8152: add TRENDnet TUC-ET2G
+Date: Tue, 10 Mar 2026 05:01:33 -0400
+Message-ID: <20260310090145.2709021-33-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260310090145.2709021-1-sashal@kernel.org>
+References: <20260310090145.2709021-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260309142757.589802-1-fanwu01@zju.edu.cn>
-X-Rspamd-Queue-Id: 3601A247BA2
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.19.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: CC61F248119
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34388-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-34387-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,hovoldconsulting.com:mid,zju.edu.cn:email]
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,msgid.link:url,spreckels.dev:email]
 X-Rspamd-Action: no action
 
-On Mon, Mar 09, 2026 at 02:27:57PM +0000, Fan Wu wrote:
-> The opticon driver anchors write URBs to priv->anchor in opticon_write()
-> and frees priv in opticon_port_remove() without first killing these
-> anchored URBs. The completion callback opticon_write_control_callback()
-> may dereference priv via usb_get_serial_port_data() and access
-> priv->lock, priv->outstanding_urbs, and priv->outstanding_bytes after
-> it has been freed.
-> 
-> If a write URB is in flight when the port is removed:
-> 
->     CPU 0 (remove path)              CPU 1 (URB completion)
->     ---------------------            ---------------------
->     opticon_port_remove()
->       kfree(priv)  <--+
->                      |  --> opticon_write_control_callback()
->                      |        priv = usb_get_serial_port_data()
->                      |        spin_lock_irqsave(&priv->lock)
->                      |        --priv->outstanding_urbs  // possible UAF
->     return           |
->                      usb_free_urb()
+From: Valentin Spreckels <valentin@spreckels.dev>
 
-This cannot happen as ports are always shut down before being
-deregistered (see usb_serial_disconnect()).
+[ Upstream commit 15fba71533bcdfaa8eeba69a5a5a2927afdf664a ]
 
-It used to be possible to trigger something like this by manually
-unbinding a port device through sysfs as root but even that's no longer
-possible since commit fdb838efa31e ("USB: serial: suppress driver bind
-attributes").
+The TRENDnet TUC-ET2G is a RTL8156 based usb ethernet adapter. Add its
+vendor and product IDs.
 
-> Fix this by calling usb_kill_anchored_urbs(&priv->anchor) before
-> kfree(priv) so that all in-flight URBs have finished before the private
-> data is freed.
-> 
-> Note that opticon_close() already correctly kills anchored URBs; this
-> fix addresses the port_remove path which was overlooked.
-> 
-> Fixes: 648d4e16567e ("USB: serial: opticon: add write support")
-> Signed-off-by: Fan Wu <fanwu01@zju.edu.cn>
+Signed-off-by: Valentin Spreckels <valentin@spreckels.dev>
+Link: https://patch.msgid.link/20260226195409.7891-2-valentin@spreckels.dev
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
-How was this potential issue found? Are you using some kind of LLM or
-other tool?
+LLM Generated explanations, may be completely bogus:
 
-Johan
+## Analysis
+
+### What the commit does
+
+This commit adds USB vendor and product IDs for the TRENDnet TUC-ET2G
+USB ethernet adapter (vendor ID `0x20f4`, product ID `0xe02b`) to the
+existing `r8152` driver. The device uses the RTL8156 chipset, which is
+already fully supported by the driver.
+
+### Changes
+
+1. **`include/linux/usb/r8152.h`**: Adds `#define VENDOR_ID_TRENDNET
+   0x20f4`
+2. **`drivers/net/usb/r8152.c`**: Adds `{ USB_DEVICE(VENDOR_ID_TRENDNET,
+   0xe02b) }` to the device table
+
+### Stable kernel criteria
+
+- **New device ID to existing driver**: This is a textbook example of
+  the "NEW DEVICE IDs" exception explicitly listed in stable kernel
+  rules. The r8152 driver already exists in all stable trees, and the
+  RTL8156 chipset is already supported.
+- **Obviously correct**: Two lines — a vendor ID define and a device
+  table entry.
+- **No risk of regression**: Adding a USB device ID cannot break
+  existing functionality. It only enables matching for a new device.
+- **Small and contained**: 2 lines of actual change across 2 files.
+- **Fixes a real problem**: Without this, users with TRENDnet TUC-ET2G
+  adapters cannot use them with the r8152 driver (the device won't be
+  claimed).
+
+### Risk assessment
+
+**Zero risk.** This is the most minimal possible change — adding
+identifiers so the kernel recognizes a device. No code paths are
+changed, no logic is modified.
+
+### Verification
+
+- Confirmed `VENDOR_ID_TRENDNET` is a new define not previously in the
+  header by examining the diff context showing the existing vendor IDs.
+- The RTL8156 chipset support already exists in the r8152 driver (the
+  driver handles RTL8152/8153/8156 variants).
+- The change pattern matches dozens of similar device ID additions that
+  are routinely backported to stable (e.g., other vendor IDs already in
+  the table: Lenovo, Linksys, NVIDIA, TP-Link, D-Link, Dell, ASUS).
+- No dependencies on other commits — this is fully self-contained.
+
+**YES**
+
+ drivers/net/usb/r8152.c   | 1 +
+ include/linux/usb/r8152.h | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 6b107cf5f37bd..9eda892beb1f8 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -10062,6 +10062,7 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_DLINK,   0xb301) },
+ 	{ USB_DEVICE(VENDOR_ID_DELL,    0xb097) },
+ 	{ USB_DEVICE(VENDOR_ID_ASUS,    0x1976) },
++	{ USB_DEVICE(VENDOR_ID_TRENDNET, 0xe02b) },
+ 	{}
+ };
+ 
+diff --git a/include/linux/usb/r8152.h b/include/linux/usb/r8152.h
+index 2ca60828f28bb..1502b2a355f98 100644
+--- a/include/linux/usb/r8152.h
++++ b/include/linux/usb/r8152.h
+@@ -32,6 +32,7 @@
+ #define VENDOR_ID_DLINK			0x2001
+ #define VENDOR_ID_DELL			0x413c
+ #define VENDOR_ID_ASUS			0x0b05
++#define VENDOR_ID_TRENDNET		0x20f4
+ 
+ #if IS_REACHABLE(CONFIG_USB_RTL8152)
+ extern u8 rtl8152_get_version(struct usb_interface *intf);
+-- 
+2.51.0
+
 
