@@ -1,139 +1,225 @@
-Return-Path: <linux-usb+bounces-34487-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34488-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sCaEItBPsGnFhgIAu9opvQ
-	(envelope-from <linux-usb+bounces-34487-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 18:07:28 +0100
+	id AF8yN2lTsGmBiAIAu9opvQ
+	(envelope-from <linux-usb+bounces-34488-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 18:22:49 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D83A92553DE
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 18:07:27 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14A702557AB
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 18:22:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B4E313197323
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 17:05:42 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 463393028C03
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2026 17:17:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36BDC3BF69F;
-	Tue, 10 Mar 2026 17:05:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 450E33C9EF2;
+	Tue, 10 Mar 2026 17:17:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="baNT5FHc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F25933D0924;
-	Tue, 10 Mar 2026 17:05:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853F540DFB9;
+	Tue, 10 Mar 2026 17:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773162340; cv=none; b=o4Fp7jJ1NmXNT18yd1xHGG4TvScCZqwXFpIDfDPGj/aJw1I6A1KcJRUH745H7cth4sKqQVym5QcFpDfz3U3dwrudARUxFlxNcQcz7SFnJ74o2xCck7ENipTqcuttbHmRrwxz6/nItjMZZOlxMA2rGNaY+xPG7bH27zLtCNDdI6I=
+	t=1773163057; cv=none; b=O3LK81jHqb3tw3tLHTYZEswJb1lSi7cfDRhUS20D6/VmjTucGmpTl+25axhO46ocxgxhjBHFQrE/t0GI//gQHUP4PNN3WAAz8cwNgcqOKdB1U9boQywSn+Y1Teb+hytaWZ4kqOIBbmCzq4j4i6zYIAWe56lFGJcPUqlPRCoCFsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773162340; c=relaxed/simple;
-	bh=zoLYaN/qdnReMLP8BmR++i4YAYIRxysZZRHkz7LKVFw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gTYW/HwTLvQOnZ0rmMIXLPShKqeJdkenWahzeoSbi1YHtiuN+Eyv3fN91SAK18bykBUGDT5nlV/U+SjX7+L3CbLBJA3jOjYfm4wEM644hiSJNTehALojjeZyoilODvDcMhjSTYhbHkvQaiTfXPODP7voqGrB+d0IhJ/OeqahBlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=209.97.182.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.98.66.117])
-	by mtasvr (Coremail) with SMTP id _____wAnpoRUT7BpuoUqAQ--.4495S3;
-	Wed, 11 Mar 2026 01:05:25 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.98.66.117])
-	by mail-app3 (Coremail) with SMTP id zS_KCgAnKGtRT7Bp4+mbBg--.13190S2;
-	Wed, 11 Mar 2026 01:05:24 +0800 (CST)
-From: Fan Wu <fanwu01@zju.edu.cn>
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Fan Wu <fanwu01@zju.edu.cn>
-Subject: Re: [PATCH] USB: serial: opticon: fix UAF in write callback during port removal
-Date: Tue, 10 Mar 2026 17:04:24 +0000
-Message-Id: <20260310170424.19817-1-fanwu01@zju.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <aa_c0B9E7MPm_yqL@hovoldconsulting.com>
-References: <aa_c0B9E7MPm_yqL@hovoldconsulting.com>
- <20260309142757.589802-1-fanwu01@zju.edu.cn>
+	s=arc-20240116; t=1773163057; c=relaxed/simple;
+	bh=Z+61i1KejLDU448AmtfkHV2MHfpFo0pJbhwF4WeIFa8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jnqox0ogBDFbauu6flkNIv/arCvBJDLWRwMWdgtEhPd6qJyUw5wOzEUb/NutNA8xpl/Pco/KXDuiE1adQDzzeGfymUqfA9NDpxOEYGlq8lZV+b8dlVLCub0r7RNNWHYMDS+MHshjMkX2qbpQwtrPLxqoY5GgKMs2Lu2LZTxqRAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=baNT5FHc; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1773163054;
+	bh=Z+61i1KejLDU448AmtfkHV2MHfpFo0pJbhwF4WeIFa8=;
+	h=From:Date:Subject:To:Cc:From;
+	b=baNT5FHcGYQvzbWr4fA+mL7nul/7k6CTns8vws5uOC6tQAtAH67WcAvkisoKfxbc7
+	 +jgeLdFZB5//49cOM9/EVjOhM6D57VUEwldos2QZRD5iN28uofysskTtrak5riKS2J
+	 hHFRy7VtHFKMhbrbkUlZlqxhbCtku66Ol+mAASVSXkbhb0ESK/7vziU7WNGzaPx/Ka
+	 Vg2foqNcDuQyM2MgRXLty58X1/m77mSXVbmb1QkxVSw1NIY7nZd/AWADhYZGPpuOnx
+	 CJ/Y7oQx/luwQEVj/SKbhdG1KC1aa+iHX5UkWPiUnwWU9dKVq/thOn42yWYTZ8BBMs
+	 WlJ6TVlOrzisQ==
+Received: from jupiter.universe (dyndsl-091-248-208-051.ewe-ip-backbone.de [91.248.208.51])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id ABD8A17E0454;
+	Tue, 10 Mar 2026 18:17:34 +0100 (CET)
+Received: by jupiter.universe (Postfix, from userid 1000)
+	id 3FF72480026; Tue, 10 Mar 2026 18:17:34 +0100 (CET)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+Date: Tue, 10 Mar 2026 18:17:34 +0100
+Subject: [PATCH] usb: typec: fusb302: add DRM DP HPD bridge support
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-CM-TRANSID:zS_KCgAnKGtRT7Bp4+mbBg--.13190S2
-X-CM-SenderInfo: qrstjiaswqq6lmxovvfxof0/
-X-CM-DELIVERINFO: =?B?B7jqowXKKxbFmtjJiESix3B1w3vZ3A9ovKVTomAyoQazvoRs/NHSP8GI2EvgeEEW7R
-	sfnTqSmKH0LqHUXXTLjNnjGwEwjA7P0UCowrhus0RajvFhf1AkuuN/qN0dlI7N8F9ueFhy
-	ymtMlJTcmRgOd7Bip5jN5RPxYw6l01w8CbPzC/8w
-X-Coremail-Antispam: 1Uk129KBj9xXoWrtF48ZF45Ar4Uuw47tw4rtFc_yoWfJrg_Wa
-	ykGr18X3yFqFs5uw1Yka4Yvr9aq3ykKry7Ww18ZrsrJ3s5Xa4UCrZakr98Wr1rG3yqyFs0
-	krn8Za9xCw1SgosvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUb-AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r1j6r4UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6x
-	kI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v2
-	6r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2
-	Ij64vIr41lF7xvr2IYc2Ij64vIr40E4x8a64kEw24l42xK82IYc2Ij64vIr41l4I8I3I0E
-	4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-	WUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-	Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
-	WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4U
-	YxBIdaVFxhVjvjDU0xZFpf9x07jnKsUUUUUU=
-X-Rspamd-Queue-Id: D83A92553DE
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260310-fusb302-drm-dp-hpd-bridge-v1-1-ffd41ef9afe3@collabora.com>
+X-B4-Tracking: v=1; b=H4sIAC1SsGkC/x2MQQrDMAzAvlJ8rsFNoLB9pfSQxM7iw7rgsFEI/
+ XvDjgJJHZqYSoPn1MHkp00/x4BlniCVcLwElQeDI7eSXwjzt0VPDtneyBVLZYymPESivKZHkOR
+ DhNFXk6zn/73t13UDF1heyWsAAAA=
+X-Change-ID: 20260310-fusb302-drm-dp-hpd-bridge-00f6c9aec3ab
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Dmitry Baryshkov <lumag@kernel.org>, Alexey Charkov <alchark@gmail.com>, 
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel@collabora.com, Sebastian Reichel <sebastian.reichel@collabora.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3411;
+ i=sebastian.reichel@collabora.com; h=from:subject:message-id;
+ bh=Z+61i1KejLDU448AmtfkHV2MHfpFo0pJbhwF4WeIFa8=;
+ b=owJ4nAFtApL9kA0DAAoB2O7X88g7+poByyZiAGmwUi6RX9Y2kI5UcNWkOw+LFMowoDZsd7JWD
+ cLvu2vdPAV1x4kCMwQAAQoAHRYhBO9mDQdGP4tyanlUE9ju1/PIO/qaBQJpsFIuAAoJENju1/PI
+ O/qaSqwP/2d/oJKYnkiUCntWVEn4FcewQ9e8bW5QXqfdF4ggKGAYIT5lrJlCTIeLGnlgvsaZWGK
+ RNa98ZYWBk3qMaSMfzv3vZPFEojsrgsjBcxC77xtTheruCcjSj1U3Wsg3M/cfyW6g09nMDrhwNU
+ hgnlw5KukvQU5wWzwcqWRPWtsNV/Cuj+sdP1Zu6yahf5YCdfB87QxtV4ukcVgiM+io/r8jlYBxq
+ Q+eYpkp0Pgx2fgEDGdTObzhjZUBBUiHdIQVT+sp9pEKp2i7IwurDyVa8GggaKY6EZIDDpgxBfI9
+ r77yOGVnmsizystV3UOGmAyzCwjpcZIYUJYH8Kv0G03xXFvJ1T2nqsCszjMZ2c4fwbut50CBsyO
+ 4IYyELzPe5yhX9pCDTaNLX8uPZWjHz7giXZ5AgX2AkjHroen9BFve24gKgEtSCkNPsSDvszlg+3
+ 3yrcnXoxyo26wEJwkJIQI/0q++em3LIemF8sfc0g0qgsMucqos8QU3BINQuHnJ1b6G320HAm+Ho
+ uqxeSipfsZWfokMOahnf6o0wpswyOuaY45pkwmoch87LDdINL1Ga8spyhss6fvdWIGLZc4+0SY9
+ gVVF7ruer9GJ2ZwaltWIjrs5/YrQdTu4Mu4gYx62NR9N8MPTOsiYVmA4PijYJLwaqYUtC2hUs67
+ MvkiM0MqDV2j+YunxMPkoEA==
+X-Developer-Key: i=sebastian.reichel@collabora.com; a=openpgp;
+ fpr=EF660D07463F8B726A795413D8EED7F3C83BFA9A
+X-Rspamd-Queue-Id: 14A702557AB
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[collabora.com:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	DMARC_NA(0.00)[zju.edu.cn];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34487-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	PRECEDENCE_BULK(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.985];
+	DKIM_TRACE(0.00)[collabora.com:+];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,vger.kernel.org,collabora.com];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34488-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sebastian.reichel@collabora.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.998];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	FROM_NEQ_ENVFROM(0.00)[fanwu01@zju.edu.cn,linux-usb@vger.kernel.org];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.22:email,collabora.com:dkim,collabora.com:email,collabora.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,2ac50000:email,2b010000:email]
 X-Rspamd-Action: no action
 
-On Tue, Mar 10, 2026 at 09:56:48 +0100, Johan Hovold wrote:=0D
-> How was this potential issue found? Are you using some kind of LLM or=0D
-> other tool?=0D
-=0D
-Hi Johan,=0D
-=0D
-Thanks for the explanation. You're right =E2=80=94 I missed the lifecycle g=
-uarantees=0D
-provided by usb_serial_disconnect(), and since opticon_close() already hand=
-les=0D
-the URB cleanup, this report is a false positive.=0D
-=0D
-I'm currently researching static analysis techniques (CodeQL combined with =
-LLM=0D
-assistance) for detecting UAF bugs, particularly around cross-entry lifetim=
-es.=0D
-In this case, the analysis missed the subsystem-level guarantee that close =
-runs=0D
-before remove.=0D
-=0D
-Thanks for pointing out commit fdb838efa31e and the relevant mechanism =E2=
-=80=94 this=0D
-is very helpful feedback for my research.=0D
-=0D
-Please disregard this patch, and apologies for the noise.=0D
-=0D
-Best regards,=0D
-Fan Wu=0D
+Add support to use fusb302 based USB-C connectors with the DP altmode
+helper code on devicetree based platforms. To get this working there
+must be a DRM bridge chain from the DisplayPort controller to the USB-C
+connector. E.g. on Rockchip RK3576:
+
+root@rk3576 # cat /sys/kernel/debug/dri/0/encoder-0/bridges
+bridge[0]: dw_dp_bridge_funcs
+	refcount: 7
+	type: [10] DP
+	OF: /soc/dp@27e40000:rockchip,rk3576-dp
+	ops: [0x47] detect edid hpd
+bridge[1]: drm_aux_bridge_funcs
+	refcount: 4
+	type: [0] Unknown
+	OF: /soc/phy@2b010000:rockchip,rk3576-usbdp-phy
+	ops: [0x0]
+bridge[2]: drm_aux_hpd_bridge_funcs
+	refcount: 5
+	type: [10] DP
+	OF: /soc/i2c@2ac50000/typec-portc@22/connector:usb-c-connector
+	ops: [0x4] hpd
+
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+To make this usable on Rockchip RK3588 and RK3576 platforms as shown in
+the commit message, the Designware DP driver and the USBDP PHY driver
+also need changes. Those are being send separately as the fusb302 patch
+can be merged completley independently.
+---
+ drivers/usb/typec/tcpm/Kconfig   |  2 ++
+ drivers/usb/typec/tcpm/fusb302.c | 13 +++++++++++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
+index 8cdd84ca5d6f..00baa7503d45 100644
+--- a/drivers/usb/typec/tcpm/Kconfig
++++ b/drivers/usb/typec/tcpm/Kconfig
+@@ -58,6 +58,8 @@ config TYPEC_FUSB302
+ 	tristate "Fairchild FUSB302 Type-C chip driver"
+ 	depends on I2C
+ 	depends on EXTCON || !EXTCON
++	depends on DRM || DRM=n
++	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE && OF
+ 	help
+ 	  The Fairchild FUSB302 Type-C chip driver that works with
+ 	  Type-C Port Controller Manager to provide USB PD and USB
+diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+index 19ff8217818e..ce7069fb4be6 100644
+--- a/drivers/usb/typec/tcpm/fusb302.c
++++ b/drivers/usb/typec/tcpm/fusb302.c
+@@ -5,6 +5,7 @@
+  * Fairchild FUSB302 Type-C Chip Driver
+  */
+ 
++#include <drm/bridge/aux-bridge.h>
+ #include <linux/debugfs.h>
+ #include <linux/delay.h>
+ #include <linux/errno.h>
+@@ -1689,6 +1690,7 @@ static int fusb302_probe(struct i2c_client *client)
+ {
+ 	struct fusb302_chip *chip;
+ 	struct i2c_adapter *adapter = client->adapter;
++	struct auxiliary_device *bridge_dev;
+ 	struct device *dev = &client->dev;
+ 	const char *name;
+ 	int ret = 0;
+@@ -1747,6 +1749,13 @@ static int fusb302_probe(struct i2c_client *client)
+ 		goto destroy_workqueue;
+ 	}
+ 
++	bridge_dev = devm_drm_dp_hpd_bridge_alloc(chip->dev, to_of_node(chip->tcpc_dev.fwnode));
++	if (IS_ERR(bridge_dev)) {
++		ret = PTR_ERR(bridge_dev);
++		dev_err_probe(chip->dev, ret, "failed to alloc bridge\n");
++		goto destroy_workqueue;
++	}
++
+ 	chip->tcpm_port = tcpm_register_port(&client->dev, &chip->tcpc_dev);
+ 	if (IS_ERR(chip->tcpm_port)) {
+ 		fwnode_handle_put(chip->tcpc_dev.fwnode);
+@@ -1764,6 +1773,10 @@ static int fusb302_probe(struct i2c_client *client)
+ 	enable_irq_wake(chip->gpio_int_n_irq);
+ 	i2c_set_clientdata(client, chip);
+ 
++	ret = devm_drm_dp_hpd_bridge_add(chip->dev, bridge_dev);
++	if (ret)
++		return ret;
++
+ 	return ret;
+ 
+ tcpm_unregister_port:
+
+---
+base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+change-id: 20260310-fusb302-drm-dp-hpd-bridge-00f6c9aec3ab
+
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
 
 
