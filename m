@@ -1,148 +1,176 @@
-Return-Path: <linux-usb+bounces-34623-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34624-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8G9BLKf1sWkeHgAAu9opvQ
-	(envelope-from <linux-usb+bounces-34623-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 00:07:19 +0100
+	id SORVAJP1sWl7HQAAu9opvQ
+	(envelope-from <linux-usb+bounces-34624-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 00:06:59 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DF0F26B241
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 00:07:18 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3270526B222
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 00:06:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6E9F63094F99
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 23:05:58 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 03827301AA8E
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 23:06:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48F6A39EF1D;
-	Wed, 11 Mar 2026 23:05:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D243A168D;
+	Wed, 11 Mar 2026 23:06:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D2xCPE0s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e7toUs4c"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 875F839EF23
-	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 23:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53B7B2989B5;
+	Wed, 11 Mar 2026 23:06:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773270352; cv=none; b=BsiaFgxifHPEWNt38cz9/CZ8/Q6nDex+XBuiBSdoBIpJAN5Hyi5gMMWYgaa+IV16wmu9hp5DVwHZ/mosfMaYCm774P63Z3hjOmYUpVh8ARu7ZPCR4/qaQ/3vARiOSc8eteUEVhpiw8seisprrGCsRDbHze2mbx9ZnagH7lnOFuI=
+	t=1773270409; cv=none; b=bYH2KggxlKFJILdfJPhDTPyzF5Xd/JzxtUaxH3Ues+ZGbq90yHE5bst5tRucaVnMDPazAKr0s/Rl+h4RLsHRskYRPoNB+DD79wdqB21eQDjQ5JJEiRs5HJtOpiKtXtMjQ6nKAdonHBPZ+8kgnjwIHmeqMFZGBEme6DUN8GzaM8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773270352; c=relaxed/simple;
-	bh=rfKuOzvHe5vBbX9keVb//BJgX5e9Vh2x9YeAvZCPoVM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nrIITfwaDnjzyhikrZXwEmGUi3o7IzUBtPHanbmmW6gA+ayZzaqUCDCha4JD5xNKORZuZgLHFAIwNCQSmHAWzxh/IQmnFUHXi4kQr09N22oqRNhi9LXxAYa61q5D0K98WwbMpyKT8/t6ITOH5zzyOQaB9tjYcFvwxUGjjjbwGa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D2xCPE0s; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-661cfb9f3aaso484593a12.2
-        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 16:05:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1773270350; x=1773875150; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZNc95yBeQgjpi9QO4APmDLhPk0cXt4A6W6yy8C9WSLE=;
-        b=D2xCPE0s5zyDyTGigNQ1MakKhNaOmsWBNhdiUDFHTgziagAYK6laDimkgs/DL5udfk
-         JIiFK+Rys2O91h2E2DRflOHdsKhDT0PagNm7+it5sXbFAMxDLKLiJyY+wOZ8anieq1zg
-         Nkbfzjr7qdV4/FSNKZP48EyQzxya3yroet99O3l5TVjo7ZytP1UuStM817+TU4lYJL5f
-         +oD5b+K//UdKxzLpBSi3ovbE/4lIqWVrQWKooVqN913lMfQ1/UEzCUdCoifgYHdTUSHL
-         dAlp3da+RKne9aN3/SrOS+7R8/rK1Ww8UrmkJmNEDstIyn4ZY03ciBeTEO58M9iq88NE
-         DtMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773270350; x=1773875150;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZNc95yBeQgjpi9QO4APmDLhPk0cXt4A6W6yy8C9WSLE=;
-        b=PVcvYYPfPqZWz/WK8f/3MUmS2VwdfNNB47Hd5LQIrW2TBjf0ji8LpGtBoxP+BWJcGM
-         yh9Ep0x7/eOfe+eLg6lFfa9stGk4DvSRAQiNPhEvruz82dlqtApIrzAc2tKBQlzDG7La
-         eeKVYfMwcHFiIDqq2ypOi9ye7lgbqE4FqTx8wGebfl3N+Mb7/UdQtKnIu1ge+xjQ/4Hk
-         SGsGS9uNjRsAKomSDao1edGiZH8bJqN5TmQlHQdh6vdOUocHzPT0On8xXqcH/L1BnUQm
-         hQkaaiE5CFdXhQVTbYiOTWqZ+x0D/BD71aQGea5K61yKHn9V/KoUJiX3PY5JiyjgU7om
-         GRXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX8Ae3oV67Kc54P9Cb61bJ+DHkY4+rT2U/68hCiDqabkzDGgQmbAgoFq8xkC9b9pXHgunEk2bMmh28=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNozuhBv+qM+nrxLZzvsNtUDmZ6iJTFGD5u7pMKT7suQmCpl/J
-	NrCXBEN+EjKEFxrgjgWDBOGwrG/zchsgBZk2W226f4SpDBIJXX2A7akRo0kPXJDSv4g=
-X-Gm-Gg: ATEYQzzM2S7ZXdVUIujzrRayi6IGOqeMsdSjfe7PF3jOMwkKVq6fJ+gxNCIRmfrGm/M
-	1w0xQcr5+1BdtpXQwWrDNgE9t7BC8JdyUuwt2yEx6YYXVNlRv0tpwPReFQ74UPkFjp4OlEHBdES
-	Zo82XMeSP8+wsmIfPie10Ubw2LnbI929fdI+GltMEB90n48/ArOEhdhDQeDLVJ5baCDDkrh7IAs
-	eC51pJzP8OQ+gwph7lYY1flamlfyi78HjAlGOuNX63DaLl3mIIJKEAyOwCMRYJSnvHDOHR08xrR
-	J+ltGZUHO+L6hTOOmpL2WAz7J4PtJIh+knEUxdnEhn+YPL73wduOQ1bwvrnqk9UhEAc93A5fEUP
-	Ezm1/e9rzGeOVg6sH8QXkqTY8ufYxUNxqzBJ3QzwIprJPpjg6eajxmuksfirzkTSeJvWwpaMzvl
-	A6BFA+SUkNJe32dSh3dINcDZd+fgBEeT8R5g==
-X-Received: by 2002:a05:6402:f24:b0:662:bd56:3ba3 with SMTP id 4fb4d7f45d1cf-66319ee4b53mr1755231a12.31.1773270349747;
-        Wed, 11 Mar 2026 16:05:49 -0700 (PDT)
-Received: from [192.168.0.101] ([109.77.88.70])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6634ead9972sm279788a12.0.2026.03.11.16.05.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Mar 2026 16:05:49 -0700 (PDT)
-Message-ID: <1bc80b89-5b09-4042-a61d-698884febded@linaro.org>
-Date: Wed, 11 Mar 2026 23:05:47 +0000
+	s=arc-20240116; t=1773270409; c=relaxed/simple;
+	bh=nyCis1OKm867BGk54vBM7sp6aWigeD6z3A7a10n9BmE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=r4oN3QTh/Id5jt3F5s1FWw0ZtcZRqM16Zp4QvhSgWDxWFp/nTuU+pzL51oaDfT8QsAoPlXim9wn1NGDFtQKV3PzK0ZiXk+cqBwm3/vUvFzY1duzF021+eGIbJV14TrqN/IqCEglnqHBWl1vQN4EkCoedsdrXjEYyYOaEecr0aGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e7toUs4c; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 08809C4CEF7;
+	Wed, 11 Mar 2026 23:06:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773270409;
+	bh=nyCis1OKm867BGk54vBM7sp6aWigeD6z3A7a10n9BmE=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=e7toUs4csjuJvgq8ohVhWy2bPVlGDCSRO259nEFgNVZ1/9uqjD9y3wgKD04BjJY/i
+	 QE1hm/ZVTTzuHAET2qz39vbW/lSmCjfLyd6PcACpAVGaS9AEuB1j9o8yEmd3jN7Ty/
+	 u5MYYRaOmiK7Yp0+9ArjptzSLS6l7dtbpW4gmxcI923CTSCFLXQyhmgLxpjciPnFM5
+	 cIvcezSWV2tT7gq7s4MQX2hYLsORJaeC8KNHpxuTDyR8NkxGpHONDU3UXohLM0SqDb
+	 7N9UInXOe6Oyj7Wp+jgXbXecf1e0mr1rdFRrtMCW8NGsLhzBarxvum+qgZABFuNFQA
+	 lILvH2aLKh/tw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC4DD103E2F1;
+	Wed, 11 Mar 2026 23:06:48 +0000 (UTC)
+From: =?utf-8?q?Bence_Cs=C3=B3k=C3=A1s_via_B4_Relay?= <devnull+bence98.sch.bme.hu@kernel.org>
+Date: Thu, 12 Mar 2026 00:06:35 +0100
+Subject: [PATCH] USB: core: Use `krealloc()` in `usb_cache_string()`
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 2/2] usb: typec: qcom: Add support for shared USBIN
- VBUS detection
-To: Alexander Koskovich <AKoskovich@pm.me>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260308-qcom-typec-shared-vbus-v1-0-7d574b91052a@pm.me>
- <20260308-qcom-typec-shared-vbus-v1-2-7d574b91052a@pm.me>
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Content-Language: en-US
-In-Reply-To: <20260308-qcom-typec-shared-vbus-v1-2-7d574b91052a@pm.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260312-usb-krealloc-v1-1-f76b92b92402@sch.bme.hu>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MwQqDMAyA4VeRnBewrQzcq8gOaZfOMFclURmI7
+ 75ux+/w/wcYq7DBrTlAeReTuVS4SwNppPJklEc1+NZf2+AcbhbxpUzTNCfsuHMh+9BTn6Emi3K
+ Wz3833KsjGWNUKmn8Td5kKyuc5xcU/ug4dwAAAA==
+X-Change-ID: 20260311-usb-krealloc-4e413f239a9f
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Bence_Cs=C3=B3k=C3=A1s?= <bence98@sch.bme.hu>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773270407; l=1845;
+ i=bence98@sch.bme.hu; s=20260213; h=from:subject:message-id;
+ bh=ryeZKOW7CoNcTvHQhdlplcN1pMIWzqbmCO+DbTrOUHo=;
+ b=TQXh95Qshna5DUlvdb+3cekUBsb7EGBbjdiOEEpRVdGjKu6uCnWEJ6F4M+n8xqlupNwBMgqIk
+ uDLpQEFx+8DAwBBrbkN3uqDNpMaYsnT+UqcAEygIWIgk9Vtrtj9nuHU
+X-Developer-Key: i=bence98@sch.bme.hu; a=ed25519;
+ pk=rtWE8PtqZ5ZMyUVCckDq8i1ASLxgUbV2fwDA8KaOli8=
+X-Endpoint-Received: by B4 Relay for bence98@sch.bme.hu/20260213 with
+ auth_id=636
+X-Original-From: =?utf-8?q?Bence_Cs=C3=B3k=C3=A1s?= <bence98@sch.bme.hu>
+Reply-To: bence98@sch.bme.hu
+X-Spamd-Result: default: False [-1.39 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_MIXED_CHARSET(0.77)[subject];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34623-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-34624-lists,linux-usb=lfdr.de,bence98.sch.bme.hu];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	MIME_TRACE(0.00)[0:+];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bryan.odonoghue@linaro.org,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linaro.org:dkim,linaro.org:email,linaro.org:mid]
-X-Rspamd-Queue-Id: 6DF0F26B241
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	HAS_REPLYTO(0.00)[bence98@sch.bme.hu];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,bme.hu:email]
+X-Rspamd-Queue-Id: 3270526B222
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 08/03/2026 23:20, Alexander Koskovich wrote:
-> +	if (IS_ERR(pmic_typec_port->vbus_detect_gpio))
-> +		return dev_err_probe(dev, PTR_ERR(pmic_typec_port->vbus_detect_gpio),
-> +				     "failed to get vbus-detect GPIO\n");
-> +
+From: Bence Csókás <bence98@sch.bme.hu>
 
-I'd prefer if this was bracketed since it is over more than one line.
+Instead of "shrinking" the allocation by `kmalloc()`ing a new, smaller
+buffer, utilize `krealloc()` to shrink the existing allocation. This saves
+a `memcpy()`, as well as guards against `smallbuf` allocation failure.
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Bence Csókás <bence98@sch.bme.hu>
+---
+Using `krealloc()` makes this code from 2005 more readable as well as
+robust. Nested `if`s were also unrolled.
+---
+ drivers/usb/core/message.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+index ea970ddf8879..dfe61d8b913b 100644
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -1005,7 +1005,7 @@ int usb_string(struct usb_device *dev, int index, char *buf, size_t size)
+ }
+ EXPORT_SYMBOL_GPL(usb_string);
+ 
+-/* one UTF-8-encoded 16-bit character has at most three bytes */
++/* one 16-bit character, when UTF-8-encoded, has at most three bytes */
+ #define MAX_USB_STRING_SIZE (127 * 3 + 1)
+ 
+ /**
+@@ -1026,17 +1026,17 @@ char *usb_cache_string(struct usb_device *udev, int index)
+ 		return NULL;
+ 
+ 	buf = kmalloc(MAX_USB_STRING_SIZE, GFP_NOIO);
+-	if (buf) {
+-		len = usb_string(udev, index, buf, MAX_USB_STRING_SIZE);
+-		if (len > 0) {
+-			smallbuf = kmalloc(++len, GFP_NOIO);
+-			if (!smallbuf)
+-				return buf;
+-			memcpy(smallbuf, buf, len);
+-		}
++	if (!buf)
++		return NULL;
++
++	len = usb_string(udev, index, buf, MAX_USB_STRING_SIZE);
++	if (len <= 0) {
+ 		kfree(buf);
++		return NULL;
+ 	}
+-	return smallbuf;
++
++	smallbuf = krealloc(buf, len + 1, GFP_NOIO);
++	return smallbuf ? : buf;
+ }
+ EXPORT_SYMBOL_GPL(usb_cache_string);
+ 
 
 ---
-bod
+base-commit: 80234b5ab240f52fa45d201e899e207b9265ef91
+change-id: 20260311-usb-krealloc-4e413f239a9f
+
+Best regards,
+-- 
+Bence Csókás <bence98@sch.bme.hu>
+
+
 
