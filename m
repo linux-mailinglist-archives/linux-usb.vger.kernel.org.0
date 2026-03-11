@@ -1,222 +1,283 @@
-Return-Path: <linux-usb+bounces-34563-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34565-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SOgBADRzsWlVvAIAu9opvQ
-	(envelope-from <linux-usb+bounces-34563-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:50:44 +0100
+	id EOS4JWN1sWnovQIAu9opvQ
+	(envelope-from <linux-usb+bounces-34565-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:00:03 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 685B1264D7D
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:50:43 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E343E264F60
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:00:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1DFA9304AA38
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 13:44:47 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4196A300681A
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:00:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA69B331202;
-	Wed, 11 Mar 2026 13:44:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79E9E31E838;
+	Wed, 11 Mar 2026 13:59:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b0LdjQgh"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="uUP2v0zq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E953246EB;
-	Wed, 11 Mar 2026 13:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335062C21E8;
+	Wed, 11 Mar 2026 13:59:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.252
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773236684; cv=none; b=IGdpexnpwlYpVZxfcTdvASoZ5sRGRmvb7NWBwU7KQNagoHRrlxYpcEYAS76Vx7hSO/VHPfpxYb84M9hrFCvqqUbO0WLLmTh3C0z3lfEj9PwhDEDXVG/nrKfPcnisqaiJ/WpstV1c29xNxjkFMLMLuFCoo/dd4Lvh1ozIw/TXLLM=
+	t=1773237596; cv=none; b=SOshKBr6kvUuqzRBGeWaewaVe87uV2CkZyud/YlA3+ns3WD1QDKSLSduQF9cE88Dq7LicUxmorRqWNnylodyfZ1VZQ9PwjpJ6DsFLJC2o7PHRONFwiHLpfLB3yJ0eKaCdnsqj1SHKJ4YOZV7c6N5l25Rx3OfupVEjRgYy53BTM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773236684; c=relaxed/simple;
-	bh=M+85F0iw//RmpY0Vyatx6+pqHbwS2nU9O2LhkVCgnXw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=niT+IPe7lGK00WDFJ5JlLI94xJ4OPDTjErQJ2VGiGef2bM6cOWOmIMOQqFg8Yql8Y1rb9TeatA+Xizyw2a32iFo28dxKKtKz9Uv20HAlx88QOs7SMFeV1TJmSyBGo3sR/B7OBWPs4+mDdNnaEeFqECYf8Zldp0y9hMep5f+8/2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b0LdjQgh; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773236682; x=1804772682;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M+85F0iw//RmpY0Vyatx6+pqHbwS2nU9O2LhkVCgnXw=;
-  b=b0LdjQghHFezS3LUuCDUxlCjhJUkwhIBTp+DTZK4fp2J6TbL6gt3YjWq
-   0B9LLJ8nkLW6Th0LPMBFgNCGyCPiApXq/rEDZk/IGgV99I2cwavuyRxrb
-   IN10BEezWAkQkh8SUnu0gXSKaf1cD9GbrTacwFSZTUD+FTgykv0etfr0r
-   ve2goAnI5zknQM4fX3TIKxLVwi3LyYTv5nier23s1jEya0PwgqqcJbH0z
-   SaoFHIR2wRbHmAS/MtJtetcKtgAtgf+hMJ4vyFCVhYgcA3CXubpBg9DaP
-   FKkiRSlK6BOxOtB23RwdszuHxEMiSWUp3fPtgh1W5GN4N0RnQhqfTiAZf
-   Q==;
-X-CSE-ConnectionGUID: 1ZR751u4S2aIw22LX6EkEg==
-X-CSE-MsgGUID: v6fzDQZAQ7GklyG1oUrYyw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11726"; a="74213851"
-X-IronPort-AV: E=Sophos;i="6.23,113,1770624000"; 
-   d="scan'208";a="74213851"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2026 06:44:41 -0700
-X-CSE-ConnectionGUID: 40xNvqfoR8ekLrkVhns5NQ==
-X-CSE-MsgGUID: Ki/5RhmoQkq9hAiw+QGqkQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,113,1770624000"; 
-   d="scan'208";a="217135190"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa010.fm.intel.com with ESMTP; 11 Mar 2026 06:44:39 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 80B1595; Wed, 11 Mar 2026 14:44:38 +0100 (CET)
-Date: Wed, 11 Mar 2026 15:43:55 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Alexey Charkov <alchark@gmail.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH] usb: typec: fusb302: add DRM DP HPD bridge support
-Message-ID: <abFxm8i6swona50j@kuha>
-References: <20260310-fusb302-drm-dp-hpd-bridge-v1-1-ffd41ef9afe3@collabora.com>
+	s=arc-20240116; t=1773237596; c=relaxed/simple;
+	bh=ImoRRmYpDR8Cr/M4ylbzMKAjZz3cYU9M/Su3D3cb47w=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=ro4WjzaGTkBhE4kwFkQnhXk3ADz4nUoZO6Q6TtaoRbFPTTljp8q1hwAR5hao7vtifQ9VtgscOR0c4ONMgqPUy8t59uOZSY2QpaSb+9rn/kPd0AZ64dYlwZhD/vUcP9LAWIFjgz4qPy3Ag/AxaQ3ZpncNvP4Cpivjpy3mqZfDNqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=uUP2v0zq; arc=none smtp.client-ip=162.62.57.252
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1773237583; bh=aF2WmMKwRgaVIE/I3i48O1DlYAeIZM+SRboymF2C9J4=;
+	h=From:To:Cc:Subject:Date;
+	b=uUP2v0zqWqjxcQq9YMyMzKggdmcH/+FFNm8bHJsQNwGjFvvPYBjZ8Czdj3qSjp0Nn
+	 VMX/JbFuiepQJEwknsX88q0vQo+Z+0/ZTo349DNegIsCfVNtqH5/OkJzUmjVA75Yiv
+	 RO5o4Fpb5PmuAeeQv2P7ndXMPgEETuOmtn+5Ud5E=
+Received: from admin.. ([2001:da8:205:20a0:6eeb:b6ff:fe15:94a7])
+	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
+	id E111DE10; Wed, 11 Mar 2026 21:56:17 +0800
+X-QQ-mid: xmsmtpt1773237377ty1o3sjo7
+Message-ID: <tencent_648835A07EDBB7CA94B66FAF5662EC2F1407@qq.com>
+X-QQ-XMAILINFO: OIJV+wUmQOUAP2RiU7AszV5h0akRExrROY4HWo3RaWpE+EdEdLqCeOv4CgAzpK
+	 KmNPva4/tt+XkNcm45EhU93CDu/bSFtM5MazeyJijsIITdBULuWjKxefOruB/DpZGoay/efiMCC7
+	 cjWwZNmc3n2VEQU3uQx1l/DcReyzTjZYvQ67JituoIM6UeTHZo7SAVXpEAJV2dkEme3DQJ/F1faH
+	 n3TJW2skzcg/1kdUcBiZrRLIPgTZK2ofxWJSxNnZUDsFn4elcndNSkGJlPhMgUKxvu1w7FJp+f/P
+	 7JgEqvpnuleaP6KTFLi6aW24lLJIml1ypz9QZXsahNzZKqcClbnhscXSooln5SJCY7Z5TTtar4KM
+	 uI2S8rJn8/mZAG5Gpr1wMXjfdlDXwQwpK1qZqmB0cnB2v5oRUK/afAMfCQmdsafgxPgIFqe3D7yE
+	 9ANCGf61M2VHHovgN2U37rdQFuVJKTsExVwCHdatr8GFXHeeR2n/9c4rq6CXc4wYTaO3EYiswO56
+	 jL7guT6yZn9B1H3xfNZ8riHUj93EAYe652ear57WGY+GlpE2afWFth6xRn9Ro6aYNsqmUDFx9EcN
+	 ehNSl4eTZd/pITf8YzidUqhQmDtASo1fLVDo0Cz4kG49jBdByvfXd+TvgRq1R8afO99lwKwpi6wH
+	 HFZg9XK9IP/+GbayUtK9p5BDvFdt/JlOBlpL6dCOxkQhv2MbZ/+VLkGoFks7rR8SBilyBjq7Xk6j
+	 OeXoWd8S+86FrYxTCdpmt5HjN6HysNyKuQYWG+I9hTZX/Kn2HtP4wOp0AjFgoqYA0wiUQSK9LM4E
+	 H3Wy3oL6iD/L7anoMl9KrfRQS5wcqozIvftOGAm5ixj0Se0w/GaO8RrsZSt6/oOPBcOVKSlB0unF
+	 aGOQuYIuCoh7J8c2njbNRkDv9MRNKy45JWnUyNcE+fUt0+2+D4hjMZuj5Muf2smkh5Nsb+DN9T7M
+	 Tca/HlKS320nmcMlgIW0HuEVsJozd2H3OdbcbPBad+4rx8Vx9z0naNCG2nFUyeNzYHBVvG/EJQrw
+	 UkWmPAacVzwwrZFQYVEjvW4k89CLpI5Z3x6mrt+/8yjDUgI/MRmuzUKZroxNw=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+From: Zhaoyang Yu <2426767509@qq.com>
+To: gregkh@linuxfoundation.org
+Cc: sergei.shtylyov@gmail.com,
+	daniel@zonque.org,
+	haojian.zhuang@gmail.com,
+	robert.jarzmik@free.fr,
+	linux-arm-kernel@lists.infradead.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zhaoyang Yu <2426767509@qq.com>
+Subject: [PATCH v3] USB: pxa27x_udc: check return value of clk_enable
+Date: Wed, 11 Mar 2026 13:56:14 +0000
+X-OQ-MSGID: <20260311135614.283723-1-2426767509@qq.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260310-fusb302-drm-dp-hpd-bridge-v1-1-ffd41ef9afe3@collabora.com>
-X-Rspamd-Queue-Id: 685B1264D7D
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: E343E264F60
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[qq.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[qq.com:s=s201512];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,gmail.com,vger.kernel.org,collabora.com];
-	TAGGED_FROM(0.00)[bounces-34563-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[collabora.com:email,0.0.0.22:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,2b010000:email,intel.com:dkim,intel.com:email,rk3576:email]
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34565-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[gmail.com,zonque.org,free.fr,lists.infradead.org,vger.kernel.org,qq.com];
+	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[2426767509@qq.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[qq.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_FROM(0.00)[qq.com];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,qq.com:dkim,qq.com:email,qq.com:mid]
 X-Rspamd-Action: no action
 
-Tue, Mar 10, 2026 at 06:17:34PM +0100, Sebastian Reichel kirjoitti:
-> Add support to use fusb302 based USB-C connectors with the DP altmode
-> helper code on devicetree based platforms. To get this working there
-> must be a DRM bridge chain from the DisplayPort controller to the USB-C
-> connector. E.g. on Rockchip RK3576:
-> 
-> root@rk3576 # cat /sys/kernel/debug/dri/0/encoder-0/bridges
-> bridge[0]: dw_dp_bridge_funcs
-> 	refcount: 7
-> 	type: [10] DP
-> 	OF: /soc/dp@27e40000:rockchip,rk3576-dp
-> 	ops: [0x47] detect edid hpd
-> bridge[1]: drm_aux_bridge_funcs
-> 	refcount: 4
-> 	type: [0] Unknown
-> 	OF: /soc/phy@2b010000:rockchip,rk3576-usbdp-phy
-> 	ops: [0x0]
-> bridge[2]: drm_aux_hpd_bridge_funcs
-> 	refcount: 5
-> 	type: [10] DP
-> 	OF: /soc/i2c@2ac50000/typec-portc@22/connector:usb-c-connector
-> 	ops: [0x4] hpd
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+clk_enable() may fail according to the API contract.
+Previously, udc_enable() ignored its return value and returned void.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Modify udc_enable() to return the error code. Additionally, update
+all of its callers (pxa_udc_pullup, pxa_udc_vbus_session,
+pxa27x_udc_start, pxa_udc_probe, and pxa_udc_resume) to check
+this return value and handle the failure properly with necessary
+cleanups or rollbacks.
 
-> ---
-> To make this usable on Rockchip RK3588 and RK3576 platforms as shown in
-> the commit message, the Designware DP driver and the USBDP PHY driver
-> also need changes. Those are being send separately as the fusb302 patch
-> can be merged completley independently.
-> ---
->  drivers/usb/typec/tcpm/Kconfig   |  2 ++
->  drivers/usb/typec/tcpm/fusb302.c | 13 +++++++++++++
->  2 files changed, 15 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-> index 8cdd84ca5d6f..00baa7503d45 100644
-> --- a/drivers/usb/typec/tcpm/Kconfig
-> +++ b/drivers/usb/typec/tcpm/Kconfig
-> @@ -58,6 +58,8 @@ config TYPEC_FUSB302
->  	tristate "Fairchild FUSB302 Type-C chip driver"
->  	depends on I2C
->  	depends on EXTCON || !EXTCON
-> +	depends on DRM || DRM=n
-> +	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE && OF
->  	help
->  	  The Fairchild FUSB302 Type-C chip driver that works with
->  	  Type-C Port Controller Manager to provide USB PD and USB
-> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-> index 19ff8217818e..ce7069fb4be6 100644
-> --- a/drivers/usb/typec/tcpm/fusb302.c
-> +++ b/drivers/usb/typec/tcpm/fusb302.c
-> @@ -5,6 +5,7 @@
->   * Fairchild FUSB302 Type-C Chip Driver
->   */
->  
-> +#include <drm/bridge/aux-bridge.h>
->  #include <linux/debugfs.h>
->  #include <linux/delay.h>
->  #include <linux/errno.h>
-> @@ -1689,6 +1690,7 @@ static int fusb302_probe(struct i2c_client *client)
->  {
->  	struct fusb302_chip *chip;
->  	struct i2c_adapter *adapter = client->adapter;
-> +	struct auxiliary_device *bridge_dev;
->  	struct device *dev = &client->dev;
->  	const char *name;
->  	int ret = 0;
-> @@ -1747,6 +1749,13 @@ static int fusb302_probe(struct i2c_client *client)
->  		goto destroy_workqueue;
->  	}
->  
-> +	bridge_dev = devm_drm_dp_hpd_bridge_alloc(chip->dev, to_of_node(chip->tcpc_dev.fwnode));
-> +	if (IS_ERR(bridge_dev)) {
-> +		ret = PTR_ERR(bridge_dev);
-> +		dev_err_probe(chip->dev, ret, "failed to alloc bridge\n");
-> +		goto destroy_workqueue;
-> +	}
-> +
->  	chip->tcpm_port = tcpm_register_port(&client->dev, &chip->tcpc_dev);
->  	if (IS_ERR(chip->tcpm_port)) {
->  		fwnode_handle_put(chip->tcpc_dev.fwnode);
-> @@ -1764,6 +1773,10 @@ static int fusb302_probe(struct i2c_client *client)
->  	enable_irq_wake(chip->gpio_int_n_irq);
->  	i2c_set_clientdata(client, chip);
->  
-> +	ret = devm_drm_dp_hpd_bridge_add(chip->dev, bridge_dev);
-> +	if (ret)
-> +		return ret;
-> +
->  	return ret;
->  
->  tcpm_unregister_port:
-> 
-> ---
-> base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
-> change-id: 20260310-fusb302-drm-dp-hpd-bridge-00f6c9aec3ab
-> 
-> Best regards,
-> -- 
-> Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Zhaoyang Yu <2426767509@qq.com>
+---
+Changes in v3:
+- Changed udc_enable() return type from void to int.
+- Propagated the error to all caller functions and added proper
+  error handling/rollback per Greg KH's review.
 
+Changes in v2:
+- Fixed a formatting issue by moving the 'int ret' declaration to
+  the beginning of the function block.
+
+ drivers/usb/gadget/udc/pxa27x_udc.c | 60 ++++++++++++++++++++++-------
+ 1 file changed, 46 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/pxa27x_udc.c b/drivers/usb/gadget/udc/pxa27x_udc.c
+index 897f53601b5b..0a5f05f8e73c 100644
+--- a/drivers/usb/gadget/udc/pxa27x_udc.c
++++ b/drivers/usb/gadget/udc/pxa27x_udc.c
+@@ -1462,7 +1462,7 @@ static int pxa_udc_wakeup(struct usb_gadget *_gadget)
+ 	return 0;
+ }
+ 
+-static void udc_enable(struct pxa_udc *udc);
++static int udc_enable(struct pxa_udc *udc);
+ static void udc_disable(struct pxa_udc *udc);
+ 
+ /**
+@@ -1519,14 +1519,18 @@ static int should_disable_udc(struct pxa_udc *udc)
+ static int pxa_udc_pullup(struct usb_gadget *_gadget, int is_active)
+ {
+ 	struct pxa_udc *udc = to_gadget_udc(_gadget);
++	int ret;
+ 
+ 	if (!udc->gpiod && !udc->udc_command)
+ 		return -EOPNOTSUPP;
+ 
+ 	dplus_pullup(udc, is_active);
+ 
+-	if (should_enable_udc(udc))
+-		udc_enable(udc);
++	if (should_enable_udc(udc)) {
++		ret = udc_enable(udc);
++		if (ret)
++			return ret;
++	}
+ 	if (should_disable_udc(udc))
+ 		udc_disable(udc);
+ 	return 0;
+@@ -1545,10 +1549,14 @@ static int pxa_udc_pullup(struct usb_gadget *_gadget, int is_active)
+ static int pxa_udc_vbus_session(struct usb_gadget *_gadget, int is_active)
+ {
+ 	struct pxa_udc *udc = to_gadget_udc(_gadget);
++	int ret;
+ 
+ 	udc->vbus_sensed = is_active;
+-	if (should_enable_udc(udc))
+-		udc_enable(udc);
++	if (should_enable_udc(udc)) {
++		ret = udc_enable(udc);
++		if (ret)
++			return ret;
++	}
+ 	if (should_disable_udc(udc))
+ 		udc_disable(udc);
+ 
+@@ -1691,12 +1699,18 @@ static void udc_init_data(struct pxa_udc *dev)
+  * Enables the udc device : enables clocks, udc interrupts, control endpoint
+  * interrupts, sets usb as UDC client and setups endpoints.
+  */
+-static void udc_enable(struct pxa_udc *udc)
++static int udc_enable(struct pxa_udc *udc)
+ {
++	int ret;
++
+ 	if (udc->enabled)
+-		return;
++		return 0;
+ 
+-	clk_enable(udc->clk);
++	ret = clk_enable(udc->clk);
++	if (ret) {
++		dev_err(udc->dev, "clk_enable failed: %d\n", ret);
++		return ret;
++	}
+ 	udc_writel(udc, UDCICR0, 0);
+ 	udc_writel(udc, UDCICR1, 0);
+ 	udc_clear_mask_UDCCR(udc, UDCCR_UDE);
+@@ -1726,6 +1740,8 @@ static void udc_enable(struct pxa_udc *udc)
+ 	pio_irq_enable(&udc->pxa_ep[0]);
+ 
+ 	udc->enabled = 1;
++
++	return 0;
+ }
+ 
+ /**
+@@ -1761,10 +1777,16 @@ static int pxa27x_udc_start(struct usb_gadget *g,
+ 		}
+ 	}
+ 
+-	if (should_enable_udc(udc))
+-		udc_enable(udc);
++	if (should_enable_udc(udc)) {
++		retval = udc_enable(udc);
++		if (retval)
++			goto fail_enable;
++	}
+ 	return 0;
+ 
++fail_enable:
++	if (!IS_ERR_OR_NULL(udc->transceiver))
++		otg_set_peripheral(udc->transceiver->otg, NULL);
+ fail:
+ 	udc->driver = NULL;
+ 	return retval;
+@@ -2430,10 +2452,16 @@ static int pxa_udc_probe(struct platform_device *pdev)
+ 		goto err_add_gadget;
+ 
+ 	pxa_init_debugfs(udc);
+-	if (should_enable_udc(udc))
+-		udc_enable(udc);
++	if (should_enable_udc(udc)) {
++		retval = udc_enable(udc);
++		if (retval)
++			goto err_enable;
++	}
+ 	return 0;
+ 
++err_enable:
++	usb_del_gadget_udc(&udc->gadget);
++	pxa_cleanup_debugfs(udc);
+ err_add_gadget:
+ 	if (!IS_ERR_OR_NULL(udc->transceiver))
+ 		usb_unregister_notifier(udc->transceiver, &pxa27x_udc_phy);
+@@ -2509,13 +2537,17 @@ static int pxa_udc_resume(struct platform_device *_dev)
+ {
+ 	struct pxa_udc *udc = platform_get_drvdata(_dev);
+ 	struct pxa_ep *ep;
++	int ret;
+ 
+ 	ep = &udc->pxa_ep[0];
+ 	udc_ep_writel(ep, UDCCSR, udc->udccsr0 & (UDCCSR0_FST | UDCCSR0_DME));
+ 
+ 	dplus_pullup(udc, udc->pullup_resume);
+-	if (should_enable_udc(udc))
+-		udc_enable(udc);
++	if (should_enable_udc(udc)) {
++		ret = udc_enable(udc);
++		if (ret)
++			return ret;
++	}
+ 	/*
+ 	 * We do not handle OTG yet.
+ 	 *
 -- 
-heikki
+2.34.1
+
 
