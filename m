@@ -1,143 +1,169 @@
-Return-Path: <linux-usb+bounces-34559-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34561-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IIzjEHdrsWkuvAIAu9opvQ
-	(envelope-from <linux-usb+bounces-34559-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:17:43 +0100
+	id 2LKgEBJtsWlVvAIAu9opvQ
+	(envelope-from <linux-usb+bounces-34561-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:24:34 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 448BD26449A
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 41C6F26470E
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:24:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id DCDCC301AA93
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 13:10:34 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 650943002527
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 13:22:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AEBA2E5B2A;
-	Wed, 11 Mar 2026 13:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KwIxzNEI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 480982D8391;
+	Wed, 11 Mar 2026 13:22:52 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E03425CC79
-	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 13:10:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D26257825
+	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 13:22:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773234633; cv=none; b=nJemfKWLep4F+XXLjrkRzddvWosmD/uI3xt78MdtoOD+KcFgJLLTRVx/gahdWrWkSpQu2D76tcIwYsX+ZQpMxkIP9hjQ8EKTRyT+czz8Au6uiZdB3t8FXKR6SIRPycJWDrJI6IYuZBnwJwo6shre8AYwpa3ujCUaxHj/1hd8HNM=
+	t=1773235372; cv=none; b=IO6dwFrMtBty+Q24UQgmLGINOkWg8OciUCSLYOy3A1D4ivpFKGF1vq75ch3bzJr9fcAxLG3mbjLsWclpo8NnhbqPwiMwdeVQXPRtoUyArJNDaxMN0UVOnMG73o99UPDzFzCp2RW84NFGQAgVPp8IwX2FmgX9YrR804yncjC+rUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773234633; c=relaxed/simple;
-	bh=ZCjsKcKrd5cM7xc0gKPL5+/ZPrvnCW7/RoFaa9cMHac=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oFIVV2EmgX1i1XQSJs2/8KKJPe6LY0Zc/2BpjEtyhV1f+7pDRir1fgMeFn5aCDO531yWc6OaBXXAGOPTEvAcSC3/T9xEUh/PD1eSZnbtaoaxt7A98MCwm64UrYAwn81Moum5JRWNE9VcICOLgWMNlU3xrVXqlJhVWUCC8Wj3F8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KwIxzNEI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A8AC19425;
-	Wed, 11 Mar 2026 13:10:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1773234633;
-	bh=ZCjsKcKrd5cM7xc0gKPL5+/ZPrvnCW7/RoFaa9cMHac=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KwIxzNEIkllpIBdg6FBHftwd6/ngFFC5bpQatK0BOYZxG6vkRPKMEWQ3PvI+AXZ4y
-	 zu2Ea9/06AMfIxVb9ADKJsNNSGqOagKh2pvE99DEkC3cH8FBbKGP2uFkd06TV676rV
-	 iqQnajlJmsJ033ww9iRN0r9/BGT/YoCvxw0KM4a4=
-Date: Wed, 11 Mar 2026 14:10:28 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Nathan Rebello <nathan.c.rebello@gmail.com>
-Cc: linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com
-Subject: Re: [PATCH 1/2] usb: typec: ucsi: validate connector number in
- ucsi_connector_change()
-Message-ID: <2026031109-scrunch-aviator-0e2b@gregkh>
-References: <20260219164925.3249-1-nathan.c.rebello@gmail.com>
- <20260219164925.3249-2-nathan.c.rebello@gmail.com>
+	s=arc-20240116; t=1773235372; c=relaxed/simple;
+	bh=bQRlE5OR+3/41N9B/xBGXfMeOTv3hgeQ2WrY6jcTpBY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=krUc/lCesS5Vib24LERvT7hRlJoWCFHcXrPwyvL47nlhZme1qsNCZUMs0xCnkYcJLrLsTdRCeXxO0MLXhkU0GVdACt3AhcUYIc+bA0GEmr2DOGdkQEhq+ZxggU6qvJkybpiRX/kIR/60eaz3traRr7UuXeeKuI77YzbYQQp1dGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-5fff18d44fbso3421742137.1
+        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 06:22:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773235370; x=1773840170;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=34DR94e/1PAvLLEaib58vFA4GW0m5SGe6jvxchEhMek=;
+        b=j5EwgUGYiRS1IykNZzIfJBefaSAUXap/EihjCfZAkPVCuwKrRJc8DRwAJJF4YUlyyi
+         XPWQ73YtZjj9mQsDnWFiRXL/iSBx7NLbGaD26l1JXVlT0X7HCuVx6O9TvH971aiEO/61
+         HwhsOaXzfXbqGbsFimj2MU0rRCdZ83PNg1AxTLaJ+rLlv+JmV56wbHF4Txid7QO6oEMP
+         rT2xE2Qp/SWEpi6NhPNnwpo9Uer6l6FOa3I/cg5Co/Tu9WqFaJeAyo8SJ+wg5PWh8n27
+         fci8h6EVNJ2R/TxpdWNuUEhYEz8sI5801QaYPRRxHSaXYQyAxMiBa6vNQ4EdLN6OFTMP
+         NJMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVGtU2RePOYkIAhZyw/NJDeeMjfTkUmMeulfbhyrlDi8/vdgGC94qGO8PutIB+Cy8jr8dTnDwo3w4Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRBgm8SyaINAzasgcFVB7iFaaZVeXEOu8Qrz05iRozA1C6t+Uw
+	UYAwv0BTFyXFG9fSp6ep80wtXbABFDjILw6Ljmruy/r5cdXYB57B3iUdMsvdSloSstQ=
+X-Gm-Gg: ATEYQzyJCncmW3AY0PypqVFIwD9dD69rs6TwdiTQ4bFSLyCntGZtP8sl+1xZ35Yq+9K
+	qq6t1dZftO0SddQfo/xsiYr2f4Vlk3aP/R2PaDCSMB59Vcb9IFW/qISCWVw9yH+k/Gs17rzalHI
+	flO7p9oLBuI8hMBZ1IteWFd0ZayqV2SDI6KSoNXSpNAV8Djfxvpk4N9RRm2F5wrl1JgJa1C5D/9
+	Qn7cqiWTwVS1hzdRKrVdc4+PoviMnldXgEnLv9k4x9avJslQKvNMgn+1wnVqA4zjuF0Uv2aHsAH
+	KP8OxrKE9l96qS+cvPVmaY300t0zORFFwEINt89UmPs/65FFCSUrNYlLhjcFe0J/W9r/Sz8udYB
+	p4dD7OZg7hviRVfVZWBvGaCboXncNfBIriDgXD2CItMcgTG3Sc6ZfpUG0GvuazAa+8IMPwxph+z
+	0Vw87K6X0gvYwWGlC51EQXCgviEVSvmlntsqLjL6OJRbb8/XofUgXgdGEdZgvkweEc
+X-Received: by 2002:a05:6102:2909:b0:5ff:dabc:db3c with SMTP id ada2fe7eead31-601df009f12mr1165327137.33.1773235369954;
+        Wed, 11 Mar 2026 06:22:49 -0700 (PDT)
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com. [209.85.221.180])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-601deaa379asm700919137.8.2026.03.11.06.22.49
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Mar 2026 06:22:49 -0700 (PDT)
+Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-56739adfa1aso10529613e0c.0
+        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 06:22:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXyaXt8G5v5ruNTFzcPXksxgoLK4vrZ6C5cK8OR/2gUweuGgwTOdCYEOn6s2fG1myexN48O5YrbkAE=@vger.kernel.org
+X-Received: by 2002:a05:6122:1d05:b0:55b:7494:177b with SMTP id
+ 71dfb90a1353d-56b4752d806mr922396e0c.10.1773234967338; Wed, 11 Mar 2026
+ 06:16:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260219164925.3249-2-nathan.c.rebello@gmail.com>
-X-Rspamd-Queue-Id: 448BD26449A
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de> <20260310-b4-is_err_or_null-v1-36-bd63b656022d@avm.de>
+In-Reply-To: <20260310-b4-is_err_or_null-v1-36-bd63b656022d@avm.de>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 11 Mar 2026 14:15:56 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXQ8Q4jvkgFRJYhghz2BZRDC-9Mk6DbXxuaOc6C9DFHZQ@mail.gmail.com>
+X-Gm-Features: AaiRm52J84H77ROK64ZWWtJfaiCpnFeKyoSRmPbi-NC8CN6Ju1TJEFxJU9gZQQ8
+Message-ID: <CAMuHMdXQ8Q4jvkgFRJYhghz2BZRDC-9Mk6DbXxuaOc6C9DFHZQ@mail.gmail.com>
+Subject: Re: [PATCH 36/61] arch/sh: Prefer IS_ERR_OR_NULL over manual NULL check
+To: Philipp Hahn <phahn-oss@avm.de>
+Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com, 
+	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr, 
+	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org, 
+	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org, 
+	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev, kvm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, 
+	linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org, 
+	linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, 
+	linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
+	samba-technical@lists.samba.org, sched-ext@lists.linux.dev, 
+	target-devel@vger.kernel.org, tipc-discussion@lists.sourceforge.net, 
+	v9fs@lists.linux.dev, Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Rspamd-Queue-Id: 41C6F26470E
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [0.04 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34559-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34561-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[linux-m68k.org];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	NEURAL_HAM(-0.00)[-0.998];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
 	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-usb@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,linuxfoundation.org:dkim]
+	RCVD_COUNT_FIVE(0.00)[6];
+	NEURAL_HAM(-0.00)[-0.999];
+	RCPT_COUNT_GT_50(0.00)[57];
+	R_DKIM_NA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[fu-berlin.de:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,glider.be:email,mail.gmail.com:mid,linux-m68k.org:email,avm.de:email,libc.org:email,sourceforge.jp:email]
 X-Rspamd-Action: no action
 
-On Thu, Feb 19, 2026 at 11:49:23AM -0500, Nathan Rebello wrote:
-> ucsi_connector_change() uses the connector number from the CCI as an
-> index into the connector array without first verifying it falls within
-> the valid range. The connector number is extracted from the CCI register
-> via UCSI_CCI_CONNECTOR(), which returns a 7-bit value (1-127), but the
-> connector array is typically only 2-4 entries.
-> 
-> A malicious or malfunctioning device could report an out-of-range
-> connector number, causing an out-of-bounds array access.
-> 
-> Add a bounds check to reject invalid connector numbers before indexing.
-> 
-> Fixes: bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
-> Signed-off-by: Nathan Rebello <nathan.c.rebello@gmail.com>
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index a7b388dc7fa0..7109d3bd39b4 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1345,7 +1345,14 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->   */
->  void ucsi_connector_change(struct ucsi *ucsi, u8 num)
->  {
-> -	struct ucsi_connector *con = &ucsi->connector[num - 1];
-> +	struct ucsi_connector *con;
-> +
-> +	if (num < 1 || num > ucsi->cap.num_connectors) {
-> +		dev_warn(ucsi->dev, "invalid connector number %d\n", num);
-> +		return;
+On Tue, 10 Mar 2026 at 12:56, Philipp Hahn <phahn-oss@avm.de> wrote:
+> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
+> check.
+>
+> Change generated with coccinelle.
+>
+> To: Yoshinori Sato <ysato@users.sourceforge.jp>
+> To: Rich Felker <dalias@libc.org>
+> To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> Cc: linux-sh@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
 
-Shouldn't this return an error and have the caller stop what it was
-attempting to do?  When this is called in ucsi_init(), the
-num_connectors is already parsed, so how can this be wrong?  Shouldn't
-these values all be verified in one single place and then if any of the
-descriptors are "incorrect", the device rejected at that point in time
-and not require "deep" changes in the logic here to try to find these
-types of errors?
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-in short, let's validate the device once, and after that is done, we can
-"trust" that it is correct and not need to check this stuff all over the
-place.
+Gr{oetje,eeting}s,
 
-thanks,
+                        Geert
 
-greg k-h
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
