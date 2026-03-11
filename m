@@ -1,169 +1,185 @@
-Return-Path: <linux-usb+bounces-34561-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34560-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2LKgEBJtsWlVvAIAu9opvQ
-	(envelope-from <linux-usb+bounces-34561-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:24:34 +0100
+	id IOx4NDhssWlVvAIAu9opvQ
+	(envelope-from <linux-usb+bounces-34560-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:20:56 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41C6F26470E
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:24:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77921264592
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:20:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 650943002527
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 13:22:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DB3B83221066
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 13:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 480982D8391;
-	Wed, 11 Mar 2026 13:22:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41DA930E0F1;
+	Wed, 11 Mar 2026 13:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="d/1/ZTIm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D26257825
-	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 13:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79732F5474;
+	Wed, 11 Mar 2026 13:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773235372; cv=none; b=IO6dwFrMtBty+Q24UQgmLGINOkWg8OciUCSLYOy3A1D4ivpFKGF1vq75ch3bzJr9fcAxLG3mbjLsWclpo8NnhbqPwiMwdeVQXPRtoUyArJNDaxMN0UVOnMG73o99UPDzFzCp2RW84NFGQAgVPp8IwX2FmgX9YrR804yncjC+rUA=
+	t=1773235016; cv=none; b=ju2dz83ggqajP06RoC8b2eAXBlEkougkUUmuVx127fniFxjzXQ7JjVijfW5ZyrB7ir21LyJTViOAMJe6YMSazN1wqyuaTOoeca/wdw0orAZHVt8BchIa70nPq3dnLPZZkLqPc6n+K/9L1xvueICnnvil48NA0LsvJ4nAZOaKMU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773235372; c=relaxed/simple;
-	bh=bQRlE5OR+3/41N9B/xBGXfMeOTv3hgeQ2WrY6jcTpBY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=krUc/lCesS5Vib24LERvT7hRlJoWCFHcXrPwyvL47nlhZme1qsNCZUMs0xCnkYcJLrLsTdRCeXxO0MLXhkU0GVdACt3AhcUYIc+bA0GEmr2DOGdkQEhq+ZxggU6qvJkybpiRX/kIR/60eaz3traRr7UuXeeKuI77YzbYQQp1dGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-5fff18d44fbso3421742137.1
-        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 06:22:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773235370; x=1773840170;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=34DR94e/1PAvLLEaib58vFA4GW0m5SGe6jvxchEhMek=;
-        b=j5EwgUGYiRS1IykNZzIfJBefaSAUXap/EihjCfZAkPVCuwKrRJc8DRwAJJF4YUlyyi
-         XPWQ73YtZjj9mQsDnWFiRXL/iSBx7NLbGaD26l1JXVlT0X7HCuVx6O9TvH971aiEO/61
-         HwhsOaXzfXbqGbsFimj2MU0rRCdZ83PNg1AxTLaJ+rLlv+JmV56wbHF4Txid7QO6oEMP
-         rT2xE2Qp/SWEpi6NhPNnwpo9Uer6l6FOa3I/cg5Co/Tu9WqFaJeAyo8SJ+wg5PWh8n27
-         fci8h6EVNJ2R/TxpdWNuUEhYEz8sI5801QaYPRRxHSaXYQyAxMiBa6vNQ4EdLN6OFTMP
-         NJMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVGtU2RePOYkIAhZyw/NJDeeMjfTkUmMeulfbhyrlDi8/vdgGC94qGO8PutIB+Cy8jr8dTnDwo3w4Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRBgm8SyaINAzasgcFVB7iFaaZVeXEOu8Qrz05iRozA1C6t+Uw
-	UYAwv0BTFyXFG9fSp6ep80wtXbABFDjILw6Ljmruy/r5cdXYB57B3iUdMsvdSloSstQ=
-X-Gm-Gg: ATEYQzyJCncmW3AY0PypqVFIwD9dD69rs6TwdiTQ4bFSLyCntGZtP8sl+1xZ35Yq+9K
-	qq6t1dZftO0SddQfo/xsiYr2f4Vlk3aP/R2PaDCSMB59Vcb9IFW/qISCWVw9yH+k/Gs17rzalHI
-	flO7p9oLBuI8hMBZ1IteWFd0ZayqV2SDI6KSoNXSpNAV8Djfxvpk4N9RRm2F5wrl1JgJa1C5D/9
-	Qn7cqiWTwVS1hzdRKrVdc4+PoviMnldXgEnLv9k4x9avJslQKvNMgn+1wnVqA4zjuF0Uv2aHsAH
-	KP8OxrKE9l96qS+cvPVmaY300t0zORFFwEINt89UmPs/65FFCSUrNYlLhjcFe0J/W9r/Sz8udYB
-	p4dD7OZg7hviRVfVZWBvGaCboXncNfBIriDgXD2CItMcgTG3Sc6ZfpUG0GvuazAa+8IMPwxph+z
-	0Vw87K6X0gvYwWGlC51EQXCgviEVSvmlntsqLjL6OJRbb8/XofUgXgdGEdZgvkweEc
-X-Received: by 2002:a05:6102:2909:b0:5ff:dabc:db3c with SMTP id ada2fe7eead31-601df009f12mr1165327137.33.1773235369954;
-        Wed, 11 Mar 2026 06:22:49 -0700 (PDT)
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com. [209.85.221.180])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-601deaa379asm700919137.8.2026.03.11.06.22.49
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Mar 2026 06:22:49 -0700 (PDT)
-Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-56739adfa1aso10529613e0c.0
-        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 06:22:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXyaXt8G5v5ruNTFzcPXksxgoLK4vrZ6C5cK8OR/2gUweuGgwTOdCYEOn6s2fG1myexN48O5YrbkAE=@vger.kernel.org
-X-Received: by 2002:a05:6122:1d05:b0:55b:7494:177b with SMTP id
- 71dfb90a1353d-56b4752d806mr922396e0c.10.1773234967338; Wed, 11 Mar 2026
- 06:16:07 -0700 (PDT)
+	s=arc-20240116; t=1773235016; c=relaxed/simple;
+	bh=U13aFlwZAety379snMOfNociaZUEB0cGKCSE9d/m9OU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YD8hLy7HKhWhf03ND5fF3amZZxXZkQr495mW3F237zz/F4rv4FjXz1YfYUHGgCCyab+fV4Mf4Wb0PM3vAJwrUJ4+O6UwYGBvZCYtpynzg54zvINBByQ1plqCpF8m1QNR8gDe4kLI1sDFjosLs7L23jraE+yOibn/hynW3HySaRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=d/1/ZTIm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B873FC4CEF7;
+	Wed, 11 Mar 2026 13:16:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1773235016;
+	bh=U13aFlwZAety379snMOfNociaZUEB0cGKCSE9d/m9OU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=d/1/ZTImJAB9+0FsHXXtaZgczILjEjx5Qa4DOIye7nSXW05U44v0UCX8KlpwNghoS
+	 tvj3RWIbNws/7DJErRm4dSAnfQAwOEmodTawYZLQpH2U9OjCISQ1alaldZW5VZ8xwb
+	 FggafbRywmXw2rTywpppWcvPobLjFHj0aQppt5lE=
+Date: Wed, 11 Mar 2026 14:16:50 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Elson Serrao <elson.serrao@oss.qualcomm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v3 02/10] usb: misc: qcom_eud: add sysfs attribute
+ for port selection
+Message-ID: <2026031101-cornstalk-partner-a30e@gregkh>
+References: <20260309203337.803986-1-elson.serrao@oss.qualcomm.com>
+ <20260309203337.803986-3-elson.serrao@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de> <20260310-b4-is_err_or_null-v1-36-bd63b656022d@avm.de>
-In-Reply-To: <20260310-b4-is_err_or_null-v1-36-bd63b656022d@avm.de>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 11 Mar 2026 14:15:56 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXQ8Q4jvkgFRJYhghz2BZRDC-9Mk6DbXxuaOc6C9DFHZQ@mail.gmail.com>
-X-Gm-Features: AaiRm52J84H77ROK64ZWWtJfaiCpnFeKyoSRmPbi-NC8CN6Ju1TJEFxJU9gZQQ8
-Message-ID: <CAMuHMdXQ8Q4jvkgFRJYhghz2BZRDC-9Mk6DbXxuaOc6C9DFHZQ@mail.gmail.com>
-Subject: Re: [PATCH 36/61] arch/sh: Prefer IS_ERR_OR_NULL over manual NULL check
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com, 
-	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr, 
-	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org, 
-	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org, 
-	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev, kvm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org, 
-	linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-mips@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
-	samba-technical@lists.samba.org, sched-ext@lists.linux.dev, 
-	target-devel@vger.kernel.org, tipc-discussion@lists.sourceforge.net, 
-	v9fs@lists.linux.dev, Yoshinori Sato <ysato@users.sourceforge.jp>, 
-	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 41C6F26470E
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260309203337.803986-3-elson.serrao@oss.qualcomm.com>
+X-Rspamd-Queue-Id: 77921264592
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [3.84 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34561-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[linux-m68k.org];
+	TAGGED_FROM(0.00)[bounces-34560-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCPT_COUNT_GT_50(0.00)[57];
-	R_DKIM_NA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[fu-berlin.de:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,glider.be:email,mail.gmail.com:mid,linux-m68k.org:email,avm.de:email,libc.org:email,sourceforge.jp:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,linuxfoundation.org:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Tue, 10 Mar 2026 at 12:56, Philipp Hahn <phahn-oss@avm.de> wrote:
-> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
-> check.
->
-> Change generated with coccinelle.
->
-> To: Yoshinori Sato <ysato@users.sourceforge.jp>
-> To: Rich Felker <dalias@libc.org>
-> To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: linux-sh@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+On Mon, Mar 09, 2026 at 01:33:29PM -0700, Elson Serrao wrote:
+> EUD can be mapped to either the primary USB port or the secondary USB port
+> depending on the value of the EUD_PORT_SEL register. Add a 'port' sysfs
+> attribute to allow userspace to select which port EUD should operate on
+> and update the ABI documentation. This is needed for systems with dual
+> USB ports where EUD needs to be accessible on either port depending on the
+> system configuration and use case.
+> 
+> Signed-off-by: Elson Serrao <elson.serrao@oss.qualcomm.com>
+> ---
+>  Documentation/ABI/testing/sysfs-driver-eud | 16 ++++++++
+>  drivers/usb/misc/qcom_eud.c                | 43 ++++++++++++++++++++++
+>  2 files changed, 59 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-driver-eud b/Documentation/ABI/testing/sysfs-driver-eud
+> index 2bab0db2d2f0..67223f73ee60 100644
+> --- a/Documentation/ABI/testing/sysfs-driver-eud
+> +++ b/Documentation/ABI/testing/sysfs-driver-eud
+> @@ -7,3 +7,19 @@ Description:
+>  		EUD based on a 1 or a 0 value. By enabling EUD,
+>  		the user is able to activate the mini-usb hub of
+>  		EUD for debug and trace capabilities.
+> +
+> +What:		/sys/bus/platform/drivers/qcom_eud/.../port
+> +Date:		January 2026
+> +Contact:	Elson Serrao <elson.serrao@oss.qualcomm.com>
+> +Description:
+> +		Selects which USB port the Embedded USB Debugger (EUD)
+> +		is mapped to on platforms providing multiple High-Speed
+> +		USB ports.
+> +
+> +		Valid values:
+> +		  0 - Primary USB port
+> +		  1 - Secondary USB port
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Why not use "primary" and "secondary" as values instead?  That makes
+this much simpler to understand.
 
-Gr{oetje,eeting}s,
 
-                        Geert
+> +
+> +		The attribute is writable only while EUD is disabled.
+> +		Reading the attribute returns the currently selected
+> +		USB port number.
+> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+> index 926419ca560f..1a136f8f1ae5 100644
+> --- a/drivers/usb/misc/qcom_eud.c
+> +++ b/drivers/usb/misc/qcom_eud.c
+> @@ -23,8 +23,11 @@
+>  #define EUD_REG_VBUS_INT_CLR	0x0080
+>  #define EUD_REG_CSR_EUD_EN	0x1014
+>  #define EUD_REG_SW_ATTACH_DET	0x1018
+> +#define EUD_REG_PORT_SEL	0x1028
+>  #define EUD_REG_EUD_EN2		0x0000
+>  
+> +#define EUD_MAX_PORTS		2
+> +
+>  #define EUD_ENABLE		BIT(0)
+>  #define EUD_INT_PET_EUD		BIT(0)
+>  #define EUD_INT_VBUS		BIT(2)
+> @@ -40,6 +43,7 @@ struct eud_chip {
+>  	int				irq;
+>  	bool				enabled;
+>  	bool				usb_attached;
+> +	u8				port_idx;
+>  };
+>  
+>  static int enable_eud(struct eud_chip *priv)
+> @@ -104,8 +108,47 @@ static ssize_t enable_store(struct device *dev,
+>  
+>  static DEVICE_ATTR_RW(enable);
+>  
+> +static ssize_t port_show(struct device *dev,
+> +		struct device_attribute *attr, char *buf)
+> +{
+> +	struct eud_chip *chip = dev_get_drvdata(dev);
+> +
+> +	return sysfs_emit(buf, "%u\n", chip->port_idx);
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Wait, you are returning a 0/1 here, yet using a u8?  How can that work?
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+confused,
+
+greg k-h
 
