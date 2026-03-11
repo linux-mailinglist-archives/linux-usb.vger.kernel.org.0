@@ -1,178 +1,135 @@
-Return-Path: <linux-usb+bounces-34614-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34615-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eOGuM+fJsWnvFAAAu9opvQ
-	(envelope-from <linux-usb+bounces-34614-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 21:00:39 +0100
+	id 6DSsHdTTsWk2FgAAu9opvQ
+	(envelope-from <linux-usb+bounces-34615-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 21:43:00 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3327E269BDB
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 21:00:39 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D9E426A17A
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 21:42:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CADC430B3D66
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 20:00:35 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id ECEAC301B87F
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 20:42:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0378338237D;
-	Wed, 11 Mar 2026 20:00:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC7538E113;
+	Wed, 11 Mar 2026 20:42:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jdc+2kVc"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HtMMcnNx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA9A344DAA
-	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 20:00:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564FF383C63
+	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 20:42:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773259234; cv=none; b=n1nVFX03PEBnXA46urBHudQfuXrjGGODFZ8uv40406W3Ut8SEBeHZBXIOG4IR7xoTunJRqaW8fmBGoMUBQydAxqQyMqcm3nh0jNrl7XgIBv9QF0DXKv81cS08twK/EPQeaK4jAVeU64IycXuUh+z+Fc9RpPQUDtICaqXEUS0KeU=
+	t=1773261755; cv=none; b=QAxHzFCoVnws3SOpSJLuWXYgj6Jc4RyWulX4avVLPuxg6RsZk7RyNOIaWlPQ4s50cCp+r9N0O8hrgW09OELdJwMlbqXOFUoGOl1F5ExS3/1ZrF9DQDZK8/mHPbrjaY1V/ldz0AIq4BaV4E/Mf9/8HFzdkXyJth2ZCveXRcxgyJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773259234; c=relaxed/simple;
-	bh=ACv21EToIQ3NVCRczaI+PEDm1EcsdyjZXJrYowQrVzM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dM9801NBiF+lqVQnCrW34KbYtJlHIefgphI8fzH/GVcFHeKqMlMce9PjiZkLJO2sqRPQd/WjGdAKb55HeWzYXfuljoAR5WfGqxnl6mHkXF5TVOoNs/NOHFEkyX9wchqsWXRPszS3aSQnRZoX1L8AiT6qmOcGUIiL0QXFfIhh4Ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jdc+2kVc; arc=none smtp.client-ip=209.85.221.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-56af73db66bso131016e0c.2
-        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 13:00:33 -0700 (PDT)
+	s=arc-20240116; t=1773261755; c=relaxed/simple;
+	bh=+tMjwVtoIwPnEEENKr/fbMqHX+fXhXF+EjhZ6XLdk2o=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=SiP55HfDSgWG1JtOmwyRlTExP4MZcqJgmpU/hpgVIXh7aUR3tkdeOGHKyCwctYYBno2WT3tBkHfmdttVJZgdbIob9MF22pYVhfIqMQ95/4ZrcNgID4IMhfYvv8ZrIlSZ5+hMv3EtQnZK6NGn6wc58MEKAzrVx74uhsHOtHevtKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HtMMcnNx; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-439b8a3f2bcso224223f8f.3
+        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 13:42:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773259232; x=1773864032; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=i1r3InFvaXQHSB4+wPzQax9N8XbBVVdha9jMwVwxtnQ=;
-        b=Jdc+2kVc2FcxAof7lfdF5EEVWX7CzYGyvQFH/tXsXKLgGWq9GZjA9/V5Nq94vLipXe
-         doD5yqF9wFJz0oJKSL/oOAcRljLNlu5wf4gGNdJZPabXHHx+8pyqJ8i5iutu7VVgOAXN
-         J9BjnzmmEgc8efDG7ziG0Ohq+d3/ZRQHDBIWMlYLgI3z2l2nWHY5IHRPxDD26PxXKp0t
-         OpcDeicEAVp+zHBPbPtnJ0dbqRAPFOXOmbak4Nj8nvpwlA24tWOdwRFxlgdiGlttwD1p
-         O4TTjYzjnNBmAXB7XsC4HNvHcZrb596FTv87rUtaW+FbPZbd19ipZC2XgDqFVm4XBU8x
-         7Pwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773259232; x=1773864032;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=suse.com; s=google; t=1773261749; x=1773866549; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i1r3InFvaXQHSB4+wPzQax9N8XbBVVdha9jMwVwxtnQ=;
-        b=CTcFLEE/Z4tKev0TtP8aHWSkcUZjQd0avP8HoxmYoKisjcPN9oODbFvBcYOQhNqkcK
-         PVa5tv77Ut8MupcKcMdRM+yjPRZprgy+CssJKPM40t6hmh/pdCFhwYfF/Hf/V13ICevp
-         KbmOXMgESigaEByMhYgZ1ldqnvvGZgWsW9ffObu1PBFSXJ3WIw43j3Tj3fK04stsMVLI
-         JaRse357nInSBTHh2T6jRCbilNu/N9S/mh/yYW2paBDyyGDLILjOSB85gxgr4FWxhZBb
-         JqqWkiH0q48BvXTNdl8QKnGK006Q+dPvIGAPmzPPSPGyFh8lDGvpFiqzTIk4+MXky8XU
-         c1TQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVMJRBiSvXNVT9MFb52yivjOLgLBdLSquoytGWjWYX3nS7D1F1/AwFNJKg93IPMZ4oQTZ6rTPB//OY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxjr21B+Nf2uuYbW6tHK/FqK9STEs9Yyof28nl+jesBNcQOq7sy
-	7B0tNZPkIdK+/DKQFeLX9ln7e03rEErPeD/IoP4s4MkUIuL8VXaQFxAp
-X-Gm-Gg: ATEYQzzzhNAqKeXt6AG7WNh1cm791GKtg8slu+TTFbPRPNr4Srv2+rObbsWW+pjTjh1
-	d0hSTHY+gIjebnw9MRDGJNbeIiqQY6X5mdSE9/7K60036CUYIqN07wStwlFHFvU3L8hd8xjMGDI
-	e3i54WH3hTmHDu/Ucj7wp5zpxnPVpnKXS0mZ01KKAmOMjAvo80PG27aI8q14gWEVW2R+JbCFsmP
-	870P/hOcQ40xfVNFwJsy5rfxad2WnzDMn+QEhHozl9Xw2/fSrZwL1WfJ9jVJMheFcM6ZtoVQhW0
-	kQRztwWs/MF5ZY0dfzlmMh+Yc3hWV8yOLZx66mPvEwteUy3jUjReNfaeXxtiP0giymh6aem9BMA
-	a4RYP4BiAgo7dQCp5aApQaYkRShnTFuOkkA3Hs7Uq5KBjswPrRNWYyB0Wxmbpx9u7MvI2Q/pX/J
-	cGvKKTmZNvxhAmorm2+A9RTmoExdnIKp9jQNWssgXfDXREFMz85tMlpiXp2N+2Jkc46hQUeDQcy
-	Ap4Ucs=
-X-Received: by 2002:a05:6122:508:b0:55b:9c3f:55f with SMTP id 71dfb90a1353d-56b476778eamr1273567e0c.18.1773259231967;
-        Wed, 11 Mar 2026 13:00:31 -0700 (PDT)
-Received: from ortodist (177-4-162-212.user3p.v-tal.net.br. [177.4.162.212])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56b4634177esm1534327e0c.6.2026.03.11.13.00.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 13:00:31 -0700 (PDT)
-From: =?UTF-8?q?C=C3=A1ssio=20Gabriel?= <cassiogabrielcontato@gmail.com>
-To: tiwai@suse.com,
-	perex@perex.cz,
-	broonie@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?C=C3=A1ssio=20Gabriel?= <cassiogabrielcontato@gmail.com>
-Subject: [PATCH] ALSA: usb-audio: map UAC3 front wide channels in convert_chmap_v3()
-Date: Wed, 11 Mar 2026 17:00:10 -0300
-Message-ID: <20260311200010.103710-1-cassiogabrielcontato@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        bh=5GUWYHfXVEdpadwblxnNUaZuExc2YFi2bDkvDupR/6U=;
+        b=HtMMcnNxhCXaGFudSQT/KuKB/uoOcJIRNEFqeBqV8IF9RVQw02e711ano21lZUg1K8
+         WcHD30YQ7nYlvrjGdd4Is25k67BUiPDaU5vi7YTrvolNWaf/chTnOZ3i7+ASx+1N7F3L
+         UfAFpp58Bwp4miYohFE+ZvQGeDhELQIjwi1e8Mqz6dzclLG7p/MporBwMNcdZ0Ojdaub
+         nTlxwHLTD/5pt0F7j/hX80phpSoHuDQJgk+ks0zuzhxXQOJKqOQcHyPDrCXDERzhD91g
+         1dT7Tq0n0j4S9pR7xdxVFPWfY/exNMibJC3puvGSQLnnIAo7Dwugw53uVVFp6mTlspZF
+         K4yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773261749; x=1773866549;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5GUWYHfXVEdpadwblxnNUaZuExc2YFi2bDkvDupR/6U=;
+        b=NUky5eEF9b52kaE5F1WApmCS33YjEgiCS7/Y6gn50MAmCZElpFQ7Un25g2rW5DvojR
+         YNQy0C8r0Sa8s5sFo/MX1g6S273FFyzF/6lJfs4WwxaAMQuPJ9LrgnnREHzWssU5d26S
+         J/zeYwDFhjnHSYnKMPSpN4DVC1V1pBFjjTa4/TdBlygWsnOKyRx1xm9BY0v3pqeN/UTY
+         Lfl+1ojb8jzrHedXuBbubngjjwY0ECzr/0x1A6xMUIQZvnLHxjY/Hn/4h4middo8Cgx2
+         FNowTXIVHs8ZFmY3F15LWrEVQJET9Mswt1d1voh307HWddBI9PAUtEf2VadDx4ywgT0p
+         TYYQ==
+X-Gm-Message-State: AOJu0Yyhfq2K85/zdDq9J06K3DhUXeh5b8L5qY/4V1Zchl+ZryhT2DuZ
+	IoYV+NtPeZ7rfRVthhEUr0z/VgNrfFvBewHQadXcfHepOZAuIUQVONR8q+Nio4fP/RkkL7FqgKf
+	1Cbrk
+X-Gm-Gg: ATEYQzxmghbT+tlbVSkCJsWCn0bwixIt2FcVjSKz9Y8++YuDwxLk+nM/eItmc6FLCFM
+	tf1zM47UwxMnpEE+3CutX/Im8PH8kjv9JBBYkMnsHtIT/ZjRZtUTl4N06cTs9XOcuxjfe6gZcmA
+	MlbAwQOKGVJkG/U75FV2xq9wQ359WXBoA0mbjJNMGfKGENGvplzH35B/oSfFP7+PqMC6RdZoeeC
+	3/dMKFJbFZ1s3UR+AkVV+E/6/3O1WV1lyZvl/4J9lrJV64g2afgeRzOILyA03nb7bXnCRAI/eNU
+	YwvOiZrFlCSNxN3ioYEDxFsH5vwiLXC+wgxZcyPujJBAISWOACI+RIyS5KAjR0t4VhcrxqVTo2P
+	FLGgcy5kddA2AClvWPHi/uIoIfQUZDiTtC3783XDbpWG3aakkieX4I9cH4kRKFAE7BNZddjJZq2
+	TKwhIuPxPZHtnPfAZcatrd4a7Xl7na5YuMHQcKmvrF2bZnhX6XcqZ54L5o1kLpaZzVg6M=
+X-Received: by 2002:a05:6000:4029:b0:439:af81:1b21 with SMTP id ffacd0b85a97d-439f8139dafmr6848767f8f.0.1773261749119;
+        Wed, 11 Mar 2026 13:42:29 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13a8:5d01:6093:5efc:b082:5860? ([2001:a61:13a8:5d01:6093:5efc:b082:5860])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439fdf09abesm2029476f8f.0.2026.03.11.13.42.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Mar 2026 13:42:28 -0700 (PDT)
+Message-ID: <615187c2-3c93-4de8-87c8-df840b6f451c@suse.com>
+Date: Wed, 11 Mar 2026 21:42:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: USB list <linux-usb@vger.kernel.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Oliver Neukum <oneukum@suse.com>
+Subject: Do we want to reset intfdata in the error case of probe
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-34614-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TO_DN_ALL(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34615-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_THREE(0.00)[3];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[cassiogabrielcontato@gmail.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3327E269BDB
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,suse.com:dkim,suse.com:mid]
+X-Rspamd-Queue-Id: 7D9E426A17A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-convert_chmap_v3() translates UAC3 channel relationship values into
-ALSA channel-map positions.
+Hi,
 
-UAC3_CH_FRONT_WIDE_LEFT and UAC3_CH_FRONT_WIDE_RIGHT currently fall
-back to SNDRV_CHMAP_UNKNOWN, although ALSA already provides matching
-channel-map positions via SNDRV_CHMAP_FLW and SNDRV_CHMAP_FRW.
+usb_probe_interface() reset intfdate to NULL, if probe() fails.
+Hence a question arises. Do we want to depend on it? That is,
+should handling intfdata be removed from the error handling
+of the probe methods of drivers?
 
-Map these two UAC3 positions to their ALSA equivalents and update the
-comment to clarify that unsupported UAC3 channel relationships remain
-reported as SNDRV_CHMAP_UNKNOWN.
-
-No functional change for other channel relationships.
-
-Signed-off-by: Cássio Gabriel <cassiogabrielcontato@gmail.com>
----
- sound/usb/stream.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/sound/usb/stream.c b/sound/usb/stream.c
-index d38c39e28f38..2532bf97e05e 100644
---- a/sound/usb/stream.c
-+++ b/sound/usb/stream.c
-@@ -366,6 +366,8 @@ snd_pcm_chmap_elem *convert_chmap_v3(struct uac3_cluster_header_descriptor
- 			/*
- 			 * TODO: this conversion is not complete, update it
- 			 * after adding UAC3 values to asound.h
-+			 * NOTE: not all UAC3 channel relationship have a
-+			 * direct ALSA chmap equivalent.
- 			 */
- 			switch (is->bChRelationship) {
- 			case UAC3_CH_MONO:
-@@ -390,6 +392,12 @@ snd_pcm_chmap_elem *convert_chmap_v3(struct uac3_cluster_header_descriptor
- 			case UAC3_CH_FRONT_RIGHT_OF_CENTER:
- 				map = SNDRV_CHMAP_FRC;
- 				break;
-+			case UAC3_CH_FRONT_WIDE_LEFT:
-+				map = SNDRV_CHMAP_FLW;
-+				break;
-+			case UAC3_CH_FRONT_WIDE_RIGHT:
-+				map = SNDRV_CHMAP_FRW;
-+				break;
- 			case UAC3_CH_SIDE_LEFT:
- 				map = SNDRV_CHMAP_SL;
- 				break;
--- 
-2.53.0
+	Regards
+		Oliver
 
 
