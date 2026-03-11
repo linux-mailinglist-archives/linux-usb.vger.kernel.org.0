@@ -1,175 +1,227 @@
-Return-Path: <linux-usb+bounces-34581-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34582-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eKTNM9iCsWmjCwAAu9opvQ
-	(envelope-from <linux-usb+bounces-34581-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:57:28 +0100
+	id cOt8HS6DsWmjCwAAu9opvQ
+	(envelope-from <linux-usb+bounces-34582-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:58:54 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6E6D265DD1
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:57:27 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CB49265E32
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:58:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 61DC930086B4
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:57:22 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id F1A7D301253A
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:58:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46E3634FF58;
-	Wed, 11 Mar 2026 14:57:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 865FE366810;
+	Wed, 11 Mar 2026 14:58:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="QF4xUfHa"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="prQCEWwz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EAB1320A0E
-	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 14:57:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B9B337688;
+	Wed, 11 Mar 2026 14:58:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773241037; cv=none; b=h8qbaUrY/GVAIoWa9W8qCrw0nFOP3Mn56WEymv7mutIi5NWwb3kOEkmTgmUzWp98369t5NmaqqyilaL8/S8SpEHHtFF27G+E8AES1mS8SaSvgYjv7MEs0dI8vLCRN/tJKYXXo0syl45rP71OldRPKiBxf84kDhRdC/YdhlvtdAI=
+	t=1773241128; cv=none; b=CJKCk/CVwYn4LEfv7tVG836mhes2J9BSO7EsSx3I9qFS3rx1eOJ1RoSjOWrH/dfEWdsAHW3ioiDEvDsBDedj2hZiT3t5Ovhz2quWaGASXVyfdUQK2lJtIQI57ji3W+X3rLJWMY/03A3fDXDxVzbRGIKKeeIRnDiRYOzHzjLPGn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773241037; c=relaxed/simple;
-	bh=whRlnXOTJX33UysFGZTkniey9cqO9uDlVFVa4j6/+PU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Kil/poCnhFcpja1gKDIrMXmJIZyWesU8KnOKeGQeW9YgPZhwKqRL2OXf4+wpW5yE98aX9/XX8T4ytadfAQuSuGbvj62VkQX+JMe7oBTyxB/sGunOkWosvJLnGSinDlGRVBm10516lwXGfCgNE3ZTXu+9Dce1Xs5ueCaFlmA4FTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=QF4xUfHa; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-439c56e822eso8749992f8f.2
-        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 07:57:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flipper.net; s=google; t=1773241035; x=1773845835; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ki9mPb6MpmZA9uDUTROX4stJ4S460LJ9o1EuP/Qc+p4=;
-        b=QF4xUfHaa10obzGhDAGX6UKwkB08xUWsHhmmuN0+omsFL105GnyiyjZbYoxT2T7tPQ
-         3evp2UK8EA2Bct9k3WPeNgg6wokdbDr45LvJXe+x+yC4rkv7HxalV5+96wuaCVQrtx7n
-         0/iBMHWe/K2VmlsYTRzTwx4RgxuzoqjKx2udD5XzaefmiSYxiTd2fLSbCtRRmdrIy7SF
-         Kvy6sY9vpcsho3kMrW4Z2ucISTwp3z445ItSYL7IPc5fHtTwtXGt6EsxifULhANJpHNT
-         MX8jPTo6PeF05+9PMYSKY5v817EO48F5NT0s/cEptpPFVd/Rkfji+NVuDWrjaMgrpE+R
-         dZpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773241035; x=1773845835;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ki9mPb6MpmZA9uDUTROX4stJ4S460LJ9o1EuP/Qc+p4=;
-        b=N+JNAbsoelE3OgQMD7rfBe9oZXSRay91iqrW1qF+zNo7h6TQFd6odrn8FnkyxnZRO3
-         ArjNBrTWfZwYFfgg/eLK5cyLAms1sSDBA81ftGlYsQ6b5UVwGxmLmX1LupYqWZuZQ27K
-         CN+cMV2lFt61w8OF2b9Sdar0gQ5l8m806E+y22/0+KWQWlsyd5j4VXBunPHKA/i3N364
-         XsaEHPvuiASXM8ggkkxH+pEDkK9qxufCNe94Ar2KtrcePCCl+PJQu9/y7xU9IBpjNoKu
-         yaxs/RFKyTde2HIlrb2Rb1gadHZ5XuDELy9RqIrYgl5insWDY7rxXz0+B6y0WitHKVRO
-         CiPQ==
-X-Gm-Message-State: AOJu0YxSD+6YiBAZ1uhgK55WqhikBSOPsvHHWsDtgjvB5a5OlBnuU8aI
-	tQ4b+nScIPpImopgzbHy8eJwUlxDJVF1wzhNfGFtiL1xs3bgGqHvCckx1JqWOxJRUYdEFf9kj5d
-	DT7QQ
-X-Gm-Gg: ATEYQzxkdWUyN4H/GqaUyjYtZlzym9v5qpHHHoeFsSRnW4xIvvV6utihm3kLo0o8q+l
-	6BwiQG5ZK0ysc5YRl3f8J+v6hPHRgQXGPQys6fVros6vAXfDOZQfl6BYbEI/421unWm/dVp7ddF
-	YexFrpvd/MxWbzgp7Y42PA9u9xaZdmYxOLRk+SVdL4yXLFA5i2vC2UOH+ITQ73nIvPcZ6QyWE7g
-	djr1YQvX4JHE8kH+Qle+LyZ1Y4OX5SaV4vHOZtp2zoBlR1JChjNdaVJuIIqQonbtdkWDthdbUoR
-	qQ0U6nuRWS8JnRKlnX3cM7V/drVO3v2pidZkCeccctfbc3AochOjwx08l954FjNOKbziqxU1YMI
-	++HjtaHay4cGQ5tshK7DL5/5UeKRul/dLbMi7TispVxtla9H45KmREc3OX2uqpDG5Rxz5aEnUAE
-	ZxWHCbNJMmjTMdVkiyxn1IldzB+7CmnbwDS9wa3rDEEamAseL/4zmkyS0UvLlem3YKKaxj87iG7
-	QFb9AF7EENNs622
-X-Received: by 2002:a05:6000:2482:b0:439:b932:b428 with SMTP id ffacd0b85a97d-439f81b6659mr5556374f8f.8.1773241034786;
-        Wed, 11 Mar 2026 07:57:14 -0700 (PDT)
-Received: from alchark-surface.localdomain (bba-86-98-192-109.alshamil.net.ae. [86.98.192.109])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439f81acc22sm7000956f8f.16.2026.03.11.07.57.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 07:57:14 -0700 (PDT)
-From: Alexey Charkov <alchark@flipper.net>
-Date: Wed, 11 Mar 2026 18:57:12 +0400
-Subject: [PATCH] usb: typec: fusb302: Switch to threaded IRQ handler
+	s=arc-20240116; t=1773241128; c=relaxed/simple;
+	bh=3UwwGA7p1224trkn2l3lnBOIO6zwoCMBxvu/3n1GBnI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p2B3LcaevSVi2mGqEeHJzuEl3+4JvJuP8rLuqtDZd3d/roDA2bgfDF9S2/aSGcnVULrDXMEnGEOmXVC4l3OlyZXuSQ9FWUWo6pBcws/d5lJ+rwvVtScxwqQ2TJDcvVhPnOHRCuGhKs7mN1dPJPYhDmPewQH4PiYPlfdll/rB/WE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=prQCEWwz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43A99C4CEF7;
+	Wed, 11 Mar 2026 14:58:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1773241127;
+	bh=3UwwGA7p1224trkn2l3lnBOIO6zwoCMBxvu/3n1GBnI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=prQCEWwzc2c26hzWCQXpbLIVIsXlF2APJXq4ME+yQ7XEp8IDqBOARuSceQg+zJA5u
+	 zWofnfjZLH78djAVv0aBq1L0a5JNFoXMJZO8gkSijTmVnQ9xZm2+4Aj0Itan2/212Z
+	 fk8eDVRBfW+zBA8hGQORnDn1W6Cs97y21PqAA4vw=
+Date: Wed, 11 Mar 2026 15:58:44 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Zhaoyang Yu <2426767509@qq.com>
+Cc: sergei.shtylyov@gmail.com, daniel@zonque.org, haojian.zhuang@gmail.com,
+	robert.jarzmik@free.fr, linux-arm-kernel@lists.infradead.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] USB: pxa27x_udc: check return value of clk_enable
+Message-ID: <2026031145-stencil-italics-89b3@gregkh>
+References: <tencent_648835A07EDBB7CA94B66FAF5662EC2F1407@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260311-fusb302-irq-v1-1-7e7105706629@flipper.net>
-X-B4-Tracking: v=1; b=H4sIAMeCsWkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDY0ND3bTS4iRjAyPdzKJCXWNDMwtjE3MzUwtzQyWgjoKi1LTMCrBp0bG
- 1tQDxCsT/XQAAAA==
-X-Change-ID: 20260311-fusb302-irq-316834765871
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- stable@vger.kernel.org, Alexey Charkov <alchark@flipper.net>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1328; i=alchark@flipper.net;
- h=from:subject:message-id; bh=whRlnXOTJX33UysFGZTkniey9cqO9uDlVFVa4j6/+PU=;
- b=owGbwMvMwCW2adGNfoHIK0sZT6slMWRubDrZcLNDr/yn0seGFQkvXy9+f7nA4zybffHiTauWL
- vjUuu1icMdEFgYxLgZLMUWWud+W2E414pu1y8PjK8wcViaQIdIiDQxAwMLAl5uYV2qkY6Rnqm2o
- Z2ioY6xjxMDFKQBTzfmP4a9AUrZshOjvyqunIie+Nfvy/L1uiNZdWXvTmiszjuzNn+vD8E+fQfL
- EdFOJGu8bBhUbAj4bKwjx9Dou6Ggs41xz9cv23QwA
-X-Developer-Key: i=alchark@flipper.net; a=openpgp;
- fpr=9DF6A43D95320E9ABA4848F5B2A2D88F1059D4A5
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_648835A07EDBB7CA94B66FAF5662EC2F1407@qq.com>
+X-Spamd-Result: default: False [3.84 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[flipper.net,quarantine];
-	R_DKIM_ALLOW(-0.20)[flipper.net:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[flipper.net:+];
-	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34581-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-34582-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[qq.com];
+	FREEMAIL_CC(0.00)[gmail.com,zonque.org,free.fr,lists.infradead.org,vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alchark@flipper.net,linux-usb@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C6E6D265DD1
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,qq.com:email,linuxfoundation.org:dkim]
+X-Rspamd-Queue-Id: 0CB49265E32
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-FUSB302 fails to probe with -EINVAL if its interrupt line is connected via
-an I2C GPIO expander, such as TI TCA6416.
+On Wed, Mar 11, 2026 at 01:56:14PM +0000, Zhaoyang Yu wrote:
+> clk_enable() may fail according to the API contract.
+> Previously, udc_enable() ignored its return value and returned void.
+> 
+> Modify udc_enable() to return the error code. Additionally, update
+> all of its callers (pxa_udc_pullup, pxa_udc_vbus_session,
+> pxa27x_udc_start, pxa_udc_probe, and pxa_udc_resume) to check
+> this return value and handle the failure properly with necessary
+> cleanups or rollbacks.
+> 
+> Signed-off-by: Zhaoyang Yu <2426767509@qq.com>
+> ---
+> Changes in v3:
+> - Changed udc_enable() return type from void to int.
+> - Propagated the error to all caller functions and added proper
+>   error handling/rollback per Greg KH's review.
+> 
+> Changes in v2:
+> - Fixed a formatting issue by moving the 'int ret' declaration to
+>   the beginning of the function block.
+> 
+>  drivers/usb/gadget/udc/pxa27x_udc.c | 60 ++++++++++++++++++++++-------
+>  1 file changed, 46 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/pxa27x_udc.c b/drivers/usb/gadget/udc/pxa27x_udc.c
+> index 897f53601b5b..0a5f05f8e73c 100644
+> --- a/drivers/usb/gadget/udc/pxa27x_udc.c
+> +++ b/drivers/usb/gadget/udc/pxa27x_udc.c
+> @@ -1462,7 +1462,7 @@ static int pxa_udc_wakeup(struct usb_gadget *_gadget)
+>  	return 0;
+>  }
+>  
+> -static void udc_enable(struct pxa_udc *udc);
+> +static int udc_enable(struct pxa_udc *udc);
+>  static void udc_disable(struct pxa_udc *udc);
+>  
+>  /**
+> @@ -1519,14 +1519,18 @@ static int should_disable_udc(struct pxa_udc *udc)
+>  static int pxa_udc_pullup(struct usb_gadget *_gadget, int is_active)
+>  {
+>  	struct pxa_udc *udc = to_gadget_udc(_gadget);
+> +	int ret;
+>  
+>  	if (!udc->gpiod && !udc->udc_command)
+>  		return -EOPNOTSUPP;
+>  
+>  	dplus_pullup(udc, is_active);
+>  
+> -	if (should_enable_udc(udc))
+> -		udc_enable(udc);
+> +	if (should_enable_udc(udc)) {
+> +		ret = udc_enable(udc);
+> +		if (ret)
+> +			return ret;
+> +	}
 
-Switch the interrupt handler to a threaded one, which also works behind
-such GPIO expanders.
+DOn't you need to change the pullup?
 
-Cc: stable@vger.kernel.org
-Fixes: 309b6341d557 ("usb: typec: fusb302: Revert incorrect threaded irq fix")
-Signed-off-by: Alexey Charkov <alchark@flipper.net>
----
- drivers/usb/typec/tcpm/fusb302.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>  	if (should_disable_udc(udc))
+>  		udc_disable(udc);
+>  	return 0;
+> @@ -1545,10 +1549,14 @@ static int pxa_udc_pullup(struct usb_gadget *_gadget, int is_active)
+>  static int pxa_udc_vbus_session(struct usb_gadget *_gadget, int is_active)
+>  {
+>  	struct pxa_udc *udc = to_gadget_udc(_gadget);
+> +	int ret;
+>  
+>  	udc->vbus_sensed = is_active;
+> -	if (should_enable_udc(udc))
+> -		udc_enable(udc);
+> +	if (should_enable_udc(udc)) {
+> +		ret = udc_enable(udc);
+> +		if (ret)
+> +			return ret;
+> +	}
 
-diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-index 19ff8217818e..4f1f24737051 100644
---- a/drivers/usb/typec/tcpm/fusb302.c
-+++ b/drivers/usb/typec/tcpm/fusb302.c
-@@ -1755,8 +1755,8 @@ static int fusb302_probe(struct i2c_client *client)
- 		goto destroy_workqueue;
- 	}
- 
--	ret = request_irq(chip->gpio_int_n_irq, fusb302_irq_intn,
--			  IRQF_TRIGGER_LOW, "fsc_interrupt_int_n", chip);
-+	ret = request_threaded_irq(chip->gpio_int_n_irq, NULL, fusb302_irq_intn,
-+				   IRQF_TRIGGER_LOW, "fsc_interrupt_int_n", chip);
- 	if (ret < 0) {
- 		dev_err(dev, "cannot request IRQ for GPIO Int_N, ret=%d", ret);
- 		goto tcpm_unregister_port;
+Shouldn't you change vbus_sensed?
 
----
-base-commit: 7109a2155340cc7b21f27e832ece6df03592f2e8
-change-id: 20260311-fusb302-irq-316834765871
 
-Best regards,
--- 
-Alexey Charkov <alchark@flipper.net>
+>  	if (should_disable_udc(udc))
+>  		udc_disable(udc);
+>  
+> @@ -1691,12 +1699,18 @@ static void udc_init_data(struct pxa_udc *dev)
+>   * Enables the udc device : enables clocks, udc interrupts, control endpoint
+>   * interrupts, sets usb as UDC client and setups endpoints.
+>   */
+> -static void udc_enable(struct pxa_udc *udc)
+> +static int udc_enable(struct pxa_udc *udc)
+>  {
+> +	int ret;
+> +
+>  	if (udc->enabled)
+> -		return;
+> +		return 0;
+>  
+> -	clk_enable(udc->clk);
+> +	ret = clk_enable(udc->clk);
+> +	if (ret) {
+> +		dev_err(udc->dev, "clk_enable failed: %d\n", ret);
+> +		return ret;
+> +	}
+>  	udc_writel(udc, UDCICR0, 0);
+>  	udc_writel(udc, UDCICR1, 0);
+>  	udc_clear_mask_UDCCR(udc, UDCCR_UDE);
+> @@ -1726,6 +1740,8 @@ static void udc_enable(struct pxa_udc *udc)
+>  	pio_irq_enable(&udc->pxa_ep[0]);
+>  
+>  	udc->enabled = 1;
+> +
+> +	return 0;
+>  }
+>  
+>  /**
+> @@ -1761,10 +1777,16 @@ static int pxa27x_udc_start(struct usb_gadget *g,
+>  		}
+>  	}
+>  
+> -	if (should_enable_udc(udc))
+> -		udc_enable(udc);
+> +	if (should_enable_udc(udc)) {
+> +		retval = udc_enable(udc);
+> +		if (retval)
+> +			goto fail_enable;
+> +	}
 
+No other unwinding is needed?
+
+thanks,
+
+greg k-h
 
