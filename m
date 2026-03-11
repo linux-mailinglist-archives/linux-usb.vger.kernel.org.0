@@ -1,156 +1,137 @@
-Return-Path: <linux-usb+bounces-34573-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34574-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0KN5JvV+sWm5CwAAu9opvQ
-	(envelope-from <linux-usb+bounces-34573-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:40:53 +0100
+	id GIQoO19/sWmjCwAAu9opvQ
+	(envelope-from <linux-usb+bounces-34574-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:42:39 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C141F265946
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 687FE265983
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:42:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C5D5B30427D1
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:27:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2601A31798D1
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:38:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E9B83B5312;
-	Wed, 11 Mar 2026 14:27:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5EAB3C5DB7;
+	Wed, 11 Mar 2026 14:38:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kKlbhlaX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D75A36C9FC;
-	Wed, 11 Mar 2026 14:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432DA3C4571
+	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 14:38:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773239223; cv=none; b=V6WPkx4C13+OiMxXOP2k8hRwNFJ+XgSDy/OqqHSAZB2hzwLAHq0rsxAm767spuS3MezgvsmHDnaMQNRMcZAj1yAiCgeqjiXduVbUvtgjCKZXSqIJXFlBR3/RvmXsnVcss7T/Lefb4EIcHJw7idg5hriNs+LfW49v64KjUyxMnhE=
+	t=1773239911; cv=none; b=CMd7Y/LoBHl4E522lPVm0lIgn5nfbc2Eiiics7NEIWy0b001sMhiYGjS9DSw4gEe6V7h7rp5+wRAizmmQUZ7h8Jz8zz8spcvnMyUZp64HyNLRu5SMKFY33kC2Ke/aHcVKH+o3ZvhgR9R+BN8HUPZ0BDjpGvKaIEzTn/AC8M/c7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773239223; c=relaxed/simple;
-	bh=qsc0nN/4RxQMlqWMx3JHaohcUF60lS5B7vmkWkNl7SA=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=Nu6A6TNE8NpwXBaTW/5Ge8ZiSaFjbfygRf3yTaN5A6tMvecNl+tjE4cGi1OT1sxDT+G/6axevZTlvA93+EGV0aCrFAhK0rJiJcZqg3/YlQrnP/+vuMFKC2r89YXQIh2oJD7u8utYqen+pYMSlF98DAvhWSJRJg6YUqOwg8IjjBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=209.97.182.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [61.153.121.51])
-	by mtasvr (Coremail) with SMTP id _____wDXc_ake7FpNsQBAA--.4856S3;
-	Wed, 11 Mar 2026 22:26:45 +0800 (CST)
-Received: from smtpclient.apple (unknown [61.153.121.51])
-	by mail-app2 (Coremail) with SMTP id zC_KCgCnDD+je7Fp+CA4Bg--.57544S2;
-	Wed, 11 Mar 2026 22:26:43 +0800 (CST)
-Content-Type: text/plain;
-	charset=utf-8
+	s=arc-20240116; t=1773239911; c=relaxed/simple;
+	bh=ETzv97zDgruShPzK93Eq5JH+jzzPKS63r24y/2vXXO4=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=IOU1tvY8Dcj7t6AZh2KwDz54au6c7/PUpdYSi+OAC1pltRaqiPYrhrWpRuOMtrDFTOHH/IWSkW3NzpALqtkt9Dh0ThaWNAqZxnHQDWMzyUGdsqqu2jI/6D3mNIe6AURo6dmqGp7Fsuyahl9dKp38d5XnnCvhcpug7xWXOojveTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kKlbhlaX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D66A0C19425
+	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 14:38:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773239910;
+	bh=ETzv97zDgruShPzK93Eq5JH+jzzPKS63r24y/2vXXO4=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=kKlbhlaXivUGNvoDMXLUePJMBsf2aBh6HNjiOP18mmEwSbPT1eDkz+uz6OOeNfN3M
+	 ofFKcNrs3OBlr6WajmLSZPiJgfMI8/HER+dct5/SHY3bSufYjMimxHseGkRZOO+kAV
+	 GhWuVt9FmdtLRm7NctpHGdWUQxTbJZculalR8rjvDsm/6euJvBZ4W1eD/hHvi1De8w
+	 Gm8Ergm69jSpGmoq+D0BV4qnYigkkcrv7MQEtkQU3VNaToRE+zQ61Vv09k/AXXyNu/
+	 s4iv9Jmqe0D+ngJhfDdnpV+DgmLhXYNweyv1rCqU7SwxpPlgyP5kwRiIhUXqzkz+Mu
+	 wnYDqIjgb+cjg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id CD315C41614; Wed, 11 Mar 2026 14:38:30 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 221184] mouse/keyboard (connected via hub) usb reset under
+ system load with weak cpu
+Date: Wed, 11 Mar 2026 14:38:30 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-221184-208809-Vyc2KHy5TS@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-221184-208809@https.bugzilla.kernel.org/>
+References: <bug-221184-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.600.62\))
-Subject: Re: [PATCH] USB: serial: opticon: fix UAF in write callback during
- port removal
-From: Fan Wu <12321260@zju.edu.cn>
-In-Reply-To: <2026031137-amply-cardboard-581c@gregkh>
-Date: Wed, 11 Mar 2026 22:26:33 +0800
-Cc: Fan Wu <fanwu01@zju.edu.cn>,
- Johan Hovold <johan@kernel.org>,
- linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <493E1779-94BC-49B3-80CB-3AE5FDD3D045@zju.edu.cn>
-References: <aa_c0B9E7MPm_yqL@hovoldconsulting.com>
- <20260309142757.589802-1-fanwu01@zju.edu.cn>
- <20260310170424.19817-1-fanwu01@zju.edu.cn>
- <2026031137-amply-cardboard-581c@gregkh>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-X-Mailer: Apple Mail (2.3774.600.62)
-X-CM-TRANSID:zC_KCgCnDD+je7Fp+CA4Bg--.57544S2
-X-CM-SenderInfo: qrstjiaswqq6lmxovvfxof0/
-X-CM-DELIVERINFO: =?B?OOxAawXKKxbFmtjJiESix3B1w3vZ3A9ovKVTomAyoQazvoRs/NHSP8GI2EvgeEEW7R
-	sfncp7Oa4RjKRyNF7NkJaR8oLeOByjrhV9s/EO96xJD/raT9CtCGqW5x+RN8yiVO4GqluA
-	2X0GAexbH3l+fvgkMzYcmLAfi45W/jsSQAs2wsTu
-X-Coremail-Antispam: 1Uk129KBj9xXoW7XFWDury5WF4xJryxKF43twc_yoWkXwb_WF
-	WkCa4kAr1vqayfAws8KF1YqrZxtayxXF17X3s5JrsIq3s5AFZ0grZakr95AF15J3ykAFnI
-	krn0vanxCr1SqosvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUb-AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6x
-	kI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v2
-	6r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2
-	Ij64vIr41lF7xvr2IYc2Ij64vIr40E4x8a64kEw24l42xK82IYc2Ij64vIr41l4I8I3I0E
-	4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-	WUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-	Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
-	WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4U
-	YxBIdaVFxhVjvjDU0xZFpf9x07jnKsUUUUUU=
-X-Spamd-Result: default: False [-1.46 / 15.00];
+MIME-Version: 1.0
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DMARC_NA(0.00)[zju.edu.cn];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34573-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	FROM_NO_DN(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	MISSING_XM_UA(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.954];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[12321260@zju.edu.cn,linux-usb@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_DKIM_NA(0.00)[];
-	APPLE_MAILER_COMMON(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5]
-X-Rspamd-Queue-Id: C141F265946
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	TAGGED_FROM(0.00)[bounces-34574-lists,linux-usb=lfdr.de];
+	TO_DN_NONE(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+]
+X-Rspamd-Queue-Id: 687FE265983
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221184
 
-> On Mar 11, 2026, at 20:14, Greg Kroah-Hartman =
-<gregkh@linuxfoundation.org> wrote:
-> On Tue, Mar 10, 2026 at 05:04:24PM +0000, Fan Wu wrote:
->> On Tue, Mar 10, 2026 at 09:56:48 +0100, Johan Hovold wrote:
->>> How was this potential issue found? Are you using some kind of LLM =
-or
->>> other tool?
->>=20
->> Hi Johan,
->>=20
->> Thanks for the explanation. You're right =E2=80=94 I missed the =
-lifecycle guarantees
->> provided by usb_serial_disconnect(), and since opticon_close() =
-already handles
->> the URB cleanup, this report is a false positive.
->>=20
->> I'm currently researching static analysis techniques (CodeQL combined =
-with LLM
->> assistance) for detecting UAF bugs, particularly around cross-entry =
-lifetimes.
->> In this case, the analysis missed the subsystem-level guarantee that =
-close runs
->> before remove.
->=20
-> As is required, you always have to document this type of thing in the
-> changelog text.
->=20
-> thanks,
->=20
-> greg k-h
+--- Comment #40 from Alan Stern (stern@rowland.harvard.edu) ---
+For USB-2, mismatched toggles usually don't hurt.  Mismatches occur when an=
+ ACK
+packet is lost, so the sender thinks its data wasn't received but the recei=
+ver
+thinks it was.  When this happens, the sender will resend the same data usi=
+ng
+the old toggle value; the receiver will note the mismatch and ignore the
+duplicate data while acknowledging it.  This is part of the reason why the =
+USB
+stack historically has not included much error handling for EPROTO errors.
 
-Hi Johan,
+USB-3 is more complicated, and the host controller hardware keeps track of =
+more
+information that USB-2 host controllers do.  Re-establishing correct
+synchronization after an error is therefore all the more difficult.  It wou=
+ld
+be worth some effort to find a solution that can work for both USB-2 and US=
+B-3.
 
-Thanks for the reminder. Understood =E2=80=94 I'll make sure to =
-explicitly document the=20
-search method and tool assistance in the changelog for any future =
-patches.
+--=20
+You may reply to this email to add a comment.
 
-Best regards,
-Fan Wu=
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
