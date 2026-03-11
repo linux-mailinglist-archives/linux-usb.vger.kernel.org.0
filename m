@@ -1,96 +1,68 @@
-Return-Path: <linux-usb+bounces-34518-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34519-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GB39CU4asWluqwIAu9opvQ
-	(envelope-from <linux-usb+bounces-34518-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 08:31:26 +0100
+	id WO8RGp4isWkOrQIAu9opvQ
+	(envelope-from <linux-usb+bounces-34519-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 09:06:54 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCDCE25DFE2
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 08:31:25 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02D0825E904
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 09:06:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B3CB73083DF4
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 07:27:05 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7020730630D7
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 08:05:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DEE43B27DF;
-	Wed, 11 Mar 2026 07:23:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB2A3BD241;
+	Wed, 11 Mar 2026 08:02:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="btFi3Vpk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UDUR+vfk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FD23B0ACA
-	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 07:22:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B4C3BD22A;
+	Wed, 11 Mar 2026 08:02:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773213783; cv=none; b=Qsppx7QIsYBwX8wRzMYxjvMBAHVGODS5E1HmpUE/tuFxXpChOuzCIloqiWJf7JXpOHeRvl53EXcEkcy5G6OioeoWmsnJ8DlIoarDoUaQs/qbkbkIumscT+Vl9wbkUzPJfTa5TzHZO9QXgCwLRJZtnkRBsqYLwC7AuqgZ3roKVjM=
+	t=1773216135; cv=none; b=Ts5ikrpVw6na/4SXcvmcMAZji+GfR4jl9J/SjgfIlQfeCAUFtXs+EhxmQZV5ygbsHa7WE6oRkI4SEPi6SWfnOxjo+S1TSe97WhqXeGj9UegaknviCK+kjsX1z4/kbmMjx7WQ8gD4EcvlUBiT+j2/+0ghAa/AG98mJ40gt6ecIGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773213783; c=relaxed/simple;
-	bh=4h7q0aW632IYrtgogyF1+Py8qp0ql8NGsU4ff1gYQPU=;
+	s=arc-20240116; t=1773216135; c=relaxed/simple;
+	bh=n8A54UbdN3Qk/1oFVDqa88G4ckLRtwTE0EURVB8GS6Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IQ1IvDBl4R6xJ4mu62jWYjta8lSe4npCfnL5Ae3NblA9pxfR4j/ADpePi9qIqz2f5Slj5xq3N8AjosAJc65dfDL2I0tqt65ROKH/xyA7pBTjvmub56xtgXk4FSnRxwR9JOMXbwGfrHolNfRXeMs2Flh9SmUKuaLGWjrF0yl/VOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=btFi3Vpk; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-439bc14dcf4so474394f8f.1
-        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 00:22:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1773213772; x=1773818572; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NsP9rDmMXfVGzEA1J0kgDggGIcSaIxHDyX+DUVCfTBk=;
-        b=btFi3Vpk2Cg+ry5PoMZVp2H3ghehUZpNvMuIYyrmAhmoOpQEmauBSTllaiTtWvxNZq
-         lliL2h++UPGdIGjjbIIrCSnisUhPTp1PkU/FLATtLUOPg+M/HpXacQJvUszLHEZ8tuX+
-         /6z1QdRft7KXYuNAu9c8sI0CLZNAqDlBkpr5Sga/Cq3ngRK3yjQ0gETNEnqlNlEwQfnf
-         +YZ0omtonJs2/5TVXus4b3E87iBrkcr77hbEhSMKJg5CAKkNwSYkgRYJzZPB6GvG8e91
-         /MJdNOV7AOzoqSPbLlMaSxPAfuGho/9IbO0M32kgVzNxRh1mWEx+fdNIbUgIPOSRglV1
-         Wjwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773213772; x=1773818572;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NsP9rDmMXfVGzEA1J0kgDggGIcSaIxHDyX+DUVCfTBk=;
-        b=dbTLYGaKPyozEfCqxJqpWBFKol4GTVjIPPUiP1GRjEvsiAT1knRWglojsAx8g3LQsP
-         SpMYIKdY2yuwovWO7Km+6/uVwadkQBQ/ZNUmGasqfiU8P9xxCJ4fqCMRBRIQ09nZNtY4
-         +onLHllaAu5UXGrRQytggbSxMUhu7HkbjoynuWMae7htJlXkuvTPgN15ecTUlRq8slmz
-         /UuCeemudn4VtR2JZntUnByOqFc/sP9pSUYIPROtOTCbzJXIPckT5gTGEJnFKxb2V/59
-         tKkcCjtkkibuNh4C/bHeyTlYSuWpRPfIEUTLr+zLWIRdJnQ7PGckl/2gsfTLhHf5UJZm
-         KLfg==
-X-Forwarded-Encrypted: i=1; AJvYcCU4r+Tza0Jw5EMAtiVpCnLogTUd5r3ckckd5TXXLqENeyc6PvhISeKtB4TKb3dzhFYGg1o+3w7a0tw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/q/tsrEZEZzSdrnnuCoCkgEFCCGoGsFLpqSquT9p5jQ6wS4qt
-	ao0JKxVbiPF5XvZhu+GFHJe2Qf7me7b6fo07uCT4G2Q4A6+qGEIuvMWVYgphHvkS+3M=
-X-Gm-Gg: ATEYQzzt/j5kkMHSNkgTQvYPP8Sj/9oc7L1wwVuDpJNJoZnXwpsBQciI/mXirL+HG4S
-	wu8JlLL7Pl0mrGReXR2kqR6AFf8hTFZp6z/5f/boUbJ1eV/DQGxG9ZvoNcx28L4bfvrSLUdybY/
-	r18uakoEIG4JxujjCYHU3zakbIgynZphfCYCofxDoEiufTgy1cLJRCIaGhH7Hduys4QsQM7D0F8
-	udd6rLVnQDOC9mXN1br00XqOvTq91V/QeNE3g/a4gQfJ1CLz5kNiJ3yX3SVCsQgfz8FRfuQ7OX6
-	S3SJi4DsdAI/+n9xDa2MNYf/Lu73l54MlmcPUfvrYXuwMYeHifn9BQ4GVZPwoDNni2d8PpG+k0Z
-	Pye3wUrXpw1P9yM4JxXJ0j0MNvFuPq+A1SjxzampGWcoceHqeIm9PuIypVCsAuZ+XH58mdH73dM
-	JTQmt3ur5HxS1bQc5BiQ5iT6/wN52s
-X-Received: by 2002:a05:600c:19d4:b0:485:3294:fff0 with SMTP id 5b1f17b1804b1-4854b29e736mr22629695e9.17.1773213772335;
-        Wed, 11 Mar 2026 00:22:52 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439f821d895sm4240139f8f.33.2026.03.11.00.22.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 00:22:51 -0700 (PDT)
-Date: Wed, 11 Mar 2026 10:22:48 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fze2R4btrufugN68iQlj04FbZEf/DG/r+zrV1GsQuKOiWs1YsytgBLvyTzOIAb1S4cpCIy6E9ag1uOa/IxR8BedKFPxU+dl2Tot4x99xkKKyxueFeCYh8GJPa43oBsl9TsFZpJS8E0JF3wMPfY764J1YRLtu7gTbFXEGY7dRTt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UDUR+vfk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 765A5C4CEF7;
+	Wed, 11 Mar 2026 08:02:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773216134;
+	bh=n8A54UbdN3Qk/1oFVDqa88G4ckLRtwTE0EURVB8GS6Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UDUR+vfknVq6HyVH09NZyfc8nto+ikvEoc2rMhH6zJnkOs4YxT0TvltpsIaD41cpS
+	 lKlBV+EbyLmQulLzxyLs4XPPsi9IBtimy2oIwxbjJrj7Saus4kuf5XFZBvVY7mSqiJ
+	 sl1eTJ3MXlKV4P23Bf1nLGqN3nf2DZI3w5R/s2Za09FMZBSsyJAJNG0xZEVMKzTpP4
+	 BIwAwdJ5O/trTGPOfMau+HXDxBoT+JDZJXRu7kyxLwGveYfRrUiTOE5DLIaNJsaPs8
+	 /d3PXfpOCuFLosEED00bkLui5RBLEUceQzWTJmK5uwVVHS+ONvrURY8gspi+HPQJUs
+	 7hkTysK+lCimA==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1w0EWB-000000002Vk-3a8J;
+	Wed, 11 Mar 2026 09:02:11 +0100
+Date: Wed, 11 Mar 2026 09:02:11 +0100
+From: Johan Hovold <johan@kernel.org>
 To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Ai Chao <aichao@kylinos.cn>, gregkh@linuxfoundation.org, b-liu@ti.com,
-	johan@kernel.org, badhri@google.com,
-	heikki.krogerus@linux.intel.com, valentina.manea.m@gmail.com,
-	shuah@kernel.org, i@zenithal.me, tiwai@suse.de, kees@kernel.org,
-	christophe.jaillet@wanadoo.fr, prashanth.k@oss.qualcomm.com,
-	khtsai@google.com, tglx@kernel.org, mingo@kernel.org,
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bastien Nocera <hadess@hadess.net>,
+	Valentina Manea <valentina.manea.m@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] usbip: vhci_sysfs: Use safer strscpy() instead of
- strcpy()
-Message-ID: <abEYSBb8LJo9iVPL@stanley.mountain>
-References: <20260310094434.3639602-1-aichao@kylinos.cn>
- <20260310094434.3639602-7-aichao@kylinos.cn>
- <b49bc467-8c51-41fc-a7ee-5770a9720deb@linuxfoundation.org>
+Subject: Re: [PATCH 2/2] USB: usbip: drop redundant device reference
+Message-ID: <abEhg-n_mpucbUbg@hovoldconsulting.com>
+References: <20260305133851.2952-1-johan@kernel.org>
+ <20260305133851.2952-3-johan@kernel.org>
+ <9d727cd2-701e-4c5b-9646-82874f2d0a4a@linuxfoundation.org>
+ <aa_X1qNsCGll04zj@hovoldconsulting.com>
+ <55fcc500-afa5-4ee7-bde8-c5eec6932764@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -99,64 +71,69 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b49bc467-8c51-41fc-a7ee-5770a9720deb@linuxfoundation.org>
-X-Rspamd-Queue-Id: BCDCE25DFE2
+In-Reply-To: <55fcc500-afa5-4ee7-bde8-c5eec6932764@linuxfoundation.org>
+X-Rspamd-Queue-Id: 02D0825E904
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34518-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kylinos.cn,linuxfoundation.org,ti.com,kernel.org,google.com,linux.intel.com,gmail.com,zenithal.me,suse.de,wanadoo.fr,oss.qualcomm.com,vger.kernel.org];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,hadess.net,gmail.com,kernel.org,zenithal.me,vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_FROM(0.00)[bounces-34519-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dan.carpenter@linaro.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linaro.org:+];
+	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:dkim,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,stanley.mountain:mid]
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Tue, Mar 10, 2026 at 04:10:20PM -0600, Shuah Khan wrote:
-> On 3/10/26 03:44, Ai Chao wrote:
-> > Use a safer function strscpy() instead of strcpy() for copying to
-> > arrays.
+On Tue, Mar 10, 2026 at 03:51:41PM -0600, Shuah Khan wrote:
+> On 3/10/26 02:35, Johan Hovold wrote:
+> > On Mon, Mar 09, 2026 at 02:26:03PM -0600, Shuah Khan wrote:
+> >> On 3/5/26 06:38, Johan Hovold wrote:
+> >>> Driver core holds a reference to the USB device while it is bound to a
+> >>> driver and there is no need to take additional references unless the
+> >>> structure is needed after disconnect.
+> >>
+> >> In this case it is necessary for stub driver to hang on to the reference
+> >> to maintain exported device status.
 > > 
-> > Only idiomatic code replacement, and no functional changes.
+> > But the driver does not hold on to the reference taken at probe after
+> > disconnect returns. The stub device itself is even freed at disconnect
+> > and cannot be used to release the reference.
+> > 
+> > Which exported device status are you referring to here?
 > 
-> It is a functional change since it calls a new routine. Get rid
-> of this line from change log.
+> I am referring to the device status that usbip host exports to
+> the client side. The interaction between host and client is
+> handled from stub rx, tx, and also event handler.
 > 
-> How did you test this patch? I am curious because of you are
-> describing the change as "idiomatic code replacement"
-> 
+> Having the reference to the device helps so the device sticks
+> around until the stub driver no longer needs it so we don't see
+> use after free type issues.
 
-I liked the commit message...  To me it says that patch affect
-runtime.  It doesn' fix any bugs or introduce any bugs.  Too often
-these changes are sold as a "potential" bugfix, which means people
-haven't bothered to check whether it fixes a bug or not.
+But the driver drops the reference that it takes during probe at
+disconnect, which makes that reference completely redundant as driver
+core guarantees that the device won't go away while a driver is bound.
 
-It's the right thing to add a note under the --- cut off that the
-patch hasn't been tested.  Testing isn't required for this sort
-of patch but a note is good so reviewers will know to be careful.
+So that particular reference doesn't help with anything.
 
-regards,
-dan carpenter
-
+Johan
 
