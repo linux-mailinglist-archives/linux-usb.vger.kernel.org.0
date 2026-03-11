@@ -1,165 +1,138 @@
-Return-Path: <linux-usb+bounces-34566-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34567-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gKEEB9h1sWnovQIAu9opvQ
-	(envelope-from <linux-usb+bounces-34566-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:02:00 +0100
+	id EFWvJ352sWnovQIAu9opvQ
+	(envelope-from <linux-usb+bounces-34567-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:04:46 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86313264FA7
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:01:59 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85DD1265076
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:04:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BA455304609F
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:00:35 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9D2933018691
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:03:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E27CA364035;
-	Wed, 11 Mar 2026 14:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K28CEYX+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F1B3366DCC;
+	Wed, 11 Mar 2026 14:03:42 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D945E3630BF;
-	Wed, 11 Mar 2026 14:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F901309F09;
+	Wed, 11 Mar 2026 14:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773237631; cv=none; b=ovMfkih8WPdu3njFDXwOs1e9Fz/kKwxKbsuXdbGph2AEfUqSaYsPlLqyfKz6YT/tkS99HXIjR21RhUDSAqvbMrTXUUa3A1vF3FiihNCavHdLaTTyjfUQDadt5zJBWdTuhyJgC2Isx3FgteHPO7RZA6l5UC9XxOOT80+TBjx/8ks=
+	t=1773237822; cv=none; b=U7cF4nZxtc2c4cK7n1OzG19aH5+dgU9f/wqLQSvQgb4j7iZp4rSBbttgdWd97z8mI7ozV0nJMXb06lND7uHMcqLkpZED3/t+en8Br7LrsV1Yo9jLZDnvosBfQBUyYa1MgbXFRK5K38pcBBbNEMwSK75/oRI2MSAFzxbbIIa4Gw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773237631; c=relaxed/simple;
-	bh=ZABq3YcoOB/+vPS4cjgG/dTgLwZa0NrYSc3e6rZwVlA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QogBF4DBXQvAvTNZyfkwyja1cPOr3OJc65l5+REdLYknaBYUnr/lUlHZHOkxZDcwNpkUQkb7+mGtf4rgmeJRKeG7BVPwImtk/jb6+xpY+ot9lo4MEBU4WgyVTFHonmR79SEyEWZMjDWQQrn9JO3QGx4nK0tpqX7QwUj9l71zofc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K28CEYX+; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773237629; x=1804773629;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZABq3YcoOB/+vPS4cjgG/dTgLwZa0NrYSc3e6rZwVlA=;
-  b=K28CEYX+DiAijBfAu5DN/1FlJFILdHhaKOSVggxdI3WCq3h6qSfzbis4
-   8tOl5NkU5/yqWj6IxKtBT5Misc4gySgJz3QQcE5RjvXCvchwR5ZnCOPsM
-   S0zEiG3PWKeJzgXA/YpcH0s4aCFLb5t5B2WU/WIEx1la+B+B3Iy9kbjQl
-   fru55OgfwQc4+6+WfjW605hNwbVinQE65DYfw9WV12Xf2rNd5vSKlTCNa
-   TvbOV/q/ToYpzUj4o/beXgQ/VF4NIhGyR3Axyoj+SkH+9dQaezP+RlLUX
-   +PCHLSnpM0P0FZCzlMZO/LuYKecuFVig7MtIbjPNPJZS+ys75s1hNHmbn
-   Q==;
-X-CSE-ConnectionGUID: TfcZYw7SRo2GrOs63XSmSg==
-X-CSE-MsgGUID: 5hmbD7jpQ3+eX1WAQjzFLw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11726"; a="78197562"
-X-IronPort-AV: E=Sophos;i="6.23,113,1770624000"; 
-   d="scan'208";a="78197562"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2026 07:00:28 -0700
-X-CSE-ConnectionGUID: 25TGe8YAQLyAR0oA93jB0g==
-X-CSE-MsgGUID: 4raiCVH/RumGLymRaPcKyA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,113,1770624000"; 
-   d="scan'208";a="216725496"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa006.fm.intel.com with ESMTP; 11 Mar 2026 07:00:26 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 569C795; Wed, 11 Mar 2026 15:00:25 +0100 (CET)
-Date: Wed, 11 Mar 2026 15:59:43 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: RD Babiera <rdbabiera@google.com>
-Cc: gregkh@linuxfoundation.org, utkarsh.h.patel@intel.com,
-	andriy.shevchenko@linux.intel.com, badhri@google.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@kernel.org
-Subject: Re: [PATCH v1] usb: typec: altmode/displayport: set displayport
- signaling rate in configure message
-Message-ID: <abF1Tx7YQ2mdu2SW@kuha>
-References: <20260310204106.3939862-2-rdbabiera@google.com>
+	s=arc-20240116; t=1773237822; c=relaxed/simple;
+	bh=Co6af1PDO/5BNnOq+gUEX5fdYaHwA4r9elfY/kzPOJ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qyBMsrb5SPFBIIc854cuwDhH3Ipf4a1siEqNW06kPLlIONuEYGb0ab2B91Z7WgCJv0P/LMiDdAGxS5RQO+hPu4o/F5B0FSlaf1WkURBKFXIEAErUTT1WageYMo0IOYuda3GtC8L+q+16QjVqBE2K1Ac2uV/+XuLSwNcT1IiHmi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id 53D96B6D37;
+	Wed, 11 Mar 2026 14:03:38 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id 0CF3220025;
+	Wed, 11 Mar 2026 14:03:20 +0000 (UTC)
+Date: Wed, 11 Mar 2026 10:03:32 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org,
+ apparmor@lists.ubuntu.com, bpf@vger.kernel.org, ceph-devel@vger.kernel.org,
+ cocci@inria.fr, dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
+ gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+ intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
+ kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+ linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+ linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
+ sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
+ tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH 15/61] trace: Prefer IS_ERR_OR_NULL over manual NULL
+ check
+Message-ID: <20260311100332.6a2ce4b1@gandalf.local.home>
+In-Reply-To: <20260311141332.b611237d36b61b2409e66cb3@kernel.org>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+	<20260310-b4-is_err_or_null-v1-15-bd63b656022d@avm.de>
+	<20260310100750.303af303@gandalf.local.home>
+	<20260311141332.b611237d36b61b2409e66cb3@kernel.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260310204106.3939862-2-rdbabiera@google.com>
-X-Rspamd-Queue-Id: 86313264FA7
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: ff8ct3tumfmuryqygkfkcm78w16u4scc
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+skqrXXDxm4il2tsYmj25H0/GTzSRdMUI=
+X-HE-Tag: 1773237800-364001
+X-HE-Meta: U2FsdGVkX1+aU4mY7bFvO8lRauP/vgjT20dobHa0QHVROVhTP6xZNvlHFy+HnthX7C3DUw86Ksayk8kipkioUde1pGRJffeDzlmGTmiRQAtxOhSsM3gHnZJQZGdgNXBABYZdeE7OsMEvCI5Ff4ZQbbyu3yXHRyZXg5AHof/AO0vcusmeqjpCWWhtLLOcuZIY7+tOVjT7VktVnLaFPp1jjRLc3JQ2sJ4jp/SiL4aHgDK/k//b9d34oAYT+AlJT32Fm0BFv3eObF3U3OAnj7CnGXu0MyQ+0edSgYKqKIiOybnUsF1fYSODF4X+zk3bqwV4HOqJnRMkZevrGktYEsiiqb8/qNY0d6MZ
+X-Rspamd-Queue-Id: 85DD1265076
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [0.14 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[goodmis.org : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34566-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-34567-lists,linux-usb=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_NEQ_ENVFROM(0.00)[rostedt@goodmis.org,linux-usb@vger.kernel.org];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[56];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.979];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[gandalf.local.home:mid,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-Tue, Mar 10, 2026 at 08:41:05PM +0000, RD Babiera kirjoitti:
-> dp_altmode_configure sets the signaling rate to the current
-> configuration's rate and then shifts the value to the Select
-> Configuration bitfield. On the initial configuration, dp->data.conf
-> is 0 to begin with, so the signaling rate field is never set, which
-> leads to some DisplayPort Alt Mode partners sending NAK to the
-> Configure message.
-> 
-> Set the signaling rate to the capabilities supported by both the
-> port and the port partner. If the cable supports DisplayPort Alt Mode,
-> then include its capabilities as well.
-> 
-> Fixes: a17fae8fc38e ("usb: typec: Add Displayport Alternate Mode 2.1 Support")
-> Cc: stable@kernel.org
-> Signed-off-by: RD Babiera <rdbabiera@google.com>
+On Wed, 11 Mar 2026 14:13:32 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/usb/typec/altmodes/displayport.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+> Hmm, now IS_ERR_OR_NULL() is an inline function, so it is safe.
+> But if you want to use IS_ERR_OR_NULL() here, it will be better something like
 > 
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index d185688a16b1..35d9c3086990 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -100,9 +100,14 @@ static int dp_altmode_configure(struct dp_altmode *dp, u8 con)
->  {
->  	u8 pin_assign = 0;
->  	u32 conf;
-> +	u32 signal;
->  
->  	/* DP Signalling */
-> -	conf = (dp->data.conf & DP_CONF_SIGNALLING_MASK) >> DP_CONF_SIGNALLING_SHIFT;
-> +	signal = DP_CAP_DP_SIGNALLING(dp->port->vdo) & DP_CAP_DP_SIGNALLING(dp->alt->vdo);
-> +	if (dp->plug_prime)
-> +		signal &= DP_CAP_DP_SIGNALLING(dp->plug_prime->vdo);
-> +
-> +	conf = signal << DP_CONF_SIGNALLING_SHIFT;
->  
->  	switch (con) {
->  	case DP_STATUS_CON_DISABLED:
-> 
-> base-commit: bb375c251ab40bdbc5272008fcf2bc6cd5266610
-> -- 
-> 2.53.0.473.g4a7958ca14-goog
+> node = rhashtable_walk_next(&iter);
+> while (!IS_ERR_OR_NULL(node)) {
+> 	fprobe_remove_node_in_module(mod, node, &alist);
+> 	node = rhashtable_walk_next(&iter);
+> }
 
--- 
-heikki
+But now you need to have a duplicate code in order to acquire "node"
+
+I think the patch just makes the code worse.
+
+-- Steve
 
