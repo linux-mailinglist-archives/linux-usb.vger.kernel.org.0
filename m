@@ -1,218 +1,174 @@
-Return-Path: <linux-usb+bounces-34590-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34586-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aNZ0LjyLsWnkDAAAu9opvQ
-	(envelope-from <linux-usb+bounces-34590-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 16:33:16 +0100
+	id MEPoNVKIsWmjCwAAu9opvQ
+	(envelope-from <linux-usb+bounces-34586-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 16:20:50 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C62E26698F
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 16:33:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 691592665B1
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 16:20:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id AE71830A5CF1
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:26:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 63B3F303A90E
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 15:20:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A85D3DEAEB;
-	Wed, 11 Mar 2026 15:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98616248F64;
+	Wed, 11 Mar 2026 15:20:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="G3dW7vqU"
+	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="fvxsmHWw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010025.outbound.protection.outlook.com [52.101.69.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0803002DF;
-	Wed, 11 Mar 2026 15:26:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.25
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773242816; cv=fail; b=c9eL0AhiWxUAVU80Y2jsAfxhQwz4asp5Vy2thB5ZDgZq7F4zYWSTJLEsDgpGHARbGe5BMt8k8onOhVya0STwJ8hjBHHRewYYk4RUewZTYxRzdQLeK62oEogRAIzECR/L8hubQC/Vp2W+jE62DB8qso6uoHxEy2foNVrtA9o6naM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773242816; c=relaxed/simple;
-	bh=sZZTkmvHA70ND2ngn6jmSKUBjZMc61gKQnKtBgur02A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=mP6OMQugIJ9uw9grXpf5yMcgw6McdnKXgxJtl/bLVk49M5Vhp5/lZfOoW/Ci+ymIeCChgFyUsJQCOcZwuFX2izlE52l/CDY0gtJeXO4t9KF7xY1TCthbGvqRKK/IQkNLs6ykQ2JBDkdLQBsz+vFzm6GbsLcu4/L9C87GLoS3OZ4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=G3dW7vqU; arc=fail smtp.client-ip=52.101.69.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xBUoZIxCimPUDEWlGlzSh49nw3K6VuXjHGxg0CTW2KW1DzeTeusixOMAhSUI1Tvs+Xb+fwX3YSlgQB0zzT66LNjWJXswAiVxx9hHEw7C7Pc/qzKUF6yAZPUu5mayeFkzlZG7RIH4FYCRLu/tU+H1/q4VrDCeoePdXC1Uo74lp+yG3H3ZCGCu7H4AQm3NKJY8xlNygOMsXbmbm/NmiQJtKlMDQhPdSPTzGLE/PzBfgkEPnISyQ0b71+hN1P/jG5/41PH9SIdnqeQJbraP5baAPgd3L9dsLNKCuyHwDP8FvjdNVPKH0Ofvg3FH2InaCzNYl+pwCkl/Fnd9wHwmQyG0mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=03bN75yQWGe0ivr1tldZHU5DhpIcPPIT2MuQhrgwfPE=;
- b=RLmArTJouhvH8+Bg2KV4qA6PYzJCQb3FvItz8JfA7A2Zctu0niezH2YDui0ssePfseCXDSCqi/d67zjHcpbhi2guhHIKF6K21klfwLzgUbMB9UnnU+y1W81zRhFcMNKxUo/P8jhji0rRWoJ5wUOnfSi0YXvbcnkpc/asE+lVgVPMb2e0nfRnrJFM9mXZQQh05Kp6D5Q7RidhjSWzdlQCkfapRHRe1P4AiIYbgznG9E8rtoI08RlOlrfOwWiBJpRQAQKDLyJuwTEFXllp+4izozqCSEd9cRnl0BICYD3onN4sxqHxZfgZPY2ualsNFGWbeyzZujIqL7ysb8cSevF5yw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=03bN75yQWGe0ivr1tldZHU5DhpIcPPIT2MuQhrgwfPE=;
- b=G3dW7vqUlq5z3Y2BByiM4vGUhH1Nj470/fVSvWUdr379tSeQDBfqreJBj78JEiqyKgb+Nqhc8Fp5T9OMVuWjBIov/vzOrLtw5iSMTBf7EsZMWFei+LpdUjpPISckd0XmDiGG8wlUlL4fBBIY7oF8UpPNq5xl3ITyUIf9pAm0DhpLDVsBZYRvswdBFSIXMvZr7rSIc8YB75URtCvk0lgGteB8TgUU5nPkId3eTF8Ihu+lrNb/Qgh5BrHRlz+shyEp/HNzdMI/lTmFDtrbwhgM1l+6RO+16wJMDrX9Mi9b6gRkutUqrQ8TtGAgRrvlDU2P0ELDTmMcYTeH9QLmBzhIbw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by PA6PR04MB11830.eurprd04.prod.outlook.com (2603:10a6:102:521::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.12; Wed, 11 Mar
- 2026 15:26:50 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::c67b:71cd:6338:9dce]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::c67b:71cd:6338:9dce%5]) with mapi id 15.20.9678.024; Wed, 11 Mar 2026
- 15:26:52 +0000
-Date: Wed, 11 Mar 2026 23:19:09 +0800
-From: Xu Yang <xu.yang_2@nxp.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Li Jun <jun.li@nxp.com>, 
-	Badhri Jagan Sridharan <badhri@google.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	linux-usb@vger.kernel.org, imx@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: usb: nxp,ptn5110: add optional
- orientation-gpio property
-Message-ID: <xx5k6awqdaffor2ajb5jth5m5z6xtv4kb4wrma6fmk4pukb6a5@pelngr4qjgov>
-References: <20260310-support-setting-orientation-use-gpio-v1-0-da31dc6cd641@nxp.com>
- <20260310-support-setting-orientation-use-gpio-v1-1-da31dc6cd641@nxp.com>
- <20260311-spry-honored-sheep-de9d7a@quoll>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260311-spry-honored-sheep-de9d7a@quoll>
-X-ClientProxiedBy: FR4P281CA0329.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:eb::12) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E334328000F
+	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 15:20:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773242435; cv=none; b=oaCdnts/6em8mRrNWoBFtK0+4QooE1lkuKt851DokgBO51gXLrT75gii24k7h9wNdw9aM0rKzMPLbZFlhHGrbvUV56vIglLQgK23l1A/YyPboYykBZDl/QHanntYfCcC8Tul5uZVHWmQo/Lh/xzzNiREgMdrqLZtwTDJYviNppI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773242435; c=relaxed/simple;
+	bh=qIns13uQVIFngxNxMdLQKv/A1SD5iBfuaA1F7jTUhu4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QJd3+9VEoNvbk51THWsmMazXZ2SxXW9JAmAplbu/A9VBlKGML46tFUc54iFCgdVoqV/2KT6OU54D6HrSmCHhTEO0I0YMoWEoJ34CymEsruiQAm8bRV8BdxT2E0JzJo5Yfyl16ZE2BchwCe6G1StlSPOo1quT1d9fJU19xrQU2ck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=fvxsmHWw; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-439b73f4ab4so10872342f8f.1
+        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 08:20:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flipper.net; s=google; t=1773242432; x=1773847232; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=L35iSGHl3sKnZzkhaQZmLKpUBP1SB2CXAb5fzFNXY4A=;
+        b=fvxsmHWwOXg9ZogGYH5m2b9N4yPqAAiVhzdRjbjpaTh1vPj9ei7P+oiZlINe8224HP
+         wo7cq7xUpqqRvgqhuhJEp3pHLGD+oc6Q7Yh1HAdFqtWqQOD3pjd0d1Kw4JT9qojf+v5b
+         HPW48y+RtaUe+YtZFmb9G2/aGchor9CWF547svbhkNYiS+yK0yCXgowQoWdibpy6Hmx+
+         uK6CdEGmKJJ6QLS1WpERbPqX8vYqPn/S05EulqgIrr5YrLugm5/Kxni5RiZB+7y6swwn
+         WuJEyNaRtF4563k+nCJZ/fuRlPqNw9/OxE0utf/cTH74ojaqMZRzfSvqqnIlzcXW08a8
+         ps2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773242432; x=1773847232;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L35iSGHl3sKnZzkhaQZmLKpUBP1SB2CXAb5fzFNXY4A=;
+        b=R2qozav0USkOhtBT7E79Z0wc9sMRyh7PMPqV08Bv6hioNlsFwn8Luvj6rVnu9v2tsh
+         oICy2j18rCtcF75i2DiPqUc1s6KHyY1lAlBC7RRJ3xLA94eKnLzrHFoIgqPnZkbEb1Di
+         E7CZNmhhqloUe7F3Va+7Jw1CdWt/TY0rC2CaRpbcNyU5wz+o1TQyX8mS30xk7sttThGd
+         7jHSPSgDz0R46sXRi2MUASrZ8G+3i7w8PspCJ4s7WiFL/lrwNlN1bJCmcoOqGYbDDl3n
+         r7wbbM8qMVB4Iu2Y00Y17HZInptHeZpS8t16pxFCTxmGZOSJE2uX/M5eGFXrbsVagU16
+         LcQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCURh0Tnmgouk5casrNUXwAYafVifycJzej5p1NepXGHtoz9vA61xD1oHh6CZN3qtTuadeHcTyWvdYw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6rJ8DknF1zwtkqguPuOGpvBPs+CWdW/kSjyRYfq9nhhnQjARS
+	xgrGQFuh3uycfUbVqZ4IRi8r+3daMz/qp2PthtzCikv641+bsOFP2S6DZY+li7gkVTQ=
+X-Gm-Gg: ATEYQzw2Uzad3W7G/Al6Ne8XyRsOcKvZyrl5bZAl/K5F2sSivbyLiBYEJ2KhWEIo04q
+	IWpd83fY14fYiUlZCrvDJdq5rFaobrIGb8zrdXASt2gz1z3GYaHzXFtHDilQjb5sj+mrAMRMEhW
+	yYxy9JUtjiB21E5beDUqBRDi4ErZwUJypDNYLX0mmh7An+eScaQfAboqvpKrB/WDEU1UYwA+ZKG
+	iD1sFKOBKh3/sbVPm6S+5obQOtkzDZGLZIYs2nr9JcwM11lsXiVeL5lzBvtpVlj73Kmxl+Wq5DZ
+	qQPvZFYS9bXdkNTKyz6/pw3mzaeOlj97b6kPiS/o0Xn6aXAWe7K944a9PCOWRdBu/ydYIdO8PXc
+	sTU1a+xwWmiHPLT1wPV1N4uhDhZQdCgi9N5tQHtUm+HftJZUKUp+7znXXrN79etXPK6NrKDSTaa
+	GnEmV31Q6afvxOrmIbNJ+im/wkZnPzQUaWeiIuuyh0W1MEMdiK/rw1WeYjF7REs0Z+dplWnMH0E
+	FxWig==
+X-Received: by 2002:a05:600c:1d0e:b0:485:3a03:ceca with SMTP id 5b1f17b1804b1-4854b10c86cmr51440335e9.23.1773242432249;
+        Wed, 11 Mar 2026 08:20:32 -0700 (PDT)
+Received: from alchark-surface.localdomain (bba-86-98-192-109.alshamil.net.ae. [86.98.192.109])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48541aa73dasm435519285e9.2.2026.03.11.08.20.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2026 08:20:31 -0700 (PDT)
+From: Alexey Charkov <alchark@flipper.net>
+Subject: [PATCH 0/3] Add binding and driver for Corechips SL6341 USB
+ 2.0/3.0 Hub Controller
+Date: Wed, 11 Mar 2026 19:20:20 +0400
+Message-Id: <20260311-sl6341-v1-0-0a890056f054@flipper.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|PA6PR04MB11830:EE_
-X-MS-Office365-Filtering-Correlation-Id: b0d796c8-d008-490a-6a9b-08de7f829eec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|19092799006|366016|52116014|7416014|376014|38350700014|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	yYQbVua3LJJc/KpqDqzUkDz2PmolT8TTCLOtGXF11QQiNqnUhrcFC6ybXh6bFBNmuzzCE2scuxvu7C3JNinfO5OwdGxLuI7lgO4QfZ1ObEKwMD3kdVg9Q1LyIfIr00+wLpra5X8WL1P1gJ1FHfQnpGXGuXwxcfwq11eR/BCWYvcObVJWhiIfyGUE5GTOZWnSReSkDf6+mLqbCd6KuFC/hJiAIW5Yp35G9DihgXqHpJtEPuZXWYiya6qMBtRHyAzHpU5ahQte33tKa6cYgneQboGUYWAdhL/N8qV6pbqj4pX0RlO3J0WNSS3QaAOL3Kcat7RAD5de992/L6HB3IAFmeOsqsyRosbAvjPnu1gkQtLu1361inTgvBh/tmXlUGb6ytc/81wbU2o5EsNFnMgR+RfzcAeWYa/02RBCJQ+nyQdQzBZCAJ9EJjUrSta38Uj5vnD9iuJ3db/lrIEY5UtRGp6N1DYy6WvHI/pJ2pX0uE0qptQ7JLPE2Xso1+WWknvaqVbbYEOdUPe6ulrGaCsYDAF5z/L2durkYBgAu7VfKAVv0Gr4IPdj/BMIb9c3t8PVYdR2p4YRyDDzbmO0E4ogxiy0Zyba1i6zi1sJC955IHislC9HCRtgW09aXKj2R3oFxdCaCwP71Jxxf6RGcr2FMjymyQWVEvIIx6Saf5gNtTlBFLfnao5Em2mFtTm4zuahYwY11AKXP3+M2mn/DbZT3KHFiSVKfO0ZsxUjS1R5qrM=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(19092799006)(366016)(52116014)(7416014)(376014)(38350700014)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?WQv+hHkvWV2+uRYUCIvIoSJNP1hkxoy7Ec/eoEqJy60avdZoREBJTvzilkMX?=
- =?us-ascii?Q?GeDQ3Fa4SrVU6Kb+tWkOdcObLkyymcpgXamMNx5cIja8DrorUt3IXGxrqhLY?=
- =?us-ascii?Q?hjdOTGYt595aRGFfAwlgqPU+IAYBgEJTFxvIFQlXy4beZKb6tLhqAUv3XejZ?=
- =?us-ascii?Q?jsqg7nKUMutJptihuQidrlsAAkU/3Z4uapRmplo6Pz8O6N1tlxzh4y19r06v?=
- =?us-ascii?Q?y7qfRA+tBCm11VcoSIXRH7ycpgCu6r1elRHl1bSfMFwNRsp6t20c0F61h8xc?=
- =?us-ascii?Q?i9AXElkVEwy4IW9flfypFqm+w7tN8FbUHM3l4qdwy+Co1rLI1PrVuhhiRsm2?=
- =?us-ascii?Q?zo/TXU0gxXwLMoOqmqWzBeW/eTF4IXNpqBIV6xHT9C3tE0C514VKi3gWny+u?=
- =?us-ascii?Q?rCkUSGGUaGc/bk0mL7Ln3nhFbz5LumsYpvcybxpJKWyNbE2FrPmCcJ/RITd/?=
- =?us-ascii?Q?/sHMJ0ieLB8O9sukGPawy31qjGeE6br1jWOX/sO0al7FJsrrMYhCwCJmF8Hi?=
- =?us-ascii?Q?mMgfalniWc05YhzVwVQRulYyeQXSpWLjp6lAsW3I3GynIxrtIqJrNuEx4Dd0?=
- =?us-ascii?Q?0ZJbiqTh5J80/Wl9jXzlsXQXGD9ENECTrQGtpYBH8K/0Ygvrm3/+CKm7OJGW?=
- =?us-ascii?Q?faLTlHL/YiME1fBBSQ23uZUugKPcuAmSu+zEL/K8cCQL8HwY7mjFS6EHW1MS?=
- =?us-ascii?Q?tD3PsK78LbgmR2iiQYNxGy/j1hr5TSl0dqyBCuqJjcFBKvBHvvchbMUniAMi?=
- =?us-ascii?Q?zcGTo0IK1hZSUrynQJzIoF2l0MiE5pHgdYb8sq/NiVXh36r3R+OWoL6c8+oL?=
- =?us-ascii?Q?4nWh6fWS2NO/1lddZ7Duv+0zDQqj8+bSOT14ycQMwUACQ9huidO3yb2yTLjK?=
- =?us-ascii?Q?ulXr3EL8SxQkd9WFL/myqxC1BsiJZ7v8flJca0JNyc9ClvvVw6AVMUNgMzDp?=
- =?us-ascii?Q?0JUvh7NnVFerJQb7O9zJu8XEbm9KaJm4PXymjMleRoCO6YZtDDLi7mlCdr68?=
- =?us-ascii?Q?koGDpWBbqFrAZsmFpoSZWt5blOrRx3di7oeB0YVu1/9zjoM5N6KI39gur2It?=
- =?us-ascii?Q?2Stdb0JuQ2IZaxiiliAmJTCSA3pu0LBtCM7xKuk3y4D4KsxMEVxdrYfcRQLh?=
- =?us-ascii?Q?XmaMQs/gNOSdegNG2U/YCKo7inJ+jwL6a47IfgXyHCmK0sQAJClKoz78wqgp?=
- =?us-ascii?Q?UoyFwCwsGSg5RrGsWtOsTUvks6MKKNoef2MPwmlgl79bXGsr3lAYkSHQdzOH?=
- =?us-ascii?Q?vvphBfypqzOXL7ETJ6QUw/F+VfYOH55D3ws/+H82iMAE+STe1AxY0Z88b1GR?=
- =?us-ascii?Q?Et4vLkc6v0toXd6iERD8qalJ8HL29BrSlPAgm3ZtbVP0oKWCmIXUva/q06Aq?=
- =?us-ascii?Q?BLUSu4zyXaFRBnretZcNEef3sPVe9muRAktfYOEMlghCqOugJCygePrfH8j0?=
- =?us-ascii?Q?RbgNivcszyzHyrevclgFhMuSJHIbx/hdqjT/sdJy3mX7fFIAAlCHz7jyTdos?=
- =?us-ascii?Q?o+ft2F7o+yoTDlqMYXrrmxggPSHu1q/FlGuyhDb3bIO2RZpdEncP2a9oxhfc?=
- =?us-ascii?Q?ZjwSo2V9mw+0evCe3/+0FDx7x4Ye01O9N2cQKMfMh4BZ5Qw9jBaJGO72KTyJ?=
- =?us-ascii?Q?Pq/MZAFVC4JTz0qVnDeObkZZischMGKd9ACsZL1P5hYnqVta0Hs4f5XbaR+b?=
- =?us-ascii?Q?6Hbqnc1y86TGH94lm2iCib7kUM8MgS2b6VToZiS9MMhmYH+G41RkaqP+rrbh?=
- =?us-ascii?Q?F4Q3hmBnYw=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0d796c8-d008-490a-6a9b-08de7f829eec
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2026 15:26:52.3519
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2WeNkHNlWdZaqpXPYCvaQEg6FP2Fvykc+IbLvay4sKyO65yjejgGwoqqYPg8SW+4IRpThbNGjvaQl4kv7CIy4w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA6PR04MB11830
-X-Spamd-Result: default: False [1.84 / 15.00];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADSIsWkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDY0ND3eIcM2MTQ13DVNNkS2PLZGMLkzQloOKCotS0zAqwQdGxtbUAphp
+ sSlgAAAA=
+X-Change-ID: 20260311-sl6341-1e5c939c384f
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Matthias Kaehlcke <mka@chromium.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, Alexey Charkov <alchark@flipper.net>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1365; i=alchark@flipper.net;
+ h=from:subject:message-id; bh=qIns13uQVIFngxNxMdLQKv/A1SD5iBfuaA1F7jTUhu4=;
+ b=owGbwMvMwCW2adGNfoHIK0sZT6slMWRu7LCb0sfYHyceY+5+vYr7jyf/leKzWb/L9VIOfd7nJ
+ h5WWvKqYyILgxgXg6WYIsvcb0tspxrxzdrl4fEVZg4rE8gQaZEGBiBgYeDLTcwrNdIx0jPVNtQz
+ NNQx1jFi4OIUgKmeZ8PIcOfFw+PH3xZkG4hrGux6dvfigTPytyc5ak7faFA4pY1d2JDhn627W52
+ t00rluvQu8171OYGL9crXCnHoVykaOS5a4rmQEwA=
+X-Developer-Key: i=alchark@flipper.net; a=openpgp;
+ fpr=9DF6A43D95320E9ABA4848F5B2A2D88F1059D4A5
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[flipper.net,quarantine];
+	R_DKIM_ALLOW(-0.20)[flipper.net:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34590-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	DKIM_TRACE(0.00)[flipper.net:+];
+	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34586-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[xu.yang_2@nxp.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[nxp.com:+];
+	FROM_NEQ_ENVFROM(0.00)[alchark@flipper.net,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,nxp.com:dkim,nxp.com:email]
-X-Rspamd-Queue-Id: 5C62E26698F
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,flipper.net:dkim,flipper.net:email,flipper.net:mid]
+X-Rspamd-Queue-Id: 691592665B1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Mar 11, 2026 at 02:00:21PM +0100, Krzysztof Kozlowski wrote:
-> On Tue, Mar 10, 2026 at 04:13:56PM +0800, Xu Yang wrote:
-> > The Type-C chip know the cable orientation and then normally will set the
-> > switch channel to correctly configure the data path. Some chips itself
-> > support to output the control signal by indicating the capability in
-> > bit[0] of STANDARD_OUTPUT_CAPABILITIES register and do it in
-> > CONFIG_STANDARD_OUTPUT register. For other chips which don't present this
-> > capability currently there are no way to achieve the orientation setting.
-> > Add an optional "orientation-gpio" property to achieve the same purpose.
-> > 
-> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > ---
-> >  Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-> > index 65a8632b4d9e..866b5d033f4e 100644
-> > --- a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-> > @@ -26,6 +26,11 @@ properties:
-> >      $ref: /schemas/connector/usb-connector.yaml#
-> >      unevaluatedProperties: false
-> >  
-> > +  orientation-gpio:
-> 
-> Ah, and you cannot have "gpio" property. It's also typeless and
-> constrain-less, so looks like you create some random code here. :/
+Corechips SL6341 is a USB 2.0/3.0 hub controller with integrated power
+management and support for up to 4 downstream ports.
 
-Thanks for your correction.
-After carefully reading the doc I think it should be:
+This adds the vendor prefix for Corechips, a binding document for the hub,
+as well as requisite entries in the onboard_usb_dev driver to let it
+request the supply regulator(s) and the optional reset GPIO.
 
-  orientation-gpios:
-    maxItems: 1
-    description: ...
+At least 1v1 supply is required for the device to operate, and external
+3v3 may be used depending on the board design.
 
-> 
-> >From where did you take such syntax?
+The reset GPIO may be provided in either the USB 2.0 or in the USB 3.0
+node but not both (the chip has only a single physical reset pin).
 
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/tree/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml?h=usb-next#n61
-It may also need improvement.
+Signed-off-by: Alexey Charkov <alchark@flipper.net>
+---
+Alexey Charkov (3):
+      dt-bindings: vendor-prefixes: Add Shenzhen Corechips Microelectronics
+      dt-bindings: usb: Add Corechips SL6341 USB2.0/3.0 hub controller
+      usb: misc: onboard_usb_dev: Add Corechips SL6341 USB 2.0/3.0 hub
 
-Thanks,
-Xu Yang
+ .../devicetree/bindings/usb/corechips,sl6341.yaml  | 79 ++++++++++++++++++++++
+ .../devicetree/bindings/vendor-prefixes.yaml       |  2 +
+ drivers/usb/misc/onboard_usb_dev.c                 |  3 +
+ drivers/usb/misc/onboard_usb_dev.h                 |  9 +++
+ 4 files changed, 93 insertions(+)
+---
+base-commit: 7109a2155340cc7b21f27e832ece6df03592f2e8
+change-id: 20260311-sl6341-1e5c939c384f
+
+Best regards,
+-- 
+Alexey Charkov <alchark@flipper.net>
 
 
