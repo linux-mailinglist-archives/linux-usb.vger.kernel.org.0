@@ -1,156 +1,159 @@
-Return-Path: <linux-usb+bounces-34621-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34622-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2NgLDLf0sWl7HQAAu9opvQ
-	(envelope-from <linux-usb+bounces-34621-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 00:03:19 +0100
+	id CJ7JDQ31sWl7HQAAu9opvQ
+	(envelope-from <linux-usb+bounces-34622-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 00:04:45 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0C2726B0C0
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 00:03:18 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A51326B1B6
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 00:04:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 89FD3308823E
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 23:03:03 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 3CB5E3026D8A
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 23:04:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5C0A39FCB5;
-	Wed, 11 Mar 2026 23:03:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6613D3A382B;
+	Wed, 11 Mar 2026 23:03:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="b9OGqbBR"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="WxcdvAR4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A3002DA759
-	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 23:03:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969E039DBF5;
+	Wed, 11 Mar 2026 23:03:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773270182; cv=none; b=fi5lDMXYw89FXZAFYmvP5K9ldFJXfjhb5blUdJAEH3wq9wTLUhITKXg/XR7NI2rZ1UQZGPBva5KCTvTncZUealgHH9rHCNMkX2u0MqlLOsMeNx88ZF2eALFozdqp9vlifrTGgDG1GtNjnWPsCt01Z0tqwPuzHC+1Ri6GZQNnBjk=
+	t=1773270226; cv=none; b=AkA2Gnlxmrw7n8wlICODGs3io7QO9Oh/YDy07WP09JF/KFh9g5IxYQ17wt6vWQVzPCB+iYEQu7P3mBvtqRc+n31lnQN5NVwKohchMiBQHqmgSZE6jhjwc4hv3UUzJs1InFDBm/aIiY3ylNEkhCwq8TX0CYHFVkpY9m+PERgjhT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773270182; c=relaxed/simple;
-	bh=59eQRVfCv7e/0LRpztdSuln1uytuOC9fin5p5Kd0jS4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AKV/9VJoaIkE2iK7j3GRRIVgLPPS8LIJv+rIVsG/71KrpYk+ZJ6Qe8AGBVP65tjB29+T7bFrqJYbsZExO+JTXparxYfqTYGVUTd7WIQqHJCjB7W95kBmsoM/Q61Njbo+taw8gEYVJ1GHaOLLZaLVqgMBsN0UDtj6vfmy/lnXhW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=b9OGqbBR; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4853fd7b59aso2090265e9.2
-        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 16:02:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1773270178; x=1773874978; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=91rIWBbGs1aKNKxqJ3UCP9ypQZSnAgeYdy2D4RNVFZw=;
-        b=b9OGqbBRPE7uEH1GUNkBDMbugsSiMBGMAMuyTBTMQFgQaeDmkEKbLVQ32y9Dw0sMFH
-         CJkt0n348i4fu/HfNBsk7jBeH5NQn3x1lyWkT3pBfgtxYp37S7pxSB5cUTE4hB0ASJRc
-         PBYOLbSO3KIfs/8869p03YcNJbo/jp1xI6KU7RmrL3TZEdBQCSk2Kj4b8jG7LNEaCwyC
-         UzbQrjmoEUlmyZJCAS5lrHwAOnjh9gqMil4P+ATiItVq6vz4yXNsXkvZgEoFpGZb36rz
-         qA93pXf2kO8Pmx/WlW+HG2ZbnxSGpd7CydTwrZnm1UJ+sPV07Zjdy5Dox5FmLzDEjJ6H
-         9UfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773270178; x=1773874978;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=91rIWBbGs1aKNKxqJ3UCP9ypQZSnAgeYdy2D4RNVFZw=;
-        b=VDSBI5Qx87bFrCji9MgrEbk3mh69wwcYmXS+yLt/Ve4OvU3Pz0GFjXDklWSW53vMpv
-         oByTH4e0aI3V0fjgihKurjuRTqw3ZTWyDgw6mNcV5SB0r5byDfWYfJgq8wh1bbbN6Ugn
-         5FTP6DQRT5QsW68uUXSL2msNz2wo9QdRinEPJlbmsww94FFqJRsly64vWyqtgP7GH4B1
-         s6Ar7sL9tMPGRSbcywJL2TnruiMWGeORTN55N0+e6Rq8/pFJRxGidA5QlNZt4rutJdg8
-         ioEJwp/t5esUy6cNpM7KzuITgs1LbUVy05vUDg3LRAhTltyAkCnuY9v8j93ut2IzREG7
-         x0zA==
-X-Forwarded-Encrypted: i=1; AJvYcCW7Jbf3vhhKw940VX30d43OH0E3WsP6XT8PO5ZJ+icDQQ5SXcJiOwgGNZrLstN6MDh0BKqsbLPuhyA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMg7cib2wICVyEe9KFuR24L4mIWS6l627pXyQh/ZAX2Ud2dzmO
-	cApewcKrT7i4Nx8MzGb+gqq1IXiAPioNWZNHaInCfI7YZxiATbAVskzp0APVEYyofB8=
-X-Gm-Gg: ATEYQzwzA0xAHhu0NFtFZqs/wZlG0okvr4UCGi0DXqJvwgnBxWhbGkTaa6YrPsUIgPQ
-	KUH7Lj0kWc22hmfYmmPejRe+wXPUIdbe7u6qmE2lZ0zIzl9cCK5plR2XfY0TH2zRZCzGqlB/X5W
-	CAGv+AuemkZ2539wDRUU/eSeacc+hOHK8uphM2UkYyIUG7ssQ8+/iKMwj/s16bU5jBeRSfRIdA8
-	+DcMG8rFFqbTMGUusxTOtQfiCU0gGK0lQbGxRPwUBUcWVS7n8x+yrVRBFNi+aDHGTcTnH76iYNx
-	4zecdJuI8+C3Li+p1XCIPju+gIBEypDdKAqzf1IrWsKXcf2idNyulPrgq9K/eGT3R8CcoHDwY3f
-	p/BYSzoYavPfOI7l4ZtYXE31UYm2dFfW4WHV9L0z+DJJSt8xfo27OXfx7Jfv8eNKqQJ5JYEZLNG
-	1vS05D52NPKQEXzcL2P++oU8NPsrV3TDUe2A==
-X-Received: by 2002:a05:600c:c4b7:b0:485:3ff1:d5c5 with SMTP id 5b1f17b1804b1-4854b0a5669mr69863415e9.7.1773270178526;
-        Wed, 11 Mar 2026 16:02:58 -0700 (PDT)
-Received: from [192.168.0.101] ([109.77.88.70])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4854a30b4bbsm30704795e9.9.2026.03.11.16.02.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Mar 2026 16:02:57 -0700 (PDT)
-Message-ID: <d6d859a3-4137-4fb8-8b04-40abc86f4e33@linaro.org>
-Date: Wed, 11 Mar 2026 23:02:56 +0000
+	s=arc-20240116; t=1773270226; c=relaxed/simple;
+	bh=ATo3aRyKmYSXuSYD8x/NeBUp5LJcLKbzHVpozNXQJC0=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=riWYrESCcc9KNXqP13SZYyXzR58RrYMlS+b2xha5iOXuuIp+StTrVizqL6ketCeeYmMEMoyxUK8taVuLlBt+IYJOKFEOgMITJUBE5YxvJbFyx57ukqqJFBTg7MI8yXilCszhmCyW65ADzTthRqCB0cIhFeDkNxgzAb+Zf6dy7s0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=fail (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=WxcdvAR4 reason="signature verification failed"; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from monstersaurus.ideasonboard.com (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id CD91E448;
+	Thu, 12 Mar 2026 00:02:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1773270149;
+	bh=ATo3aRyKmYSXuSYD8x/NeBUp5LJcLKbzHVpozNXQJC0=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=WxcdvAR4zphcUuTNTLXCbLGiiCOKCwemLRMbnRdmW3ARcBHAWQiYVeysDpnfCIDuk
+	 B8rMCjKjDjoWJdgj4Zp0scfHxrPnr5P3xl9hFANY/wyWKZBZYHzyf2qsFxVEe9S31Y
+	 m9r/HjFnopry9bsUUdk6/id/Q3d97jYK/FiMa+Qw=
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 1/2] dt-bindings: usb: qcom,pmic-typec: Document
- vbus-detect-gpios property
-To: Alexander Koskovich <AKoskovich@pm.me>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260308-qcom-typec-shared-vbus-v1-0-7d574b91052a@pm.me>
- <20260308-qcom-typec-shared-vbus-v1-1-7d574b91052a@pm.me>
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Content-Language: en-US
-In-Reply-To: <20260308-qcom-typec-shared-vbus-v1-1-7d574b91052a@pm.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20260310-b4-is_err_or_null-v1-49-bd63b656022d@avm.de>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de> <20260310-b4-is_err_or_null-v1-49-bd63b656022d@avm.de>
+Subject: Re: [PATCH 49/61] media: Prefer IS_ERR_OR_NULL over manual NULL check
+From: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org,
+	apparmor@lists.ubuntu.com, bpf@vger.kernel.org,
+	ceph-devel@vger.kernel.org, cocci@inria.fr, dm-devel@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, gfs2@lists.linux.dev,
+	intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
+	iommu@lists.linux.dev, kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+	linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org,
+	linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+	linux-omap@vger.kernel.org, linux-phy@lists.infradead.org,
+	lin@web.codeaurora.org, ux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+	ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
+	sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
+	tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev
+Date: Wed, 11 Mar 2026 23:03:33 +0000
+Message-ID: <177327021364.3167621.11851238159935183684@ping.linuxembedded.co.uk>
+User-Agent: alot/0.9.1
+X-Spamd-Result: default: False [3.14 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	ARC_REJECT(1.00)[signature check failed: fail, {[1] = sig:subspace.kernel.org:reject}];
+	R_DKIM_REJECT(1.00)[ideasonboard.com:s=mail];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[ideasonboard.com : SPF not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34621-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-34622-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_GT_50(0.00)[57];
+	FROM_NEQ_ENVFROM(0.00)[kieran.bingham@ideasonboard.com,linux-usb@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bryan.odonoghue@linaro.org,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:dkim,linaro.org:email,linaro.org:mid]
-X-Rspamd-Queue-Id: C0C2726B0C0
+	DKIM_TRACE(0.00)[ideasonboard.com:-];
+	NEURAL_HAM(-0.00)[-0.726];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ping.linuxembedded.co.uk:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,avm.de:email,ideasonboard.com:email,linuxfoundation.org:email]
+X-Rspamd-Queue-Id: 2A51326B1B6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 08/03/2026 23:20, Alexander Koskovich wrote:
-> +  vbus-detect-gpios:
+Quoting Philipp Hahn (2026-03-10 11:49:15)
+> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
+> check.
+>=20
+> Change generated with coccinelle.
+>=20
+> To: Shuah Khan <skhan@linuxfoundation.org>
+> To: Kieran Bingham <kieran.bingham@ideasonboard.com>
+> To: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: linux-media@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+> ---
+>  drivers/media/test-drivers/vimc/vimc-streamer.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/media/test-drivers/vimc/vimc-streamer.c b/drivers/me=
+dia/test-drivers/vimc/vimc-streamer.c
+> index 15d863f97cbf96b7ca7fbf3d7b6b6ec39fcc8ae3..da5aca50bcb4990c06f28e5a8=
+83eb398606991e9 100644
+> --- a/drivers/media/test-drivers/vimc/vimc-streamer.c
+> +++ b/drivers/media/test-drivers/vimc/vimc-streamer.c
+> @@ -167,7 +167,7 @@ static int vimc_streamer_thread(void *data)
+>                 for (i =3D stream->pipe_size - 1; i >=3D 0; i--) {
+>                         frame =3D stream->ved_pipeline[i]->process_frame(
+>                                         stream->ved_pipeline[i], frame);
+> -                       if (!frame || IS_ERR(frame))
+> +                       if (IS_ERR_OR_NULL(frame))
 
-Should this be plural ?
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
 
-arch/arm64/boot/dts/qcom/apq8096-db820c.dts:		pinctrl-0 = 
-<&usb2_vbus_det_gpio>;
-arch/arm64/boot/dts/qcom/apq8096-db820c.dts:		pinctrl-0 = 
-<&usb3_vbus_det_gpio>;
-arch/arm64/boot/dts/qcom/apq8096-db820c.dts:	usb3_vbus_det_gpio: 
-pm8996-gpio22-state {
-arch/arm64/boot/dts/qcom/apq8096-db820c.dts:	usb2_vbus_det_gpio: 
-pmi8996-gpio6-state {
-
-Seems a minor point
-
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-
----
-bod
+>                                 break;
+>                 }
+>                 //wait for 60hz
+>=20
+> --=20
+> 2.43.0
+>
 
