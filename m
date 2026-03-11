@@ -1,255 +1,245 @@
-Return-Path: <linux-usb+bounces-34512-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34513-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id P97QCYvKsGm/nAIAu9opvQ
-	(envelope-from <linux-usb+bounces-34512-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 02:51:07 +0100
+	id sDdiAWDPsGmLnQIAu9opvQ
+	(envelope-from <linux-usb+bounces-34513-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 03:11:44 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 690B825A82E
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 02:51:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FA4C25ABCF
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 03:11:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1FD1D3160167
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 01:51:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2F77A3245488
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 02:07:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DFB1283C89;
-	Wed, 11 Mar 2026 01:51:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C32631691A;
+	Wed, 11 Mar 2026 02:07:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="b8HvDSrY"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SqpOgAb4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863E42620E5
-	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 01:51:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773193863; cv=none; b=XiVw6/d2n2A7Al/C/2rQdg3IofnnkRIYoNQ3aRTEuAsaGuixyRqCtw7A6RiJGaI5URTz0XHDSkq1leHfRwukBt59D/gZR2JK31ZmGJ0EsrpK9kClrJstfjP9spAFCFI11Bik2Z2zN7P9+kF5TVnPbyntXGKEoYxUkNQTmCg4KnU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773193863; c=relaxed/simple;
-	bh=PfJcbH7DAQz4l0q68uuTWqXekkdD1vmcVWh5bjWRpOM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kysGfRcWA7OS+lSYuggp/BzQkPCbNYVMZI/Q1d4FkYwuq40nKz4sYuIeeCyawqJ9XLR5SObJXRiFsMTX73fuyFW6i6m8KNK+Injte3etzn4WFM7aTpFWTiqhlW07fH0acadO6HkpOf3j86EFzechF0hVpJ2fM/Vwp+jEyMNyLUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=b8HvDSrY; arc=none smtp.client-ip=209.85.222.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-8c70b5594f4so54464085a.1
-        for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 18:51:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C2A330660
+	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 02:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773194858; cv=pass; b=iBHml8H0hZ4KYhoresrMW0EOwSPSQBXCkPsLh+qJBv4BEokk5jaGIzGyDNKGGJ8vDeVyj1hMuZob8ZenXHNZVaXzHk46GrDkWIuNOYvZBjhIe57ycokjHmGrOlJlyMqbDW4vDg9pxFoOXzyXfu7sZE3O91mJdjNcn1xurG7Lj/0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773194858; c=relaxed/simple;
+	bh=8UJnLa/DDQ+b65RDSHa97nR/Rm6zetnRjswOkVb13wc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=snJuYo3fqbl8fSS2MTeR2h0QCBqMI4PFpTX0JXMSxpU3yQotrOwLb6sBbfeFpFtoCHlCWb1Fi5/bYUGBNRhcPIlWrNItXe1NU3/Wm2hZE9SuL2+wHkY0gAqfj/rAf6ocZ+INmUrmV04ZsVUvVl9Mi5hiDnaVe97L1v4YUpKnblE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=SqpOgAb4; arc=pass smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5a13d1c6f25so4703798e87.3
+        for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2026 19:07:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773194852; cv=none;
+        d=google.com; s=arc-20240605;
+        b=IdixW+g7kLRf+WxhN3SdNIRUOpG8rH6HbQ86VF2hpwzFxJtK/+BFVcLsbm+FNZUj4Y
+         NnlnKuR3FqIYRpcPV2Cx0YWdGwEyu3LoPW5dt3vp4HPdNGAea9+klJnaFsvVfPLAqQHa
+         lh8f87HOwd/wBiOyDXh7BY0e0FBM2uBRsWTyqWMGHCweODousR2yJgJCzMQwGUtKhqVT
+         Kf2cX9Z6/BJlCkz0cs38ytl0PjlF1k6TfoI0Nvuq84Fk1hcm34X0aoJfH91J9lTsRIwQ
+         IgbGWroKAYXaxJsp6GR/2RRP1ICWeB+WMwO68OwIj8q80RkhnzVIAAPyEoXSb3xH8Usi
+         WPeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=+zLBLQzKjcztDlxJqoLP6w+B6xnZmfHibV4jlBQCebA=;
+        fh=sUtTg7wLIApy9+rIYfyLsUgjOBuc1fVBsoV4f3u3Dkc=;
+        b=UUyGfoC6Q+PBRoQ8u1xEtlkGkWVO3VnJUR0DX9XAOUrfco9B6e7xk0mDXgbgSPg+e+
+         gkd5VivK7YRzuVO9FXPhcRwsFdw27UiQNZV24T1c335dxMhR7VcGte0CfE/Ztj7DtahI
+         lsORAn6MoC6T0px+dYx4XGJ6m66dUh5ADZWyJuH9HLh1Wphze8oao6Vl6K6eHYqbAyjM
+         CxCUjiVn/SnAaOIwQUUxiIr6IVsNhyw1BShU5wvleKlrNcN12whjWE8J81BWtK7LJiMD
+         Bbx05a623C7PvR65UXuRgYu8syzT4+SUg7KiSqodGn/+yes21n1WV7XmJQFghLHd46bj
+         +hSQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1773193861; x=1773798661; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s0e9kg5CWREVQj27d0HiCAQTaRk+NJlGmn268UFe3K0=;
-        b=b8HvDSrYjwmrE8vnJUUW3dgV/nZzsf4NkP9zE6xS6QbFnR/VTJVVpA8L0/BaOGEDoG
-         QlNHnckPcjUJUZWr1k/lurZ9qSlZ+ThhThFAgSxtbc4HJ0DYuNzdIn2gmIxM+xc1D/Yb
-         XZaNRv3YvgddcsRMCQ4/liHFnzwAQZON8k4mr6Vp024OZLxISAKUVFNMLybkI8DbZzCv
-         FaYzdxbwQAHYZ4b1tlsej6kdAb7mgzRMNy4VMEidDtNGBtMWCuIfjRY4g4u9pbnj+RJh
-         xeb3BOOP3MZHQHTlPizwAYB8EXtAMUZJ92mFpE715Eq640Vbp1cN0z/zxuvBDoIwZZ6o
-         0BMw==
+        d=chromium.org; s=google; t=1773194852; x=1773799652; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+zLBLQzKjcztDlxJqoLP6w+B6xnZmfHibV4jlBQCebA=;
+        b=SqpOgAb4CQOCp6QT1IhDiJXNOENCCAthmmQiQ2Xm1LqdH6AuNnr9pWEOxoaM6J2EHp
+         TaZvrNsWvEAAdeAh3rGZCGLrxzU767HUy57VJt43+079ae3+2kuAr2+JBVbU8T9+l/BT
+         vjjO+GANIyds0bGFgUhdgNG0FnF3NJi/nWQH4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773193861; x=1773798661;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s0e9kg5CWREVQj27d0HiCAQTaRk+NJlGmn268UFe3K0=;
-        b=Buoo/twL4BkXnBvQT4eMb2PsJdqMkhN7mqcX2iGLo2RuRrb7pSUaXrWCjsV4Rai64Z
-         O3SzDqLsZ4GPN7ar4sJe6SR5TzWZBxk7QxVnmQTXvXUdV8ytb1dcvNu7aqjFILr5+rCu
-         0aZAmQaPrQYyTtQh9x1Lx4pg0Y1NaWE5fyGu1wbMjr3nt377tMIkm5F4XEwapvjVSrtI
-         Ip3R/p6gHNWdgmWULdTn+oNKdJyu+lJO21QH0Mc9meFqJ1GTnVq2g6ulmJ2Xs1JsvjsF
-         mE7iNxC/GEzmU/zHxAv3sWQ+fgQr0HHX2NY7sl4Ek72dyAJM5IfG6BptXsW15edq51cx
-         8qgw==
-X-Forwarded-Encrypted: i=1; AJvYcCVXIzDfAf/QGM/nxhcsrCevNYHiq/cDNZLI6e+l2xxuBETdyBMCm9yQC0u4UnOxdcSJsvExbKHTlmA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8V1265mOy4dqpHdcMJHTA1BRuB+PPA9kHsdbFtb96lnHTWf25
-	HMj3R2K2QHoGVuOxsMGlofSoVKeA8dJZr52taRpL99kCkNAhfRpAYbDYWKt8sXxos0rbbx4pRdb
-	axd8=
-X-Gm-Gg: ATEYQzyGQHqiCFtp+uEQYIrP314P5iWBW1jdyrscyJo/UrMfo1/oqqJ3rslNNVvopJv
-	+vzgovULPpR9RrnSrYQdNXB66uXO/YQYz056FbEEi77HO/uN1gwYgDY0BZzQSxfjXUZYKHRPuuS
-	hzrN15ozSrPNBfyKntlwWP1xdQ9gPFIMWf0kUrTVqdkOeV2777pwX4V6pxFWLX7FenEmAfdH5EQ
-	J7jMj/ZwJcv3tPVSlWJKRN5hEObQ0hV0esTDvlp9E4f9ForvMFsHdxaHG0Mlib6qqjbszccvOSI
-	e1IRh02NfGUHGaaWKMLDajAcrr6vse8ZExNPWngvS2SZylgXHnSS2ih0zmSs0sfQ7NchdJAhc2O
-	lO9u+NUHR4Do7aE5csCuC6bxZrSJZKgQi0mc04LdtIS9eMu5pJ3DExhMv491YWl9UTY1UY0o0Gq
-	OoxryRi+5J/YGsvSYdV+NDSOvC
-X-Received: by 2002:a05:620a:2991:b0:8cd:88ea:fd21 with SMTP id af79cd13be357-8cda1f6f0e9mr93207785a.21.1773193861373;
-        Tue, 10 Mar 2026 18:51:01 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::687c])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cda21348e2sm41701385a.35.2026.03.10.18.51.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2026 18:51:00 -0700 (PDT)
-Date: Tue, 10 Mar 2026 21:50:58 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: syzbot <syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] general protection fault in usb_gadget_udc_reset
- (4)
-Message-ID: <8b3636bc-3446-4b4c-a8cf-d940be933c4b@rowland.harvard.edu>
-References: <c99003a0-f26a-4bfe-81f0-27536c9570c8@rowland.harvard.edu>
- <69b071b3.a70a0220.51e36.0001.GAE@google.com>
+        d=1e100.net; s=20230601; t=1773194852; x=1773799652;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+zLBLQzKjcztDlxJqoLP6w+B6xnZmfHibV4jlBQCebA=;
+        b=WI/8JjL+bNPUdBwq/ydt1fz9fMDK3Zql1X3rqks0WrS5FvNqmoOfaHWW+XqfET/JRP
+         izsu4IN5iNGkcKkEjEBpY+O0C9J09YV/aabAxOZXrJsDysViG0Y1X80TUq1H7juaxHxi
+         9KFm0tUL1jiLb0WQBvoSvflLvtK9go68Ba/GHBtJON/axrSMvXm85Y/aBcvFd3AkdrwB
+         zd179qz0uY9PeiMhEgTVwfuUHAtrRfK8UpZIjg7Xa4TBpWKDyJiGWpPTEDj48QX5ifv7
+         iOhzPhhG9nah6OOtmG8TGlJ56Ynv5x6eEbcOLARXI6TabSNbZcEoHAOZF8nBEpR9K49N
+         UvYw==
+X-Forwarded-Encrypted: i=1; AJvYcCXfFiUpBCN5obxG6Wv2YZNgEKwLmmosVXlaAzzsUy0kYEEayKATenWiDxn5A8/+LBD8eEiDFykqVdI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyy09PyY0q52viwWNFZdeQuTABsldqkes6JCFXfky5f7+GOHrBN
+	UU2bP+BDN+ya2iT9ZnDKS/kvfNXvdyl1VVl9GF5lY5gnP6hHEzoCP9kfSgsxsaDYj4IXzzsLJGO
+	YKw9rck+Byw9aRHMTU8tBRKkemyn+59K0yFA07MkO
+X-Gm-Gg: ATEYQzy2zS5V/EVoaOmFry/2uy9Mykb+8AN35zUaW0upsjwPrqL3dBBnsaa7u7CXmlO
+	gta/bs3aGVSrLh/NaLmrt6jGi64T/8xGTEavdVhivyH/9mmhqwrOHTz1HuGePo1Gy/bIccQ1oRR
+	VWq8GmUYvuDs8WooPFFKlvwVwWRzGQpG62e41XI/fSpzxC2hCFaRSet77z8HY6McSF2F4mihGgu
+	nmHxhCuUWP+hOupI24HV/YGjyuhHUfExB4tfdTWfSF45t+PXHpiNMsBW0sTKWU4fa8Xb+c2naus
+	+htRu/rVHg==
+X-Received: by 2002:ac2:4427:0:b0:5a1:3134:9bac with SMTP id
+ 2adb3069b0e04-5a156cbd1bbmr169453e87.28.1773194852284; Tue, 10 Mar 2026
+ 19:07:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69b071b3.a70a0220.51e36.0001.GAE@google.com>
-X-Rspamd-Queue-Id: 690B825A82E
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de> <20260310-b4-is_err_or_null-v1-56-bd63b656022d@avm.de>
+In-Reply-To: <20260310-b4-is_err_or_null-v1-56-bd63b656022d@avm.de>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Wed, 11 Mar 2026 11:07:21 +0900
+X-Gm-Features: AaiRm5028PWt8n-JnveiRgn8oYMksdR_-_nk4JOkvxMfplWs-GDr7RRk-OxICyw
+Message-ID: <CAGXv+5FQAVaJjqhv+Xq-ysOc4SHQn2mCNTgCAp8XocmWBWGGoA@mail.gmail.com>
+Subject: Re: [PATCH 56/61] clk: Prefer IS_ERR_OR_NULL over manual NULL check
+To: Philipp Hahn <phahn-oss@avm.de>
+Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com, 
+	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr, 
+	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org, 
+	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org, 
+	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev, kvm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, 
+	linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org, 
+	linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, 
+	linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
+	samba-technical@lists.samba.org, sched-ext@lists.linux.dev, 
+	target-devel@vger.kernel.org, tipc-discussion@lists.sourceforge.net, 
+	v9fs@lists.linux.dev, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 7FA4C25ABCF
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
+	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34512-lists,linux-usb=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,rowland.harvard.edu:dkim,rowland.harvard.edu:mid];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-34513-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[chromium.org:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[wenst@chromium.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[58];
+	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,19bed92c97bee999e5db];
-	SUBJECT_HAS_QUESTION(0.00)[]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,baylibre.com:email,avm.de:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,chromium.org:dkim]
 X-Rspamd-Action: no action
 
-On Tue, Mar 10, 2026 at 12:32:03PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> general protection fault in usb_gadget_udc_reset
+On Tue, Mar 10, 2026 at 9:57=E2=80=AFPM Philipp Hahn <phahn-oss@avm.de> wro=
+te:
+>
+> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
+> check.
+>
+> Semantich change: Previously the code only printed the warning on error,
+> but not when the pointer was NULL. Now the warning is printed in both
+> cases!
+>
+> Change found with coccinelle.
+>
+> To: Michael Turquette <mturquette@baylibre.com>
+> To: Stephen Boyd <sboyd@kernel.org>
+> To: Daniel Lezcano <daniel.lezcano@kernel.org>
+> To: Thomas Gleixner <tglx@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+> ---
+>  drivers/clk/clk.c               | 4 ++--
+>  drivers/clocksource/timer-pxa.c | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> index 47093cda9df32223c1120c3710261296027c4cd3..35146e3869a7dd93741d10b72=
+23d4488a9216ed1 100644
+> --- a/drivers/clk/clk.c
+> +++ b/drivers/clk/clk.c
+> @@ -4558,7 +4558,7 @@ void clk_unregister(struct clk *clk)
+>         unsigned long flags;
+>         const struct clk_ops *ops;
+>
+> -       if (!clk || WARN_ON_ONCE(IS_ERR(clk)))
+> +       if (WARN_ON_ONCE(IS_ERR_OR_NULL(clk)))
+>                 return;
+>
+>         clk_debug_unregister(clk->core);
+> @@ -4744,7 +4744,7 @@ void __clk_put(struct clk *clk)
+>  {
+>         struct module *owner;
+>
+> -       if (!clk || WARN_ON_ONCE(IS_ERR(clk)))
+> +       if (WARN_ON_ONCE(IS_ERR_OR_NULL(clk)))
 
-I'm getting the impression from the console log that this isn't a race 
-between unbind and reset after all, but between bind and reset.  The log 
-contains these two lines:
+clk_get_optional() returns NULL if the clk isn't present.
 
-[  250.845916][ T7233] raw-gadget.4 gadget.2: Dummy stop
-[  250.847972][ T6660] gadget gadget.2: Reset usage 1
+Drivers would just pass this to clk_put(). Your change here would cause
+this pattern to emit a very big warning.
 
-The dummy_udc_stop() routine sets ints_enabled to 0, but the "Reset 
-usage 1" line is printed only if ints_enabled != 0.  The only way for 
-ints_enabled to be set to a nonzero value is through a call to 
-usb_gadget_enable_async_callbacks(), which happens only in 
-gadget_bind_driver().
+I don't think this change should be landed.
 
-So let's add more debugging messages to track binding as well as 
-unbinding events.
 
-Alan Stern
+ChenYu
 
-#syz test: upstream 651690480a96
-
- 2 files changed, 26 insertions(+), 15 deletions(-)
-
-Index: usb-devel/drivers/usb/gadget/udc/core.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/udc/core.c
-+++ usb-devel/drivers/usb/gadget/udc/core.c
-@@ -1197,7 +1197,9 @@ EXPORT_SYMBOL_GPL(usb_udc_vbus_handler);
- void usb_gadget_udc_reset(struct usb_gadget *gadget,
- 		struct usb_gadget_driver *driver)
- {
-+	dev_info(&gadget->dev, "Reset #1, gadget %p driver %p\n", gadget, driver);
- 	driver->reset(gadget);
-+	dev_info(&gadget->dev, "Reset #2\n");
- 	usb_gadget_set_state(gadget, USB_STATE_DEFAULT);
- }
- EXPORT_SYMBOL_GPL(usb_gadget_udc_reset);
-Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
-+++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
-@@ -464,7 +464,9 @@ static void set_link_state(struct dummy_
- 		if (dum->ints_enabled && (disconnect || reset)) {
- 			stop_activity(dum);
- 			++dum->callback_usage;
-+			dev_info(&dum->gadget.dev, "Reset usage %d\n", dum->callback_usage);
- 			spin_unlock(&dum->lock);
-+			udelay(1000);
- 			if (reset)
- 				usb_gadget_udc_reset(&dum->gadget, dum->driver);
- 			else
-@@ -906,23 +908,9 @@ static int dummy_pullup(struct usb_gadge
- 	dum_hcd = gadget_to_dummy_hcd(_gadget);
- 
- 	spin_lock_irqsave(&dum->lock, flags);
-+	dev_info(&_gadget->dev, "Dummy pullup %d\n", value);
- 	dum->pullup = (value != 0);
- 	set_link_state(dum_hcd);
--	if (value == 0) {
--		/*
--		 * Emulate synchronize_irq(): wait for callbacks to finish.
--		 * This seems to be the best place to emulate the call to
--		 * synchronize_irq() that's in usb_gadget_remove_driver().
--		 * Doing it in dummy_udc_stop() would be too late since it
--		 * is called after the unbind callback and unbind shouldn't
--		 * be invoked until all the other callbacks are finished.
--		 */
--		while (dum->callback_usage > 0) {
--			spin_unlock_irqrestore(&dum->lock, flags);
--			usleep_range(1000, 2000);
--			spin_lock_irqsave(&dum->lock, flags);
--		}
--	}
- 	spin_unlock_irqrestore(&dum->lock, flags);
- 
- 	usb_hcd_poll_rh_status(dummy_hcd_to_hcd(dum_hcd));
-@@ -945,6 +933,25 @@ static void dummy_udc_async_callbacks(st
- 
- 	spin_lock_irq(&dum->lock);
- 	dum->ints_enabled = enable;
-+	dev_info(&_gadget->dev, "Dummy ints_enabled %d\n", enable);
-+	if (!enable) {
-+		/*
-+		 * Emulate synchronize_irq(): wait for callbacks to finish.
-+		 * This seems to be the best place to emulate the call to
-+		 * synchronize_irq() that's in usb_gadget_remove_driver().
-+		 * It has to come after dum->ints_enabled is clear.  But
-+		 * doing it in dummy_udc_stop() would be too late since that
-+		 * routine is called after the unbind callback, and unbind
-+		 * shouldn't be invoked until all the other callbacks are
-+		 * finished.
-+		 */
-+		while (dum->callback_usage > 0) {
-+			spin_unlock_irq(&dum->lock);
-+			usleep_range(1000, 2000);
-+			spin_lock_irq(&dum->lock);
-+		}
-+		dev_info(&_gadget->dev, "Disable done\n");
-+	}
- 	spin_unlock_irq(&dum->lock);
- }
- 
-@@ -1020,6 +1027,7 @@ static int dummy_udc_start(struct usb_ga
- 	spin_lock_irq(&dum->lock);
- 	dum->devstatus = 0;
- 	dum->driver = driver;
-+	dev_info(&g->dev, "Dummy start\n");
- 	spin_unlock_irq(&dum->lock);
- 
- 	return 0;
-@@ -1034,6 +1042,7 @@ static int dummy_udc_stop(struct usb_gad
- 	dum->ints_enabled = 0;
- 	stop_activity(dum);
- 	dum->driver = NULL;
-+	dev_info(&g->dev, "Dummy stop\n");
- 	spin_unlock_irq(&dum->lock);
- 
- 	return 0;
-
+>                 return;
+>
+>         clk_prepare_lock();
+> diff --git a/drivers/clocksource/timer-pxa.c b/drivers/clocksource/timer-=
+pxa.c
+> index 7ad0e5adb2ffac4125c34710fc67f4b45f30331d..f65fb0b7fc318b766227e5e7a=
+4c0fb08ba11c8f9 100644
+> --- a/drivers/clocksource/timer-pxa.c
+> +++ b/drivers/clocksource/timer-pxa.c
+> @@ -218,7 +218,7 @@ void __init pxa_timer_nodt_init(int irq, void __iomem=
+ *base)
+>
+>         timer_base =3D base;
+>         clk =3D clk_get(NULL, "OSTIMER0");
+> -       if (clk && !IS_ERR(clk)) {
+> +       if (!IS_ERR_OR_NULL(clk)) {
+>                 clk_prepare_enable(clk);
+>                 pxa_timer_common_init(irq, clk_get_rate(clk));
+>         } else {
+>
+> --
+> 2.43.0
+>
+>
 
