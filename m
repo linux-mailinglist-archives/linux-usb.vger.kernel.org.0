@@ -1,243 +1,143 @@
-Return-Path: <linux-usb+bounces-34558-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34559-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2NtaHvVosWnsugIAu9opvQ
-	(envelope-from <linux-usb+bounces-34558-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:07:01 +0100
+	id IIzjEHdrsWkuvAIAu9opvQ
+	(envelope-from <linux-usb+bounces-34559-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:17:43 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB02626420B
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:07:00 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 448BD26449A
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 14:17:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AF7903212905
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 13:01:53 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id DCDCC301AA93
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 13:10:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BD5429B793;
-	Wed, 11 Mar 2026 13:01:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AEBA2E5B2A;
+	Wed, 11 Mar 2026 13:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ksKYSHzQ";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="j0o1Q270"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KwIxzNEI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B481AA1D2
-	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 13:01:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E03425CC79
+	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 13:10:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773234111; cv=none; b=Dj1Lye5jfrJxaQpkmstrv+tKPeF8rz1bkC7KoZ+WExioc+f+peFp2st7Nn1kTawV+56eV0wfivT6yQZCJFi8E6SVhI5dTUYR6O2hINmnx7D4MMK+D2xW6+9sIj75YlTLWGdY/B3wz+imjskoHprtbJr0jFUdrVvbdz1oEOqLR24=
+	t=1773234633; cv=none; b=nJemfKWLep4F+XXLjrkRzddvWosmD/uI3xt78MdtoOD+KcFgJLLTRVx/gahdWrWkSpQu2D76tcIwYsX+ZQpMxkIP9hjQ8EKTRyT+czz8Au6uiZdB3t8FXKR6SIRPycJWDrJI6IYuZBnwJwo6shre8AYwpa3ujCUaxHj/1hd8HNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773234111; c=relaxed/simple;
-	bh=w3DdBqnwYzlppHJlA0FKUqhcUqEniEi+aCNpmhpnk/Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ojrer4BUGJzMkSQCAL2AK4ExQ5AcGi8orvxvApOMKVPZLlsHM3JEJoC11HMIWqnQmDIY2crF5jK+AMxn+5zPlWcuJl+qtIsS/FN8WVlQHlnrUXwPvqZk3Ck6uLAIZXJQl3IXeOrpdieOgmzlfhuClJ2UCuNQJBAi413SS6tLtcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ksKYSHzQ; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=j0o1Q270; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62BA5ZGT294237
-	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 13:01:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	WXcLvHbkZw0uXVaZr0o1vWk4BkeOU64L8yo+XGnvNBE=; b=ksKYSHzQ3430mJLW
-	24gLPMOMJuhdnhQqN+ZLprglRvOIqbSetPAYh0jznUcwwoNm6LTMYPn2mEH4rBMl
-	sjUg3vdeElCRgRXiTHmWq7Lj/5NfST7wTETyr34xKIUGMvg8w4tJbu7LFqV2uq+A
-	yyOi52tFqO9Nr+e/6z8f2p/AgU7Ff2GkbR+XGOhe6PJlrkD9+P0ZGjei9ytJkuqw
-	yZYaKF0aPTXObYlKAHtamWRSMSy4t6pVqS8KsVTP6vcMi5+rTY+arLLBCGY2JOTY
-	RcJ6fMGSW4NJ2iNot9v2hfWhcUWrltaoiaSjXupPNzk05IADSXbBwrVN9XmgkRW+
-	fBEgdg==
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com [209.85.160.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cu6bb8jvf-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 13:01:49 +0000 (GMT)
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-417014a1276so4492876fac.2
-        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 06:01:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1773234109; x=1773838909; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WXcLvHbkZw0uXVaZr0o1vWk4BkeOU64L8yo+XGnvNBE=;
-        b=j0o1Q2700h4oPiWau3EMEmaK/R7vHSM6QHTqZG4HP4bqTy9hfHjinCumz2d52PankF
-         h1QiNko5DQKI3ksohFmv11VGrh48xTM9BtmCc1t4ljSVtPANrfPIFqUDLlqi/yex0TV4
-         /czBhEAMoRAmWbs8plRQzKw8c3ZLwR1lV4z4ZIjs6n/6boIFBapEyF0Fdvr8LQtYpZcr
-         seXm0jBrNZ+pDh2pM4r3pKGr04LdDUSWrpLYxxQhWGMw5sOLyWl+6BtkajfNUeyqbMcO
-         gL0YKAr8Ci1QXm75wttiHJkwox6tTR/m3kYcH04MvG9VtUCdnVnlSo0NHQx/IbTGjaKp
-         8lnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773234109; x=1773838909;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WXcLvHbkZw0uXVaZr0o1vWk4BkeOU64L8yo+XGnvNBE=;
-        b=ecA6oB1YAVsMvFqNdlkWUfgLEyyYy7knvE992RQi8GRgkaCS5Zw1/cCMs+cXFeAUMY
-         WrzKH22skRF+z8rbdroWcY1C3Jpd+DhoFTKaZ8f2Lp0lPArdcNZ1BPMVclZWWc5Lz1wo
-         EjYzmXsIDLfZrMPk4OaZNJ9gwZbeXLAG0wWMXoLtSh2f4HAo1oGlxDj4LliBUrXHbEy7
-         rqKjSJfMK5oI2KWrdy3Buz65z2CXQRuR2NSz2u293XDcPdlZJrw2Cl5CRWdYTlGoDmCg
-         h5weoaq+FDB+RQlP6ZhHFK8OwB1KMqYnXPprXwCPYjRfyyI2jYpVbLp0eaJ94HZp1Lsa
-         GVuw==
-X-Forwarded-Encrypted: i=1; AJvYcCUevQQndy87ehoUbtW+a893ql6ez1eORSI6zAiD8NLlXQN5EN8dUs/DI8sOzniu+YQGQYCq+bLK+dY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBmvZmc4yyuw18oc2TllQFEpyeUMff5bSn22XyoCbVbemXeCuR
-	dKMJbt46towgyU3IqOUuh67c7u75eryGjoaJb2aP+LQNY9/UT+iORKljLexV7+Umwt9Pw5qOsBS
-	c1Vcby+r3RbZoqdu2E0Z+BhIvI175qvNEPWFAPGmM7Da8T+TamZ6lp0mqkJ7Hi9Q=
-X-Gm-Gg: ATEYQzw52Su2BEKbCuLnXSvdetbJSVMlqlxAUroRaBB8OYaLJ2i9ExeCT1jGvmZ5le+
-	QU9j1MA4ZWitQmWgZakopz+hj8JP6Fb7VDW7Llvc6S9jBXAle7o3M6SckYaoxsvnHQZFvT+/YR6
-	+XzIxOJuFEEY3FW0fCPqxeHnRJa8/PboSkJa9gfvnPmCqKI1Oj9FW+HKnyqhm+UgTHewcrZUy0C
-	ewfQqRDhrxZ7gZsFe0KwoIVOEgLRMxUUPxcGz22lWmxrd4qHfk5b7nu2Edqr8KXCaf+sS6TZuiT
-	DE2DWzpEmgyk9xb8i7fM/8E7Yhl9H/vXBzrrUpAr1c9V+na3Oogoi0FPzrJJmFZT97mskwntRun
-	YLJETrxJGQ7PFwyW8FUYdfSS3WFu95B32ihVZg/ra2gc7jUwxS19ot8OIWlbvTw1SZ8vOhkDP1c
-	9OWAY=
-X-Received: by 2002:a05:6870:a199:b0:408:a779:41a7 with SMTP id 586e51a60fabf-4177c9fd737mr1130443fac.7.1773234108066;
-        Wed, 11 Mar 2026 06:01:48 -0700 (PDT)
-X-Received: by 2002:a05:6870:a199:b0:408:a779:41a7 with SMTP id 586e51a60fabf-4177c9fd737mr1130324fac.7.1773234105957;
-        Wed, 11 Mar 2026 06:01:45 -0700 (PDT)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6631532db0dsm524054a12.32.2026.03.11.06.01.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Mar 2026 06:01:44 -0700 (PDT)
-Message-ID: <5304144a-0907-4b7e-8c65-d0d37e74e9f8@oss.qualcomm.com>
-Date: Wed, 11 Mar 2026 14:01:40 +0100
+	s=arc-20240116; t=1773234633; c=relaxed/simple;
+	bh=ZCjsKcKrd5cM7xc0gKPL5+/ZPrvnCW7/RoFaa9cMHac=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oFIVV2EmgX1i1XQSJs2/8KKJPe6LY0Zc/2BpjEtyhV1f+7pDRir1fgMeFn5aCDO531yWc6OaBXXAGOPTEvAcSC3/T9xEUh/PD1eSZnbtaoaxt7A98MCwm64UrYAwn81Moum5JRWNE9VcICOLgWMNlU3xrVXqlJhVWUCC8Wj3F8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KwIxzNEI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A8AC19425;
+	Wed, 11 Mar 2026 13:10:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1773234633;
+	bh=ZCjsKcKrd5cM7xc0gKPL5+/ZPrvnCW7/RoFaa9cMHac=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KwIxzNEIkllpIBdg6FBHftwd6/ngFFC5bpQatK0BOYZxG6vkRPKMEWQ3PvI+AXZ4y
+	 zu2Ea9/06AMfIxVb9ADKJsNNSGqOagKh2pvE99DEkC3cH8FBbKGP2uFkd06TV676rV
+	 iqQnajlJmsJ033ww9iRN0r9/BGT/YoCvxw0KM4a4=
+Date: Wed, 11 Mar 2026 14:10:28 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Nathan Rebello <nathan.c.rebello@gmail.com>
+Cc: linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com
+Subject: Re: [PATCH 1/2] usb: typec: ucsi: validate connector number in
+ ucsi_connector_change()
+Message-ID: <2026031109-scrunch-aviator-0e2b@gregkh>
+References: <20260219164925.3249-1-nathan.c.rebello@gmail.com>
+ <20260219164925.3249-2-nathan.c.rebello@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 2/2] usb: typec: qcom: Add support for shared USBIN
- VBUS detection
-To: Alexander Koskovich <AKoskovich@pm.me>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260308-qcom-typec-shared-vbus-v1-0-7d574b91052a@pm.me>
- <20260308-qcom-typec-shared-vbus-v1-2-7d574b91052a@pm.me>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20260308-qcom-typec-shared-vbus-v1-2-7d574b91052a@pm.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: VS8ibpzVy_fOIQ19CuUcwoWrEf4AWYwU
-X-Proofpoint-GUID: VS8ibpzVy_fOIQ19CuUcwoWrEf4AWYwU
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzExMDExMCBTYWx0ZWRfX6Pmvf7V6jVKt
- PJ1aLsvRkFs0VD3INetn8yk7JIinF2BqqpBoX7/fT9JWkex2bNYd3OeGIFd6YP/HEvukOSVUefk
- 3shDVeS87Ht1TZb21Cwld0wpX1t6W2ofrMJdrPxgscCfElTtr+APZvg3DxbUyRur0HejVHONfmb
- w4pimAfyqxJ+Y9A2ypnqtMdJnMkf6+zLoGr1iio96VltJN/MlQibDyNarR6XjRuvhI7Pxe1WnTD
- OMHDMIih61vgNUwSetmvLPX4Tk+4NcTQjw3lVIH5GERGOfyCKpDpf3y3c2MGV87ICqZUPKk0YQI
- mGNDPODLtPim31yX3G8FAI38goo4ML1uZ6Z6yWV/ZlEkrUTJ+SMKjVhviVXZdfyVWBnVVnWj6np
- iGZDifcVvw7TMwwILe1chuHdSoQZ+joLu+QjplKerMymYpF4vKhoo2+lK4xe69BOT+SjWNt2tgb
- RRzEX+Abm7WDb7LOf0Q==
-X-Authority-Analysis: v=2.4 cv=CKwnnBrD c=1 sm=1 tr=0 ts=69b167bd cx=c_pps
- a=CWtnpBpaoqyeOyNyJ5EW7Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=_K5XuSEh1TEqbUxoQ0s3:22
- a=A_zI2UM3U9TYkvnQF4QA:9 a=QEXdDO2ut3YA:10 a=vh23qwtRXIYOdz9xvnmn:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-11_01,2026-03-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 priorityscore=1501 phishscore=0 impostorscore=0 spamscore=0
- adultscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603110110
-X-Rspamd-Queue-Id: EB02626420B
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260219164925.3249-2-nathan.c.rebello@gmail.com>
+X-Rspamd-Queue-Id: 448BD26449A
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,pm.me:email,qualcomm.com:dkim,oss.qualcomm.com:dkim,oss.qualcomm.com:mid];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34558-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-34559-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	NEURAL_HAM(-0.00)[-0.998];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,linuxfoundation.org:dkim]
 X-Rspamd-Action: no action
 
-On 3/9/26 12:20 AM, Alexander Koskovich wrote:
-> On devices with multiple USB-C ports whose VBUS lines are wired to a
-> single shared USBIN input on the PM8150B PMIC (e.g. ASUS ROG Phone 3), the
-> Type-C port controller cannot distinguish which port is providing VBUS.
+On Thu, Feb 19, 2026 at 11:49:23AM -0500, Nathan Rebello wrote:
+> ucsi_connector_change() uses the connector number from the CCI as an
+> index into the connector array without first verifying it falls within
+> the valid range. The connector number is extracted from the CCI register
+> via UCSI_CCI_CONNECTOR(), which returns a 7-bit value (1-127), but the
+> connector array is typically only 2-4 entries.
 > 
-> In practice this shows up as being unable to use the affected Type-C port
-> while the other port is connected to a device providing VBUS such as a PC
-> or charger.
+> A malicious or malfunctioning device could report an out-of-range
+> connector number, causing an out-of-bounds array access.
 > 
-> Add support for an optional vbus-detect-gpios property that allows the
-> Type-C port controller to read VBUS state from a per-port GPIO instead of
-> the shared USBIN input. When present, the driver also bypasses VSAFE0V
-> checks and switches DRP toggling to TRY_SRC to avoid false source
-> detection caused by VBUS present on USBIN from another port.
+> Add a bounds check to reject invalid connector numbers before indexing.
 > 
-> Signed-off-by: Alexander Koskovich <akoskovich@pm.me>
+> Fixes: bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
+> Signed-off-by: Nathan Rebello <nathan.c.rebello@gmail.com>
 > ---
-
-[...]
-
-> +	if (pmic_typec_port->vbus_detect_gpio) {
-> +		vbus = gpiod_get_value_cansleep(pmic_typec_port->vbus_detect_gpio);
-> +		return vbus;
-
-"return gpiod_..."
-
-[...]
-
-> +	/*
-> +	 * On devices with multiple USB-C ports sharing USBIN, bypass
-> +	 * VSAFE0V so SRC attachment can complete despite VBUS being
-> +	 * present on USBIN from another port.
-> +	 */
-> +	if (pmic_typec_port->vbus_detect_gpio) {
-> +		ret = regmap_update_bits(pmic_typec_port->regmap,
-> +					 pmic_typec_port->base + TYPEC_EXIT_STATE_CFG_REG,
-> +					 BYPASS_VSAFE0V_DURING_ROLE_SWAP,
-> +					 BYPASS_VSAFE0V_DURING_ROLE_SWAP);
-
-regmap_set_bits()
-
-
-
-> +		if (ret)
-> +			goto done;
-> +	}
+>  drivers/usb/typec/ucsi/ucsi.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index a7b388dc7fa0..7109d3bd39b4 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1345,7 +1345,14 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>   */
+>  void ucsi_connector_change(struct ucsi *ucsi, u8 num)
+>  {
+> -	struct ucsi_connector *con = &ucsi->connector[num - 1];
+> +	struct ucsi_connector *con;
 > +
->  	pmic_typec_port->tcpm_port = tcpm_port;
->  
->  	for (i = 0; i < pmic_typec_port->nr_irqs; i++)
-> @@ -724,6 +760,12 @@ int qcom_pmic_typec_port_probe(struct platform_device *pdev,
->  	if (IS_ERR(pmic_typec_port->vdd_vbus))
->  		return PTR_ERR(pmic_typec_port->vdd_vbus);
->  
-> +	pmic_typec_port->vbus_detect_gpio = devm_gpiod_get_optional(dev, "vbus-detect",
-> +								 GPIOD_IN);
+> +	if (num < 1 || num > ucsi->cap.num_connectors) {
+> +		dev_warn(ucsi->dev, "invalid connector number %d\n", num);
+> +		return;
 
-I thought the intent here was to have 2 GPIOs, one per port - could
-you please shed some light on this?
+Shouldn't this return an error and have the caller stop what it was
+attempting to do?  When this is called in ucsi_init(), the
+num_connectors is already parsed, so how can this be wrong?  Shouldn't
+these values all be verified in one single place and then if any of the
+descriptors are "incorrect", the device rejected at that point in time
+and not require "deep" changes in the logic here to try to find these
+types of errors?
 
-Konrad
+in short, let's validate the device once, and after that is done, we can
+"trust" that it is correct and not need to check this stuff all over the
+place.
+
+thanks,
+
+greg k-h
 
