@@ -1,135 +1,167 @@
-Return-Path: <linux-usb+bounces-34615-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34616-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6DSsHdTTsWk2FgAAu9opvQ
-	(envelope-from <linux-usb+bounces-34615-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 21:43:00 +0100
+	id MP4+H4jjsWksGwAAu9opvQ
+	(envelope-from <linux-usb+bounces-34616-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 22:50:00 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D9E426A17A
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 21:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A02A226A90B
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 22:49:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id ECEAC301B87F
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 20:42:47 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 0965F301B66E
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 21:49:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC7538E113;
-	Wed, 11 Mar 2026 20:42:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A41A33261E;
+	Wed, 11 Mar 2026 21:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HtMMcnNx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hWxQqZ9x"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564FF383C63
-	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 20:42:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961E829B200
+	for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 21:49:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773261755; cv=none; b=QAxHzFCoVnws3SOpSJLuWXYgj6Jc4RyWulX4avVLPuxg6RsZk7RyNOIaWlPQ4s50cCp+r9N0O8hrgW09OELdJwMlbqXOFUoGOl1F5ExS3/1ZrF9DQDZK8/mHPbrjaY1V/ldz0AIq4BaV4E/Mf9/8HFzdkXyJth2ZCveXRcxgyJs=
+	t=1773265791; cv=none; b=laoVPm13W0GeSQE73nuZB602sjUi11zuoeu2meVu/3FEvE51mq7j9pGuY3AxQpWAOyy+bkykzK0pn3lPJEkEWHrtpMTGkMZ6BbOUqQSLPxN2Yubk7f6fViXsGcDvTJT7ieUcVTTIFhSEZLLs6WEOGqo22EU/LfWVFs1ABg+m5Eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773261755; c=relaxed/simple;
-	bh=+tMjwVtoIwPnEEENKr/fbMqHX+fXhXF+EjhZ6XLdk2o=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=SiP55HfDSgWG1JtOmwyRlTExP4MZcqJgmpU/hpgVIXh7aUR3tkdeOGHKyCwctYYBno2WT3tBkHfmdttVJZgdbIob9MF22pYVhfIqMQ95/4ZrcNgID4IMhfYvv8ZrIlSZ5+hMv3EtQnZK6NGn6wc58MEKAzrVx74uhsHOtHevtKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HtMMcnNx; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-439b8a3f2bcso224223f8f.3
-        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 13:42:30 -0700 (PDT)
+	s=arc-20240116; t=1773265791; c=relaxed/simple;
+	bh=291oU36VktgDA4lcdjWsesdhLAVd3HI+Ywtw5dEDGFU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PAUjqvMNT+rSCLP+hx8cPd6nHRRyNKh+Sn6SoueyDaonMotR9ZZSZK8dtWIbIUSJ5WYksUuq3Dm+BJUQ8itdcrO9GTH8G3+bnr/FsoiLMRBr8ys8OJ/PfPWsRQLalcvZ2OB1uKRBYaPiCO+vzebJnlT1Wg3tX89f7mGa0SKOanI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hWxQqZ9x; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-8cd73c4a827so28095285a.3
+        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2026 14:49:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1773261749; x=1773866549; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1773265789; x=1773870589; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5GUWYHfXVEdpadwblxnNUaZuExc2YFi2bDkvDupR/6U=;
-        b=HtMMcnNxhCXaGFudSQT/KuKB/uoOcJIRNEFqeBqV8IF9RVQw02e711ano21lZUg1K8
-         WcHD30YQ7nYlvrjGdd4Is25k67BUiPDaU5vi7YTrvolNWaf/chTnOZ3i7+ASx+1N7F3L
-         UfAFpp58Bwp4miYohFE+ZvQGeDhELQIjwi1e8Mqz6dzclLG7p/MporBwMNcdZ0Ojdaub
-         nTlxwHLTD/5pt0F7j/hX80phpSoHuDQJgk+ks0zuzhxXQOJKqOQcHyPDrCXDERzhD91g
-         1dT7Tq0n0j4S9pR7xdxVFPWfY/exNMibJC3puvGSQLnnIAo7Dwugw53uVVFp6mTlspZF
-         K4yw==
+        bh=qe0o17KWryN2uQb+v83tzDMkUNJMgvdghMeQjdARKa8=;
+        b=hWxQqZ9xXBeFJ2q2OT4znLPwMy1MuYgxZh9vs/hXYAlOLbI2KaUVLIcOVpKs3HUouv
+         RooXPdvruXQRY2nTcVA2J9ykLd5QUR0p9mhgeWaPz1m5GroJdkviLGuRUXQYAG5bgpWs
+         lrIm8bzATeFYM0D9U5H05fonSy2RE8YVLHxKlP0nJ7Y5U85thjntsJ/OF15IKxNDLriL
+         unITmScK62+NA+LNf8rFTPQtdqghpfyYrrPhDQpB4p3IP/oOWKs1CzgkwWd7jp/55jC5
+         g9ruiBDJNRcbm09Rq6taPOebVyPoG+vQoice+LmW5iv5GXaqTpRnA0Tj+W8hakLfiUiF
+         lhoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773261749; x=1773866549;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5GUWYHfXVEdpadwblxnNUaZuExc2YFi2bDkvDupR/6U=;
-        b=NUky5eEF9b52kaE5F1WApmCS33YjEgiCS7/Y6gn50MAmCZElpFQ7Un25g2rW5DvojR
-         YNQy0C8r0Sa8s5sFo/MX1g6S273FFyzF/6lJfs4WwxaAMQuPJ9LrgnnREHzWssU5d26S
-         J/zeYwDFhjnHSYnKMPSpN4DVC1V1pBFjjTa4/TdBlygWsnOKyRx1xm9BY0v3pqeN/UTY
-         Lfl+1ojb8jzrHedXuBbubngjjwY0ECzr/0x1A6xMUIQZvnLHxjY/Hn/4h4middo8Cgx2
-         FNowTXIVHs8ZFmY3F15LWrEVQJET9Mswt1d1voh307HWddBI9PAUtEf2VadDx4ywgT0p
-         TYYQ==
-X-Gm-Message-State: AOJu0Yyhfq2K85/zdDq9J06K3DhUXeh5b8L5qY/4V1Zchl+ZryhT2DuZ
-	IoYV+NtPeZ7rfRVthhEUr0z/VgNrfFvBewHQadXcfHepOZAuIUQVONR8q+Nio4fP/RkkL7FqgKf
-	1Cbrk
-X-Gm-Gg: ATEYQzxmghbT+tlbVSkCJsWCn0bwixIt2FcVjSKz9Y8++YuDwxLk+nM/eItmc6FLCFM
-	tf1zM47UwxMnpEE+3CutX/Im8PH8kjv9JBBYkMnsHtIT/ZjRZtUTl4N06cTs9XOcuxjfe6gZcmA
-	MlbAwQOKGVJkG/U75FV2xq9wQ359WXBoA0mbjJNMGfKGENGvplzH35B/oSfFP7+PqMC6RdZoeeC
-	3/dMKFJbFZ1s3UR+AkVV+E/6/3O1WV1lyZvl/4J9lrJV64g2afgeRzOILyA03nb7bXnCRAI/eNU
-	YwvOiZrFlCSNxN3ioYEDxFsH5vwiLXC+wgxZcyPujJBAISWOACI+RIyS5KAjR0t4VhcrxqVTo2P
-	FLGgcy5kddA2AClvWPHi/uIoIfQUZDiTtC3783XDbpWG3aakkieX4I9cH4kRKFAE7BNZddjJZq2
-	TKwhIuPxPZHtnPfAZcatrd4a7Xl7na5YuMHQcKmvrF2bZnhX6XcqZ54L5o1kLpaZzVg6M=
-X-Received: by 2002:a05:6000:4029:b0:439:af81:1b21 with SMTP id ffacd0b85a97d-439f8139dafmr6848767f8f.0.1773261749119;
-        Wed, 11 Mar 2026 13:42:29 -0700 (PDT)
-Received: from ?IPV6:2001:a61:13a8:5d01:6093:5efc:b082:5860? ([2001:a61:13a8:5d01:6093:5efc:b082:5860])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439fdf09abesm2029476f8f.0.2026.03.11.13.42.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Mar 2026 13:42:28 -0700 (PDT)
-Message-ID: <615187c2-3c93-4de8-87c8-df840b6f451c@suse.com>
-Date: Wed, 11 Mar 2026 21:42:22 +0100
+        d=1e100.net; s=20230601; t=1773265789; x=1773870589;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qe0o17KWryN2uQb+v83tzDMkUNJMgvdghMeQjdARKa8=;
+        b=etjZvuXr+UJ9RWf6o8gB/JN9LTCYjPiuqYcmP4cRPSJbelCDp/E6ymHp1d4iz0EbjT
+         rkmPdv7nRA/mf2mODexWK25SpYyyX1AyJHMAYUSlfFaoiG1JefpKPLVBRjbOAWhH4a9v
+         CsztK+0ci+Qh0Fg06GRv9bo8grfz9Eu4QsmNzmUVOAKE2RWf8BXvo7fgJsKbjZjCJ09l
+         iABP9HOYpE9teTZyS7eD6u5Ry3KzPYJX2KlrwwNScp6YWsOfcdSWWVxghDbKlAKwf97Q
+         cfnYRLt0igH/fTVYMFSu0yqxHV9Oih4gmscC5P2i8+azmFpKuVWy1L+YWykttdoseSlY
+         IUfw==
+X-Gm-Message-State: AOJu0YxoQcR2VPNxtzBm/+fF0AUGfFu0eaaJ6uyvqkO355uvAWj+hD4I
+	Pc8FroYuFOUE+xJLlID36z9ZVocp3ZsrKkUm+6hBM6zgQxopdUZGGskZdXueq3Y+
+X-Gm-Gg: ATEYQzxz4uwxeMqf6kqNv3IZodIZejegpNjXS5+xw6wkmHa1m0z+BWlQsH9nuHF6pYh
+	nc8l+eujU1BNm9LI5FApniqQDIIm8v2ZwOqV56c8lxbUD+jngieM36p0E3sUS5KF77YaNkWOZXl
+	XqXBgt23t9CqPqwpweOlMHjpE1smO22Dpo6LFunHKZozubPGRkJE6pb0qD8hmjcNWiUBpJN5X3h
+	m6of48wf1fxn2z4iRKrSurpT+ZTwD7XSkygNU93C1o532tBWM4BLK16kpqytU12pylaH/Au2X8B
+	YGNOyHQvXZ2LgsUN3TRVlItwj7pspTs2GrBW3G19eCAS4InpYEFgPoFy78xVGZOo82it0U/Ci8z
+	/VGZyy6gj6rLBkv5mZOdWuEhqsVMbWRhy0toqTxslb0fti7J/fIicrLNw4NzsIK5ZgrhT6rn/p1
+	6A3k+wT324DrtN8modbL8rZzNJFdOBHD9fea/Z3XIZMaAP4RpjQoMDx+92MTsOyDDOcSOCbhUIX
+	4UUwrOsjkuMuW9hVtM3
+X-Received: by 2002:a05:620a:288c:b0:8cd:8ea2:2db3 with SMTP id af79cd13be357-8cda1abaf14mr556177985a.62.1773265789381;
+        Wed, 11 Mar 2026 14:49:49 -0700 (PDT)
+Received: from localhost.localdomain ([129.170.197.125])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cda21346a0sm208191285a.34.2026.03.11.14.49.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2026 14:49:48 -0700 (PDT)
+From: Nathan Rebello <nathan.c.rebello@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	heikki.krogerus@linux.intel.com,
+	kyungtae.kim@dartmouth.edu,
+	nathan.c.rebello@gmail.com
+Subject: Re: [PATCH 1/2] usb: typec: ucsi: validate connector number in ucsi_connector_change()
+Date: Wed, 11 Mar 2026 17:49:36 -0400
+Message-ID: <20260311214936.1045-1-nathan.c.rebello@gmail.com>
+X-Mailer: git-send-email 2.43.0.windows.1
+In-Reply-To: <2026031109-scrunch-aviator-0e2b@gregkh>
+References: <20260219164925.3249-2-nathan.c.rebello@gmail.com> <2026031109-scrunch-aviator-0e2b@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: USB list <linux-usb@vger.kernel.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-From: Oliver Neukum <oneukum@suse.com>
-Subject: Do we want to reset intfdata in the error case of probe
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_ALL(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34615-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_THREE(0.00)[3];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34616-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,linux.intel.com,dartmouth.edu,gmail.com];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FROM_NEQ_ENVFROM(0.00)[nathancrebello@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,suse.com:dkim,suse.com:mid]
-X-Rspamd-Queue-Id: 7D9E426A17A
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A02A226A90B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
+On Wed, 11 Mar 2026 at 14:10:28 +0100, Greg KH wrote:
+> Shouldn't this return an error and have the caller stop what it was
+> attempted to do?  When this is called in ucsi_init(), the
+> num_connectors is already parsed, so how can this be wrong?  Shouldn't
+> these values all be verified in one single place and then if any of the
+> descriptors are "incorrect", the device rejected at that point in time
+> and not require "deep" changes in the logic here to try to find these
+> types of errors?
+>
+> in short, let's validate the device once, and after that is done, we can
+> "trust" that it is correct and not need to check this stuff all over the
+> place.
 
-usb_probe_interface() reset intfdate to NULL, if probe() fails.
-Hence a question arises. Do we want to depend on it? That is,
-should handling intfdata be removed from the error handling
-of the probe methods of drivers?
+The CCI connector number can't be validated at init because it's not a
+static descriptor -- it arrives fresh with each runtime interrupt from
+the CCI register. The device can correctly report num_connectors=2 at
+init time, then later send an interrupt with connector_number=50 in the
+CCI. This is the same class of issue already handled at line 1840 in
+ucsi_init(), where buggy firmware sets a reserved bit in num_connectors
+and a defensive check was added because it "happens in buggy FW."
 
-	Regards
-		Oliver
+Without a bounds check, an out-of-range connector number indexes past
+the connector array into adjacent heap memory, and the resulting pointer
+is passed to schedule_work() -- dereferencing whatever function pointer
+happens to sit at that offset. A single buggy interrupt could crash the
+kernel.
 
+The closest single validation point is ucsi_notify_common(), the sole
+entry point where the CCI is parsed before calling
+ucsi_connector_change(). A one-line bounds check there would cover all
+backends and all call sites.
+
+Happy to send a v2 with that approach if acceptable.
+
+Nathan Rebello
 
