@@ -1,117 +1,211 @@
-Return-Path: <linux-usb+bounces-34548-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34549-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IKaoJ7NcsWlHuQIAu9opvQ
-	(envelope-from <linux-usb+bounces-34548-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 13:14:43 +0100
+	id MGyFM49fsWl/uQIAu9opvQ
+	(envelope-from <linux-usb+bounces-34549-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 13:26:55 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE3132637BB
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 13:14:42 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 922B5263973
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 13:26:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 32FD93058B90
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 12:14:08 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EB4D930333E4
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2026 12:26:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C1163D8114;
-	Wed, 11 Mar 2026 12:14:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A93A93D669F;
+	Wed, 11 Mar 2026 12:26:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="T8WBGX6p"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mtnbjkVi"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F753D648D;
-	Wed, 11 Mar 2026 12:14:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CA4A3DDDB5;
+	Wed, 11 Mar 2026 12:26:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773231244; cv=none; b=Vx1XIoLhUyxbh9JphIMQlCZTog1z9pRD7S6r44XOJ+1q+0L/asdzmQEu8DUApHArBQLMsjI+uXVluvMM/C3L4yK7lHgLQHclgJ08I+FLlPGJQN4K0Q7ob1VfjNB5Xxs+sxFrB8t8Byut2lM013p2dIehU8gkdNvHoqn2+1Ir0n0=
+	t=1773232008; cv=none; b=ZDZ/mXRYHhyBAM26y4COaMxNZOvL/3m24FPYaptev7PScpCPw0cZBkurpm01hnL3Dy+OSP/vAK7JBN+wGBu6YKeW+7vaISMdbZi1oTeQ+tDNdjS51zyPvn04lQnjV6hiEW3ngZyxE7/ZjWvyKHUyBs6zF64Dzd6Fk/x7fOF3ATs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773231244; c=relaxed/simple;
-	bh=PwGqk3+v7R+sLdxm5pk+5pTXm9MbGfoX5QFzpE+IBd4=;
+	s=arc-20240116; t=1773232008; c=relaxed/simple;
+	bh=wkhLYTb3dUx5spk5PzkXfvYKQAFodBUsoXqoLotdRT0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tcwaJ1BL3YzRKQrt4MjHgDP+WZCln/TrHZlurDo8OL+a4cpbPMsHGKKEv+h2Osx61YfAo1/HWpM+YglfTyw37gulCCrd134gVvLcGS1j2bZM1+kcL3wH7zZ096HBjaA9mJbF5WrA5cAm3RhC+aVO5opTY45OvfTIVJUY1fi/gB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=T8WBGX6p; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E768AC4CEF7;
-	Wed, 11 Mar 2026 12:14:02 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=flLM+PG90KjfLUQI+VWeWcsuahEX7NJxfYBllLK1nZriGAra9FAm/S9ninLuq3/PUsunEbfR44dMRNjgOyBynbBGwgS3cr6RBLBjbxFY59sW/h2s88jtwZqPjZa3ttmAUXnOTYiQxeIiHifbNhomf4xmWV/ZT1UvTYF9vt+nzUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=mtnbjkVi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBA75C116C6;
+	Wed, 11 Mar 2026 12:26:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1773231243;
-	bh=PwGqk3+v7R+sLdxm5pk+5pTXm9MbGfoX5QFzpE+IBd4=;
+	s=korg; t=1773232007;
+	bh=wkhLYTb3dUx5spk5PzkXfvYKQAFodBUsoXqoLotdRT0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T8WBGX6pA9/utK4xBTtzIT98h0VMcaJhSAPnB4nCAWe5KNI0To3xBatViS2ZcdcnT
-	 yM0nGpttZJNNgf8R4jUcvpQvLTMiHpaQmi5d+Nu6TyLNHE9kiLnjmDqBggla0k73gh
-	 wRTzlIMdhb7UlpERe9JYZIlmn3Szug/7c013MNns=
-Date: Wed, 11 Mar 2026 13:14:00 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Fan Wu <fanwu01@zju.edu.cn>
-Cc: Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: opticon: fix UAF in write callback during
- port removal
-Message-ID: <2026031137-amply-cardboard-581c@gregkh>
-References: <aa_c0B9E7MPm_yqL@hovoldconsulting.com>
- <20260309142757.589802-1-fanwu01@zju.edu.cn>
- <20260310170424.19817-1-fanwu01@zju.edu.cn>
+	b=mtnbjkVigYJS4+MUXSjOwYMnuAsKnZ9xbtrj2IJrlvhqJ2bG+66/R6ZURJ4EVOhGO
+	 cJwupph4PhLK8hgOdHsRJTYM6+SaRS3zWmJTkb9/pZul4Y8irIGBhv4uUurFT5d6lq
+	 S0MPEf5t7u+5rT2KmfzVcrO84s/wQ0BNWcRYnxcU=
+Date: Wed, 11 Mar 2026 13:26:42 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Guan-Yu Lin <guanyulin@google.com>
+Cc: mathias.nyman@intel.com, perex@perex.cz, tiwai@suse.com,
+	quic_wcheng@quicinc.com, broonie@kernel.org, arnd@arndb.de,
+	christophe.jaillet@wanadoo.fr, xiaopei01@kylinos.cn,
+	wesley.cheng@oss.qualcomm.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org,
+	stable@vger.kernel.org, Hailong Liu <hailong.liu@oppo.com>
+Subject: Re: [PATCH v2 1/2] usb: offload: move device locking to callers in
+ offload.c
+Message-ID: <2026031134-uncover-siamese-cdf9@gregkh>
+References: <20260309022205.28136-1-guanyulin@google.com>
+ <20260309022205.28136-2-guanyulin@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260310170424.19817-1-fanwu01@zju.edu.cn>
-X-Rspamd-Queue-Id: EE3132637BB
+In-Reply-To: <20260309022205.28136-2-guanyulin@google.com>
+X-Rspamd-Queue-Id: 922B5263973
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [2.34 / 15.00];
 	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
 	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34548-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-34549-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[intel.com,perex.cz,suse.com,quicinc.com,kernel.org,arndb.de,wanadoo.fr,kylinos.cn,oss.qualcomm.com,vger.kernel.org,oppo.com];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	NEURAL_HAM(-0.00)[-0.988];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.910];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
 	DKIM_TRACE(0.00)[linuxfoundation.org:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,linuxfoundation.org:dkim]
 X-Rspamd-Action: no action
 
-On Tue, Mar 10, 2026 at 05:04:24PM +0000, Fan Wu wrote:
-> On Tue, Mar 10, 2026 at 09:56:48 +0100, Johan Hovold wrote:
-> > How was this potential issue found? Are you using some kind of LLM or
-> > other tool?
+On Mon, Mar 09, 2026 at 02:22:04AM +0000, Guan-Yu Lin wrote:
+> Update usb_offload_get() and usb_offload_put() to require that the
+> caller holds the USB device lock. Remove the internal call to
+> usb_lock_device() and add device_lock_assert() to ensure synchronization
+> is handled by the caller. These functions continue to manage the
+> device's power state via autoresume/autosuspend and update the
+> offload_usage counter.
 > 
-> Hi Johan,
+> Additionally, decouple the xHCI sideband interrupter lifecycle from the
+> offload usage counter by removing the calls to usb_offload_get() and
+> usb_offload_put() from the interrupter creation and removal paths. This
+> allows interrupters to be managed independently of the device's offload
+> activity status.
 > 
-> Thanks for the explanation. You're right — I missed the lifecycle guarantees
-> provided by usb_serial_disconnect(), and since opticon_close() already handles
-> the URB cleanup, this report is a false positive.
+> Cc: stable@vger.kernel.org
+> Fixes: ef82a4803aab ("xhci: sideband: add api to trace sideband usage")
+> Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
+> Tested-by: Hailong Liu <hailong.liu@oppo.com>
+> ---
+>  drivers/usb/core/offload.c       | 34 +++++++++++---------------------
+>  drivers/usb/host/xhci-sideband.c | 14 +------------
+>  2 files changed, 13 insertions(+), 35 deletions(-)
 > 
-> I'm currently researching static analysis techniques (CodeQL combined with LLM
-> assistance) for detecting UAF bugs, particularly around cross-entry lifetimes.
-> In this case, the analysis missed the subsystem-level guarantee that close runs
-> before remove.
+> diff --git a/drivers/usb/core/offload.c b/drivers/usb/core/offload.c
+> index 7c699f1b8d2b..e13a4c21d61b 100644
+> --- a/drivers/usb/core/offload.c
+> +++ b/drivers/usb/core/offload.c
+> @@ -20,6 +20,7 @@
+>   * enabled on this usb_device; that is, another entity is actively handling USB
+>   * transfers. This information allows the USB driver to adjust its power
+>   * management policy based on offload activity.
+> + * The caller must hold @udev's device lock.
 
-As is required, you always have to document this type of thing in the
-changelog text.
+Ok, but:
+
+>   *
+>   * Return: 0 on success. A negative error code otherwise.
+>   */
+> @@ -27,31 +28,25 @@ int usb_offload_get(struct usb_device *udev)
+
+Why are you not using the __must_hold() definition here?
+
+>  {
+>  	int ret;
+>  
+> -	usb_lock_device(udev);
+> -	if (udev->state == USB_STATE_NOTATTACHED) {
+> -		usb_unlock_device(udev);
+> +	device_lock_assert(&udev->dev);
+
+That's going to splat at runtime, not compile time, which is when you
+really want to check for this, right?
+
+And I thought all of the locking was messy before, and you cleaned it up
+to be nicer here, why go back to the "old" way?  Having a caller be
+forced to have a lock held is ripe for problems...
+
+You also are not changing any callers to usb_offload_get() in this
+patch, so does this leave the kernel tree in a broken state?  If not,
+why not?  If so, that's not ok :(
+
+
+
+> +
+> +	if (udev->state == USB_STATE_NOTATTACHED)
+>  		return -ENODEV;
+> -	}
+>  
+>  	if (udev->state == USB_STATE_SUSPENDED ||
+> -		   udev->offload_at_suspend) {
+> -		usb_unlock_device(udev);
+> +	    udev->offload_at_suspend)
+
+Can't that really all be on one line?
+
+>  		return -EBUSY;
+> -	}
+>  
+>  	/*
+>  	 * offload_usage could only be modified when the device is active, since
+>  	 * it will alter the suspend flow of the device.
+>  	 */
+>  	ret = usb_autoresume_device(udev);
+> -	if (ret < 0) {
+> -		usb_unlock_device(udev);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+>  
+>  	udev->offload_usage++;
+>  	usb_autosuspend_device(udev);
+> -	usb_unlock_device(udev);
+>  
+>  	return ret;
+>  }
+> @@ -64,6 +59,7 @@ EXPORT_SYMBOL_GPL(usb_offload_get);
+>   * The inverse operation of usb_offload_get, which drops the offload_usage of
+>   * a USB device. This information allows the USB driver to adjust its power
+>   * management policy based on offload activity.
+> + * The caller must hold @udev's device lock.
+>   *
+>   * Return: 0 on success. A negative error code otherwise.
+>   */
+> @@ -71,33 +67,27 @@ int usb_offload_put(struct usb_device *udev)
+
+Again, use __must_hold() here, to catch build time issues.
+
+And again, I don't see any code changes to reflect this new requirement
+:(
 
 thanks,
 
