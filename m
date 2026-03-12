@@ -1,159 +1,179 @@
-Return-Path: <linux-usb+bounces-34685-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34686-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SEbSNWXFsmmvPAAAu9opvQ
-	(envelope-from <linux-usb+bounces-34685-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 14:53:41 +0100
+	id OPFWL73GsmmvPAAAu9opvQ
+	(envelope-from <linux-usb+bounces-34686-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 14:59:25 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7E5E272F61
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 14:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E8DE7273039
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 14:59:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id AA5823033E64
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 13:49:07 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 1E5843042687
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 13:56:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44FF8351C07;
-	Thu, 12 Mar 2026 13:48:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3795334A771;
+	Thu, 12 Mar 2026 13:55:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Vbza1ZoZ"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TECEkn3/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA6B175A87;
-	Thu, 12 Mar 2026 13:48:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A15C356A0D
+	for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 13:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773323338; cv=none; b=Pglhx5RwzrdM7b/amvZ3DoI/GpkC4aR1WWDyzLO2eCtrb1x6i/Md0V7ns7yHrPs0dTARdkYdWMZwUHItM1QFYgA+Ez0BZtfMutEAu2mDhKnSotz8i3WFKq+ykTYSaqRp+4uUn26xKTlDpJcQXwTEfvmlUU2rlQsOp10fWZP1qoI=
+	t=1773323757; cv=none; b=dqPJe+DWhbZr+o9KIl2coRaWjz8Co1G+iBbd7suPhc3AdSbe57Hoio+bo6Rc373MJ6Ha1Zn9iOqJxdS7++0TuIIDQg5wWhc6WWhc8xmLioBpY7u3BT68X09fNqSkjd9x0nfd8W/WSe24Q2egw3nfzepOBLKAOJ8h4fqpAd8HIHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773323338; c=relaxed/simple;
-	bh=n6Wi8+Wf3bcqnQdzJvITeSyaVeWgTfVDYqyrAlHIfO8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RMXUWNoQRFVwzH2zJAZTGtgViy6bChn27ZKp5L/GG1qJC/zt4XWpVcTKc6iQAIoyH1FvE/tdi8PkJLGrbornc71jJlvnW5LeUghpQGVOmupre1ol48atBy1RGm+lTAZVLQiAjL/0eV4duPDVRpbQOLmI5gOSxVo+jaHYSYiyPFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=Vbza1ZoZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1211C4CEF7;
-	Thu, 12 Mar 2026 13:48:54 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Vbza1ZoZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1773323333;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cGQoGI0iD9IPU4MUwC9OugDLG8y8kJybLkuwslOCZHA=;
-	b=Vbza1ZoZ3MQ4b2ykXY2DyqS4C6Ur7UHx9qiWIc/vFh778HfoElPE2RxbHwwtYDWBWz5kTd
-	GgqrRtZHwWKcuZxBSTueiwWRWvj2d75BQlYdE8HJs5S7vd9FutLk/Ei4er761vtUbva2iY
-	m5uliyiKx+1wocBBtZVjNBVv6c6GbN0=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 780e6e40 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Thu, 12 Mar 2026 13:48:53 +0000 (UTC)
-Date: Thu, 12 Mar 2026 14:48:48 +0100
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: Fernando Fernandez Mancera <fmancera@suse.de>
-Cc: netdev@vger.kernel.org, rbm@suse.com, Jason Gunthorpe <jgg@ziepe.ca>,
-	Leon Romanovsky <leon@kernel.org>,
-	Zhu Yanjun <zyjzyj2000@gmail.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Boris Pismenny <borisp@nvidia.com>,
-	Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>,
-	Simon Horman <horms@kernel.org>,
-	Edward Cree <ecree.xilinx@gmail.com>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Harald Welte <laforge@gnumonks.org>,
-	Antonio Quartulli <antonio@openvpn.net>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	Oliver Neukum <oliver@neukum.org>, David Ahern <dsahern@kernel.org>,
-	Stanislav Yakovlev <stas.yakovlev@gmail.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Parav Pandit <parav@nvidia.com>, Edward Srouji <edwards@nvidia.com>,
-	Vlad Dumitrescu <vdumitrescu@nvidia.com>,
-	Kees Cook <kees@kernel.org>, Jianbo Liu <jianbol@nvidia.com>,
-	Gal Pressman <gal@nvidia.com>, Guillaume Nault <gnault@redhat.com>,
-	Cosmin Ratiu <cratiu@nvidia.com>,
-	Carolina Jubran <cjubran@nvidia.com>,
-	Alexandre Cassen <acassen@corp.free.fr>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	"open list:INFINIBAND SUBSYSTEM" <linux-rdma@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:NETRONOME ETHERNET DRIVERS" <oss-drivers@corigine.com>,
-	"open list:SFC NETWORK DRIVER" <linux-net-drivers@amd.com>,
-	"open list:GTP (GPRS Tunneling Protocol)" <osmocom-net-gprs@lists.osmocom.org>,
-	"open list:USB CDC ETHERNET DRIVER" <linux-usb@vger.kernel.org>,
-	"open list:WIREGUARD SECURE NETWORK TUNNEL" <wireguard@lists.zx2c4.com>,
-	"open list:INTEL PRO/WIRELESS 2100, 2200BG, 2915ABG NETWOR..." <linux-wireless@vger.kernel.org>,
-	"open list:ETHERNET BRIDGE" <bridge@lists.linux.dev>
-Subject: Re: [PATCH 05/10 net-next v2] drivers: net: drop ipv6_stub usage and
- use direct function calls
-Message-ID: <abLEQMx6mPM4vL4t@zx2c4.com>
-References: <20260310153506.5181-1-fmancera@suse.de>
- <20260310153506.5181-6-fmancera@suse.de>
+	s=arc-20240116; t=1773323757; c=relaxed/simple;
+	bh=jiJ5K1GrkbKrm0dg4OwhK+jrfwhUt7/zK3u5sGP5gkg=;
+	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=GLjU52++GNgfs4pxgaFq6JhPZODjiYOyKIE8b6RYOeeKwVJeoSqfxLDh3x2PUBKrYbFeKdocfKm9fkRIcBCDy/fv+19UVckAW7rkAHxWWMP5YHo0UvsMiPqrSiyNF9M0+PT8RoaMzCmtpEa4Sk9GyJkmbLpQWJCzHT8qsfv3UU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TECEkn3/; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4852f73d0a3so9783425e9.3
+        for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 06:55:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1773323754; x=1773928554; darn=vger.kernel.org;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=FYIgue5vOTpk/VhE+0OdhsRUaHFWy6O7UNT6rpalMsM=;
+        b=TECEkn3/ayC3deFph0WpkcPdxFSl5R4gucQzk4VwaoRPCB10nbxydM8ZNYRefy3mkq
+         ReecLP8yaJDmDSAeIcE70crF4+3TfXmueMDYGf58WwNEsDzVpa7/lN7nLXULVIaVdB2s
+         n6fU2JdTHyduERRpean5m6dsFvkvy4Yu/9MvrAaN27IzdqqGJ/ZVYEHU6tRtfxgM8BZ6
+         h49WTIstL0r9v6hdbDu6FWKVS2v+XIfZqYCcX8ETfIiaCmcB0tbdqGN0ejlCgkyWjJ02
+         tVpuN4SLwxKJCeFAOh1OogB0RQSCpoUOJ4NDOHZFQvufpot55m+9h6UwFi3veR7N5W3I
+         /OGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773323754; x=1773928554;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FYIgue5vOTpk/VhE+0OdhsRUaHFWy6O7UNT6rpalMsM=;
+        b=mXGynSioqvtI7plmAwoSA7UpUKjZwb44Rzmk+p/ksbmKmK6Z1ryfchnBktTVSBQExh
+         sh69pOGDdvdbn0k39aMeAASyNnwmv0vGDR8DnN8kheN3wQGs9O6oDyvmp58yFl7Rst/P
+         H5svE6Sz41PvYwIuMkeikQTZdJxToIAFpx8f1lXzyLWK0B5nXMHxGtxjxz8hkl0vyPgE
+         5cFonEx+9UXd2zmnqy07P8ztXAsEkT0gvIvWOOn5vgdEQTkIBd/U2EuJdo0/DLNJw3TE
+         VOCRd0xeR8392GFhhHoBt4OjgoDq8RlTb05jKyb/IGoc58ZCm+L/+Sxcf92GgRvZaJWD
+         85fA==
+X-Forwarded-Encrypted: i=1; AJvYcCUPo9FgQ8htP2LvBM8mUwAxaBw3i+Z5ZIFDrbHsNUeKZgi+GsWf2JXYEZLVKGPYNiyrBidhdMlX0ts=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwS/PQ15FPpsQjf0bYajVk82QTI5DBBFq+kNyz3qkCQLZ31p//8
+	kxIHZad/mVkXXz0CkuZe6/4jjRYnGLQmu0GT6nu4ZXim88jtuDBJ3rEsWMfDqflElST2/QChpuW
+	5wGGC
+X-Gm-Gg: ATEYQzweSH8Dz7lCFsPqcUpQ28JFqsKGhF8Xmp+0/MOoMyIvECywVTjgj7Kecmlqcfx
+	AGGa2r3kBG8XQlLxK3AHUiQUSCxcEMREJbN5yHiyoP/NHCyoVyJ1uZaP4M2o3HxvauACiLBm2vS
+	ACiTgwNtyka3UyVu2zcqywvwYVmHDVgW89EY7qjk6OKFs0b1U/AQLQcYLMEKRuGgBVZQcbPqMAw
+	LzG+78fdTyofXPwSH55muAxUXGiMNDxIkftO4OotuHtnlr96Bfpq0qy8PgWZ77ucjIs7Ea2p/yP
+	+yx1MTElMl1vZT8+no/SS9iCZdYv/uMHPPJc+mAXtHLbHk0t+47pM1pXleYuwAIqXzw3Q4STjpt
+	VRjqIBqJVjeF8T3WQu4n7ber+HYMWDvxATHOSysY9ag7UxzHCysRb2ZeigYhg0nyvksZzwqhiRH
+	q5X1OKY/fFNOHY1e75n8iyyPRRxw95P3hveEuTCqCgbJpUshQj9FMVcfvsH0z4LYLgMIB6w8Gul
+	EAPMA==
+X-Received: by 2002:a05:600c:1d06:b0:485:3eba:ab96 with SMTP id 5b1f17b1804b1-4854b0acca6mr96365905e9.3.1773323754437;
+        Thu, 12 Mar 2026 06:55:54 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13b5:4001:781c:5386:18e2:cda0? ([2001:a61:13b5:4001:781c:5386:18e2:cda0])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48541aba60esm264053855e9.5.2026.03.12.06.55.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Mar 2026 06:55:54 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------S8umGV2860PBvl0ev8K1KStv"
+Message-ID: <261996a8-7ad4-4df2-a469-f6602da71255@suse.com>
+Date: Thu, 12 Mar 2026 14:55:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260310153506.5181-6-fmancera@suse.de>
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+ USB list <linux-usb@vger.kernel.org>
+From: Oliver Neukum <oneukum@suse.com>
+Subject: correctly handling EPROTO
+X-Spamd-Result: default: False [-1.06 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[zx2c4.com,quarantine];
+	MIME_BASE64_TEXT_BOGUS(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[zx2c4.com:s=20210105];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
+	MIME_GOOD(-0.10)[multipart/mixed,text/plain,text/x-patch];
+	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,suse.com,ziepe.ca,kernel.org,gmail.com,nvidia.com,lunn.ch,davemloft.net,google.com,redhat.com,netfilter.org,gnumonks.org,openvpn.net,queasysnail.net,neukum.org,blackwall.org,corp.free.fr,fomichev.me,corigine.com,amd.com,lists.osmocom.org,lists.zx2c4.com,lists.linux.dev];
-	TAGGED_FROM(0.00)[bounces-34685-lists,linux-usb=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34686-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[47];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[zx2c4.com:+];
+	TO_DN_ALL(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Jason@zx2c4.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	HAS_ATTACHMENT(0.00)[];
+	NEURAL_HAM(-0.00)[-0.988];
+	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:+];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[zx2c4.com:dkim,zx2c4.com:email,zx2c4.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D7E5E272F61
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,suse.com:dkim,suse.com:email,suse.com:mid]
+X-Rspamd-Queue-Id: E8DE7273039
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Mar 10, 2026 at 04:34:28PM +0100, Fernando Fernandez Mancera wrote:
-> diff --git a/drivers/net/wireguard/socket.c b/drivers/net/wireguard/socket.c
-> index 253488f8c00f..c362c78d908e 100644
-> --- a/drivers/net/wireguard/socket.c
-> +++ b/drivers/net/wireguard/socket.c
-> @@ -136,8 +136,7 @@ static int send6(struct wg_device *wg, struct sk_buff *skb,
->  			if (cache)
->  				dst_cache_reset(cache);
->  		}
-> -		dst = ipv6_stub->ipv6_dst_lookup_flow(sock_net(sock), sock, &fl,
-> -						      NULL);
-> +		dst = ip6_dst_lookup_flow(sock_net(sock), sock, &fl, NULL);
->  		if (IS_ERR(dst)) {
->  			ret = PTR_ERR(dst);
->  			net_dbg_ratelimited("%s: No route to %pISpfsc, error %d\n",
+This is a multi-part message in MIME format.
+--------------S8umGV2860PBvl0ev8K1KStv
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Rest in peace, stub.
+Hi,
 
-For the WireGuard part,
+as we just discussed an HID device which tends to report
+-EPROTO from time to time, the question what a driver is
+to do when it gets -EPROTO.
+Do we just retry? I am not really happy with that, as we
+may very well get into a livelock. Nevertheless I think
+we cannot just assume that -EPROTO is not recoverable.
 
-    Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Do we need to do something drastic like generalizing
+the backoff logic from usbhid?
+
+What do you think?
+
+	Regards
+		Oliver
+
+--------------S8umGV2860PBvl0ev8K1KStv
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-usb-class-cdc-wdm-handle-EPROTO-on-interrupt-endpoin.patch"
+Content-Disposition: attachment;
+ filename*0="0001-usb-class-cdc-wdm-handle-EPROTO-on-interrupt-endpoin.pa";
+ filename*1="tch"
+Content-Transfer-Encoding: base64
+
+RnJvbSBjNTY1NmQ0OTIyNDkwOGQwM2E0ZjdkYzgyMzUzZTkxOWRmNTE5OGU0IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29t
+PgpEYXRlOiBUaHUsIDEyIE1hciAyMDI2IDEyOjI5OjIzICswMTAwClN1YmplY3Q6IFtQQVRD
+SF0gdXNiOiBjbGFzczogY2RjLXdkbSBoYW5kbGUgRVBST1RPIG9uIGludGVycnVwdCBlbmRw
+b2ludAoKSWYgd2UgZ2V0IGFuIHVuZXhwZWN0ZWQgZXJyb3IsIG1vc3QgbGlrZWx5IEVQUk9U
+TwpkdXJpbmcgZGlzY29ubmVjdCwgdGhlcmUgaXMgbm8gcG9pbnQgaW4gY2hlY2tpbmcKZm9y
+IHRyYW5zbWl0dGVkIGRhdGEuIFdlIGRvIG5vdCB3YW50IHRvIHByb2Nlc3MKc3VjaCBtZXNz
+YWdlcywgZXZlbiBpZiB0aGV5IGFyZSBsb25nIGVub3VnaC4KQXMgd2UgY29uc2lkZXIgc3Vj
+aCBldmVudHMgcmVjb3ZlcmFibGUsIGp1bXAKZGlyZWN0bHkgdG8gcmVzdWJtaXNzaW9uLgoK
+U2lnbmVkLW9mZi1ieTogT2xpdmVyIE5ldWt1bSA8b25ldWt1bUBzdXNlLmNvbT4KLS0tCiBk
+cml2ZXJzL3VzYi9jbGFzcy9jZGMtd2RtLmMgfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBp
+bnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9j
+bGFzcy9jZGMtd2RtLmMgYi9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtd2RtLmMKaW5kZXggOTE4
+NTI5NWY1Mzc2Li44MDY3NTA2ZDA2YTQgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2NsYXNz
+L2NkYy13ZG0uYworKysgYi9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtd2RtLmMKQEAgLTI3MSw3
+ICsyNzEsNyBAQCBzdGF0aWMgdm9pZCB3ZG1faW50X2NhbGxiYWNrKHN0cnVjdCB1cmIgKnVy
+YikKIAkJZGVmYXVsdDoKIAkJCWRldl9lcnJfcmF0ZWxpbWl0ZWQoJmRlc2MtPmludGYtPmRl
+diwKIAkJCQkibm9uemVybyB1cmIgc3RhdHVzIHJlY2VpdmVkOiAlZFxuIiwgc3RhdHVzKTsK
+LQkJCWJyZWFrOworCQkJZ290byBleGl0OwogCQl9CiAJfQogCi0tIAoyLjUzLjAKCg==
+
+--------------S8umGV2860PBvl0ev8K1KStv--
 
