@@ -1,196 +1,170 @@
-Return-Path: <linux-usb+bounces-34706-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34707-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aBwQL/YFs2njRgAAu9opvQ
-	(envelope-from <linux-usb+bounces-34706-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 19:29:10 +0100
+	id 2Fu8LTQPs2k9SAAAu9opvQ
+	(envelope-from <linux-usb+bounces-34707-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 20:08:36 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25183277266
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 19:29:10 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52F6E277770
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 20:08:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 09143304973E
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 18:29:07 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4BE993030ED9
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 19:08:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9512A3F165D;
-	Thu, 12 Mar 2026 18:29:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53ACE397E90;
+	Thu, 12 Mar 2026 19:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Nt6+wKDY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
+Received: from mail-pj1-f97.google.com (mail-pj1-f97.google.com [209.85.216.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046B23DBD6F
-	for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 18:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5A63375C5
+	for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 19:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773340145; cv=none; b=nJ8SI959XYiIQ8k1WhASbdP7OE2YlZEozXtYRjgBnpeAHdUIH/ZilfH+AEZjZv++vpyAOgcrgCPanPjXRYPK4CHi4HgoY1zKMlku5qTw8xBYqZCHBm9JSYpFQIGRfo1A0fzxfK6kV5PIlhw6ibtiMfDo6U7XXguSa1ODkQ59EiY=
+	t=1773342513; cv=none; b=kph/Dm42O+gujG17WtZidF6VeQhgMgvBJAH5DCJG+FnNH9ZXZssRcs0srpU53k4lEF4fLg0JO302y09oxnA57zY7qp1LMqFF6U3HOvaa2jf+NT6maHSLbG9jL0tUl2DWyyBMZay9vXlNRdYpNvFXUiv00t9SlB/DBIGVn/eqMT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773340145; c=relaxed/simple;
-	bh=d/DP0+vJOcECsIzjX4QzSrE3anVwwolFAi7fW3G/joM=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=hMLT/EjZI80PdiR1YUu0ti0eVG2eyVnqtFN+Ujp1ig4VWfkcPUnwGR+PF3Fuo1Caf0hgCIW1wwQbw/TT846x0JDzVnTFBALhMQKDzKvqzDeVN1syiaNbRHVbFjeIXoXHFfM2/dY49pLU+zM3BW7k++dsbyrVIm8eBcPpuENnk2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-464bbea2120so9814399b6e.3
-        for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 11:29:03 -0700 (PDT)
+	s=arc-20240116; t=1773342513; c=relaxed/simple;
+	bh=rlw7vcJT6fYP+b9VD7DzcuKWSe2ilm2bxQ1uoV6+SPI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RUTzo7odDNMqAaRzOH+taF5p3uoEJyng2V5Y3hO+8Kp2OyS6zXvx1sicDS5kc1Nmibh4vfFBJqSvg/s2eekskYnonUjYHhEsZJfG3+IVIDdSe3PdbAvfPkVWZrBoviYYNeTmRcEYWSMsJK1ldZxFxSppBzDAtirhIsdSsEiMQPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Nt6+wKDY; arc=none smtp.client-ip=209.85.216.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-pj1-f97.google.com with SMTP id 98e67ed59e1d1-3567e2b4159so738817a91.0
+        for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 12:08:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773340143; x=1773944943;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jJ7QbcWa7DDuZX8xC1UJVHiqbPGwWNOJj7WjTfU8Las=;
-        b=PdmDRIalB1/icS3jlArkHTRt1V/eaATNTnB1PEP4kx9HBUPuCRHYRcq9bSHdx18lQK
-         3QkgquVg4q2hmbUHtZ92uf4QYmGmRHH3uwwWcvn+0ddtcKZht5uGGD/RzjjsUsHmXEDE
-         Xq0acLEunBeDn6CHZBRX3e/8kCDswkaxEKBMhceaLomSZOGPwxvhV/7NDDJaYclCFJtm
-         flLU0VRa2YMD8anPUBksXjs3lX5WhU/fxiQzRe4gDt4iUJz7hXQ75XyuFuqO7X6/RAs+
-         tXdZEH+QfkXom5ZK8/ZtF+HjCT8KgBZ3FWvzjc6GHjwvhi0Ikhr6bEZe9tiBJNh4OWEZ
-         wh2g==
-X-Forwarded-Encrypted: i=1; AJvYcCXsBJ98yBsLXpqfGE7P90cJljeaRS63+1cPAFtWeUoRkeah4AzS5/EH3Mfx4sxbxg9LrjUC8jx4Qtw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnCqX3fHvzmWweW3ZSd3HmdXV/KIv/CwEEBy12sNKTy5/+Ya+H
-	NrkhBcV6RclaqHv/mb4VUY6nHwcFqfDId6BwK1F7DJc3mz4ycsDn2wdpw4X3uMuNVrtGfZdoVab
-	mwN4L2W4rkODLTPnu+8SmBTGv3gz12jirhQNkp67kIilVM4DILx1BDXu7wg4=
+        d=1e100.net; s=20230601; t=1773342512; x=1773947312;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wUXbea6QKRzDcqvVKEwxyV3TOlSzxbp6/w4bcFBJnaA=;
+        b=ScNW7Ov0e8O4F6XwGpQKV19mOG2UXosB3XNH4kdyxEyQidXc4i4EHKTskt8eSGqh2q
+         VHKtgwY1ydmTZEvOCbfx5Tx0f/4XMVsYQWApsnSJOpHL0x0ynIH6lHaxY+PBClZaQkqx
+         n4mKngpQu6EfvMRGHXejWSm5KsyA25HdYo4oBz56uWPN3Eo7vsnM0OtaC5mAtIQTSJVl
+         ysayBNgGNj7POQrzIFFNLdw4Hsjfx3HY3y7Hbhe/JlOlku3NmguIRyUQkotpSUquGUIG
+         mR3J261Wjy35/DXjbaYTIQR1Y+IloRRURwFPKCrhJ/q6cXbpAuV7aYUY7tJmeu3B1i0e
+         u2SQ==
+X-Gm-Message-State: AOJu0YzNGuVS5zVnRgVEIe7zYGXYTbEYNTXF/xLYNVm9c7gfc1KJODu/
+	1rOVRCuE6J6ZhmwWa1T31ttyDOFsSAgnC21H8H3F6/0AC+9cpoHz5T6Rfg+ayHUhKAzpr+OvF0/
+	3lXh/IbavyA46gGos5saCsEd6Z+E9BRFPSoX922feXM4fL/AFAhQxD072BjJ+9G/Mit4JeTxKOR
+	euCEI4uJW5BozVzLbWWUE08XKXFwhs9xeg7j9nsWC+8Hm31laByqlCwZmImB7V33YS9FGUd/bGH
+	Y0Chogcj9WaJA==
+X-Gm-Gg: ATEYQzwO1di4o6Ht3cLxqHLfn5i0XJvm1/WjOnX6Yrc5AWT6hMcihm7ztYT7UsCaasa
+	7qq3NCWlBCQZ2tL4L2O1+QzPaSRtbzZHneH4LqIEQ0pKU8qaZtTo6aXBRaxETOJ2ae2bpmPEIKr
+	9RfgKZwTT8Oaf6zHcT1o/PScPenoH1cTpETeLpcyGYzwbRlRJDoJQFvkjoB4mR6cWMlEE+jpwE0
+	eHtqlvLcv/jMPg4vpYszG+33m+RxbWHIHaLavumELF7zmC+GyuKh19tK/OA/z6rSYlNO0dq4ufX
+	2QYETv5BTfco2eCVO/KY0XlTF/nNZcfY9QhAzHo6mVAZZuWtTmg47WLgli0KM4BCzCQ0wolQEds
+	1owT7mGRRRFlNoYQuAjgXsxfcnGvL6itruKcuP48U/qYQFbIwcqVJJ2FeNoU14jiJUCAvhZNE1U
+	NWexFmYYhuMmCcIAkiJXGuRkucOgj/2FoXPrKfHD2P7/aF5Ng/PbCdb/s3RA==
+X-Received: by 2002:a17:90b:1d09:b0:359:8dfd:64c8 with SMTP id 98e67ed59e1d1-35a22053575mr557834a91.24.1773342511961;
+        Thu, 12 Mar 2026 12:08:31 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-117.dlp.protect.broadcom.com. [144.49.247.117])
+        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-35a23d9f3c4sm19690a91.6.2026.03.12.12.08.31
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 12 Mar 2026 12:08:31 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-dl1-f70.google.com with SMTP id a92af1059eb24-1279caef718so2155285c88.1
+        for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 12:08:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1773342510; x=1773947310; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wUXbea6QKRzDcqvVKEwxyV3TOlSzxbp6/w4bcFBJnaA=;
+        b=Nt6+wKDYO5zBz1qZnLkcPUmLG52htxQAit88swDlLKEKjcW1GKUmGwwYMDduIwfsvN
+         4/PE4XlQbeY74Tc6wZ9AKn5GNSciSfeqpG9KH2kLTZ6qoN5zzFtOcbH8q1CbTwyPYXVS
+         RzfV9c7/a/xgOZ3LbOiLqWHKwDONZsCCNjUy8=
+X-Received: by 2002:a05:7022:f9a:b0:119:e55a:9be7 with SMTP id a92af1059eb24-128f3d01a1amr340042c88.3.1773342510177;
+        Thu, 12 Mar 2026 12:08:30 -0700 (PDT)
+X-Received: by 2002:a05:7022:f9a:b0:119:e55a:9be7 with SMTP id a92af1059eb24-128f3d01a1amr340011c88.3.1773342509418;
+        Thu, 12 Mar 2026 12:08:29 -0700 (PDT)
+Received: from stbsdo-bld-1.sdg.broadcom.net ([192.19.161.248])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-128e7cb558fsm9908113c88.10.2026.03.12.12.08.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2026 12:08:29 -0700 (PDT)
+From: justin.chen@broadcom.com
+X-Google-Original-From: justin.chen@broadcom.net
+To: linux-usb@vger.kernel.org
+Cc: bcm-kernel-feedback-list@broadcom.com,
+	alcooperx@gmail.com,
+	stern@rowland.harvard.edu,
+	gregkh@linuxfoundation.org,
+	Justin Chen <justin.chen@broadcom.com>
+Subject: [PATCH] usb: ehci-brcm: fix sleep during atomic
+Date: Thu, 12 Mar 2026 12:08:25 -0700
+Message-Id: <20260312190825.3596757-1-justin.chen@broadcom.net>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:22a0:b0:672:a49f:128e with SMTP id
- 006d021491bc7-67bda98fb5emr266907eaf.8.1773340143019; Thu, 12 Mar 2026
- 11:29:03 -0700 (PDT)
-Date: Thu, 12 Mar 2026 11:29:03 -0700
-In-Reply-To: <76ea1412-ee4d-4eaf-b8a8-5866ad960b52@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69b305ef.050a0220.24f2ac.0022.GAE@google.com>
-Subject: Re: [syzbot] [usb?] general protection fault in usb_gadget_udc_reset (4)
-From: syzbot <syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-0.36 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[broadcom.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[broadcom.com:s=google];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[broadcom.com,gmail.com,rowland.harvard.edu,linuxfoundation.org];
+	TAGGED_FROM(0.00)[bounces-34707-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34706-lists,linux-usb=lfdr.de,19bed92c97bee999e5db];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
+	DKIM_TRACE(0.00)[broadcom.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NO_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	FROM_NEQ_ENVFROM(0.00)[justin.chen@broadcom.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	SUBJECT_HAS_QUESTION(0.00)[]
-X-Rspamd-Queue-Id: 25183277266
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 52F6E277770
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello,
+From: Justin Chen <justin.chen@broadcom.com>
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-general protection fault in usb_gadget_udc_reset
+echi_brcm_wait_for_sof() gets called after disabling interrupts
+in ehci_brcm_hub_control(). Use the atomic version of poll_timeout
+to fix the warning.
 
-raw-gadget.1 gadget.3: Inc usage: 1 A
-Oops: general protection fault, probably for non-canonical address 0xdffffc0000000008: 0000 [#1] SMP KASAN PTI
-KASAN: null-ptr-deref in range [0x0000000000000040-0x0000000000000047]
-CPU: 1 UID: 0 PID: 5926 Comm: kworker/1:3 Not tainted syzkaller #0 PREEMPT_{RT,(full)} 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/27/2026
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:usb_gadget_udc_reset+0x27/0x60 drivers/usb/gadget/udc/core.c:1200
-Code: 90 90 90 f3 0f 1e fa 41 56 53 49 89 f6 48 89 fb e8 6e 5c c0 fa 49 83 c6 40 4c 89 f0 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <80> 3c 08 00 74 08 4c 89 f7 e8 cb 74 26 fb 4d 8b 1e 48 89 df 2e e8
-RSP: 0018:ffffc90004197310 EFLAGS: 00010202
-RAX: 0000000000000008 RBX: ffff888029ce8c40 RCX: dffffc0000000000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffff8f6a51b7 R09: 1ffffffff1ed4a36
-R10: dffffc0000000000 R11: ffffffff8b2104d0 R12: 1ffff1100539d187
-R13: ffff8880296b450b R14: 0000000000000040 R15: ffff888029ce8c40
-FS:  0000000000000000(0000) GS:ffff88812643d000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f21940fcff8 CR3: 0000000038eda000 CR4: 00000000003526f0
-Call Trace:
- <TASK>
- set_link_state+0xa17/0x10c0 drivers/usb/gadget/udc/dummy_hcd.c:474
- dummy_hub_control+0xa09/0x1a00 drivers/usb/gadget/udc/dummy_hcd.c:-1
- rh_call_control drivers/usb/core/hcd.c:652 [inline]
- rh_urb_enqueue drivers/usb/core/hcd.c:817 [inline]
- usb_hcd_submit_urb+0xdbe/0x1b50 drivers/usb/core/hcd.c:1538
- usb_start_wait_urb+0x12b/0x510 drivers/usb/core/message.c:59
- usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
- usb_control_msg+0x232/0x3e0 drivers/usb/core/message.c:154
- set_port_feature drivers/usb/core/hub.c:466 [inline]
- hub_port_reset+0x3c7/0x1820 drivers/usb/core/hub.c:3083
- hub_port_init+0x299/0x28c0 drivers/usb/core/hub.c:4939
- hub_port_connect drivers/usb/core/hub.c:5496 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
- port_event drivers/usb/core/hub.c:5871 [inline]
- hub_event+0x25d3/0x4f60 drivers/usb/core/hub.c:5953
- process_one_work kernel/workqueue.c:3275 [inline]
- process_scheduled_works+0xb02/0x1830 kernel/workqueue.c:3358
- worker_thread+0xa50/0xfc0 kernel/workqueue.c:3439
- kthread+0x388/0x470 kernel/kthread.c:436
- ret_from_fork+0x51e/0xb90 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:usb_gadget_udc_reset+0x27/0x60 drivers/usb/gadget/udc/core.c:1200
-Code: 90 90 90 f3 0f 1e fa 41 56 53 49 89 f6 48 89 fb e8 6e 5c c0 fa 49 83 c6 40 4c 89 f0 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <80> 3c 08 00 74 08 4c 89 f7 e8 cb 74 26 fb 4d 8b 1e 48 89 df 2e e8
-RSP: 0018:ffffc90004197310 EFLAGS: 00010202
-RAX: 0000000000000008 RBX: ffff888029ce8c40 RCX: dffffc0000000000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffff8f6a51b7 R09: 1ffffffff1ed4a36
-R10: dffffc0000000000 R11: ffffffff8b2104d0 R12: 1ffff1100539d187
-R13: ffff8880296b450b R14: 0000000000000040 R15: ffff888029ce8c40
-FS:  0000000000000000(0000) GS:ffff88812643d000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f21940fcff8 CR3: 00000000348ae000 CR4: 00000000003526f0
-----------------
-Code disassembly (best guess):
-   0:	90                   	nop
-   1:	90                   	nop
-   2:	90                   	nop
-   3:	f3 0f 1e fa          	endbr64
-   7:	41 56                	push   %r14
-   9:	53                   	push   %rbx
-   a:	49 89 f6             	mov    %rsi,%r14
-   d:	48 89 fb             	mov    %rdi,%rbx
-  10:	e8 6e 5c c0 fa       	call   0xfac05c83
-  15:	49 83 c6 40          	add    $0x40,%r14
-  19:	4c 89 f0             	mov    %r14,%rax
-  1c:	48 c1 e8 03          	shr    $0x3,%rax
-  20:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
-  27:	fc ff df
-* 2a:	80 3c 08 00          	cmpb   $0x0,(%rax,%rcx,1) <-- trapping instruction
-  2e:	74 08                	je     0x38
-  30:	4c 89 f7             	mov    %r14,%rdi
-  33:	e8 cb 74 26 fb       	call   0xfb267503
-  38:	4d 8b 1e             	mov    (%r14),%r11
-  3b:	48 89 df             	mov    %rbx,%rdi
-  3e:	2e                   	cs
-  3f:	e8                   	.byte 0xe8
+Fixes: ("9df231511bd6 usb: ehci: Add new EHCI driver for Broadcom STB SoC's")
+Signed-off-by: Justin Chen <justin.chen@broadcom.com>
+---
+ drivers/usb/host/ehci-brcm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-Tested on:
-
-commit:         65169048 Merge tag 'spi-fix-v7.0-rc2' of git://git.ker..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=153e775a580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692
-dashboard link: https://syzkaller.appspot.com/bug?extid=19bed92c97bee999e5db
-compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=162dd75a580000
+diff --git a/drivers/usb/host/ehci-brcm.c b/drivers/usb/host/ehci-brcm.c
+index 888e8f6670d2..5e3156f94cc6 100644
+--- a/drivers/usb/host/ehci-brcm.c
++++ b/drivers/usb/host/ehci-brcm.c
+@@ -31,8 +31,8 @@ static inline void ehci_brcm_wait_for_sof(struct ehci_hcd *ehci, u32 delay)
+ 	int res;
+ 
+ 	/* Wait for next microframe (every 125 usecs) */
+-	res = readl_relaxed_poll_timeout(&ehci->regs->frame_index, val,
+-					 val != frame_idx, 1, 130);
++	res = readl_relaxed_poll_timeout_atomic(&ehci->regs->frame_index,
++						val, val != frame_idx, 1, 130);
+ 	if (res)
+ 		ehci_err(ehci, "Error waiting for SOF\n");
+ 	udelay(delay);
+-- 
+2.34.1
 
 
