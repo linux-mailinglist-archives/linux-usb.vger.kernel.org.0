@@ -1,164 +1,143 @@
-Return-Path: <linux-usb+bounces-34679-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34680-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sNqPMNWrsmkjOwAAu9opvQ
-	(envelope-from <linux-usb+bounces-34679-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 13:04:37 +0100
+	id wPFjHDGysmmYOwAAu9opvQ
+	(envelope-from <linux-usb+bounces-34680-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 13:31:45 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65358271664
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 13:04:37 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FD6B271CD9
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 13:31:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4D74A3092AED
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 12:04:32 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id ADBB1301EBCA
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 12:27:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 527FE391E6B;
-	Thu, 12 Mar 2026 12:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E22692DEA62;
+	Thu, 12 Mar 2026 12:27:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ksOCmuZ2";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="CxXm2ivm"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="eUW/uwyE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71EF33A16A2;
-	Thu, 12 Mar 2026 12:04:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E4214EC73;
+	Thu, 12 Mar 2026 12:27:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773317066; cv=none; b=DDAZuOV3C4AqXjcPOuazq4/VJDMsdgcYJ9lzbhK5D8sfpsdzOcstsiWsXye8/3umtr6rGXFsnPzmq1VxUET8Hof5orVw86AElSUTY6RHOoOB0XvES9YSG4ZnzhtJjLpzU8NoqH0uy73/fHUI42PwjvWW25MTOxgVoEBmchMjZDc=
+	t=1773318472; cv=none; b=F+iOiV0gGZMNOaofiL5APswg4rzdIgkz/5USsxuA5JaOwkkC0x1Xpp5TtdsKu3lLrKgcaYQTve1jRIZtieKwNyhxlX96xHVUw1c22vO3ANt+8MlhsYkiDhdaUhU19HTBdUNvxXB9Pqb0g0M0RUM+x0L/iaPRBYOKWNOu/rECb1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773317066; c=relaxed/simple;
-	bh=4T0R8wPHP6FeSHnXv/Tz2dDoC+X3Ht2YZSUPLavxi3Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gxpEszHnEh+1mbuyDhS3vowUf2Wn4bPucFYo3/2XlL1ogkXJhMmHwkzHy2aflXknKTKUWiHfdFlmaUrzDZwsseMJQgSf77rvuCLzZvgoqHsA1tlUzsjwDUNF+xWaxu2+i3BDX/CM8AmOEX3KTGKYEeDTe9BJm+yR0/L5xcuaxIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ksOCmuZ2; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=CxXm2ivm; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Thu, 12 Mar 2026 13:04:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1773317060;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DfPMmF7lS8HLyEiYZywd8U0TpaP5viEQJcLpYvdynUw=;
-	b=ksOCmuZ2baAZohf/ILQavLKEagfCjVDHiKnWv0dYSx6F/ZGzT+DQVNwPCAttoYDitgE3Rm
-	87BGGDIf047eabwto7zGSHeDDkqK7425NGSfl/LIwfuOAX0qDNGTYvc9FVwCXD/mZ6h0BF
-	fyqCHhfjX4pvZK2QjoseRL8UvBjTBQsu9SlSXAh5tq2cIoOXV46VVgR9h1xQ5lVCyxTv9w
-	dpQVjQ9OdJy46Q8LtCpskH5wpvol9/evB7JyNw0ruQ+N1RquWcH5tB72OtK1kuTHGUmq8C
-	kAr8X2L5pa3Gp20ixOhvmo+cRWscCSSQ1KO06w1puJ2YS7kDcy9DKJObJObQ2A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1773317060;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DfPMmF7lS8HLyEiYZywd8U0TpaP5viEQJcLpYvdynUw=;
-	b=CxXm2ivmdgp7/mrFblGsv77aHc12B9ASsoQDl3bHYarTuLfQZ/C/fmvQghlD0q7P8m/qxu
-	3/78SnCTTSt52tCg==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Hans de Goede <hansg@kernel.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Alexey Charkov <alchark@flipper.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Yongbo Zhang <giraffesnn123@gmail.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: fusb302: Switch to threaded IRQ handler
-Message-ID: <20260312120418.99U0NPWL@linutronix.de>
-References: <20260311-fusb302-irq-v1-1-7e7105706629@flipper.net>
- <abKDG8wHJ-19c3AD@kuha>
- <63dfd90a-d54d-4d87-8c62-61a3c24d76fd@kernel.org>
+	s=arc-20240116; t=1773318472; c=relaxed/simple;
+	bh=ieLHoto4+96APZSwNtBq+cq/bsSxRVVMPY9/iG19O+Y=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=AuHXb0mKGWQDYQrKmg5dhzFUAFHaNxhh1/0O1OwJ5Qgh2S9B7RrTwhykCcnSVkqxZEnV2wN/nk9aQE2NWrGwbD93EWH1pi5QRJk2uO4gQFY/Nac6eh9935+3l30MgjXyTFXkgXHqrL6CqFGMk97nTQY0whkfX3SKtd/dgaFoxY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=eUW/uwyE; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Cc:To:Message-Id:Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:Content-Description
+	:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=crT96uBlmju1P98PXOgVEI4VATCQ71GLj65C0UFT0gY=; b=eUW/uwyEN3Wi/+wuGdQ2KsYzvT
+	Xt+u9p3SqGOxg5MreeQ5klBm85bcw4ycyZyh+hB/rjpSBquDDLaYv+7vGsLxMv2XvaLxm2SGsRWiz
+	S0voa/JfMWaPFm1EetU28jpDUtHmzXallPsu5fV5InF0WEYQxU+kVu4UZhPPQOW/DZSjgYYk76fhr
+	tZ3MvKXtNavpokrL74NjKNdDAti6/2GLza0+Ovvougto76MMsA2ZnBWqADC4poeo1ab5Ooc5VA2UF
+	K6QEchqWzk0e/j+batObWLMVysw8jJHABM0mBa2Nf0mxtGmnrCQ9xXfL2oYg6AmWLeqK84v79wcl+
+	pvoAivCQ==;
+Received: from 177-136-93-197.vmaxnet.com.br ([177.136.93.197] helo=[127.0.1.1])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1w0f8c-00EUa0-Rv; Thu, 12 Mar 2026 13:27:39 +0100
+From: Heitor Alves de Siqueira <halves@igalia.com>
+Date: Thu, 12 Mar 2026 09:27:28 -0300
+Subject: [PATCH] usb: usbtmc: Flush anchored URBs in usbtmc_release
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <63dfd90a-d54d-4d87-8c62-61a3c24d76fd@kernel.org>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260312-usbtmc-flush-release-v1-1-5755e9f4336f@igalia.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3M3QpAQBCG4VvRHJvaJYpbkYO1Pkz5awcpuXebw
+ +fgfR9SBIFSnTwUcInKtkbYNCE/uXUESx9NmclKk1vLp3bH4nmYT504YIZTcNFXvjSwLoenmO4
+ Bg9z/tmnf9wOqHm5mZgAAAA==
+X-Change-ID: 20260311-usbtmc-flush-release-5d9c60e1a3ec
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Guido Kiener <guido@kiener-muenchen.de>, 
+ Steve Bayless <steve_bayless@keysight.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel-dev@igalia.com, 
+ syzbot+9a3c54f52bd1edbd975f@syzkaller.appspotmail.com, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.14.3
+X-Spamd-Result: default: False [1.14 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	R_DKIM_REJECT(1.00)[igalia.com:s=20170329];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linux.intel.com,flipper.net,linuxfoundation.org,collabora.com,gmail.com,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-34679-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bigeasy@linutronix.de,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34680-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[igalia.com:-];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linutronix.de:dkim,linutronix.de:mid]
-X-Rspamd-Queue-Id: 65358271664
+	NEURAL_HAM(-0.00)[-0.002];
+	FROM_NEQ_ENVFROM(0.00)[halves@igalia.com,linux-usb@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,9a3c54f52bd1edbd975f];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,igalia.com:email,igalia.com:mid,appspotmail.com:email,syzkaller.appspot.com:url]
+X-Rspamd-Queue-Id: 6FD6B271CD9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 2026-03-12 11:49:30 [+0100], Hans de Goede wrote:
-> Using a threaded interrupt handler should be ok, yes. This should
-> also fix the issue this patch tries to fix:
-> 
-> https://lore.kernel.org/linux-usb/20260103083232.9510-4-linux.amoon@gmail.com
+When calling usbtmc_release, pending anchored URBs must be flushed or
+killed to prevent use-after-free errors (e.g. in the HCD giveback
+path). Call usbtmc_draw_down() to allow anchored URBs to be completed.
 
-This issue went away with commit a7fb84ea70aae ("usb: typec: fusb302:
-Remove IRQF_ONESHOT").
+Fixes: 4f3c8d6eddc2 ("usb: usbtmc: Support Read Status Byte with SRQ per file")
+Reported-by: syzbot+9a3c54f52bd1edbd975f@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=9a3c54f52bd1edbd975f
+Cc: stable@vger.kernel.org
+Signed-off-by: Heitor Alves de Siqueira <halves@igalia.com>
+---
+ drivers/usb/class/usbtmc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> Normally an i2c device like this would use a threaded interrupt handler to
-> do all the work since I2C transfers can sleep combined with disabling the IRQ
-> on suspend to avoid the interrupt handler running while the parent i2c-adapter
-> may be suspended.
-> 
-> The problem with the fusb302 is that it can be a wakeup source so we cannot
-> disable the IRQ. I worked around this in commit 207338ec5a2 ("usb: typec: fusb302:
-> Improve suspend/resume handling") by moving the actual work to a workqueue
-> and have a hard (non threaded) interrupt handler which disables the IRQ and
-> queues the work, with the work re-enabling the IRQ when done + special
-> handling for the suspended case. Basically our own manual oneshot.
-> 
-> If we move the IRQ disabling to a threaded handler, which appears to be
-> necessary for some IRQ controllers (arguably a IRQ controller driver issue,
-> but this seems to be a re-occuring issue), then I wonder if we need
-> the ONESHOT flag again to avoid a level type IRQ re-triggering before
-> the threaded handler gets a chance to disable it (with the workqueue
-> item eventually re-enabling it).
-> 
-> I think we need to re-add the ONESHOT flag, but maybe that is the default
-> with a primary NULL handler ?
-> 
-> Sebastian Siewior I think you now the IRQ subsystem better then me,
-> any advice / remarks ?
-
-You could do
-	request_threaded_irq(chip->gpio_int_n_irq, NULL, fusb302_irq_intn,
-			     IRQF_ONESHOT | IRQF_TRIGGER_LOW, "fsc_interrupt_int_n", chip);
-
-which would ensure that the handler runs as a thread and the interrupt
-line is disable while it is active.
-Then you could let fusb302_irq_intn() do what fusb302_irq_work() does.
-Since it is a thread, mutex_lock() works here.
-Last step would be to replace fusb302_chip::irq_suspended with
-disable_irq() in fusb302_pm_suspend() and enable_irq() in
-fusb302_pm_resume().
-
-That could do the trick.
+diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+index 2526a0e03cde..3d6daa8b748e 100644
+--- a/drivers/usb/class/usbtmc.c
++++ b/drivers/usb/class/usbtmc.c
+@@ -254,6 +254,9 @@ static int usbtmc_release(struct inode *inode, struct file *file)
+ 	list_del(&file_data->file_elem);
  
-> Regards,
-> 
-> Hans
+ 	spin_unlock_irq(&file_data->data->dev_lock);
++
++	/* flush anchored URBs */
++	usbtmc_draw_down(file_data);
+ 	mutex_unlock(&file_data->data->io_mutex);
+ 
+ 	kref_put(&file_data->data->kref, usbtmc_delete);
 
-Sebastian
+---
+base-commit: b29fb8829bff243512bb8c8908fd39406f9fd4c3
+change-id: 20260311-usbtmc-flush-release-5d9c60e1a3ec
+
+Best regards,
+-- 
+Heitor Alves de Siqueira <halves@igalia.com>
+
 
