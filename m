@@ -1,166 +1,185 @@
-Return-Path: <linux-usb+bounces-34691-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34692-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wGT6JgDesmmtQQAAu9opvQ
-	(envelope-from <linux-usb+bounces-34691-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 16:38:40 +0100
+	id UJgKA6XjsmnyQgAAu9opvQ
+	(envelope-from <linux-usb+bounces-34692-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 17:02:45 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B13F274ABF
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 16:38:40 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37AE72751E0
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 17:02:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9397430DEC1D
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 15:32:58 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3C8C73046222
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 15:59:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9380E3CBE60;
-	Thu, 12 Mar 2026 15:32:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E719F3F165E;
+	Thu, 12 Mar 2026 15:57:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="pcvJZxMl"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TsL2Ol35"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5489238552A;
-	Thu, 12 Mar 2026 15:32:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D013F20FD
+	for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 15:57:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773329562; cv=none; b=mqHb/DJurcag11SRnS5v0eXKw/B9KYnMFAy3k0LtOleIzyizQQIZGPykWB/Fmk1pYX0+BCwlxnWPlyFL0p4IAqK1AyjV+lTgP5B2vSizwLKg+5GL0Sd0YH7qCbTM9rqMlMY4753DXbwz9x4BcwiR/xWXOdqGvIlauCtTKbZdkZU=
+	t=1773331048; cv=none; b=qhV00Al45gYM72VUUI/eMrdbWWQHs7zQj879u2IFQp+saMaJeEkfjZtXQ0CmPnfc149CnDnEcqkU43/3QS074OWiqfWkamW+sQ5H4J2s5mdcMKqHpNsNrz7tg7mnNLWX2nuLyISUKzQ430frUXdzFrTlshdMsbeIRY9CWxLqzkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773329562; c=relaxed/simple;
-	bh=zTDNMMg/o0AbpOakTawLJV8HRHueJx9lUWpbuHSD3BU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=R5LzA8Ou2FAlfTxruBbGM6k/z0Mz4c/yMKAdYnzLlIPQhgSJuhcbKkZvN1DS4RRkPHUDvwVX2kkuu25gzXZl/1tiNKIgamJTw7JCYSn//2RRSauf0uGJeCv2B6mWEI1AOeDpowYKobPwyLnOI9ONcClsULIU0+ZMOVB4W4VRrAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=pcvJZxMl; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1773329560;
-	bh=zTDNMMg/o0AbpOakTawLJV8HRHueJx9lUWpbuHSD3BU=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=pcvJZxMlUnyDHCQWdoy7oBw4t3ApqjoLShbfu4EGfeRRF/0XvwrUC3nRWEDXXVQdM
-	 hMwbriKe/NL1VZ4m3mEc/Q/oxiEwEcX/NNUV+xlSHstrQ2AykR2/lPVz8ssLEFKVvD
-	 cNP4AXmMocQMY4pE83K1rY1dx5NyhQ9bJbZtUZWw=
-Received: from [IPv6:2601:5c4:4300:d341::a774] (unknown [IPv6:2601:5c4:4300:d341::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 599341C02A4;
-	Thu, 12 Mar 2026 11:32:38 -0400 (EDT)
-Message-ID: <f5688b895eaebabae6545a0d9baf8f1404e8454e.camel@HansenPartnership.com>
-Subject: Re: [PATCH 00/61] treewide: Use IS_ERR_OR_NULL over manual NULL
- check - refactor
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>, Kuan-Wei Chiu <visitorckw@gmail.com>
-Cc: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org, 
- apparmor@lists.ubuntu.com, bpf@vger.kernel.org, ceph-devel@vger.kernel.org,
-  cocci@inria.fr, dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
-  gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org, 
- intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
- kvm@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
- linux-block@vger.kernel.org,  linux-bluetooth@vger.kernel.org,
- linux-btrfs@vger.kernel.org,  linux-cifs@vger.kernel.org,
- linux-clk@vger.kernel.org,  linux-erofs@lists.ozlabs.org,
- linux-ext4@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
- linux-gpio@vger.kernel.org,  linux-hyperv@vger.kernel.org,
- linux-input@vger.kernel.org,  linux-kernel@vger.kernel.org,
- linux-leds@vger.kernel.org,  linux-media@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org, 
- linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
- linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, 
- linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
- linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
- linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
- linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, 
- linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
- linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
- ntfs3@lists.linux.dev,  samba-technical@lists.samba.org,
- sched-ext@lists.linux.dev,  target-devel@vger.kernel.org,
- tipc-discussion@lists.sourceforge.net,  v9fs@lists.linux.dev
-Date: Thu, 12 Mar 2026 11:32:37 -0400
-In-Reply-To: <20260312125730.GI1469476@ziepe.ca>
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
-	 <abBlpGKO842B3yl9@google.com> <20260312125730.GI1469476@ziepe.ca>
-Autocrypt: addr=James.Bottomley@HansenPartnership.com;
- prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+	s=arc-20240116; t=1773331048; c=relaxed/simple;
+	bh=XBD0OuxwzIMl7iLrmWV1aLrAwjvbu+uBC6CY5dkGSfc=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To; b=aNeMmjdL826RTj5/R1n9UX4Gw7ecS1SjMOp8Acl5/hJnoy52W5cnWPH6N7TzXNP2XQIXqDUOsby+9Q0rXAHhSBalJ/jl30P6dTl2AwVOLEjDfmgIeBPaUP+LC+2qhq9DfrzuqBiuiUShFMxL125eSdtf4MQFs1M4zIi7GbDYchw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TsL2Ol35; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48534e9076fso10264605e9.0
+        for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 08:57:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1773331045; x=1773935845; darn=vger.kernel.org;
+        h=in-reply-to:from:content-language:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ni605gMwQZI0HMUoYpv6rP4PZlw7NyzUBTWnmqTauDI=;
+        b=TsL2Ol353lwuNzawxhz07pvtL1zlsdx8VK8hvZzCVFsd+jC+g4CgoyuRU6OCjSxKFt
+         dVOCkidvP4hlXnJQTRj//68U67RIQokK08McYOIaP8jcoaMWmL76396/QCZZAb8AOeXW
+         fM4iuL0BIY/+3C7HFoG2kJi+pHV5wNWBWaJ8xYXcHQkfZiqGAqjWqCXSVPZNYNrZ8N8Q
+         Np3j+gDDe+/jgZ21z1cQE1wMNMJtvG/weVczGKSCrlMcUQsKfroceKI3nrv7ACM315JT
+         X9RnbUWN6U99F/OIkRndaMqrTWGsGpxJErWMzIm6snLJBDWGnhzJD6eVgA2GZIpplagg
+         Y4Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773331045; x=1773935845;
+        h=in-reply-to:from:content-language:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ni605gMwQZI0HMUoYpv6rP4PZlw7NyzUBTWnmqTauDI=;
+        b=LsbByxzoBnFYxqLOcQJzEZu2Q+oZJU9Gixoy1HnT8r4LPMwEUxUuiA7rtqerN5wxJ6
+         rP/vjb+uOopNimvONGm4ziW1AljIWTbnvQ++GawTii8dU+1/sxMnctEwaHCcZHTkHkh/
+         KDTpv5I6CpHGLYimzsqdrFkxiH4j9jZhuYcf1Zz2k7vknA9P7F/xt5mPU5jZxtcaOI3F
+         ohfWs0of9VxBGWK5NfVJkdUI4+ER1qDyn5dKi+/I+MVJuQhBky6fmbF+yKw31tHo4PR1
+         wxfY8P7jBEQQDMGyi1nsDwqftaHeVGEfq62Jvr2tdIo+h//41RwuOPrvzkKUFUxRsmfl
+         IJ3g==
+X-Forwarded-Encrypted: i=1; AJvYcCXOVP9Zq99rYlev4VEi883ewRBqZujWIFQjOb5mgBCpJUGVtjgrSFi15mze75RUFgRuATwvOG0W4z4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8z9KqbCEB5Q6yOaaeXXxG4zp+RKp0GUzBu876GlIbyuuAid/J
+	pWUvxtRWS/Rvsk83Z567uW8WnDrI6fTzbKoWEVlA4Ogh8VLpm5GnawvWsnn95mF7U4A=
+X-Gm-Gg: ATEYQzzRQuP9C8z6mQt2T4hoFgpcEFPKJrx1Ysu+3qrKRLDqcVmQnDX9gMAjUMwiVQ1
+	oZ50PD3Hwpdp8BhKAoVY9ASftJYgfTFUJ3l1KcfkE+0nJZlVtuou2wvOAlvJtkmRNIfVKYv63aK
+	0HwYS8TuNrKLhFrbb8WqCeHlgbQXReJQsap55RWHLAaAvR+Rqv7pCrYqUeOpNGLUMEu5Sm5NtiW
+	c0JX/R+dzjH8K+60JP1ntx3oTQ7LvJ4yniJraHs9xU1ZvlKw3Xmy7jxpW2q6nBmWUNaG2BmCRwF
+	VsVPqJhuaXt+ZSNhm4e8yVNlAW4wchJlTi79Rwm6vDsjHNkVMoN3/K05B98ED/7X3WPHz/XnsVK
+	wUiBD9W8NkpDwOtuXnYUu8nS8I5+uMfPFSto2ggVvPBuTTi3yIZmP870FTH4AHdQxGqHQ3XmWTR
+	5bOsAoYy/otRkeisNvpL1vVyTQ48kfjcFfpirfQoJQeNpz+jn9DXuw9iPsL91e15MfiEo=
+X-Received: by 2002:a05:600c:444e:b0:485:3bb5:92c5 with SMTP id 5b1f17b1804b1-4854b0c779dmr109717975e9.14.1773331044988;
+        Thu, 12 Mar 2026 08:57:24 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13b5:4001:781c:5386:18e2:cda0? ([2001:a61:13b5:4001:781c:5386:18e2:cda0])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4854b65fd3dsm143522355e9.10.2026.03.12.08.57.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Mar 2026 08:57:24 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------1Us7OPef2Ot1hlSdK39IFswX"
+Message-ID: <64dc9c5d-d662-41e3-898f-71587b940a2c@suse.com>
+Date: Thu, 12 Mar 2026 16:57:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+User-Agent: Mozilla Thunderbird
+Subject: Re: correctly handling EPROTO
+To: Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>
+Cc: =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+ USB list <linux-usb@vger.kernel.org>
+References: <261996a8-7ad4-4df2-a469-f6602da71255@suse.com>
+ <4f85311c-bdfe-46a4-a310-4a74a3c56b3e@rowland.harvard.edu>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <4f85311c-bdfe-46a4-a310-4a74a3c56b3e@rowland.harvard.edu>
+X-Spamd-Result: default: False [-1.06 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[hansenpartnership.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[hansenpartnership.com:s=20151216];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MIME_BASE64_TEXT_BOGUS(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
+	MIME_GOOD(-0.10)[multipart/mixed,text/plain,text/x-patch];
+	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34691-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[ziepe.ca,gmail.com];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[hansenpartnership.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[56];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[James.Bottomley@HansenPartnership.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_FROM(0.00)[bounces-34692-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_ALL(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	HAS_ATTACHMENT(0.00)[];
+	NEURAL_HAM(-0.00)[-0.886];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:+];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,HansenPartnership.com:mid,hansenpartnership.com:dkim]
-X-Rspamd-Queue-Id: 1B13F274ABF
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,suse.com:dkim,suse.com:email,suse.com:mid]
+X-Rspamd-Queue-Id: 37AE72751E0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 2026-03-12 at 09:57 -0300, Jason Gunthorpe wrote:
-> On Wed, Mar 11, 2026 at 02:40:36AM +0800, Kuan-Wei Chiu wrote:
->=20
-> > IMHO, the necessity of IS_ERR_OR_NULL() often highlights a
-> > confusing or flawed API design. It usually implies that the caller
-> > is unsure whether a failure results in an error pointer or a NULL
-> > pointer.=20
->=20
-> +1
->=20
-> IS_ERR_OR_NULL() should always be looked on with suspicion. Very
-> little should be returning some tri-state 'ERR' 'NULL' 'SUCCESS'
-> pointer. What does the middle condition even mean? IS_ERR_OR_NULL()
-> implies ERR and NULL are semanticly the same, so fix the things to
-> always use ERR.
+This is a multi-part message in MIME format.
+--------------1Us7OPef2Ot1hlSdK39IFswX
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Not in any way supporting the original patch.  However, the pattern
-ERR, NULL, PTR is used extensively in the dentry code of filesystems.=20
-See the try_lookup..() set of functions in fs/namei.c
+On 12.03.26 15:21, Alan Stern wrote:
+  
+> There's a discussion about the same issue here:
+> 
+> 	https://bugzilla.kernel.org/show_bug.cgi?id=221184
+> 
+> See especially the later parts, starting with comment #28.
 
-The meaning is
+Well, that is fascinating, but not necessarily in a comfortable
+way. It seems to me that for all drivers to care about the
+exact details of getting which toggle back into sync is not
+a viable strategy. This I'd say, when in doubt, clear a halt.
 
-PTR - I found it
-NULL - It definitely doesn't exist
-ERR - something went wrong during the lookup.
+	Regards
+		Oliver
 
-So I don't think you can blanket say this pattern is wrong.
+--------------1Us7OPef2Ot1hlSdK39IFswX
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-usb-class-cdc-wdm-handle-EPROTO-on-interrupt-endpoin.patch"
+Content-Disposition: attachment;
+ filename*0="0001-usb-class-cdc-wdm-handle-EPROTO-on-interrupt-endpoin.pa";
+ filename*1="tch"
+Content-Transfer-Encoding: base64
 
-Regards,
+RnJvbSBmYzdhNjczYzc4MGU4ZWFmMDhhNTI5OTM4ZTcwYWQwMGE5ZWRkN2IzIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29t
+PgpEYXRlOiBUaHUsIDEyIE1hciAyMDI2IDEyOjI5OjIzICswMTAwClN1YmplY3Q6IFtQQVRD
+SF0gdXNiOiBjbGFzczogY2RjLXdkbSBoYW5kbGUgRVBST1RPIG9uIGludGVycnVwdCBlbmRw
+b2ludAoKVW5kZXIgc29tZSBjb25kaXRpb25zIC1FUFJPVE8gcmVxdWlyZXMgYSBoYWx0IHRv
+IGJlIGNsZWFyZWQuClRoaXMgaXMgdG9vIGNvbXBsaWNhdGVkIHRvIGdldCBvcHRpbWFsLiBX
+ZSBzaG91bGQgbm90IGV2ZW4KdHJ5LiBIZW5jZSB0aGUgc2FuZSBzdHJhdGVneSBpcyB0byBj
+bGVhciBhIGhhbHQgb24KLUVQUk9UTyBhbmQgZGlyZWN0bHkgcmV0cnkgZm9yIGV2ZXJ5dGhp
+bmcgYnV0IGEga25vd24KZGlzY29ubmVjdC4KClNpZ25lZC1vZmYtYnk6IE9saXZlciBOZXVr
+dW0gPG9uZXVrdW1Ac3VzZS5jb20+CgplcHJvdG8KLS0tCiBkcml2ZXJzL3VzYi9jbGFzcy9j
+ZGMtd2RtLmMgfCAzICsrLQogMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBk
+ZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2NsYXNzL2NkYy13ZG0uYyBi
+L2RyaXZlcnMvdXNiL2NsYXNzL2NkYy13ZG0uYwppbmRleCA5MTg1Mjk1ZjUzNzYuLmNmYjMx
+YTgxNDVmZiAxMDA2NDQKLS0tIGEvZHJpdmVycy91c2IvY2xhc3MvY2RjLXdkbS5jCisrKyBi
+L2RyaXZlcnMvdXNiL2NsYXNzL2NkYy13ZG0uYwpAQCAtMjY1LDEzICsyNjUsMTQgQEAgc3Rh
+dGljIHZvaWQgd2RtX2ludF9jYWxsYmFjayhzdHJ1Y3QgdXJiICp1cmIpCiAJCWNhc2UgLUVD
+T05OUkVTRVQ6CiAJCQlyZXR1cm47IC8qIHVucGx1ZyAqLwogCQljYXNlIC1FUElQRToKKwkJ
+Y2FzZSAtRVBST1RPOgogCQkJc2V0X2JpdChXRE1fSU5UX1NUQUxMLCAmZGVzYy0+ZmxhZ3Mp
+OwogCQkJZGV2X2VycigmZGVzYy0+aW50Zi0+ZGV2LCAiU3RhbGwgb24gaW50IGVuZHBvaW50
+XG4iKTsKIAkJCWdvdG8gc3c7IC8qIGhhbHQgaXMgY2xlYXJlZCBpbiB3b3JrICovCiAJCWRl
+ZmF1bHQ6CiAJCQlkZXZfZXJyX3JhdGVsaW1pdGVkKCZkZXNjLT5pbnRmLT5kZXYsCiAJCQkJ
+Im5vbnplcm8gdXJiIHN0YXR1cyByZWNlaXZlZDogJWRcbiIsIHN0YXR1cyk7Ci0JCQlicmVh
+azsKKwkJCWdvdG8gZXhpdDsKIAkJfQogCX0KIAotLSAKMi41My4wCgo=
 
-James
-
+--------------1Us7OPef2Ot1hlSdK39IFswX--
 
