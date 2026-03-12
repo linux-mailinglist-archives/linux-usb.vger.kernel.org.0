@@ -1,124 +1,152 @@
-Return-Path: <linux-usb+bounces-34647-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34648-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iAvuHiJbsmngLwAAu9opvQ
-	(envelope-from <linux-usb+bounces-34647-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 07:20:18 +0100
+	id MNT3K3tcsmkZMAAAu9opvQ
+	(envelope-from <linux-usb+bounces-34648-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 07:26:03 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1BFF26D92E
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 07:20:17 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2936526DA00
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 07:26:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 34492308833F
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 06:18:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6EA3E3039686
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 06:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394FE33B6FB;
-	Thu, 12 Mar 2026 06:18:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B87359A86;
+	Thu, 12 Mar 2026 06:26:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="VeoEbx0Q"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eIy/IUI+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-43103.protonmail.ch (mail-43103.protonmail.ch [185.70.43.103])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0AA72BCFB
-	for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 06:18:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.103
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E40303CA0;
+	Thu, 12 Mar 2026 06:25:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773296326; cv=none; b=stDEvIEHm34nKIZOoRCqKFUzNEuOed5RYjAhQaZdHTdLqviMjaP6HjB7XOA1/qOWsBVlymWoqmCrLTeO30DiNAbDjPldCxdPU+G/h65r0fsEL3ADPm6KwtxAiMSJQsxflkgQCRubNZfZVTCphDJg4IXs3l2hIWKovgpEKKAeB9s=
+	t=1773296760; cv=none; b=A6Ju13bIS9tN7g/s059E52KMWOEgeM4WF6aX8z0MbP9DNa0Q1euM4YNbdjba7GPiggRrptGO+5sohM78IrpnXcy94bsLOiKFbV+1iRNLmSe+bmiuU0RiMQ6YVt5df3jq3njQTSnGSvMfCXnHivsorfvOsgsGWtw2Ub7WBZA7kAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773296326; c=relaxed/simple;
-	bh=GGEG/iXcpX15qUuubohwdpntNlJn0sLBn6ojdxqc81k=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AuPZ47rxirActEfF82cGPxon3kVGPixv0911iap8cclwxXn2NW3S1eA45cGMKfg1mXWENr/dPsD//+IkgnvEPDJ5NuFX+8cCQz40jc8Fu5UE/c2g4A0x2UoERoXk4r59yUfzh9uhLQfdShEh4ghntbkQb1uiBaqnm910W9b9yuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=VeoEbx0Q; arc=none smtp.client-ip=185.70.43.103
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1773296317; x=1773555517;
-	bh=msKiFDEI7WW9jpJXjs5mIiIQtN0ui9UCxytc66kG8mc=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=VeoEbx0Qa52sJUotNe1muW5U5DuxCcQ8bf849dIfLlYGZi//CBDRUUL7WhrGaPNvY
-	 VonDKN8vEDePXMuB1T1X+nW/xL6LeUfise/JI0T9vL1ISQtfyjAT5jc9fTzmp4/O6z
-	 BhxnANsbIqoH9svjUg24dg4kMRMI1XPiE47GRdOSo52i77TdmuHK5NJz1taw01xhZj
-	 j9A4xOPki/9YovCjBo0oByL7PGRycEbhsi6rnjmc77coKS597FLTTena+KLT/ZrBXg
-	 GqCzL5I8U396nYH7KAf/3IUjAdTR/YQXqVESO8Sz6PfTSvkR42UPCnH18AEPJ8W7vi
-	 dg5/ebpVff7Sg==
-Date: Thu, 12 Mar 2026 06:18:31 +0000
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-From: Alexander Koskovich <akoskovich@pm.me>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] usb: typec: qcom: Add support for shared USBIN VBUS detection
-Message-ID: <0_Uzay_JH2Pb9Ff9XJ6VD5Y1EgtfjUQPIK7JPpYzBS9te24xw6JEs5XH2TDzIvGHmDk0ke8AuDKXYZWhQA2mMtmVkpnpXAMCePPZgAQqLZ4=@pm.me>
-In-Reply-To: <1bc80b89-5b09-4042-a61d-698884febded@linaro.org>
-References: <20260308-qcom-typec-shared-vbus-v1-0-7d574b91052a@pm.me> <20260308-qcom-typec-shared-vbus-v1-2-7d574b91052a@pm.me> <1bc80b89-5b09-4042-a61d-698884febded@linaro.org>
-Feedback-ID: 37836894:user:proton
-X-Pm-Message-ID: c35c85aff5daf4509ae0e410cfad3f3ca9bb8ea7
+	s=arc-20240116; t=1773296760; c=relaxed/simple;
+	bh=us6vuoIvQAI/20Llr77KpQic2drfxzzoWJBG+BBSrAM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BKeUTsmY/QJMwtONuQw2ReJFfKLi7ksYW0mKY0uA/enLpoi18fr3Xw1C9oWnujzbclgbayjRs2rPPl9rThJbocmgG/FPul891kyBbIo7WmIBZO7j3ejQo69wkTIlH0RmD65dhA+dCpXdLrw8ClJQAeo78WmX6GvaCzDunyZ7TMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eIy/IUI+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA15EC4CEF7;
+	Thu, 12 Mar 2026 06:25:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1773296759;
+	bh=us6vuoIvQAI/20Llr77KpQic2drfxzzoWJBG+BBSrAM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eIy/IUI+w/EOxMlihf1gv1wI84SpsgSLHkpfz0Z36dc2ndeCSE24T/Nh2W+04TtEz
+	 m5F0YOeb9nHQ37v5omIbtqmy1bEKS1xJBVJO1+hu2WNAoc+S+GgVrsGdTNCAzRcki1
+	 8L7vrjD9bSCCOaTkW3zkKNmncGJMXjMJFMhwu220=
+Date: Thu, 12 Mar 2026 07:25:54 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Nathan Rebello <nathan.c.rebello@gmail.com>
+Cc: linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com,
+	kyungtae.kim@dartmouth.edu, stable@vger.kernel.org
+Subject: Re: [PATCH v3] usb: typec: ucsi: validate connector number in
+ ucsi_connector_change()
+Message-ID: <2026031238-richly-tattle-eab8@gregkh>
+References: <20260312060815.55-1-nathan.c.rebello@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260312060815.55-1-nathan.c.rebello@gmail.com>
+X-Spamd-Result: default: False [3.84 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[pm.me,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[pm.me:s=protonmail3];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34647-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-34648-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[pm.me:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[akoskovich@pm.me,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,pm.me:dkim,pm.me:mid,linaro.org:email]
-X-Rspamd-Queue-Id: D1BFF26D92E
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-0.998];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linuxfoundation.org:dkim]
+X-Rspamd-Queue-Id: 2936526DA00
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-
-On Wednesday, March 11th, 2026 at 7:06 PM, Bryan O'Donoghue <bryan.odonoghu=
-e@linaro.org> wrote:
-
-> On 08/03/2026 23:20, Alexander Koskovich wrote:
-> > +=09if (IS_ERR(pmic_typec_port->vbus_detect_gpio))
-> > +=09=09return dev_err_probe(dev, PTR_ERR(pmic_typec_port->vbus_detect_g=
-pio),
-> > +=09=09=09=09     "failed to get vbus-detect GPIO\n");
-> > +
->=20
-> I'd prefer if this was bracketed since it is over more than one line.
->=20
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-
-Uploaded v2 but didn't carry your Reviewed-By since there's a fair bit of d=
-iff, can you look at v2 and check if all looks good?
-
->=20
+On Thu, Mar 12, 2026 at 02:08:15AM -0400, Nathan Rebello wrote:
+> ucsi_connector_change() uses the connector number from the CCI as an
+> index into the connector array without first verifying it falls within
+> the valid range. The connector number is extracted from the CCI register
+> via UCSI_CCI_CONNECTOR(), which returns a 7-bit value (0-127), but the
+> connector array is typically only 2-4 entries.
+> 
+> A malicious or malfunctioning device could report an out-of-range
+> connector number, causing an out-of-bounds array access.
+> 
+> Add a bounds check in ucsi_connector_change() itself, before the array
+> dereference, as it is the single function through which all connector
+> change events flow.
+> 
+> Fixes: bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Nathan Rebello <nathan.c.rebello@gmail.com>
 > ---
-> bod
->=20
->=20
+> v3:
+>  - Added changelog (Greg's bot)
+> v2:
+>  - Kept bounds check in ucsi_connector_change() rather than moving it
+>    to ucsi_notify_common(), as ucsi_connector_change() is the true
+>    central validation point covering all callers (ucsi_notify_common,
+>    ucsi_register, and backend-specific call sites) (Greg KH)
+> 
+>  drivers/usb/typec/ucsi/ucsi.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index a7b388dc7fa0..b4f630154aba 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1345,7 +1345,14 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>   */
+>  void ucsi_connector_change(struct ucsi *ucsi, u8 num)
+>  {
+> -	struct ucsi_connector *con = &ucsi->connector[num - 1];
+> +	struct ucsi_connector *con;
+> +
+> +	if (num < 1 || num > ucsi->cap.num_connectors) {
+> +		dev_warn(ucsi->dev, "bogus connector change event: connector %u\n", num);
+> +		return;
+> +	}
 
-Thanks,
-Alex
+Shouldn't we "fail" something here?  If this device is sending broken
+data, we don't want the caller to just assume this succeeded, right?
+
+Shouldn't stuff like this be checked in a single call after read_cci()
+is called?  The other calls to ucsi_connector_change() are not operating
+on a "new" descriptor value from what I can tell, but I might have
+missed a code path somewhere.
+
+thanks,
+
+greg k-h
 
