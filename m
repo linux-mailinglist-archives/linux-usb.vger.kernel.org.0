@@ -1,143 +1,143 @@
-Return-Path: <linux-usb+bounces-34680-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34681-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wPFjHDGysmmYOwAAu9opvQ
-	(envelope-from <linux-usb+bounces-34680-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 13:31:45 +0100
+	id QDuyJ0OzsmmYOwAAu9opvQ
+	(envelope-from <linux-usb+bounces-34681-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 13:36:19 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FD6B271CD9
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 13:31:44 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CF87271DFE
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 13:36:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id ADBB1301EBCA
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 12:27:55 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 74A4B30911F5
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 12:31:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E22692DEA62;
-	Thu, 12 Mar 2026 12:27:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1799262FC1;
+	Thu, 12 Mar 2026 12:31:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="eUW/uwyE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eJfMWkxM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E4214EC73;
-	Thu, 12 Mar 2026 12:27:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F50C7080E;
+	Thu, 12 Mar 2026 12:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773318472; cv=none; b=F+iOiV0gGZMNOaofiL5APswg4rzdIgkz/5USsxuA5JaOwkkC0x1Xpp5TtdsKu3lLrKgcaYQTve1jRIZtieKwNyhxlX96xHVUw1c22vO3ANt+8MlhsYkiDhdaUhU19HTBdUNvxXB9Pqb0g0M0RUM+x0L/iaPRBYOKWNOu/rECb1o=
+	t=1773318697; cv=none; b=AOx4lutkKPNJkAW+htMCvkOSI3ZPcfHKe+T8IBgWmeSy69FJCTgt17sDUG3eKF5+Z9BUTJjY5x+q6ewsCajeJH4gmngqpNAUcszBvjMtV0L55f+vB4Ad6CWia36ymz10oD7AzsqZzzKR1puolEmzGaY+IUh/CdyTqfVzxFiEu7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773318472; c=relaxed/simple;
-	bh=ieLHoto4+96APZSwNtBq+cq/bsSxRVVMPY9/iG19O+Y=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=AuHXb0mKGWQDYQrKmg5dhzFUAFHaNxhh1/0O1OwJ5Qgh2S9B7RrTwhykCcnSVkqxZEnV2wN/nk9aQE2NWrGwbD93EWH1pi5QRJk2uO4gQFY/Nac6eh9935+3l30MgjXyTFXkgXHqrL6CqFGMk97nTQY0whkfX3SKtd/dgaFoxY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=eUW/uwyE; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Cc:To:Message-Id:Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:Content-Description
-	:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=crT96uBlmju1P98PXOgVEI4VATCQ71GLj65C0UFT0gY=; b=eUW/uwyEN3Wi/+wuGdQ2KsYzvT
-	Xt+u9p3SqGOxg5MreeQ5klBm85bcw4ycyZyh+hB/rjpSBquDDLaYv+7vGsLxMv2XvaLxm2SGsRWiz
-	S0voa/JfMWaPFm1EetU28jpDUtHmzXallPsu5fV5InF0WEYQxU+kVu4UZhPPQOW/DZSjgYYk76fhr
-	tZ3MvKXtNavpokrL74NjKNdDAti6/2GLza0+Ovvougto76MMsA2ZnBWqADC4poeo1ab5Ooc5VA2UF
-	K6QEchqWzk0e/j+batObWLMVysw8jJHABM0mBa2Nf0mxtGmnrCQ9xXfL2oYg6AmWLeqK84v79wcl+
-	pvoAivCQ==;
-Received: from 177-136-93-197.vmaxnet.com.br ([177.136.93.197] helo=[127.0.1.1])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1w0f8c-00EUa0-Rv; Thu, 12 Mar 2026 13:27:39 +0100
-From: Heitor Alves de Siqueira <halves@igalia.com>
-Date: Thu, 12 Mar 2026 09:27:28 -0300
-Subject: [PATCH] usb: usbtmc: Flush anchored URBs in usbtmc_release
+	s=arc-20240116; t=1773318697; c=relaxed/simple;
+	bh=81okZrd1UlY9T52gDN7wLEuy0mbxKF8ZDAxHQskLTYI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=awSLNDdaQJ/6KG0rFj2u3NWvsqWBBWTyKUMUrRAoIkoRK3bxwkeliykVell4dTjMhXrIc7KgTefVso+mnjsudnIiKa/am0BKxVxG3jNUxSKmIXKd+WwXHPClvbGTHyoKYerUE5a6ffjGnFHNNPrHaJB5pqakvbN49r6dQKMiLr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eJfMWkxM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06704C19424;
+	Thu, 12 Mar 2026 12:31:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773318697;
+	bh=81okZrd1UlY9T52gDN7wLEuy0mbxKF8ZDAxHQskLTYI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eJfMWkxMcusxc/h7WsROfsdCetuMRU+gVO5nX42hZ3WDIwnPHUJYSmNjA5rtV967u
+	 sj9CLwjaPc8GLgjn5E7EAIX2K41WGButGTWF0qw33/zDELWqodg2I1IgQmM6NbNlh4
+	 TtJw8yxqMNHD3BgZuOVsDYdUTdYhxoJAH83bRgjkhNYQESfH4oZMTwu01+VMxlxhte
+	 qA9O0VImLUt0jzQPvoB/SorAT5ItEwTsx/qOuQ4bV/5nydtYlQTXwd79FTrQT+r+DL
+	 pXccagd4M2bMk1XXEsGCuumgt7jLaWxYTMSRLQ0305LdSsI3QqpfzOGZy8bVIG+qzm
+	 vs7opZViv9srQ==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1w0fCQ-000000003aB-2Vhe;
+	Thu, 12 Mar 2026 13:31:34 +0100
+Date: Thu, 12 Mar 2026 13:31:34 +0100
+From: Johan Hovold <johan@kernel.org>
+To: zwq2226404116@163.com
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Wanquan Zhong <wanquan.zhong@fibocom.com>
+Subject: Re: [PATCH] usb: serial: add RW135R-GL (33f8:1003) support
+Message-ID: <abKyJsH7oJf06BDf@hovoldconsulting.com>
+References: <20260312113214.27549-1-zwq2226404116@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260312-usbtmc-flush-release-v1-1-5755e9f4336f@igalia.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3M3QpAQBCG4VvRHJvaJYpbkYO1Pkz5awcpuXebw
- +fgfR9SBIFSnTwUcInKtkbYNCE/uXUESx9NmclKk1vLp3bH4nmYT504YIZTcNFXvjSwLoenmO4
- Bg9z/tmnf9wOqHm5mZgAAAA==
-X-Change-ID: 20260311-usbtmc-flush-release-5d9c60e1a3ec
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Guido Kiener <guido@kiener-muenchen.de>, 
- Steve Bayless <steve_bayless@keysight.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kernel-dev@igalia.com, 
- syzbot+9a3c54f52bd1edbd975f@syzkaller.appspotmail.com, 
- stable@vger.kernel.org
-X-Mailer: b4 0.14.3
-X-Spamd-Result: default: False [1.14 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	R_DKIM_REJECT(1.00)[igalia.com:s=20170329];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260312113214.27549-1-zwq2226404116@163.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-34681-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34680-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[igalia.com:-];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[163.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.002];
-	FROM_NEQ_ENVFROM(0.00)[halves@igalia.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,9a3c54f52bd1edbd975f];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,igalia.com:email,igalia.com:mid,appspotmail.com:email,syzkaller.appspot.com:url]
-X-Rspamd-Queue-Id: 6FD6B271CD9
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,fibocom.com:email]
+X-Rspamd-Queue-Id: 3CF87271DFE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-When calling usbtmc_release, pending anchored URBs must be flushed or
-killed to prevent use-after-free errors (e.g. in the HCD giveback
-path). Call usbtmc_draw_down() to allow anchored URBs to be completed.
+On Thu, Mar 12, 2026 at 07:32:14PM +0800, zwq2226404116@163.com wrote:
+> From: Wanquan Zhong <wanquan.zhong@fibocom.com>
+> 
+> Add VID/PID 33f8:1003 for the Rolling Wireless RW135R-GL M.2 module,
+> used in laptop debug cards with MBIM interface for Linux/Chrome OS.
+> The device supports mbim, diag, adb and AT commands.
+> 
+> Device info from lsusb:
+> Bus 03 Device 12: ID 33f8:1003 Rolling Wireless S.a.r.l.
 
-Fixes: 4f3c8d6eddc2 ("usb: usbtmc: Support Read Status Byte with SRQ per file")
-Reported-by: syzbot+9a3c54f52bd1edbd975f@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=9a3c54f52bd1edbd975f
-Cc: stable@vger.kernel.org
-Signed-off-by: Heitor Alves de Siqueira <halves@igalia.com>
----
- drivers/usb/class/usbtmc.c | 3 +++
- 1 file changed, 3 insertions(+)
+Please include the output from usb-devices which includes details about
+the interfaces (see commit ae420771551b ("USB: serial: option: add
+Rolling RW350-GL variants") for an example).
 
-diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
-index 2526a0e03cde..3d6daa8b748e 100644
---- a/drivers/usb/class/usbtmc.c
-+++ b/drivers/usb/class/usbtmc.c
-@@ -254,6 +254,9 @@ static int usbtmc_release(struct inode *inode, struct file *file)
- 	list_del(&file_data->file_elem);
- 
- 	spin_unlock_irq(&file_data->data->dev_lock);
-+
-+	/* flush anchored URBs */
-+	usbtmc_draw_down(file_data);
- 	mutex_unlock(&file_data->data->io_mutex);
- 
- 	kref_put(&file_data->data->kref, usbtmc_delete);
+> Signed-off-by: Wanquan Zhong <wanquan.zhong@fibocom.com>
+> ---
+>  drivers/usb/serial/option.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index e349ed66d2ac..abeeb7c66977 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -2449,6 +2449,9 @@ static const struct usb_device_id option_ids[] = {
+>  	  .driver_info = RSVD(4) | RSVD(5) },
+>  	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x0115, 0xff),			/* Rolling RW135-GL (laptop MBIM) */
+>  	  .driver_info = RSVD(5) },
+> +	/* Rolling RW135R-GL (laptop MBIM) */
 
----
-base-commit: b29fb8829bff243512bb8c8908fd39406f9fd4c3
-change-id: 20260311-usbtmc-flush-release-5d9c60e1a3ec
+The comment should go after the entry (it's fine to ignore checkpatch
+warnings about long lines here).
 
-Best regards,
--- 
-Heitor Alves de Siqueira <halves@igalia.com>
+> +	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x1003, 0xff),
 
+And please try to keep the entries sorted by VID/PID (i.e. put the new
+one after Rolling RW350-GL).
+
+> +	  .driver_info = RSVD(5) },
+>  	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x01a2, 0xff) },			/* Rolling RW101-GL (laptop MBIM) */
+>  	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x01a3, 0xff) },			/* Rolling RW101-GL (laptop MBIM) */
+>  	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x01a4, 0xff),			/* Rolling RW101-GL (laptop MBIM) */
+
+Johan
 
