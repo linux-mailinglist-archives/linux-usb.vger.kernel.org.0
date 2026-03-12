@@ -1,149 +1,159 @@
-Return-Path: <linux-usb+bounces-34684-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34685-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gFfrKHS8smmvPAAAu9opvQ
-	(envelope-from <linux-usb+bounces-34684-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 14:15:32 +0100
+	id SEbSNWXFsmmvPAAAu9opvQ
+	(envelope-from <linux-usb+bounces-34685-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 14:53:41 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0951D2725CF
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 14:15:32 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7E5E272F61
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 14:53:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 20927316CF1D
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 13:10:51 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id AA5823033E64
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 13:49:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76BBE3C457D;
-	Thu, 12 Mar 2026 13:10:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44FF8351C07;
+	Thu, 12 Mar 2026 13:48:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D/PFIyj9"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Vbza1ZoZ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0043A23BCED;
-	Thu, 12 Mar 2026 13:10:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA6B175A87;
+	Thu, 12 Mar 2026 13:48:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773321049; cv=none; b=SJq8VzpOvitOMQd3Ljea6LKSs63XAP5S6DA76bPAEUO2WtIu69vNkNY9UjECduzZ/zLOYTdCg6lkrfZZ/rsR+tm7o3e+m16c0u9CaswqVceUhKe94B8bpm2s9EN83LfRg7dMh0NzEaXPaH1Tf5nO/7diOX1J4KfJHVWqMl0BYck=
+	t=1773323338; cv=none; b=Pglhx5RwzrdM7b/amvZ3DoI/GpkC4aR1WWDyzLO2eCtrb1x6i/Md0V7ns7yHrPs0dTARdkYdWMZwUHItM1QFYgA+Ez0BZtfMutEAu2mDhKnSotz8i3WFKq+ykTYSaqRp+4uUn26xKTlDpJcQXwTEfvmlUU2rlQsOp10fWZP1qoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773321049; c=relaxed/simple;
-	bh=knQrS10xE8pCiFxKeddUKvT0NROChU5ox+YUb1+I4Jk=;
+	s=arc-20240116; t=1773323338; c=relaxed/simple;
+	bh=n6Wi8+Wf3bcqnQdzJvITeSyaVeWgTfVDYqyrAlHIfO8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mDpMnPa2WKWn+I1wyc22jCV5SRSeo+QzVfpVxKbVT8b6mXDiekGsRLX5FNeqrduRmR0omP40kvVVZ4bA/tWAkoKSHTuTDCbys4yuyGTx1bVs8C5B0jMYJ9KnxMSa9VJLOpppw8ljFr4idVSO8cYVtWV9rL+9n7UWAQkUBexQ/Dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D/PFIyj9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87868C2BC86;
-	Thu, 12 Mar 2026 13:10:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773321048;
-	bh=knQrS10xE8pCiFxKeddUKvT0NROChU5ox+YUb1+I4Jk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D/PFIyj91n4cjwbkmFrtz1Zp7ltSngsuz/KUHloIpRJcdahbkIMAiUXROd+gGnVOb
-	 Iw1Iwc0yAYWvNNZj178FpoLhC5TYOP7Pmp1fvWRDqKAhRMDg2WEuxAeCb6MGSU+Egk
-	 73pdalxpbDWCtEsQSVXUKwDlYH4Y0Kha4cPztJa4sDX6hpbUPusZIkB1784SyljfPI
-	 4ghgvGGPrpjQ8jiHYiC6WIp9P/SdZcDym9Br0ffyKZF1aEOJDShPudm+SEdxa1e666
-	 oUO3wjvTpZz7btpB1PIgJk2lhCAtBhOW9K/0XQJ0gA1R51AQv5NUJOana1FjpgzVs1
-	 R1gBn/o3oM87A==
-Date: Thu, 12 Mar 2026 13:10:41 +0000
-From: Mark Brown <broonie@kernel.org>
-To: amitsd@google.com
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Lee Jones <lee@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH v8 4/6] lib/linear_ranges: Add
- linear_range_get_selector_high_array
-Message-ID: <500e053a-9919-4c63-a042-30a5e5f09c6f@sirena.org.uk>
-References: <20260224-max77759-charger-v8-0-eb86bd570e9c@google.com>
- <20260224-max77759-charger-v8-4-eb86bd570e9c@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=RMXUWNoQRFVwzH2zJAZTGtgViy6bChn27ZKp5L/GG1qJC/zt4XWpVcTKc6iQAIoyH1FvE/tdi8PkJLGrbornc71jJlvnW5LeUghpQGVOmupre1ol48atBy1RGm+lTAZVLQiAjL/0eV4duPDVRpbQOLmI5gOSxVo+jaHYSYiyPFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=Vbza1ZoZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1211C4CEF7;
+	Thu, 12 Mar 2026 13:48:54 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Vbza1ZoZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1773323333;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cGQoGI0iD9IPU4MUwC9OugDLG8y8kJybLkuwslOCZHA=;
+	b=Vbza1ZoZ3MQ4b2ykXY2DyqS4C6Ur7UHx9qiWIc/vFh778HfoElPE2RxbHwwtYDWBWz5kTd
+	GgqrRtZHwWKcuZxBSTueiwWRWvj2d75BQlYdE8HJs5S7vd9FutLk/Ei4er761vtUbva2iY
+	m5uliyiKx+1wocBBtZVjNBVv6c6GbN0=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 780e6e40 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Thu, 12 Mar 2026 13:48:53 +0000 (UTC)
+Date: Thu, 12 Mar 2026 14:48:48 +0100
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Fernando Fernandez Mancera <fmancera@suse.de>
+Cc: netdev@vger.kernel.org, rbm@suse.com, Jason Gunthorpe <jgg@ziepe.ca>,
+	Leon Romanovsky <leon@kernel.org>,
+	Zhu Yanjun <zyjzyj2000@gmail.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Boris Pismenny <borisp@nvidia.com>,
+	Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>,
+	Simon Horman <horms@kernel.org>,
+	Edward Cree <ecree.xilinx@gmail.com>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Harald Welte <laforge@gnumonks.org>,
+	Antonio Quartulli <antonio@openvpn.net>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	Oliver Neukum <oliver@neukum.org>, David Ahern <dsahern@kernel.org>,
+	Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Parav Pandit <parav@nvidia.com>, Edward Srouji <edwards@nvidia.com>,
+	Vlad Dumitrescu <vdumitrescu@nvidia.com>,
+	Kees Cook <kees@kernel.org>, Jianbo Liu <jianbol@nvidia.com>,
+	Gal Pressman <gal@nvidia.com>, Guillaume Nault <gnault@redhat.com>,
+	Cosmin Ratiu <cratiu@nvidia.com>,
+	Carolina Jubran <cjubran@nvidia.com>,
+	Alexandre Cassen <acassen@corp.free.fr>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	"open list:INFINIBAND SUBSYSTEM" <linux-rdma@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:NETRONOME ETHERNET DRIVERS" <oss-drivers@corigine.com>,
+	"open list:SFC NETWORK DRIVER" <linux-net-drivers@amd.com>,
+	"open list:GTP (GPRS Tunneling Protocol)" <osmocom-net-gprs@lists.osmocom.org>,
+	"open list:USB CDC ETHERNET DRIVER" <linux-usb@vger.kernel.org>,
+	"open list:WIREGUARD SECURE NETWORK TUNNEL" <wireguard@lists.zx2c4.com>,
+	"open list:INTEL PRO/WIRELESS 2100, 2200BG, 2915ABG NETWOR..." <linux-wireless@vger.kernel.org>,
+	"open list:ETHERNET BRIDGE" <bridge@lists.linux.dev>
+Subject: Re: [PATCH 05/10 net-next v2] drivers: net: drop ipv6_stub usage and
+ use direct function calls
+Message-ID: <abLEQMx6mPM4vL4t@zx2c4.com>
+References: <20260310153506.5181-1-fmancera@suse.de>
+ <20260310153506.5181-6-fmancera@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="z6vnm6QHpA1WTayS"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260224-max77759-charger-v8-4-eb86bd570e9c@google.com>
-X-Cookie: I feel better about world problems now!
-X-Spamd-Result: default: False [-2.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
+In-Reply-To: <20260310153506.5181-6-fmancera@suse.de>
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[zx2c4.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[zx2c4.com:s=20210105];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34684-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,linaro.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,gmail.com,linux-foundation.org,vger.kernel.org,lists.infradead.org];
-	RCPT_COUNT_TWELVE(0.00)[23];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FREEMAIL_CC(0.00)[vger.kernel.org,suse.com,ziepe.ca,kernel.org,gmail.com,nvidia.com,lunn.ch,davemloft.net,google.com,redhat.com,netfilter.org,gnumonks.org,openvpn.net,queasysnail.net,neukum.org,blackwall.org,corp.free.fr,fomichev.me,corigine.com,amd.com,lists.osmocom.org,lists.zx2c4.com,lists.linux.dev];
+	TAGGED_FROM(0.00)[bounces-34685-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[47];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[zx2c4.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[Jason@zx2c4.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[broonie@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sirena.org.uk:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0951D2725CF
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[zx2c4.com:dkim,zx2c4.com:email,zx2c4.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D7E5E272F61
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+On Tue, Mar 10, 2026 at 04:34:28PM +0100, Fernando Fernandez Mancera wrote:
+> diff --git a/drivers/net/wireguard/socket.c b/drivers/net/wireguard/socket.c
+> index 253488f8c00f..c362c78d908e 100644
+> --- a/drivers/net/wireguard/socket.c
+> +++ b/drivers/net/wireguard/socket.c
+> @@ -136,8 +136,7 @@ static int send6(struct wg_device *wg, struct sk_buff *skb,
+>  			if (cache)
+>  				dst_cache_reset(cache);
+>  		}
+> -		dst = ipv6_stub->ipv6_dst_lookup_flow(sock_net(sock), sock, &fl,
+> -						      NULL);
+> +		dst = ip6_dst_lookup_flow(sock_net(sock), sock, &fl, NULL);
+>  		if (IS_ERR(dst)) {
+>  			ret = PTR_ERR(dst);
+>  			net_dbg_ratelimited("%s: No route to %pISpfsc, error %d\n",
 
---z6vnm6QHpA1WTayS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Rest in peace, stub.
 
-On Tue, Feb 24, 2026 at 01:45:34AM +0000, Amit Sunil Dhamne via B4 Relay wr=
-ote:
-> From: Amit Sunil Dhamne <amitsd@google.com>
->=20
-> Add a helper function to find the selector for a given value in a linear
-> range array. The selector should be such that the value it represents
-> should be higher or equal to the given value.
+For the WireGuard part,
 
-Acked-by: Mark Brown <broonie@kernel.org>
-
---z6vnm6QHpA1WTayS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmyu1EACgkQJNaLcl1U
-h9BlIgf/WMBGgptFYb7yIkxGUKOn+mEm5q45nldetnrV4TDR6/fAFjQxqU/GOzxS
-+RPqXEnr6F/3iDWu5WJimjJi9gjJmxkw52yeg39ccZj3DOA2IrooBLGMRFMOqaj6
-CVnKmk6oOv71y0xclOYuRpt3je4UIYAwViaJds5ASxPTi2qnDSmjDVez2iBwbuwr
-FJZKbzW7hqrcGiRLLkU5TS1+BzMSP/G1ErzLcduQ24Vtc5zwys6wpnkny7ma8URw
-eQVUJX+avpSiNGQxBSlOcFUypkh9ISW7OVo67fk76i9MfPiIJZw+g9YtwPKmq7pG
-2YWuApGAT4LC24MHQDEFu9Umvmuvqg==
-=sJI6
------END PGP SIGNATURE-----
-
---z6vnm6QHpA1WTayS--
+    Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
