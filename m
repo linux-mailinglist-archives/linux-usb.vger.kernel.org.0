@@ -1,182 +1,166 @@
-Return-Path: <linux-usb+bounces-34714-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34715-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WIaoI/Uss2ksSwAAu9opvQ
-	(envelope-from <linux-usb+bounces-34714-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 22:15:33 +0100
+	id GDxlHokzs2ntSwAAu9opvQ
+	(envelope-from <linux-usb+bounces-34715-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 22:43:37 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55E2C279D86
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 22:15:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF83B27A1FD
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 22:43:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id AD98F300AB00
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 21:15:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2FE51318725B
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 21:42:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A354350D46;
-	Thu, 12 Mar 2026 21:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 205403F0ABC;
+	Thu, 12 Mar 2026 21:42:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eolSopzT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E+Gt6j6v"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22162F8BEE
-	for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 21:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773350126; cv=none; b=l4Pa7dVUU4XUZzkInNSxu2Uh2HVxiNFO1QfJcw+1BdosWTNrg6SlXv6r2rQqQnZagbe920QKUCwCbkfoR58xbprS7nbF252NWq0oTBea+26qrb56e+gBD4aleeombrN3tp+XsL3wYns/5EVQcuuZHKGYsZuH/xNEVzM7G8VDIyg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773350126; c=relaxed/simple;
-	bh=EdyZWxoywiGkoxPvBufylUOq8C71Uqcu+Rnfl8Xh8zg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dD54D6gZ/znTL12TY+VawM4d4tFd40PJCLfVJjsndD9DIZCN2HUjr2Lea2hblul/uFe8uOngby9Z1FW26pmH6cL+wYtkzgVByC/1/3wngFtXDYLg5Q1p1rWb2/jBCYWAHNmQIvL5pWPS9UYT0xBYblW57TxcEnLTBdzQ8m7pa58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eolSopzT; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E8D03F0768
+	for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 21:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773351770; cv=pass; b=Pew537xZ+8pRqTjO5vY8oZk5DOl3gGHZJG3v5EFA0/8wlCrjZCdF3lCir0WBFyq9VK6YvvFReMA6/eAMC/JojwXmEwHbWJrLcYNOO5JOkDRmrDwjbbxuFtdrOCHyou03FfSw65uBWOaybSYO24C2GYr2STViw4RcbsL8AEz1qrc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773351770; c=relaxed/simple;
+	bh=RcARsbD3X5Ve8NxMdSBCwo9hyEgFWZ8HNihyXfTRSkA=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=owCtbrWBCaCfv+622zngSeKpoVEJ9Npux8sCENeR/Mz/qWgUK/0PE3pURyO82hlwvJEuzwFdwpG91lMfVUAyQGQvkXXu9XtA0NEvdLrb7aKwHMp+ixT4XAm9sxQdHyFjDmn2PICVDdS6LEZYPBgB7pgmaQLASC3gr3BjBFHLbVI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E+Gt6j6v; arc=pass smtp.client-ip=209.85.161.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8cbc593a67aso144554885a.2
-        for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 14:15:22 -0700 (PDT)
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-67bb17938d5so1113045eaf.1
+        for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 14:42:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773351768; cv=none;
+        d=google.com; s=arc-20240605;
+        b=kr02aD1UTs19GOuErmXgWxBmak0exKEAlmrISPbMV63JxMongkVkdajkIPzfjEcx+M
+         1+fXhlyGJKv1MB0JM+IuwQt36ob/iwZNK7lFF3V63UcBBN7ao+N3bxtdjUNVpSmiblcl
+         83sRTNeb60pvO4adcLdBYB4Hoq/xLlSmpBrqGLmb1Bxbl+R+Q/JOKeF3J+FV8xYMGN9Y
+         g9yflrp8KWFpY1AvFDtukc+4Kr9JqBMlrpnHMBEfmU/FRa/1sDSpkmbeyckSrEOV3uAG
+         JjTXFam5+O+pBIUWXW60QS/NLg+KM1m/fPZa8H190bWOEo8v0Cf4XECgY5uvzzq2jOHa
+         Z/Lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=P7q9V/f3Yk57FFVndjsG5cSBKz/deygCR5HNCS5o+ks=;
+        fh=hNQ6fdDUCMJqXvPWEyN8HMRDMwg76/LnkBrPgOb3dmM=;
+        b=GknN5O/QNsJimoAD7HEjYMipuB1kk/4CJaLX12pWdv5Js8KXbJiU9cbAOq7IDZ8NLf
+         JDSo5cbSlksHdBX9VfEt2hptt5WlqJcJftM5xtFuaPTYRTIzsj9PutwlJib70jeECpuG
+         yZYwLQFpD8H+wxnszCfrsneVbNe3h1o4GI6HO/m/PgV39g/SOQS0cvDbWcIvUyjmjPgV
+         hT/a3blf4Mdrws0uo1YXBd/fwiXlWP0riP11dtkP8XJ9d4J282tyboJgpdmA5b0UyCQK
+         1/LuX9YUpvEh/inZ6IB4xFhaDZSJwqiFse5wBzqmboZffR5s7gFj9C2Y2DRXuB4Csr8V
+         kNCg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773350121; x=1773954921; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=z6I0Vq1Tl+Jo39N58IrwVNoCJt4B+2Bjz6e3dij+7e4=;
-        b=eolSopzT5ldI+Bo3BWICjCSdjCtb/UqFqh/y8kqMoKX/4DNjpyHfQd/K6QPcGkWR7z
-         yrILt/ZoLmEIAV35oQi4dYAUt1OrfHBWlouwbcJo3JcZ5UidrAaBa6JTaOzdnIjjQnaE
-         U8RCW+RH7K+e+HHqYlRdI6GuGllUu+xU4jhdacGlrSBWdiy0bq4rApgTzdLznqh8Bu5S
-         tGWA+NxG8YxvDkVOrfXNXWZXKpSb0mp8NBH4crzEof75PcCXTQHAAJxhpkM2QD5XZsw6
-         flDRccKYZanq6yaZaX4/taBE7VnTwo1E6lncueQ3rAIUDHnO3hjFZA4lfXi/3yPEwgZe
-         +dZg==
+        d=gmail.com; s=20230601; t=1773351768; x=1773956568; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=P7q9V/f3Yk57FFVndjsG5cSBKz/deygCR5HNCS5o+ks=;
+        b=E+Gt6j6vynb2g69OtFHrHy6LM3UM9D0vOovYY4ASXGIivxpsMT+gq4sKZlHs9AIu77
+         ukmH39QbIt74go4VNy/vjfKgzKOZdFBlSkvoRJVHv9TQoagOLV/tXZosBAt7mHWhiIkR
+         wWqcb8TrUAi2tUYwh5QUPHpXLpycxY/jhlwChBobnxBtXDmiqtVw/FH67UCKHgiCj/0H
+         KVhP/7MOmoOnRa4vxgDNfNRSVgMFvV+yJ6FTHJUirfPld+4bwEU7BvUtpxazGygIyNKb
+         JlIjnN4pXY3J1LGDMgMCgYAJf2DVcTi6rxygQHV5lnqw/aLcx0kkPqC8xUmOiseUUdCU
+         SuPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773350121; x=1773954921;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z6I0Vq1Tl+Jo39N58IrwVNoCJt4B+2Bjz6e3dij+7e4=;
-        b=BzDCpPYk2GWWf2fwiLw63dQbOP14DVRyIG0C2OMa0wGRD2t6OU8rUHaGdqrDHlDZvH
-         D23R5mrtoI4lwINNMVPkFiJrzBdWtczFQ56tI6uVJYOQ3FOgqek2yz9cxBSEF0QUGvew
-         GokICrIdxS5kCnd670fbtYFKPDHX5P64CSQd7HV/S9iX3L7n0O23cx7Ppi0N5hmOobN+
-         PC8q6PRbavRFGodpbDIoa+1hv7vc1UMKNEQsjrCv+uk797Y6+JcrungRNbdMncFq8Qdl
-         P91PqHtB9rAFguncjFepOTvaUNuL65AzYP8trZC0yODtQtYcEU0zEN5sXv0o2YN5l4NH
-         qq5w==
-X-Gm-Message-State: AOJu0Yx5H1yhxH5KLoE1GlFKGsy9al2IHgq4ukRS6Qtvln1nu5kcQPT/
-	gjy0iTg9RnGkwsFtOGrrt206MOCS5PGJrkGwbU2X45DrUkf3rHjtWZSlurWmenmb
-X-Gm-Gg: ATEYQzz95Cd9ISuK6YoDAHafNUo4EnDg/lTxaE0azLOF53HOSdQ2N+jhCM6f3jWeMW/
-	yz9sTEkDmwlXTLIioJikNiTVUrLLnVdJFfVtXMAsgLroBn0Uh2rdrsJD4s6Vu6T630zlYnehiMQ
-	pU2pgKtrfOnqEZ7Sw+a7ODAb+uMPAR/pOx2q5AOupXB7cGsYBPHgLH72aXP9MvqVI4qjlojx+gE
-	trF2Ds3Tk0grgv04W6fnwd0S8PFPtH/lRwywCh704Ov7ZjtI9ohzZjQwtg5VxnTj2Rwe+2Xslwl
-	PrS+1/XBOfGsuAXIx3kfuNNvYvAHRKWCeEGtYgaAOtlIpjPYHj3nqwPfCDO6c9MGV4UaEsoex5J
-	npYmfDvx4hoc6yywvlP8DyWfroumcRXV6Z7dchgjG58Q4cu0cUpUccr1nHNgCgrhiwb2WZXcdLx
-	dlUbXKpAmz+TzbAwuII0rndCNeAO841h/8Zz88dQTg1C/xxXK91gPVioEHpqoI9fd50o+2nLjLx
-	xmAZa7eK3pEJq8WUW41
-X-Received: by 2002:a05:622a:1214:b0:509:25ab:f545 with SMTP id d75a77b69052e-50957cb1bc6mr13008261cf.11.1773350121263;
-        Thu, 12 Mar 2026 14:15:21 -0700 (PDT)
-Received: from localhost.localdomain ([129.170.197.126])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5093a146218sm38781001cf.30.2026.03.12.14.15.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 14:15:20 -0700 (PDT)
-From: Nathan Rebello <nathan.c.rebello@gmail.com>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	heikki.krogerus@linux.intel.com,
-	kyungtae.kim@dartmouth.edu,
-	stable@vger.kernel.org,
-	Nathan Rebello <nathan.c.rebello@gmail.com>
-Subject: [PATCH v4] usb: typec: ucsi: validate connector number in ucsi_notify_common()
-Date: Thu, 12 Mar 2026 17:15:03 -0400
-Message-ID: <20260312211503.1915-1-nathan.c.rebello@gmail.com>
-X-Mailer: git-send-email 2.43.0.windows.1
+        d=1e100.net; s=20251104; t=1773351768; x=1773956568;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P7q9V/f3Yk57FFVndjsG5cSBKz/deygCR5HNCS5o+ks=;
+        b=AcZYSz+bSdfhGweu29sqNvWoLWHDS8IF6xA0oPklslXRf7u4wqjvCCru8Ok+yj7e/o
+         OBTSmRANptjqmG1OwcA7gt7KWXGMsXvTJVKS1P7ml868hrcfsu5Op+AJfjJcwcjD9c8k
+         reKC6FDZNs8BMmfkipuQIIIOK8dVh32pqbgrYnAKQoLvFWPS+otZzPjVcQvTK6U1iADK
+         eogwu58vEFhc2+uOdvYfm8Iyt9K82jVTtk7Ch9Ui0o1qoKxJ/wmOq4ScTyXT5TGbCF5z
+         /Qtx7LmmvAFEvPp0Lv5XdAEvTbG4sUq4QyhkNwZL7UhR8AngvSt/dm7YMQawPUFly4/c
+         XrMQ==
+X-Gm-Message-State: AOJu0YzMWfBlI887bZCZB79ZAoD5bYEVOKxRL5WIMSt5zHvCfVy3kzW5
+	Mic3b/3Kx+/b3u2Pxva/HjmztzF1xmvcTCi+B8TRfZHDXw/YjN6FrD2O7caUzmhkPcy5FiOEv9D
+	BuItC1Wy8VBMwduRfnlz2UYZPkCZCbkHrijEn
+X-Gm-Gg: ATEYQzySwgPB+UQpfl4mI6gr4dXO+gEbV2PuJFoklLra0ZhaKV87cZQLvSXFByB5PJL
+	sd/7wqFe+/UbIw5IL/bvi4W9KlZGBgQw62cMpUb0RGiXMMYVQG4ujbuOVrcCf3Byqxabm8ICdpI
+	gssGJFxKJKCn7zHFiXh5IUdhlzFQWtxJ8Z7zpfLuyT5+NOLxo8zs0GnoLqd8MTrXyvpKoBV9PsW
+	dmi2BxzWRzOBbcWIdNkNQnBFghPBGP79clokC/vlHctcv5gYVUQzoDSUq79lrCmZ++xWBxhZC+6
+	DZYaAsuMTw0TdkHg2dOXUT4KXAuo5YQddfV4Nx7gc6IyRRncjk/FJ1bb85Itb2RNf390eg==
+X-Received: by 2002:a05:6820:821:b0:674:4a89:d824 with SMTP id
+ 006d021491bc7-67bda98c883mr685118eaf.2.1773351768400; Thu, 12 Mar 2026
+ 14:42:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
+From: John S <xaum.io@gmail.com>
+Date: Thu, 12 Mar 2026 22:42:35 +0100
+X-Gm-Features: AaiRm53wep7_NMeuuJJuJv8YuZc1Bd-Bij4KHBUI9UbQ7vVR0UrQBWcWQOVj5Zo
+Message-ID: <CAAZVx98RyzO+Pdqt+w-4QWyefbgmAKzzSYkVHZV9x=GiTW-GfQ@mail.gmail.com>
+Subject: [PATCH] usb: typec: add kernel-doc for priority and mode_selection members
+To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-34714-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,linux.intel.com,dartmouth.edu,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nathancrebello@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-34715-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[xaumio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 55E2C279D86
+	FREEMAIL_FROM(0.00)[gmail.com]
+X-Rspamd-Queue-Id: DF83B27A1FD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The connector number extracted from CCI via UCSI_CCI_CONNECTOR() is a
-7-bit field (0-127) that is used to index into the connector array in
-ucsi_connector_change(). However, the array is only allocated for the
-number of connectors reported by the device (typically 2-4 entries).
+Document the priority and mode_selection members of struct
+typec_altmode that were added without kernel-doc descriptions.
 
-A malicious or malfunctioning device could report an out-of-range
-connector number in the CCI, causing an out-of-bounds array access in
-ucsi_connector_change().
+This fixes the following warnings when building with W=1:
 
-Add a bounds check in ucsi_notify_common(), the central point where CCI
-is parsed after arriving from hardware, so that bogus connector numbers
-are rejected before they propagate further.
+  include/linux/usb/typec_altmode.h: struct member 'priority' not
+described in 'typec_altmode'
+  include/linux/usb/typec_altmode.h: struct member 'mode_selection'
+not described in 'typec_altmode'
 
-Fixes: bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
-Cc: stable@vger.kernel.org
-Signed-off-by: Nathan Rebello <nathan.c.rebello@gmail.com>
+Signed-off-by: Kit Dallege <xaum.io@gmail.com>
 ---
-v4:
- - Moved bounds check to ucsi_notify_common(), the single point where
-   CCI is parsed after read_cci(), so bogus connector numbers never
-   propagate to ucsi_connector_change() (Greg KH)
- - Changed dev_warn to dev_err
-v3:
- - Added changelog (Greg's bot)
-v2:
- - Kept bounds check in ucsi_connector_change() rather than moving it
-   to ucsi_notify_common() (Greg KH)
+ include/linux/usb/typec_altmode.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
- drivers/usb/typec/ucsi/ucsi.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index a7b388dc7fa0..10261992f020 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -42,8 +42,13 @@ void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
- 	if (cci & UCSI_CCI_BUSY)
- 		return;
- 
--	if (UCSI_CCI_CONNECTOR(cci))
--		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
-+	if (UCSI_CCI_CONNECTOR(cci)) {
-+		if (UCSI_CCI_CONNECTOR(cci) <= ucsi->cap.num_connectors)
-+			ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
-+		else
-+			dev_err(ucsi->dev, "bogus connector number in CCI: %u\n",
-+				UCSI_CCI_CONNECTOR(cci));
-+	}
- 
- 	if (cci & UCSI_CCI_ACK_COMPLETE &&
- 	    test_and_clear_bit(ACK_PENDING, &ucsi->flags))
--- 
-2.43.0.windows.1
-
+diff --git a/include/linux/usb/typec_altmode.h
+b/include/linux/usb/typec_altmode.h
+index 0513d333b797..c7cfc4629484 100644
+--- a/include/linux/usb/typec_altmode.h
++++ b/include/linux/usb/typec_altmode.h
+@@ -26,6 +26,8 @@ struct typec_altmode_ops;
+  * @mode: Index of the Mode
+  * @vdo: VDO returned by Discover Modes USB PD command
+  * @active: Tells has the mode been entered or not
++ * @priority: Numeric priority for alternate mode selection ordering
++ * @mode_selection: Indicates support for the mode selection feature
+  * @desc: Optional human readable description of the mode
+  * @ops: Operations vector from the driver
+  * @cable_ops: Cable operations vector from the driver.
+--
+2.53.0
 
