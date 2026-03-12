@@ -1,132 +1,141 @@
-Return-Path: <linux-usb+bounces-34671-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34672-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AALnEQCUsmnONgAAu9opvQ
-	(envelope-from <linux-usb+bounces-34671-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 11:22:56 +0100
+	id AHQDHwaXsmmKNwAAu9opvQ
+	(envelope-from <linux-usb+bounces-34672-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 11:35:50 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA1DD2704CE
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 11:22:55 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17AEE270601
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 11:35:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1C6E8302A04F
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 10:21:49 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id BDE663031F0A
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2026 10:35:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31B913B2FE4;
-	Thu, 12 Mar 2026 10:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E29B3BAD9D;
+	Thu, 12 Mar 2026 10:35:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="RPrWI7y4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mSUyyBIz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC1A3B6C00;
-	Thu, 12 Mar 2026 10:21:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F8B3B636B
+	for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 10:35:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773310907; cv=none; b=DGyqZG0WdMhjEbnUb2mceBeA/fuwEZceVmHELEt84m7/2N+IAOKXSFaBT2NwiJrP+ffLNSkj0QQoM8eOuvj96qBeG3gPkwtjLB2NfnDjlG84eJy2qBoopT9bu0t5ANqCz0yy2JVxeEEl8BFKcWSpYxgiSAFfwxrsA+Ca6TX//v0=
+	t=1773311721; cv=none; b=KcgZNFQA7XhmvdEBnF0WrbWXmsceyCu5Y8YEkTDtX3dW/cKsFJYoPOHT6kz/B5/EkO+NGgjaLSz1n5pzjl7O4cSamW8WAvrNHgWGi3oqnxepGisl5nWN69PRTixQQuXQyZ8pYHr476tLyrzKaZs25el+UJNNL1nBNycYpiHDtkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773310907; c=relaxed/simple;
-	bh=zbTl27wV5HeuwH5zVUaa9KiMquW/Szbs0K+fRXai0/U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VORfALVjBfuzZ9oY0gickxVO+NdO4MI9Ze2Q9rkGMEjd9hclj4p6Hpt1u+ck1Y/KuKFT0H+gns8ZKmG85JN9bF2GadTEBMEVz9JrCTm5l5B7Wa7nIf9qC3qB7IZaZ4HFLsdbjm8LoFJFnOQrLVWJC2JZUbzGuEneT8I8/xUafoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=RPrWI7y4; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=go
-	GS09xqTUU6YR9G8aJL6xMgSupRDBvPN0gU4EiALso=; b=RPrWI7y4YBrtfWReFI
-	7Ru5uE/wcNNhaHCQNzeJYBnbsyGPvwD/bmkP2fdC4bAUvouQmNqcxQelS9lveHfX
-	aNUcWiR30H0O6DbnjQ7vFdIoH7sivKfRqFxxDBGFnMuyjbBdSaj7Z1R4RyvFBixc
-	RrzzU2tXOwoH/vfjNx/xAk6+c=
-Received: from GHT-5854251031.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wBHtmSYk7JpnC0vAg--.7909S2;
-	Thu, 12 Mar 2026 18:21:13 +0800 (CST)
-From: zwq2226404116@163.com
-To: johan@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	zwq2226404116@163.com,
-	"wanquan.zhong" <wanquan.zhong@fibocom.com>
-Subject: [PATCH] usb: serial: add RW135R-GL (33f8:1003) support
-Date: Thu, 12 Mar 2026 18:21:08 +0800
-Message-ID: <20260312102108.13584-1-zwq2226404116@163.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1773311721; c=relaxed/simple;
+	bh=my9cFR3GuWad0tyG4lpnny3qNC3tmK7ju0l7C5nbA3k=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=BLloZPUAUn70YO0oA6q1H5/+MoORVcUE0fwZFCp8ejdg1GklndSWtj6r7iSb3HG5zxF0z+LOf8iibIX2Zoo7NoqOLIocgT3LVSChG8Kr3oQcumvS4o4GaA2BTFLak4itaV+YoCaplqcRSxSREq+eZ/zRFFAj6sntv9cN51LgACU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mSUyyBIz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5325FC2BC9E
+	for <linux-usb@vger.kernel.org>; Thu, 12 Mar 2026 10:35:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773311721;
+	bh=my9cFR3GuWad0tyG4lpnny3qNC3tmK7ju0l7C5nbA3k=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=mSUyyBIzGiecdMV94P+WvBwetZ12aQjFwSsMj8TwQ//2c5osGpHT6GAW+Y5V8xOHi
+	 0zPH7aBvuPGoE9hXzdTeqokFXIgtnpg+5z9eYzpbK5qeK01IigHZOleduj/QyNv8IK
+	 D8xZIFXnOg0pKPYrKcB5ycoHuvMGGI24z+E5A5Ua09RGiCbnQpIcty654vBHL4GE50
+	 CM+yfzxbKn15A7nzyEnGuCEd/CWi67ADBwKcvY0Z9yWjgqlpuwAsbAYWc5LM+QjpsV
+	 MDSbs4WYTPke8b6SZQvzkKM+fEyZ5ZdONECxqnx4I/zGsspJJpS4Cndfizyjp1+NOe
+	 cplSoHqsL16fg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 4B355CAB781; Thu, 12 Mar 2026 10:35:21 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 221073] xHCI host controller dies on resume from s2idle on AMD
+ Strix Halo [1022:1587]
+Date: Thu, 12 Mar 2026 10:35:20 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Status: NEEDINFO
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-221073-208809-bYbZ2M77l8@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-221073-208809@https.bugzilla.kernel.org/>
+References: <bug-221073-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBHtmSYk7JpnC0vAg--.7909S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFWkAw4UCFy5Cr1UAFy5Jwb_yoW8Gr17pF
-	15tFW5WrZ8Z34rZw1UAr95uF95uayqkFy3Kayvy39a9F17tw1UK34qyrWFgr17Aa17Cr12
-	9F90vr4DGw47G3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRrsq9UUUUU=
-X-CM-SenderInfo: h2ztjjaswuikqrrwqiywtou0bp/xtbC0hkSaWmyk5mWZgAA3R
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[163.com,none];
-	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34671-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_FROM(0.00)[163.com];
+	TAGGED_FROM(0.00)[bounces-34672-lists,linux-usb=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_CC(0.00)[vger.kernel.org,163.com,fibocom.com];
-	DKIM_TRACE(0.00)[163.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zwq2226404116@163.com,linux-usb@vger.kernel.org];
-	RCPT_COUNT_FIVE(0.00)[6];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FROM_NO_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,fibocom.com:email]
-X-Rspamd-Queue-Id: CA1DD2704CE
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_ONE(0.00)[1];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 17AEE270601
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: "wanquan.zhong" <wanquan.zhong@fibocom.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221073
 
-Add VID/PID 33f8:1003 for the Rolling Wireless RW135R-GL M.2 module,
-used in laptop debug cards with MBIM interface for Linux/Chrome OS.
-The device supports mbim, diag, adb and AT commands.
+--- Comment #38 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+(In reply to Alexander F from comment #35)
 
-Device info from lsusb:
-Bus 03 Device 12: ID 33f8:1003 Rolling Wireless S.a.r.l.
+> >There are some error flags set on DevSta=20
+>=20
+> These flags only appear after the "HC died" occurs. (That event also adds
+> (warning) taint.) I verified that by running `lspci -vvv | grep DevSta: |
+> grep +` before/after every resume, and NonFatalError on all c4:00 devices
+> flips only after the event.
 
-Signed-off-by: wanquan.zhong <wanquan.zhong@fibocom.com>
----
- drivers/usb/serial/option.c | 3 +++
- 1 file changed, 3 insertions(+)
+Interesting, was PCI DevSta: NonFatalErr+ ever set with the 'Forced MSI onl=
+y'
+patch after resume?
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index e349ed66d2ac..abeeb7c66977 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2449,6 +2449,9 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(4) | RSVD(5) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x0115, 0xff),			/* Rolling RW135-GL (laptop MBIM) */
- 	  .driver_info = RSVD(5) },
-+	/* Rolling RW135R-GL (laptop MBIM) */
-+	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x1003, 0xff),
-+	  .driver_info = RSVD(5) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x01a2, 0xff) },			/* Rolling RW101-GL (laptop MBIM) */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x01a3, 0xff) },			/* Rolling RW101-GL (laptop MBIM) */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x01a4, 0xff),			/* Rolling RW101-GL (laptop MBIM) */
--- 
-2.43.0
+i.e. Does MSI-X usage on xHC trigger the DevSta: NonFatalErr+, causing xHC
+interrupt handler to hot be called
 
+or,
+
+is there something else causing PCI DevSta: NonFatalErr+ in resume which for
+some reason only affects/omits MSI-X handler while MSI work and handler is
+called as it should.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
