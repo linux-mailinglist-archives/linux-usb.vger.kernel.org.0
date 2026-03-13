@@ -1,82 +1,77 @@
-Return-Path: <linux-usb+bounces-34729-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34730-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sJp9GRvPs2n2awAAu9opvQ
-	(envelope-from <linux-usb+bounces-34729-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 09:47:23 +0100
+	id OLZkFujQs2ncbAAAu9opvQ
+	(envelope-from <linux-usb+bounces-34730-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 09:55:04 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05CF727FF08
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 09:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B3CC227FFEE
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 09:55:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6304E3064BC1
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 08:47:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AEBAA3059FE9
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 08:53:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8446387355;
-	Fri, 13 Mar 2026 08:47:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C551823E33D;
+	Fri, 13 Mar 2026 08:53:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JepH0vlW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TEMXdfVy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D8B386437;
-	Fri, 13 Mar 2026 08:47:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF81B2E54D3;
+	Fri, 13 Mar 2026 08:53:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773391633; cv=none; b=TPAg1H7WluJKUx8NIAhOeZY2x8NzQbkgBghXMZH+kWGyWdFndBOetdl/ITkqo5GydpBfEtE9uh/NR7tSvH3oaEjG+101RWhHrbXlWZ1E0tjwSjgrG2QALIBoWwOIftwMNVRHFJpyBNt0dESA7CyR+08DnxaFX/n37xd+oDwJG3s=
+	t=1773392034; cv=none; b=a67jsbS8lWkFMcnqkoe0TlduxWdtxvuaNjVsod6Yt4BVx9nYpUmN8ac2ZOu9MlrL5cAkuOfgouRH2eQNYczoMIC1LD9Vs8oA8zqqg5rnF5cDxAWbal6V07T9Dkl/Lm3Zy0Yis4i5SWFWnXOpr4nb2Vlz0xNetilmA3Ip2ql9xyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773391633; c=relaxed/simple;
-	bh=FGn8dJxicvgrsI/h6Hp65oLeF+oMlSRnErsYPVzfqqk=;
+	s=arc-20240116; t=1773392034; c=relaxed/simple;
+	bh=03rhZ3rnTWDziCs20a8l62amlt5ld61X2Tb6E/l08NM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HN42H7m5JRw+om9KVxah8uzHNr2CqW7MepuEKA04xiW0Uj5XjqboYva2kcMJuabQ1we3SufLbSW7sR+DzY27mpFb6deyb5Vq/9T5clxhfOomS/i5ftyivIbcK7JV6AhkJnFo6OGLl+PadnkxhNYaeZ1Ynbcae7izQUaRAxVtfrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JepH0vlW; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=J1weyPzYVv8HNks4gsnppg1+cGy+DKASYKhq0RW1oUD/Y6xOHF6zH4I4beldpEjhAQZghTNVLl5TIgaHGmAVM7weigf1HRc1iJAaHUvlcCYIchke4DXZmE+rm9lxUfW5VKRu8oq6RncdbXCKRVff9d/oeCWW11hBODZBMphnTlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TEMXdfVy; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773391631; x=1804927631;
+  t=1773392032; x=1804928032;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=FGn8dJxicvgrsI/h6Hp65oLeF+oMlSRnErsYPVzfqqk=;
-  b=JepH0vlWQAHM04z4VugFqzL18gjiv51JpfZFSiQ+uXlsfSWUO84KQnTu
-   R5RG+YCexun0PFIShChBncq6cLlTYy+4XihDpKqHJvz8BBY2h3Q/vBmN+
-   lGpF3mfCImGbZhlQAeu8+klchf9kPY8b06tzNNSwyegIRxb2CaZbgUjj6
-   2VZtX7qhoyrCJj3OqDKrR5XyVrVszYWyewW1NYYIMOkUnW52hdP8u+KcJ
-   7oyW1PaWk3HrKvTKq48WtdbMdGIM5w9CEqcd/Ks2I6JJSCNIwB+Ckp4Jh
-   RjQyRgl/u1KrXvCJdA9REvtT2dlRJFFjGixqnFrXaGUbn4guX4Ri1DNyG
-   g==;
-X-CSE-ConnectionGUID: Wa/c42eSQXKisWhsPjwFKw==
-X-CSE-MsgGUID: yiozJj6ITKio6P72Wc5D0Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11727"; a="62067203"
+  bh=03rhZ3rnTWDziCs20a8l62amlt5ld61X2Tb6E/l08NM=;
+  b=TEMXdfVym+2VLbmETcexXS2viURugDVl0CIeN1dPjpwTz69+orZlfWzf
+   E8hpF0mo2mrfh2PYGu68Y+jp9PaKp/bDjrWvbOugtTnNkjPYjeuDK50AU
+   gJx5RktsCy7XW0KDKLNmkk8qkCxQVlSKa6mPeIPJI/J+qPtCRBdNBc8o1
+   tGEH+km29B5IV/GuQZm1/mNuxBIjPIBxx0NSUU/b0OSI9AEB82CcAgbp6
+   3A2cM2+LeaeVGB9kZdmOtf97KzMaB2Mgx3tLyg4V7vBqMADIDnrUIGC/a
+   s4/GNpu0XGiFBeyICwzcrhA3MY9qkNl4j6proRs6ZT+6Z1cpy7/LINPk2
+   A==;
+X-CSE-ConnectionGUID: r8STaKKST7mKAfIe5FKDgw==
+X-CSE-MsgGUID: 9Q+A4V3rREOUsF3lJ1FTnQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11727"; a="91878618"
 X-IronPort-AV: E=Sophos;i="6.23,117,1770624000"; 
-   d="scan'208";a="62067203"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 01:47:10 -0700
-X-CSE-ConnectionGUID: EK0T+kaDQpCaPmPvtWwt/A==
-X-CSE-MsgGUID: TwUHx1WNRQ6Dc8H0L0qKYA==
+   d="scan'208";a="91878618"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 01:53:51 -0700
+X-CSE-ConnectionGUID: +Kwt4LJvRqmQhsVVjwSzwA==
+X-CSE-MsgGUID: wvhfM72fQ7S9VTXA7WNnyw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,117,1770624000"; 
-   d="scan'208";a="244128261"
+   d="scan'208";a="221312814"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa002.fm.intel.com with ESMTP; 13 Mar 2026 01:47:08 -0700
+  by orviesa007.jf.intel.com with ESMTP; 13 Mar 2026 01:53:50 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 331FD95; Fri, 13 Mar 2026 09:47:07 +0100 (CET)
-Date: Fri, 13 Mar 2026 10:46:23 +0200
+	id E4DBA95; Fri, 13 Mar 2026 09:53:48 +0100 (CET)
+Date: Fri, 13 Mar 2026 10:53:04 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Alexander Koskovich <akoskovich@pm.me>
-Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: typec: qcom: Add support for per port VBUS
- detection
-Message-ID: <abPO31SynIPY6fJD@kuha>
-References: <20260312-qcom-typec-shared-vbus-v2-1-99ed9e500947@pm.me>
+To: Nathan Rebello <nathan.c.rebello@gmail.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	kyungtae.kim@dartmouth.edu, stable@vger.kernel.org
+Subject: Re: [PATCH v4] usb: typec: ucsi: validate connector number in
+ ucsi_notify_common()
+Message-ID: <abPQcFxlSntTv-1t@kuha>
+References: <20260312211503.1915-1-nathan.c.rebello@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,196 +80,98 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260312-qcom-typec-shared-vbus-v2-1-99ed9e500947@pm.me>
+In-Reply-To: <20260312211503.1915-1-nathan.c.rebello@gmail.com>
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34729-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34730-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,pm.me:email,intel.com:dkim,intel.com:email]
-X-Rspamd-Queue-Id: 05CF727FF08
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,intel.com:email]
+X-Rspamd-Queue-Id: B3CC227FFEE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Thu, Mar 12, 2026 at 06:16:58AM +0000, Alexander Koskovich kirjoitti:
-> This is required for devices (e.g. ASUS ROG Phone 3) where more than
-> one USB port can act as a sink and both share a single USBIN input on
-> the PMIC.
+Thu, Mar 12, 2026 at 05:15:03PM -0400, Nathan Rebello wrote:
+> The connector number extracted from CCI via UCSI_CCI_CONNECTOR() is a
+> 7-bit field (0-127) that is used to index into the connector array in
+> ucsi_connector_change(). However, the array is only allocated for the
+> number of connectors reported by the device (typically 2-4 entries).
 > 
-> Because the PM8150B uses USBIN to determine VBUS presence, a charger
-> connected to one port causes the PMIC to falsely detect VBUS on the
-> other port, preventing it from entering source mode.
+> A malicious or malfunctioning device could report an out-of-range
+> connector number in the CCI, causing an out-of-bounds array access in
+> ucsi_connector_change().
 > 
-> For example, plugging a charger into one port prevents using the other
-> port for a flash drive.
+> Add a bounds check in ucsi_notify_common(), the central point where CCI
+> is parsed after arriving from hardware, so that bogus connector numbers
+> are rejected before they propagate further.
 > 
-> Fix this by adding support for the vbus-gpios connector binding so the
-> driver can use an external GPIO for per-port VBUS presence detection
-> instead of the shared USBIN register.
-> 
-> Signed-off-by: Alexander Koskovich <akoskovich@pm.me>
+> Fixes: bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Nathan Rebello <nathan.c.rebello@gmail.com>
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Did you see this happening on an actual device?
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
-> Changes in v2:
-> - Dropped RFC prefix
-> - Remove redundant vbus-detect-gpios, instead use existing vbus-gpios from usb-connector (Dmitry)
-> - Updated cover to better describe scenario where this change is relevant
-> - Update comment for EN_TRY_SRC to make more sense
-> - Skip vSafe5V poll too not just vSafe0V
-> - return gpiod_get_value_cansleep (Konrad)
-> - regmap_update_bits -> regmap_set_bits (Konrad)
-> - Get vbus-gpios per connector (Konrad)
-> - Add bracket to if (IS_ERR(pmic_typec_port->vbus_detect_gpio)) (Bryan)
-> - Link to v1: https://lore.kernel.org/r/20260308-qcom-typec-shared-vbus-v1-0-7d574b91052a@pm.me
-> ---
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c | 53 +++++++++++++++++++++-
->  1 file changed, 52 insertions(+), 1 deletion(-)
+> v4:
+>  - Moved bounds check to ucsi_notify_common(), the single point where
+>    CCI is parsed after read_cci(), so bogus connector numbers never
+>    propagate to ucsi_connector_change() (Greg KH)
+>  - Changed dev_warn to dev_err
+> v3:
+>  - Added changelog (Greg's bot)
+> v2:
+>  - Kept bounds check in ucsi_connector_change() rather than moving it
+>    to ucsi_notify_common() (Greg KH)
 > 
-> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
-> index 8051eaa46991..a8f6687a3522 100644
-> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
-> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
-> @@ -5,6 +5,7 @@
+>  drivers/usb/typec/ucsi/ucsi.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index a7b388dc7fa0..10261992f020 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -42,8 +42,13 @@ void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+>  	if (cci & UCSI_CCI_BUSY)
+>  		return;
 >  
->  #include <linux/delay.h>
->  #include <linux/err.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/interrupt.h>
->  #include <linux/kernel.h>
->  #include <linux/mod_devicetable.h>
-> @@ -176,6 +177,8 @@ struct pmic_typec_port {
->  	bool				vbus_enabled;
->  	struct mutex			vbus_lock;		/* VBUS state serialization */
->  
-> +	struct gpio_desc		*vbus_detect_gpio;
-> +
->  	int				cc;
->  	bool				debouncing_cc;
->  	struct delayed_work		cc_debounce_dwork;
-> @@ -279,6 +282,9 @@ static int qcom_pmic_typec_port_vbus_detect(struct pmic_typec_port *pmic_typec_p
->  	unsigned int misc;
->  	int ret;
->  
-> +	if (pmic_typec_port->vbus_detect_gpio)
-> +		return gpiod_get_value_cansleep(pmic_typec_port->vbus_detect_gpio);
-> +
->  	ret = regmap_read(pmic_typec_port->regmap,
->  			  pmic_typec_port->base + TYPEC_MISC_STATUS_REG,
->  			  &misc);
-> @@ -310,6 +316,13 @@ static int qcom_pmic_typec_port_vbus_toggle(struct pmic_typec_port *pmic_typec_p
->  		val = TYPEC_SM_VBUS_VSAFE0V;
->  	}
->  
-> +	/*
-> +	 * On devices with multiple ports sharing USBIN, VBUS from another
-> +	 * port makes the USBIN-based vsafe polls unreliable.
-> +	 */
-> +	if (pmic_typec_port->vbus_detect_gpio)
-> +		return 0;
-> +
->  	/* Poll waiting for transition to required vSafe5V or vSafe0V */
->  	ret = regmap_read_poll_timeout(pmic_typec_port->regmap,
->  				       pmic_typec_port->base + TYPEC_SM_STATUS_REG,
-> @@ -589,7 +602,15 @@ static int qcom_pmic_typec_port_start_toggling(struct tcpc_dev *tcpc,
->  		mode = EN_SNK_ONLY;
->  		break;
->  	case TYPEC_PORT_DRP:
-> -		mode = EN_TRY_SNK;
-> +		/*
-> +		 * With VBUS present on USBIN from another port, EN_TRY_SNK
-> +		 * keeps the port in sink mode. Use EN_TRY_SRC so the port
-> +		 * tries to source first.
-> +		 */
-> +		if (pmic_typec_port->vbus_detect_gpio)
-> +			mode = EN_TRY_SRC;
+> -	if (UCSI_CCI_CONNECTOR(cci))
+> -		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
+> +	if (UCSI_CCI_CONNECTOR(cci)) {
+> +		if (UCSI_CCI_CONNECTOR(cci) <= ucsi->cap.num_connectors)
+> +			ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
 > +		else
-> +			mode = EN_TRY_SNK;
->  		break;
->  	}
->  
-> @@ -677,6 +698,19 @@ static int qcom_pmic_typec_port_start(struct pmic_typec *tcpm,
->  	if (ret)
->  		goto done;
->  
-> +	/*
-> +	 * On devices with multiple USB-C ports sharing USBIN, bypass
-> +	 * VSAFE0V so SRC attachment can complete despite VBUS being
-> +	 * present on USBIN from another port.
-> +	 */
-> +	if (pmic_typec_port->vbus_detect_gpio) {
-> +		ret = regmap_set_bits(pmic_typec_port->regmap,
-> +				     pmic_typec_port->base + TYPEC_EXIT_STATE_CFG_REG,
-> +				     BYPASS_VSAFE0V_DURING_ROLE_SWAP);
-> +		if (ret)
-> +			goto done;
+> +			dev_err(ucsi->dev, "bogus connector number in CCI: %u\n",
+> +				UCSI_CCI_CONNECTOR(cci));
 > +	}
-> +
->  	pmic_typec_port->tcpm_port = tcpm_port;
 >  
->  	for (i = 0; i < pmic_typec_port->nr_irqs; i++)
-> @@ -704,6 +738,7 @@ int qcom_pmic_typec_port_probe(struct platform_device *pdev,
->  	struct device *dev = &pdev->dev;
->  	struct pmic_typec_port_irq_data *irq_data;
->  	struct pmic_typec_port *pmic_typec_port;
-> +	struct fwnode_handle *connector;
->  	int i, ret, irq;
->  
->  	pmic_typec_port = devm_kzalloc(dev, sizeof(*pmic_typec_port), GFP_KERNEL);
-> @@ -724,6 +759,22 @@ int qcom_pmic_typec_port_probe(struct platform_device *pdev,
->  	if (IS_ERR(pmic_typec_port->vdd_vbus))
->  		return PTR_ERR(pmic_typec_port->vdd_vbus);
->  
-> +	connector = device_get_named_child_node(dev, "connector");
-> +	if (connector) {
-> +		pmic_typec_port->vbus_detect_gpio =
-> +			devm_fwnode_gpiod_get(dev, connector, "vbus",
-> +					      GPIOD_IN, NULL);
-> +		fwnode_handle_put(connector);
-> +
-> +		if (IS_ERR(pmic_typec_port->vbus_detect_gpio)) {
-> +			ret = PTR_ERR(pmic_typec_port->vbus_detect_gpio);
-> +			pmic_typec_port->vbus_detect_gpio = NULL;
-> +			if (ret != -ENOENT)
-> +				return dev_err_probe(dev, ret,
-> +						     "failed to get vbus GPIO\n");
-> +		}
-> +	}
-> +
->  	pmic_typec_port->dev = dev;
->  	pmic_typec_port->base = base;
->  	pmic_typec_port->regmap = regmap;
-> 
-> ---
-> base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
-> change-id: 20260308-qcom-typec-shared-vbus-7d37c6b2d155
-> 
-> Best regards,
+>  	if (cci & UCSI_CCI_ACK_COMPLETE &&
+>  	    test_and_clear_bit(ACK_PENDING, &ucsi->flags))
 > -- 
-> Alexander Koskovich <akoskovich@pm.me>
-> 
+> 2.43.0.windows.1
 
 -- 
 heikki
