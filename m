@@ -1,87 +1,77 @@
-Return-Path: <linux-usb+bounces-34740-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34741-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iJe4MSz4s2nYdgAAu9opvQ
-	(envelope-from <linux-usb+bounces-34740-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 12:42:36 +0100
+	id 0AOCIrb3s2nYdgAAu9opvQ
+	(envelope-from <linux-usb+bounces-34741-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 12:40:38 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4075228261D
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 12:42:36 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08AAB28257E
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 12:40:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 07A493213356
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 11:39:59 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 02A3430498C9
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 11:40:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DB53378D9D;
-	Fri, 13 Mar 2026 11:39:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF4A337F8CF;
+	Fri, 13 Mar 2026 11:40:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bAWaxm3i"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DavXPohB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3412F6192;
-	Fri, 13 Mar 2026 11:39:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423CC2690F9;
+	Fri, 13 Mar 2026 11:40:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773401997; cv=none; b=Jfw1PW3AFvAiv4xpjhWjJ4TqLDjYz8guZKm3UymoobQoUlbDtv+9aJmIWK/AO/UsGOKz2PpjEyk7bYkDTnePTfyRLwLtr3CAAfdWNI7YVSb+VAV+oP29MQRaXIjJJi6PjBb3AFzxRQy6k9/49sB5KS40MdU37LnX/hEZWeAEQSg=
+	t=1773402035; cv=none; b=r9UzRZ1b/lBr8QMk2aNHnMYFq/2Tv23lyr0f74G7cFqYFOLLDFA9oT1HARssm4P9oWS/6XduN07z512xiW+YWVcbkqeHGJnOQpdmrXpAx0hqWNy8tPNGEQfq/p3NOnG0LYdH4BuXv+YsilYuR3+jrON5DHEAKupbyznzQjIbxKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773401997; c=relaxed/simple;
-	bh=i+aFsWzO9tIXNu6Ej8Jx68B17i34ahjmDr02FiuMQNI=;
+	s=arc-20240116; t=1773402035; c=relaxed/simple;
+	bh=eUdyEt1K9ktTe15IY+RAwo7+xmEZBt2VpLieo0Mn23k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NP5BG5Q/2V6cODjRplhsLyaLG1l22BDGmoNLs1tmpHRCpVzPZZm+t/WLlgR/sBxwk+ynz2yW7fRsmfQnDZufcc+oTeLgnx1uT3Ps9kb+UeB9HWkLLTH5zqG6ovU9ljWLIlAF54ewlop7CO+7hPU/bNtjWus4cbqtBDOelhB/bwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bAWaxm3i; arc=none smtp.client-ip=198.175.65.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=bA2cojxMTDTriAinWjuDpmqz8QM4wTlJ4N5gPYLmGWBEND7FG3CO5cygQOw/4fJk6wwlM9XFKVidsnQFtffuhL8XusraTh4uURe2Rd1f83sHgT5WAZZ8fnQTPvGztwPgyCmghpMw1dZtY/o6nVl5nHMwGQuoVhBdS+K/ZMDD7nM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DavXPohB; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773401996; x=1804937996;
+  t=1773402034; x=1804938034;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=i+aFsWzO9tIXNu6Ej8Jx68B17i34ahjmDr02FiuMQNI=;
-  b=bAWaxm3i03ylrIR+7BSS+E7JMgBzKnh0da5zi9lG+b7Uw9n9BUGSEC7K
-   DNCFcwfqrGbqbxdULJUk1u5e5gcGM96i6GEdqlCyzNAsf4pRQBeC9XG0c
-   /eIpJhaxj4PD+jVSP0ZBntkv2pQEoUYOBgauOlCxval6f+0XJndc3/Bc4
-   zZZNcvyuTfkaO2GwqWIFiuq5CiKD8gGK3eHbQGYQUxyvIRqi1LJmmTtdw
-   ahM6bnAkCbnGahcJ7sDpxqUorkOXTJy7cOxGPohNRPf5ewt1K/9OM+6NP
-   iOqFRKhE/ZsbjN/kcp04SYsUMNJwTC/Mx3SspCBUPel0S3Bm1GP/oM05K
-   Q==;
-X-CSE-ConnectionGUID: zMqhcJHITUKWpjGkdu/mjA==
-X-CSE-MsgGUID: WKGhi9EXRjWJtKJhe8rifg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11727"; a="78106014"
+  bh=eUdyEt1K9ktTe15IY+RAwo7+xmEZBt2VpLieo0Mn23k=;
+  b=DavXPohBiyMkSAg/fdI/APCYvLX//bpCAAs5TDau1LR5ZRkjvJ6r2CNH
+   XuTKcLy8ykNPPsPoAx5T/ms+oF78tfy4mVHIo+gsslPC/+W484Vs1hV/D
+   6VPw74WdJ0hPevIrkStk7O90YuBKA9YYujaz+91GaNjQqgmDotG8mO5QN
+   qB7qDX9xOkBopAEnEcpEST0N0RDB+VExKk8xDQUdzzN46lIIxdJ21i2TY
+   sCxQcjCgmygMladZvWLfgw0Z56xLuUeQbAEdgN+pAvTdoM6fQiw3I3Zqu
+   7RtGaZIrY6Mmhtsmgh/EjXgTpjGAvp0ufaoWXOjmCAbEx6iusB2snGSh+
+   A==;
+X-CSE-ConnectionGUID: n4yddnsATI+lCHmnD9BIVQ==
+X-CSE-MsgGUID: p13HI7JWQCegYH2BP5zxGA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11727"; a="73523637"
 X-IronPort-AV: E=Sophos;i="6.23,118,1770624000"; 
-   d="scan'208";a="78106014"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 04:39:46 -0700
-X-CSE-ConnectionGUID: S91NXOlqQuCuzaZGDi60TA==
-X-CSE-MsgGUID: 7KwB5vrRSzuXBUGN0q+qkw==
+   d="scan'208";a="73523637"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 04:40:34 -0700
+X-CSE-ConnectionGUID: AiKMpy6gQMmcdWwyYb2cmg==
+X-CSE-MsgGUID: JWhztHe/RRiAJEUpdgjAjg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,118,1770624000"; 
-   d="scan'208";a="221351996"
+   d="scan'208";a="218483914"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa007.jf.intel.com with ESMTP; 13 Mar 2026 04:39:42 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 13 Mar 2026 04:40:33 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 7400D95; Fri, 13 Mar 2026 12:39:41 +0100 (CET)
-Date: Fri, 13 Mar 2026 13:38:57 +0200
+	id 1277F95; Fri, 13 Mar 2026 12:40:32 +0100 (CET)
+Date: Fri, 13 Mar 2026 13:39:47 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrei Kuchynski <akuchynski@chromium.org>,
-	Abel Vesa <abelvesa@kernel.org>,
-	Pooja Katiyar <pooja.katiyar@intel.com>,
-	Johan Hovold <johan@kernel.org>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>,
-	Jameson Thies <jthies@google.com>,
-	Hsin-Te Yuan <yuanhsinte@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Add UCSI_USB4_IMPLIES_USB quirk for
- X1E80100
-Message-ID: <abP3UVuPBk_cSXDp@kuha>
-References: <20260312101431.2375709-1-krishna.kurapati@oss.qualcomm.com>
+To: Kit Dallege <xaum.io@gmail.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: add kernel-doc for priority and
+ mode_selection members
+Message-ID: <abP3g8bHPDNYqWHw@kuha>
+References: <CAAZVx99U8a4w7cZihEyysaKD4R=pgXs4fKEegmvHv0Q3avJg7w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -90,109 +80,75 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260312101431.2375709-1-krishna.kurapati@oss.qualcomm.com>
+In-Reply-To: <CAAZVx99U8a4w7cZihEyysaKD4R=pgXs4fKEegmvHv0Q3avJg7w@mail.gmail.com>
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34740-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34741-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	DKIM_TRACE(0.00)[intel.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb];
+	DKIM_TRACE(0.00)[intel.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,qualcomm.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4075228261D
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:dkim,intel.com:email]
+X-Rspamd-Queue-Id: 08AAB28257E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Thu, Mar 12, 2026 at 03:44:31PM +0530, Krishna Kurapati kirjoitti:
-> On X1E80100, when we connect a USB4 capable dock, the PARTNER_FLAGS
-> indicate USB4_GEN3 being set whilst keeping the PARTNER_FLAGS_USB
-> cleared. Due to this, during ucsi_partner_change call, the usb role
-> is marked as ROLE_NONE and passed to DWC3 controller the same way.
+Fri, Mar 13, 2026 at 12:29:56PM +0100, Kit Dallege kirjoitti:
+> Document the priority and mode_selection members of struct
+> typec_altmode that were added without kernel-doc descriptions.
 > 
-> Fix this by adding UCSI_USB4_IMPLIES_USB quirk and check for it to
-> decide and pass on proper ROLE information to DWC3 layer.
+> This fixes the following warnings when building with W=1:
 > 
-> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+>   include/linux/usb/typec_altmode.h: struct member 'priority' not
+> described in 'typec_altmode'
+>   include/linux/usb/typec_altmode.h: struct member 'mode_selection'
+> not described in 'typec_altmode'
+> 
+> Signed-off-by: Kit Dallege <xaum.io@gmail.com>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/ucsi/ucsi.c       | 6 ++++--
->  drivers/usb/typec/ucsi/ucsi.h       | 3 +++
->  drivers/usb/typec/ucsi/ucsi_glink.c | 2 ++
->  3 files changed, 9 insertions(+), 2 deletions(-)
+> v2: resend so From matches Signed-off-by (Greg KH)
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index f38a4d7ebc42..e042499613c9 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1182,8 +1182,10 @@ static void ucsi_partner_change(struct ucsi_connector *con)
->  		}
->  	}
->  
-> -	/* Only notify USB controller if partner supports USB data */
-> -	if (!(UCSI_CONSTAT(con, PARTNER_FLAG_USB)))
-> +	if ((!UCSI_CONSTAT(con, PARTNER_FLAG_USB)) &&
-> +	    ((con->ucsi->quirks & UCSI_USB4_IMPLIES_USB) &&
-> +	     (!(UCSI_CONSTAT(con, PARTNER_FLAG_USB4_GEN3) ||
-> +		UCSI_CONSTAT(con, PARTNER_FLAG_USB4_GEN4)))))
->  		u_role = USB_ROLE_NONE;
->  
->  	ret = usb_role_switch_set_role(con->usb_role_sw, u_role);
-> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> index 43a0d01ade8f..cff9ddc2ae21 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.h
-> +++ b/drivers/usb/typec/ucsi/ucsi.h
-> @@ -497,6 +497,9 @@ struct ucsi {
->  	unsigned long quirks;
->  #define UCSI_NO_PARTNER_PDOS	BIT(0)	/* Don't read partner's PDOs */
->  #define UCSI_DELAY_DEVICE_PDOS	BIT(1)	/* Reading PDOs fails until the parter is in PD mode */
-> +
-> +/* USB4 connection can imply that USB communcation is supported */
-> +#define UCSI_USB4_IMPLIES_USB	BIT(2)
->  };
->  
->  #define UCSI_MAX_DATA_LENGTH(u) (((u)->version < UCSI_VERSION_2_0) ? 0x10 : 0xff)
-> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> index 11b3e24e34e2..1cb519cc0532 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -371,6 +371,7 @@ static void pmic_glink_ucsi_destroy(void *data)
->  static unsigned long quirk_sc8180x = UCSI_NO_PARTNER_PDOS;
->  static unsigned long quirk_sc8280xp = UCSI_NO_PARTNER_PDOS | UCSI_DELAY_DEVICE_PDOS;
->  static unsigned long quirk_sm8450 = UCSI_DELAY_DEVICE_PDOS;
-> +static unsigned long quirk_x1e80100 = UCSI_DELAY_DEVICE_PDOS | UCSI_USB4_IMPLIES_USB;
->  
->  static const struct of_device_id pmic_glink_ucsi_of_quirks[] = {
->  	{ .compatible = "qcom,qcm6490-pmic-glink", .data = &quirk_sc8280xp, },
-> @@ -379,6 +380,7 @@ static const struct of_device_id pmic_glink_ucsi_of_quirks[] = {
->  	{ .compatible = "qcom,sm8350-pmic-glink", .data = &quirk_sc8180x, },
->  	{ .compatible = "qcom,sm8450-pmic-glink", .data = &quirk_sm8450, },
->  	{ .compatible = "qcom,sm8550-pmic-glink", .data = &quirk_sm8450, },
-> +	{ .compatible = "qcom,x1e80100-pmic-glink", .data = &quirk_x1e80100, },
->  	{}
->  };
->  
-> -- 
-> 2.34.1
+>  include/linux/usb/typec_altmode.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/include/linux/usb/typec_altmode.h
+> b/include/linux/usb/typec_altmode.h
+> index 0513d333b797..c7cfc4629484 100644
+> --- a/include/linux/usb/typec_altmode.h
+> +++ b/include/linux/usb/typec_altmode.h
+> @@ -26,6 +26,8 @@ struct typec_altmode_ops;
+>   * @mode: Index of the Mode
+>   * @vdo: VDO returned by Discover Modes USB PD command
+>   * @active: Tells has the mode been entered or not
+> + * @priority: Numeric priority for alternate mode selection ordering
+> + * @mode_selection: Indicates support for the mode selection feature
+>   * @desc: Optional human readable description of the mode
+>   * @ops: Operations vector from the driver
+>   * @cable_ops: Cable operations vector from the driver.
+> --
+> 2.53.0
 
 -- 
 heikki
