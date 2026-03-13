@@ -1,74 +1,99 @@
-Return-Path: <linux-usb+bounces-34750-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34751-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AA3RA5UctGlLhQAAu9opvQ
-	(envelope-from <linux-usb+bounces-34750-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 15:17:57 +0100
+	id 8Nd+GHgdtGlLhQAAu9opvQ
+	(envelope-from <linux-usb+bounces-34751-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 15:21:44 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66658284C63
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 15:17:56 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 063DA284D68
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 15:21:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 23AC832449AE
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 14:12:35 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7614E300DF7F
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 14:17:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94B143976A3;
-	Fri, 13 Mar 2026 14:12:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BA8039F19E;
+	Fri, 13 Mar 2026 14:16:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="fSMsv3AF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KApzdeHq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from www537.your-server.de (www537.your-server.de [188.40.3.216])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49716317164;
-	Fri, 13 Mar 2026 14:12:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.3.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6F939EF1B
+	for <linux-usb@vger.kernel.org>; Fri, 13 Mar 2026 14:16:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773411152; cv=none; b=tyLZm2GHvaR99uZskDU8gKF28XjiAdFml9ZNetNbpb6WpkCErC9MDS4PCeZS8+2Ivsq7mBQvtknIiF/o6wJWClF+QlhWAqzwvkBnpdDNKehFRQdhpFX6rwzrLDnXriAyi7090UID3NeUOnQCcRGxxrFTj5dTeYFdHxw4DMgJP+c=
+	t=1773411415; cv=none; b=Rugb9197YM3vXbC8KfoEPGm6rliB33yhBor3Iyvc5lkm38KQGjOApTnACqWSXeHZPkvhphbvDpLgLPqfa2GibydrJKY+qYqwR/9+qiVwHjAM7JnDqXlf6j+1aTygM0VQyPS/rnWKpMqGqbcL+htWfWeL6UmQuWtYJgDikWo7WIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773411152; c=relaxed/simple;
-	bh=PxFg/Zz2g6RSbfEJ5qOmR/kgxLuCrp2pJQD2tP/Fq/0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XcUsIUOFkE315KnQNoeAd6MKipjb8LolVidwwbXsSCRhzq/IK6q29k5MvKJ+ra9P4BIpKDBlExgXEibWNxvGPwJhVqmNuB6kG+2QPlruoCmJaEsmZCx5xO0QN49NVyhoOGFFhuoibgPO5yRWJjJUydROw2aly9W+PuMp+vcrAU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=fSMsv3AF; arc=none smtp.client-ip=188.40.3.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=ew.tq-group.com; s=default2602; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=kAVg/sYPnXBAvpoucWG8yYJST8CnCLSxx7MYSqDw6RA=; b=fSMsv3AF1L9YrqaMOW8ZGzbX+C
-	rrGJfl+v6Y7UxlPpXN4KrEU9oZwLkAqXxqtZlijRqjSmq1BkQZ4/DtRJ/8GMSkaK1wrI1WxU2Ogiv
-	GPeXblft23YaC+UvTep6pA/yBhVDk/gifacj4OKJHJsu1vgD1V49BDDGsSm1mxFoPquqqJEKK1YGG
-	VWgNGeUipfZl+wjN14uvEQCiw9iMq1IjfYBwnFt0ygJnYSgOswz/LKUGFgrKhdOuEPL61fODd7s6d
-	+UTPMAoXsgEfSqYLoN1z/3pGxxE/vYhHgUbYLQ/cJsZUTfediWpOBh6zCzXkQxc0bXqHb1/8Z1eCT
-	vd7CIcig==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by www537.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <alexander.stein@ew.tq-group.com>)
-	id 1w13Fc-000AWh-1Q;
-	Fri, 13 Mar 2026 15:12:28 +0100
-Received: from localhost ([127.0.0.1])
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <alexander.stein@ew.tq-group.com>)
-	id 1w13Fc-000NT6-0l;
-	Fri, 13 Mar 2026 15:12:28 +0100
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>
+	s=arc-20240116; t=1773411415; c=relaxed/simple;
+	bh=RuN0Ldv/9U7l8QmtqeZ4T/0OtDq1G+qZAGOb5aRaWnA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZoSOx86fHCfpsWNmgcXtTe3T+cIoHBw3odRyq00PoKilnVzhtzn04ynIS7EWlr+rwZ3BOwJnI4kLANcJB3TZAw5ZMpRh3COaR1Idk11KY5/xGptH+xzwkdJ83aw9/jVNxXIh3sQ/qotImRr0+iVaA8TztV8yyoxp2rXF72i61kE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KApzdeHq; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-48541edecf9so23553115e9.1
+        for <linux-usb@vger.kernel.org>; Fri, 13 Mar 2026 07:16:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773411412; x=1774016212; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EF3xeTr8UCb4d17q9UmVHZHAuKNnKdi+DQOBeYCIjiY=;
+        b=KApzdeHqdGNF1DTHgfL/EuxbW1ybyPXGlmr6sVX94eH8K8FFZLqUPVCCe/hqffTwIs
+         VIbbYc1ny11PeHr7sOvzMO7mQiEJnpPReP1wXynXYwUYxjcxt0lsRbWVHiiueDzmTvnk
+         QrNky+mhkQ13Exx87KuPgtqGf6O0lXMcW9sB4WbOOWkxK581ybbhNKtpt8S5vEhifSiX
+         xaJrC2Z19UecejqQLs06q0eKXgtqtA4m+1JnPqv1v5+YN1tgWZoP7oby1x5mWiBl6Kgp
+         ziqqjNzbmz6qD+DW6L7OdGSkJyRnTB3xvqXPvPYZJIlvOuwqglRjKfaaIfHwuOS06qZi
+         01aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773411412; x=1774016212;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EF3xeTr8UCb4d17q9UmVHZHAuKNnKdi+DQOBeYCIjiY=;
+        b=Dwrjc2ewPC4gjGlVR3X4f/10+BiQRB8w/t+pVrILcgIY9Al/xt36qGZXbOmYI8gl4A
+         sFaSJYPAk8CKWjcVE8CO1ge1l3CG6Zy3HMDq+7cfOh3uKDgqJ7zzaP09vcVUn7kcF1Kp
+         9cBCE2J0KKUlDNoFh97LrykqBmvMyUjq3UGvswZ/F37bPy/Gpe86w+NmGpuZzCwyLijQ
+         1J8AgU2ugvY3Emf6p0w/p2QULQrIn6ybqmKm+NzhFAL6B848NJYLVHl/2f2TO/IWKaUm
+         iFcJnd9AHqgLBled4QgZOLpLP0WvT4NmeZqIvLX2WEL9mQCC1MJvr33DN2bg47hWyHPi
+         Nu1w==
+X-Gm-Message-State: AOJu0YwZV/CPm8Vx1++5nxg35USs6JvHHK4exHNz7Dho4la5sVFQ+D+r
+	4xcDhn/CqN0H9TgisHCLVOBk3U1x5fcwhABdBFgarRzA/b9iEnrxgMr0
+X-Gm-Gg: ATEYQzybSGEdaTNKgXZRKjp1UKm12Ci6A11VIxPqLmV7nGqjRS8Qqc/+wCzB1hrikqL
+	e/2XvnxMZqHgpJALnXhgyohOAg/JF1WjQqXNinOYHpprscT4/JkGX5i/MNWzw0Gn6UZxyMBtxkE
+	KDXpNi2j3LuQn9z1vnfiR3B3CQhdlTq8mOfz2V7263pv3TXGdxHdTLFqvMJWkCrEviD1CsQRNwL
+	DrF2e4YxwTJqFzoNdbJiT7p7ayza+vcdeRicqIVq4gm+dbfz3MraM4JCi1/051POUrBqpLKuVxw
+	MXtSkZNzkC8ikwYyeRu7zNEVQcd66G2vWS1mVyL+NsUUdqe1Sfab07hmJyG2IlkRMBMl321CgKK
+	Pt0Lb3CQ3XJY9/iJOdCjDqLriKd9vtI7L1ETmmcUJab7WTuqExEauN2mzf+5Ey+G7MsQj+imNZU
+	/94veTP47y6o3xjuyn1xEFS1w=
+X-Received: by 2002:a05:600c:2284:b0:485:3f58:d9f with SMTP id 5b1f17b1804b1-4855670c0a0mr39350665e9.30.1773411412197;
+        Fri, 13 Mar 2026 07:16:52 -0700 (PDT)
+Received: from fedora-dev ([2a01:5a8:304:153c:d983:1bac:a686:ee59])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4854e67ea40sm164214205e9.7.2026.03.13.07.16.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Mar 2026 07:16:51 -0700 (PDT)
+From: "Nikola Z. Ivanov" <zlatistiv@gmail.com>
+To: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	enelsonmoore@gmail.com,
+	kees@kernel.org,
+	oneukum@suse.com,
+	n.zhandarovich@fintech.ru
 Cc: linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] dt-bindings: usb: ti,usb8041: Support nested USB hubs
-Date: Fri, 13 Mar 2026 15:12:19 +0100
-Message-ID: <20260313141220.1843488-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.43.0
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	dbezrukov@marvell.com,
+	irusskikh@marvell.com,
+	"Nikola Z. Ivanov" <zlatistiv@gmail.com>,
+	syzbot+48dc1e8dfc92faf1124c@syzkaller.appspotmail.com
+Subject: [PATCH net v2] net: usb: aqc111: Do not perform PM inside suspend callback
+Date: Fri, 13 Mar 2026 16:16:43 +0200
+Message-ID: <20260313141643.1181386-1-zlatistiv@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,104 +101,100 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27939/Fri Mar 13 07:24:42 2026)
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ew.tq-group.com,quarantine];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[ew.tq-group.com:s=default2602];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-34750-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,marvell.com,gmail.com,syzkaller.appspotmail.com];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-34751-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alexander.stein@ew.tq-group.com,linux-usb@vger.kernel.org];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[ew.tq-group.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,gmail.com,suse.com,fintech.ru];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
 	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zlatistiv@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb,netdev,48dc1e8dfc92faf1124c];
+	NEURAL_HAM(-0.00)[-0.999];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.1:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,ew.tq-group.com:dkim,ew.tq-group.com:mid]
-X-Rspamd-Queue-Id: 66658284C63
+	DBL_BLOCKED_OPENRESOLVER(0.00)[appspotmail.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,syzkaller.appspot.com:url]
+X-Rspamd-Queue-Id: 063DA284D68
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Onboard USB hubs might be nested. Add the reference for the generic
-usb-hub.yaml binding and lift the restriction on peer-hub.
-A (downstream) hub might only be connected on USB High-Speed lines.
+syzbot reports "task hung in rpm_resume"
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+This is caused by aqc111_suspend calling
+the PM variant of its write_cmd routine.
+
+The simplified call trace looks like this:
+
+rpm_suspend()
+  usb_suspend_both() - here udev->dev.power.runtime_status == RPM_SUSPENDING
+    aqc111_suspend() - called for the usb device interface
+      aqc111_write32_cmd()
+        usb_autopm_get_interface()
+          pm_runtime_resume_and_get()
+            rpm_resume() - here we call rpm_resume() on our parent
+              rpm_resume() - Here we wait for a status change that will never happen.
+
+At this point we block another task which holds
+rtnl_lock and locks up the whole networking stack.
+
+Fix this by replacing the write_cmd calls with their _nopm variants
+
+Reported-by: syzbot+48dc1e8dfc92faf1124c@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=48dc1e8dfc92faf1124c
+Fixes: e58ba4544c77 ("net: usb: aqc111: Add support for wake on LAN by MAGIC packet")
+Signed-off-by: Nikola Z. Ivanov <zlatistiv@gmail.com>
 ---
- .../devicetree/bindings/usb/ti,usb8041.yaml   | 23 ++++++++++++++-----
- 1 file changed, 17 insertions(+), 6 deletions(-)
+Changes since v1:
+  - Replace calls for all types of PM
+  https://lore.kernel.org/all/20260304155734.110734-1-zlatistiv@gmail.com/T/
 
-diff --git a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
-index 5e3eae9c2961c..07e13fae640b7 100644
---- a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
-+++ b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
-@@ -11,6 +11,7 @@ maintainers:
+ drivers/net/usb/aqc111.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
+index cbffa9ae1bb6..dd53f413c38f 100644
+--- a/drivers/net/usb/aqc111.c
++++ b/drivers/net/usb/aqc111.c
+@@ -1395,14 +1395,14 @@ static int aqc111_suspend(struct usb_interface *intf, pm_message_t message)
+ 		aqc111_write16_cmd_nopm(dev, AQ_ACCESS_MAC,
+ 					SFR_MEDIUM_STATUS_MODE, 2, &reg16);
  
- allOf:
-   - $ref: usb-device.yaml#
-+  - $ref: usb-hub.yaml#
+-		aqc111_write_cmd(dev, AQ_WOL_CFG, 0, 0,
+-				 WOL_CFG_SIZE, &wol_cfg);
+-		aqc111_write32_cmd(dev, AQ_PHY_OPS, 0, 0,
+-				   &aqc111_data->phy_cfg);
++		aqc111_write_cmd_nopm(dev, AQ_WOL_CFG, 0, 0,
++				      WOL_CFG_SIZE, &wol_cfg);
++		aqc111_write32_cmd_nopm(dev, AQ_PHY_OPS, 0, 0,
++					&aqc111_data->phy_cfg);
+ 	} else {
+ 		aqc111_data->phy_cfg |= AQ_LOW_POWER;
+-		aqc111_write32_cmd(dev, AQ_PHY_OPS, 0, 0,
+-				   &aqc111_data->phy_cfg);
++		aqc111_write32_cmd_nopm(dev, AQ_PHY_OPS, 0, 0,
++					&aqc111_data->phy_cfg);
  
- properties:
-   compatible:
-@@ -30,17 +31,20 @@ properties:
-     description:
-       VDD power supply to the hub
- 
--  peer-hub:
--    $ref: /schemas/types.yaml#/definitions/phandle
--    description:
--      phandle to the peer hub on the controller.
-+  peer-hub: true
-+
-+patternProperties:
-+  '^.*@[1-9a-f][0-9a-f]*$':
-+    description: The hard wired USB devices
-+    type: object
-+    $ref: /schemas/usb/usb-device.yaml
-+    additionalProperties: true
- 
- required:
-   - compatible
-   - reg
--  - peer-hub
- 
--additionalProperties: false
-+unevaluatedProperties: false
- 
- examples:
-   - |
-@@ -56,7 +60,14 @@ examples:
-             compatible = "usb451,8142";
-             reg = <1>;
-             peer-hub = <&hub_3_0>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-             reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+
-+            hub@1 {
-+              compatible = "usb123,4567";
-+              reg = <1>;
-+            };
-         };
- 
-         /* 3.0 hub on port 2 */
+ 		/* Disable RX path */
+ 		aqc111_read16_cmd_nopm(dev, AQ_ACCESS_MAC,
 -- 
-2.43.0
+2.53.0
 
 
