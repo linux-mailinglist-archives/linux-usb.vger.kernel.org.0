@@ -1,207 +1,120 @@
-Return-Path: <linux-usb+bounces-34756-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34757-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MGnKMp05tGl3jAAAu9opvQ
-	(envelope-from <linux-usb+bounces-34756-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 17:21:49 +0100
+	id CMpuFNY8tGmDjQAAu9opvQ
+	(envelope-from <linux-usb+bounces-34757-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 17:35:34 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2480C286E74
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 17:21:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A112E2871FA
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 17:35:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id BCC9530074D7
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 16:21:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CD3C632835B5
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 16:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44200313E1B;
-	Fri, 13 Mar 2026 16:21:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nNhdfnFC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 563433C457C;
+	Fri, 13 Mar 2026 16:32:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BB4371CF9;
-	Fri, 13 Mar 2026 16:21:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C062241665
+	for <linux-usb@vger.kernel.org>; Fri, 13 Mar 2026 16:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773418897; cv=none; b=ekWlxEnB6t0dhZjNnITiQxO9L9lEqWBDwXnqPCN/sFNRGuQXJ9dau3WYOht5kfbWCWo9bDwkDuJ34/bu3g59iWl8MK62zPMx8j8dsJvGOfWP3M6Yt2wM/A772iTqBm9cEN47rjkEI/dbSgCsAEIhcs3TUWEQAMwEDR/J+EHS4pE=
+	t=1773419525; cv=none; b=VRRkxF5H1F+/TfA3jIhM48BVORqWCwOsx9qoPI1uqgg1exPkY1znshZZKuxgfM/jPN2jmLheaxxblwOui52ZNdIjtHCvbv45f+B1djePBQYgEwwQBVamE0jSUTx6DORRaZZXrdc46Rz478IjeCWbGeiQPiv5odF0iLm1QwnpaWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773418897; c=relaxed/simple;
-	bh=Cp8x8Bv0sxIKPeMyGLBJaZhu+zViKlpdZD/FAbUs4cI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kZGcYbYdcjz6E85RzvkZGTTYM9lTWCD9Ch/RQBswmm3lnFwj02zsxgJAr9qU/gGXIqlAptN04yudFX1SABj0+Zl92hA+AATd6UEd9jREdCN+iBfCxzSKZl9VUAQ2J4yik1kp7cBL91wnLYrYwwHafh6RTVoOzjyI3J1u9cgAvB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nNhdfnFC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B6EBC19421;
-	Fri, 13 Mar 2026 16:21:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773418897;
-	bh=Cp8x8Bv0sxIKPeMyGLBJaZhu+zViKlpdZD/FAbUs4cI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nNhdfnFCIoNU4XkA8fVhSHYP4g9k/hEJErZ4cTYsWhwAPhRnG+G/KMAs0ftrbuNJn
-	 RwdjaeCPXgCJxjQhS/5WaG0GJ3VAvSyGNOfuSCPnlomMf34fT+j1ctc1a4c5BM+Mwb
-	 JHi4Gq6c31f/m9fDlltiDdKiq+2CHVE68c7WR0OyfA9ZRBh4oulgpzklQPJF3ujPG/
-	 FC4SICizdRuslF+pAUcJb9spBRd6yxx8c5arDHQ7cZ812fgREcxHaH/75eQwuS2oxM
-	 RV5tUhJMvf9rX8kh/IiWo/hbbDx+juUVHxSUv1lCqUxVwpDneMKy0+dl4O1FMIr5/H
-	 5wW4em+i3bLYg==
-Message-ID: <22c94dd0-7bef-4682-acdb-905dd81f8083@kernel.org>
-Date: Fri, 13 Mar 2026 17:21:33 +0100
+	s=arc-20240116; t=1773419525; c=relaxed/simple;
+	bh=d17kownJ1AGwwn9SoVOR4txdfWEgDu7epVYOJd3bS8Y=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=QKmZHjMXfIxRhOcWi8UkPfMWYyMpYCjTTTrBCHOjrlWpdkgvkyfXxhi/LVdHRUwEASe97edaAzlCE4bEzlvkDk5YEXj4P/QTz6uwV65AFA/H/UAgsLldWZw5LZ371J1A1y+wafN/PlL/DQ36CkGSMe4VxVWA9qSy/e8HSIQHaCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-67bc5678917so18553447eaf.2
+        for <linux-usb@vger.kernel.org>; Fri, 13 Mar 2026 09:32:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773419522; x=1774024322;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NqqoX27h7cfC9UaFH/3mKou2AD8VrVf/UJ27oKiHEOc=;
+        b=G9MSG9Q1LPHqnKZMYfd0NHNLWYRICBW8Ww7uZeoOZSmzuVpDV0RhNllcp10VeANT7u
+         cc8tkshGKMKvokyyWMo1Y1Z6cylYnxQbg7RdfMOVj82psAOnLrY8/aA7xfc+SV1glrzO
+         pRYSyLLIe+CKPHOeSlCmI6T1KhfAHW9/vba0vZoQzAf7TN0AZ1ppaQX6lbUl4DeDsptc
+         47MTfmdM0KYzG/k3VBZy+yPhuU/gSoiLoOHbCrzLjlQaFXVhX93mZE29AUCAvupk3cd7
+         3jyPcyJPrMms/07h5kinB5EJz9/orb1c8Fot4ognQSI4BW/ToXW3gThGd8IOBsPaSjMU
+         GFMg==
+X-Forwarded-Encrypted: i=1; AJvYcCWqriCNhYJNIN3F3zwBGn8sA3IxwkyTSkMJ++t2S+HnW+RLWD3sh0n9zTtsWrIW6KnIrgU1c/ycMB4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkBY7ChVQf9X3wRirLmUdHvUAmpXXkvErc9cAG+BbRSItN1Bkb
+	/hK870Q6EHnndWePzWwiRYLcm2perMz9sttjtAQqQajU2yxvBHERIgn6Jzl+ZxOHyMhwYqIr9Mr
+	nNE8ey2L8clsH84jsxVWn2hYp8uFdtwDqTsUUmM13TQKzYo41iw4ejFqCMQg=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: typec: fusb302: Switch to threaded IRQ handler
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Alexey Charkov <alchark@flipper.net>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- Yongbo Zhang <giraffesnn123@gmail.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20260311-fusb302-irq-v1-1-7e7105706629@flipper.net>
- <abKDG8wHJ-19c3AD@kuha> <63dfd90a-d54d-4d87-8c62-61a3c24d76fd@kernel.org>
- <20260312120418.99U0NPWL@linutronix.de>
-From: Hans de Goede <hansg@kernel.org>
-Content-Language: en-US, nl
-In-Reply-To: <20260312120418.99U0NPWL@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Received: by 2002:a05:6820:80d:b0:67b:e54e:d07b with SMTP id
+ 006d021491bc7-67be54edaa1mr509884eaf.20.1773419522399; Fri, 13 Mar 2026
+ 09:32:02 -0700 (PDT)
+Date: Fri, 13 Mar 2026 09:32:02 -0700
+In-Reply-To: <ca83b97b-9895-4e7f-821c-bfdc71d8d466@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69b43c02.050a0220.36eb34.000c.GAE@google.com>
+Subject: Re: [syzbot] [usb?] general protection fault in usb_gadget_udc_reset (4)
+From: syzbot <syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [-0.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linux.intel.com,flipper.net,linuxfoundation.org,collabora.com,gmail.com,vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-34756-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_FROM(0.00)[bounces-34757-lists,linux-usb=lfdr.de,19bed92c97bee999e5db];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,syzkaller.appspot.com:url];
+	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hansg@kernel.org,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 2480C286E74
+	SUBJECT_HAS_QUESTION(0.00)[]
+X-Rspamd-Queue-Id: A112E2871FA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
+Hello,
 
-On 12-Mar-26 13:04, Sebastian Andrzej Siewior wrote:
-> On 2026-03-12 11:49:30 [+0100], Hans de Goede wrote:
->> Using a threaded interrupt handler should be ok, yes. This should
->> also fix the issue this patch tries to fix:
->>
->> https://lore.kernel.org/linux-usb/20260103083232.9510-4-linux.amoon@gmail.com
-> 
-> This issue went away with commit a7fb84ea70aae ("usb: typec: fusb302:
-> Remove IRQF_ONESHOT").
-> 
->> Normally an i2c device like this would use a threaded interrupt handler to
->> do all the work since I2C transfers can sleep combined with disabling the IRQ
->> on suspend to avoid the interrupt handler running while the parent i2c-adapter
->> may be suspended.
->>
->> The problem with the fusb302 is that it can be a wakeup source so we cannot
->> disable the IRQ. I worked around this in commit 207338ec5a2 ("usb: typec: fusb302:
->> Improve suspend/resume handling") by moving the actual work to a workqueue
->> and have a hard (non threaded) interrupt handler which disables the IRQ and
->> queues the work, with the work re-enabling the IRQ when done + special
->> handling for the suspended case. Basically our own manual oneshot.
->>
->> If we move the IRQ disabling to a threaded handler, which appears to be
->> necessary for some IRQ controllers (arguably a IRQ controller driver issue,
->> but this seems to be a re-occuring issue), then I wonder if we need
->> the ONESHOT flag again to avoid a level type IRQ re-triggering before
->> the threaded handler gets a chance to disable it (with the workqueue
->> item eventually re-enabling it).
->>
->> I think we need to re-add the ONESHOT flag, but maybe that is the default
->> with a primary NULL handler ?
->>
->> Sebastian Siewior I think you now the IRQ subsystem better then me,
->> any advice / remarks ?
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Sebastian, Thank you for your input.
+Reported-by: syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com
+Tested-by: syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com
 
-> You could do
-> 	request_threaded_irq(chip->gpio_int_n_irq, NULL, fusb302_irq_intn,
-> 			     IRQF_ONESHOT | IRQF_TRIGGER_LOW, "fsc_interrupt_int_n", chip);
+Tested on:
 
-Ok, that is good to know.
+commit:         65169048 Merge tag 'spi-fix-v7.0-rc2' of git://git.ker..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=11535cd6580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692
+dashboard link: https://syzkaller.appspot.com/bug?extid=19bed92c97bee999e5db
+compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=11de1def980000
 
-> which would ensure that the handler runs as a thread and the interrupt
-> line is disable while it is active.
-
-That is what we want, thank you.
-
-> Then you could let fusb302_irq_intn() do what fusb302_irq_work() does.
-> Since it is a thread, mutex_lock() works here.
-
-Right, but the resume handler needs to also schedule the work when the
-IRQ is initially ignored if the IRQ triggers before the i2c_client's
-resume-handler is called to ensure that the parent i2c-adapter is
-ready when the IRQ handling code does i2c accesses.
-
-> Last step would be to replace fusb302_chip::irq_suspended with
-> disable_irq() in fusb302_pm_suspend() and enable_irq() in
-> fusb302_pm_resume().
-
-That unfortunately is not possible because the fusb302 maybe
-a wake-up source so it cannot be disabled unconditionally
-and without the disable_irq() / enable_irq() pair the IRQ
-may trigger before the parent i2c-adapter is resumed.
-
-This is why the IRQ handling in this driver is as convoluted
-as it is in the first place. With the IRQ handler setting
-an irq_while_suspended flag if the IRQ runs before the
-i2c_client resume and then with resume checking that flag
-+ queuing the work do to the actual IRQ handling once the
-parent i2c-adapter is ready (if we hit this race).
-
-So as far as I can see the current state of fusb302 code
-is good as is.
-
-Except for the problem on case the IRQ line is connected to
-the mentioned i2c GPIO expander in this email thread.
-
-I think that proper handling of the sync mechanism for IRQ
-chips attached to busses where IO to the IRQ chip may sleep
-should fix this. But this seems to keep coming up, so I'm
-tempted to just move the IRQ handler to a thread, to avoid
-problems with disable_irq_nosync() not working from
-"hard" IRQ handlers with some IRQ chip drivers.
-
-TL;DR:
-
-I think doing this:
-
- 	request_threaded_irq(chip->gpio_int_n_irq, NULL, fusb302_irq_intn,
- 			     IRQF_ONESHOT | IRQF_TRIGGER_LOW, "fsc_interrupt_int_n", chip);
-
-as you suggest is the best way forward here.
-
-This does what the original patch in this thread suggested,
-with the modification that it re-adds the IRQF_ONESHOT flag.
-
-Regards,
-
-Hans
-
-
+Note: testing is done by a robot and is best-effort only.
 
