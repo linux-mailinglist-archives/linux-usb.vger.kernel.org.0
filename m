@@ -1,199 +1,167 @@
-Return-Path: <linux-usb+bounces-34760-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34761-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2AZ1FZNLtGk4kAAAu9opvQ
-	(envelope-from <linux-usb+bounces-34760-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 18:38:27 +0100
+	id mJURDDJStGk4kAAAu9opvQ
+	(envelope-from <linux-usb+bounces-34761-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 19:06:42 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58E4F28832D
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 18:38:26 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D7512887FB
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 19:06:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 709213006D4D
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 17:38:23 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A433A300D932
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2026 18:06:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6517D3B5820;
-	Fri, 13 Mar 2026 17:38:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DZKyS8zm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E4035E92C;
+	Fri, 13 Mar 2026 18:06:29 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 164643C7E14;
-	Fri, 13 Mar 2026 17:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9592417D9
+	for <linux-usb@vger.kernel.org>; Fri, 13 Mar 2026 18:06:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773423499; cv=none; b=lWDHUWrCK7tjSqGkqu8stbWcE5HP0jQQGJUSewIJPekJBQVnPhHas0hDcKoDZciX7Ub48h4a1pbDKrYlKa5YUi4cREg+xuCE5UxB4zttfF7/EucNlCq2RNhAIcu93I9LWIdPkQsMfbhA2stRK3rBmT7wVQDPsZT4rOnV5D1dXa4=
+	t=1773425189; cv=none; b=U44bZNXglhbKtEo6xQmVWlRCXGCSF6q50OytFaYbFUa2HyZCD17Wu8T3kk8sfCPP9vKVuo3dp0AxTapwynuESq7ibT/mST8m5DuzpBpxyvD2VLVbrqqfMBAUOowT+cN0aibPg39BjaavDGY2RnMvO3/811cfYJ6+Yj9y8BnYW+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773423499; c=relaxed/simple;
-	bh=XTcmNKxQOYv/ODEIJ+6aq3vYnvqwEosHnYKM0NBNPyI=;
+	s=arc-20240116; t=1773425189; c=relaxed/simple;
+	bh=M3roLdTudCdgfNngjNG50W+qQBuGSk9K3KnYMwGA7Iw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aEVbfZrzacv3MxOzTgH1zPQAahbjdanUtLKTYrXpDW979sq9wyxhfmMedec3cq5COxKEyQjwplCdSDozQYtMGNVdFIr+sXboqL66B8xBqvH4CUudp8BNawxMMDH7GJnMzfMQqJqO8El6rU8mgMok+SiutxTIfnTicqmvDP14pLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DZKyS8zm; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773423498; x=1804959498;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XTcmNKxQOYv/ODEIJ+6aq3vYnvqwEosHnYKM0NBNPyI=;
-  b=DZKyS8zmY+Dq+uXNSFtiwzg8v29uAfzMjfCeEBNqMy4VRxfSdw5BoNza
-   py+S+L66gdMlmTG+n1f4PJtArk7KSyeas4F+cgIPmd7wkA68HknmwGfeT
-   YNPHJqI89WJ/TNNCulnCUhuzBnFMiejWBNKO+7rElbu50kcWBdB1+6YaU
-   ko1j85czMpVNdr8nodMBmAXpjpIzwD7CGknB4HrncL+wtUacCmDofX7s4
-   SCoiKQz976kVaMafvoJRbsXk6DDGWm95E8ajys64151LUudpQOxVolj9b
-   R7O+2NW61SC3rXG9ZmldGW+H+b5OEg3vurM0TgQ70cLo956PBYBg3Yssc
-   Q==;
-X-CSE-ConnectionGUID: NSxr0kdJSFaVV0Ott95PbA==
-X-CSE-MsgGUID: qG0WWof4SVWFErtuAygwCg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11728"; a="74415617"
-X-IronPort-AV: E=Sophos;i="6.23,118,1770624000"; 
-   d="scan'208";a="74415617"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 10:38:17 -0700
-X-CSE-ConnectionGUID: rT0sjaKIQ1eKnBrBuuknew==
-X-CSE-MsgGUID: CHraJtiFTNKoW/DwMKNSbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,118,1770624000"; 
-   d="scan'208";a="226218180"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by orviesa005.jf.intel.com with ESMTP; 13 Mar 2026 10:38:15 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w16Si-000000003gh-125h;
-	Fri, 13 Mar 2026 17:38:12 +0000
-Date: Fri, 13 Mar 2026 18:37:45 +0100
-From: kernel test robot <lkp@intel.com>
-To: Nathan Rebello <nathan.c.rebello@gmail.com>, gregkh@linuxfoundation.org
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	heikki.krogerus@linux.intel.com, kyungtae.kim@dartmouth.edu,
-	stable@vger.kernel.org, Nathan Rebello <nathan.c.rebello@gmail.com>
-Subject: Re: [PATCH v4] usb: typec: ucsi: validate connector number in
- ucsi_notify_common()
-Message-ID: <202603131813.ofOSyCrk-lkp@intel.com>
-References: <20260312211503.1915-1-nathan.c.rebello@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=R7JMpPqiQayrG7kpmbJLcYe3fu+9BLC1UxKhc4p+goUPvAvCvj0jGNVS2/OCfn7axDB/q1v/TXFjP3+Ap2aPCD5YbshuHOb38lfDGgxxUmuxo5IZEc1Oza9SdzueTsOVIgm6mtE6LD7J47j43D7cAawfYMTOP2CampgslAWDH/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1w16tr-00052h-Rh; Fri, 13 Mar 2026 19:06:15 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1w16tq-0007Np-35;
+	Fri, 13 Mar 2026 19:06:14 +0100
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1w16tq-0000000HIrS-3ZPe;
+	Fri, 13 Mar 2026 19:06:14 +0100
+Date: Fri, 13 Mar 2026 19:06:14 +0100
+From: Michael Grzeschik <mgr@pengutronix.de>
+To: Hyungjung Joo <jhj140711@gmail.com>
+Cc: ericvh@kernel.org, lucho@ionkov.net, asmadeus@codewreck.org,
+	linux_oss@crudebyte.com, gregkh@linuxfoundation.org,
+	v9fs@lists.linux.dev, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] net: 9p: usbg: clear stale client pointer on close
+Message-ID: <abRSFmpKpRgjTWPn@pengutronix.de>
+References: <20260313171659.1225180-1-jhj140711@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="iiClkwdaAZdCwp1M"
 Content-Disposition: inline
-In-Reply-To: <20260312211503.1915-1-nathan.c.rebello@gmail.com>
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+In-Reply-To: <20260313171659.1225180-1-jhj140711@gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spamd-Result: default: False [-3.56 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[lists.linux.dev,vger.kernel.org,linux.intel.com,dartmouth.edu,gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34760-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_FROM(0.00)[bounces-34761-lists,linux-usb=lfdr.de];
+	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	DMARC_NA(0.00)[pengutronix.de];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mgr@pengutronix.de,linux-usb@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[git-scm.com:url,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:dkim,intel.com:email,intel.com:mid]
-X-Rspamd-Queue-Id: 58E4F28832D
+	RCVD_COUNT_FIVE(0.00)[6];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.991];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pengutronix.de:mid,pengutronix.de:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 9D7512887FB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Nathan,
 
-kernel test robot noticed the following build warnings:
+--iiClkwdaAZdCwp1M
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus westeri-thunderbolt/next linus/master v7.0-rc3 next-20260313]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hi
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nathan-Rebello/usb-typec-ucsi-validate-connector-number-in-ucsi_notify_common/20260313-200729
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20260312211503.1915-1-nathan.c.rebello%40gmail.com
-patch subject: [PATCH v4] usb: typec: ucsi: validate connector number in ucsi_notify_common()
-config: x86_64-rhel-9.4 (https://download.01.org/0day-ci/archive/20260313/202603131813.ofOSyCrk-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260313/202603131813.ofOSyCrk-lkp@intel.com/reproduce)
+On Sat, Mar 14, 2026 at 02:16:59AM +0900, Hyungjung Joo wrote:
+>p9_usbg_close() tears down the client transport, but usb9pfs keeps
+>using usb9pfs->client from asynchronous TX and RX completion handlers.
+>A late completion can therefore dereference a client that has already
+>been freed during mount teardown.
+>
+>Clear usb9pfs->client under usb9pfs->lock when closing the transport,
+>detach any pending TX request from in_req->context, and make the TX/RX
+>completion handlers bail out once the transport has been detached. This
+>keeps late completions from touching a freed or rebound p9_client.
+>
+>Fixes: a3be076dc174 ("net/9p/usbg: Add new usb gadget function transport")
+>Cc: stable@vger.kernel.org
+>Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>Signed-off-by: Hyungjung Joo <jhj140711@gmail.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603131813.ofOSyCrk-lkp@intel.com/
+I was just preparing a similar change in an series of patches. Let me
+come back with a test of your patch and the comparison to my changes.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/device.h:15,
-                    from drivers/usb/typec/ucsi/ucsi.c:11:
-   drivers/usb/typec/ucsi/ucsi.c: In function 'ucsi_notify_common':
->> drivers/usb/typec/ucsi/ucsi.c:50:44: warning: format '%u' expects argument of type 'unsigned int', but argument 3 has type 'long unsigned int' [-Wformat=]
-      50 |                         dev_err(ucsi->dev, "bogus connector number in CCI: %u\n",
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:154:56: note: in expansion of macro 'dev_fmt'
-     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/usb/typec/ucsi/ucsi.c:50:25: note: in expansion of macro 'dev_err'
-      50 |                         dev_err(ucsi->dev, "bogus connector number in CCI: %u\n",
-         |                         ^~~~~~~
-   drivers/usb/typec/ucsi/ucsi.c:50:77: note: format string is defined here
-      50 |                         dev_err(ucsi->dev, "bogus connector number in CCI: %u\n",
-         |                                                                            ~^
-         |                                                                             |
-         |                                                                             unsigned int
-         |                                                                            %lu
+Thanks!
+Michael
 
 
-vim +50 drivers/usb/typec/ucsi/ucsi.c
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
-    39	
-    40	void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
-    41	{
-    42		/* Ignore bogus data in CCI if busy indicator is set. */
-    43		if (cci & UCSI_CCI_BUSY)
-    44			return;
-    45	
-    46		if (UCSI_CCI_CONNECTOR(cci)) {
-    47			if (UCSI_CCI_CONNECTOR(cci) <= ucsi->cap.num_connectors)
-    48				ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
-    49			else
-  > 50				dev_err(ucsi->dev, "bogus connector number in CCI: %u\n",
-    51					UCSI_CCI_CONNECTOR(cci));
-    52		}
-    53	
-    54		if (cci & UCSI_CCI_ACK_COMPLETE &&
-    55		    test_and_clear_bit(ACK_PENDING, &ucsi->flags))
-    56			complete(&ucsi->complete);
-    57	
-    58		if (cci & UCSI_CCI_COMMAND_COMPLETE &&
-    59		    test_and_clear_bit(COMMAND_PENDING, &ucsi->flags))
-    60			complete(&ucsi->complete);
-    61	}
-    62	EXPORT_SYMBOL_GPL(ucsi_notify_common);
-    63	
+--iiClkwdaAZdCwp1M
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmm0UhMACgkQC+njFXoe
+LGSNrQ//bivobCzCGMnkMzEuCNf9x5yt+/OvHIVGHgtlZXhMZcDYo/x6EUeXcQib
+MFuI4Bh2LGLFRuWjgn0fAnBmxuIwVYcqUiLUy7d+VYLwZRStCjH0ytb4+c9kw2FY
+9V5IluViM0TmW27Wk0D/48/3vhMdWAuCJTkuGKvmfLZC8IE0/YrpEivQ4VcVDpc7
+2nkGveu0R8a8bcCwFUDLnzxkgUuerptpBgj5Q6m/VCbRUtSOw5AEYxHcQqCqGWLq
+nyz/wruCDot1uXMobsvawXL6tL4bUgkhmgO66Zwuuf30QYP9Alq+HjdVM5uhNTk3
+7D+y7g6UC1VmYU2FFrNn/66S52ZqSOKwsNiXDc487q92ONMYw86W7bVj5sBHFoS4
+8nGtFwCZ16nsQYHuUQd88xFTkbf2atp8thgMGQbCkBqSAv02LS0PijPjAEw7IT9V
+MaJNGhHVv33Wtqh9pZ/A9gZlq7SdCCzMau5VA6IBQW5zsIQubTOyegNZQv1zITwJ
+nuLTa8gcK2ByKAX//fipf6Ac9ehHpRsqbGR3Q1vGNedtbkY54s5XKYY0JnYVHbgS
+cFJEobzJfCTeEfE9DWLCs+ahQs1ia2cnsSvS3u8PaQXzufttdqWfoIUlJmjqxX/2
+pLbWnGjaJbeQ4wBE7zK+AmBRP8rOF2QUGfJ4qf5Mjf1yxeFB+90=
+=AlgS
+-----END PGP SIGNATURE-----
+
+--iiClkwdaAZdCwp1M--
 
