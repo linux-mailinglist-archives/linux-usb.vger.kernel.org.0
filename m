@@ -1,197 +1,140 @@
-Return-Path: <linux-usb+bounces-34780-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34781-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oIh7OE3ktGnvtwAAu9opvQ
-	(envelope-from <linux-usb+bounces-34780-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 05:30:05 +0100
+	id nQiHC1L2tGkHvAAAu9opvQ
+	(envelope-from <linux-usb+bounces-34781-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 06:46:58 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F18328B901
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 05:30:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2CEB28BD1A
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 06:46:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BD2853020EF5
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 04:30:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7004030530DD
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 05:46:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 844AC33BBB1;
-	Sat, 14 Mar 2026 04:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96698248F57;
+	Sat, 14 Mar 2026 05:46:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bWjdIE1H"
+	dkim=pass (2048-bit key) header.d=me.com header.i=@me.com header.b="raIGM/dy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outbound.st.icloud.com (p-east2-cluster5-host1-snip4-2.eps.apple.com [57.103.79.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B71322DB7
-	for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 04:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254A6175A9C
+	for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 05:46:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.79.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773462600; cv=none; b=BhDBj1c3rY4UqNi1dKkLTcs5ddwm5tuQxB1gDg40ZLcKStpUSfdEdQKfG0POzTXLeJ8U+Wo2Cico6LeZBdTGRBOWXwYG3gL8Z+/+47oRxRBk5w2nU+iynmPTxIcK/1jaao2GIp7ADkeOGQ3GMDjFiwwnl5fmQGDnPQhzzF+EGkw=
+	t=1773467213; cv=none; b=NngeXH2IHFkv0tFRWlp5zLAdBH7Vg5Eo2OzrzkOZLdJ0kUiDCKsQt1aougyK8agss24mSYenLaW9hHaOpBFASr3L/9+jG7HLxM5rS5ExOpHsYgu1F+WBRWzgFgV7RIv7/Q9H3H+tUkTPOslG7eZKp7kQ8nn4J6qH9epq1jjF14A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773462600; c=relaxed/simple;
-	bh=eiK5llpIqDlKtadpJmS9IixMnePsEadIlhshVasLptg=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qJS9b8vfG6rolionkVigFNXGpiziZWqoQXbQmPoYj6AXImZwrXlHNgjfZYiYEraYZcvVdbWGNSNkGBV0XIO9Aua63+T1Q8rPg9kS5A5Lqf5C4aoGVZN1pHV2qrffxuPyWpGnavua7DvWHinHeRDsFZ5408EOEJ2o96I2ZRrBAgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bWjdIE1H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A0FA0C2BCAF
-	for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 04:29:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773462599;
-	bh=eiK5llpIqDlKtadpJmS9IixMnePsEadIlhshVasLptg=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=bWjdIE1H0N048LNjM0L9m6GFnqypkm8yb5Fw/1NC0ewtCb35+iYiYTQ5dGxyW//1G
-	 0pBo3GfffHjykmjieQTBOGXiko93DU1Y5Wa5BLMAquJrW0F9Sd4yiRCVoVyyHtHf/C
-	 BlfoKpx/Vert+ikrIfb4x78dlc/8x0LMBGiWZ0lApLCJXiokdvZOwiGEx9VpW/T+hC
-	 KrpD0lY+o1yyHICDmpJNpK01wIkHdvvhx4FQE3J/o+qxNBDVRfFgM9YbzD6SIOc9Xw
-	 tq7g5WurE0M4hqs3fhVi8i2MgQL19TWzuHmZ8e1GRGBP0Xg8Z9e+2CrTde78cLw138
-	 dCjAENyT9iqsg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 9AA3FCAB780; Sat, 14 Mar 2026 04:29:59 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 221073] xHCI host controller dies on resume from s2idle on AMD
- Strix Halo [1022:1587]
-Date: Sat, 14 Mar 2026 04:29:59 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bugzilla@logical.ink
-X-Bugzilla-Status: NEEDINFO
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-221073-208809-TzAdgWqsvO@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221073-208809@https.bugzilla.kernel.org/>
-References: <bug-221073-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1773467213; c=relaxed/simple;
+	bh=VEuwbq9TIo11WjxC3hoD5q7zL4QTg2pfPBjzOCy9Y90=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AbIFfctV7e33HSmYF62ZN1IqHfocXUND/uvjUiR78W6cq9ANmWsUAjvQrP8bqwc7eU3uHqVMrDJMPLPX0Ma/eIZ68lNHrgQhpcMsihdksWMxggFFK0V4dl23XY13ua3dDTePuZSUVIxaNaOMC9AhI+YUhhLEB7PyyrEp3oyT03Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=me.com; spf=pass smtp.mailfrom=me.com; dkim=pass (2048-bit key) header.d=me.com header.i=@me.com header.b=raIGM/dy; arc=none smtp.client-ip=57.103.79.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=me.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=me.com
+Received: from outbound.st.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-east-1a-100-percent-3 (Postfix) with ESMTPS id AFCD518000B0;
+	Sat, 14 Mar 2026 05:46:49 +0000 (UTC)
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai; t=1773467211; x=1776059211; bh=pyYULN/hrkoaF/VfHRNTDL3Ycbnd1NHOv3RuGCvDpj0=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=raIGM/dynVkJpBN8SewuDAGqgJMTFMRgnuikAi+Rjvc45e5VuR3HhmNjkUuV7dlEwvJhRnJU9R6eHVUFEjvAosUcW7zNMv3fiBUVCTG+i9u5kh7/RGeOeiWFNtcnf/IJD8D88xiHKggiDvRTLcN8ODl8YpORdCg8OWVO3Hdp9JvxETVRmgC6ujGjEUejeR72x9atxZr7pz/Exjbr7hsUAXrs9PCAlq2m7PFUUE/GaIaxDiyWWAOErREsa+MooGMzV6vKErLqpZZHhkZXWZY1f9yxrmHJTMJOj4mPpMTydFrukkS4EAHUJb80lsS1gxDg9jdh3dxX/ZhPQlNsaA+Ocg==
+Received: from bimmer.. (unknown [17.42.251.67])
+	by p00-icloudmta-asmtp-us-east-1a-100-percent-3 (Postfix) with ESMTPSA id 5A597180009D;
+	Sat, 14 Mar 2026 05:46:48 +0000 (UTC)
+From: tobgaertner <tob.gaertner@me.com>
+To: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: kuba@kernel.org,
+	gregkh@linuxfoundation.org,
+	oneukum@suse.com,
+	bjorn@mork.no,
+	tobgaertner <tob.gaertner@me.com>
+Subject: [PATCH v3 0/2] net: usb: cdc_ncm: add ndpoffset to NDP nframes bounds check
+Date: Fri, 13 Mar 2026 22:46:38 -0700
+Message-ID: <20260314054640.2895026-1-tob.gaertner@me.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE0MDAzOSBTYWx0ZWRfXz2r286AUBCRX
+ PVv2+njhp4G5MiRG10OXE2m/DKqg0nm8Q4DKhx4JtrGrtTEFFWdbY2o7kawhuBk7adu9vZw2HMd
+ R0N2AXXIPHUra9REQDIS6386tgDNOFrLWZD9YpA6bsV4/lykwzmNjxvLAGidIieQvqSKSQPhi9k
+ Bz4LuhHhCfs5APDg9aGG0BRT2Sc2A11TWaib7K8+yyZylJH1t3Fonb5HUI0U0GJomfXCZW9afyJ
+ +mn0q/fVfNB2/nJtBLOTctD2X/TFqQonKXicNVkPyloNJkeIT2Qimh7mDLEQsgQmz0hH9agX7z3
+ sauuDZFHlWGRa5xShFzW2a3qx/TXD/PTw7bgKanrfBrLSStC5flPZW30QcjZjE=
+X-Authority-Info-Out: v=2.4 cv=XJQ9iAhE c=1 sm=1 tr=0 ts=69b4f64a
+ cx=c_apl:c_pps:t_out a=YrL12D//S6tul8v/L+6tKg==:117
+ a=YrL12D//S6tul8v/L+6tKg==:17 a=Yq5XynenixoA:10 a=x7bEGLp0ZPQA:10
+ a=C3-SEi6G3EkA:10 a=VkNPw1HP01LnGYTKEx00:22 a=vawl1ekDSUxKlQN4UPUA:9
+ a=zgiPjhLxNE0A:10 a=zZCYzV9kfG8A:10
+X-Proofpoint-ORIG-GUID: kA4TB7c7dj5xI1zcga3AqvePS88qxD0Q
+X-Proofpoint-GUID: kA4TB7c7dj5xI1zcga3AqvePS88qxD0Q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-14_02,2026-03-13_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
+ suspectscore=0 spamscore=0 mlxlogscore=553 mlxscore=0 clxscore=1011
+ bulkscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0 classifier=spam
+ authscore=0 adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2603140039
+X-JNJ: AAAAAAABqd9ak1X4Z2eAvbMcPe/IrTUYC6uM6q/PZbdEssFPcrVpNZ23heFH+tqitYkbuOz1mqSbZsjeBTYe6V8o96t7cmwTJthz41onAyE9T40GK1vurBLWwEBJjKND141zV7IekkGsOIH8PEE+zzQWIW0K5GstqIjxUlqLzsnzVTOTa0m5v9fDsjG0eYL0En7k4Knd4f4tcOBeOrm0csyl4ckr4sHa7WAHIX7qMFCioRrEZwmOptys7DI1TiAE5tVbBG04cKdLpIKFk8BE8KsxjWFPrFMHTLOh+GIrMxqdHqhiZEUJDQYBDB+VHmbLZ1oVHb9R+9olpqO8n7L88mmEMF/Tm2SagVprSSXmGJ20vfgvc2a6ePC1HH0NAajddBF+tfe0dG5cYRR+zBSZYyNsetZFQXPIb57nzrUI3u5MWR29emQOXjooXRR2KVBbaTwnJ4Rg6ViH0rMuJ7W45q/3boR1mU6HzVP1BtARA60Ya5j5rAcp8AHcTfGFj18LG91cu3UheT06S4Mg85bWjKMiG0+GBWov4FU5ut1f/UPc/vCNcyZXm2wmLz3ww53xPCl9WrXaCB2F9G/JZFFzPdYLZuXTAIgMmzNXJcQ+WQFr9G+oPnz9e6y8Yhrdmpc2wvN7iG8n3KvI4SrWW7N2ogMAF/9HsGRu0feR4l7Ha46e8l+A/TaRsgDOvRE9zXM8qRODORFgqoTy+w==
+X-Apple-Category-Label: Mjg5MDYwMTc4OiRjYXRlZ29yeSRfUGVyc29uYWws
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[me.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[me.com:s=1a1hai];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34780-lists,linux-usb=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_ONE(0.00)[1];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FROM_NO_DN(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,linuxfoundation.org,suse.com,mork.no,me.com];
+	TAGGED_FROM(0.00)[bounces-34781-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5F18328B901
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tob.gaertner@me.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[me.com:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	FREEMAIL_FROM(0.00)[me.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[me.com:dkim,me.com:mid]
+X-Rspamd-Queue-Id: A2CEB28BD1A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221073
+The nframes bounds check in cdc_ncm_rx_verify_ndp16() and
+cdc_ncm_rx_verify_ndp32() does not account for ndpoffset,
+allowing out-of-bounds reads when the NDP is placed near the
+end of the NTB.
 
-bugzilla@logical.ink changed:
+Changes since v2:
+- Save struct_size_t() result to a temp variable to avoid
+  awkward line wrapping (Jakub)
+- Fix From/Signed-off-by mismatch
+- Move "Compile-tested only" out of the Signed-off-by line
+  into the commit message body
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |bugzilla@logical.ink
+Tobi Gaertner (2):
+  net: usb: cdc_ncm: add ndpoffset to NDP16 nframes bounds check
+  net: usb: cdc_ncm: add ndpoffset to NDP32 nframes bounds check
 
---- Comment #39 from bugzilla@logical.ink ---
-Also experiencing this bug on Framework 13 AMD Ryzen AI 300 using Fedora.=20
+ drivers/net/usb/cdc_ncm.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-### System Information
+-- 
+2.43.0
 
-| Field | Value |
-|---|---|
-| Machine | Framework Laptop 13 (AMD Ryzen AI 300 Series) |
-| CPU | AMD Ryzen AI 9 HX 370 (Hawk Point, 24 threads) |
-| GPU | AMD Radeon 890M (integrated) |
-| BIOS | FRANMGCP09 v03.05 (2025-10-30) |
-| RAM | 64 GB DDR5 |
-| Kernel (at time of event) | 6.18.12-100.fc42.x86_64 |
-| Kernel (current) | 6.18.16-100.fc42.x86_64 |
-| Distribution | Fedora 42 |
-| xHCI controller | 0000:c1:00.4 |
-| xHCI hcc params | 0x0118ffc5 |
-| xHCI version | 0x120 (USB 3.1) |
-| xHCI quirks at init | 0x0000000200000010 |
-
-The affected USB device is `usb 1-1`: a full-speed internal device (device
-number 2, bus 1) which corresponds to the Framework laptop's internal input
-device hub (trackpad, keyboard controller, fingerprint reader).
-
-Relevant Logs:
-**Failing resume (44-minute sleep, lid closed):**
-```
-Mar 13 22:40:43 kernel: usb 1-1: reset full-speed USB device number 2 using
-xhci_hcd
-Mar 13 22:40:43 kernel: PM: suspend entry (s2idle)
-
-[~44 minutes elapse]
-
-Mar 13 23:25:33 kernel: PM: suspend devices took 0.162 seconds
-Mar 13 23:25:33 kernel: PM: resume devices took 0.285 seconds
-Mar 13 23:25:33 systemd-logind: Lid opened.
-Mar 13 23:25:33 kernel: PM: suspend exit
-                                                          <-- usb 1-1 reset
-ABSENT
-Mar 13 23:26:13 kernel: PM: suspend entry (s2idle)        <-- next suspend,
-still no usb 1-1 reset
-Mar 13 23:26:18 kernel: PM: suspend exit
-                                                          <-- usb 1-1 reset
-still ABSENT
-Mar 13 23:27:09 kernel: PM: suspend entry (s2idle)
-Mar 13 23:28:56 kernel: PM: suspend exit
-                                                          <-- usb 1-1 reset
-still ABSENT
-[reboot required to restore input]
-```
-
-**xHCI controller initialization (boot):**
-```
-kernel: xhci_hcd 0000:c1:00.4: xHCI Host Controller
-kernel: xhci_hcd 0000:c1:00.4: new USB bus registered, assigned bus number 1
-kernel: xhci_hcd 0000:c1:00.4: hcc params 0x0118ffc5 hci version 0x120 quir=
-ks
-0x0000000200000010
-```
-
-Additional Context:
-- The xHCI controller at `0000:c1:00.4` already has quirks `0x0000000200000=
-010`
-applied at init. The `XHCI_RESET_ON_RESUME` bit (0x80) is not present and m=
-ay
-need to be added to the AMD platform quirk table for this hardware.
-- `bluetoothd` logs `Controller resume with wake event 0x0` on all resumes
-including the failing one, indicating the Bluetooth/wakeup path is not the
-differentiating factor.
-- No kernel error or warning is emitted at the time of the failed USB reini=
-t =E2=80=94
-the failure is silent.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
