@@ -1,233 +1,173 @@
-Return-Path: <linux-usb+bounces-34796-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34797-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oEy7L7BLtWmzywAAu9opvQ
-	(envelope-from <linux-usb+bounces-34796-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 12:51:12 +0100
+	id iI9/GAVVtWnAzQAAu9opvQ
+	(envelope-from <linux-usb+bounces-34797-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 13:31:01 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52B7328CECB
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 12:51:12 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CD2E28D23D
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 13:31:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 331B530305F7
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 11:51:07 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 44963302DE6D
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 12:30:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F0642609EE;
-	Sat, 14 Mar 2026 11:51:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA1121C5D59;
+	Sat, 14 Mar 2026 12:30:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="N7/e3HBe"
+	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="KFyCjgek"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from submarine.notk.org (submarine.notk.org [62.210.214.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE60D246762;
-	Sat, 14 Mar 2026 11:51:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97891DD9AC;
+	Sat, 14 Mar 2026 12:30:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.210.214.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773489065; cv=none; b=Nid43yekFPcZpM4M2s38kE3+GpzGWy5YaYxh5Kq3SFuHF9RwB17GqJ0WTbBGJeNwbBDQEQ6K481eQGR9ILq3dO/nFAXtBIlgnOW8swBGyt+A1uenSJz5iRVh/5RqrwkAjSkgV+yWrt5h3NPdg+tx6pMuBfVkudnqOr9p5MkhgpE=
+	t=1773491452; cv=none; b=uNJKtXihM/HqPvIz8ozw3pafH8eDEJV/HnSH4J2O9oQLf2YuKCC4a0wd8boEJOT8aLJM8FBlysRsWBsPcCTFZ1NHeW8tE/x8tvftfjnHdFt2olket5BTYxvFZo31g1iFTQX4NXT2WdLxVbp/8ZUmBbYjZFDXGTeLI9hXIDih1+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773489065; c=relaxed/simple;
-	bh=DmkshDHVxH2j16lHfio7B9xXktEADK/s+NEakcduPro=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kS466UsICQIZ4icz2o1zHtnmJM0aIz7HD34HAVxVR3SajqZG0eeD4AwCmwd8yfRLtt4MUGyK/Czt4zzvpV6df7oZT1xPSc/O+LT5xttJHBjbmeDcHsPUvzS3UyCc7m9oCh9j1HdBvCUhnrPMQVC1tPtC+fCC27g9Cukcx7L6gG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=N7/e3HBe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDB8AC116C6;
-	Sat, 14 Mar 2026 11:51:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1773489065;
-	bh=DmkshDHVxH2j16lHfio7B9xXktEADK/s+NEakcduPro=;
-	h=Date:From:To:Cc:Subject:From;
-	b=N7/e3HBeNb2U0m0E4F7H+heu1uj31AsqjqEQ0sovLviFhEs6f7nFaFfUv5KjjoIyR
-	 8c9MVpncdZ/6hpzx88zcFLVw+A7E+GmFOaYOB0hOHSkYfCKRt8KBwKp0pM4OfLAGMB
-	 avaOx2M/3idV9sPSJ9YIa+ehvfCX1+ejzlx5EL5o=
-Date: Sat, 14 Mar 2026 12:51:02 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 7.0-rc4
-Message-ID: <abVLpuXaT8KcBt3J@kroah.com>
+	s=arc-20240116; t=1773491452; c=relaxed/simple;
+	bh=9ZK2vTkCbsS5uxnoWel8n1PDRrnyWVIPtUMBJGP84mM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d2x05Qyxryihakw8ucwqvxFt29z6/eWyGalREIr+6s/r5YLbyq8nDuQFXmrMKxd1A2xsULBQbWnPUi+ZWk0ZDdjVTW8JT5E1Pi8I0VaAWopWerAx5Ykaane5P1lZnhVNf+/e5eC9cKEjOT04G9gQ8mp3VAa7J0T4w9VkuyrHWWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org; spf=pass smtp.mailfrom=codewreck.org; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=KFyCjgek; arc=none smtp.client-ip=62.210.214.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
+Received: from gaia.codewreck.org (localhost [127.0.0.1])
+	by submarine.notk.org (Postfix) with ESMTPS id 6506F14C2D6;
+	Sat, 14 Mar 2026 13:30:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org;
+	s=2; t=1773491447;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VcoWzFo2iytvBU59qSwVkLxsYp37sXMszYQYBam9i0c=;
+	b=KFyCjgekH3VZNvEK1Lo/dG2gqjqtWALYEA5viHfhjhlY0lNXYsL6ISTAHhVrsVEdRBtqTp
+	TytgEBqJKgzVHqP8BBbau0iToaUc7IRtTRTrzvc3FYJhS0O99JjbJ5eqX0ylR3Vdkq7qEb
+	7LC/3Q+QayzQ0e/vMUmykycZ+26iooe2YfmM2CfR3RBEnwYU2/cwojnqQQiRNG8JTG/u2e
+	5TftV0qfWen521PoAGRLTgP/IkxocKBTMZNmualiHNxVV8RxNrrcsVtpU40UuFpXjvEi7A
+	/f3TmLVOaXKeKgnvzZaVvBDZi1jV1cVgLnQ61L7KftpPMIw47KEE80HAkgqv5w==
+Received: from localhost (gaia.codewreck.org [local])
+	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id 4374c7c6;
+	Sat, 14 Mar 2026 12:30:42 +0000 (UTC)
+Date: Sat, 14 Mar 2026 21:30:27 +0900
+From: Dominique Martinet <asmadeus@codewreck.org>
+To: Hyungjung Joo <jhj140711@gmail.com>
+Cc: ericvh@kernel.org, lucho@ionkov.net, linux_oss@crudebyte.com,
+	m.grzeschik@pengutronix.de, gregkh@linuxfoundation.org,
+	v9fs@lists.linux.dev, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] net: 9p: usbg: clear stale client pointer on close
+Message-ID: <abVU46kfH0K5I6OY@codewreck.org>
+References: <20260313171659.1225180-1-jhj140711@gmail.com>
+ <abT5tabfYV9a9RF_@codewreck.org>
+ <CAP_j_b9i2n+ZUriWceZJgAKz_MeGMFkRiOz7yCYE4as4T6auVQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <CAP_j_b9i2n+ZUriWceZJgAKz_MeGMFkRiOz7yCYE4as4T6auVQ@mail.gmail.com>
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[codewreck.org,none];
+	R_DKIM_ALLOW(-0.20)[codewreck.org:s=2];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34796-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_FROM(0.00)[bounces-34797-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[codewreck.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_THREE(0.00)[4];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[asmadeus@codewreck.org,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,linuxfoundation.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,kroah.com:mid]
-X-Rspamd-Queue-Id: 52B7328CECB
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 0CD2E28D23D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+Hyungjung Joo wrote on Sat, Mar 14, 2026 at 04:24:19PM +0900:
+> Thanks for the careful review.
+> 
+> > Just to make sure the problem is the usb9pfs struct being freed, not the
+> > p9_client itself which is still alive after the usb device is gone
+> > (until umount)?
+> 
+> The issue I am addressing is the stale use of the usb9pfs->client
+> association after the transport has been closed. I am not relying on
+> early free of struct f_usb9pfs for this bug.
+> 
+> The lifetime mismatch here is that struct f_usb9pfs belongs to the
+> gadget function and can be reused across mount sessions, while
+> struct p9_client is per-mount. On the close path, p9_usbg_close() did
+> not detach usb9pfs->client, so late TX/RX completions could still
+> follow that pointer after close, including into a later remount that
+> rebinds it.
 
-  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+Ah, you did write p9_usbg_close() in the commit message and I skipped
+over it too fast...
 
-are available in the Git repository at:
+I also misread your locking, I thought you were just getting a client
+pointer under lock, but you're also using it only within the lock (so
+there is no benefit from using a local variable as far as locking goes,
+but releasing the lock early would be invalid as the client itself is
+freed immediately after close...)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-7.0-rc4
+From a performance point of view I think making close() stop the ep and
+wait until any in flight calls would be better than taking the lock all
+the time, but I'm not sure how visible that'd actually be on real
+workloads... close() can take as long as you want, it's perfectly fine
+to sleep there until the usb side has finished flushing if you want.
+I'm curious what approach Michael picked?
 
-for you to fetch changes up to d0d9b1f4f5391e6a00cee81d73ed2e8f98446d5f:
 
-  USB: ezcap401 needs USB_QUIRK_NO_BOS to function on 10gbs usb speed (2026-03-13 18:19:07 +0100)
+> > I'm surprised free_func isn't called after unbind, which should stop the
+> > queues (through disable_usb9pfs)?
+> > or are the ep being disabled not enough to ensure the callbacks are not
+> > in use? (e.g. disabling prevents further calls, but doesn't wait for
+> > currently running/queued requests?)
+> 
+> My understanding is that the unbind/free_func path is different from the
+> close path at issue here. This patch is not trying to change or rely on
+> gadget teardown ordering; it addresses the close-side race where
+> usb9pfs->client remained attached and the completion paths still
+> dereferenced it.
 
-----------------------------------------------------------------
-USB fixes for 7.0-rc4
+Yes, transport close corresponds to a umount call, and is unrelated to
+usb lifetime; I was thinking of the other way around (usb device
+disappearing while the mount is still alive)
 
-Here is a large chunk of USB driver fixes for 7.0-rc4.  Included in here
-are:
-  - usb gadget reverts due to reported issues, and then a follow-on fix
-    to hopefully resolve the reported overall problem
-  - xhci driver fixes
-  - dwc3 driver fixes
-  - usb core "killable" bulk message api addition to fix a usbtmc driver
-    bug where userspace could hang the driver for forever
-  - small USB driver fixes for reported issues
-  - new usb device quirks
+> That is why the patch:
+> - clears usb9pfs->client under usb9pfs->lock on close,
+> - detaches any pending TX request from in_req->context, and
+> - makes TX/RX completions bail out once the transport has been detached.
+> 
+> So the intent is to prevent late completions from using a stale or
+> rebound client association after close, rather than to claim an early
+> free of the gadget object itself.
 
-All except the last USB device quirk change have been in linux-next with
-no reported issues.  That one came in too late, and is "obviously
-correct" :)
+Thank you for the details (and the patch!); I'll have a deeper look
+after hearing back from Michael
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-A1RM4X (1):
-      USB: add QUIRK_NO_BOS for video capture several devices
-
-Alan Stern (3):
-      USB: usbcore: Introduce usb_bulk_msg_killable()
-      USB: usbtmc: Use usb_bulk_msg_killable() with user-specified timeouts
-      USB: core: Limit the length of unkillable synchronous timeouts
-
-Christoffer Sandberg (1):
-      usb/core/quirks: Add Huawei ME906S-device to wakeup quirk
-
-Dayu Jiang (1):
-      usb: xhci: Prevent interrupt storm on host controller error (HCE)
-
-Fan Wu (1):
-      usb: renesas_usbhs: fix use-after-free in ISR during device removal
-
-Gabor Juhos (1):
-      usb: core: don't power off roothub PHYs if phy_set_mode() fails
-
-Greg Kroah-Hartman (1):
-      usb: misc: uss720: properly clean up reference in uss720_probe()
-
-Heikki Krogerus (1):
-      usb: dwc3: pci: add support for the Intel Nova Lake -H
-
-Jiasheng Jiang (1):
-      usb: gadget: f_tcm: Fix NULL pointer dereferences in nexus handling
-
-Jie Deng (1):
-      usb: core: new quirk to handle devices with zero configurations
-
-John Keeping (1):
-      usb: gadget: f_hid: fix SuperSpeed descriptors
-
-Junzhong Pan (1):
-      usb: gadget: uvc: fix interval_duration calculation
-
-Kuen-Han Tsai (9):
-      usb: legacy: ncm: Fix NPE in gncm_bind
-      usb: gadget: f_ncm: Fix atomic context locking issue
-      Revert "usb: gadget: f_ncm: Fix atomic context locking issue"
-      Revert "usb: legacy: ncm: Fix NPE in gncm_bind"
-      Revert "usb: gadget: f_ncm: align net_device lifecycle with bind/unbind"
-      Revert "usb: gadget: u_ether: Add auto-cleanup helper for freeing net_device"
-      Revert "usb: gadget: u_ether: use <linux/hex.h> header file"
-      Revert "usb: gadget: u_ether: add gether_opts for config caching"
-      usb: gadget: f_ncm: Fix net_device lifecycle with device_move
-
-Marc Zyngier (1):
-      usb: cdc-acm: Restore CAP_BRK functionnality to CH343
-
-Mathias Nyman (1):
-      xhci: Fix NULL pointer dereference when reading portli debugfs files
-
-Oliver Neukum (3):
-      usb: yurex: fix race in probe
-      usb: mdc800: handle signal and read racing
-      usb: class: cdc-wdm: fix reordering issue in read code path
-
-RD Babiera (1):
-      usb: typec: altmode/displayport: set displayport signaling rate in configure message
-
-Seungjin Bae (1):
-      usb: gadget: f_mass_storage: Fix potential integer overflow in check_command_size_in_blocks()
-
-Vyacheslav Vahnenko (1):
-      USB: ezcap401 needs USB_QUIRK_NO_BOS to function on 10gbs usb speed
-
-Xu Yang (2):
-      Revert "tcpm: allow looking for role_sw device in the main node"
-      usb: roles: get usb role switch from parent only for usb-b-connector
-
-Zilin Guan (1):
-      usb: xhci: Fix memory leak in xhci_disable_slot()
-
-Ziyi Guo (1):
-      usb: image: mdc800: kill download URB on timeout
-
- Documentation/admin-guide/kernel-parameters.txt |   3 +
- drivers/usb/class/cdc-acm.c                     |   5 +
- drivers/usb/class/cdc-acm.h                     |   1 +
- drivers/usb/class/cdc-wdm.c                     |   4 +-
- drivers/usb/class/usbtmc.c                      |   6 +-
- drivers/usb/core/config.c                       |   6 +-
- drivers/usb/core/message.c                      | 100 ++++++++++---
- drivers/usb/core/phy.c                          |   8 +-
- drivers/usb/core/quirks.c                       |  21 +++
- drivers/usb/dwc3/dwc3-pci.c                     |   2 +
- drivers/usb/gadget/function/f_hid.c             |   4 +
- drivers/usb/gadget/function/f_mass_storage.c    |  12 +-
- drivers/usb/gadget/function/f_ncm.c             | 144 ++++++++++---------
- drivers/usb/gadget/function/f_tcm.c             |  14 ++
- drivers/usb/gadget/function/u_ether.c           |  67 +++------
- drivers/usb/gadget/function/u_ether.h           |  56 ++++----
- drivers/usb/gadget/function/u_ether_configfs.h  | 177 ------------------------
- drivers/usb/gadget/function/u_ncm.h             |   4 +-
- drivers/usb/gadget/function/uvc_video.c         |   2 +-
- drivers/usb/host/xhci-debugfs.c                 |  10 +-
- drivers/usb/host/xhci-ring.c                    |   1 +
- drivers/usb/host/xhci.c                         |   4 +-
- drivers/usb/image/mdc800.c                      |   6 +-
- drivers/usb/misc/uss720.c                       |   2 +-
- drivers/usb/misc/yurex.c                        |   2 +-
- drivers/usb/renesas_usbhs/common.c              |   9 ++
- drivers/usb/roles/class.c                       |   7 +-
- drivers/usb/typec/altmodes/displayport.c        |   7 +-
- drivers/usb/typec/tcpm/tcpm.c                   |   2 +-
- include/linux/usb.h                             |   8 +-
- include/linux/usb/quirks.h                      |   3 +
- 31 files changed, 329 insertions(+), 368 deletions(-)
+-- 
+Dominique Martinet | Asmadeus
 
