@@ -1,486 +1,188 @@
-Return-Path: <linux-usb+bounces-34775-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34776-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kBNxJ6m6tGl7sQAAu9opvQ
-	(envelope-from <linux-usb+bounces-34775-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 02:32:25 +0100
+	id wOCqIiG+tGkZsgAAu9opvQ
+	(envelope-from <linux-usb+bounces-34776-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 02:47:13 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FB0928B41F
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 02:32:25 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DC9228B4AF
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 02:47:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0EE0430526DB
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 01:32:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EF12A30B1962
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 01:47:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DE7E270575;
-	Sat, 14 Mar 2026 01:32:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FA1DBfzM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3710A2475CF;
+	Sat, 14 Mar 2026 01:47:06 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from r9110.ps.combzmail.jp (r9110.ps.combzmail.jp [49.212.36.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4240225416
-	for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 01:32:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C454D221F06
+	for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 01:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.36.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773451935; cv=none; b=uGzPKRniXddraGyi7Vbu6Wl8hwYaj0rC3gn+BqnQ8laX3wkgD/PhQsw26Wbf+U+5BJumWVq+DGFDkz8Vi/QOxI4dbbMbNgFG+7WpB5Yi9Vbn13X3pet9q6HwiK+DevllPEWVVEwGfnCWWnRofmutfpl9diZuD2U7ccGJd8t0xtU=
+	t=1773452825; cv=none; b=QY8RWW1UbrROjwINZrI4y3vU5LSw7PxEHXlstaZUZTAB7PotZwpEOxtHqhOkZJb/p3eyNRCClYFlQluCgKnp3hRtp2h/axsypMQfbkHO020WzRMAZJY+sxikgrVlsyG2V7DVlW6KRtp07eX6dgllhy9njjonMmbtUyB25R5QwCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773451935; c=relaxed/simple;
-	bh=p8T4E7480ILfoOrSFfqVs8pQWFIFxD+u2YFQz9fnNxo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jbK7YqbMEOOIKm2SNSihCmktA+warWIw5YaVeTtieJFb1JQGwivILv6H3w5WnsS3o77auvU5UzybZncM1xTjH0f2gD32Je5TS4clyjyIdj1LOVhu5ffMrkLJYVIgOLLSx1Baq/o5TqaEdinD29AFdMmRFt48xfRIrXWlkg/0dUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FA1DBfzM; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43a03cb1df9so2534846f8f.1
-        for <linux-usb@vger.kernel.org>; Fri, 13 Mar 2026 18:32:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773451932; x=1774056732; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jvDWBNZNK1PJ+DFXrEgOI7FkazNpTVvzpyU4Do+y01s=;
-        b=FA1DBfzMSq9HUDJmjQ3PFv0cBwqahnZsxgMIu0G0GzM9t6J8+vpwuLdf3H1hP2Ir6n
-         JeG1Fh2uMIg41kydTFU5zELzenDn5EQF//AOx9pp3yQkbjGAeLoCwCW5hxig61Q32TvD
-         rftXzBTk7l8KuiM5401ZPhgTbqxvr++ku/UI80rEmpcrQ1ssdXJPTbJnp+5haD3CxGOf
-         addpHiWxKbICG7DRtIkvnic1r/aBEM98F8nfFVo89+ZgdEs3eHLFcXdMga4A+bzKbWwL
-         xRIgBUWaAJ3fpmDELudj2L+g7SjNTrdj/tf+j0CgHpycE7uHEE/0M7Bsuhg8iGvMv/U5
-         6KlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773451932; x=1774056732;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jvDWBNZNK1PJ+DFXrEgOI7FkazNpTVvzpyU4Do+y01s=;
-        b=JpL+JPnD7rHTWrC4tku4uDDItl4ARWa8TzO6mJUhhZZtGV3EvlQl5NYzG1YFph51MO
-         hW3XLi0Exb25tFd3U+/TUiDl27oZuxmNg8Bb8Xhcki8GqwFcDsO/tZYLqYeFeDUlj+z3
-         m1qwx8mwTlkV72nJqFBsqFu7L/RlZd3gcYQmQOmUwKgGYojCzZy/4hvKDof7/NT2kTgF
-         CtKxrkM2+Jt+1Vp/8Jj6NCxEbtyrb+Ldb0e6h9rmm8gin9KeWGJodYpNbZtuiEiu1p6c
-         +8LxSgWHJ6eJDCHIZm5v+zgYK5ISyVg3+5zTDZG/dujZmWwodgVEPEZLptc4hUBHwoFv
-         tY6g==
-X-Forwarded-Encrypted: i=1; AJvYcCXrOrMo8L3SmdbI4Dbnjb9tFS6gd5e4T+3gn9DrpYJzpt3zWof/f3/4ETV9o75LxQCp2XDYkCB17Rc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3vIcOCCoRhAz/CwVIjIfleKX2b2uOCrv1/dll5Zu26u0jfDvQ
-	4LwQk1NaG7+lzB1mkqCI9osAnAypyvFSb+ZHLjaXCWiwsa43FxfFqePYAOWWSVd5I+I=
-X-Gm-Gg: ATEYQzxly8xWFCNiE7+B6PX+u0LhK3+QSwBJpvy8khCBY6P8xsUFajRKcjRovHw7Zgb
-	GEYMXHtelw4XqKlxxd5oASC5E9tlYLYaxoqX7ZwkfyxeQuPDBywp8X4wtK2isEEl//Dt6l+YaLu
-	rBQMXPKKqCiAFl9U6CDRDQhM6M9DG2eZLqicP09ydYIVDO8CL16FOIu40rNfCX7LuNzf7vYoFX0
-	RyAC/3KF5Rv9LAxU+6THSmB+CYjqOcSWF41f1CCYaOHtVPzbcgzIcHN6kRZCXq3LyVha1YZpcRm
-	KyyCmxU4y1rgmKnd9meWPYkBhTYZ5E6p9HWk0TjenYC37S3i4b/lMs8gKBb0iAYG59uV14AqQLi
-	IUt0eTrSDdRA0YmgiddrgOKyVlH9GP8oxF6T+jUUkkZQNnsILVfiGbSdCA8xyvYoRN4sh65mVAs
-	jJXsgJ4QieJgRkxyTbmAuJKbWEk5ID0TEPEV76fTDk4EHiJoQXjiT7/quIStfneHWSbgqIikXVi
-	nTxMK0ckEECkp939R9fC2A1ZlyLO5m3MLR9b6sYmPTIqoOytKI+cGGKz05c2rFfEdGfdMZmlFlJ
-	ep7aHstbdPM=
-X-Received: by 2002:a05:6000:1787:b0:439:c677:5145 with SMTP id ffacd0b85a97d-43a04d880e8mr9903496f8f.22.1773451932107;
-        Fri, 13 Mar 2026 18:32:12 -0700 (PDT)
-Received: from scambox.localdomain (5-198-68-184.static.kc.net.uk. [5.198.68.184])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439fe22529csm21876575f8f.31.2026.03.13.18.32.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 18:32:11 -0700 (PDT)
-From: Edward Blair <edward.blair@gmail.com>
-To: linux-i2c@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	wsa+renesas@sang-engineering.com,
-	westeri@kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Edward Blair <edward.blair@gmail.com>
-Subject: [PATCH 2/2] usb: typec: ucsi: add ITE885x I2C transport driver
-Date: Sat, 14 Mar 2026 01:31:56 +0000
-Message-ID: <20260314013157.7181-3-edward.blair@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260314013157.7181-1-edward.blair@gmail.com>
-References: <20260314013157.7181-1-edward.blair@gmail.com>
+	s=arc-20240116; t=1773452825; c=relaxed/simple;
+	bh=gaxADsOpGh2R7TrfuYIbKk9k6zkvNv87ynFzd0C/yTc=;
+	h=To:From:Subject:Mime-Version:Content-Type:Message-Id:Date; b=tG0Rfs0LML0k42KwtPFhYYM44lMlxpkiYwhM1bFnBhiNZ5YNVT/zMr+14gkh/VuxJzdEUdSe2rcxDINB9Yy98tXmyqKrCxVlaYZ7RgPsOkRneIAirlol3/rz1R3xuaMtMEWYoln1WeKycsDDnY4YCaWA0vYB1TB+HwjxjIsBe54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=j-pet-hotel.jp; spf=pass smtp.mailfrom=magerr.combzmail.jp; arc=none smtp.client-ip=49.212.36.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=j-pet-hotel.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=magerr.combzmail.jp
+Received: by r9110.ps.combzmail.jp (Postfix, from userid 99)
+	id A765E188279; Sat, 14 Mar 2026 10:46:44 +0900 (JST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 r9110.ps.combzmail.jp A765E188279
+To: linux-usb@vger.kernel.org
+From: =?ISO-2022-JP?B?GyRCRnxLXCVaJUMlSCVbJUYlazYoMnEbKEI=?= <info@j-pet-hotel.jp>
+X-Ip: 126807571238744
+X-Ip-source: k85gj72w48dnsa51u0p6gd
+Precedence: bulk
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Subject: =?ISO-2022-JP?B?GyRCJVolQyVIJHIwJiQ5JGshIjdQMUQ8VE1NGyhC?=
+ =?ISO-2022-JP?B?GyRCJFgbKEI=?=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+Mime-Version: 1.0
+Content-Type: text/plain; charset=iso-2022-jp
+Content-Transfer-Encoding: 7bit
+X-MagazineId: 2w51
+X-uId: 6764245238486059665034691052
+X-Sender: CombzMailSender
+X-Url: http://www.combzmail.jp/
+Message-Id: <20260314014655.A765E188279@r9110.ps.combzmail.jp>
+Date: Sat, 14 Mar 2026 10:46:44 +0900 (JST)
+X-Spamd-Result: default: False [10.85 / 15.00];
+	FUZZY_DENIED(10.51)[1:393dfcef26:1.00:txt];
+	MV_CASE(0.50)[];
 	MAILLIST(-0.15)[generic];
+	BAD_REP_POLICIES(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linux.intel.com,linuxfoundation.org,sang-engineering.com,kernel.org,vger.kernel.org,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34776-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34775-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[j-pet-hotel.jp];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	GREYLIST(0.00)[pass,body];
+	MISSING_XM_UA(0.00)[];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_NONE(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[edwardblair@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[info@j-pet-hotel.jp,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,renesas];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5FB0928B41F
-X-Rspamd-Action: no action
+	R_SPF_ALLOW(0.00)[+ip4:172.234.253.10:c];
+	RCPT_COUNT_ONE(0.00)[1]
+X-Rspamd-Queue-Id: 0DC9228B4AF
+X-Rspamd-Action: add header
 X-Rspamd-Server: lfdr
+X-Spam: Yes
 
-Add a UCSI transport driver for ITE8853/ITE8800-ITE8805 USB Type-C
-controllers, commonly found on ASUS Z690/Z790/X670E motherboards.
+$B!!(B
+$B!!%Z%C%H$r0&$9$k!"7P1D<TMM$X(B
+$B!!(B
+$B!!(B
+$B!!CO0h$G0&8$$r0B?4$7$FMB$1$i$l$k(B
+$B!!%Z%C%H%[%F%k!&%H%j%_%s%0;v6H$r;O$a$^$;$s$+!)(B
+$B!!(B
+$B!!(B
+$B!!"#!!%U%i%s%A%c%$%:%7%9%F%`@bL@2q!!"#(B
+$B!!(B
+$B!!!!!!0&8$2H$N%*!<%J!<B??t!*(B
+$B!!!!!!%Z%C%H%[%F%k!&%H%j%_%s%0%5%m%s(B
+$B!!!!!!!H(BONE LUKE$B!J%o%s%k!<%/!K!I(B
+$B!!(B
+$B!!!!!!"(!V3+6H%Q%C%/!W$r$4MQ0U$7$F$$$k$N$G(B
+$B!!!!!!!!7P83$d;q3J$,L5$/$F$b;O$a$i$l$^$9!#(B
+$B!!(B
+$B!!(B
+$B!!"#!!3+:EJ}<0(B
+$B!!!!!!%*%s%i%$%s!J?=9~8e$K;22CJ}K!$r$40FFb!K(B
+$B!!(B
+$B!!"#!!F|Dx(B
+$B!!!!!!(B3$B7n(B16$BF|!J7n!K(B11:00$B!A(B12:00$B!!;D$j(B1$BOH(B
+$B!!!!!!(B3$B7n(B19$BF|!JLZ!K(B15:00$B!A(B16:00$B!!;D$j(B1$BOH(B
+$B!!!!!!(B3$B7n(B24$BF|!J2P!K(B13:00$B!A(B14:00
 
-These controllers implement the UCSI protocol over I2C with
-ITE-proprietary register offsets and dedicated interrupt registers:
-
-  - CCI at 0x84, MESSAGE_IN at 0x88, CONTROL at 0x98
-  - INT_STATUS at 0xBD, INT_ACK at 0xBC
-  - GPIO interrupt (level-triggered, active-low)
-
-The ITE8853 does not accept PPM_RESET over I2C (the Windows driver
-handles it internally), so the driver intercepts this command and
-returns a synthetic reset-complete response.
-
-Tested on ASUS ROG Strix Z790-E Gaming WiFi with ITE8853 at I2C
-address 0x40 on the DesignWare I2C controller.
-
-Signed-off-by: Edward Blair <edward.blair@gmail.com>
----
- drivers/usb/typec/ucsi/Kconfig    |  11 ++
- drivers/usb/typec/ucsi/Makefile   |   1 +
- drivers/usb/typec/ucsi/ucsi_ite.c | 285 ++++++++++++++++++++++++++++++
- 3 files changed, 297 insertions(+)
- create mode 100644 drivers/usb/typec/ucsi/ucsi_ite.c
-
-diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
-index 87dd992a4..455272b5a 100644
---- a/drivers/usb/typec/ucsi/Kconfig
-+++ b/drivers/usb/typec/ucsi/Kconfig
-@@ -104,4 +104,15 @@ config UCSI_HUAWEI_GAOKUN
- 	  To compile the driver as a module, choose M here: the module will be
- 	  called ucsi_huawei_gaokun.
- 
-+config UCSI_ITE
-+	tristate "UCSI Interface Driver for ITE885x"
-+	depends on I2C
-+	help
-+	  This driver enables UCSI support on platforms that expose an ITE8853
-+	  or ITE8800-ITE8805 USB Type-C controller over I2C, commonly found
-+	  on ASUS Z690/Z790/X670E motherboards.
-+
-+	  To compile the driver as a module, choose M here: the module will be
-+	  called ucsi_ite.
-+
- endif
-diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
-index c7e38bf01..9bc1d6bbb 100644
---- a/drivers/usb/typec/ucsi/Makefile
-+++ b/drivers/usb/typec/ucsi/Makefile
-@@ -28,3 +28,4 @@ obj-$(CONFIG_UCSI_PMIC_GLINK)		+= ucsi_glink.o
- obj-$(CONFIG_CROS_EC_UCSI)		+= cros_ec_ucsi.o
- obj-$(CONFIG_UCSI_LENOVO_YOGA_C630)	+= ucsi_yoga_c630.o
- obj-$(CONFIG_UCSI_HUAWEI_GAOKUN)	+= ucsi_huawei_gaokun.o
-+obj-$(CONFIG_UCSI_ITE)			+= ucsi_ite.o
-diff --git a/drivers/usb/typec/ucsi/ucsi_ite.c b/drivers/usb/typec/ucsi/ucsi_ite.c
-new file mode 100644
-index 000000000..400b844a1
---- /dev/null
-+++ b/drivers/usb/typec/ucsi/ucsi_ite.c
-@@ -0,0 +1,285 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * UCSI I2C transport driver for ITE885x USB-C controllers
-+ *
-+ * ITE8853/ITE8800-ITE8805 are UCSI-compliant USB-C controllers found on
-+ * ASUS Z690/Z790/X670E motherboards. They communicate via I2C with
-+ * ITE-proprietary register offsets and interrupt registers.
-+ *
-+ * Note: Some BIOS implementations declare both MSFT8000 (generic UCSI) and
-+ * ITE8853 (vendor-specific) ACPI devices at the same I2C address. The i2c
-+ * core skips the generic device when a vendor-specific sibling exists,
-+ * allowing this driver to bind to the ITE8853 client with proper IRQ.
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/i2c.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+
-+#include "ucsi.h"
-+
-+/* ITE-specific I2C register offsets */
-+#define ITE_REG_CCI		0x84
-+#define ITE_REG_MESSAGE_IN	0x88
-+#define ITE_REG_CONTROL		0x98
-+#define ITE_REG_INT_ACK		0xbc
-+#define ITE_REG_INT_STATUS	0xbd
-+
-+/* INT_STATUS register bits */
-+#define ITE_INT_VENDOR_ALERT	BIT(0)
-+#define ITE_INT_CCI		BIT(1)
-+
-+/* INT_ACK register values */
-+#define ITE_ACK_VENDOR		0x01
-+#define ITE_ACK_CCI		0x02
-+
-+struct ucsi_ite {
-+	struct device *dev;
-+	struct i2c_client *client;
-+	struct ucsi *ucsi;
-+};
-+
-+static int ucsi_ite_read(struct ucsi_ite *ite, u8 reg, void *val, size_t len)
-+{
-+	struct i2c_msg msgs[] = {
-+		{
-+			.addr = ite->client->addr,
-+			.flags = 0,
-+			.len = 1,
-+			.buf = &reg,
-+		},
-+		{
-+			.addr = ite->client->addr,
-+			.flags = I2C_M_RD,
-+			.len = len,
-+			.buf = val,
-+		},
-+	};
-+	int ret;
-+
-+	ret = i2c_transfer(ite->client->adapter, msgs, ARRAY_SIZE(msgs));
-+	if (ret != ARRAY_SIZE(msgs)) {
-+		dev_err(ite->dev, "i2c read 0x%02x failed: %d\n", reg, ret);
-+		return ret < 0 ? ret : -EIO;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ucsi_ite_write(struct ucsi_ite *ite, u8 reg, const void *val,
-+			  size_t len)
-+{
-+	struct i2c_msg msg = {
-+		.addr = ite->client->addr,
-+		.flags = 0,
-+	};
-+	u8 *buf;
-+	int ret;
-+
-+	buf = kmalloc(len + 1, GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	buf[0] = reg;
-+	memcpy(&buf[1], val, len);
-+	msg.len = len + 1;
-+	msg.buf = buf;
-+
-+	ret = i2c_transfer(ite->client->adapter, &msg, 1);
-+	kfree(buf);
-+	if (ret != 1) {
-+		dev_err(ite->dev, "i2c write 0x%02x failed: %d\n", reg, ret);
-+		return ret < 0 ? ret : -EIO;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ucsi_ite_read_version(struct ucsi *ucsi, u16 *version)
-+{
-+	/*
-+	 * The ITE8853 does not expose a UCSI VERSION register over I2C.
-+	 * The Windows driver never reads it. Report UCSI 1.0.
-+	 */
-+	*version = UCSI_VERSION_1_0;
-+	return 0;
-+}
-+
-+static int ucsi_ite_read_cci(struct ucsi *ucsi, u32 *cci)
-+{
-+	struct ucsi_ite *ite = ucsi_get_drvdata(ucsi);
-+
-+	return ucsi_ite_read(ite, ITE_REG_CCI, cci, sizeof(*cci));
-+}
-+
-+static int ucsi_ite_read_message_in(struct ucsi *ucsi, void *val, size_t len)
-+{
-+	struct ucsi_ite *ite = ucsi_get_drvdata(ucsi);
-+
-+	return ucsi_ite_read(ite, ITE_REG_MESSAGE_IN, val, len);
-+}
-+
-+static int ucsi_ite_async_control(struct ucsi *ucsi, u64 command)
-+{
-+	struct ucsi_ite *ite = ucsi_get_drvdata(ucsi);
-+
-+	return ucsi_ite_write(ite, ITE_REG_CONTROL, &command, sizeof(command));
-+}
-+
-+static int ucsi_ite_sync_control(struct ucsi *ucsi, u64 command, u32 *cci,
-+				 void *data, size_t size)
-+{
-+	/*
-+	 * The ITE8853 handles PPM_RESET internally and does not accept it
-+	 * over I2C — the Windows driver never sends it. Fake a successful
-+	 * reset so the UCSI core can proceed with initialization.
-+	 */
-+	if ((command & 0xff) == UCSI_PPM_RESET) {
-+		if (cci)
-+			*cci = UCSI_CCI_RESET_COMPLETE;
-+		return 0;
-+	}
-+
-+	return ucsi_sync_control_common(ucsi, command, cci, data, size);
-+}
-+
-+static const struct ucsi_operations ucsi_ite_ops = {
-+	.read_version = ucsi_ite_read_version,
-+	.read_cci = ucsi_ite_read_cci,
-+	.poll_cci = ucsi_ite_read_cci,
-+	.read_message_in = ucsi_ite_read_message_in,
-+	.sync_control = ucsi_ite_sync_control,
-+	.async_control = ucsi_ite_async_control,
-+};
-+
-+static irqreturn_t ucsi_ite_irq(int irq, void *data)
-+{
-+	struct ucsi_ite *ite = data;
-+	u8 status;
-+	u32 cci;
-+	u8 ack;
-+	int ret;
-+
-+	ret = ucsi_ite_read(ite, ITE_REG_INT_STATUS, &status, sizeof(status));
-+	if (ret)
-+		return IRQ_NONE;
-+
-+	if (!(status & (ITE_INT_CCI | ITE_INT_VENDOR_ALERT)))
-+		return IRQ_NONE;
-+
-+	if (status & ITE_INT_CCI) {
-+		ack = ITE_ACK_CCI;
-+		ucsi_ite_write(ite, ITE_REG_INT_ACK, &ack, sizeof(ack));
-+
-+		ret = ucsi_ite_read(ite, ITE_REG_CCI, &cci, sizeof(cci));
-+		if (!ret)
-+			ucsi_notify_common(ite->ucsi, cci);
-+	}
-+
-+	if (status & ITE_INT_VENDOR_ALERT) {
-+		ack = ITE_ACK_VENDOR;
-+		ucsi_ite_write(ite, ITE_REG_INT_ACK, &ack, sizeof(ack));
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int ucsi_ite_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	struct ucsi_ite *ite;
-+	int ret;
-+
-+	ite = devm_kzalloc(dev, sizeof(*ite), GFP_KERNEL);
-+	if (!ite)
-+		return -ENOMEM;
-+
-+	ite->dev = dev;
-+	ite->client = client;
-+	i2c_set_clientdata(client, ite);
-+
-+	ite->ucsi = ucsi_create(dev, &ucsi_ite_ops);
-+	if (IS_ERR(ite->ucsi))
-+		return PTR_ERR(ite->ucsi);
-+
-+	ucsi_set_drvdata(ite->ucsi, ite);
-+
-+	ret = request_threaded_irq(client->irq, NULL, ucsi_ite_irq,
-+				   IRQF_ONESHOT, dev_name(dev), ite);
-+	if (ret) {
-+		dev_err(dev, "failed to request IRQ: %d\n", ret);
-+		goto err_destroy;
-+	}
-+
-+	ret = ucsi_register(ite->ucsi);
-+	if (ret) {
-+		dev_err(dev, "failed to register UCSI: %d\n", ret);
-+		goto err_free_irq;
-+	}
-+
-+	return 0;
-+
-+err_free_irq:
-+	free_irq(client->irq, ite);
-+err_destroy:
-+	ucsi_destroy(ite->ucsi);
-+	return ret;
-+}
-+
-+static void ucsi_ite_remove(struct i2c_client *client)
-+{
-+	struct ucsi_ite *ite = i2c_get_clientdata(client);
-+
-+	ucsi_unregister(ite->ucsi);
-+	free_irq(client->irq, ite);
-+	ucsi_destroy(ite->ucsi);
-+}
-+
-+static int ucsi_ite_suspend(struct device *dev)
-+{
-+	struct ucsi_ite *ite = dev_get_drvdata(dev);
-+
-+	disable_irq(ite->client->irq);
-+
-+	return 0;
-+}
-+
-+static int ucsi_ite_resume(struct device *dev)
-+{
-+	struct ucsi_ite *ite = dev_get_drvdata(dev);
-+
-+	enable_irq(ite->client->irq);
-+
-+	return ucsi_resume(ite->ucsi);
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(ucsi_ite_pm, ucsi_ite_suspend,
-+				ucsi_ite_resume);
-+
-+static const struct acpi_device_id ucsi_ite_acpi_ids[] = {
-+	{ "ITE8853" },
-+	{ "ITE8800" },
-+	{ "ITE8801" },
-+	{ "ITE8802" },
-+	{ "ITE8803" },
-+	{ "ITE8804" },
-+	{ "ITE8805" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(acpi, ucsi_ite_acpi_ids);
-+
-+static struct i2c_driver ucsi_ite_driver = {
-+	.driver = {
-+		.name = "ucsi_ite",
-+		.acpi_match_table = ucsi_ite_acpi_ids,
-+		.pm = pm_sleep_ptr(&ucsi_ite_pm),
-+	},
-+	.probe = ucsi_ite_probe,
-+	.remove = ucsi_ite_remove,
-+};
-+module_i2c_driver(ucsi_ite_driver);
-+
-+MODULE_AUTHOR("Edward Blair <edward.blair@gmail.com>");
-+MODULE_DESCRIPTION("UCSI I2C transport driver for ITE885x USB-C controllers");
-+MODULE_LICENSE("GPL");
--- 
-2.53.0
-
+$B!!"#!!Dj0w(B
+$B!!!!!!(B5$BL>(B
+$B!!(B
+$B!!"#!!;22C?=9~$O$3$A$i(B
+$B!!!!!!(Bhttps://oneluke-fc-seminar.jp/lp/
+$B!!(B
+$B!!(B
+$B!!$*@$OC$K$J$j$^$9!#(B
+$B!!(B
+$B!!$3$NEY$O!"%Z%C%H%[%F%k!&%H%j%_%s%0%5%m%s$N(B
+$B!!%U%i%A%c%$%:;v6H@bL@2q$N3+:E$r$40FFb$$$?$7$^$9!#(B
+$B!!(B
+$B!!%Z%C%H%[%F%k$H%H%j%_%s%0%5!<%S%9$rDs6!$9$k(B
+$B!!(B
+$B!!(BONE LUKE$B!J%o%s%k!<%/!K(B
+$B!!(B
+$B!!$O!"%o%s$A$c$s$,9%$-$9$.$kAO6H<T$,<B:]$K(B
+$B!!%Z%C%H%[%F%k$KMB$1$?$H$-$K46$8$?IT0B$d(B
+$B!!;W$C$?$3$H$r;\@_$E$/$j$K3h$+$7$F$$$^$9!#(B
+$B!!(B
+$B!!(B
+$B!!Nc$($P%o%s$A$c$s$,Gq$^$k$H$-$K!">/$7$G$b(B
+$B!!9-$/!"?4CO$h$/2a$4$7$FM_$7$$$H$$$&;W$$$+$i!"(B
+$B!!E4$N%2!<%8$G$O$J$/%*!<%@!<$G?&?M$5$s$K(B
+$B!!!V$*It20!W$r$D$/$C$F$$$?$@$$$F$$$^$9!#(B
+$B!!!!(B
+$B!!$=$&$7$?0&8$2HL\@~$N$-$a:Y$+$$%5!<%S%9$,;Y;}$5$l!"(B
+$B!!%o%s%k!<%/$rMxMQ$7$?J}$O9b$$3NN($G%j%T!<%H$7$F$/$l$^$9!#(B
+$B!!(B
+$B!!(B
+$B!!F|K\$G$O$$$^$d!V(B8$B@$BS$K(B1$B@$BS!W$,%Z%C%H$r;t$&$^$G$K(B
+$B!!A}$($F$-$^$7$?$,!"%Z%C%H%[%F%k$O$^$@$^$@E9J^?t$,(B
+$B!!B-$j$F$$$J$$$?$a!":#8e$b@.D9$,4|BT$G$-$^$9!#(B
+$B!!(B
+$B!!(B
+$B!!$3$3$^$G$3$NJ8>O$rFI$^$l$?$H$$$&$3$H$O!"(B
+$B!!$"$J$?$b%o%s$A$c$s$,Bg9%$-$J$N$G$O$J$$$G$7$g$&$+!#(B
+$B!!(B
+$B!!%o%s%k!<%/$N(BFC$B%*!<%J!<MM$b0&8$2H$,B?$/!"Cf$K$O(B
+$B!!$4<+?H$,MxMQ<T$@$C$?!"$H$$$&J}$b$$$i$C$7$c$$$^$9!#(B
+$B!!(B
+$B!!(B
+$B!!@bL@2q$K$F>\$7$$%S%8%M%9%b%G%k$r$*EA$($7$^$9$N$G!"(B
+$B!!?75,;v6H$rC5$7$F$$$k0&8$2H$N7P1D<TMM$O(B
+$B!!$3$N5!2q$K$<$R$4;22C$/$@$5$$!#(B
+$B!!(B
+$B!!(B
+$B!!CO0h$N%Z%C%H%i%$%U$rK-$+$K$7!"0&8$$,0B?4$7$F(B
+$B!!2a$4$;$k6u4V$r0l=o$K$D$/$C$F$$$-$^$7$g$&!#(B
+$B!!(B
+$B!!(B
+$B!!"#!!%U%i%s%A%c%$%:%7%9%F%`@bL@2q!!"#(B
+$B!!(B
+$B!!!!!!0&8$2H$N%*!<%J!<B??t!*(B
+$B!!!!!!%Z%C%H%[%F%k!&%H%j%_%s%0%5%m%s(B
+$B!!!!!!!H(BONE LUKE$B!J%o%s%k!<%/!K!I(B
+$B!!(B
+$B!!"#!!;22C?=9~$O$3$A$i(B
+$B!!!!!!(Bhttps://oneluke-fc-seminar.jp/lp/
+$B!!(B
+***********************************************************************
+$BK\%a!<%k$N$4ITMW$JJ}$K$OBgJQ$4LBOG$r$*$+$1$$$?$7$^$7$?!#(B
+$B$*<j?t$*3]$1$7$^$9$,!"%a!<%kITMW$N$*<jB3$-$O(B
+$B2<5-(BURL$B$h$j$*4j$$$$$?$7$^$9!#(B
+<$B%a!<%kDd;_%U%)!<%`(B>
+$B!!(Bhttps://oneluke-fc-seminar.jp/mail/
+***********************************************************************
+$BF|K\%Z%C%H%[%F%k6(2q3t<02q<R(B
+$B0&CN8)L>8E20;T@i<o6hFb;3(B3$BCzL\(B9-23 3F
+TEL:052-784-8416
+***********************************************************************
 
