@@ -1,150 +1,200 @@
-Return-Path: <linux-usb+bounces-34777-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34778-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 5GrHNdLJtGnLswAAu9opvQ
-	(envelope-from <linux-usb+bounces-34777-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 03:37:06 +0100
+	id c06jLFXKtGnqswAAu9opvQ
+	(envelope-from <linux-usb+bounces-34778-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 03:39:17 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16D1228B672
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 03:37:05 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0073128B6E3
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 03:39:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E72023049519
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 02:37:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EA7203049450
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 02:39:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBBA42868AB;
-	Sat, 14 Mar 2026 02:37:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E4682C11C6;
+	Sat, 14 Mar 2026 02:39:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="WGHFCBSB"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="HNvlh03P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 106C31CDFD5
-	for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 02:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC4931EA7CE
+	for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 02:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773455822; cv=none; b=kfE7VgjnaZn0/tOzPToX/CkCr8Qt9nF0TkGB2Rl4ollFPdckEMtx21NfQhWf7K713sUIOlvkZcUGC65ufW+PoMPOg8hajh4LNMvhBSQ8KwVMMTQJNYcMD2P8gFSBIuL4oR+oXdyD7Z1ldtbs+UZmsFEJ8dU1n6N0gDRclfiewRI=
+	t=1773455952; cv=none; b=SgOH+LhPUq0xcxvndDQIHZ0WynuwrRGlGgUJPasyxBUScrJ2q7q3VxGk0Dr22qheyhGKLfvFHGCM0LI9+/UmNy9gvrJmWctuoxiOHg+9/sK3lmNLs1u/M2N7Vq01aPRm4Cr3wqRpD/aDJlY14OniVbQ3K8XTX7dLc0W0Dzh6rJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773455822; c=relaxed/simple;
-	bh=L7333wQLIVpp/u8HyBiA6yKo3VZoFLhYgxtocKGAhHs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=iUhcM8hxalhm4peyeNQQdJ+3wnWguW2tUWL2CWFYsYoiQuNXVR8RBmeAIr3Wc2EW3TRqUMN+gokPS68shiCTetPiUjli6nGF9GdDCzQ2dLoR1PQ1Il+cSATogWuLiiFe/Oo6H3YwbYNlWnWnU4Jrb6LXPhtvNfHpLGtGFPgClZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=WGHFCBSB; arc=none smtp.client-ip=113.46.200.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
-dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=hpjU/ybfSttR1uMZDy/u0ekVYor0pikJhgzdjib27Cg=;
-	b=WGHFCBSBvddPOic5Ogh7caoS1yZnSckUrU7sEPa37RP8iQwXIWbHvaVbEjBeRwX8cRc+8nSOR
-	6BktHql48hrF2l5U8mIGKHGu7LnSUJ1Do1KTrMlZ5L28rXgz7iCy1PbDMB1sS0OJzotI0UkRpfk
-	T+NscaoDVFlPiLZc+/D6hD8=
-Received: from mail.maildlp.com (unknown [172.19.163.15])
-	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fXljn5FS9zKm5G;
-	Sat, 14 Mar 2026 10:31:57 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 58CFA40539;
-	Sat, 14 Mar 2026 10:36:55 +0800 (CST)
-Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Sat, 14 Mar 2026 10:36:55 +0800
-Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
- (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Sat, 14 Mar
- 2026 10:36:54 +0800
-Message-ID: <53c62981-4953-44b1-b388-af9115a743ed@huawei.com>
-Date: Sat, 14 Mar 2026 10:36:54 +0800
+	s=arc-20240116; t=1773455952; c=relaxed/simple;
+	bh=iAFwW0+Dqe5WDWO/St9XPZhC3WybGrnythe/TIQUs9s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HwkkW9EomRINsLAPndpOMclWk5Jt3+GpX4Ag0enrAnvAcGGCgPXy4lAuv/xqMWrr5PMPXPERyy6LLSK1EiF/3PIieCNsZWFMaH1mOvuPOjDZzbkvUEuS3RwIGmcAZO3gnf96BqC5PCStL45ulJyn5rt7OSQmvswOgysKLDFT5v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=HNvlh03P; arc=none smtp.client-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-899e43ae2e1so23079866d6.2
+        for <linux-usb@vger.kernel.org>; Fri, 13 Mar 2026 19:39:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1773455950; x=1774060750; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3bJkKTDd6EcfFvOioQe6tJ3V9zVThg/LnBtoWdSKalM=;
+        b=HNvlh03PL7wK2GAAw+uFdxDbCowmAKyUKIFQl+RbnjmnyqOT04Vs7hNt2apnx3Q9Sh
+         y5/EHZxYPcKjx2CQpi9Dpy6cilo056IuTAcYuyn8PUO+dclK0AKza0lrvwmSkYMTufVd
+         JT4aF6QDUyyzQgOuxkJyxEpAgZNbZUPD34nznIoyR+B+a/rtK7fCGJr1e4HdGdOoMB9q
+         6xm/V8z+kvXN7Gl/RdSfBa4DcKjxvwlWDA4JFQ5OF5HIMrmTnK2Sh3/SwgGBcZr9QxAs
+         b1BMqpMJOZE7mjP428UeOpX2dbkBrT8rcxCsX0NhMe/HWBbMyAyDCMvYBOipbMnNBtud
+         3jcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773455950; x=1774060750;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3bJkKTDd6EcfFvOioQe6tJ3V9zVThg/LnBtoWdSKalM=;
+        b=V40/dp497avVQXpBrxyCH8gMqSxY7XLO7DxQVSWTwe5dw7yCEVPiGIqzzjFGTY4Xng
+         oWE+CDdpghLFc5fqGrYzgj/KROMcPswRUD8NBKT6f6PLywEy8mG9bKs/JBfj2BHqwfET
+         sU+MaC3aGnChWtaxb6uB6EsBlBDk1ezqtYbYTaab4JjyBrLY8Tr7rWY/FbpKsFpVpZ9y
+         LLjd+DlOiOdnBYEM9Wgt3jn7sZGTq2yTLd/QmA49WJDuZ+zMgPjZaqSJnoBxG93sXkri
+         JBTDooIh64m1e38tvq4o/Mijv20E1AnatmsRrZ0BC8tCZ+7b1NMctLkYxB5lPLQrNh7Y
+         ylcg==
+X-Forwarded-Encrypted: i=1; AJvYcCVReU8Fk4pCyAzo4p2KCagFB9ZzwM+Jze9MWhsf+7CfBVWTAluMVU9Z++iIA1ui/BaGGjcu+ZlX1pA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6t+8T9Cq7RXxvlmnqlssNdBOfI5bdY7fT122ble8AtewbVNgZ
+	XljWG4mAqv/x29z3M639fY6Ov6hJCvfsAz03yznOM78ctMJfLdkalr0/Mfhc6FRRfw==
+X-Gm-Gg: ATEYQzz7pyPbPoYflfS9xjUQ7bTz+O+ukSGzpVUICqMTwCI8QJaBZ9B/5HX+gIFurHQ
+	P/vuxyUo2ys7UnMimbCemr2rwKBfAF5XH0+uZ9bQwa2JP3O4Nko51pSjK+KJmqpERzcs5jLtjUT
+	BH7aO6cjPTSwdnZ1qAX5n4RipuWUxp2W+tudTBdP0yVU85kuS+kGdQLqbfPozUjI7BYIhQz3Oha
+	/ctcAELI8GV66ZggMkYVrxs1z3etTEvt98oW1erWTcD5oWX0KLQfSVO4/nAj3pTZ5aiiRqAtLmi
+	vXLAw4DJzveW1+LerV7spv/ZAvL6yzjUggcRUlFBjdFFsr0p6Y56OcwGN7A4RkYmaOH+2MBVhJM
+	nRm9czSwVf6bVE95qUYG+gOJC+i5+Hm3OS/4RsxpTDdJZBHtppw+9wrN+wzcRKlfD4lf9NfkEOI
+	7fJl4Q7kcHQHUOilqUh7F0C1uo
+X-Received: by 2002:ad4:5769:0:b0:899:f691:fd3a with SMTP id 6a1803df08f44-89a81d87083mr82232456d6.27.1773455949534;
+        Fri, 13 Mar 2026 19:39:09 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d01:d210::687c])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a65beb4b3sm70313456d6.14.2026.03.13.19.39.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Mar 2026 19:39:08 -0700 (PDT)
+Date: Fri, 13 Mar 2026 22:39:06 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Oliver Neukum <oneukum@suse.com>, Michal Pecio <michal.pecio@gmail.com>,
+	=?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+	USB list <linux-usb@vger.kernel.org>
+Subject: Re: correctly handling EPROTO
+Message-ID: <a6934c14-aeb5-40d0-865c-14199943e2a2@rowland.harvard.edu>
+References: <261996a8-7ad4-4df2-a469-f6602da71255@suse.com>
+ <4f85311c-bdfe-46a4-a310-4a74a3c56b3e@rowland.harvard.edu>
+ <64dc9c5d-d662-41e3-898f-71587b940a2c@suse.com>
+ <20260313085354.71a6dbf1.michal.pecio@gmail.com>
+ <12567c7d-0a17-46a0-8acf-3158c2d9011a@suse.com>
+ <9da0ac4f-12bf-4270-af6f-e08b5a89611b@rowland.harvard.edu>
+ <20260313224528.dp6utjqzbdguwlbf@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: xhci: use BIT macro
-To: Oliver Neukum <oneukum@suse.com>, <mathias.nyman@intel.com>,
-	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>
-References: <20260312150649.2138749-1-oneukum@suse.com>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20260312150649.2138749-1-oneukum@suse.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemn100009.china.huawei.com (7.202.194.112)
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),quarantine];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260313224528.dp6utjqzbdguwlbf@synopsys.com>
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
-	R_DKIM_ALLOW(-0.20)[h-partners.com:s=dkim];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[h-partners.com:+];
-	RCPT_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-34777-lists,linux-usb=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lihuisong@huawei.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[suse.com,gmail.com,mork.no,vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_ALL(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34778-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 16D1228B672
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,rowland.harvard.edu:dkim,rowland.harvard.edu:mid]
+X-Rspamd-Queue-Id: 0073128B6E3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Change below comment, then can add
-Acked-by: lihuisong@huawei.com
+On Fri, Mar 13, 2026 at 10:45:32PM +0000, Thinh Nguyen wrote:
+> On Fri, Mar 13, 2026, Alan Stern wrote:
+> > On Fri, Mar 13, 2026 at 11:33:48AM +0100, Oliver Neukum wrote:
+> > > On 13.03.26 08:53, Michal Pecio wrote:
+> > > 
+> > > There are also these pesky software systems where a perpetual immediate
+> > > retry causes a livelock.
+> > 
+> > Yes, we need to avoid this.
+> > 
+> 
+> This can be handled by the class driver (e.g. fall back to port reset
+> after 3 retry failures in a row).
 
+Part of what we are discussing is how to carry out a retry.  It seems 
+that the most general approach is to unlink all pending URBs for the 
+endpoint, wait for them to complete, call usb_clear_halt(), and then 
+resubmit everything.
 
-On 3/12/2026 11:06 PM, Oliver Neukum wrote:
-> We have the macro. Use it.
->
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> ---
->   drivers/usb/host/xhci.h | 123 ++++++++++++++++++++--------------------
->   1 file changed, 62 insertions(+), 61 deletions(-)
-<...>
->   /* imod bitmasks */
->   /*
-> @@ -267,7 +268,7 @@ struct xhci_intr_reg {
->    * bit 3 - Event Handler Busy (EHB), whether the event ring is scheduled to be serviced by
->    * a work queue (or delayed service routine)?
->    */
-> -#define ERST_EHB		(1 << 3)
-> +#define ERST_EHB		BIT(3)
->   /* bits 63:4 - Event Ring Dequeue Pointer */
->   #define ERST_PTR_MASK		GENMASK_ULL(63, 4)
->   
-> @@ -356,15 +357,15 @@ struct xhci_slot_ctx {
->   #define GET_DEV_SPEED(n) (((n) & DEV_SPEED) >> 20)
->   /* bit 24 reserved */
->   /* Is this LS/FS device connected through a HS hub? - bit 25 */
-> -#define DEV_MTT		(0x1 << 25)
-> +#define DEV_MTT		BIT(25)
->   /* Set if the device is a hub - bit 26 */
-> -#define DEV_HUB		(0x1 << 26)
-> +#define DEV_HUB		BIT(26)
->   /* Index of the last valid endpoint context in this device context - 27:31 */
-> -#define LAST_CTX_MASK	(0x1f << 27)
-> +#define LAST_CTX_MASK	BIT(27)
-here is wrong.
->   #define LAST_CTX(p)	((p) << 27)
->   #define LAST_CTX_TO_EP_NUM(p)	(((p) >> 27) - 1)
-> -#define SLOT_FLAG	(1 << 0)
-> -#define EP0_FLAG	(1 << 1)
-> +#define SLOT_FLAG	BIT(0)
-> +#define EP0_FLAG	BIT(1)
->   
+And of course, isochronous transfers are never retried, by definition.
 
+> > I tend to group transaction-level errors like EPROTO into three 
+> > categories:
+> > 
+> > 	1. Device has been unplugged, hub will notify us soon;
+> > 
+> > 	2. Unrecoverable device problem, needs reset or power cycle;
+> > 
+> > 	3. Short term problem (cable issue, EMI, system load).
+> > 
+> > Retrying makes sense for 3 but not for 1 or 2.  Unfortunately we can't 
+> > tell which category a particular fault lies in.
+> 
+> There's no need to distinquish them if we have a proper fallback
+> recovery (such as reset/power cycle) should retry failed as noted above. 
+
+Yes.  Still, that's a fair amount of logic to add into every device 
+driver.  We should be able to centralize it somehow.
+
+Also, just to make things more difficult, these errors are reported in 
+atomic context but the recovery procedure has to happen in process 
+context.  Which means there has to be a way to cancel the recovery 
+procedure if it's in progress when the driver is unbound.
+
+> Just want to give my 2-cent here: I experimented and have seen Windows
+> drivers do retry for MSC (particularly for UASP devices), and it works
+> well.
+> 
+> The retry is not specifically at the failed URB. It's a retry of the
+> UASP command where the data block offset is specified, and the entire
+> transfer is resent.
+
+Right.  usb-storage and uas rely on the SCSI layer to retry failed 
+commands; we don't need to worry about them.
+
+> This will probably not work for application with isoc endpoints where
+> timing is critical or application without certain synchronization
+> protocol in its transfer header.
+
+Because the host and the device may disagree about whether the last 
+transaction was received.  USB-2 would handle this okay if we skip the 
+usb_clear_halt() step, but I'm not so sure that xHCI controllers will 
+allow it to be skipped.
+
+Alan Stern
 
