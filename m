@@ -1,179 +1,119 @@
-Return-Path: <linux-usb+bounces-34801-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34802-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gKeoKvmPtWk42AAAu9opvQ
-	(envelope-from <linux-usb+bounces-34801-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 17:42:33 +0100
+	id CL83GsWVtWnL2AAAu9opvQ
+	(envelope-from <linux-usb+bounces-34802-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 18:07:17 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EF7328DF4C
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 17:42:33 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2E7228E127
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 18:07:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C1D4D30330AD
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 16:42:20 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8084830101F3
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 17:07:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2538314B62;
-	Sat, 14 Mar 2026 16:42:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="e3davlIR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750DC3264FD;
+	Sat, 14 Mar 2026 17:07:06 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB2C192D97
-	for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 16:42:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5983E32E121
+	for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 17:07:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773506538; cv=none; b=nnX0rnJ9gntD5/8vEv+IA4L7Y3Do8svomIQTY9UZ7tSO7rWZepmFoOTt4y0DOwJF18aNCxW4FNsIxZKWp0nX3DvFLiPKxQctgobIYnpwZ+naYP41yklbUipkgNoDlxvbqrh7YfDTKfB3CrAdfkYJVxh6U3blwPVJHZDoFR0zQaM=
+	t=1773508026; cv=none; b=Z0plAjjS1rfDsU603VXinMddg3isbcI6wamq0TZAZgthj9skVK+a4EJP4bCSWkz5HNc9yBF+H0n4ZtSwT72JEH00QC/oysz1kHdvfJsefY004mHs60wm3zmjqXuiJ3YpxzmC7E4AJe5iTHjze88yIgA6qUGnfKs6ZHbnovaNVWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773506538; c=relaxed/simple;
-	bh=aNW/SvQsvqoGJXuSokC/EAS8h/o0sai/yUenLTWBtuI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OYIWMUfDw8UPOPjzg40ovs49t+jS6w5ouFgFk1GXHOX/HHdH+Db69PJUa5q+4ppo2PAn1Fg83Fa5QgVHVBHfSzN0X66W9w7n68uued6XP9Kf2rHgrsp9bnGqVR9+80c9LuKmdYXbv9MsFZQJFWNSWgrjGUI5CaxL5dkW8EqlrrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=e3davlIR; arc=none smtp.client-ip=209.85.160.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-50919fc3a14so37637961cf.2
-        for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 09:42:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1773506536; x=1774111336; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fy06hteiKF+m/zJToPVb5WypJzO6ZJ0i6MwB/Wn9jNc=;
-        b=e3davlIRw0vtox+jEw4C8706Ik5YbO47J3vuOHlPL7W1WTDDVt0DMVWcaBlJmJ+XX/
-         bQQd8pj4HJxzEeg7vSCT9eB4Pkq9z/j0ExiS4Q+vETE6yDUfAhnkRfLDN+3ILB3zGwV7
-         c0tWI4xOnJDYNr7Oc6zVu2d+Xs+RKqSUhIOGQuwobJtC2lzylZVT8KJU+TAAuTf6oMB5
-         TG7LSlr2meFEcqSfyyF1HKXS7W8h9JXbiZZjB5COmIRSpastB8EgwNX4FbDPgqNh+FuU
-         uh+BPIgLVnjgo2EFljrIkWv6c+Q9xoGjOqYDunUL0MuqwZtcn7/saY827ProkHMQ2Jts
-         VdCw==
+	s=arc-20240116; t=1773508026; c=relaxed/simple;
+	bh=dMcpKmkbhCGD3O393x0HpDYI/LRBdOlqzxphYpqCFoU=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=V1V38+DVTYZZ3EvyHGlz3s1nmLuPybO7W9YZ9P5/alyeEkT3H71pAw61p0VuepyWKVfrIk9EFPWpXZtPLX4jYBY3Xx2lpI1uMjAo3O9e0+NRrQNr40I+9zW81VRDneYLzB0SwtYd2mpXSntL3+6BzAViGNCa86w+WM0AhoyCM/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-66308f16ea1so39246711eaf.2
+        for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 10:07:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773506536; x=1774111336;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fy06hteiKF+m/zJToPVb5WypJzO6ZJ0i6MwB/Wn9jNc=;
-        b=RVXVbA+VS0up9lykynE92fy8rI4f7ijjLRqsmuXh23BdzTLsOx/8oJiu5kw9a6ML8n
-         cz0Ksg2DwKFC926A+FZ1TVnBW7nszx1QAV2YxGSaIKty3Cxcm0QuFH5YYydKjAxJcz75
-         D253EwIPFR4XFS5ciE3umzBTEvxjBCfNP6xzQNMEktfuKAAGEc4dhft33Tvd/FW+zBGH
-         fAnu7doXRfjMZdpaYPFf7ykRDW4dYFIofowxAK1Vinha5HAjDmboP0XzMP9fzcJtrvYn
-         I3CAVg9WA2JDANVISXq+kotrtj4Xii8s7J+s/WdKj1kg0ipQeh9Rz6ora+oQ0uMzaihr
-         KV3g==
-X-Forwarded-Encrypted: i=1; AJvYcCWUrE/sz8tg7hKf+y9xFeJnRHBWk80JuOEnGsAWxQl8y626shSaYY3GbpXHDSqIozscdLucgSG4NJs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPmfexf5FMgiJbAia/Wf4kYnoczv+3W3K/pz3IMRwd+AhoN15T
-	bKIq71Nz5z7YIvvivT9ysRROhUSLEkpUK1mhZHsCYyrBVrBSG1ayikzEC2gEHq9BDQ==
-X-Gm-Gg: ATEYQzwKspVSbbVhlBqkf2jY81p+tcyiOrK5gwJ87twwBGArI6XnZ1hfx5JPbyBQ5pX
-	7eMsEgNfUN1g/Dd3o/HFBK5JUDx9pSYuqRoYqLOT6w1D13xA08a8NX/FM9fLJWVfNOzgQ4MJIso
-	OWmRUZEqiB/Kqed8l6w6Eq+o8B94lJrTJSyRdqLDRcl4iPtpTqwRVB4jitINKP4xeNoHYOxIA8+
-	EHBJaMwG1nYEpHSoLYRZfZuGYLtBBJpA/qufCJ0c6n3ocbBcz0TrJuZFr6yL8Ep/GH1X+UhO7kT
-	KPVnJNKaBAb5H42Fu1ELyNUT60p5qqIy5kOsmxa9hAKQFZOgT0sakQuvnc39mI1wv0C0XLGl2RL
-	ltKepYBVohlKoaQrzKQnDSef7PvQIaB6f1GXBrdABSfcAD3mfF2HH30HixkAmVDq3Wdq3HQXwqd
-	5tQNlgvsCY3eDn4bFICWpZKQAg
-X-Received: by 2002:a05:622a:93:b0:509:4b11:6cf4 with SMTP id d75a77b69052e-50957d51ef9mr100259131cf.5.1773506535458;
-        Sat, 14 Mar 2026 09:42:15 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::687c])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5093a14791dsm81733201cf.31.2026.03.14.09.42.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Mar 2026 09:42:14 -0700 (PDT)
-Date: Sat, 14 Mar 2026 12:42:11 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: syzbot <syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] general protection fault in usb_gadget_udc_reset
- (4)
-Message-ID: <041e5d18-6120-48dd-b137-e10020f0c191@rowland.harvard.edu>
-References: <ed831d20-3d7c-41a1-8710-f1aa5b39877f@rowland.harvard.edu>
- <69b48162.050a0220.36eb34.000f.GAE@google.com>
+        d=1e100.net; s=20251104; t=1773508023; x=1774112823;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zkEhXUpb0+5hL/MNQX2ikDwmXrwhTY9l+Zp71GR65iw=;
+        b=L79ZC/ZKhqk4U5r50l8+Fi4SdaaXM18uhM1IFa9nvSTy6eOqzhIS51A7E1nb1IbEdM
+         TxPN+uNc/J5WEJHpXc/b33kThBZgHyBfVjDmMHWST9F3Y1K0pnj7WutFx1gVeX9hdSAn
+         6u4dr04se8xkH1I47ZjgbZNSj6lvUs6LAH0qyNaMNd9jO6h9BRb3dpbDcVOG3pZydcjW
+         aziKj2oZeEATYY29KmjG+KXEeU4cvU0e8d832NcqucYJjsXIsQAhUpPN6yBWo2YjSpBz
+         3+qB/3Vi4BgIh03KPsKBD/PWCkjKMHICYaGq/Uj3b339+AWlDgBsWSz4QFL5OMGb2HPm
+         BPSw==
+X-Forwarded-Encrypted: i=1; AJvYcCUnchx8/2jBL13ywK3tJUo8KQKLbGLZzx/nhPT+jvg6RQGBMfGORgU6k2YsYd13CCRMoXhrPiZJLbk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhW54lFGMeqcgOMfamax4maWnpU5OtR6Ci1achpUwIP6RlB++c
+	RFTpMmBx2WUgE3FndHzFca7oSitrk9CeYrVLJo/hwHSoVBOgihZt77cd3xgrMiG3W4ORd8iP8NZ
+	nT3Nb91+KXEDuXq0kZmMUiCKkOaw4+2LwrGRUw5fxNfV+KZ1I9Ca0ekjYmMw=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69b48162.050a0220.36eb34.000f.GAE@google.com>
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692];
+X-Received: by 2002:a05:6820:180c:b0:679:e9c1:a91b with SMTP id
+ 006d021491bc7-67bda9c03d9mr5021899eaf.22.1773508023468; Sat, 14 Mar 2026
+ 10:07:03 -0700 (PDT)
+Date: Sat, 14 Mar 2026 10:07:03 -0700
+In-Reply-To: <041e5d18-6120-48dd-b137-e10020f0c191@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69b595b7.a00a0220.3b25d1.0017.GAE@google.com>
+Subject: Re: [syzbot] [usb?] general protection fault in usb_gadget_udc_reset (4)
+From: syzbot <syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [-0.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[appspotmail.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,syzkaller.appspot.com:url,rowland.harvard.edu:dkim,rowland.harvard.edu:mid];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34801-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34802-lists,linux-usb=lfdr.de,19bed92c97bee999e5db];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_COUNT_THREE(0.00)[4];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,19bed92c97bee999e5db];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_RCPT(0.00)[linux-usb];
 	SUBJECT_HAS_QUESTION(0.00)[]
-X-Rspamd-Queue-Id: 4EF7328DF4C
+X-Rspamd-Queue-Id: E2E7228E127
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, Mar 13, 2026 at 02:28:02PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-> 
-> Reported-by: syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com
-> Tested-by: syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         65169048 Merge tag 'spi-fix-v7.0-rc2' of git://git.ker..
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14ab954a580000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692
-> dashboard link: https://syzkaller.appspot.com/bug?extid=19bed92c97bee999e5db
-> compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=113b1602580000
-> 
-> Note: testing is done by a robot and is best-effort only.
+Hello,
 
-Just out of curiosity, let's see if this test crashes with only the 
-second change (moving stop_activity()) and not the first (moving the 
-synchronize_irq() emulation).
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Alan Stern
+Reported-by: syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com
+Tested-by: syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com
 
-#syz test: upstream 651690480a96
+Tested on:
 
-Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
-+++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
-@@ -462,8 +462,13 @@ static void set_link_state(struct dummy_
- 
- 		/* Report reset and disconnect events to the driver */
- 		if (dum->ints_enabled && (disconnect || reset)) {
--			stop_activity(dum);
- 			++dum->callback_usage;
-+			/*
-+			 * stop_activity() can drop dum->lock, so it must
-+			 * must not come between the dum->ints_enabled test
-+			 * and the ++dum->callback_usage.
-+			 */
-+			stop_activity(dum);
- 			spin_unlock(&dum->lock);
- 			if (reset)
- 				usb_gadget_udc_reset(&dum->gadget, dum->driver);
- 
+commit:         65169048 Merge tag 'spi-fix-v7.0-rc2' of git://git.ker..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=141f18ba580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692
+dashboard link: https://syzkaller.appspot.com/bug?extid=19bed92c97bee999e5db
+compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=169b5d52580000
+
+Note: testing is done by a robot and is best-effort only.
 
