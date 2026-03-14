@@ -1,128 +1,266 @@
-Return-Path: <linux-usb+bounces-34805-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34806-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +CUaIqO3tWkj4AAAu9opvQ
-	(envelope-from <linux-usb+bounces-34805-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 20:31:47 +0100
+	id uHO+FenUtWm15gAAu9opvQ
+	(envelope-from <linux-usb+bounces-34806-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 22:36:41 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E04C228E9D0
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 20:31:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id F228628F080
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 22:36:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4E431303DD2F
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 19:30:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9E9D330420B6
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 21:36:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4313B26E711;
-	Sat, 14 Mar 2026 19:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A895386569;
+	Sat, 14 Mar 2026 21:35:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="awA7/CRV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CIClaUQE"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3CFCA52;
-	Sat, 14 Mar 2026 19:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F0945BE3;
+	Sat, 14 Mar 2026 21:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773516626; cv=none; b=sT03K8yZpN99jV+lSKlR3rF15awiNfvEye4Nl4WXf4jPgyx2LmooWxlVNPj1ht5Bch4P0woUv2GmZ19fTMjiNs1WiSiEQg6/ErUX/REUL8VZViTLCjY4HqpNdbSxUvpdcQjIlW5WoTO819+hfu/EkEW8mBZoE5iI3SRFdsIvtEo=
+	t=1773524158; cv=none; b=EXU1ySxFC2c/z5R4Yw83q3/xuIfx+Nj9NTZGKGTS03I9ld4yJgp1mEsZgFIvPdGe3OLwfxZk4k/tkxUtJJA1HVQTfVJdz1o1fare2GvxdGZIzTaBYkTxuKRSonBPApSFU4UoBajd3Bue0wxndCNAuB+sC08XEtKYnSoCGyTPIrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773516626; c=relaxed/simple;
-	bh=NP3yDX6TTmPwo9gNyddq2g/G3iG+qUKfAPqrrzT+xKU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=XpFbJQZe43PBlSkQsikbG78UN/BJ+hsK99XSDgLjvXVdfSZOPKulreUP+qmi7YJpZcCMB5pwMXAx2/60gmcl9L3HIgcHyWekjrejE/i9ZMIRRWZsG6P387hDLyqBNk3Oy6BPTU4ecT6KSN3qiB8vBq2LZDXzBW+6SL9Xv/G/lwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=awA7/CRV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74490C116C6;
-	Sat, 14 Mar 2026 19:30:26 +0000 (UTC)
+	s=arc-20240116; t=1773524158; c=relaxed/simple;
+	bh=f00uJrynLNBeq1fp8KKlN/A/GMn2B9ae1DulfzNwyPQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DVWlxdHcGiQWFxBIon9df67Ps1GY++PQZkz6kkd2g/CfT1TVrPJRwTU6o5H4KsHV7WR8tqi/i2SALlGli7LDIGbjkW3h6B2prqeQvszpJgV5I4jplz/8llx4O31+GwPWyGD3WQ2I7pYsNRCG382LOYqqVu4/GlxGcN8hdwC+B5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CIClaUQE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 69E33C116C6;
+	Sat, 14 Mar 2026 21:35:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773516626;
-	bh=NP3yDX6TTmPwo9gNyddq2g/G3iG+qUKfAPqrrzT+xKU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=awA7/CRVhFBgmwdfaLaCIHiTfQx4G5sqI9ZJdD8AR64hhVNSCjesCBd9OwTblAlXH
-	 /u8oRjZ5zN1TaZXhN+S0Bs9wIqxW9o7FRpRK6WPwzyTue6d2JlG3H9vUZx1GcDXIiG
-	 QmOdyFagS/uY7RBED3waX4HoQvZA29MAKHt6LyFRCq8JVsRe9jXZXYtqjJKX0jXe6d
-	 TGWFGXzG0yYCNNd1ELWsQY2UF4r1bWQ3XbKBNH5ABy7sCVPtp1ksIxnCwMvK4g9Nqg
-	 oQcDSeJMyQb7XiwdmZJyYtxxjNIblo8tbGvVttavdEz3GRRrJyw0Gm5Evui/JFkQLe
-	 qncn6f4cuXMRw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA1DA3808200;
-	Sat, 14 Mar 2026 19:30:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1773524158;
+	bh=f00uJrynLNBeq1fp8KKlN/A/GMn2B9ae1DulfzNwyPQ=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=CIClaUQEzC26KSF8J5klewJyfr4hElKW2N5QG9B9wE6BbShuU6xVOx4Q5cX4rUO5P
+	 zOKbfBSDji8iVODllzi6HnBbcVYVsD03Nh3w9ILXFbYOOtKO54hJKgZt+OdMW1JIAg
+	 GTyLj0mcSXM3lIGMrdLLgEPNFXQwaTpijArVB3RADvDq1evUO6Pm51p1tEebzvmGbM
+	 BN0DS+4kCEM9WhZ71xIuFAjenaZ/h4ZNU94l4cdfZzlkggxHwjW3YSc3lHXSs0ylJs
+	 Qc3nDKuu8s6s9QoRyOxvVysWzkE6C0Dx1Y/i0e04rDmyrxCsNvqpxsyzEsIhcRv9hl
+	 ToGFYwPEhSr0w==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C0D910854AB;
+	Sat, 14 Mar 2026 21:35:58 +0000 (UTC)
+From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
+Subject: [PATCH RESEND v8 0/6] Introduce MAX77759 charger driver
+Date: Sat, 14 Mar 2026 21:35:35 +0000
+Message-Id: <20260314-max77759-charger-v8-0-226ca5f8c7d2@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCHv2 1/1 net-next] net: usb: cdc-ether: unify error handling
- in
- probe
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177351662029.1763199.5176772984928366532.git-patchwork-notify@kernel.org>
-Date: Sat, 14 Mar 2026 19:30:20 +0000
-References: <20260312084612.1469853-1-oneukum@suse.com>
-In-Reply-To: <20260312084612.1469853-1-oneukum@suse.com>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-B4-Tracking: v=1; b=H4sIAKfUtWkC/23QTU/DMAwG4L8y5UxR4sZOwokDu3KAI+KQr3aR2
+ IpaVA1N/e9kRWhFydG28th5L2yKY4oTe9hd2BjnNKXhlAt9t2P+YE99bFLINQMOKATH5mjPSik
+ 0TR6PfRwbjeAIKBAJy/KzzzF26bySb+xl/7p/fmLvuX9I09cwfq+bZrFOf1FoS3QWDW/IQZROd
+ 6pD+dgPQ/8R7/1wXLUZbgIIXREgC+AAjdHckqZCaDcCqIrQZgFlJJIdemugEOSfQDwfURHk9Rd
+ GQiu9DjGIQsCbALyWA2bBIW8NtoosdoVAG0HIikDXHLTnxgWrpCuTVFuhlqTKQtTBcOUjGY+Fo
+ DcC1G7QV8FpcgEVj8b/E5Zl+QHMNJU7hwIAAA==
+X-Change-ID: 20251105-max77759-charger-852b626d661a
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Lee Jones <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Badhri Jagan Sridharan <badhri@google.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>, Mark Brown <broonie@kernel.org>, 
+ Matti Vaittinen <mazziesaccount@gmail.com>, 
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>, 
+ Amit Sunil Dhamne <amitsd@google.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773524157; l=6377;
+ i=amitsd@google.com; s=20241031; h=from:subject:message-id;
+ bh=f00uJrynLNBeq1fp8KKlN/A/GMn2B9ae1DulfzNwyPQ=;
+ b=ssMe57JsMYjZhRJG94pjcao4tZCTKY8Mq7ojocIgx7mxddfSwIjQtomYQV/mztDOv1g/OwMue
+ 6QqQQrAEkwvAtSOyVAB4sxh63NX7RVuE5y/UyUQU8D5hTphX6StBE5c
+X-Developer-Key: i=amitsd@google.com; a=ed25519;
+ pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
+X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
+ auth_id=262
+X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
+Reply-To: amitsd@google.com
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-usb@vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34805-lists,linux-usb=lfdr.de,netdevbpf];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-34806-lists,linux-usb=lfdr.de,amitsd.google.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[kernel.org,linaro.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,gmail.com,linux-foundation.org];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	FROM_HAS_DN(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NO_DN(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,suse.com:email]
-X-Rspamd-Queue-Id: E04C228E9D0
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	HAS_REPLYTO(0.00)[amitsd@google.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: F228628F080
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello:
+MAX77759 PMIC is used in Pixel 6 and 6 Pro (Oriole/Raven) boards.
+One of the functions of the MAX77759 PMIC is a battery charger. This
+patchset introduces a driver for this function. One of the unique
+features of this charger driver is that it works with a USB input where
+the Type-C controller is TCPCI based.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Changes to the board files will follow soon once this patchset is reviewed.
 
-On Thu, 12 Mar 2026 09:45:32 +0100 you wrote:
-> usbnet_generic_cdc_bind() is duplicating the error handling
-> multiple times. That is bad. Unify it with jumps.
-> 
-> V2: Update error logging with every cause a unique message
-> 
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> 
-> [...]
+For reference to the MAX77759 MFD based patchset (present in upstream):
+https://lore.kernel.org/all/20250509-max77759-mfd-v10-0-962ac15ee3ef@linaro.org/
 
-Here is the summary with links:
-  - [PATCHv2,1/1,net-next] net: usb: cdc-ether: unify error handling in probe
-    https://git.kernel.org/netdev/net-next/c/a99f06e579a3
+Dependency list for patches (directionality indicates depends on):
+[6] -> [5] -> [4] & [3]
 
-You are awesome, thank you!
+The changes need to be applied in order. In this case this probably
+would be the USB subsystem as that's the leaf in the dependency list.
+
+Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+---
+Changes in v8:
+- Add an newline char at the end of dev_* prints. (André Draszik)
+- Return PTR_ERR() instead of -EPROBE_DEFER when devm_power_supply_register()
+  fails in max77759 charger probe. (André Draszik)
+- Link to v7: https://lore.kernel.org/r/20260218-max77759-charger-v7-0-e8d907ce69c5@google.com
+
+Changes in v7:
+- Add register relock for protected registers in fail path. (André Draszik)
+- Switch to usage of scoped_guard instead of guard. (LKP test bot)
+- Link to v6: https://lore.kernel.org/r/20260214-max77759-charger-v6-0-28c09bda74b4@google.com
+
+Changes in v6:
+-  Linear Range usage (André Draszik):
+  - Dedicate individual arrays for inlim, chgcc & chg_cv_prm to simplify
+    code.
+  - Use numerical values instead of macros for linear_range array init.
+  - Remove macros defining current and voltage limits due to above.
+  - Didn't use Reviewed-by tag for Patch 3 due to the above.
+  - Add new linear_ranges api to leverage it for obtaining selector
+    values.
+  - Improve voltage and current getters and setters functions by leveraging
+    existing and new linear_ranges API.
+- IRQ related changes (André Draszik)
+  - Dedicated names for individual irqs.
+  - Refactor irq handlers.
+  - Ratelimit prints
+- Retry mechanism (André Draszik):
+  - Initialize error retry counter to 0 when psy work is scheduled on a
+    new notifier event.
+  - Protect the counter using a lock.
+  - Add appropriate prints.
+- Link to v5: https://lore.kernel.org/r/20260203-max77759-charger-v5-0-b50395376a5f@google.com
+
+Changes in v5:
+- Use linear_range library instead of reinventing it. (André Draszik)
+  - This requires a selector_max value so modified mfd/max77759.h to
+    include it for CHGCC and CHG_ILIM.
+  - Removed "reviewed-by" for Patch 3 (mfd) due to above
+- Use asnyc probe type. (André Draszik)
+- Retry mechanism for psy_work. (André Draszik)
+- Minor nits (André Draszik):
+  - Use named initializers for instantiating structs.
+  - Use static qualifier for `psy_name` variable.
+  - Refactor if-else ladder to remove else handling if return in prior
+    "if" loop.
+  - Remove redundant `unlikely`.
+- Link to v4: https://lore.kernel.org/r/20260121-max77759-charger-v4-0-694234c8ded1@google.com
+
+Changes in v4:
+- Removed a stray tabspace in mfd/max77759.h. (André Draszik)
+- Fixed the following issues in Patch 4/5 (André Draszik):
+  - Re-order Kconfig entry
+  - Refactored to not use global variable
+  - Use of clamp() to clamp values instead of duplicating logic
+  - Return IRQ_NONE for unhandled irqs or error conditions
+  - Remove debug messages in irq handler
+  - Refactor code to use dev_err_probe in *_init_irqhandler()
+  - Remove unneeded irq_flags
+  - Check return values of regmap ops
+  - Other nits like newlines, not using greedy init, using print stmnts
+- Link to v3: https://lore.kernel.org/r/20251227-max77759-charger-v3-0-54e664f5ca92@google.com
+
+Changes in v3:
+- Had incorrectly folded the charger sub-device with the pmic parent.
+  Corrected it. (Krzysztof Kozlowski)
+- Link to v2: https://lore.kernel.org/r/20251218-max77759-charger-v2-0-2b259980a686@google.com
+
+Changes in v2:
+- Fold charger binding in maxim,max77759-charger.yaml to its parent
+  node. (Krzysztof Kozlowski)
+- Renamed regulator supplier & consumer. (Krzysztof Kozlowski & Heikki
+  Krogerus)
+- Removed explicit setting of irq trigger types in max77759 driver.
+  (André Draszik & Krzysztof Kozlowski)
+- Complete bit definitions for IRQ registers. (André Draszik)
+- Consolidate all bit definitions for charger IP in mfd/max77759.h.
+  (André Draszik)
+- Modify the handling of charger IRQs such that regmap IRQ chip handles
+  masking, de-mux and acking of interrupts. (André Draszik)
+- Remove unused macro definitions relating to Charger modes in tcpci
+  maxim driver (André Draszik)
+- Add dependency on Regulator class in Kconfig definition for max77759
+  chg. (Kernel Test Robot)
+- Link to v1: https://lore.kernel.org/r/20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com
+
+---
+Amit Sunil Dhamne (6):
+      dt-bindings: mfd: maxim,max77759: reference power-supply schema and add regulator property
+      dt-bindings: usb: maxim,max33359: Add supply property for vbus
+      mfd: max77759: add register bitmasks and modify irq configs for charger
+      lib/linear_ranges: Add linear_range_get_selector_high_array
+      power: supply: max77759: add charger driver
+      usb: typec: tcpm/tcpci_maxim: deprecate WAR for setting charger mode
+
+ .../devicetree/bindings/mfd/maxim,max77759.yaml    |  16 +-
+ .../devicetree/bindings/usb/maxim,max33359.yaml    |   4 +
+ MAINTAINERS                                        |   6 +
+ drivers/mfd/max77759.c                             |  91 ++-
+ drivers/power/supply/Kconfig                       |  11 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/max77759_charger.c            | 774 +++++++++++++++++++++
+ drivers/usb/typec/tcpm/tcpci_maxim.h               |   1 +
+ drivers/usb/typec/tcpm/tcpci_maxim_core.c          |  54 +-
+ include/linux/linear_range.h                       |   3 +
+ include/linux/mfd/max77759.h                       | 176 ++++-
+ lib/linear_ranges.c                                |  36 +
+ 12 files changed, 1114 insertions(+), 59 deletions(-)
+---
+base-commit: ecc64d2dc9ff9738d2a896beb68e02c2feaf9a02
+change-id: 20251105-max77759-charger-852b626d661a
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Amit Sunil Dhamne <amitsd@google.com>
 
 
 
