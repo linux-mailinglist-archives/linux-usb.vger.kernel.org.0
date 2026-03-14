@@ -1,216 +1,178 @@
-Return-Path: <linux-usb+bounces-34785-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34791-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KJGCCj4NtWlavwAAu9opvQ
-	(envelope-from <linux-usb+bounces-34785-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 08:24:46 +0100
+	id gPU9EDkttWkXxQAAu9opvQ
+	(envelope-from <linux-usb+bounces-34791-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 10:41:13 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBB0228BEE6
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 08:24:45 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id D739328C6D5
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 10:41:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 14410304DCA6
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 07:24:35 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 63188300E2BE
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 09:41:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B9752F88;
-	Sat, 14 Mar 2026 07:24:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C6534D912;
+	Sat, 14 Mar 2026 09:41:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D6lHSctm"
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="F5lSuzgx";
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="F5lSuzgx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0DA27AC45
-	for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 07:24:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773473072; cv=pass; b=EaMLU7w2zcsL7dibh5dWkLZeRQd82dDUJg7UA+FXjN7P2h/siy27Z15/fRIzXjyqVn9kdp9xkQavQLjUZg7uHwp6bQM+9425cMvsY3+d5kklLhipm0zpfULBTkl7n7I/Rvh+A9rWPjA8LEUuBaI9cfj9MVvyu/4XFsGl/As/unU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773473072; c=relaxed/simple;
-	bh=qd1mApvWSGdixoIc5To2ikkz4kciaMH/nUOF9Qefu6o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oSqnEWsp9Hdu2rSDZT4+5sp6ky4NgdgPnJAimXFZJfQYFgqLeInzWOc7CUq3X/5L13m21wpf6QwZHAxHiXpr78K4BjwOWTBubSN6ss8gaYzRwFXyPj2LdRVTfKQo9q/NsIjAVzyIF8bLIHH8mr0gTwVhomJrZcCCbqU43JIE+Wk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D6lHSctm; arc=pass smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2a9296b3926so23196525ad.1
-        for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 00:24:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773473071; cv=none;
-        d=google.com; s=arc-20240605;
-        b=N/qHJHQzyx59iNlw/j+qp/Qp3AftepbWTLFilbVSXGPmWwUuxTyNW5W/UsDVshHgra
-         KSSNQlidYaQw03xJrLwPYq8OKZGGYv5+BKKf56KyrUWqn5Y1D9eJoOsAPoBRw/kMWfLm
-         Qqlcw0yNJVJomFzGFH8Pa61yWUUsy0nEU+F1mdnBDzize72aii9FCjZPX/OfHPJWNras
-         hLC5rj8wVoRpIacy6yuN6Lux8ZNi8i8cpzeheoUyJCJ1Yd1yYucvmml4+vNq24/piy+b
-         G/JLjsNTUL3HYTy1tfxnIZXULJuvdPT/zNh0KxIYexFtQj1hLuj5/OBPzglDjQrXiY0R
-         LYlw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=qd1mApvWSGdixoIc5To2ikkz4kciaMH/nUOF9Qefu6o=;
-        fh=+elBgB31JBeDp4ZW8RzT+IiWsMs2EQHg02daqvmgy3w=;
-        b=YaGE/52s0TT0qwOsIu/aYQn1dL57tBvNzVPVQarR2Z3qW6oZ5D74mwFMsYayYG/Crh
-         v8HxZUz8gowSaReuf9x2IPU1iR0JjtWN0yqZrZ9i+YoFgRkwSoBwDn3fX01yPyjLl9ju
-         MPiF5GGm5/apebSt0MBDiG6ka/FpXVfpnNb01CuAe4n72RUH4zHDuiuFQRZawvRAitPU
-         h9xDylJqhC5zRKMKAO17TeESljSWrwCH1qgHGbv6Jtl1mkNJDk+fXtJldse9D0ega7Us
-         bR+pzfiEn1FghTKLyV9X1E5WayjyWzvSqc8/MA/9LnhUZIaHgEB9RuT5oRUy7Yq/AIto
-         E4eA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773473071; x=1774077871; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qd1mApvWSGdixoIc5To2ikkz4kciaMH/nUOF9Qefu6o=;
-        b=D6lHSctm/Ja8kNjZu5VMxO5SJO/CS1SpfBE5Komf9ziuvuId3tq0FlYr5p8dD1DpeL
-         YxzZQlTNrZkL/Ry9QhsrrqeGwBLUlYemzs0AUj6ldi3sVINozvMf3IILMi9Y3qHtoqPg
-         ZfBJ7ifGfD4U01hN5ylbQhuR1FZ2WRxujyhMGM7FKRIWB3DX9d8EEliNu+/PQ9pFUxnd
-         3GOwIeOZdP5ny/vS+V5ns8BSxz2tqOQ9V/335hvss1BNwmbWFHkszX5EI8fNHGZnhRZd
-         8/BcpS7bpNadHDlcACvTQiqKOEPBFHNVkmPrlJIinM1RWT05j0Bpu0cWus3RjzHL53iQ
-         lkyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773473071; x=1774077871;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=qd1mApvWSGdixoIc5To2ikkz4kciaMH/nUOF9Qefu6o=;
-        b=ccguEW5nHj2zSqBUdBQmndmomtLIKvFbhmKO8qz0O/Bm+two306uI5sy1/bJ2P1Fwd
-         Jws0cKvJwUNYBleofYW6Lluubj3oujqBgOvkqTLBpCTxywhrcU9up6bDfdC8KQJdFNv0
-         R3IS2Enz9LxNG6K8FeTIVkBOo/3HJF9OfU6ACyAK74yBU48CcwQ5JHSX946BEJEgUKW2
-         9gbErifWxPrtgjesNjOxN+wSpkO4mPRD+JfD5w9crfpfV3OXmAwFKYaSBuUsVPv6jlkC
-         PkO23pRcMF1RdM+h/vxy3E3V/MzfDKsJKWG3X6xoiF6kjWxj+RBQOOfA5WFosDeQhCcK
-         OJ4A==
-X-Forwarded-Encrypted: i=1; AJvYcCWlH7rTphqQPvIXsApVjO5/RPDG0Mk+aEFBfNPhUW5T3a4bErChtJj+muljjX28HJx09cA92mgd9iI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIN9wXyRuWkZQnWhZzcbmW7ofnPjXRs/sGiDVyogrwjJwgHzWe
-	jz6kzXR1qrN20ZWjEgLI3cIFpfNP0bYI9h8P1AXv6IigoDExOESxCUSzoPAB4yehisUgbMQ4IKv
-	U79hAo42CFxc5zCRyVk4o+/zyX/2dZgY=
-X-Gm-Gg: ATEYQzw9539Fo3uAEVOXrZu31ikYxvKquW69LV6mgNuEOjYcGGGpX3fowyT1eNkedwB
-	z4C91yCRs6YtrHI9wlnovjxMHZbav7wT5aGZpNyy9EHZAPqaHbJ4iavNPt11WgfA0siuYY5YIe0
-	o4P3e+eQWOE9vzFVVgpKfMh1ljHHVqTUXRS+smQXow0UjwRpaUfiKRYSlfNEbxotAJYh4xJyssH
-	eL58FG0hatlJ9yAkW00t6ZyRNRzth2ODfPQ2kqqYphOuN/KxMX0aS9LDDUyePpU1l1fwuygEWFS
-	sBDAzoA=
-X-Received: by 2002:a17:903:19e5:b0:2b0:445a:8c7b with SMTP id
- d9443c01a7336-2b0445a8fcemr11849235ad.15.1773473070880; Sat, 14 Mar 2026
- 00:24:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A707831E859;
+	Sat, 14 Mar 2026 09:41:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773481267; cv=none; b=Uh11CWrUBuxHGrZIDoEAiPR8C86ePjGRq8oGXC0//aprqnsb4IkuwRSD3aL1vqLrnh5mVyszqPIAu/w6RiqqK/A+0NaTnG7fzn4HpCQ2VfXz6aj4662f0TDoz0yaRxurFh0eYU6p78wibUxS0v3r05n8UuMOHjqMWJGCpp30Y/c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773481267; c=relaxed/simple;
+	bh=H/kSyRr0L2VYaxHlrNL1/UDci7GYRLAyO6lHLHMf8O4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=am+B7fzTu+4jRcAQ5yyNxytR4BjSqgKOoxsQZSt77cf0EwmoJTsPKoHKySpG6fLnE/rDf35DoT+IlB9JYE0e/a5g6GvLG2Iq6uGlsukcElDay6YDLfEq+ChxGfzBhrRp89vKQ21F1kp7zalZQQxdKyBd+W1Lf3IfTwWyI7vosYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=F5lSuzgx; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=F5lSuzgx; arc=none smtp.client-ip=23.88.97.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1773480702;
+	bh=H/kSyRr0L2VYaxHlrNL1/UDci7GYRLAyO6lHLHMf8O4=;
+	h=From:Subject:Date:To:Cc:From;
+	b=F5lSuzgxG3Zr9R4tlPViYUykAJT7Zr5Yw2T8pUVswE4tP8y8EgsL295zmg1l1dpUL
+	 YoLVA8GFHOwje7e6+GmqvO7lH6hwWBFE+7p7XNYRwdwAG9EydPDcLHAUEXEbsQD//Z
+	 B19u5hotimACcg8JWbgjpTKC1J3OQ2oBesXSZo379ITh+OwSYRiu/jOgP99fJjzkBS
+	 T/6kvmprMwXD3ONYOibMOVIWCnV391mi9sc8w+bAZmmQ4E0dWQHpCbbeHNn34iEkpL
+	 3Ff2I4Jfz8dY51zRRnpdC0muUfigD1cBWUkIt84H0gdwx7Q7qea/oynFaxVjxhvaaX
+	 NKWiKCUsZesIQ==
+Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
+	id D31513FCB9; Sat, 14 Mar 2026 09:31:42 +0000 (UTC)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1773480702;
+	bh=H/kSyRr0L2VYaxHlrNL1/UDci7GYRLAyO6lHLHMf8O4=;
+	h=From:Subject:Date:To:Cc:From;
+	b=F5lSuzgxG3Zr9R4tlPViYUykAJT7Zr5Yw2T8pUVswE4tP8y8EgsL295zmg1l1dpUL
+	 YoLVA8GFHOwje7e6+GmqvO7lH6hwWBFE+7p7XNYRwdwAG9EydPDcLHAUEXEbsQD//Z
+	 B19u5hotimACcg8JWbgjpTKC1J3OQ2oBesXSZo379ITh+OwSYRiu/jOgP99fJjzkBS
+	 T/6kvmprMwXD3ONYOibMOVIWCnV391mi9sc8w+bAZmmQ4E0dWQHpCbbeHNn34iEkpL
+	 3Ff2I4Jfz8dY51zRRnpdC0muUfigD1cBWUkIt84H0gdwx7Q7qea/oynFaxVjxhvaaX
+	 NKWiKCUsZesIQ==
+Received: from AMDDesktop.lan (unknown [IPv6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb])
+	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id 146673FC9A;
+	Sat, 14 Mar 2026 09:31:42 +0000 (UTC)
+From: Birger Koblitz <mail@birger-koblitz.de>
+Subject: [PATCH net-next 0/9] r8152: Add support for the RTL8157 5Gbit USB
+ Ethernet chip
+Date: Sat, 14 Mar 2026 10:31:36 +0100
+Message-Id: <20260314-rtl8157_next-v1-0-9ba77b428afd@birger-koblitz.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260313171659.1225180-1-jhj140711@gmail.com> <abT5tabfYV9a9RF_@codewreck.org>
-In-Reply-To: <abT5tabfYV9a9RF_@codewreck.org>
-From: Hyungjung Joo <jhj140711@gmail.com>
-Date: Sat, 14 Mar 2026 16:24:19 +0900
-X-Gm-Features: AaiRm524CjQgXxwQSi91n87psT0kd7Ixm0ZGTwgZZypsCLtk7Hh1FbeoE-z-Zz8
-Message-ID: <CAP_j_b9i2n+ZUriWceZJgAKz_MeGMFkRiOz7yCYE4as4T6auVQ@mail.gmail.com>
-Subject: Re: [PATCH] net: 9p: usbg: clear stale client pointer on close
-To: Dominique Martinet <asmadeus@codewreck.org>
-Cc: ericvh@kernel.org, lucho@ionkov.net, linux_oss@crudebyte.com, 
-	m.grzeschik@pengutronix.de, gregkh@linuxfoundation.org, v9fs@lists.linux.dev, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPgqtWkC/x2M7QpAMBhGb0XvbyszH8utSBoevKXRtqTk3o2fp
+ 845N3k4hqcmucnhZM+7jSDThMbV2AWCp8iUZ3mVKVkIFzYty7q3uIIwkLrSCkMxG4rJ4TDz9e9
+ asgjis6h7nhdJU8YoaAAAAA==
+X-Change-ID: 20260314-rtl8157_next-ae18683eb4fa
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Birger Koblitz <mail@birger-koblitz.de>
+X-Mailer: b4 0.14.2
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	DKIM_TRACE(0.00)[birger-koblitz.de:+];
+	TAGGED_FROM(0.00)[bounces-34791-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34785-lists,linux-usb=lfdr.de];
+	DMARC_NA(0.00)[birger-koblitz.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jhj140711@gmail.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[codewreck.org:email,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: BBB0228BEE6
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[birger-koblitz.de:dkim,birger-koblitz.de:email,birger-koblitz.de:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D739328C6D5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Thanks for the careful review.
+Add support for the RTL8157, which is a 5GBit USB-Ethernet adapter
+chip in the RTL815x family of chips.
 
-> Just to make sure the problem is the usb9pfs struct being freed, not the
-> p9_client itself which is still alive after the usb device is gone
-> (until umount)?
+The RTL8157 uses a different frame descriptor format, and different
+SRAM/ADV access methods, plus offers 5GBit/s Ethernet, so support for these
+features is added in addition to chip initialization and configuration.
 
-The issue I am addressing is the stale use of the usb9pfs->client
-association after the transport has been closed. I am not relying on
-early free of struct f_usb9pfs for this bug.
+The module was tested with an OEM RTL8157 USB adapter:
+[25758.328238] usb 4-1: new SuperSpeed Plus Gen 2x1 USB device number 2 using xhci_hcd
+[25758.345565] usb 4-1: New USB device found, idVendor=0bda, idProduct=8157, bcdDevice=30.00
+[25758.345585] usb 4-1: New USB device strings: Mfr=1, Product=2, SerialNumber=7
+[25758.345593] usb 4-1: Product: USB 10/100/1G/2.5G/5G LAN
+[25758.345599] usb 4-1: Manufacturer: Realtek
+[25758.345605] usb 4-1: SerialNumber: 000300E04C68xxxx
+[25758.534241] r8152-cfgselector 4-1: reset SuperSpeed Plus Gen 2x1 USB device number 2 using xhci_hcd
+[25758.603511] r8152 4-1:1.0: skip request firmware
+[25758.653351] r8152 4-1:1.0 eth0: v1.12.13
+[25758.689271] r8152 4-1:1.0 enx00e04c68xxxx: renamed from eth0
+[25763.271682] r8152 4-1:1.0 enx00e04c68xxxx: carrier on
 
-The lifetime mismatch here is that struct f_usb9pfs belongs to the
-gadget function and can be reused across mount sessions, while
-struct p9_client is per-mount. On the close path, p9_usbg_close() did
-not detach usb9pfs->client, so late TX/RX completions could still
-follow that pointer after close, including into a later remount that
-rebinds it.
+The RTL8157 adapter was tested against an AQC107 PCIe-card supporting
+10GBit/s and an RTL8126 5Gbit PCIe-card supporting 5GBit/s for
+performance, link speed and EEE negotiation. Using USB3.2 Gen 1 with
+the RTL8157 USB adapter and running iperf3 against the AQC107 PCIe
+card resulted in 3.47 Gbits/sec, whereas using USB3.2 Gen2 resulted
+in 4.70 Gbits/sec, speeds against the RTL8126-card were the same.
 
-> I'm surprised free_func isn't called after unbind, which should stop the
-> queues (through disable_usb9pfs)?
-> or are the ep being disabled not enough to ensure the callbacks are not
-> in use? (e.g. disabling prevents further calls, but doesn't wait for
-> currently running/queued requests?)
+As the code integrates the RTL8157-specific code with existing RTL8156 code
+in order to improve code maintainability (instead of adding RTL8157-specific
+functions duplicaing most of the RTL8156 code), regression tests were done
+with an Edimax EU-4307 V1.0 USB-Ethernet adapter with RTL8156.
 
-My understanding is that the unbind/free_func path is different from the
-close path at issue here. This patch is not trying to change or rely on
-gadget teardown ordering; it addresses the close-side race where
-usb9pfs->client remained attached and the completion paths still
-dereferenced it.
+The code is based on the out-of-tree r8152 driver published by Realtek under
+the GPL.
 
-That is why the patch:
-- clears usb9pfs->client under usb9pfs->lock on close,
-- detaches any pending TX request from in_req->context, and
-- makes TX/RX completions bail out once the transport has been detached.
+This patch is on top of linux-next as the code re-uses the 2.5 Gbit EEE
+recently added in r8152.c.
 
-So the intent is to prevent late completions from using a stale or
-rebound client association after close, rather than to claim an early
-free of the gadget object itself.
+Signed-off-by: Birger Koblitz <mail@birger-koblitz.de>
+---
+Birger Koblitz (9):
+      r8152: Add support for RTL8157 RX/TX descriptor format
+      r8152: Add support for RTL8157 SRAM access and ADV indirect access
+      r8152: Add support for configuring the PHY of the RTL8157
+      r8152: Add RTL8157 initialization
+      r8152: Add RTL8157 startup
+      r8152: Add support for chip version RTL_VER_16
+      r8152: Add support for 5Gbit Link Speeds
+      r8152: Add support for 5GBit EEE
+      r8152: Detect RTL8157 and setup
 
-Thanks,
+ drivers/net/usb/r8152.c | 1092 ++++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 845 insertions(+), 247 deletions(-)
+---
+base-commit: 5c9e55fecf9365890c64f14761a80f9413a3b1d1
+change-id: 20260314-rtl8157_next-ae18683eb4fa
 
-2026=EB=85=84 3=EC=9B=94 14=EC=9D=BC (=ED=86=A0) PM 3:01, Dominique Martine=
-t <asmadeus@codewreck.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> Hyungjung Joo wrote on Sat, Mar 14, 2026 at 02:16:59AM +0900:
-> > p9_usbg_close() tears down the client transport, but usb9pfs keeps
-> > using usb9pfs->client from asynchronous TX and RX completion handlers.
-> > A late completion can therefore dereference a client that has already
-> > been freed during mount teardown.
-> >
-> > Clear usb9pfs->client under usb9pfs->lock when closing the transport,
-> > detach any pending TX request from in_req->context, and make the TX/RX
-> > completion handlers bail out once the transport has been detached. This
-> > keeps late completions from touching a freed or rebound p9_client.
->
-> Just to make sure the problem is the usb9pfs struct being freed, not the
-> p9_client itself which is still alive after the usb device is gone
-> (until umount)?
->
-> I'm surprised free_func isn't called after unbind, which should stop the
-> queues (through disable_usb9pfs)?
-> or are the ep being disabled not enough to ensure the callbacks are not
-> in use? (e.g. disabling prevents further calls, but doesn't wait for
-> currently running/queued requests?)
->
->
-> (Also, thanks Michael for looking -- I'll let you do a first review
-> before looking deeper)
-> --
-> Dominique
+Best regards,
+-- 
+Birger Koblitz <mail@birger-koblitz.de>
+
 
