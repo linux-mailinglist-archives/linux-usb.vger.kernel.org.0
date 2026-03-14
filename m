@@ -1,78 +1,90 @@
-Return-Path: <linux-usb+bounces-34800-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34801-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id BVq1Iv5xtWlr0gAAu9opvQ
-	(envelope-from <linux-usb+bounces-34800-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 15:34:38 +0100
+	id gKeoKvmPtWk42AAAu9opvQ
+	(envelope-from <linux-usb+bounces-34801-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 17:42:33 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E671628D84E
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 15:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EF7328DF4C
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 17:42:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BD749302DB76
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 14:34:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C1D4D30330AD
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 16:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65A5F4204E;
-	Sat, 14 Mar 2026 14:34:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2538314B62;
+	Sat, 14 Mar 2026 16:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A3JekrBA"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="e3davlIR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E4D1DF271
-	for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 14:34:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB2C192D97
+	for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 16:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773498867; cv=none; b=F70HbER/wlalSoR/EYpvoT9n5K+gpsVgHmj98Mvc1YxTnxvaJZ8Qr/XvCzlHSk0vog1C/VCm32UHW2Aoij5DFK2u/EL4xeEK4Pj9ge1qPPwFKoT/Mc1Uwp8/3lktaI8EdzDbxph8IuLtoAPg4jzn5jrCif8Ck97y/yXNXNr8qCU=
+	t=1773506538; cv=none; b=nnX0rnJ9gntD5/8vEv+IA4L7Y3Do8svomIQTY9UZ7tSO7rWZepmFoOTt4y0DOwJF18aNCxW4FNsIxZKWp0nX3DvFLiPKxQctgobIYnpwZ+naYP41yklbUipkgNoDlxvbqrh7YfDTKfB3CrAdfkYJVxh6U3blwPVJHZDoFR0zQaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773498867; c=relaxed/simple;
-	bh=i+5F0X4GdMf0hoHxC/NMH3qX+G/5Z3OYrDb/IE2ew7o=;
+	s=arc-20240116; t=1773506538; c=relaxed/simple;
+	bh=aNW/SvQsvqoGJXuSokC/EAS8h/o0sai/yUenLTWBtuI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bjLDHkj8KA4iKCWIp0g27C3u7tOhu4LtkoqpfavXZnzUUBS355XvEt/EElr5a1Pp+7tUhugdlg+V69EYgDeJdqLulR/t8e4LBDpnKrn6DLPhu0rZC+5WFqJ+fYcweZ0FUHE5plaXuNLhC8b014VqVg3tAlNFEpGQz4hcjb0Lkdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A3JekrBA; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773498865; x=1805034865;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i+5F0X4GdMf0hoHxC/NMH3qX+G/5Z3OYrDb/IE2ew7o=;
-  b=A3JekrBATfzeoEkN/T3bEN1XxWVbVZgnVnh8MZkGaqLJ7YW7OA1ZqGCi
-   waDzOKUtjz2uMOQGxuMHz0c71YnnniVEF4f4HRhmwoREcoe4bsxHtBpLA
-   Xroty2Xb6p1TkksBl6ai7pWQqUyd/Zek39HsFsNf8oGKEM0WXZzfNHoiX
-   ywreyMww/PcJqWR5hHP9YxGj65VF5DXHOfZ74zu6DeHnBvNjmrOqH/OLR
-   uIejrTbWNGQw/ueJyQIFeBvm8TKe5814LI6FcSBg6eawfEzvpMwTEQX9P
-   CzOoOyqe+gV3F4j2SM8HaFe148r/tRt0/1xRgMAQ1qq7qNc/mIaiI64sz
-   Q==;
-X-CSE-ConnectionGUID: nV0I/O+pSQivquBCYNocQg==
-X-CSE-MsgGUID: siWVzS5PTXeUrvPyFepZhQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11729"; a="74698856"
-X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
-   d="scan'208";a="74698856"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2026 07:34:24 -0700
-X-CSE-ConnectionGUID: qZeezkm0RVymfnk+noLZDg==
-X-CSE-MsgGUID: rnkCghDgRjm+jZLCmehZOw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
-   d="scan'208";a="220505586"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by orviesa006.jf.intel.com with ESMTP; 14 Mar 2026 07:34:22 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w1Q4J-000000003nt-2ieg;
-	Sat, 14 Mar 2026 14:34:19 +0000
-Date: Sat, 14 Mar 2026 15:33:27 +0100
-From: kernel test robot <lkp@intel.com>
-To: Oliver Neukum <oneukum@suse.com>, mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Oliver Neukum <oneukum@suse.com>
-Subject: Re: [PATCH] usb: xhci: use BIT macro
-Message-ID: <202603141518.Qeu41mKO-lkp@intel.com>
-References: <20260312150649.2138749-1-oneukum@suse.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OYIWMUfDw8UPOPjzg40ovs49t+jS6w5ouFgFk1GXHOX/HHdH+Db69PJUa5q+4ppo2PAn1Fg83Fa5QgVHVBHfSzN0X66W9w7n68uued6XP9Kf2rHgrsp9bnGqVR9+80c9LuKmdYXbv9MsFZQJFWNSWgrjGUI5CaxL5dkW8EqlrrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=e3davlIR; arc=none smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-50919fc3a14so37637961cf.2
+        for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 09:42:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1773506536; x=1774111336; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fy06hteiKF+m/zJToPVb5WypJzO6ZJ0i6MwB/Wn9jNc=;
+        b=e3davlIRw0vtox+jEw4C8706Ik5YbO47J3vuOHlPL7W1WTDDVt0DMVWcaBlJmJ+XX/
+         bQQd8pj4HJxzEeg7vSCT9eB4Pkq9z/j0ExiS4Q+vETE6yDUfAhnkRfLDN+3ILB3zGwV7
+         c0tWI4xOnJDYNr7Oc6zVu2d+Xs+RKqSUhIOGQuwobJtC2lzylZVT8KJU+TAAuTf6oMB5
+         TG7LSlr2meFEcqSfyyF1HKXS7W8h9JXbiZZjB5COmIRSpastB8EgwNX4FbDPgqNh+FuU
+         uh+BPIgLVnjgo2EFljrIkWv6c+Q9xoGjOqYDunUL0MuqwZtcn7/saY827ProkHMQ2Jts
+         VdCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773506536; x=1774111336;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fy06hteiKF+m/zJToPVb5WypJzO6ZJ0i6MwB/Wn9jNc=;
+        b=RVXVbA+VS0up9lykynE92fy8rI4f7ijjLRqsmuXh23BdzTLsOx/8oJiu5kw9a6ML8n
+         cz0Ksg2DwKFC926A+FZ1TVnBW7nszx1QAV2YxGSaIKty3Cxcm0QuFH5YYydKjAxJcz75
+         D253EwIPFR4XFS5ciE3umzBTEvxjBCfNP6xzQNMEktfuKAAGEc4dhft33Tvd/FW+zBGH
+         fAnu7doXRfjMZdpaYPFf7ykRDW4dYFIofowxAK1Vinha5HAjDmboP0XzMP9fzcJtrvYn
+         I3CAVg9WA2JDANVISXq+kotrtj4Xii8s7J+s/WdKj1kg0ipQeh9Rz6ora+oQ0uMzaihr
+         KV3g==
+X-Forwarded-Encrypted: i=1; AJvYcCWUrE/sz8tg7hKf+y9xFeJnRHBWk80JuOEnGsAWxQl8y626shSaYY3GbpXHDSqIozscdLucgSG4NJs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPmfexf5FMgiJbAia/Wf4kYnoczv+3W3K/pz3IMRwd+AhoN15T
+	bKIq71Nz5z7YIvvivT9ysRROhUSLEkpUK1mhZHsCYyrBVrBSG1ayikzEC2gEHq9BDQ==
+X-Gm-Gg: ATEYQzwKspVSbbVhlBqkf2jY81p+tcyiOrK5gwJ87twwBGArI6XnZ1hfx5JPbyBQ5pX
+	7eMsEgNfUN1g/Dd3o/HFBK5JUDx9pSYuqRoYqLOT6w1D13xA08a8NX/FM9fLJWVfNOzgQ4MJIso
+	OWmRUZEqiB/Kqed8l6w6Eq+o8B94lJrTJSyRdqLDRcl4iPtpTqwRVB4jitINKP4xeNoHYOxIA8+
+	EHBJaMwG1nYEpHSoLYRZfZuGYLtBBJpA/qufCJ0c6n3ocbBcz0TrJuZFr6yL8Ep/GH1X+UhO7kT
+	KPVnJNKaBAb5H42Fu1ELyNUT60p5qqIy5kOsmxa9hAKQFZOgT0sakQuvnc39mI1wv0C0XLGl2RL
+	ltKepYBVohlKoaQrzKQnDSef7PvQIaB6f1GXBrdABSfcAD3mfF2HH30HixkAmVDq3Wdq3HQXwqd
+	5tQNlgvsCY3eDn4bFICWpZKQAg
+X-Received: by 2002:a05:622a:93:b0:509:4b11:6cf4 with SMTP id d75a77b69052e-50957d51ef9mr100259131cf.5.1773506535458;
+        Sat, 14 Mar 2026 09:42:15 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d01:d210::687c])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5093a14791dsm81733201cf.31.2026.03.14.09.42.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Mar 2026 09:42:14 -0700 (PDT)
+Date: Sat, 14 Mar 2026 12:42:11 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: syzbot <syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] general protection fault in usb_gadget_udc_reset
+ (4)
+Message-ID: <041e5d18-6120-48dd-b137-e10020f0c191@rowland.harvard.edu>
+References: <ed831d20-3d7c-41a1-8710-f1aa5b39877f@rowland.harvard.edu>
+ <69b48162.050a0220.36eb34.000f.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,132 +93,87 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260312150649.2138749-1-oneukum@suse.com>
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+In-Reply-To: <69b48162.050a0220.36eb34.000f.GAE@google.com>
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34800-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[appspotmail.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,syzkaller.appspot.com:url,rowland.harvard.edu:dkim,rowland.harvard.edu:mid];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
 	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6]
-X-Rspamd-Queue-Id: E671628D84E
+	TAGGED_FROM(0.00)[bounces-34801-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,19bed92c97bee999e5db];
+	SUBJECT_HAS_QUESTION(0.00)[]
+X-Rspamd-Queue-Id: 4EF7328DF4C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Oliver,
+On Fri, Mar 13, 2026 at 02:28:02PM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> 
+> Reported-by: syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com
+> Tested-by: syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com
+> 
+> Tested on:
+> 
+> commit:         65169048 Merge tag 'spi-fix-v7.0-rc2' of git://git.ker..
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14ab954a580000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692
+> dashboard link: https://syzkaller.appspot.com/bug?extid=19bed92c97bee999e5db
+> compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+> patch:          https://syzkaller.appspot.com/x/patch.diff?x=113b1602580000
+> 
+> Note: testing is done by a robot and is best-effort only.
 
-kernel test robot noticed the following build warnings:
+Just out of curiosity, let's see if this test crashes with only the 
+second change (moving stop_activity()) and not the first (moving the 
+synchronize_irq() emulation).
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus next-20260313]
-[cannot apply to linus/master v6.16-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Alan Stern
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Neukum/usb-xhci-use-BIT-macro/20260314-143843
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20260312150649.2138749-1-oneukum%40suse.com
-patch subject: [PATCH] usb: xhci: use BIT macro
-config: x86_64-rhel-9.4 (https://download.01.org/0day-ci/archive/20260314/202603141518.Qeu41mKO-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260314/202603141518.Qeu41mKO-lkp@intel.com/reproduce)
+#syz test: upstream 651690480a96
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603141518.Qeu41mKO-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/usb/host/xhci.c:25:
-   drivers/usb/host/xhci.h: In function 'xhci_decode_slot_context':
->> drivers/usb/host/xhci.h:2321:57: warning: format '%d' expects argument of type 'int', but argument 7 has type 'long unsigned int' [-Wformat=]
-    2321 |         ret = sprintf(str, "RS %05x %s%s%s Ctx Entries %d MEL %d us Port# %d/%d",
-         |                                                        ~^
-         |                                                         |
-         |                                                         int
-         |                                                        %ld
-   ......
-    2345 |                         (info & LAST_CTX_MASK) >> 27,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
-         |                                                |
-         |                                                long unsigned int
-
-
-vim +2321 drivers/usb/host/xhci.h
-
-90d6d5731da79a Mathias Nyman 2019-04-26  2308  
-4843b4b5ec64b8 Mathias Nyman 2021-08-20  2309  static inline const char *xhci_decode_slot_context(char *str,
-4843b4b5ec64b8 Mathias Nyman 2021-08-20  2310  		u32 info, u32 info2, u32 tt_info, u32 state)
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2311  {
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2312  	u32 speed;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2313  	u32 hub;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2314  	u32 mtt;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2315  	int ret = 0;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2316  
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2317  	speed = info & DEV_SPEED;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2318  	hub = info & DEV_HUB;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2319  	mtt = info & DEV_MTT;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2320  
-19a7d0d65c4a81 Felipe Balbi  2017-04-07 @2321  	ret = sprintf(str, "RS %05x %s%s%s Ctx Entries %d MEL %d us Port# %d/%d",
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2322  			info & ROUTE_STRING_MASK,
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2323  			({ char *s;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2324  			switch (speed) {
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2325  			case SLOT_SPEED_FS:
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2326  				s = "full-speed";
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2327  				break;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2328  			case SLOT_SPEED_LS:
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2329  				s = "low-speed";
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2330  				break;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2331  			case SLOT_SPEED_HS:
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2332  				s = "high-speed";
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2333  				break;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2334  			case SLOT_SPEED_SS:
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2335  				s = "super-speed";
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2336  				break;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2337  			case SLOT_SPEED_SSP:
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2338  				s = "super-speed plus";
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2339  				break;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2340  			default:
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2341  				s = "UNKNOWN speed";
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2342  			} s; }),
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2343  			mtt ? " multi-TT" : "",
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2344  			hub ? " Hub" : "",
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2345  			(info & LAST_CTX_MASK) >> 27,
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2346  			info2 & MAX_EXIT,
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2347  			DEVINFO_TO_ROOT_HUB_PORT(info2),
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2348  			DEVINFO_TO_MAX_PORTS(info2));
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2349  
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2350  	ret += sprintf(str + ret, " [TT Slot %d Port# %d TTT %d Intr %d] Addr %d State %s",
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2351  			tt_info & TT_SLOT, (tt_info & TT_PORT) >> 8,
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2352  			GET_TT_THINK_TIME(tt_info), GET_INTR_TARGET(tt_info),
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2353  			state & DEV_ADDR_MASK,
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2354  			xhci_slot_state_string(GET_SLOT_STATE(state)));
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2355  
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2356  	return str;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2357  }
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2358  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
++++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -462,8 +462,13 @@ static void set_link_state(struct dummy_
+ 
+ 		/* Report reset and disconnect events to the driver */
+ 		if (dum->ints_enabled && (disconnect || reset)) {
+-			stop_activity(dum);
+ 			++dum->callback_usage;
++			/*
++			 * stop_activity() can drop dum->lock, so it must
++			 * must not come between the dum->ints_enabled test
++			 * and the ++dum->callback_usage.
++			 */
++			stop_activity(dum);
+ 			spin_unlock(&dum->lock);
+ 			if (reset)
+ 				usb_gadget_udc_reset(&dum->gadget, dum->driver);
+ 
 
