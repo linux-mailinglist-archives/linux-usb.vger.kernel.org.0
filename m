@@ -1,119 +1,113 @@
-Return-Path: <linux-usb+bounces-34802-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34803-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CL83GsWVtWnL2AAAu9opvQ
-	(envelope-from <linux-usb+bounces-34802-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 18:07:17 +0100
+	id 0DIxCC+atWn82QAAu9opvQ
+	(envelope-from <linux-usb+bounces-34803-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 18:26:07 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2E7228E127
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 18:07:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BAF528E23D
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 18:26:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 8084830101F3
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 17:07:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7316C305263B
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2026 17:23:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750DC3264FD;
-	Sat, 14 Mar 2026 17:07:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F9D429A9C3;
+	Sat, 14 Mar 2026 17:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="USBEeuHs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5983E32E121
-	for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 17:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 904602773E5;
+	Sat, 14 Mar 2026 17:23:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773508026; cv=none; b=Z0plAjjS1rfDsU603VXinMddg3isbcI6wamq0TZAZgthj9skVK+a4EJP4bCSWkz5HNc9yBF+H0n4ZtSwT72JEH00QC/oysz1kHdvfJsefY004mHs60wm3zmjqXuiJ3YpxzmC7E4AJe5iTHjze88yIgA6qUGnfKs6ZHbnovaNVWk=
+	t=1773508997; cv=none; b=Kk7RaNEylsKcCIVV442tWErBtDPwcWAAweX285IqnwYjWxt+2yS7Ky0dDafHDuMilJzjEv4mrZE1Eif8BRfWZ34ccySR6yXRdFP4+KeenpnHdvOuJGSv72inO2zgplmzY8t4DMcd0N7XgRxk8M7j4Wy6MoY+tKNZaIARGsOafks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773508026; c=relaxed/simple;
-	bh=dMcpKmkbhCGD3O393x0HpDYI/LRBdOlqzxphYpqCFoU=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=V1V38+DVTYZZ3EvyHGlz3s1nmLuPybO7W9YZ9P5/alyeEkT3H71pAw61p0VuepyWKVfrIk9EFPWpXZtPLX4jYBY3Xx2lpI1uMjAo3O9e0+NRrQNr40I+9zW81VRDneYLzB0SwtYd2mpXSntL3+6BzAViGNCa86w+WM0AhoyCM/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-66308f16ea1so39246711eaf.2
-        for <linux-usb@vger.kernel.org>; Sat, 14 Mar 2026 10:07:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773508023; x=1774112823;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zkEhXUpb0+5hL/MNQX2ikDwmXrwhTY9l+Zp71GR65iw=;
-        b=L79ZC/ZKhqk4U5r50l8+Fi4SdaaXM18uhM1IFa9nvSTy6eOqzhIS51A7E1nb1IbEdM
-         TxPN+uNc/J5WEJHpXc/b33kThBZgHyBfVjDmMHWST9F3Y1K0pnj7WutFx1gVeX9hdSAn
-         6u4dr04se8xkH1I47ZjgbZNSj6lvUs6LAH0qyNaMNd9jO6h9BRb3dpbDcVOG3pZydcjW
-         aziKj2oZeEATYY29KmjG+KXEeU4cvU0e8d832NcqucYJjsXIsQAhUpPN6yBWo2YjSpBz
-         3+qB/3Vi4BgIh03KPsKBD/PWCkjKMHICYaGq/Uj3b339+AWlDgBsWSz4QFL5OMGb2HPm
-         BPSw==
-X-Forwarded-Encrypted: i=1; AJvYcCUnchx8/2jBL13ywK3tJUo8KQKLbGLZzx/nhPT+jvg6RQGBMfGORgU6k2YsYd13CCRMoXhrPiZJLbk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhW54lFGMeqcgOMfamax4maWnpU5OtR6Ci1achpUwIP6RlB++c
-	RFTpMmBx2WUgE3FndHzFca7oSitrk9CeYrVLJo/hwHSoVBOgihZt77cd3xgrMiG3W4ORd8iP8NZ
-	nT3Nb91+KXEDuXq0kZmMUiCKkOaw4+2LwrGRUw5fxNfV+KZ1I9Ca0ekjYmMw=
+	s=arc-20240116; t=1773508997; c=relaxed/simple;
+	bh=VCRy2+DEvO45RFXAfweziVvcPV9UABO2btNCIKmoA18=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=HZ4ioCYyvY0UXcm1ueC3OQpo9Ncoji+BQ2wCauXe965JGTxmu4yWi228l64fYK+0RLG/9KEEtYz7yy7fpT/geU7GIqzFqdBJx7npXtVfy0USdE9Ahscup1doCSJW60aepKz5XZZB5z6ATu7q0X+jjMyrGZc59xbf11FOhZuEVlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=USBEeuHs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58DFBC2BC9E;
+	Sat, 14 Mar 2026 17:23:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773508997;
+	bh=VCRy2+DEvO45RFXAfweziVvcPV9UABO2btNCIKmoA18=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=USBEeuHsRMWa7bFBuUF0uefxuoNHH7QANvWdcZP/en8bHqrVKAd6+0mIy5qanV+gK
+	 X+fr7AzLYLjZgvLdj29hUD5eCOTkzCLcuxQQIw5zSMAAmcXLhpGTc2BqaoHiGadiof
+	 CWi5Kys47/dKSot3Ythj0qjWSBS7MwG3QJ7ykXXb0CmArZReZqaQw8s6UxJFMnhCkD
+	 Qg5wP5YDcYKPqphZ/funb2h0PDnOCDDxCFUPdQJO/P74bx6VO2e+PZTLOu2pF8sRK/
+	 k+0Lj3Ohj02zcWhbl6Sy04e/bHeEIAqdTVfFCGyPTF069SAb53gmH9sOMqOuHANM8g
+	 AuKJYSSDJBsVQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9F713808200;
+	Sat, 14 Mar 2026 17:23:12 +0000 (UTC)
+Subject: Re: [GIT PULL] USB driver fixes for 7.0-rc4
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <abVLpuXaT8KcBt3J@kroah.com>
+References: <abVLpuXaT8KcBt3J@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <abVLpuXaT8KcBt3J@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-7.0-rc4
+X-PR-Tracked-Commit-Id: d0d9b1f4f5391e6a00cee81d73ed2e8f98446d5f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 69237f8c1f69112cca7388af7fab6d0ee45a2525
+Message-Id: <177350899130.1738937.7374876281299896490.pr-tracker-bot@kernel.org>
+Date: Sat, 14 Mar 2026 17:23:11 +0000
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Received: by 2002:a05:6820:180c:b0:679:e9c1:a91b with SMTP id
- 006d021491bc7-67bda9c03d9mr5021899eaf.22.1773508023468; Sat, 14 Mar 2026
- 10:07:03 -0700 (PDT)
-Date: Sat, 14 Mar 2026 10:07:03 -0700
-In-Reply-To: <041e5d18-6120-48dd-b137-e10020f0c191@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69b595b7.a00a0220.3b25d1.0017.GAE@google.com>
-Subject: Re: [syzbot] [usb?] general protection fault in usb_gadget_udc_reset (4)
-From: syzbot <syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-0.36 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34802-lists,linux-usb=lfdr.de,19bed92c97bee999e5db];
+	TAGGED_FROM(0.00)[bounces-34803-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	FROM_NO_DN(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	FROM_NEQ_ENVFROM(0.00)[pr-tracker-bot@kernel.org,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	SUBJECT_HAS_QUESTION(0.00)[]
-X-Rspamd-Queue-Id: E2E7228E127
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 7BAF528E23D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello,
+The pull request you sent on Sat, 14 Mar 2026 12:51:02 +0100:
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-7.0-rc4
 
-Reported-by: syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com
-Tested-by: syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/69237f8c1f69112cca7388af7fab6d0ee45a2525
 
-Tested on:
+Thank you!
 
-commit:         65169048 Merge tag 'spi-fix-v7.0-rc2' of git://git.ker..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=141f18ba580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2a019678b1a3a692
-dashboard link: https://syzkaller.appspot.com/bug?extid=19bed92c97bee999e5db
-compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=169b5d52580000
-
-Note: testing is done by a robot and is best-effort only.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
