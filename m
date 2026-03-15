@@ -1,163 +1,219 @@
-Return-Path: <linux-usb+bounces-34820-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34821-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8K3dM7GVtmkUDwEAu9opvQ
-	(envelope-from <linux-usb+bounces-34820-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 12:19:13 +0100
+	id ML96NhKXtmnMDwEAu9opvQ
+	(envelope-from <linux-usb+bounces-34821-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 12:25:06 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D1F3290795
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 12:19:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52667290857
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 12:25:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D48FA3018681
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 11:19:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D31CB301DE20
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 11:25:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16C4633985A;
-	Sun, 15 Mar 2026 11:19:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C433F33A6E0;
+	Sun, 15 Mar 2026 11:24:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M5uNXxZg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G4dwVUJ8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E175219A7A
-	for <linux-usb@vger.kernel.org>; Sun, 15 Mar 2026 11:19:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E11267B05;
+	Sun, 15 Mar 2026 11:24:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773573550; cv=none; b=bMKjdi3cJErsoJW2Au9UlVok2NvIZe+hHnrpsUHd5H4jYXUukiH9Az5PXxMfN+tuVNBqjyEN7kXqeVqFsMPQPw2SXs2m+SJXh7OM77QGX+y3H9b2hky0bIOvKOeI4Bi9wG44kBYLzQlvKJOhTXZ26FolUvvdanRCfA9Wr9nwZAE=
+	t=1773573899; cv=none; b=Oh2s3AkDxbGjuLbZeSxbjg5hdG58fWqt/Q/doVOLkbG6uDNHei92dIa7QApnE/69Md9F3VTwcOTSzB2XswUqHd4390JZCzPL9YXS5eW5HlfkO/gZc38hPm0RGV95BlrQDWihIp7KwKM3Exl85NdBUCppKAHw6+jSnfGROA0o21w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773573550; c=relaxed/simple;
-	bh=0UefnO4eaW8lHsTXEvSrUC5/KAXSGKCM63koqRLi84w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MvTCitJH+Vlg1g9xXeHjJquRC2Y1+2j50+B+Tmfqwm+eLxbacU+Hi5wnwGIGE01HTTPBIY6uTxvJlYWzNwCoULBWiJCO6/4x8fmB+HcuCGhpkgr3GOjOnzn/wpXlCiNBmgMnPmI/4kOwaAtJfpU/1L72X9mw37tHOPV4TROSdRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M5uNXxZg; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5a12c19affeso4522626e87.1
-        for <linux-usb@vger.kernel.org>; Sun, 15 Mar 2026 04:19:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773573547; x=1774178347; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gHh6cG7abCLnOdDMslHtYEIsgp0ugQWOPOXOQy5UzL0=;
-        b=M5uNXxZgwsKms9BggJLFW9CCl9EjQAZFvgs1mfheOj9Nt6qYPy7ujm0hw67c5VkHVS
-         GjomieBb/dMN0UPgrPRIRkfgNUjK6MUMADRLDg1xSM/Wl2rcFax/OGit8qngz1AHe+r2
-         g/Uydk7OVuw/AqoP8EZmo1vpltNW4r02pZXmvEi8+clM4lEZVTx4LLe1/MQfRPuS6Btn
-         5nqtzRyyiKRizikCk1kaeelXiHlQbndR2b/j+LlpEblldwfr2jz4VsgBDvuFtAycXVc7
-         6Tbl79eqC/EFNj0FEhL+PGWiQqli9M4bvSB6cM0APkwiZU3ueugzCtyDhe/joRSFdVsZ
-         Eipg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773573547; x=1774178347;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gHh6cG7abCLnOdDMslHtYEIsgp0ugQWOPOXOQy5UzL0=;
-        b=o9sCdegVCDueoK7xfXRKqG95x/NCIWTLrIQCXjCd+VFS3GEv4AL1eUNhZ4HKSdX5j0
-         bl5+M6CiiCYtxfHi0whaA2M3evQ1jJtQGMUuESpo3ZmDbGcWZeqo3h+PlSxlwee9WL2D
-         JK0pvpDuhtDzKvuAeAE9mJYId8S4Cw3//vvJQH68EwrDj6NcgEqN3y9Wyu3C3Z+8pjZg
-         fr11NSjjbtnB0QEsnUZr75PeHssx9zLYQppFlX8fJ0FI1CssR/NMuWSC8bnNFaSLRrgc
-         zTAxAMcO0N8EibosWyJh45pdLbSyhkslEjm3V+eCSBpCf+mMUdI4zLuiSv69JwnKBQm9
-         aQkQ==
-X-Gm-Message-State: AOJu0Yxi+HMXgAR/63ARmZq3/fU/pFPKXGVv/c17FgUU5G9URjS83ST6
-	2tvbAMXLN7euCFai8waPwW+RrVLdTgwm7xVOCNifoAvKhZAzDOxc2rbOz9SQbkca
-X-Gm-Gg: ATEYQzyrUPtbry+Ll8B5/GkaGrS1ypjn8fpvKFzE/PVumrdXNkILIfLGZaBgIWoaUn0
-	oioqMrmCfcjI05J70YK+SEzjvQI6SpaGnjK875UOFbvh8VCy5AKOa8WpXgYjTvxAvI0SV7DcGkb
-	X4KHyfpvZDTI4jpHMRS1v9dJWCFBe0DPWgmBGvg3J+Y/JX/ayzoWY2cWFa/CKw/13wc8teJtFrC
-	I4NTpajwe4FLb6MSutjbAbZd3MWdEy2H0vzGFll8748jbGhYGIhIilUHGqnX/YZ8pIPpMwhD6RV
-	VWt18mLJ2MW1+F8uTzKy2EghwZLqi4O0NI4hbJtLR3Vc4xvesvUIrE3CxXBuQZ0b2rC/QSId1CW
-	UceBHbJOoydv8Hyqa+VQuSHMdSmnqCpEi/ZfjWddb7wBnl/gLQ8TuwL7kdEdFLopjS9pZAZy1DI
-	3v/gkSC4jGBw1JkZm0uH4wmZB7s768EutEF8ENMOFONoYYwX4NwRV4/yggygLZ98a+TMjrcano6
-	4kqZ+pBT3aYMl+xuA==
-X-Received: by 2002:ac2:43d8:0:b0:5a1:4246:4168 with SMTP id 2adb3069b0e04-5a15a4b6c3dmr2815742e87.15.1773573547031;
-        Sun, 15 Mar 2026 04:19:07 -0700 (PDT)
-Received: from lawki (h-155-4-172-88.A1139.priv.bahnhof.se. [155.4.172.88])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-38a67e7c014sm26470451fa.44.2026.03.15.04.19.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Mar 2026 04:19:05 -0700 (PDT)
-From: Loke Forsberg <loke.forsberg@gmail.com>
-X-Google-Original-From: Loke Forsberg <Loke.Forsberg@gmail.com>
-To: linux-usb@vger.kernel.org
-Cc: gregkh@linuxfoundation.org,
-	khtsai@google.com,
-	raubcameo@gmail.com,
-	kees@kernel.org,
-	linux-kernel@vger.kernel.org,
-	Loke Forsberg <Loke.Forsberg@gmail.com>
-Subject: [PATCH] usb: gadget: f_ncm: replace kzalloc with kzalloc_obj
-Date: Sun, 15 Mar 2026 12:18:27 +0100
-Message-ID: <20260315111827.20205-1-Loke.Forsberg@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1773573899; c=relaxed/simple;
+	bh=tlATkbd1A5yjwsckAb+9heaam6KZoma++SSiJPJWNE8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=N1ortLOL6maf1j0I/VHsqeIsZQeCuHu3WtzI6aWg/wCBZSxDBYJIIcbZm+DbNwdLIXgBJcnSGCR37h6K7JNpgsHiJsQGVGD7XvEUH8FiNdG+fIaVpQO6fmAs1HY4mEcrLIHTIirpVo5Bv+xF9ed+Bhm4Y97cZLRjq2EYokyds10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G4dwVUJ8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F2888C4CEF7;
+	Sun, 15 Mar 2026 11:24:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773573899;
+	bh=tlATkbd1A5yjwsckAb+9heaam6KZoma++SSiJPJWNE8=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=G4dwVUJ8H7My09OI6BtGQkYSg5UZUlgMTxFfg+nqzdc9ohNquwgWrwSNPtQXfiKgQ
+	 G0kXyIJ3C3oXFOdNXKVMcNjA4X5+PRvkGt9HNv6I29Lm060gZVeMdEYVI3vDo8OjWk
+	 QRyZlxoc0CXieGMqYXt7fAjNe3oUk3DdqlSHqSwwnbqV/jbNtdAfk7B3zr78Xp9yuw
+	 50b3HuPLmkZqcCLnr14kmGDdzDXYB/HHSxsME1hDkHDDrVT5QMCg5hlIDRAHXAgzX7
+	 yizIhNNBCL5zA3PYHfCt7RThhkLP4vBOuc9j1hFf7FGA/cYV6m9qxnuXK/0CHszi95
+	 opCTYJXTwQYuA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7188D58B1A;
+	Sun, 15 Mar 2026 11:24:58 +0000 (UTC)
+From: =?utf-8?q?Bence_Cs=C3=B3k=C3=A1s_via_B4_Relay?= <devnull+bence98.sch.bme.hu@kernel.org>
+Date: Sun, 15 Mar 2026 12:24:44 +0100
+Subject: [PATCH v2] USB: core: Use krealloc() in usb_cache_string()
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Message-Id: <20260315-usb-krealloc-v2-1-32f83e090409@sch.bme.hu>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/1WNzQqDMBCEX0Vy7opZxWJPfY/iIUk3Tag/ZVelR
+ Xz3RqGHwlw+mJlvVUIcSdQlWxXTEiWOQwI8ZcoFMzwI4j2xwgLrotQaZrHwZDJdNzqoqNKlx7I
+ xjVdp8mLy8X3c3drE1giBZTO4sJ/0RibivRiiTCN/Du2i9/rPgP+GRYMGf65tgylVgVdxIbc95
+ WFW7bZtX7kHnaHCAAAA
+X-Change-ID: 20260311-usb-krealloc-4e413f239a9f
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Bence_Cs=C3=B3k=C3=A1s?= <bence98@sch.bme.hu>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773573897; l=4191;
+ i=bence98@sch.bme.hu; s=20260213; h=from:subject:message-id;
+ bh=2kZ+PbbmbSbJa9UFioo3zinMoPidNiiYW8i/CUabtoE=;
+ b=U4YeXma1jMRkhsd3BfahbVB9heC7qc9cqfIEry8ybQADDtelwJmnR+tnml/DXzp6zuJcD6oog
+ 205Pr+HIxvVAK5cFPVsE5iPIMXVfD0ERUyLdQ9UGNwJKMGCoHti4pVV
+X-Developer-Key: i=bence98@sch.bme.hu; a=ed25519;
+ pk=rtWE8PtqZ5ZMyUVCckDq8i1ASLxgUbV2fwDA8KaOli8=
+X-Endpoint-Received: by B4 Relay for bence98@sch.bme.hu/20260213 with
+ auth_id=636
+X-Original-From: =?utf-8?q?Bence_Cs=C3=B3k=C3=A1s?= <bence98@sch.bme.hu>
+Reply-To: bence98@sch.bme.hu
+X-Spamd-Result: default: False [-1.45 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_MIXED_CHARSET(0.71)[subject];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34820-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,google.com,gmail.com,kernel.org,vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lokeforsberg@gmail.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-34821-lists,linux-usb=lfdr.de,bence98.sch.bme.hu];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7D1F3290795
+	HAS_REPLYTO(0.00)[bence98@sch.bme.hu];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[bme.hu:email]
+X-Rspamd-Queue-Id: 52667290857
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Replace kzalloc(sizeof(*ptr)) with kzalloc_obj(), to improve type safety.
+From: Bence Csókás <bence98@sch.bme.hu>
 
-Signed-off-by: Loke Forsberg <Loke.Forsberg@gmail.com>
+Instead of "shrinking" the allocation by kmalloc()ing a new, smaller
+buffer, utilize krealloc() to shrink the existing allocation. This saves
+a memcpy(), as well as eliminates the temporary `smallbuf` allocation,
+which guards against allocation failure under extreme memory pressure.
+
+Signed-off-by: Bence Csókás <bence98@sch.bme.hu>
 ---
- drivers/usb/gadget/function/f_ncm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Tested on an AthlonII X2 PC running Arch userland with Plasma.
 
-diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
-index 14fc7dce6f39..e1e6763293ef 100644
---- a/drivers/usb/gadget/function/f_ncm.c
-+++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -1456,7 +1456,7 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
- 		return -EINVAL;
+  $ sudo lsusb -vvv | grep -P 'i(Product|Manu)'
+  can't get debug descriptor: Resource temporarily unavailable
+    iManufacturer           3 Linux 7.0.0-rc3-00355-g94926a68d237 ohci_hcd
+    iProduct                2 OHCI PCI host controller
+    iManufacturer           1 Hewlett-Packard Company
+    iProduct                2 HP USB Smart Card Keyboard
+  can't get device qualifier: Resource temporarily unavailable
+  can't get debug descriptor: Resource temporarily unavailable
+    iManufacturer           1 PIXART
+    iProduct                2 USB OPTICAL MOUSE
+  can't get debug descriptor: Resource temporarily unavailable
+  can't get device qualifier: Resource temporarily unavailable
+  can't get debug descriptor: Resource temporarily unavailable
+    iManufacturer           3 Linux 7.0.0-rc3-00355-g94926a68d237 ehci_hcd
+    iProduct                2 EHCI Host Controller
+    iManufacturer           3 Linux 7.0.0-rc3-00355-g94926a68d237 ehci_hcd
+  can't get device qualifier: Resource temporarily unavailable
+  can't get debug descriptor: Resource temporarily unavailable
+    iProduct                2 EHCI Host Controller
+  can't get debug descriptor: Resource temporarily unavailable
+    iManufacturer           1 USB
+    iProduct                2 Disk 2.0
+    iManufacturer           3 Linux 7.0.0-rc3-00355-g94926a68d237 ehci_hcd
+    iProduct                2 EHCI Host Controller
+  can't get device qualifier: Resource temporarily unavailable
+  can't get debug descriptor: Resource temporarily unavailable
+  can't get debug descriptor: Resource temporarily unavailable
+    iManufacturer           3 Linux 7.0.0-rc3-00355-g94926a68d237 ohci_hcd
+    iProduct                2 OHCI PCI host controller
+    iManufacturer           3 Linux 7.0.0-rc3-00355-g94926a68d237 ohci_hcd
+    iProduct                2 OHCI PCI host controller
+  can't get debug descriptor: Resource temporarily unavailable
+  can't get debug descriptor: Resource temporarily unavailable
+    iManufacturer           3 Linux 7.0.0-rc3-00355-g94926a68d237 ohci_hcd
+    iProduct                2 OHCI PCI host controller
+---
+Changes in v2:
+- Update msg, remove backticks
+- Add testing results
+- Remove ?:
+- Link to v1: https://lore.kernel.org/r/20260312-usb-krealloc-v1-1-f76b92b92402@sch.bme.hu
+---
+ drivers/usb/core/message.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+index ea970ddf8879..a0c77709aa36 100644
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -1005,7 +1005,7 @@ int usb_string(struct usb_device *dev, int index, char *buf, size_t size)
+ }
+ EXPORT_SYMBOL_GPL(usb_string);
  
- 	if (cdev->use_os_string) {
--		os_desc_table = kzalloc(sizeof(*os_desc_table), GFP_KERNEL);
-+		os_desc_table = kzalloc_obj(os_desc_table, GFP_KERNEL);
- 		if (!os_desc_table)
- 			return -ENOMEM;
+-/* one UTF-8-encoded 16-bit character has at most three bytes */
++/* one 16-bit character, when UTF-8-encoded, has at most three bytes */
+ #define MAX_USB_STRING_SIZE (127 * 3 + 1)
+ 
+ /**
+@@ -1026,16 +1026,18 @@ char *usb_cache_string(struct usb_device *udev, int index)
+ 		return NULL;
+ 
+ 	buf = kmalloc(MAX_USB_STRING_SIZE, GFP_NOIO);
+-	if (buf) {
+-		len = usb_string(udev, index, buf, MAX_USB_STRING_SIZE);
+-		if (len > 0) {
+-			smallbuf = kmalloc(++len, GFP_NOIO);
+-			if (!smallbuf)
+-				return buf;
+-			memcpy(smallbuf, buf, len);
+-		}
++	if (!buf)
++		return NULL;
++
++	len = usb_string(udev, index, buf, MAX_USB_STRING_SIZE);
++	if (len <= 0) {
+ 		kfree(buf);
++		return NULL;
  	}
-@@ -1753,7 +1753,7 @@ static struct usb_function *ncm_alloc(struct usb_function_instance *fi)
- 	struct f_ncm_opts	*opts;
- 
- 	/* allocate and initialize one new instance */
--	ncm = kzalloc(sizeof(*ncm), GFP_KERNEL);
-+	ncm = kzalloc_obj(ncm, GFP_KERNEL);
- 	if (!ncm)
- 		return ERR_PTR(-ENOMEM);
- 
++
++	smallbuf = krealloc(buf, len + 1, GFP_NOIO);
++	if (unlikely(!smallbuf))
++		return buf;
+ 	return smallbuf;
+ }
+ EXPORT_SYMBOL_GPL(usb_cache_string);
+
+---
+base-commit: 1c9982b4961334c1edb0745a04cabd34bc2de675
+change-id: 20260311-usb-krealloc-4e413f239a9f
+
+Best regards,
 -- 
-2.53.0
+Bence Csókás <bence98@sch.bme.hu>
+
 
 
