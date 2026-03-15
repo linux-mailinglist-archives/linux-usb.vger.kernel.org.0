@@ -1,216 +1,213 @@
-Return-Path: <linux-usb+bounces-34813-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34814-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gXd5IfRBtmm8/gAAu9opvQ
-	(envelope-from <linux-usb+bounces-34813-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 06:21:56 +0100
+	id cF2JA+V1tmkYCAEAu9opvQ
+	(envelope-from <linux-usb+bounces-34814-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 10:03:33 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FAB428FFDC
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 06:21:55 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A14AB2904E8
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 10:03:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 1ABAC3010921
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 05:21:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 665943032CEF
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 09:03:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBF831DF742;
-	Sun, 15 Mar 2026 05:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BACD02641E3;
+	Sun, 15 Mar 2026 09:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b="Tsn6wyHj"
+	dkim=pass (1024-bit key) header.d=surban.net header.i=@surban.net header.b="fP3ufQvN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11021109.outbound.protection.outlook.com [40.107.130.109])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 325C235898
-	for <linux-usb@vger.kernel.org>; Sun, 15 Mar 2026 05:21:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773552105; cv=none; b=IOaFBBlJkO5XYy33M4GfYpGCgDxNWxAo8Fda9f8wztlVNRZUMYFlAh9PFOc1XP4OrJvjKlNiHu/UP4ToYEE9QVNYVFkeoFWr5A5pOc1iL99M5Orpfl/NMpW1d4OdZOeS5fIGWnYeuwxAaO7NSJEKokomWV9EsRvwHUGGN4UzVfM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773552105; c=relaxed/simple;
-	bh=R5jmMat2HWpxUGIj7j0lV9HKmGJyGaS9EivY6VSkl6Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DVfWLCTwNkVOyQeryiJp7q+aN6NdXeQCvapDTGKMX1KgeOW63tIEJGeRnMPjAGRr0HOKfNu4TjOpzs6xa5rE91n1Pfvt1zczlrjK9ubLlbrV3sk9miNjzL63vbi2UdUkXgMeb2D8ytYrT3xEvCOwr+d0CRIKDT4UtPS5UYSN2pQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool; spf=pass smtp.mailfrom=packett.cool; dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b=Tsn6wyHj; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=packett.cool
-Message-ID: <10890524-cf83-4a71-b879-93e2b2cc1fcc@packett.cool>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=packett.cool;
-	s=key1; t=1773552100;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VTukRrOhuGMF/c2GfZ9K6zim0wNjOzGcB+iaGYvNiYU=;
-	b=Tsn6wyHjh1OBtU8JFJqufrYmtUcuFU1l6Wj865mjvn/stOxp99hDXGF2r9yBHmUauMm7An
-	KaU811Tx/aLjeQ0NwpdjHj28Xa9+hsCxGifyKGhBo5ajJLBixv+Mx0cmdkXdhubXqIiOw1
-	Ogs1l2+IM8hSlqlbqYrWheOB2dRbqIm60H1iUyV4nO5zIpeZYh8yG2QxT6T8Q2a9b4Biq+
-	xb6t/V9p5N2i30a95HH3bAbiHB3GjNlXfuMk/4OkCHNrJm9O49Is+bantN8A6f/FPOsEjO
-	JsKY483C2noPOxGftoCFqFAiRiJ5yQkMRHpnTPxFfF2p83rT77UpuxcNu+E5uA==
-Date: Sun, 15 Mar 2026 02:21:30 -0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06C57EADC;
+	Sun, 15 Mar 2026 09:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.109
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773565403; cv=fail; b=W3aCEsuppAs+3YPluXirBObMCoN0DT+9mjV59ezlYIaNuNBHyoon6gi9ly4HPF7NMjt7UC0JDlnqTMfqarWrcyivXY0RyIu0jbFP7B5oC3yVjpwP6TepGWpL0Kfw88JNi+GOjWHZpD1KV4qRp+nvPPT10/BOmlcKxggVFuIZ210=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773565403; c=relaxed/simple;
+	bh=HphQTg0tXmFzX+qu5hoM9Njy1bzw/js5Jf5d78FuNNo=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=EoycOZyOxg0H1yz25LQRFx+6jz3sTExJyxURAMU+4/+cCp0k6YX6YwABfBCN1HSTylhlESUGE/GyN02UkpSKESEBtk3P3G9vfBAf0QIZr+eyUSlKr5YRjLeLPc7qHBzsPIwwKBHUVs1Dt3BU+W+FH15kNDxsWtANwhxYvNtl+WI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surban.net; spf=pass smtp.mailfrom=surban.net; dkim=pass (1024-bit key) header.d=surban.net header.i=@surban.net header.b=fP3ufQvN; arc=fail smtp.client-ip=40.107.130.109
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surban.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=surban.net
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=SDrN+QXEcQtRix4Nnvm6ffK4xzIAu/Dcg9Jr3Hwpm9EE576iK7uewR8jFSO2O6/BsZpTpFVhiH3x3PaDIXbLSjZjvY1Filz3frdoBaVuYzxB1scXdrSq4fgFQpACdrU4YXxWrFqoPaAZlzdjVli5+nAAePeZNswBaQMb4E6/FchosaYgZJxBVnGxKhYTC0H7T9XY/xmprKU5JuO4hY4osES5T4H1l4NuQjRlkkk2njkFDsTptk+vMj/OfARuJ01DIU3ck4PKdlrHwPznbBJzOWdmkmrqCTvZhh+5EOliUIHpQlycczJeLnG55X0Y5+nThVGFIyB5qxj7DAIZx+CIdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SVSvqJXhPEl65418e6ZVHIzyvO4yBIwp93ntZuV3Wjk=;
+ b=eWv5Rf+4U2ROCLesIyKOb3ZowIUtWp6Tlsd4fP6lRy6x43iYwZTM2zMOu+2w70TYR7fihsIIenjZt1onJmPWvusPAmGceLIApFFQu15bjY1WhL/ARMoO3WaI3zNTLyAeRiNM/DfzriMRwvi2nfJ/i3kHNN2ZmC962zGplzUO7guAbZrhzMhdgMUccIboFH8UQqsl7Fm8hhvox8sPGch9gzkcr193TTGRtyY6w3sfZ03T5+ZgFJdeSs2P/242i8aWPnSpSKNkwNsmqlvGvTPolqqUTaxpOHhUMdFVfsy9Tp66afyAeMX1aAZiVjKWnXDz2RwWd71ZVcD77gonuDt8Ew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=surban.net; dmarc=pass action=none header.from=surban.net;
+ dkim=pass header.d=surban.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=surban.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SVSvqJXhPEl65418e6ZVHIzyvO4yBIwp93ntZuV3Wjk=;
+ b=fP3ufQvNDvj73lDaTtuC0J8C0U3FHR1fYFT+9JDp8XCbZbSDcU6EnUmFlmFMhDrWTDBI9FiHVEKRGsTkxZGBqH/iKKXx6IcI4qZRUBp1c5f6QJsjLLqKC8lTa3sEWcAgasLVHSYXCeTy6WcQYRnqhdtqFN/rf6vrVRmyfI2/q7Q=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=surban.net;
+Received: from VI2P189MB2656.EURP189.PROD.OUTLOOK.COM (2603:10a6:800:230::12)
+ by AM7PPF351D2A478.EURP189.PROD.OUTLOOK.COM (2603:10a6:20f:fff1::68f) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.22; Sun, 15 Mar
+ 2026 09:03:19 +0000
+Received: from VI2P189MB2656.EURP189.PROD.OUTLOOK.COM
+ ([fe80::4f27:10a8:fdea:41e8]) by VI2P189MB2656.EURP189.PROD.OUTLOOK.COM
+ ([fe80::4f27:10a8:fdea:41e8%4]) with mapi id 15.20.9700.018; Sun, 15 Mar 2026
+ 09:03:19 +0000
+From: Sebastian Urban <surban@surban.net>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	surban@surban.net
+Subject: [PATCH] usb: gadget: dummy_hcd: fix data corruption with queued requests
+Date: Sun, 15 Mar 2026 10:03:07 +0100
+Message-ID: <20260315090307.304644-1-surban@surban.net>
+X-Mailer: git-send-email 2.53.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: ZR0P278CA0159.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:41::8) To VI2P189MB2656.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:800:230::12)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 7/7] usb: gadget: f_ncm: Fix net_device lifecycle with
- device_move
-To: Kuen-Han Tsai <khtsai@google.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Felipe Balbi
- <balbi@ti.com>, Kyungmin Park <kyungmin.park@samsung.com>
-Cc: David Heidelberg <david@ixit.cz>,
- Ernest Van Hoecke <ernest.vanhoecke@toradex.com>,
- Jon Hunter <jonathanh@nvidia.com>,
- LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@kernel.org
-References: <20260309-f-ncm-revert-v2-0-ea2afbc7d9b2@google.com>
- <20260309-f-ncm-revert-v2-7-ea2afbc7d9b2@google.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Val Packett <val@packett.cool>
-In-Reply-To: <20260309-f-ncm-revert-v2-7-ea2afbc7d9b2@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[packett.cool,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
-	R_DKIM_ALLOW(-0.20)[packett.cool:s=key1];
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI2P189MB2656:EE_|AM7PPF351D2A478:EE_
+X-MS-Office365-Filtering-Correlation-Id: 123fd607-b5b2-4856-7c9e-08de8271b3b4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|10070799003|376014|52116014|366016|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	9ueAq+jrZl86LdgMeHSUmDSOSpW/GmZtdHFTi5+OhzKj4bZK3Zu9P9bbEtxqT+oby8hHUfQUsgpPfbw5zSqD7XCWuKxFnXYNMoOhsyUB1glQtUsaYIA0AI3cKd6qKbttQ/tSZzFRSK5pkB7TkGV2i8Jck9wOisi3e+IruIu90brsjwlfPmGppOKJuEFxHTD/Ozw+qWuVG5Gna2iK3qaLODqFvaYPqBKJO2Xv3schfxZ0R5JWbXSdec4detALm1NeMTnjAXUCCdap2YwRwrsSdityYkGj+WykyOi9IapKXMQmBIVhFVTNRiZTV3b6HH/jjEISS7SHkOfMiEakqdk/NJ4gNpco/vOjvC6VN06cZyrxxO0al1at9sHJMQgG4KKVa6S2b3bEJlRi6YnW4OqdL7It0EwXTVpm0o6xsVDJbAX+kECmFlj9KbqrLi+j2VmwKsXiGmln+roMDBSkwA6DopBNSvzF2EFNgjpAJ5cmNdErDDQT5ZXcHYx86YWCpoefkjAI4AqKJgkt/UCH5Fn3LX0jGaWp5CZZpaFVHnuKLGEcS+s8NGTf1h28k00Q/GnRolOs83ZjiXlPwaZZZl2PMoKsyohLOuZsik0dFLwwAYcYo1oiC6w1tDJD9/kUS7O4AossTEF+SOxfc6YtdVz4u+WVPCzbaFvg6gudb30vK/k9lkuoF535rvvvQeTQWJ1Ur8+yZFv9/Pvf3e41UwFmBt9/mvRBGv2iePg3qL8jI7M=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI2P189MB2656.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(10070799003)(376014)(52116014)(366016)(56012099003)(18002099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?MkmLJZVSz+sZMb4eRMZDOzw8E1VAHQMCR7imbPrB4QiI2cHrHX3WZZYoVZ1c?=
+ =?us-ascii?Q?WTMMgAw+aAWFDgGHjK1R87OPajUJsa4l8FpmDI3wk7t6pSRMTJXln9lmrbey?=
+ =?us-ascii?Q?aufKVhX5tX7aL8HAThlaZBz5LSRy2KJz03Sx6b+Tw9Se58VWhXpGxw4aHv6a?=
+ =?us-ascii?Q?1IBzj5TvWJeuNBsdNNoIn8w6e2MiYXi+rWb0F0cB0g15/MWkj162VUCRYVJN?=
+ =?us-ascii?Q?YbX1BBLtcN1JzMzINFLfOtb6KwHEwHl3VZntGsKYwXKiWhhJpHy848nr/16q?=
+ =?us-ascii?Q?yIXh7AyXQEqTV6FHjl3jIQOvOhmt4Z9omFakfo/z1AJFcvOB2aXUWurpyp4I?=
+ =?us-ascii?Q?51yu2fXgvOEyrtsVfalkC85FPDfIT2P7gisLdMJcka47Kn3xFaOILrC6kAZU?=
+ =?us-ascii?Q?FF4zWmUdVSeLbcuuGhZoFVRJu0GG9SN+dLh3oqO8EzyBuNrONYcxAOofeyeC?=
+ =?us-ascii?Q?DhUXmFruW3AyaGBOkl38+JQqqhBW7h+OzEYbk7vsN9af3Bk3r6QoDVWBKYYP?=
+ =?us-ascii?Q?w66G9qjR+3Y3Eq66MyYgmj65LtJUonyPudUzFzfa4cpedv1VeGdyxVAu83dt?=
+ =?us-ascii?Q?qrxNJ5YGw6ORaUMIfhtRgpCzTyxbj3BWelLBqTHHGJ4VIVXHSVkWIejXuPXS?=
+ =?us-ascii?Q?jxrJvRFsaDtYzRI4STxKsxi6Zr960fE3KtFdAaWlNbkzBXhqK8rd4pLUL75M?=
+ =?us-ascii?Q?ksNksyed3Kts5tFWxDDdQgjrruIBFE9W5sbiNZjoequfcR8lM92b82eFmKQt?=
+ =?us-ascii?Q?z2xDg+VD7GVuwELCkAuL3yI8oLJ6LWWWWE93RRr9vTOWUPP6RM3CnQxqkS5X?=
+ =?us-ascii?Q?RMuNeWjA2GhpfMqqGh+X/Ox1S7P1jnZFYv4+k6lx/J3WEbGPgQs4urE7nDCA?=
+ =?us-ascii?Q?7HtlJHlxGKfNEusLOc9T5yPtLW9IiaD0Lurk0eRqZ7i++HUb5Ls6iXmglby2?=
+ =?us-ascii?Q?qHBqhHur69kCLZmkSZ+m+jxBr4ObVhod4eCpPcAhoo5fbqjbsqy/XRE02eTr?=
+ =?us-ascii?Q?GR4TW01o115bG4o1eFx58j79D9LXaxcUGnJ+deEe2F6VzkjSDgrmez9O455W?=
+ =?us-ascii?Q?nNKsCPkIcPTrnB/L1PgAeMBm3ErzmMeN0VWj+qvUobFI5jWd35DpSYu5g5TN?=
+ =?us-ascii?Q?CnfwtNGCiTKHmXKCPlndqXs+DttZ9X8pQR5NW7wOfsUV39kfLDtbJsgEpTby?=
+ =?us-ascii?Q?geci9hucD58WaF0HG4ctRy42cO9y6MA4R2NpGQKs0wJZ4RG3s3zZdTa3/Uxz?=
+ =?us-ascii?Q?5jqyz3kyinw8COFcmRvjkY4sd/rAxTJ4hfM46ewXHz1o9or0cHjAOZJQogEI?=
+ =?us-ascii?Q?93x1ZR2uCOF9d5/uXdSUd5JHtpMrdBTj5A81592p+8D3Z2wuGXMKoXoV+QKK?=
+ =?us-ascii?Q?Lm9wkDY3XYmXX9iNvFw6uUDTYwH8pK824lmA5MciSxqkg4Frq8PeaYVBs+Tf?=
+ =?us-ascii?Q?/pO744OF0GxtE7RDdAXmjnjxfnYgzIiDw0AsIakPtRDILW18sn61B4OFzotm?=
+ =?us-ascii?Q?DBtgwrhVjJOFKCR88mEQuRPTEDpVXIQxG/ytgyLYvw92RxIPT0gfL5jwCxvX?=
+ =?us-ascii?Q?/6nRokYLaBxtXdco8J+P9RyLLiZl5pKihokDPnuoFneSjVpuQbkuYJYUGKCU?=
+ =?us-ascii?Q?lthgOQmpEyDcpn75Yu4VOR6wSqrTX3vlYFn6hTYZDukuhBMOXYwCaxKSmHfH?=
+ =?us-ascii?Q?e0fViyvhuTieA5nxVgEv+gbI1bBqX9FJPrTCp9jwybvzhfS9bKY0gPB8Knjy?=
+ =?us-ascii?Q?doYZT85CiyOa+67qvH3gpOsMUzPIE7c=3D?=
+X-OriginatorOrg: surban.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 123fd607-b5b2-4856-7c9e-08de8271b3b4
+X-MS-Exchange-CrossTenant-AuthSource: VI2P189MB2656.EURP189.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2026 09:03:19.2396
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a27af4ff-c4b3-4dec-be8d-845345d2ab67
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TP98WytuqgLjG+iGguqcbC+sC81E38D2nfCK2qaGT7DyiOd9OdcGKHRj9Za3VrUGiRyy2YlAfQI6WUsDDEEusw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PPF351D2A478
+X-Spamd-Result: default: False [1.84 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[surban.net:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34813-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-34814-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	DKIM_TRACE(0.00)[packett.cool:+];
-	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[surban.net:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	TO_DN_SOME(0.00)[];
+	DMARC_NA(0.00)[surban.net];
+	RCPT_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MIME_TRACE(0.00)[0:+];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[val@packett.cool,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[surban@surban.net,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 6FAB428FFDC
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A14AB2904E8
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
+The transfer() function in dummy_hcd iterates over all queued gadget
+requests for a given endpoint via list_for_each_entry(). When the
+per-frame bandwidth budget is exhausted mid-request, leaving a
+partially-transferred gadget request, the loop continues to the next
+queued request instead of stopping. This breaks data ordering in the
+URB transfer buffer.
 
-On 3/9/26 9:04 AM, Kuen-Han Tsai wrote:
-> The network device outlived its parent gadget device during
-> disconnection, resulting in dangling sysfs links and null pointer
-> dereference problems.
->
-> A prior attempt to solve this by removing SET_NETDEV_DEV entirely [1]
-> was reverted due to power management ordering concerns and a NO-CARRIER
-> regression.
->
-> A subsequent attempt to defer net_device allocation to bind [2] broke
-> 1:1 mapping between function instance and network device, making it
-> impossible for configfs to report the resolved interface name. This
-> results in a regression where the DHCP server fails on pmOS.
->
-> [..]
+Two consequences:
 
-I just saw that this was the last commit touching u_ether while 
-debugging… the DHCP server failing on pmOS. (In the initrd, even).
+  1. Data corruption: bytes from subsequent requests are written into
+     the URB buffer ahead of the remaining bytes from the incomplete
+     request. On the next timer tick the incomplete request resumes,
+     appending its remaining data after the out-of-order bytes.
 
-Specifically, udev calling ethtool_get_drvinfo and eth_get_drvinfo 
-dereferencing an unset dev->gadget:
+  2. Premature URB completion: if the next request is a ZLP or shorter
+     than the remaining host buffer, it triggers the is_short path and
+     completes the URB before all data has been transferred.
 
+Fix this by breaking out of the loop when the current request has
+remaining data (req->req.actual < req->req.length). The request
+resumes on the next timer tick, preserving data ordering.
 
-[    7.528277] [pmOS-rd]:   Setting up USB gadget through configfs
-[    7.539437] configfs-gadget.g1 gadget.0: HOST MAC 2a:a6:63:b7:92:23
-[    7.545914] configfs-gadget.g1 gadget.0: MAC 76:1d:2b:16:aa:25
-[    7.577888] [pmOS-rd]: Trying to start server with parameters: Server 
-IP addr: 172.16.42.1:67, client IP addr: 172.16.42.2, interface: usb0
-[    7.591522] [pmOS-rd]: Entering debug shell
-[    7.597590] Unable to handle kernel NULL pointer dereference at 
-virtual address 0000000000000080
-[    7.606670] Mem abort info:
-[    7.609571]   ESR = 0x0000000096000004
-[    7.613462]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    7.618942]   SET = 0, FnV = 0
-[    7.622105]   EA = 0, S1PTW = 0
-[    7.625354]   FSC = 0x04: level 0 translation fault
-[    7.630395] Data abort info:
-[    7.630398]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-[    7.630401]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-[    7.630404]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-[    7.630407] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000107b18000
-[    7.630411] [0000000000000080] pgd=0000000000000000, p4d=0000000000000000
-[    7.630420] Internal error: Oops: 0000000096000004 [#1]  SMP
-[    7.630425] Modules linked in: typec msm ubwc_config mdt_loader ocmem 
-rtc_pm8xxx drm_gpuvm drm_exec i2c_qcom_geni llcc_qcom gpi gpu_sched 
-drm_client_lib phy_qcom_snps_femto_v2 drm_display_helper cec 
-drm_dp_aux_bus icc_bwmon drm_kms_helper drm backlight ufs_qcom 
-phy_qcom_qmp_ufs icc_osm_l3 pmic_glink pdr_interface qcom_pdr_msg 
-qmi_helpers
-[    7.630486] CPU: 1 UID: 0 PID: 175 Comm: (udev-worker) Tainted: G    
-     W  7.0.0-rc3-next-20260313-00118-gf4f287b6004a-dirty #59 PREEMPT(full)
-[    7.630493] Tainted: [W]=WARN
-[    7.630495] Hardware name: Motorola edge 30 (DT)
-[    7.630499] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS 
-BTYPE=--)
-[    7.630503] pc : eth_get_drvinfo+0x50/0x90 <..snip..>
-[    7.630595] Call trace:
-[    7.630598]  eth_get_drvinfo+0x50/0x90 (P)
-[    7.630608]  ethtool_get_drvinfo+0x5c/0x1f0
-[    7.630617]  __dev_ethtool+0xaec/0x1fe0
-[    7.630622]  dev_ethtool+0x134/0x2e0
-[    7.630627]  dev_ioctl+0x338/0x560
-[    7.630633]  sock_do_ioctl+0xe0/0x128
-[    7.630642]  sock_ioctl+0x2cc/0x3e0
-[    7.630647]  __arm64_sys_ioctl+0xac/0x108
-[    7.630656]  invoke_syscall.constprop.0+0x48/0x100
-[    7.630664]  el0_svc_common.constprop.0+0x40/0xe8
-[    7.630670]  do_el0_svc+0x24/0x38
-[    7.630676]  el0_svc+0x34/0x180
-[    7.642931] [pmOS-rd]: /usr/bin/buffyboard
-[    7.644473]  el0t_64_sync_handler+0xa0/0xe8
-[    7.644482]  el0t_64_sync+0x17c/0x180
-[    7.644491] Code: 91094021 94134bd9 f9457680 d2800402 (f9404001)
-[    7.644495] ---[ end trace 0000000000000000 ]---
+Signed-off-by: Sebastian Urban <surban@surban.net>
+---
+ drivers/usb/gadget/udc/dummy_hcd.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-As a "workaround", this works:
-
-
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -113,8 +113,14 @@
-
-      strscpy(p->driver, "g_ether", sizeof(p->driver));
-      strscpy(p->version, UETH__VERSION, sizeof(p->version));
--    strscpy(p->fw_version, dev->gadget->name, sizeof(p->fw_version));
--    strscpy(p->bus_info, dev_name(&dev->gadget->dev), sizeof(p->bus_info));
-+    if (dev->gadget) {
-+        strscpy(p->fw_version, dev->gadget->name, sizeof(p->fw_version));
-+        strscpy(p->bus_info, dev_name(&dev->gadget->dev), 
-sizeof(p->bus_info));
-+    } else {
-+        pr_warn("%s: called with no gadget set\n", __func__);
-+        strscpy(p->fw_version, "N/A", sizeof(p->fw_version));
-+        strscpy(p->bus_info, "platform", sizeof(p->bus_info));
-+    }
-  }
-
-  /* REVISIT can also support:
-
-..or would that not be a workaround? The lifecycle of gadget being set 
-seems kinda decoupled from the lifecycle of the registration (??) And as 
-long as it's registered, the dev info can be queried (?)
-
-
-Thanks,
-~val
+diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
+index 1cefca660..0eead4a85 100644
+--- a/drivers/usb/gadget/udc/dummy_hcd.c
++++ b/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -1534,6 +1534,12 @@ static int transfer(struct dummy_hcd *dum_hcd, struct urb *urb,
+ 		/* rescan to continue with any other queued i/o */
+ 		if (rescan)
+ 			goto top;
++
++		/* request not fully transferred; stop iterating to
++		 * preserve data ordering across queued requests.
++		 */
++		if (req->req.actual < req->req.length)
++			break;
+ 	}
+ 	return sent;
+ }
+-- 
+2.53.0
 
 
