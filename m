@@ -1,311 +1,169 @@
-Return-Path: <linux-usb+bounces-34863-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34864-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8B5dNFnwt2mfXQEAu9opvQ
-	(envelope-from <linux-usb+bounces-34863-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 12:58:17 +0100
+	id IMhDKfjxt2mfXQEAu9opvQ
+	(envelope-from <linux-usb+bounces-34864-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 13:05:12 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE659299091
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 12:58:16 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B2EB299187
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 13:05:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 95AE7300D0E0
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 11:58:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D1A47301FCBE
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 12:05:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03D403932ED;
-	Mon, 16 Mar 2026 11:57:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB713939B1;
+	Mon, 16 Mar 2026 12:05:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oD7pxofH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GM2pMPrs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4BE21E1DF0;
-	Mon, 16 Mar 2026 11:57:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C59C283CBF;
+	Mon, 16 Mar 2026 12:04:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773662277; cv=none; b=u+0nXS1AFAvoLUanxUfzXn/82OH6BQLD8NmpqXDf8ki0kTciL9FMDE8V+EooirERbqKWH0ExyMhY7jdnkZYx2dUnV7SuVZ9a7ctG6oG6yY7ho616kSG9oHzRH0Wu5w529SJdymD4Rwpojrkc2Twr12yPYrT1M970TYtvFtb5GOY=
+	t=1773662700; cv=none; b=o1wU97VpLfGYkfKqnkLV6sMC1zlxU2rYVySoqSuBbQwrS2UnlMJDxDcmFA31CR6yXHGY4w5NdfH1ivOnizhFVQWQHFJbheg12ceK2m0fb6aRs65S0IdS8ryVycrenFGBd00bYP5gwclYUe6kkkPt+vEJuL4w6vAUs8Sz+P2ZlEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773662277; c=relaxed/simple;
-	bh=q7+7F41K9BC0uii1Sxp2yvDVUn8AFQNiqJUgMG9XHok=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=V+H6c5LKXJCUYPo8bymZ6KNo9llV/LJqtZx1I1VxBOsS5ya3XkzXLd07BGFhxrUY4BHAemJmj4RaoxVLhiBWv19PLr9JxyAM4BAbUNKstsCOpFcaB+Kq5QaH5z9J5qToVLiCPYUvsoa1sa86Pi9xIVWlucIUrIK45pH8VrWJbjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oD7pxofH; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773662276; x=1805198276;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=q7+7F41K9BC0uii1Sxp2yvDVUn8AFQNiqJUgMG9XHok=;
-  b=oD7pxofHetWF3c7IbaFuIYRUz6iy5I+OjLMhHPefY13pBlVUHpP3/IQx
-   arYp84bWheoh91sTllNtm6+a2ugvo80lT1Z0Yx17KRFu0GV5guLbopGQh
-   M9I3SNU5GOQBgubZTAK/gfWDTbHdJpZRRP4vS4iO6FPFU+ZVGjxzay4V6
-   0WAqots8CoV0Pyis/qR5SLEEi8W5s/+G+tuwoKxYI6NzZ1kMZm33LHhpm
-   forvf1arKcRhdCEihqKZvZjec23hCiuDtaWdtGKrCTyi2TnOCdpJBPArn
-   l+gtlX5vAVitPifjE8GEKr4N/CNG/f7AzLqgdmmzX/QsslxHMpJJIETG/
-   g==;
-X-CSE-ConnectionGUID: +fwaNsT0QVyoUSaGwesqxQ==
-X-CSE-MsgGUID: Ek7sZjHqQyeQB3HOXJcaQA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11730"; a="86027879"
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="86027879"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 04:57:55 -0700
-X-CSE-ConnectionGUID: j/KVNjjrRQ+lbfIu3GCe5w==
-X-CSE-MsgGUID: NKBAWtJaQeu2j6nJeneCWA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="222100324"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.253])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 04:57:51 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 16 Mar 2026 13:57:48 +0200 (EET)
-To: =?ISO-8859-2?Q?Michal_Babi=E8ka?= <michal.babka@gmail.com>
-cc: linux-pci@vger.kernel.org, linux-usb@vger.kernel.org, 
-    linux-acpi@vger.kernel.org, regressions@lists.linux.dev, 
-    LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] Apple Mac mini 2018 + Thunderbolt 3 eGPU: PCI bridge window
- / BAR allocation failure prevents NVIDIA and AMD GPUs from initializing 
-In-Reply-To: <FCEB17D3-3DC5-49C8-8C56-8051C875E2F9@gmail.com>
-Message-ID: <baa658a5-5244-1fa4-4331-03139231667a@linux.intel.com>
-References: <FCEB17D3-3DC5-49C8-8C56-8051C875E2F9@gmail.com>
+	s=arc-20240116; t=1773662700; c=relaxed/simple;
+	bh=qaJiNMc2ldOEWtsqeqCoNFz1G3BwaFSvrTyTcft3gko=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GMF5rt3aHgtwO3QpLuXAei3aKu76YolisyrPjtOPGxO3tbKuPL68aFze4iXW46jqYL1h95xl5zOq6xHrUgtdyxala30mdGcS7GkRVCxY8/oiG9MBNeUl2vA5eXpJJKQkQe17RrV89gJl8HPPhBl91NHvpd4julkco/kqvyY6VSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GM2pMPrs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 672F7C19421;
+	Mon, 16 Mar 2026 12:04:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773662699;
+	bh=qaJiNMc2ldOEWtsqeqCoNFz1G3BwaFSvrTyTcft3gko=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=GM2pMPrsL2plQ3Cq8cqek12ciONIsmaREoQapCn2VDWJ1/q/7k29E8WPfBVaPqy15
+	 I+sKF+6JVQGePWQBjUSsbMht78qo0ssKKPi1dLi2Vcp3sQnBg+2BK5clOsnqKRkZtU
+	 L7wbGBS19/gg0/ecs/xVNsEiJY4wydTjeeFB1HohDNVmpsPyNapKqEFpjHchm0qHyK
+	 cuAeMrpgSVnq8LXiucUG0grlBTkwEjcRECOy/4q3BpGXvkE0Czzoebafvbz/2V0RKc
+	 0XFG9/doZyBSLsl1aE0g0jdLbVegzd2z3mNtCdxb8tL4YQsC+GUlNauR6J0z771PP+
+	 LdVc1iTaA/icg==
+Message-ID: <87b4bd3e-2287-423a-bc6f-ba6c0a516665@kernel.org>
+Date: Mon, 16 Mar 2026 13:04:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-2032271365-1773661111=:1005"
-Content-ID: <0e97a1fe-ed58-b893-b05e-e6f47d8a37ae@linux.intel.com>
-X-Spamd-Result: default: False [0.84 / 15.00];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/5] usb: typec: add kernel-doc for priority and
+ mode_selection members
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Kit Dallege <xaum.io@gmail.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260315145741.24128-1-xaum.io@gmail.com>
+ <2026031638-deviant-granddad-9ae8@gregkh>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <2026031638-deviant-granddad-9ae8@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	CTYPE_MIXED_BOGUS(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	SUBJECT_ENDS_SPACES(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34863-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34864-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[linuxfoundation.org,gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ilpo.jarvinen@linux.intel.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:dkim,linux.intel.com:mid]
-X-Rspamd-Queue-Id: EE659299091
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 1B2EB299187
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On 16/03/2026 07:17, Greg Kroah-Hartman wrote:
+> On Sun, Mar 15, 2026 at 03:57:41PM +0100, Kit Dallege wrote:
+>> Document the priority and mode_selection members of struct
+>> typec_altmode that were added without kernel-doc descriptions.
+>>
+>> This fixes the following warnings when building with W=1:
+>>
+>>   include/linux/usb/typec_altmode.h: struct member 'priority' not described in 'typec_altmode'
+>>   include/linux/usb/typec_altmode.h: struct member 'mode_selection' not described in 'typec_altmode'
+>>
+>> Signed-off-by: Kit Dallege <xaum.io@gmail.com>
+>> Signed-off-by: kovan <xaum.io@gmail.com>
+> 
+> Please use your name, not an alias, to sign off on a patch.  And no need
+> to list it twice.
+> 
+> Also, where are the other 5 patches here?
 
---8323328-2032271365-1773661111=:1005
-Content-Type: text/plain; CHARSET=ISO-8859-2
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <8e4b41bf-b1bb-8801-c078-858e9103699f@linux.intel.com>
+FWIW, other postings from this author were called as AI slop, so the
+contents should be thoroughly reviewed.
 
-On Sun, 15 Mar 2026, Michal Babi=E8ka wrote:
+https://lore.kernel.org/all/?q=f%3A%22Kit+Dallege%22
 
-> Subject: Apple Mac mini 2018 + Thunderbolt 3 eGPU: PCI bridge window / BA=
-R allocation failure prevents NVIDIA and AMD GPUs from initializing
->=20
-> Hardware / platform:
-> - Host: Apple Mac mini 2018
-> - Connection: Thunderbolt 3
-> - eGPU enclosure: Razer Core X Chroma
-> - Tested GPUs:
->   - NVIDIA Quadro P400
->   - NVIDIA Quadro P4000
->   - AMD Radeon Vega 64
->=20
-> Linux distributions / kernels tested:
-> - Ubuntu-based systems
-> - Zorin OS 18 Pro
-> - Multiple kernels tested, including 6.12.x and 6.17.x
-
-None of which are even near the latest when it comes to resource=20
-allocation improvements and fixes (though you didn't specify .x).
-
-> Problem summary:
-> On Apple Mac mini 2018, an external GPU connected through Thunderbolt 3 i=
-n a Razer Core X Chroma enclosure is detected and enumerates on the PCI bus=
-, but GPU initialization fails because PCI bridge windows / BAR resources a=
-re not assigned correctly.
->=20
-> This is reproducible across different Linux installations and with GPUs f=
-rom different vendors, which strongly suggests a platform/topology-level PC=
-Ie resource allocation problem rather than a bug in one specific GPU driver=
-=2E
->=20
-> Observed behavior:
-> - The Thunderbolt enclosure is detected correctly.
-> - boltctl shows the enclosure as connected / authorized.
-> - The GPU appears in lspci.
-> - The kernel loads the vendor driver module.
-> - GPU initialization then fails.
->=20
-> For NVIDIA, nvidia-smi reports:
->   "NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA =
-driver."
->=20
-> Relevant NVIDIA kernel messages include:
-> - "BAR 1 [mem size 0x10000000 64bit pref]: can't assign; no space"
-> - "BAR 3 [mem size 0x02000000 64bit pref]: can't assign; no space"
-> - "This PCI I/O region assigned to your NVIDIA device is invalid"
-> - "BAR1 is 0M @ 0x0"
-> - "RmInitAdapter failed"
-> - in some attempts also:
->   "fallen off the bus and is not responding to commands"
->=20
-> With NVIDIA Quadro P4000, the same general failure pattern was observed:
-> - the GPU is detected on the PCI bus,
-> - the NVIDIA kernel module loads,
-> - initialization fails,
-> - and the logs again point to invalid / missing BAR assignments and resou=
-rce allocation problems behind the Thunderbolt PCIe bridge hierarchy.
->=20
-> For nouveau, the failure is visible as BAR/resource allocation failure as=
- well, for example:
-> - "bar: one-time init failed, -12"
-> - "init failed with -12"
-> - "Device allocation failed: -12"
->=20
-> With AMD Radeon Vega 64 installed in the same enclosure on the same host,=
- the same fundamental problem occurs:
-> - the enclosure is detected,
-> - the GPU enumerates,
-> - initialization fails,
-> - and the overall behavior indicates the same lower-level PCI resource / =
-bridge window allocation issue.
->=20
-> This strongly suggests the issue is not NVIDIA-specific.
->=20
-> Thunderbolt state:
-> boltctl reports the Razer Core X Chroma enclosure as connected/authorized=
- correctly, for example:
-> - type: peripheral
-> - generation: Thunderbolt 3
-> - status: authorized
-> - rx speed: 40 Gb/s
-> - tx speed: 40 Gb/s
->=20
-> Important conclusion:
-> Thunderbolt authorization itself appears to work.
-> PCI enumeration also works.
-> The failure happens later, at PCI resource assignment / bridge window siz=
-ing / BAR allocation time.
->=20
-> Key dmesg patterns observed:
-> - multiple "can't assign; no space" messages for PCI bridges and BARs
-> - BAR1 / BAR3 of the GPU not assigned
-> - bridge windows under the Thunderbolt hierarchy not large enough
-> - reassignment attempts that still leave required windows unassigned or i=
-nvalid
-> - vendor driver subsequently failing device initialization
->=20
-> Examples of affected topology in logs:
-> - 0000:00:01.1
-> - 0000:05:00.0
-> - 0000:06:01.0
-> - 0000:0b:00.0
-> - in other boots, the same problem may appear under a different BDF addre=
-ss after Thunderbolt re-enumeration
->=20
-> Representative log excerpts:
-> - pci 0000:0b:00.0: BAR 1 [mem size 0x10000000 64bit pref]: can't assign;=
- no space
-> - pci 0000:0b:00.0: BAR 3 [mem size 0x02000000 64bit pref]: can't assign;=
- no space
-> - pci 0000:06:01.0: bridge window [mem size 0x10000000]: can't assign; no=
- space
-> - pci 0000:05:00.0: bridge window [mem size 0x20200000]: can't assign; no=
- space
-> - NVRM: BAR1 is 0M @ 0x0
-> - NVRM: RmInitAdapter failed
-> - NVRM: The NVIDIA GPU ... has fallen off the bus and is not responding t=
-o commands
-> - nouveau ... Device allocation failed: -12
->=20
-> Kernel command line options already tested:
-> The following boot parameters were tested in various combinations:
-> - pci=3Drealloc=3Don
-> - pci=3Dhpbussize=3D0x33,hpmemsize=3D256M,hpiosize=3D2M
-> - pcie_aspm=3Doff
-> - pci=3Dnommconf
-> - pci=3Dnoaer
->=20
-> These mitigations did not resolve the issue.
->=20
-> Why this looks platform/topology specific:
-> - The same Thunderbolt eGPU enclosure is recognized correctly.
-> - The same failure pattern appears with NVIDIA Quadro P400, NVIDIA Quadro=
- P4000, and AMD Radeon Vega 64.
-> - The common denominator is Apple Mac mini 2018 + Thunderbolt PCIe topolo=
-gy under Linux.
-> - The failure mode is centered around PCI bridge window sizing / BAR plac=
-ement, not around one vendor-specific driver alone.
->=20
-> Expected behavior:
-> The Thunderbolt eGPU should receive valid PCI bridge windows and valid BA=
-R assignments so that the GPU driver can initialize the device successfully=
-=2E
->=20
-> Actual behavior:
-> The GPU is visible on the bus, but bridge windows and BAR resources are n=
-ot fully assigned, which leaves the device unusable and prevents the driver=
- from completing initialization.
->=20
-> Request:
-> Please investigate PCI resource allocation / bridge window sizing for Thu=
-nderbolt eGPU topologies on Apple Mac mini 2018 under Linux, especially whe=
-re large GPU BARs must be assigned behind multiple Thunderbolt / PCIe bridg=
-es.
->=20
-> Cross-vendor reproducibility on the same enclosure and same host strongly=
- suggests that the root cause is in PCIe/Thunderbolt resource allocation on=
- this platform rather than in a specific NVIDIA or AMD driver.
-
-Hi,
-
-Have you tried with this pending patch:
-
-https://patchwork.kernel.org/project/linux-pci/patch/20260219153951.68869-1=
--ilpo.jarvinen@linux.intel.com/
-
-This too might be relevant here (it has been recently accepted for=20
-next):
-
-https://patchwork.kernel.org/project/linux-pci/patch/20260313084551.1934-1-=
-ilpo.jarvinen@linux.intel.com/i.
-
-There are plenty of other fixes as well done relatively recently (though=20
-some may be irrelevant for the kernels as old as you've been testing).
-
-You didn't include any real logs that shows the error into this report,
-those log snippets are useless in root causing where the problem=20
-originates from. All dmesg logs should be taken with dyndebug enabled=20
-(with CONFIG_DYNAMIC_DEBUG + dyndbg=3D"file drivers/pci/*.c +p" on the=20
-kernel's command line). Please also dump /proc/iomem.
-
---=20
- i.
---8323328-2032271365-1773661111=:1005--
+Best regards,
+Krzysztof
 
