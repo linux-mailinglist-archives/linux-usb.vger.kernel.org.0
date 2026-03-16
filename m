@@ -1,98 +1,80 @@
-Return-Path: <linux-usb+bounces-34873-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34874-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EBn2CDYOuGkWYQEAu9opvQ
-	(envelope-from <linux-usb+bounces-34873-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 15:05:42 +0100
+	id MC4gDkIPuGmZYgEAu9opvQ
+	(envelope-from <linux-usb+bounces-34874-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 15:10:10 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D48F29AF9D
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 15:05:41 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E23D429B126
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 15:10:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0906E304EA5E
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 14:02:24 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3301C300AED0
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 14:07:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABDFF39B95F;
-	Mon, 16 Mar 2026 14:02:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CBE939B977;
+	Mon, 16 Mar 2026 14:07:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="GMllmQ8d"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lMn3Yi4d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04ABC1F3FED
-	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 14:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1DE6FC5;
+	Mon, 16 Mar 2026 14:07:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773669740; cv=none; b=tLOkOi+f0gVaZyPkwYhD1T9HQnaG9zRAUJB4idfP4aFG5ioTBVh0DzFVZIpgEWl4k5hukTK7dxq3Q/lNF8rJ8HogbBfCZO30cIwUyoV559IV5SF/BM1gJ3h6Z4QbQSxmUEZOBX0hTxoCvZwd0QmYupUZMZHUzq7etRR1LCvyKZU=
+	t=1773670066; cv=none; b=LgLcUww8zyKzvAKiAFbNaJiE3xwJQezT8xL8nGiXv4706F6mJCrJV1s7mFBaf9VUQE0ikNRcd0UQlnMz8LNCm6bMretjnssTObCD67pbOk7rj99Oc5Y/ITU9GvKHecTARhQi6nU+Krm+71YumeRGD4j5l0ZmbFU+2ImyCnQbi8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773669740; c=relaxed/simple;
-	bh=dMMiy6Qe6WVNBpBW8UeRDZib1650eyr8C07XQXIlz/k=;
+	s=arc-20240116; t=1773670066; c=relaxed/simple;
+	bh=Y+V9+zbKfrDyL4a5iacNwH2u07h1sCoC3a1ixh5Uhs0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R7e+mle2j5tzH/TVixpbQzC9v8h8jfJIneWRQx2dcL6KUPqri16SrN7b8HOzEFzHxy2S2F/1fuwJ/v4x31L9BhjHnpAH5d1G5giTqEaEUuteDjzSc0XREo4Ket3AUP6w01PkH3idLSOdA8RsakNoLlJ6QSaaVtLqB9Mu2ZF1Wek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=GMllmQ8d; arc=none smtp.client-ip=209.85.222.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-8cd80bea5f3so287791485a.3
-        for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 07:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1773669738; x=1774274538; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ALX7lcE21ebzREAcmYT6VR/POiIG1UrGJbIc5TeYDEw=;
-        b=GMllmQ8dJO7Hb0Nk30Ww4/wtphcN7Uf1l1n+FpDzgd7khT4p+jroNt6hrdzmBqyW/d
-         hFERsxmIgw59zxwEqG7RzypWLicqaUPs2jf+jMITWYagA2Po5AQARrW07UV2mfwBX44a
-         20sk47EMQ6WKVTGfoiX2MJcS4IkNTi4c/xLdpnD2vY5wcT1QEEWC4hl//EYyUMmJdAcI
-         RfmB0lCxBvu1e3riQEDrFqW9TlEZPNJrfE2S3IW34I70TOk11kvy2fQr5oBConBdmZCt
-         WYbQ7IuajC1WVN9IYL5EWRaZtGo5hIBFiZDEtAUGZ4K9swD4hbNXqNaxJCRgHVwmdGBh
-         1DpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773669738; x=1774274538;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ALX7lcE21ebzREAcmYT6VR/POiIG1UrGJbIc5TeYDEw=;
-        b=tXi+w5LMxL81SapakO3HENUYid0X2+zrMYPKkX49SfrZtc2YtDDgTekbIe3lgUWcy1
-         9FfKU+QXEhYlqN97Thmq+mFQ5xz8Tar9WMjtTpw0Uv7gO2+54z0glj3J5+T1Y29srimJ
-         pJpDDGJEQhuewT1ZY38UL1hgqIzOn/mMvflFEsjkIWC1RvvsfgrjwnnWdq4m3hnvqKoy
-         C6cTmTpkYL2sp/NqUYue0ID2hlrdHpjQL3eQjWX0eLEkIeuxhJ30czEVFlGWPdR0styh
-         UBOlArZsOrARPoP/JW1sSiN0yMV4KAxvY+fZAvYQov2zK5lgPSqLVpspWpUyOBiekkLk
-         pfKw==
-X-Forwarded-Encrypted: i=1; AJvYcCVeW1LVoNIWeZs+RIGjP4lGUwTamJdBcQ7zxDpa+fvq0W82Hx6JDBc4bHlP3rTbAtjmhRf6Nn9QUgY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxogA7D7HDvINJFSrxgvg4XflaXPbhNRli4HZkTTnhofrReqo3P
-	RCr+HueqziND7iGRwsyGjg1FPOSV3yVXZOtz7X9SFw2KkzqNivWAuSAGe3zQ+Vtslg==
-X-Gm-Gg: ATEYQzxu1cJNzSp1baIWs4LX5roLexYlQgrlDQC4ivnKGJk7Q+yVd0cloawcbmj7LAd
-	5WttuWqF2ZIh9iXOmT7ca6Hwxsfl9xpRyCvRUW+yJac53vhJdCNWC9yyfpFBNDUM+qEk0cCQRb0
-	3u1qJqWsXwZzyABAxTn7cNPIJMgvqqf4AZfN/hhLbPR0rVgUUzhA0FrBNWLdtvx7aqBu6xbAtn6
-	1XPsqYy5SQ780nw6GnizI+1Ua37zZBwX7WJFPMxEKoN43BdDIdZ/XW/dcjoSwiZ4q2F4FL/W0vI
-	jhOj8VL5OKfO/Um5BDRpVMuBzCnMJqoQby3Y5nxSNcNASWdDsg6nLxBfO9v4ovQ8bg/INMGFkeI
-	urx4r94JGN0+E7Z5+g9UAEFE4CYBCz2MWmpaPocrSNmjqoqHXR//i1R++ALME3GvjohQUW3tJrI
-	LgUwsBkz1OYKZNJl8X/6E6qZNpF2BBXcm3BFsB0q6PAIoaoOLArm+7
-X-Received: by 2002:a05:6214:1c8c:b0:89a:1888:a1e3 with SMTP id 6a1803df08f44-89a81ebb861mr201034116d6.36.1773669737596;
-        Mon, 16 Mar 2026 07:02:17 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c4d6f4308sm28714666d6.8.2026.03.16.07.02.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 07:02:16 -0700 (PDT)
-Date: Mon, 16 Mar 2026 10:02:14 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Michal Pecio <michal.pecio@gmail.com>,
-	=?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-	USB list <linux-usb@vger.kernel.org>
-Subject: Re: correctly handling EPROTO
-Message-ID: <437037d6-3fe1-4f81-b74a-21bea00725e0@rowland.harvard.edu>
-References: <261996a8-7ad4-4df2-a469-f6602da71255@suse.com>
- <4f85311c-bdfe-46a4-a310-4a74a3c56b3e@rowland.harvard.edu>
- <64dc9c5d-d662-41e3-898f-71587b940a2c@suse.com>
- <20260313085354.71a6dbf1.michal.pecio@gmail.com>
- <12567c7d-0a17-46a0-8acf-3158c2d9011a@suse.com>
- <9da0ac4f-12bf-4270-af6f-e08b5a89611b@rowland.harvard.edu>
- <20260313224528.dp6utjqzbdguwlbf@synopsys.com>
- <a6934c14-aeb5-40d0-865c-14199943e2a2@rowland.harvard.edu>
- <3028610a-f05a-4bc8-9037-cca152e46c52@suse.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=oiLCIjsjAd+SrMZa5x/TUHX7wDKZ3z5IzAUzcLAp6OGmHBZKAs1sles008v4b4lTllpTedjAf4v6K7rHW3ijeLgY5Ke/yKP4GsrpZhzUUGh1b7byRyra4bvNYRYIleqwRzN8wULJg9HQmdI/y92mzbvchnuCkj60uTUC9xNq1dA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lMn3Yi4d; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773670065; x=1805206065;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Y+V9+zbKfrDyL4a5iacNwH2u07h1sCoC3a1ixh5Uhs0=;
+  b=lMn3Yi4dn2JLt8UnjjjktV9e71POPloauT3ekA5deU5o/QvkgdgqAIqM
+   bsFO3PzVA0TKJBtaWeC00NmNKpAwabW3CtBkPcCjOsKTwAiFAyt6YebDa
+   UmBlqDRWSDQ/df49xz+gTZfV1luHbaXJ4imIFn17uGehiDKkywwuZ1UGx
+   Widf47cWaB+sO1eXTe8sQCqdyMYfLosL8Yzr7C5Z4xFU6pU5m1lrFdAV0
+   or/tK6lbr4WF4V8s6JoJZzyZhrV0Tm3b2G3rhqZxqFJQ2QW33xc28QuBy
+   H9Xrn+e2WuxuGbI7EDjFBMx8O2sY7qXyshn+io68K8/JodL1YNjaC4IZb
+   w==;
+X-CSE-ConnectionGUID: oy1GVYcOS+KTcl0FVvbFvw==
+X-CSE-MsgGUID: YenDiutjSOSEqg7eTZhHUg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="62252946"
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="62252946"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 07:07:44 -0700
+X-CSE-ConnectionGUID: l6Le8XKQQAWDfVYOcMSIeA==
+X-CSE-MsgGUID: LOf5DD+oSOOa3rF5kObdtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="219502454"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa008.fm.intel.com with ESMTP; 16 Mar 2026 07:07:43 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1008)
+	id B2CC798; Mon, 16 Mar 2026 15:07:41 +0100 (CET)
+Date: Mon, 16 Mar 2026 16:07:00 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Edward Blair <edward.blair@gmail.com>
+Cc: linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
+	gregkh@linuxfoundation.org, wsa+renesas@sang-engineering.com,
+	westeri@kernel.org, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] i2c: acpi: skip generic I2C device when
+ vendor-specific sibling exists
+Message-ID: <abgOhNVOKMaeAGSx@kuha>
+References: <20260314013157.7181-1-edward.blair@gmail.com>
+ <20260314013157.7181-2-edward.blair@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -101,96 +83,90 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3028610a-f05a-4bc8-9037-cca152e46c52@suse.com>
-X-Spamd-Result: default: False [-0.66 / 15.00];
+In-Reply-To: <20260314013157.7181-2-edward.blair@gmail.com>
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[synopsys.com,gmail.com,mork.no,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-34874-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_ALL(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34873-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DKIM_TRACE(0.00)[intel.com:+];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,rowland.harvard.edu:dkim,rowland.harvard.edu:mid]
-X-Rspamd-Queue-Id: 8D48F29AF9D
+	TAGGED_RCPT(0.00)[linux-usb,renesas];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E23D429B126
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Mar 16, 2026 at 01:58:34PM +0100, Oliver Neukum wrote:
-> On 14.03.26 03:39, Alan Stern wrote:
-> > On Fri, Mar 13, 2026 at 10:45:32PM +0000, Thinh Nguyen wrote:
-> > > On Fri, Mar 13, 2026, Alan Stern wrote:
+Sat, Mar 14, 2026 at 01:31:55AM +0000, Edward Blair wrote:
+> Some BIOS implementations (notably ASUS Z690/Z790/X670E motherboards)
+> declare both a generic UCSI device (MSFT8000) and a vendor-specific
+> device (e.g., ITE8853) as ACPI children of the same I2C controller,
+> both referencing the same I2C slave address.
 > 
-> > Part of what we are discussing is how to carry out a retry.  It seems
-> > that the most general approach is to unlink all pending URBs for the
-> > endpoint, wait for them to complete, call usb_clear_halt(), and then
-> > resubmit everything.
+> During ACPI I2C enumeration, whichever device is walked first claims
+> the address, causing the second to fail with -EBUSY. When the generic
+> MSFT8000 device registers first, the vendor-specific driver cannot
+> bind, losing access to device-specific features like GPIO interrupt
+> resources that are only declared on the vendor-specific ACPI device.
 > 
-> Yes. That raises the question how much can be centralized.
-> > And of course, isochronous transfers are never retried, by definition.
+> Fix this by checking, before registering a known generic I2C device,
+> whether a sibling ACPI device exists at the same address on the same
+> adapter. If so, skip the generic device to let the vendor-specific
+> one register instead.
 > 
-> Do we still need to clear a halt?
-
-Isochronous endpoints do not halt, and isochronous transfers are never 
-retried.  And although the spec doesn't seem to say this explicitly, I 
-believe isochronous endpoints do not pay any attention to the HALT 
-feature setting (which can be changed by a Set-Feature or Clear-Feature 
-request).
-
-> > > > I tend to group transaction-level errors like EPROTO into three
-> > > > categories:
-> > > > 
-> > > > 	1. Device has been unplugged, hub will notify us soon;
-> > > > 
-> > > > 	2. Unrecoverable device problem, needs reset or power cycle;
-> > > > 
-> > > > 	3. Short term problem (cable issue, EMI, system load).
-> > > > 
-> > > > Retrying makes sense for 3 but not for 1 or 2.  Unfortunately we can't
-> > > > tell which category a particular fault lies in.
-> > > 
-> > > There's no need to distinquish them if we have a proper fallback
-> > > recovery (such as reset/power cycle) should retry failed as noted above.
-> > 
-> > Yes.  Still, that's a fair amount of logic to add into every device
-> > driver.  We should be able to centralize it somehow.
+> Signed-off-by: Edward Blair <edward.blair@gmail.com>
+> ---
+>  drivers/i2c/i2c-core-acpi.c | 88 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 88 insertions(+)
 > 
-> That would suggest implementing an equivalent of usb_queue_reset_device()
-> for clearing halts.
+> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+> index 2cbd31f77..87582eac7 100644
+> --- a/drivers/i2c/i2c-core-acpi.c
+> +++ b/drivers/i2c/i2c-core-acpi.c
+> @@ -137,6 +137,17 @@ static const struct acpi_device_id i2c_acpi_ignored_device_ids[] = {
+>  	{}
+>  };
+>  
+> +/*
+> + * Generic I2C device IDs that may be duplicated by vendor-specific devices.
+> + * When a vendor-specific sibling exists at the same address, the generic
+> + * device is skipped to avoid -EBUSY address conflicts.
+> + */
+> +static const struct acpi_device_id i2c_acpi_generic_device_ids[] = {
+> +	/* Microsoft UCSI - often paired with vendor-specific UCSI device */
+> +	{ "MSFT8000" },
+> +	{}
+> +};
 
-My thought exactly.
+That's not a generic UCSI device. That's the "RhProxy" device unless
+I'm completely mistaken, and it's meant to be used in Windows to give
+the user mode access to GPIOs, SPI, I2C and UART:
+https://learn.microsoft.com/en-us/windows/uwp/devices-sensors/enable-usermode-access
 
-> > Also, just to make things more difficult, these errors are reported in
-> > atomic context but the recovery procedure has to happen in process
-> > context.  Which means there has to be a way to cancel the recovery
-> > procedure if it's in progress when the driver is unbound.
-> 
-> Well, no. Not exactly. If it is necessary to clear a halt before
-> you can communicate with the device again, we cannot reprobe
-> the device before the error is handled. It wouldn't work.
-> We need to wait for error handling to complete if the driver
-> is unbound.
+I think we need to handle that one in drivers/acpi/x86/utils.c like
+Mika said.
 
-Good point.  So not quite the same behavior as usb_queue_reset_device().
+thanks,
 
-Alan Stern
+-- 
+heikki
 
