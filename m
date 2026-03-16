@@ -1,135 +1,151 @@
-Return-Path: <linux-usb+bounces-34847-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34848-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yMbTM524t2mpUgEAu9opvQ
-	(envelope-from <linux-usb+bounces-34847-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 09:00:29 +0100
+	id eE1jE9DJt2kRVQEAu9opvQ
+	(envelope-from <linux-usb+bounces-34848-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 10:13:52 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7819C295EC8
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 09:00:29 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFCB1296CA6
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 10:13:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5179A30166F4
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 08:00:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0A7DB3055C96
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 09:08:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA8FF34EF0F;
-	Mon, 16 Mar 2026 08:00:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98B7038422C;
+	Mon, 16 Mar 2026 09:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iWYlEwok"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m155101.qiye.163.com (mail-m155101.qiye.163.com [101.71.155.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2E51B6D08;
-	Mon, 16 Mar 2026 08:00:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.101
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773648022; cv=none; b=j7CCu2eZhBAaqwcW14eYitjUcBCic6UUls/s+3zZ8WJGqaSkbQ6aj9Ro6khp6FvyTIxZXUbI46fKinWxsEfY1RilGDbGdoLY8OvS1SFZi517Tx5mQwlxcMs907iWL924vTKtMb4PDWRKC7k2o4N3GZTOsFamOvdSMP1/OSmKwqw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773648022; c=relaxed/simple;
-	bh=nA1hNX7RMF9BhK/4FLzAfTVCK8P9ZbrAkp6+REA1GqM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UUi3dfwLAjM5sBK9U8Gq3fWN3CIBGccJXhXoC5IJ++3U/q+Hzt5L2VzzwHzjvoROX/SH1tMTOt6jb4NzqzorWUSPCO6tUJCq+MOAM1ahY8MF20h0glP8H3gObMjM1E9ao/wWiYerASGHl4E5/0r4O1SuhO4/UTl0ZzeEFKgK5Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn; spf=pass smtp.mailfrom=jmu.edu.cn; arc=none smtp.client-ip=101.71.155.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jmu.edu.cn
-Received: from Vostro-3710.lan (unknown [116.25.94.199])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 3714cc931;
-	Mon, 16 Mar 2026 16:00:08 +0800 (GMT+08:00)
-From: Chukun Pan <amadeus@jmu.edu.cn>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Ze Huang <huang.ze@linux.dev>,
-	Yixun Lan <dlan@kernel.org>,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	spacemit@lists.linux.dev,
-	Chukun Pan <amadeus@jmu.edu.cn>
-Subject: [PATCH 1/1] usb: dwc3: dwc3-generic-plat: Add optional VBUS regulator support
-Date: Mon, 16 Mar 2026 16:00:00 +0800
-Message-Id: <20260316080000.3130372-1-amadeus@jmu.edu.cn>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15CDE381B1B
+	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 09:08:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773652112; cv=pass; b=RV+PVeJNaQmYf0H6TFT4nFSDlmDo2o45yXs//WP3Rmgx22CSnj+F5S/RcVuOcvwSEM+tyJVs9QzAIWK/jYMUKt86KW710ZcNajd+Br2KJQJUHkLvFDUGh0men9hmt8BMXZ8lEyvgvkIF11MzAiZLDJIXGNz2kyR+zcvTvy8V8zs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773652112; c=relaxed/simple;
+	bh=e1NTUjgORk0VY8Egtdre0eeDntNhk++SEJ7nb5oNIBw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A7JyfjMwc+QPneto5eqhhqvBFWzu33Duiwri1VLcIdp9dXnAziNiFUfweE5Kb1OrXvff4jLIuGXiYkkJGW7UCChs+oQytIX6Sw+slWZ3oFQMZGrKj7NVuyht2BWy2mfn1pkrfreAzNND0d6niz8dOcoqd8XlGdOBbdBoLdPGMMA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iWYlEwok; arc=pass smtp.client-ip=209.85.161.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-67bb5e4cf5aso2634549eaf.2
+        for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 02:08:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773652110; cv=none;
+        d=google.com; s=arc-20240605;
+        b=YlTJmm/vG4WLjvyLrKQwRpFyt/qoxGAT/XRKha+MW//I88j2LPlyxr09cI8S6iLldO
+         /aJlmb4l5clCpG9wsB2P71HHx1kDGsvkTYF1V0J11KPPRl83CwCnmlAAkRfa4mvmQEo0
+         rS4DGGIK3UcElR7IZJ/6zZ3zDigPFhrNScmHoC7Z9a3zQEMZYZsJAAsUaNu37+XGDaUf
+         Ak8e8Plt3+vOe8henPqHS8rxtRtlyOhdJVFNGcK9TZvSmYXaFagQyvMC3nDwC0edzhlR
+         llnsXC1rdee+oswnTNCNiWXmUkcxFYHY7N3Q67LJigZPTVz0SW16TbMZ0R2VHWtYkz35
+         6XzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=e1NTUjgORk0VY8Egtdre0eeDntNhk++SEJ7nb5oNIBw=;
+        fh=IWjuD6fYt9mNunSLW1t0dr4qRJxdlATMquqgeRiWKaE=;
+        b=c/J8vKOdsSVmbzWq1i6vqnr0ys102EbC2c1iiP31QRNiZo91MuopIx7wpvljpTXNAB
+         KUuV5t21IcnyZejWxnGHpw6C8Pl8bu+uJuNa+2JeiRk9g45+JOEQ6GCFCKJU9JUzC/NC
+         WWD3FNyZD1dShM93Qx7c3BrDtRBsc/gyQjRNHj9hPhf4xztDMm1FeCfEjvbtUz3AZ330
+         p30d+kpBEjk4vAmOLJeJy2t8UUCXWyNC3yEyVl+qmDzRGBFRaLICXY6WRUYYw/1K+oYS
+         ciFQmepLf9PlY5CTJmv+OyXvVv8wR/slHNwqEI8xmX0PSjwIHSgm0oe9bdJ6f7hmhwlM
+         pL1Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773652110; x=1774256910; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=e1NTUjgORk0VY8Egtdre0eeDntNhk++SEJ7nb5oNIBw=;
+        b=iWYlEwokHmHLSHUHEG3daDYwvwff2BzMf5znb8VoW6CmYDLUdZW6P2dneDYwH16qeb
+         z1eM0x0BTigx9F8qBXZcASP/EdXTaUB2yOy8yigZUacbDoYSZp4E/jQyJ0os5RGECXse
+         EAsUPM/k+0GRhXeg1yx8QtKFAY2VuBEZqpLqCmb4gofY/WNCOjoqGGOp3+YzyMgeRRuS
+         K7VPMsFi9oZ0CcR43vXxMFxT9iH5esORmAHAQeC5ac3P508vWtY5/GSct6bwCqPEeq/5
+         H+pvLSqj+ToSpZpw2uTtJx5Dc89hVm4pvImRO4eZ2aYuXLYXqGOortf2mHQ68IwSlPxG
+         P1aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773652110; x=1774256910;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e1NTUjgORk0VY8Egtdre0eeDntNhk++SEJ7nb5oNIBw=;
+        b=AT73qP/c/ABbenx8Iniasc4FhINEV1oBRjkIYMNEfubL4Y+VJXhl3iYvM1ojQt31Cq
+         tI4bhSreVVer4l7zDg3yOHLE5JESU7/7qmbPlRQI2+TtNSTfNCWuWX2d407dMkCcDshX
+         nv6Q4WvEGp7RNh2Egu/0frGzUf70TYTR9/NYNC+SztWT57waGMPeNvyex9Xjs3FMEdF1
+         bWNPtbZSAkH4wHitDp2HAGvFhvM4cEM+V1SqIYrwcMcYYqgfKjPa4pzHe3B7wEwoHDzJ
+         1U2iwEpaBE8C0buT3xSalL/qFvmU4j02MKS/BZ799ebpPLmgjYYP3CVODP97RNNsYNNu
+         26tQ==
+X-Gm-Message-State: AOJu0YyVGh68ObgZj+tb7wGzDS4B0oA23tnQqEfh6yPasroJBsI749W3
+	b42hKgDvu7W0tQHUNnAu1WkT3260ME7eItBHpDMHfhUsSpjN0eENN+VRyaxc8H2Kh8aYcZOZjQr
+	LGlzOI3UE3UEi7wbHQ9ybZJCQpMgwqRPm1S7W
+X-Gm-Gg: ATEYQzzuDqlcTve/OSAqYxdBG8QE/S7HIUePrDRxsgx7aNe/OUYq7j0+Z4il0j/JAFI
+	OtUxXDMSWGW1DMTOtF31Js0JrxEOh1EnTC4on1ecGirgfJkAl5iuHhcRFxMTHbi4USkq28FLaXy
+	nGOz8F3aqnhYXAUSaM3CG4jiegyhjZL+8qbW4uOD5G2eE7vJTTVr1W4FoCw9G+JOXfFtebZqIqj
+	+63TLJ/k7r4+dHpTClBttXejRGQuLbvDI6QYMKaWVk39/Ksqee7E6z1J2K27NrbCo5UE0zpzTuO
+	Q4QCwO9vWgvSaj79XUgdVNOkzE4MBV8M0S9476D0HuxSRHXp
+X-Received: by 2002:a05:6820:2909:b0:662:fbd6:1849 with SMTP id
+ 006d021491bc7-67bda98cb6dmr7947615eaf.4.1773652110143; Mon, 16 Mar 2026
+ 02:08:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9cf5a8d34903a2kunm97eee50df009b
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZTUIeVh9KTkkaSUxKHR9KHVYeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlKSk1VSU5VQk9VSkJCWVdZFhoPEhUdFFlBWU9LSFVKS0lCQ0NMVUpLS1VLWQ
-	Y+
-X-Spamd-Result: default: False [0.14 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+References: <20260315111827.20205-1-Loke.Forsberg@gmail.com> <2026031617-hypocrisy-lion-cb8e@gregkh>
+In-Reply-To: <2026031617-hypocrisy-lion-cb8e@gregkh>
+From: Loke Forsberg <loke.forsberg@gmail.com>
+Date: Mon, 16 Mar 2026 10:08:19 +0100
+X-Gm-Features: AaiRm52T2Smr45LpLFNtDU2SfUxXBFQsyXF_qQ90gLIGGU0SP5DsAcEv-pM0sYg
+Message-ID: <CAKMvwTZMF_advDvKCskqA_6_VrkjsbJkYjT2+NCyFUDnQCc=ow@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: f_ncm: replace kzalloc with kzalloc_obj
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, khtsai@google.com, raubcameo@gmail.com, 
+	kees@kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[jmu.edu.cn : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-34848-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34847-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	FROM_NEQ_ENVFROM(0.00)[amadeus@jmu.edu.cn,linux-usb@vger.kernel.org];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.770];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	FREEMAIL_CC(0.00)[vger.kernel.org,google.com,gmail.com,kernel.org];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lokeforsberg@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7819C295EC8
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: AFCB1296CA6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Some boards provide USB VBUS through a controllable regulator. Add
-support for the optional vbus-supply property so the regulator can
-be properly managed instead of left always-on. Note that this does
-not apply to USB Hub downstream ports with different VBUS supplies.
+> Why have you used GFP_KERNEL when kzalloc_obj() does not need that for
+> the default case?
 
-The enabled and disabled actions of the regulator are handled
-automatically by devm_regulator_get_enable_optional().
+I was following the pattern from the original kzalloc and didnt
+realize it defaults to it. I will fix it and send a v2
 
-Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
----
-The vbus-supply property has been declared in spacemit,k1-dwc3.yaml
-https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/usb/spacemit%2Ck1-dwc3.yaml#L71
----
- drivers/usb/dwc3/dwc3-generic-plat.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/usb/dwc3/dwc3-generic-plat.c b/drivers/usb/dwc3/dwc3-generic-plat.c
-index e846844e0023..83b4e4d69ba9 100644
---- a/drivers/usb/dwc3/dwc3-generic-plat.c
-+++ b/drivers/usb/dwc3/dwc3-generic-plat.c
-@@ -12,6 +12,7 @@
- #include <linux/reset.h>
- #include <linux/regmap.h>
- #include <linux/mfd/syscon.h>
-+#include <linux/regulator/consumer.h>
- #include "glue.h"
- 
- #define EIC7700_HSP_BUS_FILTER_EN	BIT(0)
-@@ -113,6 +114,10 @@ static int dwc3_generic_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		return dev_err_probe(dev, ret, "failed to get clocks\n");
- 
-+	ret = devm_regulator_get_enable_optional(dev, "vbus");
-+	if (ret && ret != -ENODEV)
-+		return dev_err_probe(dev, ret, "failed to enable VBUS\n");
-+
- 	dwc3g->num_clocks = ret;
- 	dwc3g->dwc.dev = dev;
- 	probe_data.dwc = &dwc3g->dwc;
--- 
-2.34.1
-
+Regards,
+Loke Forsberg
 
