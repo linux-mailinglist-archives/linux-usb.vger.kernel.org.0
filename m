@@ -1,78 +1,95 @@
-Return-Path: <linux-usb+bounces-34877-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34878-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QICTC64TuGk7YwEAu9opvQ
-	(envelope-from <linux-usb+bounces-34877-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 15:29:02 +0100
+	id UHY/CQIVuGl/YwEAu9opvQ
+	(envelope-from <linux-usb+bounces-34878-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 15:34:42 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9212D29B5FD
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 15:29:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8549B29B734
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 15:34:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 66C1A304C95B
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 14:27:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 31515301F338
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 14:33:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E983D28853E;
-	Mon, 16 Mar 2026 14:27:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F07F29B20D;
+	Mon, 16 Mar 2026 14:33:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lB7gpFK9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KtkVn6h6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45045280330
-	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 14:27:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71B926E173
+	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 14:33:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773671266; cv=none; b=d+Jd+uD5t0JLizxu087+9KyPmXWyKe7JpWSCFyJQfwGY8pNMgrcDmcIeA74RPq+RqM/hHV6+xYmdYK8a7MhbsyXn5NC5g41PkZQZFcWqozqiO/EhK0wGQNYTIGPle3mb5fvmBsGYDtFigwx7/BbpYVvXNv3x8lPthDXYN+Zfviw=
+	t=1773671612; cv=none; b=syKQlmvyov15i5Kpd3j843R6+oGmWuBGkwSDHpHLp5N2sO44VPfMQAtHNHljTb72NIGL5p5apMQxB46VOc7Uu+v0keQNxzIcHxQGVfZY+JQGKap+eBNt0RbtMRxlmp7Kxh54xGI3URYJe9FrTUFUDPz5WUynUDAuzXK7TRO+GQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773671266; c=relaxed/simple;
-	bh=+/RTtBMTrrlzYmVas2sGF0iVWZM/3etHoke992MgYtE=;
+	s=arc-20240116; t=1773671612; c=relaxed/simple;
+	bh=ovFl0FRA/Y50902pWqD3zOFTf5Y8L0LkM20eP95/xVw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DEU755FV+bORyl42QPaqtUJDcvDKQHP63ebx1EgFyDPFPwXk1Tv9tDNdo7X8SK7FINhR73CZpHYY7Hq07xMfnVB932VkTayCs8e4QCjfBW6yY1FEpKQW83NE5TRZ49tBQVdbcCv/obDE05gAB87Vi8reqECfObRxgch3e1ppEVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lB7gpFK9; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773671265; x=1805207265;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+/RTtBMTrrlzYmVas2sGF0iVWZM/3etHoke992MgYtE=;
-  b=lB7gpFK95cpzsre3Oqi/PkwUvTgA1BEYhjhQ4HD2ZWqbKP5eXqQ0GqvB
-   STaTLlaQLzLGkt5xfnROM5yth9tRVRrCRfRZ+2EeyV0uUp1mvAAbM7Dsr
-   r0kqmmkXK4jDPPIULIQ1vt746OHXrAhzcJQZY7UunZsvIU35ez/9L5hed
-   h4bJ0FHPZVM9W8pEvlA0M/wIURJcERaoX8QPFIe7nJ7nY67jHgwbT9ZTE
-   h5bhcADwGGKJbXhzq76vHYmG42a+rSkMLIx5SwPCMCHOInbNOJoVHvBpB
-   SWZ8JuMY0vCgw5HNrGTSRYr893YrNr6xAPdMA0/YeoOIWnUxa8LCkP+qE
-   A==;
-X-CSE-ConnectionGUID: 4Rpa+wweQkahAnvxvlabuA==
-X-CSE-MsgGUID: rwBTi2/NSA2R6YFsHGwrdA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="78537837"
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="78537837"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 07:27:44 -0700
-X-CSE-ConnectionGUID: 89/g67LyQRyMUUW2D4ivbQ==
-X-CSE-MsgGUID: 7ycFFUutSZqzCB3KdW7z9g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="218182575"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa010.fm.intel.com with ESMTP; 16 Mar 2026 07:27:43 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1058)
-	id 4D1149B; Mon, 16 Mar 2026 15:27:42 +0100 (CET)
-From: Niklas Neronin <niklas.neronin@linux.intel.com>
-To: mathias.nyman@linux.intel.com
-Cc: linux-usb@vger.kernel.org,
-	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [PATCH 2/2] usb: xhci: use writeq() for CA write on 64-bit architectures
-Date: Mon, 16 Mar 2026 15:27:20 +0100
-Message-ID: <20260316142720.1471906-3-niklas.neronin@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260316142720.1471906-1-niklas.neronin@linux.intel.com>
-References: <20260316142720.1471906-1-niklas.neronin@linux.intel.com>
+	 MIME-Version; b=ZQ3SLPAuhZ76cPG+mfbBudBvRPozPaJSfrxdE0TyTWDX8pxTG9t3w9yU3bPC/M8gNa/LfdH8tlbw7XeuRPljcDPbbt5IKcdQasusDAzJ/9tlwemWNBgj4s8fENerqsWlu4JoINDRi26UNwqd0iyl97/RT0/c8OkUfXBRgXB6yRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KtkVn6h6; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-43b3d9d0695so1334374f8f.0
+        for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 07:33:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773671609; x=1774276409; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ovFl0FRA/Y50902pWqD3zOFTf5Y8L0LkM20eP95/xVw=;
+        b=KtkVn6h6JqJikItyIXK6w6Evu8ALKW2c3vDiRRMAF3DKvXKfSfx9tJP2VlZNI+om3U
+         tCxG8uf0VLhsV2ungGj3G8VrPibRs8d90seIi9UJo3CiSyphmubwmGDxcKZ8p+0/Qsf0
+         wYPdnhC/1doIFu4ZOr5c1VYYJjH6FNMPUz5KVhiIiKl/fXhmuiZzyU+sgYqX3h46TI3n
+         d9AaKFXjVdwhd3H4UtNOyRjBLgJCiGr9YVb9xkVxBNZTSTCBbK6Yf8caiXxiv2tBfgwV
+         szBYQf2ZW8FAoi4Flz8PzZD8J7jlyPeEbd9+YvB3UHqkty3LxBR4A1CEhOZUsY/q4JSJ
+         lc/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773671609; x=1774276409;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ovFl0FRA/Y50902pWqD3zOFTf5Y8L0LkM20eP95/xVw=;
+        b=DWmtoJPSE6uCdAPUA7CXg5sY1W/TQoHkjGx9veQCUEnSPRPN6jXpT1BLvxxGHmoN6B
+         lyIompsHS7g0yRPL+iQVNPlAMTcvFrQ0AGyxG7IszPeQj0TdZLV2USw1ds3vszb+SVNB
+         0sz8PmRew1CrbaXBIxqTKjnxSoHqvZ5isQs55jTcWnfEihnzgunTiej15WAvX3Eof+W+
+         xJfd1PIB0n9GzDDlH6kwzJzNEIWSAZm2YqHq6YoZzCJFTTSx2KHBRqBbd5YzUEom0iyE
+         n0yY3tM7oO0Xf5EgkvZmxOIQAgjM69z5PvSW0uKQEGuHLB7CZB59RTWDzDjSvYyYKM+C
+         eL/g==
+X-Forwarded-Encrypted: i=1; AJvYcCULrjNAi+dPSQ22NRJvPsdU6/saxmOoJ0Wsv1N/v67pZdNZPGdZ3dLQ0Cs2s3hiZDDtzQGBzPNoBVQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDPhmFt5XDz6C7yzLMbK/2pQYzqj6Xb8Au07yNw731K2Ss5RhC
+	VxUfW533ea703OY+NnZiYvSqiTNQ5ntYtm65nHvlF9STyaIUgHixp5G2yhAK8XI0
+X-Gm-Gg: ATEYQzxUrUGQF2mEPiTZvkOXhtbDhhY3Xg41zvK4mmo+nZ7nNYksUpAtvrp3FP89vuZ
+	lNCouYWdcbsOJU1wEibJ2KMyq6mKmaw4FewPplNZmqi9pvJsimRaSgZ2y4yU8giHXi5yKLKCWz1
+	cu1ksCh7ye6ngjp5VFvqYNt3GEvZwUhg6vhwGN12dsNt0TZcAhRX3mcPad9IfNvX92hbEqy6COh
+	3XsiOOpdLakRoSQPSdR1v5gX5lebRqqxBkR/ToXzFl4hbbMzbCk2gt5kZvrFO+WFuwbKZ5LvMET
+	DhOQkUxB8xS0QEf8JajKujrw7sIwZQEvS54Ldpn2niDXF9zxNlKdGgZbVe4lTyiIVCDj48NEjBz
+	CwFY8Y6oD5Gw+HAHkJM9bA7hKrgumbgM+Vcq3FtNpzgGigIwsJgZjxO4W7RwR7JW24N8WlqGgRY
+	9WkIkIzjqgUvW0yu/Tq6zVA83xWJXfFfOkbIV4vjJGQRA0yAUcHKw2X3EvK7R0AmpHY8jEc8zlx
+	Jeg5RnP3AnvSQY9aa34Lkd8icB2xMCKCBSn9SWc8qnO0HKkwM1UYXTKi/CTHCUO6Uv66fNq1m9i
+	dPLHdUGUzHs=
+X-Received: by 2002:adf:e984:0:b0:43b:3c32:d901 with SMTP id ffacd0b85a97d-43b3c32dbd9mr10069381f8f.11.1773671608811;
+        Mon, 16 Mar 2026 07:33:28 -0700 (PDT)
+Received: from scambox.localdomain (5-198-68-184.static.kc.net.uk. [5.198.68.184])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b468cf785sm4877457f8f.12.2026.03.16.07.33.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Mar 2026 07:33:28 -0700 (PDT)
+From: Edward Blair <edward.blair@gmail.com>
+To: mika.westerberg@linux.intel.com
+Cc: heikki.krogerus@linux.intel.com,
+	linux-usb@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-acpi@vger.kernel.org
+Subject: Re: [PATCH 1/2] i2c: acpi: skip generic I2C device when vendor-specific sibling exists
+Date: Mon, 16 Mar 2026 14:32:42 +0000
+Message-ID: <20260316143242.24248-1-edward.blair@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260316131219.GD2275908@black.igk.intel.com>
+References: <20260316131219.GD2275908@black.igk.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,84 +97,62 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[intel.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_FROM(0.00)[bounces-34878-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34877-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_THREE(0.00)[3];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,intel.com:dkim,intel.com:email,marc.info:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 9212D29B5FD
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[edwardblair@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8549B29B734
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Setting the Command Abort (CA) bit in the Command Ring Control Register
-(CRCR) stops command execution by clearing the Command Ring Running (CRR).
-Some controllers latch CRCR only when the upper 32 bits are written,
-requiring a retry sequence when the initial lower 32-bit write does not
-update CRR. While CRR=1, the controller ignores all CRP updates, so no
-field other than CA may be modified.
+On Sun, 16 Mar 2026 at 13:12, Mika Westerberg wrote:
+> Are they both 'present'? I mean their _STA() returns 0xF for both?
 
-On 64-bit architectures (CONFIG_64BIT=y), writeq() performs a single,
-atomic 64-bit MMIO write. Using writeq() for the CA write ensures that all
-64 bits reach the controller in one bus transaction, without giving
-controller the opportunity to process the abort between 32-bit writes.
+MSFT8000:00 has no _STA method at all. The sysfs status attribute is
+absent, which only happens when acpi_has_method(handle, "_STA")
+returns false (device_sysfs.c line 591). So it defaults to present per
+the ACPI spec. ITE8853:00 has _STA returning 0xF.
 
-All xHCI 64-bit registers are accessed via lo_hi_writeq().
-Earlier attempts to replace these with writeq()/readq() caused regressions
-and were reverted [1]. The underlying cause was never identified [2].
-It may have been a quirk in writeq() implementation or controller-specific
-hardware behavior, both of which are likely no longer relevant after more
-than a decade of kernel and hardware evolution.
+As Heikki pointed out, MSFT8000 is the RhProxy device, not UCSI. My
+mistake in the commit message.
 
-To reduce risk, this change introduces writeq() only for the CA write path
-while retaining the fallback upper 32-bit write. This keeps the change
-contained and allows gradual validation across different hardware.
+> We have a quirk table already in drivers/acpi/x86/utils.c that I
+> think could be used to mark the other one being not present.
 
-Link: https://git.kernel.org/torvalds/c/477632dff5c7 [1]
-Link: https://marc.info/?t=139093294600002&r=1&w=2 [2]
-Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
----
- drivers/usb/host/xhci-ring.c | 5 +++++
- 1 file changed, 5 insertions(+)
+That would work. acpi_device_override_status() runs before _STA
+evaluation so it can force status=0 even without a _STA method.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 10160e76df68..e7910ae2e488 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -499,7 +499,12 @@ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
- 	/* Preserve RsvdP (5:4), other writable bits read 0. */
- 	crcr_lo = readl(&xhci->op_regs->cmd_ring);
- 	crcr_lo |= CMD_RING_ABORT;
-+
-+#ifdef CONFIG_64BIT
-+	writeq(crcr_lo, &xhci->op_regs->cmd_ring);
-+#else
- 	writel(crcr_lo, &xhci->op_regs->cmd_ring);
-+#endif
- 
- 	/* In the future we should try to recover a -ETIMEDOUT with a host controller reset */
- 	ret = xhci_handshake(&xhci->op_regs->cmd_ring, CMD_RING_RUNNING, 0, 3 * USEC_PER_SEC);
--- 
-2.50.1
+My concern is scope. MSFT8000 is a Windows-only Resource Hub Proxy
+(RhProxy) device with no Linux driver, no module binding, and no
+in-kernel consumer. It's a static ACPI node with no _STA, so the
+BIOS exports it unconditionally. Skipping it during I2C client
+enumeration would have zero functional impact on Linux while avoiding
+a quirk table entry that needs duplicating per board.
 
+Thanks,
+Edward
 
