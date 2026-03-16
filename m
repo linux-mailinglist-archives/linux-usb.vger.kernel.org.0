@@ -1,194 +1,208 @@
-Return-Path: <linux-usb+bounces-34894-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34895-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kHcBKfpauGk7cgEAu9opvQ
-	(envelope-from <linux-usb+bounces-34894-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 20:33:14 +0100
+	id OBwrCFOAuGltfAEAu9opvQ
+	(envelope-from <linux-usb+bounces-34895-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 23:12:35 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21B7129FD1E
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 20:33:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C1282A14FD
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 23:12:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8C1AD3014853
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 19:33:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 251013091F9A
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 22:11:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7F2E3E717E;
-	Mon, 16 Mar 2026 19:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E953372B38;
+	Mon, 16 Mar 2026 22:11:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ANjIKhKz"
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="eyO5nsRG";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="guCypQjf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a3-smtp.messagingengine.com (flow-a3-smtp.messagingengine.com [103.168.172.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E593B46B5
-	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 19:33:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B41364E85;
+	Mon, 16 Mar 2026 22:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773689589; cv=none; b=QWorPYEFVrwmZsD5jMfOZGZkR0SlbDZ6e4npHAUgqC1B51BRT7ryi2e5wxTMz3wmFQ+QJ8NAOHPvL/bpQPhQaxzZ66I6mV5GzY7hZEgPucfgxTVigO0JclfBQzb1ARsWrSQoqBJCjLeC7q3XXQxgc1G7XY17Uw5imkkaYmhggZo=
+	t=1773699061; cv=none; b=X2HD+TcaXbBKqJwG3FOGvtGJ46b+9I3gceqYyzbiFh6CNe9xr5K5tYkgxy7/FPoH9bW5ibjyU1GRsjl45lwRwaFkYUlkIK460MM/W7tnIzi7BdP62SHY3AFNuzkzLwFRLz8crKfu/KWSHUHvsA941n8ETVzAIJYgBbCgkdzV/Y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773689589; c=relaxed/simple;
-	bh=DObkRWdw76SqrJhQ2IGf8gCbVf9aTlspjB3YTxYt2GU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=comYzKT4GHTT+Kndv4QWFaFAbJr24SjwVwwo2pHG8DSTQ3uXc7qNGHUo5NOqYNUbBLQEDwGJELB8jeZG03jG+Xj1+HYGoDS1fbikk6QI4lkcBCZrEEBebvqcHf74BMXlKsIp7ugQnQrJrHI8XcO2rSyUZWjNJoisxtua4sLRwRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ANjIKhKz; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4853c3c2fe7so29661405e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 12:33:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1773689586; x=1774294386; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LT8GQLaykBdYQQ8v3CGI7RDdV/Q91xmOWcKLvA5VpLQ=;
-        b=ANjIKhKzA5KdlYWwxdgSfT7XWJGkdiHTQdjgF3rwSQmJeYw/AdDnons7rEhyAjAIxM
-         Sp4/iLmx2qR/0eOzeVT2u5hI5oUxodPyEESLKoDAHhcgF1B4N2uur9avUReMt+8ueZsh
-         MwkVBN9DpPS8GjknYLOANF624MF5YgRvxP+ZkGpZxp/Sk+5pQnacHvnvX03IEXeQwEri
-         eU8fuclAskQxjusdiXwLXOxBZun4ShYQNNS8aix37pe+VhKZjYpLkaazO0h650xFZ0XV
-         KeRPjGJ8B7sT5YgWx/1IoFPcRuTbXP3fyinezSMpLuAEEpYFlVrMuJsQiPq+iaMRYM0Z
-         hikw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773689586; x=1774294386;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LT8GQLaykBdYQQ8v3CGI7RDdV/Q91xmOWcKLvA5VpLQ=;
-        b=e4XUSsQ03zuCBgyGaw+v4dev2AElm8/HwzUPE6XWfYGYG/u6UnPcceFj2G0oIErXxu
-         kJys20JwrSdtaD74wVHWvLSvMME8P0BCX1ppM8gDbixOJWhrvg/rOcPAHNCFZafXeSfq
-         6Rg7pBgNYxf1WpmPWUOVhkK6lrh3+R4kiuqKGdYp72NwdaARNBoQmLT2UuH8rCvah6GA
-         IRFGyW1DrDX+x0gRanGKtncEMOmaNwZn7kxhVZEaeIsG/tONce4N2FbVPKkFtui8Y6iD
-         Ml2EBbnSkWFSBDu8nBEFVXdrdB01w9j7E9eFyyVW1DxsrElxVbD63sS5kgqRr/k4o4t0
-         r3SQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVD3O9426qS6EpMcy9GGTPHNPhTYSBEHpZGGUEJQjpQfnEN5o2FJ8TBQhL/69+VEBByN5OoIETq0uY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyycVUKgipM/FQ9fGXfhZOcvxaXdhm6Xw8ctkjb/Gps3YBvBNre
-	OkMVr6lQ3aZBdwPNvESoFvL4WVS5M5zxqAd67a1zSu79VbCFX/oKAuX0y7UBsY6+8b0=
-X-Gm-Gg: ATEYQzzdRTQilCrKOdzJ7VKCZAfbHihnRRz2cF6rzkcJKSDRdBcti3jrc149fnLf1Zu
-	mgyZKMJ0zQkSdT4weIjRBHAyGZ0+DeU/kOLoLgvRrRmDjiyfjG0usDHMSQ9JDbkwl0qkcjx5q7G
-	BkzjKHSBtsoUbE72u6axvZuNelpAzpAaNR/j0KkTM78P6OHi7d4+49/7M6XVvPcxGb+Bcj03j5j
-	nOZQZmi0qfMW/SQuBJb/cM+PFDXG7mfMApR/Nzxh0Wo8Ch/r08+OHvewqUzoxNyV6necrNdtArN
-	LEgmLQsAxB8NokLrQkwD5KlDZNiT0VjNJdEvRg3ITZLmdpqAC0xm9jeZPRT9xk9mB7qwnwHprhv
-	EFMKmO91E8G8Bhu3EcqOCNtQFCuNJ488XwoFrIYM/MYIwFFXqYnGwwEVMpuZxvNUbcEf1ECnbHG
-	qAprfgIO1b+YrKfTHB3t/CN0wNhXWijbgnh+5inO6SRbSgF+TUbsKV4sV4zF6S/hNHoEAyA09if
-	xb+yA==
-X-Received: by 2002:a05:600c:a08:b0:485:2a85:e5ec with SMTP id 5b1f17b1804b1-485566ca978mr244210335e9.2.1773689586187;
-        Mon, 16 Mar 2026 12:33:06 -0700 (PDT)
-Received: from ?IPV6:2001:a61:13e0:df01:26dd:3109:a42a:ea05? ([2001:a61:13e0:df01:26dd:3109:a42a:ea05])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4856c2823afsm16734775e9.19.2026.03.16.12.33.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Mar 2026 12:33:05 -0700 (PDT)
-Message-ID: <d1674f98-cbbf-4a16-8c76-996a0494d931@suse.com>
-Date: Mon, 16 Mar 2026 20:32:59 +0100
+	s=arc-20240116; t=1773699061; c=relaxed/simple;
+	bh=bR3l1XBxxG0Br6WPViaTYx4jBj801ByLeboUNggNeu4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A38yHLwEglJnAk0B2QCy7stC9vMmro0enVPstLHcOoOWf+ISPC3fMoHAiOFXJpgQ+JEGYQrlTu0OIZqL9gIfg9EuELK7OlOHQThyqCuvdDItVMWZTKlH5lCT2EoHtG4zqNZ3haS7IZ2EcyWbx12HIJK/xKpWlKg0tgYFk4eMcz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=eyO5nsRG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=guCypQjf; arc=none smtp.client-ip=103.168.172.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailflow.phl.internal (Postfix) with ESMTP id 96E81138028E;
+	Mon, 16 Mar 2026 18:10:56 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Mon, 16 Mar 2026 18:10:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1773699056;
+	 x=1773706256; bh=pZj8f0JboyjKt94J8KB7OLIiCOoml43GOZ4w8rDpLPA=; b=
+	eyO5nsRGgscBaSPTlSrjx8D8qsmxFZTD+YBT90C8JLtkSU+JG9otBsGP68/aDjfq
+	Ip8/CY7pDqj8uLfl6tk9PaoCLmHFx9BmC+OLDsgQIKz5wruWwvglBIFTzX8Bgo1G
+	D7tyDhfcq/yYvbxAZYbPlVlov+W1BUQwVVZx34myYfSzzczy+o0TvO2AJR+dEy1d
+	h9Fy4zA0IHy3AyAu2lJw7cTPeRVsoH7Q9DZJUhPGVmEq8IZ5byXvr46eUf3RwYLV
+	Pd21rN+O2sxo21UD0KoApMpHYwnhY5vI1CKlHqs6nb1Q0ON5mjBcz18/WvPyI4M2
+	g7ed/wORmv3aHNEvlM9NEQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1773699056; x=
+	1773706256; bh=pZj8f0JboyjKt94J8KB7OLIiCOoml43GOZ4w8rDpLPA=; b=g
+	uCypQjfxr+Zi7JxdTC/p3wGQ4VV0q/Wv3rf4QuOSSvRwPZ4hwWoKXSQwRlJppx/A
+	eTD/kX8ytMBkqeeAHXi8QojGoDJPwhemKEl1A5BQyy+VTfQ0kjCklEhRU0D9TNU6
+	QzoouUhJdY7Fi24kVLMS4vkfF5Xif+sxcGuZ+ZH9bmNOAZhg/6jHFnuxjrIUYo4Y
+	sJAjmQ/c58h+MsTVokuL8c2t4xBbVGwnTgXIvKplEwnaY81NNzKXbPGa+zPU58N/
+	vwQ/zZfUYT5zYdyXfBWrfC5sZSkqzhpuD1WACxXIM/TD7Jh2N1ZXy8qS+O1DtSBY
+	h24uS6YuZ9c79L+rKNYRA==
+X-ME-Sender: <xms:73-4aYdtUUIQC679P0YPl8k6UZ10Tz8-qTD319yDZEtXusdBhZuXRA>
+    <xme:73-4aTUav9FvduIIOmc0jldmINr5W_MhUsWQFGzP1fBm1dpf8ggOxSMvCMHniLmCu
+    LbRPk360ujIo39hLA6fsP95YlnCLki5WcrUsiuRyEwh6NcxWlxF>
+X-ME-Received: <xmr:73-4aSY56rJyFtQwMFw-H9dfM29zbbMWxWkWrpi3kYaZ1kbqDyXdf5bHU5U>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvleelheegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfgjfhfogggtgfesthejre
+    dtredtvdenucfhrhhomheptehlvgigucghihhllhhirghmshhonhcuoegrlhgvgiesshhh
+    rgiisghothdrohhrgheqnecuggftrfgrthhtvghrnhepvdekfeejkedvudfhudfhteekud
+    fgudeiteetvdeukedvheetvdekgfdugeevueeunecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomheprghlvgigsehshhgriigsohhtrdhorhhgpdhnsg
+    gprhgtphhtthhopeehhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepphhhrghh
+    nhdqohhsshesrghvmhdruggvpdhrtghpthhtoheprghmugdqghhfgieslhhishhtshdrfh
+    hrvggvuggvshhkthhophdrohhrghdprhgtphhtthhopegrphhprghrmhhorheslhhishht
+    shdruhgsuhhnthhurdgtohhmpdhrtghpthhtohepsghpfhesvhhgvghrrdhkvghrnhgvlh
+    drohhrghdprhgtphhtthhopegtvghphhdquggvvhgvlhesvhhgvghrrdhkvghrnhgvlhdr
+    ohhrghdprhgtphhtthhopegtohgttghisehinhhrihgrrdhfrhdprhgtphhtthhopegumh
+    dquggvvhgvlheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopegurhhiqdgu
+    vghvvghlsehlihhsthhsrdhfrhgvvgguvghskhhtohhprdhorhhgpdhrtghpthhtohepgh
+    hfshdvsehlihhsthhsrdhlihhnuhigrdguvghv
+X-ME-Proxy: <xmx:73-4aQltNdDVIdEqvCmz7Mlt0qW50NA4CHgJQUMNlacMN4MGiVKHfA>
+    <xmx:73-4acHdFw15OLpR73_B1AdIXJMG-pYssiD_C0T2dj2N-8ux7fVHFg>
+    <xmx:73-4aU6P6J2BtdvPwSPzfrUNjz9-qYacHOOWBucSAMlha23fXDTcIg>
+    <xmx:73-4aaO5YEqAXlnOLRO88GZx1RbxPW8QtXAeqZQNaqmxlgOL7PgFkQ>
+    <xmx:8H-4abIvs_QYur641c9BpnDuFQ6ssCC-7-o-rPLEHWyRxStBDxJEr6SL>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 16 Mar 2026 18:10:52 -0400 (EDT)
+Date: Mon, 16 Mar 2026 16:10:50 -0600
+From: Alex Williamson <alex@shazbot.org>
+To: Philipp Hahn <phahn-oss@avm.de>
+Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
+ bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr,
+ dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
+ gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+ intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
+ kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+ linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+ linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
+ sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
+ tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev,
+ alex@shazbot.org
+Subject: Re: [PATCH 46/61] vfio: Prefer IS_ERR_OR_NULL over manual NULL
+ check
+Message-ID: <20260316161050.01c82973@shazbot.org>
+In-Reply-To: <20260310-b4-is_err_or_null-v1-46-bd63b656022d@avm.de>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+	<20260310-b4-is_err_or_null-v1-46-bd63b656022d@avm.de>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: correctly handling EPROTO
-To: Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Michal Pecio <michal.pecio@gmail.com>, =?UTF-8?Q?Bj=C3=B8rn_Mork?=
- <bjorn@mork.no>, USB list <linux-usb@vger.kernel.org>
-References: <4f85311c-bdfe-46a4-a310-4a74a3c56b3e@rowland.harvard.edu>
- <64dc9c5d-d662-41e3-898f-71587b940a2c@suse.com>
- <20260313085354.71a6dbf1.michal.pecio@gmail.com>
- <12567c7d-0a17-46a0-8acf-3158c2d9011a@suse.com>
- <9da0ac4f-12bf-4270-af6f-e08b5a89611b@rowland.harvard.edu>
- <20260313224528.dp6utjqzbdguwlbf@synopsys.com>
- <a6934c14-aeb5-40d0-865c-14199943e2a2@rowland.harvard.edu>
- <3028610a-f05a-4bc8-9037-cca152e46c52@suse.com>
- <437037d6-3fe1-4f81-b74a-21bea00725e0@rowland.harvard.edu>
- <0b45d0e4-53f8-4960-b41c-63639b496dac@suse.com>
- <4f8b9942-307b-4c31-86f3-1b7b20b34a16@rowland.harvard.edu>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <4f8b9942-307b-4c31-86f3-1b7b20b34a16@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[shazbot.org,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[shazbot.org:s=fm3,messagingengine.com:s=fm1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[synopsys.com,gmail.com,mork.no,vger.kernel.org];
+	DKIM_TRACE(0.00)[shazbot.org:+,messagingengine.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_ALL(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34894-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-34895-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 21B7129FD1E
+	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alex@shazbot.org,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_FIVE(0.00)[6];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_GT_50(0.00)[55];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 9C1282A14FD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 16.03.26 18:33, Alan Stern wrote:
+On Tue, 10 Mar 2026 12:49:12 +0100
+Philipp Hahn <phahn-oss@avm.de> wrote:
 
-> That's handled at the class level.  In the simplest approach there is no
-> resync.  The host just keeps trying to send or receive isochronous
-> packets at the previously scheduled intervals, and some data is lost.
-> Consider an audio or video stream, for example.
-
-Very well. We can set that aside for now,
-
-> It's more complicated than just clearing halts.  What if the driver has
-> queued a bunch of URBs?  They all have to be unlinked first.
-
-As far as I can tell for some hardware those URBs may be already be in execution
-when the error is returned. So that is a hard problem. Frankly I do not
-see what we can do more than provide a suitable operation for anchors.
-  
-> Then after the halt has been cleared, the driver has to resubmit the URB
-> where the error occurred (keeping in mind that some initial part of it
-> may have been sent/received already).  Maybe also submit the other URBs
-> that were in the unlinked queue.
-
-Correct. Hence usbcore needs to notify the driver when a halt has been
-cleared. I see two obvious options. Either we provide a callback with
-the helper or we declare another full callback akin to pre/post_reset.
-
-> There has to be a retry counter or timer because the driver should give
-> up after some length of time.  When that happens, should we try to reset
-> the device?
-
-We need to notify the driver when a halt is cleared. How about we
-provide the option based on the return value of the notification?
-
-> It's a mess.  Implementing it in usbhid was justified because that's
-> such an important driver in such widespread use.  I'm not at all sure
-> how it can be generalized for all sorts of other drivers.
-
-Don't you think that what usbhid does is a relatively useful model
-for other drivers?
-
->> Actually you make me wonder whether the semantics for
->> usb_queue_reset_device() is good.
+> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
+> check.
 > 
-> That's a separate matter.  However, a driver that is clever enough to
-> call usb_queue_reset_device() should also be clever enough to call
-> usb_reset_device() from within its probe routine, if needed.
+> Change generated with coccinelle.
+> 
+> To: Alex Williamson <alex@shazbot.org>
+> Cc: kvm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+> ---
+>  drivers/vfio/vfio_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+> index 742477546b15d4dbaf9ebcfb2e67627db71521e0..d71922dfde5885967398deddec3e9e04b05adfec 100644
+> --- a/drivers/vfio/vfio_main.c
+> +++ b/drivers/vfio/vfio_main.c
+> @@ -923,7 +923,7 @@ vfio_ioctl_device_feature_mig_device_state(struct vfio_device *device,
+>  
+>  	/* Handle the VFIO_DEVICE_FEATURE_SET */
+>  	filp = device->mig_ops->migration_set_state(device, mig.device_state);
+> -	if (IS_ERR(filp) || !filp)
+> +	if (IS_ERR_OR_NULL(filp))
+>  		goto out_copy;
+>  
+>  	return vfio_ioct_mig_return_fd(filp, arg, &mig);
+> 
 
-Yes, one issue at a time.
+As others have expressed in general, this doesn't seem to be cleaner
+and tends to mask that we consider IS_ERR() and NULL as separate cases
+in the goto.  This code looks like it could use some refactoring, and
+likely that refactoring should handle the IS_ERR() and NULL cases
+separately, but conflating them here is not an improvement.  Thanks,
 
-	Regards
-		Oliver
-
+Alex
 
