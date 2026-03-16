@@ -1,143 +1,140 @@
-Return-Path: <linux-usb+bounces-34881-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34882-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AAUHFwMcuGlYZAEAu9opvQ
-	(envelope-from <linux-usb+bounces-34881-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 16:04:35 +0100
+	id QAl0EJccuGlYZAEAu9opvQ
+	(envelope-from <linux-usb+bounces-34882-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 16:07:03 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C08E229BF42
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 16:04:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D55929BFC4
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 16:07:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BAFE23055D76
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 14:58:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2BBD9305E9E2
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 15:02:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C0913845B7;
-	Mon, 16 Mar 2026 14:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EABE634DCCC;
+	Mon, 16 Mar 2026 15:02:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jluEImsJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MKoPeFoo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A3BA30B508;
-	Mon, 16 Mar 2026 14:58:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC74039BFFE
+	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 15:01:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773673113; cv=none; b=YlY7EGFjYbcYZnlc2UyV2sLx3RZA+BdnHYwyNJejKYHcD/NBNDUmpKKKecjPdtzZ4KvIIHxYp+8Va1UBjagAGLbPmyXCLJi9eSrewMFcyF40kxvGfKyYugn8ixv0Q7cV9bT76FjEvIoqOx2aRcBzAUVbeU4KddFGT8ndjeqitT4=
+	t=1773673322; cv=none; b=mESeJGk3MMQixaIgoUHei3HJ98pRSsasfbwnHpuQ7ZwmYrU8G1AC3LTMgWpHECR0gW8E8UciwdzYTQ4v+fWvb970X20fjG11JAZpp9Q9486GgQ3QeYmqeRtKSCv99Tt8Z9l/hs3TcMgVFjBk+R1nL6+HRDiT4VYHLVymjbEY2Yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773673113; c=relaxed/simple;
-	bh=Y1mv2qVYpFR3tZg+xb+gIrccPpvHcADmzSkdgb5F5Og=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TNPhryLKyC0HPJ9/CvxJhaYwJnL2GZL8FtnqjuAdg7MjSt0C2jy7AzyMn/NmmMUE+RZTBoR8oZNZF0OnBX94Crv0i7xZ3mFcKDcURL7/Te8pe94w+EC4HvywNi4nTzW6GaZEFp9Qw7OUtoEInDtDmByZeqrR0SxhfMYWmkpKULM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jluEImsJ; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773673112; x=1805209112;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y1mv2qVYpFR3tZg+xb+gIrccPpvHcADmzSkdgb5F5Og=;
-  b=jluEImsJ/ibG/tMtOh3+adbZAkEyjvlQWchnb5yoPz2PSQCbkVfK6vVf
-   TyiEzx5dlEmckSb1/d06G4F0wTncnhMdqqKkKJfGPd7VAq4/fOI3J/3N7
-   8ZWrHbDfyYMDoYICaqhDIRhD9VqslCXzBQTsrsOisI5zhJzJAHwpTBBCq
-   LLPXgREhfm9WB5tujXs62jFzCN+OUZukTu/BrsrjsYO/HuTWIkYg8+PdG
-   FwBqq7dJveUOiqxYcXk4K8BB8KNhAUDG7YTHs7CrqyGr+T8beAT0rK3ro
-   Kxg8hEGL6Rn/QwooEEruj9I4/Shmu4ACUQsFdHyF4jTP0TT+t4TGMFtAh
-   w==;
-X-CSE-ConnectionGUID: 4syTQnL2T62UmhAyCCXDrw==
-X-CSE-MsgGUID: uAgVBdKrQAyOdIaLlodKdw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="77300013"
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="77300013"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 07:58:31 -0700
-X-CSE-ConnectionGUID: kZ7dfhnyTPqmXGCIaxuPSw==
-X-CSE-MsgGUID: aAaZsCarSr2/dUuv47/4ig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="222156493"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa007.jf.intel.com with ESMTP; 16 Mar 2026 07:58:29 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 643FF98; Mon, 16 Mar 2026 15:58:28 +0100 (CET)
-Date: Mon, 16 Mar 2026 16:57:47 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Edward Blair <edward.blair@gmail.com>
-Cc: linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-	gregkh@linuxfoundation.org, wsa+renesas@sang-engineering.com,
-	westeri@kernel.org, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+	s=arc-20240116; t=1773673322; c=relaxed/simple;
+	bh=il0FhzsyMO7Ow6QFBh4/6/fuw7rbNfb0siORozyGmpw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gwVZtLG8rIkFekcqXaR5rucjwLIWOEh0PDShmhUX6W2EuVFx76fE8h+6hmON9ebIivpCyuF5lM8VMsNfaFWZU/jGfYaRPaM7ym4yMFaTc3Naz0K9Q3WfIR8DMsmB5e6zkzkfdVVfFyWfiG2TavQo8u+s1YmXKTCdFr55Id2kOGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MKoPeFoo; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-439b94a19fdso4298527f8f.0
+        for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 08:01:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773673313; x=1774278113; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=il0FhzsyMO7Ow6QFBh4/6/fuw7rbNfb0siORozyGmpw=;
+        b=MKoPeFootrTN11wewNRVatcq+RJH/x6met7bRCElGekQhbQo9HtVv8cVGfkNBzmEle
+         wC55rlBsYG7doUlc+SMGL3CsNWynmLjld9zW/oQiuU0tJg2jfQdMyv0lJfETwFE7UznE
+         slTEtrRDyb6OD9+6cChj1qj2WQ0ZOyZ76MMNH2AThAvPzcmCC8z814BM1viK4W+Jwzbx
+         q3PGD0xcpjsJ4T0HmaAGFIa8/TiKuaUlOHeLV3c3o1JI7N3KB6Fp9dJ/Pnktw2FdUjNC
+         BJ0Q/VK2y6+yHeC+jAtTU0/TgdQNdAqzd4SboAnDiy5RzxZ8KvdOOYD4dZu1yLkqADmR
+         C2ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773673313; x=1774278113;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=il0FhzsyMO7Ow6QFBh4/6/fuw7rbNfb0siORozyGmpw=;
+        b=IUyuWKXcuQ6mpI8vWJL/u9L215VLmPWnVCgIYGVAbtQLt+jEJy9vQ9y0uNXMIOBTjx
+         v8dyn2vdgGl7scoqtbQ1++fCDJHyh71qhYLfHZWu5OZGE72WRsE1m4t4unwF/s7boqSP
+         H8VVkLFK3b8obFmwUZMBon36ZZniunr6y59TeaF4zALSLx7tIbbtnl+zfTQS08Fedc/h
+         Bx/a4H5vKg+pn8BvWPbZFMIoZhBB95G1GoQOmcQ/PafirC6oFzizT4pRLv5YNsEFwTJp
+         HNceHOSPtqjg6MY26vC0AECd8taJMkByYBl1aayNjQvj3bzknr1UtG3M4Gml+OIi7fDP
+         iYYA==
+X-Gm-Message-State: AOJu0YwqRV48moi8qgVU+1ZXg37Pjc0cUuTErmULZtIvVZwcBlreaq0v
+	8hHe+xA3aM+DPnuwUwsntFGmdT4gH5Pa2Xs7rQF3S9FUq1PkObUaVRCE
+X-Gm-Gg: ATEYQzx9EIS6m3zKWqwfTF+/FbFSnfk1GSb1cPlavo80ERjiwYWJC605KB7ZcBlUIgT
+	rAQS1/pUSPURh26s2ss8XRIm3g39wE13T5eYBAu8QcGBWaCKRCyDxR33v5e2/33weopZpKAOjKt
+	CgeVKxRAwxHFEG/ocMdGlrZ0MqYPGMtvwU/bEaUtPqxPpq33LpjA1fgW7C9HTMbtqbPg3oY+m9f
+	8iRbNLeoGU/0MPcgpBzPJ3EgaOIFQQtHJKgDGQLvnups2WonqpiCR42cINrih+ZVtVBobD3IENw
+	0iTpI3gLEDVujIiRdn7USAYNuzVYLWMi8k1REf4eRKa7Y0hX98oI0u69d+zqkTuot1oyb+aEtkR
+	3jCylRnXDjO2zmMxrUyQVz666ZUZSo3Q+TYBuqyFDjSzHgRLXUdPOpk6IcC2/sfgiVL+JlHDO0h
+	EgD5sRUuRiwuUjCuWHVecyvqdQg8q3eDVgUwsjOEBCkUxwwgZ5EZfjxqw0r5o0ZMbfl57V5JBYt
+	KyiW0gatGmEHaTM+jK3ibzEX3abGAaLuTrEs13KUdZX5v+RXGLJRr1mXacfq5l6HBKjz8kmrDLF
+	KcXksPX4e+0=
+X-Received: by 2002:a05:6000:2c01:b0:439:da0d:a025 with SMTP id ffacd0b85a97d-43a04d878c8mr23264464f8f.20.1773673310062;
+        Mon, 16 Mar 2026 08:01:50 -0700 (PDT)
+Received: from scambox.localdomain (5-198-68-184.static.kc.net.uk. [5.198.68.184])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b42e680ddsm11780298f8f.13.2026.03.16.08.01.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Mar 2026 08:01:49 -0700 (PDT)
+From: Edward Blair <edward.blair@gmail.com>
+To: heikki.krogerus@linux.intel.com
+Cc: linux-usb@vger.kernel.org
 Subject: Re: [PATCH 2/2] usb: typec: ucsi: add ITE885x I2C transport driver
-Message-ID: <abgaax86_52szWnr@kuha>
-References: <20260314013157.7181-1-edward.blair@gmail.com>
- <20260314013157.7181-3-edward.blair@gmail.com>
+Date: Mon, 16 Mar 2026 15:01:28 +0000
+Message-ID: <20260316150128.30203-1-edward.blair@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <abgaax86_52szWnr@kuha>
+References: <abgaax86_52szWnr@kuha>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260314013157.7181-3-edward.blair@gmail.com>
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34881-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_FROM(0.00)[bounces-34882-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWO(0.00)[2];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[edwardblair@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,renesas];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim]
-X-Rspamd-Queue-Id: C08E229BF42
+	TO_DN_NONE(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 9D55929BFC4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
+On Mon, 16 Mar 2026 at 16:57, Heikki Krogerus wrote:
+> Besides the above comment, this looks okay to me.
+>
+> But couldn't you use the resource managed version to request the
+> irq: devm_request_threaded_irq() ?
 
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * UCSI I2C transport driver for ITE885x USB-C controllers
-> + *
-> + * ITE8853/ITE8800-ITE8805 are UCSI-compliant USB-C controllers found on
-> + * ASUS Z690/Z790/X670E motherboards. They communicate via I2C with
-> + * ITE-proprietary register offsets and interrupt registers.
-> + *
-> + * Note: Some BIOS implementations declare both MSFT8000 (generic UCSI) and
-> + * ITE8853 (vendor-specific) ACPI devices at the same I2C address. The i2c
-> + * core skips the generic device when a vendor-specific sibling exists,
-> + * allowing this driver to bind to the ITE8853 client with proper IRQ.
-> + */
+Thanks for the review. Will switch to devm_request_threaded_irq()
+and update the header comment for v2. As you noted on patch 1/2,
+MSFT8000 is RhProxy, not generic UCSI.
 
-Besides the above comment, this looks okay to me.
-
-But couldn't you use the resource managed version to request the irq:
-devm_request_threaded_irq() ?
-
-thanks,
-
--- 
-heikki
+Thanks,
+Edward
 
