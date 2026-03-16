@@ -1,246 +1,208 @@
-Return-Path: <linux-usb+bounces-34890-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34891-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UJLHN9cxuGmvaAEAu9opvQ
-	(envelope-from <linux-usb+bounces-34890-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 17:37:43 +0100
+	id uEpzNNs/uGnSawEAu9opvQ
+	(envelope-from <linux-usb+bounces-34891-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 18:37:31 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8396829D7F9
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 17:37:43 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA75429E61A
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 18:37:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D651D30186B0
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 16:37:42 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 1C17E3018215
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 17:33:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE5DC3CD8B9;
-	Mon, 16 Mar 2026 16:37:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9675C330D25;
+	Mon, 16 Mar 2026 17:33:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ggoLq8Nr";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="InBJvDKP";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vkExBbcg";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="PbBBDpB8"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="kwhNwgEV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90ED6332601
-	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 16:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99F113B5B3
+	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 17:33:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773679059; cv=none; b=KUCRarJGcvcqIkhRps2W+WkdASSmhke51VcbweaIl//rsCzjbNs5LrTIqtX6a07axYuFkG1lRFqnULGqv/5aKZAEN9bo0DBHJjVXK8+94ob/tzm6fDaZikSEcQKgweb5RdThCDumCgsTvv66WS6SXtQ4LN9veukhUWbSk65mhgY=
+	t=1773682400; cv=none; b=Jh8LWQyHbEWEpyZrkSDjZ4Fu8ILSjRyBtaGpkb97QinComwCVOU1UiAJ6biLR2j2ySVkFLyUSWeNgNqB5nzuX1tw49fumEUEzy4HShn6bHZb5xehLtAHN7zNaSmxptRwNfuxNwlufTcdMB/MaJlPQK+i6Z2AQ04RbKRUbBttbZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773679059; c=relaxed/simple;
-	bh=KA2V+BstHbG9WNyUP+FThEkm7s5yl9yAWX/ntY4WIh8=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hXSplACCKmxjir0dmtZ8QoiPpmRYHaqhJKmrda1xKlTWIeFhBvBXWRg+UspExeOON1JLT2KQo8F62UYCZ5e2tbUF6ERAydod8HnbFI32jsMQW7Ahm328id7R38cbBSDOrrpxy9MhOyfDWW6P8EsHxwILrrsxdLjWX0/og3qP/Go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ggoLq8Nr; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=InBJvDKP; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vkExBbcg; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=PbBBDpB8; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id E74A55BE42;
-	Mon, 16 Mar 2026 16:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773679056; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Tk5CZoVQ4UXq2yGrVWuQBI10zyAbPW5r65rMRoE9rdY=;
-	b=ggoLq8NrM7HSO7SZamfFcUbcr18wMY0fEz0dtl08y6OJkXKATiuMf5lY0Eb2RJieEEgD34
-	pAeiIk1uwv2ODxSxPLCbxUUicQcipF0lWHWNDT6sDXHSpgshoLrrKGuMPoIlgjhkHlYzaO
-	89VMPQlK5j+CPCUGrTAJmc5fanuKZ6U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773679056;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Tk5CZoVQ4UXq2yGrVWuQBI10zyAbPW5r65rMRoE9rdY=;
-	b=InBJvDKPm94vmiaoZXzkh07HfuZJzH2yfDsZ4+ioF6xRo80BoDQfA1CGq/zKvl8fqEedt/
-	RW1RvH9P+lZkAYDg==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=vkExBbcg;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=PbBBDpB8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773679055; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Tk5CZoVQ4UXq2yGrVWuQBI10zyAbPW5r65rMRoE9rdY=;
-	b=vkExBbcgQX8RXn0OeaerbF941FZYlC+Ri0tbhOUXiSUgjDywWr78FqOBsXTvbuvhjYnJc5
-	Z92+YiTBsZjjqTOhitIzTJRiaB23aYPdwtYyY5GV1rcv4O9Kx2AjLkeQNONPXzgZdosR6l
-	+T7i3P/dt//qjbI22C58oTowZunkjtk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773679055;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Tk5CZoVQ4UXq2yGrVWuQBI10zyAbPW5r65rMRoE9rdY=;
-	b=PbBBDpB80Sd2haCtU1HnU0Yaik13xzGylHKZZkENQFWfxqGQ8il1DWlK17RPNZP9+KI86v
-	tlQxnP9ZczWrOFDg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A749C4273B;
-	Mon, 16 Mar 2026 16:37:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id Wil2J88xuGnSJAAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Mon, 16 Mar 2026 16:37:35 +0000
-Date: Mon, 16 Mar 2026 17:37:35 +0100
-Message-ID: <87se9z7msw.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: =?ISO-8859-1?Q?C=E1ssio?= Gabriel <cassiogabrielcontato@gmail.com>
-Cc: Takashi Iwai <tiwai@suse.de>,
-	Takashi Iwai <tiwai@suse.com>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Mark Brown <broonie@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ALSA: usb-audio: validate full match when resolving quirk aliases
-In-Reply-To: <abWms_JJJrU8ThwV@ortodist>
-References: <20260314-alsa-usb-fix-quirk-alias-v1-1-3269998f7ada@gmail.com>
-	<87sea2a5hz.wl-tiwai@suse.de>
-	<abWms_JJJrU8ThwV@ortodist>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
+	s=arc-20240116; t=1773682400; c=relaxed/simple;
+	bh=3AQQRFXR6PJzElWym2svjDNAUTpWGUvaT993tBsmS38=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kJ2d8EwoAHjqICytbv0DrzZNCyRc59o4IGR/2GK6DmrTW4FYioauODbyHElw12T3w5E6K+XjJzFqLnwFwRwvLI2LEdicsoCa/HeATIyc/2NgI02d8II3ScIx67qx82wMcECFCv4Qzz3jJopV3+tFaZO2iPF2CUDQMH6gbc1Y6Q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=kwhNwgEV; arc=none smtp.client-ip=209.85.222.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-8cb20bcff5aso487729085a.3
+        for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 10:33:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1773682398; x=1774287198; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=13Bw5i/rQRPicG+Ee2XgD6f3k4QfwXOpTQqvT//swZY=;
+        b=kwhNwgEVphQoBOKHvLVzgBB1+JU7vaBPIioPc8JwJKPkHIC/RwcI0hS4arReWILfX+
+         QCbcmMGXtyxYD+cgK3m2YqoSPrXVRV2RNsLcHLb11h/dtFfnHh7qvXtoLyBYJ2T2n4Fo
+         HtqzTPs0sOYJAbW/2I5tpqr6KgxMB1gy7uZFOHOr8aeCKKsooMopmz8gFzswDeZ4kJ24
+         9oNcJa2gRsmsn5ImOS1tq2kOS/VsmuxL+YWzIQYys4RSMx7vdAAUt2N07fbyXVcTuIqr
+         Suha4XAuFcEO43wbB8WoukOArqXRW8fXYPT4xkrcdqy62TYAV7Jw46h7kgdDbGyhaf+o
+         kk9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773682398; x=1774287198;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=13Bw5i/rQRPicG+Ee2XgD6f3k4QfwXOpTQqvT//swZY=;
+        b=k5KMAn+rwUUDbuHe2UPm4N31RLE74TVt4ZDqivrfOtqw9s5OEt4csYAP4FvgW2wk9s
+         2106pvF7i9CytymGhEcct2O1qp9fYQ/0ry308Y+6F0QQv8AyyUnTzHwzAJ1B2xY5psF5
+         rpgyCHL6H7e1/kZmMnKSo+WhkFvLz1yOdlmYjIp3mY5DUUHDPgmDvahjE67rFuGrSbpP
+         DhrJZ2XrGSjURsqxgokeREScH7KEShJnCwYEIpkOYNyB6qmwtP0NAdf+tm/BoY+/Ehmc
+         sKXF2iaFvZsDD+Pr4hw/epfa7uM97DkS/Z9FevOuKg5zs3WbbYxfuN5HGLBenCISTJhF
+         u2vQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWV/8ybyatVOT3eUbYwbs0V5+W4g7xmE89HdGyK/TX3dHNteSAlvky5KSP0UkpVCkWrQC9wUTpUFvo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjLFLex9jsd9h2HcqdkOL+tO4II/2JJlsSpzvs74BQz2x3YTj6
+	cggKbnqy1CiYgOc0EnEDqP5rM7Zgs/TCOiVlMkV7dyCa0+z6wcfiDHQaY4LdSZGfN+LIO1M9bqJ
+	riaw=
+X-Gm-Gg: ATEYQzy4vvAeWlykrDGdZmM3y1J5eK2tKmoZm5NVajYGC/YwcG5YPU4qECEtv4ryyTN
+	9Wk6j9fNwdSQrk1RBxaY73bVTkvkFhDolGLLIsv8Z7yDX4mVu7As3e20QYBMUKfdoV67Ao91nKZ
+	ab1ALLiosh/xFt7sEQ0zUcaP5yEluj8Nya1vDF2uu6VAiRwy+PeoGeD89d5Nyz4h5if+FaAhr9/
+	zRzGdgRkfmGjb7arH4nIXwJKCrRiDI4wzckrkhF+BACZVeYPtb+E2G2YVb+uouesmld6Kwmen/A
+	ZsTJU6xDUpSjSLOVdF+SXCqeI+5MT4HK1T1p+s64tK+YDj3GkSnUKWGfSsoPfPpHg0D0A6WbxhS
+	GyzXbBgCGbgJd4uebrW1rav/KhQqYOvJ/W+h4mO5NQ3wa9bjbLuvdBZWZ3C99+UN5FibVmMGwUO
+	W4iY63zp63erL9yhAFs8noAxsU8B7rwBqB8maaWnVE5fwzXObmhPEGPmNsf3xEIEUSUi2tt9dTl
+	gxqTSc7tjbBBcOjTgLz
+X-Received: by 2002:a05:620a:44d5:b0:8c7:17f3:e98b with SMTP id af79cd13be357-8cdb5a1c665mr1876457785a.15.1773682397678;
+        Mon, 16 Mar 2026 10:33:17 -0700 (PDT)
+Received: from rowland.harvard.edu (nat-65-112-8-29.harvard-secure.wrls.harvard.edu. [65.112.8.29])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cda216b7fasm1264120585a.47.2026.03.16.10.33.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Mar 2026 10:33:17 -0700 (PDT)
+Date: Mon, 16 Mar 2026 13:33:14 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Michal Pecio <michal.pecio@gmail.com>,
+	=?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+	USB list <linux-usb@vger.kernel.org>
+Subject: Re: correctly handling EPROTO
+Message-ID: <4f8b9942-307b-4c31-86f3-1b7b20b34a16@rowland.harvard.edu>
+References: <4f85311c-bdfe-46a4-a310-4a74a3c56b3e@rowland.harvard.edu>
+ <64dc9c5d-d662-41e3-898f-71587b940a2c@suse.com>
+ <20260313085354.71a6dbf1.michal.pecio@gmail.com>
+ <12567c7d-0a17-46a0-8acf-3158c2d9011a@suse.com>
+ <9da0ac4f-12bf-4270-af6f-e08b5a89611b@rowland.harvard.edu>
+ <20260313224528.dp6utjqzbdguwlbf@synopsys.com>
+ <a6934c14-aeb5-40d0-865c-14199943e2a2@rowland.harvard.edu>
+ <3028610a-f05a-4bc8-9037-cca152e46c52@suse.com>
+ <437037d6-3fe1-4f81-b74a-21bea00725e0@rowland.harvard.edu>
+ <0b45d0e4-53f8-4960-b41c-63639b496dac@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -3.51
-X-Spam-Level: 
-X-Spamd-Result: default: False [-1.16 / 15.00];
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b45d0e4-53f8-4960-b41c-63639b496dac@suse.com>
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[synopsys.com,gmail.com,mork.no,vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_ALL(0.00)[];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	TAGGED_FROM(0.00)[bounces-34891-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-34890-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[suse.de:+];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tiwai@suse.de,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8396829D7F9
+	RCPT_COUNT_FIVE(0.00)[5]
+X-Rspamd-Queue-Id: CA75429E61A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sat, 14 Mar 2026 19:22:41 +0100,
-Cássio Gabriel wrote:
+On Mon, Mar 16, 2026 at 03:47:49PM +0100, Oliver Neukum wrote:
+> On 16.03.26 15:02, Alan Stern wrote:
+> > On Mon, Mar 16, 2026 at 01:58:34PM +0100, Oliver Neukum wrote:
+> > > On 14.03.26 03:39, Alan Stern wrote:
 > 
-> On Sat, Mar 14, 2026 at 02:46:16PM +0100, Takashi Iwai wrote:
-> > On Sat, 14 Mar 2026 04:34:46 +0100,
-> > Cássio Gabriel wrote:
+> > > Yes. That raises the question how much can be centralized.
+> > > > And of course, isochronous transfers are never retried, by definition.
 > > > 
-> > > get_alias_quirk() resolves a quirk for an aliased USB ID by scanning
-> > > usb_audio_ids[], but it currently checks only the vendor/product pair.
-> > > 
-> > > This can make an aliased ID pick the first entry with a matching
-> > > vid:pid even when that entry also depends on interface descriptor
-> > > fields that do not match the actual device or interface.
-> > > 
-> > > Fix it by re-checking each aliased candidate with usb_match_one_id()
-> > > against the real interface before returning the quirk.
-> > > 
-> > > Signed-off-by: Cássio Gabriel <cassiogabrielcontato@gmail.com>
-> > > ---
-> > >  sound/usb/card.c | 21 ++++++++++++++++-----
-> > >  1 file changed, 16 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/sound/usb/card.c b/sound/usb/card.c
-> > > index 270dad84d825..ff4418017763 100644
-> > > --- a/sound/usb/card.c
-> > > +++ b/sound/usb/card.c
-> > > @@ -870,17 +870,28 @@ static void find_last_interface(struct snd_usb_audio *chip)
-> > >  
-> > >  /* look for the corresponding quirk */
-> > >  static const struct snd_usb_audio_quirk *
-> > > -get_alias_quirk(struct usb_device *dev, unsigned int id)
-> > > +get_alias_quirk(struct usb_interface *intf, unsigned int id)
-> > >  {
-> > >  	const struct usb_device_id *p;
-> > > +	struct usb_device_id id_alias;
-> > >  
-> > >  	for (p = usb_audio_ids; p->match_flags; p++) {
-> > > -		/* FIXME: this checks only vendor:product pair in the list */
-> > >  		if ((p->match_flags & USB_DEVICE_ID_MATCH_DEVICE) ==
-> > >  		    USB_DEVICE_ID_MATCH_DEVICE &&
-> > >  		    p->idVendor == USB_ID_VENDOR(id) &&
-> > > -		    p->idProduct == USB_ID_PRODUCT(id))
-> > > -			return (const struct snd_usb_audio_quirk *)p->driver_info;
-> > > +		    p->idProduct == USB_ID_PRODUCT(id)) {
-> > > +			/*
-> > > +			 * Re-check the aliased entry against the actual
-> > > +			 * interface descriptors instead of matching only
-> > > +			 * the vendor/product pair.
-> > > +			 */
-> > > +			id_alias = *p;
-> > > +			id_alias.idVendor = USB_ID_VENDOR(id);
-> > > +			id_alias.idProduct = USB_ID_PRODUCT(id);
-> > > +
-> > > +			if (usb_match_one_id(intf, &id_alias))
+> > > Do we still need to clear a halt?
 > > 
-> > Hmm, is this really a correct logic?
+> > Isochronous endpoints do not halt, and isochronous transfers are never
+> > retried.  And although the spec doesn't seem to say this explicitly, I
+> > believe isochronous endpoints do not pay any attention to the HALT
+> > feature setting (which can be changed by a Set-Feature or Clear-Feature
+> > request).
+> 
+> That then raises the question how we resync.
+
+That's handled at the class level.  In the simplest approach there is no 
+resync.  The host just keeps trying to send or receive isochronous 
+packets at the previously scheduled intervals, and some data is lost.  
+Consider an audio or video stream, for example.
+
+> > > That would suggest implementing an equivalent of usb_queue_reset_device()
+> > > for clearing halts.
 > > 
-> > In this case, USB_ID_VENDOR(id) and USB_ID_PRODUCT(id) are very same
-> > as p->idVendor and p->idProduct, hence id_alias and *p are identical,
-> > i.e. you're basically comparing against *p.
+> > My thought exactly.
+> 
+> Good. It would need to take a callback as an argument and in principle
+> you could have this for multiple endpoints. Any ideas for the API?
+
+It's more complicated than just clearing halts.  What if the driver has 
+queued a bunch of URBs?  They all have to be unlinked first.
+
+Then after the halt has been cleared, the driver has to resubmit the URB 
+where the error occurred (keeping in mind that some initial part of it 
+may have been sent/received already).  Maybe also submit the other URBs 
+that were in the unlinked queue.
+
+There has to be a retry counter or timer because the driver should give 
+up after some length of time.  When that happens, should we try to reset 
+the device?
+
+It's a mess.  Implementing it in usbhid was justified because that's 
+such an important driver in such widespread use.  I'm not at all sure 
+how it can be generalized for all sorts of other drivers.
+
+> > > > Also, just to make things more difficult, these errors are reported in
+> > > > atomic context but the recovery procedure has to happen in process
+> > > > context.  Which means there has to be a way to cancel the recovery
+> > > > procedure if it's in progress when the driver is unbound.
+> > > 
+> > > Well, no. Not exactly. If it is necessary to clear a halt before
+> > > you can communicate with the device again, we cannot reprobe
+> > > the device before the error is handled. It wouldn't work.
+> > > We need to wait for error handling to complete if the driver
+> > > is unbound.
 > > 
-> > I suppose you wanted to substitute the original device vendor/product
-> > IDs there instead?
+> > Good point.  So not quite the same behavior as usb_queue_reset_device().
 > 
-> Hi,
-> 
-> Yes, what I actually wanted was to keep the alias lookup by vid:pid, but
-> validate the additional match fields from the candidate entry against
-> the real device and interface descriptors.
-> 
-> I was thinking of keeping the initial lookup by the aliased vid:pid and
-> then explicitly checking only the remaining match bits, such as DEV_CLASS,
-> DEV_SUBCLASS, DEV_PROTOCOL, INT_CLASS, INT_SUBCLASS, INT_PROTOCOL, INT_NUMBER,
-> and bcdDevice_lo/hi. Another option would be to build the match object
-> from the original device ID instead of the aliased one.
-> 
-> I think the first option would be simpler and more direct here, since
-> the problem is that the current code resolves the alias only by
-> vendor/product, even though some quirk table entries also depend
-> on extra descriptor fields. The quirk table already has such entries,
-> for example USB_DEVICE_VENDOR_SPEC() and USB_AUDIO_DEVICE(), so explicitly
-> checking those extra fields in get_alias_quirk() seems to fit
-> the intended logic better.
+> Actually you make me wonder whether the semantics for
+> usb_queue_reset_device() is good.
 
-I don't have much opinion, you can compare both code and choose a
-simpler one :)  In anyway, I'm waiting for your v2 patch.
+That's a separate matter.  However, a driver that is clever enough to 
+call usb_queue_reset_device() should also be clever enough to call 
+usb_reset_device() from within its probe routine, if needed.
 
-
-thanks,
-
-Takashi
+Alan Stern
 
