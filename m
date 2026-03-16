@@ -1,241 +1,194 @@
-Return-Path: <linux-usb+bounces-34893-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34894-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QIT8KlNKuGlTbgEAu9opvQ
-	(envelope-from <linux-usb+bounces-34893-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 19:22:11 +0100
+	id kHcBKfpauGk7cgEAu9opvQ
+	(envelope-from <linux-usb+bounces-34894-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 20:33:14 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4402329EF93
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 19:22:11 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21B7129FD1E
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 20:33:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 67D2E302DE3D
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 18:22:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8C1AD3014853
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 19:33:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1183B3DB634;
-	Mon, 16 Mar 2026 18:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7F2E3E717E;
+	Mon, 16 Mar 2026 19:33:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gML1drS1"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ANjIKhKz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C133DA5CA
-	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 18:21:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E593B46B5
+	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 19:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773685299; cv=none; b=frGkL6PpZKyxJ3X9HibzRpN0J/EwKfT/FyV589/6M1036SfumjlAICHdw828WgDWcyHhMsWokNt2rgNeRkQ52gSmiEUjXDSOkzHboDOrJvPwW60UT6+pE+2BQM9oSUnWVOFKCng9jTOC8Uu9cFBHnE0vSmf6ouRwvFV1NCQsKKY=
+	t=1773689589; cv=none; b=QWorPYEFVrwmZsD5jMfOZGZkR0SlbDZ6e4npHAUgqC1B51BRT7ryi2e5wxTMz3wmFQ+QJ8NAOHPvL/bpQPhQaxzZ66I6mV5GzY7hZEgPucfgxTVigO0JclfBQzb1ARsWrSQoqBJCjLeC7q3XXQxgc1G7XY17Uw5imkkaYmhggZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773685299; c=relaxed/simple;
-	bh=wyoEhbH5vEmoe/FvNNWLblsq3Yj00zp3Hzhb8lN1S9w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UpGADTMzHkLl71sebqFN4zGcFIZRbE802/hnPN2eFhuMgRpVogNJ3PY6mmuQEW47mGl32Cb8478F3HUA6aBND93I631ecrUO0GFJeUtNDTnHWAW3JcxPLfhs2hZ/eELgTQLOn3WOdOBRlHr1iUzHaKGFaCGSmrnTHZ6C7l+Ikdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gML1drS1; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-829abaaa92bso3188988b3a.1
-        for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 11:21:31 -0700 (PDT)
+	s=arc-20240116; t=1773689589; c=relaxed/simple;
+	bh=DObkRWdw76SqrJhQ2IGf8gCbVf9aTlspjB3YTxYt2GU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=comYzKT4GHTT+Kndv4QWFaFAbJr24SjwVwwo2pHG8DSTQ3uXc7qNGHUo5NOqYNUbBLQEDwGJELB8jeZG03jG+Xj1+HYGoDS1fbikk6QI4lkcBCZrEEBebvqcHf74BMXlKsIp7ugQnQrJrHI8XcO2rSyUZWjNJoisxtua4sLRwRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ANjIKhKz; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4853c3c2fe7so29661405e9.0
+        for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 12:33:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773685290; x=1774290090; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ffmkfhN6IZVcQX8QYVniegQEwjGmXttuPdYtjponOMI=;
-        b=gML1drS1cxujHW6+jEH+RoV9YKcV/WIyxim42MQEKud+pZQnCnvJexH9YEg7lQjfaM
-         H9fNz9abjHJ+iSdftB3tr8q6yLQwH4+f3VXbLyXTkO87KmhXoenLFLiQ37wheXwRlQZA
-         t3sLHKuuSypWuWpdn7XXuDK+dCpLEmi+KbdnhrH8tTgGNtJWb57lfLmVMgZiqFeAi+mj
-         1l+OYPNfhoFcBUMbs5MUhtrGnV76e2zZ/RH5hrt3iHMTOlrJ6TFSVqkoZMa+ercvRb7L
-         HBIcW5tkXBhEO5L2TMf01wgG8wB4jpKeeYI2haMYKojc9RdzFFlkXSiecOXxREitVSDu
-         Kf/Q==
+        d=suse.com; s=google; t=1773689586; x=1774294386; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LT8GQLaykBdYQQ8v3CGI7RDdV/Q91xmOWcKLvA5VpLQ=;
+        b=ANjIKhKzA5KdlYWwxdgSfT7XWJGkdiHTQdjgF3rwSQmJeYw/AdDnons7rEhyAjAIxM
+         Sp4/iLmx2qR/0eOzeVT2u5hI5oUxodPyEESLKoDAHhcgF1B4N2uur9avUReMt+8ueZsh
+         MwkVBN9DpPS8GjknYLOANF624MF5YgRvxP+ZkGpZxp/Sk+5pQnacHvnvX03IEXeQwEri
+         eU8fuclAskQxjusdiXwLXOxBZun4ShYQNNS8aix37pe+VhKZjYpLkaazO0h650xFZ0XV
+         KeRPjGJ8B7sT5YgWx/1IoFPcRuTbXP3fyinezSMpLuAEEpYFlVrMuJsQiPq+iaMRYM0Z
+         hikw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773685290; x=1774290090;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ffmkfhN6IZVcQX8QYVniegQEwjGmXttuPdYtjponOMI=;
-        b=KBPAYF1FIsrwh7uO0pKZnhGYzg/Mn3a6+6DY2b3Jrl7gy1QLSFs6N66G06M/i9w6tc
-         Fuhv1FXC/y8NKJZiFShp4r0lU9G2vsE7QfIVn/lWOpEajVc0eIiJis1Ct/NUkd/Ht51j
-         FWOa/zgtnEHNQ2MLj7DhxI4cyFQs2JL2z4Lv6K/MALZJRQGPDSNoWnjTF4/0XKcD6ul+
-         7pbr+uuOgdbI+8ZFFGPJR0U28YnSx0hhg7f5OsYPpd8LmqP8a3RHC9N7pPqbG5mTOMQB
-         FQ8hdAPIxvEjtc+qxdsHpoKCj3eAvLedUrO4EZPO0T3CDZqXNqagQI6W8U/xk9q761hu
-         SY+A==
-X-Gm-Message-State: AOJu0Ywi2tlx9jfjIMFEQWiuYbbyrhniAYhdWjvPWHCGHj+W2hyUtiw9
-	8h/LRWUDxAsZiW5pDx7UmCqpJZuNgQoQqpGe/8coK0NBUzz19a4J/QWOzdEjpv3X
-X-Gm-Gg: ATEYQzyh9sCuXcnKYuyYSGsFJTpD+B5yYI7KNg4SlxdG6NpHj6ydCAwEVip8kzyxHZd
-	sA5XVFG42aLEh14NNPzlTGvHZuAI/S8ZrImyzczAq7PGVnx/yn3P6BPM7CMTam+PmzNDD9rxyyY
-	kYuglDoCzi7mbBGNHp5w/QJTwaDZOvPKg3j+jE8630WQcOyIabM1nf5jOmhttEm2Dft3wgVpQHL
-	epl66sjNmaZv0Sh7lbkPjpjRj9oeF/CXkzWULi5xDx7YP5czBXEuKiTyMtmWtbeTyJU4gwQEyWU
-	3DRePMdpOEAvJEel8s7IZySQ2cC0k0eXHfo7k5OBqVRInRW4Kw2f1uz1b/3ndWM0HGYJyOh2i74
-	GPPFLmDws2EV0FiJuPnlPThQrxsdbDU5m2NTwIPBmE7WfTEJ89FYFusYrYZ7wqrVLdV9XSgSWWj
-	+cBbRCe5BQauq2bFR+ttBboVO5TXkRBhu8QbUxZwW8JrXXS9vQ3k0cq6g=
-X-Received: by 2002:a05:6a00:aa0a:b0:81f:394a:4897 with SMTP id d2e1a72fcca58-82a198fd351mr12387566b3a.44.1773685290281;
-        Mon, 16 Mar 2026 11:21:30 -0700 (PDT)
-Received: from ryzen ([2601:644:8000:56f5::8bd])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82a07341ed1sm13602575b3a.33.2026.03.16.11.21.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 11:21:29 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-usb@vger.kernel.org
-Cc: Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-hardening@vger.kernel.org (open list:KERNEL HARDENING (not covered by other areas):Keyword:\b__counted_by(_le|_be)?\b)
-Subject: [PATCHv2] thunderbolt: use kzalloc_flex
-Date: Mon, 16 Mar 2026 11:21:12 -0700
-Message-ID: <20260316182112.8682-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        d=1e100.net; s=20251104; t=1773689586; x=1774294386;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LT8GQLaykBdYQQ8v3CGI7RDdV/Q91xmOWcKLvA5VpLQ=;
+        b=e4XUSsQ03zuCBgyGaw+v4dev2AElm8/HwzUPE6XWfYGYG/u6UnPcceFj2G0oIErXxu
+         kJys20JwrSdtaD74wVHWvLSvMME8P0BCX1ppM8gDbixOJWhrvg/rOcPAHNCFZafXeSfq
+         6Rg7pBgNYxf1WpmPWUOVhkK6lrh3+R4kiuqKGdYp72NwdaARNBoQmLT2UuH8rCvah6GA
+         IRFGyW1DrDX+x0gRanGKtncEMOmaNwZn7kxhVZEaeIsG/tONce4N2FbVPKkFtui8Y6iD
+         Ml2EBbnSkWFSBDu8nBEFVXdrdB01w9j7E9eFyyVW1DxsrElxVbD63sS5kgqRr/k4o4t0
+         r3SQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVD3O9426qS6EpMcy9GGTPHNPhTYSBEHpZGGUEJQjpQfnEN5o2FJ8TBQhL/69+VEBByN5OoIETq0uY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyycVUKgipM/FQ9fGXfhZOcvxaXdhm6Xw8ctkjb/Gps3YBvBNre
+	OkMVr6lQ3aZBdwPNvESoFvL4WVS5M5zxqAd67a1zSu79VbCFX/oKAuX0y7UBsY6+8b0=
+X-Gm-Gg: ATEYQzzdRTQilCrKOdzJ7VKCZAfbHihnRRz2cF6rzkcJKSDRdBcti3jrc149fnLf1Zu
+	mgyZKMJ0zQkSdT4weIjRBHAyGZ0+DeU/kOLoLgvRrRmDjiyfjG0usDHMSQ9JDbkwl0qkcjx5q7G
+	BkzjKHSBtsoUbE72u6axvZuNelpAzpAaNR/j0KkTM78P6OHi7d4+49/7M6XVvPcxGb+Bcj03j5j
+	nOZQZmi0qfMW/SQuBJb/cM+PFDXG7mfMApR/Nzxh0Wo8Ch/r08+OHvewqUzoxNyV6necrNdtArN
+	LEgmLQsAxB8NokLrQkwD5KlDZNiT0VjNJdEvRg3ITZLmdpqAC0xm9jeZPRT9xk9mB7qwnwHprhv
+	EFMKmO91E8G8Bhu3EcqOCNtQFCuNJ488XwoFrIYM/MYIwFFXqYnGwwEVMpuZxvNUbcEf1ECnbHG
+	qAprfgIO1b+YrKfTHB3t/CN0wNhXWijbgnh+5inO6SRbSgF+TUbsKV4sV4zF6S/hNHoEAyA09if
+	xb+yA==
+X-Received: by 2002:a05:600c:a08:b0:485:2a85:e5ec with SMTP id 5b1f17b1804b1-485566ca978mr244210335e9.2.1773689586187;
+        Mon, 16 Mar 2026 12:33:06 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13e0:df01:26dd:3109:a42a:ea05? ([2001:a61:13e0:df01:26dd:3109:a42a:ea05])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4856c2823afsm16734775e9.19.2026.03.16.12.33.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Mar 2026 12:33:05 -0700 (PDT)
+Message-ID: <d1674f98-cbbf-4a16-8c76-996a0494d931@suse.com>
+Date: Mon, 16 Mar 2026 20:32:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: correctly handling EPROTO
+To: Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Michal Pecio <michal.pecio@gmail.com>, =?UTF-8?Q?Bj=C3=B8rn_Mork?=
+ <bjorn@mork.no>, USB list <linux-usb@vger.kernel.org>
+References: <4f85311c-bdfe-46a4-a310-4a74a3c56b3e@rowland.harvard.edu>
+ <64dc9c5d-d662-41e3-898f-71587b940a2c@suse.com>
+ <20260313085354.71a6dbf1.michal.pecio@gmail.com>
+ <12567c7d-0a17-46a0-8acf-3158c2d9011a@suse.com>
+ <9da0ac4f-12bf-4270-af6f-e08b5a89611b@rowland.harvard.edu>
+ <20260313224528.dp6utjqzbdguwlbf@synopsys.com>
+ <a6934c14-aeb5-40d0-865c-14199943e2a2@rowland.harvard.edu>
+ <3028610a-f05a-4bc8-9037-cca152e46c52@suse.com>
+ <437037d6-3fe1-4f81-b74a-21bea00725e0@rowland.harvard.edu>
+ <0b45d0e4-53f8-4960-b41c-63639b496dac@suse.com>
+ <4f8b9942-307b-4c31-86f3-1b7b20b34a16@rowland.harvard.edu>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <4f8b9942-307b-4c31-86f3-1b7b20b34a16@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,kernel.org,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-34893-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[synopsys.com,gmail.com,mork.no,vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rosenp@gmail.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_ALL(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34894-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[gmail.com:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4402329EF93
+X-Rspamd-Queue-Id: 21B7129FD1E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Simplifies allocation by using a flexible arraay member.
+On 16.03.26 18:33, Alan Stern wrote:
 
-Added __counted_by for extra runtime analysis.
+> That's handled at the class level.  In the simplest approach there is no
+> resync.  The host just keeps trying to send or receive isochronous
+> packets at the previously scheduled intervals, and some data is lost.
+> Consider an audio or video stream, for example.
 
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- v2: remove extra kfree to fix kernel test bot.
- drivers/thunderbolt/path.c | 28 +++++++---------------------
- drivers/thunderbolt/tb.h   |  3 ++-
- 2 files changed, 9 insertions(+), 22 deletions(-)
+Very well. We can set that aside for now,
 
-diff --git a/drivers/thunderbolt/path.c b/drivers/thunderbolt/path.c
-index 22fb4a1e1acd..8713ea0f47c1 100644
---- a/drivers/thunderbolt/path.c
-+++ b/drivers/thunderbolt/path.c
-@@ -150,22 +150,17 @@ struct tb_path *tb_path_discover(struct tb_port *src, int src_hopid,
- 		num_hops++;
- 	}
+> It's more complicated than just clearing halts.  What if the driver has
+> queued a bunch of URBs?  They all have to be unlinked first.
 
--	path = kzalloc_obj(*path);
-+	path = kzalloc_flex(*path, hops, num_hops);
- 	if (!path)
- 		return NULL;
+As far as I can tell for some hardware those URBs may be already be in execution
+when the error is returned. So that is a hard problem. Frankly I do not
+see what we can do more than provide a suitable operation for anchors.
+  
+> Then after the halt has been cleared, the driver has to resubmit the URB
+> where the error occurred (keeping in mind that some initial part of it
+> may have been sent/received already).  Maybe also submit the other URBs
+> that were in the unlinked queue.
 
-+	path->path_length = num_hops;
-+
- 	path->name = name;
- 	path->tb = src->sw->tb;
--	path->path_length = num_hops;
- 	path->activated = true;
- 	path->alloc_hopid = alloc_hopid;
+Correct. Hence usbcore needs to notify the driver when a halt has been
+cleared. I see two obvious options. Either we provide a callback with
+the helper or we declare another full callback akin to pre/post_reset.
 
--	path->hops = kzalloc_objs(*path->hops, num_hops);
--	if (!path->hops) {
--		kfree(path);
--		return NULL;
--	}
--
- 	tb_dbg(path->tb, "discovering %s path starting from %llx:%u\n",
- 	       path->name, tb_route(src->sw), src->port);
+> There has to be a retry counter or timer because the driver should give
+> up after some length of time.  When that happens, should we try to reset
+> the device?
 
-@@ -245,10 +240,6 @@ struct tb_path *tb_path_alloc(struct tb *tb, struct tb_port *src, int src_hopid,
- 	size_t num_hops;
- 	int i, ret;
+We need to notify the driver when a halt is cleared. How about we
+provide the option based on the return value of the notification?
 
--	path = kzalloc_obj(*path);
--	if (!path)
--		return NULL;
--
- 	first_port = last_port = NULL;
- 	i = 0;
- 	tb_for_each_port_on_path(src, dst, in_port) {
-@@ -259,20 +250,17 @@ struct tb_path *tb_path_alloc(struct tb *tb, struct tb_port *src, int src_hopid,
- 	}
+> It's a mess.  Implementing it in usbhid was justified because that's
+> such an important driver in such widespread use.  I'm not at all sure
+> how it can be generalized for all sorts of other drivers.
 
- 	/* Check that src and dst are reachable */
--	if (first_port != src || last_port != dst) {
--		kfree(path);
-+	if (first_port != src || last_port != dst)
- 		return NULL;
--	}
+Don't you think that what usbhid does is a relatively useful model
+for other drivers?
 
- 	/* Each hop takes two ports */
- 	num_hops = i / 2;
+>> Actually you make me wonder whether the semantics for
+>> usb_queue_reset_device() is good.
+> 
+> That's a separate matter.  However, a driver that is clever enough to
+> call usb_queue_reset_device() should also be clever enough to call
+> usb_reset_device() from within its probe routine, if needed.
 
--	path->hops = kzalloc_objs(*path->hops, num_hops);
--	if (!path->hops) {
--		kfree(path);
-+	path = kzalloc_flex(*path, hops, num_hops);
-+	if (!path)
- 		return NULL;
--	}
+Yes, one issue at a time.
 
-+	path->path_length = num_hops;
- 	path->alloc_hopid = true;
-
- 	in_hopid = src_hopid;
-@@ -339,7 +327,6 @@ struct tb_path *tb_path_alloc(struct tb *tb, struct tb_port *src, int src_hopid,
- 	}
-
- 	path->tb = tb;
--	path->path_length = num_hops;
- 	path->name = name;
-
- 	return path;
-@@ -372,7 +359,6 @@ void tb_path_free(struct tb_path *path)
- 		}
- 	}
-
--	kfree(path->hops);
- 	kfree(path);
- }
-
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index e96474f17067..4e66b53860dd 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -440,9 +440,10 @@ struct tb_path {
- 	bool drop_packages;
- 	bool activated;
- 	bool clear_fc;
--	struct tb_path_hop *hops;
- 	int path_length;
- 	bool alloc_hopid;
-+
-+	struct tb_path_hop hops[] __counted_by(path_length);
- };
-
- /* HopIDs 0-7 are reserved by the Thunderbolt protocol */
---
-2.53.0
+	Regards
+		Oliver
 
 
