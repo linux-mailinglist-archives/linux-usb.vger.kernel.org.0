@@ -1,184 +1,209 @@
-Return-Path: <linux-usb+bounces-34835-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34836-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CIn+JAc0t2mSNwEAu9opvQ
-	(envelope-from <linux-usb+bounces-34835-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 23:34:47 +0100
+	id k87yEzxRt2l1PwEAu9opvQ
+	(envelope-from <linux-usb+bounces-34836-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 01:39:24 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73DD5292DCA
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 23:34:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 998922931F9
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 01:39:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id ED2A43006699
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2026 22:34:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D2944300FC5F
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 00:39:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 067CA37D11C;
-	Sun, 15 Mar 2026 22:34:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB739145355;
+	Mon, 16 Mar 2026 00:39:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=starlabs-systems.20230601.gappssmtp.com header.i=@starlabs-systems.20230601.gappssmtp.com header.b="b5T4Vr2R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dy/JIebL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2268364045
-	for <linux-usb@vger.kernel.org>; Sun, 15 Mar 2026 22:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6E8AD2C
+	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 00:39:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773614080; cv=none; b=dW0jKxhxLQlIJ0JzBsfZt/e9VsEnLmnbBY5geSygiW2ybXmvl+Gx/xi7IFKbmI65uiwk4L6Ef/HwFRlElOQpLJYznjOXYQ8p2Aicd+V8xkhFgAHL6uOiwzA+tE+uNll3q7dNKZfep9AOWZfgprj1sgJLOAM28PxmvbEkp4jeDe0=
+	t=1773621559; cv=none; b=WNC80U74Vb8gVxmwOkqmztQoBg9GXxU3gIMxkRyddve+vEawygHKP8XSdNuE0zpnLvOl90y76114AwZbX6DohtWPipvE2086DtzqD8AUECpYeZcvswLqTeHN3l6/VdKLybliTKY7LL6Sm/GAYydfu+wfwAm137ZvO4oliGob0yg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773614080; c=relaxed/simple;
-	bh=hAz0ibag7bUIPe9VwHZNmnJA1+qUWoSc81esR02kZZU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZXPcZkSjxF6Pe6tYE8+70flB3hJOJWXXXrXl73xXExPE8YJ/DafDw5CT52ytPlKRd/XUYCx0ihrSYbZRXv6RwJkS7c3bXXxICwPb3BqvSAZ8cA1XdVT7T22hAE6O6WTtPs62zSX2IQdZxK5JQC0Bt1RNe0Es0oxHbo2i+yLbAH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=starlabs.systems; spf=pass smtp.mailfrom=starlabs.systems; dkim=pass (2048-bit key) header.d=starlabs-systems.20230601.gappssmtp.com header.i=@starlabs-systems.20230601.gappssmtp.com header.b=b5T4Vr2R; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=starlabs.systems
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starlabs.systems
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4853f2826f7so42564135e9.1
-        for <linux-usb@vger.kernel.org>; Sun, 15 Mar 2026 15:34:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=starlabs-systems.20230601.gappssmtp.com; s=20230601; t=1773614076; x=1774218876; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kHszhjlpTaqduGutGNkiYLzruvsG77pTCC6OqoYXjFk=;
-        b=b5T4Vr2ROEW3JVNgBX2qE3mraXLC5mTdwRXgZT/QNTHfWw9SIqEf4bALcAuJmqeVLh
-         YKUHMljQjXPZt2h+hx1FaBr8WXDV3gQYzaGvJeIW1OlnitYuChSaUd60Yixf8+KT70qP
-         NAQB01pyQRwUReX58LCCpYusEHDsyfxZlU3WPsxB6bkhn1ZT50fZPCUMp/KLMm34LhER
-         yikItIEbdkYgy4f/09kp/dmrojvjWH5d3I9xiQzUhvDLSy6XJfB/nbcMm/kbQePUhgKg
-         71/nPm91X1j305yU7phbk+xGm2W5U2Z9BmPrvedE0zAw4zcvF9+zE5BomsJXvDrlNuve
-         v3AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773614076; x=1774218876;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kHszhjlpTaqduGutGNkiYLzruvsG77pTCC6OqoYXjFk=;
-        b=QG1qYR6ge/Br1HQuWyAQ8CQU1k06rWX8Jq+19FM4o+7RNGdggTZssn/NEmMbsmDoY+
-         fKyoB30HwzGiZ6tPo/1PkmyqbGpXrabIktHH865JofZ9cR1Dn2DXB0I8xuYaD1/x3SDJ
-         uByGQd/vXOFFnp/WzBO37xeJ2HzOd7nRFhCWay2W2P7gvTFV+PiSxEK4VJcTbKLPW3yq
-         G78y1tle0EzCAuKMrs6PABqOJUUad2Q742vZ6OzW7wApJeSfXZUo4zrQWL4O+ocorUlR
-         Mp22oboSUwTJ3InxIotT2os4G11V/ba+nB4LXEVc1TOmsc6qz22pR8RtljHcoKi85GT0
-         dh4w==
-X-Gm-Message-State: AOJu0YyhxytK3YEo+RlhAYX4d0Mnn2V2WA+08Y7hN2DebD5maRHIH8k+
-	RLSbXIRKIRez5VufCOX6VJU6j+WJXPLGZKvjGD8f9xPuYOIKhnL2CQH64Nnf1jubA3Fl6S/byZ5
-	hSKE=
-X-Gm-Gg: ATEYQzxEpkLUg2SZMmxHpKnhyNxoQuPPw3qfkODnL2fDmwA/p2Hie9kfET72+VPUQsm
-	c7qsp89kreGL0Y7Fvud1lJYz1OZDHtZhFk5Ot8QqHYy5+uniMfGMcxGsxb1WSLBkNC/6dYKIWa9
-	x8qzxfe5GTvNXUhRD0ua4oYbiAXZc07ItDrgFJ8Dm+3uKUv3VqobO44Yin0czTD2jLuUjZi8yDL
-	c7ll/ZrUIpIvjVtZxkN1fZ4o97LoER+nxpTtFeckSYaB3AqOi/HoqV8dwNVJcRzZ4nc3VZsdM9D
-	HCo2mJl0BAUZLyME2DxfRNPLv+duvIpoMM7BIxcSRbT8MaV7cgn8mqsTbFdpiwOpHo27rYad9VM
-	x1nLilh7o0cmT2S8JjpUkrg+PszZB2qFjgYKWnxDHv2l+31ldeFEOhhj7PCMg7hwOIyj25OH97Q
-	Q0Roy7I+iooX/HuV5e84KRAjTTx4DzvFALx3kxPZ+kWzeSzktoNLs=
-X-Received: by 2002:a05:600c:4f8f:b0:485:40c6:f507 with SMTP id 5b1f17b1804b1-48556711c6cmr203900915e9.30.1773614075520;
-        Sun, 15 Mar 2026 15:34:35 -0700 (PDT)
-Received: from starbook ([217.155.46.38])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48556433b94sm76294215e9.11.2026.03.15.15.34.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Mar 2026 15:34:34 -0700 (PDT)
-From: Sean Rhodes <sean@starlabs.systems>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: core: allow ACPI-managed hard-wired ports to power off
-Date: Sun, 15 Mar 2026 22:34:33 +0000
-Message-ID: <20260315223433.23452-1-sean@starlabs.systems>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1773621559; c=relaxed/simple;
+	bh=hhMGypMkpp84RITcxptsFaKhcIrxdiwuVAeOX1Qzhfc=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=UngnTsHQXXow9BrOqiVQLd9hN9xOF2fHvvPe5/B62USztm8a3HsUKZVoFsZz+g+W9dFHWlRJVm4IpgRYzCHyJWHCpTO+oDhiizgGeP6TNRww2MKqX+H92lzN7t/XltT9Er2QfTQxCDN+DhMno/cKTXoHCk2hv/rTtlghF5DuhFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dy/JIebL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 03E7EC2BCB0
+	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 00:39:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773621559;
+	bh=hhMGypMkpp84RITcxptsFaKhcIrxdiwuVAeOX1Qzhfc=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=dy/JIebLf+b0OHx9syl4IrWABRx8fafE6a7y/w5HX+U0XYvgFpsI721P9CE54DCt/
+	 D8klBs80UP2SMMWrBNmAPL/VK3nAZrt1rrvttO5N3ARe23+WOuwCSQcdJlFDxiZj21
+	 BNIa5F8yuaapubMFS+/zJVsfM+KcqnS8LQ37UozMWGOZDR7IQ3z26+DpdwM4m57pP5
+	 38tjt92A6svGqSQmy5YDRFm8k1DSP3LzjmUk3jF0wHGk59EBDM33EY86hBkrXkEw/p
+	 Uq0y8qC72QIe3OA/spstpNo5VG1c7ou8ToVsSADFO2pDdI/vlDSzZtIIjaWn9aQCqH
+	 JXSzh4BVJmv/g==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id F1F60C3279F; Mon, 16 Mar 2026 00:39:18 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 221073] xHCI host controller dies on resume from s2idle on AMD
+ Strix Halo [1022:1587]
+Date: Mon, 16 Mar 2026 00:39:18 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: superveridical@gmail.com
+X-Bugzilla-Status: NEEDINFO
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-221073-208809-0GdBC5jKaA@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-221073-208809@https.bugzilla.kernel.org/>
+References: <bug-221073-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.06 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[starlabs-systems.20230601.gappssmtp.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[starlabs.systems : SPF not aligned (relaxed), DKIM not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-34836-lists,linux-usb=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34835-lists,linux-usb=lfdr.de];
-	PRECEDENCE_BULK(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	FROM_NEQ_ENVFROM(0.00)[sean@starlabs.systems,linux-usb@vger.kernel.org];
-	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NO_DN(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	DKIM_TRACE(0.00)[starlabs-systems.20230601.gappssmtp.com:+];
+	PRECEDENCE_BULK(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 73DD5292DCA
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_ONE(0.00)[1];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 998922931F9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-USB core only relaxes the default PM_QOS_FLAG_NO_POWER_OFF policy when
-an upstream hub reports switchable port power. That misses internal
-ports whose power is managed by platform firmware instead of the USB
-hub descriptor.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221073
 
-Allow the port-poweroff policy to be exposed for hard-wired ports with
-an ACPI-managed power resource. The existing runtime PM path still
-requires the child usage count to drop and remote wakeup to be clear
-before it will power the port down.
+--- Comment #40 from Alexander F (superveridical@gmail.com) ---
+>echo on > /sys/bus/pci/devices/0000:c4:00.4/power/control
 
-This lets internal devices such as CNVi Bluetooth use the existing USB
-ACPI runtime power path even when the root hub reports no USB-standard
-port power switching.
+no effect.
 
-Signed-off-by: Sean Rhodes <sean@starlabs.systems>
----
- drivers/usb/core/port.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+>The warning is unimportant,
 
-diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-index f54198171b6a..6445d05a33be 100644
---- a/drivers/usb/core/port.c
-+++ b/drivers/usb/core/port.c
-@@ -21,6 +21,20 @@ static int usb_port_block_power_off;
- 
- static const struct attribute_group *port_dev_group[];
- 
-+static bool usb_port_allow_power_off(struct usb_device *hdev,
-+				     struct usb_hub *hub,
-+				     struct usb_port *port_dev)
-+{
-+	if (hub_is_port_power_switchable(hub))
-+		return true;
-+
-+	if (!IS_ENABLED(CONFIG_ACPI))
-+		return false;
-+
-+	return port_dev->connect_type == USB_PORT_CONNECT_TYPE_HARD_WIRED &&
-+	       usb_acpi_power_manageable(hdev, port_dev->portnum - 1);
-+}
-+
- static ssize_t early_stop_show(struct device *dev,
- 			    struct device_attribute *attr, char *buf)
- {
-@@ -805,10 +819,10 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
- 	device_enable_async_suspend(&port_dev->dev);
- 
- 	/*
--	 * Keep hidden the ability to enable port-poweroff if the hub
--	 * does not support power switching.
-+	 * Keep hidden the ability to enable port-poweroff if neither the
-+	 * USB hub nor platform firmware can manage downstream port power.
- 	 */
--	if (!hub_is_port_power_switchable(hub))
-+	if (!usb_port_allow_power_off(hdev, hub, port_dev))
- 		return 0;
- 
- 	/* Attempt to let userspace take over the policy. */
--- 
-2.51.0
+Yeah, I understand. I (likely mistakenly) assumed that whatever sets taint =
+on
+the kernel also flips the NonFatalError. If "DevSta:" can only be set by the
+hardware internally, than of course it's a different matter.=20=20
 
+>was PCI DevSta: NonFatalErr+ ever set with the 'Forced MSI only' patch aft=
+er
+>resume?
+
+Never. I did 300 cycles with MSI-only patch with no issues and it was never=
+ set
+to +. The only concerning things in dmesg during these 300 cycles were mult=
+iple
+(about 9) errors of this kind:
+
+amdgpu 0000:c4:00.0: amdgpu: Register(1) [regVPEC_QUEUE_RESET_REQ_6_1_1] fa=
+iled
+to reach value 0x00000000 !=3D 0x00000001n
+amdgpu 0000:c4:00.0: amdgpu: VPE queue reset failed
+
+>i.e. Does MSI-X usage on xHC trigger the DevSta: NonFatalErr+, causing xHC
+>interrupt handler to hot be called
+>is there something else causing PCI DevSta: NonFatalErr+ in resume which f=
+or
+>some reason only affects/omits MSI-X handler while MSI work and handler is
+>called as it should.
+
+Unfortunately, I'm not equipped to find that out. I can imagine it's possib=
+le
+to write a kernel module(or modify an existing one) that tests that, but th=
+at's
+beyond me. My understanding ends at the system call boundary.
+
+>I think all we got is just more evidence that it's a PCI or x86 architectu=
+re
+>problem, not USB. I would mail linux-pci
+
+I can probably do that, but I'm not really confident that my device is
+functioning properly hardware-wise, and I wouldn't be wasting everyone's ti=
+me.
+If I had access to another sample of the device, that was not self-selected=
+, I
+would  at least be able to tell that it reproduces on a randomly sampled de=
+vice
+beside mine. Unfortunately the bugreport starter with access to multiple
+samples is MIA for some reason.
+
+...
+
+Meanwhile I think I determined the source of instability I had during the
+sleep/restart actions. I had a working hypothesis that it's static zaps, an=
+d I
+happened to pretty severely zap something in the device through a (rather t=
+hin)
+keyboard key recently, severely enough to force my desktop's monitor, that =
+only
+has common connection with the Z13 through mains, to shutdown momentarily,
+likely due to power protection circuitry in its PSU. (There is also no
+grounding wire in this house) The device functioned nominally, but the mome=
+nt I
+tried to suspend it after that zap it died, and I had to longpress the power
+button. It means I did at least 5-7 similar level zaps, and it could have of
+course damaged something. All of this could mean nothing, but that makes me
+less confident that I have a properly functioning device.
+
+There are 4-7 people complaining of this issue on Linux, so it means at lea=
+st
+100 users with their devices in the similar state. Not everyone reports iss=
+ues
+of course -- absolutely real bugs get 1-2 reporters on drm/amd for example,=
+ so
+the number could be greater. Could it be that this number of people also za=
+pped
+their devices, and did the same kind of latent damage to the whatever machi=
+nery
+responsible for the MSI-X interrupt? Sounds kind of implausible. So if it
+doesn't manifest on all devices the only other reason I can think of is
+something to do with manufacturing.
+
+I think we need more people supplying debug data to be sure before bothering
+the other subsystems. But I would do as you recommend. And the issue looks =
+like
+something hardware/firmware related, i.e. beyond the level of the kernel.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
