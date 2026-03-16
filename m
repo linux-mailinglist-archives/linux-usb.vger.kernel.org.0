@@ -1,163 +1,165 @@
-Return-Path: <linux-usb+bounces-34866-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34867-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uDhHJysEuGlpYAEAu9opvQ
-	(envelope-from <linux-usb+bounces-34866-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 14:22:51 +0100
+	id KMqGJ4kGuGkWYQEAu9opvQ
+	(envelope-from <linux-usb+bounces-34867-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 14:32:57 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 227CA29A462
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 14:22:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1376629A743
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 14:32:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E4F83304EA75
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 13:12:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C72EA305D1F4
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 13:30:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65059397695;
-	Mon, 16 Mar 2026 13:12:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MGV8Q87a"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3252E399039;
+	Mon, 16 Mar 2026 13:30:35 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB55A382362;
-	Mon, 16 Mar 2026 13:12:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B2DB280A21;
+	Mon, 16 Mar 2026 13:30:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773666744; cv=none; b=MlODgqJ8D1E2af7Q1GNAwRFMWOhk8IPiGSZpTBmcJ9z0rFDnnnqxRMhc4ZTwPVc3Vu4M0hwcqv2HmWA8C46leKoXkmflxZPakl+ZMRcJupsRBjaUQ1g1QSdNCdMW4DFuBVZy1cNDNaKZDhyxsmuZGtaus6r/E+cYbCvniMjdrPk=
+	t=1773667834; cv=none; b=K5gvf5XQbTBizT3WuXzexYkhDA1Nh5Bo9hbtZvuNydNefoU1jmo6zu/B277aM/k6HOOpCKsQac5Hy8PyKQHviCXuhAbzc4f1bA+LTrUbNOI+yd7duOWRZ9picaOnzTsYrBeHK+jP4XgbJDVfp7Gpji2P/VtesDyGGYeJXtyA5ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773666744; c=relaxed/simple;
-	bh=lTabpCjBeJaGNQ4Rm4dBCUuNvEcTFzKMAs3b6NmGIFE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KQyBQ13idvVgq7/zjS/DrwksJrf/PdRvsr0hP9oFDRb0AbuNLGtsqJy6F3u13mlkhMND2TAignOSqbBjn8V5p/ub5sMOMuUJD31nN/fD5QGjG1L4871xwCAxEw1OynAai/2Ri/v5NjPIF4j8er0Z13hM190CG+glr3DOhjq0XLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MGV8Q87a; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773666743; x=1805202743;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lTabpCjBeJaGNQ4Rm4dBCUuNvEcTFzKMAs3b6NmGIFE=;
-  b=MGV8Q87a9gVN3iGWL8U7m9ocdJ547t+1CJt7MVfTw06FX3BB0qIGXWcA
-   FglcCvsfRD5OX3zTmEpFT4gouXt0nY4QH2iK6btzRL7vUAwTlY+4+g7nQ
-   WXcNjTUWYkTYl7arZUY4mSa5ttODqLpAXUKZ8+8lKfEa06B3gzduOhXEA
-   RJaCoqAY0XBL/s3Csvb9EoVXJqqdPG6bf8EJ3zhesEK7PVgwH5T+SEhQb
-   Cnr9MLTNcBppdid765A2x2UeSIeX1T/ynuc9DBZYwtN7DryGeFITIvaSt
-   HzmA+cpcJaqfTXibxFpxk2lhCBbgayYJo9I+BKV9yPT7qleLMG45ufujn
-   A==;
-X-CSE-ConnectionGUID: VVQ+XAvMTvqB+3I79q0++A==
-X-CSE-MsgGUID: 4zOxRV+sRben+5G5O3PP0A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="97289838"
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="97289838"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 06:12:22 -0700
-X-CSE-ConnectionGUID: RdEDXrOGSIuEDuaXQjLJOw==
-X-CSE-MsgGUID: G+IyBQQyRImK9X1PBtyWEQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="226372232"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa004.jf.intel.com with ESMTP; 16 Mar 2026 06:12:21 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 1CD2F95; Mon, 16 Mar 2026 14:12:19 +0100 (CET)
-Date: Mon, 16 Mar 2026 14:12:19 +0100
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Edward Blair <edward.blair@gmail.com>
-Cc: linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-	wsa+renesas@sang-engineering.com, westeri@kernel.org,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] i2c: acpi: skip generic I2C device when
- vendor-specific sibling exists
-Message-ID: <20260316131219.GD2275908@black.igk.intel.com>
-References: <20260314013157.7181-1-edward.blair@gmail.com>
- <20260314013157.7181-2-edward.blair@gmail.com>
+	s=arc-20240116; t=1773667834; c=relaxed/simple;
+	bh=12QmHVFW6kvGAsAEHlRgc6k9FaOX+eCOvB+1XSjB85g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kTAIgrBHQLrgcO4IFIEbx3nTnmQSE0phOOz114/pc+rrT/bu6Sus3DbJ3f6KNZ/ivlu8tuYKx6DbFSlX+pJNpoh14rw5qLxKcpQEZ8J9fVri7fDrcDkZbHB7ID4BOpjvr0rL26JS5jA3WasQh7RkKZ7WAMT5gvSuisutlTRLPsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 369FC14BF;
+	Mon, 16 Mar 2026 06:30:25 -0700 (PDT)
+Received: from [10.57.61.116] (unknown [10.57.61.116])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9D4953F778;
+	Mon, 16 Mar 2026 06:30:22 -0700 (PDT)
+Message-ID: <2c7466f5-d952-4356-9b55-9d2ebb3471f2@arm.com>
+Date: Mon, 16 Mar 2026 13:30:19 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260314013157.7181-2-edward.blair@gmail.com>
-X-Spamd-Result: default: False [-0.66 / 15.00];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 50/61] iommu: Prefer IS_ERR_OR_NULL over manual NULL check
+To: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org,
+ apparmor@lists.ubuntu.com, bpf@vger.kernel.org, ceph-devel@vger.kernel.org,
+ cocci@inria.fr, dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
+ gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+ intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
+ kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+ linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+ linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
+ sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
+ tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev
+Cc: Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+ <20260310-b4-is_err_or_null-v1-50-bd63b656022d@avm.de>
+From: Robin Murphy <robin.murphy@arm.com>
+Content-Language: en-GB
+In-Reply-To: <20260310-b4-is_err_or_null-v1-50-bd63b656022d@avm.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [0.14 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	RCVD_TLS_LAST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34866-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34867-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,renesas];
+	FROM_NEQ_ENVFROM(0.00)[robin.murphy@arm.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-0.789];
+	RCPT_COUNT_GT_50(0.00)[56];
+	R_DKIM_NA(0.00)[];
 	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 227CA29A462
+X-Rspamd-Queue-Id: 1376629A743
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sat, Mar 14, 2026 at 01:31:55AM +0000, Edward Blair wrote:
-> Some BIOS implementations (notably ASUS Z690/Z790/X670E motherboards)
-> declare both a generic UCSI device (MSFT8000) and a vendor-specific
-> device (e.g., ITE8853) as ACPI children of the same I2C controller,
-> both referencing the same I2C slave address.
-> 
-> During ACPI I2C enumeration, whichever device is walked first claims
-> the address, causing the second to fail with -EBUSY. When the generic
-> MSFT8000 device registers first, the vendor-specific driver cannot
-> bind, losing access to device-specific features like GPIO interrupt
-> resources that are only declared on the vendor-specific ACPI device.
-> 
-> Fix this by checking, before registering a known generic I2C device,
-> whether a sibling ACPI device exists at the same address on the same
-> adapter. If so, skip the generic device to let the vendor-specific
-> one register instead.
-> 
-> Signed-off-by: Edward Blair <edward.blair@gmail.com>
+On 2026-03-10 11:49 am, Philipp Hahn wrote:
+> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
+> check.
+
+AFAICS it doesn't look possible for the argument to be anything other 
+than valid at both callsites, so *both* conditions here seem in fact to 
+be entirely redundant.
+
+> Change generated with coccinelle.
+
+Please use coccinelle responsibly. Mechanical changes are great for 
+scripted API updates, but for cleanup, whilst it's ideal for *finding* 
+areas of code that are worth looking at, the code then wants actually 
+looking at, in its whole context, because meaningful cleanup often goes 
+deeper than trivial replacement.
+
+In particular, anywhere IS_ERR_OR_NULL() is genuinely relevant is 
+usually a sign of bad interface design, so if you're looking at this 
+then you really should be looking first and foremost to remove any 
+checks that are already unnecessary, and for the remainder, to see if 
+the thing being checked can be improved to not mix the two different 
+styles. That would be constructive and (usually) welcome cleanup. Simply 
+churning a bunch of code with this ugly macro that's arguably less 
+readable than what it replaces, not so much.
+
+Thanks,
+Robin.
+
+> To: Joerg Roedel <joro@8bytes.org>
+> To: Will Deacon <will@kernel.org>
+> To: Robin Murphy <robin.murphy@arm.com>
+> Cc: iommu@lists.linux.dev
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
 > ---
->  drivers/i2c/i2c-core-acpi.c | 88 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 88 insertions(+)
+>   drivers/iommu/omap-iommu.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-> index 2cbd31f77..87582eac7 100644
-> --- a/drivers/i2c/i2c-core-acpi.c
-> +++ b/drivers/i2c/i2c-core-acpi.c
-> @@ -137,6 +137,17 @@ static const struct acpi_device_id i2c_acpi_ignored_device_ids[] = {
->  	{}
->  };
->  
-> +/*
-> + * Generic I2C device IDs that may be duplicated by vendor-specific devices.
-> + * When a vendor-specific sibling exists at the same address, the generic
-> + * device is skipped to avoid -EBUSY address conflicts.
-> + */
-> +static const struct acpi_device_id i2c_acpi_generic_device_ids[] = {
-> +	/* Microsoft UCSI - often paired with vendor-specific UCSI device */
-> +	{ "MSFT8000" },
-> +	{}
-> +};
+> diff --git a/drivers/iommu/omap-iommu.c b/drivers/iommu/omap-iommu.c
+> index 8231d7d6bb6a9202025643639a6b28e6faa84659..500a42b57a997696ff37c76f028a717ab71d01f9 100644
+> --- a/drivers/iommu/omap-iommu.c
+> +++ b/drivers/iommu/omap-iommu.c
+> @@ -881,7 +881,7 @@ static int omap_iommu_attach(struct omap_iommu *obj, u32 *iopgd)
+>    **/
+>   static void omap_iommu_detach(struct omap_iommu *obj)
+>   {
+> -	if (!obj || IS_ERR(obj))
+> +	if (IS_ERR_OR_NULL(obj))
+>   		return;
+>   
+>   	spin_lock(&obj->iommu_lock);
+> 
 
-Are they both "present"? I mean their _STA() returns 0xF for both?
-
-We have a quirk table already in drivers/acpi/x86/utils.c that I think could
-be used to mark the other one being not present.
 
