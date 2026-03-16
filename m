@@ -1,172 +1,131 @@
-Return-Path: <linux-usb+bounces-34874-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34875-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MC4gDkIPuGmZYgEAu9opvQ
-	(envelope-from <linux-usb+bounces-34874-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 15:10:10 +0100
+	id kFM3IY4TuGk7YwEAu9opvQ
+	(envelope-from <linux-usb+bounces-34875-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 15:28:30 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E23D429B126
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 15:10:09 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B7A929B5AB
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 15:28:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3301C300AED0
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 14:07:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F038330238D7
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 14:27:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CBE939B977;
-	Mon, 16 Mar 2026 14:07:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93600282F29;
+	Mon, 16 Mar 2026 14:27:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lMn3Yi4d"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="myuzKewb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1DE6FC5;
-	Mon, 16 Mar 2026 14:07:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25FC1A9FA8
+	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 14:27:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773670066; cv=none; b=LgLcUww8zyKzvAKiAFbNaJiE3xwJQezT8xL8nGiXv4706F6mJCrJV1s7mFBaf9VUQE0ikNRcd0UQlnMz8LNCm6bMretjnssTObCD67pbOk7rj99Oc5Y/ITU9GvKHecTARhQi6nU+Krm+71YumeRGD4j5l0ZmbFU+2ImyCnQbi8k=
+	t=1773671265; cv=none; b=foakD6gT7Vu3Ghk72vJOn3UJ6Fv7i1+szBpvm/IRvb9I0Vo8xC6xYMXTKelFoVR+/jaD9ciGry8DTrz9htJQPlD/wHVvol0SZQQWD4hHV6tWt1NTvhFNjlRZflqClu5CBNDIkpPjoqMvKbkTuZlSwPis5hn3ncBc30tUJbmI5TM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773670066; c=relaxed/simple;
-	bh=Y+V9+zbKfrDyL4a5iacNwH2u07h1sCoC3a1ixh5Uhs0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oiLCIjsjAd+SrMZa5x/TUHX7wDKZ3z5IzAUzcLAp6OGmHBZKAs1sles008v4b4lTllpTedjAf4v6K7rHW3ijeLgY5Ke/yKP4GsrpZhzUUGh1b7byRyra4bvNYRYIleqwRzN8wULJg9HQmdI/y92mzbvchnuCkj60uTUC9xNq1dA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lMn3Yi4d; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1773671265; c=relaxed/simple;
+	bh=4YoteaQvlo+mw9bsSrpChd1OirmsvzHIuUnmvmuytpc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XZxY015aAoqRMsbLQ1+a6sBpf+6+dLvTYR0h0t2WCluCfafE+s/SGN7fenLf+ux5FqjCg7w09pJCNGsINnT9qX4XL+f5tX0Goi2SFvR25njSBD+fP2jxvUuzwL4vh3WwGzl7c2JIfQaaKIOip6CKc11PQSHUCnmcrZiPeCXZrIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=myuzKewb; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773670065; x=1805206065;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y+V9+zbKfrDyL4a5iacNwH2u07h1sCoC3a1ixh5Uhs0=;
-  b=lMn3Yi4dn2JLt8UnjjjktV9e71POPloauT3ekA5deU5o/QvkgdgqAIqM
-   bsFO3PzVA0TKJBtaWeC00NmNKpAwabW3CtBkPcCjOsKTwAiFAyt6YebDa
-   UmBlqDRWSDQ/df49xz+gTZfV1luHbaXJ4imIFn17uGehiDKkywwuZ1UGx
-   Widf47cWaB+sO1eXTe8sQCqdyMYfLosL8Yzr7C5Z4xFU6pU5m1lrFdAV0
-   or/tK6lbr4WF4V8s6JoJZzyZhrV0Tm3b2G3rhqZxqFJQ2QW33xc28QuBy
-   H9Xrn+e2WuxuGbI7EDjFBMx8O2sY7qXyshn+io68K8/JodL1YNjaC4IZb
+  t=1773671264; x=1805207264;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4YoteaQvlo+mw9bsSrpChd1OirmsvzHIuUnmvmuytpc=;
+  b=myuzKewboey2L9/94B+fChxX07EdLSD7cG3nVKAWWZ8JYrQ3gNPf68Qx
+   TogW4l4Y3QiVjGPQtblWV8LApx4/9nmoFT7vtc/RXbeTqXDfO8vltC126
+   y1leVEdXu707xqZddSN+vYLJRebm3UPkiRlxvIJN0/dpt9z3FaJnst6iN
+   tups3fP5Xe+iqjpLlOKixJxyn5yezTVKlujwmM1QaI6zZbUkJs6aYGeve
+   jNahRNTURwubotTFXF094TjE440yO0TXsIR34dN3zvRAgaiMbMgBJgU0y
+   dUUAR3+53zJLTShe+nmZ6f1U1g8VaeKSCblf9iyJ9EB3fFRadm92DYuXk
    w==;
-X-CSE-ConnectionGUID: oy1GVYcOS+KTcl0FVvbFvw==
-X-CSE-MsgGUID: YenDiutjSOSEqg7eTZhHUg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="62252946"
+X-CSE-ConnectionGUID: iMQy7UdLQjmj7SSON2juNw==
+X-CSE-MsgGUID: +dykQshNSemsmygCRWYXHg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="78537836"
 X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="62252946"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 07:07:44 -0700
-X-CSE-ConnectionGUID: l6Le8XKQQAWDfVYOcMSIeA==
-X-CSE-MsgGUID: LOf5DD+oSOOa3rF5kObdtA==
+   d="scan'208";a="78537836"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 07:27:43 -0700
+X-CSE-ConnectionGUID: JvaSPpMTTViNiwcY+w9YRw==
+X-CSE-MsgGUID: 1Q2H5kC2QtiNidxr/VqWSQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="219502454"
+   d="scan'208";a="218182574"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa008.fm.intel.com with ESMTP; 16 Mar 2026 07:07:43 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id B2CC798; Mon, 16 Mar 2026 15:07:41 +0100 (CET)
-Date: Mon, 16 Mar 2026 16:07:00 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Edward Blair <edward.blair@gmail.com>
-Cc: linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-	gregkh@linuxfoundation.org, wsa+renesas@sang-engineering.com,
-	westeri@kernel.org, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] i2c: acpi: skip generic I2C device when
- vendor-specific sibling exists
-Message-ID: <abgOhNVOKMaeAGSx@kuha>
-References: <20260314013157.7181-1-edward.blair@gmail.com>
- <20260314013157.7181-2-edward.blair@gmail.com>
+  by fmviesa010.fm.intel.com with ESMTP; 16 Mar 2026 07:27:41 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1058)
+	id D4C5E98; Mon, 16 Mar 2026 15:27:40 +0100 (CET)
+From: Niklas Neronin <niklas.neronin@linux.intel.com>
+To: mathias.nyman@linux.intel.com
+Cc: linux-usb@vger.kernel.org,
+	Niklas Neronin <niklas.neronin@linux.intel.com>
+Subject: [PATCH 0/2] usb: xhci: correct Command Abort bit handling
+Date: Mon, 16 Mar 2026 15:27:18 +0100
+Message-ID: <20260316142720.1471906-1-niklas.neronin@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260314013157.7181-2-edward.blair@gmail.com>
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34874-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34875-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_THREE(0.00)[3];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,renesas];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: E23D429B126
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.intel.com:mid]
+X-Rspamd-Queue-Id: 0B7A929B5AB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Sat, Mar 14, 2026 at 01:31:55AM +0000, Edward Blair wrote:
-> Some BIOS implementations (notably ASUS Z690/Z790/X670E motherboards)
-> declare both a generic UCSI device (MSFT8000) and a vendor-specific
-> device (e.g., ITE8853) as ACPI children of the same I2C controller,
-> both referencing the same I2C slave address.
-> 
-> During ACPI I2C enumeration, whichever device is walked first claims
-> the address, causing the second to fail with -EBUSY. When the generic
-> MSFT8000 device registers first, the vendor-specific driver cannot
-> bind, losing access to device-specific features like GPIO interrupt
-> resources that are only declared on the vendor-specific ACPI device.
-> 
-> Fix this by checking, before registering a known generic I2C device,
-> whether a sibling ACPI device exists at the same address on the same
-> adapter. If so, skip the generic device to let the vendor-specific
-> one register instead.
-> 
-> Signed-off-by: Edward Blair <edward.blair@gmail.com>
-> ---
->  drivers/i2c/i2c-core-acpi.c | 88 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 88 insertions(+)
-> 
-> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-> index 2cbd31f77..87582eac7 100644
-> --- a/drivers/i2c/i2c-core-acpi.c
-> +++ b/drivers/i2c/i2c-core-acpi.c
-> @@ -137,6 +137,17 @@ static const struct acpi_device_id i2c_acpi_ignored_device_ids[] = {
->  	{}
->  };
->  
-> +/*
-> + * Generic I2C device IDs that may be duplicated by vendor-specific devices.
-> + * When a vendor-specific sibling exists at the same address, the generic
-> + * device is skipped to avoid -EBUSY address conflicts.
-> + */
-> +static const struct acpi_device_id i2c_acpi_generic_device_ids[] = {
-> +	/* Microsoft UCSI - often paired with vendor-specific UCSI device */
-> +	{ "MSFT8000" },
-> +	{}
-> +};
+Address problems with xHCI Command Abort bit handling.
 
-That's not a generic UCSI device. That's the "RhProxy" device unless
-I'm completely mistaken, and it's meant to be used in Windows to give
-the user mode access to GPIOs, SPI, I2C and UART:
-https://learn.microsoft.com/en-us/windows/uwp/devices-sensors/enable-usermode-access
+First patch reworks the Command Abort procedure so that the CA bit is
+asserted without modifying Command Ring Pointer under any circumstances.
+It documents and corrects all previously encountered corner cases.
 
-I think we need to handle that one in drivers/acpi/x86/utils.c like
-Mika said.
+The second patch refines this by using writeq() for the CA write on 64-bit
+architectures. Since writeq() performs a true atomic 64-bit MMIO write,
+it should avoid the split-write hazards that have historically caused
+Command Ring Pointer corruption.
 
-thanks,
+Niklas Neronin (2):
+  usb: xhci: fix Command Aborting
+  usb: xhci: use writeq() for CA write on 64-bit architectures
+
+ drivers/usb/host/xhci-ring.c | 47 ++++++++++++++++++------------------
+ 1 file changed, 23 insertions(+), 24 deletions(-)
 
 -- 
-heikki
+2.50.1
+
 
