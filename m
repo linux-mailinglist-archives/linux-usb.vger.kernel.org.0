@@ -1,181 +1,445 @@
-Return-Path: <linux-usb+bounces-34888-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34889-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aC/0BUokuGk8ZgEAu9opvQ
-	(envelope-from <linux-usb+bounces-34888-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 16:39:54 +0100
+	id 2MXVGN4puGlsZwEAu9opvQ
+	(envelope-from <linux-usb+bounces-34889-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 17:03:42 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C5E029C94D
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 16:39:53 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8195E29CF90
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 17:03:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6C91730F3104
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 15:30:18 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 4F9B6302099D
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2026 16:02:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19CB13A0B1D;
-	Mon, 16 Mar 2026 15:30:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD2AC32548B;
+	Mon, 16 Mar 2026 16:02:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T8fPj7/Q"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="OBh8rPSP";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="OBh8rPSP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E2634F275
-	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 15:30:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF23324B1E
+	for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 16:02:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773675015; cv=none; b=NU+Y38ES/gUTGnt010e9IZdPbI0RBjWbf3mVZP/wP0uHAGjSwQE5LCYy3ugwilMEEKFVqoUfwtZR48Q/+EFR3T2O7kMihsqkxjrAlPHSo/r6ejcSmhZOJWSdppWMIhNwgmy/0dN73CfaTHV7pbKeQyuF+dY8B0xtDoksVyzV7ME=
+	t=1773676944; cv=none; b=SQXvL4Cc2hxmEda3ssejkusXqBrJkMdPFzYlAO4/kmfqR97SjsHfpbBfCV7xyXNciC1iLRwEX/bO9gIxmK6vN0VFjzWIiAgdzRsWxsMUJZaW6Qnk4/PWR/tONjceU8N/5lLA5YikMJkbW15tz8n3EuiGn5LP8KUTQd+MxXoCeL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773675015; c=relaxed/simple;
-	bh=M9kVaC+3Cr459HgO4DubNcbQRmLEGq9666e5ZHFrwxQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YIhQcjERgzi7PGEB4jAdozABxvuSxNh3HBCrA4qN6cLN8VFIOHdBzcMx5pEf/ZbRYoCnnFS3OgIHUQA2fGDzVS0StSLbAtB9SssQgTsQsKDpQe2kRBnpzIaAS6eg1EeM3ssnp7Clpfl+YT2uwt/5M9SUSvCUStjbzhfbFp2NiCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T8fPj7/Q; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c70e27e2b74so1644878a12.0
-        for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2026 08:30:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773675014; x=1774279814; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aiYHquvove0P0QSfsD4NZMy/bqp6mn9Ek+dpN0QYTm0=;
-        b=T8fPj7/Q9iBc8vAcLciiP1ugBuQhcv1gmhhlHwIzdP6WV2vLilp3azaiPGECYjtpo3
-         GcMP+QdCpFXUDzYO2z7OtJOmrGpByv+nduS28a5hVvharX+6MgRodeBeeRLGwoMOY1e2
-         u0nuZ0QzJAxi2wp8LpSFE/2ORYkWm/4hJNG+lJu+tPcKdzZim6mb6YfQM2QUqoMwe8sd
-         /QGzQZOBmfaBk/byTTaiRiBuPqKHlRhrbBeU0OqJygQ8Ud70EwGHL3am9jv1umFSmjLG
-         bn4qXGhqU1ojEbTt2cO94SygwqtH+G4Y7AycGniKt3fHHX0e5UxVcAYwBFOG4U4N1Pcz
-         QrMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773675014; x=1774279814;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aiYHquvove0P0QSfsD4NZMy/bqp6mn9Ek+dpN0QYTm0=;
-        b=sMx1deg0+9QUnYLcfvVsekrKI3LjX0NnucgxJp82GCAQEE0KO3zUqqCyL9eAb2CUxV
-         PrD5hwLmQkalsnJwcySfex/EN0OxKz/xF4PHqAhWiEoKHB340ARljkLO72aWW3hc9jEg
-         5vAc1EXpsbqZSIYEKvGQIsHWeny78bWUCCDtQJxkp0mu3xk+Wzi2E3EjnUE6qolulwBS
-         u95uWiaSuXA6LOBuomvTqQ3Zn9IWKTn4ZdWseZWyLhMUFvTqhupQHb71Heo84rVP0Ui+
-         nEYtZDR+AhImQ+RnQL3/Eze4BCkP8P+gKqJ3Eb3NOFefDAoVi/Owyd9/3gPmSVKAWTz4
-         XWZw==
-X-Forwarded-Encrypted: i=1; AJvYcCWW7841KlgrOfUJ3Z8Q5BRC5v7quxzxUK0XXMv3j8r8Ca8bGXfjkiyM3VIsA+yLUhfL9PvD5i7AgHM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQmp1v9apVg77N6ZElmgtnl+2nxIYOq8/BMi25p9PdUKcRd2DW
-	jzUkBNehI3LZvd3Q/USfy9fAvXQMhBRNpQre9YClipfCe0LZj2unpNUc
-X-Gm-Gg: ATEYQzzhn4ReCFMZ6hTcmaciHBgVAvqgJUMc/9j6ZvYexMav0OuFcV1ohlfJWXlWA2t
-	+/nqepC7DyCEgj5ZJCz17tL0QQX83lx/0n/sQBtQyJy/10sxXwO9NWDXyH7H1Q1QHIn5jeG8AdM
-	vO4b/eW0xFVQ3hV1Gqun57xrBTyRcCkwKoNHEFKs/UwSvtLrHb0eGycMfyK9bxP8DizC89/6WSV
-	POgcDsHp2vMVMfCjjubtiEG4MF4m5ARns8adfejGAshsze0g3adCzA0XerzyueGiuC8nwt6IKQg
-	ecZgIaAvVJZfPH5+7it6e9ghaTqxcNa3N9boQDURW4zjBP3YYeP14iJdmVh5vTK2kuu0citUEFe
-	4wP3wgT2kUDpTm3n5SumOmZ/SbpbVpdUsP6p8q9YUlZ+KY3HlUtH0zzCSSAEYY2c6td7nXdTr0t
-	I2pNf530nUDgVNvgVpOIdUF0Nw9qwz2pmQJ9BC
-X-Received: by 2002:a05:6a21:7a97:b0:398:9379:d04d with SMTP id adf61e73a8af0-398ecadb5a2mr12165818637.24.1773675013707;
-        Mon, 16 Mar 2026 08:30:13 -0700 (PDT)
-Received: from junjungu-PC.localdomain ([223.167.147.240])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c73eb996257sm9392478a12.9.2026.03.16.08.30.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 08:30:13 -0700 (PDT)
-From: Felix Gu <ustc.gu@gmail.com>
-Date: Mon, 16 Mar 2026 23:30:06 +0800
-Subject: [PATCH] dwc3: google: Fix PM domain leak in dwc3_google_probe()
+	s=arc-20240116; t=1773676944; c=relaxed/simple;
+	bh=qRvuxR0lfQQNI7V+O+YVXXdiBCFZRhrOQ6AId1ASLSU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EA0fycsO5rScNkBEQxLYMnMrlEvMg+vQvQLdr2SPGPKFoVywwFxCYiq0SpZQ+wobxS/rgBAqRQBfKBYZsm5zyxC74HUZ4raV5To1ErXmnd9ocR6JsfuCwJ6IVr1HoHSYPS5eJi/3tvVrrSghz1vHjZycWNoV+b9Cwc2vgAmAILY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=OBh8rPSP; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=OBh8rPSP; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id CC8495BE8A;
+	Mon, 16 Mar 2026 16:02:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1773676940; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=E+KNAKqXhk/hikJ7IP6ROXfu5rOJiD9gi0S7g9N8N/c=;
+	b=OBh8rPSP4EjKC4qR+Ws60MCjc+0WIeYEowRy+D5NCeaXe94ryYlp+ekQ5Xyhx/7bcxbQMt
+	DM0m/OE9yH49+RakKKWgOMj/Q4+ih/OT/Jt9CAsaC3mFTMElcp0qlTswrqB4lT8DoqLgh2
+	LizNerKyquaDVllerrtoHM2zgoKczJo=
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1773676940; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=E+KNAKqXhk/hikJ7IP6ROXfu5rOJiD9gi0S7g9N8N/c=;
+	b=OBh8rPSP4EjKC4qR+Ws60MCjc+0WIeYEowRy+D5NCeaXe94ryYlp+ekQ5Xyhx/7bcxbQMt
+	DM0m/OE9yH49+RakKKWgOMj/Q4+ih/OT/Jt9CAsaC3mFTMElcp0qlTswrqB4lT8DoqLgh2
+	LizNerKyquaDVllerrtoHM2zgoKczJo=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A95944273C;
+	Mon, 16 Mar 2026 16:02:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 1+dMKIwpuGnjfgAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Mon, 16 Mar 2026 16:02:20 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCHv2] xhci: use BIT macro
+Date: Mon, 16 Mar 2026 17:01:40 +0100
+Message-ID: <20260316160213.1367774-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260316-dwc3-google-v1-1-c9bde1b02f62@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAP4huGkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDY0Mz3ZTyZGPd9Pz89JxU3bQUM0PzJOMUQ8s0UyWgjoKi1LTMCrBp0bG
- 1tQARqXqVXQAAAA==
-X-Change-ID: 20260316-dwc3-google-fd617b3d19f5
-To: Peter Griffin <peter.griffin@linaro.org>, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Joy Chakraborty <joychakr@google.com>, Roy Luo <royluo@google.com>, 
- Naveen Kumar <mnkumar@google.com>
-Cc: linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Felix Gu <ustc.gu@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773675009; l=1291;
- i=ustc.gu@gmail.com; h=from:subject:message-id;
- bh=M9kVaC+3Cr459HgO4DubNcbQRmLEGq9666e5ZHFrwxQ=;
- b=xHLSPpZk8SHQGjWfG7//LJvvpOEyszCJ6PrI6sz+mE35M4OL3AD0FVkQB0UX0IaWqxHIQQNTy
- 1FneRQRqG+nCC6L0vSU1H/byaZtGy+/ZuQ8rHdQkf3v+SDoHlMMHEt2
-X-Developer-Key: i=ustc.gu@gmail.com; a=ed25519;
- pk=fjUXwmjchVN7Ja6KGP55IXOzFeCl9edaHoQIEUA+/hw=
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -2.80
+X-Spam-Level: 
+X-Spam-Flag: NO
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34888-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[lists.infradead.org,vger.kernel.org,gmail.com];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-34889-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[6];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ustcgu@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[suse.com:+];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 6C5E029C94D
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8195E29CF90
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-When syscon_regmap_lookup_by_phandle_args() fails, the function was
-returning directly without cleaning up the power domain initialized
-earlier by dwc3_google_pm_domain_init().
+We have the macro. Use it.
 
-Fix by jumping to err_deinit_pdom to properly clean up resources.
-
-Fixes: 8995a37371bf4 ("usb: dwc3: Add Google Tensor SoC DWC3 glue driver")
-Signed-off-by: Felix Gu <ustc.gu@gmail.com>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
 ---
- drivers/usb/dwc3/dwc3-google.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-google.c b/drivers/usb/dwc3/dwc3-google.c
-index 2105c72af753..4ca567ec01d0 100644
---- a/drivers/usb/dwc3/dwc3-google.c
-+++ b/drivers/usb/dwc3/dwc3-google.c
-@@ -385,8 +385,9 @@ static int dwc3_google_probe(struct platform_device *pdev)
- 						     "google,usb-cfg-csr",
- 						     ARRAY_SIZE(args), args);
- 	if (IS_ERR(google->usb_cfg_regmap)) {
--		return dev_err_probe(dev, PTR_ERR(google->usb_cfg_regmap),
--				     "invalid usb cfg csr\n");
-+		ret = dev_err_probe(dev, PTR_ERR(google->usb_cfg_regmap),
-+				    "invalid usb cfg csr\n");
-+		goto err_deinit_pdom;
- 	}
+V2: reverted erroneous conversion
+
+ drivers/usb/host/xhci.h | 121 ++++++++++++++++++++--------------------
+ 1 file changed, 61 insertions(+), 60 deletions(-)
+
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 2b0796f6d00e..1bef4301e2b4 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -12,6 +12,7 @@
+ #ifndef __LINUX_XHCI_HCD_H
+ #define __LINUX_XHCI_HCD_H
  
- 	google->host_cfg_offset = args[0];
-
----
-base-commit: b84a0ebe421ca56995ff78b66307667b62b3a900
-change-id: 20260316-dwc3-google-fd617b3d19f5
-
-Best regards,
++#include <linux/bits.h>
+ #include <linux/usb.h>
+ #include <linux/timer.h>
+ #include <linux/kernel.h>
+@@ -125,17 +126,17 @@ struct xhci_op_regs {
+  * PCI config regs).  HC does NOT drive a USB reset on the downstream ports.
+  * The xHCI driver must reinitialize the xHC after setting this bit.
+  */
+-#define CMD_RESET	(1 << 1)
++#define CMD_RESET	BIT(1)
+ /* Event Interrupt Enable - a '1' allows interrupts from the host controller */
+ #define CMD_EIE		XHCI_CMD_EIE
+ /* Host System Error Interrupt Enable - get out-of-band signal for HC errors */
+ #define CMD_HSEIE	XHCI_CMD_HSEIE
+ /* bits 4:6 are reserved (and should be preserved on writes). */
+ /* light reset (port status stays unchanged) - reset completed when this is 0 */
+-#define CMD_LRESET	(1 << 7)
++#define CMD_LRESET	BIT(7)
+ /* host controller save/restore state. */
+-#define CMD_CSS		(1 << 8)
+-#define CMD_CRS		(1 << 9)
++#define CMD_CSS		BIT(8)
++#define CMD_CRS		BIT(9)
+ /* Enable Wrap Event - '1' means xHC generates an event when MFINDEX wraps. */
+ #define CMD_EWE		XHCI_CMD_EWE
+ /* MFINDEX power management - '1' means xHC can stop MFINDEX counter if all root
+@@ -143,9 +144,9 @@ struct xhci_op_regs {
+  * '0' means the xHC can power it off if all ports are in the disconnect,
+  * disabled, or powered-off state.
+  */
+-#define CMD_PM_INDEX	(1 << 11)
++#define CMD_PM_INDEX	BIT(11)
+ /* bit 14 Extended TBC Enable, changes Isoc TRB fields to support larger TBC */
+-#define CMD_ETE		(1 << 14)
++#define CMD_ETE		BIT(14)
+ /* bits 15:31 are reserved (and should be preserved on writes). */
+ 
+ #define XHCI_RESET_LONG_USEC		(10 * 1000 * 1000)
+@@ -155,22 +156,22 @@ struct xhci_op_regs {
+ /* HC not running - set to 1 when run/stop bit is cleared. */
+ #define STS_HALT	XHCI_STS_HALT
+ /* serious error, e.g. PCI parity error.  The HC will clear the run/stop bit. */
+-#define STS_FATAL	(1 << 2)
++#define STS_FATAL	BIT(2)
+ /* event interrupt - clear this prior to clearing any IP flags in IR set*/
+-#define STS_EINT	(1 << 3)
++#define STS_EINT	BIT(3)
+ /* port change detect */
+-#define STS_PORT	(1 << 4)
++#define STS_PORT	BIT(4)
+ /* bits 5:7 reserved and zeroed */
+ /* save state status - '1' means xHC is saving state */
+-#define STS_SAVE	(1 << 8)
++#define STS_SAVE	BIT(8)
+ /* restore state status - '1' means xHC is restoring state */
+-#define STS_RESTORE	(1 << 9)
++#define STS_RESTORE	BIT(9)
+ /* true: save or restore error */
+-#define STS_SRE		(1 << 10)
++#define STS_SRE		BIT(10)
+ /* true: Controller Not Ready to accept doorbell or op reg writes after reset */
+ #define STS_CNR		XHCI_STS_CNR
+ /* true: internal Host Controller Error - SW needs to reset and reinitialize */
+-#define STS_HCE		(1 << 12)
++#define STS_HCE		BIT(12)
+ /* bits 13:31 reserved and should be preserved */
+ 
+ /*
+@@ -182,17 +183,17 @@ struct xhci_op_regs {
+ /* Most of the device notification types should only be used for debug.
+  * SW does need to pay attention to function wake notifications.
+  */
+-#define	DEV_NOTE_FWAKE		(1 << 1)
++#define	DEV_NOTE_FWAKE		BIT(1)
+ 
+ /* CRCR - Command Ring Control Register - cmd_ring bitmasks */
+ /* bit 0 - Cycle bit indicates the ownership of the command ring */
+-#define CMD_RING_CYCLE		(1 << 0)
++#define CMD_RING_CYCLE		BIT(0)
+ /* stop ring operation after completion of the currently executing command */
+-#define CMD_RING_PAUSE		(1 << 1)
++#define CMD_RING_PAUSE		BIT(1)
+ /* stop ring immediately - abort the currently executing command */
+-#define CMD_RING_ABORT		(1 << 2)
++#define CMD_RING_ABORT		BIT(2)
+ /* true: command ring is running */
+-#define CMD_RING_RUNNING	(1 << 3)
++#define CMD_RING_RUNNING	BIT(3)
+ /* bits 63:6 - Command Ring pointer */
+ #define CMD_RING_PTR_MASK	GENMASK_ULL(63, 6)
+ 
+@@ -200,9 +201,9 @@ struct xhci_op_regs {
+ /* bits 0:7 - maximum number of device slots enabled (NumSlotsEn) */
+ #define MAX_DEVS(p)	((p) & 0xff)
+ /* bit 8: U3 Entry Enabled, assert PLC when root port enters U3, xhci 1.1 */
+-#define CONFIG_U3E		(1 << 8)
++#define CONFIG_U3E		BIT(8)
+ /* bit 9: Configuration Information Enable, xhci 1.1 */
+-#define CONFIG_CIE		(1 << 9)
++#define CONFIG_CIE		BIT(9)
+ /* bits 10:31 - reserved and should be preserved */
+ 
+ /* bits 15:0 - HCD page shift bit */
+@@ -235,9 +236,9 @@ struct xhci_intr_reg {
+ 
+ /* iman bitmasks */
+ /* bit 0 - Interrupt Pending (IP), whether there is an interrupt pending. Write-1-to-clear. */
+-#define	IMAN_IP			(1 << 0)
++#define	IMAN_IP			BIT(0)
+ /* bit 1 - Interrupt Enable (IE), whether the interrupter is capable of generating an interrupt */
+-#define	IMAN_IE			(1 << 1)
++#define	IMAN_IE			BIT(1)
+ 
+ /* imod bitmasks */
+ /*
+@@ -267,7 +268,7 @@ struct xhci_intr_reg {
+  * bit 3 - Event Handler Busy (EHB), whether the event ring is scheduled to be serviced by
+  * a work queue (or delayed service routine)?
+  */
+-#define ERST_EHB		(1 << 3)
++#define ERST_EHB		BIT(3)
+ /* bits 63:4 - Event Ring Dequeue Pointer */
+ #define ERST_PTR_MASK		GENMASK_ULL(63, 4)
+ 
+@@ -356,15 +357,15 @@ struct xhci_slot_ctx {
+ #define GET_DEV_SPEED(n) (((n) & DEV_SPEED) >> 20)
+ /* bit 24 reserved */
+ /* Is this LS/FS device connected through a HS hub? - bit 25 */
+-#define DEV_MTT		(0x1 << 25)
++#define DEV_MTT		BIT(25)
+ /* Set if the device is a hub - bit 26 */
+-#define DEV_HUB		(0x1 << 26)
++#define DEV_HUB		BIT(26)
+ /* Index of the last valid endpoint context in this device context - 27:31 */
+ #define LAST_CTX_MASK	(0x1f << 27)
+ #define LAST_CTX(p)	((p) << 27)
+ #define LAST_CTX_TO_EP_NUM(p)	(((p) >> 27) - 1)
+-#define SLOT_FLAG	(1 << 0)
+-#define EP0_FLAG	(1 << 1)
++#define SLOT_FLAG	BIT(0)
++#define EP0_FLAG	BIT(1)
+ 
+ /* dev_info2 bitmasks */
+ /* Max Exit Latency (ms) - worst case time to wake up all links in dev path */
+@@ -463,7 +464,7 @@ struct xhci_ep_ctx {
+ #define EP_MAXPSTREAMS(p)		(((p) << 10) & EP_MAXPSTREAMS_MASK)
+ #define CTX_TO_EP_MAXPSTREAMS(p)	(((p) & EP_MAXPSTREAMS_MASK) >> 10)
+ /* Endpoint is set up with a Linear Stream Array (vs. Secondary Stream Array) */
+-#define	EP_HAS_LSA		(1 << 15)
++#define	EP_HAS_LSA		BIT(15)
+ /* hosts with LEC=1 use bits 31:24 as ESIT high bits. */
+ #define CTX_TO_MAX_ESIT_PAYLOAD_HI(p)	(((p) >> 24) & 0xff)
+ 
+@@ -498,7 +499,7 @@ struct xhci_ep_ctx {
+ #define CTX_TO_MAX_ESIT_PAYLOAD(p)	(((p) >> 16) & 0xffff)
+ 
+ /* deq bitmasks */
+-#define EP_CTX_CYCLE_MASK		(1 << 0)
++#define EP_CTX_CYCLE_MASK		BIT(0)
+ /* bits 63:4 - TR Dequeue Pointer */
+ #define TR_DEQ_PTR_MASK			GENMASK_ULL(63, 4)
+ 
+@@ -661,18 +662,18 @@ struct xhci_virt_ep {
+ 	struct xhci_ring		*new_ring;
+ 	unsigned int			err_count;
+ 	unsigned int			ep_state;
+-#define SET_DEQ_PENDING		(1 << 0)
+-#define EP_HALTED		(1 << 1)	/* For stall handling */
+-#define EP_STOP_CMD_PENDING	(1 << 2)	/* For URB cancellation */
++#define SET_DEQ_PENDING		BIT(0)
++#define EP_HALTED		BIT(1)	/* For stall handling */
++#define EP_STOP_CMD_PENDING	BIT(2)	/* For URB cancellation */
+ /* Transitioning the endpoint to using streams, don't enqueue URBs */
+-#define EP_GETTING_STREAMS	(1 << 3)
+-#define EP_HAS_STREAMS		(1 << 4)
++#define EP_GETTING_STREAMS	BIT(3)
++#define EP_HAS_STREAMS		BIT(4)
+ /* Transitioning the endpoint to not using streams, don't enqueue URBs */
+-#define EP_GETTING_NO_STREAMS	(1 << 5)
+-#define EP_HARD_CLEAR_TOGGLE	(1 << 6)
+-#define EP_SOFT_CLEAR_TOGGLE	(1 << 7)
++#define EP_GETTING_NO_STREAMS	BIT(5)
++#define EP_HARD_CLEAR_TOGGLE	BIT(6)
++#define EP_SOFT_CLEAR_TOGGLE	BIT(7)
+ /* usb_hub_clear_tt_buffer is in progress */
+-#define EP_CLEARING_TT		(1 << 8)
++#define EP_CLEARING_TT		BIT(8)
+ 	/* ----  Related to URB cancellation ---- */
+ 	struct list_head	cancelled_td_list;
+ 	struct xhci_hcd		*xhci;
+@@ -954,7 +955,7 @@ struct xhci_link_trb {
+ };
+ 
+ /* control bitfields */
+-#define LINK_TOGGLE	(0x1<<1)
++#define LINK_TOGGLE	BIT(1)
+ 
+ /* Command completion event TRB */
+ struct xhci_event_cmd {
+@@ -968,13 +969,13 @@ struct xhci_event_cmd {
+ #define COMP_PARAM(p)	((p) & 0xffffff) /* Command Completion Parameter */
+ 
+ /* Address device - disable SetAddress */
+-#define TRB_BSR		(1<<9)
++#define TRB_BSR		BIT(9)
+ 
+ /* Configure Endpoint - Deconfigure */
+-#define TRB_DC		(1<<9)
++#define TRB_DC		BIT(9)
+ 
+ /* Stop Ring - Transfer State Preserve */
+-#define TRB_TSP		(1<<9)
++#define TRB_TSP		BIT(9)
+ 
+ enum xhci_ep_reset_type {
+ 	EP_HARD_RESET,
+@@ -1017,13 +1018,13 @@ enum xhci_setup_dev {
+ #define SCT_FOR_TRB(p)			(((p) & 0x7) << 1)
+ 
+ /* Link TRB specific fields */
+-#define TRB_TC			(1<<1)
++#define TRB_TC			BIT(1)
+ 
+ /* Port Status Change Event TRB fields */
+ /* Port ID - bits 31:24 */
+ #define GET_PORT_ID(p)		(((p) & (0xff << 24)) >> 24)
+ 
+-#define EVENT_DATA		(1 << 2)
++#define EVENT_DATA		BIT(2)
+ 
+ /* Normal TRB fields */
+ /* transfer_len bitmasks - bits 0:16 */
+@@ -1038,36 +1039,36 @@ enum xhci_setup_dev {
+ #define GET_INTR_TARGET(p)	(((p) >> 22) & 0x3ff)
+ 
+ /* Cycle bit - indicates TRB ownership by HC or HCD */
+-#define TRB_CYCLE		(1<<0)
++#define TRB_CYCLE		BIT(0)
+ /*
+  * Force next event data TRB to be evaluated before task switch.
+  * Used to pass OS data back after a TD completes.
+  */
+-#define TRB_ENT			(1<<1)
++#define TRB_ENT			BIT(1)
+ /* Interrupt on short packet */
+-#define TRB_ISP			(1<<2)
++#define TRB_ISP			BIT(2)
+ /* Set PCIe no snoop attribute */
+-#define TRB_NO_SNOOP		(1<<3)
++#define TRB_NO_SNOOP		BIT(3)
+ /* Chain multiple TRBs into a TD */
+-#define TRB_CHAIN		(1<<4)
++#define TRB_CHAIN		BIT(4)
+ /* Interrupt on completion */
+-#define TRB_IOC			(1<<5)
++#define TRB_IOC			BIT(5)
+ /* The buffer pointer contains immediate data */
+-#define TRB_IDT			(1<<6)
++#define TRB_IDT			BIT(6)
+ /* TDs smaller than this might use IDT */
+ #define TRB_IDT_MAX_SIZE	8
+ 
+ /* Block Event Interrupt */
+-#define	TRB_BEI			(1<<9)
++#define	TRB_BEI			BIT(9)
+ 
+ /* Control transfer TRB specific fields */
+-#define TRB_DIR_IN		(1<<16)
++#define TRB_DIR_IN		BIT(16)
+ #define	TRB_TX_TYPE(p)		((p) << 16)
+ #define	TRB_DATA_OUT		2
+ #define	TRB_DATA_IN		3
+ 
+ /* Isochronous TRB specific fields */
+-#define TRB_SIA			(1<<31)
++#define TRB_SIA			BIT(31)
+ #define TRB_FRAME_ID(p)		(((p) & 0x7ff) << 20)
+ #define GET_FRAME_ID(p)		(((p) >> 20) & 0x7ff)
+ /* Total burst count field, Rsvdz on xhci 1.1 with Extended TBC enabled (ETE) */
+@@ -1535,9 +1536,9 @@ struct xhci_hcd {
+ 	struct xhci_interrupter **interrupters;
+ 	struct xhci_ring	*cmd_ring;
+ 	unsigned int            cmd_ring_state;
+-#define CMD_RING_STATE_RUNNING         (1 << 0)
+-#define CMD_RING_STATE_ABORTED         (1 << 1)
+-#define CMD_RING_STATE_STOPPED         (1 << 2)
++#define CMD_RING_STATE_RUNNING         BIT(0)
++#define CMD_RING_STATE_ABORTED         BIT(1)
++#define CMD_RING_STATE_STOPPED         BIT(2)
+ 	struct list_head        cmd_list;
+ 	unsigned int		cmd_ring_reserved_trbs;
+ 	struct delayed_work	cmd_timer;
+@@ -1578,9 +1579,9 @@ struct xhci_hcd {
+  *
+  * There are no reports of xHCI host controllers that display this issue.
+  */
+-#define XHCI_STATE_DYING	(1 << 0)
+-#define XHCI_STATE_HALTED	(1 << 1)
+-#define XHCI_STATE_REMOVING	(1 << 2)
++#define XHCI_STATE_DYING	BIT(0)
++#define XHCI_STATE_HALTED	BIT(1)
++#define XHCI_STATE_REMOVING	BIT(2)
+ 	unsigned long long	quirks;
+ #define	XHCI_LINK_TRB_QUIRK	BIT_ULL(0)
+ #define XHCI_RESET_EP_QUIRK	BIT_ULL(1) /* Deprecated */
 -- 
-Felix Gu <ustc.gu@gmail.com>
+2.53.0
 
 
