@@ -1,279 +1,109 @@
-Return-Path: <linux-usb+bounces-34951-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34952-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8PSDBblruWmvEQIAu9opvQ
-	(envelope-from <linux-usb+bounces-34951-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 15:56:57 +0100
+	id iPMhF415uWnQGQIAu9opvQ
+	(envelope-from <linux-usb+bounces-34952-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 16:55:57 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id B38122AC7D9
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 15:56:56 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1D6A2AD604
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 16:55:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7E6463040103
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 14:56:35 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EC5D5304F21C
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 15:55:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D35893E95AD;
-	Tue, 17 Mar 2026 14:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238E92DA76A;
+	Tue, 17 Mar 2026 15:55:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FjlGHn+B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4dA4sjj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1971F3EB7ED
-	for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2026 14:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4CA2D878D;
+	Tue, 17 Mar 2026 15:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773759378; cv=none; b=Lzuu+Hng6mm3HLR6c1QLk8c6iWOFzC31+4smt9WHSX29zYgAdVdRzs4jHaGiAkY730JyQ0Ih0BDMY6H5x17DGj3SpTb0eTFPUVm/pu1xDUJW4gWTLzGd1GjhyhqtApyavcV358A1CHXtC9PEUZtE9z7Ih9kdS41DCnOYLcdCAkw=
+	t=1773762932; cv=none; b=Uv8PTsQ8YhtWqoMkbYlMNQJCSB7NV/xY8vvNjqpEQEbL1JmVMi6+Q76yt/eivSgjDV5V4JPvM9AIu9F8RjP5blUg+dc2AjcgY2xyXKKTnbuBQ+5EikDpF4ts3LY/AfXiCQGXqZJFtHGjsSYfWd0fly2zTLEtuD+9foZLNcgfci4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773759378; c=relaxed/simple;
-	bh=A2Sl5vAQfUZ78YqdT8/2WTFv/lpnkZGbMV6lC4NTJ2w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Sd8+HgVYF5QlS5iso49xtZ3KguXr+44g8TVGtcuqZ7YYV/6Fl/YtVU1uT9DiMgoroTaERzif0dUn4RSrvuRnPDW5Ey7ZevF7J75q8tGje3HkGmPUxsKEMI1v0edcVElMMFYTRxmeO/TlvoXKBKYrKNOY4gIVOgd8PwF14pCNVrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FjlGHn+B; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773759377; x=1805295377;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=A2Sl5vAQfUZ78YqdT8/2WTFv/lpnkZGbMV6lC4NTJ2w=;
-  b=FjlGHn+BQrJm6s1OWlWJ3iee+ECvVXLotpHLxSB8pqGl5vb6g65P5EYa
-   Oypws6HmP7F2uw5scwmojcbYx5XUbI0wtV7AfYpk6IwOYG4us+rSRmd52
-   QHlaZcScGBIKT7G48HRIS/sDnlIvioKbuFs5QRmvE3hiDCwEGRABV2rOu
-   ArNTKHgAK8UHnaJ7vAqNfRI9BX44NUsHgIBsTMVCnhCdTH8ZkeHf+y+sm
-   TyI7JJXT9aN89osVs94wvwZa34FWhhL012/KZG2ZBvxdV3y1PHXyGGnsl
-   cOWF4+k7evXte9c1OSyTKPkXt/e2ZC5qOlSkCLz6ERQrqpwLIKcPnTgXI
-   Q==;
-X-CSE-ConnectionGUID: Mv2ECIoIT7uCdW7+ti2MDg==
-X-CSE-MsgGUID: Vy0CD4ErT2S03vjQv9rbIg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="85491194"
-X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="85491194"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 07:56:17 -0700
-X-CSE-ConnectionGUID: e//Z/k6pToSK3IP5G+GuUg==
-X-CSE-MsgGUID: pRXdzfJ9T1C8dyAPmcQrRA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="219394933"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa007.fm.intel.com with ESMTP; 17 Mar 2026 07:56:15 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1058)
-	id 3B81E98; Tue, 17 Mar 2026 15:56:15 +0100 (CET)
-From: Niklas Neronin <niklas.neronin@linux.intel.com>
-To: mathias.nyman@linux.intel.com
-Cc: linux-usb@vger.kernel.org,
-	raoxu@uniontech.com,
-	michal.pecio@gmail.com,
-	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [RFC PATCH v2 9/9] usb: xhci: optimize resuming from S4 (suspend-to-disk)
-Date: Tue, 17 Mar 2026 15:55:44 +0100
-Message-ID: <20260317145544.2076387-10-niklas.neronin@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260317145544.2076387-1-niklas.neronin@linux.intel.com>
-References: <20260317145544.2076387-1-niklas.neronin@linux.intel.com>
+	s=arc-20240116; t=1773762932; c=relaxed/simple;
+	bh=sdxc17hjDvTbV8HLPbMxuIDiB/Y91gmpH6ASytKM/Tk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DbdwJZXpf4K2KTVBlimUMpDXeUxTthVnm4L8iI5flP+vVZimxZFF8XCC8+MHm19WT9NTMq1oQcJ8/OjI6E0YaarQxmcwrzLmyObBillFpqzy1bI/rw25WvdRDk+zTBVoxTCTsPZLHKyALs8akhdvOjDIhVZdGDFkG2TJXVw1eII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4dA4sjj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6835C4CEF7;
+	Tue, 17 Mar 2026 15:55:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773762932;
+	bh=sdxc17hjDvTbV8HLPbMxuIDiB/Y91gmpH6ASytKM/Tk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=X4dA4sjj1looa+b5wTefcyhkj+2WL4lLnQHRSOHBTGlVnDIZeOYpFKfDbJAnEa8qu
+	 f+V9e9LYrOCadGrPOF3yRi9yM2VdWeExoPWiPcw7ZFCSIwwFv18Xqv0N/s6tzYrXiS
+	 wMR8XCQqNOBxtIZbFu4yzMr/TQjp15/boOL0qFxiyKdvpB2YKgUlR8ldOS4KlsNoEk
+	 IULKg3AtCNMejQ2wB9h1NqA7mfLeCTQIopJBMnbRViSsc37IokuJCB8+xbe2svLgi5
+	 rRxdCf5ywuYjN0TRicKfZrAmc4DmAoO7Wg1ZnQSQAfREpFscgmqBh2ZYWWBUkHoPL2
+	 BBPwI+lhFX2eQ==
+Date: Tue, 17 Mar 2026 08:55:31 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Birger Koblitz <mail@birger-koblitz.de>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 1/9] r8152: Add support for RTL8157 RX/TX
+ descriptor format
+Message-ID: <20260317085531.3ddff582@kernel.org>
+In-Reply-To: <2094f5a3-e692-4d8b-9b66-0368e5142b98@birger-koblitz.de>
+References: <20260314-rtl8157_next-v1-0-9ba77b428afd@birger-koblitz.de>
+	<20260314-rtl8157_next-v1-1-9ba77b428afd@birger-koblitz.de>
+	<20260316175123.45b8d6e1@kernel.org>
+	<2094f5a3-e692-4d8b-9b66-0368e5142b98@birger-koblitz.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [0.84 / 15.00];
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,uniontech.com,gmail.com,linux.intel.com];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-34951-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-34952-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linux.intel.com:mid]
-X-Rspamd-Queue-Id: B38122AC7D9
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kuba@kernel.org,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: C1D6A2AD604
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On resume from S4 (power loss after suspend/hibernation), the xHCI
-driver previously freed, reallocated, and fully reinitialized all
-data structures. Most of this is unnecessary because the data is
-restored from a saved image; only the xHCI registers lose their values.
+On Tue, 17 Mar 2026 06:04:34 +0100 Birger Koblitz wrote:
+> I would prefer to have individual patches in the series adding support 
+> for the new functionality of the RTL8157 in parts that also allow 
+> developers to understand the differences, even if this functionality is 
+> used only in the last part of the series.
 
-This patch optimizes S4 resume by performing only a host controller
-reset, which includes:
-* Freeing or clearing runtime-created data.
-* Rewriting xHCI registers.
-
-Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
----
-v2:
- * Fix commit title: "suspend-to-RAM" -> "suspend-to-disk"
- * Cleanup 'cmd_timer', 'cmd_list', 'tts', 'endpoints' during S4 resume.
-
- drivers/usb/host/xhci-mem.c |  4 +--
- drivers/usb/host/xhci.c     | 53 ++++++++++++++++++++++---------------
- drivers/usb/host/xhci.h     |  2 ++
- 3 files changed, 35 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index f1b4f06d4b8b..4156822eb000 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -936,7 +936,7 @@ void xhci_free_virt_device(struct xhci_hcd *xhci, struct xhci_virt_device *dev,
-  * that tt_info, then free the child first. Recursive.
-  * We can't rely on udev at this point to find child-parent relationships.
-  */
--static void xhci_free_virt_devices_depth_first(struct xhci_hcd *xhci, int slot_id)
-+void xhci_free_virt_devices_depth_first(struct xhci_hcd *xhci, int slot_id)
- {
- 	struct xhci_virt_device *vdev;
- 	struct list_head *tt_list_head;
-@@ -1905,7 +1905,7 @@ void xhci_remove_secondary_interrupter(struct usb_hcd *hcd, struct xhci_interrup
- EXPORT_SYMBOL_GPL(xhci_remove_secondary_interrupter);
- 
- /* Cleanup roothub bandwidth data */
--static void xhci_rh_bw_cleanup(struct xhci_hcd *xhci)
-+void xhci_rh_bw_cleanup(struct xhci_hcd *xhci)
- {
- 	struct xhci_root_port_bw_info *rh_bw;
- 	struct xhci_tt_bw_info *tt_info, *tt_next;
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 232e6143ac4b..13042f7bc592 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1082,9 +1082,11 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
- {
- 	u32			command, temp = 0;
- 	struct usb_hcd		*hcd = xhci_to_hcd(xhci);
-+	struct xhci_segment	*seg;
- 	int			retval = 0;
- 	bool			pending_portevent = false;
- 	bool			suspended_usb3_devs = false;
-+	bool			reset_registers = false;
- 
- 	if (!hcd->state)
- 		return 0;
-@@ -1103,10 +1105,11 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
- 
- 	spin_lock_irq(&xhci->lock);
- 
--	if (xhci->quirks & XHCI_RESET_ON_RESUME || xhci->broken_suspend)
--		power_lost = true;
--
--	if (!power_lost) {
-+	if (power_lost || xhci->broken_suspend || xhci->quirks & XHCI_RESET_ON_RESUME) {
-+		xhci_dbg(xhci, "HC state lost, performing host controller reset\n");
-+		reset_registers = true;
-+	} else {
-+		xhci_dbg(xhci, "HC state intact, continuing without reset\n");
- 		/*
- 		 * Some controllers might lose power during suspend, so wait
- 		 * for controller not ready bit to clear, just as in xHC init.
-@@ -1144,11 +1147,11 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
- 		temp = readl(&xhci->op_regs->status);
- 		if ((temp & (STS_SRE | STS_HCE)) && !(xhci->xhc_state & XHCI_STATE_REMOVING)) {
- 			xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
--			power_lost = true;
-+			reset_registers = true;
- 		}
- 	}
- 
--	if (power_lost) {
-+	if (reset_registers) {
- 		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
- 				!(xhci_all_ports_seen_u0(xhci))) {
- 			timer_delete_sync(&xhci->comp_mode_recovery_timer);
-@@ -1172,27 +1175,33 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
- 		if (retval)
- 			return retval;
- 
--		xhci_dbg(xhci, "// Disabling event ring interrupts\n");
--		temp = readl(&xhci->op_regs->status);
--		writel((temp & ~0x1fff) | STS_EINT, &xhci->op_regs->status);
--		xhci_disable_interrupter(xhci, xhci->interrupters[0]);
-+		cancel_delayed_work_sync(&xhci->cmd_timer);
-+
-+		/* Delete all remaining commands */
-+		xhci_cleanup_command_queue(xhci);
-+
-+		/* Clear data which is re-initilized during runtime */
-+		xhci_for_each_ring_seg(xhci->interrupters[0]->event_ring->first_seg, seg)
-+			memset(seg->trbs, 0, sizeof(union xhci_trb) * TRBS_PER_SEGMENT);
-+
-+		for (int i = xhci->max_ports; i > 0; i--)
-+			xhci_free_virt_devices_depth_first(xhci, i);
-+
-+		xhci_rh_bw_cleanup(xhci);
-+
-+		xhci->cmd_ring_reserved_trbs = 0;
-+		xhci_for_each_ring_seg(xhci->cmd_ring->first_seg, seg)
-+			memset(seg->trbs, 0, sizeof(union xhci_trb) * TRBS_PER_SEGMENT);
- 
--		xhci_dbg(xhci, "cleaning up memory\n");
--		xhci_mem_cleanup(xhci);
- 		xhci_debugfs_exit(xhci);
--		xhci_dbg(xhci, "xhci_stop completed - status = %x\n",
--			    readl(&xhci->op_regs->status));
--
--		/* USB core calls the PCI reinit and start functions twice:
--		 * first with the primary HCD, and then with the secondary HCD.
--		 * If we don't do the same, the host will never be started.
--		 */
--		retval = xhci_mem_init(xhci, GFP_KERNEL);
--		if (retval)
--			return retval;
- 
- 		xhci_init(hcd);
- 
-+		/*
-+		 * USB core calls the PCI reinit and start functions twice:
-+		 * first with the primary HCD, and then with the secondary HCD.
-+		 * If we don't do the same, the host will never be started.
-+		 */
- 		xhci_dbg(xhci, "Start the primary HCD\n");
- 		retval = xhci_run(hcd);
- 		if (!retval && xhci->shared_hcd) {
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index ade0198bf9ea..a76e183515b3 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1792,6 +1792,7 @@ void xhci_dbg_trace(struct xhci_hcd *xhci, void (*trace)(struct va_format *),
- void xhci_mem_cleanup(struct xhci_hcd *xhci);
- int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags);
- void xhci_free_virt_device(struct xhci_hcd *xhci, struct xhci_virt_device *dev, int slot_id);
-+void xhci_free_virt_devices_depth_first(struct xhci_hcd *xhci, int slot_id);
- int xhci_alloc_virt_device(struct xhci_hcd *xhci, int slot_id, struct usb_device *udev, gfp_t flags);
- int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *udev);
- void xhci_copy_ep0_dequeue_into_input_ctx(struct xhci_hcd *xhci,
-@@ -1803,6 +1804,7 @@ void xhci_update_tt_active_eps(struct xhci_hcd *xhci,
- 		struct xhci_virt_device *virt_dev,
- 		int old_active_eps);
- void xhci_clear_endpoint_bw_info(struct xhci_bw_info *bw_info);
-+void xhci_rh_bw_cleanup(struct xhci_hcd *xhci);
- void xhci_update_bw_info(struct xhci_hcd *xhci,
- 		struct xhci_container_ctx *in_ctx,
- 		struct xhci_input_control_ctx *ctrl_ctx,
--- 
-2.50.1
-
+Functions should be added with the first caller.
 
