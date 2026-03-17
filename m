@@ -1,77 +1,81 @@
-Return-Path: <linux-usb+bounces-34942-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34943-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8AuUGq5suWm8EgIAu9opvQ
-	(envelope-from <linux-usb+bounces-34942-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 16:01:02 +0100
+	id cO5PGp9ruWmvEQIAu9opvQ
+	(envelope-from <linux-usb+bounces-34943-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 15:56:31 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 743B52AC95C
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 16:01:01 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FB4A2AC799
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 15:56:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 008A23028C16
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 14:56:16 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 158AC3037255
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 14:56:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69E8E3E929F;
-	Tue, 17 Mar 2026 14:56:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 115B73E275B;
+	Tue, 17 Mar 2026 14:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RzmpvfD2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OjQMgpu9"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4F573E959B
-	for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2026 14:56:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA82318B9B
+	for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2026 14:56:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773759372; cv=none; b=cQyMgv2m6YRVUb271i2h4a1kbc2uzOFvb8ez+jW9+Sihg+YzSa3Y66dCT4IfZX7KOpbt80Tow/09wTFnYRw8OfCLsJMx52qKy2MPSpr5CroVV/pO9DKk6n2TXkMpOvX1viC9D0Oq/pHQtQHrPg3mZENjJVfD/lMzNZUmx6eLCgA=
+	t=1773759372; cv=none; b=QXdexas6RH6CqESvQDC5C/C3kmxMHBt0mvOlizJMwoYV2ya3MWXK6K1FTn+hIY7W73MsrN0MHJCpb3WeXYNJk8xkpK/EK6zlAcCCU/smcPVzRKQbCT6zhYmVd2gFTpW+IdoFRCTgU8TVAUjcQDNr9ycd/SQ5mVJ4nQdhhZjh7vA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773759372; c=relaxed/simple;
-	bh=vVlu3eczkKX0M5rG276ke4TrpMj1Fev/Vr8r8zFHdgw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=d+kaDyCv/fS1FmdEwGO3Kk5gaq2F/b9bNWEOZsYcxQzw1byLvyNJg/dTKjGujNIdE/pM3JUrw7MbihamkIBQxRxWILihbxwu1lKhASc/I4jQ1i0glCT1XKQn2H+BXyV7+2m8yYomCvPHdXMXj75FphMCHFvcXPtBo0cnBop0IVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RzmpvfD2; arc=none smtp.client-ip=192.198.163.9
+	bh=AkqDQbEdsXJINCi/E9JaB25gxpoBhfA4ZaGolwPWlLA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JcdmeTM9YyuRJIEf6GhWHM1TCyCMohTn69AK+mZE5GVOpbGXXxJs9+fX3W5Nnni7BgTiwhr17DC80f90ryS9eP2owoAoeO8Al/f9FrAicvAmmkcrGZXoehKLDNXFCS/po4Xaqn0yhmXxPjwnjlQWII+X40KGO2PV7mdsWPPepAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OjQMgpu9; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773759370; x=1805295370;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vVlu3eczkKX0M5rG276ke4TrpMj1Fev/Vr8r8zFHdgw=;
-  b=RzmpvfD2qxEAC9RIu8NrKq9GpNiHnSXmAsVUH95s7AO/9uFqUi5hS1Zu
-   oBg5VnnYuaLYW56P8LlNsHsp8AKDhga39xrXRI+yLGSirZR60UuOaCyIW
-   kQuaSyUngf5QWHVlurwo9hEncuOVQXBDINJfs92MGqWNiSurAXBnlLgNF
-   4kG9IJdeyL3X899X/gCSpEALmQlnn8ClEEwmtX3LIYwCJ9nvZ6M1ZWxs6
-   ROBDSIUApKJoW7g4CVgNMFIdC6RfPbp+v4CGb9K5zKbDAY9oc7XIWZMqb
-   DQCvZUVx8n7mmTMDWVnJg+IH8URomyN3Ok6Td20sGBD3qfvsTFfIcbilp
+  t=1773759371; x=1805295371;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=AkqDQbEdsXJINCi/E9JaB25gxpoBhfA4ZaGolwPWlLA=;
+  b=OjQMgpu9pS8wVoXGvqIHmgSZOnVjGn/gkvUVraj8/VvBTq5tVUQdiysW
+   Y+CY4dIyBrM+NP/Fo78bGz4j0NyEDVIRyoDAd3CF1YkR2FkHYpa4PNQ+C
+   Y6ek2bvAwDAenPaHw5LzdM8LzgXKklow4KHEWzVX8RJR3r1ZvRYOBOBdc
+   TQ4mORoKZARe/KUyU+peRjJ0pKenAJyXH5i9N3l4mT/X++tIj9V5UQhDI
+   SMo6ra+V9994JPzhcXsgId13/6Gs/zMKHk53xlVRHUwQtdaaU4FmL3i/a
+   ol4VO7PfBMUSKhxTMAgq+hkg1D7Jxg//7WDepKajcStXL5INV3WxjXnU4
    A==;
-X-CSE-ConnectionGUID: aihDIeZnSJuvth6LDoONWA==
-X-CSE-MsgGUID: o37TDN89Tzy5Ib9FrzDRFQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="85491161"
+X-CSE-ConnectionGUID: SOPLYZ3IT6ywwLY0Q2eX6A==
+X-CSE-MsgGUID: UhchmMPSQB+W3waPby6zbw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="85491164"
 X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="85491161"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 07:56:09 -0700
-X-CSE-ConnectionGUID: f8UNlNvLRiOv1AyMdSMrRQ==
-X-CSE-MsgGUID: w9GnLJNpTcyM+8QLMs7ZTw==
+   d="scan'208";a="85491164"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 07:56:11 -0700
+X-CSE-ConnectionGUID: YodZbSwtR2S3zx/MYI7viA==
+X-CSE-MsgGUID: usKAzxyrS4+BaDgHN4Kfkg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="245312670"
+   d="scan'208";a="219394904"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa002.fm.intel.com with ESMTP; 17 Mar 2026 07:56:08 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 17 Mar 2026 07:56:09 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1058)
-	id DBC8E98; Tue, 17 Mar 2026 15:56:06 +0100 (CET)
+	id 7235199; Tue, 17 Mar 2026 15:56:08 +0100 (CET)
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 To: mathias.nyman@linux.intel.com
 Cc: linux-usb@vger.kernel.org,
 	raoxu@uniontech.com,
 	michal.pecio@gmail.com,
-	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [RFC PATCH v2 0/9] xhci: usb: optimize resuming from S4 (suspend-to-disk)
-Date: Tue, 17 Mar 2026 15:55:35 +0100
-Message-ID: <20260317145544.2076387-1-niklas.neronin@linux.intel.com>
+	Niklas Neronin <niklas.neronin@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@intel.com>
+Subject: [RFC PATCH v2 1/9] usb: xhci: simplify CMRT initialization logic
+Date: Tue, 17 Mar 2026 15:55:36 +0100
+Message-ID: <20260317145544.2076387-2-niklas.neronin@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260317145544.2076387-1-niklas.neronin@linux.intel.com>
+References: <20260317145544.2076387-1-niklas.neronin@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,19 +89,19 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,uniontech.com,gmail.com,linux.intel.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,uniontech.com,gmail.com,linux.intel.com,intel.com];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-34942-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-34943-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
@@ -105,46 +109,73 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux.intel.com:mid]
-X-Rspamd-Queue-Id: 743B52AC95C
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 0FB4A2AC799
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Thank you Michal Pecio and Xu Rao for your reviews.
+The function compliance_mode_recovery_timer_init() is called from
+xhci_init() because the Compliance Mode Recovery Timer (CMRT) must be set
+up before xhci_run() when the xhci driver is re-initialized.
 
-This series is now split into two parts. This first part avoids freeing
-and reallocating xHCI data structures during hibernation resume.
+To handle this case, the boolean flag 'comp_timer_running' was introduced
+to track whether xhci_run() had already been called, ensuring that
+xhci_resume() would not invoke compliance_mode_recovery_timer_init()
+a second time.
 
-The second part, which lays the groundwork for secondary interrupters,
-will be submitted separately.
+This can be simplified by moving the 'done' label in xhci_resume() to
+after the compliance_mode_recovery_timer_init() call. With this change,
+the timer initialization runs only when the xhci driver has not been
+re-initialized, making the 'comp_timer_running' flag unnecessary and
+allowing it to be removed.
 
-v1 -> v2:
- * Drop "simplify USBSTS register reset" patch.
- * [RFC PATCH 3] New patch
- * [RFC PATCH 7] Re-add function comment to xhci_init()
- * [RFC PATCH 7] Moved xhci_mem_init() and xhci_init() start/finish debug
-                 messages into the functions themselves.
- * [RFC PATCH 9] Cleanup 'cmd_timer', 'cmd_list', 'tts', 'endpoints'
-                 during S4 resume.
- * [RFC PATCH 9] Fix commit title.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+---
+ drivers/usb/host/xhci.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-Niklas Neronin (9):
-  usb: xhci: simplify CMRT initialization logic
-  usb: xhci: relocate Restore/Controller error check
-  usb: xhci: factor out roothub bandwidth cleanup
-  usb: xhci: move reserving command ring trb
-  usb: xhci: move ring initialization
-  usb: xhci: move initialization for lifetime objects
-  usb: xhci: split core allocation and initialization
-  usb: xhci: improve debug messages during suspend
-  usb: xhci: optimize resuming from S4 (suspend-to-disk)
-
- drivers/usb/host/xhci-mem.c |  82 +++++++++-------
- drivers/usb/host/xhci.c     | 183 +++++++++++++++++++-----------------
- drivers/usb/host/xhci.h     |   3 +
- 3 files changed, 148 insertions(+), 120 deletions(-)
-
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index ef6d8662adec..810905b824d3 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1084,7 +1084,6 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
+ 	u32			command, temp = 0;
+ 	struct usb_hcd		*hcd = xhci_to_hcd(xhci);
+ 	int			retval = 0;
+-	bool			comp_timer_running = false;
+ 	bool			pending_portevent = false;
+ 	bool			suspended_usb3_devs = false;
+ 
+@@ -1196,7 +1195,6 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
+ 		retval = xhci_init(hcd);
+ 		if (retval)
+ 			return retval;
+-		comp_timer_running = true;
+ 
+ 		xhci_dbg(xhci, "Start the primary HCD\n");
+ 		retval = xhci_run(hcd);
+@@ -1265,16 +1263,16 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
+ 			usb_hcd_resume_root_hub(hcd);
+ 		}
+ 	}
+-done:
++
+ 	/*
+ 	 * If system is subject to the Quirk, Compliance Mode Timer needs to
+ 	 * be re-initialized Always after a system resume. Ports are subject
+ 	 * to suffer the Compliance Mode issue again. It doesn't matter if
+ 	 * ports have entered previously to U0 before system's suspension.
+ 	 */
+-	if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) && !comp_timer_running)
++	if (xhci->quirks & XHCI_COMP_MODE_QUIRK)
+ 		compliance_mode_recovery_timer_init(xhci);
+-
++done:
+ 	if (xhci->quirks & XHCI_ASMEDIA_MODIFY_FLOWCONTROL)
+ 		usb_asmedia_modifyflowcontrol(to_pci_dev(hcd->self.controller));
+ 
 -- 
 2.50.1
 
