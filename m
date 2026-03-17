@@ -1,79 +1,79 @@
-Return-Path: <linux-usb+bounces-34960-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34961-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YJpBKD2XuWkJKwIAu9opvQ
-	(envelope-from <linux-usb+bounces-34960-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 19:02:37 +0100
+	id uBoQMZ2XuWkJKwIAu9opvQ
+	(envelope-from <linux-usb+bounces-34961-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 19:04:13 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A40C02B0846
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 19:02:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BFE62B08C3
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 19:04:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 85AC93040ABB
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 17:45:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0A1F2319DE88
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 17:45:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87BB037C11E;
-	Tue, 17 Mar 2026 17:45:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79AD537CD5E;
+	Tue, 17 Mar 2026 17:45:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z5645+vw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UADnHu8I"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E3735CB9F;
-	Tue, 17 Mar 2026 17:45:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FEE337C0ED;
+	Tue, 17 Mar 2026 17:45:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773769522; cv=none; b=kalHyR3wLf4C7p84tT6nabADuf3Xha8rclzWlGja3Fl8TIRQp1/07HU2sr6J1WR6a9wE7D34qa+7x25K0RTtjOTvzCdvAvcWJMs7OiUXCpiqPND1+LMRUjgm4h4PjDMfipG8xajJNwN/HoEoSL1LY6B32Whzm1/jHPM+MM2WrwQ=
+	t=1773769524; cv=none; b=Td8LPe3LARZQDDkRjQJ2PFpXWhBti+y/FQ1X/wM+KIfI+MwjimmELN/Md1ZqPQExbKvfbo/pn40vFa08Oi09g7OBEWkIppqucgJK3w1sa/dz+7DMu9YQewOO8gUBQUZyKHin0b49vqjCcmkgYIsKGAfhPnms0F2A+BJdJMDtTVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773769522; c=relaxed/simple;
-	bh=8YjhJFvcHuDpicEs2ORWdOGOUKXpNWrzs0hu+nBACe0=;
+	s=arc-20240116; t=1773769524; c=relaxed/simple;
+	bh=/Lg+L/LHpOVqEbuMKNJ/NXw+fYYAhV4A3JVISUtGN+k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mo61Z1KoaSXw+vET+dmUqrcgRYYTvFzPA1F+/3fm4tKtYzXr8qT1QqQbh2IP4m2Vg0xZmq1SQhwlzxDdRbpxblmwDqX9HzDuCiRHWQXpJuNVxTh9Z88FugcYyPf2hoRyHzLoExUvhqsVrz2R731yXD1CtOeX15DPYMy3VTx+kAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z5645+vw; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=n5AB80Neb40OtOiwZxSPzuh1bZJWAfhiT+n6mrJJTHVnElLaWJaLnXqXxetIQe2jK3OuJcwC2W//6Sr0cTIyNNkBSw//G7s9EiVmeIbDXxGwf8weD1q47BZFSXsSdshrvtrAJthgYCa+WtjY9Zguj+FtUqT7IoPvFrlbtQwp04g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UADnHu8I; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773769521; x=1805305521;
+  t=1773769523; x=1805305523;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=8YjhJFvcHuDpicEs2ORWdOGOUKXpNWrzs0hu+nBACe0=;
-  b=Z5645+vwIydqsBIvH6BMzxTRUA28jy84dS4gGRt/v2LVuupIntd1aHTx
-   T8qCZ+moHxLD0wY4+y+pS6Zt1ysDvTDNRE4EO5Ki9TefbzIhjLKC1HKvH
-   CA0Sd8QspTGFdNSSWZS+1/tc59QM25Wzhp7jSfRojIo8PHZ/OuIlmJDHS
-   7ogrXXQTj2XUpB/rUnuLOGsoB0JWOKMJxT9Pej1AOT3zULr2fOjglyfTc
-   wKlh3fXToPurBCk2qoMvTn7CLRsWp9MhoTLD3wv4nlU6KyA4vql8HAhV4
-   SMbecVYOsY3ka7VHHLBubjvTH5Y8CsCQ1kekK56n+4SFjSpNhSJafiUoR
-   Q==;
-X-CSE-ConnectionGUID: +5msEwdrRwmyjHKFLNEDWA==
-X-CSE-MsgGUID: UJIEmmCETvmRoL9z+wHgUQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="85440477"
+  bh=/Lg+L/LHpOVqEbuMKNJ/NXw+fYYAhV4A3JVISUtGN+k=;
+  b=UADnHu8I27uBdxP/k8HZoaOaCBtyCayalbssU0pK690LNw/L6Jr6HWUq
+   b8E81Q0j/+UAZLfjafN5Hf/p2zuez0UrNU83937SNmINbUO0jJwhyX5iT
+   vjUw8Mp07LJKh2dKJ7ufkB4NNY9nNC2lgvxcmozNEaXhn5qHcN7hLvARb
+   T77kkmxqN1wt79QP7SU45oDk+wE4E04tAcwJ03gYkSjDjdJhDYGLGH7OG
+   Buh+Yy1kOhU8jNGDmZwCulaIBwTAR+/SC2NJ5N3IKQn8j2MuQg6qv2uk3
+   1DXiWYOBdSu0bpA3OxPNs0PI2JxcAHiAwegPbogNmKEt9asJGx+tbLujv
+   w==;
+X-CSE-ConnectionGUID: JUHUxKqvSyuaqK/vJZs5Fw==
+X-CSE-MsgGUID: PPJn2vViT9eh8GW5ra+jxg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="85440484"
 X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="85440477"
+   d="scan'208";a="85440484"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 10:45:20 -0700
-X-CSE-ConnectionGUID: Y277chRaShy8cQ4C/Vmj4w==
-X-CSE-MsgGUID: yD16hZwgRqm65TnY3BBkuA==
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 10:45:21 -0700
+X-CSE-ConnectionGUID: 0tci6cXuRIG09fCx/UZ4UA==
+X-CSE-MsgGUID: Ornf0OYoTseJKMv9GaXQXQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="252818135"
+   d="scan'208";a="252818131"
 Received: from lkp-server01.sh.intel.com (HELO 63737dd503cb) ([10.239.97.150])
   by orviesa002.jf.intel.com with ESMTP; 17 Mar 2026 10:45:17 -0700
 Received: from kbuild by 63737dd503cb with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w2YTi-000000001dj-32K2;
-	Tue, 17 Mar 2026 17:45:14 +0000
+	id 1w2YTh-000000001dh-41ay;
+	Tue, 17 Mar 2026 17:45:13 +0000
 Date: Wed, 18 Mar 2026 01:44:48 +0800
 From: kernel test robot <lkp@intel.com>
 To: Loke Forsberg <loke.forsberg@gmail.com>, linux-usb@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, gregkh@linuxfoundation.org,
-	khtsai@google.com, raubcameo@gmail.com, kees@kernel.org,
-	linux-kernel@vger.kernel.org,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	gregkh@linuxfoundation.org, khtsai@google.com, raubcameo@gmail.com,
+	kees@kernel.org, linux-kernel@vger.kernel.org,
 	Loke Forsberg <Loke.Forsberg@gmail.com>
 Subject: Re: [PATCH v2] usb: gadget: f_ncm: replace kzalloc with kzalloc_obj
-Message-ID: <202603180113.YgfMQGgX-lkp@intel.com>
+Message-ID: <202603180133.Mwj8SBgf-lkp@intel.com>
 References: <20260316092505.8841-1-Loke.Forsberg@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -89,7 +89,7 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -99,7 +99,7 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34960-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-34961-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -109,11 +109,11 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	DKIM_TRACE(0.00)[intel.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,git-scm.com:url,intel.com:dkim,intel.com:email,intel.com:mid,01.org:url]
-X-Rspamd-Queue-Id: A40C02B0846
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[git-scm.com:url,01.org:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,intel.com:email,intel.com:mid]
+X-Rspamd-Queue-Id: 4BFE62B08C3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
@@ -131,26 +131,26 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Loke-Forsberg/usb-gadget-
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
 patch link:    https://lore.kernel.org/r/20260316092505.8841-1-Loke.Forsberg%40gmail.com
 patch subject: [PATCH v2] usb: gadget: f_ncm: replace kzalloc with kzalloc_obj
-config: riscv-randconfig-002-20260317 (https://download.01.org/0day-ci/archive/20260318/202603180113.YgfMQGgX-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 8.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260318/202603180113.YgfMQGgX-lkp@intel.com/reproduce)
+config: hexagon-randconfig-002-20260317 (https://download.01.org/0day-ci/archive/20260318/202603180133.Mwj8SBgf-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260318/202603180133.Mwj8SBgf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603180113.YgfMQGgX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603180133.Mwj8SBgf-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/usb/gadget/function/f_ncm.c: In function 'ncm_bind':
->> drivers/usb/gadget/function/f_ncm.c:1459:17: error: assignment to 'struct usb_os_desc_table *' from incompatible pointer type 'struct usb_os_desc_table **' [-Werror=incompatible-pointer-types]
-      os_desc_table = kzalloc_obj(os_desc_table);
-                    ^
-   drivers/usb/gadget/function/f_ncm.c: In function 'ncm_alloc':
->> drivers/usb/gadget/function/f_ncm.c:1756:6: error: assignment to 'struct f_ncm *' from incompatible pointer type 'struct f_ncm **' [-Werror=incompatible-pointer-types]
-     ncm = kzalloc_obj(ncm);
-         ^
-   cc1: some warnings being treated as errors
+>> drivers/usb/gadget/function/f_ncm.c:1459:17: error: incompatible pointer types assigning to 'struct usb_os_desc_table *' from 'typeof (os_desc_table) *' (aka 'struct usb_os_desc_table **'); dereference with * [-Wincompatible-pointer-types]
+    1459 |                 os_desc_table = kzalloc_obj(os_desc_table);
+         |                               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                 *(                        )
+>> drivers/usb/gadget/function/f_ncm.c:1756:6: error: incompatible pointer types assigning to 'struct f_ncm *' from 'typeof (ncm) *' (aka 'struct f_ncm **'); dereference with * [-Wincompatible-pointer-types]
+    1756 |         ncm = kzalloc_obj(ncm);
+         |             ^ ~~~~~~~~~~~~~~~~
+         |               *(              )
+   2 errors generated.
 
 
 vim +1459 drivers/usb/gadget/function/f_ncm.c
