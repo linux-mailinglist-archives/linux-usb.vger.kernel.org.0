@@ -1,139 +1,270 @@
-Return-Path: <linux-usb+bounces-34958-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34959-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ELbeGYmNuWnkJwIAu9opvQ
-	(envelope-from <linux-usb+bounces-34958-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 18:21:13 +0100
+	id 6PLxKFmRuWk5KQIAu9opvQ
+	(envelope-from <linux-usb+bounces-34959-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 18:37:29 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 107CE2AF5EB
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 18:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 403EE2AFE1C
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 18:37:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 683C8307D83A
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 17:19:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EDDF9307EAF4
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 17:35:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A5E4331220;
-	Tue, 17 Mar 2026 17:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C4EF379988;
+	Tue, 17 Mar 2026 17:35:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="enc6jmg4";
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="enc6jmg4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k21jPG1e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB39E191F94;
-	Tue, 17 Mar 2026 17:18:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28CB334C17
+	for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2026 17:35:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773767937; cv=none; b=rVdP5EqL1G0/6AOwdlwyzezcIyxoQ7qCfG4I+V+lX2txD7pwhW1GNDkj5s2ZbnWBsQOm7yVR6dSaVhHw5jVBv3ZjVdygVWYzWgMCe/NTwGl7AvIfdTtYtI+yh74ZjB24ykFOHQ4oroJdam4dMz/QhO6U+09Olt54bG9/zGoilv0=
+	t=1773768922; cv=none; b=RZnieRnr3FsjrpvqUI59khy2zH+9Kuy1PMRbVpIuu9jwmN/hP5g657orHGTVr/QyGehdZwslBiSknov7x7Gsi5eFzvg5agIV9PnLvYdj+yh4QLVfMIlpMQBY1NtrVAmb8mekfd94OhG1eVOIE6F4ThLEQDkhH+zOAFvEyYihHko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773767937; c=relaxed/simple;
-	bh=qJWlya7iIfbk4wtRhTdXYR03Hd0alni5JVdlet1bMtY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kwRflmxroWjKP7xhureR7cwIPsGl3ryhy+vHSEhMjoO+ZMdfFo0d+74TzamMn1qbhObJ6n9Pq9cI6TTO10eO5nvqlP5SHQ7UEVLn7Etfq/C9YEsTWdEvThtiEzNj0NU/UZ+FM/RXXJK+fiN584eWQlWdPFziwghneU+XZQHVhK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=enc6jmg4; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=enc6jmg4; arc=none smtp.client-ip=23.88.97.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1773767933;
-	bh=qJWlya7iIfbk4wtRhTdXYR03Hd0alni5JVdlet1bMtY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=enc6jmg4/rOekWZfqS1m9zu2qQG+hm4rtuFdw1Afma6e7+65QDhpcxxsrF6dwSRbV
-	 yBWZ2MscuQlG3BwwAGe7i/dSm3AzNFCrzjslqRqbwZLM8WwH2oLHJufwR3elMpG+eW
-	 9cE3+p8c/CIyy91BWWKD6ngkt9QKJ9GHpkAWrtr1N6Dtbd1JR9zRJImqgpK4T16efz
-	 GhAzkCgQ8JgGzXdnHPj00J7GE95+JabXFHpwcMLEX89ekiMlOXjmGrnBmZ2Gp5xv9n
-	 77KZsbFcFq0dYjXjqAxYsulubg+2/OhCj19Co454Xb+AZMNuVD0zcz1Gk+4cc5kWce
-	 T4mwzGpOR5v9g==
-Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
-	id 9FC8D3FDF5; Tue, 17 Mar 2026 17:18:53 +0000 (UTC)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1773767933;
-	bh=qJWlya7iIfbk4wtRhTdXYR03Hd0alni5JVdlet1bMtY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=enc6jmg4/rOekWZfqS1m9zu2qQG+hm4rtuFdw1Afma6e7+65QDhpcxxsrF6dwSRbV
-	 yBWZ2MscuQlG3BwwAGe7i/dSm3AzNFCrzjslqRqbwZLM8WwH2oLHJufwR3elMpG+eW
-	 9cE3+p8c/CIyy91BWWKD6ngkt9QKJ9GHpkAWrtr1N6Dtbd1JR9zRJImqgpK4T16efz
-	 GhAzkCgQ8JgGzXdnHPj00J7GE95+JabXFHpwcMLEX89ekiMlOXjmGrnBmZ2Gp5xv9n
-	 77KZsbFcFq0dYjXjqAxYsulubg+2/OhCj19Co454Xb+AZMNuVD0zcz1Gk+4cc5kWce
-	 T4mwzGpOR5v9g==
-Received: from [IPV6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb] (unknown [IPv6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb])
-	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id D40893FDE5;
-	Tue, 17 Mar 2026 17:18:52 +0000 (UTC)
-Message-ID: <ef706caa-a28f-46d5-b8db-18095df8da23@birger-koblitz.de>
-Date: Tue, 17 Mar 2026 18:18:52 +0100
+	s=arc-20240116; t=1773768922; c=relaxed/simple;
+	bh=bbyP0zDglMxDyEthHK2Wrlc+5c6i/7FLXGX7aZA4o4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M9nBwMwz4Xm9byGQO8Yoa/8W6oiq7PnTYjAf/xRzKdtQC/FjdzG6vTVoQbS0GUOBcA04qBWLN785ZhO+dRKj71Ol8kW0vVOrsre3REGSXVqEhRArPxG8ikq7Ty7EeYAVBiTCEx6mdyf65RjcJx1XX0JKcTmm7vNFmEAXDxZLTdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k21jPG1e; arc=none smtp.client-ip=74.125.82.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2c0e3a2605fso607536eec.0
+        for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2026 10:35:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773768920; x=1774373720; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PmeQ4Gu7cUOx49kFMbZ+6xRvgevZWes4Jn1cxhIfbz4=;
+        b=k21jPG1eYLskZ75zvDeaNAib6IFfIP4rE4bNUNQcwBTeQSScalAMaX8yjg+bIfTR+9
+         UsFv1xITSsetO5CaiSjaLKLbFkdpLZA93P6UBnla8WyXK2WmOc9OyyDJ6LlCZIJ2woQ4
+         hBYePbB8bPMX7Ed1QUnxX+8DVJwNyPOUSq764bz5y5XVItygvMlprS8of0zomJA6YQEc
+         yEAfLi1lp/yZrqiSy1OE7Oeb1TQ8cShVJR7k47jvgenKpZ1a9BP/FRx4uVwmyW1YJqx8
+         GHPyH7Wf5W7I8GcY02p6G3LgWDrpawzhNQWEcxGnpfbDD2H65ny4szEDI1/XpFhbPXaN
+         X0sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773768920; x=1774373720;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PmeQ4Gu7cUOx49kFMbZ+6xRvgevZWes4Jn1cxhIfbz4=;
+        b=BuFnS+LzVujmvGhoWadnWJ6aKi6y9ugzvTAuyEsl25+ImznNHIKa4CxDABPh9m04Oo
+         HuL1+GpD3oF0mgPLh4S9BaD/Bq9wodXlT+G2+f0KoBYX95jj9QiZGLg4EtSik5A4QAH2
+         Zl+pPvOyqrdLUUVxhzsUQzZH23+/PFA9biOiR+yWYON8uaEJGXETv2RPJVhSPHen+Xw7
+         vZuCzTwUfytGc+24oWlS04OdGMLWnifabSV+ph+5nAK0Su3r92vCEFfErLzPWf77CBRd
+         RLFRYMs+EcKwMqWDMAiWNuKDNL4+K/62mHxnc9CUtENhUzzv44gNzWV5/lJVvQ2Z7uMU
+         1fhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW0rC3bAfTf9pzZduIYwme+6NtAXxfzkcdTyexfRHlI11plstBFRIVmDo01QOO2hybmzWKWshmt8Fo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywh3N2lOQADLdjWYcG7HtnacgB/ZBTxItix/JOX6XNRrnq6SZ62
+	A8N9Agu7zdFjGnA6BPJf+4QH6Fe3PUvv4F2386n+q61+YEz/Yugd1BVvAZsSrjuc
+X-Gm-Gg: ATEYQzwcuhkztnOCKc+PM54XUkR6rpws3zJHJcO9nXBsPdw4j974QM6gl89cDooyzsW
+	aGLeRSxqM7wYZLP50rFAloWmN5xDMQK+3ctqqEsr80roOOtVV9ctKJ/YGSqdEG+FTIRMzS8ppKc
+	GJVSFdFaLFlo+O8ixHH1XJjU52P9ew5WWvhinuBAyHEWo9DEHthx6/Ls4vzEsILrduJZG7YKnDw
+	68l5TYSyXhlVs7RVHvWClL/hjvKdKKIPyguAkeN1CSzNs0AqHn6yFj1zkpWVo3yZh0p+07sJSaV
+	CI9oNt5EAXSxsBA0Ngl/hfF0Poo5Ec52Cm5kl9GO8okWMLCld2jjDKXKE4p8MNUm07+e3iiYuBE
+	KGUGaaaZ5WxdfftKo7VQ0pcHoSwtwydv49ss4Pqshe3TP2LAsiugXi/cyeNbezlx2CcFUuppnPl
+	4vAU/MJPJh5IkrAqCas5D1uRWK+8BHzGI5Gt8vm6iUsZ6MthIFYGwbrlpx+eJc84wYKk1o/g==
+X-Received: by 2002:a05:7301:9bc8:b0:2be:8216:57c8 with SMTP id 5a478bee46e88-2c0e5115c54mr117337eec.30.1773768919780;
+        Tue, 17 Mar 2026 10:35:19 -0700 (PDT)
+Received: from localhost (177-4-160-195.user3p.v-tal.net.br. [177.4.160.195])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c0e51dd413sm235640eec.0.2026.03.17.10.35.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Mar 2026 10:35:19 -0700 (PDT)
+Date: Tue, 17 Mar 2026 14:35:16 -0300
+From: =?utf-8?Q?C=C3=A1ssio?= Gabriel <cassiogabrielcontato@gmail.com>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-sound@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ALSA: usb-audio: validate full match when resolving
+ quirk aliases
+Message-ID: <abmJV97A1kaxP4Xv@ortodist>
+References: <20260317-alsa-usb-fix-quirk-alias-v2-1-6e531c67f0c8@gmail.com>
+ <878qbqg75d.wl-tiwai@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 1/9] r8152: Add support for RTL8157 RX/TX
- descriptor format
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260314-rtl8157_next-v1-0-9ba77b428afd@birger-koblitz.de>
- <20260314-rtl8157_next-v1-1-9ba77b428afd@birger-koblitz.de>
- <20260316175123.45b8d6e1@kernel.org>
- <2094f5a3-e692-4d8b-9b66-0368e5142b98@birger-koblitz.de>
- <20260317085531.3ddff582@kernel.org>
-From: Birger Koblitz <mail@birger-koblitz.de>
-Content-Language: en-US
-In-Reply-To: <20260317085531.3ddff582@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <878qbqg75d.wl-tiwai@suse.de>
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[birger-koblitz.de:+];
-	TAGGED_FROM(0.00)[bounces-34958-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[birger-koblitz.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34959-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[cassiogabrielcontato@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 107CE2AF5EB
+X-Rspamd-Queue-Id: 403EE2AFE1C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 17/03/2026 4:55 pm, Jakub Kicinski wrote:
-> On Tue, 17 Mar 2026 06:04:34 +0100 Birger Koblitz wrote:
->> I would prefer to have individual patches in the series adding support
->> for the new functionality of the RTL8157 in parts that also allow
->> developers to understand the differences, even if this functionality is
->> used only in the last part of the series.
+On Tue, Mar 17, 2026 at 10:03:10AM +0100, Takashi Iwai wrote:
+> On Tue, 17 Mar 2026 05:22:04 +0100,
+> Cássio Gabriel wrote:
+> > 
+> > get_alias_quirk() resolves a quirk for an aliased USB ID by scanning
+> > usb_audio_ids[], but it currently checks only the vendor/product pair.
+> > 
+> > This is weak for quirk table entries that also depend on additional
+> > USB_DEVICE_ID match fields, such as device or interface class,
+> > subclass, protocol, interface number, or bcdDevice range.
+> > 
+> > Rework the alias lookup so that it still uses the aliased vid:pid as
+> > the initial lookup key, but validates the remaining match_flags
+> > constraints of each candidate entry against the real device and
+> > interface descriptors before returning the quirk.
+> > 
+> > Signed-off-by: Cássio Gabriel <cassiogabrielcontato@gmail.com>
+> > ---
+> > Changes in v2:
+> > - drop the temporary usb_device_id reconstruction approach
+> > - validate only the remaining match_flags explicitly
+> > - pass struct usb_interface * to get_alias_quirk()
+> > - Link to v1: https://lore.kernel.org/r/20260314-alsa-usb-fix-quirk-alias-v1-1-3269998f7ada@gmail.com
+> > ---
+> >  sound/usb/card.c | 72 +++++++++++++++++++++++++++++++++++++++++++++++++-------
+> >  1 file changed, 64 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/sound/usb/card.c b/sound/usb/card.c
+> > index fd81f32a66fb..153085a77d43 100644
+> > --- a/sound/usb/card.c
+> > +++ b/sound/usb/card.c
+> > @@ -864,21 +864,77 @@ static void find_last_interface(struct snd_usb_audio *chip)
+> >  	usb_audio_dbg(chip, "Found last interface = %d\n", chip->last_iface);
+> >  }
+> >  
+> > +/*
+> > + * Match aliased vid:pid first, then validate remaining fields against
+> > + * the real device and interface descriptors.
+> > + */
+> > +static bool snd_usb_match_alias_entry(struct usb_interface *intf,
+> > +				      const struct usb_device_id *id,
+> > +				      u32 alias_id)
+> > +{
+> > +	struct usb_device *dev = interface_to_usbdev(intf);
+> > +	const struct usb_host_interface *alt = intf->cur_altsetting;
+> > +	const struct usb_interface_descriptor *intfd = &alt->desc;
+> > +	const struct usb_device_descriptor *devd = &dev->descriptor;
+> > +	u16 bcd = le16_to_cpu(devd->bcdDevice);
+> > +
+> > +	/* Match aliased vendor/product */
+> > +	if ((id->match_flags & USB_DEVICE_ID_MATCH_VENDOR) &&
+> > +	    id->idVendor != USB_ID_VENDOR(alias_id))
+> > +		return false;
+> > +	if ((id->match_flags & USB_DEVICE_ID_MATCH_PRODUCT) &&
+> > +	    id->idProduct != USB_ID_PRODUCT(alias_id))
+> > +		return false;
+> > +	/* Match real device descriptor constraints */
+> > +	if ((id->match_flags & USB_DEVICE_ID_MATCH_DEV_LO) &&
+> > +	    bcd < id->bcdDevice_lo)
+> > +		return false;
+> > +	if ((id->match_flags & USB_DEVICE_ID_MATCH_DEV_HI) &&
+> > +	    bcd > id->bcdDevice_hi)
+> > +		return false;
+> > +	if ((id->match_flags & USB_DEVICE_ID_MATCH_DEV_CLASS) &&
+> > +	    devd->bDeviceClass != id->bDeviceClass)
+> > +		return false;
+> > +	if ((id->match_flags & USB_DEVICE_ID_MATCH_DEV_SUBCLASS) &&
+> > +	    devd->bDeviceSubClass != id->bDeviceSubClass)
+> > +		return false;
+> > +	if ((id->match_flags & USB_DEVICE_ID_MATCH_DEV_PROTOCOL) &&
+> > +	    devd->bDeviceProtocol != id->bDeviceProtocol)
+> > +		return false;
+> > +	/* Match real interface descriptor constraints */
+> > +	if ((id->match_flags & USB_DEVICE_ID_MATCH_INT_CLASS) &&
+> > +	    intfd->bInterfaceClass != id->bInterfaceClass)
+> > +		return false;
+> > +	if ((id->match_flags & USB_DEVICE_ID_MATCH_INT_SUBCLASS) &&
+> > +	    intfd->bInterfaceSubClass != id->bInterfaceSubClass)
+> > +		return false;
+> > +	if ((id->match_flags & USB_DEVICE_ID_MATCH_INT_PROTOCOL) &&
+> > +	    intfd->bInterfaceProtocol != id->bInterfaceProtocol)
+> > +		return false;
+> > +	if ((id->match_flags & USB_DEVICE_ID_MATCH_INT_NUMBER) &&
+> > +	    intfd->bInterfaceNumber != id->bInterfaceNumber)
+> > +		return false;
+> > +
+> > +	return true;
+> > +}
 > 
-> Functions should be added with the first caller.
-Understood.
+> Hrm, it became larger than I wished.
+> You compared with another implementation and decided to choose this
+> version?
+> 
 
-Since all of the functions defined for the RTL8157 are eventually only 
-used when the RTL8157-specific functions are placed into the r8152 
-structure in the last part of the series, I will prepare a v2 series 
-which consists only of one part adding 5GBit support as this can be done 
-independently of RTL8157 hardware-code, and a second, large part 
-containing all the code supporting the RTL8157 hardware.
+Hi,
 
-B.
+I went with the explicit matching path in v2 because I wanted to keep
+the alias lookup based on the aliased vid:pid while validating the
+remaining match_flags against the real descriptors.
+
+> An alternative would be to have a copy of usb_device_id like your
+> previous version, and clear match_flags bits with
+> ~USB_DEVICE_ID_MATCH_DEVICE.  If match_flags becomes 0, it passes.
+> Otherwise call usb_match_one_id().
+
+thanks, that makes sense.
+
+What do you think about this approach?
+```
+static const struct snd_usb_audio_quirk *
+get_alias_quirk(struct usb_interface *intf, unsigned int id)
+{
+        const struct usb_device_id *p;
+        struct usb_device_id match_id;
+
+        for (p = usb_audio_ids; p->match_flags; p++) {
+                if ((p->match_flags & USB_DEVICE_ID_MATCH_DEVICE) !=
+                    USB_DEVICE_ID_MATCH_DEVICE)
+                        continue;
+
+                if (p->idVendor != USB_ID_VENDOR(id) ||
+                    p->idProduct != USB_ID_PRODUCT(id))
+                        continue;
+
+                match_id = *p;
+                match_id.match_flags &= ~USB_DEVICE_ID_MATCH_DEVICE;
+                if (!match_id.match_flags || usb_match_one_id(intf, &match_id))
+                        return (const struct snd_usb_audio_quirk *)
+                                p->driver_info;
+        }
+
+        return NULL;
+}
+```
+
+Thanks,
+Cássio.
 
