@@ -1,86 +1,86 @@
-Return-Path: <linux-usb+bounces-34968-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34970-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WIldJcWYuWn5KwIAu9opvQ
-	(envelope-from <linux-usb+bounces-34968-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 19:09:09 +0100
+	id wOSlANqYuWn5KwIAu9opvQ
+	(envelope-from <linux-usb+bounces-34970-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 19:09:30 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F7872B0A5F
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 19:09:09 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5F752B0A76
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 19:09:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7629130521D3
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 18:08:35 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 166AE304DEBF
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 18:08:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CC873EB810;
-	Tue, 17 Mar 2026 18:08:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDDB83F6608;
+	Tue, 17 Mar 2026 18:08:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="Zyzrl0kT"
+	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="vuKgi6LM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A584D37F739
-	for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2026 18:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903373F54D7
+	for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2026 18:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773770897; cv=none; b=nbq+kOVeOrpPAZB4+Tay8/yrOvofmfOk6v5uQG7SldE0UiGFV8abRX01ru2YnSBMjlSXLbSHkxiDbvOOpaRb9PqSw5HjOyjbuviiWpldIgS6ad6C12c1Pk5TrecSsyI2686O+Pe7Tff9+t9fBB0BqW6iz5OiToqezAC9/uBsVcs=
+	t=1773770901; cv=none; b=ADe65Y+G9g3/ta+gXZmvFrNgRDUPl5rr95QZnYXGI7romhTibyi66suDrhJ7wpHrglX6dpaftxUwDYUln031XjynRifhyUd3+e4Yq1zi6B+QyBIyBK1h4TYyDfNhOtLD8LJmro25t+C3pZTieDkceAkQna4KU4mHUEht/hSq27o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773770897; c=relaxed/simple;
-	bh=wc0GFxLbCGBVmDS2XpWAyiiPfvrBfgtTcVXRLT/pt8A=;
+	s=arc-20240116; t=1773770901; c=relaxed/simple;
+	bh=epfoYBJ5kMhEqlncsOICDIG4Pcj2iVFAfms6oCh1jN0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tEPzIcyo1DMbdXC3ebF4WpI7B8JHDuzogivJFvCPA1UDxYu1/mS+0lkTrOKkpKRj/MkSagkFUgFgZgBMBPoYhWyW8IPpAnqDth9CwbZFxAJKb4ojPXxhOYnL7tFDyanCfJBeZm1c2TxbthSGvxlw6ytvJfhIcsL0EY3/+kuDLvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=Zyzrl0kT; arc=none smtp.client-ip=209.85.128.51
+	 In-Reply-To:To:Cc; b=rS1wROwpHm+vIAvEYTOyY1e5UDSPhMMuqKchYQP/EPuWFLKy2lfgX/xMNemvVWyQ2vv8MgllGcps65JdrFzSorjy2ZaCfmdNyAmWttwAckzqIqwysSMJThoibRu69xQf5C9lQs5B3B8NhgD2d+K3U4G8VAhjOn8rVZsvs4jQdAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=vuKgi6LM; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-48541edecf9so66188275e9.1
-        for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2026 11:08:16 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-439b7c2788dso3743356f8f.1
+        for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2026 11:08:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flipper.net; s=google; t=1773770895; x=1774375695; darn=vger.kernel.org;
+        d=flipper.net; s=google; t=1773770898; x=1774375698; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=L8XGsFBJ+hu898M1fjVVq758+iOj2O06p054bPmG3Zo=;
-        b=Zyzrl0kTRsorwuvn6vMVRAu/CxDMC8yrk+bEDId11kRiU1Cm1L4IZf2lQgs26XgMxe
-         vSV/nQ3Ruyv1apT6DMFL32d1xIG0KREAnE0sjAfN3Ri3tOHuvcy0XuGhj31Oj03C0yBG
-         UjVoK92njwbQckFtGiDI2K9WmPU7dJUc95MaAx2WLUZugykt8YvoDOVRe6ewj3e6DxwH
-         AlyCRyLSEkgV+Pma7qp5Ko2meAzmQ8uS74CTTCovn7C2kvLb0a7D1qPQnN62RujCKQNx
-         uBA6/GioAXMdmT2XzXqHEb7O/9hxtyw91W6ntEJWR+3z4NDdMAnV5Da3nqRmeh6FthcI
-         TzYQ==
+        bh=731Ga6b9jk+vDTqIbd2aR5h/exqq5f25J8gBUSvhBrw=;
+        b=vuKgi6LMlydkn/zoJzrc+dwM8+D6vf3DiXg1lSdiJHXWveacf0Wofzv0YD8+/6cQzP
+         Vjn9w1FNycDyy5xEG8JS6bnQ89JuT7eSScLuncq7wCiDyXugphcVcSkk9BXz2JgLhNu7
+         UBr1Y+/Mt4T5FJouhFdgQTq4tosDJ2KtQF9arX4x7AFMHJm0wWW/nLD0igPuW1lQYEGk
+         oBx4s6gXW5N5TLOUmf8jqnlNY5WNjajuQHpYkbqISSW7cKriD9TODm+TTjrwfbfFWiFb
+         CC9NmDeguUSPIk5UTeOe/h5AQj+TIp6KYc5jd0Ma74OnSKJ0BRxplsgTsWebTWRw5dy3
+         9esg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773770895; x=1774375695;
+        d=1e100.net; s=20251104; t=1773770898; x=1774375698;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=L8XGsFBJ+hu898M1fjVVq758+iOj2O06p054bPmG3Zo=;
-        b=WGV10P1oX6y7Z0oQGk3epVlMxXNXnkrMxi2wbsqCg6wGOfh3ahJOpGCh2eo4EtUxtp
-         +DIM1SrDIvd5B4aaY3Tj6dEPf3L5fs3Vbh2wag321aqK00ylv/SsNSS2AN1B5arKVpe6
-         5I84fJO1dIZqcsA0wybYjqjQMsMSm4LnpWGO3Ac2h+X/F9Ukj61qp0gS0iQgI6zeBUIf
-         J8cDnJgUuqc0K+19sMzla79E0pN5Nqykzkv1oXah4QYzDXSuMklQ3kfsny+7VZXdFlxf
-         MoSq06TDnnwbYQXYpgMO+dER6+yB9OJlqp/lRPVYfVkl0wDm4cIyTtbyKrzORNrthJOG
-         m9Kw==
-X-Forwarded-Encrypted: i=1; AJvYcCUWXtHRmLx2Wo/5y1IOtyaIq9Hd9PnHpbEeHOKBsBQvlZXghVLtVLpMLOnTvzsLyvjj8SyhNh9VrcA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHgIoj/0PzEe3sv9qwQgw2eo0CGAkG/LzWqHk4wagqpYQS9agu
-	dqv3tk1fhG/sPsoilOQCw1incz1ZcoFqbcNHqjZ9p2Dspbx05MwH+LHM+FO8lyiVt/c=
-X-Gm-Gg: ATEYQzywxDb8tUZcHACM6/xZp/+wMI06ylD019dwLUTn0hd5eL4Vu+q7O4JqB8D+Bhp
-	kNT8A+PIkXIhxhsOTgyTY0JEzwt0CIec9a/fWgiaVt/K/bK5UsiQqB5evizbsLbratlx9H8l3DY
-	UH9NHM0120sO4KZSQ2VLit/IDpdf0ewSa1PUMAejbEf19xr9wJToDEPhXPyGD6O7Pan8ss8+Pwq
-	SrdkkjIdwmK97vQR3ZW8WXHJXM0fJEw88TPDj8QXr+k9TfPU0gkskZHXWhuvRYay17urzBuLvdp
-	nPw0wbZ8kuzCbFyukWMcubkYCnAP2Nyy1Ugo0PcBtZYubTwosIgcBcj/hcM7UsoyWCMf6oQFa3m
-	E82myvWyCAI+DK9QliDg4oW9+Y6CKPH0rxHR39bOHIvvRh8RnuCM7wJHREAxC/H0FfCsgAi4KGu
-	6kyd5Emov0d0ce2ZVh6X4cyoYwbvxUOWhRs453zTLShl+mVOFGrckUG7Z40HKC9vMUukkqjySTy
-	6SEAQ==
-X-Received: by 2002:a05:600c:8518:b0:485:4328:407a with SMTP id 5b1f17b1804b1-486f44435d3mr8363685e9.19.1773770894941;
-        Tue, 17 Mar 2026 11:08:14 -0700 (PDT)
+        bh=731Ga6b9jk+vDTqIbd2aR5h/exqq5f25J8gBUSvhBrw=;
+        b=QBdY3POFFem4k/LsCFjB9Cgv+PMApMv1HB21CPnr/4g0BS0Urt/c/FjHTSMQw5IjqC
+         GHLRgwEMG7a6NF8gjXmxukacWX00+0AHNgbZWM6Iiq0fh/cFdsG0a8rzUTYXghDtHp8R
+         acfIYe7eEB0CaRjC3ggugpj4HuHoDIGwlXwd8xXd4k0OmMq13FSmPS/IKN90xMG0ZXZp
+         bIl3MQaAEoBtSew9quZyf3GZPkkSbOo148MHi4QKqZgM8D+EKuBGUXqhU6d8Jh/bg9D4
+         8erNKNuVK2yQp0d7z214v1xLCZ1ZtgT3Pcn+kUvgNPI6N39D5Xr+Ng6eWBODBkeGVfQo
+         aoKw==
+X-Forwarded-Encrypted: i=1; AJvYcCUXRrY+1aB3musqRflGcY0T7R6ZxPFZl58gOXFP6gIEExDpHtX4wxxDILdJUkbara6/uklzqMJcT6E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyd2AM1kidQ8tgwnE74YNY+8fM1/9dKUCEaH9i5b7NBElqZUCTv
+	3BNQUQ5GgA0YbU80V2lv1Sv3o1ScFUhTpw3I+gV3NKjrx52v/DVWl9+2MQR9vLnbbDY=
+X-Gm-Gg: ATEYQzzMCLV2Xpo7h7ewV+8yh4MsXhA4+oj3ggwz9NwiKZOBT5NoVBGrVtseYsxQsJ8
+	H/huSOlYODNVGMfKPZfbwF2Ey/lPNenGK2H5qfAwIzt7UnJ7I0X26ltaducMehrT5pnTGvF6Vi9
+	8N21O0LZXl96Xvdw6FAtaV51njSV02lH5MciOhE9u4R0qFQ0d/uUrKuFQsJYx8Qi100mkWoXFOm
+	U9cvV1A9x1V5C3ggbCy1dxDow7fkDWybPk8Lfn41/TZOSAqa8jsG9otrHpbdK3U/v/vGGinMa4Q
+	9+80Oa/CNnQD+fHrC8cjf6CrLcV48f0MfYDNTKdg4RKjtmw2MDDeJzJc9GtUyigAOgl3a6tTXaY
+	yhzti/AEQkBwisTU0qsSNu1DESdYbeImYIa/3C1y5yKH2ixGFZ5LT/P0R5vDL68ncMI3Le66ZNe
+	k9GKD/JkGIIEW9foZvbNzjK7jUkRO8JwqsfQJ0mNkhmr1bjTMs8VH7mqTenek0ZhA/zwr2l174+
+	iLeXQ==
+X-Received: by 2002:a05:6000:4008:b0:439:d769:ec56 with SMTP id ffacd0b85a97d-43b5264e4bemr458317f8f.0.1773770897921;
+        Tue, 17 Mar 2026 11:08:17 -0700 (PDT)
 Received: from alchark-surface.localdomain (bba-86-98-192-109.alshamil.net.ae. [86.98.192.109])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b5184b8b9sm1436536f8f.1.2026.03.17.11.08.12
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b5184b8b9sm1436536f8f.1.2026.03.17.11.08.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2026 11:08:14 -0700 (PDT)
+        Tue, 17 Mar 2026 11:08:17 -0700 (PDT)
 From: Alexey Charkov <alchark@flipper.net>
-Date: Tue, 17 Mar 2026 22:07:59 +0400
-Subject: [PATCH v2 2/5] dt-bindings: usb: richtek,rt1711h: Switch ETEK
- ET7304 to use a fallback compatible
+Date: Tue, 17 Mar 2026 22:08:00 +0400
+Subject: [PATCH v2 3/5] dt-bindings: usb: richtek,rt1711h: Add Hynetek
+ HUSB311
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -89,7 +89,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260317-husb311-v2-2-03c17c986abe@flipper.net>
+Message-Id: <20260317-husb311-v2-3-03c17c986abe@flipper.net>
 References: <20260317-husb311-v2-0-03c17c986abe@flipper.net>
 In-Reply-To: <20260317-husb311-v2-0-03c17c986abe@flipper.net>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -105,12 +105,12 @@ Cc: Sebastian Reichel <sebastian.reichel@collabora.com>,
  Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
  Alexey Charkov <alchark@flipper.net>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1456; i=alchark@flipper.net;
- h=from:subject:message-id; bh=wc0GFxLbCGBVmDS2XpWAyiiPfvrBfgtTcVXRLT/pt8A=;
- b=owGbwMvMwCW2adGNfoHIK0sZT6slMWTunNEWf+r0jqyTf7R7hK55CG1YtH5PxHqmuXWVk9cft
- W1Y6mU1s2MiC4MYF4OlmCLL3G9LbKca8c3a5eHxFWYOKxPIEGmRBgYgYGHgy03MKzXSMdIz1TbU
- MzTUMdYxYuDiFICpNo9l+J8gFf5eUVz4LvMOAXtv5j3bO1s0nzovXVTZlpusmDunJZOR4cni7P6
- 5sr+5LxqtPfBh3tQ17lelD2z6Ei3+S0bi5qLJlowA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1494; i=alchark@flipper.net;
+ h=from:subject:message-id; bh=epfoYBJ5kMhEqlncsOICDIG4Pcj2iVFAfms6oCh1jN0=;
+ b=owGbwMvMwCW2adGNfoHIK0sZT6slMWTunNHmffKk5btH2plnp4uJynx2/ndxw7b1215POnEx9
+ +DrzqspcR0TWRjEuBgsxRRZ5n5bYjvViG/WLg+PrzBzWJlAhkiLNDAAAQsDX25iXqmRjpGeqbah
+ nqGhjrGOEQMXpwBMdaYJw//Yf0HnHzzy9WXnKZH0vuPgp/5X+do7deXsTyYPLzzenH6V4X/05/e
+ TXzNb5SSHz7zzd/1exUQl/hU3hQwXnDcQLEw7u4QRAA==
 X-Developer-Key: i=alchark@flipper.net; a=openpgp;
  fpr=9DF6A43D95320E9ABA4848F5B2A2D88F1059D4A5
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -118,11 +118,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[flipper.net,quarantine];
 	R_DKIM_ALLOW(-0.20)[flipper.net:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34968-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-34970-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_TO(0.00)[kernel.org,linux.intel.com,linuxfoundation.org,richtek.com,sntech.de,gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -130,7 +130,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCPT_COUNT_TWELVE(0.00)[16];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[flipper.net:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
@@ -140,48 +140,44 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4F7872B0A5F
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,hynetek.com:url,richtek.com:url]
+X-Rspamd-Queue-Id: D5F752B0A76
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-As stated in the commit message of commit ec53fe37a560 ("usb: typec: tcpm:
-Add vid and chip info for Etek ET7304"), the ETEK ET7304 is functionally
-identical to the RT1715, so reflect it in the bindings via a fallback
-compatible.
+HUSB311 is a pin-compatible and register-compatible drop-in replacement
+for RT1711H, so add its compatible string to the existing binding.
 
-As there are various TCPCI chips by different vendors reimplementing the
-registers and behavior of the RT1711H/RT1715, fallback compatibles will
-scale better.
-
-Fixes: cd763789d31a ("dt-bindings: usb: document the Etek ET7304 USB Type-C Port Controller")
+Link: https://www.hynetek.com/uploadfiles/site/219/news/0863c0c7-f535-4f09-bacd-0440d2c21088.pdf
+Link: https://dl.xkwy2018.com/downloads/RK3588S/03_Product%20Line%20Branch_Tablet/02_Key%20Device%20Specifications/HUSB311%20introduction%2020210526.pdf
+Link: https://www.richtek.com/assets/product_file/RT1711H/DS1711H-04.pdf
 Signed-off-by: Alexey Charkov <alchark@flipper.net>
 ---
- Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml b/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
-index 1eb611f35998..62169daddb4c 100644
+index 62169daddb4c..f818d07d39c6 100644
 --- a/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
 +++ b/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
-@@ -18,10 +18,13 @@ description: |
- 
- properties:
-   compatible:
--    enum:
--      - etekmicro,et7304
--      - richtek,rt1711h
--      - richtek,rt1715
-+    oneOf:
-+      - const: richtek,rt1711h
-+      - const: richtek,rt1715
+@@ -21,12 +21,17 @@ properties:
+     oneOf:
+       - const: richtek,rt1711h
+       - const: richtek,rt1715
 +      - items:
 +          - enum:
-+              - etekmicro,et7304
-+          - const: richtek,rt1715
++              - hynetek,husb311
++          - const: richtek,rt1711h
+       - items:
+           - enum:
+               - etekmicro,et7304
+           - const: richtek,rt1715
      description:
        RT1711H support PD20, ET7304 and RT1715 support PD30 except Fast Role Swap.
++      HUSB311 is a rebrand of RT1711H which is pin and register compatible.
  
+   reg:
+     maxItems: 1
 
 -- 
 2.52.0
