@@ -1,252 +1,146 @@
-Return-Path: <linux-usb+bounces-34916-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34917-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YxDjBOQYuWkBqgEAu9opvQ
-	(envelope-from <linux-usb+bounces-34916-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 10:03:32 +0100
+	id 2OT8Iu8ZuWn5qgEAu9opvQ
+	(envelope-from <linux-usb+bounces-34917-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 10:07:59 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A9E32A635F
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 10:03:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 083612A6400
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 10:07:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 226D230439C4
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 09:03:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0162030965E7
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 09:05:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03E0C33EAF9;
-	Tue, 17 Mar 2026 09:03:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 529733161AD;
+	Tue, 17 Mar 2026 09:05:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="KTmg+k0u";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="2ULljy+4";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WkZUXHK/";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="bt/nQt/Y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T1gnR2a8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5057A2222C5
-	for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2026 09:03:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFFD0330648
+	for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2026 09:05:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773738203; cv=none; b=nBWk0Jvq2DE9YqoNyB52B/NGdkw6wc/+sZSCEnJkpTOgMHS2hN+OjQ8iGDr9mNaazsJ4NJoIMEdEQhP0E3q5J3qmHO6OBrh7Mjc3J/jvGDhYseVmvAUuhVYqdsUj2zwbWoNzCP3/Fgj5UZH+4c1Z3Zgjyk3PfZKm81ba/0YJ6S0=
+	t=1773738348; cv=none; b=S13a3biLG/X+pveR5yMTrYmRkQ7wpOL9h5haa4LH9CuFUgz5Jy6VZE5x9bw2de7vfMO5NjK2Nn0fbU2nOPOXCCVh7stjAQeLHSL0qK/jsecZ4f6jYN00hYZrS6FN+x7IaEQJbFOLg+hcITeiNyOxqUaElPXUcf24B7Z5osUpX40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773738203; c=relaxed/simple;
-	bh=NRUwGV1uoRLt4unaHg3GcNc5f3AItei+ejEmRCqlz+Q=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JJWILvW9WJjraSquWFROrZvnWu7/v8yB5M673dTex8+vQbJDDaIKdub3X2T7yg2f6SFmNMgO+/e29s/9xEFiEItg2GNJVu80oBfduljsOYpZX3sp+UTHSi81vy7FLWYTHiAtGXJ2afYK8FqHZdnu5QtxbpDUonuzVqcM8w57j7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=KTmg+k0u; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=2ULljy+4; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WkZUXHK/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=bt/nQt/Y; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id BFF975BD8F;
-	Tue, 17 Mar 2026 09:03:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773738195; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ev+OZDozWhHDoTFg/txd5DS17peFvQa/sMKLGxjYpxw=;
-	b=KTmg+k0u4zmtz9LWM/vzfZ1oWDGiwqSB33jYietjBbf7WkCQytEYjJg/7QKaKJd5luUj5P
-	W+eQ1IHJKkNdmOPJmZ1DbHeRWA19fW4Na+XotEAiAvoue77Ca69JAwLNB5EMjvL4D6ng1e
-	yG3BLbAtB3y51SLtoncFtWFYhvc0DOc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773738195;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ev+OZDozWhHDoTFg/txd5DS17peFvQa/sMKLGxjYpxw=;
-	b=2ULljy+42KfETp1rx87d9Fu/v1qPCOTdiqNdKbTm33Fb30cxuRHVlsu5Y59xjED5HZ0vGP
-	wVtPJAN/gVy/3XCw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773738190; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ev+OZDozWhHDoTFg/txd5DS17peFvQa/sMKLGxjYpxw=;
-	b=WkZUXHK/CA5vY0We7c+AAc46ZUJteq41vvvDr2oiztilmB1IhZPrl+ewwcxzygXyhub26H
-	KpQNkvpiyw/tm10hFHtWwzgOFiV8dRkxDrNf0/9nck9uzWacZnpRq4kuc1ltF93wvav2cF
-	BzM01N5IFC+oUfaAxYfE9IploNueYr4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773738190;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ev+OZDozWhHDoTFg/txd5DS17peFvQa/sMKLGxjYpxw=;
-	b=bt/nQt/Y4JsPaJ4lj/AxBrJs7znI3/As7pzkTECl6Fx6rjneDJK2kjlv9jCUm/BAWND377
-	M0uAVtsUf3QkMABg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 86D894273B;
-	Tue, 17 Mar 2026 09:03:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id GU95H84YuWnJDQAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Tue, 17 Mar 2026 09:03:10 +0000
-Date: Tue, 17 Mar 2026 10:03:10 +0100
-Message-ID: <878qbqg75d.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: =?ISO-8859-1?Q?C=E1ssio?= Gabriel <cassiogabrielcontato@gmail.com>
-Cc: Takashi Iwai <tiwai@suse.com>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ALSA: usb-audio: validate full match when resolving quirk aliases
-In-Reply-To: <20260317-alsa-usb-fix-quirk-alias-v2-1-6e531c67f0c8@gmail.com>
-References: <20260317-alsa-usb-fix-quirk-alias-v2-1-6e531c67f0c8@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
+	s=arc-20240116; t=1773738348; c=relaxed/simple;
+	bh=kNY2EbyQ01kXpjCaCbkTWkQZnIlwEenqzBqDc730kxc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=S2NOZGZ4pwQmjP74SG5OHAORlqDvOvxzr0ut1QENufSIF6kJPi5GGkDXcnu3oQx+1E+iNfjjQLpPLIGnxa79w9bQy0G6WXZ+GwIL37k5C+mdpkoY+ROxtHmvQUVcvZACB8QOvJC+gfx2ixZEd+mfDeHLpo8v5zZToTO09yInE04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T1gnR2a8; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773738348; x=1805274348;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=kNY2EbyQ01kXpjCaCbkTWkQZnIlwEenqzBqDc730kxc=;
+  b=T1gnR2a8HptihIfztCApVUC5iKzZi9QKP754EGiYD2QAPrfLIvRdeZ1T
+   UKd16YFReCQaCJUvJoa4N/GTiRFfOt2tUQM6eApFHRFdVnV6093JmrhIv
+   vYKz/9sRqffB8yXuelB6SDEDH97yBEnfLkyuOPmu9OOu8ZaA4+x2HsTw+
+   BjNWLedd8bRhupxkja0jWMJsFnfROgI8GQR8jX2SHtv0xqpFGil2DxS8e
+   sGMMwA9Z+UgJW2V0ES8vBmnOYnqSNgno2dv/nN/QZK82x23vj1TPtGm6l
+   ek+qrmI7sqkwUq4Vgf25bkoiD/szqDe6SmRbmqTD1HUOXpFyhv3uPhybD
+   g==;
+X-CSE-ConnectionGUID: huNle037R+aIGQEshPfUyw==
+X-CSE-MsgGUID: Q2wbCe5GQTKW0jjLJFlcXQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="78370838"
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="78370838"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 02:05:48 -0700
+X-CSE-ConnectionGUID: p5wymnBDQTiJEbrW3oSjeQ==
+X-CSE-MsgGUID: xCtMdHxWSLiwF7fqvSvk5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="227172811"
+Received: from abityuts-desk.ger.corp.intel.com (HELO [10.245.245.138]) ([10.245.245.138])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 02:05:46 -0700
+Message-ID: <0b78f1a9-7a7b-49a1-aba2-9ad9f67ee5bf@linux.intel.com>
+Date: Tue, 17 Mar 2026 11:05:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=ISO-8859-1
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: correctly handling EPROTO
+To: Oliver Neukum <oneukum@suse.com>, Alan Stern <stern@rowland.harvard.edu>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Michal Pecio <michal.pecio@gmail.com>, =?UTF-8?Q?Bj=C3=B8rn_Mork?=
+ <bjorn@mork.no>, USB list <linux-usb@vger.kernel.org>
+References: <4f85311c-bdfe-46a4-a310-4a74a3c56b3e@rowland.harvard.edu>
+ <64dc9c5d-d662-41e3-898f-71587b940a2c@suse.com>
+ <20260313085354.71a6dbf1.michal.pecio@gmail.com>
+ <12567c7d-0a17-46a0-8acf-3158c2d9011a@suse.com>
+ <9da0ac4f-12bf-4270-af6f-e08b5a89611b@rowland.harvard.edu>
+ <20260313224528.dp6utjqzbdguwlbf@synopsys.com>
+ <a6934c14-aeb5-40d0-865c-14199943e2a2@rowland.harvard.edu>
+ <3028610a-f05a-4bc8-9037-cca152e46c52@suse.com>
+ <437037d6-3fe1-4f81-b74a-21bea00725e0@rowland.harvard.edu>
+ <0b45d0e4-53f8-4960-b41c-63639b496dac@suse.com>
+ <4f8b9942-307b-4c31-86f3-1b7b20b34a16@rowland.harvard.edu>
+ <d1674f98-cbbf-4a16-8c76-996a0494d931@suse.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <d1674f98-cbbf-4a16-8c76-996a0494d931@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -3.30
-X-Spam-Level: 
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34916-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-34917-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[synopsys.com,gmail.com,mork.no,vger.kernel.org];
+	TO_DN_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tiwai@suse.de,linux-usb@vger.kernel.org];
-	RSPAMD_EMAILBL_FAIL(0.00)[cassiogabrielcontato.gmail.com:query timed out];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid]
-X-Rspamd-Queue-Id: 3A9E32A635F
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim]
+X-Rspamd-Queue-Id: 083612A6400
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, 17 Mar 2026 05:22:04 +0100,
-Cássio Gabriel wrote:
+On 3/16/26 21:32, Oliver Neukum wrote:
+> On 16.03.26 18:33, Alan Stern wrote:
 > 
-> get_alias_quirk() resolves a quirk for an aliased USB ID by scanning
-> usb_audio_ids[], but it currently checks only the vendor/product pair.
+>> It's more complicated than just clearing halts.Â  What if the driver has
+>> queued a bunch of URBs?Â  They all have to be unlinked first.
 > 
-> This is weak for quirk table entries that also depend on additional
-> USB_DEVICE_ID match fields, such as device or interface class,
-> subclass, protocol, interface number, or bcdDevice range.
+> As far as I can tell for some hardware those URBs may be already be in execution
+> when the error is returned. So that is a hard problem. Frankly I do not
+> see what we can do more than provide a suitable operation for anchors.
 > 
-> Rework the alias lookup so that it still uses the aliased vid:pid as
-> the initial lookup key, but validates the remaining match_flags
-> constraints of each candidate entry against the real device and
-> interface descriptors before returning the quirk.
-> 
-> Signed-off-by: Cássio Gabriel <cassiogabrielcontato@gmail.com>
-> ---
-> Changes in v2:
-> - drop the temporary usb_device_id reconstruction approach
-> - validate only the remaining match_flags explicitly
-> - pass struct usb_interface * to get_alias_quirk()
-> - Link to v1: https://lore.kernel.org/r/20260314-alsa-usb-fix-quirk-alias-v1-1-3269998f7ada@gmail.com
-> ---
->  sound/usb/card.c | 72 +++++++++++++++++++++++++++++++++++++++++++++++++-------
->  1 file changed, 64 insertions(+), 8 deletions(-)
-> 
-> diff --git a/sound/usb/card.c b/sound/usb/card.c
-> index fd81f32a66fb..153085a77d43 100644
-> --- a/sound/usb/card.c
-> +++ b/sound/usb/card.c
-> @@ -864,21 +864,77 @@ static void find_last_interface(struct snd_usb_audio *chip)
->  	usb_audio_dbg(chip, "Found last interface = %d\n", chip->last_iface);
->  }
->  
-> +/*
-> + * Match aliased vid:pid first, then validate remaining fields against
-> + * the real device and interface descriptors.
-> + */
-> +static bool snd_usb_match_alias_entry(struct usb_interface *intf,
-> +				      const struct usb_device_id *id,
-> +				      u32 alias_id)
-> +{
-> +	struct usb_device *dev = interface_to_usbdev(intf);
-> +	const struct usb_host_interface *alt = intf->cur_altsetting;
-> +	const struct usb_interface_descriptor *intfd = &alt->desc;
-> +	const struct usb_device_descriptor *devd = &dev->descriptor;
-> +	u16 bcd = le16_to_cpu(devd->bcdDevice);
-> +
-> +	/* Match aliased vendor/product */
-> +	if ((id->match_flags & USB_DEVICE_ID_MATCH_VENDOR) &&
-> +	    id->idVendor != USB_ID_VENDOR(alias_id))
-> +		return false;
-> +	if ((id->match_flags & USB_DEVICE_ID_MATCH_PRODUCT) &&
-> +	    id->idProduct != USB_ID_PRODUCT(alias_id))
-> +		return false;
-> +	/* Match real device descriptor constraints */
-> +	if ((id->match_flags & USB_DEVICE_ID_MATCH_DEV_LO) &&
-> +	    bcd < id->bcdDevice_lo)
-> +		return false;
-> +	if ((id->match_flags & USB_DEVICE_ID_MATCH_DEV_HI) &&
-> +	    bcd > id->bcdDevice_hi)
-> +		return false;
-> +	if ((id->match_flags & USB_DEVICE_ID_MATCH_DEV_CLASS) &&
-> +	    devd->bDeviceClass != id->bDeviceClass)
-> +		return false;
-> +	if ((id->match_flags & USB_DEVICE_ID_MATCH_DEV_SUBCLASS) &&
-> +	    devd->bDeviceSubClass != id->bDeviceSubClass)
-> +		return false;
-> +	if ((id->match_flags & USB_DEVICE_ID_MATCH_DEV_PROTOCOL) &&
-> +	    devd->bDeviceProtocol != id->bDeviceProtocol)
-> +		return false;
-> +	/* Match real interface descriptor constraints */
-> +	if ((id->match_flags & USB_DEVICE_ID_MATCH_INT_CLASS) &&
-> +	    intfd->bInterfaceClass != id->bInterfaceClass)
-> +		return false;
-> +	if ((id->match_flags & USB_DEVICE_ID_MATCH_INT_SUBCLASS) &&
-> +	    intfd->bInterfaceSubClass != id->bInterfaceSubClass)
-> +		return false;
-> +	if ((id->match_flags & USB_DEVICE_ID_MATCH_INT_PROTOCOL) &&
-> +	    intfd->bInterfaceProtocol != id->bInterfaceProtocol)
-> +		return false;
-> +	if ((id->match_flags & USB_DEVICE_ID_MATCH_INT_NUMBER) &&
-> +	    intfd->bInterfaceNumber != id->bInterfaceNumber)
-> +		return false;
-> +
-> +	return true;
-> +}
 
-Hrm, it became larger than I wished.
-You compared with another implementation and decided to choose this
-version?
+xHC controller stops executing URBs in STALL (-EPIPE) and Transaction error (-EPROTO)
+cases, but there is a driver flaw that may restart the endpoint after giving back the
+URB.
 
-An alternative would be to have a copy of usb_device_id like your
-previous version, and clear match_flags bits with
-~USB_DEVICE_ID_MATCH_DEVICE.  If match_flags becomes 0, it passes.
-Otherwise call usb_match_one_id().
+I'll look into this
+
+-Mathias
 
 
-thanks,
-
-Takashi
 
