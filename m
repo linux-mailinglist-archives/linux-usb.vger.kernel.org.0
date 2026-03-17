@@ -1,145 +1,180 @@
-Return-Path: <linux-usb+bounces-34929-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34930-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8BklOrJNuWnj/wEAu9opvQ
-	(envelope-from <linux-usb+bounces-34929-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 13:48:50 +0100
+	id kFUSNVxQuWmuAQIAu9opvQ
+	(envelope-from <linux-usb+bounces-34930-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 14:00:12 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82FE82AA1B8
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 13:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F1082AA53F
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 14:00:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A7CAA306F39E
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 12:47:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 82AC6312CD20
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 12:55:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB4873C552B;
-	Tue, 17 Mar 2026 12:46:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43BD13C6A20;
+	Tue, 17 Mar 2026 12:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g+p6n/jl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47D033C5544
-	for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2026 12:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C56B73A3E75;
+	Tue, 17 Mar 2026 12:55:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773751619; cv=none; b=WL4UD2b1ou7GyJqw+SEBVQz2SO9RtP8tVS0RLjwESptjSNnef1yTS6tsY6NINw2Q62EEUHhs7StMsAVxFYlyiCepP+E5FSA1dyPQTxuUFPtLKEJgJ4h2LpEJV88ubGzlX6F1FuUTy3ymS7C71ZeGPT74wWxAbuVHfBQ7TURTPUw=
+	t=1773752131; cv=none; b=EQyIpJZeBV7m6sZ20DQ15LIcC1Z4/IahXr0Ly0ezR+fD0mR9vWGM5nKXODmwCLraVb2jQj2c9g3PYRiN6hgQUwX1LgA7tmYMrDoi4o6xVbHGlM+sQ4vKsUAoxm2+6m4vwsCl8k+xqqMEpym4pFFGsf/1SnUhtc1bTVSkp/sva1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773751619; c=relaxed/simple;
-	bh=JWggV038qNZoZ+I5yCUze21qBahrSF6wBCnAX06yxcM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=jvSO7pd7NnuucBoy8gft+WhzXxbRwu/Va+STqmxaUlyStltSvIkheAl6ZaExYpAOp1RqNOSnaCv3WRMxgO/5ZEncd6UcLsatvl+3lq1Evmr7rAH3QyaUorzQHEg9i6C5r5ieyycDmBJEw5UgxAenYoBGCBsoih6NgEEccczPffw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 5c7955fc21ff11f1a21c59e7364eecb8-20260317
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.11,REQID:c0f8325e-9215-4980-8f98-c48ec6facca5,IP:0,U
-	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-25
-X-CID-META: VersionHash:89c9d04,CLOUDID:2a56c87a134b30f417d614ef4e4257f0,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|898,TC:nil,Content:0|15|50,EDM:-
-	3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,A
-	V:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 5c7955fc21ff11f1a21c59e7364eecb8-20260317
-X-User: shitao@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <shitao@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 473188432; Tue, 17 Mar 2026 20:46:47 +0800
-From: shitao <shitao@kylinos.cn>
-To: zaitcev@redhat.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	shitao <shitao@kylinos.cn>
-Subject: [=PATH] usb: usblp: add the reset_resume function interface
-Date: Tue, 17 Mar 2026 20:46:40 +0800
-Message-Id: <20260317124640.3196753-1-shitao@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1773752131; c=relaxed/simple;
+	bh=JjzTP7hmp1XcE7FvW69lGHkfiLxgys4jXR9NwDPJZHU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TrsyvtV71wzDY6sBw7IjmIrQcriaAB1QXBZKOXbO2kRNQGPdNIBgmPLP77/OtFrw5RmTeFqOGZ1ejxPM9Yod3HkorqwPDxKdZ+7Pvd9Lx9u2nxNosL8FW7/zx5ejjHfkBZwdll+JAmyWjVGqHucdfl/UCZjRm5r+CZ7FhmwAvcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g+p6n/jl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F9B3C19425;
+	Tue, 17 Mar 2026 12:55:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773752131;
+	bh=JjzTP7hmp1XcE7FvW69lGHkfiLxgys4jXR9NwDPJZHU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=g+p6n/jlYOqTL1GKPlXe3s+fY4jFeIO+PMtxymQ8kOyB4MOY7pNsK/41pb0AkU1kI
+	 eHuo1eN6Il+Z7yn2xOVcpip3IKqn6pYPlN2isod5lb+sYPJWt5mmPHzvEidB4JmosI
+	 WtHWZNfFzG9WFcm8irnejmYHX3V1/IcJnLkRbs50tzmnq/jNthYGMcspArBxmoCQBX
+	 BSe8NkzR4pX/7VmsMBx36/Rwj+tzxREi6pie0juXYfsOhUjDPdGoDCFzL4LFlTZNB7
+	 Mj83zJsmPb/FlrD714JrJ0G2iJWssWHDT50k2wln0tiP7zdL0tQc0tiWKfSjw2SDQU
+	 nPQlHQTKAZ6Hg==
+Date: Tue, 17 Mar 2026 12:55:25 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Yixun Lan <dlan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Ze Huang <huang.ze@linux.dev>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Emil Renner Berthing <kernel@esmil.dk>,
+	Junzhong Pan <junzhong.pan@spacemit.com>,
+	Inochi Amaoto <inochiama@gmail.com>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: usb: dwc3: spacemit: add support for K3
+ SoC
+Message-ID: <20260317-shortness-gecko-72f14fbc79f2@spud>
+References: <20260317-02-k3-usb20-support-v1-0-d89f59062ad4@kernel.org>
+ <20260317-02-k3-usb20-support-v1-1-d89f59062ad4@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.46 / 15.00];
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="EuN2sbgx2TXCBXAM"
+Content-Disposition: inline
+In-Reply-To: <20260317-02-k3-usb20-support-v1-1-d89f59062ad4@kernel.org>
+X-Spamd-Result: default: False [-2.26 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	NEURAL_HAM(-0.00)[-0.931];
-	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	R_DKIM_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DMARC_NA(0.00)[kylinos.cn];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,kylinos.cn:email,kylinos.cn:mid];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[shitao@kylinos.cn,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_FROM(0.00)[bounces-34929-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4]
-X-Rspamd-Queue-Id: 82FE82AA1B8
+	TAGGED_FROM(0.00)[bounces-34930-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,linux.dev,synopsys.com,dabbelt.com,eecs.berkeley.edu,ghiti.fr,esmil.dk,spacemit.com,gmail.com,vger.kernel.org,lists.infradead.org,lists.linux.dev];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6F1082AA53F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add reset_resume callback to prevent premature device unbinding during
-S4 (hibernation) thaw phase, which would otherwise cause usblp to require
-a re-probe — a process that is slow and trigger error -517, and even
-has a high probability of causing use-after-free bugs and kernel panics.
 
-Problem:
-When a USB printer(CH340S USB-to-parallel adapter ID 1a86:7584)
-is connected during S4 hibernation,the following sequence occurs:
+--EuN2sbgx2TXCBXAM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-1. During thaw phase, USB core sets udev->reset_resume = 1
-2. usb_resume_interface() checks for driver->reset_resume callback
-3. If not implemented, interface is marked as needs_binding=1
-4. usb_resume() calls unbind_marked_interfaces()
-5. This forces disconnect via usb_forced_unbind_intf()
-6. usblp_disconnect() immediately frees usblp structure if !usblp->used
-7. However, PM subsystem still has references (usage_count > 0)
-8. Subsequent PM callbacks access freed memory (0x6b6b6b6b SLAB poison)
-9. Result: kernel panic in pm_op() with use-after-free
+On Tue, Mar 17, 2026 at 11:53:02AM +0000, Yixun Lan wrote:
+> Add compatible string for DWC3 USB controller found in SpacemiT K3 SoC.
+> The USB2.0 host controller in K3 SoC actually use DWC3 IP but only has
+> USB2.0 functionality, and requires only one USB2.0 PHY connected.
+>=20
+> Explicitly reduce number of phy property to minimal one.
 
-The bug manifests as:
-Unable to handle kernel paging request at virtual address 006b6b6b6b6b6b93
-pc : pm_op+0x50/0x80
-Call trace:
-pm_op+0x50/0x80
-dpm_resume+0xdc/0x200
-hibernation_snapshot+0x234/0x3d8
+Is this valid for the existing compatible, will it work with only one
+clock?
 
-Signed-off-by: shitao <shitao@kylinos.cn>
----
- drivers/usb/class/usblp.c | 1 +
- 1 file changed, 1 insertion(+)
+>=20
+> Signed-off-by: Yixun Lan <dlan@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml =
+b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
+> index 0f0b5e061ca1..cc27b363ca79 100644
+> --- a/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
+> @@ -27,7 +27,9 @@ allOf:
+> =20
+>  properties:
+>    compatible:
+> -    const: spacemit,k1-dwc3
+> +    enum:
+> +      - spacemit,k1-dwc3
+> +      - spacemit,k3-dwc3
+> =20
+>    reg:
+>      maxItems: 1
+> @@ -42,11 +44,13 @@ properties:
+>      maxItems: 1
+> =20
+>    phys:
+> +    minItems: 1
+>      items:
+>        - description: phandle to USB2/HS PHY
+>        - description: phandle to USB3/SS PHY
+> =20
+>    phy-names:
+> +    minItems: 1
+>      items:
+>        - const: usb2-phy
+>        - const: usb3-phy
+>=20
+> --=20
+> 2.53.0
+>=20
 
-diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
-index 669b9e6879bf..d0e286fe7108 100644
---- a/drivers/usb/class/usblp.c
-+++ b/drivers/usb/class/usblp.c
-@@ -1473,6 +1473,7 @@ static struct usb_driver usblp_driver = {
- 	.disconnect =	usblp_disconnect,
- 	.suspend =	usblp_suspend,
- 	.resume =	usblp_resume,
-+	.reset_resume =	usblp_resume,
- 	.id_table =	usblp_ids,
- 	.dev_groups =	usblp_groups,
- 	.supports_autosuspend =	1,
--- 
-2.25.1
+--EuN2sbgx2TXCBXAM
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCablPPQAKCRB4tDGHoIJi
+0kOzAP9IrBhz/9lUWu6n36ZzFVdy7rbYI2ZzdxCKDRsfR4RKowD/UYnpNrGUAgeX
+VhlMZkWPWooLosGBq/M0pO1VFGiCvQ8=
+=DUTM
+-----END PGP SIGNATURE-----
+
+--EuN2sbgx2TXCBXAM--
 
