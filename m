@@ -1,161 +1,119 @@
-Return-Path: <linux-usb+bounces-34939-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-34940-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2OtWOnBpuWkLEQIAu9opvQ
-	(envelope-from <linux-usb+bounces-34939-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 15:47:12 +0100
+	id iETQFy1nuWmZDwIAu9opvQ
+	(envelope-from <linux-usb+bounces-34940-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 15:37:33 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85AD62AC438
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 15:47:12 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 572772AC1B0
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 15:37:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8292230D0FC6
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 14:35:33 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 7DC22302146C
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2026 14:37:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E06013E715C;
-	Tue, 17 Mar 2026 14:35:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDB982EB87D;
+	Tue, 17 Mar 2026 14:37:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="MH9h2pPp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fafc59M5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CFCE3563F6
-	for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2026 14:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B3C3E715E;
+	Tue, 17 Mar 2026 14:37:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773758131; cv=none; b=fMUV5fi6aWiE/FmhweMOxwozUZL1fpl43T0EtPisS9V+DWLzSlc61uJ30z1QHcXE+sYrFBFp/2XBn2gZFlPLQ2kMa0ibgoY2VDtrJqhqC11rtE395/drUQ3fcqt217zvlw6G0sQwkWAuDlPZuCAwkaarNWBM9Elwce8xwWV9ELI=
+	t=1773758247; cv=none; b=W8K04lZaTGyNo7KHCqBtGczPbXU5bI/vl14iDAxI4ErtC/YDixy03qIy5YNHjpOsYgKTXVYkRrV84pat9ZuC6U8418IJDap0J2jiCSmUS8KPqyzla9H0RGG7vv2xjAsukYrMagIdz7I9actw8OJG6F/3NSqhwC5Jbn/4DZfZNiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773758131; c=relaxed/simple;
-	bh=VcSxu7+Rt6pjbVzIfjpQ5S4/EHYXb1jK8VCuGDXYnXc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i4HHGmtIS0i0YV8EJgQB5HEsVfykH9x9Xxps2jMrQqywUmC3WNbeT0pJtZyGoZlaP9HTWs+3WgieUcYsao1iUjcG4ES5jcSKux6EJPseG2C2akNdMV8VxMLZbX8HtzleLu9G17uN1ZR82PqYHWuz5k3/WP65u2M0DcaHZjBwwPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=MH9h2pPp; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-48628ce9ab5so10139475e9.2
-        for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2026 07:35:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1773758128; x=1774362928; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9Cwk0sufcQW5RoTCtoeXyYyIvZ59fFS2/mrNoD7ViYI=;
-        b=MH9h2pPpOYUB+MNhiRorZ/kSJVTA/4li+JmIFIVVE4hMYPlycdOlZEKiw8qPMhZPPh
-         39dckjk3pyeObUdQnWl6qU30duQYaMoCQ1TkMGAOuzzho9QxZVDa9ziXpLHNqk7pMglS
-         TF0Nji6FOWJzOzTiebIixKwt7GzQCwzvzJmvC94nOKYg3HYX8GbwnIplZ61s/N7JPS6u
-         3iPx5BK3xWPtnnzF7RbCSr+kFVVvkroRu2O3qeLXMvkNKQRttPQR+pat7fOpSV2N58Qd
-         eE/E8h+ZZt+Vz4HU0z1RFQGjk3Agv2b0UYk5i1wqS5ErsaX0PUv4N8F5kK7a91rebVzI
-         zyVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773758128; x=1774362928;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9Cwk0sufcQW5RoTCtoeXyYyIvZ59fFS2/mrNoD7ViYI=;
-        b=nhGCoyZp2u91ZEmZuKRyl+zhWKdBnA0xhk7xKvmzYyOHQf40eipPZrjR1oxXieZYC/
-         dlODhNh26fuR+CjoDPz1AP7gJrnc/+GSkHox5Y8ndFgIgjgU3NTvEqILowcX/sFrxXqQ
-         Niim31uyPa8QTpPYPpDENIsfslxvg4YZGXr24BVxi3V22FqJWW89SgjeR2j4mOsWqj+l
-         HwQ9iLTcTOLdD19bo7A7w5YyMumlo6E/LYGFhTcMyA2+i9uuQyaAuHvSWFl91nxfkh1t
-         YmLFSean9+o77pkyGV2T2MGUrJBeVXvg2PMhLiQhgJfX8cxG/nY3dbDtLfZre4OPLlih
-         U7MQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWQnYBUkcRedFU9Tz5zpAnKnK3ALPjmsZQePMrk+RVCgCsrHNvubwIdm3HcLpQ41Z6raifsfLwFrPE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyoEtk6oSBVarkFI1b0QWudbMqEKLeyYv3Hg8APyTxf0/8r4/E
-	Ainoet5Kh1rPuHFLn3Zxuqfy0jRkQG3qP/+ydDkESVpzenz0fBIBudYDXMHkseAufzk=
-X-Gm-Gg: ATEYQzwTtpgjRM327qAriBQqVjF6iSGWkFjoTEemA+1Cunue6GfSwRdjA/Uhb9d3ROH
-	QKM8yEhBSBT7ELOzgCb5KXmpG9CjI+cR55UYjNo1AQi7FzI93ju92lTMCMPh+fvj0Tqm3CQOOFH
-	oMWTn4uK4ESW6YDwtAFigkEVh0qEg1X94n+dD7CSRkaScGi4R1c6WJxUTBfSnay5tzFZN3dlQeg
-	j1Q3CmRfMf7UJmpf5hNEH4uvDPUjcjd9UtI5PDg8d9OYvJXrwdY/PPEEuKsyj6YZ9lbqSGM59+X
-	SsmzHw64/MpKRrjPSvd9ZBRq2DXauJAssPaAy2V19ZLWPddxWNwdlKrWLcPUILEkUeCDBSj5JSi
-	D1eel7Blmx6N/GETDHqHhGyTyNkTwIMufT4QmxTlWobRTTjdHeH0u/QMpMHPnsxRuvzuF5qH0+j
-	cipxVWFe5nXNMEBtOIHSVIxIfVmyOuGurBCtQ6GLM9b6JSaYzkseL9u2VK734dJihMCKE=
-X-Received: by 2002:a05:600c:4e8e:b0:485:34b3:8587 with SMTP id 5b1f17b1804b1-485566d7035mr274762245e9.10.1773758128320;
-        Tue, 17 Mar 2026 07:35:28 -0700 (PDT)
-Received: from ?IPV6:2001:a61:13ea:b101:88d5:cd46:69d7:10e4? ([2001:a61:13ea:b101:88d5:cd46:69d7:10e4])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48557a74266sm112003685e9.17.2026.03.17.07.35.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Mar 2026 07:35:27 -0700 (PDT)
-Message-ID: <03344b43-b3aa-4800-b4dc-0b5a2b2fd5b4@suse.com>
-Date: Tue, 17 Mar 2026 15:35:26 +0100
+	s=arc-20240116; t=1773758247; c=relaxed/simple;
+	bh=J+S1H0ApNmZBpP1WtzH5F+Jy5KRLea78YlSI3v7DBDI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FN0fGs2BZX8635nqOmjCZ1vVnGhOj0jcPrhaDAWL3OAbrIXIsRKXTNb4EpThj4jAbdOGnBkZvhmxNKsqnGphTcslLmUc2V6xvumyIQP2cWWB+gPmnQ6pZM6AFPgzfNDXH5tmiDzYUx8UohrGh460dNCG8Sf7hrl/yuXs7Xd5JeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fafc59M5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D26A5C4CEF7;
+	Tue, 17 Mar 2026 14:37:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773758246;
+	bh=J+S1H0ApNmZBpP1WtzH5F+Jy5KRLea78YlSI3v7DBDI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Fafc59M58Je45M2LOv40LzKztzspdJzVUG0h9ghO5R63/cNo3FZDAfDfoH0/6z2oF
+	 H9caeMIpb2yA1lh0usaoHTE6wWnCdtNkqPnnkZYln5bi+8IxlhcWmhTV8FaW3TgWjA
+	 eF0MzZnQeXoCjmJ3HFwJPRBEw8Rc5koX6tN8UQYXweznUiwLmKXOH+MQpWGEzJ1ZWS
+	 t+R1/KyZv7U7G2rv01XfJYqPvo7fbNq5rGfaSMd8O4amghH9ZFr6yPc8NDHgkKTl3C
+	 cYr96i7VUXNvPm+YCTre6jiE1EtknYJJAexqa9OeNiHRV22hAw6t0e1+ETCqyK3TbW
+	 jTBjrtqhZlQKw==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1w2VXw-000000006a9-1FEq;
+	Tue, 17 Mar 2026 15:37:24 +0100
+Date: Tue, 17 Mar 2026 15:37:24 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Ai Chao <aichao@kylinos.cn>
+Cc: gregkh@linuxfoundation.org, b-liu@ti.com, badhri@google.com,
+	heikki.krogerus@linux.intel.com, valentina.manea.m@gmail.com,
+	shuah@kernel.org, i@zenithal.me, tiwai@suse.de, kees@kernel.org,
+	christophe.jaillet@wanadoo.fr, prashanth.k@oss.qualcomm.com,
+	khtsai@google.com, dan.carpenter@linaro.org, tglx@kernel.org,
+	mingo@kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] USB: serial: ti_usb_3410_5052: Use safer strscpy()
+ instead of strcpy()
+Message-ID: <ablnJJIlFnlNhofA@hovoldconsulting.com>
+References: <20260310094434.3639602-1-aichao@kylinos.cn>
+ <20260310094434.3639602-2-aichao@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATH v2] usb: usblp: add the reset_resume function interface
-To: Alan Stern <stern@rowland.harvard.edu>, shitao <shitao@kylinos.cn>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <20260317125614.3215254-1-shitao@kylinos.cn>
- <c4f66c3b-7cb4-4bcc-868a-d3aef2d9e521@rowland.harvard.edu>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <c4f66c3b-7cb4-4bcc-868a-d3aef2d9e521@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260310094434.3639602-2-aichao@kylinos.cn>
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-34939-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[suse.com:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-34940-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,ti.com,google.com,linux.intel.com,gmail.com,kernel.org,zenithal.me,suse.de,wanadoo.fr,oss.qualcomm.com,linaro.org,vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim,suse.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 85AD62AC438
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[hovoldconsulting.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,kylinos.cn:email]
+X-Rspamd-Queue-Id: 572772AC1B0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-
-
-On 17.03.26 15:06, Alan Stern wrote:
-> On Tue, Mar 17, 2026 at 08:56:14PM +0800, shitao wrote:
-
->> 9. Result: kernel panic in pm_op() with use-after-free
->>
->> The bug manifests as:
->> Unable to handle kernel paging request at virtual address 006b6b6b6b6b6b93
->> pc : pm_op+0x50/0x80
->> Call trace:
->> pm_op+0x50/0x80
->> dpm_resume+0xdc/0x200
->> hibernation_snapshot+0x234/0x3d8
+On Tue, Mar 10, 2026 at 05:44:29PM +0800, Ai Chao wrote:
+> Use a safer function strscpy() instead of strcpy() for copying to
+> arrays.
 > 
-> First, are you certain that setting the reset_resume callback equal to
-> the resume callback is the right thing to do?  Don't printers hold some
-> state information that will need to be restored after a reset?
+> Only idiomatic code replacement, and no functional changes.
+> 
+> Signed-off-by: Ai Chao <aichao@kylinos.cn>
+> ---
 
-Correct. This will not work.
+I've applied this one (1/6) for 7.1. Thanks.
 
-However, if we take the trace seriously, it means that resume() was called
-after disconnect(). That must never happen. Yet, if that happens the issue
-is in the PM core, not USB.
-
-	Regards
-		Oliver
-
-  
-
+Johan
 
