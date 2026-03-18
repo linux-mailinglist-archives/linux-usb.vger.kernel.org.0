@@ -1,213 +1,209 @@
-Return-Path: <linux-usb+bounces-35040-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35041-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2CYtLn53ummTWwIAu9opvQ
-	(envelope-from <linux-usb+bounces-35040-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 10:59:26 +0100
+	id mJQ+CJR6ummTWwIAu9opvQ
+	(envelope-from <linux-usb+bounces-35041-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 11:12:36 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B3FA2B98FB
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 10:59:26 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 253B82B9B03
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 11:12:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 590963155B68
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 09:54:59 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8B2BB30131B3
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 10:08:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FEFB3B8D70;
-	Wed, 18 Mar 2026 09:54:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B995C3B8D4A;
+	Wed, 18 Mar 2026 10:08:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ee9XOfTV"
+	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="5PH08Mmr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67EC13BAD91
-	for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 09:54:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773827670; cv=none; b=JeBBmpQXHyZT5cg9+cmZLsZaWE7wedMX6QNlc8Set+h0ACGrcg0utgQSRWNtIl7LBDrLXL/kVgv2dfJsBNYCtulpbXeSi5m2rDdlbtEyLdqNML9qqdOyNyV8rFukXKkPE39sofbYTxDoBchVAFNDIWD3DSl1ELtdL2gPiPTmhSQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773827670; c=relaxed/simple;
-	bh=MGFZ9SwNBgeOveQE3q7py8tkWrsILvn63/RDA8Xi3zQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gJPvwOXkkAFYa0kT0Xvrv4Cmc1Fa9bWR1b2FFo4GUIUpmUeEct4kTLOUwveNPYRnfym1PQ5PLjASq0iJXcuIpewdo4+j+2XBWw++OnNRbbvk22wsIlB8BpInA6Gy8LnJYnn6RBuAO/XDCl4h3bBvASJzAAqiQa4X9fBsi8qswvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ee9XOfTV; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48540355459so64713075e9.3
-        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 02:54:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B452F3B8D4B
+	for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 10:08:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773828522; cv=pass; b=pNkCfUCjReQ854t2TNOEyp9I9ps+0ZL7ti7tYQI4NOSrXKFNmBZjTYdDP3/s16g92Y54YhFIqa2C76SmPCoXocrNAAini5sSGSaJ3PlcX7fus5WuFDJx1rMGtaFCjN2FV2/vhjXBdf2c0biop0wn0b5e52OQKEdNahhkl+ZvSfU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773828522; c=relaxed/simple;
+	bh=QeBwEzpkQBoucAoNzKR5pXm1ojBrdQj1YQVWxIyUZ6o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TDjEuJ3sS4B3cgkROSJx7pE+Odis/XJSyl5koSv6tc87Cf7bGGoW6Ocp+NZwNzWQtYllRGGbBon/S2uYWuew6+zLpSXXywtxG3qDYB1MQXrOw85504lMKoRlvksXFZyOX2A9NHiz7c7+dvOyNb4Wum4Yy8lhKJA9d0sOXqMZt/M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=5PH08Mmr; arc=pass smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b97f9587e6eso76814266b.3
+        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 03:08:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773828513; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KHCb2dFXB8NPv/6UqTts4LXQ8ifBkdlKCeLBftJeKm2NCStjLtHmdLS3WKaGYyzPSf
+         i7ERwyDwnxmD29h851CBPgCSKo4wPzRCU0AZlCLrZqiJizuWj2MdEEDX0BltKqJhEcIV
+         l0briiHan4qV0F0E3SfZAI/OEm/ePRT0jNP4ZUUf6nr6mFLQDDCLwNN6zrtAZRgG5r6Y
+         oPm752JNZ2QKTLbVTTgZRWuvaiAH97GbvTf8ybABoPcxo7TR6QeRWOSmqs2oD0Ee20Pd
+         /XLXyi3NYqz1fLaOu/hpe6Z8jHbHtJR3yUvW2h86/Td+xmORcqdS5MesoP7aoFE8YkCh
+         WM7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=vA3prr0pqra4fvY8vHWhez7S8tBJXQJ9txp+/8w8yfU=;
+        fh=1jDSUSNHu9Cwcommda2iC7y58asniwNTfZm9FUcAdqo=;
+        b=EgmtuEWcHqWuaReflvL65yeu5tFHEiQbwccSTO1BGk6NgCo0Za/AhsPu7tQc7YDdgg
+         hmKO71H5zehXFXgrxtTppbMoJIPwq3ObWzJp1K73rI8h58XKxTplUOFRFUYh+LdLqIto
+         p+gb5R2lbv5FBnzVPvjRonXkemfD+Mpm/Nm2V5C5G0nleiCpU+GvUypUghC1IMzYLndt
+         T9qg6IrPNH5N3N/fwmDbMkzt8JfdElK+BaI5uqkXLcKGd60pcVCs4syknmPQ530/oK5F
+         vn7yGNBi7MUM3bFPlVSb5pWc+5kHpv2fBMZljZLLwevjj0KLjd25JyPlYCDNq1d5bT7m
+         ptkw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1773827661; x=1774432461; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pkFnASwUW3a+PLGjailnDllJkLZgxWlustGr1LjMSqA=;
-        b=Ee9XOfTV2Ot5V22CzsgQ7LgG0ptnnDlwXTnxoqYOfH9Xl3k67iDrA8Ihm7D+Go/rXb
-         ghQsYihaaeyG8nqVMJqR8rXA7EpBxEWzbFinatXMbW3vja2uVrl1Um89QuUQ5VUX+Oxs
-         pKFtqbREp8u0Rwbz+HBQOBXRCoJYZNIdVsQ7LmDLDFqRMKAOkKAjm9Lk1whH/pXWIMle
-         gmYodUyFdYRiN1Pagw7dUZyHN2ddwW8RZlpodYpqeHkvjUGPiS7e8xCs2ha/BK2CHR01
-         jFQoPs8VaHL9U9ywJiGncIYLJLonr5cGnsrJqr8QFQN0glPE1ukDgrR2LQ4d/JPby+Qe
-         0PcA==
+        d=flipper.net; s=google; t=1773828513; x=1774433313; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vA3prr0pqra4fvY8vHWhez7S8tBJXQJ9txp+/8w8yfU=;
+        b=5PH08MmrYQuBIHjHEFqxdobbKawbDu7m48yaplt4qym8hzW3tiwTW/15LPFfeT1m9o
+         EorOizKk5k4hUhQ9tZ98jLyMVwJXCi+JAXmZWAEWsPrWR9krbrYEtBDIeYG+7kQxirgG
+         zKCYAWfMunFRu1+kTyEV5rIw7uqbC20Kr5JsCPE+hZbEorIO3kkSLYYMcH/b9ezTK0sy
+         +leJTauMV0yQ//Ph/YGH/tG2VXR0dScUB65Q8EPIfUDvTOEPS4FaGBjbdNd285Gt85PE
+         48s52xjHlwf2TWbX/6CGboPSx0IVTAZH937pIrBnTMnMwmyxDQcPt2GpOTsJGZLRMZdl
+         9n3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773827661; x=1774432461;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pkFnASwUW3a+PLGjailnDllJkLZgxWlustGr1LjMSqA=;
-        b=HzDjSTjDD0WXdNBUDZUkugIzGH36uR9+uJClfXsWsxlc2QMs75CBb80JMxV7MleBGk
-         9hZD9mk8HWiJThezzV1imAVDVofTvcfDk16jZqQyBkoHtDAJVjg//hXzmDksaBozM0Ze
-         EJAV1B92BE0PWnXNc+bB6tsSiOcDhCmUKdEw3n5FWF1PxPI7dHMj2Ru345rujZla0fhT
-         JAaQwx5envICWfKQ8kR1tZkjU4nWk2rSIYrdcNmOh05LP49LU3hRrPj3DJx7Vv13+9b7
-         mGpD4fVGLPPXQhLo+rh2+XISWVnbe6E+1+ag8IV088wNI9YjmiTgE6DaGl2NZo/9udnR
-         aQgw==
-X-Forwarded-Encrypted: i=1; AJvYcCX3dJxnnjXl1dTkXx+3e8szYueVHteiV9Hd+1uHbBbtYMA0j6ObISQbZfsyTAW6gt22vDPNdlsqe+w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFy0juKR39R+H4XECkIBbEZSim2fqNOJwrqFri6xAxnyCK6ZSR
-	1m4jz3AlDI+HMkcLlB7t5OCWtCVMNm4FQcUzzf/Z3+9fEpW9i31HXdddbvbixvgsorBqiiPdaGZ
-	1UMx0
-X-Gm-Gg: ATEYQzywQLE0q09HWz0rT0t5o+Us+XHM8lBu3T218U5zSSMaIcK1+cdC4BR49DpkcP1
-	YBrdFcuQqs5mKClNwY17wcy25Siki7/mirM93KM8nYjfimx65EW5iKSM19twyFo8OmoJGZowOeH
-	iYn6IFHYeBon6OOHJ/xbpha42xLJUSWaaKQ/IsVn9cU3kaQfLS4PD4sLlHpwKMgA69JDWKcCJXj
-	2RYlGnAskMc7jX7FJLXZ0seYGMPBlNIEJNCM2JwM5/MXKxyAf3Y7EmNrru4VkPS1mz/HHzQmrKJ
-	a0hLZ0q5GiGYxnu/+cXDBCAGm1pyolR8WwucByColp+cM1U17wyxStD7110EE0IrNaauyVPCKaQ
-	0O2u3Y58Gzy21PYv0e7a0qp9EREMymj4ZThatJmFwUI5/j8x7I7BQ1SJQeWB9bvRJWrruFehrox
-	ijlKwOf6PRvLy2c5AyKgDXWcaUjRyAy9v7OPuwexNaPT5zBAwWQoslO4qE+bYcaS2NCGk=
-X-Received: by 2002:a05:600c:1d0b:b0:485:30f7:6e88 with SMTP id 5b1f17b1804b1-486f4577061mr45518405e9.31.1773827661237;
-        Wed, 18 Mar 2026 02:54:21 -0700 (PDT)
-Received: from ?IPV6:2001:a61:13f6:3a01:d734:4c22:acd6:d29d? ([2001:a61:13f6:3a01:d734:4c22:acd6:d29d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f460ef0asm18079525e9.3.2026.03.18.02.54.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Mar 2026 02:54:20 -0700 (PDT)
-Message-ID: <8a14fe29-0d92-4ce5-a7e2-2c084c710727@suse.com>
-Date: Wed, 18 Mar 2026 10:54:20 +0100
+        d=1e100.net; s=20251104; t=1773828513; x=1774433313;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=vA3prr0pqra4fvY8vHWhez7S8tBJXQJ9txp+/8w8yfU=;
+        b=S083UUBD3s3gNUqgLBYVZqnRQy6s90splJjNnXnMnnpuo47Wb42HtysxqFgGz8N5cX
+         3dq4n2WpiyeNsRXCgVwAws5dATjF0LSbcWAN6CmKMkr2AU/9LwZg1ejhvLUFSUuxe9XU
+         vo5tSu1IBFwiy3SsSqyvO3Z3TuVJHkEnGW4+yG8b3M3J9FWERsSeeEv4e2oZKRMHK3y3
+         SKVLk0IIpSo+2vX+nPT7ajjTkhrI+najVtIOxvZ3j30F1+Rrtk4SSwzTdJX3Onc9BdiT
+         ae4Z8gDyMkoL4eunhHdxrpp/7Aqo6EgtI5gnjFkRk7PRvItIDKehQU+M8779HTvyFzOF
+         s2ag==
+X-Forwarded-Encrypted: i=1; AJvYcCVSLZT8oHjqMCuLOo11GxH5KPlSR6KGBmGvE1wh705gHQ91yVqzA93l2XJqxDgPP042FX/j65eELEw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOhQxy/EigNd8xwc0DtxFnSM4r3fLfjXXcvi8ILy0R1M6hXnBJ
+	sj1in18eFbsWEDB7WP/YfAwPRjmuIruASs7PWF1cVyRr2HNclUELmBQEj/9U6d3Ecf7EkGD+y4v
+	QNp5KoBgHtqxjFIWyTv68CXlWUM1x5ccn23s365OksQ==
+X-Gm-Gg: ATEYQzys2mzS8+6v4MhKI+MtnKnaKlggm1Gi9j6HqdLX0PGoCJSbyGEaAd659L4G4o8
+	qvqKlTzwxBjn4wNJv8mtiFOFEjygIiskImkd8tbrcqJosPsD26wa+tRCf1B1ZKQIYbwAmRTHeZ6
+	6Z7dKHaukcfEzTIhoim4swUMb4Jpn2i5OjI2qUoj/yFDrdhUtxXyUoECPtKxKujdtf5c3tGxDzv
+	MArLPFG346zyMR7bNhR7FvNmpYQwmXVXn6NL0NTJpaU0sYaWJFy0+c2ythwDzwtoNVhzIhCERsb
+	mK9GNVA=
+X-Received: by 2002:a17:906:4784:b0:b97:ad7c:64cb with SMTP id
+ a640c23a62f3a-b97f4abcd3bmr149390566b.44.1773828513373; Wed, 18 Mar 2026
+ 03:08:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: correctly handling EPROTO
-To: Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Michal Pecio <michal.pecio@gmail.com>, =?UTF-8?Q?Bj=C3=B8rn_Mork?=
- <bjorn@mork.no>, USB list <linux-usb@vger.kernel.org>
-References: <9da0ac4f-12bf-4270-af6f-e08b5a89611b@rowland.harvard.edu>
- <20260313224528.dp6utjqzbdguwlbf@synopsys.com>
- <a6934c14-aeb5-40d0-865c-14199943e2a2@rowland.harvard.edu>
- <3028610a-f05a-4bc8-9037-cca152e46c52@suse.com>
- <437037d6-3fe1-4f81-b74a-21bea00725e0@rowland.harvard.edu>
- <0b45d0e4-53f8-4960-b41c-63639b496dac@suse.com>
- <4f8b9942-307b-4c31-86f3-1b7b20b34a16@rowland.harvard.edu>
- <d1674f98-cbbf-4a16-8c76-996a0494d931@suse.com>
- <abcd2076-c2d4-403d-8ab8-af747b335075@rowland.harvard.edu>
- <87a692e2-559a-4765-8321-a422751d3589@suse.com>
- <4ada5d68-56f1-41b7-82d9-463901c927db@rowland.harvard.edu>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <4ada5d68-56f1-41b7-82d9-463901c927db@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260318-husb311-v3-0-2b32e6192b9c@flipper.net>
+ <20260318-husb311-v3-2-2b32e6192b9c@flipper.net> <c7129177-1265-4bf3-9925-48146bde37bf@kernel.org>
+In-Reply-To: <c7129177-1265-4bf3-9925-48146bde37bf@kernel.org>
+From: Alexey Charkov <alchark@flipper.net>
+Date: Wed, 18 Mar 2026 14:08:18 +0400
+X-Gm-Features: AaiRm535_GbWw5AUGnVGXLuLzlNfnDHGSXBhv5FW1noP-OPW1VXZBuUsNdmUPdo
+Message-ID: <CAKTNdwHrmpLLf0Oh27Td3YG0qsGKxhDBLRh4_hL3+kGWwKFvZw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] dt-bindings: usb: richtek,rt1711h: Switch ETEK
+ ET7304 to use a fallback compatible
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Gene Chen <gene_chen@richtek.com>, 
+	Yuanshen Cao <alex.caoys@gmail.com>, Sebastian Reichel <sebastian.reichel@collabora.com>, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[flipper.net,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[flipper.net:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[synopsys.com,gmail.com,mork.no,vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_ALL(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35040-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35041-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FREEMAIL_CC(0.00)[kernel.org,linux.intel.com,linuxfoundation.org,richtek.com,gmail.com,collabora.com,vger.kernel.org,oss.qualcomm.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alchark@flipper.net,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[flipper.net:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,suse.com:dkim,suse.com:mid]
-X-Rspamd-Queue-Id: 4B3FA2B98FB
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,flipper.net:dkim,flipper.net:email,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 253B82B9B03
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 17.03.26 19:03, Alan Stern wrote:
-> On Tue, Mar 17, 2026 at 05:20:37PM +0100, Oliver Neukum wrote:
+On Wed, Mar 18, 2026 at 1:27=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+>
+> On 18/03/2026 10:23, Alexey Charkov wrote:
+> > As stated in [1], ETEK ET7304 is functionally identical to Richtek RT17=
+15,
+>
+> Functionally sounds like its functions/features. You mean the register
+> layout is identical?
 
-> You know, with a USB-2 host controller, transaction errors don't make an
-> endpoint unusable, and clear-halt isn't necessary.  I wonder if xhci-hcd
-> couldn't be adjusted to behave the same way (issuing its own clear-halt
-> internally, if that is needed).  That would make things simpler.
+Both actually. The only difference is the VID reported in registers.
+Will reflect in the wording.
 
-It could be. But do you want a HCD to generate requests to endpoint 0
-on its own without coordination with usbcore or drivers bound to interfaces
-of the device?
+> > so reflect it in the bindings via a fallback compatible.
+> >
+> > As there are various TCPCI chips by different vendors reimplementing th=
+e
+> > registers and behavior of the RT1711H/RT1715, fallback compatibles will
+> > scale better.
+> >
+> > [1]
+> > Link: https://lore.kernel.org/all/20260220-et7304-v3-2-ede2d9634957@gma=
+il.com/
+>
+> [1] should be after the URL, rather.
 
-It would be an elegant solution, but I think it would bite us into our
-posterior. E.g. what do we do if a reset is requested or somebody
-wants to suspend the device or change the configuration or a setting?
+Noted, thanks, will adjust.
 
-> Another possibility is to change usbcore to automatically unlink all
-> the endpoint's pending URBs as soon as a transaction error occurs.  Then
-> drivers wouldn't have to worry about it.  But even then, drivers would
-> need to know how to react when it happened.
+> > Signed-off-by: Alexey Charkov <alchark@flipper.net>
+> > ---
+> >  Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml | 11 ++++++=
++----
+> >  1 file changed, 7 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml=
+ b/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
+> > index 1eb611f35998..62169daddb4c 100644
+> > --- a/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
+> > @@ -18,10 +18,13 @@ description: |
+> >
+> >  properties:
+> >    compatible:
+> > -    enum:
+> > -      - etekmicro,et7304
+> > -      - richtek,rt1711h
+> > -      - richtek,rt1715
+> > +    oneOf:
+> > +      - const: richtek,rt1711h
+> > +      - const: richtek,rt1715
+>
+> That's still an enum. Don't change the format.
 
-Yes. That looks more plausible.
+Ack, will make it oneOf: enum: ..., items: ...
 
-> Reset isn't always the next step.  In some cases the driver should just
-> give up.  For instance, if the device has been unplugged.
-
-Then we do not care. Signalling and detecting an unplug is not a driver's
-task. A driver should leave enough time for that detection to happen, but
-if usbcore does not eventually tell us that a device is gone, we need
-to treat errors as genuine.
-
->> In principle we know how a reset is handled, don't we?
->> Again, we cannot know whether a driver is the first, let alone only, driver
->> to request error handling.
->> If we decide to reset there is no point in clearing a halt and resubmitting
->> URBs would be wrong.
-> 
-> In practice, does resetting ever help?  With usb-storage and uas, yes,
-> occasionally.  But those are unusual drivers; what about all the other
-> ones?
-
-They don't even try. UAS, storage and usbhid are the only drivers with
-a full error handling. usbnet has vestiges. That is about it. Others
-may try to clear a spurious halt and that's it.
-
-Generically speaking, short of giving up, what is the generic alternative?
-As far as other examples are concerned, isn't this scheme quite close
-to what SCSI does in terms of algorithm?
-
->> How else would you handle errors of this kind. It seems to me that we
->> need to make the delays and number of retries tunable, but other than that
->> what can you do generically?
-> 
-> You're right that those are the only things to be done.  The question is
-> whether they can be done in a way that will be easy for all drivers to
-> adopt.
-
-Provide defaults, again best be copied from usbhid.
-
-> Consider that while error recovery is in progress, the rest of the
-> driver has to remain essentially dormant because the endpoint cannot be
-> used.  I don't think many drivers are written to support such an
-> operating mode.
-
-Isn't that exactly what you have to do after pre_reset() and suspend()?
-Nor do you have to use this facility, do you?
-
-	Regards
-		Oliver
-
+Thanks a lot,
+Alexey
 
