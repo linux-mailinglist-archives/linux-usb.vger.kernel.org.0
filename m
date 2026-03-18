@@ -1,287 +1,171 @@
-Return-Path: <linux-usb+bounces-35083-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35084-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4FaqKLQzu2kVgwIAu9opvQ
-	(envelope-from <linux-usb+bounces-35083-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 00:22:28 +0100
+	id UPjaMWU0u2lFgwIAu9opvQ
+	(envelope-from <linux-usb+bounces-35084-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 00:25:25 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C9072C3CD7
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 00:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C0252C3D0E
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 00:25:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 24F7C30DACCE
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 23:21:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BE5EB30A756B
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 23:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A21B330D24;
-	Wed, 18 Mar 2026 23:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H2DHbpJg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCEC23563D6;
+	Wed, 18 Mar 2026 23:25:04 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 772D62E7179
-	for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 23:21:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773876114; cv=pass; b=MoUtkcZIr8L08cwHU3r22IPxSSnvIv/zIl8Y9NutxtkdS2YvV9Uqio3e83SpYS1WWATYEk8u32sjTIQNFnQDqz0JOVT0IvznJgSRWQrCjofE5OOZJ7Homki/54s3pShNiL6wDbWTPdk+0EeMqQ8EbudNWYSER8O1dpZD+a0weys=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773876114; c=relaxed/simple;
-	bh=sWPkuLJXrcBX9S3aX4yM+gQyI9/bx+U9y1A0D2W1Bz4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZbobhVUHr0paDgwYj+k7MfjSTzcWl+w4EPcRhunA46jjjg40B0rMlX0Hbh9yBbXMr9zqCrk2dENEk6xjcZMuTgFeps8Beeghwpn9t4D9gvg1M2XsNnDws6P0SMscsXVsnUeXM5umDVTspSEjxWWKCkxhenhEeK9BSsexlEBKzP4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H2DHbpJg; arc=pass smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-5091ed02c54so139461cf.1
-        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 16:21:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773876111; cv=none;
-        d=google.com; s=arc-20240605;
-        b=PsttOvjunX/LnjR/SJHjvBmoUb9HUkBjOdIyiw35lxsJjgp9op6P2Q4JBaK6upWqO7
-         Tx1zD1MiBibZCWZnZ9Eo3ytvKOIpfQFzuH6pUthvnHXBffClnIXovJcRRpfcv87E63Bs
-         +vUH09IN5eTGMSW0dT3gcv4i1kCJUSbNcJn2UKt7Zhgqd+Vg7lr5UusGLvYX28pZ8MHM
-         Vw+ipeDPguLo27D2Oe6b91CuOzfeMmBDLSiKXmC/Kz+3BFkoMjaXo8r8AZchKsnnLVdK
-         vBh85z4VGcRjVRIUfdHlzpmPk5nncOhuGuEffE9XHlexEGvAx1gdqBp+bzl/UhZzfeop
-         ORCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=m9rV6JpeFuPhu2T+JRvifOR+f3O83Iw8gXacOywKROQ=;
-        fh=0YKmFXV/YUe/CqdVjBrPEsz3H9vIvJMENN0wJIITWjw=;
-        b=eBKcdGL8+F4HVLEAY8j57Q5RcoTQiGwQ/ULcp7T5HMtTptJzFEDCveh2ls1A3uAHwf
-         2Wp9ChFGJ2m6N1lA52yzNQCnyF8Rd4U2H2xVXn3WUUU/9awUKpqOs8yFGUK4Dp6IzY77
-         ojH2yfdAVbl22WHUPR47nSkX/8PmcUVw9dskgPMlhwj98lSsDsDjxcW52OJtvBP7q6f6
-         l9D1R5ihJbYTIpmHTe0avLa0/+D6s0RHbYOnwpqOznYbvsLz2MSMz9RtdSh1SW5P5Avw
-         OY5NxwWrx6/qkI4VJFtxjvHzC77Ycqh+MCn8TpkNaNSpi16TMGUdx7NG8/cd940/zGiZ
-         KE+Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773876111; x=1774480911; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m9rV6JpeFuPhu2T+JRvifOR+f3O83Iw8gXacOywKROQ=;
-        b=H2DHbpJguw8NvIiLyeFMFnAd8A9NJl4xFdl7DohesIVytl9S61tLC/Ee1OvtUa//OV
-         7d+7iaX26PR4bl/G/I9P6eVamYnoeStGJjlaCyyJaQ3hXl08BKpmG7UvDMsM82V5vNVu
-         Ygeu0wFdZnhixWUrrsHKKlq3EApgNj6eQv/GS0FaHybmS9MHegGMJB9xTo0f+Wr6z6/7
-         j+aD1DYTrzC6C3KgLDG1B9aZCmFBSWRMVerYj5SsXmy0CLN5aV8CUppXrVmq605TgHIc
-         BtJ0x5GcwDiz9+C14QYEI2Opj/lE/LrtA5T41pgiS2tCSob4AE8BYTiBB7JfYobMrjQE
-         2X+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773876111; x=1774480911;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=m9rV6JpeFuPhu2T+JRvifOR+f3O83Iw8gXacOywKROQ=;
-        b=QemkjhEwBJ04z02VD4QgF/u+RBqN37Lv/3RYF+QTgHB2+6/qcRZm8Js2XSpyKsISNr
-         lmcoKUulcMyR4Lzzi7nlYhhlyh7agDpjQL58r1H5RndOE0k1kFgVvsFn68Ffe/8gsGv0
-         LOPGTNzx6kgPpE2rWJL7qLV6AWhHKI5JX9zTuAtt57ZzJ65IyGLnw4snTJRdDRTtF52h
-         IJic3M2FPPjT6IwpR2Glp5cVYM6J/0B79pbfF1dtmDwFikoffF8SfivHauMj3GCKK7Cz
-         eldjPU3QQ1VThHs/+eEpNsTAWRogFP6T0YaKqWBjFDWrcByTKcCS+cg9zDqrf2v5H3G0
-         fcCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVULK+7IyuODO6z4rGjmS+xhJKnURbyvpwuay+6t6ghAEGQngLK4ZCZJLJ7xsdsCdJ8bN05OmVZtz8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEsMCy4wVhBYi2UMCfXvOWn679CHi5fic3x+2GR8cwwSiLk6/v
-	qinI3UEf9YLbw3JOp3SDCeDNowDxoKGkQLzcG6s4/Cj6Dt3TMMtYgsMbSvjuro73zwvXedKsmdn
-	a3GG6E+qSrnGk8AHTccZsZ9CN4i1X8LcuHNcKdw/V
-X-Gm-Gg: ATEYQzxAjj+qOv7GDYc0Rx+MTzvpIBgmJRN2ufbQ9t6yCd1JFr3CNozwXYtFfyM38dd
-	l8oUkKtmg5p9TQsHVTx4KHfmjZ+OC440v0BDlqHYWTukwgFm/sqEZx6XtAEIsCkzPazIxd6bqLl
-	Mandrdbir0xcs2KWOsi94WpH2iaxsBYaAvR3V0zZEZt3yu10vMyKsJkLnryClLLOzgs+rGN4RZW
-	QY7K0HiBLKkLcyhzglJqETQy+3+IExatefPNZNSDQRR8rse90gymrQm6qbeXSDriUDrNBTfjLjt
-	Os3EVRjOElla
-X-Received: by 2002:a05:622a:58c:b0:509:45f:fdd2 with SMTP id
- d75a77b69052e-50b2747cab0mr3002981cf.15.1773876111071; Wed, 18 Mar 2026
- 16:21:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F443101CD
+	for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 23:25:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773876304; cv=none; b=JutPkKL2/tHgnZfmBN6CZZnyajaCzV9dH/+cgY4vBqGTwhdSb+Z7y+BRQiy58+tYSuUIYsyjgVpUW0inQEC8o3rbU8FRUTvBsRA8Z0Ve7aYi9PXbK1lsJIA/sbpqlfLPnIKjpbQXC0g5R2YdLTutD6zq9lWHOsnremqjcXd1eW4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773876304; c=relaxed/simple;
+	bh=Kd7BU1YGmlHSPedRbtFQWtnhOfWayICtYpeiwOagYS4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ambp6MyqeTPJFsV6xpWgnblVB5kc2tf9vXnGBLZO0lG9t2EkoMTWvSK1nQRfTh45xkPSPDUkY2hklrGNsGAmYCCBM++yLjwT2XkBsZZDz3XOPKGG+ZkQp45dLHonIrxknEcZwZZ14IHaiZk3JUiqEnwIpXfoyv0mhr8p0KYjeak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1w30Fx-0004SV-0J; Thu, 19 Mar 2026 00:24:53 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1w30Fw-000yxs-0I;
+	Thu, 19 Mar 2026 00:24:52 +0100
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1w30Fv-00000009G77-48Le;
+	Thu, 19 Mar 2026 00:24:51 +0100
+Date: Thu, 19 Mar 2026 00:24:51 +0100
+From: Michael Grzeschik <mgr@pengutronix.de>
+To: Hyungjung Joo <jhj140711@gmail.com>
+Cc: ericvh@kernel.org, lucho@ionkov.net, asmadeus@codewreck.org,
+	linux_oss@crudebyte.com, gregkh@linuxfoundation.org,
+	v9fs@lists.linux.dev, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] net: 9p: usbg: clear stale client pointer on close
+Message-ID: <abs0Q2Sw3WvLYFbe@pengutronix.de>
+References: <20260313171659.1225180-1-jhj140711@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260309022205.28136-1-guanyulin@google.com> <20260309022205.28136-2-guanyulin@google.com>
- <505ab422-f933-4674-8f93-8744d0e67c6d@oss.qualcomm.com>
-In-Reply-To: <505ab422-f933-4674-8f93-8744d0e67c6d@oss.qualcomm.com>
-From: Guan-Yu Lin <guanyulin@google.com>
-Date: Wed, 18 Mar 2026 19:21:00 -0400
-X-Gm-Features: AaiRm539Hmpj3e5uW-24en7eVbe4K9Ue0STys9HF6sxG6gvj_pbB9iJ_D2yzCoI
-Message-ID: <CAOuDEK3b4BtHVYhLH_NkE1fP1-9ncqvAq6VedBzWLm=D_YDHQg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] usb: offload: move device locking to callers in offload.c
-To: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
-Cc: gregkh@linuxfoundation.org, mathias.nyman@intel.com, perex@perex.cz, 
-	tiwai@suse.com, quic_wcheng@quicinc.com, broonie@kernel.org, arnd@arndb.de, 
-	christophe.jaillet@wanadoo.fr, xiaopei01@kylinos.cn, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-sound@vger.kernel.org, stable@vger.kernel.org, 
-	Hailong Liu <hailong.liu@oppo.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="+erp7nSIvu7J2s4t"
+Content-Disposition: inline
+In-Reply-To: <20260313171659.1225180-1-jhj140711@gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spamd-Result: default: False [-3.56 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35083-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,intel.com,perex.cz,suse.com,quicinc.com,kernel.org,arndb.de,wanadoo.fr,kylinos.cn,vger.kernel.org,oppo.com];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[guanyulin@google.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[google.com:+];
-	NEURAL_HAM(-0.00)[-0.976];
+	TAGGED_FROM(0.00)[bounces-35084-lists,linux-usb=lfdr.de];
+	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	DMARC_NA(0.00)[pengutronix.de];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0C9072C3CD7
+	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mgr@pengutronix.de,linux-usb@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.486];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 2C0252C3D0E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Mar 17, 2026 at 4:17=E2=80=AFPM Wesley Cheng
-<wesley.cheng@oss.qualcomm.com> wrote:
+
+--+erp7nSIvu7J2s4t
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi
+
+On Sat, Mar 14, 2026 at 02:16:59AM +0900, Hyungjung Joo wrote:
+>p9_usbg_close() tears down the client transport, but usb9pfs keeps
+>using usb9pfs->client from asynchronous TX and RX completion handlers.
+>A late completion can therefore dereference a client that has already
+>been freed during mount teardown.
 >
-> On 3/8/2026 7:22 PM, Guan-Yu Lin wrote:
-> >
-> > @@ -27,31 +28,25 @@ int usb_offload_get(struct usb_device *udev)
-> >   {
-> >       int ret;
-> >
-> > -     usb_lock_device(udev);
-> > -     if (udev->state =3D=3D USB_STATE_NOTATTACHED) {
-> > -             usb_unlock_device(udev);
-> > +     device_lock_assert(&udev->dev);
-> > +
-> > +     if (udev->state =3D=3D USB_STATE_NOTATTACHED)
-> >               return -ENODEV;
-> > -     }
-
-Could be removed. Since the udev is in USB_STATE_NOTATTACHED. I expect
-the data structure being cleaned afterwards, so actually counter value
-might not be important at this moment.
-
-> >
-> >       if (udev->state =3D=3D USB_STATE_SUSPENDED ||
-> > -                udev->offload_at_suspend) {
-> > -             usb_unlock_device(udev);
-> > +         udev->offload_at_suspend)
-> >               return -EBUSY;
-> > -     }
-> >
-
-This check is still required. Because the suspend/resume process
-depends on the counter value, we can't modify the counter value while
-the device is suspended. If we do so, we will have an unbalanced
-suspend resume operation.
-
-However, we might only need to check for udev->offload_at_suspend (if
-we ensure the device is active when we want to incremant the counter):
-1. If the offload_usage_count is 0, we won't decrement counts at this momen=
-t.
-2. If the offload_usage_count is not 0, the offload_at_suspend flag
-will be true anyway.
-
+>Clear usb9pfs->client under usb9pfs->lock when closing the transport,
+>detach any pending TX request from in_req->context, and make the TX/RX
+>completion handlers bail out once the transport has been detached. This
+>keeps late completions from touching a freed or rebound p9_client.
 >
-> Do we really need to be explicitly checking for the usb device state befo=
-re
-> we touch the offload_usage count?  In the end, its a reference count that
-> determines how many consumers are active for a specific interrupter, so m=
-y
-> question revolves around if we need to have such strict checks.
+>Fixes: a3be076dc174 ("net/9p/usbg: Add new usb gadget function transport")
+>Cc: stable@vger.kernel.org
+>Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+I wonder where greg did this review? Was this in another thread?
+
+I will have to drop this anyway, when splitting it appart.
+
+>Signed-off-by: Hyungjung Joo <jhj140711@gmail.com>
+>---
+> net/9p/trans_usbg.c | 63 +++++++++++++++++++++++++++++++++------------
+> 1 file changed, 47 insertions(+), 16 deletions(-)
 >
 
-Please find the explanation for each check above.
+=2E..
 
-> >       /*
-> >        * offload_usage could only be modified when the device is active=
-, since
-> >        * it will alter the suspend flow of the device.
-> >        */
-> >       ret =3D usb_autoresume_device(udev);
-> > -     if (ret < 0) {
-> > -             usb_unlock_device(udev);
-> > +     if (ret < 0)
-> >               return ret;
-> > -     }
-> >
->
-> IMO this should be handled already by the class driver, and if not, what =
-is
-> the harm?
->
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
-We can only increment the usage count when the device is active. For
-counter decrement, the device could be in any state.
+--+erp7nSIvu7J2s4t
+Content-Type: application/pgp-signature; name="signature.asc"
 
-My initial design is to resume the device and then modify the usage
-count. Another option is to check only whether the USB device is
-active via pm_runtime_get_if_active, and leave the device-resuming
-effort to the class driver. Do you think this is the better approach?
+-----BEGIN PGP SIGNATURE-----
 
-> >       udev->offload_usage++;
-> >       usb_autosuspend_device(udev);
-> > -     usb_unlock_device(udev);
-> >
-> >       return ret;
-> >   }
-> > @@ -64,6 +59,7 @@ EXPORT_SYMBOL_GPL(usb_offload_get);
-> >    * The inverse operation of usb_offload_get, which drops the offload_=
-usage of
-> >    * a USB device. This information allows the USB driver to adjust its=
- power
-> >    * management policy based on offload activity.
-> > + * The caller must hold @udev's device lock.
-> >    *
-> >    * Return: 0 on success. A negative error code otherwise.
-> >    */
-> > @@ -71,33 +67,27 @@ int usb_offload_put(struct usb_device *udev)
-> >   {
-> >       int ret;
-> >
-> > -     usb_lock_device(udev);
-> > -     if (udev->state =3D=3D USB_STATE_NOTATTACHED) {
-> > -             usb_unlock_device(udev);
-> > +     device_lock_assert(&udev->dev);
-> > +
-> > +     if (udev->state =3D=3D USB_STATE_NOTATTACHED)
-> >               return -ENODEV;
-> > -     }
-> >
-> >       if (udev->state =3D=3D USB_STATE_SUSPENDED ||
-> > -                udev->offload_at_suspend) {
-> > -             usb_unlock_device(udev);
-> > +         udev->offload_at_suspend)
-> >               return -EBUSY;
-> > -     }
-> >
->
-> During your testing, did you ever run into any unbalanced counter issues
-> due to the above early exit conditions?
->
-> I guess these are all just questions to see if we can remove the need to
-> lock the udev mutex, and move to a local mutex for the offload framework.
-> That would address the locking concerns being brought up by Greg, etc...
->
-> Thanks
-> Wesley Cheng
->
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmm7NEAACgkQC+njFXoe
+LGS87RAAlXg50t73dUaoyzCA1jdI9UPra00KAQduhdJCA6lmuNIhjvfoORqsCzCv
+WYzfAWW+WjHSsNS+3BVPHtygcsqV/qhySKXfb2FJGmv104fHwACpTlENrEaczo8z
+vaSVO0DiYnIQcJaVjKz2IRVuYYPOGOupc+Uipv+/y6a1h1Gnzv65XgMA2rAMmx5g
+xKStC01/rXBtYJlMnwWn6jgRVquZ0zUhstm/4gPuplf7kN4e1NjZTLbbkHj2ERQg
+ltVjzmMpkYrYIfrBkaMRx3gAEsg4DPp1v2bZ8M87u/pLj3yXEPr9Iog7+Zg7Lhwt
+dC9u99dsLQAXYUylVWeoHLmuh1gwsPcSieUYG1x9L3FyTF5jaxu+cVq42IWpo6mZ
+eF2GpE1C3b/9cEMuAQ/AjPTqSIoDdN4ae0MkEp/o7+dCJWtzq7/I6WGnhTgOJkPD
+GFooKEUZvsMttQ1UAg+drK0MMzL3UATjwc3tRdBuSqp/H71X9CzHxFnrqmruWB86
+kyJxxVlT/6lpp0yjf0pPd1uogMxN5d0M7y6dFBDkB/ao7Wfx/hSyJwW7KvQuq7dH
+zgWH6hes0Om4qR0MOGeIkAB3D4U8h+kCWbDw3IiGqyNfOOt6pPemOeDvtcGrExQk
+QrRv8xm/SA52AiK263E8irdddJRBgxNM0Q916QpLoW7S/otbkBw=
+=DIlH
+-----END PGP SIGNATURE-----
 
-While developing the initial patch set, I did encounter the counter imbalan=
-ce.
-
-Following the discussion, we could move the device resume effort to
-the class driver. This way we only need to check if the device is
-active before manipulating the offload usage counter, which doesn't
-require a device lock. Is there any concern with this approach?
-
-Regards,
-Guan-Yu
+--+erp7nSIvu7J2s4t--
 
