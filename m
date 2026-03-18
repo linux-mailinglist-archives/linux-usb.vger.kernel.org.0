@@ -1,177 +1,199 @@
-Return-Path: <linux-usb+bounces-35074-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35075-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SB0fEpX2umlvdgIAu9opvQ
-	(envelope-from <linux-usb+bounces-35074-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 20:01:41 +0100
+	id OBAZNXkbu2k+fAIAu9opvQ
+	(envelope-from <linux-usb+bounces-35075-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 22:39:05 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0C912C1BBD
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 20:01:40 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 409C62C318A
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 22:39:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D456F30B4E49
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 18:57:19 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9160D301DEC9
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 21:39:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32BC63EAC7D;
-	Wed, 18 Mar 2026 18:57:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F2438944D;
+	Wed, 18 Mar 2026 21:38:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="a8tF8qJ0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G/VeEBQw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f226.google.com (mail-qt1-f226.google.com [209.85.160.226])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7902C8462
-	for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 18:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B2033121E
+	for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 21:38:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773860238; cv=none; b=JKsFaZ8auyOHtch88A2sWpCp3j/vKwMEUAzC8X8Dy84IrsuTRx2grPiaicbxWQnfXclocC+kFsDVmLlqJAGKj2N+0/e2G9p8SJ61vN1dtAFjODuG1vjOLCzOG/vIuUfUk4iqUGQrGEkHzHNy9+2ZBoWdh43GknfIheInXin9Nyk=
+	t=1773869939; cv=none; b=Tw0/+8MBE/HNkTURe7W2iL0Vtkwucp916y7Sm1piV31m+4pfnsFkcj/oPNil2rxsOe8k/CNis4/TI90D+A57LBm1q37Seo9PU8hjrQ8JO3fb0mId7leothrES9zxd9zmKBJI7BcY4/EJgmMDoPwzv7jbflKoXoj+Eg6rLc2p4C4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773860238; c=relaxed/simple;
-	bh=3gUh26W00SykE7bH+fRcJFUFxFQ5Gw2NgHrDmNwaDKg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fAE8MuRPXvV5G5DZEIDliSs6QXEbX4HwbFDpwFhYmB9gYBHgC0HfMWwXwpg4GkDhsOW1RCk8kLxde4FUVq8bSqJ5jsFe28kRD37mtliErKSZG8oJm5Ayb6gZZUcWfGbWZh3sDNnaL6HM+h1zc3aLpPRxaIDK9e3hCMJr/6z4ft8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=a8tF8qJ0; arc=none smtp.client-ip=209.85.160.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-qt1-f226.google.com with SMTP id d75a77b69052e-50b268fba9aso67161cf.3
-        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 11:57:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773860236; x=1774465036;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Flu5UveNjIetWU8TueZBFMn5Xph19iZ6ffxaF9uvm+M=;
-        b=kfUO5IxpUzP1pXQdqejwb1bVEudaG4uF+CQi+ftsu0fmZqxxGVUyaWnekoJceKNR20
-         trKbIzBbOstcyoWBauvQi8Ug8ZI56D9lHYYK0BaztGO+lwsnT3oBCMzeefgJsHdJ2Ivx
-         dQ7CQ7MaDnd5FUR1wZXepHzBYS32eNsq9XT6uEAL2UC7LS3lMZBchAYMIE1n85NmQXvl
-         M3Qa3/vh3RVUFpir+aLk+8Z0WKi9o0pIiSiJSnRSIYT+xR7exYD/J5cazzUJpAP8l5Ag
-         LQIyS6AV3Pw8rTpbt7OXh7VZN7sFbSslJgypZ+LO0mM0mMW+J1F6Lbqv8hLFISheeKwA
-         oEhQ==
-X-Gm-Message-State: AOJu0Yz/8mbJEvnL7iXY7EmmKikQT5DBZ+RphdZPIkDCHrf+Qx4d8tKG
-	bS3KNPaijpZnOo5pmW/8BoYUf/zTY5DXRoHVKg+z2YDKguQmU1320ysU5exUqPQ1V2ntNZe1PH7
-	cyLb8hdIFXzzuh3bqOGAppGsEdDqI2VH2JkR8efF04JAWFsxEFLqOhPvI961Rtwd1I4VQZDAIFD
-	+eQNU5VJ7Z7aVQXA97q4nTfQJMAaRPYcCSqc2o/F8sTXI6qoC1pAp0lhz5MjIaQ3YcEsdJkxrng
-	sKM1z+vgH5Mmw==
-X-Gm-Gg: ATEYQzwqyHm9nJNNCw0lNrhdOvd6DU9UN9AL0cxHzwlFkXYZafPxtiR3KJwLGFUwNo8
-	XfiVPTn2zvOnGWgO3kRKPm4X7rDNY6o+O8xnxX+AfPpxp4b3X4wAomENfkwcFMoTsMuOekR88yl
-	dT4hURzbdQFJQoCRnHRtYKD1U2MAAHEsXdOZnWBqhxPt7nGrTZKQtf9ianf8aC6vsLhbSBA+1n5
-	iMPs4W+eBfhR+le/M/Fylj9+9lBA5v1A2FF2zZ0gVWifyIjF9BGuA/T5ul5Kcmgq0fna2TTax/8
-	QpLMwEpX7wYCOWaJurGYk3XCRHdimYfx2Zhplbq5zprpW02B/xlRutMFcs+e48x7IPBArNb3kM4
-	ljXnF8l7Jm9wq0B17nmXY3nuP5yYciXcnAKIQBK3EV7MfK3m5qWKthT13uI8sK5WOJvoiUzGKkQ
-	YdBet13w9FuSQqNcm+V4bfrKysinkf1YkPsCUx+MB/RdLkK3+NQ+hATJU=
-X-Received: by 2002:a05:622a:120e:b0:4ed:b0f9:767f with SMTP id d75a77b69052e-50b148ff8a3mr57081451cf.70.1773860236351;
-        Wed, 18 Mar 2026 11:57:16 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-22.dlp.protect.broadcom.com. [144.49.247.22])
-        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-89c6b9999adsm3543326d6.16.2026.03.18.11.57.16
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 18 Mar 2026 11:57:16 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-5094741c1c1so10821261cf.1
-        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 11:57:16 -0700 (PDT)
+	s=arc-20240116; t=1773869939; c=relaxed/simple;
+	bh=7xHKWV5i7GmMMl5Tndi7nZMwAPSoXhuCYmtydDBY5iM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RNnVsrUquf+ztFkROeZWJwnKm8E1nN+YbldPOLY+nJqd3WxFEnOncnA/TWRWnPPguuooEK3pTRjt54mqzeBhcBLSd3Hwab8iXMeEXrD2HUhHnrpKUtf7+u/wdPqKy+gKXYFAjAEIOJBp8C3mfg8DP5QapyjYeW0VCdt2kwZC8Cw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G/VeEBQw; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-667cc4ec065so665346a12.1
+        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 14:38:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1773860235; x=1774465035; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Flu5UveNjIetWU8TueZBFMn5Xph19iZ6ffxaF9uvm+M=;
-        b=a8tF8qJ0tMWryAuH+pV1NCRzQ063JnNM13h3GYCtw4VHecpYqwcrDymbJxzYSliwfZ
-         skF4le5Tl4rF+JbZVI9WJUAg91gKg1rbuLGg2H3nQN6zbJQCUK6WHhhm0lf3si5xTbE3
-         yt3bHqHw/0SA1njAp1p2osr7zOahTVrh3GIog=
-X-Received: by 2002:ac8:7f81:0:b0:509:aa4:4a02 with SMTP id d75a77b69052e-50b147d5dadmr57622861cf.29.1773860235458;
-        Wed, 18 Mar 2026 11:57:15 -0700 (PDT)
-X-Received: by 2002:ac8:7f81:0:b0:509:aa4:4a02 with SMTP id d75a77b69052e-50b147d5dadmr57622381cf.29.1773860234876;
-        Wed, 18 Mar 2026 11:57:14 -0700 (PDT)
-Received: from stbsdo-bld-1.sdg.broadcom.net ([192.19.161.248])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50b1dfcfd2bsm14511001cf.29.2026.03.18.11.57.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 11:57:14 -0700 (PDT)
-From: justin.chen@broadcom.com
-To: linux-usb@vger.kernel.org
-Cc: f.fainelli@gmail.com,
-	andy.shevchenko@gmail.com,
-	gregkh@linuxfoundation.org,
-	stern@rowland.harvard.edu,
-	bcm-kernel-feedback-list@broadcom.com,
-	alcooperx@gmail.com,
-	Justin Chen <justin.chen@broadcom.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>
-Subject: [PATCH v2] usb: ehci-brcm: fix sleep during atomic
-Date: Wed, 18 Mar 2026 11:57:07 -0700
-Message-Id: <20260318185707.2588431-1-justin.chen@broadcom.com>
-X-Mailer: git-send-email 2.34.1
+        d=gmail.com; s=20230601; t=1773869936; x=1774474736; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W130VUJDJizIXm31y/fCiZ9jz3FQWHVyVVncG2vL5dQ=;
+        b=G/VeEBQwiDI4DvPDh7dzeCkNpg6NycPCLA7EgOSPnzXSywZW4TgCTHaZokDxlsAq0u
+         N1o+yR/PXkLJQut23zwyloexSz2QkAMRAXIt2WHrPIeiuoK6Ascz9oYqRpxQwfx6nDa0
+         T+tt3tWZxp0d6y87yE9WLqtiHIIvwqGy5Su1BD9t78dgvFpY8XLZo1NV1oAtyO0Z0cB0
+         ORiRT5VAW1vnxafPAVJdYvxUwcKESIJ+nA8y0VMpHbeUG6n3AVWpRKQzT/Ys46HjmhEQ
+         dVoIZtFPbcvlSaFuoLTxjnp/jEBJ/SKb0GrLxt9y9+PPB/XqPAJ/eZDr71Eqs4udVdjh
+         kdPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773869936; x=1774474736;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=W130VUJDJizIXm31y/fCiZ9jz3FQWHVyVVncG2vL5dQ=;
+        b=RM6vPsIqXN91g1tnoNRBC9Iw0f1cE3F4jjlMBEctnSkYx0E8pRiUDqQY5mINJDPHxx
+         4reXnjlzg0MTOgvIUXljPjicLtereRmcEIcF0urSSKL05e6of8AS1FwXt5s83Dj0TIy1
+         sxufsvTX9T7KkDwuv1WYphDr+vSpiwfppr1BzPFhblbvkobZ5QkGmdkOMf0gYQEIxfat
+         1VDqboL3o9j/qH/tYaZtIQj/kbxzDUg93kAv8GWf7d5/AWgaWVmSG3z0l3zbmR0mhCbu
+         0vNO5UseviQdStv4ixntCWPJ4EYubSGsU3vHnCvEMRKeBdeaiIjJ3rxhvvz72/WDrX9o
+         l2bA==
+X-Forwarded-Encrypted: i=1; AJvYcCV+murGKvui7pRBjZHk0z3PKCHSeb34L8AGwq3ncwwXXFFD6bpZqoR7Dq17Su0nhATMNDRj4kIg1hU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1nRtx+fhWJg3zfH5QV12dd5jnWi4wMPlYKpZEzO6XoyrzKvuG
+	fKh74gs8nRkiJSAlbay9O9VnJjCEgIRRIo2oMp631JYs3aWkTqNdwhW8
+X-Gm-Gg: ATEYQzx4FM9LjpkY5qlNN9PWPPJXGuV11p3IlRgj9NtPzXm9NDoIx/s4HjlIMpilEBq
+	iHb7mq141Msupbo1cxt3yHF+1ATuZJHYQHJH1ycjadcXGWd0PhVzY1IJ8fbRKjfceSKTNzZAj8g
+	M/pEuPobfCKCAzL6Bf1/PRb233SbG4CtJVLmqAG8X/ZhMz5LWjeB8VVb47z2C4/3YG6qCsWnLiS
+	3oFPwmXuprM4AQKkpgu/PWvt12AStE19yNrKnRNPsx+kBHujp4nAuR7yXaMkzRyvRmA5a2skdmU
+	LBrzNN8MQ1m9Oq6XBDPCdCDGk3Iw8bLio6CL54sW6lvccZS8lslvp9wu0T4bDCcL0WKoGg/Pet/
+	EqwPYNo79zUG8psYEjlmt1Q+BDnJw8ffItC3jSZpa8zKd2Zl3avBsLgeMSfct3yQDTbez+ieOQg
+	GX6xdaUkYYQ0owtyAVOJ29H3wN1fe7Pm+Qcro=
+X-Received: by 2002:a17:907:d853:b0:b97:b9ff:f2f with SMTP id a640c23a62f3a-b97f4808e2fmr278890866b.20.1773869935795;
+        Wed, 18 Mar 2026 14:38:55 -0700 (PDT)
+Received: from foxbook (bfk214.neoplus.adsl.tpnet.pl. [83.28.48.214])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b97f1689e66sm302898866b.36.2026.03.18.14.38.54
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 18 Mar 2026 14:38:55 -0700 (PDT)
+Date: Wed, 18 Mar 2026 22:38:51 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Oliver Neukum <oneukum@suse.com>, Thinh Nguyen
+ <Thinh.Nguyen@synopsys.com>, =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>, USB
+ list <linux-usb@vger.kernel.org>
+Subject: Re: correctly handling EPROTO
+Message-ID: <20260318223851.1f6d07d7.michal.pecio@gmail.com>
+In-Reply-To: <b0217cdc-f263-418c-b8b5-584520d0b1db@rowland.harvard.edu>
+References: <a6934c14-aeb5-40d0-865c-14199943e2a2@rowland.harvard.edu>
+	<3028610a-f05a-4bc8-9037-cca152e46c52@suse.com>
+	<437037d6-3fe1-4f81-b74a-21bea00725e0@rowland.harvard.edu>
+	<0b45d0e4-53f8-4960-b41c-63639b496dac@suse.com>
+	<4f8b9942-307b-4c31-86f3-1b7b20b34a16@rowland.harvard.edu>
+	<d1674f98-cbbf-4a16-8c76-996a0494d931@suse.com>
+	<abcd2076-c2d4-403d-8ab8-af747b335075@rowland.harvard.edu>
+	<87a692e2-559a-4765-8321-a422751d3589@suse.com>
+	<4ada5d68-56f1-41b7-82d9-463901c927db@rowland.harvard.edu>
+	<8a14fe29-0d92-4ce5-a7e2-2c084c710727@suse.com>
+	<b0217cdc-f263-418c-b8b5-584520d0b1db@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[broadcom.com,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[broadcom.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmail.com,linuxfoundation.org,rowland.harvard.edu,broadcom.com];
+	TAGGED_FROM(0.00)[bounces-35075-lists,linux-usb=lfdr.de];
+	TO_DN_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35074-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[broadcom.com:+];
-	FROM_NO_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.954];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[justin.chen@broadcom.com,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.979];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: A0C912C1BBD
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 409C62C318A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Justin Chen <justin.chen@broadcom.com>
+On Wed, 18 Mar 2026 13:46:26 -0400, Alan Stern wrote:
+> On Wed, Mar 18, 2026 at 10:54:20AM +0100, Oliver Neukum wrote:
+> > On 17.03.26 19:03, Alan Stern wrote:
+> > > You know, with a USB-2 host controller, transaction errors don't
+> > > make an endpoint unusable, and clear-halt isn't necessary.
 
-echi_brcm_wait_for_sof() gets called after disabling interrupts
-in ehci_brcm_hub_control(). Use the atomic version of poll_timeout
-to fix the warning.
+Depends on what you mean by "usable". If you get EPROTO reading from
+a Transaction Translator and the TT discards the packet (because of
+timeout on Int or by explicit SW request on Bulk) then not only is the
+particular packet lost because the device got its ACK and moved on, but
+I suspect the next packet will be dropped too due to toggle mismatch.
 
-Fixes: 9df231511bd6 ("usb: ehci: Add new EHCI driver for Broadcom STB SoC's")
-Signed-off-by: Justin Chen <justin.chen@broadcom.com>
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
-v2
-- Fix fixes tag formatting.
+Granted, EPROTO outside of disconnections is apparently rare enough
+that a horde of users demanging this to be fixed hasn't materialized.
 
- drivers/usb/host/ehci-brcm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I found simple ways to produce recoverable EPROTO at low/full speed,
+but no such luck with higher speeds so far. It would be helpful.
 
-diff --git a/drivers/usb/host/ehci-brcm.c b/drivers/usb/host/ehci-brcm.c
-index 888e8f6670d2..5e3156f94cc6 100644
---- a/drivers/usb/host/ehci-brcm.c
-+++ b/drivers/usb/host/ehci-brcm.c
-@@ -31,8 +31,8 @@ static inline void ehci_brcm_wait_for_sof(struct ehci_hcd *ehci, u32 delay)
- 	int res;
- 
- 	/* Wait for next microframe (every 125 usecs) */
--	res = readl_relaxed_poll_timeout(&ehci->regs->frame_index, val,
--					 val != frame_idx, 1, 130);
-+	res = readl_relaxed_poll_timeout_atomic(&ehci->regs->frame_index,
-+						val, val != frame_idx, 1, 130);
- 	if (res)
- 		ehci_err(ehci, "Error waiting for SOF\n");
- 	udelay(delay);
--- 
-2.34.1
+> > > I wonder if xhci-hcd couldn't be adjusted to behave the same way
+> > > (issuing its own clear-halt internally, if that is needed). That
+> > > would make things simpler.
+> > 
+> > It could be. But do you want a HCD to generate requests to endpoint
+> > 0 on its own without coordination with usbcore or drivers bound to
+> > interfaces of the device?
 
+I believe the intent is to maintain the illusion that drivers can just
+resubmit the failed URB and have that become a proper retry.
+
+It likely could be done, but it's still not the same thing as old HCDs
+are doing because it opens the possibility of double delivery, while
+closing the possibility of further packet loss speculated about above.
+
+Question is if this illusion is worth fighting for, when
+1. it hasn't been 100% reliable since at least USB 2.0 and TTs
+2. USB-IF keeps creating problems for software trying to be like that
+3. xhci-hcd has been this mess for 15 years without loud complaints
+
+What should an HCD do if such request fails? Just refuse URBs?
+
+> Michal should be the person to answer these questions.  I guess that
+> a clear-halt is necessary for synchronizing an xHCI host controller
+> with the device's endpoint after an error, but I don't really know.
+> Maybe it's necessary only for USB-3 devices?
+
+Strictly, it's the opposite - synchronize the device with the host
+having already zeroed its toggle or SuperSpeed sequence number.
+
+Such toggle mismatch at USB2 speeds results in loss of next packet.
+
+AFAIU, SuperSpeed sequence mismatch is covered by USB3 8.11, which says
+"discard with no response", so maybe we would keep getting EPROTO due
+to timeouts while wrong number is being retried, but not sure.
+
+Resetting host sequence state is not mandatory, but the alternative is
+intended for retrying the same URB, not another identical one. That
+would be an edge case possibly exercised by no SW other than Linux.
+
+Regards,
+Michal
 
