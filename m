@@ -1,66 +1,66 @@
-Return-Path: <linux-usb+bounces-35079-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35080-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KEWgFYAmu2kcfwIAu9opvQ
-	(envelope-from <linux-usb+bounces-35079-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 23:26:08 +0100
+	id WIr6MYImu2kcfwIAu9opvQ
+	(envelope-from <linux-usb+bounces-35080-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 23:26:10 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6C722C35AC
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 23:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BB692C35B3
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 23:26:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C02A1303102B
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 22:26:05 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AEA253031B27
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 22:26:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07EBA36F41F;
-	Wed, 18 Mar 2026 22:26:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE853372ED7;
+	Wed, 18 Mar 2026 22:26:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y8ljsXIY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X/uZAkJi"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65EFC3093B8
-	for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 22:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC37372664
+	for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 22:26:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773872764; cv=none; b=Fffjm7oLzmkSN/9nKXkcA3KK3wIE0CXJRlBvEJr4rm7YHoy3gOwFlhNAu4JFQ2ApZ9eE0Oyp/VHP6pCTVVeZbazHMSMbx6k8qS0f7QgwXevbTN/kVyyC1HBCxIHQBqol0LRtbqAYImoENLq3gdn6rKdLiJdUpB2g3eH9gZK4bbg=
+	t=1773872766; cv=none; b=blsIF/IytDTf6EGjvRx69gbq+6qmL4N4VSHLf1Y5tSoaQIAtgCzAIU4g+3Wc34qZi2/pdFLBNsuoeyfJWIiWPjPI2alx4ZOteQzL4PYGcrGkJNExmGpw9Fd7w8tsVDS2FXTnvRynekUQ7njkhdktpWnMtWcnSH8lsNG1L96/yfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773872764; c=relaxed/simple;
-	bh=nru6dcxCt9Y8Sq8MK94VWdxU6NLM5sFp48Rf2rwlEPk=;
+	s=arc-20240116; t=1773872766; c=relaxed/simple;
+	bh=nn1C/vkwRATUTXPf9w+9qzyhg42U0CLlVCzclYeWbog=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=btzgRfFEytvt+npcbzbBlI1MyAJ3UxreIpDFZgmRHKbPB+8/Sb/XmjCMcQY1V392WawHI//jW0kxX+Fz41eM4BI9hznxS19yEuaZeKw0HhycDrXQCiYW0XDCkRpF1xcOKIyHx8RCdGbtGSUNNEM4l1Xc7HwrpXalM7z6Tgu8sCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y8ljsXIY; arc=none smtp.client-ip=198.175.65.20
+	 MIME-Version; b=Ip+KZ/Uq8Uc2FkWPm6m5M+gH61N/TpIFsL3QBwA7SnCZcETfzBZl+evm0q5BU2uHy8INd+EoGEqTtFeV9zLwBPwTQWIR2fHzQi1uhIvKpq14DPjMWXs1TPevEaf1/5I0R4+d9SOt2pQzRMokKwNdRD6MGLnmPxgBaNVNfhvHiKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X/uZAkJi; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773872764; x=1805408764;
+  t=1773872765; x=1805408765;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=nru6dcxCt9Y8Sq8MK94VWdxU6NLM5sFp48Rf2rwlEPk=;
-  b=Y8ljsXIYO+gBct69dNMwHACwKiMD2GocgG93Cso7+TvjiqlQlW8QK48V
-   r1p85cHYtfyo7NZ2WcaNSn34zXkeaO/B78r/RnNPZY7TIhW/Wwfq5LSf7
-   rcfcsi2tIQKsznQSRkjBBTLaYGlQ8eIppzmBF2Mhgi86kEAa/abDIlbuz
-   qKd2vjwECepA11qp3BIkTcnicKLIqyC7UnjtE93iQ3LpovFmrJVre+2rm
-   jAlUiZ49MerxweKFjtWxoauqbh9PA1Rk7IofLZLGALO54El8EH44mFPww
-   Q70GkW9NhidbwtBltlMA+hXlTXPDmiz+Vxzk4Xj4mSg6BrADQhg/sjO5x
+  bh=nn1C/vkwRATUTXPf9w+9qzyhg42U0CLlVCzclYeWbog=;
+  b=X/uZAkJiOiRVV2hwY6SxGXv0RYlD75jwFYqPkLnbTxwet5pSUpnPCif2
+   aRzZbvZEkuuTb54nyEMVrZsZln8CILMGLwlu2rnYatqipa924dn0Mt5n0
+   aoQu4ASmYE3dlwqk88XJpbiJr6jTNQw3qDTNV9MXT+Ep2xcTDgSHWrs/k
+   E11jxhfmzcDYTFghMfPNrFQ6e0rYaTw70GrMERGgdEdE6/FnrcS1GCOYK
+   AmUplKejgmqjROJeOnCB7ebZLBPtcqs3UxBqLE2QWb5QU0Gf5i3snVTs7
+   F3AXIJI8fENT5uwMMV2J6xeY0sMOSb6IqYpWFFFErPPNylvrmiL66C/uD
    w==;
-X-CSE-ConnectionGUID: tVjeheCRQJq61MC0Fd8u7A==
-X-CSE-MsgGUID: PEO3sPwRTSKtHW4tdI8GWA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11733"; a="74637581"
+X-CSE-ConnectionGUID: qgD+TDE1QJC9c0L87njMJA==
+X-CSE-MsgGUID: PjryXpM9T5i6bc8gna4hYQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11733"; a="74637590"
 X-IronPort-AV: E=Sophos;i="6.23,128,1770624000"; 
-   d="scan'208";a="74637581"
+   d="scan'208";a="74637590"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2026 15:26:04 -0700
-X-CSE-ConnectionGUID: j0RyHoxJRF29D72O9bQfUg==
-X-CSE-MsgGUID: IjvaIDd+R723PtGmuxj29g==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2026 15:26:05 -0700
+X-CSE-ConnectionGUID: X/Mh8cOzQkmmSCRxGzej8A==
+X-CSE-MsgGUID: brNUwE5KSl6kvLOpvuSpig==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,128,1770624000"; 
-   d="scan'208";a="227467452"
+   d="scan'208";a="227467471"
 Received: from clke07vm102.fm.intel.com (HELO clke07vm102.amr.corp.intel.com) ([10.80.128.226])
-  by fmviesa005.fm.intel.com with ESMTP; 18 Mar 2026 15:26:03 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 18 Mar 2026 15:26:04 -0700
 From: Pooja Katiyar <pooja.katiyar@intel.com>
 To: linux-usb@vger.kernel.org
 Cc: gregkh@linuxfoundation.org,
@@ -69,9 +69,9 @@ Cc: gregkh@linuxfoundation.org,
 	johan@kernel.org,
 	asutosh.pathak@intel.com,
 	Pooja Katiyar <pooja.katiyar@intel.com>
-Subject: [PATCH 2/3] usb: typec: ucsi: Enable debugfs for message_out data structure
-Date: Wed, 18 Mar 2026 15:25:30 -0700
-Message-ID: <fd1d0eb97753925b5621c7913576b899c024cfa1.1773090896.git.pooja.katiyar@intel.com>
+Subject: [PATCH 3/3] usb: typec: ucsi: Add support for SET_PDOS command
+Date: Wed, 18 Mar 2026 15:25:31 -0700
+Message-ID: <094d91e68592804d4851c6fec1aecc86df785587.1773090896.git.pooja.katiyar@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1773090896.git.pooja.katiyar@intel.com>
 References: <cover.1773090896.git.pooja.katiyar@intel.com>
@@ -93,7 +93,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35079-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35080-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -102,106 +102,64 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-0.987];
+	NEURAL_HAM(-0.00)[-0.986];
 	DKIM_TRACE(0.00)[intel.com:+];
 	TAGGED_RCPT(0.00)[linux-usb];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C6C722C35AC
+X-Rspamd-Queue-Id: 8BB692C35B3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add debugfs entry for writing message_out data structure to handle
-UCSI 2.1 and 3.0 commands through debugfs interface.
-
-Users writing to the message_out debugfs file should ensure the input
-data adheres to the following format:
-1. Input must be a non-empty valid hexadecimal string.
-2. Input length of hexadecimal string must not exceed 256 bytes of
-   length to be in alignment with the message out data structure size
-   as per the UCSI specification v2.1.
-3. If the input string length is odd, then user needs to prepend a
-   '0' to the first character for proper hex conversion.
-
-Below are examples of valid hex strings. Note that these values are
-just examples. The exact values depend on specific command use case.
-
-        #echo 1A2B3C4D > message_out
-        #echo 01234567 > message_out
+Add support for UCSI SET_PDOS command as per UCSI specification v2.1 and
+above to debugfs.
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Signed-off-by: Pooja Katiyar <pooja.katiyar@intel.com>
 ---
- drivers/usb/typec/ucsi/debugfs.c | 26 ++++++++++++++++++++++++++
- drivers/usb/typec/ucsi/ucsi.h    |  3 +++
- 2 files changed, 29 insertions(+)
+ drivers/usb/typec/ucsi/debugfs.c | 5 +++++
+ drivers/usb/typec/ucsi/ucsi.h    | 4 ++++
+ 2 files changed, 9 insertions(+)
 
 diff --git a/drivers/usb/typec/ucsi/debugfs.c b/drivers/usb/typec/ucsi/debugfs.c
-index a4b9a6b51649..be987e53a8bd 100644
+index be987e53a8bd..ff33a5e7c6b0 100644
 --- a/drivers/usb/typec/ucsi/debugfs.c
 +++ b/drivers/usb/typec/ucsi/debugfs.c
-@@ -110,6 +110,30 @@ static int ucsi_vbus_volt_show(struct seq_file *m, void *v)
- }
- DEFINE_SHOW_ATTRIBUTE(ucsi_vbus_volt);
- 
-+static ssize_t ucsi_message_out_write(struct file *file,
-+				      const char __user *data, size_t count, loff_t *ppos)
-+{
-+	struct ucsi *ucsi = file->private_data;
-+	int ret;
-+
-+	char *buf __free(kfree) = memdup_user_nul(data, count);
-+	if (IS_ERR(buf))
-+		return PTR_ERR(buf);
-+
-+	ret = hex2bin(ucsi->debugfs->message_out, buf,
-+		      min(count / 2, sizeof(ucsi->debugfs->message_out)));
-+	if (ret)
-+		return ret;
-+
-+	return count;
-+}
-+
-+static const struct file_operations ucsi_message_out_fops = {
-+	.open = simple_open,
-+	.write = ucsi_message_out_write,
-+	.llseek = generic_file_llseek,
-+};
-+
- void ucsi_debugfs_register(struct ucsi *ucsi)
- {
- 	ucsi->debugfs = kzalloc_obj(*ucsi->debugfs);
-@@ -122,6 +146,8 @@ void ucsi_debugfs_register(struct ucsi *ucsi)
- 	debugfs_create_file("peak_current", 0400, ucsi->debugfs->dentry, ucsi, &ucsi_peak_curr_fops);
- 	debugfs_create_file("avg_current", 0400, ucsi->debugfs->dentry, ucsi, &ucsi_avg_curr_fops);
- 	debugfs_create_file("vbus_voltage", 0400, ucsi->debugfs->dentry, ucsi, &ucsi_vbus_volt_fops);
-+	debugfs_create_file("message_out", 0200, ucsi->debugfs->dentry, ucsi,
-+			    &ucsi_message_out_fops);
- }
- 
- void ucsi_debugfs_unregister(struct ucsi *ucsi)
+@@ -40,6 +40,11 @@ static int ucsi_cmd(void *data, u64 val)
+ 	case UCSI_READ_POWER_LEVEL:
+ 		ret = ucsi_send_command(ucsi, val, NULL, 0);
+ 		break;
++	case UCSI_SET_PDOS:
++		ret = ucsi_write_message_out_command(ucsi, val, NULL, 0,
++						     ucsi->debugfs->message_out,
++						     UCSI_COMMAND_DATA_LEN(val));
++		break;
+ 	case UCSI_GET_CAPABILITY:
+ 	case UCSI_GET_CONNECTOR_CAPABILITY:
+ 	case UCSI_GET_ALTERNATE_MODES:
 diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 82565f502bdf..e51a8472fc27 100644
+index e51a8472fc27..e1a14f043abf 100644
 --- a/drivers/usb/typec/ucsi/ucsi.h
 +++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -455,6 +455,8 @@ struct ucsi_bitfield {
+@@ -138,6 +138,7 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
+ #define UCSI_GET_PD_MESSAGE			0x15
+ #define UCSI_GET_CAM_CS			0x18
+ #define UCSI_SET_SINK_PATH			0x1c
++#define UCSI_SET_PDOS				0x1d
+ #define UCSI_READ_POWER_LEVEL			0x1e
+ #define UCSI_SET_USB				0x21
+ #define UCSI_GET_LPM_PPM_INFO			0x22
+@@ -215,6 +216,9 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
+ #define   UCSI_GET_PD_MESSAGE_TYPE_IDENTITY	4
+ #define   UCSI_GET_PD_MESSAGE_TYPE_REVISION	5
  
++/* Data length bits */
++#define UCSI_COMMAND_DATA_LEN(_cmd_)           (((_cmd_) >> 8) & GENMASK(7, 0))
++
  /* -------------------------------------------------------------------------- */
  
-+#define MESSAGE_OUT_MAX_LEN 256
-+
- struct ucsi_debugfs_entry {
- 	u64 command;
- 	struct ucsi_data {
-@@ -462,6 +464,7 @@ struct ucsi_debugfs_entry {
- 		u64 high;
- 	} response;
- 	int status;
-+	u8 message_out[MESSAGE_OUT_MAX_LEN];
- 	struct dentry *dentry;
- };
- 
+ /* Error information returned by PPM in response to GET_ERROR_STATUS command. */
 -- 
 2.43.0
 
