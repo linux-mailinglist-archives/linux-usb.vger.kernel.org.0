@@ -1,276 +1,359 @@
-Return-Path: <linux-usb+bounces-35059-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35060-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eFUhAk24umlWawIAu9opvQ
-	(envelope-from <linux-usb+bounces-35059-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 15:35:57 +0100
+	id WC7ILm64umlWawIAu9opvQ
+	(envelope-from <linux-usb+bounces-35060-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 15:36:30 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDA862BD3CD
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 15:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E9092BD401
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 15:36:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 93475303548C
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 14:34:34 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5AE6F3016ADF
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 14:34:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D3463DEAE5;
-	Wed, 18 Mar 2026 14:33:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="Pjpra7Of"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 786E93DB65A;
+	Wed, 18 Mar 2026 14:33:59 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 951B33DEACB
-	for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 14:33:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6573A63EF
+	for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 14:33:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773844406; cv=none; b=gYXEV73BFzx6EMSFFhS4E/URhl/ADIESCJWdKwyxmY3Bd5YeruvC0dLjPwsZ9AtmP68kDwK1jGIg+8nyH2dm4z7FBd4lNcpTVjSDkflP3Zm5LzZehDZ/3lss3oo1QZI+ME0zGElwumBkWnTvv18GxyJuaCGDIqT2rYqKLX3GZ0A=
+	t=1773844439; cv=none; b=t3kfyx/jvn3GZwN/5sd7My3zJTFptIe7xNKU63HxCE39FvBJzJ6FerrnMs55UMuUoJdrroS/vUsC4sRJ0IVy6Hsr6hLktXKWHcIc1S2IfLPYfGGKA4cS6ljxY1zE1dyuhSw/G10GQQTiMzcZSCKRCCc4Tip5nRiXf6scPgPw+3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773844406; c=relaxed/simple;
-	bh=qSIoqe1rCM98pYxPjvfzxpcj4EO8iAA2yOd3l9ZnBNY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TdVrUeUMxZ7HEnbGqybNMSWHs+P4wdWGklHgKZjRxEBmLCe+MAFapm4LlYf7K+KIb1L9iN8R7sObfIMo7CB5xEx4uy8fc6Mthv8/j97TOg4qzfCln7PLOn0/fIwaUNyFUMmYedpUlE7kCrifAa6KUlUftEZf082+nxA0Te2hv/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=Pjpra7Of; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48628ce9ab5so27373215e9.2
-        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 07:33:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flipper.net; s=google; t=1773844403; x=1774449203; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D1QFYrzbzDmyd8ewHMMN3Hovj77cWoAajjF/dHg7uJs=;
-        b=Pjpra7OfzTzWpcbxrCJaqgs07DRByztlLJFK6htNWU+bCyZWHot+TWc1NRPQbtPM1M
-         rLKgSmHvwXFehTFMfbiKkrD+YOwtKmSSKuGBJVBjJUOZw/fIPcJALqvR7iG5oREHLwcq
-         UD7Upi6CWmCPrHA7zx8KF05OVk0zzmfL0gyrX4vp4saFdyghcC1EQlaFXpu3U0g3X6qd
-         jcCSvMSzTlPp0gufoUF9ma6hwFWgmZFX7QFPIkaE0qAR6qtjr4SimiVJ9MdTQsoluslr
-         Z1GLqunH6Zo4WUC1y1OxmYKl2R+i8eV6YMEqiKgXhw3OcZeHgkrEKIrtJ2SjGwJrJwYs
-         8AwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773844403; x=1774449203;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=D1QFYrzbzDmyd8ewHMMN3Hovj77cWoAajjF/dHg7uJs=;
-        b=rGieXwTbt57zUkul2LyvjsX/3O8jE0tSf+FOia/Mw8nyJ+D9AI8wRlOsoxam7BDJOK
-         auRE9baF3lC1+nUSROcTmzGYgqcv4p11Zh656jPyNas4/p2NjnOcpHWiuTu4njo/XCcS
-         mEPp0W3iJzO6vNE0oce42/LZZ9ldUyO6sak9Y7rqcB6rcfi9CBnWsjnksfm8AAa5hCs+
-         sCs3ul+yqjcSYc9DPUgBgNkqdeCu4IM3wnfUNPQELCzPzxTPzHcJnEVbxG+NFyXRHtf0
-         ysliUzaCnCbfQDFp5SKKX9tHkPAL6sniS7u4dk6JoMEw0Dp2gmtdd7wFy/0oufSktDrN
-         +p2A==
-X-Forwarded-Encrypted: i=1; AJvYcCXnGcD0EmnlQE8r/LlgDsEwjP7ryisuw7b4Rb+lslq77+dAlvV/H2fZbEwlCNI21Kwc6/0P7kRFXAc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy19DYbOBTL3hsZh2mmj6ZEGZop0occsM3fy+HpC9RXkBbgOp33
-	0Rb+QgcDzJ1vfwiwCXzJMfAIxpXUbQMNWhWnv8pcBjNiWj0MgXqiXrYASFJdTHjMbNQ=
-X-Gm-Gg: ATEYQzx40esjIcV4EUc5RyxWc8Ee+OIm/fmbMVO758HgWo/RU29q04UMONVI2cjBnyG
-	s1z03KRVSeppBoaUaObZ3diTeEzN7BmSqyQ9C03d3GbVOqi0mTudClY+/IpTpex0j0ErghaAPAw
-	DSqH31IdkHLe6jKghxUlepyNjeBR/KShYrYso0mUpUO1gtqmYQHeWmJTbPF9FLI9bAnI/hJ8Omn
-	FZiJ2tZAlvRhxg1/YKR+r+xepyuTlL7LqdYLbudk1Ra4sPd8A5aSuFbJ468rBfapRLneVE+Ysa2
-	7pETteM1IRwAWXr8e//Z+M5hK7AYqYO0CikqZN5Ka8RYbBCSXayYUPkX/6qjvUor2v+DteKrfhu
-	VJX1Cm15FBU1ff9UY2lwTnv4uKEZ+b+AbBo28r6QmNa9xuxkXic1W1cFMgoAUgUqIxok/3RF2xr
-	A9x7VQDteLACEco6ZfZUXEtDZOc3YfQnq1uS16qDElsHuVFB+Oq9ICgcJ/lq4uwxlHKLA3pVk4j
-	CU/Sw==
-X-Received: by 2002:a05:600c:8484:b0:485:35a4:939c with SMTP id 5b1f17b1804b1-486f4476c41mr61407685e9.29.1773844402828;
-        Wed, 18 Mar 2026 07:33:22 -0700 (PDT)
-Received: from alchark-surface.localdomain (bba-86-98-192-109.alshamil.net.ae. [86.98.192.109])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4856ea8fb0dsm270642085e9.3.2026.03.18.07.33.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 07:33:22 -0700 (PDT)
-From: Alexey Charkov <alchark@flipper.net>
-Date: Wed, 18 Mar 2026 18:32:56 +0400
-Subject: [PATCH v4 4/4] usb: typec: tcpci_rt1711h: Drop unnecessary
- VID/PID/DID checks
+	s=arc-20240116; t=1773844439; c=relaxed/simple;
+	bh=cLufbcSTF3ZXxO63NfD5IE+LSmoBumdAAbnjhXQdd9I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YxGxAHBSs/+YW5cXvM348mkCb4yzenSYN/O4J9ztSqeJa8qx7p7hv8BXRErElf8HTTQgM1rdGDNp8lW/QIaNLl81Hp5lknlVQIY2j84StPmICRSygVGdpYs+AC9tOLBZhCk2nHf/Yg2PFk4+YX5xpoKdL36d2ZCnbPLHeL6nb8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1w2rxz-0001iL-6S; Wed, 18 Mar 2026 15:33:47 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1w2rxy-000vHs-1T;
+	Wed, 18 Mar 2026 15:33:46 +0100
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1w2rxy-00000009Ar4-1S7v;
+	Wed, 18 Mar 2026 15:33:46 +0100
+Date: Wed, 18 Mar 2026 15:33:46 +0100
+From: Michael Grzeschik <mgr@pengutronix.de>
+To: Hyungjung Joo <jhj140711@gmail.com>
+Cc: ericvh@kernel.org, lucho@ionkov.net, asmadeus@codewreck.org,
+	linux_oss@crudebyte.com, gregkh@linuxfoundation.org,
+	v9fs@lists.linux.dev, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] net: 9p: usbg: clear stale client pointer on close
+Message-ID: <abq3yqrsQJGI71jz@pengutronix.de>
+References: <20260313171659.1225180-1-jhj140711@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260318-husb311-v4-4-69e029255430@flipper.net>
-References: <20260318-husb311-v4-0-69e029255430@flipper.net>
-In-Reply-To: <20260318-husb311-v4-0-69e029255430@flipper.net>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Gene Chen <gene_chen@richtek.com>, Yuanshen Cao <alex.caoys@gmail.com>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-usb@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
- Alexey Charkov <alchark@flipper.net>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3831; i=alchark@flipper.net;
- h=from:subject:message-id; bh=qSIoqe1rCM98pYxPjvfzxpcj4EO8iAA2yOd3l9ZnBNY=;
- b=owGbwMvMwCW2adGNfoHIK0sZT6slMWTu2r6EhS9H+IT/RWf5yla7/yWBwjP+XWvJzfjq9eLc1
- 6SH07IudExkYRDjYrAUU2SZ+22J7VQjvlm7PDy+wsxhZQIZIi3SwAAELAx8uYl5pUY6Rnqm2oZ6
- hoY6xjpGDFycAjDVXtWMDKfaFCd8FpDq5AlsWHTjbmrM9maTVRGNL2VFuv0+rPp94hojw9Og62Z
- rXFvMkxXKxCfuPsVnt+BG+NHZP3OvPQvm2ODowgIA
-X-Developer-Key: i=alchark@flipper.net; a=openpgp;
- fpr=9DF6A43D95320E9ABA4848F5B2A2D88F1059D4A5
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="slHqKoTqpWZ+T6zB"
+Content-Disposition: inline
+In-Reply-To: <20260313171659.1225180-1-jhj140711@gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spamd-Result: default: False [-3.56 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[flipper.net,quarantine];
-	R_DKIM_ALLOW(-0.20)[flipper.net:s=google];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35059-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,linux.intel.com,linuxfoundation.org,richtek.com,gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[flipper.net:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alchark@flipper.net,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.997];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	TAGGED_FROM(0.00)[bounces-35060-lists,linux-usb=lfdr.de];
+	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	DMARC_NA(0.00)[pengutronix.de];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,flipper.net:dkim,flipper.net:email,flipper.net:mid]
-X-Rspamd-Queue-Id: BDA862BD3CD
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mgr@pengutronix.de,linux-usb@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.567];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linuxfoundation.org:email]
+X-Rspamd-Queue-Id: 8E9092BD401
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Existing checks for VID/PID/DID in the driver are redundant since the
-driver is already matched to the device via I2C device ID and OF
-compatible strings, and they preclude the use of fallback compatibles.
 
-Remove them to make the driver slimmer and adding new clones easier.
+--slHqKoTqpWZ+T6zB
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Alexey Charkov <alchark@flipper.net>
----
- drivers/usb/typec/tcpm/tcpci_rt1711h.c | 59 ++--------------------------------
- 1 file changed, 2 insertions(+), 57 deletions(-)
+Hi
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-index 37cf55ad74f8..4b3e4e22a82e 100644
---- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-+++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-@@ -18,13 +18,6 @@
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- 
--#define RT1711H_VID		0x29CF
--#define ET7304_VID		0x6DCF
--#define RT1711H_PID		0x1711
--#define RT1711H_DID		0x2171
--#define RT1715_DID		0x2173
--#define ET7304_DID		0x2173
--
- #define RT1711H_PHYCTRL1	0x80
- #define RT1711H_PHYCTRL2	0x81
- 
-@@ -57,8 +50,6 @@
- 
- struct rt1711h_chip_info {
- 	u32 rxdz_sel;
--	u16 vid;
--	u16 did;
- 	bool enable_pd30_extended_message;
- };
- 
-@@ -304,35 +295,6 @@ static int rt1711h_sw_reset(struct rt1711h_chip *chip)
- 	return 0;
- }
- 
--static int rt1711h_check_revision(struct i2c_client *i2c, struct rt1711h_chip *chip)
--{
--	int ret;
--
--	ret = i2c_smbus_read_word_data(i2c, TCPC_VENDOR_ID);
--	if (ret < 0)
--		return ret;
--	if (ret != chip->info->vid) {
--		dev_err(&i2c->dev, "vid is not correct, 0x%04x\n", ret);
--		return -ENODEV;
--	}
--	ret = i2c_smbus_read_word_data(i2c, TCPC_PRODUCT_ID);
--	if (ret < 0)
--		return ret;
--	if (ret != RT1711H_PID) {
--		dev_err(&i2c->dev, "pid is not correct, 0x%04x\n", ret);
--		return -ENODEV;
--	}
--	ret = i2c_smbus_read_word_data(i2c, TCPC_BCD_DEV);
--	if (ret < 0)
--		return ret;
--	if (ret != chip->info->did) {
--		dev_err(&i2c->dev, "did is not correct, 0x%04x\n", ret);
--		return -ENODEV;
--	}
--	dev_dbg(&i2c->dev, "did is 0x%04x\n", ret);
--	return ret;
--}
--
- static int rt1711h_probe(struct i2c_client *client)
- {
- 	int ret;
-@@ -349,12 +311,6 @@ static int rt1711h_probe(struct i2c_client *client)
- 
- 	chip->info = i2c_get_match_data(client);
- 
--	ret = rt1711h_check_revision(client, chip);
--	if (ret < 0) {
--		dev_err(&client->dev, "check vid/pid fail\n");
--		return ret;
--	}
--
- 	chip->data.regmap = devm_regmap_init_i2c(client,
- 						 &rt1711h_regmap_config);
- 	if (IS_ERR(chip->data.regmap))
-@@ -408,27 +364,16 @@ static void rt1711h_remove(struct i2c_client *client)
- 	tcpci_unregister_port(chip->tcpci);
- }
- 
--static const struct rt1711h_chip_info et7304 = {
--	.rxdz_sel = RT1711H_BMCIO_RXDZSEL,
--	.vid = ET7304_VID,
--	.did = ET7304_DID,
--	.enable_pd30_extended_message = true,
--};
--
- static const struct rt1711h_chip_info rt1711h = {
--	.vid = RT1711H_VID,
--	.did = RT1711H_DID,
- };
- 
- static const struct rt1711h_chip_info rt1715 = {
- 	.rxdz_sel = RT1711H_BMCIO_RXDZSEL,
--	.vid = RT1711H_VID,
--	.did = RT1715_DID,
- 	.enable_pd30_extended_message = true,
- };
- 
- static const struct i2c_device_id rt1711h_id[] = {
--	{ "et7304", (kernel_ulong_t)&et7304 },
-+	{ "et7304", (kernel_ulong_t)&rt1715 },
- 	{ "rt1711h", (kernel_ulong_t)&rt1711h },
- 	{ "rt1715", (kernel_ulong_t)&rt1715 },
- 	{}
-@@ -436,7 +381,7 @@ static const struct i2c_device_id rt1711h_id[] = {
- MODULE_DEVICE_TABLE(i2c, rt1711h_id);
- 
- static const struct of_device_id rt1711h_of_match[] = {
--	{ .compatible = "etekmicro,et7304", .data = &et7304 },
-+	{ .compatible = "etekmicro,et7304", .data = &rt1715 },
- 	{ .compatible = "richtek,rt1711h", .data = &rt1711h },
- 	{ .compatible = "richtek,rt1715", .data = &rt1715 },
- 	{}
+I have some review feedback.
 
--- 
-2.52.0
+On Sat, Mar 14, 2026 at 02:16:59AM +0900, Hyungjung Joo wrote:
+>p9_usbg_close() tears down the client transport, but usb9pfs keeps
+>using usb9pfs->client from asynchronous TX and RX completion handlers.
+>A late completion can therefore dereference a client that has already
+>been freed during mount teardown.
+>
+>Clear usb9pfs->client under usb9pfs->lock when closing the transport,
+>detach any pending TX request from in_req->context, and make the TX/RX
+>completion handlers bail out once the transport has been detached. This
+>keeps late completions from touching a freed or rebound p9_client.
+>
+>Fixes: a3be076dc174 ("net/9p/usbg: Add new usb gadget function transport")
+>Cc: stable@vger.kernel.org
+>Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>Signed-off-by: Hyungjung Joo <jhj140711@gmail.com>
+>---
+> net/9p/trans_usbg.c | 63 +++++++++++++++++++++++++++++++++------------
+> 1 file changed, 47 insertions(+), 16 deletions(-)
+>
+>diff --git a/net/9p/trans_usbg.c b/net/9p/trans_usbg.c
+>index 1ce70338999c..3c2aa1943f93 100644
+>--- a/net/9p/trans_usbg.c
+>+++ b/net/9p/trans_usbg.c
+>@@ -149,7 +149,8 @@ static void usb9pfs_tx_complete(struct usb_ep *ep, str=
+uct usb_request *req)
+> {
+> 	struct f_usb9pfs *usb9pfs =3D ep->driver_data;
+> 	struct usb_composite_dev *cdev =3D usb9pfs->function.config->cdev;
+>-	struct p9_req_t *p9_tx_req =3D req->context;
+>+	struct p9_client *client;
+>+	struct p9_req_t *p9_tx_req;
+> 	unsigned long flags;
+>
+> 	/* reset zero packages */
+>@@ -165,18 +166,27 @@ static void usb9pfs_tx_complete(struct usb_ep *ep, s=
+truct usb_request *req)
+> 		ep->name, req->status, req->actual, req->length);
+>
+> 	spin_lock_irqsave(&usb9pfs->lock, flags);
+>-	WRITE_ONCE(p9_tx_req->status, REQ_STATUS_SENT);
+>+	client =3D usb9pfs->client;
+>+	p9_tx_req =3D req->context;
+>+	req->context =3D NULL;
+>
+>-	p9_req_put(usb9pfs->client, p9_tx_req);
+>+	if (!client || !p9_tx_req) {
 
+Just goto unlock_complete;
+
+>+		spin_unlock_irqrestore(&usb9pfs->lock, flags);
+>+		complete(&usb9pfs->send);
+>+		return;
+>+	}
+>
+>-	req->context =3D NULL;
+>+	WRITE_ONCE(p9_tx_req->status, REQ_STATUS_SENT);
+>+
+>+	p9_req_put(client, p9_tx_req);
+>
+
+unlock_complete:
+> 	spin_unlock_irqrestore(&usb9pfs->lock, flags);
+>
+> 	complete(&usb9pfs->send);
+> }
+>
+>-static struct p9_req_t *usb9pfs_rx_header(struct f_usb9pfs *usb9pfs, void=
+ *buf)
+>+static struct p9_req_t *usb9pfs_rx_header(struct f_usb9pfs *usb9pfs,
+>+					  struct p9_client *client, void *buf)
+
+I like this change but not in this patch. Since with your patch,
+rx_header will be called under locking context, this is not
+really a necessary change.
+
+I would keep it in another patch, though and move it before your change.
+
+> {
+> 	struct p9_req_t *p9_rx_req;
+> 	struct p9_fcall	rc;
+>@@ -202,7 +212,7 @@ static struct p9_req_t *usb9pfs_rx_header(struct f_usb=
+9pfs *usb9pfs, void *buf)
+> 		 "mux %p pkt: size: %d bytes tag: %d\n",
+> 		 usb9pfs, rc.size, rc.tag);
+>
+>-	p9_rx_req =3D p9_tag_lookup(usb9pfs->client, rc.tag);
+>+	p9_rx_req =3D p9_tag_lookup(client, rc.tag);
+> 	if (!p9_rx_req || p9_rx_req->status !=3D REQ_STATUS_SENT) {
+> 		p9_debug(P9_DEBUG_ERROR, "Unexpected packet tag %d\n", rc.tag);
+> 		return NULL;
+>@@ -212,7 +222,7 @@ static struct p9_req_t *usb9pfs_rx_header(struct f_usb=
+9pfs *usb9pfs, void *buf)
+> 		p9_debug(P9_DEBUG_ERROR,
+> 			 "requested packet size too big: %d for tag %d with capacity %zd\n",
+> 			 rc.size, rc.tag, p9_rx_req->rc.capacity);
+>-		p9_req_put(usb9pfs->client, p9_rx_req);
+>+		p9_req_put(client, p9_rx_req);
+> 		return NULL;
+> 	}
+>
+>@@ -220,7 +230,7 @@ static struct p9_req_t *usb9pfs_rx_header(struct f_usb=
+9pfs *usb9pfs, void *buf)
+> 		p9_debug(P9_DEBUG_ERROR,
+> 			 "No recv fcall for tag %d (req %p), disconnecting!\n",
+> 			 rc.tag, p9_rx_req);
+>-		p9_req_put(usb9pfs->client, p9_rx_req);
+>+		p9_req_put(client, p9_rx_req);
+> 		return NULL;
+> 	}
+>
+>@@ -231,8 +241,10 @@ static void usb9pfs_rx_complete(struct usb_ep *ep, st=
+ruct usb_request *req)
+> {
+> 	struct f_usb9pfs *usb9pfs =3D ep->driver_data;
+> 	struct usb_composite_dev *cdev =3D usb9pfs->function.config->cdev;
+>+	struct p9_client *client;
+> 	struct p9_req_t *p9_rx_req;
+> 	unsigned int req_size =3D req->actual;
+>+	unsigned long flags;
+> 	int status =3D REQ_STATUS_RCVD;
+>
+> 	if (req->status) {
+>@@ -241,9 +253,16 @@ static void usb9pfs_rx_complete(struct usb_ep *ep, st=
+ruct usb_request *req)
+> 		return;
+> 	}
+>
+>-	p9_rx_req =3D usb9pfs_rx_header(usb9pfs, req->buf);
+>-	if (!p9_rx_req)
+>+	spin_lock_irqsave(&usb9pfs->lock, flags);
+>+	client =3D usb9pfs->client;
+>+	if (!client) {
+>+		spin_unlock_irqrestore(&usb9pfs->lock, flags);
+> 		return;
+>+	}
+>+
+>+	p9_rx_req =3D usb9pfs_rx_header(usb9pfs, client, req->buf);
+>+	if (!p9_rx_req)
+>+		goto out_unlock;
+>
+> 	if (req_size > p9_rx_req->rc.capacity) {
+> 		dev_err(&cdev->gadget->dev,
+>@@ -257,8 +276,11 @@ static void usb9pfs_rx_complete(struct usb_ep *ep, st=
+ruct usb_request *req)
+>
+> 	p9_rx_req->rc.size =3D req_size;
+>
+>-	p9_client_cb(usb9pfs->client, p9_rx_req, status);
+>-	p9_req_put(usb9pfs->client, p9_rx_req);
+>+	p9_client_cb(client, p9_rx_req, status);
+>+	p9_req_put(client, p9_rx_req);
+>+
+>+out_unlock:
+>+	spin_unlock_irqrestore(&usb9pfs->lock, flags);
+>
+> 	complete(&usb9pfs->received);
+> }
+>@@ -416,7 +438,9 @@ static int p9_usbg_create(struct p9_client *client, st=
+ruct fs_context *fc)
+> 		client->status =3D Disconnected;
+> 	else
+> 		client->status =3D Connected;
+>+	spin_lock_irq(&usb9pfs->lock);
+> 	usb9pfs->client =3D client;
+>+	spin_unlock_irq(&usb9pfs->lock);
+>
+> 	client->trans_mod->maxsize =3D usb9pfs->buflen;
+>
+>@@ -427,18 +451,25 @@ static int p9_usbg_create(struct p9_client *client, =
+struct fs_context *fc)
+>
+> static void usb9pfs_clear_tx(struct f_usb9pfs *usb9pfs)
+> {
+>+	struct p9_client *client;
+> 	struct p9_req_t *req;
+>+	unsigned long flags;
+>
+>-	guard(spinlock_irqsave)(&usb9pfs->lock);
+>+	spin_lock_irqsave(&usb9pfs->lock, flags);
+>+	client =3D usb9pfs->client;
+>+	usb9pfs->client =3D NULL;
+>+	req =3D usb9pfs->in_req ? usb9pfs->in_req->context : NULL;
+>+	if (usb9pfs->in_req)
+>+		usb9pfs->in_req->context =3D NULL;
+>+	spin_unlock_irqrestore(&usb9pfs->lock, flags);
+
+Same applies here, it would be nice to seperate the changes of
+using the extra variable to a second patch.
+>
+>-	req =3D usb9pfs->in_req->context;
+>-	if (!req)
+>+	if (!req || !client)
+> 		return;
+>
+> 	if (!req->t_err)
+> 		req->t_err =3D -ECONNRESET;
+>
+>-	p9_client_cb(usb9pfs->client, req, REQ_STATUS_ERROR);
+>+	p9_client_cb(client, req, REQ_STATUS_ERROR);
+> }
+>
+> static void p9_usbg_close(struct p9_client *client)
+>--=20
+>2.34.1
+
+I tested your patch and like the changes, however I have some extra
+patches on top. Would you mind if I take your changes and include my
+suggestions. I would still keep you as author though. These changes would
+then be included in my series I will send today.
+
+Regards,
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--slHqKoTqpWZ+T6zB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmm6t8cACgkQC+njFXoe
+LGR96xAAuLktJ1iOoveDgtn+MCY/pzKT+sHU0HgPMEpYA+hFu9hdt7kSH5pZwXhz
+sqGm4PH1j+F3mL5a55Tv2h5gjqafBLcN9HTMe9gUpjKuCPBo8NjIRZTgt2ozp60c
+7XyRqjNh2ButuN4aYLSJjfLhsSrVDlo4MuhmDltjXSjaHiuzi5iCdGnsvJY6zMF5
+4L9MhJU9HZT/xtjephHq9KYysaUwRK07ygYNDMTJJSaB5M7MRAFDp4a6m5oLH9G4
+odKKxavan2sfg/UkCSQKbahDsVlNDxNXn9TC6B/c2uweC76yNdTtzSiQ0v8PPDBU
+N5uK0EB47iDIPA6H51f9fTMsnJEgpn+X/QZEsXnUe514ShEsmwA5aU+A/A20LoRM
+VL4DpmuQMiC2AUC2OjSGeYVaZM8puh9BrY+HaD0ajMIT37fOjz5DUTx8GzJRfS5V
+9JuzJKE1/yhO7AHkjDQhRfrsHhmi+si7yqvqeMZDBm04kQEVApOIGnI1tlR7/iw5
+XD5Jqwn4mJyg2aX3Zwmw6nbNI+/i+3XE9EaUh7ywXpeNm9bswbhuNUytkeZnmQ9e
+gJEN1U/6dm+HNpTc+nczOlQ6JQ6cdugoxxICjQOSDh9czTarCZM/a+yw2z7Enh28
+eeAwYWN6UXSIMUscx23tNCn0S9gUjik/ZX6ZKFuoW4xGo41CcxU=
+=gES0
+-----END PGP SIGNATURE-----
+
+--slHqKoTqpWZ+T6zB--
 
