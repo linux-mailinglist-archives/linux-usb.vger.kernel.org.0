@@ -1,198 +1,205 @@
-Return-Path: <linux-usb+bounces-35068-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35069-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gGEfJ1PYumkycgIAu9opvQ
-	(envelope-from <linux-usb+bounces-35068-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 17:52:35 +0100
+	id sDYhOQXfumk3cwIAu9opvQ
+	(envelope-from <linux-usb+bounces-35069-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 18:21:09 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 331CE2BFAAD
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 17:52:35 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FFCC2C0251
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 18:21:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BE1A931452A2
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 16:42:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D0853308C76B
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 17:17:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66665340A59;
-	Wed, 18 Mar 2026 16:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF2842DEA61;
+	Wed, 18 Mar 2026 17:17:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="J9SdwoJg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q/ojEgzR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f100.google.com (mail-pj1-f100.google.com [209.85.216.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1DD33EB10
-	for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 16:31:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B45F2D63E8;
+	Wed, 18 Mar 2026 17:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773851480; cv=none; b=uVnvMin+PHJmCfFYZ0YnGECYf56r6xjTmX9gxnyqamxZVGf0/QSQOtrToArXHhskEsj8bDwze72SOhsADkuqvfsVyGjtqqdU8Tavx6gG6LKGdZOpJwjyqW1pbUEk02XJeftQN2GL0Qn0qw2p5IOmQ35k+o8GeTGbKEdfFZwhAjQ=
+	t=1773854247; cv=none; b=kpBST7KGfpUWCc+RgTgq7r2n1l64cMdVfdC6Dv5MnLnhVIYeLa0nmrqIezWzR7QhnPMbDfmBXzcVnJtIIpD0vUBtBeMbZ4kO+AerD7uGMidSh1UTpKDy/qotIEP5Rx7zQkkCvH6PHpHAgMyZrPr/TmGycSsWGw1HN32XxORYjwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773851480; c=relaxed/simple;
-	bh=MEv/WlD+rcv5wTooW32b9ZiJ9vyx50B5PB553LliTpI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ep4xr8Li5rPa6RJyikHY+1PxkoFOkRvLGR3md5/2n/X5GGT0Jng0PMyR4gBzvjMwqEqrR28hzpaC69atkT9430/xuYalOsXtfp89wWqsLYA2gpeQMw0SfuLmjPF75/GMfNMpoorBXRoShMD/J6uIw0jWM0HSHqyfuJDcNEj7q10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=J9SdwoJg; arc=none smtp.client-ip=209.85.216.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pj1-f100.google.com with SMTP id 98e67ed59e1d1-35b98def50bso117548a91.0
-        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 09:31:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773851475; x=1774456275;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jO3gU4CP+kDmJHjIMEAG5dIFF9fQfB/wxjxMJB3538c=;
-        b=fV7JKpQVx9H00s3U5VW/+iOsDr4FeIcRLPy8SqBx9U51Pjf84z32wDNa4+SXY7vPL1
-         kRVOneJSHtwuEMQl+7VEKwqmTsQY/WzI+Kggl9c8ZAK6nxhMHLlInaimw5lZSeWU8R/G
-         wHbvhwXtrADW3gJ4xrFloN1VLg2ws12eCgmm6JzleKasR1/8w9JiUUm1I/sGo/TrKwcT
-         8B87KzUMAINYdXSkFR6YO71MY+u/x4EEHGQhXbIDwYUoLrO4wn2U9qr4qFGbNHsAx+EJ
-         jVKc9wB/ACdv7oeExy/y4I/tgNI8pSabAaVs72Nz1UHtQtmlyJwdX0AQfqrvpm9wDqSB
-         YQKg==
-X-Gm-Message-State: AOJu0Yztb4DajpBMRJxqJ3gGKZxyzDniE4XmFBQJOFPH3c4B6Yvd6hmy
-	xscElPR4RVrKx3C71lHNxr8iYfamjxhmWmG5qSz7VEUaFgY9yIqYRAxmgWsKs0jh/rUjhxLVZBE
-	DjYTnI/qgeMSAdr5wC2l/r1TWnyESBu8o9FhDtWBM1Y2X0VUnxTDyFDIozNfss4xN1M7zEFxHxp
-	JpywmW863TVKCOm2/vpJMbMidB0VRQoXjUQtWbEHQcgnQfiw+CyuZb6+MxWXCFu0Jr42R2vmh2Y
-	pTlLcY7UIaxsw==
-X-Gm-Gg: ATEYQzyu6oKN6xztOvik0w4k0MK3+ARubNTnaM07QGO+ohHagY1yjz0ftgEK7lJFGMS
-	YpvISQQreklqnZ/M0ay6B4K3JZtPVFEvzm8atg4MQfLPQoaP2N08YN1+qV2vethKxEqTHKdB6B6
-	WHqZFUyL9b6pKmlMnvsEhm3KN/zk6Y3D2P+oYyZxV+B3cGRBGk68hD7X7R9RypTU1pYdf+UdPJN
-	3oNZ389uaE7NqDp93a898S7Lyb/3v8g1JrWP5ew3XkMkWn31ma6WRXHI+UQk3YeQbizX6B9g1ca
-	Jf60z2FhJUCqDIGHZoP3vx8JBRY6H2+ZpfLqf6fLscwPI8v9VOnFOKPxmJwj0u94B1EZnOY4cJG
-	KbUgjcKCBp4ahoS0awAhhIJJS55EksrGZFdmZOUBSY99K8PL0Lhrbd9o2U+P4qbCuXrGGRvSdIb
-	V39FS32/YcSkyJw2LmfT47CVZ1YBuxG9oEU+kbxinfh9Pgexjy0lR0yuGixQ==
-X-Received: by 2002:a17:90b:528b:b0:35b:929f:7e92 with SMTP id 98e67ed59e1d1-35bb9f0e220mr3485805a91.18.1773851474505;
-        Wed, 18 Mar 2026 09:31:14 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-117.dlp.protect.broadcom.com. [144.49.247.117])
-        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-35bc63207acsm6546a91.8.2026.03.18.09.31.14
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 18 Mar 2026 09:31:14 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-798531a0f58so4452477b3.0
-        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 09:31:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1773851473; x=1774456273; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jO3gU4CP+kDmJHjIMEAG5dIFF9fQfB/wxjxMJB3538c=;
-        b=J9SdwoJgNYb0LN8SV1LixPg2qsfPpb+hD8ehKzk5kYiZF84EJySCX3sP1x55UFW2M3
-         apYSD7geIR/QkIrgTgSTqro1U6yJMey0EtmBQvJVvs4UYpEADWZHqV6oCN7wEIqd8Z8Q
-         jjclfYw2F+uNxsItXmIVCMPpTkhxIk8Nn23q0=
-X-Received: by 2002:a05:690c:4483:b0:796:2fde:5dfe with SMTP id 00721157ae682-79a71c48d8fmr39300637b3.38.1773851473282;
-        Wed, 18 Mar 2026 09:31:13 -0700 (PDT)
-X-Received: by 2002:a05:690c:4483:b0:796:2fde:5dfe with SMTP id 00721157ae682-79a71c48d8fmr39299927b3.38.1773851472615;
-        Wed, 18 Mar 2026 09:31:12 -0700 (PDT)
-Received: from ?IPV6:2600:1700:3f50:2990:9d0f:48b0:9d4b:a7de? ([2600:1700:3f50:2990:9d0f:48b0:9d4b:a7de])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-79a7136cecasm19881027b3.5.2026.03.18.09.31.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Mar 2026 09:31:11 -0700 (PDT)
-Message-ID: <df80ab6c-69fd-4473-ac1f-2819e5d01e1a@broadcom.com>
-Date: Wed, 18 Mar 2026 09:31:10 -0700
+	s=arc-20240116; t=1773854247; c=relaxed/simple;
+	bh=HUY2/4gRri/fQKhRFzorL7GriVv5EjbW739jiuuwp0U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=mhpXyNRN5OAYmNkPZFwPSx7f5k+WyG1HxZyVyDUL7L2nxRs08yRfz5pKjEz3N7bs+XW5VPbVhsqQ4YU/G+fVp0IwAAUi94YHtMVBi+ceKBzisCTTh2S1zPh0LPO/na3G/pf2+0w20FTNhcugUpGmFF3naXJjpMlbNzzBfN5EYIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q/ojEgzR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FA09C2BC87;
+	Wed, 18 Mar 2026 17:17:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773854246;
+	bh=HUY2/4gRri/fQKhRFzorL7GriVv5EjbW739jiuuwp0U=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=q/ojEgzRMGqWsFJMKjs4TmIgH82cHym+DiGxaj2RijNg+xIYF7bCvrIFR7o5zQU18
+	 ife29DKfY0KKotPYZdhQNXoj4YEO8g53meoDP3Ti+C8V2BG4mAsFPF8/GUYQe+MlWr
+	 LW/4zb2WyOzJZT6xhQFbVOPzOV7BeW7FeHJq9g2qPi/rphmyhfUMcjNHEUzqiS633p
+	 5JPO8CgAVucJCSclLy9fVmbGHn0hfkfHLlLyoJb8xVbqtPKfS/7gIHZ8gtUWo2Mzvh
+	 W3bS516UnGNCW+VzsLi9Qfg8/0xLvyJVc9Ff6nEY3expCSodivO3kqLKv0371Tt9Xh
+	 VmwFlxz+YOYNg==
+Date: Wed, 18 Mar 2026 12:17:25 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	KancyJoe <kancy2333@outlook.com>
+Subject: Re: [PATCH v5 0/9] arm64: dts: qcom: Add support for the Ayaneo
+ Pocket S2
+Message-ID: <20260318171725.GA51567@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: ehci-brcm: fix sleep during atomic
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
- alcooperx@gmail.com, stern@rowland.harvard.edu
-References: <20260312190825.3596757-1-justin.chen@broadcom.net>
- <2026031801-spinster-scraggly-7504@gregkh>
-Content-Language: en-US
-From: Justin Chen <justin.chen@broadcom.com>
-In-Reply-To: <2026031801-spinster-scraggly-7504@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260220-topic-sm8650-ayaneo-pocket-s2-base-v5-0-1ad79caa1efa@linaro.org>
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[broadcom.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[broadcom.com:s=google];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,broadcom.com,gmail.com,rowland.harvard.edu];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-35068-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35069-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[broadcom.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[broadcom.com:dkim,broadcom.com:email,broadcom.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[justin.chen@broadcom.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com,vger.kernel.org,oss.qualcomm.com,outlook.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.958];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[helgaas@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 331CE2BFAAD
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,msgid.link:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 7FFCC2C0251
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-
-
-On 3/18/2026 7:14 AM, Greg KH wrote:
-> On Thu, Mar 12, 2026 at 12:08:25PM -0700, justin.chen@broadcom.com wrote:
->> From: Justin Chen <justin.chen@broadcom.com>
->>
->> echi_brcm_wait_for_sof() gets called after disabling interrupts
->> in ehci_brcm_hub_control(). Use the atomic version of poll_timeout
->> to fix the warning.
->>
->> Fixes: ("9df231511bd6 usb: ehci: Add new EHCI driver for Broadcom STB SoC's")
->> Signed-off-by: Justin Chen <justin.chen@broadcom.com>
->> ---
->>   drivers/usb/host/ehci-brcm.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/host/ehci-brcm.c b/drivers/usb/host/ehci-brcm.c
->> index 888e8f6670d2..5e3156f94cc6 100644
->> --- a/drivers/usb/host/ehci-brcm.c
->> +++ b/drivers/usb/host/ehci-brcm.c
->> @@ -31,8 +31,8 @@ static inline void ehci_brcm_wait_for_sof(struct ehci_hcd *ehci, u32 delay)
->>   	int res;
->>   
->>   	/* Wait for next microframe (every 125 usecs) */
->> -	res = readl_relaxed_poll_timeout(&ehci->regs->frame_index, val,
->> -					 val != frame_idx, 1, 130);
->> +	res = readl_relaxed_poll_timeout_atomic(&ehci->regs->frame_index,
->> +						val, val != frame_idx, 1, 130);
->>   	if (res)
->>   		ehci_err(ehci, "Error waiting for SOF\n");
->>   	udelay(delay);
->> -- 
->> 2.34.1
->>
->>
+On Fri, Feb 20, 2026 at 04:04:39PM +0100, Neil Armstrong wrote:
+> The Ayaneo Pocket S2 is a gaming console based on the Qualcomm
+> Snapdragon 8 Gen 3. It has an internal UFS storage, WiFi,
+> Bluetooth, gaming buttons, SDCard, 2K display and USB-C
+> connector.
 > 
-> Why is something that has been around for so long just now suddenly
-> being seen?  What changed to trigger this?
+> Product Page [1].
 > 
-
-The edge case occurs in rare occasions and predates my time maintaining 
-this driver. So we just so happened to run into it recently in our 
-tests. Guess in the past we just never hit the edge case with the 
-warnings enabled. I had the same question when the warning was reported.
-
-Will fix the Fixes tag in v2.
-
-Thanks,
-Justin
-
-> thanks,
+> The Initial linux port was done by KancyJoe (Sunflower2333)
+> at [2].
 > 
-> greg k-h
+> [1] https://www.ayaneo.com/goods/9344082149621
+> [2] https://github.com/sunflower2333/linux/tree/master
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+> Changes in v5:
+> - Rebased on -next
+> - Collected tags
+> - Rebased/renamed slot to generic based on changes from Bjorn
+> - Link to v4: https://patch.msgid.link/20260216-topic-sm8650-ayaneo-pocket-s2-base-v4-0-802c82795431@linaro.org
+> 
+> Changes in v4:
+> - Renamed slot to generic, in the code as well, fixed Kconfig & commit message
+> - Switched the UPD72020x bindings additionalProperties to true to allow devices subnodes
+> - Collected acks
+> - Link to v3: https://patch.msgid.link/20260206-topic-sm8650-ayaneo-pocket-s2-base-v3-0-5b79c5d61a03@linaro.org
+> 
+> Changes in v3:
+> - Made renesas,upd720201-pci bindings supplies required
+> - Fixed description and example of renesas,upd720201-pci bindings
+> - Renamed slot to generic, added renesas,upd720201-pci entry
+> - Used PMIC_GPIO_STRENGTH_LOW instead of numbers
+> - Removed all output-low in pinconf
+> - Link to v2: https://patch.msgid.link/20260127-topic-sm8650-ayaneo-pocket-s2-base-v2-0-c55ec1b5d8bf@linaro.org
+> 
+> Changes in v2:
+> - Add proper regulators for the USB controller, with bindings & power ctrl
+> - Add proper regulators for FAN
+> - Dropped support for headset over USB-C, audio is connected to a jack port
+> - Cleaned up Audio routing and fixed the DP endpoint index
+> - Added i2c clk frequencies
+> - Renamed fan node and used interrupts-extended
+> - Dropped the usb-c self-powered
+> - Reordered nodes alphabetically
+> - Renamed pcieport1 to pcie1_port0
+> - Link to v1: https://patch.msgid.link/20260121-topic-sm8650-ayaneo-pocket-s2-base-v1-0-bb3f95f1c085@linaro.org
+> 
+> ---
+> KancyJoe (1):
+>       arm64: dts: qcom: add basic devicetree for Ayaneo Pocket S2 gaming console
+> 
+> Neil Armstrong (8):
+>       dt-bindings: usb: document the Renesas UPD720201/UPD720202 USB 3.0 xHCI Host Controller
+>       pci: pwrctrl: slot: fix dev_err_probe() usage
+>       pci: pwrctrl: rename pci-pwrctrl-slot as generic
+>       pci: pwrctrl: generic: support for the UPD720201/UPD720202 USB 3.0 xHCI Host Controller
+>       arm64: defconfig: enable pci-pwrctrl-generic as module
+>       dt-binding: vendor-prefixes: document the Ayaneo brand
+>       dt-bindings: arm: qcom: document the Ayaneo Pocket S2
+>       arm64: dts: qcom: sm8650: Add sound DAI prefix for DP
 
+I applied the drivers/pci/pwrctrl patches to pci/pwrctrl for v7.1,
+thanks!
+
+I reordered the rename to be first (and used "git mv") and updated the
+subject lines to match the history.
+
+>  Documentation/devicetree/bindings/arm/qcom.yaml    |    1 +
+>  .../bindings/usb/renesas,upd720201-pci.yaml        |   61 +
+>  .../devicetree/bindings/vendor-prefixes.yaml       |    2 +
+>  arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+>  .../boot/dts/qcom/sm8650-ayaneo-pocket-s2.dts      | 1551 ++++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sm8650.dtsi               |   47 +-
+>  arch/arm64/configs/defconfig                       |    1 +
+>  drivers/pci/controller/dwc/Kconfig                 |    4 +-
+>  drivers/pci/pwrctrl/Kconfig                        |   13 +-
+>  drivers/pci/pwrctrl/Makefile                       |    4 +-
+>  drivers/pci/pwrctrl/generic.c                      |  143 ++
+>  drivers/pci/pwrctrl/slot.c                         |  140 --
+>  12 files changed, 1795 insertions(+), 173 deletions(-)
+> ---
+> base-commit: df94cc5ccb88d2f6ebc0cac480a1b94162f4ff0f
+> change-id: 20260121-topic-sm8650-ayaneo-pocket-s2-base-05c348efd86d
+> 
+> Best regards,
+> -- 
+> Neil Armstrong <neil.armstrong@linaro.org>
+> 
 
