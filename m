@@ -1,120 +1,114 @@
-Return-Path: <linux-usb+bounces-35016-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35017-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IEe7I6dHumkFTwIAu9opvQ
-	(envelope-from <linux-usb+bounces-35016-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 07:35:19 +0100
+	id yPnDFexIumkFTwIAu9opvQ
+	(envelope-from <linux-usb+bounces-35017-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 07:40:44 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 380F22B675B
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 07:35:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6F0C2B6813
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 07:40:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 39F9F30A4571
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 06:30:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 41E49300A138
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 06:37:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD31F366064;
-	Wed, 18 Mar 2026 06:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2D43366064;
+	Wed, 18 Mar 2026 06:37:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="p0/cvBYs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m155101.qiye.163.com (mail-m155101.qiye.163.com [101.71.155.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ADAF29D287;
-	Wed, 18 Mar 2026 06:30:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275DE21B918;
+	Wed, 18 Mar 2026 06:37:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773815424; cv=none; b=RntmsVrhfQd2X4W4iPa894jkHbbqCGllx4FowVdncd2TNgASaiEthXcW9g2KXvzrdxIUCq0cnsiMi9nUAgshEzn0txHJIDBhv3fqCPlKP3R4yjSw0s5YNJL1LpZLYQg843a5W/9y2KIDYEQ/s5js6SKNjYgYknuQj0vzmFi3l4U=
+	t=1773815825; cv=none; b=Oq8PiZogjJVGkB06JGmWA1Fn3bHyYilfaCpkC92AnHCvSTPO2NkqhVExywDm3VxCHxtslmHR7eO4km3hXM5alv3pbymsHQ4pJPLO9tw1BZaUb2zVNHXQ/8CpYauV0sNMF4vXi6I0Y/LbWAg6s+jDYmHRsIPWUPUEpl704aweOQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773815424; c=relaxed/simple;
-	bh=S/DDSdZmUw0tA5ExSi6kU8ksd+/FNhkv/SyMLipYwsA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=eRiIr3TYR97JmhYGj8PBEFPV8BVVPxTCln9exkxSEh9CPzD77d+KBd05OoNHU9/h79pKfvFF9TREljBiMqpRJ2ubvUDWk8XMK9Nzr9AvTvjv7j2FWPyhKzDYlKJXE3aQf1y0jkFMuL86aBnYXtOBBsA+2EzCJxTEpzPJBxKTPF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn; spf=pass smtp.mailfrom=jmu.edu.cn; arc=none smtp.client-ip=101.71.155.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jmu.edu.cn
-Received: from localhost.localdomain (unknown [116.25.94.199])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 375de3318;
-	Wed, 18 Mar 2026 14:30:10 +0800 (GMT+08:00)
-From: Chukun Pan <amadeus@jmu.edu.cn>
-To: thinh.nguyen@synopsys.com
-Cc: amadeus@jmu.edu.cn,
-	dlan@kernel.org,
-	gregkh@linuxfoundation.org,
-	huang.ze@linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-usb@vger.kernel.org,
-	spacemit@lists.linux.dev
-Subject: Re: [PATCH 1/1] usb: dwc3: dwc3-generic-plat: Add optional VBUS regulator support
-Date: Wed, 18 Mar 2026 14:30:02 +0800
-Message-Id: <20260318063002.3743362-1-amadeus@jmu.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260318002953.6gknb2jfveqyisop@synopsys.com>
-References: <20260318002953.6gknb2jfveqyisop@synopsys.com>
+	s=arc-20240116; t=1773815825; c=relaxed/simple;
+	bh=KKXQx4AZN32QRqUy3BQB2Ca5L3Cu5POfq9rizGvZiDY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RDZPsxnr3LDGvR79V++kmlRnN3s7/q04z4jaZ5HQ294DOg3Q+ORVI+SKxoYZ8v/T/1bRd9u3XRaldazlRuHkD7tMS6kO87zGTXXruhu2GhLAi4NhwL/o05qjbs63moaBuFXSBjbKuMcBNru/TpDgeUywueJppMNSzQn18JkIjBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=p0/cvBYs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1772EC19421;
+	Wed, 18 Mar 2026 06:37:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1773815824;
+	bh=KKXQx4AZN32QRqUy3BQB2Ca5L3Cu5POfq9rizGvZiDY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=p0/cvBYs7in47EAH61+Ne+rEq2U8xmicwhgqhWyB4iC0Swic6qaNiTW+Y8m8Wqm7f
+	 1x/Pks0iM6tSYzh8BEbHEuKKGkkx5zkD4fGmb1JTbgcpvSlZkmVvoe/Rm2CdCBn7N4
+	 WQcS8DLj+g032lRdYXwh3nlYt11jPi33KxGixvjE=
+Date: Wed, 18 Mar 2026 07:36:44 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Omer Zalman <omerzalman42@gmail.com>
+Cc: oliver@neukum.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 1/2] net: usb: cdc_ncm: convert sysfs show() callbacks to
+ sysfs_emit()
+Message-ID: <2026031824-bladder-percent-ba02@gregkh>
+References: <20260318040632.69531-1-omerzalman42@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9cffa3308303a2kunme7efa47016e9df
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCQ09LVk9PHx0YSkJOHk8aTVYeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlKSk1VSU5VQk9VSkJCWVdZFhoPEhUdFFlBWU9LSFVKS0lCTUtKVUpLS1VLWQ
-	Y+
-X-Spamd-Result: default: False [0.14 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260318040632.69531-1-omerzalman42@gmail.com>
+X-Spamd-Result: default: False [3.84 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[jmu.edu.cn : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35017-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35016-lists,linux-usb=lfdr.de];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	FROM_NEQ_ENVFROM(0.00)[amadeus@jmu.edu.cn,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-0.935];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[jmu.edu.cn:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 380F22B675B
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:dkim]
+X-Rspamd-Queue-Id: D6F0C2B6813
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
+On Tue, Mar 17, 2026 at 11:06:31PM -0500, Omer Zalman wrote:
+> sysfs_emit() was introduced in v5.10 as the preferred replacement for
+> sprintf() in sysfs show() handlers. It bounds output to PAGE_SIZE and
+> avoids potential buffer overruns.
+> 
+> Convert all show() callbacks and the NCM_PARM_ATTR macro from sprintf()
+> to sysfs_emit().
 
-> If we have a specific user, please include it in the change log. In this
-> case, it looks like spacemit k1 as noted under the "---" line?
+There is no need to change existing show functions to sysfs_emit(),
+unless you are doing some other work in the same area.  Otherwise it
+would be a huge churn all across the tree.
 
-I will change it to "Some SpacemiT K1 board".
+So no need for this patch, sorry.
 
-> The name "vbus" here maybe confusing. This regulator powers the
-> controller chip and not neccessarily turning on VBUS of the USB bus
-> power line. Is there a common/different name for regulator id?
-> At least fix the error message.
+thanks,
 
-Sorry, but I don't quite understand what you mean.
-Taking the OrangePi RV2 [1] board as an example:
-
-VCC_5V0 (IN) -> VCC5V0_USB3 (OUT) -> Vbus30
-
-The VCC5V0_USB3 regulator is connected to the USB vbus pin.
-I think it's okay to call it "vbus" here?
-
-[1] https://drive.google.com/drive/folders/1pcI_U0C3VJKTCg8A1zj08CwNbohnONSR
-
-Thanks,
-Chukun
+greg k-h
 
