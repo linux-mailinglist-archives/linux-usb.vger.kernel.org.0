@@ -1,359 +1,164 @@
-Return-Path: <linux-usb+bounces-35060-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35061-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WC7ILm64umlWawIAu9opvQ
-	(envelope-from <linux-usb+bounces-35060-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 15:36:30 +0100
+	id kMx5JJDBumkGbgIAu9opvQ
+	(envelope-from <linux-usb+bounces-35061-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 16:15:28 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E9092BD401
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 15:36:30 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9B9D2BDFDF
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 16:15:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5AE6F3016ADF
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 14:34:52 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 69C9B30FDF01
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2026 14:50:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 786E93DB65A;
-	Wed, 18 Mar 2026 14:33:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38C443D3318;
+	Wed, 18 Mar 2026 14:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rffs6hQE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6573A63EF
-	for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 14:33:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773844439; cv=none; b=t3kfyx/jvn3GZwN/5sd7My3zJTFptIe7xNKU63HxCE39FvBJzJ6FerrnMs55UMuUoJdrroS/vUsC4sRJ0IVy6Hsr6hLktXKWHcIc1S2IfLPYfGGKA4cS6ljxY1zE1dyuhSw/G10GQQTiMzcZSCKRCCc4Tip5nRiXf6scPgPw+3Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773844439; c=relaxed/simple;
-	bh=cLufbcSTF3ZXxO63NfD5IE+LSmoBumdAAbnjhXQdd9I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YxGxAHBSs/+YW5cXvM348mkCb4yzenSYN/O4J9ztSqeJa8qx7p7hv8BXRErElf8HTTQgM1rdGDNp8lW/QIaNLl81Hp5lknlVQIY2j84StPmICRSygVGdpYs+AC9tOLBZhCk2nHf/Yg2PFk4+YX5xpoKdL36d2ZCnbPLHeL6nb8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1w2rxz-0001iL-6S; Wed, 18 Mar 2026 15:33:47 +0100
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1w2rxy-000vHs-1T;
-	Wed, 18 Mar 2026 15:33:46 +0100
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1w2rxy-00000009Ar4-1S7v;
-	Wed, 18 Mar 2026 15:33:46 +0100
-Date: Wed, 18 Mar 2026 15:33:46 +0100
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Hyungjung Joo <jhj140711@gmail.com>
-Cc: ericvh@kernel.org, lucho@ionkov.net, asmadeus@codewreck.org,
-	linux_oss@crudebyte.com, gregkh@linuxfoundation.org,
-	v9fs@lists.linux.dev, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] net: 9p: usbg: clear stale client pointer on close
-Message-ID: <abq3yqrsQJGI71jz@pengutronix.de>
-References: <20260313171659.1225180-1-jhj140711@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678063E0C5C
+	for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 14:49:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773845371; cv=pass; b=BOQNkdE9To3U4A1JOesNmoX4VSo1P+eGOQItOLrLdetTp/gpPbl4vTAqQjFe8+OPBBFrM3AJCJR+Qpih8qz7rgjL+GC7HlyFuNL7v+k6NFjo/TYua/sB410LQUhZfVd/E/ZLKwJgRGMNHFsJSu8vqpMpj67Rr0MAO0h2xjub1kg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773845371; c=relaxed/simple;
+	bh=dzt3L8FljthUJAGYI2jmUC2ThE71Y92qdrRQ4fCeeEE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PRKHC+illEra9BPx8PdxzxhUU6sVLkk4tuZ9EscZJZmUAGKDqngsKowfrjGZNcQb//XppsmTjlEKEDnrCa41dkfGTd76Xa8vBM43GRK7Ww7yda1juoNt0yox5fadTLulNQY+IAjvBm9OzGJ/efkODTs7L9AVqHxTy90sFp4nRYs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rffs6hQE; arc=pass smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-35691a231a7so1199a91.3
+        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 07:49:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773845364; cv=none;
+        d=google.com; s=arc-20240605;
+        b=JoDFmQ8jFDDg2YLr2jEtHHRmjqeZ2h7gAS9V02P0iBwr7ElxYujcG0tlgCxg3ambJZ
+         grX91drnW5w3KepQTwwHe64Xj8m/PooSblbzhtcSXOWR+KbbsgZo7DR+EuPVPxlCtfCT
+         Niovg7fwqgRosmHqgkgVitg+JxFXehEnuMk+bLp2fG9A4G3nlWC6AbwXL6eeqeQedirH
+         FqLUTMgKX4lx/fNEjNe4rSJKWfLyP+UfHJibf6CX0RnOasW/mNPKLHrygTpDqOjY1kwv
+         smPYfe31X453TFasnhbTL1BvwaXLQPLzI3NToz3xBYaluh4lxnuCY0U8uvvTjtcOCsqC
+         rPIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=dzt3L8FljthUJAGYI2jmUC2ThE71Y92qdrRQ4fCeeEE=;
+        fh=qlJNfOnYLw+5nyl+qk911Q8+D4qpTxchUJeZIClXB9s=;
+        b=VG1rkmzOLs2fVYKBEw+wuxwK2IPPY/4dQARfIyTefObpDq7zMs9SSlzaYqS0XKdumS
+         GAarRoaWjSDzT6eQnBesmgrnxGyopbDrLMtk6eXlUx2sYCJABe2yyvUw/mL0zH8y/nDX
+         plDY98/i03UClCr0xD8xIfgWRvoL3iy87nCuk8joNDZLWN26G7502pkxebmwh2wWsLOe
+         Ulf0OfuYK1BmIIpXcrIEdQgUaz6M3wCLa/ase2fYgU6IN4G3GFIIIqcS0LH3zgf/7KNw
+         Sj7/icvMVhXulxVvpqBWX0q6pdwFj70qIHfRVJAyRHUx14kYIUGtZcnfz9sbWzAg7URQ
+         kLNg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773845364; x=1774450164; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dzt3L8FljthUJAGYI2jmUC2ThE71Y92qdrRQ4fCeeEE=;
+        b=Rffs6hQEngTZqgC09Vg9OiW6WYP886b8+SUx1JG+wdg7RhOpJFa+97I05/S9e4+7t3
+         vn9Q7ShFXgiYwVUsprNbpYv0O8GeHLlRIIVZWqhbEYZzAUZYb2U5qtFMK+WxenCZ+9WW
+         iFFGvh3HZSiGfbs2/viywzc3qxkAQPLQmhQ5bHUlHBzrKfAYin9Rjf79LLWzqjbb0gS7
+         o/15ZAX28upb6nFJ4ksZnYO1TidZl5SzexLlFIO+7Bs8FSTZPWE0Mn8NfrPbBfUBoGjb
+         Zmm52ZcCeO8AZPoD2RlwoKImUbEH8wK39LTAhgqqE2b9FFq+2mneC6jB+x8WmY/+ejLn
+         /A4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773845364; x=1774450164;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=dzt3L8FljthUJAGYI2jmUC2ThE71Y92qdrRQ4fCeeEE=;
+        b=ieWcNkuC7jD+LT1fnX3Aa0OPAGFqKEDJmimVxpy0BSTIMOh4oFNigW1udzirfo0M+W
+         UBqYHFWb3jSVkYMoplJIvcgfq1x9lwvhAHp1KhIl+f1fMUpRIOu/7SCQQa81b1rP5gm/
+         4CMnC+EDBrGE/Otf5fssKXYP1E7ArxShyimmdTTY/72DPW2z798MaEXePe31KOiJvGsJ
+         Oj40LJPnM3xCUvX8VcIuwTdlYQm8dCJ29Ufwz0uDdQCoznrel2krICNwHGJuCxtawfOL
+         vqB253YrXq31XykgNqGvJxKEpMIJYmq5Ade0PrJ5Qbeh+3ih3VGqPfxAgTAciluVvIX4
+         JVmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWtWG89+WUChsW66/5iu3loQhlUnF+S7Fmj34NXQIHBgv2f4oqCLbEtyG+rVAoq0jhDsMeDUPX9FLg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3BgxZk2cKTtlLFJLTN/r20U2guax0b+L/I+mDJFN/gvCtWiAZ
+	ksLw8ZLPDVa8BgRI4eVRBoqFMOt9y9XCsAu2gDQ0Qo4LVzbm3YhxZjENrO2c2iXpWbnfyi26pE3
+	UgJWeIN7x1hTbeQXio1ArkI/n8ZGKqE4=
+X-Gm-Gg: ATEYQzz8TeFHaKIZnNIUUOilYjsKNwJ+zepRFYCm4DshxW2TTFVQNgIjjsevpdzF7eV
+	Kfo/rPMKlr++44+ir+pe+cL+WzZg8ioYPzsGcpeMwnLnUGgy1hG6w4/39ZIV8cOl23h1KL320qs
+	9e0fqYGrFBa4/1xcQ/Oj+jQV6oKuR97tsyxSvWO2BHTzphI8gd1fTtKm7x4KS7TegAfKdokBMHA
+	xoSD/Hi0yMx/6z6NTJrjsin69SR+1RMQRHvQ8nM95FGXNUqxfeXSMUGNQ5JKSR+L1Y2XZzddyRr
+	VVoWcA==
+X-Received: by 2002:a17:90b:4a06:b0:35a:1762:92ed with SMTP id
+ 98e67ed59e1d1-35bb9f5653dmr3408028a91.24.1773845364331; Wed, 18 Mar 2026
+ 07:49:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="slHqKoTqpWZ+T6zB"
-Content-Disposition: inline
-In-Reply-To: <20260313171659.1225180-1-jhj140711@gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spamd-Result: default: False [-3.56 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+References: <20260313171659.1225180-1-jhj140711@gmail.com> <abq3yqrsQJGI71jz@pengutronix.de>
+In-Reply-To: <abq3yqrsQJGI71jz@pengutronix.de>
+From: Hyungjung Joo <jhj140711@gmail.com>
+Date: Wed, 18 Mar 2026 23:49:12 +0900
+X-Gm-Features: AaiRm53b9VgQZBHhKpHk6qxeRQVGZED7vCl-Dy-q0bM0EzZVA_cnAyHZSDfEH2E
+Message-ID: <CAP_j_b_QYUJeszN63nkCd1wL0vH3fa8UwCpBxJG4FV9_ARTnHQ@mail.gmail.com>
+Subject: Re: [PATCH] net: 9p: usbg: clear stale client pointer on close
+To: Michael Grzeschik <mgr@pengutronix.de>
+Cc: ericvh@kernel.org, lucho@ionkov.net, asmadeus@codewreck.org, 
+	linux_oss@crudebyte.com, gregkh@linuxfoundation.org, v9fs@lists.linux.dev, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35060-lists,linux-usb=lfdr.de];
-	MISSING_XM_UA(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	DMARC_NA(0.00)[pengutronix.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	TAGGED_FROM(0.00)[bounces-35061-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mgr@pengutronix.de,linux-usb@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.567];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.978];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jhj140711@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
 	RCPT_COUNT_SEVEN(0.00)[10];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linuxfoundation.org:email]
-X-Rspamd-Queue-Id: 8E9092BD401
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,pengutronix.de:email,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: D9B9D2BDFDF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Hi,
+Thank you for the feedback
 
---slHqKoTqpWZ+T6zB
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+2026=EB=85=84 3=EC=9B=94 18=EC=9D=BC (=EC=88=98) PM 11:33, Michael Grzeschi=
+k <mgr@pengutronix.de>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
 
-Hi
+> I tested your patch and like the changes, however I have some extra
+> patches on top. Would you mind if I take your changes and include my
+> suggestions. I would still keep you as author though. These changes would
+> then be included in my series I will send today.
 
-I have some review feedback.
+That sounds good to me.
+Feel free to take my changes and include your suggestions and thanks
+for keeping me as the author.
 
-On Sat, Mar 14, 2026 at 02:16:59AM +0900, Hyungjung Joo wrote:
->p9_usbg_close() tears down the client transport, but usb9pfs keeps
->using usb9pfs->client from asynchronous TX and RX completion handlers.
->A late completion can therefore dereference a client that has already
->been freed during mount teardown.
->
->Clear usb9pfs->client under usb9pfs->lock when closing the transport,
->detach any pending TX request from in_req->context, and make the TX/RX
->completion handlers bail out once the transport has been detached. This
->keeps late completions from touching a freed or rebound p9_client.
->
->Fixes: a3be076dc174 ("net/9p/usbg: Add new usb gadget function transport")
->Cc: stable@vger.kernel.org
->Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->Signed-off-by: Hyungjung Joo <jhj140711@gmail.com>
->---
-> net/9p/trans_usbg.c | 63 +++++++++++++++++++++++++++++++++------------
-> 1 file changed, 47 insertions(+), 16 deletions(-)
->
->diff --git a/net/9p/trans_usbg.c b/net/9p/trans_usbg.c
->index 1ce70338999c..3c2aa1943f93 100644
->--- a/net/9p/trans_usbg.c
->+++ b/net/9p/trans_usbg.c
->@@ -149,7 +149,8 @@ static void usb9pfs_tx_complete(struct usb_ep *ep, str=
-uct usb_request *req)
-> {
-> 	struct f_usb9pfs *usb9pfs =3D ep->driver_data;
-> 	struct usb_composite_dev *cdev =3D usb9pfs->function.config->cdev;
->-	struct p9_req_t *p9_tx_req =3D req->context;
->+	struct p9_client *client;
->+	struct p9_req_t *p9_tx_req;
-> 	unsigned long flags;
->
-> 	/* reset zero packages */
->@@ -165,18 +166,27 @@ static void usb9pfs_tx_complete(struct usb_ep *ep, s=
-truct usb_request *req)
-> 		ep->name, req->status, req->actual, req->length);
->
-> 	spin_lock_irqsave(&usb9pfs->lock, flags);
->-	WRITE_ONCE(p9_tx_req->status, REQ_STATUS_SENT);
->+	client =3D usb9pfs->client;
->+	p9_tx_req =3D req->context;
->+	req->context =3D NULL;
->
->-	p9_req_put(usb9pfs->client, p9_tx_req);
->+	if (!client || !p9_tx_req) {
-
-Just goto unlock_complete;
-
->+		spin_unlock_irqrestore(&usb9pfs->lock, flags);
->+		complete(&usb9pfs->send);
->+		return;
->+	}
->
->-	req->context =3D NULL;
->+	WRITE_ONCE(p9_tx_req->status, REQ_STATUS_SENT);
->+
->+	p9_req_put(client, p9_tx_req);
->
-
-unlock_complete:
-> 	spin_unlock_irqrestore(&usb9pfs->lock, flags);
->
-> 	complete(&usb9pfs->send);
-> }
->
->-static struct p9_req_t *usb9pfs_rx_header(struct f_usb9pfs *usb9pfs, void=
- *buf)
->+static struct p9_req_t *usb9pfs_rx_header(struct f_usb9pfs *usb9pfs,
->+					  struct p9_client *client, void *buf)
-
-I like this change but not in this patch. Since with your patch,
-rx_header will be called under locking context, this is not
-really a necessary change.
-
-I would keep it in another patch, though and move it before your change.
-
-> {
-> 	struct p9_req_t *p9_rx_req;
-> 	struct p9_fcall	rc;
->@@ -202,7 +212,7 @@ static struct p9_req_t *usb9pfs_rx_header(struct f_usb=
-9pfs *usb9pfs, void *buf)
-> 		 "mux %p pkt: size: %d bytes tag: %d\n",
-> 		 usb9pfs, rc.size, rc.tag);
->
->-	p9_rx_req =3D p9_tag_lookup(usb9pfs->client, rc.tag);
->+	p9_rx_req =3D p9_tag_lookup(client, rc.tag);
-> 	if (!p9_rx_req || p9_rx_req->status !=3D REQ_STATUS_SENT) {
-> 		p9_debug(P9_DEBUG_ERROR, "Unexpected packet tag %d\n", rc.tag);
-> 		return NULL;
->@@ -212,7 +222,7 @@ static struct p9_req_t *usb9pfs_rx_header(struct f_usb=
-9pfs *usb9pfs, void *buf)
-> 		p9_debug(P9_DEBUG_ERROR,
-> 			 "requested packet size too big: %d for tag %d with capacity %zd\n",
-> 			 rc.size, rc.tag, p9_rx_req->rc.capacity);
->-		p9_req_put(usb9pfs->client, p9_rx_req);
->+		p9_req_put(client, p9_rx_req);
-> 		return NULL;
-> 	}
->
->@@ -220,7 +230,7 @@ static struct p9_req_t *usb9pfs_rx_header(struct f_usb=
-9pfs *usb9pfs, void *buf)
-> 		p9_debug(P9_DEBUG_ERROR,
-> 			 "No recv fcall for tag %d (req %p), disconnecting!\n",
-> 			 rc.tag, p9_rx_req);
->-		p9_req_put(usb9pfs->client, p9_rx_req);
->+		p9_req_put(client, p9_rx_req);
-> 		return NULL;
-> 	}
->
->@@ -231,8 +241,10 @@ static void usb9pfs_rx_complete(struct usb_ep *ep, st=
-ruct usb_request *req)
-> {
-> 	struct f_usb9pfs *usb9pfs =3D ep->driver_data;
-> 	struct usb_composite_dev *cdev =3D usb9pfs->function.config->cdev;
->+	struct p9_client *client;
-> 	struct p9_req_t *p9_rx_req;
-> 	unsigned int req_size =3D req->actual;
->+	unsigned long flags;
-> 	int status =3D REQ_STATUS_RCVD;
->
-> 	if (req->status) {
->@@ -241,9 +253,16 @@ static void usb9pfs_rx_complete(struct usb_ep *ep, st=
-ruct usb_request *req)
-> 		return;
-> 	}
->
->-	p9_rx_req =3D usb9pfs_rx_header(usb9pfs, req->buf);
->-	if (!p9_rx_req)
->+	spin_lock_irqsave(&usb9pfs->lock, flags);
->+	client =3D usb9pfs->client;
->+	if (!client) {
->+		spin_unlock_irqrestore(&usb9pfs->lock, flags);
-> 		return;
->+	}
->+
->+	p9_rx_req =3D usb9pfs_rx_header(usb9pfs, client, req->buf);
->+	if (!p9_rx_req)
->+		goto out_unlock;
->
-> 	if (req_size > p9_rx_req->rc.capacity) {
-> 		dev_err(&cdev->gadget->dev,
->@@ -257,8 +276,11 @@ static void usb9pfs_rx_complete(struct usb_ep *ep, st=
-ruct usb_request *req)
->
-> 	p9_rx_req->rc.size =3D req_size;
->
->-	p9_client_cb(usb9pfs->client, p9_rx_req, status);
->-	p9_req_put(usb9pfs->client, p9_rx_req);
->+	p9_client_cb(client, p9_rx_req, status);
->+	p9_req_put(client, p9_rx_req);
->+
->+out_unlock:
->+	spin_unlock_irqrestore(&usb9pfs->lock, flags);
->
-> 	complete(&usb9pfs->received);
-> }
->@@ -416,7 +438,9 @@ static int p9_usbg_create(struct p9_client *client, st=
-ruct fs_context *fc)
-> 		client->status =3D Disconnected;
-> 	else
-> 		client->status =3D Connected;
->+	spin_lock_irq(&usb9pfs->lock);
-> 	usb9pfs->client =3D client;
->+	spin_unlock_irq(&usb9pfs->lock);
->
-> 	client->trans_mod->maxsize =3D usb9pfs->buflen;
->
->@@ -427,18 +451,25 @@ static int p9_usbg_create(struct p9_client *client, =
-struct fs_context *fc)
->
-> static void usb9pfs_clear_tx(struct f_usb9pfs *usb9pfs)
-> {
->+	struct p9_client *client;
-> 	struct p9_req_t *req;
->+	unsigned long flags;
->
->-	guard(spinlock_irqsave)(&usb9pfs->lock);
->+	spin_lock_irqsave(&usb9pfs->lock, flags);
->+	client =3D usb9pfs->client;
->+	usb9pfs->client =3D NULL;
->+	req =3D usb9pfs->in_req ? usb9pfs->in_req->context : NULL;
->+	if (usb9pfs->in_req)
->+		usb9pfs->in_req->context =3D NULL;
->+	spin_unlock_irqrestore(&usb9pfs->lock, flags);
-
-Same applies here, it would be nice to seperate the changes of
-using the extra variable to a second patch.
->
->-	req =3D usb9pfs->in_req->context;
->-	if (!req)
->+	if (!req || !client)
-> 		return;
->
-> 	if (!req->t_err)
-> 		req->t_err =3D -ECONNRESET;
->
->-	p9_client_cb(usb9pfs->client, req, REQ_STATUS_ERROR);
->+	p9_client_cb(client, req, REQ_STATUS_ERROR);
-> }
->
-> static void p9_usbg_close(struct p9_client *client)
->--=20
->2.34.1
-
-I tested your patch and like the changes, however I have some extra
-patches on top. Would you mind if I take your changes and include my
-suggestions. I would still keep you as author though. These changes would
-then be included in my series I will send today.
-
-Regards,
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---slHqKoTqpWZ+T6zB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmm6t8cACgkQC+njFXoe
-LGR96xAAuLktJ1iOoveDgtn+MCY/pzKT+sHU0HgPMEpYA+hFu9hdt7kSH5pZwXhz
-sqGm4PH1j+F3mL5a55Tv2h5gjqafBLcN9HTMe9gUpjKuCPBo8NjIRZTgt2ozp60c
-7XyRqjNh2ButuN4aYLSJjfLhsSrVDlo4MuhmDltjXSjaHiuzi5iCdGnsvJY6zMF5
-4L9MhJU9HZT/xtjephHq9KYysaUwRK07ygYNDMTJJSaB5M7MRAFDp4a6m5oLH9G4
-odKKxavan2sfg/UkCSQKbahDsVlNDxNXn9TC6B/c2uweC76yNdTtzSiQ0v8PPDBU
-N5uK0EB47iDIPA6H51f9fTMsnJEgpn+X/QZEsXnUe514ShEsmwA5aU+A/A20LoRM
-VL4DpmuQMiC2AUC2OjSGeYVaZM8puh9BrY+HaD0ajMIT37fOjz5DUTx8GzJRfS5V
-9JuzJKE1/yhO7AHkjDQhRfrsHhmi+si7yqvqeMZDBm04kQEVApOIGnI1tlR7/iw5
-XD5Jqwn4mJyg2aX3Zwmw6nbNI+/i+3XE9EaUh7ywXpeNm9bswbhuNUytkeZnmQ9e
-gJEN1U/6dm+HNpTc+nczOlQ6JQ6cdugoxxICjQOSDh9czTarCZM/a+yw2z7Enh28
-eeAwYWN6UXSIMUscx23tNCn0S9gUjik/ZX6ZKFuoW4xGo41CcxU=
-=gES0
------END PGP SIGNATURE-----
-
---slHqKoTqpWZ+T6zB--
+Best regards,
+Hyungjung Joo
 
