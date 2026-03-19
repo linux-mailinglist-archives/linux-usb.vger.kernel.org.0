@@ -1,66 +1,68 @@
-Return-Path: <linux-usb+bounces-35173-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35174-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KK6XHjQvvGnquAIAu9opvQ
-	(envelope-from <linux-usb+bounces-35173-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 18:15:32 +0100
+	id aEdBNzoyvGnxuQIAu9opvQ
+	(envelope-from <linux-usb+bounces-35174-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 18:28:26 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 284FC2CFAF0
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 18:15:32 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2D252CFFD2
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 18:28:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id DAF963003342
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 17:15:25 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 630F130071C1
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 17:28:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58DAA3EF646;
-	Thu, 19 Mar 2026 17:15:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20E7B3EF645;
+	Thu, 19 Mar 2026 17:27:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="dFKmxQsx"
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="OxeUfd3i";
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="OxeUfd3i"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90DE2DFA5B;
-	Thu, 19 Mar 2026 17:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E3538AC96;
+	Thu, 19 Mar 2026 17:27:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773940509; cv=none; b=OPTemgyt749x37dKsPXhKQk26t1kRsci5XHM6vX4CZcYXvbL+bxxP9Nuv8a9btOqVWkaoGxkaiAwlbMHpjcb0L37zU0axLhBETDbkacfptnZMcutNjtnfofgHsSKQlMMqboTrYnR/nT3XdrzjlfdradCgfhDFmZc4EZziRIf23E=
+	t=1773941257; cv=none; b=vFsAVxJbtMlund4ncrtCRE3BRKLpRs1D2ha9swkhl/7gSqgQK9YYVaCYcPizZTbKD0QMZKJWtANeSEg/+q1ccFK4tUNz77IMws25yIhx2oldxzLTifgVWrolL8I//11yRqEf6hgoreOpZWt3JhymcYzGatLpM5uoOljSYknDz3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773940509; c=relaxed/simple;
-	bh=UHJsWGTSlJTfY7QnX97XerQUNMUaLpd7tP4C0EEZkzg=;
+	s=arc-20240116; t=1773941257; c=relaxed/simple;
+	bh=ZKbw9FWJvXWeOQB5rUrkA/ki/dPVf/T9wGpjTwUjMZg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jgysmc9L+qDQBccbN/eoymwLldbrsbi262YHAoobvJZRp6Vzf+5qJglERs1JSWtpse6hfFEaqLa5E1QIadJODbo7F0OJHa3IwAaRfoNFALLdADBDWw67SlOaF2HTAyaPlBUyZPld7rjM2ZlR9c6qa1yY27CbAoyhp5zjcqM1UvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=dFKmxQsx; arc=none smtp.client-ip=199.89.1.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4fcC4X1zKzz1XM5kY;
-	Thu, 19 Mar 2026 17:15:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1773940495; x=1776532496; bh=UHJsWGTSlJTfY7QnX97XerQU
-	NMUaLpd7tP4C0EEZkzg=; b=dFKmxQsxM8O2hO+PntnmCfQmA2VsxQt1I9BWP45v
-	e99xashdlvnQ0iqpzna366213RNXzYUgf1v3+givoQ4OAgp6jhkArR0HgCsDDvLP
-	5u4QOdYjX9pUJlOX2DE3toANf60hlf5yDeqMcuMD1kjAv9XaSRRnHc2imlEmPZqQ
-	YiM5s2CDkWV6Mdk4AFzavdqTRL89qGFkfAxKt3lZ3gbdurzVjr4dSZvtrHFIkz0p
-	eIImjdzfLZxX4edUA95TsTfOxQ31EJmzDgr27Ispq2YeMv+HqZqSJu2XoNuEf+ZO
-	v8YxxK8gPLxPwbUnDpqGfT41WYhoPLQKKf/Ytf8IZrNWLA==
-X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id kgNEXQsIxXTY; Thu, 19 Mar 2026 17:14:55 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4fcC482cLFz1XM5kW;
-	Thu, 19 Mar 2026 17:14:48 +0000 (UTC)
-Message-ID: <ea7a5729-3df0-49ef-ab8d-47ade75cc393@acm.org>
-Date: Thu, 19 Mar 2026 10:14:47 -0700
+	 In-Reply-To:Content-Type; b=iDNMp97lAtICFcXPHpJGYqEUhK/IOC7JDa6FrMvtjwlNzaQDHPKtzSpK9ObVCFp7SOO85Ae+uYvFArd4gSep/aTzAwd+uJ0ZZTGpxqaFiyS7SHW6YIF4/zDBRty3ol2tcjXbFKWQKUi5mRwEFi8FlWmv9n5R0cpbN9vK8PI8EHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=OxeUfd3i; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=OxeUfd3i; arc=none smtp.client-ip=23.88.97.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1773941254;
+	bh=ZKbw9FWJvXWeOQB5rUrkA/ki/dPVf/T9wGpjTwUjMZg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=OxeUfd3i+Ag6Xm1/EpFAFx+BT2tJuVWyltiX3GJEX2sOnBkD7gatf8x81DslIK1H7
+	 mEywZZHJK1ilgi30shBtFGOk38K+rCburnW1a1FLNcZnjmkOJR9J3mBIrtAl6lbc+F
+	 Xb3lqrsII0FQcO3ENkEyHxm2GVBH5KnrJTfg2kt0c0fKZHWaWHLMQ4IcmH1bUF4o0/
+	 y6z68AzarpSDoQGUEQTIhyZrZkRK6uVplmrfpKs+DQPyvJfDEnf8zM4tzQLi5pmkeB
+	 RZYu4iFvzkfPp0vpehlNLK3pVEcEh3xec93s1eCZams7dbiPKGc5+omhwLakt9clh3
+	 496af2U0YAVzQ==
+Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
+	id 8D3CA3FEBE; Thu, 19 Mar 2026 17:27:34 +0000 (UTC)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1773941254;
+	bh=ZKbw9FWJvXWeOQB5rUrkA/ki/dPVf/T9wGpjTwUjMZg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=OxeUfd3i+Ag6Xm1/EpFAFx+BT2tJuVWyltiX3GJEX2sOnBkD7gatf8x81DslIK1H7
+	 mEywZZHJK1ilgi30shBtFGOk38K+rCburnW1a1FLNcZnjmkOJR9J3mBIrtAl6lbc+F
+	 Xb3lqrsII0FQcO3ENkEyHxm2GVBH5KnrJTfg2kt0c0fKZHWaWHLMQ4IcmH1bUF4o0/
+	 y6z68AzarpSDoQGUEQTIhyZrZkRK6uVplmrfpKs+DQPyvJfDEnf8zM4tzQLi5pmkeB
+	 RZYu4iFvzkfPp0vpehlNLK3pVEcEh3xec93s1eCZams7dbiPKGc5+omhwLakt9clh3
+	 496af2U0YAVzQ==
+Received: from [IPV6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb] (unknown [IPv6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb])
+	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id C552C3FC74;
+	Thu, 19 Mar 2026 17:27:33 +0000 (UTC)
+Message-ID: <70284a5d-7f93-45b0-a953-683c4c42ddcd@birger-koblitz.de>
+Date: Thu, 19 Mar 2026 18:27:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,68 +70,99 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 phy-next 09/24] ufs: exynos: stop poking into struct
- phy guts
-To: Vladimir Oltean <vladimir.oltean@nxp.com>, linux-phy@lists.infradead.org
-Cc: Vinod Koul <vkoul@kernel.org>, Neil Armstrong
- <neil.armstrong@linaro.org>, dri-devel@lists.freedesktop.org,
- freedreno@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
- linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org, spacemit@lists.linux.dev,
- UNGLinuxDriver@microchip.com, Alim Akhtar <alim.akhtar@samsung.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Krzysztof Kozlowski <krzk@kernel.org>,
- Chanho Park <chanho61.park@samsung.com>
-References: <20260309190842.927634-1-vladimir.oltean@nxp.com>
- <20260309190842.927634-10-vladimir.oltean@nxp.com>
+Subject: Re: [PATCH net-next v2 2/2] r8152: Add support for the RTL8157
+ hardware
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260317-rtl8157_next-v2-0-10ea1fa488d1@birger-koblitz.de>
+ <20260317-rtl8157_next-v2-2-10ea1fa488d1@birger-koblitz.de>
+ <4522d3e9-217f-4fd1-962b-1f009ee6d9f7@lunn.ch>
+From: Birger Koblitz <mail@birger-koblitz.de>
 Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260309190842.927634-10-vladimir.oltean@nxp.com>
+In-Reply-To: <4522d3e9-217f-4fd1-962b-1f009ee6d9f7@lunn.ch>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
+	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35173-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[acm.org:+];
-	RCPT_COUNT_TWELVE(0.00)[31];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[birger-koblitz.de:+];
+	TAGGED_FROM(0.00)[bounces-35174-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
+	DMARC_NA(0.00)[birger-koblitz.de];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.997];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 284FC2CFAF0
+X-Rspamd-Queue-Id: A2D252CFFD2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 3/9/26 12:08 PM, Vladimir Oltean wrote:
-> The Exynos host controller driver is clearly a PHY consumer (gets the
-> ufs->phy using devm_phy_get()), but pokes into the guts of struct phy
-> to get the generic_phy->power_count.
+On 19/03/2026 5:42 pm, Andrew Lunn wrote:
+>> +static int wait_cmd_ready(struct r8152 *tp, u16 cmd)
+>> +{
+>> +	int i, ret = 0;
+>> +
+>> +	for (i = 0; i < 10; i++) {
+>> +		u16 ocp_data = ocp_read_word(tp, MCU_TYPE_USB, cmd);
+>> +
+>> +		if (!(ocp_data & ADV_CMD_BUSY))
+>> +			break;
+>> +		usleep_range(1000, 2000);
+>> +	}
+>> +
+>> +	if (i == 10)
+>> +		ret = -ETIMEDOUT;
+>> +
+>> +	return ret;
+> 
+> It is better practice to use one of the helpers from linux/iopoll.h.
+Will do. I think poll_timeout_us should work nicely. Thanks for the pointer!
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> 
+>> -static int r8152_tx_csum(struct r8152 *tp, struct tx_desc *desc,
+>> +static int r8152_tx_csum(struct r8152 *tp, void *d,
+>>   			 struct sk_buff *skb, u32 len)
+>>   {
+>> +	struct rx_desc *desc = d;
+>>   	u32 mss = skb_shinfo(skb)->gso_size;
+>>   	u32 opts1, opts2 = 0;
+>>   	int ret = TX_CSUM_SUCCESS;
+> 
+> Reversed Christmas tree is already messed up here, but please don't
+> make it worse. Add desc after mss.
+Will do.
+
+> 
+>> +static void r8157_rx_vlan_tag(void *desc, struct sk_buff *skb)
+>> +{
+>> +	struct rx_desc_v2 *d = desc;
+>> +	u32 opts1 = le32_to_cpu(d->opts1);
+> 
+> And here you need to move the assignment into the body in order to
+> keep to reverse Christmas tree.
+Will do.
+
+Thanks for your review, Andrew!
+
+Birger
 
