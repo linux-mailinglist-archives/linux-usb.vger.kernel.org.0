@@ -1,326 +1,233 @@
-Return-Path: <linux-usb+bounces-35090-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35091-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QDzNHztFu2miiAIAu9opvQ
-	(envelope-from <linux-usb+bounces-35090-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 01:37:15 +0100
+	id KBeWEQBYu2m5iwIAu9opvQ
+	(envelope-from <linux-usb+bounces-35091-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 02:57:20 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D58A2C420F
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 01:37:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C72B2C4A42
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 02:57:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 961EE302C33C
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 00:37:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DE40B3029257
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 01:56:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1CED226D00;
-	Thu, 19 Mar 2026 00:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4DB9E54B;
+	Thu, 19 Mar 2026 01:56:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ObEqNqPB"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="euoHWrNz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3D01EF36E
-	for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2026 00:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5023876A9
+	for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2026 01:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773880628; cv=none; b=KdLxsGnVOLThzUYWkTR0xp9/CUOEbcQFNWSfGhcCk/xe8V+I+u7RmzwGqBepIbZMaoIItQ4nH7eY77BCqrJMxQSjzunuB46j3PLfyhaOsDQlEquq90yxWHhf9hQcWayebp8YVsfi2ozB/OAUlvwp2gEEMKR3qSqMKl7I5XBPFa8=
+	t=1773885395; cv=none; b=uU6+8M48ZFEN/GHhp1daLuV3pJpI/CDPG4eMzywkmUmlm2wZU7uxJt4DPnFyv46Bt0LtlE5azwvDT5ovr7rB+ylmMx5GUUgh0C/tEmoJ2xK7YnqPKDUamUiozcZAkOlSt4YjpMOWGHfNnNCzxGM7v1/FjpR9ETKG5/KawnMOgy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773880628; c=relaxed/simple;
-	bh=uJNAyle4zAzMsIs0lVM+zK/JQ69dXo4Co0vASBFr0wo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LWY1gB93WCwXXf0RhKEHnp7RnIpnb3TReGUq5NPsw+8+llPyvXwPw7s0atzaerS0D2KkYmaaC/VSDfGKpGrGr7BkJQphCxjBh+Opaj98ydpB2d9GtQ1VucB/kRtgh5wcQmZoK92n4ft2vhiTANrEYBxRhG3238VHYo59r7VkfZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ObEqNqPB; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-38ad4677830so3790141fa.2
-        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 17:37:06 -0700 (PDT)
+	s=arc-20240116; t=1773885395; c=relaxed/simple;
+	bh=Mnt9Sg80+993vnw69vZRFSo+25KQDKSKbxTTUnaSSmA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YH6Qmh7L31BtHVNDwTd5KrC46CCd1/apFHa9CI2RMm0yLMLBfle+kozfw8mx517fXod4oPPxz9Uv7sTZq3c8ItxC63VkdNwETPI1I+RwCq1R3H/v6j4KJQXRvIAsOndMWfzY9p1MNXWxEJwZ1kOp1uV4TqfjfSzno3z5mjJObPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=euoHWrNz; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-509061dab77so4308721cf.2
+        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2026 18:56:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773880625; x=1774485425; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SP0hOZ1M81RHmvuBjKc1wEu3kqZ8izLnurhKEm9dt2s=;
-        b=ObEqNqPBztXFbpqKYXDtTPZXckMz3ly2pi0ChAdHCgZXqCbmSXBL9yC34GFLfrbxPD
-         PAmGbBctP7wUu57r+pylJBKiqwhzWxZW74Usk/QUWkJ5JNhivnCfCDGtvZ+T38myS8FP
-         oMDzU/GVdkC1vFqHLByXwausLb+oEfvHS23qT6yD6YUsOyx9T1F7mEhVvWcVkIG9krGf
-         C0Su3SmYMDxQaaokETPLWzaXBVh7T1dJkII3iuiJxckbY3tuK6orAy/0cIsp8boNcNyk
-         Vcl25qtz9fzpSfaMKDcclU7f6gb9lQ8fU55uuz1v4NZAiXFv7GYDv3XjMpv3j7qjIcH/
-         G7YQ==
+        d=rowland.harvard.edu; s=google; t=1773885391; x=1774490191; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=znYbT9ZXt6G+DpGhjFG27tahWUoYy4cTHoJeNLSTysQ=;
+        b=euoHWrNz+sd5g2QFK82v8YJfms7a/YNxfS/FrkpGRCvO9xl1aTWldqpwv2Hq2Dj1pC
+         V8mDm/6j0gzHJhypBoMWxwCKUSj09iOQsDHfpNFMf84K3KYv0/+IE+JYTtnCmgKVYUKI
+         PBabGyPYwGiuIhuR5csXlNCdvrQQglOFIFrwsUkxx1nWNJkJCo9lF1A5aEX4kDwzW46F
+         XrnDpQ3tN7595JaO8iKZ8OmeuyURqi+s3BzmS9CugWPc9WNwufOc88zKgBZHCw6uSWhH
+         9Wf0zbnvTbpOjYxQbkgJQGkNBKUx1g23qDDw025YBBhMEbroJmzafTvQdXPzJ6OrCXne
+         BpJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773880625; x=1774485425;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=SP0hOZ1M81RHmvuBjKc1wEu3kqZ8izLnurhKEm9dt2s=;
-        b=AhuGEKCOuPmhNv4uJccYvZQWeedSC16mJndkIjWLIJQBAsGC2SmYbl5w7/WscAJTZY
-         g3mRlGNLVgKvOL0VutnIsZ+T94Mv1aIzTA+zZWHDUzvg8B/NkV0ANE3/LyYb5eduVVds
-         1fdnkhZzxGzanZH7DP7wlTTO4woX5Il6H0DKAQwzCvRWhGX24F2Agc0pejE10+WQGFxh
-         d/zOddquN2GMA+fZrV9Sb31H9K85JzgmjJn6yFK5F/J62wvqubOpZtwxUMAnBii3ay2C
-         WcNdQDzAAY8XWx1usI9eKJwGIJjFqMf7ger7wz07x+gwDA/3AFAI+ioc1u1DbHe8hkzn
-         ZjNA==
-X-Forwarded-Encrypted: i=1; AJvYcCXmt9kE9SQysTXg955yXpeUD1F3AZBvC9dhgktj1jbVevwtX4J5UW4+EXANkkoLcsByX4pdF4wdDF4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkZCL1zYiZ9Y8j3MDt6qzYSW78VfhPRFQqiAClKLo1FK4XlaT1
-	3hAl4/hDCU+8N8s4ar0jjfrhvw00V9kHE75kOotHzG6bFvDaC6M3H+3L
-X-Gm-Gg: ATEYQzzLJH/wCC8mJ3lIOYCjWOUPdazvEEnX4ZW3m2UlzoqPQh1LUH+SXxWbVzquH8G
-	S3uX3+jsosDN4GTWpvMnnjKKGd9t+LSOh0OMEKgr97AM22XgXNYl6Qbxp+Kg4tK057Vz6Whb2py
-	//q54xLe/2ZvjGwbQK7eMGyARLLiWz4jBkWYjuP9B4dRGqQQGA/fZOTFLjZCL76zM/sR8qMDAhb
-	/dAWLqmr0+zDPE6t+7888q8hw6qLXV4N+mRaNV5cu3XKi02p1LStvWAip+kTJsk/fsppnZ7n4oB
-	afYPt3v1ukuySvyZNiomrZHdx/7vfIM5ewyMNp5cEf0hP9HVGRa6XESjQxfYEIS8FU2MM/37YyA
-	JCcvU2zWiA03+jswr2anGWOSXrvH9HW3vPTLU0hDqEXvYHGOt11DQdFXtDLz1oc5OENA52OXCwu
-	uHZ59Z37R/wuH0HmC0bvXar8iKy3Xavb5j+Br/OJ6oAphUWQ==
-X-Received: by 2002:a05:651c:106b:b0:38a:2eb6:cd26 with SMTP id 38308e7fff4ca-38bd578b7a4mr15901651fa.6.1773880624425;
-        Wed, 18 Mar 2026 17:37:04 -0700 (PDT)
-Received: from foxbook (bfk214.neoplus.adsl.tpnet.pl. [83.28.48.214])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-38bd517c609sm9001871fa.13.2026.03.18.17.37.01
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 18 Mar 2026 17:37:03 -0700 (PDT)
-Date: Thu, 19 Mar 2026 01:36:57 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede
- <hansg@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, linux-media@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] media: uvcvideo: Introduce
- allow_privacy_override module parameter
-Message-ID: <20260319013657.155efeb0.michal.pecio@gmail.com>
-In-Reply-To: <20260316-uvcdynctrl-v3-3-19cd4657e1f3@chromium.org>
-References: <20260316-uvcdynctrl-v3-0-19cd4657e1f3@chromium.org>
-	<20260316-uvcdynctrl-v3-3-19cd4657e1f3@chromium.org>
+        d=1e100.net; s=20251104; t=1773885391; x=1774490191;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=znYbT9ZXt6G+DpGhjFG27tahWUoYy4cTHoJeNLSTysQ=;
+        b=TCbrJ8dQVOS4bmVX77Q3khr7u//K1Z6sziswWPZX8acbK6Yd96S+Trk4JXVCi8XTL/
+         4VRAUDZw2b6Cspo4emBypfwaWh6PlKbA7mQUL9BCyulnObFvVYGDiyIQBO8ni3FkVfVV
+         fBkfJ7lcSd0mAFeLiK2HVBm805LWEAERuNBbkkRNc2CoVTJu4szFomgqiIThZz0y8ikM
+         qy8+I7wbmwLjrnmQ50dhRm4fWKZ4/y0dwnPDCzD2j6Im7ssJLfvtSS1IZqGeilPHn8IB
+         Do+Xz4VWjuGRyIem4kKrmkreOAqcsw9UXwTCErg+GRpYLvMlhdGf7JNRpFKif+xg1qav
+         LQWw==
+X-Forwarded-Encrypted: i=1; AJvYcCXbJfhkcvxFbKbjwlr1BSKpjOucUQIkB1E0JOezL5/l5FOScgaj6gNTfHHDByUCeZKxTE6tC0NwfV8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyh0KO09M1NLtxBdCBv5RINbgJZPkiyPNGcHSC+gHMI2mwiKgKI
+	vUxX5bnUiLFUFxWbNe2FUGPjkMcl7UryYh+nL29OqB1i0KmLDzB4lxnu4lqqO6SXWETdQSv5Yh6
+	pVCk=
+X-Gm-Gg: ATEYQzwsZXdRHFxFZ6nnfPYSfumM066FphiC1au01UqIY+slmc1NLj4FSCJtHVm2Mpd
+	o5xoLW4mL5XTgI5nZIsqHDRub1KF5CJ+bkaIJS2rNUO+8xry/uUhCVeD1/nQyYslCC2jn2QjM9m
+	c3UcsPPWteFi/K2GMinCYvqPQMUfefqnKGnNv2b1youzOmz5gsMmG3zIuQh+rB7C6KpwuR6cFB0
+	lLMFZuSztpok6pe+lEFOLGLATQjy/aJSovRvugSMX4ugZ6EWgCipiN/1OqT9AZ5DxcVDJ7cSWQZ
+	XuF+PII7l6AcJs3FRRmOakAMu29zJPf2CuW9wM2FxKWUTEVjvDTmIToGZAfMOzMOwtMkbeU2rvO
+	P9FW0NIcURb/DxYaanEWDhiXuIVTgZ9GwfOE/+lK1ExUNoRlGJXY/l9QDabQGDUgD2VG8BtveB7
+	4pZd57t7bHWGZbd1na5IkwpxCk
+X-Received: by 2002:a05:622a:120e:b0:509:1cf9:ea0f with SMTP id d75a77b69052e-50b148fc2e0mr75502901cf.65.1773885391214;
+        Wed, 18 Mar 2026 18:56:31 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d01:d210::687c])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50b134ac6cdsm34248841cf.9.2026.03.18.18.56.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Mar 2026 18:56:30 -0700 (PDT)
+Date: Wed, 18 Mar 2026 21:56:27 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Oliver Neukum <oneukum@suse.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	=?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+	USB list <linux-usb@vger.kernel.org>
+Subject: Re: correctly handling EPROTO
+Message-ID: <4a35e3dc-620a-4596-9bf3-783865f29e8f@rowland.harvard.edu>
+References: <437037d6-3fe1-4f81-b74a-21bea00725e0@rowland.harvard.edu>
+ <0b45d0e4-53f8-4960-b41c-63639b496dac@suse.com>
+ <4f8b9942-307b-4c31-86f3-1b7b20b34a16@rowland.harvard.edu>
+ <d1674f98-cbbf-4a16-8c76-996a0494d931@suse.com>
+ <abcd2076-c2d4-403d-8ab8-af747b335075@rowland.harvard.edu>
+ <87a692e2-559a-4765-8321-a422751d3589@suse.com>
+ <4ada5d68-56f1-41b7-82d9-463901c927db@rowland.harvard.edu>
+ <8a14fe29-0d92-4ce5-a7e2-2c084c710727@suse.com>
+ <b0217cdc-f263-418c-b8b5-584520d0b1db@rowland.harvard.edu>
+ <20260318223851.1f6d07d7.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260318223851.1f6d07d7.michal.pecio@gmail.com>
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-35090-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35091-lists,linux-usb=lfdr.de];
+	TO_DN_ALL(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	NEURAL_HAM(-0.00)[-0.963];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.985];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 1D58A2C420F
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 9C72B2C4A42
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, 16 Mar 2026 13:34:46 +0000, Ricardo Ribalda wrote:
-> Some camera modules have XU controls that can configure the behaviour of
-> the privacy LED.
+On Wed, Mar 18, 2026 at 10:38:51PM +0100, Michal Pecio wrote:
+> On Wed, 18 Mar 2026 13:46:26 -0400, Alan Stern wrote:
+> > On Wed, Mar 18, 2026 at 10:54:20AM +0100, Oliver Neukum wrote:
+> > > On 17.03.26 19:03, Alan Stern wrote:
+> > > > You know, with a USB-2 host controller, transaction errors don't
+> > > > make an endpoint unusable, and clear-halt isn't necessary.
 > 
-> Block mapping of those controls, unless the module is configured with
-> a new parameter: allow_privacy_override.
+> Depends on what you mean by "usable". If you get EPROTO reading from
+> a Transaction Translator and the TT discards the packet (because of
+> timeout on Int or by explicit SW request on Bulk) then not only is the
+> particular packet lost because the device got its ACK and moved on, but
+> I suspect the next packet will be dropped too due to toggle mismatch.
+
+(Is it the TT that keeps track of the toggle state, or the host 
+controller?  I don't remember and I'm too lazy to look up the answer.)
+
+By "unusable", I meant that no more data could be transmitted through 
+that endpoint until some sort of recovery action had been carried out 
+(such as clear-halt, set-config, or device reset).
+
+Yes, data loss is sometimes inevitable, and we shouldn't worry too much 
+about things we can't prevent.
+
+> Granted, EPROTO outside of disconnections is apparently rare enough
+> that a horde of users demanging this to be fixed hasn't materialized.
+
+The major example showed up just a few weeks ago.  It was an old system 
+where some component (the PCI bus?) apparently could become saturated at 
+high load, leading to communication failures because the host controller 
+couldn't access the data needed to keep up with its scheduled work.
+
+> I found simple ways to produce recoverable EPROTO at low/full speed,
+> but no such luck with higher speeds so far. It would be helpful.
 > 
-> This is just an interim solution. Based on the users feedback, we will
-> either put the privacy controls behind a CONFIG option, or completely
-> block them.
-
-What feedback do you expect to get?
-
-Users will one day see their setup broken.
-They will curse you and jump through the hoops you set up.
-Next year they will see their setup broken completely.
-They will curse again and wish you all pain, but *after* the fact.
-
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  drivers/media/usb/uvc/uvc_ctrl.c   | 38 ++++++++++++++++++++++++++++++++++++++
->  drivers/media/usb/uvc/uvc_driver.c | 20 ++++++++++++++++++++
->  drivers/media/usb/uvc/uvc_v4l2.c   |  7 +++++++
->  drivers/media/usb/uvc/uvcvideo.h   |  2 ++
->  include/linux/usb/uvc.h            |  4 ++++
->  5 files changed, 71 insertions(+)
-
-This doesn't seem to cover libusb, VM guests and such.
-
-What's even the attack vector? It has to be full remote code execution.
-And it's just an LED, when you see it turn on somebody already has your
-mugshot, if you notice at all. And the mugshot isn't your worst worry.
-
+> > > > I wonder if xhci-hcd couldn't be adjusted to behave the same way
+> > > > (issuing its own clear-halt internally, if that is needed). That
+> > > > would make things simpler.
+> > > 
+> > > It could be. But do you want a HCD to generate requests to endpoint
+> > > 0 on its own without coordination with usbcore or drivers bound to
+> > > interfaces of the device?
 > 
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> index b6e020b41671..3ca108b83f1d 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -3001,6 +3001,35 @@ static int uvc_ctrl_init_xu_ctrl(struct uvc_device *dev,
->  	return ret;
->  }
->  
-> +bool uvc_ctrl_is_privacy_control(u8 entity[16], u8 selector)
-> +{
-> +	/*
-> +	 * This list is not exhaustive, it is a best effort to block access to
-> +	 * non documented controls that can affect user's privacy.
-> +	 */
-
-So it's not removal of some controversial feature, but 3KB of extra
-code in everybody's kernel (I just applied this patch) and a forever
-game of whack-a-mole with HW vendors? They will win...
-
-You will blacklist features found by legitimate users and shared on
-public forums, while hackers will keep their findings to themselves.
-Assuming that there are any who even care.
-
-> +	struct privacy_control {
-> +		u8 entity[16];
-> +		u8 selector;
-> +	} privacy_control[] = {
-> +		{
-> +			.entity = UVC_GUID_LOGITECH_USER_HW_CONTROL_V1,
-> +			.selector = 1,
-> +		},
-> +		{
-> +			.entity = UVC_GUID_LOGITECH_PERIPHERAL,
-> +			.selector = 9,
-> +		},
-> +	};
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(privacy_control); i++)
-> +		if (!memcmp(entity, privacy_control[i].entity, 16) &&
-> +		    selector == privacy_control[i].selector)
-> +			return true;
-> +
-> +	return false;
-> +}
-> +
->  int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
->  	struct uvc_xu_control_query *xqry)
->  {
-> @@ -3045,6 +3074,15 @@ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
->  		return -ENOENT;
->  	}
->  
-> +	if (uvc_ctrl_is_privacy_control(entity->guid, xqry->selector) &&
-> +	    !uvc_allow_privacy_override_param) {
-> +		dev_warn_once(&chain->dev->intf->dev,
-> +			      "Privacy related controls can only be accessed if module parameter allow_privacy_override is true\n");
-> +		uvc_dbg(chain->dev, CONTROL, "Blocking access to privacy related Control %pUl/%u\n",
-> +			entity->guid, xqry->selector);
-> +		return -EACCES;
-> +	}
-> +
->  	if (mutex_lock_interruptible(&chain->ctrl_mutex))
->  		return -ERESTARTSYS;
->  
-> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> index b0ca81d924b6..74c9dea29d36 100644
-> --- a/drivers/media/usb/uvc/uvc_driver.c
-> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> @@ -36,6 +36,7 @@ unsigned int uvc_no_drop_param = 1;
->  static unsigned int uvc_quirks_param = -1;
->  unsigned int uvc_dbg_param;
->  unsigned int uvc_timeout_param = UVC_CTRL_STREAMING_TIMEOUT;
-> +bool uvc_allow_privacy_override_param;
->  
->  static struct usb_driver uvc_driver;
->  
-> @@ -2505,6 +2506,25 @@ MODULE_PARM_DESC(trace, "Trace level bitmask");
->  module_param_named(timeout, uvc_timeout_param, uint, 0644);
->  MODULE_PARM_DESC(timeout, "Streaming control requests timeout");
->  
-> +static int param_set_privacy(const char *val, const struct kernel_param *kp)
-> +{
-> +	pr_warn_once("uvcvideo: " DEPRECATED
-> +		     "allow_privacy_override parameter will be eventually removed.\n");
-> +	return param_set_bool(val, kp);
-> +}
-> +
-> +static const struct kernel_param_ops param_ops_privacy = {
-> +	.set = param_set_privacy,
-> +	.get = param_get_bool,
-> +};
-> +
-> +param_check_bool(allow_privacy_override, &uvc_allow_privacy_override_param);
-> +module_param_cb(allow_privacy_override, &param_ops_privacy,
-> +		&uvc_allow_privacy_override_param, 0644);
-> +__MODULE_PARM_TYPE(allow_privacy_override, "bool");
-> +MODULE_PARM_DESC(allow_privacy_override,
-> +		 "Allow access to privacy related controls");
-> +
->  /* ------------------------------------------------------------------------
->   * Driver initialization and cleanup
->   */
-> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> index f9049e9c0d3a..6d4f027c8402 100644
-> --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> @@ -133,6 +133,13 @@ static int uvc_ioctl_xu_ctrl_map(struct uvc_video_chain *chain,
->  		return -EINVAL;
->  	}
->  
-> +	if (uvc_ctrl_is_privacy_control(xmap->entity, xmap->selector) &&
-> +	    !uvc_allow_privacy_override_param) {
-> +		dev_warn_once(&chain->dev->intf->dev,
-> +			      "Privacy related controls can only be mapped if module parameter allow_privacy_override is true\n");
-> +		return -EACCES;
-> +	}
-> +
->  	map = kzalloc_obj(*map);
->  	if (map == NULL)
->  		return -ENOMEM;
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index 8480d65ecb85..362110d58ca3 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -664,6 +664,7 @@ extern unsigned int uvc_no_drop_param;
->  extern unsigned int uvc_dbg_param;
->  extern unsigned int uvc_timeout_param;
->  extern unsigned int uvc_hw_timestamps_param;
-> +extern bool uvc_allow_privacy_override_param;
->  
->  #define uvc_dbg(_dev, flag, fmt, ...)					\
->  do {									\
-> @@ -794,6 +795,7 @@ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
->  		      struct uvc_xu_control_query *xqry);
->  
->  void uvc_ctrl_cleanup_fh(struct uvc_fh *handle);
-> +bool uvc_ctrl_is_privacy_control(u8 entity[16], u8 selector);
->  
->  /* Utility functions */
->  struct usb_host_endpoint *uvc_find_endpoint(struct usb_host_interface *alts,
-> diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
-> index dea23aabbad4..70c2a7d25236 100644
-> --- a/include/linux/usb/uvc.h
-> +++ b/include/linux/usb/uvc.h
-> @@ -49,6 +49,10 @@
->  #define UVC_GUID_LOGITECH_PERIPHERAL \
->  	{0x21, 0x2d, 0xe5, 0xff, 0x30, 0x80, 0x2c, 0x4e, \
->  	 0x82, 0xd9, 0xf5, 0x87, 0xd0, 0x05, 0x40, 0xbd }
-> +#define UVC_GUID_LOGITECH_USER_HW_CONTROL_V1 \
-> +	{0x82, 0x06, 0x61, 0x63, 0x70, 0x50, 0xab, 0x49, \
-> +	 0xb8, 0xcc, 0xb3, 0x85, 0x5e, 0x8d, 0x22, 0x1f }
-> +
->  
->  /* https://learn.microsoft.com/en-us/windows-hardware/drivers/stream/uvc-extensions-1-5#222-extension-unit-controls */
->  #define UVC_MSXU_CONTROL_FOCUS			0x01
+> I believe the intent is to maintain the illusion that drivers can just
+> resubmit the failed URB and have that become a proper retry.
 > 
-> -- 
-> 2.53.0.851.ga537e3e6e9-goog
+> It likely could be done, but it's still not the same thing as old HCDs
+> are doing because it opens the possibility of double delivery, while
+> closing the possibility of further packet loss speculated about above.
 > 
+> Question is if this illusion is worth fighting for, when
+> 1. it hasn't been 100% reliable since at least USB 2.0 and TTs
+> 2. USB-IF keeps creating problems for software trying to be like that
+> 3. xhci-hcd has been this mess for 15 years without loud complaints
+> 
+> What should an HCD do if such request fails? Just refuse URBs?
+
+Do nothing.  Log an error message, continue on, and hope for best,
+
+I'm not sure what sort of transfers will really want to go through the 
+retry procedure.  With usbhid, we're talking about a stream of interrupt 
+URBs.  If some data gets lost it's not a good thing, but the user can 
+probably handle it -- provided the data stream manages to pick up more 
+or less where it left off (and the shorter the recovery delay, the 
+better).
+
+For other types of transfers (i.e., not data streams), I do not have a 
+clear idea of what requirements drivers will have.
+
+> > Michal should be the person to answer these questions.  I guess that
+> > a clear-halt is necessary for synchronizing an xHCI host controller
+> > with the device's endpoint after an error, but I don't really know.
+> > Maybe it's necessary only for USB-3 devices?
+> 
+> Strictly, it's the opposite - synchronize the device with the host
+> having already zeroed its toggle or SuperSpeed sequence number.
+> 
+> Such toggle mismatch at USB2 speeds results in loss of next packet.
+
+Just to be clear, are you saying there's no way for an xHC to restart a 
+(host-side) halted non-SuperSpeed endpoint without setting the toggle 
+back to 0?
+
+> AFAIU, SuperSpeed sequence mismatch is covered by USB3 8.11, which says
+> "discard with no response", so maybe we would keep getting EPROTO due
+> to timeouts while wrong number is being retried, but not sure.
+> 
+> Resetting host sequence state is not mandatory, but the alternative is
+> intended for retrying the same URB, not another identical one. That
+> would be an edge case possibly exercised by no SW other than Linux.
+
+It does seem like the USB-IF has not given much thought to this problem.
+
+Alan Stern
 
