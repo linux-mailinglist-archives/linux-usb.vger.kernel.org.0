@@ -1,208 +1,148 @@
-Return-Path: <linux-usb+bounces-35153-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35155-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kO6vIcAAvGnqrAIAu9opvQ
-	(envelope-from <linux-usb+bounces-35153-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 14:57:20 +0100
+	id sI7pMd8EvGmurAIAu9opvQ
+	(envelope-from <linux-usb+bounces-35155-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 15:14:55 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DCB72CC46D
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 14:57:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3299E2CC821
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 15:14:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4564D3004079
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 13:57:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 293F931B8F17
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 14:10:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 933E02BEC57;
-	Thu, 19 Mar 2026 13:57:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64B0B3033E8;
+	Thu, 19 Mar 2026 14:10:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="crXvDdoV"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KaKmziBI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA8E934AAE3
-	for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2026 13:57:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073262EDD45
+	for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2026 14:10:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773928631; cv=none; b=oi6FGkLbzrWSUVaOw0dP3xMQ/tRkKqsOzBf8NmdO9/wPn2ia96sjuACnBhzY9oTwufosWZWzzVn6c8q2jp8CSIfTSBiUY+5ForisARzAmeYI9rgyxLKctcPLQWFTw21iwJjf3YrwdZr6ohHlsukVcqP/o1ylJSPK34dlEDLatWI=
+	t=1773929426; cv=none; b=U+CR3HPt37FV6F81ka8cLPybEZZy8FEjHrhmqoC+O75rGSaKCU0bpNS+fwBpMMy2AHgfx/UCET3bC17ZYZMuew9NpMf4x5X8CuHzd2lljGbyjD8g7qarPlrnwuB8vqNF3JvR9vfXrLC3DpLXcz6ze6TBVgXjYHDpSv3paEWkd2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773928631; c=relaxed/simple;
-	bh=UIRc3VxnvrESnaUmKcZxhiDgFb1/pxyyFyAo3t6ihN0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MQHJ0ikabhv6CfGkQucSo+mQqU057uRkuP6VUiQyQ84q6i+hcJLu0tkIkregJvIaCwuAy0HwNMeT+u8WBVE3nM9COU4dlNMoejb5cZOnfw5eYRy9VYEdEfJqC7udz4OcB/O+pN8sqscMYzym40KbRpVTTslEYuNdfO1YvQ5SrJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=crXvDdoV; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773928630; x=1805464630;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UIRc3VxnvrESnaUmKcZxhiDgFb1/pxyyFyAo3t6ihN0=;
-  b=crXvDdoV7Dz+/Hn6FNNa0b9+l2EMiIe9qRSp8xO9TsMtIrbmlmJtOOl8
-   7syLZSH9H7jkmIJatS5BxRKQ7x6mdj9iNRNZQsOJquwuBHHDorZ09zi86
-   wJ6Bq9FLbyXcvT2Pbv97esSALTYrE6vFeJWuFEhwUsiBFuN3VxePPB7DS
-   HXtcZ/ylC72jgQ7CLq6UIUnL/X6w2e4sCsXryZSl5+UHgPq2cNi5+d0aG
-   zulhvFIp59aGiLbc4NJj5Jr6lxxhc7wrxL3Mc9wtNWL8Ln4hMZRKKwy2F
-   rXVbPp0JvHw9ZCpNAmDk5LYiamrmvWMwulwVTA1QQC9Zk6MsXlOoOtK+b
-   Q==;
-X-CSE-ConnectionGUID: CrsPmtpKSx2Jv5SO/jqhWA==
-X-CSE-MsgGUID: H63D9AQoRfmFky+gUZ1p/Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="78904207"
-X-IronPort-AV: E=Sophos;i="6.23,129,1770624000"; 
-   d="scan'208";a="78904207"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 06:57:09 -0700
-X-CSE-ConnectionGUID: 66CGLZLjRfOmFEcTzGVUUg==
-X-CSE-MsgGUID: JyZuGclWSc6R3l6dtNybdA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,129,1770624000"; 
-   d="scan'208";a="260866338"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa001.jf.intel.com with ESMTP; 19 Mar 2026 06:57:08 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1058)
-	id E79D798; Thu, 19 Mar 2026 14:57:07 +0100 (CET)
-From: Niklas Neronin <niklas.neronin@linux.intel.com>
-To: mathias.nyman@linux.intel.com
-Cc: linux-usb@vger.kernel.org,
-	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [PATCH 9/9] usb: xhci: cleanup xhci_hub_report_usb3_link_state()
-Date: Thu, 19 Mar 2026 14:56:24 +0100
-Message-ID: <20260319135626.3077643-10-niklas.neronin@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260319135626.3077643-1-niklas.neronin@linux.intel.com>
-References: <20260319135626.3077643-1-niklas.neronin@linux.intel.com>
+	s=arc-20240116; t=1773929426; c=relaxed/simple;
+	bh=3FpX8OJxqBa8gwdiP9aZE8MdNK+2u1/n4TnG7eZd05Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KQnmw6KWcbWoeAFNPkH47iKWVXwpmHwowLkDgcU5HvrLKi8sO+LwUG/yV8xivnbbUnC7XtN/7MOMuhQAqiC8qnayR0elPHDJAjHDPXf5hsZqYt8ex4XiUqTGVdt85DnH2q/yRyKTtC6PTY3M4Rp/XsNKe/PbbMuXdOp2AoU46ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KaKmziBI; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-486b96760easo10963175e9.2
+        for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2026 07:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1773929419; x=1774534219; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u/lUQzaDLX9G5vwASRv/N/w/bLqcMJFq4CzwCojc9sg=;
+        b=KaKmziBI/MgMycx7+AtxCqE/M5K7rU4OFi1RHbZH+Xr8M9onenWruaoavVOy/tFQ2v
+         t9hY4ZATkNCYW4I60w9j3f1JDg9xt7kqtkiLwbaqIkG7Vcbt13qG1kBoAFQGyKQwAjgW
+         boMZ+AkVlxY/6kSgPQ3AoHIR985IRqaP87SFGpPHSi77khHnihO2ndBtTcdIbo2bdcvR
+         8ZJ0/FMWCuXgHFCwliBNBkv8XKP/Y2RO+pECQT85WKFFjs7PhW0pRXJJXSsnwd27QF5q
+         1dNe8u/cDYzintJW5uPpx/zMCeig76RsmvIRQAv+juHwbDwZFNERJon9dXhg/uZ9Gwo1
+         iUFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773929419; x=1774534219;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u/lUQzaDLX9G5vwASRv/N/w/bLqcMJFq4CzwCojc9sg=;
+        b=okWflpw/1YOTZstT3bAYzJ8fbpC0tl1Vy/ubrEOxDATeNNuPnzF0I1phyJ3+g937sA
+         V78JA8n5OlXkjNZqDq9UNVyoJPdU7Nl3vg/s3OrI+74yo78ivA/4XTrcauIzGt0Wud9/
+         jgnPn5rlfv2rLKSAYULqvoerZBll6HaJpM0bWcbUP4aR87EvsagAZ/nfcq9KgZ9IZB95
+         XFSCf/M1TYvAYH2opaekSPt4zYSQm4NFo6ZGsryezYGf2gk56R2x0PW6jiQgY2Feln53
+         Nf5CYRwHuL8B2MFpPOR2Mc2pXDhfcJYbmUK9XojtVDY9XPgX4KMzHJVBmTIoUsoMmMps
+         xpYA==
+X-Gm-Message-State: AOJu0YzvuzzR8RvPkD8uSnaiOvnmTWSHt3H22bAeyiar9l4rUhOVpmdq
+	+h3EdvMsh0nCTlfqTvV3/T9TJZwpm0WaTJz5zcwa/qBDonVMAPGpgYnn+0sIcfulmHewDWTKZ4X
+	mtcFI
+X-Gm-Gg: ATEYQzyESs/XibmT9EOx34QgZlRamOYFAMNg0QsG4qS5H4z2sHCsE7AgabOJNeVBtPw
+	v3zWb8q3CbxFWDDVSDQah/hOD3/029w2Xc9b6ZaU5eQDTL/HSBkO+byg6xdollskJg4dnjdHDSJ
+	AaFGLeacfaXQjI5VrRxqfvyvfZ9WmcQEdhGqwwAEwZjEfpP+KONbpj5KUrxhWkFD7b48EVFWoAx
+	KeCFFCbohJxkuclMCbjT8vieVzPzDMhCukPCILKBi4WsW1z9axwFCYOfx1OjTlhiGU+qXE2uKKx
+	XNxXJ+YZSf2oOkOlE1J/5IkJ96Vyh8l0tQN5sfDMRiYaMcAG6UIxZW9JUtfkGJOuHpXIcfU0t26
+	7DGAeEabTPeI6ZdzUdsUB69IXunxl15idW/qqKRRGe+3tqr5QLBG4yGccBRh5Pfw7DE0bOIbyTu
+	JpVT+NkXBoQ4GdvjcCOvnhmIxb4+HbOaxCFkn9QBY9CAlEummYVWjzt5NY537vMpHzlA==
+X-Received: by 2002:a05:600c:3e8d:b0:485:4eaf:eb53 with SMTP id 5b1f17b1804b1-486f447503emr116225005e9.19.1773929419281;
+        Thu, 19 Mar 2026 07:10:19 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1301:b601:321d:fd64:6ebf:9f7d? ([2001:a61:1301:b601:321d:fd64:6ebf:9f7d])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f463c9f3sm66438135e9.3.2026.03.19.07.10.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Mar 2026 07:10:18 -0700 (PDT)
+Message-ID: <34b85317-29aa-440c-88a8-54a454784759@suse.com>
+Date: Thu, 19 Mar 2026 15:10:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/9] usb: xhci: stop treating 'wIndex' as a mutable port
+ number
+To: Niklas Neronin <niklas.neronin@linux.intel.com>,
+ mathias.nyman@linux.intel.com
+Cc: linux-usb@vger.kernel.org
+References: <20260319135626.3077643-1-niklas.neronin@linux.intel.com>
+ <20260319135626.3077643-2-niklas.neronin@linux.intel.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20260319135626.3077643-2-niklas.neronin@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35153-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
+	TAGGED_FROM(0.00)[bounces-35155-lists,linux-usb=lfdr.de];
+	URIBL_MULTI_FAIL(0.00)[suse.com:server fail,sea.lore.kernel.org:server fail];
 	RCPT_COUNT_THREE(0.00)[3];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-0.991];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,intel.com:dkim,intel.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8DCB72CC46D
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 3299E2CC821
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Improve readability of xhci_hub_report_usb3_link_state().
+Hi,
 
-Comments are shortened and clarified, and the code now makes it explicit
-when the Port Link State (PLS) value is modified versus when other status
-bits are updated.
+On 19.03.26 14:56, Niklas Neronin wrote:
 
-No functional changes.
+> @@ -1258,11 +1257,11 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+>   		spin_unlock_irqrestore(&xhci->lock, flags);
+>   		return retval;
+>   	case GetPortStatus:
+> -		if (!portnum1 || portnum1 > max_ports)
+> +		portnum = (wIndex & 0xff) - 1;
 
-Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
----
- drivers/usb/host/xhci-hub.c | 58 ++++++++++++++-----------------------
- 1 file changed, 21 insertions(+), 37 deletions(-)
+Should this be a macro like usb_index_to_portnum() or something
+similar?
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index 8e134f6b4e37..bacd0ddd0d09 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -850,53 +850,37 @@ void xhci_test_and_clear_bit(struct xhci_hcd *xhci, struct xhci_port *port,
- }
- 
- /* Updates Link Status for super Speed port */
--static void xhci_hub_report_usb3_link_state(struct xhci_hcd *xhci,
--		u32 *status, u32 portsc)
-+static void xhci_hub_report_usb3_link_state(struct xhci_hcd *xhci, u32 *status, u32 portsc)
- {
- 	u32 pls = portsc & PORT_PLS_MASK;
- 
--	/* When the CAS bit is set then warm reset
--	 * should be performed on port
-+	/*
-+	 * CAS indicates that a warm reset is required, it may be set in any
-+	 * link state and is only present on roothubs.
- 	 */
- 	if (portsc & PORT_CAS) {
--		/* The CAS bit can be set while the port is
--		 * in any link state.
--		 * Only roothubs have CAS bit, so we
--		 * pretend to be in compliance mode
--		 * unless we're already in compliance
--		 * or the inactive state.
-+		/*
-+		 * If not already in Compliance or Inactive state,
-+		 * report Compliance Mode so the hub logic triggers a warm reset.
- 		 */
--		if (pls != XDEV_COMP_MODE &&
--		    pls != XDEV_INACTIVE) {
-+		if (pls != XDEV_COMP_MODE && pls != XDEV_INACTIVE)
- 			pls = USB_SS_PORT_LS_COMP_MOD;
--		}
--		/* Return also connection bit -
--		 * hub state machine resets port
--		 * when this bit is set.
--		 */
--		pls |= USB_PORT_STAT_CONNECTION;
--	} else {
--		/*
--		 * Resume state is an xHCI internal state.  Do not report it to
--		 * usb core, instead, pretend to be U3, thus usb core knows
--		 * it's not ready for transfer.
--		 */
--		if (pls == XDEV_RESUME) {
--			*status |= USB_SS_PORT_LS_U3;
--			return;
--		}
- 
-+		/* Signal a connection change to force a reset */
-+		*status |= USB_PORT_STAT_CONNECTION;
-+	} else if (pls == XDEV_RESUME) {
- 		/*
--		 * If CAS bit isn't set but the Port is already at
--		 * Compliance Mode, fake a connection so the USB core
--		 * notices the Compliance state and resets the port.
--		 * This resolves an issue generated by the SN65LVPE502CP
--		 * in which sometimes the port enters compliance mode
--		 * caused by a delay on the host-device negotiation.
-+		 * Resume is an internal xHCI-only state and must not be exposed
-+		 * to usbcore. Report it as U3 so transfers are blocked.
- 		 */
--		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
--				(pls == XDEV_COMP_MODE))
--			pls |= USB_PORT_STAT_CONNECTION;
-+		pls = USB_SS_PORT_LS_U3;
-+	} else if (pls == XDEV_COMP_MODE) {
-+		/*
-+		 * Some hardware may enter Compliance Mode without CAS.
-+		 * Fake a connection event so usbcore notices and resets the port.
-+		 */
-+		if (xhci->quirks & XHCI_COMP_MODE_QUIRK)
-+			*status |= USB_PORT_STAT_CONNECTION;
- 	}
- 
- 	/* update status field */
--- 
-2.50.1
+	Regards
+		Oliver
 
 
