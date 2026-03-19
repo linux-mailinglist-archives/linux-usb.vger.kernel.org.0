@@ -1,75 +1,75 @@
-Return-Path: <linux-usb+bounces-35149-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35151-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2HyAAhkBvGmurAIAu9opvQ
-	(envelope-from <linux-usb+bounces-35149-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 14:58:49 +0100
+	id YNyDMLoAvGmurAIAu9opvQ
+	(envelope-from <linux-usb+bounces-35151-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 14:57:14 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DE852CC4BE
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 14:58:48 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53DC82CC45E
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 14:57:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8A98131FDF86
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 13:57:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CFBB230166FA
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 13:57:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21A6D3A4F50;
-	Thu, 19 Mar 2026 13:57:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60F0A2C21DD;
+	Thu, 19 Mar 2026 13:57:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WWf6S962"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gu9NgI22"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D452DA749
-	for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2026 13:57:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9125737F8B5
+	for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2026 13:57:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773928628; cv=none; b=mF8dUZynXYT469A95X1z4p6Btw4r/UZdc0g/YV8tZg2AicHn4NVjhKQFDek+MtcR5AXJEzXXdxpYe23bTNsIGRcsR1/UkKfpw/X+Dx+PslkjIo1OHtNe/dVaRCD5MNRq5X0fCO23TBj/AXyf2FpZvFqaW0wAhCBRoMfYKAQU6cs=
+	t=1773928629; cv=none; b=nJFT5ixGk1x0P76Oy9anUQeBJDEx946z0rCFHl9zuaR/cZwTFKNo+WmT1Gxp0O4VpD8aoniHbKrLcPJy7/9gzry0L/U1piZVVN3+zrqsEmx6b7uytIaUJ4qm9JjUqVHIP2D+ltWP8GzsN58ZMuWiE2RuufwMtV3H0YlJqpP0Im0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773928628; c=relaxed/simple;
-	bh=93GmAKzNU6Onpirs/ktPWSLV3kt8yP5q+LrmOVXkuzo=;
+	s=arc-20240116; t=1773928629; c=relaxed/simple;
+	bh=Hm2Rw6qwGLY5BtfLJUqLoka3l+RaX01lxXXFdtA3bcE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a6O0xBSFAgfD3qgdIw5rnFp+J7JdPyMhRLK5sNgie4tGo8vU1Rzrd5H7iHgGPmxwX+HFIX1p7nek9ODsntvD6CiSoC2m1spi95sj1BNHEFb0ep6PRuRyui5rDUKHWV8w8BhvAUX5ZPWPn3DjcRx4XsVD36XK5RLjoT11f3Sd85Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WWf6S962; arc=none smtp.client-ip=192.198.163.12
+	 MIME-Version; b=t2ZqNgxbILLcJSIUN1pCzMl4sI4Hwkkx/T3iU91m73sJQ3twR5MOEQ+zvisSWlWIeQMwimFZQRbAoqzElDeTmBW6C9u4/uQDYW/rJv1AOsTp2AUgUMHTD5pTQfeOVmT83Rt2YlV+z4JcgbCeVGC0JLg/k43Tpam+QHpihC8wzwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gu9NgI22; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773928627; x=1805464627;
+  t=1773928628; x=1805464628;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=93GmAKzNU6Onpirs/ktPWSLV3kt8yP5q+LrmOVXkuzo=;
-  b=WWf6S962bRCjbGoCzO5ZaVEfZ/9SpXOXs+0c/4lnxHOfnzCx1lM6sRrJ
-   RnggO3RkrPXnH64WEdQmHSAhOPe5LwIAbnV79WZJH88hK0NlKla0cwg20
-   mYhwVkC9nYuLpRs0SwdtEs1FCSkSayLsDkhjLDkckzsV44y1Qmi3yXb/5
-   +2IkVWk6P9uPlgpz4Fs5csgN3A3AczAFWPBnMoygwO6iEcFWTWjrjJHG+
-   na+xRnYW63YDKUjzxWkifXSNZrgg+Df7D4zlTj3aB7nQap/N1PPqYkINs
-   H6FFcxSrbcqsFvRhJfu3zVtx3t0Wv62dTE1DOXWA2dhbGvnDfrgNMmdbR
-   w==;
-X-CSE-ConnectionGUID: QY79TauBSDiJ/cI1aU1HtQ==
-X-CSE-MsgGUID: sjqVHChVQvySXqopIceKPQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="78904203"
+  bh=Hm2Rw6qwGLY5BtfLJUqLoka3l+RaX01lxXXFdtA3bcE=;
+  b=gu9NgI22jmSzk0C+2JXqNfH9M1ThlhX/B/SVL1Me4ByfZUTW+K+jv28/
+   f7VBCn1oVOzFFHWUkag8ewd2JnIYN038ZDzpnioiVDaA1Um25JPVsc/PP
+   Z/Lxf8RO7C3g2Iz/UlAr8qJOS2yPC1l4YiSguNOXVw5bM/e0+oCP8PERH
+   kQgWaM+SA684ifK7uRRR+tH72xEnxH+4u/eziNdVh9wwjgAg9lrkHLkOJ
+   nsg4SzqcmHaTgmDqoAxwfKFrjfWVZ2/mlEMyNopAXhu+nX0Dgzm5e7pbL
+   ARnwB93HwGg1uo4xHYhUwNhOgA02NcePBOcy48EajlFFVN2Gpzdv8SM2c
+   A==;
+X-CSE-ConnectionGUID: FB+xQmfKQeWCsI7xV4kCiQ==
+X-CSE-MsgGUID: Kc7V6NE/QjW4vxj3byi9Hw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="78904205"
 X-IronPort-AV: E=Sophos;i="6.23,129,1770624000"; 
-   d="scan'208";a="78904203"
+   d="scan'208";a="78904205"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 06:57:06 -0700
-X-CSE-ConnectionGUID: mn7YuilHSPypCOzRz/VNUA==
-X-CSE-MsgGUID: MtIPHpgYT2aezJwndxn97g==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 06:57:07 -0700
+X-CSE-ConnectionGUID: Q2LSyvjBQ+iU8N0ki6eC3g==
+X-CSE-MsgGUID: EVurhfSGTNSKB9PinSlPNw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,129,1770624000"; 
-   d="scan'208";a="260866320"
+   d="scan'208";a="260866322"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa001.jf.intel.com with ESMTP; 19 Mar 2026 06:57:05 -0700
+  by orviesa001.jf.intel.com with ESMTP; 19 Mar 2026 06:57:06 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1058)
-	id E56069D; Thu, 19 Mar 2026 14:57:04 +0100 (CET)
+	id 7EF7398; Thu, 19 Mar 2026 14:57:05 +0100 (CET)
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 To: mathias.nyman@linux.intel.com
 Cc: linux-usb@vger.kernel.org,
 	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [PATCH 4/9] usb: xhci: clean up 'wValue' handling in xhci_hub_control()
-Date: Thu, 19 Mar 2026 14:56:19 +0100
-Message-ID: <20260319135626.3077643-5-niklas.neronin@linux.intel.com>
+Subject: [PATCH 5/9] usb: xhci: separate use of USB Chapter 11 PLS macros from xHCI-specific PLS macros
+Date: Thu, 19 Mar 2026 14:56:20 +0100
+Message-ID: <20260319135626.3077643-6-niklas.neronin@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260319135626.3077643-1-niklas.neronin@linux.intel.com>
 References: <20260319135626.3077643-1-niklas.neronin@linux.intel.com>
@@ -85,7 +85,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -94,9 +94,9 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35149-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35151-lists,linux-usb=lfdr.de];
 	RCPT_COUNT_THREE(0.00)[3];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
@@ -105,71 +105,92 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-0.991];
 	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.intel.com:mid,intel.com:dkim,intel.com:email]
-X-Rspamd-Queue-Id: 7DE852CC4BE
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:dkim,intel.com:email,linux.intel.com:mid]
+X-Rspamd-Queue-Id: 53DC82CC45E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Several hub control requests encode a descriptor type in the upper byte
-of 'wValue'. Clean this up by extracting the descriptor type into a local
-variable and using it for all relevant requests.
+The xhci driver uses two different sources for Port Link State (PLS):
+  1. The PLS field in the PORTSC register (bits 8:5).
+  2. The PLS value encoded in bits 15:8 of the USB request wIndex,
+     received by xhci_hub_control().
 
-Replace magic value (0x02) with the appropriate macro (HUB_EXT_PORT_STATUS)
+While both represent similar link states, they differ in a few details,
+for example, xHCI's Resume State. Because of these differences, the xhci
+driver defines its own set of PLS macros in xhci-port.h, which are intended
+to be used when reading and writing  PORTSC. The generic USB Chapter 11
+macros in ch11.h should only be used when parsing or replying to hub-class
+USB requests.
 
-This improves readability and makes the handling of 'wValue' consistent.
+To avoid mixing these two representations and prevent incorrect state
+reporting, replace all uses of Chapter 11 PLS macros with the xHCI
+versions when interacting with the PORTSC register.
 
 Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 ---
- drivers/usb/host/xhci-hub.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/usb/host/xhci-hub.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index daa04ac811fc..b57fe0967e10 100644
+index b57fe0967e10..7fb17799cfdc 100644
 --- a/drivers/usb/host/xhci-hub.c
 +++ b/drivers/usb/host/xhci-hub.c
-@@ -1209,6 +1209,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 	u16 wake_mask;
- 	u8 timeout;
- 	u8 test_mode;
-+	u8 desc_type;
- 	struct xhci_hub *rhub;
- 	struct xhci_port **ports;
- 	struct xhci_port *port;
-@@ -1226,13 +1227,13 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 		memset(buf, 0, 4);
- 		break;
- 	case GetHubDescriptor:
-+		desc_type = (wValue & 0xff00) >> 8;
- 		/* Check to make sure userspace is asking for the USB 3.0 hub
- 		 * descriptor for the USB 3.0 roothub.  If not, we stall the
- 		 * endpoint, like external hubs do.
+@@ -866,8 +866,8 @@ static void xhci_hub_report_usb3_link_state(struct xhci_hcd *xhci,
+ 		 * unless we're already in compliance
+ 		 * or the inactive state.
  		 */
- 		if (hcd->speed >= HCD_USB3 &&
--				(wLength < USB_DT_SS_HUB_SIZE ||
--				 wValue != (USB_DT_SS_HUB << 8))) {
-+		    (wLength < USB_DT_SS_HUB_SIZE || desc_type != USB_DT_SS_HUB)) {
- 			xhci_dbg(xhci, "Wrong hub descriptor type for "
- 					"USB 3.0 roothub.\n");
- 			goto error;
-@@ -1241,7 +1242,8 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 				(struct usb_hub_descriptor *) buf);
- 		break;
- 	case DeviceRequest | USB_REQ_GET_DESCRIPTOR:
--		if ((wValue & 0xff00) != (USB_DT_BOS << 8))
-+		desc_type = (wValue & 0xff00) >> 8;
-+		if (desc_type != USB_DT_BOS)
- 			goto error;
+-		if (pls != USB_SS_PORT_LS_COMP_MOD &&
+-		    pls != USB_SS_PORT_LS_SS_INACTIVE) {
++		if (pls != XDEV_COMP_MODE &&
++		    pls != XDEV_INACTIVE) {
+ 			pls = USB_SS_PORT_LS_COMP_MOD;
+ 		}
+ 		/* Return also connection bit -
+@@ -895,7 +895,7 @@ static void xhci_hub_report_usb3_link_state(struct xhci_hcd *xhci,
+ 		 * caused by a delay on the host-device negotiation.
+ 		 */
+ 		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+-				(pls == USB_SS_PORT_LS_COMP_MOD))
++				(pls == XDEV_COMP_MODE))
+ 			pls |= USB_PORT_STAT_CONNECTION;
+ 	}
  
- 		if (hcd->speed < HCD_USB3)
-@@ -1272,7 +1274,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+@@ -1365,7 +1365,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			if (link_state == USB_SS_PORT_LS_RX_DETECT) {
+ 				xhci_dbg(xhci, "Enable port %d-%d\n",
+ 					 hcd->self.busnum, portnum + 1);
+-				xhci_set_link_state(xhci, port,	link_state);
++				xhci_set_link_state(xhci, port,	XDEV_RXDETECT);
+ 				temp = xhci_portsc_readl(port);
+ 				break;
+ 			}
+@@ -1397,7 +1397,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
  
- 		put_unaligned(cpu_to_le32(status), (__le32 *) buf);
- 		/* if USB 3.1 extended port status return additional 4 bytes */
--		if (wValue == 0x02) {
-+		if (wValue == HUB_EXT_PORT_STATUS) {
- 			u32 port_li;
+ 				xhci_dbg(xhci, "Enable compliance mode transition for port %d-%d\n",
+ 					 hcd->self.busnum, portnum + 1);
+-				xhci_set_link_state(xhci, port, link_state);
++				xhci_set_link_state(xhci, port, XDEV_COMP_MODE);
  
- 			if (hcd->speed < HCD_USB31 || wLength != 8) {
+ 				temp = xhci_portsc_readl(port);
+ 				break;
+@@ -1435,7 +1435,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 					reinit_completion(&port->u3exit_done);
+ 				}
+ 				if (pls <= XDEV_U3) /* U1, U2, U3 */
+-					xhci_set_link_state(xhci, port, USB_SS_PORT_LS_U0);
++					xhci_set_link_state(xhci, port, XDEV_U0);
+ 				if (!wait_u0) {
+ 					if (pls > XDEV_U3)
+ 						goto error;
+@@ -1461,7 +1461,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 					xhci_stop_device(xhci, port->slot_id, 1);
+ 					spin_lock_irqsave(&xhci->lock, flags);
+ 				}
+-				xhci_set_link_state(xhci, port, USB_SS_PORT_LS_U3);
++				xhci_set_link_state(xhci, port, XDEV_U3);
+ 				spin_unlock_irqrestore(&xhci->lock, flags);
+ 				while (retries--) {
+ 					usleep_range(4000, 8000);
 -- 
 2.50.1
 
