@@ -1,386 +1,238 @@
-Return-Path: <linux-usb+bounces-35130-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35128-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EKNbHrfKu2leoQIAu9opvQ
-	(envelope-from <linux-usb+bounces-35130-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 11:06:47 +0100
+	id WN5kHpvNu2mXogIAu9opvQ
+	(envelope-from <linux-usb+bounces-35128-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 11:19:07 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA0392C93AA
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 11:06:46 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 933E42C95B7
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 11:19:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E0839329217E
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 09:57:37 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 9939C30B82A5
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 09:55:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D26373AA4E9;
-	Thu, 19 Mar 2026 09:57:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 109F33859F1;
+	Thu, 19 Mar 2026 09:55:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hQ7o2rmR"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="DkIddBhK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011045.outbound.protection.outlook.com [52.101.70.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D95386C23
-	for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2026 09:57:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773914243; cv=none; b=pWtjiRiBXrXkkwgRDmxBRMcRNjhtaOWP1fPQyh+ii8nJD8/jdeiCIAzPhiE/4r1D6X+pbdha7jpJNHTpFns8tEz0qTYAIqFh++TitJm06VMBcpv6wldAMhUb4LCWX7KpnFSXP86egL9upXh98SFPfjY/gBQoKPshUaRC1bheVvs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773914243; c=relaxed/simple;
-	bh=8V1U2yHquHjLMhQY21Dsi5RU6DPFKswfiQM7HLk83UA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kvQ9LnPQbLU/OcDU0D0JTanjNRlXuROEhP+TlomYFLRgT95gmQMen6xcY6hu/btVvK9+ysv/v6tmZf6A66FmvV8SfuTR2lbMJrEjQfAWU2m9TOmPbcRHTOgSYD3VRk6g3aLAa+Tbtcn4Hg0YeZ4Bg2c5cO4LLDq5QxhV4nBLgOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=hQ7o2rmR; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6644a3029b3so765908a12.0
-        for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2026 02:57:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1773914234; x=1774519034; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=42kcHim1m1kLe6enJpDUsxV3kWm1Hbl04yW9V6WrLu8=;
-        b=hQ7o2rmR62aBW0SpbdnxzXkv8t2h8e0b2k62B5JcVLapAaZUhHyfegNjSDf4586Oes
-         JvJilImBxygM3HFN6hWt5NaWf/0h8IKIvge1D8qO9j8OWQJH4GVkfEdONKbaU5a870F9
-         Fu1x8cARfyV984iWLH1PSpivMW2uYhiw2mLmQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773914234; x=1774519034;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=42kcHim1m1kLe6enJpDUsxV3kWm1Hbl04yW9V6WrLu8=;
-        b=LEozHwjSLqUK/vUA6xZHmt49Zeac/Fo69Tywy4dSYuTTmz+IWqUBiRMU7b04BVEj0j
-         7FCmzXx+8vva7KFnWA6bz6urfBB9Ux3zbdf9hAAGHXE/l9wlMTvLRKcV6v8npijQG1j9
-         lOJ6XTTibccOBvOiGhARa6noT7FBGLNH3hCt7nR8Jq/Bx455Ul9FvwFSpuJ8/HxDMOXe
-         S1hfeJ+I3YEMAYHuBOec2NI7Z0evlhul1vAP3KLYs3/4AFTZuMKUB1iRkqCM+WBb1UMm
-         a3+1ZtJmLWAtrLShTSaj+ZVZaeZnr851RUlMXGmj1yVGs+jIHBDUrsP58HkVxmwOr4dw
-         AzTw==
-X-Forwarded-Encrypted: i=1; AJvYcCWT+AA3yZ2r7AIbmlKDLgtMVZqp5ZOv/NUpzjfq+aEKLOxvWRGlNAcdJaE0vLgDref5sKNKvhY6xLM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyJwDjaM1ctgVoOP5GhUayyyGt3pu7pA/lJnRw7U1D/Fgq4mN1
-	2GWFyhvykWBAY084KTr3kQetqzEUDMhlfYjg+6PnrjD5eGGjojaZTM3NbDH7AyCWv+xmRKqGS4f
-	Jpg6m6lyy
-X-Gm-Gg: ATEYQzwJgf7f47erNMZ2Wk8wGMmCTzMlLkFpPqDFcvS8hUbvU9vkfTqd4HQnpEm4r2O
-	4+mYZp03kEILrdg5YRHeCTq3+cV+F+ZVWwmdWSSU6XZtX35n7xMRqYKXNGQ7NiPW2wqQbftIKzi
-	CBtQCeuYywEdn6DFmY6wow1CUm8L46z4JWAJd+inDEnLqLpSsZHGZvnDCUjJg6au/JI3pLu0OcW
-	3I0OnUAvrWrp7wZqyaYRkVPt5i97zClmdO0Bjps/83lXrY0WgiuOJLdPG3z/XVyaKWkPcZgQzTo
-	F6H7a4SmwW3vvuAu98pgwbOT0MzSnCZx+1Th7O3XOzDRhOdVa4Nd6M4teyuq3yGjQFTYvPqnciY
-	4VaC45USwLapm24CEWIUqV1UgKaAO1cfrsXMJRIEFgQomycSvwXfO6H42mjUAxu3qCKD17kbrDN
-	VrVPOpfE2RLZ09ZjwaxRcYz7lJifOVfemXUkjsQzK83DuILja42zSCnmWDueU2
-X-Received: by 2002:a05:6402:458c:b0:668:57f8:cb86 with SMTP id 4fb4d7f45d1cf-66857f8ccd8mr1246469a12.22.1773914234171;
-        Thu, 19 Mar 2026 02:57:14 -0700 (PDT)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-667b14976f1sm3501467a12.31.2026.03.19.02.57.12
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Mar 2026 02:57:12 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b97a06d7629so60140066b.0
-        for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2026 02:57:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUog0jbaTZtinSYhwdbez5UhshQCubbsw7NvQQxwUxbJQ/DsDWmpw1/pDFC9dBp8HyrgvSZ2MldEvY=@vger.kernel.org
-X-Received: by 2002:a17:907:3f13:b0:b98:e38:559e with SMTP id
- a640c23a62f3a-b980e386168mr190482466b.54.1773914231511; Thu, 19 Mar 2026
- 02:57:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F2AA37F8A4;
+	Thu, 19 Mar 2026 09:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773914118; cv=fail; b=bFKVp3KxvEX0aZOlNGNYo73qCHA0abnWCpTHQmYJB66ICnHBNqGO8kjpiM6nAW73x9sVFKd2E7WE8KPRLtZvLEdLJd26Q3mh9xt4y2V8tMCBSfKDOB6HYXxzHuJ1ZzeM58h3f16lit/ALmXYTXshACxxjCvfkPL9MiTXoQxsl0I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773914118; c=relaxed/simple;
+	bh=mcPSpezCZDBFMadoXQCvjjSemZpzOn/u/EflR+KGl9M=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=dNrkJDyi1iYX9fV96i3ONvT6Hy1VY+ROU4SzBZ9OYaY1aS6XXDktJwm1bpO+Wh9xvnTBWloVtD/53WHStOrlBz6pZPkFrWZoZPSgjdQQDWq/ftztgn/uurEMIdgPq65MmeqNjZn6OgaIP5JgjMl/k8pJZcqGMz9q1OMlc7T2dt8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=DkIddBhK; arc=fail smtp.client-ip=52.101.70.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZSsbe0cxqYlNfJph6rSOO0G03stMs9+xTmAdR2G5pxP02g5zHXyQWo5mldJeTtaVHiBTlSDt+TVN1EJiTaI3FR3JAdRn1sh4VMKRU/9YIONdTP4zixmwDALr811ZleMsbdsUKjoAuE+N9fCGyjV5CAPBAqbLVkY+5CwbAAPvDOpW7m20C5F7nZXBoPgOBnjRKMBLHhAGQmM/V8kr3Ruknv3ULPmJVO1/r//EGE0q1UlnRYSRccVhq/xEQatiZ5y2F7kFXD9rpUrxtKd08laHmv3soiEv48pw9GEfr1pVIPPYlLCPpaw6lJoyoCIr3iDRHS4a0lXZQ85LvebkWaH4AQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=22ibsRXyHNMfocPuWqnsEq7bURXD06VFnQtBNqvq3vo=;
+ b=DSraHb1E4HKNo0y90XBhJ7OWsvLui1kJpREFUW8+ZIqr4bzuMHjtFLpy4zF+HM8qdd2APUfCBB531g42s1V+XLh5hcQlZKFwFr6FcolPbcZfMR9df/Q+VmtCXisbEd8gy1LkVShXYRKnAuuNethqyUce1IRvM57eHc863tZ4KC0E8npivsAADXdRBV8Crz6bXjnvdwpBwN4Kko/zp4Br5Hw+6/yyEuBs3jXjORZzTSfb5aQ402Dfb1bBp2HUOaiZkezdfjumFB+LX5xyp1xRBRhl4pVXXgaJSfX7yLNhrNChUHW/5/PNOxw8bKIQLCLoTIaSkIhh9udgy3bIPSp1DQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=22ibsRXyHNMfocPuWqnsEq7bURXD06VFnQtBNqvq3vo=;
+ b=DkIddBhK+sW/pba9g6cIYGWhlD/mCDzTEuPvT/8vnG6nWFthR9eaM1IC75573jTES3/FkIqOpMRcjLyyWP2IDU7W44vxtVNEs6OIsB2uPtf75LePFxzjxDwnQ/p8OqIEqAnK2T0eH/dvAfUJXigk7c9KpL/ByaDtPThAyP9Ot8iajdONsnJn6eAlSLPVaDuIxeKWgjAPy5IDcgRuP5q5cKWoHHOZbmxQtJcaadTzfs4Hu3FryZ288vE6LJR6sLnAVZhCVUbPsevjE5WoC8YgOnog/KySOb0c2QTLl6GKlWqizpla7CgXvfaFAQq7JXoSbuVAJ9U1yLR0Sa49rHC23g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by PA1PR04MB11057.eurprd04.prod.outlook.com (2603:10a6:102:48f::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.19; Thu, 19 Mar
+ 2026 09:55:12 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::c67b:71cd:6338:9dce]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::c67b:71cd:6338:9dce%5]) with mapi id 15.20.9723.018; Thu, 19 Mar 2026
+ 09:55:05 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: peter.chen@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: jun.li@nxp.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev
+Subject: [PATCH 1/2] usb: chipidea: core: fix device mode not work in non-lpm
+Date: Thu, 19 Mar 2026 17:57:15 +0800
+Message-Id: <20260319095716.634568-1-xu.yang_2@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0002.apcprd02.prod.outlook.com
+ (2603:1096:3:17::14) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260316-uvcdynctrl-v3-0-19cd4657e1f3@chromium.org>
- <20260316-uvcdynctrl-v3-3-19cd4657e1f3@chromium.org> <20260319013657.155efeb0.michal.pecio@gmail.com>
-In-Reply-To: <20260319013657.155efeb0.michal.pecio@gmail.com>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Thu, 19 Mar 2026 10:56:59 +0100
-X-Gmail-Original-Message-ID: <CANiDSCsBjgZL0MGFgkDzbTaJ03hE0gZbV3tu3fKo7k6KaAcMZw@mail.gmail.com>
-X-Gm-Features: AaiRm5192DSsBGH08gPtl1ojGHVdXtgV6ffP6UH8PASivTgmPU2I0YYLsTu9Xmg
-Message-ID: <CANiDSCsBjgZL0MGFgkDzbTaJ03hE0gZbV3tu3fKo7k6KaAcMZw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] media: uvcvideo: Introduce allow_privacy_override
- module parameter
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede <hansg@kernel.org>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|PA1PR04MB11057:EE_
+X-MS-Office365-Filtering-Correlation-Id: e0e4a09f-485e-4ee6-cf4a-08de859d98d7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|52116014|376014|366016|19092799006|38350700014|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	2KsU27yfl7oFjqx2OA9KIj4pyAtmX/L+FsvUh0nCCaxgXTS6f4ftvSirE3LR/6+IkX6rgQ+DkTV0BQeecZ8DvJHQx2bxmzSC6fjPqRjM1p4e8SzsUJYeTwjX/z21qOVZBotuiF8iowsVJnTom+podNrJJwweXpZzwKCeDFZGQa/kUpakiD2BZGz+mQ8SGr080/WyUBi4AkbPrjlkY9ZuNTuEVQMWEyLaP7Hx/xzqwDIUxJfmKhJ3JozaRfUXKDJRyaJzxm1SW0mAHUSgSSDrJKG/DCssCun/OJS0LQvrdf89dni14f4yN9wLejJQAKRHnxrgh6VWsRGVyBE9XcDNpStyyqdxER6xsuu1IVVxpGkw0uoBzn7AH3Mg29ii0xfI+d6BwMX+OJH08B0LX3BBkqJ6Wg3F37lBVNgGGXKqcEZ374zK7yxjI0fBUTHLcKzsicO7UDU9hY609s7134pRoNxu6kcJZGM/qpVTUx7ndSbsRQCjUVCqqfr/Iu4cr8rJ63TY4jrTHkn1GebfaaeKC9fuHpGBvfCTwWuM+EvWRmcngqVy4jv2mzv+oQQt33rl8hAKEH8vSbDUhWf3tTVDUhzO9PJPJfACyJrCSbUevGsMKrOMGo194oe+AxqpT8iMrq2E7kU1Ys7w/aPdeLzpLrEJkRhh4O5SoVSmYMADWZtTabJhwSW72y8YTEtF9baPHBnW3j5rCQy9V14GWNaTq6LSKOu5VJlpfnu+mUuVvbhuDa5ctwqZmAfQtS6jmeDiAR0Mc8hvkMzvcnt29eVVqWlI7qDzUFEWouuw/3OyVyY=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(376014)(366016)(19092799006)(38350700014)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?gw47VpYkn8ux9w3jgrxxoQRpoLmY9fEqMc40BhZ70We0DhKaYUCd8fjyY6jQ?=
+ =?us-ascii?Q?VGHiqQyP3ybBx4QbsFfnIsP5V4W+HGjTkCEnOyMYDNTmqtBcMFrEbmPV0eYr?=
+ =?us-ascii?Q?9UoHdP8JBvRCUcuKvz4mWo3QoN26zt0sbgSgbp2mgseADZtWR+pf+cq96Ilt?=
+ =?us-ascii?Q?+QwCHo53WKxgbAPv25TiKPfE2hLcuE+ZWtqt+tul76GBEcBlxA7CsevUf8wN?=
+ =?us-ascii?Q?/uIaZxCH51X59AY6WoZ52UEdsam9vdW5RR0Wbzv+nGRBfolp/AsAmuh2sdoZ?=
+ =?us-ascii?Q?6fLekpIrSwqyBdHQDcq6Q2K73l0eMupqVLv+i+PenqAt5diFDoRAkSfaaEi6?=
+ =?us-ascii?Q?x0KNyaK3LfbwZDGu6ZqGxancC/ykXyZowf0b7JJ35hiamv+np+BSrTWw6zCj?=
+ =?us-ascii?Q?4xepr9YMwE6xufKMYzCaUlpPUs6H7OfYDITKIUr0HnUP+bEdveV9ym3NW93t?=
+ =?us-ascii?Q?/D2/fru8c5PchSjRokXqZoZQb/5t7+WDAcSx9RrxIQK63tmpDmgeu/bHjygt?=
+ =?us-ascii?Q?jem31bBleSZzOOZMSxHp1OgbIUP1rlntohixbyfeo8OLo6lndEmtph2bsjPC?=
+ =?us-ascii?Q?BLjA9RkWAkA+9dovFtZZ93tRch8i/4fkZ2IDh9VzyDv+Vkrl3yICpOHL78ej?=
+ =?us-ascii?Q?IDqSzbMJYbl4qET7ZNOXGuqmwVqnIGn9lhQvr9EmZWFBNv1Ho+aI/BYOiGgD?=
+ =?us-ascii?Q?AyamQcQXbvLQfSXnM+iwoigXSgilKViC7ewxJtSBr1b7RYde8UZpI4eliVoq?=
+ =?us-ascii?Q?uDg7dePHogiVF0WbfxS55W8q+8jhjoEvmLTyRNlcdv9AegRh/aEaBGyqf/Fc?=
+ =?us-ascii?Q?mOaHqpR0iwMofMXN/eveCOsb8hWqqz3uFTHN3RQaKEUzFrSNke3QvI+TdYnv?=
+ =?us-ascii?Q?eHKPEeHvUeNiaRUadoesdtXHxjx2L2K3GN2gF7JPe8VkJFCgxhR+K4GcGvPg?=
+ =?us-ascii?Q?LmyZCIC+1Xzn5WZAO0tIZ3RJ51drf+cu+QRjKMPt30qEA44FCrNOdvRfbIW+?=
+ =?us-ascii?Q?ZAjKVU8vYKNlJBIbOfA1jI0MGj2QMv7xi1Wvh/X5rDYGVl7irhLL84hYqyKU?=
+ =?us-ascii?Q?r4Imw99bTUa7Z9ulnxm1TaY4EUKVLvp1NGwyb584/vR8+VnRWW65OJVioiYD?=
+ =?us-ascii?Q?35F9tRMQnETLwzxyDUGpEAN42Wuxb5CxeWWqdubX4yAKs7GbpqSwjk37pcNO?=
+ =?us-ascii?Q?eV+mSIH4GeT7D/PkWgmow//oCjDqvTCibfFfPo0yTibJm0iB5J3NugEnzk5w?=
+ =?us-ascii?Q?DQy6X01Xc90brwDl53FHgiG8TZaBIPjcCb1YuAb8dXm3imi3tyRNee1aZm8+?=
+ =?us-ascii?Q?oKNzSB6PaZLGKw5sP28wwRrHZXKVx4nlbdcKnemGKdZNeNsSZF67XSQvIl9Z?=
+ =?us-ascii?Q?olPnnQy1WdTuZqIkz/vXOUwtL+O3eAjrypedGkMEWKKhyjBMbs3hTWubIQmU?=
+ =?us-ascii?Q?NVsFilxAT/l0ycNX0G8Ie9vAuOmgthAejpS1A16EDFNEAT1Wk6fjqmeTP2tc?=
+ =?us-ascii?Q?BuDfyE39NlU4eSBsU+Zq6kuiKtphNFeaU6np7I9XsHcaIsInQw/t9PI3u7Q1?=
+ =?us-ascii?Q?DczXjRUIBfDYV/CY1GiF3pV7QknxVsbpQLZ3ttk8zySBLREgxhc+7mnuV84N?=
+ =?us-ascii?Q?WfU60o5sQu/3g+wC6X/kZ14u1FyeLNg5hgnFVIvr4mNi5nPCiKDjJ5yyzAGy?=
+ =?us-ascii?Q?gdMxnF5DPfFqjGAGeS1x5wHo7YRKihe2+cMDQvjjgEoDQTJJViTAEYztC2+4?=
+ =?us-ascii?Q?17uYqrKhAg=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0e4a09f-485e-4ee6-cf4a-08de859d98d7
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Mar 2026 09:55:05.6637
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cvsHKB0o+BVBEHnT8PVpZU6fSNXqiwEq0Mo5kaVe+wNjansO+LaW9PbJRiTphvM/UQxNs+3Uv/wB8n9c0HdLIg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB11057
+X-Spamd-Result: default: False [1.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35130-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[chromium.org:+];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35128-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[nxp.com:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ribalda@chromium.org,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.974];
+	FROM_NEQ_ENVFROM(0.00)[xu.yang_2@nxp.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-0.993];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,chromium.org:dkim,chromium.org:email,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: DA0392C93AA
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,nxp.com:dkim,nxp.com:email,nxp.com:mid]
+X-Rspamd-Queue-Id: 933E42C95B7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Michal
+In current design, we expect 2 ci_irq() to handle ID and VBUS events in
+usb role switch, like what ci_extcon_wakeup_int() does. Now we only call
+ci_irq() once. However, this won't bring any issues in low power mode,
+because ci_irq() just take the device out of low power mode, and then
+ci_extcon_wakeup_int() will call ci_irq() twice. If the device is not in
+suspend state, the device mode will not work properly because VBUS event
+won'tbe handled (ID event has higher priority) at all.
 
-On Thu, 19 Mar 2026 at 01:37, Michal Pecio <michal.pecio@gmail.com> wrote:
->
-> On Mon, 16 Mar 2026 13:34:46 +0000, Ricardo Ribalda wrote:
-> > Some camera modules have XU controls that can configure the behaviour of
-> > the privacy LED.
-> >
-> > Block mapping of those controls, unless the module is configured with
-> > a new parameter: allow_privacy_override.
-> >
-> > This is just an interim solution. Based on the users feedback, we will
-> > either put the privacy controls behind a CONFIG option, or completely
-> > block them.
->
-> What feedback do you expect to get?
+Although 2 consecutive ci_irq() can work around the issue, do not do it
+because ci_usb_role_switch_set() may or not be in low power context which
+make the ci_irq() purpose not unique here. Because the final processing
+is in ci_otg_work(), just directly queue an otg work. This also refine
+the logic for more clarity and not set changed flag.
 
-I want to identify the valid usecases for overriding the privacy LEDs.
+Fixes: e1b5d2bed67c ("usb: chipidea: core: handle usb role switch in a common way")
+Cc: stable@vger.kernel.org
+Reviewed-by: Jun Li <jun.li@nxp.com>
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+---
+ drivers/usb/chipidea/core.c | 30 +++++++++++-------------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
 
->
-> Users will one day see their setup broken.
-> They will curse you and jump through the hoops you set up.
-> Next year they will see their setup broken completely.
-> They will curse again and wish you all pain, but *after* the fact.
+diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+index fac11f20cf0a..1bd231a852a1 100644
+--- a/drivers/usb/chipidea/core.c
++++ b/drivers/usb/chipidea/core.c
+@@ -618,30 +618,22 @@ static int ci_usb_role_switch_set(struct usb_role_switch *sw,
+ 	struct ci_hdrc *ci = usb_role_switch_get_drvdata(sw);
+ 	struct ci_hdrc_cable *cable;
+ 
+-	if (role == USB_ROLE_HOST) {
+-		cable = &ci->platdata->id_extcon;
+-		cable->changed = true;
++	cable = &ci->platdata->id_extcon;
++	if (role == USB_ROLE_HOST)
+ 		cable->connected = true;
+-		cable = &ci->platdata->vbus_extcon;
+-		cable->changed = true;
+-		cable->connected = false;
+-	} else if (role == USB_ROLE_DEVICE) {
+-		cable = &ci->platdata->id_extcon;
+-		cable->changed = true;
++	else
+ 		cable->connected = false;
+-		cable = &ci->platdata->vbus_extcon;
+-		cable->changed = true;
++
++	cable = &ci->platdata->vbus_extcon;
++	if (role == USB_ROLE_DEVICE)
+ 		cable->connected = true;
+-	} else {
+-		cable = &ci->platdata->id_extcon;
+-		cable->changed = true;
+-		cable->connected = false;
+-		cable = &ci->platdata->vbus_extcon;
+-		cable->changed = true;
++	else
+ 		cable->connected = false;
+-	}
+ 
+-	ci_irq(ci);
++	ci->id_event = true;
++	ci->b_sess_valid_event = true;
++	ci_otg_queue_work(ci);
++
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
 
-The goal of the deprecation period is exactly this: to trigger a
-conversation before a permanent block. If a user relies on this, they
-can report it now. We can then decide if we need a specialized API for
-their use case or a Kconfig option, rather than leaving the current
-"anyone can turn off the privacy LED" status quo.
-
-
->
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> >  drivers/media/usb/uvc/uvc_ctrl.c   | 38 ++++++++++++++++++++++++++++++++++++++
-> >  drivers/media/usb/uvc/uvc_driver.c | 20 ++++++++++++++++++++
-> >  drivers/media/usb/uvc/uvc_v4l2.c   |  7 +++++++
-> >  drivers/media/usb/uvc/uvcvideo.h   |  2 ++
-> >  include/linux/usb/uvc.h            |  4 ++++
-> >  5 files changed, 71 insertions(+)
->
-> This doesn't seem to cover libusb, VM guests and such.
-
-For libusb and VM guests to work you need to unbind the uvc driver.
-Only privileged users can do that.
-Today, any user with camera access can disable the privacy LED.
-
->
-> What's even the attack vector? It has to be full remote code execution.
-> And it's just an LED, when you see it turn on somebody already has your
-> mugshot, if you notice at all. And the mugshot isn't your worst worry.
-
-The attack vector is that an app with camera access, like your
-browser, can record you when you don't want to be recorded.
-The LED will be a signal that something is happening.
-
-Imagine that you install a Flatpak for live streaming. Assuming the
-Flatpak is properly sandboxed, remote code execution is less worrisome
-than the app spying on you.
-
->
-> >
-> > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> > index b6e020b41671..3ca108b83f1d 100644
-> > --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> > @@ -3001,6 +3001,35 @@ static int uvc_ctrl_init_xu_ctrl(struct uvc_device *dev,
-> >       return ret;
-> >  }
-> >
-> > +bool uvc_ctrl_is_privacy_control(u8 entity[16], u8 selector)
-> > +{
-> > +     /*
-> > +      * This list is not exhaustive, it is a best effort to block access to
-> > +      * non documented controls that can affect user's privacy.
-> > +      */
->
-> So it's not removal of some controversial feature, but 3KB of extra
-> code in everybody's kernel (I just applied this patch) and a forever
-> game of whack-a-mole with HW vendors? They will win...
-
-Maybe I meassured it wrong. But I can only account for 1.3 KiB
-
-$ size drivers/media/usb/uvc/uvcvideo-without.ko
-   text    data     bss     dec     hex filename
- 115974    3748      88  119810   1d402 drivers/media/usb/uvc/uvcvideo.ko
-
-$ size drivers/media/usb/uvc/uvcvideo-with.ko
-   text    data     bss     dec     hex filename
- 117315    3767      88  121170   1d952 drivers/media/usb/uvc/uvcvideo.ko
-
-I see no need for vendors to hide these features, they simply added
-them because an OEM thought it was a nice feature to have, or because
-they left them as hardware debug features.
-
->
-> You will blacklist features found by legitimate users and shared on
-> public forums, while hackers will keep their findings to themselves.
-> Assuming that there are any who even care.
-
-If a legitimate user needs a feature, this patch gives them a way to
-keep using it (allow_privacy_override) while notifying us. This allows
-the community to find a better, safer way to support that specific
-need without leaving the door wide open for everyone else.
-
->
-> > +     struct privacy_control {
-> > +             u8 entity[16];
-> > +             u8 selector;
-> > +     } privacy_control[] = {
-> > +             {
-> > +                     .entity = UVC_GUID_LOGITECH_USER_HW_CONTROL_V1,
-> > +                     .selector = 1,
-> > +             },
-> > +             {
-> > +                     .entity = UVC_GUID_LOGITECH_PERIPHERAL,
-> > +                     .selector = 9,
-> > +             },
-> > +     };
-> > +     int i;
-> > +
-> > +     for (i = 0; i < ARRAY_SIZE(privacy_control); i++)
-> > +             if (!memcmp(entity, privacy_control[i].entity, 16) &&
-> > +                 selector == privacy_control[i].selector)
-> > +                     return true;
-> > +
-> > +     return false;
-> > +}
-> > +
-> >  int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
-> >       struct uvc_xu_control_query *xqry)
-> >  {
-> > @@ -3045,6 +3074,15 @@ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
-> >               return -ENOENT;
-> >       }
-> >
-> > +     if (uvc_ctrl_is_privacy_control(entity->guid, xqry->selector) &&
-> > +         !uvc_allow_privacy_override_param) {
-> > +             dev_warn_once(&chain->dev->intf->dev,
-> > +                           "Privacy related controls can only be accessed if module parameter allow_privacy_override is true\n");
-> > +             uvc_dbg(chain->dev, CONTROL, "Blocking access to privacy related Control %pUl/%u\n",
-> > +                     entity->guid, xqry->selector);
-> > +             return -EACCES;
-> > +     }
-> > +
-> >       if (mutex_lock_interruptible(&chain->ctrl_mutex))
-> >               return -ERESTARTSYS;
-> >
-> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > index b0ca81d924b6..74c9dea29d36 100644
-> > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > @@ -36,6 +36,7 @@ unsigned int uvc_no_drop_param = 1;
-> >  static unsigned int uvc_quirks_param = -1;
-> >  unsigned int uvc_dbg_param;
-> >  unsigned int uvc_timeout_param = UVC_CTRL_STREAMING_TIMEOUT;
-> > +bool uvc_allow_privacy_override_param;
-> >
-> >  static struct usb_driver uvc_driver;
-> >
-> > @@ -2505,6 +2506,25 @@ MODULE_PARM_DESC(trace, "Trace level bitmask");
-> >  module_param_named(timeout, uvc_timeout_param, uint, 0644);
-> >  MODULE_PARM_DESC(timeout, "Streaming control requests timeout");
-> >
-> > +static int param_set_privacy(const char *val, const struct kernel_param *kp)
-> > +{
-> > +     pr_warn_once("uvcvideo: " DEPRECATED
-> > +                  "allow_privacy_override parameter will be eventually removed.\n");
-> > +     return param_set_bool(val, kp);
-> > +}
-> > +
-> > +static const struct kernel_param_ops param_ops_privacy = {
-> > +     .set = param_set_privacy,
-> > +     .get = param_get_bool,
-> > +};
-> > +
-> > +param_check_bool(allow_privacy_override, &uvc_allow_privacy_override_param);
-> > +module_param_cb(allow_privacy_override, &param_ops_privacy,
-> > +             &uvc_allow_privacy_override_param, 0644);
-> > +__MODULE_PARM_TYPE(allow_privacy_override, "bool");
-> > +MODULE_PARM_DESC(allow_privacy_override,
-> > +              "Allow access to privacy related controls");
-> > +
-> >  /* ------------------------------------------------------------------------
-> >   * Driver initialization and cleanup
-> >   */
-> > diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> > index f9049e9c0d3a..6d4f027c8402 100644
-> > --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> > +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> > @@ -133,6 +133,13 @@ static int uvc_ioctl_xu_ctrl_map(struct uvc_video_chain *chain,
-> >               return -EINVAL;
-> >       }
-> >
-> > +     if (uvc_ctrl_is_privacy_control(xmap->entity, xmap->selector) &&
-> > +         !uvc_allow_privacy_override_param) {
-> > +             dev_warn_once(&chain->dev->intf->dev,
-> > +                           "Privacy related controls can only be mapped if module parameter allow_privacy_override is true\n");
-> > +             return -EACCES;
-> > +     }
-> > +
-> >       map = kzalloc_obj(*map);
-> >       if (map == NULL)
-> >               return -ENOMEM;
-> > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> > index 8480d65ecb85..362110d58ca3 100644
-> > --- a/drivers/media/usb/uvc/uvcvideo.h
-> > +++ b/drivers/media/usb/uvc/uvcvideo.h
-> > @@ -664,6 +664,7 @@ extern unsigned int uvc_no_drop_param;
-> >  extern unsigned int uvc_dbg_param;
-> >  extern unsigned int uvc_timeout_param;
-> >  extern unsigned int uvc_hw_timestamps_param;
-> > +extern bool uvc_allow_privacy_override_param;
-> >
-> >  #define uvc_dbg(_dev, flag, fmt, ...)                                        \
-> >  do {                                                                 \
-> > @@ -794,6 +795,7 @@ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
-> >                     struct uvc_xu_control_query *xqry);
-> >
-> >  void uvc_ctrl_cleanup_fh(struct uvc_fh *handle);
-> > +bool uvc_ctrl_is_privacy_control(u8 entity[16], u8 selector);
-> >
-> >  /* Utility functions */
-> >  struct usb_host_endpoint *uvc_find_endpoint(struct usb_host_interface *alts,
-> > diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
-> > index dea23aabbad4..70c2a7d25236 100644
-> > --- a/include/linux/usb/uvc.h
-> > +++ b/include/linux/usb/uvc.h
-> > @@ -49,6 +49,10 @@
-> >  #define UVC_GUID_LOGITECH_PERIPHERAL \
-> >       {0x21, 0x2d, 0xe5, 0xff, 0x30, 0x80, 0x2c, 0x4e, \
-> >        0x82, 0xd9, 0xf5, 0x87, 0xd0, 0x05, 0x40, 0xbd }
-> > +#define UVC_GUID_LOGITECH_USER_HW_CONTROL_V1 \
-> > +     {0x82, 0x06, 0x61, 0x63, 0x70, 0x50, 0xab, 0x49, \
-> > +      0xb8, 0xcc, 0xb3, 0x85, 0x5e, 0x8d, 0x22, 0x1f }
-> > +
-> >
-> >  /* https://learn.microsoft.com/en-us/windows-hardware/drivers/stream/uvc-extensions-1-5#222-extension-unit-controls */
-> >  #define UVC_MSXU_CONTROL_FOCUS                       0x01
-> >
-> > --
-> > 2.53.0.851.ga537e3e6e9-goog
-> >
-
-
-
---
-Ricardo Ribalda
 
