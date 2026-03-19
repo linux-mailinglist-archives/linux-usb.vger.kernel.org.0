@@ -1,247 +1,215 @@
-Return-Path: <linux-usb+bounces-35108-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35109-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sEZsM7C6u2mtmwIAu9opvQ
-	(envelope-from <linux-usb+bounces-35108-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 09:58:24 +0100
+	id COZLILe6u2mtmwIAu9opvQ
+	(envelope-from <linux-usb+bounces-35109-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 09:58:31 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F6742C82F1
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 09:58:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C5C62C8316
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 09:58:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9B86E31B1FBB
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 08:55:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 619E231B7E9D
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2026 08:55:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 445353B0AC2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78C5E3AE701;
 	Thu, 19 Mar 2026 08:55:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="akZdPIUn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K9Iuf77G"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D2233AEF2F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65DD83AEF27
 	for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2026 08:55:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773910516; cv=none; b=MtRg0RG0NdL3PM/9dU4g6TJyW3/mr9adiEaS39NptmV+lH1MR0O1/0+F0JQ7VD3YPZlOlkGhyk3rotJP1DX7X6QkyGm+jMeisGYKkNRALpYH0UxczY4K3VC8xMKkOMbJsiIgRIZy/eOXTph+BIhLm7oxACk6+m/YaqHbo/jzQlU=
+	t=1773910516; cv=none; b=bxWhcR7XEeg3LGP3yBweFNKC3dkACNUQ+vD+ozuGo3rhj1+jrd44FWqw29HhfIjm24TnJp+1YWRY8bHtQJTu6TfPbfhpOo+7SKbTDBpNVY3rshFa64xmcBA2/jC2ic3wcdzz4JESRAEwAPM4faoekH0S0pkxd53o87TS3uHa2Uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773910516; c=relaxed/simple;
-	bh=zrw23kbaB6w9Tx36goqR08XFMojlC5+6mg4vLV+ld8M=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KpAYlHw77uArjwRlSLDiJBjcu+NW1HB2ATyluDo48XCYnMAWw/89s9MB7C8W+P8U+tn//vUMgE0LEOnRxsST7RBBLxqRcniPdaW9+IEQ+nUQs3JNictZHNVQpvm/qB2zFMwW3jCtXcXTtKtiAGK7l5JZL0pNbCVUJVOub/scpFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=akZdPIUn; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-439af7d77f0so293131f8f.0
+	bh=pt5AEOgnJaMVVC3MBMkMQnVvcMUAn1axpRTZ3q9g9R4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NXdXTaglL53Jg5n4qYXbnzk3JQMXQRnqic7/ud9wOPArz9Y/zPTDxUNLxOP3zg8TpEpasSI29zSQPF7T2wUmkM0IIqH4Al9tmIxrEElQrIj+EpGeum4ajYLrxKu8r9TUenyBvZCqmZOKdqxIS2OO2qYOjbBDP1pLEIEAhkWwBUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K9Iuf77G; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-65c4152313fso1049769a12.1
         for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2026 01:55:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1773910513; x=1774515313; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=g2aJhnD/vRwXSeh3Fhk/ZXgYYRMhSjsCNQv0oxpRs+s=;
-        b=akZdPIUnHy2Bpu0VmBS89IRTh+tGrmxEp7YSD5pMx6k6Q0M7cwIawhE1dUnVfzuBZL
-         Bydk+pmdfnpAHmZOifBJxBArZG2RjTrs1oVOPUnYIyw2S7M8GEodGz800WDaQSNnYPsE
-         utHN2D+D6ybg0Nu7PdSgfP9zVeskmHXr6KmcKln7Mf6EnT6eIZMcPLTPeJvvNa1Ekc5q
-         u294kHDen4HGTcv7ujHvECi4OirHLBN+YngZlY73x8FEJ3YiGT93JbNcJCkkq7ZAS6W/
-         z/khAcM8I8zsbhQDXgEql6Lix9w6GgiD947qjdk3NJ8MXqNE0p1ibyZKcPGRewTNLCk+
-         llZA==
+        d=gmail.com; s=20230601; t=1773910513; x=1774515313; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VhlTTa4lm/ZTlw781XjD3VuY5ClQbRaNwiCpOGPb7qI=;
+        b=K9Iuf77GM0Az6ATwFACTmkZUCRBX0uhhC9KCWSzRnXQ5HKA+Qll6lNtT0NOBsFtHXz
+         zqaxnHmKBqcdfetfP9HU7QHuciJYrHns5QXLsWEH6mzJna2B9sVby2Pekfv8OhfQlZUP
+         P7LHCc23AwYgyfn12fnhMyKoeZrx5HFl25hQ88GNJ0/cBWwcX/mAKlK7SY63ycHmlH1M
+         rgGYkK412kbXAeH2iHtYVHEB+qXke2tS5XIXpT/XkryPhTQah7qoqBSoeAYOeNDheB3w
+         QtteKqpCkaTb+ZCAgMrp2e8ykxer4JFq45wRCc/Djad38XJGp5Ti59f+rJ7nqEzKz+VS
+         5Ljw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20251104; t=1773910513; x=1774515313;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g2aJhnD/vRwXSeh3Fhk/ZXgYYRMhSjsCNQv0oxpRs+s=;
-        b=QCXHdaN+8fK2ImPaz29HsLVa/IB+weDztOaGOKYwXBhI3kDM3Nqu/cZw1gFssKJmfQ
-         kVNhzehyKFQB9PFk07ctJEy8jjqVqWGnLGfFRTEntqF9nzA478C7z+lmT2TLnRGhRJJU
-         do4yifpk+h0x3HIhEIBE1D6XwtIkbf8BDQLye2ev0rYd2kWflWEwUzDjyaWEYjkO3AoM
-         FHIairPWdq8a02aIY/CeVSxuCVIYox6DBorR8ilwBeiS0b8WXLBmFpzTcfTftisPx1vn
-         T0iqd05WItzE07VBeZxwqYmUh19A0Zbr6kBZsAa2UMApIVNWKHFN4Y1S1HJDt3mtvkhI
-         p4zA==
-X-Gm-Message-State: AOJu0YzFjuDimWDQHrJl57YiQe4VztlxwWKF8HqfA7yhCBEahmOOSyZP
-	+/jAElkfsipxhwIHxtZCZP+X9lIyFu/gyvB7EVXIhRVJuZhbQydeoMAAjLrtRrW1C8E=
-X-Gm-Gg: ATEYQzzSgRTLvbQYeOkItNPZEAPX4hvoLQ3I+YX706wGfmBRO/Q2VqJajYHFwnvixZw
-	zbBkXv6f/rOqqyivZQ3sIdggAy6Ei5y7oVu6/MQioeZv4REQFivTVzT8pJo+voJbzmMBm7cQ7Hi
-	T9C7d5BBFgfygqpqa1y+2LcaBgHrBrMp678Z6yfSrKxypWDzivUf5aOCZLJjhY08bvK0yETustb
-	hzabchNPPJ4IQlYvY39tL9ogWvOaORLE4x3bGIbElPNUOsjXLvefEpNb+OMqsen6p+mzJk/c4lF
-	i4/GINEp1xVGt4Jmo2CMg7HCHyJ3swBBdw0QZhBmNrEGi/HYleAzgxZvHgqNzPIn6rmUm7l+VYK
-	e5X3DCc9VKXExMMYRT21o+/8y9pQRlxd7JhN6SVcUJMDn93Px5PJINDghfUcL8teGAyJRmVtp7d
-	wUtrR5GLLpVm/thVCCWW7EC/ItuHMo00peWXq4Ddr8k1yT
-X-Received: by 2002:a05:6000:40cb:b0:43b:4f97:9608 with SMTP id ffacd0b85a97d-43b527a7368mr11451596f8f.14.1773910512637;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=VhlTTa4lm/ZTlw781XjD3VuY5ClQbRaNwiCpOGPb7qI=;
+        b=e/0ESyIa5qfKb2Ulpjd6Tioyi+aHm8m7sd6x+HW37vqHY2ZqNv+KlXB6ffcfmekwrt
+         e66/D9hAeNpgrBxzAAkaXeMSYc62yutfIfhIIJsJzWfXr3iMiyMI875rdpJS4B2b2nuG
+         MWoBjoqvpxwXEIUh7S4tiqQrjWsh5yK9k8kMNOqkRleg3TzFergQ7nEMs762LYjbhMX1
+         Z9LSgCoZDqTO7WJ64ukIuyaa8Xd1IZ36bhoX2uDVgDZ5MeP9Ywx9g04E13b6v+1qpGmI
+         AT7vF6BumzIZdd3CRN36iDJHuva4Wbro/DSv3w9U7sn6GEPyNQ7wfnYQSGjBc++7QENV
+         1xbg==
+X-Forwarded-Encrypted: i=1; AJvYcCWTQ4W0YczR46V748cdsjuJeV522cHEqL5xYkzEpJJan+PkDrGFWG3eXjb6tOV1A8qL+xacNoy/1fU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8H8NCLzBQnTkuARgv4yaRtEaHY90P2yKpYrXoF7ltKLtGn52r
+	U6rwzH+/DW5WdC+coXoi6jaHJQPSUrRIjfnHyuCO1TzzdRO3IJFsR5tu
+X-Gm-Gg: ATEYQzyuglEtgoCDVoxwxhpRQEyE5jJX2cLB2MVR2DqpaVCiKgEMwHZDZe1pw8hWe7k
+	08G7fB0gXlfLckVwc2cSALlRsv/YFJV2GYk+KlLMNYenqEjREp5CWPDIk1VrOoSy9jNy/0+XM8/
+	s3ERTwBtbx6sfvx895ZwOGvSeMAiyt3yU995Rl1/uk90Ia5Nhm7p2dSle+j0RDT9gtNz6+gG3Ob
+	3dKJFOaeKpNb0Lej25kxEUm4iNQwX+EL2rnVYZkjCWJXIAs1dXd04xvW/yoobObxKu/v2XAE5D0
+	ov+VC4VWW0TBuxe+XguOtTKPLwfeW5n0YaVKwKuIwi3cUlut4zBQ5H5iXuhWMvhQmg/S+hmv6A5
+	ARinGrx8KWHNHKaJQ2XE2ekMy11OBLG1AeNr9q/+ZD5uVl26AGPsi8UWNGxO/SHMBwk3cI2iC7c
+	i6pXQcrgmnx3Bv5IJzxDWaXJsBPdxvr+VFozY=
+X-Received: by 2002:a05:6402:280c:b0:663:8be1:3649 with SMTP id 4fb4d7f45d1cf-667b214d6d7mr4228861a12.3.1773910512463;
         Thu, 19 Mar 2026 01:55:12 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:106d:1080:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b518588a0sm23072267f8f.16.2026.03.19.01.55.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+Received: from foxbook (bfk214.neoplus.adsl.tpnet.pl. [83.28.48.214])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-667aecbcae2sm3881815a12.1.2026.03.19.01.55.10
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
         Thu, 19 Mar 2026 01:55:12 -0700 (PDT)
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH v6 0/5] arm64: dts: qcom: Add support for the Ayaneo Pocket
- S2
 Date: Thu, 19 Mar 2026 09:55:06 +0100
-Message-Id: <20260319-topic-sm8650-ayaneo-pocket-s2-base-v6-0-797bf96df771@linaro.org>
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Oliver Neukum <oneukum@suse.com>, Thinh Nguyen
+ <Thinh.Nguyen@synopsys.com>, =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>, USB
+ list <linux-usb@vger.kernel.org>
+Subject: Re: correctly handling EPROTO
+Message-ID: <20260319095506.4b1a6ac8.michal.pecio@gmail.com>
+In-Reply-To: <4a35e3dc-620a-4596-9bf3-783865f29e8f@rowland.harvard.edu>
+References: <437037d6-3fe1-4f81-b74a-21bea00725e0@rowland.harvard.edu>
+	<0b45d0e4-53f8-4960-b41c-63639b496dac@suse.com>
+	<4f8b9942-307b-4c31-86f3-1b7b20b34a16@rowland.harvard.edu>
+	<d1674f98-cbbf-4a16-8c76-996a0494d931@suse.com>
+	<abcd2076-c2d4-403d-8ab8-af747b335075@rowland.harvard.edu>
+	<87a692e2-559a-4765-8321-a422751d3589@suse.com>
+	<4ada5d68-56f1-41b7-82d9-463901c927db@rowland.harvard.edu>
+	<8a14fe29-0d92-4ce5-a7e2-2c084c710727@suse.com>
+	<b0217cdc-f263-418c-b8b5-584520d0b1db@rowland.harvard.edu>
+	<20260318223851.1f6d07d7.michal.pecio@gmail.com>
+	<4a35e3dc-620a-4596-9bf3-783865f29e8f@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAOq5u2kC/5XOTW7DIBCG4atErEvFgAfjrnqPqgt+hgS1NRZYV
- qPIdy/Jpq68cZfvLJ5vbqxSSVTZy+nGCi2ppjy20E8n5i92PBNPoTWTQmoBEvicp+R5/TIaBbd
- XO1LmU/YfNPMqubOVuECvOkMxGB1Yg6ZCMX0/Rt7eW19SnXO5PjYXuF//xS/ABXdOxQEjeGHw9
- TONtuTnXM7s7i9ya/aHTNlMj0geHAbj4s5Uv6YU+pCpmomuHzwGDVaondltTDhmds00Qnoj+wE
- 7BTsTN6YUh0xsJtjQHrUWKNo/5rquP3vSoaolAgAA
-X-Change-ID: 20260121-topic-sm8650-ayaneo-pocket-s2-base-05c348efd86d
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Magnus Damm <magnus.damm@gmail.com>, Bartosz Golaszewski <brgl@kernel.org>, 
- Manivannan Sadhasivam <mani@kernel.org>, 
- Bjorn Helgaas <bhelgaas@google.com>, Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
- linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
- KancyJoe <kancy2333@outlook.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3500;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=zrw23kbaB6w9Tx36goqR08XFMojlC5+6mg4vLV+ld8M=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBpu7nsszJs/FqL3KMrYDOOOifv9EJW3hrIP7kVI0ui
- uHuA9oyJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCabu57AAKCRB33NvayMhJ0WoYD/
- 9MFI3MCQ8UwJfOb/HO9DZgqVoTf0uRjzlLchxD1CyAp9CUoDyxcavBJ/57z0HqE4ACNfK7ebavrOlX
- 4556xHWTIMurKfERPtQ8d9CEeAvE8aYRSwlKDmH2Nr0fvII7822w1SsAG+Eq3AXA8xc82iYEPjYqDB
- 0wuWK8wYK2LKeYpbr/m+foyYoyOT89Sn9Kaq4GDumRVEAc7URBD3qL7xfDr+V0SWgWExwM+BP8Gr5a
- Y35rzHBVeg5ByZFtOxl8RiGnHv3RQuvRkNcSHAaN/rTjmbRSBQyHndaddbLHMfZs9z9J5v2UvD84qK
- z51CuHMtckrfBt/mp4633LbJSnUU6wIEEkU3cI08HjsEErOy4v0oQkzsYRRQ+kjHskM3mSQFvC4Ipr
- cfW03ElcQqwrUo1KT5TH21WDstsCtWI82Wuz0R+fi9Lr3BBn8N9xAJsNgSbg+RCX3m2dAAR6ETxJ9H
- E3bf6QXK2FN/svBw7lL8oeZvcE0WNWv/UjzGeLx6Y31/X0vNeIIBmJ2Ke0vWwJ2OA46/8Drm0fIs9O
- xlKC32YG8wJzqGB7X3IjEaaqUPDzNt117bJBpIU7axXSbLHnfacXMKCI7vz0e6emAyR5UbiH0EjsYj
- XOfsUiCI/XivfXokXW9DD+wd1qSN4W3Maoj7hZEs2TkpNB84PCncSfuxDf/A==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35108-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,linaro.org,oss.qualcomm.com,outlook.com];
-	RCPT_COUNT_TWELVE(0.00)[25];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35109-lists,linux-usb=lfdr.de];
+	TO_DN_ALL(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[neil.armstrong@linaro.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	NEURAL_HAM(-0.00)[-0.992];
-	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.982];
+	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:dkim,linaro.org:email,linaro.org:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,ayaneo.com:url]
-X-Rspamd-Queue-Id: 4F6742C82F1
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 1C5C62C8316
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The Ayaneo Pocket S2 is a gaming console based on the Qualcomm
-Snapdragon 8 Gen 3. It has an internal UFS storage, WiFi,
-Bluetooth, gaming buttons, SDCard, 2K display and USB-C
-connector.
+On Wed, 18 Mar 2026 21:56:27 -0400, Alan Stern wrote:
+> On Wed, Mar 18, 2026 at 10:38:51PM +0100, Michal Pecio wrote:
+> > If you get EPROTO reading from a Transaction Translator and the TT
+> > discards the packet (because of timeout on Int or by explicit SW
+> > request on Bulk) then not only is the particular packet lost
+> > because the device got its ACK and moved on, but I suspect the next
+> > packet will be dropped too due to toggle mismatch.  
+>
+> (Is it the TT that keeps track of the toggle state, or the host 
+> controller?  I don't remember and I'm too lazy to look up the answer.)
 
-Product Page [1].
+Good question. I skimmed USB2 chapters about TT (11.14+) and haven't
+seen this spelled out clearly. However,
+- I don't remember ever reading about a requirement for TT to keep
+  separate toggle state upstream and downstream
+- there is nothing about what CSPLIT response to send after device IN
+  packet was discarded due to wrong toggle
+- we would need a separate request to clear TT toggle when we clear
+  host and device toggle, no such request seems to exist
 
-The Initial linux port was done by KancyJoe (Sunflower2333)
-at [2].
+So I still suspect that TT is just a dumb forwarder and that we get
+toggle mismatch when a packet is lost on the HS bus, which sets us up
+to lose the next valid packet too.
 
-The UPD720201 binding patch has been sent separately in [3]
-and is ready to be merged. The pci/pwrctrl changes were merged
-in the pci tree.
+> By "unusable", I meant that no more data could be transmitted through 
+> that endpoint until some sort of recovery action had been carried out 
+> (such as clear-halt, set-config, or device reset).
+>
+> Yes, data loss is sometimes inevitable, and we shouldn't worry too
+> much about things we can't prevent.
 
-[1] https://www.ayaneo.com/goods/9344082149621
-[2] https://github.com/sunflower2333/linux/tree/master
-[3] https://lore.kernel.org/all/20260319-topic-sm8650-ayaneo-pocket-s2-upd-bindings-v1-1-84e4ef564022@linaro.org/
+But an EP which loses data is not as usable as we might wish for.
+Doing usb_clear_halt() prevents at least that second loss, which may
+occur in far future when we think the error has been solved already.
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
-Changes in v6:
-- Added the review tags
-- Dropped all the pci/pwrctrl applied patches
-- Sent the UPD720201 bindings in a separate patch
-- Link to v5: https://patch.msgid.link/20260220-topic-sm8650-ayaneo-pocket-s2-base-v5-0-1ad79caa1efa@linaro.org
+USB-IF doesn't seem to consider "pipes" a reliable transport and
+expects class drivers to anticipate data loss and work around it.
 
-Changes in v5:
-- Rebased on -next
-- Collected tags
-- Rebased/renamed slot to generic based on changes from Bjorn
-- Link to v4: https://patch.msgid.link/20260216-topic-sm8650-ayaneo-pocket-s2-base-v4-0-802c82795431@linaro.org
+HID, for example, appears to provide a mandatory control request to
+poll for the current state of input controls. This could recover lost
+data (except from mice) after resetting the pipe to avoid more loss.
+ 
+> The major example showed up just a few weeks ago.  It was an old
+> system where some component (the PCI bus?) apparently could become
+> saturated at high load, leading to communication failures because the
+> host controller couldn't access the data needed to keep up with its
+> scheduled work.
 
-Changes in v4:
-- Renamed slot to generic, in the code as well, fixed Kconfig & commit message
-- Switched the UPD72020x bindings additionalProperties to true to allow devices subnodes
-- Collected acks
-- Link to v3: https://patch.msgid.link/20260206-topic-sm8650-ayaneo-pocket-s2-base-v3-0-5b79c5d61a03@linaro.org
+I'm aware of this bug and it's an odd one, because I don't understand
+why reducing retry delay seems to help.
 
-Changes in v3:
-- Made renesas,upd720201-pci bindings supplies required
-- Fixed description and example of renesas,upd720201-pci bindings
-- Renamed slot to generic, added renesas,upd720201-pci entry
-- Used PMIC_GPIO_STRENGTH_LOW instead of numbers
-- Removed all output-low in pinconf
-- Link to v2: https://patch.msgid.link/20260127-topic-sm8650-ayaneo-pocket-s2-base-v2-0-c55ec1b5d8bf@linaro.org
+> Just to be clear, are you saying there's no way for an xHC to restart
+> a (host-side) halted non-SuperSpeed endpoint without setting the
+> toggle back to 0?
 
-Changes in v2:
-- Add proper regulators for the USB controller, with bindings & power ctrl
-- Add proper regulators for FAN
-- Dropped support for headset over USB-C, audio is connected to a jack port
-- Cleaned up Audio routing and fixed the DP endpoint index
-- Added i2c clk frequencies
-- Renamed fan node and used interrupts-extended
-- Dropped the usb-c self-powered
-- Reordered nodes alphabetically
-- Renamed pcieport1 to pcie1_port0
-- Link to v1: https://patch.msgid.link/20260121-topic-sm8650-ayaneo-pocket-s2-base-v1-0-bb3f95f1c085@linaro.org
+To be clear, I'm saying that most xHCI people probably think so. You
+have seen Thinh's reaction to my suggestion that we could do otherwise.
 
----
-KancyJoe (1):
-      arm64: dts: qcom: add basic devicetree for Ayaneo Pocket S2 gaming console
+We need a Reset Endpoint command (xHCI 4.6.8) to clear the Halted flag
+in xHC, otherwise it will refuse to run the endpoint to protect us from
+race conditions (new submission while the error is being reported).
 
-Neil Armstrong (4):
-      arm64: defconfig: enable pci-pwrctrl-generic as module
-      dt-binding: vendor-prefixes: document the Ayaneo brand
-      dt-bindings: arm: qcom: document the Ayaneo Pocket S2
-      arm64: dts: qcom: sm8650: Add sound DAI prefix for DP
+Clearing toggle/sequesce state is optional. If we don't clear it then
+"the endpoint shall continue execution by retrying the last transaction
+[after restart] if no other commands have been issued to the endpoint."
 
- Documentation/devicetree/bindings/arm/qcom.yaml    |    1 +
- .../devicetree/bindings/vendor-prefixes.yaml       |    2 +
- arch/arm64/boot/dts/qcom/Makefile                  |    1 +
- .../boot/dts/qcom/sm8650-ayaneo-pocket-s2.dts      | 1551 ++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sm8650.dtsi               |   47 +-
- arch/arm64/configs/defconfig                       |    1 +
- 6 files changed, 1580 insertions(+), 23 deletions(-)
----
-base-commit: 8e42d2514a7e8eb8d740d0ba82339dd6c0b6463f
-change-id: 20260121-topic-sm8650-ayaneo-pocket-s2-base-05c348efd86d
+We can command it to move to the next URB (possibly not submitted yet)
+and only then restart the endpoint. But this is another weird thing
+that Linux does, possibly noboddy else does it, USB-IF doesn't expect
+us to do it, and HW vendors may not test this edge case.
 
-Best regards,
--- 
-Neil Armstrong <neil.armstrong@linaro.org>
+It's something that would have made sense to try 15 years ago, but
+today I think you may meet resistance. Ask Mathias what he thinks.
 
+Regards,
+Michal
 
