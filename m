@@ -1,258 +1,151 @@
-Return-Path: <linux-usb+bounces-35219-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35220-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AGWAFeutvGkb2AIAu9opvQ
-	(envelope-from <linux-usb+bounces-35219-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 03:16:11 +0100
+	id 6AqQDkPbvGk63wIAu9opvQ
+	(envelope-from <linux-usb+bounces-35220-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 06:29:39 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D38912D5143
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 03:16:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE8D22D5F90
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 06:29:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id AAC973023303
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 02:16:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5F830308D3FB
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 05:29:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40E7F326D63;
-	Fri, 20 Mar 2026 02:15:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D2742FE56E;
+	Fri, 20 Mar 2026 05:29:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="NCm+1Hqh";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="dYWjLkUZ"
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="b4dTk39X";
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="b4dTk39X"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7026521B9F6;
-	Fri, 20 Mar 2026 02:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773972948; cv=fail; b=PCQbfwWXNfcWS/kI2CHIMcn/G8wn04XpDtDI9Hu/Em7LLMRhUW26AbeT4R/Hr7wy+jqoSN/mfWhxE3ruqV6dFh2DBXrmSfAVnVUq3sW+ksPBrLHhPqirTsL6f52f5i6ZV8bcjFAt0CzCmUjT9LF/Z0Mb+pqgU5sCR7teTw3KvbQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773972948; c=relaxed/simple;
-	bh=1ZoeDOxMhnex72tLDU2sZJlkSp6Y2R1ch09tJfrzIRw=;
-	h=To:Cc:Subject:From:In-Reply-To:Message-ID:References:Date:
-	 Content-Type:MIME-Version; b=c8p06M05hX626XxFXTgiG9UVIdzJoN7zx+d+SQsh5dHCf09Mnm6SgYTAWF7L1ohhFDF2Qf1uMgn6SfX7Aabm6m1tHOH6UaN21j4gyXF5EGJOjPslAsvMQfhg0zbiO9456jsZRm9PY+HlPVYodC84oj7QS6ng4JHXdhqmE9KccHU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=NCm+1Hqh; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=dYWjLkUZ; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62JFudhc1949233;
-	Fri, 20 Mar 2026 02:15:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=e4LFMg2KiFC1HRlDK/
-	EH75+9Wt/J7M2f9XJJkwjZW0k=; b=NCm+1Hqh4Zz/N+Y8NYoccvlviaEs8jA3Wx
-	K0mzWQBO2DRvDYqD1GnJknzRbcZ9FiTCsFqb6FSP5p+bgLArETde4dd5FYOOcZJy
-	nFdjXr991KfHuMKQrx7+GxTj0ud/xEy1bX6TFLX/4CXf8cA+Q5guZL16HFTQaoue
-	PpOKRfBFBAwF+tLjVzgsQ0+J7Ru3/uyIkUNZPGhZICdAgP7yrri7UOEEW/vA/JP0
-	daEV2GDW3RqQ1QbMPacTfJlBXuDO3jzLXSyX8w3NJfYHD3CRmt7iysKZn/12HHo9
-	2Kzmc24eTBAesjipYJFORVQOKeIM6QRtJP0y9CARdtSosw2LaG0w==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cvyj68vsh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 20 Mar 2026 02:15:25 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62K1iJS9014100;
-	Fri, 20 Mar 2026 02:15:24 GMT
-Received: from dm5pr21cu001.outbound.protection.outlook.com (mail-centralusazon11011070.outbound.protection.outlook.com [52.101.62.70])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4cvx4dn74n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 20 Mar 2026 02:15:24 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Wkxkx1m5lqxchbh4xs6iimUG961baTvxttfY9bBuMbmezddL8k8q2FwNGJtpRxJOc3zKNdFKiKlBC6oRU4gyQhmh8UWX8UvGXwAeKmnLY4moF97CKqFEN19LLDFte0l6Au8cWdFprsRyzdDG1r03ZBGxD9PVnRrw7nHTIpZ/ahCucUyd58g8Df6kl45PTz738Q/f4KXLp3726d7x8IB8TT0HvD7klYttfX1JCH0go61p/P/bY/gELbLfD1s7LnLieAQ6N8sqZouKndAtUSK0gf53RHpNGJywbhc6f2M74MHv2I+CrSgTcTAFVu+4iU1Xk1X0ZYTD5ztQFiQeKQX9Sw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e4LFMg2KiFC1HRlDK/EH75+9Wt/J7M2f9XJJkwjZW0k=;
- b=BPIaHJyP5d2/vP4gcOLx2UNWdBSfboyCS7yK1B/0Ilb2rh5K2hd3VM8/WRjjZaQLZOd332eiBkxe46cT9v4lf3WyEDzhTf2wmEVdyYSyF7Jt8/5JCRtQWn8bS4QLd+HwppJe0QGyKjXTcpM/OkRmwnf+Toh+ue3+BA9bB/GZqHPmh5xNiJc3FEu/x8TQT5OKkuqagHHTJJN+jzo1KhgxRI80E+4tvH4e5usPTI+Q9RdqkM39asdEhlcBHTzp6XeeHtPpeDMMVRUXsbD1C6SV+YjnVLW6K6LoT+1yObKOOFNDcFUnmNVYzVILpiiSYpI4f0nk6JiJMSQsUtL3x4zBTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e4LFMg2KiFC1HRlDK/EH75+9Wt/J7M2f9XJJkwjZW0k=;
- b=dYWjLkUZuXuVlZmPikv6rIW5O14PwPFXeHrvDgQMCv5br7FZMQgcpK0sir9yuU263Dqp+jksu7rC+XQ88/YjsG8YmHdbc7cvpI1C/K1F3MO/1qSgJK9fIrl1tK/VjPly+Sk4rut4sHBtxgUE2/JnoASHjeuR6VZza/K5JJ5D3J0=
-Received: from CH0PR10MB5338.namprd10.prod.outlook.com (2603:10b6:610:cb::8)
- by IA4PR10MB8587.namprd10.prod.outlook.com (2603:10b6:208:55c::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.19; Fri, 20 Mar
- 2026 02:15:19 +0000
-Received: from CH0PR10MB5338.namprd10.prod.outlook.com
- ([fe80::e525:dd71:b002:6ad5]) by CH0PR10MB5338.namprd10.prod.outlook.com
- ([fe80::e525:dd71:b002:6ad5%6]) with mapi id 15.20.9723.019; Fri, 20 Mar 2026
- 02:15:19 +0000
-To: Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: <linux-phy@lists.infradead.org>, Vinod Koul <vkoul@kernel.org>,
-        Neil
- Armstrong <neil.armstrong@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-can@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linux-sunxi@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <spacemit@lists.linux.dev>, <UNGLinuxDriver@microchip.com>,
-        Bart Van
- Assche <bvanassche@acm.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Peter Griffin <peter.griffin@linaro.org>,
-        "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>,
-        "Martin K. Petersen"
- <martin.petersen@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Chanho Park <chanho61.park@samsung.com>
-Subject: Re: [PATCH v5 phy-next 09/27] scsi: ufs: exynos: stop poking into
- struct phy guts
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-In-Reply-To: <20260319223241.1351137-10-vladimir.oltean@nxp.com> (Vladimir
-	Oltean's message of "Fri, 20 Mar 2026 00:32:23 +0200")
-Organization: Oracle Corporation
-Message-ID: <yq1a4w3l04g.fsf@ca-mkp.ca.oracle.com>
-References: <20260319223241.1351137-1-vladimir.oltean@nxp.com>
-	<20260319223241.1351137-10-vladimir.oltean@nxp.com>
-Date: Thu, 19 Mar 2026 22:15:17 -0400
-Content-Type: text/plain
-X-ClientProxiedBy: YQZPR01CA0118.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:83::6) To CH0PR10MB5338.namprd10.prod.outlook.com
- (2603:10b6:610:cb::8)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F50B279DCC;
+	Fri, 20 Mar 2026 05:29:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773984564; cv=none; b=B/+rL+QxdJhVUHk0HFbauZbZT8TMwTM5ynzw5dDLmyoG3QgFBzve7bIejn5nH06GmOIM0Lyrv5vUPCKGxgtvGltkJP6PekhU0Kwp4BoyANjePbJDRS1dfJaXM7ioK3RxOUC9p5HAjlOL3ZhLRjBTC91sb7At9Z/906Q3I8d85Fw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773984564; c=relaxed/simple;
+	bh=5TVNEMyUV6Nyt8igSSYIMZQ785TLtaLYhsQIRWIusQs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GGwsqsa0spyV4htC6upnXV+7gs5gGcZrGmAA4fMbAFki+Dqa1jH2SUz/2wtSXzu4ugTCCKW+fk/x21D6vh0TBpLISsAL4IrnTr65OfRgQhOK8HqmCMDKAQSX+IidZ6zQtiXt0gy7pg9TuFtOzw58hk6CtkqnyunN3zvi+jgKvxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=b4dTk39X; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=b4dTk39X; arc=none smtp.client-ip=23.88.97.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1773984561;
+	bh=5TVNEMyUV6Nyt8igSSYIMZQ785TLtaLYhsQIRWIusQs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=b4dTk39XxeASjobqM5VCZZFikZZ0nNpuQsorBt627XPAZ2f238drrss32u+PD8v8+
+	 EflKBJqgCaIHw6Fz0MLbTIe55TyI7Y+VrzXNk5zEjEgJP8JvS8og3x3Ly4pR/vTsLd
+	 3eI6eOu8p561kkPQV6vckomlWDy+w1zBNXnslRKBiqoFgJSeNNIJ4XT4fff8epC2AU
+	 nAva5Eb1T6/aM+CcnuFWJc2gQHExk531mwSQkyr9arCm834ct+yw2KRqcljJmxDtBY
+	 v/DZF3RxTAy+vlLAbu+m22UrTKCt9CeO8q4fWmC3VON+Rk/pYNVbE6kFB5EewSUu1Z
+	 Cmg3IxVD/BP7A==
+Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
+	id E28F33FEE3; Fri, 20 Mar 2026 05:29:21 +0000 (UTC)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1773984561;
+	bh=5TVNEMyUV6Nyt8igSSYIMZQ785TLtaLYhsQIRWIusQs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=b4dTk39XxeASjobqM5VCZZFikZZ0nNpuQsorBt627XPAZ2f238drrss32u+PD8v8+
+	 EflKBJqgCaIHw6Fz0MLbTIe55TyI7Y+VrzXNk5zEjEgJP8JvS8og3x3Ly4pR/vTsLd
+	 3eI6eOu8p561kkPQV6vckomlWDy+w1zBNXnslRKBiqoFgJSeNNIJ4XT4fff8epC2AU
+	 nAva5Eb1T6/aM+CcnuFWJc2gQHExk531mwSQkyr9arCm834ct+yw2KRqcljJmxDtBY
+	 v/DZF3RxTAy+vlLAbu+m22UrTKCt9CeO8q4fWmC3VON+Rk/pYNVbE6kFB5EewSUu1Z
+	 Cmg3IxVD/BP7A==
+Received: from [IPV6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb] (unknown [IPv6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb])
+	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id E70B43F9FD;
+	Fri, 20 Mar 2026 05:29:20 +0000 (UTC)
+Message-ID: <3bdcd08a-8001-4343-b150-693b58ead886@birger-koblitz.de>
+Date: Fri, 20 Mar 2026 06:29:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH0PR10MB5338:EE_|IA4PR10MB8587:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9597bd68-9e17-433c-490c-08de86268867
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	Isij4SalK5vkUb6Sph8ACbKn/vLNdxeK5hYB5pt7n7NkbclMmRMLXUO1JdlxVu8V4t26O6Qgjv6E++vh4Fgg7kxQzrHclDWrxwodpFk4Rf4gbmamLqRYE0xHmtGYkF+2XVmEuTiHnRryu/ynWZIRvN0PrSauHV36bzQCXRZtt4p0EMzHTP9lDfQl+cizsKPX40qrodq9HZFLLIIDKvGFLi6PD2J+r3BZOD1mnwtj2rdEXsL6YI0oeQCGI29NNwhLAZozT6Nd0j/sn8VjPuJq8FkZBBVS0USawqSdPmr5dZTHkC7jP8KoZhPbOUKxHCOCQuoVZ/YbWYPDvFsJeeOtf7Ni4cvPpdu6hve/Kv6eKgZ0FnlCy+zxpERaUKcgeTzikQ6BCoilsO2sL0PjanNWyv1Thcwea/NJoKEIIAz0khAGXtvQf4ZpzvG5BrwejQYsnjQJ2XgdE5WsriBtEn9/hocwqfIZy6KpyqpgIfN+Pav1eun3IYBnpW/F9F70xCg9PzpTnnjVAu3q4MyDSGK5a5gVMyBgFNRNu+EnXCcadQqjwc0PJsJZr1ngYuWRSM06LJZLk9mpPRlSn06CH5OFckfuY7javhy+m51E8SwkCjQCFtNlY1dlWVZ1488BsDdiw0t0Vor0nT0YOVAi2Iqq3ws74VcE0G5NzTk/nhWQEW7p5fb2GxV1aYn4MyENN6OC1tYnXiawVA6ogaJiTxYV+aP2Qnq67KHYVQOzTdaXuSQ=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5338.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?GADOBKCndiyZeNbnf8HfwAAJB3xS13V5z7jgy2z5BlkNuLjd5/vTJR3gIe1U?=
- =?us-ascii?Q?RUtuekBA/lYmg2yRS+gSIc+1jARl+VlI9Fs2i5x0UY0I6WLC7faivhYKDv8f?=
- =?us-ascii?Q?tALAS9XsuSzia1D0p3+akxmoBRnS2C4eulYWaFyezUo76eAQH14Hv2OpIxRE?=
- =?us-ascii?Q?Fj/XeKcXZ/pGdxAE1AiZ3Oa8BrQ4xcOYlY3ObT+5rzQYtH4z4NgU2PwWuQut?=
- =?us-ascii?Q?9he1wbaTp7YWTcseTQFUbwhKvLFyU2diIg1Kg+sZrD4dwCopYa0ZYxP7IyMS?=
- =?us-ascii?Q?svY7+wCdI6j0CWO0uIJFlDHaGcnW+eFgoPSBNSiTmOqn4fNpHIbyagQmNPMl?=
- =?us-ascii?Q?n5NpwsVZp9Dmvs0f8EiEOSQIEoG2xIZjw3Y9cLutrgRvgcwnbolE8zM4If8f?=
- =?us-ascii?Q?jP89k5Y0h/fH/IhLfkvpbkLGsJp0sbTUqXXChS6qZyWN5gOn/VRdbaetYpB3?=
- =?us-ascii?Q?KLUfnoPudm1SDQMU54hbUIoVkwDckQYH85niv4kPe9QCBWZIqGm14nZKqlPD?=
- =?us-ascii?Q?xTRBoFTX7kWtqqi1YIp7Kpn98cinr8wNuNfBl4XsPh2McMxu6tjLApq6Si/w?=
- =?us-ascii?Q?lJ3O7Zc5qqsC0nqA6x1xUQFu3kldPAvaosXh6zV50Xq4ntYMr9ykxI0mEg/T?=
- =?us-ascii?Q?0ladsb8qImvtaBhL+H3rQJYqq6rKg/rPAFJ0ZyAeIEO1nQ0PGKwp+2wSTzVM?=
- =?us-ascii?Q?oRqxSN06z475lOxoK3Oe/8IBz6j5wiWlwphm+TkVAio7c2vekagFcZDxzCHB?=
- =?us-ascii?Q?JZXNgtMJNFuO6jXDm4kZ6rgoK6dbPEA+WRMD9nlyVzu0ekzKS5StvNTFJIEC?=
- =?us-ascii?Q?qPz6bUOuHyFg0ZSTIiUKkRFkPQwV65Zh1gYY5GNkffHjPByzB0sa0KmeN74M?=
- =?us-ascii?Q?Ixxkg8D4YBSuNnkBya1C9wwvwg49VdY8nmEyCV4RI61xU1qtCYHL82eCPX+k?=
- =?us-ascii?Q?OR5r4ODhaiekUKmyTtNet1ptWR6k5iDNcookM/CrgfdHru1m8r4hWAKyN7pc?=
- =?us-ascii?Q?15ln1ZhNCrpgHe9/YZPl7g2F1i1/MN/tUb7iX+rPr6mOlivNiK/bU7UGqkgp?=
- =?us-ascii?Q?/nAkaJQRp0T33dZdMAUhVhNomMA7SfkysQf/zpDLDamIb5kA57JsDG6gNfbx?=
- =?us-ascii?Q?BEME7V230bftQe1PauICAte633l38H/NJJhWcHz1oS3efI/YP4Rx6AMvyHiP?=
- =?us-ascii?Q?eiw95SlKMZiDlVzepQP64x+Zln9kVpx6XYn/9MjMS2okFyy+UTwBDdDuLxqg?=
- =?us-ascii?Q?LaxyLRtfJ4PEsMrrSlhJGspmekS5l4i1cQ7o2TLZEiudcv7ilLj5+FME9WiR?=
- =?us-ascii?Q?QlU4nCteXk6MN0aRwBaOeCw7yQGZesGgi8H/1JLBu3hRIGf00ZxPfRFkl9vN?=
- =?us-ascii?Q?Dt5QjzJkNCk8YopNaGLSCAcyOyMfOAyqI6DZuhXYPzEnmtOJ1+syK/IgC84J?=
- =?us-ascii?Q?Hp8V6SEGOJRtnU5r4Vv5r4M2FvhghqwyQuoQvWEKqF+RgGIeG+eCuY2oOYTX?=
- =?us-ascii?Q?h3gB+9UadCT8M30d+Y30Ewzzsy/cXr/UlHnYMWlDcWOBzC4C1xD7gYQ4VzWN?=
- =?us-ascii?Q?sPn5SVcKn0LrFf8jJZxrM5XlVmeTfh3uwoi+p/LVEQ49JHA1yBsbmjrq8tAP?=
- =?us-ascii?Q?nUhjnbf5DCAhzVGdyhyMn9Wy1Zeig9+uoeSpVd0Qbn3BuxDAUqe4Uxj1Y/uS?=
- =?us-ascii?Q?7ApPYXgv5eRXx3Yik5ZKZwpFwwQTv67N/nIMuL9ZGBiCaztev+ZYq/bRkjap?=
- =?us-ascii?Q?dvfu3Cbau1E1UOsxSCkoYAyjCR+xbqg=3D?=
-X-Exchange-RoutingPolicyChecked:
-	nT+dhkAx6s9DfOKC67xMe4B3rWj0mPlg/55wTOMCxyrOXqOFHLhJefT2JWaJiHaT3oo0amqzAN3Cz2fXH515s8NnkLTLzF2P5Kgn4HhXkVgyHd5BeV0SZCTAVCZ5AH4hDqMpRlntz5hMlbMn22oI5RCpwZihNfXmbuRyOicq4Bdy56bjLSxaz+h5x8PKXqX4nX2wiqy3EA4sPRgWr2gu4W30PoeFUmNXzn+HNv0CsxqLB03TSCcPs0R97culdBZT23U9a8EJOHaYz6CDf8pR2Sb2BgYax50AZ3XBlAmaQgjhqbL2Jw/ItDnQ4E4b2g+xUg4Xfs24wDwk51iH9UqUGA==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	mhc2D9TyLR68DlFIdp+gaKJqoq98VOrvsExHMWs/jC0qqymj9nUWAhUgpKmGlg7iBCoAOg29Mb/+B9QLlgV8ORL3SDSrym/pCuAdHWzRoHu9NtpVYupU7YW4XRfHG35h8qPLOA/HP2ve6OarB9uurG5QOqZVk0VEwbzDTzOJEbw1EO69/X8DBRBQjTO6LPYqqDq9YIIIq8GijLWvQVy6p/ccB83/6XvWqwURCBSOIueAXiLrb1YSfMCPegkN/TKc8pN4PD7eEXfnnAeIk8bHhjVSTNjpzAEB1ECsffxJfKxbsc/H6FwDrEnQLCRvgrhTwKUxe014qB6yk0KHl9n8Tym9uXag+kNrGPlCqFMJcVgj33Ksxm+aGKyCLDCzEfZkHwaE6rWCbjUtetZvgCN5BDIzimKPQ8c+qklTnvxMe/x3cJIFdNJ0xWdy/hmm93U2rqTfjtKy+0+r5jE/wjVhhHsk0gyKWKtF2bfG7AFzJ/cHhP9TduRZ7XWOAnHKLSkzxu6dN7Rj03AXiPbS2AX0E7Mr8R+SkTI+ogXZnWdHFXlYgv6dgIrChl6rUjjkzyy/8v73Yn7y1w65LswK6rjdi/CqguKzcIBFgx/uEL8y2Ns=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9597bd68-9e17-433c-490c-08de86268867
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5338.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2026 02:15:19.0787
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: e6DJcmw4KePw8UOMFfe+7DYbwBYNUYfLf9gAtUIsoqwwn9IMF2CXZM4FwTBt/yyS6n75ff1hy8Nq4red+2jQMQK/ABvFhO2XxSHaBRZUVxY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA4PR10MB8587
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-19_04,2026-03-19_05,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 bulkscore=0
- phishscore=0 mlxscore=0 mlxlogscore=750 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
- definitions=main-2603200016
-X-Authority-Analysis: v=2.4 cv=LKFrgZW9 c=1 sm=1 tr=0 ts=69bcadbd cx=c_pps
- a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=Yq5XynenixoA:10
- a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=EIcjfB9IiI4px24ztqRk:22 a=MazYMTbE4VX3fH07rsQA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzIwMDAxNiBTYWx0ZWRfX8Npg2O1Td+kZ
- tFOGPjoqnEYilc1YHWXI0NIOol/WEca1t0Lj9F3mXZ9wgzUu9hCjsLSzVehdAl11R9Nidpc8JoM
- VKxKt59DR8oOYM3JqibxOybvbF8Vq0ywNfhW68y0zghEsBewiB5iHIwXifpr2nseFr+DD+UukT0
- 1g5GbkE1ipZHohNkKs9ungfa/PrHih6Zl5ghvV5bXXzzUzpBCqqSdcdsCCiee1/pECeWAJOG5/q
- Qiu80QGVxX4SB/MuaurYzIeATlVKX2ITmqePhMD/pjw3yqAD/TFSnLYcXuqMYFNNWr6HSpMVrv3
- GVrS+ToNX6gG3RrWAtTpnEM1McdmC8KO6JyxNSRk33Xk+NJNEGPncR828SgZIxmyR/kE7qWCbht
- ZFN5LsWCJ6X1czAJpp+Jb29Lr+vRvaQeyZQt0TklZgQnTnm8VtytJQwuFQQy72ircSKr34Huug+
- jXgDeE951jbaLC0GQ1Q==
-X-Proofpoint-GUID: HsO257hzTrCyeZFJCkd6SsHTExLTVyyP
-X-Proofpoint-ORIG-GUID: HsO257hzTrCyeZFJCkd6SsHTExLTVyyP
-X-Spamd-Result: default: False [0.34 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25,oracle.onmicrosoft.com:s=selector2-oracle-onmicrosoft-com];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 1/2] r8152: Add support for 5Gbit Link Speeds
+ and EEE
+To: Simon Horman <horms@kernel.org>
+Cc: edumazet@google.com, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-usb@vger.kernel.org, pabeni@redhat.com,
+ kuba@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net
+References: <20260317-rtl8157_next-v2-1-10ea1fa488d1@birger-koblitz.de>
+ <20260319165100.1988286-1-horms@kernel.org>
+From: Birger Koblitz <mail@birger-koblitz.de>
+Content-Language: en-US
+In-Reply-To: <20260319165100.1988286-1-horms@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[32];
-	HAS_ORG_HEADER(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35219-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[oracle.com:+,oracle.onmicrosoft.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[birger-koblitz.de:+];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,oracle.onmicrosoft.com:dkim,ca-mkp.ca.oracle.com:mid,oracle.com:dkim];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	NEURAL_HAM(-0.00)[-0.994];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[birger-koblitz.de];
+	TAGGED_FROM(0.00)[bounces-35220-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: D38912D5143
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.995];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: AE8D22D5F90
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Hi Simon, thanks a lot for reviewing this patch!
 
-Vladimir,
+On 19/03/2026 5:51 pm, Simon Horman wrote:
+>> The RTL8157 supports 5GBit Link speeds. Add support for this speed
+>> in the setup and setting/getting through ethool. Also add 5GBit EEE.
+>                                            ^^^^^^
+> This isn't a bug, but there's a typo: 'ethool' should be 'ethtool'.
+Will be fixed in v3.
 
-> The Exynos host controller driver is clearly a PHY consumer (gets the
-> ufs->phy using devm_phy_get()), but pokes into the guts of struct phy
-> to get the generic_phy->power_count.
+> When rtl8152_set_speed() sets tp->ups_info.speed_duplex = NWAY_5000M_FULL
+> and r8156_ups_en(enable=true) subsequently calls r8156_ups_flags(), the
+> switch falls through to the default case and no speed bits are set in the
+> UPS flags word.
+Yes, this analysis is correct.
 
-Ah, newer version. Would still like an ack from Samsung.
+> 
+> Is the UPS power management configuration incorrect for 5Gbit link speeds
+> without a case for NWAY_5000M_FULL in r8156_ups_flags()?
+The out-of-tree driver also does not set any flags in USB_UPS_FLAGS in 
+the 5000M case. Maybe this is an oversight in that driver, but according 
+to my tests, the power management works. In any case, I would not be 
+able to guess the correct register value with any confidence for the 
+NWAY_5000M_FULL case: the bits are different from the speed bits in 
+PLA_PHYSTATUS. The RTL8157 also has other differences in USB power 
+management compared to previous generations, such as introducing 
+register USB_U2P3_V2_CTRL. So, to the best of my knowledge, the proposed 
+patch is correct.
 
-And I hit the wrong key, I did not actually apply this...
+> 
+> This path is activated by the next commit in the series (58ba3b6c476d
+> 'r8152: Add support for the RTL8157 hardware') which sets
+> support_5000full = 1.
+> 
+> [ ... ]
 
--- 
-Martin K. Petersen
 
