@@ -1,307 +1,169 @@
-Return-Path: <linux-usb+bounces-35241-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35243-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2NbzFr0LvWkO5gIAu9opvQ
-	(envelope-from <linux-usb+bounces-35241-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 09:56:29 +0100
+	id aNwmJnkZvWnG6QIAu9opvQ
+	(envelope-from <linux-usb+bounces-35243-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 10:55:05 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9698D2D794B
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 09:56:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D5142D853C
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 10:55:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 2E3ED301FE66
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 08:55:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3EC8A3108275
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 09:52:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA67A378D65;
-	Fri, 20 Mar 2026 08:55:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5911037DEA4;
+	Fri, 20 Mar 2026 09:52:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oMNDPWHv"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ux7sY9yw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0F1375F96
-	for <linux-usb@vger.kernel.org>; Fri, 20 Mar 2026 08:55:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BE433D6D5
+	for <linux-usb@vger.kernel.org>; Fri, 20 Mar 2026 09:51:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773996933; cv=none; b=JlO21Fsb+bZfgt2yBNOLTJ5KgJNSQZVJpRJ+DdQHoUMyTiN9L1QqbVluYIBiUtDRQioVJs8fJ6ZcNHprutW88tegnUoplQdxUbfdBb/S2ri2+AKw+7CPr7U3NHJoDdcctbbpWQLXAYrEcxJfZHszWyHe9dB2LOWeIP9RwRQarxE=
+	t=1774000319; cv=none; b=XLtJTLYKg74rVHnSN2lfj1utQ1jvuIVNjrGKxrXxXOZfpNgb1gLyCY/vvx3PYaLPAye0WwVxjebtza7sg79XNy033A0iGw8cdsCtyPpm+FzZFZ/r6ovXO+9v7bh/pNx4Qsy2geSTExgUsnlfZU+TOzLMd5kB2DJs6ECftw0DmAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773996933; c=relaxed/simple;
-	bh=cPeN1vUKjquyCNuYv+KhJlm53tGodtnOjIR6zLwHcWM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Y2pa8hEspU+E1EJ7UV3KXQD/CcEtWHu3rINXZ62FK1UnFsKg7qkAubmbDQ6kKb4l3IUHCiMjpukgePhDogOigTpytu9bn4AU0qohoI+un6FTqKysxd7mIn40rByInTO4sUldZVtPRZPgy6Hm7XNOzNKikGsvwIItag8PJqiS3uI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oMNDPWHv; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2b060c14ccbso41229445ad.0
-        for <linux-usb@vger.kernel.org>; Fri, 20 Mar 2026 01:55:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773996931; x=1774601731; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=q+r6IZRTjAuqtqKkL9NYRrlxIcvlXL5N8kxFoBUFnCk=;
-        b=oMNDPWHv7S6s+UsYL+wxhHq2mcRvWFfNp9QznXXvn49FopPvS7QiDGAflRx735afPt
-         89bTM/55pyBlQQntLfoZAvY7pQ6j/yZ5RjPdIPGK1CqReBIrM6yrOapNem4fvNfd8fH8
-         UxzPF9yBls9iR5YtHazkPjrV0XOu9Y/woG0Rrx1UKjBLKc6dkyx+grze8XAeJw+7/cjx
-         PsATQDUAX6/FKUILgTrUhRb019dCx6xIKMZybnRr5/ggNifVfM9jB3bNLxbYFLjeGoUY
-         0ln46ii8pGzypM1Q1sdnHbv2xSEm01UdV6mUGMQXorkTd9os/prge5lw5FEyuC/L2EYE
-         LobA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773996931; x=1774601731;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q+r6IZRTjAuqtqKkL9NYRrlxIcvlXL5N8kxFoBUFnCk=;
-        b=Bloc8MwhE3EVpFUDZRKhSezd474lOBqv8bBFLA3Yv6B1rESVU4ZibfOyclLz8tk65u
-         d25QW6bv/A2K8cUfhFk1HwRHsb6psaq6aH9hABUB/dnrcd8BUsLjEpIj/ypo7d/Dd4Xj
-         LFb75u9VJNWbXuGd/zcJu+MvAG8bmxICrN9TsjxZ+2nZ5ZsiAuwq0Wfw9pB/yFbRDyFe
-         O6TqUIAFI+zD29w6MMQAnwyzVRNqu21Itu3l6+jrXq5HburL5mqcKzaekJEHuzBN57J3
-         Kh5ivNw5ZJw8q+vpyIz98qN8IE02vdQkAJqseEpUYz1sitvMKn9waYwkL6Aq3eTg1U6X
-         1yQw==
-X-Gm-Message-State: AOJu0YxweZ5px0620cyXzkpcIsb7AMq1zYfl6WNy9/gUnqm6d7at8LcE
-	CoWqu2jL4wf2v+yhUawypmCN5eAQFCpJOYJG6F6gc15cCVs7ySxV5i/7LUBowlur/csZKMCwQhd
-	L7WQyuw==
-X-Received: from pliy14.prod.google.com ([2002:a17:903:3d0e:b0:2ae:5344:9e72])
- (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:2348:b0:2ae:b9cd:d2df
- with SMTP id d9443c01a7336-2b0827a797amr23492035ad.34.1773996931063; Fri, 20
- Mar 2026 01:55:31 -0700 (PDT)
-Date: Fri, 20 Mar 2026 16:54:50 +0800
-In-Reply-To: <20260320-usb-net-lifecycle-v1-0-4886b578161b@google.com>
+	s=arc-20240116; t=1774000319; c=relaxed/simple;
+	bh=tBusV8I1xKXUrGEu9BjwwnL+Ldksq8Sarqj0TThaMqk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=ewlSNeIT+9LZyOTFXKohYrX8o4OSybIJCMFaoZ+1LnANxy/JOy02xeErpCcILosFa5qeJKEkP+bWlzY3q5R9KSCCFyTnoxwug9W5J05kliV8A9PUrQDUXT8eMUBzlSWpbktoE1iEG52y6sSJ3qZueuhcAq8V+4oSR8fO1UjqBfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ux7sY9yw; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260320-usb-net-lifecycle-v1-0-4886b578161b@google.com>
-X-Developer-Key: i=khtsai@google.com; a=ed25519; pk=abA4Pw6dY2ZufSbSXW9mtp7xiv1AVPtgRhCFWJSEqLE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773996915; l=7379;
- i=khtsai@google.com; s=20250916; h=from:subject:message-id;
- bh=cPeN1vUKjquyCNuYv+KhJlm53tGodtnOjIR6zLwHcWM=; b=RIX8Pw9NlPIBE4VKtmrY5ajDc9rdW4WzWxkwZJbeAJQUk/Q/hGXLBiEZYwMBcLMkOUDsbThHR
- dypca3ELtsHBW/YW1Om4xFxztBIxL97VBNgCaMme5HNH74THPYA6vvQ
-X-Mailer: b4 0.14.3
-Message-ID: <20260320-usb-net-lifecycle-v1-7-4886b578161b@google.com>
-Subject: [PATCH 7/7] usb: gadget: f_rndis: Fix net_device lifecycle with device_move
-From: Kuen-Han Tsai <khtsai@google.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kyungmin Park <kyungmin.park@samsung.com>, 
-	Felipe Balbi <balbi@kernel.org>, David Lechner <david@lechnology.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Kuen-Han Tsai <khtsai@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774000306;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SB0KpBn5A09Moyx+zjJpQCHUxGkKOb8xwpecR+YoJT4=;
+	b=ux7sY9ywu+wS45NR3bq7PywwA4yYp30v4K9OZ3Eua2QuPZ2luZmhd+98gprsJzH8xMB6Nf
+	bXJjA8h8o5i/Y29DqWrnoMESdqi7RX+zRDB2jAHBO9x1sk9Lwda/m2n2LHrDjmm2dXUlqt
+	i6aWySuiFz498jMm/x8VCqt1OVKoXpU=
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 20 Mar 2026 17:50:50 +0800
+Message-Id: <DH7ILSL8DXBO.ZR74CL1QEUBU@linux.dev>
+Cc: <dlan@kernel.org>, <gregkh@linuxfoundation.org>,
+ <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+ <linux-usb@vger.kernel.org>, <spacemit@lists.linux.dev>,
+ <thinh.nguyen@synopsys.com>
+Subject: Re: [PATCH 1/1] usb: dwc3: dwc3-generic-plat: Add optional VBUS
+ regulator support
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Ze Huang" <huang.ze@linux.dev>
+To: "Chukun Pan" <amadeus@jmu.edu.cn>, <huang.ze@linux.dev>
+References: <DH7FXPBMB1K5.28IT6DZQ280ZV@linux.dev>
+ <20260320081826.1331721-1-amadeus@jmu.edu.cn>
+In-Reply-To: <20260320081826.1331721-1-amadeus@jmu.edu.cn>
+X-Migadu-Flow: FLOW_OUT
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
 	MV_CASE(0.50)[];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35241-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[google.com:+];
+	TAGGED_FROM(0.00)[bounces-35243-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.993];
+	DKIM_TRACE(0.00)[linux.dev:+];
 	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[khtsai@google.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[huang.ze@linux.dev,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	NEURAL_HAM(-0.00)[-0.880];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 9698D2D794B
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:dkim,linux.dev:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 1D5142D853C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The net_device is allocated during function instance creation and
-registered during the bind phase with the gadget device as its sysfs
-parent. When the function unbinds, the parent device is destroyed, but
-the net_device survives, resulting in dangling sysfs symlinks:
+Hi Chukun
 
-  console:/ # ls -l /sys/class/net/usb0
-  lrwxrwxrwx ... /sys/class/net/usb0 ->
-  /sys/devices/platform/.../gadget.0/net/usb0
-  console:/ # ls -l /sys/devices/platform/.../gadget.0/net/usb0
-  ls: .../gadget.0/net/usb0: No such file or directory
+On Fri Mar 20, 2026 at 4:18 PM CST, Chukun Pan wrote:
+> Hi,
+>
+>> I don't think it's a good idea to tie this optional VBUS regulator
+>> implementation to the SpacemiT K1 platform.
+>>
+>> While the K1 SoC does have a DRD controller, current boards in the wild
+>> (like Jupiter[1], OrangePi RV2[2], and Banana Pi F3[3]) all route this
+>> port to an onboard hub[4][5]. IMHO, managing the downstream VBUS regulat=
+or
+>> via the onboard_usb_dev driver is the correct approach for us.
+>
+> I'm sorry, but I don't quite understand why it's necessary to use
+> onboard_usb_dev driver instead.
+>
 
-Use device_move() to reparent the net_device between the gadget device
-tree and /sys/devices/virtual across bind and unbind cycles. During the
-final unbind, calling device_move(NULL) moves the net_device to the
-virtual device tree before the gadget device is destroyed. On rebinding,
-device_move() reparents the device back under the new gadget, ensuring
-proper sysfs topology and power management ordering.
+I think it's better to align the driver with the actual hardware. I'm not
+opposed to managing any regulators in usb host/device drivers. But if we
+do have an onboard hub, and regulator belongs to the downstream ports of
+the hub, then it's hub's job, right?
 
-To maintain compatibility with legacy composite drivers (e.g., multi.c),
-the borrowed_net flag is used to indicate whether the network device is
-shared and pre-registered during the legacy driver's bind phase.
+>
+> The DRD controller is connected to the onboard USB hub, so it can
+> only operate in host mode. If all downstream ports of the USB hub
+> use the same VBUS supply, then what's the problem with using this?
 
-Fixes: f466c6353819 ("usb: gadget: f_rndis: convert to new function interface with backward compatibility")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
----
- drivers/usb/gadget/function/f_rndis.c | 42 +++++++++++++++++++++--------------
- drivers/usb/gadget/function/u_rndis.h | 31 +++++++++++++++++++-------
- 2 files changed, 48 insertions(+), 25 deletions(-)
+It does work.
 
-diff --git a/drivers/usb/gadget/function/f_rndis.c b/drivers/usb/gadget/function/f_rndis.c
-index 521b4619d6be..7de1c5f8e326 100644
---- a/drivers/usb/gadget/function/f_rndis.c
-+++ b/drivers/usb/gadget/function/f_rndis.c
-@@ -666,6 +666,7 @@ rndis_bind(struct usb_configuration *c, struct usb_function *f)
- 
- 	struct f_rndis_opts *rndis_opts;
- 	struct usb_os_desc_table        *os_desc_table __free(kfree) = NULL;
-+	struct net_device		*net __free(detach_gadget) = NULL;
- 	struct usb_request		*request __free(free_usb_request) = NULL;
- 
- 	if (!can_support_rndis(c))
-@@ -683,21 +684,18 @@ rndis_bind(struct usb_configuration *c, struct usb_function *f)
- 		rndis_iad_descriptor.bFunctionClass = rndis_opts->class;
- 		rndis_iad_descriptor.bFunctionSubClass = rndis_opts->subclass;
- 		rndis_iad_descriptor.bFunctionProtocol = rndis_opts->protocol;
--	}
- 
--	/*
--	 * in drivers/usb/gadget/configfs.c:configfs_composite_bind()
--	 * configurations are bound in sequence with list_for_each_entry,
--	 * in each configuration its functions are bound in sequence
--	 * with list_for_each_entry, so we assume no race condition
--	 * with regard to rndis_opts->bound access
--	 */
--	if (!rndis_opts->bound) {
--		gether_set_gadget(rndis_opts->net, cdev->gadget);
--		status = gether_register_netdev(rndis_opts->net);
--		if (status)
--			return status;
--		rndis_opts->bound = true;
-+		if (rndis_opts->bind_count == 0 && !rndis_opts->borrowed_net) {
-+			if (!device_is_registered(&rndis_opts->net->dev)) {
-+				gether_set_gadget(rndis_opts->net, cdev->gadget);
-+				status = gether_register_netdev(rndis_opts->net);
-+			} else
-+				status = gether_attach_gadget(rndis_opts->net, cdev->gadget);
-+
-+			if (status)
-+				return status;
-+			net = rndis_opts->net;
-+		}
- 	}
- 
- 	us = usb_gstrings_attach(cdev, rndis_strings,
-@@ -796,6 +794,9 @@ rndis_bind(struct usb_configuration *c, struct usb_function *f)
- 	}
- 	rndis->notify_req = no_free_ptr(request);
- 
-+	rndis_opts->bind_count++;
-+	retain_and_null_ptr(net);
-+
- 	/* NOTE:  all that is done without knowing or caring about
- 	 * the network link ... which is unavailable to this code
- 	 * until we're activated via set_alt().
-@@ -812,11 +813,11 @@ void rndis_borrow_net(struct usb_function_instance *f, struct net_device *net)
- 	struct f_rndis_opts *opts;
- 
- 	opts = container_of(f, struct f_rndis_opts, func_inst);
--	if (opts->bound)
-+	if (device_is_registered(&opts->net->dev))
- 		gether_cleanup(netdev_priv(opts->net));
- 	else
- 		free_netdev(opts->net);
--	opts->borrowed_net = opts->bound = true;
-+	opts->borrowed_net = true;
- 	opts->net = net;
- }
- EXPORT_SYMBOL_GPL(rndis_borrow_net);
-@@ -874,7 +875,7 @@ static void rndis_free_inst(struct usb_function_instance *f)
- 
- 	opts = container_of(f, struct f_rndis_opts, func_inst);
- 	if (!opts->borrowed_net) {
--		if (opts->bound)
-+		if (device_is_registered(&opts->net->dev))
- 			gether_cleanup(netdev_priv(opts->net));
- 		else
- 			free_netdev(opts->net);
-@@ -943,6 +944,9 @@ static void rndis_free(struct usb_function *f)
- static void rndis_unbind(struct usb_configuration *c, struct usb_function *f)
- {
- 	struct f_rndis		*rndis = func_to_rndis(f);
-+	struct f_rndis_opts	*rndis_opts;
-+
-+	rndis_opts = container_of(f->fi, struct f_rndis_opts, func_inst);
- 
- 	kfree(f->os_desc_table);
- 	f->os_desc_n = 0;
-@@ -950,6 +954,10 @@ static void rndis_unbind(struct usb_configuration *c, struct usb_function *f)
- 
- 	kfree(rndis->notify_req->buf);
- 	usb_ep_free_request(rndis->notify, rndis->notify_req);
-+
-+	rndis_opts->bind_count--;
-+	if (rndis_opts->bind_count == 0 && !rndis_opts->borrowed_net)
-+		gether_detach_gadget(rndis_opts->net);
- }
- 
- static struct usb_function *rndis_alloc(struct usb_function_instance *fi)
-diff --git a/drivers/usb/gadget/function/u_rndis.h b/drivers/usb/gadget/function/u_rndis.h
-index a8c409b2f52f..4e64619714dc 100644
---- a/drivers/usb/gadget/function/u_rndis.h
-+++ b/drivers/usb/gadget/function/u_rndis.h
-@@ -15,12 +15,34 @@
- 
- #include <linux/usb/composite.h>
- 
-+/**
-+ * struct f_rndis_opts - RNDIS function options
-+ * @func_inst: USB function instance.
-+ * @vendor_id: Vendor ID.
-+ * @manufacturer: Manufacturer string.
-+ * @net: The net_device associated with the RNDIS function.
-+ * @bind_count: Tracks the number of configurations the RNDIS function is
-+ *              bound to, preventing double-registration of the @net device.
-+ * @borrowed_net: True if the net_device is shared and pre-registered during
-+ *                the legacy composite driver's bind phase (e.g., multi.c).
-+ *                If false, the RNDIS function will register the net_device
-+ *                during its own bind phase.
-+ * @rndis_interf_group: ConfigFS group for RNDIS interface.
-+ * @rndis_os_desc: USB OS descriptor for RNDIS.
-+ * @rndis_ext_compat_id: Extended compatibility ID.
-+ * @class: USB class.
-+ * @subclass: USB subclass.
-+ * @protocol: USB protocol.
-+ * @lock: Protects the data from concurrent access by configfs read/write
-+ *        and create symlink/remove symlink operations.
-+ * @refcnt: Reference counter for the function instance.
-+ */
- struct f_rndis_opts {
- 	struct usb_function_instance	func_inst;
- 	u32				vendor_id;
- 	const char			*manufacturer;
- 	struct net_device		*net;
--	bool				bound;
-+	int				bind_count;
- 	bool				borrowed_net;
- 
- 	struct config_group		*rndis_interf_group;
-@@ -30,13 +52,6 @@ struct f_rndis_opts {
- 	u8				class;
- 	u8				subclass;
- 	u8				protocol;
--
--	/*
--	 * Read/write access to configfs attributes is handled by configfs.
--	 *
--	 * This is to protect the data from concurrent access by read/write
--	 * and create symlink/remove symlink.
--	 */
- 	struct mutex			lock;
- 	int				refcnt;
- };
+Many boards leave gpio controlled regulators always on, that's what we
+want to solve. If we have to choose the parent of these regulators, why
+not put them in the correct hierarchy?
 
--- 
-2.53.0.959.g497ff81fa9-goog
+>
+>> K1 platform currently does not need this feature here.
+>>
+>> Considering the role switch, I think it would be better to hold off on
+>> this until there is an actual board/user that relies on it.
+>
+> There is a board without onboard USB hub,
 
+If such a board really need the regulator, IMO, your patch is the way to go=
+.
+
+>
+> such as the OrangePi R2S.
+> So this is possible for boards that don't have onboard USB hub?
+
+OrangePi haven't released the schematic yet.
+
+That's what I could find [1], which seems similar to RV2.
+
+    &usb3hub {
+    	vbus-gpios =3D <&gpio 123 0>;	/* gpio_123 for usb3 hub pwr and output =
+vbus */
+    	status =3D "okay";
+    };
+
+[1] https://github.com/orangepi-xunlong/linux-orangepi/blob/orange-pi-6.6-k=
+y/arch/riscv/boot/dts/ky/x1_orangepi-r2s.dts#L762
+
+>
+> Thanks,
+> Chukun
+
+Thanks,
+Ze
 
