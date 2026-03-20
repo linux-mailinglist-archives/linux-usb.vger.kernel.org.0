@@ -1,71 +1,71 @@
-Return-Path: <linux-usb+bounces-35237-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35238-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QNnZKkkMvWkO5gIAu9opvQ
-	(envelope-from <linux-usb+bounces-35237-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 09:58:49 +0100
+	id CGEGCWAMvWkO5gIAu9opvQ
+	(envelope-from <linux-usb+bounces-35238-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 09:59:12 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 128AC2D79E7
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 09:58:48 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B11AA2D79EF
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 09:59:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EF9A73164B22
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 08:55:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E8B29302BEB1
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 08:55:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB440377009;
-	Fri, 20 Mar 2026 08:55:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85F33377038;
+	Fri, 20 Mar 2026 08:55:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uUdz5pjF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fMCDp536"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25ADA37701B
-	for <linux-usb@vger.kernel.org>; Fri, 20 Mar 2026 08:55:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5F23783AB
+	for <linux-usb@vger.kernel.org>; Fri, 20 Mar 2026 08:55:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773996923; cv=none; b=uSDuLOM7Aq7Qf2GBZE6ws4v4VQqZxSPEw+7fw/O14C3zeHavalISWpHxg1xK1BV+bDZLpLdNktcYjfQB0HcjX1lbi2PdEb40hTbFp3N5X4dGNCbficttOmyxT4tmA/l8vC9IIGeFHLJd+phB+NUZviiPh/hTJafaNuc8jyyniBw=
+	t=1773996925; cv=none; b=UG4r5Y+T20vEDmfuE5jwMJhGfqjmyFSoxXIWMmPTMPUR0B3ZREFq+FwKbCm/+ItaUvJJWDUqPnij2LIh69LGlUClbKslQSO5aPy+IUtcN4ZVisYX9LmG+DBYO9H0FLUrw6juad14XQEBi5GLw3l4A1FHHpL9IuoCRLeqRQccTBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773996923; c=relaxed/simple;
-	bh=6Wkr6y8zvwVGvQGPNYUT30NoBb4TcsrkrqZeBgojKgk=;
+	s=arc-20240116; t=1773996925; c=relaxed/simple;
+	bh=r5JeqbpaQSgzfD5nVZ2+4ZgQVe4wxzOwvDAuDGO/s2g=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ssw324KBwPYQ8L3KsL6pQuztS5Lw/g3nuE2m4zeg15R0z/ZYn6VK7ppgMIsVjiRG7ldbHl3x6Vvws9vIicEMGPuPokkoQ/yXTJHF9uVwSSYrB+C0xCu3L+Seqsu4qJB5YQ9uRET2cvgJuHpDkIFiKpJ9nl4qTeX+c68FET1nOnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uUdz5pjF; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=Fai9+F+2g2hpivbGp//wdFsl7aBxEmp2+o5A/DJeQ850yPQ2eDTvXQx1WV36xznlXsuzgemS7o+9eGMMJOBOMrv9biV75+xN/A9twva1srJs7JEl1C2R2iksSmpSusnTl9VovmCr4XCi254rh+M+T5mSUiSWwYzbheYH4P1WTiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fMCDp536; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c7414516609so1312808a12.3
-        for <linux-usb@vger.kernel.org>; Fri, 20 Mar 2026 01:55:21 -0700 (PDT)
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3568090851aso4978722a91.1
+        for <linux-usb@vger.kernel.org>; Fri, 20 Mar 2026 01:55:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773996921; x=1774601721; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1773996923; x=1774601723; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hZ7vsqBU2jtHuNF1VCOsuin7WLACvQQEK8+9Bbcoxqo=;
-        b=uUdz5pjFTS+WCCMmWUWscbOP1MTYn/8UbNXYHATlZNrliZ/h2THIjq3bayR+sV0wgO
-         bYkkE9KpGJLPjD/KIHzqV1ybWiGFEKkRMUzgsZb0cgGImtDRCtsI54QWNRkxZ5pL0EUE
-         TrTZ/1HhIb0gOfWaC668vlLMTjTRJb+HHoZXcS1RqLVGw32+qRKhAd2y3nxHYPg+xpnQ
-         mFvLm+6msxjjq2JDN5f04Dl/J84ub2jiim65HL6pvJDkquEHVmewDvlSLKK5nWaKQuNX
-         2yV/w6BQ+h0MOOdjyuvXyDTWO+toL2bRlauG2M9o9rm1JrVd3tXkF387x6U3ga9x8GY7
-         mwZA==
+        bh=1dWn+d5N9BmZH7+uNOdi4sUe7sM9CUAvkoQg+RhZqyg=;
+        b=fMCDp536uKLz+Qau+iE4aKGJzuJDU+WabL3QVGmjUvZHcTP2bHIZbKSsWK8/QTGi/+
+         MVvmz3D/ZPYOMMaB+wkBDDCS22U9HkXiV350DAC7+UwevyYz5fUe3+Ats0esD6AxFnrU
+         Xfs4EafJ02JZZfydBCMGR9VbqQoDtMgYYosPSuLdUbv4Ck7bvJmc3VA2V1gIivutY3WN
+         X8R9hA0fBycopE/mtdlos3gW1t0g3T3b62M7G+wYqaquXwYIDgTI1LdKNPaJNwLxknir
+         pPUb432GjYnqDVYDEwyevXlLTVVKMxp0Cv4S6crNI+KkOr1HThXtdwXXk4qKyvmnqc1o
+         Uo8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773996921; x=1774601721;
+        d=1e100.net; s=20251104; t=1773996923; x=1774601723;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hZ7vsqBU2jtHuNF1VCOsuin7WLACvQQEK8+9Bbcoxqo=;
-        b=qUr2Xz068+pgzpAvIzvo25Nv2Ts/9mqfLe9nOtO2Ztt0G4J9EoxPzbufHfIrRaOalh
-         d/Y+lIYb7ziMoCY0/FYK2j2pZbSfIlrvaE8hqh3Yd/vlvwAuHY09oOv/rIYKgKYktvqp
-         mjQbtbwMzf2bYNZv27NveE0eEBOeJSMG9Kq0eR6XuAu3J5dkfJwC4ubN5lG/6c9dyblY
-         oLl45iQC8+n9PVbACYUY6CwsWRENFINIsbAIhNrJPzK1rVNKcGsHFgfch5VTFAnsA4Ux
-         5jKrj513bk5YqQ529ijtRFuxcr2fJougqJXf5OaGLn2mLie6jh2W2M+Gnkk+lmuvVMPx
-         J9xw==
-X-Gm-Message-State: AOJu0YzB/pjAZ9AxKI6w8k62AV2NHdVYWnoEv6ta4qCiQQ/0MkQxsVbG
-	+qoTraExp8xwYc3P+tFyJWt+HYu9uD70xz2KbrpW7BLuOX4OD7VrpEe2J4OxJjBBkfF8B8iWi28
-	XmSbMLw==
-X-Received: from pfbbt10.prod.google.com ([2002:a05:6a00:438a:b0:82a:6e03:a17f])
- (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:3d10:b0:82a:77f9:c563
- with SMTP id d2e1a72fcca58-82a8c22deabmr1820957b3a.12.1773996921141; Fri, 20
- Mar 2026 01:55:21 -0700 (PDT)
-Date: Fri, 20 Mar 2026 16:54:45 +0800
+        bh=1dWn+d5N9BmZH7+uNOdi4sUe7sM9CUAvkoQg+RhZqyg=;
+        b=RqML1Y1bDckUQhcHkgF0iJLsFZ87rNpXDEBd+Tku+V6sM/vTL2eI4yhDgxKHwZ4HT3
+         3mAd6J+2SdO/i2xEa54+x5kk0TCxJbJDOczR5UZBEJILSmjlf1pfURk8cNafwAWGNCDK
+         oOZPxVXJzU9Z3UHtffbistN1CWlLDLF69oDTDRV3gudGoE8epCYlYRhdb/YIQDa3+Nqg
+         GdiIBMb9XKw//Vq+mUzrkAwQP8UjQd12/VS9+J/B22pKFSvtPqjYhZiIvSim7KTYvKl/
+         SC2y+ig6nMUSYMMtISi5av6sGMzChvFidl2NZQBHW1cfyN3JJ3OODfI7oYWxCw+Hg4LB
+         3Khw==
+X-Gm-Message-State: AOJu0Ywu3rgYEgu8ROd+DYBO4s5mlgr7LH2zhnUSYNGf1DwfEYslxqsB
+	pJAkuBDHpQIwjm8lyWLKK082wPmazyZzLrKWggsQo09K6uSpbS0gmp1t1UxHMmpqLee4Rou0RQG
+	oeH294A==
+X-Received: from pjbei15.prod.google.com ([2002:a17:90a:e54f:b0:359:bc4:636])
+ (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:554e:b0:35b:9ab6:1d65
+ with SMTP id 98e67ed59e1d1-35bd2d52dc5mr1663642a91.25.1773996923152; Fri, 20
+ Mar 2026 01:55:23 -0700 (PDT)
+Date: Fri, 20 Mar 2026 16:54:46 +0800
 In-Reply-To: <20260320-usb-net-lifecycle-v1-0-4886b578161b@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -75,88 +75,95 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260320-usb-net-lifecycle-v1-0-4886b578161b@google.com>
 X-Developer-Key: i=khtsai@google.com; a=ed25519; pk=abA4Pw6dY2ZufSbSXW9mtp7xiv1AVPtgRhCFWJSEqLE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773996915; l=1561;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773996915; l=1808;
  i=khtsai@google.com; s=20250916; h=from:subject:message-id;
- bh=6Wkr6y8zvwVGvQGPNYUT30NoBb4TcsrkrqZeBgojKgk=; b=v8vZYl0ZMCKyFw75/3cvh+rKLQGT0mxQMyM9i1ZigduUl/TMQ6/WSN2wbvDbTi7ITMVr9tAy2
- OgCsgnfoDZ6AJKz/G4uH9hFs6gmLjtZtgdn5E3QO8DoyM/0L6RyzjAX
+ bh=r5JeqbpaQSgzfD5nVZ2+4ZgQVe4wxzOwvDAuDGO/s2g=; b=zvaz6HcwncN9XVtstgwC9aPtuRPoIf8obg4Gc/e+qJ+iyNk+ZMbETqriLLPo7gpzCHMvHvtdP
+ nvSn224/OS2D+4wn+wViROkQiOArwYnBk4OQhn9dJmG8/0i0B350BWG
 X-Mailer: b4 0.14.3
-Message-ID: <20260320-usb-net-lifecycle-v1-2-4886b578161b@google.com>
-Subject: [PATCH 2/7] usb: gadget: f_rndis: Protect RNDIS options with mutex
+Message-ID: <20260320-usb-net-lifecycle-v1-3-4886b578161b@google.com>
+Subject: [PATCH 3/7] usb: gadget: u_ncm: Add kernel-doc comments for struct f_ncm_opts
 From: Kuen-Han Tsai <khtsai@google.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kyungmin Park <kyungmin.park@samsung.com>, 
 	Felipe Balbi <balbi@kernel.org>, David Lechner <david@lechnology.com>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Kuen-Han Tsai <khtsai@google.com>, stable@vger.kernel.org
+	Kuen-Han Tsai <khtsai@google.com>
 Content-Type: text/plain; charset="utf-8"
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
 	MV_CASE(0.50)[];
 	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35237-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35238-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[google.com:+];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.991];
+	NEURAL_HAM(-0.00)[-0.990];
 	MIME_TRACE(0.00)[0:+];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[khtsai@google.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 128AC2D79E7
+X-Rspamd-Queue-Id: B11AA2D79EF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The class/subclass/protocol options are suspectible to race conditions
-as they can be accessed concurrently through configfs.
+Provide kernel-doc descriptions for the fields in struct f_ncm_opts to
+improve code readability and maintainability.
 
-Use existing mutex to protect these options. This issue was identified
-during code inspection.
-
-Fixes: 73517cf49bd4 ("usb: gadget: add RNDIS configfs options for class/subclass/protocol")
-Cc: stable@vger.kernel.org
 Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
 ---
- drivers/usb/gadget/function/f_rndis.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/usb/gadget/function/u_ncm.h | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_rndis.c b/drivers/usb/gadget/function/f_rndis.c
-index 8b11d8d6d89c..521b4619d6be 100644
---- a/drivers/usb/gadget/function/f_rndis.c
-+++ b/drivers/usb/gadget/function/f_rndis.c
-@@ -11,6 +11,7 @@
+diff --git a/drivers/usb/gadget/function/u_ncm.h b/drivers/usb/gadget/function/u_ncm.h
+index b1f3db8b68c1..ce2f6358688a 100644
+--- a/drivers/usb/gadget/function/u_ncm.h
++++ b/drivers/usb/gadget/function/u_ncm.h
+@@ -15,6 +15,20 @@
  
- /* #define VERBOSE_DEBUG */
+ #include <linux/usb/composite.h>
  
-+#include <linux/cleanup.h>
- #include <linux/slab.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-@@ -678,9 +679,11 @@ rndis_bind(struct usb_configuration *c, struct usb_function *f)
- 			return -ENOMEM;
- 	}
++/**
++ * struct f_ncm_opts - NCM function options
++ * @func_inst: USB function instance.
++ * @net: The net_device associated with the NCM function.
++ * @bind_count: Tracks the number of configurations the NCM function is
++ *              bound to, preventing double-registration of the @net device.
++ * @ncm_interf_group: ConfigFS group for NCM interface.
++ * @ncm_os_desc: USB OS descriptor for NCM.
++ * @ncm_ext_compat_id: Extended compatibility ID.
++ * @lock: Protects the data from concurrent access by configfs read/write
++ *        and create symlink/remove symlink operations.
++ * @refcnt: Reference counter for the function instance.
++ * @max_segment_size: Maximum segment size.
++ */
+ struct f_ncm_opts {
+ 	struct usb_function_instance	func_inst;
+ 	struct net_device		*net;
+@@ -23,12 +37,7 @@ struct f_ncm_opts {
+ 	struct config_group		*ncm_interf_group;
+ 	struct usb_os_desc		ncm_os_desc;
+ 	char				ncm_ext_compat_id[16];
+-	/*
+-	 * Read/write access to configfs attributes is handled by configfs.
+-	 *
+-	 * This is to protect the data from concurrent access by read/write
+-	 * and create symlink/remove symlink.
+-	 */
++
+ 	struct mutex			lock;
+ 	int				refcnt;
  
--	rndis_iad_descriptor.bFunctionClass = rndis_opts->class;
--	rndis_iad_descriptor.bFunctionSubClass = rndis_opts->subclass;
--	rndis_iad_descriptor.bFunctionProtocol = rndis_opts->protocol;
-+	scoped_guard(mutex, &rndis_opts->lock) {
-+		rndis_iad_descriptor.bFunctionClass = rndis_opts->class;
-+		rndis_iad_descriptor.bFunctionSubClass = rndis_opts->subclass;
-+		rndis_iad_descriptor.bFunctionProtocol = rndis_opts->protocol;
-+	}
- 
- 	/*
- 	 * in drivers/usb/gadget/configfs.c:configfs_composite_bind()
 
 -- 
 2.53.0.959.g497ff81fa9-goog
