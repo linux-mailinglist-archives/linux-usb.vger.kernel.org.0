@@ -1,147 +1,226 @@
-Return-Path: <linux-usb+bounces-35227-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35226-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MNdZJpv0vGms4wIAu9opvQ
-	(envelope-from <linux-usb+bounces-35227-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 08:17:47 +0100
+	id WLwXEEP0vGms4wIAu9opvQ
+	(envelope-from <linux-usb+bounces-35226-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 08:16:19 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3BFF2D6803
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 08:17:46 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDD9F2D67C6
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 08:16:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0B7A830E6F11
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 07:16:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F023530333D5
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 07:16:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F0CD309EF2;
-	Fri, 20 Mar 2026 07:16:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 795973563FB;
+	Fri, 20 Mar 2026 07:16:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FrEpdPEP"
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="TRlxXDDD";
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="3FXFMYuy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05EAE1DDE5;
-	Fri, 20 Mar 2026 07:16:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7696B2472A6;
+	Fri, 20 Mar 2026 07:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773990969; cv=none; b=r1lHWC6cFGNp1p7RdzZ+CME3PepVZN0tafAso+OvOUtipxH3BgW/fdKb8TX1n/DuMHcUoGU94NzW8SbFtrvc2ojj1OUfVNKLTEF3tK5H13u7WGXEFE+8VUSit62+IlIwA/kybew2bLXLrGOgPkIPLCwfDbuxp+SMsGIFs5jadhQ=
+	t=1773990962; cv=none; b=dnW9OOV99yvNBQ2zfnEXrZ7V0aqdXCGT2SKIqXSUaGlxh8Nhbxg4Iu38yNCeZm16zJwo/+OGPLF0KbRCoErD4rSbmmQiM8odaBXe0g4Dym1fUcPRyq3Ol92c2iFEp+OG+54pf3OKAh66eY+r/XEmG/rM5ZBwF+aQlryjRIRn/Dk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773990969; c=relaxed/simple;
-	bh=uwZVnODgMG45JU6Yv5E76ubyYRFZJjdJgmzpPJ0euLY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BWq+KfodfQvTmh665E5ioPTpybUS5xZZTMCtwj8OlTyO9an5HsSwf52FxiV70mmI+N02/5sByCGQvPAzqf3TB23nIxx/H5j5X3TL/LI79lBk0KM0fRVibUguGfd82QQboV5GqBE+9O4spIFmQXDJ/uIg8wDF6tBBmyR5gLTgR9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FrEpdPEP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EED3BC4CEF7;
-	Fri, 20 Mar 2026 07:16:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773990966;
-	bh=uwZVnODgMG45JU6Yv5E76ubyYRFZJjdJgmzpPJ0euLY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=FrEpdPEPxtsF8JUFp3ia71jsEcAY+IG4zPq1h1lqRay6yZTm4wGwlloaTkaXCua3V
-	 3XCMNMue8hHcM9dUblSeaw878aDsjLtEDCIuCgTZvz5tlpOSpiBQnnHDE9Yg4GhHPT
-	 AY9EjwZyyQ6cE/orONktioJ9Th/t6tG5tkGvnC4wP9MZ5+FDj/26NlVr/pq6uJwVCZ
-	 sZg9bvfXVshLJrQC4LqoaMigvgJY2vMfCHKCn79XH3DK2XligSOx6AyyZdvDp62dzT
-	 /9PsaPlSshKZO7JjmAeZNFWattR6gaLnQ/4+sunIlZHu6f5xkwNfVXR9H6KXZRDuUE
-	 S44nkhZCBAtUg==
-From: Yixun Lan <dlan@kernel.org>
-Date: Fri, 20 Mar 2026 07:15:38 +0000
-Subject: [PATCH v2 2/2] usb: dwc3: dwc3-generic-plat: spacemit: add support
- for K3 SoC
+	s=arc-20240116; t=1773990962; c=relaxed/simple;
+	bh=2VPZnVTs8tuWaMepUH7rXwMM9ZYqMiXOBUGOswyaMm0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fQuvSvDZ7syW718HZGfJX9XUXnmVq7FBgS8+eAJmMMfxGW7JZ1YfC5s9Uk2CK4vn0Z63JLYJMlbDafWi4kIQlQHJUSUCVvcbfo5UxD+CBeZS+9/7o2C3qQLeBMW/DrgoqArhm17yVSIJHxo4Xxmfy9v8H9MHFl93cJa3njyX4VU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=TRlxXDDD; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=3FXFMYuy; arc=none smtp.client-ip=23.88.97.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1773990958;
+	bh=2VPZnVTs8tuWaMepUH7rXwMM9ZYqMiXOBUGOswyaMm0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=TRlxXDDDNEy9olDleVJnORvJqcIkx/8EGTel/sMrM7a9+3bBnS3auPLYmbok244YD
+	 YE7IljIPJ/xEKvmtSOJTVLaMgwQSlsMrSKS9c9bI1eWbzK8x/PdOqLC1dR6J4YMjRN
+	 /vLTc31lL1B+BFi8qwqJ1dya794CgtPKGqBidnnaKj8IAnxD4dcgX3Ht2e2xd8YQ3L
+	 EQR48rKREeJyqGeGqtlMJFBu7ny/RXL73y4EsF+M5RCJereNGW6Lq4XS2kp1X7haOx
+	 PBEeQi60E7YFOeqWbXYOHf1i+VfKxL6VEBYTo0HJ6BiA5tMLHUjM9E0NoDjOhT3lZa
+	 kVg7QiRoF5x6A==
+Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
+	id A9E1D3FEE5; Fri, 20 Mar 2026 07:15:58 +0000 (UTC)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1773990957;
+	bh=2VPZnVTs8tuWaMepUH7rXwMM9ZYqMiXOBUGOswyaMm0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=3FXFMYuyqpAsAq36ej14KmA9damwUvvO2WV+5qgB8aaKbVTG8MgogWz+kPcUEMSCs
+	 MuPun+lMg03W0rChE0u7M6s7A84a1ophmnwKvGcfpASHiLzKnOPmUE1UiEWvbKfZj3
+	 w1nWsxvm+d/L2ZK74IkTZfg7FwHPmYcC0NUZTqadN3+91lOflfhKmDqgB+dWtpqMcf
+	 NcqyoB0ih/dotr2AdaMX7NMRYfSx/HQbA5/Q+qg08iVg8Syp9XjA/Y8jGKlOYBpEZy
+	 EqMPbOTFAZkiX+9trwPNgTdTgqO6gQF0j9qmk4r36r7bDEuGciLwi3r1AEIM+W3PRn
+	 /0vud9Cts1RAA==
+Received: from [IPV6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb] (unknown [IPv6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb])
+	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id 7E6FC3F9FD;
+	Fri, 20 Mar 2026 07:15:57 +0000 (UTC)
+Message-ID: <4a32e356-f818-452c-bde5-a3850ad9b21a@birger-koblitz.de>
+Date: Fri, 20 Mar 2026 08:15:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 2/2] r8152: Add support for the RTL8157
+ hardware
+To: Simon Horman <horms@kernel.org>
+Cc: edumazet@google.com, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-usb@vger.kernel.org, pabeni@redhat.com,
+ kuba@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net
+References: <20260317-rtl8157_next-v2-2-10ea1fa488d1@birger-koblitz.de>
+ <20260319165118.1988383-1-horms@kernel.org>
+From: Birger Koblitz <mail@birger-koblitz.de>
+Content-Language: en-US
+In-Reply-To: <20260319165118.1988383-1-horms@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260320-02-k3-usb20-support-v2-2-308ea0e44038@kernel.org>
-References: <20260320-02-k3-usb20-support-v2-0-308ea0e44038@kernel.org>
-In-Reply-To: <20260320-02-k3-usb20-support-v2-0-308ea0e44038@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Ze Huang <huang.ze@linux.dev>, 
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Emil Renner Berthing <kernel@esmil.dk>, 
- Junzhong Pan <junzhong.pan@spacemit.com>, 
- Inochi Amaoto <inochiama@gmail.com>, spacemit@lists.linux.dev, 
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, 
- Yixun Lan <dlan@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=856; i=dlan@kernel.org;
- h=from:subject:message-id; bh=uwZVnODgMG45JU6Yv5E76ubyYRFZJjdJgmzpPJ0euLY=;
- b=owEB6QIW/ZANAwAKATGq6kdZTbvtAcsmYgBpvPQmOFxwzZBI8PVNThFFbSRrHn3UyFMGboiFj
- AR+sHudp3SJAq8EAAEKAJkWIQS1urjJwxtxFWcCI9wxqupHWU277QUCabz0JhsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMSwyLDJfFIAAAAAALgAoaXNzdWVyLWZwckBub3RhdGlvbnMub3BlbnBncC5
- maWZ0aGhvcnNlbWFuLm5ldEI1QkFCOEM5QzMxQjcxMTU2NzAyMjNEQzMxQUFFQTQ3NTk0REJCRU
- QACgkQMarqR1lNu+1b3A//V9yooInUPnDEnA9zUVopFpPUygIVe8+FyIpuVffaXUyiG6thQzjTF
- M7SPaVRMCXvvaqHfrFWYy5Zi4nenPOKJ45eCnsW6V6S57K+cd50fZ1qddb19qmmt5CUR2rJ/TIh
- 7mY+IANnbVA69jJMCGRRe8Sz006SbDtxnqCLc6kgRXIA8B2K0de8Fs4JXWC4PamqSdzOLrlEhO6
- 5HrESGXvQEGQYTibjLouk6+3Ihslfg1AoJxXwKEKV7E2gr7A4mKGga1YJ7XjF5eopzwi7pm2/ip
- Iiqoy/3KVZXzQj2fPmjZclfe1x460PGnQbcgeaO5Wzsz6EPG/yeIOdH7fj1bwT+1Tc+QTD/77wy
- SQSRRMNKhO43SpI/fwm2OWqC3hFXdJLqj4HDuc8WqzEWp0jiymiymEMAUbUUFJ1+4Jv9zuiLgp0
- bno5aaJFUhU45v86mwNG/4OpJEb9uxH0LEbAtHvtPWWfGsIdmnWzv2bFmFMbWXBVlsjFh4Vtd3O
- bZjeN4AXaPOGLvhPQtXx9S/l00z4vLcXDQKgSD9vyhAScZ/TMIJ6bWx0bwmZQUyzABzV2wrhLK0
- 4ycu1wrrmCfRK0pWMJsE7gwhPxcz4DN3iuE1O6Efey0e8sRVDI2J4qbtjq01baU48WEOH7M0uHS
- oyO7ZqiuE3z3oRe62apCd/BAqrpEs8=
-X-Developer-Key: i=dlan@kernel.org; a=openpgp;
- fpr=50B03A1A5CBCD33576EF8CD7920C0DBCAABEFD55
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35227-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[esmil.dk,spacemit.com,gmail.com,lists.linux.dev,vger.kernel.org,lists.infradead.org,kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.993];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dlan@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	DKIM_TRACE(0.00)[birger-koblitz.de:+];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[birger-koblitz.de];
+	TAGGED_FROM(0.00)[bounces-35226-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[synopsys.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: F3BFF2D6803
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.991];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: CDD9F2D67C6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add support for the DWC3 USB controller which found in SpacemiT K3 SoC.
+On 19/03/2026 5:51 pm, Simon Horman wrote:
+> This is an AI-generated review of your patch. The human sending this
+> email has considered the AI review valid, or at least plausible.
+> 
+> For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
+> ---
+> r8152: Add support for the RTL8157 hardware
+> 
+> The RTL8157 uses a different packet descriptor format compared to the
+> previous generation of chips. The commit adds support for the new format,
+> SRAM and ADV access interfaces, and consolidates RTL8156/RTL8156B/RTL8157
+> initialization into a single function.
+> 
+>> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+>> index bab8e10e5f99..05531ea43791 100644
+>> --- a/drivers/net/usb/r8152.c
+>> +++ b/drivers/net/usb/r8152.c
+> 
+> [ ... ]
+> 
+>> @@ -6151,15 +6562,24 @@ static void rtl8156_enable(struct r8152 *tp)
+>>   	u32 ocp_data;
+>>   	u16 speed;
+>>
+>> +	if (tp->version <= RTL_VER_16)
+>> +		return rtl_enable(tp);
+>> +
+>>   	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL4);
+> 
+The comparison operation is indeed wrong, it should be
+   tp->version >= RTL_VER_16
+Note that RTL_VER_17 will be used for the RTL8159, and the enable 
+functions for these chips are identical, so we are already using >= here.
 
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Yixun Lan <dlan@kernel.org>
----
- drivers/usb/dwc3/dwc3-generic-plat.c | 1 +
- 1 file changed, 1 insertion(+)
+> Before this patch, both rtl8156_enable (VER_10/11) and rtl8156b_enable
+> (VER_12/13/15) executed all of these operations unconditionally.
+Indeed, this will be again the case with the correction to
+tp->version >= 16
 
-diff --git a/drivers/usb/dwc3/dwc3-generic-plat.c b/drivers/usb/dwc3/dwc3-generic-plat.c
-index e846844e0023..28219968b8b0 100644
---- a/drivers/usb/dwc3/dwc3-generic-plat.c
-+++ b/drivers/usb/dwc3/dwc3-generic-plat.c
-@@ -212,6 +212,7 @@ static const struct dwc3_generic_config eic7700_dwc3 =  {
- 
- static const struct of_device_id dwc3_generic_of_match[] = {
- 	{ .compatible = "spacemit,k1-dwc3", },
-+	{ .compatible = "spacemit,k3-dwc3", },
- 	{ .compatible = "fsl,ls1028a-dwc3", &fsl_ls1028_dwc3},
- 	{ .compatible = "eswin,eic7700-dwc3", &eic7700_dwc3},
- 	{ /* sentinel */ }
+I also verified that the new enable() function for the RTL8157 as found 
+in the out-of-tree driver is indeed as short as implemented by the early 
+return from rtl8156_enable() function, here.
 
--- 
-2.53.0
+This will be fixed in v3.
 
+>> -	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3);
+>> -	ocp_data &= ~PLA_MCU_SPDWN_EN;
+>> -	ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, ocp_data);
+>> +	if (tp->version != RTL_VER_16)
+>> +		ocp_byte_clr_bits(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, PLA_MCU_SPDWN_EN);
+> 
+> Is ocp_byte_clr_bits() the correct function here? PLA_MCU_SPDWN_EN is
+> defined as BIT(14) (0x4000), which requires 16-bit access. ocp_byte_clr_bits()
+> performs an 8-bit read/modify/write via ocp_read_byte/ocp_write_byte,
+> accessing only bits 0-7 of the register. Bit 14 is outside the byte range.
+Indeed, this is wrong, it should be ocp_word_clr_bits. Will be fixed in v3.
+
+> The other hw_phy_cfg functions (r8156_hw_phy_cfg, r8156b_hw_phy_cfg)
+> use 'u16 data' and don't attempt error handling on r8153_phy_status().
+The analysis is correct and the code will not correctly handle errors.
+I will use the same approach as in the other hw_phy_cfg functions and 
+not attempt error handling. Will be fixed in v3.
+
+> 
+> If the device becomes inaccessible during r8153_phy_status(), the function
+> continues to program PHY registers with potentially invalid values instead
+> of returning early.
+The driver uses a different approach to error handling. Once the device 
+becomes inaccessible, this state is detected and the device reset.
+
+> 
+> [ ... ]
+> 
+>> @@ -8191,59 +8543,180 @@ static int r8156_init(struct r8152 *tp)
+>>
+>>   	ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, USB_MISC_1);
+>>   	if (ocp_data & PCUT_STATUS) {
+> 
+> [ ... ]
+> 
+>> +	if (tp->version != RTL_VER_16)
+>> +		ocp_byte_clr_bits(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, PLA_MCU_SPDWN_EN);
+> 
+> Same issue as above - is ocp_byte_clr_bits() the correct function for
+> clearing BIT(14)? PLA_MCU_SPDWN_EN is 0x4000, which exceeds the 8-bit range.
+This is the same passage as above, found a second time by the AI. Will 
+be fixed in v3.
+
+>> @@ -9541,6 +10056,7 @@ static void rtl_ops_init(struct r8152 *tp)
+>>   	case RTL_VER_12:
+>>   	case RTL_VER_13:
+>>   	case RTL_VER_15:
+>> +		ops->init		= r8156_init;
+>>   		ops->enable		= rtl8156_enable;
+>>   		ops->disable		= rtl8153_disable;
+> 
+> The ops->enable assignment changes from rtl8156b_enable to rtl8156_enable
+> for RTL_VER_12/13/15 (RTL8156B). Does the new rtl8156_enable provide the
+> same functionality?
+> 
+> As noted in the earlier issue, rtl8156_enable has an early return at line
+> 6581 that causes it to skip the PLA_MAC_PWR_CTRL4, USB_L1_CTRL, and
+> FC_PATCH_TASK configuration for all current versions. The old
+> rtl8156b_enable performed these operations.
+This will be fixed with the correct comparison in rtl8156_enable as 
+mentioned before, for that function. The function will then provide the 
+same functionality as before for RTL_VER_12/13/15, so this will be fixed 
+in v3.
+
+Birger
 
