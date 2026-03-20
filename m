@@ -1,226 +1,158 @@
-Return-Path: <linux-usb+bounces-35226-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35228-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WLwXEEP0vGms4wIAu9opvQ
-	(envelope-from <linux-usb+bounces-35226-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 08:16:19 +0100
+	id IEf+A2X7vGmd5AIAu9opvQ
+	(envelope-from <linux-usb+bounces-35228-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 08:46:45 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDD9F2D67C6
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 08:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 892092D6C39
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 08:46:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F023530333D5
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 07:16:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7A7F63019FF3
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2026 07:46:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 795973563FB;
-	Fri, 20 Mar 2026 07:16:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53EF21459FA;
+	Fri, 20 Mar 2026 07:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="TRlxXDDD";
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="3FXFMYuy"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cuId0NRl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7696B2472A6;
-	Fri, 20 Mar 2026 07:16:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994B6175A64
+	for <linux-usb@vger.kernel.org>; Fri, 20 Mar 2026 07:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773990962; cv=none; b=dnW9OOV99yvNBQ2zfnEXrZ7V0aqdXCGT2SKIqXSUaGlxh8Nhbxg4Iu38yNCeZm16zJwo/+OGPLF0KbRCoErD4rSbmmQiM8odaBXe0g4Dym1fUcPRyq3Ol92c2iFEp+OG+54pf3OKAh66eY+r/XEmG/rM5ZBwF+aQlryjRIRn/Dk=
+	t=1773992791; cv=none; b=MgaN9XsJPzMJzB/21MAx1pn8dOrwyEYxnOmLJelb2w0KO5tvJzfB6eMboFilRcAv3g39vWMO96YwV5DEj4U8Vg7CGt1mM4+LREmM5rKg2SQXAtpj/rO+7/uMCVPXItM99clNgI/d8T/zFxe1852KkMxl452+5W5Fr3ucJMN6yTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773990962; c=relaxed/simple;
-	bh=2VPZnVTs8tuWaMepUH7rXwMM9ZYqMiXOBUGOswyaMm0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fQuvSvDZ7syW718HZGfJX9XUXnmVq7FBgS8+eAJmMMfxGW7JZ1YfC5s9Uk2CK4vn0Z63JLYJMlbDafWi4kIQlQHJUSUCVvcbfo5UxD+CBeZS+9/7o2C3qQLeBMW/DrgoqArhm17yVSIJHxo4Xxmfy9v8H9MHFl93cJa3njyX4VU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=TRlxXDDD; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=3FXFMYuy; arc=none smtp.client-ip=23.88.97.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1773990958;
-	bh=2VPZnVTs8tuWaMepUH7rXwMM9ZYqMiXOBUGOswyaMm0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TRlxXDDDNEy9olDleVJnORvJqcIkx/8EGTel/sMrM7a9+3bBnS3auPLYmbok244YD
-	 YE7IljIPJ/xEKvmtSOJTVLaMgwQSlsMrSKS9c9bI1eWbzK8x/PdOqLC1dR6J4YMjRN
-	 /vLTc31lL1B+BFi8qwqJ1dya794CgtPKGqBidnnaKj8IAnxD4dcgX3Ht2e2xd8YQ3L
-	 EQR48rKREeJyqGeGqtlMJFBu7ny/RXL73y4EsF+M5RCJereNGW6Lq4XS2kp1X7haOx
-	 PBEeQi60E7YFOeqWbXYOHf1i+VfKxL6VEBYTo0HJ6BiA5tMLHUjM9E0NoDjOhT3lZa
-	 kVg7QiRoF5x6A==
-Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
-	id A9E1D3FEE5; Fri, 20 Mar 2026 07:15:58 +0000 (UTC)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1773990957;
-	bh=2VPZnVTs8tuWaMepUH7rXwMM9ZYqMiXOBUGOswyaMm0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=3FXFMYuyqpAsAq36ej14KmA9damwUvvO2WV+5qgB8aaKbVTG8MgogWz+kPcUEMSCs
-	 MuPun+lMg03W0rChE0u7M6s7A84a1ophmnwKvGcfpASHiLzKnOPmUE1UiEWvbKfZj3
-	 w1nWsxvm+d/L2ZK74IkTZfg7FwHPmYcC0NUZTqadN3+91lOflfhKmDqgB+dWtpqMcf
-	 NcqyoB0ih/dotr2AdaMX7NMRYfSx/HQbA5/Q+qg08iVg8Syp9XjA/Y8jGKlOYBpEZy
-	 EqMPbOTFAZkiX+9trwPNgTdTgqO6gQF0j9qmk4r36r7bDEuGciLwi3r1AEIM+W3PRn
-	 /0vud9Cts1RAA==
-Received: from [IPV6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb] (unknown [IPv6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb])
-	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id 7E6FC3F9FD;
-	Fri, 20 Mar 2026 07:15:57 +0000 (UTC)
-Message-ID: <4a32e356-f818-452c-bde5-a3850ad9b21a@birger-koblitz.de>
-Date: Fri, 20 Mar 2026 08:15:57 +0100
+	s=arc-20240116; t=1773992791; c=relaxed/simple;
+	bh=xpMLAOZvhEkRytV+fa+rQ9qyVsW7tLTtfEbuNXc7Mh0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Uq3nUAm8ljj1SnkCQeeWC9ZOssjQT4ppiwO2MF2ci6IUAj54mEepIG5GUM0xFPiwGuBd0Oh84nNbsHAtbwKtJnLREbruOGyUwmD/apG+4qADF3jxupp+E04qar4mXQQPlI7ikiXN/ICLQJ5c7gT9Te8HASXztmMv0lAFLow4aks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cuId0NRl; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 2/2] r8152: Add support for the RTL8157
- hardware
-To: Simon Horman <horms@kernel.org>
-Cc: edumazet@google.com, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-usb@vger.kernel.org, pabeni@redhat.com,
- kuba@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net
-References: <20260317-rtl8157_next-v2-2-10ea1fa488d1@birger-koblitz.de>
- <20260319165118.1988383-1-horms@kernel.org>
-From: Birger Koblitz <mail@birger-koblitz.de>
-Content-Language: en-US
-In-Reply-To: <20260319165118.1988383-1-horms@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Mime-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773992778;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xpMLAOZvhEkRytV+fa+rQ9qyVsW7tLTtfEbuNXc7Mh0=;
+	b=cuId0NRlWcRCWES4HU+Lc0ibv221MW3lWyOOSu7k/bwBjgd6QZ39zqgGbVZbJJ35e4WLsi
+	ivNw38ZPjVePckXTnkAQjc1bCiwMpGJ3HUWyE35Nio1vJntwQpAvjhLXhu7qIOjQjyIG0A
+	22Zoytt9cfpinC0/jvLWb2yWP4He7zQ=
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 20 Mar 2026 15:45:20 +0800
+Message-Id: <DH7FXPBMB1K5.28IT6DZQ280ZV@linux.dev>
+Cc: <dlan@kernel.org>, <gregkh@linuxfoundation.org>, <huang.ze@linux.dev>,
+ <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+ <linux-usb@vger.kernel.org>, <spacemit@lists.linux.dev>
+Subject: Re: [PATCH 1/1] usb: dwc3: dwc3-generic-plat: Add optional VBUS
+ regulator support
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Ze Huang" <huang.ze@linux.dev>
+To: "Chukun Pan" <amadeus@jmu.edu.cn>, <thinh.nguyen@synopsys.com>
+References: <20260319214633.cyzr7silffbzisot@synopsys.com>
+ <20260320063621.1204038-1-amadeus@jmu.edu.cn>
+In-Reply-To: <20260320063621.1204038-1-amadeus@jmu.edu.cn>
+X-Migadu-Flow: FLOW_OUT
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
+	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
+	MV_CASE(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[birger-koblitz.de:+];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[birger-koblitz.de];
-	TAGGED_FROM(0.00)[bounces-35226-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linux.dev:+];
+	RCVD_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-35228-lists,linux-usb=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[huang.ze@linux.dev,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.991];
+	TAGGED_RCPT(0.00)[linux-usb];
 	RCPT_COUNT_SEVEN(0.00)[9];
+	NEURAL_HAM(-0.00)[-0.947];
 	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: CDD9F2D67C6
+X-Rspamd-Queue-Id: 892092D6C39
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 19/03/2026 5:51 pm, Simon Horman wrote:
-> This is an AI-generated review of your patch. The human sending this
-> email has considered the AI review valid, or at least plausible.
-> 
-> For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
-> ---
-> r8152: Add support for the RTL8157 hardware
-> 
-> The RTL8157 uses a different packet descriptor format compared to the
-> previous generation of chips. The commit adds support for the new format,
-> SRAM and ADV access interfaces, and consolidates RTL8156/RTL8156B/RTL8157
-> initialization into a single function.
-> 
->> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
->> index bab8e10e5f99..05531ea43791 100644
->> --- a/drivers/net/usb/r8152.c
->> +++ b/drivers/net/usb/r8152.c
-> 
-> [ ... ]
-> 
->> @@ -6151,15 +6562,24 @@ static void rtl8156_enable(struct r8152 *tp)
->>   	u32 ocp_data;
->>   	u16 speed;
+On Fri Mar 20, 2026 at 2:36 PM CST, Chukun Pan wrote:
+> Hi,
+>
+>> In my previous response, I noted to pass the name/id that best match
+>> your platform in the dwc3_generic_config. This structure is passed as
+>> private data corresponding to your k1 platform compatible string. That
+>> should solve the naming issue (i.e. you can keep the name "vbus").
+>
+> Thank you for your suggestion, I will change it to match compatible.
+>
+>> > Do I need to check if it's in host mode?
 >>
->> +	if (tp->version <= RTL_VER_16)
->> +		return rtl_enable(tp);
->> +
->>   	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL4);
-> 
-The comparison operation is indeed wrong, it should be
-   tp->version >= RTL_VER_16
-Note that RTL_VER_17 will be used for the RTL8159, and the enable 
-functions for these chips are identical, so we are already using >= here.
+>> Is your k1 a DRD controller, and that it can operate in device mode?
+>> If so, does it save power to disable the regulator while operating in
+>> device mode?
+>
+> It is a DRD controller that supports switching between Host and Device
+> modes. I will change it to enable regulator only in Host mode.
+>
+>> > > Also do we want to disable the regulator on system suspend? If so,
+>> > > we may need a regulator handle.
+>> >=20
+>> > I'll add it if you think it's necessary.
+>> >
+>> Same comment as above, but this will be more involved. E.g. you may only
+>> want to disable the vbus when remote wakeup is disabled and power saving
+>> is more essential (disabling vbus will disconnect the device).
+>
+> I will consider implementing it in the future.
+>
+> Thanks,
+> Chukun
 
-> Before this patch, both rtl8156_enable (VER_10/11) and rtl8156b_enable
-> (VER_12/13/15) executed all of these operations unconditionally.
-Indeed, this will be again the case with the correction to
-tp->version >= 16
+Hi Chukun,
 
-I also verified that the new enable() function for the RTL8157 as found 
-in the out-of-tree driver is indeed as short as implemented by the early 
-return from rtl8156_enable() function, here.
+I don't think it's a good idea to tie this optional VBUS regulator
+implementation to the SpacemiT K1 platform.
 
-This will be fixed in v3.
+While the K1 SoC does have a DRD controller, current boards in the wild
+(like Jupiter[1], OrangePi RV2[2], and Banana Pi F3[3]) all route this
+port to an onboard hub[4][5]. IMHO, managing the downstream VBUS regulator
+via the onboard_usb_dev driver is the correct approach for us.
 
->> -	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3);
->> -	ocp_data &= ~PLA_MCU_SPDWN_EN;
->> -	ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, ocp_data);
->> +	if (tp->version != RTL_VER_16)
->> +		ocp_byte_clr_bits(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, PLA_MCU_SPDWN_EN);
-> 
-> Is ocp_byte_clr_bits() the correct function here? PLA_MCU_SPDWN_EN is
-> defined as BIT(14) (0x4000), which requires 16-bit access. ocp_byte_clr_bits()
-> performs an 8-bit read/modify/write via ocp_read_byte/ocp_write_byte,
-> accessing only bits 0-7 of the register. Bit 14 is outside the byte range.
-Indeed, this is wrong, it should be ocp_word_clr_bits. Will be fixed in v3.
+[1] https://github.com/milkv-jupiter/jupiter-files/blob/main/hardware/v1_0/=
+jupiter-sch-v1_0.pdf (page 20)
+[2] https://drive.google.com/drive/folders/1pcI_U0C3VJKTCg8A1zj08CwNbohnONS=
+R (page 16)
+[3] https://drive.google.com/file/d/19iLJ5xnCB_oK8VeQjkPGjzAn39WYyylv/view =
+(page 24)
+[4] https://www.lcsc.com/datasheet/C209756.pdf
+[5] https://www.lcsc.com/datasheet/C157362.pdf
 
-> The other hw_phy_cfg functions (r8156_hw_phy_cfg, r8156b_hw_phy_cfg)
-> use 'u16 data' and don't attempt error handling on r8153_phy_status().
-The analysis is correct and the code will not correctly handle errors.
-I will use the same approach as in the other hw_phy_cfg functions and 
-not attempt error handling. Will be fixed in v3.
+K1 platform currently does not need this feature here.
 
-> 
-> If the device becomes inaccessible during r8153_phy_status(), the function
-> continues to program PHY registers with potentially invalid values instead
-> of returning early.
-The driver uses a different approach to error handling. Once the device 
-becomes inaccessible, this state is detected and the device reset.
+Considering the role switch, I think it would be better to hold off on this
+until there is an actual board/user that relies on it.
 
-> 
-> [ ... ]
-> 
->> @@ -8191,59 +8543,180 @@ static int r8156_init(struct r8152 *tp)
->>
->>   	ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, USB_MISC_1);
->>   	if (ocp_data & PCUT_STATUS) {
-> 
-> [ ... ]
-> 
->> +	if (tp->version != RTL_VER_16)
->> +		ocp_byte_clr_bits(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, PLA_MCU_SPDWN_EN);
-> 
-> Same issue as above - is ocp_byte_clr_bits() the correct function for
-> clearing BIT(14)? PLA_MCU_SPDWN_EN is 0x4000, which exceeds the 8-bit range.
-This is the same passage as above, found a second time by the AI. Will 
-be fixed in v3.
-
->> @@ -9541,6 +10056,7 @@ static void rtl_ops_init(struct r8152 *tp)
->>   	case RTL_VER_12:
->>   	case RTL_VER_13:
->>   	case RTL_VER_15:
->> +		ops->init		= r8156_init;
->>   		ops->enable		= rtl8156_enable;
->>   		ops->disable		= rtl8153_disable;
-> 
-> The ops->enable assignment changes from rtl8156b_enable to rtl8156_enable
-> for RTL_VER_12/13/15 (RTL8156B). Does the new rtl8156_enable provide the
-> same functionality?
-> 
-> As noted in the earlier issue, rtl8156_enable has an early return at line
-> 6581 that causes it to skip the PLA_MAC_PWR_CTRL4, USB_L1_CTRL, and
-> FC_PATCH_TASK configuration for all current versions. The old
-> rtl8156b_enable performed these operations.
-This will be fixed with the correct comparison in rtl8156_enable as 
-mentioned before, for that function. The function will then provide the 
-same functionality as before for RTL_VER_12/13/15, so this will be fixed 
-in v3.
-
-Birger
+Thanks,
+Ze
 
