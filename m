@@ -1,155 +1,159 @@
-Return-Path: <linux-usb+bounces-35274-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35275-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UPrZHN+evmnoUgMAu9opvQ
-	(envelope-from <linux-usb+bounces-35274-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2026 14:36:31 +0100
+	id 8slxLEnAvmkJaQMAu9opvQ
+	(envelope-from <linux-usb+bounces-35275-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2026 16:59:05 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10CFF2E58BE
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2026 14:36:30 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBCE02E63F3
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2026 16:59:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3F72A300D749
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2026 13:36:30 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id F1529300D36A
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2026 15:59:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D1AA38C405;
-	Sat, 21 Mar 2026 13:36:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73E23378D80;
+	Sat, 21 Mar 2026 15:58:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mfWkyGW4"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="d7cFh1oN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9340438B7B1;
-	Sat, 21 Mar 2026 13:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9397184
+	for <linux-usb@vger.kernel.org>; Sat, 21 Mar 2026 15:58:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774100179; cv=none; b=ohBCfM+Fu2BwpCk1ZCEyP4tQzZFzLUJnXQxB8yw+gvcaaoFhWUhhdO71PL96vR2ZUEwiLVcfPXY/lbferssov/9UmDN6rW0izL+dnX6DLBiVAenHcTUXxCEAppvYRN1UZIkS3cqsX06JVUlY2/dMYbRQi2HVomB7k//FO9UWr5A=
+	t=1774108739; cv=none; b=BMp3BrVZfO+mIpVCX35tb5Sn8YPQ5N6ZxB/75NAdoTbfF13YMI3nos4WLW7FJpEnc7Xz9AG3HAClNblZlStYvgRnBjnkGWC4uSBSrqMDwivOm6bbI17wUftbRZwc9kgn5Zm8BDCXJCKurgeTFG+xScZpwjv8Zq+v28tSKGT7Phc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774100179; c=relaxed/simple;
-	bh=ScEthUcLfpX621z6HtFnqRquosLH06QLxz8gxt9F8Lc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=smoUfaj3seZRPraza6GDr2IdU+9uIWtJUEFoEal3A6E7CerdE/WwiAO9qPNxAd/PDlZDIj3ystXj25BtEVmdK6Y+FQPVLKupmV8gOo2HnSTlJiG1o51bWZKTJnAsAArnhHfZs77n9f1zQZVutFWv5kB67hoZCuE7RM6fG539nsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mfWkyGW4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B6C1C19421;
-	Sat, 21 Mar 2026 13:36:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774100179;
-	bh=ScEthUcLfpX621z6HtFnqRquosLH06QLxz8gxt9F8Lc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mfWkyGW4u4C/onbagpRCHYFYfGetckJWs751FJGNn3t/wq4qxg8U+CqrhtGqHIh6T
-	 8uxouxrbuZF4Gf6h87cyP55Zc8BXYfFXgfrs9Kxd/0viswRCyaZ1F7IAV4A2Yi341s
-	 D5KOpW0S7nTg85tDinOHVmYKHE9+3p7HhX/VaIF61UYgpQ0/8cpnWhtUKOq06Ug/EM
-	 rpQUDL7wWyq7LHOqA8zCSvWUIQOVvVC5XB7Ikau0Eppr6pje9jbSwDS7FzRPEgFpF+
-	 lss+2fn2KEG1ly43nFju+p9JVvDT9byhEw0M2i/wazJi6B/ehFS+0LOYnTatiJmzwa
-	 3EPe3RXJfKsnw==
-Message-ID: <224fb6d5-47aa-4677-a257-aa470e05c5dd@kernel.org>
-Date: Sat, 21 Mar 2026 14:36:15 +0100
+	s=arc-20240116; t=1774108739; c=relaxed/simple;
+	bh=SiodWoSXu9+caLrSXyvdSQnn2ekiWv17t8Jn3ctG73A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oTyLYIJBe68G/IMz32bnSwJjxSV+R/XXiL8skCVrm/B7TsYJhRyPICvyAmLoi2BgMmoGKbsFrAulzy5TZSC0/R7aKpnnYbBTEv7tdWLCdtiPAjBdBqGPwtbjOnECs+A7g73Wl2Z6PgQG3NIDz+wwsyIIRVTQRQIB7SrZTUL2t4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=d7cFh1oN; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-899ee491af3so32248366d6.1
+        for <linux-usb@vger.kernel.org>; Sat, 21 Mar 2026 08:58:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1774108737; x=1774713537; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RKVhUOfkuzK/fGCk0GqCxgldiTxu/DepeOIIv4MLeYY=;
+        b=d7cFh1oNuQKaHqZEKPNua+WP1lYMG1X/j3DZzl+2uPRvwm4/6CdJTkE2QTIlDgrakj
+         z8ljO9rueSIsdtWZ2tRvbJuM+i+N9AYZP4XcpnpTGMIpfAnVZpQhRZS7/x5Ry+TpexJi
+         5IxD9TwQ9kEb3izIeEOtu/l+tTmffidIlP1M/1KQpkuntAYgBhlWdwpWN+pkQY0+cNIs
+         NL9QdMzOg1P6C1X1vJ1X4sPDVKPTS5/gKn109XVZN6mQFT/+maUkVGpe1yAvz5w3rMWX
+         QPMm1jdSbROsOeas7dv1cc9/Z5ZAz4G1vU9c0UzC8TdmDW853X2FqrCP/qn0qc5IJ5X4
+         HpsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774108737; x=1774713537;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RKVhUOfkuzK/fGCk0GqCxgldiTxu/DepeOIIv4MLeYY=;
+        b=q/+kKrHkUvPwctZbf68ZhicDVUm6HOg6Hki30bTTfqczU9b2chss4Lhg+jfykcehwK
+         l0rPrwHYikstRLRh9ZF6MbanTW7i2ZZ858/WYbzzqsnpqEP8pTLJH2D6qAMfmywwld9a
+         a31iFslN3R1I2HoZtDBdACPIFeGk69SuTHHNgix6tdz19fSemQ2e6Dz2rZDUAiduY7l1
+         3B/D5/gbnaF8coNcRePhio5ghcmubrWCiHAWLJRFPwNngBewzgiixgqF/euW8IAaodBg
+         9/NMhLm99ly/t4HR5kZNxLllRMArQLFnTygDhAy9u0MUNfvoFBrM+FuJCrrsamjrLIKG
+         m11A==
+X-Forwarded-Encrypted: i=1; AJvYcCVeTSMWb0Ryueqc2kEeHkyE4WL7iAWraTajgSw2QKsvYCyrInYqqD/GBbDeE4/4FDAzb52vg/MQEu8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxjy+xJav2KkgbkZBoweP3OW+C4wHrjhZCzelKFbsVZppATILYf
+	HlPshepCtJjLEWEczSnKxBKPPExZ3Jyl/W2Qr+lVtWRzT3+aNxXYcl/fwRq21VtT3A==
+X-Gm-Gg: ATEYQzzEuIFXtlTzqvjfpEWMjjKVQwkRDFYXmS8xDny1X+vin+1DNlXevF2NBNGdR9N
+	fWzt6LYK/duh7XJj/dHYIcqLzepBcKtgsL0v9GG2WBUROdtPgT2b41ByJm/RhblE5/3ijbbBEyd
+	SzhPIDvvm/n4H9SoSQT2QGo2ebzkDUxaOvvvD6mnOXlAxatZmIhsDbNRkPoHTYfkQ8BjUTJcR1f
+	H6CfT8epjHcgxa8+PawLmvluCChX6r1CGdzIWKiJH/E8mwGwL8TXmpPfpZGmW8lBlHLqmqz+Fs+
+	fetMWZFOeHc1PdyYFZTus9JA4wImTQZnenIH8dwG7Z6o/CRrPhxkJJFLY/+5vIZQAbw0vi6ff9N
+	RODvgE7NqhDYHeGo9QnaISKcty+QxWjz3YYDjcMhAL6RJfXSBjE8nf4564A4uHmfyr16PWh4Nsl
+	sV9WPofwR1WF4ELFoeWL9oAAmJVqg9l2Wc6w==
+X-Received: by 2002:ad4:5e8d:0:b0:89a:3013:be02 with SMTP id 6a1803df08f44-89c85a379dcmr117723006d6.34.1774108736872;
+        Sat, 21 Mar 2026 08:58:56 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d01:d210::b00])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c96cb614dsm15687136d6.22.2026.03.21.08.58.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Mar 2026 08:58:56 -0700 (PDT)
+Date: Sat, 21 Mar 2026 11:58:53 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Oliver Neukum <oneukum@suse.com>,
+	=?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+	USB list <linux-usb@vger.kernel.org>
+Subject: Re: correctly handling EPROTO
+Message-ID: <d3fd1c0b-d0cf-40e2-9f21-b4c5de1c421b@rowland.harvard.edu>
+References: <4ada5d68-56f1-41b7-82d9-463901c927db@rowland.harvard.edu>
+ <8a14fe29-0d92-4ce5-a7e2-2c084c710727@suse.com>
+ <b0217cdc-f263-418c-b8b5-584520d0b1db@rowland.harvard.edu>
+ <20260318223851.1f6d07d7.michal.pecio@gmail.com>
+ <20260318235920.ioek26hdr25rkksp@synopsys.com>
+ <1eaf4cf3-4278-4d04-87aa-8b6069d544e1@rowland.harvard.edu>
+ <20260319231620.3ukqxsrwqikp5zbd@synopsys.com>
+ <2929d47c-fc02-49d2-873e-758f24c43071@rowland.harvard.edu>
+ <20260321021439.7pmcdrpb5oxbivct@synopsys.com>
+ <20260321065424.76a80508.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: typec: fusb302: Switch to threaded IRQ handler
-To: Alexey Charkov <alchark@flipper.net>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20260317-fusb302-irq-v2-1-dbabd5c5c961@flipper.net>
-From: Hans de Goede <hansg@kernel.org>
-Content-Language: en-US, nl
-In-Reply-To: <20260317-fusb302-irq-v2-1-dbabd5c5c961@flipper.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260321065424.76a80508.michal.pecio@gmail.com>
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35274-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35275-lists,linux-usb=lfdr.de];
+	TO_DN_ALL(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hansg@kernel.org,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 10CFF2E58BE
+	DBL_BLOCKED_OPENRESOLVER(0.00)[rowland.harvard.edu:dkim,rowland.harvard.edu:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: BBCE02E63F3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
-
-On 17-Mar-26 17:30, Alexey Charkov wrote:
-> FUSB302 fails to probe with -EINVAL if its interrupt line is connected via
-> an I2C GPIO expander, such as TI TCA6416.
+On Sat, Mar 21, 2026 at 06:54:24AM +0100, Michal Pecio wrote:
+> > The clear-halt doesn't have to be done after the unlinking of URBs.
+> > The xhci endpoint is in stopped state after a reset ep command. As
+> > long as the class driver doesn't submit a new URB to trigger a
+> > doorbell ring, the xhci driver can send a clear-halt after a reset ep
+> > command and no transfer will start.
 > 
-> Switch the interrupt handler to a threaded one, which also works behind
-> such GPIO expanders.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 309b6341d557 ("usb: typec: fusb302: Revert incorrect threaded irq fix")
-> Signed-off-by: Alexey Charkov <alchark@flipper.net>
+> Nope, for many years now, if not forever, xhci-hcd has been restarting
+> the endpoint after giving back the failed URB if its completion hasn't
+> unlinked all remaining URBs.
 
-Thanks, patch looks good to me:
+How can that work in the presence of BH givebacks?  xhci-hcd doesn't 
+really know when the completion handler runs.
 
-Reviewed-by: Hans de Goede <johannes.goede@oss.qualcomm.com>
+> Changing this is one of the issues under discussion here. It would take
+> a few tweaks to the driver.
 
-Regards,
+I think this is something that should be done in any case.
 
-Hans
-
-
-
-> ---
-> Changes in v2:
-> - Re-added the IRQF_ONESHOT flag to the request_threaded_irq() call
->   (thanks Hans de Goede and Sebastian Andrzej Siewior)
-> - Link to v1: https://lore.kernel.org/r/20260311-fusb302-irq-v1-1-7e7105706629@flipper.net
-> ---
->  drivers/usb/typec/tcpm/fusb302.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-> index ce7069fb4be6..889c4c29c1b8 100644
-> --- a/drivers/usb/typec/tcpm/fusb302.c
-> +++ b/drivers/usb/typec/tcpm/fusb302.c
-> @@ -1764,8 +1764,9 @@ static int fusb302_probe(struct i2c_client *client)
->  		goto destroy_workqueue;
->  	}
->  
-> -	ret = request_irq(chip->gpio_int_n_irq, fusb302_irq_intn,
-> -			  IRQF_TRIGGER_LOW, "fsc_interrupt_int_n", chip);
-> +	ret = request_threaded_irq(chip->gpio_int_n_irq, NULL, fusb302_irq_intn,
-> +				   IRQF_ONESHOT | IRQF_TRIGGER_LOW,
-> +				   "fsc_interrupt_int_n", chip);
->  	if (ret < 0) {
->  		dev_err(dev, "cannot request IRQ for GPIO Int_N, ret=%d", ret);
->  		goto tcpm_unregister_port;
-> 
-> ---
-> base-commit: 95c541ddfb0815a0ea8477af778bb13bb075079a
-> change-id: 20260311-fusb302-irq-316834765871
-> 
-> Best regards,
-
+Alan Stern
 
