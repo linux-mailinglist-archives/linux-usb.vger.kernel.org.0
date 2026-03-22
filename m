@@ -1,266 +1,191 @@
-Return-Path: <linux-usb+bounces-35289-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35290-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eCZtCG/2v2moBgQAu9opvQ
-	(envelope-from <linux-usb+bounces-35289-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2026 15:02:23 +0100
+	id CKrAI78awGkmDwQAu9opvQ
+	(envelope-from <linux-usb+bounces-35290-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2026 17:37:19 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7271C2E98FA
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2026 15:02:22 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 205E42EA079
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2026 17:37:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D0B4E301AD05
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2026 14:01:33 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3F6383003999
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2026 16:37:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 165453630A2;
-	Sun, 22 Mar 2026 14:01:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3D21368964;
+	Sun, 22 Mar 2026 16:37:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VU6CRocy"
+	dkim=pass (2048-bit key) header.d=scala.name header.i=@scala.name header.b="qkHSLFee"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417C036309C
-	for <linux-usb@vger.kernel.org>; Sun, 22 Mar 2026 14:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774188092; cv=pass; b=WWonxEGgf78uenGGeldBcTMqta4IqRg4INhobjxOaTsi/vO9Qxw3TjMz+d6ZEGimhRJ3Z/qG0ADvjw/OHTlkqTdQvh7V+9DC3oItisl7Ng0ULBt4t74+IPOPcw5BqFvD/i6IA01wGVyBg6PVfRy34NtvjoFb6n3R+K2vqWb48XI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774188092; c=relaxed/simple;
-	bh=f4Y4GZpxNK80pHM6+r/uD0ZDgoV5RAsXXgZuZwKvHS4=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=CtpdkBqkkEIySVMN3MSsoYBh83iINe1f/G82uJEYbfSYsnGdYRzqjdzXsqpJx6nBeHsbsR+5/5j+opUdhJzzRJOG8YTu06yW5+A/pt44pURqowb+Rs9zUSzl7Dv1u0kBB+PpCG0KcPEKkpitkSa9I6z1cNzgzed0idD1aY5DPq0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VU6CRocy; arc=pass smtp.client-ip=209.85.167.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-467e044082dso549406b6e.1
-        for <linux-usb@vger.kernel.org>; Sun, 22 Mar 2026 07:01:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774188090; cv=none;
-        d=google.com; s=arc-20240605;
-        b=TY/C0nbNXQELE/8pqQL2Tqq3FwVBDf9+XmcbLiajehTgIN/BctbJ20ypkSwguzCAIb
-         Pk/mrqkUQXJhEbKKf9bCFALcG4O2VnpJgscG3mH66hOddijCollU7iQlzGGB7WNR5hFJ
-         HkvuK/fihH8mO8EHw3/M31cRaiFHkMFtYwUZjoHTJItvUidv5x1LiMmmJNbmALt1il5N
-         qxTw2BrF5RyUv+V7s+gk+YI/ikmeQa9BY7Sb4VmoeYEVngH4zt6RB8L8pavwfp1xqKog
-         3tT87qOmC20r9UcLccMfGt+auQLuyCLfs6XVGBFrJFDBOqikdno06dHvUbfnCJ0w0bbV
-         /HpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=HjdxNGbc6EUEUZ1jI0PTsos+tLENfT/cGtkQi34+lc8=;
-        fh=RJk+pZqpqHiQVCVuJD0Zn0GPfBYL6VTxd4FySlr35Q8=;
-        b=F8osWQityj/DTgmdidDu/Z+s0tb7mAK2xfqqwE+bDPpHojPIug6rTnVi1yaUpkkbwx
-         BVwGHHxo5I/sTWwV2zdge4LIRK5O6NfhSiFMXoao0R/qLCjuCnT1JGq1mUcX2/yIzP7S
-         9JOCA6FHwjZnQI4rg8MBtnRORX+2x8IVBI8ZjK5XE9+JnEYxvpDCq+QvT11NxgwknUNH
-         rztsm0MJmnVVK5zmN/KVD0cCIxGh0Guzxu9YRqk9sGYhs4T0vp3DCeS7242UlSAPr/hY
-         D0wgu+rk0SqVnW/GvBMkm/G2vj4oEOOh6VVcf3vit6Jkbz5msIS65AvhS7y2m1kpLp+a
-         Wbbg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F522F3C3D
+	for <linux-usb@vger.kernel.org>; Sun, 22 Mar 2026 16:37:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774197436; cv=none; b=Mnqs3wOQdSP7dmOCM2YSVNoGZFGXJMOewBe9zYcFNUJQALY+MVlTdze1897/XawEdQXBH0mmW6NSDA0M2KSNGFZjjIEUQX1hGY/lANpbDYMZP0KIGv3Do6v4SgI8eu+TEf2iUGZXiVKiY8LvLCpR4MHloxmMTOmUSTmnJhkGux0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774197436; c=relaxed/simple;
+	bh=JFpoWSgD1s/KhKAWvJeZEZ04y6D4QxnN9MevAWxYU4s=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=M7sUWHr0ZX1swLAv5p7Cjrc10+pIUZQHcYVoOkWXeqI5UGUn4zY6lRVSOc1AnmoDawAIhKTiELXq7KwSpmAuYq5jndB+CGTwvOzRRfABVwIK6mQRegctnvwzZ4et8RkMiHP/oPnj3BsRagx0btDKujy4OYfEj+D7TxKoNp0yYpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=scala.name; spf=pass smtp.mailfrom=scala.name; dkim=pass (2048-bit key) header.d=scala.name header.i=@scala.name header.b=qkHSLFee; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=scala.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=scala.name
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-439d8dc4ae4so2989512f8f.2
+        for <linux-usb@vger.kernel.org>; Sun, 22 Mar 2026 09:37:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774188090; x=1774792890; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HjdxNGbc6EUEUZ1jI0PTsos+tLENfT/cGtkQi34+lc8=;
-        b=VU6CRocyiKTXqYlkBkNM9gAmWE5huH0PfxZxtyU0+fAM5U2N6vLl5vCjw2Mo0rUok/
-         z8NWl9uxZMYcFrUdb0MV0lodQF5CedXTx5Aw2R8fOiOnuUFDp/6rNIa07j1RT5GDPuhG
-         YT4LnqBC1v1qCGFov/RKF9k8zmCmQ8pu/D4Glo5nEglESIndleXli/rfSFqGzNnyV1sR
-         Bv1s4Uwo8d6nJaMXrji6va/yJldrPXOLVqCppAiItOciPGy601wNmc2MWa3YZBMlXUpr
-         Lrod7ly/y8DB7qU6W0FBm2GI+IC7qh5TNgv3Ka2YtBTr+/28XI6CmjYSHsDp4AbKvz5a
-         0gGA==
+        d=scala.name; s=google; t=1774197433; x=1774802233; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:reply-to:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x9a6p/HT+rfzidRgp0jxaqZ5q+tj10zj/6Sd+UW0c8E=;
+        b=qkHSLFeeMK+G0U/sSgK5poDWkucvf+9uYEMtYLwK4Ft6tzg69sa0VA1+6zcMQ0uvK7
+         Cpy/98BueWB20jDozMElyc1VeO0kxwTdWPeDW9Ym5va+4GKpFPZd7ir71PB6E3mL87j4
+         ZUDZJdlvfbJcpQf3ZOs5+0hq28diJwC20WBL/soMGJLFWQDMebu6Q2Q1D83Wh5y6PDPk
+         +lrC9nBWqG+EDA/2kSUzS3I6aJQj7q5jB8hK1LV6+EmvuzT87rnIyyBF2kB4jyTyMvNx
+         XDVDTEwIKTG1o94FaD2xx5jKmlmdFCw7ds10DbM1xVFQl1IJV87sPQFca/Giba9UuzyQ
+         UqsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774188090; x=1774792890;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HjdxNGbc6EUEUZ1jI0PTsos+tLENfT/cGtkQi34+lc8=;
-        b=D9CciXwPPLre0e3uvFXjBsJeeSXYWil2HjtBa0/YW5fzADsxlQAm5e0PeTIALJnVQi
-         4mvBn79lr/PWK7v9gNj9VzeJ9jZxJwbnB9PBbPVAL55yH7lS9ctYXK8YXFuC9QdZ4f4h
-         QInLrWyUDPws1NceaACk9gZ/NdxUmHCC6KxMlzfJa2BNh3wtzRO+3jrxuP+bDJBHAOnQ
-         PeRvhmMpOh54fS4OpUvVM54KZgznmG/ecCRRRxDuK9NkrS27qICbLQkt97weaUASxO3c
-         AfvQyJ/gbJ2cZElWs9BLILSdqkbg5kVaZ7KCC1S/g4ToZjz2KY5YEEbbd5aAA6GNP6kj
-         yAEA==
-X-Gm-Message-State: AOJu0YxOqi53yFpJHIfubfsLrzKGJosEs2MLr8d2Mt5rqI211R5Te/Y3
-	geKIvBMIpZQjsRc0Ly+V+zGLa68IeIos2z2TNNr6qZPN3MPtiKdRb5rG+67hYGsmYSnRm5Z95t9
-	t9gBX7zvQVEAzbYrycvtshrnG1pEEUOt/Prs5iDa0RQ==
-X-Gm-Gg: ATEYQzyN4m+H3VWjHwekA2RqPP8c31YbqLOyOnX8WwiV61KSnAV6diik2X049mGpQNR
-	4F0FQdwlMVoAFPYSNky1h6W44C/xmGMwXC6U1dtphf43ObKek6A6e6B2hz2GcQMc/LLfqOyibBD
-	TjW3jR8gaFLtgLwJkst4G/TssMMWzNKf8gS16p4gHoGKvmrbOUP6lz31+dSAL2IT0O0Pocs/yXt
-	AAZjxwxQQy1uNoVFHZ4zjGmsxqqyophCXYkmwYZQWyvdpVwZqwwFQYyxBhk48Mr9aVFcBjNKElf
-	0l6ZtJub0TYY6dw7nZpWmVBvxv5SsOCeBcPIMpMHLV76z5UUxK30d94sEgy9ArQnqnnqOSGOEZu
-	ZfS0RUWHcR2AZPX6jkESihxqs
-X-Received: by 2002:a05:6808:144e:b0:45c:96bb:1202 with SMTP id
- 5614622812f47-467e5fe3284mr4910422b6e.58.1774188089867; Sun, 22 Mar 2026
- 07:01:29 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774197433; x=1774802233;
+        h=content-transfer-encoding:subject:from:reply-to:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x9a6p/HT+rfzidRgp0jxaqZ5q+tj10zj/6Sd+UW0c8E=;
+        b=ldTrDLF575nL2+jd1uY/kToOBIEl+cUEqI1xC428k9B4YOhJGgGnKUe4BKPwTQSVvZ
+         v+tniMc8OGuZHUHVyiob51Gv9tfWc5PayhKJ+yRIXzrSjI90yuCWuiCiVAhxCcDe68tO
+         9B8dDIQSjf3WqRJiYZaUAbMCV4PguOa2m+4tmZ/QDSPoDDNu1Ll01bm02uItubpW1BuS
+         cGRdvl+Q9jyw7shjtLhKDZ6ZiUe8zqL5vRkkVy8f/s5DHUim9I0+PH3ZUO57F+pbd7IM
+         utPk52IQDNZ3274MRI+Vg3KE/tMw7huzqlz7C0FJiI/WFz2FI6fOgtzC4EstzDjHMr/j
+         CnCg==
+X-Gm-Message-State: AOJu0YyXp17bwkiAs3IPPunHYz0gjg3ZOT4cqtoBTnV+tOQhYS1G6B3c
+	RZF8H8eaK+z0B5c7cNzEAf/Odk9gATzoy3kpaWyiusRZj5tpIOCS/WTJoF1mKulG2AeGTCBWQ18
+	HEe0t
+X-Gm-Gg: ATEYQzzZ9kY2B8J+UeqhATK3SFklOcFzoX8457oNe0itP5HowdiEmujb9GW2rmhrCAV
+	R/NchjgQwDG6SW9Qz3BxpB2ObJKdjvofUEK28RhjpmxBI2wPmX77sZDwZZxHZ7Ssb6X9GiiqNW7
+	guddcfGVckEjG6zp76RueVRQ8rk5MsFh49zxQZdJzVsfiO21iuvNL+G0aaNeZ+/rzB44p7lO8YM
+	qAbB1q5NseXZ1f3BldM0Iwrzwj0T5lgXm7L0Q/i/VDbXc+6GtQYkra/Z2YSeNt3nCreiqHAJcQD
+	tKqUTmJDaF1vlTDpSTAXt9tFqPVNUW5Afn8jnr33VA1lseQTIsoooWLD5avbURH9F0F54GXSkd4
+	WeKijhWnRUZ7EpBp4iR3rcWrznLBSfaCY4uS7hQm/UXAoQDEgfSiRE3s8/E5GpsHRQzhQ5IQGCL
+	hZpEmPRup8TkA0Dzb00E8WPZaTKUqLaEqYvnS34VQxRZ8JWGWGC/6b+r3gWhomTbY=
+X-Received: by 2002:a05:600c:8483:b0:485:531d:28b9 with SMTP id 5b1f17b1804b1-486fedc0070mr135241265e9.14.1774197432568;
+        Sun, 22 Mar 2026 09:37:12 -0700 (PDT)
+Received: from ?IPV6:2a02:169:ee00:0:98f1:7a2a:1483:7cf1? ([2a02:169:ee00:0:98f1:7a2a:1483:7cf1])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f8b322d9sm277821525e9.8.2026.03.22.09.37.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Mar 2026 09:37:12 -0700 (PDT)
+Message-ID: <7333738a-8364-42fa-b334-c4dc4b0ee503@scala.name>
+Date: Sun, 22 Mar 2026 17:37:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Michael Zimmermann <sigmaepsilon92@gmail.com>
-Date: Sun, 22 Mar 2026 15:01:19 +0100
-X-Gm-Features: AaiRm53S_Slu1MIoUQzPglCe_cV9tEleP7ZEjzwQGR-LoHO7Q6m7efiOTgqfW3Q
-Message-ID: <CAN9vWD+13DHCyjq+7hYgTSDx87TLtKXV9-8GMnZPuZnYvjyANA@mail.gmail.com>
-Subject: Oops when rebinding f_hid while /dev/hidg* is still opened
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: linux-usb@vger.kernel.org
+Reply-To: Francois Scala <francois@scala.name>
+From: =?UTF-8?Q?Fran=C3=A7ois_Scala?= <francois@scala.name>
+Subject: Caldigit TS5+ problem with work in progress patch
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[scala.name:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-35290-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[scala.name:+];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35289-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_ONE(0.00)[1];
+	DMARC_NA(0.00)[scala.name];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWO(0.00)[2];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sigmaepsilon92@gmail.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	HAS_REPLYTO(0.00)[francois@scala.name];
+	RCVD_COUNT_FIVE(0.00)[5];
+	REPLYTO_ADDR_EQ_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[francois@scala.name,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TO_DN_NONE(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com]
-X-Rspamd-Queue-Id: 7271C2E98FA
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[caldigit.com:url]
+X-Rspamd-Queue-Id: 205E42EA079
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The steps are as follows:
-- setup an hid gadget via configfs
-- bind it via the UDC file
-- open /dev/hidg0
-- unbind it via the UDC file
-- bind it via the UDC file
-- close /dev/hidg0
+Hello,
 
-This results in an oops (on a Raspberry Pi 4 running Fedora 43 with
-kernel 6.17.1-300.fc43.aarch64):
-+ echo fe980000.usb
-[  273.407057] dwc2 fe980000.usb: bound driver configfs-gadget.g1
-+ sleep 3
-[  273.624208] dwc2 fe980000.usb: new device is high-speed
-[  273.748314] dwc2 fe980000.usb: new device is high-speed
-[  273.811272] dwc2 fe980000.usb: new address 30
 
-+ exec
-+ echo ''
-+ echo fe980000.usb
-[  276.423944] dwc2 fe980000.usb: bound driver configfs-gadget.g1
-+ exec
-[  276.432878]  slab kmalloc-rnd-05-2k start ffff0000023c8000 pointer
-offset 1184 size 2048
-[  276.440740] list_del corruption. prev->next should be
-ffff00000c72e7f0, but was ffff0000023c84a0. (prev=ffff0000023c84a0)
-[  276.451905] ------------[ cut here ]------------
-[  276.456345] kernel BUG at lib/list_debug.c:62!
-[  276.460836] Internal error: Oops - BUG: 00000000f2000800 [#1]  SMP
-[  276.467096] Modules linked in: usb_f_hid libcomposite nft_fib_inet
-nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4
-nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack
-nf_defrag_ipv6 nf_defrag_ipv4 nf_tables qrtr bnep brcmfmac_wcc
-bcm2835_v4l2(C) bcm2835_mmal_vchiq(C) videobuf2_vmalloc
-videobuf2_memops videobuf2_v4l2 videodev btsdio videobuf2_common
-cpufreq_dt mc snd_bcm2835(C) vc4 snd_soc_hdmi_codec brcmfmac hci_uart
-btqca drm_exec btrtl snd_soc_core btintel btbcm brcmutil bluetooth
-cfg80211 snd_compress ac97_bus snd_pcm_dmaengine snd_seq
-snd_seq_device pwrseq_core raspberrypi_cpufreq snd_pcm rfkill
-pwm_bcm2835 snd_timer iproc_rng200 snd v3d soundcore
-drm_display_helper vchiq(C) bcm2711_thermal gpu_sched cec
-i2c_mux_pinctrl ledtrig_default_on leds_gpio i2c_mux drm_dma_helper
-binfmt_misc vfat fat loop dm_multipath zram lz4hc_compress
-lz4_compress xfs mmc_block rpmb_core reset_gpio dwc2
-gpio_raspberrypi_exp raspberrypi_hwmon sdhci_iproc broadcom
-pwrseq_simple sdhci_pltfm bcm_phy_ptp
-[  276.467432]  bcm_phy_lib udc_core i2c_brcmstb sdhci clk_bcm2711_dvp
-mmc_core genet i2c_bcm2835 mdio_bcm_unimac bcm2835_wdt bcm2835_dma
-phy_generic nvmem_rmem sunrpc be2iscsi bnx2i cnic uio cxgb4i cxgb4 tls
-cxgb3i cxgb3 mdio libcxgbi libcxgb qla4xxx iscsi_boot_sysfs iscsi_tcp
-libiscsi_tcp libiscsi scsi_transport_iscsi scsi_dh_rdac scsi_dh_emc
-scsi_dh_alua i2c_dev fuse nfnetlink aes_neon_bs
-[  276.592961] CPU: 0 UID: 0 PID: 1756 Comm: bash Tainted: G         C
-         6.17.1-300.fc43.aarch64 #1 PREEMPT(voluntary)
-[  276.604226] Tainted: [C]=CRAP
-[  276.607215] Hardware name: raspberrypi Raspberry Pi 4 Model B Rev
-1.1/Raspberry Pi 4 Model B Rev 1.1, BIOS 2025.10 10/01/2025
-[  276.618677] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  276.625725] pc : __list_del_entry_valid_or_report+0xb8/0x110
-[  276.631451] lr : __list_del_entry_valid_or_report+0xb8/0x110
-[  276.637179] sp : ffff80008082bb80
-[  276.640527] x29: ffff80008082bb80 x28: ffff00000509a540 x27: 0000000000000000
-[  276.647756] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
-[  276.654982] x23: 0000000000000001 x22: ffffbc93e4208d00 x21: ffff00000c72e7f0
-[  276.662209] x20: ffffbc93e69cbf90 x19: ffff00000c72e5b8 x18: 00000000ffffffff
-[  276.669435] x17: 20747562202c3066 x16: 3765323763303030 x15: 0720072007200720
-[  276.676661] x14: 0720072007200720 x13: 0720072007200720 x12: 0720072007200720
-[  276.683888] x11: 0000000000000001 x10: 0000000000000001 x9 : ffffbc93e2ef94c8
-[  276.691114] x8 : ffffbc93e63b8168 x7 : ffff80008082b8f0 x6 : 0000000000000001
-[  276.698341] x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-[  276.705568] x2 : 0000000000000000 x1 : ffff00000509a540 x0 : 000000000000006d
-[  276.712794] Call trace:
-[  276.715262]  __list_del_entry_valid_or_report+0xb8/0x110 (P)
-[  276.720990]  cd_forget+0x3c/0x90
-[  276.724250]  evict+0x220/0x250
-[  276.727333]  iput_final+0xb8/0x160
-[  276.730771]  iput.part.0+0x104/0x130
-[  276.734384]  iput+0x24/0x40
-[  276.737203]  dentry_unlink_inode+0xc8/0x1a0
-[  276.741435]  __dentry_kill+0x84/0x200
-[  276.745135]  dput+0x80/0xe8
-[  276.747956]  __fput+0x12c/0x300
-[  276.751128]  fput_close_sync+0x40/0x120
-[  276.755006]  __arm64_sys_close+0x40/0x98
-[  276.758972]  invoke_syscall.constprop.0+0x64/0xe8
-[  276.763731]  el0_svc_common.constprop.0+0x40/0xe8
-[  276.768490]  do_el0_svc+0x24/0x38
-[  276.771839]  el0_svc+0x3c/0x168
-[  276.775010]  el0t_64_sync_handler+0xa0/0xf0
-[  276.779242]  el0t_64_sync+0x1b0/0x1b8
-[  276.782947] Code: a94107e3 9129a000 f9400062 97d7bf71 (d4210000)
-[  276.789118] ---[ end trace 0000000000000000 ]---
-[  276.793784] note: bash[1756] exited with irqs disabled
-[  276.799026] dwc2 fe980000.usb: new device is high-speed
-Segmentation fault         bash -x trigger_udcbug.sh
+Last year, I purchased the TS5plus docker station from Caldigit 
+(https://www.caldigit.com/thunderbolt-5-dock-ts5-plus/)
 
-I think the issue happens while calling
-`list_del_init(&inode->i_devices);` in cd_forget.
-I did some research and a similar bug was fixed in:
-89ff3dfac604 usb: gadget: f_hid: fix f_hidg lifetime vs cdev
+It is a particular docking station as it has two USB controllers.
 
-I assume that the difference is, that they only fixed an issue which
-occurred while unbinding, but never tried to rebind it afterwards.
-I'm not familiar with the code, but could the issue be, that f_hid
-calls cdev_init during bind, which memsets the entire cdev structure?
+This cause a problem with the Linux kernel, where the typec_probe 
+function is designed to handle only one.
 
-Here's the script I use to trigger this bug:
-export CONFIGFS_HOME=/sys/kernel/config
-export DEVNAME="fe980000.usb"
+    Mar 09 09:13:54 alpha26 kernel: sysfs: cannot create duplicate
+    filename '/devices/platform/USBC000:00/typec/port1/port1.0/partner'
+    Mar 09 09:13:54 alpha26 kernel: CPU: 8 UID: 0 PID: 14 Comm:
+    kworker/u64:1 Tainted: G           OE       6.19.6-arch1-1 #1
+    PREEMPT(full)  a70f585a3574c37bff18875a6cf7bd8652b4cbca
+    Mar 09 09:13:54 alpha26 kernel: Tainted: [O]=OOT_MODULE,
+    [E]=UNSIGNED_MODULE
+    Mar 09 09:13:54 alpha26 kernel: Hardware name: Dell Inc. Dell Pro
+    Max 14 Premium MA14250/0TMRG5, BIOS 1.7.1 12/11/2025
+    Mar 09 09:13:54 alpha26 kernel: Workqueue: USBC000:00-con2
+    ucsi_poll_worker [typec_ucsi]
 
-mkdir -p $CONFIGFS_HOME/usb_gadget/g1
-cd $CONFIGFS_HOME/usb_gadget/g1
+    Mar 09 09:13:54 alpha26 kernel: Call Trace:
+    Mar 09 09:13:54 alpha26 kernel:  <TASK>
+    Mar 09 09:13:54 alpha26 kernel:  dump_stack_lvl+0x5d/0x80
+    Mar 09 09:13:54 alpha26 kernel:  sysfs_warn_dup.cold+0x17/0x23
+    Mar 09 09:13:54 alpha26 kernel: sysfs_do_create_link_sd+0xc6/0xd0
+    Mar 09 09:13:54 alpha26 kernel:  typec_probe+0x75/0xf0 [typec
+    9ceda448c6e572f91f8deb4f238aee9fc6b9153b]
+    Mar 09 09:13:54 alpha26 kernel:  really_probe+0xde/0x380
+    ...
 
-mkdir configs/c.1
+So I started to work on a patch to handle this situation (available for 
+kernel 6.19 here: 
+https://gitlab.archlinux.org/fs75/linux-ts5plus/-/blob/v6.19-ts5plus-test/ts5-test.patch?ref_type=heads 
+)
 
-mkdir -p functions/hid.usb0
-echo 0 > functions/hid.usb0/protocol
-echo 64 > functions/hid.usb0/report_length
-ln -s functions/hid.usb0 configs/c.1
+Instead of using the hard coded "partner" name, it now use the device 
+name instead. And the struct is updated to have multiple partners.
 
-echo "$DEVNAME" > UDC
+    $ ls -la /sys/devices/platform/USBC000:00/typec/port1/port1.0
+    drwxr-xr-x 4 root root    0 Mar 22 17:17 .
+    drwxr-xr-x 9 root root    0 Mar 22 17:16 ..
+    -rw-r--r-- 1 root root 4096 Mar 22 17:17 active
+    -r--r--r-- 1 root root 4096 Mar 22 17:17 mode
+    drwxr-xr-x 2 root root    0 Mar 22 17:16 mode1
+    lrwxrwxrwx 1 root root    0 Mar 22 17:17 port1-partner.0 ->
+    ../port1-partner/port1-partner.0
+    lrwxrwxrwx 1 root root    0 Mar 22 17:17 port1-partner.1 ->
+    ../port1-partner/port1-partner.1
+    drwxr-xr-x 2 root root    0 Mar 22 17:16 power
+    -r--r--r-- 1 root root 4096 Mar 22 17:17 svid
+    -rw-r--r-- 1 root root 4096 Mar 22 17:16 uevent
+    -r--r--r-- 1 root root 4096 Mar 22 17:17 vdo
 
-sleep 3
-exec 3<> /dev/hidg0
-echo "" > UDC
-echo "$DEVNAME" > UDC
-exec 3<&-
+My question is: how do I get my patch reviewed/merged ?
 
-Thanks
-Michael
+
+Thank you
+
+François
+
+
 
