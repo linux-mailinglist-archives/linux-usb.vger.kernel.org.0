@@ -1,83 +1,80 @@
-Return-Path: <linux-usb+bounces-35319-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35320-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8PgzLnIMwWngQAQAu9opvQ
-	(envelope-from <linux-usb+bounces-35319-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 10:48:34 +0100
+	id 0GB1LNgMwWngQAQAu9opvQ
+	(envelope-from <linux-usb+bounces-35320-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 10:50:16 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 243C82EF527
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 10:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 21B602EF586
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 10:50:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 331E0300DE22
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 09:43:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D45E4310C344
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 09:44:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2747A386C3D;
-	Mon, 23 Mar 2026 09:43:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80B8B386427;
+	Mon, 23 Mar 2026 09:44:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k5HwNrpZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RuOym74w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A9E3859CE;
-	Mon, 23 Mar 2026 09:43:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C997C3859CE;
+	Mon, 23 Mar 2026 09:44:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774259008; cv=none; b=FH3mGoN5n4KxcTKzGFGeQFwYPlgYPTkWVqF1/SSRXO+97NfbyRLPTdHifYXKQ54L7HPKp5yEcXv4eXZy+odQRI9F8X4t/7G/zNCdj042PicfMwH2tuZegOGtjmTTYmExEz85XG1xvBinyobSKJtAZl7MRyhYKtKqTMWmBc4FRiY=
+	t=1774259070; cv=none; b=BylCBLvZ4OcHyDf/tjxOlqy9qmQRTekrEeFau6234CKwwe9AHyMQ2sysClzabGt1mZMGTOJQ5hhPICK2ik/o1owd5rcMgIgKL1eU8NqyTeYuC7j/fOWrabC93QeeIb9uaHOAPfsevPHnNCnE73E1v7Z2UWl0DaAIjdNdcb8thHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774259008; c=relaxed/simple;
-	bh=TI5JFDwjWcEkHz2N++OnVaBuk+jQNncRJqQUQmXcqVo=;
+	s=arc-20240116; t=1774259070; c=relaxed/simple;
+	bh=4Gd851lvLvJILwJ42KZt3QyiZAzIvQuwtSDen6xjDXk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lrQxQLXbCMK1ql56fI4ftObfizoLpeux2ti1hgiOCzzdikZUS3ew7u3w+GeefrZ2LclHyw4i/EWNm6V+w8IRQEjVFEY5hpvt4wnUcT6n+I23KRnrMXAV8aZW1+4PyZJUhYoTx+cc1cQ1km/Qcbs7FGBp6G3q7/VmSdLhsNJTdn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k5HwNrpZ; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=E9wXRzCptZZlZA5Cl8od69cVvpotm7X0AwMTMs322ob5gKuE10s//F1gkoiIb+4sAAKsfAisrgdkn9ozjMQjYwhMLUc/MSUFr2YL8UA351qU4q67c5nTsM+OhiVMsNZOE73fJe1mBIEWu5pG8AP978Hzdi8dpCmXNVRrXYs4w84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RuOym74w; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774259007; x=1805795007;
+  t=1774259069; x=1805795069;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TI5JFDwjWcEkHz2N++OnVaBuk+jQNncRJqQUQmXcqVo=;
-  b=k5HwNrpZfK9w5af1VnFaVZ3S6EKBitnSBtVAzwOaJlqJYmr5qQWvz4s7
-   hjQNjFdonVa1thrbNbQFv2pL+JhFWx7haBhZ1Fnk+LJRqKbI/o6Gv4u7g
-   H0c9OJ8YCO50zdmbIodvbrFVwW12BDUlkWUE2lfhE7n7T+khHJkb8RA/p
-   1KDjnkOfsbMoSA0OmuhJ9c9yQQkS/mb1VTW4PJPsEyCeSjSEIln/uv+Dz
-   QfoBMKWFuR24ZAZOWmODgk3jzpZd/oA1BXAFLREFDXZnsYKEJyciAlANF
-   6DkJT4Eo77zPecA3xobIUZ5j/fJWC4rkRTiMrG2shdETAnGSGM9/WIZ2N
-   Q==;
-X-CSE-ConnectionGUID: 6kY63thhQsi3N0fYDTiyjg==
-X-CSE-MsgGUID: QnQdDRlvS7+i/aueawURhg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11737"; a="75373521"
+  bh=4Gd851lvLvJILwJ42KZt3QyiZAzIvQuwtSDen6xjDXk=;
+  b=RuOym74wRAmJpv+bdAQjPfBscISUENa9zDuX0kJP2hyHskY1/XghZYaP
+   S701Vd/Y7+j4eJHuFYVlncob0wWeY3e226hERjGQf75sr/BdwMzyxUrFy
+   1x8LjvdPLcEtGdojpgkY3590KFv21Dg3jSC3p1g1Kax/p2xZfd6N8DXov
+   v057OMFVTz00k5qLp1YT/Arh63Y/iUKMYf1Wn4ahOdWAedSdACzQNY7l3
+   V1W0gBu912mE5aIvBXdl1Rq2DTc86ZvZAAYG7WXP/4NJZbOTtT/icuidd
+   nMrX4GEjTkXbKE9DjUGGbMG4Nz//E+Q9ssrJKJO1CwgC7vTcibwiJvdK6
+   A==;
+X-CSE-ConnectionGUID: ieaoLXPhQm2M1ruTTB0pZw==
+X-CSE-MsgGUID: I2EaM9hGTU2s73enlhO5gA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11737"; a="79111828"
 X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
-   d="scan'208";a="75373521"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 02:43:27 -0700
-X-CSE-ConnectionGUID: wg8KxA7KSA6blYJhL6H3mA==
-X-CSE-MsgGUID: ulTJ0Fo1Q76uF1CaBru1aA==
+   d="scan'208";a="79111828"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 02:44:29 -0700
+X-CSE-ConnectionGUID: CnDrWjkgQDWsXg8XJSXKsg==
+X-CSE-MsgGUID: 9TOZ9+fySbOoYpCqfO6B+g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
-   d="scan'208";a="254449660"
+   d="scan'208";a="223044951"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa002.jf.intel.com with ESMTP; 23 Mar 2026 02:43:23 -0700
+  by orviesa006.jf.intel.com with ESMTP; 23 Mar 2026 02:44:27 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 3133295; Mon, 23 Mar 2026 10:43:22 +0100 (CET)
-Date: Mon, 23 Mar 2026 11:42:34 +0200
+	id A629195; Mon, 23 Mar 2026 10:44:25 +0100 (CET)
+Date: Mon, 23 Mar 2026 11:43:38 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Xu Yang <xu.yang_2@nxp.com>
+To: Alexey Charkov <alchark@flipper.net>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Li Jun <jun.li@nxp.com>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	linux-usb@vger.kernel.org, imx@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] usb: typec: tcpci: support setting orientation
- via GPIO
-Message-ID: <acELCgSYi48Pc0tj@kuha>
-References: <20260319-support-setting-orientation-use-gpio-v4-0-ab6dfa8610c2@nxp.com>
- <20260319-support-setting-orientation-use-gpio-v4-2-ab6dfa8610c2@nxp.com>
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Hans de Goede <hansg@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: fusb302: Switch to threaded IRQ handler
+Message-ID: <acELSje2b6alANAk@kuha>
+References: <20260317-fusb302-irq-v2-1-dbabd5c5c961@flipper.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,9 +83,8 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260319-support-setting-orientation-use-gpio-v4-2-ab6dfa8610c2@nxp.com>
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+In-Reply-To: <20260317-fusb302-irq-v2-1-dbabd5c5c961@flipper.net>
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
@@ -97,116 +93,73 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35319-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35320-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,nxp.com:email]
-X-Rspamd-Queue-Id: 243C82EF527
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,intel.com:email,flipper.net:email]
+X-Rspamd-Queue-Id: 21B602EF586
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Mar 19, 2026 at 05:48:49PM +0800, Xu Yang wrote:
-> If the chip indicates its "Connection Orientation" standard output control
-> in STANDARD_OUTPUT_CAPABILITIES register, it can do the thing by
-> programming CONFIG_STANDARD_OUTPUT register. Due to the optional feature,
-> the chip which not present this capability currently doesn't have a way to
-> correctly set the data path. This add the support to set orientation via
-> a simple GPIO.
+On Tue, Mar 17, 2026 at 08:30:15PM +0400, Alexey Charkov wrote:
+> FUSB302 fails to probe with -EINVAL if its interrupt line is connected via
+> an I2C GPIO expander, such as TI TCA6416.
 > 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> Switch the interrupt handler to a threaded one, which also works behind
+> such GPIO expanders.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 309b6341d557 ("usb: typec: fusb302: Revert incorrect threaded irq fix")
+> Signed-off-by: Alexey Charkov <alchark@flipper.net>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Heikki Krogerus <heikki.krogrerus@linux.intel.com>
 
 > ---
-> Changes in v4:
->  - simplify gpiod_set_value_cansleep()
-> Changes in v3:
->  - use "err = !!orient_gpio"
 > Changes in v2:
->  - return early in tcpci_set_orientation() if using gpio method
+> - Re-added the IRQF_ONESHOT flag to the request_threaded_irq() call
+>   (thanks Hans de Goede and Sebastian Andrzej Siewior)
+> - Link to v1: https://lore.kernel.org/r/20260311-fusb302-irq-v1-1-7e7105706629@flipper.net
 > ---
->  drivers/usb/typec/tcpm/tcpci.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+>  drivers/usb/typec/tcpm/fusb302.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index 8b7e6eb92ca2..0148b8f50412 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -7,6 +7,7 @@
+> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+> index ce7069fb4be6..889c4c29c1b8 100644
+> --- a/drivers/usb/typec/tcpm/fusb302.c
+> +++ b/drivers/usb/typec/tcpm/fusb302.c
+> @@ -1764,8 +1764,9 @@ static int fusb302_probe(struct i2c_client *client)
+>  		goto destroy_workqueue;
+>  	}
 >  
->  #include <linux/bitfield.h>
->  #include <linux/delay.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/i2c.h>
-> @@ -42,6 +43,7 @@ struct tcpci {
->  
->  	struct tcpc_dev tcpc;
->  	struct tcpci_data *data;
-> +	struct gpio_desc *orientation_gpio;
->  };
->  
->  struct tcpci_chip {
-> @@ -316,6 +318,10 @@ static int tcpci_set_orientation(struct tcpc_dev *tcpc,
->  	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
->  	unsigned int reg;
->  
-> +	if (tcpci->orientation_gpio)
-> +		return gpiod_set_value_cansleep(tcpci->orientation_gpio,
-> +						orientation != TYPEC_ORIENTATION_NORMAL);
-> +
->  	switch (orientation) {
->  	case TYPEC_ORIENTATION_NONE:
->  		/* We can't put a single output into high impedance */
-> @@ -903,6 +909,7 @@ EXPORT_SYMBOL_GPL(tcpci_unregister_port);
->  static int tcpci_probe(struct i2c_client *client)
->  {
->  	struct tcpci_chip *chip;
-> +	struct gpio_desc *orient_gpio = NULL;
->  	int err;
->  	u16 val = 0;
->  
-> @@ -931,12 +938,23 @@ static int tcpci_probe(struct i2c_client *client)
->  	if (err < 0)
->  		return err;
->  
-> +	if (err == 0) {
-> +		orient_gpio = devm_gpiod_get_optional(&client->dev, "orientation",
-> +						      GPIOD_OUT_LOW);
-> +		if (IS_ERR(orient_gpio))
-> +			return dev_err_probe(&client->dev, PTR_ERR(orient_gpio),
-> +					"unable to acquire orientation gpio\n");
-> +		err = !!orient_gpio;
-> +	}
-> +
->  	chip->data.set_orientation = err;
->  
->  	chip->tcpci = tcpci_register_port(&client->dev, &chip->data);
->  	if (IS_ERR(chip->tcpci))
->  		return PTR_ERR(chip->tcpci);
->  
-> +	chip->tcpci->orientation_gpio = orient_gpio;
-> +
->  	err = devm_request_threaded_irq(&client->dev, client->irq, NULL,
->  					_tcpci_irq,
->  					IRQF_SHARED | IRQF_ONESHOT,
+> -	ret = request_irq(chip->gpio_int_n_irq, fusb302_irq_intn,
+> -			  IRQF_TRIGGER_LOW, "fsc_interrupt_int_n", chip);
+> +	ret = request_threaded_irq(chip->gpio_int_n_irq, NULL, fusb302_irq_intn,
+> +				   IRQF_ONESHOT | IRQF_TRIGGER_LOW,
+> +				   "fsc_interrupt_int_n", chip);
+>  	if (ret < 0) {
+>  		dev_err(dev, "cannot request IRQ for GPIO Int_N, ret=%d", ret);
+>  		goto tcpm_unregister_port;
 > 
+> ---
+> base-commit: 95c541ddfb0815a0ea8477af778bb13bb075079a
+> change-id: 20260311-fusb302-irq-316834765871
+> 
+> Best regards,
 > -- 
-> 2.34.1
+> Alexey Charkov <alchark@flipper.net>
 
 -- 
 heikki
