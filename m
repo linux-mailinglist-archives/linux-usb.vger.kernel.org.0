@@ -1,189 +1,209 @@
-Return-Path: <linux-usb+bounces-35341-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35342-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8Nw4J9xvwWnmTAQAu9opvQ
-	(envelope-from <linux-usb+bounces-35341-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 17:52:44 +0100
+	id 0DKiCtOFwWn+TgQAu9opvQ
+	(envelope-from <linux-usb+bounces-35342-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 19:26:27 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AD5D2F8FAD
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 17:52:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B54E2FB411
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 19:26:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id CB1AC30F599C
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 16:24:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BBB2D3105F3F
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 17:11:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30CDF3BE648;
-	Mon, 23 Mar 2026 16:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DB7C3C0638;
+	Mon, 23 Mar 2026 17:11:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="SwGLjMrK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bt4PgJvY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6273BB9F6;
-	Mon, 23 Mar 2026 16:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774283029; cv=none; b=Ei9sy74AW0xNAOzunvYVD7TDfe6hWaayzJPc1mPOzq9NTbZvhSJl+CW4JZ0ov6dbfrNV2Q7/jfDnB8r7Twz1Av8EKsVsQnP5N4cNuVD0I3Yh8BbznN+/GDSmYQkORXLYnrlNDV3KUEFpNWTuVvFLfeYDFZ47I7h/E6hOSn7UxaM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774283029; c=relaxed/simple;
-	bh=AiYR3m9OPMS94EYaKPIpJW6EJB1OAUUOLjUwhjl9HPw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=M7glgbpiy/WVb4t6sGriqxfNK17JOjzLGGRUgd7QWzWulxjNGew6gUlPKEiKgFiO5/K9/3lvKaFDfzk3bAoxZLSdkd2A5jUnBHV6mWcB+LmBdqYlyIOYHUQKFRTXKUn8zfnVZInNAdxnNHbtA4b3srAS+Xwd28h3rIOYa6DlclI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=SwGLjMrK; arc=none smtp.client-ip=193.136.128.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id C350E600882A;
-	Mon, 23 Mar 2026 16:15:46 +0000 (WET)
-X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
-Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
- by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with LMTP id 126tTdIN8NTm; Mon, 23 Mar 2026 16:15:44 +0000 (WET)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [193.136.128.10])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id E2AB36008813;
-	Mon, 23 Mar 2026 16:15:42 +0000 (WET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
-	s=mail2; t=1774282543;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oxX+OUc3xAG2hwZFdRqs0R//MKXMT1i1SmwKlI7QCUU=;
-	b=SwGLjMrK9ln3TcNEAy+X0mypZiqlB9obo5qLLYD5EBTUgUj81QnjKt4tNkkCO/mjjfLHo2
-	Y3PEOU09sIAODUjaPNDpqo8otBGKVMH1F3dMorf4JQkK59Kd9t8gDl0REdd3ML2ISfa8Nz
-	xrmRUHJjFZk015wqZPQfQEY+5UCcGar+nTkVXv5d0H7/JE04N/KYuScurMaSJD+96Gidfo
-	dZjlL3FAbJq76/l/qMwZIXalTwJLtpmVI+NFuV0B5AIO8SCGPyqLBrFoIElXWbMarS1Zka
-	u4xxGAi8SdMWEwhWRMzTd2WgoTDOZ6Z04F/vuH6KRUMU+VLL9EJCGdzVPKcEYw==
-Received: from [IPV6:2001:8a0:57db:f00:3ee2:38aa:e2c9:7dde] (unknown [IPv6:2001:8a0:57db:f00:3ee2:38aa:e2c9:7dde])
-	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 767D33601AC;
-	Mon, 23 Mar 2026 16:15:41 +0000 (WET)
-Message-ID: <54167943-deac-40ec-be86-7ddc6b015c2d@tecnico.ulisboa.pt>
-Date: Mon, 23 Mar 2026 16:15:24 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E425626F2AF
+	for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 17:11:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774285901; cv=pass; b=lbTmwFmBy7qtJbP2g+fve5XcQz5or8toyG8GtXQWes1LwQAjL4uHkMHUQ3uoJT6lypKHKuVJO/G8LOWvWk7IYbVjpSzIAZOF8ZMSdDILe7vjxjv+MtBVn5eV1wrbZx0Z4f+I5YMW05ObdWqXMVu2ERZVkQfZ4NufIbDGP2TIkI8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774285901; c=relaxed/simple;
+	bh=71cSsY+1LDFRL91FKXwp5TAsrbyMr683Ah+dE3YjAH4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cYLGnOw44gTd1EFEWegzAbc+BLJ1pnGG+Ot6td9442RSCtDx5CQlGe1FNcByiMWUhyRSzfQJg4hjoBKdQzobl/+cKhcvEOdgp5MFaZ9JogDEv6nsuaG8wrrkUOqwQvQDb1Gc3J7mWHqo56bpEUaIB1XwlEdHAfN5Ydo9b6d76UA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bt4PgJvY; arc=pass smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-50b35f3e489so31167361cf.0
+        for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 10:11:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774285899; cv=none;
+        d=google.com; s=arc-20240605;
+        b=NJmys1mhjjVBk0TkKGPn/nS+aFtK20owhtdtisEHstPDcJEyhdAuqxS3YPzHrsjxzZ
+         J9WfZjbtqBzVZMIrgW7wQuFR7BsEY+MWBL6qbcz40k70zpPoFR3SpD3CVdz6fxrI82i0
+         0xp0DHwkoJP6o1cdxCr0g/JkhyXFLr2eiCafcQO82mKI7w9h7rBWPd6A98+pC8f+3/fh
+         iHoQDUuqdBXm5ahutTMp4xtKNqjyFEht4cpvYRhq9iqvLDrhmMn7n8XtQqKVA3yYcrrM
+         DK4XxiXsiaOuGmD1cPGCGro+tFveit3thJT8VpFtvs/uwexTSjhVrC3zoV27ipqCqC3Q
+         DrTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=iRqym/SYCBxPgS5kPiCro33o+ZN+dD8ItlnNTykfAZ0=;
+        fh=RJk+pZqpqHiQVCVuJD0Zn0GPfBYL6VTxd4FySlr35Q8=;
+        b=jS3bNhb4u9jTN23H7j5rcF9VPIcStWIPcgU77IiNKfp3iE+0ukSN4yrK1imaH8CeQk
+         T7BGNRpXyp4a/k5zT3Cr5DIYUY/q7J0ELbPEnW4W0pBIbHksp/PpmcPCD0WDCTxjWHzn
+         p0y4CUt/5C/7YEw1mflJEa6zAdXx52BPsNNRqPCCEKyh+gu8gNJba/iwgI89VNKX/sgK
+         I4mXN+2wwpvJprHDIHrla+yb7mu7DxgY7XENLpC4qgsz9GUiXRUAQzFyOZb4Ez+VV5GE
+         E1oIWWywtQvT8Rzzegm8uAsRoDye3wPLOskGgttOYQPv0c2Hc1Jzgxs6Suf49rg5WAnI
+         EHuQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774285899; x=1774890699; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iRqym/SYCBxPgS5kPiCro33o+ZN+dD8ItlnNTykfAZ0=;
+        b=Bt4PgJvY1vVVzoF9Pik2J5jYU4Vq8NaE/xBEduhxAOfSOjoMMX3YLg7IdCMW5eZK1Z
+         IH/4S7j1RsuZvORjipX4WgB2H7CortmrXdcl7MHoU2puolj/ptiuh+70BpOYdASqbOPe
+         NXcasJ8aQAQtjtrKrpPywWCpjHvbpo0wacRac4U2RYDHW9m1hTjKY+qfZcPVfFyEd7bv
+         LNdoGruHSJkYuFeHMKgqJHyjq3MStEu2fGf6YCOWn1AQmDBH4s6LYW2C9CsCVbmTEgle
+         1aUbVr54Zd8V331FPIw/dgXVue6X9m+SOJhZmvq2ZXvrQjsDPnKV69MSYvegJdopOrDj
+         S3Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774285899; x=1774890699;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iRqym/SYCBxPgS5kPiCro33o+ZN+dD8ItlnNTykfAZ0=;
+        b=oiefWnPOcVq0gwX26GMfkohatRdvpv8LflQPw8UPJMkx2CbiDWucfnLeYiXuGJAHLr
+         e0OQ8W+UlOve8CjjhhVqfuvD7fCTWXUvnml0g/w6Vx1b+ztCrPzWLaPVquHArD6XuJdX
+         dTp6+PnrbHOeH2QDHOjlwb72FEROWja+jgGRsbpVv0CQ4X2RhWWYSAvw1PgXclNazDEF
+         y7Ge8P78dTUKLd8SgItLqWId0tz3cy/Mqm7Jr/enh6/Q29vAuV10rZTuHowNSk+zFkqH
+         RBeCEy3NwpLpfkYfjF0Ipvffpjx3BPpIhALq6V2MHxPd2xNfpnXrn7kcArdLB0cneArJ
+         vYjw==
+X-Gm-Message-State: AOJu0Ywfak6JEenhE0xbXVrWJMwYeehT3eAhRUU+36wdczua/GL6HnT4
+	qcyXnmsZ9+HsP9fH/nURgfkRTHN8ArsIlEaeZ01hZRTNJV7Q5Lyp5WOY1mC2fOFB8Nrsi0PGSpY
+	uzT1vKdCfrViXrzK4PE2z5Suhq16YbYw=
+X-Gm-Gg: ATEYQzxvocCR7UwFYSSR/PmyP3Oi1bTh8REaNZXUqrab81OgRBnONIqjY5fLSuubBzU
+	J9hqix9uDTtOSxcsJzLD0PUYf3z6fpq7DKbG6n5lKQavUwSuhbMTaxHk2PkL4n7LXz7+B0/mpQs
+	ZadunS0DR0Gjdlwnr0azz5oVqYOX2NyZfC1CvGNvJCv/7dIyqhG4wctmbS+qk+dDUvu/Ur8c4rh
+	boacg6Nk6VU0M/cKiPxSEHWewKU2LHgeP71JM6RL3hLm9JGSAZf23STrr6Ew1weN00tvgL4gB9N
+	c3rnyVKzGJEj0u1dOOU6fdrNV5oomKkcV7Vn1zIRLZHRRtAFST0sFJLeVuzk2fqLyytPixurRsy
+	fLeWvkleKxC5agfe1K6wKlmBr
+X-Received: by 2002:a05:622a:1f14:b0:50b:2fcb:9891 with SMTP id
+ d75a77b69052e-50b6ebf034bmr6583001cf.0.1774285898607; Mon, 23 Mar 2026
+ 10:11:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/6] Fixes to Tegra USB role switching and phy handling
-To: Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>, JC Kuo <jckuo@nvidia.com>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Neil Armstrong <neil.armstrong@linaro.org>
-Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- devicetree@vger.kernel.org, stable@vger.kernel.org
-References: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
-Content-Language: en-US
-From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-In-Reply-To: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[tecnico.ulisboa.pt,quarantine];
-	R_DKIM_ALLOW(-0.20)[tecnico.ulisboa.pt:s=mail2];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+References: <CAN9vWD+13DHCyjq+7hYgTSDx87TLtKXV9-8GMnZPuZnYvjyANA@mail.gmail.com>
+ <2026032337-resend-recolor-efc5@gregkh>
+In-Reply-To: <2026032337-resend-recolor-efc5@gregkh>
+From: Michael Zimmermann <sigmaepsilon92@gmail.com>
+Date: Mon, 23 Mar 2026 18:11:27 +0100
+X-Gm-Features: AaiRm53yhKtG1QdZqn6qyMF3pRwVV6oZErkKW_7jyWcX_L6lgA2r56Qh-BFiXWY
+Message-ID: <CAN9vWD+N6K4VExNgnhp=amfBDJTFN9Sz156qsy550dP-d1S9Qw@mail.gmail.com>
+Subject: Re: Oops when rebinding f_hid while /dev/hidg* is still opened
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35341-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[intel.com,linuxfoundation.org,gmail.com,nvidia.com,kernel.org,linaro.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWO(0.00)[2];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
+	TAGGED_FROM(0.00)[bounces-35342-lists,linux-usb=lfdr.de];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[diogo.ivo@tecnico.ulisboa.pt,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[tecnico.ulisboa.pt:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 7AD5D2F8FAD
+	FROM_NEQ_ENVFROM(0.00)[sigmaepsilon92@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 8B54E2FB411
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello,
+> This bug has happened a lot on many gadget drivers, I think we fixed a
+> bunch of them already, can you verify this is still an issue on the
+> latest 7.0-rc4 or 6.19.y kernel release (6.17 is very old and obsolete
+> and insecure, don't run that thing...)
 
-Ping on this series as it has been quite a while since this was sent out
-originally.
+Apparently, Fedora updates their images very rarely and they need a
+package manager update, sorry about that.
 
-Best regards,
+I now tested it 6.19.8-200.fc43.aarch64 and the bug is still there. I
+then switched to testing with buildroot, because that makes it easier
+to test different kernel versions. There, the behavior is a bit
+different but there's still a bug: Instead of immediately triggering
+an oops, everything appears fine on the first run of my script. But on
+the second run I see this:
+[   81.514126] refcount_t: underflow; use-after-free.
+[   81.519000] WARNING: lib/refcount.c:28 at
+refcount_warn_saturate+0xf4/0x150, CPU#2: bash/176
+[   81.527501] Modules linked in: usb_f_hid libcomposite
+[   81.532613] CPU: 2 UID: 0 PID: 176 Comm: bash Not tainted 7.0-rc5 #2 PREEMPT
+[   81.539749] Hardware name: Raspberry Pi 4 Model B Rev 1.1 (DT)
+[   81.545654] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   81.552704] pc : refcount_warn_saturate+0xf4/0x150
+[   81.557550] lr : refcount_warn_saturate+0xf4/0x150
+[   81.562398] sp : ffff800080613a90
+[   81.565746] x29: ffff800080613a90 x28: ffff0000048d0f40 x27: 0000000000000000
+[   81.572973] x26: 0000000000000000 x25: 0000000000000000 x24: ffff000003e22000
+[   81.580199] x23: ffff000003f39a80 x22: ffff000003e22618 x21: ffff000003f39968
+[   81.587425] x20: ffff000003e22c58 x19: ffff000003e22c58 x18: ffff80008061367f
+[   81.594653] x17: 0000000000000000 x16: ffffba3cf8d80650 x15: 072007200720072e
+[   81.601879] x14: 0765076507720766 x13: 072007200720072e x12: ffffba3cfac96be8
+[   81.609105] x11: 0000000000000058 x10: 0000000000000018 x9 : ffffba3cfac96be8
+[   81.616332] x8 : 0000000000000102 x7 : ffffba3cfaceebe8 x6 : ffffba3cfaceebe8
+[   81.623558] x5 : 0000000000017fe8 x4 : 0000000000000000 x3 : 0000000000000000
+[   81.630785] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff0000048d0f40
+[   81.638012] Call trace:
+[   81.640479]  refcount_warn_saturate+0xf4/0x150 (P)
+[   81.645326]  kobject_put+0x108/0x110
+[   81.648938]  cdev_device_del+0x50/0x60
+[   81.652728]  hidg_unbind+0x24/0x50 [usb_f_hid]
+[   81.657222]  purge_configs_funcs+0x7c/0xe0 [libcomposite]
+[   81.662686]  configfs_composite_unbind+0x5c/0xb0 [libcomposite]
+[   81.668680]  gadget_unbind_driver+0x7c/0x120
+[   81.672997]  device_remove+0x4c/0x80
+[   81.676610]  device_release_driver_internal+0x1cc/0x230
+[   81.681898]  driver_detach+0x4c/0xa0
+[   81.685511]  bus_remove_driver+0x6c/0xc0
+[   81.689478]  driver_unregister+0x30/0x60
+[   81.693443]  usb_gadget_unregister_driver+0x20/0x40
+[   81.698379]  gadget_dev_desc_UDC_store+0xb4/0x140 [libcomposite]
+[   81.704459]  configfs_write_iter+0xc4/0x120
+[   81.708690]  vfs_write+0x244/0x370
+[   81.712127]  ksys_write+0x70/0x110
+[   81.715564]  __arm64_sys_write+0x1c/0x30
+[   81.719529]  invoke_syscall+0x48/0x110
+[   81.723319]  el0_svc_common.constprop.0+0x40/0xe0
+[   81.728077]  do_el0_svc+0x1c/0x30
+[   81.731426]  el0_svc+0x34/0x110
+[   81.734599]  el0t_64_sync_handler+0xa0/0xf0
+[   81.738829]  el0t_64_sync+0x198/0x19c
 
-Diogo
+I get this with both 6.19.8 and 7.0-rc5 on buildroot. I guess there's
+some randomness to this bug and the different kernel config changes
+the outcome a little bit.
 
-On 1/27/26 15:11, Diogo Ivo wrote:
-> Hello,
-> 
-> This patch series contains fixes/improvements for USB role switching on the
-> Tegra210 and Tegra186 SoCs.
-> 
-> The first patch addresses a wrong check on the logic that disables the
-> VBUS regulator.
-> 
-> The second patch removes a redundant mutex lock when setting the PHY
-> mode.
-> 
-> The third patch guarantees proper ordering of events when switching PHY
-> roles.
-> 
-> The remaining patches are included to standardize the PHY .set_mode()
-> callback between Tegra186 and Tegra210.
-> 
-> With this patch series this feature can only be controlled from userspace,
-> by writing the desired role to sysfs as
-> 
-> echo "role" > /sys/class/usb_role/usb2-0-role-switch/role
-> 
-> with role being one of {device, host, none}.
-> 
-> Further patches will enable automatic role switching via the 'cros_ec_typec'
-> driver which is currently broken on Smaug.
-> 
-> Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-> ---
-> Changes in v2:
-> - Remove DT patches already taken to be upstreamed
-> - Add standardization between Tegra210 and Tegra186
-> - Address review comments from v1, detailed descriptions in each patch
-> - Link to v1: https://lore.kernel.org/r/20251204-diogo-tegra_phy-v1-0-51a2016d0be8@tecnico.ulisboa.pt
-> 
-> ---
-> Diogo Ivo (6):
->        phy: tegra: xusb: Fix USB2 port regulator disable logic
->        usb: xhci: tegra: Remove redundant mutex when setting phy mode
->        phy: tegra: xusb: Fix ordering issue when switching roles on USB2 ports
->        phy: tegra: xusb: Add ID override support to padctl
->        phy: tegra: xusb: Move .set_mode() to a shared location
->        phy: tegra: xusb: Move T186 .set_mode() to common implementation
-> 
->   drivers/phy/tegra/xusb-tegra186.c   | 73 +++++----------------------------
->   drivers/phy/tegra/xusb-tegra210.c   | 42 +------------------
->   drivers/phy/tegra/xusb.c            | 80 +++++++++++++++++++++++++++++++++++++
->   drivers/phy/tegra/xusb.h            |  4 ++
->   drivers/usb/gadget/udc/tegra-xudc.c |  4 ++
->   drivers/usb/host/xhci-tegra.c       | 14 ++++---
->   include/linux/phy/tegra/xusb.h      |  3 ++
->   7 files changed, 111 insertions(+), 109 deletions(-)
-> ---
-> base-commit: b02a5530af8abe0d3cd4852ba48990716e962934
-> change-id: 20251201-diogo-tegra_phy-86c89cab7377
-> 
-> Best regards,
+Thanks
+Michael
 
