@@ -1,239 +1,253 @@
-Return-Path: <linux-usb+bounces-35328-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35329-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CHt+F+khwWmTQwQAu9opvQ
-	(envelope-from <linux-usb+bounces-35328-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 12:20:09 +0100
+	id wJ+rNfEjwWmTQwQAu9opvQ
+	(envelope-from <linux-usb+bounces-35329-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 12:28:49 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 074942F118D
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 12:20:08 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 451E92F1365
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 12:28:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5FAD4301E21E
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 11:14:58 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8D16130062E7
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 11:25:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A016639527C;
-	Mon, 23 Mar 2026 11:14:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7606F3921F8;
+	Mon, 23 Mar 2026 11:25:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Ye+BBE4k";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="gCQaEkEY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XnWT/iGn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B5236C59E
-	for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 11:14:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E600364EB2
+	for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 11:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774264494; cv=none; b=JpRRh4pF7xZM4ONJ/+zeTx6ZxW0lirQ0Azr/SLkeFiUDZV4K91lnWnBGZS1j1emUZ+EBONuBLSZVMcH3SMgYupVTsan0tds/JGNz4z6Eo4ELqDYaV+45mGThXgxzARMa+7UWFL3ZTCRH9th59EJ+RcetXmHU0oUhOzPO+9w22dI=
+	t=1774265108; cv=none; b=UtRGGhkNBajn8i3wztsaypOgjgyGw3y6BQStMwrVu4SCsbaRQ/vuU2XT8yFR3BI6hSMepJ+7vSD6SC7utNYsRWXShcrZgQ8InNT9MfBoKUZsPmh/UKFkzJWXm5Tsk8MXHlKgQvHisEwTWix7VJIdB1jqs3ELUoKIpEUC+fVe7s0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774264494; c=relaxed/simple;
-	bh=cLFCtM3vNo1q1OQN7GQ9cfbUHDA7Kfmuiw5ZyragmcA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IsAhR5lyNd82HeB/nu+O4J8yzVW+Si8ufDFhw1MQxyoVKq9UpFGSvylcct/dlV+YHHvzZ/SJNlnaYkkem3q5qkbmF6Fonu9Xfhefr4y/tU2+qf/69h3y8pM3lo+x1TdeYTIdmR8QdvQ/kRqBFd8/2QTww/tiE3gEX5f3W1yiAVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Ye+BBE4k; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=gCQaEkEY; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62N83o5K1364149
-	for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 11:14:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	YY3Tc5YnXTi4hNRW8PsT1kXgcBbe6sHvsCQISPk98w0=; b=Ye+BBE4k5fqx+cLi
-	B1mowjqEmSo9un0Y2/x95HjC3PA2fy3ZuOgwi4bVO+S3tVtGpektRXRNokIv0Vpk
-	MT9cZW7LrnqK+XwHMSv+gmrjT5klZVREGioqmiSRyXP26jpO7eZjhDkJ57b/LB/O
-	mwkfpfSzNtW4qdIfhnwqXZhxETlmPU1OQDIfWR+PKkQ6hwCQY1ql1tLl7VDYXHG7
-	+OGVyDpaHxa0l4FRacyzEorRTzj22T2KXWTKiTSNopMY51JYj60Qfm1BTqyX2r9a
-	3HDGwKOJc78Hcs43B92395JSQaE9TFARR7as7q4P1zRTpq6fpMLrGWIT0Q3cMI1N
-	iQe8Kg==
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4d31p78pna-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 11:14:51 +0000 (GMT)
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-509219f94b0so11075311cf.3
-        for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 04:14:51 -0700 (PDT)
+	s=arc-20240116; t=1774265108; c=relaxed/simple;
+	bh=d1mbfh30PSWLcQGHHJ7QO5Q8nJ2bBIIOFG2e0lGUds0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=my/Z8V8DC2WnkMhIg8uJ2KYU/vk9RTGTZ58xUz/9ZTaiPfyOB/oxNcUsckRMkLgs0T0Da6v2/XHz95yEvK7qW9EcQ1gLPZWN3ySsV9O3HJdRpy4udvwyrYacXCqifiDBakJZHZjL/L2AX7MPIMXKdfTpTJYZ4PotAvmn8nmgsio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XnWT/iGn; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6696421701fso1780085a12.1
+        for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 04:25:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1774264491; x=1774869291; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=YY3Tc5YnXTi4hNRW8PsT1kXgcBbe6sHvsCQISPk98w0=;
-        b=gCQaEkEYjaBL8269+NpoYH1KlvwNq86/zIAliko2bIgQttzxa3ors5H74MbKqrzn3E
-         1JbtPTCcS3RUU1m4GgRP+FGNwS0lJQ/Xt6mRwuyXDJa0y0E+y9WuDazquRaQ5+IbzWrF
-         ZjfYfmKeCDo7NkzvBT4hj0YMJmsL4PlrLQZHK0FmIG3Vr+eSvhJ6M1Yd2XBi6p1EEZsx
-         S/O5OuBXCy8iHqQxObc+EnPYsVllSHXKiUCsTTcFTHEVJg3m0gesUpacmRDIdICcGJkC
-         7QPUk4Be0DzBTDSI9BcaKZwUu0kvUcGYjVW106YDnhMJOq/Kc0uAU1Qxhi0rpaDuCxel
-         pC/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774264491; x=1774869291;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1774265104; x=1774869904; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YY3Tc5YnXTi4hNRW8PsT1kXgcBbe6sHvsCQISPk98w0=;
-        b=oen3ttl4wCclq26H6aumVU9Glw3TT7tMaZOxk1YR8XOk4uxR/AutvBMcnauYv5kNJO
-         QGF1E6xp5T6vZBvZl1tgruwBDG7yTNc54sN+6iHw/SlR6BfEjCTk0H2nBbYUgeB+Q6X0
-         FCQCJHIbwkJNvE2+g9MZlsPc2ixyDDn4zeQ3mLXGfgqHnLDflGR4ml5f4FcQjGcz459K
-         yOWCS1Ms+UXCTxyDhIuPCqF16JM31/VGvEFtGmI0izVIBHba3hroyxgwAap0KneAfguB
-         sGbR2uWBAAf+63U30EVdoJcU0OnxBgH37EKw644lf8wmKgwgR4wQxT6gbRLZwW0LSMVU
-         PMBg==
-X-Forwarded-Encrypted: i=1; AJvYcCVL9H1EI37hk1kNbaUz7Msft2k3yXOV6ad19Om10WO0unyvRqu0Jrs3i9P2qgsqQgqO7cWObf7rcrk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/PqSn6bndrj4bZh7qaaHP5yDgrUZW1tjvQEsk61Y5xf8MWtB/
-	xL6Y+9UDkSIN79JcX1rIqFkoGBvYGF8ikMZnhY0brBjxKGhrO0XsUfQmV2vxbloDPHog/RJ13XC
-	e4AgTSDEmu+0nFB1YIgYZ/phF+oEORVF7xdFjiFZZDyo/75hCizuj5Gh3FVzH22s=
-X-Gm-Gg: ATEYQzzYbUP4UrCVLFQaYfEsFU5Z/r/41Xn9Hvq9Ed/CyDVDg/+9yWeRwXIYJc2yDbi
-	7e5/My5YtJyMeA5t6Tcq6QTZdgnWiC6ZBGlzvKMhqqeYT8QMuTmMdRApqIDbA1ZC4tBeLGaY3n3
-	07Q9dwBDl4Fy9GEMgScD/2vqu3F8efPAasUtJCJoh06CmPDogDvOYw9J5DUazOtjgwgtlbEYQ2u
-	YMgE4H5Y4+0PGIJNsBUsff1yS/o5q8aqGfa5P8PT6sGp1LyAym4zhf/hClGpHDC0SHCXC/XNxwb
-	YYGaOpUcX+tKF2IryBiK8eq55t6BC4TmPmo0agVMYdy0wdAXEr2vbInZg8pMP6RiHqTQKvK4OTc
-	Ug0xzyYOhthq6pqItW5kMvx8gWZe/MniDMESkN3qGLiqaK8SV
-X-Received: by 2002:a05:622a:17c3:b0:50b:4c63:cd25 with SMTP id d75a77b69052e-50b4c63ce77mr100300011cf.65.1774264491345;
-        Mon, 23 Mar 2026 04:14:51 -0700 (PDT)
-X-Received: by 2002:a05:622a:17c3:b0:50b:4c63:cd25 with SMTP id d75a77b69052e-50b4c63ce77mr100299661cf.65.1774264490886;
-        Mon, 23 Mar 2026 04:14:50 -0700 (PDT)
-Received: from [192.168.1.29] ([178.197.219.94])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fe68ec05sm405202115e9.0.2026.03.23.04.14.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Mar 2026 04:14:50 -0700 (PDT)
-Message-ID: <e36e0b01-2572-49c9-b8ea-8f4796c3ba92@oss.qualcomm.com>
-Date: Mon, 23 Mar 2026 12:14:48 +0100
+        bh=TyGVFwoqJXD6sTcQJaRkNfVnZ6mG4fmvwfHqwA2ASCA=;
+        b=XnWT/iGnM59wfrlCJ4GMjncZc5ybozmoA4m6peE75MwKXsW4hs9e8OVyQfQIT+mL6b
+         CVXAvBbTKlsT1L10QdZx8p6iCnf+52u6vZifXecFc++TzA7KO7CCTJESJ9R+9f0frW58
+         UFpe05hcKptyOkZMD5N9B/UKKog9xjxzrjZ9oIH4pAe1taJts34WBu7nLOel0maCnl6d
+         u/7Ml+drqYGr3Yum/qGY/Ccl1Gwhlwfayxm7uWBADknru9jm5NBPql/vwjg//tS12uCG
+         xZnfn7Fz+ziEwo6Ccqt6zyOvqZ5InWO9B+ZeZwlYO+H2c1hQXJQKXuTQS8utroiE/zD1
+         pKRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774265104; x=1774869904;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=TyGVFwoqJXD6sTcQJaRkNfVnZ6mG4fmvwfHqwA2ASCA=;
+        b=UHposuRBJaRovae2V4tDSg/Utf1iHOtdZXcLFiRU/wWaQjMFAv2nu+TWbpTCVCJAtZ
+         Yi9UdlPEzQQvRGRSAsVj/gb24umrtWW3pkNw8dvDqrn7cu26l4+sqYAcb6itOmYKHpIG
+         7h7wCxZTsnt9R+qEhKsnYS228HoeuC7HR5s3CAmfeNuljSBEwhV3Q4AaE7sjbcCffCAw
+         hMrkqrLRtQcdQTeAFqYEsclkycHWB4uWOhQocLb/QueAX45qe92Q9dTbw8p6RTig6SrH
+         ukgRWfDjgy9+Q63xdENyPuBwW05EX4fNGLrJFpEV7L4ZSxSscDJ6w2TH42G+SSI1h8Nf
+         leBA==
+X-Forwarded-Encrypted: i=1; AJvYcCUKU2TNZqS4BySClTCzqbxk2wyG+F3G/TPq2PawpWLtlmINsVr2mjYQZtRY2jsuX+3hdpr4DTYOFCE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywb3WJmGYSqSwvB3PbWFChCrbwmoi2fVIcDW24ivZRs3IkadMp3
+	VIZsIlhGcY3Yj8D1IQR7AcfcPdQy9cj5i6oYYYmT24L/JubVWuZ+5Qd5
+X-Gm-Gg: ATEYQzy9GTTVWUveRgoV0lGiz8oeTRAzEt3CVSSVgpMxLQnqOC3juNL/I6r6HgyjeXt
+	haDdHxVn9ef8NbOgg0Rp+e3rsxkG+COg5gIdvLBb+F2xNd6ZqpFdPYocWWySJCuDR5Ovt8lvV3G
+	IqSypFhpRjxEawM9Sy4HLVVMsZi9b+CMu0xpGZlqaPYAJ3VXtnL5ahLteVXqB7Yx4lMMzDtyYFU
+	swnw9E+2gHL1GWXXEVWTrlB0zJNTEj7qj7N5ERyWg3RXaKVHaSOgrI2jM6HUsvfQ7zJUPPL60kj
+	Z5yZWtuPEHX3uaLt7jVNaMSp8Yjja8WQLtuOsfx7g24Pf7JZZzSJ+AoJqCJOipesDm3txBhgVSG
+	K2hN54sqmIufKSUZ15qj0fvwdBrh3QpDXN85oljAXXA9Jh37xQy1Bi1/ucJNifSv4BDSAVO3TCv
+	9rsmOJQiyx0jBHgSjs34k1J0u6k4IZPWt3pe0=
+X-Received: by 2002:a05:6402:1ecc:b0:668:368b:38d7 with SMTP id 4fb4d7f45d1cf-668c93239dfmr8479086a12.8.1774265104024;
+        Mon, 23 Mar 2026 04:25:04 -0700 (PDT)
+Received: from foxbook (bfk214.neoplus.adsl.tpnet.pl. [83.28.48.214])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-668cf7e30f7sm3603218a12.8.2026.03.23.04.25.03
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 23 Mar 2026 04:25:03 -0700 (PDT)
+Date: Mon, 23 Mar 2026 12:24:58 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
+Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org, Pavankumar
+ Kondeti <quic_pkondeti@quicinc.com>, Pavankumar Kondeti
+ <pkondeti@codeaurora.org>
+Subject: Re: [PATCH 1/2] usb: xhci: fix Command Aborting
+Message-ID: <20260323122458.0af6b4d0.michal.pecio@gmail.com>
+In-Reply-To: <56606a55-b1cb-4669-9025-8a91d8d258bf@linux.intel.com>
+References: <20260316142720.1471906-1-niklas.neronin@linux.intel.com>
+	<20260316142720.1471906-2-niklas.neronin@linux.intel.com>
+	<20260321143057.1bf31b1b.michal.pecio@gmail.com>
+	<56606a55-b1cb-4669-9025-8a91d8d258bf@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/5] dt-bindings: usb: qcom,snps-dwc3: Add constraints
- for SM4250
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260323-dt-bindings-snps-qcom-dwc3-cleanup-v2-0-3bcd37c0a5b5@oss.qualcomm.com>
- <20260323-dt-bindings-snps-qcom-dwc3-cleanup-v2-4-3bcd37c0a5b5@oss.qualcomm.com>
- <e5a8c3d0-7f7f-420f-a5fa-cb177d321112@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@oss.qualcomm.com; keydata=
- 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
- cwzYbmi/Et7T2+47PN9NZAOyb771QoVr8A==
-In-Reply-To: <e5a8c3d0-7f7f-420f-a5fa-cb177d321112@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=RMC+3oi+ c=1 sm=1 tr=0 ts=69c120ab cx=c_pps
- a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=gOEeR9iKwsj33Yj5oN/cWg==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22
- a=dI1csYQj4UmQvqOn9H4A:9 a=QEXdDO2ut3YA:10 a=dawVfQjAaf238kedN5IG:22
-X-Proofpoint-ORIG-GUID: zSqX2b6Lc_A7Z6aJHnOSX2RnN-ChXdZ_
-X-Proofpoint-GUID: zSqX2b6Lc_A7Z6aJHnOSX2RnN-ChXdZ_
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzIzMDA4NyBTYWx0ZWRfXwXdUr7bnA0pQ
- HAKBQaLQxvKxrGI1PotFHCcZXAYOnjmgVbXQVPnuQsPjhrqoz36WBWeHbHzGbyjO98R+z3bvAqu
- 8zYz3cAQBm3H748p4DpeZDKVKIzOHzp1JXkGuSuw/MDthDXvegbfkaoah7TMDlPKnZfqGQuZ/Cy
- CgM/UAo/1PnRlKnW+1wGiNkLxb4e/hu1ALpVeY2sCyUs0RmPn0o3Q5EPNEAlv6QiSoXIiz/aUND
- nXVQkkUbpxlKNRY3oLI6H4rs9pN8QFVK8rYrHrGfvoJW0JKAPm+nRuIWuXSklWwUKB32c0UY/ml
- g1ckX6rnKasV/ypwgoCRZ841Qw4SbNYac1Mkk+9uyHRUGxEByflsKFIIfeswxXtzeuP2DNOI8fI
- TnkWVk5uXo++ru6MdmFtRTr+xBSjqfluYp6uqRapUCjP6+jp09ti9ubctEvDxo3Nd3bYDqK1P4B
- YDmqZt9CWuBvZAWtU/g==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-23_03,2026-03-20_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 malwarescore=0 phishscore=0 lowpriorityscore=0 impostorscore=0
- priorityscore=1501 bulkscore=0 spamscore=0 adultscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603230087
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:dkim,oss.qualcomm.com:dkim,oss.qualcomm.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns];
+	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35329-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35328-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzysztof.kozlowski@oss.qualcomm.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 074942F118D
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 451E92F1365
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 23/03/2026 12:01, Konrad Dybcio wrote:
-> On 3/23/26 9:54 AM, Krzysztof Kozlowski wrote:
->> The qcom,sm4250-dwc3 is already documented in top level part, but it
->> misses specific constraints for clocks.  The SoC is derivative of SM6115
->> (or vice versa), so the interrupts part is incorrectly placed and should
->> be same as for SM6115.
+On Mon, 23 Mar 2026 12:25:00 +0200, Neronin, Niklas wrote:
+> On 21/03/2026 15.30, Michal Pecio wrote:
+> > On Mon, 16 Mar 2026 15:27:19 +0100, Niklas Neronin wrote:  
+> >> Aborting the command ring requires setting the Command Abort (CA)
+> >> bit in the 64-bit Command Ring Control Register (CRCR).
+> >> Historically, several attempts have been made to implement this
+> >> correctly, but each introduced its own problems. This patch fixes
+> >> the final remaining issue: accidental modification of the Command
+> >> Ring Pointer (i'll abbreviate it to CRP).
+> >>
+> >> Originally [1], the full 64-bit CRCR value was read and written
+> >> back after setting CA. This is a bit unnecessary, only RsvdP bits
+> >> (5:4) should be read and written back (for future-proofing). All
+> >> other writable fields read as zero.
+> >>
+> >> Later patches attempted to solve an issues, caused by 64-bit writes
+> >> being split into two 32-bit writes. Writing the lower 31:0 bits
+> >> first immediately stopped the ring (CRR=0), and the following
+> >> upper-half write then overwrote part of CRP with zeroes, thus
+> >> corrupting the CRP. Patch [2] avoided this by writing only the
+> >> lower 31:0 bits with CA set, but that broke controllers that latch
+> >> 64-bit registers only when the upper bits are written, as reported
+> >> in [3].  
+> > 
+> > I too have HW which waits for the high DWORD after low DWORD write.
+> > 
+> > And I have HW which doesn't. If I write 0xdeadbeef to the high DWORD
+> > after waiting for CRR=0, some HW will ignore the write and some will
+> > IOMMU fault at 0xdeadbeefsomething.
+> > 
+> > The abort itself takes a few microseconds in my tests.  
 > 
-> They're the same SoC with a different speedbin fuse value for the CPU/GPU,
-> I'd say drop this binding altogether
+> Yes, abort completion itself is usually very fast. The 5 second
+> timeout comes directly from the xHCI 1.9 specification, which
+> explicitly allows for that duration.
+> 
+> 4.6.1.2 Aborting a Command:
+> "If software doesn't see CRR negated in a timely manner (e.g. longer
+>  than 5 seconds), then it should assume that there are larger problems
+>  with the xHC and assert HCRST"
+> 
+> The timeout could probably be reduced to 1 second, but I did not do
+> that since I do not have evidence that a shorter timeout would be
+> safe across all hardware.
 
-Sure, I also thought about it.
+As noted in my later response to patch 2/2, in rare corner cases
+ASMedia command abort can take a few seconds and still succeed.
 
-Best regards,
-Krzysztof
+> > Is this race causing problems in the real world?  
+> 
+> I believe so, given that a fix was proposed specifically to address it:
+> https://lore.kernel.org/all/20211008092547.3996295-5-mathias.nyman@linux.intel.com/#t
+
+It does look like a problem which people would be unlikely to discover
+without being affected by it, but the patch says nothing.
+
+Hi Pavankumar,
+
+Could you elaborate on the above issue, what was the affected host
+controller and what sort of workloads made this race turn bad?
+
+In theory the two DWORD writes could be separated by some NMI/SMI
+hitting the CPU or by heavy traffic on the I/O bus.
+
+
+And if probelms are known to happen here, then what about other users
+of xhci_write_64(), for example updating ERDP aka erst_dequeue?
+
+> The current implementation does attempt to change the CRP.
+> The sequence is as follows:
+>  1. Fetch the next TRB.
+>  2. If the TRB is a Link TRB, advance to the next TRB.
+>  3. Get the DMA address of that TRB.
+>  4. Write the lower DWORD with the new CRP address and the CA bit set.
+>  5. Write the upper DWORD with the new CRP address.
+> 
+> This results in two possible final states, depending on how quickly
+> CRR is cleared:
+>  1. The CRP is not updated at all.
+>  2. Only the upper DWORD of the CRP is updated.
+
+I stand corrected, I wasn't aware of some details. That said,
+
+1. is a valid outcome and not a bug, jumping to the next TRB is not
+   necessary, it was a workaround for previous issues.
+2. is a bug, but it shouldn't matter because the ring has one segment
+
+But I did have problems on NEC and AMD, which means that something else
+is also possible. I think I will need to debug it deeper, but I suspect
+that writing high DWORD alone is enough to trigger bit 4:5 truncation
+or overwrite low DWORD with some garbage.
+
+> So you believe that when waiting for CRR=0 any software writes to
+> CRCR, which are not immediately acted on, i.e. Command Stop/Abort,
+> are instead buffered internally?
+
+We all believe that some HW does nothing and waits for high DWORD.
+
+Other HW is seen to begin aborting more or less immediately. However,
+until the abort is complete, any subsequent write to high DWORD may
+be ignored because we can't change CRP while CRR=1.
+
+Problems begin if CRR=0 before we write high DWORD. CRP bits become
+writeable and any write may trigger truncation of bits 4:5.
+
+Note that if the HW interprets this as a single write to high DWORD
+separate from the previous abort operation (which it has already
+completed) then this is out of spec, because we should write low-high.
+
+It seems that my Etron HC ignores this high DWORD write after CRR=0.
+I can write 0xdeadbeef there and it continues working normally.
+Or maybe it's broken and should get the disable 64 bits quirk.
+
+But NEC and AMD start getting "mismatched completion" errors, so it
+seems that their CRP is corrupted somehow. And I could probably replace
+waiting for CRR=0 with usleep(20) and get the same corruption.
+
+I will later look closer what happens here.
+
+Regards,
+Michal
 
