@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-35305-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35306-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GLILB+TzwGkwPAQAu9opvQ
-	(envelope-from <linux-usb+bounces-35305-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 09:03:48 +0100
+	id 8KAMMBD3wGkwPAQAu9opvQ
+	(envelope-from <linux-usb+bounces-35306-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 09:17:20 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89B752EE07A
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 09:03:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CDBC2EE304
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 09:17:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6587D300A4CC
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 08:03:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 791CD3099810
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 08:08:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D1936CDF2;
-	Mon, 23 Mar 2026 08:03:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C65836EAAE;
+	Mon, 23 Mar 2026 08:08:51 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
 	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AADA4240611;
-	Mon, 23 Mar 2026 08:03:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78A51DED4C;
+	Mon, 23 Mar 2026 08:08:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774253025; cv=none; b=aCn2Szbgs1CUz1e1ZqhM9BIkv1awETbmSyYqMJXUGa1L7CKTbXIuMefTCbjFmNR3W4EwpiDc/6zV+GZ3DkquhtXGp0PieMAW7UE/1ygUoFUurov1PW2DyURNoon7M02oW6Rrmvgsl1xveCqtP31MsVp/z8z2Xt4qCo6/nQ8Uuo4=
+	t=1774253330; cv=none; b=T0TAwyaoWfBKIaHSualisFseVUwQM/nvjMKv2bpLGhYbjOy2NxCidWRJYAxne5qVHFSYuHbJzKSM2eb0DmRPFgpB+XmWjXSC67mcKcyWkXDkJSEPe+80YTH980d8qaiuOCc1qeNYfwObrhcfFkJLmNif7kV3Jp/+Yr5jsEEM4Q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774253025; c=relaxed/simple;
-	bh=8Zo+7ratc40NVvRMr4YFI1YyjPw6DitdGxCULzEOIb8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a2EulvIBAZuXqzzbP8xRO+c7T/xJ32ssrObNH7vi0YT5HwdUJ70IHiF4s4wnFXMM/JGHapIi2GvLzQtW4OZSzEwwXREx8wciD81Tq8h+dcRRiqT6HFPKgY4b2pWwB/YdrPY6s1NanFBkfQPdbknULQEajr85uQHPVvhojD1xkME=
+	s=arc-20240116; t=1774253330; c=relaxed/simple;
+	bh=lq17LlRq3ghjiIK1g8G0CFSZ+ZYA5oq1kqQKY0BLXtM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=d0NkXr8o4E6VeSzklOSLjeorKp2yXA2IWDkAlo8MKIjViAOxhgtoN09a3dlKr59iaFGtEeGeZo1/q1bhQKatfql+V0zQ+MoD4q5o3X1dSuOwXapKhW+NvBqfw7Z2gSodSf3vz4a2hJe7AQaijtxJ/MTI2sSaVp3/86/bWWGxqz4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
 Received: from localhost.localdomain (unknown [111.196.245.197])
-	by APP-03 (Coremail) with SMTP id rQCowACnyeDY88BpgCyHCw--.52766S2;
-	Mon, 23 Mar 2026 16:03:37 +0800 (CST)
+	by APP-03 (Coremail) with SMTP id rQCowABXdt0N9cBpO0eHCw--.11897S2;
+	Mon, 23 Mar 2026 16:08:46 +0800 (CST)
 From: Pengpeng Hou <pengpeng@iscas.ac.cn>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-usb@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
 	Kees Cook <kees@kernel.org>,
 	Pengpeng Hou <pengpeng@iscas.ac.cn>
-Subject: [PATCH] usb: gadget: rndis: validate query and set message buffers
-Date: Mon, 23 Mar 2026 16:03:36 +0800
-Message-ID: <20260323080336.36930-1-pengpeng@iscas.ac.cn>
+Subject: [PATCH v2] usb: gadget: rndis: validate query and set message buffers
+Date: Mon, 23 Mar 2026 16:08:45 +0800
+Message-ID: <20260323080845.40045-1-pengpeng@iscas.ac.cn>
 X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -51,29 +51,29 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowACnyeDY88BpgCyHCw--.52766S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Jry7JF4UGw1rKry8JrW8Zwb_yoW7Zw17pF
-	4UW3W2yr45Gr4DZrWkWrs5JFW5Z3s2qFWUKFW7t343WF17JryvgFykCFyY9F15try3Ar1x
+X-CM-TRANSID:rQCowABXdt0N9cBpO0eHCw--.11897S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKw47Zr1fWry7Gr4rXF47Arb_yoWxXrW7pF
+	48W3WIyr45Gr4DZrWvgrs5JFy5u3s2qFWUKFW7t3sI9F17JryvgFykCFyY9F15Kr9xAr1x
 	ta1DKr4UW3Z7C37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	9KBjDU0xBIdaVrnRJUUUkC14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
 	rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-	0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-	jxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
-	1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v26r12
-	6r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-	0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y
-	0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-	WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1l
-	IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUqQDUUUUU
-	U==
+	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+	6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY1x0262kKe7AKxVWU
+	AVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
+	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfUjAwsUU
+	UUU
 X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
 X-Spamd-Result: default: False [0.04 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -84,22 +84,37 @@ X-Spamd-Result: default: False [0.04 / 15.00];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35305-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35306-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[pengpeng@iscas.ac.cn,linux-usb@vger.kernel.org];
 	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	NEURAL_HAM(-0.00)[-0.998];
 	FROM_HAS_DN(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,iscas.ac.cn:email,iscas.ac.cn:mid]
-X-Rspamd-Queue-Id: 89B752EE07A
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,iscas.ac.cn:email,iscas.ac.cn:mid]
+X-Rspamd-Queue-Id: 1CDBC2EE304
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+rndis_set_response() already checks the host-controlled
+InformationBufferOffset/InformationBufferLength pair before using it,
+but the QUERY path still passes the same fields straight into
+gen_ndis_query_resp(). The parser also does not verify that MsgLength
+fits the actual EP0 request buffer before dispatching the message.
+
+Pass the actual request size into rndis_msg_parser(), reject messages
+whose MsgLength exceeds the received buffer, and apply the same offset
+and length validation to QUERY and SET requests before dereferencing the
+embedded information buffer.
+
 Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
 ---
+v2:
+- add commit message context and fix rationale
+- no code changes
+
  drivers/usb/gadget/function/f_rndis.c |  2 +-
  drivers/usb/gadget/function/rndis.c   | 49 +++++++++++++++++++--------
  drivers/usb/gadget/function/rndis.h   |  2 +-
