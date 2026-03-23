@@ -1,95 +1,64 @@
-Return-Path: <linux-usb+bounces-35337-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35339-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GCvDNXVMwWlbSAQAu9opvQ
-	(envelope-from <linux-usb+bounces-35337-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 15:21:41 +0100
+	id WMa6OoZVwWlTSQQAu9opvQ
+	(envelope-from <linux-usb+bounces-35339-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 16:00:22 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80FE62F447D
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 15:21:41 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 893752F59F4
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 16:00:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5829630E8528
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 14:06:49 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B0F65303BA65
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 14:48:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85FAE3B7B69;
-	Mon, 23 Mar 2026 14:03:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0F7326F2AF;
+	Mon, 23 Mar 2026 14:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k1xGzdxl"
+	dkim=pass (2048-bit key) header.d=iconn-networks.com header.i=@iconn-networks.com header.b="AQaT0mBh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from zebra.wilibox.com (zebra.wilibox.com [62.77.155.212])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96943B27FF
-	for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 14:03:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE21723BF9B;
+	Mon, 23 Mar 2026 14:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.77.155.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774274585; cv=none; b=EC6zuPouAE/oaxsU0QnUtY3Kd272w9CoVv+Dj4U8uwtf0KB1smlkDwrny7ZQs1ySf/jOVTSi/93EuGzXiDsUJfisAQC+AuRXp65n4gOx7z+fzHVfSWMaTzaGpkrzT9XFNAL4lBTc9GFByvC92/VKxb6zENAaZGURu4vbZzDtbrg=
+	t=1774277275; cv=none; b=U3RXCbLt7qs15pyDFxt60/tcqEiTtqspziw84VwcuUX7aOI7Y5osKwkOfZ7l0X+zLDPAumRYS+tW8v+05AIbruX1a7uw60qJMJakVdu+2IzxhXwX0B1KSVaoX8GA89MKFhvZWGz1Ru4r1zCtvJyOpv+XxQxU36qSaLIDVWIcy2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774274585; c=relaxed/simple;
-	bh=74nU+p4AvwjOMMyaJKS8cH28y3pbGWscg6d7b4xTKtk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i3UkWfl5uB6hiMoMRF8lHQvqfmV8giREDe5vpLURT/C8/XpqNVLaC2EuZJWHWRIwbJNE0a7dv7FqcAoZg4z3I4oneNE1t3Bifnd5mF2jZL8qDOVHrffSC3yEMqVCfONhul9sGfiTgtOFIBXhYGGSWmDXeGGPE4YKokm4VQiO9F0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k1xGzdxl; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-439b6d9c981so2943763f8f.1
-        for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 07:03:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774274582; x=1774879382; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XP2z4EeTIErAA0SCjA9USYIYpOzE49JnT+Yi7rCFLbY=;
-        b=k1xGzdxluxr1LoG8GVK1bTURerq8V+XXte5dhkp8eZ5eoIJlI1zbNfeKeveSKTuS39
-         5nWgwrj5gtvtdP6W9TKk9NyA/Sc/3ytTD0VmRWWgDmqE1A0sJl/KfeJV6RTwypepH0Wn
-         4jnwLzJS8b9SwT8gYEXTnslmrXakYNOBen9LHI4TgrB4VSyknXty6jFshpQC3TFWSiMk
-         Q+P6o1c+3XZsi0PXRzqOoxZKaahyZl+FEPI1jleuehk8xVH11Z5sJEpnmWaMdeG8spDA
-         UTRAuhpQWd0B3QwlVlJwylmDZkqjNhI2JPZkF5ud64cBzcboVvUXMWinQO4aTMjhGS6m
-         ZG0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774274582; x=1774879382;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=XP2z4EeTIErAA0SCjA9USYIYpOzE49JnT+Yi7rCFLbY=;
-        b=FeqaTDsoBFRNHA5zH0G7MQapoRDSlGanWyTdqjnHC6te480pAs03X5MUVno32OuTJ7
-         ZLZobyFSqjtCeWCWR87Q3XGMGZbM5V4Or2nA7EWCh74Ddv2hbuZOHWLYXbH90sVHxm6b
-         3kGi/89xxWa/WLsKMdqw/rZkAKcIsGHCmfRqKpsyTDrFwj7DMhgDIRB9/rdI2doSn/ei
-         UDSivB/LCkgleMW+fzA8OVJEbJIQVNKI+uohmQj495FH+jRrFyh/oN8LXZoG9bZmxHwR
-         DoPBJmDWR48DluuacptqtJ7UnoQh0is/Wkb61RYBe2xxod2KXGk99xvWaRYvPkqYmL1Q
-         uTZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXTz9wLGJviTqLJza3ftVd3mCbu7v20Y34OABiiNiVmoUKCvdGXsS00jcjSmGVVXMJNDuVnjfnXnQo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUhHM1pc5o2MQdw+NeIfB0QZpanzPTlPx2oJQRiDN4rp/7FdwA
-	mivJLakVHhsAF7UwUyM7aHzbnVlOG6G2eze1kkWweCTLWpVEbcrfrlBP
-X-Gm-Gg: ATEYQzyDZAbGTI0X6EGoXYhO6vBf8YIXJRCANwTw4Hkq2aRL/SuCWjsnkJaR7f3+m6m
-	qUNb8HFQnEiKq1u9pdEO5q7WOp7DYveP3jDaGkDplSbQm950R2VUgf90zzcB92vgZKvCMyUn2fa
-	sfE/634H2BOsXEDuhkFQon1PPsV2W/hgjo4EcUAEcoXBX3rFejeBFkk2oIyXd+bpcKgPmwTBuXb
-	OzMXiXO2M+mGpOJxh7vMtz+yMYO9tgUcspsr30PO2L9pzKGqgqCMK2Zovid3gyZKLz9QciZ8CgA
-	YKxb5LiS0u+72m0TLpfKoW8kRDHr3xdPE7DmbtKoH/a4LbAmVPO8ES1Qkd4A9UgiSdoZJ5Z4xKY
-	abScTtT1PORrGZ2HHvjUveznsi70fLEA+AgV0lnTM3DaUaqAH5IDihXxz7Wg9Hx2tPInYxe7Ja1
-	+nPcdV5Xc8iuNwGiuYEJy4xO9MuMeZ+dtm/21ON4MV3dYOa2eiG5pw1qDCYgMLFJswLw==
-X-Received: by 2002:a05:6000:270e:b0:43b:3c32:d901 with SMTP id ffacd0b85a97d-43b576fc6bfmr18592076f8f.11.1774274582040;
-        Mon, 23 Mar 2026 07:03:02 -0700 (PDT)
-Received: from arrakis.kwizart.net (82-65-38-83.subs.proxad.net. [82.65.38.83])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b64703650sm30440010f8f.20.2026.03.23.07.03.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 07:03:01 -0700 (PDT)
-From: Nicolas Chauvet <kwizart@gmail.com>
-To: Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-tegra@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Nicolas Chauvet <kwizart@gmail.com>
-Subject: [PATCH] usb: tegra: use MODULE_FIRMWARE if SOC is ENABLED
-Date: Mon, 23 Mar 2026 15:02:49 +0100
-Message-ID: <20260323140249.173603-2-kwizart@gmail.com>
+	s=arc-20240116; t=1774277275; c=relaxed/simple;
+	bh=TgoZDC+7lVDdNRf5BJDcTfMDsRRTXCPaa+J8MdUELUM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iqHJk2uKqj0OHaOTi+T1o5VmgpU0eF9N2XeHiqMkfZwrlyFrAbgWjKKMdxjtp29gvYf9jxq/+7NO1kBYxHzyJ0DJSxDbyMH0Jqv5IlhkXPx0OvvDRzHaK73O31XMbt1ayUJ0ljjjsQ9HS1FYVvj0pqIB5a8tySII0e9lDN8UzsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=iconn-networks.com; spf=pass smtp.mailfrom=iconn-networks.com; dkim=pass (2048-bit key) header.d=iconn-networks.com header.i=@iconn-networks.com header.b=AQaT0mBh; arc=none smtp.client-ip=62.77.155.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=iconn-networks.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iconn-networks.com
+Received: from debian (unknown [81.7.79.211])
+	(Authenticated sender: ernestas.k@iconn-networks.com)
+	by zebra.wilibox.com (Postfix) with ESMTPSA id 275261763BA;
+	Mon, 23 Mar 2026 16:38:53 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iconn-networks.com;
+	s=default; t=1774276733;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=N2wUzQGUYUtExLAHWgwTpueY71WnmTfKf9fpJlUuows=;
+	b=AQaT0mBh4T7DSUwcwgXWt3XD7zylezpxFRM1aiDL3Y4HYiC/Y+4RsLDe1WbMit5fqvipne
+	WUndfKpnB4oRH06oox8SG9aOQlvd3elBokMcNlqY0sFnftvJzfz5NIX81kSPqGi/Tss5Xc
+	Ep6rCNAbwQtGN5cGglMl1gOcB/is/wrOr93fEoa0U7cHQSny6FV4Ibn75dozhiCKaUjeg3
+	0Xo41KshDAIvpy16bF1fsPdphYXYM4zPeENBCZ1IXkEdl0CnIPEnjcg7gManlJ+Iv/Ex5Z
+	3hY/XANJ6XMyEV9XI9lUrzSAr49Lsei3w3bagio3hj6TgT5NUNg0ErTce2TL9A==
+Authentication-Results: zebra.wilibox.com;
+	auth=pass smtp.auth=ernestas.k@iconn-networks.com smtp.mailfrom=ernestas.k@iconn-networks.com
+From: Ernestas Kulik <ernestas.k@iconn-networks.com>
+To: johan@kernel.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ernestas Kulik <ernestas.k@iconn-networks.com>
+Subject: [PATCH] USB: serial: option: Add MeiG Smart SRT853
+Date: Mon, 23 Mar 2026 16:37:53 +0200
+Message-ID: <20260323143753.686561-1-ernestas.k@iconn-networks.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260323140249.173603-1-kwizart@gmail.com>
-References: <20260323140249.173603-1-kwizart@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -97,89 +66,97 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[iconn-networks.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[iconn-networks.com:s=default];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_TO(0.00)[gmail.com,nvidia.com,intel.com,linuxfoundation.org];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-35337-lists,linux-usb=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-35339-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[iconn-networks.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FROM_NEQ_ENVFROM(0.00)[kwizart@gmail.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FROM_NEQ_ENVFROM(0.00)[ernestas.k@iconn-networks.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 80FE62F447D
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: 893752F59F4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-This allows to reduce the size of the initramfs by only selecting
-the related firmware when a given SOC is enabled.
+This commit adds support for the MeiG Smart SRT853 5G CPE modem.
 
-Signed-off-by: Nicolas Chauvet <kwizart@gmail.com>
+If#= 0: RNDIS
+If#= 1: RNDIS
+If#= 2: Diag
+If#= 3: AT
+If#= 4: AT
+If#= 5: NMEA
+
+T:  Bus=01 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#= 19 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=2dee ProdID=4d38 Rev= 5.04
+S:  Manufacturer=MEIG
+S:  Product=LTE-A Module
+S:  SerialNumber=da47a175
+C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=e0(wlcon) Sub=01 Prot=03
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
+E:  Ad=81(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+Signed-off-by: Ernestas Kulik <ernestas.k@iconn-networks.com>
 ---
- drivers/usb/host/xhci-tegra.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/usb/serial/option.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index 3f6aa2440b05..5587302a69dd 100644
---- a/drivers/usb/host/xhci-tegra.c
-+++ b/drivers/usb/host/xhci-tegra.c
-@@ -2566,7 +2566,9 @@ static const struct tegra_xusb_soc tegra124_soc = {
- 		.smi_intr = XUSB_CFG_ARU_SMI_INTR,
- 	},
- };
-+#if IS_ENABLED(CONFIG_ARCH_TEGRA_124_SOC) || IS_ENABLED(CONFIG_ARCH_TEGRA_132_SOC)
- MODULE_FIRMWARE("nvidia/tegra124/xusb.bin");
-+#endif
- 
- static const char * const tegra210_supply_names[] = {
- 	"dvddio-pex",
-@@ -2604,11 +2606,15 @@ static const struct tegra_xusb_soc tegra210_soc = {
- 		.smi_intr = XUSB_CFG_ARU_SMI_INTR,
- 	},
- };
-+#if IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC)
- MODULE_FIRMWARE("nvidia/tegra210/xusb.bin");
-+#endif
- 
- static const char * const tegra186_supply_names[] = {
- };
-+#if IS_ENABLED(CONFIG_ARCH_TEGRA_186_SOC)
- MODULE_FIRMWARE("nvidia/tegra186/xusb.bin");
-+#endif
- 
- static const struct tegra_xusb_phy_type tegra186_phy_types[] = {
- 	{ .name = "usb3", .num = 3, },
-@@ -2681,7 +2687,9 @@ static const struct tegra_xusb_soc tegra194_soc = {
- 	},
- 	.lpm_support = true,
- };
-+#if IS_ENABLED(CONFIG_ARCH_TEGRA_194_SOC)
- MODULE_FIRMWARE("nvidia/tegra194/xusb.bin");
-+#endif
- 
- static const struct tegra_xusb_soc_ops tegra234_ops = {
- 	.mbox_reg_readl = &bar2_readl,
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index e349ed66d2ac..328f14a99953 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2439,10 +2439,13 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0x10, 0x02) },	/* MeiG Smart SLM828 */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0x10, 0x03) },	/* MeiG Smart SLM828 */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0xff, 0x30) },	/* MeiG Smart SRM815 and SRM825L */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0xff, 0x40) },	/* MeiG Smart SRM825L */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0xff, 0x60) },	/* MeiG Smart SRM825L */
++	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d38, 0xff, 0xff, 0x30) },	/* MeiG Smart SRT853 (Diag) */
++	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d38, 0xff, 0xff, 0x40) },	/* MeiG Smart SRT853 (AT) */
++	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d38, 0xff, 0xff, 0x60) },	/* MeiG Smart SRT853 (NMEA) */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2df3, 0x9d03, 0xff) },			/* LongSung M5710 */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
+ 	{ USB_DEVICE(0x33f8, 0x0104),						/* Rolling RW101-GL (laptop RMNET) */
 -- 
 2.53.0
 
