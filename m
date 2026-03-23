@@ -1,126 +1,189 @@
-Return-Path: <linux-usb+bounces-35338-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35341-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SC2kLDJSwWn+SAQAu9opvQ
-	(envelope-from <linux-usb+bounces-35338-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 15:46:10 +0100
+	id 8Nw4J9xvwWnmTAQAu9opvQ
+	(envelope-from <linux-usb+bounces-35341-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 17:52:44 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DD112F5275
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 15:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AD5D2F8FAD
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 17:52:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 12A193059730
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 14:39:05 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CB1AC30F599C
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 16:24:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC7C13B27C1;
-	Mon, 23 Mar 2026 14:38:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30CDF3BE648;
+	Mon, 23 Mar 2026 16:23:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j1I5Wngw"
+	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="SwGLjMrK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735A83B0ADD;
-	Mon, 23 Mar 2026 14:38:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6273BB9F6;
+	Mon, 23 Mar 2026 16:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774276718; cv=none; b=MG4A5e9C/YZBLKcNmawD90/118fVJtYzs0SziIPLOmtWT0IIUJ5sWxhhlUD0+mDam8V4O1werVqZ+ZCI4rMBq5/mm44Xz7sjOiRr1fjKPY+IaNdZd6ToUvTC798+KQ1IwayUn6knxECwv8b8h9m6Bg4/P+ngmif+mKE9oDSjmC4=
+	t=1774283029; cv=none; b=Ei9sy74AW0xNAOzunvYVD7TDfe6hWaayzJPc1mPOzq9NTbZvhSJl+CW4JZ0ov6dbfrNV2Q7/jfDnB8r7Twz1Av8EKsVsQnP5N4cNuVD0I3Yh8BbznN+/GDSmYQkORXLYnrlNDV3KUEFpNWTuVvFLfeYDFZ47I7h/E6hOSn7UxaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774276718; c=relaxed/simple;
-	bh=Q8yzU7oBURNt+wPrt3Zq4LJWGjFX0fYGgtlJz51VqXo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=byNhQIqny34mv6HPdRtgSDUzM7IIeZE3HDo1vSkC4DdQuQ9hyvG6NcFU1qURCOGYk6XW4fEYsdNl/06thI0ZBCrQgmzW5wSwGc6MqiI6Y/moPi5ImLSqS6S8Y6B3iV6gYG6NOql96SmONXU9NZ6wC3NLNdO8/ttmv4fCLU10cko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j1I5Wngw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B118C4CEF7;
-	Mon, 23 Mar 2026 14:38:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774276718;
-	bh=Q8yzU7oBURNt+wPrt3Zq4LJWGjFX0fYGgtlJz51VqXo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=j1I5Wngwn8apZSY1Lz8LrrTMQPpHh3SPu3wGlDgRxZYJ2jvLx8Obo8WwGbgyuZK4J
-	 wuGu6Wg5TCpoED71Hd9FL5Z0d0HDPEQPo2qcguoConcx82CBOy7waysmrIJ2+ChCQ6
-	 EAB1gNRDWHrbth0hx8PZygiw5b+cf6xC3PQ6m5udlXXGHoPl9bSWB+vLqj50gxKMLm
-	 S8r5ivkW9bTom8IfLXZN/HYkcXIYrWzlVoZEqdMmfik/hwnucUQysGa/iriP8QfteF
-	 NRInwF2zGX1fg4zMt5XIyS3ENtq8n6PtswUlDUkD/7h5y3uqTsDxy/eipfhUkDwtNj
-	 qbLIcXWavGJMQ==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Abel Vesa <abel.vesa@oss.qualcomm.com>
-Cc: Pankaj Patil <pankaj.patil@oss.qualcomm.com>,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Wesley Cheng <wesley.cheng@oss.qualcomm.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Subject: Re: [PATCH v7 0/2] arm64: dts: qcom: glymur: Add USB support
-Date: Mon, 23 Mar 2026 09:38:21 -0500
-Message-ID: <177427670535.11515.11926100924280298245.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260320-dts-qcom-glymur-add-usb-support-v7-0-ba367eda6010@oss.qualcomm.com>
-References: <20260320-dts-qcom-glymur-add-usb-support-v7-0-ba367eda6010@oss.qualcomm.com>
+	s=arc-20240116; t=1774283029; c=relaxed/simple;
+	bh=AiYR3m9OPMS94EYaKPIpJW6EJB1OAUUOLjUwhjl9HPw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M7glgbpiy/WVb4t6sGriqxfNK17JOjzLGGRUgd7QWzWulxjNGew6gUlPKEiKgFiO5/K9/3lvKaFDfzk3bAoxZLSdkd2A5jUnBHV6mWcB+LmBdqYlyIOYHUQKFRTXKUn8zfnVZInNAdxnNHbtA4b3srAS+Xwd28h3rIOYa6DlclI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=SwGLjMrK; arc=none smtp.client-ip=193.136.128.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id C350E600882A;
+	Mon, 23 Mar 2026 16:15:46 +0000 (WET)
+X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
+Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
+ by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
+ with LMTP id 126tTdIN8NTm; Mon, 23 Mar 2026 16:15:44 +0000 (WET)
+Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [193.136.128.10])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id E2AB36008813;
+	Mon, 23 Mar 2026 16:15:42 +0000 (WET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
+	s=mail2; t=1774282543;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oxX+OUc3xAG2hwZFdRqs0R//MKXMT1i1SmwKlI7QCUU=;
+	b=SwGLjMrK9ln3TcNEAy+X0mypZiqlB9obo5qLLYD5EBTUgUj81QnjKt4tNkkCO/mjjfLHo2
+	Y3PEOU09sIAODUjaPNDpqo8otBGKVMH1F3dMorf4JQkK59Kd9t8gDl0REdd3ML2ISfa8Nz
+	xrmRUHJjFZk015wqZPQfQEY+5UCcGar+nTkVXv5d0H7/JE04N/KYuScurMaSJD+96Gidfo
+	dZjlL3FAbJq76/l/qMwZIXalTwJLtpmVI+NFuV0B5AIO8SCGPyqLBrFoIElXWbMarS1Zka
+	u4xxGAi8SdMWEwhWRMzTd2WgoTDOZ6Z04F/vuH6KRUMU+VLL9EJCGdzVPKcEYw==
+Received: from [IPV6:2001:8a0:57db:f00:3ee2:38aa:e2c9:7dde] (unknown [IPv6:2001:8a0:57db:f00:3ee2:38aa:e2c9:7dde])
+	(Authenticated sender: ist187313)
+	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 767D33601AC;
+	Mon, 23 Mar 2026 16:15:41 +0000 (WET)
+Message-ID: <54167943-deac-40ec-be86-7ddc6b015c2d@tecnico.ulisboa.pt>
+Date: Mon, 23 Mar 2026 16:15:24 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/6] Fixes to Tegra USB role switching and phy handling
+To: Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>, JC Kuo <jckuo@nvidia.com>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>
+Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ devicetree@vger.kernel.org, stable@vger.kernel.org
+References: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
+Content-Language: en-US
+From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+In-Reply-To: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[tecnico.ulisboa.pt,quarantine];
+	R_DKIM_ALLOW(-0.20)[tecnico.ulisboa.pt:s=mail2];
 	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35338-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35341-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[intel.com,linuxfoundation.org,gmail.com,nvidia.com,kernel.org,linaro.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andersson@kernel.org,linux-usb@vger.kernel.org];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[diogo.ivo@tecnico.ulisboa.pt,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[tecnico.ulisboa.pt:+];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 9DD112F5275
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 7AD5D2F8FAD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Hello,
 
-On Fri, 20 Mar 2026 12:56:51 +0200, Abel Vesa wrote:
-> Add support for USB on Glymur SoC and its Compute Reference Device.
-> 
-> This unblocks the upstreaming of the display support, since 3 DP instances
-> rely on some clocks provided by the combo PHYs.
-> 
-> 
-
-Applied, thanks!
-
-[1/2] arm64: dts: qcom: glymur: Add USB related nodes
-      commit: 83f88b7dda2c71fd5ff0b0b44b47e20a51270ae4
-[2/2] arm64: dts: qcom: glymur-crd: Enable USB support
-      commit: fd556a59e0e928a368cda25810b2de0e6cdc8e7e
+Ping on this series as it has been quite a while since this was sent out
+originally.
 
 Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+
+Diogo
+
+On 1/27/26 15:11, Diogo Ivo wrote:
+> Hello,
+> 
+> This patch series contains fixes/improvements for USB role switching on the
+> Tegra210 and Tegra186 SoCs.
+> 
+> The first patch addresses a wrong check on the logic that disables the
+> VBUS regulator.
+> 
+> The second patch removes a redundant mutex lock when setting the PHY
+> mode.
+> 
+> The third patch guarantees proper ordering of events when switching PHY
+> roles.
+> 
+> The remaining patches are included to standardize the PHY .set_mode()
+> callback between Tegra186 and Tegra210.
+> 
+> With this patch series this feature can only be controlled from userspace,
+> by writing the desired role to sysfs as
+> 
+> echo "role" > /sys/class/usb_role/usb2-0-role-switch/role
+> 
+> with role being one of {device, host, none}.
+> 
+> Further patches will enable automatic role switching via the 'cros_ec_typec'
+> driver which is currently broken on Smaug.
+> 
+> Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+> ---
+> Changes in v2:
+> - Remove DT patches already taken to be upstreamed
+> - Add standardization between Tegra210 and Tegra186
+> - Address review comments from v1, detailed descriptions in each patch
+> - Link to v1: https://lore.kernel.org/r/20251204-diogo-tegra_phy-v1-0-51a2016d0be8@tecnico.ulisboa.pt
+> 
+> ---
+> Diogo Ivo (6):
+>        phy: tegra: xusb: Fix USB2 port regulator disable logic
+>        usb: xhci: tegra: Remove redundant mutex when setting phy mode
+>        phy: tegra: xusb: Fix ordering issue when switching roles on USB2 ports
+>        phy: tegra: xusb: Add ID override support to padctl
+>        phy: tegra: xusb: Move .set_mode() to a shared location
+>        phy: tegra: xusb: Move T186 .set_mode() to common implementation
+> 
+>   drivers/phy/tegra/xusb-tegra186.c   | 73 +++++----------------------------
+>   drivers/phy/tegra/xusb-tegra210.c   | 42 +------------------
+>   drivers/phy/tegra/xusb.c            | 80 +++++++++++++++++++++++++++++++++++++
+>   drivers/phy/tegra/xusb.h            |  4 ++
+>   drivers/usb/gadget/udc/tegra-xudc.c |  4 ++
+>   drivers/usb/host/xhci-tegra.c       | 14 ++++---
+>   include/linux/phy/tegra/xusb.h      |  3 ++
+>   7 files changed, 111 insertions(+), 109 deletions(-)
+> ---
+> base-commit: b02a5530af8abe0d3cd4852ba48990716e962934
+> change-id: 20251201-diogo-tegra_phy-86c89cab7377
+> 
+> Best regards,
 
