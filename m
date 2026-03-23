@@ -1,253 +1,201 @@
-Return-Path: <linux-usb+bounces-35348-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35349-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oDTqE3aiwWkwUQQAu9opvQ
-	(envelope-from <linux-usb+bounces-35348-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 21:28:38 +0100
+	id sHEyOMmzwWnlUgQAu9opvQ
+	(envelope-from <linux-usb+bounces-35349-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 22:42:33 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A685C2FD38D
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 21:28:37 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2A472FDE2B
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 22:42:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5423330BDFD8
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 20:13:50 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 10113304A4C8
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 21:40:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C12303E1D07;
-	Mon, 23 Mar 2026 20:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C2537F007;
+	Mon, 23 Mar 2026 21:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jM/NBGP1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f77.google.com (mail-oo1-f77.google.com [209.85.161.77])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA0C3C1961
-	for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 20:13:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B39B637DE9F
+	for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 21:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774296820; cv=none; b=PjRWH6usp3ZjYhGMpHaKiZpxyFWTa9MQc2P6XMN6TenOvTutLhOt/RnLvkKvv3N5pYTHUTOpdYqr4vBbB9Z5AXwNvhhx35GFD3Sv+z19zASJA4O/0ur9Nfo7de6t9uEXOFpLFN0UdwTcThrSAIfLhiai/KYwyr7NAT/aJuYCKp4=
+	t=1774302056; cv=none; b=FXd3vrzSWQZ+MLZdrTUV6egmYt5nG25QJBi8oIzwLbxD+AKoHga39c87nPWJsnaUJFBg80UrBeecbIvf/xOFHwalJxG/TJNNIzf52zuTY1hrtJts07AZd7thVRAKvpww+PZ0o1oDzQXXXAQBugdtlwojeL4l/0uRblyjT4dr2u0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774296820; c=relaxed/simple;
-	bh=cj8ALMrx35H2DTMyqR4QEKUGwvRYO/9HFJ7GMEZ5JxY=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=lcj100Xli4DYZownhb9h1A7LlI5vBkGy2GrLteh3t0LxDQ05S32DcJaRdGeNB6ZhHGD01BmWcYoRPU4BqI98a1v/XQWZg0SnP9/DZY+1L9FaC4ZB45LZP9EversaYwG3WInx4ophRxnxc80//Vq6XvSJCwQE+99z+p+hgVQudv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f77.google.com with SMTP id 006d021491bc7-66b612efb4aso53804220eaf.0
-        for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 13:13:37 -0700 (PDT)
+	s=arc-20240116; t=1774302056; c=relaxed/simple;
+	bh=PyGsXxwBLAbx0pkRlKrTWfssNHt0Fqjuwy/lrB2CQdk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VSdlTWcoDmZBN8XZQeaQ58iZFmmE4EPoNhvxb4rfUbBalkXQ4IgImK2AoGemC07MjHQWgMXYIApoQi2mtfMOysjbrjQJL6d/u0a34w5ykrxJlnin4X7bp+QunxLmyWpBLowkE3iAKU1Nx9wsJwXWEklEVJq/Fb/zrMLMsWe6NgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jM/NBGP1; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b982d56dac4so109880366b.3
+        for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 14:40:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774302053; x=1774906853; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QPpefVkYLkq2RrZMkVrdiEsEfY877uoA9IM104OWkz0=;
+        b=jM/NBGP1H7xJ6m2ZTOgnMOfxc7irHHnqX4TJ92S2zWZ3RbucN3iKJLd2XiVdiRmbZ1
+         U6KoyXnrgei6l32CouFRQlFx0PcLSHUnNaLI6njI2EJzP7SMch6e8xLm3OvcsLgNWI2k
+         Kr2j1Si8UY/ZELXDENWHTPomUqeKhO4U+jvH/VAowHPPObToCp8gofLtz1XnJcDVtFOb
+         ELZM9HvCVJ8SA8BSd9fC+uQZQ0NQ9HT+aS5WrAgg9AUUxtw/9ML7rmuopeDQAw4aMb9q
+         iIYJVmm+RUAx7wZidzaKmgPqLQ6ghfysTnI9qVSI1Bxt88i5czm/mh/oy/ZppbJnhx1t
+         Ivxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774296817; x=1774901617;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0pEoFV3Z+GhDMvVnTuUQ5HLbi+15yPEKi/PRT6DkVAQ=;
-        b=hAkYpfELTJqFsa8zvatM7jrYbuun+OFe3AOHsDendlWXg5l6vBnbCkq757kGYzvf4n
-         s5G5e67he7NSmn1zB5Dcd2LZ0SyixW+qvRVDSCvMmRt35ZD4KOosPuPbi+egNU5cN2Y3
-         IPbkTXYNWtejRFVNfLC4lBgTOtu5PM59dk1CBDbFRIocwiOlhTYEXrkp/2i26Y5dmU0G
-         Lb50ilCst46Zr8Hj3rbiMoxZvCfpspp6tDA23MuBZuGJ/MpXHp1AGQJeMId4j0aRCfcW
-         uwVilRawnn5BFMOm1RFISZCaEO620PDqMyVHC7ehgOFSDCJt6mAt99/U92NTZbuPayRh
-         dQXA==
-X-Forwarded-Encrypted: i=1; AJvYcCWuCCIBXALNN11tkAW6r0XjfuGhvK1NLDTUMl4SgdbmhXu6VugltEgtINcntD5vKbo9jfUmJagax78=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSB+p6qfRvoXtf7N/T6i/2LxftaARDwnxnagPEDoRsoE2RaL7N
-	e4uOCGNnxq9K/lSuAeMy7F9ShAd8SK2MCYf9Fh6kGRBEJOr4tDt5m0aqeBGNaueiUmxsX5isaa0
-	pHTmQSILX6loGfEmEfQ3VnpBa98KKnhbpZVDIkK2wFwdNp8FkBXF862KGN5Y=
+        d=1e100.net; s=20251104; t=1774302053; x=1774906853;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=QPpefVkYLkq2RrZMkVrdiEsEfY877uoA9IM104OWkz0=;
+        b=V1SKGN3G25FX6IgSH6HBgD0b0PRG7BVMEQtKl7vcaBrhu/vHo9EKo+YOfdVSBY2Ug7
+         CheJC6BdYzQ+Spn3oPO48aRaxgQSfkSth6zDj1KFjQBSpfvmuu8oPMMuitDiOmH8uxzH
+         ZdduQTgR+kW5bzcAY/L65unGOwICS3Oj6OtdJ/C9NRsBZVF9oW812BvExdS00Wdjqasd
+         d3Qypj8q6vSAcPTzEkEVwgpb7AjvPLC9evcmW5j3v6oc8fPV7Z94igRtPACUbJYLbVoT
+         HhYUPA/yiGKIHA//E9xhtjBuYBv6Xr2eyDFqRgLR0yfRZ5s+xsKAQM5W+FqG0nnL4mVg
+         348g==
+X-Forwarded-Encrypted: i=1; AJvYcCXtMBbtH+Zlgiy8n8+FVPtTqwLj7GTc+QxpJhLTsHMsorWGRqoEV8uItM521OeRNgoQNIyR1sQmmwQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBRuqalTBGfAGf9xBBWq3LEcd4ir8bx6QgxSz90XMqC8N2GKkF
+	3d7ONOFDgaUuVIwOFImst2Uou5yIhAB+fz76ykr/BhPraxlWCWCKVA9fTTDqoQ==
+X-Gm-Gg: ATEYQzwvDS+2oVRBs/yqYoqyepvnLbwU4XlWuMuWWqg7hQoc2E7suaSdBJ5qvYpiSY0
+	UTXI/1vCL17SKhMonaLkBWyteRv5LsKwam8ic7uHj0hBwpNL+vWoDlsHMyFnbg1CIgMLt9q5YaE
+	YBKOx1dyLFFkmtZWYA+m1uKnlGJe8XzYjskzm+GA8Uiw+UNhVrQWD3dDOjw9dWYcR+tbzUZQbk9
+	FWgnFSnSfqoexYW3o7YZpDHdVgLlNswnHxEJO3WWP1baQy9Mh5mg5I6JThlaXlE+G2H6ghizA5p
+	3L/18wXq3jsNWAJpQQVxB6HOSZ8Ji0KGe0ubi0zT7Huc1HI4unKz6HQS3p0bqDzSwXOqphFTEv4
+	YI3xTBbSL1EH58+4D6EwvREkM8SgdLHUJqwNQ+xZtced0QLC2zxpr4Ckl/pCqW8EXeZXABj+jlv
+	onTcMUg4MR0bUDay6U+XHD+CSATgIYX5psFIrThmfaW/0Fxg==
+X-Received: by 2002:a17:906:27d7:b0:b98:2641:be5e with SMTP id a640c23a62f3a-b982f399b5amr768393166b.27.1774302052634;
+        Mon, 23 Mar 2026 14:40:52 -0700 (PDT)
+Received: from foxbook (bfk214.neoplus.adsl.tpnet.pl. [83.28.48.214])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9832f8da12sm550852666b.21.2026.03.23.14.40.51
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 23 Mar 2026 14:40:52 -0700 (PDT)
+Date: Mon, 23 Mar 2026 22:40:48 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
+Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org, Pavankumar
+ Kondeti <quic_pkondeti@quicinc.com>
+Subject: Re: [PATCH 1/2] usb: xhci: fix Command Aborting
+Message-ID: <20260323224048.14426237.michal.pecio@gmail.com>
+In-Reply-To: <9c6625f0-64d1-4f90-ba89-72eb9a153ea1@linux.intel.com>
+References: <20260316142720.1471906-1-niklas.neronin@linux.intel.com>
+	<20260316142720.1471906-2-niklas.neronin@linux.intel.com>
+	<20260321143057.1bf31b1b.michal.pecio@gmail.com>
+	<56606a55-b1cb-4669-9025-8a91d8d258bf@linux.intel.com>
+	<20260323122458.0af6b4d0.michal.pecio@gmail.com>
+	<9c6625f0-64d1-4f90-ba89-72eb9a153ea1@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:3090:b0:67b:a4cb:293f with SMTP id
- 006d021491bc7-67df5d6a987mr683972eaf.17.1774296816960; Mon, 23 Mar 2026
- 13:13:36 -0700 (PDT)
-Date: Mon, 23 Mar 2026 13:13:36 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69c19ef0.050a0220.3bf4de.00aa.GAE@google.com>
-Subject: [syzbot] [media?] [usb?] KASAN: slab-out-of-bounds Read in ec168_i2c_xfer
-From: syzbot <syzbot+64485d3659c4c07111b4@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-0.36 / 15.00];
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=c584910d0d74158d];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-35348-lists,linux-usb=lfdr.de,64485d3659c4c07111b4];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	SUBJECT_HAS_QUESTION(0.00)[];
-	REDIRECTOR_URL(0.00)[goo.gl];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-35349-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[goo.gl:url,googlegroups.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,appspotmail.com:email,syzkaller.appspot.com:url,storage.googleapis.com:url]
-X-Rspamd-Queue-Id: A685C2FD38D
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A2A472FDE2B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello,
+On Mon, 23 Mar 2026 16:00:54 +0200, Neronin, Niklas wrote:
+> The ERDP bit field is 63:4 and can therefore hold any TRB address.
 
-syzbot found the following issue on:
+Yes, we don't have truncation problems. But what if the high DWORD
+write is delayed enough that some stupid hardware doesn't wait for it
+and simply overwrites just the low DWORD and assumes that it now has
+the new dequeue pointer?
 
-HEAD commit:    785f0eb2f85d Add linux-next specific files for 20260320
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12cc5e02580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c584910d0d74158d
-dashboard link: https://syzkaller.appspot.com/bug?extid=64485d3659c4c07111b4
-compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1689e06a580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12e22cba580000
+Not good. But also not likely to matter, it seems we only get in
+trouble if the event ring overfills and the HW fails to detect this,
+exactly during the short window between the two DWORD writes.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/a1f7fd9c1a63/disk-785f0eb2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6c138da87c25/vmlinux-785f0eb2.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/4d1be64e56db/bzImage-785f0eb2.xz
+> How I see it; hardware which requires an upper DWORD write will
+> "buffer" the lower DWORD and wait for the corresponding upper DWORD
+> write.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+64485d3659c4c07111b4@syzkaller.appspotmail.com
+Hopefully that's what it does, yes.
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in ec168_i2c_xfer+0x4cd/0x640 drivers/media/usb/dvb-usb-v2/ec168.c:143
-Read of size 1 at addr ffff888022a8e061 by task syz.0.17/6065
+> However, because the specification states that the CRP and RCS are
+> ignored while CRR=1, the lower DWORD write ignores lower CRP bits and
+> RCS bit.
 
-CPU: 0 UID: 0 PID: 6065 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
-Call Trace:
- <TASK>
- dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
- print_address_description+0x55/0x1e0 mm/kasan/report.c:378
- print_report+0x58/0x70 mm/kasan/report.c:482
- kasan_report+0x117/0x150 mm/kasan/report.c:595
- ec168_i2c_xfer+0x4cd/0x640 drivers/media/usb/dvb-usb-v2/ec168.c:143
- __i2c_transfer+0x79a/0x1f70 drivers/i2c/i2c-core-base.c:-1
- i2c_transfer+0x1cc/0x2d0 drivers/i2c/i2c-core-base.c:2317
- i2cdev_ioctl_rdwr+0x460/0x740 drivers/i2c/i2c-dev.c:306
- i2cdev_ioctl+0x6a5/0x880 drivers/i2c/i2c-dev.c:467
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:597 [inline]
- __se_sys_ioctl+0xfc/0x170 fs/ioctl.c:583
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fc935d9c799
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffef6f8b6b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fc936015fa0 RCX: 00007fc935d9c799
-RDX: 0000200000000140 RSI: 0000000000000707 RDI: 0000000000000004
-RBP: 00007fc935e32c99 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fc936015fac R14: 00007fc936015fa0 R15: 00007fc936015fa0
- </TASK>
+Yes, I tried writing only the CA bit and it still works.
 
-Allocated by task 6065:
- kasan_save_stack mm/kasan/common.c:57 [inline]
- kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
- poison_kmalloc_redzone mm/kasan/common.c:398 [inline]
- __kasan_kmalloc+0x93/0xb0 mm/kasan/common.c:415
- kasan_kmalloc include/linux/kasan.h:263 [inline]
- __do_kmalloc_node mm/slub.c:5292 [inline]
- __kmalloc_node_track_caller_noprof+0x4db/0x7b0 mm/slub.c:5400
- memdup_user+0x2b/0xd0 mm/util.c:221
- i2cdev_ioctl_rdwr+0x1c6/0x740 drivers/i2c/i2c-dev.c:266
- i2cdev_ioctl+0x6a5/0x880 drivers/i2c/i2c-dev.c:467
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:597 [inline]
- __se_sys_ioctl+0xfc/0x170 fs/ioctl.c:583
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> As a result, if the upper DWORD is written after CRR=0, only upper
+> CRP bits and RsvdP bits are updated.
+> Conversely, if the upper DWORD is written before CRR=0, only RsvdP
+> bits are updated.
 
-The buggy address belongs to the object at ffff888022a8e060
- which belongs to the cache kmalloc-8 of size 8
-The buggy address is located 0 bytes to the right of
- allocated 1-byte region [ffff888022a8e060, ffff888022a8e061)
+If high DWORD is written before CRR=0 (current code executing quickly
+enough) then nothnig bad happens, or at least nobody complains.
 
-The buggy address belongs to the physical page:
-page: refcount:0 mapcount:0 mapping:0000000000000000 index:0xffff888022a8e260 pfn:0x22a8e
-flags: 0xfff00000000200(workingset|node=0|zone=1|lastcpupid=0x7ff)
-page_type: f5(slab)
-raw: 00fff00000000200 ffff88801b041500 ffffea0000a17150 ffffea0000cd6d90
-raw: ffff888022a8e260 000000080080007b 00000000f5000000 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0xd2cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 3746368734, free_ts 0
- set_page_owner include/linux/page_owner.h:32 [inline]
- post_alloc_hook+0x231/0x280 mm/page_alloc.c:1859
- prep_new_page mm/page_alloc.c:1867 [inline]
- get_page_from_freelist+0x2418/0x24b0 mm/page_alloc.c:3926
- __alloc_frozen_pages_noprof+0x233/0x3d0 mm/page_alloc.c:5213
- alloc_slab_page mm/slub.c:3278 [inline]
- allocate_slab+0x77/0x660 mm/slub.c:3467
- new_slab mm/slub.c:3525 [inline]
- refill_objects+0x339/0x3d0 mm/slub.c:7247
- refill_sheaf mm/slub.c:2816 [inline]
- __pcs_replace_empty_main+0x321/0x720 mm/slub.c:4651
- alloc_from_pcs mm/slub.c:4749 [inline]
- slab_alloc_node mm/slub.c:4883 [inline]
- __do_kmalloc_node mm/slub.c:5291 [inline]
- __kmalloc_noprof+0x474/0x760 mm/slub.c:5304
- kmalloc_noprof include/linux/slab.h:954 [inline]
- kzalloc_noprof include/linux/slab.h:1188 [inline]
- acpi_ns_internalize_name+0x2c9/0x3e0 drivers/acpi/acpica/nsutils.c:331
- acpi_ns_get_node_unlocked+0x186/0x480 drivers/acpi/acpica/nsutils.c:666
- acpi_ns_get_node+0x76/0xc0 drivers/acpi/acpica/nsutils.c:726
- acpi_ns_evaluate+0x283/0x1230 drivers/acpi/acpica/nseval.c:62
- acpi_evaluate_object+0x657/0xd50 drivers/acpi/acpica/nsxfeval.c:354
- acpi_evaluate_dsm drivers/acpi/utils.c:797 [inline]
- acpi_check_dsm+0x1bb/0x6f0 drivers/acpi/utils.c:830
- device_has_acpi_name drivers/pci/pci-label.c:44 [inline]
- acpi_attr_is_visible+0x89/0xe0 drivers/pci/pci-label.c:221
- create_files fs/sysfs/group.c:69 [inline]
- internal_create_group+0x5e5/0x1180 fs/sysfs/group.c:189
- internal_create_groups fs/sysfs/group.c:229 [inline]
- sysfs_create_groups+0x59/0x120 fs/sysfs/group.c:255
-page_owner free stack trace missing
+If high DWORD is written after CRR=0, then it's a spec violation (we
+should write low before high in the same "transaction") and low DWORD
+may become corrupted on some hardware:
 
-Memory state around the buggy address:
- ffff888022a8df00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888022a8df80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff888022a8e000: fa fc fc fc fa fc fc fc fa fc fc fc 01 fc fc fc
-                                                       ^
- ffff888022a8e080: 00 fc fc fc fa fc fc fc fa fc fc fc 07 fc fc fc
- ffff888022a8e100: 07 fc fc fc 05 fc fc fc fa fc fc fc 06 fc fc fc
-==================================================================
+# command at fffd4220 completes normally
+[  +0,061649] xhci_hcd 0000:00:10.0: handle_cmd_completion cmd_dma fffd4220 cmd_comp_code 1
+# command at fffd4230 is aborted and generates Aborted event
+[  +5,501058] xhci_hcd 0000:00:10.0: abort took 69464ns
+[  +0,000067] xhci_hcd 0000:00:10.0: handle_cmd_completion cmd_dma fffd4230 cmd_comp_code 25
+# then the ring stops on the next command as it should
+[  +0,000029] xhci_hcd 0000:00:10.0: handle_cmd_completion cmd_dma fffd4240 cmd_comp_code 24
+# I wrote 0xdeadbeef after CRR=0, so CRP changes
+# lower DWORD is corrupted, it should be fffd4240
+[  +0,207941] xhci_hcd 0000:00:10.0: handle_cmd_completion cmd_dma deadbeeffffd4000 cmd_comp_code 5
+[  +0,000015] xhci_hcd 0000:00:10.0: ERROR mismatched command completion event
+[  +0,000004] xhci_hcd 0000:00:10.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0007 address=0xdeadbeeffffd4000 flags=0x0010]
 
+This happens on NEC and a gen-1 AMD in-CPU xHCI (rumor has it that
+AMD licensed this IP core from NEC/Renesas).
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+On Etron, the out of spec high DWORD write is completely ignored.
+But if I wait for CRR=0 and write both DWORDs, then it accepts the
+new pointer and IOMMU faults like NEC.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ASM1042 is 32 bit it so it ignores the upper DWORD completely.
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+ASM1142 first times out waiting for the upper DWORD, then accepts
+the upper DWORD and IOMMU faults, without corrupting low DWORD.
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+ASM3142 fails to complete the abort, even on unpatched kernel.
+Not sure what happens here. But this is not a usual case, normally
+Address Device times out internally. I reduced command timeout to
+500ms to force it to abort.
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Regards,
+Michal
 
