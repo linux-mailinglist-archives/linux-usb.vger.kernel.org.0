@@ -1,189 +1,268 @@
-Return-Path: <linux-usb+bounces-35340-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35335-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IFyYCTNmwWlESwQAu9opvQ
-	(envelope-from <linux-usb+bounces-35340-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 17:11:31 +0100
+	id GPx1FtZLwWlbSAQAu9opvQ
+	(envelope-from <linux-usb+bounces-35335-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 15:19:02 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AF012F7B41
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 17:11:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E045D2F42A0
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 15:19:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C0784306754B
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 15:43:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1144631B588B
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2026 14:05:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 735703B6BEE;
-	Mon, 23 Mar 2026 15:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76BCB3B5303;
+	Mon, 23 Mar 2026 14:01:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="mgU9aFrC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F5zTZuHM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEAD3B6BF2
-	for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 15:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32FBB3BADA5
+	for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 14:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774280290; cv=none; b=Ze+35sdjDA27LKpSG15rW4a6DECDJjFhTxcfYyh5R2KHgtJuhnaU/BFhR+l6k2bhIDDmfEam6hv1DzxuSeeeWZ7MtzVZbSMCaaKaeYxG6jea9pCDfb5W7yVFd4lLv/0oJbJwdybT/MU9lmMopZtwqHkHsahoXfn3Zkq/uUoEBNE=
+	t=1774274463; cv=none; b=fqYZQNpdr7ie8t7Gudy/xz02OPHY6sXTgjDmOLVBSowiBMltyJf23fcqPTI+END0vTDlyiR7IPoeCL04V8nvClb6M2L0KhZjIxF+hvblikeT2zj95nK7T65aXpXndeilDZMvZgjXS7GTGGCCo2GBC9XG+vjH3nbCtS5iuMpshr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774280290; c=relaxed/simple;
-	bh=vToF1UbNvL4l1OkVwlOI7+XcnxHkjKZMzjHswh/EJ+k=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
-	 Content-Type:References; b=MzUK1iiTsUvks1hhL4oMgGyXFFRX5A1eZ5vkVBUS5hWLP/BCIXfOmlAFSO4wQN3gk0lEe+M8CVje6Zeg/qnrXbb+80//pzvi/m5pcEXA1hOgYvBbvMKRY9AWMTP+7v5xlTgC3HtXjpmMpADUwIbuYwA0EjG94f0PCO17k/FAa9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=mgU9aFrC; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20260323153802epoutp01a6450ead41b9bfc695a1a0418218a51a~fgoRGAHEI0287802878epoutp01H
-	for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 15:38:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20260323153802epoutp01a6450ead41b9bfc695a1a0418218a51a~fgoRGAHEI0287802878epoutp01H
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1774280282;
-	bh=MYU9K1BczlLtBMfJPDu28QIk9pzoA+hXl3yf17nC2HI=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=mgU9aFrC+5Kx+21CCBQ48vtUtevP0XGV5aHjupTGFTw7s0wbx2FYZ7piHu2gEGNx9
-	 7FiJ9iRzTsn7N6OtZVcQFwqx9+/yRy1FbPgDJReQh76dJWCUi3xQdbS9llr9OgF8ia
-	 3KFTDuksHm5/ZDwJUU6SICm8wW+RY1yai4quNiMM=
-Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
-	20260323153802epcas5p1bb1e979594c5257c037cdf6411e7a177~fgoQZrLX82373723737epcas5p1t;
-	Mon, 23 Mar 2026 15:38:02 +0000 (GMT)
-Received: from epcpadp2new (unknown [182.195.40.142]) by
-	epsnrtp03.localdomain (Postfix) with ESMTP id 4ffckf0KMvz3hhT4; Mon, 23 Mar
-	2026 15:38:02 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20260323123542epcas5p349d0e7c45d02ccaa06c84dbdf1777126~feJElRtj12139221392epcas5p34;
-	Mon, 23 Mar 2026 12:35:42 +0000 (GMT)
-Received: from INBRO002756 (unknown [107.122.3.168]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20260323123538epsmtip2099c850de3b514ee4ac3f5a0092dd02a~feJAkDKG92361023610epsmtip2P;
-	Mon, 23 Mar 2026 12:35:38 +0000 (GMT)
-From: "Alim Akhtar" <alim.akhtar@samsung.com>
-To: "'Vladimir Oltean'" <vladimir.oltean@nxp.com>, "'Martin K. Petersen'"
-	<martin.petersen@oracle.com>
-Cc: <linux-phy@lists.infradead.org>, "'Vinod Koul'" <vkoul@kernel.org>,
-	"'Neil	Armstrong'" <neil.armstrong@linaro.org>,
-	<dri-devel@lists.freedesktop.org>, <freedreno@lists.freedesktop.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
-	<linux-can@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-	<linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-media@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-	<linux-renesas-soc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<linux-rockchip@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
-	<linux-scsi@vger.kernel.org>, <linux-sunxi@lists.linux.dev>,
-	<linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <spacemit@lists.linux.dev>,
-	<UNGLinuxDriver@microchip.com>, "'Bart Van Assche'" <bvanassche@acm.org>,
-	"'Peter Griffin'" <peter.griffin@linaro.org>, "'James E.J. Bottomley'"
-	<James.Bottomley@HansenPartnership.com>, "'Krzysztof	Kozlowski'"
-	<krzk@kernel.org>, "'Chanho Park'" <chanho61.park@samsung.com>
-In-Reply-To: <20260323115848.ghdu4sbk75tvggfb@skbuf>
-Subject: RE: [PATCH v5 phy-next 09/27] scsi: ufs: exynos: stop poking into
- struct phy guts
-Date: Mon, 23 Mar 2026 18:05:36 +0530
-Message-ID: <1891546521.01774280282025.JavaMail.epsvc@epcpadp2new>
+	s=arc-20240116; t=1774274463; c=relaxed/simple;
+	bh=iOoxeCml71jS8RpDpVXtmQSHr8afDQmrN78dah/maos=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=soJTrPVZ6hYLfqRiKgzYKU8Fu0YTa0PBay7vKi1pdC96i7s6HTx/hWEfM16tEm6+yk7KxvklgUYpp0UfY2rQo5OhqY5KHY/Bn69sD4HdGZTShkD7ULHIVq7E1mZummpa/lWsaunoyJXgw66+r5y4lSFNfTOVZQP8J1UO/hAaTRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F5zTZuHM; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774274461; x=1805810461;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iOoxeCml71jS8RpDpVXtmQSHr8afDQmrN78dah/maos=;
+  b=F5zTZuHMZaFTuEPCJexFMzpVDL+Hz4Y192ilbzDU+rALyYbDyCdRyyGU
+   CYk3MGAbPEoRU/HTVjVekX6N73RYhLNpI2P5h3v4GgGAgBzowWCPyfn5I
+   Uc/7kg2cTswxdmqxnWLg2/npsgsl4f7H25JYO9ktXhM8y8DSDnOaWTWHr
+   sdsJKo0zRkne/atLuUJ3bxt7u1/hVwyA5zkpYoBuSyIvcY5vw1+KWT9Cz
+   VlM9gOrY2vN6gvYeBHacbFMm5b7K3DRoqRR5bpoZo6FdRdVm/u3Jd7GQw
+   PkAp4Bsgrb2Vc0tkpDXiP4fvrBGJ6B1kl5YUOllZIkCqEnUmpcdILs+67
+   A==;
+X-CSE-ConnectionGUID: HXj4/AXcTT2AZj6On6SGig==
+X-CSE-MsgGUID: USeG2VC1SVmy5TY7JoMtgQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="85894586"
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="85894586"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 07:01:00 -0700
+X-CSE-ConnectionGUID: 6n8nIOTpR6Odz++adbrl2Q==
+X-CSE-MsgGUID: uspfll+ORL6uWBqbfViucA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="223994066"
+Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.246.17.204]) ([10.246.17.204])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 07:00:58 -0700
+Message-ID: <9c6625f0-64d1-4f90-ba89-72eb9a153ea1@linux.intel.com>
+Date: Mon, 23 Mar 2026 16:00:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJoz1sM+EbPjkyDopxrfJVWkMJWdwI9AyWpAaSC6pgB9ZOp/gJXIgBltGJxFXA=
-Content-Language: en-us
-X-CMS-MailID: 20260323123542epcas5p349d0e7c45d02ccaa06c84dbdf1777126
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20260323115859epcas5p10177db12a2e8aee9578271ff1411137b
-References: <20260319223241.1351137-1-vladimir.oltean@nxp.com>
-	<20260319223241.1351137-10-vladimir.oltean@nxp.com>
-	<yq1a4w3l04g.fsf@ca-mkp.ca.oracle.com>
-	<CGME20260323115859epcas5p10177db12a2e8aee9578271ff1411137b@epcas5p1.samsung.com>
-	<20260323115848.ghdu4sbk75tvggfb@skbuf>
-X-Spamd-Result: default: False [-1.66 / 15.00];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] usb: xhci: fix Command Aborting
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org,
+ Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+ Pavankumar Kondeti <pkondeti@codeaurora.org>
+References: <20260316142720.1471906-1-niklas.neronin@linux.intel.com>
+ <20260316142720.1471906-2-niklas.neronin@linux.intel.com>
+ <20260321143057.1bf31b1b.michal.pecio@gmail.com>
+ <56606a55-b1cb-4669-9025-8a91d8d258bf@linux.intel.com>
+ <20260323122458.0af6b4d0.michal.pecio@gmail.com>
+Content-Language: en-US
+From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
+In-Reply-To: <20260323122458.0af6b4d0.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
-	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-35335-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35340-lists,linux-usb=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[31];
-	DKIM_TRACE(0.00)[samsung.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alim.akhtar@samsung.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[8]
-X-Rspamd-Queue-Id: 2AF012F7B41
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_FIVE(0.00)[5]
+X-Rspamd-Queue-Id: E045D2F42A0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Vladimir
 
-> -----Original Message-----
-> From: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Sent: Monday, March 23, 2026 5:29 PM
-> To: Martin K. Petersen <martin.petersen@oracle.com>
-> Cc: linux-phy@lists.infradead.org; Vinod Koul <vkoul@kernel.org>; Neil
-> Armstrong <neil.armstrong@linaro.org>; dri-devel@lists.freedesktop.org;
-> freedreno@lists.freedesktop.org; linux-arm-kernel@lists.infradead.org;
-> linux-arm-msm@vger.kernel.org; linux-can@vger.kernel.org; linux-
-> gpio@vger.kernel.org; linux-ide@vger.kernel.org; linux-
-> kernel@vger.kernel.org; linux-media@vger.kernel.org; linux-
-> pci@vger.kernel.org; linux-renesas-soc@vger.kernel.org; linux-
-> riscv@lists.infradead.org; linux-rockchip@lists.infradead.org;
-linux-samsung-
-> soc@vger.kernel.org; linux-scsi@vger.kernel.org;
-linux-sunxi@lists.linux.dev;
-> linux-tegra@vger.kernel.org; linux-usb@vger.kernel.org;
-> netdev@vger.kernel.org; spacemit@lists.linux.dev;
-> UNGLinuxDriver@microchip.com; Bart Van Assche <bvanassche@acm.org>;
-> Alim Akhtar <alim.akhtar@samsung.com>; Peter Griffin
-> <peter.griffin@linaro.org>; James E.J. Bottomley
-> <James.Bottomley@HansenPartnership.com>; Krzysztof Kozlowski
-> <krzk@kernel.org>; Chanho Park <chanho61.park@samsung.com>
-> Subject: Re: [PATCH v5 phy-next 09/27] scsi: ufs: exynos: stop poking into
-> struct phy guts
+
+On 23/03/2026 13.24, Michal Pecio wrote:
+> On Mon, 23 Mar 2026 12:25:00 +0200, Neronin, Niklas wrote:
+>> On 21/03/2026 15.30, Michal Pecio wrote:
+>>> On Mon, 16 Mar 2026 15:27:19 +0100, Niklas Neronin wrote:  
+>>>> Aborting the command ring requires setting the Command Abort (CA)
+>>>> bit in the 64-bit Command Ring Control Register (CRCR).
+>>>> Historically, several attempts have been made to implement this
+>>>> correctly, but each introduced its own problems. This patch fixes
+>>>> the final remaining issue: accidental modification of the Command
+>>>> Ring Pointer (i'll abbreviate it to CRP).
+>>>>
+>>>> Originally [1], the full 64-bit CRCR value was read and written
+>>>> back after setting CA. This is a bit unnecessary, only RsvdP bits
+>>>> (5:4) should be read and written back (for future-proofing). All
+>>>> other writable fields read as zero.
+>>>>
+>>>> Later patches attempted to solve an issues, caused by 64-bit writes
+>>>> being split into two 32-bit writes. Writing the lower 31:0 bits
+>>>> first immediately stopped the ring (CRR=0), and the following
+>>>> upper-half write then overwrote part of CRP with zeroes, thus
+>>>> corrupting the CRP. Patch [2] avoided this by writing only the
+>>>> lower 31:0 bits with CA set, but that broke controllers that latch
+>>>> 64-bit registers only when the upper bits are written, as reported
+>>>> in [3].  
+>>>
+>>> I too have HW which waits for the high DWORD after low DWORD write.
+>>>
+>>> And I have HW which doesn't. If I write 0xdeadbeef to the high DWORD
+>>> after waiting for CRR=0, some HW will ignore the write and some will
+>>> IOMMU fault at 0xdeadbeefsomething.
+>>>
+>>> The abort itself takes a few microseconds in my tests.  
+>>
+>> Yes, abort completion itself is usually very fast. The 5 second
+>> timeout comes directly from the xHCI 1.9 specification, which
+>> explicitly allows for that duration.
+>>
+>> 4.6.1.2 Aborting a Command:
+>> "If software doesn't see CRR negated in a timely manner (e.g. longer
+>>  than 5 seconds), then it should assume that there are larger problems
+>>  with the xHC and assert HCRST"
+>>
+>> The timeout could probably be reduced to 1 second, but I did not do
+>> that since I do not have evidence that a shorter timeout would be
+>> safe across all hardware.
 > 
-> On Thu, Mar 19, 2026 at 10:15:17PM -0400, Martin K. Petersen wrote:
-> > Vladimir,
-> >
-> > > The Exynos host controller driver is clearly a PHY consumer (gets
-> > > the
-> > > ufs->phy using devm_phy_get()), but pokes into the guts of struct
-> > > ufs->phy
-> > > to get the generic_phy->power_count.
-> >
-> > Ah, newer version. Would still like an ack from Samsung.
-> >
-> > And I hit the wrong key, I did not actually apply this...
+> As noted in my later response to patch 2/2, in rare corner cases
+> ASMedia command abort can take a few seconds and still succeed.
 > 
-> I will have to resend v6 because of an armv7 build error I've caused for
-ufs-
-> qcom.c (which doesn't #include <linux/interrupt.h>, and relies on a
-transitive
-> inclusion from <linux/phy/phy.h>). It would be nice to get the ack from
-> Samsung, but I'll send the next version in the upcoming hours regardless.
-Will review and possibly test on one of the board later tonight
+>>> Is this race causing problems in the real world?  
+>>
+>> I believe so, given that a fix was proposed specifically to address it:
+>> https://lore.kernel.org/all/20211008092547.3996295-5-mathias.nyman@linux.intel.com/#t
+> 
+> It does look like a problem which people would be unlikely to discover
+> without being affected by it, but the patch says nothing.
+>
+> Hi Pavankumar,
+> 
+> Could you elaborate on the above issue, what was the affected host
+> controller and what sort of workloads made this race turn bad?
+> 
+> In theory the two DWORD writes could be separated by some NMI/SMI
+> hitting the CPU or by heavy traffic on the I/O bus.
+> 
+> 
+> And if probelms are known to happen here, then what about other users
+> of xhci_write_64(), for example updating ERDP aka erst_dequeue?
 
+They are not related.
 
+The ERDP bit field is 63:4 and can therefore hold any TRB address.
+It is also not gated or "locked" behind a control bit in the same register.
+
+Other 63:6 bit fields address in xHCI are all base addresses, which are
+always programmed with correctly aligned values. The only 63:6‑bit
+address field that is not a base address is the Command Ring Pointer.
+
+> 
+>> The current implementation does attempt to change the CRP.
+>> The sequence is as follows:
+>>  1. Fetch the next TRB.
+>>  2. If the TRB is a Link TRB, advance to the next TRB.
+>>  3. Get the DMA address of that TRB.
+>>  4. Write the lower DWORD with the new CRP address and the CA bit set.
+>>  5. Write the upper DWORD with the new CRP address.
+>>
+>> This results in two possible final states, depending on how quickly
+>> CRR is cleared:
+>>  1. The CRP is not updated at all.
+>>  2. Only the upper DWORD of the CRP is updated.
+> 
+> I stand corrected, I wasn't aware of some details. That said,
+> 
+> 1. is a valid outcome and not a bug, jumping to the next TRB is not
+>    necessary, it was a workaround for previous issues.
+> 2. is a bug, but it shouldn't matter because the ring has one segment
+> 
+> But I did have problems on NEC and AMD, which means that something else
+> is also possible. I think I will need to debug it deeper, but I suspect
+> that writing high DWORD alone is enough to trigger bit 4:5 truncation
+> or overwrite low DWORD with some garbage.
+> 
+>> So you believe that when waiting for CRR=0 any software writes to
+>> CRCR, which are not immediately acted on, i.e. Command Stop/Abort,
+>> are instead buffered internally?
+> 
+> We all believe that some HW does nothing and waits for high DWORD.
+> 
+> Other HW is seen to begin aborting more or less immediately. However,
+> until the abort is complete, any subsequent write to high DWORD may
+> be ignored because we can't change CRP while CRR=1.
+> 
+> Problems begin if CRR=0 before we write high DWORD. CRP bits become
+> writeable and any write may trigger truncation of bits 4:5.
+
+Should this be bits 31:6?
+
+> 
+> Note that if the HW interprets this as a single write to high DWORD
+> separate from the previous abort operation (which it has already
+> completed) then this is out of spec, because we should write low-high.
+
+How I see it; hardware which requires an upper DWORD write will "buffer"
+the lower DWORD and wait for the corresponding upper DWORD write.
+
+However, because the specification states that the CRP and RCS are ignored
+while CRR=1, the lower DWORD write ignores lower CRP bits and RCS bit.
+
+As a result, if the upper DWORD is written after CRR=0, only upper CRP bits
+and RsvdP bits are updated.
+Conversely, if the upper DWORD is written before CRR=0, only RsvdP bits are
+updated.
+
+> 
+> It seems that my Etron HC ignores this high DWORD write after CRR=0.
+> I can write 0xdeadbeef there and it continues working normally.
+> Or maybe it's broken and should get the disable 64 bits quirk.
+> 
+> But NEC and AMD start getting "mismatched completion" errors, so it
+> seems that their CRP is corrupted somehow. And I could probably replace
+> waiting for CRR=0 with usleep(20) and get the same corruption.
+> 
+> I will later look closer what happens here.
+> 
+> Regards,
+> Michal
 
 
