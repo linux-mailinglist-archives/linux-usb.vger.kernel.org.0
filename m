@@ -1,173 +1,161 @@
-Return-Path: <linux-usb+bounces-35371-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35372-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qBpJHOxbwmlKcAQAu9opvQ
-	(envelope-from <linux-usb+bounces-35371-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 10:39:56 +0100
+	id WJBIEBJdwmlKcAQAu9opvQ
+	(envelope-from <linux-usb+bounces-35372-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 10:44:50 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5D60305BFE
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 10:39:55 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C350B305D0E
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 10:44:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 64E75305115A
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 09:28:36 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D78B83016BB1
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 09:44:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A54C3290D8;
-	Tue, 24 Mar 2026 09:28:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A24B3DD536;
+	Tue, 24 Mar 2026 09:44:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="aCGJzXah"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fW0xGO3F"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9356E3DB62B
-	for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 09:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5053DCD88;
+	Tue, 24 Mar 2026 09:44:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774344495; cv=none; b=octQpEqaZulSwnC3L6J+JOOR9fCstVBdpA8AA+W5nnZi1RiT/pWUSronxR1qQxgzBLz/mAYuSNT1/agledO/wU6iL2ER4znvmVg5dsc6KTZ/T2wHCWF7Z2n0F5SsgM1J+fEm4EOCIWHfVWcCEE3/BlnchdnIZI5lDgbt1EyWnUE=
+	t=1774345485; cv=none; b=t2Ka9elMMFYXdKzPheNaKT3SiIAtYu4Qe4iRmAXOI/V+D1PdftmETxZHxYXRzmVwjH0GsGkRJzIS6jNvlfZaOA4c0/Qgb6YI/zxP8BFj91Og+YLQLTi+l9MuFG0DLn2J2Fi2hRsCW4oszPyBBOORlBiqq8sl8DwUpYiRucYX9Ys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774344495; c=relaxed/simple;
-	bh=f2X4PmGvz1w6x2E6U7pcl7fz6GrkLBwvW1uql5aW0U4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SOsuGq6LEu0KNHe5jO+ZPy14kBd4uFUZnchpkwN0208or7k1qfP9mWqtMR2ruF7cyYeTct534GxZfU31PWRqDW/+Rx1KeWQ6978zV6Xc49SdGXtjF8yhSLKQWp51xZb3EsjQKl3FjaCYkEx65mPZOpTtaveb/3pGnLgsciG4pgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=aCGJzXah; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-48702d51cd0so36314365e9.2
-        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 02:28:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774344484; x=1774949284; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PFxIqtbqvbTpQVutxQGCTHKwY8ACAbaiPzWH8XF9rbY=;
-        b=aCGJzXahDQq9HAp8bLbnZaLo8DruRoISD7EBJ0tSaTD67qjbYZmswIOUylmK5kn4AK
-         IZc2hQYLDYJ5MvvhbvunuNIU0p/sgLEK+WTwZo5ka8gmm0VbWi68X9TnTFmFAC4OUL63
-         lYQK4CGNVJgfdASUzakKUZ4TvTSlVwQ5Dx047IcWK+wJplQfKhONoSUwevYyWbhwatiD
-         2QKO5821k5yKG8iaZnR6Xqp42twV5Qyyci1NhlrpQYCIKDmN/RB/LeFAr9wUJ1vDg1uc
-         EeUdBJLaYdB9ePq8DknVKsgR5yUjTTZzH2I4AQHSL8wC3jdkga2To8tq9QbhbyHRhJKW
-         NKSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774344484; x=1774949284;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PFxIqtbqvbTpQVutxQGCTHKwY8ACAbaiPzWH8XF9rbY=;
-        b=n7u48CplZbpGM8x6ng+9Wkr8qMLzpUI/2T/S5Ly4zS435p5a0bZ1mMVdpgaGd1qO0C
-         WMo2/6w4/W7/F1BwXRoJ7i5QLM3Jcd0KjLzE9Y7HvwxGqttpo8172vKoD9aI7VMunLtv
-         DzxMqt6uOEO93U1wAovmra2gkogvs58Nuy+4o57CzgTsxc4g1aOKLLAj+XSRg9wTw0+y
-         UapnwyEPr/kvvhqz/8pmKAZXAo6YEDFnaeSQeJwteYH+eu44+3YcBnYHrN+kQO74mvMf
-         gg4tJAVAK9CAiKWjGDLNVRFcWKjVkzWrJWM8mjRYnXBv1l+104qMw3/Nm5DWG+3TJ8JE
-         IkyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWiVS0WL3AQVaNHsEiOJH8zsScbzUe/C2743cJP1XNG+sBIrKMJ1BlMqiHv3GFpr62UJh5tYPkPmQM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxoG/PN6mSxN11z0rIByvk8dB/N8niWdjmwr21XWNeFN+RRPES5
-	PHCTnzLvUuz0O6v/a96zWeE4GrtG6RmOiaoVOc5hy4QSLqJDE9PE/irpey3Oxm7dalc=
-X-Gm-Gg: ATEYQzwcJBLT04StucNOZfw26hYH2uil3ug1b1MktSLrYJXdgYXrgobBF3j/0jAmdhl
-	3oUGcltvXoAfLWpZWVKzp0n6jTcSmDjQ967ybHLNm8ybXZ201xqgiQGIXUqF6BXHViLfAUBeYps
-	23OEQ+67cKFV5nziuWFJxxo2+MvLSh6HfREx6BE2mu/vyk+Ikl/4YyS+9x8rVZn6XftP8BdY+//
-	i0mtcM3HvoYkX+3+AeE7P8XsQWHaZ8dpuIZJQ93fBBpfCjsOXxmcaqPRRfQfzk1y7tXG+3z5ESb
-	vjC6nfxnVQa6M1v+RrN0pdHGWZIfF9qzgulTW5GFKvA+KmT7Xy8ZDRSjUKbJNYZEKCoVU/NGaay
-	ZnRLTRmCXd5guhLdrTHurwmrDPH64ZnilK3AhlXhf23CwkRRuYCFgceWEZnv15LHvSjtnDrOQOe
-	f8Vp+jdXtw8nB320zcIYGz10cVSD81CpL3Xhy2RGA+g47yTJM5U4ifdmSnXwNrPe/5kAXKr0fVW
-	tQ=
-X-Received: by 2002:a05:600c:a418:b0:485:3423:727d with SMTP id 5b1f17b1804b1-486ff03f502mr171008755e9.26.1774344484101;
-        Tue, 24 Mar 2026 02:28:04 -0700 (PDT)
-Received: from ?IPV6:2001:a61:1332:2a01:88e9:6e6:b5b2:fd40? ([2001:a61:1332:2a01:88e9:6e6:b5b2:fd40])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b6471a297sm35740014f8f.37.2026.03.24.02.28.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Mar 2026 02:28:03 -0700 (PDT)
-Message-ID: <44ce5041-7286-4f59-837a-995c4e1307ab@suse.com>
-Date: Tue, 24 Mar 2026 10:28:01 +0100
+	s=arc-20240116; t=1774345485; c=relaxed/simple;
+	bh=Gnp/JzsQshL/y7bfE5XIuAqulYP4yCWXKNNeS5cCKTk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FUWHrdKuH6xs/n5wultGtb9//qXnutNyPXB+sr0fpKb5134k3LNhP/ft4tv4rLcfTmu6z+JVt1iHW87kN5+shsQ9MBwv39IPS/3apvBqdwxJFyCcAfQj/p1VUUmLF/sVJLAI50fRRfacR7pXiGGuh7MARpForMy0kheaT4Lm3SQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fW0xGO3F; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774345484; x=1805881484;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Gnp/JzsQshL/y7bfE5XIuAqulYP4yCWXKNNeS5cCKTk=;
+  b=fW0xGO3FEH3eIK2hRD2Ury0xk36yCeMNzyDEi1NqdeYbHI0cXA72KlV3
+   W+MljMQIEsFEKOCdiUDbbAYQ+N3ZpeegxJ+CJDyGG111VAbPueyPs8dZw
+   fQ6DuHGsovlF7qK4HVjjEwcb2IxXlR0Z0+DTnq4MSB8uFtEoC7smcRcFo
+   uu6d4PpHj7EmoDDlAaSZSPIqLaB7JFcbRNJAlWh32trDPhrDqOaBEPsRF
+   Il15FaJUBpfDxR4V+EAT9LQPqEJfGFNEziTsO+EPtfKXvhDDqMpB4Kx52
+   jsqJtYoVmo3UnhjPeb80IwmdgpHaLEAgg5ORb/hmVY+jDJGaGhsYRcQ8N
+   w==;
+X-CSE-ConnectionGUID: FCW9CCt/Q1OwhlteJXSoYA==
+X-CSE-MsgGUID: Iyh+CWoMSJ+ABEZlmrRrtg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="75549597"
+X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
+   d="scan'208";a="75549597"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 02:44:43 -0700
+X-CSE-ConnectionGUID: ozyZBBx2S8y8eU6rir3YyQ==
+X-CSE-MsgGUID: JrdIaezSR1OtYoaQ6L3W9g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
+   d="scan'208";a="254786377"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa002.jf.intel.com with ESMTP; 24 Mar 2026 02:44:42 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1008)
+	id 9489295; Tue, 24 Mar 2026 10:44:40 +0100 (CET)
+Date: Tue, 24 Mar 2026 11:43:56 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Andrei Kuchynski <akuchynski@chromium.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Madhu M <madhu.m@intel.corp-partner.google.com>
+Subject: Re: [PATCH] usb: typec: Remove alt->adev.dev.class assignment
+Message-ID: <acJc3AWs2oNIveAD@kuha>
+References: <20260324083818.686269-1-akuchynski@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: correctly handling EPROTO
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Oliver Neukum <oneukum@suse.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
- Michal Pecio <michal.pecio@gmail.com>, =?UTF-8?Q?Bj=C3=B8rn_Mork?=
- <bjorn@mork.no>, USB list <linux-usb@vger.kernel.org>
-References: <4ada5d68-56f1-41b7-82d9-463901c927db@rowland.harvard.edu>
- <8a14fe29-0d92-4ce5-a7e2-2c084c710727@suse.com>
- <b0217cdc-f263-418c-b8b5-584520d0b1db@rowland.harvard.edu>
- <20260318223851.1f6d07d7.michal.pecio@gmail.com>
- <20260318235920.ioek26hdr25rkksp@synopsys.com>
- <1eaf4cf3-4278-4d04-87aa-8b6069d544e1@rowland.harvard.edu>
- <20260319231620.3ukqxsrwqikp5zbd@synopsys.com>
- <2929d47c-fc02-49d2-873e-758f24c43071@rowland.harvard.edu>
- <20260321021439.7pmcdrpb5oxbivct@synopsys.com>
- <5b378006-666f-4a72-902b-bb5f466f7895@suse.com>
- <20260324010523.3ufngdffak7ldchg@synopsys.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20260324010523.3ufngdffak7ldchg@synopsys.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260324083818.686269-1-akuchynski@chromium.org>
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[rowland.harvard.edu,gmail.com,mork.no,vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_ALL(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35371-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35372-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C5D60305BFE
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,chromium.org:email]
+X-Rspamd-Queue-Id: C350B305D0E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Tue, Mar 24, 2026 at 08:38:18AM +0000, Andrei Kuchynski kirjoitti:
+> The typec plug alternate mode is already registered as part of the bus.
+> When both class and bus are set for a device, device_add() attempts to
+> create the "subsystem" symlink in the device's sysfs directory twice, once
+> for the bus and once for the class.
+> This results in a duplicate filename error during registration,
+> causing the alternate mode registration to fail with warnings:
+> 
+> cannot create duplicate filename '/devices/pci0000:00/0000:00:1f.0/
+>   PNP0C09:00/GOOG0004:00/cros-ec-dev.1.auto/cros_ec_ucsi.3.auto/typec/
+>   port1/port1-cable/port1-plug0/port1-plug0.0/subsystem'
+> typec port0-plug0: failed to register alternate mode (-17)
+> cros_ec_ucsi.3.auto: failed to registers svid 0x8087 mode 1
+> 
+> Tested-by: Madhu M <madhu.m@intel.corp-partner.google.com>
+> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
 
+Thanks for the patch. This needs to be marked as a fix:
 
-On 24.03.26 02:06, Thinh Nguyen wrote:
+Fixes: 67ab45426215 ("usb: typec: Set the bus also for the port and plug altmodes")
 
+thanks,
 
-> I attached a couple of usb traffic sniffing traces. Review comments
-> below.
+> ---
+>  drivers/usb/typec/class.c | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 8314309094719..0977581ad1b6e 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -686,10 +686,6 @@ typec_register_altmode(struct device *parent,
+>  
+>  	alt->adev.dev.bus = &typec_bus;
+>  
+> -	/* Plug alt modes need a class to generate udev events. */
+> -	if (is_typec_plug(parent))
+> -		alt->adev.dev.class = &typec_class;
+> -
+>  	ret = device_register(&alt->adev.dev);
+>  	if (ret) {
+>  		dev_err(parent, "failed to register alternate mode (%d)\n",
+> -- 
+> 2.53.0.983.g0bb29b3bc5-goog
 
-Thank you a whole lot. These are extremely educational. I am not sure
-to which extent this discussion is on topic. Though it makes me wonder
-how we'd deal with an error in the last phase of the command. We'd
-be unsure whether it has been completed.
-
-> Yes it must. I was responding to Alan's comment that noting that it can
-> be done prior or after unlinking the URBs. But as Michal noted, that may
-> not be possible because we ring the doorbell right after giving back an
-> URB.
-
-Very well. That raises a fundamental issue. Are we planning around the limits
-of the existing API or according to capabilities of the hardware. I see
-two specific issues
-
-1) What do we do to URBs after the URB suffering a failure? We cannot just execute
-them.
-2) Do we need a second callback for an "undead" URB, which decides on how errors
-are to be handled?
-
-	Regards
-		Oliver
-
+-- 
+heikki
 
