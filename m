@@ -1,209 +1,135 @@
-Return-Path: <linux-usb+bounces-35373-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35374-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wGUcCeJhwmmecAQAu9opvQ
-	(envelope-from <linux-usb+bounces-35373-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 11:05:22 +0100
+	id kL8yCq1gwmmecAQAu9opvQ
+	(envelope-from <linux-usb+bounces-35374-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 11:00:13 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21DE33062B3
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 11:05:20 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0F513060E0
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 11:00:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 789C9305EF68
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 09:55:22 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7DF56303AC10
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 09:57:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 742BC3DE449;
-	Tue, 24 Mar 2026 09:55:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DB1E3DDDCD;
+	Tue, 24 Mar 2026 09:57:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cpiIiaQw"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Bp9rD6z3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B833DE421;
-	Tue, 24 Mar 2026 09:55:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4490366046
+	for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 09:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774346118; cv=none; b=t5ekw/RTYQm1qN8UjJY5tfXRizy+sMrh1pebkynJhxijkHVI2XW31nbj9cg1BrtO/3sMgmFkbO17q8bty9dSmPJyRnN1vdnomsSmpF0Um5GAZOikoDl+Vg+37C/lJVSBqr+ZupulJJ1t30HLBcf76KzxSlWeSd3NyfoqhrCtiMU=
+	t=1774346240; cv=none; b=CfOpmBj7tL3aklm7aWqQhehm7LCpQxG/1x++dr1huuGw5yQKVC+2SnsF4AzdkezOrFCV0ywr8kuy+P9XKvLMz/QHxfjdWfWzlpFeVEA8IysFkyu55h71GSjy7Lrp0MPkldarNd8PcyiQjbrXncJG+hmmd0TKZERj0USq1RQ0cz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774346118; c=relaxed/simple;
-	bh=YwgSy4xtNl1ZP02/vExJo+Y36gPFhXcBI7MstOfXII0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CPb6LweqPerGrcvv3wCTk9H3+mbl1qUiffoI7ODDpReIcs6S3AkWjahkyyUyUaeihyHhRkFlkcMm8Z3xz5OBQTLBQ3k6jPhIw4Bl/6o+oQaVspcvc323qKn5GqF9XCof1COJQHWhews07B2J0U+ubvpMVUCbUP6lo/82cqQiYlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cpiIiaQw; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774346115; x=1805882115;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YwgSy4xtNl1ZP02/vExJo+Y36gPFhXcBI7MstOfXII0=;
-  b=cpiIiaQwvSkQCMJVLutSdJO8DUyDzXyVAsUfDbN1eYmD0w3K0ca7BdZk
-   FnMG0CfVzn5FoJywCG4vbTpLErCwJZi7G+3gMKC8ARJ/0rYZXgimjjBFt
-   5K2WVHt7ZepiPc/JYvwO41UzAEW0BI2Ra9jWjDPY40jpBOgF7rZa2YwP8
-   659Ltn296itCaPg49VUr/z9QnJSQQyAYcbc3vxZu369BaSN5IoInW2Ijd
-   yOiJnwI2JWh1X9g9SxuyS5RBPz4t8sqNesckoXwAZUQQ86jW5mdDAoC+/
-   0KDA5rpUO0lKjpdLTt2VmShBbQY8oNrpPfaGYW4aeDCQwxaU3wjreG2Ww
-   w==;
-X-CSE-ConnectionGUID: aue7I7uEQ3Ca0owgmDVAJA==
-X-CSE-MsgGUID: 4Ch0Z0R1TWKXua4V9lo/CQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="86054509"
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="86054509"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 02:55:15 -0700
-X-CSE-ConnectionGUID: fLwbJYk0SNim5gDuLGgpiA==
-X-CSE-MsgGUID: 4nXPdn31SIKMy085ZmRNbQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="228366864"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa003.jf.intel.com with ESMTP; 24 Mar 2026 02:55:13 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 2F31395; Tue, 24 Mar 2026 10:55:12 +0100 (CET)
-Date: Tue, 24 Mar 2026 11:54:27 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Madhu M <madhu.m@intel.corp-partner.google.com>
-Subject: Re: [PATCH] usb: typec: thunderbolt: Set enter_vdo during
- initialization
-Message-ID: <acJfU2qlyj0QLUQU@kuha>
-References: <20260324090223.919832-1-akuchynski@chromium.org>
+	s=arc-20240116; t=1774346240; c=relaxed/simple;
+	bh=cSSRqdl3bRjI2qTVJyh+oxlQnsH6b6ppDKYP2gx347M=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=UIrzoQFR+4CCIc+0YLmGrqFvyurOTmiVrDY/9dQjtwmk3YbYIS4Hc+iCX0j3S0P+/1S8I8qaAFb27U0h2V8i2NknO5U6Nv9i2YKZmyVivPBucS4wx/zYOtfqKluzMNWmQw+fb2NOF/V4RDDKPukTGVBZCKlEegcL2QO0equuxJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Bp9rD6z3; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-439cd6b09f8so3751322f8f.3
+        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 02:57:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1774346238; x=1774951038; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pWjO/xgvn1SjtSt3LipRq2Pbv7MghLZ9edNo1IpvDhc=;
+        b=Bp9rD6z3rqlIGN18U7jtBZ+TTZmhgFZ/W6ESP+tQuR+IG45FtAShCtWUfTIn3TUzYR
+         P3NPLsmlsVitwNaUznQ8xByLXA4TOAZ06rct5hXfM1vRk5h52Qm05ef3opRWBp/mIlMG
+         e3hvEddGivNXgnaO5TTyjwo05wCER69keCIzLOhUVlNj2hWKNI45Yj4rIHV4roydL065
+         XqPS2J+SgoGpgzpNNePTyVgbx/YA1xPfsGmnWFnFoB+LMiLOjRFBBzydtW4q4PYVnvj/
+         PmgZahINL5ROIW1ZJMjj4I8xfTrlPONxpFFpjjFzeKaJF59TkwdvzaNgRBc6uvxlfiM9
+         S4Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774346238; x=1774951038;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pWjO/xgvn1SjtSt3LipRq2Pbv7MghLZ9edNo1IpvDhc=;
+        b=Pil8LY04OUfEBM3K5/DSDYdzoyiPdjCVtXcW0imKLGXjXSKgrcPA8jK+azXrhcigqc
+         71sXOTTsRd4Hu49/4LD4eH9Ua+d1YrI/Y/MhLrMJk4oUdkMLKIJ1WxZTT1BYku/tb5tH
+         64TVUvMBzxKoqV9zWUP0PYiLYwlIYF8FuvijOBHIUGiB2fzr+m/O9qak70nYHCyZIR0m
+         o4U0SIRdHgpgI326bWzVn200Iz9ElmjUMIPrIQhpeQh7QQGr8QFlFoU5qVe97SjkHF68
+         ufTYd4VnnbDIRH1f92nY+oh5fu1WHbl4/FI2+qJGN8I04gJ7vg3ga0JnAJTet4zXkUUe
+         BkDw==
+X-Gm-Message-State: AOJu0YweFxSopwEqRuXW6wqOGnF0Q0QGCauIDvwcSpfa7FiFe3SC5oSK
+	CmPyCwvKPcFoQ6nA4YQRmMcfL7nUmPO08C/SABh/4uYv56OQsE671yoMa5SAnLynORg=
+X-Gm-Gg: ATEYQzwjK6LDzMrdcEw/I7f8pqpkkrwQjD2A5uPe3IRIfK1xdONzMk82GYw9CZFOhC1
+	yODN81PvKfbdgAD+1JY4PqO+rbKnszWiByCSqb/tG9EFz6Wb2EsohLNUu0K7vAXpxLN23C6IR3q
+	ax6849mSCZmgO2LwbKRizVGMA3QLnsrIY2OWdWkB6/70Ue5PxB4ONci5Bex6ATipXxAWX/iV/d/
+	OCetWDPK0L1T+6ETcRraMQ4hYpLdzcktukU+XXxJ71zwNOR6WlBntF02sfiJCYKgMgCW+caabCh
+	8eMF9eHJAv2tXLU57JafReQBvNNIDexNDZtq6N8XvVsNLFg9Ay+92X9u41yebf7XNiUTGUQV8AW
+	OW0p4gM+qFtQzZWGtWz7oTzqKZv64IlTMq64Tl/lvv4W6EX4IibY7NWV/47VGkG/mO0QbCYlpex
+	4N1QrWMaqZlB2PQuzcEyaXtj2emycWqJhFzoyeLwu5UOwGB0No32fwvEPGSTinG7Uh
+X-Received: by 2002:a5d:5f86:0:b0:43b:4921:8743 with SMTP id ffacd0b85a97d-43b6428168dmr23971363f8f.42.1774346238045;
+        Tue, 24 Mar 2026 02:57:18 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1332:2a01:88e9:6e6:b5b2:fd40? ([2001:a61:1332:2a01:88e9:6e6:b5b2:fd40])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b644ae619sm37731853f8f.5.2026.03.24.02.57.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Mar 2026 02:57:17 -0700 (PDT)
+Message-ID: <8d665258-6dd6-404a-85e0-a2f3420cd992@suse.com>
+Date: Tue, 24 Mar 2026 10:57:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260324090223.919832-1-akuchynski@chromium.org>
-X-Spamd-Result: default: False [-1.66 / 15.00];
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: USB list <linux-usb@vger.kernel.org>,
+ "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>
+From: Oliver Neukum <oneukum@suse.com>
+Subject: Question regarding error handling in usbhid
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35373-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35374-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
+	RCPT_COUNT_THREE(0.00)[3];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[chromium.org:email,intel.com:dkim,intel.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 21DE33062B3
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,suse.com:dkim,suse.com:mid]
+X-Rspamd-Queue-Id: E0F513060E0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Mar 24, 2026 at 09:02:23AM +0000, Andrei Kuchynski wrote:
-> In the current implementation, if a cable's alternate mode enter operation
-> is not supported, the tbt->plug[TYPEC_PLUG_SOP_P] pointer is cleared by the
-> time tbt_enter_mode() is called. This prevents the driver from identifying
-> the cable's VDO.
-> 
-> As a result, the Thunderbolt connection falls back to the default
-> TBT_CABLE_USB3_PASSIVE speed, even if the cable supports higher speeds.
-> To ensure the correct VDO value is used during mode entry, calculate and
-> store the enter_vdo earlier during the initialization phase in tbt_ready().
-> 
-> Tested-by: Madhu M <madhu.m@intel.corp-partner.google.com>
-> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+Hi,
 
-Also a fix? In any case:
+hid_io_error(), in case it decides that a reset is necessary,
+schedules reset_work(). reset_work() in turn calls usb_queue_reset_device().
+Why? Is there a reason usb_queue_reset_device() is not used directly
+in hid_io_error()?
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+	Regards
+		Oliver
 
-> ---
->  drivers/usb/typec/altmodes/thunderbolt.c | 44 ++++++++++++------------
->  1 file changed, 22 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/altmodes/thunderbolt.c b/drivers/usb/typec/altmodes/thunderbolt.c
-> index c4c5da6154da9..32250b94262a9 100644
-> --- a/drivers/usb/typec/altmodes/thunderbolt.c
-> +++ b/drivers/usb/typec/altmodes/thunderbolt.c
-> @@ -39,28 +39,7 @@ static bool tbt_ready(struct typec_altmode *alt);
->  
->  static int tbt_enter_mode(struct tbt_altmode *tbt)
->  {
-> -	struct typec_altmode *plug = tbt->plug[TYPEC_PLUG_SOP_P];
-> -	u32 vdo;
-> -
-> -	vdo = tbt->alt->vdo & (TBT_VENDOR_SPECIFIC_B0 | TBT_VENDOR_SPECIFIC_B1);
-> -	vdo |= tbt->alt->vdo & TBT_INTEL_SPECIFIC_B0;
-> -	vdo |= TBT_MODE;
-> -
-> -	if (plug) {
-> -		if (typec_cable_is_active(tbt->cable))
-> -			vdo |= TBT_ENTER_MODE_ACTIVE_CABLE;
-> -
-> -		vdo |= TBT_ENTER_MODE_CABLE_SPEED(TBT_CABLE_SPEED(plug->vdo));
-> -		vdo |= plug->vdo & TBT_CABLE_ROUNDED;
-> -		vdo |= plug->vdo & TBT_CABLE_OPTICAL;
-> -		vdo |= plug->vdo & TBT_CABLE_RETIMER;
-> -		vdo |= plug->vdo & TBT_CABLE_LINK_TRAINING;
-> -	} else {
-> -		vdo |= TBT_ENTER_MODE_CABLE_SPEED(TBT_CABLE_USB3_PASSIVE);
-> -	}
-> -
-> -	tbt->enter_vdo = vdo;
-> -	return typec_altmode_enter(tbt->alt, &vdo);
-> +	return typec_altmode_enter(tbt->alt, &tbt->enter_vdo);
->  }
->  
->  static void tbt_altmode_work(struct work_struct *work)
-> @@ -337,6 +316,7 @@ static bool tbt_ready(struct typec_altmode *alt)
->  {
->  	struct tbt_altmode *tbt = typec_altmode_get_drvdata(alt);
->  	struct typec_altmode *plug;
-> +	u32 vdo;
->  
->  	if (tbt->cable)
->  		return true;
-> @@ -364,6 +344,26 @@ static bool tbt_ready(struct typec_altmode *alt)
->  		tbt->plug[i] = plug;
->  	}
->  
-> +	vdo = tbt->alt->vdo & (TBT_VENDOR_SPECIFIC_B0 | TBT_VENDOR_SPECIFIC_B1);
-> +	vdo |= tbt->alt->vdo & TBT_INTEL_SPECIFIC_B0;
-> +	vdo |= TBT_MODE;
-> +	plug = tbt->plug[TYPEC_PLUG_SOP_P];
-> +
-> +	if (plug) {
-> +		if (typec_cable_is_active(tbt->cable))
-> +			vdo |= TBT_ENTER_MODE_ACTIVE_CABLE;
-> +
-> +		vdo |= TBT_ENTER_MODE_CABLE_SPEED(TBT_CABLE_SPEED(plug->vdo));
-> +		vdo |= plug->vdo & TBT_CABLE_ROUNDED;
-> +		vdo |= plug->vdo & TBT_CABLE_OPTICAL;
-> +		vdo |= plug->vdo & TBT_CABLE_RETIMER;
-> +		vdo |= plug->vdo & TBT_CABLE_LINK_TRAINING;
-> +	} else {
-> +		vdo |= TBT_ENTER_MODE_CABLE_SPEED(TBT_CABLE_USB3_PASSIVE);
-> +	}
-> +
-> +	tbt->enter_vdo = vdo;
-> +
->  	return true;
->  }
->  
-
--- 
-heikki
 
