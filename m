@@ -1,202 +1,138 @@
-Return-Path: <linux-usb+bounces-35356-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35357-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +GbMBhH6wWlSYgQAu9opvQ
-	(envelope-from <linux-usb+bounces-35356-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 03:42:25 +0100
+	id KCMcJUgAwmkjYwQAu9opvQ
+	(envelope-from <linux-usb+bounces-35357-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 04:08:56 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F89A301457
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 03:42:24 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EBFE3018AB
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 04:08:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8B4C5300FECE
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 02:38:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 99AAD306C986
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 03:06:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4135386C38;
-	Tue, 24 Mar 2026 02:38:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D6A738F655;
+	Tue, 24 Mar 2026 03:06:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qbA8KnZV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fpjcsc0k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F4C1F30AD
-	for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 02:38:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921F838AC8D;
+	Tue, 24 Mar 2026 03:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774319917; cv=none; b=pWqvtYMNxIhlDyzKDu6jYvvl7WXVvzENb6HBeoU16FtdEjo3s9YqhKXhn+VnPNef1awsrL4f4jOxxZqcUVb3yQQM0aMd3O6ywrudSRobeastk87GntHEKmnJ4MmykdtdSDhgOIYPBCL4glYit3b0JW9Mrx66IKwdToDKZV+WpVw=
+	t=1774321576; cv=none; b=A6R12Hm6hNiYu5vw6xj1qQ3jj/KVjOLsjFNltZWpWKfthy5H+NbFQTWe7+qb6wTqubUNAcWBnqYbWWw6I+0aRREsJ7x7Pc35JPJ5dsfCPTZLDoopkmDKUH6zSCF92LxOEs4xZ1NtmXy+wYW5LbaB77PymXwJm7MnLf9igYsZ4es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774319917; c=relaxed/simple;
-	bh=wtuCSFP1+FdCP/Ko/Dz3BZlfpBIvDLYkst4lyMZcr88=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DS8LQHrmtfXmsuH8ZfqpbGh6wuews54ByXkqVy26OSV9FyoLjxFuqurHcVdM58YfpVLaOOKFs10wXLc/7byL66ZU4y7/Kn/rz9ud89Nc+NmS2dOSrwjI+BmOb50GTil5N6j0LW58dmsfhgdIM458HHYpLKi63lpl89dtkEGwq6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qbA8KnZV; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-35b982990aeso629397a91.2
-        for <linux-usb@vger.kernel.org>; Mon, 23 Mar 2026 19:38:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774319915; x=1774924715; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+OHN9SidwM4mOMyIea3fSL57NYFeZ5w74p9KZ3JEjoQ=;
-        b=qbA8KnZVjdN7E6K88C5xOa5VAYHHhw+E9q2xenbO26vqsddosOdritNjQEwMpZPCHs
-         zBzK8LdCrQQ5ZtWY/vpHB20FwYUQxEPamwPFCwjH8mKVpwWpw/gDYJrYbuQT1cdUmUKi
-         EsWpsRK5S5H40TE13DYQdRf5SsaI7qpX6BfHUU5UZJj8wg1c2T/vXABjz4n/nj8nby/4
-         NuLtKf7o9dzKJsLqroS1pOz6qOzB0pollcCVY3d97KbdlIHcARZMwjB2QhL4K8mIR/DR
-         8CCftn8lYT3F5i3m0VoU8nCkblJljolbpQDPfL42XYNiZz6Z9+SqPCnqU193oFtYchgk
-         VQaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774319915; x=1774924715;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+OHN9SidwM4mOMyIea3fSL57NYFeZ5w74p9KZ3JEjoQ=;
-        b=X8RNqOOG2mmO+3ho5L3+nP+ljfO7PNZrLISWcdBoErI6jiXnk1ELY8kXl2RIATyVvv
-         1iohIbKYxmr1xWrLo/fO/jMbY43SozVxuaCWLcu0WttBfQY+uvQuoMN7tTjNg5zXdHE7
-         4xphMWaNDWAtj+nOSi5cm4hu0x1NrCH2sQPkS8vPlEMM84/hb6n7iqmncgUxhgJbIQGJ
-         shr+NgR+Vq9EthgPIMjC/sYKRH3jrvfbimVS+IOA9W0TkboL2ktZffxgyW5k00LrNsb8
-         JkQw7VvTkJKb4fgYgRhOHC1crUumSDL1+osb5bujZkIQxCEKEyxt7rajSPaRI709W5Wm
-         XXyQ==
-X-Gm-Message-State: AOJu0Yy3t1jrvaZ0/fUC1yEfgPEB86Ch570iMLBdvRc4WTjfXL8esn/q
-	yVOaOVgP7oUywv9CDRp1NOJMNr7s91yxup9LZ+3Qx2RYEY/0b1sZtJcRedpArg==
-X-Gm-Gg: ATEYQzziU/H8jNIQqgnYuB1jB39Tnl9In63tyIQObb1ak0riNQtTJs5grOJiYxHymRZ
-	Z8urMFMlZ+JCRXHPeYinTPjS9mUkHH7LNxpZ21OcZLJqz32otpXTI01GYpwCeDp/OWp3gK032ki
-	6SokNma+mz50SRrPRpHOw15F+6CLtX1FSCVz9/9PQQdYXYWF7333Fbwr6cBSE64AYZTmX/bNjsV
-	0qHarhutTebVauNPsMaB300M0d/UAYQ2SrNesiO0pI+l2Fea23Pj4x1QlU6uqY34gggmviKv4Nt
-	knlhXVNeF4ROBSHGk1ymNtWF0m7Z5u53MP+qUhZjKJkw1mf2yEWLaZakBJ42WNsXbAMHwBQ55Bw
-	Ksw1RwDITRs8xKWPe8ePD7fKwNDHHsvEaTT67ggV7dJFtgY+nJ+5Oc5n20aejyw0qKk44/DYV8O
-	nxiuzYbqQO/xIx7aKjlfuD38Ms+SS/esp3cGaWBtFJ18Y=
-X-Received: by 2002:a17:90b:2684:b0:35b:ed51:afac with SMTP id 98e67ed59e1d1-35bed51b526mr3860146a91.6.1774319915497;
-        Mon, 23 Mar 2026 19:38:35 -0700 (PDT)
-Received: from [192.168.1.7] ([159.192.167.11])
-        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-35c03149db2sm503511a91.9.2026.03.23.19.38.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Mar 2026 19:38:35 -0700 (PDT)
-Message-ID: <f547c497-8da1-4993-8d52-579f42810aba@gmail.com>
-Date: Tue, 24 Mar 2026 09:38:30 +0700
+	s=arc-20240116; t=1774321576; c=relaxed/simple;
+	bh=fJksfMG3GI9YwwYtPBCDyaorDMq3olF43HqOpnW0wb8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PFQSan0ivz9TkPclGER4EUdArZnSgAiDE6gxxdlq1/3RhPw34cmTScfUnP1JBU4q+B3nrZbRJhcUjxkTkTbfB3/+pBxmy/Wsi1seuhHeVVEY//gBbKvokyHqRhleLO6hvycYOMc+U2xOPaTje/+TCNG7FoEAjmTH6r27z5RqfBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fpjcsc0k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26245C2BCB4;
+	Tue, 24 Mar 2026 03:06:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774321576;
+	bh=fJksfMG3GI9YwwYtPBCDyaorDMq3olF43HqOpnW0wb8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=fpjcsc0kyGEJjbcjL+eSVcCWhm/9pRrBG0u/DD2SsTOG97/ydhjUgQCkfKhiTCOTS
+	 5l73Ls496utFKuLkBKH3seXCDKqOMs/LFLvFzwdVr3NPRBnyAOGZU4s8v+YHYVQdib
+	 5XvMBxmjp/pVeQEkoXGiu45kA0wmq3wPcKIFzh5OWJPBXKVQRlDEXjLhl3noLPa1kP
+	 2VzPHy8rZuZhlu9rPV2dAlhrlly7HMA12HAxLj+CAFqeiehlRpPTkFWuuYhDNaseyJ
+	 lfpF/0L29ywhLLqOJC8CPhSkZXjOYiI15Z+HCTOd2CSb12AajLzyGaU47BEKlwlUtI
+	 pE/SA3hJXdsGQ==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Cc: linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	KancyJoe <kancy2333@outlook.com>
+Subject: Re: (subset) [PATCH v6 0/5] arm64: dts: qcom: Add support for the Ayaneo Pocket S2
+Date: Mon, 23 Mar 2026 22:05:57 -0500
+Message-ID: <177432155636.28714.2401575051515656183.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260319-topic-sm8650-ayaneo-pocket-s2-base-v6-0-797bf96df771@linaro.org>
+References: <20260319-topic-sm8650-ayaneo-pocket-s2-base-v6-0-797bf96df771@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: serial: option: Add MeiG Smart SRT853
-To: Ernestas Kulik <ernestas.k@iconn-networks.com>, johan@kernel.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260323143753.686561-1-ernestas.k@iconn-networks.com>
-Content-Language: en-US
-From: Lars Melin <larsm17@gmail.com>
-In-Reply-To: <20260323143753.686561-1-ernestas.k@iconn-networks.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-35356-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCPT_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-35357-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[larsm17@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com,linaro.org];
+	RCPT_COUNT_TWELVE(0.00)[24];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,oss.qualcomm.com,outlook.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andersson@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 6F89A301457
+	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 0EBFE3018AB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 2026-03-23 21:37, Ernestas Kulik wrote:
-> This commit adds support for the MeiG Smart SRT853 5G CPE modem.
-> 
-> If#= 0: RNDIS
-> If#= 1: RNDIS
-> If#= 2: Diag
-> If#= 3: AT
-> If#= 4: AT
-> If#= 5: NMEA
-> 
-> T:  Bus=01 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#= 19 Spd=480  MxCh= 0
-> D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=2dee ProdID=4d38 Rev= 5.04
-> S:  Manufacturer=MEIG
-> S:  Product=LTE-A Module
-> S:  SerialNumber=da47a175
-> C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=500mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=e0(wlcon) Sub=01 Prot=03
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
-> E:  Ad=81(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-> E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-> E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> Signed-off-by: Ernestas Kulik <ernestas.k@iconn-networks.com>
-> ---
->   drivers/usb/serial/option.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index e349ed66d2ac..328f14a99953 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -2439,10 +2439,13 @@ static const struct usb_device_id option_ids[] = {
->   	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0x10, 0x02) },	/* MeiG Smart SLM828 */
->   	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0x10, 0x03) },	/* MeiG Smart SLM828 */
->   	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0xff, 0x30) },	/* MeiG Smart SRM815 and SRM825L */
->   	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0xff, 0x40) },	/* MeiG Smart SRM825L */
->   	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0xff, 0x60) },	/* MeiG Smart SRM825L */
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d38, 0xff, 0xff, 0x30) },	/* MeiG Smart SRT853 (Diag) */
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d38, 0xff, 0xff, 0x40) },	/* MeiG Smart SRT853 (AT) */
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d38, 0xff, 0xff, 0x60) },	/* MeiG Smart SRT853 (NMEA) */
->   	{ USB_DEVICE_INTERFACE_CLASS(0x2df3, 0x9d03, 0xff) },			/* LongSung M5710 */
->   	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
->   	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
->   	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
->   	{ USB_DEVICE(0x33f8, 0x0104),						/* Rolling RW101-GL (laptop RMNET) */
 
-Hi Ernestas,
-the SRT835 is the name of a CPE that is available in more than one 
-configuration depending on the installed 5G card.
-You can not use the CPE name when adding linux driver support, please
-find out the type of Meig 5G card (SRMxxx) it is you want to add support 
-for.
-You may have to open up the SRT835 in order to find the name of the 
-installed 5G card/5G module.
+On Thu, 19 Mar 2026 09:55:06 +0100, Neil Armstrong wrote:
+> The Ayaneo Pocket S2 is a gaming console based on the Qualcomm
+> Snapdragon 8 Gen 3. It has an internal UFS storage, WiFi,
+> Bluetooth, gaming buttons, SDCard, 2K display and USB-C
+> connector.
+> 
+> Product Page [1].
+> 
+> [...]
 
-thanks
-Lars
+Applied, thanks!
+
+[1/5] arm64: defconfig: enable pci-pwrctrl-generic as module
+      commit: fdeb077b8ae53a6ef772c5b3c4d1f3a408dac2a0
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
