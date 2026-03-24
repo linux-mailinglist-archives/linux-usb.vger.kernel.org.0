@@ -1,199 +1,166 @@
-Return-Path: <linux-usb+bounces-35413-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35414-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yPBWHeT7wmlXngQAu9opvQ
-	(envelope-from <linux-usb+bounces-35413-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 22:02:28 +0100
+	id cKzvFlYDw2lKnwQAu9opvQ
+	(envelope-from <linux-usb+bounces-35414-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 22:34:14 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7C8F31CA48
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 22:02:27 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04B4431CE2B
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 22:34:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2DA48316DA9D
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 20:56:15 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 2510D303B924
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 21:34:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0354135AC3D;
-	Tue, 24 Mar 2026 20:56:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE22A35F176;
+	Tue, 24 Mar 2026 21:34:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MWWCXBP9"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NkyS8+Km"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5BE347FEA
-	for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 20:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9BCC3090D5
+	for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 21:34:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774385773; cv=none; b=b6CT+yxpZc6jcV6ExknE/4iD57Nap5c6qvtigzp1NbLllMARskzdanEVomdvuC+MPDFLPjdl4amHa61Scz6Fr3g5S6ebeuUnbq8MfPSX3U6tQaXteKT0wzQlWU1meSHqL7tr97Ght0roXuHH5DmL9zvUp1CvbJkT6+4Z15CRrsc=
+	t=1774388048; cv=none; b=HIQMn9jjkNTmJlThrgZt5xFS8AcbsLi+rB1SJamuXcpc/nh5QPtFGOTIf2YE15iyRISwW9vc+soDGlNyWhm2KGryfeyVOYruSjX4djWQCENSYsWTbd87jCd++dm2Q5P7uTPPHask/OaOb7WSperjDsMxwGJJpRDX+luSQI5UxUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774385773; c=relaxed/simple;
-	bh=hdjKvfBWWeq0uSDptTLstowPlforQbXn8RIryJ7jeSY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=td8Oouccy/KLRi9vnfzi6+jo6Bqny5VNBfL/dzm+e+vk+sdfoCE5IYynVrCpjw4OlrQPyUr7ZKdXnXoZcFomGRTUDV8Q+nLB0QLMqxbj9pibOB0GLPWsAOvDsa8jnC1C02XW2Td5yXx8xzlq1souWCEgwLfrc/1APY3w71oI7eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MWWCXBP9; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-35c06831dd3so895209a91.2
-        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 13:56:11 -0700 (PDT)
+	s=arc-20240116; t=1774388048; c=relaxed/simple;
+	bh=MUgBHrSd5Eaisetn5rk18NYLq0bGtPJN237wYHa4aBQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PkOj+yMJZ6Ddoa8FRKretROet0tld+K5z+R+OoC2uM+Qk1tdrX8TMGOuDQ8kcthZdn6gGrCYdiSMCdPEjyC3f6BigHYHEQXi+3dVc28gvK0zWUyYUepbINXOWCUQsqB5/nt30RyUlvZmN+WknyQYaUI0kfAyWo1NhXt8QnQIa4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NkyS8+Km; arc=none smtp.client-ip=209.85.210.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7d86eb7c854so1878301a34.3
+        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 14:34:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774385771; x=1774990571; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FscbW10Q3KKVYse0rj9RSiZh6xJn2dHId/vIM0ejStE=;
-        b=MWWCXBP9njA4Ih7o9qnRzL7XJopLZlXYq1CyMEmVuOTrjreDf4Gqu06s59wvYCkcXy
-         /GgZNf2rItiY9MvErZYrMb0TeKwFEb5TfAxXoCnrE7T9uVM/VEGEXPEJNF51TopvNsQz
-         oOgG6xEaKHJQnYbqKofi+I9jqM16oFjw65rhi/goso19Agntu5Ofy5H3eSkW7uLIS/L+
-         j76wlBmYiRC0z7oMaiV0wZsHuJPr6vH0WXGDFICNNqASbaDIkX03fsHZP/HsNgL8kHrL
-         gb24mZ2r1CzG8JqylzmDdtcF5q8rC8ZjgpdAzWTheR9d7y0hQ8zvPBPlXXZyNHPpzj8V
-         VSRw==
+        d=linuxfoundation.org; s=google; t=1774388046; x=1774992846; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IuvaKH6SCR9+aNoGoEjXACsCakxFP7F2n123rgDmZ5g=;
+        b=NkyS8+Km4Bp6ENH29lwm7JmioAIzHruF2duTKrGnJyRFZ97DFg6MRS2W31ms78FsON
+         FcmUbWgmoC/huO4VPJ8lPZxpGZ8t4LuKI9mMElGWXxcxrFhqpah2nFCso1A4eGvjOi71
+         9AUBPqvH9Lpo0mBXiiK0dryHMq9G5a6n3C4iY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774385771; x=1774990571;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FscbW10Q3KKVYse0rj9RSiZh6xJn2dHId/vIM0ejStE=;
-        b=KyQooADvWNuuv2aIKCnc2BRW2soAXd4E2/OZd2D2F6MNNSU2uvJaOj/I1GyXqebDjP
-         YBhHvyyGFyJAhte5gifvUqC/ykJchF9TPqqSusQDVfw5lVYjgTJkEpO3RvvlyVvVJs7x
-         IaxHkycctsPXSlyZes5kt+hLQT+VfFdj0wjBPNXo+sC3byTlD0gur7uKfnTlf4DQ6e3m
-         uiTk452/tXcK4mIAO+PrX4aonctdbN+xl4CqeapaSYrC/x75i65x/MIuzUE/jf5Tf4iN
-         aO/IfUONFs7MRGBvJBjEmWtxpRMas8jbkhjdC57LfBGnMliHc14TaQf5wfq0lAgeFt0x
-         lVkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV+oZxkNpaUJVMQIzdPVncLGsK+f80X0iA/z4/K8xbaw1sQazAJeIqJG/wyi7bdYHT9vmwZx5plXnU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxANdtSQXimSI5iIWsjKVxys99p5scUYhUBg9yjF5Ow/JtgSiJl
-	E6FwqlTGmiJZNig4QIXV1xFSDmUoiq3SkXbgGd81LrVfXuSjYMc2yvkuNvEDVdh0Ow==
-X-Gm-Gg: ATEYQzzbUBDFW8UP0M8UddcNdVuKUuCHGK1HwqgMzq8M9QQNpw1sWq/F4fHB0WGQppT
-	M2qT5+jXXWNr0f8ExPLBMwOgMYdgRjuNzLwahLaNusf1pOItd0QO/THOqntrk9JguKbIKleZzb5
-	D09X8jn6MNqzrSsY7ulW7HJU7C6c58ZND+l8+EuKtX/jXoSASUSdy9qQzkofU4Px2DySBW62Aq/
-	9jbehgRinoyfMI1uIEl6Rklzvc+OV1WssO+trRdazBY2W/mz5ZuMhDaqEhe9p225NUODUZoAjG5
-	/9wc5yhHOQzFiKIrBKOEpC1AdS1SB5Psw73Aw0C7QlPkFyNj4NILNV5fmHnNp9VaqG1az6tlVSp
-	Pmd6Z7Eps3HS30llkfPmE8oP8mmGF8ZIdUZLmTVSvkrtqJo5U4C8GURLXowgNTQK/omamIsNd7u
-	Kh04NyRlvNryq/5exA873TpmW7p2IpMzuFNZMbL+yEMFDTUkdrFK4HxC/P
-X-Received: by 2002:a17:90b:2f0d:b0:356:2c7b:c026 with SMTP id 98e67ed59e1d1-35c0dd95872mr717194a91.23.1774385770651;
-        Tue, 24 Mar 2026 13:56:10 -0700 (PDT)
-Received: from google.com (21.59.127.34.bc.googleusercontent.com. [34.127.59.21])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35c0312ee89sm4218287a91.1.2026.03.24.13.56.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 13:56:08 -0700 (PDT)
-Date: Tue, 24 Mar 2026 20:56:04 +0000
-From: Benson Leung <bleung@google.com>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	stable@vger.kernel.org,
-	Madhu M <madhu.m@intel.corp-partner.google.com>
-Subject: Re: [PATCH v2] usb: typec: Remove alt->adev.dev.class assignment
-Message-ID: <acL6ZNa6ErLHqmwt@google.com>
-References: <20260324102903.1416210-1-akuchynski@chromium.org>
+        d=1e100.net; s=20251104; t=1774388046; x=1774992846;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IuvaKH6SCR9+aNoGoEjXACsCakxFP7F2n123rgDmZ5g=;
+        b=FFkaecmawhhY5IEr0rnhua/mO+6VYPhFSGjzekcJ8PalFjJbr8YzGKUKxMxly9pPnb
+         KiLC25usOY1US4vrs6di3/Aw91dMbYyoFln0g6R0dX+ywgvgByE0e2+DQPOJ6wvhL+pq
+         s2706MoFrbNo0kh+7pSRAp6v/YTyEexKj/OujKWzHLxMrpA8CdFBdYH7UTuWy6KXcehy
+         QdQA9SvE+gbyhIPk2ZM7+POhismKdC/fvoM6RzdtMOeRGl4ecQm779MHuNy5GTOScUQE
+         8FbxDF5fofXTv+7R0bM6EA4HN8s3aIZ6fFrn0VhyTZt6hfP2g1eWfuMyZCl82pGz6FQo
+         eTCg==
+X-Forwarded-Encrypted: i=1; AJvYcCXUspZKXqFlIwuQEbenIS1jseNEXAUAX6eGQX/gJ0p4WuHWpqjRZq+WAOVwqcigUWsIsHZFsDK/uWA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5RTaQiIQkr/Mu475tzzv4O10iPG1w9WdT9cQUl4YARy3j3rFX
+	0qcP3vUWb2YZZ5MT26aXp3U0JuFKmhG8WuNn0VfUhHCk4ZSjB5hdftOeFPhX9UWYXjs=
+X-Gm-Gg: ATEYQzxMyNsUFTZSdWlKPs0iWw6gKR+zXa8ehLgEQrOMZ8wG4Vg7p/qoI/tELBR5v8d
+	fxTwV0GqR+RLMmXn0TskHf0ShPAPcCQtGdtXEdJ2wS8e12uu9h0YSlONY5x5INpGhwjvSvonxV9
+	07UXj5gK7HAltX8qGfSZjr+c0TG1AlqCiDfZC2BD5uAmlcUNGhaenNGzIdcR0qVHzJYMpd1W7JD
+	9yiL63+eX1hVMZF5OEXGXsBr423VCN/BdqulsoiRdRodGbDNSQ11auT69bFTBP81bTACxcSYTlE
+	awtmXa7zecV+LN304BTLfOugAWc37/t3PIrWSkLoljReTkXkiv8CABTFFXTolnnayNvCxwzgA9T
+	+XsjRXwVQNHdDPyInKg0MRVLGJ5bvnsy9v5JrJGWVxi8Q+SxrnMlRuZ1Ee8IyREO8XUj5bqcMWS
+	Arb/roC9z5YZmiK24KejujDJXZ5ATLIW/zlsI=
+X-Received: by 2002:a05:6820:6ac7:b0:67b:ddec:e4c1 with SMTP id 006d021491bc7-67dff5c3e0emr696531eaf.69.1774388045950;
+        Tue, 24 Mar 2026 14:34:05 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-67c252c892dsm9157301eaf.4.2026.03.24.14.34.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Mar 2026 14:34:05 -0700 (PDT)
+Message-ID: <4328a59a-a02b-491f-92a5-4dbd10ee77c2@linuxfoundation.org>
+Date: Tue, 24 Mar 2026 15:34:03 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Mq7wClqCT9VK9him"
-Content-Disposition: inline
-In-Reply-To: <20260324102903.1416210-1-akuchynski@chromium.org>
-X-Spamd-Result: default: False [-4.26 / 15.00];
-	SIGNED_PGP(-2.00)[];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6/6] usbip: vhci_sysfs: Use safer strscpy() instead of
+ strcpy()
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Ai Chao <aichao@kylinos.cn>, gregkh@linuxfoundation.org, b-liu@ti.com,
+ johan@kernel.org, badhri@google.com, heikki.krogerus@linux.intel.com,
+ valentina.manea.m@gmail.com, shuah@kernel.org, i@zenithal.me, tiwai@suse.de,
+ kees@kernel.org, christophe.jaillet@wanadoo.fr,
+ prashanth.k@oss.qualcomm.com, khtsai@google.com, tglx@kernel.org,
+ mingo@kernel.org, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20260310094434.3639602-1-aichao@kylinos.cn>
+ <20260310094434.3639602-7-aichao@kylinos.cn>
+ <b49bc467-8c51-41fc-a7ee-5770a9720deb@linuxfoundation.org>
+ <abEYSBb8LJo9iVPL@stanley.mountain>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <abEYSBb8LJo9iVPL@stanley.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=google];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[google.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kylinos.cn,linuxfoundation.org,ti.com,kernel.org,google.com,linux.intel.com,gmail.com,zenithal.me,suse.de,wanadoo.fr,oss.qualcomm.com,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-35414-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35413-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bleung@google.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[skhan@linuxfoundation.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,chromium.org:email]
-X-Rspamd-Queue-Id: C7C8F31CA48
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 04B4431CE2B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+On 3/11/26 01:22, Dan Carpenter wrote:
+> On Tue, Mar 10, 2026 at 04:10:20PM -0600, Shuah Khan wrote:
+>> On 3/10/26 03:44, Ai Chao wrote:
+>>> Use a safer function strscpy() instead of strcpy() for copying to
+>>> arrays.
+>>>
+>>> Only idiomatic code replacement, and no functional changes.
+>>
+>> It is a functional change since it calls a new routine. Get rid
+>> of this line from change log.
+>>
+>> How did you test this patch? I am curious because of you are
+>> describing the change as "idiomatic code replacement"
+>>
+> 
+> I liked the commit message...  To me it says that patch affect
+> runtime.  It doesn' fix any bugs or introduce any bugs.  Too often
+> these changes are sold as a "potential" bugfix, which means people
+> haven't bothered to check whether it fixes a bug or not.
+> 
+> It's the right thing to add a note under the --- cut off that the
+> patch hasn't been tested.  Testing isn't required for this sort
+> of patch but a note is good so reviewers will know to be careful.
 
---Mq7wClqCT9VK9him
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I would like to see some sort of testing for patches like this one.
+It isn't hard to test this change.
 
-On Tue, Mar 24, 2026 at 10:29:03AM +0000, Andrei Kuchynski wrote:
-> The typec plug alternate mode is already registered as part of the bus.
-> When both class and bus are set for a device, device_add() attempts to
-> create the "subsystem" symlink in the device's sysfs directory twice, once
-> for the bus and once for the class.
-> This results in a duplicate filename error during registration,
-> causing the alternate mode registration to fail with warnings:
->=20
-> cannot create duplicate filename '/devices/pci0000:00/0000:00:1f.0/
->   PNP0C09:00/GOOG0004:00/cros-ec-dev.1.auto/cros_ec_ucsi.3.auto/typec/
->   port1/port1-cable/port1-plug0/port1-plug0.0/subsystem'
-> typec port0-plug0: failed to register alternate mode (-17)
-> cros_ec_ucsi.3.auto: failed to registers svid 0x8087 mode 1
->=20
-> Cc: stable@vger.kernel.org
-> Fixes: 67ab45426215 ("usb: typec: Set the bus also for the port and plug =
-altmodes")
-> Tested-by: Madhu M <madhu.m@intel.corp-partner.google.com>
-> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-
-Reviewed-by: Benson Leung <bleung@chromium.org>
-
-
-> ---
-> Changes in V2:
-> - Marked as a Fix
->=20
->  drivers/usb/typec/class.c | 4 ----
->  1 file changed, 4 deletions(-)
->=20
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 8314309094719..0977581ad1b6e 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -686,10 +686,6 @@ typec_register_altmode(struct device *parent,
-> =20
->  	alt->adev.dev.bus =3D &typec_bus;
-> =20
-> -	/* Plug alt modes need a class to generate udev events. */
-> -	if (is_typec_plug(parent))
-> -		alt->adev.dev.class =3D &typec_class;
-> -
->  	ret =3D device_register(&alt->adev.dev);
->  	if (ret) {
->  		dev_err(parent, "failed to register alternate mode (%d)\n",
-> --=20
-> 2.53.0.983.g0bb29b3bc5-goog
->=20
->=20
-
---Mq7wClqCT9VK9him
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCacL6ZAAKCRBzbaomhzOw
-wq2sAQCUZJhrv7AaalP85KIJJboMt7KzueWrl87wl1CfC8SCUwD/QYg8KuDsEZC0
-WC3rvxaQqHZeB3xJMTS+O65CYaCUzQU=
-=TV8y
------END PGP SIGNATURE-----
-
---Mq7wClqCT9VK9him--
+thanks,
+-- Shuah
 
