@@ -1,163 +1,166 @@
-Return-Path: <linux-usb+bounces-35385-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35386-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QO+rOJFzwmmncwQAu9opvQ
-	(envelope-from <linux-usb+bounces-35385-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 12:20:49 +0100
+	id QBzpN3B2wmnqdAQAu9opvQ
+	(envelope-from <linux-usb+bounces-35386-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 12:33:04 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D72D307300
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 12:20:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88048307592
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 12:33:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 26138300C7CB
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 11:09:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DD85C30E7664
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 11:31:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0E6F3E95BC;
-	Tue, 24 Mar 2026 11:09:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A505A3EB80B;
+	Tue, 24 Mar 2026 11:31:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mkuk0eIH"
+	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="lgHrWBaH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E623DFC9D;
-	Tue, 24 Mar 2026 11:09:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE1E3E2755;
+	Tue, 24 Mar 2026 11:31:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774350574; cv=none; b=KHUpgbflioj7X6VUVaZdN+EafbQLaKloU19BiFsYzVga3i2PucmMRkZf1f7l66j1qO/Vp1ECkh4aAHMiILtvmHwBvaqZAACjDWj+FGJ29lsLd4o8uEkI8ZMA40nXwb+jos8MCqOeSgPA+sh3HSFRsb8c5N84mmXQR1M1ze09Ik8=
+	t=1774351889; cv=none; b=uIeITGA1IsFD5vtOhVxC78e5Unmo5nqWm9r+F3mu1LKHY42UVwc3PbDepul5MoKXDPQ7y9fxP8zNAuFBVhEpnMynLpDefRF2f2fWPyum5BFLx8CfoQO/5yoMkGLtQ498sqigC6O3eTsezCuFpNZHD0qqle/nBcX2baqaKZmp/5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774350574; c=relaxed/simple;
-	bh=iOR1h4fcZWeV6zkcSAkDK7aDf13M07RsodIPR4ByCSk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qwJAuMYkWvoV2JDrGucOFCsZ1gyXJyWAfXS+bAeWaHiG9or2Nn00bMm3x7qzM25uRMHtYQtvpe02sA72AmfgWGOlsiyczBJ8JT6ZaYyiFs8YDuczqokfAzlq/Tle0la3tI/LGE/JurAUUiq1SFU7bj76G7G3wuFoQW1ksSuyzfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mkuk0eIH; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774350572; x=1805886572;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iOR1h4fcZWeV6zkcSAkDK7aDf13M07RsodIPR4ByCSk=;
-  b=mkuk0eIHNa0kKA8v8awlwucrXRELaXAirzUOh3hn33ybDilXlBlDsCcI
-   do3akbtpmJEO52aknNGBx1MuPHwVH2Bnlv7Fy3RwUqvuLBeIsdxSwdowm
-   B5RII6ZVP39wcymiqB3Xv48519zx59rKo4aTBVNRqDsUUyGAhfaWmxX3I
-   9qQjopxrdFL1UZeHgSQFQ9MU3KNo/jSV8le/ZKXgY2QrmZ7dlf5b/3Ae1
-   52yEGZe54ELBWEowICgp4+MmC/kEamCBbH/GnWS1kpWERZakZLyGV0gjS
-   m+kG0dboP7jholPynEt1vxeN28AogcrmJGx9jvIEu1tm3NMaMSU5YQ9p0
-   w==;
-X-CSE-ConnectionGUID: Jh0nCzw9RZOPc5gUfxtA9A==
-X-CSE-MsgGUID: UwIGDrwXQjSKBTHwjA4MeA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="100807671"
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="100807671"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 04:09:32 -0700
-X-CSE-ConnectionGUID: usaXSFn1TdG0jwqW0DAUuA==
-X-CSE-MsgGUID: ejoi2VIOS7iZOgXip8Ubjg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="254805065"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa002.jf.intel.com with ESMTP; 24 Mar 2026 04:09:30 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 0B03A95; Tue, 24 Mar 2026 12:09:29 +0100 (CET)
-Date: Tue, 24 Mar 2026 13:08:43 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	stable@vger.kernel.org,
-	Madhu M <madhu.m@intel.corp-partner.google.com>
-Subject: Re: [PATCH v2] usb: typec: Remove alt->adev.dev.class assignment
-Message-ID: <acJwu-kjdGsrf4Pr@kuha>
-References: <20260324102903.1416210-1-akuchynski@chromium.org>
+	s=arc-20240116; t=1774351889; c=relaxed/simple;
+	bh=II2rZwZeLPXJZhkpJhi4wJRb5oOq3AIDy0SrqkkRGQE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gouahX8QQ9CQdyWdJ7z1yrbz9X+LXsgnvQHuiEO65rWc9koQzc9xCO8mdP0I6xxzvswHAa1oi5SSvQM5jbFdpkbBrzpxQsrRywN2UAPpAt9AX4p7vfAOyumvNZKxGT1oCF3QZqfcsO9XfO363m63wXOfT4l/1UqrkjuAEosf6vA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=lgHrWBaH; arc=none smtp.client-ip=193.136.128.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id EECEF6002439;
+	Tue, 24 Mar 2026 11:31:21 +0000 (WET)
+X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
+Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
+ by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
+ with LMTP id YRfo6YsFNLkN; Tue, 24 Mar 2026 11:31:19 +0000 (WET)
+Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [IPv6:2001:690:2100:1::b3dd:b9ac])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 736066002436;
+	Tue, 24 Mar 2026 11:31:19 +0000 (WET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
+	s=mail2; t=1774351879;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zSwCOD4R8nBRbYuCX+0wUTZPA2P7sMyjbzopSB4njWE=;
+	b=lgHrWBaHuXpubfTTTI1CnMeRCMIPwkhn1V0/z5oDj59D4RJJS7er242v736fbfdxLlwj6t
+	211O8rhOZ2/B6nEHXFV8kgrrI6bQfu6xTpoRqZEZI3AjyBLetL+CEQq70aZo3dG7zIbCdt
+	GfPyYA6LVlmos7uq01plRG9SjiQGr1OjntVB2PPqeKUXCQR6ybTkphVYvLOi2Bwuc6moGg
+	GOEQ0Ss2+7nUNLKb+7kSItPNdCbwDSGH28zKXyRGueeTIleNp6waxnXIKFHeYsTuy1ZZMX
+	GiGSxZrZEbaemjGMv2jyJUJLjhdQU6Xf62+q4NYkAyBKSauFJgE7/EYcbfH8HQ==
+Received: from [IPV6:2001:8a0:57db:f00:3ee2:38aa:e2c9:7dde] (unknown [IPv6:2001:8a0:57db:f00:3ee2:38aa:e2c9:7dde])
+	(Authenticated sender: ist187313)
+	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 6EDB6360164;
+	Tue, 24 Mar 2026 11:31:18 +0000 (WET)
+Message-ID: <5a5397c8-cc32-4d6b-86a4-76f924ae6d75@tecnico.ulisboa.pt>
+Date: Tue, 24 Mar 2026 11:31:17 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260324102903.1416210-1-akuchynski@chromium.org>
-X-Spamd-Result: default: False [-1.66 / 15.00];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 6/6] phy: tegra: xusb: Move T186 .set_mode() to common
+ implementation
+To: Jon Hunter <jonathanh@nvidia.com>, Mathias Nyman
+ <mathias.nyman@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Thierry Reding <thierry.reding@gmail.com>, JC Kuo <jckuo@nvidia.com>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>
+Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ devicetree@vger.kernel.org
+References: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
+ <20260127-diogo-tegra_phy-v2-6-787b9eed3ed5@tecnico.ulisboa.pt>
+ <af04fc85-1ed4-4046-86ee-1ffcec8c44cd@nvidia.com>
+Content-Language: en-US
+From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+In-Reply-To: <af04fc85-1ed4-4046-86ee-1ffcec8c44cd@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[tecnico.ulisboa.pt,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[tecnico.ulisboa.pt:s=mail2];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35385-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35386-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[nvidia.com,intel.com,linuxfoundation.org,gmail.com,kernel.org,linaro.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,tecnico.ulisboa.pt:dkim,tecnico.ulisboa.pt:mid];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[diogo.ivo@tecnico.ulisboa.pt,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[tecnico.ulisboa.pt:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,chromium.org:email,intel.com:dkim,intel.com:email]
-X-Rspamd-Queue-Id: 1D72D307300
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 88048307592
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Mar 24, 2026 at 10:29:03AM +0000, Andrei Kuchynski wrote:
-> The typec plug alternate mode is already registered as part of the bus.
-> When both class and bus are set for a device, device_add() attempts to
-> create the "subsystem" symlink in the device's sysfs directory twice, once
-> for the bus and once for the class.
-> This results in a duplicate filename error during registration,
-> causing the alternate mode registration to fail with warnings:
-> 
-> cannot create duplicate filename '/devices/pci0000:00/0000:00:1f.0/
->   PNP0C09:00/GOOG0004:00/cros-ec-dev.1.auto/cros_ec_ucsi.3.auto/typec/
->   port1/port1-cable/port1-plug0/port1-plug0.0/subsystem'
-> typec port0-plug0: failed to register alternate mode (-17)
-> cros_ec_ucsi.3.auto: failed to registers svid 0x8087 mode 1
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 67ab45426215 ("usb: typec: Set the bus also for the port and plug altmodes")
-> Tested-by: Madhu M <madhu.m@intel.corp-partner.google.com>
-> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> ---
-> Changes in V2:
-> - Marked as a Fix
+On 3/24/26 10:16, Jon Hunter wrote:
 > 
->  drivers/usb/typec/class.c | 4 ----
->  1 file changed, 4 deletions(-)
+> On 27/01/2026 15:11, Diogo Ivo wrote:
+>> Move the Tegra186 PHY .set_mode() callback to a common implementation.
+>> In order to do this first revert cefc1caee9dd.
 > 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 8314309094719..0977581ad1b6e 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -686,10 +686,6 @@ typec_register_altmode(struct device *parent,
->  
->  	alt->adev.dev.bus = &typec_bus;
->  
-> -	/* Plug alt modes need a class to generate udev events. */
-> -	if (is_typec_plug(parent))
-> -		alt->adev.dev.class = &typec_class;
-> -
->  	ret = device_register(&alt->adev.dev);
->  	if (ret) {
->  		dev_err(parent, "failed to register alternate mode (%d)\n",
+> This commit message does not seem complete.
 
-thanks,
+How so? It is succint but it states exactly what the commit does. It
+reverts cefc1caee9dd and changes T186 to the common implementation
+prepared in the previous patch.
 
--- 
-heikki
+> Furthermore, I am not sure why we want to revert cefc1caee9dd. We 
+> purposely moved the regulator_enable/disable into 
+> tegra186_xusb_padctl_id_override() because it is tied to setting the 
+> USB2_VBUS_ID. So I would prefer to keep it this way and move the 
+> Tegra210 implementation in the same direction (if possible).
+
+I don't agree that this is the best solution.
+
+We really benefit from a common implementation for the two platforms, not
+only because of duplicate code but more importantly because without it
+whenever a bug is found and fixed on either platform it most likely will
+not be fixed on the other one. Case in point, cefc1caee9dd fixed a bug
+on T186 but not the same bug on T210 (which then led to this series) since
+the implementation was not shared among them. Were it the case that they
+shared the implementation the fix would have come "free" for T210.
+
+This will keep happening for as long as we have duplicate implementations,
+which becomes more relevant since there is a severe lack of testing in
+older Tegra platforms. I also thought about making the id_override()
+implementation shared between T186 and T210 but that would be take more
+changes since register definitions would need to be moved somewhere
+else too.
+
+Diogo
+
+> Jon
+> 
 
