@@ -1,188 +1,126 @@
-Return-Path: <linux-usb+bounces-35398-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35399-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +Go6Os6iwmm3fQQAu9opvQ
-	(envelope-from <linux-usb+bounces-35398-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 15:42:22 +0100
+	id APcIHt6uwmkyggQAu9opvQ
+	(envelope-from <linux-usb+bounces-35399-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 16:33:50 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 493C830A596
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 15:42:22 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3CA33181C0
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 16:33:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1BA813110294
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 14:37:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AD2BB30834A7
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 15:28:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7AAD3E5590;
-	Tue, 24 Mar 2026 14:36:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25834406286;
+	Tue, 24 Mar 2026 15:28:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="Fpx0AwDk"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="kjIORTYP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746C23FD121;
-	Tue, 24 Mar 2026 14:36:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E01405ADC
+	for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 15:28:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774363019; cv=none; b=UliiiskPms3EYtA7sYOYiqioLQTLvWD1Bjh60/VWRDLvScEF076IU9IsuCBF7/En0PkpcDL+76RlqfvzeQ8mpYnTMkUyCqLZ36TXyaXAcBhj5ssWKOYx8bsEzIww4OwKcmzJVK199zzG68Dal+TZ+zBfYtE7GRChMn4NtXzj0Yg=
+	t=1774366119; cv=none; b=byL9bWwlFl0teyP726YF+Id8IXy+c9OhorLnOw3j3PlEgAvNhS+VVdK+6Va3IS4LshJ9k99UI7O2fRljhlipN1XBjODx3qFBrGzHORo2mvB1E+grywGXUrrMfJdIuCVRHiSWsw2USOgh4QUmujJ6Y2gYAoX7jKFg+qBYLnON5Fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774363019; c=relaxed/simple;
-	bh=oJP7qI2REKO4LiflVR31WZ7BIRLbL4ifu7guzzThvyo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o1Phn2mbwyWtfkbcCGGSEPCH+J2Ai74oLaUoWC+V290++GMqTKXhja9BunUIvZJ9whoq3ZIvWcNtHaRZJfLyWA6Oq82nEwuB4muS4vnReCXVl1+KzoZAgnIKfXw5xdtJQ0cmOAcs0rQr9MQNRC+ekvaMfCR2zzuJcIPCyF/XY6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=Fpx0AwDk; arc=none smtp.client-ip=193.136.128.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 3BCAE600230C;
-	Tue, 24 Mar 2026 14:36:52 +0000 (WET)
-X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
-Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
- by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with LMTP id ZFZeKCH7NTFC; Tue, 24 Mar 2026 14:36:49 +0000 (WET)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [IPv6:2001:690:2100:1::b3dd:b9ac])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 8F9D960022FE;
-	Tue, 24 Mar 2026 14:36:49 +0000 (WET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
-	s=mail2; t=1774363009;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2zWSTkt+TZRxqfL4or/GcsQYMaV+0vZsmOBl4HXog6Y=;
-	b=Fpx0AwDkYLWE5tsos9uLbjPzDgbdmM4oPrNAjmV5hWv/npcEazDQyw7pdrNmDrzsFrWZ3u
-	sAJx58RBRUDAebkdnpaRxj2DRU4fchddeTeY2JWgqfy+nNSFtNdLpL2xL4V8zDW8sxOusL
-	SivlaHAF+/O7PZtvMVEOUrYwDqykgw0FaxDHX/aIG+0p2LH/pmQUOxSkHko8LDJPrd+Pfe
-	hHEbGYCJ8QrFyG1GOLQ6TGt/wJxi/TDEHt/9NNzoCyv9mR4w2dTgLyVueqdUlGGBjRogDr
-	bPZAkwUJ3Jtw07pcg14V8QLrMz0ZNPqAnln6Be3qad7beJgjr8HQfYggksykRA==
-Received: from [192.168.2.116] (unknown [148.63.39.39])
-	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 44B1D360194;
-	Tue, 24 Mar 2026 14:36:48 +0000 (WET)
-Message-ID: <2c7fa782-f7f1-43c6-bda4-296fa7ab88c2@tecnico.ulisboa.pt>
-Date: Tue, 24 Mar 2026 14:36:46 +0000
+	s=arc-20240116; t=1774366119; c=relaxed/simple;
+	bh=eq89uO/iGvH1puHXptrRmddhmGCGk/loZxnweyrl7pc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QWdcah/C8WpxLzelJXnC1BRhyOClVIFE5eIczsf442gl0JzbQbU81HXd/BLB9y+rfFvAzps6LQSTJB5IgnJuFJm0o4EZJDO3lLOdKFTfdbMUURYa53xdUzzc6PP3BUejDxyQK+tVZN8znaze48HL0Kc4+tVl5qrEJBDzrrTQxz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=kjIORTYP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED983C19424;
+	Tue, 24 Mar 2026 15:28:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1774366119;
+	bh=eq89uO/iGvH1puHXptrRmddhmGCGk/loZxnweyrl7pc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kjIORTYPHSPrRxuUBwedN2Q91+qStcxv2IxFxenYbw8WWWDaX5LnMOnYu+dD01dDW
+	 dH/Wr5E6FuNxqy/Egt+HBQZkwDoB5ibJhnxuwwywoTt+HUj+MZlhjt1edYmmlb21Eg
+	 cm3OAAvRkD4XWbYEKH78Y/uFKUu+q5ifFVL+fvkg=
+Date: Tue, 24 Mar 2026 16:28:16 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Michael Zimmermann <sigmaepsilon92@gmail.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: Oops when rebinding f_hid while /dev/hidg* is still opened
+Message-ID: <2026032431-chance-dodge-6b6e@gregkh>
+References: <CAN9vWD+13DHCyjq+7hYgTSDx87TLtKXV9-8GMnZPuZnYvjyANA@mail.gmail.com>
+ <2026032337-resend-recolor-efc5@gregkh>
+ <CAN9vWD+N6K4VExNgnhp=amfBDJTFN9Sz156qsy550dP-d1S9Qw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/6] phy: tegra: xusb: Move T186 .set_mode() to common
- implementation
-To: Jon Hunter <jonathanh@nvidia.com>, Mathias Nyman
- <mathias.nyman@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thierry Reding <thierry.reding@gmail.com>, JC Kuo <jckuo@nvidia.com>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Neil Armstrong <neil.armstrong@linaro.org>
-Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- devicetree@vger.kernel.org
-References: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
- <20260127-diogo-tegra_phy-v2-6-787b9eed3ed5@tecnico.ulisboa.pt>
- <af04fc85-1ed4-4046-86ee-1ffcec8c44cd@nvidia.com>
- <5a5397c8-cc32-4d6b-86a4-76f924ae6d75@tecnico.ulisboa.pt>
- <7a6f8967-c635-4d84-bbab-9e019ff79134@nvidia.com>
-Content-Language: en-US
-From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-In-Reply-To: <7a6f8967-c635-4d84-bbab-9e019ff79134@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAN9vWD+N6K4VExNgnhp=amfBDJTFN9Sz156qsy550dP-d1S9Qw@mail.gmail.com>
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[tecnico.ulisboa.pt,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[tecnico.ulisboa.pt:s=mail2];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35398-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[nvidia.com,intel.com,linuxfoundation.org,gmail.com,kernel.org,linaro.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWO(0.00)[2];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-35399-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tecnico.ulisboa.pt:dkim,tecnico.ulisboa.pt:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[diogo.ivo@tecnico.ulisboa.pt,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[tecnico.ulisboa.pt:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.996];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 493C830A596
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linuxfoundation.org:dkim]
+X-Rspamd-Queue-Id: E3CA33181C0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-
-
-On 3/24/26 13:33, Jon Hunter wrote:
+On Mon, Mar 23, 2026 at 06:11:27PM +0100, Michael Zimmermann wrote:
+> > This bug has happened a lot on many gadget drivers, I think we fixed a
+> > bunch of them already, can you verify this is still an issue on the
+> > latest 7.0-rc4 or 6.19.y kernel release (6.17 is very old and obsolete
+> > and insecure, don't run that thing...)
 > 
+> Apparently, Fedora updates their images very rarely and they need a
+> package manager update, sorry about that.
 > 
-> On 24/03/2026 11:31, Diogo Ivo wrote:
->>
->>
->> On 3/24/26 10:16, Jon Hunter wrote:
->>>
->>> On 27/01/2026 15:11, Diogo Ivo wrote:
->>>> Move the Tegra186 PHY .set_mode() callback to a common implementation.
->>>> In order to do this first revert cefc1caee9dd.
->>>
->>> This commit message does not seem complete.
->>
->> How so? It is succint but it states exactly what the commit does. It
->> reverts cefc1caee9dd and changes T186 to the common implementation
->> prepared in the previous patch.
-> 
-> It does not read clearly to me. The 2nd sentence sounds like that's all 
-> this is doing but we are not, we are reverting and doing the move.
->>> Furthermore, I am not sure why we want to revert cefc1caee9dd. We 
->>> purposely moved the regulator_enable/disable into 
->>> tegra186_xusb_padctl_id_override() because it is tied to setting the 
->>> USB2_VBUS_ID. So I would prefer to keep it this way and move the 
->>> Tegra210 implementation in the same direction (if possible).
->>
->> I don't agree that this is the best solution.
->>
->> We really benefit from a common implementation for the two platforms, not
->> only because of duplicate code but more importantly because without it
->> whenever a bug is found and fixed on either platform it most likely will
->> not be fixed on the other one. Case in point, cefc1caee9dd fixed a bug
->> on T186 but not the same bug on T210 (which then led to this series) 
->> since
->> the implementation was not shared among them. Were it the case that they
->> shared the implementation the fix would have come "free" for T210.
->>
->> This will keep happening for as long as we have duplicate 
->> implementations,
->> which becomes more relevant since there is a severe lack of testing in
->> older Tegra platforms. I also thought about making the id_override()
->> implementation shared between T186 and T210 but that would be take more
->> changes since register definitions would need to be moved somewhere
->> else too.
-> 
-> I am all for a common implementation. I believe that in the 
-> tegra186_xusb_padctl_id_override() function the only thing that is 
-> different is the offset for the USB2_VBUS_ID register, which should be 
-> easy to handle.
+> I now tested it 6.19.8-200.fc43.aarch64 and the bug is still there. I
+> then switched to testing with buildroot, because that makes it easier
+> to test different kernel versions. There, the behavior is a bit
+> different but there's still a bug: Instead of immediately triggering
+> an oops, everything appears fine on the first run of my script. But on
+> the second run I see this:
+> [   81.514126] refcount_t: underflow; use-after-free.
 
-Ok, I can make it common there as well. However I still feel like
-reverting cefc1caee9dd leads to cleaner code since vbus_override() and
-id_override() will look similar and only do exactly what they state in
-their names and the overall logic looks cleaner.
+Ok, something is not being initialized again properly.
 
-Diogo
+Take a look at the patch series at commit 41f71deda1c1 ("Merge patch
+series "usb: gadget: Refactor function drivers to use __free()
+cleanup"")
 
-> Jon
-> 
+Perhaps something like commit 42988380ac67 ("usb: gadget: f_ecm:
+Refactor bind path to use __free()") should be done for the f_hid
+driver?  Can you work on that as you have a way to test this well, or do
+you want a patch to test?
+
+thanks,
+
+greg k-h
 
