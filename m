@@ -1,73 +1,73 @@
-Return-Path: <linux-usb+bounces-35359-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35360-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kDoUK/AKwmmOZAQAu9opvQ
-	(envelope-from <linux-usb+bounces-35359-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 04:54:24 +0100
+	id WFyBARYLwmmOZAQAu9opvQ
+	(envelope-from <linux-usb+bounces-35360-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 04:55:02 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 343DA301E12
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 04:54:24 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68BD6301E21
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 04:55:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0841B311B4D2
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 03:51:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A268E3125A5F
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 03:51:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AAAD37CD5D;
-	Tue, 24 Mar 2026 03:51:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C81D53A1E80;
+	Tue, 24 Mar 2026 03:51:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=moxa.com header.i=@moxa.com header.b="J4K8F0kE"
+	dkim=pass (1024-bit key) header.d=moxa.com header.i=@moxa.com header.b="e7NFHAsx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11012025.outbound.protection.outlook.com [40.107.75.25])
+Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11012014.outbound.protection.outlook.com [40.107.75.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 140B439F17C;
-	Tue, 24 Mar 2026 03:51:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B86B3A1A54;
+	Tue, 24 Mar 2026 03:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.14
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774324279; cv=fail; b=FutPZhwNQDn3bru67Tn4ldHs/wAg7vnZ1bHNcdjy8rFjn7IfZVu7oVxpNJqw572U1zqZLyJLjeruQnEmGMXH5xRUfz6/5c+g4nprYM7edTVzIEVWrhyorSXjWXNJxFIHw9MnGiXHGqt+j5jQJ8B4aNeUYV7/KMimDRkiNU5cBSM=
+	t=1774324287; cv=fail; b=ULI4kqOoNYHgY9DRhoQPOjg4y25pqyJiAajuzDea6RGbi4SCECkRtJTaAe5kIlyw6vy0mHC1u5KNEtzzJARSjvYrArYw0iT1IS89qbA3Y8H8C8qrTnE8dW/wB9k4kzfWAS6gurO6A3ZNw5Xa+5JoZcOJ77W97M5DZAlSRov4DBc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774324279; c=relaxed/simple;
-	bh=smQVyscc5Bcmhq4/7gvaEmzKhaJnwK4/vJJWpNaN9Yw=;
+	s=arc-20240116; t=1774324287; c=relaxed/simple;
+	bh=p3ewzcSN0wU2GeNfoUMZzCBAdSMpmfjOc7ed5a2atNo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=d3HQKNjU1+qAXZKwSNiWL+D3zjm36QsM4+/5/llSxCnaUZHPuaEuGticQ3RzCCROFpZqa1sabAE7JCPl/xQr6MaxckOukUHis8x7hbKaue5ePt8VmUtS6uYNvLTJ7/AF8AWzJb4KBjF8MkiF8poFnsywMb575DFH+PHE4+A6ysg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=moxa.com; spf=pass smtp.mailfrom=moxa.com; dkim=pass (1024-bit key) header.d=moxa.com header.i=@moxa.com header.b=J4K8F0kE; arc=fail smtp.client-ip=40.107.75.25
+	 Content-Type:MIME-Version; b=duvGt6X+hXjxk2Ele3bDvJSJnRSrabHBwKPjK0e4de/SnHmNoJoenQywFIXTMvT39jIGj/zILtrwBeDPOtedzoBWgsFFysCRz5sjDh15LIjW045cgQMdA22cbpOBJxs7bYCG21i0dFGOTgpvXqva9cz5fjOiO8jHhTSCGTiL8So=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=moxa.com; spf=pass smtp.mailfrom=moxa.com; dkim=pass (1024-bit key) header.d=moxa.com header.i=@moxa.com header.b=e7NFHAsx; arc=fail smtp.client-ip=40.107.75.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=moxa.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=moxa.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=BjjLaRb5+SEG0Ugoi+TgijE9HazCDmZij7JUU4aUa8wqf3kf9uAnn6fkLDJTIMI8hZHaRsUnGtNoyaflqpBbLxyUwrTjNmxzwf3KP49Ig3peqIEGcVjbF2o9vUZluDX9tnr5VEsy4aBojNWFcMOkUlZvOB/ZiXgcWKLBvicHs2rnWMy5wVUuDfMW0RB1LEfgL2bq+QTpGFWvuSWrP2bZ85G6HE4/oSEZZYoEupKCGlc5/OKgLgh1QlaCQjHJEunHzXXhsm9MRwaVum7Be/Kv0LOAh25qIa7cRP+0hxypbLOCL3AamY4ksZ+o4FqguE//wBL8OMki146rvxim0ZfMlQ==
+ b=y8v3RRC8jpe5aMpB/dGNvDnfclnWyjHvHEpQibcBH+FuIxL6fEOyuxkh0ZLUCLEJ2kdsBFRhtqw1Udk7HDhzswxvytZRORGOLWx1CTDnb7BIIMSrk2WigE+xm88oWPoSw9nlpfQPfwAjFtosZwUgCcF/MBt5cUolQCsF6VTrul7Y0ruzrJzqBeQGmrSXNEQ6Xtce2MyBUFAu2Zk1H7/sOoc7VVINmXuLi8rSxNUy+OgqMirG82UCqtewnAW+EwnvoAmgPiKGMPFpS8W7PnmM/SVOXP3c7RE8L4twFYHmeQuK1RSvsx9lC/GhuoI/JjcHSH7Px2eOefYs0Op9HnJoYw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3ElD+sSHpFq2d6d4kaqnkOZS+spU1gn1ENAQU0xAhSk=;
- b=K23JyGtlUDh5c+VdBRhbdk++lzo/VWIX88++H1Fj8+sU2pg9QBipk54zd0uh46JjekQkf4H5YMHS3KrmbyKQdlCHskw4rxFeJ5ZUgGzTE3ud3x7Fyz6kwq05P01RPURMWSGCsvuTvVN2hbN0wCtuo8T9EvcvHgKJbjpglDXhFgUEckMFGGMzwK8VySECEOnwSvKcqiTp6dkBuNFnoTAGPOCjc5LBC5MDDYBEoILsHDsoG58wuglxQUKnf3sPuagnR+/rlx0zV+frgVYUU0vD8cLRYlYbNFBEzF8ng18RrPjc8v9Ii58K2PHYw4ZATzfBKRdmw08nYteWt4KPIRIu5Q==
+ bh=KmVtBAcoFdBF4Vr4ipD1EMULifLmippSbH52ZfcZ+/A=;
+ b=XRsOEOdQ2MdQI0yAhq6PXwFQEOji7B4Z2Mcz3XCzbd/1whhxx7GtzJ1LNo8zMO60indliQru2xasfuNalAxu/3AVFvR27+HhDVgENgtTKV2u2coA9/Ji+AZ1IBcqamif80NjoiG/aNJkKhCPYUvCLwcmqzNnRklbF+DNNwtigBSmzqJ86sPEN31PLjoL5i28LHYZonJXPBBb7ufkJ4NyR6ZV+fiR/rd3PvZYXqaqOSSdvCmXD8JS3pJx17lxZiHcucOTFrRLiTeAbKz+Q4G2mFYOkb+BujbYWGaLHhIhckTjdu+tEqWF1FFeNBouGVIhvmQWL5Bqo/IbBp8OU+Ueow==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=moxa.com; dmarc=pass action=none header.from=moxa.com;
  dkim=pass header.d=moxa.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=moxa.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3ElD+sSHpFq2d6d4kaqnkOZS+spU1gn1ENAQU0xAhSk=;
- b=J4K8F0kEm5VyQv4jjZMHBATM87fgvZG1+drL6Y7mJrL42v59cbs33MFWTvJjo2yJyaFqmPFP35pe/sxknuwy2oaeCcZQ8HvfeUyqlQporn4OYzA/uK+bjKOEsaOLTYUpZ7X3BwbwMxw4mHWXo8gpmvyQkNOqwukMujfKs1RdvvQ=
+ bh=KmVtBAcoFdBF4Vr4ipD1EMULifLmippSbH52ZfcZ+/A=;
+ b=e7NFHAsx3dhU+L+/dJ8OSI6aNX5HlmXocHGy21OENMhD6EUBJ0kPx91A0j03zHVqhTVRzU6qTDqb1DuBAXVllUacotc68VHQEJvanTGUEpyBa/KpY4RjYwULMx/t6/9gh4PCvBhbC6/RdCf6sgR0yRbVHXKACdqWsQiPTq6L0LI=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=moxa.com;
 Received: from PUZPR01MB5405.apcprd01.prod.exchangelabs.com
  (2603:1096:301:115::14) by TY0PR0101MB4844.apcprd01.prod.exchangelabs.com
  (2603:1096:400:275::6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.31; Tue, 24 Mar
- 2026 03:51:03 +0000
+ 2026 03:51:11 +0000
 Received: from PUZPR01MB5405.apcprd01.prod.exchangelabs.com
  ([fe80::ae38:e821:cf7d:3717]) by PUZPR01MB5405.apcprd01.prod.exchangelabs.com
  ([fe80::ae38:e821:cf7d:3717%4]) with mapi id 15.20.9723.018; Tue, 24 Mar 2026
- 03:51:15 +0000
+ 03:51:23 +0000
 From: Crescent Hsieh <crescentcy.hsieh@moxa.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Johan Hovold <johan@kernel.org>
 Cc: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Crescent Hsieh <crescentcy.hsieh@moxa.com>
-Subject: [PATCH v1 1/4] usb: serial: mxuport: add support for more MXU50U UART devices
-Date: Tue, 24 Mar 2026 11:50:38 +0800
-Message-ID: <20260324035041.352190-2-crescentcy.hsieh@moxa.com>
+Subject: [PATCH v1 2/4] usb: serial: mxuport: handle SEND_NEXT tx flow control
+Date: Tue, 24 Mar 2026 11:50:39 +0800
+Message-ID: <20260324035041.352190-3-crescentcy.hsieh@moxa.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260324035041.352190-1-crescentcy.hsieh@moxa.com>
 References: <20260324035041.352190-1-crescentcy.hsieh@moxa.com>
@@ -83,57 +83,57 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PUZPR01MB5405:EE_|TY0PR0101MB4844:EE_
-X-MS-Office365-Filtering-Correlation-Id: c1257c62-c774-4278-81b6-08de89589936
+X-MS-Office365-Filtering-Correlation-Id: eb941d8f-dc75-4584-a961-08de89589dac
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|1800799024|376014|52116014|38350700014|18002099003|22082099003|56012099003;
 X-Microsoft-Antispam-Message-Info:
-	K/jSAy59J4odCVGGQKwr1geK/dcwdvDm5rbJZygbZR/LZksD5rgFCQphfhjVi+2srdrNiDPQByVp9ZIDf+lZPGg7PjG7vcA7STAYhka4mL2a6QZ1NhBbUA8IaYu9ir8Czbn7qW50AkxWUGcdHbGEiDcSVXJ+gLT6aFUqrAFRK6Bc9N7gvIx7xbvuHvox/f7WHunu22sWdpuJZCGdiv9Xh4VGxyMsKDXypNZBb7S8COQRGd/f2fF5FQegGu22jAf1HYbshA7U9XqIv1pECcyPpO5JEfEn/JCSoU9wssfykfQqY8KZxjLxqLZXoyAed7B/B7Z39tskfHzgpwu/8R8v3R+o7N2B0JXLbyZm9hO+oIMUbUM39yQFltLzzJ8OAbQINmMsihS23W763HugF5lyo6ducNU5IR68lXcnskcnQhFMYxXDK0hcm3Gjn2cpaxkMpIvBL5Z6lQrq10wE0O0RR699mV+IvZ3QJ4KLYYDVJXulGTTltiiqGGwlvrGsT6zXxB+M3zNDleR1ce5zZXNoV7kcqQ+q8kWO3InHT47BtIr199tWLzM4mWYyd74sn5HSHDDunwv7kyLgWWzRzw88xuVUctldea/oiWW5kk/xy3HJXrfBxx6tA5NGsfg9s1Lyu5kuqzOOS6+yjwYaMJf82TT9SomZSNq28aUfR1o36HdEFUYmepxAIj0hK00U3joSwj8svt3BFv2AILbBjgZAA8wmIb0M8GD+J47PYmQlBq1LxEcubKrMcl/b6nB8nnH929/04iU9xGUyiC5jUt/hAKMZaFLaLIYXn+cDYqQ8rkU=
+	+Xq2oLYcoQNlwcYkLPWnj+yNQCEfz7PrpYc1Lh6kfFAq+IUb0um2KCm9x8uTaDp5mg8hWOklSB6YjXg9Bow8sy69cn1GPcxh+51ZMG9oWVwdYJZKzMNvhL9XTddXHA2wgPEat2UqxrGvfSqIBRd6ODiMAmLsr2AhBGbv5XADQSNb/Tb7QDeajfHuzbiMt1CPhUuaq2tJ+YhAnHHOFQStjZxtkk5l8pkD9zUjlwkjh8u4mgpjkaaHeeqbDAP8AQLThY9S3IsYlTzZMHizVu07CldD+IjjQ5Hc8jn28y0JPtyP/1UDgKPma4goNyHDi0J/Oilz3nk0lY00LixsE3UVNX3Ng5mDU8+Sf6SnSIw5d91f75OMVgqliYTw8LhfzEsmMj7HZlTEgcGeGJtuVCRs68yXSCQqA51abpnkpVDtXvEwl7XQztbzcqrYR+WuhvvBfTQpczWOoWF2iTIMKnV3YenIXCvI0YmyBc8gQqy52CYayYe4M87QxXCoQW9m095pKgtcV2Z/I6VtyxzkQi3DkqZi8V32XDNG9xpTkyKwTMW7+VnylNbCXDgTJoafFAThinWxkSn87HAwK0uEG1R9XIc+hj9useMMdnxE6No0gTDGMpviI1XKKYtm7KSQoKXMW5pUEhju8y4nx9kBZ5S/mHgTNwZS/Hr4PcKJknTnYV1+liAfAOKAX77N5B4RH7aGPJOKNnUQU/DoMxOILUmo9w/seTwa+Uw4fAsKD7jErBnxgsv1B7F9EFBGO3Ytc8idE0LGn3T2cQQpWk+PCS2w6U1GZJ5swVjTjeXAc5FeC5k=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR01MB5405.apcprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(52116014)(38350700014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?64HnxLMhSbXMF/LLA2ReCY4NERWKfXWyBAe+K3zLg0rLGIgiqwFCsQrBRzvt?=
- =?us-ascii?Q?dIrWkZmvsyOad+5pArV3NVIEoc83/pJvHyZFanAxr7sWyWDF69EANty2Uy2s?=
- =?us-ascii?Q?n9QJ8h/zDRLGbjJC3SPdDmlxiXgMlXQ5cZ6mrnDBHnHYqvM/0KG4QJepsMHV?=
- =?us-ascii?Q?9WKr8bY1/qGxq9IzlS/N75qRk7wGQF14dR71Rbd1hACJjV5c49PhZWja3omy?=
- =?us-ascii?Q?jqFBS2YNgCtEMuB7Zhwyt0LBwuGTERgVdDJslNWo3kmq3iPXnQlLy0M8/vs8?=
- =?us-ascii?Q?lg+VCSqSbJ6yGSjv8/y2RfVvNlIxqbrBSTPzk3aeKjOQ7BIbkV3LtryXM4zC?=
- =?us-ascii?Q?INGQnQcQJc8L75GWhNb/mp+MTT83Ib8pMW2SK/XoucwSuJ37r3sFr40dgApp?=
- =?us-ascii?Q?vi+F0zvhmo28CcRPx4PFnp+lDFB/YZ7mrZvz3DCVC3lBF2TOrtwqWperfXt9?=
- =?us-ascii?Q?2KADnKL4hE/7DCXzlTk5RaXlE5o9ZoXooM5rBgYEf5PtQDLRU3jkf3ctPhvN?=
- =?us-ascii?Q?msFIlKvMQWwGCVQjFIuJBA+JdR4YPgpRgSg5EKSVzsBRJ3cZcBJNOggWvuxT?=
- =?us-ascii?Q?blK907RnxxN6W1oEk0ea/XFjIC0dxMHQWKJ9gmRO8Ish8kaDEi7g9fYu037q?=
- =?us-ascii?Q?m0CCd2pj8ybxfyNwNHrvxD5VwCcEXMcUN9o42UHYk/0y7spPbpZlHtfXmhHb?=
- =?us-ascii?Q?DItPwSr6QasylHSahIoqvl7R5zLYZfAKs3NIwB3Ea03Varw5//89Dd42l7Uz?=
- =?us-ascii?Q?S2pQOJMGA2MBvDzU8R7rlFJkv1eSDCSbMhR2PXVvcOays4GtXQPi+qQdha/U?=
- =?us-ascii?Q?y5WbjQmja69LRVk8/Uy97ih3CJmiba+jGQ8mzXU1nEPQslFGeQXPhkmOecsI?=
- =?us-ascii?Q?uO5Y6Kau39uCMRiKRc2H0y2aMkeKCLiQhFYc8TMIWZiWvviwLm4yIPo37Yn6?=
- =?us-ascii?Q?INce2RKUrVjeY1q07xmlIDXXlx8wmoe4m8oe9eGa1DKJH/0KQCmedNJ/VMpq?=
- =?us-ascii?Q?Qo5gPOF46W9hFRiVlVerEcLUmownIAUnTuhkvIKoZxemoWckb72f3nUmU0xs?=
- =?us-ascii?Q?08ee4Cq2qGXV6LQuKbUK5WnAHUgSzTFkeTTUYFCNCbQVakJ6623SWzLI0u9P?=
- =?us-ascii?Q?2y+7p7SyMVLguvc0/tQkn8dK+ZC+f2q9/LykmgIlXjfT86pz0NOf42DCYmas?=
- =?us-ascii?Q?dYJGZCcCdKYyALQqnpk8V0SPdJeWdlvRBqmWrCKcwwqSa9GNHO37VKXzITm0?=
- =?us-ascii?Q?UFnh0dwtPnGptlHDQJ121w7mkEdGPYQd/ZRpffhhgLjnHNUmstkBQq3jOM7N?=
- =?us-ascii?Q?Ol6M08HLWLGU8ObUrbQQTh5AQ3bkS7r29nnjCwyWrV9BAM+nukw7mvqmVaP3?=
- =?us-ascii?Q?DHW4jAbJIiq4ML9tWvMqf/OwbDY2bG52sKpUPcFiDQWddox2KPEdNS2SKzpj?=
- =?us-ascii?Q?ICGVO40p8k7chI+Yb09aflzTYz5pGSDRWF7GFSkNSEn+2bOU69oh4e745cjU?=
- =?us-ascii?Q?iUg+LK17rh0ghAf2+JRUif9ChJcAB5n2cFcwVVCVn7U9CEmYNZ5Bk6Fz0Oqb?=
- =?us-ascii?Q?NfI3p+Qb4dSMa2NRAnQjfXsAc2oAuSxtnxmkpHLxnKk7o5uxN2Jiq2QmIf1T?=
- =?us-ascii?Q?nLaKz855GQmg1V+o94z+KzB7GYtTiHADeI+Nh9q4gw1mVFce5Xvn6Kd8DqjU?=
- =?us-ascii?Q?1GRTN0NnMvwpK2zcmdvDhs9IZNipZcJZD3kbA+2piTL87T2Yqfd9NmJCr99i?=
- =?us-ascii?Q?lrnFoNOgqnxW1vdCPe608ZwOdFl/KYw=3D?=
+	=?us-ascii?Q?huIBGuR/1m4/wfqopHF0FTjNK3dZTz+ku70K+996pfkf3pXj4kwk8l/Dt1Ne?=
+ =?us-ascii?Q?N4O2qAU4VdWwRuqDPZ26WAHItwYZcOLaErEF5BIls8+kj/lh1S3yE7yEi/VT?=
+ =?us-ascii?Q?B1QtDRKkvVi2JnRjGo6P4NziPPUiNxjT4Z99P6hwkWWrPmh/gSJ9H6G59kWF?=
+ =?us-ascii?Q?K0OYr8BOjPLAlwynUxec4ltW5ygoJ4CutgEIog+ZB41Kp4gFm2FoxUn6g4G6?=
+ =?us-ascii?Q?Q9qOYZY/rCeLjglp5f+Qi2LtIuPsXBb/jAr1r/Y5xTSzXo0ZiSW4bW9VJVN8?=
+ =?us-ascii?Q?L4HrkAiZ03sy5/jScpNDx8mc83uV9Apd9JWX+fVl0u7YPuhPQTX4PwrWPD1x?=
+ =?us-ascii?Q?51JedCnOlElMoKRuyVJe6KVcQY53DAo4GDqiRAOf4LMtLIPM890Ew7A0pTQI?=
+ =?us-ascii?Q?qkPHHCyhBnYH2BOZjIMsZt/IXmqE2e8Li45q3FsOP7M+cZ8UDewxt3BxBJwq?=
+ =?us-ascii?Q?Jeb364EjGTxN52zSrLkof3DceYwEOqeTArTb0ZiaAw0rzBnE8XZI5ITWDWLX?=
+ =?us-ascii?Q?JlnGJIGOfE1Z5pOqS6BPUnnQuBhPaurrP116VTX7hJOFYM3XWMA7j8xyMFL1?=
+ =?us-ascii?Q?XU/KCIpSTAq6Wbs2fd6bbpusGJYolHWEmtEUkwKOFlvwF5m+RQKcXjZAMsfO?=
+ =?us-ascii?Q?mu499ekaQKo+cgrSo76oGm1DBvg3bxap3ef19qPZ9UkK2e9cR3RHhaQ5YTHm?=
+ =?us-ascii?Q?wnq4p2SkEVYRS+bAp2NjBZiJXtXfIQE1VIag1eszj1vSaqNphncQyzgzPFZ3?=
+ =?us-ascii?Q?kVCnazl9A5LiQp3Iwzd/IHGf7blv7W18/KieU8ym57zOyjdfs1d6rbRv6Rcr?=
+ =?us-ascii?Q?a5yjWyAOGCRP5uWw0R/bV8gCOTDq6qXMdaw7MhT+bpI46mqvC65aSZ7/9lNP?=
+ =?us-ascii?Q?feYlp7vbKTZXCyNzR1zeUIL8yN3hSm92s9fTVEy82XZOWhyoSTu3Xx8f4o22?=
+ =?us-ascii?Q?a6vvFyDB2301ZZ0tfcQlvtxa+bqmgo1Lx2XRhpzr0ih27Q0igA4Gk/cJgEFe?=
+ =?us-ascii?Q?8Td4UJ4/oyZixl0T27VnAeSiqRgHNOc0og34KQo8sraUNpRmAntX2i7cpQt4?=
+ =?us-ascii?Q?1Mxtka62K60NfSk55+rIKJGwxoN8zSKjwH/C+XjgddzTPLlFJ5Uvf00oe+wz?=
+ =?us-ascii?Q?/ha167g02eXVsaK7sajiKHW2Xw0o2uQMQVv52xdeb/1BAylwYOzFyZ7Q4UWI?=
+ =?us-ascii?Q?YxrUVIVql06HnxwENm9uR4v+51rmGcE3anWofJBQwa4tdAxYjADU7hWk0FK+?=
+ =?us-ascii?Q?xblOIQ2ihoxmUR/yJjm/QBsTLO4wpRBO4b+da2wWfttDruTns+OwQUQMMGSA?=
+ =?us-ascii?Q?YMqLWEMZqJ5vO7cgP1sLwZJPqFtUw0kLfcjabdB7iT/HUzYNxu7C5sdK8RlB?=
+ =?us-ascii?Q?385wdVywFoI1o+/rrD76ChWGHzFZ1f6T14+DKZI1YYAo0c40IskVE3te+M1F?=
+ =?us-ascii?Q?eqp+uKnY04sKCccUa7K9VqQTb7OZUUDJTI5ZbCy4j/5HmF0+8BOR3aETlLwi?=
+ =?us-ascii?Q?sGTLTOrD6rHa773EdSHOvw6hSvyqPad2vZF40Nt7bSSmHOAjhQJNupZ7wSgP?=
+ =?us-ascii?Q?ta7eSgBQ2yJqrE388239jAJBopxzVkzknVme5BLfRrexuOp9Z/yCv4U4/buu?=
+ =?us-ascii?Q?SEWkVnvZdQuOXSYKgyuBdv0zLO3uIlG2iMBvMX+PgNizTsniuBEw3DTKqwQG?=
+ =?us-ascii?Q?BNmii39+VSPGbX32GHeluto4w+nW02SHrdLLjBKl9lJw5XwEXtEcQTT+BCc8?=
+ =?us-ascii?Q?pP0v11dh7asvnALhY0eliJMLQ4P8TkU=3D?=
 X-OriginatorOrg: moxa.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1257c62-c774-4278-81b6-08de89589936
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb941d8f-dc75-4584-a961-08de89589dac
 X-MS-Exchange-CrossTenant-AuthSource: PUZPR01MB5405.apcprd01.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2026 03:51:15.5167
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2026 03:51:22.9985
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5571c7d4-286b-47f6-9dd5-0aa688773c8e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YwSQo8vb1pCBtVOgS5qIwyykIyCPqoOCDw/h50aSfz0CDBtlLbNyhVdrQJ1aAOVtQMjJVWStlgjNeJS7Ro6/Rycarl22ddgnp0Ggsz1H/Uk=
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2YqZ549BEkbriugRkJ4wl0TExP96lb6uM+7k8Q6TS8x/p+0JyfDIoVS0dUwoQtbx1rPXTY61FMdG4esGhExN5PMPzlh/vuqxpcrBhk94X2g=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR0101MB4844
 X-Spamd-Result: default: False [1.34 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
@@ -141,14 +141,14 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[moxa.com,quarantine];
 	R_DKIM_ALLOW(-0.20)[moxa.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35359-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35360-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[5];
@@ -159,229 +159,101 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[moxa.com:dkim,moxa.com:email,moxa.com:mid]
-X-Rspamd-Queue-Id: 343DA301E12
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[moxa.com:dkim,moxa.com:email,moxa.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 68BD6301E21
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add support for additional Moxa devices using the MXU50U UART family.
+Track the transmitted payload size per port and stop queueing more data
+once a bulk-out transfer reaches the device buffer threshold.
 
-Extend the device ID table and port-count handling for 3-, 5-, 6- and
-7-port devices, and update firmware selection to use the matching
-MXU50U firmware images and version offsets.
+Resume transmission when the device reports UPORT_EVENT_SEND_NEXT, and
+reset the TX flow-control state when the port is opened.
+
+This prevents the driver from queueing more TX data until the device
+reports that it is ready to accept the next transfer.
 
 Signed-off-by: Crescent Hsieh <crescentcy.hsieh@moxa.com>
 ---
- drivers/usb/serial/mxuport.c | 132 +++++++++++++++++++++++++++++++----
- 1 file changed, 118 insertions(+), 14 deletions(-)
+ drivers/usb/serial/mxuport.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
 diff --git a/drivers/usb/serial/mxuport.c b/drivers/usb/serial/mxuport.c
-index ad5fdf55a02e..034b506322c2 100644
+index 034b506322c2..4d29a431cefd 100644
 --- a/drivers/usb/serial/mxuport.c
 +++ b/drivers/usb/serial/mxuport.c
-@@ -39,6 +39,25 @@
- #define MX_UPORT1613_PID	0x1613
- #define MX_UPORT1653_PID	0x1653
- 
-+#define MX_UPORT1252_PID	0x1252
-+#define MX_UPORT1253_PID	0x1253
-+#define MX_UPORT1411_PID	0x1411
-+#define MX_UPORT1452_PID	0x1452
-+#define MX_UPORT1453_PID	0x1453
-+#define MX_UPORT1619_PID	0x1619
-+#define MX_UPORT1659_PID	0x1659
-+#define MX_UPORT165A_PID	0x165A
-+#define MX_UPORT165B_PID	0x165B
-+
-+#define MX_MU250U_PID		0x0250
-+#define MX_MU450U_PID		0x0450
-+#define MX_MU850U_PID		0x0850
-+
-+#define MX_MU850U_6PORT_PID	0x7002
-+#define MX_MUX50U_3PORT_PID	0x7003
-+#define MX_MU850U_5PORT_PID	0x7004
-+#define MX_MU850U_7PORT_PID	0x7005
-+
- /* Definitions for USB info */
- #define HEADER_SIZE		4
- #define EVENT_LENGTH		8
-@@ -48,6 +67,9 @@
- #define VER_ADDR_1		0x20
- #define VER_ADDR_2		0x24
- #define VER_ADDR_3		0x28
-+#define NEW_ADDR_1		0x86
-+#define NEW_ADDR_2		0x88
-+#define NEW_ADDR_3		0x8A
- 
- /* Definitions for USB vendor request */
- #define RQ_VENDOR_NONE			0x00
-@@ -147,9 +169,13 @@
- #define MX_WAIT_FOR_SEND_NEXT		0x0080
- 
- #define MX_UPORT_2_PORT			BIT(0)
--#define MX_UPORT_4_PORT			BIT(1)
--#define MX_UPORT_8_PORT			BIT(2)
--#define MX_UPORT_16_PORT		BIT(3)
-+#define MX_UPORT_3_PORT			BIT(1)
-+#define MX_UPORT_4_PORT			BIT(2)
-+#define MX_UPORT_5_PORT			BIT(3)
-+#define MX_UPORT_6_PORT			BIT(4)
-+#define MX_UPORT_7_PORT			BIT(5)
-+#define MX_UPORT_8_PORT			BIT(6)
-+#define MX_UPORT_16_PORT		BIT(7)
+@@ -179,6 +179,8 @@
  
  /* This structure holds all of the local port information */
  struct mxuport_port {
-@@ -179,7 +205,39 @@ static const struct usb_device_id mxuport_idtable[] = {
- 	  .driver_info = MX_UPORT_16_PORT },
- 	{ USB_DEVICE(MX_USBSERIAL_VID, MX_UPORT1653_PID),
- 	  .driver_info = MX_UPORT_16_PORT },
--	{}			/* Terminating entry */
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_UPORT1252_PID),
-+	  .driver_info = MX_UPORT_2_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_UPORT1253_PID),
-+	  .driver_info = MX_UPORT_2_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_UPORT1411_PID),
-+	  .driver_info = MX_UPORT_4_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_UPORT1452_PID),
-+	  .driver_info = MX_UPORT_4_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_UPORT1453_PID),
-+	  .driver_info = MX_UPORT_4_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_UPORT1619_PID),
-+	  .driver_info = MX_UPORT_8_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_UPORT1659_PID),
-+	  .driver_info = MX_UPORT_8_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_UPORT165A_PID),
-+	  .driver_info = MX_UPORT_8_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_UPORT165B_PID),
-+	  .driver_info = MX_UPORT_8_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_MU250U_PID),
-+	  .driver_info = MX_UPORT_2_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_MU450U_PID),
-+	  .driver_info = MX_UPORT_4_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_MU850U_PID),
-+	  .driver_info = MX_UPORT_8_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_MU850U_6PORT_PID),
-+	  .driver_info = MX_UPORT_6_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_MUX50U_3PORT_PID),
-+	  .driver_info = MX_UPORT_3_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_MU850U_5PORT_PID),
-+	  .driver_info = MX_UPORT_5_PORT },
-+	{ USB_DEVICE(MX_USBSERIAL_VID, MX_MU850U_7PORT_PID),
-+	  .driver_info = MX_UPORT_7_PORT },
-+	{} /* Terminating entry */
- };
++	u32 sent_payload;
++	u32 hold_reason;
+ 	u8 mcr_state;		/* Last MCR state */
+ 	u8 msr_state;		/* Last MSR state */
+ 	struct mutex mutex;	/* Protects mcr_state */
+@@ -250,9 +252,13 @@ MODULE_DEVICE_TABLE(usb, mxuport_idtable);
+ static int mxuport_prepare_write_buffer(struct usb_serial_port *port,
+ 					void *dest, size_t size)
+ {
++	struct mxuport_port *mxport = usb_get_serial_port_data(port);
+ 	u8 *buf = dest;
+ 	int count;
  
- MODULE_DEVICE_TABLE(usb, mxuport_idtable);
-@@ -944,8 +1002,16 @@ static int mxuport_calc_num_ports(struct usb_serial *serial,
- 
- 	if (features & MX_UPORT_2_PORT) {
- 		num_ports = 2;
-+	} else if (features & MX_UPORT_3_PORT) {
-+		num_ports = 3;
- 	} else if (features & MX_UPORT_4_PORT) {
- 		num_ports = 4;
-+	} else if (features & MX_UPORT_5_PORT) {
-+		num_ports = 5;
-+	} else if (features & MX_UPORT_6_PORT) {
-+		num_ports = 6;
-+	} else if (features & MX_UPORT_7_PORT) {
-+		num_ports = 7;
- 	} else if (features & MX_UPORT_8_PORT) {
- 		num_ports = 8;
- 	} else if (features & MX_UPORT_16_PORT) {
-@@ -1053,6 +1119,7 @@ static int mxuport_probe(struct usb_serial *serial,
- 	int local_ver;
- 	char buf[32];
- 	int err;
-+	bool is_mux50u = false;
- 
- 	/* Load our firmware */
- 	err = mxuport_send_ctrl_urb(serial, RQ_VENDOR_QUERY_FW_CONFIG, 0, 0);
-@@ -1065,12 +1132,41 @@ static int mxuport_probe(struct usb_serial *serial,
- 	if (err < 0)
- 		return err;
- 
--	dev_dbg(&serial->interface->dev, "Device firmware version v%x.%x.%x\n",
-+	dev_dbg(&serial->interface->dev, "Device firmware version v%d.%d.%d\n",
- 		(version & 0xff0000) >> 16,
- 		(version & 0xff00) >> 8,
- 		(version & 0xff));
- 
--	snprintf(buf, sizeof(buf) - 1, "moxa/moxa-%04x.fw", productid);
-+	switch (productid) {
-+	case MX_UPORT1252_PID:
-+	case MX_UPORT1253_PID:
-+	case MX_UPORT1411_PID:
-+	case MX_UPORT1452_PID:
-+	case MX_UPORT1453_PID:
-+	case MX_UPORT1619_PID:
-+	case MX_UPORT1659_PID:
-+	case MX_UPORT165A_PID:
-+	case MX_UPORT165B_PID:
-+		is_mux50u = true;
-+		snprintf(buf, sizeof(buf) - 1, "moxa/moxa-up-mux50u.fw");
++	if (mxport->hold_reason & MX_WAIT_FOR_SEND_NEXT)
++		return 0;
 +
-+		break;
-+	case MX_MU250U_PID:
-+	case MX_MU450U_PID:
-+	case MX_MU850U_PID:
-+	case MX_MU850U_6PORT_PID:
-+	case MX_MUX50U_3PORT_PID:
-+	case MX_MU850U_5PORT_PID:
-+	case MX_MU850U_7PORT_PID:
-+		is_mux50u = true;
-+		snprintf(buf, sizeof(buf) - 1, "moxa/moxa-pf-mux50u.fw");
+ 	count = kfifo_out_locked(&port->write_fifo, buf + HEADER_SIZE,
+ 				 size - HEADER_SIZE,
+ 				 &port->lock);
+@@ -263,6 +269,13 @@ static int mxuport_prepare_write_buffer(struct usb_serial_port *port,
+ 	dev_dbg(&port->dev, "%s - size %zd count %d\n", __func__,
+ 		size, count);
+ 
++	mxport->sent_payload += count;
 +
-+		break;
-+	default:
-+		snprintf(buf, sizeof(buf) - 1, "moxa/moxa-%04x.fw", productid);
-+
-+		break;
++	if (mxport->sent_payload >= port->bulk_out_size) {
++		mxport->hold_reason |= MX_WAIT_FOR_SEND_NEXT;
++		buf[0] |= 0x80;
 +	}
- 
- 	err = request_firmware(&fw_p, buf, &serial->interface->dev);
- 	if (err) {
-@@ -1080,14 +1176,22 @@ static int mxuport_probe(struct usb_serial *serial,
- 		/* Use the firmware already in the device */
- 		err = 0;
- 	} else {
--		local_ver = ((fw_p->data[VER_ADDR_1] << 16) |
--			     (fw_p->data[VER_ADDR_2] << 8) |
--			     fw_p->data[VER_ADDR_3]);
-+		if (is_mux50u) {
-+			local_ver = ((fw_p->data[NEW_ADDR_1] << 16) |
-+				     (fw_p->data[NEW_ADDR_2] << 8) |
-+				     (fw_p->data[NEW_ADDR_3]));
-+		} else {
-+			local_ver = ((fw_p->data[VER_ADDR_1] << 16) |
-+				     (fw_p->data[VER_ADDR_2] << 8) |
-+				     (fw_p->data[VER_ADDR_3]));
-+		}
- 		dev_dbg(&serial->interface->dev,
--			"Available firmware version v%x.%x.%x\n",
--			fw_p->data[VER_ADDR_1], fw_p->data[VER_ADDR_2],
--			fw_p->data[VER_ADDR_3]);
--		if (local_ver > version) {
-+			"Available firmware version v%d.%d.%d\n",
-+			(local_ver & 0xff0000) >> 16,
-+			(local_ver & 0xff00) >> 8,
-+			(local_ver & 0xff));
 +
-+		if (local_ver != version) {
- 			err = mxuport_download_fw(serial, fw_p);
- 			if (err)
- 				goto out;
-@@ -1098,7 +1202,7 @@ static int mxuport_probe(struct usb_serial *serial,
- 	}
+ 	return count + HEADER_SIZE;
+ }
  
- 	dev_info(&serial->interface->dev,
--		 "Using device firmware version v%x.%x.%x\n",
-+		 "Using device firmware version v%d.%d.%d\n",
- 		 (version & 0xff0000) >> 16,
- 		 (version & 0xff00) >> 8,
- 		 (version & 0xff));
+@@ -484,6 +497,9 @@ static void mxuport_lsr_event(struct usb_serial_port *port, u8 buf[4])
+ static void mxuport_process_read_urb_event(struct usb_serial_port *port,
+ 					   u8 buf[4], u32 event)
+ {
++	struct mxuport_port *mxport = usb_get_serial_port_data(port);
++	unsigned long flags;
++
+ 	dev_dbg(&port->dev, "%s - receive event : %04x\n", __func__, event);
+ 
+ 	switch (event) {
+@@ -492,6 +508,13 @@ static void mxuport_process_read_urb_event(struct usb_serial_port *port,
+ 		 * Sent as part of the flow control on device buffers.
+ 		 * Not currently used.
+ 		 */
++		if (mxport->hold_reason & MX_WAIT_FOR_SEND_NEXT) {
++			spin_lock_irqsave(&mxport->spinlock, flags);
++			mxport->hold_reason &= ~MX_WAIT_FOR_SEND_NEXT;
++			mxport->sent_payload = 0;
++			usb_serial_generic_write_start(port, GFP_ATOMIC);
++			spin_unlock_irqrestore(&mxport->spinlock, flags);
++		}
+ 		break;
+ 	case UPORT_EVENT_MSR:
+ 		mxuport_msr_event(port, buf);
+@@ -1318,6 +1341,9 @@ static int mxuport_open(struct tty_struct *tty, struct usb_serial_port *port)
+ 	 * returns.
+ 	 */
+ 	mxport->msr_state = 0;
++	mxport->sent_payload = 0;
++	mxport->hold_reason = 0;
++	kfifo_reset(&port->write_fifo);
+ 
+ 	return err;
+ }
 -- 
 2.43.0
 
