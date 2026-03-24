@@ -1,159 +1,243 @@
-Return-Path: <linux-usb+bounces-35394-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35395-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EBcIDQSSwmkXfAQAu9opvQ
-	(envelope-from <linux-usb+bounces-35394-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 14:30:44 +0100
+	id qPJUKbeUwmkXfAQAu9opvQ
+	(envelope-from <linux-usb+bounces-35395-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 14:42:15 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 666B53096DD
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 14:30:42 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2488C3099AF
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 14:42:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9142330774F1
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 13:25:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 29F1630C8244
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 13:33:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2109E3F8E14;
-	Tue, 24 Mar 2026 13:25:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 824B93FCB2E;
+	Tue, 24 Mar 2026 13:33:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="XQ5mEYjU"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="YAVZfCrX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010025.outbound.protection.outlook.com [52.101.85.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28AFA3D5666
-	for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 13:25:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774358739; cv=none; b=JPxTBebVIIvcpQgRy7amMvIDZN248jibm98pSPv+7dOby7ojLfj2J6ToCGIDBv0wikrR1f9FlQ6U8/V+TIEduwmXYdSquqbqCHaLXAlHoaB/lVh7hpyYPLxThl0YX63voatDKI5KWjrQrYP3ftJTM9ed1dZmDdA3tHp/y+oLFwE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774358739; c=relaxed/simple;
-	bh=8D+rmh0EulRwAWJQolEQSbke1F1XQ+tQqgQ5N/08quE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C0atJ/1g+dLOU0xycUK1l+AHCrh6M5KxdPXe9p/O6gormLWJF21ABH79zzDGEkrc3ooWi0FJe3IpcXALUttZ1yUQfO0PThGrXkrc1CvH4oDOYSIjOTwAwb9PGnMWWBmIeaZwtysM7OvcQC/Ol0SsOUn40M2/sdTHrpaFEvpVcmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=XQ5mEYjU; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8cfc085395fso385227785a.2
-        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 06:25:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1774358737; x=1774963537; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fkqof4XtX0lqj+6PLUfaQCeLhyC6Vxdd/HKKTMpiazo=;
-        b=XQ5mEYjUwJHpwDt0knELuhvx/38PDVMvkPCk3HkYbHsSvxNkJXACTMvpeWVJtONuM8
-         wZcKjNkrEibGdzzWf+EoySkzaU2354qnvtU4HuN2L73KaSt6yGO30cYhRad2lJwi3Fy2
-         HYPkZVxMljYK8EdQwSyEgmFx8sutuXvTFuZdaem9j7AGPUQhDSKSHT+kH9xQppPz63XB
-         7RawB1ghxztkjub99aPlBpMkh6nGkZEaonCpaJGVaLCHrChp5QtyAuqmoldLJX3NIdbe
-         ksZl0k4o+EdAQZVIJBW0U2ieF4hJRj9NaNJEoMglPC7pCTyC9WDK4f+LTXrqjW6S8RjN
-         hkbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774358737; x=1774963537;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fkqof4XtX0lqj+6PLUfaQCeLhyC6Vxdd/HKKTMpiazo=;
-        b=jBhSc060p8qLgtggxfJ669Zht/fLAwu8NkaSizL0l0PA09nCjB0p9+Z1ksljOwz8mS
-         5txQens8zdbpABmVqOOjJTpbUvUYxSKgdRVtozpAZANhLCZtP4Q6egKELon3hM/4U5yA
-         +KR3jm70NPGn5+7ZrPUwDne2Z6uftg81tdxr7funD9kBfe8JyX/UnvxfTTt3j37WxZW+
-         2ioGJpGEOoe/O2RQuzESYaAiWki4JlhcuG/uuqCHo8AUn2ZNrdA6VnaHXoTEmaXPOz0x
-         LwYNmuxk8G6xhpl1YJ5kJ6NY1z/pLDsRYVnfJTuQga0nP3ckJF7GvzaGojiMnXwz7n8B
-         dzag==
-X-Forwarded-Encrypted: i=1; AJvYcCWuFZxz9QSd5+/4JNRkzEo17MjoEljtlSrx47yyxlPFRMeSsJ4fh/dBp3bbtiwGqB8huf3w5/rZ8dU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpacYrCGOpswxvplc/y3jdvjyyhbRNSMChLhdw5op2W+ty/YFQ
-	XzeTSitL0XaTs0spJ98ktTLbvt5mnkHmlPoPICji2IuhJRHRgAB0DWyQmQpFqAVPfw==
-X-Gm-Gg: ATEYQzyTcqcqLJ63hBEC8UuLk7vLCmDizQndckNRTJHaZ0s6kUeFdlgkizOuM+3TtjE
-	njvCmNnBMxVICPpePsponWbSp2wn6I9CYaJVck82A7avhH71weWT2Ep2oufYbkBpuZO5e4CpXy2
-	I0yml3zmioirXhv5wQPzDx26e60mBnmWPG4Z8jEMpFllbOQi11XAtqKDFBIBLQ8nQf9aDH8G0Cj
-	qJTcA6urjXKq+Srhb3kwxO3QUPntlVVCnSqgP5yE6q8KOyB/M9eYZU5e+OuPNnFWCc1XmeVS4zj
-	KxQOSMYLHdlN+fezGlf7wd6dwW9oq+o3DTW1QqDmzUmJniID5OW4ZhY7o6Evigj7x4tUta01ALv
-	x5OYBHYaBPhsCOeUkWWysfs1975dT7iF1dJaTkfhQgkMKyotK9Q8G2fu9gmrtjqFyi6w5CLYy/w
-	AD4MvcEOi/DsyG6vtUQdE3Etz6
-X-Received: by 2002:a05:6214:2dc6:b0:89c:a2c8:9432 with SMTP id 6a1803df08f44-89ca2c895famr134460456d6.0.1774358736948;
-        Tue, 24 Mar 2026 06:25:36 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::9c76])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c85214a43sm117153456d6.6.2026.03.24.06.25.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 06:25:36 -0700 (PDT)
-Date: Tue, 24 Mar 2026 09:25:33 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Michal Pecio <michal.pecio@gmail.com>,
-	=?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-	USB list <linux-usb@vger.kernel.org>
-Subject: Re: correctly handling EPROTO
-Message-ID: <3d4a5a9b-a6e0-462e-a3c6-712cc4fb2fc6@rowland.harvard.edu>
-References: <b0217cdc-f263-418c-b8b5-584520d0b1db@rowland.harvard.edu>
- <20260318223851.1f6d07d7.michal.pecio@gmail.com>
- <20260318235920.ioek26hdr25rkksp@synopsys.com>
- <1eaf4cf3-4278-4d04-87aa-8b6069d544e1@rowland.harvard.edu>
- <20260319231620.3ukqxsrwqikp5zbd@synopsys.com>
- <2929d47c-fc02-49d2-873e-758f24c43071@rowland.harvard.edu>
- <20260321021439.7pmcdrpb5oxbivct@synopsys.com>
- <5b378006-666f-4a72-902b-bb5f466f7895@suse.com>
- <20260324010523.3ufngdffak7ldchg@synopsys.com>
- <44ce5041-7286-4f59-837a-995c4e1307ab@suse.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE783FB7E7;
+	Tue, 24 Mar 2026 13:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.25
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774359211; cv=fail; b=B8JgQZrIFMTHGz9KDbl5X6yPZjArazveixd6vj1Y6DG+cr6TKqskjQwbV2luTGxSM0AuKHBmif+6M7V9mvXSvYFSnOf4of0esgRoWQbyZwXYZJLAU0zNovqDsSuUXIFDOXA1NWleBb4B+sjquaPxIXlQH5L1B3HTkKj5TjGy0Es=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774359211; c=relaxed/simple;
+	bh=sF8WBNxMYM5IfW6TJRRw8H3QdjCp9iIe5p807Xp0qgg=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=LmMpxZ0Z1ng9VRtMVlcvzoiokvKWcBbY9xWsxDVL6gGSlMKKzy4YnF3uJbFXTedr3JuP8pXMVPX+sbuyy+dqAxmUoCdgckQYwkRBe+3/yiD0NdZkZTVFhQJ7G4QWDcsqxNm3P4eEQEcaChIStlqdFqEMxQV2SFmYpnxOJTwmQUY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=YAVZfCrX; arc=fail smtp.client-ip=52.101.85.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZqZhJmOa/I6J1zddIMyLMPIFw15bikJXDf7InSe6+QYFlJo/0fbifB8obytZvwjszxGROdZV+/NPi+vj/4HHkhJhqsz6OombuxWEyvoWRnZIgEF7ztrkxRv1ICY0Z4ZBrlVKzlRSYzt7dqGr3O5KsuFEmdspeQnDhrGkSHZJRBOQsdL+JeRqlqde/qdwvTxhO7ktv80CHp9P1BzxMsjLxzmOqed9jdGleWPHJupuQ63imTh7tZciiXJ0Zlc25b8axRIBrlnWjGvIrUOV/S6BG37NMagfPrv0S51JL0AdPPAKDrYl3lwNApQAnVzeOh72iB9oNTT/x5dxovUZVeF1fA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7ZCIFpUENMXB5Rh8UX5aYxAw+tkASxgH6B6AnJbICJc=;
+ b=j/7ClS+BnnM/dNl2twx+IEuRnC4KFuSRVNYgN0hmA2MsVShc8+dRkZrPs940AypgQUrA4It8CEwCHWSWkDtHbbHV7wvxbn7K5bMJVR52noXi2AxU6okT5WKUKYeOi0srygnK3SjMYkmb7BWhoLq/eXPkU1b0uvVvjjNWgNOKtpADCy2Y+9sdCbP+yG0EGyeQbDDA8E/M5q9skRm/8FgJT8zlmuTR62Xl5F3RREjuRWpxYoTzB8TsMNYTs5WzWdy91wyNQ6EGhIDExGZdzc5APfKfsemgoKPVrz+mW6XpFattnVLWwKHrd5dTwzq5BbAeCe2G8ExC/Cy9ydw+3lSUXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7ZCIFpUENMXB5Rh8UX5aYxAw+tkASxgH6B6AnJbICJc=;
+ b=YAVZfCrXkk503tot27wiCkBf4ic3Dm7MKMHQimtt898P8jtFy+AnvAPefGKIU5gGWGEIFl9DEVJfFo2634tSP0fvGKh99GDhGkCVHSnGh9lqmVuR7+3yw31fkPQ5sE7PPg/+cg3V46AOVBtvgoCSCe5uMX5rTlUV/B1BvPngwqMQpC1T11UUcef11hO493anr5TkDJe8mwBREHutKzuP4NtGA5XGC6Oqv3mOGkqhlSKs6YIJ5PJvVNejdp4RFMDxfdUADlqs7f9X7lxly7aASWExxpwMa/u8nVquPBinCFRf4/vYtM4DUoh2nQs0Gzd/NciCXQOKKlROSACt9+x74w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS2PR12MB9750.namprd12.prod.outlook.com (2603:10b6:8:2b0::12)
+ by LV9PR12MB9805.namprd12.prod.outlook.com (2603:10b6:408:2ee::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Tue, 24 Mar
+ 2026 13:33:22 +0000
+Received: from DS2PR12MB9750.namprd12.prod.outlook.com
+ ([fe80::56a8:d6bf:e24c:b391]) by DS2PR12MB9750.namprd12.prod.outlook.com
+ ([fe80::56a8:d6bf:e24c:b391%6]) with mapi id 15.20.9745.019; Tue, 24 Mar 2026
+ 13:33:22 +0000
+Message-ID: <7a6f8967-c635-4d84-bbab-9e019ff79134@nvidia.com>
+Date: Tue, 24 Mar 2026 13:33:17 +0000
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 6/6] phy: tegra: xusb: Move T186 .set_mode() to common
+ implementation
+To: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Thierry Reding <thierry.reding@gmail.com>, JC Kuo <jckuo@nvidia.com>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>
+Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ devicetree@vger.kernel.org
+References: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
+ <20260127-diogo-tegra_phy-v2-6-787b9eed3ed5@tecnico.ulisboa.pt>
+ <af04fc85-1ed4-4046-86ee-1ffcec8c44cd@nvidia.com>
+ <5a5397c8-cc32-4d6b-86a4-76f924ae6d75@tecnico.ulisboa.pt>
+From: Jon Hunter <jonathanh@nvidia.com>
+Content-Language: en-US
+In-Reply-To: <5a5397c8-cc32-4d6b-86a4-76f924ae6d75@tecnico.ulisboa.pt>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO0P265CA0015.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:355::6) To DS2PR12MB9750.namprd12.prod.outlook.com
+ (2603:10b6:8:2b0::12)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <44ce5041-7286-4f59-837a-995c4e1307ab@suse.com>
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS2PR12MB9750:EE_|LV9PR12MB9805:EE_
+X-MS-Office365-Filtering-Correlation-Id: ab4d7983-8a00-430e-0e91-08de89a9eb0b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|921020|56012099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	pYKf2Qt4wr7nR9qVe3JWMVAOmzovazcBvd1d45sk0rc5BmBNc5gUTqgMAoABnpV+qpOSVqF+pn6uuU/1iboJJTB7JDjSRaqY9XijQftfmq15skHFFUBV9x7R3vx5HBKUlhfWv5ciF9AdeRzzWeLMeGsPc9wKAQR49NyvQdfZX1C8e/zQcORsUM6OqoCDuKyXh3gVjQ8b1Bx24AWzJFOlC5ZTVrX+OAbUUNPMWkmc9Ok2XJFAU5Lr/q0UBieYrTEckmfmMcIKqrhFayDX2TxoL7sD2SF/2zvKuSf1f05XjkcFY5ELB1ib3gVg0Qoqnx09H/6cribjR97eLO+eyUu+tImOFVDHcLJfNcCl0Hlv9NfbSUeaTEJsB8DWvL8ILdaCLbI4tVCDQMuqpSFj0wn5a7fZLcG4PBQPOlztTHmdnFS5G6QBwjhHh/Kr30arDpqPmGZqbDq/AdWfcldyF0IQBVNcgDBLYcTlgD05GCtStERNrNbL2k1vOQS1wnQ5vuVoCaBrjuMaOWQToqW20VuzYB1UmQVYthS5bmJ3Qii0LTRAq2hirDJQHkUvtmX4GxuS20Tl70NpdQVfAIDHzT1OpUeRqYaXnQ4Ze7CFaqUBTCjHI0X81q3SaejwWFutDEe+6wNr9j+lN1it8QtgrwoexPjumJqm7S4QYD98e1TCjWtim3CEPm6I3H3m9thZD5q5S/DhGMMfHN/cjddL9STe+cLPKrfv9l+L22mcOBrcHoGjfYErKrjiy4sfoEO7dtCiC3rAkRTEpuv3I2l8lRQErg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS2PR12MB9750.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(921020)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?RGl1N1NsT3JlWXY0KzZNSHQvbWsrUEdQNjMvSTlxZUNJakZxemZKK1BTQVVJ?=
+ =?utf-8?B?cTNFRzFGWS91c1NxZFB0bDFKVWFZa3psTUFMVHZ1cUxHSi9xU0VMemtOcEYr?=
+ =?utf-8?B?bnk4bWxEOGh3ZER3aEVPYjlVUGVabFVIRDJqOUFaTlVreW01cUVDRDFqYktj?=
+ =?utf-8?B?VURPVmZyY3BLTTFnVU9nTkpNY3dzWDBKMVhVQ0hwellyemtuMmUvMkNhdHdM?=
+ =?utf-8?B?ZFZyVVZtRmc1bVFROGVsTjI1NThUUFMwNEYySmpLalIwRHI2NHk2R21hZHdm?=
+ =?utf-8?B?Z3VObHE2YldiZ0NtYy9FSDRHWFF5MEhsQ0I0OVJPeVVpMThTcDJKZ1lHZDV3?=
+ =?utf-8?B?d1NpT3dyR3NabXF0dmZLS2RKbkZKOGFzVmtjQkV2bVZPMzdGSmRPTTNtVzAy?=
+ =?utf-8?B?TERxeEpQZVRkaHlaTUdKemJKK1RmWlBmOUpNN244TDg3cS9kYjhLVmxYbXNX?=
+ =?utf-8?B?Rjg3aUErRnFBZ2xHNXJSTzhydC9kTHdyMkJFTEdWa3RyUVVSQ012bEc1Tm8y?=
+ =?utf-8?B?Uzh1UnBuaExRV0RwaThVcWsrZ3AvRXhxZlVPUE9TRkhJTjVzRnlHd21ZS1hn?=
+ =?utf-8?B?Y3JkY3RQNi9hZUJkWVJMVnd3ZldMVHhjUy9BeWhBVkdTSWtWYkRIbWdJWlJD?=
+ =?utf-8?B?L0tLU3VabUFaMXFkUUVZWDlwTzl6ekFQNiszYVFjOEJiWnh2MkNPTGxuaHlN?=
+ =?utf-8?B?Q2F4eXBwQ09WMEhUQmpjQVU0c0t4elZNUWpkN3B3aEIzb0pNcExMRTJHQ0p4?=
+ =?utf-8?B?b0xLVk9LaXJDM2ZyV3dtTTBhaHg2QmRTczBRL0ZyMHhNVy9EZzd1UFFnTExV?=
+ =?utf-8?B?WjFtSElJMmxwMlhHQUZ2VGNVMmpDNVU3Q3pBQWJwRWhjRnFnbHdCZ0pGRUZG?=
+ =?utf-8?B?TTFSWS8vWXR1RHVrSmtMNUlIMmtLc1hHaEw4amhzbi9MOERLVkZaRHdFc0Qx?=
+ =?utf-8?B?Ti9NUE0xdUREdS9sdUpXelZUeHdvTk1uWXQ2RlE1SHh4ZW5QOEJsTm9uMzVz?=
+ =?utf-8?B?VWVVZEcyeFlGaXVINThYdjY4bGtHOUVFOFVoS0RoVlFXcFpWV0s2by8xbHdp?=
+ =?utf-8?B?UTh1RE1YWndMa2dzV1BuZXBTWHY3R0tPeExSY0svdkFJc3dlTFZUVk5WOFJm?=
+ =?utf-8?B?RjZUNFlHSCthNG5rcUVDUTltb3VaSzBhaVFYQ0xRY3R5TC9ibExYUUJjR0hS?=
+ =?utf-8?B?SUUyalFydlJMNm51U0d5cUdtVzZQOG9NOWhVVDcvWW45ZG11ZHpTSkxlZndO?=
+ =?utf-8?B?SU1PV0RRTitpMHdRY2IxTCt0UEZKWUJhVDArNStoUUg3TWtZZ1dxZU5jOE9O?=
+ =?utf-8?B?aU9aWnJwMnZOTVlYZVlwR0ZURHlRUDlybCtsd0JwMU4vZmkzY1N3enBLN1Vr?=
+ =?utf-8?B?Zk5WeXZpWEgvSkFoaWNpajF0MUtGWFFueG5MTHBoRWt1VWl3alRha1J4ZzRY?=
+ =?utf-8?B?RkhBcHpqSUR5VnMvSkJ3dlkzV3poekZicjlFVDllMnkyUElicW03TU16WUZP?=
+ =?utf-8?B?cTZSMnNCVnU5N0I2eTRmZ3c4UEYxTEJFdzg5SUNjeGhKSVpENFlZUWFXWFRB?=
+ =?utf-8?B?aG1iUHhza1dkWG8wdFBCNVRPbWREOWEyS3ZDNWtQQ3I2cmxoeVZzakVac1BV?=
+ =?utf-8?B?RG5Qa0c3UWo3TEp1K1kyZkFBL2J6b2twTEpFaThYejZaZ3h4UlFSOTNYQzc0?=
+ =?utf-8?B?Q0ZMbnVjUk9kQVYza2V3RSt4ak5xVEJ1UVJseUc2YkVUenVORzByZlpHL1RP?=
+ =?utf-8?B?K1h6K0VyaGEzTW9KTEM2bkV5RXFERjhSUzBQZ2lvOEZVamwyZkFHZVM2aXN5?=
+ =?utf-8?B?WFE0RGowSWJsLys5RHQxT1lxT2dTRTY3eVpCb2MrQXRjZUVHK2tKeGNtaldC?=
+ =?utf-8?B?bVcwQk85aGpvU1dYdnMvbHkxOXYwWDRZREtlbHltQ1p2YldLTGtpNUVUMjJ5?=
+ =?utf-8?B?VkVtbDBndjVJZDlpR2dXUTNxTUhCaTNYWUJaWk5zRWozMDFXK2RnRGM4MVRN?=
+ =?utf-8?B?R0VlRmE2VWw2OTVyOFdwcUp3dE10bUJDN0d4Y2lOUGVON1N2Q2ZhMW8xRVpB?=
+ =?utf-8?B?UlVvSGFkN1d4YVFHOHN6TTlQZXNSci9JNjM3akJCUi9sckFTME9oYnpvcTRP?=
+ =?utf-8?B?NDVIYjdIenZZSktKRG5aWkJnKzdZcHhTTkpqdHRjYkE4ZkluVG1tSDhGcmJX?=
+ =?utf-8?B?M3grWHNIN0Q3dHAvQm5oNVFxZ1dzSjZXWEVNTW5sM0I4SS9TTkY4dmh6ZzJ3?=
+ =?utf-8?B?RGM3V0pmQ2xWbjRvd2Z1ZmV1bzdhL3dxcFhLOXVBU0IrYnMzbHdKb2YzL25w?=
+ =?utf-8?B?Y2ZTcndwVzV6d1pmNWE0N1hCenBxclh0bjI4VlYyM2Y1UUhCNXFOdz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab4d7983-8a00-430e-0e91-08de89a9eb0b
+X-MS-Exchange-CrossTenant-AuthSource: DS2PR12MB9750.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2026 13:33:22.0048
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vvE73lhMOOQWOQobwyE6lo73mtTN+M6H1yEqcvCGR+jQ5eDbs8Id+Bb+QvwQu6h38U/cCGglbpRzWnuilfVw4A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV9PR12MB9805
+X-Spamd-Result: default: False [1.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[nvidia.com,reject];
+	R_DKIM_ALLOW(-0.20)[Nvidia.com:s=selector2];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[synopsys.com,gmail.com,mork.no,vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35395-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_ALL(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35394-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[tecnico.ulisboa.pt,intel.com,linuxfoundation.org,gmail.com,nvidia.com,kernel.org,linaro.org];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jonathanh@nvidia.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[Nvidia.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[rowland.harvard.edu:dkim,rowland.harvard.edu:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 666B53096DD
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[nvidia.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,Nvidia.com:dkim]
+X-Rspamd-Queue-Id: 2488C3099AF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Mar 24, 2026 at 10:28:01AM +0100, Oliver Neukum wrote:
-> Very well. That raises a fundamental issue. Are we planning around the limits
-> of the existing API or according to capabilities of the hardware. I see
-> two specific issues
+
+
+On 24/03/2026 11:31, Diogo Ivo wrote:
 > 
-> 1) What do we do to URBs after the URB suffering a failure? We cannot just execute
-> them.
+> 
+> On 3/24/26 10:16, Jon Hunter wrote:
+>>
+>> On 27/01/2026 15:11, Diogo Ivo wrote:
+>>> Move the Tegra186 PHY .set_mode() callback to a common implementation.
+>>> In order to do this first revert cefc1caee9dd.
+>>
+>> This commit message does not seem complete.
+> 
+> How so? It is succint but it states exactly what the commit does. It
+> reverts cefc1caee9dd and changes T186 to the common implementation
+> prepared in the previous patch.
 
-Indeed not.  That leaves only one choice: Give them back with a suitable 
-error status.
+It does not read clearly to me. The 2nd sentence sounds like that's all 
+this is doing but we are not, we are reverting and doing the move.
+>> Furthermore, I am not sure why we want to revert cefc1caee9dd. We 
+>> purposely moved the regulator_enable/disable into 
+>> tegra186_xusb_padctl_id_override() because it is tied to setting the 
+>> USB2_VBUS_ID. So I would prefer to keep it this way and move the 
+>> Tegra210 implementation in the same direction (if possible).
+> 
+> I don't agree that this is the best solution.
+> 
+> We really benefit from a common implementation for the two platforms, not
+> only because of duplicate code but more importantly because without it
+> whenever a bug is found and fixed on either platform it most likely will
+> not be fixed on the other one. Case in point, cefc1caee9dd fixed a bug
+> on T186 but not the same bug on T210 (which then led to this series) since
+> the implementation was not shared among them. Were it the case that they
+> shared the implementation the fix would have come "free" for T210.
+> 
+> This will keep happening for as long as we have duplicate implementations,
+> which becomes more relevant since there is a severe lack of testing in
+> older Tegra platforms. I also thought about making the id_override()
+> implementation shared between T186 and T210 but that would be take more
+> changes since register definitions would need to be moved somewhere
+> else too.
 
-> 2) Do we need a second callback for an "undead" URB, which decides on how errors
-> are to be handled?
+I am all for a common implementation. I believe that in the 
+tegra186_xusb_padctl_id_override() function the only thing that is 
+different is the offset for the USB2_VBUS_ID register, which should be 
+easy to handle.
 
-That would be too much complication.  The decisions on how to handle 
-errors, whether to resubmit, and so on, are entirely up to the class 
-driver.  Whatever the decision is, the driver can carry it out directly, 
-with no need for an extra callback.
+Jon
 
-Alan Stern
+-- 
+nvpublic
+
 
