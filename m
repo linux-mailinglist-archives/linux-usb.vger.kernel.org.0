@@ -1,167 +1,184 @@
-Return-Path: <linux-usb+bounces-35408-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35409-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gMnrEMvbwmm0mwQAu9opvQ
-	(envelope-from <linux-usb+bounces-35408-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 19:45:31 +0100
+	id SHuBBortwmkdnQQAu9opvQ
+	(envelope-from <linux-usb+bounces-35409-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 21:01:14 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEA2231B02C
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 19:45:30 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C245131C036
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 21:01:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2AE48301AA94
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 18:45:27 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 12A8B3023E15
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 19:56:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55D073B2FD5;
-	Tue, 24 Mar 2026 18:45:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7FDB30DEDD;
+	Tue, 24 Mar 2026 19:56:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Nj6CCrMu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BkBf6S52"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f98.google.com (mail-qv1-f98.google.com [209.85.219.98])
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D533B19B3
-	for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 18:45:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.98
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774377925; cv=none; b=D+k04Cq84jIE/NJmfW+OFbI1DZqmBnKJqcTvOzf5qBEU+t0kQEZ4rRLrFA8vPpbAmD5rwuNi24rCWDT01IT2Kvnf3NYgn62miQyVmMEBHIsVukkiyzNZBXoiZUyfxNzi2GeCNkfxNzbjIy80fWx4MRj4zq0JxynNHbRXHXmzb3M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774377925; c=relaxed/simple;
-	bh=zgIDjGBLHYRXKjHT62Y8zHCcmWlzgS1goIgHk7PM6/U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MAcgc/8/NPxci1qctwhlGqrK45GgYIBRwUkQIwVgxxBdVHzOzWt4ffPY5nfX37To4ZVhjYMB6lH9qaBT4NImoAUe2mdoHBetWnP1+XaqDl/JrEOPJsjhxjH5w/npTWHfsOGK5TQ0ykWbpWkXhQwqfifGjMLs+O+JDrsE/yG7tz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Nj6CCrMu; arc=none smtp.client-ip=209.85.219.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-qv1-f98.google.com with SMTP id 6a1803df08f44-89a05955720so66024806d6.2
-        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 11:45:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774377924; x=1774982724;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qV3+ksbhWzQ3JWuKsMBNviGlAsd2rzdqL3CoeGDVw0U=;
-        b=VhXPUmyugrtLxrHWZf/1ksmmpSq5/Uu7h5oSFzJHaWCt3a9bUxNw6kZYa4bU1Npgl3
-         5PV3zG+az111Z0n//rghXktX6PlIjxkBjOoTM1D2hVqbpw6Do3rcjhXFJzgtu5jfKLOV
-         O+REWf5GDvWRdlW41gMaHq8sAzz7ExLKlP8UhY14bF6V80+AFH+PXgptHef+O3TSqe/d
-         0e3IhVBMSvz+MmCG1hDHXb9Lu2Bggk27FYo5P7JyVInwF5fIf4l1E1FD6veb8E4PZufl
-         1FRf/aMgm48cJak3uV7HtE2GyVMF8pt72w+Q6lzsQ8FhBfyCzKGmxv9NXcYB2HF2eq+m
-         HWgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVvCunF6unqN7geHZvihazkguzJOPYGTNQvAfew9O1GPqzmOFOsFmarjWlYsXQ2HPCg5IXfybSzc7g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw84Olr7Zx/shU75O4Kr9HxRH6cTJ2MzeiU4DBGc9qrG8H5EAZg
-	cWWYRTZq1DLNrdOxku0eiWzDebJqTsenbj0AvblYiCr8ahLY68FSJskM+Ldsdx7P8b2F7W5JGyq
-	px9LAuwtLUDDYFqqLampsqyG1UXzRVnw6g3adSlTXau/ZDVsTOe6SCD3qjpW5fSgFu4OkizlZZ6
-	rko4Y69fJzmfbERAHyt7m1XEHfNOsyp7qtU3KyxsGk/gKsOS65+rMeRWRSEsS1NsUGOD6eZIEOk
-	Md+uuMAiqZ1LQ==
-X-Gm-Gg: ATEYQzzMZLoACFYgtFY03UPHr1E5gGQ4FW0wYJG0KY1qhlrE3xw0UWvclFFhDVGIlAx
-	mvnk8fcO7DNqHf7OuNt3RM+OXo9nSC5dQluKihCiaJknCdvQi5044s3SfIgJY27JwaM1+7KJcQM
-	93w1LNTVm7cumwwC6BgfxQmPRQQmLJ/dGLlD4BeXEVnPDdaUjpSaNUYwyyzj4PQ+bN0D910npuT
-	NRaXTYjaudQV08unauPpiJMd/mSmgFlsExsWg634zlkFy/PbCFUQO4/mx5CwJpZmUry+KC1yrxl
-	TDAnv48AEui/n3lOtGH9bfhjHmYjWa+aW8sn2lDpvRsJwcwasbiCAQuOePHzRfWFK50ndihBT3i
-	1DcPs4i2PmZbtZelA/keSlzGzYNb/1DJlP/q9LpW8fO5UljjrbX417UEYeHuOj+OGM3bE5/4GzG
-	8KbEEmHKq66POnX0hu1RFj1G7516uHNIXfMFyU7ak+9by89dB9Gv6OdMHvaA==
-X-Received: by 2002:a05:6214:4892:b0:89c:3d3e:697c with SMTP id 6a1803df08f44-89cc49aca3dmr12054986d6.14.1774377923418;
-        Tue, 24 Mar 2026 11:45:23 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-102.dlp.protect.broadcom.com. [144.49.247.102])
-        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-89cc1dfd018sm1068226d6.25.2026.03.24.11.45.23
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 24 Mar 2026 11:45:23 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8cd77e5e187so1248653585a.1
-        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 11:45:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1630628751B
+	for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 19:56:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774382174; cv=pass; b=lmQ66rYV7uDiuq0RitDvxEN/e9hZixUli+hEhWeALrrX8A81vmbXqk0LrdmcH36zMZNHxJBhN3KjeHNORrvkGLycm2D/lmtS9WrqAQvAUwWvFxXZ4h5bWNLD+pg/UMzh9IoFf//6ep3zJ93HPwcJoxpGeza/ZIwIJrQJ0UN58xg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774382174; c=relaxed/simple;
+	bh=oR8xUTPOj3/MQ4wkgPJM/M5JNRfvF7PQNZmCBV8vP5s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pu9I1g5GIsxjysw5a6dZDXYLbOKEAQ6Ae/cfZa8OBuYFcGX1K4iprLsTFiCid9af+uB+GIEB5TUETiJt2UMxa7bNa8ZLuuZDWbtA3OK7pOUzX2W2SBK/Y7hYIp8KDB2+dtOalJ9eVB4zAI8KjFd4lKfhWbRQ0aRdbHgOOyZ9EVY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BkBf6S52; arc=pass smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-50b29c4e554so53378101cf.0
+        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 12:56:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774382172; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KzhSOcyObmEXvw43aJpEnDV0x/7TqDAGLn/wE/+oLxBn6AIuzZegeYuykV62X42OZA
+         XOfTkBUdl2bSWrepxpH4Ind2RbMng3pjjcI4h5WpJfX0ih5wK/lb3yoXvNfOSI1yHYAt
+         lYNBnOfJNZJnIp3JMBvuL9UmI1jz1513CybmT8O3HJAJWNbkw6ZsnzO3LaL7AMMrP0IC
+         k+3SHoPr6Ksfm59+18ULR8sdPHJKibYd021LGOiYWpCe0Q3bImG6+vtSfuQIRcATgGD5
+         nCo+EPdMTjZTnHCUxLttQMpD48dBvo9H/Y/jBX4WUFyrTFnWYd5xsEH5qlHjJ39V6diI
+         ThhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=aPRDpn/My64eHIRqLgmhXyxMCxs/fXj5TEoqaC2Rfng=;
+        fh=RJk+pZqpqHiQVCVuJD0Zn0GPfBYL6VTxd4FySlr35Q8=;
+        b=GRX+ohmd8aJvY2I39A/0xj/NUdSbeHj9JB7DrRx/cGUbxuYSI8T54oWrgB/YUKPi5e
+         vvIEYOh9Hi7izm0/M1XseQzMWdkhmKT6PCDeHmoDNwrayGb6MFqcZk+sGDPPHmxKNWZ7
+         ShMAzn4e9Bwhwm8NoaN4ynjhUktawq9Xsd5+v+/LTcdOeNq41CSChQk0l+fYkmjA97eb
+         F//Cc91qQMUW2uYv/s3GMOSwvycBp1awNpbRiBLB8OnchKOXDSf4CXFAUDBDXwUUNj7D
+         A3+HNJFckFt461VhV/g5jfVH7BStj8agew7YLPka7jqg+BgPHzOBfLI72GVXLwUf7Nnl
+         VUrw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1774377923; x=1774982723; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qV3+ksbhWzQ3JWuKsMBNviGlAsd2rzdqL3CoeGDVw0U=;
-        b=Nj6CCrMuil+nt8xT0AKZIm5QdVA+sosb4LiMc+cxyx1YpTN2DqqjQKgbsz7QqPqhKN
-         fcpBqlu5cLtExB7hds3pNeydqBxZVzR/zTA8Tm1u3sYtzzOYOZOmTUXSBRVS22O2f6E7
-         XLxekBksIExr/atJHImahxThigT7b8sucdAxY=
-X-Forwarded-Encrypted: i=1; AJvYcCUT7vKtek1StmUJKBr6Yhk7+4AHOQa8Bv7U922zm5JbfzymTtR3XC51vaaNXQN+xVmiFfQ7SAbQ2dE=@vger.kernel.org
-X-Received: by 2002:a05:620a:690f:b0:8cf:c218:739b with SMTP id af79cd13be357-8d000f3b707mr94339385a.18.1774377922497;
-        Tue, 24 Mar 2026 11:45:22 -0700 (PDT)
-X-Received: by 2002:a05:620a:690f:b0:8cf:c218:739b with SMTP id af79cd13be357-8d000f3b707mr94330385a.18.1774377921695;
-        Tue, 24 Mar 2026 11:45:21 -0700 (PDT)
-Received: from [10.14.5.144] ([192.19.161.248])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cfc9088df1sm1144053285a.25.2026.03.24.11.45.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Mar 2026 11:45:20 -0700 (PDT)
-Message-ID: <6c46d196-bb77-4a7c-aeab-d167747fcd11@broadcom.com>
-Date: Tue, 24 Mar 2026 11:45:17 -0700
+        d=gmail.com; s=20251104; t=1774382172; x=1774986972; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aPRDpn/My64eHIRqLgmhXyxMCxs/fXj5TEoqaC2Rfng=;
+        b=BkBf6S52PLjXzr6TESQ5jT3WdIpA8JqFogqGfYhL5EXt7CALk39t0OW7Z0sdeBmCLD
+         3p61NSZp8ws5bJhdl9O9gmIanGhdlKjCTB4HeCnc6O5R7JHLoCTVvWMROMH+OJCUFrpm
+         58G/J4UyKwm6W9NVuTeD6T4acgLlqKytKWtDCSJBTeF7z+m1q7OrB9GCtkQyrNkcyt2m
+         ZisflvO2kFOdbG91M/EgKovebGtXHxh7KmCLesPBlEEinWLQO8tQipUhridv2IhoSwE2
+         NUM7iSqAxv86g5eE6/mTTUVMms+FmvVinZKDVfEU2eWJYk67EiWH743Mhtk+3j5VvlnL
+         fZcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774382172; x=1774986972;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aPRDpn/My64eHIRqLgmhXyxMCxs/fXj5TEoqaC2Rfng=;
+        b=AObLxCXugVBMRmR3JUmZS8tpnwdF3ZMyT5+rrSkqnLuLbLDBZdwm7ip7XtMNPsghOE
+         eZFBFpbik4ZxCPiHGhbul9Wt14OnPm31y/0s+oiC7fvLi0GMvV7tXl2BRZyBaJCyMz2E
+         vnCTDSFtaM6/TrkQ/p/OdoyK105228scFABoc9AUGg/MW+IWFGheKfiJkEJnDDK9SnQk
+         b2ZUNdkEI5GvsTUqprKRRJO2tnNk/vJCkT+ulfnD8AwAXCWQ3o2szJkf7pquN1UP+Rsm
+         y1+9q7FNXxAyJpywwMRIOZwcRzClc5iccT9lFnJRougHfyRZhB8s8CC+dcbcwOrAfQIC
+         slVw==
+X-Gm-Message-State: AOJu0Yy+FFOLB20xM6K7sVunOsrvfaD0kR/URYAIXy7ALXbta0ypHL2Y
+	mS1aXaHlix/J78y24Av5W1S31IuVWDH58UwDZbPvyOw+Bmgv3PYeSHG6y6alOxMrUUJwdo6ADiN
+	ivxNQgFCU31eUBArc7Vn4/0pznmCCItd4/I28NHA=
+X-Gm-Gg: ATEYQzwcIrVqriynEmyIV/W/FCmCFQr1gBwd03lVmT/cEGyEeYks+Jqtcyi15z8tfDs
+	S9sTy4tiYM0jrr0W7m0NUDPX7IsblxuYta89nAjzqQ23vgaCEmtAPaO+tsfTsEr4cvtY26RCfcT
+	cqNqoj9SlC6KMgjLXv4sxZ9LkqKeq9axf6+vhuhd9E2tDohKElFouFbbJMZemz2d+NwlNxLPdu8
+	tsu5DpmN7/lknf5Ym4gVk9vxLhkmH9qjtSM16HN0DUWlG2at2PEDfHQeSO93tNsLBU8AkbuXbO8
+	MuyUrGPfeldibCWt9zHYzwtoDoq/FPuQpYTkOCuC8UjfQdHd6h7idO7QvGSnTVZTy6A8XgFgQai
+	BhppfSQuI1GARKYLSHWBg7yN2
+X-Received: by 2002:a05:622a:999:b0:50b:496c:baba with SMTP id
+ d75a77b69052e-50b80e67611mr14651491cf.57.1774382172102; Tue, 24 Mar 2026
+ 12:56:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: gadget: bdc: validate status-report endpoint indices
-To: Florian Fainelli <florian.fainelli@broadcom.com>,
- Pengpeng Hou <pengpeng@iscas.ac.cn>
-Cc: alcooperx@gmail.com, bcm-kernel-feedback-list@broadcom.com,
- gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260323121730.75245-1-pengpeng@iscas.ac.cn>
- <89a5cf0e-444a-42d3-b7cb-49ce2560995c@broadcom.com>
-Content-Language: en-US
-From: Justin Chen <justin.chen@broadcom.com>
-In-Reply-To: <89a5cf0e-444a-42d3-b7cb-49ce2560995c@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+References: <CAN9vWD+13DHCyjq+7hYgTSDx87TLtKXV9-8GMnZPuZnYvjyANA@mail.gmail.com>
+ <2026032337-resend-recolor-efc5@gregkh> <CAN9vWD+N6K4VExNgnhp=amfBDJTFN9Sz156qsy550dP-d1S9Qw@mail.gmail.com>
+ <2026032431-chance-dodge-6b6e@gregkh>
+In-Reply-To: <2026032431-chance-dodge-6b6e@gregkh>
+From: Michael Zimmermann <sigmaepsilon92@gmail.com>
+Date: Tue, 24 Mar 2026 20:56:00 +0100
+X-Gm-Features: AaiRm53wHoShpUyzEpK9IIkES0eJonyh5hEp7Z4GrUh656OHTon151kaSNg-mBM
+Message-ID: <CAN9vWDKZn0Ts5JyV2_xcAmbnBEi0znMLg_USMFrShRryXrgWGQ@mail.gmail.com>
+Subject: Re: Oops when rebinding f_hid while /dev/hidg* is still opened
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[broadcom.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[broadcom.com:s=google];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	DKIM_TRACE(0.00)[broadcom.com:+];
-	FREEMAIL_CC(0.00)[gmail.com,broadcom.com,linuxfoundation.org,vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWO(0.00)[2];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35408-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35409-lists,linux-usb=lfdr.de];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[justin.chen@broadcom.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sigmaepsilon92@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: BEA2231B02C
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: C245131C036
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+> Ok, something is not being initialized again properly.
+>
+> Take a look at the patch series at commit 41f71deda1c1 ("Merge patch
+> series "usb: gadget: Refactor function drivers to use __free()
+> cleanup"")
+>
+> Perhaps something like commit 42988380ac67 ("usb: gadget: f_ecm:
+> Refactor bind path to use __free()") should be done for the f_hid
+> driver?  Can you work on that as you have a way to test this well, or do
+> you want a patch to test?
 
+First off, I had an aha moment about `89ff3dfac604 usb: gadget: f_hid:
+fix f_hidg lifetime vs cdev`, which I mentioned in my original mail:
+That one seems to have fixed removing an hid function while the cdev
+is opened. The issue I'm seeing is about binding/unbinding the udc
+while the cdev is opened.
 
-On 3/23/26 12:20 PM, Florian Fainelli wrote:
-> On 3/23/26 05:17, Pengpeng Hou wrote:
->> bdc_sr_xsf() decodes a 5-bit endpoint number from the hardware status
->> report and uses it to index bdc->bdc_ep_array[] directly. The array is
->> only allocated to bdc->num_eps for the current controller instance, so a
->> status report can carry an endpoint number that still fits the 5-bit
->> field but does not fit the runtime-sized endpoint table.
->>
->> Reject status reports whose endpoint number is outside bdc->num_eps
->> before indexing the endpoint array.
->>
->> Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
-> 
-> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+I don't see anything wrong with the goto error handling in f_hid's
+unbind, but I've done some tests regarding my suspicion about
+cdev_init, and it looks like that is actually the problem. Calling it
+on an already initialized structure is simply unsafe (unless there are
+no references left). The lifetime of the cdev is bound to the device
+in hidg, but the bind/unbind procedure can happen independent of that.
 
-Tested-by: Justin Chen <justin.chen@broadcom.com>
+I see two solutions to that:
+- Move cdev_init to hidg_alloc and cdev_device_del to hidg_release.
+I've tested this and it removes the issue, but it changes the
+behavior. With that, the /dev/hidg* will be created as soon as you
+allocate the function and bind/unbind of a udc device has no effect on
+its existence. Only deleting a function will remove it.
+- Use cdev_alloc in hidg_alloc. This would allow replacing the cdev
+without invalidating the old one. This would probably require
+introducing a global variable with a list of hidg functions though to
+provide an alternative to "container_of(inode->i_cdev, struct f_hidg,
+cdev);"
 
+Any thoughts about the best way to proceed with this?
+
+Thanks
+Michael
 
