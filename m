@@ -1,166 +1,173 @@
-Return-Path: <linux-usb+bounces-35386-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35387-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QBzpN3B2wmnqdAQAu9opvQ
-	(envelope-from <linux-usb+bounces-35386-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 12:33:04 +0100
+	id 4EPCKAx/wmnqdAQAu9opvQ
+	(envelope-from <linux-usb+bounces-35387-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 13:09:48 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88048307592
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 12:33:04 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED8F2307EE9
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 13:09:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DD85C30E7664
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 11:31:30 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 399DB30D6953
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 11:50:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A505A3EB80B;
-	Tue, 24 Mar 2026 11:31:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 082DA3F0A9F;
+	Tue, 24 Mar 2026 11:48:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="lgHrWBaH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gsaRuY6e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE1E3E2755;
-	Tue, 24 Mar 2026 11:31:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7653F074F;
+	Tue, 24 Mar 2026 11:48:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774351889; cv=none; b=uIeITGA1IsFD5vtOhVxC78e5Unmo5nqWm9r+F3mu1LKHY42UVwc3PbDepul5MoKXDPQ7y9fxP8zNAuFBVhEpnMynLpDefRF2f2fWPyum5BFLx8CfoQO/5yoMkGLtQ498sqigC6O3eTsezCuFpNZHD0qqle/nBcX2baqaKZmp/5M=
+	t=1774352910; cv=none; b=hyICMqJgOxXZWwlS4Z76HkqIvUu+magptFgse/xOQyYBzCVqwjhbDTJpFbhs+vZOTTFfxYYpyc0JX1IJdCFXhzghzRFpq2B39bELpIWEAPmKHvW6Z6rHlKFzhALVw5b4haUvCYxkafkP5r1aMDVkQLHCCYES3dFXrRGo/Scq+IE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774351889; c=relaxed/simple;
-	bh=II2rZwZeLPXJZhkpJhi4wJRb5oOq3AIDy0SrqkkRGQE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gouahX8QQ9CQdyWdJ7z1yrbz9X+LXsgnvQHuiEO65rWc9koQzc9xCO8mdP0I6xxzvswHAa1oi5SSvQM5jbFdpkbBrzpxQsrRywN2UAPpAt9AX4p7vfAOyumvNZKxGT1oCF3QZqfcsO9XfO363m63wXOfT4l/1UqrkjuAEosf6vA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=lgHrWBaH; arc=none smtp.client-ip=193.136.128.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id EECEF6002439;
-	Tue, 24 Mar 2026 11:31:21 +0000 (WET)
-X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
-Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
- by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with LMTP id YRfo6YsFNLkN; Tue, 24 Mar 2026 11:31:19 +0000 (WET)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [IPv6:2001:690:2100:1::b3dd:b9ac])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 736066002436;
-	Tue, 24 Mar 2026 11:31:19 +0000 (WET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
-	s=mail2; t=1774351879;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zSwCOD4R8nBRbYuCX+0wUTZPA2P7sMyjbzopSB4njWE=;
-	b=lgHrWBaHuXpubfTTTI1CnMeRCMIPwkhn1V0/z5oDj59D4RJJS7er242v736fbfdxLlwj6t
-	211O8rhOZ2/B6nEHXFV8kgrrI6bQfu6xTpoRqZEZI3AjyBLetL+CEQq70aZo3dG7zIbCdt
-	GfPyYA6LVlmos7uq01plRG9SjiQGr1OjntVB2PPqeKUXCQR6ybTkphVYvLOi2Bwuc6moGg
-	GOEQ0Ss2+7nUNLKb+7kSItPNdCbwDSGH28zKXyRGueeTIleNp6waxnXIKFHeYsTuy1ZZMX
-	GiGSxZrZEbaemjGMv2jyJUJLjhdQU6Xf62+q4NYkAyBKSauFJgE7/EYcbfH8HQ==
-Received: from [IPV6:2001:8a0:57db:f00:3ee2:38aa:e2c9:7dde] (unknown [IPv6:2001:8a0:57db:f00:3ee2:38aa:e2c9:7dde])
-	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 6EDB6360164;
-	Tue, 24 Mar 2026 11:31:18 +0000 (WET)
-Message-ID: <5a5397c8-cc32-4d6b-86a4-76f924ae6d75@tecnico.ulisboa.pt>
-Date: Tue, 24 Mar 2026 11:31:17 +0000
+	s=arc-20240116; t=1774352910; c=relaxed/simple;
+	bh=6CXTjNHX0J4uF5Ojb5ZTtc7BYWwcUfE/5znpHFlnD7w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EuPO0n+uXap7t0y3LUTLoMbKUtPv48rQ7BcHm7IUDnthPlPvpKumPREWxm28VbyEELgV9IFZW3F9Mq5I9KX8cM+vVIr8Kg3E1EadWrw93b0mUcf1PIExjjtcd2BrAg7HaKPZiAs7DVrbhvy7Y37BdVrn8T4SVmiKOnMDehqj3lM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gsaRuY6e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8EBFC19424;
+	Tue, 24 Mar 2026 11:48:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774352910;
+	bh=6CXTjNHX0J4uF5Ojb5ZTtc7BYWwcUfE/5znpHFlnD7w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gsaRuY6eViu8X3g7+P8vdzfxU4G+qz03aiKEZuxnGTNsLVxiKXMSAswe4uAP4Voff
+	 9Ya58a36gSb4qTTV2ALgFbdUiig5NcEiPClqZfMMpWh47cbVgEFlfyQE7SR/lhNk4d
+	 jXzk2INfqyjbAPNNKbbjeeKw144hv7CcDnL7MbSF2wt5ImoiprqnaXr+p9eEJhMVbi
+	 a1Fznmx7J3yfrSTOVsNjX+TwRExiB67lrRqxzPeABK3epFD8N4N4dMLlH/kC2Xc0hC
+	 zWfjNxa/AqFXRF0eCkSus1j1bgH5+Aq6qAHRrRo1IliJcDMUYbKBG5kgQ3HLQn4g0s
+	 f7Wv2zWveKrWw==
+Date: Tue, 24 Mar 2026 12:48:27 +0100
+From: Thierry Reding <thierry.reding@kernel.org>
+To: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, JC Kuo <jckuo@nvidia.com>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] usb: xhci: tegra: Remove redundant mutex when
+ setting phy mode
+Message-ID: <acJ50sQraVmy4zXs@orome>
+References: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
+ <20260127-diogo-tegra_phy-v2-2-787b9eed3ed5@tecnico.ulisboa.pt>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/6] phy: tegra: xusb: Move T186 .set_mode() to common
- implementation
-To: Jon Hunter <jonathanh@nvidia.com>, Mathias Nyman
- <mathias.nyman@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thierry Reding <thierry.reding@gmail.com>, JC Kuo <jckuo@nvidia.com>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Neil Armstrong <neil.armstrong@linaro.org>
-Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- devicetree@vger.kernel.org
-References: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
- <20260127-diogo-tegra_phy-v2-6-787b9eed3ed5@tecnico.ulisboa.pt>
- <af04fc85-1ed4-4046-86ee-1ffcec8c44cd@nvidia.com>
-Content-Language: en-US
-From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-In-Reply-To: <af04fc85-1ed4-4046-86ee-1ffcec8c44cd@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="geubzoieqitgmbmw"
+Content-Disposition: inline
+In-Reply-To: <20260127-diogo-tegra_phy-v2-2-787b9eed3ed5@tecnico.ulisboa.pt>
+X-Spamd-Result: default: False [-2.26 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[tecnico.ulisboa.pt,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[tecnico.ulisboa.pt:s=mail2];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35386-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[nvidia.com,intel.com,linuxfoundation.org,gmail.com,kernel.org,linaro.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	TAGGED_FROM(0.00)[bounces-35387-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,tecnico.ulisboa.pt:dkim,tecnico.ulisboa.pt:mid];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[diogo.ivo@tecnico.ulisboa.pt,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[intel.com,linuxfoundation.org,gmail.com,nvidia.com,kernel.org,linaro.org,vger.kernel.org,lists.infradead.org];
+	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[tecnico.ulisboa.pt:+];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[thierry.reding@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 88048307592
+	RCPT_COUNT_TWELVE(0.00)[17];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: ED8F2307EE9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 
+--geubzoieqitgmbmw
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 2/6] usb: xhci: tegra: Remove redundant mutex when
+ setting phy mode
+MIME-Version: 1.0
 
-On 3/24/26 10:16, Jon Hunter wrote:
-> 
-> On 27/01/2026 15:11, Diogo Ivo wrote:
->> Move the Tegra186 PHY .set_mode() callback to a common implementation.
->> In order to do this first revert cefc1caee9dd.
-> 
-> This commit message does not seem complete.
+On Tue, Jan 27, 2026 at 03:11:48PM +0000, Diogo Ivo wrote:
+> As the PHY subsystem already synchronizes concurrent accesses to a PHY
+> instance with a core-internal mutex remove the driver specific mutex
+> synchronization.
+>=20
+> Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+> ---
+> v1->v2:
+> - New patch
+> ---
+>  drivers/usb/host/xhci-tegra.c | 4 ----
+>  1 file changed, 4 deletions(-)
+>=20
+> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+> index 8b492871d21d..927861ca14f2 100644
+> --- a/drivers/usb/host/xhci-tegra.c
+> +++ b/drivers/usb/host/xhci-tegra.c
+> @@ -1357,15 +1357,11 @@ static void tegra_xhci_id_work(struct work_struct=
+ *work)
+> =20
+>  	dev_dbg(tegra->dev, "host mode %s\n", str_on_off(tegra->host_mode));
+> =20
+> -	mutex_lock(&tegra->lock);
+> -
+>  	if (tegra->host_mode)
+>  		phy_set_mode_ext(phy, PHY_MODE_USB_OTG, USB_ROLE_HOST);
+>  	else
+>  		phy_set_mode_ext(phy, PHY_MODE_USB_OTG, USB_ROLE_NONE);
+> =20
+> -	mutex_unlock(&tegra->lock);
+> -
 
-How so? It is succint but it states exactly what the commit does. It
-reverts cefc1caee9dd and changes T186 to the common implementation
-prepared in the previous patch.
+It looks to me like the mutex here is trying to protect against
+tegra->host_mode changing while we're setting a different mode. That
+doesn't seem to be taken care of by the PHY internal mutex.
 
-> Furthermore, I am not sure why we want to revert cefc1caee9dd. We 
-> purposely moved the regulator_enable/disable into 
-> tegra186_xusb_padctl_id_override() because it is tied to setting the 
-> USB2_VBUS_ID. So I would prefer to keep it this way and move the 
-> Tegra210 implementation in the same direction (if possible).
+Thierry
 
-I don't agree that this is the best solution.
+--geubzoieqitgmbmw
+Content-Type: application/pgp-signature; name="signature.asc"
 
-We really benefit from a common implementation for the two platforms, not
-only because of duplicate code but more importantly because without it
-whenever a bug is found and fixed on either platform it most likely will
-not be fixed on the other one. Case in point, cefc1caee9dd fixed a bug
-on T186 but not the same bug on T210 (which then led to this series) since
-the implementation was not shared among them. Were it the case that they
-shared the implementation the fix would have come "free" for T210.
+-----BEGIN PGP SIGNATURE-----
 
-This will keep happening for as long as we have duplicate implementations,
-which becomes more relevant since there is a severe lack of testing in
-older Tegra platforms. I also thought about making the id_override()
-implementation shared between T186 and T210 but that would be take more
-changes since register definitions would need to be moved somewhere
-else too.
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmnCegsACgkQ3SOs138+
+s6ESAQ/9EMcAUytgVdqWsJtOBxpPlq0tVZ2c5MSbDjInQhkZMWHEEqh4CS0S7gwO
+524kejcplYr2DTbmr/wI0zjfWP7Aomr7HGRWiUUCVCYru/V9YLwXak5A0+OtKusq
+i4aCxyzdzUcXYdXCxglPOBPW0nr3v/NGkG/fqvBEKAMiSfgWhXL3Y7BPsPw/g0o5
+ro+f10rx1QlLR9V+2Zkie2CufCkpqChsutAgGM0o0b6FpT1H3ICTBFW0AJ6a8sv7
+fMB4cba7XWBLC38BEfjKsRum62s5ImJklbTYahVZbkLp0cFIBaMQPZhAbkH937i4
+ouJXF/2oew+Z9d3aN4eLhOMvoml0a9Ttthhx8S1QgJ+tF4uII9wrSlVnNsOU3wRc
+ft3RaKEffEJJ8/796FF0x+kLPeqeIhE0GC8/O2LavsZLQJo6T55g1sG1hytkixM1
+DsEaCG1qqe4yAthaW1Gge28uq5yd6k36cxOORwIhrP9usHKV1X6Z5IPbkziJ8XeJ
+a+tSM/AD6m1oKMxPRJke7PkM04oc+cZzSPcmZ2abBocV2t/CLmd5TCgGPZ+er8aT
+wOW0l0ERdomQMAGhMo8rJHN225YRE7fG3Hy5lhTux1mcAQsb4Y61QW8qxA1nCIqJ
+d0tqu1GKLIwTGZEGG+fydMq7BAy+F3+duGopgY5IJ4bU1YGjsaU=
+=eWzY
+-----END PGP SIGNATURE-----
 
-Diogo
-
-> Jon
-> 
+--geubzoieqitgmbmw--
 
