@@ -1,247 +1,173 @@
-Return-Path: <linux-usb+bounces-35370-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35371-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AH7eFqFawmnQbwQAu9opvQ
-	(envelope-from <linux-usb+bounces-35370-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 10:34:25 +0100
+	id qBpJHOxbwmlKcAQAu9opvQ
+	(envelope-from <linux-usb+bounces-35371-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 10:39:56 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8DA6305A86
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 10:34:24 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5D60305BFE
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 10:39:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2397930F3611
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 09:25:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 64E75305115A
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2026 09:28:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59C873DDDDD;
-	Tue, 24 Mar 2026 09:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A54C3290D8;
+	Tue, 24 Mar 2026 09:28:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TTlaY5lB"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="aCGJzXah"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8FF3DCD98
-	for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 09:23:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9356E3DB62B
+	for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 09:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774344238; cv=none; b=V4xQNRu2qmXTHc9Pa/zkPHn7yDhxNzbyVzRCbK0Qmgwx/1YlnwazGKrAhPGFVOB2Va6d60XFKQoo0riNNIj70C5KVdEMovlWKHMgzVlYprw1taVTR1CAZATkiKO/zCBz+WWx36dlm3hIrun20m6L4eR0tL9EVN/q+ZDfMqjSuqU=
+	t=1774344495; cv=none; b=octQpEqaZulSwnC3L6J+JOOR9fCstVBdpA8AA+W5nnZi1RiT/pWUSronxR1qQxgzBLz/mAYuSNT1/agledO/wU6iL2ER4znvmVg5dsc6KTZ/T2wHCWF7Z2n0F5SsgM1J+fEm4EOCIWHfVWcCEE3/BlnchdnIZI5lDgbt1EyWnUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774344238; c=relaxed/simple;
-	bh=eORHv6uMOxEZQvZKT0NGFZMJsp3s4BCbYLo0O/D16Zw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=l0p8+xtzHHhvEJ3fiYnm1rBtEain7aybV2Qpfax3O+8uH8t0Q4mnco3exycpye6zn21z0vxqqBHWQ13GZDVdhuk0R8KNeDsBboEQEhCXFQumo6TvfQHEVFAlgqxFDwmk1lx3aT0Laawxr3N/Fq5XzxRgQE9lJloGIg/9sLRw7yE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TTlaY5lB; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-486fe2024a9so28474815e9.0
-        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 02:23:47 -0700 (PDT)
+	s=arc-20240116; t=1774344495; c=relaxed/simple;
+	bh=f2X4PmGvz1w6x2E6U7pcl7fz6GrkLBwvW1uql5aW0U4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SOsuGq6LEu0KNHe5jO+ZPy14kBd4uFUZnchpkwN0208or7k1qfP9mWqtMR2ruF7cyYeTct534GxZfU31PWRqDW/+Rx1KeWQ6978zV6Xc49SdGXtjF8yhSLKQWp51xZb3EsjQKl3FjaCYkEx65mPZOpTtaveb/3pGnLgsciG4pgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=aCGJzXah; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-48702d51cd0so36314365e9.2
+        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 02:28:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1774344226; x=1774949026; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=G5BTS4Xu7BcfhUbuvKmb6N+eqgb+/BungbccHaCogJs=;
-        b=TTlaY5lBI780CEmaF4G6s2ABEbZEWSzZ1EONPBx3jInjBgAa4HB+O5DJRlJ5WTAv3g
-         Qbewwz2/QM8/eLhZJMCr74z5dvRLdP/VBFKby9XZr1X2UsBOG+hkLeVvxjqAZ4wLLoC5
-         gPhHmj6MQdNo2IEUabVpFaqKum3i+bPb+/KXRq+xikZAmO7MWXExUU/PkDnJZdwNc23h
-         b/1f4a2QhDt27syw9Wc5FdCL2/gKPbPgaJWgoIgD8YvNqPIE0f1/lkgSt1XOA3TPEQ8Q
-         K4YVcZQelrVd9Zrzg/7yyICI4YjzFW8aXg98pKmlGX0X2TXcQw+L5les5r7NZk1EIccm
-         t/gg==
+        d=suse.com; s=google; t=1774344484; x=1774949284; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PFxIqtbqvbTpQVutxQGCTHKwY8ACAbaiPzWH8XF9rbY=;
+        b=aCGJzXahDQq9HAp8bLbnZaLo8DruRoISD7EBJ0tSaTD67qjbYZmswIOUylmK5kn4AK
+         IZc2hQYLDYJ5MvvhbvunuNIU0p/sgLEK+WTwZo5ka8gmm0VbWi68X9TnTFmFAC4OUL63
+         lYQK4CGNVJgfdASUzakKUZ4TvTSlVwQ5Dx047IcWK+wJplQfKhONoSUwevYyWbhwatiD
+         2QKO5821k5yKG8iaZnR6Xqp42twV5Qyyci1NhlrpQYCIKDmN/RB/LeFAr9wUJ1vDg1uc
+         EeUdBJLaYdB9ePq8DknVKsgR5yUjTTZzH2I4AQHSL8wC3jdkga2To8tq9QbhbyHRhJKW
+         NKSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774344226; x=1774949026;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G5BTS4Xu7BcfhUbuvKmb6N+eqgb+/BungbccHaCogJs=;
-        b=HKeETAYOkTPf/xJE7wMcitSEFEsr7nqdu2KkLQ+3VzRSWUCnaZwz9mNiF50LsTMLDr
-         6BqIp8haL4OackEZXwZPCQwTE8hLAoIa/8MiOJlGSjvJ0yYb7aHnjXipGQndI1pUbtdF
-         7Ks+Z8ZCaMB0jTfxXaa9oIwazoJ5NVKfGkK+aVpdzq/8PrrLAmYlRIYrZqy7cgbJiY/Q
-         V7+eo17Xz0LJXTpSz+mEnIwSTHyNYG1SckpqNCKUKtRUeQUn/SE+BGICPmLdj/jjb1An
-         jyWysP5jo8wQ6W4vvGDkg73nO6p6ubNHDT+rS82NQKFxUqT4+eoofoyTjV5BiktsmkN3
-         Z1Lw==
-X-Gm-Message-State: AOJu0Yw9SiQnnKsWwt3IjLDo5PCQBdQvHdr0df4r/RhV6piOVvvMym3z
-	fDV+4FFXOoJ2pa5kDb9j5GcDAwcSn+OmUHxlW2gIbsTn5PgV06WFvsJxnCTf1K0n0qw=
-X-Gm-Gg: ATEYQzzvoxSGyBExtwtUy/AzOk5d+LpRFCAnIBSOCRNOh5WLDW/zGXhSF9Z7HUBUNNT
-	H4VjTHlKjUg+3fc042uZ6uwHfqNWePYtW+n0HbaQvvVf6bTNv70pJlCZmKsNGK9THIOCeIfXk9l
-	kV4GdjUVZ/pc0wvwYmhoe06D05t8VCx83WhuLD47eAhN4nzlvXge2uhouOHKnKTShZDoDIi/Aey
-	MKCX51UaEs55dP1T4aAeLLsmCQEIYOKVAg9B6KHSs21LJe9sRFDLI7mVxKFsruckNnz/Yd9swtN
-	3UyjrFJ4iF7D0FJ4GBgzg5ylyFtq29uct+NIVFi8O31o9A02T4SvEnDoGaF58+UgXymUt88emFO
-	dZzgrE2SQ/OnloEj24Qy7U2WtNTYvVGn1yDiW0wJHJL3cO7yipWZLEEbiFn6huboW9UHTb5yD/R
-	Y/PY0z1sfEWnxyRGjOkKtKXWSZOuB0RqXYj6SvO7ueFQR0
-X-Received: by 2002:a05:600c:a596:b0:486:ffa3:594 with SMTP id 5b1f17b1804b1-486ffa30b0amr132702615e9.23.1774344225686;
-        Tue, 24 Mar 2026 02:23:45 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:106d:1080:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-487116c44bfsm41808585e9.9.2026.03.24.02.23.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 02:23:38 -0700 (PDT)
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Tue, 24 Mar 2026 10:23:22 +0100
-Subject: [PATCH v2] dt-bindings: usb: document the Renesas
- UPD720201/UPD720202 USB 3.0 xHCI Host Controller
+        d=1e100.net; s=20251104; t=1774344484; x=1774949284;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PFxIqtbqvbTpQVutxQGCTHKwY8ACAbaiPzWH8XF9rbY=;
+        b=n7u48CplZbpGM8x6ng+9Wkr8qMLzpUI/2T/S5Ly4zS435p5a0bZ1mMVdpgaGd1qO0C
+         WMo2/6w4/W7/F1BwXRoJ7i5QLM3Jcd0KjLzE9Y7HvwxGqttpo8172vKoD9aI7VMunLtv
+         DzxMqt6uOEO93U1wAovmra2gkogvs58Nuy+4o57CzgTsxc4g1aOKLLAj+XSRg9wTw0+y
+         UapnwyEPr/kvvhqz/8pmKAZXAo6YEDFnaeSQeJwteYH+eu44+3YcBnYHrN+kQO74mvMf
+         gg4tJAVAK9CAiKWjGDLNVRFcWKjVkzWrJWM8mjRYnXBv1l+104qMw3/Nm5DWG+3TJ8JE
+         IkyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWiVS0WL3AQVaNHsEiOJH8zsScbzUe/C2743cJP1XNG+sBIrKMJ1BlMqiHv3GFpr62UJh5tYPkPmQM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoG/PN6mSxN11z0rIByvk8dB/N8niWdjmwr21XWNeFN+RRPES5
+	PHCTnzLvUuz0O6v/a96zWeE4GrtG6RmOiaoVOc5hy4QSLqJDE9PE/irpey3Oxm7dalc=
+X-Gm-Gg: ATEYQzwcJBLT04StucNOZfw26hYH2uil3ug1b1MktSLrYJXdgYXrgobBF3j/0jAmdhl
+	3oUGcltvXoAfLWpZWVKzp0n6jTcSmDjQ967ybHLNm8ybXZ201xqgiQGIXUqF6BXHViLfAUBeYps
+	23OEQ+67cKFV5nziuWFJxxo2+MvLSh6HfREx6BE2mu/vyk+Ikl/4YyS+9x8rVZn6XftP8BdY+//
+	i0mtcM3HvoYkX+3+AeE7P8XsQWHaZ8dpuIZJQ93fBBpfCjsOXxmcaqPRRfQfzk1y7tXG+3z5ESb
+	vjC6nfxnVQa6M1v+RrN0pdHGWZIfF9qzgulTW5GFKvA+KmT7Xy8ZDRSjUKbJNYZEKCoVU/NGaay
+	ZnRLTRmCXd5guhLdrTHurwmrDPH64ZnilK3AhlXhf23CwkRRuYCFgceWEZnv15LHvSjtnDrOQOe
+	f8Vp+jdXtw8nB320zcIYGz10cVSD81CpL3Xhy2RGA+g47yTJM5U4ifdmSnXwNrPe/5kAXKr0fVW
+	tQ=
+X-Received: by 2002:a05:600c:a418:b0:485:3423:727d with SMTP id 5b1f17b1804b1-486ff03f502mr171008755e9.26.1774344484101;
+        Tue, 24 Mar 2026 02:28:04 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1332:2a01:88e9:6e6:b5b2:fd40? ([2001:a61:1332:2a01:88e9:6e6:b5b2:fd40])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b6471a297sm35740014f8f.37.2026.03.24.02.28.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Mar 2026 02:28:03 -0700 (PDT)
+Message-ID: <44ce5041-7286-4f59-837a-995c4e1307ab@suse.com>
+Date: Tue, 24 Mar 2026 10:28:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: correctly handling EPROTO
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Oliver Neukum <oneukum@suse.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+ Michal Pecio <michal.pecio@gmail.com>, =?UTF-8?Q?Bj=C3=B8rn_Mork?=
+ <bjorn@mork.no>, USB list <linux-usb@vger.kernel.org>
+References: <4ada5d68-56f1-41b7-82d9-463901c927db@rowland.harvard.edu>
+ <8a14fe29-0d92-4ce5-a7e2-2c084c710727@suse.com>
+ <b0217cdc-f263-418c-b8b5-584520d0b1db@rowland.harvard.edu>
+ <20260318223851.1f6d07d7.michal.pecio@gmail.com>
+ <20260318235920.ioek26hdr25rkksp@synopsys.com>
+ <1eaf4cf3-4278-4d04-87aa-8b6069d544e1@rowland.harvard.edu>
+ <20260319231620.3ukqxsrwqikp5zbd@synopsys.com>
+ <2929d47c-fc02-49d2-873e-758f24c43071@rowland.harvard.edu>
+ <20260321021439.7pmcdrpb5oxbivct@synopsys.com>
+ <5b378006-666f-4a72-902b-bb5f466f7895@suse.com>
+ <20260324010523.3ufngdffak7ldchg@synopsys.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20260324010523.3ufngdffak7ldchg@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260324-topic-sm8650-ayaneo-pocket-s2-upd-bindings-v2-1-b86a1543b76b@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAAlYwmkC/53NQQ6DIBCF4asY1p0GEIntqvdoXKAMOmkLBKypM
- d691CN0+b/F+zaWMRFmdq02lnChTMGXkKeKDZPxIwLZ0kxyqXktLjCHSAPkV6sbDmY1HgPEMDx
- whizhHS305C35MUNdi15qq1zvNCuHMaGjz4Hdu9IT5Tmk9bAX8Vv/YhYBAlqFCl2jFZfy9iRvU
- jiHNLJu3/cvQADm8uUAAAA=
-X-Change-ID: 20260319-topic-sm8650-ayaneo-pocket-s2-upd-bindings-331b26d4fbf6
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Magnus Damm <magnus.damm@gmail.com>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
- Michal Pecio <michal.pecio@gmail.com>, linux-arm-msm@vger.kernel.org, 
- Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2777;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=eORHv6uMOxEZQvZKT0NGFZMJsp3s4BCbYLo0O/D16Zw=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBpwlgUNXlsxFgShF54TYDVG1RvCpnFEmpxXa5+pnAN
- EhfuNCOJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCacJYFAAKCRB33NvayMhJ0ZAYEA
- CTtXaX+QkB8DgDMLvFTrRnE7nh8tqLti7a4LyO4nYHeud+aKpAFrzh09iL9TsRro7mPdHVa20bNJ9u
- 3Sq+qZQd3ThEBEDzeO3oXDrTE0oTpH2HshAymgxaMQpG1MfnZdFHYFMpnU27xKmo/7OYVNf4DNoM1A
- zCoDM6YBHKNuxjO01QkwtivZgSaj8MGqxDAHF6juKnTscUri0qJpo8gESOppMHz+3CThUSeUphkY0K
- XiAEEe6tGlW5nqkQljBJyUQLvKpViMFEp+rcQPc/BCMYx7+rPE+XeNBqak7xO4G+dz1HlIQlaPp9Vz
- heEswCfTFi+shHXTfxwfXfge85LQwwS3G7fsJ0CCTeLjuJ1T73JH0422eshrdxwj3Qk7FTw7kr+xFR
- 6OXhznoZxjDIvo9EwOPZKPJt7XWtdBvJeq/9YCWyg0DuR/9veDp1zBiw1AG9VsJfnZzvjD5rLu1vIH
- EV2o0UhJghb9n9EixQakI2MFilElfB6AAeNzRW6rJo354neqKYueFNtxNdbMkle/TTFze12RolMKJS
- nHRBaY8DsbBqbpa0JFEW+u+i0FP42fTqv6IfGyDWFZYIMr3kJCERDevPoX1Nxe+K/h31ykJnhuzaHC
- DylioeoldQHPsoyKVyXEoepO/MvydYe0eaxUkuFgEgmtV8UYiyV0+JB5QwBQ==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35370-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[linuxfoundation.org,kernel.org,glider.be,gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,linaro.org];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[rowland.harvard.edu,gmail.com,mork.no,vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_ALL(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35371-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[neil.armstrong@linaro.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linaro.org:+];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
+	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[devicetree.org:url,0.0.0.0:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,msgid.link:url,linaro.org:dkim,linaro.org:email,linaro.org:mid]
-X-Rspamd-Queue-Id: C8DA6305A86
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: C5D60305BFE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Document the Renesas UPD720201/UPD720202 USB 3.0 xHCI Host Controller,
-which connects over PCIe and requires specific power supplies to
-start up.
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
-- [1] https://lore.kernel.org/all/20260220-topic-sm8650-ayaneo-pocket-s2-base-v5-1-1ad79caa1efa@linaro.org/
----
-Changes in v2:
-- Added the PCI ID for uPD720202, thanks to Michal Pecio
-- Link to v1: https://patch.msgid.link/20260319-topic-sm8650-ayaneo-pocket-s2-upd-bindings-v1-1-84e4ef564022@linaro.org
----
- .../bindings/usb/renesas,upd720201-pci.yaml        | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/renesas,upd720201-pci.yaml b/Documentation/devicetree/bindings/usb/renesas,upd720201-pci.yaml
-new file mode 100644
-index 000000000000..4e890d0d2070
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/renesas,upd720201-pci.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/renesas,upd720201-pci.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: UPD720201/UPD720202 USB 3.0 xHCI Host Controller (PCIe)
-+
-+maintainers:
-+  - Neil Armstrong <neil.armstrong@linaro.org>
-+
-+description:
-+  UPD720201 USB 3.0 xHCI Host Controller via PCIe x1 Gen2 interface.
-+  The UPD720202 supports up to two downstream ports, while UPD720201
-+  supports up to four downstream USB 3.0 rev1.0 ports.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - pci1912,0014 # UPD720201
-+      - pci1912,0015 # UPD720202
-+
-+  reg:
-+    maxItems: 1
-+
-+  avdd33-supply:
-+    description: +3.3 V power supply for analog circuit
-+
-+  vdd10-supply:
-+    description: +1.05 V power supply
-+
-+  vdd33-supply:
-+    description: +3.3 V power supply
-+
-+required:
-+  - compatible
-+  - reg
-+  - avdd33-supply
-+  - vdd10-supply
-+  - vdd33-supply
-+
-+allOf:
-+  - $ref: usb-xhci.yaml
-+
-+additionalProperties: true
-+
-+examples:
-+  - |
-+    pcie@0 {
-+        reg = <0x0 0x1000>;
-+        ranges = <0x02000000 0x0 0x100000 0x10000000 0x0 0x0>;
-+        #address-cells = <3>;
-+        #size-cells = <2>;
-+        device_type = "pci";
-+
-+        usb-controller@0 {
-+            compatible = "pci1912,0014";
-+            reg = <0x0 0x0 0x0 0x0 0x0>;
-+            avdd33-supply = <&avdd33_reg>;
-+            vdd10-supply = <&vdd10_reg>;
-+            vdd33-supply = <&vdd33_reg>;
-+        };
-+    };
+On 24.03.26 02:06, Thinh Nguyen wrote:
 
----
-base-commit: 8e42d2514a7e8eb8d740d0ba82339dd6c0b6463f
-change-id: 20260319-topic-sm8650-ayaneo-pocket-s2-upd-bindings-331b26d4fbf6
 
-Best regards,
--- 
-Neil Armstrong <neil.armstrong@linaro.org>
+> I attached a couple of usb traffic sniffing traces. Review comments
+> below.
+
+Thank you a whole lot. These are extremely educational. I am not sure
+to which extent this discussion is on topic. Though it makes me wonder
+how we'd deal with an error in the last phase of the command. We'd
+be unsure whether it has been completed.
+
+> Yes it must. I was responding to Alan's comment that noting that it can
+> be done prior or after unlinking the URBs. But as Michal noted, that may
+> not be possible because we ring the doorbell right after giving back an
+> URB.
+
+Very well. That raises a fundamental issue. Are we planning around the limits
+of the existing API or according to capabilities of the hardware. I see
+two specific issues
+
+1) What do we do to URBs after the URB suffering a failure? We cannot just execute
+them.
+2) Do we need a second callback for an "undead" URB, which decides on how errors
+are to be handled?
+
+	Regards
+		Oliver
 
 
