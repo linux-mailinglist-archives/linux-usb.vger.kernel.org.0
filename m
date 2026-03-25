@@ -1,177 +1,227 @@
-Return-Path: <linux-usb+bounces-35424-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35425-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UIejJV5Lw2m5pwQAu9opvQ
-	(envelope-from <linux-usb+bounces-35424-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 03:41:34 +0100
+	id uIQeCVNQw2lGqAQAu9opvQ
+	(envelope-from <linux-usb+bounces-35425-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 04:02:43 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0665231EC55
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 03:41:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9889131F038
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 04:02:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3E16830500C0
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 02:40:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6DF1630EF3DE
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 03:01:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3398928F948;
-	Wed, 25 Mar 2026 02:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D802B2C11D6;
+	Wed, 25 Mar 2026 03:01:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b="QTJYcWCm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f80.google.com (mail-ot1-f80.google.com [209.85.210.80])
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F1DE283FCF
-	for <linux-usb@vger.kernel.org>; Wed, 25 Mar 2026 02:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E133FFD;
+	Wed, 25 Mar 2026 03:01:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774406430; cv=none; b=oVZsXD8hB+zFMKlroyt/1fZ783htbg4Cy31sprhYMRZpaRAfIREeRkTJFllgsY2Z9EYlDK6ASrGIBr9r8FjhtS8PuBZArb3akvrnbEzEqKhJvB07x1N0i9guvsSyppcPW0xh8lpvzyPlv/UzqCgEkDQE++6MfLgXsTE8GVoESBI=
+	t=1774407690; cv=none; b=NwDpZ+IdOlkUMAL/ORPjmt02boPlffz9AosiDFx9D0+QVVu6f4dIsD00ED+5DdMG1xYvX3fKIabFyOeoF/Nzloqse3gQHDOeLyMSm0XEZxa4yqLTs9lO5RDyUAhv/vnejrsODWnwMS0Ku630DDWF8qdAxA30sayc86qKx6bD8Yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774406430; c=relaxed/simple;
-	bh=r2/SqIjLIWy0EUSMP3v29DKK68YqLCchwQbERUhn2nM=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=B9WSRL4I14HCOIR8/BiynC+3DYGI4sH98Ca+1rAU9CC41xmG8tf8tG6DtktJy+BtPtHBSgFlF71sQSXwdq97nNNd8Lmrba+cuSj5m7OKulHjBkz8POQYU7Ht9AKf7LNmLY7IVlHwCLnn0EVB0D+jn24ldbJu4pwuBkIJ/r9dtA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-ot1-f80.google.com with SMTP id 46e09a7af769-7d74211ff80so15813000a34.3
-        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2026 19:40:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774406428; x=1775011228;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=06ZkxdPmjXJHAdYiuofRx86KOCd4GJenDBvOMPL3C0A=;
-        b=O2ziBZoSYs7HM/TvLU6dMOiMxykNaTyhdz3bKhHgeeHOFPdVEQvCEqFddlZd3fG4CY
-         PttKuhFd6PXK2NOoxYmVavs/o6ucClsgDlUdHlbiRTg7ZzNOlk0vSWFO7SKuSLVTD5Sm
-         hTC6RZxRGe99LdMq3vkArY1Vtpp2vWv0LIv04BHa4TLN+OpkylN7D8nkuZ/QMC83Rv+Q
-         ReyuilVxvcPFjNL6MtS/s1AAbMfqflqRo0/2+TvbXyF3Z/fa+cT9mdlCFpeMq02vfeN3
-         1FnEX5QTH6C9ingsSDNDAn5BJGGl/VamsEluL1jo8q81hP8BrKTFp1dKkyTrLSnIo3yj
-         NaZw==
-X-Forwarded-Encrypted: i=1; AJvYcCUhzcCuDi0LvQPer5c0sAfivYDKWwdanbiw1PyWQfr55ITZVWm4rKTAZGt67FRwIWLBNEiPTG0jFIU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyaK2FqpHr8pnxfyYAu5NpKZH8S/5daRsR6xtq9E5NuBjA+WJ0
-	LzU3Y32dxlpg9uTS5h7mtOIj40morCCUyuek2sPjfMjzrRK2Z3f8NYgFSEicm8t86rvWOJQ0kOx
-	HbR971Jr0Ju6e6J4tRSE1MfWQTaxkD+qcaKzy8ilMPF+b8BZn66DU8Pe0V0o=
+	s=arc-20240116; t=1774407690; c=relaxed/simple;
+	bh=NgBtXumRYzlCnV3Yn7sZqZQ6hn+kEyQe8IdIsmh2PqM=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Q48/BCNJU9PTh6lzuB5b6vT2cqkrFeiGPZuZk6icVZ4b3reZgtzwLbUqjI0g31/Pp8cDUKWFeiuhd7Zy0EwJ3Ssx6NR+OxOQez4kR7GQOFQC1HAHwbCLLyoAK80RkfYGh5p9nLxDoCo1Ohpeco63sFT1qLe+UsigVURQ55Ajvuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b=QTJYcWCm; arc=none smtp.client-ip=211.75.126.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
+X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 62P30n8tA2439054, This message is accepted by code: ctloc85258
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
+	t=1774407649; bh=gyX10HvKWq0m3Gjf5BnS2Fo+ddbTNDryB1fDJNtEqqI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:MIME-Version;
+	b=QTJYcWCmCunPaJEc0SBlq3iY6gr216XE2pcJVTEYIcntjOzXBE0cL37So92m15a8y
+	 We+UyCU5d3wUGuL8fIAf3jjBbDydukdRXkLBTX2lGPl4OdGpINaTImYrvhQhe1rPsg
+	 2HHIyKxD3RhLsicLdZVCg6LyR+lGyAJr/XnNqXRjeE1l6yKGT9YwEnMwZjAwwCJz6R
+	 C5T9rTYpm3FRGsbQli/7jmMHmfnQmKigoOXkKOUGzPJRWZ4CMDQQeac7P6WRpDtKEZ
+	 n/2vpipAC1nY6VPNC3OG7GxKtdTNbmBUkyqqD49kHE5DASM95Mg2vI4urG9e411PgV
+	 pmBIRdWKpZyTg==
+Received: from mail.realtek.com (rtkexhmbs03.realtek.com.tw[10.21.1.53])
+	by rtits2.realtek.com.tw (8.15.2/3.21/5.94) with ESMTPS id 62P30n8tA2439054
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 25 Mar 2026 11:00:49 +0800
+Received: from RTKEXHMBS01.realtek.com.tw (172.21.6.40) by
+ RTKEXHMBS03.realtek.com.tw (10.21.1.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Wed, 25 Mar 2026 11:00:49 +0800
+Received: from RTKEXHMBS03.realtek.com.tw (10.21.1.53) by
+ RTKEXHMBS01.realtek.com.tw (172.21.6.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Wed, 25 Mar 2026 11:00:48 +0800
+Received: from RTKEXHMBS03.realtek.com.tw ([::1]) by
+ RTKEXHMBS03.realtek.com.tw ([fe80::368f:61f6:1754:de7d%9]) with mapi id
+ 15.02.1748.010; Wed, 25 Mar 2026 11:00:48 +0800
+From: Chih Kai Hsu <hsu.chih.kai@realtek.com>
+To: Hayes Wang <hayeswang@realtek.com>, "kuba@kernel.org" <kuba@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>
+CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        nic_swsd
+	<nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "bjorn@mork.no" <bjorn@mork.no>,
+        "pabeni@redhat.com" <pabeni@redhat.com>
+Subject: RE: [PATCH net-next v3 1/2] r8152: add helper functions for PLA/USB
+ OCP registers
+Thread-Topic: [PATCH net-next v3 1/2] r8152: add helper functions for PLA/USB
+ OCP registers
+Thread-Index: AQHcup5ZqnjknxQNN0m9fKk+ygYNm7W8rK6AgACQ0bA=
+Date: Wed, 25 Mar 2026 03:00:48 +0000
+Message-ID: <48a0d72d1cad401fb19cd1f5353b0755@realtek.com>
+References: <20260323082226.2601-450-nic_swsd@realtek.com>
+ <20260323082226.2601-451-nic_swsd@realtek.com>
+ <be38bdf5c2b64629920bfe6688907992@realtek.com>
+In-Reply-To: <be38bdf5c2b64629920bfe6688907992@realtek.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:61a:b0:67d:e836:2e35 with SMTP id
- 006d021491bc7-67dff534a70mr1160458eaf.47.1774406428462; Tue, 24 Mar 2026
- 19:40:28 -0700 (PDT)
-Date: Tue, 24 Mar 2026 19:40:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69c34b1c.050a0220.abc16.000b.GAE@google.com>
-Subject: [syzbot] [usb?] [net?] KMSAN: uninit-value in rtl8150_open (2)
-From: syzbot <syzbot+9db6c624635564ad813c@syzkaller.appspotmail.com>
-To: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	netdev@vger.kernel.org, pabeni@redhat.com, petkan@nucleusys.com, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [1.14 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=963de479f54c6dbb];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[realtek.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_DKIM_ALLOW(-0.20)[realtek.com:s=dkim];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	DKIM_TRACE(0.00)[realtek.com:+];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35425-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[realtek.com:dkim,realtek.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_FROM(0.00)[bounces-35424-lists,linux-usb=lfdr.de,9db6c624635564ad813c];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[goo.gl:url,googlegroups.com:email,appspotmail.com:email,storage.googleapis.com:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,syzkaller.appspot.com:url];
-	REDIRECTOR_URL(0.00)[goo.gl];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[hsu.chih.kai@realtek.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
 	RCPT_COUNT_SEVEN(0.00)[10];
-	SUBJECT_HAS_QUESTION(0.00)[]
-X-Rspamd-Queue-Id: 0665231EC55
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 9889131F038
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello,
+On 24/03/26 2:04 pm, Hayes Wang wrote:
+>=20
+> > @@ -7166,21 +6942,17 @@ static void r8153_init(struct r8152 *tp)
+> >  	r8153_u1u2en(tp, true);
+> >  	usb_enable_lpm(tp->udev);
+> >
+> > -	ocp_data =3D ocp_read_byte(tp, MCU_TYPE_PLA, PLA_CONFIG6);
+> > -	ocp_data |=3D LANWAKE_CLR_EN;
+> > -	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CONFIG6, ocp_data);
+> > +	ocp_byte_set_bits(tp, MCU_TYPE_PLA, PLA_CONFIG6,
+> > LANWAKE_CLR_EN);
+> >
+> > -	ocp_data =3D ocp_read_byte(tp, MCU_TYPE_PLA, PLA_LWAKE_CTRL_REG);
+> > -	ocp_data &=3D ~LANWAKE_PIN;
+> > -	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_LWAKE_CTRL_REG, ocp_data);
+> > +	ocp_byte_clr_bits(tp, MCU_TYPE_PLA, PLA_LWAKE_CTRL_REG,
+> > LANWAKE_PIN);
+> >
+> >  	/* rx aggregation */
+> > -	ocp_data =3D ocp_read_word(tp, MCU_TYPE_USB, USB_USB_CTRL);
+> > -	ocp_data &=3D ~(RX_AGG_DISABLE | RX_ZERO_EN);
+> > -	if (tp->dell_tb_rx_agg_bug)
+> > -		ocp_data |=3D RX_AGG_DISABLE;
+> > +	ocp_word_clr_bits(tp, MCU_TYPE_USB, USB_USB_CTRL,
+> > +			  RX_AGG_DISABLE | RX_ZERO_EN);
+> >
+> > -	ocp_write_word(tp, MCU_TYPE_USB, USB_USB_CTRL, ocp_data);
+> > +	if (tp->dell_tb_rx_agg_bug)
+> > +		ocp_word_set_bits(tp, MCU_TYPE_USB, USB_USB_CTRL,
+> > +				  RX_AGG_DISABLE);
+>=20
+> I think you could combine above, such as
+>=20
+> 	if (tp->dell_tb_rx_agg_bug)
+> 		ocp_word_w0w1(tp, MCU_TYPE_USB, USB_USB_CTRL,
+> RX_ZERO_EN,
+> 			      RX_AGG_DISABLE);
+> 	else
+> 		ocp_word_clr_bits(tp, MCU_TYPE_USB, USB_USB_CTRL,
+> 				  RX_AGG_DISABLE | RX_ZERO_EN);
+>=20
+Indeed, I will fix this in v4.
 
-syzbot found the following issue on:
+> >  	rtl_tally_reset(tp);
+> >
+> > @@ -7200,7 +6972,6 @@ static void r8153_init(struct r8152 *tp)
+> >
+> >  static void r8153b_init(struct r8152 *tp)  {
+> > -	u32 ocp_data;
+> >  	u16 data;
+> >  	int i;
+> >
+> [...]
+> > @@ -8306,48 +8028,39 @@ static void r8156b_init(struct r8152 *tp)
+> >
+> >  	usb_enable_lpm(tp->udev);
+> >
+> > -	ocp_data =3D ocp_read_word(tp, MCU_TYPE_PLA, PLA_RCR);
+> > -	ocp_data &=3D ~SLOT_EN;
+> > -	ocp_write_word(tp, MCU_TYPE_PLA, PLA_RCR, ocp_data);
+> > +	ocp_word_clr_bits(tp, MCU_TYPE_PLA, PLA_RCR, SLOT_EN);
+> >
+> > -	ocp_data =3D ocp_read_word(tp, MCU_TYPE_PLA, PLA_CPCR);
+> > -	ocp_data |=3D FLOW_CTRL_EN;
+> > -	ocp_write_word(tp, MCU_TYPE_PLA, PLA_CPCR, ocp_data);
+> > +	ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_CPCR, FLOW_CTRL_EN);
+> >
+> >  	/* enable fc timer and set timer to 600 ms. */
+> >  	ocp_write_word(tp, MCU_TYPE_USB, USB_FC_TIMER,
+> >  		       CTRL_TIMER_EN | (600 / 8));
+> >
+> > -	ocp_data =3D ocp_read_word(tp, MCU_TYPE_USB, USB_FW_CTRL);
+> >  	if (!(ocp_read_word(tp, MCU_TYPE_PLA, PLA_POL_GPIO_CTRL) &
+> > DACK_DET_EN))
+> > -		ocp_data |=3D FLOW_CTRL_PATCH_2;
+> > -	ocp_data &=3D ~AUTO_SPEEDUP;
+> > -	ocp_write_word(tp, MCU_TYPE_USB, USB_FW_CTRL, ocp_data);
+> > +		ocp_word_set_bits(tp, MCU_TYPE_USB, USB_FW_CTRL,
+> > +				  FLOW_CTRL_PATCH_2);
+> > +
+> > +	ocp_word_clr_bits(tp, MCU_TYPE_USB, USB_FW_CTRL, AUTO_SPEEDUP);
+>=20
+> I think you could combine above, such as
+>=20
+> 	if (!(ocp_read_word(tp, MCU_TYPE_PLA, PLA_POL_GPIO_CTRL) &
+> DACK_DET_EN))
+> 		ocp_word_w0w1(tp, MCU_TYPE_USB, USB_FW_CTRL,
+> AUTO_SPEEDUP,
+> 			      FLOW_CTRL_PATCH_2);
+> 	else
+> 		ocp_word_clr_bits(tp, MCU_TYPE_USB, USB_FW_CTRL,
+> AUTO_SPEEDUP);
+>=20
+Will do.
 
-HEAD commit:    c612261bedd6 Merge tag 'io_uring-7.0-20260320' of git://gi..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=155801d6580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=963de479f54c6dbb
-dashboard link: https://syzkaller.appspot.com/bug?extid=9db6c624635564ad813c
-compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+Thanks for your review.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/aa2bdf537bf6/disk-c612261b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/8fcd98072431/vmlinux-c612261b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/737b94c52155/bzImage-c612261b.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9db6c624635564ad813c@syzkaller.appspotmail.com
-
-usb 2-1: device reset failed
-=====================================================
-BUG: KMSAN: uninit-value in set_carrier drivers/net/usb/rtl8150.c:726 [inline]
-BUG: KMSAN: uninit-value in rtl8150_open+0x1131/0x1360 drivers/net/usb/rtl8150.c:763
- set_carrier drivers/net/usb/rtl8150.c:726 [inline]
- rtl8150_open+0x1131/0x1360 drivers/net/usb/rtl8150.c:763
- __dev_open+0x8e3/0xd40 net/core/dev.c:1702
- __dev_change_flags+0x32f/0x950 net/core/dev.c:9764
- netif_change_flags+0x8d/0x1e0 net/core/dev.c:9827
- dev_change_flags+0x18c/0x320 net/core/dev_api.c:68
- devinet_ioctl+0x10dd/0x25a0 net/ipv4/devinet.c:1199
- inet_ioctl+0x4c0/0x6f0 net/ipv4/af_inet.c:1015
- sock_do_ioctl net/socket.c:1254 [inline]
- sock_ioctl+0x769/0x1140 net/socket.c:1375
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:597 [inline]
- __se_sys_ioctl+0x23c/0x400 fs/ioctl.c:583
- __x64_sys_ioctl+0x97/0xe0 fs/ioctl.c:583
- x64_sys_call+0x1975/0x3ea0 arch/x86/include/generated/asm/syscalls_64.h:17
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x134/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Local variable tmp.i created at:
- set_carrier drivers/net/usb/rtl8150.c:723 [inline]
- rtl8150_open+0xc26/0x1360 drivers/net/usb/rtl8150.c:763
- __dev_open+0x8e3/0xd40 net/core/dev.c:1702
-
-CPU: 1 UID: 0 PID: 5428 Comm: dhcpcd Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
-=====================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Best Regards,
+Chih-Kai
 
