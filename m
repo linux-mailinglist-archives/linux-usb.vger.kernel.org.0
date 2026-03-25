@@ -1,68 +1,68 @@
-Return-Path: <linux-usb+bounces-35456-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35457-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2MBsO2Tcw2lwuQQAu9opvQ
-	(envelope-from <linux-usb+bounces-35456-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 14:00:20 +0100
+	id AO1ADiPfw2kgugQAu9opvQ
+	(envelope-from <linux-usb+bounces-35457-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 14:12:03 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 170E132554D
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 14:00:20 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3CB33257EA
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 14:12:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B5E773026BDA
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 12:24:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A997731A0229
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 12:28:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2533D16F5;
-	Wed, 25 Mar 2026 12:24:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931E43D412C;
+	Wed, 25 Mar 2026 12:28:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UcSZK9Oq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LoaORlSW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF36533A6E9;
-	Wed, 25 Mar 2026 12:24:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E943D349F;
+	Wed, 25 Mar 2026 12:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774441490; cv=none; b=sSF4TAy7x3LgKPtaTL9J3wHTApJ/7LF/QW6s6DhW4uyEQPEJwlcwsV4m22gZ/gvG2RsNilGA09DMfXfIxKWVKsyLN/KiK0Q3idhs8NJB+1Mp+CCy0Eq09oen9cHV9gCx6OjqL4i4c4mAa0XjnxjHMy5xN3r/jE4u/B/Gw98SW7I=
+	t=1774441680; cv=none; b=dR26oBfIcvyeyxsLsJ6W6ZS3Peod01EXBe2dAw4bWgDUAH+BJa03o1TCfQl+tsS44/axhrUnc9ZvvJ7EJAXhvF4JD8Sq0yW6WvgUazcJx926sOlhpNP+V9L/U5t23gCTzB9a9B6eocK2izQTfy9kbcOUb7qlmUCex5b4Nn3C1uQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774441490; c=relaxed/simple;
-	bh=ALWKNvVNm0+2r3Ry2QG32tAeoyhy7TVqmqpTEmbO2Kw=;
+	s=arc-20240116; t=1774441680; c=relaxed/simple;
+	bh=IByB2XwCRydQfIDr3lH49NKDx9ONCF9CIQqUcUApv9U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lj2QSQ1uSAG8R3EJeVOpYTLmLf5Nl/AyFz0ApiYc6B9aXiUgwLvAkBXMI5Cw7HwnPakY+2BkC28Gc8abiehekC7jHTFAL9gXG1CwmV89CEo4b9mV/LEMIojtgyoV11yBXjNHRwcyoBwtJVzOa5mSNGOEmq6JNXsl8o+puZ1psWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UcSZK9Oq; arc=none smtp.client-ip=198.175.65.19
+	 In-Reply-To:Content-Type; b=cfZVH/uaM/LX4RViWKFTjV23UH2PGUU2yWGs2E8VH7gs3Fxa8/sx010IQDJuYnupKDpUBgD7ieDzGR0BzPrOQ1qWgS18UTbOhzs72omxFrIqrZXLgMd1KXizbJcMzEwbeptV/UFGdwzCUrFJ4pZ6MuuxiakhxbPRov5dKvxyNtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LoaORlSW; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774441489; x=1805977489;
+  t=1774441679; x=1805977679;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=ALWKNvVNm0+2r3Ry2QG32tAeoyhy7TVqmqpTEmbO2Kw=;
-  b=UcSZK9Oq5P/FEtsTwqWcmW+WZzr5aNMZiTeDZ99KZloCMJEi+FpM6Whh
-   p7WdEhnmwn5SqT/MREA8JUQ69tb5mAEWxPdeOGpu86SrEJRABG0vh0lwG
-   iqVQmtBLynlXgR+KgXY33ZjMcts2g3X45h1KNixF5TdNGWt55lqOLoVCZ
-   /pvPalMhQ9VTMnI0KhkyqCtKNuHW5kflKbIN0brUIoHqRluyD0uorLSxg
-   uODCdmjmO2sK8FRZi3WUf39gVXfykXsjox9ucZ51kDh0te25XKZKLiqLs
-   0daNqAS7JS9tFxn28+6HlTc81Aq56sys/V6Ayfe20ACkRno7EncBvHmra
+  bh=IByB2XwCRydQfIDr3lH49NKDx9ONCF9CIQqUcUApv9U=;
+  b=LoaORlSWeacSeHR1t3FHGpS225upSMsNU93q/ahz5j1yAbH/hCiQ5qWQ
+   AqkzIZuZcSmDUvNghnoMXaXKEkGTfybnzJTQebHMJf2iioVV1m00bgEPR
+   /oX4Wa6vRwcD62bJ0eCZMlwMeENvfQ0lRhaunXKSGrZjxyV5iiil6v1JS
+   /y/CK5gjZe0GKdD/H5Fehggh0n7bmcI/NT05N2GXrBuwx0XSDscs71ztC
+   bdM8AD6gtGz/Ys4IFvUrMxkrG5qPIYTzQgklgfgA7sLJ2rHW+C9Xt9Z9P
+   VrjjkIFx2M53H/84cTUa1H3v/FUuxoRNTnLxuKkkuo+1Gap5hYueoVZFe
    w==;
-X-CSE-ConnectionGUID: S6d3ug8gSbyXnsKanwMpLQ==
-X-CSE-MsgGUID: 1lwjvAPETQ2Mjj02yXqEzw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="75363446"
+X-CSE-ConnectionGUID: fqx2Xk/lQ8qbmEER1xr9Xg==
+X-CSE-MsgGUID: h5NIVm0vRtmiat/bAjPmJw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="93052983"
 X-IronPort-AV: E=Sophos;i="6.23,140,1770624000"; 
-   d="scan'208";a="75363446"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 05:24:49 -0700
-X-CSE-ConnectionGUID: 9BW7yyEAQaKCWYAUnfO/RQ==
-X-CSE-MsgGUID: fvTQur7XR22g/4FM1CTggA==
+   d="scan'208";a="93052983"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 05:27:58 -0700
+X-CSE-ConnectionGUID: 6Q0tGT3ISruaRCOl/ZTTkg==
+X-CSE-MsgGUID: UxvnzVIWQbWogWZhsMjhNw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,140,1770624000"; 
-   d="scan'208";a="248184268"
+   d="scan'208";a="224929338"
 Received: from pgcooper-mobl3.ger.corp.intel.com (HELO [10.245.245.106]) ([10.245.245.106])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 05:24:47 -0700
-Message-ID: <a6d6478e-e6a9-430c-a8f9-1d003d949c2f@linux.intel.com>
-Date: Wed, 25 Mar 2026 14:24:44 +0200
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 05:27:57 -0700
+Message-ID: <8b94065d-b7b9-4964-803f-c2f2b58becb3@linux.intel.com>
+Date: Wed, 25 Mar 2026 14:27:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -70,18 +70,19 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: xhci: Fix debugfs bandwidth reporting
+Subject: Re: [PATCH] usb: xhci: Simplify clearing the Event Interrupt bit
 To: Michal Pecio <michal.pecio@gmail.com>
 Cc: Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Xu Rao
- <raoxu@uniontech.com>, linux-usb@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Niklas Neronin <niklas.neronin@linux.intel.com>, linux-usb@vger.kernel.org,
  linux-kernel@vger.kernel.org
-References: <20260304114928.110be4c4.michal.pecio@gmail.com>
- <d9ae5a8b-3aa0-451e-8a42-80ef73e2d210@linux.intel.com>
- <20260325113246.07681667.michal.pecio@gmail.com>
+References: <20260304114224.62814449.michal.pecio@gmail.com>
+ <408ff4ce-1020-472c-9526-312ba8ea2ae1@linux.intel.com>
+ <20260320211809.705e0cbd.michal.pecio@gmail.com>
+ <20260320212831.0bbabf25.michal.pecio@gmail.com>
 Content-Language: en-US
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20260325113246.07681667.michal.pecio@gmail.com>
+In-Reply-To: <20260320212831.0bbabf25.michal.pecio@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -89,18 +90,18 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35456-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35457-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
@@ -110,49 +111,29 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux.intel.com:mid]
-X-Rspamd-Queue-Id: 170E132554D
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.intel.com:mid]
+X-Rspamd-Queue-Id: B3CB33257EA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 3/25/26 12:32, Michal Pecio wrote:
-> On Thu, 19 Mar 2026 23:04:38 +0200, Mathias Nyman wrote:
->> On 3/4/26 12:49, Michal Pecio wrote:
->>> Replace kernel USB speed numbers with xHCI protocol IDs expected by HW.
->>> They are numerically equal up to high speed, but instead of SuperSpeed
->>> we were querying SuperSpeed+.
->>>
->>> Gen1 hardware rejects such commands with TRB Error, which resulted in
->>> zero available bandwidth being shown.
->>>
->>> While at that, report command failure as IO error, not zero bandwidth.
->>>
->>> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+On 3/20/26 22:28, Michal Pecio wrote:
+> On Fri, 20 Mar 2026 21:18:09 +0100, Michal Pecio wrote:
+>> Several other cards (VL805, FL1100, uPD720202, ASM1142, ASM3142) wake
+>> from s2idle but not S3, including with a keyboard.
 >>
->> Added to queue
+>> No difference if this patch is reverted, no difference if PCD is
+>> explicitly cleared in xhci_suspend(). And same problem in Windows.
+>> Looks like a HW deficiency in those cards.
 > 
-> Hi,
+> Actually it's quite obvious: I know for sure that some of them derive
+> Vbus from the 12V rail, and chances are that the others also do.
 > 
-> Thanks for taking the patch, but can we have a last minute swap for
-> a v2 or optionally v3?
-> 
+> Now I'm surprised that NEC and Etron cards bothered to make it work.
+> Looks like PCIe cards aren't the best option for testing suspend.
 
-Sure, no problem.
+Thanks for testing and clarifying
 
-> Problem is that returning -EIO is common (the command is optional)
-> and it upsets userspace: "grep -r" spams the console with errors,
-> "zip -R" terminates and doesn't include remaining files, etc.
-> So I would prefer to print an error string in this case.
-> "Real" errors will still be returned ordinarily.
-> 
-> The optional v3 also renames the new directory for consistency.
-> Technically it's a breaking change, but I believe it's permissible
-> in debugfs, particularly for an interface only added recently.
-> 
+Adding this patch to queue
 
-lets stick with v2, avoiding possible breakage due to debugfs file rename.
-
-Thanks
-Mathias
-
+-Mathias
 
