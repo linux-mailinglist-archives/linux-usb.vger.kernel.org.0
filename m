@@ -1,197 +1,170 @@
-Return-Path: <linux-usb+bounces-35463-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35465-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YFTVNHcRxGnuvwQAu9opvQ
-	(envelope-from <linux-usb+bounces-35463-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 17:46:47 +0100
+	id SBg/M9caxGnlwQQAu9opvQ
+	(envelope-from <linux-usb+bounces-35465-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 18:26:47 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 764A8329504
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 17:46:47 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8434B329C4F
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 18:26:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 71B3C303D53B
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 16:44:37 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 137BD3042614
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 17:13:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D883F9F4C;
-	Wed, 25 Mar 2026 16:44:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AB903FE348;
+	Wed, 25 Mar 2026 17:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZK19vgAS"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="SweADKNH";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="SweADKNH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED553F7E60;
-	Wed, 25 Mar 2026 16:44:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7714C351C06
+	for <linux-usb@vger.kernel.org>; Wed, 25 Mar 2026 17:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774457068; cv=none; b=HqGpeIphD1NAfFeddPtjMuwgXUJ1sCw6JN7bW/nfBlst3Fwn4JjNMzpYWPnUjb4UU41cPADz6xoYRKqnbgkZWF7pv/85F0hb+7pIQIMAHPBS0hGFr+Dry6Q45AVL5thWtqisRS8MtSxzENe2x1p0TgNnzwSqsbw2m9qBmorfbjA=
+	t=1774458801; cv=none; b=uxomABejZJDBOwZsADcmOXoNePj4LoepiTE6d7aFCrSkBAh9clHXSR+WaKmrsIjDTlXE/sZFI3tK3nHeFaOg/XrEDR6u5pjkaQfPXKozwi97aOxlbI86Nl9seOvs/OyIgsgMb9TUP0ydrsDmnUz5cjwGGu7bKhkPrPy8NGx5oT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774457068; c=relaxed/simple;
-	bh=p1acyll1bR0nEEnbxjVK4uNTIZyXUWRjCnNxTq33pMI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AFveNHu2kN/1q8mZnpBtX+tRsr/j2SSzxN77eA24yqJnthJmU9egH3tE7vRWtfuNQbGiHEww3E9JD7UVCKahJYpbtH9ajX5jckIp8GlsTy2M+YBlW4fkBOFZbniSMnXhFjx40zuRvoYGURvMkcqFvRudhKuWmqtf+aXXbgwDpxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZK19vgAS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8356C4CEF7;
-	Wed, 25 Mar 2026 16:44:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774457068;
-	bh=p1acyll1bR0nEEnbxjVK4uNTIZyXUWRjCnNxTq33pMI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZK19vgAS8miXRfQna05EA3PaFDTJrgsk7EjO5enW3EhW4qxu32QMfiaMf3cUr00hC
-	 PXI7/tlscjxS4LueKgf/KVTiU/K7P+yKlSV4AKLbt1A/MmatmYXgG7b+hH2boSsX9H
-	 7cM48XUdYr/ckGy8a+eCRDyeyMaT0jA2j4yScaTRNkfdaqZmm46E12JmAzxvfNbvAZ
-	 PpfmOshQSFHjsrmTXq/2WU3Ln486qFBW7WCzlNd/okXE0xltCsmZ6i8oS3H57ia9RT
-	 qk3n+OsRGzWpGmwmJa/oek1yAd/sQzV4UaLcWE2iFfLgamCPyTTxKwI5vvoiAfatbv
-	 2prasgiCofRFg==
-Date: Wed, 25 Mar 2026 16:44:24 +0000
-From: Simon Horman <horms@kernel.org>
-To: Chih Kai Hsu <hsu.chih.kai@realtek.com>
-Cc: nic_swsd <nic_swsd@realtek.com>,
-	"edumazet@google.com" <edumazet@google.com>,
-	"kuba@kernel.org" <kuba@kernel.org>,
-	"pabeni@redhat.com" <pabeni@redhat.com>,
-	"bjorn@mork.no" <bjorn@mork.no>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"davem@davemloft.net" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v3 1/2] r8152: add helper functions for PLA/USB
- OCP registers
-Message-ID: <20260325164424.GG111839@horms.kernel.org>
-References: <20260323082226.2601-451-nic_swsd@realtek.com>
- <20260324180532.261099-1-horms@kernel.org>
- <9be8e74588604d9d9f5c10d33c6881e3@realtek.com>
+	s=arc-20240116; t=1774458801; c=relaxed/simple;
+	bh=T0Cutb5XzvfMWHMtdmzLwJ5k5RTrHxUPXirUcDQMXMQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tbrVMev0gBCsf/aDyaUiTtPWq6g7OjIZgusEBjp73mM0m0GVgtk++aPAbQpAX1d4NCMRvB9bQpNg24A8UYzoAkk++RFcQuch6xH7egICquJTLC3EpGKY9k4lzQ1ZoK3ak7K7/52ZmTYnfwT/F09CLWyLywr+FVsHAAbcAiTponM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=SweADKNH; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=SweADKNH; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id AD60A4D41D;
+	Wed, 25 Mar 2026 17:13:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1774458798; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=LXH3veoCF3+GBtD59dXeyld1awRLwoMKIjQ5zGza2vY=;
+	b=SweADKNHfKce6O5KbR7FTLYYBI8LeWnMwvB30Nl4WlxsoXd1l6RYa7xxnX/VNRx4ZDYIyE
+	g9hJ76+ZV5wF6KGRRQk4IvRarDzQFRiV6FCjr/EfY6XhbDqCSCIb3MHn2b1ifMnqZvlwKU
+	3yGpuG01/FS1qYL+fmaey47uVrrrAxM=
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1774458798; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=LXH3veoCF3+GBtD59dXeyld1awRLwoMKIjQ5zGza2vY=;
+	b=SweADKNHfKce6O5KbR7FTLYYBI8LeWnMwvB30Nl4WlxsoXd1l6RYa7xxnX/VNRx4ZDYIyE
+	g9hJ76+ZV5wF6KGRRQk4IvRarDzQFRiV6FCjr/EfY6XhbDqCSCIb3MHn2b1ifMnqZvlwKU
+	3yGpuG01/FS1qYL+fmaey47uVrrrAxM=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 907F1444EC;
+	Wed, 25 Mar 2026 17:13:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id QCQtIq4XxGn6cwAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Wed, 25 Mar 2026 17:13:18 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH 1/2] usb: misc: appledisplay: use HID includes
+Date: Wed, 25 Mar 2026 18:12:56 +0100
+Message-ID: <20260325171311.384010-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9be8e74588604d9d9f5c10d33c6881e3@realtek.com>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -2.80
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35463-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35465-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[6];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[3];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[horms@kernel.org,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[suse.com:+];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linux.dev:url,horms.kernel.org:mid]
-X-Rspamd-Queue-Id: 764A8329504
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim,suse.com:email,suse.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8434B329C4F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Mar 25, 2026 at 03:35:24AM +0000, Chih Kai Hsu wrote:
-> On 25/03/26 2:06 am, Simon Horman wrote:
-> > 
-> > This is an AI-generated review of your patch. The human sending this email has
-> > considered the AI review valid, or at least plausible.
-> > 
-> > For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
-> > ---
-> > r8152: add helper functions for PLA/USB OCP registers
-> > 
-> > This commit introduces new helper functions (ocp_dword_w0w1,
-> > ocp_word_w0w1, ocp_byte_w0w1, and their _clr_bits/_set_bits variants) to
-> > simplify bitwise operations on PLA/USB OCP registers throughout the
-> > r8152 driver.
-> > 
-> > > diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c index
-> > > 3b6d4252d34c..ba6dc4dbfd80 100644
-> > > --- a/drivers/net/usb/r8152.c
-> > > +++ b/drivers/net/usb/r8152.c
-> > 
-> > [ ... ]
-> > 
-> > > @@ -3875,35 +3873,30 @@ static void r8153c_ups_en(struct r8152 *tp,
-> > > bool enable)
-> > >
-> > >  static void r8156_ups_en(struct r8152 *tp, bool enable)  {
-> > > -     u32 ocp_data = ocp_read_byte(tp, MCU_TYPE_USB,
-> > USB_POWER_CUT);
-> > > -
-> > >       if (enable) {
-> > >               r8156_ups_flags(tp);
-> > >
-> > > -             ocp_data |= UPS_EN | USP_PREWAKE | PHASE2_EN;
-> > > -             ocp_write_byte(tp, MCU_TYPE_USB, USB_POWER_CUT,
-> > ocp_data);
-> > > +             ocp_byte_set_bits(tp, MCU_TYPE_USB, USB_POWER_CUT,
-> > > +                               UPS_EN | USP_PREWAKE |
-> > PHASE2_EN);
-> > >
-> > > -             ocp_data = ocp_read_byte(tp, MCU_TYPE_USB,
-> > USB_MISC_2);
-> > > -             ocp_data |= UPS_FORCE_PWR_DOWN;
-> > > -             ocp_write_byte(tp, MCU_TYPE_USB, USB_MISC_2,
-> > ocp_data);
-> > > +             ocp_byte_set_bits(tp, MCU_TYPE_USB, USB_MISC_2,
-> > > +                               UPS_FORCE_PWR_DOWN);
-> > >
-> > >               switch (tp->version) {
-> > >               case RTL_VER_13:
-> > >               case RTL_VER_15:
-> > > -                     ocp_data = ocp_read_word(tp, MCU_TYPE_USB,
-> > USB_UPHY_XTAL);
-> > > -                     ocp_data &= ~OOBS_POLLING;
-> > > -                     ocp_write_byte(tp, MCU_TYPE_USB,
-> > USB_UPHY_XTAL, ocp_data);
-> > > +                     ocp_word_clr_bits(tp, MCU_TYPE_USB,
-> > USB_UPHY_XTAL,
-> > > +                                       OOBS_POLLING);
-> >                               ^^^^
-> > 
-> > Does this actually change the hardware behavior for RTL_VER_13 and
-> > RTL_VER_15?
-> > 
-> > The old code read a 16-bit word with ocp_read_word() to get OOBS_POLLING
-> > (BIT(8)), then cleared BIT(8) in the local variable, but wrote it back using
-> > ocp_write_byte(). Since ocp_write_byte() masks the data with 0xff, the write
-> > operation would only touch the low 8 bits and never actually clear BIT(8) in
-> > the hardware register. This made the old code effectively a no-op for clearing
-> > OOBS_POLLING.
-> > 
-> > The new code uses ocp_word_clr_bits() which calls ocp_word_w0w1(), and
-> > that performs a proper 16-bit read-modify-write cycle with ocp_write_word().
-> > This means BIT(8) will now actually be cleared in the hardware.
-> > 
-> The OOBS_POLLING (BIT(8)) must be cleared in the USB_UPHY_XTAL register.
-> The old code using ocp_write_byte() is wrong.
+The driver uses its own definitions for HID requests.
+This leads to duplication and obfuscation. Use HID's
+definitions.
 
-I expect the best way forward here is to submit a fix for (only) that
-problem to net-next.
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/misc/appledisplay.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-> 
-> > While this looks like it fixes a latent bug where OOBS_POLLING was never
-> > being cleared, the commit message describes this as pure refactoring to
-> > simplify the code with no mention of a behavioral change.
-> > 
-> I will mention this fix in the v4 commit message.
-> 
-> Thanks for your review.
-> 
-> Best Regards,
-> Chih-Kai
+diff --git a/drivers/usb/misc/appledisplay.c b/drivers/usb/misc/appledisplay.c
+index 4beebde59842..16883592f7fc 100644
+--- a/drivers/usb/misc/appledisplay.c
++++ b/drivers/usb/misc/appledisplay.c
+@@ -12,6 +12,7 @@
+ #include <linux/init.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
++#include <linux/hid.h>
+ #include <linux/usb.h>
+ #include <linux/backlight.h>
+ #include <linux/timer.h>
+@@ -20,9 +21,6 @@
+ 
+ #define APPLE_VENDOR_ID		0x05AC
+ 
+-#define USB_REQ_GET_REPORT	0x01
+-#define USB_REQ_SET_REPORT	0x09
+-
+ #define ACD_USB_TIMEOUT		250
+ 
+ #define ACD_USB_EDID		0x0302
+@@ -140,7 +138,7 @@ static int appledisplay_bl_update_status(struct backlight_device *bd)
+ 	retval = usb_control_msg(
+ 		pdata->udev,
+ 		usb_sndctrlpipe(pdata->udev, 0),
+-		USB_REQ_SET_REPORT,
++		HID_REQ_SET_REPORT,
+ 		USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
+ 		ACD_USB_BRIGHTNESS,
+ 		0,
+@@ -163,7 +161,7 @@ static int appledisplay_bl_get_brightness(struct backlight_device *bd)
+ 	retval = usb_control_msg(
+ 		pdata->udev,
+ 		usb_rcvctrlpipe(pdata->udev, 0),
+-		USB_REQ_GET_REPORT,
++		HID_REQ_GET_REPORT,
+ 		USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
+ 		ACD_USB_BRIGHTNESS,
+ 		0,
+-- 
+2.53.0
+
 
