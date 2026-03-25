@@ -1,89 +1,89 @@
-Return-Path: <linux-usb+bounces-35444-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35445-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CCpIA528w2kRtwQAu9opvQ
-	(envelope-from <linux-usb+bounces-35444-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 11:44:45 +0100
+	id +A3vFP67w2kRtwQAu9opvQ
+	(envelope-from <linux-usb+bounces-35445-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 11:42:06 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1195032337E
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 11:44:44 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E79643232C9
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 11:42:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 432AA305D4A2
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 10:36:52 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 54AEF308BC98
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 10:36:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B5863BA245;
-	Wed, 25 Mar 2026 10:36:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95CAF3BA230;
+	Wed, 25 Mar 2026 10:36:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s09pqUdG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YCXM0xIK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3C23BA243
-	for <linux-usb@vger.kernel.org>; Wed, 25 Mar 2026 10:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05BE3BA235
+	for <linux-usb@vger.kernel.org>; Wed, 25 Mar 2026 10:36:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774435010; cv=none; b=FDwrXUwv5jpkrHHOb9IEJNZ1q4+tLKfBovLSjeT6YGPjhn46bLUuixCeExi8rkU3whn78Q99AUo0sVRqkam+cwPzz43U2dzYDKFb7z0GhExGByKppt4KY+vxD+1OVeUMGkzMKxy9k78ZH9DpIDIVzP2QKzhcy/qck8g6MA+gUnk=
+	t=1774435013; cv=none; b=ai/UhhYg/+ovsf4fGtcO89Jt/rKJ03iaRgoZIzigNxoJtMUFZZwKfdX2kvTAjtEO3KkbvjzIsDjrDomk2clE1YrRADmc7TooaPKUVT//sP9uZIJcUIIxX3h85VaPOKFqZivpT3QMHaxdAkqwacdgwBowFKz/cxbhtvUu2yzXAio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774435010; c=relaxed/simple;
-	bh=aDCwn0qI0YEqhlF9ohMW9VqX+MrPVXhBbc9ci1BibzU=;
+	s=arc-20240116; t=1774435013; c=relaxed/simple;
+	bh=FatE/wK9J7yDXMt0nj/XrzYzbc9G/22/6FOzRnqaSwY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=R9G/pLew3LIO+VW5QW0aigjgdJhphOEtnARECVSJDtXULISas2xIrwEb8oABiY6xF6jLs4hmFACcZCNYI+dVNLKOQYhtvniffX4glMueynwMulAeErFYddjUYxVV6XEDC7cpselNGB4ceAI1Z++ORDgZR4o7nAoqGqfV0tCFI9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s09pqUdG; arc=none smtp.client-ip=209.85.222.178
+	 MIME-Version; b=bgI7e9betrobDYzVINS7BhD1Om0fd3b6UqcJ8DixAGOl8mdcIhuPow5YEx8U/pOXZn0eBCfLFS2KBCbMC4T63CQQRZkMsA5pE2Rf2gVdE3eYBdem+Nu6Q/F8bnFgID9zbGt5fiBlktUT+CiDBBZ7yvJYYnNXjbmI++UoO8nC/Fc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YCXM0xIK; arc=none smtp.client-ip=209.85.222.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8c6f21c2d81so201384885a.2
-        for <linux-usb@vger.kernel.org>; Wed, 25 Mar 2026 03:36:49 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-8cfc2d1fdbfso187193385a.3
+        for <linux-usb@vger.kernel.org>; Wed, 25 Mar 2026 03:36:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774435008; x=1775039808; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774435010; x=1775039810; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wtluUl8d/Kurx3iRelP/lTdzsDEhoY4ch3ZOhe3ebzY=;
-        b=s09pqUdGDsPVWgX36iCa4Clp1mIgnSI9CT8Zc7ueAqIxlrvtl5k4k55s4hpLBrtuL+
-         tH0QYHY4IAsJSmvQnhuLu5HEVqfPajjCpxxqvVayNibT7DhraZLRa2SbRIojs5DG5/zZ
-         zsA/crPxt/t/zQxktcN8GSPc482j5ewX/VAFBL1xLmEKtBeT6vGvsbmqXJSaeEbneSnv
-         rlH/uVNrO0LDf/xRoydWnm/udv7eTJajT/x5MMXbubbhk7BrLuSmKzabiNei+uKOKff7
-         xaBUGKBBcWSed1Wo3rt7vL10NRuSNMs69dbaIR5LCcjXZwYmVx014U7ssEBdGy+2IqZK
-         417A==
+        bh=SZP3i3TTYy/eNIzw4A1vLXOZeRi+MZYB+jmMoKKIpEE=;
+        b=YCXM0xIKEWW7DKe7pr8qN+GPWpljebCzAlLgn0TnRaQDjhBc0NFKEhRh60QaHqIlUS
+         9ssZUEgHJb5UHoKJZVJJw2v3PCE+oJ2B4+QIzD4ONF4VSGnci2GTESVko8uXxsbhijVw
+         v/e330IjdU+mYEfVIfYbWWHo58mXOdwXnImY5TxK7iJSPjYQYAx6n272TRKDGI0F5deh
+         LuUPK5lwCQ6czWBI164gXXjasuFQqEalpTUN5NJN+M1DH8vcHxOCPvXjWBqjIbNMYI9S
+         RaB6JyEImGs2hEFkQYkAEiasD+bqjfyV5rP8/8ANXy1NPRSxNSK3j1oT3UV1GjqhdBfK
+         CCKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774435008; x=1775039808;
+        d=1e100.net; s=20251104; t=1774435010; x=1775039810;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=wtluUl8d/Kurx3iRelP/lTdzsDEhoY4ch3ZOhe3ebzY=;
-        b=FeHpne5zFCimHEd3J59OaTOV54IiK9lwEMhSBm1h3bpTOYD8F+PpwzVpcmpN1YnNvd
-         r3/9uqKsyYLPsTPIaRfA9wd3GytLWbIMoCvCekDK62kczoKrGZyuqxcEzY6m5y4Ih/tG
-         KeM5Cgs1VPegXMTJBecA23+Mw/87h3RCBfAtb2JjCALqX8EA0NBWDGjFkaCp+PSpEiVe
-         oLSKq8H8NiGQMXF2VXxrNJk2AM9dsoCWYSyodJtePkZwY/KVDDTfQ2qGU6XKCzaRMg5A
-         H8ZnDLB/mP5eHB1cpyxYh6tYhWCpqVAjEDQ7d970cxXaNPceLvtcel0l6iKfw/da+tA9
-         ckRw==
-X-Gm-Message-State: AOJu0Yxga63HymjJ+D+MvQRpLwvkppLurNiOAeegOLlJFRydPxONVEzX
-	49Z9bOixtw8WlavuSH6aKdwOmlNfW4PCH/80brgOCk0g2Iy71oEOMSFJ3Ydyabd5mZSdxZJb
-X-Gm-Gg: ATEYQzy4xcDfNTe4Y9dzKe7X7r9T8QXXesOVmaLbVOUy4SzW8NQ7nn6V/5H7KffwhDv
-	TVIIgIs17h9xJqzr9apu3CiAMR8a9XuZ5vmtvhyGPnsQdIJ8N2wXIpNgQQEp6g3h8CDGdK+wtYR
-	U9hqVNcVG+WyztENS6t2BVJvDrJpveOVuNrqApnGTZiS3diJ7Whn4QcyC6QnW4N4zhesBlCvsc2
-	4eLga2ATDu5sHsizLtMTtYVUmDMD4kQTPBBEKuTSp9A0u/xuOE+M9rhadFdYT2sse9paWy4Y+Y0
-	UGMi9nzN+JBbOx04hZEFmmuwkrYnEdPdbKOvtSaSnQjIrsy3rNvWnxgnVgocgBckiieEMWkLXnb
-	YjWgE4G2+jKwDEuiM6LsNyQwnE5KVQWmVqZIvZZBDmFDuSfLflXP9Lnn8tc0K5ibHb3ngEU2uzm
-	eNTyOX9kZ260RHMFWtya1Hs5nO7DQz8fhsIEY9F0zCBqrJPjnOInwgy0KHCatC0PXmnGfslr4O+
-	N+C+3bq
-X-Received: by 2002:a05:620a:31a8:b0:8cd:81cc:5567 with SMTP id af79cd13be357-8d000f5dd23mr410583185a.32.1774435007981;
-        Wed, 25 Mar 2026 03:36:47 -0700 (PDT)
+        bh=SZP3i3TTYy/eNIzw4A1vLXOZeRi+MZYB+jmMoKKIpEE=;
+        b=FoisnnBWcEung7CW1I35KH+/O0ilkU4Vs2+nm0Ozl1h5+UIjyCMlR7LbEVypdNIbmT
+         oVc1u8u7f1jC3ZEwFEePGRCC9RV61KGYB+3zwaDv0AV0majzjqEBRgQ+O5R4Xo8q2d9E
+         uI1sU6mBMXgg8UVQ5jn+RmZqdOYHpGFRuPwU9FDdEMzSLw53pUvPUZ4eaPut+LE9Z1x8
+         Lk0ztrcCf8/2RhIaHg8rUtaE7+DbZl0Rv4BUaOboWqmwdO+boOFlQ50Hc8Ok0IUX3JH7
+         YePrc/IKXoPlk0MHEbzhW5DfqyS25IMvMLZbvtBqUHuaFV1mXL6zX5UhAfQ+kVu+q9fM
+         qepQ==
+X-Gm-Message-State: AOJu0YwgOKBm4tI5uZjFkw2+HADyzI82G6xdp6Wp81/C35WH+FAAtjxw
+	CIRew6k3GUnkbDifBQznynf1yF38/L6ZY6ddh4/81VDfbOUTpxX1rKLvuT1Jr/fcfZpbhZ8F
+X-Gm-Gg: ATEYQzxaf5Rnt8MBXV6bnyIqgub/Midxh7Al4G5IMawPc07TcxFACjEKhFUg3zHq4oS
+	ckOkQe/mOFFLF0Ik3zIz5/fnl8UWZCg9n490Fvzmg5ynqMqlhS0WYhZZaF5p6YmDRlvqrQbKjPk
+	ISTCrmYqsGv+7ewDonTbPqVz3g23/LgtdZQxh1Cln0NuH51DR05OqvHx0kI2hJA4mP8ZUrsldKH
+	I/QGEkh8SluomHS1hYpcrLjeA/T1a7s0VltJiV34wXHw3saeaEDS2lJymtVj1OYz73y5gYYpFqU
+	PUiKnXFKavRgKRTOrjPYbtHBvA4XF1MUiggp7QpGrl01Gt8RTnavBtRCLziZwbZOzrAvuhCbmQo
+	VD0345wzuk/0jEZ5YkBeTO2dDFqMWqqCZItjfJsGOqIrbUzIyOVIK3vKZQeXgyECffzAFD/92j6
+	DkWH+sbHG0yFwMzcAyYR7mv7Y+/i3ioFnNG1vd4CKiFTDSqgUqPRV09e8pNAtWbnzo9JVYQZQe/
+	lK/X3Gdda4RGHiGXcg=
+X-Received: by 2002:a05:620a:408e:b0:8cb:3870:5c1e with SMTP id af79cd13be357-8d000f55fcamr374389585a.25.1774435010462;
+        Wed, 25 Mar 2026 03:36:50 -0700 (PDT)
 Received: from AddContent.localdomain (static-23-234-101-108.cust.tzulo.com. [23.234.101.108])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cfc8f5cd4csm1482760385a.5.2026.03.25.03.36.46
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cfc8f5cd4csm1482760385a.5.2026.03.25.03.36.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2026 03:36:47 -0700 (PDT)
+        Wed, 25 Mar 2026 03:36:50 -0700 (PDT)
 From: Kelvin Mbogo <addcontent08@gmail.com>
 To: linux-usb@vger.kernel.org
 Cc: gregkh@linuxfoundation.org,
 	skhan@linuxfoundation.org,
 	Kelvin Mbogo <addcontent08@gmail.com>
-Subject: [PATCH v2 2/3] usb: usbip: validate iso frame actual_length in usbip_recv_iso()
-Date: Wed, 25 Mar 2026 13:36:39 +0300
-Message-Id: <20260325103640.8090-2-addcontent08@gmail.com>
+Subject: [PATCH v2 3/3] usb: usbip: fix OOB read/write in usbip_pad_iso()
+Date: Wed, 25 Mar 2026 13:36:40 +0300
+Message-Id: <20260325103640.8090-3-addcontent08@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260325103640.8090-1-addcontent08@gmail.com>
 References: <20260325103640.8090-1-addcontent08@gmail.com>
@@ -100,7 +100,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -110,8 +110,8 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35444-lists,linux-usb=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TAGGED_FROM(0.00)[bounces-35445-lists,linux-usb=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	RCPT_COUNT_THREE(0.00)[4];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[addcontent08@gmail.com,linux-usb@vger.kernel.org];
@@ -122,72 +122,83 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 1195032337E
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E79643232C9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-usbip_recv_iso() sums each frame's actual_length into an int
-accumulator without checking the individual values first:
+usbip_pad_iso() repositions ISO frame data within the transfer buffer
+via memmove().  Neither the source offset (actualoffset, derived by
+subtracting wire-supplied actual_length values) nor the destination
+offset (iso_frame_desc[i].offset, taken directly from the wire) is
+bounds-checked.
 
-    total_length += urb->iso_frame_desc[i].actual_length;
+If a crafted actual_length wraps actualoffset negative through the
+subtraction (see patch 2/3 for the root cause), the memmove source
+points before the allocation - slab OOB read, data returned to
+userspace.
 
-A malicious server can send actual_length = 0xFFFFFFFC for one frame
-and a small value for the other, making the signed sum wrap around to
-match urb->actual_length.  The sanity check passes, and usbip_pad_iso()
-later computes a negative actualoffset, feeding it to memmove() as a
-source pointer - reads before the allocation, leaked to userspace via
-USBDEVFS_REAPURB.
+Independently, iso_frame_desc[i].offset is never validated against
+transfer_buffer_length.  Setting offset past the end of the buffer
+gives a fully controlled OOB write into whatever sits next in the
+slab - confirmed with offset=400 on a 392-byte buffer, 64-byte write.
 
-Reject any frame whose actual_length exceeds transfer_buffer_length
-(one frame can't carry more data than the whole buffer), and widen the
-accumulator to u32 so that many moderately-large frames can't wrap it
-either.
+Add bounds checks for both the source and destination ranges before
+each memmove call.  Use unsigned comparisons after the sign check on
+actualoffset to avoid signed/unsigned conversion surprises.
 
 Signed-off-by: Kelvin Mbogo <addcontent08@gmail.com>
 ---
- drivers/usb/usbip/usbip_common.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/usb/usbip/usbip_common.c | 36 ++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
 diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
-index 8b6eb74..fd620e9 100644
+index fd620e9..8ebaaea 100644
 --- a/drivers/usb/usbip/usbip_common.c
 +++ b/drivers/usb/usbip/usbip_common.c
-@@ -665,7 +665,7 @@ int usbip_recv_iso(struct usbip_device *ud, struct urb *urb)
- 	int size;
- 	int i;
- 	int ret;
--	int total_length = 0;
-+	u32 total_length = 0;
- 
- 	if (!usb_pipeisoc(urb->pipe))
- 		return 0;
-@@ -706,14 +706,23 @@ int usbip_recv_iso(struct usbip_device *ud, struct urb *urb)
- 	for (i = 0; i < np; i++) {
- 		usbip_iso_packet_correct_endian(&iso[i], 0);
- 		usbip_pack_iso(&iso[i], &urb->iso_frame_desc[i], 0);
-+		if (urb->iso_frame_desc[i].actual_length >
-+				(unsigned int)urb->transfer_buffer_length) {
+@@ -770,6 +770,42 @@ void usbip_pad_iso(struct usbip_device *ud, struct urb *urb)
+ 	 */
+ 	for (i = np-1; i > 0; i--) {
+ 		actualoffset -= urb->iso_frame_desc[i].actual_length;
++
++		/*
++		 * Validate source range: actualoffset can go negative
++		 * via crafted actual_length values from the wire.
++		 */
++		if (actualoffset < 0 ||
++		    (unsigned int)actualoffset >
++				(unsigned int)urb->transfer_buffer_length ||
++		    urb->iso_frame_desc[i].actual_length >
++				(unsigned int)urb->transfer_buffer_length -
++				(unsigned int)actualoffset) {
 +			dev_err(&urb->dev->dev,
-+				"recv iso: frame actual_length %u exceeds buffer %d\n",
++				"pad_iso: bad src off=%d len=%u bufsz=%d\n",
++				actualoffset,
 +				urb->iso_frame_desc[i].actual_length,
 +				urb->transfer_buffer_length);
-+			kfree(buff);
-+			return -EPROTO;
++			return;
 +		}
- 		total_length += urb->iso_frame_desc[i].actual_length;
- 	}
- 
- 	kfree(buff);
- 
--	if (total_length != urb->actual_length) {
-+	if (total_length != (u32)urb->actual_length) {
- 		dev_err(&urb->dev->dev,
--			"total length of iso packets %d not equal to actual length of buffer %d\n",
-+			"total length of iso packets %u not equal to actual length of buffer %d\n",
- 			total_length, urb->actual_length);
- 
- 		if (ud->side == USBIP_STUB || ud->side == USBIP_VUDC)
++
++		/*
++		 * Validate destination range: iso_frame_desc[i].offset
++		 * is wire-supplied and must not exceed the buffer.
++		 */
++		if (urb->iso_frame_desc[i].offset >
++				(unsigned int)urb->transfer_buffer_length ||
++		    urb->iso_frame_desc[i].actual_length >
++				(unsigned int)urb->transfer_buffer_length -
++				urb->iso_frame_desc[i].offset) {
++			dev_err(&urb->dev->dev,
++				"pad_iso: bad dst off=%u len=%u bufsz=%d\n",
++				urb->iso_frame_desc[i].offset,
++				urb->iso_frame_desc[i].actual_length,
++				urb->transfer_buffer_length);
++			return;
++		}
++
+ 		memmove(urb->transfer_buffer + urb->iso_frame_desc[i].offset,
+ 			urb->transfer_buffer + actualoffset,
+ 			urb->iso_frame_desc[i].actual_length);
 -- 
 2.34.1
 
