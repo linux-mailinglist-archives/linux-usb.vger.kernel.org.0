@@ -1,66 +1,89 @@
-Return-Path: <linux-usb+bounces-35431-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35432-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wGJbCSGpw2ngtAQAu9opvQ
-	(envelope-from <linux-usb+bounces-35431-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 10:21:37 +0100
+	id 6P7pKcurw2nAtAQAu9opvQ
+	(envelope-from <linux-usb+bounces-35432-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 10:32:59 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93DFC322135
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 10:21:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10C22322473
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 10:32:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E8524300A8D4
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 09:12:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C0ECC307E0BB
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 09:26:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3812F350A1B;
-	Wed, 25 Mar 2026 09:12:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20633358387;
+	Wed, 25 Mar 2026 09:26:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=enjuk.jp header.i=@enjuk.jp header.b="xOo+/+6S"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f370A5GI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from www2881.sakura.ne.jp (www2881.sakura.ne.jp [49.212.198.91])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C32724DFF3;
-	Wed, 25 Mar 2026 09:12:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.198.91
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523693537C6
+	for <linux-usb@vger.kernel.org>; Wed, 25 Mar 2026 09:26:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774429952; cv=none; b=FRjerPndDfgUvfPjolpSNBwTNdio2fvtDb3CzNlXr2g0XJ/igqTPtvQVlrhXqg2w8Bfj7OkKLtB66aTW6yCPj/H9STkJ/QE3IuTCf4zo6SdAwe0g6tFmWYpQZe+0MKt3w0YWNTMg/ZTu6YMf8duQipFiwE5aD3CeMfAILVG9rh8=
+	t=1774430775; cv=none; b=QVn4Y47gLBov1eL1CT4ClipiKTWFIYXDA/yCVGwCrmoEzBnPi7c4AmyF0ViHTs1yH3G9vhSGnx1V5AD1RBG5rc1SfcOdsbabhSbpalRLQbSc7fN0Zi15pE8CtohMrmXz2wSaqIk/PrMjY8QIcaOeOSM23CrC47dZUIEHZJzzhec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774429952; c=relaxed/simple;
-	bh=7sjIAF6Y4pA90r8SW6hjDbE4KQgDXlaYo44sYcV1hYs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JQkLFsKcZ899Pi/IGl2XbBGsg34C0WYJy1N6gOmj857TxHAHAJgA8wl7TTAk9R7hHj8Vw+qC8Dcp/xJ24bNNuE5DteSC1nbzet9pcphzUFvTVKKt1StCYZIff6NqIZBhLcOwVjKPd2ccaFIQxm6CpFWR0hHgTTSKFbiK3GLw5xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enjuk.jp; spf=pass smtp.mailfrom=enjuk.jp; dkim=pass (2048-bit key) header.d=enjuk.jp header.i=@enjuk.jp header.b=xOo+/+6S; arc=none smtp.client-ip=49.212.198.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enjuk.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enjuk.jp
-Received: from x1 (39.25.31.150.dy.iij4u.or.jp [150.31.25.39])
-	(authenticated bits=0)
-	by www2881.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 62P9CEN5076027
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Wed, 25 Mar 2026 18:12:14 +0900 (JST)
-	(envelope-from kohei@enjuk.jp)
-DKIM-Signature: a=rsa-sha256; bh=edtYkGRJV3gYT9SXCi4jX9/DuvUQzuZSJ7QfmLUWaQ4=;
-        c=relaxed/relaxed; d=enjuk.jp;
-        h=From:Message-ID:To:Subject:Date;
-        s=rs20251215; t=1774429935; v=1;
-        b=xOo+/+6SkW+y2AbaNR8+H/hPfyZfkBGEzmUVxJOrhsNwSwQSjrtwCpIO6M0QdiNE
-         e6wEfhaM0SgbsUFC9613PXvet01H8SngXCaH4LdacswYnQ/pkRnI8NIB8o5zZOnB
-         VzW8h+8oMMc7YYzqJqwA8wwBpoglNxKqFjxE8o6fClKjnejAVHLrdrV53GL4nY/s
-         /2HhFxPJ25SsPkVzt3PX/4//13AXm8UKfW/NgLoBm5eqzd6bBWRYilRLyWMiUAT9
-         tD1XN6ca/uREXgiD/MlW/TwgA0rscoziopMoJHy3liLd7OZgoHsnwN1Z+i0hFrCr
-         d9RbS738WorbeHClr02Ryw==
-From: Kohei Enju <kohei@enjuk.jp>
-To: syzbot+9db6c624635564ad813c@syzkaller.appspotmail.com
-Cc: kuniyu@google.com, andrew+netdev@lunn.ch, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] [net?] KMSAN: uninit-value in rtl8150_open (2)
-Date: Wed, 25 Mar 2026 18:12:09 +0900
-Message-ID: <20260325091214.24516-1-kohei@enjuk.jp>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <69c34b1c.050a0220.abc16.000b.GAE@google.com>
-References: <69c34b1c.050a0220.abc16.000b.GAE@google.com>
+	s=arc-20240116; t=1774430775; c=relaxed/simple;
+	bh=ZmvqgTFWaGKMAXmXyLcAAz5wXUFrHvKEHYA4hbYZ59Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sNpsPPpYIregw68jfppQ+Q+RQNVUd1p/U1oJze4U5wVoOVrkltWJ7qtTFirzRTSQcgD0lNMm4YI6lBXbjgvq1mk2PVXw4n3qSz/GpcWKnltuntJOhHaF/gF5L90lDbRvSpGokQXkQ/cpcYF8CgQb8/i8fG/obeg5FhGuwDxgMp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f370A5GI; arc=none smtp.client-ip=209.85.222.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8cb5c9ba82bso756255585a.2
+        for <linux-usb@vger.kernel.org>; Wed, 25 Mar 2026 02:26:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774430773; x=1775035573; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SacAaeI15ps9TFZN5fr++lDc4/4uJ2KggRWKXYoPEog=;
+        b=f370A5GIUcheycKOpaOCDfpplPnmGzCUZepEj4fXECqKqxOllC7RDmz8UKZBkMPNtf
+         uGdCp56pbFjSpLRmSqy/t5avEU691XLAJe2bir9SOfas4WhgIOusOi9BoBwTSh88cctr
+         VcO/jaMCa0Rsj3F5sklbD44el/kqZhps8XXnMB6DnOuXRqHyW03DO+sqekMPIZ6nhWsC
+         Gv9nD1LY57Im349C7o6Nk86wdVL7jyOChdz4vuyAJ/fhCi2qBcr5cFQ6Q0XGYFf6xI96
+         JiC3sr7tjgC2DMF/mGHNhRK11j337OPUZiCdtHoNR0WFuWTv1FlJnVd3MpLGukRGTS0y
+         VP+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774430773; x=1775035573;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SacAaeI15ps9TFZN5fr++lDc4/4uJ2KggRWKXYoPEog=;
+        b=YxAagPKbfauSymP8e/cqKyndI6GE95/fBGzocjNzD+CPPyrgsUrPEpyaVrqHP+Mnu0
+         xySUVqOZDFacxNp1SktefgtklEnHrRMJ7S9Z6CFiRt0ueMIMFr+2yOUeYjFCxiF8Bswl
+         Q6PmFnuEDPbhhOrHvehP8UZ7+tbOdc3L/CfIEd9jEEwVStK9pjXHZ8ttxiiLXN3Bz/8J
+         zaG5p0CsyXM0Vcd10wGy6TzUBzuVws+CxsZIY2uyLGIPoFvASM/L8KpWwOFvU3Nu5eDJ
+         HdLfaO3qerTjx8+430Ca1CRqbGSLVFjB6eCKtDWloxRtZTckskQpyd2O0hTCQMwgdody
+         rcrQ==
+X-Gm-Message-State: AOJu0YyTBHMMoeIKbAPvIV0/JS5nBYbfXnkOUAB83fZSQJtQpVXHgROJ
+	RjwEPGPBtr60msC6Tk9x1RJPk8qEVA2Kq6YUbT2MO+JYimpjaUNgyH3B0Ngtuhf86WdLwgMS
+X-Gm-Gg: ATEYQzwl6SCOmNDQlXyoiRx0MdP6RUV53DW6ZsgM2hVhlIZWbDNqrnnjTVjiuokexXq
+	gppaTqjSuSOOHqS6mfquz1jnYJ1fqU5D9l5CV+AbsnivebLpnW0BFr3N5eV1cVVty+rm7aULu+j
+	CkN2+dXySFwesM5dloMtgl7Z79M9vfLcx0Ap4E18JWFVlQMwVspdlR5YHgB83E1OaIrAS8i+d3G
+	y7dWNuI9X442JwvqB00ZLeI7nH3pcDXQik2vsywtfYBdtJzrQdacCd5BQI9MNAy/52cZsi7mYJ+
+	LAr10vqNb0HH7Zy27ir9jfcxCxMa1kAqoMaYPQ0s3D9hQU47xpIP4hSTSl3B8vl0/6RTsnjv/7a
+	TrclcQrsQ1swZPWn4gKIIWzF2XdbmKinAlw6nsEiXhNfNWGUjX29EURHUyWQ4sTFpgqGKzafCZM
+	bUUxNuakYcgWsvOMOHM2tEL11XaU6bEZ3sng0I4oreSmqaGIQq7zRzY7Om5RM4KFIqarYJSKDeR
+	bvaeMJ5
+X-Received: by 2002:a05:620a:25d0:b0:8cf:ebd2:f8e1 with SMTP id af79cd13be357-8d0010ccb9fmr373957185a.53.1774430772889;
+        Wed, 25 Mar 2026 02:26:12 -0700 (PDT)
+Received: from AddContent.localdomain (static-23-234-101-108.cust.tzulo.com. [23.234.101.108])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cfc8f5dabasm1287525085a.3.2026.03.25.02.26.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2026 02:26:11 -0700 (PDT)
+From: Kelvin Mbogo <addcontent08@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
+	skhan@linuxfoundation.org,
+	security@kernel.org,
+	Kelvin Mbogo <addcontent08@gmail.com>
+Subject: [PATCH 1/3] usb: usbip: fix integer overflow in usbip_recv_iso()
+Date: Wed, 25 Mar 2026 12:26:04 +0300
+Message-Id: <20260325092606.7474-1-addcontent08@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,98 +91,107 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [1.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=963de479f54c6dbb];
-	DMARC_POLICY_ALLOW(-0.50)[enjuk.jp,none];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[enjuk.jp:s=rs20251215];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[kohei@enjuk.jp,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35431-lists,linux-usb=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[enjuk.jp:dkim,enjuk.jp:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,appspotmail.com:email,storage.googleapis.com:url];
-	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-35432-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[enjuk.jp:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,9db6c624635564ad813c,netdev];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[addcontent08@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	SUBJECT_HAS_QUESTION(0.00)[]
-X-Rspamd-Queue-Id: 93DFC322135
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 10C22322473
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-+ Iwashima-san
+usbip_recv_iso() computes the iso descriptor buffer size as:
 
-On Tue, 24 Mar 2026 19:40:28 -0700, syzbot wrote:
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    c612261bedd6 Merge tag 'io_uring-7.0-20260320' of git://gi..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=155801d6580000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=963de479f54c6dbb
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9db6c624635564ad813c
-> compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/aa2bdf537bf6/disk-c612261b.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/8fcd98072431/vmlinux-c612261b.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/737b94c52155/bzImage-c612261b.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+9db6c624635564ad813c@syzkaller.appspotmail.com
->
-> usb 2-1: device reset failed
-> =====================================================
-> BUG: KMSAN: uninit-value in set_carrier drivers/net/usb/rtl8150.c:726 [inline]
-> BUG: KMSAN: uninit-value in rtl8150_open+0x1131/0x1360 drivers/net/usb/rtl8150.c:763
->  set_carrier drivers/net/usb/rtl8150.c:726 [inline]
->  rtl8150_open+0x1131/0x1360 drivers/net/usb/rtl8150.c:763
->  __dev_open+0x8e3/0xd40 net/core/dev.c:1702
->  __dev_change_flags+0x32f/0x950 net/core/dev.c:9764
->  netif_change_flags+0x8d/0x1e0 net/core/dev.c:9827
->  dev_change_flags+0x18c/0x320 net/core/dev_api.c:68
->  devinet_ioctl+0x10dd/0x25a0 net/ipv4/devinet.c:1199
->  inet_ioctl+0x4c0/0x6f0 net/ipv4/af_inet.c:1015
->  sock_do_ioctl net/socket.c:1254 [inline]
->  sock_ioctl+0x769/0x1140 net/socket.c:1375
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:597 [inline]
->  __se_sys_ioctl+0x23c/0x400 fs/ioctl.c:583
->  __x64_sys_ioctl+0x97/0xe0 fs/ioctl.c:583
->  x64_sys_call+0x1975/0x3ea0 arch/x86/include/generated/asm/syscalls_64.h:17
->  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->  do_syscall_64+0x134/0xf80 arch/x86/entry/syscall_64.c:94
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->
-> Local variable tmp.i created at:
->  set_carrier drivers/net/usb/rtl8150.c:723 [inline]
->  rtl8150_open+0xc26/0x1360 drivers/net/usb/rtl8150.c:763
->  __dev_open+0x8e3/0xd40 net/core/dev.c:1702
+    int size = np * sizeof(*iso);
 
-I see Iwashima-san was previously working on this issue here:
-  https://lore.kernel.org/all/20250827233108.3768855-1-kuniyu@google.com/T/
+where np comes straight from the wire (urb->number_of_packets, set by
+usbip_pack_ret_submit() before we get here).  With np = 0x10000001 and
+sizeof(*iso) == 16 the product is 0x100000010 which truncates to 16 on
+a 32-bit int.  kzalloc(16) succeeds but the following receive loop
+writes np * 16 bytes into it - game over.
 
-The issue seems to be that set_carrier() ignores the return value of
-get_registers() and may use an uninitialized tmp.
+USBIP_MAX_ISO_PACKETS (1024) already exists in usbip_common.h for the
+submit path but was never enforced on the receive side.
 
-rtl8150 appears to have other call sites that use get_registers() the
-same way as mentioned in the thread above.
+Clamp np to [1, USBIP_MAX_ISO_PACKETS] and switch to kmalloc_array()
+so the allocator itself can catch overflows in the future.
+
+One subtlety: usbip_pack_ret_submit() already copied the bogus np into
+urb->number_of_packets before we run, so just returning -EPROTO isn't
+enough - processcompl() in the HCD will still iterate that many
+iso_frame_desc entries when it completes the failed URB.  Zero out
+urb->number_of_packets before bailing to prevent that secondary crash
+(confirmed on 6.12.0, processcompl+0x63 with CR2 in unmapped slab).
+
+Reported-by: Kelvin Mbogo <addcontent08@gmail.com>
+Signed-off-by: Kelvin Mbogo <addcontent08@gmail.com>
+---
+ drivers/usb/usbip/usbip_common.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
+index a2b2da1..549e34b 100644
+--- a/drivers/usb/usbip/usbip_common.c
++++ b/drivers/usb/usbip/usbip_common.c
+@@ -662,7 +662,6 @@ int usbip_recv_iso(struct usbip_device *ud, struct urb *urb)
+ 	void *buff;
+ 	struct usbip_iso_packet_descriptor *iso;
+ 	int np = urb->number_of_packets;
+-	int size = np * sizeof(*iso);
+ 	int i;
+ 	int ret;
+ 	int total_length = 0;
+@@ -674,12 +673,22 @@ int usbip_recv_iso(struct usbip_device *ud, struct urb *urb)
+ 	if (np == 0)
+ 		return 0;
+ 
+-	buff = kzalloc(size, GFP_KERNEL);
++	if (np < 0 || np > USBIP_MAX_ISO_PACKETS) {
++		dev_err(&urb->dev->dev,
++			"recv iso: invalid number_of_packets %d\n", np);
++		/* usbip_pack_ret_submit() already set urb->number_of_packets
++		 * from the wire - zero it so processcompl() does not iterate
++		 * OOB descriptors on the way out. */
++		urb->number_of_packets = 0;
++		return -EPROTO;
++	}
++
++	buff = kmalloc_array(np, sizeof(*iso), GFP_KERNEL);
+ 	if (!buff)
+ 		return -ENOMEM;
+ 
+-	ret = usbip_recv(ud->tcp_socket, buff, size);
+-	if (ret != size) {
++	ret = usbip_recv(ud->tcp_socket, buff, np * sizeof(*iso));
++	if (ret != np * (int)sizeof(*iso)) {
+ 		dev_err(&urb->dev->dev, "recv iso_frame_descriptor, %d\n",
+ 			ret);
+ 		kfree(buff);
+-- 
+2.34.1
+
 
