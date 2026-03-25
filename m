@@ -1,56 +1,56 @@
-Return-Path: <linux-usb+bounces-35468-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35467-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0KaJBJJgxGlNywQAu9opvQ
-	(envelope-from <linux-usb+bounces-35468-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 23:24:18 +0100
+	id ANFtKo5gxGkuywQAu9opvQ
+	(envelope-from <linux-usb+bounces-35467-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 23:24:14 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4B9E32CE82
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 23:24:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3023232CE79
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 23:24:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 057F630D9336
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 22:22:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B5FDD30D6CF3
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 22:22:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19ED13859E8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 196AE382F13;
 	Wed, 25 Mar 2026 22:22:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LXpL4/p+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ml0wSrig"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 751B732720C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7509D322B7B;
 	Wed, 25 Mar 2026 22:22:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774477355; cv=none; b=sfyJdQlEktCBBjBz1h4UHv7nOGGRTm2sHO4oiCOJkRO1yWHfEuYzHs9JRSfOY7jkep1hMB/CD8D7xLQbLsFdb9IRrtkvlislmfAbYVlXH/HbsGyoR15KP0Hno4A47wQwke2irtiBn6CgNBmFIAKZe/Yt5u0NjxstOxXGeOaWPVA=
+	t=1774477355; cv=none; b=qtMgbhJMX5q+6LYfunU8YS1hvupoUcpeTvf6WpMs0DRcwjsWcuN7NFz9moZq1sZPsjwYjoiQHlwYzRosSe8Z3Tx6czenkjJMVUJ72w4V9LY9Yt+fvpGP7PEmjoQTH1fItvxWWUmvPWhYGg/t8mF69EPdSKfcy1MZDg+XCAVFT5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1774477355; c=relaxed/simple;
-	bh=9UCX6c9kBue4B3sgbyp0P1Fi4/nUyuZVOM3nKzPEbWs=;
+	bh=2aya4qzSBOnrqFcF0qCiQffRH1oUsnDZtVMTEa3jgnE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BBtjSlKDqziHM9iiIYV3OhYVP7VVZJd6SA33VJWL4POjT+LDHG3J4S0BpDUYJ9T8saWWCDg0d3vwtEE2t3oI4JzRWvx3MGXaSffoH99FoWsole9GCxKRUWd0BNbu6KmdQJ97PZ/KrXdME71SlumiDhl7OY+ePeBF0MvYCPevVNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LXpL4/p+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 30C08C116C6;
+	 In-Reply-To:To:Cc; b=IBzY1qykXeZgqFkQi60g7qryJ/32A899e0A7amhiloGBM+/v9s33LGFY84Ku9aHqapBGH4sEul5nOjQp7UocvkR1fyBX/CpZZZA4DVngP0XDS6hPtxafgNICQfSfMxytztzj60PnYBDb4QC0VgH0XmQAMhHnVStHx8U0huEhf7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ml0wSrig; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 405E1C2BCB4;
 	Wed, 25 Mar 2026 22:22:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1774477355;
-	bh=9UCX6c9kBue4B3sgbyp0P1Fi4/nUyuZVOM3nKzPEbWs=;
+	bh=2aya4qzSBOnrqFcF0qCiQffRH1oUsnDZtVMTEa3jgnE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=LXpL4/p+3x2GYazbMumdPJ2u0s4HQn9WONBeVb9KuNqoRECEJnYzgV62TPBISI4HI
-	 Iqp790T4+F4A9fD843kXcVg1Som7DXB2K/33XuNn9DPJEn4YVnIyZzc7K9k8Wg/tYt
-	 ENIDnHJ5i863lJbZSYBcOfmFSCaTc6f9ZZwIE/A/HfSXDgrxyAwW2DqiTqGlE3be6e
-	 DiW3UTchGsxv65duWRfMxOqdFJ/g6pd5Dt1cBmqBHpDltPCmTy7iIsQbhRnJCfL1o7
-	 s5CmltsEo8KIfquu2hNIOL7UYXxekWnsjQRfyOVPCI4+aw1KgvKaAQpnoalH/axvB1
-	 QQoXKCthNx2ig==
+	b=ml0wSrigpR2DeHga6KHr4v8dLcTUo6ZEco/FPiw8erY70q6kzf7ChYRCbB2s0ofgb
+	 lyASFqjbGMUfN5L6AdvdLHLN7ekJi2XNYkYSeRz73uM+dINv+ffNxuhLPoY5sqgm1G
+	 GEr3N5/5sNx+cHyIGzHr6yMKnnTbnzkPkufn4cWvHLeR9XAOpkOmZKfTLzO36OYgsP
+	 cBW53YtJBPDamav8JExn4XpIJlywsnnNtXUSkG6HWFHaIagdQaLq7AnYGwqPdyBJ8B
+	 mkqQoVWtVaal+uwX2jwTyhi+eI5Y7kLlw69SuVKN5XhyndQ8uz28iY7hhuQmKOOWS+
+	 sTBdrObXYChgg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D4B6109E527;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34FD4109E529;
 	Wed, 25 Mar 2026 22:22:35 +0000 (UTC)
 From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
-Date: Wed, 25 Mar 2026 22:22:22 +0000
-Subject: [PATCH v9 1/6] dt-bindings: mfd: maxim,max77759: reference
- power-supply schema and add regulator property
+Date: Wed, 25 Mar 2026 22:22:23 +0000
+Subject: [PATCH v9 2/6] dt-bindings: usb: maxim,max33359: Add supply
+ property for vbus
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,8 +58,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260325-max77759-charger-v9-1-4486dd297adc@google.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260325-max77759-charger-v9-2-4486dd297adc@google.com>
 References: <20260325-max77759-charger-v9-0-4486dd297adc@google.com>
 In-Reply-To: <20260325-max77759-charger-v9-0-4486dd297adc@google.com>
 To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -81,11 +81,11 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  Amit Sunil Dhamne <amitsd@google.com>, 
  Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1774477354; l=1898;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1774477354; l=1273;
  i=amitsd@google.com; s=20241031; h=from:subject:message-id;
- bh=vVEQb41vA+t6rlDPrzI7KwMZCc1WnDQaHQOICIfZd9s=;
- b=3j8YrSqS2bsLk/cq1k+cPifauF6cnA/HvyVgV3zfi6ELmpRQH1eCykwiBpndv7iy2yRq7X+Nb
- dlkLgbGkw+XDPWm5EOdSmAvy1c1LmTTfrfNnRNTWTGW2hotstxIGsab
+ bh=xHGJ1Vk5ohekxV/HkgsFaQ5FhplVGnbXa8tx/HTuhSE=;
+ b=CTTOsuHGqVUcu4uWfAFuYbSqHf/2gLAtRaF9QcKDjxZI511TxrXnXqTcN5uL2O40X58LVgvhg
+ 2xQrghgR95LAiEQ4UxBVsFYDj/kEO+8Q7PFMWxrkTvQlb05IeA8qpkG
 X-Developer-Key: i=amitsd@google.com; a=ed25519;
  pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
 X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
@@ -97,12 +97,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35468-lists,linux-usb=lfdr.de,amitsd.google.com];
+	TAGGED_FROM(0.00)[bounces-35467-lists,linux-usb=lfdr.de,amitsd.google.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_TO(0.00)[kernel.org,linaro.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,gmail.com,linux-foundation.org];
@@ -116,74 +116,50 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
 	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
 	HAS_REPLYTO(0.00)[amitsd@google.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,linaro.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A4B9E32CE82
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email]
+X-Rspamd-Queue-Id: 3023232CE79
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 From: Amit Sunil Dhamne <amitsd@google.com>
 
-Extend the max77759 binding to reference power-supply schema, so that
-PMIC node can reference its supplier. Also, add regulator property to
-control CHGIN (OTG) voltage.
+Add a regulator supply property for vbus. This notifies the regulator
+provider to source vbus when Type-C operates in Source power mode,
+while turn off sourcing vbus when operating in Sink mode or
+disconnected.
 
 Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Reviewed-by: André Draszik <andre.draszik@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 ---
- .../devicetree/bindings/mfd/maxim,max77759.yaml          | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/usb/maxim,max33359.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
-index 525de9ab3c2b..42e4a84d5204 100644
---- a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
-+++ b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
-@@ -16,6 +16,9 @@ description: |
-   The MAX77759 includes Battery Charger, Fuel Gauge, temperature sensors, USB
-   Type-C Port Controller (TCPC), NVMEM, and a GPIO expander.
+diff --git a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+index 3de4dc40b791..e652a24902ea 100644
+--- a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
++++ b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+@@ -32,6 +32,9 @@ properties:
+     description:
+       Properties for usb c connector.
  
-+allOf:
-+  - $ref: /schemas/power/supply/power-supply.yaml#
-+
- properties:
-   compatible:
-     const: maxim,max77759
-@@ -37,12 +40,18 @@ properties:
-   nvmem-0:
-     $ref: /schemas/nvmem/maxim,max77759-nvmem.yaml
- 
-+  chgin-otg-regulator:
-+    type: object
-+    description: Provides Boost for sourcing VBUS.
-+    $ref: /schemas/regulator/regulator.yaml#
-+    unevaluatedProperties: false
++  vbus-supply:
++    description: Regulator to control sourcing Vbus.
 +
  required:
    - compatible
-   - interrupts
    - reg
+@@ -53,6 +56,7 @@ examples:
+             reg = <0x25>;
+             interrupt-parent = <&gpa8>;
+             interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
++            vbus-supply = <&chgin_otg_reg>;
  
--additionalProperties: false
-+unevaluatedProperties: false
- 
- examples:
-   - |
-@@ -59,6 +68,11 @@ examples:
- 
-             interrupt-controller;
-             #interrupt-cells = <2>;
-+            power-supplies = <&maxtcpci>;
-+
-+            chgin-otg-regulator {
-+                regulator-name = "chgin-otg";
-+            };
- 
-             gpio {
-                 compatible = "maxim,max77759-gpio";
+             connector {
+                 compatible = "usb-c-connector";
 
 -- 
 2.53.0.1018.g2bb0e51243-goog
