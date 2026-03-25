@@ -1,188 +1,162 @@
-Return-Path: <linux-usb+bounces-35439-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35440-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IB3zBia7w2kKtwQAu9opvQ
-	(envelope-from <linux-usb+bounces-35439-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 11:38:30 +0100
+	id 0A6mNH+8w2kRtwQAu9opvQ
+	(envelope-from <linux-usb+bounces-35440-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 11:44:15 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7C0B3231E6
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 11:38:29 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 899AA32334A
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 11:44:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 82ED33092A82
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 10:32:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1F809317AA68
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2026 10:32:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9516E3B893C;
-	Wed, 25 Mar 2026 10:32:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32E023B8BB9;
+	Wed, 25 Mar 2026 10:32:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ll2Nkv5O"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DBAD3B777F
-	for <linux-usb@vger.kernel.org>; Wed, 25 Mar 2026 10:32:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3A33B8937
+	for <linux-usb@vger.kernel.org>; Wed, 25 Mar 2026 10:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774434746; cv=none; b=OEea+8qAwPaZFK5h9smxC8vX1Fv1a3+nUyedb2N0hFxNuHVpbdQ0kJ6FzZVrVFiyDAE+FtAQ27uW5JvPvRESAj0QluMc82Q9GZ9SZ5/m652LbLrNQgZsso6CGcyFLF6wtrlHopwcnxL09VXh+wAcrGYoHtCOwU/HZO26+3f/Jn0=
+	t=1774434774; cv=none; b=mU2oaR71uWIY1hghrjl+UTrIAZLgDxPC6D7QIo6lN9zmBsnCQ8M3KH6glMF/uNDA62wugcQNNnJOHmLWPZ6JBBeFmcit9PDpMNVyvPWJ88WkB2KQVvlVu9nG7YGMyQja0zCqNg577wqdeKgKgNkM2y9PgkiKQNzJVTGWE4cARwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774434746; c=relaxed/simple;
-	bh=d3qSLmtsLeosQsB6mOHbK/z7/4Q5Wzm2kxK26UVgvz8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BBxRTjUpk9yM+KdMfUnlZfGppSvJ+kMQGaMlrSGPrhcZ7M2Fy8kI9TZuv+91cSXAAvUfAAnkWpPNj0ZiD2nv6ylBySBqkJBnVI+s9h/EUdFLu5p8J9WAi8boneF40oI1thUZxNoJj+PGi1tHDv4bVYDahFXk2vpkN3PAMgb0CT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 9D1BF5BCEE;
-	Wed, 25 Mar 2026 10:32:17 +0000 (UTC)
-Authentication-Results: smtp-out2.suse.de;
-	none
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 85C454435D;
-	Wed, 25 Mar 2026 10:32:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 4PScH7G5w2nVUAAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Wed, 25 Mar 2026 10:32:17 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: linux-usb@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [RFC 2/2] hid: usbhid: rename reset_work
-Date: Wed, 25 Mar 2026 11:31:49 +0100
-Message-ID: <20260325103210.198820-2-oneukum@suse.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260325103210.198820-1-oneukum@suse.com>
-References: <20260325103210.198820-1-oneukum@suse.com>
+	s=arc-20240116; t=1774434774; c=relaxed/simple;
+	bh=FGGdrgKC/Z+YvdCUWQsTKr2aqUW0ST6EG9paGHCfwFU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FKQLOr5G9eeLvzfF8xQia+5LUbUHMD0w+FH52F2GB/xYq8ySobd0WLe2/CBZyGRqrTnp7WUobbFGgRnipVSKoQinZACR12hkbA/UyjkxTzI4AFo402APwdARJiU+aS4BADC5Sffuj39VEvVUtKflDOw2STwue/BspR31046iEDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ll2Nkv5O; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b97ba4c2be2so312630666b.1
+        for <linux-usb@vger.kernel.org>; Wed, 25 Mar 2026 03:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774434772; x=1775039572; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HVOMnkbYwEL8fVDgn1ygmPBmgqD43enQpHSoLRimEuc=;
+        b=Ll2Nkv5O8YjB6qt4aWt7Wjmh+yCSf5EpmcK3v9DoBn/6Y/Hg6Rsr26GVAKpyVpv79n
+         qMl+RfRCUQT0U6xUYg44mjOEnm0acf0vGEpJchXYMxjW3aRrPXumAPW/4euv5PBVq36e
+         eNDaSq/VfizlvB+REmISqu0Z5G0CgNlpiJ9pYqaTS2UyuD4wxH+X+LmVYQWQ0xRPYpWE
+         wyMi9uyOR4e7o2wj4hJz7NY5G7eSgDSu54DoVtz3NkVDT9Eijt8IrYZiam+yW1OOjz6Z
+         HX8swsJM9ivTnOoqWLQdVJ56dg1ejel1oLgTiNnXDjlX/NT03iOD3XiAwIemlQG4B3r9
+         gx+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774434772; x=1775039572;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=HVOMnkbYwEL8fVDgn1ygmPBmgqD43enQpHSoLRimEuc=;
+        b=SzfIxBC3IfAjSXONgQjb8CyElssUPZMHfLS0D4jqfSPGFalSQL9STEOT+yvqoDzDnE
+         lNtGfqyEiYTwttBNJw5OtiYL4OoWEv9aRDOVV16xJwfDBJfcIsgJ4K556aI4CGIGaVWf
+         X/p8/Re/5xGLlgqtBCHEQCKmfLlSX0H7JtPMmPS14EJloqi2ZRO1t54/goj4C7UT6sWT
+         gd9nk/DWh0JJMbmFrExNwZF6BHwYMgjQv08UCImhmCpe9I2A9ArwZZI+lI3V+cUsvYM4
+         WKEdvGTizTAK2IsKrvGVstv0kGD/oUa/nLvIzVEy6TZvenAH3ImUrC4pangUZxrMeHNh
+         AtzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWBp6cnGYFwy2VMasFnrskGt/iELlBuKbaRICVNosHxsB2rv0eeF90nSZbVksETrKdQfqBMV2EB7aA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPB/Hj9WYVajjgXEZPWfELRpvl22s5HLM/75XpIGtSZeyhMIR1
+	Df1KTEJic2hI3zavWw3iywGnRWQMKGjbsXhFsp2y45TMVB35//jO4d+PDF0LPQ==
+X-Gm-Gg: ATEYQzxIquKu5rNFGSKizAxLG0OuRc0aNK8xbKQ6yQJJkODbLVRXSA4awsJNnVKHrsI
+	/XGBODXl3EVe5vpg1U8+AAtkMzVUkD4P6E5pILd+TNETK/dvy0NvKLmGqsuQczQWva+YR8eyDxM
+	A7jgzTGWPwjJbk3d8SVgf/3xz5k4/zCxE11dp2WVqKWdL/gRUhwI+E3jelPO0TBnoYsqXxZZI+l
+	V8OvtqvG0f//onvKjy9SnfkKJ/LKnGQ6ypqXBFTY+UcoFWy9TIMCoC3gTX92vdiKmn+vekyLJu8
+	e4SioxCMN5LVRpvfNTjQ91z2gai2DNDPmEisJiG0GMnNGzmo87H23dT6LXAglcVqY/h8cE40EyO
+	AfGyQroL6cXcZ2LX4h1cBdu3vosfj1B5aTtSPjc4RImbudcxWnlnbX0pdi1O0UgOniIR4uK4pVn
+	5S2KbYMpIVy85vWc7N/3erGPafGnpeCgoe3Cg=
+X-Received: by 2002:a17:907:9605:b0:b9b:1b9f:8397 with SMTP id a640c23a62f3a-b9b1b9f89d3mr21027366b.31.1774434771237;
+        Wed, 25 Mar 2026 03:32:51 -0700 (PDT)
+Received: from foxbook (bfk214.neoplus.adsl.tpnet.pl. [83.28.48.214])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b98335de16csm782729666b.41.2026.03.25.03.32.50
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 25 Mar 2026 03:32:50 -0700 (PDT)
+Date: Wed, 25 Mar 2026 11:32:46 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Xu Rao <raoxu@uniontech.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: xhci: Fix debugfs bandwidth reporting
+Message-ID: <20260325113246.07681667.michal.pecio@gmail.com>
+In-Reply-To: <d9ae5a8b-3aa0-451e-8a42-80ef73e2d210@linux.intel.com>
+References: <20260304114928.110be4c4.michal.pecio@gmail.com>
+	<d9ae5a8b-3aa0-451e-8a42-80ef73e2d210@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Spam-Score: -4.00
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [1.54 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[suse.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35440-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35439-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWO(0.00)[2];
-	RCVD_TLS_LAST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[6];
-	R_DKIM_NA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: E7C0B3231E6
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 899AA32334A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Now that reset is used directly, there is no point
-in calling the generic error handling reset_work.
+On Thu, 19 Mar 2026 23:04:38 +0200, Mathias Nyman wrote:
+> On 3/4/26 12:49, Michal Pecio wrote:
+> > Replace kernel USB speed numbers with xHCI protocol IDs expected by HW.
+> > They are numerically equal up to high speed, but instead of SuperSpeed
+> > we were querying SuperSpeed+.
+> > 
+> > Gen1 hardware rejects such commands with TRB Error, which resulted in
+> > zero available bandwidth being shown.
+> > 
+> > While at that, report command failure as IO error, not zero bandwidth.
+> > 
+> > Signed-off-by: Michal Pecio <michal.pecio@gmail.com>  
+> 
+> Added to queue
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/hid/usbhid/hid-core.c | 14 +++++++-------
- drivers/hid/usbhid/usbhid.h   |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+Hi,
 
-diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index a70721b3add6..6cfdfc2be68b 100644
---- a/drivers/hid/usbhid/hid-core.c
-+++ b/drivers/hid/usbhid/hid-core.c
-@@ -114,11 +114,11 @@ static void hid_retry_timeout(struct timer_list *t)
- 		hid_io_error(hid);
- }
- 
--/* Workqueue routine to reset the device or clear a halt */
--static void hid_reset(struct work_struct *work)
-+/* Workqueue routine to clear a halt */
-+static void hid_err_work(struct work_struct *work)
- {
- 	struct usbhid_device *usbhid =
--		container_of(work, struct usbhid_device, reset_work);
-+		container_of(work, struct usbhid_device, error_work);
- 	struct hid_device *hid = usbhid->hid;
- 	int rc;
- 
-@@ -297,7 +297,7 @@ static void hid_irq_in(struct urb *urb)
- 		usbhid_mark_busy(usbhid);
- 		clear_bit(HID_IN_RUNNING, &usbhid->iofl);
- 		set_bit(HID_CLEAR_HALT, &usbhid->iofl);
--		schedule_work(&usbhid->reset_work);
-+		schedule_work(&usbhid->error_work);
- 		return;
- 	case -ECONNRESET:	/* unlink */
- 	case -ENOENT:
-@@ -1438,7 +1438,7 @@ static int usbhid_probe(struct usb_interface *intf, const struct usb_device_id *
- 	usbhid->ifnum = interface->desc.bInterfaceNumber;
- 
- 	init_waitqueue_head(&usbhid->wait);
--	INIT_WORK(&usbhid->reset_work, hid_reset);
-+	INIT_WORK(&usbhid->error_work, hid_err_work);
- 	timer_setup(&usbhid->io_retry, hid_retry_timeout, 0);
- 	spin_lock_init(&usbhid->lock);
- 	mutex_init(&usbhid->mutex);
-@@ -1477,7 +1477,7 @@ static void usbhid_disconnect(struct usb_interface *intf)
- static void hid_cancel_delayed_stuff(struct usbhid_device *usbhid)
- {
- 	timer_delete_sync(&usbhid->io_retry);
--	cancel_work_sync(&usbhid->reset_work);
-+	cancel_work_sync(&usbhid->error_work);
- }
- 
- static void hid_cease_io(struct usbhid_device *usbhid)
-@@ -1498,7 +1498,7 @@ static void hid_restart_io(struct hid_device *hid)
- 	usbhid_mark_busy(usbhid);
- 
- 	if (clear_halt)
--		schedule_work(&usbhid->reset_work);
-+		schedule_work(&usbhid->error_work);
- 
- 	usbhid->retry_delay = 0;
- 	spin_unlock_irq(&usbhid->lock);
-diff --git a/drivers/hid/usbhid/usbhid.h b/drivers/hid/usbhid/usbhid.h
-index 75fe85d3d27a..530dca7e5ef3 100644
---- a/drivers/hid/usbhid/usbhid.h
-+++ b/drivers/hid/usbhid/usbhid.h
-@@ -86,7 +86,7 @@ struct usbhid_device {
- 	struct timer_list io_retry;                                     /* Retry timer */
- 	unsigned long stop_retry;                                       /* Time to give up, in jiffies */
- 	unsigned int retry_delay;                                       /* Delay length in ms */
--	struct work_struct reset_work;                                  /* Task context for resets */
-+	struct work_struct error_work;                                  /* Task context for earing halts*/
- 	wait_queue_head_t wait;						/* For sleeping */
- };
- 
--- 
-2.53.0
+Thanks for taking the patch, but can we have a last minute swap for
+a v2 or optionally v3?
 
+Problem is that returning -EIO is common (the command is optional)
+and it upsets userspace: "grep -r" spams the console with errors,
+"zip -R" terminates and doesn't include remaining files, etc.
+So I would prefer to print an error string in this case.
+"Real" errors will still be returned ordinarily.
+
+The optional v3 also renames the new directory for consistency.
+Technically it's a breaking change, but I believe it's permissible
+in debugfs, particularly for an interface only added recently.
+
+Regards,
+Michal
 
