@@ -1,205 +1,156 @@
-Return-Path: <linux-usb+bounces-35515-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35517-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WN2uKoVJxWl39AQAu9opvQ
-	(envelope-from <linux-usb+bounces-35515-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 15:58:13 +0100
+	id UJGVLjhUxWmD9QQAu9opvQ
+	(envelope-from <linux-usb+bounces-35517-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 16:43:52 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04CBC337279
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 15:58:12 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id C450E337CB2
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 16:43:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 211A1308873A
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 14:49:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 4C3F130FE98C
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 15:27:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D05FA3FF88F;
-	Thu, 26 Mar 2026 14:49:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 374D9401A22;
+	Thu, 26 Mar 2026 15:26:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=oppo.com header.i=@oppo.com header.b="BM9i06Dc"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="iZWvtOxo";
+	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="EkuaFTiN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11023080.outbound.protection.outlook.com [52.101.127.80])
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28263FEB2D;
-	Thu, 26 Mar 2026 14:49:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.80
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774536560; cv=fail; b=McDFYt6hZSYyuTzPS5AtNv5Gg9Hw8k5CbZyMKNFflqs/SCDIHBug3XwmIjW0YFGSHsFgvHhwiQzB/U3ELWM5B9kvOgUh/ZC1QTpzaEgYK83p9v9ACvGbEFcbaK5JSN/zyuEHg/kH9pl63uTILjZy7knBPHOQKRFztmWVid8WmHw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774536560; c=relaxed/simple;
-	bh=YMsJREqlRvqdUNqBXjOIMjeChIU1NlD3k5dcGyaBWAU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=g7e0it2SpJKWDtTwjn9iscQLquefYZjl4BkkI6dsNob9JtO/JKv/cO+HLcMpsaZx5Pte4j8GKjdeTftHEWga+mRxqtGlSBdLANJRxgrlqWysatKYoDLwbrzTpMxsditmS0/EXWtE/nb5m3DhDFJMyTfikSMTuiUfwrxHZtiSY0Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oppo.com; spf=pass smtp.mailfrom=oppo.com; dkim=pass (1024-bit key) header.d=oppo.com header.i=@oppo.com header.b=BM9i06Dc; arc=fail smtp.client-ip=52.101.127.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oppo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oppo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Q/R1Y31IgT+dwHn9SvXyimtBs9cY+MncCoWF34MPj4i15c0pOug/tOOTchJZ6NtrGitlefHjD2SDpZ0UOXLoX5iZKY04cxFkk2Urd+IR2oGyIyj7guoLzE+ovbGgmdtb5bvk67IQy0/Vr3NMKgyAKBsLPaMWhDeBbdaNteVR2XV92l+fUFpG1jEqbO7Py0uUXlyXemLrkfxcG71zcgPN6KESLA8473dKNqacD1j140Ca4K2qWI+0ySszalt9XV/io4SInFNpu07Nw7mR/W2KDH+absdz11Zwgw+jM/PPVJw6tF0MXfp860OBLcOMt2gH+MV4Dz11hx4aW7xvrqnSBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YMsJREqlRvqdUNqBXjOIMjeChIU1NlD3k5dcGyaBWAU=;
- b=f7pnZuoZMlwI45bPCC1ZIbkesG6vF2CAHegdIJct3yWwywsV++JrFsbBGUbx1mTknOihydQxGJr9f2iIyZ5JRFHQTwnNRzIdkOxh28dqQ4uHzcq+FqBWAVcOxu2UP9SleMzjLLuxRBOA1j6TO96fAqVlmgG5ZJNeAEb8EaUj/OcElBIHrcUJOWX1z3WvRNxY4cB+9tPaEykRHwGm//gGoHnTAV81d/1pdhMEDz/qKEWDF872DfSdIyyFjHnFuE7j4e6y+/maZncTFuGQffBmAoK2PfQdGMPUlzLhpHDjP6dLeSUHkVOXQYBO4j7/f08kTE4fs6VXgnMXc+jywxr5Bw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 58.252.5.68) smtp.rcpttodomain=google.com smtp.mailfrom=oppo.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=oppo.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YMsJREqlRvqdUNqBXjOIMjeChIU1NlD3k5dcGyaBWAU=;
- b=BM9i06Dc06CQt7EWw7seWzB8MPWoxzz1T87JyE1nFro4iql896Jx2DwbJs5aAl1dBF7Ikwz1rnPozLfeYOKc32Z7FlFrmS/v2RLKMyqsBVQVferTGo77SxT80TbHHUMAddN13e4fb9/TqHseo+3K9QerQ4MaGbF759XMN/3TTzo=
-Received: from SI2PR01CA0001.apcprd01.prod.exchangelabs.com
- (2603:1096:4:191::13) by SEYPR02MB9088.apcprd02.prod.outlook.com
- (2603:1096:101:303::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.22; Thu, 26 Mar
- 2026 14:49:10 +0000
-Received: from OSA0EPF000000C9.apcprd02.prod.outlook.com
- (2603:1096:4:191:cafe::14) by SI2PR01CA0001.outlook.office365.com
- (2603:1096:4:191::13) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9723.33 via Frontend Transport; Thu,
- 26 Mar 2026 14:49:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 58.252.5.68)
- smtp.mailfrom=oppo.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=oppo.com;
-Received-SPF: Pass (protection.outlook.com: domain of oppo.com designates
- 58.252.5.68 as permitted sender) receiver=protection.outlook.com;
- client-ip=58.252.5.68; helo=mail.oppo.com; pr=C
-Received: from mail.oppo.com (58.252.5.68) by
- OSA0EPF000000C9.mail.protection.outlook.com (10.167.240.55) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.9745.21 via Frontend Transport; Thu, 26 Mar 2026 14:49:09 +0000
-Received: from PH80250894.adc.com (172.16.40.117) by mailappw31.adc.com
- (172.16.56.198) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.57; Thu, 26 Mar
- 2026 22:49:08 +0800
-From: hailong <hailong.liu@oppo.com>
-To: <guanyulin@google.com>
-CC: <amardeep.rai@intel.com>, <andriy.shevchenko@linux.intel.com>,
-	<arnd@arndb.de>, <broonie@kernel.org>, <eadavis@qq.com>,
-	<gregkh@linuxfoundation.org>, <hannelotta@gmail.com>,
-	<linux-kernel@vger.kernel.org>, <linux-sound@vger.kernel.org>,
-	<linux-usb@vger.kernel.org>, <mathias.nyman@intel.com>, <nkapron@google.com>,
-	<perex@perex.cz>, <quic_wcheng@quicinc.com>, <sakari.ailus@linux.intel.com>,
-	<stern@rowland.harvard.edu>, <tiwai@suse.com>,
-	<wesley.cheng@oss.qualcomm.com>, <xiaopei01@kylinos.cn>, <xu.yang_2@nxp.com>,
-	<hailong.liu@oppo.com>
-Subject: Re [PATCH v3 0/2] usb: offload: Decouple interrupter lifecycle and refactor usage tracking
-Date: Thu, 26 Mar 2026 22:48:48 +0800
-Message-ID: <20260326144848.1016104-1-hailong.liu@oppo.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260324203851.4091193-1-guanyulin@google.com>
-References: <20260324203851.4091193-1-guanyulin@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78ED3F210F;
+	Thu, 26 Mar 2026 15:26:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774538813; cv=none; b=Dny/VsXz4GCP4sY9A+SX5EWD9UVxgkpdbOYLLJxlW0mwC2c+Lr6kvD85ycG4xcvJ2KgeWzqndGXt9FXXovK77AW82iLNC/W7sxOejANaHTvVMRKPjcj51UI7aXsJAEV9Y6xDhiA0XomDah48NP07nPgP5rnAtYaiaXZcf90RV44=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774538813; c=relaxed/simple;
+	bh=KjbFPWZ52zjrwBOztZYvBAKOfo7bGoPD2DP/sKJUKVw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nzin3N8kCZpuJnJuApwqFLQCiIPS1VdyByUNysodIQ7t68IH7Efx1LxDSAsPPjBdq31+4DZUkupLM+5zLq8uENFn9k4sRu248z6W5+G2ZUZOZIiOfEf7k8GBmv5osfFevhjdisPyfWY47t4Q6/Dm6b9HwNUuLzaF0IefO92b2Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=iZWvtOxo; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=EkuaFTiN; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
+	h=From:To:Subject:Date:Message-ID; t=1774538665; bh=5yWH0aBEsh9Z+ZlkcQnP2na
+	Jb810iE/tfOrPtXpGt/E=; b=iZWvtOxobEN+2bXRJ9/vwqsowV7cc9Z2DM1mhUI68D5CoOvxSR
+	VThBf0lpUiRBXLiPjJ/nVAu/zmrAet/8kSDGl3QTRYkub5oInA5ctJJWh3uuGj+LkKLVObcSc9C
+	ErBHpKWYYG83uB+ZHKLagZM2aqIShLVe9JfmdkhUs2syErpzSjm+z+2lmTidwrL628aJTHSGsQI
+	1pWGhqq5e4jb2r3K8FAqRDguWCuJyjmogALRIv58WzwBPF9o690GcKw9t2R5KnZt/cYXXsSYPvK
+	s6afrW4j2wwRM/jaH2pmtLXxj/XPklt7NvSi/mV0htYvGv0xyKoc3yV4SCLR2yEZjig==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
+	h=From:To:Subject:Date:Message-ID; t=1774538665; bh=5yWH0aBEsh9Z+ZlkcQnP2na
+	Jb810iE/tfOrPtXpGt/E=; b=EkuaFTiNEjBrnLfchD8BGwWIIKWbo8LulXtIWJDdRORf5YJwVG
+	FVS5iC2Pc2iTZ8B/6jyvBjPPad5ISrAG5VBw==;
+Message-ID: <1f2dd742-a845-4b51-86a5-755c39f75b45@mainlining.org>
+Date: Thu, 26 Mar 2026 16:24:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: mailappw30.adc.com (172.16.56.197) To mailappw31.adc.com
- (172.16.56.198)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: OSA0EPF000000C9:EE_|SEYPR02MB9088:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4d2167a9-b2f0-4fbe-c7d4-08de8b46d6d0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|1800799024|7416014|376014|82310400026|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	78DPaUg5hYueN3jZmroSI1Jv/3BPQWi0pRGO3dzw1k+Qz3xDDPFp04NC3bUef8aWKKzeyqH1v1Nx9VmIsjLIqKGDDy/hmnOsynfPaiyThO1kn26/TeScrWA6FNDflu/9fu2V6GqbL1HCXrS3pC/WHqWGAe0S+xVl3HJS/lIK0di2uVned/ELvqB+DmBiB+ZehC+tZDFu9bpC5tgj+pHHWlKzs5jXzXVgObMPGGQk0fDp8PBG+KG0sdSlOhj9ckOSTLtZW6gK56UNXL3yTFsRciO/rJadEQnfszbwApsXsbEwl3IIRZXJk56PKQ3tb8X2izknqvgehYArygbKpf0yRnT19gKj5HLtx50Jl2T4UmRFYXd3fqlX047Ps7Q0BcSVfNrgxi1VMKhw8FgOdgDbqbJd4Aa86LOmvl1uoXicaXIOb97TGFDPchIzEhpfCupID6vWHZGoHVt8MvCZXvW2gXyn8SuCmdZhEZ9KAFgx1HpOvN+LvPMmNym7ZUinAtEqHm/Qs78EScVMqoMwmHj36/iBkZz/wBFEz05Lp4B3Z98yWFvFse57ifEj3nc3iC96rxbXwKeLst9gDOZaRAJQLBiiwWy0cwA7VGvH8Qk/CFKa8UXBAqxPRo8LI6KIdDcU2Alr0umWkLm4f2asXylcC2MybCeUcAgQdXzNQ/q0YIo2CvmnQQfRn0wWlwwk3ghywhyC/xivP2B+k4x5Qhs50BvnJiiv+PE9SU2k4Nu/Q06CUVgCn50fThR8Gn56fjK7RO8a7OhdI9x3CpOtVKrl2w==
-X-Forefront-Antispam-Report:
-	CIP:58.252.5.68;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.oppo.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(1800799024)(7416014)(376014)(82310400026)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	6E1Jw21EsWnwGmM/tGtKQJ9oUzRIX0C3gBg7GJj2wmu1eArqzK3QgnqGwAHgLGGodw0j0NVKiq4v2y9TbK5orV6oZFY798EUWJhuLbeO9R6gdxdnZRWXXIX49oT8pOzPU7RHOhkHdeotbnT9KHOZSqW6Lqpv8ETix5Lt6dewEAsjAzSZsvnqk/O3RsBVpEJiCUyfb+Fblr2p4xsBp6uk+JCyy0Q3CZ9tD+Rp/UBG5xwXgbzUw8/MFU2VUmF0N4NXXRf2yEeXUg7AQ0mkIqsRrOYz1xNeVdbtWo3nSxcx7emyYMbsufa0gS741Fyj7ndbQHlBIWrTFcGl81mdCBbtQp7bPovVsWzkKOIYEIy1PyyW7H1+Z9RvWcyldVOsQqMBYGRa1uRCH+SshWfDLiRNQtu955prG8ZgdmA3OPRK6+D7G+25tMkrwLKyK2dbxwtr
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2026 14:49:09.9197
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d2167a9-b2f0-4fbe-c7d4-08de8b46d6d0
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f1905eb1-c353-41c5-9516-62b4a54b5ee6;Ip=[58.252.5.68];Helo=[mail.oppo.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	OSA0EPF000000C9.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR02MB9088
-X-Spamd-Result: default: False [1.34 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[oppo.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[oppo.com:s=selector1];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: gadget: u_ether: Fix NULL pointer deref in
+ eth_get_drvinfo
+To: Kuen-Han Tsai <khtsai@google.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: David Heidelberg <david@ixit.cz>, Val Packett <val@packett.cool>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20260316-eth-null-deref-v1-1-07005f33be85@google.com>
+Content-Language: en-US
+From: Aelin Reidel <aelin@mainlining.org>
+In-Reply-To: <20260316-eth-null-deref-v1-1-07005f33be85@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[mainlining.org,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[mainlining.org:s=202507r,mainlining.org:s=202507e];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[intel.com,linux.intel.com,arndb.de,kernel.org,qq.com,linuxfoundation.org,gmail.com,vger.kernel.org,google.com,perex.cz,quicinc.com,rowland.harvard.edu,suse.com,oss.qualcomm.com,kylinos.cn,nxp.com,oppo.com];
-	TAGGED_FROM(0.00)[bounces-35515-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35517-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[mainlining.org:+];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[22];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hailong.liu@oppo.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[oppo.com:+];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[aelin@mainlining.org,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 04CBC337279
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mainlining.org:dkim,mainlining.org:email,mainlining.org:mid]
+X-Rspamd-Queue-Id: C450E337CB2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
-We, OPPO kernel team, have thoroughly verified this patch on our devices.
-The test results confirm that it effectively resolves a critical headset
-hot-plugging issue and the subsequent system deadlock.
+On 3/16/26 8:49 AM, Kuen-Han Tsai wrote:
+> Commit ec35c1969650 ("usb: gadget: f_ncm: Fix net_device lifecycle with
+> device_move") reparents the gadget device to /sys/devices/virtual during
+> unbind, clearing the gadget pointer. If the userspace tool queries on
+> the surviving interface during this detached window, this leads to a
+> NULL pointer dereference.
+> 
+> Unable to handle kernel NULL pointer dereference
+> Call trace:
+>  eth_get_drvinfo+0x50/0x90
+>  ethtool_get_drvinfo+0x5c/0x1f0
+>  __dev_ethtool+0xaec/0x1fe0
+>  dev_ethtool+0x134/0x2e0
+>  dev_ioctl+0x338/0x560
+> 
+> Add a NULL check for dev->gadget in eth_get_drvinfo(). When detached,
+> skip copying the fw_version and bus_info strings, which is natively
+> handled by ethtool_get_drvinfo for empty strings.
+> 
+> Suggested-by: Val Packett <val@packett.cool>
+> Reported-by: Val Packett <val@packett.cool>
+> Closes: https://lore.kernel.org/linux-usb/10890524-cf83-4a71-b879-93e2b2cc1fcc@packett.cool/
+> Fixes: ec35c1969650 ("usb: gadget: f_ncm: Fix net_device lifecycle with device_move")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
+> ---
+>  drivers/usb/gadget/function/u_ether.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+> index 1a9e7c495e2e..a653fae9c0cb 100644
+> --- a/drivers/usb/gadget/function/u_ether.c
+> +++ b/drivers/usb/gadget/function/u_ether.c
+> @@ -113,8 +113,10 @@ static void eth_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *p)
+>  
+>  	strscpy(p->driver, "g_ether", sizeof(p->driver));
+>  	strscpy(p->version, UETH__VERSION, sizeof(p->version));
+> -	strscpy(p->fw_version, dev->gadget->name, sizeof(p->fw_version));
+> -	strscpy(p->bus_info, dev_name(&dev->gadget->dev), sizeof(p->bus_info));
+> +	if (dev->gadget) {
+> +		strscpy(p->fw_version, dev->gadget->name, sizeof(p->fw_version));
+> +		strscpy(p->bus_info, dev_name(&dev->gadget->dev), sizeof(p->bus_info));
+> +	}
+>  }
+>  
+>  /* REVISIT can also support:
+> 
+> ---
+> base-commit: d0d9b1f4f5391e6a00cee81d73ed2e8f98446d5f
+> change-id: 20260316-eth-null-deref-0304bb048267
+> 
+> Best regards,
 
-Impact:
-This issue is currently a blocker for our upcoming product shipping.
-We have observed a high reproduction rate on our latest platforms,
-and this patch is essential for our production stability.
+Thank you for the patch! This does fix the null pointer dereference for me.
 
-Test Environment:
-Devices: OPPO devices based on SM8850 and SM8845 platforms.
-OS/Kernel: Android 16.0 / Linux Kernel 6.12.
-
-Background:
-High reproduction rate (typically within 10 cycles) before
-applying this patch.
-
-Original Reproduction Path (Verified fixed):
-Open music player and enable USB exclusive mode.
-Connect a Type-C digital headset and start playback.
-Repeatedly plug/unplug the headset.
-
-Observation:
-Within 10 cycles, the headset icon would persist after
-unplugging, followed by no audio upon reconnection and a system deadlock.
-
-Stress Test Results with This Patch (Phone A & B):
-Test Case 1: USB Exclusive Mode Hot-plug
-Steps: Enable USB exclusive mode -> Play music -> Plug/unplug 100 cycles.
-Result: PASS. Audio functions normally; no deadlock observed.
-
-Test Case 2: Standard Mode Hot-plug
-Steps: Disable USB exclusive mode -> Play music -> Plug/unplug 100 cycles.
-Result: PASS. Audio and system stability remain normal.
-
-Test Case 3: Mixed Accessory Switching (Headset/Charger)
-Steps: Play music -> Unplug headset -> Plug in charger -> Unplug charger
--> Re-plug headset. Repeated for 30 cycles.
-Result: PASS. No issues observed.
-
-The patch looks solid and is critical for our project. We hope these
-results help expedite the upstreaming process.
-
-Free to add
-Tested-by: hailong.liu@oppo.com
+Tested-by: Aelin Reidel <aelin@mainlining.org>
 
