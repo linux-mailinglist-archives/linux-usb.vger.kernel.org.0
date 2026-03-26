@@ -1,227 +1,323 @@
-Return-Path: <linux-usb+bounces-35474-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35475-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UJAbMd1+xGnAzgQAu9opvQ
-	(envelope-from <linux-usb+bounces-35474-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 01:33:33 +0100
+	id oGs2LCOJxGnB0AQAu9opvQ
+	(envelope-from <linux-usb+bounces-35475-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 02:17:23 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46F6032DA8B
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 01:33:33 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FDA832DC98
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 02:17:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0FA28304B5E7
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 00:33:31 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E37CA302C31E
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 01:17:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 007152D9EC4;
-	Thu, 26 Mar 2026 00:33:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54FBE3126B4;
+	Thu, 26 Mar 2026 01:17:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XIa5xyKV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m/odJqfM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C40F1A9FB7
-	for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 00:33:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774485209; cv=pass; b=V4C367Kp2lnP9Gf0UDQ9v+97wVEEDKd9Kv7SyOcMW9UjW2rlwqkJw3ReuRegYx/P8U1uvY++S6yzlsR8+iKa4/4BmfULVDgvOWcbuhJC/KQVhi+3f7NCqdThC4XYpAjZ3sLgavAwNzK4488I3b7n5+JPpMkofdh2JyYgBvJYTq0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774485209; c=relaxed/simple;
-	bh=xcYoU2EhupfeQFEMz+G4nlS3bJJinaBxrvHwAj3XtDQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U7zqwThZKP1CD/N5m2yyqbk+/f74YbRzbM1zO+3IGayUs073BOo3NdTbeDF4iZ56+NHd2F38PsNDXYoQCwNKYQgS78GVQ1MxVyjcFsGiu5cittOr8SnbqFJCDin0u0ZfiN40Fhe8ONDiHg+Cw7WTRs1njzRHZbJA2bsQGn7FQYk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XIa5xyKV; arc=pass smtp.client-ip=74.125.82.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-1274204434bso1186873c88.1
-        for <linux-usb@vger.kernel.org>; Wed, 25 Mar 2026 17:33:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774485206; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Ku1VmANDjNltj976jwwQcWUsWsShl2BeeVL8WB3Qum+a9JWD/Bht7Pn3ZDEWZkWaWR
-         rRKzTv2QhMdrHTfck0RQRBO4QtcbqiujOZm1qj6vY682q3+8kPp8Arl1Xu/KBw7cDYOp
-         ioNzWRENL/gLdeZAS45MYl0oSedjEvIl1xj8jGKW0CkvZaOKTJ09xd1y8ZGl+T/rXKMM
-         TGqsCApIt/FHszwuUyMf8MXPBkrD0izaz3ibSVDBh9C7zW6+trbk1nP5q/LztojMJELW
-         WKCc+jJiENXVb5LsjTjHFa4+7xSbTYcMxwo/44q4v5pgRpE2RZh0RK8/U73obkJZd/e/
-         v6dg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lo7u2CLCsySezJ/m+R87LTCOQKYhnIiiwQZOPh9KHPw=;
-        fh=zxvTll+mUbDn6a5p9MjLlqVwGI46BI+wVuZnjo7vNn4=;
-        b=hbiz8kbBp6gqGVDNdfRNfH5Ch8nZTJWKpte6Y2GOH8c9dtjWtWuDAdafEZwknn/hQu
-         2jNYhOxFzjx/EVMQqwwG08a/kTzkWMa8sssgaLswjjqo0TYh3v2P2ghkysfk9ZEpXQoQ
-         VaQUp7E7rHz2c3jmK0JhwR/bGTDtOE8Kmbyah2cNcklJ+gH0Xq1hSx92Xz8HRKSlZQNa
-         jw/MeFFVi6Zklet+O3NO8/4QoHmhke5zQAjFkdZ9kiVldMEH+kPRh9xEs2LsITRqToTA
-         /mrfwbopZyoAxI8wag/Ni9kXlFwiv3S69e2Jw+/e3J1wxFfmNVStC/iTbe+amjwhdBtP
-         Avfw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26DF018D636
+	for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 01:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774487837; cv=none; b=R3o75qfvjjjwDn9M0ZK/hflKSiaf3QezqZWxpnbmQ56cUAnroYL/aFOWpvb53qSCZJ8zgko5LhnMMzu3DfZ2cFiDPGlA4MB9DAVnVEFGReblJ+F+7U2wXw+NbvHyMDw5m39jgUMtBE/fGPeOvCajKXea3KLazjUDvPicJr9tXHM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774487837; c=relaxed/simple;
+	bh=FqOlEAwOfCbP23aG6bMYtRghAfx1YBK01HwsP1a1RWI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BBHscdCag5crL/NqkSoJn5EGXlrdXSiE2n98uCNKRxYDg8P86lPVKrH/MNbOCTCZgIIjlDTD7p/oNK2OxAW6ZZqpT6MPsMdFKvcB584xdWRJlS7OA9IyqbyLROz/k5A76G3zlvTjjIniwdLEDVdnW/ayARTcM8gxHWa0ev5cCLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m/odJqfM; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-486fb439299so4041705e9.0
+        for <linux-usb@vger.kernel.org>; Wed, 25 Mar 2026 18:17:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774485206; x=1775090006; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lo7u2CLCsySezJ/m+R87LTCOQKYhnIiiwQZOPh9KHPw=;
-        b=XIa5xyKVb5wcqp90foRjJOgtu/n6/sPk6MKrsLHHXNf/vkA9XLIgO88pytb7Eb0gYB
-         XL77ZhrAVcUbE/RjNKQCvgDmq6Wb84alrC9vEvKlLLOjqBjmRNP6e9xEWoA3NP3ZITlv
-         eICgj0HzpG8VGhbOSE0ULx11plegphK2t5u46KoA8Jj4eF/3gGa/x3G5SgYEPJbIjWwm
-         q5ci95tF5P6sxU5xfA6P5yU/ecctgBjDysw+MLuEMUXoU4G4cPotjIr9ZL2kN5egFsSL
-         s0Erer7w3ksRsy5xryYzcz9QBxSC5WvrOUYYPjYqorSu4boTDbd6ID86w808+dKH1q6s
-         UX3Q==
+        d=gmail.com; s=20251104; t=1774487835; x=1775092635; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=tmwvz4ZJv9HEj3L/hWGz1xzYb0Wd5vrxJOQo6Gk1qm4=;
+        b=m/odJqfM39kZbkPwYqeVJlI7gUjv/PManZNjI5FzMUeGSMP4qz+zthNno6G0nsXWJS
+         3VBUcYu9ZjD9CCk/XNYB8rAPQuyJUSmSppSV3k42id9IYMLVom2+NLQEF7udHjfNGgdv
+         MPT4mTnbRvmlQFhU5/8uBKIKJWsO1nofZOweyFdrDjem62Tr6W9f1E3sTo0cuHluofMi
+         NIhx7Y6Z+X8nrX4SsugUpHRiu6KKp0PX/u6y0Kv0SvgcoDrZxnyv/TL+vR686QE2y8b6
+         3xEeSvwXx6MpQBQ5LITrTIiwutQEHc2K5WIQzOFn7NIVNW6AOv9vwY4sB01Tz3pEYBcQ
+         qrjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774485206; x=1775090006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lo7u2CLCsySezJ/m+R87LTCOQKYhnIiiwQZOPh9KHPw=;
-        b=h/s4hajSMmL/CFoIA7DmLo0dU79GCKDGnzMB1jXGcUREKyQ0Y2cUOrtVF3CHYQaPnn
-         g/fbwWtGM6yLiXhaebFsjT7rWN4PXTgrgqHmA7dRj/50RWkWOwGzynGNBtcoKPtXTNet
-         DB0HTnfJ0jLUdDl+M8cRc2TaL3g4DdF3s5/kPWvFKKQUL6OIktnYxZwIEweYluyZjn4Z
-         lLhG89iSdBXF2EXOvt8v5DN56D/UkpS2yiUlrw4FyAMMtZjnhTAvp1XzAlUWrfOlVMmx
-         0Y23np1RXG0tBo92lS9wdU94ma4uU1cWZ5UwbAacy0XQWg5vwHx/sdUE3JAXN22s5UQ0
-         cVMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUUYQyvY3sY22jJ3AqG7zIk2hXwseAVoElNDVbH0hRq3NkLoPIRS3Ajw7ROxphlT1V/wJc9V42KuRc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9gJDoDl8nF6t9oNpnhhdKHST4bMgpS7GFkexyDG5fNxD3DAy8
-	d16ELFfGozam8i3VXV8BdyahVSY9Ly4HMJ0gKNJNklBUcF4XAGzBPv/6XQ2biX+1ZKsz8V0YK19
-	FT/2399C2F9H9L65nDnOy3sqSH+D2W6sT0UVlmyYF
-X-Gm-Gg: ATEYQzxtD5nEBFhUDTH08/NbKwtVvoa68afNZ2Q+aNoUpCgjm+YR7BTsVkNiTIaHNIF
-	u2OC29L4pg5TgZbcz8VMyDo55FKa2EAdzSjB+N/H1Nmvynn16chblWC20U9sKDPzjJY2d06Kkjz
-	DxzskS0px87FWbrUD8na9Ip8jSSaEPaqcitxASR6NEFBDUQRoELCg0Z0/qvAXVAtcwmOAj6R8ee
-	cInQgervOz86N3CKjy1pb/kG1el468P+ZfVZUdEDMZI9ryTLSOGFVUYpN+TPicM/nnYUUX6b0PS
-	t4Rgvxium7CcD91VNgcm1jey4g6HN/b3Cz6roD6o01kSXgL4gYv92hJlGhqo9miudcpDMg==
-X-Received: by 2002:a05:7022:48f:b0:123:2de5:346e with SMTP id
- a92af1059eb24-12a9672ae4fmr2373174c88.0.1774485205821; Wed, 25 Mar 2026
- 17:33:25 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774487835; x=1775092635;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tmwvz4ZJv9HEj3L/hWGz1xzYb0Wd5vrxJOQo6Gk1qm4=;
+        b=Si7fle6/EQL8jAxJuOJl2Joqt9H17l6BOVGKiRhZTddRuYXmF9rU3zRAUjiAYJeTuq
+         dwXzQpIMYXNKOzZoSVBr+T+MltwhwSOLdmILa5igqvNLy7EyKaHlAvBVIPKDx94xOuDG
+         YQ15Pq2yMVIL2gY3mP9yAMJigEFjUVJ0WNZEMKtFg/d/pCoKPCEOI+g0dHeIMrkCje8A
+         4CyYn0PXAKsUyJTxuXZiu/fwWDhg6wlbjBukG4WShFEBN/1baWyU2+kMb3mP6SoOgZ0/
+         AjMVvrANH7WNsjLiMueoQn+gr46RJZ/S00fA0RL6vJAjQ94TGcKxola4vsEkc0irKFNt
+         iOzA==
+X-Gm-Message-State: AOJu0YyLVLvqPHBNiGztS0ppmkspNsF3ytTfZMFQpD4AIIABkBE1Z29T
+	QuCFxYKg09fsr9Meai5ExKCBPPlAIbCqJtnT3qD28ZdrohJ4G01dXRGA
+X-Gm-Gg: ATEYQzzG/KVClUm91GuDMqtvBSSiftq4XLQKiGDjGAiYhFkX4T/HKU6ikBsyboip4fd
+	FoATMXOZ2fTGxkVs7BCki9f4GpMyttFNes1zY3/y9NOp0vF/S+apH3iGADdqhlQy1fyt+AMQUF+
+	MY0kPVgz7QQXv7Ew2l2UTPZy87+MJmuZcqFrqlSi6N4Up5mHJAzB+icsJplUdo6FSeX36LSf4g+
+	HBCmzcj0XATE0V9dPz0JjbH/HCdvW3dZTwm40HjjudR8q2NQ5/3pREbOB4SgHn0LxCgJJ61z3Tw
+	kLSPMKFevhAv8jSlsUVPIud79kwoZOew7Y42Cp6+9es2cPWTCPolyOkdTMqJCLJX2YAgQoRr/fj
+	MkqU8qrCplyliJFNlflPTh6J8l/ahr/OAnSoL2kKP0VU8TDx7kyo/eELwG3oPl8laIlaclpbKPh
+	cfe2p1Xw==
+X-Received: by 2002:a05:600c:3b12:b0:47e:e2eb:bc22 with SMTP id 5b1f17b1804b1-48715fc3677mr84780155e9.5.1774487834167;
+        Wed, 25 Mar 2026 18:17:14 -0700 (PDT)
+Received: from localhost ([2001:67c:1562:8007::aac:4468])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4871fbd2a9fsm5664235e9.12.2026.03.25.18.17.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2026 18:17:13 -0700 (PDT)
+Sender: AceLan Kao <acelan@gmail.com>
+From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Kuen-Han Tsai <khtsai@google.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	"Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
+	Thorsten Blum <thorsten.blum@linux.dev>,
+	Kees Cook <kees@kernel.org>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Chenyuan Yang <chenyuan0y@gmail.com>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: hub: call ACPI _PRR reset during port power-cycle on enumeration failure
+Date: Thu, 26 Mar 2026 09:17:08 +0800
+Message-ID: <20260326011708.1128840-1-acelan.kao@canonical.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <69c34b1c.050a0220.abc16.000b.GAE@google.com> <20260325091214.24516-1-kohei@enjuk.jp>
-In-Reply-To: <20260325091214.24516-1-kohei@enjuk.jp>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Wed, 25 Mar 2026 17:33:14 -0700
-X-Gm-Features: AaiRm52FZnReW96QyKNXCikodMxR4sLl4Lf1vVIrk4VLmb9KeJp5bh5-WmGGHWs
-Message-ID: <CAAVpQUDAMyKqTwneX8TPh1a=+pW-FyR2URWuTzsJOrUO0iuiOA@mail.gmail.com>
-Subject: Re: [syzbot] [usb?] [net?] KMSAN: uninit-value in rtl8150_open (2)
-To: Kohei Enju <kohei@enjuk.jp>
-Cc: syzbot+9db6c624635564ad813c@syzkaller.appspotmail.com, 
-	andrew+netdev@lunn.ch, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=963de479f54c6dbb];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [1.34 / 15.00];
+	DMARC_POLICY_REJECT(2.00)[canonical.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),reject];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35474-lists,linux-usb=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,appspotmail.com:email,storage.googleapis.com:url,syzkaller.appspot.com:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35475-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	MIME_TRACE(0.00)[0:+];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[google.com:+];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_TO(0.00)[linuxfoundation.org,linux.intel.com,rowland.harvard.edu,google.com,kernel.org,canonical.com,linux.dev,gmail.com];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kuniyu@google.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[acelan.kao@canonical.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,9db6c624635564ad813c,netdev];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	SUBJECT_HAS_QUESTION(0.00)[]
-X-Rspamd-Queue-Id: 46F6032DA8B
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 1FDA832DC98
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Mar 25, 2026 at 2:12=E2=80=AFAM Kohei Enju <kohei@enjuk.jp> wrote:
->
-> + Iwashima-san
->
-> On Tue, 24 Mar 2026 19:40:28 -0700, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    c612261bedd6 Merge tag 'io_uring-7.0-20260320' of git:/=
-/gi..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D155801d6580=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D963de479f54=
-c6dbb
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D9db6c62463556=
-4ad813c
-> > compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e=
-25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-> >
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/aa2bdf537bf6/d=
-isk-c612261b.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/8fcd98072431/vmli=
-nux-c612261b.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/737b94c52155=
-/bzImage-c612261b.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
-> > Reported-by: syzbot+9db6c624635564ad813c@syzkaller.appspotmail.com
-> >
-> > usb 2-1: device reset failed
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-> > BUG: KMSAN: uninit-value in set_carrier drivers/net/usb/rtl8150.c:726 [=
-inline]
-> > BUG: KMSAN: uninit-value in rtl8150_open+0x1131/0x1360 drivers/net/usb/=
-rtl8150.c:763
-> >  set_carrier drivers/net/usb/rtl8150.c:726 [inline]
-> >  rtl8150_open+0x1131/0x1360 drivers/net/usb/rtl8150.c:763
-> >  __dev_open+0x8e3/0xd40 net/core/dev.c:1702
-> >  __dev_change_flags+0x32f/0x950 net/core/dev.c:9764
-> >  netif_change_flags+0x8d/0x1e0 net/core/dev.c:9827
-> >  dev_change_flags+0x18c/0x320 net/core/dev_api.c:68
-> >  devinet_ioctl+0x10dd/0x25a0 net/ipv4/devinet.c:1199
-> >  inet_ioctl+0x4c0/0x6f0 net/ipv4/af_inet.c:1015
-> >  sock_do_ioctl net/socket.c:1254 [inline]
-> >  sock_ioctl+0x769/0x1140 net/socket.c:1375
-> >  vfs_ioctl fs/ioctl.c:51 [inline]
-> >  __do_sys_ioctl fs/ioctl.c:597 [inline]
-> >  __se_sys_ioctl+0x23c/0x400 fs/ioctl.c:583
-> >  __x64_sys_ioctl+0x97/0xe0 fs/ioctl.c:583
-> >  x64_sys_call+0x1975/0x3ea0 arch/x86/include/generated/asm/syscalls_64.=
-h:17
-> >  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
-> >  do_syscall_64+0x134/0xf80 arch/x86/entry/syscall_64.c:94
-> >  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> >
-> > Local variable tmp.i created at:
-> >  set_carrier drivers/net/usb/rtl8150.c:723 [inline]
-> >  rtl8150_open+0xc26/0x1360 drivers/net/usb/rtl8150.c:763
-> >  __dev_open+0x8e3/0xd40 net/core/dev.c:1702
->
-> I see Iwashima-san was previously working on this issue here:
->   https://lore.kernel.org/all/20250827233108.3768855-1-kuniyu@google.com/=
-T/
->
-> The issue seems to be that set_carrier() ignores the return value of
-> get_registers() and may use an uninitialized tmp.
->
-> rtl8150 appears to have other call sites that use get_registers() the
-> same way as mentioned in the thread above.
+Some USB-connected devices (e.g. MT7925 Bluetooth on Dell laptops) expose
+their hardware reset line via an ACPI Power Resource for Reset (_PRR)
+rather than relying solely on VBUS cycling for recovery.  When the reset
+GPIO gets stuck low the device stops responding on USB; a VBUS power-cycle
+alone cannot recover it because the chip remains in reset regardless of
+VBUS state.
 
-Right, feel free to take my patch over ;)
+Add usb_acpi_port_prr_reset() in usb-acpi.c that, given a hub device and
+one-based port number, looks up the port's ACPI companion handle, evaluates
+_PRR to obtain the power-resource reference, and then calls _RST on that
+reference to toggle the reset line.  The function is a no-op if the port
+has no ACPI handle or no _PRR method, so it is safe to call unconditionally
+for every port.
+
+Wire it into hub_port_connect() during the mid-retry VBUS power-cycle
+(at (PORT_INIT_TRIES-1)/2 iterations), calling usb_acpi_port_prr_reset()
+*after* VBUS goes off and *before* VBUS comes back on.  The ordering is
+critical: on the tested hardware the ACPI _RST method (MBTR._RST) drives
+BT_RST low for 200 ms then high again.  If _RST is called after VBUS is
+already restored the GPIO pulse races with device enumeration starting on
+the live bus; the device begins asserting USB signals while still held in
+reset and enumeration fails.  Performing the reset while the port is
+de-powered ensures the GPIO pulse completes fully before the device is
+given power and time to initialise.
+
+After VBUS is restored, add an msleep(100) conditional on _PRR._RST having
+succeeded.  USB 2.0 spec §7.1.7.3 (Fig. 7-29) mandates a minimum of 100 ms
+between VBUS power-on and the first reset signalling for power settling.
+On root hubs, hub_power_on_good_delay() returns bPwrOn2PwrGood * 2 with
+no minimum floor; on the tested xHCI root hub bPwrOn2PwrGood = 10, yielding
+only 20 ms — well below the spec minimum.  (External hubs already enforce
+a 100 ms minimum via hub_power_on_good_delay().)  When _PRR._RST has been
+exercised the device must also complete its full power-on sequence (GPIO
+de-assertion, internal oscillator start, firmware load) before USB
+enumeration begins.  The 100 ms sleep enforces the spec minimum and gives
+the device adequate settling time.
+
+Tested on a Dell laptop with MT7925 Bluetooth (idVendor=0489,
+idProduct=e139) whose BT_RST GPIO was stuck low.  With this fix the
+device recovers autonomously at boot without requiring a G3
+(mechanical power-off) cycle.  The relevant dmesg sequence:
+
+  [    1.448491] usb 3-10: new high-speed USB device number 4 using xhci_hcd
+  [    6.813942] usb 3-10: device descriptor read/64, error -110
+  [   22.685978] usb 3-10: device descriptor read/64, error -110
+  [   22.901715] usb 3-10: new high-speed USB device number 5 using xhci_hcd
+  [   28.317963] usb 3-10: device descriptor read/64, error -110
+  [   44.189949] usb 3-10: device descriptor read/64, error -110
+  [   44.294065] usb usb3-port10: attempt power cycle
+  [   44.872709] usb 3-10: new high-speed USB device number 6 using xhci_hcd
+  [   44.888293] usb 3-10: New USB device found, idVendor=0489, idProduct=e139, bcdDevice= 1.00
+  [   44.888318] usb 3-10: Manufacturer: MediaTek Inc.
+
+Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+---
+ drivers/usb/core/hub.c      | 14 ++++++++
+ drivers/usb/core/usb-acpi.c | 68 +++++++++++++++++++++++++++++++++++++
+ drivers/usb/core/usb.h      |  3 ++
+ 3 files changed, 85 insertions(+)
+
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 24960ba9caa91..1740e96f73cc6 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -5603,11 +5603,25 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+ 
+ 		/* When halfway through our retry count, power-cycle the port */
+ 		if (i == (PORT_INIT_TRIES - 1) / 2) {
++			int prr_reset;
++
+ 			dev_info(&port_dev->dev, "attempt power cycle\n");
+ 			usb_hub_set_port_power(hdev, hub, port1, false);
+ 			msleep(2 * hub_power_on_good_delay(hub));
++			prr_reset = usb_acpi_port_prr_reset(hdev, port1);
+ 			usb_hub_set_port_power(hdev, hub, port1, true);
+ 			msleep(hub_power_on_good_delay(hub));
++			/*
++			 * USB 2.0 spec §7.1.7.3 requires at least 100 ms
++			 * between VBUS power-on and the first reset for power
++			 * settling.  hub_power_on_good_delay() on an xHCI root
++			 * hub returns bPwrOn2PwrGood * 2 with no minimum floor,
++			 * which can be as little as 20 ms.  When _PRR _RST was
++			 * also exercised the device must complete its power-on
++			 * sequence before enumeration; enforce the spec minimum.
++			 */
++			if (prr_reset == 0)
++				msleep(100);
+ 		}
+ 	}
+ 	if (hub->hdev->parent ||
+diff --git a/drivers/usb/core/usb-acpi.c b/drivers/usb/core/usb-acpi.c
+index 489dbdc96f94a..ee62e3fd8e3a1 100644
+--- a/drivers/usb/core/usb-acpi.c
++++ b/drivers/usb/core/usb-acpi.c
+@@ -142,6 +142,74 @@ int usb_acpi_set_power_state(struct usb_device *hdev, int index, bool enable)
+ }
+ EXPORT_SYMBOL_GPL(usb_acpi_set_power_state);
+ 
++/**
++ * usb_acpi_port_prr_reset - issue an ACPI _PRR reset on a hub port
++ * @hdev: USB device belonging to the usb hub
++ * @port1: port number (one-based)
++ *
++ * Some devices expose their hardware reset line via an ACPI Power Resource for
++ * Reset (_PRR).  When such a device fails to enumerate (e.g. because the reset
++ * GPIO is stuck low), the USB power-cycle alone is not enough; the firmware
++ * reset path must also be exercised.
++ *
++ * This function evaluates _PRR on the port's ACPI companion to obtain the
++ * power-resource reference and then calls _RST on that resource to toggle the
++ * reset line.  It is intended to be called alongside the mid-retry VBUS
++ * power-cycle already performed by hub_port_connect().
++ *
++ * Returns 0 on success, -ENODEV if the port has no ACPI handle or no _PRR
++ * method, or a negative error code on failure.
++ */
++int usb_acpi_port_prr_reset(struct usb_device *hdev, int port1)
++{
++	acpi_handle port_handle;
++	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
++	union acpi_object *pkg, *ref;
++	acpi_status status;
++	int ret = 0;
++
++	port_handle = usb_get_hub_port_acpi_handle(hdev, port1);
++	if (!port_handle)
++		return -ENODEV;
++
++	if (!acpi_has_method(port_handle, "_PRR"))
++		return -ENODEV;
++
++	status = acpi_evaluate_object(port_handle, "_PRR", NULL, &buffer);
++	if (ACPI_FAILURE(status)) {
++		dev_dbg(&hdev->dev, "port%d: _PRR evaluation failed: %s\n",
++			port1, acpi_format_exception(status));
++		return -ENODEV;
++	}
++
++	pkg = buffer.pointer;
++	if (!pkg || pkg->type != ACPI_TYPE_PACKAGE || pkg->package.count < 1) {
++		dev_dbg(&hdev->dev, "port%d: _PRR returned unexpected object\n",
++			port1);
++		ret = -EINVAL;
++		goto out;
++	}
++
++	ref = &pkg->package.elements[0];
++	if (ref->type != ACPI_TYPE_LOCAL_REFERENCE || !ref->reference.handle) {
++		dev_dbg(&hdev->dev, "port%d: _PRR element is not a reference\n",
++			port1);
++		ret = -EINVAL;
++		goto out;
++	}
++
++	status = acpi_evaluate_object(ref->reference.handle, "_RST", NULL, NULL);
++	if (ACPI_FAILURE(status)) {
++		dev_dbg(&hdev->dev, "port%d: _RST evaluation failed: %s\n",
++			port1, acpi_format_exception(status));
++		ret = -EIO;
++	}
++
++out:
++	kfree(buffer.pointer);
++	return ret;
++}
++
+ /**
+  * usb_acpi_add_usb4_devlink - add device link to USB4 Host Interface for tunneled USB3 devices
+  *
+diff --git a/drivers/usb/core/usb.h b/drivers/usb/core/usb.h
+index a9b37aeb515be..4d3dc3bd881b2 100644
+--- a/drivers/usb/core/usb.h
++++ b/drivers/usb/core/usb.h
+@@ -211,7 +211,10 @@ extern int usb_acpi_register(void);
+ extern void usb_acpi_unregister(void);
+ extern acpi_handle usb_get_hub_port_acpi_handle(struct usb_device *hdev,
+ 	int port1);
++extern int usb_acpi_port_prr_reset(struct usb_device *hdev, int port1);
+ #else
+ static inline int usb_acpi_register(void) { return 0; };
+ static inline void usb_acpi_unregister(void) { };
++static inline int usb_acpi_port_prr_reset(struct usb_device *hdev,
++					  int port1) { return -ENODEV; }
+ #endif
+-- 
+2.53.0
+
 
