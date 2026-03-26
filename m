@@ -1,173 +1,216 @@
-Return-Path: <linux-usb+bounces-35503-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35504-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GGOFIv4axWnr6QQAu9opvQ
-	(envelope-from <linux-usb+bounces-35503-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 12:39:42 +0100
+	id ANDhL/QcxWnr6QQAu9opvQ
+	(envelope-from <linux-usb+bounces-35504-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 12:48:04 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id B049A334A00
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 12:39:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A3C7334B25
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 12:48:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id EF67A30367AE
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 11:25:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4979F3024509
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 11:43:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 660573BE623;
-	Thu, 26 Mar 2026 11:25:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB1FD3EBF08;
+	Thu, 26 Mar 2026 11:42:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jUz9GKeP"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="C1ObYSbW";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="WIjPEtf7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE4834D394
-	for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 11:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774524322; cv=none; b=RidCEZmnMzPB8W29l42uROjjgu7kJGKJdFDeUX/oMWQvP0mRK0sCuHi4mnHh77vWja3DqpNhuWwK/QNe2BW7JeQP9f1LFvLrgMxWAwbEXE/cy1zsFNCzaSu0554JGZkOQUvDusVWEJsSFyMP0dggqa0rSfLI/FWm38tm/Xf7YY0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774524322; c=relaxed/simple;
-	bh=QBSRtqUaxUbuRxORlre39f9p1OQPQaGrDv8X8Y15Aj4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HNRoICeNg7aYHFI1Zlr0yoQESKggmvIiJ1WLv3JYgWp6Ht2A9h1b/J0PqfjkSfNGjtlKOAKG8UoleSGNTmIkivGbdBbrIm4gcedvuHxl5ZOimKRF/4C6K5TnlNOOF31DCGGg3mziDPCsBFZA4Bx1eHnJSFM8m4Nz3H50ikbShWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jUz9GKeP; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774524320; x=1806060320;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QBSRtqUaxUbuRxORlre39f9p1OQPQaGrDv8X8Y15Aj4=;
-  b=jUz9GKePNgTDVsN11cqE+8lWMFA4Sm+str1qS/hob0uMSgUE0y6SiPJq
-   oHhRovQWbIsXZ4Fq6u8nUf/Lbr9ON3Wkgd2y4KyqBtwQEq4xioq+nzU0t
-   LSd6U0zSDCUWWzgHlyEsIcYfPCMXbvqDjNPGkihIrPOVpCRXyIZdTzddh
-   +s6qdMhSpp4Bva8gQ1lu9dJ57j0LkToVcrlhPBlasxCnlV6NJKiiJ1JRp
-   /5CXDDsdQrDaAfTXudL8O8MwBI8Mw2QjGgt/I2Ca7uEhOe5NanP3N0gqp
-   ptGJ7QJVYnMtC4RI49O4i9Z9VpFqwHFvfBVKTGbU52GTEQ8r/Ncq7MDiO
-   Q==;
-X-CSE-ConnectionGUID: dlbC2l1DTZWd/AqJYAWdQQ==
-X-CSE-MsgGUID: og5kMlToQkKLS2rrDe0j3g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11740"; a="75467286"
-X-IronPort-AV: E=Sophos;i="6.23,142,1770624000"; 
-   d="scan'208";a="75467286"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 04:25:19 -0700
-X-CSE-ConnectionGUID: HN5Dmq+rSd2rhna7Yac2gQ==
-X-CSE-MsgGUID: omI8j/LSRLyhbBnzM7MH4Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,142,1770624000"; 
-   d="scan'208";a="262889085"
-Received: from egrumbac-mobl6.ger.corp.intel.com (HELO [10.245.245.254]) ([10.245.245.254])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 04:25:17 -0700
-Message-ID: <9cf4008e-2d12-4025-809a-8d9371f45dac@linux.intel.com>
-Date: Thu, 26 Mar 2026 13:25:14 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF553EBF2D
+	for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 11:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=205.220.180.131
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774525373; cv=pass; b=l5Ngbw/Ejkd/plNgm51C2WJUs3CCaz/A9lZRmFr6jnK/w56sAKebThdfnOWOSz9lsAKvqYmByJwv+7BYNcc96VYFfjAP2VccEbhl7CswmIaC/daSzE8m+eLgwuHQgFYzHS0XhmTmqNgUvFfvqSMDTsaeRdmONlL/8e7TC/564RU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774525373; c=relaxed/simple;
+	bh=XZnEY+PXCYFTUIKxsHTQTOQdmnrTCBUbZux8mOVUkp8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Mun663yiYScp0ZIOmkw1DnferOcjcSukyHrmcuzsGvO00KzsBB++VjZDX3GxVxWvVhtojGDSSyrlR/W4hl3c0l7ibaI3pn294mEEQRsY8jp439K4J0PjnM4YqdPUmxsZrGfJGzzTPCt1Q4U01vm9uLA9jGZ2lleqHTyr7N8nF+c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=C1ObYSbW; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=WIjPEtf7; arc=pass smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62Q6wKVM1060683
+	for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 11:42:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	XZnEY+PXCYFTUIKxsHTQTOQdmnrTCBUbZux8mOVUkp8=; b=C1ObYSbWiwpCagR8
+	PCkhkCO+GXK50Qtp7sDAjSeZkGc90lzWu4RUVAmdXsngOvdubpYWk59L47Iwgkim
+	RKQ0z/9x3G2R0rS9Ov8Plj78TrpoyRCGGAhM/Dg/sfIMNWg0FR890NxArZgAPT3r
+	cGYaMEJqwlGZAP5VAB9vSPvt93H/4+eHJdc/76+JIt8ZbM/q3y0cvDN1MWs1+wrF
+	huqzVEAGVWpPyC5EjR9lWZUvXitGXJS7iKWJUVg8cy27WrI5CTcwz4o6XEdvjG+D
+	ajhmt876F1YtrHRC5OKQ4tZWLhmR1EHGItRMh7PbfbyyplcVPEovOy5XW1ExV0+x
+	Sas20g==
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com [209.85.219.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4d4qkstffh-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 11:42:45 +0000 (GMT)
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-89c4d85d619so21665346d6.3
+        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 04:42:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774525364; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FjrdQQv/Xg1dhVj2n2VogBsJtu38kh9vCwKJKA1l6n2eM+++qNFmnaozGe20T5m1Y+
+         gaCz7BYIYXF1YnPFoak8ZOXysmEhmwvw5BurqL5VP4COzKx8A9YVsNKH+AuQ8fdRdaj2
+         RWAaAFMU8BmXPRf6CCvP2Si2Y6XA0S8899LLlfDvH3nnXXuFhjf6oH4pf/C8b2TOlmEm
+         KbAJGwjk31ykIdNvfcV+VpTU1Cg2i+LMKrdFcEas/PFpvzmS39GIEuvRXDgmq2I0zeqc
+         AdRvEappnSQIKMvfbkqAZBVt7gCJSwjbueTzwt0ACT2T/7CYhZxWHt8YEOcVzlXzJsAI
+         FmnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=XZnEY+PXCYFTUIKxsHTQTOQdmnrTCBUbZux8mOVUkp8=;
+        fh=KbIHHdB0JDYpfEcPt4eMXlY5opA8tc2QlttdcFRat1k=;
+        b=keT2j+3oujljZO39HCIqntmWJQ7nqrQDIAkxGiXeQyA/+LL3j0e6MMNrmZ9AeDox1c
+         vZ/GXC05Pv1Tc1h8sLULhGTJzMP1HURX8sYTrjuT5NnLJ6aO9NKtX8S45oFqIKkX9sUF
+         f26rU7qlhR4X5+8FgxE6HVIzpcuvlHJSeQa8W+BwM7048WsRGQZ100rKLNVsUSdfZpM4
+         N5m1Lsn9o9mafdBAVixfJkpBI3an1x60vIhZZH00uis/S27dQOYSUmsWXOEKMh5aoYFk
+         6VR430bnb4vZSK4N9+jkbn/pGLiUNnVRe7upbfMZs3/XVg5ceVC9H41P8AQq3RdtKWsg
+         l5lQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1774525364; x=1775130164; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XZnEY+PXCYFTUIKxsHTQTOQdmnrTCBUbZux8mOVUkp8=;
+        b=WIjPEtf7ypeubV1XgBR7R71VSos/Hdemf4GqYh3AVJwt/yuPUdyiJn5axAMWRVSZ+Q
+         shVJgigYvdYOGIofbcPfpwNTYtTI45Fl2fNMv7l3dX0vvIf2TnVniAQvJCd7pmAL5Iq7
+         QpF7WDgSjfjf51yaN/7M3SPxKRS6t191+uZijkfBtZ+y6CyBcS5GHwjTje8f/OLjh5GG
+         LcZ/lrVFgMgreyfqtw+9xoJcydVAJ0niAvGanQjbIsHC6b0yB09q1Lw7ErQw2Pc8uHX5
+         ZKf1ypZMod0A7PdEksNPv4B734WjVyF5Mu06i+JiBLF0iRrBykxoCwNPhGAB+Yc6MD8c
+         Zj5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774525364; x=1775130164;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=XZnEY+PXCYFTUIKxsHTQTOQdmnrTCBUbZux8mOVUkp8=;
+        b=D6wf40v4HpMO4YouQRumpvbGCPl0qNti2bEMGXb6ye5B6WVUthJsekZJysJjR+UTzy
+         9MRUSb21ZGAB7tWDylJcCIzPvDzbK17QyQr7cabqnVOQ4HqYtfzhhA6pr9Ax9ymY60Y7
+         yvjrJ27wcQ1boGJqkCrPXE5iFFYgiFNN8AzPPPQyznztqrBmuUsGzNfmDkYIFJx/Uiin
+         TAUoKThToH7mrWtRz+IBFWzk9MpfW34KgYJ+YbH/2KcN7DwnbdVhGWP0KVLpRXRqs3Dw
+         X+LXaEL6bBMptE9PesqnF5rN+vPUWLNnNSwTv32nx4q6hg57X0+V6O+U13U/91pb73+6
+         zGGg==
+X-Forwarded-Encrypted: i=1; AJvYcCWgJNjpLW+jDBifKilyDbQ+EUU/AP2m5OsJidw7yZTiqpa4bKFqVl0qOH7D8IACzT7w0cQH6GhVM1Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQLE4om2PDbdLeIEbI6YB/5/wp15AU2vyyxM9+k0PF9VeeYazp
+	D9nhleyWQcPjwJauwFUxlWn4XWHi6Ar8zOwAm9Z/gGaUYBlc4AlmIQoaVM5KaDfkax39gXvBMSj
+	fQI2vrcsN+RLk0xG6zzRNzT0CxIpO8xfkEBPEAIbdpzIWV5Y9S55qL74Br/u8+JgewI5Frl/Y2I
+	Ua7646hr7djfD68c+thLyrdvCsuj82PECucvk/aA==
+X-Gm-Gg: ATEYQzw8HH9s+/L9QNeJFEH2L5kiXCLXz1C7bH5od1LPJtWzEPEztIMm9rN3o+5Eg51
+	BviyhZ+sJWK942Nu2cLYVpSo65k3fIaiuFeh/rr425YyqzuKWPEoOXgrZ6lYKEdAfQlImT1kk8C
+	6qIim6V5zPxg+enZm13CEeRLsr1/iWKyf6AHJNZRs/PzGsINtz98Yppf8cwFNAflivCTLdrHmbS
+	LG6XZQ=
+X-Received: by 2002:a0c:ff49:0:b0:895:4bec:c629 with SMTP id 6a1803df08f44-89cc4b09c00mr80035396d6.31.1774525364571;
+        Thu, 26 Mar 2026 04:42:44 -0700 (PDT)
+X-Received: by 2002:a0c:ff49:0:b0:895:4bec:c629 with SMTP id
+ 6a1803df08f44-89cc4b09c00mr80035026d6.31.1774525364127; Thu, 26 Mar 2026
+ 04:42:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 1/2] xhci: prevent automatic endpoint restart after
- stall or error
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
- "michal.pecio@gmail.com" <michal.pecio@gmail.com>,
- "oneukum@suse.com" <oneukum@suse.com>,
- "niklas.neronin@linux.intel.com" <niklas.neronin@linux.intel.com>
-References: <20260323122512.2019893-1-mathias.nyman@linux.intel.com>
- <20260323122512.2019893-2-mathias.nyman@linux.intel.com>
- <20260325015110.v4r5smfvdd62fcua@synopsys.com>
- <0f38e10d-ecac-4beb-ad2c-3a42c2546c3c@linux.intel.com>
- <20260326011910.t7ijezht7g7ttrec@synopsys.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20260326011910.t7ijezht7g7ttrec@synopsys.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260318040644.3591478-1-swati.agarwal@oss.qualcomm.com>
+ <20260318040644.3591478-2-swati.agarwal@oss.qualcomm.com> <20260318-devious-spider-of-endurance-ede46f@quoll>
+ <CAHz4bYsUAojfB3BCHVoc8PMQBrjme6grdEnkxu7KhTQ+sxOf0A@mail.gmail.com> <0e88f413-82c4-4986-9d9c-122e0b0377b1@kernel.org>
+In-Reply-To: <0e88f413-82c4-4986-9d9c-122e0b0377b1@kernel.org>
+From: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
+Date: Thu, 26 Mar 2026 17:12:33 +0530
+X-Gm-Features: AQROBzCVc_oNC_sU_oC_61KpntoUnrA8I1UPJ75_lQ-xCRorf2C4iC8lBXyBl_Y
+Message-ID: <CAHz4bYvNFw1opNV3EDYaPbvA43KwY560afhHJrB_VELyfc8Vpg@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] dt-bindings: usb: Add binding for Genesys Logic
+ GL3590 hub
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Chaoyi Chen <chaoyi.chen@rock-chips.com>,
+        =?UTF-8?B?SiAuIE5ldXNjaMOkZmVy?= <j.ne@posteo.net>,
+        Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzI2MDA4MSBTYWx0ZWRfXx3/O9i+58FLn
+ SjoEEhe0BDAN0A834rG8c1GLPMZM/TtYtnR/FyXONVtlgcJbDtzvimYdKQSI1Uv9dtphTwQlB85
+ OuA7XS9PlMdDeSsHaZCUuxPDXjD1P9BJYInmtx408k1lrIbr9961udz32giMZeeEtHtBTnu1xu5
+ AXeORUaT3Ue+hM8v7vMje0fyZC/VgHcFFs+MKyeofU4VjuVWfeeQGirTl/bUk1TzL/b0eha6k32
+ VTgiRY1rC8GzzJF8Bh0MjbXhHNClo+pB43Q3a6SxDskrjV4PZYEh9vi3rytIpr3HYc5TaoY+QmR
+ cScDeWI8ArJfKUlIY9Zf00V6VTyXszl+WGWWf/Zxxrv8I3kzETkaSwKRlLJzJuR/WenXNZlI38F
+ ESgHI8Jfw3WYvq3peaJO9ORouXvi0+H2+gFErxCa/2yDH8YPzPl0L/BZu0kV7fYE1NAZkYtglfV
+ Hgxn4ydj6g8lFoK1sSA==
+X-Proofpoint-ORIG-GUID: n5pbr6tW74z2d9VCwcsvSUYDWLrZmsOI
+X-Authority-Analysis: v=2.4 cv=eOMeTXp1 c=1 sm=1 tr=0 ts=69c51bb5 cx=c_pps
+ a=7E5Bxpl4vBhpaufnMqZlrw==:117 a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10
+ a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
+ a=rJkE3RaqiGZ5pbrm-msn:22 a=VwQbUJbxAAAA:8 a=3iSX5NBQDq5eyQkNaboA:9
+ a=QEXdDO2ut3YA:10 a=pJ04lnu7RYOZP9TFuWaZ:22
+X-Proofpoint-GUID: n5pbr6tW74z2d9VCwcsvSUYDWLrZmsOI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-26_02,2026-03-24_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 phishscore=0 malwarescore=0 suspectscore=0 impostorscore=0
+ lowpriorityscore=0 adultscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603260081
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35503-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,rowland.harvard.edu,gmail.com,suse.com,linux.intel.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35504-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
+	FROM_NEQ_ENVFROM(0.00)[swati.agarwal@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux.intel.com:mid,intel.com:dkim]
-X-Rspamd-Queue-Id: B049A334A00
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:dkim,qualcomm.com:dkim,mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 2A3C7334B25
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 3/26/26 03:19, Thinh Nguyen wrote:
-> On Wed, Mar 25, 2026, Mathias Nyman wrote:
->> On 3/25/26 03:52, Thinh Nguyen wrote:
->>> On Mon, Mar 23, 2026, Mathias Nyman wrote:
->>>> Avoid automatically restarting bulk or interrupt transfers after a
->>>> URB is given back due to stall or error.
->>>>
->>>> Introduce a 'TD_TAINTED' state for pending TDs queued on a endpoint when
->>>> it halted. The actual TD the endpoint halted on is marked TD_HALTED,
->>>> and its URB is given back with proper EPROTO or EPIPE error code.
->>>>
->>>> Don't automatically restart an endpoint if the next queued TD after
->>>> the TD_HALTED one is marked tainted.
->>>
->>> Sounds good for -EPROTO, but will a clear-halt ring the corresponding
->>> the endpoint's doorbell for STALL endpoint?
->>>
->>
->> With this change xhci would not restart the stalled endpoint after a clear-halt
->> request. The first usb_enqueue() call after clear-halt would start it.
->>
->> Could make sense to restart the endpoint after a clear-halt, and just add a small
->> debug message if the next queued URB is marked 'tainted'.
->>
-> 
-> The -EPROTO should be handled differently than -EPIPE. A STALL endpoint
-> is part of a normal usb flow. Should the class driver submit a new URB
-> while the endpoint is STALL, we would always expect a STALL error
-> response after the endpoint is restarted. That's not the case with
-> -EPROTO where the data may be corrupted and/or the host and device are
-> out of sync. We should not continue until the class driver do some
-> recovery. IMHO, we can keep the handling of -EPIPE how it was before.
-> Let the xHC tell whether the STALL error still persists instead of
-> managing it by the xhci driver.
-> 
-I agree that that we should restart the endpoint if class/core enqueues a new
-URB _after_ xhci gave back an URB with EPIPE after endpoint STALL.
+On Thu, Mar 26, 2026 at 3:39=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+>
+> On 26/03/2026 11:07, Swati Agarwal wrote:
+> > https://lore.kernel.org/all/20260121022449.GA1804139-robh@kernel.org/#t
+>
+> Exactly this comment is not implemented. v5 repeated it. I repeated now.
+Hi Krysztof,
+Are you trying to say, i should mark vdd12-supply false wherever
+applicable but dont mark it as true and it should be by default
+considered as true? Correct me if my understanding is wrong.
 
-But I don't think we should restart the ring to continue processing URBs that
-were queued before the endpoint stalled. This would prevent the class/core
-from even attempting to retire the pending URBs, something USB2.0 spec,
-'5.8.5 Bulk Transfer Data Sequences' requires:
-
-"If a halt condition is detected on a bulk pipe due to transmission errors or
-  a STALL handshake being returned from the endpoint, all pending IRPs are
-  retired.  Removal of the halt condition is achieved via software intervention
-  through a separate control pipe."
-
-Thanks
-Mathias
+Regards,
+Swati
 
