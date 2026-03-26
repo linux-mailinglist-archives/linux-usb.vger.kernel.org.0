@@ -1,171 +1,259 @@
-Return-Path: <linux-usb+bounces-35479-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35480-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6K7xHCbSxGmw4AQAu9opvQ
-	(envelope-from <linux-usb+bounces-35479-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 07:28:54 +0100
+	id aKprDuTbxGlf4gQAu9opvQ
+	(envelope-from <linux-usb+bounces-35480-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 08:10:28 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 104F532FCE6
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 07:28:53 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2C8A33046C
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 08:10:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id F1AED303774E
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 06:28:05 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2211530AAE5A
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 07:04:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD2073B4EA3;
-	Thu, 26 Mar 2026 06:27:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BDFA393DFC;
+	Thu, 26 Mar 2026 07:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RcmG5SSX"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="OYqhxSCA";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="DXMBPdOS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580363B38AE
-	for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 06:27:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774506464; cv=none; b=aSLQQ/Ci8jUH+wBqri4o4cIda9B73oZVzIlOR+74jawA/yTr82Ek9E8L5AGN+bJo7eg1XfIfxp8HjFTEifylqrlIS518ECUChbKqYXrd9Y0RWoUv+JSUtiyFN5abUudwkTPIaIkVf930cye+vip4Th8lH3Gk20phAPPby03o8BU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774506464; c=relaxed/simple;
-	bh=t9KoS2RsfIogwqwcowCvWno4HLPDxGzBqya9ZfulrOc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gJfpPBX3OD8axeqikxL9N7k77CpXYUrTRDJp+zOCRugMThIVnW3Y2hvT6aSRhCWGsvql5KmkDU/aNelc/rPPUD+JbdiF/87ykLU7yC98J5wBx6k1zddW3IHfcGdPkoz4hyslnnT5oyEFMJvYkQ01LqnL0Bm/J4cHgdsgdAhjAls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RcmG5SSX; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-66aed966c7eso601390a12.3
-        for <linux-usb@vger.kernel.org>; Wed, 25 Mar 2026 23:27:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D18F34E75C
+	for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 07:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=205.220.168.131
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774508678; cv=pass; b=HV/fdWNWhw6mi1WzHpGJhfcIy+7lbadRMHAAm+sbN9bT+CE8Nc3NPhK9fPe4uFdkXxKo0mzSwhGvMdGQmi/79U6VlWqU3GJ3djzGGcFnExWg8Tfuwzy8Gmhu5kHKonaZujr4yg9DLBSCGvLVoP3XvEcigcvdv4LGD/g9mv0NSdk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774508678; c=relaxed/simple;
+	bh=xi5NIAahgNef8wQN/SdnNgsW+wwbnYDjNGE/8YIg2rI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MC0EOh/RDss525eBBYdMPE6fkGN+EHAMY3G8pZgq1qN9T9FcS25hFdh2Co0mUev3pU2GaFRVmEgq57UTwShMY9RvTnxiidIOZKVTqY4xA7hVw5XF7eJuz9dIDGPIKvrVpN2OpfBFTMvZ5CLkmdsqKgZkR9/FZk9xdetg5MckL3Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=OYqhxSCA; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=DXMBPdOS; arc=pass smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62Q6LV8r1175513
+	for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 07:04:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	xi5NIAahgNef8wQN/SdnNgsW+wwbnYDjNGE/8YIg2rI=; b=OYqhxSCAp7T2l35L
+	iae+xlTa2e9RLFYO8j/ejRRz8ydvBYN56F4AW2BrBGPrjMwgj99KZfnUiopnKw5S
+	fYJJoAiQbjEMWUSsJLa1TTFKvpQ38Ehf+OZAsMb6QnWZZ/1drQs5EK0NoAb13+04
+	UPoT1y0v/bDeWCNupjKv9v1DOhbvHxmhh4d6KuFlqtE4d5rFNdrREV7i+YpB49SO
+	ESXnZiNG/pO1Qoz8TvLTxkNGjo41jgdnu7E1x2ZGSNOFSggh7aJAc67UaSREvw3J
+	ssS7ZyuR7wpytge4Cj0AUVNkwRIkHDAbV7qKTo/6pdLtrb9a2sTMRzRawj8pbnoE
+	zKdSEg==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4d4q76smdu-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 07:04:36 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8cfd0a23243so284409485a.2
+        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 00:04:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774508676; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KybsuanUN5YWEmbbsCpjQfXs+WiEYqrtXFp9vKwcQghBz3mx+nLvKo9Sz0xPvRlrhY
+         SFDCCSh94zGYk1nl43dqhAd7R+Jav3CzjL1TtRlb4C64CC3TFtxLM4eX5qCC0rL6/rVC
+         stIDzv2ey5vHvpfdn9awG9CoWspUe4Frt2ZmninPrijJMc+begzMupkw9AOHzVqRVAGd
+         8XK+woNpHGIod5rxNw2pQi+gwbHpZTH6ARwzV+fTr0jVt9V53Tj9OxhmP7oAMsZ3RK/d
+         0tJcWKqLKwz6Or4LFWrjuLAkpesn5Zl1uuHcxfhmfcGWLMtAvsaybVy1uEVbxD01lFAs
+         NuKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=xi5NIAahgNef8wQN/SdnNgsW+wwbnYDjNGE/8YIg2rI=;
+        fh=8XhMqJs2uwEt3kvVOVPGiGJkHKtgZfGMD0tFjnbODzg=;
+        b=GgldXyalmMLexqpj/rf7QZGjv7hz/C/gm5r9ZG55tT9z/WuFGcOFGbdX43wnd63H86
+         8DvKZB+jWZVqnHGbVlH+XYEvUODAFL1UvHYCW8xbDVIChThOB7DL1mKQ9mHTZThxw2Jj
+         nEB/0DBL4CPqs6HFDW/Z3+njzJubUdcotoe3VAQoB/tWl8ZOZeCB+i+QeLieDIoSrV9b
+         84lkCclfgSOG/DZXnkPMNRfNU1AAOq5cpl1/LTmjGA47RJreawTL9AGvVMDFocFjJRYK
+         Rplop3s9chOQYgkNBc/F62DSdMSswMzEsfYfnDvBVFiO5HXbTxNYQZjzpopiU5St1fJD
+         8THQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774506460; x=1775111260; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=oss.qualcomm.com; s=google; t=1774508676; x=1775113476; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hqeDJ1IpX+MOxp/pGIYBD1tduTELPWeLDwKkLbtAg34=;
-        b=RcmG5SSXPLtukpl13Sj3xVRUTG0FfbIbyj1tPXVuNXAy1zaM+6eDYYO3podsPFA6RZ
-         gTWFtwj3zz9u+zUIFFDRaH9Aa6xtm3Br0CuN2570esuZxV7QKoyRHZoHnjkDdAvU+nZC
-         fxVc8Xq5N6WbCuBxNnGE7p3IKbXmQj7j6DPzLbNuWMTnTAyk/0WZzdMlmfQEcTEUmTm5
-         AwAGmWT0dZAXLYR1H7t7FdRIe/nXaBiNMbzgcrKBD1PV1kn6iog2A5xpu5Im0i6VpHKP
-         ZMvTsbVCFvQGXAJWfN6AbY/UeQLQOXrlwZcgxzqZaPUapDZDe0UgQnneZJjSZoCINbZJ
-         4KUQ==
+        bh=xi5NIAahgNef8wQN/SdnNgsW+wwbnYDjNGE/8YIg2rI=;
+        b=DXMBPdOSRhvFBYjjnrlzxvDxM+3ZchMskrRMfg5T8TQha/3abj9sPRiQjqtETswVOe
+         ICeiXTfMJsy+enUjk8f1DOxcELtiR2eGh2KkCwHZ8VyHO5nHBw34luF2u6iSGGwHs7nU
+         WUxQFDh+L0DP03dBNZyeTzjQZE393PDxsgvrtscomIjiqBfyUXEg2A9qW46p2JXzVP5s
+         7cTju3TUY3fS39zTJzXXp3N85c2Xuj3sV0e3cB5MPdqaWEx3sau6hDM6/rkOTLrfB/dk
+         Dd+IOOajdPvN+qmY26lRd6SPJrA6RDLJgBudAWZsiMiXI/B0o6xaKYt25PMh0q/A+iVM
+         s5xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774506460; x=1775111260;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1774508676; x=1775113476;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=hqeDJ1IpX+MOxp/pGIYBD1tduTELPWeLDwKkLbtAg34=;
-        b=TkeE8B/3lGl1ltGCWci0ke2G7/L/oiaRVFdkVOjWX2H0oGMA/AlKNSoXVcUqVmuEX6
-         Dt+qgZxCPChHsAWCx0kWd+PyM4EPdeFh8xfYPufWS5zCFXliYeAdwxQQQXCukpLX1Rcs
-         gl9XW+ZwfHL1f2wrr493q94CqxJLAQyWzn6EO11X1TVX8iyOg5a4k9bblX99a7gDRwOA
-         i7wdgE90Fmchg73APDIVoRAjvN7Xrgep5G2pJbekpwbcAVqp/TZ/tQ75HeFbfRfGLy83
-         KY6AwPaGVgazkZ1fWDOUikIz4xyjTiF3zyIphSOl1yRrD51WQEa6jz54oBo6FVOCvE1G
-         Lowg==
-X-Forwarded-Encrypted: i=1; AJvYcCXqIr3UxeZV5VnVz8R4juh6mKNsq6aHqrALXZCfQBpqIXlxUumc6RIW9f38dMow2c6wos5VpD5LSqU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz550yHE74z11ujsDsjWaVVyTh7A/47br9wMXyh79Gk98x0LDBu
-	mgbmW99jbh3ZPBOEO3A4yeH5iSDqtLjO+rhb/tL5TwN4iQisvrcFAR0J
-X-Gm-Gg: ATEYQzxkfsf6qu4Q92w9vZuZtdBSkJ0lfQXohLXfTjxtronxLCqLUDZOZE+6U/OayhP
-	Zel2kK2Ou01hRN1YBZCzfG6lzXk8mQ/08Ok00d2eXeA+pmTVC60PrQrlIp6kv1yv0LKI92GuwDy
-	reR9DqYFT0OACCQlWA4KTpcG0Z6RiSuA/QFxCQMgNv05zurgu16q6qrvECVTqs49kDSgM4IMIjz
-	FbmaVXohbNIngx0W4TlmGlBEF91lCMAB98u5LKbDGACKSJ5Fl3r6j1YCu1vmYC3drX2zwVorqhV
-	T3bfbL/IlVN9mtwEGl21Ci3174b3SFjuTK8Qm4DK/h6NCfiKx9JpLgZO4zDZhP0mS+h0fjZs1S0
-	8D/CHLW1Xdq6getbIA0nUBZ0FKLRm5PuSM/ma11SH+6uuKiAYchUmPA9qKzPZoMqMCCQWvgMs9l
-	Jeg8xTFPpOe1H+LBhQyGvH8X/GJgPgnLnMbtI=
-X-Received: by 2002:a17:906:7316:b0:b9b:2456:989c with SMTP id a640c23a62f3a-b9b24569a89mr80938566b.6.1774506460067;
-        Wed, 25 Mar 2026 23:27:40 -0700 (PDT)
-Received: from foxbook (bfk214.neoplus.adsl.tpnet.pl. [83.28.48.214])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9b2029b0a6sm76678366b.27.2026.03.25.23.27.39
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 25 Mar 2026 23:27:39 -0700 (PDT)
-Date: Thu, 26 Mar 2026 07:27:35 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: translate ENOSPC for user space
-Message-ID: <20260326072735.67707e66.michal.pecio@gmail.com>
-In-Reply-To: <20260325145537.372993-1-oneukum@suse.com>
-References: <20260325145537.372993-1-oneukum@suse.com>
+        bh=xi5NIAahgNef8wQN/SdnNgsW+wwbnYDjNGE/8YIg2rI=;
+        b=Yh34tpCbO4kjr8pZWqWihxTTk26m3eYBb3kWRpfeAMu4uHJNEpv2y4d67KRfMcspXr
+         RZJmLQFwFc8ikEzZ2ttlr0YKh45Ly/OzipfsmDk1oLVym4GsPHU8+2VwgDB8sU4zSwv/
+         PrhrNq99htr55TfMwTZYKekyxbyAIjaj/i+n2bkDPlszyTu1GaRpFIV5mzm/GzyYNMHt
+         UfO+ARfn2oW2YlIF85Iei4EpLbDx1Xn2NYTh4Qpux1Zz2uPSrEmw7TqhZSVHpYGIshID
+         v3Lc/54xB+9dI6jhdrrnSlDZkqjrouDUMhi7LuJQ5/nU4NlO/BsGt0WRFtg3FQ/tawWu
+         pAgA==
+X-Forwarded-Encrypted: i=1; AJvYcCXbQ+C3jwwGBAfnZkziusCJ6aRyeDBeDhLfz5aRf5ZVFTIHxHu8wRXH2Xy/aSYu5YOEugJORGC+7as=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbxTIVDOWeU6OljSOYtrWlT3WernnD5FQbd8CE4mN2yWxtH1TD
+	nm0/A2GosEF7Q9qOcYzjAgTZ0S0zlI5NHRN1KrNhL6sl++Vc/SlwR844yI1+Ph2KFTrJry+isyB
+	kJdy8SEceqsOTKBo8WUCB3jYYDSibA2IBJ+I9MrvhjvFOSrrp+Db/ZYRWqRYxA27ewLzxjmxzNx
+	i1qoN3e9zTKT1Ss0RQuiHSoVX8SkIOjclTuvai5Q==
+X-Gm-Gg: ATEYQzysv+oAtUaDBK2+xpw8q2WOMBA+qru9udVaRTgM167EANFzbJ/ce0HorFeigei
+	69p2GxnKLWxp6t2L+IGsGkxNx+Y1GDtEgRnxzQMlMNPb3vStiRRlqSbm3/rA/ZveawDwB0138nd
+	0tRN7Hw3qN/NykxSkxQcOAK6cpK1l9/fi7dAEmp8rAaM03F7Ye6nd7wxeo/OM/c+W/VsTSuGuLK
+	+pipsw=
+X-Received: by 2002:a05:620a:568:b0:8d0:ad0:bfee with SMTP id af79cd13be357-8d00ad0c705mr420798585a.26.1774508675579;
+        Thu, 26 Mar 2026 00:04:35 -0700 (PDT)
+X-Received: by 2002:a05:620a:568:b0:8d0:ad0:bfee with SMTP id
+ af79cd13be357-8d00ad0c705mr420795085a.26.1774508675045; Thu, 26 Mar 2026
+ 00:04:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+References: <20260318040644.3591478-1-swati.agarwal@oss.qualcomm.com>
+ <20260318-neon-vigorous-prawn-dce7f3@quoll> <CAHz4bYvs9mnDwfkfjkebucZSQpugEqr6+sFf1-hgzNO8SodzQA@mail.gmail.com>
+ <d44ec842-1763-4f5a-a987-f41a6e624e87@kernel.org>
+In-Reply-To: <d44ec842-1763-4f5a-a987-f41a6e624e87@kernel.org>
+From: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
+Date: Thu, 26 Mar 2026 12:34:23 +0530
+X-Gm-Features: AaiRm53LgZwRC4-dZr8TZYUTH90mg7YLcB4GfdpJtgbwdJVo8pxW4uBCJ-w86qQ
+Message-ID: <CAHz4bYvG-FE2bmN+VU6jM-x-j1pLz7DdYqub+=ek0P-zgU1X2A@mail.gmail.com>
+Subject: Re: [PATCH v6 0/4] Enable secondary USB controller in host mode
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Chaoyi Chen <chaoyi.chen@rock-chips.com>,
+        =?UTF-8?B?SiAuIE5ldXNjaMOkZmVy?= <j.ne@posteo.net>,
+        Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Authority-Analysis: v=2.4 cv=NOPYOk6g c=1 sm=1 tr=0 ts=69c4da84 cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10
+ a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
+ a=eoimf2acIAo5FJnRuUoq:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=q5bItssymG7qwTykz4IA:9 a=QEXdDO2ut3YA:10 a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-ORIG-GUID: uNhhmc2m3P-km5sMCIYsx5NpPpCho5xM
+X-Proofpoint-GUID: uNhhmc2m3P-km5sMCIYsx5NpPpCho5xM
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzI2MDA1MSBTYWx0ZWRfX+oO+cLAslDEc
+ /NmNottG+rjdN3z6KkA8Wv7+J0t5Iro87s0UAHdvVBF6hwh9ZCc1RN3WqqbOXyBK8fPXCfqyvNW
+ HLby56iS2T7W3e18wOM0/FfPMup14KFnuh0qfQ0Q+yOA2D2MYhSNP80Bm4GPNM0NA+JzJ/V2TJL
+ ZpUvElWHir0RyAR6MCQloaXxYHTxGm96nogsxEH87k27O/e9x3z1SEYg2l7DOWk/HzZ3mbpp6Tt
+ 4wGqAoGeiaoYmLkmfA4X8N8tCt651eSKgIZaYOCMFbXVF0RN1+TLnsCfhIRSx6X/05Ui9SlMaME
+ zAIBSf0YA/ymwtsxaojDm5hADltU+jj8Y4DOz8c7fZeEYyRgOXUAZjk0nC8JR01/aCGQcxGLDWr
+ njuCRIuOOJ5tA4AS9Q5b/gWDB4G4NXhHPmZivLeCcvuYeXtH4zCOrvun/dHX6vsapuwXkz3GMoQ
+ q1x8hOlGhTjuOPSCIgA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-26_02,2026-03-24_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 spamscore=0 clxscore=1015 priorityscore=1501 lowpriorityscore=0
+ impostorscore=0 malwarescore=0 bulkscore=0 phishscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603260051
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35479-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35480-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[swati.agarwal@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 104F532FCE6
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,qualcomm.com:dkim]
+X-Rspamd-Queue-Id: D2C8A33046C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, 25 Mar 2026 15:55:20 +0100, Oliver Neukum wrote:
-> In case of insufficient bandwidth usb_submit_urb()
-> returns -ENOSPC. Translating this to -EIO is not
-> optimal. There are insufficient resources not
-> an error. EBUSY is a better fit.
-> 
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> ---
->  include/linux/usb.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/include/linux/usb.h b/include/linux/usb.h
-> index 04277af4bb9d..815f2212936e 100644
-> --- a/include/linux/usb.h
-> +++ b/include/linux/usb.h
-> @@ -2075,6 +2075,8 @@ static inline int usb_translate_errors(int error_code)
->  	case -ENODEV:
->  	case -EOPNOTSUPP:
->  		return error_code;
-> +	case -ENOSPC:
-> +		return -EBUSY;
->  	default:
->  		return -EIO;
->  	}
+On Mon, Mar 23, 2026 at 1:12=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+>
+> On 23/03/2026 08:36, Swati Agarwal wrote:
+> > On Wed, Mar 18, 2026 at 12:33=E2=80=AFPM Krzysztof Kozlowski <krzk@kern=
+el.org> wrote:
+> >>
+> >> On Wed, Mar 18, 2026 at 09:36:40AM +0530, Swati Agarwal wrote:
+> >>> Enable secondary USB controller in host mode.
+> >>>
+> >>> This patch depends on:
+> >>> https://lore.kernel.org/all/20260306091355.1178333-1-swati.agarwal@os=
+s.qualcomm.com/
+> >>
+> >> Honestly? No. Drivers cannot depend on DTS.
+> > Hi Krysztof,
+> >
+> > Here what i meant by dependency is that I have rebase this patch
+> > series over below patch series. Below patch series is related to USB2
+>
+> And you should not. Drivers cannot be based on DTS branch.
+>
+> > micro USB controller support on lemans EVK.
+> > https://lore.kernel.org/all/20260306091355.1178333-1-swati.agarwal@oss.=
+qualcomm.com/
+> >
+> > There is no dependency of drivers on DT.
+> >
+> >>
+> >> Also, combining here USB is a no-go. Do not combine independent
+> >> patchsets into one patchset.
+> >>
+> >> I also do not see how you addressed my comments from previous version.
+> >> You never bothered to respond and I do not see them implemented.
+> >
+> > Apologies if i missed replying any comments.
+> > Regarding your comment on v3 series below:- GL3590 hub used in lemans
+> > EVK requires only 1.2V and 3.3V supplies for operation, confirmes the
+> > same from our internal HW team and update the same in thereafter patch
+> > sets.
+> > https://lore.kernel.org/all/20251220-economic-gay-firefly-1873a9@quoll/
+>
+> This does not address the feedback. I did not talk about Lemans EVK. I
+> don't even have its datasheet. We speak here about GL3590. I found at
+> least three supplies in datasheet. Your binding has only two.
 
-This function is used by serial drivers in syscalls like "set/get modem
-control" and apparently also "write/read data" in cdc-wdm.
-
-So when they fail because the USB I/O failed, does userspace really
-care whether the I/O failed due to insufficient USB resources?
-Are those syscalls documented to return EBUSY and is userspace expected
-to handle it better than EIO in those particular cases?
-
-I would assume that EBUSY means too many processes are trying to do too
-many thing with this tty at once, and that's not the case. My recovery
-might be to find such processes and kill them, and it wouldn't help.
-
-What real world improvement was achieved? ;)
-
-Does it ever happen? ENOSPC applies to periodic URBs, but that code
-looks like sometihng that would end up using control or bulk.
+Hi Krysztof,
+For HUB GL3590, there are three supplies which are VP10, VP33 and
+VP12. I have already used VP12 and VP33 in bindings. VP10 i have not
+mentioned since its internal supply and other two are external
+supplies to hub. VP10 is internal regulator and its pins just loop
+back. Regarding AVDD10 and AVDD33, so AVDD10 is internal power hub
+which is routed to several pins for different functions such as the
+PLL and AVDD33 is external power hub where the external 3.3V gets
+connected for multiple devices.
 
 Regards,
-Michal
+Swati
 
