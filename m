@@ -1,205 +1,155 @@
-Return-Path: <linux-usb+bounces-35491-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35492-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qM/OJwLrxGmj5AQAu9opvQ
-	(envelope-from <linux-usb+bounces-35491-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 09:14:58 +0100
+	id YNvPEvvsxGm+5AQAu9opvQ
+	(envelope-from <linux-usb+bounces-35492-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 09:23:23 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 039A5331154
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 09:14:57 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EA5A3313D4
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 09:23:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9A63430F7EAF
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 08:08:18 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 34059300C38D
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 08:23:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B08B3350A05;
-	Thu, 26 Mar 2026 08:08:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e6fvrRNq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7B8B38C2DB;
+	Thu, 26 Mar 2026 08:23:09 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6DEF384248
-	for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 08:07:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774512481; cv=pass; b=uWOz6cVFCs8p1b3ZT1eTdsw+55xJzrks2k+9fVIAPbeujTbCnsRXOuOEFerHqaBleRZxZcUjYA5NxTPLqpkumdTQjss/3kJljKrfxVxlbUZJCicl3fgF7nKeEmIQXPEQJ43Pk9viNuntzwHHUuKsLjluHnVqsqXr/ChDEivECBc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774512481; c=relaxed/simple;
-	bh=qQ3t4fEm6UcvNrhoSDVgJCI0Hy9U8j+6sJp79T/tdvc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XC/QGLeXEz/4ayI/m/g3+2m6UNpphQGm+5BtmkqyipvUqKkrDU8VpdVzMamR0w2nrawVnksdeLOGXng5iUijRbgsdHdqgg9pWj5YEo6IrcAaoR/Iir7yrZR6pOUuJeUtiJv5/mE+cQxtaOgqRJUDSY9YuSaaCuMDeI3w7wLbW8Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e6fvrRNq; arc=pass smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-486fb112c09so6446205e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 01:07:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774512477; cv=none;
-        d=google.com; s=arc-20240605;
-        b=DtPPqIyjlOiAPbRnErCdrj/SbzWm4aL3ZS2pe74htrCeDSOVIywDVWgf7sY/n8B3Fn
-         gkDkkQP3Nk//FZac3YFOUtqJaSUm04QrZraQsLYytNorSB22n2iFatFNBmtPcGCdMDzO
-         8pHHw68Br86RJXBWfWBeybKh79s7Vx4Y08+I+Oq34miTfV/4H5DpoBPApTE910c8YPKO
-         SkemA4BqxCR83wA7QY8QfBx4glf2bSjYWbQ5PYU5jpqGmkuU5e2kt01Lh/pd9xUiZK9B
-         hEYmTD2tl5HqR0damcrkSSUue9QOIKASN+Z3wfm3PNZJ7IAvuFp4XlCEOvBf+FyFdPIK
-         61iw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GxNwnXNSeOlt3YvpFKLNRIc51EgKqgFCtbpdUU6DY7Y=;
-        fh=aG9hhZLqF4IPvYUY4hj+v7yT12Cr85jDzNyEI2TBTOc=;
-        b=Nk2pZrV3RsPxfCRbIj7Mo82Sk+7B5BI+wK9cm49/NzrcYCN1KE9VBcEMDMBkD/Vi0Z
-         XLyWvyPOpDehUXUoMvZz30Lpklvq76tkFuFUje5GvghndXxyIh+n2iY7nWhq0BIdvuKn
-         PxOgo+EFYjqEKuKBiYsN05md0IYUeEmXmA5+QuHBwQk5UPu2z/9W7CjTWwoAxEDJI5JD
-         aWhjey87Xejs7KVV5gEULoHMxlkVkQS/uJx018GRxW+za7+6H5etcD51uJ0qENZR/Wxc
-         FVLWh8NKRMt5A3PkY0hc/AqrptTAF9lIxDwH3+uqZXd91Mm4eUu4CtISbJSk9s6vIza5
-         qHIA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774512477; x=1775117277; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GxNwnXNSeOlt3YvpFKLNRIc51EgKqgFCtbpdUU6DY7Y=;
-        b=e6fvrRNqvo/Va2Ah9tQrdun5qzfbhRHxqqortpvXYs/73judfGBX9fE5y+jvOx6Z9f
-         Nwk7MiL05b0kyvO0dDJXL0giWF+oW+MhuAdax0Nkutfe6rQ2kJYAPVtYMoXkRGA3bShc
-         sNrZB51FL2AUHLi1beDOZBJrTAzbHSPs4mlf8mDdSJfd7fXhwCsWCfYcvbcmzzA7Fp4k
-         qRsF/YUD6qt/w+EZ/bhqHq7aTKpzvH8c4H0mFfL4LECa9MOCGJZf37k+2azz/HJqifOd
-         Xzd7HVG2JY7wOFQIvPml+cUrwPXNI3+RbGp64id7MMqQT02kcZrP7De63DniLO4KBe7D
-         ZDsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774512477; x=1775117277;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GxNwnXNSeOlt3YvpFKLNRIc51EgKqgFCtbpdUU6DY7Y=;
-        b=Q3M+4F3qtiIRhAR9a9O+/Mcztbs2ScgHIgEXiClAe62o5xFhhKKHQpB7LmdrPhkTxW
-         nAyT0mjnfG0qpDzMEjvDVoHtghIuYLAuVd7AIT3yxWBYNq6KdsHeKczlRZoWgcJz7PQA
-         gMXzo5OlVNWP2rDmBL0Zsr5qEpfDPGmJe7VVXKucNXrhednJFuqOcxR9ZFB4yQsyNiFD
-         wZvlFxTtHOpE8q3fKFGobbO90MCLNHOSxd4ZxCAhLMSi9+5B4ZLcdF5wNO1+D5zuZC/l
-         SVbTWh3nbbjomxzSwdlDOc7NYPBcQfE4ujp1YRhqc79fVHzqGUnfRJt0vYgXldp9nPa1
-         AUkA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJMrLzYUI6SeDKSd1NfMjjkDe3G4ERdnVuwxKprmd3ZaSSTyGxIYxzMk4ggGBELXHgdTFOUT2vlYk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRKf3MX1rmsfbQObvgPia6otCVBUQtUz0FG/npgsWw3aj5jzcR
-	4nk7X0dBXnn/uwpGPZP+seOGhgxpeT+qId8q/m7OAoEJZQ2fC8DpwzRIbAulBzphYZoY/RywUk4
-	2jpk6FQ1dV2kIUYqiLjUyCcLEXw5I4Y5zQFRm
-X-Gm-Gg: ATEYQzzZZNhdo7X3LOc0nroqKUy8wuRFl13oZL/HSRZelFPg0cldApPcRyVu3zorLaF
-	jCvcIW06Ho6ItNBxrwMtbsE3qt34FQ8SiWeEoRiElr+a0eRPBmC6ayckl/ensUutEqWIVTOeQ4C
-	l7CuTBu34ehfmNud5yelN7GZHMCNmgRQ30hWtu3ALVPUrGQrVMbH/SRsi69w25Exj5rRilzcNwv
-	TV5MZaRXBrwUAYr/a/RWAa+cZATz8TwkJFMfgZCQLF933eM0vlDk8GoO5z4FJUiRA4LoyTUaD79
-	SRCAzRZY6PGdwrxjNutuqVAOJAZUj/UCMT5BU0XDpA==
-X-Received: by 2002:a05:600c:6287:b0:486:f4d2:eac6 with SMTP id
- 5b1f17b1804b1-48715fd63f5mr100683785e9.13.1774512476398; Thu, 26 Mar 2026
- 01:07:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF90634D3A5;
+	Thu, 26 Mar 2026 08:23:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774513389; cv=none; b=bEBaDWWRnx3jI7J+S5Ri8s+q1rCXGNcQG+fihFn6enV+RFhKsnlzGKHfkMjsqW2IpDJiOGTU1zMLqdy/+KZjQ/0h4L2mS5qnpquhH24gnohQ/I50Glz5Mj1M8eeLL7vK2AnAWotO7GqmjeAsNedXAExYhWAiIv+FggtmoET/1F0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774513389; c=relaxed/simple;
+	bh=qEG9vdVahhvIuwcyP+tsgzm0OFe9nueSPkN7PwT9zNs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iH7lAcESLb2R3RJY1tHo1XNuwlJDQwWAoDzo3Ym6GtPd4c7vfIWC7Akb0qlfl27/d3Ck5GcQt1EcjyUE3NuTCKXL36sjLhlxMBlWDU4gst9nNYQ+SQcOqQJ+t9+LnM04+zH2WJoNhCL2bpwtQdeTazeTMfBvQHQINBrqD4K1UK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: fe23452228ec11f1a21c59e7364eecb8-20260326
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.11,REQID:b596755d-891a-4166-bd95-e322802c5790,IP:20,
+	URL:0,TC:0,Content:0,EDM:-20,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:5
+X-CID-INFO: VERSION:1.3.11,REQID:b596755d-891a-4166-bd95-e322802c5790,IP:20,UR
+	L:0,TC:0,Content:0,EDM:-20,RT:0,SF:5,FILE:0,BULK:0,RULE:EDM_GE969F26,ACTIO
+	N:release,TS:5
+X-CID-META: VersionHash:89c9d04,CLOUDID:dfbf92b15722b387ba97234406aead83,BulkI
+	D:260326162258MEO55VSQ,BulkQuantity:0,Recheck:0,SF:19|38|66|72|78|102|127|
+	850|898,TC:nil,Content:0|15|50,EDM:1,IP:-2,URL:99|1,File:nil,RT:nil,Bulk:n
+	il,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BR
+	E:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_AEC,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS,TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: fe23452228ec11f1a21c59e7364eecb8-20260326
+X-User: cuiyudong@kylinos.cn
+Received: from localhost.localdomain [(183.242.174.21)] by mailgw.kylinos.cn
+	(envelope-from <cuiyudong@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1836722074; Thu, 26 Mar 2026 16:22:56 +0800
+From: cuiyudong <cuiyudong@kylinos.cn>
+To: Andrey Konovalov <andreyknvl@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Gopi Krishna Menon <krishnagopi487@gmail.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: gadget: raw_gadget: fix double free in raw_release
+Date: Thu, 26 Mar 2026 16:22:45 +0800
+Message-Id: <20260326082245.39394-1-cuiyudong@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260326074332.34305-1-cuiyudong@kylinos.cn>
-In-Reply-To: <20260326074332.34305-1-cuiyudong@kylinos.cn>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Thu, 26 Mar 2026 09:07:44 +0100
-X-Gm-Features: AQROBzCWff3A9GRqaigPenrZRtqRniggr8QJYET4Ts4ayvTIideuOJ_2ERfA5hw
-Message-ID: <CA+fCnZdstY6Aj=W7csa2qSXPEDgoOeiHj5eMuKnEeTmgp45Huw@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: raw_gadget: fix double free in raw_release
-To: cuiyudong <cuiyudong@kylinos.cn>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook <kees@kernel.org>, 
-	Gopi Krishna Menon <krishnagopi487@gmail.com>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [0.04 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35491-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35492-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[kylinos.cn];
+	FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,gmail.com,vger.kernel.org];
-	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[cuiyudong@kylinos.cn,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andreyknvl@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,appspotmail.com:email,kylinos.cn:email]
-X-Rspamd-Queue-Id: 039A5331154
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,kylinos.cn:email,kylinos.cn:mid]
+X-Rspamd-Queue-Id: 4EA5A3313D4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Mar 26, 2026 at 8:45=E2=80=AFAM cuiyudong <cuiyudong@kylinos.cn> wr=
-ote:
->
-> raw_release() had duplicate kref_put() which caused KASAN double-free.
-> The extra put inside the unregister block is removed to balance refcount.
+In raw_release(), when unregister == true, there are two kref_put() calls:
+1. Inside the unregister block (extra)
+2. At out_put label
 
-This patch is missing the details that explain what happens and why
-this fix makes sense (and I cannot tell that it does).
+The refcount increments are:
+- 1 ref from dev_new() in raw_open()
+- 1 ref from kref_get() in raw_ioctl_run()
 
-Why is the removed kref_put() extra?
+Total: 2 references.
 
-Why did we get a KASAN report instead of a refcount warning, if
-kref_put() is the problem?
+The original code performed 3 kref_put() operations, which causes the refcount
+to drop below zero and leads to a double free in dev_free().
 
->
-> BUG: KASAN: double-free in dev_free+0x424/0x740
-> Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
-> Tested-by: syzbot+25612fe5ab3dcafc3aab@syzkaller.appspotmail.com
+Remove the extra kref_put() inside the unregister block to balance the
+reference counter correctly.
 
-Why is there a Tested-by tag here? I don't see a patch testing request
-on the syzbot page.
+Since the extra kref_put() triggers an immediate use-after-free condition
+on the dev structure, KASAN reports a double-free instead of a refcount warning.
 
-Moreover, there's no reproducer for this bug, so syzbot could not have
-tested this fix.
+BUG: KASAN: double-free in dev_free+0x424/0x740
+Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
+Reported-by: syzbot+25612fe5ab3dcafc3aab@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/69c401ad.a70a0220.23629d.0000.GAE@google.com/
+Signed-off-by: cuiyudong <cuiyudong@kylinos.cn>
+---
+ drivers/usb/gadget/legacy/raw_gadget.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-> Reported-by: syzbot+25612fe5ab3dcafc3aab@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/all/69c401ad.a70a0220.23629d.0000.GAE@goo=
-gle.com/
-> Signed-off-by: cuiyudong <cuiyudong@kylinos.cn>
-> ---
->  drivers/usb/gadget/legacy/raw_gadget.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/=
-legacy/raw_gadget.c
-> index 4febf8dac7ca..a1fd3fdf1323 100644
-> --- a/drivers/usb/gadget/legacy/raw_gadget.c
-> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
-> @@ -465,12 +465,10 @@ static int raw_release(struct inode *inode, struct =
-file *fd)
->                         dev_err(dev->dev,
->                                 "usb_gadget_unregister_driver() failed wi=
-th %d\n",
->                                 ret);
-> -               /* Matches kref_get() in raw_ioctl_run(). */
-> -               kref_put(&dev->count, dev_free);
->         }
->
->  out_put:
-> -       /* Matches dev_new() in raw_open(). */
-> +       /* Matches dev_new() in raw_open() and kref_get() in raw_ioctl_ru=
-n(). */
->         kref_put(&dev->count, dev_free);
->         return ret;
->  }
-> --
-> 2.25.1
->
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index 4febf8dac7ca..a1fd3fdf1323 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -465,12 +465,10 @@ static int raw_release(struct inode *inode, struct file *fd)
+ 			dev_err(dev->dev,
+ 				"usb_gadget_unregister_driver() failed with %d\n",
+ 				ret);
+-		/* Matches kref_get() in raw_ioctl_run(). */
+-		kref_put(&dev->count, dev_free);
+ 	}
+ 
+ out_put:
+-	/* Matches dev_new() in raw_open(). */
++	/* Matches dev_new() in raw_open() and kref_get() in raw_ioctl_run(). */
+ 	kref_put(&dev->count, dev_free);
+ 	return ret;
+ }
+-- 
+2.25.1
+
 
