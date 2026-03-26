@@ -1,151 +1,239 @@
-Return-Path: <linux-usb+bounces-35509-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35510-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qPTKOLwzxWlS8AQAu9opvQ
-	(envelope-from <linux-usb+bounces-35509-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 14:25:16 +0100
+	id CJ0HHLY2xWn/8AQAu9opvQ
+	(envelope-from <linux-usb+bounces-35510-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 14:37:58 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5CCD335EB2
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 14:25:16 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC3CA33619C
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 14:37:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 19C8630718C7
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 13:20:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6E2AD3134ACC
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2026 13:21:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B345C3F7E94;
-	Thu, 26 Mar 2026 13:19:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69CAD3FBEAB;
+	Thu, 26 Mar 2026 13:19:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b="Qa5yMiLN"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VbDT6vyW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7440C3EF67D;
-	Thu, 26 Mar 2026 13:18:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 676253FA5ED
+	for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 13:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774531140; cv=none; b=jZ+msfGWkgP5o6FOw7CqBbv/7eTR2yEkT6dn0rgFfwMNEOu67rvBIbRnLOy07t5OzA884FKlFXbPPQUMS+4EpmortK1w3t1AIOFq3o66Husgj/gVJz+QMoD0VNOcAPXUNOFiItz5slE3Gbi+zqvMXOI5u/QJutRTrBP8eoEdbVI=
+	t=1774531155; cv=none; b=Mp0kOOnh36gzbq9m3XIiZ19AL4SX7wMh7n4tXfHdENED4HzYbA3dEr2kqBZZ08Y8Lx1DVRNkGmaXb0Ejo0vUszFuM0+6BRE7j4UI+9bqln2QdOjfQUXkA7aisUyFIacw41RbhG0QYb3Hr03mk+ygUfPUch4Z8hyO7z+rXLRlpoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774531140; c=relaxed/simple;
-	bh=dbSlJJLZr0aDkUKCge5XYxPSmLToKME6MYNLXskWdG4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=HN0/jKtInHPoSn9neQQqT23BeOcIQ4rP38D0kfRyQ8nFhqnYESLGxB1LY45wDY1JBbCL2POwZM93fAsXOkTb2NoMgc/+VN/mKX5XsasXKixa8q4H1HNCIgDhA4cmSa8tVLjE/xfYyK+lTPykZSpOHq3hh5WC5ak9wjRlg6TMVG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b=Qa5yMiLN; arc=none smtp.client-ip=211.75.126.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
-X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 62QDIN1801573874, This message is accepted by code: ctloc85258
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
-	t=1774531103; bh=dbSlJJLZr0aDkUKCge5XYxPSmLToKME6MYNLXskWdG4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:MIME-Version;
-	b=Qa5yMiLNgKN4NGypfhmmU2ZphpmWmn3nwilmPv4bEITdcNGQNTOvjl2ncH7YsS20p
-	 Tqqdw7zq+A1nDqyuZY1fI36Zka6BVzE+whMMS9A+P58hmGhDJ49rpnRFstkFNWC01q
-	 it46x/ff3OaykAQXtYvJ5qw34nHvEQ2Vnmrap9XCaF6NU78SNNvzzD7RSOn+qmJ6+r
-	 m5b4xAr7GIqf4dQ8lSVmgU5vBOU+8KDMHidryttzreuQ3O83IwjAYhVi3PU9m/fWll
-	 qSyvMoxO3uL1M4VYFgAN2yAxD+41iNgvz8tD12k5d+3KWCQWtLq6hPakTXPZu6Rf+K
-	 OM0ZayGg9wUsw==
-Received: from mail.realtek.com (rtkexhmbs04.realtek.com.tw[10.21.1.54])
-	by rtits2.realtek.com.tw (8.15.2/3.26/5.94) with ESMTPS id 62QDIN1801573874
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 26 Mar 2026 21:18:23 +0800
-Received: from RTKEXHMBS03.realtek.com.tw (10.21.1.53) by
- RTKEXHMBS04.realtek.com.tw (10.21.1.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Thu, 26 Mar 2026 21:18:23 +0800
-Received: from RTKEXHMBS03.realtek.com.tw ([::1]) by
- RTKEXHMBS03.realtek.com.tw ([fe80::368f:61f6:1754:de7d%9]) with mapi id
- 15.02.1748.010; Thu, 26 Mar 2026 21:18:23 +0800
-From: Hayes Wang <hayeswang@realtek.com>
-To: Chih Kai Hsu <hsu.chih.kai@realtek.com>,
-        "kuba@kernel.org"
-	<kuba@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>
-CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        nic_swsd
-	<nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "bjorn@mork.no" <bjorn@mork.no>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        Chih Kai Hsu <hsu.chih.kai@realtek.com>
-Subject: RE: [PATCH net-next v4 1/3] r8152: fix incorrect register write to
- USB_UPHY_XTAL
-Thread-Topic: [PATCH net-next v4 1/3] r8152: fix incorrect register write to
- USB_UPHY_XTAL
-Thread-Index: AQHcvPOycbfPy/dSukipZ8LkOW+IpbXAy+uQ
-Date: Thu, 26 Mar 2026 13:18:23 +0000
-Message-ID: <9260dd860db047858a5a505bf2b2430e@realtek.com>
-References: <20260326073925.32976-453-nic_swsd@realtek.com>
- <20260326073925.32976-454-nic_swsd@realtek.com>
-In-Reply-To: <20260326073925.32976-454-nic_swsd@realtek.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1774531155; c=relaxed/simple;
+	bh=mBKrZtOnIAHd6KsphkSL/iGsCqPyJf6gyUryLPO2bOA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=B7E+eez9+gG6PAwTFMGM4loIkRdF7sCTr31p+wAw0AZ3AaVp8Emw2OeUkqwhGPbCsBoRSGjB1ZzHF2p5iT3ffposE/OPuidaPkhZ//364TQziwHxlDMX+fxAhPZq5qpgac/69EJQtRZLnrUiydT/orot1egSYVoh2TpC5E2r9eY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VbDT6vyW; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774531153;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1w/tzujNq6shO/Yk27oYEh0iCXtTypElru3vLGpkYIY=;
+	b=VbDT6vyWXPO+4os31l2ExNnHHF82D0UgnrYx0yKgwTgl1aL46mhn5Nf7z36r9s1BiEKhh/
+	y09GwBqwEiT0dfR64J2r950aF4HbD91LeTrzdq65BSjtJDN9DzejsOAH9ssWSi/tIdtgRL
+	m6ZPN9Vz5V/oLnBmmODLvOkgsY7kkuY=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-389-SRuUNOehMoCCTIHOHqYf1Q-1; Thu,
+ 26 Mar 2026 09:19:09 -0400
+X-MC-Unique: SRuUNOehMoCCTIHOHqYf1Q-1
+X-Mimecast-MFC-AGG-ID: SRuUNOehMoCCTIHOHqYf1Q_1774531147
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5C57C19560B4;
+	Thu, 26 Mar 2026 13:19:07 +0000 (UTC)
+Received: from warthog.procyon.org.com (unknown [10.44.33.121])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 93EA6180036E;
+	Thu, 26 Mar 2026 13:19:02 +0000 (UTC)
+From: David Howells <dhowells@redhat.com>
+To: netdev@vger.kernel.org
+Cc: David Howells <dhowells@redhat.com>,
+	Marc Dionne <marc.dionne@auristor.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-afs@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	John Johansen <john.johansen@canonical.com>,
+	Minas Harutyunyan <hminas@synopsys.com>,
+	Simon Horman <horms@kernel.org>,
+	apparmor@lists.ubuntu.com,
+	linux-usb@vger.kernel.org,
+	stable@kernel.org
+Subject: [PATCH net v3 04/11] list: Move on_list_rcu() to list.h and add on_list() also
+Date: Thu, 26 Mar 2026 13:18:29 +0000
+Message-ID: <20260326131838.634095-5-dhowells@redhat.com>
+In-Reply-To: <20260326131838.634095-1-dhowells@redhat.com>
+References: <20260326131838.634095-1-dhowells@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[realtek.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[realtek.com:s=dkim];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[realtek.com:+];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-35509-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35510-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[redhat.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hayeswang@realtek.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dhowells@redhat.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mork.no:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C5CCD335EB2
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[infradead.org:email,auristor.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: CC3CA33619C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Chih Kai Hsu <hsu.chih.kai@realtek.com>
-> Sent: Thursday, March 26, 2026 3:39 PM
-> To: kuba@kernel.org; davem@davemloft.net
-> Cc: netdev@vger.kernel.org; nic_swsd <nic_swsd@realtek.com>;
-> linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
-> edumazet@google.com; bjorn@mork.no; pabeni@redhat.com; Chih Kai Hsu
-> <hsu.chih.kai@realtek.com>
-> Subject: [PATCH net-next v4 1/3] r8152: fix incorrect register write to
-> USB_UPHY_XTAL
->=20
-> The old code used ocp_write_byte() to clear the OOBS_POLLING bit
-> (BIT(8)) in the USB_UPHY_XTAL register, but this doesn't correctly clear =
-a bit in
-> the upper byte of the 16-bit register.
->=20
-> Fix this by using ocp_write_word() instead.
->=20
-> Fixes: 195aae321c82 ("r8152: support new chips")
-> Signed-off-by: Chih Kai Hsu <hsu.chih.kai@realtek.com>
+Unfortunately, list_empty() is not usable with an entry that has been
+removed from a list with list_del_rcu() as ->next must be left pointing at
+the following entry so as not to break traversal under RCU.
 
-Reviewed-by: Hayes Wang <hayeswang@realtek.com>
+Solve this by moving on_list_rcu() from AppArmor to linux/list.h, and
+turning it into an inline function.
 
-Best Regards,
-Hayes
+Also add an on_list() counterpart (functionally, this is just an antonym
+for list_empty()), but the name looks less awkward when applied to a
+non-head element.  We probably don't want to use on_list_rcu() generally
+because it requires an extra check as ->prev is set differently in the two
+cases.
+
+Further, rename the on_list() function in the Designware usb2 drd ip driver
+to dwc2_on_list() to free up the original name.
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+cc: John Johansen <john.johansen@canonical.com>
+cc: Minas Harutyunyan <hminas@synopsys.com>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: Eric Dumazet <edumazet@google.com>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Simon Horman <horms@kernel.org>
+cc: linux-afs@lists.infradead.org
+cc: apparmor@lists.ubuntu.com
+cc: linux-usb@vger.kernel.org
+cc: netdev@vger.kernel.org
+cc: stable@kernel.org
+---
+ drivers/usb/dwc2/gadget.c          |  6 +++---
+ include/linux/list.h               | 26 ++++++++++++++++++++++++++
+ security/apparmor/include/policy.h |  2 --
+ 3 files changed, 29 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index d216e26c787b..04b6aef8ac13 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -4306,11 +4306,11 @@ static int dwc2_hsotg_ep_disable_lock(struct usb_ep *ep)
+ }
+ 
+ /**
+- * on_list - check request is on the given endpoint
++ * dwc2_on_list - check request is on the given endpoint
+  * @ep: The endpoint to check.
+  * @test: The request to test if it is on the endpoint.
+  */
+-static bool on_list(struct dwc2_hsotg_ep *ep, struct dwc2_hsotg_req *test)
++static bool dwc2_on_list(struct dwc2_hsotg_ep *ep, struct dwc2_hsotg_req *test)
+ {
+ 	struct dwc2_hsotg_req *req, *treq;
+ 
+@@ -4338,7 +4338,7 @@ static int dwc2_hsotg_ep_dequeue(struct usb_ep *ep, struct usb_request *req)
+ 
+ 	spin_lock_irqsave(&hs->lock, flags);
+ 
+-	if (!on_list(hs_ep, hs_req)) {
++	if (!dwc2_on_list(hs_ep, hs_req)) {
+ 		spin_unlock_irqrestore(&hs->lock, flags);
+ 		return -EINVAL;
+ 	}
+diff --git a/include/linux/list.h b/include/linux/list.h
+index 00ea8e5fb88b..d224e7210d1b 100644
+--- a/include/linux/list.h
++++ b/include/linux/list.h
+@@ -381,6 +381,32 @@ static inline int list_empty(const struct list_head *head)
+ 	return READ_ONCE(head->next) == head;
+ }
+ 
++/**
++ * on_list - Test whether an entry is on a list.
++ * @entry: The entry to check
++ *
++ * Test whether an entry is on a list.  Safe to use on an entry initialised
++ * with INIT_LIST_HEAD() or LIST_HEAD() or removed with things like
++ * list_del_init().  Not safe for use with list_del() or list_del_rcu().
++ */
++static inline bool on_list(const struct list_head *entry)
++{
++	return !list_empty(entry);
++}
++
++/**
++ * on_list_rcu - Test whether an entry is on a list (RCU-del safe).
++ * @entry: The entry to check
++ *
++ * Test whether an entry is on a list.  Safe to use on an entry initialised
++ * with INIT_LIST_HEAD() or LIST_HEAD() or removed with things like
++ * list_del_init().  Also safe for use with list_del() or list_del_rcu().
++ */
++static inline bool on_list_rcu(const struct list_head *entry)
++{
++	return !list_empty(entry) && entry->prev != LIST_POISON2;
++}
++
+ /**
+  * list_del_init_careful - deletes entry from list and reinitialize it.
+  * @entry: the element to delete from the list.
+diff --git a/security/apparmor/include/policy.h b/security/apparmor/include/policy.h
+index 3895f8774a3f..c3697c23bbed 100644
+--- a/security/apparmor/include/policy.h
++++ b/security/apparmor/include/policy.h
+@@ -57,8 +57,6 @@ extern const char *const aa_profile_mode_names[];
+ 
+ #define profile_is_stale(_profile) (label_is_stale(&(_profile)->label))
+ 
+-#define on_list_rcu(X) (!list_empty(X) && (X)->prev != LIST_POISON2)
+-
+ /* flags in the dfa accept2 table */
+ enum dfa_accept_flags {
+ 	ACCEPT_FLAG_OWNER = 1,
 
 
