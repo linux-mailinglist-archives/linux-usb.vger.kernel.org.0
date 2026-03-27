@@ -1,134 +1,169 @@
-Return-Path: <linux-usb+bounces-35538-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35539-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qDNmEz80xmnzHQUAu9opvQ
-	(envelope-from <linux-usb+bounces-35538-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 08:39:43 +0100
+	id uBGeJDU6xmm7HgUAu9opvQ
+	(envelope-from <linux-usb+bounces-35539-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 09:05:09 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20186340893
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 08:39:39 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 004AE340BF2
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 09:05:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5666130BCB29
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 07:33:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7842C3018598
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 08:00:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 546581A9FAF;
-	Fri, 27 Mar 2026 07:32:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 120AB3CCFBA;
+	Fri, 27 Mar 2026 08:00:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NRg3PWIp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AMzp/MVP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E3C35B136
-	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 07:32:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EF03CA4B4;
+	Fri, 27 Mar 2026 08:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774596771; cv=none; b=U8Az8zpRbLCxVQJIOHu3T90TaZ7f54Ko2iK5zgwen6izo8fCwosG98meq0Tg6gTzzHBii7cu+opEb6bo5OW2x3dqo4U/KaVfKnEa3amO0QAuRAxi1OLbqYP0YmohvEWq1t9yBReHSG/IAyJUR5a54bjDpNA1upXr4RLIzRCd7ok=
+	t=1774598430; cv=none; b=VE+ilrlov6YWrNiJh09x6blgLYeMnzbqkBUUWMbHWEjo+1ThXz0uQse46TxPzaGlusn5DArBZ996s6v8wAVGUFe1+v6zbR1y9kw2efvTbsERhIl8meUYCZWKC+oEOmRKtEJW8wm2ltWuWty2gwaIe2MzmL52FbFY8ct5I3Ls8xM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774596771; c=relaxed/simple;
-	bh=+ShoLdz9/OM/tcUtRedCYiIfB51UqNgB7LeiDV/CXyA=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=d4Jz50cPl6BsaD+aNCN8Pt+li3wRKukEwuF+bgN9gHttYzWNCtOrM4Ma/f3QE6LhLh9+talcS1i59SZBsKjThi+L/uqfL7afcbbRenPbh3g1aX+Gvj9clFUYyABzxlVEPTGqbIjtNcxt0Ljz5Pl6L9YeuqCl5UgchhVrm0th0UQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NRg3PWIp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D43F1C19423
-	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 07:32:50 +0000 (UTC)
+	s=arc-20240116; t=1774598430; c=relaxed/simple;
+	bh=UwiT4eozaNGhaqFAauKAmgowg7gYec1LshvaOOfoH98=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OhWTUQ7NtOrJ81CNJn9Owu9PtArUOFAU9tS3rj94IZZqooE2PU+hHsIWAxGK5QnlCbdb8t28mbQHYtN5SMfdh8q3xUyCMhZJsRFdp1BLRhrkTWaP7AwHJEVfF1Q498WfE6tBoBauetI34J11qvVQRBXNrfaBglUpLstPxg2HJfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AMzp/MVP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 817F2C19423;
+	Fri, 27 Mar 2026 08:00:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774596770;
-	bh=+ShoLdz9/OM/tcUtRedCYiIfB51UqNgB7LeiDV/CXyA=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=NRg3PWIp6LJX+h69lCy2ln11+S8UQQ+0yG41ciLEJCiLd1Slf64mpngISFxswsds4
-	 sjYWzKs49KKIoptKOFX5oXVu4puqHRF+5o27eRn3QQZxsIl4Ga6YHqYuLi3J1Z6mcO
-	 0V4M4+4PL7Jpa5EIgXOTKu9vtnhv40ddvJVMGQt5ex+ozmyN2ySS/zthR7D+G3GNvw
-	 Eldll8vyziNjBWL3su/y1VzeL4ZEx9VpcGJeEL23at0BXyOTgYlfR9yNMEvuQUL/ay
-	 FYkDRVtoP7xsCiwUWWi5srm+6R++nfp/FM79OsWbNqT/ybqAb5LD3MmvDvxmog5i+N
-	 CjL7ZLeTpImUg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id C9322C41612; Fri, 27 Mar 2026 07:32:50 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 215740] kernel warning: DMA-API: xhci_hcd: cacheline tracking
- EEXIST, overlapping mappings aren't supported
-Date: Fri, 27 Mar 2026 07:32:50 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: andy.shevchenko@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: PATCH_ALREADY_AVAILABLE
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-215740-208809-P54FG1m59t@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215740-208809@https.bugzilla.kernel.org/>
-References: <bug-215740-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1774598429;
+	bh=UwiT4eozaNGhaqFAauKAmgowg7gYec1LshvaOOfoH98=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AMzp/MVPmPrMezJQOn1mDo5LbPa0YLeYE9UEXhRtDjY761/eB6HLSdUWo0k4iudr2
+	 THtMHRLbROmmOI9KZrwzdmsJ6gh7yTMDPscEk/RomiGW8sOv93Er7o6APa6N/E0DRq
+	 t2i/tWzBCaBv/NGniY6Wi5Lh13A3njCwJIxTSvU3bMFDQtinLe9H3pIUbOuoEGYrsw
+	 l/o5a82T9A1KUIklrp6f2umrcYamik9UYi6skrdYy0rfIH2LR0QH3EbqgR1Ryqx3ib
+	 RBfCEdSdBhnzq0K4STJ1DRkIn67MSohEnbSIOigrsd53k4/yf2+jKNKrEfrLBL2yiE
+	 N0m1ObfRtkHWA==
+Date: Fri, 27 Mar 2026 17:00:27 +0900
+From: "Harry Yoo (Oracle)" <harry@kernel.org>
+To: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc: vbabka@kernel.org, akpm@linux-foundation.org, hao.li@linux.dev,
+	cl@gentwo.org, rientjes@google.com, roman.gushchin@linux.dev,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+	linux@roeck-us.net, andy.shevchenko@gmail.com, hch@lst.de,
+	Jeff.kirsher@gmail.com, Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH] mm/slab: align kmalloc to cacheline when DMA API
+ debugging is active
+Message-ID: <acY5G-lKZQEsUbRw@hyeyoo>
+References: <20260327055846.248829-1-mikhail.v.gavrilov@gmail.com>
+ <acYlxRBhSMcwBnja@hyeyoo>
+ <CABXGCsMTk6kDuJxsTAUKP6npTvp4X6Ryng+P4xjMUsPbTA43+Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABXGCsMTk6kDuJxsTAUKP6npTvp4X6Ryng+P4xjMUsPbTA43+Q@mail.gmail.com>
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35538-lists,linux-usb=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FROM_NO_DN(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35539-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[harry@kernel.org,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,linux-foundation.org,linux.dev,gentwo.org,google.com,kvack.org,vger.kernel.org,rowland.harvard.edu,roeck-us.net,gmail.com,lst.de,arm.com];
 	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_ONE(0.00)[1];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 20186340893
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 004AE340BF2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215740
+On Fri, Mar 27, 2026 at 11:50:07AM +0500, Mikhail Gavrilov wrote:
+> On Fri, Mar 27, 2026 at 11:38 AM Harry Yoo (Oracle) <harry@kernel.org> wrote:
+> >
+> > On Fri, Mar 27, 2026 at 10:58:46AM +0500, Mikhail Gavrilov wrote:
+> > > When CONFIG_DMA_API_DEBUG is enabled, the DMA debug infrastructure
+> > > tracks active mappings per cacheline and warns if two different DMA
+> > > mappings share the same cacheline ("cacheline tracking EEXIST,
+> > > overlapping mappings aren't supported").
+> > >
+> > > On x86_64, ARCH_KMALLOC_MINALIGN defaults to 8, so small kmalloc
+> > > allocations (e.g. the 8-byte hub->buffer and hub->status in the USB
+> > > hub driver) frequently land in the same 64-byte cacheline.  When both
+> > > are DMA-mapped, this triggers a false positive warning.
+> >
+> > Is it feasible to suppress the warning if dma_get_cache_alignment() is
+> > smaller than L1_CACHE_BYTES?
+> 
+> Hi Harry,
 
-Andy Shevchenko (andy.shevchenko@gmail.com) changed:
+Hi Mikhail,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |PATCH_ALREADY_AVAILABLE
+Please keep in mind that I have limited understanding of DMA API,
+but just wanted to double check if there is (or isn't) a sane way to
+fix it on dma-debug side.
 
---- Comment #53 from Andy Shevchenko (andy.shevchenko@gmail.com) ---
-(In reply to Guenter Roeck from comment #52)
-> comment #51: Sounds good. I'd suggest to go ahead.
+> Good question. I considered the dma-debug side, but the issue is
+> that the cacheline overlap check in add_dma_entry() is intentionally
+> strict -- it catches real bugs on non-coherent architectures where
+> two DMA buffers sharing a cacheline can corrupt data.
 
-Agree. I close this for now since we have a compromise solution publicly
-available.
-https://lore.kernel.org/all/20260327055846.248829-1-mikhail.v.gavrilov@gmai=
-l.com/
+But dma_get_cache_alignment() < L1_CACHE_BYTES means the architecture
+actually allows overlapping cachelines, no?
 
---=20
-You may reply to this email to add a comment.
+A non-coherent architecture where two DMA buffers sharing a cacheline
+could corrupt data should define ARCH_DMA_MINALIGN >= L1_CACHE_BYTES.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+I'm not sure what kind of a real bug this will hide,
+or am I missing something?
+
+> Alan Stern discussed this in the bugzilla [1] and concluded that
+> the slab alignment approach "seems reasonable" [2],
+
+As long as there's no good alternative way to fix, yeah.
+
+> noting that turning on debugging should not affect the way the kernel
+> behaves -- otherwise what you're debugging isn't the same as what normally
+> happens.
+
+Yeah, this is why I'm trying to double check if there's no feasible
+alternative.
+
+> But given the way the DMA API debugging is set up, I don't
+> see any alternative."
+
+I'm trying to say adding the (dma_get_cache_alignment() <
+L1_CACHE_BYTES) check might be considered as an alternative ;)
+ 
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=215740#c31
+> [2] https://bugzilla.kernel.org/show_bug.cgi?id=215740#c44
+
+-- 
+Cheers,
+Harry / Hyeonggon
 
