@@ -1,225 +1,159 @@
-Return-Path: <linux-usb+bounces-35577-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35578-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UNnkCqfMxmn5OgUAu9opvQ
-	(envelope-from <linux-usb+bounces-35577-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 19:29:59 +0100
+	id OCXqHLjQxmkCPAUAu9opvQ
+	(envelope-from <linux-usb+bounces-35578-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 19:47:20 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D531349096
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 19:29:57 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D54F23491FA
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 19:47:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id AF3373009E22
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 18:29:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 55CE0305B965
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 18:46:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D20A94035AA;
-	Fri, 27 Mar 2026 18:29:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 783DA2D781F;
+	Fri, 27 Mar 2026 18:46:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dfUlr+7y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nz+foUhr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49599378D79
-	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 18:29:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774636153; cv=none; b=EJMkIbpLpZ3odWxHOdHslmqwxMtqRPOriJNRK4y/nzTJWEmFNZoGKqBK42Dbx6BvMDGBTVybrHtZEwXKHXZowhLsnhA0/n2CPVuxIRaROm8iJL90vUVND2nEO+tPW80wuaJnzwiVh1zh4piqqHXmnSR44r16z9LnVdUFsD/8nBI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774636153; c=relaxed/simple;
-	bh=73dudT28ohOwp+pTTc9O+i9WChCARZpw9xHP2Y8aeLA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TQ7I+sXbHHOMWk6WdLyKWasDbGKAyaopAb/6qg9zEIuWGoFSOMrNct+hcH0NwuSl49mI56gVhUxZI80EibQtuZa5ro+msco8OstwrlDQz/psb/JLcvsM2l2tf0+4/CTjZT+pfYe6q2zvrhIig4aGRF8NIz+X6b9lVoThk5DbwuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=dfUlr+7y; arc=none smtp.client-ip=209.85.167.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-46702742c99so1605741b6e.3
-        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 11:29:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62AD1ADC97
+	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 18:46:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774637189; cv=pass; b=dnesLHaZ6VVrZYeGVl5Cv6WdW+L6SW0bkYuPbSnsk4mSjc8yiByDwZoYTvoNxJ7R4PKbhstcMrE3rCgER0glenlUINWdrntkWZzDF41nQ2Mlsp8fSFrxAajngJNvYMocffcc9t670uutzjgsuxyAuMwv+VuZMxT0EVDUuO/xarg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774637189; c=relaxed/simple;
+	bh=ig/C+jgMKPpowpKxPcfOcwOQHv/H0BhwJpXkTWUhuaQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NQ3vyt60Vu6eZSSl8Lu4+p4uJvVFak/Q6MAN46BqiuBgbwTQTSaA69Y1u2NTU+o0Lu/Aouib9r4sL4jYMx2mRUMeCx5iEjOtHqqyDN7VU4ThwaBrab+GfYEyY5ypn1NNuJnd0Mujx8lP/9t7Xjnuw5hee8t9KbNpKwJAYNgQdt8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nz+foUhr; arc=pass smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-506bcb23a78so20798701cf.3
+        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 11:46:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774637187; cv=none;
+        d=google.com; s=arc-20240605;
+        b=lL51NzLRZbiMSgZ+sae8epDv1D7Q6c95Rb2kzX/tA4giJZoECLsfJ6VS4jf/XY1Phl
+         WqMK1ZAHejvyiPwGPaT09SaG5rWnRqGtwKkEgpZ3qm8I0MdVGuHiLq4RZuyNRNGXPtcD
+         ZvBFUwNiHEkkaAR9R1KiZMkPUhim9107BHKUq/IfNpow+Fk38/aBUgEc/E3czhy+CMPS
+         GEV1/PnMrsmSnE7k88+nd2vWpXpGH1e6Rsw11SmoMet1hXVc4h2TyaIT1sDKLkwWcoqS
+         CbxeDCUOhMJDUj6omX1hmunttjB1dBI5vW2ZSzqhiVuZpvnQTzvaqp8epc+EMJqjmSrE
+         sb4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=ig/C+jgMKPpowpKxPcfOcwOQHv/H0BhwJpXkTWUhuaQ=;
+        fh=RJk+pZqpqHiQVCVuJD0Zn0GPfBYL6VTxd4FySlr35Q8=;
+        b=MZeOxxVqShQVk9FJBChsqgtw+EOWTTPqvpi4MAUcpeR2dLIib62tnwUU/q6H/3xyHt
+         n+SWCQNu2J8U91Bu8qg6IMD9CkdJ4QOfcR75JXnRKMVr1vHFmYSiVxo1hrB9tUSK0GyM
+         VJeRXIKXz8lNyieyElRszHIUuU2QV8M0zE42SSLGUAxHGwG4IZaroM3lc3y3sl1lYOZ1
+         Uv2pfJOITNfoZ4YLQwPm046h3+6YoYFJuSL1vtL4QeqZhi4ww1x6WWaLMR5sYjPjupUh
+         O6ocq5rgB4jNrMqXuyqZ/GeU9pg6xbIQvm9FqWZ0WX0+5WQL8mLUBtLNsJIRNfqoUa+T
+         pHZQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1774636148; x=1775240948; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bP3JPj5F335Oxaly6YkXO9Lq7ry1WLTVoeRDAW7BUVw=;
-        b=dfUlr+7yq17FK8rEvzT8piTwJUXE2Job4EWiThMmiiEXu1hEmWuuuCFFRbB8I30iql
-         9afisJKTYs2V5XDSXfsRT/mteQpCfkrAQuwUAJArqynbP7BKuI0Rxl2vK5Xg9ub5xwpq
-         D+PwHq80DzHZ8QmZisotdddk8wZ0NwnRYGNGw=
+        d=gmail.com; s=20251104; t=1774637187; x=1775241987; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ig/C+jgMKPpowpKxPcfOcwOQHv/H0BhwJpXkTWUhuaQ=;
+        b=nz+foUhrPFz+lxK55Pj3dXpIU1qLS1KKPqiOTWdObWBzNcmDmHashA8Bp1mP90Xv53
+         P9HEHf0klOPc10+fUGwCRKqpZYS5MfrehRcWjpQJlCdbyXA1KkH150w9Mw3Pqp+e29MN
+         zhKxDe9knAuuku+8EE1NyucKnsQWdThmWAjGu2n4ioX5C2V+xl8TMYOJ9NCptHJeqieI
+         Ppz7my4n6hgOzOZHrwUpNULxYdm0woRMupg9jb3UkZy9FhF06ZQXI+SSDsLzWNdnVX8L
+         dhqwmLNarkWG2X8uyfmvtfCQ3YXyG5Ey1YunEgUlOOOlVYSbQKW9ddxkmHVXvp2pO37V
+         BChQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774636148; x=1775240948;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bP3JPj5F335Oxaly6YkXO9Lq7ry1WLTVoeRDAW7BUVw=;
-        b=VfNF0u43gaGOLtk1QWNHXqWdULCccFFNNaX8SQjzYn+0amjKThnQMCdDkZOOSKOy3Q
-         nOHrgaSR7PK0ltqPQLqplL0BL3Kn6QpISR1m+4EDDKjAQfuuTIBN0SzozcFVtNUC20fc
-         221qhYqLcHJlFkQ7vjTVQpDhoOQnyKswMbUMYp0NLRK9j+2gYM8Ultg58pZ5zGfRf8RP
-         RLAb+3tGz7ps95hb5sRbihVZmbFV5ohOJQZaX5vU6zkatJzorcVnuYN9xY1fCf3pryb1
-         Ya+q+w2/yRRYwAifmhlHhSFbQiaxQWTpdHE8ObF9Eu250WGBhM5J5r7mMCiq7RmRcb70
-         zr9g==
-X-Forwarded-Encrypted: i=1; AJvYcCV+aDoXyXWkTDUroxjmo5T5Ixi//0SJqWpdN1ABtluyhHgc93fWe5PddYHeXk60sLW8BnvVk7O8aTI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydfQvAb1g+MEsR+WZkg9bd8sqOdemXBnXwAXDLOoujOhwHSaG6
-	bkLLkkU0DtEqy/6m2hPkvP8deBf9Xef/VsqnF3vRwPSrZGxzE6zKvIGgzSn8YmHL8h2Ibl5gBnf
-	OUw9/tQo=
-X-Gm-Gg: ATEYQzyepkF6zQh4UiE1Pyo7hWYNDSLRQ3gkBPqWiXqQSDSnzYoNbM0vC/Dw6v2rP15
-	ADKvhPMsQHcWOUODKJ6FM9Fi3HuAp2/HXwj/cj7TexuN5mvrBCo5NyuCkFogNwkIcdkm5QXCHt3
-	vKQ3ZjIwMszuu9jcKlRpTorBTsFHXaJnxAM9IIJrBmqjzJEX48AZnp1wxCMS7hST0snmbbDnSF0
-	ZwE5tBjrPzrJ1Lhejua8EeCwVpNuTUFhBH+paB/DWuIjV0IGUc25QVV/F9w6EdEcA1bfhKmWIqf
-	9xMb5eBSgt3T8LzGKm4f1l9wYMg+ApCF95kPkFFEkwFuNd0YdH5ugqimG2jPPscvCMVagcldCI9
-	BV7kh/PErnp+dvSxYm6HFkAM2egHEevi5gKSlu6uF4B8zsrX85V8FURmqI/iX83DipolMYtEH0R
-	4DnlGHBV78KVIGfgkIiCU7Q74XS8qPvMNrSXE=
-X-Received: by 2002:a05:6808:309e:b0:467:1212:46fd with SMTP id 5614622812f47-46a8a588675mr1483551b6e.33.1774636148607;
-        Fri, 27 Mar 2026 11:29:08 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41d04958090sm78071fac.7.2026.03.27.11.29.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Mar 2026 11:29:07 -0700 (PDT)
-Message-ID: <3b0aad9f-b424-41b0-9efe-60a1252153f6@linuxfoundation.org>
-Date: Fri, 27 Mar 2026 12:29:05 -0600
+        d=1e100.net; s=20251104; t=1774637187; x=1775241987;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ig/C+jgMKPpowpKxPcfOcwOQHv/H0BhwJpXkTWUhuaQ=;
+        b=Dl+W/ph8hJQrUn3BoqEo2msSJg1z0S0o9fJSXrSO3gLgQU3Pi0QaN2u8D7sXkLSexY
+         5RxyPoEB1hTRT0SGYtFxzCzT+r/j5TxG/y9W1hHko+uT4CgX+iXLbSqP666rPkyKhpSX
+         3P32jD0N1aDvFan4pWTaSuA8ufbFr0aePNjbIj9k9nUUwK5GwhSu9TWj0Tq69fPeYwMF
+         jpuS9pjzQbUhBseCcD3jSGAXiA+uSr/uUXLZj1FxK4rkCLybWORzjEOwBqMXNkPeXdCd
+         IAH5m2zgQEYGgCfeKNGVMKf8bTCizK4cpnZvLXRlb6P0FIM66bzfHVV7GSFqRG8JQH76
+         AvAA==
+X-Gm-Message-State: AOJu0YyhKwHntB4zOWs+tXoDCdXKbFGxq9cKby7ju2hesX5UpL8b2aEM
+	aWZQUo09SOCnssRNlpkjdCPlqdo5R1C4cwBOU4GhAzkSnuJ2Za/Rk6U2nkbreigyUzEpvtem+wL
+	nSZcHgjEeIuPRDaNBEkUVq9DXiTmAjhmfZoyv
+X-Gm-Gg: ATEYQzxIBVDsGh373lMLV9ouTR5m++BSzgQlh/f+K5HenV10CPRXuPsBvwLr0OVecUe
+	+8LMUEwtiFRDEH5ihHMiiRQ91RsqEkAVnFH1JP0iYqIFkxrhMFi7WSWMC0eGuuEI5V42xycrksJ
+	KO+Y/4LT/oTaxFuY05JXS30LJ9WnUMdxn1tReLMBRVR6I+k+5bmpa4oaT79Z0Sz0YbUhjqNrZf6
+	vcb2hjz64myQPzasm9MI0LM1OUfLwV+QVxi4cPegrnaJ2onSk3n4kHJZ0iG0qcUnKL9qJPNZ5e6
+	5msOFv24o2bar9GdsjbVITMsuNc2QMdsGwJDDHm01yeDveHUEZ8nGnWBHkWiakiZqkAFqXXm+Ti
+	uSXT/h+qIXAEO826E/ACVV+Mi
+X-Received: by 2002:a05:622a:112:b0:509:3c8c:2405 with SMTP id
+ d75a77b69052e-50ba380bfdbmr50966151cf.28.1774637186747; Fri, 27 Mar 2026
+ 11:46:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usbip: tools: Add usbip host driver availability check
-To: Zongmin Zhou <min_halo@163.com>
-Cc: i@zenithal.me, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- valentina.manea.m@gmail.com, Zongmin Zhou <zhouzongmin@kylinos.cn>,
- Shuah Khan <skhan@linuxfoundation.org>, Greg KH <gregkh@linuxfoundation.org>
-References: <29c03d8b-c73b-4393-95ff-bbf5c31df86e@linuxfoundation.org>
- <20260325022634.279624-1-min_halo@163.com>
- <2026032555-headrest-example-af16@gregkh>
- <1fdab10a-86f0-454a-af10-396a53169ea7@163.com>
- <2026032615-donated-chaps-9eac@gregkh>
- <1e974e1d-afdc-41a5-95a7-45e19e77a087@linuxfoundation.org>
- <722d5e64-a4d8-4ab2-954d-22f9b67f8f4e@163.com>
- <28dd623f-43f6-4d43-bf7e-41b8c771a954@linuxfoundation.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <28dd623f-43f6-4d43-bf7e-41b8c771a954@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=google];
+References: <CAN9vWD+13DHCyjq+7hYgTSDx87TLtKXV9-8GMnZPuZnYvjyANA@mail.gmail.com>
+ <2026032337-resend-recolor-efc5@gregkh> <CAN9vWD+N6K4VExNgnhp=amfBDJTFN9Sz156qsy550dP-d1S9Qw@mail.gmail.com>
+ <2026032431-chance-dodge-6b6e@gregkh> <CAN9vWDKZn0Ts5JyV2_xcAmbnBEi0znMLg_USMFrShRryXrgWGQ@mail.gmail.com>
+In-Reply-To: <CAN9vWDKZn0Ts5JyV2_xcAmbnBEi0znMLg_USMFrShRryXrgWGQ@mail.gmail.com>
+From: Michael Zimmermann <sigmaepsilon92@gmail.com>
+Date: Fri, 27 Mar 2026 19:46:16 +0100
+X-Gm-Features: AQROBzC8jTMoInqphaSg9I1fOzn0L1yauWTQYhpu-R0mAdHIkz9RrEnbG00Hbuw
+Message-ID: <CAN9vWDJOrHk0oNyiB97JaYqxMDGtP6hNh+LrPBC-van+HU7YGw@mail.gmail.com>
+Subject: Re: Oops when rebinding f_hid while /dev/hidg* is still opened
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[zenithal.me,vger.kernel.org,gmail.com,kylinos.cn,linuxfoundation.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[163.com];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35577-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWO(0.00)[2];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35578-lists,linux-usb=lfdr.de];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[skhan@linuxfoundation.org,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sigmaepsilon92@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linuxfoundation.org:dkim,linuxfoundation.org:mid]
-X-Rspamd-Queue-Id: 2D531349096
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: D54F23491FA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 3/27/26 11:51, Shuah Khan wrote:
-> On 3/27/26 02:39, Zongmin Zhou wrote:
->>
->> On 2026/3/27 02:43, Shuah Khan wrote:
->>> On 3/26/26 02:43, Greg KH wrote:
-> 
-> [removed text]
-> 
->>>
->>> The problem Zongmin is trying fix ish when usbipd starts, it looks for
->>> exported if any - if it doesn't find any it assumes there aren't any
->>> exported and doesn't detect that usbip_host driver isn't loaded.
->>>
->>> refresh_exported_devices() doesn't have the logic and it shouldn't
->>> include that logic because this hook is called periodically to
->>> refresh the list of exported devices. Starting usbipd and loading
->>> the driver are distinct steps and without any dependencies.
->>>
->>> This patch he is trying to add that detection so a message can be printed
->>> to say "load the driver".
->>>
->>> A message can be added easily to cover two cases:
->>>
->>> 1. usbip_host driver isn't loaded
->>> 2. There are no exported devices.
->>>
->>> refresh_exported_devices() will not find any devices in both
->>> of the above scenarios. It isn't an error if it can't find
->>> any exported devices.
->>>
->>> An informational message when refresh_exported_devices()
->>> when it doesn't find any devices could help users.
->>>
->>> Zongmin,
->>>
->>> Would adding a message that says
->>> "Check if usbip_host driver is loaded or export devices"
->>> solve the problem of hard to debug problem you are addressing here?
->>>
->> Shuah,
->>
->> Your suggestion makes sense.
->> Adding an informational message when no devices are found would be a simple
->> and clean solution that helps users debug without being intrusive.
->>
->> However, I plan to add the info() message in usbip_generic_driver_open() instead of
->> refresh_exported_devices(), because:
->> - usbip_generic_driver_open() is called only once at initialization.
->> - refresh_exported_devices() is called periodically to refresh the exported device list.
-> 
-> refresh_exported_devices() isn't called periodically - it is called
-> from usbip_host_driver op: refresh_device_list and it will be called
-> whenever usbipd (host side) calls it whenever it receives a request from
-> user-space via process_request()
-> 
-> For example running "usbip list -l" command will trigger a run of
-> refresh_exported_devices() via usbip_host_driver op: refresh_device_list
-> 
-> I don't think it will that noisy to add a message to refresh_exported_devices()
-> when device list is zero. Currently the logic doesn't detect device list zero.
-> You have add that condition to print informational message.
-> 
-> 
->> - When the server has no exported devices, having zero devices
->>    is normal and not worth frequent info messages.
-> 
-> That is correct. Zero exported devices isn't an error and this could
-> persist until devices are exported.
-> 
->>
->> Theoretically, we only need to prompt once at startup. Is my understanding correct?> > I'll also remove the existing error messages like below,
->> since they cannot accurately determine whether the driver is loaded:
->>
->> if (ret)
->>      err("please load " USBIP_CORE_MOD_NAME ".ko and "
->>          USBIP_HOST_DRV_NAME ".ko!");
-> 
-> Leave this one alone, because it gets called from a couple of places.
-> 
+> - Move cdev_init to hidg_alloc and cdev_device_del to hidg_release.
+> I've tested this and it removes the issue, but it changes the
+> behavior. With that, the /dev/hidg* will be created as soon as you
+> allocate the function and bind/unbind of a udc device has no effect on
+> its existence. Only deleting a function will remove it.
 
-Better yet, why not change the usbip instead - usbip_list for example.
-This is the one that prints the device list and the change can be made
-there when the list is zero to say, "Check if driver is loaded and
-exported devices"
+That didn't work out, because it leaks the kobj due to recursive references.
 
-thanks,
--- Shuah
+> - Use cdev_alloc in hidg_alloc. This would allow replacing the cdev
+> without invalidating the old one. This would probably require
+> introducing a global variable with a list of hidg functions though to
+> provide an alternative to "container_of(inode->i_cdev, struct f_hidg,
+> cdev);"
+
+I found a way to implement this without a global list and will send a patch.
 
