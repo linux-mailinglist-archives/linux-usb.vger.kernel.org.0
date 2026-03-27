@@ -1,181 +1,250 @@
-Return-Path: <linux-usb+bounces-35540-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35541-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uH47Lss7xmm7HgUAu9opvQ
-	(envelope-from <linux-usb+bounces-35540-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 09:11:55 +0100
+	id KCRDG8RCxmlRIAUAu9opvQ
+	(envelope-from <linux-usb+bounces-35541-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 09:41:40 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 211CB340CB5
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 09:11:54 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBD2534124E
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 09:41:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3380730D931F
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 08:07:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BAD7330459FE
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 08:39:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E74453D16E1;
-	Fri, 27 Mar 2026 08:07:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBA073D75BA;
+	Fri, 27 Mar 2026 08:39:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GnQlbQ8g"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Klsg/bW4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C193CBE7B
-	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 08:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774598857; cv=pass; b=RxEq2zRfHz4p5lXAOwScLWjMbzGznDtHBKaPlGNhbGRV6ufgvIaYi4aqpBmcvucXaoNKwgp7JS37aWox2h5dx0xt4ZyX6tYvp4nYNFzfRq77NxGMm0kNVHwZAbP6QB61hhFBSN1YGy0JWqxThHU0xrVxF54gegfAEgpNoQ2/qZ8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774598857; c=relaxed/simple;
-	bh=z5bReYMbAsOBEng2PqcZRA/9wn0+wKy0w6WBlljYVOA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VAgEo16u7UEU8KPXSyiL7lEU79/Ep2fqJutgCS71z2hIDN+m4kNOuzn/CQ9kDUbL1JM74uhu+m8gwc5Rv3X/iT6hpOpyKlb+0HCJb3mBLeTfsXOnOGT1lpk5sazRYsk1g4ZLzJexWWwtcLneI02tpO5xkIINS6DoKJxZWEy4R24=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GnQlbQ8g; arc=pass smtp.client-ip=209.85.210.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7d556c1a79eso1813647a34.3
-        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 01:07:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774598853; cv=none;
-        d=google.com; s=arc-20240605;
-        b=P5g60Lk+q/vf1fNJZgldH4vV0H41x+Vo75av/iZ2gi06ZNd6CyfAvDKHGwmWnPLd+s
-         +T10taEZZGxYEH/5tkDmf655eAaAUdnskhP/qjOKw0OvlvAZHXt7jTIVTNeGf0aDv1O9
-         3IMEaFQ+RlcQ88UAVGSiwtyEiJTdjKO+P+B+xsQwBxCC2yDFvndjOY28L+kJgnPDoh7d
-         DyksDQrmMgpRhuP250qRebt0o1HsHtCAITGewcvOkrUBOFBlmdIMkNChiwp4OvrizPgO
-         qHdrS3SX96t0tnC/qJDe3AoHYz4TCkX8/c6yqZVGYk1zf3SLFiToC1tYBuWCM/Vbu97R
-         CETg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=KVfFAtvOjT/QY/G+zbXJh5l3DQTsEAM4O7UyelDmPk8=;
-        fh=0gdao+oYuZa4/PnkKV34pl4G1Tm+M3Nermni5X1+G+c=;
-        b=DUJoV8sao7LwkMg2WMn2mMcaQyDmIUtr+B3DxUHRtKPVK5CFWm4V9Vh8fIbOyEtWTy
-         Tr+FGmAoRcQFi0gKYBVHL4f7y6pe8nrtOHZPLhetu4mw8+Fj/Ci87c7gnAs5mOety9zX
-         9sAQhkNJTPLg715zYeK50KxX+3Lx+XeIEPWUtDgbwgPlKjCERqs5ioDCjka1KjnFhmOw
-         n16XJBdFEy1+NjKICOwTDjqmbbipve4X3uXnNzRv6vMPkVzi5vdZKx0HR9vYMMH6nwtp
-         n4gEEgzf7OJm9QQuaIxDxukpzfn/z4FhGuNyoX66v43gUvmym80v/ijY/S8LyiUzdzoZ
-         wnUw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774598853; x=1775203653; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KVfFAtvOjT/QY/G+zbXJh5l3DQTsEAM4O7UyelDmPk8=;
-        b=GnQlbQ8gsRtpomFh4RUQ/gsOQf1vfSsGdfIXL/gOfJejz8X/ZM4aGmcYBi80mIhuSe
-         CRxXa172diWvPLrh7bN47WiDpgKI3WEqwuMiW7FDGIG4yB3pNAl7Xvs5K5TaINynFmJE
-         TiBWft2k6QKAKOk1xFxT0NUHDLDfEmbmewUwiDc/8qjF1xes3Ib6GR95dEVQl/reQcGd
-         xYegRx4jpfcbivYPZY3DtWxJK3P959/6xeSWLFDgGu7lZ95YS8qRcMWKS7/iME8PLeBk
-         /p5Dn8rI4fhuFG5oXJWFpR739Rev8cNQwV6RHky4k2+ydpsY0qo7ObghQlZtVorIVmzA
-         cEKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774598853; x=1775203653;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=KVfFAtvOjT/QY/G+zbXJh5l3DQTsEAM4O7UyelDmPk8=;
-        b=CdsosUzBr7C+UIqCsrLDQehRwuo6jiv4edJaogmVz0OXR5GmvvwZeWSsR6vB00uUtU
-         8tvc6lhwQSSDbID0vfen711XwZO9uZHO8uLo1KI73rYX89U79MnhvJnOIRsLGIZUTMqI
-         YOLqI70zFgsYqzZh1PN1CduZSyuQp5qWs1V2J11AKQpSABrcs4LYBjfLspqT9vF5Ltn7
-         jlELDygXNBd1BGS0ABK5/bLW0y9nul87NHKvH/lh7azeN68+JGeKOq/YWA3noHoNpbAh
-         FYnx9D2YXPzYGZaJ5uRFzPpxwgftXIR/gW4FPZ921bblvTkqZLRmzob9rpfoArVmNb3U
-         NNqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXvfCkHmTyF3WrUlllVKsJvDaZ6PHm210g3gQY7RVPnlzZaITLJCVC+5tGYzBK8G/nCHM/MHz/T70w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBrHmuW1wndzjvyu+3LGyGpYaJ3Ee05A9bprXjdNFu5NLNw2k6
-	I1VUTAX6hGJb+Bexb2W23ewv2nmVPY5OchyMNe4fFiAchlS9pOqa3D19HnqFNxI7uZwoXf+r8Uh
-	yWfzikgpPYOboz+7yT6H+EgQYS5Nxa6M=
-X-Gm-Gg: ATEYQzxQfepK59DVZC+KIsiKE3JXoCz1F0Tny73dX3Jw/yTAPLol872hfpJsQXgGPY1
-	fS3Fe4Gp6RkXQE8hMNJXiKJ538+g2PXvVYk/Qd8l+f51rnbso+tHgLGD0Hy9pa1vhaA+tdaS588
-	jF3/BC+YiDrF1Ir1OtqtTpUqPrXxMVL5JSXXAFnMjN2lMZRicAkBqSINZL0sPCC8t7nzuzJ57a8
-	hkXzTB4ezmFm/2iMOvwenC46bzY/KxfIeiMOQVI237jGq6UcYhRunvasNNeTBpc1dE7gUphwvZJ
-	YZF86kM=
-X-Received: by 2002:a05:6830:67cb:b0:7d7:4e62:58d2 with SMTP id
- 46e09a7af769-7d9fad9248bmr731336a34.7.1774598853157; Fri, 27 Mar 2026
- 01:07:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4CB3D170E;
+	Fri, 27 Mar 2026 08:39:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774600763; cv=none; b=dKNmitD5g8u3eqPJWyuGOHpwWah5SLDo3iNKN+K98t8QgtExtwZVfwNaOuwvE9asYNOjxH95t26n4TZ4DKi3nSLlOnTtZsynUqB0Labgpml2/8Ryy7sxfSkQx0ricvJXvVDJuWqDSbas/eYu2AMyIGdFLATwu9HXcqOnbKEhkrw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774600763; c=relaxed/simple;
+	bh=CvjosGmgGWsamF6d4kfKKJ/lTth5SWPM72dubgAKses=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VkhXXNUWhbaGLlkINjfqVnD07EDwPpI7lDlDUDLz1C5j6fxR2W/YCCb613H6wCKFW6f+AStw9HHGZM0s4qz7KRHk6kLKHlpGgGMRqeul+U68M2m39QrpwloeQzk2S+dXPt6V6c28aUotNNytmmgaXs752DE11XlgyPoJRJu6p6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Klsg/bW4; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
+	Content-Type; bh=fyBU2iBlutvJLKSem8Iq0QgalALwj/6TqQLJ365vS9Y=;
+	b=Klsg/bW4LURwg5EYRAPiy5LsSVNZUFTGwgf57Gxuxw1Dmg88yj28Ki4z9F9SUG
+	wq3QxduEJY6Qyx/aQ+jqwV1hlkkgzQdOL/X9SvWTkS1e8CXKRWUD/XspOFXolyCG
+	p0Y4grldsYbJw8HV6HkdBWTAgRhj/czlXbBiOcvmZgseI=
+Received: from [10.42.12.46] (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgC3f94nQsZp+d6KXg--.16323S2;
+	Fri, 27 Mar 2026 16:39:05 +0800 (CST)
+Message-ID: <722d5e64-a4d8-4ab2-954d-22f9b67f8f4e@163.com>
+Date: Fri, 27 Mar 2026 16:39:03 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260327055846.248829-1-mikhail.v.gavrilov@gmail.com>
- <acYlxRBhSMcwBnja@hyeyoo> <CABXGCsMTk6kDuJxsTAUKP6npTvp4X6Ryng+P4xjMUsPbTA43+Q@mail.gmail.com>
- <acY5G-lKZQEsUbRw@hyeyoo>
-In-Reply-To: <acY5G-lKZQEsUbRw@hyeyoo>
-From: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date: Fri, 27 Mar 2026 13:07:21 +0500
-X-Gm-Features: AQROBzCzB3coDtODs6w7gt0-QdNGc5pwWqkx1wDss66ksHdICPpNIJLEWH3TZ30
-Message-ID: <CABXGCsPQo=Npum2aHet3QkZWkWEnEVMAw0KQ1AHPrNjMn=9bmA@mail.gmail.com>
-Subject: Re: [PATCH] mm/slab: align kmalloc to cacheline when DMA API
- debugging is active
-To: "Harry Yoo (Oracle)" <harry@kernel.org>
-Cc: vbabka@kernel.org, akpm@linux-foundation.org, hao.li@linux.dev, 
-	cl@gentwo.org, rientjes@google.com, roman.gushchin@linux.dev, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	stern@rowland.harvard.edu, linux@roeck-us.net, andy.shevchenko@gmail.com, 
-	hch@lst.de, Jeff.kirsher@gmail.com, Catalin Marinas <catalin.marinas@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usbip: tools: Add usbip host driver availability check
+To: Shuah Khan <skhan@linuxfoundation.org>,
+ Greg KH <gregkh@linuxfoundation.org>
+Cc: i@zenithal.me, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ valentina.manea.m@gmail.com, Zongmin Zhou <zhouzongmin@kylinos.cn>
+References: <29c03d8b-c73b-4393-95ff-bbf5c31df86e@linuxfoundation.org>
+ <20260325022634.279624-1-min_halo@163.com>
+ <2026032555-headrest-example-af16@gregkh>
+ <1fdab10a-86f0-454a-af10-396a53169ea7@163.com>
+ <2026032615-donated-chaps-9eac@gregkh>
+ <1e974e1d-afdc-41a5-95a7-45e19e77a087@linuxfoundation.org>
+Content-Language: en-US
+From: Zongmin Zhou <min_halo@163.com>
+In-Reply-To: <1e974e1d-afdc-41a5-95a7-45e19e77a087@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PSgvCgC3f94nQsZp+d6KXg--.16323S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxuFWxuryDuw4UCw17tr48Crg_yoW7CryfpF
+	W8tFWjkrWUJF47ArsFvF1Ykay0gwsrtr4Fgr1rJw15Ww1qv3W7Kr9xtrn5CayxGr4Yqr1I
+	yFWqqFZrGFyUXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UTHqxUUUUU=
+X-CM-SenderInfo: pplqsxxdorqiywtou0bp/xtbC0QmmUmnGQikFkAAA39
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[163.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-35541-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35540-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	FREEMAIL_CC(0.00)[kernel.org,linux-foundation.org,linux.dev,gentwo.org,google.com,kvack.org,vger.kernel.org,rowland.harvard.edu,roeck-us.net,gmail.com,lst.de,arm.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[zenithal.me,vger.kernel.org,gmail.com,kylinos.cn];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[163.com];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mikhailvgavrilov@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[min_halo@163.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[163.com:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 211CB340CB5
+	RCPT_COUNT_SEVEN(0.00)[7];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:email,kylinos.cn:email]
+X-Rspamd-Queue-Id: DBD2534124E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, Mar 27, 2026 at 1:00=E2=80=AFPM Harry Yoo (Oracle) <harry@kernel.or=
-g> wrote:
+
+On 2026/3/27 02:43, Shuah Khan wrote:
+> On 3/26/26 02:43, Greg KH wrote:
+>> On Thu, Mar 26, 2026 at 11:10:02AM +0800, Zongmin Zhou wrote:
+>>>
+>>> On 2026/3/25 16:58, Greg KH wrote:
+>>>> On Wed, Mar 25, 2026 at 10:26:34AM +0800, Zongmin Zhou wrote:
+>>>>> From: Zongmin Zhou <zhouzongmin@kylinos.cn>
+>>>>>
+>>>>> Currently, usbip_generic_driver_open() doesn't verify that the 
+>>>>> required
+>>>>> kernel module (usbip-host or usbip-vudc) is actually loaded.
+>>>>> The function returns success even when no driver is present,
+>>>>> leading to usbipd daemon run success without driver loaded.
+>>>>>
+>>>>> So add a check function to ensure usbip host driver has been loaded.
+>>>>>
+>>>>> Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+>>>>> Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
+>>>>> ---
+>>>>> Changes in v2:
+>>>>> - Use system calls directly instead of checking sysfs dir.
+>>>>>
+>>>>>    tools/usb/usbip/libsrc/usbip_device_driver.c | 7 +++++--
+>>>>>    tools/usb/usbip/libsrc/usbip_host_driver.c   | 8 ++++++--
+>>>>>    2 files changed, 11 insertions(+), 4 deletions(-)
+>>>>>
+>>>>> diff --git a/tools/usb/usbip/libsrc/usbip_device_driver.c 
+>>>>> b/tools/usb/usbip/libsrc/usbip_device_driver.c
+>>>>> index 927a151fa9aa..45ab647ef241 100644
+>>>>> --- a/tools/usb/usbip/libsrc/usbip_device_driver.c
+>>>>> +++ b/tools/usb/usbip/libsrc/usbip_device_driver.c
+>>>>> @@ -136,10 +136,13 @@ static int usbip_device_driver_open(struct 
+>>>>> usbip_host_driver *hdriver)
+>>>>>        hdriver->ndevs = 0;
+>>>>>        INIT_LIST_HEAD(&hdriver->edev_list);
+>>>>> -    ret = usbip_generic_driver_open(hdriver);
+>>>>> -    if (ret)
+>>>>> +    if (system("/sbin/lsmod | grep -q usbip_vudc")){
+>>>> What happens if the module is built into the kernel?
+>>>>
+>>>>>            err("please load " USBIP_CORE_MOD_NAME ".ko and "
+>>>>>                USBIP_DEVICE_DRV_NAME ".ko!");
+>>>>> +        return -1;
+>>>>> +    }
+>>>>> +
+>>>>> +    ret = usbip_generic_driver_open(hdriver);
+>>>>>        return ret;
+>>>>>    }
+>>>>> diff --git a/tools/usb/usbip/libsrc/usbip_host_driver.c 
+>>>>> b/tools/usb/usbip/libsrc/usbip_host_driver.c
+>>>>> index 573e73ec36bd..f0ac941d4f6e 100644
+>>>>> --- a/tools/usb/usbip/libsrc/usbip_host_driver.c
+>>>>> +++ b/tools/usb/usbip/libsrc/usbip_host_driver.c
+>>>>> @@ -31,10 +31,14 @@ static int usbip_host_driver_open(struct 
+>>>>> usbip_host_driver *hdriver)
+>>>>>        hdriver->ndevs = 0;
+>>>>>        INIT_LIST_HEAD(&hdriver->edev_list);
+>>>>> -    ret = usbip_generic_driver_open(hdriver);
+>>>>> -    if (ret)
+>>>>> +    if (system("/sbin/lsmod | grep -q usbip_host")){
+>>>> Same here, what happens if it is built in?
+>>> Thank you for pointing this out.
+>>> I apologize for not considering the built-in module case.
+>>>
+>>> You are right that using lsmod | grep would incorrectly fail when 
+>>> usbip_host
+>>> is built into the kernel (CONFIG_USBIP_HOST=y).
+>>> Usbip has always been built as a loadable module (.ko) by default, 
+>>> which led
+>>> to this oversight.
+>>>
+>>> To address this issue, would the following approach be acceptable?
+>>
+>> Wait, what "issue" are you trying to fix here?  Why can't you just check
+>> for opening the correct device node when the host opens the file and if
+>> that fails, report an error?  Doesn't that happen today already?
+>>
 >
-> But dma_get_cache_alignment() < L1_CACHE_BYTES means the architecture
-> actually allows overlapping cachelines, no?
+> The problem Zongmin is trying fix ish when usbipd starts, it looks for
+> exported if any - if it doesn't find any it assumes there aren't any
+> exported and doesn't detect that usbip_host driver isn't loaded.
+>
+> refresh_exported_devices() doesn't have the logic and it shouldn't
+> include that logic because this hook is called periodically to
+> refresh the list of exported devices. Starting usbipd and loading
+> the driver are distinct steps and without any dependencies.
+>
+> This patch he is trying to add that detection so a message can be printed
+> to say "load the driver".
+>
+> A message can be added easily to cover two cases:
+>
+> 1. usbip_host driver isn't loaded
+> 2. There are no exported devices.
+>
+> refresh_exported_devices() will not find any devices in both
+> of the above scenarios. It isn't an error if it can't find
+> any exported devices.
+>
+> An informational message when refresh_exported_devices()
+> when it doesn't find any devices could help users.
+>
+> Zongmin,
+>
+> Would adding a message that says
+> "Check if usbip_host driver is loaded or export devices"
+> solve the problem of hard to debug problem you are addressing here?
+>
+Shuah,
 
-Hi Harry,
+Your suggestion makes sense.
+Adding an informational message when no devices are found would be a simple
+and clean solution that helps users debug without being intrusive.
 
-On x86_64, dma_get_cache_alignment() returns L1_CACHE_BYTES (both
-are 64).  The condition (dma_get_cache_alignment() < L1_CACHE_BYTES)
-would be false, so the check wouldn't suppress the warning.
+However, I plan to add the info() message in usbip_generic_driver_open() 
+instead of
+refresh_exported_devices(), because:
+- usbip_generic_driver_open() is called only once at initialization.
+- refresh_exported_devices() is called periodically to refresh the 
+exported device list.
+- When the server has no exported devices, having zero devices
+   is normal and not worth frequent info messages.
 
-The problem isn't that the architecture allows overlapping -- it's
-that kmalloc returns 8-byte aligned buffers that happen to land in
-the same 64-byte cacheline.  The DMA debug code correctly identifies
-that two DMA mappings share a cacheline, but on coherent platforms
-this is harmless.
+Theoretically, we only need to prompt once at startup. Is my 
+understanding correct?
 
-Adding a dev_is_dma_coherent() check in dma-debug would fix x86 but
-would also silence the warning for any coherent device, including
-ones behind IOMMUs that might have non-coherent paths.  That's why
-Alan's conclusion was that fixing the allocator side is safer --
-it doesn't weaken any debug checks, it just ensures the situation
-never arises.
+I'll also remove the existing error messages like below,
+since they cannot accurately determine whether the driver is loaded:
 
---=20
-Best Regards,
-Mike Gavrilov.
+if (ret)
+     err("please load " USBIP_CORE_MOD_NAME ".ko and "
+         USBIP_HOST_DRV_NAME ".ko!");
+
+Does this approach look acceptable?
+
+Best regards,
+--Zongmin Zhou
+> thanks,
+> -- Shuah
+
 
