@@ -1,250 +1,154 @@
-Return-Path: <linux-usb+bounces-35541-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35542-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KCRDG8RCxmlRIAUAu9opvQ
-	(envelope-from <linux-usb+bounces-35541-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 09:41:40 +0100
+	id YEjTC4tDxmlRIAUAu9opvQ
+	(envelope-from <linux-usb+bounces-35542-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 09:44:59 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBD2534124E
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 09:41:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 883DA3413BA
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 09:44:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BAD7330459FE
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 08:39:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 671D5300D975
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 08:43:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBA073D75BA;
-	Fri, 27 Mar 2026 08:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6364A3D8127;
+	Fri, 27 Mar 2026 08:43:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Klsg/bW4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CdwmAEK9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4CB3D170E;
-	Fri, 27 Mar 2026 08:39:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAF93D9054;
+	Fri, 27 Mar 2026 08:43:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774600763; cv=none; b=dKNmitD5g8u3eqPJWyuGOHpwWah5SLDo3iNKN+K98t8QgtExtwZVfwNaOuwvE9asYNOjxH95t26n4TZ4DKi3nSLlOnTtZsynUqB0Labgpml2/8Ryy7sxfSkQx0ricvJXvVDJuWqDSbas/eYu2AMyIGdFLATwu9HXcqOnbKEhkrw=
+	t=1774601002; cv=none; b=Kjtfw+fCgLJvxL/ywna2fWSTXQVmH9lk4WOLzriMRcvUhuikFdM30QVgVErNnuUns9akpMxDJQ5l2ZiLPt5KGjrM4abq1YmSWUz5A/VfdxE6ZKz6CaPC2zhsJu7NaI+faaZ1IJG9rjh5lcwVNFDK7ue4VqxtuXqzaClOo9xvb3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774600763; c=relaxed/simple;
-	bh=CvjosGmgGWsamF6d4kfKKJ/lTth5SWPM72dubgAKses=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VkhXXNUWhbaGLlkINjfqVnD07EDwPpI7lDlDUDLz1C5j6fxR2W/YCCb613H6wCKFW6f+AStw9HHGZM0s4qz7KRHk6kLKHlpGgGMRqeul+U68M2m39QrpwloeQzk2S+dXPt6V6c28aUotNNytmmgaXs752DE11XlgyPoJRJu6p6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Klsg/bW4; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=fyBU2iBlutvJLKSem8Iq0QgalALwj/6TqQLJ365vS9Y=;
-	b=Klsg/bW4LURwg5EYRAPiy5LsSVNZUFTGwgf57Gxuxw1Dmg88yj28Ki4z9F9SUG
-	wq3QxduEJY6Qyx/aQ+jqwV1hlkkgzQdOL/X9SvWTkS1e8CXKRWUD/XspOFXolyCG
-	p0Y4grldsYbJw8HV6HkdBWTAgRhj/czlXbBiOcvmZgseI=
-Received: from [10.42.12.46] (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgC3f94nQsZp+d6KXg--.16323S2;
-	Fri, 27 Mar 2026 16:39:05 +0800 (CST)
-Message-ID: <722d5e64-a4d8-4ab2-954d-22f9b67f8f4e@163.com>
-Date: Fri, 27 Mar 2026 16:39:03 +0800
+	s=arc-20240116; t=1774601002; c=relaxed/simple;
+	bh=uSAEwv+P0NWX+V8A9QMICb6Q1yjjMb/K72DG65M/P6s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lZZ7AwMBdX2PCgriEHUd82uWh6m3az82cdJgINKO+gkN3YA7jddAU5BOZIeCorzDrUw4DQnjXG7/B+iRGRqSdmwmswL+l8fqNSyI0F1da9Hku4EKTrTHxYPccUguzO208qyMWOv9hNBJbUlEkt+Q/yB6KJ10vwbhM3b/bthKdlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CdwmAEK9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ECFFC19423;
+	Fri, 27 Mar 2026 08:43:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774601002;
+	bh=uSAEwv+P0NWX+V8A9QMICb6Q1yjjMb/K72DG65M/P6s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CdwmAEK9/IFM+EMSgv+GZ9ZiT76lRLLB86oWqQrq7C2uu9OiZLoSUXMc5BIsA0J00
+	 IBMD0wPdVdFw4GyPS2ZKEvPE4iHbRUP/T2GgfjNh+seLgDT2o54Z6zZWTUt/k8nRlc
+	 BF8aTp5KdnIH2qwAsAPnfy3OeORNSRCOj8UuzNJ+5UziM0BxVWkPCGEK2SvUxmVv+o
+	 D+Xpgtx/RoNNYEJ29wK0jydMrqjUvCT1kCUWo+KywHkKhxUy2T2al3sO5Lqb6NVilB
+	 f1dFDPvgKgA1A7bA2qCxhjUqluqXr+Ds1KHhO57uUaEkxyDQJekZ1WZrn67Izo3csm
+	 JuATilun0kMpQ==
+Date: Fri, 27 Mar 2026 17:43:19 +0900
+From: "Harry Yoo (Oracle)" <harry@kernel.org>
+To: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc: vbabka@kernel.org, akpm@linux-foundation.org, hao.li@linux.dev,
+	cl@gentwo.org, rientjes@google.com, roman.gushchin@linux.dev,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+	linux@roeck-us.net, andy.shevchenko@gmail.com, hch@lst.de,
+	Jeff.kirsher@gmail.com, Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH] mm/slab: align kmalloc to cacheline when DMA API
+ debugging is active
+Message-ID: <acZDJ4Nfw4x7HCSr@hyeyoo>
+References: <20260327055846.248829-1-mikhail.v.gavrilov@gmail.com>
+ <acYlxRBhSMcwBnja@hyeyoo>
+ <CABXGCsMTk6kDuJxsTAUKP6npTvp4X6Ryng+P4xjMUsPbTA43+Q@mail.gmail.com>
+ <acY5G-lKZQEsUbRw@hyeyoo>
+ <CABXGCsPQo=Npum2aHet3QkZWkWEnEVMAw0KQ1AHPrNjMn=9bmA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usbip: tools: Add usbip host driver availability check
-To: Shuah Khan <skhan@linuxfoundation.org>,
- Greg KH <gregkh@linuxfoundation.org>
-Cc: i@zenithal.me, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- valentina.manea.m@gmail.com, Zongmin Zhou <zhouzongmin@kylinos.cn>
-References: <29c03d8b-c73b-4393-95ff-bbf5c31df86e@linuxfoundation.org>
- <20260325022634.279624-1-min_halo@163.com>
- <2026032555-headrest-example-af16@gregkh>
- <1fdab10a-86f0-454a-af10-396a53169ea7@163.com>
- <2026032615-donated-chaps-9eac@gregkh>
- <1e974e1d-afdc-41a5-95a7-45e19e77a087@linuxfoundation.org>
-Content-Language: en-US
-From: Zongmin Zhou <min_halo@163.com>
-In-Reply-To: <1e974e1d-afdc-41a5-95a7-45e19e77a087@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgC3f94nQsZp+d6KXg--.16323S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxuFWxuryDuw4UCw17tr48Crg_yoW7CryfpF
-	W8tFWjkrWUJF47ArsFvF1Ykay0gwsrtr4Fgr1rJw15Ww1qv3W7Kr9xtrn5CayxGr4Yqr1I
-	yFWqqFZrGFyUXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UTHqxUUUUU=
-X-CM-SenderInfo: pplqsxxdorqiywtou0bp/xtbC0QmmUmnGQikFkAAA39
-X-Spamd-Result: default: False [-0.66 / 15.00];
+In-Reply-To: <CABXGCsPQo=Npum2aHet3QkZWkWEnEVMAw0KQ1AHPrNjMn=9bmA@mail.gmail.com>
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[163.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35541-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[zenithal.me,vger.kernel.org,gmail.com,kylinos.cn];
-	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35542-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[163.com];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[min_halo@163.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[163.com:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[harry@kernel.org,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,linux-foundation.org,linux.dev,gentwo.org,google.com,kvack.org,vger.kernel.org,rowland.harvard.edu,roeck-us.net,gmail.com,lst.de,arm.com];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:email,kylinos.cn:email]
-X-Rspamd-Queue-Id: DBD2534124E
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 883DA3413BA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+On Fri, Mar 27, 2026 at 01:07:21PM +0500, Mikhail Gavrilov wrote:
+> On Fri, Mar 27, 2026 at 1:00 PM Harry Yoo (Oracle) <harry@kernel.org> wrote:
+> >
+> > But dma_get_cache_alignment() < L1_CACHE_BYTES means the architecture
+> > actually allows overlapping cachelines, no?
+> 
+> Hi Harry,
+> 
+> On x86_64, dma_get_cache_alignment() returns L1_CACHE_BYTES (both
+> are 64). The condition (dma_get_cache_alignment() < L1_CACHE_BYTES)
+> would be false, so the check wouldn't suppress the warning.
 
-On 2026/3/27 02:43, Shuah Khan wrote:
-> On 3/26/26 02:43, Greg KH wrote:
->> On Thu, Mar 26, 2026 at 11:10:02AM +0800, Zongmin Zhou wrote:
->>>
->>> On 2026/3/25 16:58, Greg KH wrote:
->>>> On Wed, Mar 25, 2026 at 10:26:34AM +0800, Zongmin Zhou wrote:
->>>>> From: Zongmin Zhou <zhouzongmin@kylinos.cn>
->>>>>
->>>>> Currently, usbip_generic_driver_open() doesn't verify that the 
->>>>> required
->>>>> kernel module (usbip-host or usbip-vudc) is actually loaded.
->>>>> The function returns success even when no driver is present,
->>>>> leading to usbipd daemon run success without driver loaded.
->>>>>
->>>>> So add a check function to ensure usbip host driver has been loaded.
->>>>>
->>>>> Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
->>>>> Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
->>>>> ---
->>>>> Changes in v2:
->>>>> - Use system calls directly instead of checking sysfs dir.
->>>>>
->>>>>    tools/usb/usbip/libsrc/usbip_device_driver.c | 7 +++++--
->>>>>    tools/usb/usbip/libsrc/usbip_host_driver.c   | 8 ++++++--
->>>>>    2 files changed, 11 insertions(+), 4 deletions(-)
->>>>>
->>>>> diff --git a/tools/usb/usbip/libsrc/usbip_device_driver.c 
->>>>> b/tools/usb/usbip/libsrc/usbip_device_driver.c
->>>>> index 927a151fa9aa..45ab647ef241 100644
->>>>> --- a/tools/usb/usbip/libsrc/usbip_device_driver.c
->>>>> +++ b/tools/usb/usbip/libsrc/usbip_device_driver.c
->>>>> @@ -136,10 +136,13 @@ static int usbip_device_driver_open(struct 
->>>>> usbip_host_driver *hdriver)
->>>>>        hdriver->ndevs = 0;
->>>>>        INIT_LIST_HEAD(&hdriver->edev_list);
->>>>> -    ret = usbip_generic_driver_open(hdriver);
->>>>> -    if (ret)
->>>>> +    if (system("/sbin/lsmod | grep -q usbip_vudc")){
->>>> What happens if the module is built into the kernel?
->>>>
->>>>>            err("please load " USBIP_CORE_MOD_NAME ".ko and "
->>>>>                USBIP_DEVICE_DRV_NAME ".ko!");
->>>>> +        return -1;
->>>>> +    }
->>>>> +
->>>>> +    ret = usbip_generic_driver_open(hdriver);
->>>>>        return ret;
->>>>>    }
->>>>> diff --git a/tools/usb/usbip/libsrc/usbip_host_driver.c 
->>>>> b/tools/usb/usbip/libsrc/usbip_host_driver.c
->>>>> index 573e73ec36bd..f0ac941d4f6e 100644
->>>>> --- a/tools/usb/usbip/libsrc/usbip_host_driver.c
->>>>> +++ b/tools/usb/usbip/libsrc/usbip_host_driver.c
->>>>> @@ -31,10 +31,14 @@ static int usbip_host_driver_open(struct 
->>>>> usbip_host_driver *hdriver)
->>>>>        hdriver->ndevs = 0;
->>>>>        INIT_LIST_HEAD(&hdriver->edev_list);
->>>>> -    ret = usbip_generic_driver_open(hdriver);
->>>>> -    if (ret)
->>>>> +    if (system("/sbin/lsmod | grep -q usbip_host")){
->>>> Same here, what happens if it is built in?
->>> Thank you for pointing this out.
->>> I apologize for not considering the built-in module case.
->>>
->>> You are right that using lsmod | grep would incorrectly fail when 
->>> usbip_host
->>> is built into the kernel (CONFIG_USBIP_HOST=y).
->>> Usbip has always been built as a loadable module (.ko) by default, 
->>> which led
->>> to this oversight.
->>>
->>> To address this issue, would the following approach be acceptable?
->>
->> Wait, what "issue" are you trying to fix here?  Why can't you just check
->> for opening the correct device node when the host opens the file and if
->> that fails, report an error?  Doesn't that happen today already?
->>
->
-> The problem Zongmin is trying fix ish when usbipd starts, it looks for
-> exported if any - if it doesn't find any it assumes there aren't any
-> exported and doesn't detect that usbip_host driver isn't loaded.
->
-> refresh_exported_devices() doesn't have the logic and it shouldn't
-> include that logic because this hook is called periodically to
-> refresh the list of exported devices. Starting usbipd and loading
-> the driver are distinct steps and without any dependencies.
->
-> This patch he is trying to add that detection so a message can be printed
-> to say "load the driver".
->
-> A message can be added easily to cover two cases:
->
-> 1. usbip_host driver isn't loaded
-> 2. There are no exported devices.
->
-> refresh_exported_devices() will not find any devices in both
-> of the above scenarios. It isn't an error if it can't find
-> any exported devices.
->
-> An informational message when refresh_exported_devices()
-> when it doesn't find any devices could help users.
->
-> Zongmin,
->
-> Would adding a message that says
-> "Check if usbip_host driver is loaded or export devices"
-> solve the problem of hard to debug problem you are addressing here?
->
-Shuah,
+How does dma_get_cache_alignment() return L1_CACHE_BYTES when
+x86_64 doesn't define ARCH_HAS_DMA_MINALIGN?
 
-Your suggestion makes sense.
-Adding an informational message when no devices are found would be a simple
-and clean solution that helps users debug without being intrusive.
+> The problem isn't that the architecture allows overlapping --
 
-However, I plan to add the info() message in usbip_generic_driver_open() 
-instead of
-refresh_exported_devices(), because:
-- usbip_generic_driver_open() is called only once at initialization.
-- refresh_exported_devices() is called periodically to refresh the 
-exported device list.
-- When the server has no exported devices, having zero devices
-   is normal and not worth frequent info messages.
+Probably what I said was misleading...
 
-Theoretically, we only need to prompt once at startup. Is my 
-understanding correct?
+I didn't mean "the architecture is fine with overlapping cacheline".
 
-I'll also remove the existing error messages like below,
-since they cannot accurately determine whether the driver is loaded:
+I meant "not defining ARCH_DMA_MINALIGN or defining it as smaller than
+L1_CACHE_BYTES is how architectures tell kmalloc subsystem that
+kmalloc objects don't have to be aligned with cacheline size."
 
-if (ret)
-     err("please load " USBIP_CORE_MOD_NAME ".ko and "
-         USBIP_HOST_DRV_NAME ".ko!");
+> it's that kmalloc returns 8-byte aligned buffers that happen to land in
+> the same 64-byte cacheline.
+> The DMA debug code correctly identifies that two DMA mappings share
+> a cacheline, but on coherent platforms this is harmless.
 
-Does this approach look acceptable?
+That happens only when the architecture can live with that.
 
-Best regards,
---Zongmin Zhou
-> thanks,
-> -- Shuah
+> Adding a dev_is_dma_coherent() check in dma-debug would fix x86
+> but would also silence the warning for any coherent device, including
+> ones behind IOMMUs that might have non-coherent paths.
 
+Sorry, I don't understand where the idea of adding a
+dma_is_dma_coherent() check comes from ...
+
+> That's why Alan's conclusion was that fixing the allocator side is safer --
+> it doesn't weaken any debug checks, it just ensures the situation
+> never arises.
+
+-- 
+Cheers,
+Harry / Hyeonggon
 
