@@ -1,185 +1,207 @@
-Return-Path: <linux-usb+bounces-35549-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35560-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iNyNF/d5xmnwKgUAu9opvQ
-	(envelope-from <linux-usb+bounces-35549-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 13:37:11 +0100
+	id AE3qBFh8xmnwKgUAu9opvQ
+	(envelope-from <linux-usb+bounces-35560-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 13:47:20 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C32F9344448
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 13:37:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DA5134486D
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 13:47:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 74B5530525D5
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 12:35:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AA61B30524FD
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 12:42:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A40F222597;
-	Fri, 27 Mar 2026 12:35:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9085B34DCEC;
+	Fri, 27 Mar 2026 12:42:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hDTOTZSl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C9vKBgE0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2A121ADC7
-	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 12:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774614939; cv=pass; b=ZQ/V99690AysLdW4n0KRaaWEyuBmY6q6+0hp42nWvipDsjKZiiGg57rbLY9lSC46wAeIA8jlgRg8q+4wYUT2pfJPFDySFsT5+F1GbvDVkqF7OSCdSP6wJsUbJ9dEYZjEs1onjslzgv9f1mKkG5M81UTBsPukOfnHXY73Z1w+ouE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774614939; c=relaxed/simple;
-	bh=5cOyBNoqrTish9nBBS87UAnS6CU3/R9H+gkn7UHvmow=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NfW4oJAntytHXwNoqQ00TSNVWcVt3MNs2bXXvm3JqEVzQhKUloS3VoolIE6r+RQ8F0O3g98jhh+r5BCy34Vmk+2W+iGafDY1Ysj4zD0vgYTkiKsDvPNDKO2ugaqvWs9vStEMECfWWbpgI0nRZnvSwQRbqMWtjluP/E4cbUO0MVM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hDTOTZSl; arc=pass smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5D586323
+	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 12:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774615329; cv=none; b=rpeGs+4xPkYEy8b7l9aOXuHQbmOltS2YZjj8Pk35AGzh2qynwBTOS/bIaexlpmROustT0Ylk/Ys3c6U6paqFqTlc2qejclYtd6Any8dajV516YKPbe1CbB0raOSy01QRWcVVOxq2I0B2Qnw1UwWdKi5N7gmDdAw+D5HISAsKi4w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774615329; c=relaxed/simple;
+	bh=B3tp398WNbwm1ae+gWHLUuGz3BxoORfZ1NVIHaytnAg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=btxP/7SnxYW6Ap4ZrnmVRxguvBjavz1uAvuDyzzppopcEdukKD/DTEGgLmPrWPvcRx2BhVPAbyXoVU0BjNXlvxaPP8IERmDekK4nvZX7A5+fweGjI9JqlfFfQSrQJzzUynKL0U8R/9AWSz2jID3MzI8ZR+X0ORA4BQ541QDKoi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C9vKBgE0; arc=none smtp.client-ip=209.85.167.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b936331786dso229983666b.3
-        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 05:35:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774614936; cv=none;
-        d=google.com; s=arc-20240605;
-        b=dDrUOq20xijFGZuVixpF5QJD1DKdWCeVzGupbu2/vHBirjCptB99XpLVCPg1BcI0t1
-         I2WAhJOY0Uju/J6V4qsyVAJ4nvglBEULgs+SgIRD9fJU+mjNR7mViHHz/1DEfiChTXl9
-         7i8jZc2ygXGLMRa4FLvsCXhbq2aIQ5fD34p70rjNgMGvfhK4o7D8nbbQ1hxXWbU4GZnJ
-         3UiMGmimKhwTHt4rcj3xFLMjP3R2nkBrPH+2I4IR97ETZ0BpfeSBTelUaDXhf/d7Ugyd
-         TwbXAWXIOQCqcoeh1MRS4vhSSuPhg8vq6WMpp/F3DZWde7alZ8F96K+phIxoIAl0nv2o
-         nj1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5cOyBNoqrTish9nBBS87UAnS6CU3/R9H+gkn7UHvmow=;
-        fh=ycO3rTy+/ay3vChLPKZ8ZdZsi4BLWN/HpmfCKky+DOQ=;
-        b=QCluzDvcqabjf4TmRrrFM2C2/6lkyhVdxiYWp2qKpJ2pzM46QagN5wp0/pKr3VsNoZ
-         CxEn1DRISGLIar+2MhFNJn/wP6lW9htFHx6d1wNIDuP9gFilN5BLakRK/2nQcATMhE+m
-         wRTcWPzSrJv1+BgpByxzJ3afmvqUDABCJsIdGYKDE57dJLTOqMKBkm18niNfKv4BAXKA
-         wDvUSgAW0mEZZDXS+RpJBx4uNiOhRln7331c4OuPsxj87UfF1+KheovahqRBIeK1ypKR
-         hdzzHIObbUVo7t+btZBv/owFQk/52MMq7rU6q555X1z9oaPsMe9wn3rYfE7BsQ1ew4b4
-         kxoA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5a0fc5e2c59so2465499e87.1
+        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 05:42:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774614936; x=1775219736; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5cOyBNoqrTish9nBBS87UAnS6CU3/R9H+gkn7UHvmow=;
-        b=hDTOTZSl8giVTfchqfV1qmgf27MF/qdda6lMtUPEsJgLk6b5H5LsQ0Jl5knXo6igdU
-         ulAVPyKxvwSd392+aI7Kwq+ZD1q5jeL1x1xyCtt2ngLHEAt03Q5Xk95XW6/irQhCHY2K
-         CaO9iunTyJdkP23j8YUKe1ppnFQ80erIFlhi31M+wMuGVIAu/Fhi/UxS8Vc0lK8gzjq5
-         WJl8CQnI+84YsOeo+RJJc8Oj5gACtNYk7uJ/61QA5aDWW0uga4QMfJMsOG1uQHCBgey/
-         MIPHguneBhfL6YFnMg13xV2NVGYVBAgwnDWKuD0ntV3caql4L7D26u1LKHpu2d/07kMp
-         HZ+Q==
+        d=gmail.com; s=20251104; t=1774615326; x=1775220126; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vnEhmrhTPA7Nd81/VP3XZfiniWMenGZwrrUyIBlvmYM=;
+        b=C9vKBgE0xtvL8Jt4R7jq/jNUIy0sbgkauEQs/mBNZzAfUmhgyPSUM5Ow4bPERhwdaK
+         ++ZA7ixGVWMJcW8PLQI4h0csbGtM3H5Ee9FlG6MzpX5+WLHy7zgCCKFJglqdPS0zg97o
+         85TNJHLNsc+0udA/iPRUcMP6jum219wgf6HQImW1f6Lgv1oIVDfjxUcbK6xcjeBYa4PI
+         NauzZ+vyzdH2DhWqZAb/pQHqHZnNx2gwQtmzdJDax0IA3Q92OqCAUyzo5c04YmpO/KQ6
+         DkRLkBcft98X8VfxPN+DNfGGL+Q0S9Jg+p/5gv4vrKKlLxDxpoGtBYmBAosYaea9ywfA
+         OBpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774614936; x=1775219736;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5cOyBNoqrTish9nBBS87UAnS6CU3/R9H+gkn7UHvmow=;
-        b=pfUodJslK45GbAGPj0PLdFk3sJlDZO9QRhjk5LN1Cx8Nb3SRG5xrP703vZo0z3KFL3
-         kqWMNgjIHVKC3/PEtRP/+AkwdSJdhEbAUQ1OeooHAd48u/Q5mhXeGb9xPgNYHoShK3MC
-         imYx7WGMuQYgHuWfiiAyCr58k7SSGnAeuY5g58zyPguYYmu59PwPETCOe51Iuylo3aJ4
-         oc07iHaDRcWQsK4acrJ1bqWQvDIuMCakZFppJ6UrlR/QFI6Y98z/a1qdQn/NSANtn4TE
-         ZKy3Cifr23w+SI1PAuYl5idlpshN0kYck6gJrg42+HjftYQFUQ4AFRlSDE+uRfNjw1iJ
-         NM7w==
-X-Forwarded-Encrypted: i=1; AJvYcCVupC3q6P+Sd8VXjC9Bhs+lUsnJ4QDsCHXYYhMFNysH9YRFFJi7LpAEiblNJZtL0cIirmgy8+UrXMw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCnuoPnp8pmwwPe0NMKouSpw0dtnRv6D3ht92MEeEhWsn66Pmn
-	0nZDNj2Nml2qwpFnYUNc2PFZxGn1gEw2QtdIjPtpud5UB/MgjJ4qw9SB1IbNbEvdlCjqZnXZxq2
-	b4Iftq/jbN7jCfAwY7lPIzUYsBwAkqrc=
-X-Gm-Gg: ATEYQzxgHrzmLncj8trJetIKqUEQMXlivT1+NVLzf91Xpvv63Kb2TileC3c+SZfZKvz
-	/Li1fcqYwPxr5Sqi+PGf46akc7aSogS4GW0OtAKCJwXhW8VkOVmfCXqeg1B6t7LMyyLHW6fBBqR
-	OmxF470llljSivaRG94ax5u4PTy+TdTq1rm8jWIEnHHsthHIChfz0tYTTF9/dER6ssM1KUed2/2
-	7M026UwPzUIRonok0i724PObiN+jy/PO6pd7ygkknU7nx8zMnIcB1t5XyMm6Hjm496jsaS9GkFl
-	nZwVrdJ5BfjXCcl7ALcxfa4AsSEp8Vqaaia5FrJN7FcPisNE2NvYWOwDRtev0IjQYKQNyt/XvyV
-	XqMQUWQs=
-X-Received: by 2002:a17:907:3f07:b0:b8f:b32e:e196 with SMTP id
- a640c23a62f3a-b9b507b20ebmr158948066b.30.1774614935669; Fri, 27 Mar 2026
- 05:35:35 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774615326; x=1775220126;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vnEhmrhTPA7Nd81/VP3XZfiniWMenGZwrrUyIBlvmYM=;
+        b=hgjD3mz9iUWrKEMlvGhkij9GtMARLS0hDDFK+vecqDIsY3Q08f/Lgof8eYT3WVcsPX
+         Mt3CBL29A3baWaYLDuwwq2Sk5b2FF/1NIC/Fxn5DPw+3n5FMPth/3TXK4DLMu4O3BCr1
+         6xm6UxtIq7WWJw5xi7sOao8A2dmQzFnnug3OSG81LmIFw7RRteqjmxZur067LB40uUgi
+         kcZjTWoFF0eJWWL3zlUpdbkpPW8TwdTw7mZJh6/JJnOAiRjLmAQVP6fnO+Qp8kBJ69DT
+         ge3qiPAsfxrlBvB0vxieAY4wSmJzrqndO4P5Pe0uy9tXg9UwfJxnz28Z4fvk+nEDiFwR
+         1bZg==
+X-Forwarded-Encrypted: i=1; AJvYcCVUzEoz4Th6nfOpNjPb0bm3TT7zLvB5X27rnl8ly5sWT99TitfIWrFOFtYjKYhZKt/aFm1YzKTej1M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywmn/9Alxl2SanrY5o03o2A+pg8LskTBRHOxFnAIOr6cF6J9ixD
+	RmhKGtwCQB1HTY+Blthvy8QhT2P3rLGDNv+bAuy/AqeN85jAFy5KoMnu
+X-Gm-Gg: ATEYQzz9yBHbOA+BozJ8A5RpIXCHCo1jcckYRFE8JJd2mFcXb1GDDlT1FWJ0opOYdS/
+	Umg2KOub09sNA6UOpz+5gum3jZh4iCYG7nOC3vZmC0Of+aPNqOO6fBw10qbPvTmRPOQmVvF479U
+	4lOcU7hPde8Jh2PSmbHSEAnrYnW5z/uvpg9VD/dAsxUEjQjCPdf72tgHKCTxyRlzao5nAAvTYeI
+	ZOEGK0uF1nA5/bDfi3Hc6kX9cCnstQjyUZF1g/FxAp/3/oLcLftZytWG4cuuFEwZkNTkFNsaBPq
+	3iNP+Xgt0QzgsbV75/MusD2ynmq/d6dNZPlmzx11Bf0mDhc9dngKDXYSpit/u92kZIilhlptnhk
+	cNLdNkuFgAFpk2Cg8iRgNmhLlCD5N/dX471UAWOMEPO9GL93kBC93cZNQOv+EFnHl5B2fTbtQ1e
+	ENqlByiuv6Hw+k/UGwFJSz3Qox1Oc1A59l+A==
+X-Received: by 2002:a05:6512:6c8:b0:5a2:5b88:a8a3 with SMTP id 2adb3069b0e04-5a2ab92854fmr1015552e87.31.1774615325628;
+        Fri, 27 Mar 2026 05:42:05 -0700 (PDT)
+Received: from localhost ([188.234.148.119])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a2a063efbasm1336127e87.14.2026.03.27.05.42.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2026 05:42:04 -0700 (PDT)
+From: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+To: m.szyprowski@samsung.com,
+	robin.murphy@arm.com
+Cc: iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-mm@kvack.org,
+	harry@kernel.org,
+	vbabka@kernel.org,
+	akpm@linux-foundation.org,
+	stern@rowland.harvard.edu,
+	linux@roeck-us.net,
+	andy.shevchenko@gmail.com,
+	hch@lst.de,
+	Jeff.kirsher@gmail.com,
+	catalin.marinas@arm.com,
+	Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Subject: [PATCH v2] dma-debug: suppress cacheline overlap warning when arch has no DMA alignment requirement
+Date: Fri, 27 Mar 2026 17:41:56 +0500
+Message-ID: <20260327124156.24820-1-mikhail.v.gavrilov@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260327055846.248829-1-mikhail.v.gavrilov@gmail.com> <acZ3ZUXhFHpSXzYS@arm.com>
-In-Reply-To: <acZ3ZUXhFHpSXzYS@arm.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Fri, 27 Mar 2026 14:34:58 +0200
-X-Gm-Features: AQROBzAf3n6UCCCVOWz8_h19fmxDUeJxeUYrZ9qKYYIvgXaEOz3JyzyW2dWdB10
-Message-ID: <CAHp75Ved0H=QE0CDfThdOexi0BE2JKrcmTnv1GQJyrf0_-M9fg@mail.gmail.com>
-Subject: Re: [PATCH] mm/slab: align kmalloc to cacheline when DMA API
- debugging is active
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>, vbabka@kernel.org, harry.yoo@oracle.com, 
-	akpm@linux-foundation.org, hao.li@linux.dev, cl@gentwo.org, 
-	rientjes@google.com, roman.gushchin@linux.dev, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	stern@rowland.harvard.edu, linux@roeck-us.net, hch@lst.de, 
-	Jeff.kirsher@gmail.com, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Robin Murphy <robin.murphy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35549-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	FREEMAIL_CC(0.00)[gmail.com,kernel.org,oracle.com,linux-foundation.org,linux.dev,gentwo.org,google.com,kvack.org,vger.kernel.org,rowland.harvard.edu,roeck-us.net,lst.de,samsung.com,arm.com];
+	TAGGED_FROM(0.00)[bounces-35560-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[lists.linux.dev,vger.kernel.org,kvack.org,kernel.org,linux-foundation.org,rowland.harvard.edu,roeck-us.net,gmail.com,lst.de,arm.com];
+	MIME_TRACE(0.00)[0:+];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andyshevchenko@gmail.com,linux-usb@vger.kernel.org];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[mikhailvgavrilov@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid,arm.com:email]
-X-Rspamd-Queue-Id: C32F9344448
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6DA5134486D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, Mar 27, 2026 at 2:26=E2=80=AFPM Catalin Marinas <catalin.marinas@ar=
-m.com> wrote:
-> On Fri, Mar 27, 2026 at 10:58:46AM +0500, Mikhail Gavrilov wrote:
+When CONFIG_DMA_API_DEBUG is enabled, the DMA debug infrastructure
+tracks active mappings per cacheline and warns if two different DMA
+mappings share the same cacheline ("cacheline tracking EEXIST,
+overlapping mappings aren't supported").
 
+On x86_64, ARCH_KMALLOC_MINALIGN defaults to 8, so small kmalloc
+allocations (e.g. the 8-byte hub->buffer and hub->status in the USB
+hub driver) frequently land in the same 64-byte cacheline.  When both
+are DMA-mapped, this triggers a false positive warning.
 
-> TL;DR: I think this is fine:
->
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
->
-> I'm not sure that's the best way to hide the warning but there
-> are no great solutions either. On one hand, we want the DMA debug to
-> capture potential problems on architectures it's not running on. OTOH,
-> we also want to avoid false positives on coherent architectures/devices.
-> I don't think reconciling the two requirements is easy.
->
-> When DMA_API_DEBUG is enabled, the above will change the x86 behaviour
-> that could have implications beyond DMA (e.g. may not catch some buffer
-> overflow because it's within L1_CACHE_BYTES). Similarly for non-coherent
-> architectures that select DMA_BOUNCE_UNALIGNED_KMALLOC (arm64 and riscv
-> currently). arm64 defines ARCH_DMA_MINALIGN to 128 but
-> ARCH_KMALLOC_MINALIGN to 8 (why 128 is larger than L1_CACHE_BYTES is
-> another matter but let's ignore it for now).
+This has been reported repeatedly since v5.14 (when the EEXIST check
+was added) across various USB host controllers and devices including
+xhci_hcd with USB hubs, USB audio devices, and USB ethernet adapters.
 
-Maybe for the cases where we do not warn we should introduce a
-dev_dbg_/pr_debug_once()? At least users may be informed about potential is=
-sues.
+The cacheline overlap is only a real concern on architectures that
+require DMA buffer alignment to cacheline boundaries (i.e. where
+ARCH_DMA_MINALIGN >= L1_CACHE_BYTES).  On architectures like x86_64
+where dma_get_cache_alignment() returns 1, the hardware is
+cache-coherent and overlapping cacheline mappings are harmless.
 
+Suppress the EEXIST warning when dma_get_cache_alignment() is less
+than L1_CACHE_BYTES, indicating the architecture does not require
+cacheline-aligned DMA buffers.
 
---=20
-With Best Regards,
-Andy Shevchenko
+Verified with a kernel module reproducer that performs two kmalloc(8)
+allocations back-to-back and DMA-maps both:
+
+  Before: allocations share a cacheline, EEXIST fires within ~50 pairs
+  After:  same cacheline pair found, but no warning emitted
+
+Fixes: 2b4bbc6231d7 ("dma-debug: report -EEXIST errors in add_dma_entry")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215740
+Suggested-by: Harry Yoo <harry@kernel.org>
+Tested-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Signed-off-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+---
+
+v1 -> v2:
+  - Moved fix from include/linux/slab.h (ARCH_KMALLOC_MINALIGN)
+    to kernel/dma/debug.c per Harry Yoo's suggestion.
+  - Instead of forcing cacheline-aligned allocations, suppress
+    the warning when the architecture has no DMA alignment
+    requirement (dma_get_cache_alignment() < L1_CACHE_BYTES).
+
+v1: https://lore.kernel.org/all/20260327055846.248829-1-mikhail.v.gavrilov@gmail.com/
+
+Reproducer module that triggers the bug reliably:
+  https://bugzilla.kernel.org/attachment.cgi?id=309769
+
+ kernel/dma/debug.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
+index 0677918f06a8..1a725edbbbf6 100644
+--- a/kernel/dma/debug.c
++++ b/kernel/dma/debug.c
+@@ -615,6 +615,7 @@ static void add_dma_entry(struct dma_debug_entry *entry, unsigned long attrs)
+ 	} else if (rc == -EEXIST &&
+ 		   !(attrs & DMA_ATTR_SKIP_CPU_SYNC) &&
+ 		   !(entry->is_cache_clean && overlap_cache_clean) &&
++		   dma_get_cache_alignment() >= L1_CACHE_BYTES &&
+ 		   !(IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) &&
+ 		     is_swiotlb_active(entry->dev))) {
+ 		err_printk(entry->dev, entry,
+-- 
+2.53.0
+
 
