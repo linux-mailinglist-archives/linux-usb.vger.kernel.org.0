@@ -1,207 +1,201 @@
-Return-Path: <linux-usb+bounces-35535-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35536-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yD+yHakoxmnQGwUAu9opvQ
-	(envelope-from <linux-usb+bounces-35535-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 07:50:17 +0100
+	id iHW/FSgsxmmNHQUAu9opvQ
+	(envelope-from <linux-usb+bounces-35536-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 08:05:12 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3179D340080
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 07:50:17 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB4E23402A1
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 08:05:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B5EA130A757C
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 06:45:20 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2F1FE310C8F6
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 06:50:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B63AB3B893F;
-	Fri, 27 Mar 2026 06:45:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD35F3C061A;
+	Fri, 27 Mar 2026 06:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WPjP9uAk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CivIGDIg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52393C062C
-	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 06:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774593915; cv=none; b=SDJdctlARy4fUs4wOPU2sJhsL5eIayGj2f6MQq+dWuEJJa2KxqweRA26g0IRGxQKDr2vnophcfC4/BreIAIJbLIM9aKdsGbGjZ3vqOJfd/HGma08bnFG+7L/X4TqZ4lNna7i9MBnYh8USAUneftBn/40dm8Ef4AAfeqWCh0Gdi4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774593915; c=relaxed/simple;
-	bh=i9wiMfsMy9Mf4aeuKAwnYO3RKNzbzS39shLmUR25TVQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rs8gMSYEiVmDgZlrc7/bI907YykUWk8oAftJgKNxKU864YdlWqeR/scqbkbrmVs/jPAJwIXeduW4PQHYpHgOwFkAuaXnTzg7z8fQ1XPbzrtUZuL52up1mwohauc7tyhD32ajQKiZyd11VJYuF1qV+W6wOATqhiSEEN4bbu+DoIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WPjP9uAk; arc=none smtp.client-ip=209.85.217.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7CE3C199B
+	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 06:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774594228; cv=pass; b=n6BK+uAP4ukwanjUBcB9Ay/Wl7Aq3/3TTpoMUTILjJG5wRQMS9s+nOOdM5cpfhr3W1K1YMyfwxZnNxSNlvgdn6aTWx4Kk44ER4emm9ncHuxdPeVgSZBFqqll5idkEz/PQRO5WXoCVBoTbrPzYXvscT0XlYt6/aml5+DdHW0A4mU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774594228; c=relaxed/simple;
+	bh=mWr59OIPiCZdjs/Wa4DCoMAu/k7cJ4tF3qAkyfBgVvE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MsRtPIDpLKEp7ZpKJZcoRqWEFAE4SQBpp2nMxrwjsqH3YQ7Gzffkj6G9dh3T8zCe30BDJh30fgvy6B61jLoD9vLDBoFeeD8TwULbmSMx/ZimT7kKzqlShqTnAZugkGS3CapVDdhp5avpD7Ii7BvX9aLxN4Ye1qdPAJHbGIe4OBc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CivIGDIg; arc=pass smtp.client-ip=209.85.210.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-6028bb29cc9so1091333137.0
-        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 23:45:05 -0700 (PDT)
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7d9e22176a7so850104a34.1
+        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 23:50:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774594219; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Zw5SCqGSOb6Eok4HEnbX6KpBHv2VR8Tl+HAM1ngn8FMyrqIfmpg2jy06q8mqHOQ6QB
+         5ffOav8BalAV0HTJIqRd4INrO99Ko/zDDiw1AbU6O95Oq+tBrFAOpsjzGikv6n0PfKmo
+         f1EsIuFPxL3S+uVE4pvePLZXBq6C8nTgd0jxm6pzYOTAKBfR9iXaMPR3TY6mkAQKRLOz
+         zybWd5/B96LOILoZm233OyJDHwecxedjpPZt7eJLiPbambcy94CeihVm+WRYy+wqNVyB
+         5ii+Ii4BlBv6FUldtXoS+Q3aWNE+VM0xooSeX5P3cnokOoVFrlTli3p7ZX7knQlr+CVC
+         P6xA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=iXjFFBcD3SJF8SimrCdKf4tkm13+ZSGuVlzsZ43PuGk=;
+        fh=tLT+0s8r7nKtmLxcqAHWeBQz1igmHUgQOe/oe3YR5gQ=;
+        b=G+Z1c0yFuxJQ4KlDhux9Fx+ceEdlk6b3IbwD26ngQ0Ys1/U8et48RgDuLQv30gm9Db
+         ypl+85LRXM3vCls8TUkLwvjJCcTNBqGHuMSqOj/VUV8l2UixNNSVUo+zLwN8EhkuYTVJ
+         cxoRdaDAFyFNy/o6/5RPeEVoGqV4YgEckODPDPE5tJHeMCkGeRNlCg12FRRAhxufL2dA
+         H/xnENt0wK0fx9S9D84YdSGpjFkky3tEDezY47/rt3HLEnipQlxscDsxq21aP0T5p9kI
+         wcyunLUSVRwqCMlqcTq7ZMssOWx4RyXwvssa9fbljUbUjAt5IPikRSxPEo/2O1ajrXxT
+         oyyg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774593904; x=1775198704; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=C5steKgFbVCdTXCRbQ/WRIMoGkwD2ComHRnreYDYbjI=;
-        b=WPjP9uAkhaSho3azgC4X2mkgmded/cf6VGAIHcDZbI5dXpT41JfbIIvrQaGAmVfqf1
-         jsLqcXIAk2jsTe/HviWQAEgk9H5fz7NzuKBmA/Tx4Y5HCw9VsKn2WGOAEgENI9BS/cNV
-         LgzVfjjrYFntZYyLyjTOKZEb4Rqc+UBY8iywS6LShP1WFXHSZI+u3MLywBmIxpTxDDIV
-         PsFisrtHzK0tJirfR1TUgWChlANStUxHp3R/hXUS0kYILnFnRSqz67gYQKfiOUuDfsiI
-         8quc4C3HRHOGo43dOoaB7+SIJLTcpKru4fJShYD43r9Mt8+TWh42E94N3UXJ4BxDjF+/
-         s2uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774593904; x=1775198704;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1774594219; x=1775199019; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=C5steKgFbVCdTXCRbQ/WRIMoGkwD2ComHRnreYDYbjI=;
-        b=cP3DS46XJ/zWd4zxg7icKRzQWk1FEJmt5fH3yYgzV7D3O0kJRx+WCbJ6FPOhMrtqr2
-         3SmKctmWB3OkEjWyxhhmA9VLtRfkGZw7UqYVCHxLJmW3JpG+ZPUh2E4RkJ6MP5YPSngD
-         fpREf9JIDsQj7o8v8/JYOP7oDxAVyu+XSelNGYgq3qhFye7n0O/1tRYMnHxElvCFRkez
-         Z4iBX4MMaL2tI7RcF+7vEMfezYFQygydIPpUFlHhsNnUUumScSLArN/+oX3VQbXzxbk1
-         cidZyjVQunKaIAb31k0WRlQHLp1I7V35s6WkBL0m+k4anG7P5UV1VRikuz9GCHbPItRe
-         iy6w==
-X-Gm-Message-State: AOJu0YzJzBpTUtwEmHsgtVVQaTatvon0GHrlAbM2nKqPj6eYQr4vl3n6
-	Pa03iPXHuMwh3IwmCWd8TqpUDYbWhtHUxeaoguZ7Vh5D5ZPjrF/5TyqmnrXDRQCAyC1cKw==
-X-Gm-Gg: ATEYQzwpYt1s9uCmCNsF4wOl8MMa9SzAAkIvIJV1HSSCRPvnuAGY2qFSFUNaVye4CLq
-	zMIcMth6k1oZ82xkvgbuk8rU/laNWyRCUBI6juy2k9HTPt3bz8ZLGuZOoRuW3S0vDApmwIg9675
-	oBbhfREF5DGUoTzi5EJLTfIaQ32zb/ydv96XSbmCE7UYRvXtQV23fMjIFZ0cSvy4LEblZIhm26i
-	/ldqWwKa2T8XF+OtmiNn52WKaVpXz9+5EU8kuSxEeoFc0mY/m/qxzjxZalrQsa2fFIZByuMtQvm
-	FBLoxDAZss5HEtWtdpVPIhNt11UAjZ9L26Dt4ax8EoCYRrUJUJJ5ACQJRahSJpwLr/eTV9+lZO+
-	SayIDutTLb1pMIFSiVc5FVSM6nRfOU31wjLF09I9y5H/k1mXmMl8Wr6w5PKzkzjYQfqu87KIZN2
-	z+rLYOgwPgEPQfXFcKuYHSDMRkaVjX+nt+nK6p6LGzpjhox51d4sWYM78tKfRs2kB/e3/lqc8fp
-	IzlEVoTJnuclP9ppa/TAhIq9Gy79AjOeJpoIKJNLa5On0xDHEFYR3hIcNrcp1Mu1SuCfwoFBNZr
-	6lM=
-X-Received: by 2002:a05:6102:c4d:b0:5ff:c6b2:efde with SMTP id ada2fe7eead31-604f909816fmr552934137.6.1774593903894;
-        Thu, 26 Mar 2026 23:45:03 -0700 (PDT)
-Received: from localhost.localdomain (2603-900b-5c40-0017-3433-631f-7c6a-3c94.inf6.spectrum.com. [2603:900b:5c40:17:3433:631f:7c6a:3c94])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-604d5313adbsm5641316137.8.2026.03.26.23.45.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2026 23:45:03 -0700 (PDT)
-From: Nathan Rebello <nathan.c.rebello@gmail.com>
-To: linux-usb@vger.kernel.org
-Cc: gregkh@linuxfoundation.org,
-	addcontent08@gmail.com,
-	skhan@linuxfoundation.org,
-	kyungtae.kim@dartmouth.edu,
-	stable@vger.kernel.org,
-	Nathan Rebello <nathan.c.rebello@gmail.com>
-Subject: [PATCH] usbip: vhci: reject RET_SUBMIT with inflated number_of_packets
-Date: Fri, 27 Mar 2026 02:44:49 -0400
-Message-ID: <20260327064449.735-1-nathan.c.rebello@gmail.com>
-X-Mailer: git-send-email 2.43.0.windows.1
+        bh=iXjFFBcD3SJF8SimrCdKf4tkm13+ZSGuVlzsZ43PuGk=;
+        b=CivIGDIgxRz5Vy6nC1xhBQp4PENupx+Gt0M2vsYaqdKg0wwG0uLK93Ry1l4eKtO4K1
+         Baa2xxHchnFe11AI838/Yo3ZjsLnJscwF3RP7khXSRsPddLLfI7/HTkqQUqR6K+BS/kf
+         UuAS2kOSjEJutB4pFzaqJCevFQm5En76jzf1smyu8LhjdrPEWhDHie6Q2OT1i6DGlSFv
+         OV9P8mVNYFtWEerPpR7mOXDzSkakPailw83ysrXlRMbNM6PCyUMr+TW55J5R1lkWwqqj
+         imqrBjdqDlAmA45Vkf6yfyUcVrn3YLQd1An8ZWpvl6zeldce5JqnBfz7HlBm1m37NO/y
+         wIpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774594219; x=1775199019;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=iXjFFBcD3SJF8SimrCdKf4tkm13+ZSGuVlzsZ43PuGk=;
+        b=hOt/GrxlHm/+NgqFzrRcWNBm/15r4WioG8ppFuIw5iYFLQ9iAt1xw4pfLTfoYUUPea
+         9JOEEk0/Oi62YMy7Mn9zXZTprB2y49feW/6Dn9Xl2WdkMmC3QN3fpgylnPwvw06ICJpk
+         M1cmIwouiGGy0EK9wSUAx2eppsETrglxU/vJvxANsrOJTaz8zt23OSiNOtAhaEVARLRk
+         rkWWF2HYh4TCI+7It84vOKCffc6ktfgMlClCDzWJfRdbOsqoWWV59CRhLt8+wnxp3j87
+         GkpeavIGhHD9GiiLrz+UzMwrZhhOmCLuTFP9puc5gJoKHAwv1EzxwWV+TgSMAJkcavWU
+         wRHg==
+X-Forwarded-Encrypted: i=1; AJvYcCX/fbOm2+rOpsyqBNHmVABM1XuGKCLn5I2JdBKF51Ov92NZpZkuAVoej73D4lQCfzDz5T3133GGAYg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBJ1/inou3Met//v8Yg6P1E0dDUiyRsBUv7A51MbhIjciu495Z
+	MerIZzxg8CyK+ECVJv0kI8/E0sD9rRTMlF9ec7kJTQJzYrOTv+dqv6HY5MCBIVJNLmsi0HkSib3
+	pnfgRIL72g0RR5pE4QYiPDzxdac3XScQ=
+X-Gm-Gg: ATEYQzzykZLhSbEZFM6entKtYBuRQXh+rO/iWmRnRrGGJzsVAMzDKtmDJPu29zruHdO
+	a4ZW3gTKVEoAPUwZ2+pts0U/CWd1YOdXUaRwupS/xi/QpYQATmCWC1GEY/QApILPlCQp6TJH/ca
+	Z4aSX7pGuqEt8KZousFTkXqX1kSgb0azWlhM9YRIceJ5RsD8kY88j3dVePqDaw/FtIXSFJikyoD
+	m8R3yQRWIDHdIsgSWFtHRkAvNhsdHwPrv0YECWCH4rJEb7cZWOc7MFwmcHIcF96PTFWDkH6nMX5
+	VgFl47eGeqLp4yZ5HHUE
+X-Received: by 2002:a05:6830:82d1:b0:7d7:419a:7ac8 with SMTP id
+ 46e09a7af769-7d9fae3e615mr593879a34.15.1774594219320; Thu, 26 Mar 2026
+ 23:50:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
+References: <20260327055846.248829-1-mikhail.v.gavrilov@gmail.com> <acYlxRBhSMcwBnja@hyeyoo>
+In-Reply-To: <acYlxRBhSMcwBnja@hyeyoo>
+From: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date: Fri, 27 Mar 2026 11:50:07 +0500
+X-Gm-Features: AQROBzCSJ9XrV9me08FJoe9N5FsTCYU6wreGwMbyYjqv4H9TotPPKCpBSj6ZRjM
+Message-ID: <CABXGCsMTk6kDuJxsTAUKP6npTvp4X6Ryng+P4xjMUsPbTA43+Q@mail.gmail.com>
+Subject: Re: [PATCH] mm/slab: align kmalloc to cacheline when DMA API
+ debugging is active
+To: "Harry Yoo (Oracle)" <harry@kernel.org>
+Cc: vbabka@kernel.org, akpm@linux-foundation.org, hao.li@linux.dev, 
+	cl@gentwo.org, rientjes@google.com, roman.gushchin@linux.dev, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	stern@rowland.harvard.edu, linux@roeck-us.net, andy.shevchenko@gmail.com, 
+	hch@lst.de, Jeff.kirsher@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,gmail.com,dartmouth.edu,vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35535-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nathancrebello@gmail.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-35536-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FREEMAIL_CC(0.00)[kernel.org,linux-foundation.org,linux.dev,gentwo.org,google.com,kvack.org,vger.kernel.org,rowland.harvard.edu,roeck-us.net,gmail.com,lst.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mikhailvgavrilov@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3179D340080
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: EB4E23402A1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-When a USB/IP client receives a RET_SUBMIT response,
-usbip_pack_ret_submit() unconditionally overwrites
-urb->number_of_packets from the network PDU. This value is
-subsequently used as the loop bound in usbip_recv_iso() and
-usbip_pad_iso() to iterate over urb->iso_frame_desc[], a flexible
-array whose size was fixed at URB allocation time based on the
-*original* number_of_packets from the CMD_SUBMIT.
+On Fri, Mar 27, 2026 at 11:38=E2=80=AFAM Harry Yoo (Oracle) <harry@kernel.o=
+rg> wrote:
+>
+> On Fri, Mar 27, 2026 at 10:58:46AM +0500, Mikhail Gavrilov wrote:
+> > When CONFIG_DMA_API_DEBUG is enabled, the DMA debug infrastructure
+> > tracks active mappings per cacheline and warns if two different DMA
+> > mappings share the same cacheline ("cacheline tracking EEXIST,
+> > overlapping mappings aren't supported").
+> >
+> > On x86_64, ARCH_KMALLOC_MINALIGN defaults to 8, so small kmalloc
+> > allocations (e.g. the 8-byte hub->buffer and hub->status in the USB
+> > hub driver) frequently land in the same 64-byte cacheline.  When both
+> > are DMA-mapped, this triggers a false positive warning.
+>
+> Is it feasible to suppress the warning if dma_get_cache_alignment() is
+> smaller than L1_CACHE_BYTES?
 
-A malicious USB/IP server can set number_of_packets in the response
-to a value larger than what was originally submitted, causing a heap
-out-of-bounds write when usbip_recv_iso() writes to
-urb->iso_frame_desc[i] beyond the allocated region.
 
-KASAN confirmed this with kernel 7.0.0-rc5:
+Hi Harry,
 
-  BUG: KASAN: slab-out-of-bounds in usbip_recv_iso+0x46a/0x640
-  Write of size 4 at addr ffff888106351d40 by task vhci_rx/69
+Good question. I considered the dma-debug side, but the issue is
+that the cacheline overlap check in add_dma_entry() is intentionally
+strict -- it catches real bugs on non-coherent architectures where
+two DMA buffers sharing a cacheline can corrupt data.
 
-  The buggy address is located 0 bytes to the right of
-   allocated 320-byte region [ffff888106351c00, ffff888106351d40)
+The check already has suppressions for DMA_ATTR_SKIP_CPU_SYNC,
+DMA_ATTR_CPU_CACHE_CLEAN, and CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC +
+swiotlb.  Adding another special case (e.g. dev_is_dma_coherent())
+would weaken the check for all coherent platforms, potentially
+hiding real bugs on devices behind non-coherent IOMMUs.
 
-The server side (stub_rx.c) and gadget side (vudc_rx.c) already
-validate number_of_packets in the CMD_SUBMIT path since commits
-c6688ef9f297 ("usbip: fix stub_rx: harden CMD_SUBMIT path to handle
-malicious input") and b78d830f0049 ("usbip: fix vudc_rx: harden
-CMD_SUBMIT path to handle malicious input"). The server side validates
-against USBIP_MAX_ISO_PACKETS because no URB exists yet at that point.
-On the client side we have the original URB, so we can use the tighter
-bound: the response must not exceed the original number_of_packets.
+Alan Stern discussed this in the bugzilla [1] and concluded that
+the slab alignment approach "seems reasonable" [2], noting that
+"turning on debugging should not affect the way the kernel behaves --
+otherwise what you're debugging isn't the same as what normally
+happens. But given the way the DMA API debugging is set up, I don't
+see any alternative."
 
-This mirrors the existing validation of actual_length against
-transfer_buffer_length in usbip_recv_xbuff(), which checks the
-response value against the original allocation size.
+The memory overhead is only present when CONFIG_DMA_API_DEBUG is
+enabled, which is a debug-only option not used in production.
 
-Kelvin Mbogo's series ("usb: usbip: fix integer overflow in
-usbip_recv_iso()", v2) hardens the receive-side functions themselves;
-this patch complements that work by catching the bad value at its
-source -- in usbip_pack_ret_submit() before the overwrite -- and
-using the tighter per-URB allocation bound rather than the global
-USBIP_MAX_ISO_PACKETS limit.
+That said, if you'd prefer a dma-debug side fix, I'm happy to
+explore that direction instead.
 
-Fix this by checking rpdu->number_of_packets against
-urb->number_of_packets in usbip_pack_ret_submit() before the
-overwrite. On violation, clamp to zero so that usbip_recv_iso() and
-usbip_pad_iso() safely return early.
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=3D215740#c31
+[2] https://bugzilla.kernel.org/show_bug.cgi?id=3D215740#c44
 
-Fixes: 0775a9cbc798 ("staging: usbip: vhci extension: modifications to the client side")
-Cc: stable@vger.kernel.org
-Signed-off-by: Nathan Rebello <nathan.c.rebello@gmail.com>
----
- drivers/usb/usbip/usbip_common.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
---- a/drivers/usb/usbip/usbip_common.c
-+++ b/drivers/usb/usbip/usbip_common.c
-@@ -470,7 +470,18 @@ static void usbip_pack_ret_submit(struct usbip_header *pdu, struct urb *urb,
- 		urb->status		= rpdu->status;
- 		urb->actual_length	= rpdu->actual_length;
- 		urb->start_frame	= rpdu->start_frame;
--		urb->number_of_packets = rpdu->number_of_packets;
-+		/*
-+		 * The number_of_packets field determines the length of
-+		 * iso_frame_desc[], which is a flexible array allocated
-+		 * at URB creation time. A response must never claim more
-+		 * packets than originally submitted; doing so would cause
-+		 * an out-of-bounds write in usbip_recv_iso() and
-+		 * usbip_pad_iso(). Clamp to zero on violation so both
-+		 * functions safely return early.
-+		 */
-+		if (rpdu->number_of_packets < 0 ||
-+		    rpdu->number_of_packets > urb->number_of_packets)
-+			rpdu->number_of_packets = 0;
-+		urb->number_of_packets = rpdu->number_of_packets;
- 		urb->error_count	= rpdu->error_count;
- 	}
- }
+--=20
+Best Regards,
+Mike Gavrilov.
 
