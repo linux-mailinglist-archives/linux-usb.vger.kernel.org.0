@@ -1,228 +1,254 @@
-Return-Path: <linux-usb+bounces-35562-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35563-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aPE3LfyPxmlLLwUAu9opvQ
-	(envelope-from <linux-usb+bounces-35562-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 15:11:08 +0100
+	id yNFfC7aQxmlLLwUAu9opvQ
+	(envelope-from <linux-usb+bounces-35563-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 15:14:14 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39388345CF7
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 15:11:08 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EBF1345DA9
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 15:14:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EA17D306F96C
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 14:06:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5E09A30626E1
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 14:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D494C3F0A9B;
-	Fri, 27 Mar 2026 14:06:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E8AD3F074F;
+	Fri, 27 Mar 2026 14:09:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XJUcqaIg"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="IEtwusiy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D94391826
-	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 14:06:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BDE31C57B
+	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 14:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774620392; cv=none; b=DqhDB681iLf430CsxZfvrezx/3CHJaEL5fATawJ7kNFWz6CuOkMOcify6CzA2CiWDUOfv3SmQJ5ZddzXKYPH7nOtIdpOKTBgr+MAkspXDwFExrKLgI681+Z+DUWeFTGAD2A/GH2NfC4cOAf8XBmTCPNSnsw04ZLX/X0cRz/N9qc=
+	t=1774620560; cv=none; b=c/oUKdw/qQCFK2cgHm1K9T095pQlfle2tglCgJYa0F38fgh+oSsUwkkTYHgpNNaQgnj4tCdohIvwLeS8/WZK4AUmoLDWKau0u6hPpY5RRmmdt6C2VioKFU8B3F67tc9OwjKB96ssj7tpKrdsyPmSOQkH+KiI0p+4/GBPsEdHO4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774620392; c=relaxed/simple;
-	bh=YG4r2XuxApAYu6LKzoe/5SwvEPoyF1OnlWcoZM1u4mI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PWvcDTBbDXzZnmS7STK8xfCMkVS4e9EdhQZgTD9f3kPXflMre5XAKPta23DQJJWUUCpSYdE2uz+rHTd/9BPdSMRJXxrmxdRVXoECtQq9AubbuO3orNzow3dOOWRfBtF00qKBV50WnycLUTwGbmQS80Km4ibZF7q3a1xgMS3XCTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XJUcqaIg; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43b41b545d9so2227743f8f.2
-        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 07:06:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774620388; x=1775225188; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QSUpIlblw1Y8p0Flz+2ps8AGucj2y3pRw8IP0aJ+OJI=;
-        b=XJUcqaIgL71hXD8t8lZL96lttY7Xmh42IwKc368lwUvYfz9XpYn8Jd5XpIJeKwnEFm
-         e8eEcTukPFBgYursd0S1J82POhJmnJ07m/jPGknii0EALdeJQlpPYMXIfLBUfdubcFIj
-         v4nhPm+AeCgHb3KWllGs2ESKnlm4tp179tr921TTeSCc5Hr9eH1DjvukiwNCzf51SLoW
-         2MfPnhVEMpxMeVzt6APJbDIJZWCEvVK+wwNgO/1cEVZqpYH+ywjowG4JYq2Z2bxFnG7Z
-         6+zTinJphliFafoczfxB7EX2oh7tPuziJouOa+myu0yHg/jtkwyYv4++V98M6PyOO+TI
-         ywGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774620388; x=1775225188;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QSUpIlblw1Y8p0Flz+2ps8AGucj2y3pRw8IP0aJ+OJI=;
-        b=lke2FRccJl+y+RZZEwcwGi8pRum8R1aHd9uWNufhGhyxTQ+8vm487nEmTKytkM2Nzy
-         kCEtYl2tqX2CIOxUvgc9JmUqnkrWsxzrwncDUlLKEgXgoMj2QsRpo+fJKyAK9VEZZ2HG
-         E6oJG679EXbK7XbbnNWGKBJOThEvThUAgZsTH/L0T8roKXhZqp6FMyT85CaCST99Ri+x
-         xX8yWEfwBuuLjiNWytfphk049gBk0peTUgpT1AA6sY5zVXcPjRzYSd0KOUzfYoQukRWo
-         SgnVZ/uJXsh17XQOuPtk1bvHn7inB1YkSs9SU+OsbF1tqWYGr3K4BKYXMWl+/PHrSvaP
-         Cl/A==
-X-Forwarded-Encrypted: i=1; AJvYcCUKhdJskn99KcuLoBSMo/TTZGa3tKwZc255tnhYCM2eDcyT+GsBpUCiUj45h88kYuj19l4V26cq6zs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCKVSXNY8iUIBACdikiBci/kBBdxwPQA1f0mMZNNWp5nZr7N6J
-	vJfYZh70ahIc57tPl3STm0TNXzgULK+31/cVwOa3TV6GHh/uEq6Ckq0x
-X-Gm-Gg: ATEYQzyZOrsovcC+CALrX0R8tJSSEaZBJxlPmuWy2WlfqdhZG5NEfb9zkLOrYTfTa5l
-	lOLq4OXW72D/A0xpoRRZE20BI7zAz12WZDFrg6fqgbtctch1a1q8doXUbjwdtL23NI2xAJBUaRS
-	orp+VTWRYE8PDEZ3gvpTcqUKc8gQnrFXK3klqiG37DK8J9q5H6rwqzzR2RU/S0S2RPu0jMTm1uP
-	wDTi/xXxG9NH6FfcTZ/fC24DVJTTVAsaq+YCbAdvxpTUeJHt5u+1kmicaSofa3VOnmbFUeYVq2L
-	TQRK3vd7BR+KP7GPlZ1JRa1xTp2QDZ/QTC/VDb76IenVTmzFNEvJat+anB8oXd0AouK/7St/wzv
-	+ublw0DSJYLfBu/d7MP1PpbBWP2f59+sBZwPTT5KoLiZ6n35ncAHzkBA60vww/sKltA1BK3ka4h
-	AT8va/A+/G1wZmbT/T1sZfVjvJqffl/Bm/Co1hbtV7qeNDbQ3G+Dh7ip+u67a61zYkSqJMEuBNr
-	xNQ1umMveUkGQ==
-X-Received: by 2002:a05:6000:4212:b0:43b:95e9:413c with SMTP id ffacd0b85a97d-43b9ea6390fmr4110385f8f.44.1774620388098;
-        Fri, 27 Mar 2026 07:06:28 -0700 (PDT)
-Received: from orome (p200300e41f249a00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f24:9a00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b9192e305sm16052576f8f.8.2026.03.27.07.06.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2026 07:06:26 -0700 (PDT)
-Date: Fri, 27 Mar 2026 15:06:23 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-Cc: Thierry Reding <thierry.reding@kernel.org>, 
-	Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, JC Kuo <jckuo@nvidia.com>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] usb: xhci: tegra: Remove redundant mutex when
- setting phy mode
-Message-ID: <acaNBQkGgQ_N6Krh@orome>
-References: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
- <20260127-diogo-tegra_phy-v2-2-787b9eed3ed5@tecnico.ulisboa.pt>
- <acJ50sQraVmy4zXs@orome>
- <00aeda7a-e5e5-4779-b212-6e56c2c5ec31@tecnico.ulisboa.pt>
+	s=arc-20240116; t=1774620560; c=relaxed/simple;
+	bh=QaEM4HGdtXRUqqANI+Ht9k3oZ7yHPx9x7IFLbSI8XF0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=AOhinC3rDcTE8zMp9ryxkkzB9D0C5FvmgQs2a8Kn/UA6wX9EMk/kWA4WAOVTWdzbNr90l+bUj7x8sX/EcDYXGwAFQWc+w8kbVlQ9TfPYAVWZ3GGMX39vn3IUnJdWZn9mpRF5mveqAD+oFSCXBcQtS0wcUWYH0AFCsKuy0/CZCuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=IEtwusiy; arc=none smtp.client-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20260327140914euoutp015943901440697ccc9b5c46c150b153af~gt-4JaRzX2093820938euoutp01K
+	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 14:09:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20260327140914euoutp015943901440697ccc9b5c46c150b153af~gt-4JaRzX2093820938euoutp01K
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1774620554;
+	bh=FllaRuqz/ndrQdv/IFjTF2PMiXOCm/8g8JGqiCXRtZ8=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=IEtwusiyymGgXTgefN5F2+tP3oGnBaysfmc5wcK8nupPsfZqjORP7h7wCyeegICe9
+	 lxu1CtjuM/x3dsuNHEsfeRVcwk6iBQtdRUwKy5JNgDFiBPeccnY9nyx+ifDhLdzJgq
+	 KCEhEkk/1Pqg1xKElvtpyCRYF77aefPTpmANE3Ok=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20260327140914eucas1p19677ff7152b3f9bb8751546cf127d41b~gt-3sPh0s3007330073eucas1p1M;
+	Fri, 27 Mar 2026 14:09:14 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20260327140913eusmtip18997f7f0a8f811699c2317b9909b495b~gt-2n1yFW1792317923eusmtip1e;
+	Fri, 27 Mar 2026 14:09:13 +0000 (GMT)
+Message-ID: <d2ed7315-72ff-43f3-bfaa-995025cb9419@samsung.com>
+Date: Fri, 27 Mar 2026 15:09:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ktw4w3vv6m4wgb3m"
-Content-Disposition: inline
-In-Reply-To: <00aeda7a-e5e5-4779-b212-6e56c2c5ec31@tecnico.ulisboa.pt>
-X-Spamd-Result: default: False [-2.26 / 15.00];
-	SIGNED_PGP(-2.00)[];
+User-Agent: Betterbird (Windows)
+Subject: Re: [PATCH] mm/slab: align kmalloc to cacheline when DMA API
+ debugging is active
+To: Catalin Marinas <catalin.marinas@arm.com>, Mikhail Gavrilov
+	<mikhail.v.gavrilov@gmail.com>
+Cc: vbabka@kernel.org, harry.yoo@oracle.com, akpm@linux-foundation.org,
+	hao.li@linux.dev, cl@gentwo.org, rientjes@google.com,
+	roman.gushchin@linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, linux@roeck-us.net,
+	andy.shevchenko@gmail.com, hch@lst.de, Jeff.kirsher@gmail.com, Robin Murphy
+	<robin.murphy@arm.com>
+Content-Language: en-US
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <acZ3ZUXhFHpSXzYS@arm.com>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20260327140914eucas1p19677ff7152b3f9bb8751546cf127d41b
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20260327122625eucas1p10eabcb31aada4e11b5c2ebcff4cb3c39
+X-EPHeader: CA
+X-CMS-RootMailID: 20260327122625eucas1p10eabcb31aada4e11b5c2ebcff4cb3c39
+References: <20260327055846.248829-1-mikhail.v.gavrilov@gmail.com>
+	<CGME20260327122625eucas1p10eabcb31aada4e11b5c2ebcff4cb3c39@eucas1p1.samsung.com>
+	<acZ3ZUXhFHpSXzYS@arm.com>
+X-Spamd-Result: default: False [-0.65 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35562-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35563-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[kernel.org,oracle.com,linux-foundation.org,linux.dev,gentwo.org,google.com,kvack.org,vger.kernel.org,rowland.harvard.edu,roeck-us.net,gmail.com,lst.de,arm.com];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[arm.com,gmail.com];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[thierryreding@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 39388345CF7
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[m.szyprowski@samsung.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[samsung.com:+];
+	NEURAL_HAM(-0.00)[-0.747];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arm.com:email,samsung.com:dkim,samsung.com:mid]
+X-Rspamd-Queue-Id: 7EBF1345DA9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Hi
 
---ktw4w3vv6m4wgb3m
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 2/6] usb: xhci: tegra: Remove redundant mutex when
- setting phy mode
-MIME-Version: 1.0
+On 27.03.2026 13:26, Catalin Marinas wrote:
+> + Marek, Robin
 
-On Thu, Mar 26, 2026 at 02:17:33PM +0000, Diogo Ivo wrote:
-> Hello,
->=20
-> On 3/24/26 11:48, Thierry Reding wrote:
-> > On Tue, Jan 27, 2026 at 03:11:48PM +0000, Diogo Ivo wrote:
-> > > As the PHY subsystem already synchronizes concurrent accesses to a PHY
-> > > instance with a core-internal mutex remove the driver specific mutex
-> > > synchronization.
-> > >=20
-> > > Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-> > > ---
-> > > v1->v2:
-> > > - New patch
-> > > ---
-> > >   drivers/usb/host/xhci-tegra.c | 4 ----
-> > >   1 file changed, 4 deletions(-)
-> > >=20
-> > > diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-te=
-gra.c
-> > > index 8b492871d21d..927861ca14f2 100644
-> > > --- a/drivers/usb/host/xhci-tegra.c
-> > > +++ b/drivers/usb/host/xhci-tegra.c
-> > > @@ -1357,15 +1357,11 @@ static void tegra_xhci_id_work(struct work_st=
-ruct *work)
-> > >   	dev_dbg(tegra->dev, "host mode %s\n", str_on_off(tegra->host_mode)=
-);
-> > > -	mutex_lock(&tegra->lock);
-> > > -
-> > >   	if (tegra->host_mode)
-> > >   		phy_set_mode_ext(phy, PHY_MODE_USB_OTG, USB_ROLE_HOST);
-> > >   	else
-> > >   		phy_set_mode_ext(phy, PHY_MODE_USB_OTG, USB_ROLE_NONE);
-> > > -	mutex_unlock(&tegra->lock);
-> > > -
-> >=20
-> > It looks to me like the mutex here is trying to protect against
-> > tegra->host_mode changing while we're setting a different mode. That
-> > doesn't seem to be taken care of by the PHY internal mutex.
->=20
-> After taking another look at it I think I understand your point for the
-> mutex, but in that case wouldn't it also need to be held in the writer
-> of host_mode, tegra_xhci_id_notify()?
+Thanks for adding me to the loop.
 
-Yes, I think it probably would need to. I don't know how likely it is,
-but I think the purpose of this is to protect against the ID notifier
-firing quickly in succession. Although, given that this runs on a work
-queue and work queue instances are non-reentrant to my knowledge, I
-don't think we need the mutex here after all.
+> On Fri, Mar 27, 2026 at 10:58:46AM +0500, Mikhail Gavrilov wrote:
+>> When CONFIG_DMA_API_DEBUG is enabled, the DMA debug infrastructure
+>> tracks active mappings per cacheline and warns if two different DMA
+>> mappings share the same cacheline ("cacheline tracking EEXIST,
+>> overlapping mappings aren't supported").
+>>
+>> On x86_64, ARCH_KMALLOC_MINALIGN defaults to 8, so small kmalloc
+>> allocations (e.g. the 8-byte hub->buffer and hub->status in the USB
+>> hub driver) frequently land in the same 64-byte cacheline.  When both
+>> are DMA-mapped, this triggers a false positive warning.
+>>
+>> This has been reported repeatedly since v5.14 (when the EEXIST check
+>> was added) across various USB host controllers and devices including
+>> xhci_hcd with USB hubs, USB audio devices, and USB ethernet adapters.
+> This indeed has come up regularly in the past years.
+>
+>> +/*
+>> + * Align memory allocations to cache lines if DMA API debugging is active
+>> + * to avoid false positive DMA overlapping error messages.
+>> + */
+>> +#ifdef CONFIG_DMA_API_DEBUG
+>> +#ifndef ARCH_KMALLOC_MINALIGN
+>> +#define ARCH_KMALLOC_MINALIGN  L1_CACHE_BYTES
+>> +#elif ARCH_KMALLOC_MINALIGN < L1_CACHE_BYTES
+>> +#undef ARCH_KMALLOC_MINALIGN
+>> +#define ARCH_KMALLOC_MINALIGN  L1_CACHE_BYTES
+>> +#endif
+>> +#endif
+> TL;DR: I think this is fine:
+>
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+>
+> I'm not sure that's the best way to hide the warning but there
+> are no great solutions either. On one hand, we want the DMA debug to
+> capture potential problems on architectures it's not running on. OTOH,
+> we also want to avoid false positives on coherent architectures/devices.
+> I don't think reconciling the two requirements is easy.
+>
+> When DMA_API_DEBUG is enabled, the above will change the x86 behaviour
+> that could have implications beyond DMA (e.g. may not catch some buffer
+> overflow because it's within L1_CACHE_BYTES). Similarly for non-coherent
+> architectures that select DMA_BOUNCE_UNALIGNED_KMALLOC (arm64 and riscv
+> currently). arm64 defines ARCH_DMA_MINALIGN to 128 but
+> ARCH_KMALLOC_MINALIGN to 8 (why 128 is larger than L1_CACHE_BYTES is
+> another matter but let's ignore it for now).
 
-> This patch has been picked up as-is into usb-next so it would be nice to
-> figure this out before it gets merged in the next merge window.
+IMHO enabling DMA_API_DEBUG should not change the kernel behavior, so I 
+would prefer fixing this in DMA-debug code somehow.
 
-Given the above, I think it's fine. Maybe the commit message doesn't
-give a correct reason for why we don't need the mutex, but the resulting
-code looks like it should be fine regardless.
+> More of a thinking out loud, we have:
+>
+> 1. Coherent architectures - alignment doesn't matter
+>
+> 2. Non-coherent architectures with:
+>     a) Sufficiently large ARCH_KMALLOC_MINALIGN
+>     b) Small ARCH_KMALLOC_MINALIGN but DMA_BOUNCE_UNALIGNED_KMALLOC
+>     c) Broken config - forgot to set ARCH_DMA_MINALIGN or bouncing
+>
+> We can ignore (2.c), the aim of the DMA debug is to catch wrong uses in
+> drivers. If drivers is the only goal, the above change will do when
+> running on (1) or (2.a) hardware - it will catch sub-L1_CACHE_BYTES
+> buffers from drivers while assuming kmalloc() machinery is safe.
+> However, if running on (2.b) it won't catch anything that may be
+> problematic on (2.a) since the DMA debug ignores the overlap.
+>
+> We could make DMA_BOUNCE_UNALIGNED_KMALLOC dependent on !DMA_API_DEBUG
+> but it would be nice to be able to sanity-check the bouncing logic.
+> Well, it wasn't checking it before and with commit 03521c892bb8
+> ("dma-debug: don't report false positives with
+> DMA_BOUNCE_UNALIGNED_KMALLOC"), we made this clear that overlapping will
+> be ignored.
+>
+> Irrespective of whether we disable bouncing with DMA_API_DEBUG, maybe we
+> could replace the above commit with:
+>
+> diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
+> index 3928a509c44c..488045ef6245 100644
+> --- a/kernel/dma/mapping.c
+> +++ b/kernel/dma/mapping.c
+> @@ -175,7 +175,7 @@ dma_addr_t dma_map_phys(struct device *dev, phys_addr_t phys, size_t size,
+>   	if (!is_mmio)
+>   		kmsan_handle_dma(phys, size, dir);
+>   	trace_dma_map_phys(dev, phys, addr, size, dir, attrs);
+> -	debug_dma_map_phys(dev, phys, size, dir, addr, attrs);
+> +	debug_dma_map_phys(dev, dma_to_phys(addr), size, dir, addr, attrs);
+>
+>   	return addr;
+>   }
+>
+> Anyway, this I think is unrelated to the proposed change affecting x86,
+> more of a how to make the DMA API debugging more useful when running on
+> arm64 or riscv.
 
-Thierry
+This is not enough, there is also a dma_map_sg_attrs() path.
 
---ktw4w3vv6m4wgb3m
-Content-Type: application/pgp-signature; name="signature.asc"
+I've reverted 03521c892bb8 and added the following change:
 
------BEGIN PGP SIGNATURE-----
+diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c index 
+55e7ca8ceb86..bbada41143ea 100644 --- a/kernel/dma/debug.c +++ 
+b/kernel/dma/debug.c @@ -18,6 +18,7 @@ #include <linux/uaccess.h> 
+#include <linux/export.h> #include <linux/device.h> +#include 
+<linux/dma-direct.h> #include <linux/types.h> #include <linux/sched.h> 
+#include <linux/ctype.h> @@ -1241,7 +1242,8 @@ void 
+debug_dma_map_phys(struct device *dev, phys_addr_t phys, size_t size, 
+entry->dev = dev; entry->type = dma_debug_phy; - entry->paddr = phys; + 
+entry->paddr = IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) ? + 
+dma_to_phys(dev, dma_addr) : phys; entry->dev_addr = dma_addr; 
+entry->size = size; entry->direction = direction; @@ -1335,7 +1337,9 @@ 
+void debug_dma_map_sg(struct device *dev, struct scatterlist *sg, 
+entry->type = dma_debug_sg; entry->dev = dev; - entry->paddr = 
+sg_phys(s); + entry->paddr = + 
+IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) ? + dma_to_phys(dev, 
+sg_dma_address(s)) : sg_phys(s); entry->size = sg_dma_len(s); 
+entry->dev_addr = sg_dma_address(s); entry->direction = direction;
 
-iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmnGjtwACgkQ3SOs138+
-s6Goig//SnPG7Rf8K0gKeOP5TZWyD90YKXfxg4roWTYyRNVHdUU2H14n31xJS1Oo
-pMQvSFpK/kjChe09fFOUecq5vW68Rrfm2+Vi5rqfW+GHUlGo+5S70gJ8lbpV4wOh
-Ee7fuEilJgSjIMVxxwQY6rupnrXIPufzsSHGwbtaSYy04ibP9vhDn2REJ0bkIuZc
-AWzBBUQXf+aDMyKkliS5Ll15t54oQRdjZp/c02Zd1ffBX/6vx2/lx7hbSTBEm8mF
-eTyQV9XU3so3X9+mmff5uYEOLkHOxEJgOOVdMW8XDrTTLqR+PgTJ44zoGcOnCrNk
-2sOuA8ThjZBqgmjmVvi1zTasc0jHB7McIwHD8XLHmBS1SM1k8y7Lwjzm3VXXqYOl
-aXaMCIEwzp+WeYuxLPDQp5Qj8HEbNmAqZMztnucMn0h6riFsFX1SICiQ7o8DXe3/
-qTPjRWL7qvtiJSBCN068/hZF6l0m2hIfJqflvmF9CqDd4wzAfUqgSZiavmwpJpYt
-refzB/wklao+yrD+cp895hPidxJVmG6omcleeczxJmVVKWm6pOYJP3LCLGezArVn
-phgVYhRDOUvKWQk6sgtCqJbf6h0T1Nf1YvN/Cu1y6MAB1tgGiMUV6JEVuhaPN+kd
-PnN3cFTF/8ATfGpMSArmO8l4VYoGHx5FxgE/LFRPED4LZgaGlZU=
-=g7fB
------END PGP SIGNATURE-----
+thenran my tests on ARM64 and RV64 boards. Only one new warning has been 
+reported (I didn't analyze it yet), so this might be indeed a better 
+solution than skipping overlapping cache lines warnings when 
+DMA_BOUNCE_UNALIGNED_KMALLOC is set.
 
---ktw4w3vv6m4wgb3m--
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
 
