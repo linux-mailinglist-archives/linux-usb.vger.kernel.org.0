@@ -1,201 +1,176 @@
-Return-Path: <linux-usb+bounces-35536-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35537-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iHW/FSgsxmmNHQUAu9opvQ
-	(envelope-from <linux-usb+bounces-35536-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 08:05:12 +0100
+	id GOT8FfcqxmnQGwUAu9opvQ
+	(envelope-from <linux-usb+bounces-35537-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 08:00:07 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB4E23402A1
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 08:05:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7D28340234
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 08:00:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2F1FE310C8F6
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 06:50:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 35C063037E4B
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 06:53:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD35F3C061A;
-	Fri, 27 Mar 2026 06:50:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD42F3C454F;
+	Fri, 27 Mar 2026 06:53:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CivIGDIg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uM9tWBQS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7CE3C199B
-	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 06:50:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774594228; cv=pass; b=n6BK+uAP4ukwanjUBcB9Ay/Wl7Aq3/3TTpoMUTILjJG5wRQMS9s+nOOdM5cpfhr3W1K1YMyfwxZnNxSNlvgdn6aTWx4Kk44ER4emm9ncHuxdPeVgSZBFqqll5idkEz/PQRO5WXoCVBoTbrPzYXvscT0XlYt6/aml5+DdHW0A4mU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774594228; c=relaxed/simple;
-	bh=mWr59OIPiCZdjs/Wa4DCoMAu/k7cJ4tF3qAkyfBgVvE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MsRtPIDpLKEp7ZpKJZcoRqWEFAE4SQBpp2nMxrwjsqH3YQ7Gzffkj6G9dh3T8zCe30BDJh30fgvy6B61jLoD9vLDBoFeeD8TwULbmSMx/ZimT7kKzqlShqTnAZugkGS3CapVDdhp5avpD7Ii7BvX9aLxN4Ye1qdPAJHbGIe4OBc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CivIGDIg; arc=pass smtp.client-ip=209.85.210.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7d9e22176a7so850104a34.1
-        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2026 23:50:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774594219; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Zw5SCqGSOb6Eok4HEnbX6KpBHv2VR8Tl+HAM1ngn8FMyrqIfmpg2jy06q8mqHOQ6QB
-         5ffOav8BalAV0HTJIqRd4INrO99Ko/zDDiw1AbU6O95Oq+tBrFAOpsjzGikv6n0PfKmo
-         f1EsIuFPxL3S+uVE4pvePLZXBq6C8nTgd0jxm6pzYOTAKBfR9iXaMPR3TY6mkAQKRLOz
-         zybWd5/B96LOILoZm233OyJDHwecxedjpPZt7eJLiPbambcy94CeihVm+WRYy+wqNVyB
-         5ii+Ii4BlBv6FUldtXoS+Q3aWNE+VM0xooSeX5P3cnokOoVFrlTli3p7ZX7knQlr+CVC
-         P6xA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=iXjFFBcD3SJF8SimrCdKf4tkm13+ZSGuVlzsZ43PuGk=;
-        fh=tLT+0s8r7nKtmLxcqAHWeBQz1igmHUgQOe/oe3YR5gQ=;
-        b=G+Z1c0yFuxJQ4KlDhux9Fx+ceEdlk6b3IbwD26ngQ0Ys1/U8et48RgDuLQv30gm9Db
-         ypl+85LRXM3vCls8TUkLwvjJCcTNBqGHuMSqOj/VUV8l2UixNNSVUo+zLwN8EhkuYTVJ
-         cxoRdaDAFyFNy/o6/5RPeEVoGqV4YgEckODPDPE5tJHeMCkGeRNlCg12FRRAhxufL2dA
-         H/xnENt0wK0fx9S9D84YdSGpjFkky3tEDezY47/rt3HLEnipQlxscDsxq21aP0T5p9kI
-         wcyunLUSVRwqCMlqcTq7ZMssOWx4RyXwvssa9fbljUbUjAt5IPikRSxPEo/2O1ajrXxT
-         oyyg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774594219; x=1775199019; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iXjFFBcD3SJF8SimrCdKf4tkm13+ZSGuVlzsZ43PuGk=;
-        b=CivIGDIgxRz5Vy6nC1xhBQp4PENupx+Gt0M2vsYaqdKg0wwG0uLK93Ry1l4eKtO4K1
-         Baa2xxHchnFe11AI838/Yo3ZjsLnJscwF3RP7khXSRsPddLLfI7/HTkqQUqR6K+BS/kf
-         UuAS2kOSjEJutB4pFzaqJCevFQm5En76jzf1smyu8LhjdrPEWhDHie6Q2OT1i6DGlSFv
-         OV9P8mVNYFtWEerPpR7mOXDzSkakPailw83ysrXlRMbNM6PCyUMr+TW55J5R1lkWwqqj
-         imqrBjdqDlAmA45Vkf6yfyUcVrn3YLQd1An8ZWpvl6zeldce5JqnBfz7HlBm1m37NO/y
-         wIpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774594219; x=1775199019;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=iXjFFBcD3SJF8SimrCdKf4tkm13+ZSGuVlzsZ43PuGk=;
-        b=hOt/GrxlHm/+NgqFzrRcWNBm/15r4WioG8ppFuIw5iYFLQ9iAt1xw4pfLTfoYUUPea
-         9JOEEk0/Oi62YMy7Mn9zXZTprB2y49feW/6Dn9Xl2WdkMmC3QN3fpgylnPwvw06ICJpk
-         M1cmIwouiGGy0EK9wSUAx2eppsETrglxU/vJvxANsrOJTaz8zt23OSiNOtAhaEVARLRk
-         rkWWF2HYh4TCI+7It84vOKCffc6ktfgMlClCDzWJfRdbOsqoWWV59CRhLt8+wnxp3j87
-         GkpeavIGhHD9GiiLrz+UzMwrZhhOmCLuTFP9puc5gJoKHAwv1EzxwWV+TgSMAJkcavWU
-         wRHg==
-X-Forwarded-Encrypted: i=1; AJvYcCX/fbOm2+rOpsyqBNHmVABM1XuGKCLn5I2JdBKF51Ov92NZpZkuAVoej73D4lQCfzDz5T3133GGAYg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBJ1/inou3Met//v8Yg6P1E0dDUiyRsBUv7A51MbhIjciu495Z
-	MerIZzxg8CyK+ECVJv0kI8/E0sD9rRTMlF9ec7kJTQJzYrOTv+dqv6HY5MCBIVJNLmsi0HkSib3
-	pnfgRIL72g0RR5pE4QYiPDzxdac3XScQ=
-X-Gm-Gg: ATEYQzzykZLhSbEZFM6entKtYBuRQXh+rO/iWmRnRrGGJzsVAMzDKtmDJPu29zruHdO
-	a4ZW3gTKVEoAPUwZ2+pts0U/CWd1YOdXUaRwupS/xi/QpYQATmCWC1GEY/QApILPlCQp6TJH/ca
-	Z4aSX7pGuqEt8KZousFTkXqX1kSgb0azWlhM9YRIceJ5RsD8kY88j3dVePqDaw/FtIXSFJikyoD
-	m8R3yQRWIDHdIsgSWFtHRkAvNhsdHwPrv0YECWCH4rJEb7cZWOc7MFwmcHIcF96PTFWDkH6nMX5
-	VgFl47eGeqLp4yZ5HHUE
-X-Received: by 2002:a05:6830:82d1:b0:7d7:419a:7ac8 with SMTP id
- 46e09a7af769-7d9fae3e615mr593879a34.15.1774594219320; Thu, 26 Mar 2026
- 23:50:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F1A12BE7BB;
+	Fri, 27 Mar 2026 06:53:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774594384; cv=none; b=ESnt93odZ5ccH6QecTRpZez+pzGT89aWC5NqsSD8Fhcz/j3N18YOpxXVT0+bixAVPmssGaNK2zDc0HvmLkXEMzWwqty9HsdNmXprVtVgMdG2+G+T5L5RQWwWNWpCSTFW4enPEy2xpyRC3lru1cdjUBoELDq43oS19HqYbTfoCEg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774594384; c=relaxed/simple;
+	bh=+6taD/KYX6s6aOGsQO53ivGa0KI2dG/K2GEdTZ29IxI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=maY8VjJ4M8ub7rY6gutpF8eIFQyvtYi1+++x2DcJwHGfOX0f41dZIGa/Utm0EM31BBTovbZ3+CXl08C+ydUVpxWWk/i4kcyZ5hKkqJpgD7zVyXn0oEDR9CpUbgRk9lHRqxSD+owzeafQuMEczQJ88UbSl9Lvv+cLesXXTneo4VM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uM9tWBQS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5247EC19423;
+	Fri, 27 Mar 2026 06:52:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774594383;
+	bh=+6taD/KYX6s6aOGsQO53ivGa0KI2dG/K2GEdTZ29IxI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uM9tWBQSBzeOskmqaDM0QvWoV4jUNiC4DsBlIKIFg7In21qbXcrgvL+npIdvVsRu4
+	 qrE69iQ+kiDSqXlcivHy16z+fEY80xVdn90vInQTF9nPU0Nfe7+PBampXS2wO/gG+p
+	 NgAISEoCyX1+VSpZjmfa/Wk2xePLkgGitS5duT/iqLt2Xz6gmhtYoyq/3bAsUtsGq+
+	 2OtE88H/kNHCxHKSKe13LzCtkcFHYUQtieBVLEZ/RgfH2fMVrGZXCU2jVD0wDWvbDI
+	 /UHVNy1S2RfsSIT/lKpdHdy0Vk/hccjI1KCqeAffyJ+BOUCNvP4IiTCz7QCM5HVlUz
+	 YXDRsPrcv0reg==
+Date: Fri, 27 Mar 2026 12:22:46 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org, linux-sunxi@lists.linux.dev, 
+	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
+	spacemit@lists.linux.dev, UNGLinuxDriver@microchip.com, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
+	Nitin Rawat <quic_nitirawa@quicinc.com>
+Subject: Re: [PATCH v5 phy-next 10/27] scsi: ufs: qcom: keep parallel track
+ of PHY power state
+Message-ID: <gq4sswslkjaoe5hhxe2mz6z57uiumotqknkryadvfsstj4srx4@qgenqekgrqv4>
+References: <20260319223241.1351137-1-vladimir.oltean@nxp.com>
+ <20260319223241.1351137-11-vladimir.oltean@nxp.com>
+ <ezrcjjwtg5n76w4m65l27szu5mywx66ti3xuprkfcp3x6quvbf@2rew4zrnnbt2>
+ <20260325114309.3k7xkfrffpxp5xq4@skbuf>
+ <vu3cxpynr5mu2fzkrtmjcwijc5jz323wlnbc3r7lp2wxqmhydx@z5xhgf4myw2d>
+ <20260325115731.genmq2yew2p4dvbs@skbuf>
+ <20260326080444.gbesciaa5zwvcgoy@skbuf>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260327055846.248829-1-mikhail.v.gavrilov@gmail.com> <acYlxRBhSMcwBnja@hyeyoo>
-In-Reply-To: <acYlxRBhSMcwBnja@hyeyoo>
-From: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date: Fri, 27 Mar 2026 11:50:07 +0500
-X-Gm-Features: AQROBzCSJ9XrV9me08FJoe9N5FsTCYU6wreGwMbyYjqv4H9TotPPKCpBSj6ZRjM
-Message-ID: <CABXGCsMTk6kDuJxsTAUKP6npTvp4X6Ryng+P4xjMUsPbTA43+Q@mail.gmail.com>
-Subject: Re: [PATCH] mm/slab: align kmalloc to cacheline when DMA API
- debugging is active
-To: "Harry Yoo (Oracle)" <harry@kernel.org>
-Cc: vbabka@kernel.org, akpm@linux-foundation.org, hao.li@linux.dev, 
-	cl@gentwo.org, rientjes@google.com, roman.gushchin@linux.dev, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	stern@rowland.harvard.edu, linux@roeck-us.net, andy.shevchenko@gmail.com, 
-	hch@lst.de, Jeff.kirsher@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260326080444.gbesciaa5zwvcgoy@skbuf>
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35536-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FREEMAIL_CC(0.00)[kernel.org,linux-foundation.org,linux.dev,gentwo.org,google.com,kvack.org,vger.kernel.org,rowland.harvard.edu,roeck-us.net,gmail.com,lst.de];
+	TAGGED_FROM(0.00)[bounces-35537-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[28];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mikhailvgavrilov@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[mani@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: EB4E23402A1
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: C7D28340234
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, Mar 27, 2026 at 11:38=E2=80=AFAM Harry Yoo (Oracle) <harry@kernel.o=
-rg> wrote:
->
-> On Fri, Mar 27, 2026 at 10:58:46AM +0500, Mikhail Gavrilov wrote:
-> > When CONFIG_DMA_API_DEBUG is enabled, the DMA debug infrastructure
-> > tracks active mappings per cacheline and warns if two different DMA
-> > mappings share the same cacheline ("cacheline tracking EEXIST,
-> > overlapping mappings aren't supported").
-> >
-> > On x86_64, ARCH_KMALLOC_MINALIGN defaults to 8, so small kmalloc
-> > allocations (e.g. the 8-byte hub->buffer and hub->status in the USB
-> > hub driver) frequently land in the same 64-byte cacheline.  When both
-> > are DMA-mapped, this triggers a false positive warning.
->
-> Is it feasible to suppress the warning if dma_get_cache_alignment() is
-> smaller than L1_CACHE_BYTES?
+On Thu, Mar 26, 2026 at 10:04:44AM +0200, Vladimir Oltean wrote:
+> On Wed, Mar 25, 2026 at 01:57:31PM +0200, Vladimir Oltean wrote:
+> > On Wed, Mar 25, 2026 at 05:21:14PM +0530, Manivannan Sadhasivam wrote:
+> > > I believe I added the power_count check for phy_exit(). But since that got
+> > > moved, the check becomes no longer necessary.
+> > 
+> > FYI, the power_count keeps track of the balance of phy_power_on() and
+> > phy_power_off() calls, whereas it is the init_count keeps track of
+> > phy_init() and phy_exit() calls. They are only related to the extent
+> > that you must respect the phy_init() -> phy_power_on() -> phy_power_off()
+> > -> phy_exit() sequence. But in any case, both should be considered
+> > PHY-internal fields. The "Order of API calls" section from
+> > Documentation/driver-api/phy/phy.rst mentions the order that I just
+> > described above, and consumers should just ensure they follow that.
+> 
+> Ok, so we can close this topic of "checking the power_count not needed"
+> by linking to the conversation which spun off here:
+> https://lore.kernel.org/lkml/20260325120122.265973-1-manivannan.sadhasivam@oss.qualcomm.com/
+> 
 
+Sure.
 
-Hi Harry,
+> Mani, I spent some more time to figure out what's really going on with
+> this unexpected phy_power_off() call. Do you think you could
+> regression-test the patch attached?
+> 
 
-Good question. I considered the dma-debug side, but the issue is
-that the cacheline overlap check in add_dma_entry() is intentionally
-strict -- it catches real bugs on non-coherent architectures where
-two DMA buffers sharing a cacheline can corrupt data.
+I tested the patch. But it fails ufs_qcom_power_up_sequence() if PHY was already
+powered on:
 
-The check already has suppressions for DMA_ATTR_SKIP_CPU_SYNC,
-DMA_ATTR_CPU_CACHE_CLEAN, and CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC +
-swiotlb.  Adding another special case (e.g. dev_is_dma_coherent())
-would weaken the check for all coherent platforms, potentially
-hiding real bugs on devices behind non-coherent IOMMUs.
+[   31.513321] qcom-qmp-ufs-phy 1d87000.phy: phy initialization timed-out
+[   31.513335] ufshcd-qcom 1d84000.ufshc: Failed to calibrate PHY: -110
+[   31.565273] ufshcd-qcom 1d84000.ufshc: Enabling the controller failed
 
-Alan Stern discussed this in the bugzilla [1] and concluded that
-the slab alignment approach "seems reasonable" [2], noting that
-"turning on debugging should not affect the way the kernel behaves --
-otherwise what you're debugging isn't the same as what normally
-happens. But given the way the DMA API debugging is set up, I don't
-see any alternative."
+Funny thing is, it didn't affect the functionality since the UFS core retries
+ufshcd_hba_enable() and in the error path of ufs_qcom_power_up_sequence(),
+phy_power_off() gets called and that causes the next try to succeed. So it is
+evident that, if PHY was already powered ON, it should be powered off before
+ufs_qcom_phy_power_on(). And due to the UFS driver design,
+ufs_qcom_power_up_sequence() can get called multiple times. So we cannot just
+remove phy_power_off().
 
-The memory overhead is only present when CONFIG_DMA_API_DEBUG is
-enabled, which is a debug-only option not used in production.
+Below diff on top of your patch fixes the issue:
 
-That said, if you'd prefer a dma-debug side fix, I'm happy to
-explore that direction instead.
+```
+diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+index ed067247d72a..2c9fe03f349e 100644
+--- a/drivers/ufs/host/ufs-qcom.c
++++ b/drivers/ufs/host/ufs-qcom.c
+@@ -567,6 +567,8 @@ static int ufs_qcom_power_up_sequence(struct ufs_hba *hba)
+        if (ret)
+                return ret;
+ 
++       ufs_qcom_phy_power_off(host);
++
+        ret = ufs_qcom_phy_set_gear(host, mode);
+        if (ret) {
+                dev_err(hba->dev, "%s: phy_set_mode_ext() failed, ret = %d\n",
+```
 
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=3D215740#c31
-[2] https://bugzilla.kernel.org/show_bug.cgi?id=3D215740#c44
+- Mani
 
---=20
-Best Regards,
-Mike Gavrilov.
+-- 
+மணிவண்ணன் சதாசிவம்
 
