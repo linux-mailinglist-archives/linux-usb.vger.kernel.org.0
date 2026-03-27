@@ -1,207 +1,251 @@
-Return-Path: <linux-usb+bounces-35560-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35561-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AE3qBFh8xmnwKgUAu9opvQ
-	(envelope-from <linux-usb+bounces-35560-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 13:47:20 +0100
+	id MHyQDmp9xmnwKgUAu9opvQ
+	(envelope-from <linux-usb+bounces-35561-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 13:51:54 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DA5134486D
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 13:47:19 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0AF5344955
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 13:51:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AA61B30524FD
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 12:42:10 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CDBCB30356CF
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 12:51:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9085B34DCEC;
-	Fri, 27 Mar 2026 12:42:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 594953BB9F4;
+	Fri, 27 Mar 2026 12:51:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C9vKBgE0"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="kEy6DQQh";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="G8PdNzcP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5D586323
-	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 12:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7163B6340
+	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 12:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774615329; cv=none; b=rpeGs+4xPkYEy8b7l9aOXuHQbmOltS2YZjj8Pk35AGzh2qynwBTOS/bIaexlpmROustT0Ylk/Ys3c6U6paqFqTlc2qejclYtd6Any8dajV516YKPbe1CbB0raOSy01QRWcVVOxq2I0B2Qnw1UwWdKi5N7gmDdAw+D5HISAsKi4w=
+	t=1774615907; cv=none; b=MXhcJsDeAB6Kd6hdPfw82pYPvPumffCqksm9IEReFpSq0JhB4Cku6HHHaWuKBXGLa84C32hMa5n5r/3Jnb7Djf5WdzU0UX7gzZkRpvH8SDhBLnC2Hlsb4u1ixU5/zMWTvAT39pSouBNoE95l2XTu6sX3W69XN1pa/yPB2w99XiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774615329; c=relaxed/simple;
-	bh=B3tp398WNbwm1ae+gWHLUuGz3BxoORfZ1NVIHaytnAg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=btxP/7SnxYW6Ap4ZrnmVRxguvBjavz1uAvuDyzzppopcEdukKD/DTEGgLmPrWPvcRx2BhVPAbyXoVU0BjNXlvxaPP8IERmDekK4nvZX7A5+fweGjI9JqlfFfQSrQJzzUynKL0U8R/9AWSz2jID3MzI8ZR+X0ORA4BQ541QDKoi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C9vKBgE0; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5a0fc5e2c59so2465499e87.1
-        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 05:42:07 -0700 (PDT)
+	s=arc-20240116; t=1774615907; c=relaxed/simple;
+	bh=K3xNzafka3xiJcudUHpMCrqQIELa5zT+lr5VDT0hF/g=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Tc6Ln+pxeK8NVljPLHilYhHxuUfPodF4FOcgQWAdkiDvbG3wWYOKzYXgGaaEpWWD3CiXgQN/yiSOMvxw8Nr+4oZvq9cZOPUL1wROPe+SN+/6265taoAyguMQVdEUTSEKE42mPTzYrEcM5alciY714FFp/qUgKi3bfNjJgL37kks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=kEy6DQQh; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=G8PdNzcP; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62R6wL773718198
+	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 12:51:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=e5fagU1N8SY9m1K9NIje7G
+	6v+BVL6SsF8Rp4VL+0jtw=; b=kEy6DQQhcs/UnrfKW/Cz7dzorh6FeIsEAHUtsl
+	X4ABaDQV0ef+iNIlFoZNOVS0jZcSrWo8y/7eeljpyjnz/ZLVDGa579mQ2tK/4cwl
+	4x6oxo2n74RbZZG8ODnRKCrtolt1HpnIgqHZqb1FUkhUFvBKJsbdtQ4drlx3I+WP
+	VS++Fp9laCXj+Juh/3skrBFINVwTa8dnkf6uGdxJh1HyOeSQOCodSbWDyzd1oJRU
+	XqLkC0eHGZ+KaG1L6ItxrxGOgIZfYr72wvTYTYzC73fNWnN1PDy1ouPYo0BjMZ6p
+	Sl1yFrsvGkH/r7V4H6rqfa7m2vJZyqmHZ9NjLzJ2gCsVZA2A==
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4d5dd6jsg2-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 12:51:45 +0000 (GMT)
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-5091782ab06so98664891cf.0
+        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 05:51:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774615326; x=1775220126; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vnEhmrhTPA7Nd81/VP3XZfiniWMenGZwrrUyIBlvmYM=;
-        b=C9vKBgE0xtvL8Jt4R7jq/jNUIy0sbgkauEQs/mBNZzAfUmhgyPSUM5Ow4bPERhwdaK
-         ++ZA7ixGVWMJcW8PLQI4h0csbGtM3H5Ee9FlG6MzpX5+WLHy7zgCCKFJglqdPS0zg97o
-         85TNJHLNsc+0udA/iPRUcMP6jum219wgf6HQImW1f6Lgv1oIVDfjxUcbK6xcjeBYa4PI
-         NauzZ+vyzdH2DhWqZAb/pQHqHZnNx2gwQtmzdJDax0IA3Q92OqCAUyzo5c04YmpO/KQ6
-         DkRLkBcft98X8VfxPN+DNfGGL+Q0S9Jg+p/5gv4vrKKlLxDxpoGtBYmBAosYaea9ywfA
-         OBpw==
+        d=oss.qualcomm.com; s=google; t=1774615905; x=1775220705; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=e5fagU1N8SY9m1K9NIje7G6v+BVL6SsF8Rp4VL+0jtw=;
+        b=G8PdNzcPw+BZG4lNNkj+KRYNHsDHxyVxrrBoGk5DXzsblL7xHgZ1gLwQGEBzjv+rrw
+         0Zc7x19N5kkdoUmk4B2I9Zu+HWvHuw+0Ff765nC0SqYsaXJnL9w8BwitbPds2LAoMcA8
+         X9kvSlxAoz3LTh5qwYeOI2AhTe0X1+1DIKiTGRo0FKbayD2pal3lTXKcgBcPm1mIdMvr
+         eoBojn0DAlMw1ihiMqdXmIzbFon5lK99pdeh8pGf2wkfjZugTvWcWNFy9bcREZS435St
+         HjGVDRfn+Ug7Fet2kvhnA9RGuda5LllMER1lOjDkjaX6ASGQcS9I+hRMn3wclvA/FkWV
+         FwSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774615326; x=1775220126;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1774615905; x=1775220705;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vnEhmrhTPA7Nd81/VP3XZfiniWMenGZwrrUyIBlvmYM=;
-        b=hgjD3mz9iUWrKEMlvGhkij9GtMARLS0hDDFK+vecqDIsY3Q08f/Lgof8eYT3WVcsPX
-         Mt3CBL29A3baWaYLDuwwq2Sk5b2FF/1NIC/Fxn5DPw+3n5FMPth/3TXK4DLMu4O3BCr1
-         6xm6UxtIq7WWJw5xi7sOao8A2dmQzFnnug3OSG81LmIFw7RRteqjmxZur067LB40uUgi
-         kcZjTWoFF0eJWWL3zlUpdbkpPW8TwdTw7mZJh6/JJnOAiRjLmAQVP6fnO+Qp8kBJ69DT
-         ge3qiPAsfxrlBvB0vxieAY4wSmJzrqndO4P5Pe0uy9tXg9UwfJxnz28Z4fvk+nEDiFwR
-         1bZg==
-X-Forwarded-Encrypted: i=1; AJvYcCVUzEoz4Th6nfOpNjPb0bm3TT7zLvB5X27rnl8ly5sWT99TitfIWrFOFtYjKYhZKt/aFm1YzKTej1M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywmn/9Alxl2SanrY5o03o2A+pg8LskTBRHOxFnAIOr6cF6J9ixD
-	RmhKGtwCQB1HTY+Blthvy8QhT2P3rLGDNv+bAuy/AqeN85jAFy5KoMnu
-X-Gm-Gg: ATEYQzz9yBHbOA+BozJ8A5RpIXCHCo1jcckYRFE8JJd2mFcXb1GDDlT1FWJ0opOYdS/
-	Umg2KOub09sNA6UOpz+5gum3jZh4iCYG7nOC3vZmC0Of+aPNqOO6fBw10qbPvTmRPOQmVvF479U
-	4lOcU7hPde8Jh2PSmbHSEAnrYnW5z/uvpg9VD/dAsxUEjQjCPdf72tgHKCTxyRlzao5nAAvTYeI
-	ZOEGK0uF1nA5/bDfi3Hc6kX9cCnstQjyUZF1g/FxAp/3/oLcLftZytWG4cuuFEwZkNTkFNsaBPq
-	3iNP+Xgt0QzgsbV75/MusD2ynmq/d6dNZPlmzx11Bf0mDhc9dngKDXYSpit/u92kZIilhlptnhk
-	cNLdNkuFgAFpk2Cg8iRgNmhLlCD5N/dX471UAWOMEPO9GL93kBC93cZNQOv+EFnHl5B2fTbtQ1e
-	ENqlByiuv6Hw+k/UGwFJSz3Qox1Oc1A59l+A==
-X-Received: by 2002:a05:6512:6c8:b0:5a2:5b88:a8a3 with SMTP id 2adb3069b0e04-5a2ab92854fmr1015552e87.31.1774615325628;
-        Fri, 27 Mar 2026 05:42:05 -0700 (PDT)
-Received: from localhost ([188.234.148.119])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a2a063efbasm1336127e87.14.2026.03.27.05.42.03
+        bh=e5fagU1N8SY9m1K9NIje7G6v+BVL6SsF8Rp4VL+0jtw=;
+        b=P2/hNX+BWuaLmNAHtdGqCsv5DsvJv7z0JE9gA+P7JgQi+mfSZkF6QYJ5K7QfHQfhQk
+         VyH1EkA8M45Vcpg6Ybpded4bEFM5fAgsJlyxpijsxBOcATCUraNkDPZYPyrfotgVVj3F
+         D2y7ClJq48ZVZIVF6ZTuUAUwiKGmMZ1fqdpYF+noXGHKYw4gCPUdllhDmzJYRjsRGGhA
+         D0RVRSZfKCaccENLgL6tty4y/mQppkdHNvNdoYyJjdasAPlQmYb/Q5V0U3wZscSGlN87
+         EoZSLc+O3gkDJxJBmVF1JgJrZxn+LbnmBosb8AeO/1RiTpyf64xOKPg6Du7e0txhg7sU
+         8Puw==
+X-Forwarded-Encrypted: i=1; AJvYcCWECo8Jv5AHZYe9NwG+O3lWT41iSyh9EqVhIohTdnk9LUdJzRVQQWUXU/HlwwzFRi1D5l28MjkgyFo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4l5lCeUd/3WJz/BP3+FKUIkajReiyqlMVqlaikbBGOgwWbgzj
+	LZ2xr5jr0zsoOSha/XDK1cvUmyCu76vJOkc4nALAzXg+fZpjgq2BcO1zTV5nOiJ/p4r6RGwrvzf
+	12+HNNLKOWcgWSywiKc12VfUa6xuN17t9awa+Sj19tSUGzKXF0vyhbnbFHkdaC+qAb3MC2iw=
+X-Gm-Gg: ATEYQzyKLxg/x8AlEW7Av45V9oNvy6BaKNPRBEPudsia5a0S8UQn5IhyzQW5+CKjwV6
+	EIjeXosyH2yEMoq7sDfszdH8PJGavot3EPiwP7dm0EvT/XU5HVSJarUFUVBqvwoory0xInrqhS+
+	m0m534EY7QJxB1TTsR2+qT32jS6Pblm2XIYtY/xoPCP439+wc2BSPhZjkqXJtjiwffL1wUyJ5jb
+	nCvuSUNSuRwvqjPrK3VhiC2i0HgNOmWS9aiyqBEFyCOv+VReGO0n4OyEXcImDPerkaPqoQO+JcM
+	pS3wLkTp0PvcuwflrFT+U4ZQccvbWI+0C8l6NN/X74Kef5dyjliFXwPrjPXAnc+hPEkp3G4HO+l
+	tZ+pGzF/DaPJkJyergPLh+5gzMvk=
+X-Received: by 2002:a05:622a:1244:b0:509:439f:adc6 with SMTP id d75a77b69052e-50ba37f5b5cmr25401941cf.20.1774615904821;
+        Fri, 27 Mar 2026 05:51:44 -0700 (PDT)
+X-Received: by 2002:a05:622a:1244:b0:509:439f:adc6 with SMTP id d75a77b69052e-50ba37f5b5cmr25401441cf.20.1774615904274;
+        Fri, 27 Mar 2026 05:51:44 -0700 (PDT)
+Received: from hackbox.lan ([82.79.95.133])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b919df85csm20781507f8f.28.2026.03.27.05.51.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2026 05:42:04 -0700 (PDT)
-From: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-To: m.szyprowski@samsung.com,
-	robin.murphy@arm.com
-Cc: iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-mm@kvack.org,
-	harry@kernel.org,
-	vbabka@kernel.org,
-	akpm@linux-foundation.org,
-	stern@rowland.harvard.edu,
-	linux@roeck-us.net,
-	andy.shevchenko@gmail.com,
-	hch@lst.de,
-	Jeff.kirsher@gmail.com,
-	catalin.marinas@arm.com,
-	Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Subject: [PATCH v2] dma-debug: suppress cacheline overlap warning when arch has no DMA alignment requirement
-Date: Fri, 27 Mar 2026 17:41:56 +0500
-Message-ID: <20260327124156.24820-1-mikhail.v.gavrilov@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        Fri, 27 Mar 2026 05:51:43 -0700 (PDT)
+From: Abel Vesa <abel.vesa@oss.qualcomm.com>
+Date: Fri, 27 Mar 2026 14:51:36 +0200
+Subject: [PATCH v2] dt-bindings: usb: qcom,snps-dwc3: Document the Eliza
+ compatible
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.16 / 15.00];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260327-eliza-bindings-dwc3-v2-1-28439482ebce@oss.qualcomm.com>
+X-B4-Tracking: v=1; b=H4sIAFd9xmkC/32Nyw6CMBREf4V0bQltEcGV/2FY9HGBa6DVFvBB+
+ HcL7t1McpKZOQsJ4BECOScL8TBjQGcj8ENCdCdtCxRNZMIzXmSClRR6/Eiq0Bq0baDmqQXNVQE
+ 5yPyoKkHi8u6hwdf+eq1/HCZ1Az1uV1ujwzA6/961M9t6/w0zo4xWXJmGC6FVebq4ENLHJHvth
+ iGNQep1Xb8ZNA+rzwAAAA==
+X-Change-ID: 20260318-eliza-bindings-dwc3-4b6e4ea45b93
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+        Abel Vesa <abel.vesa@oss.qualcomm.com>
+X-Mailer: b4 0.15-dev-bc6c4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1829;
+ i=abel.vesa@oss.qualcomm.com; h=from:subject:message-id;
+ bh=K3xNzafka3xiJcudUHpMCrqQIELa5zT+lr5VDT0hF/g=;
+ b=owEBbQKS/ZANAwAKARtfRMkAlRVWAcsmYgBpxn1dKJc/zJzaa/3EEQufD+LPMm/E0AnRwmsSj
+ ipD6l8NvsGJAjMEAAEKAB0WIQRO8+4RTnqPKsqn0bgbX0TJAJUVVgUCacZ9XQAKCRAbX0TJAJUV
+ VjObD/93pNNLKYp5fF4v7MjgX4oeZ/EmydJK48uAgiMHRpM/xtgWX9pCp+ecdVtYZ4Kf6bOLf2I
+ j+zj5IfybYmV2Ic9g5Lk24/gDjaZLrXvpGn6Z2Iu092t/qgQ5G3o7tRZN6XRvTxeEDS7fA8KlHy
+ HG2zcNBdB543g4jq0RqWWOiZUQ7YA4p9N4FrVJqBHG8WOXroQENgUSumjQrZR0HvmgW9vTH6zd4
+ QJshCpdoxixiKeeYqzJWd0OqcMIQb1wcr7JtEqa/K4Aw2a787ClWoK2V+mPYPfXLEC3mI6NItTd
+ mchsP1M0cfyfZ+8cBrMUvThIdCNO9CGsm5TFev95aecR4u4FKS4hEOhXGm60NJMtlVms4Fu3f9+
+ JPxY0fEfJ4yAanVw1Rv1cFJV5xykWokzoXZB/1r/bbET6uCEgCjefMKo9/OBodNC+Z/TJhN1/BZ
+ JZtevFY3mOoPzPdmuWcdGeBTUmt+rollRs2eRu4eJcjMxB7MxQRu3J8oTTtilIcC/SSsXV/E1V4
+ kyRwvm98H3ID83xjkmIKy8eG/IjQE+2VJuYcua0A1VJ+/hBo4FR9AhvhODR4BH6H7aEe9D4nw6e
+ l7Iz2RuUTN4RsEgDdcadBC/Olv9vMnj8AO0K0IIk1Dr1562uk8hPAAn1I4GJ1Fzg/kGKIn7UqZm
+ eY1JoiF2Fwfi8zA==
+X-Developer-Key: i=abel.vesa@oss.qualcomm.com; a=openpgp;
+ fpr=6AFF162D57F4223A8770EF5AF7BF214136F41FAE
+X-Authority-Analysis: v=2.4 cv=NenrFmD4 c=1 sm=1 tr=0 ts=69c67d61 cx=c_pps
+ a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=iKs3dpp2RB4k51ZqCjcyjQ==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=_glEPmIy2e8OvE2BGh3C:22
+ a=bC-a23v3AAAA:8 a=EUspDBNiAAAA:8 a=VBHLH5VKHYG7obxZQbIA:9 a=QEXdDO2ut3YA:10
+ a=dawVfQjAaf238kedN5IG:22 a=FO4_E8m0qiDe52t0p3_H:22
+X-Proofpoint-GUID: 8gSq1n9Ds8X8jfdLv1k-TZRLdCfXF3mh
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzI3MDA4OCBTYWx0ZWRfX09WyBZHFmkQI
+ r2FaNQDIF0+3DSRp0ePCa51iBBbjefs8+pxjm9Ow7gQsClqzUXh4JwG6hAE9ABBH/bjI0T+MyNY
+ gBR1RhxlxATuLpczlnC4w8lKre7EZMghnzQsXEOsM9GWov33SShvckeIKkF5s1IVco9gKpAflYs
+ kHjJ8CirCnJMlSBrR3hjp3zw+k6U9XnEb85oY+S2OfjyU8ZnVgFJG5wInNRkHV0cmvB4bmG+nyb
+ cnzFcPrzbv564mnuIQBbsXW+0aALu1zG3+7Ipkc1aFWAXmBhQ2yczaG4CdPW/egytvo+YNknOSu
+ h67isKF9c2g9b97fDILxCX5ZvhbYCi+Vzv/uL6kiK4M1P0ebTKyXlc+rTICZMMWRsSTa35Ncgn0
+ At6VUDpS9Q6ykBkPr66/r372qIdiIdToighnZjNNFTuuThvy1wgC+2tnpDLnA2j1ZRLOfDWArtO
+ 2oLoyUlWW5GX05T4jmg==
+X-Proofpoint-ORIG-GUID: 8gSq1n9Ds8X8jfdLv1k-TZRLdCfXF3mh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-26_04,2026-03-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 spamscore=0 priorityscore=1501 phishscore=0 lowpriorityscore=0
+ clxscore=1015 suspectscore=0 adultscore=0 impostorscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603270088
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-35560-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:dkim,oss.qualcomm.com:mid,qualcomm.com:dkim,qualcomm.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[lists.linux.dev,vger.kernel.org,kvack.org,kernel.org,linux-foundation.org,rowland.harvard.edu,roeck-us.net,gmail.com,lst.de,arm.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35561-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FROM_NEQ_ENVFROM(0.00)[mikhailvgavrilov@gmail.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 6DA5134486D
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[abel.vesa@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: D0AF5344955
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-When CONFIG_DMA_API_DEBUG is enabled, the DMA debug infrastructure
-tracks active mappings per cacheline and warns if two different DMA
-mappings share the same cacheline ("cacheline tracking EEXIST,
-overlapping mappings aren't supported").
+Document the compatible for the Qualcomm Synopsys DWC3 glue controller
+found on Eliza SoC.
 
-On x86_64, ARCH_KMALLOC_MINALIGN defaults to 8, so small kmalloc
-allocations (e.g. the 8-byte hub->buffer and hub->status in the USB
-hub driver) frequently land in the same 64-byte cacheline.  When both
-are DMA-mapped, this triggers a false positive warning.
+It follows the same binding requirements as other recent Qualcomm
+SoCs, so add it to the existing schema conditionals covering the
+required properties.
 
-This has been reported repeatedly since v5.14 (when the EEXIST check
-was added) across various USB host controllers and devices including
-xhci_hcd with USB hubs, USB audio devices, and USB ethernet adapters.
-
-The cacheline overlap is only a real concern on architectures that
-require DMA buffer alignment to cacheline boundaries (i.e. where
-ARCH_DMA_MINALIGN >= L1_CACHE_BYTES).  On architectures like x86_64
-where dma_get_cache_alignment() returns 1, the hardware is
-cache-coherent and overlapping cacheline mappings are harmless.
-
-Suppress the EEXIST warning when dma_get_cache_alignment() is less
-than L1_CACHE_BYTES, indicating the architecture does not require
-cacheline-aligned DMA buffers.
-
-Verified with a kernel module reproducer that performs two kmalloc(8)
-allocations back-to-back and DMA-maps both:
-
-  Before: allocations share a cacheline, EEXIST fires within ~50 pairs
-  After:  same cacheline pair found, but no warning emitted
-
-Fixes: 2b4bbc6231d7 ("dma-debug: report -EEXIST errors in add_dma_entry")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215740
-Suggested-by: Harry Yoo <harry@kernel.org>
-Tested-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Signed-off-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
 ---
+Changes in v2:
+- Rebased on next-20260326.
+- Picked up Krzysztof's R-b tag.
+- Link to v1: https://patch.msgid.link/20260318-eliza-bindings-dwc3-v1-1-92bdf233cb87@oss.qualcomm.com
+---
+ Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-v1 -> v2:
-  - Moved fix from include/linux/slab.h (ARCH_KMALLOC_MINALIGN)
-    to kernel/dma/debug.c per Harry Yoo's suggestion.
-  - Instead of forcing cacheline-aligned allocations, suppress
-    the warning when the architecture has no DMA alignment
-    requirement (dma_get_cache_alignment() < L1_CACHE_BYTES).
+diff --git a/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
+index f879e2e104c4..e67a967c677f 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
+@@ -24,6 +24,7 @@ properties:
+   compatible:
+     items:
+       - enum:
++          - qcom,eliza-dwc3
+           - qcom,glymur-dwc3
+           - qcom,glymur-dwc3-mp
+           - qcom,ipq4019-dwc3
+@@ -346,6 +347,7 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - qcom,eliza-dwc3
+               - qcom,milos-dwc3
+               - qcom,qcm2290-dwc3
+               - qcom,qcs615-dwc3
+@@ -507,6 +509,7 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - qcom,eliza-dwc3
+               - qcom,ipq4019-dwc3
+               - qcom,ipq8064-dwc3
+               - qcom,kaanapali-dwc3
 
-v1: https://lore.kernel.org/all/20260327055846.248829-1-mikhail.v.gavrilov@gmail.com/
+---
+base-commit: e77a5a5cfe43b4c25bd44a3818e487033287517f
+change-id: 20260318-eliza-bindings-dwc3-4b6e4ea45b93
 
-Reproducer module that triggers the bug reliably:
-  https://bugzilla.kernel.org/attachment.cgi?id=309769
-
- kernel/dma/debug.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
-index 0677918f06a8..1a725edbbbf6 100644
---- a/kernel/dma/debug.c
-+++ b/kernel/dma/debug.c
-@@ -615,6 +615,7 @@ static void add_dma_entry(struct dma_debug_entry *entry, unsigned long attrs)
- 	} else if (rc == -EEXIST &&
- 		   !(attrs & DMA_ATTR_SKIP_CPU_SYNC) &&
- 		   !(entry->is_cache_clean && overlap_cache_clean) &&
-+		   dma_get_cache_alignment() >= L1_CACHE_BYTES &&
- 		   !(IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) &&
- 		     is_swiotlb_active(entry->dev))) {
- 		err_printk(entry->dev, entry,
--- 
-2.53.0
+Best regards,
+--  
+Abel Vesa <abel.vesa@oss.qualcomm.com>
 
 
