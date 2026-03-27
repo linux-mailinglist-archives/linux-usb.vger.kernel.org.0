@@ -1,272 +1,199 @@
-Return-Path: <linux-usb+bounces-35567-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35568-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qM8bMIKaxmnrMQUAu9opvQ
-	(envelope-from <linux-usb+bounces-35567-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 15:56:02 +0100
+	id yFVCNqG5xmnoNwUAu9opvQ
+	(envelope-from <linux-usb+bounces-35568-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 18:08:49 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D9C5346626
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 15:56:01 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAC1E34814E
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 18:08:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 35682302EFD0
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 14:55:59 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 80EAA30DD302
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2026 16:47:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7714C3F99F7;
-	Fri, 27 Mar 2026 14:55:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BE7A351C38;
+	Fri, 27 Mar 2026 16:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="bnojqI/e"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eqhu4PGD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3CCD3FA5EB
-	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 14:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767C035AC3A
+	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 16:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774623352; cv=none; b=Cq1EcYit3xEKUsu6DwkmwxyprGa1fLXPiKa37cYc/6wOXwUyWNjzjwEdx5UwsKc8pr5E4+/7KTCAHOnIiWzBA+bQnEVf8rzJ3ULn0sL/uZJLw6H71JkmhDq8VWMtO3cQFPa+y7/+PziJVGNa1QGQ6gf33iKwEf7ZKFD+9VyoHXs=
+	t=1774630074; cv=none; b=WaGMNKvKbO73QCPtWsKH/hLBGdDt6dsNkoUQlVcYszukHNjasMPnW8RPlev3RT2GM770k8M2IdIn85tMkC1i0uiQ4gfOTl6JGeldW3BRvM8+JnvdpDBinkedFoEdyaFC4BbTWsvlNZ7JaK4efVA9D7PI9gdOAAwBt2iAJ3YRE08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774623352; c=relaxed/simple;
-	bh=x7xhITfsCynT/1FyganOvh4mc/tbvcHXBz7kyIURvjs=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:In-Reply-To:
-	 Content-Type:References; b=bYQsklid3z7RRfNp/wZ+320nmo+Bzc4jXTE6TxCdIGzgHyL4Pd8IFolTdA4t60L89b5wdMZaBwBipUHetWHTEBieUf+mQhcoVayCY5dZLBI97ixogcVjZjnBsgwM6tivgdo+S66tM4IilCxGnGdrkDG6e9LlTCzd8n3a0PEMyUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=bnojqI/e; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20260327145544euoutp01f2b7c11be27e275ad8338b5c9972f495~guoeINkLJ0437504375euoutp01E
-	for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 14:55:44 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20260327145544euoutp01f2b7c11be27e275ad8338b5c9972f495~guoeINkLJ0437504375euoutp01E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1774623344;
-	bh=REUXe8UYNGwRNwOSyc6qufXzTOCwF72bk0Eo6/3HEGg=;
-	h=Date:Subject:From:To:Cc:In-Reply-To:References:From;
-	b=bnojqI/epEcuYRMSJKdrOewMzsAS5gYfTSJMyQ1OcYuVh307Kt4WAIJMCGhAImqNf
-	 9p2XMXpUpPL2PjUBO+/6m7Z/mP5L2K5Munla/d0RozFaufulx1xdLKXIbwzSwLcrp9
-	 /mrRbQDD84OjTjj5u3kdV0CRDd0tt8YcAsqqn1no=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20260327145543eucas1p1ff8162bebd6e11976bf7be95ab3a2658~guodnd7MR2635526355eucas1p13;
-	Fri, 27 Mar 2026 14:55:43 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20260327145541eusmtip1ce5407db7b38952ac949b9394b6c8bdd~guobpmBSi0746707467eusmtip1G;
-	Fri, 27 Mar 2026 14:55:41 +0000 (GMT)
-Message-ID: <336a20f9-408e-49d1-9d56-60315bd01881@samsung.com>
-Date: Fri, 27 Mar 2026 15:55:41 +0100
+	s=arc-20240116; t=1774630074; c=relaxed/simple;
+	bh=IIEe6p/2b8mHbH/L1QZ72Ut1uvoqOXePwTz8y7eTZ/I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=AEAynkmlPlpW/Sjch12dePtpWyTa8MYGt5HF5ZWDg9nfxDblgaF9i1XZ6q3qWS1v2c7ld/HJ/RLJUvddIknVIHhZSu+1YoWXYoLwLqY7lDCsUNBIIcqCRoOBm22l8R8r79Hyu1jtoQ4fWG0DsOgrUvofFeX6dbdO98aElsEnk4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eqhu4PGD; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2b0ba3bfe16so20106245ad.1
+        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2026 09:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774630073; x=1775234873; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=icAwEwH8j7JyHdp/GRQI0AOGmMKcZjmWcMVOP98ILmM=;
+        b=eqhu4PGD6OrkyEso1+WRLZ/liwjvU/EQWDh02QCYX+L4v6s1X3Jir0uSfgn9ZufHoa
+         r+jkNCTZ+k1PU19sqRFHr07SAF5MaUfPv/DnhGAhZub0zPdACIDWhEvgn1h+D7DQUKdZ
+         9G/OkGssBCgjt5aDUqq0Qdv+gfWay8AQ4Qlhw3BZu8ED/7Tmqr3meuhSVd227AYfLwLR
+         O+jNiPdc/U7vopvcJpwcR5qZV/1S2DFTOulIbss0LU5XMC8NnBg4rReauCuiMbs1mTmG
+         SoDtxYX95/Y8y0fmSvU3mDUkUG3M/XZBcZ1TfFHTQpdDXSwmyen/jTW5EFq2xYwExHj6
+         8CiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774630073; x=1775234873;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=icAwEwH8j7JyHdp/GRQI0AOGmMKcZjmWcMVOP98ILmM=;
+        b=bFWja9dqebJmAUo7sjGRYdmjz/bycnkAM3FTSHFiaDMzEdc0xz6j4WEvqV3Edsr1tA
+         Ti3RlvPRJw23XR9vVPNdcCb1/rzCnq1TvdSitAmSuAWIWsHlNuRpJ3B/CeWMGmGgYc5Q
+         He9EWIFKE06lrUTPaem9rzznvGLDdpU8wOW/xAAX7qQwS2cB4T1sJQ+14JFRl7aG1pcD
+         ijqeRDi3qW8ovpNmxP+3GqLw/s0in5Lod8EsKN6kkngjMQVTrP3dtq9Y93ITbAUu3GzU
+         Qn7YUlGt9/B52vBSRVHiuQzDJ0XBd3Uyu6Sj3I3MtSVusKiiK999AEHu6ASkpgl41svw
+         hJlA==
+X-Gm-Message-State: AOJu0YzofHqQgeWnQK7WL+ZKs2+8cv44jxk2e1UGy0FFwtimE+HebiNr
+	HS1a3MX5b10Lz6We6yqYv65SMG1DYsXfxgMV2g+nmvtJOSes+7sq3alN
+X-Gm-Gg: ATEYQzzYv3Mm6HFXCNZbh+CKM4EDdK2HU7GAb3Quk5kpBv/H2SMIbwT08ckWdmy5zD2
+	4iyDPUq2RWbZxd6nc7d4ksKx8pD3cF2p6+lsum1fs36Y9jQBcm+genw/ACMyQ49tXdxqtyfPJGi
+	Kv0rayQ3d45PbtU5ax9/7iS/kQp6XvBxHOQ1UsMUvip0sF8+tuouyKpSrkRnwPD75ZwSnNs0Wf9
+	JnSL6fQV8940CziaxLVzhx8Nuk6Bzlh6hnSeXKlRAhhsfGl+mT+/+1pAYYMmr9Z6H0lG5UzEZN+
+	Qr6dYtTOjUqsKUXF+AO+dZJ4SvhYd0OlYYwjnKOTeykU5Q8jgS33EHEl7T/CB5bv9XFQbvhG9Ur
+	IYiNfYlPzi7UdN8iFjel0AlW83mIZoI5Cg3sEKD60ID1qnCPRKgG3iyBYrizID7aK3FIZj7pWZr
+	yZNRhJDodMDw757TXuDQUfa0jAoak/N1/sT+qBXdzqgsy+
+X-Received: by 2002:a17:902:e94c:b0:2b0:5a4c:726f with SMTP id d9443c01a7336-2b0c48e9a76mr63024805ad.15.1774630072724;
+        Fri, 27 Mar 2026 09:47:52 -0700 (PDT)
+Received: from Black-Pearl.localdomain ([116.72.145.18])
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-2b0bc8b9da6sm86065305ad.58.2026.03.27.09.47.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2026 09:47:52 -0700 (PDT)
+From: Charan Pedumuru <charan.pedumuru@gmail.com>
+Subject: [PATCH v4 0/5] dt-bindings: usb: atmel: convert Atmel USB
+ controller bindings to YAML
+Date: Fri, 27 Mar 2026 16:47:41 +0000
+Message-Id: <20260327-atmel-usb-v4-0-eb8b6e49b29d@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Windows)
-Subject: Re: [PATCH] mm/slab: align kmalloc to cacheline when DMA API
- debugging is active
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-To: Catalin Marinas <catalin.marinas@arm.com>, Mikhail Gavrilov
-	<mikhail.v.gavrilov@gmail.com>
-Cc: vbabka@kernel.org, harry.yoo@oracle.com, akpm@linux-foundation.org,
-	hao.li@linux.dev, cl@gentwo.org, rientjes@google.com,
-	roman.gushchin@linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, linux@roeck-us.net,
-	andy.shevchenko@gmail.com, hch@lst.de, Jeff.kirsher@gmail.com, Robin Murphy
-	<robin.murphy@arm.com>
-Content-Language: en-US
-In-Reply-To: <d2ed7315-72ff-43f3-bfaa-995025cb9419@samsung.com>
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20260327145543eucas1p1ff8162bebd6e11976bf7be95ab3a2658
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20260327122625eucas1p10eabcb31aada4e11b5c2ebcff4cb3c39
-X-EPHeader: CA
-X-CMS-RootMailID: 20260327122625eucas1p10eabcb31aada4e11b5c2ebcff4cb3c39
-References: <20260327055846.248829-1-mikhail.v.gavrilov@gmail.com>
-	<CGME20260327122625eucas1p10eabcb31aada4e11b5c2ebcff4cb3c39@eucas1p1.samsung.com>
-	<acZ3ZUXhFHpSXzYS@arm.com>
-	<d2ed7315-72ff-43f3-bfaa-995025cb9419@samsung.com>
-X-Spamd-Result: default: False [-0.65 / 15.00];
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAK60xmkC/13M0Q6CIBTG8VdxXEfjAIF21Xu0LhAPyqbZwFzN+
+ e6hXcS6/M7O77+QiMFjJOdiIQFnH/14T0MeCmI7c2+R+iZtwhlXDHhFzTRgT5+xpkK7sjIgAWV
+ J0v8joPOvvXW9pd35OI3hvadn2K7fCmeQVWagjDZgBFaCMeHg0g7G90c7DmSrzDyTXOaSJ6kaZ
+ RScbGWl/pfiJwXTuRRJisbK0qHWvMZcruv6AQYTrBkWAQAA
+X-Change-ID: 20260129-atmel-usb-37f89a141e48
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+ Herve Codina <herve.codina@bootlin.com>, 
+ Nicolas Ferre <nicolas.ferre@microchip.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Charan Pedumuru <charan.pedumuru@gmail.com>
+X-Mailer: b4 0.14.3
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35567-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,oracle.com,linux-foundation.org,linux.dev,gentwo.org,google.com,kvack.org,vger.kernel.org,rowland.harvard.edu,roeck-us.net,gmail.com,lst.de,arm.com];
+	TAGGED_FROM(0.00)[bounces-35568-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[arm.com,gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,gmail.com];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[m.szyprowski@samsung.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[samsung.com:+];
-	NEURAL_HAM(-0.00)[-0.865];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[charanpedumuru@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8D9C5346626
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: EAC1E34814E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 27.03.2026 15:09, Marek Szyprowski wrote:
-> On 27.03.2026 13:26, Catalin Marinas wrote:
->> + Marek, Robin
->
-> Thanks for adding me to the loop.
->
->> On Fri, Mar 27, 2026 at 10:58:46AM +0500, Mikhail Gavrilov wrote:
->>> When CONFIG_DMA_API_DEBUG is enabled, the DMA debug infrastructure
->>> tracks active mappings per cacheline and warns if two different DMA
->>> mappings share the same cacheline ("cacheline tracking EEXIST,
->>> overlapping mappings aren't supported").
->>>
->>> On x86_64, ARCH_KMALLOC_MINALIGN defaults to 8, so small kmalloc
->>> allocations (e.g. the 8-byte hub->buffer and hub->status in the USB
->>> hub driver) frequently land in the same 64-byte cacheline.  When both
->>> are DMA-mapped, this triggers a false positive warning.
->>>
->>> This has been reported repeatedly since v5.14 (when the EEXIST check
->>> was added) across various USB host controllers and devices including
->>> xhci_hcd with USB hubs, USB audio devices, and USB ethernet adapters.
->> This indeed has come up regularly in the past years.
->>
->>> +/*
->>> + * Align memory allocations to cache lines if DMA API debugging is active
->>> + * to avoid false positive DMA overlapping error messages.
->>> + */
->>> +#ifdef CONFIG_DMA_API_DEBUG
->>> +#ifndef ARCH_KMALLOC_MINALIGN
->>> +#define ARCH_KMALLOC_MINALIGN  L1_CACHE_BYTES
->>> +#elif ARCH_KMALLOC_MINALIGN < L1_CACHE_BYTES
->>> +#undef ARCH_KMALLOC_MINALIGN
->>> +#define ARCH_KMALLOC_MINALIGN  L1_CACHE_BYTES
->>> +#endif
->>> +#endif
->> TL;DR: I think this is fine:
->>
->> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
->>
->> I'm not sure that's the best way to hide the warning but there
->> are no great solutions either. On one hand, we want the DMA debug to
->> capture potential problems on architectures it's not running on. OTOH,
->> we also want to avoid false positives on coherent architectures/devices.
->> I don't think reconciling the two requirements is easy.
->>
->> When DMA_API_DEBUG is enabled, the above will change the x86 behaviour
->> that could have implications beyond DMA (e.g. may not catch some buffer
->> overflow because it's within L1_CACHE_BYTES). Similarly for non-coherent
->> architectures that select DMA_BOUNCE_UNALIGNED_KMALLOC (arm64 and riscv
->> currently). arm64 defines ARCH_DMA_MINALIGN to 128 but
->> ARCH_KMALLOC_MINALIGN to 8 (why 128 is larger than L1_CACHE_BYTES is
->> another matter but let's ignore it for now).
->
-> IMHO enabling DMA_API_DEBUG should not change the kernel behavior, so I would prefer fixing this in DMA-debug code somehow.
->
->> More of a thinking out loud, we have:
->>
->> 1. Coherent architectures - alignment doesn't matter
->>
->> 2. Non-coherent architectures with:
->>     a) Sufficiently large ARCH_KMALLOC_MINALIGN
->>     b) Small ARCH_KMALLOC_MINALIGN but DMA_BOUNCE_UNALIGNED_KMALLOC
->>     c) Broken config - forgot to set ARCH_DMA_MINALIGN or bouncing
->>
->> We can ignore (2.c), the aim of the DMA debug is to catch wrong uses in
->> drivers. If drivers is the only goal, the above change will do when
->> running on (1) or (2.a) hardware - it will catch sub-L1_CACHE_BYTES
->> buffers from drivers while assuming kmalloc() machinery is safe.
->> However, if running on (2.b) it won't catch anything that may be
->> problematic on (2.a) since the DMA debug ignores the overlap.
->>
->> We could make DMA_BOUNCE_UNALIGNED_KMALLOC dependent on !DMA_API_DEBUG
->> but it would be nice to be able to sanity-check the bouncing logic.
->> Well, it wasn't checking it before and with commit 03521c892bb8
->> ("dma-debug: don't report false positives with
->> DMA_BOUNCE_UNALIGNED_KMALLOC"), we made this clear that overlapping will
->> be ignored.
->>
->> Irrespective of whether we disable bouncing with DMA_API_DEBUG, maybe we
->> could replace the above commit with:
->>
->> diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
->> index 3928a509c44c..488045ef6245 100644
->> --- a/kernel/dma/mapping.c
->> +++ b/kernel/dma/mapping.c
->> @@ -175,7 +175,7 @@ dma_addr_t dma_map_phys(struct device *dev, phys_addr_t phys, size_t size,
->>       if (!is_mmio)
->>           kmsan_handle_dma(phys, size, dir);
->>       trace_dma_map_phys(dev, phys, addr, size, dir, attrs);
->> -    debug_dma_map_phys(dev, phys, size, dir, addr, attrs);
->> +    debug_dma_map_phys(dev, dma_to_phys(addr), size, dir, addr, attrs);
->>
->>       return addr;
->>   }
->>
->> Anyway, this I think is unrelated to the proposed change affecting x86,
->> more of a how to make the DMA API debugging more useful when running on
->> arm64 or riscv.
->
-> This is not enough, there is also a dma_map_sg_attrs() path.
->
-> I've reverted 03521c892bb8 and added the following change:
->
-> diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c index 55e7ca8ceb86..bbada41143ea 100644 --- a/kernel/dma/debug.c +++ b/kernel/dma/debug.c @@ -18,6 +18,7 @@ #include <linux/uaccess.h> #include <linux/export.h> #include <linux/device.h> +#include <linux/dma-direct.h> #include <linux/types.h> #include <linux/sched.h> #include <linux/ctype.h> @@ -1241,7 +1242,8 @@ void debug_dma_map_phys(struct device *dev, phys_addr_t phys, size_t size, entry->dev = dev; entry->type = dma_debug_phy; - entry->paddr = phys; + entry->paddr = IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) ? + dma_to_phys(dev, dma_addr) : phys; entry->dev_addr = dma_addr; entry->size = size; entry->direction = direction; @@ -1335,7 +1337,9 @@ void debug_dma_map_sg(struct device *dev, struct scatterlist *sg, entry->type = dma_debug_sg; entry->dev = dev; - entry->paddr = sg_phys(s); + entry->paddr = + IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) ? + dma_to_phys(dev, sg_dma_address(s)) : sg_phys(s);
-> entry->size = sg_dma_len(s); entry->dev_addr = sg_dma_address(s); entry->direction = direction;
->
-> thenran my tests on ARM64 and RV64 boards. Only one new warning has been reported (I didn't analyze it yet), so this might be indeed a better solution than skipping overlapping cache lines warnings when DMA_BOUNCE_UNALIGNED_KMALLOC is set.
->
-Huh, the diff has been malformed by my mail client. Let's try again:
+This patch series converts the legacy text-based Device Tree bindings for
+Atmel/Microchip USB controllers to DT schema (YAML) format.
 
-diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
-index 55e7ca8ceb86..bbada41143ea 100644
---- a/kernel/dma/debug.c
-+++ b/kernel/dma/debug.c
-@@ -18,6 +18,7 @@
- #include <linux/uaccess.h>
- #include <linux/export.h>
- #include <linux/device.h>
-+#include <linux/dma-direct.h>
- #include <linux/types.h>
- #include <linux/sched.h>
- #include <linux/ctype.h>
-@@ -1241,7 +1242,8 @@ void debug_dma_map_phys(struct device *dev, phys_addr_t phys, size_t size,
+Note:
+The patch "dt-bindings: usb: atmel,at91sam9rl-udc: convert to DT schema"
+depends on the patch "arm: dts: at91: remove unused #address-cells/#size-cells
+from sam9x60 UDC node". If the DT schema patch is applied before the DTS
+cleanup patch, `dtbs_check` will fail due to the presence of the removed
+properties in the existing DTS.
 
-        entry->dev       = dev;
-        entry->type      = dma_debug_phy;
--       entry->paddr     = phys;
-+       entry->paddr     = IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) ?
-+                          dma_to_phys(dev, dma_addr) : phys;
-        entry->dev_addr  = dma_addr;
-        entry->size      = size;
-        entry->direction = direction;
-@@ -1335,7 +1337,9 @@ void debug_dma_map_sg(struct device *dev, struct scatterlist *sg,
+Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
+---
+Changes in v4:
+- generic-ohci: Modify the commit message and modify description for the
+  properties "atmel,vbus-gpio" and "atmel,oc-gpio".
+- atmel,at91rm9200-udc: Remove minItems for clocks and rename
+  unevaluatedProperties to additionalProperties.
+- atmel,at91sam9rl-udc: Remove minItems for clocks and modify commit
+  message.
+- all: Remove the corresponding text binding node for each patch from
+  the text binding file.
+- Link to v3: https://lore.kernel.org/r/20260307-atmel-usb-v3-0-3dc48fe772be@gmail.com
 
-                entry->type           = dma_debug_sg;
-                entry->dev            = dev;
--               entry->paddr          = sg_phys(s);
-+               entry->paddr          =
-+                       IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) ?
-+                       dma_to_phys(dev, sg_dma_address(s)) : sg_phys(s);
-                entry->size           = sg_dma_len(s);
-                entry->dev_addr       = sg_dma_address(s);
-                entry->direction      = direction;
+Changes in v3:
+- sam9x60: Add a new patch removing the unnecessary #address-cells and
+  #size-cells properties from the sam9x60 UDC node.
+- atmel,at91sam9rl-udc: Remove #address-cells and #size-cells from the
+  atmel,at91sam9rl-udc binding properties.
+- generic-ohci: Add an else condition to the generic-ohci schema properties
+  for improved validation precision.
+- Link to v2: https://lore.kernel.org/r/20260224-atmel-usb-v2-0-6d6a615c9c47@gmail.com
 
+Changes in v2:
+- Drop the separate YAML patches for OHCI and EHCI.
+- Add the compatibles "atmel,at91rm9200-ohci" and "atmel,at91sam9g45-ehci"
+  to the existing generic OHCI and EHCI binding files.
+- Link to v1: https://lore.kernel.org/r/20260201-atmel-usb-v1-0-d1a3e93003f1@gmail.com
 
-Best regards
+---
+Charan Pedumuru (5):
+      arm: dts: at91: remove unused #address-cells/#size-cells from sam9x60 udc node
+      dt-bindings: usb: generic-ohci: add AT91RM9200 OHCI binding support
+      dt-bindings: usb: generic-ehci: fix schema structure and add at91sam9g45 constraints
+      dt-bindings: usb: atmel,at91rm9200-udc: convert to DT schema
+      dt-bindings: usb: atmel,at91sam9rl-udc: convert to DT schema
+
+ .../bindings/usb/atmel,at91rm9200-udc.yaml         |  76 +++++++++++++
+ .../bindings/usb/atmel,at91sam9rl-udc.yaml         |  74 ++++++++++++
+ .../devicetree/bindings/usb/atmel-usb.txt          | 125 ---------------------
+ .../devicetree/bindings/usb/generic-ehci.yaml      |  46 +++++---
+ .../devicetree/bindings/usb/generic-ohci.yaml      |  41 +++++++
+ arch/arm/boot/dts/microchip/sam9x60.dtsi           |   2 -
+ 6 files changed, 224 insertions(+), 140 deletions(-)
+---
+base-commit: 3f24e4edcd1b8981c6b448ea2680726dedd87279
+change-id: 20260129-atmel-usb-37f89a141e48
+
+Best regards,
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+Charan Pedumuru <charan.pedumuru@gmail.com>
 
 
