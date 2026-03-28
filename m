@@ -1,258 +1,165 @@
-Return-Path: <linux-usb+bounces-35617-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35618-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id zH83JNkQyGnDggUAu9opvQ
-	(envelope-from <linux-usb+bounces-35617-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2026 18:33:13 +0100
+	id ev/nAZtGyGl+jQUAu9opvQ
+	(envelope-from <linux-usb+bounces-35618-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2026 22:22:35 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0981434F61C
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2026 18:33:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5311E34FFD0
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2026 22:22:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CF64B301D97D
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2026 17:33:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9735E30063B0
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2026 21:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23C93396598;
-	Sat, 28 Mar 2026 17:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF01136492F;
+	Sat, 28 Mar 2026 21:22:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lO/7eQ4Y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QLi9RVUr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3287A3314C4
-	for <linux-usb@vger.kernel.org>; Sat, 28 Mar 2026 17:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B68E33F5AF
+	for <linux-usb@vger.kernel.org>; Sat, 28 Mar 2026 21:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774719187; cv=none; b=StUqh39d44JJHQkdes1ym1nqv140RuH+//tVoFEQ9K+Ro9CGi+jvHpqwo12MJNPerDIcuMBmunvhuq666F9rrmv168cZZfVW7i8+zTCowt3tCqQ7XIX8UP2ihmspq+Ptdl3Gg6dWrKETz7B2O6TFJQzettGYVxw38hHLjyn95G8=
+	t=1774732949; cv=none; b=Rg2N0OqUWruVNkTUjXyl4g2md0zlkhT7cUHiKuSGmgISOXkddGqTtyF6SW11fUdD/PiqHciBk35yMyuJtoUsA+/AMZVIA7lo0GSBSZ5qszcjrwy0Yzh2pmftXK/yVYJ3BidzEoRpZB+kizaZSI4YEAx9OXz/wFwExmYskJyp+M4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774719187; c=relaxed/simple;
-	bh=lEwGRQ/INn1o0oezBCZsILziDQurLp0Vg7dDoL9HIH0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hZag2Lg6fRq5pf/7ge16UGzbxGXX8LEya9b7lGOaTAz/cjPu5vL/f34AwUFAjdPGb3MZOiwQqxgeWiu01QJg6lthMiPRJ1Aimyrg82Nii35pr3LlZupGUQjz7+bg5ogr9OtPthV1HUIWy6Mu1s4nSgJCGrHV/OC9Jo+3KuW8aPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lO/7eQ4Y; arc=none smtp.client-ip=209.85.128.42
+	s=arc-20240116; t=1774732949; c=relaxed/simple;
+	bh=R0hkqY29co8MKnie0sq6siQ7Kf3egWqvjoGDjqu0+8k=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ugKsVcpKKSjhlKjqAsv1c33gw/RasmlEZrwPQCekODWtxyplLpYQUI1wNKuDtxRzW6mViXhsRyy19LoCTlfC7z626GiczZ3H1FKeIKphboBG8O0e/rsHhcQL5TotF1XaQXp8kkzys66yFEtsvym79OoPrADDdi1QQHx6ZN9htFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QLi9RVUr; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48704db565eso42776475e9.1
-        for <linux-usb@vger.kernel.org>; Sat, 28 Mar 2026 10:33:05 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b976536806cso440598766b.0
+        for <linux-usb@vger.kernel.org>; Sat, 28 Mar 2026 14:22:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774719184; x=1775323984; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-disposition:mime-version
+        d=gmail.com; s=20251104; t=1774732946; x=1775337746; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=d93cTq5QiIvneBfBankgaImdXDC9+22sYcuw2plg3Os=;
-        b=lO/7eQ4YrU63mxAUuyC32yciNy3OBT+bwIzC4z5KmNnSZTLy2vPYKYAY3vspkIaTmq
-         BYzSzZOnj+z2++qayLVQariSn4sLo6eECl4O+HY9Z7GS9uDwlex9LqSksxQ0W3uT9SC7
-         rVJPhVu6v34JpR5l4H6pIQ6KqzPSNE5EZORMJRj4ik0M2LLwpPsypJhqpHrUNMZ0GHXF
-         E6BwccPnnb2Nj9n99Gty3uuyod24w+X8YCcHqgIODIvKIphbJvFIP610QoHk/1IvhP9m
-         0254q3dHMNA8ulddPlH+9sQw1YMsfXyIqJ2IrNcDHSFtCHptFoUUsm4Xb6w3vcH/bwDX
-         ziVw==
+        bh=wjOBTaIyp3A6iO0bqUaE76OnW1EFhxGZozoi6eNR6QY=;
+        b=QLi9RVUrdH4+LdlyUhRw3dnjwVC6gzgCLhBxbmpRvq8luSsx2yL0CKmLc1AeznktDo
+         8pnI/x69M+TKBDhdG6VrGS+go1CzO9H65z7KgQFfjU7Q1RhRz20giCL/I6+q20a6YbA+
+         CcM28r0SuCoMubMtpeesg93tqKSlyj1MHVBSypcgwVRbbiVyNDJdP/zB8sD4Ek4ONEZc
+         sjn/d54fhCsPCbmPJRQTjllCw+l2SXMvLITfK1VEINaXG+/N3xph5L98Dof5Qee7PVms
+         FW86S2gR72VfMdkK2Mth//65FDA0YnaCCKic9i9CX1d7ZhHIJIfylLZehZtfvu8Mksgi
+         63nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774719184; x=1775323984;
-        h=content-transfer-encoding:content-disposition:mime-version
+        d=1e100.net; s=20251104; t=1774732946; x=1775337746;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=d93cTq5QiIvneBfBankgaImdXDC9+22sYcuw2plg3Os=;
-        b=NkyDXM0P1c4FZ4CDBnZuicV3xtgDyx5+X1oZOklQA9sCyaUXv1DCD669Xt9wJY6LF2
-         /pbUS8WKEvvph2wI0xPssMdiMpx44KNKsxZZDQ+hO5SeAeOATeZK/8A7ygFvHgK6Pb16
-         89qc428nrdzXhGOxrlIuEHFG3oVsmv4BU6gD3lMe1PdAMyqyxEXux/BKs2muJ0YB2gUL
-         tJRHtxPbSngHqc4BFsGHV4hwmGQ0ve6IZp0ssCYRAXNbYE2FGji9g0tNxg8Dsrd01Mk+
-         rb7HemVrDxuy4ADujSU9EFQ6j3HbMpDQGANo7rPYIduO/HDVyR5w1GsE+R7Uc8leGSbR
-         69vw==
-X-Forwarded-Encrypted: i=1; AJvYcCVFxJtgCLoV9WlAf7UVMUr4w8+3gpQLhCY7QoF01UA7FrDz/g3Nkp6xexyZlNpjoiTYc6VyMQYYtcc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgcWtr9Hn1dWA3swZMDYsuT72B/tHd7FY4efIR5vO8WqLLRjjn
-	kgBK9MzUWjMD5LPSUwXiHLtdLQKmEMOeJpg/Fw4hFox+MO8x5KB9AHNY93s8zduM0ww=
-X-Gm-Gg: ATEYQzwm7TTlNrFnh9f9Xgs2lNSemsfInur7JznnzdFcP7JVjEeTMNBJTkGPPWgixII
-	0I+2RiggVOodjXq+7vKeQEUesGacu5uwrNa+RO7qjmTNj7xAfa6pF+BMtnUSa1TKmQZU7SyVUv9
-	vgcBNNWNcl/kcv5ZoouxAtR73zyY/36JSQJedCvblnVuV8nD0mcZJjyIyquAkoprFp0r0QVEgzf
-	st/RLSOyGIit8gngG0XNToauqEwBCLu9cWVqz+ER4ntSOxW9dKMYV6t66VZSQL2lU4vWJUHVQoX
-	U5DNFes0QGDrMINOrVca3HUU/WUe3uMRLfM6iNgasUy2chNGiTOezi9w5Z2zv/s0pOhbcgqPQyM
-	scNomsmzf4V0Hb5b3bpc/TWnzd8zM4KHaOeoPHVIPuXM42Otl9dzVlhHm0UsnYAtkhE2OnTbof+
-	GcYYRl9Ys6SVwaUAnz0EuTicqNfz2KlHKD9UalrLVzXHebfuWQULOjU4VuGu2lluXTfd98o/3Sa
-	rDWHHPxzaAqbUj6RYSH4TFSt27lrvNTdXMwM8m4EZHvi4AGqI12mYLuEU/IlOUeWV/DJxeWDmLw
-	vKDA0hnf
-X-Received: by 2002:a05:600c:1d1f:b0:486:d76c:fa57 with SMTP id 5b1f17b1804b1-48727eb81bbmr122822165e9.17.1774719184216;
-        Sat, 28 Mar 2026 10:33:04 -0700 (PDT)
-Received: from stanislaw-QEMU-Virtual-Machine (host86-163-160-172.range86-163.btcentralplus.com. [86.163.160.172])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48730688605sm96375825e9.10.2026.03.28.10.33.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Mar 2026 10:33:03 -0700 (PDT)
-Date: Sat, 28 Mar 2026 17:33:03 +0000
-From: =?utf-8?Q?Stanis=C5=82aw?= Maciej Molsa <stanislawmolsa@gmail.com>
-To: peter.chen@kernel.org
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: [PATCH] usb: common: fix all alignment warnings in usb-otg-fsm.c
-Message-ID: <acgQzzfSTX-5foU-@stanislaw-QEMU-Virtual-Machine>
+        bh=wjOBTaIyp3A6iO0bqUaE76OnW1EFhxGZozoi6eNR6QY=;
+        b=H4Lu9pmvbniQsys56WGBsCwVr00b61jkKBG7LUOLHwRezJCJAOingbet0znumSKRyQ
+         4WX9zm/XOHdpoiPDa7yTDdWt7yHHKl1f0raNBMrhgwPLlDRXjt8ArhLtYFqWkj9cj2mc
+         28VQ4pcPx9nKfgnYstU4dI4zi66PC3VEgL0Ute9VAXi65e2rvQiPWBsCdr+VUmnjGQn6
+         TDW+MXONKeKooY7wZ2ZFf5o/s14TZ8Q9zRNWLPN+gHZAOMzyJ8C41rmEd3nARSAvy7Zx
+         MT9FetQttvseLnk2NgK8CLJtk3EjXBnUaaMKdCejl3IYUHc8oyx1twQEujB4xk+Ev6/9
+         3gHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWgrZUmBTwAS1LFtjytvn/xO2Cv22m8EQZ4CQ651x+eVrJOJ1AqcxoK4p1bsmwqhprg2tPhwUxkKUo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNbnHUzlp6ae6ldmKo9ZNI70Vqo7Vk5rexq9k8WsuDf6h3acd0
+	WKs1W+tf0xszCeJkFsqOI9XrFbPKQhvuwCRASeKOzmJA/J13PpC8aJ0l
+X-Gm-Gg: ATEYQzztozsJJQNVOOrVoU7py7a2muhN3QiPzHW3MsVcTYEF3iNO6NhvVuYRq7K4DMx
+	y1d0HoE2vZfNHuAvGiCMUyxPbPkhiovvQW4w80e6EuEpfgwv3YRNkEpwMoDAHt47HAPhTxF3+a1
+	AD7jjUVbPzggaMbRkzqrTJYQqNV3BW1Lv0E2BpoK3DfKm3DYVd0mguSr+5xe3+BwQkqd4pIHWZf
+	dKkksNXQDZo4Zimc7Gp/MRv5rV4FkzhSvMXFR4WtgVLR/kztifAiDilDUwWlq4m6u819j1rwCEW
+	ZVT0u16P5a79TupWjkYrfThARIEIRPpy/uYhlS08am7BBX1heKnLZO0VkjKUviWsASNankQGO54
+	W0HIjmucznhtCjcNkF6+CC7lqlG+5N7L8CwkDNpDLOioI/uyu5Nw6/40kYmxFL6YsjXSr7G63L4
+	XmHi1bioIOCDI5bo6k39ojy44r+zaoYveADRc/Bit0k/lDDQ==
+X-Received: by 2002:a17:907:3f93:b0:b99:1074:750 with SMTP id a640c23a62f3a-b9b5079aaa5mr411438966b.39.1774732945829;
+        Sat, 28 Mar 2026 14:22:25 -0700 (PDT)
+Received: from foxbook (bhd145.neoplus.adsl.tpnet.pl. [83.28.93.145])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9b7ae52032sm113342366b.20.2026.03.28.14.22.24
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sat, 28 Mar 2026 14:22:25 -0700 (PDT)
+Date: Sat, 28 Mar 2026 22:22:17 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Oliver Neukum
+ <oneukum@suse.com>, =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>, USB list
+ <linux-usb@vger.kernel.org>
+Subject: Re: correctly handling EPROTO
+Message-ID: <20260328222217.297200bd.michal.pecio@gmail.com>
+In-Reply-To: <d3fd1c0b-d0cf-40e2-9f21-b4c5de1c421b@rowland.harvard.edu>
+References: <4ada5d68-56f1-41b7-82d9-463901c927db@rowland.harvard.edu>
+	<8a14fe29-0d92-4ce5-a7e2-2c084c710727@suse.com>
+	<b0217cdc-f263-418c-b8b5-584520d0b1db@rowland.harvard.edu>
+	<20260318223851.1f6d07d7.michal.pecio@gmail.com>
+	<20260318235920.ioek26hdr25rkksp@synopsys.com>
+	<1eaf4cf3-4278-4d04-87aa-8b6069d544e1@rowland.harvard.edu>
+	<20260319231620.3ukqxsrwqikp5zbd@synopsys.com>
+	<2929d47c-fc02-49d2-873e-758f24c43071@rowland.harvard.edu>
+	<20260321021439.7pmcdrpb5oxbivct@synopsys.com>
+	<20260321065424.76a80508.michal.pecio@gmail.com>
+	<d3fd1c0b-d0cf-40e2-9f21-b4c5de1c421b@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-1.66 / 15.00];
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35617-lists,linux-usb=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35618-lists,linux-usb=lfdr.de];
+	TO_DN_ALL(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stanislawmolsa@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com]
-X-Rspamd-Queue-Id: 0981434F61C
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 5311E34FFD0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Peter,
+On Sat, 21 Mar 2026 11:58:53 -0400, Alan Stern wrote:
+> On Sat, Mar 21, 2026 at 06:54:24AM +0100, Michal Pecio wrote:
+> > Nope, for many years now, if not forever, xhci-hcd has been
+> > restarting the endpoint after giving back the failed URB if its
+> > completion hasn't unlinked all remaining URBs.  
+> 
+> How can that work in the presence of BH givebacks?
 
-This is my first small contribution to the USB subsystem.
+Certainly not reliably and I started a similar thread two years ago
+after coming to this exact realization.
 
-Fixed all "Alignment should match open parenthesis" warnings in
-usb-otg-fsm.c, as
-reported by checkpatch.pl
+Does anyone know class drivers affected by this which could be used
+to validate such changes? Writing a patch is one thing, knowing whether
+it does any good is another. I recall that last time Mathias tried to
+touch this logic it caused a regression by unearthing more issues.
 
-Signed-off-by: Stanisław Maciej Molsa <stanislawmolsa@gmail.com>
----
- drivers/usb/common/usb-otg-fsm.c | 42 ++++++++++++++++----------------
- 1 file changed, 21 insertions(+), 21 deletions(-)
+I was reluctant to touch this mess in absence of known impact. The race
+is as old as BH giveback (2019) and automatic restarting is even older.
+It could get awkward if users (or driver developers) learned to expect
+this behavior.
 
-diff --git a/drivers/usb/common/usb-otg-fsm.c b/drivers/usb/common/usb-otg-fsm.c
-index e11803225775..5dcaa6c2057f 100644
---- a/drivers/usb/common/usb-otg-fsm.c
-+++ b/drivers/usb/common/usb-otg-fsm.c
-@@ -32,7 +32,7 @@ static int otg_set_protocol(struct otg_fsm *fsm, int protocol)
- 
- 	if (fsm->protocol != protocol) {
- 		VDBG("Changing role fsm->protocol= %d; new protocol= %d\n",
--			fsm->protocol, protocol);
-+		     fsm->protocol, protocol);
- 		/* stop old protocol */
- 		if (fsm->protocol == PROTO_HOST)
- 			ret = otg_start_host(fsm, 0);
-@@ -139,14 +139,14 @@ static void otg_hnp_polling_work(struct work_struct *work)
- 	*fsm->host_req_flag = 0;
- 	/* Get host request flag from connected USB device */
- 	retval = usb_control_msg(udev,
--				usb_rcvctrlpipe(udev, 0),
--				USB_REQ_GET_STATUS,
--				USB_DIR_IN | USB_RECIP_DEVICE,
--				0,
--				OTG_STS_SELECTOR,
--				fsm->host_req_flag,
--				1,
--				USB_CTRL_GET_TIMEOUT);
-+				 usb_rcvctrlpipe(udev, 0),
-+				 USB_REQ_GET_STATUS,
-+				 USB_DIR_IN | USB_RECIP_DEVICE,
-+				 0,
-+				 OTG_STS_SELECTOR,
-+				 fsm->host_req_flag,
-+				 1,
-+				 USB_CTRL_GET_TIMEOUT);
- 	if (retval != 1) {
- 		dev_err(&udev->dev, "Get one byte OTG status failed\n");
- 		return;
-@@ -156,7 +156,7 @@ static void otg_hnp_polling_work(struct work_struct *work)
- 	if (flag == 0) {
- 		/* Continue HNP polling */
- 		schedule_delayed_work(&fsm->hnp_polling_work,
--					msecs_to_jiffies(T_HOST_REQ_POLL));
-+				      msecs_to_jiffies(T_HOST_REQ_POLL));
- 		return;
- 	} else if (flag != HOST_REQUEST_FLAG) {
- 		dev_err(&udev->dev, "host request flag %d is invalid\n", flag);
-@@ -168,11 +168,11 @@ static void otg_hnp_polling_work(struct work_struct *work)
- 		/* Set b_hnp_enable */
- 		if (!fsm->otg->host->b_hnp_enable) {
- 			retval = usb_control_msg(udev,
--					usb_sndctrlpipe(udev, 0),
--					USB_REQ_SET_FEATURE, 0,
--					USB_DEVICE_B_HNP_ENABLE,
--					0, NULL, 0,
--					USB_CTRL_SET_TIMEOUT);
-+						 usb_sndctrlpipe(udev, 0),
-+						 USB_REQ_SET_FEATURE, 0,
-+						 USB_DEVICE_B_HNP_ENABLE,
-+						 0, NULL, 0,
-+						 USB_CTRL_SET_TIMEOUT);
- 			if (retval >= 0)
- 				fsm->otg->host->b_hnp_enable = 1;
- 		}
-@@ -199,7 +199,7 @@ static void otg_start_hnp_polling(struct otg_fsm *fsm)
- 	}
- 
- 	schedule_delayed_work(&fsm->hnp_polling_work,
--					msecs_to_jiffies(T_HOST_REQ_POLL));
-+			      msecs_to_jiffies(T_HOST_REQ_POLL));
- }
- 
- /* Called when entering a state */
-@@ -249,7 +249,7 @@ static int otg_set_state(struct otg_fsm *fsm, enum usb_otg_state new_state)
- 		otg_loc_sof(fsm, 1);
- 		otg_set_protocol(fsm, PROTO_HOST);
- 		usb_bus_start_enum(fsm->otg->host,
--				fsm->otg->host->otg_port);
-+				   fsm->otg->host->otg_port);
- 		otg_start_hnp_polling(fsm);
- 		break;
- 	case OTG_STATE_A_IDLE:
-@@ -349,7 +349,7 @@ int otg_statemachine(struct otg_fsm *fsm)
- 		else if (fsm->b_sess_vld && fsm->otg->gadget)
- 			otg_set_state(fsm, OTG_STATE_B_PERIPHERAL);
- 		else if ((fsm->b_bus_req || fsm->adp_change || fsm->power_up) &&
--				fsm->b_ssend_srp && fsm->b_se0_srp)
-+			 fsm->b_ssend_srp && fsm->b_se0_srp)
- 			otg_set_state(fsm, OTG_STATE_B_SRP_INIT);
- 		break;
- 	case OTG_STATE_B_SRP_INIT:
-@@ -383,14 +383,14 @@ int otg_statemachine(struct otg_fsm *fsm)
- 		if (fsm->id)
- 			otg_set_state(fsm, OTG_STATE_B_IDLE);
- 		else if (!fsm->a_bus_drop && (fsm->a_bus_req ||
--			  fsm->a_srp_det || fsm->adp_change || fsm->power_up))
-+					      fsm->a_srp_det || fsm->adp_change || fsm->power_up))
- 			otg_set_state(fsm, OTG_STATE_A_WAIT_VRISE);
- 		break;
- 	case OTG_STATE_A_WAIT_VRISE:
- 		if (fsm->a_vbus_vld)
- 			otg_set_state(fsm, OTG_STATE_A_WAIT_BCON);
- 		else if (fsm->id || fsm->a_bus_drop ||
--				fsm->a_wait_vrise_tmout)
-+			 fsm->a_wait_vrise_tmout)
- 			otg_set_state(fsm, OTG_STATE_A_WAIT_VFALL);
- 		break;
- 	case OTG_STATE_A_WAIT_BCON:
-@@ -405,7 +405,7 @@ int otg_statemachine(struct otg_fsm *fsm)
- 		if (fsm->id || fsm->a_bus_drop)
- 			otg_set_state(fsm, OTG_STATE_A_WAIT_VFALL);
- 		else if ((!fsm->a_bus_req || fsm->a_suspend_req_inf) &&
--				fsm->otg->host->b_hnp_enable)
-+			 fsm->otg->host->b_hnp_enable)
- 			otg_set_state(fsm, OTG_STATE_A_SUSPEND);
- 		else if (!fsm->b_conn)
- 			otg_set_state(fsm, OTG_STATE_A_WAIT_BCON);
--- 
-2.51.0
+But if somebody can point out serious issues like data loss in storage
+then it's a different ball game.
 
+Regards,
+Michal
 
