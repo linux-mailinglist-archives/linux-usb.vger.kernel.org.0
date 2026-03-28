@@ -1,130 +1,114 @@
-Return-Path: <linux-usb+bounces-35614-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35615-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kPvxJ9byx2lMfQUAu9opvQ
-	(envelope-from <linux-usb+bounces-35614-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2026 16:25:10 +0100
+	id 8BOpOeP7x2mIfwUAu9opvQ
+	(envelope-from <linux-usb+bounces-35615-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2026 17:03:47 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 009C834EDEB
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2026 16:25:09 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7843434F165
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2026 17:03:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C3F8B305E319
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2026 15:21:24 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A42FE301B162
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2026 16:03:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE02F34A774;
-	Sat, 28 Mar 2026 15:21:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C36EE395DB4;
+	Sat, 28 Mar 2026 16:03:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="rhShdjgA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m49204.qiye.163.com (mail-m49204.qiye.163.com [45.254.49.204])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7339F3446BC;
-	Sat, 28 Mar 2026 15:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA28D396B68;
+	Sat, 28 Mar 2026 16:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774711283; cv=none; b=Y6QIrGi0AoTsP3CNO2w3flMNlisDlfSyadRPiELWm36mj90mr9mPaEzj+1/yzvCDeN+z7JB6r7gTCqpTIh0agRCRvAMN+cCVRZMg3XjtpDKRwPlKDW0Zi8+Ume1nLx/bBD47a+HKvipo2gQya84I3F5EFPGNKQ03yLzoA51pHp8=
+	t=1774713820; cv=none; b=WR++tkW1zdZyrhAkZF0B22m/L2VJicB8dCxGkRBecg2cPzssGIXlkDQfLcrOm449RIZJlACFbTg8FT/meJhJrgqZ1BYZX3iqbb/iWNje8cdChGWERV+l1b98bDhZIxw6FXBQ1cZZl37OIWx1Kf42tbk/el6IRVrtBWTAQDI9smM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774711283; c=relaxed/simple;
-	bh=xGPwdfXHzKe8y015Nop31mQCc5qA9KhNFhj8uO1vIZo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pu2DR1V/1pO0LfaX8vilgSN2KzVd710wOOuNQ2LMrukb4b/fDr/ZKi6oNjmOHPuDiv/OzifLVsfBdcQtYD8bdTK1fyFdXYqDrW0z1dOjIDsvh0uQbiyGqtGAjOHcAztWWbmKcsy2XjCG1wF0aCQyd7zgHZ0LeSeZeHUr8Q+/P+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=autochips.com; spf=pass smtp.mailfrom=autochips.com; arc=none smtp.client-ip=45.254.49.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=autochips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=autochips.com
-Received: from H20F120008.autochips.inc (unknown [223.244.89.246])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 38a9b8708;
-	Sat, 28 Mar 2026 23:15:59 +0800 (GMT+08:00)
-From: Yongchao Wu <yongchao.wu@autochips.com>
-To: Peter Chen <peter.chen@kernel.org>
-Cc: Pawel Laszczak <pawell@cadence.com>,
-	Roger Quadros <rogerq@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yongchao Wu <yongchao.wu@autochips.com>
-Subject: [PATCH] usb: cdns3: gadget: fix resource leak on gadget init failure
-Date: Sat, 28 Mar 2026 23:15:50 +0800
-Message-ID: <20260328151551.61228-1-yongchao.wu@autochips.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1774713820; c=relaxed/simple;
+	bh=OUG1cT55RhpZRDRllJn6TQgHhKE+14/e2xYUYI2tBHk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I7NyQyrAnexmJ2BxFJYmG4Gk2smVIebiPbPrUNQbFwYuGTQuzOXEezZG/h1eYashM5yNEAqZQL372I93hJPLyNjEdlob5M5S7PZxyvktcErCpPW8ANwU0MjJCI++Mhyzgx4Kv+uyvCUN5cIeT3g7Qqip4rfmAouKXetlPUMBSjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=rhShdjgA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E356C4CEF7;
+	Sat, 28 Mar 2026 16:03:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1774713820;
+	bh=OUG1cT55RhpZRDRllJn6TQgHhKE+14/e2xYUYI2tBHk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rhShdjgAswb0N29q9pJI1Y1KTXN0DzSmhQ6/Hch4/vSX94z1u/NGa3EuJBW62VA5C
+	 17y+APSwISLfjBEVSO3DXYa2eceHJyQwPdgiXIwXX2zHfDqTGCZ53aA0tXPkf405d5
+	 duYTpn2QbYIY528267rZ90qHIQl6g7CPUmq19paI=
+Date: Sat, 28 Mar 2026 17:03:14 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "yongchao.wu" <yongchao.wu@autochips.com>
+Cc: Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
+	Roger Quadros <rogerq@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: cdns3: gadget: fix NULL pointer dereference in
+ ep_queue
+Message-ID: <2026032859-gave-smokeless-a5f4@gregkh>
+References: <20260328143842.57315-1-yongchao.wu@autochips.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9d35042e8803ackunme8c0037b2187eb2
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaGU1LVktNH0geSh0YTkofSVYVFAkWGhdVEwETFh
-	oSFyQUDg9ZV1kYEgtZQVlJSUhVSU9PVUNCVUlPTVlXWRYaDxIVHRRZQVlPS0hVSktJT09PSFVKS0
-	tVSkJLS1kG
-X-Spamd-Result: default: False [1.54 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[autochips.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260328143842.57315-1-yongchao.wu@autochips.com>
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-35614-lists,linux-usb=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35615-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FROM_NEQ_ENVFROM(0.00)[yongchao.wu@autochips.com,linux-usb@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 009C834EDEB
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linuxfoundation.org:dkim]
+X-Rspamd-Queue-Id: 7843434F165
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-When cdns3_gadget_start() fails, the DRD gadget is left in an
-initialized state, causing a resource leak. When switching to host
-mode, the stale state triggers a synchronous external abort in
-xhci_gen_setup(), leading to kernel panic:
+On Sat, Mar 28, 2026 at 10:38:42PM +0800, yongchao.wu wrote:
+> When the gadget endpoint is disabled or not yet configured, the ep->desc
+> pointer can be NULL. This leads to a NULL pointer dereference when
+> __cdns3_gadget_ep_queue() is called, causing a kernel crash.
+> 
+> Add a check to return -ESHUTDOWN if ep->desc is NULL, which is the
+> standard return code for unconfigured endpoints.
+> 
+> This prevents potential crashes when ep_queue is called on endpoints
+> that are not ready.
+> 
+> Signed-off-by: yongchao.wu  <yongchao.wu@autochips.com>
 
-[  1301.377716][ T5000][E] Internal error: synchronous external abort: 96000010 [#1] PREEMPT SMP
-[  1301.382485][ T5000][I] pc : xhci_gen_setup+0xa4/0x408
-[  1301.393391][ T5000][I] backtrace:
-    ...
-    xhci_gen_setup+0xa4/0x408    <-- CRASH
-    xhci_plat_setup+0x44/0x58
-    usb_add_hcd+0x284/0x678
-    ...
-    cdns_role_set+0x9c/0xbc        <-- Role switch
+Please use your name, not your email alias, for the From: and
+signed-off-by lines.
 
-Fix by calling cdns_drd_gadget_off() in the error path to properly
-clean up the DRD gadget state. This prevents both the resource leak
-and the kernel panic during role switching.
+thanks,
 
-Signed-off-by: Yongchao Wu <yongchao.wu@autochips.com>
----
- drivers/usb/cdns3/cdns3-gadget.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-index d59a60a16..4cc3f2ffb 100644
---- a/drivers/usb/cdns3/cdns3-gadget.c
-+++ b/drivers/usb/cdns3/cdns3-gadget.c
-@@ -3428,6 +3428,7 @@ static int __cdns3_gadget_init(struct cdns *cdns)
- 	ret = cdns3_gadget_start(cdns);
- 	if (ret) {
- 		pm_runtime_put_sync(cdns->dev);
-+		cdns_drd_gadget_off(cdns);
- 		return ret;
- 	}
- 
--- 
-2.43.0
-
+greg k-h
 
