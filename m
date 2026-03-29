@@ -1,224 +1,249 @@
-Return-Path: <linux-usb+bounces-35625-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35626-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WIeZItcNyWlatwUAu9opvQ
-	(envelope-from <linux-usb+bounces-35625-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 13:32:39 +0200
+	id AU5ZGGA/yWk7wgUAu9opvQ
+	(envelope-from <linux-usb+bounces-35626-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 17:04:00 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29869351D04
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 13:32:39 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF5FD352844
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 17:03:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 43E7D3017271
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 11:32:31 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4DEAE300C811
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 15:03:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A22935DA6F;
-	Sun, 29 Mar 2026 11:32:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FF0A37CD53;
+	Sun, 29 Mar 2026 15:03:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="jTS6pVyR"
+	dkim=pass (2048-bit key) header.d=jphein.com header.i=@jphein.com header.b="PYJM/xmG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBDC118A6A7;
-	Sun, 29 Mar 2026 11:32:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774783949; cv=none; b=aljNuf3obYHPmuY8THAWwq+08A8WrHs0HRpd563gERBXqtz6AekTDel2spkjbt5FmsUsRh4do1erBZ1r/1ycxxCzON5N3ut0ZO4k6Q/HX27hN9b1yqPlp/6KIPyHYjbp2MDgBr4rfpAP3fcYYINyKgLQH6h9REvMk2D8tDN2poM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774783949; c=relaxed/simple;
-	bh=CS1AKKELuvewejgn0DBIhyp5SikMKYpZXqpF4+4HZVw=;
-	h=From:To:Cc:Subject:MIME-Version:Content-Disposition:Content-Type:
-	 Message-Id:Date; b=j/qUCMpTO5Cs37QzXtbgonvPFU3PkUfaeo4OEtCSNZ2wT2c1r+u8kMhQlmUJSWlvhWHfi+u8Bsdq/A888AxBSBade2KMIwWPcv4Ip3WTbHCTPPoz8EscSNL1aOhhCO6k1y1+1CgDDkyhYi5U4u8q30RMP/ElkJm+z84b6S4HKrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=jTS6pVyR; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
-	:Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-	Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=AxNR5KaJmzWZIX1WbAJp7aQ4tgAbVPKdjMDYmpdFN5s=; b=jTS6pVyRRG8MYv9PxPUvYR15P+
-	nJ8AAwxhgPe+Q7578NPbWitGHavbLyZ+IhcpJJlV2ii/pXIM0q2dkEPjC/U4CIizyFqoZWJNdCmHi
-	4KYPrJXpKNTqxqvJLtGtiYO9Sdzr5mBS9xqwoDnUnxQ6otEmQgUwrX1kapqSUUWiqifGjApQWINl9
-	3QwhMAK87JMd27uudgHNEvo4VLIGvNuqfqJmZZJpNh92cmO5pueVl5tl5WdLkGYziZFjTiSio9Fh6
-	2cO7HVMTfV/j3uGlnzmxhwYIGGOygf1jpDZz2W7ymHjPv8oDCT0kkdhlBi5XOJ/JuBkQ6OglXIebA
-	VmBM760Q==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:51262 helo=rmk-PC.armlinux.org.uk)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <rmk@armlinux.org.uk>)
-	id 1w6oNR-000000007sn-2tJK;
-	Sun, 29 Mar 2026 12:32:21 +0100
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1w6oNQ-0000000ER1E-43NU;
-	Sun, 29 Mar 2026 12:32:20 +0100
-From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Kees Cook <kees@kernel.org>,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Tony Luck <tony.luck@intel.com>
-Subject: [PATCH RFC net-next] usb: gadget: u_ether: fix eth_get_drvinfo() oops
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103F9279DCC
+	for <linux-usb@vger.kernel.org>; Sun, 29 Mar 2026 15:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774796636; cv=pass; b=JMNlBCgXIPM+Bprq3iWNaT/LM6od25vHLLx8dZYImSOYbwkfubSuRdvUGva03TEedbNKVT80k3xkeUN7bR9C8RwDT0pDycDhUKqtldZhJi4d+4V6n5eXTCWLtHyUxhkFQ9yiR09X6LAPvIYmJH8n1nu74Q+efagarYmPoux3Lqk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774796636; c=relaxed/simple;
+	bh=7fn3Z+2dnye8ym96U8WpPLIEbXEMZnKCkPCfscZBs5Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GFBNgq9UoMaXQ9+eMxrMFleGR9pYXyMOB3CCkq2d5nmZkTRt5vhivPC2w+I2NaC7N1oTRIVZRa14vC4HjULMZkAK68DhtQKZZ3cnJKl9oggfbR1Dj1xzmqT6vSgHmdZ+QhRwLCkwE+u39h5souJoOlk6ilQLKKf5yopUM+d5hzs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jphein.com; spf=pass smtp.mailfrom=jphein.com; dkim=pass (2048-bit key) header.d=jphein.com header.i=@jphein.com header.b=PYJM/xmG; arc=pass smtp.client-ip=74.125.224.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jphein.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jphein.com
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-650158138d9so620192d50.3
+        for <linux-usb@vger.kernel.org>; Sun, 29 Mar 2026 08:03:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774796634; cv=none;
+        d=google.com; s=arc-20240605;
+        b=EHR6Yqh8RTRUZx/HFiweERKhWS+3xKKuMyUp90XxNJwjuTidxOqixckrxHn/WcDs4o
+         M37OXxhkH6EL9yLPFaR5YQx3xNUbCeKzbJO1uQy8WPGvBuxtATPygXxTjOez67En4Z3+
+         uUbK75ibwSuT30UtyiHdODXCJWZ+aa4iyykFG59+0XL8NQZQ9ynr8I/ooIiZ74IfIqfE
+         /K7sQT5Rtb8Vy81Vxwn8JzHJ6ERyp8/rkfKJ8qWMiaVBTPSeRLP2pEB/oXKyNTpnyW7c
+         YB23M42lEhEJOLEpIHeDLNEqIPwnWGvbkRRJTN4oGYVjy54MPBGwSPEy3TwKgCOkiVd3
+         EgAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Fkpr6x8ZyyJkz5iE6Uzz9ElyoBGLMbtXkFG8ALfJ6/c=;
+        fh=X7gwTjO57Iu1hC9uVzKyfvABgwy/4y8Rb04isNIyqMk=;
+        b=KrsiZ/FmjQAk82DDKteMWP1ARwIxKU1COXddJW48g4rfeI3ctZY293COge8LgVWCQ6
+         mtl9N77XPgwpRFsdEM8gz8aCABkcquuJ/oP+x2nEuhoMZSlohpbLfPqLWzdd/fUBewV+
+         oY2o4kXBKcKn07g97puFu7WlCoaSq1dVmCctS/QpnUuD2dqTRG7/VUNzxMUo6JsQqtqX
+         cWg8WR+wX/URmJ0fryUfktb+1JR5FWPox8AcnnuqymJcbP7AgGzT/BKs7RCU0Ja+ZOAJ
+         K5greujD3wS2MyI1TMNouQKDqv6mJXCcYTeyQv9CSnO9efDwUvSvQGXl0B5ey9qIUXMR
+         gSpQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jphein.com; s=google; t=1774796634; x=1775401434; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fkpr6x8ZyyJkz5iE6Uzz9ElyoBGLMbtXkFG8ALfJ6/c=;
+        b=PYJM/xmGj4WlXxJz3E7rYM16yoPekuH/t0vpGv5havGLAAuo2ANVyVZH0dGqwKF811
+         uvv4SBd1KoUdDAKyQUHplWJPyqJPzRBvMqIh96SQSb9+A3HO0hvUIfaiRR3Puxe3WJSd
+         zQEf1N1d6EM1d1BHTCCQFiTP5L5gHggivWmvrIBJta2mM5pcfen2BrPwLCxoIn1wTRYN
+         SiPaEduwkeHBadCioL3rHyF3Ua9BzIc5yuZCgHZ0skXyUjn2uRaElvHwesHIpUXBKCi+
+         USKp4nO1XPhRIIoCqVcK/o3CCYws0zx+GZKig0YnQgRjuqVNaFlX55tWeKD0asZLAwq4
+         SIKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774796634; x=1775401434;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Fkpr6x8ZyyJkz5iE6Uzz9ElyoBGLMbtXkFG8ALfJ6/c=;
+        b=DtPHCBCTgEHwlROsKFZXzoCkPR84qWtW4oGmReydNK4SdchBgi5e8L/1+0a1qhuBMb
+         AkGlm5fILTDuz+fzxkH95N2dGsTjr6Ox5j/TdYl9gHggQUFvDGRCrOOpU7r0O8JsV94v
+         b5m5sd8X9aCUXXyVJulxe3Ig2rQBzBHiKJDZ3hbaxSjbn8vsaAehIBsQXIztNM901wQj
+         U17EfgK4GInpV9Alogo1kGZjaerDqViQfgt3EjXNxeunkrsdSkm5K0vBf9nAGwLjUAnU
+         Gx4GgEUJDWpWK4UCZ8MC8mjNT1BPOVxDGynEtJEc3KB4LJFSU9QjBsGcYjQHenwdHj2l
+         6CJg==
+X-Forwarded-Encrypted: i=1; AJvYcCXHkzrPSsIHPrTSpR/K+m73VNB+W7rr4uAnj23grf0+DN4inUcPi1wu8K5uPNTc/uv8FdZifwxbynI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0jz8ReV0cPud0M9YAJJ3o4WEL+6TCUiRaoAmJCVV/H6efxTVD
+	Pnbns4jTTzLWBB5cF6LqAhlqn44KNRuH2gljRMINBIARn5eS3ldRPymD2Yi2TuX2xyTL9nnzxB/
+	wCsMBBxAuISs1/yn8Z4EayLrNqfRuAtN2PRh0J8tv
+X-Gm-Gg: ATEYQzw2V24+S0V2rxv7GrG/VoFNJ79sRcaPxS7N16k4tHHCbO/gXjH4ubNenD9EgV1
+	TBVeUfc2THARj07y4hFy5rXYkGor2B5QG5SbjBl5lToKst40nfkgDVNYgE9xURH0sWUjJnsWyaO
+	yCBV4pRCzBEvTbD/Htcep+/GtojAnzk5Of4kELdn5yndsVDZgj57awcjKIlBzgIb9GpB8+wliW6
+	xuJiQ7/4aX9NUAPK4WRWpwdLFjHA9cW0PrITVfaJBGBTyoTgSQl5S8iDfSIYH85O0ZuPIRE3iKD
+	LSxFC2dyZypnS9Y=
+X-Received: by 2002:a05:690e:1c08:b0:64c:9ec3:d710 with SMTP id
+ 956f58d0204a3-64ff73acdb5mr9325664d50.41.1774796633749; Sun, 29 Mar 2026
+ 08:03:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1w6oNQ-0000000ER1E-43NU@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date: Sun, 29 Mar 2026 12:32:20 +0100
-X-Spamd-Result: default: False [-0.36 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_REJECT(1.00)[armlinux.org.uk:s=pandora-2019];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+References: <20260321223713.1219297-1-jp@jphein.com> <20260322055354.03399a32.michal.pecio@gmail.com>
+ <CAD5VvzBE8Oq80EhFZnZ7kNrRC_rpoR25Ct5-Fg62yDZUHVtWzw@mail.gmail.com> <20260323085845.6bf57b3b.michal.pecio@gmail.com>
+In-Reply-To: <20260323085845.6bf57b3b.michal.pecio@gmail.com>
+From: Jeffrey Hein <jp@jphein.com>
+Date: Sun, 29 Mar 2026 08:03:42 -0700
+X-Gm-Features: AQROBzD7GC_TrwPeTrvW3mp5jNE4JvirNKJp_EKtrLyJ9BYIvabbB9bj_SkkwFk
+Message-ID: <CAD5VvzDWF7SO0Aytp3K_uXV6ZYoqEqN1dhfv7VtMAHSpHP+qTA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] USB/UVC: Add quirks to prevent Razer Kiyo Pro xHCI
+ cascade failure
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede <hansg@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[jphein.com,reject];
+	R_DKIM_ALLOW(-0.20)[jphein.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[armlinux.org.uk : SPF not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[armlinux.org.uk:-];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35625-lists,linux-usb=lfdr.de,kernel];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35626-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FROM_NEQ_ENVFROM(0.00)[rmk@armlinux.org.uk,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.990];
+	FROM_NEQ_ENVFROM(0.00)[jp@jphein.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[jphein.com:+];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[get_maintainers.pl:url]
-X-Rspamd-Queue-Id: 29869351D04
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,techempower.org:url]
+X-Rspamd-Queue-Id: BF5FD352844
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The following oops was observed on the nVidia Jetson Xavier NX1
-platform with 7.0.0-rc5, which is caused by dev->gadget becoming NULL
-while the u_ether device is still visible to userspace. Adding some
-debug reveals that we see this sequence:
+Hi Michal,
 
-net usb1: gadget detached
-tegra-xudc 3550000.usb: ep 0 disabled
-net usb1: no gadget for drvinfo
-usb1 (unregistering): left allmulticast mode
-usb1 (unregistering): left promiscuous mode
-l4tbr0: port 2(usb1) entered disabled state
+I have now tested on 6.17.0-19-generic (Ubuntu 25.04) with dynamic
+debug enabled for xhci_hcd and usbcore, and without any of my proposed
+patches or workarounds applied. No udev quirks, no LPM disable, no
+control throttle -- completely stock kernel.
 
-Put a sticky plaster over this (it's racy!) I suspect
-gether_detach_gadget() needs to at least take the RTNL as well to
-prevent ethtool ops running concurrently with the gadget being
-detached.
+Results: the stress test passes 50/50 rounds with 0ms delay. On
+6.8.0-106-generic the same test crashed consistently around round 25.
 
-Unable to handle kernel NULL pointer dereference at virtual address 000000000000
-00d0
-Mem abort info:
-  ESR = 0x0000000096000004
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x04: level 0 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-  CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-  GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=00000001086b1000
-[00000000000000d0] pgd=0000000000000000, p4d=0000000000000000
-Internal error: Oops: 0000000096000004 [#1]  SMP
-Modules linked in: snd_soc_tegra210_mvc snd_soc_tegra186_asrc snd_soc_tegra210_m
-ixer snd_soc_tegra210_admaif snd_soc_tegra_pcm snd_soc_tegra210_ope snd_soc_tegr
-a186_dspk snd_soc_tegra210_i2s snd_soc_simple_card_utils snd_soc_tegra210_dmic s
-nd_soc_tegra210_amx snd_soc_tegra210_adx snd_soc_tegra210_sfc rtw88_8822ce rtw88
-_8822c rtw88_pci rtw88_core mac80211 libarc4 sha256 cfg80211 snd_soc_tegra210_ah
-ub snd_soc_core snd_pcm_dmaengine snd_pcm snd_timer tegra210_adma zram tegra_drm
- zsmalloc usb_f_ncm syscopyarea usb_f_mass_storage drm_client_lib sysfillrect sy
-simgblt ramoops fb_sys_fops reed_solomon nls_iso8859_1 drm_display_helper nls_cp437 vfat drm_kms_helper fb fat cec drm_dp_aux_bus tegra_aconnect usb_f_acm u_serial usb_f_rndis u_ether max77620_wdt realtek tegra_xudc phy_package snd phy_tegra194_p2u dwmac_dwc_qos_eth soundcore stmmac_platform pwm_tegra rtc_efi tegra186_gpc_dma virt_dma tegra_bpmp_thermal host1x pcie_tegra194 libcomposite udc_core drm drm_panel_orientation_quirks backlight efivarfs ip_tables
- x_tables
-CPU: 1 UID: 0 PID: 4181 Comm: systemd-udevd Not tainted 7.0.0-rc5-net-next+ #640 PREEMPT
-Hardware name: NVIDIA NVIDIA Jetson Xavier NX Developer Kit/Jetson, BIOS 6.0-37391689 08/28/2024
-pstate: 80400009 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : eth_get_drvinfo+0x4c/0x80 [u_ether]
-lr : eth_get_drvinfo+0x40/0x80 [u_ether]
-sp : ffff80008484bb60
-x29: ffff80008484bb60 x28: ffff000083de18c0 x27: 0000000000000000
-x26: 0000000000000000 x25: ffff0000947da0a8 x24: 0000000000004000
-x23: ffff0000a38a5600 x22: 0000000000000000 x21: ffff80007a3a5558
-x20: ffff0000947da000 x19: ffff0000a38a5608 x18: 0000000000000000
-x17: 0000000000000000 x16: 0000000000000000 x15: 0000ffffe09af760
-x14: 0000000000000000 x13: 0000000000000020 x12: 0101010101010101
-x11: 7f7f7f7f7f7f7f7f x10: 00007ffff0071c50 x9 : 0000000000000020
-x8 : 0101010101010101 x7 : ffff0000a38a5634 x6 : fefefefefefefeff
-x5 : ffff0000a38a562c x4 : 0000000000383030 x3 : 0000000000383030
-x2 : 0000000000000020 x1 : 0000000000000000 x0 : ffff0000a38a564c
-Call trace:
- eth_get_drvinfo+0x4c/0x80 [u_ether] (P)
- ethtool_get_drvinfo+0x54/0x1e0
- __dev_ethtool+0x698/0x2000
- dev_ethtool+0x90/0x1a0
- dev_ioctl+0x37c/0x594
- sock_ioctl+0x390/0x5bc
- __arm64_sys_ioctl+0x408/0xeb4
- invoke_syscall.constprop.0+0x50/0xe0
- do_el0_svc+0x40/0xc0
- el0_svc+0x48/0x2a0
- el0t_64_sync_handler+0xa0/0xe4
- el0t_64_sync+0x19c/0x1a0
-Code: 95a68811 f9468a81 d2800402 91011260 (f9406821)
----[ end trace 0000000000000000 ]---
+The xHCI error handling changes between 6.8 and 6.17 appear to have
+resolved the cascade failure. The controller no longer escalates to
+hc_died() when the device firmware stalls.
 
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
----
+The UVC probe control EPIPE (-32) still occurs at device init:
 
-1. get_maintainers.pl is picking up on the PSTORE folk because of the
-mention of "ramoops" in the commit message... even though this has
-nothing to do with them.
+    uvcvideo 2-3.4:1.1: Failed to set UVC probe control : -32 (exp. 26).
 
-2. I think there's more bugs here as mentioned in the commit message,
-since setting dev->gadget to NULL without taking any locking while
-the u_ether device is still published to userspace looks mightily
-dangerous. Seems to be another kernel driver that fails to obey the
-basics discussed in OLS some twenty years ago concerning the order
-of setup/publish/unpublish/teardown... and we still don't seem to
-be able to get it right. :(
+And with dynamic debug enabled, the kernel logs show it dynamically
+disabling U1 LPM when the device responds slowly:
 
-3. Patch generated against the net-next tree, because that's what I'm
-working with being focussed on stmmac at the moment - but I would like
-my test platform not to oops and reboot itself when I instead want it
-to power off.
+    usb 2-3.4: Hub-initiated U1 disabled due to long timeout 16800us
 
- drivers/usb/gadget/function/u_ether.c | 4 ++++
- 1 file changed, 4 insertions(+)
+So the kernel is now handling both the LPM issues and the error
+recovery gracefully without needing the quirks I proposed.
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 1a9e7c495e2e..d1ae91889537 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -113,6 +113,10 @@ static void eth_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *p)
- 
- 	strscpy(p->driver, "g_ether", sizeof(p->driver));
- 	strscpy(p->version, UETH__VERSION, sizeof(p->version));
-+
-+	if (!dev->gadget)
-+		return;
-+
- 	strscpy(p->fw_version, dev->gadget->name, sizeof(p->fw_version));
- 	strscpy(p->bus_info, dev_name(&dev->gadget->dev), sizeof(p->bus_info));
- }
--- 
-2.47.3
+I have not tested on non-Intel hardware. The firmware is already at
+the latest version (1.5.0.1) per Razer's standalone updater.
 
+Full debug log from the stress test is available at:
+
+    https://github.com/jphein/kiyo-xhci-fix
+
+Given these results, it seems like the patch series may no longer be
+needed for current kernels. Happy to provide any additional testing or
+logs.
+
+JP
+
+
+On Mon, Mar 23, 2026 at 12:58=E2=80=AFAM Michal Pecio <michal.pecio@gmail.c=
+om> wrote:
+>
+> On Sun, 22 Mar 2026 15:10:28 -0700, Jeffrey Hein wrote:
+> > Both failure modes are in the device firmware (version 8.21), not the
+> > kernel, so they exist on any kernel version.  On 6.8.0-106-generic
+> > (where I tested), the TRB_STOP_RING case in
+> > xhci_handle_command_timeout() goes straight to xhci_halt() +
+> > xhci_hc_died() without attempting per-device recovery.
+>
+> Command timeout is a failure of the xHCI controller, not the device,
+> and as Alan said, it's generally not supposed to happen so we are
+> curious how it happens and if it can be prevented in xhci-hcd.
+>
+> Device behavior may be a contributing factor, as can be a kernel bug
+> or controller HW bug. It would be helpful if somebody tried this on
+> non-Intel hardware and on current kernels, because there were various
+> changes to xHCI error handling over the last two years.
+>
+> > The stress test script is in the series repository:
+> >
+> >     https://github.com/jphein/kiyo-xhci-fix
+> >
+> > stress-test-kiyo.sh exercises UVC controls via v4l2-ctl at maximum
+> > rate -- brightness, contrast, saturation, white balance, exposure,
+> > focus, pan/tilt/zoom -- cycling through their full ranges each round.
+> > With 0ms delay between controls, the crash consistently occurs around
+> > round 25 of 50 (~5-10 seconds of sustained rapid SET_CUR).
+>
+> OK, I will see if it does anything interesting on my hardware, but it
+> may be nothing because I don't have this camera.
+>
+> Did you try it on a different camera in the same USB port?
+>
+> > That said, the firmware lockup itself is controller-independent -- the
+> > device stops responding to USB control transfers regardless of the
+> > host controller.  What varies is the host controller's response to the
+> > resulting stop-endpoint timeout.  On 6.8, xhci-hcd takes the
+> > TRB_STOP_RING timeout straight to hc_died()
+>
+> Nope, this is controller dependent because Stop Endpoint is a command
+> to the controller and it has no reason to fail. Something is broken.
+>
+> Could you boot a newer kernel (compile 7.0-rc5 yourself or at least get
+> latest release (or beta) of your distribution), enable dynamic debug
+>
+> echo 'module xhci_hcd +p' >/proc/dynamic_debug/control
+> echo 'module usbcore +p' >/proc/dynamic_debug/control
+>
+> then connect the camera, crash it again and send dmesg output?
+>
+> Regards,
+> Michal
+
+
+
+--=20
+Jeffrey Pine Hein
+Just plain helpful.
+jphein.com =E2=98=80=EF=B8=8F techempower.org
+(530) 798-4099
 
