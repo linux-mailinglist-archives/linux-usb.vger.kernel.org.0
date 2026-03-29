@@ -1,254 +1,167 @@
-Return-Path: <linux-usb+bounces-35632-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35633-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2M1tN1B/yWnbyQUAu9opvQ
-	(envelope-from <linux-usb+bounces-35632-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 21:36:48 +0200
+	id wNWMD0mFyWndygUAu9opvQ
+	(envelope-from <linux-usb+bounces-35633-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 22:02:17 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6465B353D0D
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 21:36:48 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1AE4353E75
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 22:02:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 50745302A699
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 19:35:07 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EA1E53006F0D
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 20:02:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CACBE386C0F;
-	Sun, 29 Mar 2026 19:35:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E8F338735E;
+	Sun, 29 Mar 2026 20:02:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rWeIaT3t"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="JekhqfT7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58885EEBB;
-	Sun, 29 Mar 2026 19:35:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3152C15BB
+	for <linux-usb@vger.kernel.org>; Sun, 29 Mar 2026 20:02:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774812905; cv=none; b=d0m5LpSkLF9wDDUCeV/vOVDBpZBeNZkDU6m+8FX53l6aRyPnerVEZRH19TCl4haldsIGWbTfKDwHLIsRXJiSIbhxPNxwHDFo++JgxK81X7X8Yhc9HkpmAyesIWr4wjqxtCVhhkVz/l4t68MyXj32mIs3TVBEp4y/GZireLmoQx4=
+	t=1774814522; cv=none; b=fIB+YRBzv5XQXtqxlDBYwnYZYwP2mCSsqQlH96Agml/VO26Z40av0JnpQp5Lzn86hUWMXrH0zw0R1YBaITBGfRueq0T/Xt3C0aiTaUR0+LPbRCaVCf2LbJ3jrQ3cq8GVLhRpCFQq3CfX1tgrGb/GWEDIlhyJNQM3rpr+q2N1yc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774812905; c=relaxed/simple;
-	bh=XQkUIWVsukd2jBCyqb0nVppdak+jFRU6N91Zevt00dA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kYFNYssdCw6rxIWtwBxjXNnorXejGiJG6Ms+bNTI1zJAGkGd0VtxyWX/8XKxUH3C7k9C42utPLl/KFlQM8HdZpXu8wnJtkZgDEfrMn6RLQkYO2tn+2hzlT2JvqtHFyCOJBn6tFWJkRgSndb1bvtYhy2RDXrwI3SjZ+Y+u5KFFx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rWeIaT3t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F358C116C6;
-	Sun, 29 Mar 2026 19:35:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774812904;
-	bh=XQkUIWVsukd2jBCyqb0nVppdak+jFRU6N91Zevt00dA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rWeIaT3tNCZpU0n47rci5u2TtOotxCkpIbDjKRy5XyufiPQZ3bTIx8F1T7ne59T69
-	 Y0SmnxUXdiwZZVUhYogZU1Br0ENXB4Lv7jCYQ7QQxYxcC3pGgxXlYUP74b0AD933fo
-	 hWOOVKzR77KbE5pamjB/jN+YEO0z0eEEXjucmvh9NZpd2uPBriv1dk6+Yvc1vntkBh
-	 Yu7qRr51Hd7+7xl92AdsWkvSbg8UkRZVfA94mJ9o6Mn66g9awrwzMdStReeJZqTzts
-	 ZzP3Y87FDokjrq0qu2BqDy8zPfoYwLrWsGEMrw1dr09OSABVFIq9/o6WhxZ3NhxFvy
-	 PihgOQ1JpwcIA==
-From: Jakub Kicinski <kuba@kernel.org>
-To: mail@birger-koblitz.de
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v4 2/2] r8152: Add support for the RTL8157 hardware
-Date: Sun, 29 Mar 2026 12:34:58 -0700
-Message-ID: <20260329193457.2764549-2-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260324-rtl8157_next-v4-2-034312b12de5@birger-koblitz.de>
-References: <20260324-rtl8157_next-v4-2-034312b12de5@birger-koblitz.de>
+	s=arc-20240116; t=1774814522; c=relaxed/simple;
+	bh=6KesuHunNm5vzupfH6dWeNmGrojSoSm6OoZ7E509dxI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XJc1f+3mdvyLLOAeFQY5632VlP9Bbly8HsGZm0Olzf+FOahn+/eJ1gYpSCc8yVF2CIH155y8rFtZeNTmq7ajdZJbw7pDWYVHgQWaJiuIocnusPNOYo+/N56nWU4Q9MHoD4wKE68HGJMbDIKQPKVXeUdGAtRTfI+b6edkwh0TE0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=JekhqfT7; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-66ad907833dso6634087a12.3
+        for <linux-usb@vger.kernel.org>; Sun, 29 Mar 2026 13:02:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1774814519; x=1775419319; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=W2LBsWL0RCR7A1/NBeRjO1DmOoAWjMff84GLac5q8D4=;
+        b=JekhqfT7S/8S3fOXygO+G3tv8ClmY6WZ+pFZWo0tdyj79q1llTout79e8bAAs3XR7u
+         IP+xpWflJfhHHuQcJjyKb9BribdvSyh2GGym47VzrFgnFWVWzeC1lRCQHEGpakTrGMni
+         Mb41H650xJ9KzGdOLMp83IfqpESMGZEFjULwY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774814519; x=1775419319;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W2LBsWL0RCR7A1/NBeRjO1DmOoAWjMff84GLac5q8D4=;
+        b=BLa/6Fkt55dBcvVIWpUz+JLQAC/Ttz7Dxhh9vZhXV6GLExt+l0mPW1tcqMUjJFlv+5
+         RdcP163Fzd8df8ocvj9bz5k4PdLUcH9BDC5wYNaaogohhLUzAy8o3HOGcYRoQKSHT5j2
+         EYLbWzMw7lI/R4ufCyhxXrQJacX/EkGUSO2HtlPua2i+oV6N0H4zr0YUEjG4lJJDhUVQ
+         HHixd1KSugga8Eouxs4aVAuVs38Gkp1+9XnL1SHe6XFJJCyunKJKtRQf+MtziwoJloRZ
+         Ux1f+LQ59eLJDaSj174gM8UU33HuPmyVhS/D9jlcJ/dL0MMpyKdQ4TnRqNv4q+6b950j
+         VVOg==
+X-Forwarded-Encrypted: i=1; AJvYcCXGeQXJEVTIHJUiW0XjcdokeboOJ5ZIYGlHUU/8XHjeaSOLhEG6T6W0O9hJj6i9PhO4tWvCDHjadHE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyIVgxrba7yRCqDvNuPLre2BJ0EKBic6elwq5A3Q3qZkGM9zCr
+	j2mtwA6xtWWMmUKQx3DAu7yKgkuASakaGMqSVYSP+38nP9d4ok8htK3piNrK0AK8wDKlI3ChEpB
+	NCtRXYj8=
+X-Gm-Gg: ATEYQzzfmrmeh7z86MXWRX+ukbLzbA3NpnZBxbAJEuQfGURbA48HsyLqKdZoyXJAiF6
+	fIri5eDnOrAYWwgfgQinSKBpQLr6PViMglPt6sFmp5XePdk9mRCkh2xrjh5l/Kc0so7IsgsGwj9
+	dqgzg+ER7jqj1fbKQ6F/lx9B8PGtpHghmEJZZjh9MgXB0s3xbO4f0BuxKqWhBUyQZ1TwWz3Tvpn
+	ue0Xb99yaMSRGHiaznTLvgou6xjO7VPh62CZTvmHjafG4GZE9vur2PsySBnz9oBnD7W0cWzjD/+
+	mbr9VK5d8onse5kiTNsa4U5lbSgFwAhyF43YJ4gHZiDDDyHVPdx6q3tsOsYmekWga7ZiZG7siXX
+	yAWyXnJS+YIsx0L2Z/qBVr7f8YZrKF3H9Q1m38/Bdv4Xai7FLbjmeYYnNJ/oQxQGM8eWPm+Imt0
+	ASLNdI7v3vWqdyah1wievQMeGrAvuFVmJn0QKU3qa8hF/PJkagxDpPB5rE9pFe5APkKHRDyr4b
+X-Received: by 2002:a17:907:c714:b0:b98:2df5:9bf0 with SMTP id a640c23a62f3a-b9b5034d3d9mr608780566b.22.1774814518873;
+        Sun, 29 Mar 2026 13:01:58 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9b7ae23d4fsm194176766b.10.2026.03.29.13.01.57
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Mar 2026 13:01:57 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-66132b22182so5411155a12.2
+        for <linux-usb@vger.kernel.org>; Sun, 29 Mar 2026 13:01:57 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVUE3Fc36YhHesN4JJArCKnxCohb4VtAKvNSEP16jtXEdM7WWpfgmxbsuJ9/DZPqBWAkUcHG2loG4U=@vger.kernel.org
+X-Received: by 2002:a05:6402:370f:b0:665:638d:75c1 with SMTP id
+ 4fb4d7f45d1cf-66b2836522dmr5313873a12.3.1774814517026; Sun, 29 Mar 2026
+ 13:01:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+References: <20260326131838.634095-1-dhowells@redhat.com> <20260326131838.634095-5-dhowells@redhat.com>
+ <20260329121208.6092419d@kernel.org>
+In-Reply-To: <20260329121208.6092419d@kernel.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sun, 29 Mar 2026 13:01:40 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiJ6gEELLviexdmSHnyjVoG7MFo8Qwhd1zxs_tCnL-=gQ@mail.gmail.com>
+X-Gm-Features: AQROBzCLNnOtMDq7_zEYzn905-QyT8tE9Dg3ZE8enKPKMkcfb1CkLbH9Xycl1-E
+Message-ID: <CAHk-=wiJ6gEELLviexdmSHnyjVoG7MFo8Qwhd1zxs_tCnL-=gQ@mail.gmail.com>
+Subject: Re: [PATCH net v3 04/11] list: Move on_list_rcu() to list.h and add
+ on_list() also
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, netdev@vger.kernel.org, 
+	Marc Dionne <marc.dionne@auristor.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	John Johansen <john.johansen@canonical.com>, Minas Harutyunyan <hminas@synopsys.com>, 
+	Simon Horman <horms@kernel.org>, apparmor@lists.ubuntu.com, linux-usb@vger.kernel.org, 
+	stable@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[linux-foundation.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-35633-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35632-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[linux-foundation.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[linux-foundation.org:+];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kuba@kernel.org,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[torvalds@linux-foundation.org,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 6465B353D0D
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux-foundation.org:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: E1AE4353E75
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
----
-r8152: Add support for the RTL8157 hardware
+On Sun, 29 Mar 2026 at 12:12, Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> Could someone with sufficient weight to their name ack this?
 
-This commit adds support for the RTL8157 chip, including its new 16-byte
-descriptor format, SRAM/ADV interfaces, and PHY setup. It reuses existing
-initialization functions where possible while branching for chip-specific
-logic.
+I don't particularly like it. I think the name is too generic, and
+it's all wrong anyway. Whether something is on a list or not ends up
+being much too specific to the use-case, and I do *not* see a huge
+advantage to a helper function that just wraps "list_empty()" with
+another name that is actually *less* descriptive.
 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index bab8e10e5f99..010126e6dae4 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -1629,6 +1862,28 @@ static u16 sram_read(struct r8152 *tp, u16 addr)
->  	return ocp_reg_read(tp, OCP_SRAM_DATA);
->  }
->  
-> +static void sram_write_w0w1(struct r8152 *tp, u16 addr, u16 clear, u16 set)
-> +{
-> +	u16 data = sram_read(tp, addr);
-> +
-> +	data = (data & ~clear) | set;
-> +	ocp_reg_write(tp, OCP_SRAM_DATA, data);
-> +}
+So no. NAK.
 
-Does this sequence write the modified data back to the wrong address?
+As you mention, the RCU version at least does something else, but
+honestly, it looks pretty damn questionable too. And no, it does not
+work for non-RCU lists in any kind of generic sense, since iut's
+perfectly valid to remove list entries without poisoning them.,
 
-Indirect SRAM access ports typically auto-increment their internal address
-pointer upon read. Since sram_read() reads OCP_SRAM_DATA, the address
-pointer likely advances, causing the subsequent ocp_reg_write() to corrupt
-the adjacent register instead of the intended one. Should this use
-sram_write(tp, addr, data) to reset the address before writing?
+For example, some places that want a simple "am I on a list" will use
+__list_del_clearprev(), which does *not* poison the prev pointer, but
+just clears it instead. And then the "am I on a list" is just checking
+prev for NULL or not.
 
-> +static u16 sram2_read(struct r8152 *tp, u16 addr)
-> +{
-> +	ocp_reg_write(tp, OCP_SRAM2_ADDR, addr);
-> +	return ocp_reg_read(tp, OCP_SRAM2_DATA);
-> +}
-> +
-> +static void sram2_write_w0w1(struct r8152 *tp, u16 addr, u16 clear, u16 set)
-> +{
-> +	u16 data = sram2_read(tp, addr);
-> +
-> +	data = (data & ~clear) | set;
-> +	ocp_reg_write(tp, OCP_SRAM2_DATA, data);
-> +}
+In other words: all of this is wrong. Whether you are on a list or not
+is simply not a generic operation. It depends on the user.
 
-Is the same auto-increment issue present here with OCP_SRAM2_DATA?
+The name is also *MUCH* too generic anyway.
 
-[ ... ]
-
-> @@ -4080,6 +4473,14 @@ static void rtl8156_runtime_enable(struct r8152 *tp, bool enable)
->  	}
->  }
->  
-> +static void rtl8157_runtime_enable(struct r8152 *tp, bool enable)
-> +{
-> +	r8153_queue_wake(tp, enable);
-> +	r8153b_u1u2en(tp, false);
-> +	r8157_u2p3en(tp, false);
-> +	rtl_runtime_suspend_enable(tp, enable);
-> +}
-
-Does this function break power management upon the first suspend and resume
-cycle? Unlike rtl8156_runtime_enable() which checks the enable parameter,
-this implementation unconditionally calls r8153b_u1u2en(tp, false) and
-r8157_u2p3en(tp, false) even when resuming.
-
-[ ... ]
-
-> @@ -6693,7 +7052,7 @@ static void rtl8156_up(struct r8152 *tp)
->  	r8153_aldps_en(tp, true);
->  	r8153_u2p3en(tp, true);
->  
-> -	if (tp->udev->speed >= USB_SPEED_SUPER)
-> +	if (tp->version != RTL_VER_16 && tp->udev->speed >= USB_SPEED_SUPER)
->  		r8153b_u1u2en(tp, true);
->  }
-
-Because r8153_u2p3en(tp, true) is called unconditionally just before the
-modified lines, will RTL8157 incorrectly write to the legacy USB_U2P3_CTRL
-register instead of using its specific r8157_u2p3en() function?
-
-[ ... ]
-
-> @@ -6706,13 +7065,13 @@ static void rtl8156_down(struct r8152 *tp)
->  		return;
->  	}
->  
-> -	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3);
-> -	ocp_data |= PLA_MCU_SPDWN_EN;
-> -	ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, ocp_data);
-> +	ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, PLA_MCU_SPDWN_EN);
->  
->  	r8153b_u1u2en(tp, false);
-> -	r8153_u2p3en(tp, false);
-> -	r8153b_power_cut_en(tp, false);
-> +	if (tp->version != RTL_VER_16) {
-> +		r8153_u2p3en(tp, false);
-> +		r8153b_power_cut_en(tp, false);
-> +	}
->  	r8153_aldps_en(tp, false);
-
-While the legacy registers are correctly avoided for RTL_VER_16 here, are we
-missing calls to r8157_u2p3en(tp, false) and r8157_power_cut_en(tp, false)?
-If omitted, these power states might remain permanently enabled when the
-interface goes down.
-
-[ ... ]
-
-> @@ -8362,10 +8825,21 @@ static void r8156b_init(struct r8152 *tp)
->  
->  	set_bit(GREEN_ETHERNET, &tp->flags);
->  
-> -	/* rx aggregation */
-> -	ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_USB_CTRL);
-> -	ocp_data &= ~(RX_AGG_DISABLE | RX_ZERO_EN);
-> -	ocp_write_word(tp, MCU_TYPE_USB, USB_USB_CTRL, ocp_data);
-> +	/* rx aggregation / 16 bytes Rx descriptor */
-> +	if (tp->version == RTL_VER_16)
-> +		ocp_word_clr_bits(tp, MCU_TYPE_USB, USB_USB_CTRL, RX_AGG_DISABLE | RX_DESC_16B);
-
-Is it intended to clear the RX_DESC_16B bit for RTL_VER_16? The driver uses
-sizeof(struct rx_desc_v2) which is a 16-byte descriptor for RTL8157.
-Clearing this bit might configure the hardware to send 8-byte descriptors
-instead, leading to packet parsing corruption in rx_bottom().
-
-[ ... ]
-
-> @@ -9647,6 +10158,29 @@ static int rtl_ops_init(struct r8152 *tp)
->  		tp->rx_buf_sz		= 32 * 1024;
->  		tp->eee_en		= true;
->  		tp->eee_adv		= MDIO_EEE_1000T | MDIO_EEE_100TX;
-> +		r8152_desc_init(tp);
-> +		break;
-> +
-> +	case RTL_VER_16:
-> +		tp->eee_en		= true;
-> +		tp->eee_adv		= MDIO_EEE_1000T | MDIO_EEE_100TX;
-> +		tp->eee_adv2		= MDIO_EEE_2_5GT | MDIO_EEE_5GT;
-> +		ops->init		= r8156_init;
-> +		ops->enable		= rtl8156_enable;
-> +		ops->disable		= rtl8153_disable;
-> +		ops->up			= rtl8156_up;
-> +		ops->down		= rtl8156_down;
-> +		ops->unload		= rtl8153_unload;
-
-Will using rtl8153_unload for RTL_VER_16 result in incorrect power cut
-teardown? rtl8153_unload calls the legacy r8153_power_cut_en(tp, false).
-RTL8157 seems to require r8157_power_cut_en(tp, false) to properly clear
-USB_MISC_2 bit 1 and PCUT_STATUS on module unload.
+               Linus
 
