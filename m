@@ -1,101 +1,67 @@
-Return-Path: <linux-usb+bounces-35628-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35629-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UFWaGmpYyWkuxgUAu9opvQ
-	(envelope-from <linux-usb+bounces-35628-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 18:50:50 +0200
+	id 6PbwL855yWlIyQUAu9opvQ
+	(envelope-from <linux-usb+bounces-35629-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 21:13:18 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D22CA353250
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 18:50:49 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15832353BC7
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 21:13:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 929B3300E5DD
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 16:46:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5F9FB30226B0
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 19:12:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7B6B38228B;
-	Sun, 29 Mar 2026 16:46:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A6FB3859FC;
+	Sun, 29 Mar 2026 19:12:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jXn6+4I2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ug2PkI59"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75483822AE
-	for <linux-usb@vger.kernel.org>; Sun, 29 Mar 2026 16:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B986C27281D;
+	Sun, 29 Mar 2026 19:12:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774802783; cv=none; b=jlKVp5AUh1h7C/2YfeAUv0Ku/3DftQ+fkjjaQyto9zxfWO48/22oOrevUlvIorJzOZiGhFrvdS87t119iQAB3hCMYb+pjwPgVPQDuTN+odascPj3vVQxmttoS5A7K8Y781BVOM1W2o8TC3Bg8bOlWtRyT4hxtAy5UXdyZIm2L0Y=
+	t=1774811530; cv=none; b=DKD+hd8sZp0sbLLPsuPRLGQabmmc8Pag0KnpaaejHH0buYjVOgIUDaPevqDaS4Omuj4aiai+EBjnymWmuTYMLrymP6v46fH6/JRxXQlKhQRK+Z7jGYBDIgAcwelUgDE8RRCAnn+FZU/lPJFd45wN/iVqb/nx8sWm8gDt4fGAX2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774802783; c=relaxed/simple;
-	bh=uFMCjtjlVnGaOFvRNOA0uD/zTbacRy+2/gQZeG+XP9I=;
+	s=arc-20240116; t=1774811530; c=relaxed/simple;
+	bh=o/yp8qy8Rbn8pJPvjcvzhSGLE6cgVQWLWrs+k/X0tNo=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=imbUJeV1tJN0X+qzhCUKEe/kQaPNx4+uXTSIEPsvpEua7aUiuxbdmzoUhqwtvGrtvtHqvRv63xUmm1Xco9Sd1uuwfIDJtBhbPzX5ue1wcwFVX+mLtzZFaRsdG19jrr0iG9KwtYhcoQCWKmbnEadSUaRo2psXB7oUhnuRQ9j9Bn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jXn6+4I2; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b9841aecf72so427087466b.2
-        for <linux-usb@vger.kernel.org>; Sun, 29 Mar 2026 09:46:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774802777; x=1775407577; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NnmXj3NfRJi3UhC1vJIDVcNt8l/y48d9IxJ0hWK5iiw=;
-        b=jXn6+4I2+iRojAukWw4MinqtO8KSYP8gbF/YIO7Zi61eTH0gcJ0J9vMMFZ7cbw3ILL
-         AcaEqwN3INXfDjs+Kq6Y5GPRc+rwyOn2xVvgxKctctcVjZnbctAujdIF7IdIVGWvW3PP
-         wfCiX8wPJXGgdMSAlgHwKZJj5f0Amql81MN3r++Hxt/9yB8XdXQ9eEWHuaGzKliC/t4T
-         kOXVZgqh9mvwJpexxs3SzKCiLnc8ImB2+j2O+9RuZjoQspMwB6JS0S+EwRa5H4H0pZEu
-         T04UpdxWbJPWeOiYE1lhdHLjP0GXxK6mriOGD+BTOGjHnzr134OEs/OJPcC4jtCtTe26
-         HK+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774802777; x=1775407577;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=NnmXj3NfRJi3UhC1vJIDVcNt8l/y48d9IxJ0hWK5iiw=;
-        b=FtspcWnGoh8pFXBT4PpbjrieRoyuDhUVIDH2CeZ/lp3LSl8XwEgTfScwdjxZUi2ptj
-         oyOQx4id8jQn8Kg4asvf9+BLvr79ez+IieU+FAnrZ51PbCQw2p/4f0QLxtPInlEsfBxu
-         t8pWVmt0ruipYAe6iSsyBKLzoHJLZb5J7xthnU8z2Vy7YsbUsooqQZECXqX1AtlppWAw
-         CGmvN7Ahxvztd3zOwV8jEBSMiH5uK1KSpGwsjMWOTkrwHbhbmhymzdGOzFohtRsZ2770
-         zXys0hUO/jjEBrtGevOu2MBqSvsZyIVtF9e/lWJbYCiO05xU9BREOi41tL3euYAHP0oI
-         jWvw==
-X-Forwarded-Encrypted: i=1; AJvYcCW73e98rgI6smbMP0LrQ+LicW1Et2KcytkQZMxEjNnWkr8w2nAB5YYaoegR8zVUZHDX5DJYP8YLXvE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywv9/6XSWD6M1ubV4/nfrw6TkuZX8Jxybv/dB6LUWi8cwOy27ex
-	w043zyRgKCigA2xwhRMar6SE7WkL9dhUk9Pb1QoYexWwskN9q8XQw4Jo
-X-Gm-Gg: ATEYQzxmbmzslUE7z41hKa9Rc8PQPlPM5vsT8K4HYSq4BX3F1Mb/98S01egLcHWGl0v
-	z1But/pQY/y6OIluzP3U8D1w8fW3sqjIuMbLKagBLmRm1k+hlj/IBUr5X/FqU+C1pdbxFjA69Aa
-	8Wqux4csfAaVMVvs5IqfObuyj+NslReN1joPhD6EDxXrEjGFqCbevnBnOGgVPJD+qP9BXB9UrFn
-	aQU93gStcyaH7vmFRUnY6x7R1lldToVVqff2joq4ZA0YcNJ7+BryV4zqJ6/CUj7ZKntc8fGQRRx
-	dX+HPzCn57warJLEP8iTbCqWke59Ah5+nJpPfHNFcS0ltknYy3TuN8BPQkVwQQzV38iyJ0kFH7c
-	N+bZssXoHuOOySdBqPMXCQDIjl9glnZ+bYVODyYgSE84eA4feXba18s8aotmfOip9eDxY7gW72k
-	62bTf+ioG4UPFiR06H/WHeVqX/9Fs6kr9u
-X-Received: by 2002:a17:907:61a7:b0:b98:6177:2eff with SMTP id a640c23a62f3a-b9b509141afmr436531066b.41.1774802777008;
-        Sun, 29 Mar 2026 09:46:17 -0700 (PDT)
-Received: from foxbook (bfi53.neoplus.adsl.tpnet.pl. [83.28.46.53])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9b7ae52064sm175908566b.23.2026.03.29.09.46.16
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sun, 29 Mar 2026 09:46:16 -0700 (PDT)
-Date: Sun, 29 Mar 2026 18:46:11 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Oliver Neukum
- <oneukum@suse.com>, =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>, USB list
- <linux-usb@vger.kernel.org>
-Subject: Re: correctly handling EPROTO
-Message-ID: <20260329184611.0afa92c7.michal.pecio@gmail.com>
-In-Reply-To: <22c70ca7-57dc-4328-a5cc-d46c4f73556f@rowland.harvard.edu>
-References: <b0217cdc-f263-418c-b8b5-584520d0b1db@rowland.harvard.edu>
-	<20260318223851.1f6d07d7.michal.pecio@gmail.com>
-	<20260318235920.ioek26hdr25rkksp@synopsys.com>
-	<1eaf4cf3-4278-4d04-87aa-8b6069d544e1@rowland.harvard.edu>
-	<20260319231620.3ukqxsrwqikp5zbd@synopsys.com>
-	<2929d47c-fc02-49d2-873e-758f24c43071@rowland.harvard.edu>
-	<20260321021439.7pmcdrpb5oxbivct@synopsys.com>
-	<20260321065424.76a80508.michal.pecio@gmail.com>
-	<d3fd1c0b-d0cf-40e2-9f21-b4c5de1c421b@rowland.harvard.edu>
-	<20260328222217.297200bd.michal.pecio@gmail.com>
-	<22c70ca7-57dc-4328-a5cc-d46c4f73556f@rowland.harvard.edu>
+	 MIME-Version:Content-Type; b=SNWByXR3OWMiZAG8ifNo3zwQJcVuWzjSFty9mzVgQCBsWIxxdufnpyQttDVE6IjCHzWTYtOsOoDrrgfBsokBQrq8L9ybp7bw6asr0kFrnc8TYsbCvSWdIMSGc0MSD15Nhe5ewMGJbexJkhmZvPZb62cKWdcTDWzUPIor3OOWyRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ug2PkI59; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB585C116C6;
+	Sun, 29 Mar 2026 19:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774811530;
+	bh=o/yp8qy8Rbn8pJPvjcvzhSGLE6cgVQWLWrs+k/X0tNo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ug2PkI59dzaumq1kfHe7AM8vGd6gYTu2DkprdY3/WoPS35Mcv5Ua98WvhRV9bSncQ
+	 WAJivNsRgSkn2mrYpy3QHCWfJeUSNHe+xmJFI7IZC4Go08Q2kIxr6ZX6fOP0622+rT
+	 vJ84hwXyDzXN9Ebq9jm/SCXzbipCMks5p+jHQJJQbj9hZQl/nSa31sZVT0AbLv8vBR
+	 7sbvuaPNSm/2Xjh4UeSzUxrT0vfb2j5kmhTRRyUcE2pjbqeH9ZnJyPvRaxz0rlsTNE
+	 iTvoPeScH/dyM9R9xDye2m4W+52NyHo0I57ZAT2LQzGGKNkpwnMgdopTKOUaWgCgjt
+	 GUDbt17aLiEDw==
+Date: Sun, 29 Mar 2026 12:12:08 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: David Howells <dhowells@redhat.com>
+Cc: netdev@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
+ linux-kernel@vger.kernel.org, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, John Johansen
+ <john.johansen@canonical.com>, Minas Harutyunyan <hminas@synopsys.com>,
+ Simon Horman <horms@kernel.org>, apparmor@lists.ubuntu.com,
+ linux-usb@vger.kernel.org, stable@kernel.org, Linus Torvalds
+ <torvalds@linux-foundation.org>
+Subject: Re: [PATCH net v3 04/11] list: Move on_list_rcu() to list.h and add
+ on_list() also
+Message-ID: <20260329121208.6092419d@kernel.org>
+In-Reply-To: <20260326131838.634095-5-dhowells@redhat.com>
+References: <20260326131838.634095-1-dhowells@redhat.com>
+	<20260326131838.634095-5-dhowells@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -106,74 +72,83 @@ Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35628-lists,linux-usb=lfdr.de];
-	TO_DN_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35629-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kuba@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D22CA353250
+	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 15832353BC7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sat, 28 Mar 2026 21:52:37 -0400, Alan Stern wrote:
-> Storage is not a good example.  It's so obviously critical that a
-> huge amount of effort has gone into making it exceptionally robust.
-> Very few of the other drivers do as good a job of error recovery.
+On Thu, 26 Mar 2026 13:18:29 +0000 David Howells wrote:
+> diff --git a/include/linux/list.h b/include/linux/list.h
+> index 00ea8e5fb88b..d224e7210d1b 100644
+> --- a/include/linux/list.h
+> +++ b/include/linux/list.h
+> @@ -381,6 +381,32 @@ static inline int list_empty(const struct list_head *head)
+>  	return READ_ONCE(head->next) == head;
+>  }
+>  
+> +/**
+> + * on_list - Test whether an entry is on a list.
+> + * @entry: The entry to check
+> + *
+> + * Test whether an entry is on a list.  Safe to use on an entry initialised
+> + * with INIT_LIST_HEAD() or LIST_HEAD() or removed with things like
+> + * list_del_init().  Not safe for use with list_del() or list_del_rcu().
+> + */
+> +static inline bool on_list(const struct list_head *entry)
+> +{
+> +	return !list_empty(entry);
+> +}
+> +
+> +/**
+> + * on_list_rcu - Test whether an entry is on a list (RCU-del safe).
+> + * @entry: The entry to check
+> + *
+> + * Test whether an entry is on a list.  Safe to use on an entry initialised
+> + * with INIT_LIST_HEAD() or LIST_HEAD() or removed with things like
+> + * list_del_init().  Also safe for use with list_del() or list_del_rcu().
+> + */
+> +static inline bool on_list_rcu(const struct list_head *entry)
+> +{
+> +	return !list_empty(entry) && entry->prev != LIST_POISON2;
+> +}
 
-I though it's a good example because all the effort is in vain if
-xhci runs subsequent URBs before the driver even knows about it.
+Could someone with sufficient weight to their name ack this?
 
-> Other drivers that might be affected include things like HID
+The non-RCU version of on_list() does not sit well with me.
+It provides no additional semantics above list_empty() and
+the uninit / poison-related gotchas more obvious when typing
+!list_empty(&entry->list).
 
-HID doesn't submit multiple URBs so there is nothing to restart after
-an error, but it's affected by the unilateral toggle reset issue.
+I can believe the RCU version is more useful. It could probably
+be used on both RCU and non-RCU entries?
 
-And by the way, is there any chance that ohci-hcd also clears host
-toggle on errors? I'm doing simple test with a keyboard (low speed
-interrupt in): disconnect D+ which causes some ETIME errors, connect
-it back, press and hold 'u'. Half the time uuuuu shows up, half the
-time only when I later add shift does UUUUU show up. Looks like the
-first packet is dropped due to toggle. I see it on xhci (known bug)
-and also on ohci, but never on ehci with a TT hub.
+Last minor nit - the list API consistently uses list_ as a prefix.
+I have no better name to suggest but it's sad that on_list_rcu()
+breaks that.
 
-> various serial protocols
-
-If you mean usbserial, they are pretty boring. On completion they just
-submit the next URB, except for EPIPE, ENODEV etc. There is data loss
-on OUT endpoints, there can be more data loss due to toggle mismatch,
-and throwing out already queued URBs would probably add more loss.
-
-It seems usbserial won't care whether we restart instantly or not.
-
-> network drivers, video & audio
-
-And I suspect they are similar, because higher layers can tolerate loss
-so why bother recovering from USB errors. I may play with them later.
-
-BTW, I think audio only runs over isochronous. But I should have a bulk
-video device somethere.
-
-Regards,
-Michal
+I think you're missing a READ_ONCE(), BTW.
 
