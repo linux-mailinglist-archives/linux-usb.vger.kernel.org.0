@@ -1,149 +1,237 @@
-Return-Path: <linux-usb+bounces-35630-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35631-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MHblAD16yWlIyQUAu9opvQ
-	(envelope-from <linux-usb+bounces-35630-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 21:15:09 +0200
+	id UN2PH/h+yWnbyQUAu9opvQ
+	(envelope-from <linux-usb+bounces-35631-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 21:35:20 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E193353BFD
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 21:15:08 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D393C353CF6
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 21:35:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 17B9D30120E9
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 19:15:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 16D32300E256
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2026 19:35:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FE3F3859FC;
-	Sun, 29 Mar 2026 19:14:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B66A386579;
+	Sun, 29 Mar 2026 19:34:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L71CGYcE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GVkhNhF6"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D141D28D830;
-	Sun, 29 Mar 2026 19:14:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C795EEBB;
+	Sun, 29 Mar 2026 19:34:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774811697; cv=none; b=iEMzWAxDjfByy7JU7zy4VTfZww+liu8Vjjy0wHeUCnaMyqILTCQQFr5klVB9P3aD4jaQTdziQIFJUZSWmU5bQeK+KXszgsHvsVIVrP6I0EUyN5KerFfjjwyXjEYNs3N3gNGCdebTxj/21pH6CnAOAMu8Vt/VwrW/U82gewb8sGU=
+	t=1774812897; cv=none; b=J4hYTp8GeZYel2UfFBPWPiY28fidE1Fmj7RasSaHqaVbifShcGIB9dYvMdz8FU4a01VLgvD+gkuHscNAMy0WRWE6WPe7YAMnScj7FZ28vLXNWtzLtrwscHvRW//vrTP9RfCLsoIwhu0en7pc/OIsMykB+iptlHNHXUTf0oj7o8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774811697; c=relaxed/simple;
-	bh=2t4y18byjP1MjQQ2XhoChveQhWdoC7SnSWd/GP1c26g=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FVHYEzCEHf/eKGr5iUnXWcHWu8pHOrXPHhCARo7HKWDo2JvvNyYrHUC+VVTTCx2iqFqblfLgspzJQU1t+UtDDU43HOpOcg6xb9iRBogh8O5aFg1C0oZzntTmpmv8cceduZULf/sZSpuv3OIL7QuIT8mrdauzH2281Vb0TQ6Y0Ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L71CGYcE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3851C116C6;
-	Sun, 29 Mar 2026 19:14:56 +0000 (UTC)
+	s=arc-20240116; t=1774812897; c=relaxed/simple;
+	bh=HKyld4TxIknD6PhFGLzo/+fjmh3AuVgLmMrpmS5DxuY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=W3w0iaXklctuYkYV7hv2md33ZJcl0QZ6RJMWCOsRgNj2f+WGQGVAXt1ek4e1622voga4wuKXCzgEYc4owKLClhrAU5o2m8h1C4vaFBMcNeOI+SsgjjyRnoVGCJ04SLRtZwfGFrNih9ft6p1MlZdqpQr5XtKp3U81iTfHZ1U67Lg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GVkhNhF6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3F9DC116C6;
+	Sun, 29 Mar 2026 19:34:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774811697;
-	bh=2t4y18byjP1MjQQ2XhoChveQhWdoC7SnSWd/GP1c26g=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=L71CGYcE68iwQWH4swEnEnQd5j4J1W+HudNK3TShVFeCpkhI95IU4g4JXoykRuJrq
-	 k5Lip9ePtirW1wyHq/ZlHphH9D3zjq3SkRTWSKi4C+uIhO6SfqpcXVeYHCp1aNUfvo
-	 /B+FEGp00aaRdk80zHhk74rzEZH+rpRdusZvw6maC3gyZL7HXZpwNyiK94+LhLnKip
-	 dIUabtN4QvKW3DPfjhIBzqkWkDS+DEK59P6bs1a0SIM2PXnAogWQ7SZOzond6lQCaE
-	 02lqUAhSz0HiRhlUXj8XHI0Az2eqbWszHG9+TzIJgbP9Kmfz6qelpSkiGQI4YHqE/z
-	 4K3ecNoUfEvew==
-Date: Sun, 29 Mar 2026 12:14:55 -0700
+	s=k20201202; t=1774812897;
+	bh=HKyld4TxIknD6PhFGLzo/+fjmh3AuVgLmMrpmS5DxuY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=GVkhNhF6EQHOl4NSjk6VtJs6YmVDZE1oQqzLCsAYVaSJSZ33YRXsBr9QU6mzP9nHw
+	 yCLIuv8YEmld83K5lHNtqj5RWpOpNnxfGNYYel9Tt6HiIyrzeRfLzBcC3HwxJblQrW
+	 TQjmzhejrwe+L7ti4gwygeR1tOtJXopwq+pMlqSWhjMviBSE16n0kcj1NnBcOoJx1S
+	 iVcG/ibOBA2sUl6xYJJ44CtbaEz7gEpIsf9kV2YqBMEOQnGM8PnVKgbBopGeCmBAUG
+	 zoq8XiujpSs+DmNQ6SDX5BtvwAL97Sy8EdBmRZ643RS9gkSt2I6OQQXJ7RQuZqn20v
+	 1hcsFmyiRUT9g==
 From: Jakub Kicinski <kuba@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: netdev@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
- linux-kernel@vger.kernel.org, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, John Johansen
- <john.johansen@canonical.com>, Minas Harutyunyan <hminas@synopsys.com>,
- Simon Horman <horms@kernel.org>, apparmor@lists.ubuntu.com,
- linux-usb@vger.kernel.org, stable@kernel.org
-Subject: Re: [PATCH net v3 04/11] list: Move on_list_rcu() to list.h and add
- on_list() also
-Message-ID: <20260329121455.72f87d3b@kernel.org>
-In-Reply-To: <20260326131838.634095-5-dhowells@redhat.com>
-References: <20260326131838.634095-1-dhowells@redhat.com>
-	<20260326131838.634095-5-dhowells@redhat.com>
+To: mail@birger-koblitz.de
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v4 1/2] r8152: Add support for 5Gbit Link Speeds and EEE
+Date: Sun, 29 Mar 2026 12:34:49 -0700
+Message-ID: <20260329193449.2764517-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260324-rtl8157_next-v4-1-034312b12de5@birger-koblitz.de>
+References: <20260324-rtl8157_next-v4-1-034312b12de5@birger-koblitz.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35630-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35631-lists,linux-usb=lfdr.de];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[kuba@kernel.org,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 6E193353BFD
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D393C353CF6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 26 Mar 2026 13:18:29 +0000 David Howells wrote:
-> Unfortunately, list_empty() is not usable with an entry that has been
-> removed from a list with list_del_rcu() as ->next must be left pointing at
-> the following entry so as not to break traversal under RCU.
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+---
+r8152: Add support for 5Gbit Link Speeds and EEE
 
-This seems to break build for jffs.
-Someone already marked this as rejected in PW.
-Whoever it was PLEASE STOP.
+This commit adds support for 5GBit link speeds and EEE to the RTL8157
+driver. It updates the speed and duplex settings, ethtool integration,
+and EEE advertisement parameters to handle the new 5G capabilities.
 
-Quoting documentation:
+> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+> index 3b6d4252d34c..bab8e10e5f99 100644
+> --- a/drivers/net/usb/r8152.c
+> +++ b/drivers/net/usb/r8152.c
+> @@ -604,6 +604,7 @@ enum spd_duplex {
+>  	FORCE_100M_FULL,
+>  	FORCE_1000M_FULL,
+>  	NWAY_2500M_FULL,
+> +	NWAY_5000M_FULL,
+>  };
 
-  Updating patch status
-  ~~~~~~~~~~~~~~~~~~~~~
-  
-  Contributors and reviewers do not have the permissions to update patch
-  state directly in patchwork. Patchwork doesn't expose much information
-  about the history of the state of patches, therefore having multiple
-  people update the state leads to confusion.
-  
-  Instead of delegating patchwork permissions netdev uses a simple mail
-  bot which looks for special commands/lines within the emails sent to
-  the mailing list. For example to mark a series as Changes Requested
-  one needs to send the following line anywhere in the email thread::
-  
-    pw-bot: changes-requested
-  
-  As a result the bot will set the entire series to Changes Requested.
-  This may be useful when author discovers a bug in their own series
-  and wants to prevent it from getting applied.
-  
-  The use of the bot is entirely optional, if in doubt ignore its
-  existence completely. Maintainers will classify and update the state
-  of the patches themselves. No email should ever be sent to the list
-  with the main purpose of communicating with the bot, the bot commands
-  should be seen as metadata. 
-  The use of the bot is restricted to authors of the patches (the
-  ``From:`` header on patch submission and command must match!),
-  maintainers of the modified code according to the MAINTAINERS file
-  (again, ``From:`` must match the MAINTAINERS entry) and a handful of
-  senior reviewers. 
-  Bot records its activity here:
-  
-    https://netdev.bots.linux.dev/pw-bot.html
-  
-See:
-  https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#updating-patch-status
+Are there missing switch cases for NWAY_5000M_FULL in the hardware UPS
+flag configurations, such as r8156_ups_flags? 
+
+It looks like if a 5Gbps link is established, it might fall through to the
+default case and leave the speed bits as 0. Since ups_flags_speed(0) maps
+to FORCE_10M_HALF, this could cause the device's clock scaling and power
+management features to be misconfigured for 10M Half-Duplex instead of the
+5Gbps link.
+
+[ ... ]
+
+> @@ -725,6 +726,7 @@ enum spd_duplex {
+>  #define BP4_SUPER_ONLY		0x1578	/* RTL_VER_04 only */
+>  
+>  enum rtl_register_content {
+> +	_5000bps	= BIT(12),
+>  	_2500bps	= BIT(10),
+
+Is it intentional that the MAC idle speed down feature (IDLE_SPDWN_EN) is
+disabled for _2500bps but remains enabled for _5000bps? 
+
+In functions like rtl8156_enable, the code checks if the speed is _2500bps
+to disable the idle speed down feature, but the new _5000bps constant is
+not included in those checks. This might cause latency spikes or instability
+at 5Gbps if the power-saving feature is enabled.
+
+[ ... ]
+
+> @@ -6343,15 +6356,20 @@ static int rtl8152_set_speed(struct r8152 *tp, u8 autoneg, u32 speed, u8 duplex,
+>  				r8152_mdio_write(tp, MII_CTRL1000, new1);
+>  		}
+>  
+> -		if (tp->support_2500full) {
+> +		if (tp->support_2500full || tp->support_5000full) {
+>  			orig = ocp_reg_read(tp, OCP_10GBT_CTRL);
+> -			new1 = orig & ~MDIO_AN_10GBT_CTRL_ADV2_5G;
+> +			new1 = orig & ~(MDIO_AN_10GBT_CTRL_ADV2_5G | MDIO_AN_10GBT_CTRL_ADV5G);
+>  
+>  			if (advertising & RTL_ADVERTISED_2500_FULL) {
+>  				new1 |= MDIO_AN_10GBT_CTRL_ADV2_5G;
+>  				tp->ups_info.speed_duplex = NWAY_2500M_FULL;
+>  			}
+>  
+> +			if (advertising & RTL_ADVERTISED_5000_FULL) {
+> +				new1 |= MDIO_AN_10GBT_CTRL_ADV5G;
+> +				tp->ups_info.speed_duplex = NWAY_5000M_FULL;
+> +			}
+> +
+
+Could this unintentionally advertise 5GbE on a 2.5GbE-only adapter if
+userspace requests it? 
+
+The earlier check in this function:
+
+		if (!(advertising & support))
+			return -EINVAL;
+
+only ensures that at least one supported speed is requested, but it does
+not strip unsupported speeds from the advertising mask. Since this block
+is now entered when support_2500full is true, checking the advertising mask
+for RTL_ADVERTISED_5000_FULL without verifying tp->support_5000full could
+erroneously write the 5G bit to the PHY and misconfigure the hardware
+state.
+
+[ ... ]
+
+> @@ -8793,6 +8814,19 @@ int rtl8152_get_link_ksettings(struct net_device *netdev,
+>  			cmd->base.speed = SPEED_2500;
+>  	}
+>  
+> +	if (tp->support_5000full) {
+> +		linkmode_mod_bit(ETHTOOL_LINK_MODE_5000baseT_Full_BIT,
+> +				 cmd->link_modes.advertising,
+> +				 ocp_reg_read(tp, OCP_10GBT_CTRL) & MDIO_AN_10GBT_CTRL_ADV5G);
+> +
+> +		linkmode_mod_bit(ETHTOOL_LINK_MODE_5000baseT_Full_BIT,
+> +				 cmd->link_modes.lp_advertising,
+> +				 ocp_reg_read(tp, OCP_10GBT_STAT) & MDIO_AN_10GBT_STAT_LP5G);
+> +
+> +		if (is_speed_5000(rtl8152_get_speed(tp)))
+> +			cmd->base.speed = SPEED_5000;
+> +	}
+
+Since 5G adapters like the RTL8157 will have both support_2500full and
+support_5000full set, will this result in duplicate blocking USB control
+transfers? 
+
+The ocp_reg_read calls for OCP_10GBT_CTRL and OCP_10GBT_STAT, along with
+rtl8152_get_speed, are also executed in the preceding support_2500full
+block. Reading these into local variables before the capability checks
+would avoid the overhead of duplicate hardware accesses.
+
+[ ... ]
+
+> @@ -8994,6 +9032,13 @@ static int r8153_get_eee(struct r8152 *tp, struct ethtool_keee *eee)
+>  			linkmode_set_bit(ETHTOOL_LINK_MODE_2500baseT_Full_BIT, common);
+>  	}
+>  
+> +	if (tp->support_5000full) {
+> +		linkmode_set_bit(ETHTOOL_LINK_MODE_5000baseT_Full_BIT, eee->supported);
+> +
+> +		if (speed & _5000bps)
+> +			linkmode_set_bit(ETHTOOL_LINK_MODE_5000baseT_Full_BIT, common);
+> +	}
+
+In r8153_get_eee, the reading of OCP_EEE_ADV2 and OCP_EEE_LPABLE2 is
+performed inside the if (tp->support_2500full) block that precedes this new
+code. 
+
+Since those registers contain the EEE capability bits for both 2.5G
+and 5G speeds, what happens if a device has support_5000full enabled but
+support_2500full disabled? It looks like the registers would never be read,
+and the 5Gbps EEE capabilities would fail to populate correctly.
+-- 
+pw-bot: cr
 
