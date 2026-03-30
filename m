@@ -1,160 +1,149 @@
-Return-Path: <linux-usb+bounces-35657-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35659-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sBamAbhTymn27gUAu9opvQ
-	(envelope-from <linux-usb+bounces-35657-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 12:43:04 +0200
+	id WN0BMppWymn27gUAu9opvQ
+	(envelope-from <linux-usb+bounces-35659-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 12:55:22 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0031235993F
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 12:43:02 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D634359C2C
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 12:55:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id BD798300D0CB
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 10:26:40 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 93EC530DB8BB
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 10:49:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F03CB3BC67D;
-	Mon, 30 Mar 2026 10:26:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCC493BFE24;
+	Mon, 30 Mar 2026 10:49:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T3Lk3LeT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Za8O/dPl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F763B637E;
-	Mon, 30 Mar 2026 10:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3916E72623
+	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 10:49:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774866385; cv=none; b=jsdDo7wSR2R0aptFfi2SoUP6s7fOhC+qQbjsdE7eabZEHq7i+jkRnmm8seujN0ID2qYdTnvlxifBd0evNlgn2Z0F1nmgSlRPM5v/1v7aVY5yuF2Q2yKcjiKua1ixWfOiFEa4MfDXnL0JtFItjg/xkST4h6/9ZUMCnNgINzP1NRc=
+	t=1774867782; cv=none; b=Bg7LqI5Rpfe6OJtC07vM3zKx1ZWgAzOr7/B6GNbrjsjw8Eh7aYrRZdvw6zHHtCQjr2G+nWnWkApQAHiqNQ84gPd8kwHP+cSbfmPX+yCu5eW6B/zgIq42EV7f2euNa+F7HSmjAlPisxAeVhVtd/F+0WaIANLkd++idUXY+kGRMWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774866385; c=relaxed/simple;
-	bh=T9uIlKF64yOcg9bZtE+cTBedhjk9S9RgTUSXgAnuvIw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TPmpX1Ah1ZwQqfSvCUH2R82AdsMkb798GbHbkjpkZ6RGIfYvuOfFwjUqUfDGdSQbl5937u2BBzvw/5an9/We9s+JpR3VLBtS1j8Ff+fvO3zpTFwfq7BAd68isNDfKULd4NMuhzCCrJWzePdZ5cYXuKpGATASeZsmpsIFDOzasE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T3Lk3LeT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21D52C4CEF7;
-	Mon, 30 Mar 2026 10:26:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774866385;
-	bh=T9uIlKF64yOcg9bZtE+cTBedhjk9S9RgTUSXgAnuvIw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=T3Lk3LeTfciLzYIG75jBzdIlDdDiBmouF5ORvWGPOHx12VEIo6la8O327J2sZk3/e
-	 fXDSOERPW4rywuTPQeYzcfPtPw1avW980TYA13Dl2aMHwTfS+l/eolVC3gcYMWn2Vt
-	 KhIp7fKVr1MK42KrpJJiCmc6IgayIZhmyiM71ySP67dneW4Qea3SfCP6+tdNWbGu47
-	 GqPHK+ichN9sfmqgQjLDfXu4vmfPt2lktGVJ1estQdrQ0uXz4tY57sga7toFsLTqrD
-	 mcUjGBZsq2/Q7m+T/Hjuc3iDEuWkAqhnqWg0W2dVxLUC/3sEnA+SXH8yQ3URnAeuEW
-	 sD1cTcOQLCcCA==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1w79p8-000000070qq-42E7;
-	Mon, 30 Mar 2026 12:26:22 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Johan Hovold <johan@kernel.org>
-Subject: [PATCH 2/2] net: ipeth: refactor endpoint lookup
-Date: Mon, 30 Mar 2026 12:26:11 +0200
-Message-ID: <20260330102611.1671546-3-johan@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260330102611.1671546-1-johan@kernel.org>
-References: <20260330102611.1671546-1-johan@kernel.org>
+	s=arc-20240116; t=1774867782; c=relaxed/simple;
+	bh=TkWSAOyKf9pHzREC1ZInMjKXj+zxxRlCU5cWRTHk0bs=;
+	h=In-Reply-To:References:To:Cc:Subject:MIME-Version:Content-Type:
+	 From:Date:Message-ID; b=dMF0ei4D/P4pxm4zGgGXIpoXg95IErsNoehtT9cReCz1DUNySdbysWLsavSdM2Br9cBaX8TdnWH5zMlLVu6bKRY15Ky/FED5XNwGMxmlqVo7VkqVkQbyF1gKXBZ9qoXTzax16rnegENcAJ5Na0xeXKEDns8xRaxT5A2NZpeTHDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Za8O/dPl; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774867780;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=T6CbeBbXEhiNM7kEGDQxi0LjkO7hSdtdP9Ej33IXIkE=;
+	b=Za8O/dPljq+2mdnNwvD96Bgn4Kc/x34FwXSmadNLbF8+tW4MTjcIAv1pKsRQOxAT2v7zk5
+	KEzNLHChQM6ZgfpAcF64SThMDjv2pmVwnpgkWH4F+8JctWlZ3xpnN8J9Kze4Cl5zYaAX8W
+	diwoFzox4Hl/JIVYFuzBg4moDv7GjlE=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-343-vgCQ4JUgMBOlmC67iSTGSQ-1; Mon,
+ 30 Mar 2026 06:49:37 -0400
+X-MC-Unique: vgCQ4JUgMBOlmC67iSTGSQ-1
+X-Mimecast-MFC-AGG-ID: vgCQ4JUgMBOlmC67iSTGSQ_1774867775
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5587C195608E;
+	Mon, 30 Mar 2026 10:49:33 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.44.35.245])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4C7AD1955D84;
+	Mon, 30 Mar 2026 10:49:28 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+In-Reply-To: <CAHk-=wiJ6gEELLviexdmSHnyjVoG7MFo8Qwhd1zxs_tCnL-=gQ@mail.gmail.com>
+References: <CAHk-=wiJ6gEELLviexdmSHnyjVoG7MFo8Qwhd1zxs_tCnL-=gQ@mail.gmail.com> <20260326131838.634095-1-dhowells@redhat.com> <20260326131838.634095-5-dhowells@redhat.com> <20260329121208.6092419d@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: dhowells@redhat.com, Jakub Kicinski <kuba@kernel.org>,
+    netdev@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
+    "David S. Miller" <davem@davemloft.net>,
+    Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+    linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
+    Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+    John Johansen <john.johansen@canonical.com>,
+    Minas Harutyunyan <hminas@synopsys.com>,
+    Simon Horman <horms@kernel.org>, apparmor@lists.ubuntu.com,
+    linux-usb@vger.kernel.org, stable@kernel.org
+Subject: Re: [PATCH net v3 04/11] list: Move on_list_rcu() to list.h and add on_list() also
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <972872.1774858862.1@warthog.procyon.org.uk>
+From: David Howells <dhowells@redhat.com>
+Date: Mon, 30 Mar 2026 11:49:25 +0100
+Message-ID: <1179840.1774867765@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35657-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35659-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	DKIM_TRACE(0.00)[redhat.com:+];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0031235993F
+	FROM_NEQ_ENVFROM(0.00)[dhowells@redhat.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linux-foundation.org:email,warthog.procyon.org.uk:mid]
+X-Rspamd-Queue-Id: 6D634359C2C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Use the common USB helper for looking up bulk and interrupt endpoints
-instead of open coding.
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/net/usb/ipheth.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+> ... and I do *not* see a huge advantage to a helper function that just wraps
+> "list_empty()" with another name that is actually *less* descriptive.
 
-diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
-index a19789b57190..bb1364f85bd1 100644
---- a/drivers/net/usb/ipheth.c
-+++ b/drivers/net/usb/ipheth.c
-@@ -573,11 +573,10 @@ static int ipheth_probe(struct usb_interface *intf,
- 			const struct usb_device_id *id)
- {
- 	struct usb_device *udev = interface_to_usbdev(intf);
-+	struct usb_endpoint_descriptor *ep_in, *ep_out;
- 	struct usb_host_interface *hintf;
--	struct usb_endpoint_descriptor *endp;
- 	struct ipheth_device *dev;
- 	struct net_device *netdev;
--	int i;
- 	int retval;
- 
- 	netdev = alloc_etherdev(sizeof(struct ipheth_device));
-@@ -603,19 +602,16 @@ static int ipheth_probe(struct usb_interface *intf,
- 		goto err_endpoints;
- 	}
- 
--	for (i = 0; i < hintf->desc.bNumEndpoints; i++) {
--		endp = &hintf->endpoint[i].desc;
--		if (usb_endpoint_is_bulk_in(endp))
--			dev->bulk_in = endp->bEndpointAddress;
--		else if (usb_endpoint_is_bulk_out(endp))
--			dev->bulk_out = endp->bEndpointAddress;
--	}
--	if (!(dev->bulk_in && dev->bulk_out)) {
--		retval = -ENODEV;
-+	retval = usb_find_common_endpoints_reverse(hintf, &ep_in, &ep_out,
-+						   NULL, NULL);
-+	if (retval) {
- 		dev_err(&intf->dev, "Unable to find endpoints\n");
- 		goto err_endpoints;
- 	}
- 
-+	dev->bulk_in = ep_in->bEndpointAddress;
-+	dev->bulk_out = ep_out->bEndpointAddress;
-+
- 	dev->ctrl_buf = kmalloc(IPHETH_CTRL_BUF_SIZE, GFP_KERNEL);
- 	if (dev->ctrl_buf == NULL) {
- 		retval = -ENOMEM;
--- 
-2.52.0
+I don't like list_empty() as the name of the function used to find out whether
+an entry is on a list.  Yes, technically, all it's doing is seeing if the
+list_head is 'empty', but, linguistically, it looks wrong: the question you're
+asking is not if the list is empty (you're not looking at the list head), but
+if the entry is on a list.
+
+So if I see in the code:
+
+	if (list_empty(p))
+
+what is the test actually asking?
+
+Note that various other list types in the kernel have separate "is the list
+empty" and "is the entry on a list" primitives, though, granted, usually
+because they require separate functions programmatically.
+
+Anyway, I'll find a different way to do this, not involving checking the prev
+pointer.  What I don't want to do is hard code "prev == LIST_POISON2" into my
+stuff.  Anything like that really needs to be in list.h.
+
+David
 
 
