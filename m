@@ -1,111 +1,136 @@
-Return-Path: <linux-usb+bounces-35667-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35668-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4MXiJi94ymnk9AUAu9opvQ
-	(envelope-from <linux-usb+bounces-35667-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 15:18:39 +0200
+	id APYSC2J5ymnk9AUAu9opvQ
+	(envelope-from <linux-usb+bounces-35668-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 15:23:46 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 471CB35BCB4
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 15:18:39 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93B1C35BDC5
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 15:23:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F24B1303B2F5
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 13:13:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5412C30A585B
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 13:15:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8671E3D34A1;
-	Mon, 30 Mar 2026 13:13:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CF353D3CEE;
+	Mon, 30 Mar 2026 13:15:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NGjuAb6T"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MneS+9H3"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FBEF3CAE92;
-	Mon, 30 Mar 2026 13:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144DF3CB2C1;
+	Mon, 30 Mar 2026 13:15:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774876407; cv=none; b=Os3hwRZI3vdavL8wFaoOLWlUUU3btIwz8d3jq3e3XcOA4WVuk7DQ4ulXS97U3qsp0Xv/JOf3avvI95vSn2NZr6SHNi7D7p8p7kVzCX4tzUImJDMbioK3mjB8Mvz2NG/ZNRe4eDBw8xET6s4LDFrNnZ7Wxw7aERFr3HWDSCHqYos=
+	t=1774876522; cv=none; b=QPlbhSpkYmJpGMq4xqAMKWLyi4P9DMMaNgNHEmiHMPD/pv7e0CwBJdmG2/DnNvYLzEERAUH8HEfCU2giaUMGyp2yZNZsqgwuIJ1c0lEeB0NnS66PHnStQb8D4nOX8cF5ICYkJbfFo3fC1b4rYDVd+SLJ+VcLickhhRJxmojrFNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774876407; c=relaxed/simple;
-	bh=iRu06Dw2d6ph0U9tYPqV94xGWUm85Z93YsLg0rQ7yfk=;
+	s=arc-20240116; t=1774876522; c=relaxed/simple;
+	bh=b1haNmzh5GBu/xqCNhbwf9cQMSb0Kbt+fAjPReEkhGc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hxJ0rM0eQyQ2TAhugvBVaGLky4kHv8yIfS23np3cJSUSfM1tOuK4fFKX9weRNHAbpFmdWHdAgw4Iwh53ZmkqaoSEGhsngJeCghTZVECzZKEzNEjsQ8wz/zn+SjphxEC9ClRKV5kIco8wRdypKW8fFZszVdCUUJ2qsKESFeGAwWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NGjuAb6T; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 459EEC4CEF7;
-	Mon, 30 Mar 2026 13:13:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=rbFa5N0rLrnVIM4F5yy7xlWDLpD7AI0hFDmT5/CysfbfJbpCnJ6CJ9him65R9RQzymn/26Fw/joar/wGtipmFJwZsjT69eg0SnxWMeUvr5H3VcU2RMi8IIeDIKkg7jgPW+vmiODMr4xP2VCXfFA5hbYCCRJQ9pn2ZQOqbNkeO7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MneS+9H3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24BBDC4CEF7;
+	Mon, 30 Mar 2026 13:15:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1774876406;
-	bh=iRu06Dw2d6ph0U9tYPqV94xGWUm85Z93YsLg0rQ7yfk=;
+	s=korg; t=1774876521;
+	bh=b1haNmzh5GBu/xqCNhbwf9cQMSb0Kbt+fAjPReEkhGc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NGjuAb6TzZAAsGEjqYnL8OLuKzcIgB75MvduROffiZ1HcceDk38c8L/Q7p12MhhxH
-	 4IwuSm9L2p93ZXHeuEqm6bQTH2e0LJsh8Fgk6oYTUiBvdzSXWxJYV/LOcXYdpSb/JP
-	 k+upR/AJIHWjTRcb1e6JPxYnASGP4ycvb/Y5ktiY=
-Date: Mon, 30 Mar 2026 15:13:23 +0200
-From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To: =?utf-8?B?0KDRi9C20L7QsiDQpNGR0LTQvtGA?= <symansel@outlook.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Oliver Neukum <oneukum@suse.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: cdc-acm: Add support for second ACM channel on more
- Nokia phones
-Message-ID: <2026033015-badge-huddling-14e8@gregkh>
-References: <a8008c91-52c1-4a5c-ac96-dd45f109c68c@outlook.com>
+	b=MneS+9H3YIhbaR1Cnk/kcZy7hXMELM+aGTZ6lmJBo5q/Kp3SahX68xyx4Zn9iX8z7
+	 SX0oZwi3eaVpSvnaaA8p2U7+VZTQMqL/S1wkp8RIkCpKvPAa2593mDJwYN5bEIYrOj
+	 zHchgJDuFu88lVdLCb8Bf6lXLDMEIBuBOT7YLBfs=
+Date: Mon, 30 Mar 2026 15:15:18 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Marco Felsch <m.felsch@pengutronix.de>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: Re: [PATCH v5 1/4] usb: port: track the disabled state
+Message-ID: <2026033002-cyclist-onslaught-30ee@gregkh>
+References: <20260223-v6-16-topic-usb-onboard-dev-v5-0-28d3018a8026@pengutronix.de>
+ <20260223-v6-16-topic-usb-onboard-dev-v5-1-28d3018a8026@pengutronix.de>
+ <2026031105-uptake-glucose-5b61@gregkh>
+ <mavc4ului42mdozzfwxd6zfa5b664umlqe5dal2r6knnilbi5a@ubnxauwhnoue>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a8008c91-52c1-4a5c-ac96-dd45f109c68c@outlook.com>
-X-Spamd-Result: default: False [3.34 / 15.00];
+In-Reply-To: <mavc4ului42mdozzfwxd6zfa5b664umlqe5dal2r6knnilbi5a@ubnxauwhnoue>
+X-Spamd-Result: default: False [2.34 / 15.00];
 	MID_END_EQ_FROM_USER_PART(4.00)[];
-	FROM_DN_EQ_ADDR(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35668-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,chromium.org,vger.kernel.org,pengutronix.de];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[outlook.com];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35667-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,outlook.com:email,linuxfoundation.org:dkim]
-X-Rspamd-Queue-Id: 471CB35BCB4
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linuxfoundation.org:dkim,pengutronix.de:email]
+X-Rspamd-Queue-Id: 93B1C35BDC5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Mar 26, 2026 at 02:37:41PM +0000, Рыжов Фёдор wrote:
-> On Nokia Series60 phones, second ACM channel is used by phone
-> applications to communicate with PC. It reports "vendor-specific
-> protocol" so kernel does not expose it as tty by default.
+On Fri, Mar 20, 2026 at 11:16:43PM +0100, Marco Felsch wrote:
+> On 26-03-11, Greg Kroah-Hartman wrote:
+> > On Mon, Feb 23, 2026 at 12:27:34PM +0100, Marco Felsch wrote:
+> > > The disable state isn't tracked at the moment, instead the state is
+> > > directly passed to the hub driver. Change this behavior to only trigger
+> > > the hub if a state change happened. Exit early in case of no state
+> > > changes but don't return an error.
+> > > 
+> > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 > 
-> This patch extends the whitelist with all S60v3.x and S60v5.x phones,
-> supported by official "Nokia PC Suite" driver for Windows. Device IDs
-> are taken from its installation configuration file. Older S60v2.x and
-> S60v1.x devices were not added because I have no hardware to test.
+> ...
 > 
-> Signed-off-by: Ansel Hayashi <symansel@outlook.com>
+> > >  #define to_usb_port(_dev) \
+> > > diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+> > > index 44e38f922bc553adee64b35c536dfd4154a42d8a..86e9d6d0c0f505782569565fde8e4a46b06b8b4d 100644
+> > > --- a/drivers/usb/core/port.c
+> > > +++ b/drivers/usb/core/port.c
+> > > @@ -117,6 +117,10 @@ static ssize_t disable_store(struct device *dev, struct device_attribute *attr,
+> > >  	if (rc)
+> > >  		return rc;
+> > >  
+> > > +	/* Early quit if no change was detected */
+> > > +	if (port_dev->disabled == disabled)
+> > > +		return count;
+> > > +
+> > 
+> > This will change behavior where someone tells the port to be enabled
+> > again, when it already is.  Is that ok?
+> 
+> That's the whole purpose of this patch. Can you please elaborate why
+> someone wants to enable or disbale a port more than once in a row?
 
-Does not match the From: line :(
+I have given up trying to understand why users do what users do :)
 
