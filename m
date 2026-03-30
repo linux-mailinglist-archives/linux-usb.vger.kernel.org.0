@@ -1,204 +1,222 @@
-Return-Path: <linux-usb+bounces-35639-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35640-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6CKvHVMZymk65QUAu9opvQ
-	(envelope-from <linux-usb+bounces-35639-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 08:33:55 +0200
+	id 8GGAFMUiymmu5QUAu9opvQ
+	(envelope-from <linux-usb+bounces-35640-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 09:14:13 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35E45355FBA
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 08:33:55 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 489DC3564CD
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 09:14:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C3B4D300889D
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 06:33:32 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 4A35C3004400
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 07:14:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 838B73947B8;
-	Mon, 30 Mar 2026 06:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54B3E39E176;
+	Mon, 30 Mar 2026 07:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="TNnURRJb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXm3lbeZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013008.outbound.protection.outlook.com [40.107.159.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92739394492;
-	Mon, 30 Mar 2026 06:33:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774852401; cv=fail; b=BH89UnohKbh92LbXv46cvsEVaEKSUpZPbnYyPkP8pOVGlfMsqpyIDcYlLF0D7ZzGkLw0qAoElS0+5PGwFA3/z9oiTXENCals7KD0e2Azr1HXNYMwRxhMbPUoxPZsQ6XWBKwxZ19fTmKGOTvkdM8PIuCyM6E2nTW/B8qBWWdgiPE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774852401; c=relaxed/simple;
-	bh=ulT6zcM+tFLBNDagDEBVhngdiziTzU8SnEK+y7YNSg0=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=fCcxvaLId9tdEVl2Dy+Wdf8kDBOkBCSahAAScVk1EGyhWeR7CJzUBTH0QWlqCBzmjefryRIHevAw87s4kug68Z3KTOh5TdfX+p4KwYVSSenaLIvsj/cs5qVlx7ucXEqUSifHGtdWMr3bm0IwE3HaRR9H2KkVPmmULjvv+CU5agc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=TNnURRJb; arc=fail smtp.client-ip=40.107.159.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Dpd/8KykqFALJgnxFL/2nKr7tv4STV2GbR8yCrlM2/lrwG1oQFalCumX+4QmM3ZBBI1D6ajSn3nH9UXxnxQLsLKhJRr0vpsQrCfDh6I1O8t6hHlvzEHMebZV7SX7p5NegOy6IDPmPncp+i4zHD1+V6X5l9gXkrKKPMbhA/Iz4+Jr5zfKk+UBmZpAxZxnRi5aI1OnDE0qBBp9rnORCUfc1vp5+NR3A33LmEIC8lkRR0JaLeV2rrcRk/9MXFIWoODEcuuOJbDKvBmsxGGES/gQyOF82QllgI/s3TpHmJm5/CSg5JPop7OrGztCRlr/xzL916VuzCrrmIxcWXgD8jGAHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=08+YfOAKHFmUdMM9E+SDo8S/94vrVaM6bGzVZBFpEfc=;
- b=wSVvjGZ7pXobPYYiphcUThqlvefqjWFc0DWNIhuTrWQyP20h3y4/ZVqyYGUWI79bgC3dKdUmsNReEcA+TRT6ZrxartCCSB0+NB5Mqzdgu/MGqOLHPZgYdixmzD2WLyygZMZDI2r5pFh7RKQhI83gMZRj2iez3Y7cGqh4zl3C7FXcn9luOSdHRkYNpWn5L0ww7aI+l59e3msQIUnGMczexmqSf+MKOpITsL0gGofurMbIDKOISEjs5bBgDmKvbunT5tiHAaXZfN784QAKQUsg4oa6YH0WZX2KpZrYVm0gBZjlLmZrIccOWsyyRjTygUo46yXiwgc7ihYmzqpccqpCGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=08+YfOAKHFmUdMM9E+SDo8S/94vrVaM6bGzVZBFpEfc=;
- b=TNnURRJbYSaPEzYg5Q+z8a0V4rM4oh8G3aWwWivn9RVYGaTmvr3q4Qvu3MgQQi5h5f+l3MvFuMEajARvMr48ESfPZlKGvmEEDUUKO2ofrhFA6bRBjy9XIXuzJUUskdT7OYxbWzIbLVlI13OePvnf6NSFdvI7KSF7ivCg1wGEdwEYkYhkJUNIvtjEqO/16gTWhH4XMuYKwxTWNG55ygSXiWneXou0FYe/CdApz/Wr80E92CvGh7bFsvTrdR+bB/fNYoSAtQ2dny0JaPEiHNznrc4KG7MIGF1BtNpmxlmXUj15gwRyuDcuJokQfQnhNJs0bPqMIm0Rdo0JIVO2hfOnbg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by DBAPR04MB7430.eurprd04.prod.outlook.com (2603:10a6:10:1aa::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.28; Mon, 30 Mar
- 2026 06:33:12 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::c67b:71cd:6338:9dce]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::c67b:71cd:6338:9dce%5]) with mapi id 15.20.9745.027; Mon, 30 Mar 2026
- 06:33:12 +0000
-From: Xu Yang <xu.yang_2@nxp.com>
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	gregkh@linuxfoundation.org,
-	badhri@google.com,
-	amitsd@google.com,
-	kyletso@google.com
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-usb@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: connector: add pd-disable dependency
-Date: Mon, 30 Mar 2026 14:35:18 +0800
-Message-Id: <20260330063518.719345-1-xu.yang_2@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MA5P287CA0146.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:1d7::6) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4BD6361DA2;
+	Mon, 30 Mar 2026 07:14:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774854846; cv=none; b=tiB8rA8TVvjHT8zgcJjJZeOJd2fyr7N56f8xfBIVFKC9TgHjhZ+wuFkC0wYmsFc9BCfLtl+2RZjVXPXJaEoe1KYWN4Qd9gc4Zcugco1JWrjBaL7LEouPRc5o/58tneZlwXBcdZquvcYVAcShcWKVG2Wd6i8Wiu1mjWsaMJjcMVM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774854846; c=relaxed/simple;
+	bh=4FXQCsqHMrZh0O3fV0syJyvRr5qovyuJXqcuOWxo5Aw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pxi0cIjPlF5AdJMcW/MbCxfbMd9+CKl8WEJHMnHfCp+ynHZdyOjkEza+6ulG/d3TJ9XXWH2ZOkdZXl/PBzVu6/ZOM9nZPJMjnoCjt6pXMyWAmtbAVjcnPfaQ3VgKDlHe5w9+/MxZRYvfUYCwARzfXTfsvBh9x9AfV5iQ2CaJ71I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IXm3lbeZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 341BDC4CEF7;
+	Mon, 30 Mar 2026 07:14:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774854846;
+	bh=4FXQCsqHMrZh0O3fV0syJyvRr5qovyuJXqcuOWxo5Aw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IXm3lbeZjB5tSGISWtEYlmgVFJrRYWrVC7nmNetg+w+k1nHi6leVb+u7ThDv4Pmwd
+	 FRVjan5cL/oKV46WU4gcxPyjTWkD9WM6r0Y+Dx6UuX8hrrIgiieK0ni/8oknT4re7y
+	 eElypl+ZAMHN4j+nFxFessmpGv866wvWI/hY5htXvG02OGtdbeiuG6yp+L0Wiis2KU
+	 BgLJSdscx00FesQp0E7B56I1lQ2VTTT+OxVQsxsGuNtneuutT1esuO+LjZtCY1TbVn
+	 CYM8CGNLG1KnRgqUCmIIweqckZ4Mj1TT6cWYYEfQ9cS1gCj6dlHYcR4mFC+UlYezzG
+	 7SsdUeFDGlQ+A==
+Date: Mon, 30 Mar 2026 15:14:02 +0800
+From: "Peter Chen (CIX)" <peter.chen@kernel.org>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: gregkh@linuxfoundation.org, jun.li@nxp.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev
+Subject: Re: [PATCH 1/2] usb: chipidea: core: fix device mode not work in
+ non-lpm
+Message-ID: <acoiuow+HrDQTBKz@nchen-desktop>
+References: <20260319095716.634568-1-xu.yang_2@nxp.com>
+ <acOKAeNKWT86veM+@nchen-desktop>
+ <7n6s3luk32sk36y47u6axedhysnrrin3radc7mgxh2pjzwdzv6@v3yu3tg4moiq>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|DBAPR04MB7430:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3ace8a60-7c71-4a2e-9c72-08de8e26376b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|52116014|1800799024|19092799006|366016|38350700014|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	ZaxhjkpCB4XH/EhL3OBEMVcr2ZyRYzmmdc2qCqSkvGsFr9jrrLt/LXIP2kePzSwbkBMRC8shAmWGADmDr66CaMcLc4uDWJcKjh3kwdpWc3BetXcOthSwc82TtLOpcuAjhbmWN0dKWBJZHPfgFU0Pc9s+ivUS4PTNqkUFumU+M+vD35BPXZ6vDWi93SHnWs9fjFffv1ivv5nPDKIE1QMzFBReAmePDcn4KVysjJRvTulS3+DAGJNqdCgHztUbFrNBbr+qy9nGUwfaKsH2UAQnIbOsqAMM7S/RLwCh9lOHAl3txsW+uVfNcmHns+/lvZcuQXnnNUbXU2EKBhMUNTtFQz42REd1uOnyV2nWJYc/DzAYgZAwqE+IiWAvPijVmf+Ww9UH9AXl+uisv1hBXBrZJAXQmn5X7K/veZQGMVu5LIHnDGlbrqQLZgjIY5FkJOTWtCEcNDhV1uejHSQedAud2p4LJCusGYMyx3yLXzJruaAkeojFM4iixNSCQxQgxVrTGTfIpkxvKU0QAsQa9rlO4iUpWhvuWgnMFLC7GvNXcuxg94dAPOz3AODfq5x9frDxENpn/20G1oZqDxDqRbntpPhOPhavYyZuL04tuaM45KSLDLi59ONUztFGchaAOuJFvNhV4jR8NFXYeW02me5zDf3zWUizp53kYo3U2W8mVOWNLfyxZM6Ks4UfRf82u1z/Lw2Qm7UTrJPj/whuGpm6xcd4Rarrx7Gkw1R7ivChSLF3ueLCoBNZXn4GjV8/d/uGOab9G0MPp3NSorHyo0vtLlPE4KBGdq3xapXSDLE/qQY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(52116014)(1800799024)(19092799006)(366016)(38350700014)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?YcSocY51XdZpW3rM11x+hEp88RVsNdi5nLMxtCin+ITT1XcQgxsLgAH6mBc2?=
- =?us-ascii?Q?dXfbS3c+5bnR89JR7mhNJFTWf371UPXiXsv+BtDn1cYPyegyE6BA2ROXsqIL?=
- =?us-ascii?Q?ehWARI+hH/7br8k9pZDBKmI7FXobGs8qiHlxDSncSFHy/El8aSXFTvE4awd1?=
- =?us-ascii?Q?YPnOFCLJ7qbhEbZlGuK5BNR5ddf4pEfnGXrmE5J9RAVI/xJw84xOA5Ls27Co?=
- =?us-ascii?Q?dXgDIsxNqam7cNqtz+obg73Q8ubu8mLfA2KObfMBY33l50j27gPLK6um0HnT?=
- =?us-ascii?Q?DKHqGXKVe6I8n+zEyVaHJv44K1k9oVziFiMaZu0U+vlux/DQpdPsA59gp4KN?=
- =?us-ascii?Q?95jK8h/oEeNeUPRcb7FNFKOvGCvsWxI3E1nE05RaxP3gWGOIE4c++y/KxZrA?=
- =?us-ascii?Q?SQoW3aD3xxIdBHz7bQpilHOnOE5Pf+mxGllDALBNHdpR0XR0OtwBeETJyBat?=
- =?us-ascii?Q?SZcO0gO97ldeVHRrYdDaJXUq+uPb0cLxlAf3sxjUaWQfc+IL4lTaGlUHAFse?=
- =?us-ascii?Q?oikW73dk6PYMpQTpMHc1JrCo/OTLzVXiGV9IRF/8uDw5NmyO7O6iFHCSMcTt?=
- =?us-ascii?Q?Ps11iuAnnGI9Xv0j6u3arsiPrU4Qr1idZcuS9PLLrlHPVC6ctqwXtYhyv53v?=
- =?us-ascii?Q?qfdqB3HBvB7ZTKCoj2bZ714oveTMPM7cWNOD+CuYcnpNKTpnRc+igvGixKeR?=
- =?us-ascii?Q?bMNLU2cr+ITumEX82ITeCQ+GVeqizceHd82zskpLdBg53zeQxFKIYaA2XhPX?=
- =?us-ascii?Q?dck4lAwshXtJcYEQYuYlxd8FwlOn06lmFkCCEEak2RsIVnXdjLz3I7yzIBKs?=
- =?us-ascii?Q?GpxTnUlIHTFQ2Ywy6mr4ls1cg703lYx8h8JIQWGAZzRLqa1wwa5RKF0sUZvA?=
- =?us-ascii?Q?7uYG8x6XILjOWV3MGQ2azYIXEMQoXALnH9u7HPy3ZhtxjYm5XyVcHv+Huhqc?=
- =?us-ascii?Q?5b9qvX14Eh2qBA98GX0LN31WenPtNVyR7JFAsQL4du+aATzVzmOjqMNP+WpM?=
- =?us-ascii?Q?o2b2dNwSMVQnlElvtAx+sXPKnWErIve8FbW8zIuONvW8rpmESMJboou22wq+?=
- =?us-ascii?Q?8VR0wD5//xueU3pCVa97PrmgPLU2NkhU64S0CD2aGh0ldimk4qHDgC4JrJ4Z?=
- =?us-ascii?Q?fpIdYmu2AblewTkkztt5nlDAq9fNnQpnCdcqgk3PYmWkHQtVZrM8BMIx4Xl/?=
- =?us-ascii?Q?xwqkUT/aD3bqYmz7gPTgXNFK1LRFQBXWFb8fdxNwvcOumtMp53X1AlSl6jOX?=
- =?us-ascii?Q?/kTDKJOhw5b0DQ6Wfx14DN7ZWGCBJUrwNxebPiQLV6wYi/p2jK5RUlbVV6T4?=
- =?us-ascii?Q?uNktHlmlZwuF2miNyz/sfjXM+VcUNXo7IHHitnQumdbMH8L4GOE7PaoiOHt+?=
- =?us-ascii?Q?M8K1vvgu44G4sLkAkeYzOEi6+DN8p2S5GRaPJfLMGZb4Oh7NvMw8EM1qNui8?=
- =?us-ascii?Q?OS+x9nTC4lVmMKUavLfBv+v7RcEd7NYpn6g7Xt1v1YpazqnuXTLZjoAiDQYZ?=
- =?us-ascii?Q?AglwJQznb0QGxPs9YBmDWu3jfAt89nZee/hBstVNmAg/7X32D1K+SnFB3Buj?=
- =?us-ascii?Q?BxT1OXAoEs2R6LoP03jiCxpiWZUHyAcabXWGDbCluIs8TCER7xsWHSey6hD5?=
- =?us-ascii?Q?OaTi9NG4g78tPt8ambzFHZ8RRU9lWrcZ2VSYCYiQUBm5tCtBollhV/YbG3S1?=
- =?us-ascii?Q?vK11/KqcO2o2dX/XL3TOtxxbeXkZn4sfYcQktJ3TSNSn9N0JIuoJNcVy71JR?=
- =?us-ascii?Q?fox0an90DQ=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ace8a60-7c71-4a2e-9c72-08de8e26376b
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 06:33:12.8246
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jrVzj4BmDUJ9roO7mUyE2KWF3slxGFcoHMhlGkMCKak6nDUqQr30rEmwJPH6QOifFS9zkyUWK2sDAl5zV1Gm2Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7430
-X-Spamd-Result: default: False [2.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
-	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7n6s3luk32sk36y47u6axedhysnrrin3radc7mgxh2pjzwdzv6@v3yu3tg4moiq>
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	TAGGED_FROM(0.00)[bounces-35639-lists,linux-usb=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[xu.yang_2@nxp.com,linux-usb@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[5];
-	DKIM_TRACE(0.00)[nxp.com:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	TO_DN_NONE(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35640-lists,linux-usb=lfdr.de];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 35E45355FBA
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[peter.chen@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,nxp.com:email]
+X-Rspamd-Queue-Id: 489DC3564CD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-When Power Delivery is not supported, the source is unable to obtain the
-current capability from the Source PDO. As a result, typec-power-opmode
-needs to be added to advertise such capability.
+On 26-03-27 18:54:45, Xu Yang wrote:
+> On Wed, Mar 25, 2026 at 03:08:49PM +0800, Peter Chen (CIX) wrote:
+> > On 26-03-19 17:57:15, Xu Yang wrote:
+> > > In current design, we expect 2 ci_irq() to handle ID and VBUS events in
+> > > usb role switch, like what ci_extcon_wakeup_int() does. Now we only call
+> > > ci_irq() once. However, this won't bring any issues in low power mode,
+> > > because ci_irq() just take the device out of low power mode, and then
+> > > ci_extcon_wakeup_int() will call ci_irq() twice. If the device is not in
+> > > suspend state, the device mode will not work properly because VBUS event
+> > > won'tbe handled (ID event has higher priority) at all.
+> > 
+> > %s/won'tbe/won't be
+> 
+> OK.
+> 
+> > 
+> > Is it possible change ci_irq_handler and handle both events?
+> 
+> Yes, we can change ci_irq_handler() and let it set both ci->id_event and
+> ci->b_sess_valid_event flags, then queue a ci_otg_work() to handle them
+> later. 
+> 
+> I think this just unnecessarily call ci_irq_handler() to handle lpm/non-lpm
+> case as the final path is ci_otg_work() and it will handle lpm/non-lpm case
+> by naturally calling pm_runtime_get/put_sync(), otherwise it relies on
+> ci_extcon_wakeup_int() to achieve the same purpose. 
+> 
+> Both methods work for me, may I know which one do you prefer? :)
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Fixes: 7a4440bc0d86 ("dt-bindings: connector: Add pd-disable property")
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+My main concerns are below code, and it may confuse the reader.
 
----
-Changes in v2:
- - add acked by tag
- - DTS patch has been picked by Frank
----
- Documentation/devicetree/bindings/connector/usb-connector.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ci->id_event = true;
+ci->b_sess_valid_event = true;
 
-diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-index a00b239960a3..8ca0292490a2 100644
---- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-+++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-@@ -335,6 +335,7 @@ properties:
-     maximum: 100000
- 
- dependencies:
-+  pd-disable: [typec-power-opmode]
-   sink-vdos-v1: [ sink-vdos ]
-   sink-vdos: [ sink-vdos-v1 ]
- 
+I may prefer the first option, it is easy to understand.
+
+Peter
+
+> 
+> > 
+> > > 
+> > > Although 2 consecutive ci_irq() can work around the issue, do not do it
+> > > because ci_usb_role_switch_set() may or not be in low power context which
+> > > make the ci_irq() purpose not unique here. Because the final processing
+> > > is in ci_otg_work(), just directly queue an otg work. This also refine
+> > > the logic for more clarity and not set changed flag.
+> > > 
+> > > Fixes: e1b5d2bed67c ("usb: chipidea: core: handle usb role switch in a common way")
+> > > Cc: stable@vger.kernel.org
+> > > Reviewed-by: Jun Li <jun.li@nxp.com>
+> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > > ---
+> > >  drivers/usb/chipidea/core.c | 30 +++++++++++-------------------
+> > >  1 file changed, 11 insertions(+), 19 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> > > index fac11f20cf0a..1bd231a852a1 100644
+> > > --- a/drivers/usb/chipidea/core.c
+> > > +++ b/drivers/usb/chipidea/core.c
+> > > @@ -618,30 +618,22 @@ static int ci_usb_role_switch_set(struct usb_role_switch *sw,
+> > >  	struct ci_hdrc *ci = usb_role_switch_get_drvdata(sw);
+> > >  	struct ci_hdrc_cable *cable;
+> > >  
+> > > -	if (role == USB_ROLE_HOST) {
+> > > -		cable = &ci->platdata->id_extcon;
+> > > -		cable->changed = true;
+> > > +	cable = &ci->platdata->id_extcon;
+> > > +	if (role == USB_ROLE_HOST)
+> > >  		cable->connected = true;
+> > > -		cable = &ci->platdata->vbus_extcon;
+> > > -		cable->changed = true;
+> > > -		cable->connected = false;
+> > > -	} else if (role == USB_ROLE_DEVICE) {
+> > > -		cable = &ci->platdata->id_extcon;
+> > > -		cable->changed = true;
+> > > +	else
+> > >  		cable->connected = false;
+> > > -		cable = &ci->platdata->vbus_extcon;
+> > > -		cable->changed = true;
+> > > +
+> > > +	cable = &ci->platdata->vbus_extcon;
+> > > +	if (role == USB_ROLE_DEVICE)
+> > >  		cable->connected = true;
+> > > -	} else {
+> > > -		cable = &ci->platdata->id_extcon;
+> > > -		cable->changed = true;
+> > > -		cable->connected = false;
+> > > -		cable = &ci->platdata->vbus_extcon;
+> > > -		cable->changed = true;
+> > > +	else
+> > >  		cable->connected = false;
+> > > -	}
+> > >  
+> > > -	ci_irq(ci);
+> > > +	ci->id_event = true;
+> > > +	ci->b_sess_valid_event = true;
+> > 
+> > Why both ID and VBUS event are set as true unconditionally?
+> 
+> The main purpose is to simplify the handling of the various situations.
+> 
+> The usb role include below types:
+>  - host
+>  - device
+>  - none.
+> 
+>  1. host <--> none
+>  Above change means ID change occur.
+> 
+>  2. device <--> none
+>  Above change means VBUS change occur.
+> 
+>  3. host <--> device
+>  Above change means ID and VBUS change occur.
+> 
+> By setting both of them as true, the logic can be simplified here and
+> ID and VBUS otg work will check if a real state change happen by comparing
+> old state and current OTGSC_ID/OTGSC_BSV bit.
+> 
+
 -- 
-2.34.1
 
+Best regards,
+Peter
 
