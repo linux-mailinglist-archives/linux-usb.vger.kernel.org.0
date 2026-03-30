@@ -1,165 +1,153 @@
-Return-Path: <linux-usb+bounces-35663-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35664-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gFA4C6drymnG8gUAu9opvQ
-	(envelope-from <linux-usb+bounces-35663-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 14:25:11 +0200
+	id MPUwLB1rymnG8gUAu9opvQ
+	(envelope-from <linux-usb+bounces-35664-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 14:22:53 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DC3535AFD5
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 14:25:10 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38F8335AF60
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 14:22:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 2E81A301F402
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 12:16:16 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6C02B302C379
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 12:17:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EB603C3444;
-	Mon, 30 Mar 2026 12:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899463C3BFF;
+	Mon, 30 Mar 2026 12:17:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MbxoKiOw"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DdlaxDAY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73383002A9
-	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 12:16:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774872972; cv=pass; b=MSNvlP1O0wkHWQLpx5+SL7dwwLC+KJANFsZUkfpbISfgISoK9EgjNUEKDgHIuoLDGJQEFMoDT8ctz02wEKIOwpCj9tdliXfY+wzQs4P7IB2YMtAxanuKllyek90/xTN80AWmqPl4lQcR1GQMplgoIahikhQ/I2cYA805laUCkDI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774872972; c=relaxed/simple;
-	bh=Uw35mKRYCMJg9FLMVpCEhFv3Apj6vxn4xy9VKcxb9Ow=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kLu3MkS2udI7VVWO2rrzlVykq0enLt5IzecgA/u64GGR1oTMfz+RH0urA7REgHV1zLVj6S0CqT2x6+XogZccu2GXih7Y7aOhPR7bq7XzDR/5Y8sTColmaK02REe99in++sVjTS0wE2EGCuBHj+uR0XFPy+T3dMU6WVkos8QguFo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MbxoKiOw; arc=pass smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-66b8110361fso3492848a12.0
-        for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 05:16:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774872968; cv=none;
-        d=google.com; s=arc-20240605;
-        b=HFxZ1tiwZsf9NGwmGQm5nyzOqghvOnDf4gv6XwBNTKvX7kjiDRsmjUffmL2kzgurRf
-         2SgQyuzOXzU7hnNmNRT/tuWYoud+0DgCuwM6higFuMtFzHY2bGzQV9wnKwj735am9uMc
-         6AqyWe5K8rGIBTAAlG2BJBjGxxBO8YMAuWny+ZKVKxRKixG4A8WXvVR6h/I0BUwz6z6w
-         AyJqxDhMmEQSBm0DYUMgqW11mLqqAus7Aat+yX37LKxT6b4vElUW1nI9L2kxo1LTjASN
-         903Kwn2l2CNjLOKNAAP2jaxqgAL39QZRNEGjn6HfbdffqmywBlumbxn/niRrZc3MtbUX
-         7oeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=Uw35mKRYCMJg9FLMVpCEhFv3Apj6vxn4xy9VKcxb9Ow=;
-        fh=XBxVRYcciHHSZfoOqiSuN2C7VAk/fAhsJCUl7EPP57g=;
-        b=Fq5cz+k3g4k1g6WAXUnZFKQYLuSTfNugU1T9FcXMTHT20nr+zpKozcgjoRem4bLSdr
-         kZB/sCV9Hw1XwIXqxFlPn509nKJfsqFGifDxApwCM0sIrZ9n30Ksu0gwmEBhYUgWdWuv
-         ybQ/pfcDuH7cPQ93G2/RmRdkqKsbMxOd2wOmlCv4fFK09zn6nkJCh1EK4Zu15fzJU/34
-         qjSOvf1RNNj3zxSg3BddHbqy7XL3bAlOgUVv+tIZ6sF22JGlvv6iiMYknah078UvgbN1
-         Bx4/JAuWMiQQx3oGpfRA3pu0f1FjjqLDy1TBSvTX6yRGC1tf/ydC/JOjkHdobTRwybBa
-         8iLQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E451930594F
+	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 12:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774873052; cv=none; b=kcEl9qMj7Osyz9t8Bjb922vErtvF3zY+Hw0xvaKtJJoNC5vM0FKelVukvsigWYAsVjzqO7tHAYgUX8qfc/z/HaC4on+5md/7VOcRZ2+PI0YM/v6AIFBbn+WA5ch207Ks24srx777JidzNjzSrC8yAmuIhD7nMFRhg9xkyUTi9Dg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774873052; c=relaxed/simple;
+	bh=huX5GU4mg7XTQNFDIs5ax+BpCrAFvc65U/YSZJ6Cj/s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=sSlhMhnHVtLxbP39LANCMGJvUsHnzKO0iUVbTov9jOFq39KhkjhCxP4zkZeHg4ItTrwHetcjTnKTd3qf244IzivBwixMMl5ic+rQFsxrA2Q3vv5OvA4ZOBqNJWqMX8y3W7lJpMjzXnhyBGIfuq95BFFfvQ6lIyc4waBe3RgFK7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DdlaxDAY; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4838c15e3cbso35832865e9.3
+        for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 05:17:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774872968; x=1775477768; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uw35mKRYCMJg9FLMVpCEhFv3Apj6vxn4xy9VKcxb9Ow=;
-        b=MbxoKiOw2E3z4H735hb3ucZUfJXuKIb5HuaCPKjsrwoDcWk54dbFYUHXTitAsf34Ec
-         1lHIrD+sWKbZt3LFWx6ayb2xHsiS5ChVKtNe6v1jYVU1hXEAfN0ROB0ZjOQAD/QcSfCW
-         PeUXohDcqDmvAJwyJge4QnjKq+f0OCrv+l0M7xUR4ZcSfWaUKB+KJyXyn5ariIeBRUOT
-         yBfAVeUM+PUXBGd1iUreNkkBV9h6Q1txuKPoA5xssYxFxzXzBfZdHafx43/ar762WWZ9
-         MEg1jF6pNmTQeHzXBqvCx3J4YH92Bie+MV69WXUP337ivoJCfHpOxuw695cpZ9ZuS515
-         G3wQ==
+        d=suse.com; s=google; t=1774873049; x=1775477849; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=VdAbQpF9Yri5l/JqAp8LREGFHdLjibhdiCY00f8L7JU=;
+        b=DdlaxDAYesErtFVhyHKGHq2QthoudSMRVfifYvt38u64Dr23ZXVSMPZCXn2XC7wUHI
+         T6eTMosFI2frlv+W9XeBKIaYPR2dPbjOBX2TNyR58J5vgxldVOYyWH7a3RfpmcQ5eKa+
+         wPTruDVPngc7hohxwcvb+3nKlSzXx15Ae7ZM5SHVtzPCUmEsZy/9yEG/yt7Gz8yp5AWt
+         pHJd2xDUd6tXuKBWgcwheeTBGI5FYU4P56JAuQ8hG/DNG3Z2mqTMDZwMeYDka5cZkA21
+         vJjnzM5h09hIJ6K4N/m7wiX1btUagcI652R/sJGogVQMWrbVjIX71+jIChZo9tGHpna9
+         zAzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774872968; x=1775477768;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Uw35mKRYCMJg9FLMVpCEhFv3Apj6vxn4xy9VKcxb9Ow=;
-        b=GZ2coy42sryvfFW08ixf1fMxSiURqnVtJlbewmQ9XuUe+qemiJak5ds/GYeqmn/KNv
-         10rZy3h0/PDZzLhNQ9XZk/VBhihuzOsFUqS8tNR7HygF81ehuOk04FPWg+xWS+di0T57
-         ekkMa/iDRCVWmaz7t5xB4mluwcdoGywhPoImx6TBNyw1Cj/1vXlYc4AxGxczKS/wR3Qp
-         9Mwnqz3K3qzIUjppQRrFU1oASPm6aIcG4qd6ZEChU3u0TPpRSQ0AnMn7KfPAxe8E53t4
-         scPcjgoOq/IcFlh4esbBUzqnr/pzSq106UP7TQOMImakdSWKe3UMUKzLQGp2BN/eLfYQ
-         9d1g==
-X-Forwarded-Encrypted: i=1; AJvYcCV+aYvFdHq6D2R0NiOB8x3V4oBuac5w+WeXlcvfqr5V0n1blxo6T+KoH/ZXH2EsCRtpN8l1jhRxLYE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw18Zsc25iZ7EhzQRdO48ETIpiY/GS3PF31x/44FUBQCemUOlM5
-	os6n4Oy043mV9bM68SLSZ8XgdZ0EU4pnlZCmfz2gHnL3lQILayJHdXKuC85DbDOgoTAdqtlp9g/
-	u+13oYyK0XMj/cAlpcpz7mYXlmkYRaz8=
-X-Gm-Gg: ATEYQzxfPqcJHy1o0IXQtWDIOFh3gG3D/2zCtPa6sqwfKqv1/aIn7PRbs/NdosOx3V7
-	bgdkOtitDR1cZpyWTussJqqHeex5i8Tq6bprI3PR6CjJNgWUpIJYCoIZ3CJXSYIhN9E7TTkbaGz
-	ftf8hyQp6EBo0IZMdbfAdXio5zRI68Ec/5vN4g4h38DEOgobdDkn5vH9CoKGsfLSqnM5Uktq3MK
-	m18D65IBkbMv1mtSPRt7wKT3gRrk4WvMcIP1U3x+6//8PO3BPWu8BP3FGT6qm6Mz6XFO+XQzjhC
-	M3y6aw==
-X-Received: by 2002:a05:6402:280d:b0:66c:167a:30c2 with SMTP id
- 4fb4d7f45d1cf-66c167a31f2mr564738a12.8.1774872968093; Mon, 30 Mar 2026
- 05:16:08 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774873049; x=1775477849;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VdAbQpF9Yri5l/JqAp8LREGFHdLjibhdiCY00f8L7JU=;
+        b=dWvWykeZEyWRztXJMB735zuV896adlKyA+ur6WFHrg3GJX8Okv6NvJ2adFzXdrVnL6
+         q6lBb3YhXiKAmgC6lcDmPub9AqL47DBuFpSi9QFx04P1AKkReDV92mAJSqGd9DPywemk
+         Wn2U9EMbMGNsgV1l+HSL2e7J4pZXdW90Y9o5HYRdOiY9LxZIO6vcLxwDuYGOUXtmcJbR
+         le8xWphRehRfO5ip/TrG6G4JwEiEOs3bbX36mEOqnFlgQG3v+xNQD6AJR1/v1iWxd3Mr
+         Spgy6MsY7ZkN7jJ0kpBi0xGpFRRZ0RB1leDEp7HOEoHnrO2RoopVRb6SXakHD+Ppm3lx
+         gLRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU2nYIclaMagtzaqz5pZ75LyLJsvtWUq3AxKR+HTrq3F9LB5UyDti9IBEXoMZ1JMF6zFlHgzzW/CV8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJ92i9xx/1pJtafA5OYFIBHS3y4oQI9I+Xj+RCMU2I1x/s08Y2
+	zunb6PIjxqIhIZSnjjouJbex0wb/e/OiuqZaKldemH+PrsAAeFuhThOdTrt90TuHsCwx9DJ7LTT
+	s5qMt
+X-Gm-Gg: ATEYQzx6pJ8Ed2o/hP7VsfvkU+gkTkmwp3lp2YHtlBX+kXdl0q5cwy+8tJXcA9dHzK8
+	nP2SfgrxRoXCpBouyHZevjfx+Tbzex2BiEvO3mxURCDZ7HiSfsMPpkNoFB30h//O1rJ8MwZW/E4
+	fTS08/LIZl+XvXVKDWH3qzGs3sMk1j2FniF1QA/fosUZuDgnoUNuzLx1ca6TAWqhoEVZUqlieWU
+	2d01MfUfOZzUDGM6u0AZzMyuOohLE1dmcuLoAMTbOTzYYOhL4PjYcgc85VicxtyalT3vDTORa+z
+	Qm/y/cJiL060Rjgapm2Q2vKj6QL9+DKyiIR21zCo3NxdifquiyIilc/iafCPV3cxX7i22u3w6oh
+	idMb4zAP4D9NXHjfW06xSncmEE8dFguU7xb2PvjwtbiXOAy1mVkAVm19RdQnvw5IR0wBWpqAhlQ
+	NXXcUQChRjynL/eZngBfCFEahLj5PmMbmHMJfuquaLAHeiCOOfLLQBxBtEFnIvZOo25Q==
+X-Received: by 2002:a05:600c:3592:b0:485:3949:e5c6 with SMTP id 5b1f17b1804b1-48727d5943dmr224717805e9.3.1774873049105;
+        Mon, 30 Mar 2026 05:17:29 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1373:4b01:cc61:7bc9:bea5:a415? ([2001:a61:1373:4b01:cc61:7bc9:bea5:a415])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43cf257b72dsm19142291f8f.34.2026.03.30.05.17.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Mar 2026 05:17:28 -0700 (PDT)
+Message-ID: <5717b2f7-1f8c-441e-b905-f6fc8aa00eb1@suse.com>
+Date: Mon, 30 Mar 2026 14:17:28 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260326100010.3588454-1-amadeus@jmu.edu.cn> <20260326100010.3588454-2-amadeus@jmu.edu.cn>
-In-Reply-To: <20260326100010.3588454-2-amadeus@jmu.edu.cn>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Mon, 30 Mar 2026 17:45:51 +0530
-X-Gm-Features: AQROBzB-LqUMsU7GjSBa2raN-d9hzLimLXCwAQc0Z2nOV4SZWTpS5pDRv4Qty3w
-Message-ID: <CANAwSgRO+mXtc09D=iVb1kvMHpkdekiwErRXZGoLYrwNtMSZqA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] usb: dwc3: Add optional VBUS regulator support to
- SpacemiT K1
-To: Chukun Pan <amadeus@jmu.edu.cn>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Yixun Lan <dlan@kernel.org>, 
-	Ze Huang <huang.ze@linux.dev>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, spacemit@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: UAS peripheral with unrecognized TRIM support
+To: Johan Gill <johan.gill@bahnhof.se>, linux-usb@vger.kernel.org
+References: <1717beab-848b-4927-8fa5-26fb5ae05495@bahnhof.se>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <1717beab-848b-4927-8fa5-26fb5ae05495@bahnhof.se>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35663-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linuxamoon@gmail.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35664-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWO(0.00)[2];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 4DC3535AFD5
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,suse.com:dkim,suse.com:mid]
+X-Rspamd-Queue-Id: 38F8335AF60
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-hi Chukun,
 
-On Thu, 26 Mar 2026 at 15:32, Chukun Pan <amadeus@jmu.edu.cn> wrote:
->
-> Some SpacemiT K1 boards (like OrangePi R2S) provide USB VBUS
-> through a controllable regulator. Add support for the optional
-> vbus-supply property so the regulator can be properly managed
-> in host mode instead of left always-on. Note that this doesn't
-> apply to USB Hub downstream ports with different VBUS supplies.
->
-> The enabled and disabled actions of the regulator are handled
-> automatically by devm_regulator_get_enable_optional().
->
-> Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
-> ---
-Reviewed-by: Anand Moon <linux.amoon@gmail.com>
 
-Thanks
--Anand
+On 28.03.26 17:23, Johan Gill wrote:
+
+> It would be nice to have the adapter recognized as more capable out of the box. Should I aim at patching drivers/usb/storage/unusual_uas.h?
+
+No,
+
+because
+
+1) we cannot be sure why the VPD is wrong. Worst case is that it works
+on some devices, but not others and the vendor is conservative
+2) this is a SCSI issue, not a USB issue. Storage and UAS devices
+can be real converters to a SCSI bus or device enclosures for
+arbitrary disks, whose capabilities depend on the concrete disk used
+in them
+
+Hence this issue cannot be solved at the level of UAS. You need
+to get a quirk on the SCSI level and discuss this with the SCSI
+list.
+
+	HTH
+		Oliver
+
+
 
