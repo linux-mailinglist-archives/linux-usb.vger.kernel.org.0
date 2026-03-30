@@ -1,200 +1,147 @@
-Return-Path: <linux-usb+bounces-35661-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35662-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KN/TJIRiymn27gUAu9opvQ
-	(envelope-from <linux-usb+bounces-35661-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 13:46:12 +0200
+	id GPk+APViymn27gUAu9opvQ
+	(envelope-from <linux-usb+bounces-35662-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 13:48:05 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 483ED35A7A3
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 13:46:12 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C93635A837
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 13:48:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id ECF1E302D96B
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 11:44:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F1ACF305F194
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 11:45:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 159873C9422;
-	Mon, 30 Mar 2026 11:44:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BC293C5525;
+	Mon, 30 Mar 2026 11:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="HIkJbBz0";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="kmoXuNBD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QrP9Nzst"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D3333C7DEB
-	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 11:44:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED3413C6A2B
+	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 11:44:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774871046; cv=none; b=lgosGnfJMWA83DXGNOI5ZWq5AkkTEP2/TNIS07YYNNKrqXBGeAxu3/OS6TMSeopGOsgo1nEwGgLlaihQU0p2Y9GK0t9o7XX6aRdsU57phOWpHQbeCJKrJjEs6RR++4ycj5GvX0+jhxqpZ54vougi1n4Au40kkxxKp3pLMtO3GYA=
+	t=1774871099; cv=none; b=L8JrJUvG74tpgR2D1xmcIBYN/NpSLV6ABsm7xsmIrs9DzFABjQG3iQ+pHpj1g5hrQQ7dv5zjhfEh0NXDOPvtdjqIJHmuztphEbEGqI+jSwfXS2MNB2Rt1XWeziTUFBzNNYOxhHTYAN/KaOimm5OTUOABDCELHur3pt+wnNsGZac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774871046; c=relaxed/simple;
-	bh=rDDAI35LwY4vdXtKXtWrH9zP1Q0+G4S6xmDfjJPBWzI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U4PgUTNLKyo7lMwzAFWQms3dKxBNq4D0gt30lypFV0vHanFNLYlhzsFNEMIwL4dN5etjsO+wnPvthD+D7FnUtXjmMeZxXv/cD2mWbyHuvbXFENm2olvHkuv1Pp4kb1ewHR/aDFtex/CJVXbDMzZKzz6OBvCyyKG22Yf0B5HsJNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=HIkJbBz0; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=kmoXuNBD; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62U78Vb54162066
-	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 11:44:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=r6RhkK89kHSOIpO38YTi9tc2
-	C368dXy4c8JlsfP3zbY=; b=HIkJbBz0ieHVIoGCufLPm64hoN0fXYu20kQJOVtF
-	AmId9raNPnNU7EVev2gFirfDlHZ7dKyStwIkMWVuL+Ok8wZdsSr58K/fbwtSIlC7
-	AVwi2NFc9CEDBvJ/FxbXXOY6te7RiuTCZZVRLzCsfXVsoNMtPJwFfB5jQU1eRjXP
-	3z2FuFl1hJR7b1QkoXPEsym/SR6bdH5uaFcrGuB6eu4e7SjP+12Q3mSLfUsneREE
-	8tCi2orf5r3nsjtHPma02fH/VvvOoDjUrYuw8JwZgqDF25BJM+s/9mgLp0EXSzly
-	cbB6BFLsMCObTPkS6Kd/iNRIl7e3EKETNWN6UmGGLlgjVA==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4d7mhas1y8-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 11:44:04 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-5091327215dso88525631cf.1
-        for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 04:44:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1774871044; x=1775475844; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r6RhkK89kHSOIpO38YTi9tc2C368dXy4c8JlsfP3zbY=;
-        b=kmoXuNBDfbw2rb8k7jhU4mKSHwOnP7XqiF8MsgiMmXVm7xtQf7iFrnHvuOqNwFXzg+
-         lguZR9wOEGv15eQlFiMhPEirnCh4FlX+9WWsDOA5ybtLAmIYQ8rXc5wuMlOIvz1URXdE
-         NKlCTdEl4bxDONXeoZt+EodFK13tvpiMx/Yu1R7vTY8RwKJ3qyuM8iGmdm84I6SOc4Dz
-         y7QrjQZD3o3d0zXS1VU9OI2UE6LbrHt5Zhm34+v6fuCLPes2PFoAfp7ovHQABLsSyEj+
-         gQx9MIpnuGD6NAboDGXHL/pMdrGG9/lxmS4oqfP1Tw59PnF0d1kBDaKE6FxUXuogVZUh
-         VnvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774871044; x=1775475844;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r6RhkK89kHSOIpO38YTi9tc2C368dXy4c8JlsfP3zbY=;
-        b=jCpNG2iKsv1C2p01nEBagNbyaT+Y+zR3VNnzHe2+jNRNotnb5i6O+nzYPulLFeS3eQ
-         +hgtu05yvxWa5BW53ZZ1dnOQoYguPldYY/Q0lGOXMirtj+OPOl3xaTASUyrZVqu7htho
-         AyZ5Tk+ztNjFkkQpW/VnfNOde944Y/WDqT17zGW4hwpgOU8aGpnslLyekV3LuLy06IHo
-         BirXZVspWpHbyCdj50haoI9Ak4kOqIKqurFgIMIyn+MpFTfbjafp/XNWqhK3BHEWLTZe
-         etokWCgym3pX7UIxwbuCspNxyRIiLKSVkGw5XZkfqCFbkQuazVa1spLOBPkE3hoPUd6A
-         X5eA==
-X-Forwarded-Encrypted: i=1; AJvYcCVeXvceqRHcTayBBLXUE6ZfcYzgcRh2PJXn+dc1tabmQ2JuyzBLl0voFWvYNKc1v/u0sWH+9fZgB8M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4FhXtc/sGW4Do30pOnfZ7hX0Uwo8KaLXOezV//TuGp/KpVFUe
-	JwxPf0i1R70Fig0KQf9hErRtvakCGirSGzEmhmawt7ZXCxPGAHOLZPyGpp+DSE9WV9iBFNWIYva
-	KHQeMz/BWoLYKxlczRcHvaLTFf+CNhMlegBo1sALrLlRVEcwpK9M6WJT323Bl1KU=
-X-Gm-Gg: ATEYQzwnfUt7psLQOcjg7CAOrLuYqKHKAaLzId1N037TG4vm0Qkz2e6DN6vp8MFkWMI
-	wY1pQMIkML4CQqWgdTXaVTQwW2oSK10vN2Ulqq0EzYR11hI72rTZYxsqaFKF6k8vNmWuL4RS/AM
-	hpN1sPc7JihLAif6YxMFjSyUNPeajtZ1XmUJ/F+5MvlfrKYe3Rz3QsW3qMPK92i23NWPcIEYbHa
-	IOjfbBCqquXJ27gPTeL4L3DFFq2Mi9ISIoCSgrYVkJfaVlBcUsT9q3hTYheqbpaF06zWvnFRvCF
-	pkjF33eSer8KZy1G34Yxm50Ls513ko1no97UsuCB+Q78zVyLud9gFc2DvSB0dU8X5/kp0cJi+/0
-	Pq7I2rcvidf5rJizs2T4St0L7jTLnbmxlB/U0PIU/2HXVrvG8Dm6h7Hw4qpwVisfCus7NwbOFHk
-	I0CxTRBeqleZyWMC5cT9mLWKqrN7tcMAf3r8E=
-X-Received: by 2002:a05:622a:114f:b0:50b:54f5:f769 with SMTP id d75a77b69052e-50ba38098aemr169211801cf.14.1774871043746;
-        Mon, 30 Mar 2026 04:44:03 -0700 (PDT)
-X-Received: by 2002:a05:622a:114f:b0:50b:54f5:f769 with SMTP id d75a77b69052e-50ba38098aemr169211341cf.14.1774871043306;
-        Mon, 30 Mar 2026 04:44:03 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a2b1403e64sm1613119e87.30.2026.03.30.04.44.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 04:44:00 -0700 (PDT)
-Date: Mon, 30 Mar 2026 14:43:59 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Pin-yen Lin <treapking@chromium.org>,
-        Chaoyi Chen <chaoyi.chen@rock-chips.com>,
-        J =?utf-8?Q?=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
-        Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v6 2/4] usb: misc: onboard_usb_hub: Add Genesys Logic
- GL3590 hub support
-Message-ID: <yuefg36ebldf3te554fwb6jo5h7gwa5csvubzqhhypbjnyxi22@lhfs2x27mtdg>
-References: <20260318040644.3591478-1-swati.agarwal@oss.qualcomm.com>
- <20260318040644.3591478-3-swati.agarwal@oss.qualcomm.com>
+	s=arc-20240116; t=1774871099; c=relaxed/simple;
+	bh=2gwNHPgx7diOc+6eOq9eGZo0wBqjAvb/jUl9K0S1PhA=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=B51lAnH3qHtVQR+MeF9tfoN7/bcNFdKB1j5rvVpIofr39hh6rfY5bM9GDiR+sMWPlY7jfqKWk+eybtKTkYJDcXVwH/PkWGe/Adxfynci9mQsRInCtAOL8kEFOMn2j/1Bme8ImxKmdLfq8Bl9aKCXkeRFiobdKzHxw1cdXxPpswk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QrP9Nzst; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774871098; x=1806407098;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=2gwNHPgx7diOc+6eOq9eGZo0wBqjAvb/jUl9K0S1PhA=;
+  b=QrP9NzstXI+BKZu3S5FK12AeaH8uVrw0VFUA5DsYhEjvV46PmzrAWvIb
+   7soXZKqewPN5JVkcUuWM2IWD3B5TpyHBw7N+UAfq3J938/wyixM7OyFiu
+   oxtWVxM/SDfcfwCPJB53wkBiBiP7ZrVnJSl8mptHdpp7eSQI7X3MGXHXs
+   qE+X13osE2sUodDj8D1sh+CTJUdwrFhwzwxqQhVLYYeiFcEjVlxr1ODKL
+   uPFREVBblI3OtrYQ+NZdNFccmj/Nr9C4EY5pID/ZLdlJcyXWi5uc2NA9R
+   ZVyzUizDdNeoljGhmp+fNAbb+ilW+gLHrc3Q8JfMLtJ0/5GkBQYXP/EU8
+   w==;
+X-CSE-ConnectionGUID: E0sNAEucS5GybUr11ao7pQ==
+X-CSE-MsgGUID: nnvDPoRPQyGoj22Ory63ng==
+X-IronPort-AV: E=McAfee;i="6800,10657,11743"; a="76053014"
+X-IronPort-AV: E=Sophos;i="6.23,149,1770624000"; 
+   d="scan'208";a="76053014"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 04:44:57 -0700
+X-CSE-ConnectionGUID: aWy0k28tRxCu/J+L0mxqpQ==
+X-CSE-MsgGUID: C9d2karvSNezUFooL0iDBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,149,1770624000"; 
+   d="scan'208";a="225208921"
+Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.94.250.130]) ([10.94.250.130])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 04:44:56 -0700
+Message-ID: <3778537d-6eee-4f62-a851-6259199ec768@linux.intel.com>
+Date: Mon, 30 Mar 2026 14:44:52 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260318040644.3591478-3-swati.agarwal@oss.qualcomm.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzMwMDA5MSBTYWx0ZWRfX/4qFMatpEH2m
- gjP0RvfJrF8cBnyfM4e6Pm8pcDoUHf9CEljumUFGbxf5ISk9HzCBBleoKN6DyJlcLPcTsJHptzR
- OOBxSycM68AWCVTULwSUz9ofVB8HdCPjzPocbLvCWuzrBhzqvCdt07eaPFGfxzG9zAe58/PwvDF
- wT7oe4XydrJwfW/ZjbZGrvBe37Alvf0plFCH0Vz7fTU8j4FrcnMqiu+Pju6/yYLBtYflSuzqSb/
- omLWr/Jo2akjdW/aB6Ds7UObJBOWLPE1NXslwR5KX4oHQHExJSFuWbygubeCB6qkaW9xliTqjhG
- l7w6qrqBnQb76RgLw3onhT4wlCr2A2cLeQltIgg7lPry5XibS4lOrnOWJ4696PEMxJLgfUVqKBX
- cgl08DM+mrwZ4bmvQmNgySER8yIxIyamN/nyOhsLaz7Sp4f3QlyTVS8dKgMNpZviN4fMG4lgAJ9
- cbdyhtq2eQCyJHZ91nw==
-X-Authority-Analysis: v=2.4 cv=Fbw6BZ+6 c=1 sm=1 tr=0 ts=69ca6204 cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22 a=EUspDBNiAAAA:8
- a=X_ZM2WFtZuAqk53pdE0A:9 a=CjuIK1q_8ugA:10 a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-ORIG-GUID: rlTB6IgFYGtqL2yfcOOfnwotN13QzIy_
-X-Proofpoint-GUID: rlTB6IgFYGtqL2yfcOOfnwotN13QzIy_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-29_05,2026-03-28_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 priorityscore=1501 adultscore=0 impostorscore=0 clxscore=1015
- phishscore=0 suspectscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603300091
-X-Spamd-Result: default: False [-0.16 / 15.00];
+User-Agent: Mozilla Thunderbird
+From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
+Subject: Re: [PATCH 8/9] usb: xhci: improve debug messages during suspend
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org,
+ raoxu@uniontech.com
+References: <20260327123441.806564-1-niklas.neronin@linux.intel.com>
+ <20260327123441.806564-9-niklas.neronin@linux.intel.com>
+ <20260330111421.65c2eb06.michal.pecio@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20260330111421.65c2eb06.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35661-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:dkim,qualcomm.com:email,oss.qualcomm.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dmitry.baryshkov@oss.qualcomm.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-35662-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 483ED35A7A3
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 5C93635A837
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Mar 18, 2026 at 09:36:42AM +0530, Swati Agarwal wrote:
-> Add support for the GL3590 4 ports USB3.2 hub.
+
+
+On 30/03/2026 12.14, Michal Pecio wrote:
+>>
+>> Currently, the SRE error is only observed and warning is printed.
+>> This patch does not introduce deeper error handling, as the correct
+>> response is unclear and changes to suspend behavior may risk
+>> regressions once the resume path is updated.
 > 
-> Signed-off-by: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
-> ---
->  drivers/usb/misc/onboard_usb_dev.c | 1 +
->  drivers/usb/misc/onboard_usb_dev.h | 8 ++++++++
->  2 files changed, 9 insertions(+)
-> 
+> I think patch 10/9 should add setting xhci->broken_suspend if this is
+> detected. It's ridiculous to try State Restore after State Save error.
+> At best, it should fail. At worst, it might not fail...
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+I plan to follow‑up with a cleanup/optimization patch after this patch set.
+(Forgot to mention this in the cover letter)
 
+The primary goal of this initial patch set is narrowly scoped:
+to change resume handling from a full teardown and reinitialization,
+to a minimal reset‑and‑restore flow. This has a higher risk of triggering
+issues on some hardware.
+Because of that, I deliberately avoided refactoring or optimizing
+unrelated xhci code in this first step. Keeping changes minimal to helps
+isolate resume issues, if they arise :)
 
--- 
-With best wishes
-Dmitry
+Once this new resume path has had broader testing and any regressions
+are resolved, I intend to follow up with cleanup and optimization patches,
+where the surrounding code can be refactored with less risk of obscuring
+resume memory state issues.
+
+Thanks,
+Niklas
 
