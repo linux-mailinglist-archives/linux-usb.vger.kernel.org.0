@@ -1,177 +1,193 @@
-Return-Path: <linux-usb+bounces-35641-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35642-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2PZ1ODslymnX5gUAu9opvQ
-	(envelope-from <linux-usb+bounces-35641-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 09:24:43 +0200
+	id gJv4HZEsymkA6AUAu9opvQ
+	(envelope-from <linux-usb+bounces-35642-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 09:56:01 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E309B356684
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 09:24:42 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEE9C356BF2
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 09:56:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E63E93007AD7
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 07:24:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B63163094248
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 07:50:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB4153A0B1A;
-	Mon, 30 Mar 2026 07:24:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DE363A9014;
+	Mon, 30 Mar 2026 07:50:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=moxa.com header.i=@moxa.com header.b="BMVNYfrT"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="YJrGmy8G"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013004.outbound.protection.outlook.com [52.101.127.4])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A5F314D13;
-	Mon, 30 Mar 2026 07:24:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.4
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774855456; cv=fail; b=n0Uu3JphnnX9lRfWJxonuQMoxuaaILcXCL/eUCPuUpmM6apHVGkvsJqs4wS0TOGaMPoGGuoA2YhUHi8orG3k8+Y1GSplCAbtkL2eRmPlN9gPzCJUEa4AnWAxHejvI/c1jXXetfC5vMq7/i2B4cl4r3Av3dS8TA5a/iw9sY2elys=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774855456; c=relaxed/simple;
-	bh=D2JDKXMwTECdHQdRah5ea2dcFPfyCyzeUwLt07bWtGs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=BgejsjoHFAMNApZ++15ajtYUOYevtpnI1RwCuXY6ezrQdtyUoNVb3dwHQhO3/ZSlOPl6MVo0+eTjQKD176kRfYzZ8/5nR+EkfPxDo5mM1lgfa9oc6t8Adl1YaaihUslyCvBkE6dPCi3OlC5Tb68y7keoaW8rXB6UKnDeE3wigWY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=moxa.com; spf=pass smtp.mailfrom=moxa.com; dkim=pass (1024-bit key) header.d=moxa.com header.i=@moxa.com header.b=BMVNYfrT; arc=fail smtp.client-ip=52.101.127.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=moxa.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=moxa.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vsddQkwJisdGpr87n5MJHADJdze9nmLXwZgTc6BTPnoR+YIetC7pF1TwVi7nN3Bfrqbz/6VMdDK3r7k6ib+Av1JDfZ2hMCBnQVoNrAFVCzCh4tvEoifp8wbXfKqic4MwqxfX+PmqmwxIr9xwvo2do5G2S2qtF3rV0j9PA5eJJhKGSE/khOdHOWy8c/j0C4oXl5lGvsLjSyg0qsnTK+kloJLENDdXmNeeaWcag0/frLOamrm8eNH6/NP8yisfes4izspZZKTDfaxpbLEnDcxquj7TDss0O+7mvGVJsFzLlR/KX8qeIMeVElMVVHJAgXFd7ETKYE+/1tRQkJP+dfx31g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D2JDKXMwTECdHQdRah5ea2dcFPfyCyzeUwLt07bWtGs=;
- b=Qy2YhT4kiOXt40UuMeplNiVzwNaPAzH+p4r/sjGr4NB/xBv7kiBOOd4Py/EinIrO5boxvoYXV86u6+yk6ycomm24Mdw5M+IKxYTrq3Ql6Q3LzXYjZCQ0K+bAVaI1V+smT4LRWXDg0hCgQbLvZ4UK3q2xDgXzV13hxx8r9nEX46YjqA5+LW3zGrnGQOSqfOtZ0H+1ayk5OrUOwJ1YrwShJOp/JeqQKf74MQPMfZW3S58vsDJX7guxM47kQri+IwCbOrL5bM7dXiFn83YPf+dwMaSu8dq2OMQlcbcbHE6jHQKysbnI7qoKudnQQ+l2ExqPdHTpnLPV0PK9MTLuzeA63Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=moxa.com; dmarc=pass action=none header.from=moxa.com;
- dkim=pass header.d=moxa.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=moxa.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D2JDKXMwTECdHQdRah5ea2dcFPfyCyzeUwLt07bWtGs=;
- b=BMVNYfrT55bBNO0N4IJUWNBx1ooE5Vj6Qh6/6N96V8JAo3oF/qUR4wgJCRahSMjHvJ6crs6gajYDLIXYQ9z3ZuW8Ucb4Hjes4uvh6Y/z4Kr+a3a/LgHAMw1NfhQSPfUxO73aSruJxCvlqMKJB5L+8xrAQctIgMZ4uOu79Fd/31o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=moxa.com;
-Received: from PUZPR01MB5405.apcprd01.prod.exchangelabs.com
- (2603:1096:301:115::14) by TYZPR01MB4848.apcprd01.prod.exchangelabs.com
- (2603:1096:400:284::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.28; Mon, 30 Mar
- 2026 07:24:11 +0000
-Received: from PUZPR01MB5405.apcprd01.prod.exchangelabs.com
- ([fe80::ae38:e821:cf7d:3717]) by PUZPR01MB5405.apcprd01.prod.exchangelabs.com
- ([fe80::ae38:e821:cf7d:3717%4]) with mapi id 15.20.9745.027; Mon, 30 Mar 2026
- 07:24:09 +0000
-Date: Mon, 30 Mar 2026 15:24:06 +0800
-From: Crescent Hsieh <crescentcy.hsieh@moxa.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Johan Hovold <johan@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/4] usb: serial: mxuport: extend MXU50U support and
- runtime controls
-Message-ID: <acolFoqcYDuxwmPX@moxa-ThinkCentre-M90t>
-References: <20260324035041.352190-1-crescentcy.hsieh@moxa.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260324035041.352190-1-crescentcy.hsieh@moxa.com>
-X-ClientProxiedBy: TPYP295CA0053.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:7d0:8::10) To PUZPR01MB5405.apcprd01.prod.exchangelabs.com
- (2603:1096:301:115::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1C633D4E9
+	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 07:50:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774857037; cv=none; b=QaeegfD0NzO21CYZ6Ix9eU4F6D0AlI6+rLpl5jppEvaWa5mUrHMWElKpFpQZFVZ169vkHg93qQ+wiS0MMODSp0UOfEWpJVfDAPrS+XBWyIuX778GZJqYPcSRakOGFkY9Wm4MFb85IEiUdI9a+Hbg2ZPJR42yVC6Q8E7W3dM2mfg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774857037; c=relaxed/simple;
+	bh=W+Xq3uqQfC7cWNV6p0E+iHO/A0FKPjAynrOVyWdSkLw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=ZC76z55dcycoBLCfeH09JARsWb3SVE0Ic3CeqNiiMxdNxzebFR1oH7XZwYFStBqmy7xBbtHHNEZnfRRGONvLLYMaJqz04+u83vnh9MRj2Al4DgnjVtJfDVKicek+iaPFQuBgTmJ7Fk+C6+p0h6y2x80SbnTRa4MpEpA4qJYKwAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=YJrGmy8G; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20260330074420euoutp026b4013c5868f514edbcb40be6dafeb01~hjrqW96DX2726227262euoutp02Z
+	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 07:44:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20260330074420euoutp026b4013c5868f514edbcb40be6dafeb01~hjrqW96DX2726227262euoutp02Z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1774856660;
+	bh=9QPMkW/TQgAobnAcPDNit13NRu4FKkyV5RCLsq0khvk=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=YJrGmy8GvOM3mmyK9kws4zdWGH1dA1A5Md3L+uoa7kf5NvPELnf3Rt57mYaxlDG6t
+	 2ozhEK1FoWFGq1mvVoca4CpOlr/ImI6n+8NjrlUk96uadGEUy3tWeR/tKpv7Ran/pu
+	 T8if3cS6Q8XI76uQgyu+XJnrqBi9AtDPw/6mAUHY=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20260330074419eucas1p1cb351a1eec598b99842de25cb754e135~hjrqEFclI3155331553eucas1p1k;
+	Mon, 30 Mar 2026 07:44:19 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20260330074418eusmtip14412bd6a1082ddac8ec5e8950d587f4f~hjrpFeoW32902829028eusmtip1T;
+	Mon, 30 Mar 2026 07:44:18 +0000 (GMT)
+Message-ID: <6270d4f0-85e4-496d-8db4-87ccb791ca4d@samsung.com>
+Date: Mon, 30 Mar 2026 09:44:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR01MB5405:EE_|TYZPR01MB4848:EE_
-X-MS-Office365-Filtering-Correlation-Id: 208b0593-77ee-4a79-47fc-08de8e2d5564
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|52116014|1800799024|56012099003|18002099003|22082099003|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	5izPX65EZD7uFHro9EZ5CdP5cPTnhSAfbikDa5Mevxat078Lx+6Q4tqIp/t4CQlXlLN5E6I0KpemsIVyXYxJoRZMmFwkfxpkG/TfG/c1QZYBa3pB/3Ff0wtQvfzmPn7HcweqtSR9jg4UclNcM7pTF+n31yZptZ8urLVMlGVBNox2anZ8lT8nd31hIulrvxAy/az36yW2gw+LJqVuaMGiPMHFngBT81oPveqztGcdgDLJvFQ6Z1BigyK+pq5RQktvs5VfNpvTBxmRMzHm0XbntqJE7pw7QWRpglmS7gKMaVAJiF9d0DwFMwbpaY5sxDXcU/EFnfapRdxCXyq7R9pl9Fs2XD2qWhEETqgwnhlOpe0jAdB1XsbFpaqtW5pwBntig9XousGTSEGefHNGwf0HpVBGlg+Gbg/CMw0o1gTX7SzADVuTprO2d3V/jKd8Rn9R2m898v2xAyBdY8Nk4rLo9pF0n28eJHchm9PG1iVO3W/LMRpaRAiG7it44PS3hsJXLdUXQebttvy/Dw6IOLiI093mxBvKStbeLjmkGCS+NAdeQWr/hXkV3zURWDNThWvrtrVJlCcwfSv4ZV08bnovATpn+xLp5OANgipgx7vXdIZVAIS+B9VSD5HN1gvbXzR+Ifb7Y/AQefDJjaH2sZcHCXo7Tu5MlYCEl7Q1IVkEUh9/iuF81z4PFABYePSX/eZvUu/0Eibh0UWJVqX6Oppij6GNelo3O+JMcaf46vo0GbB4eD1x/9TG+klvf2N5BxXisyfsVzd8L7KBiS9cfRHXV5QbdGrypn5swxSBF2G1B+k=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR01MB5405.apcprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(52116014)(1800799024)(56012099003)(18002099003)(22082099003)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?mr+gPhn2umBrlWizEFuxti+ih0t/250dZcr5FlvVxO/1pc80H3zFMO27gxJ+?=
- =?us-ascii?Q?fdBsWS22yQtmQ2dW8wqKTYMY8R1D2aq/1kM7+ONBLk/T7RWUujCAlxN7Tdyl?=
- =?us-ascii?Q?ZHh7m/T0bI/Lpb8sRPmNE+qRFi6ZuvwnVyzYnhxZkIMnbNbjaY3b9Im9jBJJ?=
- =?us-ascii?Q?HJjOsO0E33vwRNFQo1/maxxC55u+RvR5QtNm7yXY97SUX1jEYp+EL18SW+/p?=
- =?us-ascii?Q?DZb46gfFYOXrwJ1GWK4H4fIGR2/SSbnNboJPTs1Ql31MIL9yiDRFdWa4VEXW?=
- =?us-ascii?Q?j+PWcOs/3akmGg1hDah/D4IAANN6T2CDAQSgwXMdjuMpWEfDdKpQlhVLizfi?=
- =?us-ascii?Q?n/eoa41QYAj1tA1R1t3ldDrZdNHbPWfq1vhQ+JPnwTxkkapKrA+KhBkj4+7M?=
- =?us-ascii?Q?GwMTCEYh7/Ar4rZWggmSAkJDNdRfPUirGcHetMORk2Z/y0SjPvCFccCNd5tz?=
- =?us-ascii?Q?9QQjV1mmqyp5oimAX0rpMhhPmYRkjGR3EI6NHe3/fA9mvVv+roIhANdEtppX?=
- =?us-ascii?Q?MXX8+srdpSK1jVZ/7gKKnlv9f0eKki8r4oCKYeKjXWiqTtTJ9tKnMM/BELcZ?=
- =?us-ascii?Q?s4uzch1abH25+NFkqlKx5dX6rC1FgyFrtFwBVud6TbvhYdsphbeTi/6fhUVC?=
- =?us-ascii?Q?f84fLSzpjzRv6ja3jQIa+Hza5unPEs9lbczJwqxf2LXqKcRghgnOL1OYGJy9?=
- =?us-ascii?Q?X+96Vm9Beljm3HMT1e0Hunlvj4O4dMVnJEEXlHf++3HIHrlA1iiIkGuzZvaB?=
- =?us-ascii?Q?b6MnQqg79Lkbp2XFNMLzC4hBK1PJWd1n5Rw5swGdSwez4KLnvT1eIla9LHes?=
- =?us-ascii?Q?EDDRzK4k2qD/vR48zpB5v7eBGDRAzPDcwPy05qzvfwrO27/PEf53eV/bTOiH?=
- =?us-ascii?Q?aU9buE/19edSziv9a2hKvkFtMKKJtzdrDq5KbFv9t1DOxPN3oBSj5zwllrZZ?=
- =?us-ascii?Q?b+We+jn738NDtCoE8c2C2edDznKh731bW/nRXXru8c+BXkSWktogbPGRincu?=
- =?us-ascii?Q?HJ8CPy5zAMgXHOm0Z+o+4vvYMv5gXwlGOq5wxe5vRDWu85Ehx/1pTy9F1rAw?=
- =?us-ascii?Q?VkQ8lMLbRH8574QnJ9V2fPIxiVui6sWaLlicbUUtNbjyYi9jxl+XRB4kqMTA?=
- =?us-ascii?Q?a+tTRd8svnojlCEFu6koYVeZPj9AnDRUJoXBHxd/E87vBT2v85D6r8airXVy?=
- =?us-ascii?Q?yx8Lt5OL1Q+nVBhdmnLBmThbdKlzuy6bn/cfzERtfdK3xN7LS9wOJGoFeQoy?=
- =?us-ascii?Q?YydKlvRbAL8UCuU5htCj1JC/lOtU9OwJBP5uD6dGP0QRuRJjT0RCcK/GLadw?=
- =?us-ascii?Q?kle0gQQIKrWwxWiyP2oVtfU+mQPHtIWoVmE9EPsRHxipfHw+XAHUW2I64KAm?=
- =?us-ascii?Q?pOXwc9e/Ymvk8EUqOyuiqf5Uplo1oeuk0gjz54I37+QaNGo/kzWjZm5VI6TF?=
- =?us-ascii?Q?VMC/x/cls7HZvxbv/jLL2QNV6iTupzhUGwI85Dz3E0O7vQimscdr3PH6l8oo?=
- =?us-ascii?Q?KUiq5E6szWZBfDp0DQfo3ANMiJTqr8jPyKGaRHiEnhb7WUJhqikFwh/igGts?=
- =?us-ascii?Q?xNa/C9BQSKK+kYk088wtkQLSwYZVdesuhOj5CCocF18Q+0udkifkhbFPDG0I?=
- =?us-ascii?Q?OALHUkmPcz/mhQygemAxRvTLAK76amDYKMXgiL3tbEmVgGS17T37pTNVghxH?=
- =?us-ascii?Q?aNPq/Aze0Qrfk4VZ5go2gXf+JdSmqQMZ6AYPX/ZcYQZ0C/dXxYqDLwsDSwcr?=
- =?us-ascii?Q?PrlSxFqdrEoZMUZ8wAX9+at7FwyflgE=3D?=
-X-OriginatorOrg: moxa.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 208b0593-77ee-4a79-47fc-08de8e2d5564
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR01MB5405.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 07:24:09.3040
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5571c7d4-286b-47f6-9dd5-0aa688773c8e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rHK7TlyheyMNysIfdw5uaiF1S3JNEnm+aySbYxqhRm8E30tOhmXp3dXWnGcoykpjBBLwNPmIZjrKaXEpxlGf0V1eTiqSbrHIpVc4GAJqOo8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR01MB4848
-X-Spamd-Result: default: False [0.34 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[moxa.com,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[moxa.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
+User-Agent: Betterbird (Windows)
+Subject: Re: [PATCH v2] dma-debug: suppress cacheline overlap warning when
+ arch has no DMA alignment requirement
+To: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>, robin.murphy@arm.com
+Cc: iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-mm@kvack.org, harry@kernel.org,
+	vbabka@kernel.org, akpm@linux-foundation.org, stern@rowland.harvard.edu,
+	linux@roeck-us.net, andy.shevchenko@gmail.com, hch@lst.de,
+	Jeff.kirsher@gmail.com, catalin.marinas@arm.com
+Content-Language: en-US
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20260327124156.24820-1-mikhail.v.gavrilov@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-CMS-MailID: 20260330074419eucas1p1cb351a1eec598b99842de25cb754e135
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20260327124211eucas1p10425a28f67736d2043e7e4dd77d58e72
+X-EPHeader: CA
+X-CMS-RootMailID: 20260327124211eucas1p10425a28f67736d2043e7e4dd77d58e72
+References: <CGME20260327124211eucas1p10425a28f67736d2043e7e4dd77d58e72@eucas1p1.samsung.com>
+	<20260327124156.24820-1-mikhail.v.gavrilov@gmail.com>
+X-Spamd-Result: default: False [-0.65 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[moxa.com:+];
+	TAGGED_FROM(0.00)[bounces-35642-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-35641-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[lists.linux.dev,vger.kernel.org,kvack.org,kernel.org,linux-foundation.org,rowland.harvard.edu,roeck-us.net,gmail.com,lst.de,arm.com];
 	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,arm.com];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[crescentcy.hsieh@moxa.com,linux-usb@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[4];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[m.szyprowski@samsung.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[samsung.com:+];
+	NEURAL_HAM(-0.00)[-0.667];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,moxa.com:dkim]
-X-Rspamd-Queue-Id: E309B356684
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,samsung.com:dkim,samsung.com:mid]
+X-Rspamd-Queue-Id: DEE9C356BF2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
+On 27.03.2026 13:41, Mikhail Gavrilov wrote:
+> When CONFIG_DMA_API_DEBUG is enabled, the DMA debug infrastructure
+> tracks active mappings per cacheline and warns if two different DMA
+> mappings share the same cacheline ("cacheline tracking EEXIST,
+> overlapping mappings aren't supported").
+>
+> On x86_64, ARCH_KMALLOC_MINALIGN defaults to 8, so small kmalloc
+> allocations (e.g. the 8-byte hub->buffer and hub->status in the USB
+> hub driver) frequently land in the same 64-byte cacheline.  When both
+> are DMA-mapped, this triggers a false positive warning.
+>
+> This has been reported repeatedly since v5.14 (when the EEXIST check
+> was added) across various USB host controllers and devices including
+> xhci_hcd with USB hubs, USB audio devices, and USB ethernet adapters.
+>
+> The cacheline overlap is only a real concern on architectures that
+> require DMA buffer alignment to cacheline boundaries (i.e. where
+> ARCH_DMA_MINALIGN >= L1_CACHE_BYTES).  On architectures like x86_64
+> where dma_get_cache_alignment() returns 1, the hardware is
+> cache-coherent and overlapping cacheline mappings are harmless.
+>
+> Suppress the EEXIST warning when dma_get_cache_alignment() is less
+> than L1_CACHE_BYTES, indicating the architecture does not require
+> cacheline-aligned DMA buffers.
+>
+> Verified with a kernel module reproducer that performs two kmalloc(8)
+> allocations back-to-back and DMA-maps both:
+>
+>   Before: allocations share a cacheline, EEXIST fires within ~50 pairs
+>   After:  same cacheline pair found, but no warning emitted
+>
+> Fixes: 2b4bbc6231d7 ("dma-debug: report -EEXIST errors in add_dma_entry")
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215740
+> Suggested-by: Harry Yoo <harry@kernel.org>
+> Tested-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+> Signed-off-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
 
-Gentle ping on this series.
-Please let me know if I should revise or split anything.
+Applied to dma-mapping-fixes. Thanks!
 
-Related firmware patch:
-https://lore.kernel.org/all/20260324024635.349522-1-crescentcy.hsieh@moxa.com/
+> ---
+>
+> v1 -> v2:
+>   - Moved fix from include/linux/slab.h (ARCH_KMALLOC_MINALIGN)
+>     to kernel/dma/debug.c per Harry Yoo's suggestion.
+>   - Instead of forcing cacheline-aligned allocations, suppress
+>     the warning when the architecture has no DMA alignment
+>     requirement (dma_get_cache_alignment() < L1_CACHE_BYTES).
+>
+> v1: https://lore.kernel.org/all/20260327055846.248829-1-mikhail.v.gavrilov@gmail.com/
+>
+> Reproducer module that triggers the bug reliably:
+>   https://bugzilla.kernel.org/attachment.cgi?id=309769
+>
+>  kernel/dma/debug.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
+> index 0677918f06a8..1a725edbbbf6 100644
+> --- a/kernel/dma/debug.c
+> +++ b/kernel/dma/debug.c
+> @@ -615,6 +615,7 @@ static void add_dma_entry(struct dma_debug_entry *entry, unsigned long attrs)
+>  	} else if (rc == -EEXIST &&
+>  		   !(attrs & DMA_ATTR_SKIP_CPU_SYNC) &&
+>  		   !(entry->is_cache_clean && overlap_cache_clean) &&
+> +		   dma_get_cache_alignment() >= L1_CACHE_BYTES &&
+>  		   !(IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) &&
+>  		     is_swiotlb_active(entry->dev))) {
+>  		err_printk(entry->dev, entry,
 
-Thanks,
-Crescent Hsieh
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
 
