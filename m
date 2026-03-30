@@ -1,166 +1,183 @@
-Return-Path: <linux-usb+bounces-35699-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35700-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oAUwG5v2ymmlBwYAu9opvQ
-	(envelope-from <linux-usb+bounces-35699-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 00:18:03 +0200
+	id CGJWDY4Cy2k2CgYAu9opvQ
+	(envelope-from <linux-usb+bounces-35700-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 01:09:02 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C5D6361D74
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 00:18:03 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4F65362463
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 01:09:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B12FD303422A
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 22:14:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6FABE304AD0E
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 23:07:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC01839DBC5;
-	Mon, 30 Mar 2026 22:14:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 768DF3B4E9A;
+	Mon, 30 Mar 2026 23:07:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="TN+vEPan"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ApSQSqDC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1B4E258EC1
-	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 22:14:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC23337C90A
+	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 23:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774908869; cv=none; b=nBDTXmp/yKD1TVh3IqOHIVxgeDRx5bqQW9c6a+INdAlX/giv6Jg8XLtr5Ve8a+HCzv80q17TbJN+6yLeHEw3BsgGXkxbBJx6A+JpC8vSGn8F7hDyreLxgH7YLqRPnsVy7QGN+O72rWLM+QpUlWcSjpja2vJSuNgrpyVWB+DizyU=
+	t=1774912022; cv=none; b=tdvW6txpaLE3oowPG2m1Y6JesahUh1uq0eudsmm2C42R+awUtHrKNe6BtcMa4SwPR1n2e0POymp+KJK5aiPyNGQJVeqvCNOZw8JyVsa6WH1yrPevsmAng3mceQdBDqfd5DxLr6iSEldbzIuWr/oO6iy4fyGGOvqrHDxSI3lJd18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774908869; c=relaxed/simple;
-	bh=13wssujQbIyLQCFM48Stg4nMkhMgvIXI0K6eqdMmGww=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hVw8G8SYTP7yrYZvSCh2sNMqhsy776RE5jJlyjcw+KFH5NpHSqeHykoqKPUtkoXCdKULKWcJQrhEsL3TKYexYzU1FiLupfiziE3HDT4EPraX5vzNN8IDEPNROrtLhzTdKkT/1QvpnlfsHcX8RwtOzxg+7VoOHCI8kmyH4LZnoQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=TN+vEPan; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-66a4c6bb6ecso8943665a12.1
-        for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 15:14:27 -0700 (PDT)
+	s=arc-20240116; t=1774912022; c=relaxed/simple;
+	bh=lVi9fbw+5ehLHwAy5mSHqojU6979t7AjxSx8xyHdGDQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=oAy9uMay5+pDjNnZzqn+Q7qXpn61ReInNF9ewGMN0nv30SKCTGpJkuRUAOTGhYfLXtFGD6lF8/vsdPArRmbWtli4fKut/8lsH1A9fkA83DA4K7oVY5vApXzRN/goZg2azRdqhzIT6cNneKaSyMeaiwEnGnmhY2AaPP85dv2TdHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ApSQSqDC; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-48557c8ad47so38445325e9.0
+        for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 16:07:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1774908866; x=1775513666; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sgxFsOJvZ8sXCMbDM96Xr96StQzCVgpxG8bopM7guow=;
-        b=TN+vEPanlt0PxB3Mvg54x6W80CFGCmt/IozkLTKxlCtNfBjAYkKb+AsP/Fo/R4zMge
-         t67/hlp1VLpovDo+7j8cI2RZ3qSpUnzBWJGNgN4gBOuo2UpwNI/31y8XW42eoklUVq0B
-         Qi5rhG7KNQZLLEvtUXovdAw4GQYz9ljJN6Hmo=
+        d=gmail.com; s=20251104; t=1774912019; x=1775516819; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lXlVTZh0nZUrX6/FvVb6P/QWtzXF6yzkjdxzhuy5lIU=;
+        b=ApSQSqDCDjFbKBYazoRTi2isbDwDby/shYtZEPm7QFceMlp/fvAatWRzqJAGyhDW5J
+         tnZjanAte1TFLpQGuNJmOCG4dr7Noz94JbCKQ3vkfrOfVdcdsCl73G63RUA7Z8vKdfMK
+         iGwA55qRMxmWc+Ntv653+XDncoZu8EJDigdJRm4MHHiSJs1bkyDA1dJr1yKts4BjerqC
+         iTd76JlQl/6dVmYuFymZJtgB9m/291FmUbsAZYojWk/KOYOfEmtnGvhrJqkB8Qr4dcR3
+         3Gu6F52Q6naiJYtdnyFhX0XtmCg1kkmqUbbg+/v31SLX1fGrwvqOY/FSDeg/SSmIsrXg
+         OaIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774908866; x=1775513666;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1774912019; x=1775516819;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sgxFsOJvZ8sXCMbDM96Xr96StQzCVgpxG8bopM7guow=;
-        b=ncUs4DglHpKkaDh38z4p+nqL/B1SqrnMybf1nttchbfb1dZoOmC9kwrurcm4XPC/0B
-         E4gOTuM+0HgzSlIHAUso7H0NEpqn7NPMplubLFKIkJt+yHRnUJqVJOzQv0cxEJsXOk/W
-         /ZPCXqEO+J3CMn5DNvLD3Pg+sGXlQm9cFd6NocUqad4nv6YKC/K+PDfOlLHOG20RXZKF
-         HuqK4J5IsA+e9BGjVF12qbha7N/pehZgdW8b0r3K4gnRuxUb6BnM6AI+lAb5EXxDEOn6
-         hq11kSq2E/mRTsTRjOwJ+MpeqtP/3bF4W9P4Y+i8qfDGbEoi+KpujmA+xGcXaXM4Qdyk
-         v56g==
-X-Forwarded-Encrypted: i=1; AJvYcCUd76t9BfFSt3AffXEXvcacn/oPyn7d2k+99qENygjG23P+KcSatQ03VXxfsg9bx/yd5fwrDYUz6EI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6N/iJY6iAC9ckiht3eoFyArZtnC8PZzBuLFce2VpcDmnZNsQq
-	SE2t6w51pwNyg3MQ/08N/miE/sUI5TLl1gQz2mAjd5rpod33/vvZ9p4SqZPAJLVncauZFtiy6IH
-	s4Wd2hrE=
-X-Gm-Gg: ATEYQzxXIpozq3zT961PEbgrjF705hihyAANAUvjZAJnITe/vBwtO9n6QfUJcqconF4
-	N4/kt2oGU3IZx2ygM+4zmJkXPoU2CKHLER/u/aKXlRCRDpl7rIlDKQKuoGOYin4CXx4vgSpy9wd
-	WhscoWbY9NjrO+2X3XuN0pDN1fTPIG/g6mGPG8H+S5hu4U4sugRXmy0FlQXyYiC/Ss2i4HjIP1e
-	ChID0qRl4XdE6Huh1ES8hxi0UdQg7Yaa4aXrqSaNVznUZY84+Q2dYgZ8p+PIaarfEi0YccWKhuM
-	w4DBPglJPZi9oUV3uhquaWWJjulMB/9RNTPxfpWX+zABU7ByOFcBwBYo8wLvL2q9LLOBKnAMOwR
-	qCSBlHxGLuwJJ4So6RBkXFO/LNs/kSPIPsQsG5dS2g9P0H70NtztK6gXyku+7oFK3RKim7UV1tw
-	MT/84UNG8R0TuvbVGDcVYKrW7VG4SoAhmFJyf6ahiWT8CdZg+2UfpwSXMUULo1eVFeXJR/Ggw3
-X-Received: by 2002:a05:6402:51c6:b0:66c:9d2:b208 with SMTP id 4fb4d7f45d1cf-66c09d2b3f6mr1716886a12.25.1774908866058;
-        Mon, 30 Mar 2026 15:14:26 -0700 (PDT)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-66beb2d044esm1757773a12.26.2026.03.30.15.14.25
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Mar 2026 15:14:25 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-66c05fb27e4so1882621a12.2
-        for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 15:14:25 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU46gPdGs/3KZ4ZMLe+IGd6W5Iwx2BGgUVdZoKEOh6Ys9WADsyqDfXNsvbSpwy0ziwS9GURoTBceCA=@vger.kernel.org
-X-Received: by 2002:a05:6402:52c7:b0:662:ab67:a560 with SMTP id
- 4fb4d7f45d1cf-66b28c526dcmr6891247a12.24.1774908864935; Mon, 30 Mar 2026
- 15:14:24 -0700 (PDT)
+        bh=lXlVTZh0nZUrX6/FvVb6P/QWtzXF6yzkjdxzhuy5lIU=;
+        b=fPTEVyl3fXegkkYJvCzoiSbpGfzBd1wW8/PaH+bfddVp80+aISsUXh0yLwdncJ0UZn
+         ZV827aTQ9RZ/j7X5vd98+RrZ449sFBUFXMCWgV4/AXKylRWguGRDMIaoqF/S6WrdxqzO
+         IYRoJLRgYBJgZ4nOgjHT2iqGnz6XbPNkKVH1P9MBnanTb8bk+oRycrhjhWBj+jD1aDoA
+         9D0uUPkOvgToX13Dn8hKbZ846M/zorLuX6XqhngPt/BadZX50OAVSbGL+KK4N8LmcCfr
+         mg7ltfNZr9r1ysI/26jXwj020vzx9tO/7BK71FCTrpgggXEcK8P6AuLmmDe02AY+iQfd
+         DDlw==
+X-Forwarded-Encrypted: i=1; AJvYcCXwjnM2ed4u9yCwo/1lVBa0p3PMSVKiJnQqBPVOXUOedK2tAdIcwTXuPmD87jO2ERioZXWu1QkdqNo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+JYwyejCAkQzsYvhvUYf2nisfrwVWE66p8woppgz68UkvIdXs
+	Gan+TAVw+98L+tPNuYC+IOU3tbrBbRu5m+tSpW05efPkKxmd8wEn/Di8ljKomw==
+X-Gm-Gg: ATEYQzyPyw0lqc1hWprJaepA50NmTrCxzP+YiuoYxyFKEBXcvQEz+WEKnmMNL/GIOhX
+	01Fr0ewwtgaaj2XH+4HY7LVDnR5qCUtw1o5RwXN2o4NwgeqmyXMEAuaE3pUwlvNrvImL+E5UAnA
+	MWlEV01R10pX1Ic+gGyNaYk+rBg7G9BMOU5R7+wjoyAI5aJtWuvsbMbVZCZ579Ej4sG0ZnkgKS1
+	aNuhcItd4kuq9Lv7+bI/898QziN5OaCHqk3UdigaNp0zhizhtkt9jCBpoEMXa4oBqC1lF7sVTCq
+	YtIQhfzB+SvPW3CZgUrOOVQv+Uj+t+iGhmgtmqySizk1qaLuFR2wxEWeDLXK5v8kqfevfGtqd29
+	PXOpHuFiGrucPQHBcJX3d5BTVqnR0UwSFFAjeBVWK/nKT3zJwR28IjCnkWh+EZH8lRwGYOWJJ12
+	jjkWzIuqleN7xjXCJj+G7DNSiR4iGkrOLT
+X-Received: by 2002:a05:600c:a292:b0:487:2439:b7be with SMTP id 5b1f17b1804b1-4873d34639fmr53269585e9.6.1774912018978;
+        Mon, 30 Mar 2026 16:06:58 -0700 (PDT)
+Received: from foxbook (bfi53.neoplus.adsl.tpnet.pl. [83.28.46.53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48722c9506dsm297019645e9.7.2026.03.30.16.06.57
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 30 Mar 2026 16:06:58 -0700 (PDT)
+Date: Tue, 31 Mar 2026 01:06:54 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: xhci: Make usb_host_endpoint.hcpriv survive
+ endpoint_disable()
+Message-ID: <20260331010654.269ac270.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260326131838.634095-1-dhowells@redhat.com> <20260326131838.634095-5-dhowells@redhat.com>
- <20260329121208.6092419d@kernel.org> <CAHk-=wiJ6gEELLviexdmSHnyjVoG7MFo8Qwhd1zxs_tCnL-=gQ@mail.gmail.com>
- <1179840.1774867765@warthog.procyon.org.uk>
-In-Reply-To: <1179840.1774867765@warthog.procyon.org.uk>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 30 Mar 2026 15:14:07 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjDKfhS5TvEfrsOgBgAvFMPfAd3wT=Um2AQb4txHq5sAQ@mail.gmail.com>
-X-Gm-Features: AQROBzC8ec9XUhg2CYF5IFXZ9-klR-Uxedhu4hxXRVBKoiRq4ZlNxeqrDUpLHRg
-Message-ID: <CAHk-=wjDKfhS5TvEfrsOgBgAvFMPfAd3wT=Um2AQb4txHq5sAQ@mail.gmail.com>
-Subject: Re: [PATCH net v3 04/11] list: Move on_list_rcu() to list.h and add
- on_list() also
-To: David Howells <dhowells@redhat.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, 
-	Marc Dionne <marc.dionne@auristor.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	John Johansen <john.johansen@canonical.com>, Minas Harutyunyan <hminas@synopsys.com>, 
-	Simon Horman <horms@kernel.org>, apparmor@lists.ubuntu.com, linux-usb@vger.kernel.org, 
-	stable@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-1.66 / 15.00];
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_ALLOW(-0.20)[linux-foundation.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35699-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[linux-foundation.org];
+	TAGGED_FROM(0.00)[bounces-35700-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[linux-foundation.org:+];
-	RCPT_COUNT_TWELVE(0.00)[16];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[torvalds@linux-foundation.org,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linux-foundation.org:dkim,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 0C5D6361D74
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B4F65362463
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, 30 Mar 2026 at 03:49, David Howells <dhowells@redhat.com> wrote:
->
-> Anyway, I'll find a different way to do this, not involving checking the prev
-> pointer.  What I don't want to do is hard code "prev == LIST_POISON2" into my
-> stuff.  Anything like that really needs to be in list.h.
+xHCI hardware maintains its endpoint state between add_endpoint()
+and drop_endpoint() calls followed by successful check_bandwidth().
+So does the driver.
 
-So i think the proper model is:
+Core may call endpoint_disable() during xHCI endpoint life, so don't
+clear host_ep->hcpriv then, because this breaks endpoint_reset().
 
-(a) normal and good list users should never *use* this kind of "is
-this entry on a list or not".
+If a driver calls usb_set_interface(), submits URBs which make host
+sequence state non-zero and calls usb_clear_halt(), the device clears
+its sequence state but xhci_endpoint_reset() bails out. The next URB
+malfunctions: USB2 loses one packet, USB3 gets Transaction Error or
+may not complete at all on some (buggy?) HCs from ASMedia and AMD.
+This is triggered by uvcvideo on bulk video devices.
 
-Dammit, you should *KNOW* that already from core logic. Not with a
-flag, not with a function to ask, but from how things work. The whole
-"am I on a list or not" should not be a list issue, it should be
-obvious.
+The code was copied from ehci_endpoint_disable() but it isn't needed
+here - hcpriv should only be NULL on emulated root hub endpoints.
+It might prevent resetting and inadvertently enabling a disabled and
+dropped endpoint, but core shouldn't try to reset dropped endpoints.
 
-(b) if the code in question really doesn't know what the ^%&%^ it did,
-and has lost sight of what it has done to a list entry, and really
-wants some kind of "did I remove this entry already" logic, I would
-encourage such uses to either re-consider, or just use the
-"__list_del_clearprev()" function when removing entries.
+Document xhci requirements regarding hcpriv. They are currently met.
 
-Because I really don't want the core list handling to cater to code
-that doesn't know what the hell it has done.
+Fixes: 18b74067ac78 ("xhci: Fix use-after-free regression in xhci clear hub TT implementation")
+Cc: stable@vger.kernel.org
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+---
+ drivers/usb/host/xhci.c | 1 -
+ include/linux/usb.h     | 3 ++-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-                Linus
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 2f7e6544e5ae..849a568d0e63 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -3353,7 +3353,6 @@ static void xhci_endpoint_disable(struct usb_hcd *hcd,
+ 		xhci_dbg(xhci, "endpoint disable with ep_state 0x%x\n",
+ 			 ep->ep_state);
+ done:
+-	host_ep->hcpriv = NULL;
+ 	spin_unlock_irqrestore(&xhci->lock, flags);
+ }
+ 
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 04277af4bb9d..27e95eade121 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -54,7 +54,8 @@ struct ep_device;
+  * @eusb2_isoc_ep_comp: eUSB2 isoc companion descriptor for this endpoint
+  * @urb_list: urbs queued to this endpoint; maintained by usbcore
+  * @hcpriv: for use by HCD; typically holds hardware dma queue head (QH)
+- *	with one or more transfer descriptors (TDs) per urb
++ *	with one or more transfer descriptors (TDs) per urb; must be preserved
++ *	by core while BW is allocated for the endpoint
+  * @ep_dev: ep_device for sysfs info
+  * @extra: descriptors following this endpoint in the configuration
+  * @extralen: how many bytes of "extra" are valid
+-- 
+2.48.1
 
