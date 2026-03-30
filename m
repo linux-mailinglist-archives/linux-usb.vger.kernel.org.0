@@ -1,158 +1,167 @@
-Return-Path: <linux-usb+bounces-35671-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35672-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uDR/AnZ8ymlo9QUAu9opvQ
-	(envelope-from <linux-usb+bounces-35671-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 15:36:54 +0200
+	id ICT0F9R/ymnX9QUAu9opvQ
+	(envelope-from <linux-usb+bounces-35672-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 15:51:16 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07B0D35C18A
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 15:36:52 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D28A035C57F
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 15:51:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id CB7A23040E0B
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 13:30:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 082EA30BB54C
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 13:42:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 514403D522F;
-	Mon, 30 Mar 2026 13:30:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C17543BFE5A;
+	Mon, 30 Mar 2026 13:42:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jmQoRjvV"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="jk9ZJLSj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4201B4F1F
-	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 13:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4CC238150;
+	Mon, 30 Mar 2026 13:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774877433; cv=none; b=Gg6sUqaS9+alrTiqQoFbeZ5C3RQ8R+3fzRw+OogSJ/tMBxXQtwiyUav35Bm9AAUwA0SKAtPtgih1sOeiq5B4oG9tksIRRQwLu3CTcUWW9Tw2hRupwnSjZlPmz7gg0ZvGYITQrnRg+Ue+Yi1E2ZaIw504FElcS0Q25NHM06T7kug=
+	t=1774878171; cv=none; b=XpETNgWxMzKIL4b/B70NVgGz0Mg94PFKgoMoJ0v5dQ3rU43ryeRzH5FCeqgvzDHU7WtDzju1lmfSwChE2Vs0L+VCePRBbcwJDWXyBvKuGsUEwyJEeoj/F23hmGKQ9zUquPlE8+3ItltN3CRxwQi6WxqnrdDeHvWrPaknBD32Anw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774877433; c=relaxed/simple;
-	bh=PWI9pxJMUliAWSxOIp1fSPLGEwUcRFIYY006I5gutzY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FZFVMDBwGaNzHngALzjSS7Wf9eOm5STknsg19Jx/onPXx2Nd06X/m6SHaFnKmR8WfBjIO8ObwvELJRMNAbCrIIorIB6GE4vjTy6gw/Do0K8HqjyEyU/gCDqx4j30vHwX2dvfoWwRoOw6KRtw11vZdsDK/nY2HAw7+wSvgytS0cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jmQoRjvV; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5a13a06fc85so5579168e87.1
-        for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 06:30:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774877429; x=1775482229; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=77WeHT8C34JNWFQ0DtWQQvXMSZXQxoGR8B6oehAckGQ=;
-        b=jmQoRjvVwOVvx6r72QPQI64ow/RiqnyE+p5PAwu+jdfvFRleymitXjvksg+5siCqJH
-         po8FCgj25Yf1EZYgLbW8KaFPpDgrziD/IWpi5OoxsnbtB/hKoOfHvtxMUgCPtqZzSfe+
-         T+h3DamHNJeRsMyZUaZAExSx8PZh5UuKWacCRTuftDMDxLxBtGiluNAHIku5TE7a4CKv
-         /sYauYVYYqgiGfnmCsdnq7dm4f7awud3DmqHAyfKVwxekQRTG4JE53vFA9Owllt33DcZ
-         wAM9dJRB5D1l1HZ2Ht7sZaBp/LLjeElXSWkV3kMbiqj9Ipk+rzHpFUqhng8UKLmUVDU9
-         D8Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774877429; x=1775482229;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=77WeHT8C34JNWFQ0DtWQQvXMSZXQxoGR8B6oehAckGQ=;
-        b=XExxbGiO8xQOhLCwfNCgY6kIu2h23MFZNU3WTRiHcY/tB3ebtFk7L7UpOBvIs0txiK
-         mJuGWXMpAFJM50snA4kMIbXh8kmxXkLjWvSRMtljZJjpTIFAa6mIoVV9/TvyA3Xh5aPl
-         NkrWVdEUpocL3TiVVpbltd51glMUCfc11C3GdLbkTRtzgQC0btFor2Rt8zwjzn3k+xBo
-         RKSYnne9TPp6YeS/1MZP7aKbo31t/kkg9HYpIh/GYYuxJ4jDx9PRlDv6Gq4mg2LHfjDd
-         Omdz2JQmw3JolYSg/NqRM1y5o2QvUwqXi0zDS5slNfYAuhjKgc4mL5gdBti1MK4S16fv
-         wt9g==
-X-Forwarded-Encrypted: i=1; AJvYcCUdVvkog6RiyN3pr+yMPxRFll2wVycisThK3ejsumGPZLsgGCuRpf43erblRWahhTdhlJyJTlbxRhY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvZd2+x66jjVDEjGsG24FWJwMHj9DGG3BnSPiWbmYXhE7296NK
-	OFnxXKrAHP/E3gY04pqQwdioyE/SMQQ+DDVcx8DDHm0tXwBtEqMOw3SW
-X-Gm-Gg: ATEYQzzeQTu3xJBIwMn2goxP+eBOK4/ZVSSYn+htumD6/3xWjk/FXnIKveCQ+KiXrWz
-	DNFSFh2sqRvUbhKP4yb1Rn1+++R/0tLmGuo6Abdiko0lp8kt7d5C17bYm0uJx7pBQCtbZOxZNYm
-	wZAvp03YiySyub0tGsYEm0Ah/OsVei8Wol0dC2/aGtRJbZY9kiPlG+VsZKFLsyCyjvyVcapwHWY
-	ZQpbmqDn96o4n+VmWEG4A6OtA9HWhJYeEm8alf+cWKFxfL1cwgeG+53PqeHs784QZpp5aOB1Ymu
-	uKqgvGR+xcbg1KINpHP946tKnVNLJ6iVS2aHZigUo3EJ/EFhYVU+epBj7YRKnI98xNiLBiwlmd5
-	3tXOsN/vbYCb2DkOIr2mGSnA5bs6JdGxcsf4GfhOoAwERKqGW2Fpr6V4RJ/8GobFyzPQWTCmnsH
-	UOGFl2TC3eVHhc39it7gvxlXYUr9xLgVYyztz8gBRe1fVWFAtU5lGh3T/eE81ZTnQ+ExQTXv17s
-	18kxSSo1ZGmHNHqaQ==
-X-Received: by 2002:a05:6512:3b8f:b0:5a2:a355:aa4e with SMTP id 2adb3069b0e04-5a2ab927773mr5628324e87.31.1774877429070;
-        Mon, 30 Mar 2026 06:30:29 -0700 (PDT)
-Received: from ?IPV6:2a00:1fa0:2c2:728e:63f1:6154:c8be:fcb7? ([2a00:1fa0:2c2:728e:63f1:6154:c8be:fcb7])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a2b13f549dsm1643949e87.14.2026.03.30.06.30.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Mar 2026 06:30:26 -0700 (PDT)
-Message-ID: <e370860b-4ad4-485e-8ad6-30fea2241547@gmail.com>
-Date: Mon, 30 Mar 2026 16:30:25 +0300
+	s=arc-20240116; t=1774878171; c=relaxed/simple;
+	bh=6IRIpHIj+N++yiCem11RlYYa0rcQ4NBJhwZvsqPL2WA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LhSA1JC/1n3pQPOicfOILReSh2WDsOQVhDArhqiWQK5VKrFiIARAiTju7unofqk+M1eCSnbXCGQTOT9QrVJ+DMPYs0gu5RuzMYcxg2llp1OjklN3IB1fVVOfAk1Dz+JgKT4Yj6W0656iIYFQr1iN3lU7REi+odyuXAAZTbnIyFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=jk9ZJLSj; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1774878169; x=1806414169;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6IRIpHIj+N++yiCem11RlYYa0rcQ4NBJhwZvsqPL2WA=;
+  b=jk9ZJLSjmlLYCd5+LZpB3CcGd8MV9L0mxw9d+mFBjXsb4vOZ4yrHHgyB
+   fjomy57DAVAGrNU/zINlsYa6ALVjCZGXN2WMIllJWWt14xLltn7jrf+B2
+   f2Q0nlTtqpbgXsszOhTG6YT2bCdHqdCnthchNkcBPkK4DwyTuh1q2FwB/
+   2P/slvaDw9k/SzqDBV215kldFi4+efiV/t4XhHeNv4aI3iVfGmUYxs4sO
+   wb+IZXBmAvt44OsFURNMt567BgDakqB1Gz2ihelohMbrV4xkYccHXa5Sa
+   hmaZ5ronNON0Wl8wiaH4OsrhljfkrsOMfG6UwBd7sJ6fGlfaZdS4iwKHO
+   Q==;
+X-CSE-ConnectionGUID: 8rpL+xwkQsmCO/TnwCZ14w==
+X-CSE-MsgGUID: XlUhTyqySMC9CJYhTwfLtA==
+X-IronPort-AV: E=Sophos;i="6.23,150,1770620400"; 
+   d="scan'208";a="222664073"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 06:42:42 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.87.151) by
+ chn-vm-ex3.mchp-main.com (10.10.87.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.35; Mon, 30 Mar 2026 06:42:30 -0700
+Received: from che-ll-i17164.microchip.com (10.10.85.11) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Mon, 30 Mar 2026 06:42:26 -0700
+From: Parthiban Veerasooran <parthiban.veerasooran@microchip.com>
+To: <parthiban.veerasooran@microchip.com>, <piergiorgio.beruto@gmail.com>,
+	<andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <steve.glendinning@shawell.net>,
+	<UNGLinuxDriver@microchip.com>
+CC: <netdev@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: [PATCH net-next 0/3] Add OATC10 Sleep Wake-up support and LAN867x Rev.D0 handling
+Date: Mon, 30 Mar 2026 19:12:19 +0530
+Message-ID: <20260330134222.67597-1-parthiban.veerasooran@microchip.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: cdns3: gadget: fix NULL pointer dereference in
- ep_queue
-To: "Peter Chen (CIX)" <peter.chen@kernel.org>,
- Yongchao Wu <yongchao.wu@autochips.com>
-Cc: Pawel Laszczak <pawell@cadence.com>, Roger Quadros <rogerq@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260328143842.57315-1-yongchao.wu@autochips.com>
- <20260329013404.116481-1-yongchao.wu@autochips.com>
- <acpAmimXvxD+WXA1@nchen-desktop>
-Content-Language: en-US
-From: Sergey Shtylyov <sergei.shtylyov@gmail.com>
-In-Reply-To: <acpAmimXvxD+WXA1@nchen-desktop>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[microchip.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[microchip.com:s=mchp];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TAGGED_FROM(0.00)[bounces-35671-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35672-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[microchip.com,gmail.com,lunn.ch,armlinux.org.uk,davemloft.net,google.com,kernel.org,redhat.com,shawell.net];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[microchip.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sergeishtylyov@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[parthiban.veerasooran@microchip.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_NONE(0.00)[];
+	HAS_WP_URI(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 07B0D35C18A
+	DBL_BLOCKED_OPENRESOLVER(0.00)[microchip.com:dkim,microchip.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,opensig.org:url]
+X-Rspamd-Queue-Id: D28A035C57F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 3/30/26 12:21 PM, Peter Chen (CIX) wrote:
-[...]
->> When the gadget endpoint is disabled or not yet configured, the ep->desc
->> pointer can be NULL. This leads to a NULL pointer dereference when
->> __cdns3_gadget_ep_queue() is called, causing a kernel crash.
->>
->> Add a check to return -ESHUTDOWN if ep->desc is NULL, which is the
->> standard return code for unconfigured endpoints.
->>
->> This prevents potential crashes when ep_queue is called on endpoints
->> that are not ready.
->>
->> Signed-off-by: Yongchao Wu  <yongchao.wu@autochips.com>
-> 
-> Add Fixed-by tag and Cc to stable tree please, others:
+This patch series adds support for 10BASE‑T1S Open Alliance TC10 (OATC10)
+Sleep/Wake‑up to the generic Clause 45 PHY layer and integrates it with
+the Microchip LAN867x Rev.D0 T1S PHY driver. It also ensures that PHY
+suspend is properly invoked from the smsc95xx USB Ethernet driver so that
+low‑power states are entered during system suspend.
 
-   I think you meant the Fixes tag. :-)
+Patch Summary:
 
-[...]
+1. add generic OATC10 suspend/resume helpers
+   - Add TC10 Sleep/Wake‑up MDIO register definitions
+   - Implement genphy_c45_oatc10_suspend() and genphy_c45_oatc10_resume()
+   - Cache PLCA configuration in struct phy_device for restore after wake
 
-MBR, Sergey
+2. add LAN867x Rev.D0 TC10 suspend and Wake‑on‑PHY support
+   - Enable TC10 low‑power entry via generic helpers
+   - Restore configuration correctly on resume
+   - Add ethtool WoL support using PHY wake‑up pulse (WUP)
+   - Mark driver with PHY_ALWAYS_CALL_SUSPEND
+
+3. suspend attached PHY on system suspend
+   - Call phy_suspend() before USB suspend
+   - Allows TC10‑capable PHYs to enter low‑power state
+
+Testing:
+
+Tested on EVB-LAN8670-USB Rev.D0 with suspend/resume cycles and verified:
+  - PLCA configuration is preserved across low-power transitions.
+  - Wake-up Pulse triggers proper resume.
+  - ethtool WOL operations function as expected.
+
+Reference:
+Open Alliance TC10 10BASE-T1S Sleep/Wake-up Specification:
+https://opensig.org/wp-content/uploads/2024/01/TC14_TC10_JWG_10BASE-T1S-Sleep-Wake-up-Specification_1.0_final.pdf
+
+
+Parthiban Veerasooran (3):
+  net: phy: phy-c45: add OATC10 Sleep/Wakeup support in 10BASE-T1S PHYs
+  net: phy: microchip_t1s: add suspend and WOL support for LAN867x
+    Rev.D0
+  net: usb: smsc95xx: suspend PHY during USB suspend
+
+ drivers/net/phy/mdio-open-alliance.h | 13 ++++
+ drivers/net/phy/microchip_t1s.c      | 67 ++++++++++++++++++++-
+ drivers/net/phy/phy-c45.c            | 82 ++++++++++++++++++++++++++
+ drivers/net/usb/smsc95xx.c           |  6 ++
+ include/linux/phy.h                  | 88 +++++++++++++++-------------
+ 5 files changed, 211 insertions(+), 45 deletions(-)
+
+
+base-commit: cf0d9080c6f795bc6be08babbffa29b62c06e9b0
+-- 
+2.34.1
 
 
