@@ -1,277 +1,328 @@
-Return-Path: <linux-usb+bounces-35652-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35653-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AJBFL3lEymky7AUAu9opvQ
-	(envelope-from <linux-usb+bounces-35652-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 11:38:01 +0200
+	id ANw0Dc5HymkQ7QUAu9opvQ
+	(envelope-from <linux-usb+bounces-35653-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 11:52:14 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DDBB3584C5
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 11:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B2AC935895E
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 11:52:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A73EC30576B0
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 09:29:31 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 57E893073D8C
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 09:45:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D90E3AE6FA;
-	Mon, 30 Mar 2026 09:29:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28DBC3B774E;
+	Mon, 30 Mar 2026 09:45:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="hHjr778x"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rEihBIF0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012015.outbound.protection.outlook.com [52.101.66.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 834DC3AB29D;
-	Mon, 30 Mar 2026 09:29:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774862970; cv=fail; b=P1h4e8F9W3Sf+kob5muYpkrTmjYzum6YkudWtJJagN3r0Vs0q8coxxwZldgH8nnu3bVdh2K56zxMOhq52TzugNwuz6/CpEzYvZSfDkEO+tcMVjYvf4g4CKJ2d9RAUJy5shFtBTahs4onil5GLu+3IWmBO55qkVekdnuXiMPGCFo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774862970; c=relaxed/simple;
-	bh=PtDc6PbfbDzn2CXglaqTT7T/Q1pkrBdzM8r6vPkS+e0=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=Pa9MY2sWeJPFBLSjGxr89uHtVLNsDs1vlsEFA6K4BNXFm9WSlDBVxiJct5mHTpQa+zWac8oglkSnTJQvOYN43Cao5JA1ILoaTyyEIKPxZzcJHsr2C+x8ko9Ybq/wM+llApg0gFgZhbY/Koj7SL/6Svp0nGTdEHqQXhF0IIyHOug=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=hHjr778x; arc=fail smtp.client-ip=52.101.66.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tJ54gLnhG+kmtsAg2+UREm5UVTJ1V/xpN2gs+sxLE+d/rr898mUI4gIZTXktO5HIzLNCxZseXeImgwCdCr19oRszpXf9DvM+AuopCIs283UBwQnfREpW0eqApbkvgaGEAgUPmhlizaLHw81QVLYWeXqha7lC3H46AC/XzxpDWcLI0d/H+vAK1wkrCk9URNrIDB+I4oQm/T4FZnPM2u+neFluUUniBaFce264v4YZ6Go+NVNKDE17w7PkZt4FxPyC4JhT0f0SZISYzULyFWnDpZLbzDL/cgimWrMvxgv3hTSAaswg7gsCEtd2y0eSfWurXMkU05sgchtsQMFapUAGmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IXSwsX5u4yvN1K2wZVsOdt8GLyfelCWfTazU0M9wOAs=;
- b=RFXaUFnGZwmBqEa7yuYB3hjBqJw0joWZ76xsAYnl0+fpxh3FT9gJBXEt8oW1U4s8YI5g152TNs3j296L9An/kWDpB5uAJuzbfHvT+21LR8EBI6u25CPdhH+/1EN6YUj4VuJ1loAfP5bTAjJb+XRjLd7qA4l2R+TmATcoDulmTf1GJylbQoKijLLu+ZtDOCl/ad9k96S0yE1rom5v5IQHZ0MHxa8CFxwRxg6Pw1X9IUvV4qKlkf4m8MKOgANFaAilseWWRvFJtUc7vXxfPp74cLyxtNr/sRZ0dcZh19qKSPdz9jDYJ9awmmO4B6mO/oV734GImEzR00SJtQPR9mRQ5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IXSwsX5u4yvN1K2wZVsOdt8GLyfelCWfTazU0M9wOAs=;
- b=hHjr778xI9kAv71cuxcYUrCsJfSYZSycv65nPyuyhXICBoNJJIWuEIdWfp+xqyUyHoNA+wkNh8Pt+bY0xz3o3poN8wymBP+y+g1/0svZakR5ARlVCOYGQOYGcnfRw3wtoHX7PVZKf83Bf+HvoLy63N+bevyWHqWyli1haShHUOaDMwfwzIkX3OMZa2C5s+QkWtNyoWwKtIYqztYz2aNUeKqPchmj3eDVtI2H/mHY6RUYjsGvMFebx5KNzrcTu4QdVvovV4fF1YRX0+0s5mfixGKQr1VxtfwmORgNABDzocnzUAN7Rp/JDJO1sY0DCqmkA2YQGDQLQxI6QX/jMzdV4w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by VI2PR04MB10811.eurprd04.prod.outlook.com (2603:10a6:800:277::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.24; Mon, 30 Mar
- 2026 09:29:24 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::c67b:71cd:6338:9dce]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::c67b:71cd:6338:9dce%5]) with mapi id 15.20.9745.027; Mon, 30 Mar 2026
- 09:29:24 +0000
-From: Xu Yang <xu.yang_2@nxp.com>
-To: gregkh@linuxfoundation.org,
-	Frank.Li@nxp.com,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com
-Cc: linux-usb@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: phy: mxs: manually reset phy regs after a warm reset
-Date: Mon, 30 Mar 2026 17:31:33 +0800
-Message-Id: <20260330093133.973785-1-xu.yang_2@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR04CA0015.apcprd04.prod.outlook.com
- (2603:1096:4:197::21) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67303B6C07
+	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 09:45:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774863919; cv=none; b=F/FwoFqQw7na1Y+X/WCc6aJka3ZLwDmGAKFEaVCSv/BSir+gCryYhZAiNjJn74g14zMfbudWJCnK0Li2RORn9z79RN1wKSRWmOIWsoq4n/QKWA3GWfRa65Xi2AgDcIx9GfhZZUCTQgWoubzGeFvS8zpcXhS6Lki21FKcRsK1hrI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774863919; c=relaxed/simple;
+	bh=XD6SmwPmwVE7azTszrrUQuUWr7GMIaYgN9QzNUYC+is=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Zxdy/kzxzZfCQjpfwSd2jGDOMbFbT9BQo/+JyNwrfFrUf7Jbot2bSIJ7S3qjtSh3hMxKs5wC2UoXzmdXWoW36LjgXVGa2yELEoycW0lXyi9k44pn9DiQ4rhby9DTWTN9JgfsjPmgRJjyjSyrESG2XXHRINOD3daZQzUWYqXUyA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rEihBIF0; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b97e6e48b24so726102766b.2
+        for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 02:45:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774863916; x=1775468716; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oSBHQ9W/Y7iY/BjNQLcvfZuKZKaBhaRsM3fB8kd4w9U=;
+        b=rEihBIF0TXGaURZqymCfvRcVeuXcjwSqZotgBMZHB92oNr+hqKqd32hL0H5DUTLl/Y
+         t3G/wuFQxFvwgKXyClvNpVLw4QeMubIpnGBEWUSP1mpOY/gvqldcbk/iobMj/6ebjPwt
+         Nt9KjdQ87az23Qt7NooAkio1yQRIH8HMg1jhnLJ1x13wwnM/lBYkBfEkJ+5ssPrl07UU
+         fiayKD0YIwrCM9vTXy1j1R899fazASPnit444NWgJJijHTNkRtcpGAcBV/ivSxRwe6Ah
+         YxJ78XNAbE5mBFFzZ5cbZz0HIPAaHQicqzKBNP421ZfhCZWSedJwX8OTXDPQdOZOGGHb
+         mWvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774863916; x=1775468716;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=oSBHQ9W/Y7iY/BjNQLcvfZuKZKaBhaRsM3fB8kd4w9U=;
+        b=NwnLFLLY4njkC4x8Z8z+e+DRx5PNpqtqa5IwH3/R5DMX9R0gNH8E5wpsDFoEPo4BDA
+         fysDZM50yjCsRS9KxfLMnRNhWTzRTs/oC8tTAKJ8HV5XIOstItrFhJwFTZl6vxSU+t0L
+         qLBEOqF2mRXfIvBqLvVrY3nR4eGMt2PoDi9r7wo0me86QHAsqSMQ4ZT1drChHRAyIPaD
+         7BOdkfoX7Wbz0sp9kzACoXnei2KynyndUODUIHLfxZvmPcFK29TiJnmRtlwDHTHOu6X+
+         Jq1ICU9eCuWddatNlGSH/E702YGOeykTocV8pvXshgOtOo2mDhRUKlhZCOHV9jCZ7UZF
+         rbZA==
+X-Forwarded-Encrypted: i=1; AJvYcCVVj9CTdXb9subLg9EN3w3RdEJGI8ET0xlqv3J1OAUol7fl1OtZBlsUIUDVFkzHoFulCh74X3Q1tq4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5gQSN/XcKoUIH4jS1jSDynfFrh6u2bFyQBJAU/fD02KxAFs76
+	5rPY4/akOYEx2HVOARwfhie6EYSsRKuSQ1+ZHvoQpD9XZ98ZkMtjDRMh
+X-Gm-Gg: ATEYQzyHJVE58md7jTu6bhxrs49WnfrndYjxM+zTsXKXNJvJJjbawBQ828vsuZiBskq
+	jthwh87Vd3v2v2jbc2/8cyXMeFHBZ3vcYbCwmKuJp1hw/6jAGOx0zWrOTM+gku0pXeZ9e73AL1f
+	07MWQiyhYvm4baPBUAmBO4aVw1t1CjW9wMtaXNVPjEZPeTXnkXhsHsiBCmxr0W5uS6ySsQoTPyS
+	y5fzaYSACaM/Fyu+HIqaYaSsUVi9n1f4ow7O5MgHz+Eo6m2VWiuVa1T0GEBb+/6RqQUKP3aW3Rh
+	Aii9mHsctV6zXHYk+CiZaub7C07LfCyq1cnAEa5iKYagnfnwlXceKJ1JRrOWuP5kcq8tN5Od5oe
+	so7Iq/jZ/oia9vuZ7TaUnakRrB46ssun2whpsl6ioBV6RIUEmeVP53gJ+8umLk8fgQDNXRba75h
+	deT/QEiair4r5ft/22J+z41m3jb1ynEXD6
+X-Received: by 2002:a17:907:934b:b0:b97:b210:a91a with SMTP id a640c23a62f3a-b9b503516f2mr701972166b.13.1774863915879;
+        Mon, 30 Mar 2026 02:45:15 -0700 (PDT)
+Received: from foxbook (bfi53.neoplus.adsl.tpnet.pl. [83.28.46.53])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9b7b1a6736sm274478966b.38.2026.03.30.02.45.15
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 30 Mar 2026 02:45:15 -0700 (PDT)
+Date: Mon, 30 Mar 2026 11:45:10 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Niklas Neronin <niklas.neronin@linux.intel.com>
+Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org,
+ raoxu@uniontech.com
+Subject: Re: [PATCH 9/9] usb: xhci: optimize resuming from S4
+ (suspend-to-disk)
+Message-ID: <20260330114510.2b1e5f05.michal.pecio@gmail.com>
+In-Reply-To: <20260327123441.806564-10-niklas.neronin@linux.intel.com>
+References: <20260327123441.806564-1-niklas.neronin@linux.intel.com>
+	<20260327123441.806564-10-niklas.neronin@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|VI2PR04MB10811:EE_
-X-MS-Office365-Filtering-Correlation-Id: c151a942-e93a-4d1c-c1f5-08de8e3ed4a9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|52116014|19092799006|56012099003|18002099003|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	4QM14xB+qafwlppC/paJrsW0s9T3SXSVvMP/BbpnNc6Uc9VZLFkqD/ZBKCT1KnaBSCuJkGrghB0xMZ237MODAgaerqO+aPGIxBvT+jVbwCLNPkj64uV6wUukesKdV9I2kmAgQJw8EnHA8bCGgdium46J6rYiJf6cWvJQy+bWwzzasFkKdDwDBxmzEtv1tvk7xQhXNfZd99+3kjqrSHhCkrQ5gECMWHAYpWRJeqEKdu+oGsSjmD4xx22ZsXo9bXQJlv5LOIJU2hF3KdR5RiUbqMzZ9511vtNk7vQk+pwfuZFigA32hPUow9Ej0SNojePtn2V+0xKBAsekHWs+WEP1abkppaJ5Vy8+GWXkm8ba7rJoCxYkr+KK7MTH8udjkram4EdgzH+5j7NXj0/Jr5sBoEgzbDcHTzy0osxB3Glz17c2jP40iYBPQB2wUf4FSK5O9Nj/aaEzT80B/kWz1EAGpmMfbIsCxUSziSli398/kcQWQyg0LwBhEKFYEq3HwJ7uVu8bDXO6yzm1AXIzwGQ9YYLQqjVWyNrJ7ushteFTCEoIG5Fmp1vOuK0F92ZFj30poNgzp2xd7Mf/bOgcJ7/1sITaFUDYGHjHrM1OxtffrOIe39eZ7X/MkFHBYhrPJmoIMXn7Ll6jd2y+HWHISUrsX625O8K+AP62iONltBr3Goe0UfFRbyuEEQkscxceW2EwgHTOR1/GoVXOQJI6IvI3gc8ldu/Us6/VL/xiEihbJ/33faHePnDvY37pLmUoBDRa61m3Otm1gkF1HXegopEFESm01kX6ANU7metZ9JLCF3s=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(52116014)(19092799006)(56012099003)(18002099003)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Jc+2wxCNgOwrNZMoozIB9F1yu/pHIzFsf6ydgz/gU+BXI8j8QBIf7sFwS0//?=
- =?us-ascii?Q?qHKANWerC8o+FXvdq48dU01P5zsBRgeP5AReesknbBJ31mhQ6W+UFA+gvZaB?=
- =?us-ascii?Q?1MhhZH5sC/iCX0wCgr9S7hOJQBciR5DORH0iL1zyyTxriod/2krNbp5wFgfW?=
- =?us-ascii?Q?SqVzkKJXO/b37Gipz1Knycd7DNZ1SvZJ4JpJQjn5E6/YK/3WWFY0GpSLFYF1?=
- =?us-ascii?Q?1S6yCi7r6e4r7cwgDqifOzn5SNS89A8dbJutaC+soXuDNJ7OTbrl0JhjzfRI?=
- =?us-ascii?Q?q2SQ6hMONWevlIYVSeWOnEVoeVxnTOVpy3SK1V9SBqrgFtRbQfxEp8/9KBWQ?=
- =?us-ascii?Q?JXf//6JyrmQeGpbscmSuL2n6mNerPMUD21t22Yjdzxqc5Dlj6ILk/WRln0uL?=
- =?us-ascii?Q?teDv5O5tYdz+uXUGNZ0laD58WW1av5IOKvsekERwYZ9PfBIU/oR5uk+p/F5U?=
- =?us-ascii?Q?Gktd4M5yr3s4aW/wcGp62J5rf0fHVtpf/u+SSVGwUTEdSAT0WBPQkvVLMUp7?=
- =?us-ascii?Q?v4IIPY8UXKSZV7xrdZKPZM1+ugzy30UzAGyx2jaXN63bisz/5Is4l3s7KCHw?=
- =?us-ascii?Q?hegXBe7xvHW6/Lcq/m2S3pmLWOE4fqz/V/JUY3/uEH1/Rg1KiJv2AJkWIZbU?=
- =?us-ascii?Q?0Fz6c2/s6cEDMErLGPF/NrH9vJgmcpT1biBYSnhKQDfEuZt5iF+koXQAwH3d?=
- =?us-ascii?Q?ZdsfqaOpETiqi5F8ZkLv1J4RYbMh51b/CfyeesXxjOb2cX6VASpGVHVaHxcA?=
- =?us-ascii?Q?4X6Pp1JAcB7TyHVrnUAprFLYVrs9VeMynNcRlvNTOJ2GbTfKJ2EoVZhGaNMw?=
- =?us-ascii?Q?cbayDk9e2ez4QpqszrNBfqm47cQvKJmgehjFZ3Xflq1+z0+xmNO/AkNDsKv/?=
- =?us-ascii?Q?tEWhtuicxhl1sr7l16vIRIxfNqTmXpsnzib9T/eyACxLb6eZmmG0sj+MH+uL?=
- =?us-ascii?Q?wMjHbpXbbIL0l2JOIcJ7pu34IQ1GhVwAZpu/0Sk27j/gAjeRdOd90AGX0vCJ?=
- =?us-ascii?Q?L2ekqmn6NycB4hXQgnL760e1e4vzYWIRAe4Wyz9dlqDCY7/621cZX5/k9t4q?=
- =?us-ascii?Q?fJ2GH6r9FX9OEoxa7TKVWR9f2fwLdhzy7ahA71NroU+aQv4KgD8QYad2WXJP?=
- =?us-ascii?Q?LjAazCa7VGiygPLkDFVoorLgxQGjZ0TsKn6sHweHuVqoo3wpugN6fOE9l1nV?=
- =?us-ascii?Q?KMjQGhMybojbj6pL35c0SYOGY5adfPYZsYgD2aQIHhpZrokLeluzRUA6aTCA?=
- =?us-ascii?Q?1hSr5615ircm9lUh+dUfsPRhrtVQyK+mHaj4/zFMC5VwilRTPqz7+a/qFZAr?=
- =?us-ascii?Q?3v4U96TlGYnsm+tkmLapy+0KvbrXhhahYxScidoBzSZoJxrZdBTjefCtfDDw?=
- =?us-ascii?Q?LjX4w6XnIgY0zYQfpyKFiyM0qCXL7RpLi1MmafG0YKeeYMTJeAwFXuAvrPC9?=
- =?us-ascii?Q?0svmPmygDgPjHupoWH2w4osQgYgpnznclovDm1YL2FCSx+4V2AYkFWBgHpAb?=
- =?us-ascii?Q?AEUe4PDbcwm/Zlx54i7HjcCU60vpL3UDeayUUgAvBMjYiJv1XUM+Y/HxCqSp?=
- =?us-ascii?Q?c/FDwBV6591USeD9MpPX12E1XtEZu5KwS5LvuNyrGbAicBgUn6kEGK8aM3JB?=
- =?us-ascii?Q?3yZ5D42pgG/LpOSKEK6xRHtTTsKtfcSOxcI5x2TbXZUsFeyEonef2G6Ei+0y?=
- =?us-ascii?Q?AzHPiwKNWeEDgVJnPfP5cK4Ag3sdF5Cv/9TeYOzZfFrlVc/mWi/xfNo6DcqE?=
- =?us-ascii?Q?QaCvuSqCtA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c151a942-e93a-4d1c-c1f5-08de8e3ed4a9
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 09:29:24.3793
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GG+6YOutPjDzlmJjzOQJg9ATSrjL8Ssk/1K/6KPciWcav2CS/XdWuKozhhignawaYzc36axGIKgO2dQcrAz+MQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI2PR04MB10811
-X-Spamd-Result: default: False [1.34 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35652-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[linuxfoundation.org,nxp.com,pengutronix.de,gmail.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35653-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[nxp.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[xu.yang_2@nxp.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_NONE(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 3DDBB3584C5
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email]
+X-Rspamd-Queue-Id: B2AC935895E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The usb phy registers are not fully reset on warm reset under stress
-conditions. We need to manually reset those (CTRL, PWD, DEBUG, PLL_SIC)
-regs after a warm reset. This will reset DEBUG and PLL_SIC registers.
-CTRL and PWD register are handled by "SFT" bit in stmp_reset_block().
+On Fri, 27 Mar 2026 13:34:40 +0100, Niklas Neronin wrote:
+> On resume from S4 (power loss after suspend/hibernation), the xHCI
+> driver previously freed, reallocated, and fully reinitialized all
+> data structures. Most of this is unnecessary because the data is
+> restored from a saved image; only the xHCI registers lose their
+> values.
 
-ERR051269: USB PHY registers not fully resetting on warm reset under
-           stress conditions
+... and all runtime information must be wiped from data structures.
+That's the tricky part here.
 
-The following USB PHY registers must be written by SW to restore the reset
-value after a warm reset:
+> 
+> This patch optimizes S4 resume by performing only a host controller
+> reset, which includes:
+> * Freeing or clearing runtime-created data.
+> * Rewriting xHCI registers.
+> 
+> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+> ---
+>  drivers/usb/host/xhci-mem.c |  4 +--
+>  drivers/usb/host/xhci.c     | 53 ++++++++++++++++++++++---------------
+>  drivers/usb/host/xhci.h     |  2 ++
+>  3 files changed, 35 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+> index f1b4f06d4b8b..4156822eb000 100644
+> --- a/drivers/usb/host/xhci-mem.c
+> +++ b/drivers/usb/host/xhci-mem.c
+> @@ -936,7 +936,7 @@ void xhci_free_virt_device(struct xhci_hcd *xhci, struct xhci_virt_device *dev,
+>   * that tt_info, then free the child first. Recursive.
+>   * We can't rely on udev at this point to find child-parent relationships.
+>   */
+> -static void xhci_free_virt_devices_depth_first(struct xhci_hcd *xhci, int slot_id)
+> +void xhci_free_virt_devices_depth_first(struct xhci_hcd *xhci, int slot_id)
+>  {
+>  	struct xhci_virt_device *vdev;
+>  	struct list_head *tt_list_head;
+> @@ -1905,7 +1905,7 @@ void xhci_remove_secondary_interrupter(struct usb_hcd *hcd, struct xhci_interrup
+>  EXPORT_SYMBOL_GPL(xhci_remove_secondary_interrupter);
+>  
+>  /* Cleanup roothub bandwidth data */
+> -static void xhci_rh_bw_cleanup(struct xhci_hcd *xhci)
+> +void xhci_rh_bw_cleanup(struct xhci_hcd *xhci)
+>  {
+>  	struct xhci_root_port_bw_info *rh_bw;
+>  	struct xhci_tt_bw_info *tt_info, *tt_next;
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 232e6143ac4b..8fb2b91fc0cc 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -1082,9 +1082,11 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
+>  {
+>  	u32			command, temp = 0;
+>  	struct usb_hcd		*hcd = xhci_to_hcd(xhci);
+> +	struct xhci_segment	*seg;
+>  	int			retval = 0;
+>  	bool			pending_portevent = false;
+>  	bool			suspended_usb3_devs = false;
+> +	bool			reset_registers = false;
+>  
+>  	if (!hcd->state)
+>  		return 0;
+> @@ -1103,10 +1105,11 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
+>  
+>  	spin_lock_irq(&xhci->lock);
+>  
+> -	if (xhci->quirks & XHCI_RESET_ON_RESUME || xhci->broken_suspend)
+> -		power_lost = true;
+> -
+> -	if (!power_lost) {
+> +	if (power_lost || xhci->broken_suspend || xhci->quirks & XHCI_RESET_ON_RESUME) {
+> +		xhci_dbg(xhci, "HC state lost, performing host controller reset\n");
+> +		reset_registers = true;
+> +	} else {
+> +		xhci_dbg(xhci, "HC state intact, continuing without reset\n");
 
-Reg: ctrl Addr: 0x29910030 Data: 0xc000_0000
-Reg: pwd Addr: 0x29910000 Data: 0x001e_1c00
-Reg: debug0 Addr: 0x29910050 Data: 0x7f18_0000
-Reg: pll_sic Addr: 0x299100a0 Data: 0x00d1_2000
+Maybe not a bad idea to log this function, but it could simply print
+the value of reset_registers instead of two separate xhci_dbg().
+And maybe also print power_lost and broken_suspend separately.
 
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
----
- drivers/usb/phy/phy-mxs-usb.c | 32 +++++++++++++++++++++++++++++---
- 1 file changed, 29 insertions(+), 3 deletions(-)
+>  		/*
+>  		 * Some controllers might lose power during suspend, so wait
+>  		 * for controller not ready bit to clear, just as in xHC init.
+> @@ -1144,11 +1147,11 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
+>  		temp = readl(&xhci->op_regs->status);
+>  		if ((temp & (STS_SRE | STS_HCE)) && !(xhci->xhc_state & XHCI_STATE_REMOVING)) {
+>  			xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
+> -			power_lost = true;
+> +			reset_registers = true;
+>  		}
+>  	}
+>  
+> -	if (power_lost) {
+> +	if (reset_registers) {
+>  		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+>  				!(xhci_all_ports_seen_u0(xhci))) {
+>  			timer_delete_sync(&xhci->comp_mode_recovery_timer);
+> @@ -1172,27 +1175,33 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
+>  		if (retval)
+>  			return retval;
 
-diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
-index 7069dd3f4d0d..dd42db8a0829 100644
---- a/drivers/usb/phy/phy-mxs-usb.c
-+++ b/drivers/usb/phy/phy-mxs-usb.c
-@@ -209,6 +209,9 @@ static const struct mxs_phy_data imx6ul_phy_data = {
- static const struct mxs_phy_data imx7ulp_phy_data = {
- };
- 
-+static const struct mxs_phy_data imx8ulp_phy_data = {
-+};
-+
- static const struct of_device_id mxs_phy_dt_ids[] = {
- 	{ .compatible = "fsl,imx6sx-usbphy", .data = &imx6sx_phy_data, },
- 	{ .compatible = "fsl,imx6sl-usbphy", .data = &imx6sl_phy_data, },
-@@ -217,6 +220,7 @@ static const struct of_device_id mxs_phy_dt_ids[] = {
- 	{ .compatible = "fsl,vf610-usbphy", .data = &vf610_phy_data, },
- 	{ .compatible = "fsl,imx6ul-usbphy", .data = &imx6ul_phy_data, },
- 	{ .compatible = "fsl,imx7ulp-usbphy", .data = &imx7ulp_phy_data, },
-+	{ .compatible = "fsl,imx8ulp-usbphy", .data = &imx8ulp_phy_data, },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, mxs_phy_dt_ids);
-@@ -248,6 +252,11 @@ static inline bool is_imx7ulp_phy(struct mxs_phy *mxs_phy)
- 	return mxs_phy->data == &imx7ulp_phy_data;
- }
- 
-+static inline bool is_imx8ulp_phy(struct mxs_phy *mxs_phy)
-+{
-+	return mxs_phy->data == &imx8ulp_phy_data;
-+}
-+
- static inline bool is_imx6ul_phy(struct mxs_phy *mxs_phy)
- {
- 	return mxs_phy->data == &imx6ul_phy_data;
-@@ -305,12 +314,29 @@ static int mxs_phy_pll_enable(void __iomem *base, bool enable)
- 	return ret;
- }
- 
-+/*
-+ * The imx8ulp phy registers are not properly reset after a warm
-+ * reset (ERR051269). Using the following steps to reset DEBUG and
-+ * PLL_SIC regs. CTRL and PWD regs are reset by "SFT" bit in
-+ * stmp_reset_block().
-+ */
-+static void mxs_phy_regs_reset(void __iomem *base)
-+{
-+	writel(0x7f180000, base + HW_USBPHY_DEBUG_SET);
-+	writel(~0x7f180000, base + HW_USBPHY_DEBUG_CLR);
-+	writel(0x00d12000, base + HW_USBPHY_PLL_SIC_SET);
-+	writel(~0x00d12000, base + HW_USBPHY_PLL_SIC_CLR);
-+}
-+
- static int mxs_phy_hw_init(struct mxs_phy *mxs_phy)
- {
- 	int ret;
- 	void __iomem *base = mxs_phy->phy.io_priv;
- 
--	if (is_imx7ulp_phy(mxs_phy)) {
-+	if (is_imx8ulp_phy(mxs_phy))
-+		mxs_phy_regs_reset(base);
-+
-+	if (is_imx7ulp_phy(mxs_phy) || is_imx8ulp_phy(mxs_phy)) {
- 		ret = mxs_phy_pll_enable(base, true);
- 		if (ret)
- 			return ret;
-@@ -368,7 +394,7 @@ static int mxs_phy_hw_init(struct mxs_phy *mxs_phy)
- 	return 0;
- 
- disable_pll:
--	if (is_imx7ulp_phy(mxs_phy))
-+	if (is_imx7ulp_phy(mxs_phy) || is_imx8ulp_phy(mxs_phy))
- 		mxs_phy_pll_enable(base, false);
- 	return ret;
- }
-@@ -487,7 +513,7 @@ static void mxs_phy_shutdown(struct usb_phy *phy)
- 	writel(BM_USBPHY_CTRL_CLKGATE,
- 	       phy->io_priv + HW_USBPHY_CTRL_SET);
- 
--	if (is_imx7ulp_phy(mxs_phy))
-+	if (is_imx7ulp_phy(mxs_phy) || is_imx8ulp_phy(mxs_phy))
- 		mxs_phy_pll_enable(phy->io_priv, false);
- 
- 	if (mxs_phy->phy_3p0)
--- 
-2.34.1
+It's suspicious that xhci_halt() is called earlier without checking
+retval. If it fails then xhci_reset() returns success and this check
+passes and it seems that nothing good will happen.
 
+No sure if the HC can be running here?
+
+>  
+> -		xhci_dbg(xhci, "// Disabling event ring interrupts\n");
+> -		temp = readl(&xhci->op_regs->status);
+> -		writel((temp & ~0x1fff) | STS_EINT, &xhci->op_regs->status);
+> -		xhci_disable_interrupter(xhci, xhci->interrupters[0]);
+> +		cancel_delayed_work_sync(&xhci->cmd_timer);
+> +
+> +		/* Delete all remaining commands */
+> +		xhci_cleanup_command_queue(xhci);
+
+Considering that xhci_suspend() clears the command ring anyway, it
+could probably do this too so we don't need to. 
+
+BTW, debugfs/port_bandwidth interface queues commands and I'm not sure
+if it's synchronized in any way with power management. IOW, it might be 
+possible that command are pending at suspend, but I'm not sure.
+
+> +
+> +		/* Clear data which is re-initilized during runtime */
+> +		xhci_for_each_ring_seg(xhci->interrupters[0]->event_ring->first_seg, seg)
+> +			memset(seg->trbs, 0, sizeof(union xhci_trb) * TRBS_PER_SEGMENT);
+> +
+> +		for (int i = xhci->max_slots; i > 0; i--)
+> +			xhci_free_virt_devices_depth_first(xhci, i);
+
+This loop is a bit ugly, it could be a function in xhci-mem.
+
+> +
+> +		xhci_rh_bw_cleanup(xhci);
+> +
+> +		xhci->cmd_ring_reserved_trbs = 0;
+> +		xhci_for_each_ring_seg(xhci->cmd_ring->first_seg, seg)
+> +			memset(seg->trbs, 0, sizeof(union xhci_trb) * TRBS_PER_SEGMENT);
+
+This looks like a bug because it nukes link TRBs. I know that
+xhci_init() will fix this up (unless somebody changes that without
+updating here), but it looks confusing.
+
+I think calling clear_command_ring() was clearer and less bug prone.
+
+>  
+> -		xhci_dbg(xhci, "cleaning up memory\n");
+> -		xhci_mem_cleanup(xhci);
+>  		xhci_debugfs_exit(xhci);
+
+Interesting, it looks like there used to be a window of time when all
+memory was freed but debugfs files still existed? Odd...
+
+> -		xhci_dbg(xhci, "xhci_stop completed - status = %x\n",
+> -			    readl(&xhci->op_regs->status));
+> -
+> -		/* USB core calls the PCI reinit and start functions twice:
+> -		 * first with the primary HCD, and then with the secondary HCD.
+> -		 * If we don't do the same, the host will never be started.
+> -		 */
+> -		retval = xhci_mem_init(xhci, GFP_KERNEL);
+> -		if (retval)
+> -			return retval;
+>  
+>  		xhci_init(hcd);
+>  
+> +		/*
+> +		 * USB core calls the PCI reinit and start functions twice:
+> +		 * first with the primary HCD, and then with the secondary HCD.
+> +		 * If we don't do the same, the host will never be started.
+> +		 */
+>  		xhci_dbg(xhci, "Start the primary HCD\n");
+>  		retval = xhci_run(hcd);
+>  		if (!retval && xhci->shared_hcd) {
+> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+> index ade0198bf9ea..a76e183515b3 100644
+> --- a/drivers/usb/host/xhci.h
+> +++ b/drivers/usb/host/xhci.h
+> @@ -1792,6 +1792,7 @@ void xhci_dbg_trace(struct xhci_hcd *xhci, void (*trace)(struct va_format *),
+>  void xhci_mem_cleanup(struct xhci_hcd *xhci);
+>  int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags);
+>  void xhci_free_virt_device(struct xhci_hcd *xhci, struct xhci_virt_device *dev, int slot_id);
+> +void xhci_free_virt_devices_depth_first(struct xhci_hcd *xhci, int slot_id);
+>  int xhci_alloc_virt_device(struct xhci_hcd *xhci, int slot_id, struct usb_device *udev, gfp_t flags);
+>  int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *udev);
+>  void xhci_copy_ep0_dequeue_into_input_ctx(struct xhci_hcd *xhci,
+> @@ -1803,6 +1804,7 @@ void xhci_update_tt_active_eps(struct xhci_hcd *xhci,
+>  		struct xhci_virt_device *virt_dev,
+>  		int old_active_eps);
+>  void xhci_clear_endpoint_bw_info(struct xhci_bw_info *bw_info);
+> +void xhci_rh_bw_cleanup(struct xhci_hcd *xhci);
+>  void xhci_update_bw_info(struct xhci_hcd *xhci,
+>  		struct xhci_container_ctx *in_ctx,
+>  		struct xhci_input_control_ctx *ctrl_ctx,
+> -- 
+> 2.50.1
+> 
 
