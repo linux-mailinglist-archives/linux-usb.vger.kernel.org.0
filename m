@@ -1,205 +1,218 @@
-Return-Path: <linux-usb+bounces-35683-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35684-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QPERIfiQymlV+AUAu9opvQ
-	(envelope-from <linux-usb+bounces-35683-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 17:04:24 +0200
+	id ODtBABaYymla+QUAu9opvQ
+	(envelope-from <linux-usb+bounces-35684-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 17:34:46 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93DBD35D69F
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 17:04:23 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4905535DEFD
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 17:34:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 05B6E30138C8
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 15:03:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 548C530DCDBC
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 15:21:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9766D338925;
-	Mon, 30 Mar 2026 15:02:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16B7E346797;
+	Mon, 30 Mar 2026 15:21:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M+wzTzLJ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LSRALObR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4A1334C05
-	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 15:02:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9847B3431E7;
+	Mon, 30 Mar 2026 15:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774882978; cv=none; b=DQZ1fhIWnzy612OoKUiX4sA5ZkVNyiCXAaCOdgxuFAtYQaIuRAEmSulPp9oUZsOPz1wRUbjgDq0YYa4q+sDkQCZ6o0hxP3SInAvxpmAYs6OpKtZbJ5nyp0WtAF26AjuH3jQ0l6ToeXZHyIls7hbmGjth8MJ3u7JyAxP7hqQ1xx8=
+	t=1774884072; cv=none; b=gttaboT+da3o+5ynEdIklroE/49YTiB9SgHkKC//qWxPyFLJ6NvzczWl2O6kWXo0+d5fWSGybFb0Japh2H05xjmtrHJi46iZ6hYIdHF6mgfYeQFznnYQ7tvwyBRJb8rlSI2eF1HaHNIBcNwVt+kCByUWOgaWwzYReMVTkB/irs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774882978; c=relaxed/simple;
-	bh=mYXIm1WLt8UpzUiZmsLBr44Fjyc4CuwjsMIhWi+IAuI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=dwOesRw4x/T4VJKgV5bSXQ90rHnQYITYyK23GNeY2UyNwoNr28RGEE1Dg2G72m0zHNA2U6akiYJvZWvA3mvBDRSV41Zh6513G6hr0vv2z/W4iU1zFKD7CeAWCaXSM3IvdvcemFmtr+G7MklRw+ft5V7sg91vOcXSfbn3nss1Lfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M+wzTzLJ; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-486fda2a389so37364305e9.1
-        for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 08:02:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774882975; x=1775487775; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IefxdwdaNENTe3ijrHdpPLezHBD/mzIOjWzh1r0qkT8=;
-        b=M+wzTzLJDUcIHwuwWo2OB/1VQWgS31Ny/QOuzZJVgpsnO6iINGDzHAs1LJkTAz6EOv
-         0JDnpKceNG9isCwBmzkqJQTcqvl9WJeJIc/W1lTcN9lK8fA9tfFIkGNFwkfRiqi2xgcd
-         7hARSWb4w/VGZXvazzcC+x4n8mkMJ81X1JwzMTqxsIDPgyXsqXj9Vkoakatp5NTgZIFm
-         GWIZ9utuk7wGGUuva4j5mVKHEXMvp0VSPa7z/yHrNXBqMBSjlEdjivOtnBzebeFCU9sy
-         xHvw2xN2phZBLj7+k35/JBRf1wLZcfwuLtWcX/H18onTDy/RaN5xZkA4L3BjrupBNMP6
-         y/aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774882975; x=1775487775;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IefxdwdaNENTe3ijrHdpPLezHBD/mzIOjWzh1r0qkT8=;
-        b=TxkcIUgO8iEFB/Yqp9KhyNcB3LIcdK9NqGWYR+/iZkbsrPmY5GnJDJFgkitc9OLvWX
-         812duNLx5GXIiJrOHyysPy4zuk2Act2J3Ueof+PODKextAMX0PzTopyiaSxGcgguoQf4
-         yPOx5/w5OugXRtnAG3dk0QEP943uJ0YdTzkPhDcMyrWijH7RCXjUyaTkhhMPhtlNA/q+
-         8YeYlgpDb/IwZZE5AGGbnKeRUCQALo/GpaXVrQWGVBpIphhW1tt8MGciNWZlNok5Tcao
-         HNNwvuNuk+L/LoegG7C6Qy+2iTsc4NK+cYvaipFlgIVV3Nikag8oh1xcABTva/Nx6Ulj
-         b0Hw==
-X-Forwarded-Encrypted: i=1; AJvYcCVxKT12PoR5Zg+OAuNUyB8Xfi4Nxf+ugDbFdCRJ0t2nfvO9ksk3sXhPHrULR9rhydrjwn0pJoNFSgo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFP1m2VPQXOSRIPbQ7Yn8T+ZieBWHL2vn35NEhZjV2GykRebGv
-	xaTFNTWn99YUEvBu4bySL1NDGuz/0ftFLDDkKAMritFt/MNHErIErZPamdaHMg==
-X-Gm-Gg: ATEYQzzsSdaxbkomWqDEMWFMkfaVMRCfwBTX1h8FVhpxM5K/4UjFzBr7x/ldDKI+Ptk
-	GCdfIOpNuHgC93pEmKn0fNxPRUaEGP7kJrB8HMvfzknoHhUlZ/L2G8EUN0CZyO+Is2vXt/SqNcY
-	nlBHPCwBB5ujC6txAP/3TGH8m4VSGn2N4+xSF6xhEHR48E1/MCPtCQIf9QLzWCDfjoBfxhUbv1O
-	D00/PFyUJG0WzR4u4NgNa4hVDcNUki/VhXRLOf4w0jY0k+tt3qAveEZt3yA8P87uwpaA3CSRg4d
-	FnCYavGuec83Nmdp3zSa8JJkjpFXKzgOXkwM3iNyYTm5lYxnht6EC5EyfNLP5TSy87+dV8ak/1i
-	i+QG3GH/s3rId9zpkDV9QjQNq2RE8blZ7nxOv34LJC1B9MTfFdaI4qpc2m0FyrW+HjpE57g2lj+
-	tF35hNqq81INQqg7csOAEEmM8Rj18Xj4j45f6xIg7hyWMBD0+Y4iZy
-X-Received: by 2002:a05:600c:4e15:b0:485:2ce2:4c8a with SMTP id 5b1f17b1804b1-48727d67a21mr205698365e9.1.1774882974762;
-        Mon, 30 Mar 2026 08:02:54 -0700 (PDT)
-Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-43cf2471ee2sm18711796f8f.29.2026.03.30.08.02.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 08:02:53 -0700 (PDT)
-From: Gabor Juhos <j4g8y7@gmail.com>
-Date: Mon, 30 Mar 2026 17:02:42 +0200
-Subject: [PATCH] usb: core: avoid double use of 'usb3-phy'
+	s=arc-20240116; t=1774884072; c=relaxed/simple;
+	bh=/Zv/LzGzn+Zw5AjQS84R2gM/G3q6GWIAfBAwe6PyxSc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rECb/ttFj+boV93HZPGNRJCqurDpHgw4q8C4kZ2yb0WvixYn/6JtSVmwSTE2ISTn4jv+WpZC4UnXQSThQfxhqAYWaAMMdSKnkhra254v5kgFiodvbP5fJ9W0h+t9urACZbB5JOLg1sbXDjQw8LJ6ABQ5yE0MS64Ybly/+b35HVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LSRALObR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC3D5C19423;
+	Mon, 30 Mar 2026 15:21:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1774884072;
+	bh=/Zv/LzGzn+Zw5AjQS84R2gM/G3q6GWIAfBAwe6PyxSc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LSRALObROJOc3vlOV8jdZ8Xte8qUYj6bHVlbYKVvNFcanIZxwJR3YySEaYpUXPKkz
+	 zzFkxvfUPQp5cWXilPvDDaqxj4qTl3qadChiHvEe14+jZj864/zkqjnZ84+c6qSJ5C
+	 W10s+twUT2bdRm2TPEbI0mkivf/vMM06RjDzX4bg=
+Date: Mon, 30 Mar 2026 17:21:09 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc: "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Kees Cook <kees@kernel.org>, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH RFC net-next] usb: gadget: u_ether: fix eth_get_drvinfo()
+ oops
+Message-ID: <2026033036-glimpse-monsieur-6c0e@gregkh>
+References: <E1w6oNQ-0000000ER1E-43NU@rmk-PC.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260330-usb-avoid-usb3-phy-double-use-v1-1-d2113aecb535@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQ5AMBBA0avIrE1SHVFcRSzQwSSi0oYQcXdl9
- 9/m3xDYCweokxs8HxLErRFZmsAwd+vEKDYatNKFIl3hHnrsDif2K8JtvtC6vV84mtFwXpVkSBk
- aID42z6Oc/79pn+cFd3WL428AAAA=
-X-Change-ID: 20260329-usb-avoid-usb3-phy-double-use-7e498373073c
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Stanley Chang <stanley_chang@realtek.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, 
- Gregory Clement <gregory.clement@bootlin.com>, 
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- Gabor Juhos <j4g8y7@gmail.com>
-X-Mailer: b4 0.14.2
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <E1w6oNQ-0000000ER1E-43NU@rmk-PC.armlinux.org.uk>
+X-Spamd-Result: default: False [3.84 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[lunn.ch,bootlin.com,gmail.com,vger.kernel.org,lists.infradead.org];
-	URIBL_MULTI_FAIL(0.00)[sin.lore.kernel.org:server fail];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35683-lists,linux-usb=lfdr.de];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35684-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[j4g8y7@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_RCPT(0.00)[linux-usb,kernel];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 93DBD35D69F
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,armlinux.org.uk:email]
+X-Rspamd-Queue-Id: 4905535DEFD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Commit 53a2d95df836 ("usb: core: add phy notify connect and disconnect")
-causes double use of the 'usb3-phy' in certain cases.
+On Sun, Mar 29, 2026 at 12:32:20PM +0100, Russell King (Oracle) wrote:
+> The following oops was observed on the nVidia Jetson Xavier NX1
+> platform with 7.0.0-rc5, which is caused by dev->gadget becoming NULL
+> while the u_ether device is still visible to userspace. Adding some
+> debug reveals that we see this sequence:
+> 
+> net usb1: gadget detached
+> tegra-xudc 3550000.usb: ep 0 disabled
+> net usb1: no gadget for drvinfo
+> usb1 (unregistering): left allmulticast mode
+> usb1 (unregistering): left promiscuous mode
+> l4tbr0: port 2(usb1) entered disabled state
+> 
+> Put a sticky plaster over this (it's racy!) I suspect
+> gether_detach_gadget() needs to at least take the RTNL as well to
+> prevent ethtool ops running concurrently with the gadget being
+> detached.
+> 
+> Unable to handle kernel NULL pointer dereference at virtual address 000000000000
+> 00d0
+> Mem abort info:
+>   ESR = 0x0000000096000004
+>   EC = 0x25: DABT (current EL), IL = 32 bits
+>   SET = 0, FnV = 0
+>   EA = 0, S1PTW = 0
+>   FSC = 0x04: level 0 translation fault
+> Data abort info:
+>   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+>   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+>   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+> user pgtable: 4k pages, 48-bit VAs, pgdp=00000001086b1000
+> [00000000000000d0] pgd=0000000000000000, p4d=0000000000000000
+> Internal error: Oops: 0000000096000004 [#1]  SMP
+> Modules linked in: snd_soc_tegra210_mvc snd_soc_tegra186_asrc snd_soc_tegra210_m
+> ixer snd_soc_tegra210_admaif snd_soc_tegra_pcm snd_soc_tegra210_ope snd_soc_tegr
+> a186_dspk snd_soc_tegra210_i2s snd_soc_simple_card_utils snd_soc_tegra210_dmic s
+> nd_soc_tegra210_amx snd_soc_tegra210_adx snd_soc_tegra210_sfc rtw88_8822ce rtw88
+> _8822c rtw88_pci rtw88_core mac80211 libarc4 sha256 cfg80211 snd_soc_tegra210_ah
+> ub snd_soc_core snd_pcm_dmaengine snd_pcm snd_timer tegra210_adma zram tegra_drm
+>  zsmalloc usb_f_ncm syscopyarea usb_f_mass_storage drm_client_lib sysfillrect sy
+> simgblt ramoops fb_sys_fops reed_solomon nls_iso8859_1 drm_display_helper nls_cp437 vfat drm_kms_helper fb fat cec drm_dp_aux_bus tegra_aconnect usb_f_acm u_serial usb_f_rndis u_ether max77620_wdt realtek tegra_xudc phy_package snd phy_tegra194_p2u dwmac_dwc_qos_eth soundcore stmmac_platform pwm_tegra rtc_efi tegra186_gpc_dma virt_dma tegra_bpmp_thermal host1x pcie_tegra194 libcomposite udc_core drm drm_panel_orientation_quirks backlight efivarfs ip_tables
+>  x_tables
+> CPU: 1 UID: 0 PID: 4181 Comm: systemd-udevd Not tainted 7.0.0-rc5-net-next+ #640 PREEMPT
+> Hardware name: NVIDIA NVIDIA Jetson Xavier NX Developer Kit/Jetson, BIOS 6.0-37391689 08/28/2024
+> pstate: 80400009 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> pc : eth_get_drvinfo+0x4c/0x80 [u_ether]
+> lr : eth_get_drvinfo+0x40/0x80 [u_ether]
+> sp : ffff80008484bb60
+> x29: ffff80008484bb60 x28: ffff000083de18c0 x27: 0000000000000000
+> x26: 0000000000000000 x25: ffff0000947da0a8 x24: 0000000000004000
+> x23: ffff0000a38a5600 x22: 0000000000000000 x21: ffff80007a3a5558
+> x20: ffff0000947da000 x19: ffff0000a38a5608 x18: 0000000000000000
+> x17: 0000000000000000 x16: 0000000000000000 x15: 0000ffffe09af760
+> x14: 0000000000000000 x13: 0000000000000020 x12: 0101010101010101
+> x11: 7f7f7f7f7f7f7f7f x10: 00007ffff0071c50 x9 : 0000000000000020
+> x8 : 0101010101010101 x7 : ffff0000a38a5634 x6 : fefefefefefefeff
+> x5 : ffff0000a38a562c x4 : 0000000000383030 x3 : 0000000000383030
+> x2 : 0000000000000020 x1 : 0000000000000000 x0 : ffff0000a38a564c
+> Call trace:
+>  eth_get_drvinfo+0x4c/0x80 [u_ether] (P)
+>  ethtool_get_drvinfo+0x54/0x1e0
+>  __dev_ethtool+0x698/0x2000
+>  dev_ethtool+0x90/0x1a0
+>  dev_ioctl+0x37c/0x594
+>  sock_ioctl+0x390/0x5bc
+>  __arm64_sys_ioctl+0x408/0xeb4
+>  invoke_syscall.constprop.0+0x50/0xe0
+>  do_el0_svc+0x40/0xc0
+>  el0_svc+0x48/0x2a0
+>  el0t_64_sync_handler+0xa0/0xe4
+>  el0t_64_sync+0x19c/0x1a0
+> Code: 95a68811 f9468a81 d2800402 91011260 (f9406821)
+> ---[ end trace 0000000000000000 ]---
+> 
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> ---
+> 
+> 1. get_maintainers.pl is picking up on the PSTORE folk because of the
+> mention of "ramoops" in the commit message... even though this has
+> nothing to do with them.
+> 
+> 2. I think there's more bugs here as mentioned in the commit message,
+> since setting dev->gadget to NULL without taking any locking while
+> the u_ether device is still published to userspace looks mightily
+> dangerous. Seems to be another kernel driver that fails to obey the
+> basics discussed in OLS some twenty years ago concerning the order
+> of setup/publish/unpublish/teardown... and we still don't seem to
+> be able to get it right. :(
+> 
+> 3. Patch generated against the net-next tree, because that's what I'm
+> working with being focussed on stmmac at the moment - but I would like
+> my test platform not to oops and reboot itself when I instead want it
+> to power off.
+> 
+>  drivers/usb/gadget/function/u_ether.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+> index 1a9e7c495e2e..d1ae91889537 100644
+> --- a/drivers/usb/gadget/function/u_ether.c
+> +++ b/drivers/usb/gadget/function/u_ether.c
+> @@ -113,6 +113,10 @@ static void eth_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *p)
+>  
+>  	strscpy(p->driver, "g_ether", sizeof(p->driver));
+>  	strscpy(p->version, UETH__VERSION, sizeof(p->version));
+> +
+> +	if (!dev->gadget)
+> +		return;
+> +
+>  	strscpy(p->fw_version, dev->gadget->name, sizeof(p->fw_version));
+>  	strscpy(p->bus_info, dev_name(&dev->gadget->dev), sizeof(p->bus_info));
+>  }
+> -- 
+> 2.47.3
 
-Since that commit, if a generic PHY named 'usb3-phy' is specified in
-the device tree, that is getting added to the 'phy_roothub' list of the
-secondary HCD by the usb_phy_roothub_alloc_usb3_phy() function. However,
-that PHY is getting added also to the primary HCD's 'phy_roothub' list
-by usb_phy_roothub_alloc() if there is no generic PHY specified with
-'usb2-phy' name.
+This is fixed much the same way in a patch that was sent before you, so
+I'll take that one and get it into 7.0-final so that you don't trip over
+this anymore.
 
-This causes that the usb_add_hcd() function executes each phy operations
-twice on the 'usb3-phy'. Once when the primary HCD is added, then once
-again when the secondary HCD is added.
+thanks,
 
-The issue affects the Marvell Armada 3700 platform at least, where a
-custom name is used for the USB2 PHY:
-
-  $ git grep 'phy-names.*usb3' arch/arm64/boot/dts/marvell/armada-37xx.dtsi | tr '\t' ' '
-  arch/arm64/boot/dts/marvell/armada-37xx.dtsi:    phy-names = "usb3-phy", "usb2-utmi-otg-phy";
-
-Extend the usb_phy_roothub_alloc_usb3_phy() function to skip adding the
-'usb3-phy' to the 'phy_roothub' list of the secondary HCD when 'usb2-phy'
-is not specified in the device tree to avoid the double use.
-
-Fixes: 53a2d95df836 ("usb: core: add phy notify connect and disconnect")
-Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
----
- drivers/usb/core/phy.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/phy.c b/drivers/usb/core/phy.c
-index 4bba1c2757406a35bf19eb7984a2807212374d18..4d966cc9cdc9510147041df7875ad9e48a9ea3af 100644
---- a/drivers/usb/core/phy.c
-+++ b/drivers/usb/core/phy.c
-@@ -114,7 +114,7 @@ EXPORT_SYMBOL_GPL(usb_phy_roothub_alloc);
- struct usb_phy_roothub *usb_phy_roothub_alloc_usb3_phy(struct device *dev)
- {
- 	struct usb_phy_roothub *phy_roothub;
--	int num_phys;
-+	int num_phys, usb2_phy_index;
- 
- 	if (!IS_ENABLED(CONFIG_GENERIC_PHY))
- 		return NULL;
-@@ -124,6 +124,16 @@ struct usb_phy_roothub *usb_phy_roothub_alloc_usb3_phy(struct device *dev)
- 	if (num_phys <= 0)
- 		return NULL;
- 
-+	/*
-+	 * If 'usb2-phy' is not present, usb_phy_roothub_alloc() added
-+	 * all PHYs to the primary HCD's phy_roothub already, so skip
-+	 * adding 'usb3-phy' here to avoid double use of that.
-+	 */
-+	usb2_phy_index = of_property_match_string(dev->of_node, "phy-names",
-+						  "usb2-phy");
-+	if (usb2_phy_index < 0)
-+		return NULL;
-+
- 	phy_roothub = devm_kzalloc(dev, sizeof(*phy_roothub), GFP_KERNEL);
- 	if (!phy_roothub)
- 		return ERR_PTR(-ENOMEM);
-
----
-base-commit: f50200dd44125e445a6164e88c217472fa79cdbc
-change-id: 20260329-usb-avoid-usb3-phy-double-use-7e498373073c
-
-Best regards,
--- 
-Gabor Juhos <j4g8y7@gmail.com>
-
+greg k-h
 
