@@ -1,199 +1,171 @@
-Return-Path: <linux-usb+bounces-35646-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35647-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wF5WA987ymmd6wUAu9opvQ
-	(envelope-from <linux-usb+bounces-35646-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 11:01:19 +0200
+	id OHQcDwI9ymnG6wUAu9opvQ
+	(envelope-from <linux-usb+bounces-35647-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 11:06:10 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5558C357A70
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 11:01:13 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C4D1357C4C
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 11:06:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 3F48C300BC9E
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 08:49:16 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id EF9263011505
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 08:53:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA3ED3ACF16;
-	Mon, 30 Mar 2026 08:49:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27D8C3AEF34;
+	Mon, 30 Mar 2026 08:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hb6iCScz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NWD2x+Cb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F198C382383
-	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 08:49:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4818382383
+	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 08:53:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774860554; cv=none; b=bDOLCktzGxg7Fq4UOvr0yJGCcIIl9aJ63KJ3+rVQftY1liP+vWbBgX9IFvQhzGcnPMS/jSubEDnnk8yRzql/GLpo5+87/qcnlB9IsxcEcCmaXuL6It0mmSeJtBzBdWa3ihs1ipk/yO0jGLvadJZFzAZqmV0u5WoeLfFCsSzJkr8=
+	t=1774860826; cv=none; b=ufXqt8BdS2JW/ORTkTZXp0Pwz9URjuiFY+U6CTVx6gbWWDTqRTxQOyPtDnuGbLxwKYSk4/pGfg0l34GLzzb2d5xAcqpHFdl8fIwgsXYbSuizzuizV1k13uuu09kWXzB1G5zDdgMiaXCAAHlOCy+NC5OLdAudXl7o7j7UFpmetp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774860554; c=relaxed/simple;
-	bh=VsneFWcSkus1fFMVXxx/QwSYwMQ2qDtLejzDVV/QDEU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hP0Om2wOl7zZEbc7q9jT6TPD6ogjvXH+Xs2IViUpVPUMJj07uYI8ORZsfXwRBBl+YgI/PX2w6K0pBHI9Ud/9/eHO+/vyRWT9hCzcbSgwpxo8LnVAdYgrX9SJwylj2Dn7cJFpJOmevI1FXvNc2cRqWI9AmjrnZubcVvy40YKzYBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hb6iCScz; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-661b16ac011so7829731a12.2
-        for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 01:49:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774860551; x=1775465351; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UJs5jyFDgqnMMoICR2ZJ7zHZjg3apfmhhwnrm6XyWRE=;
-        b=Hb6iCSczFQFI+a8ZqiPDRKmFRARWWqygLwRcOIDQVbDg+wKE7gzwFpRawz1QfO/Jnp
-         pAq0q1gXOrl026twoUbBOZDe2uufADPOld9gvuaZ+mcM6hmRPGQRxICQgpKzrsjtnwBD
-         eKYtlzyWO/17h4Xr1/lOf/2pWkEXt3FrevR9RS6HaK6o0uoH4GPYxD3DYdlU2LtSGXWQ
-         fb7ZKDEbP0pjFSPLpjl0cphiOzqXzHdWS61UOe6DWx9H9/lNW7ls0t5E+zJ3LZy0vZdk
-         oWOyy1DmDWT+ibWfGrYa+YP/ad9zWpy+RZ91iKuJAQrD5cBUrNxMa17kMaCH+3sprqzG
-         a6zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774860551; x=1775465351;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UJs5jyFDgqnMMoICR2ZJ7zHZjg3apfmhhwnrm6XyWRE=;
-        b=rsqcRzEdeYM1+TFLC7UoNBx4+yKcEbfNQ3qdyBpy8YZxea/MQkMOOWXyOdCU+6UemU
-         LUaaInunIwFW9af4p9V+ApH/6D+pFtz8SSz0NsHLX34ALubC2Bi3bhQA/YbfSWH9SbIO
-         AvHGyeTT1uxOTMAXwl8fj6k+4dx8dPuWvr2tk9E68KWP1K+mUjjvrlRlyov7n/ZfNH55
-         0z+UfGnRg5UktROdfJTmjVB5VaIYBZa6wVPGpuYjNFEUeU42uTsGbRhwytZe/GYwTg8x
-         dtKI8ItCBLvlWsgM5D4rw6HceFxdTS6fv6yNGqHpNBOiipR8CGljbwXeWTc3A7FljRkS
-         fdwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVVM8k2WY4NyP7TNfwp+twf3bgEMmFTt4eRP194o2FsjU1+134K6WFVpuKQvDfZdUkzI266Q0r5CTk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZ9UvxdjVfEUMK2E3PCyEC1USFbyzTJ1gCuQCZITepD3NnrHIE
-	tR5n93z8fs/SdtS55Qsr5kOmQiFyI11Dp4eGz0Fui2vVXUzsAh7XOH4N
-X-Gm-Gg: ATEYQzzbxlgSyXyc53brgNQ8CjOW9QaMGLAj2gXTMpHmNjC6S1d27yV02ybKoAvyePX
-	gLiwGac4TlRPyUb3CM8UQEBJS7qj4FunzXGs4e7kaYC/vGIRaLb8YGdcm7PUdjIErghIIf0xSjl
-	n9WyY8cLIRX24LfkhGTWsSqQdnCzoS4LdenB6ty3IZHy3R9Iu/V5ieH3I6e08dQZxu7z91TJ/PT
-	WlhqP06lu1hqiWLSu85x5VgX+lZisnbFcbHuprrylkp9IsWhOaGpTT0Mw7J8W00HtY5d4SuEq7a
-	LEB49DGdDqc0Rwkrg098S6iE8piW5NRFjB39PHUJcfQe3074PMGuA3lmI+jGbF5jM21Rl1V7Vht
-	ElKvYzy+pVR4oiXtMPo35LRzrEycG6bIdbApW+mqbmARWPERuvRe8Hno6o1hQsgHOZFvqcnPzS0
-	odvoaDiZCsCLyXd1pUCxnI1eAURvxC1AYf
-X-Received: by 2002:a17:907:846:b0:b96:f6f1:e7af with SMTP id a640c23a62f3a-b9b502bea2fmr744858866b.9.1774860550945;
-        Mon, 30 Mar 2026 01:49:10 -0700 (PDT)
-Received: from foxbook (bfi53.neoplus.adsl.tpnet.pl. [83.28.46.53])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9b7b1a5fc9sm258902766b.36.2026.03.30.01.49.10
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 30 Mar 2026 01:49:10 -0700 (PDT)
-Date: Mon, 30 Mar 2026 10:49:07 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Niklas Neronin <niklas.neronin@linux.intel.com>
-Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org,
- raoxu@uniontech.com
-Subject: Re: [PATCH 6/9] usb: xhci: move initialization for lifetime objects
-Message-ID: <20260330104907.224fd772.michal.pecio@gmail.com>
-In-Reply-To: <20260327123441.806564-7-niklas.neronin@linux.intel.com>
-References: <20260327123441.806564-1-niklas.neronin@linux.intel.com>
-	<20260327123441.806564-7-niklas.neronin@linux.intel.com>
+	s=arc-20240116; t=1774860826; c=relaxed/simple;
+	bh=a6uDhOf8cHZKi+iFmInk3x/N08PeQYWjm+nQ6PFfUYw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sfH6Lhh0az9sJv9L/mOKUF2LMGLcJDWK4+YLxrCvuIeBpsVakv2n6KvKpKYvB5KCTO/MmpzEdW8VU9ISNFe2tJHT29ig2FalYK/PbVeqH3a50nSLI7N9sJpQ9l6S5RSHreyLMFt0RvL1BIaQJdkM7zQJnLiFIH8Y7PoW4APUpDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NWD2x+Cb; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774860825; x=1806396825;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=a6uDhOf8cHZKi+iFmInk3x/N08PeQYWjm+nQ6PFfUYw=;
+  b=NWD2x+Cb7r0ydIahb3xMm+FeK7GzB9x3tNtAulzvR1BEDupl2ycdksXx
+   ydPYZwoi6B9KUNU3y+O9Alizk5surZsGnUHK11j6aklewTgxd8BWu1yIU
+   oLMDie/7ZzlNGvIQFGmTsWVGH5+5FZ/0sqd3gYtM0lyAuev15sXHWkzCf
+   rDixly8hc20FrP2+fFMnzyDSivXxPvcQpJmPUgg71D8Uv7Z68w0ZWCYXf
+   xuOZvJnsI6B0yDRy9VcS1XC4lsc4gMIc+P3x5b80qeemCYisVp183PCZK
+   9jFXamdklvoidw+nZe7k5r9UerwjQYf9Q/9Lg2R/29WEjNOWL9LeIUFf0
+   w==;
+X-CSE-ConnectionGUID: vcqLWKk+R4qufIG/OWMOoQ==
+X-CSE-MsgGUID: sCzomhzmSfSKGCFeUK8A9g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11743"; a="79449945"
+X-IronPort-AV: E=Sophos;i="6.23,149,1770624000"; 
+   d="scan'208";a="79449945"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 01:53:45 -0700
+X-CSE-ConnectionGUID: Y5OZtWRWRbKiSDuG+ihocg==
+X-CSE-MsgGUID: wwmcZEkbQHOATMY7uwQdmw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,149,1770624000"; 
+   d="scan'208";a="230803431"
+Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.94.250.130]) ([10.94.250.130])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 01:53:39 -0700
+Message-ID: <33373f50-7e86-4854-a651-577662d54811@linux.intel.com>
+Date: Mon, 30 Mar 2026 11:53:31 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/9] usb: xhci: move ring initialization
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org,
+ raoxu@uniontech.com
+References: <20260327123441.806564-1-niklas.neronin@linux.intel.com>
+ <20260327123441.806564-6-niklas.neronin@linux.intel.com>
+ <20260330104207.40c7500e.michal.pecio@gmail.com>
+Content-Language: en-US
+From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
+In-Reply-To: <20260330104207.40c7500e.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35646-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35647-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	MAILSPIKE_FAIL(0.00)[104.64.211.4:query timed out];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	RSPAMD_EMAILBL_FAIL(0.00)[niklas.neronin.linux.intel.com:query timed out];
+	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:email]
-X-Rspamd-Queue-Id: 5558C357A70
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux.intel.com:mid,intel.com:dkim,intel.com:email]
+X-Rspamd-Queue-Id: 5C4D1357C4C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, 27 Mar 2026 13:34:37 +0100, Niklas Neronin wrote:
-> Initialize objects that exist for the lifetime of the driver only once,
-> rather than repeatedly. These objects do not require re-initialization
-> after events such as S4 (suspend-to-disk).
+
+
+On 30/03/2026 11.42, Michal Pecio wrote:
+> On Fri, 27 Mar 2026 13:34:36 +0100, Niklas Neronin wrote:
+>> Move ring initialization from xhci_ring_alloc() to xhci_ring_init().
+>> Call xhci_ring_init() after xhci_ring_alloc();
 > 
-> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
-> ---
->  drivers/usb/host/xhci-mem.c |  1 -
->  drivers/usb/host/xhci.c     | 15 ++++++++-------
->  2 files changed, 8 insertions(+), 8 deletions(-)
+> This adds more code and more opportunities for bugs.
+> Can't ring_alloc() just call ring_init() itself?
+
+Sure, but the naming would not be accurate.
+ring_create() or ring_alloc_and_init() would be accurate.
+
 > 
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index ca4463eebc49..2cd6111c9707 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -2009,7 +2009,6 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
->  	xhci->port_caps = NULL;
->  	xhci->interrupters = NULL;
->  
-> -	xhci->page_size = 0;
->  	xhci->usb2_rhub.bus_state.bus_suspended = 0;
->  	xhci->usb3_rhub.bus_state.bus_suspended = 0;
->  }
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 170615dd1e93..4e811a2668e6 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -549,13 +549,6 @@ static int xhci_init(struct usb_hcd *hcd)
->  	int retval;
->  
->  	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Starting %s", __func__);
-> -	spin_lock_init(&xhci->lock);
-> -
-> -	INIT_LIST_HEAD(&xhci->cmd_list);
-> -	INIT_DELAYED_WORK(&xhci->cmd_timer, xhci_handle_command_timeout);
-> -	init_completion(&xhci->cmd_ring_stop_completion);
-> -	xhci_hcd_page_size(xhci);
-> -	memset(xhci->devs, 0, MAX_HC_SLOTS * sizeof(*xhci->devs));
->  
->  	retval = xhci_mem_init(xhci, GFP_KERNEL);
->  	if (retval)
-> @@ -5525,6 +5518,14 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
->  		dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
->  	}
->  
-> +	spin_lock_init(&xhci->lock);
-> +	INIT_LIST_HEAD(&xhci->cmd_list);
-> +	INIT_DELAYED_WORK(&xhci->cmd_timer, xhci_handle_command_timeout);
-> +	init_completion(&xhci->cmd_ring_stop_completion);
-> +	xhci_hcd_page_size(xhci);
-> +
-> +	memset(xhci->devs, 0, MAX_HC_SLOTS * sizeof(*xhci->devs));
-
-This seems to do nothing because we just got a freshly kzalloc'd
-xhci_hcd from __usb_create_hcd(), as far as I understand.
-
-On the other hand, doing it in xhci_init() used to cover for the
-possibility of xhci_mem_cleanup() failing to fully clear xhci->dev.
-
-So same questions:
-Do we trust xhci_free_virt_devices_depth_first() to do its job?
-Does it need to become more robust?
-
->  	xhci_dbg(xhci, "Calling HCD init\n");
->  	/* Initialize HCD and host controller data structures. */
->  	retval = xhci_init(hcd);
-> -- 
-> 2.50.1
+>> in the future it can also be used to re-initialize the ring during
+>> resume.
 > 
+> Yes, but it seems we don't have the opposite problem: there is no
+> need to allocate rings but never initialize them.
+
+Technically there is, during ring linking. The "new" ring does not
+need to be initialized, as it will be initialized according to the
+"dst" rings values.
+
+This is not implemented in this patch series, but I planned to do it
+later.
+
+> 
+>>
+>> Additionally, remove xhci_dbg_trace() from xhci_mem_init(). The
+>> command ring's first segment DMA address is now printed during the
+>> trace call in xhci_ring_init().
+>>
+>> This refactoring lays also the groundwork for eventually replacing:
+>> * xhci_dbc_ring_init()
+>> * xhci_clear_command_ring()
+> 
+> Or xhci_clear_command_ring() could just call memset() and ring_init(),
+> instead of duplicating this sequence in every place which needs it.
+
+xhci_clear_command_ring() clears the command ring specifically.
+
+The idea is to have (naming not set in stone):
+ring_alloc() <- allocate necessary ring memory
+ring_free()  <- free all ring memory
+ring_init()  <- initialize necessary ring memory
+ring_reset() <- resets the ring
+
+The reader can then easily understand what each function does.
+
+>  
+>>
+>> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+
 
