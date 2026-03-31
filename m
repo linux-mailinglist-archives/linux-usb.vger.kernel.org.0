@@ -1,148 +1,172 @@
-Return-Path: <linux-usb+bounces-35716-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35718-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uDuRJQaFy2l4IgYAu9opvQ
-	(envelope-from <linux-usb+bounces-35716-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 10:25:42 +0200
+	id WI3hAZCLy2kuIwYAu9opvQ
+	(envelope-from <linux-usb+bounces-35718-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 10:53:36 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 351973660F4
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 10:25:42 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 004C13667C7
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 10:53:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 4B933300C0E7
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 08:25:41 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 44D6C306F4CC
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 08:44:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBC243DFC8D;
-	Tue, 31 Mar 2026 08:25:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89DFB3E9293;
+	Tue, 31 Mar 2026 08:44:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ihjnBgBX"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="hc0P82ui"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4678D3DDDDE;
-	Tue, 31 Mar 2026 08:25:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 140BD37997E;
+	Tue, 31 Mar 2026 08:43:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774945536; cv=none; b=JRZ3yVPXOmPAsSyZiSgk+BU6/aiQ504Lx+tKgt4xp1QltKDsGDbbxMhb/wKkqJ45ubM1azVhlLe9Hc5WlYaTBu2TjWPUBdPsuh+q2jnUYw0YQofLDUL2+aw1n5ihOKFHQULUEJX64acNMIrqjJA0hK/Q6+qCwrgPdr+of9AeeB0=
+	t=1774946641; cv=none; b=X0dMGARp9JajaEr522/9vAIaVL+KNdKtS42MUiAJ8Q2Wvm/HdG49OCMBCZnWtUuQc+ZNtHSTDCFoYZsP94RzoISn8T4e0+GOVZtNFAfLU99WDWPGZLxZnXLP0otYnMlN/HfXmIMhHbDQG6qN/zYAeZFLUBObx8T+dhFejYSOYRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774945536; c=relaxed/simple;
-	bh=2gJfRtSBfXj4JRuylSNVBq9hSnCvKnDG0P+NVrtq244=;
+	s=arc-20240116; t=1774946641; c=relaxed/simple;
+	bh=iai/CORVV26S9lAvHgswniAbqaXve9nbtDysFebyyPc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XCxVgCdQpBxU+uBEaeZ5ohNfWjXNuIbnO6qfeId2ifWNqSCbo5hz1SFt5BHBnkMlVmn9BSM2j6q0ZfE1a+3xxQSWNYrdj8YpdN+tZIltONr6Q3vnDeXy+N5sDniVN3KRfKFSo2l1A3OvgOm1b2x82q0GJGHP3eN9/VoVJgbl13k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ihjnBgBX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E0B6C19423;
-	Tue, 31 Mar 2026 08:25:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774945535;
-	bh=2gJfRtSBfXj4JRuylSNVBq9hSnCvKnDG0P+NVrtq244=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ihjnBgBXql7h/5fe93awTa+yWd+6DPMXqWIdZEg1MG2gGESxwaQEUjhFAhe/AWs9X
-	 AhKazAWnXUDgqa0S8cFAUc6Ma1jg830IWVPKdBHzXptRIVv+aHASXG9YdMQZDD3NF6
-	 +pee5dJLS35pZIM9RIBPEtOJPTg29e/Rx4wU3eHW30K1WkDNwxR7LGnILDMYvTHzcQ
-	 qzNjK6z6wko8l+WnOR9QCauH+0DhhIwnZdz6OMsBR8y7tAnIFXMPy2S1Bgi/kWQDp8
-	 QEcZbSFW9viMSxzL/cnHtdq+cVNJrqxFdmi9srjxf85RaDugNIxmtJKIV57eyM9dRt
-	 CUIIiJm8hGQBA==
-Date: Tue, 31 Mar 2026 10:25:33 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, michal.simek@amd.com, Thinh.Nguyen@synopsys.com, 
-	p.zabel@pengutronix.de, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, git@amd.com
-Subject: Re: [PATCH v2 1/4] dt-bindings: usb: dwc3-xilinx: Add MMI USB
- support on Versal Gen2 platform
-Message-ID: <20260331-jellyfish-of-pragmatic-prowess-a230fc@quoll>
-References: <20260330190304.1841593-1-radhey.shyam.pandey@amd.com>
- <20260330190304.1841593-2-radhey.shyam.pandey@amd.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dl5uMhUgizZ43iz9b9ZXzqp5kBegbwi5sPUWkRnBhVLQay+M4+lNJxFDbfjS8FHrkEGOhfnAxjtwv2w8qQnb3iOnKfKVBvq/Ztopep7j9oyAzpDfYTWwZV0JBiI0Cc8pt2R/deptIj4fUiQkZQU/u0X2e0CJTEWD36lO5n578sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=hc0P82ui; arc=none smtp.client-ip=54.206.16.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1774946569;
+	bh=/uvGm2tgjmbaLFdSZktoAKCcvUL0XxD/eA5skeTmt24=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version;
+	b=hc0P82uiLXmBwiJ10SpbwQHDWalcrCXctz7gaKpoOfm4zjjAj6BzgzNICUHo//51J
+	 RpWJjErLtwfwY8W2MoegH2FS+GeeiEOTwpD8GPKylzrJQdOg96o1lyxHVfbUfdY7vn
+	 peY682b1ySOeOmuw5F1A1Ak2HVRgW9AXOFZjsqkc=
+X-QQ-mid: zesmtpsz9t1774946567t1dceea17
+X-QQ-Originating-IP: Nru55Ic+l8JgLfAeWFW3/2SH3CgH47atZ3QRPmdUeJA=
+Received: from = ( [120.237.158.181])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 31 Mar 2026 16:42:46 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 15209079779085793497
+EX-QQ-RecipientCnt: 10
+Date: Tue, 31 Mar 2026 16:42:45 +0800
+From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+To: Chukun Pan <amadeus@jmu.edu.cn>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Yixun Lan <dlan@kernel.org>, Ze Huang <huang.ze@linux.dev>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, spacemit@lists.linux.dev,
+	Troy Mitchell <troy.mitchell@linux.spacemit.com>
+Subject: Re: [PATCH v3 1/1] usb: dwc3: Add optional VBUS regulator support to
+ SpacemiT K1
+Message-ID: <5E6BDCE16DD4ADB0+acuJBfKF-SCAOu2_@kernel.org>
+References: <20260326100010.3588454-1-amadeus@jmu.edu.cn>
+ <20260326100010.3588454-2-amadeus@jmu.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260330190304.1841593-2-radhey.shyam.pandey@amd.com>
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+In-Reply-To: <20260326100010.3588454-2-amadeus@jmu.edu.cn>
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: NZcrde3zhHkVLuLpntG7TPHMdl/gXoK3X6JuO7HIKdI4knYe0zrsChIs
+	7SspeR4jWF7D2roKU73d4J4YJUR4bTy7RHBHqUyvUDJP3NeaNey6CJH+lGE90IiJna92yLi
+	KjPVHN2vN3zHRMO8JKm7HN1VjUqRJ1T3OYDH/PpBp7n2bwpa2Z0rw35yWOrF1AkBhkfNVpU
+	SgZKkMk2Os0i50Lj/JQUipZ1/HwYfXt/OmbSLBos0tR0ijdUid8HLF9wjIZ6dyO+Kg1XLsK
+	IWJiLt6hWqJTo/bSH2KxIRr+74AFTQq/VkigDlELyxT1mKBrkS7p1NMyhNYQR5XLsAKt1j+
+	BzrPkj3wnzVMXDgUyRWg2MwLBXl6KZuTmCHqTKy89ksWMpxQW3Bd91mVnqh/O5NhKcmhi2p
+	Kk4yUpAyPWyMF8QbJEoxUI7ZOT+MbYebexTsTU0al32aCMvkSRSyLWbKWgAfRr8z9eULLmH
+	ClLgdO8qhSWtQLvGvqgb2wl18JxFrKyI/kirOeUwWoV/UjbIu9JzB+IkK3ty538DzJDVP8D
+	d9j+a/TSUdght6FWAAAggP7rgZex3cWD4JRfrEzOia3SijIuJ9fX5jLJ+KdIhMFqgp45kDY
+	gyZW8ywo57bZLjlVsd9H19hvBUqJu/f20o8xBLxwk72ACaj4fn+EjeYhyUtYLiBH8Ro7yMR
+	ZXt02fq8RSdb7UxR1rJZM/jvFKC7FI1YH7Amhns7kFiJ6yTH5V6wPhkfAuQpQcstBnMT76l
+	uzsYUBHUzIc8k67IlnVvW/rPfI2FvNlR8v0mPoMO/C8TfcgEPfawq+wKdQzhp7GavVOM5w9
+	ajjynfQdOXh0KaTDkwSP1EqA4TqrvRv/5toQXhokr/9lqtFUGNmrqxpW4yoBlOzN4tLofp6
+	cgJqnJSELzFuE0zIqseff8WfUKYf3X2uXcwjBLdyDOkvTdHTTeDnQkiVXXo48KCkoDCuEqb
+	auD8pBYf4QDAtqeB6Q19tzPCbctSjJNaOg238B0Le/hCWScmk4IBOEpGenjp/N1sY+Mt2wu
+	pVx+yINUpeDU6glKtmzfXFjpKM+YZKdz0XfbcNsocz1jd6aZ9b
+X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+X-QQ-RECHKSPAM: 0
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[linux.spacemit.com:s=mxsw2412];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35716-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[spacemit.com];
+	TAGGED_FROM(0.00)[bounces-35718-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[linux.spacemit.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:email]
-X-Rspamd-Queue-Id: 351973660F4
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[troy.mitchell@linux.spacemit.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[spacemit.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,jmu.edu.cn:email,linux.spacemit.com:dkim]
+X-Rspamd-Queue-Id: 004C13667C7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Mar 31, 2026 at 12:33:01AM +0530, Radhey Shyam Pandey wrote:
-> Versal Gen2 platform multimedia integrated (MMI) module has a USB3.2 Gen
-> 2x1 Dual Role Device IP. Introduce a new compatibility string to support
-> it. The USB wrapper registers reside in the MMI UDH system-level control
-> registers (SLCR) block, so instead of a dedicated reg property, add
-> xlnx,usb-syscon phandle with four cells specifying register offsets for
-> USB2 PHY, USB3 PHY, USB DRD, and USB power configuration within the SLCR.
+On Thu, Mar 26, 2026 at 18:00:10 CST, Chukun Pan wrote:
+> Some SpacemiT K1 boards (like OrangePi R2S) provide USB VBUS
+> through a controllable regulator. Add support for the optional
+> vbus-supply property so the regulator can be properly managed
+> in host mode instead of left always-on. Note that this doesn't
+> apply to USB Hub downstream ports with different VBUS supplies.
 > 
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-> ---
-> Changes for v2:
-> - Add blank line after compatible as suggested by Krzysztof.
-> - Retain the mmi suffix in the compatible string, as this USB 3.2 Gen2
->   IP from Synopsys is part of the dedicated Multimedia Interface. The
->   Versal Gen2 platform also includes a separate USB 2.0 controller,
->   and the mmi suffix uniquely distinguishes between the two USB
->   controllers. MMI is an independent subsystem particularly targeted for
->   deployment in Multi-Media related applications. The MMI block include
->   following submodules: UDH: USB3.2 Gen 2x1 Dual Role Device, DisplayPort
->   Transmit Controller, Security Module (ESM) for DisplayPort and HDMI
->   Controllers, DP AUX-I2C PHY.
-> - For MMI USB define parent address space i.e UDH block.
-> - Fix inconsistent MHz spacing to use SI convention with spaces.
-> - Move description before $ref and items in xlnx,usb-syscon property.
-> - Restore original zynqmp-dwc3 example, add new versal2-mmi-dwc3 example.
-> - Use 'usb' node name (without unit address) for versal2 example since
->   it has no reg property.
-> - Use 1/1 address/size configuration in versal2 example, use lowercase
->   hex in syscon offsets.
-> ---
->  .../devicetree/bindings/usb/dwc3-xilinx.yaml  | 70 ++++++++++++++++++-
->  1 file changed, 67 insertions(+), 3 deletions(-)
+> The enabled and disabled actions of the regulator are handled
+> automatically by devm_regulator_get_enable_optional().
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> index d6823ef5f9a7..5e31b961aff7 100644
-> --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> @@ -15,6 +15,8 @@ properties:
->        - enum:
->            - xlnx,zynqmp-dwc3
->            - xlnx,versal-dwc3
-> +          - xlnx,versal2-mmi-dwc3
+> Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
+> ---
+>  drivers/usb/dwc3/dwc3-generic-plat.c | 23 ++++++++++++++++++++++-
+>  1 file changed, 22 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-generic-plat.c b/drivers/usb/dwc3/dwc3-generic-plat.c
+> index e846844e0023..64f5e9f20663 100644
+> --- a/drivers/usb/dwc3/dwc3-generic-plat.c
+> +++ b/drivers/usb/dwc3/dwc3-generic-plat.c
+> @@ -12,6 +12,8 @@
+>  #include <linux/reset.h>
+>  #include <linux/regmap.h>
+>  #include <linux/mfd/syscon.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/usb/otg.h>
+>  #include "glue.h"
+>  
+>  #define EIC7700_HSP_BUS_FILTER_EN	BIT(0)
+> @@ -69,6 +71,20 @@ static int dwc3_eic7700_init(struct dwc3_generic *dwc3g)
+>  	return 0;
+>  }
+>  
+> +static int dwc3_spacemit_k1_init(struct dwc3_generic *dwc3g)
+> +{
+> +	struct device *dev = dwc3g->dev;
+> +
+> +	if (usb_get_dr_mode(dev) == USB_DR_MODE_HOST) {
+The logic looks good, but the structure can be further improved to better align with
+standard kernel coding style:
 
-I am not going to ask the same questions.
+if (usb_get_dr_mode(dev) != USB_DR_MODE_HOST)
+  return 0;
+> +		int ret = devm_regulator_get_enable_optional(dev, "vbus");
+Could you please move the declaration of ret to the top of the function?
 
-Best regards,
-Krzysztof
-
+Otherwise, LGTM.
+Reviewed-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
 
