@@ -1,196 +1,211 @@
-Return-Path: <linux-usb+bounces-35745-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35746-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qEFWOGcxzGmwRAYAu9opvQ
-	(envelope-from <linux-usb+bounces-35745-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 22:41:11 +0200
+	id YAJuAvdFzGm+RgYAu9opvQ
+	(envelope-from <linux-usb+bounces-35746-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 00:08:55 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B8A9371364
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 22:41:11 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B1133724FE
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 00:08:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1D810302B389
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 20:39:43 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 46ABF30143F1
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 22:08:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9514F4508EB;
-	Tue, 31 Mar 2026 20:39:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C3AC45BD7B;
+	Tue, 31 Mar 2026 22:08:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DPBpTV4h"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VTvF7VaV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8473A542A
-	for <linux-usb@vger.kernel.org>; Tue, 31 Mar 2026 20:39:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590243E95B4
+	for <linux-usb@vger.kernel.org>; Tue, 31 Mar 2026 22:08:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774989582; cv=none; b=H25+R/cNEPP/N2m00KlOBCXpwwGo1ULveMfPvAztKwWxRJ9Vzj+vGo9X/KirIHF+dDqs9sJhHxrZHeh35eqcNz/d47Crex9+BDQmydaPQhNkMqIX37au9XomAW4dJZTdo/V10fXRsOgASPhcXlM/GuMbW2xqFTv/4qI3qS2jouA=
+	t=1774994932; cv=none; b=qFUky8NGTrLsaN4q0x1Gs6deeM7obmC1WWI9OQhhtKkaubJYUdf6yUG+2e38IKlJb71wPydOiRCB20+tByhZ2EqG6ppTqoRG9QDSJXAJk+ozW8ms/QDp2aet7L+0eeiURm6YGRTw5WW62eh4lmznDK2vIWpaRY1loIHDVS+Qfqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774989582; c=relaxed/simple;
-	bh=HP1NLiOIWXUdUXadhKy3DijqQs/PEm5plRHuOWWD/BE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s5eq3wKOPpj91TrQUGQ3vlSJubcpyxwOAcmCNG4QB6lgAmmIyDP/uo5a8DR0KzfMlfw2V6A+kPW7o/j+gMfvvsxhJsY7gxWfUA64FET566FcSV/KFgVSiWTsOj/qx0DnO8UE/hyGeeMubd4h1uGrM3VVp85IrrWkkoo3oHCpWKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DPBpTV4h; arc=none smtp.client-ip=74.125.82.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-12a74039dc6so4974524c88.0
-        for <linux-usb@vger.kernel.org>; Tue, 31 Mar 2026 13:39:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774989579; x=1775594379; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZRCQMa9zMGlvIHkM8ghTZ/x9mDeTjIV8vVymtj5kVU4=;
-        b=DPBpTV4h5w2BFiOw69qC+snsZ6UIPwzQUE28J8UvFype6PVntmyF2izsLsD3mVkNpo
-         hEX0V2St3RZ/fo7/DNSHVdP/nRF2pDhUmS82K+mOK0dKLWg0ZEy1SHHW/KYikQ6jlmg+
-         /QRCmbdxAr0z30oIdubZGSvnCXv5vPZiAGAtiIx50CcbCaB5Btz2XYpoebS2eGo1nAtX
-         JzST46OlyDicpt9dwVPP7+vuVa4HMyPUXC+3QyUTgQeBHwd89ewVamIHDySTBvH3i+Kx
-         puL+W9SyIIYqID6hvy2VtRKnfNMKP0CUzKemuiDoGSRs3jWdKjyStdNPB0ufQutwUP4S
-         iufQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774989579; x=1775594379;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZRCQMa9zMGlvIHkM8ghTZ/x9mDeTjIV8vVymtj5kVU4=;
-        b=ANi2fQ/SickEcmEpTrg/9sjvfzVkOKk4U2FeZfyqR9TKAXvZWw4DAaMktMv1DYFOeo
-         JURcyPUH17XtYpThnw0XxczAy33oF5ybO/+wjfABLKjb9Ew7OP7/QS0BTgtrh6MpUs4W
-         fxmWsCTxX7RmXnwDgp7MihrnXKKpZGheljFOJbtoaZCdFoDyQiV2dkU2Er4JmYrCZYr+
-         RywYPF9bz8HqTXlDAmOoC67DEJjHR7mM+IYyF5hbcY2k1C4smI1ej76l3hszxARntcxv
-         ebtrjNWk0W0JVmFNJYD07URmhYRzm/Ju1f4e3jf1HCUBugiSMA6+9W4xuCARalLiJ0cR
-         HZNw==
-X-Forwarded-Encrypted: i=1; AJvYcCUbr9y+znlgPeIudxfQ0KPUY6wrEhUQwWJFMG3HJuKyHUC3Tf2v1kC5oBj7/P8zm1USfWGKtysuz1A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJyi0z7rYajoNliTf8ifuh7WSu0zWMQAawJ5ilUSFSrldVVOCa
-	PpoSDcibFsxgMxIZ2tXYUEQfmfMGD+ZKlXQzH5J18DmF7GBS+J61HCaj8tJLvn9nFQ==
-X-Gm-Gg: ATEYQzwN80gn0jWlmPEAZa/hZWx3+hHVjYl54vnQAmzJJg2OY9V1pJD3C9/jqySrfhD
-	B3fApXoxKM8m/GMlYrRpN7jxnlqrsfFyNehqSftftIy2H1YhWshC4RHxUQWecZXiOi5erDoPAtW
-	mNSKDSGxyXz+mQEBqF3z/cn384PScYRu/DdoOEuUeWAN5/rJ3R8DonxNECurmq8c2d2CE1klFhr
-	k0rM/CWds0JoG80tAp4rj41mO3bgVAMNpb/ectlR7R4Kq1UguniveYmmwyqrb7ERJJkm1ItRWcg
-	1wsuQs680LLie2ab6OLgesmP0Sb9hqgzUF/i7iUGA7XNMqTStCsFlFrYZzsPLh1Ng2XguUAc9FO
-	8Q9vYvx3bLBVCMRy4IRSckzotB77m1NG23hxpo+A0DneAe/AjREy49cPl6lTdbk/ZMu+P2v9wG4
-	bFZfT3dAA5I/dJXOpmoJ3h/xc/ydrFw11e6pQDzbUjKrXZalMf5+9kyEWYhRDZcas9jtZ3XlCg3
-	jkQu7mIcszbgg4slmXtn8T7hQ==
-X-Received: by 2002:a05:7022:41aa:b0:128:d494:a1ab with SMTP id a92af1059eb24-12be649eb12mr512442c88.15.1774989578723;
-        Tue, 31 Mar 2026 13:39:38 -0700 (PDT)
-Received: from ?IPV6:2a00:79e0:2e7c:8:6a92:85c3:5cd5:d23d? ([2a00:79e0:2e7c:8:6a92:85c3:5cd5:d23d])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12ab983f9f3sm16792226c88.10.2026.03.31.13.39.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2026 13:39:38 -0700 (PDT)
-Message-ID: <e5384261-7a9d-4c24-8387-6002268f5c1d@google.com>
-Date: Tue, 31 Mar 2026 13:39:33 -0700
+	s=arc-20240116; t=1774994932; c=relaxed/simple;
+	bh=zK9zUD5uzq1VcBYKOgMyvNkCuXxfcS51dZ/NleWPfM4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ompgFi+wiMHmvELXEji0ul5pTbqCkYzvYn796b1D+BgBAvOXt+QEJaI37fIfo1Ttg7q91Zt63/W86U30uYCXMDKz17SI316i9yyzkVghOvp37brQumnNf394JnN0J7PU9UwdYOHahaxGsX3QlO+btZs4nnzlhTZhEJzCSWkdDWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VTvF7VaV; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774994930; x=1806530930;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zK9zUD5uzq1VcBYKOgMyvNkCuXxfcS51dZ/NleWPfM4=;
+  b=VTvF7VaV+tCKJpCm7A1M8x3aggBFCJur532kG4Vo9A/689C+xbAZqoqx
+   fQ0yW5DkT0Ojhc+B25arHVelVwJzGp3PNd9h9M3yqkrDplaSM4d8YLXGs
+   NaR5gOeyupgRvYU/BNxkpmPzYzMr4cNU/BDvcfboX7aLLKyOeyPTDuDph
+   Rw1kUqd4WZNhMUQVvCHD8MycYNB4ii1z3oVASp+8e1Jexz5nWVt9/hZt0
+   V+n/KWM+Qn3heE9As34QoY7pXhUFgPnb1aahp9ZDND058m4Bk0UfKCatu
+   QvST3JA5Tcw9+cz2TLw9Zg8QfHAlQsRKWRqacSwSZBOe/WWAfw4g+bm41
+   Q==;
+X-CSE-ConnectionGUID: HkLqVWhIQPGX9NvFwhjixg==
+X-CSE-MsgGUID: 9psLvMRwQdy4a/PK1rLh+w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="93417538"
+X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
+   d="scan'208";a="93417538"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 15:08:50 -0700
+X-CSE-ConnectionGUID: PLIi6lHgTPm2/kZ3ZQ83Kg==
+X-CSE-MsgGUID: 7SzXoGxzTw+NK/M5aVgYwg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
+   d="scan'208";a="222095554"
+Received: from lkp-server01.sh.intel.com (HELO 283bf2e1b94a) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 31 Mar 2026 15:08:48 -0700
+Received: from kbuild by 283bf2e1b94a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w7hGP-000000004LD-0rg9;
+	Tue, 31 Mar 2026 22:08:45 +0000
+Date: Wed, 1 Apr 2026 06:07:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Oliver Neukum <oneukum@suse.com>, mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH] usb: xhci: use BIT macro
+Message-ID: <202604010611.oXcU3y6m-lkp@intel.com>
+References: <20260312150649.2138749-1-oneukum@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 3/6] mfd: max77759: add register bitmasks and modify
- irq configs for charger
-To: Lee Jones <lee@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Mark Brown <broonie@kernel.org>,
- Matti Vaittinen <mazziesaccount@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
- Kyle Tso <kyletso@google.com>
-References: <20260325-max77759-charger-v9-0-4486dd297adc@google.com>
- <20260325-max77759-charger-v9-3-4486dd297adc@google.com>
- <20260331123138.GE3795166@google.com>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <20260331123138.GE3795166@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260312150649.2138749-1-oneukum@suse.com>
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,linaro.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,gmail.com,linux-foundation.org,vger.kernel.org,lists.infradead.org];
-	TAGGED_FROM(0.00)[bounces-35745-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[23];
+	DKIM_TRACE(0.00)[intel.com:+];
+	TAGGED_FROM(0.00)[bounces-35746-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[google.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[amitsd@google.com,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4B8A9371364
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[git-scm.com:url,01.org:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:dkim,intel.com:email,intel.com:mid]
+X-Rspamd-Queue-Id: 7B1133724FE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Lee,
+Hi Oliver,
 
-On 3/31/26 5:31 AM, Lee Jones wrote:
-> On Wed, 25 Mar 2026, Amit Sunil Dhamne via B4 Relay wrote:
->
->> From: Amit Sunil Dhamne <amitsd@google.com>
->>
->> Add register bitmasks for charger function.
->> In addition split the charger IRQs further such that each bit represents
->> an IRQ downstream of charger regmap irq chip. In addition populate the
->> ack_base to offload irq ack to the regmap irq chip framework.
->>
->> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->> Reviewed-by: André Draszik <andre.draszik@linaro.org>
->> ---
->>   drivers/mfd/max77759.c       |  95 ++++++++++++++++++++++---
->>   include/linux/mfd/max77759.h | 166 +++++++++++++++++++++++++++++++++++--------
->>   2 files changed, 222 insertions(+), 39 deletions(-)
->>
-> [...]
->
->> +/*
->> + * enum max77759_chgr_chgin_dtls_status - Charger Input Status
->> + * @MAX77759_CHGR_CHGIN_DTLS_VBUS_UNDERVOLTAGE:
->> + *     Charger input voltage (Vchgin) < Under Voltage Threshold (Vuvlo)
->> + * @MAX77759_CHGR_CHGIN_DTLS_VBUS_MARGINAL_VOLTAGE: Vchgin > Vuvlo and
->> + *     Vchgin < (Battery Voltage (Vbatt) + system voltage (Vsys))
->> + * @MAX77759_CHGR_CHGIN_DTLS_VBUS_OVERVOLTAGE:
->> + *     Vchgin > Over Voltage threshold (Vovlo)
->> + * @MAX77759_CHGR_CHGIN_DTLS_VBUS_VALID:
->> + *     Vchgin > Vuvlo, Vchgin < Vovlo and Vchgin > (Vsys + Vbatt)
->> + */
-> This comment is masquerading as a kernel-doc header, but isn't actually
-> kernel-doc.  Either change the formatting or adapt the formatting to use
-> /** and use W=1 to check it.
-Thanks for pointing this out! I'll fix this in the next version and 
-ensure it's a proper kernel-doc block.
+kernel test robot noticed the following build warnings:
 
-BR,
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus linus/master v7.0-rc6 next-20260330]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Amit
+url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Neukum/usb-xhci-use-BIT-macro/20260314-143843
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20260312150649.2138749-1-oneukum%40suse.com
+patch subject: [PATCH] usb: xhci: use BIT macro
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260401/202604010611.oXcU3y6m-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 2cd67b8b69f78e3f95918204320c3075a74ba16c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260401/202604010611.oXcU3y6m-lkp@intel.com/reproduce)
 
->> +enum max77759_chgr_chgin_dtls_status {
->> +	MAX77759_CHGR_CHGIN_DTLS_VBUS_UNDERVOLTAGE,
->> +	MAX77759_CHGR_CHGIN_DTLS_VBUS_MARGINAL_VOLTAGE,
->> +	MAX77759_CHGR_CHGIN_DTLS_VBUS_OVERVOLTAGE,
->> +	MAX77759_CHGR_CHGIN_DTLS_VBUS_VALID,
->> +};
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604010611.oXcU3y6m-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/usb/host/xhci.c:25:
+>> drivers/usb/host/xhci.h:2345:4: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+    2321 |                         (info & LAST_CTX_MASK) >> 27,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+--
+   In file included from drivers/usb/cdns3/host.c:18:
+>> drivers/usb/cdns3/../host/xhci.h:2345:4: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+    2321 |                         (info & LAST_CTX_MASK) >> 27,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +2345 drivers/usb/host/xhci.h
+
+90d6d5731da79a Mathias Nyman 2019-04-26  2308  
+4843b4b5ec64b8 Mathias Nyman 2021-08-20  2309  static inline const char *xhci_decode_slot_context(char *str,
+4843b4b5ec64b8 Mathias Nyman 2021-08-20  2310  		u32 info, u32 info2, u32 tt_info, u32 state)
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2311  {
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2312  	u32 speed;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2313  	u32 hub;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2314  	u32 mtt;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2315  	int ret = 0;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2316  
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2317  	speed = info & DEV_SPEED;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2318  	hub = info & DEV_HUB;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2319  	mtt = info & DEV_MTT;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2320  
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2321  	ret = sprintf(str, "RS %05x %s%s%s Ctx Entries %d MEL %d us Port# %d/%d",
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2322  			info & ROUTE_STRING_MASK,
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2323  			({ char *s;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2324  			switch (speed) {
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2325  			case SLOT_SPEED_FS:
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2326  				s = "full-speed";
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2327  				break;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2328  			case SLOT_SPEED_LS:
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2329  				s = "low-speed";
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2330  				break;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2331  			case SLOT_SPEED_HS:
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2332  				s = "high-speed";
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2333  				break;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2334  			case SLOT_SPEED_SS:
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2335  				s = "super-speed";
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2336  				break;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2337  			case SLOT_SPEED_SSP:
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2338  				s = "super-speed plus";
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2339  				break;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2340  			default:
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2341  				s = "UNKNOWN speed";
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2342  			} s; }),
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2343  			mtt ? " multi-TT" : "",
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2344  			hub ? " Hub" : "",
+19a7d0d65c4a81 Felipe Balbi  2017-04-07 @2345  			(info & LAST_CTX_MASK) >> 27,
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2346  			info2 & MAX_EXIT,
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2347  			DEVINFO_TO_ROOT_HUB_PORT(info2),
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2348  			DEVINFO_TO_MAX_PORTS(info2));
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2349  
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2350  	ret += sprintf(str + ret, " [TT Slot %d Port# %d TTT %d Intr %d] Addr %d State %s",
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2351  			tt_info & TT_SLOT, (tt_info & TT_PORT) >> 8,
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2352  			GET_TT_THINK_TIME(tt_info), GET_INTR_TARGET(tt_info),
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2353  			state & DEV_ADDR_MASK,
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2354  			xhci_slot_state_string(GET_SLOT_STATE(state)));
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2355  
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2356  	return str;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2357  }
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2358  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
