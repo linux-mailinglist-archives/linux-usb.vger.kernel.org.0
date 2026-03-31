@@ -1,154 +1,135 @@
-Return-Path: <linux-usb+bounces-35701-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35702-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8HKeEkUMy2msDQYAu9opvQ
-	(envelope-from <linux-usb+bounces-35701-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 01:50:29 +0200
+	id SEq1F78Py2lCDgYAu9opvQ
+	(envelope-from <linux-usb+bounces-35702-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 02:05:19 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id E42C13626CE
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 01:50:28 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C8AA3628AD
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 02:05:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id F1517301BAB2
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2026 23:50:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3F07A30238D5
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 00:04:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B42463B7756;
-	Mon, 30 Mar 2026 23:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Jwld01rk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E98A175A7C;
+	Tue, 31 Mar 2026 00:04:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mail-m49196.qiye.163.com (mail-m49196.qiye.163.com [45.254.49.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F7F3BE159
-	for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2026 23:50:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98752EACD;
+	Tue, 31 Mar 2026 00:04:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774914625; cv=none; b=oOY1FrZCYhX7IyZapogwQ+3udgIpsYArEunPhKZIIgNY0X3Zy52hv9jAKqLyKqPv02PsSR30Yvj2jJ4QmcA7k0um5kbfYooNvGCyQW7Qt/PDAxkxAe4tELMg6JgjuL3FNqVpK7K1l0A5HN6too4pqM8mjiFTKvV/GaKMxlcosnI=
+	t=1774915471; cv=none; b=ubrtc3Y+6UxmAK82ThW0mTt5KhCKKOwd2/qPtNBTTDLEBG90gU/jFI++f4nxV8LTmrVimowVp7o0VARWxng8aOud+hQ+tvqD8Bur3uDpmMz2AbE87wbbSn3tXM6TRrjzsuK5KHCs4CGt9yCAstyjQ1jOc5ZRA96mxluO+7Rocos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774914625; c=relaxed/simple;
-	bh=IKu99eJLKxEb+cabwk6c0H/g6/VfIhKW1QY/qwKQT/o=;
-	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
-	 Content-Type:Date:Message-ID; b=J+d53h/yVn73EjbTOaeaZiXyh7YkJF1VZ0F/GDhA3Ox7r8abr5uYevIrx0mH5pDgxGiI5ajdEstEZQWxbGfAjb73OFiGPgyw2pdxRbdsQpNAvSNF+TTVPQUSgLMT9AJ3abbK/BLkuX6lj8KFJBuBwKyUzXBlqs1uffExUJY4Il8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Jwld01rk; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774914623;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4//0gHIbpafUUo1kR2n1Am7xkOI04D7fEcFujAkL3aw=;
-	b=Jwld01rkrqHbupodp+Fg05aCHVJ6luaux00YHFZ8tS6eyGvivceKG6pOG+QHQY/VuZxE4r
-	iY0qyFU5eLUKVQqrGXCRRxR80dKQ1Rxba0rOfb9mKMYU1k3R+pfUgWrdUgdMOtcxx2WhqK
-	pbY7UR9V/7Schq0RNNwELkNKVg5AUbg=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-422-zqA9f9snPU-ZRNj8WWh5tg-1; Mon,
- 30 Mar 2026 19:50:17 -0400
-X-MC-Unique: zqA9f9snPU-ZRNj8WWh5tg-1
-X-Mimecast-MFC-AGG-ID: zqA9f9snPU-ZRNj8WWh5tg_1774914615
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4D644180035C;
-	Mon, 30 Mar 2026 23:50:14 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.44.35.245])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6465018002A6;
-	Mon, 30 Mar 2026 23:50:08 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wjDKfhS5TvEfrsOgBgAvFMPfAd3wT=Um2AQb4txHq5sAQ@mail.gmail.com>
-References: <CAHk-=wjDKfhS5TvEfrsOgBgAvFMPfAd3wT=Um2AQb4txHq5sAQ@mail.gmail.com> <20260326131838.634095-1-dhowells@redhat.com> <20260326131838.634095-5-dhowells@redhat.com> <20260329121208.6092419d@kernel.org> <CAHk-=wiJ6gEELLviexdmSHnyjVoG7MFo8Qwhd1zxs_tCnL-=gQ@mail.gmail.com> <1179840.1774867765@warthog.procyon.org.uk>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: dhowells@redhat.com, Jakub Kicinski <kuba@kernel.org>,
-    netdev@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
-    "David S. Miller" <davem@davemloft.net>,
-    Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-    linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-    Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-    John Johansen <john.johansen@canonical.com>,
-    Minas Harutyunyan <hminas@synopsys.com>,
-    Simon Horman <horms@kernel.org>, apparmor@lists.ubuntu.com,
-    linux-usb@vger.kernel.org, stable@kernel.org
-Subject: Re: [PATCH net v3 04/11] list: Move on_list_rcu() to list.h and add on_list() also
+	s=arc-20240116; t=1774915471; c=relaxed/simple;
+	bh=/QIvjWKbDBIRH67mT3BA0UqG08f2nXpv9thEhLoLGXM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RVLaCJ6cllTLhdxdrKV3l9mkw5NVrUlsUO399yQUSO/qxasfVKTtD338vW2hLkW5KE7bOBH5pwQt1HU8mXGHazsdh0MTLrqS/Gf9O9l7ICw8cTKIdaY4hokcmUGRapL4uCbqjvdpQCN3HcTb8KVXgvPpGZeH+Wr0BTYuNeGGlvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=autochips.com; spf=pass smtp.mailfrom=autochips.com; arc=none smtp.client-ip=45.254.49.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=autochips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=autochips.com
+Received: from H20F120008.autochips.inc (unknown [223.244.89.246])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 38e3cda8a;
+	Tue, 31 Mar 2026 08:04:19 +0800 (GMT+08:00)
+From: Yongchao Wu <yongchao.wu@autochips.com>
+To: peter.chen@kernel.org
+Cc: pawell@cadence.com,
+	rogerq@kernel.org,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@kernel.org,
+	Yongchao Wu <yongchao.wu@autochips.com>
+Subject: [PATCH v3] usb: cdns3: gadget: fix NULL pointer dereference in ep_queue
+Date: Tue, 31 Mar 2026 08:04:07 +0800
+Message-ID: <20260331000407.613298-1-yongchao.wu@autochips.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1317860.1774914607.1@warthog.procyon.org.uk>
-Date: Tue, 31 Mar 2026 00:50:07 +0100
-Message-ID: <1317861.1774914607@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a9d4134995403ackunm89aa724e26e5764
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZSUMfVkIdQk8ZTB1JGB1PQlYVFAkWGhdVEwETFh
+	oSFyQUDg9ZV1kYEgtZQVlJSUhVSU9PVUNCVUlPTVlXWRYaDxIVHRRZQVlPS0hVSktJT09PSFVKS0
+	tVSkJLS1kG
+X-Spamd-Result: default: False [1.54 / 15.00];
+	DMARC_POLICY_QUARANTINE(1.50)[autochips.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35701-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dhowells@redhat.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35702-lists,linux-usb=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FROM_NEQ_ENVFROM(0.00)[yongchao.wu@autochips.com,linux-usb@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
+	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,warthog.procyon.org.uk:mid]
-X-Rspamd-Queue-Id: E42C13626CE
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 9C8AA3628AD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+When the gadget endpoint is disabled or not yet configured, the ep->desc
+pointer can be NULL. This leads to a NULL pointer dereference when
+__cdns3_gadget_ep_queue() is called, causing a kernel crash.
 
-> Dammit, you should *KNOW* that already from core logic. Not with a
-> flag, not with a function to ask, but from how things work. The whole
-> "am I on a list or not" should not be a list issue, it should be
-> obvious.
+Add a check to return -ESHUTDOWN if ep->desc is NULL, which is the
+standard return code for unconfigured endpoints.
 
-The circumstance in question is this: There's a list of outstanding calls
-attached to the rxrpc network namespace.  Calls may hang around on it beyond
-the life of the socket that created them for a little bit to deal with network
-protocol cleanup, timer cleanup, work func cleanup.  Under normal operation,
-calls are removed as the last ref is put.
+This prevents potential crashes when ep_queue is called on endpoints
+that are not ready.
 
-However, should the namespace be deleted, rxrpc_destroy_all_calls() trawls the
-list to report any calls that haven't been cleaned up and the calls are
-deleted from the list as it reports them so that the spinlock doesn't have to
-be kept held.  It used to do other work here too, IIRC, but that's no longer
-the case, so perhaps this loop is not needed now, and a warning will suffice
-if the list is not empty (or I could just report, say, the first 10 calls and
-not worry about calling cond_resched()).  The wait at the bottom of the
-function should be sufficient to hold up namespace deallocation.
+Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+Cc: stable@kernel.org
 
-If I don't delete entries in rxrpc_destroy_all_calls(), then rxrpc_put_call()
-only needs list_empty() to guard against the call not having being queued yet.
-I could have a flag for that, but it would be superfluous.
+Signed-off-by: Yongchao Wu <yongchao.wu@autochips.com>
+Acked-by: Peter Chen <peter.chen@kernel.org>
 
-Note that the reason for the RCU walking is because /proc/net/rxrpc/calls
-walks over the same list, so I still need the next patch which switches to
-list_del_rcu().
+---
+Changes in v3:
+  - add Fixes tag
+  - add Cc to stable tree
+Changes in v2:
+  - Fix author name format (use "Yongchao Wu" instead of "yongchao.wu")
+---
+ drivers/usb/cdns3/cdns3-gadget.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-David
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index d59a60a16..96d2a4c38 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -2589,6 +2589,9 @@ static int __cdns3_gadget_ep_queue(struct usb_ep *ep,
+ 	struct cdns3_request *priv_req;
+ 	int ret = 0;
+ 
++	if (!ep->desc)
++		return -ESHUTDOWN;
++
+ 	request->actual = 0;
+ 	request->status = -EINPROGRESS;
+ 	priv_req = to_cdns3_request(request);
+-- 
+2.43.0
 
 
