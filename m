@@ -1,211 +1,213 @@
-Return-Path: <linux-usb+bounces-35746-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35747-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YAJuAvdFzGm+RgYAu9opvQ
-	(envelope-from <linux-usb+bounces-35746-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 00:08:55 +0200
+	id UIbiHjFWzGn/SQYAu9opvQ
+	(envelope-from <linux-usb+bounces-35747-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 01:18:09 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B1133724FE
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 00:08:54 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01DD0372A8E
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 01:18:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 46ABF30143F1
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 22:08:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 495A13027B47
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 23:17:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C3AC45BD7B;
-	Tue, 31 Mar 2026 22:08:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E2FA3B47F0;
+	Tue, 31 Mar 2026 23:17:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VTvF7VaV"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BVCnSKrM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590243E95B4
-	for <linux-usb@vger.kernel.org>; Tue, 31 Mar 2026 22:08:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFC8225417
+	for <linux-usb@vger.kernel.org>; Tue, 31 Mar 2026 23:17:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774994932; cv=none; b=qFUky8NGTrLsaN4q0x1Gs6deeM7obmC1WWI9OQhhtKkaubJYUdf6yUG+2e38IKlJb71wPydOiRCB20+tByhZ2EqG6ppTqoRG9QDSJXAJk+ozW8ms/QDp2aet7L+0eeiURm6YGRTw5WW62eh4lmznDK2vIWpaRY1loIHDVS+Qfqk=
+	t=1774999069; cv=none; b=K8xvYHNe3EHstQoAO9ETChp9MMDwg1dT5ovuzv4gEHZbY5bYRizdeYbnOfitryEu0/G2hC+YhVjP9VPPILMtYyWyqGfLNE93UrPEeG/MOHBC+GMOCLxSPraCVYueS4xfi5RPwNlxHccJDvh7P+bFIXzHM3+NHwjkyWpl1kXxpnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774994932; c=relaxed/simple;
-	bh=zK9zUD5uzq1VcBYKOgMyvNkCuXxfcS51dZ/NleWPfM4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ompgFi+wiMHmvELXEji0ul5pTbqCkYzvYn796b1D+BgBAvOXt+QEJaI37fIfo1Ttg7q91Zt63/W86U30uYCXMDKz17SI316i9yyzkVghOvp37brQumnNf394JnN0J7PU9UwdYOHahaxGsX3QlO+btZs4nnzlhTZhEJzCSWkdDWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VTvF7VaV; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774994930; x=1806530930;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zK9zUD5uzq1VcBYKOgMyvNkCuXxfcS51dZ/NleWPfM4=;
-  b=VTvF7VaV+tCKJpCm7A1M8x3aggBFCJur532kG4Vo9A/689C+xbAZqoqx
-   fQ0yW5DkT0Ojhc+B25arHVelVwJzGp3PNd9h9M3yqkrDplaSM4d8YLXGs
-   NaR5gOeyupgRvYU/BNxkpmPzYzMr4cNU/BDvcfboX7aLLKyOeyPTDuDph
-   Rw1kUqd4WZNhMUQVvCHD8MycYNB4ii1z3oVASp+8e1Jexz5nWVt9/hZt0
-   V+n/KWM+Qn3heE9As34QoY7pXhUFgPnb1aahp9ZDND058m4Bk0UfKCatu
-   QvST3JA5Tcw9+cz2TLw9Zg8QfHAlQsRKWRqacSwSZBOe/WWAfw4g+bm41
-   Q==;
-X-CSE-ConnectionGUID: HkLqVWhIQPGX9NvFwhjixg==
-X-CSE-MsgGUID: 9psLvMRwQdy4a/PK1rLh+w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="93417538"
-X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
-   d="scan'208";a="93417538"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 15:08:50 -0700
-X-CSE-ConnectionGUID: PLIi6lHgTPm2/kZ3ZQ83Kg==
-X-CSE-MsgGUID: 7SzXoGxzTw+NK/M5aVgYwg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
-   d="scan'208";a="222095554"
-Received: from lkp-server01.sh.intel.com (HELO 283bf2e1b94a) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 31 Mar 2026 15:08:48 -0700
-Received: from kbuild by 283bf2e1b94a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w7hGP-000000004LD-0rg9;
-	Tue, 31 Mar 2026 22:08:45 +0000
-Date: Wed, 1 Apr 2026 06:07:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oliver Neukum <oneukum@suse.com>, mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Oliver Neukum <oneukum@suse.com>
-Subject: Re: [PATCH] usb: xhci: use BIT macro
-Message-ID: <202604010611.oXcU3y6m-lkp@intel.com>
-References: <20260312150649.2138749-1-oneukum@suse.com>
+	s=arc-20240116; t=1774999069; c=relaxed/simple;
+	bh=aHZRNoTvbdlI/EombGoD9iP8bTf4Aj4gSIgmhshYEx0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iU1yuzA6CS+UPNgC1N2bZEznxie4HcfDkFgvT4tgK6qkU6Y3wAAagTlJn7q1sC9AUHupNnHiME/kOvpzqxdkebPI8kl+tqZ/sc1JHDgfXPAtudvtuB3kjBeNWeRbYDdmlpgj4DhESObTC54oicX5PPN0D8bRGM889G7+X5AFTMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BVCnSKrM; arc=none smtp.client-ip=209.85.210.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7d7447778b9so3376529a34.2
+        for <linux-usb@vger.kernel.org>; Tue, 31 Mar 2026 16:17:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1774999066; x=1775603866; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4mwEv/M/xQBFIbRAjlXXEdV7PZOOUIQNp5LFHgoTzio=;
+        b=BVCnSKrM9DvXuhNrDHYF8dDrfGbTXc2b0h1u9bjWhhnjlsXyWtBmxEtuabf990UrNj
+         eaDlMMn2mlxlOjD0/0hHNXrIMucgm7hBPEitUVBRBWrddwtnmMAcf2pCbrVXit+f+lxP
+         fNBQwGNOezu93ALYcvJ80bPQPJ0d36Cz384xU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774999066; x=1775603866;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4mwEv/M/xQBFIbRAjlXXEdV7PZOOUIQNp5LFHgoTzio=;
+        b=FUFOkSNcsn2IhnIkza6TsFZeZ6+KvF0861j7YRmhrLNYxlcuxFLSSk1Bszz0F44XRU
+         U9sDn5rG0KbWU34zFPWcLxj/+xSZl1B0aCaBXQYbri/csM89u8z/AJelvF7H+4KbWzvz
+         bORaQfuMaBGZjzWU8EXWCH75N/AG8p9SwCTQapVk3B/6pCi1BaoJKG0TOlT9BNgscTgC
+         3fJE3zlsxRw7CIP7Yr2Yt6Ia03lX/ZW/LBOhG4Ksy5WKmlE4xzQ7v4s3QNBWUGd3pGNY
+         JDSPUh4GURHKHVHSt/oZ2IOp31jWOwbwoW42lGnFIHrpbuN12tAPYtC0lLyGjq6q4WpN
+         XguQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXqdI6GB4k0GB8CYurTI1ak5SUy1v/fpa2zs9nRs2WMXk6Xz2ckMY/CP+ogJocfxVqA/yZcjapIpds=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynW/7yreunHjM8dC51zK1GAZ7ySuXzN8u5nDnV7hB/lc7+gQhJ
+	PWqmWr8hMfhaD95ScIICsEBEt128gXUFBvj+F8C4RhQBnuqRzK4tCzoBd3PsVrhMghDOWJz392Q
+	vH31PRWo=
+X-Gm-Gg: ATEYQzz4tRzuynnp6/SKSJB5QyTLBpcfKYKoMxXH0B0MB960BdZ2icDpASzZXzj1FzF
+	0xMbkalJRtue+T+IZNqkqSKBJvFYQqz8/0Ji73u+tABTHNIbAXOB7ekPzf6qXCnhWKq0MFFS6Rt
+	0DKtQeNfwLrc/PbzMxAiwGX+crqvegnkIcYih2YZRFn0BmsDwdnn+z3Qed8vXbSM6ztJiXva/bz
+	dUHS9D1EwZOfEf8PPRxMwMFDptDwNq3YFmOs4OW08sjo4faJXQyRhWflmUBjmVl6idjSOsJLK4L
+	hWa0041iNUM0p6fZENz+zQePrsr5bVDXOdCmnDVVVl7POYmIBVPLhF5ZLmyFA7BkA3DBm391Qw8
+	3piz9p5jL+Y/mItHK/lh3xSpqTutriZXeqpFsvEDMCuoMInoHt4I0tlorUmNy+PY2Ba4NJzO4+K
+	wcfmDjjz/p1cAjZNPVIYYB0OSoiqyQuNgeMn4=
+X-Received: by 2002:a05:6830:7009:b0:7d7:ecef:1460 with SMTP id 46e09a7af769-7db9946a0d8mr1102070a34.31.1774999065919;
+        Tue, 31 Mar 2026 16:17:45 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7da0a335440sm9117890a34.4.2026.03.31.16.17.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Mar 2026 16:17:45 -0700 (PDT)
+Message-ID: <34da1928-f6e7-43fb-a436-6bc02e262698@linuxfoundation.org>
+Date: Tue, 31 Mar 2026 17:17:44 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260312150649.2138749-1-oneukum@suse.com>
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usbip: vhci: reject RET_SUBMIT with inflated
+ number_of_packets
+To: Nathan Rebello <nathan.c.rebello@gmail.com>, linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org, addcontent08@gmail.com,
+ kyungtae.kim@dartmouth.edu, stable@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20260327064449.735-1-nathan.c.rebello@gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20260327064449.735-1-nathan.c.rebello@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	TAGGED_FROM(0.00)[bounces-35746-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,gmail.com,dartmouth.edu,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-35747-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[skhan@linuxfoundation.org,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.996];
 	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-1.000];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[git-scm.com:url,01.org:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:dkim,intel.com:email,intel.com:mid]
-X-Rspamd-Queue-Id: 7B1133724FE
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:dkim,linuxfoundation.org:email,linuxfoundation.org:mid]
+X-Rspamd-Queue-Id: 01DD0372A8E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Oliver,
+On 3/27/26 00:44, Nathan Rebello wrote:
+> When a USB/IP client receives a RET_SUBMIT response,
+> usbip_pack_ret_submit() unconditionally overwrites
+> urb->number_of_packets from the network PDU. This value is
+> subsequently used as the loop bound in usbip_recv_iso() and
+> usbip_pad_iso() to iterate over urb->iso_frame_desc[], a flexible
+> array whose size was fixed at URB allocation time based on the
+> *original* number_of_packets from the CMD_SUBMIT.
+> 
+> A malicious USB/IP server can set number_of_packets in the response
+> to a value larger than what was originally submitted, causing a heap
+> out-of-bounds write when usbip_recv_iso() writes to
+> urb->iso_frame_desc[i] beyond the allocated region.
+> 
+> KASAN confirmed this with kernel 7.0.0-rc5:
+> 
+>    BUG: KASAN: slab-out-of-bounds in usbip_recv_iso+0x46a/0x640
+>    Write of size 4 at addr ffff888106351d40 by task vhci_rx/69
+> 
+>    The buggy address is located 0 bytes to the right of
+>     allocated 320-byte region [ffff888106351c00, ffff888106351d40)
+> 
+> The server side (stub_rx.c) and gadget side (vudc_rx.c) already
+> validate number_of_packets in the CMD_SUBMIT path since commits
+> c6688ef9f297 ("usbip: fix stub_rx: harden CMD_SUBMIT path to handle
+> malicious input") and b78d830f0049 ("usbip: fix vudc_rx: harden
+> CMD_SUBMIT path to handle malicious input"). The server side validates
+> against USBIP_MAX_ISO_PACKETS because no URB exists yet at that point.
+> On the client side we have the original URB, so we can use the tighter
+> bound: the response must not exceed the original number_of_packets.
+> 
+> This mirrors the existing validation of actual_length against
+> transfer_buffer_length in usbip_recv_xbuff(), which checks the
+> response value against the original allocation size.
+> 
+> Kelvin Mbogo's series ("usb: usbip: fix integer overflow in
+> usbip_recv_iso()", v2) hardens the receive-side functions themselves;
+> this patch complements that work by catching the bad value at its
+> source -- in usbip_pack_ret_submit() before the overwrite -- and
+> using the tighter per-URB allocation bound rather than the global
+> USBIP_MAX_ISO_PACKETS limit.
+> 
+> Fix this by checking rpdu->number_of_packets against
+> urb->number_of_packets in usbip_pack_ret_submit() before the
+> overwrite. On violation, clamp to zero so that usbip_recv_iso() and
+> usbip_pad_iso() safely return early.
+> 
+> Fixes: 0775a9cbc798 ("staging: usbip: vhci extension: modifications to the client side")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Nathan Rebello <nathan.c.rebello@gmail.com>
+> ---
+>   drivers/usb/usbip/usbip_common.c | 13 ++++++++++++-
+>   1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
+> --- a/drivers/usb/usbip/usbip_common.c
+> +++ b/drivers/usb/usbip/usbip_common.c
+> @@ -470,7 +470,18 @@ static void usbip_pack_ret_submit(struct usbip_header *pdu, struct urb *urb,
+>   		urb->status		= rpdu->status;
+>   		urb->actual_length	= rpdu->actual_length;
+>   		urb->start_frame	= rpdu->start_frame;
+> -		urb->number_of_packets = rpdu->number_of_packets;
+> +		/*
+> +		 * The number_of_packets field determines the length of
+> +		 * iso_frame_desc[], which is a flexible array allocated
+> +		 * at URB creation time. A response must never claim more
+> +		 * packets than originally submitted; doing so would cause
+> +		 * an out-of-bounds write in usbip_recv_iso() and
+> +		 * usbip_pad_iso(). Clamp to zero on violation so both
+> +		 * functions safely return early.
+> +		 */
+> +		if (rpdu->number_of_packets < 0 ||
+> +		    rpdu->number_of_packets > urb->number_of_packets)
+> +			rpdu->number_of_packets = 0;
+> +		urb->number_of_packets = rpdu->number_of_packets;
+>   		urb->error_count	= rpdu->error_count;
+>   	}
+>   }
 
-kernel test robot noticed the following build warnings:
+Look good to me.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus linus/master v7.0-rc6 next-20260330]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Neukum/usb-xhci-use-BIT-macro/20260314-143843
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20260312150649.2138749-1-oneukum%40suse.com
-patch subject: [PATCH] usb: xhci: use BIT macro
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260401/202604010611.oXcU3y6m-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 2cd67b8b69f78e3f95918204320c3075a74ba16c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260401/202604010611.oXcU3y6m-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604010611.oXcU3y6m-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/usb/host/xhci.c:25:
->> drivers/usb/host/xhci.h:2345:4: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
-    2321 |                         (info & LAST_CTX_MASK) >> 27,
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
---
-   In file included from drivers/usb/cdns3/host.c:18:
->> drivers/usb/cdns3/../host/xhci.h:2345:4: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
-    2321 |                         (info & LAST_CTX_MASK) >> 27,
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +2345 drivers/usb/host/xhci.h
-
-90d6d5731da79a Mathias Nyman 2019-04-26  2308  
-4843b4b5ec64b8 Mathias Nyman 2021-08-20  2309  static inline const char *xhci_decode_slot_context(char *str,
-4843b4b5ec64b8 Mathias Nyman 2021-08-20  2310  		u32 info, u32 info2, u32 tt_info, u32 state)
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2311  {
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2312  	u32 speed;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2313  	u32 hub;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2314  	u32 mtt;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2315  	int ret = 0;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2316  
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2317  	speed = info & DEV_SPEED;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2318  	hub = info & DEV_HUB;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2319  	mtt = info & DEV_MTT;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2320  
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2321  	ret = sprintf(str, "RS %05x %s%s%s Ctx Entries %d MEL %d us Port# %d/%d",
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2322  			info & ROUTE_STRING_MASK,
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2323  			({ char *s;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2324  			switch (speed) {
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2325  			case SLOT_SPEED_FS:
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2326  				s = "full-speed";
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2327  				break;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2328  			case SLOT_SPEED_LS:
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2329  				s = "low-speed";
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2330  				break;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2331  			case SLOT_SPEED_HS:
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2332  				s = "high-speed";
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2333  				break;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2334  			case SLOT_SPEED_SS:
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2335  				s = "super-speed";
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2336  				break;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2337  			case SLOT_SPEED_SSP:
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2338  				s = "super-speed plus";
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2339  				break;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2340  			default:
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2341  				s = "UNKNOWN speed";
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2342  			} s; }),
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2343  			mtt ? " multi-TT" : "",
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2344  			hub ? " Hub" : "",
-19a7d0d65c4a81 Felipe Balbi  2017-04-07 @2345  			(info & LAST_CTX_MASK) >> 27,
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2346  			info2 & MAX_EXIT,
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2347  			DEVINFO_TO_ROOT_HUB_PORT(info2),
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2348  			DEVINFO_TO_MAX_PORTS(info2));
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2349  
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2350  	ret += sprintf(str + ret, " [TT Slot %d Port# %d TTT %d Intr %d] Addr %d State %s",
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2351  			tt_info & TT_SLOT, (tt_info & TT_PORT) >> 8,
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2352  			GET_TT_THINK_TIME(tt_info), GET_INTR_TARGET(tt_info),
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2353  			state & DEV_ADDR_MASK,
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2354  			xhci_slot_state_string(GET_SLOT_STATE(state)));
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2355  
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2356  	return str;
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2357  }
-19a7d0d65c4a81 Felipe Balbi  2017-04-07  2358  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
