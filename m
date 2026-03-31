@@ -1,213 +1,406 @@
-Return-Path: <linux-usb+bounces-35747-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35749-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UIbiHjFWzGn/SQYAu9opvQ
-	(envelope-from <linux-usb+bounces-35747-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 01:18:09 +0200
+	id IPVGCJ1XzGkjSgYAu9opvQ
+	(envelope-from <linux-usb+bounces-35749-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 01:24:13 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01DD0372A8E
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 01:18:08 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B48A4372C07
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 01:24:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 495A13027B47
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 23:17:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0C3A8308A978
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 23:22:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E2FA3B47F0;
-	Tue, 31 Mar 2026 23:17:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F8B0477984;
+	Tue, 31 Mar 2026 23:22:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BVCnSKrM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YXQFXAH/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFC8225417
-	for <linux-usb@vger.kernel.org>; Tue, 31 Mar 2026 23:17:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353253E959A;
+	Tue, 31 Mar 2026 23:22:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774999069; cv=none; b=K8xvYHNe3EHstQoAO9ETChp9MMDwg1dT5ovuzv4gEHZbY5bYRizdeYbnOfitryEu0/G2hC+YhVjP9VPPILMtYyWyqGfLNE93UrPEeG/MOHBC+GMOCLxSPraCVYueS4xfi5RPwNlxHccJDvh7P+bFIXzHM3+NHwjkyWpl1kXxpnk=
+	t=1774999354; cv=none; b=rwuUVm0LKobotpDEXD32pqj2k8z5OHIz0sRz4SYfpFVag41y0rOvwUgfrpFG7554jQfLdwoKEM+Iz+bAi0F8fMRPGQl+NyEEcPTXaf/RKZw9C02Qb7c158VmtIdX0voOdTLjA75iksc4NDUITZpgBkR9+ZHH2OREpM7cGvvlFCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774999069; c=relaxed/simple;
-	bh=aHZRNoTvbdlI/EombGoD9iP8bTf4Aj4gSIgmhshYEx0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iU1yuzA6CS+UPNgC1N2bZEznxie4HcfDkFgvT4tgK6qkU6Y3wAAagTlJn7q1sC9AUHupNnHiME/kOvpzqxdkebPI8kl+tqZ/sc1JHDgfXPAtudvtuB3kjBeNWeRbYDdmlpgj4DhESObTC54oicX5PPN0D8bRGM889G7+X5AFTMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BVCnSKrM; arc=none smtp.client-ip=209.85.210.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7d7447778b9so3376529a34.2
-        for <linux-usb@vger.kernel.org>; Tue, 31 Mar 2026 16:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1774999066; x=1775603866; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4mwEv/M/xQBFIbRAjlXXEdV7PZOOUIQNp5LFHgoTzio=;
-        b=BVCnSKrM9DvXuhNrDHYF8dDrfGbTXc2b0h1u9bjWhhnjlsXyWtBmxEtuabf990UrNj
-         eaDlMMn2mlxlOjD0/0hHNXrIMucgm7hBPEitUVBRBWrddwtnmMAcf2pCbrVXit+f+lxP
-         fNBQwGNOezu93ALYcvJ80bPQPJ0d36Cz384xU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774999066; x=1775603866;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4mwEv/M/xQBFIbRAjlXXEdV7PZOOUIQNp5LFHgoTzio=;
-        b=FUFOkSNcsn2IhnIkza6TsFZeZ6+KvF0861j7YRmhrLNYxlcuxFLSSk1Bszz0F44XRU
-         U9sDn5rG0KbWU34zFPWcLxj/+xSZl1B0aCaBXQYbri/csM89u8z/AJelvF7H+4KbWzvz
-         bORaQfuMaBGZjzWU8EXWCH75N/AG8p9SwCTQapVk3B/6pCi1BaoJKG0TOlT9BNgscTgC
-         3fJE3zlsxRw7CIP7Yr2Yt6Ia03lX/ZW/LBOhG4Ksy5WKmlE4xzQ7v4s3QNBWUGd3pGNY
-         JDSPUh4GURHKHVHSt/oZ2IOp31jWOwbwoW42lGnFIHrpbuN12tAPYtC0lLyGjq6q4WpN
-         XguQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXqdI6GB4k0GB8CYurTI1ak5SUy1v/fpa2zs9nRs2WMXk6Xz2ckMY/CP+ogJocfxVqA/yZcjapIpds=@vger.kernel.org
-X-Gm-Message-State: AOJu0YynW/7yreunHjM8dC51zK1GAZ7ySuXzN8u5nDnV7hB/lc7+gQhJ
-	PWqmWr8hMfhaD95ScIICsEBEt128gXUFBvj+F8C4RhQBnuqRzK4tCzoBd3PsVrhMghDOWJz392Q
-	vH31PRWo=
-X-Gm-Gg: ATEYQzz4tRzuynnp6/SKSJB5QyTLBpcfKYKoMxXH0B0MB960BdZ2icDpASzZXzj1FzF
-	0xMbkalJRtue+T+IZNqkqSKBJvFYQqz8/0Ji73u+tABTHNIbAXOB7ekPzf6qXCnhWKq0MFFS6Rt
-	0DKtQeNfwLrc/PbzMxAiwGX+crqvegnkIcYih2YZRFn0BmsDwdnn+z3Qed8vXbSM6ztJiXva/bz
-	dUHS9D1EwZOfEf8PPRxMwMFDptDwNq3YFmOs4OW08sjo4faJXQyRhWflmUBjmVl6idjSOsJLK4L
-	hWa0041iNUM0p6fZENz+zQePrsr5bVDXOdCmnDVVVl7POYmIBVPLhF5ZLmyFA7BkA3DBm391Qw8
-	3piz9p5jL+Y/mItHK/lh3xSpqTutriZXeqpFsvEDMCuoMInoHt4I0tlorUmNy+PY2Ba4NJzO4+K
-	wcfmDjjz/p1cAjZNPVIYYB0OSoiqyQuNgeMn4=
-X-Received: by 2002:a05:6830:7009:b0:7d7:ecef:1460 with SMTP id 46e09a7af769-7db9946a0d8mr1102070a34.31.1774999065919;
-        Tue, 31 Mar 2026 16:17:45 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7da0a335440sm9117890a34.4.2026.03.31.16.17.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2026 16:17:45 -0700 (PDT)
-Message-ID: <34da1928-f6e7-43fb-a436-6bc02e262698@linuxfoundation.org>
-Date: Tue, 31 Mar 2026 17:17:44 -0600
+	s=arc-20240116; t=1774999354; c=relaxed/simple;
+	bh=xrHMl7PzQE+M0LSv6NXEKGHOeSB6YtsB/EXUXuyzHIU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=uMeFUYoerPeyFzER6TimMoQZUtjvbCaICqqe022+Z9SuZUMFvTKLrxVHx4zrBc33NRRQb1jyKXU5oLOiZlSb7DnnU/zllIbc6bEbresyQCsi5Zbf87M/hZyMrFPZYvCdQbj1cVUtuJM+0q4T477YrJlIwCao7dT/KvOJTRB0FUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YXQFXAH/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C6AB1C19423;
+	Tue, 31 Mar 2026 23:22:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774999353;
+	bh=xrHMl7PzQE+M0LSv6NXEKGHOeSB6YtsB/EXUXuyzHIU=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=YXQFXAH/ApLwj/3rujZ7fzwAWKiYhiDRSuPARWgNv3GsWUKX/jysoeOhoxyDDSgnc
+	 MolkPnotBuk5ogbgEmR1j+jsJRvwhOGBcPCAZlxYjU03O0LwG/UgaCWnsU3J7H3Jk3
+	 n4DoAuIaBsL5785vNPtOysiqznFrbJqio2kPgOOnlLGPTkSxJPJcbwSLa2Ct69/3Yc
+	 uHb58wLtxEZfHonTrpjcecwFcIRTbcnxmCcGxndcGwJmZG3IEhnt0Rq8wVleaDS1p5
+	 T+GZmxWrDeuyVXHe9u5+6tUAcFgseMbX49TOjZOoFR6t5BpWVGSKu/wSbD3epi5p1h
+	 hCulDUk9pVSbw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B023710F92E3;
+	Tue, 31 Mar 2026 23:22:33 +0000 (UTC)
+From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
+Subject: [PATCH v10 0/6] Introduce MAX77759 charger driver
+Date: Tue, 31 Mar 2026 23:22:15 +0000
+Message-Id: <20260331-max77759-charger-v10-0-76f59233c369@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usbip: vhci: reject RET_SUBMIT with inflated
- number_of_packets
-To: Nathan Rebello <nathan.c.rebello@gmail.com>, linux-usb@vger.kernel.org
-Cc: gregkh@linuxfoundation.org, addcontent08@gmail.com,
- kyungtae.kim@dartmouth.edu, stable@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20260327064449.735-1-nathan.c.rebello@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20260327064449.735-1-nathan.c.rebello@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAChXzGkC/3XSS27DIBAA0KtErOMKBmaArnqPKgt+diw1cWVXV
+ qrIdy9OW9kVdMmgefOBO5vS2KeJPR/ubExzP/XDNR8EPx5YOLtrl5o+5gADDigEx+biblprtE2
+ +Hrs0NgbBE1AkEo7ltPcxtf3tYb6e8vncTx/D+PkoMYs1+oOBLLFZNLwhD0l50+oW1Us3DN1be
+ grDha3aDJsAwlQEyAJ4QGsNd2SoEOROAF0RZBZQJSLVYnAWCkH9CsRzExVBrVNYBVIFE1MUhYC
+ bALy2B8yCRy4tSk0O20KgnSBURaB1DyZw66PTypeb1HuhtkmdhWSi5ToksgELwewEqPVgVsEb8
+ hE1TzbshePhO1OK/zIBKOTRTdCxfAO71ZZQ+ZazzYJShmIEq138U/u0LMsXmnMe1fwCAAA=
+X-Change-ID: 20251105-max77759-charger-852b626d661a
+To: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jagan Sridharan <badhri@google.com>, Mark Brown <broonie@kernel.org>, 
+ Matti Vaittinen <mazziesaccount@gmail.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Sebastian Reichel <sre@kernel.org>, Amit Sunil Dhamne <amitsd@google.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1774999352; l=10670;
+ i=amitsd@google.com; s=20241031; h=from:subject:message-id;
+ bh=xrHMl7PzQE+M0LSv6NXEKGHOeSB6YtsB/EXUXuyzHIU=;
+ b=VQ4+ZDAPkr2wBthukXkfOAKgEk8Wz0q0nZkxms2VgtYIjdLqkBrjYo2bZg0AmZhR9UuHeUyi6
+ G+DDj3x/SMIDz05MjMD5sGw9Io/N2GqLHifgz/TRxMaondK9uWLkPes
+X-Developer-Key: i=amitsd@google.com; a=ed25519;
+ pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
+X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
+ auth_id=262
+X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
+Reply-To: amitsd@google.com
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,gmail.com,dartmouth.edu,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-35747-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35749-lists,linux-usb=lfdr.de,amitsd.google.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[linaro.org,kernel.org,linuxfoundation.org,google.com,gmail.com,linux-foundation.org,linux.intel.com,samsung.com];
 	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	FROM_HAS_DN(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[skhan@linuxfoundation.org,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.996];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:dkim,linuxfoundation.org:email,linuxfoundation.org:mid]
-X-Rspamd-Queue-Id: 01DD0372A8E
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.997];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	HAS_REPLYTO(0.00)[amitsd@google.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B48A4372C07
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 3/27/26 00:44, Nathan Rebello wrote:
-> When a USB/IP client receives a RET_SUBMIT response,
-> usbip_pack_ret_submit() unconditionally overwrites
-> urb->number_of_packets from the network PDU. This value is
-> subsequently used as the loop bound in usbip_recv_iso() and
-> usbip_pad_iso() to iterate over urb->iso_frame_desc[], a flexible
-> array whose size was fixed at URB allocation time based on the
-> *original* number_of_packets from the CMD_SUBMIT.
-> 
-> A malicious USB/IP server can set number_of_packets in the response
-> to a value larger than what was originally submitted, causing a heap
-> out-of-bounds write when usbip_recv_iso() writes to
-> urb->iso_frame_desc[i] beyond the allocated region.
-> 
-> KASAN confirmed this with kernel 7.0.0-rc5:
-> 
->    BUG: KASAN: slab-out-of-bounds in usbip_recv_iso+0x46a/0x640
->    Write of size 4 at addr ffff888106351d40 by task vhci_rx/69
-> 
->    The buggy address is located 0 bytes to the right of
->     allocated 320-byte region [ffff888106351c00, ffff888106351d40)
-> 
-> The server side (stub_rx.c) and gadget side (vudc_rx.c) already
-> validate number_of_packets in the CMD_SUBMIT path since commits
-> c6688ef9f297 ("usbip: fix stub_rx: harden CMD_SUBMIT path to handle
-> malicious input") and b78d830f0049 ("usbip: fix vudc_rx: harden
-> CMD_SUBMIT path to handle malicious input"). The server side validates
-> against USBIP_MAX_ISO_PACKETS because no URB exists yet at that point.
-> On the client side we have the original URB, so we can use the tighter
-> bound: the response must not exceed the original number_of_packets.
-> 
-> This mirrors the existing validation of actual_length against
-> transfer_buffer_length in usbip_recv_xbuff(), which checks the
-> response value against the original allocation size.
-> 
-> Kelvin Mbogo's series ("usb: usbip: fix integer overflow in
-> usbip_recv_iso()", v2) hardens the receive-side functions themselves;
-> this patch complements that work by catching the bad value at its
-> source -- in usbip_pack_ret_submit() before the overwrite -- and
-> using the tighter per-URB allocation bound rather than the global
-> USBIP_MAX_ISO_PACKETS limit.
-> 
-> Fix this by checking rpdu->number_of_packets against
-> urb->number_of_packets in usbip_pack_ret_submit() before the
-> overwrite. On violation, clamp to zero so that usbip_recv_iso() and
-> usbip_pad_iso() safely return early.
-> 
-> Fixes: 0775a9cbc798 ("staging: usbip: vhci extension: modifications to the client side")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Nathan Rebello <nathan.c.rebello@gmail.com>
-> ---
->   drivers/usb/usbip/usbip_common.c | 13 ++++++++++++-
->   1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
-> --- a/drivers/usb/usbip/usbip_common.c
-> +++ b/drivers/usb/usbip/usbip_common.c
-> @@ -470,7 +470,18 @@ static void usbip_pack_ret_submit(struct usbip_header *pdu, struct urb *urb,
->   		urb->status		= rpdu->status;
->   		urb->actual_length	= rpdu->actual_length;
->   		urb->start_frame	= rpdu->start_frame;
-> -		urb->number_of_packets = rpdu->number_of_packets;
-> +		/*
-> +		 * The number_of_packets field determines the length of
-> +		 * iso_frame_desc[], which is a flexible array allocated
-> +		 * at URB creation time. A response must never claim more
-> +		 * packets than originally submitted; doing so would cause
-> +		 * an out-of-bounds write in usbip_recv_iso() and
-> +		 * usbip_pad_iso(). Clamp to zero on violation so both
-> +		 * functions safely return early.
-> +		 */
-> +		if (rpdu->number_of_packets < 0 ||
-> +		    rpdu->number_of_packets > urb->number_of_packets)
-> +			rpdu->number_of_packets = 0;
-> +		urb->number_of_packets = rpdu->number_of_packets;
->   		urb->error_count	= rpdu->error_count;
->   	}
->   }
+MAX77759 PMIC is used in Pixel 6 and 6 Pro (Oriole/Raven) boards.
+One of the functions of the MAX77759 PMIC is a battery charger. This
+patchset introduces a driver for this function. One of the unique
+features of this charger driver is that it works with a USB input where
+the Type-C controller is TCPCI based.
 
-Look good to me.
+Changes to the board files will follow soon once this patchset is reviewed.
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+For reference to the MAX77759 MFD based patchset (present in upstream):
+https://lore.kernel.org/all/20250509-max77759-mfd-v10-0-962ac15ee3ef@linaro.org/
+
+Dependency list for patches (directionality indicates depends on):
+[6] -> [5] -> [4] & [3]
+
+The changes need to be applied in order. In this case this probably
+would be the USB subsystem as that's the leaf in the dependency list.
+
+---
+Kernel-doc output for include/linux/mfd/max77759.h (partial and only for
+the changes introduced by me:
+
+.. c:enum:: max77759_chgr_chgin_dtls_status
+
+  Charger Input Status
+
+.. container:: kernelindent
+
+    **Constants**
+
+    ``MAX77759_CHGR_CHGIN_DTLS_VBUS_UNDERVOLTAGE``
+      Charger input voltage (Vchgin) < Under Voltage Threshold (Vuvlo)
+
+    ``MAX77759_CHGR_CHGIN_DTLS_VBUS_MARGINAL_VOLTAGE``
+      Vchgin > Vuvlo and Vchgin < (Battery Voltage (Vbatt) + system voltage (Vsys))
+
+    ``MAX77759_CHGR_CHGIN_DTLS_VBUS_OVERVOLTAGE``
+      Vchgin > Over Voltage threshold (Vovlo)
+
+    ``MAX77759_CHGR_CHGIN_DTLS_VBUS_VALID``
+      Vchgin > Vuvlo, Vchgin < Vovlo and Vchgin > (Vsys + Vbatt)
+
+.. c:enum:: max77759_chgr_bat_dtls_states
+
+  Battery Details
+
+.. container:: kernelindent
+
+    **Constants**
+
+    ``MAX77759_CHGR_BAT_DTLS_NO_BATT_CHG_SUSP``
+      No battery and the charger suspended
+
+    ``MAX77759_CHGR_BAT_DTLS_DEAD_BATTERY``
+      Vbatt < Vtrickle
+
+    ``MAX77759_CHGR_BAT_DTLS_BAT_CHG_TIMER_FAULT``
+      Charging suspended due to timer fault
+
+    ``MAX77759_CHGR_BAT_DTLS_BAT_OKAY``
+      Battery okay and Vbatt > Min Sys Voltage (Vsysmin)
+
+    ``MAX77759_CHGR_BAT_DTLS_BAT_UNDERVOLTAGE``
+      Battery is okay. Vtrickle < Vbatt < Vsysmin
+
+    ``MAX77759_CHGR_BAT_DTLS_BAT_OVERVOLTAGE``
+      Battery voltage > Overvoltage threshold
+
+    ``MAX77759_CHGR_BAT_DTLS_BAT_OVERCURRENT``
+      Battery current exceeds overcurrent threshold
+
+    ``MAX77759_CHGR_BAT_DTLS_BAT_ONLY_MODE``
+      Battery only mode and battery level not available
+
+.. c:enum:: max77759_chgr_chg_dtls_states
+
+  Charger Details
+
+.. container:: kernelindent
+
+    **Constants**
+
+    ``MAX77759_CHGR_CHG_DTLS_PREQUAL``
+      Charger in prequalification mode
+
+    ``MAX77759_CHGR_CHG_DTLS_CC``
+      Charger in fast charge const curr mode
+
+    ``MAX77759_CHGR_CHG_DTLS_CV``
+      Charger in fast charge const voltage mode
+
+    ``MAX77759_CHGR_CHG_DTLS_TO``
+      Charger is in top off mode
+
+    ``MAX77759_CHGR_CHG_DTLS_DONE``
+      Charger is done
+
+    ``MAX77759_CHGR_CHG_DTLS_RSVD_1``
+      Reserved
+
+    ``MAX77759_CHGR_CHG_DTLS_TIMER_FAULT``
+      Charger is in timer fault mode
+
+    ``MAX77759_CHGR_CHG_DTLS_SUSP_BATT_THM``
+      Charger is suspended as battery removal detected
+
+    ``MAX77759_CHGR_CHG_DTLS_OFF``
+      Charger is off. Input invalid or charger disabled
+
+    ``MAX77759_CHGR_CHG_DTLS_RSVD_2``
+      Reserved
+
+    ``MAX77759_CHGR_CHG_DTLS_RSVD_3``
+      Reserved
+
+    ``MAX77759_CHGR_CHG_DTLS_OFF_WDOG_TIMER``
+      Charger is off as watchdog timer expired
+
+    ``MAX77759_CHGR_CHG_DTLS_SUSP_JEITA``
+      Charger is in JEITA control mode
+---
+
+To: Sebastian Reichel <sre@kernel.org>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: André Draszik <andre.draszik@linaro.org>
+To: Lee Jones <lee@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Badhri Jagan Sridharan <badhri@google.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Peter Griffin <peter.griffin@linaro.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+To: Alim Akhtar <alim.akhtar@samsung.com>
+To: Mark Brown <broonie@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: RD Babiera <rdbabiera@google.com>
+Cc: Kyle Tso <kyletso@google.com>
+Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+---
+Changes in v10:
+- Fixed comment style (/* -> /**) to make it a kernel-doc comment. (Lee
+  Jones)
+- Link to v9: https://lore.kernel.org/r/20260325-max77759-charger-v9-0-4486dd297adc@google.com
+
+Changes in v9:
+- Fixed nits in mfd/max77759.* (Lee Jones)
+  - s/max77759_chrg_irq_chip/max77759_chgr_irq_chip
+  - s/bettery/battery
+  - Fix alignment in descriptions in kerneldoc comments
+- Link to v8 resend: https://lore.kernel.org/r/20260314-max77759-charger-v8-0-226ca5f8c7d2@google.com
+- Link to v8: https://lore.kernel.org/all/20260224-max77759-charger-v8-0-eb86bd570e9c@google.com/
+
+Changes in v8:
+- Add an newline char at the end of dev_* prints. (André Draszik)
+- Return PTR_ERR() instead of -EPROBE_DEFER when devm_power_supply_register()
+  fails in max77759 charger probe. (André Draszik)
+- Link to v7: https://lore.kernel.org/r/20260218-max77759-charger-v7-0-e8d907ce69c5@google.com
+
+Changes in v7:
+- Add register relock for protected registers in fail path. (André Draszik)
+- Switch to usage of scoped_guard instead of guard. (LKP test bot)
+- Link to v6: https://lore.kernel.org/r/20260214-max77759-charger-v6-0-28c09bda74b4@google.com
+
+Changes in v6:
+-  Linear Range usage (André Draszik):
+  - Dedicate individual arrays for inlim, chgcc & chg_cv_prm to simplify
+    code.
+  - Use numerical values instead of macros for linear_range array init.
+  - Remove macros defining current and voltage limits due to above.
+  - Didn't use Reviewed-by tag for Patch 3 due to the above.
+  - Add new linear_ranges api to leverage it for obtaining selector
+    values.
+  - Improve voltage and current getters and setters functions by leveraging
+    existing and new linear_ranges API.
+- IRQ related changes (André Draszik)
+  - Dedicated names for individual irqs.
+  - Refactor irq handlers.
+  - Ratelimit prints
+- Retry mechanism (André Draszik):
+  - Initialize error retry counter to 0 when psy work is scheduled on a
+    new notifier event.
+  - Protect the counter using a lock.
+  - Add appropriate prints.
+- Link to v5: https://lore.kernel.org/r/20260203-max77759-charger-v5-0-b50395376a5f@google.com
+
+Changes in v5:
+- Use linear_range library instead of reinventing it. (André Draszik)
+  - This requires a selector_max value so modified mfd/max77759.h to
+    include it for CHGCC and CHG_ILIM.
+  - Removed "reviewed-by" for Patch 3 (mfd) due to above
+- Use asnyc probe type. (André Draszik)
+- Retry mechanism for psy_work. (André Draszik)
+- Minor nits (André Draszik):
+  - Use named initializers for instantiating structs.
+  - Use static qualifier for `psy_name` variable.
+  - Refactor if-else ladder to remove else handling if return in prior
+    "if" loop.
+  - Remove redundant `unlikely`.
+- Link to v4: https://lore.kernel.org/r/20260121-max77759-charger-v4-0-694234c8ded1@google.com
+
+Changes in v4:
+- Removed a stray tabspace in mfd/max77759.h. (André Draszik)
+- Fixed the following issues in Patch 4/5 (André Draszik):
+  - Re-order Kconfig entry
+  - Refactored to not use global variable
+  - Use of clamp() to clamp values instead of duplicating logic
+  - Return IRQ_NONE for unhandled irqs or error conditions
+  - Remove debug messages in irq handler
+  - Refactor code to use dev_err_probe in *_init_irqhandler()
+  - Remove unneeded irq_flags
+  - Check return values of regmap ops
+  - Other nits like newlines, not using greedy init, using print stmnts
+- Link to v3: https://lore.kernel.org/r/20251227-max77759-charger-v3-0-54e664f5ca92@google.com
+
+Changes in v3:
+- Had incorrectly folded the charger sub-device with the pmic parent.
+  Corrected it. (Krzysztof Kozlowski)
+- Link to v2: https://lore.kernel.org/r/20251218-max77759-charger-v2-0-2b259980a686@google.com
+
+Changes in v2:
+- Fold charger binding in maxim,max77759-charger.yaml to its parent
+  node. (Krzysztof Kozlowski)
+- Renamed regulator supplier & consumer. (Krzysztof Kozlowski & Heikki
+  Krogerus)
+- Removed explicit setting of irq trigger types in max77759 driver.
+  (André Draszik & Krzysztof Kozlowski)
+- Complete bit definitions for IRQ registers. (André Draszik)
+- Consolidate all bit definitions for charger IP in mfd/max77759.h.
+  (André Draszik)
+- Modify the handling of charger IRQs such that regmap IRQ chip handles
+  masking, de-mux and acking of interrupts. (André Draszik)
+- Remove unused macro definitions relating to Charger modes in tcpci
+  maxim driver (André Draszik)
+- Add dependency on Regulator class in Kconfig definition for max77759
+  chg. (Kernel Test Robot)
+- Link to v1: https://lore.kernel.org/r/20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com
+
+---
+Amit Sunil Dhamne (6):
+      dt-bindings: mfd: maxim,max77759: reference power-supply schema and add regulator property
+      dt-bindings: usb: maxim,max33359: Add supply property for vbus
+      mfd: max77759: add register bitmasks and modify irq configs for charger
+      lib/linear_ranges: Add linear_range_get_selector_high_array
+      power: supply: max77759: add charger driver
+      usb: typec: tcpm/tcpci_maxim: deprecate WAR for setting charger mode
+
+ .../devicetree/bindings/mfd/maxim,max77759.yaml    |  16 +-
+ .../devicetree/bindings/usb/maxim,max33359.yaml    |   4 +
+ MAINTAINERS                                        |   6 +
+ drivers/mfd/max77759.c                             |  95 ++-
+ drivers/power/supply/Kconfig                       |  11 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/max77759_charger.c            | 774 +++++++++++++++++++++
+ drivers/usb/typec/tcpm/tcpci_maxim.h               |   1 +
+ drivers/usb/typec/tcpm/tcpci_maxim_core.c          |  54 +-
+ include/linux/linear_range.h                       |   3 +
+ include/linux/mfd/max77759.h                       | 166 ++++-
+ lib/linear_ranges.c                                |  36 +
+ 12 files changed, 1106 insertions(+), 61 deletions(-)
+---
+base-commit: ecc64d2dc9ff9738d2a896beb68e02c2feaf9a02
+change-id: 20251105-max77759-charger-852b626d661a
+
+Best regards,
+-- 
+Amit Sunil Dhamne <amitsd@google.com>
+
+
 
