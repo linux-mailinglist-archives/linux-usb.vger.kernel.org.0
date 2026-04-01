@@ -1,167 +1,190 @@
-Return-Path: <linux-usb+bounces-35808-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35809-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2EKrNLFyzWnYdgYAu9opvQ
-	(envelope-from <linux-usb+bounces-35808-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 21:32:01 +0200
+	id YNqWHyGJzWnFegYAu9opvQ
+	(envelope-from <linux-usb+bounces-35809-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 23:07:45 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F20BE37FD60
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 21:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D5F3D3807DC
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 23:07:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7F88C3053757
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 19:27:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 719F130530FE
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 21:02:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41326345753;
-	Wed,  1 Apr 2026 19:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0E5B3B895F;
+	Wed,  1 Apr 2026 21:02:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j6slyov0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BgAtuK9Z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F151D33EAF9;
-	Wed,  1 Apr 2026 19:27:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F40E3B776A;
+	Wed,  1 Apr 2026 21:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775071655; cv=none; b=sd73VSiKgxwwwe7ASMhehM7UZH6mxpWSq2ADqyOxW50Sz/XN45Meevznzn4jkeULV7Qwss2NOtMCHk/wcVJT/Y59s3lZtFgx5HtJUB+vQjGfic8g0H4aE0WRHDx5Zpr6ys/H8EV9LQidCRwNLjH4V1p2xI2DR2egKJ4LrZuLsHA=
+	t=1775077330; cv=none; b=O0PL9L51oGu9CV4S9tnucchSVq0QIMocwxDFZNf62ynfFVrKCfKGgb85TRsABnOUQ5h5Ygc1+bon/ODU+skTLe5RVjS4wRzdiwxpUAnNxsD9TZtGYT6ZSSdJpyb9/Z/u4X3FKjYBAZEOmrlmy2aWjrZNDKrwNIuIu9PwJHlg9fI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775071655; c=relaxed/simple;
-	bh=Por6Bivu3RY/etWGrApXUaxm8laHsOpvqzeH//gKASU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uom4pOOYENuI556WRjlk0nePiJLBZzX1uw49IQPjOdAZPH+WU/itbUkfelJ0OJsrinVtyn5Ueav1zeMN3arzgKh7yRBO0aD/LwUpjj/rKa+uGltwZ0ykpDBGSYsK4JvkswzmHXp4ohReSyBo5nkfRjqWMcPpU+FxAflMsooJRiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j6slyov0; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775071655; x=1806607655;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Por6Bivu3RY/etWGrApXUaxm8laHsOpvqzeH//gKASU=;
-  b=j6slyov0ePRopSzJzXH+9XwBKG5gpH2HUlPzNvybpZ9U1Wkq62wHOzF6
-   JxRSRd6cxuett52K//n6uljuv+CAC2Y29kSKY6yi3XVLJPW/JajZBSxf4
-   HaCtY2nnSTvOvH/Fpl3zog3IpIJpES/Y5Izl9aeAklcKwzJ0A2nDc/LcM
-   3zgLTkxweH0prC465iHOsDzFsQNUJL6bT/iQ5YoeerHBNl5jnbKHfw0yf
-   tfYJOnELuVcDHf97iTILbo4M/he+EHMTSlNj5gMGzaPZobX2gPYdm7B8A
-   LFCb/ETZCwtn8/bM6BqCejK/xihUdkaZudDn2Jbqt5vnUCYlObBVCZqUA
-   g==;
-X-CSE-ConnectionGUID: uYH+LkuPTHCghuZyotYYbA==
-X-CSE-MsgGUID: TBUbS3x9TDSv2Di194H38A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="76007790"
-X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
-   d="scan'208";a="76007790"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2026 12:27:34 -0700
-X-CSE-ConnectionGUID: u5EPoVbcRZib+pUv063EyA==
-X-CSE-MsgGUID: CCvJxipQSwyspH97hdNrkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
-   d="scan'208";a="231179816"
-Received: from vpanait-mobl.ger.corp.intel.com (HELO [10.245.244.145]) ([10.245.244.145])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2026 12:27:32 -0700
-Message-ID: <88f6d39e-5738-4a55-af75-854dfc0df094@linux.intel.com>
-Date: Wed, 1 Apr 2026 22:27:29 +0300
+	s=arc-20240116; t=1775077330; c=relaxed/simple;
+	bh=L58uh9aBIxg/CIlqDRb0F/mkohK+bfSXFUrxnHGWD8Y=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=nlaew38aV73SRAjW6ANkE46DhjcMdx4jFMrDa3rDqAB6vZIOHqG7rFR/StVOYR7qcif0UEMnIKyMsY2GL4v9p0kExkwh19cFYaO0EVqAY2ysPC9sioSLccI8GCQ0nI153bQTUzt//jwAxp9ezd17eGdXxg7PZ+CTqHFvAVfbgNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BgAtuK9Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id ED5C4C2BCAF;
+	Wed,  1 Apr 2026 21:02:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775077330;
+	bh=L58uh9aBIxg/CIlqDRb0F/mkohK+bfSXFUrxnHGWD8Y=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=BgAtuK9Zwc4o/0bEs/8qJVhXL0gF2JbgdfEc6pUsUymfio/WR1Yjd8tKehcoGCg8A
+	 2nfq8zB/iuNil1xU6QBXeCgYr1Ffs4UZin91hgY9td0lbbLkJ8rHTezWiTcKi8o/bt
+	 Ti9oQmsJvFx3gdQOb0/+RYSbEK9pv0bdjwoKnHMmSUhc+BuJWvDIuOLokcX/1RNXi1
+	 B1zuVXyp6BKhRoS4tABSR2TSMwuUxGpyNFAjSHb5rRWustjsjzNr9rz+TFpGJLZ7PC
+	 ssU4R9IxU2MyUENOSiQlBwbzeTXBKY3GefqLalg56gy3k1eGQenNFTWSuw+gJDgnnO
+	 Qyh37XGoH6zeg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D940A10FCADC;
+	Wed,  1 Apr 2026 21:02:09 +0000 (UTC)
+From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
+Date: Wed, 01 Apr 2026 21:02:08 +0000
+Subject: [PATCH] mfd: max77759: fix comment style for enums
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: xhci: Make usb_host_endpoint.hcpriv survive
- endpoint_disable()
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260331010654.269ac270.michal.pecio@gmail.com>
- <e14fb308-a003-4a76-b908-106b5271eccc@linux.intel.com>
- <20260401165205.56dcfcda.michal.pecio@gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20260401165205.56dcfcda.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Message-Id: <20260401-fix-mfd-max77759-usb-next-v1-1-174ec23ad824@google.com>
+X-B4-Tracking: v=1; b=H4sIAM+HzWkC/x2MywqAIBAAfyX23IL2svqV6GC51R6y0ApB+vek4
+ 8DMRPDkmDz0WQRHD3s+bAKZZzBv2q6EbBJDIYpGVELiwgH3xeCug1Kq7vD2E1oKF1LTKmNkOYt
+ WQ+pPR0n+38P4vh9S0MymawAAAA==
+X-Change-ID: 20260401-fix-mfd-max77759-usb-next-e687dd13c08a
+To: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Lee Jones <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ Badhri Jagan Sridharan <badhri@google.com>, 
+ Amit Sunil Dhamne <amitsd@google.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1775077329; l=3284;
+ i=amitsd@google.com; s=20241031; h=from:subject:message-id;
+ bh=7DZ+8ZRZWuwCTzw0kJR0me2ttfQ1oXwKqAtj79QG1jU=;
+ b=VnHr0xONR1kTvZZjHhd/sHmSTg6nOJjtG0cMtUhG3f8l0yxRUnWvR+/kHXJXey0rklvh+ED/e
+ EiFG1L9BdqlBSemk4B8NzdgE6dq8NC1CcOFfMePc4eQCnmAsASYPwsL
+X-Developer-Key: i=amitsd@google.com; a=ed25519;
+ pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
+X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
+ auth_id=262
+X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
+Reply-To: amitsd@google.com
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35808-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35809-lists,linux-usb=lfdr.de,amitsd.google.com];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	NEURAL_HAM(-0.00)[-0.997];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim]
-X-Rspamd-Queue-Id: F20BE37FD60
+	RCPT_COUNT_SEVEN(0.00)[7];
+	HAS_REPLYTO(0.00)[amitsd@google.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D5F3D3807DC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 4/1/26 17:52, Michal Pecio wrote:
-> On Wed, 1 Apr 2026 17:34:37 +0300, Mathias Nyman wrote:
->> On 3/31/26 02:06, Michal Pecio wrote:
->>> xHCI hardware maintains its endpoint state between add_endpoint()
->>> and drop_endpoint() calls followed by successful check_bandwidth().
->>> So does the driver.
->>>
->>> Core may call endpoint_disable() during xHCI endpoint life, so don't
->>> clear host_ep->hcpriv then, because this breaks endpoint_reset().
->>>
->>> If a driver calls usb_set_interface(), submits URBs which make host
->>> sequence state non-zero and calls usb_clear_halt(), the device clears
->>> its sequence state but xhci_endpoint_reset() bails out. The next URB
->>> malfunctions: USB2 loses one packet, USB3 gets Transaction Error or
->>> may not complete at all on some (buggy?) HCs from ASMedia and AMD.
->>> This is triggered by uvcvideo on bulk video devices.
->>
->> Were you able to trigger a usb_clear_halt() called with ep->hcpriv == NULL,
->> causing a toggle/seq mismatch?
->>
->> The ep->hcpriv should be set back correctly in usb_set_interface():
->>
->> usb_set_interface()
->>     usb_hcd_alloc_bandwidth()
->>       hcd->driver->add_endpoint()
->>         xhci_add_endpoint()
->>           ep->hcpriv = udev;
-> 
-> right, and later:
-> 
->       usb_disable_interface(dev, iface, true)
->         usb_disable_endpoint(dev, ..., true)
->           usb_hcd_disable_endpoint(dev, ep)
->             hcd->driver->endpoint_disable(hcd, ep)
->       usb_enable_interface(dev, iface, true)
->         usb_enable_endpoint(dev, ..., true)
->           usb_hcd_reset_endpoint(dev, ep)
->             hcd->driver->endpoint_reset(hcd, ep)
-> 
+From: Amit Sunil Dhamne <amitsd@google.com>
 
-True, thanks, usb_set_interface() calls usb_disable_interface() twice.
-First time just to flush pending URBs, second time with reset_hardware
-flag set.
+Fix comment style for enums so they're kernel-doc compliant.
 
-Adding patch to queue
+Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+---
+This patch is a follow-up to the series [1]. [1] has been accepted in
+the USB subsystem tree (usb-next). However, since Lee has additional
+feedback [2], I am sending this patch to fix it. Please note that this
+patch is based out of usb-next branch on usb tree. This patch should be
+applied on top of b422f7c072ac ("mfd: max77759: add register bitmasks
+and modify irq configs for charger").
 
--Mathias
+[1] https://lore.kernel.org/all/20260325-max77759-charger-v9-0-4486dd297adc@google.com/
+[2] https://lore.kernel.org/all/20260331123138.GE3795166@google.com/
+---
+Output of kernel-doc script (none format)
+$ scripts/kernel-doc -v -none -Wall include/linux/mfd/max77759.h
+Info: include/linux/mfd/max77759.h:134 Scanning doc for enum max77759_chgr_chgin_dtls_status
+Info: include/linux/mfd/max77759.h:152 Scanning doc for enum max77759_chgr_bat_dtls_states
+Info: include/linux/mfd/max77759.h:174 Scanning doc for enum max77759_chgr_chg_dtls_states
+Info: include/linux/mfd/max77759.h:212 Scanning doc for struct max77759
+Info: include/linux/mfd/max77759.h:235 Scanning doc for struct max77759_maxq_command
+Info: include/linux/mfd/max77759.h:247 Scanning doc for struct max77759_maxq_response
+Info: include/linux/mfd/max77759.h:258 Scanning doc for function max77759_maxq_command
+---
+ include/linux/mfd/max77759.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/mfd/max77759.h b/include/linux/mfd/max77759.h
+index ad1aa4c2b779..ec19be952877 100644
+--- a/include/linux/mfd/max77759.h
++++ b/include/linux/mfd/max77759.h
+@@ -131,12 +131,12 @@
+ #define MAX77759_MAXQ_OPCODE_USER_SPACE_READ     0x81
+ #define MAX77759_MAXQ_OPCODE_USER_SPACE_WRITE    0x82
+ 
+-/*
++/**
+  * enum max77759_chgr_chgin_dtls_status - Charger Input Status
+  * @MAX77759_CHGR_CHGIN_DTLS_VBUS_UNDERVOLTAGE:
+  *     Charger input voltage (Vchgin) < Under Voltage Threshold (Vuvlo)
+- * @MAX77759_CHGR_CHGIN_DTLS_VBUS_MARGINAL_VOLTAGE: Vchgin > Vuvlo and
+- *     Vchgin < (Battery Voltage (Vbatt) + system voltage (Vsys))
++ * @MAX77759_CHGR_CHGIN_DTLS_VBUS_MARGINAL_VOLTAGE:
++ *     Vchgin > Vuvlo and Vchgin < (Battery Voltage (Vbatt) + system voltage (Vsys))
+  * @MAX77759_CHGR_CHGIN_DTLS_VBUS_OVERVOLTAGE:
+  *     Vchgin > Over Voltage threshold (Vovlo)
+  * @MAX77759_CHGR_CHGIN_DTLS_VBUS_VALID:
+@@ -149,7 +149,7 @@ enum max77759_chgr_chgin_dtls_status {
+ 	MAX77759_CHGR_CHGIN_DTLS_VBUS_VALID,
+ };
+ 
+-/*
++/**
+  * enum max77759_chgr_bat_dtls_states - Battery Details
+  * @MAX77759_CHGR_BAT_DTLS_NO_BATT_CHG_SUSP:	No battery and the charger suspended
+  * @MAX77759_CHGR_BAT_DTLS_DEAD_BATTERY:	Vbatt < Vtrickle
+@@ -171,7 +171,7 @@ enum max77759_chgr_bat_dtls_states {
+ 	MAX77759_CHGR_BAT_DTLS_BAT_ONLY_MODE,
+ };
+ 
+-/*
++/**
+  * enum max77759_chgr_chg_dtls_states - Charger Details
+  * @MAX77759_CHGR_CHG_DTLS_PREQUAL:		Charger in prequalification mode
+  * @MAX77759_CHGR_CHG_DTLS_CC:			Charger in fast charge const curr mode
+
+---
+base-commit: 81ebd43cc0d6d106ce7b6ccbf7b5e40ca7f5503d
+change-id: 20260401-fix-mfd-max77759-usb-next-e687dd13c08a
+
+Best regards,
+-- 
+Amit Sunil Dhamne <amitsd@google.com>
+
 
 
