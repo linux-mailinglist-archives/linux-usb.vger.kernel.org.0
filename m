@@ -1,193 +1,159 @@
-Return-Path: <linux-usb+bounces-35782-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35783-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6DcfKlgUzWmMZwYAu9opvQ
-	(envelope-from <linux-usb+bounces-35782-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 14:49:28 +0200
+	id 0OZCFc0PzWmMZwYAu9opvQ
+	(envelope-from <linux-usb+bounces-35783-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 14:30:05 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 089C337AB9F
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 14:49:27 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B72537A785
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 14:30:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BDA1A31E3EB9
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 12:11:38 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id F314E3017A88
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 12:20:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 221F53FF89B;
-	Wed,  1 Apr 2026 12:11:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77C023FF8BF;
+	Wed,  1 Apr 2026 12:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="FNDsTbVE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oKUcCgFm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A933C9EFB;
-	Wed,  1 Apr 2026 12:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F963A16B0;
+	Wed,  1 Apr 2026 12:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775045495; cv=none; b=tc8LtUn4OKEP8CwMAh+wfbuwnz2MWYa7dQXNEq3PZ8UCwbUsf9Dl0wAq5X0keXoy+JucNyBZ5K4VEfQDgnhIiYK1SM8DYigPsiHmHM4arebUv8fDHa65EEH/oHKy+uONbQi1eELFvqcQ2cZR9em6xbK2atHADwu5Izj5Y7cMwew=
+	t=1775046019; cv=none; b=eykEFc92YBQVGGRpq8vakP4T2mH8nakQ3GCNIOhYtMJXh2c/xB3RUP37y9c9VKM5TUZh2cxteBwK7UxAoU15LC9QQUhJCeUUJUs0pF1gE0TQY3zj0rIuaaMZ0diel8TN4+Z7GuEoxlyO+Q6qlhXYQdr4u3uFTS35Cg6SWHau/zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775045495; c=relaxed/simple;
-	bh=BE5/nPRKaHRs63cPfmGPfBklsCc8yJVyXPy273mNLyk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jJDuKweb5LkCXA6YOWi+7cPQxFBOMD9aif1kPtcWtu2YoXt17PXmTdgbiU8WVkFBzIHsprRlqy3INyKcaKday1DkbfM8bOFeCZlaxBP/DydBy98Q/MmQL7T3i3pRSF8JZvbrugyDh8EB5e1qmQzpDkpL6GZZQftkK1a79AmCPps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=FNDsTbVE; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 429D31BB0;
-	Wed,  1 Apr 2026 05:11:26 -0700 (PDT)
-Received: from [10.57.77.192] (unknown [10.57.77.192])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 610EF3F915;
-	Wed,  1 Apr 2026 05:11:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1775045492; bh=BE5/nPRKaHRs63cPfmGPfBklsCc8yJVyXPy273mNLyk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FNDsTbVE+dEiFbJpw+3tElXCfZHMBObNS/5oxU0uSjGMnwgeMM/5I47NhEc/4WPmB
-	 PnE2ghf/jR8nTm2Dhd2kAQ2b2dWvFR/wyB1eCJYRdAgCyC0HUEbNE3bbZmtG/lGOpQ
-	 2XRAycjpy4vEjbPShbCiHyksZ605KXgFH187AaO4=
-Message-ID: <c9ded35b-fc10-47d8-bfaa-cecb4fa91add@arm.com>
-Date: Wed, 1 Apr 2026 13:11:20 +0100
+	s=arc-20240116; t=1775046019; c=relaxed/simple;
+	bh=acnQ6s1ZhIdXaU8kOcjwbAULnwWazRUTJQJ/dWj42KQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qj9ge59Nkk9wrjmZQb5EtxLo4+dW1/jt0Ts8pubvO4V6B2+3OXf9p4IUOEOddZ4CD00WcDNG0Jo+MQPP5wWrQQzXCqxMVc8yQ9xKh1GNYTddQtk0+vwyit1JyCY6ZQsa4CAQq1PtyF/OYHBGJzu24JqRtlg3LSato6EBS22U+Z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oKUcCgFm; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775046017; x=1806582017;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=acnQ6s1ZhIdXaU8kOcjwbAULnwWazRUTJQJ/dWj42KQ=;
+  b=oKUcCgFmxUhhRL9YLKzNBVw3ghESXJj61kogP9XMAVrx/FavN3wK/zCa
+   aWnbg5BGP5QytsH85ZtW7ONPMU2Lru4OJbYVhGj695lfmeQTov1r9ByG1
+   Bd6Ie9R7dvlRSVP1WbChlf+5RD+es/HSrFnRnoULe9jKzLVDTJnxpmcKU
+   20UMIAaa5ItiDDoOW5WR5v2Na/94O7Oj19+AuL9l2jC3UaWepTiBikIyo
+   kdOjcfEH4g6Tb4+x8bdwdeOguZNrIwRa51Zse4jE890dUkWX/yfNwnig+
+   cI8BY10iuAah+S8AB22wPIGc0ucX3ta/OZ/MxTxPFm2tPNLMNfbTABT8D
+   A==;
+X-CSE-ConnectionGUID: Mxz7WCE2TXOX/2BYPP70nA==
+X-CSE-MsgGUID: Tqk50WxwR8uRCkAtmkQBGQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="63631459"
+X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
+   d="scan'208";a="63631459"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2026 05:20:16 -0700
+X-CSE-ConnectionGUID: 0951rfR5TiSuzWobkpqRyQ==
+X-CSE-MsgGUID: HQPIvawtQe2akqH9I2Ql+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
+   d="scan'208";a="264589556"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa001.jf.intel.com with ESMTP; 01 Apr 2026 05:20:15 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1008)
+	id 1D8E098; Wed, 01 Apr 2026 14:20:13 +0200 (CEST)
+Date: Wed, 1 Apr 2026 15:19:26 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Guangshuo Li <lgs201920130244@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	David Cohen <david.a.cohen@linux.intel.com>,
+	Felipe Balbi <balbi@ti.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: ulpi: fix double free in ulpi_register_interface()
+ error path
+Message-ID: <ac0NTgTPXj7vnXdV@kuha>
+References: <20260401025142.1398996-1-lgs201920130244@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dma-debug: suppress cacheline overlap warning when
- arch has no DMA alignment requirement
-To: Marek Szyprowski <m.szyprowski@samsung.com>,
- Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc: iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-mm@kvack.org, harry@kernel.org,
- vbabka@kernel.org, akpm@linux-foundation.org, stern@rowland.harvard.edu,
- linux@roeck-us.net, andy.shevchenko@gmail.com, hch@lst.de,
- Jeff.kirsher@gmail.com, catalin.marinas@arm.com
-References: <CGME20260327124211eucas1p10425a28f67736d2043e7e4dd77d58e72@eucas1p1.samsung.com>
- <20260327124156.24820-1-mikhail.v.gavrilov@gmail.com>
- <6270d4f0-85e4-496d-8db4-87ccb791ca4d@samsung.com>
-From: Robin Murphy <robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <6270d4f0-85e4-496d-8db4-87ccb791ca4d@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260401025142.1398996-1-lgs201920130244@gmail.com>
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
-	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35782-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35783-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[samsung.com,gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[lists.linux.dev,vger.kernel.org,kvack.org,kernel.org,linux-foundation.org,rowland.harvard.edu,roeck-us.net,gmail.com,lst.de,arm.com];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robin.murphy@arm.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[arm.com:+];
-	NEURAL_HAM(-0.00)[-0.984];
+	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 089C337AB9F
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:dkim,intel.com:email]
+X-Rspamd-Queue-Id: 5B72537A785
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 2026-03-30 8:44 am, Marek Szyprowski wrote:
-> On 27.03.2026 13:41, Mikhail Gavrilov wrote:
->> When CONFIG_DMA_API_DEBUG is enabled, the DMA debug infrastructure
->> tracks active mappings per cacheline and warns if two different DMA
->> mappings share the same cacheline ("cacheline tracking EEXIST,
->> overlapping mappings aren't supported").
->>
->> On x86_64, ARCH_KMALLOC_MINALIGN defaults to 8, so small kmalloc
->> allocations (e.g. the 8-byte hub->buffer and hub->status in the USB
->> hub driver) frequently land in the same 64-byte cacheline.  When both
->> are DMA-mapped, this triggers a false positive warning.
->>
->> This has been reported repeatedly since v5.14 (when the EEXIST check
->> was added) across various USB host controllers and devices including
->> xhci_hcd with USB hubs, USB audio devices, and USB ethernet adapters.
->>
->> The cacheline overlap is only a real concern on architectures that
->> require DMA buffer alignment to cacheline boundaries (i.e. where
->> ARCH_DMA_MINALIGN >= L1_CACHE_BYTES).  On architectures like x86_64
->> where dma_get_cache_alignment() returns 1, the hardware is
->> cache-coherent and overlapping cacheline mappings are harmless.
->>
->> Suppress the EEXIST warning when dma_get_cache_alignment() is less
->> than L1_CACHE_BYTES, indicating the architecture does not require
->> cacheline-aligned DMA buffers.
-
-Really the value of this check is for mappings of structure members or 
-array elements which have no inherent guarantee of being individually 
-aligned to ARCH_DMA_MINALIGN, and while x86 can also get away with that, 
-it represents a genuine issue for non-coherent architectures. USB's 
-mapping of a dedicated tiny allocation is, if anything, rather the 
-special case.
-
-TBH I'd be inclined to have CONFIG_DMA_DEBUG raise ARCH_DMA_MINALIGN as 
-appropriate such that genuine false-positives can't happen, rather than 
-effectively defeat the whole check, but I suppose that might carry a 
-risk of tripping up arch code that doesn't expect it... Oh well.
-
-Thanks,
-Robin.
-
->> Verified with a kernel module reproducer that performs two kmalloc(8)
->> allocations back-to-back and DMA-maps both:
->>
->>    Before: allocations share a cacheline, EEXIST fires within ~50 pairs
->>    After:  same cacheline pair found, but no warning emitted
->>
->> Fixes: 2b4bbc6231d7 ("dma-debug: report -EEXIST errors in add_dma_entry")
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215740
->> Suggested-by: Harry Yoo <harry@kernel.org>
->> Tested-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
->> Signed-off-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+On Wed, Apr 01, 2026 at 10:51:42AM +0800, Guangshuo Li wrote:
+> When device_register() fails, ulpi_register() calls put_device() on
+> ulpi->dev.
 > 
-> Applied to dma-mapping-fixes. Thanks!
+> The device release callback ulpi_dev_release() drops the OF node
+> reference and frees ulpi, but the current error path in
+> ulpi_register_interface() then calls kfree(ulpi) again, causing a
+> double free.
 > 
->> ---
->>
->> v1 -> v2:
->>    - Moved fix from include/linux/slab.h (ARCH_KMALLOC_MINALIGN)
->>      to kernel/dma/debug.c per Harry Yoo's suggestion.
->>    - Instead of forcing cacheline-aligned allocations, suppress
->>      the warning when the architecture has no DMA alignment
->>      requirement (dma_get_cache_alignment() < L1_CACHE_BYTES).
->>
->> v1: https://lore.kernel.org/all/20260327055846.248829-1-mikhail.v.gavrilov@gmail.com/
->>
->> Reproducer module that triggers the bug reliably:
->>    https://bugzilla.kernel.org/attachment.cgi?id=309769
->>
->>   kernel/dma/debug.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
->> index 0677918f06a8..1a725edbbbf6 100644
->> --- a/kernel/dma/debug.c
->> +++ b/kernel/dma/debug.c
->> @@ -615,6 +615,7 @@ static void add_dma_entry(struct dma_debug_entry *entry, unsigned long attrs)
->>   	} else if (rc == -EEXIST &&
->>   		   !(attrs & DMA_ATTR_SKIP_CPU_SYNC) &&
->>   		   !(entry->is_cache_clean && overlap_cache_clean) &&
->> +		   dma_get_cache_alignment() >= L1_CACHE_BYTES &&
->>   		   !(IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) &&
->>   		     is_swiotlb_active(entry->dev))) {
->>   		err_printk(entry->dev, entry,
+> Let put_device() handle the cleanup through ulpi_dev_release() and
+> avoid freeing ulpi again in ulpi_register_interface().
 > 
-> Best regards
+> Fixes: 289fcff4bcdb1 ("usb: add bus type for USB ULPI")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
 
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/usb/common/ulpi.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+> index 4a2ee447b213..d895cf6532a2 100644
+> --- a/drivers/usb/common/ulpi.c
+> +++ b/drivers/usb/common/ulpi.c
+> @@ -331,10 +331,9 @@ struct ulpi *ulpi_register_interface(struct device *dev,
+>  	ulpi->ops = ops;
+>  
+>  	ret = ulpi_register(dev, ulpi);
+> -	if (ret) {
+> -		kfree(ulpi);
+> +	if (ret)
+>  		return ERR_PTR(ret);
+> -	}
+> +
+>  
+>  	return ulpi;
+>  }
+
+-- 
+heikki
 
