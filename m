@@ -1,158 +1,183 @@
-Return-Path: <linux-usb+bounces-35794-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35795-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EOlmNtc3zWmxawYAu9opvQ
-	(envelope-from <linux-usb+bounces-35794-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 17:20:55 +0200
+	id IF4bApU4zWnDawYAu9opvQ
+	(envelope-from <linux-usb+bounces-35795-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 17:24:05 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A6C037CED8
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 17:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 53E6337CFC3
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 17:24:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 76425316E0D3
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 14:49:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 945A631A14BA
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 14:52:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25442361DD4;
-	Wed,  1 Apr 2026 14:48:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 194793AA4F6;
+	Wed,  1 Apr 2026 14:52:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KyR2WfO2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aeP1fb0P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4B540F8DE;
-	Wed,  1 Apr 2026 14:47:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A22132F759
+	for <linux-usb@vger.kernel.org>; Wed,  1 Apr 2026 14:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775054881; cv=none; b=IEE1fQLxN6b6UH0Wb8k2YnwPlUm63WZIxCVxzOizF7wjsIXRSGL7xhUIFzd2EATbbD0yXUqeLpz1v8ospnCbCIu7gYNOMXmUAUTcDufdYXXVlX4zH7fJYLjN+/rjv/1SLxCpJKggPSVrt7Gmn/MmnaW0HuIQCl5OVFgy+nrWRo8=
+	t=1775055131; cv=none; b=kyj1+rTnyvBjycFVAuaExq9Ld2RJbwK+ZDWk8eHiV7hdHVZEF/ncRyeH0ebrSwXR1LNkIHCgeyOHOUexFp/Uy2bIjXuq79HgVMipqNtoeMm3Bm6Ce5ZiGei+waHecqbGcEiHVIN6jcZ3IgrMLcjbjTQhF0O6LN4sMKKhGHyzhA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775054881; c=relaxed/simple;
-	bh=0Ny0N1xj0M6XzhxozbC2k7qxmaTwUj5U300NbYnX5MA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eAbY8ivMTzRHhuDAJfu5iq5+SRP/78Vl0f3+6BgNvNfJI6N+UTq+aSc2U5c/8wXKWXRllfkQjCFUNfnjJOE3cBFQbi9ldP6mxTHCw+13sfwxQYfbdOGh6TaUwRMKzyU4+Y7GlXj2eKUvSFBUZ+CjEpqIpTZ29FyYS9y+9YbK5Tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KyR2WfO2; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775054880; x=1806590880;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0Ny0N1xj0M6XzhxozbC2k7qxmaTwUj5U300NbYnX5MA=;
-  b=KyR2WfO2UUDozIe6abBuq6/QjWkyKnOmMGyIv+e11JTm0q8qsdoEhbHX
-   fcX6oz8wPc7BWVdSZNLEZpQD30kF8pQTpleQckmw3NX/d1Ky6/uFwJvZU
-   qYeSViPPUxjfQxQAoJYoqst/5gd0G/0+Udj62J0HxJCcJ0Kz8SeVCxl2H
-   YtJQB3AGKBYM+d57E8K1LWmQTOWBKO8n9HNrX9MAxLxjzDakD1tsCLygh
-   bxbaDXkkd8MrL3XavpwR1OvyxQKRjvI1Yzt76bfcTGh2HhXZ80CANqYMt
-   G7urboJ4KkT4z3A8RR/0AXD4Drw2jVznPX/rGx4vASBzEZCDLTOSCTvN8
-   A==;
-X-CSE-ConnectionGUID: eHkq6m6gQmCsCeEWu8NxFQ==
-X-CSE-MsgGUID: WY0JWsfpRjO+RvfzFciN+g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="78687434"
-X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
-   d="scan'208";a="78687434"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2026 07:47:58 -0700
-X-CSE-ConnectionGUID: lGBKpemaQBG8TMCescEnnQ==
-X-CSE-MsgGUID: KnsR4Y8sTEyB8FVjM/alkQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
-   d="scan'208";a="249912695"
-Received: from vpanait-mobl.ger.corp.intel.com (HELO [10.245.244.145]) ([10.245.244.145])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2026 07:47:54 -0700
-Message-ID: <885a239a-9ead-41e7-8a86-50fa02d41093@linux.intel.com>
-Date: Wed, 1 Apr 2026 17:47:51 +0300
+	s=arc-20240116; t=1775055131; c=relaxed/simple;
+	bh=BDjySe3Wept64ylci3W7T5dzcnJPnCZJLigg2n3u4Sk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QBAmGDxEuVzz6ILsqxhgBhPJqlJdJaPprMTxJoIYQD05znpS5vyu///fqc+cUJS0OQJ9oVjv8sYCYTnirGRMIf7kds+7k6jNjrq5wHQI0VAtZYBHMp8qTGRzk9J78QAqDfZi9BFoCTzzokjxGDqxWggHu6hRpMGggs0BUj1HUSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aeP1fb0P; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-486fe655187so91454755e9.2
+        for <linux-usb@vger.kernel.org>; Wed, 01 Apr 2026 07:52:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775055129; x=1775659929; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xAnJuA4UgKDovd+3kYctjUIM3Ts92zwG9ROe6cpfd5U=;
+        b=aeP1fb0PNuBKnmFJHMDY/uDMMrT+oujr/iUVFlqcijokI44qliufG+u1cP3FRbrhTV
+         nKdG0ji+1ayx4uh7eWfFSO9qy7Q8ZPsHMNNi7MJZAcBMc07VVGla0kDkQEvjZNbFA89n
+         Q+RBMDHvb7jo4OzrbuTGB49i7I6P58GmI6/BR1MLb+Q9RIgznuQHJjLpq1Garf82enIj
+         AsqrliSluWqDphsoFedAWEJjuJKerkWRLcg6vA6mDJJFeAN3o/BATQsKwhcYXMZD9S2v
+         X+c61FmIcZ5BaoLbA4Z5k85e88F4BbVI2wRfv8xNoeh1fUXyQTT3Xjj5zzWjZaiUpPN6
+         qBeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775055129; x=1775659929;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=xAnJuA4UgKDovd+3kYctjUIM3Ts92zwG9ROe6cpfd5U=;
+        b=ejAMlXcZKEclOusA7/xr6nT1I4U1WxLpfJCyodhvSxllMy/bZn2ug+9s/KYsY442Xo
+         q+Hya2Ib4XkvRL67Iq/dYwSUIZU/ttd+5dKiowpoLD3ThtTUC3ylMzRToOFPlqWNizfg
+         AG5GW10dicFDfcLYjsdKjR0YlJkcBIECVKCpRdtS115BOPe7x2AtYMZbW+I2P4n6E8+Q
+         V+9uVzNSJzyfQljbvysfQkybL/lCXWph0vm+bQcSJG0GKyQ8D1tXmEyX/l8lkjqVqOCx
+         h9WfW8LqUGLUfkB9Qbm6gkwsG0A9JSnhQeb8Su2f4Uy/x7WCO2n3RYOzcG5Llwq7xl2y
+         gjLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXvYdDvAGbpGB40qUObQ7ohMAFPluZzDl2quRArG+KukyTlE1zyeS31JoFYYOGk8Q3z7jrTWlghofA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9bKSka9oZHM1c19O7a8Mos1gYpnOlftnJOi5yPDs5k7k49F3D
+	NG0wMp55y6Sen+SfCA4WvyQwkfKDgM6KZiKjFUxxGPQgEB581uiBitEr
+X-Gm-Gg: ATEYQzyYjezDsd29+w8RX3YPlQ93D0FHm0E91PvM9jbrA8oOWXwaOxXHmyDc1eVgoWz
+	Yd4YoPlkoQx3vxIh404eCI2pBcIfV5GxOSMPfKWJX3+BFX7U1i3DmVJGHNP/mZDiF7LB4Om67HW
+	vdwePTrbg2gNEN/yp3owaADC0eMVx2jR/oQd5AdGFqxkSYX30Ios5O/TX4NBxBpDTKWguOOL/E+
+	nr0t2v4FxeLzIysbTrwvTAP3uPc5/BZDg+tvIVjxPpfTVPZkxxIsO/91Khbuwmk30J372lW8CxI
+	jYQ8MiCbihfBlMPtKhWbpe6wQp0QBb41FQfaEr6FbYhdaOjbLfu6ua05/iPFqU96uPvg7Z7fl8g
+	0zSIEGFfKzrVQ4eXbLsfqj6T9/GaxfUmZM8N7NPXy8vUMpPdTEIh+YvwsMRHbeJLtb9UnoSFkAz
+	Jkzcshk23kJ15EfIg+oqvgdN838aSnx9+I
+X-Received: by 2002:a05:600c:c168:b0:485:3cf3:1010 with SMTP id 5b1f17b1804b1-4888355e4admr68427405e9.2.1775055128629;
+        Wed, 01 Apr 2026 07:52:08 -0700 (PDT)
+Received: from foxbook (bfi53.neoplus.adsl.tpnet.pl. [83.28.46.53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4888a62616dsm5272185e9.3.2026.04.01.07.52.07
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 01 Apr 2026 07:52:08 -0700 (PDT)
+Date: Wed, 1 Apr 2026 16:52:05 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Alan Stern <stern@rowland.harvard.edu>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: xhci: Make usb_host_endpoint.hcpriv survive
+ endpoint_disable()
+Message-ID: <20260401165205.56dcfcda.michal.pecio@gmail.com>
+In-Reply-To: <e14fb308-a003-4a76-b908-106b5271eccc@linux.intel.com>
+References: <20260331010654.269ac270.michal.pecio@gmail.com>
+	<e14fb308-a003-4a76-b908-106b5271eccc@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/2] usb: offload: Decouple interrupter lifecycle and
- refactor usage tracking
-To: Greg KH <gregkh@linuxfoundation.org>, Guan-Yu Lin <guanyulin@google.com>
-Cc: mathias.nyman@intel.com, perex@perex.cz,
- dominique.martinet@atmark-techno.com, eadavis@qq.com, hannelotta@gmail.com,
- tiwai@suse.com, quic_wcheng@quicinc.com, broonie@kernel.org, arnd@arndb.de,
- xiaopei01@kylinos.cn, wesley.cheng@oss.qualcomm.com,
- sakari.ailus@linux.intel.com, stern@rowland.harvard.edu,
- amardeep.rai@intel.com, xu.yang_2@nxp.com,
- andriy.shevchenko@linux.intel.com, nkapron@google.com,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-sound@vger.kernel.org
-References: <20260401123238.3790062-1-guanyulin@google.com>
- <2026040148-cucumber-automatic-9a6b@gregkh>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <2026040148-cucumber-automatic-9a6b@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[intel.com,perex.cz,atmark-techno.com,qq.com,gmail.com,suse.com,quicinc.com,kernel.org,arndb.de,kylinos.cn,oss.qualcomm.com,linux.intel.com,rowland.harvard.edu,nxp.com,google.com,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-35794-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35795-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[22];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,intel.com:email]
-X-Rspamd-Queue-Id: 2A6C037CED8
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 53E6337CFC3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 4/1/26 16:38, Greg KH wrote:
-> On Wed, Apr 01, 2026 at 12:32:16PM +0000, Guan-Yu Lin wrote:
->> The current USB offload implementation couples the allocation of xHCI
->> sideband interrupters with the device's offload usage counter. This
->> coupling is conceptually incorrect, as hardware resource availability
->> and power management state serve distinct purposes.
->>
->> Furthermore, the reliance on the coarse USB device lock for offload
->> state updates has led to potential recursive locking issues,
->> especially during device disconnect when the lock is already held
->> by the USB core.
->>
->> This series refactors the offload synchronization by introducing a
->> dedicated spinlock for offload state, allowing for more granular
->> concurrency control and avoiding deadlocks. It also optimizes power
->> management by ensuring that offload state is only modified when the
->> device is already active, avoiding unnecessary auto-resumes.
->>
->> Patch 1 introduces the `offload_lock` spinlock and `offload_pm_locked`
->> synchronization, replacing the coarse `udev->lock` and the legacy
->> `offload_at_suspend` flag. It also updates `usb_offload_get/put` to use
->> `pm_runtime_get_if_active()`.
->>
->> Patch 2 removes the implicit usage tracking from the xHCI sideband layer
->> and delegates the responsibility to class drivers, who have the
->> correct context for managing offload data stream activity.
+On Wed, 1 Apr 2026 17:34:37 +0300, Mathias Nyman wrote:
+> On 3/31/26 02:06, Michal Pecio wrote:
+> > xHCI hardware maintains its endpoint state between add_endpoint()
+> > and drop_endpoint() calls followed by successful check_bandwidth().
+> > So does the driver.
+> > 
+> > Core may call endpoint_disable() during xHCI endpoint life, so don't
+> > clear host_ep->hcpriv then, because this breaks endpoint_reset().
+> > 
+> > If a driver calls usb_set_interface(), submits URBs which make host
+> > sequence state non-zero and calls usb_clear_halt(), the device clears
+> > its sequence state but xhci_endpoint_reset() bails out. The next URB
+> > malfunctions: USB2 loses one packet, USB3 gets Transaction Error or
+> > may not complete at all on some (buggy?) HCs from ASMedia and AMD.
+> > This is triggered by uvcvideo on bulk video devices.  
 > 
-> Ok, this looks much better, thanks for the revisions.
+> Were you able to trigger a usb_clear_halt() called with ep->hcpriv == NULL,
+> causing a toggle/seq mismatch?
 > 
-> If the xhci maintainer acks these, I'll be glad to apply them to my
-> tree.
+> The ep->hcpriv should be set back correctly in usb_set_interface():
+> 
+> usb_set_interface()
+>    usb_hcd_alloc_bandwidth()
+>      hcd->driver->add_endpoint()
+>        xhci_add_endpoint()
+>          ep->hcpriv = udev;
 
-For both patches:
+right, and later:
 
-Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+     usb_disable_interface(dev, iface, true)
+       usb_disable_endpoint(dev, ..., true)
+         usb_hcd_disable_endpoint(dev, ep)
+           hcd->driver->endpoint_disable(hcd, ep)
+     usb_enable_interface(dev, iface, true)
+       usb_enable_endpoint(dev, ..., true)
+         usb_hcd_reset_endpoint(dev, ep)
+           hcd->driver->endpoint_reset(hcd, ep)
 
+So it seems set_interface() is broken and doesn't actually reset host
+sequence state (while the device is supposed to reset its own).
+
+This alone is rarely a problem because the endpoint is usually "fresh".
+
+But uvcvideo calls usb_clear_halt() *after* stopping a bulk stream,
+because that's what Windows does. Then sequence state is random and
+gets cleared only on the device, because hcpriv is still NULL.
+
+The next URB gets Transaction Error, the host endpoint is reset and
+another URB succeeds (because we restart the endpoint unconditionally).
+
+Regards,
+Michal
 
