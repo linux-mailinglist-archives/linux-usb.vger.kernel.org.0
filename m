@@ -1,252 +1,153 @@
-Return-Path: <linux-usb+bounces-35753-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35755-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4F4IJ/BXzGn/SQYAu9opvQ
-	(envelope-from <linux-usb+bounces-35753-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 01:25:36 +0200
+	id ONC5Fe1jzGnZSgYAu9opvQ
+	(envelope-from <linux-usb+bounces-35755-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 02:16:45 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00651372C6D
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 01:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 913AC3730E3
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 02:16:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 32E9730B2707
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2026 23:22:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8C15F302C92B
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 00:10:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2256E477E46;
-	Tue, 31 Mar 2026 23:22:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KG9om4c9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A12256FBF;
+	Wed,  1 Apr 2026 00:10:25 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m822136188.xmail.ntesmail.com (mail-m822136188.xmail.ntesmail.com [8.221.36.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF4E46AF01;
-	Tue, 31 Mar 2026 23:22:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47558D531;
+	Wed,  1 Apr 2026 00:10:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=8.221.36.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774999354; cv=none; b=HkGHbTqV1tklBEkvge/SRJayO6qckqXkQFugeCKVsvD3MZUjjD0LY5WrzYgJC8hsYROL3v5QpxBY8v7Ef/I6rd/uJIxUrxZIM58Fvb+TaicfA252E01CNsfCxWedpn9b/H0CDMyErkOiEMyagUJr8ApLPsirFdpjK8Z1bUoaS10=
+	t=1775002225; cv=none; b=u9IDOfFFEgRJDJBFa22mDEvcFsj/4mYsf/6uXeG2ttYD9hcdgkBadcIP3GTri+mSD0MSl4QmbcTpsQn3/fSzjkCn5yNbX9FiJkYC76jTv7OFAPk31+Cm56AQNlPB3E6T9a73bJBe+HKVZh9emOmUFpim6VKL+0FuYM2Y8F5agAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774999354; c=relaxed/simple;
-	bh=KVXtZ+/WRWDwP1y6mCnb4gF7X3fAe64Fr6tL2bcbpj0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=U0aHO1wUVJ/mdKz0tG0hhgk50E9Xw8AfqY1TRv+G3S1BomfdMe/Tux+w6ZDryuymEzeIten39S8v5wjGqPXv8nVzhck3AJzWQV1ja3ph981XgcLD8cprnLgudHWC5tfnopkNLo3wvWxHMa1xrdDHAW/HnNKMzJPJeFe0y6EGink=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KG9om4c9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 31C49C2BD00;
-	Tue, 31 Mar 2026 23:22:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774999354;
-	bh=KVXtZ+/WRWDwP1y6mCnb4gF7X3fAe64Fr6tL2bcbpj0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=KG9om4c97jLq9bfnkS2hoxtcrPobMR99/oYDsJGiUma2F2zcHBoKH1C1Jo7YszAZW
-	 7AqWXVq53rlG6WS4pN3MWlQu57xcNIT/MZCqcTbosc9FjVMimbLWfy/WZbCmzy+QRd
-	 WBwSTGXGlcpOuRDbsnbqVfTIb+abrtqB+AgiYr/pC9RofNTbIzmLTuxdN4x+IGDYt6
-	 IP76sLrTlY2Td//3doJzCrxkj7sDSdkdmpf0pRSDVtO63Av8zHCutgACFY0/ci0Zkj
-	 tMSXEzw/dG5s/RZtv1ktHFiRlz815G/Lcfug5EsPGPQbrMJj0mlI3C6agQweEKIQYe
-	 SJmjXnQt0YpHg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28D4510F930B;
-	Tue, 31 Mar 2026 23:22:34 +0000 (UTC)
-From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
-Date: Tue, 31 Mar 2026 23:22:21 +0000
-Subject: [PATCH v10 6/6] usb: typec: tcpm/tcpci_maxim: deprecate WAR for
- setting charger mode
+	s=arc-20240116; t=1775002225; c=relaxed/simple;
+	bh=cLlHaEkpEPd+eUffQrKgEEhU4uNRLXVeyyrImwDE1UY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MI/4SgeFKY+QOorUGy6WwdU9VB/i8/acngWaVVWmP5E/IET8uaQfH4JMRR4wIC/2NMak5Kf2VUlE/UeOvOx/Rqo1VBK1mMIMAH455V0osC1aShitHI3/GsDxasbSmXqwvDkbourLmhlRtC+mcmMc6diwwmrmJAYfYhy0yQn4YXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=autochips.com; spf=pass smtp.mailfrom=autochips.com; arc=none smtp.client-ip=8.221.36.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=autochips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=autochips.com
+Received: from H20F120008.autochips.inc (unknown [223.244.89.246])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 390cf478f;
+	Wed, 1 Apr 2026 08:10:08 +0800 (GMT+08:00)
+From: Yongchao Wu <yongchao.wu@autochips.com>
+To: peter.chen@kernel.org
+Cc: pawell@cadence.com,
+	rogerq@kernel.org,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yongchao Wu <yongchao.wu@autochips.com>,
+	stable@kernel.org
+Subject: [PATCH v2] usb: cdns3: gadget: fix state inconsistency on gadget init failure
+Date: Wed,  1 Apr 2026 08:10:00 +0800
+Message-ID: <20260401001000.5761-1-yongchao.wu@autochips.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260331-max77759-charger-v10-6-76f59233c369@google.com>
-References: <20260331-max77759-charger-v10-0-76f59233c369@google.com>
-In-Reply-To: <20260331-max77759-charger-v10-0-76f59233c369@google.com>
-To: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jagan Sridharan <badhri@google.com>, Mark Brown <broonie@kernel.org>, 
- Matti Vaittinen <mazziesaccount@gmail.com>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Sebastian Reichel <sre@kernel.org>, Amit Sunil Dhamne <amitsd@google.com>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Peter Griffin <peter.griffin@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-usb@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1774999353; l=3934;
- i=amitsd@google.com; s=20241031; h=from:subject:message-id;
- bh=jqB7nbJYjXzzrVt8ib5lZ+aErFjpCV5gSR4p87DWXuY=;
- b=50/aGmDD8T+AKZHYt95IDC1JJ8uUvuD6lsaj2lxoCtBDrexnAvaJ2xnus30rgZVfqR4t41lCp
- VTyklAgf6e2Dtz3jQ44OtKqemm1jV6Ffhs8KwurZEzuiu+sxmIxbRUW
-X-Developer-Key: i=amitsd@google.com; a=ed25519;
- pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
-X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
- auth_id=262
-X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
-Reply-To: amitsd@google.com
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-HM-Tid: 0a9d4660478f03ackunm44a85ff7299a141
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCQk1JVkNMGUxOGR8fTUhOTVYVFAkWGhdVEwETFh
+	oSFyQUDg9ZV1kYEgtZQVlJSUhVSU9PVUNCVUlPTVlXWRYaDxIVHRRZQVlPS0hVSktJT09PSFVKS0
+	tVSkJLS1kG
+X-Spamd-Result: default: False [1.54 / 15.00];
+	DMARC_POLICY_QUARANTINE(1.50)[autochips.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35753-lists,linux-usb=lfdr.de,amitsd.google.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[linaro.org,kernel.org,linuxfoundation.org,google.com,gmail.com,linux-foundation.org,linux.intel.com,samsung.com];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[24];
 	FROM_HAS_DN(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	HAS_REPLYTO(0.00)[amitsd@google.com];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35755-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:email]
-X-Rspamd-Queue-Id: 00651372C6D
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FROM_NEQ_ENVFROM(0.00)[yongchao.wu@autochips.com,linux-usb@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.992];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,autochips.com:email,autochips.com:mid]
+X-Rspamd-Queue-Id: 913AC3730E3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Amit Sunil Dhamne <amitsd@google.com>
+When cdns3_gadget_start() fails, the DRD hardware is left in gadget mode
+while software state remains INACTIVE, creating hardware/software state
+inconsistency.
 
-TCPCI maxim driver directly writes to the charger's register space to
-set charger mode depending on the power role. As MAX77759 chg driver
-exists, this WAR is not required.
+When switching to host mode via sysfs:
+  echo host > /sys/class/usb_role/13180000.usb-role-switch/role
 
-Instead, use a regulator interface to source vbus when typec is in
-source power mode. In other power modes, this regulator will be turned
-off if active.
+The role state is not set to CDNS_ROLE_STATE_ACTIVE due to the error,
+so cdns_role_stop() skips cleanup because state is still INACTIVE.
+This violates the DRD controller design specification (Figure22),
+which requires returning to idle state before switching roles.
 
-Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: André Draszik <andre.draszik@linaro.org>
+This leads to a synchronous external abort in xhci_gen_setup() when
+setting up the host controller:
+
+[  516.440698] configfs-gadget 13180000.usb: failed to start g1: -19
+[  516.442035] cdns-usb3 13180000.usb: Failed to add gadget
+[  516.443278] cdns-usb3 13180000.usb: set role 2 has failed
+...
+[ 1301.375722] xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
+[ 1301.377716] Internal error: synchronous external abort: 96000010 [#1] PREEMPT SMP
+[ 1301.382485] pc : xhci_gen_setup+0xa4/0x408
+[ 1301.393391] backtrace:
+    ...
+    xhci_gen_setup+0xa4/0x408    <-- CRASH
+    xhci_plat_setup+0x44/0x58
+    usb_add_hcd+0x284/0x678
+    ...
+    cdns_role_set+0x9c/0xbc        <-- Role switch
+
+Fix by calling cdns_drd_gadget_off() in the error path to properly
+clean up the DRD gadget state.
+
+Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+Cc: stable@kernel.org
+Signed-off-by: Yongchao Wu <yongchao.wu@autochips.com>
+
 ---
- drivers/usb/typec/tcpm/tcpci_maxim.h      |  1 +
- drivers/usb/typec/tcpm/tcpci_maxim_core.c | 54 +++++++++++++++++++------------
- 2 files changed, 34 insertions(+), 21 deletions(-)
+Changes in v2:
+  - Update commit title to reflect state inconsistency
+  - Add more detailed description with error logs
+  - Add Fixes tag and Cc to stable
+---
+ drivers/usb/cdns3/cdns3-gadget.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.h b/drivers/usb/typec/tcpm/tcpci_maxim.h
-index b33540a42a95..b314606eb0f6 100644
---- a/drivers/usb/typec/tcpm/tcpci_maxim.h
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim.h
-@@ -60,6 +60,7 @@ struct max_tcpci_chip {
- 	struct tcpm_port *port;
- 	enum contamiant_state contaminant_state;
- 	bool veto_vconn_swap;
-+	struct regulator *vbus_reg;
- };
- 
- static inline int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-index 19f638650796..c0ee7e6959ed 100644
---- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-@@ -10,6 +10,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/usb/pd.h>
- #include <linux/usb/tcpci.h>
- #include <linux/usb/tcpm.h>
-@@ -35,12 +36,6 @@
-  */
- #define TCPC_RECEIVE_BUFFER_LEN				32
- 
--#define MAX_BUCK_BOOST_SID				0x69
--#define MAX_BUCK_BOOST_OP				0xb9
--#define MAX_BUCK_BOOST_OFF				0
--#define MAX_BUCK_BOOST_SOURCE				0xa
--#define MAX_BUCK_BOOST_SINK				0x5
--
- static const struct regmap_range max_tcpci_tcpci_range[] = {
- 	regmap_reg_range(0x00, 0x95)
- };
-@@ -202,32 +197,49 @@ static void process_rx(struct max_tcpci_chip *chip, u16 status)
- 	tcpm_pd_receive(chip->port, &msg, rx_type);
- }
- 
-+static int get_vbus_regulator_handle(struct max_tcpci_chip *chip)
-+{
-+	if (IS_ERR_OR_NULL(chip->vbus_reg)) {
-+		chip->vbus_reg = devm_regulator_get_exclusive(chip->dev,
-+							      "vbus");
-+		if (IS_ERR_OR_NULL(chip->vbus_reg)) {
-+			dev_err(chip->dev,
-+				"Failed to get vbus regulator handle\n");
-+			return -ENODEV;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int max_tcpci_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata, bool source, bool sink)
- {
- 	struct max_tcpci_chip *chip = tdata_to_max_tcpci(tdata);
--	u8 buffer_source[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SOURCE};
--	u8 buffer_sink[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SINK};
--	u8 buffer_none[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_OFF};
--	struct i2c_client *i2c = chip->client;
- 	int ret;
- 
--	struct i2c_msg msgs[] = {
--		{
--			.addr = MAX_BUCK_BOOST_SID,
--			.flags = i2c->flags & I2C_M_TEN,
--			.len = 2,
--			.buf = source ? buffer_source : sink ? buffer_sink : buffer_none,
--		},
--	};
--
- 	if (source && sink) {
- 		dev_err(chip->dev, "Both source and sink set\n");
- 		return -EINVAL;
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index d59a60a16..4cc3f2ffb 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -3428,6 +3428,7 @@ static int __cdns3_gadget_init(struct cdns *cdns)
+ 	ret = cdns3_gadget_start(cdns);
+ 	if (ret) {
+ 		pm_runtime_put_sync(cdns->dev);
++		cdns_drd_gadget_off(cdns);
+ 		return ret;
  	}
  
--	ret = i2c_transfer(i2c->adapter, msgs, 1);
-+	ret = get_vbus_regulator_handle(chip);
-+	if (ret) {
-+		/*
-+		 * Regulator is not necessary for sink only applications. Return
-+		 * success in cases where sink mode is being modified.
-+		 */
-+		return source ? ret : 1;
-+	}
-+
-+	if (source) {
-+		if (!regulator_is_enabled(chip->vbus_reg))
-+			ret = regulator_enable(chip->vbus_reg);
-+	} else {
-+		if (regulator_is_enabled(chip->vbus_reg))
-+			ret = regulator_disable(chip->vbus_reg);
-+	}
- 
--	return  ret < 0 ? ret : 1;
-+	return ret < 0 ? ret : 1;
- }
- 
- static void process_power_status(struct max_tcpci_chip *chip)
-
 -- 
-2.53.0.1118.gaef5881109-goog
-
+2.43.0
 
 
