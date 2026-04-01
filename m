@@ -1,176 +1,118 @@
-Return-Path: <linux-usb+bounces-35805-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35806-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WIiiHdlszWnvdQYAu9opvQ
-	(envelope-from <linux-usb+bounces-35805-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 21:07:05 +0200
+	id EI/yNjhszWnvdQYAu9opvQ
+	(envelope-from <linux-usb+bounces-35806-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 21:04:24 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C93FE37FA31
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 21:07:04 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CE5537F997
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 21:04:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9E6DB3034299
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 18:58:59 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3D23E300D722
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 19:01:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ED8B47DD56;
-	Wed,  1 Apr 2026 18:58:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D1A53115A2;
+	Wed,  1 Apr 2026 19:01:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="edIkuXRN"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="x867PCu2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E744247DD4C
-	for <linux-usb@vger.kernel.org>; Wed,  1 Apr 2026 18:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A393382DE;
+	Wed,  1 Apr 2026 19:01:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775069938; cv=none; b=cBSlikls/Zok0Hi021+V3vYYwQgqOnw4UdC5i5MWvh6RkA58H37b7FmH7zKAVw3M1qmqvaVkl/V6I+Jz9KIkq/yn/NkekxlnzJ8APIclC1A6Qiuj4QG7rp+9Lk+HvTavX8PAYzGjzFsBWSrZgi7tX3rhYEGth9LbAs2RRyzftzo=
+	t=1775070068; cv=none; b=Q3xjrlw9Kv6z/ZZuPqDHyCOp94kobRdq9+z9mudVOAyw0J5vZ2FK26GmfMCZXT3XCaJT5ZQzdi5cORKT3Bp7cxMXyPXUe1+KzUxCLlLNYG5mRr1gBLbLCYNlmOBDqyMoVdmuvFaVGPOr00e0xaeKtzxPuLdjQ1ky3Dhiqr8m+HU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775069938; c=relaxed/simple;
-	bh=sKujeDTzJuTCHtB3SVg6AfaM6uX0ZM+uSJZF8PLxqB8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X0Yd4YLY9lkN+u93IwO+uQH84ZJrhwyhwJhSBr46G+SKrBzcuXV+AgT4Mpg8nBVEOT/qsHAYkQXLpTqvkzYyDWwJ0PTTr8B55hb8DdhLDKBCaQ8bLlrJStShY+wL74sWXPs3E3StjCZ6fOXCeNtu1FCLX3AM3aR6o6jUb1Cgbxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=edIkuXRN; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775069937; x=1806605937;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=sKujeDTzJuTCHtB3SVg6AfaM6uX0ZM+uSJZF8PLxqB8=;
-  b=edIkuXRNhmmDLvD70MCCDW4oGyMKVT7CyzirLhjYRwSN7L44OcWMgEKV
-   rbJQi4LwBKFtc1e3u3l1csMu70D/Ao5HDNCUQg9ahoUylvhk+AkxeyBHm
-   GlV2serN8wiP6+RlHvdm6Tjk5ZsYbO9m2XdWERSrSAmHGSby6wuxBo+9F
-   3ftkAqGyXD1Q23NpZzR71SsawDh0dGgJCqS1Ai2D2FEYEPx/XziKO2ROe
-   JAUc7JPyWNm1LJHqqztdf2FDMhBlaUZq5moPz57MxuX7WWnvaW2ZCjqnZ
-   iw1vxK73fydO2j9zoISRu2s6dtPhqphAd4omfNuxrt4Y73udSO053ILbD
-   w==;
-X-CSE-ConnectionGUID: oz/ScdqhS2OWFwAy2vDBRg==
-X-CSE-MsgGUID: 69BZa+1GR8aNucpFSQIqig==
-X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="79975599"
-X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
-   d="scan'208";a="79975599"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2026 11:58:57 -0700
-X-CSE-ConnectionGUID: 735xRQuPQLaY7RvFdPgHSg==
-X-CSE-MsgGUID: 6j1vspbeQ8W9Lo9/cptGow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
-   d="scan'208";a="226744466"
-Received: from pooja-nuc9i7qnx.fm.intel.com ([10.80.169.153])
-  by orviesa008.jf.intel.com with ESMTP; 01 Apr 2026 11:58:56 -0700
-From: Pooja Katiyar <pooja.katiyar@intel.com>
-To: linux-usb@vger.kernel.org
-Cc: gregkh@linuxfoundation.org,
-	heikki.krogerus@linux.intel.com,
-	dmitry.baryshkov@oss.qualcomm.com,
-	johan@kernel.org,
-	asutosh.pathak@intel.com,
-	pooja.katiyar@intel.com
-Subject: [PATCH v7 3/3] usb: typec: ucsi: Add support for SET_PDOS command
-Date: Wed,  1 Apr 2026 12:00:44 -0700
-Message-ID: <5bc7cbe0b40f1bf404ebd5ca7e8ce34323300bb8.1774994425.git.pooja.katiyar@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1774994425.git.pooja.katiyar@intel.com>
-References: <cover.1774994425.git.pooja.katiyar@intel.com>
+	s=arc-20240116; t=1775070068; c=relaxed/simple;
+	bh=uvh8oOR8f012iFbqSPUUmUgjDYv1sLltGScE5WU8BrI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n6G1LyV7UF7kh0AY1xXDEqHh9ezsqi3AmKqfGLoZ8B8Tft8Pqtj1CubkD27RKljhXXpyCLeO7jQwy+i8+pNa1Mv4q0xQ1fwRymj2nSNyx13Fddq84Xoe3+GDtfX46MtWHI9Dbfbe4/05SxU9gpuW/W3ge89vXdg4709H9zBV0Rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=x867PCu2; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=8MpH8X6sjaPrUpqh7/He3PqKvB7B8nmD6tdg+fBP6uI=; b=x867PCu238MpZ7Gonv8MF+FBKO
+	2R8qti0IOEIscNfG9s4Qhcov6/9FV8f3bhiwehCJWt7Pt02/SrmPE7bHADzj/hWFfnD5eowxG7Fnp
+	Py9i/cIc8Zo0lTwCEh2fh3UzfMvHQXOZQr7rMdglK8kyoDBY/PL6yVvK/rQ/NeSQjQo0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1w80o7-00EP25-Ha; Wed, 01 Apr 2026 21:00:51 +0200
+Date: Wed, 1 Apr 2026 21:00:51 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Birger Koblitz <mail@birger-koblitz.de>
+Cc: Jakub Kicinski <kuba@kernel.org>, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v4 1/2] r8152: Add support for 5Gbit Link Speeds
+ and EEE
+Message-ID: <f308c593-a186-4a2b-ac4d-78491d6e7255@lunn.ch>
+References: <20260324-rtl8157_next-v4-1-034312b12de5@birger-koblitz.de>
+ <20260329193449.2764517-1-kuba@kernel.org>
+ <50dc7e8c-6c6d-47d1-866e-677638b4deaf@birger-koblitz.de>
+ <20260331175649.729e60a7@kernel.org>
+ <59b4be26-1fee-40f1-b9ff-45881cddc7df@birger-koblitz.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <59b4be26-1fee-40f1-b9ff-45881cddc7df@birger-koblitz.de>
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[lunn.ch,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[lunn.ch:s=20171124];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[pooja.katiyar@intel.com,linux-usb@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-35805-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35806-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,intel.com:email,intel.com:mid]
-X-Rspamd-Queue-Id: C93FE37FA31
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[lunn.ch:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andrew@lunn.ch,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lunn.ch:dkim,lunn.ch:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6CE5537F997
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add support for UCSI SET_PDOS command as per UCSI specification v2.1 and
-above to debugfs.
+>  One thing I
+> noticed in particular is that the AI does not seem to take into account
+> that the code actually works: suspecting broken SRAM-access or wrong
+> descriptor-size settings would break the driver at such a fundamental level,
+> it would not be able to work at all.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Pooja Katiyar <pooja.katiyar@intel.com>
----
-Changelog v7:
-- Added changelogs.
+The flip side to this is that we get a lot of patches which are
+compile tested only. So assuming the patch has run on real hardware is
+a poor assumption to make.
 
-Changelog v6:
-- Removed message_out field from UCSI structure and added it back
-  to ucsi_debugfs_entry structure. 
+We humans however do have a feeling about who is submitting the
+patches and how likely they have run it on hardware. So we know to
+look for fundamental problems or not.
 
-Changelog v2:
-- Send message_out data as part of ucsi_send_command.
-
- drivers/usb/typec/ucsi/debugfs.c | 5 +++++
- drivers/usb/typec/ucsi/ucsi.h    | 4 ++++
- 2 files changed, 9 insertions(+)
-
-diff --git a/drivers/usb/typec/ucsi/debugfs.c b/drivers/usb/typec/ucsi/debugfs.c
-index be987e53a8bd..ff33a5e7c6b0 100644
---- a/drivers/usb/typec/ucsi/debugfs.c
-+++ b/drivers/usb/typec/ucsi/debugfs.c
-@@ -40,6 +40,11 @@ static int ucsi_cmd(void *data, u64 val)
- 	case UCSI_READ_POWER_LEVEL:
- 		ret = ucsi_send_command(ucsi, val, NULL, 0);
- 		break;
-+	case UCSI_SET_PDOS:
-+		ret = ucsi_write_message_out_command(ucsi, val, NULL, 0,
-+						     ucsi->debugfs->message_out,
-+						     UCSI_COMMAND_DATA_LEN(val));
-+		break;
- 	case UCSI_GET_CAPABILITY:
- 	case UCSI_GET_CONNECTOR_CAPABILITY:
- 	case UCSI_GET_ALTERNATE_MODES:
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index e51a8472fc27..e1a14f043abf 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -138,6 +138,7 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
- #define UCSI_GET_PD_MESSAGE			0x15
- #define UCSI_GET_CAM_CS			0x18
- #define UCSI_SET_SINK_PATH			0x1c
-+#define UCSI_SET_PDOS				0x1d
- #define UCSI_READ_POWER_LEVEL			0x1e
- #define UCSI_SET_USB				0x21
- #define UCSI_GET_LPM_PPM_INFO			0x22
-@@ -215,6 +216,9 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
- #define   UCSI_GET_PD_MESSAGE_TYPE_IDENTITY	4
- #define   UCSI_GET_PD_MESSAGE_TYPE_REVISION	5
- 
-+/* Data length bits */
-+#define UCSI_COMMAND_DATA_LEN(_cmd_)           (((_cmd_) >> 8) & GENMASK(7, 0))
-+
- /* -------------------------------------------------------------------------- */
- 
- /* Error information returned by PPM in response to GET_ERROR_STATUS command. */
--- 
-2.43.0
-
+	Andrew
 
