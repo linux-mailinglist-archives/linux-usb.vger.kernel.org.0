@@ -1,174 +1,135 @@
-Return-Path: <linux-usb+bounces-35788-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35789-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KKBqGAUdzWk0aQYAu9opvQ
-	(envelope-from <linux-usb+bounces-35788-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 15:26:29 +0200
+	id 4LodGgojzWnOaAYAu9opvQ
+	(envelope-from <linux-usb+bounces-35789-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 15:52:10 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02BFE37B346
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 15:26:28 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECF1F37B995
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 15:52:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B0F04301061E
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 13:26:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A5A523050EFE
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 13:39:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63AB64266AC;
-	Wed,  1 Apr 2026 13:25:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE11743CED8;
+	Wed,  1 Apr 2026 13:38:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bg57Im07"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MTUq6rUZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E148425CDD
-	for <linux-usb@vger.kernel.org>; Wed,  1 Apr 2026 13:25:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775049959; cv=pass; b=llAvDzws/0AcUzcfGwtmGe3UiLbp+h0RaQi+reU3uUK9wTAdf1Fu3aeGbp8hh/ksNnumc27Jdm5hEyWMe8UufjwaT0KPya/f97CdpimtbdChl8fH1yFm/KxXVgeXDUH5ofUYe8q+pcKyBga2nsLQq9/fj95YQcffCAoekN3oRVw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775049959; c=relaxed/simple;
-	bh=1qGvVqwik+E6UaA8EtHo8Y9hkD9P8wNTkAKesdsaWMI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RAGu16E+DOFF7YDBFYdqamts1YV4r0QuJR5AWJyww27gD8JCENOiTpQlZ+b4/vSG6tmWC1MrNFIM16zyyP/RlhTTlHrvEfbfawCBxN6PC4Ph4rPMY1rRvIr9icPz/QyZ0X7WrbgvPbx4VOhBCcdzK97vamN2KAyPqxOuFm/ikyc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bg57Im07; arc=pass smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b9825ba7e8dso953309766b.3
-        for <linux-usb@vger.kernel.org>; Wed, 01 Apr 2026 06:25:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775049956; cv=none;
-        d=google.com; s=arc-20240605;
-        b=SAzPM0FB+2d5kbJAx2QjMFJhMzE7YqU1iACGQDMIeicxAjGwokzfbNy41K0Z2t5+LC
-         JUyJ+v8lLwdmTXWJcPLDfwsQd9OenvSNd++vgxWBD/y1heEsmmlb3VRd3yL0NJaWLsTm
-         iNphfVF8Imx/7RFwWGMpQQ4dxmuRdIzsQk7vwC1PfJIou7fOtbaZvcYd+o5Taw76+6Hq
-         qVZb4rfHwditGlZ5Rv5UH2Y6Gs3xJwdnfN8h3mXwfJE21qfHbnUSDB/FUivUEp5p1SlM
-         HOrRYe0yWm3CQfnQ4xQ27a5TUxGMhBrpfBUke6CN5c6xIrPo45mc80iiOxad5FMcnJl5
-         MwNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=1qGvVqwik+E6UaA8EtHo8Y9hkD9P8wNTkAKesdsaWMI=;
-        fh=0uV+IWU4KK4dPYurX8TPHfLuzqkMH6D1P5+jhtC+77s=;
-        b=Sj/psEfmChbF5y+Tw7y0IbCAiY8O6A6HQwbgixwk946JTxnU3eaDEIID+locch3sp4
-         0XdqqADkJArAvyhn6zkBKwwNWolIVhAk2XdTCR/xyVt3VxJhV17hlGGujmynpSdRn4oS
-         BpwoHpMPAtxsOOeZNAdZ9IlhuZijqrJ1icc4mopEkfyRoimy0P9TY35TGL11+EAKIFi5
-         DzcRoRKht47ZCOHVWgo3z2fBttuA1cKCiX1/sMgC9akBMfMBNNpg6LsvHrA4gXQwtMHL
-         i5b+7Ddhh8ryL3hzs+5iwmQsMAdzYTeKoq5vWLPo9hPZV8/iBYGygAgRw0TMGYcixRpx
-         p35w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775049956; x=1775654756; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1qGvVqwik+E6UaA8EtHo8Y9hkD9P8wNTkAKesdsaWMI=;
-        b=Bg57Im07oKpD2Id2uVjX3zSW+EFamrhu5+kDDEffJH5u3B+Uy1mkXXq0veHW+BYspr
-         wQROVUnEvm693lDq3w9+R/ySBIX62lKuMVdtXzR4oWXszGmfh0A+FoJAZCdTA0tsyKQU
-         2KRCjKmc1Bk5NBvR+fhTy7+sXOG/MkPoCZc5m6VXPehMJ2TrFIqvbzIDdxRUkto0Se+m
-         uosq+MC1ZenvI7gy5YgcAwKy5IKsImLZrozs5gqlqJY7Xpk2gJZWc53MRZ1jLC3/NIii
-         PSWABeLceppngSDh5v8M7/V01lqelIEn7kbUBBPCoGS1shEGhHLBrO9mCn8p7YWtTPWw
-         qKZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775049956; x=1775654756;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1qGvVqwik+E6UaA8EtHo8Y9hkD9P8wNTkAKesdsaWMI=;
-        b=IKB2Rmxx3UaIMNeAZnNlHFrH5B1KFvAUs1Uw08ltpD/PM3EXaVghTn1gH5+8uK0Vtv
-         C7aHn82tNRwFbkPHJmx57kCtNFADAhgGZv+I10KVS2D6RMwzKtUjunKQ1tSwzYvrDMSk
-         h0ALU3DOk2+8IWqfph8J/bTFDQOXw78PwafD/p4uMFFCGOy1uxk4g90OwYKMZWIBcy5n
-         0v5Wzlh5VWG55S3WbO2i9tzlFzY+QA7bmq1UpMahpeNthmwyH757CVX+ObLMzE1isMeY
-         hljtpFNJujeplqP00lW3roTQdIiLj7FoFomazOR3ahG1a+p/7tPqd4+/vevz/s9unBir
-         tV+g==
-X-Forwarded-Encrypted: i=1; AJvYcCXcvrURItETPyTiM+EXrcn4R1CEJzvcnmGlURbnhKGoqsLl+z390JZYHUwSdNXuwyKZ0Q7NVJwp4ZA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1909W7PFvAc0Fr5IfA7c0ObFgHZG7fLfPIOy6qT+OKWKlyehG
-	00Wc6Mj4AtNRny4bB76fd5FLY1BwBcEynIz/uS89I9Ndzhzwa7iMbeBtjC6W+oO99wIHpr1f6NZ
-	tKzUgZpPZnJXKjv5Qg4y3SjJdormFqpk=
-X-Gm-Gg: ATEYQzxmX6nw4GHzRwDbYdwVAVXhaQsF7cWL2MUZzT8VDTPE/KxZoCnhKnt2V3LsSGm
-	xM4aSiGHlpYFbyf63u7B8cu8yhbcisEJlJEx5ZAAP3g8YA5Sc33FDnXy0FImvMwR21ucIj2vw/G
-	KIKk2ZBZHB6uMv+IEcfm7vZkfG0FGXSZaOI6nunU+WhZi44zB+Ogc9mzwnp2q/8fjD6dViuTXxd
-	zmyAG8uhkhstgESkaEWvxovHE5ooxcMiesU3QM6THUVRBjxqzh2NezWHNhpEjMcoWkeiC4wqaTK
-	4URNEw3WT1WfTqJ8xt6SHn7RpmBwDNtbB0/lrEs6DpKldXDUVyQtbKM1Axs8GUnXF8Ruljh06F6
-	1Iky7wmg=
-X-Received: by 2002:a17:907:786:b0:b97:3bbe:e42b with SMTP id
- a640c23a62f3a-b9c13b0a2bfmr237863466b.28.1775049955607; Wed, 01 Apr 2026
- 06:25:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7309343CEC5;
+	Wed,  1 Apr 2026 13:38:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775050700; cv=none; b=cHHVN+EHbUbuOChKq5ZBdQ35VCrid6/V1sPvLF7jQZa2LOJYoTW7jgjAao2j6RbHfCri1LP1UYIYp2H23Ku1gelrO20PriBWV2ZvNXkd/0+E8easE5fhsF8/fAu8TOh7n65npMQY80kfTfufpiEh5ltp0BY8rZiGfVV/dzCH6Es=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775050700; c=relaxed/simple;
+	bh=XC2A2BfNuaHwWBFpTSHeQ5AFz6V+30DkFd6RW8BE7cQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mnHWMEmfUFg9qtMqnFP9qGjDZ51C7PRF36qIhjhRWD6PSXXiqzwhxu0qdFXlK5M6yFdU77oupEtucaY4nDvSBlp+q1lQzdccj4vzZ9D5Ek5p2Ss/aTzvR9JJ5iiMf9KipEESp42D8I/4ynZoeyk8aPOHGPR5TKFEQCAX97iex1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MTUq6rUZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96FFDC4CEF7;
+	Wed,  1 Apr 2026 13:38:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1775050700;
+	bh=XC2A2BfNuaHwWBFpTSHeQ5AFz6V+30DkFd6RW8BE7cQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MTUq6rUZ0ZxGmau0+2eUhGwCjs3mJhZ3M1ILcEzCBPwDUx+jt0/8vFNKJxSa6jyvA
+	 fFeEMKfdgnsOYLHKwIAyQN2idcvPXOQeZuEdW6Yj9LchtF6CKlVBRF8I/IjJpwWe2L
+	 VlhV6QjZuPdtUfKl982A3kAk2UPQF1QKUKZRu4TI=
+Date: Wed, 1 Apr 2026 15:38:17 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Guan-Yu Lin <guanyulin@google.com>
+Cc: mathias.nyman@intel.com, perex@perex.cz,
+	dominique.martinet@atmark-techno.com, eadavis@qq.com,
+	hannelotta@gmail.com, tiwai@suse.com, quic_wcheng@quicinc.com,
+	broonie@kernel.org, arnd@arndb.de, xiaopei01@kylinos.cn,
+	wesley.cheng@oss.qualcomm.com, sakari.ailus@linux.intel.com,
+	stern@rowland.harvard.edu, amardeep.rai@intel.com,
+	xu.yang_2@nxp.com, andriy.shevchenko@linux.intel.com,
+	nkapron@google.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org
+Subject: Re: [PATCH v4 0/2] usb: offload: Decouple interrupter lifecycle and
+ refactor usage tracking
+Message-ID: <2026040148-cucumber-automatic-9a6b@gregkh>
+References: <20260401123238.3790062-1-guanyulin@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20260327124211eucas1p10425a28f67736d2043e7e4dd77d58e72@eucas1p1.samsung.com>
- <20260327124156.24820-1-mikhail.v.gavrilov@gmail.com> <6270d4f0-85e4-496d-8db4-87ccb791ca4d@samsung.com>
- <c9ded35b-fc10-47d8-bfaa-cecb4fa91add@arm.com>
-In-Reply-To: <c9ded35b-fc10-47d8-bfaa-cecb4fa91add@arm.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 1 Apr 2026 16:25:19 +0300
-X-Gm-Features: AQROBzDDLArf0c-hToXUOK8do2aJGAPhYCPRDaClvBGUScWSaymi-rt5o9xqIis
-Message-ID: <CAHp75VdrGk=foAzQBJNRNDZ1yfFY8p-tC_ApM8_gN4EehpmN_Q@mail.gmail.com>
-Subject: Re: [PATCH v2] dma-debug: suppress cacheline overlap warning when
- arch has no DMA alignment requirement
-To: Robin Murphy <robin.murphy@arm.com>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>, iommu@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, linux-mm@kvack.org, 
-	harry@kernel.org, vbabka@kernel.org, akpm@linux-foundation.org, 
-	stern@rowland.harvard.edu, linux@roeck-us.net, hch@lst.de, 
-	Jeff.kirsher@gmail.com, catalin.marinas@arm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260401123238.3790062-1-guanyulin@google.com>
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35788-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35789-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FREEMAIL_CC(0.00)[samsung.com,gmail.com,lists.linux.dev,vger.kernel.org,kvack.org,kernel.org,linux-foundation.org,rowland.harvard.edu,roeck-us.net,lst.de,arm.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andyshevchenko@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FREEMAIL_CC(0.00)[intel.com,perex.cz,atmark-techno.com,qq.com,gmail.com,suse.com,quicinc.com,kernel.org,arndb.de,kylinos.cn,oss.qualcomm.com,linux.intel.com,rowland.harvard.edu,nxp.com,google.com,vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:email,mail.gmail.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 02BFE37B346
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.996];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: ECF1F37B995
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Apr 1, 2026 at 3:11=E2=80=AFPM Robin Murphy <robin.murphy@arm.com> =
-wrote:
-> On 2026-03-30 8:44 am, Marek Szyprowski wrote:
-> > On 27.03.2026 13:41, Mikhail Gavrilov wrote:
+On Wed, Apr 01, 2026 at 12:32:16PM +0000, Guan-Yu Lin wrote:
+> The current USB offload implementation couples the allocation of xHCI
+> sideband interrupters with the device's offload usage counter. This
+> coupling is conceptually incorrect, as hardware resource availability
+> and power management state serve distinct purposes.
+> 
+> Furthermore, the reliance on the coarse USB device lock for offload
+> state updates has led to potential recursive locking issues,
+> especially during device disconnect when the lock is already held
+> by the USB core.
+> 
+> This series refactors the offload synchronization by introducing a
+> dedicated spinlock for offload state, allowing for more granular
+> concurrency control and avoiding deadlocks. It also optimizes power
+> management by ensuring that offload state is only modified when the
+> device is already active, avoiding unnecessary auto-resumes.
+> 
+> Patch 1 introduces the `offload_lock` spinlock and `offload_pm_locked`
+> synchronization, replacing the coarse `udev->lock` and the legacy
+> `offload_at_suspend` flag. It also updates `usb_offload_get/put` to use
+> `pm_runtime_get_if_active()`.
+> 
+> Patch 2 removes the implicit usage tracking from the xHCI sideband layer
+> and delegates the responsibility to class drivers, who have the
+> correct context for managing offload data stream activity.
 
-...
+Ok, this looks much better, thanks for the revisions.
 
-> TBH I'd be inclined to have CONFIG_DMA_DEBUG raise ARCH_DMA_MINALIGN as
-> appropriate such that genuine false-positives can't happen, rather than
-> effectively defeat the whole check,
+If the xhci maintainer acks these, I'll be glad to apply them to my
+tree.
 
-I dunno if you read v1 thread, where I proposed to unroll the check
-and use pr_debug_once() for the cases which we expect not to panic,
-but would be good to have a track of.
+thanks,
 
-
---=20
-With Best Regards,
-Andy Shevchenko
+greg k-h
 
