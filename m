@@ -1,165 +1,136 @@
-Return-Path: <linux-usb+bounces-35801-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35802-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eLf3KOljzWkHdAYAu9opvQ
-	(envelope-from <linux-usb+bounces-35801-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 20:28:57 +0200
+	id aC1YJnJrzWkkdQYAu9opvQ
+	(envelope-from <linux-usb+bounces-35802-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 21:01:06 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40AB137F448
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 20:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 28CD937F935
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 21:01:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B86793041170
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 18:28:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4F56B305246C
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 18:58:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63FF4376BD3;
-	Wed,  1 Apr 2026 18:28:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E54C47DD4B;
+	Wed,  1 Apr 2026 18:58:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yrp1Do7J"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QJtmFe4d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEEFF345CC2
-	for <linux-usb@vger.kernel.org>; Wed,  1 Apr 2026 18:28:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928B535AC25
+	for <linux-usb@vger.kernel.org>; Wed,  1 Apr 2026 18:58:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775068124; cv=none; b=DhuZQZsJmyTDCGTJx4gk6ng6zELw1E8jm/bEsWsGJBNkfinvmCM8asCw8qTfl63edBnCIzQYswoaTkA2BnHIv6SuyqhP9cXTQn38M9DTNrRnLyDci4tnoAeJlBD67Dd1YnPWSuOet3H2gcdk/aSeaUcJzpaE5zKYppSoERsx3xQ=
+	t=1775069934; cv=none; b=s3oXFg+jbu8G4QRplx3UoAqUR1GrwPzdXyITi7NMeYXqt6XKjoG3dIFI3tDKsQF6JVmJ6Ccn+pxxKqJiWnkekce2wmJecNvtlpwQAoKbRagjEWaQlVQ/1z7zAm8vnfqIv0/mjcxDJXizzVRXGIDdv130JFpbdHomLWE5Xo2rAlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775068124; c=relaxed/simple;
-	bh=UKTZoesvlkUmpVjBnnnmkZu42wFtE56ai+CTDbeVo0U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aSQpy8fUqso6vxeeT1xpnnILSivv6VhOUcPhmBxWiYe1zWIbbF0YeRsGFnexl5gqMi7wBG8RV8FKBBtYaWT6ibInjSuuj/coByNXlcWxREXUjAxTJ11RLor8TM89qfOuHRaCDXwUiFZgtz8yMRyJr6lbqUKYIOHgNI7TnxwdnZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yrp1Do7J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 363D5C4CEF7;
-	Wed,  1 Apr 2026 18:28:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1775068124;
-	bh=UKTZoesvlkUmpVjBnnnmkZu42wFtE56ai+CTDbeVo0U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=yrp1Do7Jtlm3JaYt4MYQLVbug9Xf0TkF9KTGkfIKBwnpFEfuMVgNYzKoKzWcbau37
-	 fNb3UZyIvitSa6WG7Qjr2cD4+X1I8cwdhybS3UyOAsLxsykKrOnEgbUtrXFZswnl9o
-	 dVq/CpIgRCFG2VVi2RXab7sIZbuaaQ7AbWrLtVGo=
-Date: Wed, 1 Apr 2026 20:28:42 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Taegu Ha <hataegu0826@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: f_uac1_legacy: validate control request
- size
-Message-ID: <2026040144-gratitude-haven-f28a@gregkh>
-References: <2026040124-unheated-opponent-3c56@gregkh>
- <20260401151539.3441000-1-hataegu0826@gmail.com>
+	s=arc-20240116; t=1775069934; c=relaxed/simple;
+	bh=0kS+2FUd4NdnhaN3k6PHg1Pz1WH4rowDGLOdaQ0M8qM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tdyId0oVK0qYnZjZnuj/f8tQCBC8b5dR2sa0ihx+VlQNjkSSIlhoney/cYxpRnxQG7Tb7PzqITuR4XdKHCpwXqh3KWmB1gGfvGWkjAAU4mAIYHumbC4TIHE4xVYVG3KqoX19g52ngIOn+AxQpLlmrEvonrmMdkdpnqzcRw5/yDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QJtmFe4d; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775069934; x=1806605934;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0kS+2FUd4NdnhaN3k6PHg1Pz1WH4rowDGLOdaQ0M8qM=;
+  b=QJtmFe4dU/7yqO3RNqyfCj/JkUEbkMzUP08U4WjaXdVg8gk1eVWjO9zR
+   YAPrzKB/R0whzToiCqqcfKQ921xrzCrrgSzZs3cHcAZmmi/nb8v2RVsGK
+   Dei9SesAoKF1Fg+lnCTrt6Z8do1W2HvBdnFhc9F7auaxNlnYp3jX+coZ5
+   OLkoIPdib5nbaw0V2jsz11I1sKoVwbtcMMPmcPyIYInxrez+AVAceE2yf
+   RaBSl+lZ6Cja6DfKPcnUa5fH/B9i0zUxeQqWPs+EOk536QJMQZta3iea9
+   q7bUVi328XmKwC8u43y5E9aW9CrOafQhZzNUrenlF3Y53sZUNUVSqJ2If
+   Q==;
+X-CSE-ConnectionGUID: 2TgoSI96Q/CEu7v/nIsYwQ==
+X-CSE-MsgGUID: zZTFnSN1Sxuj8jNbPLdsiQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="79975577"
+X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
+   d="scan'208";a="79975577"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2026 11:58:53 -0700
+X-CSE-ConnectionGUID: 5gkUJWKARaKG/IN8SEkNhQ==
+X-CSE-MsgGUID: Z+40GeSxS+WQ42yeOn8qgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
+   d="scan'208";a="226744454"
+Received: from pooja-nuc9i7qnx.fm.intel.com ([10.80.169.153])
+  by orviesa008.jf.intel.com with ESMTP; 01 Apr 2026 11:58:53 -0700
+From: Pooja Katiyar <pooja.katiyar@intel.com>
+To: linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
+	heikki.krogerus@linux.intel.com,
+	dmitry.baryshkov@oss.qualcomm.com,
+	johan@kernel.org,
+	asutosh.pathak@intel.com,
+	pooja.katiyar@intel.com
+Subject: [PATCH v7 0/3] usb: typec: ucsi: Add support for SET_PDOS command
+Date: Wed,  1 Apr 2026 12:00:41 -0700
+Message-ID: <cover.1774994425.git.pooja.katiyar@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260401151539.3441000-1-hataegu0826@gmail.com>
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FROM_NEQ_ENVFROM(0.00)[pooja.katiyar@intel.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-35802-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWO(0.00)[2];
-	FREEMAIL_TO(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-35801-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.970];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
+	DKIM_TRACE(0.00)[intel.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 40AB137F448
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 28CD937F935
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Apr 02, 2026 at 12:15:39AM +0900, Taegu Ha wrote:
-> f_audio_complete() copies req->length bytes into a 4-byte stack
-> variable:
-> 
->   u32 data = 0;
->   memcpy(&data, req->buf, req->length);
-> 
-> req->length is derived from the host-controlled USB request path,
-> which can lead to a stack out-of-bounds write.
-> 
-> Validate req->actual against the expected payload size for the
-> supported control selectors and decode only the expected amount
-> of data.
-> 
-> This avoids copying a host-influenced length into a fixed-size
-> stack object.
-> 
-> Signed-off-by: Taegu Ha <hataegu0826@gmail.com>
-> 
-> Changes in v2:
-> - rewrite the validation logic into a switch on control type
-> - use constant-size memcpy() for fixed-size payloads
-> - convert the volume payload with le16_to_cpu()
-> 
-> Build-tested: not tested, build environment not prepared
+[Resending with linux-usb@vger.kernel.org added, previous send
+ missed LKML]
 
-As you found and tested your previous change, can you please test this
-one to verify it solves the issue?
+This series implements support for UCSI SET PDOS command. It provides
+interface to send message out data and update source or sink
+capabilities PDOs on a connector over debugfs interface.
 
+Pooja Katiyar (3):
+  usb: typec: ucsi: Add support for message_out data structure
+  usb: typec: ucsi: Enable debugfs for message_out data structure
+  usb: typec: ucsi: Add support for SET_PDOS command
 
+ drivers/usb/typec/ucsi/cros_ec_ucsi.c   |  6 ++-
+ drivers/usb/typec/ucsi/debugfs.c        | 31 +++++++++++++++
+ drivers/usb/typec/ucsi/ucsi.c           | 52 ++++++++++++++++++++-----
+ drivers/usb/typec/ucsi/ucsi.h           | 20 +++++++++-
+ drivers/usb/typec/ucsi/ucsi_acpi.c      | 22 ++++++++++-
+ drivers/usb/typec/ucsi/ucsi_ccg.c       |  6 ++-
+ drivers/usb/typec/ucsi/ucsi_yoga_c630.c |  6 ++-
+ 7 files changed, 123 insertions(+), 20 deletions(-)
 
-> 
-> ---
->  drivers/usb/gadget/function/f_uac1_legacy.c | 47 ++++++++++++++++-----
->  1 file changed, 37 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_uac1_legacy.c b/drivers/usb/gadget/function/f_uac1_legacy.c
-> index a0c953a99727..00cc7161db66 100644
-> --- a/drivers/usb/gadget/function/f_uac1_legacy.c
-> +++ b/drivers/usb/gadget/function/f_uac1_legacy.c
-> @@ -360,19 +360,46 @@ static int f_audio_out_ep_complete(struct usb_ep *ep, struct usb_request *req)
->  static void f_audio_complete(struct usb_ep *ep, struct usb_request *req)
->  {
->  	struct f_audio *audio = req->context;
-> -	int status = req->status;
-> -	u32 data = 0;
->  	struct usb_ep *out_ep = audio->out_ep;
->  
-> -	switch (status) {
-> -
-> -	case 0:				/* normal completion? */
-> -		if (ep == out_ep)
-> +	switch (req->status) {
-> +	case 0:
-> +		if (ep == out_ep) {
->  			f_audio_out_ep_complete(ep, req);
-> -		else if (audio->set_con) {
-> -			memcpy(&data, req->buf, req->length);
-> -			audio->set_con->set(audio->set_con, audio->set_cmd,
-> -					le16_to_cpu(data));
-> +		} else if (audio->set_con) {
-> +			struct usb_audio_control *con = audio->set_con;
-> +			u8 type = con->type;
-> +			u32 data = 0;
+-- 
+2.43.0
 
-No need to set this to 0 ahead of time, right?
-
-thanks,
-
-greg k-h
 
