@@ -1,159 +1,191 @@
-Return-Path: <linux-usb+bounces-35783-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35784-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0OZCFc0PzWmMZwYAu9opvQ
-	(envelope-from <linux-usb+bounces-35783-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 14:30:05 +0200
+	id sG2yBzQTzWmMZwYAu9opvQ
+	(envelope-from <linux-usb+bounces-35784-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 14:44:36 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B72537A785
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 14:30:04 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F3FA37AA78
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 14:44:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id F314E3017A88
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 12:20:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B37BE316CC4B
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 12:32:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77C023FF8BF;
-	Wed,  1 Apr 2026 12:20:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7329E405ADB;
+	Wed,  1 Apr 2026 12:32:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oKUcCgFm"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CZBSaX3P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F963A16B0;
-	Wed,  1 Apr 2026 12:20:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C967C3F87E4
+	for <linux-usb@vger.kernel.org>; Wed,  1 Apr 2026 12:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775046019; cv=none; b=eykEFc92YBQVGGRpq8vakP4T2mH8nakQ3GCNIOhYtMJXh2c/xB3RUP37y9c9VKM5TUZh2cxteBwK7UxAoU15LC9QQUhJCeUUJUs0pF1gE0TQY3zj0rIuaaMZ0diel8TN4+Z7GuEoxlyO+Q6qlhXYQdr4u3uFTS35Cg6SWHau/zg=
+	t=1775046765; cv=none; b=oD5Ku/0zHLaOXJcfPUOJWDYbSfVjDTNS0eldt0aplvNMalJQPJ8tFqQOqD+SL1TkHOpCzCO88X0X5l1ufpOkL/NOedzUv0HYzXQPTlYxk7m7P68AFIFAZP4II/PZCGKotKqhD18OOqTGBgurvUTiD+J/KgJ7QYkYltE41qeWPhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775046019; c=relaxed/simple;
-	bh=acnQ6s1ZhIdXaU8kOcjwbAULnwWazRUTJQJ/dWj42KQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qj9ge59Nkk9wrjmZQb5EtxLo4+dW1/jt0Ts8pubvO4V6B2+3OXf9p4IUOEOddZ4CD00WcDNG0Jo+MQPP5wWrQQzXCqxMVc8yQ9xKh1GNYTddQtk0+vwyit1JyCY6ZQsa4CAQq1PtyF/OYHBGJzu24JqRtlg3LSato6EBS22U+Z0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oKUcCgFm; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775046017; x=1806582017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=acnQ6s1ZhIdXaU8kOcjwbAULnwWazRUTJQJ/dWj42KQ=;
-  b=oKUcCgFmxUhhRL9YLKzNBVw3ghESXJj61kogP9XMAVrx/FavN3wK/zCa
-   aWnbg5BGP5QytsH85ZtW7ONPMU2Lru4OJbYVhGj695lfmeQTov1r9ByG1
-   Bd6Ie9R7dvlRSVP1WbChlf+5RD+es/HSrFnRnoULe9jKzLVDTJnxpmcKU
-   20UMIAaa5ItiDDoOW5WR5v2Na/94O7Oj19+AuL9l2jC3UaWepTiBikIyo
-   kdOjcfEH4g6Tb4+x8bdwdeOguZNrIwRa51Zse4jE890dUkWX/yfNwnig+
-   cI8BY10iuAah+S8AB22wPIGc0ucX3ta/OZ/MxTxPFm2tPNLMNfbTABT8D
-   A==;
-X-CSE-ConnectionGUID: Mxz7WCE2TXOX/2BYPP70nA==
-X-CSE-MsgGUID: Tqk50WxwR8uRCkAtmkQBGQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="63631459"
-X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
-   d="scan'208";a="63631459"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2026 05:20:16 -0700
-X-CSE-ConnectionGUID: 0951rfR5TiSuzWobkpqRyQ==
-X-CSE-MsgGUID: HQPIvawtQe2akqH9I2Ql+Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
-   d="scan'208";a="264589556"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa001.jf.intel.com with ESMTP; 01 Apr 2026 05:20:15 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 1D8E098; Wed, 01 Apr 2026 14:20:13 +0200 (CEST)
-Date: Wed, 1 Apr 2026 15:19:26 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Guangshuo Li <lgs201920130244@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	David Cohen <david.a.cohen@linux.intel.com>,
-	Felipe Balbi <balbi@ti.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: ulpi: fix double free in ulpi_register_interface()
- error path
-Message-ID: <ac0NTgTPXj7vnXdV@kuha>
-References: <20260401025142.1398996-1-lgs201920130244@gmail.com>
+	s=arc-20240116; t=1775046765; c=relaxed/simple;
+	bh=ibk0bQN/ByI0CUeuRlmijZM5DofIEEeYHnmPB3e9Ibg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=E+fFGfx8A7EGAGV7zgNx2JoMa5RbQFVtBrvE/jO71JqbcEvFQaj7PunE+uduKOPbveQLGO7LG+nKqjvWgAuBE1fm0DXTITEUFAkLDxmbEjfD2Vq9QhPcO4awzwKRZf4w1VzpySUDmSWwqdJOVsD39hlH8YF/X7Rh7ohltvGbDc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CZBSaX3P; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-35da4795b3cso10875574a91.2
+        for <linux-usb@vger.kernel.org>; Wed, 01 Apr 2026 05:32:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775046763; x=1775651563; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YcXBQG8D+snwNvD2Om+UYpFzj7Dd8z4o0RuXSY5rICk=;
+        b=CZBSaX3PT36VTPB6kgC+pPm+oWU/RFF4T5gRxKfofCPkmPeHd2H68I0LGrwdV2LXqu
+         Mj+wR7nLB287KoTgrYc/xl8ER/YTj1MjLbArubPJeBvs13fSamF4kUDUiEqJHTbxy/S2
+         D5lPbiYxtZO8HRr2LWwBeSzJroaN2PXcK5u9AY1N9ovrWpgNHLiY7ecKtyuPiPzJmCQI
+         fwcrj3XZjFbX7EtYQeBhazKGe200w5/OJKM3GY5hZofXYn4ZB8FVJtWFi9Lz+3usURNV
+         V4px+yNmfN4EnWhjvF3W+9ZVMtWBsJVtZ/LTJUiT+HzeQdoAx25JAuOjqabEoCKRLiFY
+         bUtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775046763; x=1775651563;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YcXBQG8D+snwNvD2Om+UYpFzj7Dd8z4o0RuXSY5rICk=;
+        b=WE+NZpaIwaoIsrYGGx74Am0ypK3KWrC3di6I8SoGXbzDS986on+/dTino6g6xfW8wg
+         HAospV4l0V87vz6F68YFoMfPbM/K40d1oSD/9V14sBXpl5YX+RgNU40td9e7RsK8zpvO
+         mwAR2umLo8rhP0egPGR3Cfxz1S5li3QF/G3kTrL+DSultrNvgojJ24Z9B5Kq1Y6GmVny
+         cVRLzpsjKqcoVLvQEgCe9Uem32djYBCtzVxmJSECyLke4MLtiXTnCe/Pc1pdjWN5OAz3
+         oNHP0h6bVZHTzf/015DmBGZdT8XU5NWNaUIOknx+etR8KV76kNFCKIWDwWcbwyXbvz8W
+         VEyQ==
+X-Gm-Message-State: AOJu0Yzki9tGUUKUqYNxa1J2gFotBKFg0SpXx2UALZnD+V6Lm7UxZPZH
+	w2QzEL1bxDfO3hdnxe52Nd52gnwua1ueGejDOs+xTxgSRIwyEFLhgeHb34Cj+avDKSAA96tUAV5
+	SZCt0+q0oBFCddno2XQ==
+X-Received: from pgax36.prod.google.com ([2002:a05:6a02:2e64:b0:c73:cc95:c0e4])
+ (user=guanyulin job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a21:6d89:b0:39b:e6af:2d8 with SMTP id adf61e73a8af0-39ef71fe1c9mr3888925637.4.1775046762634;
+ Wed, 01 Apr 2026 05:32:42 -0700 (PDT)
+Date: Wed,  1 Apr 2026 12:32:16 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260401025142.1398996-1-lgs201920130244@gmail.com>
-X-Spamd-Result: default: False [-1.66 / 15.00];
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.1118.gaef5881109-goog
+Message-ID: <20260401123238.3790062-1-guanyulin@google.com>
+Subject: [PATCH v4 0/2] usb: offload: Decouple interrupter lifecycle and
+ refactor usage tracking
+From: Guan-Yu Lin <guanyulin@google.com>
+To: gregkh@linuxfoundation.org, mathias.nyman@intel.com, perex@perex.cz, 
+	dominique.martinet@atmark-techno.com, eadavis@qq.com, hannelotta@gmail.com, 
+	tiwai@suse.com, quic_wcheng@quicinc.com, broonie@kernel.org, arnd@arndb.de, 
+	xiaopei01@kylinos.cn, wesley.cheng@oss.qualcomm.com, 
+	sakari.ailus@linux.intel.com, stern@rowland.harvard.edu, 
+	amardeep.rai@intel.com, xu.yang_2@nxp.com, andriy.shevchenko@linux.intel.com, 
+	nkapron@google.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-sound@vger.kernel.org, Guan-Yu Lin <guanyulin@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35783-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[linuxfoundation.org,intel.com,perex.cz,atmark-techno.com,qq.com,gmail.com,suse.com,quicinc.com,kernel.org,arndb.de,kylinos.cn,oss.qualcomm.com,linux.intel.com,rowland.harvard.edu,nxp.com,google.com];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	TAGGED_FROM(0.00)[bounces-35784-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:dkim,intel.com:email]
-X-Rspamd-Queue-Id: 5B72537A785
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[guanyulin@google.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[google.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8F3FA37AA78
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Apr 01, 2026 at 10:51:42AM +0800, Guangshuo Li wrote:
-> When device_register() fails, ulpi_register() calls put_device() on
-> ulpi->dev.
-> 
-> The device release callback ulpi_dev_release() drops the OF node
-> reference and frees ulpi, but the current error path in
-> ulpi_register_interface() then calls kfree(ulpi) again, causing a
-> double free.
-> 
-> Let put_device() handle the cleanup through ulpi_dev_release() and
-> avoid freeing ulpi again in ulpi_register_interface().
-> 
-> Fixes: 289fcff4bcdb1 ("usb: add bus type for USB ULPI")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
+The current USB offload implementation couples the allocation of xHCI
+sideband interrupters with the device's offload usage counter. This
+coupling is conceptually incorrect, as hardware resource availability
+and power management state serve distinct purposes.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Furthermore, the reliance on the coarse USB device lock for offload
+state updates has led to potential recursive locking issues,
+especially during device disconnect when the lock is already held
+by the USB core.
 
-> ---
->  drivers/usb/common/ulpi.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
-> index 4a2ee447b213..d895cf6532a2 100644
-> --- a/drivers/usb/common/ulpi.c
-> +++ b/drivers/usb/common/ulpi.c
-> @@ -331,10 +331,9 @@ struct ulpi *ulpi_register_interface(struct device *dev,
->  	ulpi->ops = ops;
->  
->  	ret = ulpi_register(dev, ulpi);
-> -	if (ret) {
-> -		kfree(ulpi);
-> +	if (ret)
->  		return ERR_PTR(ret);
-> -	}
-> +
->  
->  	return ulpi;
->  }
+This series refactors the offload synchronization by introducing a
+dedicated spinlock for offload state, allowing for more granular
+concurrency control and avoiding deadlocks. It also optimizes power
+management by ensuring that offload state is only modified when the
+device is already active, avoiding unnecessary auto-resumes.
+
+Patch 1 introduces the `offload_lock` spinlock and `offload_pm_locked`
+synchronization, replacing the coarse `udev->lock` and the legacy
+`offload_at_suspend` flag. It also updates `usb_offload_get/put` to use
+`pm_runtime_get_if_active()`.
+
+Patch 2 removes the implicit usage tracking from the xHCI sideband layer
+and delegates the responsibility to class drivers, who have the
+correct context for managing offload data stream activity.
+
+---
+Changes in v4:
+- remove spinlock in `usb_offload_check`.
+- Collect the <Tested-by> tag from the OPPO team.
+- Link to v3: https://lore.kernel.org/all/20260324203851.4091193-1-guanyulin@google.com/
+
+Changes in v3:
+- Replace the coarse USB device lock with a dedicated `offload_lock`
+  spinlock to reduce contention and prevent recursive locking.
+- Introduce `offload_pm_locked` to synchronize with PM transitions and
+  replace the legacy `offload_at_suspend` flag.
+- Optimize `usb_offload_get/put` by switching from auto-resume/suspend
+  to `pm_runtime_get_if_active()`, avoiding unnecessary power transitions.
+- Explicitly delegate `offload_usage` tracking to USB class drivers
+  (e.g., the Qualcomm USB audio offload driver).
+- Link to v2: https://lore.kernel.org/all/20260309022205.28136-1-guanyulin@google.com/
+
+Changes in v2:
+- Collect the <Tested-by> tag from the OPPO team.
+- Link to v1: https://lore.kernel.org/all/20260225064601.270301-1-guanyulin@google.com/
+
+Changes in v1:
+- Fix build error when building sound/usb/qcom/qc_audio_offload.o.
+- Link to RFC v2: https://lore.kernel.org/all/20260213100736.2914690-1-guanyulin@google.com/
+
+Changes in RFC v2:
+- Move device locking to callers.
+- Decouple sideband from offload counting.
+- Link to RFC v1: https://lore.kernel.org/all/20260130074746.287750-1-guanyulin@google.com/
+---
+Guan-Yu Lin (2):
+  usb: core: use dedicated spinlock for offload state
+  usb: host: xhci-sideband: delegate offload_usage tracking to class
+    drivers
+
+ drivers/usb/core/driver.c         |  23 ++++---
+ drivers/usb/core/offload.c        | 102 +++++++++++++++++-------------
+ drivers/usb/core/usb.c            |   1 +
+ drivers/usb/host/xhci-sideband.c  |  18 +-----
+ include/linux/usb.h               |  10 ++-
+ sound/usb/qcom/qc_audio_offload.c |  10 ++-
+ 6 files changed, 94 insertions(+), 70 deletions(-)
 
 -- 
-heikki
+2.53.0.1018.g2bb0e51243-goog
+
 
