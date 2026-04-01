@@ -1,190 +1,130 @@
-Return-Path: <linux-usb+bounces-35777-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35778-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iFQJFWoGzWkjZgYAu9opvQ
-	(envelope-from <linux-usb+bounces-35777-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 13:50:02 +0200
+	id mN/JDjUEzWnhZQYAu9opvQ
+	(envelope-from <linux-usb+bounces-35778-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 13:40:37 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AA8F379CF4
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 13:50:01 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB68B379A06
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 13:40:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 03ED2308D634
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 11:30:53 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D61763030D70
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 11:34:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 512B73F8E03;
-	Wed,  1 Apr 2026 11:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="m8O29xIE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B332E2DB785;
+	Wed,  1 Apr 2026 11:34:16 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F0D3F8801;
-	Wed,  1 Apr 2026 11:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A162135AD;
+	Wed,  1 Apr 2026 11:34:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775043048; cv=none; b=NPxN2lRFjUYuU383jvD+xq6K879ceYhDHTT2lR/eTZ3iAv3qucYnMhT54hCfBwRwBGSERdIkKGKkjPo3k7fa1QfpJlbS8+VQhuH4M1Nlq4oTROBVXlsiehiFYh0XKToiEdDGxLouTMUjGpCePvqdvnZPOKCqvUbPa/UvFtyCK0M=
+	t=1775043256; cv=none; b=GfaQSQNPxD6/Qtd0TExsXWkV/RXOIpoeLjKc3IaB49OnyzJHrs5SgXsDVxdFSkTxKdBQOeF5fP2gHPm0zVHN8NKsynRyGtjxHTN+KgtosFAZMn6pSCizftXoKzKQDQkZXYHKM/Bs+79GaCiO8H1iyUPU9h+Tps8SoeXbejtRDlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775043048; c=relaxed/simple;
-	bh=Gp4+lC6r5Flzym+ffuJOaBtHcfM5CzGfglQ5zESJL30=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=biXZsHpXJ9wzs4kqIamzWRZuFIVRyIVewwat+eerpGwtcS7UdW3iaIYAlya3xB5qAOCDDHhW3Z7iNAgSUmnOpGQOdE+C219M2sSU/uj6QBIztxUTFaCEylCZZNt7p0kY131NnhOoJhMNyTiRVu7jU0NmEMISqE9zak+cW8Wb3kE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=m8O29xIE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2E31C4CEF7;
-	Wed,  1 Apr 2026 11:30:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1775043048;
-	bh=Gp4+lC6r5Flzym+ffuJOaBtHcfM5CzGfglQ5zESJL30=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m8O29xIEaWY91wgd87rIn1FyRAAR5F3FajU9tni6bsGXe5BW6jx3tR2bXdhiGfIh+
-	 JiYSCCpdkgPtXAKqmJHhMCNeBPSaTG8HxIbD3uDKfw0C3S4jVdmoi8ZQosYbBfq3fH
-	 ScWmR2uHPD419tM7Ry4ZdGeXq+Xlq9WjooSsp52A=
-Date: Wed, 1 Apr 2026 13:30:45 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Taegu Ha <hataegu0826@gmail.com>
-Cc: linux-usb@vger.kernel.org, kees@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_uac1_legacy: validate control request size
-Message-ID: <2026040124-unheated-opponent-3c56@gregkh>
-References: <20260401104611.3375330-1-hataegu0826@gmail.com>
+	s=arc-20240116; t=1775043256; c=relaxed/simple;
+	bh=ovjN69LONW6J5W3hqMRqSYEXDRrsdTu7g5acrd1hp2M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=SQa7HH5WjeQNRD2umIG5uYm4UbuzqFSB3bvFK7MQq4RO03LRoik/ZgLgIb7e60KIEppG+hiMlYqJgqtsWeObpLTCSWre6BwPwg0R/jXr0EQR1T7nuzvfb4sbBVBZb4/9dbf72rmj+aWSu7gDqqlUcxlfz8bb2/AwPnhkg9G/Ko4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost.localdomain (unknown [111.196.245.197])
+	by APP-01 (Coremail) with SMTP id qwCowAD3n2uyAs1pZRHcCw--.8595S2;
+	Wed, 01 Apr 2026 19:34:11 +0800 (CST)
+From: Pengpeng Hou <pengpeng@iscas.ac.cn>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kees@kernel.org,
+	pengpeng@iscas.ac.cn
+Subject: Re: [PATCH v2] usb: gadget: rndis: validate query and set message buffers
+Date: Wed,  1 Apr 2026 19:34:10 +0800
+Message-ID: <20260401113410.66427-1-pengpeng@iscas.ac.cn>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260323080845.40045-1-pengpeng@iscas.ac.cn>
+References: <20260323080845.40045-1-pengpeng@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260401104611.3375330-1-hataegu0826@gmail.com>
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qwCowAD3n2uyAs1pZRHcCw--.8595S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrurW8Kw13KFyUuw18AF4UXFb_yoWfWrb_C3
+	4vyayDGan2ka18CF4fCFZFvr97XrWUCry8ArWUJF17W34qyFn8WF4kCry5Cr18Ga98tr9a
+	k3sYqa10v3ya9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbcAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
+	1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
+	cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
+	ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_JF0_
+	Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+	4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+	42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUYNVyDUUUU
+X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
+X-Spamd-Result: default: False [0.04 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35777-lists,linux-usb=lfdr.de];
+	TO_DN_NONE(0.00)[];
+	DMARC_NA(0.00)[iscas.ac.cn];
 	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35778-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	NEURAL_HAM(-0.00)[-0.984];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.990];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5AA8F379CF4
+	FROM_NEQ_ENVFROM(0.00)[pengpeng@iscas.ac.cn,linux-usb@vger.kernel.org];
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[iscas.ac.cn:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: AB68B379A06
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Apr 01, 2026 at 07:46:11PM +0900, Taegu Ha wrote:
-> f_audio_complete() copies req->length bytes into a 4-byte stack
-> variable:
-> 
->   u32 data = 0;
->   memcpy(&data, req->buf, req->length);
-> 
-> req->length is derived from the host-controlled USB request path,
-> which can lead to a stack out-of-bounds write.
-> 
-> Validate req->actual against the expected payload size for the
-> supported control selectors and decode only the expected amount
-> of data.
-> 
-> This avoids copying a host-influenced length into a fixed-size
-> stack object.
-> 
-> Signed-off-by: Taegu Ha <hataegu0826@gmail.com>
-> ---
->  drivers/usb/gadget/function/f_uac1_legacy.c | 19 ++++++++++++++++---
->  1 file changed, 16 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_uac1_legacy.c b/drivers/usb/gadget/function/f_uac1_legacy.c
-> index a0c953a99727..6d6fe5db99f5 100644
-> --- a/drivers/usb/gadget/function/f_uac1_legacy.c
-> +++ b/drivers/usb/gadget/function/f_uac1_legacy.c
-> @@ -11,6 +11,7 @@
->  #include <linux/module.h>
->  #include <linux/device.h>
->  #include <linux/atomic.h>
-> +#include <asm/unaligned.h>
->  
->  #include "u_uac1_legacy.h"
->  
-> @@ -370,9 +371,21 @@ static void f_audio_complete(struct usb_ep *ep, struct usb_request *req)
->  		if (ep == out_ep)
->  			f_audio_out_ep_complete(ep, req);
->  		else if (audio->set_con) {
-> -			memcpy(&data, req->buf, req->length);
-> -			audio->set_con->set(audio->set_con, audio->set_cmd,
-> -					le16_to_cpu(data));
-> +			struct usb_audio_control *con = audio->set_con;
-> +
-> +			if ((con->type == UAC_FU_MUTE && req->actual != sizeof(u8)) ||
-> +				(con->type == UAC_FU_VOLUME && req->actual != sizeof(__le16)) ||
-> +				(con->type != UAC_FU_MUTE && con->type != UAC_FU_VOLUME)) {
-> +				usb_ep_set_halt(ep);
-> +				audio->set_con = NULL;
-> +				break;
-> +			}
-> +
-> +			if (con->type == UAC_FU_MUTE)
-> +				data = *(u8 *)req->buf;
-> +			else
-> +				data = get_unaligned_le16(req->buf);
+Hi Greg,
 
-Very cool, thanks for finding and fixing this.  But there is a bit of a
-coding style issue in that big if check, AND it's hard to follow, how
-about doing something like this instead (totally untested and not even
-compiled:
-			struct usb_audio_control *con = audio->set_con;
-			u8 type = con->type;
-			bool valid_request = false;
+I have not tested this against an actual RNDIS host/device setup yet.
 
-			switch (type) {
-			case: UAC_FU_MUTE:
-				if (req->actual == sizeof(__u8)) {
-					memcpy(&data, req->buf, sizeof(__u8));
-					valid_request = true;
-				}
-				break;
-			case UAC_FU_VOLUME:
-				if (req->actual == sizeof(__le16) {
-					memcpy(&data, req->buf, sizeof(__le16));
-					valid_request = true;
-				}
-				break;
-			}
-			if (valid_request)
-				con->set(con, audio->set_cmd, data);
-			else
-				usb_ep_set_halt(ep);
+For clarity, v2 did not change the code from v1; it only expanded the
+commit message.
 
-  			audio->set_con = NULL;
-		}
+What I was trying to fix here is limited to two current-tree checks that
+are missing today:
 
-Does that make it easier to read?  I don't know, maybe not, your call,
-but this way the memcpy of a constant size should be equalivant to your
-direct cast if the compiler is sane, right?
+1. rndis_msg_parser() reads MsgLength from the request body but does not
+   verify that it fits within the actual EP0 request buffer length.
 
-And as this is a __le16 value, should we be doing some endian conversion
-somewhere?
+2. rndis_set_response() validates the host-controlled
+   InformationBufferOffset/InformationBufferLength pair before using it,
+   but rndis_query_response() still passes the same fields directly into
+   gen_ndis_query_resp() without corresponding bounds validation.
 
-thanks,
+I do not mean this patch to claim that these are the only issues in the
+RNDIS parser.
 
-greg k-h
+If you want runtime testing before considering this further, I can stop
+here until I can test it properly.
+
+Thanks,
+Pengpeng
+
 
