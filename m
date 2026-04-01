@@ -1,75 +1,92 @@
-Return-Path: <linux-usb+bounces-35780-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35781-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yJIYI1YNzWnhZgYAu9opvQ
-	(envelope-from <linux-usb+bounces-35780-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 14:19:34 +0200
+	id gCpDJsUTzWmMZwYAu9opvQ
+	(envelope-from <linux-usb+bounces-35781-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 14:47:01 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A0B737A57F
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 14:19:34 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD11337AB17
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Apr 2026 14:47:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7CC76302A1B3
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 12:00:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2CA9730DE6E5
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 12:09:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E2D3F7873;
-	Wed,  1 Apr 2026 12:00:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6A623DEAD4;
+	Wed,  1 Apr 2026 12:09:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b="MthuQN5U"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MRLeSSci"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F41D372661;
-	Wed,  1 Apr 2026 12:00:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA383A16AA
+	for <linux-usb@vger.kernel.org>; Wed,  1 Apr 2026 12:09:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775044851; cv=none; b=nRGC1AXUtE1D+VtIflnWTjlcV1u3Dbuo8m+aLQ0NdA8GdXAgMLro2eHhFc7LQB1RSJytg3WH8gmJ0zMh14AZ0OVlCzFjf37zfE/XXB458BxwWDx7GApTxLRjg3iSP6Ys4YYQBbFqDg461lYdUT07GH1ag8YfWeuNnUbT+rJanGc=
+	t=1775045350; cv=none; b=DSPmZ+VwWYbL5/3I5cK/UFiUGTgRupokCe14ay63DCIeNSEJ3qqovoOoCGepruWEzF6Rkpd4s0FaF4GNZlxCOKCJjZzoDUCupBbMdBRBkWc2tKdoZfBgwrqsdXKqWckcmLHq35pxP5j0UYPtMcFE1Y0JhMgUa9vXnOnQfafEHFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775044851; c=relaxed/simple;
-	bh=/XVIYgs8c1K0hkydh6nKHYEu03DUZJv/Npx79K6spMQ=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=knrtHwyEDswH4+cb4g5o6ezbx07ptqYXEIdKycocgiE+0ZTpARBTyO4yKRdXoyukYkzDgzjSuYtPDS/ysxaPcf20di9aUf6SgXpjXiLw3buPJlGJ3kSQPqvUgDz4HNLnsq9SgXXC/UXh2pVfDKqPVLMnzdDfom/m9rGMf/AzKKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b=MthuQN5U; arc=none smtp.client-ip=211.75.126.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
-X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 631C0JpiC1033663, This message is accepted by code: ctloc85258
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
-	t=1775044819; bh=4rEODMMXW5a9qKNeOVjFTfXYt/R/mm+wrGelqwPbXuo=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:
-	 Content-Transfer-Encoding:Content-Type;
-	b=MthuQN5Uw2U1dGlbj27XlM2i+65JIxqYGC72RL5+fY8IDIlJwo8tX7kmnD0wi0Qst
-	 oj+YGz0nPh5rrQKstZbrvCf9j9SW2m54QcQmwENWxyWio5t0aGXxJwVY+fGgEfaLeL
-	 DzzbuWLxwMy4QhYSonCqwACJ1xAl6ReWM8NM34NUQqy6pd7eV4ccY97akFjT7mh52U
-	 VO+9XytASa9t7APG62Nqu9lkvbeAXPdAcdTtH93z8SCxK0XB7ZMyWzkfxdTlny4nz7
-	 lpx7W2T3/tDvC88jwnBORX10EXnNyeLR+LNm8XY/lvNgqXWeMVjh8z+m+nFuo8vhVW
-	 6qmwCIlW3HPxA==
-Received: from mail.realtek.com (rtkexhmbs02.realtek.com.tw[172.21.6.41])
-	by rtits2.realtek.com.tw (8.15.2/3.26/5.94) with ESMTPS id 631C0JpiC1033663
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 1 Apr 2026 20:00:19 +0800
-Received: from RTKEXHMBS06.realtek.com.tw (10.21.1.56) by
- RTKEXHMBS02.realtek.com.tw (172.21.6.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Wed, 1 Apr 2026 20:00:17 +0800
-Received: from RTKEXHMBS05.realtek.com.tw (10.21.1.55) by
- RTKEXHMBS06.realtek.com.tw (10.21.1.56) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Wed, 1 Apr 2026 19:55:56 +0800
-Received: from fc40.realtek.com.tw (172.22.241.7) by
- RTKEXHMBS05.realtek.com.tw (10.21.1.55) with Microsoft SMTP Server id
- 15.2.1748.10 via Frontend Transport; Wed, 1 Apr 2026 19:55:56 +0800
-From: Chih Kai Hsu <hsu.chih.kai@realtek.com>
-To: <kuba@kernel.org>, <davem@davemloft.net>
-CC: <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <edumazet@google.com>, <bjorn@mork.no>, <pabeni@redhat.com>,
-        Chih Kai Hsu
-	<hsu.chih.kai@realtek.com>
-Subject: [PATCH net-next] r8152: Add helper functions for SRAM2
-Date: Wed, 1 Apr 2026 19:55:41 +0800
-Message-ID: <20260401115542.34601-1-nic_swsd@realtek.com>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1775045350; c=relaxed/simple;
+	bh=//Urz/K9pTwj4R51GVVhcOJ0Kf3oWTMWkp9QDOAgsFE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nTvpvwa7XYmZY1/MBXHaFCMqfpJyHupr+pZ26WBCPv/Dgdnts4W/FldsnsWWpuZCDTkvDzr8xxtasdYy92uvD7hNR3Gk8k+Hiu3fZSs7T0OOS/85WLb3u+2+9gMKvU1rtfnSaw7+jNwr9tlNErleQEImIN0wN2h/21HA/9Xq160=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MRLeSSci; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-79853c0f5b9so41072907b3.0
+        for <linux-usb@vger.kernel.org>; Wed, 01 Apr 2026 05:09:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775045348; x=1775650148; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gpu+nIydRNg4LqEAOn0F6sFr7pGZaX7fcnHuwE94M0Q=;
+        b=MRLeSSciqg2O7b3M91LogUUfamZ/z0zzG9e47mxXhlA9luf2vFZzxqQm7u0ahiEaIu
+         D8vspshsCBbsSQNtQmvzM8mNzCHStWaaoseh8j60L4QhAuO9ItHSHRk6ubywt/CYlpUr
+         /9D9x3n6jAzxcIP3p0NyqfnuN+Ryq05pgaKSEuYJzXNfm9JB5iERWDvvxm3W7MbFPjO9
+         WjKemuXS9KvESywpU96B64oZ0pGiFageDRcJIQhWXjytNiahLN3a5QD04B5lFntUIM2I
+         MSrpvHulYd+QTyZ6H4u7scMw86wjF4cpjIW9rbhD4FLxETz8XCup/P6tOwGR8EiAF0gm
+         fSJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775045348; x=1775650148;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gpu+nIydRNg4LqEAOn0F6sFr7pGZaX7fcnHuwE94M0Q=;
+        b=X7NovUCC+nHW/g8FxElxcv4PW2bQZ8bTyGoI/aRmuSK0HfOk1A/ZLIOszloSNEm44+
+         5aysIsuCUj0u3NaRvvvwX6JWiP/12+0YDp146cFkabXlleYv/lc8LnmKpIc76XNxCc3K
+         ZScKrjtOM92j4N222KXVvx2fzh4vQrJsGLtk7fDQ+MscZ7MH+Z4TRJeBlXRVUzDqud6C
+         TqqenHoKtEEeXyMkTA4g1aLu/NthAT/zkVEtMm5A1NOiM3HFjSii0e3nRlIJhmUe1dpg
+         IfOwUZ9/nZlIHSv1qBT7qH7lu8AkSAp65jw+ANdvekJgDWs5FIKgboKGLh1BJBQCy6h3
+         VOIQ==
+X-Gm-Message-State: AOJu0YzMj4DXvsh56FxPEnCqEzSAQLpMaepalRmuPx2lK25XQWy9McSf
+	1wz7qLMIUiMT03q+2ScU42wS+ChP0xYgxIPPDOLA/OmG9gphGGLK+2SW98M+pAAHI3cx2w==
+X-Gm-Gg: ATEYQzyPwsNa8VuNU5H8W2wmcjBjhJ9u147KloiwliAD9i91ZYHpMoTvWLFEfoyzLEm
+	ltclnrwyZIvJ0Q4UmDHSyl8GymWywT6og7GD7UHWFyy1PhVq/bTW8TscpXXwHBWV/oy3TnKAdj7
+	+jLadRphqZKeMT4wjlltcsFX6+XcjTQjfCZgTdRrpmzNHaie8b6euXgnVk1zdurnAAizIEtjk2r
+	upAQbYtUU4GRrou+G2Q4l4MAC0sUV0De2Tl2GeKh7L+//ybADldaGvBrgG0fjhUaHTO1ZheAX1P
+	SfsBoGbWIm/VMFqpZqo9lvxQV4oCyfXBrP8fG/67CDWTQ7HcyC4s8H/osqVQ8SO1l2hCgMNfqET
+	z9BTxUMUF8KoByQ6+7aizJ5tjJkpLRiL7sCR+lWNw1Xvl6YgAS4WMEZZM7PhOMeLtT/dBIjpRIt
+	D/tUK8PkSltq5/o9uW8TT9TQxAp2BiY0NdAGDGgxgRQC9xrB5GuwmCv2e7eggxLaAQjI1Up0Tbs
+	1EK
+X-Received: by 2002:a05:690c:388:b0:79d:dce:5880 with SMTP id 00721157ae682-7a20f4ff581mr33389067b3.7.1775045348153;
+        Wed, 01 Apr 2026 05:09:08 -0700 (PDT)
+Received: from localhost.localdomain (104.194.93.216.16clouds.com. [104.194.93.216])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-79cb790c05asm61771647b3.16.2026.04.01.05.09.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 05:09:07 -0700 (PDT)
+From: hkbinbin <hkbinbinbin@gmail.com>
+To: valentina.manea.m@gmail.com,
+	shuah@kernel.org,
+	i@zenithal.me,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	hkbinbin <hkbinbinbin@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] usbip: vhci: validate ret_submit number_of_packets
+Date: Wed,  1 Apr 2026 12:08:57 +0000
+Message-ID: <20260401120857.1443552-1-hkbinbinbin@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,284 +94,111 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[realtek.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[realtek.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[hsu.chih.kai@realtek.com,linux-usb@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-35780-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com,kernel.org,zenithal.me,linuxfoundation.org];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[realtek.com:+];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[realtek.com:dkim,realtek.com:email,realtek.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	RCPT_COUNT_SEVEN(0.00)[10];
 	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35781-lists,linux-usb=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[hkbinbinbin@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 2A0B737A57F
+	RCPT_COUNT_SEVEN(0.00)[8];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: CD11337AB17
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add the following helper functions for SRAM2 access to simplify the code
-and improve readability:
+vhci_recv_ret_submit() unpacks USBIP_RET_SUBMIT directly into the URB,
+including number_of_packets from the remote server. For isochronous
+URBs, iso_frame_desc[] was allocated using the original locally
+submitted number_of_packets.
 
-- sram2_write() - write data to SRAM2 address
-- sram2_read() - read data from SRAM2 address
-- sram2_write_w0w1() - read-modify-write operation
+If a malicious or buggy USB/IP server returns a larger
+number_of_packets, usbip_recv_iso() will iterate past the end of
+urb->iso_frame_desc[] and write attacker-controlled ISO descriptors out
+of bounds. Later completion paths may also walk past iso_frame_desc[]
+if the poisoned number_of_packets is left in the URB after rejecting
+the response.
 
-Signed-off-by: Chih Kai Hsu <hsu.chih.kai@realtek.com>
+Fix this by saving the original packet count before unpacking the PDU,
+rejecting larger values from the server, restoring the original count
+on error, and marking the connection as broken.
+
+Fixes: 1325f85fa49f ("staging: usbip: bugfix add number of packets for isochronous frames")
+Cc: stable@vger.kernel.org
+Signed-off-by: hkbinbin <hkbinbinbin@gmail.com>
 ---
- drivers/net/usb/r8152.c | 178 +++++++++++++++++-----------------------
- 1 file changed, 75 insertions(+), 103 deletions(-)
+ drivers/usb/usbip/vhci_rx.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 8747c55e0a48..1765da5bd6cf 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -213,6 +213,8 @@
- #define OCP_PHY_PATCH_STAT	0xb800
- #define OCP_PHY_PATCH_CMD	0xb820
- #define OCP_PHY_LOCK		0xb82e
-+#define OCP_SRAM2_ADDR		0xb87c
-+#define OCP_SRAM2_DATA		0xb87e
- #define OCP_ADC_IOFFSET		0xbcfc
- #define OCP_ADC_CFG		0xbc06
- #define OCP_SYSCLK_CFG		0xc416
-@@ -1764,6 +1766,27 @@ static void sram_set_bits(struct r8152 *tp, u16 addr, u16 set)
- 	sram_write_w0w1(tp, addr, 0, set);
- }
+diff --git a/drivers/usb/usbip/vhci_rx.c b/drivers/usb/usbip/vhci_rx.c
+index a75f4a898a41..5bbfd5ae7755 100644
+--- a/drivers/usb/usbip/vhci_rx.c
++++ b/drivers/usb/usbip/vhci_rx.c
+@@ -60,6 +60,7 @@ static void vhci_recv_ret_submit(struct vhci_device *vdev,
+ 	struct usbip_device *ud = &vdev->ud;
+ 	struct urb *urb;
+ 	unsigned long flags;
++	int orig_number_of_packets;
  
-+static void sram2_write(struct r8152 *tp, u16 addr, u16 data)
-+{
-+	ocp_reg_write(tp, OCP_SRAM2_ADDR, addr);
-+	ocp_reg_write(tp, OCP_SRAM2_DATA, data);
-+}
+ 	spin_lock_irqsave(&vdev->priv_lock, flags);
+ 	urb = pickup_urb_and_free_priv(vdev, pdu->base.seqnum);
+@@ -73,9 +74,33 @@ static void vhci_recv_ret_submit(struct vhci_device *vdev,
+ 		return;
+ 	}
+ 
++	/*
++	 * Save the original number_of_packets before it gets overwritten
++	 * by the server's response. The iso_frame_desc[] array was allocated
++	 * based on this value, so the server must not increase it.
++	 */
++	orig_number_of_packets = urb->number_of_packets;
 +
-+static u16 sram2_read(struct r8152 *tp, u16 addr)
-+{
-+	ocp_reg_write(tp, OCP_SRAM2_ADDR, addr);
-+	return ocp_reg_read(tp, OCP_SRAM2_DATA);
-+}
+ 	/* unpack the pdu to a urb */
+ 	usbip_pack_pdu(pdu, urb, USBIP_RET_SUBMIT, 0);
+ 
++	/*
++	 * Validate number_of_packets from the server response against the
++	 * original URB allocation. A malicious server could set this to a
++	 * larger value, causing usbip_recv_iso() to write beyond the
++	 * iso_frame_desc[] array bounds.
++	 */
++	if (urb->number_of_packets < 0 ||
++	    urb->number_of_packets > orig_number_of_packets) {
++		dev_err(&urb->dev->dev,
++			"invalid number_of_packets in ret_submit: %d (max %d)\n",
++			urb->number_of_packets, orig_number_of_packets);
++		urb->number_of_packets = orig_number_of_packets;
++		urb->status = -EPROTO;
++		usbip_event_add(ud, VDEV_EVENT_ERROR_TCP);
++		goto error;
++	}
 +
-+static void sram2_write_w0w1(struct r8152 *tp, u16 addr, u16 clear, u16 set)
-+{
-+	u16 data;
-+
-+	data = sram2_read(tp, addr);
-+	data = (data & ~clear) | set;
-+	ocp_reg_write(tp, OCP_SRAM2_DATA, data);
-+}
-+
- static void r8152_mdio_clr_bit(struct r8152 *tp, u16 addr, u16 clear)
- {
- 	int data;
-@@ -7195,16 +7218,12 @@ static void r8156_hw_phy_cfg(struct r8152 *tp)
- 		ocp_reg_write(tp, 0xad4c, 0x00a8);
- 		ocp_reg_write(tp, 0xac5c, 0x01ff);
- 		ocp_reg_w0w1(tp, 0xac8a, 0xf0, BIT(4) | BIT(5));
--		ocp_reg_write(tp, 0xb87c, 0x8157);
--		ocp_reg_w0w1(tp, 0xb87e, 0xff00, 0x0500);
--		ocp_reg_write(tp, 0xb87c, 0x8159);
--		ocp_reg_w0w1(tp, 0xb87e, 0xff00, 0x0700);
-+		sram2_write_w0w1(tp, 0x8157, 0xff00, 0x0500);
-+		sram2_write_w0w1(tp, 0x8159, 0xff00, 0x0700);
- 
- 		/* AAGC */
--		ocp_reg_write(tp, 0xb87c, 0x80a2);
--		ocp_reg_write(tp, 0xb87e, 0x0153);
--		ocp_reg_write(tp, 0xb87c, 0x809c);
--		ocp_reg_write(tp, 0xb87e, 0x0153);
-+		sram2_write(tp, 0x80a2, 0x0153);
-+		sram2_write(tp, 0x809c, 0x0153);
- 
- 		/* EEE parameter */
- 		ocp_write_word(tp, MCU_TYPE_PLA, PLA_EEE_TXTWSYS_2P5G, 0x0056);
-@@ -7402,82 +7421,48 @@ static void r8156b_hw_phy_cfg(struct r8152 *tp)
- 		ocp_reg_write(tp, 0xacc8, 0xa0d3);
- 		ocp_reg_write(tp, 0xad08, 0x0007);
- 
--		ocp_reg_write(tp, 0xb87c, 0x8560);
--		ocp_reg_write(tp, 0xb87e, 0x19cc);
--		ocp_reg_write(tp, 0xb87c, 0x8562);
--		ocp_reg_write(tp, 0xb87e, 0x19cc);
--		ocp_reg_write(tp, 0xb87c, 0x8564);
--		ocp_reg_write(tp, 0xb87e, 0x19cc);
--		ocp_reg_write(tp, 0xb87c, 0x8566);
--		ocp_reg_write(tp, 0xb87e, 0x147d);
--		ocp_reg_write(tp, 0xb87c, 0x8568);
--		ocp_reg_write(tp, 0xb87e, 0x147d);
--		ocp_reg_write(tp, 0xb87c, 0x856a);
--		ocp_reg_write(tp, 0xb87e, 0x147d);
--		ocp_reg_write(tp, 0xb87c, 0x8ffe);
--		ocp_reg_write(tp, 0xb87e, 0x0907);
--		ocp_reg_write(tp, 0xb87c, 0x80d6);
--		ocp_reg_write(tp, 0xb87e, 0x2801);
--		ocp_reg_write(tp, 0xb87c, 0x80f2);
--		ocp_reg_write(tp, 0xb87e, 0x2801);
--		ocp_reg_write(tp, 0xb87c, 0x80f4);
--		ocp_reg_write(tp, 0xb87e, 0x6077);
-+		sram2_write(tp, 0x8560, 0x19cc);
-+		sram2_write(tp, 0x8562, 0x19cc);
-+		sram2_write(tp, 0x8564, 0x19cc);
-+		sram2_write(tp, 0x8566, 0x147d);
-+		sram2_write(tp, 0x8568, 0x147d);
-+		sram2_write(tp, 0x856a, 0x147d);
-+		sram2_write(tp, 0x8ffe, 0x0907);
-+		sram2_write(tp, 0x80d6, 0x2801);
-+		sram2_write(tp, 0x80f2, 0x2801);
-+		sram2_write(tp, 0x80f4, 0x6077);
- 		ocp_reg_write(tp, 0xb506, 0x01e7);
- 
--		ocp_reg_write(tp, 0xb87c, 0x8013);
--		ocp_reg_write(tp, 0xb87e, 0x0700);
--		ocp_reg_write(tp, 0xb87c, 0x8fb9);
--		ocp_reg_write(tp, 0xb87e, 0x2801);
--		ocp_reg_write(tp, 0xb87c, 0x8fba);
--		ocp_reg_write(tp, 0xb87e, 0x0100);
--		ocp_reg_write(tp, 0xb87c, 0x8fbc);
--		ocp_reg_write(tp, 0xb87e, 0x1900);
--		ocp_reg_write(tp, 0xb87c, 0x8fbe);
--		ocp_reg_write(tp, 0xb87e, 0xe100);
--		ocp_reg_write(tp, 0xb87c, 0x8fc0);
--		ocp_reg_write(tp, 0xb87e, 0x0800);
--		ocp_reg_write(tp, 0xb87c, 0x8fc2);
--		ocp_reg_write(tp, 0xb87e, 0xe500);
--		ocp_reg_write(tp, 0xb87c, 0x8fc4);
--		ocp_reg_write(tp, 0xb87e, 0x0f00);
--		ocp_reg_write(tp, 0xb87c, 0x8fc6);
--		ocp_reg_write(tp, 0xb87e, 0xf100);
--		ocp_reg_write(tp, 0xb87c, 0x8fc8);
--		ocp_reg_write(tp, 0xb87e, 0x0400);
--		ocp_reg_write(tp, 0xb87c, 0x8fca);
--		ocp_reg_write(tp, 0xb87e, 0xf300);
--		ocp_reg_write(tp, 0xb87c, 0x8fcc);
--		ocp_reg_write(tp, 0xb87e, 0xfd00);
--		ocp_reg_write(tp, 0xb87c, 0x8fce);
--		ocp_reg_write(tp, 0xb87e, 0xff00);
--		ocp_reg_write(tp, 0xb87c, 0x8fd0);
--		ocp_reg_write(tp, 0xb87e, 0xfb00);
--		ocp_reg_write(tp, 0xb87c, 0x8fd2);
--		ocp_reg_write(tp, 0xb87e, 0x0100);
--		ocp_reg_write(tp, 0xb87c, 0x8fd4);
--		ocp_reg_write(tp, 0xb87e, 0xf400);
--		ocp_reg_write(tp, 0xb87c, 0x8fd6);
--		ocp_reg_write(tp, 0xb87e, 0xff00);
--		ocp_reg_write(tp, 0xb87c, 0x8fd8);
--		ocp_reg_write(tp, 0xb87e, 0xf600);
-+		sram2_write(tp, 0x8013, 0x0700);
-+		sram2_write(tp, 0x8fb9, 0x2801);
-+		sram2_write(tp, 0x8fba, 0x0100);
-+		sram2_write(tp, 0x8fbc, 0x1900);
-+		sram2_write(tp, 0x8fbe, 0xe100);
-+		sram2_write(tp, 0x8fc0, 0x0800);
-+		sram2_write(tp, 0x8fc2, 0xe500);
-+		sram2_write(tp, 0x8fc4, 0x0f00);
-+		sram2_write(tp, 0x8fc6, 0xf100);
-+		sram2_write(tp, 0x8fc8, 0x0400);
-+		sram2_write(tp, 0x8fca, 0xf300);
-+		sram2_write(tp, 0x8fcc, 0xfd00);
-+		sram2_write(tp, 0x8fce, 0xff00);
-+		sram2_write(tp, 0x8fd0, 0xfb00);
-+		sram2_write(tp, 0x8fd2, 0x0100);
-+		sram2_write(tp, 0x8fd4, 0xf400);
-+		sram2_write(tp, 0x8fd6, 0xff00);
-+		sram2_write(tp, 0x8fd8, 0xf600);
- 
- 		ocp_byte_set_bits(tp, MCU_TYPE_PLA, PLA_USB_CFG,
- 				  EN_XG_LIP | EN_G_LIP);
- 
--		ocp_reg_write(tp, 0xb87c, 0x813d);
--		ocp_reg_write(tp, 0xb87e, 0x390e);
--		ocp_reg_write(tp, 0xb87c, 0x814f);
--		ocp_reg_write(tp, 0xb87e, 0x790e);
--		ocp_reg_write(tp, 0xb87c, 0x80b0);
--		ocp_reg_write(tp, 0xb87e, 0x0f31);
-+		sram2_write(tp, 0x813d, 0x390e);
-+		sram2_write(tp, 0x814f, 0x790e);
-+		sram2_write(tp, 0x80b0, 0x0f31);
- 		ocp_reg_set_bits(tp, 0xbf4c, BIT(1));
- 		ocp_reg_set_bits(tp, 0xbcca, BIT(9) | BIT(8));
--		ocp_reg_write(tp, 0xb87c, 0x8141);
--		ocp_reg_write(tp, 0xb87e, 0x320e);
--		ocp_reg_write(tp, 0xb87c, 0x8153);
--		ocp_reg_write(tp, 0xb87e, 0x720e);
--		ocp_reg_write(tp, 0xb87c, 0x8529);
--		ocp_reg_write(tp, 0xb87e, 0x050e);
-+		sram2_write(tp, 0x8141, 0x320e);
-+		sram2_write(tp, 0x8153, 0x720e);
-+		sram2_write(tp, 0x8529, 0x050e);
- 		ocp_reg_clr_bits(tp, OCP_EEE_CFG, CTAP_SHORT_EN);
- 
- 		sram_write(tp, 0x816c, 0xc4a0);
-@@ -7489,27 +7474,17 @@ static void r8156b_hw_phy_cfg(struct r8152 *tp)
- 		sram_write(tp, 0x8ff1, 0x0404);
- 
- 		ocp_reg_write(tp, 0xbf4a, 0x001b);
--		ocp_reg_write(tp, 0xb87c, 0x8033);
--		ocp_reg_write(tp, 0xb87e, 0x7c13);
--		ocp_reg_write(tp, 0xb87c, 0x8037);
--		ocp_reg_write(tp, 0xb87e, 0x7c13);
--		ocp_reg_write(tp, 0xb87c, 0x803b);
--		ocp_reg_write(tp, 0xb87e, 0xfc32);
--		ocp_reg_write(tp, 0xb87c, 0x803f);
--		ocp_reg_write(tp, 0xb87e, 0x7c13);
--		ocp_reg_write(tp, 0xb87c, 0x8043);
--		ocp_reg_write(tp, 0xb87e, 0x7c13);
--		ocp_reg_write(tp, 0xb87c, 0x8047);
--		ocp_reg_write(tp, 0xb87e, 0x7c13);
--
--		ocp_reg_write(tp, 0xb87c, 0x8145);
--		ocp_reg_write(tp, 0xb87e, 0x370e);
--		ocp_reg_write(tp, 0xb87c, 0x8157);
--		ocp_reg_write(tp, 0xb87e, 0x770e);
--		ocp_reg_write(tp, 0xb87c, 0x8169);
--		ocp_reg_write(tp, 0xb87e, 0x0d0a);
--		ocp_reg_write(tp, 0xb87c, 0x817b);
--		ocp_reg_write(tp, 0xb87e, 0x1d0a);
-+		sram2_write(tp, 0x8033, 0x7c13);
-+		sram2_write(tp, 0x8037, 0x7c13);
-+		sram2_write(tp, 0x803b, 0xfc32);
-+		sram2_write(tp, 0x803f, 0x7c13);
-+		sram2_write(tp, 0x8043, 0x7c13);
-+		sram2_write(tp, 0x8047, 0x7c13);
-+
-+		sram2_write(tp, 0x8145, 0x370e);
-+		sram2_write(tp, 0x8157, 0x770e);
-+		sram2_write(tp, 0x8169, 0x0d0a);
-+		sram2_write(tp, 0x817b, 0x1d0a);
- 
- 		sram_write_w0w1(tp, 0x8217, 0xff00, 0x5000);
- 		sram_write_w0w1(tp, 0x821a, 0xff00, 0x5000);
-@@ -7574,12 +7549,9 @@ static void r8156b_hw_phy_cfg(struct r8152 *tp)
- 		fallthrough;
- 	case RTL_VER_15:
- 		/* EEE parameter */
--		ocp_reg_write(tp, 0xb87c, 0x80f5);
--		ocp_reg_write(tp, 0xb87e, 0x760e);
--		ocp_reg_write(tp, 0xb87c, 0x8107);
--		ocp_reg_write(tp, 0xb87e, 0x360e);
--		ocp_reg_write(tp, 0xb87c, 0x8551);
--		ocp_reg_w0w1(tp, 0xb87e, 0xff00, 0x0800);
-+		sram2_write(tp, 0x80f5, 0x760e);
-+		sram2_write(tp, 0x8107, 0x360e);
-+		sram2_write_w0w1(tp, 0x8551, 0xff00, 0x0800);
- 
- 		/* ADC_PGA parameter */
- 		ocp_reg_w0w1(tp, 0xbf00, 0xe000, 0xa000);
+ 	/* recv transfer buffer */
+ 	if (usbip_recv_xbuff(ud, urb) < 0) {
+ 		urb->status = -EPROTO;
 -- 
-2.34.1
+2.51.0
 
 
