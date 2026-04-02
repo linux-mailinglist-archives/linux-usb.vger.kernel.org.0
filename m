@@ -1,303 +1,193 @@
-Return-Path: <linux-usb+bounces-35838-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35839-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OJC+D0kYzmmnkgYAu9opvQ
-	(envelope-from <linux-usb+bounces-35838-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:18:33 +0200
+	id cIzXDYUgzmnElAYAu9opvQ
+	(envelope-from <linux-usb+bounces-35839-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:53:41 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0E7B38506F
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:18:32 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C14F385773
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:53:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 74FA6309ED7A
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 07:15:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 182DB3132F50
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 07:46:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B9BA382289;
-	Thu,  2 Apr 2026 07:15:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 913F338838A;
+	Thu,  2 Apr 2026 07:45:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="REYM9YSb"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="g8aXiaFB"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4FA13242BD;
-	Thu,  2 Apr 2026 07:15:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7F631F9B8;
+	Thu,  2 Apr 2026 07:45:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775114154; cv=none; b=dT4msT3N6Gd5p5m4mY+P/lpSwWs2UQLqYSzDiaZnSvMiAzhjKOxde9PFYwtTSrgA3wkWHcOi8H3Jc1A77HABhxu/KZuF94u3Ow3p9kgln3iqDY9Gp/n5dF+xZFsTlveJueN/CSYqfupiMRBzPye2eBsWXccVVZgD9qYKHuMTq+c=
+	t=1775115931; cv=none; b=oY+MEW2Z0Yh2ucQvk4TlyzKTtJBEgV8TgXHPSIboJCrE7c1A0UnteZj6gbtlEuAlY5KOhvxw/fzZfV8vEC2102rEAm3WZ4D/VSHROCtXnZqNA2b1iiFBYuy+qHpZNwoUQrcVfpOdjDstG5FH+nkHyNRelpZW7CMQvME63gzTbaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775114154; c=relaxed/simple;
-	bh=cy1rJY3lSecevucVCMq4/107OEQfGsVu0eTYQYUqRcw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LqAO1deAhjf4awEu9nUKA2+JyNWbt2ODMMjdlES9K+7OYGh8ixs+ky7Js5oxfXcV0nViBL6eLoI9g4qhQ73kfhtxGR2lB2o6fG6XGx9z7yFuKPWymmRHPBmSbgCAQDWqhPpFqpD7J+OJM0cSISOJV9oJLWr7EOKepPDxX3vy+2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=REYM9YSb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 62B71C2BC9E;
-	Thu,  2 Apr 2026 07:15:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775114154;
-	bh=cy1rJY3lSecevucVCMq4/107OEQfGsVu0eTYQYUqRcw=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=REYM9YSboF92FkiqTDVXpi2awTDiV+esI2AmGlajTWCbf/C50Fl20QHT/h8gFkfGG
-	 6mTaGBSN4VSu1mrSOQNPnZzAsgRswZpSAODhWBqnHSPXmOEIQ7dZIW/G1qSNLgdlTK
-	 VLgkvacFU7aTx4i99M/q6RcHqaoDG6/MnrKto9vXHSG7EwxbW3LgYeDndONHL45VsU
-	 D91uz0fZ2GWXN4Az0FIFNlGdKKBrjhgOyKCBhcE3yWAKZzHmWhMuhbzwDg0SiFuF1k
-	 zc0Y+mNwLwzqUD51WWakmy7/s7SIKaWiWxiFLvum9jkLg7Wz8V+Jm4BaqSysj9WJOV
-	 U6jUjmzgdjmcA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C2DCCC6B01;
-	Thu,  2 Apr 2026 07:15:54 +0000 (UTC)
-From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
-Date: Thu, 02 Apr 2026 07:15:29 +0000
-Subject: [PATCH] power: supply: max77759_charger: fix voltage scale (mV ->
- uV)
+	s=arc-20240116; t=1775115931; c=relaxed/simple;
+	bh=L9PtbiHVcjP1nfTjjXupJxIUPL/K74latiizMZHOzk0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oCU20HgMn3sf2/b78fj76YJGt7uB1PAQDOhRWH3QA0l9sYyd0CzYzPnNJW2q2zSL5oD7ifo5CUqdK6Euuz6eg33MrMtO5PKp9o+AxCaKxdtdRqbuCInv7hxYHJy0ByLX23ckgWRUVxQak9Dd65J0fivgw6IeA7qwhfei5MM25JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=g8aXiaFB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73E52C19423;
+	Thu,  2 Apr 2026 07:45:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1775115930;
+	bh=L9PtbiHVcjP1nfTjjXupJxIUPL/K74latiizMZHOzk0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=g8aXiaFBflMZSSIMOvUkPQT6eLGTUxFv6rtaRDIjUK7GRYqPS/ycnXwKOb0dYGT0F
+	 1Sw3HmGKgrXt/oMK07s/DvI81FBv0h5Pg2xNkPe5VJPi0lQmxDJPsfre4W+vuJQBWa
+	 XOWeeSMeMpzulWFRMbiyt6uo3YNDD4UvBcB8UYpw=
+Date: Thu, 2 Apr 2026 09:45:28 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Nathan Rebello <nathan.c.rebello@gmail.com>, linux-usb@vger.kernel.org,
+	addcontent08@gmail.com, kyungtae.kim@dartmouth.edu,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] usbip: vhci: reject RET_SUBMIT with inflated
+ number_of_packets
+Message-ID: <2026040220-defeat-jokester-22dc@gregkh>
+References: <20260327064449.735-1-nathan.c.rebello@gmail.com>
+ <34da1928-f6e7-43fb-a436-6bc02e262698@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260402-fix-psy-max77759-usb-next-v1-1-427f5af566c3@google.com>
-X-B4-Tracking: v=1; b=H4sIAJAXzmkC/x2MQQ5AMBAAvyJ7tkk1KL4iDsViD0q6SEX8XeM4y
- cw8IOSZBJrkAU8XC28uQpYmMCzWzYQ8RgatdKlypXHigLvcuNpgjClqPKVHR+HArLD5VJVWVQN
- B7HdPUf7fbfe+H7R8EV1rAAAA
-X-Change-ID: 20260402-fix-psy-max77759-usb-next-15a4f86a08ce
-To: Amit Sunil Dhamne <amitsd@google.com>, 
- Sebastian Reichel <sre@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-usb@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1775114153; l=7748;
- i=amitsd@google.com; s=20241031; h=from:subject:message-id;
- bh=59/AjsdipPHEtmFIyA3h6KhCPPrrp72LTkD5FeZMk/k=;
- b=/cA759Ui37lFsiIJWmlVx2MCaJTghbsbPALCnqg5ZDIL2DNiM8O/pyvhr+gyXCG/Xp4fsMAjZ
- UHXBmKbWx0UDXG4jIzLEBlTLOfiuX4O3QWvUQVTt7ch7Qbe1TZkuYEE
-X-Developer-Key: i=amitsd@google.com; a=ed25519;
- pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
-X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
- auth_id=262
-X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
-Reply-To: amitsd@google.com
-X-Spamd-Result: default: False [-1.16 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <34da1928-f6e7-43fb-a436-6bc02e262698@linuxfoundation.org>
+X-Spamd-Result: default: False [3.84 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_MATCH_TO(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35838-lists,linux-usb=lfdr.de,amitsd.google.com];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35839-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	HAS_REPLYTO(0.00)[amitsd@google.com];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org,dartmouth.edu];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_FIVE(0.00)[6];
+	NEURAL_HAM(-0.00)[-0.990];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,sysfs.online:url,uevent.name:url,google-gs:email,sysfs.technology:url]
-X-Rspamd-Queue-Id: D0E7B38506F
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8C14F385773
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Amit Sunil Dhamne <amitsd@google.com>
+On Tue, Mar 31, 2026 at 05:17:44PM -0600, Shuah Khan wrote:
+> On 3/27/26 00:44, Nathan Rebello wrote:
+> > When a USB/IP client receives a RET_SUBMIT response,
+> > usbip_pack_ret_submit() unconditionally overwrites
+> > urb->number_of_packets from the network PDU. This value is
+> > subsequently used as the loop bound in usbip_recv_iso() and
+> > usbip_pad_iso() to iterate over urb->iso_frame_desc[], a flexible
+> > array whose size was fixed at URB allocation time based on the
+> > *original* number_of_packets from the CMD_SUBMIT.
+> > 
+> > A malicious USB/IP server can set number_of_packets in the response
+> > to a value larger than what was originally submitted, causing a heap
+> > out-of-bounds write when usbip_recv_iso() writes to
+> > urb->iso_frame_desc[i] beyond the allocated region.
+> > 
+> > KASAN confirmed this with kernel 7.0.0-rc5:
+> > 
+> >    BUG: KASAN: slab-out-of-bounds in usbip_recv_iso+0x46a/0x640
+> >    Write of size 4 at addr ffff888106351d40 by task vhci_rx/69
+> > 
+> >    The buggy address is located 0 bytes to the right of
+> >     allocated 320-byte region [ffff888106351c00, ffff888106351d40)
+> > 
+> > The server side (stub_rx.c) and gadget side (vudc_rx.c) already
+> > validate number_of_packets in the CMD_SUBMIT path since commits
+> > c6688ef9f297 ("usbip: fix stub_rx: harden CMD_SUBMIT path to handle
+> > malicious input") and b78d830f0049 ("usbip: fix vudc_rx: harden
+> > CMD_SUBMIT path to handle malicious input"). The server side validates
+> > against USBIP_MAX_ISO_PACKETS because no URB exists yet at that point.
+> > On the client side we have the original URB, so we can use the tighter
+> > bound: the response must not exceed the original number_of_packets.
+> > 
+> > This mirrors the existing validation of actual_length against
+> > transfer_buffer_length in usbip_recv_xbuff(), which checks the
+> > response value against the original allocation size.
+> > 
+> > Kelvin Mbogo's series ("usb: usbip: fix integer overflow in
+> > usbip_recv_iso()", v2) hardens the receive-side functions themselves;
+> > this patch complements that work by catching the bad value at its
+> > source -- in usbip_pack_ret_submit() before the overwrite -- and
+> > using the tighter per-URB allocation bound rather than the global
+> > USBIP_MAX_ISO_PACKETS limit.
+> > 
+> > Fix this by checking rpdu->number_of_packets against
+> > urb->number_of_packets in usbip_pack_ret_submit() before the
+> > overwrite. On violation, clamp to zero so that usbip_recv_iso() and
+> > usbip_pad_iso() safely return early.
+> > 
+> > Fixes: 0775a9cbc798 ("staging: usbip: vhci extension: modifications to the client side")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Nathan Rebello <nathan.c.rebello@gmail.com>
+> > ---
+> >   drivers/usb/usbip/usbip_common.c | 13 ++++++++++++-
+> >   1 file changed, 12 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
+> > --- a/drivers/usb/usbip/usbip_common.c
+> > +++ b/drivers/usb/usbip/usbip_common.c
+> > @@ -470,7 +470,18 @@ static void usbip_pack_ret_submit(struct usbip_header *pdu, struct urb *urb,
+> >   		urb->status		= rpdu->status;
+> >   		urb->actual_length	= rpdu->actual_length;
+> >   		urb->start_frame	= rpdu->start_frame;
+> > -		urb->number_of_packets = rpdu->number_of_packets;
+> > +		/*
+> > +		 * The number_of_packets field determines the length of
+> > +		 * iso_frame_desc[], which is a flexible array allocated
+> > +		 * at URB creation time. A response must never claim more
+> > +		 * packets than originally submitted; doing so would cause
+> > +		 * an out-of-bounds write in usbip_recv_iso() and
+> > +		 * usbip_pad_iso(). Clamp to zero on violation so both
+> > +		 * functions safely return early.
+> > +		 */
+> > +		if (rpdu->number_of_packets < 0 ||
+> > +		    rpdu->number_of_packets > urb->number_of_packets)
+> > +			rpdu->number_of_packets = 0;
+> > +		urb->number_of_packets = rpdu->number_of_packets;
+> >   		urb->error_count	= rpdu->error_count;
+> >   	}
+> >   }
+> 
+> Look good to me.
+> 
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-CONSTANT_CHARGE_VOLTAGE_MAX property incorrectly uses mV instead of uV.
-Add fix to use uV as per the power-supply subsystem convention.
+This patch is somehow corrupted and can not be applied at all.  Nathan,
+how did you generate it?
 
-Also, add a note indicating all the properties use non negative values.
-A negative value indicates failure with the appropriate error value. In
-that case, it should not be taken as a measurement value or status.
+You can tell something is wrong as it shows you removing, and then
+adding, the same line, which is a huge hint something went wrong.
 
-Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
----
-This patch is a follow-up to the series [1]. [1] has been accepted in
-the USB subsystem tree (usb-next). However, since Sebastian has additional
-feedback [2], I am sending this patch to address it. Please note that this
-patch is based out of usb-next branch on usb tree. This patch should be
-applied on top of 70d7dd27f6dc ("power: supply: max77759: add charger driver").
+Can you regenerate this against my latest usb-testing branch and resend?
 
-[1] https://lore.kernel.org/all/20260325-max77759-charger-v9-0-4486dd297adc@google.com/
-[2] https://lore.kernel.org/all/ac2jYUA2F5oQsA2g@venus/#t
----
-Output of power supply selftest:
-root@google-gs:/data/power_supply# ./test_power_supply_properties.sh
-TAP version 13
-1..66
- # Testing device max77759-charger
-ok 1 max77759-charger.exists
-ok 2 max77759-charger.uevent.NAME
-ok 3 max77759-charger.sysfs.type
-ok 4 max77759-charger.uevent.TYPE
-ok 5 max77759-charger.sysfs.usb_type # SKIP
- # Reported: '1' ()
-ok 6 max77759-charger.sysfs.online
- # Reported: '1' ()
-ok 7 max77759-charger.sysfs.present
- # Reported: 'Charging'
-ok 8 max77759-charger.sysfs.status
-ok 9 max77759-charger.sysfs.capacity # SKIP
-ok 10 max77759-charger.sysfs.capacity_level # SKIP
-ok 11 max77759-charger.sysfs.model_name # SKIP
-ok 12 max77759-charger.sysfs.manufacturer # SKIP
-ok 13 max77759-charger.sysfs.serial_number # SKIP
-ok 14 max77759-charger.sysfs.technology # SKIP
-ok 15 max77759-charger.sysfs.cycle_count # SKIP
-ok 16 max77759-charger.sysfs.scope # SKIP
- # Reported: '3000000' uA (3000 mA)
-ok 17 max77759-charger.sysfs.input_current_limit
-ok 18 max77759-charger.sysfs.input_voltage_limit # SKIP
-ok 19 max77759-charger.sysfs.voltage_now # SKIP
-ok 20 max77759-charger.sysfs.voltage_min # SKIP
-ok 21 max77759-charger.sysfs.voltage_max # SKIP
-ok 22 max77759-charger.sysfs.voltage_min_design # SKIP
-ok 23 max77759-charger.sysfs.voltage_max_design # SKIP
-ok 24 max77759-charger.sysfs.current_now # SKIP
-ok 25 max77759-charger.sysfs.current_max # SKIP
-ok 26 max77759-charger.sysfs.charge_now # SKIP
-ok 27 max77759-charger.sysfs.charge_full # SKIP
-ok 28 max77759-charger.sysfs.charge_full_design # SKIP
-ok 29 max77759-charger.sysfs.power_now # SKIP
-ok 30 max77759-charger.sysfs.energy_now # SKIP
-ok 31 max77759-charger.sysfs.energy_full # SKIP
-ok 32 max77759-charger.sysfs.energy_full_design # SKIP
-ok 33 max77759-charger.sysfs.energy_full_design # SKIP
- # Testing device tcpm-source-psy-1-0025
-ok 34 tcpm-source-psy-1-0025.exists
-ok 35 tcpm-source-psy-1-0025.uevent.NAME
-ok 36 tcpm-source-psy-1-0025.sysfs.type
-ok 37 tcpm-source-psy-1-0025.uevent.TYPE
- # Reported: 'C [PD] PD_PPS PD_SPR_AVS PD_PPS_SPR_AVS' ()
-ok 38 tcpm-source-psy-1-0025.sysfs.usb_type
- # Reported: '1' ()
-ok 39 tcpm-source-psy-1-0025.sysfs.online
-ok 40 tcpm-source-psy-1-0025.sysfs.present # SKIP
-ok 41 tcpm-source-psy-1-0025.sysfs.status # SKIP
-ok 42 tcpm-source-psy-1-0025.sysfs.capacity # SKIP
-ok 43 tcpm-source-psy-1-0025.sysfs.capacity_level # SKIP
-ok 44 tcpm-source-psy-1-0025.sysfs.model_name # SKIP
-ok 45 tcpm-source-psy-1-0025.sysfs.manufacturer # SKIP
-ok 46 tcpm-source-psy-1-0025.sysfs.serial_number # SKIP
-ok 47 tcpm-source-psy-1-0025.sysfs.technology # SKIP
-ok 48 tcpm-source-psy-1-0025.sysfs.cycle_count # SKIP
-ok 49 tcpm-source-psy-1-0025.sysfs.scope # SKIP
-ok 50 tcpm-source-psy-1-0025.sysfs.input_current_limit # SKIP
-ok 51 tcpm-source-psy-1-0025.sysfs.input_voltage_limit # SKIP
- # Reported: '5000000' uV (5 V)
-ok 52 tcpm-source-psy-1-0025.sysfs.voltage_now
- # Reported: '5000000' uV (5 V)
-ok 53 tcpm-source-psy-1-0025.sysfs.voltage_min
- # Reported: '5000000' uV (5 V)
-ok 54 tcpm-source-psy-1-0025.sysfs.voltage_max
-ok 55 tcpm-source-psy-1-0025.sysfs.voltage_min_design # SKIP
-ok 56 tcpm-source-psy-1-0025.sysfs.voltage_max_design # SKIP
- # Reported: '3000000' uA (3000 mA)
-ok 57 tcpm-source-psy-1-0025.sysfs.current_now
- # Reported: '3000000' uA (3000 mA)
-ok 58 tcpm-source-psy-1-0025.sysfs.current_max
-ok 59 tcpm-source-psy-1-0025.sysfs.charge_now # SKIP
-ok 60 tcpm-source-psy-1-0025.sysfs.charge_full # SKIP
-ok 61 tcpm-source-psy-1-0025.sysfs.charge_full_design # SKIP
-ok 62 tcpm-source-psy-1-0025.sysfs.power_now # SKIP
-ok 63 tcpm-source-psy-1-0025.sysfs.energy_now # SKIP
-ok 64 tcpm-source-psy-1-0025.sysfs.energy_full # SKIP
-ok 65 tcpm-source-psy-1-0025.sysfs.energy_full_design # SKIP
-ok 66 tcpm-source-psy-1-0025.sysfs.energy_full_design # SKIP
- # 47 skipped test(s) detected.  Consider enabling relevant config options to improve coverage.
- # Totals: pass:19 fail:0 xfail:0 xpass:0 skip:47 error:0
----
- drivers/power/supply/max77759_charger.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+thanks,
 
-diff --git a/drivers/power/supply/max77759_charger.c b/drivers/power/supply/max77759_charger.c
-index 9bb414599f16..58594bb78426 100644
---- a/drivers/power/supply/max77759_charger.c
-+++ b/drivers/power/supply/max77759_charger.c
-@@ -26,7 +26,7 @@
- 
- /* Default values for Fast Charge Current & Float Voltage */
- #define CHG_CC_DEFAULT_UA			2266770
--#define CHG_FV_DEFAULT_MV			4300
-+#define CHG_FV_DEFAULT_UV			4300000
- 
- #define MAX_NUM_RETRIES				3
- #define PSY_WORK_RETRY_DELAY_MS			10
-@@ -61,10 +61,10 @@ static const struct linear_range chgcc_limit_ranges[] = {
- 	LINEAR_RANGE(200000, 0x3, 0x3C, 66670),
- };
- 
--/* Charge Termination Voltage Limits (in mV) */
-+/* Charge Termination Voltage Limits (in uV) */
- static const struct linear_range chg_cv_prm_ranges[] = {
--	LINEAR_RANGE(3800, 0x38, 0x39, 100),
--	LINEAR_RANGE(4000, 0x0, 0x32, 10),
-+	LINEAR_RANGE(3800000, 0x38, 0x39, 100000),
-+	LINEAR_RANGE(4000000, 0x0, 0x32, 10000),
- };
- 
- /* USB input current limits (in uA) */
-@@ -310,14 +310,14 @@ static int get_float_voltage(struct max77759_charger *chg)
- 	return ret ? ret : val;
- }
- 
--static int set_float_voltage_limit(struct max77759_charger *chg, u32 fv_mv)
-+static int set_float_voltage_limit(struct max77759_charger *chg, u32 fv_uv)
- {
- 	u32 regval;
- 	bool found;
- 
- 	linear_range_get_selector_high_array(chg_cv_prm_ranges,
- 					     ARRAY_SIZE(chg_cv_prm_ranges),
--					     fv_mv, &regval, &found);
-+					     fv_uv, &regval, &found);
- 	if (!found)
- 		return -EINVAL;
- 
-@@ -370,6 +370,11 @@ static const enum power_supply_property max77759_charger_props[] = {
- 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
- };
- 
-+/*
-+ * Note: None of the properties in this driver support usage of negative values.
-+ * If you do see one, it's because the function is reporting an error value and
-+ * should not be taken as a measurement value or status.
-+ */
- static int max77759_charger_get_property(struct power_supply *psy,
- 					 enum power_supply_property psp,
- 					 union power_supply_propval *pval)
-@@ -557,10 +562,10 @@ static int max77759_charger_init(struct max77759_charger *chg)
- 		return ret;
- 
- 	if (power_supply_get_battery_info(chg->psy, &info)) {
--		fv = CHG_FV_DEFAULT_MV;
-+		fv = CHG_FV_DEFAULT_UV;
- 		fast_chg_curr = CHG_CC_DEFAULT_UA;
- 	} else {
--		fv = info->constant_charge_voltage_max_uv / 1000;
-+		fv = info->constant_charge_voltage_max_uv;
- 		fast_chg_curr = info->constant_charge_current_max_ua;
- 	}
- 
-
----
-base-commit: 81ebd43cc0d6d106ce7b6ccbf7b5e40ca7f5503d
-change-id: 20260402-fix-psy-max77759-usb-next-15a4f86a08ce
-
-Best regards,
--- 
-Amit Sunil Dhamne <amitsd@google.com>
-
-
+greg k-h
 
