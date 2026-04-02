@@ -1,91 +1,91 @@
-Return-Path: <linux-usb+bounces-35848-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35849-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KLiPJtkrzmnIlQYAu9opvQ
-	(envelope-from <linux-usb+bounces-35848-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 10:42:01 +0200
+	id mCrNAf0vzmnIlQYAu9opvQ
+	(envelope-from <linux-usb+bounces-35849-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 10:59:41 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B3D9386367
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 10:42:01 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63DE038663C
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 10:59:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0038330FD7AB
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 08:37:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0BF763040750
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 08:53:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 286813A9626;
-	Thu,  2 Apr 2026 08:37:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AF7E3CAE65;
+	Thu,  2 Apr 2026 08:53:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nz6Hna+2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N5tHyB74"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A0A1EE7D5
-	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 08:37:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 859A33C73C0
+	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 08:53:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775119051; cv=none; b=OD5g5KpQ2CNVTok/rumydMw2WXYVfI3d2j3U9QPHstuAt+04+ftr9STEtU26vAY4RyHGz0GE2pWyqtxJwfKNNv0v7+f8PkZ2xZLE2+KKDrNLUs1MUYppi+1YcvddxCkfPsdkQJGf2i1B008QOy5ACus625quVq/kHX4qtN8AVRw=
+	t=1775119996; cv=none; b=abEF7nZn3lyh3wWM9lZCSu+EHFL0ACFNFDfbas/3RtOOr2pblz1qDwp9lhzMnTJsGO8Q/pn+oSYj6jG3thCaxUJnrgjpPrUvfxg11rB5Z0I7lHTJ8KF5nONJNRTlxaxei0ll9WlieVNogZ52WCv9QuGd5ZjNHQ/FnOQOM+Mzc4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775119051; c=relaxed/simple;
-	bh=sjNHI0SqRG1xFTfbqXbfYmiraZhzljPHPeE0rBZzwcQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nrrRHNU03ZvMO3d0MtrecwNha0fPXLMVloaHaGmf66MdZmMGDsbNidGfNRUgXAxrB/Js46d/os/Vt4v1fPT2Je1PNC2mJNwAzLjMDWDEcn9iBwBMdWZIp8TOKb88fIxwAnN35ITwd16f9Jq0n/r1cIcLmU35gZjQFtZjpzVEniQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nz6Hna+2; arc=none smtp.client-ip=209.85.128.41
+	s=arc-20240116; t=1775119996; c=relaxed/simple;
+	bh=nD5pJ6t0iPgbSDk4MiAKLhLc2K497D4OPy81R4OU6T4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YE6ozhmfyiBxw4DRQN9OKFcvhSV0+cooeE4CrzMjqEZbl8PEaR0SNiqKj+bSNrGw4shIDTkzWy0tlENqxAiziSgMkiDT9ZKwtpd1IEhepaQ5TiuDsKdkpAwNCK1o+mN6SGv8eEdOLuIu7EHEImF8ss6Sa4sscwH71X3QK9FGVyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N5tHyB74; arc=none smtp.client-ip=209.85.160.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-486ff3a0fc1so5227665e9.2
-        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2026 01:37:30 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-50b2b2aa276so5494631cf.3
+        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2026 01:53:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775119049; x=1775723849; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775119993; x=1775724793; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OS1+Hv6V68sWUSaQ2t5yVzr46ljjcx27+0z8+uJDDlM=;
-        b=nz6Hna+2NkBlljTkewYWtQBU3IhbVmLZ3QUNwz4FDkjFtGiZU4ghU0+uCFyEAhWMQf
-         fjAP/P0DiICtcnLWya9G3D2QOT/r0hLs/F3Ds8OgbVpiIDD97pwY79fD+UYq+uR6bJCo
-         eyTeJSRO/ul1oLOvkpqh8NB+yMjhVWUcuuEAegB6jii6FvWYWfN8JJYr0ScAt5YOtrGL
-         996yfAetkLQ8UjOzo5TpmM+u7pbXM0VbJ+uh7OkIa+OYlpDFouGv/aCGyhMzdrRqaV13
-         rzqQMuKOXAPYm0pnEI99VslcfVnIQXXYPnr41KGUu9xzk008rBYMxua2oGydvTmf/VlR
-         uoig==
+        bh=OwBCIwxrNlJiEdT3Pl3xjUbsa64rptRCzck0YDPH76w=;
+        b=N5tHyB74XFUK61ze43qVIwy/4AH9uBtLYxt/ZEddYZthFLLnYXyD1DpCIDeh3+S261
+         OVCQQdSXwSCXmrXoWrKWQbYxqNtRi9vSf87Mxnkb1WNW/KuLdoPxbce66a3KxKdHWfTp
+         oqYevYy5Zv+Fe5qgLRNOtZ3M6MlUkwe+iBZhLIxAXE4X4Z8NK4kksiuDNtWD7kvQa5wa
+         RVqlN1anm30RLrdyi7EUGtIuYtDNCaja4706rRv48QirN5AivwIx6VeZhVlue3TMD5hS
+         xppKb4DSD/uuMEOQQfUlN4pWqUIElOwXzLKmwiooVCUWjm3PDyJ5L1Oa0qyS7nIorenx
+         dmGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775119049; x=1775723849;
+        d=1e100.net; s=20251104; t=1775119993; x=1775724793;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OS1+Hv6V68sWUSaQ2t5yVzr46ljjcx27+0z8+uJDDlM=;
-        b=UQv9+AuHARV9aq513RNX3QPte+qdAE967VRI1Djfz44tD+WzMEmYUnDkClsMJZji9Z
-         ujBm5qB70F7++EoshnWhgfx/bUlBylDQEdVHZ3JnlRDA9Z1RHpsH9LYyK6y8XdWDUxBy
-         gK+r+z3hxb14vTaZhL3yJFWdsxDbJqz+el8ageDydRwXMX2YG2vOke7sLSbcrkxhSQYg
-         /Ndm/FGa+YeaPyYQG+p8/8AWffaWOfQ5mYTQDsWoEkMV42cqsMgcTtsG2/stqmfJ5snR
-         eLKuQu6Wv7iBS1QLxf55I82SQkrOm2kvoVceTQMJjC0vuuaWMyezr3lFfajbIFzs9IRn
-         9uOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXfmK2A/p//GAO+TQeX9SYY/Nq5DypO8GAc7qjVjm+/5/357uA5ZzPWr0Z5tIARLuEg9MAZEQfIQ8Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRIZSaIGIydZ+TaxbViuhad/30sMfbWVawYrEr7bcpeghK2e2/
-	Rx3q92sLYWzP59Y0uvuWphymWuO1ZYkydCXsGI/OFp+aI8FRoGaxYZwN
-X-Gm-Gg: ATEYQzwMYl3EzuXe/s7OMCq0RcyaG+5WAeY1RUi9ggOnEt252TQWSTvvEhldDK3XsJW
-	QB3e9cpUQYAi3pgbAzwctTIS9D1aVvwY6iys+6v1t8u86tkdMCCxNWenDLg6chXZZjV8r2F5RD1
-	TLAj6rQgh3SfTN2o4YZRFGElS/cQd6aOsFUXbMc6kSGtrZ39cUzV4SWdmADgfXmWtdccA+vrU0b
-	HbtbkWtC5hbryQ4/v9q6gxPGW/MVQePEKd9esbgjj5spSV2DwlKBvY4lzdzm4GrFbVQlgChg0kW
-	5aPRcBFpmIPEuqvHo0V86jtqdyNtcYIXxVOeiDRWphAqdiMFS3OE+L+hed8I5UXvtlIoPJk/nXf
-	u67rAbwVzO/RodCAxqrDzMN4nKK7VFX7gyxzicLSJaRk+Mlc88i0+BbdHy4Kfgh2fV/2lgv8hj0
-	RwBZHSsk1DEnEBY/+CTYfdXiNCEpFRWFS07CU2IioKktL18bRPAgopzChJUmgqqnxee5Tg5of66
-	D9+4qaHA2hrcdIksoVfE3re+Eg/Rz/9AlJrsNMEeA==
-X-Received: by 2002:a05:600c:4a18:b0:488:90fc:82cf with SMTP id 5b1f17b1804b1-48890fc877bmr10691015e9.22.1775119048772;
-        Thu, 02 Apr 2026 01:37:28 -0700 (PDT)
-Received: from labdl-itc-sw01.tmt.telital.com ([2a01:7d0:4800:7:a04:488a:882a:de93])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e2c3a01sm5883101f8f.12.2026.04.02.01.37.27
+        bh=OwBCIwxrNlJiEdT3Pl3xjUbsa64rptRCzck0YDPH76w=;
+        b=he9qrwslauvrkO3jkNx+Q7h/8H2gyURFIb/4lF4+SMBDHXEYVJAErn5h8C8OLZ5LSu
+         KTy/J/UCzm8OWKp9hurMuZKyh4a9FSAaDxlYuMwFTm6T25ORhFopdVFT5P4mQdgTh9qP
+         MqE11N4x8EYExWcwmpv4GJjzSDrAQXr8L+3qwNwFhBML65ow/PJOalc4VEDTGfUSu2x9
+         AG6K1eeXITrMoDRaULYIgaM10VgMS1adxMl5mzDqJqkX//AiZEnpbTjqLY25ZXyIIfBW
+         83Nzoubc+cO+a1YzB8E6FbTLOk+8hU2VaOU5C7cwlYu+RWkhIhfVDCSafHvPWFn+68/X
+         dC+w==
+X-Gm-Message-State: AOJu0YwFXLlXro9AgfcR6puEfPsIrRMeVm5W6Yole9HT8sr5SGfR4SRY
+	GhdoDW+Vfs8N1hqc4FtxGPFiiGsgRc3GgGFbLjNZr90beBULRV4BteAPAHi36/yY
+X-Gm-Gg: ATEYQzy8uZZhmWypWHPuJefrs8X8Qy4PDH6b2HRwpvbTPr504HUnwoWiFNviHe3rR/s
+	hpx5VUPhyQ7mDM3AZollQtjJBw1BbPS/5160dH7M1V3A0h28Zp6gAYpB+3iCa8pZprN7S+TQTka
+	1ynZRfTYpi1sRhRkcM0+RWU0CnZXyU5Ow0Li4UUz3lv0RhRf43TN8kRvFLufVzAw7PSSSfzeS6v
+	NZgaN2qIJd2vQCy00+pNo89yl1quqjohaxppuCO8f6dJhE36e7nEftMd749xdLiJ2t9aX1vt3Tv
+	8Y3ik3Le4qKWnMiiaStYuR1CJhzUKn4/UySvW6MTUF+VDILrVX6DTxA7hdkT2Qu99oz/S8EO42l
+	kGTHUu7C3apR3CwscljFvwFCTxV+BGeiiwATd8WHqild0r4XQgjSpY7OglbRyeIo7syY/aMTK9y
+	2Q+hFeYqK2e3bFulDiEcuckJ9c+/fjEukcHjDdZ8Sh0n/4Xz8v/OKXypjLBs+Sh4oN7KfrQ4pRb
+	CKsJa24HZffvS2lhBCJ
+X-Received: by 2002:a05:622a:259a:b0:509:379b:d4e with SMTP id d75a77b69052e-50d3bcd2630mr105863161cf.32.1775119992828;
+        Thu, 02 Apr 2026 01:53:12 -0700 (PDT)
+Received: from localhost.localdomain ([129.170.197.116])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50d4b88914csm18051841cf.23.2026.04.02.01.53.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 01:37:28 -0700 (PDT)
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	Daniele Palmas <dnlplm@gmail.com>,
-	Fabio Porcedda <fabio.porcedda@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] USB: serial: option: add Telit Cinterion FN990A MBIM composition
-Date: Thu,  2 Apr 2026 10:37:22 +0200
-Message-ID: <20260402083722.100973-1-fabio.porcedda@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        Thu, 02 Apr 2026 01:53:12 -0700 (PDT)
+From: Nathan Rebello <nathan.c.rebello@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
+	addcontent08@gmail.com,
+	skhan@linuxfoundation.org,
+	kyungtae.kim@dartmouth.edu,
+	stable@vger.kernel.org,
+	Nathan Rebello <nathan.c.rebello@gmail.com>
+Subject: [PATCH v2] usbip: validate number_of_packets in usbip_pack_ret_submit()
+Date: Thu,  2 Apr 2026 04:52:59 -0400
+Message-ID: <20260402085259.234-1-nathan.c.rebello@gmail.com>
+X-Mailer: git-send-email 2.43.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -93,99 +93,121 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35848-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[fabioporcedda@gmail.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,gmail.com,dartmouth.edu,vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35849-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[nathancrebello@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_COUNT_FIVE(0.00)[5];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5B3D9386367
+	RCPT_COUNT_SEVEN(0.00)[7];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:email]
+X-Rspamd-Queue-Id: 63DE038663C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add the following Telit Cinterion FN990A MBIM composition:
+When a USB/IP client receives a RET_SUBMIT response,
+usbip_pack_ret_submit() unconditionally overwrites
+urb->number_of_packets from the network PDU. This value is
+subsequently used as the loop bound in usbip_recv_iso() and
+usbip_pad_iso() to iterate over urb->iso_frame_desc[], a flexible
+array whose size was fixed at URB allocation time based on the
+*original* number_of_packets from the CMD_SUBMIT.
 
-0x1074: MBIM + tty (AT/NMEA) + tty (AT) + tty (AT) + tty (diag) +
-        DPL (Data Packet Logging) + adb
+A malicious USB/IP server can set number_of_packets in the response
+to a value larger than what was originally submitted, causing a heap
+out-of-bounds write when usbip_recv_iso() writes to
+urb->iso_frame_desc[i] beyond the allocated region.
 
-T:  Bus=01 Lev=01 Prnt=04 Port=06 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=1bc7 ProdID=1074 Rev=05.04
-S:  Manufacturer=Telit Wireless Solutions
-S:  Product=FN990
-S:  SerialNumber=70628d0c
-C:  #Ifs= 7 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
-E:  Ad=8f(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+KASAN confirmed this with kernel 7.0.0-rc5:
 
+  BUG: KASAN: slab-out-of-bounds in usbip_recv_iso+0x46a/0x640
+  Write of size 4 at addr ffff888106351d40 by task vhci_rx/69
+
+  The buggy address is located 0 bytes to the right of
+   allocated 320-byte region [ffff888106351c00, ffff888106351d40)
+
+The server side (stub_rx.c) and gadget side (vudc_rx.c) already
+validate number_of_packets in the CMD_SUBMIT path since commits
+c6688ef9f297 ("usbip: fix stub_rx: harden CMD_SUBMIT path to handle
+malicious input") and b78d830f0049 ("usbip: fix vudc_rx: harden
+CMD_SUBMIT path to handle malicious input"). The server side validates
+against USBIP_MAX_ISO_PACKETS because no URB exists yet at that point.
+On the client side we have the original URB, so we can use the tighter
+bound: the response must not exceed the original number_of_packets.
+
+This mirrors the existing validation of actual_length against
+transfer_buffer_length in usbip_recv_xbuff(), which checks the
+response value against the original allocation size.
+
+Kelvin Mbogo's series ("usb: usbip: fix integer overflow in
+usbip_recv_iso()", v2) hardens the receive-side functions themselves;
+this patch complements that work by catching the bad value at its
+source -- in usbip_pack_ret_submit() before the overwrite -- and
+using the tighter per-URB allocation bound rather than the global
+USBIP_MAX_ISO_PACKETS limit.
+
+Fix this by checking rpdu->number_of_packets against
+urb->number_of_packets in usbip_pack_ret_submit() before the
+overwrite. On violation, clamp to zero so that usbip_recv_iso() and
+usbip_pad_iso() safely return early.
+
+Fixes: 1325f85fa49f ("staging: usbip: bugfix add number of packets for isochronous frames")
 Cc: stable@vger.kernel.org
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Nathan Rebello <nathan.c.rebello@gmail.com>
 ---
-v2:
-- Added "Cc: stable@vger.kernel.org"
-- Link to v1: https://lore.kernel.org/linux-usb/20260402082747.98441-1-fabio.porcedda@gmail.com
+Changes in v2:
+  - Fixed patch whitespace corruption
+  - Corrected Fixes tag commit hash
 
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/usbip/usbip_common.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 313612114db9..c71461893d20 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1383,6 +1383,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = NCTRL(2) | RSVD(3) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1073, 0xff),	/* Telit FN990A (ECM) */
- 	  .driver_info = NCTRL(0) | RSVD(1) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1074, 0xff),	/* Telit FN990A (MBIM) */
-+	  .driver_info = NCTRL(5) | RSVD(6) | RSVD(7) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1075, 0xff),	/* Telit FN990A (PCIe) */
- 	  .driver_info = RSVD(0) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1077, 0xff),	/* Telit FN990A (rmnet + audio) */
+diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
+index 8ebaaeaf848e..a5837c0feb05 100644
+--- a/drivers/usb/usbip/usbip_common.c
++++ b/drivers/usb/usbip/usbip_common.c
+@@ -470,6 +470,18 @@ static void usbip_pack_ret_submit(struct usbip_header *pdu, struct urb *urb,
+ 		urb->status		= rpdu->status;
+ 		urb->actual_length	= rpdu->actual_length;
+ 		urb->start_frame	= rpdu->start_frame;
++		/*
++		 * The number_of_packets field determines the length of
++		 * iso_frame_desc[], which is a flexible array allocated
++		 * at URB creation time. A response must never claim more
++		 * packets than originally submitted; doing so would cause
++		 * an out-of-bounds write in usbip_recv_iso() and
++		 * usbip_pad_iso(). Clamp to zero on violation so both
++		 * functions safely return early.
++		 */
++		if (rpdu->number_of_packets < 0 ||
++		    rpdu->number_of_packets > urb->number_of_packets)
++			rpdu->number_of_packets = 0;
+ 		urb->number_of_packets = rpdu->number_of_packets;
+ 		urb->error_count	= rpdu->error_count;
+ 	}
 -- 
-2.53.0
+2.43.0.windows.1
 
 
