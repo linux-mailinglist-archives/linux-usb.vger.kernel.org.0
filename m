@@ -1,214 +1,221 @@
-Return-Path: <linux-usb+bounces-35833-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35835-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6DaUGuoXzmmnkgYAu9opvQ
-	(envelope-from <linux-usb+bounces-35833-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:16:58 +0200
+	id gIiUCBgZzmmnkgYAu9opvQ
+	(envelope-from <linux-usb+bounces-35835-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:22:00 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF3B5385009
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:16:57 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1214B3850FE
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:21:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4393730B3AD1
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 07:10:40 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 1E4D830B6519
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 07:13:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF429386C3B;
-	Thu,  2 Apr 2026 07:10:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A18043876BB;
+	Thu,  2 Apr 2026 07:12:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UFSAQhmP"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="AQs2nF+E"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012060.outbound.protection.outlook.com [52.101.66.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A105737F000;
-	Thu,  2 Apr 2026 07:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775113837; cv=none; b=hoPRwjrIBOCEF3ceI+ymXdKFI45+q8GoNNmVq1240TuU2xjWI/cfJmYmH9l553PtGX6RJ/UqaAFjVOBZm05f61kR+9LNIIo6HC3x4JXWMDde260nSUCHQBfGGJsIZjuVJ67HjfcpptxlSRUspFqvQSBD+BLjxMvIwewRdb62+i0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775113837; c=relaxed/simple;
-	bh=9yJyuT/SJkwKU+0+ZJyHL0OAOwGO+rPd25aIidvgN7E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cBzDtOVEGArura19ajgbB/0rJAgOdaxo/TgHcSE0k7BCPqpu/wqg9/ltawniQSnSFk5AcRBV7Ym1bGL0fo+YBuhL6XYnSMRv+4YhFyFtUUq1EmvlBIMWV6Zc0JS9TE69eXZp9Usd0nycvzB+QRiEeRx3KRl3icsuOlg/BH6kwyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UFSAQhmP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFEBDC2BC9E;
-	Thu,  2 Apr 2026 07:10:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1775113837;
-	bh=9yJyuT/SJkwKU+0+ZJyHL0OAOwGO+rPd25aIidvgN7E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UFSAQhmP+RPnaEAiNPGX0WP2sXlKzatOze+VRmFXRr0TIQ670Wo0MvmmuBUvhtabF
-	 2ovyRzQozeomnvj2ihzN7cxQW3qZEAC+mZRStg8DbkR9HVCLF5Ja5nN+7gxQPBfDrU
-	 oEhosVW/t/WoVhbuEnF/t7KCq/KoxyS2ywsn/EWc=
-Date: Thu, 2 Apr 2026 09:10:34 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: "Xuetao (kirin)" <xuetao09@huawei.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	caiyadong@huawei.com, stable@kernel.org, stern@rowland.harvard.edu
-Subject: Re: [PATCH] usb: core: Fix bandwidth for devices with invalid
- wBytesPerInterval
-Message-ID: <2026040232-wrinkly-replace-4fdf@gregkh>
-References: <20260402021400.28853-1-xuetao09@huawei.com>
- <2026040241-purveyor-bakery-a9f1@gregkh>
- <c463f9ed-22ed-4ee6-b4fa-2933770e9c4c@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1CA37F734;
+	Thu,  2 Apr 2026 07:12:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.60
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775113977; cv=fail; b=RGselETDC4wUwjJRc+E2h/dALsSpiIIf1xpbjxP16Qlgw/mPBvvWRFMCaPSYCezwu1L+P7mIRpvvEHtLaenPua8c0PM4+dBekLjCqO8O273/Wv9zwL1THDb50HDwNhOQ9MZzahuM8RSYg+OqHmtnUz3tQX3XKyBjgEhgOSSy350=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775113977; c=relaxed/simple;
+	bh=QQjMK0ZSYxcsSkSF/vk3yamBgsjzcmWbIkNH2Ag8jqQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=Vl0gHBlyzlBcE3Y2LiIDEfpiBF42wMkdU+Bj2ul4lNW9R2I4D+ZfoM+b+ewEzcfEifXnbrOarJ3hEDLtNpkKkFZyU8hleMQzQDB47R3AdMx5Wv6MXjVC6RDNOm8KNSCRxCxLgmZOnfGJpFLlZEy5jV4W6HN8sYcgIYwjDTgXdiM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=AQs2nF+E; arc=fail smtp.client-ip=52.101.66.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Hjf6KAV2XTpAQ00FX/AvP4dRU07duM/8OeYYKHB/vuSP+cg8PtUEOfu6pNYKkBLpoZU48/GAwvP0EI1X4X1wOuWrQ7y9LnZLBBhz4krjv3K/mbJDjhtIlPrN0o2rhH2Wk9C9snjLTv5xmaOrpSAquYuNtw8/2QbU6e2AavQ3yVDg0JHIO2KsnIUIPVPqrxPJW/WjmfHRPH8dufxL96x106rxb/HuTDbFMmfJBcsBtk2yydK/bl/TLvLyG27TY1MEeKOCaQoBwCkgx/q7Y6vD1eMeo+dF0v8yhaJH9op3tAurr+zmxH0V709saH+P1kuUvhidaEey2dsgXSX48Bp67w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Vad8mlMw1L9TzdqP8ZggxBGw4ooDYABHxlIioYHhFjI=;
+ b=MWexs/luPSGL0JF7saCjmvWwSAV9s3p99b1UYxEljZ9pKEi7B38Bzf1ewHtojD/JNEYqR5FQgU6ktIUVNnEqq5yHiSePG12MQCBZ7mh4AK9CQ4BsPBFVLFbs4gBP+yb+MF9yub1Ski5h8Bn5gkWQw4unlrOMZi+DMyIdnAJbtj+fhzO+Nwrf+c3rSNmnOEf8z7aVhnNZ7SBekCEVJaxrbUYgAFw3C6ycGfd+zCI2HU2gpnZOoMfnbUrJicsMpUzGcrNb2QOD4Dc+wKLyU8/FGL2iuRxcZPaSkC8E8KX3OxrVBUPn8jntuxtyKfx7mEGg1NNE7LU+lkgjZ9q4TKVDng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Vad8mlMw1L9TzdqP8ZggxBGw4ooDYABHxlIioYHhFjI=;
+ b=AQs2nF+E506fIZSCRQpytPK9f5gx0ZaOxBxfjS9cyGwr3MOzIrIuQbf7bT3Fex8yiJZshslePenyb83/hgTTB0u9/c96PkqM3rfjX+9Os9TvJ3Xs+0CUf3mtvaEGwWv+JQavsGKLJOQet19chl3jKpbrIEAypcchN2f+kSAgB/8GlsLTUfq9yfoRA9i5cYxsTTcbjZL0eSgZnc98VGME9TkWeYjVejCksc/l4ZS6V2UaSUOfGp+IY2kVo6rZG6rOuXBV3DqK+Jby6gZpxIhM60n+Jq3NHhXXNyhG3oX+3PYee9IrOfkdnAKHlAbv34sS9OTbKSqfS1/r7lAXATJ7+A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by AM9PR04MB8761.eurprd04.prod.outlook.com (2603:10a6:20b:408::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.18; Thu, 2 Apr
+ 2026 07:12:52 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::c67b:71cd:6338:9dce]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::c67b:71cd:6338:9dce%5]) with mapi id 15.20.9769.016; Thu, 2 Apr 2026
+ 07:12:51 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: peter.chen@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: jun.li@nxp.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev
+Subject: [PATCH v2 1/3] usb: chipidea: core: refactor ci_usb_role_switch_set()
+Date: Thu,  2 Apr 2026 15:14:55 +0800
+Message-Id: <20260402071457.2516021-1-xu.yang_2@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MA5P287CA0025.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:17a::15) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c463f9ed-22ed-4ee6-b4fa-2933770e9c4c@huawei.com>
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AM9PR04MB8761:EE_
+X-MS-Office365-Filtering-Correlation-Id: 31798d12-e1f2-4ac4-083c-08de90874097
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|376014|52116014|19092799006|56012099003|18002099003|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	TJx+qrHz+UVndAxKNIbKJYTtu9v/YjNhj+KXOzCsMkPs+94NMCt7w8zw1AvKSuJ/sqWusVcY9VUZJLH1a+KQIquLuUp59gOh539hHUw0QRyibMfkaxwgYLOxWLP7MwV3xvCc/BZqZlc3FPxavrVv60Qn1kqdz4cNF/LOE7Aw8o+3v9ofE/T3tLQEZkcPJFMAij9p2bQkybASYXoxE8Wuxl2B2xxzGnm0vrmZzfo5SycTKecDwb/O7H80bzVWJJ14z751mRjF/1w/Tn/bHgCD7jOYRSqVlNxxt79QwPzmGYSDMDGRKtv3t4XpMXuvFNWNXIlvuVdqYqeFvQ60ucJEsO4TPI0Y8L+PnFQ+ekzbeF01sg8+++3nNnCa4IHnZp9GKeaEA1TaDikNm2PUY1/5Ar5cRa3AijO4x+94v5Wmml6iNOXVB7aGEL2cWUXebkgJxblsBsIz6FA5reIJcLnM5yN8nKEre/+khVq0RV46Cqkao32fwlhfQi1EIFulb6mO33YRpKkbeujRTLofG7m/vSS9mymTGi1iIj0czuJnvQXnzZwzLHuX+UH/CjQqP3f/O94dCptxgtbifDFqrjoHg0DZRsyygC49lnOLsOCLNBu+ytm0/SfxKdmhGaDx4QgEvGFnTWdZM5VdS3xemzufBLANR9MYYiLLfTKV204VvHUm+7ucQnfjKv5PGn4JDddSmRI07U+W3cYb6/QxFghhLNoJ5Ml2BThFly6HaATyOnDYX8Auwk8Mlg8ECs/Se0SFQhnlZ/gdV9XK04Rv5lTGi2lmfORrWefqEElaBz3eXiI=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(52116014)(19092799006)(56012099003)(18002099003)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?prybQWsGlyVSG+A8E//NfcKy+3gNLs1tVQKhhGvxJnzF/tOz62KDrajrkDQw?=
+ =?us-ascii?Q?aYI9yP6ZpJ87xG4dA9l99lEP4aoTUvVgMOqCdAbTcVunQmH+hNdYZos5v8u9?=
+ =?us-ascii?Q?jpWg4FX0tmljYLP+ANcHZFN3bEJrLSUM2jzazBs1SyVz6ZVBUlLcOcei2eh/?=
+ =?us-ascii?Q?wgFlsG9UcbptfkcbCRtfkz06Qr3WeuexIufYz5JCjYI2cZzUq4AxDm7Y7IHw?=
+ =?us-ascii?Q?3wkk7nBFFLOZqKskzbsoKknnzyiw8UA+pIJban6FANX4pPLJvm5h7v+XJsS+?=
+ =?us-ascii?Q?T+HXX9p8eZmekT0yXlYM/d9NSdrQh5xC7X1iP6E7AAj3jJ07g8E3JNedokGr?=
+ =?us-ascii?Q?yBu1hqIQSHzmLCLHaxYvDUAfwoFzTTtdsop9iSpD7VtjHYVw51LvX1QDLSjT?=
+ =?us-ascii?Q?djR5F3LDVEOS+E0NMEiTq4Q5mEDg+gVMg2Jcj43lQYZHkJ2s6OciuMS7Felh?=
+ =?us-ascii?Q?CAVzdfNKmCiUCyX+N3WvzOkYi8gCNk7Ds+0B1aw3jQi26SSdVHnB7nq6q84y?=
+ =?us-ascii?Q?zY+yZ7zzPGsZjGU7puseY1n1tylMvpu/jqbUR+gPH2pHjbwsdwwKWOmDNXZH?=
+ =?us-ascii?Q?4NyQ5GqCrk3l3KjKWpmgTxZVWyT2wWDtqTdlyMmaLYEhypQYh8wlh1TySA5C?=
+ =?us-ascii?Q?a8GxZ6HEoT/KwAMpUhCDEQKcU4JaITTmDQiocBatPGoapSfgWj7oM9zGzk/M?=
+ =?us-ascii?Q?xsfXsQ3vsosNw2BH/J+oHxPy1pMByYUCtembJR9mSg7+/Q26UGvuSXrQ0TPs?=
+ =?us-ascii?Q?qZIgGBaqD1HAnyvbpoBdyJ/UY+kWsjecIHbt3WnyDVKruUeoc1bRfZMPeYmx?=
+ =?us-ascii?Q?ZtghMABO4/fVpxp91pW1b1ZLCuWxk+q33umO6yYhBPE33wfypphlTMQm00aT?=
+ =?us-ascii?Q?yjsGEraQpHSzvY+iL+ML7y5Iv3Gd8JzLIaLwnSRY4OZeuHgzK+OrOblbRVIe?=
+ =?us-ascii?Q?FQ9HYGurTCK4nwocoyT2o1re9D6LEFCkUh2CsY9JfZqZLkkoMsvKuONtBMzz?=
+ =?us-ascii?Q?mgf22mjzuaBq6NQ5fBhx6wCM2advIeSnMF2P+OqQE9/al1VrJ2v78GJGc5Oh?=
+ =?us-ascii?Q?RtGquNmyJabGBzDHkwRs1WBTlYPy2MqwCir3ph+lun6sL7eEC3nByusLNqTM?=
+ =?us-ascii?Q?lzo3frmHAhVv5gMxs29QNei51IhMsOc9KswpEbu8PCbReO04mXkV/EPd6vaR?=
+ =?us-ascii?Q?8GCfvtdgBLuBbEkscsfDcBUJjlxGppnSGkor61PfcWTOkI8paq/vch4nEQiP?=
+ =?us-ascii?Q?cFNIjHszGWa440DHoTgOsm+VAh3rIGrvmaR2XDczpcyfUyPBSNkHv2Oe32Xz?=
+ =?us-ascii?Q?dy689ufEPHwSj9NN2ZFf4Y8b26WCgqxdmFQI6oeeNXFz1hzmyP5RUGyXPrw1?=
+ =?us-ascii?Q?VYW/Dhf4Rw8fjQCBqKehMIbVsCxg6PLAM529+2m2WfBz4YG1xbbKdNcIUvpJ?=
+ =?us-ascii?Q?uXX3JpRwhu+39dWk9oW6INm10kWrsLVrIc6bRx1TwgcWQcz8SVoBRt/nfRm/?=
+ =?us-ascii?Q?EwMOLeMXfcucgDf7qcL1VLM/l33iimgtvxWztkiFEfm7Ao/Txj2+O4XyT3EV?=
+ =?us-ascii?Q?VtCBWQVr5dJWZqueEGbchxWn3UySI4PKOyeLOa1rjjejlj3Hygr5D4PxgJfL?=
+ =?us-ascii?Q?F9yrRj98kQo3gP1SKMk+++Nn4n29JrlXJRXK+Axu0TRAQlnTC4RXNeYR3X5X?=
+ =?us-ascii?Q?KAWdm0wtDFXQ9yHYj6fSoPERKswca32I+Zym25UXT7X80ik7tTvFoMDw9Nbm?=
+ =?us-ascii?Q?L1ywsI+CjQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31798d12-e1f2-4ac4-083c-08de90874097
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2026 07:12:51.5068
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: STKDBajbUxMMxOZoph/J4ZtupMqdgvrVEVpgzIVtieQt/fHy2dUl/CmT6fo67n47DkwE8v9LOLUOoL0t7avUyQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8761
+X-Spamd-Result: default: False [1.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35835-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35833-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[nxp.com:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,huawei.com:email,linuxfoundation.org:dkim]
-X-Rspamd-Queue-Id: CF3B5385009
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[xu.yang_2@nxp.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,nxp.com:dkim,nxp.com:email,nxp.com:mid]
+X-Rspamd-Queue-Id: 1214B3850FE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Apr 02, 2026 at 02:59:35PM +0800, Xuetao (kirin) wrote:
-> 
-> 
-> 在 2026/4/2 11:51, Greg KH 写道:
-> > On Thu, Apr 02, 2026 at 10:14:00AM +0800, Tao Xue wrote:
-> > > As specified in Section 4.14.2 of the xHCI Specification, the xHC
-> > > reserves bandwidth for periodic endpoints according to bInterval and
-> > > wBytesPerInterval (Max ESIT Payload).
-> > > 
-> > > Some peripherals report an invalid wBytesPerInterval in their device
-> > > descriptor, which is either 0 or smaller than the actual data length
-> > > transmitted. This issue is observed on ASIX AX88179 series USB 3.0
-> > > Ethernet adapters.
-> > > 
-> > > These errors may lead to unexpected behavior on certain USB host
-> > > controllers, causing USB peripherals to malfunction.
-> > > 
-> > > To address the issue, return max(wBytesPerInterval, max_payload) when
-> > > calculating bandwidth reservation.
-> > > 
-> > > Fixes: 9238f25d5d32 ("USB: xhci: properly set endpoint context fields for periodic eps.")
-> > > Cc: <stable@kernel.org>
-> > > Signed-off-by: Tao Xue <xuetao09@huawei.com>
-> > > ---
-> > >   drivers/usb/core/usb.c | 9 ++++++++-
-> > >   1 file changed, 8 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-> > > index e9a10a33534c..8f2e05a5a015 100644
-> > > --- a/drivers/usb/core/usb.c
-> > > +++ b/drivers/usb/core/usb.c
-> > > @@ -1125,6 +1125,8 @@ EXPORT_SYMBOL_GPL(usb_free_noncoherent);
-> > >   u32 usb_endpoint_max_periodic_payload(struct usb_device *udev,
-> > >   				      const struct usb_host_endpoint *ep)
-> > >   {
-> > > +	u32 max_payload;
-> > > +
-> > >   	if (!usb_endpoint_xfer_isoc(&ep->desc) &&
-> > >   	    !usb_endpoint_xfer_int(&ep->desc))
-> > >   		return 0;
-> > > @@ -1135,7 +1137,12 @@ u32 usb_endpoint_max_periodic_payload(struct usb_device *udev,
-> > >   			return le32_to_cpu(ep->ssp_isoc_ep_comp.dwBytesPerInterval);
-> > >   		fallthrough;
-> > >   	case USB_SPEED_SUPER:
-> > > -		return le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval);
-> > > +		max_payload = usb_endpoint_maxp(&ep->desc) * (ep->ss_ep_comp.bMaxBurst + 1);
-> > > +		if (usb_endpoint_xfer_isoc(&ep->desc))
-> > > +			return max_t(u32, max_payload * USB_SS_MULT(ep->ss_ep_comp.bmAttributes),
-> > > +					ep->ss_ep_comp.wBytesPerInterval);
-> > > +		else
-> > > +			return max_t(u32, max_payload, ep->ss_ep_comp.wBytesPerInterval);
-> > 
-> > You dropped the conversion from le16 to cpu?  Why?
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> Hi Greg,
-> 
-> Thank you for the review.
-> 
-> 1、You're right, that was an oversight. I should keep the le16_to_cpu().
-> Here's the corrected version:
-> 
->     max_payload = usb_endpoint_maxp(&ep->desc) * (ep->ss_ep_comp.bMaxBurst +
-> 1);
->     if (usb_endpoint_xfer_isoc(&ep->desc))
->         return max_t(u32, max_payload *
-> USB_SS_MULT(ep->ss_ep_comp.bmAttributes),
->                         le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval));
->     else
->         return max_t(u32, max_payload,
-> le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval));
+Current code is redundant, refactor the code, no function change.
 
-That's hard to follow as it is line-wrapped, just fix it up for your
-next version and I'll be glad to review it then.
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-> 2、Following Alan's suggestion in another email, should I check whether
-> wBytesPerInterval is a valid value and handle it in the
-> usb_parse_ss_endpoint_companion() ?
-> 
-> However, when parsing the device descriptor, we do not know whether the
-> actual data length transmitted by the peripheral is greater than
-> wBytesPerInterval.
-> 
-> Therefore, would it be sufficient to only add a check for whether
-> wBytesPerInterval is 0 in the existing flow, and if it is 0, set
-> wBytesPerInterval to cpu_to_le16(max_tx) by default?
+---
+Changes in v2:
+ - new patch
+---
+ drivers/usb/chipidea/core.c | 29 +++++++----------------------
+ 1 file changed, 7 insertions(+), 22 deletions(-)
 
-No, don't override a value given by a device.  Mark the descriptor as
-invalid and fail attaching to the device.
+diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+index fac11f20cf0a..87be716dff3e 100644
+--- a/drivers/usb/chipidea/core.c
++++ b/drivers/usb/chipidea/core.c
+@@ -618,28 +618,13 @@ static int ci_usb_role_switch_set(struct usb_role_switch *sw,
+ 	struct ci_hdrc *ci = usb_role_switch_get_drvdata(sw);
+ 	struct ci_hdrc_cable *cable;
+ 
+-	if (role == USB_ROLE_HOST) {
+-		cable = &ci->platdata->id_extcon;
+-		cable->changed = true;
+-		cable->connected = true;
+-		cable = &ci->platdata->vbus_extcon;
+-		cable->changed = true;
+-		cable->connected = false;
+-	} else if (role == USB_ROLE_DEVICE) {
+-		cable = &ci->platdata->id_extcon;
+-		cable->changed = true;
+-		cable->connected = false;
+-		cable = &ci->platdata->vbus_extcon;
+-		cable->changed = true;
+-		cable->connected = true;
+-	} else {
+-		cable = &ci->platdata->id_extcon;
+-		cable->changed = true;
+-		cable->connected = false;
+-		cable = &ci->platdata->vbus_extcon;
+-		cable->changed = true;
+-		cable->connected = false;
+-	}
++	cable = &ci->platdata->id_extcon;
++	cable->changed = true;
++	cable->connected = (role == USB_ROLE_HOST);
++
++	cable = &ci->platdata->vbus_extcon;
++	cable->changed = true;
++	cable->connected = (role == USB_ROLE_DEVICE);
+ 
+ 	ci_irq(ci);
+ 	return 0;
+-- 
+2.34.1
 
-> For example, modify it in the following way：
-> 
->      if (le16_to_cpu(desc->wBytesPerInterval) > max_tx ||
-> le16_to_cpu(desc->wBytesPerInterval) == 0) {
->         dev_notice(ddev, "%s endpoint with wBytesPerInterval of %d in "
->                 "config %d interface %d altsetting %d ep %d: "
->                 "setting to %d\n",
->                 usb_endpoint_xfer_isoc(&ep->desc) ? "Isoc" : "Int",
->                 le16_to_cpu(desc->wBytesPerInterval),
->                 cfgno, inum, asnum, ep->desc.bEndpointAddress,
->                 max_tx);
->         ep->ss_ep_comp.wBytesPerInterval = cpu_to_le16(max_tx);
->     }
-
-There's nothing a user can do with this type of error, and yet the
-kernel is supposed to fix it up?  We should just fail it and tell the
-user then, like we do for other broken descriptors.
-
-Did you find this issue with a real device, or is this just due to
-fuzzing invalid descriptor values?
-
-thanks,
-
-greg k-h
 
