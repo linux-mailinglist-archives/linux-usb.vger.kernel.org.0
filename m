@@ -1,205 +1,303 @@
-Return-Path: <linux-usb+bounces-35837-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35838-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eE5DAEkXzmmnkgYAu9opvQ
-	(envelope-from <linux-usb+bounces-35837-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:14:17 +0200
+	id OJC+D0kYzmmnkgYAu9opvQ
+	(envelope-from <linux-usb+bounces-35838-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:18:33 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67C6A384FA1
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D0E7B38506F
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:18:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 48CEA3095658
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 07:13:23 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 74FA6309ED7A
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 07:15:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF1A83890E4;
-	Thu,  2 Apr 2026 07:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B9BA382289;
+	Thu,  2 Apr 2026 07:15:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="c70cmzYR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="REYM9YSb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013049.outbound.protection.outlook.com [52.101.72.49])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3370137F734;
-	Thu,  2 Apr 2026 07:13:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775113982; cv=fail; b=mzir5pdR+/ynRs5ZOm5NXtcTKDMJZKPtZoScqNWUyBiNVgXxn6SszlKBWKkl8bcZ0Jp9BTSvcETrg3phn1Swb/1tDLiXBOgW89TuFGKVMljrmXEv1HFMa7CFsOLZqjYM3/Cr4a3TZ0ygvYvh2M1WrzQgSETXFtNfFoJ7hlW/HJA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775113982; c=relaxed/simple;
-	bh=fIovWwFpOf/1JGCKUX17+pD8VkM+CA51G5jDA/1wXSo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=m6zbHkagNVe7qFjxQv2PGJbl/N8Xg1gFqsctSXA5YbixRKlnJ0+1M1eaxAYWDMYwlbFv8CYx6XkLJY2xHNS/EceIvIsTozmfdOIsS5IjciB0SmwqRtz8CMM9n3xMYXjiRVrr5p0PNekhTpP4DX0cFRfva7w+PtI+L+MO9duaguE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=c70cmzYR; arc=fail smtp.client-ip=52.101.72.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=C2KLbtbUB+N/eg3xfd+WyBKfX6wfB+q/loAsAmw+SG4S7oQZrrVHoEz7Liv7d6Oe0fS49rJsPLreqR2pFZE9EOqDcvt2ViLGyw0hNwtXXUkdqf3QXO0bYTNqpt8VhmguTAc9k7K2MHTpDAfkap7Qjx3cXa1XhZ3ROzNaCtIybGLTiuRMlSmsVZ21Fa31WchbOz1WS/DuqqzZLqEMDenkwKDzMW5QLSrn11x4qYLQbXyxicRTJ/MsyHAPL/q+msBCcE0aP3qKyG8ZTtenB1BkmBA+ZgaX2FcxU+Z4rEKX6Q177w3FcVbd5/opVDr5lSH6w6qV+Tfwq5UfS5QbtDEuSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Nrb95crwNKc8DosAcc3uSv4YudSuSK52V7bqimP85HI=;
- b=SUAmh0YN0c4dvre+OcDX/MBP5H13J/ero6w0eyV1vFmElFfly5uX+7XAIxXni0XE1QrWd8s4Fa3H47EeXZnPBiqWvoqzzvBGsDMcNHgrX3IZQuZ+z2GcxF0c9GN7RpY5C6R1nPDVxJPI0JQSwLT218fKEd2dGLUmjTheIOe2lXuxhzZk9MHaNBGAnuh6zJNwwpBxlfIZIh2fYdv7iOAZY9oU6gkmyKCmtk1NYbhJHGQrtC2BI7R0GF6N7ID+mdsnnIAawGwXl5RJg/RpU15tlv5INJsXWRNgc57eHdbx1UzDLkDLuch5nsblyb92eb7HWHYt34c/ClDOrO7RSDJU3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Nrb95crwNKc8DosAcc3uSv4YudSuSK52V7bqimP85HI=;
- b=c70cmzYRgZB9o6zVuNxFo3DbAHoSV5pj4u56ImnHZsFqHh+tsxY0tt16Kp6aDxO0QkfnQlKZyxTuigitI6UzMCkeCIgQEXJqzpJpSGbFyQ1gbIcwDbBCr7yTuhJteUpElOpQ2O4MfitxczttORh7YfYSh9+Ex0/RtZkFriIsyBjm85c0zrZTQ0wEuxkHzoD+G/4s3rpbmFXShElKzGUkS21d1kXIS63Pui0ukrZm0vPkICuRrKne+caZFEJA1nuKQcVZhBQk1o9F50TVYTJz5VEDdUMURoSzqj6zkSb1ZlvR5uuZZVf8d75+HRLGHaT3KwjWYcpQ41xMqygAq/9Y1A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by AM9PR04MB8761.eurprd04.prod.outlook.com (2603:10a6:20b:408::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.18; Thu, 2 Apr
- 2026 07:12:58 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::c67b:71cd:6338:9dce]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::c67b:71cd:6338:9dce%5]) with mapi id 15.20.9769.016; Thu, 2 Apr 2026
- 07:12:58 +0000
-From: Xu Yang <xu.yang_2@nxp.com>
-To: peter.chen@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: jun.li@nxp.com,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev
-Subject: [PATCH v2 3/3] usb: chipidea: otg: not wait vbus drop if use role_switch
-Date: Thu,  2 Apr 2026 15:14:57 +0800
-Message-Id: <20260402071457.2516021-3-xu.yang_2@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260402071457.2516021-1-xu.yang_2@nxp.com>
-References: <20260402071457.2516021-1-xu.yang_2@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MA5P287CA0025.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:17a::15) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4FA13242BD;
+	Thu,  2 Apr 2026 07:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775114154; cv=none; b=dT4msT3N6Gd5p5m4mY+P/lpSwWs2UQLqYSzDiaZnSvMiAzhjKOxde9PFYwtTSrgA3wkWHcOi8H3Jc1A77HABhxu/KZuF94u3Ow3p9kgln3iqDY9Gp/n5dF+xZFsTlveJueN/CSYqfupiMRBzPye2eBsWXccVVZgD9qYKHuMTq+c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775114154; c=relaxed/simple;
+	bh=cy1rJY3lSecevucVCMq4/107OEQfGsVu0eTYQYUqRcw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LqAO1deAhjf4awEu9nUKA2+JyNWbt2ODMMjdlES9K+7OYGh8ixs+ky7Js5oxfXcV0nViBL6eLoI9g4qhQ73kfhtxGR2lB2o6fG6XGx9z7yFuKPWymmRHPBmSbgCAQDWqhPpFqpD7J+OJM0cSISOJV9oJLWr7EOKepPDxX3vy+2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=REYM9YSb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 62B71C2BC9E;
+	Thu,  2 Apr 2026 07:15:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775114154;
+	bh=cy1rJY3lSecevucVCMq4/107OEQfGsVu0eTYQYUqRcw=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=REYM9YSboF92FkiqTDVXpi2awTDiV+esI2AmGlajTWCbf/C50Fl20QHT/h8gFkfGG
+	 6mTaGBSN4VSu1mrSOQNPnZzAsgRswZpSAODhWBqnHSPXmOEIQ7dZIW/G1qSNLgdlTK
+	 VLgkvacFU7aTx4i99M/q6RcHqaoDG6/MnrKto9vXHSG7EwxbW3LgYeDndONHL45VsU
+	 D91uz0fZ2GWXN4Az0FIFNlGdKKBrjhgOyKCBhcE3yWAKZzHmWhMuhbzwDg0SiFuF1k
+	 zc0Y+mNwLwzqUD51WWakmy7/s7SIKaWiWxiFLvum9jkLg7Wz8V+Jm4BaqSysj9WJOV
+	 U6jUjmzgdjmcA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C2DCCC6B01;
+	Thu,  2 Apr 2026 07:15:54 +0000 (UTC)
+From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
+Date: Thu, 02 Apr 2026 07:15:29 +0000
+Subject: [PATCH] power: supply: max77759_charger: fix voltage scale (mV ->
+ uV)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AM9PR04MB8761:EE_
-X-MS-Office365-Filtering-Correlation-Id: 078223ae-924d-4047-2f25-08de9087447b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|52116014|19092799006|56012099003|18002099003|22082099003|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	OBCA4cvyJF5loajxF4h56Zn673phPyorOxOt6YmDiuyjy+iP4N1Su88sUhLslm9Sba+g3BSqPXwmfT4g4QGygYxyhslq9PxYH4W/yVpuvLUU2ut5/V+EBl+iVeBFh1tZrN+hd3Oa7YuaE4Z9sX0rw4BXht1pTLOG5dzCclnQZYT+c3BJL6NWnVvC4mUTAh/pFOR4h3mmvoue4SRnbUQX/KoA02CNXeVrrAE0tD55hnwNlZ0XXMfIzTLLAN5WYrgnjuvgmOr3goLnd5uBf26bU0fPrVmVgrPO7tjxJ1K5+/v2el46mcfwjxmDPhRmLsOx5woYvZEX5h5ezjuTxRL6okn/B5xgHe7RF2wn8O2HBvy4CXSwflr8o4eWAzOru8qYgPZ0OVG9tjdqnO/E/YjcvBJvl4eCRY6t8H1iWEmLg+OtvcTM3kJDlhTxVoO+4SNPy3eZssil1YI8woQttCNJHXAXMRJXotfi8lowq8NPHplw9+BcC7orZeYrBvBwg/i2AovzUGOJv19DwwRyD7cnSMl3rZRhY2+u/BORR+Zy7xHdh8OpVMeqPj+jt4kPAbWiCRR3LL0MdnlxQ889EqSoFs1w0JNwEb1xwZ5v/HtK6RdjgQXd3QL5STfvCS8ZbKxHP2p8r3qKcut71LUpw/GqUUkAWlMKADO2RwypWGSIDczYyHYugfNme5ljUOQdz1+3MLckWXN3zTqOFl1i+FgdArHqtgxz2yqXUEqxPYKLqvYMoC5MJJrKeJuf9Iao35alZk+yX4A1pU6qpGSQ/FsOtPM3oqLsAC9ojQ0AqevC0Kc=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(52116014)(19092799006)(56012099003)(18002099003)(22082099003)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?4nFP7IqkY5DUnaSJMaInzfUCP3kS5T8xJndvKmhNnjxbC99iONB8zM/R9cbZ?=
- =?us-ascii?Q?b/ja7BXtWKlkrgOjlh+XvakIyi2K3h51/V3/89UxHXuDFAeSfILMH1iC1O7M?=
- =?us-ascii?Q?gVZZQmI9V0WMH85C8HuTQ/RRbt/vSQMPPDLqAa0HqXQi0AIuu4P38OGQWm/3?=
- =?us-ascii?Q?uFz/WuBrM/mBeddVTDWeGROY8UZsHp8KJonHUw8iWwl5VyxvVoG3u+IL/BI1?=
- =?us-ascii?Q?8WqEEbDiFlduRUhZMeRPPMe/qdghPnbRaw8gSuKsRWlruPz+j4K7JAiqSTkV?=
- =?us-ascii?Q?HEIrLQdhZTu37VPg6eTiNgDe5VE8fYa+vJUwlR0d8QwMMSAGisiJT9/WC/vo?=
- =?us-ascii?Q?QuXai/7Tyl89BbtLnSS3zhQfDYYQRK7IIrPyVMC+YhQtnpOfBnL88M+S5n9/?=
- =?us-ascii?Q?xHWo9XsV0gPyhHRNU+HbgCF2aB80hagCckDbYZ6ykT825gkkC11eDbCgqxmq?=
- =?us-ascii?Q?aMvQPoqOdUBXn27SPZlcQEy8vTJgiWG+qEVZ/tqMzq7AeS59N+ye5/IWBQ4Z?=
- =?us-ascii?Q?U4SSMExtfBtx6ZPiXL+6d1Uds2MlLaKept8a8t3Let79V2Rky0YHlRo2pUoC?=
- =?us-ascii?Q?OVHsaXhKDKi5QbWFbifXrlwHNLw6M367yqhwY9/fY0N7pXXNi2/pyRcJ9Iye?=
- =?us-ascii?Q?oxc9fUih6ZR6hprhRWHlTuLIrOLaIhPR7j9O54qk3srPD0RWG1rcF6MsPvFR?=
- =?us-ascii?Q?06dkA8LQ9vx1RhIsNIuxMycVuaDOH17eck13JELdN4L4sMNYK4p7kKdyNskD?=
- =?us-ascii?Q?ke+e/lfdsuuxTqSBUB+n+r4YmaUVIv2YaVlrzCWiDIEgnaYrfnbgDJUT3HzB?=
- =?us-ascii?Q?1wFrSEbj/ftFcSq636AGlGJ0rWZRMSKT5yjkOg6L7q/F0ke3fRyOtvgFkZnM?=
- =?us-ascii?Q?y+MAuC9rYj6Lu3DJYgRl03c+Wy7NEmWhsXGz07B5c18dHnb8jgK1Ju1il5So?=
- =?us-ascii?Q?gNgeTD3fL0MDQ0DN/q7oWnE+L4WZZ8nH458hPdJ60lzYtLCGbxluPlPouWUa?=
- =?us-ascii?Q?LGSDI1Cteg1y62a0RYRpw/jb4AO4N0JLb2MqC+BhWb4aw9l3pvFprGnup/u7?=
- =?us-ascii?Q?b7nnx9CmwQhT8TNk3IePSfyKv2IiinPS5VR2oGk2VPDu0TfCFn9+eVg2ZXMK?=
- =?us-ascii?Q?7/elkrpZLk2k2avQUC/vrqf7VwzCyc84YwlrOuiMOMP690wt3DwF+RgGirdt?=
- =?us-ascii?Q?H6xjqddxwsI3E+lKT37xvqokEBQp27+yG4pHRVnAy1ntvO5+BDaGdgUhRKlh?=
- =?us-ascii?Q?XsdB9KQ5VS2/nV7Sa5pdATy7dzWt+rd0Gen7n1D3Cf3aMO1Ds7VF97UpHObJ?=
- =?us-ascii?Q?wRZEtI1ljU6ZARXYRkwN5yysYcGzvxWKCMcLKpmxmIR1sq9je0zbUw9rPfZq?=
- =?us-ascii?Q?hV7HXAsfL4jQj1I8C9OQrBQfpOfrjyHRYwGWBa4ovzyrzuwLpY5E3MklWQgs?=
- =?us-ascii?Q?ctnFuxKJFuTh8TUOwZLpCoI1dxI6Lsj20BoT7PSCE/IoyFzSNdkuMQDatG2J?=
- =?us-ascii?Q?W8euOThNfZA/5E3mjZki6f61+b0m5skiE3ZL0DRQdXPZIW9RnxdIub29r5Vi?=
- =?us-ascii?Q?lVg/kZD+2/Wh7gWx/TjoP2VatNKbF9W9DKslTbTcqzGJ4urvqsDScaLOYeXU?=
- =?us-ascii?Q?hzyieFKG5y1spe7+WmbYuBaEdWeUyDYYWxnHu46W2AiYxHf4p3aTG+VWO+56?=
- =?us-ascii?Q?brunpiZplkAfIWEOX1WmHchTZgjPXKgN0LXzNbt02Tqq4hvawc1zJuGucxvg?=
- =?us-ascii?Q?VSfGNw/YUQ=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 078223ae-924d-4047-2f25-08de9087447b
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2026 07:12:58.5070
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mzrSqxA8JM/wfOw6e32p+zNwzsYiPMIDbxMnYD0yhHxJnoMjNsOE1wOKFGv08dy8mR3dC32ocTnoWeeJd+OU5Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8761
-X-Spamd-Result: default: False [1.34 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
-	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260402-fix-psy-max77759-usb-next-v1-1-427f5af566c3@google.com>
+X-B4-Tracking: v=1; b=H4sIAJAXzmkC/x2MQQ5AMBAAvyJ7tkk1KL4iDsViD0q6SEX8XeM4y
+ cw8IOSZBJrkAU8XC28uQpYmMCzWzYQ8RgatdKlypXHigLvcuNpgjClqPKVHR+HArLD5VJVWVQN
+ B7HdPUf7fbfe+H7R8EV1rAAAA
+X-Change-ID: 20260402-fix-psy-max77759-usb-next-15a4f86a08ce
+To: Amit Sunil Dhamne <amitsd@google.com>, 
+ Sebastian Reichel <sre@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-usb@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1775114153; l=7748;
+ i=amitsd@google.com; s=20241031; h=from:subject:message-id;
+ bh=59/AjsdipPHEtmFIyA3h6KhCPPrrp72LTkD5FeZMk/k=;
+ b=/cA759Ui37lFsiIJWmlVx2MCaJTghbsbPALCnqg5ZDIL2DNiM8O/pyvhr+gyXCG/Xp4fsMAjZ
+ UHXBmKbWx0UDXG4jIzLEBlTLOfiuX4O3QWvUQVTt7ch7Qbe1TZkuYEE
+X-Developer-Key: i=amitsd@google.com; a=ed25519;
+ pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
+X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
+ auth_id=262
+X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
+Reply-To: amitsd@google.com
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_MATCH_TO(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35837-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[nxp.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[xu.yang_2@nxp.com,linux-usb@vger.kernel.org];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35838-lists,linux-usb=lfdr.de,amitsd.google.com];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	HAS_REPLYTO(0.00)[amitsd@google.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 67C6A384FA1
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,sysfs.online:url,uevent.name:url,google-gs:email,sysfs.technology:url]
+X-Rspamd-Queue-Id: D0E7B38506F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The usb role switch will update ID and VBUS states at the same time, and
-vbus will not drop when execute data role swap in Type-C usecase. So lets
-not wait vbus drop in usb role switch case too.
+From: Amit Sunil Dhamne <amitsd@google.com>
 
-Fixes: e1b5d2bed67c ("usb: chipidea: core: handle usb role switch in a common way")
-Cc: stable@vger.kernel.org
-Acked-by: Peter Chen <peter.chen@kernel.org>
-Reviewed-by: Jun Li <jun.li@nxp.com>
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+CONSTANT_CHARGE_VOLTAGE_MAX property incorrectly uses mV instead of uV.
+Add fix to use uV as per the power-supply subsystem convention.
+
+Also, add a note indicating all the properties use non negative values.
+A negative value indicates failure with the appropriate error value. In
+that case, it should not be taken as a measurement value or status.
+
+Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+---
+This patch is a follow-up to the series [1]. [1] has been accepted in
+the USB subsystem tree (usb-next). However, since Sebastian has additional
+feedback [2], I am sending this patch to address it. Please note that this
+patch is based out of usb-next branch on usb tree. This patch should be
+applied on top of 70d7dd27f6dc ("power: supply: max77759: add charger driver").
+
+[1] https://lore.kernel.org/all/20260325-max77759-charger-v9-0-4486dd297adc@google.com/
+[2] https://lore.kernel.org/all/ac2jYUA2F5oQsA2g@venus/#t
+---
+Output of power supply selftest:
+root@google-gs:/data/power_supply# ./test_power_supply_properties.sh
+TAP version 13
+1..66
+ # Testing device max77759-charger
+ok 1 max77759-charger.exists
+ok 2 max77759-charger.uevent.NAME
+ok 3 max77759-charger.sysfs.type
+ok 4 max77759-charger.uevent.TYPE
+ok 5 max77759-charger.sysfs.usb_type # SKIP
+ # Reported: '1' ()
+ok 6 max77759-charger.sysfs.online
+ # Reported: '1' ()
+ok 7 max77759-charger.sysfs.present
+ # Reported: 'Charging'
+ok 8 max77759-charger.sysfs.status
+ok 9 max77759-charger.sysfs.capacity # SKIP
+ok 10 max77759-charger.sysfs.capacity_level # SKIP
+ok 11 max77759-charger.sysfs.model_name # SKIP
+ok 12 max77759-charger.sysfs.manufacturer # SKIP
+ok 13 max77759-charger.sysfs.serial_number # SKIP
+ok 14 max77759-charger.sysfs.technology # SKIP
+ok 15 max77759-charger.sysfs.cycle_count # SKIP
+ok 16 max77759-charger.sysfs.scope # SKIP
+ # Reported: '3000000' uA (3000 mA)
+ok 17 max77759-charger.sysfs.input_current_limit
+ok 18 max77759-charger.sysfs.input_voltage_limit # SKIP
+ok 19 max77759-charger.sysfs.voltage_now # SKIP
+ok 20 max77759-charger.sysfs.voltage_min # SKIP
+ok 21 max77759-charger.sysfs.voltage_max # SKIP
+ok 22 max77759-charger.sysfs.voltage_min_design # SKIP
+ok 23 max77759-charger.sysfs.voltage_max_design # SKIP
+ok 24 max77759-charger.sysfs.current_now # SKIP
+ok 25 max77759-charger.sysfs.current_max # SKIP
+ok 26 max77759-charger.sysfs.charge_now # SKIP
+ok 27 max77759-charger.sysfs.charge_full # SKIP
+ok 28 max77759-charger.sysfs.charge_full_design # SKIP
+ok 29 max77759-charger.sysfs.power_now # SKIP
+ok 30 max77759-charger.sysfs.energy_now # SKIP
+ok 31 max77759-charger.sysfs.energy_full # SKIP
+ok 32 max77759-charger.sysfs.energy_full_design # SKIP
+ok 33 max77759-charger.sysfs.energy_full_design # SKIP
+ # Testing device tcpm-source-psy-1-0025
+ok 34 tcpm-source-psy-1-0025.exists
+ok 35 tcpm-source-psy-1-0025.uevent.NAME
+ok 36 tcpm-source-psy-1-0025.sysfs.type
+ok 37 tcpm-source-psy-1-0025.uevent.TYPE
+ # Reported: 'C [PD] PD_PPS PD_SPR_AVS PD_PPS_SPR_AVS' ()
+ok 38 tcpm-source-psy-1-0025.sysfs.usb_type
+ # Reported: '1' ()
+ok 39 tcpm-source-psy-1-0025.sysfs.online
+ok 40 tcpm-source-psy-1-0025.sysfs.present # SKIP
+ok 41 tcpm-source-psy-1-0025.sysfs.status # SKIP
+ok 42 tcpm-source-psy-1-0025.sysfs.capacity # SKIP
+ok 43 tcpm-source-psy-1-0025.sysfs.capacity_level # SKIP
+ok 44 tcpm-source-psy-1-0025.sysfs.model_name # SKIP
+ok 45 tcpm-source-psy-1-0025.sysfs.manufacturer # SKIP
+ok 46 tcpm-source-psy-1-0025.sysfs.serial_number # SKIP
+ok 47 tcpm-source-psy-1-0025.sysfs.technology # SKIP
+ok 48 tcpm-source-psy-1-0025.sysfs.cycle_count # SKIP
+ok 49 tcpm-source-psy-1-0025.sysfs.scope # SKIP
+ok 50 tcpm-source-psy-1-0025.sysfs.input_current_limit # SKIP
+ok 51 tcpm-source-psy-1-0025.sysfs.input_voltage_limit # SKIP
+ # Reported: '5000000' uV (5 V)
+ok 52 tcpm-source-psy-1-0025.sysfs.voltage_now
+ # Reported: '5000000' uV (5 V)
+ok 53 tcpm-source-psy-1-0025.sysfs.voltage_min
+ # Reported: '5000000' uV (5 V)
+ok 54 tcpm-source-psy-1-0025.sysfs.voltage_max
+ok 55 tcpm-source-psy-1-0025.sysfs.voltage_min_design # SKIP
+ok 56 tcpm-source-psy-1-0025.sysfs.voltage_max_design # SKIP
+ # Reported: '3000000' uA (3000 mA)
+ok 57 tcpm-source-psy-1-0025.sysfs.current_now
+ # Reported: '3000000' uA (3000 mA)
+ok 58 tcpm-source-psy-1-0025.sysfs.current_max
+ok 59 tcpm-source-psy-1-0025.sysfs.charge_now # SKIP
+ok 60 tcpm-source-psy-1-0025.sysfs.charge_full # SKIP
+ok 61 tcpm-source-psy-1-0025.sysfs.charge_full_design # SKIP
+ok 62 tcpm-source-psy-1-0025.sysfs.power_now # SKIP
+ok 63 tcpm-source-psy-1-0025.sysfs.energy_now # SKIP
+ok 64 tcpm-source-psy-1-0025.sysfs.energy_full # SKIP
+ok 65 tcpm-source-psy-1-0025.sysfs.energy_full_design # SKIP
+ok 66 tcpm-source-psy-1-0025.sysfs.energy_full_design # SKIP
+ # 47 skipped test(s) detected.  Consider enabling relevant config options to improve coverage.
+ # Totals: pass:19 fail:0 xfail:0 xpass:0 skip:47 error:0
+---
+ drivers/power/supply/max77759_charger.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/power/supply/max77759_charger.c b/drivers/power/supply/max77759_charger.c
+index 9bb414599f16..58594bb78426 100644
+--- a/drivers/power/supply/max77759_charger.c
++++ b/drivers/power/supply/max77759_charger.c
+@@ -26,7 +26,7 @@
+ 
+ /* Default values for Fast Charge Current & Float Voltage */
+ #define CHG_CC_DEFAULT_UA			2266770
+-#define CHG_FV_DEFAULT_MV			4300
++#define CHG_FV_DEFAULT_UV			4300000
+ 
+ #define MAX_NUM_RETRIES				3
+ #define PSY_WORK_RETRY_DELAY_MS			10
+@@ -61,10 +61,10 @@ static const struct linear_range chgcc_limit_ranges[] = {
+ 	LINEAR_RANGE(200000, 0x3, 0x3C, 66670),
+ };
+ 
+-/* Charge Termination Voltage Limits (in mV) */
++/* Charge Termination Voltage Limits (in uV) */
+ static const struct linear_range chg_cv_prm_ranges[] = {
+-	LINEAR_RANGE(3800, 0x38, 0x39, 100),
+-	LINEAR_RANGE(4000, 0x0, 0x32, 10),
++	LINEAR_RANGE(3800000, 0x38, 0x39, 100000),
++	LINEAR_RANGE(4000000, 0x0, 0x32, 10000),
+ };
+ 
+ /* USB input current limits (in uA) */
+@@ -310,14 +310,14 @@ static int get_float_voltage(struct max77759_charger *chg)
+ 	return ret ? ret : val;
+ }
+ 
+-static int set_float_voltage_limit(struct max77759_charger *chg, u32 fv_mv)
++static int set_float_voltage_limit(struct max77759_charger *chg, u32 fv_uv)
+ {
+ 	u32 regval;
+ 	bool found;
+ 
+ 	linear_range_get_selector_high_array(chg_cv_prm_ranges,
+ 					     ARRAY_SIZE(chg_cv_prm_ranges),
+-					     fv_mv, &regval, &found);
++					     fv_uv, &regval, &found);
+ 	if (!found)
+ 		return -EINVAL;
+ 
+@@ -370,6 +370,11 @@ static const enum power_supply_property max77759_charger_props[] = {
+ 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+ };
+ 
++/*
++ * Note: None of the properties in this driver support usage of negative values.
++ * If you do see one, it's because the function is reporting an error value and
++ * should not be taken as a measurement value or status.
++ */
+ static int max77759_charger_get_property(struct power_supply *psy,
+ 					 enum power_supply_property psp,
+ 					 union power_supply_propval *pval)
+@@ -557,10 +562,10 @@ static int max77759_charger_init(struct max77759_charger *chg)
+ 		return ret;
+ 
+ 	if (power_supply_get_battery_info(chg->psy, &info)) {
+-		fv = CHG_FV_DEFAULT_MV;
++		fv = CHG_FV_DEFAULT_UV;
+ 		fast_chg_curr = CHG_CC_DEFAULT_UA;
+ 	} else {
+-		fv = info->constant_charge_voltage_max_uv / 1000;
++		fv = info->constant_charge_voltage_max_uv;
+ 		fast_chg_curr = info->constant_charge_current_max_ua;
+ 	}
+ 
 
 ---
-Changes in v2:
- - add Ack by tag
----
- drivers/usb/chipidea/otg.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+base-commit: 81ebd43cc0d6d106ce7b6ccbf7b5e40ca7f5503d
+change-id: 20260402-fix-psy-max77759-usb-next-15a4f86a08ce
 
-diff --git a/drivers/usb/chipidea/otg.c b/drivers/usb/chipidea/otg.c
-index def933b73a90..fecc7d7e2f0d 100644
---- a/drivers/usb/chipidea/otg.c
-+++ b/drivers/usb/chipidea/otg.c
-@@ -190,8 +190,8 @@ void ci_handle_id_switch(struct ci_hdrc *ci)
- 
- 		ci_role_stop(ci);
- 
--		if (role == CI_ROLE_GADGET &&
--				IS_ERR(ci->platdata->vbus_extcon.edev))
-+		if (role == CI_ROLE_GADGET && !ci->role_switch &&
-+		    IS_ERR(ci->platdata->vbus_extcon.edev))
- 			/*
- 			 * Wait vbus lower than OTGSC_BSV before connecting
- 			 * to host. If connecting status is from an external
+Best regards,
 -- 
-2.34.1
+Amit Sunil Dhamne <amitsd@google.com>
+
 
 
