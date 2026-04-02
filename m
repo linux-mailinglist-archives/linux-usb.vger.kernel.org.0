@@ -1,149 +1,356 @@
-Return-Path: <linux-usb+bounces-35914-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35915-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qOxhJ9Przmn/rwYAu9opvQ
-	(envelope-from <linux-usb+bounces-35914-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 03 Apr 2026 00:21:07 +0200
+	id CBdeLajtzmkvsAYAu9opvQ
+	(envelope-from <linux-usb+bounces-35915-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 03 Apr 2026 00:28:56 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D0EC38EC22
-	for <lists+linux-usb@lfdr.de>; Fri, 03 Apr 2026 00:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EDE938EC97
+	for <lists+linux-usb@lfdr.de>; Fri, 03 Apr 2026 00:28:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 05460302DF48
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 22:20:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 06ADA302BDF4
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 22:28:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84B8C3C9EF7;
-	Thu,  2 Apr 2026 22:20:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B1663CBE6F;
+	Thu,  2 Apr 2026 22:28:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="prUW9UT3"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="OrPGrj6H"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1297B36D51B;
-	Thu,  2 Apr 2026 22:20:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775168457; cv=none; b=UXDsA9B3F081WZno8+5eCiaynd6NH2uQL8fO6MCM0adwiMa9pRExshmxW8NerKJNGWilCjTIjZbAbE9WTFxFZePgMsCWSPqQEre2dYJtjz6FO8TVQ/y1WYPpdsuciVDNrtq0NGTwEROcF/OGkZUko8QyhebWJlTcCE/+cgslHjk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775168457; c=relaxed/simple;
-	bh=KE5CJQvzLY7UMhd/2yz8skIZOhhpRl5F0TjWND7YUkI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=ZtxXfIt4LwDW1GtQUKRkQxb2Q/YwLU+AZtUnXCShUQfFf8mPNID9h+1L++eRDmGowCN7JSutKjd6rfzOG+xGBJqBfkpkf+eM0ro7qcKZ+16fyNrMH5ltlbiTBd7s+fsgfYCGM/XvpL0Cf18bqP1BP2gHjG7cdHbEXNuHphtOjp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=prUW9UT3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77D8AC116C6;
-	Thu,  2 Apr 2026 22:20:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775168456;
-	bh=KE5CJQvzLY7UMhd/2yz8skIZOhhpRl5F0TjWND7YUkI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=prUW9UT3rmyzotQUUTkrod77DHp5m0ZeQwv/pLDDsFw61hdnQwmDt6kbTMrlmHXU4
-	 Yav12lrsXexlysCdiZa/s+L93vFGEtXNLrXgQFQu0ZCXxoKQVIw0fJsUA8mxnZMGHw
-	 /W5mbO7pMFwX56f2y+HnMPgOi9DNndI+cBzkSJxt/hU1UbW7AjapGJxaWqBfVfUD8J
-	 PDuDkOVALGisc0MdTmzy0+gWJ6IuYkecZGM8Vgjf/0BhX3Afg6KO4cpSTJhRWwzGC7
-	 Uio39ErNSNf+E0wuiJtGKnYaZaJrtFIJ13+WK6PFIhkbWK4oSQhxS/ozaajRXOQiZq
-	 saOofhH1rQ8ag==
-Date: Thu, 2 Apr 2026 17:20:55 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Georg Klima <Georg.Klima@durst-group.com>
-Cc: linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Georg Klima <georg_klima@gmx.at>, Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
-Subject: Re: AW: [BUG] Thunderbolt runtime resume during PCIe removal causes
- IRQ warning and shutdown failure.
-Message-ID: <20260402222055.GA293966@bhelgaas>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7841935F600;
+	Thu,  2 Apr 2026 22:28:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775168914; cv=pass; b=c9NhW/NwlD8Cd9ZVizfQVYVVwbjd0l/XpXddJ+/31NCEMUz+r1/V61HnM/6rQCcm1VNcgkp4/v0ReCN+jCuRl8KspLjo78U3YMJf8t1+GMVGyiKgb5W6ByQK6jviQnz2tABg8CNQk1DD78jZoLySDFk/zU8FlPs0GUwz6UuIHcc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775168914; c=relaxed/simple;
+	bh=cWzhn33xN51nFRRVvV+KNBhpCFESH6n3aNwLqKxIu0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hlXamX1LBbh+bW1c6X/ABMwbEwiL/209wp+If4Ao+mYYUENe0FEDse1vNZvfWu9dGvxMOmbx0vr/VhI19Y9ID2YfiULgVVvjRvnplXz/iDDBBBWFzzSm0zfGM6Ik8t8s55ufsJwAqy18o2MOxfNHX111jnEjgSkfOGmStC555aE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=OrPGrj6H; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1775168906; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=X4VT53uawtnjS1Niwvm5ZXCp/7cNdPRHYjAqgi0fd/Y+Sf+bHMXUaeFwLxvUozbSyIOV6uyGygXwqtGZIybHzh/s9XEho1tuoXBX01AnSKptTNua0/nZyJVYi9Cilps8UBSSt6rK8pQkNEYTHWmJZFCLy69tRozPV2q1OgbZkmE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1775168906; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=FkxMUYx+N68uEm8Mh0vleqxZg/nlV5YrzMF+2ER7ebo=; 
+	b=NA46oTftH2KOo5VVC4u4KMrA3DMqf7+mlJiCh1CbSIOXHP+9zYGEKOFVhhTrAy72ZCP0j5GVTpbzOB6F1ZUhJUwZ5Ozp7lPODet2iE+337fpY1nzGjr3lWO+Zd/p5jBsd4ylIybu9rgwbZ3LqaOBx2TAEriAU9pSLzTw3Dlq7qI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1775168906;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=FkxMUYx+N68uEm8Mh0vleqxZg/nlV5YrzMF+2ER7ebo=;
+	b=OrPGrj6H1ZF2YPsCwWSKm38HhIOjBd1lBJENb6dCnBCKn2TOUZ/H/V/cxvQbbQ7U
+	xunz6FU1mOWGj4i8fFwsZlf74Ug7M9kBtPkauSYBqaX8Ltl+TPoFFzNjnXnkQDJFMEn
+	GhiJXaHdSVYM3kFwbrJOip0QY9LsIgLh63+n4Tfg=
+Received: by mx.zohomail.com with SMTPS id 1775168905106236.55627358469133;
+	Thu, 2 Apr 2026 15:28:25 -0700 (PDT)
+Received: by venus (Postfix, from userid 1000)
+	id 067321812B4; Fri, 03 Apr 2026 00:28:22 +0200 (CEST)
+Date: Fri, 3 Apr 2026 00:28:21 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: amitsd@google.com
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	=?utf-8?B?QW5kcsOp?= Draszik <andre.draszik@linaro.org>, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-usb@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>
+Subject: Re: [PATCH] power: supply: max77759_charger: fix voltage scale (mV
+ -> uV)
+Message-ID: <ac7s4IzdF1KGu1mO@venus>
+References: <20260402-fix-psy-max77759-usb-next-v1-1-427f5af566c3@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dx6jhw4hlgbh6bru"
 Content-Disposition: inline
-In-Reply-To: <AM9PR10MB4231D6536D271E1F5A81F3D1B757A@AM9PR10MB4231.EURPRD10.PROD.OUTLOOK.COM>
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+In-Reply-To: <20260402-fix-psy-max77759-usb-next-v1-1-427f5af566c3@google.com>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-0.1.0.1.4.3/275.137.35
+X-ZohoMailClient: External
+X-Spamd-Result: default: False [-3.76 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
+	R_DKIM_ALLOW(-0.20)[collabora.com:s=zohomail];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-35914-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmx.at,wunner.de,gmail.com,kernel.org];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	DKIM_TRACE(0.00)[collabora.com:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35915-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[helgaas@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3D0EC38EC22
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sebastian.reichel@collabora.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,google-gs:email]
+X-Rspamd-Queue-Id: 0EDE938EC97
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-[+cc Thunderbolt & pciehp folks, initial report of system poweroff
-failure at
-https://lore.kernel.org/all/AM9PR10MB42316BF3E59B29E1EA3E5600B756A@AM9PR10MB4231.EURPRD10.PROD.OUTLOOK.COM]
 
-On Fri, Mar 27, 2026 at 05:28:28PM +0000, Georg Klima wrote:
-> Hi Bjorn,
-> 
-> Upstream without nvidia, more debug, same issue with aspm default:
+--dx6jhw4hlgbh6bru
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] power: supply: max77759_charger: fix voltage scale (mV
+ -> uV)
+MIME-Version: 1.0
 
-Thanks for this test with an upstream kernel (6.19.10).  Complete
-dmesg log was attached to
-https://lore.kernel.org/all/AM9PR10MB4231D6536D271E1F5A81F3D1B757A@AM9PR10MB4231.EURPRD10.PROD.OUTLOOK.COM/
+Hi,
 
-Linux only requests control of PME, AER, hotplug, etc if Linux
-supports ASPM and MSI.  "pcie_aspm=off" means Linux doesn't support
-ASPM, so it doesn't request control:
+On Thu, Apr 02, 2026 at 07:15:29AM +0000, Amit Sunil Dhamne via B4 Relay wr=
+ote:
+> From: Amit Sunil Dhamne <amitsd@google.com>
+>=20
+> CONSTANT_CHARGE_VOLTAGE_MAX property incorrectly uses mV instead of uV.
+> Add fix to use uV as per the power-supply subsystem convention.
+>=20
+> Also, add a note indicating all the properties use non negative values.
+> A negative value indicates failure with the appropriate error value. In
+> that case, it should not be taken as a measurement value or status.
+>=20
+> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> ---
+> This patch is a follow-up to the series [1]. [1] has been accepted in
+> the USB subsystem tree (usb-next). However, since Sebastian has additional
+> feedback [2], I am sending this patch to address it. Please note that this
+> patch is based out of usb-next branch on usb tree. This patch should be
+> applied on top of 70d7dd27f6dc ("power: supply: max77759: add charger dri=
+ver").
+>=20
+> [1] https://lore.kernel.org/all/20260325-max77759-charger-v9-0-4486dd297a=
+dc@google.com/
+> [2] https://lore.kernel.org/all/ac2jYUA2F5oQsA2g@venus/#t
+> ---
 
-  --- dmesg_aspm_off.txt
-  +++ dmesg_actual.txt
-  - acpi PNP0A08:01: _OSC: OS supports [ExtendedConfig Segments MSI EDR HPX-Type3]
-  + acpi PNP0A08:01: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI EDR HPX-Type3]
-  - acpi PNP0A08:01: _OSC: not requesting OS control; OS requires [ExtendedConfig ASPM ClockPM MSI]
-  + acpi PNP0A08:01: _OSC: OS now controls [PCIeHotplug SHPCHotplug PME AER PCIeCapability LTR DPC]
+Fixes: 70d7dd27f6dc ("power: supply: max77759: add charger driver")
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-I suspect the issue is related to those services, not to ASPM itself.
-Booting with "pcie_port_pm=off" might be a more targeted workaround.
+Greetings,
 
-You have this topology:
+-- Sebastian
 
-  0000:80:1b.4: [8086:7f44] PCIe Root Port to [bus 88-d8]
-  0000:88:00.0: [8086:5780] PCIe Switch Upstream Port (JHL9580 Thunderbolt 5)
+> Output of power supply selftest:
+> root@google-gs:/data/power_supply# ./test_power_supply_properties.sh
+> TAP version 13
+> 1..66
+>  # Testing device max77759-charger
+> ok 1 max77759-charger.exists
+> ok 2 max77759-charger.uevent.NAME
+> ok 3 max77759-charger.sysfs.type
+> ok 4 max77759-charger.uevent.TYPE
+> ok 5 max77759-charger.sysfs.usb_type # SKIP
+>  # Reported: '1' ()
+> ok 6 max77759-charger.sysfs.online
+>  # Reported: '1' ()
+> ok 7 max77759-charger.sysfs.present
+>  # Reported: 'Charging'
+> ok 8 max77759-charger.sysfs.status
+> ok 9 max77759-charger.sysfs.capacity # SKIP
+> ok 10 max77759-charger.sysfs.capacity_level # SKIP
+> ok 11 max77759-charger.sysfs.model_name # SKIP
+> ok 12 max77759-charger.sysfs.manufacturer # SKIP
+> ok 13 max77759-charger.sysfs.serial_number # SKIP
+> ok 14 max77759-charger.sysfs.technology # SKIP
+> ok 15 max77759-charger.sysfs.cycle_count # SKIP
+> ok 16 max77759-charger.sysfs.scope # SKIP
+>  # Reported: '3000000' uA (3000 mA)
+> ok 17 max77759-charger.sysfs.input_current_limit
+> ok 18 max77759-charger.sysfs.input_voltage_limit # SKIP
+> ok 19 max77759-charger.sysfs.voltage_now # SKIP
+> ok 20 max77759-charger.sysfs.voltage_min # SKIP
+> ok 21 max77759-charger.sysfs.voltage_max # SKIP
+> ok 22 max77759-charger.sysfs.voltage_min_design # SKIP
+> ok 23 max77759-charger.sysfs.voltage_max_design # SKIP
+> ok 24 max77759-charger.sysfs.current_now # SKIP
+> ok 25 max77759-charger.sysfs.current_max # SKIP
+> ok 26 max77759-charger.sysfs.charge_now # SKIP
+> ok 27 max77759-charger.sysfs.charge_full # SKIP
+> ok 28 max77759-charger.sysfs.charge_full_design # SKIP
+> ok 29 max77759-charger.sysfs.power_now # SKIP
+> ok 30 max77759-charger.sysfs.energy_now # SKIP
+> ok 31 max77759-charger.sysfs.energy_full # SKIP
+> ok 32 max77759-charger.sysfs.energy_full_design # SKIP
+> ok 33 max77759-charger.sysfs.energy_full_design # SKIP
+>  # Testing device tcpm-source-psy-1-0025
+> ok 34 tcpm-source-psy-1-0025.exists
+> ok 35 tcpm-source-psy-1-0025.uevent.NAME
+> ok 36 tcpm-source-psy-1-0025.sysfs.type
+> ok 37 tcpm-source-psy-1-0025.uevent.TYPE
+>  # Reported: 'C [PD] PD_PPS PD_SPR_AVS PD_PPS_SPR_AVS' ()
+> ok 38 tcpm-source-psy-1-0025.sysfs.usb_type
+>  # Reported: '1' ()
+> ok 39 tcpm-source-psy-1-0025.sysfs.online
+> ok 40 tcpm-source-psy-1-0025.sysfs.present # SKIP
+> ok 41 tcpm-source-psy-1-0025.sysfs.status # SKIP
+> ok 42 tcpm-source-psy-1-0025.sysfs.capacity # SKIP
+> ok 43 tcpm-source-psy-1-0025.sysfs.capacity_level # SKIP
+> ok 44 tcpm-source-psy-1-0025.sysfs.model_name # SKIP
+> ok 45 tcpm-source-psy-1-0025.sysfs.manufacturer # SKIP
+> ok 46 tcpm-source-psy-1-0025.sysfs.serial_number # SKIP
+> ok 47 tcpm-source-psy-1-0025.sysfs.technology # SKIP
+> ok 48 tcpm-source-psy-1-0025.sysfs.cycle_count # SKIP
+> ok 49 tcpm-source-psy-1-0025.sysfs.scope # SKIP
+> ok 50 tcpm-source-psy-1-0025.sysfs.input_current_limit # SKIP
+> ok 51 tcpm-source-psy-1-0025.sysfs.input_voltage_limit # SKIP
+>  # Reported: '5000000' uV (5 V)
+> ok 52 tcpm-source-psy-1-0025.sysfs.voltage_now
+>  # Reported: '5000000' uV (5 V)
+> ok 53 tcpm-source-psy-1-0025.sysfs.voltage_min
+>  # Reported: '5000000' uV (5 V)
+> ok 54 tcpm-source-psy-1-0025.sysfs.voltage_max
+> ok 55 tcpm-source-psy-1-0025.sysfs.voltage_min_design # SKIP
+> ok 56 tcpm-source-psy-1-0025.sysfs.voltage_max_design # SKIP
+>  # Reported: '3000000' uA (3000 mA)
+> ok 57 tcpm-source-psy-1-0025.sysfs.current_now
+>  # Reported: '3000000' uA (3000 mA)
+> ok 58 tcpm-source-psy-1-0025.sysfs.current_max
+> ok 59 tcpm-source-psy-1-0025.sysfs.charge_now # SKIP
+> ok 60 tcpm-source-psy-1-0025.sysfs.charge_full # SKIP
+> ok 61 tcpm-source-psy-1-0025.sysfs.charge_full_design # SKIP
+> ok 62 tcpm-source-psy-1-0025.sysfs.power_now # SKIP
+> ok 63 tcpm-source-psy-1-0025.sysfs.energy_now # SKIP
+> ok 64 tcpm-source-psy-1-0025.sysfs.energy_full # SKIP
+> ok 65 tcpm-source-psy-1-0025.sysfs.energy_full_design # SKIP
+> ok 66 tcpm-source-psy-1-0025.sysfs.energy_full_design # SKIP
+>  # 47 skipped test(s) detected.  Consider enabling relevant config option=
+s to improve coverage.
+>  # Totals: pass:19 fail:0 xfail:0 xpass:0 skip:47 error:0
+> ---
+>  drivers/power/supply/max77759_charger.c | 21 +++++++++++++--------
+>  1 file changed, 13 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/max77759_charger.c b/drivers/power/supp=
+ly/max77759_charger.c
+> index 9bb414599f16..58594bb78426 100644
+> --- a/drivers/power/supply/max77759_charger.c
+> +++ b/drivers/power/supply/max77759_charger.c
+> @@ -26,7 +26,7 @@
+> =20
+>  /* Default values for Fast Charge Current & Float Voltage */
+>  #define CHG_CC_DEFAULT_UA			2266770
+> -#define CHG_FV_DEFAULT_MV			4300
+> +#define CHG_FV_DEFAULT_UV			4300000
+> =20
+>  #define MAX_NUM_RETRIES				3
+>  #define PSY_WORK_RETRY_DELAY_MS			10
+> @@ -61,10 +61,10 @@ static const struct linear_range chgcc_limit_ranges[]=
+ =3D {
+>  	LINEAR_RANGE(200000, 0x3, 0x3C, 66670),
+>  };
+> =20
+> -/* Charge Termination Voltage Limits (in mV) */
+> +/* Charge Termination Voltage Limits (in uV) */
+>  static const struct linear_range chg_cv_prm_ranges[] =3D {
+> -	LINEAR_RANGE(3800, 0x38, 0x39, 100),
+> -	LINEAR_RANGE(4000, 0x0, 0x32, 10),
+> +	LINEAR_RANGE(3800000, 0x38, 0x39, 100000),
+> +	LINEAR_RANGE(4000000, 0x0, 0x32, 10000),
+>  };
+> =20
+>  /* USB input current limits (in uA) */
+> @@ -310,14 +310,14 @@ static int get_float_voltage(struct max77759_charge=
+r *chg)
+>  	return ret ? ret : val;
+>  }
+> =20
+> -static int set_float_voltage_limit(struct max77759_charger *chg, u32 fv_=
+mv)
+> +static int set_float_voltage_limit(struct max77759_charger *chg, u32 fv_=
+uv)
+>  {
+>  	u32 regval;
+>  	bool found;
+> =20
+>  	linear_range_get_selector_high_array(chg_cv_prm_ranges,
+>  					     ARRAY_SIZE(chg_cv_prm_ranges),
+> -					     fv_mv, &regval, &found);
+> +					     fv_uv, &regval, &found);
+>  	if (!found)
+>  		return -EINVAL;
+> =20
+> @@ -370,6 +370,11 @@ static const enum power_supply_property max77759_cha=
+rger_props[] =3D {
+>  	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+>  };
+> =20
+> +/*
+> + * Note: None of the properties in this driver support usage of negative=
+ values.
+> + * If you do see one, it's because the function is reporting an error va=
+lue and
+> + * should not be taken as a measurement value or status.
+> + */
+>  static int max77759_charger_get_property(struct power_supply *psy,
+>  					 enum power_supply_property psp,
+>  					 union power_supply_propval *pval)
+> @@ -557,10 +562,10 @@ static int max77759_charger_init(struct max77759_ch=
+arger *chg)
+>  		return ret;
+> =20
+>  	if (power_supply_get_battery_info(chg->psy, &info)) {
+> -		fv =3D CHG_FV_DEFAULT_MV;
+> +		fv =3D CHG_FV_DEFAULT_UV;
+>  		fast_chg_curr =3D CHG_CC_DEFAULT_UA;
+>  	} else {
+> -		fv =3D info->constant_charge_voltage_max_uv / 1000;
+> +		fv =3D info->constant_charge_voltage_max_uv;
+>  		fast_chg_curr =3D info->constant_charge_current_max_ua;
+>  	}
+> =20
+>=20
+> ---
+> base-commit: 81ebd43cc0d6d106ce7b6ccbf7b5e40ca7f5503d
+> change-id: 20260402-fix-psy-max77759-usb-next-15a4f86a08ce
+>=20
+> Best regards,
+> --=20
+> Amit Sunil Dhamne <amitsd@google.com>
+>=20
+>=20
 
-and the first thing I see in the 6.19.10 log is this, which makes me
-think we put the Thunderbolt controller at 88:00.0 into D3 and are
-trying to bring it back to D0 but it took too long, so we can't access
-downstream devices like b1:00.0:
+--dx6jhw4hlgbh6bru
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  Mar 27 18:08:40 fedora kernel: pcieport 0000:80:1b.4: Data Link Layer Link Active not set in 100 msec
-  Mar 27 18:08:40 fedora kernel: pcieport 0000:80:1b.4: pciehp: Slot(25): Card not present
-  Mar 27 18:08:40 fedora kernel: xhci_hcd 0000:b1:00.0: Controller not ready at resume -19
-  Mar 27 18:08:40 fedora kernel: ------------[ cut here ]------------
-  Mar 27 18:08:40 fedora kernel: xhci_hcd 0000:b1:00.0: PCI post-resume error -19!
-  Mar 27 18:08:40 fedora kernel: thunderbolt 0000:8a:00.0: interrupt for TX ring 0 is already enabled
-  Mar 27 18:08:40 fedora kernel:  tb_ring_start+0x149/0x330 [thunderbolt]
-  Mar 27 18:08:40 fedora kernel:  tb_ctl_start+0x1b/0xc0 [thunderbolt]
-  Mar 27 18:08:40 fedora kernel:  tb_domain_runtime_resume+0x19/0x40 [thunderbolt]
-  Mar 27 18:08:40 fedora kernel:  __rpm_callback+0x48/0x1f0
-  Mar 27 18:08:40 fedora kernel:  rpm_callback+0x6d/0x80
-  Mar 27 18:08:40 fedora kernel:  rpm_resume+0x4ab/0x6d0
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmnO7YEACgkQ2O7X88g7
++pr9ig/9F9w6eJfG3PUgCOqQcRT+kudS/TQkIq6nvAg6aacY7eZ0AgjGW8swlEgt
+0loTiMR2TU2ALt6eSF2Avq2r2+c7yXzcBI0geTJRSCdsZ0gqx4mDG6Z64C9nrH5m
+OeBMMZ+Tjqk9L0bw075fDhlUeRAy9jvHMU5k06TGeKYl343YFGB+yJMd7+9mg9rT
+gOYCCv9JVvH7t1y3OyREe2f9qPOKH93/0fJPAOh0BmEijEAkQT1mnKLAqJjiyV49
+/7Cyy6P+JOQ5fdyfBf+K6cZ8WMyhsM4a8HGOd+qpyWCEtdO+0UQKJZ6oP9QX2HR8
+esFn9zkTEHwhsvRrWfYd7F+HjZQgUzRRFTXWL1xbt7xww84/8+VQYSPJAoncG9r0
+H+L0Y7lJphSQQ9zQ3UtO8VRRmmO7cPJq/tn4ymOimeNjQZ3a/Ot+93vWsKHljaSo
+S/1G42yTpc8Hfc1B0XFkeNRmQTdTciEbLszgVfZKrUh1WAg6p1JtA/6XAXsL6WXS
+B1Cf9YeOneeJR1AiVgK3DdjL+7fP4HkNMxr2uWhdLVT8h0zXbCM9epxb4VwxI/rM
+0MX8V6tANlBWiBD7RwoDAFdHsRSb3xOni1y97/1d6u6ZvOjIttob2wlDr1QWc9Ic
+OGO51COYWxXGnR/14jXRv/duiVNQvkEHe5X+DdPq/yDMsnl/hEc=
+=j6ci
+-----END PGP SIGNATURE-----
+
+--dx6jhw4hlgbh6bru--
 
