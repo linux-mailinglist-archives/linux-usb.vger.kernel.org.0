@@ -1,74 +1,74 @@
-Return-Path: <linux-usb+bounces-35875-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35876-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8JSLMDVvzmnxngYAu9opvQ
-	(envelope-from <linux-usb+bounces-35875-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 15:29:25 +0200
+	id QLh+BrRszmmpngYAu9opvQ
+	(envelope-from <linux-usb+bounces-35876-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 15:18:44 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E17D389BE1
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 15:29:25 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2029D389898
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 15:18:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 299B631403E8
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 13:17:43 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id BB8503047510
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 13:17:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A2B2D8DC3;
-	Thu,  2 Apr 2026 13:17:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5FB82F3C3D;
+	Thu,  2 Apr 2026 13:17:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SBvSZj78"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j8YkjYQ9"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12F4D2F1FEA
-	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 13:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022F12D8DDB
+	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 13:17:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775135849; cv=none; b=QOf9drHPlhf8CFzzVYWBJRlJS9IgVJ9Mo/1B2F7iMUQRE2/e5QzavNYDu28OiKWXjSsLaDxhJFea3jzL/twddmQGfyTJ1jRd/JdzklFBk69aj5IBbfJiEu/YY9PTT96RE3lyTdekpEfn7uNVSZs6EG6nWf0WjRyeX4ya0yN2dx0=
+	t=1775135851; cv=none; b=cIDuOI1O2PBEfG1x3PIdqfv8Bsr8j3bQZD9ufBFyW+2lvju4yuy/6v/MUNK9t/chJlVp/hj4qMnG2d8lL/rNAUH8Gy238MPJG05K7ZzkjQv9aNJCxYpK7Uvd//XBf73AeNFn6eb4gcvnqJS1YocjNv4HknR9ur63Mo/4nUKzVU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775135849; c=relaxed/simple;
-	bh=ahO45hTmcjfkAcBd6tg+k/e8NqSea7OKH/O0+fOge4c=;
+	s=arc-20240116; t=1775135851; c=relaxed/simple;
+	bh=vxLq6tgmDW3jTkeVusLASJtq9McLYLeNBdrOiFHi7HU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Kskan0fFhtu7MAPhKxfbJMTSfppA3tec0ghHs//8LdSYxa76ERD8b5YxQimZZqvuTt7FMOJtT90MXivbikjwkXSN75nItcC9UNtHWKE1LGxS2X/AYsm9p8YJGPLPjdeuRTcGtby48pUzeX0uozaAg8dmQ6n8XMQFY4wNPn3WD5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SBvSZj78; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version; b=RRui8S0czuQm7AvAHGFsiUZGfbyejNi7TjB9d6S5jJfmFo634C9PlIpIqrnAQqZuAM2vhqKGaLFelHjWpJOJ9Xxc+TJJZSLzLQNg4Q4ncQN0lq4ooLz55INQvZFWu7xMZ4wzSoC61t1rzoBxNcKVmBhxZxNHtZRsPFnqhX+4GOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j8YkjYQ9; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775135848; x=1806671848;
+  t=1775135850; x=1806671850;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ahO45hTmcjfkAcBd6tg+k/e8NqSea7OKH/O0+fOge4c=;
-  b=SBvSZj78lAKfD+jrcU7S6QSaZq8LLvjt73pZW68dXSMLYHN9oMkjN2qP
-   A79M+J6nazq5mX+TFHBzk+9CKKdmW3xU2jagM0WAuuebe6ITqmN+phPa/
-   Zmf9+NpkQPtXMpMTRFpv9IVVHreS969Zz+jB9u/qRAgJ4G7ERV5N14qF4
-   CjFJ13VhbDeo4y0we8x3A4ELJKRCWdyV2LrNQol44LpkOQjsbD0T5yPv9
-   KCnUNeaUFYVPxskX9RPy5Xd0i4TNKA+i8lilhzy+QR0aiDZa+K1+qsHGe
-   YhsmOTXegzSdGrfpmz+3MF1dJABszTcq0kx6eXjRt3WVqa6c1qSDJ0+ZC
-   Q==;
-X-CSE-ConnectionGUID: RO6OTIwpQ16om4dDzmTxCw==
-X-CSE-MsgGUID: Cigi0NJiSE+lOFkEtbZlKA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11746"; a="87650855"
+  bh=vxLq6tgmDW3jTkeVusLASJtq9McLYLeNBdrOiFHi7HU=;
+  b=j8YkjYQ9hEV7VjPLBBsGhNTy5oM5lF1LmAYIXyLxsYlGd4328P5aqfCr
+   sF4VgeEzYX22rHMkhSey83K1FBCPG0ERQYlEIiB5Rq4SEJpKvzN20VrXk
+   CchLm7G0ULM2VkpOQUT6Ip5zYv74tDsx1LoFeHngPps2OU0Zh10YKPBir
+   SmRod2/PVvFKjl6sj6u9qSzAd6+ZbEZAGgIRhT4FvdGTrpJZsgPYg+SyV
+   IT3WSwPyNREAo0nlfQMMSc/Yzerl980GIWkScy2Knb0L+kRmxT124FLJ4
+   /sMc/m3keS/bCbp5aJIZm1a1VEn/JnAB1i6uOYHC+rMW8DSgtdBM62Ndh
+   w==;
+X-CSE-ConnectionGUID: 9ujHZ8LPQHeMeqzGGzor3Q==
+X-CSE-MsgGUID: XWxMhOp5R7mSeVTBYDYQvA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11746"; a="87650857"
 X-IronPort-AV: E=Sophos;i="6.23,155,1770624000"; 
-   d="scan'208";a="87650855"
+   d="scan'208";a="87650857"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 06:17:28 -0700
-X-CSE-ConnectionGUID: nHOqXWeiTgy9dABz54FJcQ==
-X-CSE-MsgGUID: 5c09mH/nSZuH4fmL2iNK3Q==
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 06:17:30 -0700
+X-CSE-ConnectionGUID: QG+t8XjXTwO+KCIifPi72A==
+X-CSE-MsgGUID: qS4KwtrXSwmKNzi9zZKPJQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,155,1770624000"; 
-   d="scan'208";a="227241527"
+   d="scan'208";a="227241530"
 Received: from pgcooper-mobl3.ger.corp.intel.com (HELO mnyman-desk.intel.com) ([10.245.245.50])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 06:17:27 -0700
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 06:17:29 -0700
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
 	Niklas Neronin <niklas.neronin@linux.intel.com>,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 10/25] usb: xhci: split core allocation and initialization
-Date: Thu,  2 Apr 2026 16:13:27 +0300
-Message-ID: <20260402131342.2628648-11-mathias.nyman@linux.intel.com>
+Subject: [PATCH 11/25] usb: xhci: improve debug messages during suspend
+Date: Thu,  2 Apr 2026 16:13:28 +0300
+Message-ID: <20260402131342.2628648-12-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260402131342.2628648-1-mathias.nyman@linux.intel.com>
 References: <20260402131342.2628648-1-mathias.nyman@linux.intel.com>
@@ -84,7 +84,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -93,9 +93,9 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35875-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35876-lists,linux-usb=lfdr.de];
 	RCPT_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
@@ -104,120 +104,143 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,intel.com:email]
-X-Rspamd-Queue-Id: 3E17D389BE1
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,linux.intel.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 2029D389898
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 
-Separate allocation and initialization in the xHCI core:
-* xhci_mem_init() now only handles memory allocation.
-* xhci_init() now only handles initialization.
+Improve debug output for suspend failures, particularly when the controller
+handshake does not complete. This will become important as upcoming patches
+significantly rework the resume path, making more detailed suspend-side
+messages valuable for debugging.
 
-This split allows xhci_init() to be reused when resuming from S4
-suspend-to-disk.
+Add an explicit check of the Save/Restore Error (SRE) flag after a
+successful Save State (CSS) operation. The xHCI specification
+(note in section 4.23.2) states:
+
+ "After a Save or Restore State operation completes, the
+  Save/Restore Error (SRE) flag in USBSTS should be checked to
+  ensure the operation completed successfully."
+
+Currently, the SRE error is only observed and warning is printed.
+This patch does not introduce deeper error handling, as the correct
+response is unclear and changes to suspend behavior may risk regressions
+once the resume path is updated.
+
+Additionally, simplify and clean up the suspend USBSTS CSS/SSS
+handling code, improving readability and quirk handling for AMD
+SNPS xHC controllers that occasionally do not clear the SSS bit.
 
 Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-mem.c |  3 +++
- drivers/usb/host/xhci.c     | 30 ++++++++++--------------------
- 2 files changed, 13 insertions(+), 20 deletions(-)
+ drivers/usb/host/xhci.c | 65 +++++++++++++++++++++++------------------
+ 1 file changed, 37 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 2cd6111c9707..f1b4f06d4b8b 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -2421,6 +2421,8 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 	struct device	*dev = xhci_to_hcd(xhci)->self.sysdev;
- 	dma_addr_t	dma;
- 
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Starting %s", __func__);
-+
- 	/*
- 	 * xHCI section 5.4.6 - Device Context array must be
- 	 * "physically contiguous and 64-byte (cache line) aligned".
-@@ -2510,6 +2512,7 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 	if (xhci_setup_port_arrays(xhci, flags))
- 		goto fail;
- 
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Finished %s", __func__);
- 	return 0;
- 
- fail:
 diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 674bd40e4e2d..9e2e2c2ed0e0 100644
+index 9e2e2c2ed0e0..2c573aad4464 100644
 --- a/drivers/usb/host/xhci.c
 +++ b/drivers/usb/host/xhci.c
-@@ -536,24 +536,13 @@ static void xhci_set_dev_notifications(struct xhci_hcd *xhci)
- 	writel(dev_notf, &xhci->op_regs->dev_notification);
- }
- 
--/*
-- * Initialize memory for HCD and xHC (one-time init).
-- *
-- * Program the PAGESIZE register, initialize the device context array, create
-- * device contexts (?), set up a command ring segment (or two?), create event
-- * ring (one for now).
-- */
--static int xhci_init(struct usb_hcd *hcd)
-+/* Setup basic xHCI registers */
-+static void xhci_init(struct usb_hcd *hcd)
+@@ -957,11 +957,11 @@ static bool xhci_pending_portevent(struct xhci_hcd *xhci)
+  */
+ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
  {
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
--	int retval;
+-	int			rc = 0;
++	int			err;
+ 	unsigned int		delay = XHCI_MAX_HALT_USEC * 2;
+ 	struct usb_hcd		*hcd = xhci_to_hcd(xhci);
+ 	u32			command;
+-	u32			res;
++	u32			usbsts;
  
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Starting %s", __func__);
+ 	if (!hcd->state)
+ 		return 0;
+@@ -1007,11 +1007,10 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
+ 	/* Some chips from Fresco Logic need an extraordinary delay */
+ 	delay *= (xhci->quirks & XHCI_SLOW_SUSPEND) ? 10 : 1;
  
--	retval = xhci_mem_init(xhci, GFP_KERNEL);
--	if (retval)
--		return retval;
--
- 	/* Set the Number of Device Slots Enabled to the maximum supported value */
- 	xhci_enable_max_dev_slots(xhci);
+-	if (xhci_handshake(&xhci->op_regs->status,
+-		      STS_HALT, STS_HALT, delay)) {
+-		xhci_warn(xhci, "WARN: xHC CMD_RUN timeout\n");
+-		spin_unlock_irq(&xhci->lock);
+-		return -ETIMEDOUT;
++	err = xhci_handshake(&xhci->op_regs->status, STS_HALT, STS_HALT, delay);
++	if (err) {
++		xhci_warn(xhci, "Clearing Run/Stop bit failed %d\n", err);
++		goto handshake_error;
+ 	}
+ 	xhci_clear_command_ring(xhci);
  
-@@ -589,7 +578,6 @@ static int xhci_init(struct usb_hcd *hcd)
+@@ -1022,28 +1021,34 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
+ 	command = readl(&xhci->op_regs->command);
+ 	command |= CMD_CSS;
+ 	writel(command, &xhci->op_regs->command);
++
++	err = xhci_handshake(&xhci->op_regs->status, STS_SAVE, 0, 20 * USEC_PER_MSEC);
++	usbsts = readl(&xhci->op_regs->status);
+ 	xhci->broken_suspend = 0;
+-	if (xhci_handshake(&xhci->op_regs->status,
+-				STS_SAVE, 0, 20 * 1000)) {
+-	/*
+-	 * AMD SNPS xHC 3.0 occasionally does not clear the
+-	 * SSS bit of USBSTS and when driver tries to poll
+-	 * to see if the xHC clears BIT(8) which never happens
+-	 * and driver assumes that controller is not responding
+-	 * and times out. To workaround this, its good to check
+-	 * if SRE and HCE bits are not set (as per xhci
+-	 * Section 5.4.2) and bypass the timeout.
+-	 */
+-		res = readl(&xhci->op_regs->status);
+-		if ((xhci->quirks & XHCI_SNPS_BROKEN_SUSPEND) &&
+-		    (((res & STS_SRE) == 0) &&
+-				((res & STS_HCE) == 0))) {
+-			xhci->broken_suspend = 1;
+-		} else {
+-			xhci_warn(xhci, "WARN: xHC save state timeout\n");
+-			spin_unlock_irq(&xhci->lock);
+-			return -ETIMEDOUT;
++	if (err) {
++		/*
++		 * AMD SNPS xHC 3.0 occasionally does not clear the
++		 * SSS bit of USBSTS and when driver tries to poll
++		 * to see if the xHC clears BIT(8) which never happens
++		 * and driver assumes that controller is not responding
++		 * and times out. To workaround this, its good to check
++		 * if SRE and HCE bits are not set (as per xhci
++		 * Section 5.4.2) and bypass the timeout.
++		 */
++		if (!(xhci->quirks & XHCI_SNPS_BROKEN_SUSPEND)) {
++			xhci_warn(xhci, "Controller Save State failed %d\n", err);
++			goto handshake_error;
++		}
++
++		if (usbsts & (STS_SRE | STS_HCE)) {
++			xhci_warn(xhci, "Controller Save State failed, USBSTS 0x%08x\n", usbsts);
++			goto handshake_error;
+ 		}
++
++		xhci_dbg(xhci, "SNPS broken suspend, save state unreliable\n");
++		xhci->broken_suspend = 1;
++	} else if (usbsts & STS_SRE) {
++		xhci_warn(xhci, "Suspend Save Error (SRE), USBSTS 0x%08x\n", usbsts);
+ 	}
+ 	spin_unlock_irq(&xhci->lock);
+ 
+@@ -1059,7 +1064,11 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
+ 				__func__);
  	}
  
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Finished %s", __func__);
--	return 0;
+-	return rc;
++	return 0;
++
++handshake_error:
++	spin_unlock_irq(&xhci->lock);
++	return -ETIMEDOUT;
  }
+ EXPORT_SYMBOL_GPL(xhci_suspend);
  
- /*-------------------------------------------------------------------------*/
-@@ -1190,11 +1178,12 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
- 		 * first with the primary HCD, and then with the secondary HCD.
- 		 * If we don't do the same, the host will never be started.
- 		 */
--		xhci_dbg(xhci, "Initialize the xhci_hcd\n");
--		retval = xhci_init(hcd);
-+		retval = xhci_mem_init(xhci, GFP_KERNEL);
- 		if (retval)
- 			return retval;
- 
-+		xhci_init(hcd);
-+
- 		xhci_dbg(xhci, "Start the primary HCD\n");
- 		retval = xhci_run(hcd);
- 		if (!retval && xhci->shared_hcd) {
-@@ -5533,12 +5522,13 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
- 
- 	memset(xhci->devs, 0, MAX_HC_SLOTS * sizeof(*xhci->devs));
- 
--	xhci_dbg(xhci, "Calling HCD init\n");
--	/* Initialize HCD and host controller data structures. */
--	retval = xhci_init(hcd);
-+	/* Allocate xHCI data structures */
-+	retval = xhci_mem_init(xhci, GFP_KERNEL);
- 	if (retval)
- 		return retval;
--	xhci_dbg(xhci, "Called HCD init\n");
-+
-+	/* Initialize HCD and host controller data structures */
-+	xhci_init(hcd);
- 
- 	if (xhci_hcd_is_usb3(hcd))
- 		xhci_hcd_init_usb3_data(xhci, hcd);
 -- 
 2.43.0
 
