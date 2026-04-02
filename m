@@ -1,226 +1,216 @@
-Return-Path: <linux-usb+bounces-35855-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35856-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EDnGHRlAzmlQmQYAu9opvQ
-	(envelope-from <linux-usb+bounces-35855-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 12:08:25 +0200
+	id oEB7OmVEzmlQmQYAu9opvQ
+	(envelope-from <linux-usb+bounces-35856-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 12:26:45 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D33A238776B
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 12:08:24 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63E2B387B42
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 12:26:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 399313024977
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 10:05:18 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AF6AC3044B4C
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 10:24:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FB723C65FC;
-	Thu,  2 Apr 2026 10:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 889F33CA4A9;
+	Thu,  2 Apr 2026 10:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UkUjSIHI"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="loml4KzG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013052.outbound.protection.outlook.com [40.107.162.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6253DC4A0
-	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 10:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D584F3921CE;
+	Thu,  2 Apr 2026 10:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775124315; cv=pass; b=RZWVytSlZrbR+H9m24DrOsqSezT5n5hcV9Y0jex+s3R97aBc68W7uO4ThNIRwFVIqhHhobZZbVyAmpjJIq+eDu6MQCw8If9ICr3fdiEqsWVBOEpK0Ckpm35pZN6MoLwng1ibYpZSTOhckJckmAm/9OWWCuDudR8Q1u+H/qoO/Pk=
+	t=1775125468; cv=fail; b=re5nHzXhNqCISO39TCjnGj1dNcKgwiYUhuMjkYpCTepPYzgYQoKJMKhUqovn4E1iCl8yJb8PRUE2lDA4LluxT9firg6gJ6cjwjh2GOAoFHqwhV5GdW7svwrCkfjG6XxJjOLYGzDzF+FhngtYAsISSlfienzxGR4lAADJH98uSD0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775124315; c=relaxed/simple;
-	bh=OsiL/1pwgaLk9UGEMEVqaS1tHbhO879gXMnD9GeFmM4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gOEk8NoR+tdlWqxeoEu5M4fGEEL/X4ILd72H0X8QXbC5brjuTmr1HU1M45gu2WWT2gO5M5a76XSZu8gK7TusD/CGlBfiZPE9VjS2KvyXsjRd+jXsaNx9JExt52qSkHlM/A9cypYrqMtB7zhvs4xyPj8enAEScdhgbQY/Tvryw3s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UkUjSIHI; arc=pass smtp.client-ip=209.85.210.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7d751ef36ccso414507a34.0
-        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2026 03:05:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775124313; cv=none;
-        d=google.com; s=arc-20240605;
-        b=DXaXmOI6uEjhVp1FWB/vInwjS4jfoNrPQlACdjya6b4BXCrkpy7Gl3iTGVAz4P4hZL
-         hZC61L/nYCy4rIgYEaDzwL0mXdUxiH+OZ9VjLjZkkGpBeO+qiKf1I4VmVa28Wj4Ykv2/
-         7jzjdVvS6NUThiqTDMn/rm/Z+sTmS3y53HKrEQzjULQSIooVaiRy3ujEaEgP6IvEzPQX
-         c8BZzlyj003oia19KmWzKGsQwpkF86Mb5xxE1QujuwIRHSJxlm1Z+7yEqWMHgwmJnYh6
-         ybdU9g6tglAS/MgwRQAo9MT2p7McQxkIQ1p2GvZoi2w1WU3QG8JcEvks6GP9gaAGxQvW
-         1VrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6Z0F0LSV4rb0+tEeskaVV3h52HTcTsqrrJt52KWcr8c=;
-        fh=slpmbzV2+oCngYxkoWkvTQMPRDbewrKzPxdcs3OVV7s=;
-        b=Rn2VeY58Xv/ud8LjiBqcJRVNk6OumhgGBPtcs4IReC9dtiPAa8J5RDx67W905zACHb
-         4pXi8RwN2P4PSHFkt1dHP5/XTanv/X2TtbEsuld6AKHRfKGDKKy38r/nwsyZjVJjSoGx
-         WEUxn7LzlQZ8owTuWYbaFBQfmpMjX0TSaePggzWDnOHQOCmlfsE8yLHdviohlZ6wTEpJ
-         BcWq+EI55zm9qZNpZRDMjY841caSl4IBdGLRD7Y9vVcDNcgK3VajEJ1qtu6XD6aP3dw6
-         8E4avKrj1Kf4qYZ9s6PE2LevVfa6d4RdwC0Zdu5QOkQzLRvDwnnyfhfqsrw0SQYeplZ2
-         DnOg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775124313; x=1775729113; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6Z0F0LSV4rb0+tEeskaVV3h52HTcTsqrrJt52KWcr8c=;
-        b=UkUjSIHI1U703viqbTydlU4JHi7AFAl51AUpCMx9b+wVryiST9od87YB4RwLXhKC7u
-         l1jt1voRP5Mgg0J9rUDkORvIYjtHKc1q4cFgy9vQowZ1mSYQLEYH22A6IRr1yCaQ6t6H
-         8hd0UZ5DO1+4d/OzgIsSmaLeoLGZj+cdrf7jySzpiknlouXB2ZZsjsycsIo3y8Ft5IGp
-         evKaQJbKktL19N/SqAtcNIy3qOD7QOcIA7LKwPnBtPbNcEq7z6OzA3CGT+ZBJlW9r+Hg
-         Ul0KYMmbBXL1u2qAVj6FsUqGa5Ir4a2xrVKODmmTypPrRYTgIc7iZLKRoS//MYNeC7JU
-         pOvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775124313; x=1775729113;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6Z0F0LSV4rb0+tEeskaVV3h52HTcTsqrrJt52KWcr8c=;
-        b=il/GaKEGouEeS6sO1LiQHurtXmQLQU897MLDr32IqbNIqaN0zKD18eJZxWQUuy0p3g
-         NKsz/LypUozCVzX+8l2nICTEqmHtqhSx/M9M+hqy0p8CE9oIhKrGmy/KwivpSqyuYc4j
-         0ywcV3+Zdqstn17Mg0RgLk9/lFFFx+ehVblLlvGEdNSYP111qlKd0xU4UADkc1jkfwb2
-         1ebHtHyA8x8Ku5nCFd2wa+hVgMkTiMPmkgYvkxfBBveqtw5hpg0CD7uClAEaeimEm+x5
-         K37bbwr0dVj0z0hT153bEHwYIswZ0INxGwAf9JquAU+vANQQvBS1JmL6J8E74Loj72rY
-         eBYg==
-X-Forwarded-Encrypted: i=1; AJvYcCVgD/NDFCpyZAkMGtN2Q6tesui8TbbywvFyvjQRwKxvNR3cAJGJMbLokAffO8U2k9NboO2DSRd9GU8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6sSRIMFvRAiMF+yarwVQSRaCbwit4wDGb5I5Hjxi4HSH7aJiA
-	aWJgcA0qGFqHdLkdU5wS5bTRlO6YEHIT4sjY8tr80+28TiHXp+nkHOmGzkf7xfQ/uXBMDZ8nt2N
-	qq+xZCcZ2QF3wyP1+r1B+1ZH81WSkfzbq5KqPoh4=
-X-Gm-Gg: ATEYQzxu7rugVHb4+Cek7iwJAVYT2hn3zC58DPVjUEqcYPW1GagW8wAXcCTb4oZ7MKu
-	grSsBN57sk6YvRUilxeH/FEALbayzi6cz0DFW+2zbwtjpxNE44VRHdqgmX0Rxg//EvdNMhMIhNl
-	au/Cio7umoASNh//RR9L+HoNVuMiEH0JDt+BPHrfRV3qwrH2zbtl+0hxfyA3Kt8j+2907IHI9My
-	0OFgi5Iu7JHCg8XLlCJnGtnEyq/mnnvOh2vy+Jbfmm6BbVmVPBCydJzyH5psizNW4WtLlqBKShH
-	oqmw4BT2uRKa3OEPgMByL4DtyTYgVUvJEpZLBHKrqqezLxOvjZZtEOxoi4GR0mrY8aRH+A==
-X-Received: by 2002:a05:6820:3087:b0:67e:3265:1659 with SMTP id
- 006d021491bc7-67fabd0ee58mr3470951eaf.62.1775124313530; Thu, 02 Apr 2026
- 03:05:13 -0700 (PDT)
+	s=arc-20240116; t=1775125468; c=relaxed/simple;
+	bh=T002WR+RCbbGb5A4nXZeQiEoHrPGnMX46nGvfuR3ij4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ae7hcxCjlFpXOdmJHZGLhDkkKrRgJ4Mz1rSD308cyJDTFpPmiVBqIolL4HRNhOnlyDVuxgmrUqzCXlC8h44xRSDUGPk7LD/jM6MY+evXJROfQ85lfo/dxvy4TVvRg0MMuZE3ThY3E2ybNlRuxwuSAxtQgwKhliKe3c80qs+q1J0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=loml4KzG; arc=fail smtp.client-ip=40.107.162.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Y25Jufo52I+5J5d1lGTYaZ8qUVcrlsSDQbLkB/ooqpDVY12tHQ4DcGXPbEG6d0kCoSjSQn8ltX1nx37T8nuo71yy15yynqcczzJsXr4+ySk8Vrsk58pKdgHoLFwiFAjq9+CbT9uTdTaSTEUs9GMN9cwZD1zImhaLjonyfU/EpMGJKihcIYqiFBSEu8PqmzICDNLPvoMQgqfIoc5ICd399L2Ty2x2Zp2/BQOz9r7vybzItzVyzRBc9AXklP6vcatwrqrD8pbihrQIB9DM4mjN4InmjB2AU1JljUBHTALh6S76Su9YVHbZTeQRJFKkEqgi8N4NZlO+DeCDkrN6K/8+sw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T002WR+RCbbGb5A4nXZeQiEoHrPGnMX46nGvfuR3ij4=;
+ b=Tvza/SEGY4utGssuJ+iokqNvEfcucQftydyH3i85aC0CcZYzp9+TOm5IVuopsNlAwx3c9nTLN3IVA+fpuXW6Z9L2VCDVMc3lQoyynCp3CkDMwi0b/JrdfClPuaxlkB8aSPE8lvztGNiPeodDtdJ8Wi0u/t0Cpj6ObbtdDbPDXR5kbbEibBCznkUc6Lu8Yd99oD/CF2b499KMd/Yb1qHeVGJzF8UipSZl1Q0sx2BJ2IxQJoJw6wbchAmtES+bNqtskAgzh7pEsJQDmL9eqJbGHiOfpKZJefqJWYG7tGLmvrssbBiD7556GYxc1d5Y8XPxxUyv5ly331U2aUKYVmObKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T002WR+RCbbGb5A4nXZeQiEoHrPGnMX46nGvfuR3ij4=;
+ b=loml4KzGT8s3y5k+ZQgg2uQRSg6Nlmv9GWqZco4B3pqAxigVHXC/DkTJVf+3062TFf1cX3nX8vWvAs5QuELD+Yqzs2WsrOFJwYlB5jv8Bd8rgo5Cb6bW8dTO7NsofK+Mbl7Z0/Bw7ObUAyPSwHcuNzrLWPB53dastGsxfxh5WHb6a2I7n3Zqt3z7qG1kRUcVCLUzemn2GU+Xa4Mx8K3+sGicaUnUGelN5mYrk1AEjTZ6MOYeeEWtWcR7THBnV1jxJpXFkEQYVxUxmRP9eI9OBf182gQnYUzMfligFDTiYQQgHszvY8dWyGeIK+Ivs49pwIEQpqgEFmNOCvOgi7LrZQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by PA1PR04MB11382.eurprd04.prod.outlook.com (2603:10a6:102:4f1::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Thu, 2 Apr
+ 2026 10:24:24 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::c67b:71cd:6338:9dce]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::c67b:71cd:6338:9dce%5]) with mapi id 15.20.9769.016; Thu, 2 Apr 2026
+ 10:24:24 +0000
+Date: Thu, 2 Apr 2026 18:16:28 +0800
+From: Xu Yang <xu.yang_2@nxp.com>
+To: "Andreea.Popescu@aumovio.com" <Andreea.Popescu@aumovio.com>
+Cc: Peter Chen <peter.chen@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: chipidea: udc: reject non-control requests while
+ controller is suspended
+Message-ID: <fbrg36w35eu7txbsshh32descrn6bzfypjqs6wwb76ijjbay52@opctausuvgi6>
+References: <FRYP281MB261885D9851351180B1EC037EA53A@FRYP281MB2618.DEUP281.PROD.OUTLOOK.COM>
+ <yel7zijkcua3cdn646fadp2pebatkbt4vracrpsbcdtmpahzxn@dhiapuctxbfe>
+ <FRYP281MB2618B5E8484BD399A6B3085AEA50A@FRYP281MB2618.DEUP281.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <FRYP281MB2618B5E8484BD399A6B3085AEA50A@FRYP281MB2618.DEUP281.PROD.OUTLOOK.COM>
+X-ClientProxiedBy: SG2PR04CA0152.apcprd04.prod.outlook.com (2603:1096:4::14)
+ To DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402083722.100973-1-fabio.porcedda@gmail.com> <ac46YeSJeYVvm0Hn@hovoldconsulting.com>
-In-Reply-To: <ac46YeSJeYVvm0Hn@hovoldconsulting.com>
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 2 Apr 2026 12:04:33 +0200
-X-Gm-Features: AQROBzDG6MB7MLj_5-xfUluKajqLUUg8YfN3uzie3Tuh6LKnQWHoKmLCh6Jmgto
-Message-ID: <CAHkwnC8avsKQFdbGZ=sTgjhWgoykjH+nLm=si8J5siwr=DkB7Q@mail.gmail.com>
-Subject: Re: [PATCH v2] USB: serial: option: add Telit Cinterion FN990A MBIM composition
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	Daniele Palmas <dnlplm@gmail.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|PA1PR04MB11382:EE_
+X-MS-Office365-Filtering-Correlation-Id: b95a4280-6434-4151-7c7b-08de90a20305
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|366016|52116014|19092799006|38350700014|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	lIOtw4n2gI76oqbxzwe8jenD5T/fKPws/8+Q0AH6IzWBDCuMiklkU3OmMlgVFGHMxOvBaCPXu3CK9JPjN1Cv0AIYf9cIpI0VDrTQ23PHKQneXJ/77Q57zlSg1GvNtWAMmxygxqY7ETl9RYmgNOG8Xwb6WWyeFI9Inzcool7hVDzQZJpEemK22z8GXZUuilzKFowMIkhIPxZ1fHwplsaZT4fiZo+2ICCRgJRS7cweUEw2GzWRyWSNnf4Eod6pKmO6uCO1kh2zop4D4ItPjhoSgmW7XDCtG3wxIY9iWhV0AnWYh00EQKsc4cAXKbAGjm3rnVO6BvhYBqV58afA5g/ooJPq0N0C2SHn6qL1Yya1DAAEJ1JCOg7Uu30ijWDuYDqVJrTiGTNSLFSUW/u+fMFjJHhC2CyjdtCcqcJLG5QEQwu+ao5mDPzKhuKvEV7Zi02RzEBk74aSGMPQsEAYe3sAQsN8falMPgD8wqjNKID6E0KmhyQD/vfUgoQi4DsInQMyitF8IzqDKVl6Pa03KyKAPHEMrc6L8GrwlQ0Oy/yf6FwlrdBjnl1uQK7opKnLU4lcUr0VbxwZms0L7X16km1HUJjjqBiWJYsSjwPkdCVc6xddQ1aycbIc7/9XmZoZn+0Wxvn5jsGsvp5VeKzGM9eTJkEjseX9PsjScoPPNLvl8yM/JXk7bogGkErWIxoXsTb7HGUERlqa4pLb3nfXKXjWaCTEFRcph0KszQlaNgu94V1Ge7qTPDatiD1gaWW83ODEenKtehCbtPvQ2lZLXtEepLdhvV6ttMyM8o6nqnNsuhY=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(52116014)(19092799006)(38350700014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?WVBoaERNYytESDB1RlJ6clFFNERnVVRsbmVsVU9QQjFTQkU0QnZMeGQwb1Nz?=
+ =?utf-8?B?cFQzWGN5MzY1bWZEVlB1ZmFNdDNHbUZZUFJJZ2hVNVBGdU92TXZtU3hmY0tF?=
+ =?utf-8?B?bHZTa1FtM2pxRi9RT0FtMjNId1hCbG1nU2t2Wm84cE85eE84Um9KdFFXWnNv?=
+ =?utf-8?B?NkdHdjJsVCtJcXMycEJtUmZydmsyT1J0aTRNbTkzNFU2bVZYWGF2cHlkcjhN?=
+ =?utf-8?B?Y2JJTTdFOEl0NmVhV2RMVC8wZHUwZjk3bXdncE1nZ3pwb01MS05iZjJCNjB5?=
+ =?utf-8?B?cXpta2xiOTVlVVNmRkdiaVBKaHhPN21NYTkzOFNlOGhTSVJ4UjNnWVJ6VVZQ?=
+ =?utf-8?B?KysybkY2Z1d6RGc0WXFFdU1aOTE1MmxHVjRQZUtYcENCYTZXTFpFMmJMYlQ2?=
+ =?utf-8?B?Ry9KbS9odWhaem9yNWR5Qm9GZFJFWEQ1RWY4aWlCQmx4bkVsTTVLdkRScDZ5?=
+ =?utf-8?B?MnhQWHdVNmtsWGtYcVI3cWpYOHFiN3hDU3NRQU9EL0R2RUpXL3pSZ2xYcE8r?=
+ =?utf-8?B?NHg4Mnk2ME4zRmJMaTBWRXFrVjdNVFQ5VURBVVp1bkhCb2NNMzRJeVUyMjI0?=
+ =?utf-8?B?ZklramlUUDE1ZjF4NzdnVjFBWEVDanpId3FyZWVHNUZtTDBmZnc0R0JZTnlC?=
+ =?utf-8?B?MnhWZ0RUQ1psa1FOVnFUNGJDdzNURmZabmhxbWZBWkRJY0lWTTVLWnovV1Fv?=
+ =?utf-8?B?c3djUkwxVXR5OTNwQkkxckhoSmx3RzR6VEg4T3phS0tocWJYMFlPL2RRR1M4?=
+ =?utf-8?B?bWppaFNmaU5pc3h3ZjlxTktBUnlkVmtMc2kwVU1NT2I1cmlDRWlsWXZOclNp?=
+ =?utf-8?B?Q1YxT0g3b0Q0N2pzZm5zQlBNNXBvS3R5VDNpcmNZMUVSUHFhdG80aUVMZ3ls?=
+ =?utf-8?B?aGVOU1k5c0JPV2kxczgzOHBZTWROSUNwRWNSdlNuMTVFbXZOcXA5RmRGMTVq?=
+ =?utf-8?B?T1VFb3EvemlIUWQwbnRpSU04TFRETFJqNGZHTHBVdCtiZ0YrMVo3Zm9qaEI3?=
+ =?utf-8?B?YkZBc0lvd3J4RjBoVTA0U2MxVzE0VmNLQmRhNVRLalYzajdad1dGQkg3SDRM?=
+ =?utf-8?B?ck5HYU10OWR5dFIvZTdoS3ZYdkxGa2NlVlJMdlBTc0ZBd2tYcTViWHdueC9j?=
+ =?utf-8?B?cUFTVzRoWW5jS0owc2Z6U281S0tjWTV2aTFUTDNKYUVLbnJZQWw4QTcwQ0VK?=
+ =?utf-8?B?eGxSdTJFcWE2aTB3eVFxNWFhZXRpWDBORWhKMVBXdTZQQTVBWG5ETU9sYjFQ?=
+ =?utf-8?B?RGE1RHk0WW1DUlZvUWdDMkJLekdqeG1lY29ORFBMRVFJNU1KTHFGdjNQNFFi?=
+ =?utf-8?B?Yk9qK0lyUkNCRjhUVWVVNWk3MHdHUCtVWU9OZnM5Zm9vRjNISUd4NnptbHBQ?=
+ =?utf-8?B?cXhKa2JjM2djVmxHTUlIV3dQOHZFNFU2YlFKeXFnVXRncnE5THh0aUtML05B?=
+ =?utf-8?B?Uy9Wb0lLak5PLytNTUpIVWlCM2JoZGY5TER0TlBwZHBsR0ZwaVY5VFBlWmdO?=
+ =?utf-8?B?NWlnY2NoamF6c3FPeUJZZG5KYWowMGRaTXdrYTVIR29XMTlCQkoySTdBWisy?=
+ =?utf-8?B?TngxZlcwOTlwa0gyeXUxR3pqV3dFVjJWbWFvbGFhaGN3RGVhdDJOTTBmcFdJ?=
+ =?utf-8?B?cjh3OTBPMUJ0cHU3ZStLTUtWRlhoRVNwWEtzdmJlVEZPbUM5UG5KTElkN3VH?=
+ =?utf-8?B?ME1BWlp0OExMQVE4emVZbTZPeVNscFNGU2IwRHc2VTUwc1JCakh2YzVZN2p2?=
+ =?utf-8?B?bUxPa0MvalQ1L01Rc2h0dEs3R3IvOWorWnRKRlFuSDlxaTdCOWRxNjI1c3V5?=
+ =?utf-8?B?Uk9kTzZpMHdId1M5RDRGdE1XL0JER0hQa28rZHc0eWRZTkZiNDhROU43cjZM?=
+ =?utf-8?B?UWZCZzhJNFIxRUFsQ0NObmtEcjg4RlJiTnZscTZsNndTczlCSVBLdUUzL1d2?=
+ =?utf-8?B?dTRxeXVLdzVwbHAwbGYxRFNEQlprV0hxQTZ4eGpVN0l4a3JFRHRWVnV0MEZ6?=
+ =?utf-8?B?bnV0WGZwb21hUjRhZTlJRzBUUEdyR051QzZVQzY3SmpJeHJNOXRXS09xOGpq?=
+ =?utf-8?B?anhmUTc0cUg4MlRxSjZST3QrQ0JxS3U1VGJuYUJSMFN6cFRMNWJzRCtKcjht?=
+ =?utf-8?B?R2dqTXU2YXF4VzJITjhQWE9HdVlWZG5FcnRYSEN0NjkyTUk2b0VBYWhWODRT?=
+ =?utf-8?B?RVBJSHFCQ0VTRTVuY08rcXdaNEErc3J3M0phK0gzNFhma0dVaXZoWlQxMWhr?=
+ =?utf-8?B?czBQUjNDTndKMGpyWFpNWmVmMTNLV1J6SnVVR21lL29zU3lqMnZJcjlyWk03?=
+ =?utf-8?B?cVRwa01XTGw5ZWhKc0dDNkFZd0IvU1JEWEhsZUFPUjVqV0V5WjVwZz09?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b95a4280-6434-4151-7c7b-08de90a20305
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2026 10:24:24.4858
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kxSsu/Wq+q0T9bVHGM7kxBYVnxBCY3KIjwofU6Kn7W4TBbv1hp/MV7OvVj9Dywbs9mRqXQ5S7EqsNDAf9m8/FQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB11382
+X-Spamd-Result: default: False [0.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35855-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-35856-lists,linux-usb=lfdr.de];
 	TO_DN_SOME(0.00)[];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[fabioporcedda@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[xu.yang_2@nxp.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[nxp.com:+];
+	NEURAL_HAM(-0.00)[-0.998];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: D33A238776B
+	RCPT_COUNT_FIVE(0.00)[5]
+X-Rspamd-Queue-Id: 63E2B387B42
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Apr 2, 2026 at 11:44=E2=80=AFAM Johan Hovold <johan@kernel.org> wro=
-te:
->
-> On Thu, Apr 02, 2026 at 10:37:22AM +0200, Fabio Porcedda wrote:
-> > Add the following Telit Cinterion FN990A MBIM composition:
+On Wed, Apr 01, 2026 at 10:47:54AM +0000, Andreea.Popescu@aumovio.com wrote:
+> On Tue, Mar 31, 2026 at 12:21:45PM +0000, Andreea.Popescu@aumovio.com wrote:
+> >> When Linux runtime PM autosuspends a ChipIdea UDC that is still
+> >> enumerated by the host, the driver gates the PHY clocks and marks
+> >> the controller as suspended (ci->in_lpm = 1) but deliberately leaves
+> >> gadget.speed unchanged so upper-layer gadget drivers do not see a
+> >> spurious disconnect.
 > >
-> > 0x1074: MBIM + tty (AT/NMEA) + tty (AT) + tty (AT) + tty (diag) +
-> >         DPL (Data Packet Logging) + adb
+> >It's strange that chipidea UDC will runtime suspend even it's already
+> >enumerated by the host. AFAIK, the udc driver will call pm_runtime_get_sync()
+> >in ci_hdrc_gadget_connect(is_active = true), so it will be in runtime active
+> >state all the time unless a explicit pm_runtime_put/_autosuspend() is called
+> >in somewhere.
 > >
-> > T:  Bus=3D01 Lev=3D01 Prnt=3D04 Port=3D06 Cnt=3D01 Dev#=3D  3 Spd=3D480=
-  MxCh=3D 0
-> > D:  Ver=3D 2.10 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  =
-1
-> > P:  Vendor=3D1bc7 ProdID=3D1074 Rev=3D05.04
-> > S:  Manufacturer=3DTelit Wireless Solutions
-> > S:  Product=3DFN990
-> > S:  SerialNumber=3D70628d0c
-> > C:  #Ifs=3D 7 Cfg#=3D 1 Atr=3De0 MxPwr=3D500mA
-> > I:  If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D02(commc) Sub=3D0e Prot=3D00 Driv=
-er=3Dcdc_mbim
-> > E:  Ad=3D81(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D32ms
-> > I:  If#=3D 1 Alt=3D 1 #EPs=3D 2 Cls=3D0a(data ) Sub=3D00 Prot=3D02 Driv=
-er=3Dcdc_mbim
-> > E:  Ad=3D0f(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> > E:  Ad=3D8e(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> > I:  If#=3D 2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D60 Driv=
-er=3Doption
-> > E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> > E:  Ad=3D82(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> > E:  Ad=3D83(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
-> > I:  If#=3D 3 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D40 Driv=
-er=3Doption
-> > E:  Ad=3D02(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> > E:  Ad=3D84(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> > E:  Ad=3D85(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
-> > I:  If#=3D 4 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D40 Driv=
-er=3Doption
-> > E:  Ad=3D03(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> > E:  Ad=3D86(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> > E:  Ad=3D87(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
-> > I:  If#=3D 5 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3D30 Driv=
-er=3Doption
-> > E:  Ad=3D04(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> > E:  Ad=3D88(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> > I:  If#=3D 6 Alt=3D 0 #EPs=3D 1 Cls=3Dff(vend.) Sub=3Dff Prot=3D80 Driv=
-er=3D(none)
-> > E:  Ad=3D8f(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->
-> > @@ -1383,6 +1383,8 @@ static const struct usb_device_id option_ids[] =
-=3D {
-> >         .driver_info =3D NCTRL(2) | RSVD(3) },
-> >       { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1073, 0xff),    /=
-* Telit FN990A (ECM) */
-> >         .driver_info =3D NCTRL(0) | RSVD(1) },
-> > +     { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1074, 0xff),    /=
-* Telit FN990A (MBIM) */
-> > +       .driver_info =3D NCTRL(5) | RSVD(6) | RSVD(7) },
->
-> There is no adb interface in the usb-devices output in the commit
-> message. Do you still need to reserve interface 7?
+> >Would you share more details how device controller go to runtime suspended?
+> >Thanks,
+> >Xu Yang
+> Thank you very much for taking the time and pointing this. It made me realize a very important distinction. I am using an I.MX board, due to this I will split my answer, so you can decide if it's still worth what I am proposing or you can just reject it. Either way, I am most grateful.
 
-The output of usb-devices was not complete, I've sent a new version
-with the full output:
-https://lore.kernel.org/linux-usb/20260402095727.108281-1-fabio.porcedda@gm=
-ail.com
+Thank you for the information.
 
-> >       { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1075, 0xff),    /=
-* Telit FN990A (PCIe) */
-> >         .driver_info =3D RSVD(0) },
-> >       { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1077, 0xff),    /=
-* Telit FN990A (rmnet + audio) */
->
-> Johan
+> Still applicable to 6.19 mainline:
+> ep_queue returning 0 for USB_SPEED_UNKNOWN: I believe there might be the following window: _gadget_stop_activity() sets gadget.speed = USB_SPEED_UNKNOWN, but ep_queue is called before that completes from a concurrent context. The return 0 is misleading and should be -ESHUTDOWN.
 
-Thanks
---=20
-Fabio Porcedda
+I think this will hardly happen or the window is very small. Because when
+the driver sees the speed is USB_SPEED_UNKNOWN, it has most likely already
+seen that ep->enabled is false. _gadget_stop_activity() will call usb_ep_disable(),
+so usb_ep_queue() will return -ESHUTDOWN early.
+
+> I.MX specific: On i.MX SoCs the chipidea controller sits inside a power domain managed by imx-blk-ctrl or the GPC. When that parent domain is shut down by the platform PM framework, pm_runtime_force_suspend() is called on the chipidea device, bypassing usage_count entirely and invoking ci_runtime_suspend → ci_controller_suspend → ci->in_lpm = true. This happens while VBUS is still present and the gadget is enumerated. This is the actual path I observed and it is platform-specific, not a general chipidea mainline issue. Due to this, please disregard the proposed change with _ep_queue guard on ci->in_lpm
+
+Then I guess the PM framework is working abnormally. How could a parent
+domain shut down itself when its active subdomain and users are using it?
+
+Thanks,
+Xu Yang
+
 
