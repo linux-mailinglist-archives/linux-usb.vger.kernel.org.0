@@ -1,161 +1,169 @@
-Return-Path: <linux-usb+bounces-35904-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35905-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OIDfA/6nzmkgpQYAu9opvQ
-	(envelope-from <linux-usb+bounces-35904-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 19:31:42 +0200
+	id AO8WDvGuzml+pQYAu9opvQ
+	(envelope-from <linux-usb+bounces-35905-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 20:01:21 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FA5B38C890
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 19:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BD8A738CD22
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 20:01:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C38C63085F12
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 17:25:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 88ED73029ADC
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 18:00:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 156C13DEFF6;
-	Thu,  2 Apr 2026 17:25:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 770F21FCFFC;
+	Thu,  2 Apr 2026 18:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p48x7C+m"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="roERPF/W"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB633D904B
-	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 17:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF00936C0CD
+	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 18:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775150709; cv=none; b=Uzcfc7+/AVwiHQyARHmmSliFHeHXKJsxY6BUKUN5GSsLN0K35WsgBblBF/xVWSFYsL7itPqLYyGovXHkmeRuQLCsZ1dPuq3Uvf4lgi36Lga5Dtoz22iQHJq1kDTH7y2TG1xnvIN1BTy4Hqbtxe5KwTEm4LsMpADj8LpAwOcgRi0=
+	t=1775152815; cv=none; b=CUUPnW2+eEXD4DXW4nZpNQRo2RmdTbk+bfS2H0gR4HynBaTu3L3fW4PDqeC4htzWEnIWYa1u7R4abdIl3I2bBlsTem/uIhFXmp4vbr8URPqykEDUo2+7OoE+tUSHl3IEoGB3n6rvor7BeQCJaxsAq65LXrUwL4mQIps6iBp1TY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775150709; c=relaxed/simple;
-	bh=xFTtdl0INtzmZuTBgshMsPe6/i29cuHnLmIVlT8f9lM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Bje/uHDvvKTyqBaMX4sZs+NbUHUsrUFbDgJJFYne7sd1CAmkhVPcrWksb9CoMBIGlzKzmovcHoUwReeJs1WUarINr7I7JODVm5qTGiZnG5Dx4AX4U8MNHDpcQzBcs7y8vQyV6VshyyDwt8sfzE1v4REc6Ii1ju3emVKHc2VG6g0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p48x7C+m; arc=none smtp.client-ip=209.85.128.49
+	s=arc-20240116; t=1775152815; c=relaxed/simple;
+	bh=8bupjfUocC26fZ9+vDNIVZ+9yNEJBseln4RkmXNA7Y0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FjvLWTWMlB1+pf6ipJedCIQW0kYR8FKnmmlpvebyCNK8wj9M4x059YL9lDhxHF2gq/DBwnJ/wuvqMTRofCmUlYv05gsIaGuatKGuBjIo1sQSf0BlcOY1cgWbyypTjizkKmYfzcy+MK/U2W9g7okLe2pVsamTO3t4IWoiaWHb9dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=roERPF/W; arc=none smtp.client-ip=209.85.128.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso11046135e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2026 10:25:07 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-79ed2fc6ac7so9000837b3.2
+        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2026 11:00:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775150706; x=1775755506; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775152813; x=1775757613; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/s3YP1+w5CIUcOZyOXsmFt5ma0YGzEEXw58qL3h7ZJ8=;
-        b=p48x7C+mrD1MWhIWkzVGSXkk0yaNddz4h/a05hsT4fIEhikkq6jx5rpImTkX6ifVD+
-         uL0hbAWjgsDE6eAEw0KK2G13j2WTfcCWQJq/j7hsl5CQfa4xrVn/0/dHivSphoFlB8tk
-         GOQOFvFzqlBe9GwqYjCLYNQ0/9lv43+nDNi+trlN4G5bBClhxHdpdXeKGJFLcKnBXPlN
-         BBngKliumjJJDR/vWM5kpHy0WVA+2o8JvodzlT3Al6SWprZj9ioMTGYz1xbNpERfkoBc
-         bw+zqWWlkvMFhabZAFEco3b1FTx9saf3mL0PeSKMgJCDh6tmc5Wt/XJM/vZmyYpC9cgP
-         tdIA==
+        bh=zt7vlx+cjI66ioF65ZU6UWgXA9N3wmD47EJ6HdwFLZY=;
+        b=roERPF/WQN85MiAvRRAL4fZLF3kHrlH51IUnxQrbDmbMNp2V5qYq5wpjGE6+e67t75
+         9leOLUxTza89kZDO9SY36uUOykhTI5I5Dc0+yrrkn77JS7Mz+gGW1b5QB6sFKnzBc/G6
+         z32SwRaxHFPYR/9o4Qu3Ht4/zmZX7tD12/FBvNt++ouQ12vl51vqk2IMFZYBl8cQMD+1
+         ezJeP4F/nNNc3fzFKwCLMbC9cXtJ5xTDpFO98yWnTPdrQVxAdG+mh1Bd0qE+ZPntXEXs
+         C3QOCWuiaHK8FYl4ylzjpDIHjCWgm/iOOxrmM586zpG6tnwEj5p0JMQsoq0wTzFDzNFL
+         8DDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775150706; x=1775755506;
+        d=1e100.net; s=20251104; t=1775152813; x=1775757613;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/s3YP1+w5CIUcOZyOXsmFt5ma0YGzEEXw58qL3h7ZJ8=;
-        b=SBz0JhiL+m0kYrJOSCi870nxwOqMDwdHqz0xSJwP6evzP4aeBgdFgJHto8TEK7m4xm
-         B+1nGBsuFLHDZ8ooypCXmNGyKjhTwlGAtusCNExOv8554InyEzXEhpiZcSVf/quOCzZ/
-         2FuNmwEd6YAuB7EPA4LBZZO0Ge4uSocSQhVkXQHap93xZDg+CNJMZPNeaz2JhdNLpxXQ
-         2nd9fkDNmn0LWPVygnR1eHTUSTPOwTXCx0A4aOwBEGSnkdSHEyuStlB2cv08MjYK84lc
-         Nj/jlNCfdG/Z4ta90Zdg4VNYjLhM1U74vOAFIZRlB55qp4LB4DocR2cZ7DDbqoP2wl9o
-         3Dag==
-X-Gm-Message-State: AOJu0YyT3ibGF00TDTxcgzTruyLAdYKqosv++wDm2qsnBexSsbILnfom
-	D62h7TtgegbfHQwEwiPVJ66k1Ft/0TqRTI/cCqdS5UJZs08mGyIWZx6cakrFDRJd
-X-Gm-Gg: ATEYQzykxa8Np4bYXNf177ilPKl16X+u6yqZhY6cxdI9AV3ym1xLeAZD9kio9QYovDK
-	3keTiaBd0CVey5G7kGGyuULfcfR/kmW7HpG1Tg7qOt0+NJWzRCORXKyfGYrnGamDR0ZWsK9ligq
-	PUrCx1xNF+Twt1QlXRJBBkrbC9MsxbEq4Nc0o721oFFLyVbykciVMQ0W/ZYYNYV9T6X9k3u412D
-	WWEeG7COxR1xMolB1AFbY5rf13p8BrcATQ06SBHgonmyw9wzmKlCq+pa/UJmVjJr6naL1R/JjB7
-	wMLxWDJifj5OnVlW0vc7Psk82HL1/2ayYQEiuL4OyCmfZSqXNVaSWhsI4Ed9snDzcGcdRchvsbW
-	aAYjRZbIfA5HDIlTwe6vdw3aIHThlYiifSTpWr4mBM16jaQAbBitUQApGP2Fh0+UuxDuFBTF0X2
-	KG+fq+f8Ykc6HEWQX6tyFyAg60q5jXkla4eer0vpkIxLM1+lxwd35QCifiGFWGyENZOvp055dkY
-	cvAuHe/Yg==
-X-Received: by 2002:a05:600c:858e:b0:487:467:4276 with SMTP id 5b1f17b1804b1-488835cd391mr112384525e9.30.1775150705508;
-        Thu, 02 Apr 2026 10:25:05 -0700 (PDT)
-Received: from PC-BRAT-W10.intra.eskon.cz (mx1.eskon.cz. [83.240.30.122])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48897fd5f3csm1769155e9.2.2026.04.02.10.25.04
+        bh=zt7vlx+cjI66ioF65ZU6UWgXA9N3wmD47EJ6HdwFLZY=;
+        b=WX6gjO77W4HRYxhJSiSwBpss1xNLhKfXwvzTRFQA11lsrwBOTHlJ/thkqRCnwtIFra
+         GinKwobknbaO1Q1+H38vZPf55MVmOKBM1jU5SF0V+HrutfpKoCLQr7GIB0JAu1TDfPw1
+         MHqI7TU8z6dSGMCFtZ/Apc/NSAm8ZwgMh1x7dxUU8ziZQKi8HicjPFb3XfJs0SqFPu80
+         yfR0iPvNAN92pC6CIbKS6iMh9i7THCPhaHj+IflF01E9tjF2PaF2ZECdIgZrBz1D3FWQ
+         u6xRFRYytwksK9L9kvWBx12niKE0BNmPYXpGPNgY06rS0JidhMzh9M+5cPVGAhmIWdTH
+         /dwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV1xPz+Kq4l/WSRp4K72Vmi5XhRSqch6VPZAuA+9xtbHhjgQFQOZif9f7uGXp+GqPf6w7ZV73DNNw4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFstndEEUgqz+eJbV4w9LAbMk6rxmgSMZOUlfg0T1YLV6SrS8v
+	iB3yxEOglh1mEZZ61PUzgzIEixSmwQy7dm0xr4SoSa8wxxLipR6o1TVW
+X-Gm-Gg: AeBDiet2f2K92Ix9+M7qz2RYMML5/HGCgyA9TYJwZJeEm3w6qQ4JqFGKc85VZEnF8+v
+	Ur04XeYIECFqNcLoYF5vMWTaJXVXr+qvWoSkjuKLoVHILXH57JRqUO4OuONi5GRijRyT0a+vXRS
+	r2/OoshF/YCyBRvfSF1Prd9+1ftqwvwdncfgeZNU5nbsucAJd9jQBL/TjHaSL8pGQIoPQa4S22w
+	rXpzuewboHnoaxjv6+W+3hoU1uxK+OeqiZrU2siGzvIpOXk5vYih6a3H0sJ4zU2iRzqOz/+DKVy
+	YNfeNTiJcRc03vHLuoU4d0weTJj1BSgJk5eHymp1oXQC1hZBXsNJ9YJUl72l9wDBY4JA3zRUKp3
+	ddEGkqn7u8pqjvSSvKjWx2rLl+mmcM8445SycUqIjvL8nkKODs3W/8zQfDgDoBE7esun2kR5fEq
+	8XdMOh3wAaU1Ai3J0grC3NTQS3zlcgBQmvmUTAXLg8ZY5THUDIBegyHPLM15+6X7qyOlfDovDLX
+	l4Cab5lZmmVo8d3OLpDmTQO
+X-Received: by 2002:a05:690c:89:b0:79a:c630:c40b with SMTP id 00721157ae682-7a4d90a3374mr2463047b3.48.1775152811908;
+        Thu, 02 Apr 2026 11:00:11 -0700 (PDT)
+Received: from tux ([2601:7c0:c37e:2360::17e2])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7a36e42fd37sm13481747b3.1.2026.04.02.11.00.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 10:25:05 -0700 (PDT)
-From: =?UTF-8?q?Daniel=20Br=C3=A1t?= <danek.brat@gmail.com>
-To: linux-usb@vger.kernel.org
-Cc: =?UTF-8?q?Daniel=20Br=C3=A1t?= <danek.brat@gmail.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	usb-storage@lists.one-eyed-alien.net,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: storage: Expand range of matched versions for VL817 quirks entry
-Date: Thu,  2 Apr 2026 19:24:33 +0200
-Message-Id: <20260402172433.5227-1-danek.brat@gmail.com>
-X-Mailer: git-send-email 2.39.5
+        Thu, 02 Apr 2026 11:00:11 -0700 (PDT)
+From: Ethan Tidmore <ethantidmore06@gmail.com>
+To: gregkh@linuxfoundation.org,
+	sigmaepsilon92@gmail.com
+Cc: peter@korsgaard.com,
+	mhklinux@outlook.com,
+	linuxhid@cosmicgizmosystems.com,
+	danisjiang@gmail.com,
+	kees@kernel.org,
+	hoff.benjamin.k@gmail.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ethan Tidmore <ethantidmore06@gmail.com>
+Subject: [PATCH] usb: gadget: f_hid: Add missing error code
+Date: Thu,  2 Apr 2026 13:00:08 -0500
+Message-ID: <20260402180008.64233-1-ethantidmore06@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35904-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[linuxfoundation.org,gmail.com];
+	FREEMAIL_CC(0.00)[korsgaard.com,outlook.com,cosmicgizmosystems.com,gmail.com,kernel.org,vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[gmail.com,rowland.harvard.edu,linuxfoundation.org,lists.one-eyed-alien.net,vger.kernel.org];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35905-lists,linux-usb=lfdr.de];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[danekbrat@gmail.com,linux-usb@vger.kernel.org];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[ethantidmore06@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[gmail.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vacharakis.de:email]
-X-Rspamd-Queue-Id: 5FA5B38C890
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: BD8A738CD22
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Expands range of matched bcdDevice values for the VL817 quirk entry.
-This is based on experience with Axagon EE35-GTR rev1 3.5" HDD
-enclosure, which reports its bcdDevice as 0x0843, but presumably other
-vendors using this IC in their products may set it to any other value.
+Currently in cdev_alloc() error path no error code is assigned.
 
-Signed-off-by: Daniel Brát <danek.brat@gmail.com>
+Assign error code '-ENOMEM'.
+
+Detected by Smatch:
+drivers/usb/gadget/function/f_hid.c:1291 hidg_bind()
+warn: missing error code 'status'
+
+Fixes: 81ebd43cc0d6d ("usb: gadget: f_hid: don't call cdev_init while cdev in use")
+Signed-off-by: Ethan Tidmore <ethantidmore06@gmail.com>
 ---
- drivers/usb/storage/unusual_devs.h | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/usb/gadget/function/f_hid.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-index 47f50d7a385c..255968f9ca42 100644
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -2350,10 +2350,11 @@ UNUSUAL_DEV(  0x2027, 0xa001, 0x0000, 0x9999,
- 		US_FL_SCM_MULT_TARG ),
+diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+index e0c3f39ee95e..c5a12a6760ea 100644
+--- a/drivers/usb/gadget/function/f_hid.c
++++ b/drivers/usb/gadget/function/f_hid.c
+@@ -1278,8 +1278,10 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
  
- /*
-- * Reported by DocMAX <mail@vacharakis.de>
-- * and Thomas Weißschuh <linux@weissschuh.net>
-+ * Reported by DocMAX <mail@vacharakis.de>,
-+ * Thomas Weißschuh <linux@weissschuh.net>
-+ * and Daniel Brát <danek.brat@gmail.com>
-  */
--UNUSUAL_DEV( 0x2109, 0x0715, 0x9999, 0x9999,
-+UNUSUAL_DEV( 0x2109, 0x0715, 0x0000, 0x9999,
- 		"VIA Labs, Inc.",
- 		"VL817 SATA Bridge",
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 	/* create char device */
+ 	hidg->cdev = cdev_alloc();
+-	if (!hidg->cdev)
++	if (!hidg->cdev) {
++		status = -ENOMEM;
+ 		goto fail_free_all;
++	}
+ 	hidg->cdev->ops = &f_hidg_fops;
+ 
+ 	status = cdev_device_add(hidg->cdev, &hidg->dev);
 -- 
-2.39.5
+2.53.0
 
 
