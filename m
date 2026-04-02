@@ -1,177 +1,161 @@
-Return-Path: <linux-usb+bounces-35895-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35896-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mJW2LyN3zmk6nwYAu9opvQ
-	(envelope-from <linux-usb+bounces-35895-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 16:03:15 +0200
+	id oEN4MOp5zmmMnwYAu9opvQ
+	(envelope-from <linux-usb+bounces-35896-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 16:15:06 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6668438A2AE
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 16:03:14 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3677B38A512
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 16:15:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6D1D33065F24
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 13:57:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3ADB43078137
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 14:07:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C0883DE449;
-	Thu,  2 Apr 2026 13:56:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB35D3E63A8;
+	Thu,  2 Apr 2026 14:07:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="aKom4NQw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UsRgnHs8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD19A32C937
-	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 13:56:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4403E4C90;
+	Thu,  2 Apr 2026 14:07:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775138216; cv=none; b=nk/H4/nkTJ1/k4kl4Ml6Q6il1GJ5HiHoAqc1y53b0Jl38Mi2k39cG3WlSRsaFIeqJxVrRItrHidC6wZ4liJsj3QkAg9CduVoPHu0ntjO2nEj5JfbSgCkKLlKktgBYj+O+QjANaBLkB0SdfG8Z1Q13oauIF9BSR8PfQGC1sP3DcU=
+	t=1775138839; cv=none; b=V295nUovaS3D/V4IaElX3Kh1rugL/sVe5k7XsuQ1YQ4WhQliEWrDYJAx5/O+mqIdEQ5l180Y5BJM9Lnn7ExD8If9x5ny1ynF+9XucjnIHEfhcuKJl8POiR03zn9HNU17JRhj9vGwtekyUOQGnpyYBCAvx6Bqeojp51tr+IrWWbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775138216; c=relaxed/simple;
-	bh=KCCA9jnaiojSGmvFpsadbMJRYvkck6taf5csbT0fYbM=;
+	s=arc-20240116; t=1775138839; c=relaxed/simple;
+	bh=gYESeRb0qPLXt+/mthA2S699t3955yDhVoyjnkXvDmo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GMSU+hlGp+My308WCXSEDsInN/bVaQauVniHmmWiJSxj4V5pZHdZY0qPByMrwBRCDe1BGuh90lfZelHtjQyHsQNvLa55pvpyUC8Ko0TayMeXncYfKMNDHYaD/XZEOi2FUxCXttM6h/UtsKcL+joowYD7ksgfCquDV61sltCfR1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=aKom4NQw; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-8cd71fb9f06so57398785a.2
-        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2026 06:56:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1775138214; x=1775743014; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=aMcYRRHaeHkEdKOK+XQr9uF66twatToBigFcTZn3WGE=;
-        b=aKom4NQwZPyJ7wlNPMlH6Zy+auIfek2UeLioL7dSaXK22AYR+MhXrzkmZMEZO9P9C1
-         DLQ9N32zi/ou51Xa2RSaDl9WIXf1mHCduxfvLx4VUkoMNsg48gTh4WpAAGxGSuJO1UcX
-         328q2Jac3nq2X24FwODgGsO+wfGNE7XQcy08DPDEIn+pycZ+Gs09UVStsiajAFaaRV3u
-         sKbaZfd8nDIf8/OfhzZurdVbtkJaR5uc+Dq6/2ah6VWfDUT52gSe0Qtazo0qBIq/X3Tk
-         Im+RFXQ3p08fCVvQwgED5S87AZQaqXbhofPj5c8B//H9WKCA5cp2gkuizmVWufEESrED
-         VlSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775138214; x=1775743014;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aMcYRRHaeHkEdKOK+XQr9uF66twatToBigFcTZn3WGE=;
-        b=PD70xAOyIGvfm6o7SWeictPhIFjoxmPwjZyMX1EeU4ZNfjZ/mcVYDvmaIgMGm+Hd1x
-         RG1w3UPpWFd909fAA+MlXAof1xTHP1bp+cR9noCUt/ysLcfH3D23E7JZaoWRSfpku6Eg
-         a7k+mEUFtE2sQwNtH0uvwjhC/YFDI3XRDpocpEXJ29uWYsk5EWHvq87ONcJCBeCFSeY+
-         gHtAz4czTxW8ZqgXIegOtVIpHISqxOlUUz4qSz6tFMf1OgszcjRn94CmqVTn0llxIeoE
-         D/x6sKM06kOMBy9/mNXFhy9cmw/XzKx2h0bdmDFar0rsHWEvoQ25N64tIBOLXd0R3vQa
-         czeg==
-X-Forwarded-Encrypted: i=1; AJvYcCXCgtgQrCm1aZEOlBfM6zpeFIXYb3ZYHGm8v0PUkxNK39xcalBXB+Ol/A12kdDYylarmjqWYHgGbLA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFSO7Zfe0BqUzIV32o+TXiIjL7hvN7ifnWRiDtPp4kXm6QqnxF
-	xSzWMuYM/59+VZs83UQgeslGcIaGOE9jZHaVvGXPA2Pu7uzhsu4mpdUK6k2Db/kWvZq2iqF/4/0
-	xxj0=
-X-Gm-Gg: ATEYQzzRXH9qO/YIH29KbaXv3GE3mSruLbtl5HNaqBguwxmtJVXLe61tcMzkTKIApIB
-	qJQnTwPu6Bu1vskYu+QjO7H/fVr5Gd/B3Fh9QCllvgsLtGIPf88tqDx94mX7noQs+EUWTMUivVn
-	KSIS6pND1rQ4xpmvX1L6H+sUaplOCeTMTF2iN/0KsRlSS6fpfGcHP3qP+tS2itP2mAPgCu1TAQo
-	c79dd6biocCbmMZrnphpP8BF0SakV15Q4wnLDsNySjEjN9rbEhRwgv8fYqLF1UghTgoPmNEayGn
-	GyLFgQtkxPrlMAWIpL8gzBbxjkIfB5Gqexv5YI+IRK5zqoESxvjmbuhMX15B6uAqwEEjTQ6i0S9
-	nrkpcGOd1dxqZ5tBfc7Esa8iVHoYYNceWrg1GGULvkjRH3/JnpG8+IXdgz6+Xl331jU0Yuzs2mE
-	z42J/IQLQ2wufQHrbgjpNTpef8o2PypIq4teU42lF5+A==
-X-Received: by 2002:a05:620a:1981:b0:8ca:105a:298e with SMTP id af79cd13be357-8d1b5c26391mr1110490585a.63.1775138213604;
-        Thu, 02 Apr 2026 06:56:53 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8d2a5393a7bsm232674285a.3.2026.04.02.06.56.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 06:56:53 -0700 (PDT)
-Date: Thu, 2 Apr 2026 09:56:51 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: "Xuetao (kirin)" <xuetao09@huawei.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, caiyadong@huawei.com,
-	stable@kernel.org
-Subject: Re: [PATCH] usb: core: Fix bandwidth for devices with invalid
- wBytesPerInterval
-Message-ID: <74f1bb0d-24c3-44be-9583-0585863cdae3@rowland.harvard.edu>
-References: <20260402021400.28853-1-xuetao09@huawei.com>
- <2026040241-purveyor-bakery-a9f1@gregkh>
- <c463f9ed-22ed-4ee6-b4fa-2933770e9c4c@huawei.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=QjA0XmPxaGNQhCZRR5yssIauPS2LreKLhPAIzzQUc77XTUJcVnqDssBvSEiafX6CW7KrWsxstsdASHVOUQJWoN/6y7rt+Y8p9gA9i7BX+BbjG50mwb3vWiOp33ldA3rKEioKDg9s6+C2ZOx6s9RqWJ3Y2Yc2HqVwxus5b+TJcOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UsRgnHs8; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775138837; x=1806674837;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gYESeRb0qPLXt+/mthA2S699t3955yDhVoyjnkXvDmo=;
+  b=UsRgnHs8xAGU8xAiKDANxcRAcMItDZXCrhWGw25LQvBiYGrK6noXOW8P
+   pbBqCIuTm2lZTQWxlKNsaw4oNRXV/bec0yfTVn2LOx3mqW0R+KH+XZ62L
+   8+dvjzp5a+LPBvhDs5rVzTAe8QjAlm1JS9Anx0oqRzH4e0A3llRLWHpn3
+   3I9CnqZVZNfcgNzX8xbcbIsaH/p0Uf9+gxjviPBi3lOXnZBKgNPWxIXFO
+   oa7eZA7h89HUlQ7c9AD0QHZ3r/IPzg7K9otTZprL/wJkpPs93s6r5LGyM
+   UMdHPI4J32yf/JDbGtOvdtH4MM4QNbrxnEsL6dsTa8vGwni45+V9v5LF+
+   Q==;
+X-CSE-ConnectionGUID: oKLg4Zc6T8yYshpTT4bZHA==
+X-CSE-MsgGUID: LBW1B8thTwycGS7oGoAocQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11746"; a="76213287"
+X-IronPort-AV: E=Sophos;i="6.23,155,1770624000"; 
+   d="scan'208";a="76213287"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 07:07:17 -0700
+X-CSE-ConnectionGUID: Chzy8OXbSmyj099eo8MKOQ==
+X-CSE-MsgGUID: J/RxUdt1T0i2VOC+fXZylw==
+X-ExtLoop1: 1
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa003.fm.intel.com with ESMTP; 02 Apr 2026 07:07:14 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1008)
+	id AC5D095; Thu, 02 Apr 2026 16:07:13 +0200 (CEST)
+Date: Thu, 2 Apr 2026 17:06:27 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Vincent Cloutier <vincent.cloutier@icloud.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, sven@kernel.org,
+	Vincent Cloutier <vincent@cloutier.co>, stable@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] usb: typec: tipd: Restore generic TPS6598x
+ contract interrupts
+Message-ID: <ac5344ei3zZllgx9@kuha>
+References: <20260402000950.715470-1-vincent.cloutier@icloud.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c463f9ed-22ed-4ee6-b4fa-2933770e9c4c@huawei.com>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+In-Reply-To: <20260402000950.715470-1-vincent.cloutier@icloud.com>
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-35895-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35896-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[icloud.com];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,rowland.harvard.edu:dkim,rowland.harvard.edu:mid]
-X-Rspamd-Queue-Id: 6668438A2AE
+	RCPT_COUNT_SEVEN(0.00)[7];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,cloutier.co:email]
+X-Rspamd-Queue-Id: 3677B38A512
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Apr 02, 2026 at 02:59:35PM +0800, Xuetao (kirin) wrote:
-> 2、Following Alan's suggestion in another email, should I check whether
-> wBytesPerInterval is a valid value and handle it in the
-> usb_parse_ss_endpoint_companion() ?
-
-Yes, IMO.
-
-> However, when parsing the device descriptor, we do not know whether the
-> actual data length transmitted by the peripheral is greater than
-> wBytesPerInterval.
-
-Note: wBytesPerInterval is in the endpoint descriptor, not the device 
-descriptor.
-
-> Therefore, would it be sufficient to only add a check for whether
-> wBytesPerInterval is 0 in the existing flow, and if it is 0, set
-> wBytesPerInterval to cpu_to_le16(max_tx) by default?
+Wed, Apr 01, 2026 at 08:09:50PM -0400, Vincent Cloutier kirjoitti:
+> From: Vincent Cloutier <vincent@cloutier.co>
 > 
-> For example, modify it in the following way：
+> The generic TPS6598x interrupt handler still relies on
+> PP_SWITCH_CHANGED, NEW_CONTRACT_AS_CONSUMER, HARD_RESET, and
+> STATUS_UPDATE, but the irq_mask1 refactor only kept
+> POWER_STATUS_UPDATE, DATA_STATUS_UPDATE, and PLUG_EVENT in
+> tps6598x_data.
 > 
->      if (le16_to_cpu(desc->wBytesPerInterval) > max_tx ||
-> le16_to_cpu(desc->wBytesPerInterval) == 0) {
->         dev_notice(ddev, "%s endpoint with wBytesPerInterval of %d in "
->                 "config %d interface %d altsetting %d ep %d: "
->                 "setting to %d\n",
->                 usb_endpoint_xfer_isoc(&ep->desc) ? "Isoc" : "Int",
->                 le16_to_cpu(desc->wBytesPerInterval),
->                 cfgno, inum, asnum, ep->desc.bEndpointAddress,
->                 max_tx);
->         ep->ss_ep_comp.wBytesPerInterval = cpu_to_le16(max_tx);
->     }
+> On the librem5 that leaves PD partners stuck at the 500 mA fallback
+> because the active contract is never refreshed after attach.
 > 
->  Could you please give me some advice? Thanks.
+> Restore the missing interrupt bits so the existing handler paths are
+> reachable again. This fixes USB-C charging negotiation on the librem5:
+> after a replug the TPS6598x source power supply reports 3 A instead of
+> 500 mA and the BQ25890 input limit follows suit.
+> 
+> Fixes: b3dddff502c5 ("usb: typec: tipd: Move initial irq mask to tipd_data")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Vincent Cloutier <vincent@cloutier.co>
 
-Try it and see if it fixes the problems you see with the network 
-adapters.
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-I saw the Greg said not to change the descriptors and just fail the 
-device, but we already make this sort of change to correct other errors 
-so there doesn't seem to be any reason not to do it here as well.  
-Especially if it allows people to use devices that otherwise would not 
-work.
+> ---
+>  drivers/usb/typec/tipd/core.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 84ee5687bb27..83f2fec6e34e 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -2395,7 +2395,11 @@ static const struct tipd_data tps6598x_data = {
+>  	.irq_handler = tps6598x_interrupt,
+>  	.irq_mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
+>  		     TPS_REG_INT_DATA_STATUS_UPDATE |
+> -		     TPS_REG_INT_PLUG_EVENT,
+> +		     TPS_REG_INT_PLUG_EVENT |
+> +		     TPS_REG_INT_PP_SWITCH_CHANGED |
+> +		     TPS_REG_INT_NEW_CONTRACT_AS_CONSUMER |
+> +		     TPS_REG_INT_HARD_RESET |
+> +		     TPS_REG_INT_STATUS_UPDATE,
+>  	.tps_struct_size = sizeof(struct tps6598x),
+>  	.register_port = tps6598x_register_port,
+>  	.unregister_port = tps6598x_unregister_port,
 
-Alan Stern
+-- 
+heikki
 
