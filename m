@@ -1,147 +1,175 @@
-Return-Path: <linux-usb+bounces-35827-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35828-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uFaKG3nozWkLjAYAu9opvQ
-	(envelope-from <linux-usb+bounces-35827-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 05:54:33 +0200
+	id 6CxmG377zWlYkAYAu9opvQ
+	(envelope-from <linux-usb+bounces-35828-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 07:15:42 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9724383452
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 05:54:32 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 033C1383E55
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 07:15:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2F6583051D35
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 03:51:26 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 2B51C3066623
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 05:15:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 498B2199FAB;
-	Thu,  2 Apr 2026 03:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AD18370D53;
+	Thu,  2 Apr 2026 05:15:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wv/pCjws"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aexidzYF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA0763537F4;
-	Thu,  2 Apr 2026 03:51:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8D036DA13
+	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 05:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775101884; cv=none; b=FPmhBHmFDJRUZdtdTU38l2qebavMBL148qrzPVYpN3+ntaGxZQ8fvn4kayxApOsXPlX3z+LUVIU3GvxLHsXRaYVT37eM3u0AExX8pkrwZ+Z5gfRjinEyEioyd1rn48xEL/3veuxdhGB2ZAV5kjjw+yx9658zizMcxGJydQeB8sg=
+	t=1775106935; cv=none; b=feMJyA+hLKTJzlETunKaxGfC0XOB0PZnu71yFKYdK6Ore8xEhiHzbP1J69K/1nnNYlQXdip9Xy+WjPzCFmpi8g8BZzo7VobeYF7yBsqs79p8Ax6/IWZ4QBs1QVAStlCptJV7LdrfOfmqYwsujqKEyeTRKOXRB6DC38StglUbw/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775101884; c=relaxed/simple;
-	bh=Ei0zcERwAzlGq2/DTmZlX7mB0C6+IdXVqA4B5CYk+HQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LEy7puQFCqQeCV2nd1O1ChTP+sU7sUiZTuXeUh3o9zUcLXcWRi2oeg5qtjH0Zrin5OwI9sp2v5OeF4JxDUWqhX4I/tqHY7oNfhvxpa4zRNeK3sWM8CIxEUAMZdTj36rqMMKbknFZ5HLtwPgmjP9R/xCdl4qYLkm/zESDt4BHby0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wv/pCjws; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8C67C19423;
-	Thu,  2 Apr 2026 03:51:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1775101884;
-	bh=Ei0zcERwAzlGq2/DTmZlX7mB0C6+IdXVqA4B5CYk+HQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=wv/pCjwsAdQL5D0XR/iKZFXf7/Do7TTaInQB5KGNdeo1cVpRXeBTBlgdGyu4jpJcn
-	 llaLjICk4gaC740Iaz8zOiJHQ+Z1yQsis8fg5b296JfH/5CzuLVKLFQoTV8VaIR6Mi
-	 HnzAEt3jJVGKlKknJmuWPOTKkwSswsM2uX3FXkXw=
-Date: Thu, 2 Apr 2026 05:51:21 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Tao Xue <xuetao09@huawei.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	caiyadong@huawei.com, stable@kernel.org
-Subject: Re: [PATCH] usb: core: Fix bandwidth for devices with invalid
- wBytesPerInterval
-Message-ID: <2026040241-purveyor-bakery-a9f1@gregkh>
-References: <20260402021400.28853-1-xuetao09@huawei.com>
+	s=arc-20240116; t=1775106935; c=relaxed/simple;
+	bh=HVoeiC7t5M0u01gC8ZWrF1ZSdndrYAnSTfQH8ssTUVw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BDukQXCyq0Pb3lJ9cFCmtfrpY5pM15J5L1gCG/5EeIo9fd6mNn0DHRgicA0fL0rAzLXFMU1lUkPbWRQRez4sV9m88SBFKMSEyidEpI5xqd1taMtkOb/Bwfg9wA4CjtOLvVFViU9SnAoyW9qdGMbMPuTMACGQ6039EB95TdDBkyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aexidzYF; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-35c238f1063so264969a91.1
+        for <linux-usb@vger.kernel.org>; Wed, 01 Apr 2026 22:15:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775106934; x=1775711734; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9VRhm1iFIbmMSuYjrKLq45KZf5lir66/ZO2vyNWUJDo=;
+        b=aexidzYFvmt3YUxjauyrhjoe8SwDNNMksF916eZytT+OIQSDwv+fk8dut+4JpZJdf1
+         FJ6tzmwntIrY5zt/ua4BlUIpJ2yr7BUK5vLmntaa6lM17aaSw1N65UnXEtmU4wQDChPa
+         Hrp6o2VIXdXnE9X1zAmRB587COYxbWO3Rc6t3wbJcw9ZFYbhRbcLlz/1gfvPVHNJ9jLv
+         jM2tr/bO/UPDAKTx81hkgJrfHdJlbUuBPh0WyDRibWzEJ7MRFDe4JIYLR0neXEaPYw7E
+         VeLIu8Zo/y8OYP0GsN3gtGe2cj7cRi2CVT2rxGPmtrh0yvE2JDztD7sOsKR2AuvM/yjq
+         ENRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775106934; x=1775711734;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9VRhm1iFIbmMSuYjrKLq45KZf5lir66/ZO2vyNWUJDo=;
+        b=RAYwPizkfH6GZxktmhhVhOYIocy8BpfQuxMb2Kgsn3di/itr5bpsGtqJdKABt+nGm9
+         ljSxrbYi2ONmV2IQptrDoDmVV0JdL/E1Cc2Ywe2yKDowtQAWwYab9Vjjw6NFgC/jrOEt
+         JxWn4pLZbiHLVKtDU5ic32qwzxe5AGyFRD7Z5awcSyFGh7ox3Oibo5Z+klgIaz4H6Bt4
+         vYEiH5jFa9rW5s9CqxGUR9pteyFOLDRGx07lxmwWN//5A5ELiYT1El00RBtdnE9uXLo0
+         gqBruHkbX1oTVkeK4l0v2g/X0t7dQPOq4saGDKzT6yNoyEhGXildAEsgDWlwqlIpKAFX
+         876g==
+X-Forwarded-Encrypted: i=1; AJvYcCXS4mqorTrVz7uJhKmxiPn2O6Cl/+vyNm+A0IxRq3xHFWhtLSmPrTlwGsBRork6dYie0HDLiLcouwg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJNRbaNKj7iZ1c/4DNQFyZC0gev3erJsuGtcbHBs/sBudrBs9i
+	/YcaUl5mxsai6ZWdN0ofuldA1hFCX2BWGeA0WkUw8kaJnklYyNUGpzyJ
+X-Gm-Gg: AeBDietS0rMLkC12lr8sqHWpgxpCN/A/iG7433ApqA0dK9RbfKDI0Lk++XBaxur/z95
+	Bo3bqMLzGDp/xKv3EY2xv7NjuW3F6HLr8YjU5V0+HVqesjAVz/akqFL5gT3nWqp7W/+J0RwsjZg
+	QLrBHlKm4dviddCanwiP0ijzhfjzHqcjFfK/zwVIyeRBcV87kuWOMrYdIaRDPU9U/wonC5lpphG
+	mQf6VPZyXyRlgylPqSKk44MUk0oS+YYd6XZ3bSE+oV7kDWkXMkC1l2TkWOStiBhK8ktCqAH1t5H
+	GOy8RA7E8OmaqIJIMIJI4O8AYMs4cyHi4U/wqiPAKQ6tAliykQb3C4hxsGhmVYL0V3RQRO7/b8/
+	Re2w1ZKNoMgVoUQ7dVpf8OgFz+PRqGthYL2Ru+C3RKbRL1/WhTvPtorhFYUxHK77pk1++DXmdYx
+	z578R7lG25+ZoO/WzR4ORFc7vWj1Zu+9GHtRzvnLaTAU1a6O3et52ZAxl3MPjcheGBPg==
+X-Received: by 2002:a17:90a:c110:b0:35b:9c97:3d18 with SMTP id 98e67ed59e1d1-35dc6eae327mr5651672a91.12.1775106933827;
+        Wed, 01 Apr 2026 22:15:33 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe93661fsm6902107a91.11.2026.04.01.22.15.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 22:15:33 -0700 (PDT)
+From: a0282524688@gmail.com
+To: tmyu0@nuvoton.com,
+	linusw@kernel.org,
+	brgl@kernel.org,
+	linux@roeck-us.net,
+	andi.shyti@kernel.org,
+	lee@kernel.org,
+	mkl@pengutronix.de,
+	mailhol@kernel.org,
+	alexandre.belloni@bootlin.com,
+	wim@linux-watchdog.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH v1 0/2] mfd: nct6694: Refactor transport layer and add HIF (eSPI) support
+Date: Thu,  2 Apr 2026 13:14:40 +0800
+Message-Id: <20260402051442.1426672-1-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260402021400.28853-1-xuetao09@huawei.com>
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35827-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-35828-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[20];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[a0282524688@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:email,linuxfoundation.org:dkim]
-X-Rspamd-Queue-Id: C9724383452
+	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NO_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 033C1383E55
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Apr 02, 2026 at 10:14:00AM +0800, Tao Xue wrote:
-> As specified in Section 4.14.2 of the xHCI Specification, the xHC
-> reserves bandwidth for periodic endpoints according to bInterval and
-> wBytesPerInterval (Max ESIT Payload).
-> 
-> Some peripherals report an invalid wBytesPerInterval in their device
-> descriptor, which is either 0 or smaller than the actual data length
-> transmitted. This issue is observed on ASIX AX88179 series USB 3.0
-> Ethernet adapters.
-> 
-> These errors may lead to unexpected behavior on certain USB host
-> controllers, causing USB peripherals to malfunction.
-> 
-> To address the issue, return max(wBytesPerInterval, max_payload) when
-> calculating bandwidth reservation.
-> 
-> Fixes: 9238f25d5d32 ("USB: xhci: properly set endpoint context fields for periodic eps.")
-> Cc: <stable@kernel.org>
-> Signed-off-by: Tao Xue <xuetao09@huawei.com>
-> ---
->  drivers/usb/core/usb.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-> index e9a10a33534c..8f2e05a5a015 100644
-> --- a/drivers/usb/core/usb.c
-> +++ b/drivers/usb/core/usb.c
-> @@ -1125,6 +1125,8 @@ EXPORT_SYMBOL_GPL(usb_free_noncoherent);
->  u32 usb_endpoint_max_periodic_payload(struct usb_device *udev,
->  				      const struct usb_host_endpoint *ep)
->  {
-> +	u32 max_payload;
-> +
->  	if (!usb_endpoint_xfer_isoc(&ep->desc) &&
->  	    !usb_endpoint_xfer_int(&ep->desc))
->  		return 0;
-> @@ -1135,7 +1137,12 @@ u32 usb_endpoint_max_periodic_payload(struct usb_device *udev,
->  			return le32_to_cpu(ep->ssp_isoc_ep_comp.dwBytesPerInterval);
->  		fallthrough;
->  	case USB_SPEED_SUPER:
-> -		return le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval);
-> +		max_payload = usb_endpoint_maxp(&ep->desc) * (ep->ss_ep_comp.bMaxBurst + 1);
-> +		if (usb_endpoint_xfer_isoc(&ep->desc))
-> +			return max_t(u32, max_payload * USB_SS_MULT(ep->ss_ep_comp.bmAttributes),
-> +					ep->ss_ep_comp.wBytesPerInterval);
-> +		else
-> +			return max_t(u32, max_payload, ep->ss_ep_comp.wBytesPerInterval);
+From: Ming Yu <a0282524688@gmail.com>
 
-You dropped the conversion from le16 to cpu?  Why?
+The Nuvoton NCT6694 is a peripheral expander that provides GPIO, I2C,
+CAN-FD, Watchdog, HWMON, PWM, and RTC sub-devices. Currently, the
+driver only supports USB as the host transport interface.
 
-thanks,
+This series refactors the NCT6694 MFD core to support multiple transport
+backends and adds a new Host Interface (HIF) transport driver that
+communicates over eSPI using Super-I/O shared memory.
 
-greg k-h
+Ming Yu (2):
+  mfd: nct6694: Switch to devm_mfd_add_devices() and drop IDA
+  mfd: Add Host Interface (HIF) support for Nuvoton NCT6694
+
+ MAINTAINERS                         |   1 +
+ drivers/gpio/gpio-nct6694.c         |  26 +-
+ drivers/hwmon/nct6694-hwmon.c       |  21 -
+ drivers/i2c/busses/i2c-nct6694.c    |  26 +-
+ drivers/mfd/Kconfig                 |  47 +-
+ drivers/mfd/Makefile                |   3 +-
+ drivers/mfd/nct6694-hif.c           | 649 ++++++++++++++++++++++++++++
+ drivers/mfd/nct6694.c               | 180 ++++----
+ drivers/net/can/usb/nct6694_canfd.c |  18 +-
+ drivers/rtc/rtc-nct6694.c           |   7 -
+ drivers/watchdog/nct6694_wdt.c      |  27 +-
+ include/linux/mfd/nct6694.h         |  57 ++-
+ 12 files changed, 829 insertions(+), 233 deletions(-)
+ create mode 100644 drivers/mfd/nct6694-hif.c
+
+-- 
+2.34.1
+
 
