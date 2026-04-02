@@ -1,206 +1,157 @@
-Return-Path: <linux-usb+bounces-35832-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35834-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SOUIMzoVzmmnkgYAu9opvQ
-	(envelope-from <linux-usb+bounces-35832-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:05:30 +0200
+	id yLowED0YzmmnkgYAu9opvQ
+	(envelope-from <linux-usb+bounces-35834-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:18:21 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 299C5384E4B
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:05:26 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2B92385058
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 09:18:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 54D7C306DA79
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 07:00:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6C62230E6C79
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 07:11:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79FF83793AC;
-	Thu,  2 Apr 2026 06:59:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 751A7387341;
+	Thu,  2 Apr 2026 07:11:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Szyr1N0a"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="MbJ5ioau"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037D536AB50;
-	Thu,  2 Apr 2026 06:59:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0236838238B;
+	Thu,  2 Apr 2026 07:11:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775113199; cv=none; b=BB6JEE/Z/YopBbDhonV23F456OJerINOtH2MuV2zn/khSTKSDfM3tpJ0LGa5yWlzZ+IZlZhZ8MzmrKD9lyuZWRPOIkx+WOjs+/1RWIIx8aLw15uqyXxqoHM8KjvLPswzTomOYyXSj9Eb5GTHWi42+PggDoHCRM9W2LuJ71/GYu4=
+	t=1775113873; cv=none; b=rqMpAU8IjRDSllSmnXc4Icjt+SJN16VP+UJ1VzMqxZWajvVdBrIOIqFWbhi4ZNb4444lYGaS6QEiLq3mibz4ZDyX16tKiPw8ZEq6BhIMC5czfGk7BNDmCBdeU/oTeSOS82qeVn+YeE1qj7d59KMBjCvlWmABaWUHkxWosAlR03k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775113199; c=relaxed/simple;
-	bh=ZDEoCEoGwR4n1MolQDEm9fLTMXkYPeAcDweWOQxTSHI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Uel7GjYidkFO3e0z8yJfmbmE5PHP/D6QZc1IggGTBnMlRShKlMuElTcEvJquLhC2FF+5a1bCsP1O/qrf1BXrxMSteyYai1XADhJTwOoLgBiOyk88kDx+xdSmxqJ68blZQbFZUb8YRfKr247osJ3tPrBNw2YoOP6dYVxl6iTp9DM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Szyr1N0a; arc=none smtp.client-ip=113.46.200.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=NvaeLv4xkSNqFdj9tLvDtX5B0ttpvO9UnSQzhaIJ2bc=;
-	b=Szyr1N0aManmA++xNwZx8zNYFmd+ukqvTKfKlTnCsvQXVU8KFYG++R5oWvCLdy6KOvT841lEp
-	zgTapkTDcHBLaJC3W6VMhmmCS4zMECjkVt6QmvQYp+3vOYPwRNcUTmkhu79aHVBVFNEoKRoZ436
-	lvpf/WEyPLkn3iC40j0b6RU=
-Received: from mail.maildlp.com (unknown [172.19.163.127])
-	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fmXcz5TdlzKm4J;
-	Thu,  2 Apr 2026 14:53:39 +0800 (CST)
-Received: from kwepemk100018.china.huawei.com (unknown [7.202.194.66])
-	by mail.maildlp.com (Postfix) with ESMTPS id F0685402AB;
-	Thu,  2 Apr 2026 14:59:51 +0800 (CST)
-Received: from [10.164.148.136] (10.164.148.136) by
- kwepemk100018.china.huawei.com (7.202.194.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.36; Thu, 2 Apr 2026 14:59:51 +0800
-Message-ID: <c463f9ed-22ed-4ee6-b4fa-2933770e9c4c@huawei.com>
-Date: Thu, 2 Apr 2026 14:59:35 +0800
+	s=arc-20240116; t=1775113873; c=relaxed/simple;
+	bh=jm1FXZTjTqQIWmNHRIK8WBy9zxLiGDZ6rzNB+PBaij8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KVIGrMHJRRIa3+OtwyrbWXf7+F1k2s58sz2n/xcszPJJ1ABGXAuYCuHMJfqTGt84GqMl0W+V2ze9RDE381CGYJzM4vqbyQC0XsLx7xIjsE5Unq9mfU2IU1SGuBEIoYR+WtSuKizNUbSPKMxQuuifjF7DaEjptws2fjad//wjzKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=MbJ5ioau; arc=none smtp.client-ip=54.206.16.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1775113694;
+	bh=/EDF8vbCixDR+cQpySr1VFlA7poH9R0LoMtY1CfbwLU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=MbJ5ioauu/hSgyoJmTr+md5djDL9oUSMZkYaFwzLfTX8PzWvERwQKxD/ly9H2nKCU
+	 eSPFawESMIy4RzR9a+Vn7Uhwz7up4OZFq3SmGWwYPHJHr1aZq7JmGmLZwDR2EYzP1D
+	 MJfnXvpQgWRemua3Tu9VV0UqEi9lGE0IgWJaA/qA=
+X-QQ-mid: zesmtpip3t1775113674t15674a6d
+X-QQ-Originating-IP: ll5hvArA3wb3VuAG7IYT6Y+aIU/WYiZFcoug7CkMRlU=
+Received: from uos-PC ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 02 Apr 2026 15:07:52 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 16583864949417679068
+EX-QQ-RecipientCnt: 11
+From: Morduan Zang <zhangdandan@uniontech.com>
+To: Petko Manolov <petkan@nucleusys.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	syzbot+9db6c624635564ad813c@syzkaller.appspotmail.com,
+	Morduan Zang <zhangdandan@uniontech.com>
+Subject: [PATCH] usb: rtl8150: avoid using uninitialized CSCR value
+Date: Thu,  2 Apr 2026 15:07:43 +0800
+Message-ID: <93FF85BB9F33CD2B+20260402070743.20641-1-zhangdandan@uniontech.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: core: Fix bandwidth for devices with invalid
- wBytesPerInterval
-To: Greg KH <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<caiyadong@huawei.com>, <stable@kernel.org>, <stern@rowland.harvard.edu>
-References: <20260402021400.28853-1-xuetao09@huawei.com>
- <2026040241-purveyor-bakery-a9f1@gregkh>
-From: "Xuetao (kirin)" <xuetao09@huawei.com>
-In-Reply-To: <2026040241-purveyor-bakery-a9f1@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemk100018.china.huawei.com (7.202.194.66)
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: M3HmTlv+XDB5qhX4RBwbX2/d3enucYcZzM9v3c7lJP5nuLspKRhaHiN3
+	6f2bk9rVeveDCDxc3EP6st3QhVhV9f2BXLe7vFRXPfD5OoOgtMbASMkhU0cRwg4VJ54svbY
+	oankKDizLdyVknm+astZXUE10ZJrmKAeXo+520tQTcpBxfHoE1At0xFqC/slbl9ZqyVJJb+
+	jTx00hGcna4TH8GmkFg0j+Wd5lC79wW0/99TlSiieHljruJZ0hMT4n/jWie4cLw/lXAEuhL
+	4e89p1RCQFuHVGgmh/INXD3KoHp27F49rFE/nXvLginyiC1FYHwoX1yNZt9uCLHpsLZLoWF
+	r5lyzVbCJ9cigys0UQFnOvNqmDx2790hjRxhLjz+1QP/R3lOoZ6YmSjOBA2mPqhh5XvKM36
+	PnS06QTaRd9oeAWLKu2al2f3rymD027PCPsGWNjEKb1cKhp+4DbltaNGVeDOXiLwPzYztc0
+	B2is2zdAUfQGC3TnxnnaO77J9LeYVUbhVN5REU2R8dm2b45hDxE8XC6IMHOvT3oELjhf7Qr
+	Q6JglTlkU0smgx0LE43krmP6XAxlK/MQ0sRzamBTNs9D02j2x2AQnhTCuRGDVw7EkOOjH5L
+	47auILhdxhEHyPuKU4cli3yXkQmlGj8AjEtcMV6a6jEyGXYOL2ulGIE7HdsbRI6RXJgeIly
+	pnUDSwcnz4AYbERYZxNhYtcndmYeoVR3+h9DIsNXvSlihB4+EHyMOkJoPbRfPYIsmFe53RH
+	88UiinQEllNqDBhB12ex3owNS+AqWBilQEn6hv9S/SctIfv0iNj2ZoHY8oXD4meDcCWe8E0
+	IXHLh8uVsm92pU+Ul8oaqn1MNY3b8PJ2aekN4I/DtYl4bsCkdwnOQgG15LiPMJwCrB6Rxzg
+	uDPamGAIuPkIC0bIlVIvfhk1wMAUAB8N5/tMWB6UsyYdpEmYWyCsDSNvrlc9g2yaDrywTGP
+	E/Vy7sgoZJBSJNHWXEnI9VEciUvw7v/DRuWsOILlIQ9Er8vb4KiHB19JOzehlX7rjU511ys
+	E3XOGBxRoXi9vrdAQ8elVQkT0pD5BFfI9D46Ii/g==
+X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
+X-QQ-RECHKSPAM: 0
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
+	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35832-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[huawei.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-35834-lists,linux-usb=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[xuetao09@huawei.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_COUNT_FIVE(0.00)[6];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,huawei.com:dkim,huawei.com:email,huawei.com:mid]
-X-Rspamd-Queue-Id: 299C5384E4B
+	FROM_NEQ_ENVFROM(0.00)[zhangdandan@uniontech.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[uniontech.com:+];
+	NEURAL_HAM(-0.00)[-0.998];
+	TAGGED_RCPT(0.00)[linux-usb,netdev,9db6c624635564ad813c];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,syzkaller.appspot.com:url,appspotmail.com:email]
+X-Rspamd-Queue-Id: B2B92385058
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Check get_registers() when reading CSCR in set_carrier().
+If the control transfer fails, don't use the stack value.
 
+Reported-by: syzbot+9db6c624635564ad813c@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=9db6c624635564ad813c
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Morduan Zang <zhangdandan@uniontech.com>
+---
+ drivers/net/usb/rtl8150.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-在 2026/4/2 11:51, Greg KH 写道:
-> On Thu, Apr 02, 2026 at 10:14:00AM +0800, Tao Xue wrote:
->> As specified in Section 4.14.2 of the xHCI Specification, the xHC
->> reserves bandwidth for periodic endpoints according to bInterval and
->> wBytesPerInterval (Max ESIT Payload).
->>
->> Some peripherals report an invalid wBytesPerInterval in their device
->> descriptor, which is either 0 or smaller than the actual data length
->> transmitted. This issue is observed on ASIX AX88179 series USB 3.0
->> Ethernet adapters.
->>
->> These errors may lead to unexpected behavior on certain USB host
->> controllers, causing USB peripherals to malfunction.
->>
->> To address the issue, return max(wBytesPerInterval, max_payload) when
->> calculating bandwidth reservation.
->>
->> Fixes: 9238f25d5d32 ("USB: xhci: properly set endpoint context fields for periodic eps.")
->> Cc: <stable@kernel.org>
->> Signed-off-by: Tao Xue <xuetao09@huawei.com>
->> ---
->>   drivers/usb/core/usb.c | 9 ++++++++-
->>   1 file changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
->> index e9a10a33534c..8f2e05a5a015 100644
->> --- a/drivers/usb/core/usb.c
->> +++ b/drivers/usb/core/usb.c
->> @@ -1125,6 +1125,8 @@ EXPORT_SYMBOL_GPL(usb_free_noncoherent);
->>   u32 usb_endpoint_max_periodic_payload(struct usb_device *udev,
->>   				      const struct usb_host_endpoint *ep)
->>   {
->> +	u32 max_payload;
->> +
->>   	if (!usb_endpoint_xfer_isoc(&ep->desc) &&
->>   	    !usb_endpoint_xfer_int(&ep->desc))
->>   		return 0;
->> @@ -1135,7 +1137,12 @@ u32 usb_endpoint_max_periodic_payload(struct usb_device *udev,
->>   			return le32_to_cpu(ep->ssp_isoc_ep_comp.dwBytesPerInterval);
->>   		fallthrough;
->>   	case USB_SPEED_SUPER:
->> -		return le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval);
->> +		max_payload = usb_endpoint_maxp(&ep->desc) * (ep->ss_ep_comp.bMaxBurst + 1);
->> +		if (usb_endpoint_xfer_isoc(&ep->desc))
->> +			return max_t(u32, max_payload * USB_SS_MULT(ep->ss_ep_comp.bmAttributes),
->> +					ep->ss_ep_comp.wBytesPerInterval);
->> +		else
->> +			return max_t(u32, max_payload, ep->ss_ep_comp.wBytesPerInterval);
-> 
-> You dropped the conversion from le16 to cpu?  Why?
-> 
-> thanks,
-> 
-> greg k-h
+diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
+index 4cda0643afb6..7e32726d3e6f 100644
+--- a/drivers/net/usb/rtl8150.c
++++ b/drivers/net/usb/rtl8150.c
+@@ -722,7 +722,11 @@ static void set_carrier(struct net_device *netdev)
+ 	rtl8150_t *dev = netdev_priv(netdev);
+ 	short tmp;
+ 
+-	get_registers(dev, CSCR, 2, &tmp);
++	if (get_registers(dev, CSCR, 2, &tmp) < 0) {
++		netif_carrier_off(netdev);
++		return;
++	}
++
+ 	if (tmp & CSCR_LINK_STATUS)
+ 		netif_carrier_on(netdev);
+ 	else
+-- 
+2.50.1
 
-Hi Greg,
-
-Thank you for the review.
-
-1、You're right, that was an oversight. I should keep the le16_to_cpu().
-Here's the corrected version:
-
-     max_payload = usb_endpoint_maxp(&ep->desc) * 
-(ep->ss_ep_comp.bMaxBurst + 1);
-     if (usb_endpoint_xfer_isoc(&ep->desc))
-         return max_t(u32, max_payload * 
-USB_SS_MULT(ep->ss_ep_comp.bmAttributes),
-                         le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval));
-     else
-         return max_t(u32, max_payload, 
-le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval));
-
-2、Following Alan's suggestion in another email, should I check whether 
-wBytesPerInterval is a valid value and handle it in the 
-usb_parse_ss_endpoint_companion() ?
-
-However, when parsing the device descriptor, we do not know whether the 
-actual data length transmitted by the peripheral is greater than 
-wBytesPerInterval.
-
-Therefore, would it be sufficient to only add a check for whether 
-wBytesPerInterval is 0 in the existing flow, and if it is 0, set 
-wBytesPerInterval to cpu_to_le16(max_tx) by default?
-
-For example, modify it in the following way：
-
-      if (le16_to_cpu(desc->wBytesPerInterval) > max_tx || 
-le16_to_cpu(desc->wBytesPerInterval) == 0) {
-         dev_notice(ddev, "%s endpoint with wBytesPerInterval of %d in "
-                 "config %d interface %d altsetting %d ep %d: "
-                 "setting to %d\n",
-                 usb_endpoint_xfer_isoc(&ep->desc) ? "Isoc" : "Int",
-                 le16_to_cpu(desc->wBytesPerInterval),
-                 cfgno, inum, asnum, ep->desc.bEndpointAddress,
-                 max_tx);
-         ep->ss_ep_comp.wBytesPerInterval = cpu_to_le16(max_tx);
-     }
-
-  Could you please give me some advice? Thanks.
 
