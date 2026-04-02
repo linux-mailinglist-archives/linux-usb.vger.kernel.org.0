@@ -1,74 +1,74 @@
-Return-Path: <linux-usb+bounces-35886-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35887-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8HufHGVvzmnxngYAu9opvQ
-	(envelope-from <linux-usb+bounces-35886-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 15:30:13 +0200
+	id ePCpKbxvzmnxngYAu9opvQ
+	(envelope-from <linux-usb+bounces-35887-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 15:31:40 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75463389BFA
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 15:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F357D389C44
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 15:31:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4BD54316B3AD
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 13:18:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7F9583171C4A
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 13:18:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C929309F1D;
-	Thu,  2 Apr 2026 13:17:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92CD3313283;
+	Thu,  2 Apr 2026 13:17:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UwLydMSJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lBzhmIqQ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDA73081DF
-	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 13:17:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1048C31079B
+	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 13:17:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775135868; cv=none; b=dc6V3UXWxxuQcc3x6WaJ/Umxti9Jn4NStX3DQLYjvX68PJuGjMmAvgrFRbvxRA2pQZbZuAI0fctZOGrPL6q0C3FpEVB/6GhY/84QeCmYMeb0IU9a2lZnYI0y06aUVeISsbQR45C9bp2rXAD9xp28NTzxLHqiBpsFO19ArR9LJe8=
+	t=1775135870; cv=none; b=e4adjVoPswLIWCaPsV0l7njjJMeY14NyKspnCWNDy/9gV4l+lljgiiH7mX2lYz/1aobdgklltPYfQ+uWKg26i13OG6wrhnRrD8q+AbB+rWoz7VmmPhoQjKLjl5HYyQ+zqhm5w4dJn7FNLhQEXH7bm+SkVd0K526Lvse8AhWzB14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775135868; c=relaxed/simple;
-	bh=1hPDITlY6plfisap8V8yRn2EEgmFeomO3+suvpeQX24=;
+	s=arc-20240116; t=1775135870; c=relaxed/simple;
+	bh=fUEPRpAJPYGx6dQLIfZj06i9wu0ng2REl1JNKaK0NnI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rvq7JAaptTAJEXYCLaPp7dxMxERa9rew6z2H/wwzEgLBQREpVaoZ7V4mrcgHHB1Z35hgx8H5g6YvBTVRL64wyQU2V4BDv8S1DCyTBCZF2Pz5PI3DD5zqQiN5jkOWyFPuS7wSRTqJNF7kS+TKhrxBCbTXaqXDt8yPfdC/Z3H/VGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UwLydMSJ; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version; b=WKUprskqwXuFSjGq5/891K8A2igEv4Aj7IRkn70jW7VAEpe9ifuJ+A5tru5c9IvlmaqdYwtrz1SSX4u0jkNNwD47tUY9TuT4sxzp9nikbUORCwgHXO2LWoFBgLQX6fJD+XQ3+0C6+2LN95QiPJigRFKHhDwEEqv3k3ZKhRQEtis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lBzhmIqQ; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775135868; x=1806671868;
+  t=1775135869; x=1806671869;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1hPDITlY6plfisap8V8yRn2EEgmFeomO3+suvpeQX24=;
-  b=UwLydMSJfHuBSfqaWsTPgLl0+/Dp5cbTCDYo3r/eHMWiHu8eQsmd9bwp
-   /e7LS8xBEhAiYFKD0JnO1MQvoVEIu/RBLAleX8gF+5d0O29BLM/nemGO7
-   t9FMTCyLkC2kYQAzgWcINzZNpMpkoEBKSCToeLFKiTFCKVuFI+bsCuDze
-   kS0/3CcXcTHf8KGuhcIWhzEfLkPCsBg9cn2DwQFbV9ZwsdqhduJ79hJxU
-   T6Ot8yB1nYfK1VhWyB1hAdPpdcnjKkhRRBh+5cQxL7SkBkCESoUsPotq/
-   Gqqzi2BPeaTIY8p7gH+UHX5NYxJ1toCnphhLcp6u+ElNMFkTYVHtpZzwm
+  bh=fUEPRpAJPYGx6dQLIfZj06i9wu0ng2REl1JNKaK0NnI=;
+  b=lBzhmIqQpWczka6Ud59z4tg2LEZSHvrpsI7NHwuD+g45PtpTLkedURtK
+   RDotTImnyjyOjtqoDnqwyBa/BuMF0LJcW0cIo+2kvsGy27VPTrSigjjLF
+   hSwY6LRXwftlUSGedDS1YDV32DsAch6KHkdtst5gxxkt93AN4Z5PQTZl8
+   tUNoCR4uI8SLsr6MWe1I/iuX8CyiXt4NY2g9mTALPzq9diWiwhr9o6N2u
+   uIa0G/HmNrkOODIoTmSU49iuqbST2gy+Fq9aSI37z8XUA2FM9A0rs9kts
+   g18I4gjFY6UhavNkn7wz2RyFVSPXwc2aONwA4ccnP+2AiXi6MWrXxtrwK
    A==;
-X-CSE-ConnectionGUID: 8C9ls303RlWjgNdKbtxL6Q==
-X-CSE-MsgGUID: zER7HUMBSE+MZsAxQL7fdQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11746"; a="87650921"
+X-CSE-ConnectionGUID: 5MADY4bJTfm2G9lfabXt/Q==
+X-CSE-MsgGUID: b79eniiNQMORcoHqacYk7w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11746"; a="87650930"
 X-IronPort-AV: E=Sophos;i="6.23,155,1770624000"; 
-   d="scan'208";a="87650921"
+   d="scan'208";a="87650930"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 06:17:47 -0700
-X-CSE-ConnectionGUID: 8QkuIZ/sTu+oWBcHrVKb4g==
-X-CSE-MsgGUID: 8P3OZW1fSJO582VO+OnDBQ==
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 06:17:49 -0700
+X-CSE-ConnectionGUID: t6l4Pw/0TBCZj/+v2oe+LA==
+X-CSE-MsgGUID: gNw2+cNYTcayxrLPvffI2A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,155,1770624000"; 
-   d="scan'208";a="227241588"
+   d="scan'208";a="227241590"
 Received: from pgcooper-mobl3.ger.corp.intel.com (HELO mnyman-desk.intel.com) ([10.245.245.50])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 06:17:46 -0700
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 06:17:48 -0700
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
 	Niklas Neronin <niklas.neronin@linux.intel.com>,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 21/25] usb: xhci: cleanup xhci_hub_report_usb3_link_state()
-Date: Thu,  2 Apr 2026 16:13:38 +0300
-Message-ID: <20260402131342.2628648-22-mathias.nyman@linux.intel.com>
+Subject: [PATCH 22/25] usb: xhci: simpilfy resume root hub code
+Date: Thu,  2 Apr 2026 16:13:39 +0300
+Message-ID: <20260402131342.2628648-23-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260402131342.2628648-1-mathias.nyman@linux.intel.com>
 References: <20260402131342.2628648-1-mathias.nyman@linux.intel.com>
@@ -93,7 +93,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35886-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35887-lists,linux-usb=lfdr.de];
 	RCPT_COUNT_THREE(0.00)[4];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
@@ -105,104 +105,72 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-usb];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,intel.com:email,linux.intel.com:mid]
-X-Rspamd-Queue-Id: 75463389BFA
+X-Rspamd-Queue-Id: F357D389C44
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 
-Improve readability of xhci_hub_report_usb3_link_state().
-
-Comments are shortened and clarified, and the code now makes it explicit
-when the Port Link State (PLS) value is modified versus when other status
-bits are updated.
-
-No functional changes.
+Resume roothubs without checking 'retval' value, as it is always '0'.
+Due to changes made in commit 79989bd4ab86 ("xhci: always resume roothubs
+if xHC was reset during resume") the check is redundant.
 
 Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-hub.c | 56 +++++++++++++------------------------
- 1 file changed, 20 insertions(+), 36 deletions(-)
+ drivers/usb/host/xhci.c | 36 ++++++++++++++++--------------------
+ 1 file changed, 16 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index 8e134f6b4e37..bacd0ddd0d09 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -850,53 +850,37 @@ void xhci_test_and_clear_bit(struct xhci_hcd *xhci, struct xhci_port *port,
- }
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index ece3ff7916ff..6d27c471d4da 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1245,29 +1245,25 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
  
- /* Updates Link Status for super Speed port */
--static void xhci_hub_report_usb3_link_state(struct xhci_hcd *xhci,
--		u32 *status, u32 portsc)
-+static void xhci_hub_report_usb3_link_state(struct xhci_hcd *xhci, u32 *status, u32 portsc)
- {
- 	u32 pls = portsc & PORT_PLS_MASK;
+ 	xhci_dbc_resume(xhci);
  
--	/* When the CAS bit is set then warm reset
--	 * should be performed on port
-+	/*
-+	 * CAS indicates that a warm reset is required, it may be set in any
-+	 * link state and is only present on roothubs.
- 	 */
- 	if (portsc & PORT_CAS) {
--		/* The CAS bit can be set while the port is
--		 * in any link state.
--		 * Only roothubs have CAS bit, so we
--		 * pretend to be in compliance mode
--		 * unless we're already in compliance
--		 * or the inactive state.
-+		/*
-+		 * If not already in Compliance or Inactive state,
-+		 * report Compliance Mode so the hub logic triggers a warm reset.
- 		 */
--		if (pls != XDEV_COMP_MODE &&
--		    pls != XDEV_INACTIVE) {
-+		if (pls != XDEV_COMP_MODE && pls != XDEV_INACTIVE)
- 			pls = USB_SS_PORT_LS_COMP_MOD;
--		}
--		/* Return also connection bit -
--		 * hub state machine resets port
--		 * when this bit is set.
+-	if (retval == 0) {
+-		/*
+-		 * Resume roothubs only if there are pending events.
+-		 * USB 3 devices resend U3 LFPS wake after a 100ms delay if
+-		 * the first wake signalling failed, give it that chance if
+-		 * there are suspended USB 3 devices.
 -		 */
--		pls |= USB_PORT_STAT_CONNECTION;
--	} else {
-+
-+		/* Signal a connection change to force a reset */
-+		*status |= USB_PORT_STAT_CONNECTION;
-+	} else if (pls == XDEV_RESUME) {
- 		/*
--		 * Resume state is an xHCI internal state.  Do not report it to
--		 * usb core, instead, pretend to be U3, thus usb core knows
--		 * it's not ready for transfer.
-+		 * Resume is an internal xHCI-only state and must not be exposed
-+		 * to usbcore. Report it as U3 so transfers are blocked.
- 		 */
--		if (pls == XDEV_RESUME) {
--			*status |= USB_SS_PORT_LS_U3;
--			return;
+-		if (xhci->usb3_rhub.bus_state.suspended_ports ||
+-		    xhci->usb3_rhub.bus_state.bus_suspended)
+-			suspended_usb3_devs = true;
++	/*
++	 * Resume roothubs only if there are pending events.
++	 * USB 3 devices resend U3 LFPS wake after a 100ms delay if
++	 * the first wake signalling failed, give it that chance if
++	 * there are suspended USB 3 devices.
++	 */
++	if (xhci->usb3_rhub.bus_state.suspended_ports || xhci->usb3_rhub.bus_state.bus_suspended)
++		suspended_usb3_devs = true;
+ 
++	pending_portevent = xhci_pending_portevent(xhci);
++	if (suspended_usb3_devs && !pending_portevent && is_auto_resume) {
++		msleep(120);
+ 		pending_portevent = xhci_pending_portevent(xhci);
++	}
+ 
+-		if (suspended_usb3_devs && !pending_portevent && is_auto_resume) {
+-			msleep(120);
+-			pending_portevent = xhci_pending_portevent(xhci);
 -		}
 -
-+		pls = USB_SS_PORT_LS_U3;
-+	} else if (pls == XDEV_COMP_MODE) {
- 		/*
--		 * If CAS bit isn't set but the Port is already at
--		 * Compliance Mode, fake a connection so the USB core
--		 * notices the Compliance state and resets the port.
--		 * This resolves an issue generated by the SN65LVPE502CP
--		 * in which sometimes the port enters compliance mode
--		 * caused by a delay on the host-device negotiation.
-+		 * Some hardware may enter Compliance Mode without CAS.
-+		 * Fake a connection event so usbcore notices and resets the port.
- 		 */
--		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
--				(pls == XDEV_COMP_MODE))
--			pls |= USB_PORT_STAT_CONNECTION;
-+		if (xhci->quirks & XHCI_COMP_MODE_QUIRK)
-+			*status |= USB_PORT_STAT_CONNECTION;
+-		if (pending_portevent) {
+-			if (xhci->shared_hcd)
+-				usb_hcd_resume_root_hub(xhci->shared_hcd);
+-			usb_hcd_resume_root_hub(hcd);
+-		}
++	if (pending_portevent) {
++		if (xhci->shared_hcd)
++			usb_hcd_resume_root_hub(xhci->shared_hcd);
++		usb_hcd_resume_root_hub(hcd);
  	}
  
- 	/* update status field */
+ 	/*
 -- 
 2.43.0
 
