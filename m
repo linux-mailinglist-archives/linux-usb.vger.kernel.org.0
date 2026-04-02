@@ -1,181 +1,149 @@
-Return-Path: <linux-usb+bounces-35913-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35914-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KMlmGwDPzmlXqQYAu9opvQ
-	(envelope-from <linux-usb+bounces-35913-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 22:18:08 +0200
+	id qOxhJ9Przmn/rwYAu9opvQ
+	(envelope-from <linux-usb+bounces-35914-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 03 Apr 2026 00:21:07 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C150A38DE60
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 22:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D0EC38EC22
+	for <lists+linux-usb@lfdr.de>; Fri, 03 Apr 2026 00:21:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3D8FB3021E70
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 20:18:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 05460302DF48
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 22:20:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CF46388E64;
-	Thu,  2 Apr 2026 20:18:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84B8C3C9EF7;
+	Thu,  2 Apr 2026 22:20:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OdiTHaC0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="prUW9UT3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB421A0BE0
-	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 20:18:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1297B36D51B;
+	Thu,  2 Apr 2026 22:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775161083; cv=none; b=jy4qdBnAJMzq4zcJ0hxJfh6oznmlqh8ceOBWQvr+3dLUFkgxZj7zjkE3Of2SS+T1nmtBOWONcmQVxX5Tu8PBIb8steF1o4oGI+G3UaCZwdTk092DPKuyoE9tSbascM5XZ3Yj2FgQCxS0A6oiOLPVC/E+R0GY7heOzk7ujo98dWc=
+	t=1775168457; cv=none; b=UXDsA9B3F081WZno8+5eCiaynd6NH2uQL8fO6MCM0adwiMa9pRExshmxW8NerKJNGWilCjTIjZbAbE9WTFxFZePgMsCWSPqQEre2dYJtjz6FO8TVQ/y1WYPpdsuciVDNrtq0NGTwEROcF/OGkZUko8QyhebWJlTcCE/+cgslHjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775161083; c=relaxed/simple;
-	bh=5UsOEcn50cdBc2IpTEpFynqVOam78E9Xv9FXNMb1C8A=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mRzBVI0LZLNKh3frgkX8LymTlsEbVhJRf0CSPP/P+QyfOySKFnxfl1z/O9ZjOSgZ4+YAtTyolOlbZZOBEshpZSXdZ7zxiTqTJNHGJ5GkhmKQ8szJewk/DXjww1QHWW/PKt55kJhSPrbjgMnJbf44/LMhThPO5/j4y/NPiHOzueY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OdiTHaC0; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4887f49ec5aso17758795e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2026 13:18:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775161080; x=1775765880; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5UsOEcn50cdBc2IpTEpFynqVOam78E9Xv9FXNMb1C8A=;
-        b=OdiTHaC0gBz7Ws9ArJJe8KabPgKKlNWZiVyVZBWQXms7QwCQfnqSiHfXqkQoGuom8b
-         s0hx3QJ342x72jOmM5l8jzA0bM6UmJgNxcYuh7eApmmCVekf0cRjmm1HIdekuM+wtI3A
-         IIZzni1aXMdsMaQxYny2w8IruUNNEKRnsbHSUaQTZ7YKPgG0tPRMKpRW/xA+Bh37Jxc2
-         Vt/4/cfi0Hg2dnO1MmkNNv5PCivLZNfn3OQeIqLCMtj4+D9owZ4U4DBwGzCJgpjv1UoN
-         krqqpaAECJYY85fU7agFocobbdC32DV6vaQ0/5dNA3qF7pvYRFlQ60OOXua5ZnXorWs2
-         KGCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775161080; x=1775765880;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5UsOEcn50cdBc2IpTEpFynqVOam78E9Xv9FXNMb1C8A=;
-        b=hVkASNBtf1gXUkfnwUn0J40eIQYAi/ZBnOygCQu9daxpVod2QIupJULznScAz6ahvy
-         ExOL/uQxcjit3Tqs5/7K7SHa7I8UnAYxJvIx8mFGeHE+6tkd2UjINsW6uBEyVHCI4K4F
-         ITZHM55Ms4AA8DZktT9bhmxg1BG4ajYzWpqhihXRDi9t/JGnghJ7cJu8JkUxhS4xIHfr
-         M3oXuPlMPPro0G7j4bHAPRFc0/Y5sDgxFjMtgp4tcApb55HuPqRsesIwcKmmzXtDOtr2
-         6Yg/L9eIdMNPyH8555UHS4OBQEzrpnT4YGViChwxNozzGozt35rdT5/QR43Fhtp4qAgt
-         yt0w==
-X-Forwarded-Encrypted: i=1; AJvYcCXMN///LdqD6nq5Yu5nlqebVDHW83Ads0qq1i5+FDjeDqyeHbulmyDOU6hk8H5SkI00yXzo50XmFZs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyz3XWG65gqxH1b8bMImRJDwF+VmAANGy1Jvsh1ieZUoSINDbjY
-	a9nO9Sk1mLdAZi6POkjVVBOJBBVsBUQeIdEYAOeNQ/cBo+1J2RToRdZC
-X-Gm-Gg: ATEYQzxhT2YI/sumLCWuG2PrPNfUyybiE83ZYDgA5+e0z5t7AlHS1d/EPuO1p2YxYG8
-	ZdQDFRnKMmG+R0qfGi6pV78v8bwkqg7pPWnKGcr5b1kz6aQm6247qC3DrVTHknDdc59aHeawxip
-	o47A/xlfZleEkjKkN2V5hYjwEUaVOZN+meuW9JBW0sE+dZwPrjsOBDOEe87pQViY7Bk+VVNVz/a
-	NYW8XHnQTVL6qWWorEHERj5P5FwJ9Z7jc4TN1D2aWqk2WiBNacFsXWZA10GN/qSC4kPofr7XEvU
-	AE7yRZvA5AIuaLvf1P1H74yx4eIxLCA5+N59cjgrO+I3bl+mEWqgwXe45PbwZUcdlnV8+3NyIyn
-	sk5/moFNrJ514oW5D//xohhD44TOn8gFWA0kg3tIaZKWICLzRkxVAms9elRjUs0Pu00dggyMnfs
-	BQBCNwavQrvMY00MD4EPvoBePi1KrngnghFGCarKTP65w=
-X-Received: by 2002:a05:600c:3f0a:b0:487:2439:b7be with SMTP id 5b1f17b1804b1-488996a34c9mr7304365e9.6.1775161079942;
-        Thu, 02 Apr 2026 13:17:59 -0700 (PDT)
-Received: from foxbook (bfi53.neoplus.adsl.tpnet.pl. [83.28.46.53])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e4d2971sm10185098f8f.22.2026.04.02.13.17.58
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Thu, 02 Apr 2026 13:17:59 -0700 (PDT)
-Date: Thu, 2 Apr 2026 22:17:55 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: "Xuetao (kirin)" <xuetao09@huawei.com>, Greg KH
- <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, caiyadong@huawei.com, stable@kernel.org
-Subject: Re: [PATCH] usb: core: Fix bandwidth for devices with invalid
- wBytesPerInterval
-Message-ID: <20260402221755.3afd7df4.michal.pecio@gmail.com>
-In-Reply-To: <74f1bb0d-24c3-44be-9583-0585863cdae3@rowland.harvard.edu>
-References: <20260402021400.28853-1-xuetao09@huawei.com>
-	<2026040241-purveyor-bakery-a9f1@gregkh>
-	<c463f9ed-22ed-4ee6-b4fa-2933770e9c4c@huawei.com>
-	<74f1bb0d-24c3-44be-9583-0585863cdae3@rowland.harvard.edu>
+	s=arc-20240116; t=1775168457; c=relaxed/simple;
+	bh=KE5CJQvzLY7UMhd/2yz8skIZOhhpRl5F0TjWND7YUkI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=ZtxXfIt4LwDW1GtQUKRkQxb2Q/YwLU+AZtUnXCShUQfFf8mPNID9h+1L++eRDmGowCN7JSutKjd6rfzOG+xGBJqBfkpkf+eM0ro7qcKZ+16fyNrMH5ltlbiTBd7s+fsgfYCGM/XvpL0Cf18bqP1BP2gHjG7cdHbEXNuHphtOjp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=prUW9UT3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77D8AC116C6;
+	Thu,  2 Apr 2026 22:20:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775168456;
+	bh=KE5CJQvzLY7UMhd/2yz8skIZOhhpRl5F0TjWND7YUkI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=prUW9UT3rmyzotQUUTkrod77DHp5m0ZeQwv/pLDDsFw61hdnQwmDt6kbTMrlmHXU4
+	 Yav12lrsXexlysCdiZa/s+L93vFGEtXNLrXgQFQu0ZCXxoKQVIw0fJsUA8mxnZMGHw
+	 /W5mbO7pMFwX56f2y+HnMPgOi9DNndI+cBzkSJxt/hU1UbW7AjapGJxaWqBfVfUD8J
+	 PDuDkOVALGisc0MdTmzy0+gWJ6IuYkecZGM8Vgjf/0BhX3Afg6KO4cpSTJhRWwzGC7
+	 Uio39ErNSNf+E0wuiJtGKnYaZaJrtFIJ13+WK6PFIhkbWK4oSQhxS/ozaajRXOQiZq
+	 saOofhH1rQ8ag==
+Date: Thu, 2 Apr 2026 17:20:55 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Georg Klima <Georg.Klima@durst-group.com>
+Cc: linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Georg Klima <georg_klima@gmx.at>, Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
+Subject: Re: AW: [BUG] Thunderbolt runtime resume during PCIe removal causes
+ IRQ warning and shutdown failure.
+Message-ID: <20260402222055.GA293966@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM9PR10MB4231D6536D271E1F5A81F3D1B757A@AM9PR10MB4231.EURPRD10.PROD.OUTLOOK.COM>
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-35913-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35914-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmx.at,wunner.de,gmail.com,kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[helgaas@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C150A38DE60
+X-Rspamd-Queue-Id: 3D0EC38EC22
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 2 Apr 2026 09:56:51 -0400, Alan Stern wrote:
-> On Thu, Apr 02, 2026 at 02:59:35PM +0800, Xuetao (kirin) wrote:
-> > 2=E3=80=81Following Alan's suggestion in another email, should I check
-> > whether wBytesPerInterval is a valid value and handle it in the
-> > usb_parse_ss_endpoint_companion() ? =20
->=20
-> Yes, IMO.
+[+cc Thunderbolt & pciehp folks, initial report of system poweroff
+failure at
+https://lore.kernel.org/all/AM9PR10MB42316BF3E59B29E1EA3E5600B756A@AM9PR10MB4231.EURPRD10.PROD.OUTLOOK.COM]
 
-Not sure, this could backfire if it turns out that these workarounds
-will need to become more elaborate and account for wBytesPerInterval.
+On Fri, Mar 27, 2026 at 05:28:28PM +0000, Georg Klima wrote:
+> Hi Bjorn,
+> 
+> Upstream without nvidia, more debug, same issue with aspm default:
 
-These descriptors aren't blatantly invalid. USB3 9.6.7 doesn't require
-that wBytesPerInterval =3D=3D wMaxPacketSize * bMaxBurst * Mult.
+Thanks for this test with an upstream kernel (6.19.10).  Complete
+dmesg log was attached to
+https://lore.kernel.org/all/AM9PR10MB4231D6536D271E1F5A81F3D1B757A@AM9PR10MB4231.EURPRD10.PROD.OUTLOOK.COM/
 
-Being greater would be blatantly invalid, but this is already being
-sanitized by the descriptor parser.
+Linux only requests control of PME, AER, hotplug, etc if Linux
+supports ASPM and MSI.  "pcie_aspm=off" means Linux doesn't support
+ASPM, so it doesn't request control:
 
-> > However, when parsing the device descriptor, we do not know whether
-> > the actual data length transmitted by the peripheral is greater than
-> > wBytesPerInterval. =20
+  --- dmesg_aspm_off.txt
+  +++ dmesg_actual.txt
+  - acpi PNP0A08:01: _OSC: OS supports [ExtendedConfig Segments MSI EDR HPX-Type3]
+  + acpi PNP0A08:01: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI EDR HPX-Type3]
+  - acpi PNP0A08:01: _OSC: not requesting OS control; OS requires [ExtendedConfig ASPM ClockPM MSI]
+  + acpi PNP0A08:01: _OSC: OS now controls [PCIeHotplug SHPCHotplug PME AER PCIeCapability LTR DPC]
 
-Indeed. Device is allowed (actually: required) not to send more data
-than its wBytesPerInterval on IN endpoints.
+I suspect the issue is related to those services, not to ASPM itself.
+Booting with "pcie_port_pm=off" might be a more targeted workaround.
 
-UVC driver uses this field to pick isochronous altsetting capable of
-transmitting a particular payload each interval. If we overestimate,
-there is risk that the device will deliver on its promise and truncate
-instead of violating USB3 spec. We should rather pick a larger alt.
+You have this topology:
 
-OTOH, when a device lies and sends more than specified, this happens.
-Some HCs ignore the problem (and may overcommit bandwidth if we enable
-million such endpoints), others get pedantic and return Babble Error
-(my mistake, Bandwidth Overrun is specific to isochronous).
+  0000:80:1b.4: [8086:7f44] PCIe Root Port to [bus 88-d8]
+  0000:88:00.0: [8086:5780] PCIe Switch Upstream Port (JHL9580 Thunderbolt 5)
 
+and the first thing I see in the 6.19.10 log is this, which makes me
+think we put the Thunderbolt controller at 88:00.0 into D3 and are
+trying to bring it back to D0 but it took too long, so we can't access
+downstream devices like b1:00.0:
 
-I think this patch is relatively safe for interrupt, because drivers
-generally don't look at endpoint descriptors and submit URBs of class
-specific size. Case in point, everything works when you override xHCI
-allocation. It also works on HCs ignoring it.
-
-Beind the pedant I am, I would restrict this to bMaxBurst=3D=3D0 because
-that's the known problem case and IDK off-hand what devices might use
-bursting interrupt endpoints and what gotchas await there.
-
-Maybe add a comment that it's a questionable, spec-violating hack.
-
-Regards,
-Michal=20
+  Mar 27 18:08:40 fedora kernel: pcieport 0000:80:1b.4: Data Link Layer Link Active not set in 100 msec
+  Mar 27 18:08:40 fedora kernel: pcieport 0000:80:1b.4: pciehp: Slot(25): Card not present
+  Mar 27 18:08:40 fedora kernel: xhci_hcd 0000:b1:00.0: Controller not ready at resume -19
+  Mar 27 18:08:40 fedora kernel: ------------[ cut here ]------------
+  Mar 27 18:08:40 fedora kernel: xhci_hcd 0000:b1:00.0: PCI post-resume error -19!
+  Mar 27 18:08:40 fedora kernel: thunderbolt 0000:8a:00.0: interrupt for TX ring 0 is already enabled
+  Mar 27 18:08:40 fedora kernel:  tb_ring_start+0x149/0x330 [thunderbolt]
+  Mar 27 18:08:40 fedora kernel:  tb_ctl_start+0x1b/0xc0 [thunderbolt]
+  Mar 27 18:08:40 fedora kernel:  tb_domain_runtime_resume+0x19/0x40 [thunderbolt]
+  Mar 27 18:08:40 fedora kernel:  __rpm_callback+0x48/0x1f0
+  Mar 27 18:08:40 fedora kernel:  rpm_callback+0x6d/0x80
+  Mar 27 18:08:40 fedora kernel:  rpm_resume+0x4ab/0x6d0
 
