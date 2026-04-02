@@ -1,249 +1,149 @@
-Return-Path: <linux-usb+bounces-35906-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35907-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +DscKI2yzml+pQYAu9opvQ
-	(envelope-from <linux-usb+bounces-35906-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 20:16:45 +0200
+	id CMO5IJO0zmlVpgYAu9opvQ
+	(envelope-from <linux-usb+bounces-35907-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 20:25:23 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC8E738CFA0
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 20:16:44 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28A9338D0F5
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 20:25:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 39478301FF9B
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 18:10:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9E375305B484
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 18:24:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7D703750A2;
-	Thu,  2 Apr 2026 18:10:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 501E737B019;
+	Thu,  2 Apr 2026 18:24:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=scala.name header.i=@scala.name header.b="jtJUrySA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wYkCW+Jq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A663B372EEF
-	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 18:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD54355803
+	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 18:24:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775153415; cv=none; b=QimIwiWyqCCxhypNCLN9ct5L3X4x5AMxoDBujX9kE1KFczqAMFPhoyvBuNguyL9c70ofEZ9XnSwzOlefk9ckTEpRYwJG1iI7mJn+5wZJRVwQa8Wqu/RGJmwO1pLNUdULUWw/hpQRGopSJ0CIdd9mItHW6NmJf6mSTWKnCiX26vE=
+	t=1775154285; cv=none; b=t4VkKfVBHniVSm4EGlFBRbSn2pxXPIkqmS3aWBAIyEqYfilCMscOPMnXTIWRQTtFTDUWKcy3+7oc64r9dDVeWLMTvydXJ1R9lhcbKB6+c55O+1YvLvaWlxIVzwy0sz041QFbHL6L3K4yWKJ3kdMfYHQbcrlTN/D/2TNVwHIALN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775153415; c=relaxed/simple;
-	bh=li3acwxqbb9VQNST74J+DjsJ3B+4NziXxB2PqoD3c38=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S5cllPMSxRrMsL9ZKj0BVq71hy2LY6176xJUcloZn4vlS2LUv4wgGPUZ828L4HZH8DeHkgC7P7koUD/uwmatiYlFIiqysGpr8O8iYWwgf+N7n+6SrgKTPgiNGiEtosQQ4C+4Rr7i5HZVF2EQegxdFGQOlIQ/7Il/ApvuwUbXz3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=scala.name; spf=pass smtp.mailfrom=scala.name; dkim=pass (2048-bit key) header.d=scala.name header.i=@scala.name header.b=jtJUrySA; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=scala.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=scala.name
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-487012ce896so6485765e9.0
-        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2026 11:10:12 -0700 (PDT)
+	s=arc-20240116; t=1775154285; c=relaxed/simple;
+	bh=neDYEmiq1jNlLVPfYr/DxMz6+oxLr+J/ArGBVyjHcfA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=thNNkFtY6Cd5wqcT/1zwINmJ4EVr7RU/TCAVor2fFpfjPMKMBLaaBWw4d3Iff8/GLG29irGiZHzFaDrOwrtLvLVZKd7dWyLlC1viutyXuO/EYKZ6uMTyboux3mgT68bNiiVfKK6ubIFvlwXHNZimlOAfRAGv7QV+AbNR/dG1wnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wYkCW+Jq; arc=none smtp.client-ip=74.125.82.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
+Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2c72849f648so5211064eec.0
+        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2026 11:24:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=scala.name; s=google; t=1775153411; x=1775758211; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zfTbalLF2DOQ7KkU3Yvkrm4nEjw6kVKlkvgHGq/Gq0c=;
-        b=jtJUrySAIfYITCuhiextf1AmGjJ3FrKeX13r8ZbvbT5H1mX8xM8Y6C3i9aKUCtg5zs
-         0moXYvmhHIyhxZUZ6Vm2I0FJ0eyM7wZiStf0mEYv2cwj+nwUwso5r6eQug+bAXLdJXn0
-         14/Srwa911xL+vxgkqsP4epF0L078DjQ7F5Wshs6lhrEskHIGVjv1qJQHVEWN0jSc5tP
-         GaxmDH87ouQnIUWDdxSetLpZI0H5e8xCZ8A7vufK8xWMhN4nM/sCOMqfV6wWXZGpaJHm
-         wo/p22t6SIgqqCxxNhC5tg2xpD49v5wWY+qt4ZtHhvQtOKV5H3yyVJnCfvGB5Q9UxFoE
-         nP8A==
+        d=google.com; s=20251104; t=1775154283; x=1775759083; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=H/GppnI5PJ9zcCt0/6kmbzD7q0Lab98aUuQ2hUohGxQ=;
+        b=wYkCW+JqeoqqGckP8JBdNfVLuxVbo9dM3zu1Gb5A9t7QzjIGx//pEefKCgMtJyXVbT
+         VvpkBWdmQEfynJ02oDxms02NrpMCdVGwBqkHDmH8FPXnAgEk+aadLQcgNygZ2p0znDHj
+         bB+udLJDWAZ621HYI01v37Nlw6ejRvBTHXYitTu3TwAAVIn2CHy1hJT6oY7A1wvFVBud
+         8ijEVT5uA4IV42J6r+YLGBmfb9RQrO4gJx9ewot5dHeYBbfauTXF9M+ABGfxfW0NWau7
+         Z7AUkseXvAGLC5o4QchTYBjOBMMSe26hMib6khYenqRytGjWI68qbdbrTigydpnOl38q
+         HdGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775153411; x=1775758211;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zfTbalLF2DOQ7KkU3Yvkrm4nEjw6kVKlkvgHGq/Gq0c=;
-        b=PW3zw5t8mYVibTMeQdgLS/ZMrk7APSrSPZ/gF5Bj3QabbUiLnOVep/A6dROxwNQvWX
-         sA5eL9LOpxEw5xId24xI5ShJAqbhXsw/OrJfIb2BhzrI+8mqzxhqSNi1XrXj11vKnGkw
-         YOJAxMJMyhBcUO8IspBNVAYhbmZbnJgpUzMnVGBZhU6+7l2r+dxi7jGimcqoL3qHASbr
-         uSbZVJTN8ft2nzPohExFBUtRdUR4AqV7w4W/s+Rowm1IpRFYbjuj3f7FIEy6bPTlp7Mu
-         bw1T3DINRUhBYd72nCaYVIvgv8PO77FDegcru+JW7GOXqqogr+VCMyxA+X+cJL5hiLgR
-         mvXg==
-X-Gm-Message-State: AOJu0Yzig5SiUEBMGok50kyU2ArtHVSdWYKtI9Cd7QwRt0eS/aivsBCv
-	ZKCj5PED3KvBu+MYJb5oLlB5YKHvo/FeaK1W2fOpCxfEP42UQp5h9gywoRSfPu/Ivtc=
-X-Gm-Gg: ATEYQzyKraa0HsbDiIjVdoRrGBj82IvuSWXcwumAlunApGHd0dMPv83BFFEG46J+YTn
-	zG9ZaP9t78PcFbTfUdOXV6YIFzFJ6sDnOaPMNks8dUJBHpZotZ8p476S3cgmwavE7I939Cie/y7
-	Rls+Njrrr2vuXenhtbuuEqpR/5YKcmpjwoyffCtLWsXDSFiBuHh/ZDEUwUoFmgTixgNUZmVNhwh
-	G8b9Rvfv+dUTNz9B3d+TDhrqwJ7xBxsqUTGhSbXDj4/+DnKpqZlMSVtTikQNebMbQVpzodpg4IE
-	kBZrUqXC/CKW09JrJlTg87rTYSdp/LZ1pNk22Zat5d3Zqs7U4SRXJ7xvcTH+DaEUpYpU9+zopHc
-	cTSAj6eLNSqcnoIp8LNlRhuaNZsDS03neknEW3yEo1VK1eAFuPMLaO0cTgsRHn0tO9d1mF7Go00
-	rf+Pm1YgZ1V4GojZQS1izrklRiXME3AAI9Zf85ZSiBSw8SYc8uZ5iZYk7YNfsp0uY=
-X-Received: by 2002:a05:600c:858e:b0:487:467:4276 with SMTP id 5b1f17b1804b1-488835cd391mr114425615e9.30.1775153410610;
-        Thu, 02 Apr 2026 11:10:10 -0700 (PDT)
-Received: from ?IPV6:2a02:169:ee00:0:98f1:7a2a:1483:7cf1? ([2a02:169:ee00:0:98f1:7a2a:1483:7cf1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e822227sm237512085e9.4.2026.04.02.11.10.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Apr 2026 11:10:10 -0700 (PDT)
-Message-ID: <8cef8b26-71ce-4fdf-a514-111d9760634c@scala.name>
-Date: Thu, 2 Apr 2026 20:10:09 +0200
+        d=1e100.net; s=20251104; t=1775154283; x=1775759083;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H/GppnI5PJ9zcCt0/6kmbzD7q0Lab98aUuQ2hUohGxQ=;
+        b=iMNGrjRp8KSJ1PXyMN5qhe98Jimn4d8PnRfLhsLxem8TbX/eYQ6G7i73qSZJUeMlHV
+         oi97FfIJUkl8TO/gXuICA3RBrqUIMhvIrpA2MTxoX7V2s5Y29imKLmig/dAyWs5kJYrl
+         V509axLtfZP3WaGMKaC/64nj0xAk9X6Nbi7Z+8oulOpr2ULkKAPycBZ4hNGgtVF3fJYn
+         H+Z4VtBDxhRNnpDMAlX12dqISG6d0v4KiPxYiigL/LhrTqpEqof9oI+ZgLPkSxbgAlK6
+         sG6i7CrtskGC8rVVYxCyQrdOv7ScIAGC6HWJ91zrHPC1DE8fCdcAw8NPiupvZSn9gIcW
+         1waw==
+X-Forwarded-Encrypted: i=1; AJvYcCV13GgMcboN/BSJeG7+ESZnAuYTKJp7t9enDiG4hGYdBgbGzfzM1gXbfn8RbiNmzdZM2appvQ5Iz/o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJ0VcBKF52RFaC4G3Tq+whpPeWZwp+rWx36inAsB6ERrAD3wef
+	A1lMWSZbDDxmtH0HIoiTbh9Rmz9Ug6GWVZ7o+3w23zTCQsJuSHTYC9VNDCeM2HlZW5P5Nudq/Ry
+	Cr/eKPw==
+X-Received: from dycmz22.prod.google.com ([2002:a05:7300:ea16:b0:2cb:45a9:2264])
+ (user=jthies job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:1688:b0:2c6:cdb3:bd5e
+ with SMTP id 5a478bee46e88-2cbfc365473mr100512eec.28.1775154282763; Thu, 02
+ Apr 2026 11:24:42 -0700 (PDT)
+Date: Thu,  2 Apr 2026 18:24:38 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: typec: altmode: Fix altmode to handle multiple
- parners
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-References: <20260402120433.22967-1-francois@scala.name>
- <ac5uh_3N3q61efIb@kuha>
-Content-Language: en-US
-From: =?UTF-8?Q?Fran=C3=A7ois_Scala?= <francois@scala.name>
-In-Reply-To: <ac5uh_3N3q61efIb@kuha>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-1.66 / 15.00];
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.1213.gd9a14994de-goog
+Message-ID: <20260402182438.867396-1-jthies@google.com>
+Subject: [PATCH v1] usb: typec: ucsi: Set usb mode on partner change
+From: Jameson Thies <jthies@google.com>
+To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Cc: dmitry.baryshkov@oss.qualcomm.com, bleung@chromium.org, 
+	gregkh@linuxfoundation.org, akuchynski@chromium.org, 
+	abhishekpandit@chromium.org, Jameson Thies <jthies@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[scala.name:s=google];
+	MID_CONTAINS_FROM(1.00)[];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-35906-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-35907-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWO(0.00)[2];
-	DMARC_NA(0.00)[scala.name];
-	DKIM_TRACE(0.00)[scala.name:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[francois@scala.name,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[jthies@google.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[google.com:+];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,scala.name:dkim,scala.name:mid]
-X-Rspamd-Queue-Id: EC8E738CFA0
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 28A9338D0F5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
+Currently the partner usb_mode is only set in ucsi_register_partner().
+If the partner enters USB4 operation after it is registered, this is not
+reported to the typec class. The UCSI spec states that the Connector
+Partner Changed bit can represent a Connector Partner Flags change. When
+handling a UCSI partner change, check the partner flags for USB4
+operation.
 
-On 02/04/2026 15.26, Heikki Krogerus wrote:
-> No. You can not have more than a single partner per mode. Let's figure
-> out the root issue. Please check the svids of the partner altmodes:
->
->          grep . /sys/class/typec/port0-partner/port0-partner.*/svid
+Signed-off-by: Jameson Thies <jthies@google.com>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-/sys/class/typec/port2-partner/port2-partner.0/svid:8087
-/sys/class/typec/port2-partner/port2-partner.1/svid:8087
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index fe1fb8a68a1d..e6fd2e2eba94 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1182,6 +1182,12 @@ static void ucsi_partner_change(struct ucsi_connector *con)
+ 			if (UCSI_CONSTAT(con, PARTNER_FLAG_USB))
+ 				typec_set_mode(con->port, TYPEC_STATE_USB);
+ 		}
++
++		if (((con->ucsi->version >= UCSI_VERSION_3_0 &&
++		    UCSI_CONSTAT(con, PARTNER_FLAG_USB4_GEN4)) ||
++		    (con->ucsi->version >= UCSI_VERSION_2_0 &&
++		    UCSI_CONSTAT(con, PARTNER_FLAG_USB4_GEN3))) && con->partner)
++			typec_partner_set_usb_mode(con->partner, USB_MODE_USB4);
+ 	}
+ 
+ 	if ((!UCSI_CONSTAT(con, PARTNER_FLAG_USB)) &&
 
-> Then provide the trace output from the ucsi driver, dmesg output
-> (full), and also acpidump of your system. The ucsi trace you can
-> get like this (assuming you have the debugfs mounted at
-> /sys/kernel/debug):
->
->          cd /sys/kernel/debug/tracing
-
-That /sys/kernel/tracing (without /debug).
-
-The traces with port3 (tb4) and port0 (tb5):
-
-# entries-in-buffer/entries-written: 19/19   #P:16
-#
-#                                _-----=> irqs-off/BH-disabled
-#                               / _----=> need-resched
-#                              | / _---=> hardirq/softirq
-#                              || / _--=> preempt-depth
-#                              ||| / _-=> migrate-disable
-#                              |||| /     delay
-#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-#              | |         |   |||||     |         |
-      kworker/5:2-321     [005] .....   465.001617: 
-ucsi_connector_change: port3 status: change=4000, opmode=4, connected=1, 
-sourcing=1, partner_flags=1, partner_type=2, request_data_obj=00000000, 
-BC status=1
-      kworker/5:2-321     [005] .....   465.111779: 
-ucsi_connector_change: port3 status: change=0060, opmode=3, connected=1, 
-sourcing=1, partner_flags=1, partner_type=2, request_data_obj=13800000, 
-BC status=1
-      kworker/8:1-174     [008] .....   465.429999: 
-ucsi_connector_change: port3 status: change=1000, opmode=5, connected=1, 
-sourcing=0, partner_flags=1, partner_type=2, request_data_obj=13800000, 
-BC status=1
-      kworker/8:1-174     [008] .....   465.532708: 
-ucsi_connector_change: port3 status: change=0060, opmode=3, connected=1, 
-sourcing=0, partner_flags=1, partner_type=2, request_data_obj=42c4b12c, 
-BC status=1
-     kworker/10:1-178     [010] .....   465.883679: 
-ucsi_connector_change: port3 status: change=0060, opmode=3, connected=1, 
-sourcing=0, partner_flags=1, partner_type=2, request_data_obj=42c7a9ea, 
-BC status=1
-      kworker/3:0-13120   [003] .....   466.330330: 
-ucsi_connector_change: port3 status: change=0060, opmode=3, connected=1, 
-sourcing=0, partner_flags=1, partner_type=2, request_data_obj=82c7d1f4, 
-BC status=1
-    kworker/u64:2-356     [005] .....   466.890372: 
-ucsi_register_altmode: partner alt mode: svid 8087, mode 1 vdo 8087a843
-    kworker/u64:2-356     [005] .....   467.005141: 
-ucsi_register_altmode: partner alt mode: svid 8087, mode 2 vdo 1
-      kworker/2:1-177     [002] .....   471.027602: 
-ucsi_connector_change: port3 status: change=0200, opmode=3, connected=1, 
-sourcing=0, partner_flags=1, partner_type=2, request_data_obj=82c7d1f4, 
-BC status=1
-      kworker/2:1-177     [002] .....  1140.998711: 
-ucsi_connector_change: port3 status: change=4000, opmode=1, connected=0, 
-sourcing=0, partner_flags=0, partner_type=0, request_data_obj=82c7d1f4, 
-BC status=0
-      kworker/0:2-15093   [000] .....  1164.065528: 
-ucsi_connector_change: port0 status: change=4000, opmode=4, connected=1, 
-sourcing=1, partner_flags=1, partner_type=2, request_data_obj=00000000, 
-BC status=1
-      kworker/0:2-15093   [000] .....  1164.173696: 
-ucsi_connector_change: port0 status: change=0060, opmode=3, connected=1, 
-sourcing=1, partner_flags=1, partner_type=2, request_data_obj=13800000, 
-BC status=1
-      kworker/7:0-13116   [007] .....  1164.508267: 
-ucsi_connector_change: port0 status: change=1000, opmode=5, connected=1, 
-sourcing=0, partner_flags=1, partner_type=2, request_data_obj=13800000, 
-BC status=1
-      kworker/7:0-13116   [007] .....  1164.609765: 
-ucsi_connector_change: port0 status: change=0060, opmode=3, connected=1, 
-sourcing=0, partner_flags=1, partner_type=2, request_data_obj=42c4b12c, 
-BC status=1
-      kworker/6:3-360     [006] .....  1165.119848: 
-ucsi_connector_change: port0 status: change=0060, opmode=3, connected=1, 
-sourcing=0, partner_flags=1, partner_type=2, request_data_obj=82c7d1f4, 
-BC status=1
-      kworker/6:3-360     [006] .....  1165.208511: 
-ucsi_connector_change: port0 status: change=0060, opmode=3, connected=1, 
-sourcing=0, partner_flags=1, partner_type=2, request_data_obj=82c7d1f4, 
-BC status=1
-    kworker/u64:3-1005    [010] .....  1166.339613: 
-ucsi_register_altmode: partner alt mode: svid 8087, mode 1 vdo 8087a843
-    kworker/u64:3-1005    [011] .....  1166.454835: 
-ucsi_register_altmode: partner alt mode: svid 8087, mode 2 vdo 1
-      kworker/1:3-191     [001] .....  1170.026494: 
-ucsi_connector_change: port0 status: change=0200, opmode=3, connected=1, 
-sourcing=0, partner_flags=1, partner_type=2, request_data_obj=82c7d1f4, 
-BC status=1
-
-> For acpidump you need the acpica-tools installed:
->
->          acpidump -o my_acpi.dump
-
-The file is quite large, how can I share it ? Or do you need a specific 
-part ?
-
-   -rw-r--r-- 1 fs fs 4.7M Apr  2 19:05 acpi-port3-20260402.dump
-
-
-Thanks
-
-François
-
-
-
-
-
+base-commit: 81ebd43cc0d6d106ce7b6ccbf7b5e40ca7f5503d
+-- 
+2.53.0.1213.gd9a14994de-goog
 
 
