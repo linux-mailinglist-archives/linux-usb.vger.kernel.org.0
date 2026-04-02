@@ -1,161 +1,150 @@
-Return-Path: <linux-usb+bounces-35896-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35897-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oEN4MOp5zmmMnwYAu9opvQ
-	(envelope-from <linux-usb+bounces-35896-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 16:15:06 +0200
+	id aHLYLit6zmmMnwYAu9opvQ
+	(envelope-from <linux-usb+bounces-35897-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 16:16:11 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3677B38A512
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 16:15:06 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C4D038A546
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 16:16:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3ADB43078137
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 14:07:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 440ED305C6C9
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 14:09:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB35D3E63A8;
-	Thu,  2 Apr 2026 14:07:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22C83E715C;
+	Thu,  2 Apr 2026 14:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UsRgnHs8"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="g8Q+Kj6a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4403E4C90;
-	Thu,  2 Apr 2026 14:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8393E51F4;
+	Thu,  2 Apr 2026 14:09:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775138839; cv=none; b=V295nUovaS3D/V4IaElX3Kh1rugL/sVe5k7XsuQ1YQ4WhQliEWrDYJAx5/O+mqIdEQ5l180Y5BJM9Lnn7ExD8If9x5ny1ynF+9XucjnIHEfhcuKJl8POiR03zn9HNU17JRhj9vGwtekyUOQGnpyYBCAvx6Bqeojp51tr+IrWWbY=
+	t=1775138994; cv=none; b=Sh6vdcjxw2rWzvAIcnUrh9res8JUzbfxUIfbumdeS2TDeOcEdLJhpN6aPW4Y1n7nq81G8o9QDREiELDSdxE9Qpdd/g607tCqy+pmdR+XCgYM8Gfb2ZmhEfWmMBj8hjoLPMvZNGTcJKfbink/BusSy3ouidI8MxORB3PPp4uF20A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775138839; c=relaxed/simple;
-	bh=gYESeRb0qPLXt+/mthA2S699t3955yDhVoyjnkXvDmo=;
+	s=arc-20240116; t=1775138994; c=relaxed/simple;
+	bh=7zp4ANr68FyPWcDzAkNP4q8JRJH5RLod3BMcemdKkrI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QjA0XmPxaGNQhCZRR5yssIauPS2LreKLhPAIzzQUc77XTUJcVnqDssBvSEiafX6CW7KrWsxstsdASHVOUQJWoN/6y7rt+Y8p9gA9i7BX+BbjG50mwb3vWiOp33ldA3rKEioKDg9s6+C2ZOx6s9RqWJ3Y2Yc2HqVwxus5b+TJcOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UsRgnHs8; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775138837; x=1806674837;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gYESeRb0qPLXt+/mthA2S699t3955yDhVoyjnkXvDmo=;
-  b=UsRgnHs8xAGU8xAiKDANxcRAcMItDZXCrhWGw25LQvBiYGrK6noXOW8P
-   pbBqCIuTm2lZTQWxlKNsaw4oNRXV/bec0yfTVn2LOx3mqW0R+KH+XZ62L
-   8+dvjzp5a+LPBvhDs5rVzTAe8QjAlm1JS9Anx0oqRzH4e0A3llRLWHpn3
-   3I9CnqZVZNfcgNzX8xbcbIsaH/p0Uf9+gxjviPBi3lOXnZBKgNPWxIXFO
-   oa7eZA7h89HUlQ7c9AD0QHZ3r/IPzg7K9otTZprL/wJkpPs93s6r5LGyM
-   UMdHPI4J32yf/JDbGtOvdtH4MM4QNbrxnEsL6dsTa8vGwni45+V9v5LF+
-   Q==;
-X-CSE-ConnectionGUID: oKLg4Zc6T8yYshpTT4bZHA==
-X-CSE-MsgGUID: LBW1B8thTwycGS7oGoAocQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11746"; a="76213287"
-X-IronPort-AV: E=Sophos;i="6.23,155,1770624000"; 
-   d="scan'208";a="76213287"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 07:07:17 -0700
-X-CSE-ConnectionGUID: Chzy8OXbSmyj099eo8MKOQ==
-X-CSE-MsgGUID: J/RxUdt1T0i2VOC+fXZylw==
-X-ExtLoop1: 1
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa003.fm.intel.com with ESMTP; 02 Apr 2026 07:07:14 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id AC5D095; Thu, 02 Apr 2026 16:07:13 +0200 (CEST)
-Date: Thu, 2 Apr 2026 17:06:27 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Vincent Cloutier <vincent.cloutier@icloud.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, sven@kernel.org,
-	Vincent Cloutier <vincent@cloutier.co>, stable@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] usb: typec: tipd: Restore generic TPS6598x
- contract interrupts
-Message-ID: <ac5344ei3zZllgx9@kuha>
-References: <20260402000950.715470-1-vincent.cloutier@icloud.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=fIm8HroEbJFqQPYLQ7IpDsLErLx6SLFGv933Ki14ywpMGtdttz7hQuehgMmxi7jqUWgV7ga1NrYq0a3QtXBcIWNCWSOQpExEm3y/f1CiMylGXWmVF5sYFdY7ySHbYXS6GGuW/a+S6h5rOjz6y3Ml9Z8fNnAqmk/rbfq4hzaZU8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=g8Q+Kj6a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAA0BC116C6;
+	Thu,  2 Apr 2026 14:09:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1775138994;
+	bh=7zp4ANr68FyPWcDzAkNP4q8JRJH5RLod3BMcemdKkrI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=g8Q+Kj6aEltLsMDz5jn2kxU9xFoskyxUrUXSHsA1FFVEhnbepnYRyjbafF0D1RmIQ
+	 Kyb8Q7Sqz0/Bln2iBNWH2jYYvzZI+dfEnEFP2VFBJNi08NBZUvmQSf8c+zL4NW9FeL
+	 Ley62pFYVL7fZVwx6jeXzFqmitzCEEGYsuZGhHjI=
+Date: Thu, 2 Apr 2026 16:09:51 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: "Xuetao (kirin)" <xuetao09@huawei.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, caiyadong@huawei.com,
+	stable@kernel.org
+Subject: Re: [PATCH] usb: core: Fix bandwidth for devices with invalid
+ wBytesPerInterval
+Message-ID: <2026040221-reclusive-garland-6281@gregkh>
+References: <20260402021400.28853-1-xuetao09@huawei.com>
+ <2026040241-purveyor-bakery-a9f1@gregkh>
+ <c463f9ed-22ed-4ee6-b4fa-2933770e9c4c@huawei.com>
+ <74f1bb0d-24c3-44be-9583-0585863cdae3@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260402000950.715470-1-vincent.cloutier@icloud.com>
-X-Spamd-Result: default: False [-1.66 / 15.00];
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <74f1bb0d-24c3-44be-9583-0585863cdae3@rowland.harvard.edu>
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
 	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35896-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[icloud.com];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	TAGGED_FROM(0.00)[bounces-35897-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,cloutier.co:email]
-X-Rspamd-Queue-Id: 3677B38A512
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 0C4D038A546
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Wed, Apr 01, 2026 at 08:09:50PM -0400, Vincent Cloutier kirjoitti:
-> From: Vincent Cloutier <vincent@cloutier.co>
+On Thu, Apr 02, 2026 at 09:56:51AM -0400, Alan Stern wrote:
+> On Thu, Apr 02, 2026 at 02:59:35PM +0800, Xuetao (kirin) wrote:
+> > 2、Following Alan's suggestion in another email, should I check whether
+> > wBytesPerInterval is a valid value and handle it in the
+> > usb_parse_ss_endpoint_companion() ?
 > 
-> The generic TPS6598x interrupt handler still relies on
-> PP_SWITCH_CHANGED, NEW_CONTRACT_AS_CONSUMER, HARD_RESET, and
-> STATUS_UPDATE, but the irq_mask1 refactor only kept
-> POWER_STATUS_UPDATE, DATA_STATUS_UPDATE, and PLUG_EVENT in
-> tps6598x_data.
+> Yes, IMO.
 > 
-> On the librem5 that leaves PD partners stuck at the 500 mA fallback
-> because the active contract is never refreshed after attach.
+> > However, when parsing the device descriptor, we do not know whether the
+> > actual data length transmitted by the peripheral is greater than
+> > wBytesPerInterval.
 > 
-> Restore the missing interrupt bits so the existing handler paths are
-> reachable again. This fixes USB-C charging negotiation on the librem5:
-> after a replug the TPS6598x source power supply reports 3 A instead of
-> 500 mA and the BQ25890 input limit follows suit.
+> Note: wBytesPerInterval is in the endpoint descriptor, not the device 
+> descriptor.
 > 
-> Fixes: b3dddff502c5 ("usb: typec: tipd: Move initial irq mask to tipd_data")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Vincent Cloutier <vincent@cloutier.co>
+> > Therefore, would it be sufficient to only add a check for whether
+> > wBytesPerInterval is 0 in the existing flow, and if it is 0, set
+> > wBytesPerInterval to cpu_to_le16(max_tx) by default?
+> > 
+> > For example, modify it in the following way：
+> > 
+> >      if (le16_to_cpu(desc->wBytesPerInterval) > max_tx ||
+> > le16_to_cpu(desc->wBytesPerInterval) == 0) {
+> >         dev_notice(ddev, "%s endpoint with wBytesPerInterval of %d in "
+> >                 "config %d interface %d altsetting %d ep %d: "
+> >                 "setting to %d\n",
+> >                 usb_endpoint_xfer_isoc(&ep->desc) ? "Isoc" : "Int",
+> >                 le16_to_cpu(desc->wBytesPerInterval),
+> >                 cfgno, inum, asnum, ep->desc.bEndpointAddress,
+> >                 max_tx);
+> >         ep->ss_ep_comp.wBytesPerInterval = cpu_to_le16(max_tx);
+> >     }
+> > 
+> >  Could you please give me some advice? Thanks.
+> 
+> Try it and see if it fixes the problems you see with the network 
+> adapters.
+> 
+> I saw the Greg said not to change the descriptors and just fail the 
+> device, but we already make this sort of change to correct other errors 
+> so there doesn't seem to be any reason not to do it here as well.  
+> Especially if it allows people to use devices that otherwise would not 
+> work.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+I didn't realize this was on "real" devices, sorry.  I thought this was
+only a fuzzing thing.  So yes, fix up the broken descriptor after
+warning about it is the correct thing to do.
 
-> ---
->  drivers/usb/typec/tipd/core.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index 84ee5687bb27..83f2fec6e34e 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -2395,7 +2395,11 @@ static const struct tipd_data tps6598x_data = {
->  	.irq_handler = tps6598x_interrupt,
->  	.irq_mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
->  		     TPS_REG_INT_DATA_STATUS_UPDATE |
-> -		     TPS_REG_INT_PLUG_EVENT,
-> +		     TPS_REG_INT_PLUG_EVENT |
-> +		     TPS_REG_INT_PP_SWITCH_CHANGED |
-> +		     TPS_REG_INT_NEW_CONTRACT_AS_CONSUMER |
-> +		     TPS_REG_INT_HARD_RESET |
-> +		     TPS_REG_INT_STATUS_UPDATE,
->  	.tps_struct_size = sizeof(struct tps6598x),
->  	.register_port = tps6598x_register_port,
->  	.unregister_port = tps6598x_unregister_port,
+thanks,
 
--- 
-heikki
+greg k-h
 
