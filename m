@@ -1,192 +1,181 @@
-Return-Path: <linux-usb+bounces-35912-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35913-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2HRcJNnIzmmtqAYAu9opvQ
-	(envelope-from <linux-usb+bounces-35912-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 21:51:53 +0200
+	id KMlmGwDPzmlXqQYAu9opvQ
+	(envelope-from <linux-usb+bounces-35913-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 22:18:08 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBF5638DCD4
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 21:51:52 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C150A38DE60
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 22:18:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DB1B130465E7
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 19:50:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3D8FB3021E70
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 20:18:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B70F3F65E4;
-	Thu,  2 Apr 2026 19:50:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CF46388E64;
+	Thu,  2 Apr 2026 20:18:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="N9a+pYrF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OdiTHaC0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAAAE3F7AA0
-	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 19:50:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB421A0BE0
+	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 20:18:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775159444; cv=none; b=dpy3PfoNWXdWVD4+fbGdG5v3vofpwhezrBvvuGS7zjf5CLvNGeOgYIloFmZGKJh7oCE3Sm9CdIH1V/QK/pUr5hwRtL0lsfmVzvPzEQLxdLzPdh8X6MFHD9O1fF8NntHBD6swrWfLQunL4OfdcbNbh+nV68504pqRigHUqD/hgvc=
+	t=1775161083; cv=none; b=jy4qdBnAJMzq4zcJ0hxJfh6oznmlqh8ceOBWQvr+3dLUFkgxZj7zjkE3Of2SS+T1nmtBOWONcmQVxX5Tu8PBIb8steF1o4oGI+G3UaCZwdTk092DPKuyoE9tSbascM5XZ3Yj2FgQCxS0A6oiOLPVC/E+R0GY7heOzk7ujo98dWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775159444; c=relaxed/simple;
-	bh=AzTLb/+DCpcAJ/71Q3/OfR60Ev8xUPFaTIRCfBfnKPs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o+4kPfwwtQSPZjVbcWbt/AQxz0ZgbQ5dX1CLO2bJSfXG0tXmnZWfj2fsY2txpZXvIFJKupmFDAJCMvS7jf6btdi1YE83FrqCY65EMXLoLBcwhUKh0XDI65VesnrAWIxNWvYUuOeKiaJ8bd2knqTvmY1ogalEaLQm9/eXfp0Rhog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=N9a+pYrF; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-82cd6614a90so578190b3a.3
-        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2026 12:50:42 -0700 (PDT)
+	s=arc-20240116; t=1775161083; c=relaxed/simple;
+	bh=5UsOEcn50cdBc2IpTEpFynqVOam78E9Xv9FXNMb1C8A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mRzBVI0LZLNKh3frgkX8LymTlsEbVhJRf0CSPP/P+QyfOySKFnxfl1z/O9ZjOSgZ4+YAtTyolOlbZZOBEshpZSXdZ7zxiTqTJNHGJ5GkhmKQ8szJewk/DXjww1QHWW/PKt55kJhSPrbjgMnJbf44/LMhThPO5/j4y/NPiHOzueY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OdiTHaC0; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4887f49ec5aso17758795e9.1
+        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2026 13:18:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775159442; x=1775764242; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hESu2BsQc8AYFisupFYHTDCpAV3AtYeQMal7dvvaR8w=;
-        b=N9a+pYrFup43dRNHje4XKhbkLCRF6sY6g78cI4Pkd2ieNBdNJUED34G/FXK7fKeXPl
-         Sc8uiC1Xp9DQdPH1BvJvkgR9U9hwNa2qQow57o95ngFfgARwhbM8yqhySLKGhEcFoiDp
-         lmeX0G3II7Y1G7Sau+LJ7HOOmM87XkI7hvA8RYYg9Rn+A7aHs0qptrMgTOYHbhfC5JcF
-         QhbRje1qWSCduYncS6v/9eaKuO0toKCUkoPgbLmG6OeOdELmolfrV78r/VGkEAVyfyS7
-         wBWgbC1q/5AjU30XyG3kg9WDiEnPYf/1OKq66lW0ofH0L2DQPSu0HtffulckeGCKqcS9
-         DJfw==
+        d=gmail.com; s=20251104; t=1775161080; x=1775765880; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5UsOEcn50cdBc2IpTEpFynqVOam78E9Xv9FXNMb1C8A=;
+        b=OdiTHaC0gBz7Ws9ArJJe8KabPgKKlNWZiVyVZBWQXms7QwCQfnqSiHfXqkQoGuom8b
+         s0hx3QJ342x72jOmM5l8jzA0bM6UmJgNxcYuh7eApmmCVekf0cRjmm1HIdekuM+wtI3A
+         IIZzni1aXMdsMaQxYny2w8IruUNNEKRnsbHSUaQTZ7YKPgG0tPRMKpRW/xA+Bh37Jxc2
+         Vt/4/cfi0Hg2dnO1MmkNNv5PCivLZNfn3OQeIqLCMtj4+D9owZ4U4DBwGzCJgpjv1UoN
+         krqqpaAECJYY85fU7agFocobbdC32DV6vaQ0/5dNA3qF7pvYRFlQ60OOXua5ZnXorWs2
+         KGCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775159442; x=1775764242;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hESu2BsQc8AYFisupFYHTDCpAV3AtYeQMal7dvvaR8w=;
-        b=nRpe98PYKlEkc6uss0SoaEyDZarv2IxrvpTjVtx73ZRvjdyMC3lVNKyiCRvC1cBDdK
-         Gazkx3vb13vhpCWWmxQWthDEbJ9nq3ZMwafciYTz8p82VCok7FB5b0RFYpmtaYAKnhzm
-         XyZjKrTCFTRh/3zphgv7XB1wCwXgEjk8UtiR1IolQRo3C6JbZvYa89torY5lVmtpM6hm
-         quWEZu8wTnmPqK2p+/m35KIRGlXifJExNUIlzP4ajWrud0kKku0KxkOHAGouDRNMQ5EI
-         ghviJTJoIeLKkgAxQdkO0WmQ0kp6c7fJ/z0crgDOtsiZatWOn11hJb+ctK1S3905pmum
-         ZIZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVjrPQ44IK5HF/JtCs4Fy+AmtAKv6r1BEoElCfBQynQAo0l5+H6pjQw6ZgKCThctlGAAK46+hPwjyk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzH2iQgfsqTPlY3qSlDpf4J3qOTh8toTJ7gc3HFVTX9PkSCpYm1
-	ZnWKOvLAw0cF9LDSprSejbytagP5lQ/CQg3vG6joidRGsY9T89AZH7KCXPLolLcuVgCqw+82a+a
-	pDId4zQ==
-X-Gm-Gg: ATEYQzxDnDAMqUS1OLsIr4CGlEBFRt9ydcKwgHxyO8qm8H4cMqHgznEQfvlU4SAuunr
-	uuR9QSLHmdTYjJo1QogVvCc42ggUdWNDhS3y7w9Hryd73K3kvnQwKEGXbQEJpyqldu4ErAkE6sN
-	uffaHTmu4jUY/3x5o2HksNPXh35VL303abZ0MNGYeP1n2vGfv9W6qg9/KVmSWNYZJ1WeKos4fpS
-	FyLt7NfQ8BIigY4X753NFaHNh2k3apA65Oae7D97rTugYR1XLoKofLLzPJEZgH26gieo+vDIac1
-	9cvNWgwbtHg79ZyM4R/8/9UIE5OGzf0bc1+RJ0GuqSPMzFoAqznzb7PRF+SqNT9Z8hrnbouXkw+
-	bZdogGJvDkETRH60En7NpW9YySZlEEEpmY5GUWiynYbBYduqMlK05dSn0XNul8CIYqDKjGGai51
-	ZIx+fs4Bg0nUVylszWQCExkLSPY8FHTKK76vD1WdvN/xn6Un6q2i0pcjQDi5PHlGzUPqg=
-X-Received: by 2002:a05:6a00:1ac9:b0:81e:b2ba:5b3a with SMTP id d2e1a72fcca58-82d0da464cemr377965b3a.8.1775159441398;
-        Thu, 02 Apr 2026 12:50:41 -0700 (PDT)
-Received: from google.com (21.59.127.34.bc.googleusercontent.com. [34.127.59.21])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9ca1869sm4053802b3a.56.2026.04.02.12.50.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 12:50:39 -0700 (PDT)
-Date: Thu, 2 Apr 2026 19:50:36 +0000
-From: Benson Leung <bleung@google.com>
-To: Jameson Thies <jthies@google.com>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com,
-	bleung@chromium.org, gregkh@linuxfoundation.org,
-	akuchynski@chromium.org, abhishekpandit@chromium.org
-Subject: Re: [PATCH v1] usb: typec: ucsi: Set usb mode on partner change
-Message-ID: <ac7IjGWy0vE2_gYM@google.com>
-References: <20260402182438.867396-1-jthies@google.com>
+        d=1e100.net; s=20251104; t=1775161080; x=1775765880;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5UsOEcn50cdBc2IpTEpFynqVOam78E9Xv9FXNMb1C8A=;
+        b=hVkASNBtf1gXUkfnwUn0J40eIQYAi/ZBnOygCQu9daxpVod2QIupJULznScAz6ahvy
+         ExOL/uQxcjit3Tqs5/7K7SHa7I8UnAYxJvIx8mFGeHE+6tkd2UjINsW6uBEyVHCI4K4F
+         ITZHM55Ms4AA8DZktT9bhmxg1BG4ajYzWpqhihXRDi9t/JGnghJ7cJu8JkUxhS4xIHfr
+         M3oXuPlMPPro0G7j4bHAPRFc0/Y5sDgxFjMtgp4tcApb55HuPqRsesIwcKmmzXtDOtr2
+         6Yg/L9eIdMNPyH8555UHS4OBQEzrpnT4YGViChwxNozzGozt35rdT5/QR43Fhtp4qAgt
+         yt0w==
+X-Forwarded-Encrypted: i=1; AJvYcCXMN///LdqD6nq5Yu5nlqebVDHW83Ads0qq1i5+FDjeDqyeHbulmyDOU6hk8H5SkI00yXzo50XmFZs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyz3XWG65gqxH1b8bMImRJDwF+VmAANGy1Jvsh1ieZUoSINDbjY
+	a9nO9Sk1mLdAZi6POkjVVBOJBBVsBUQeIdEYAOeNQ/cBo+1J2RToRdZC
+X-Gm-Gg: ATEYQzxhT2YI/sumLCWuG2PrPNfUyybiE83ZYDgA5+e0z5t7AlHS1d/EPuO1p2YxYG8
+	ZdQDFRnKMmG+R0qfGi6pV78v8bwkqg7pPWnKGcr5b1kz6aQm6247qC3DrVTHknDdc59aHeawxip
+	o47A/xlfZleEkjKkN2V5hYjwEUaVOZN+meuW9JBW0sE+dZwPrjsOBDOEe87pQViY7Bk+VVNVz/a
+	NYW8XHnQTVL6qWWorEHERj5P5FwJ9Z7jc4TN1D2aWqk2WiBNacFsXWZA10GN/qSC4kPofr7XEvU
+	AE7yRZvA5AIuaLvf1P1H74yx4eIxLCA5+N59cjgrO+I3bl+mEWqgwXe45PbwZUcdlnV8+3NyIyn
+	sk5/moFNrJ514oW5D//xohhD44TOn8gFWA0kg3tIaZKWICLzRkxVAms9elRjUs0Pu00dggyMnfs
+	BQBCNwavQrvMY00MD4EPvoBePi1KrngnghFGCarKTP65w=
+X-Received: by 2002:a05:600c:3f0a:b0:487:2439:b7be with SMTP id 5b1f17b1804b1-488996a34c9mr7304365e9.6.1775161079942;
+        Thu, 02 Apr 2026 13:17:59 -0700 (PDT)
+Received: from foxbook (bfi53.neoplus.adsl.tpnet.pl. [83.28.46.53])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e4d2971sm10185098f8f.22.2026.04.02.13.17.58
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Thu, 02 Apr 2026 13:17:59 -0700 (PDT)
+Date: Thu, 2 Apr 2026 22:17:55 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: "Xuetao (kirin)" <xuetao09@huawei.com>, Greg KH
+ <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, caiyadong@huawei.com, stable@kernel.org
+Subject: Re: [PATCH] usb: core: Fix bandwidth for devices with invalid
+ wBytesPerInterval
+Message-ID: <20260402221755.3afd7df4.michal.pecio@gmail.com>
+In-Reply-To: <74f1bb0d-24c3-44be-9583-0585863cdae3@rowland.harvard.edu>
+References: <20260402021400.28853-1-xuetao09@huawei.com>
+	<2026040241-purveyor-bakery-a9f1@gregkh>
+	<c463f9ed-22ed-4ee6-b4fa-2933770e9c4c@huawei.com>
+	<74f1bb0d-24c3-44be-9583-0585863cdae3@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="76VoeIkvap3VAeEX"
-Content-Disposition: inline
-In-Reply-To: <20260402182438.867396-1-jthies@google.com>
-X-Spamd-Result: default: False [-4.26 / 15.00];
-	SIGNED_PGP(-2.00)[];
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[google.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35912-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35913-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bleung@google.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[chromium.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: DBF5638DCD4
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: C150A38DE60
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-
---76VoeIkvap3VAeEX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Jameson,
-
-On Thu, Apr 02, 2026 at 06:24:38PM +0000, Jameson Thies wrote:
-> Currently the partner usb_mode is only set in ucsi_register_partner().
-> If the partner enters USB4 operation after it is registered, this is not
-> reported to the typec class. The UCSI spec states that the Connector
-> Partner Changed bit can represent a Connector Partner Flags change. When
-> handling a UCSI partner change, check the partner flags for USB4
-> operation.
+On Thu, 2 Apr 2026 09:56:51 -0400, Alan Stern wrote:
+> On Thu, Apr 02, 2026 at 02:59:35PM +0800, Xuetao (kirin) wrote:
+> > 2=E3=80=81Following Alan's suggestion in another email, should I check
+> > whether wBytesPerInterval is a valid value and handle it in the
+> > usb_parse_ss_endpoint_companion() ? =20
 >=20
-> Signed-off-by: Jameson Thies <jthies@google.com>
+> Yes, IMO.
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
+Not sure, this could backfire if it turns out that these workarounds
+will need to become more elaborate and account for wBytesPerInterval.
+
+These descriptors aren't blatantly invalid. USB3 9.6.7 doesn't require
+that wBytesPerInterval =3D=3D wMaxPacketSize * bMaxBurst * Mult.
+
+Being greater would be blatantly invalid, but this is already being
+sanitized by the descriptor parser.
+
+> > However, when parsing the device descriptor, we do not know whether
+> > the actual data length transmitted by the peripheral is greater than
+> > wBytesPerInterval. =20
+
+Indeed. Device is allowed (actually: required) not to send more data
+than its wBytesPerInterval on IN endpoints.
+
+UVC driver uses this field to pick isochronous altsetting capable of
+transmitting a particular payload each interval. If we overestimate,
+there is risk that the device will deliver on its promise and truncate
+instead of violating USB3 spec. We should rather pick a larger alt.
+
+OTOH, when a device lies and sends more than specified, this happens.
+Some HCs ignore the problem (and may overcommit bandwidth if we enable
+million such endpoints), others get pedantic and return Babble Error
+(my mistake, Bandwidth Overrun is specific to isochronous).
 
 
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->=20
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index fe1fb8a68a1d..e6fd2e2eba94 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1182,6 +1182,12 @@ static void ucsi_partner_change(struct ucsi_connec=
-tor *con)
->  			if (UCSI_CONSTAT(con, PARTNER_FLAG_USB))
->  				typec_set_mode(con->port, TYPEC_STATE_USB);
->  		}
-> +
-> +		if (((con->ucsi->version >=3D UCSI_VERSION_3_0 &&
-> +		    UCSI_CONSTAT(con, PARTNER_FLAG_USB4_GEN4)) ||
-> +		    (con->ucsi->version >=3D UCSI_VERSION_2_0 &&
-> +		    UCSI_CONSTAT(con, PARTNER_FLAG_USB4_GEN3))) && con->partner)
-> +			typec_partner_set_usb_mode(con->partner, USB_MODE_USB4);
->  	}
-> =20
->  	if ((!UCSI_CONSTAT(con, PARTNER_FLAG_USB)) &&
->=20
-> base-commit: 81ebd43cc0d6d106ce7b6ccbf7b5e40ca7f5503d
-> --=20
-> 2.53.0.1213.gd9a14994de-goog
->=20
+I think this patch is relatively safe for interrupt, because drivers
+generally don't look at endpoint descriptors and submit URBs of class
+specific size. Case in point, everything works when you override xHCI
+allocation. It also works on HCs ignoring it.
 
---76VoeIkvap3VAeEX
-Content-Type: application/pgp-signature; name="signature.asc"
+Beind the pedant I am, I would restrict this to bMaxBurst=3D=3D0 because
+that's the known problem case and IDK off-hand what devices might use
+bursting interrupt endpoints and what gotchas await there.
 
------BEGIN PGP SIGNATURE-----
+Maybe add a comment that it's a questionable, spec-violating hack.
 
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCac7IjAAKCRBzbaomhzOw
-wl7pAQCthX65cQP7vUbMHR1/udw+M9kpUhXG1gQ3UO94jXMKbwD9HRibHaJje5uO
-tcxLuFJKC7kBhqqhUMFnrFxLi9Ygjgg=
-=Jfgi
------END PGP SIGNATURE-----
-
---76VoeIkvap3VAeEX--
+Regards,
+Michal=20
 
