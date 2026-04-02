@@ -1,210 +1,158 @@
-Return-Path: <linux-usb+bounces-35818-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35819-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QAudF52ozWmvfgYAu9opvQ
-	(envelope-from <linux-usb+bounces-35818-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 01:22:05 +0200
+	id oFCSE220zWnJfwYAu9opvQ
+	(envelope-from <linux-usb+bounces-35819-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 02:12:29 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01541381A45
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 01:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E0BFA381E9F
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 02:12:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7804E3032046
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2026 23:17:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B2BE3308134A
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 00:10:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54AA03C944F;
-	Wed,  1 Apr 2026 23:17:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DCE235959;
+	Thu,  2 Apr 2026 00:09:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O0QG4vF8"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="iSMagunR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outbound.mr.icloud.com (p-west2-cluster2-host6-snip4-10.eps.apple.com [57.103.68.243])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF59340DFB5;
-	Wed,  1 Apr 2026 23:17:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1F41D6BB
+	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 00:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.68.243
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775085446; cv=none; b=VOiRRyFkhQwdvzTK1GeookjGHRksmcCAOhMQEaFV8FF7ECClWohE+huTb2TjmPfl7AztG0s5mzNiOfsOYh3z3kuhsm1Oqh7YHLfjtKvdAhID14vbMNV04yBbVE7BZ8uDf25LQarpb/cL9Kh6Yh1ST/x0fdz/VTmIjunlG3AxoYc=
+	t=1775088599; cv=none; b=Ye/L6FAMbUN8dCxFLSYJ1gMcCLJgV+3ITU/En/fFsGpju/xJM9tMT1G5J9JU97MsuH7yM1O34GcHhD7HUs4bDRcTmEZNxTsmYVCV9YmHBUTllTB/p2qR9D44GAebvSAdOOpHCV3/9aUEr6yRMNFbuNr8AR7F15KFQdeCNnh9Z7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775085446; c=relaxed/simple;
-	bh=AFBPE2tUaFJUYmw4MizZgV1dE/vXi61t6qjVrFPh5xE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jzW7Lza2Pb6WWHiXvII6r5HO3mTJ6W3es8Labe2h+O9jsTSuRVaIwig1zaYza+PW80V1vhdOZV1s3o67QgQ1BiXkEXCh4bn0de9AC27BKVskADfQm98GPspgve0zSBYQMY7yFH816H+PzwL2wnl/TBJqJsvvcFGg1v32AsF2Vsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O0QG4vF8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C86C4CEF7;
-	Wed,  1 Apr 2026 23:17:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775085446;
-	bh=AFBPE2tUaFJUYmw4MizZgV1dE/vXi61t6qjVrFPh5xE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=O0QG4vF8nC3zXT9W+JK932apg0tWqn55m2OYznKPKTIG1F2rW0Zi4G2CWZtkpEptc
-	 SgD8rWW0ds4j2wf6M5YMxHTqL0+n736WQjPIVjAyz8fcq0Zd8e9OQKJY+d78QNGbAg
-	 1fyM5CN4aAQUBWHBqkyd6VRfFGHqP+YjSk1V8zF9GQ6eZimvAebuu9IGXGQCCnl11e
-	 yDSlf+pP12JtGbDNs7X2eAGL7pMOqiIElGErcJqWuegSqH5zUNn29xTE/vo5ZL81A1
-	 arE44FBGR+GsiAxXkb504QUVFGUhGVxs6eBpHHeVMfkmJnjSdMCaTyI79ZOjnpmQaE
-	 fFjLZN4//09Wg==
-Received: by venus (Postfix, from userid 1000)
-	id 9A506181F5A; Thu, 02 Apr 2026 01:17:24 +0200 (CEST)
-Date: Thu, 2 Apr 2026 01:17:24 +0200
-From: Sebastian Reichel <sre@kernel.org>
-To: amitsd@google.com
-Cc: =?utf-8?B?QW5kcsOp?= Draszik <andre.draszik@linaro.org>, 
-	Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jagan Sridharan <badhri@google.com>, 
-	Mark Brown <broonie@kernel.org>, Matti Vaittinen <mazziesaccount@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Peter Griffin <peter.griffin@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH v10 5/6] power: supply: max77759: add charger driver
-Message-ID: <ac2jYUA2F5oQsA2g@venus>
-References: <20260331-max77759-charger-v10-0-76f59233c369@google.com>
- <20260331-max77759-charger-v10-5-76f59233c369@google.com>
+	s=arc-20240116; t=1775088599; c=relaxed/simple;
+	bh=v53V7g1V8tTzWSmrHGzZibB9+U0z5hWEJC9YW6+BcBk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZBO4yac6w5L8w8L/A2KxAVJ1eMuVKzm0KcuDbakghGDtbi8vw3jqmqgYcqHgX4W35q6eIX2FZ0RZg3t0VlJJZQ8MdMknBzNSxLGzUlYH2B/egL5GwQgzY9Z3SzN1D2JxXE5r9Htx3rTEcVPuRdUmLIOGVm5ZfpWC7n16P93S6TU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=iSMagunR; arc=none smtp.client-ip=57.103.68.243
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+Received: from outbound.mr.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-west-2a-60-percent-11 (Postfix) with ESMTPS id 4CA5518001BE;
+	Thu, 02 Apr 2026 00:09:56 +0000 (UTC)
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1775088597; x=1777680597; bh=iEhD6I1AfA0RRQQAAbP4CVRxjAFzpgK6h+poLfMFR4c=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=iSMagunRQIvmIUDYf1c3UpVUcDlfhOho3FsJ3/Zov8HnBu7Ktjt+5QaEQevrOdi/UfTamXF8deh6A1I1Yw48UlEI541LhGmfNEycWXgiOc7Q149w2286QG3tsOlhvU3gT265JiFJKbfhTp3J5XADT7KmQvIK9HMjK+vzp19daUGZAvdOHThCxQTQxdSPdTgGXLhHLz0xOUGfZ5S1Hn4wTEs17wE99bMSe4O+Pi885ACLcSBVWEHZyVxJDNFr381wGsD59iO1b63z5ve4B9EVcIfs7Z6tI/caZ2/JlFGGp394x0HI5pBFvkm1bcEVHFHeCpWRqPw6aUFJnhBWDUpgTA==
+Received: from bigre.tail98293.ts.net (unknown [17.57.152.38])
+	by p00-icloudmta-asmtp-us-west-2a-60-percent-11 (Postfix) with ESMTPSA id DD35618000AA;
+	Thu, 02 Apr 2026 00:09:54 +0000 (UTC)
+From: Vincent Cloutier <vincent.cloutier@icloud.com>
+To: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	sven@kernel.org,
+	Vincent Cloutier <vincent@cloutier.co>,
+	stable@vger.kernel.org
+Subject: [PATCH v1 1/1] usb: typec: tipd: Restore generic TPS6598x contract interrupts
+Date: Wed,  1 Apr 2026 20:09:50 -0400
+Message-ID: <20260402000950.715470-1-vincent.cloutier@icloud.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jtllgmysjjqf46tb"
-Content-Disposition: inline
-In-Reply-To: <20260331-max77759-charger-v10-5-76f59233c369@google.com>
-X-Spamd-Result: default: False [-2.26 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDIyNyBTYWx0ZWRfXzyqhj3gqqaxY
+ wLMXImoYMclOSMrTV9ceW4kETSnz+XIAstrHhxvhNvuTO++B92LtRxsmqUW17BmzEv88ZJIJ5eJ
+ hF8XAldmgqxc1LMAFBbk0a5IvEQngGMRj1eFKikB+CHJ6/48oV/B/6Bx9c09THRtT21K+0FQvAC
+ JDc7QKWiFovb1BOHgfkHtajodagjkecShr+eUGTQ3pwsdX/cJtMGHooUiJTNBCurWqWaH2806VG
+ Fozbd5gQtIVfAl4OszISVQQCxb3UWmZqyaGONy7Ws5yVMsyPjyBnf6bcAQkSPqgHNVtXmFpGeKg
+ uPiN7YXi8josrU8YxHveVM/zqAfiQo2yMWsIQstaKgE5HhGgwJ9nhCyVOfq1ck=
+X-Proofpoint-GUID: PkPConQ7h62PGs4UGwYcz8kF2uTlpDVS
+X-Authority-Info-Out: v=2.4 cv=TK9Iilla c=1 sm=1 tr=0 ts=69cdb3d5
+ cx=c_apl:c_pps:t_out a=9OgfyREA4BUYbbCgc0Y0oA==:117
+ a=9OgfyREA4BUYbbCgc0Y0oA==:17 a=A5OVakUREuEA:10 a=x7bEGLp0ZPQA:10
+ a=5j__JWfIoqoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8
+ a=F8PtdawhZOR1Lvo1uHQA:9
+X-Proofpoint-ORIG-GUID: PkPConQ7h62PGs4UGwYcz8kF2uTlpDVS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-01_05,2026-04-01_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1011
+ bulkscore=0 phishscore=0 lowpriorityscore=0 adultscore=0 spamscore=0
+ mlxlogscore=754 malwarescore=0 suspectscore=0 mlxscore=0 classifier=spam
+ authscore=0 adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2604010227
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[icloud.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[icloud.com:s=1a1hai];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35818-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[23];
-	FREEMAIL_CC(0.00)[linaro.org,kernel.org,linuxfoundation.org,google.com,gmail.com,linux-foundation.org,linux.intel.com,samsung.com,vger.kernel.org,lists.infradead.org];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35819-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sre@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[vincent.cloutier@icloud.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[icloud.com:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	FREEMAIL_FROM(0.00)[icloud.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 01541381A45
+	DBL_BLOCKED_OPENRESOLVER(0.00)[cloutier.co:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,icloud.com:dkim,icloud.com:mid]
+X-Rspamd-Queue-Id: E0BFA381E9F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+From: Vincent Cloutier <vincent@cloutier.co>
 
---jtllgmysjjqf46tb
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v10 5/6] power: supply: max77759: add charger driver
-MIME-Version: 1.0
+The generic TPS6598x interrupt handler still relies on
+PP_SWITCH_CHANGED, NEW_CONTRACT_AS_CONSUMER, HARD_RESET, and
+STATUS_UPDATE, but the irq_mask1 refactor only kept
+POWER_STATUS_UPDATE, DATA_STATUS_UPDATE, and PLUG_EVENT in
+tps6598x_data.
 
-Hi,
+On the librem5 that leaves PD partners stuck at the 500 mA fallback
+because the active contract is never refreshed after attach.
 
-On Tue, Mar 31, 2026 at 11:22:20PM +0000, Amit Sunil Dhamne via B4 Relay wr=
-ote:
-> +/* Charge Termination Voltage Limits (in mV) */
-> +static const struct linear_range chg_cv_prm_ranges[] =3D {
-> +	LINEAR_RANGE(3800, 0x38, 0x39, 100),
-> +	LINEAR_RANGE(4000, 0x0, 0x32, 10),
-> +};
+Restore the missing interrupt bits so the existing handler paths are
+reachable again. This fixes USB-C charging negotiation on the librem5:
+after a replug the TPS6598x source power supply reports 3 A instead of
+500 mA and the BQ25890 input limit follows suit.
 
-Let me quote from include/linux/power_supply.h:
+Fixes: b3dddff502c5 ("usb: typec: tipd: Move initial irq mask to tipd_data")
+Cc: stable@vger.kernel.org
+Signed-off-by: Vincent Cloutier <vincent@cloutier.co>
+---
+ drivers/usb/typec/tipd/core.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
- * All voltages, currents, charges, energies, time and temperatures in uV,
- * =B5A, =B5Ah, =B5Wh, seconds and tenths of degree Celsius unless otherwise
- * stated. It's driver's job to convert its raw values to units in which
- * this class operates.
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index 84ee5687bb27..83f2fec6e34e 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -2395,7 +2395,11 @@ static const struct tipd_data tps6598x_data = {
+ 	.irq_handler = tps6598x_interrupt,
+ 	.irq_mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
+ 		     TPS_REG_INT_DATA_STATUS_UPDATE |
+-		     TPS_REG_INT_PLUG_EVENT,
++		     TPS_REG_INT_PLUG_EVENT |
++		     TPS_REG_INT_PP_SWITCH_CHANGED |
++		     TPS_REG_INT_NEW_CONTRACT_AS_CONSUMER |
++		     TPS_REG_INT_HARD_RESET |
++		     TPS_REG_INT_STATUS_UPDATE,
+ 	.tps_struct_size = sizeof(struct tps6598x),
+ 	.register_port = tps6598x_register_port,
+ 	.unregister_port = tps6598x_unregister_port,
+-- 
+2.53.0
 
-What makes you think that CONSTANT_CHARGE_VOLTAGE_MAX is
-special?
-
-[...]
-
-> +static int max77759_charger_get_property(struct power_supply *psy,
-> +					 enum power_supply_property psp,
-> +					 union power_supply_propval *pval)
-> +{
-> +	struct max77759_charger *chg =3D power_supply_get_drvdata(psy);
-> +	int ret;
-> +
-> +	switch (psp) {
-> +	case POWER_SUPPLY_PROP_ONLINE:
-> +		ret =3D get_online(chg);
-> +		break;
-> +	case POWER_SUPPLY_PROP_PRESENT:
-> +		ret =3D charger_input_valid(chg);
-> +		break;
-> +	case POWER_SUPPLY_PROP_STATUS:
-> +		ret =3D get_status(chg);
-> +		break;
-> +	case POWER_SUPPLY_PROP_CHARGE_TYPE:
-> +		ret =3D get_charge_type(chg);
-> +		break;
-> +	case POWER_SUPPLY_PROP_HEALTH:
-> +		ret =3D get_health(chg);
-> +		break;
-> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
-> +		ret =3D get_fast_charge_current(chg);
-> +		break;
-> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-> +		ret =3D get_float_voltage(chg);
-> +		break;
-> +	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-> +		ret =3D get_input_current_limit(chg);
-> +		break;
-> +	default:
-> +		ret =3D -EINVAL;
-> +	}
-> +
-> +	pval->intval =3D ret;
-> +	return ret < 0 ? ret : 0;
-
-As people like to use existing drivers as reference this definitely
-needs a comment, that none of the properties used by this driver
-support negative values. This is not a general thing as e.g. the
-CHARGE current may be negative depending on the battery being
-charged or discharged (OTG mode).
-
-Greetings,
-
--- Sebastian
-
---jtllgmysjjqf46tb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmnNp4EACgkQ2O7X88g7
-+pqRTQ/9GJQNOBRCUPdxAgEbXxqn4fVYD6kqeogAdgEa+OWX6WMXbEcqexLYkDIg
-6TYG1jIZfgUiHU9L1IbHaWR7DMESCYrDE1LE82FkTE9eHrm44pVkuF+YZRh6mkci
-EPIZRZYUrwO/PkbfmlXDZE1lyYnoKrwYSAFF+MKprcNwHSj5Fsk7627Mbejr14B8
-g2iMAMLfIxvP1DH9mfmMrsj4drTfK6Jdi7o6l9jiib2szbCQcufiaazJQmybj/Jb
-AXXODllyBB+WxwP9AEppVGx2/wayzl3SuGVJ57U0lvc+sJQex4KBSDNulrDXqtBN
-9egXzVUO8MdF+kmI4koQiPhVenWiG45Aq8cN4vqqLLmf67ti5jssM+uyxSEmo/C/
-kbZMt9BEsq6b/mS6tjxNDYS2U7inRoEILK7O1ZpfMfoU2Z+L9UGM5rIridEYA6RC
-TVIIElfjOS0tpgIGu2oB7PL3xb3wBfRdhwWI5xSmP8FcPwTngBVAj0IwkuLEKYPc
-dOXTpfIofc07gdNdRvdkkCAwoPE83exInZ0P+YxxhUaJ1MZULK1W/fUZOinH5TLY
-c+VASpW+OUXyOYPQO8t5LBoc9hCVutONRXqnMM2RxyUPf35BFF2emJ6/9Kjr270H
-PE6r1tb+UF+kuI2fBUG7zunqfLzmrKU3ZkPLCbdlUWBsvWKWrVo=
-=sRb6
------END PGP SIGNATURE-----
-
---jtllgmysjjqf46tb--
 
