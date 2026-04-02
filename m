@@ -1,152 +1,159 @@
-Return-Path: <linux-usb+bounces-35821-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35822-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id DJCsJVjRzWnVhwYAu9opvQ
-	(envelope-from <linux-usb+bounces-35821-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 04:15:52 +0200
+	id ENmBK1HTzWnVhwYAu9opvQ
+	(envelope-from <linux-usb+bounces-35822-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 04:24:17 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BB9E3828EC
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 04:15:50 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 227B1382A26
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 04:24:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B2BDB3028EF6
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 02:14:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id BA80B30E7BBA
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 02:21:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BECF0313E2C;
-	Thu,  2 Apr 2026 02:14:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 225E4336887;
+	Thu,  2 Apr 2026 02:21:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="HX+dOX4L"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="LhCGhTkn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1BA1B4224;
-	Thu,  2 Apr 2026 02:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0303A2848BA
+	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 02:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775096095; cv=none; b=VA1spXh0mQzosVQId0PEPU4p0eJlX5IglgL5a21TuV4At0WqbWkxsOOMl0jOQWedz6QWMRdOSBLATSQK37dUYrUfk9snEARyWl5W7K6iHc8ev8hPrGh8S5wtjk/90i+EzEaYqIqL5Ci6tA1jKqnEVY1haQTVB+Ra3UpsZppiWUY=
+	t=1775096459; cv=none; b=q/7AoZ1Oj1SLfJDnzYsd+jeh6EMtPcOD8MoUPBSEqVy2OjGTxD2xlXsrBVFmCLPWkO1FAkLgH2jhh7zk+wcs9Gj0jPT3KUhKtjLgjUWc/WmrmAH+MO5kC5JIvVb3Zl2N7qgiyHbShW3NAMswFdZA4RU4AWuLbBDo6T6IUMwa6As=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775096095; c=relaxed/simple;
-	bh=b/OXsoo0CVevj2L/jQepFRvWMjRjoNn9amU8TR5hZEI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tU4MWb3CegL0HTevXjTvZx9qMgqmFMkwaUdbgT6x6+UPeld4hUv3qLmberNDd1LJ9RLMsAWlZycGgVq/Pc4zWwGleQFANZg/H3jt8fWyobnrXpfpX5jDpwIrl7LfYXtfO2a5kP9I37jBhBV20xc7ExccNKWGGdOareQVsOC4ZyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=HX+dOX4L; arc=none smtp.client-ip=113.46.200.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=/AJjsv6osL6nIUXhjXTdfF7UVHGATEdaHDeUN6cVQH8=;
-	b=HX+dOX4LDEaPsr1pwu0IwILEh8j5B0CvzaTGv7Ngo4456xSKUJFPlCYrTv4jyaCFcJhSHDKzc
-	rUiNcQAPl77hWgcP907yvAy0m+qllQzXEadlISSADtamXRARkD2qhayVvcGk8PDP99N0uJNbgkD
-	cPC8+pB+BL+tRji4LeexPRE=
-Received: from mail.maildlp.com (unknown [172.19.163.163])
-	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4fmQJ03p8zzmV8k;
-	Thu,  2 Apr 2026 10:08:32 +0800 (CST)
-Received: from kwepemk100018.china.huawei.com (unknown [7.202.194.66])
-	by mail.maildlp.com (Postfix) with ESMTPS id 38D1F4056E;
-	Thu,  2 Apr 2026 10:14:44 +0800 (CST)
-Received: from vm7-217-32-6.huawei.com (7.217.32.6) by
- kwepemk100018.china.huawei.com (7.202.194.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.36; Thu, 2 Apr 2026 10:14:43 +0800
-From: Tao Xue <xuetao09@huawei.com>
-To: <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<caiyadong@huawei.com>, Tao Xue <xuetao09@huawei.com>, <stable@kernel.org>
-Subject: [PATCH] usb: core: Fix bandwidth for devices with invalid wBytesPerInterval
-Date: Thu, 2 Apr 2026 10:14:00 +0800
-Message-ID: <20260402021400.28853-1-xuetao09@huawei.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1775096459; c=relaxed/simple;
+	bh=ycTVm9fBUPMU9Vp+rwKYcRqX2G9nYJTKVEE8SYElERw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uHksiP7HqFvyUy8A5WGggB97H5eDYfQhQ8B5xae7MD0q0vx8leODSGDJ0X1ZjXsieiGeirPjtHN5wYB4bqNAdwoDlRefETE/3sPLdquPdHkbMBEpIN11pwWRHpBVmAxpzEXKsBbU14tn/X9tStJFANn8pohSc9XkyP37b0POnKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=LhCGhTkn; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-8a3970f1a0eso5256286d6.2
+        for <linux-usb@vger.kernel.org>; Wed, 01 Apr 2026 19:20:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1775096455; x=1775701255; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8PBfoXjwXX6diu+9e4EdlsT8PYHbIzIhMdZEjZKN+/Y=;
+        b=LhCGhTknCSJObr5GL1jQLsZUJkh0W+aI4yPVBr/ptmDMXd0mz4i/LDtV3fFEjoJNx6
+         FjViAeP85aqLJQKgPGjX/FzoX/GnU9p9zLjCS4zZHwqPja51AESQa+NWtuAY7LBP2y6z
+         RctYvhuGrBLCfSOCUKu2qjl3UPGBSK3GYalyLVawaZKJuGx/I/MEKJsH+hGXo8UfwuFB
+         HbTNeSDSEJkMNB00z3qHWEiLqJ05rtTQQqmVYnhzAaTy0uJdEr7eiXr7cL9Dc/zOJ9oZ
+         LpNqegeYxYXwzqKlvRv2JHgKcmtjon7x842647jptvHjAgiBMGwKW9mZU+/Md438LQ1J
+         4G/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775096455; x=1775701255;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8PBfoXjwXX6diu+9e4EdlsT8PYHbIzIhMdZEjZKN+/Y=;
+        b=fi/UNw2EdexMvDf+UJi1Xif9/yv6cWZKNSsAmqIez7HW1loThTC8Clx2zAdlM/1YZJ
+         yTT2BkqVsA1hf/EYBkY8sP5EM2mF2mfjeHz7yauMeZ9x5QYoKSILvIDbrKLH74LRdruI
+         gTdpZUOvc7R6kwn5uNBT0Q18wpAzZDMfpuiYwYYs3TgD+29xmD5TwJT3BfznHdCGmunh
+         nzIT9wBs+iNqO5Xa+6jAtF3KlRFs7ygNGICtNnj+9IAnYuJGQlI/lJwT/Qz0d1ZQDKBr
+         4SRBzfnCB3t172TnGOjcdjHmPT/0vI0Jaw2BpZbChOTVQzW9NtxvsXWZkCtL/7otBD3U
+         MrUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUXvvyVUlieas8eF071NDjgi1pu6BWLSI/U7GedYQUZb6YvArsxfxl1gekRc8y15PBKj1eCmyyOE0U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynlMdHtV6ihy31kTC0Jkks/KG1kZLdgdBDu+mHCTGsV6RyePwS
+	n6euQ2IMUnpEVmStW2QvBff0Hxb/e+51+KAe38+SPgV10+jTB6oKGKpaIxQHynsQ5g==
+X-Gm-Gg: ATEYQzw4/l6CJ8wZHvUzu1MEhScNA83fMsNU//8iXmRDEscyN8OBw6K81zTfOQNnAby
+	gf3bqFn1xktcTCqJeN8DgdQSkwq/Pd/IirbqHLGA5JGJ8IvFAKxahmR8tr2OXpzWH8EIAyma5qf
+	Zp9aufvJE/KO/ngA0c4TTg7dWdbOC9ohFlcmFMY6Jwo8xxujK5SQT7/dxYCxmE+jgmr2caCE9lP
+	KxHGi6ubvawkVa1+A2+SyaFBcT5CEsbFA4eZdqMKGUjyNKrGY5J4sO1jnywN/lxdC9cujIdhvbz
+	L/Ur8pCUCSK13s79Fgn4MoH+0cZpg+l8TPj4AtOY6csv6rauAVftiuqyOKlbP3Tt1BOjYVuo/pZ
+	+egQGz1099sRv9AhINJ9t5a9h4eUw9z8D/UVl6opBliCHT9YoqVKCYj+Uu2B9cnqqU7TaSa0kss
+	821Fh0NHOjQFTtvDqoPT2EG4h1
+X-Received: by 2002:ad4:5c6d:0:b0:89c:e290:c176 with SMTP id 6a1803df08f44-8a5a10d7549mr30393446d6.57.1775096455601;
+        Wed, 01 Apr 2026 19:20:55 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d01:d210::5a82])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8a596e03cd8sm11367706d6.33.2026.04.01.19.20.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 19:20:55 -0700 (PDT)
+Date: Wed, 1 Apr 2026 22:20:52 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Oliver Neukum <oneukum@suse.com>,
+	=?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+	USB list <linux-usb@vger.kernel.org>
+Subject: Re: correctly handling EPROTO
+Message-ID: <7ee8c7cc-da0e-4298-b288-51271ab335e9@rowland.harvard.edu>
+References: <2929d47c-fc02-49d2-873e-758f24c43071@rowland.harvard.edu>
+ <20260321021439.7pmcdrpb5oxbivct@synopsys.com>
+ <20260321065424.76a80508.michal.pecio@gmail.com>
+ <d3fd1c0b-d0cf-40e2-9f21-b4c5de1c421b@rowland.harvard.edu>
+ <20260328222217.297200bd.michal.pecio@gmail.com>
+ <22c70ca7-57dc-4328-a5cc-d46c4f73556f@rowland.harvard.edu>
+ <20260329184611.0afa92c7.michal.pecio@gmail.com>
+ <ba68bdbb-9ffd-47d3-8915-9e2e40fd6adb@rowland.harvard.edu>
+ <20260330143600.0594f0da.michal.pecio@gmail.com>
+ <20260401235022.67037c98.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemk100018.china.huawei.com (7.202.194.66)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260401235022.67037c98.michal.pecio@gmail.com>
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35821-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[huawei.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	FROM_NEQ_ENVFROM(0.00)[xuetao09@huawei.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-35822-lists,linux-usb=lfdr.de];
+	TO_DN_ALL(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:dkim,huawei.com:email,huawei.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8BB9E3828EC
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 227B1382A26
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-As specified in Section 4.14.2 of the xHCI Specification, the xHC
-reserves bandwidth for periodic endpoints according to bInterval and
-wBytesPerInterval (Max ESIT Payload).
+On Wed, Apr 01, 2026 at 11:50:22PM +0200, Michal Pecio wrote:
+> On Mon, 30 Mar 2026 14:36:00 +0200, Michal Pecio wrote:
+> > UVC allows both isoc and bulk transport. I have one bulk device and I
+> > found that if I randomly change urb->status to -EPROTO, the URB is not
+> > resubmitted but (on xHCI) the endpoint keeps going, until it stops after
+> > 5 errors (no URBs left). EHCI would presumably never restart at all.
+> 
+> I tried this again with real transaction errors (dodgy cable) on EHCI
+> with disabled XactErr retries and I see identical result. Failed URBs
+> are never submitted again (checked with usbmon) but the endpoint keeps 
+> going as long as there are other URBs remaining.
 
-Some peripherals report an invalid wBytesPerInterval in their device
-descriptor, which is either 0 or smaller than the actual data length
-transmitted. This issue is observed on ASIX AX88179 series USB 3.0
-Ethernet adapters.
+> Not sure why it happens, maybe it's just the async giveback race,
+> but it worked like that reliably several times.
 
-These errors may lead to unexpected behavior on certain USB host
-controllers, causing USB peripherals to malfunction.
+Well, once we have settled the issues surrounding transaction errors and 
+fixed up the HCDs, someone will have to implement the class driver's 
+side of the solution in uvcvideo.
 
-To address the issue, return max(wBytesPerInterval, max_payload) when
-calculating bandwidth reservation.
-
-Fixes: 9238f25d5d32 ("USB: xhci: properly set endpoint context fields for periodic eps.")
-Cc: <stable@kernel.org>
-Signed-off-by: Tao Xue <xuetao09@huawei.com>
----
- drivers/usb/core/usb.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index e9a10a33534c..8f2e05a5a015 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -1125,6 +1125,8 @@ EXPORT_SYMBOL_GPL(usb_free_noncoherent);
- u32 usb_endpoint_max_periodic_payload(struct usb_device *udev,
- 				      const struct usb_host_endpoint *ep)
- {
-+	u32 max_payload;
-+
- 	if (!usb_endpoint_xfer_isoc(&ep->desc) &&
- 	    !usb_endpoint_xfer_int(&ep->desc))
- 		return 0;
-@@ -1135,7 +1137,12 @@ u32 usb_endpoint_max_periodic_payload(struct usb_device *udev,
- 			return le32_to_cpu(ep->ssp_isoc_ep_comp.dwBytesPerInterval);
- 		fallthrough;
- 	case USB_SPEED_SUPER:
--		return le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval);
-+		max_payload = usb_endpoint_maxp(&ep->desc) * (ep->ss_ep_comp.bMaxBurst + 1);
-+		if (usb_endpoint_xfer_isoc(&ep->desc))
-+			return max_t(u32, max_payload * USB_SS_MULT(ep->ss_ep_comp.bmAttributes),
-+					ep->ss_ep_comp.wBytesPerInterval);
-+		else
-+			return max_t(u32, max_payload, ep->ss_ep_comp.wBytesPerInterval);
- 	default:
- 		if (usb_endpoint_is_hs_isoc_double(udev, ep))
- 			return le32_to_cpu(ep->eusb2_isoc_ep_comp.dwBytesPerInterval);
--- 
-2.17.1
-
+Alan Stern
 
