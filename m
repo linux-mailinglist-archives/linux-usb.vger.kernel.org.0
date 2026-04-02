@@ -1,467 +1,247 @@
-Return-Path: <linux-usb+bounces-35857-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35858-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kJTpBbpOzmmjmgYAu9opvQ
-	(envelope-from <linux-usb+bounces-35857-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 13:10:50 +0200
+	id Uww+H8lVzmnrmwYAu9opvQ
+	(envelope-from <linux-usb+bounces-35858-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 13:40:57 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3989C388222
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 13:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8585938873C
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Apr 2026 13:40:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 5F5DE30606FE
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 11:07:17 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 895D0308D3F2
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2026 11:27:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AEF13C1970;
-	Thu,  2 Apr 2026 11:06:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D63D13C345D;
+	Thu,  2 Apr 2026 11:27:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="IwJ+ViV3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE5253C0619
-	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 11:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBBBF364949
+	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 11:26:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775127994; cv=none; b=lueaMhLQ6fT/t09FyAKn0Dktv+3UtGFPnjvfQhVtBNMTDCWGGV6+c+cOuWAIC89Foe3MeBE9s9M1rPsbDDN1St/VBX2hggivqNwoBUbiFA2D0FN8pi68hTqIT7pLpcz01bfZVjPctGWDnQvRaUKZpAyYE8+WUdnPMMmd2SBNq3Y=
+	t=1775129223; cv=none; b=FZxLK6qO5y4WjcEXmZ1jzFVtKGs0BqpThi3xY9oEpHG4Ye8MMciFrwhvdyEY3wjzwfsx2zSCMMpRADSUVxyM+8ZCCfgjgP+/e14FIalIfCn1GuWzuawbu7ddcFTLpjM3wnLrMtEYS1FVcAtAzu7Nb2LIE4SijrqeJ3HD4MC/flI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775127994; c=relaxed/simple;
-	bh=Yd/6Pc5loOp6q2Ae4swq/Wc1w/fliWxGIpt5pwIb6ZE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AiVrfg/628eNKlDJH71dhYPeP9RmybvWixNrOf3XBv7nHz2EBvVRwYQSv0lkr7U3ITCd2yy9X9p1pO5vL7+L8U+U+runUWo2apDZFwgK2lPHZENnmryBX2u9R6UvFOuA+gOgSjMCa4V+geEbBPwjRH0HrCSWG/gBo+WawFm3kzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1w8Fru-0004ZY-BZ; Thu, 02 Apr 2026 13:05:46 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1w8Frs-003MQs-2L;
-	Thu, 02 Apr 2026 13:05:44 +0200
-Received: from pengutronix.de (p4ffb2dc6.dip0.t-ipconnect.de [79.251.45.198])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 57352514511;
-	Thu, 02 Apr 2026 11:05:44 +0000 (UTC)
-Date: Thu, 2 Apr 2026 13:05:43 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, linusw@kernel.org, brgl@kernel.org, 
-	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org, mailhol@kernel.org, 
-	alexandre.belloni@bootlin.com, wim@linux-watchdog.org, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] mfd: Add Host Interface (HIF) support for Nuvoton
- NCT6694
-Message-ID: <20260402-warping-chameleon-of-prowess-9df780-mkl@pengutronix.de>
-X-AI: stop_reason: "refusal"
-References: <20260402051442.1426672-1-a0282524688@gmail.com>
- <20260402051442.1426672-3-a0282524688@gmail.com>
+	s=arc-20240116; t=1775129223; c=relaxed/simple;
+	bh=5olAb5QXerM6p+khOaKaPB6OLy1SzrqXK1h9oVMNBis=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:In-Reply-To:
+	 Content-Type:References; b=SQTBBmkXZOtp7EbWvrNAx9rnanJr1h63bFhEavMsW3abUFNlUqpxKj2iPPwcpmljnOKhQHmdBqPX9Xu0dc06+pyKW2hbI9wCArSMDNQE0i3c8Y9/hotG8iTn8yz4QDgK14HCmyyGk0wrLGAE9cUFtKwSnrAI1yHX1X84bTSmQS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=IwJ+ViV3; arc=none smtp.client-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20260402112649euoutp01a64b0fa070cae7f9a8a6ac03a768eb24~ihpxRCyFl2155621556euoutp01P
+	for <linux-usb@vger.kernel.org>; Thu,  2 Apr 2026 11:26:49 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20260402112649euoutp01a64b0fa070cae7f9a8a6ac03a768eb24~ihpxRCyFl2155621556euoutp01P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1775129209;
+	bh=Hy/twRPYhbiir+MS1ZezR/NKFm6OHeTxxqJZFQB9PJY=;
+	h=Date:From:Subject:To:Cc:In-Reply-To:References:From;
+	b=IwJ+ViV3fVn8ffILzN1+oSKTdtPlqtT21PrIkH5/BQMaj/8kI/qfGXWbxMYJDctiz
+	 i+YraefNVbY5fJzfoHlOr9B8zKq8rn1DA2V//EveiyX9g3bzwvUb4VC52OoJNuQdrq
+	 82Tb77fuTcDwpqFGKil3reo97r1qMVk14qCuPFk8=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20260402112648eucas1p2d6d3dffafe14d15bb776935b734d3e19~ihpwrX8Mr0663806638eucas1p2s;
+	Thu,  2 Apr 2026 11:26:48 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20260402112647eusmtip247f6a1ea586e1f285f816be2bae2700a~ihpvrdsMm3271332713eusmtip2X;
+	Thu,  2 Apr 2026 11:26:47 +0000 (GMT)
+Message-ID: <73ef4f64-498e-45a3-bea0-2a5f11e71b28@samsung.com>
+Date: Thu, 2 Apr 2026 13:26:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="eduyjgnvxkh2zrsd"
-Content-Disposition: inline
-In-Reply-To: <20260402051442.1426672-3-a0282524688@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spamd-Result: default: False [-1.06 / 15.00];
-	SIGNED_PGP(-2.00)[];
+User-Agent: Betterbird (Windows)
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: Re: [PATCH v2] dma-debug: suppress cacheline overlap warning when
+ arch has no DMA alignment requirement
+To: Robin Murphy <robin.murphy@arm.com>, Andy Shevchenko
+	<andy.shevchenko@gmail.com>
+Cc: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>, iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, linux-mm@kvack.org,
+	harry@kernel.org, vbabka@kernel.org, akpm@linux-foundation.org,
+	stern@rowland.harvard.edu, linux@roeck-us.net, hch@lst.de,
+	Jeff.kirsher@gmail.com, catalin.marinas@arm.com
+Content-Language: en-US
+In-Reply-To: <75f65aa7-4f89-4ef8-8941-51b1d54d1ad3@arm.com>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20260402112648eucas1p2d6d3dffafe14d15bb776935b734d3e19
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20260327124211eucas1p10425a28f67736d2043e7e4dd77d58e72
+X-EPHeader: CA
+X-CMS-RootMailID: 20260327124211eucas1p10425a28f67736d2043e7e4dd77d58e72
+References: <CGME20260327124211eucas1p10425a28f67736d2043e7e4dd77d58e72@eucas1p1.samsung.com>
+	<20260327124156.24820-1-mikhail.v.gavrilov@gmail.com>
+	<6270d4f0-85e4-496d-8db4-87ccb791ca4d@samsung.com>
+	<c9ded35b-fc10-47d8-bfaa-cecb4fa91add@arm.com>
+	<CAHp75VdrGk=foAzQBJNRNDZ1yfFY8p-tC_ApM8_gN4EehpmN_Q@mail.gmail.com>
+	<75f65aa7-4f89-4ef8-8941-51b1d54d1ad3@arm.com>
+X-Spamd-Result: default: False [-0.65 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	URIBL_MULTI_FAIL(0.00)[sin.lore.kernel.org:server fail,pengutronix.de:server fail];
-	TAGGED_FROM(0.00)[bounces-35857-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[pengutronix.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35858-lists,linux-usb=lfdr.de];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[gmail.com,lists.linux.dev,vger.kernel.org,kvack.org,kernel.org,linux-foundation.org,rowland.harvard.edu,roeck-us.net,lst.de,arm.com];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[arm.com,gmail.com];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-usb@vger.kernel.org];
-	NEURAL_SPAM(0.00)[0.272];
-	TO_DN_NONE(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[m.szyprowski@samsung.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[samsung.com:+];
+	NEURAL_HAM(-0.00)[-0.269];
 	TAGGED_RCPT(0.00)[linux-usb];
-	R_DKIM_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[pengutronix.de:mid,pengutronix.de:url,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3989C388222
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,samsung.com:dkim,samsung.com:mid]
+X-Rspamd-Queue-Id: 8585938873C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+On 01.04.2026 17:26, Robin Murphy wrote:
+> On 2026-04-01 2:25 pm, Andy Shevchenko wrote:
+>> On Wed, Apr 1, 2026 at 3:11 PM Robin Murphy <robin.murphy@arm.com> wrote:
+>>> On 2026-03-30 8:44 am, Marek Szyprowski wrote:
+>>>> On 27.03.2026 13:41, Mikhail Gavrilov wrote:
+>>
+>> ...
+>>
+>>> TBH I'd be inclined to have CONFIG_DMA_DEBUG raise ARCH_DMA_MINALIGN as
+>>> appropriate such that genuine false-positives can't happen, rather than
+>>> effectively defeat the whole check,
+>>
+>> I dunno if you read v1 thread, where I proposed to unroll the check
+>> and use pr_debug_once() for the cases which we expect not to panic,
+>> but would be good to have a track of.
+>
+> I had not seen v1, as I took the last 3 days off and hadn't got that far up my inbox yet - I guess it's at least reassuring to have reached similar conclusions independently :)
+>
+> The fundamental issue here is that dma-debug doesn't realistically have a way to know whether the thing being mapped is intentionally a whole dedicated kmalloc allocation - where we can trust SLUB (and DMA_BOUNCE_UNALIGNED_KMALLOC if appropriate) to do the right thing across different systems - or just something which might happen to line up by coincidence on someone's development machine, but for portability they definitely do still need to take explicit care about (e.g. struct devres::data).
 
---eduyjgnvxkh2zrsd
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 2/2] mfd: Add Host Interface (HIF) support for Nuvoton
- NCT6694
-MIME-Version: 1.0
 
-On 02.04.2026 13:14:42, a0282524688@gmail.com wrote:
-> From: Ming Yu <a0282524688@gmail.com>
->
-> The Nuvoton NCT6694 also provides a Host Interface (HIF) via eSPI
-> to the host to access its features.
->
-> Sub-devices can use the common functions nct6694_read_msg() and
-> nct6694_write_msg() to issue a command. They can also request
-> interrupts that will be called when the HIF device triggers a
-> shared memory interrupt.
->
-> To support multiple transports, the driver configuration is
-> updated to allow selecting between the USB and HIF interfaces.
->
-> Signed-off-by: Ming Yu <a0282524688@gmail.com>
-> ---
->  MAINTAINERS                         |   1 +
->  drivers/gpio/gpio-nct6694.c         |   7 -
->  drivers/hwmon/nct6694-hwmon.c       |  21 -
->  drivers/i2c/busses/i2c-nct6694.c    |   7 -
->  drivers/mfd/Kconfig                 |  47 +-
->  drivers/mfd/Makefile                |   3 +-
->  drivers/mfd/nct6694-hif.c           | 649 ++++++++++++++++++++++++++++
->  drivers/mfd/nct6694.c               |  97 +++--
->  drivers/net/can/usb/nct6694_canfd.c |   6 -
->  drivers/rtc/rtc-nct6694.c           |   7 -
->  drivers/watchdog/nct6694_wdt.c      |   7 -
->  include/linux/mfd/nct6694.h         |  51 ++-
->  12 files changed, 787 insertions(+), 116 deletions(-)
->  create mode 100644 drivers/mfd/nct6694-hif.c
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c3fe46d7c4bc..7b6241faa6df 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18899,6 +18899,7 @@ S:	Supported
->  F:	drivers/gpio/gpio-nct6694.c
->  F:	drivers/hwmon/nct6694-hwmon.c
->  F:	drivers/i2c/busses/i2c-nct6694.c
-> +F:	drivers/mfd/nct6694-hif.c
->  F:	drivers/mfd/nct6694.c
->  F:	drivers/net/can/usb/nct6694_canfd.c
->  F:	drivers/rtc/rtc-nct6694.c
-> diff --git a/drivers/gpio/gpio-nct6694.c b/drivers/gpio/gpio-nct6694.c
-> index 3703a61209e6..a279510ece89 100644
-> --- a/drivers/gpio/gpio-nct6694.c
-> +++ b/drivers/gpio/gpio-nct6694.c
-> @@ -12,13 +12,6 @@
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->
-> -/*
-> - * USB command module type for NCT6694 GPIO controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * GPIO controller over the USB interface.
-> - */
-> -#define NCT6694_GPIO_MOD	0xFF
-> -
->  #define NCT6694_GPIO_VER	0x90
->  #define NCT6694_GPIO_VALID	0x110
->  #define NCT6694_GPI_DATA	0x120
-> diff --git a/drivers/hwmon/nct6694-hwmon.c b/drivers/hwmon/nct6694-hwmon.c
-> index 6dcf22ca5018..581451875f2c 100644
-> --- a/drivers/hwmon/nct6694-hwmon.c
-> +++ b/drivers/hwmon/nct6694-hwmon.c
-> @@ -15,13 +15,6 @@
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
->
-> -/*
-> - * USB command module type for NCT6694 report channel
-> - * This defines the module type used for communication with the NCT6694
-> - * report channel over the USB interface.
-> - */
-> -#define NCT6694_RPT_MOD			0xFF
-> -
->  /* Report channel */
->  /*
->   * The report channel is used to report the status of the hardware monit=
-or
-> @@ -38,13 +31,6 @@
->  #define NCT6694_TIN_STS(x)		(0x6A + (x))
->  #define NCT6694_FIN_STS(x)		(0x6E + (x))
->
-> -/*
-> - * USB command module type for NCT6694 HWMON controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * HWMON controller over the USB interface.
-> - */
-> -#define NCT6694_HWMON_MOD		0x00
-> -
->  /* Command 00h - Hardware Monitor Control */
->  #define NCT6694_HWMON_CONTROL		0x00
->  #define NCT6694_HWMON_CONTROL_SEL	0x00
-> @@ -53,13 +39,6 @@
->  #define NCT6694_HWMON_ALARM		0x02
->  #define NCT6694_HWMON_ALARM_SEL		0x00
->
-> -/*
-> - * USB command module type for NCT6694 PWM controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * PWM controller over the USB interface.
-> - */
-> -#define NCT6694_PWM_MOD			0x01
-> -
->  /* PWM Command - Manual Control */
->  #define NCT6694_PWM_CONTROL		0x01
->  #define NCT6694_PWM_CONTROL_SEL		0x00
-> diff --git a/drivers/i2c/busses/i2c-nct6694.c b/drivers/i2c/busses/i2c-nc=
-t6694.c
-> index 7d8ad997f6d2..7ee209a04d16 100644
-> --- a/drivers/i2c/busses/i2c-nct6694.c
-> +++ b/drivers/i2c/busses/i2c-nct6694.c
-> @@ -11,13 +11,6 @@
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->
-> -/*
-> - * USB command module type for NCT6694 I2C controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * I2C controller over the USB interface.
-> - */
-> -#define NCT6694_I2C_MOD			0x03
-> -
->  /* Command 00h - I2C Deliver */
->  #define NCT6694_I2C_DELIVER		0x00
->  #define NCT6694_I2C_DELIVER_SEL		0x00
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 7192c9d1d268..8a715ec2f79f 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1164,19 +1164,46 @@ config MFD_MENF21BMC
->  	  will be called menf21bmc.
->
->  config MFD_NCT6694
-> -	tristate "Nuvoton NCT6694 support"
-> +	tristate
->  	select MFD_CORE
-> +	help
-> +	  Core MFD support for the Nuvoton NCT6694 peripheral expander.
-> +	  This provides the common APIs and shared structures used by all
-> +	  interfaces (USB, HIF) to access the NCT6694 hardware features
-> +	  such as GPIO, I2C, CAN-FD, Watchdog, ADC, PWM, and RTC.
-> +
-> +	  It is selected automatically by the transport interface drivers.
-> +
-> +config MFD_NCT6694_HIF
-> +	tristate "Nuvoton NCT6694 HIF (eSPI) interface support"
-> +	depends on HAS_IOPORT && ACPI
-> +	select MFD_NCT6694
-> +	select REGMAP_MMIO
-> +	help
-> +	  This enables support for the Nuvoton NCT6694 peripheral expander
-> +	  connected via the Host Interface (HIF) using eSPI transport.
-> +
-> +	  The transport driver uses Super-I/O mapping and shared memory to
-> +	  communicate with the NCT6694 firmware. Enable this option if you
-> +	  are using the NCT6694 over an eSPI interface on an ACPI platform.
-> +
-> +	  To compile this driver as a module, choose M here: the module
-> +	  will be called nct6694-hif.
-> +
-> +config MFD_NCT6694_USB
-> +	tristate "Nuvoton NCT6694 USB interface support"
-> +	select MFD_NCT6694
->  	depends on USB
->  	help
-> -	  This enables support for the Nuvoton USB device NCT6694, which shares
-> -	  peripherals.
-> -	  The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
-> -	  6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
-> -	  PWM, and RTC.
-> -	  This driver provides core APIs to access the NCT6694 hardware
-> -	  monitoring and control features.
-> -	  Additional drivers must be enabled to utilize the specific
-> -	  functionalities of the device.
-> +	  This enables support for the Nuvoton NCT6694 peripheral expander
-> +	  connected via the USB interface.
-> +
-> +	  The transport driver uses USB bulk and interrupt transfers to
-> +	  communicate with the NCT6694 firmware. Enable this option if you
-> +	  are using the NCT6694 via a USB connection.
-> +
-> +	  To compile this driver as a module, choose M here: the module
-> +	  will be called nct6694.
->
->  config MFD_OCELOT
->  	tristate "Microsemi Ocelot External Control Support"
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index e75e8045c28a..4cee9b74978c 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -124,7 +124,8 @@ obj-$(CONFIG_MFD_MC13XXX_I2C)	+=3D mc13xxx-i2c.o
->
->  obj-$(CONFIG_MFD_PF1550)	+=3D pf1550.o
->
-> -obj-$(CONFIG_MFD_NCT6694)	+=3D nct6694.o
-> +obj-$(CONFIG_MFD_NCT6694_HIF)	+=3D nct6694-hif.o
-> +obj-$(CONFIG_MFD_NCT6694_USB)	+=3D nct6694.o
->
->  obj-$(CONFIG_MFD_CORE)		+=3D mfd-core.o
->
-> diff --git a/drivers/mfd/nct6694-hif.c b/drivers/mfd/nct6694-hif.c
-> new file mode 100644
-> index 000000000000..a5953c951eb5
-> --- /dev/null
-> +++ b/drivers/mfd/nct6694-hif.c
-> @@ -0,0 +1,649 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2026 Nuvoton Technology Corp.
-> + *
-> + * Nuvoton NCT6694 host-interface (eSPI) transport driver.
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/bits.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/irq.h>
-> +#include <linux/irqdomain.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/nct6694.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/unaligned.h>
-> +
-> +#define DRVNAME "nct6694-hif"
-> +
-> +#define NCT6694_POLL_INTERVAL_US	10
-> +#define NCT6694_POLL_TIMEOUT_US		10000
-> +
-> +/*
-> + * Super-I/O registers
-> + */
-> +#define SIO_REG_LDSEL		0x07	/* Logical device select */
-> +#define SIO_REG_DEVID		0x20	/* Device ID (2 bytes) */
-> +#define SIO_REG_LD_SHM		0x0F	/* Logical device shared memory control */
-> +
-> +#define SIO_REG_SHM_ENABLE	0x30	/* Enable shared memory */
-> +#define SIO_REG_SHM_BASE_ADDR	0x60	/* Shared memory base address (2 byte=
-s) */
-> +#define SIO_REG_SHM_IRQ_NR	0x70	/* Shared memory interrupt number */
-> +
-> +#define SIO_REG_UNLOCK_KEY	0x87	/* Key to enable Super-I/O */
-> +#define SIO_REG_LOCK_KEY	0xAA	/* Key to disable Super-I/O */
-> +
-> +#define SIO_NCT6694B_ID		0xD029
-> +#define SIO_NCT6694D_ID		0x5832
-> +
-> +/*
-> + * Super-I/O Shared Memory Logical Device registers
-> + */
-> +#define NCT6694_SHM_COFS_STS			0x2E
-> +#define NCT6694_SHM_COFS_STS_COFS4W		BIT(7)
-> +
-> +#define NCT6694_SHM_COFS_CTL2			0x3B
-> +#define NCT6694_SHM_COFS_CTL2_COFS4W_IE		BIT(3)
-> +
-> +#define NCT6694_SHM_INTR_STATUS			0x9C	/* Interrupt status register (4 b=
-ytes) */
-> +
-> +enum nct6694_chips {
-> +	NCT6694B =3D 0,
-> +	NCT6694D,
-> +};
-> +
-> +enum nct6694_module_id {
-> +	NCT6694_GPIO0 =3D 0,
-> +	NCT6694_GPIO1,
-> +	NCT6694_GPIO2,
-> +	NCT6694_GPIO3,
-> +	NCT6694_GPIO4,
-> +	NCT6694_GPIO5,
-> +	NCT6694_GPIO6,
-> +	NCT6694_GPIO7,
-> +	NCT6694_GPIO8,
-> +	NCT6694_GPIO9,
-> +	NCT6694_GPIOA,
-> +	NCT6694_GPIOB,
-> +	NCT6694_GPIOC,
-> +	NCT6694_GPIOD,
-> +	NCT6694_GPIOE,
-> +	NCT6694_GPIOF,
-> +	NCT6694_I2C0,
-> +	NCT6694_I2C1,
-> +	NCT6694_I2C2,
-> +	NCT6694_I2C3,
-> +	NCT6694_I2C4,
-> +	NCT6694_I2C5,
-> +	NCT6694_CAN0,
-> +	NCT6694_CAN1,
-> +};
-> +
-> +struct __packed nct6694_msg {
-> +	struct nct6694_cmd_header cmd_header;
-> +	struct nct6694_response_header response_header;
-> +	unsigned char *data;
-> +};
-> +
-> +struct nct6694_sio_data {
-> +	enum nct6694_chips chip;
-> +	int sioreg;	/* Super-I/O index port */
-> +
-> +	/* Super-I/O access functions */
-> +	int (*sio_enter)(struct nct6694_sio_data *sio_data);
-> +	void (*sio_exit)(struct nct6694_sio_data *sio_data);
-> +	void (*sio_select)(struct nct6694_sio_data *sio_data, int ld);
-> +	int (*sio_inb)(struct nct6694_sio_data *sio_data, int reg);
-> +	int (*sio_inw)(struct nct6694_sio_data *sio_data, int reg);
-> +	void (*sio_outb)(struct nct6694_sio_data *sio_data, int reg, int val);
+Right, the debug code cannot distinguish them. I'm still convinced that increasing
+ARCH_DMA_MINALIGN when DEBUG is enabled is not a good idea. I also agree that the
+current exceptions for DMA_BOUNCE_UNALIGNED_KMALLOC and dma_get_cache_alignment() <
+L1_CACHE_BYTES are wider than really needed. What we can do about it?
 
-The signatures of the function look a bit strange. I expect functions
-reading/writing bytes use u8 not int, register offsets should probably
-be an unsigned int.
+For the (dma_get_cache_alignment() < L1_CACHE_BYTES) case I came up with the idea
+of reducing the check only to the dma_get_cache_alignment()-size overlapping:
 
-Why do you have pointers to the access functions? Why not use them
-directly?
 
-Marc
+diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
+index 86f87e43438c..9bf4b5c368f9 100644
+--- a/kernel/dma/debug.c
++++ b/kernel/dma/debug.c
+@@ -418,13 +418,13 @@ static void hash_bucket_del(struct dma_debug_entry *entry)
+ static RADIX_TREE(dma_active_cacheline, GFP_ATOMIC | __GFP_NOWARN);
+ static DEFINE_SPINLOCK(radix_lock);
+ #define ACTIVE_CACHELINE_MAX_OVERLAP ((1 << RADIX_TREE_MAX_TAGS) - 1)
+-#define CACHELINE_PER_PAGE_SHIFT (PAGE_SHIFT - L1_CACHE_SHIFT)
+-#define CACHELINES_PER_PAGE (1 << CACHELINE_PER_PAGE_SHIFT)
 
---
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+ static phys_addr_t to_cacheline_number(struct dma_debug_entry *entry)
+ {
+-       return ((entry->paddr >> PAGE_SHIFT) << CACHELINE_PER_PAGE_SHIFT) +
+-               (offset_in_page(entry->paddr) >> L1_CACHE_SHIFT);
++       if (dma_get_cache_alignment() >= L1_CACHE_BYTES)
++               return entry->paddr >> L1_CACHE_SHIFT;
++       else
++               return entry->paddr >> ilog2(dma_get_cache_alignment());
+ }
 
---eduyjgnvxkh2zrsd
-Content-Type: application/pgp-signature; name="signature.asc"
+ static int active_cacheline_read_overlap(phys_addr_t cln)
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCac5NhQAKCRDMOmT6rpmt
-0iiOAQDPnaCTCz7cHPZcUdH6WW5DKZHAXFfgb03FMRkx/xPipgD/X+mA6FYqehlp
-FMnxD26sUBwZidoKAtEpXxguwwLFGgo=
-=+i7v
------END PGP SIGNATURE-----
+For the remaining cases (DMA_BOUNCE_UNALIGNED_KMALLOC mainly), based on the Catalin's
+suggestion, I came up with the following idea:
 
---eduyjgnvxkh2zrsd--
+diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
+index 0677918f06a8..f9b6a989ac15 100644
+--- a/kernel/dma/debug.c
++++ b/kernel/dma/debug.c
+@@ -18,6 +18,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/export.h>
+ #include <linux/device.h>
++#include <linux/dma-direct.h>
+ #include <linux/types.h>
+ #include <linux/sched.h>
+ #include <linux/ctype.h>
+@@ -590,6 +591,14 @@ static int dump_show(struct seq_file *seq, void *v)
+ }
+ DEFINE_SHOW_ATTRIBUTE(dump);
+
++static inline void dma_debug_fixup_bounced(struct dma_debug_entry *entry)
++{
++       if (IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) &&
++           dma_kmalloc_needs_bounce(entry->dev, entry->size, entry->direction) &&
++           is_swiotlb_active(entry->dev))
++               entry->paddr = dma_to_phys(entry->dev, entry->dev_addr);
++}
++
+ /*
+  * Wrapper function for adding an entry to the hash.
+  * This function takes care of locking itself.
+@@ -601,6 +610,8 @@ static void add_dma_entry(struct dma_debug_entry *entry, unsigned long attrs)
+        unsigned long flags;
+        int rc;
+
++       dma_debug_fixup_bounced(entry);
++
+        entry->is_cache_clean = attrs & (DMA_ATTR_DEBUGGING_IGNORE_CACHELINES |
+                                         DMA_ATTR_REQUIRE_COHERENT);
+
+@@ -614,9 +625,7 @@ static void add_dma_entry(struct dma_debug_entry *entry, unsigned long attrs)
+                global_disable = true;
+        } else if (rc == -EEXIST &&
+                   !(attrs & DMA_ATTR_SKIP_CPU_SYNC) &&
+-                  !(entry->is_cache_clean && overlap_cache_clean) &&
+-                  !(IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) &&
+-                    is_swiotlb_active(entry->dev))) {
++                  !(entry->is_cache_clean && overlap_cache_clean)) {
+                err_printk(entry->dev, entry,
+                        "cacheline tracking EEXIST, overlapping mappings aren't supported\n");
+        }
+@@ -981,6 +990,8 @@ static void check_unmap(struct dma_debug_entry *ref)
+        struct hash_bucket *bucket;
+        unsigned long flags;
+
++       dma_debug_fixup_bounced(ref);
++
+        bucket = get_hash_bucket(ref, &flags);
+        entry = bucket_find_exact(bucket, ref);
+
+
+What do You think about it? Both at least allows to detect errors like multiple,
+incompatible mappings of the same memory.
+
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
 
