@@ -1,190 +1,160 @@
-Return-Path: <linux-usb+bounces-35932-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35933-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uIOFJXqBz2mvwgYAu9opvQ
-	(envelope-from <linux-usb+bounces-35932-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 03 Apr 2026 10:59:38 +0200
+	id MGM9IFyAz2mvwgYAu9opvQ
+	(envelope-from <linux-usb+bounces-35933-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 03 Apr 2026 10:54:52 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3F29392713
-	for <lists+linux-usb@lfdr.de>; Fri, 03 Apr 2026 10:59:37 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22582392623
+	for <lists+linux-usb@lfdr.de>; Fri, 03 Apr 2026 10:54:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5D9203082FB6
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2026 08:51:54 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5B09530172F5
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2026 08:54:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75D1C3803F5;
-	Fri,  3 Apr 2026 08:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7897A37F8B0;
+	Fri,  3 Apr 2026 08:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pAsYfgeU"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="olOtzznI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9982D94BA
-	for <linux-usb@vger.kernel.org>; Fri,  3 Apr 2026 08:51:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048E32D94BA;
+	Fri,  3 Apr 2026 08:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775206313; cv=none; b=Herc0SUn7xxTimqkgAjvihPfa/J+TTPQNraWAUzNA6R4xIjH69/EAGiUIHJ4wT72tffHJBNVFc+t8+LC5CnWddns4wqDSw2O1/ho4gzntj8tKU0JFt1SsSA80MRVeOcfdN7c/NKZwdAmsdie7cP/clizM+zwpHbaNNTjU6e4os8=
+	t=1775206488; cv=none; b=TxLaJwElU408GgnDhWMO0CDFpTmGihkN9tHWrGZMC06tp8SmI9L2zJ8TSCySnMiaXSsMJczMqaQ0+yPlbeekvdWypBo1VuBUIIREO5qNRhk4d6dZSC2J94uRn/3dp5Pq5KoCEFdp8mDyJlITLPDMZHzDHW7FsMtb80zx8bv9U/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775206313; c=relaxed/simple;
-	bh=vwZoqm2nK/TO4MOrS59mA5ABmTfwQJKL4eRStWaEzcY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HQSNrb1RCrwNMq3n4Xkkjtb5rQWCGwlGWqGVovx9woJFULaU5wewlxcMeOrnQll2uZtpAGAIdf8gVIqTJAbyYQsgtXnzqqa9nPokStlaOEkeZroejKa1Am1v3gmP+94P8IPuDtr7gWI8By9qeg0eyjnjTZwSrx8X1EAFLg93TG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pAsYfgeU; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48891776099so19451035e9.2
-        for <linux-usb@vger.kernel.org>; Fri, 03 Apr 2026 01:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775206310; x=1775811110; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wzoKTzy/K1lrfOBgYvdwSXj9RSXtY/lDKFGFaL27dZU=;
-        b=pAsYfgeUGLQsJffaVe259P44+0lOlChNoeUPWnJ/RRvvdwO3dGKVDpxwHzweWSDgN1
-         MVNk/CDvpqeSvD3l6jISuVankuVvzRcz4WvgTtCT92C5soEmRTPvImiAjGTPKoFL8sYu
-         xhT4McbH0a8kFQn69k9sZnigEQW+gcgesJttKSRYcBIAqfgP7PIXZp0LqXBeaWkTdDsl
-         7f3/cpW3ODsTgGeJaGpWXQNX1UaYpdmKbgqO4XnDr8XdwdXOOTTPcFafxFHOeoDw3/sf
-         sPBv54rr9RUcJ2ExvySdkeRJVWJ0P2mNmb17ooD5tzeJhJxipElQptSMqBrmr08wzaKN
-         1u9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775206310; x=1775811110;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=wzoKTzy/K1lrfOBgYvdwSXj9RSXtY/lDKFGFaL27dZU=;
-        b=AZ3o+T5V0iunhwG7P8IFzLDWjBHk1Vsp5RVj5Zy3af2pEIxYst07PoNbLt1nkgItU6
-         i5NGz89nQtLcuExlSgQfX4JLx9NmUC1QUAgMR1xCV49EvaqsbUFz2OJcSjjYsyxjhVVQ
-         Xz0zdGx1Em5/7fdogwR14VdCL5vgtD/e0CQy7++TB5uFGBdAvoForHk5FqcV7p9F+R0o
-         hDaMgmeZiUw8LSFBAsDznobgCGShJJKubCniKcu9gGGRGVfaU6MfXMlDgepF7Rmp0EhK
-         HkMjccfYhdz0Q5n7NQPJiop41ir7zn+xNp6AaZtRJDmKpgaoZdUB6P/Hsodt9tRLkLSx
-         HSeg==
-X-Forwarded-Encrypted: i=1; AJvYcCUW4eB1FNc2CDwG0WGM4rgyp4OupHFXWBjHaS9QknnMpnx3CqmcmZeoZSllME2LSBdmJ6VKYYcPqkE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuG/AGQwGpW8bL4Xjo42JYDkwFYsf2VGwgk0NlMLtVvFNN0JT0
-	hG/DBRuo2K/YWDB731J2LCsE7JNWFS6AFExOq0zhdxHfwZ+A5mBfU/fEwqQELg==
-X-Gm-Gg: ATEYQzxJgowEpvej5gdPbMWlVTz5svzQMVgan4a2hA8DtbNDj3SHQQ3BiCn2STDCO+y
-	TkmU4U1X55V0J8f/fyVXOiBsp5+ShwsaROrPdYDUNr1kbhn1UWVtgpPjATHKXBFNb84EbFjLPoh
-	tFmyXHmLQAtb/T/mydZkCqLK4h2OYygCHAmeMe1dgp8qQAQEozRZ5oG3EHaorOWP5yxZBNBpl8G
-	sAsHHTHDhuDrb70hO3x3Fq1HMZE7oHqprJy+S6GBhVuUKLOt/wMz+pNKiAHFaWh8BHrdOyQlKWB
-	aHB4HqxUVln1GSRYCX02axvCr/HFQ+85EESLPTbbBEI/mJFzMROZIartUFmzZQFI5iczb0aB6RM
-	jvLVikutV9/Wd3PkEUVM7H/qXwn/eumuBEj5FcMgeg+JTSfoTLRy9JMCTvdSEWbmnz5LybP3JWk
-	LUwpXpCzJo/IPjTkATUGt2iqaVDVWUK5Zz
-X-Received: by 2002:a05:600c:8b46:b0:485:4006:960c with SMTP id 5b1f17b1804b1-4889978e22emr36833735e9.16.1775206309841;
-        Fri, 03 Apr 2026 01:51:49 -0700 (PDT)
-Received: from foxbook (bfi53.neoplus.adsl.tpnet.pl. [83.28.46.53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4888a705f99sm122826715e9.11.2026.04.03.01.51.48
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 03 Apr 2026 01:51:49 -0700 (PDT)
-Date: Fri, 3 Apr 2026 10:51:45 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Mathias Nyman
- <mathias.nyman@linux.intel.com>, "linux-usb@vger.kernel.org"
- <linux-usb@vger.kernel.org>, "oneukum@suse.com" <oneukum@suse.com>,
- "niklas.neronin@linux.intel.com" <niklas.neronin@linux.intel.com>
-Subject: Re: [RFC PATCH 1/2] xhci: prevent automatic endpoint restart after
- stall or error
-Message-ID: <20260403105145.7e74a410.michal.pecio@gmail.com>
-In-Reply-To: <28a00143-85fa-4043-93a0-c2b687ff1bcd@rowland.harvard.edu>
-References: <20260326011910.t7ijezht7g7ttrec@synopsys.com>
-	<9cf4008e-2d12-4025-809a-8d9371f45dac@linux.intel.com>
-	<20260326232400.zkplsxflhykhayyb@synopsys.com>
-	<2604e951-01e8-44d0-a11e-be63b0849c23@linux.intel.com>
-	<9e62ef5a-5b31-4fca-891b-d028f5bbfc05@rowland.harvard.edu>
-	<54121929-d775-45a0-b31d-09b783aada5d@linux.intel.com>
-	<86876c62-01d2-45da-81f3-7d4499ffa0ad@rowland.harvard.edu>
-	<50e61cf7-cce9-45b4-884e-ac65f5e771d7@linux.intel.com>
-	<07351d72-5cdb-45e8-90af-311a0dc49718@rowland.harvard.edu>
-	<20260403015950.lx4n4zdqki37dy27@synopsys.com>
-	<28a00143-85fa-4043-93a0-c2b687ff1bcd@rowland.harvard.edu>
+	s=arc-20240116; t=1775206488; c=relaxed/simple;
+	bh=Lm7sxcZWZLQ7jgVaZ6uQsqGGcnJlQ/ZjCeLWYGM5xds=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KhatrTZ7OblFexdQ5PxGtldhwzJALNyXNHkpEnNj5VZycJDM4skmyIP0raGQCGIrts+lllzWq9HOsTF98MBKTPjIQdB3FN7SSBqovR+hmkPvNLrrlrHzrJ2gzIRdpMFxDYgvWEkLB2xxJN+eFraxHRmKlfPYBqZI23ZQIJwqozg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=olOtzznI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3393C4CEF7;
+	Fri,  3 Apr 2026 08:54:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1775206487;
+	bh=Lm7sxcZWZLQ7jgVaZ6uQsqGGcnJlQ/ZjCeLWYGM5xds=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=olOtzznIfuQMHAk0Wl81GenxptY5Zo1gWWid1mEXIHXjWJfS0PjK8hEq5j3QRmFWt
+	 YcZCH/U8E8gpXrqTyrSSFFWiapqYmjUl4sIjIB22dkf6mftsdw2Vm8JUs872LobpGW
+	 fhSfbhTULNIirhqd3uItgZeQtBV/cNTN7TCVakrs=
+Date: Fri, 3 Apr 2026 10:54:44 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "Peter Chen (CIX)" <peter.chen@kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
+	Arnd Bergmann <arnd@arndb.de>, Roger Quadros <rogerq@kernel.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: cdns3: attempt to fix Kconfig dependencies
+Message-ID: <2026040328-residence-auction-d94d@gregkh>
+References: <20260402141008.2691819-1-arnd@kernel.org>
+ <ac9xVUVB/BKfBUmE@nchen-desktop>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ac9xVUVB/BKfBUmE@nchen-desktop>
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35932-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35933-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-0.998];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,harvard.edu:email]
-X-Rspamd-Queue-Id: D3F29392713
+	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linuxfoundation.org:dkim,arndb.de:email]
+X-Rspamd-Queue-Id: 22582392623
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 2 Apr 2026 22:42:39 -0400, stern@rowland.harvard.edu wrote:
-> Every status other than 0 should mean that the endpoint's queue is 
-> halted.  But not all statuses require a clear-halt or reset-endpoint
-> to recover.  For instance, a short transfer when the URB_SHORT_NOT_OK
-> flag is set.
-
-This doesn't work in xhci-hcd and I'm not sure if it can. I don't recall
-any way to make endpoints halt on short transfer at all.
-
-The driver does exactly two things with this flag:
-1. Isochronus frames get EREMOTEIO status when it's detected, although
-   ISTR that URB_SHORT_NOT_OK isn't defined for isochronous URBs.
-2. All others log a dbg() message. Supposedly, core is responsible for
-   updating urb->status then.
-
-> > * The USB core will not attempt to unlink pending URBs due to halted
-> >   condition
-> > * The HCD is responsible for completing or canceling queued URBs
-> >   when the halted flag is set. Cancelled and newly submitted URBs
-> > will be returned with -EPIPE as long as the halted flag is set  
+On Fri, Apr 03, 2026 at 03:50:45PM +0800, Peter Chen (CIX) wrote:
+> On 26-04-02 16:09:55, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > The way that dependencies between host and gadget mode, as well as cdns3
+> > and cdnsp were handled was rather fragile before commit 6076388ca1ed
+> > ("usb: cdns3: Add USBSSP platform driver support").
+> > 
+> > After those changes, I get randconfig build failures:
+> > 
+> > arm-linux-gnueabi-ld: drivers/usb/cdns3/cdnsp-gadget.o: in function `__cdnsp_gadget_init':
+> > cdnsp-gadget.c:(.text+0x12da): undefined reference to `cdns_drd_gadget_on'
+> > arm-linux-gnueabi-ld: drivers/usb/cdns3/cdnsp-gadget.o: in function `cdnsp_gadget_pullup':
+> > cdnsp-gadget.c:(.text+0x3030): undefined reference to `cdns_clear_vbus'
+> > arm-linux-gnueabi-ld: cdnsp-gadget.c:(.text+0x3138): undefined reference to `cdns_set_vbus'
+> > arm-linux-gnueabi-ld: drivers/usb/cdns3/cdnsp-gadget.o: in function `cdnsp_gadget_exit':
+> > cdnsp-gadget.c:(.text+0xe0): undefined reference to `cdns_drd_gadget_off'
+> > 
+> > and I see additional configurations that are broken. The main problem
+> > here is that the 'common' module links against both host and gadget
+> > support if they are enabled, but there are insufficient protections
+> > agains it being built-in if only one of them is built-in and the other
+> > is in a loadable module, causing link failures.
+> > 
+> > The use of IS_REACHABLE() in gadget-export.h works around a similar
+> > problem if one of cdns3 and cdnsp is built-in but the other one is
+> > =m. This one is worse because instead of a clear link failure, the
+> > logic just makes it not work at all despite support being enabled.
+> > 
+> > To improve this mess, throw out both the Makefile hacks and the
+> > IS_REACHABLE() hack and replace these with regular Kconfig dependencies
+> > that ensure each driver is only enabled when its dependencies are there,
+> > as we do in most other drivers. The main downside here is that there is no
+> > good way to have built-in gadget support on cdn3 along with USB=m. Fixing
+> > this part proper would require cleaning up the code to turn the 'common'
+> > parts into a library module that only gets called by the other drivers
+> > but does not interact with either host or gadget support itself.
+> > 
+> > Another problem that is not solved by this patch is the way that
+> > platform specific glue logic in this driver relies on having
+> > a soc specific device as the parent of a generic child, instead of
+> > the specific driver just calling into a common helper module.
+> > This may be impossible to fix without breaking the DT bindings.
+> > 
+> > Fixes: 6076388ca1ed ("usb: cdns3: Add USBSSP platform driver support")
 > 
-> Why make the HCD responsible for draining the queue?  It's like
-> setting the halted flag; one central place is simpler and less
-> error-prone than lots of separate places.
+> Hi Arnd,
+> 
+> Thanks for fixing it, I am sorry for taking your effort debug it.
+> 
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+> > TBH, I would be more comfortable with reverting 6076388ca1ed altogether
+> > and asking for a new version with the proper fixups included along
+> > with more testing for the next merge window.
+> 
+> It depends on Greg, I am okay for both ways. If Greg reverts the patch,
+> I will do below improvements and adapts for most of your changes for v3
+> patch.
 
-Is emptying the queue really a good idea at all? It obviously breaks
-lazy drivers which just ignore errors and continue with the URBs they
-have already submitted. Removing the URBs only adds more data loss.
+I'll be glad to revert if you want me to, just let me know.
 
-> For newly submitted URBs, should the submission fail with -EPIPE, or 
-> should the submission succeed and then the URB complete with -EPIPE?  
-> The first is simpler, but drivers probably aren't prepared for it
+thanks,
 
-Are they truly expecting the alternative? I bet most of them would
-usb_clear_halt() for each received EPIPE, or not at all.
-
-If completion unlinks remaining URBs before returning, this question
-doesn't exist (if we fix restarting before completion). If it doesn't
-unlink them, who even knows what the driver wants?
-
-For example, some drivers resubmit the URB while handling EPROTO and
-don't unlink anything. To me, it says "screw data loss and continue".
-
-It admittedly doesn't work on SuperSpeed anymore, but not all drivers
-need to worry about SuperSpeed. Including some old and lazy ones.
-
-Regards,
-Michal
+greg k-h
 
