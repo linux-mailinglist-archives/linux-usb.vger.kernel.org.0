@@ -1,212 +1,336 @@
-Return-Path: <linux-usb+bounces-35929-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35930-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ECYwOllpz2lPwAYAu9opvQ
-	(envelope-from <linux-usb+bounces-35929-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 03 Apr 2026 09:16:41 +0200
+	id IKT2IXtxz2nAwQYAu9opvQ
+	(envelope-from <linux-usb+bounces-35930-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 03 Apr 2026 09:51:23 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46571391A18
-	for <lists+linux-usb@lfdr.de>; Fri, 03 Apr 2026 09:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D8E00391D5E
+	for <lists+linux-usb@lfdr.de>; Fri, 03 Apr 2026 09:51:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DE3A0302BDE2
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2026 07:16:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C09083035249
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2026 07:50:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DF5C372B52;
-	Fri,  3 Apr 2026 07:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 369DE3793D0;
+	Fri,  3 Apr 2026 07:50:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KchRWfgN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sXsm6qCH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB3E31F9AF
-	for <linux-usb@vger.kernel.org>; Fri,  3 Apr 2026 07:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94BFA350A35;
+	Fri,  3 Apr 2026 07:50:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775200589; cv=none; b=H8rZ+IKrtJBMISnjH4onjTfqVhpMs0fUXzOglfm6vXOA1zD/pC2pWJ0VCG/5oFpaS3AgzWCDH2Xcd3i4pDyJZAoT/LzvbLgs5U0OdmnrkX7594KAsHH8RwG2grFYlPTzeuEpFIR+ZFAU+7YqG2vKoS+ZEeKRst+OOqsCxgWfyEc=
+	t=1775202649; cv=none; b=Y8K9H7uChUePksJJKKy5JaTcHmOMou/+R9ucmwqWD8A7BSvQqCDX2ophKCAXgUa8ZPK9sCCxgJzN/1P8fOcMrnNKXdnT0W6/fu41eDUehN6qOuVmrrTrUpZ3GeZf3S6Y+qbZvXrS2TfhtmA3/vtsDe/5SmuELWJtdEOcF6z9kIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775200589; c=relaxed/simple;
-	bh=0nZuTcmjVogseCLtgK8tavuElgI++B7d7DDySahhkKg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=S6BSphwU2Go4LMGg8K+85meMYVDg5HR0MY6CUMNSYBJQgKRNYWFYZRHQkwH4USP2onTPHP02DfhRe3g9CetabnmX/seQorwAebpMik1oDIJX+xrnDlkc6kQSNePS6jfqwJx2RFxeMi7bkb0rEOtau+aMe8O3xT5e2difoUZLNq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KchRWfgN; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4852b81c73aso14696115e9.3
-        for <linux-usb@vger.kernel.org>; Fri, 03 Apr 2026 00:16:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775200586; x=1775805386; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FZ5txd2ARz+JAlbloDyJ8LSIfv4wwpP/E5PFDh15gDc=;
-        b=KchRWfgNHLukxa1MTJDd4+/Tif/KcqilOQtf5KFCKJRQkPKE7KuNhnSZwJoP2WX95a
-         UmOvsmPqhlIl+CAZPj1lynXttNFdu7EEGrg5wY85PaKz4Ys0iK6RNrVzxjupBgCbAxpt
-         eEM+f6GKPqGJtWtZW2s2Y2oIRgYUC2QV+1dmR6XHLHyPXC9UwM+kavxJ6qwSPsQ82xVG
-         ljmy21+r9l4sD/W2YC698WlY+m1cbOXsnpk3/Z+tPc54DTQcaHwJov3t5Oqz47D0pDx+
-         pMJ48ksUdUEH/rrNg8Jx5Mh6LDe1Fe9rWgdC8XMob6jCSkerwOi07AjStbrtd5yqmw7S
-         pVxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775200586; x=1775805386;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FZ5txd2ARz+JAlbloDyJ8LSIfv4wwpP/E5PFDh15gDc=;
-        b=iOtOJz6wDLsg+pOW25wHKoeu70IZXzso5zlJpW3MxFdo3M7KDde6aGp5zU90Asmfm7
-         Lr/va1CThapBMDsTHnZ68wQV3OxRPKPPpLfjUOXsSDPdufyRFCEsfH0RLH9J1zuKAETa
-         R/1IrHkhHdgP/3bpCrQBYS+nOAccQOSyDDknArQBV71kgpykn4AlHNGSo4Oer310V6Iv
-         ENziJcqAjKsd0jaXHbUwlZPebigBdG5uLSmzmMVNJLKKKJkn4NoCKuBjMycPo2tptnUg
-         5cHaQLnPA91LKpVE8nSN7CvkrcfOPDshjcMMNYJxZKn2dLkIamDbsCtbBY1P1sH/JLfH
-         4uWA==
-X-Forwarded-Encrypted: i=1; AJvYcCVq2dDoiTNCjdMrKKQ8lMxjxnSCFuGuw2/+iW++gXPTf5AAozvP1rhPDbWmYp1MUQMJPZcdvQeD/co=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyo7RJ8uxjAPGgAn8RY84Pkq12RiiaGDxc8wLaZHQl6Ns50liL8
-	SoNYO0ZuDjpfZ/X0x1PLnCIi3954vMbCdPNuWqiMAjz3jpcA7wQOvEa/
-X-Gm-Gg: ATEYQzyzd2rJFiem6Bvg4wCzNJ3aQ5plXTw5EV4N+/NC5jx0O/GkuGvOqERhZUKYvzF
-	6XBE8Dy11U6ZbdblXSv5S1mQsA1QM7BhzOXRNe2t2nMeAohyfsAHHGAIn8x/rqHtIYdbK7zljQT
-	EwAxxKiNHsPGdP7KfQV954GMMTJ5zg9sNqWi3VUyHZHC7ymtgB7Znh0QJGuJI4LMa3Dx2PgK4Xa
-	MSmhOOcKFvfkOotFhePycvVCHFLWX4yBlgyAALPJaa5AEfIDm5NhejfHP7u5HMjzj7P4Wr5GYQz
-	0FD0UDItDRwIxT1IdujxTfKCRA+OGnPvQYPV1rUP76AlD4rwWYY7eeWR4uPvwzZHmVIiy/wjbvo
-	F77RjxVN0b5VlVd29vxgGce/hr/FxJOXOJ0rTIdiM02z51QZVP6JfSywt5nyhRMtqY6C2Dm1BVe
-	+Yq/gzSL/NnyhGsl4QDSorkhvYRkUgQ+d+
-X-Received: by 2002:a05:600c:1d1c:b0:488:79a3:f04c with SMTP id 5b1f17b1804b1-488997d1387mr31070665e9.27.1775200585837;
-        Fri, 03 Apr 2026 00:16:25 -0700 (PDT)
-Received: from foxbook (bfi53.neoplus.adsl.tpnet.pl. [83.28.46.53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e80a5e2sm241111235e9.1.2026.04.03.00.16.25
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 03 Apr 2026 00:16:25 -0700 (PDT)
-Date: Fri, 3 Apr 2026 09:16:21 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: "Xuetao (kirin)" <xuetao09@huawei.com>
-Cc: <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <caiyadong@huawei.com>, <stable@kernel.org>
-Subject: Re: [PATCH] usb: core: Fix bandwidth for devices with invalid
- wBytesPerInterval
-Message-ID: <20260403091621.5a685d6e.michal.pecio@gmail.com>
-In-Reply-To: <85ad518a-f87f-4ca6-a11c-1ccc37d60bd1@huawei.com>
-References: <20260402021400.28853-1-xuetao09@huawei.com>
-	<20260402114421.738e375a.michal.pecio@gmail.com>
-	<85ad518a-f87f-4ca6-a11c-1ccc37d60bd1@huawei.com>
+	s=arc-20240116; t=1775202649; c=relaxed/simple;
+	bh=iHr9TU95dPwFUO5ds2ilz08EwSjtcbKqPm5yk9gWTGY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BSfmNQuA4CkjKxlhjjSGYV4LPgP9csPEuK7V9IG0CpN+GcmKCBqJnHD16mE6ermJq3Emm4N3E4d2PsPgJ/X3DLT7BCOPYXB0qiVXR0rLviXu+fKnpfHtcSX+gEIh8FU5io+vcO/xLL7weimZ3s3u8YQvb0x63W4oWZcqv0dGKW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sXsm6qCH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ACADC4CEF7;
+	Fri,  3 Apr 2026 07:50:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775202649;
+	bh=iHr9TU95dPwFUO5ds2ilz08EwSjtcbKqPm5yk9gWTGY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sXsm6qCH+2rlDrRPyds9LhapVM2ux0o2UnacA+yHTHAdwVCsamyD07M72+HoW6dZl
+	 CTcJyNV/3ckRe7yZ0/1uo2Zb8VLeh0RAaREKawKRXQT6XuHEyfX35rwleFSpGZbAbl
+	 AzY7EVmsclzvdn0f3wYYEfI44hiaKC+J3Tz6XfFlWBIF2D8TIW/0j0vA3wxDgl4VoT
+	 2xqNdYS9hzGb+gE6xoMWKsm5xJr6t40f8ksVRTTBRV4h5H/99XIccdqyHK6Qv/eIZI
+	 HDIiLMFfu2nO4kxeTLcRk4EF+goJ3MH7r+G/Y3ONwRc62MeeQmwQYS26OVEMK919Bs
+	 QHOMEm7b5821w==
+Date: Fri, 3 Apr 2026 15:50:45 +0800
+From: "Peter Chen (CIX)" <peter.chen@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Pawel Laszczak <pawell@cadence.com>, Arnd Bergmann <arnd@arndb.de>,
+	Roger Quadros <rogerq@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: cdns3: attempt to fix Kconfig dependencies
+Message-ID: <ac9xVUVB/BKfBUmE@nchen-desktop>
+References: <20260402141008.2691819-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260402141008.2691819-1-arnd@kernel.org>
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-35929-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-35930-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[peter.chen@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6]
-X-Rspamd-Queue-Id: 46571391A18
+	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[i.mx:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D8E00391D5E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 2 Apr 2026 19:55:16 +0800, Xuetao (kirin) wrote:
-> > Any other examples besides AX88179?  
+On 26-04-02 16:09:55, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> We tested 18 different USB 3.0 docks, but they only contained two 
-> different types of USB 3.0 Ethernet devices based on VID/PID.
-> The dwc3 controller works fine with all of the devices mentioned
-> above. The other USB host controller works fine with all 12 Realtek
-> devices, but fails with all 6 ASIX devices.
+> The way that dependencies between host and gadget mode, as well as cdns3
+> and cdnsp were handled was rather fragile before commit 6076388ca1ed
+> ("usb: cdns3: Add USBSSP platform driver support").
 > 
-> 1. Realtek USB 10/100/1000 LAN (12 devices)
-> All 12 devices share the same VID/PID and descriptor values.
+> After those changes, I get randconfig build failures:
 > 
-> VID = 0x0BDA, PID = 0x8153
-> wMaxPacketSize = 0x10
-> bMaxBurst = 0
-> wBytesPerInterval = 0x8
-
-My RTL8153 has this endpoint for its default proprietary configuration:
-
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0002  1x 2 bytes
-        bInterval               8
-        bMaxBurst               0
-        wBytesPerInterval       2
-
-which should be problem-free, and this for its CDC configuration:
-
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0010  1x 16 bytes
-        bInterval               8
-        bMaxBurst               0
-        wBytesPerInterval       8
-
-The CDC configuration needs to be enabled with a patch, I'm not sure
-if there is any other way. It will then use the r8153_ecm driver.
-
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -9641,6 +9641,7 @@ static int rtl_fw_init(struct r8152 *tp)
- 
- static u8 __rtl_get_hw_ver(struct usb_device *udev)
- {
-+	return 0;
- 	u32 ocp_data = 0;
- 	__le32 *tmp;
- 	u8 version;
-
-> 2. ASIX AX88179 USB 3.0 to Gigabit Ethernet Adapter (6 devices)
-> All 6 devices share the same VID/PID.
+> arm-linux-gnueabi-ld: drivers/usb/cdns3/cdnsp-gadget.o: in function `__cdnsp_gadget_init':
+> cdnsp-gadget.c:(.text+0x12da): undefined reference to `cdns_drd_gadget_on'
+> arm-linux-gnueabi-ld: drivers/usb/cdns3/cdnsp-gadget.o: in function `cdnsp_gadget_pullup':
+> cdnsp-gadget.c:(.text+0x3030): undefined reference to `cdns_clear_vbus'
+> arm-linux-gnueabi-ld: cdnsp-gadget.c:(.text+0x3138): undefined reference to `cdns_set_vbus'
+> arm-linux-gnueabi-ld: drivers/usb/cdns3/cdnsp-gadget.o: in function `cdnsp_gadget_exit':
+> cdnsp-gadget.c:(.text+0xe0): undefined reference to `cdns_drd_gadget_off'
 > 
-> VID = 0x0B95, PID = 0x1790
-> (a) 4 devices:
-> wMaxPacketSize = 0x10
-> bMaxBurst = 0
-> wBytesPerInterval = 0x0
+> and I see additional configurations that are broken. The main problem
+> here is that the 'common' module links against both host and gadget
+> support if they are enabled, but there are insufficient protections
+> agains it being built-in if only one of them is built-in and the other
+> is in a loadable module, causing link failures.
+> 
+> The use of IS_REACHABLE() in gadget-export.h works around a similar
+> problem if one of cdns3 and cdnsp is built-in but the other one is
+> =m. This one is worse because instead of a clear link failure, the
+> logic just makes it not work at all despite support being enabled.
+> 
+> To improve this mess, throw out both the Makefile hacks and the
+> IS_REACHABLE() hack and replace these with regular Kconfig dependencies
+> that ensure each driver is only enabled when its dependencies are there,
+> as we do in most other drivers. The main downside here is that there is no
+> good way to have built-in gadget support on cdn3 along with USB=m. Fixing
+> this part proper would require cleaning up the code to turn the 'common'
+> parts into a library module that only gets called by the other drivers
+> but does not interact with either host or gadget support itself.
+> 
+> Another problem that is not solved by this patch is the way that
+> platform specific glue logic in this driver relies on having
+> a soc specific device as the parent of a generic child, instead of
+> the specific driver just calling into a common helper module.
+> This may be impossible to fix without breaking the DT bindings.
+> 
+> Fixes: 6076388ca1ed ("usb: cdns3: Add USBSSP platform driver support")
 
-This looks like my AX88179 and it's obviously broken.
+Hi Arnd,
 
-> (b) 2 devices:
-> wMaxPacketSize = 0x10
-> bMaxBurst = 0
-> wBytesPerInterval = 0x8
+Thanks for fixing it, I am sorry for taking your effort debug it.
 
-But this is odd. When I use mine, I see that the driver submits 8 byte
-URBs and they complete successfully with 8 bytes received, no babble.
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> TBH, I would be more comfortable with reverting 6076388ca1ed altogether
+> and asking for a new version with the proper fixups included along
+> with more testing for the next merge window.
 
-ffff888100981b40 3364969734 S Ii:2:010:1 -115:1024 8 <
-ffff888100981b40 3365097706 C Ii:2:010:1 0:1024 8 = a1000800 79490000
+It depends on Greg, I am okay for both ways. If Greg reverts the patch,
+I will do below improvements and adapts for most of your changes for v3
+patch.
 
-So I think this should work even with bandwidth reservation set to 8.
-Can you check what happens here, before and after your patch?
+cdns-usb-common.ko is a libary, and no USB/GADGET dependency, could builds in.
+  ├── core.o  
+  └── drd.o
 
-Regards,
-Michal
+cdns3-host.ko     -> depends on USB/XHCI（it is m when USB = m
+cdns3.ko (gadget) -> depends on USB_GADGET
+cdnsp.ko (gadget) -> depends on USB_GADGET
+cdns3-plat.ko     -> assign host_init/gadget_init function pointer
+
+In that way, below combination could work:
+cdns-usb-common=y
+cdns3-host=m
+cdns3(p)-gadget=y
+
+> @@ -10,12 +11,24 @@ config USB_CDNS_SUPPORT
+>  
+>  config USB_CDNS_HOST
+>  	bool
+> +	depends on USB=y || USB=USB_CDNS_SUPPORT
+> +
+> +config CONFIG_USB_CDNS_PLATFORM
+
+%s/CONFIG_USB_CDNS_PLATFORM/USB_CDNS_PLATFORM
+
+Peter
+
+> +	tristate "Cadence USB3 generic platform support"
+> +	depends on USB_CDNSP || USB_CDNS3
+> +	depends on USB_CDNSP || !USB_CDNSP
+> +	depends on USB_CDNS3 || !USB_CDNS3
+> +	help
+> +	  The platform driver support is needed on any SoC integrating
+> +	  a variant of the Cadence USB3 or USBSSP dual-role controllers,
+> +	  e.g. the TI K3 or NXP i.MX series of SoCs.
+>  
+>  if USB_CDNS_SUPPORT
+>  
+>  config USB_CDNS3
+>  	tristate "Cadence USB3 Dual-Role Controller"
+>  	depends on USB_CDNS_SUPPORT
+> +	select USB_CDNS_HOST if USB_CDNS3_HOST
+>  	help
+>  	  Say Y here if your system has a Cadence USB3 dual-role controller.
+>  	  It supports: dual-role switch, Host-only, and Peripheral-only.
+> @@ -23,8 +36,9 @@ config USB_CDNS3
+>  if USB_CDNS3
+>  
+>  config USB_CDNS3_GADGET
+> -	bool "Cadence USB3 device controller"
+> +	tristate "Cadence USB3 device controller"
+>  	depends on USB_GADGET=y || USB_GADGET=USB_CDNS3
+> +	depends on USB_CDNS_SUPPORT
+>  	help
+>  	  Say Y here to enable device controller functionality of the
+>  	  Cadence USBSS-DEV driver.
+> @@ -34,8 +48,7 @@ config USB_CDNS3_GADGET
+>  
+>  config USB_CDNS3_HOST
+>  	bool "Cadence USB3 host controller"
+> -	depends on USB=y || USB=USB_CDNS3
+> -	select USB_CDNS_HOST
+> +	depends on USB=y || USB=USB_CDNS_SUPPORT
+>  	help
+>  	  Say Y here to enable host controller functionality of the
+>  	  Cadence driver.
+> @@ -57,6 +70,7 @@ config USB_CDNS3_PCI_WRAP
+>  config USB_CDNS3_TI
+>  	tristate "Cadence USB3 support on TI platforms"
+>  	depends on ARCH_K3 || COMPILE_TEST
+> +	depends on USB_CDNS_PLATFORM
+>  	default USB_CDNS3
+>  	help
+>  	  Say 'Y' or 'M' here if you are building for Texas Instruments
+> @@ -67,6 +81,7 @@ config USB_CDNS3_TI
+>  config USB_CDNS3_IMX
+>  	tristate "Cadence USB3 support on NXP i.MX platforms"
+>  	depends on ARCH_MXC || COMPILE_TEST
+> +	depends on USB_CDNS_PLATFORM
+>  	default USB_CDNS3
+>  	help
+>  	  Say 'Y' or 'M' here if you are building for NXP i.MX
+> @@ -77,6 +92,7 @@ config USB_CDNS3_IMX
+>  config USB_CDNS3_STARFIVE
+>  	tristate "Cadence USB3 support on StarFive SoC platforms"
+>  	depends on ARCH_STARFIVE || COMPILE_TEST
+> +	depends on USB_CDNS_PLATFORM
+>  	help
+>  	  Say 'Y' or 'M' here if you are building for StarFive SoCs
+>  	  platforms that contain Cadence USB3 controller core.
+> @@ -91,6 +107,7 @@ endif # USB_CDNS3
+>  config USB_CDNSP
+>  	tristate "Cadence USBSSP Dual-Role Controller"
+>  	depends on USB_CDNS_SUPPORT
+> +	select USB_CDNS_HOST if USB_CDNSP_HOST
+>  	help
+>  	  Say Y here if your system has a Cadence USBSSP dual-role controller.
+>  	  It supports: dual-role switch, Host-only, and Peripheral-only.
+> @@ -115,8 +132,7 @@ config USB_CDNSP_GADGET
+>  
+>  config USB_CDNSP_HOST
+>  	bool "Cadence USBSSP host controller"
+> -	depends on USB=y || USB=USB_CDNSP
+> -	select USB_CDNS_HOST
+> +	depends on USB=y || USB=USB_CDNS_SUPPORT
+>  	help
+>  	  Say Y here to enable host controller functionality of the
+>  	  Cadence driver.
+> diff --git a/drivers/usb/cdns3/Makefile b/drivers/usb/cdns3/Makefile
+> index 63484f145bb9..f1e00ab3d729 100644
+> --- a/drivers/usb/cdns3/Makefile
+> +++ b/drivers/usb/cdns3/Makefile
+> @@ -5,32 +5,25 @@ CFLAGS_cdnsp-trace.o				:= -I$(src)
+>  
+>  cdns-usb-common-y				:= core.o drd.o
+>  
+> -ifeq ($(CONFIG_USB),m)
+> -obj-m						+= cdns-usb-common.o
+> -obj-m						+= cdns3-plat.o
+> -else
+>  obj-$(CONFIG_USB_CDNS_SUPPORT)			+= cdns-usb-common.o
+> -obj-$(CONFIG_USB_CDNS_SUPPORT)			+= cdns3-plat.o
+> -endif
+> +
+> +obj-$(CONFIG_USB_CDNS_PLATFORM)			+= cdns3-plat.o
+>  
+>  cdns-usb-common-$(CONFIG_USB_CDNS_HOST) 	+= host.o
+>  
+>  # For CDNS3 gadget
+> -ifneq ($(CONFIG_USB_CDNS3_GADGET),)
+>  cdns3-y						:= cdns3-gadget.o cdns3-ep0.o
+>  cdns3-$(CONFIG_TRACING)				+= cdns3-trace.o
+> -obj-$(CONFIG_USB_CDNS3)				+= cdns3.o
+> -endif
+> +obj-$(CONFIG_USB_CDNS3_GADGET)			+= cdns3.o
+> +
+>  obj-$(CONFIG_USB_CDNS3_PCI_WRAP)		+= cdns3-pci-wrap.o
+>  obj-$(CONFIG_USB_CDNS3_TI)			+= cdns3-ti.o
+>  obj-$(CONFIG_USB_CDNS3_IMX)			+= cdns3-imx.o
+>  obj-$(CONFIG_USB_CDNS3_STARFIVE)		+= cdns3-starfive.o
+>  
+>  # For CDNSP gadget
+> -ifneq ($(CONFIG_USB_CDNSP_GADGET),)
+>  cdnsp-y						:= cdnsp-ring.o cdnsp-gadget.o \
+>  						   cdnsp-mem.o cdnsp-ep0.o
+>  cdnsp-$(CONFIG_TRACING)				+= cdnsp-trace.o
+> -obj-$(CONFIG_USB_CDNSP)				+= cdnsp.o
+> -endif
+> +obj-$(CONFIG_USB_CDNSP_GADGET)			+= cdnsp.o
+>  obj-$(CONFIG_USB_CDNSP_PCI)			+= cdnsp-pci.o
+> diff --git a/drivers/usb/cdns3/gadget-export.h b/drivers/usb/cdns3/gadget-export.h
+> index 0cb600e2b5d2..c37b6269b001 100644
+> --- a/drivers/usb/cdns3/gadget-export.h
+> +++ b/drivers/usb/cdns3/gadget-export.h
+> @@ -10,7 +10,7 @@
+>  #ifndef __LINUX_CDNS3_GADGET_EXPORT
+>  #define __LINUX_CDNS3_GADGET_EXPORT
+>  
+> -#if defined(CONFIG_USB_CDNSP_GADGET) && IS_REACHABLE(CONFIG_USB_CDNSP)
+> +#if IS_ENABLED(CONFIG_USB_CDNSP_GADGET)
+>  
+>  int cdnsp_gadget_init(struct cdns *cdns);
+>  #else
+> @@ -22,7 +22,7 @@ static inline int cdnsp_gadget_init(struct cdns *cdns)
+>  
+>  #endif /* CONFIG_USB_CDNSP_GADGET */
+>  
+> -#if defined(CONFIG_USB_CDNS3_GADGET) && IS_REACHABLE(CONFIG_USB_CDNS3)
+> +#if IS_ENABLED(CONFIG_USB_CDNS3_GADGET)
+>  
+>  int cdns3_gadget_init(struct cdns *cdns);
+>  #else
+> -- 
+> 2.39.5
+> 
+
+-- 
+
+Best regards,
+Peter
 
