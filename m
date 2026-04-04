@@ -1,150 +1,172 @@
-Return-Path: <linux-usb+bounces-35965-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35966-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EB4JHhi00Gnx/AYAu9opvQ
-	(envelope-from <linux-usb+bounces-35965-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 04 Apr 2026 08:47:52 +0200
+	id TwfaJz220Glx/QYAu9opvQ
+	(envelope-from <linux-usb+bounces-35966-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 04 Apr 2026 08:57:01 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7530139A2B5
-	for <lists+linux-usb@lfdr.de>; Sat, 04 Apr 2026 08:47:51 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1E1239A2CE
+	for <lists+linux-usb@lfdr.de>; Sat, 04 Apr 2026 08:57:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 223C03008621
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2026 06:47:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DB0323026C34
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2026 06:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC4734F46F;
-	Sat,  4 Apr 2026 06:47:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7335352C3C;
+	Sat,  4 Apr 2026 06:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="zkz/qr1g";
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="vnsVlbgV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sYXMqYCh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449A32F60CC;
-	Sat,  4 Apr 2026 06:47:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775285265; cv=none; b=kZLJG2fvB5K6udVC3YPzV+XN0MzJXGaQ2TyfJMBYz2RNgl7h1eNQCJz3IascEmfEvtnhJRlKwV8MvmUX/Aw9m2dDxqlEl9JtaMa8KN3WkZNMEPo0FquJ59IEw+K6CxwesuWwqBesDoqv+gCJTojUk731QNUB7k9+GgqG1BhhfRE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775285265; c=relaxed/simple;
-	bh=XAwJvcrO6lNB3FEqBBsjGjIoCjnUTt4u/LgkHw0Ia0w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XWduGA8AnjAvgyWJBeJcoch2zynMSyizdvWVFtn0FBOwhr0E2nkYZ15fuJ5PFO3YwzpH74k4LGrSpHGSgORsgWNIaG17A/lvi8kDP3dVXKmOmnGgM6Ho6WjdVIUrIWvbbgISBvKQy6ZIng+HrOOPc/wLR2pvuO/+Zi6vsuk3AgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=zkz/qr1g; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=vnsVlbgV; arc=none smtp.client-ip=23.88.97.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1775285262;
-	bh=XAwJvcrO6lNB3FEqBBsjGjIoCjnUTt4u/LgkHw0Ia0w=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=zkz/qr1gkgkKLjpYUPH/ET6zhvWqP8lJY95rqeF2bEMpQl6l6z5XCmpcJK+JoADmd
-	 AX7oXFhdfc8sge3ji0U75pFowayK06aRmGSZ8TkXotyzSlPo3lq953ti6NktvNl3QW
-	 d+3KUKekmdmdiIf2HEAD8wR8TLSaaMxscNi7pPxfK/swRwMlblD5FskyIREDB9tW51
-	 sOhRDxNtyCtwICe9qYRaS8VEBPykvwXRTUlZ+EkyrhGcuDyLvIlr4MvoSYOLk7tNYn
-	 pdmPAhS1uUgZVnJCfZWZsKCtPm18shQBmhFYoMiFH01COLABCvhDQQzh3qGkHxcE3z
-	 rI3O3zBc38+1w==
-Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
-	id 8AEDD4091A; Sat,  4 Apr 2026 06:47:42 +0000 (UTC)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1775285261;
-	bh=XAwJvcrO6lNB3FEqBBsjGjIoCjnUTt4u/LgkHw0Ia0w=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vnsVlbgV9hlDrRHZi1Gmdm8FnvykA9O8f8r7kIXxUHsOXa6el1f3/xfptvNtNdu09
-	 xHJggOUK1yCLa/oEktgckbmugoFIrkd9MnBlHQK7sS8JY2DXlmeanwT9lhe0Xci/rL
-	 kJloUYooBSfXxVNe9FLIgloyD287d+BLAT2r6PYbAwncFCVYsSmtaqgFJ8PiXTCfN5
-	 awC0CcA7krfVxjI4UqANu/r6pSXevtfpqdLbJTul/c9MykoBf+nD9H6fSdrYDel8K8
-	 TZ/54g9a32an5Kn7lKHXO4HTPzHZ0J10Ia7yxi0zoy0UIZk0SpTHjFC1XIeOjd/8OM
-	 YHUECs4JfW04A==
-Received: from [IPV6:2003:c6:9f04:eb00:ab14:e4b1:3dbb:7eb8] (p200300c69f04eb00ab14e4b13dbb7eb8.dip0.t-ipconnect.de [IPv6:2003:c6:9f04:eb00:ab14:e4b1:3dbb:7eb8])
-	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id 99B2840904;
-	Sat,  4 Apr 2026 06:47:41 +0000 (UTC)
-Message-ID: <23860a3b-5c89-42d8-bf7f-2f77f35cf14a@birger-koblitz.de>
-Date: Sat, 4 Apr 2026 08:47:40 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55E842F9998
+	for <linux-usb@vger.kernel.org>; Sat,  4 Apr 2026 06:56:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775285816; cv=pass; b=Djxo2qMybqHpx2FYdt0rU7WV047MUdsE09T5WDlwzkCD7iNi+OvMfyNio41M6xcqx7EEMHJHqGM9QmVzsKRLHh9KnzBZM28P5C6t8Y/H480FjglW/FVeBobAlUuul5Mvd2MFSJMCfxVR8qKPwqmtfLQr53k/pGbknQRcg/4g5j0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775285816; c=relaxed/simple;
+	bh=1UqMHYmJXo3EadADYx3d4TbVz35I1rkeUVyQjfCiFas=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=FQszl0+7k0R0oT0KZvkrEA/RzD+n5nPhY7qpAj/cz/4Mq1g7paCv8ctdP0oPT5IKfRHE3ImU3gBjScLjh6kWyM2cr022l33ISA8s4M5Y2uv1mC0hxNHYUXNO+1MmQ6HS3lGoeDKUs2SuMXm+aFqDwekit0gYagT2OdSioy4Ynjw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sYXMqYCh; arc=pass smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-79a46ebe2beso23943217b3.2
+        for <linux-usb@vger.kernel.org>; Fri, 03 Apr 2026 23:56:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775285812; cv=none;
+        d=google.com; s=arc-20240605;
+        b=D19GwHQ/mDUv4lnBFuKsjpKMcHLw0j50wwfyskSYUr7iy6eUGmo7mpPD0lORI+2eA7
+         YrHj3d4uOgtWTgJtvqQwzECYmPoFdKDvZMccDZL5h9u627fQQ7+HQb7OIM7o9crcWkyI
+         t0VWdDQ2YccHkXbt2Qaif9szauUdCfRH89kAW6siGSQTM9jq2qKZEfyoH3c/K0sVbF0i
+         9ICDy8YgLdncuSb6qaD9sNip2IMad6Rf2YWDWZXhQU7jMVP020Ybi+AYCwDY1YN1NTvo
+         XeI8x+LelHNefrCJhmRM72JQwL6M/nomB3AKLXtV9Tl5MCjyuIBy8BVF75finmPppCJx
+         e08Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=1UqMHYmJXo3EadADYx3d4TbVz35I1rkeUVyQjfCiFas=;
+        fh=VimqKRrJCN9rdcfuq5onff2+63396vNbthBTDDSyxg0=;
+        b=h0y9v2on1LVzTieOOLeIOdgQQC8y32dr2z7Y0i+v/jB6FH0qcR6BfHqtchWhuHuuzc
+         mVBEhYCW4T1TrwYMYxF0mbBt2bCZPch077n+h/6qe2B1R2MQyKzZ5/hL6EfR64UPx16S
+         J2cWHIchjAVYnQC3Mgzz6BwqgwFejzR0b1gJunhcE5KHYh+DMRPgrjvJ/vzhUdjgNJ3b
+         E2JgDekPnqsStXQXpjLnkyT2qYpGCHmdGPT02TodJSgjm974/JDA104dBtYKqQx8exlA
+         n6iTh6E5YLxhweQuEyRPCbCkuxZdhA4/YLpxGgAbzr7GxOyOREY5WViu3cO8HA1I6UIg
+         XHGg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775285812; x=1775890612; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1UqMHYmJXo3EadADYx3d4TbVz35I1rkeUVyQjfCiFas=;
+        b=sYXMqYChWdMtV9fDMLYoi9puNTEZyVNpM4oazBauvI3/RRvAeH3T6ZvCimyvxuCCib
+         FOrtqXqbM1lNrLl56QFc9SUpstMQ/QdWVBHPIRhKcK4e3mh/gCUfmMe5gVAy5bCPm3AY
+         M+o/4Q4+W2ugVpTC349pMi+HON/p598h3DMtUpNvewAlV76eX51Gk0vOYsXjwGH25+8n
+         17UyHMaAH2QkEENlsORLMSV+GJoFlNjz2gOtXVs+p/GODCY7IbrzYpyKL2NQ/czDkcJQ
+         1Ewh8JyNIYYUPLRPmPqdB+SRuwnquIq+++x84WBQCMvUn6nu4JHwsULPMd8WuKH/bgEV
+         VD9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775285812; x=1775890612;
+        h=to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1UqMHYmJXo3EadADYx3d4TbVz35I1rkeUVyQjfCiFas=;
+        b=NjzELTBsgp8A2W9O+1ZcodJGdWgrE6bjTAxzvslrWkzvUqdKTQN7inmeYl7t8QvtzU
+         UYojX5hTkY19yFBQhO7Qaw5zRM8+HlXGilcG9V60E0F/aKYCWdgc8uoj6s2zW6tU0pxs
+         kbgZgVN8XXaWqCqUlShR1nLX7PpGJUBHp7Ynu6N+pL3HhHd7EhNK+LQunbDnRUoTwWLW
+         JiHFjDsqwbo3fMbj9eencx43g+SxhkX5ttvMCIJQMBVIq0jr5RsLxYUTlRB2HcV/WJjY
+         VV198rK5Vztoy056o5mTcIna6ZzVYlLgqPgU2YRXOeT5pdX2dUuJGwlR2H2neIfcoqFQ
+         VhbQ==
+X-Gm-Message-State: AOJu0YyA0tvtguLXhTbCQU3GAvJuDQ1GGn35TDJjB7oGLCXlvi2E7buO
+	hR0itwYiKAlVEKU/Z8BtU3TEoQ2hsGJQ4Kem9D0dDyOw3hMaISAIgOXw3XdEvf5LyBFxsOGos9v
+	jGZEoThpZwzcNLhfN1C6SdVHsTnfe39Xy2g==
+X-Gm-Gg: AeBDievirse51oTmZfnIFeIELexu2x6zZEO8xHvi4dwyrbvauYD4BFjsFErbKnemBlH
+	PppBNCeT6gYQVvgnAfNYp/5e4P+PuvcFa77pHqXIhqalAdueKjRo+xBvt+74tENkhPT2ZSZEzOu
+	Sl6pN+gMC/N5dc//ukwxIs9HLazdRACnp9udUlETBCStOCBdyuX/SZVCsuXyrVZJKpRCdsR6y9N
+	BFne+o4Vs3WFs0BRL05lttVa1j/qCaozvN+fzGn3BU8XrNvnvZuk6DPxkqG82wuyba5OYvQ3TUY
+	9syI8rs=
+X-Received: by 2002:a05:690c:38a:b0:79a:7cff:7b81 with SMTP id
+ 00721157ae682-7a4d556cdf1mr59489987b3.27.1775285811679; Fri, 03 Apr 2026
+ 23:56:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 0/2] r8152: Add support for the RTL8157 5Gbit
- USB Ethernet chip
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- Chih Kai Hsu <hsu.chih.kai@realtek.com>
-References: <20260402-rtl8157_next-v6-0-a9b77c0931ef@birger-koblitz.de>
- <20260403160608.04f2408b@kernel.org>
- <741bde66-45b7-49e4-88be-7fb1ca8a92df@birger-koblitz.de>
- <2026040421-kite-ethanol-2e28@gregkh>
-From: Birger Koblitz <mail@birger-koblitz.de>
-Content-Language: en-US
-In-Reply-To: <2026040421-kite-ethanol-2e28@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+From: Ajay Garg <ajaygargnsit@gmail.com>
+Date: Sat, 4 Apr 2026 12:26:35 +0530
+X-Gm-Features: AQROBzBFFJG3pNPfdo1IBk2_EkeXBsxe7BVPAyI9PeDhoa7A8j6jsjDAMmd1SyA
+Message-ID: <CAHP4M8XXQAsOzJFvCwXB=BPN4tdoh5wyn+ZFFmJZPZq5BorxOQ@mail.gmail.com>
+Subject: Some queries on eHCI/xHCI/Thunderbolt and dwc2/dwc3
+To: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[birger-koblitz.de:+];
-	TAGGED_FROM(0.00)[bounces-35965-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[birger-koblitz.de];
+	TAGGED_FROM(0.00)[bounces-35966-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_ONE(0.00)[1];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[ajaygargnsit@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[birger-koblitz.de:dkim,birger-koblitz.de:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7530139A2B5
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D1E1239A2CE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 04/04/2026 08:27, Greg KH wrote:
-> On Sat, Apr 04, 2026 at 05:54:43AM +0200, Birger Koblitz wrote:
->> On 04/04/2026 01:06, Jakub Kicinski wrote:
->>> On Thu, 02 Apr 2026 10:28:12 +0200 Birger Koblitz wrote:
->>>> Add support for the RTL8157, which is a 5GBit USB-Ethernet adapter
->>>> chip in the RTL815x family of chips.
->>>
->>> no longer applies, please rebase & repost
->> It looks like you are letting me play out the story of the hare and the
->> hedgehog. If there is no interest in this patch series or you would like
->> it to look different, please let me know instead of playing games.
-> 
-> "Does not apply" is not a game, you just need to rebase and resubmit as
-> others are also doing work on the same driver at the same time, so there
-> can be some conflicts that it is up to the submitter to resolve.
-> 
-> This is normal kernel development, has always been this way.
-> 
+Hi everyone.
 
-Thanks for the feedback, Greg!
-the underlying issue is that parts of the patch I submitted are now also
-submitted by others, and that gets fast-tracked. This has now happened twice,
-and I am being told every time to re-submit, without efforts to coordinate
-this, or hints that this pattern may stop. This has somewhat made me loose
-trust in the process.
+I have been gaining an architectural understanding on how host/gadget
+usb-drivers inter-operate with USB-2 / USB-3 / USB-4 (host-side) and
+synopsys-DWC controllers (gadget-side).
 
-I'll nevertheless rebase and resend, and see what happens next.
+Following have been my understandings :
 
-Birger
+a)
+For host-side, eHCI does not require / use dwc2, but xHCI mandatorily
+needs dwc3.
+
+Am I correct?
+
+If yes, how is hardware-specific actions taken care by eHCI alone
+(since eHCI is hardware-agnostic)?
+Is it that USB-2 PHY-registers are already a part of eHCI
+MMIO-registers themselves (thus not requiring any hardware-specific
+actions on the PHY side)?
+
+b)
+For host-side, does thunderbolt driver require any of dwc3 / upcoming-dwc4?
+
+c)
+For gadget-side, dwc2 and dwc3 are enough for USB-2 / USB-3.
+Am I correct?
+
+d)
+For gadget-side, would USB-4 require an upcoming-dwc4? Or will dwc3 be
+modified? Or is there another plan in the pipeline?
+
+
+Will be grateful for light on the above from kernel/synopsys experts :)
+Many thanks in advance !
+
+Thanks and Regards,
+Ajay
 
