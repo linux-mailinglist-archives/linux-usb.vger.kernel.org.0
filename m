@@ -1,367 +1,286 @@
-Return-Path: <linux-usb+bounces-35961-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35962-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id s1swJUhn0Gla7QYAu9opvQ
-	(envelope-from <linux-usb+bounces-35961-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 04 Apr 2026 03:20:08 +0200
+	id 1zSmC2lv0Gmo7gYAu9opvQ
+	(envelope-from <linux-usb+bounces-35962-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 04 Apr 2026 03:54:49 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE0563996E7
-	for <lists+linux-usb@lfdr.de>; Sat, 04 Apr 2026 03:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73A6E3998A1
+	for <lists+linux-usb@lfdr.de>; Sat, 04 Apr 2026 03:54:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9A4D9303E4BD
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2026 01:20:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BDE1D303E4B9
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2026 01:54:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47EC725A357;
-	Sat,  4 Apr 2026 01:20:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7ED02BDC23;
+	Sat,  4 Apr 2026 01:54:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E5z/1Ufh"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Ewi8/2Tg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F1886341
-	for <linux-usb@vger.kernel.org>; Sat,  4 Apr 2026 01:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B5281DFD96
+	for <linux-usb@vger.kernel.org>; Sat,  4 Apr 2026 01:54:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775265601; cv=none; b=LlKfWtnvWEDU7adpgNW18v/yUPWEsZ+Gmhdp3TaWyZ6bur/UgmNsDGLgDgWAAi1xrdXtG01w3MoMWLBJGZrjF7rNYL3zQ/hNcWvOHfA/Onsc8foKoMEc+5lNwi72jsz3sRGcEj32yybrYiC+2o+X70FWLLsmatRzIsW5cpAQzBs=
+	t=1775267685; cv=none; b=EpVaSXpYzeXNbgN9VmxgOYEo5kT59jB1E+4Z7HkYHM8Jd3++vAstkcidWh1Fip+MEFd6xp47XhBb2LYoJdZ9W7Cn1KJpiKdPaWJJyltpd09nUkdSupZh4X5Ggayocf9Rw31YfhHMS3Nuxg3/hhP482OtuC4Mni4XLXd0QX2rjZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775265601; c=relaxed/simple;
-	bh=+pS+RmIDgZ1YCX3k35yMjcwuE97tnAxTxoVE0+pDuGI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=gj2+F8vY6F9MWx9+2qC2OAhXua8wPNcwQEx9qnO6IexbwHDPu4U0EWj/OuJwtFYrZBNEwF4ylSPnE1EEFNBN9awvxrV2HgqnqN6Az0TUZP06CQu0LwgbqR/7jgDqtA9IiN4BTxnZKN1ktmzpuf1ZNlgS6hCezsUqDt6DHRPyRWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E5z/1Ufh; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775265599; x=1806801599;
-  h=date:from:to:cc:subject:message-id;
-  bh=+pS+RmIDgZ1YCX3k35yMjcwuE97tnAxTxoVE0+pDuGI=;
-  b=E5z/1Ufh03cVQONw7JNb3bAqtLO06zjdDeB8CoV9lDTRGtpY53aM6Kjb
-   rkbCKCsKWyJpWFoknvkdTOeR+jM6h5zsLTeBL2CMl8QpTqmnsKNB++qSB
-   orUB4ZfRPqi+IUvQvb9EYZ32CitdD+pgv7JZu7kqm2au8IJxrLmNboWQT
-   mJ/Oegr+JnTES31FTMcBqNIRn3l9JoD8Z7EIWlAdxfgEhgn74xTVe2m/E
-   +k+F6WQtXGM/Un7NAyYECJKjHiqu2t65AYEQy1NIdrSaxB80kOlI3h1/0
-   oA7GoDalM1VPeRo+NOGIUiKwfKWuRKobtIWG7V9xt62oIaobv+r33FTOi
-   w==;
-X-CSE-ConnectionGUID: 6H1UzAHwRLuSoeiNWw9qIw==
-X-CSE-MsgGUID: JTl8XLBgRj2LPcZ3lvOoFw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="76389767"
-X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
-   d="scan'208";a="76389767"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 18:19:58 -0700
-X-CSE-ConnectionGUID: pjL7JuUHRxS6oTUpZaaSzw==
-X-CSE-MsgGUID: Phf46lEWTumFtdXEKsE/Jg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
-   d="scan'208";a="224571045"
-Received: from lkp-server01.sh.intel.com (HELO 3afb7d003cac) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 03 Apr 2026 18:19:57 -0700
-Received: from kbuild by 3afb7d003cac with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w8pg3-000000000PC-1aUb;
-	Sat, 04 Apr 2026 01:19:55 +0000
-Date: Sat, 04 Apr 2026 09:19:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 1df7a7652f032cf1abe1c102a031c2128e24c31d
-Message-ID: <202604040934.tXnI2dBh-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1775267685; c=relaxed/simple;
+	bh=Mk2VvbPkTi7fh4jL6Hn04cj0xT4lPEiLFmcwwp+s+B8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qDZS72mXuaxn3ZagrtKhzv2lYaAFylzdVPYEHGKIlQWgXAUr86PZKllmu4lY5QQoHRnC0Q9VaT3BLbb3YCvNDqtaL9I8IV1SsLjASkssJrrx8cvN1rifY3ZeumFC/yWqJ/6h9YAkXiz8AwgWPPdsHn20N63JaAmyJ1QxSGqHiWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Ewi8/2Tg; arc=none smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-50904a8f421so25376721cf.2
+        for <linux-usb@vger.kernel.org>; Fri, 03 Apr 2026 18:54:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1775267683; x=1775872483; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2mAE2PFL2SF4OCAYjBOmDM+5vJAmvzcZfbm3+M7q6k0=;
+        b=Ewi8/2TgcNyyJKezU0eRIBJ94mTGIFPnJu8LlWc3Cp2yladrs+JoadGQMT+UAS4ABS
+         FHE/LjxdjwXoFbMosY19rnupS//tfMt2GMzztl8AV7/Ts09wZUCu7BvCMzXvbLd1PBF8
+         c5XZIoWJfkKcnfMHfvJ9tCPbu/+YQMx7OWEVPh+ahfVSsma+Ii8OZVAIVp9kyQEpdEPl
+         ALcrTWzuG1VHfNeZWOSIWdnUq0Xs7FKZp1p4Q0u6/W9juLg5hXU1wryQmMWP+KQOoldh
+         ebG4ZE0xfwjkW/wjZonGW4g4xSEgu/ZKRUcsUf7fZehQz+A5YaBFTHsVU3bK+EAbZvJS
+         f2+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775267683; x=1775872483;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2mAE2PFL2SF4OCAYjBOmDM+5vJAmvzcZfbm3+M7q6k0=;
+        b=AU2b7rzGTKHahjjByll+/PaUiLD+DlrE2sTE1Q3uPBP9J9J1Nf3lkLXJrp4sVQIbl6
+         mUrVslwwrEB0floLOLZ3eCa72Jgfhxgz6hyA1mfAHB8QrApbDFJz9tR+SiDmcJdur2oy
+         bVW5lMKt/iYLCfYKaJxknABrOYks656U+tmC00org02wrAORKg74KocEHnD124hdlpj5
+         JN6uYNs22nzUTlPZqQXL0oe5cosEkgRfcvN7qHTcxeRY+6/Wg2nPj3zrQsWhOQ0B4Nle
+         ju/qJ5mYvRpe9CiXXURdV8iMXbM/8Tw7lJdBpqK0gZMGTpMsvpCIb2EXj2kIgai9qd/c
+         SI/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVxsyZu6tDCdiHRKEimjrZs64bJnhLrdLxMVx0yidRBXBRdLMGpoGFLX7Mb6qquoTvGNfNdD2Y2wYU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9b+4lWFey4G7MNvxvO//iRkx0v+51pIfdB4W/WWYyJWbuydWx
+	QZV6oo2gnucCWUK+dyyFveA7lwN13EHzw6PYYfHrc7Ylmi19LT3m1IeYNpjO9JyoGw==
+X-Gm-Gg: AeBDieuqBnq9/OMrJ0uq8nIulvQHyk1aKejW+zdgJy4iTk7WwZ78rbXaKR3EfkG2PDM
+	M6WZkwc8ylfBx58C8Vpdn3yDzF3X/BQGR3G5vT+gWD8ngIovIi+QyXj3wHvURkdUkg8LTCq9b9Q
+	LRTPyHFAGxUYNxJqElKzPgujITQo+aMoczBke8klTeDfhz9sOvEQ6A50mcmvAnrcW6VIbcPabrq
+	OedVc7dDl9qisCFOBAk5sUw8ln+v93YD1CmsUnONDXD4WK57yvyXseCsvwJY4Ntgu2zbN0eKMiT
+	sK/HlB1iSbKPECyXnFLf+6YjCfAXAAMpqFe6cBVyzH2S0ZtjejqxnYp8ojVQIo2BBdsXkehnrFA
+	dGNRWe6sDMhXjGw6nvg8Sug76rf4MqrsdutdaE2qRx5JNKG//cFGsGKyADUDrO6Dz5Iv0AYrm8s
+	ZUIDuT5MEnixaG9W8unYqOjze7
+X-Received: by 2002:a05:622a:698f:b0:50d:41fa:8100 with SMTP id d75a77b69052e-50d6289bf26mr55323391cf.27.1775267682764;
+        Fri, 03 Apr 2026 18:54:42 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d01:d210::5a82])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50d4b73e7e5sm57090911cf.17.2026.04.03.18.54.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Apr 2026 18:54:41 -0700 (PDT)
+Date: Fri, 3 Apr 2026 21:54:38 -0400
+From: "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"michal.pecio@gmail.com" <michal.pecio@gmail.com>,
+	"oneukum@suse.com" <oneukum@suse.com>,
+	"niklas.neronin@linux.intel.com" <niklas.neronin@linux.intel.com>
+Subject: Re: [RFC PATCH 1/2] xhci: prevent automatic endpoint restart after
+ stall or error
+Message-ID: <616e2a64-6feb-4ee6-bf39-a6284549f18f@rowland.harvard.edu>
+References: <20260326232400.zkplsxflhykhayyb@synopsys.com>
+ <2604e951-01e8-44d0-a11e-be63b0849c23@linux.intel.com>
+ <9e62ef5a-5b31-4fca-891b-d028f5bbfc05@rowland.harvard.edu>
+ <54121929-d775-45a0-b31d-09b783aada5d@linux.intel.com>
+ <86876c62-01d2-45da-81f3-7d4499ffa0ad@rowland.harvard.edu>
+ <50e61cf7-cce9-45b4-884e-ac65f5e771d7@linux.intel.com>
+ <07351d72-5cdb-45e8-90af-311a0dc49718@rowland.harvard.edu>
+ <20260403015950.lx4n4zdqki37dy27@synopsys.com>
+ <28a00143-85fa-4043-93a0-c2b687ff1bcd@rowland.harvard.edu>
+ <20260404011530.aukxllvizvmc3f3x@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-X-Spamd-Result: default: False [-0.66 / 15.00];
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260404011530.aukxllvizvmc3f3x@synopsys.com>
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	FROM_DN_EQ_ADDR(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWO(0.00)[2];
+	TAGGED_FROM(0.00)[bounces-35962-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35961-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[linux.intel.com,vger.kernel.org,gmail.com,suse.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,intel.com:mid]
-X-Rspamd-Queue-Id: CE0563996E7
+	RCPT_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 73A6E3998A1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 1df7a7652f032cf1abe1c102a031c2128e24c31d  Revert "dt-bindings: usb: cdns,usb3: document USBSSP controller support"
+On Sat, Apr 04, 2026 at 01:15:52AM +0000, Thinh Nguyen wrote:
+> > > How about this:
+> > > 
+> > > Introduce a halted flag the following conditions:
+> > > 
+> > > * Introduce the halted flag in usb_host_endpoint
+> > > * The halted flag must be implemented as a bit in a unsigned long so
+> > >   we can use atomic bit operation
+> > 
+> > I don't see why it needs to use atomic operations.  Unless you're 
+> > thinking that we might want to add other bitflags into the same unsigned 
+> > long?
+> 
+> Now that I think about it again, it's not needed if we have the
+> requirement for clearing the flag only after usb_reset_endpoint.
+> 
+> > 
+> > > * Only the HCD may set the halted flag, and only upon checking the
+> > >   first URB completing with a halted status
+> > 
+> > Every status other than 0 should mean that the endpoint's queue is 
+> > halted.  But not all statuses require a clear-halt or reset-endpoint to 
+> > recover.  For instance, a short transfer when the URB_SHORT_NOT_OK flag 
+> > is set.
+> 
+> It seems we're using the "halted" flag for different things. The halted
+> flag to me is the endpoint's state and rather than the endpoint queue
+> state. That is, if the endpoint is halted, there's an error that was
+> reported on the pipe. So, an -ECONNRESET would not cause a halted
+> endpoint.
+> 
+> > 
+> > Why do you want the HCD to set the flag instead of 
+> > usb_hcd_giveback_urb()?  Just one central place is simpler than in every 
+> > HCD.
+> 
+> I'm just thinking in term of whose role to return the pending URBs.
+> Typically the HCD handles when to give back URBs. If the HCD were to
+> handle giving back pending URBs due to halted endpoint, then it should
+> be the one to set the halted flag. However, if the core tracks and does
+> both setting and clearing of the halted flag, then the core should
+> handle canceling the URBs. As you said, if we can shift the burden to
+> the core, that would help keep the flow consistent and centralized.
+> 
+> > 
+> > > * Only the USB core may clear the halted flag, and only after
+> > >   usb_reset_endpoint returns (this makes sure the HCD drained and reset
+> > >   the endpoint before the flag is cleared and new URBs are accepted)
+> > > * The usb_reset_endpoint must be called after clear-halt, SetInterface,
+> > >   and SetConfiguration.
+> > 
+> > That's easy to do just by adding it into the appropriate core routines.
+> 
+> Yes.
+> 
+> > 
+> > > * The USB core will not attempt to unlink pending URBs due to halted
+> > >   condition
+> > > * The HCD is responsible for completing or canceling queued URBs
+> > >   when the halted flag is set. Cancelled and newly submitted URBs will
+> > >   be returned with -EPIPE as long as the halted flag is set
+> > 
+> > Why make the HCD responsible for draining the queue?  It's like setting 
+> > the halted flag; one central place is simpler and less error-prone than 
+> > lots of separate places.
+> > 
+> > For newly submitted URBs, should the submission fail with -EPIPE, or 
+> > should the submission succeed and then the URB complete with -EPIPE?  
+> > The first is simpler, but drivers probably aren't prepared for it -- it 
+> > would mean adding error handling to the submission code as well as to 
+> > the completion handler code.
+> > 
+> > (Actually, that wouldn't matter unless the driver was queuing up 
+> > multiple URBs, in which case it should be prepared to handle submission 
+> > errors in the middle.)
+> 
+> I didn't think about failing immediately on submission because we would
+> need to audit every class driver for that. Perhaps the core can
+> intercept the URBs and immediately schedule a completion handler with
+> the updated URB's status?
+> 
+> > 
+> > > * The class driver is responsible to check the halted flag to
+> > >   determine whether to initiate error recovery via usb_clear_halt
+> > > 
+> > > I'm trying to keep a clear separation of responsibilities between HCD
+> > > and the USB core. Also, I try to keep the halted flag more closely match
+> > > the state of the endpoint. 
+> > > 
+> > > Let me know what you think?
+> > 
+> > Making the flag match the endpoint state is a good idea.  But there is 
+> > some ambiguity: Do you mean the state in the device, or the state in the 
+> > HC hardware, or the state in the HCD?  After all, these aren't always 
+> > the same.  For instance, unlinking an URB won't affect the device's 
+> > state but it will affect the state on the host side.
+> > 
+> 
+> The HCD state. If we can let the core manage the halted state, then here
+> are the points where the halted state is updated (hopefully I didn't
+> miss any other ones):
+> 
+> Endpoint is halted (reported by HCD):
+> * URB returned with -EPROTO or -EPIPE
+> 
+> Endpoint is active (updated by the core):
+> * SetConfiguration, SetInterface, clear-halt
 
-elapsed time: 730m
+Hmmm.  What did you think of my recent proposal in a message to Michal?  
+Summarizing:
 
-configs tested: 242
-configs skipped: 2
+If the class driver wants to unlink queued URBs when a transaction error 
+occurs, it has to do so itself in the failed URB's completion handler.  
+We can make this easier by adding a usb_flush_endpoint_queue() routine 
+to the core.  In the meantime, the HCD ensures that the queue is stopped 
+before giving back the URB.  (Note: -EPIPE, -ENOENT, -ECONNRESET, and 
+-EREMOTEIO aren't considered to be transaction errors.)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+When the completion handler returns, the core will automatically call 
+usb_clear_halt(), which will also reset the endpoint on the host side 
+and will restart the queue.  This also happens after SetConfiguration 
+and SetInterface, either explicitly or implicitly.
 
-tested configs:
-alpha                             allnoconfig    gcc-15.2.0
-alpha                            allyesconfig    gcc-15.2.0
-alpha                               defconfig    gcc-15.2.0
-arc                              allmodconfig    clang-16
-arc                               allnoconfig    gcc-15.2.0
-arc                              allyesconfig    clang-23
-arc                                 defconfig    gcc-15.2.0
-arc                   randconfig-001-20260403    gcc-10.5.0
-arc                   randconfig-001-20260404    gcc-15.2.0
-arc                   randconfig-002-20260403    gcc-10.5.0
-arc                   randconfig-002-20260404    gcc-15.2.0
-arm                               allnoconfig    gcc-15.2.0
-arm                              allyesconfig    clang-16
-arm                                 defconfig    gcc-15.2.0
-arm                   randconfig-001-20260403    gcc-10.5.0
-arm                   randconfig-001-20260404    gcc-15.2.0
-arm                   randconfig-002-20260403    gcc-10.5.0
-arm                   randconfig-002-20260404    gcc-15.2.0
-arm                   randconfig-003-20260403    gcc-10.5.0
-arm                   randconfig-003-20260404    gcc-15.2.0
-arm                   randconfig-004-20260403    gcc-10.5.0
-arm                   randconfig-004-20260404    gcc-15.2.0
-arm64                            allmodconfig    clang-23
-arm64                             allnoconfig    gcc-15.2.0
-arm64                               defconfig    gcc-15.2.0
-arm64                 randconfig-001-20260403    gcc-13.4.0
-arm64                 randconfig-001-20260404    gcc-15.2.0
-arm64                 randconfig-002-20260403    gcc-13.4.0
-arm64                 randconfig-002-20260404    gcc-15.2.0
-arm64                 randconfig-003-20260403    gcc-13.4.0
-arm64                 randconfig-003-20260404    gcc-15.2.0
-arm64                 randconfig-004-20260403    gcc-13.4.0
-arm64                 randconfig-004-20260404    gcc-15.2.0
-csky                             allmodconfig    gcc-15.2.0
-csky                              allnoconfig    gcc-15.2.0
-csky                                defconfig    gcc-15.2.0
-csky                  randconfig-001-20260403    gcc-13.4.0
-csky                  randconfig-001-20260404    gcc-15.2.0
-csky                  randconfig-002-20260403    gcc-13.4.0
-csky                  randconfig-002-20260404    gcc-15.2.0
-hexagon                          allmodconfig    gcc-15.2.0
-hexagon                           allnoconfig    gcc-15.2.0
-hexagon                             defconfig    gcc-15.2.0
-hexagon               randconfig-001-20260403    clang-23
-hexagon               randconfig-001-20260404    gcc-15.2.0
-hexagon               randconfig-002-20260403    clang-23
-hexagon               randconfig-002-20260404    gcc-15.2.0
-i386                             allmodconfig    clang-20
-i386                              allnoconfig    gcc-15.2.0
-i386                             allyesconfig    clang-20
-i386        buildonly-randconfig-001-20260403    gcc-14
-i386        buildonly-randconfig-001-20260404    clang-20
-i386        buildonly-randconfig-002-20260403    gcc-14
-i386        buildonly-randconfig-002-20260404    clang-20
-i386        buildonly-randconfig-003-20260403    gcc-14
-i386        buildonly-randconfig-003-20260404    clang-20
-i386        buildonly-randconfig-004-20260403    gcc-14
-i386        buildonly-randconfig-004-20260404    clang-20
-i386        buildonly-randconfig-005-20260403    gcc-14
-i386        buildonly-randconfig-005-20260404    clang-20
-i386        buildonly-randconfig-006-20260403    gcc-14
-i386        buildonly-randconfig-006-20260404    clang-20
-i386                                defconfig    gcc-15.2.0
-i386                  randconfig-001-20260404    clang-20
-i386                  randconfig-002-20260404    clang-20
-i386                  randconfig-003-20260404    clang-20
-i386                  randconfig-004-20260404    clang-20
-i386                  randconfig-005-20260404    clang-20
-i386                  randconfig-006-20260404    clang-20
-i386                  randconfig-007-20260404    clang-20
-i386                  randconfig-011-20260403    clang-20
-i386                  randconfig-011-20260404    clang-20
-i386                  randconfig-012-20260403    clang-20
-i386                  randconfig-012-20260404    clang-20
-i386                  randconfig-013-20260403    clang-20
-i386                  randconfig-013-20260404    clang-20
-i386                  randconfig-014-20260403    clang-20
-i386                  randconfig-014-20260404    clang-20
-i386                  randconfig-015-20260403    clang-20
-i386                  randconfig-015-20260404    clang-20
-i386                  randconfig-016-20260403    clang-20
-i386                  randconfig-016-20260404    clang-20
-i386                  randconfig-017-20260403    clang-20
-i386                  randconfig-017-20260404    clang-20
-loongarch                        allmodconfig    clang-23
-loongarch                         allnoconfig    gcc-15.2.0
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20260403    clang-23
-loongarch             randconfig-001-20260404    gcc-15.2.0
-loongarch             randconfig-002-20260403    clang-23
-loongarch             randconfig-002-20260404    gcc-15.2.0
-m68k                             allmodconfig    gcc-15.2.0
-m68k                              allnoconfig    gcc-15.2.0
-m68k                             allyesconfig    clang-16
-m68k                                defconfig    clang-19
-microblaze                        allnoconfig    gcc-15.2.0
-microblaze                       allyesconfig    gcc-15.2.0
-microblaze                          defconfig    clang-19
-microblaze                      mmu_defconfig    gcc-15.2.0
-mips                             allmodconfig    gcc-15.2.0
-mips                              allnoconfig    gcc-15.2.0
-mips                             allyesconfig    gcc-15.2.0
-nios2                            allmodconfig    clang-23
-nios2                             allnoconfig    clang-23
-nios2                               defconfig    clang-19
-nios2                 randconfig-001-20260403    clang-23
-nios2                 randconfig-001-20260404    gcc-15.2.0
-nios2                 randconfig-002-20260403    clang-23
-nios2                 randconfig-002-20260404    gcc-15.2.0
-openrisc                         allmodconfig    clang-23
-openrisc                          allnoconfig    clang-23
-openrisc                            defconfig    gcc-15.2.0
-parisc                           allmodconfig    gcc-15.2.0
-parisc                            allnoconfig    clang-23
-parisc                           allyesconfig    clang-19
-parisc                              defconfig    gcc-15.2.0
-parisc                randconfig-001-20260403    gcc-10.5.0
-parisc                randconfig-001-20260404    gcc-10.5.0
-parisc                randconfig-002-20260403    gcc-10.5.0
-parisc                randconfig-002-20260404    gcc-10.5.0
-parisc64                            defconfig    clang-19
-powerpc                          allmodconfig    gcc-15.2.0
-powerpc                           allnoconfig    clang-23
-powerpc                     mpc83xx_defconfig    clang-23
-powerpc               randconfig-001-20260403    gcc-10.5.0
-powerpc               randconfig-001-20260404    gcc-10.5.0
-powerpc               randconfig-002-20260403    gcc-10.5.0
-powerpc               randconfig-002-20260404    gcc-10.5.0
-powerpc                  storcenter_defconfig    gcc-15.2.0
-powerpc64             randconfig-001-20260403    gcc-10.5.0
-powerpc64             randconfig-001-20260404    gcc-10.5.0
-powerpc64             randconfig-002-20260403    gcc-10.5.0
-powerpc64             randconfig-002-20260404    gcc-10.5.0
-riscv                            alldefconfig    gcc-15.2.0
-riscv                            allmodconfig    clang-23
-riscv                             allnoconfig    clang-23
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    gcc-15.2.0
-riscv                 randconfig-001-20260403    clang-23
-riscv                 randconfig-001-20260404    clang-20
-riscv                 randconfig-002-20260403    clang-23
-riscv                 randconfig-002-20260404    clang-20
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-23
-s390                             allyesconfig    gcc-15.2.0
-s390                                defconfig    gcc-15.2.0
-s390                  randconfig-001-20260403    clang-23
-s390                  randconfig-001-20260404    clang-20
-s390                  randconfig-002-20260403    clang-23
-s390                  randconfig-002-20260404    clang-20
-sh                               allmodconfig    gcc-15.2.0
-sh                                allnoconfig    clang-23
-sh                               allyesconfig    clang-19
-sh                        apsh4ad0a_defconfig    gcc-15.2.0
-sh                                  defconfig    gcc-14
-sh                    randconfig-001-20260403    clang-23
-sh                    randconfig-001-20260404    clang-20
-sh                    randconfig-002-20260403    clang-23
-sh                    randconfig-002-20260404    clang-20
-sh                           se7751_defconfig    gcc-15.2.0
-sparc                             allnoconfig    clang-23
-sparc                               defconfig    gcc-15.2.0
-sparc                 randconfig-001-20260403    clang-20
-sparc                 randconfig-001-20260404    clang-20
-sparc                 randconfig-002-20260403    clang-20
-sparc                 randconfig-002-20260404    clang-20
-sparc64                          allmodconfig    clang-23
-sparc64                             defconfig    gcc-14
-sparc64               randconfig-001-20260403    clang-20
-sparc64               randconfig-001-20260404    clang-20
-sparc64               randconfig-002-20260403    clang-20
-sparc64               randconfig-002-20260404    clang-20
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-23
-um                               allyesconfig    gcc-15.2.0
-um                                  defconfig    gcc-14
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20260403    clang-20
-um                    randconfig-001-20260404    clang-20
-um                    randconfig-002-20260403    clang-20
-um                    randconfig-002-20260404    clang-20
-um                           x86_64_defconfig    gcc-14
-x86_64                           allmodconfig    clang-20
-x86_64                            allnoconfig    clang-23
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20260403    clang-20
-x86_64      buildonly-randconfig-001-20260404    gcc-13
-x86_64      buildonly-randconfig-002-20260403    clang-20
-x86_64      buildonly-randconfig-002-20260404    gcc-13
-x86_64      buildonly-randconfig-003-20260403    clang-20
-x86_64      buildonly-randconfig-003-20260404    gcc-13
-x86_64      buildonly-randconfig-004-20260403    clang-20
-x86_64      buildonly-randconfig-004-20260404    gcc-13
-x86_64      buildonly-randconfig-005-20260403    clang-20
-x86_64      buildonly-randconfig-005-20260404    gcc-13
-x86_64      buildonly-randconfig-006-20260403    clang-20
-x86_64      buildonly-randconfig-006-20260404    gcc-13
-x86_64                              defconfig    gcc-14
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20260404    gcc-14
-x86_64                randconfig-002-20260404    gcc-14
-x86_64                randconfig-003-20260404    gcc-14
-x86_64                randconfig-004-20260404    gcc-14
-x86_64                randconfig-005-20260404    gcc-14
-x86_64                randconfig-006-20260404    gcc-14
-x86_64                randconfig-011-20260403    gcc-14
-x86_64                randconfig-011-20260404    gcc-14
-x86_64                randconfig-012-20260403    gcc-14
-x86_64                randconfig-012-20260404    gcc-14
-x86_64                randconfig-013-20260403    gcc-14
-x86_64                randconfig-013-20260404    gcc-14
-x86_64                randconfig-014-20260403    gcc-14
-x86_64                randconfig-014-20260404    gcc-14
-x86_64                randconfig-015-20260403    gcc-14
-x86_64                randconfig-015-20260404    gcc-14
-x86_64                randconfig-016-20260403    gcc-14
-x86_64                randconfig-016-20260404    gcc-14
-x86_64                randconfig-071-20260403    gcc-14
-x86_64                randconfig-071-20260404    gcc-14
-x86_64                randconfig-072-20260403    gcc-14
-x86_64                randconfig-072-20260404    gcc-14
-x86_64                randconfig-073-20260403    gcc-14
-x86_64                randconfig-073-20260404    gcc-14
-x86_64                randconfig-074-20260403    gcc-14
-x86_64                randconfig-074-20260404    gcc-14
-x86_64                randconfig-075-20260403    gcc-14
-x86_64                randconfig-075-20260404    gcc-14
-x86_64                randconfig-076-20260403    gcc-14
-x86_64                randconfig-076-20260404    gcc-14
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-14
-x86_64                          rhel-9.4-func    clang-20
-x86_64                    rhel-9.4-kselftests    clang-20
-x86_64                         rhel-9.4-kunit    gcc-14
-x86_64                           rhel-9.4-ltp    gcc-14
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    clang-23
-xtensa                           allyesconfig    clang-23
-xtensa                randconfig-001-20260403    clang-20
-xtensa                randconfig-001-20260404    clang-20
-xtensa                randconfig-002-20260403    clang-20
-xtensa                randconfig-002-20260404    clang-20
+For -EPIPE (device sent a STALL token), the class driver has to clear 
+the halt itself.  This is because stalls aren't errors; they are an 
+intentional part of the USB protocol.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-ENOENT and -ECONNRESET (URB was unlinked) and -EREMOTEIO (short packet 
+received with URB_SHORT_NOT_OK set) are a little trickier.  The HCD may 
+or may not need to stop the queue for an unlink, possibly depending on 
+whether the URB being unlinked is the active one.  When a short packet 
+is received, the HC hardware may or may not stop its queue.  Either way, 
+the class driver shouldn't need to take any special recovery action; any 
+necessary actions should be taken automatically by the HCD and the core.
+
+All of this applies only to bulk and interrupt endpoints.  Control 
+endpoints generally need error recovery only on the host side, because 
+the device resets automatically when it gets a new SETUP packet, and so 
+the HCD should handle whatever is needed.  Isochronous endpoints don't 
+ever halt and they shouldn't need to be reset when an error occurs.
+
+Overall, this seems simpler than anything else we have discussed.
+
+Alan Stern
 
