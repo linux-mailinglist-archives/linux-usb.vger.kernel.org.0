@@ -1,189 +1,298 @@
-Return-Path: <linux-usb+bounces-35977-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35978-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MpndLeQy0WkQGgcAu9opvQ
-	(envelope-from <linux-usb+bounces-35977-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 04 Apr 2026 17:48:52 +0200
+	id SLLeMHRG0Wn5HAcAu9opvQ
+	(envelope-from <linux-usb+bounces-35978-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 04 Apr 2026 19:12:20 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 144C339BA85
-	for <lists+linux-usb@lfdr.de>; Sat, 04 Apr 2026 17:48:51 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8449139BE9C
+	for <lists+linux-usb@lfdr.de>; Sat, 04 Apr 2026 19:12:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6CD2D300B9BC
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2026 15:48:50 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 89ACF300DA5B
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2026 17:12:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB98430ACE3;
-	Sat,  4 Apr 2026 15:48:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B91003385A5;
+	Sat,  4 Apr 2026 17:12:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="UD1LPcZ0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GcgJMoZ0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6B4168BD
-	for <linux-usb@vger.kernel.org>; Sat,  4 Apr 2026 15:48:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4453433689F
+	for <linux-usb@vger.kernel.org>; Sat,  4 Apr 2026 17:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775317726; cv=none; b=TH0Z3D/SrnP3JWzMjp8k1H336YXDNpOgSE82QWEaLYKNIKLevg1EkScY0Rqp56FrsC0FhzK0gZ8vfZY7eTKtIw9vzGbsFACKwce0nSz+fYF4XW8vw1PAKkyF2F45KgBzyFB3zhBbsBuOXNsAfUqIVfTiDygLO+a/S9jUhstcYxE=
+	t=1775322733; cv=none; b=qd00E24j+TRRTYN80j3NAFQ/LnF3VlOEcWpklsAiE5iGf7IylZLEB1jOPdUPr8t4p1Ek4gsP1pY5iAbCDkvSV1WEWZEfekmHqVCA+ATclWvthgc3gnqRs7NXI2bwFyJnoMpZurnXhfT2yEbPRGn+M4YpRHbTDrdQVvEunaDvxPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775317726; c=relaxed/simple;
-	bh=9sz3+e7hFS7e3D5u4gXCFEmetpYoIO5AhMXFUjOjC1Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UNolmdDfkbmL5hd3d2TAF3wBL/8mzPJZTKMGg/R5Ye5eIl0ZFFx5AXGCRwuhEoZr25PU9FzJ30g4r3rQFEhyQRebkdK2C7o6SjeiBYInbH/mYEZ4zF8LtimSFOmm6AjFSFULST6VtWQMPOdqeGC8Tw2ZTYbHjBNFbT5j/j/DH3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=UD1LPcZ0; arc=none smtp.client-ip=209.85.219.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-8a48deebe95so28548056d6.0
-        for <linux-usb@vger.kernel.org>; Sat, 04 Apr 2026 08:48:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1775317724; x=1775922524; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TbCDxLb/JRnwtCFojza32AVUTFHSLT3bO9q4M+IgyD0=;
-        b=UD1LPcZ0YKJb6ZWV4CQSXYE0anFRxVjVSEMgZpFYdz0Bc/8F12zDsO+ojqDNmywMaZ
-         upNC3YvFerFGyjNP3qcrUKbwzDVVqSBngHAaeUuYt3TaceEEMCIFd90khssJ+3ITscZM
-         IcXCTJbJC+r+JguV710BPvD25xQj6ArahlF/bGWgDyOj7KXIrxdfRcft6cXBX0QAx6Pb
-         1u+VAzDhZYU7g61VfalsaYubfRV8GmRAIf6NfAlIAcJDhnsUabLUgVL275eR2nh3eIBF
-         MbQEyWibHmEnhW0eqZLxHy3bqqfdBj2u3E8tKzrIIIlCC11xua50k3mD+AHA7XUFzIT+
-         0+Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775317724; x=1775922524;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TbCDxLb/JRnwtCFojza32AVUTFHSLT3bO9q4M+IgyD0=;
-        b=kEroS7NVvH158Si8yZ94kT7s8PbMRa3Yi7wLVwTTbnujrXn1RTRF1Z4ECZLXbAVc4d
-         6ocp36phqorqh9EdtqN9DJikaPvB47Ey92BL0pIiEigiKbbOTjlIkdjs8D8+aLPMSV7Y
-         qsiskns32zixpH03gHN1PJ0wilGG6shA8bzROpSdjwy5sptUZxBFg1QkAZhas8ek/WkQ
-         8DFJ1wpKFMCG+DnZ6okwgvDz1jISJPaQ/6Jwr5TG8sVpvbbygqxwClmMJDihqlRLAh0h
-         nW+xNXOoTbADnUlxzOXzfXt+EByjn9/tMqdEEFIbJ43VLLvnVB1KBJ/RfxzUUYr3hztg
-         uh1A==
-X-Gm-Message-State: AOJu0YzxVReXcb6+roBRFLSdByPsTMLG6AKTRFuK6oC8b3zKr2d9ePyW
-	6vwVxSC7EN7xYqUGJLtn7gOHeSwIgh0QGiNtGtSq8oJfAFMZWoa2Tk7MvZOqRsbl9e6SelecFLh
-	ojo0c8w==
-X-Gm-Gg: AeBDieuJCn9ZMmtIkLjF/EqPcoHTo3zW+i0hIQ7en71ZAeOe7ShjgTKeZjyTIa0CPGF
-	tuXSujpl2moh+MKpHoyf1fuKWHXM7uev+0b7cIktoCUY4VtlmYXEjJs6/4vclJAolQHiBhdFwXZ
-	s4cL3ilG8tX2Ge+mVo7C8F/tMSPaL07+yvcNtDZYczakz1jDPpZAG7VlfFkMaRD/TYraj59rl+e
-	vZRIkE0P0/RPZPCw+0JAhhwPXVenczJBjsLhgT5cnjqOgx0UYLqiYrSbbh3qFt+QAzzCSb0YGCL
-	UdUtV4haqKdjYVdp+HzbjTDQ0Ij0OW/UBMONV8Qy/ldAYrcgCj0YipK4kihjCOc1MgTYl0Tl25E
-	XufZFz0kX5EX8rqwlXsTVpPiv+7cmsfblukWTDXG2f7Y6DWGUv8VoZlKCdwjYVdywzuCDZ2rMka
-	Dvfw21KD6hTxJpZPGHAWPEWqiF
-X-Received: by 2002:ad4:5bee:0:b0:8a3:1a24:8e8f with SMTP id 6a1803df08f44-8a702c923b6mr115984836d6.26.1775317723626;
-        Sat, 04 Apr 2026 08:48:43 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::5a82])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8a596915986sm83673276d6.24.2026.04.04.08.48.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Apr 2026 08:48:43 -0700 (PDT)
-Date: Sat, 4 Apr 2026 11:48:40 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Ajay Garg <ajaygargnsit@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: Some queries on eHCI/xHCI/Thunderbolt and dwc2/dwc3
-Message-ID: <ade1d49f-e3ad-48ea-a044-851e9d28c78e@rowland.harvard.edu>
-References: <CAHP4M8XXQAsOzJFvCwXB=BPN4tdoh5wyn+ZFFmJZPZq5BorxOQ@mail.gmail.com>
+	s=arc-20240116; t=1775322733; c=relaxed/simple;
+	bh=6HWbdXTvY5ARCKQw/mJejk6jJkYYvhLGzuFZu/CMKrk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=F7A4fJ8oEKf0IzH5VEkWikK9jZJ+ZqGLKHVQ5WwAQPkyRZxGAZmTiT0e2Rqc4xBvE7TAvBcUBPt7Igi8LiP3pK08HihINIbVJHkifK6+OAhnIqINxp91qyyCIuvcb+ZPb1s2aMKtMGCWdEa0oQ1aRa68o35W4BL0PJv0vuoRa0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GcgJMoZ0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1853CC4AF0E
+	for <linux-usb@vger.kernel.org>; Sat,  4 Apr 2026 17:12:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775322733;
+	bh=6HWbdXTvY5ARCKQw/mJejk6jJkYYvhLGzuFZu/CMKrk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GcgJMoZ0JuCk1oE2p1uOznAEPZR6CrHmU63ZoUxVtxnX8mJab0r4uPFFxlAmTqcZA
+	 myj15f5ytltHO0slbfE7HO6gmrYbw3URX3zm5Ch5rWSlVdR401ec5dfg7RfsH5oBN4
+	 PnqK3oN/0RY4LZWR+knx2bZtXfIc8cep3MmTai8iVDgIiE9nPWWVN8CVFPKdI3F70S
+	 gC8kQiqGR2CuAUPcJ/9Yaydp3RzrBUC+10/bPsY353+aL5ufFQEdpAgg8xvos3Up3I
+	 owNuHEnPhFIkScgSgy7tm8cpYaSl2vK6VDp57FI0G+Yzb2m579C7WS8lt58GdxocpN
+	 fGfJdiBZK7yLg==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-40ede943bf0so1601772fac.2
+        for <linux-usb@vger.kernel.org>; Sat, 04 Apr 2026 10:12:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVVtd4d1pBo+c04QzajRU0W+2xoqqff0LhcpmbBz2Otn/0F6cQAqRnSQHyxaY7luK8WeP7O9zkVSKg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFz09AKITfSW8dui+W+JKkYkHS9Z9g3W3ap5iIsXFp2oy3J+Pl
+	oyV5kH7pYjvJnTq8nBSOPyZjHFBNoUdNDy8HFGzRd4WWHToI9XY1NJfxzhnHcx8E9hr7HkZjbo+
+	HbvtYThG4RxO9xhZDomAalbDGUQ2yAiU=
+X-Received: by 2002:a05:6871:581e:b0:422:cd76:929d with SMTP id
+ 586e51a60fabf-4230fd2d9e4mr3996409fac.18.1775322730928; Sat, 04 Apr 2026
+ 10:12:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHP4M8XXQAsOzJFvCwXB=BPN4tdoh5wyn+ZFFmJZPZq5BorxOQ@mail.gmail.com>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+References: <20260404000644.522677-1-dianders@chromium.org>
+In-Reply-To: <20260404000644.522677-1-dianders@chromium.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Sat, 4 Apr 2026 19:11:59 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hRKyPesMGKGoDZEMDCX-GVw6Z-dxMLhNhwy6Kjz=7MCQ@mail.gmail.com>
+X-Gm-Features: AQROBzCS1sK1yep87rT-2xolltVfQ4j4qlt-9lHai0wQJnu4V3tzUHOX8_7jVCo
+Message-ID: <CAJZ5v0hRKyPesMGKGoDZEMDCX-GVw6Z-dxMLhNhwy6Kjz=7MCQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/9] driver core: Fix some race conditions
+To: Douglas Anderson <dianders@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
+	Saravana Kannan <saravanak@kernel.org>, Christoph Hellwig <hch@lst.de>, Eric Dumazet <edumazet@google.com>, 
+	Johan Hovold <johan@kernel.org>, Leon Romanovsky <leon@kernel.org>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, Alexey Kardashevskiy <aik@ozlabs.ru>, 
+	Robin Murphy <robin.murphy@arm.com>, Andrew Morton <akpm@linux-foundation.org>, Frank.Li@kernel.org, 
+	Jason Gunthorpe <jgg@ziepe.ca>, alex@ghiti.fr, alexander.stein@ew.tq-group.com, 
+	andre.przywara@arm.com, andrew@codeconstruct.com.au, andrew@lunn.ch, 
+	andriy.shevchenko@linux.intel.com, aou@eecs.berkeley.edu, ardb@kernel.org, 
+	bhelgaas@google.com, brgl@kernel.org, broonie@kernel.org, 
+	catalin.marinas@arm.com, chleroy@kernel.org, davem@davemloft.net, 
+	david@kernel.org, devicetree@vger.kernel.org, dmaengine@vger.kernel.org, 
+	driver-core@lists.linux.dev, gbatra@linux.ibm.com, 
+	gregory.clement@bootlin.com, hkallweit1@gmail.com, iommu@lists.linux.dev, 
+	jirislaby@kernel.org, joel@jms.id.au, joro@8bytes.org, kees@kernel.org, 
+	kevin.brodsky@arm.com, kuba@kernel.org, lenb@kernel.org, lgirdwood@gmail.com, 
+	linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-aspeed@lists.ozlabs.org, linux-cxl@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-serial@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
+	linux-usb@vger.kernel.org, linux@armlinux.org.uk, 
+	linuxppc-dev@lists.ozlabs.org, m.szyprowski@samsung.com, maddy@linux.ibm.com, 
+	mani@kernel.org, maz@kernel.org, miko.lenczewski@arm.com, mpe@ellerman.id.au, 
+	netdev@vger.kernel.org, npiggin@gmail.com, osalvador@suse.de, 
+	oupton@kernel.org, pabeni@redhat.com, palmer@dabbelt.com, 
+	peter.ujfalusi@gmail.com, peterz@infradead.org, pjw@kernel.org, 
+	robh@kernel.org, sebastian.hesselbarth@gmail.com, tglx@kernel.org, 
+	tsbogend@alpha.franken.de, vgupta@kernel.org, vkoul@kernel.org, 
+	will@kernel.org, willy@infradead.org, yangyicong@hisilicon.com, 
+	yeoreum.yun@arm.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,rowland.harvard.edu,lst.de,google.com,intel.com,ozlabs.ru,arm.com,linux-foundation.org,ziepe.ca,ghiti.fr,ew.tq-group.com,codeconstruct.com.au,lunn.ch,linux.intel.com,eecs.berkeley.edu,davemloft.net,vger.kernel.org,lists.linux.dev,linux.ibm.com,bootlin.com,gmail.com,jms.id.au,8bytes.org,lists.infradead.org,lists.ozlabs.org,kvack.org,armlinux.org.uk,samsung.com,ellerman.id.au,suse.de,redhat.com,dabbelt.com,infradead.org,alpha.franken.de,hisilicon.com];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-35977-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWO(0.00)[2];
-	FREEMAIL_TO(0.00)[gmail.com];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-35978-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-usb@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_GT_50(0.00)[85];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 144C339BA85
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 8449139BE9C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sat, Apr 04, 2026 at 12:26:35PM +0530, Ajay Garg wrote:
-> Hi everyone.
-> 
-> I have been gaining an architectural understanding on how host/gadget
-> usb-drivers inter-operate with USB-2 / USB-3 / USB-4 (host-side) and
-> synopsys-DWC controllers (gadget-side).
-> 
-> Following have been my understandings :
-> 
-> a)
-> For host-side, eHCI does not require / use dwc2, but xHCI mandatorily
-> needs dwc3.
-> 
-> Am I correct?
+On Sat, Apr 4, 2026 at 2:07=E2=80=AFAM Douglas Anderson <dianders@chromium.=
+org> wrote:
+>
+> The main goal of this series is to fix the observed bug talked about
+> in the first patch ("driver core: Don't let a device probe until it's
+> ready"). That patch fixes a problem that has been observed in the real
+> world and could land even if the rest of the patches are found
+> unacceptable or need to be spun.
+>
+> That said, during patch review Danilo correctly pointed out that many
+> of the bitfield accesses in "struct device" are unsafe. I added a
+> bunch of patches in the series to address each one.
+>
+> Danilo said he's most worried about "can_match", so I put that one
+> first. After that, I tried to transition bitfields to flags in reverse
+> order to when the bitfield was added.
+>
+> Even if transitioning from bitfields to flags isn't truly needed for
+> correctness, it seems silly (and wasteful of space in struct device)
+> to have some in bitfields and some as flags. Thus I didn't spend time
+> for each bitfield showing that it's truly needed for correctness.
+>
+> Transition was done semi manually. Presumably someone skilled at
+> coccinelle could do a better job, but I just used sed in a heavy-
+> handed manner and then reviewed/fixed the results, undoing anything my
+> script got wrong. My terrible/ugly script was:
+>
+> var=3Dcan_match
+> caps=3D"${var^^}"
+> for f in $(git grep -l "[>\.]${var}[^1-9_a-zA-Z\[]"); do
+>   echo $f
+>   sed -i~ -e "s/\([a-zA-Z_0-9\.>()-][a-zA-Z_0-9\.>()-]*\)->${var} =3D tru=
+e/set_bit(DEV_FLAG_${caps}, \&\\1->flags)/" "$f"
+>   sed -i~ -e "s/\([a-zA-Z_0-9\.>()-][a-zA-Z_0-9\.>()-]*\)\.${var} =3D tru=
+e/dev_set_${caps}(\&\\1)/" "$f"
+>   sed -i~ -e "s/\([a-zA-Z_0-9\.>()-][a-zA-Z_0-9\.>()-]*\)->${var} =3D fal=
+se/clear_bit(DEV_FLAG_${caps}, \&\\1->flags)/" "$f"
+>   sed -i~ -e "s/\([a-zA-Z_0-9\.>()-][a-zA-Z_0-9\.>()-]*\)\.${var} =3D fal=
+se/dev_clear_${caps}(\&\\1)/" "$f"
+>   sed -i~ -e "s/\([a-zA-Z_0-9\.>()-][a-zA-Z_0-9\.>()-]*\)->${var} =3D \([=
+^;]*\)/assign_bit(DEV_FLAG_${caps}, \&\\1->flags, \\2)/" "$f"
+>   sed -i~ -e "s/\([a-zA-Z_0-9\.>()-][a-zA-Z_0-9\.>()-]*\)\.${var} =3D \([=
+^;]*\)/dev_assign_${caps}(\&\\1, \\2)/" "$f"
+>   sed -i~ -e "s/\([a-zA-Z_0-9\.>()-][a-zA-Z_0-9\.>()-]*\)->${var}\([^1-9_=
+a-zA-Z\[]\)/test_bit(DEV_FLAG_${caps}, \&\\1->flags)\\2/" "$f"
+>   sed -i~ -e "s/\([a-zA-Z_0-9\.>()-][a-zA-Z_0-9\.>()-]*\)\.${var}\([^1-9_=
+a-zA-Z\[]\)/dev_${caps}(\&\\1)\\2/" "$f"
+> done
+>
+> From v3 to v4, I transitioned to accessor functions with another ugly
+> sed script. I had git format the old patches, then transformed them
+> with:
+>
+> for f in *.patch; do
+>   echo $f
+>   sed -i~ -e "s/test_and_set_bit(DEV_FLAG_\([^,]*\), \&\(.*\)->flags)/dev=
+_test_and_set_\\L\\1(\\2)/" "$f"
+>   sed -i~ -e "s/test_and_set_bit(DEV_FLAG_\([^,]*\), \(.*\)\.flags)/dev_t=
+est_and_set_\\L\\1(\\2)/" "$f"
+>   sed -i~ -e "s/test_bit(DEV_FLAG_\([^,]*\), \&\(.*\)->flags)/dev_\\L\\1(=
+\\2)/" "$f"
+>   sed -i~ -e "s/test_bit(DEV_FLAG_\([^,]*\), \(.*\)\.flags)/dev_\\L\\1(\\=
+2)/" "$f"
+>   sed -i~ -e "s/set_bit(DEV_FLAG_\([^,]*\), \&\(.*\)->flags)/dev_set_\\L\=
+\1(\\2)/" "$f"
+>   sed -i~ -e "s/set_bit(DEV_FLAG_\([^,]*\), \(.*\)\.flags)/dev_set_\\L\\1=
+(\\2)/" "$f"
+>   sed -i~ -e "s/clear_bit(DEV_FLAG_\([^,]*\), \&\(.*\)->flags)/dev_clear_=
+\\L\\1(\\2)/" "$f"
+>   sed -i~ -e "s/clear_bit(DEV_FLAG_\([^,]*\), \(.*\)\.flags)/dev_clear_\\=
+L\\1(\\2)/" "$f"
+>   sed -i~ -e "s/assign_bit(DEV_FLAG_\([^,]*\), \&\(.*\)->flags, \(.*\))/d=
+ev_assign_\\L\\1(\\2, \\3)/" "$f"
+>   sed -i~ -e "s/assign_bit(DEV_FLAG_\([^,]*\), \(.*\)\.flags, \(.*\))/dev=
+_assign_\\L\\1(\\2, \\3)/" "$f"
+> done
+>
+> ...and then did a few manual touchups for spacing.
+>
+> NOTE: one potentially "controversial" choice I made in some patches
+> was to always reserve a flag ID even if a flag is only used under
+> certain CONFIG_ settings. This is a change from how things were
+> before. Keeping the numbering consistent and allowing easy
+> compile-testing of both CONFIG settings seemed worth it, especially
+> since it won't take up any extra space until we've added a lot more
+> flags.
+>
+> I only marked the first patch as a "Fix" since it is the only one
+> fixing observed problems. Other patches could be considered fixes too
+> if folks want.
+>
+> I tested the first patch in the series backported to kernel 6.6 on the
+> Pixel phone that was experiencing the race. I added extra printouts to
+> make sure that the problem was hitting / addressed. The rest of the
+> patches are tested with allmodconfig with arm32, arm64, ppc, and
+> x86. I boot tested on an arm64 Chromebook running mainline.
+>
+> Changes in v4:
+> - Use accessor functions for flags
+>
+> Changes in v3:
+> - Use a new "flags" bitfield
+> - Add missing \n in probe error message
+>
+> Changes in v2:
+> - Instead of adjusting the ordering, use "ready_to_probe" flag
+>
+> Douglas Anderson (9):
+>   driver core: Don't let a device probe until it's ready
+>   driver core: Replace dev->can_match with dev_can_match()
+>   driver core: Replace dev->dma_iommu with dev_dma_iommu()
+>   driver core: Replace dev->dma_skip_sync with dev_dma_skip_sync()
+>   driver core: Replace dev->dma_ops_bypass with dev_dma_ops_bypass()
+>   driver core: Replace dev->state_synced with dev_state_synced()
+>   driver core: Replace dev->dma_coherent with dev_dma_coherent()
+>   driver core: Replace dev->of_node_reused with dev_of_node_reused()
+>   driver core: Replace dev->offline + ->offline_disabled with accessors
+>
+>  arch/arc/mm/dma.c                             |   4 +-
+>  arch/arm/mach-highbank/highbank.c             |   2 +-
+>  arch/arm/mach-mvebu/coherency.c               |   2 +-
+>  arch/arm/mm/dma-mapping-nommu.c               |   4 +-
+>  arch/arm/mm/dma-mapping.c                     |  28 ++--
+>  arch/arm64/kernel/cpufeature.c                |   2 +-
+>  arch/arm64/mm/dma-mapping.c                   |   2 +-
+>  arch/mips/mm/dma-noncoherent.c                |   2 +-
+>  arch/powerpc/kernel/dma-iommu.c               |   8 +-
+>  .../platforms/pseries/hotplug-memory.c        |   4 +-
+>  arch/riscv/mm/dma-noncoherent.c               |   2 +-
+>  drivers/acpi/scan.c                           |   2 +-
+>  drivers/base/core.c                           |  53 +++++---
+>  drivers/base/cpu.c                            |   4 +-
+>  drivers/base/dd.c                             |  28 ++--
+>  drivers/base/memory.c                         |   2 +-
+>  drivers/base/pinctrl.c                        |   2 +-
+>  drivers/base/platform.c                       |   2 +-
+>  drivers/dma/ti/k3-udma-glue.c                 |   6 +-
+>  drivers/dma/ti/k3-udma.c                      |   6 +-
+>  drivers/iommu/dma-iommu.c                     |   9 +-
+>  drivers/iommu/iommu.c                         |   5 +-
+>  drivers/net/pcs/pcs-xpcs-plat.c               |   2 +-
+>  drivers/of/device.c                           |   6 +-
+>  drivers/pci/of.c                              |   2 +-
+>  drivers/pci/pwrctrl/core.c                    |   2 +-
+>  drivers/regulator/bq257xx-regulator.c         |   2 +-
+>  drivers/regulator/rk808-regulator.c           |   2 +-
+>  drivers/tty/serial/serial_base_bus.c          |   2 +-
+>  drivers/usb/gadget/udc/aspeed-vhub/dev.c      |   2 +-
+>  include/linux/device.h                        | 120 ++++++++++++------
+>  include/linux/dma-map-ops.h                   |   6 +-
+>  include/linux/dma-mapping.h                   |   2 +-
+>  include/linux/iommu-dma.h                     |   3 +-
+>  kernel/cpu.c                                  |   4 +-
+>  kernel/dma/mapping.c                          |  12 +-
+>  mm/hmm.c                                      |   2 +-
+>  37 files changed, 206 insertions(+), 142 deletions(-)
+>
+> --
 
-No.
+For the whole set
 
-EHCI (not "eHCI") is an architecture for a USB-2 host controller.  
-Several companies make controllers that are compatible with the EHCI 
-specification, but Synopsys's DesignWare dwc2 is not one of them.
-
-Similarly, xHCI is an architecture for a USB-3 host controller.  The 
-DesignWare dwc3 is such a controller, but there are others (such as 
-Intel's).
-
-> If yes, how is hardware-specific actions taken care by eHCI alone
-> (since eHCI is hardware-agnostic)?
-
-Part of the EHCI specification says how the host controller should 
-interact with the PCI bus.  Most EHCI implementations use PCI, but not 
-all.  For those that don't, the ehci-hcd driver has platform-specific 
-submodules.
-
-> Is it that USB-2 PHY-registers are already a part of eHCI
-> MMIO-registers themselves (thus not requiring any hardware-specific
-> actions on the PHY side)?
-
-More or less.  The PHY functionality is part of EHCI, but its registers 
-don't correspond very well to those of standalone PHYs.
-
-> b)
-> For host-side, does thunderbolt driver require any of dwc3 / upcoming-dwc4?
-
-I don't know anything about thunderbolt, USB-4, or dwc4.
-
-> c)
-> For gadget-side, dwc2 and dwc3 are enough for USB-2 / USB-3.
-> Am I correct?
-
-Yes, as far as I know.  But of course there are alternatives.
-
-Alan Stern
-
-> d)
-> For gadget-side, would USB-4 require an upcoming-dwc4? Or will dwc3 be
-> modified? Or is there another plan in the pipeline?
-> 
-> 
-> Will be grateful for light on the above from kernel/synopsys experts :)
-> Many thanks in advance !
-> 
-> Thanks and Regards,
-> Ajay
+Reviewed-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
 
