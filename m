@@ -1,131 +1,128 @@
-Return-Path: <linux-usb+bounces-35999-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36001-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2EcHKc7l0mlecAcAu9opvQ
-	(envelope-from <linux-usb+bounces-35999-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 06 Apr 2026 00:44:30 +0200
+	id oCUxE3jy0mn8cQcAu9opvQ
+	(envelope-from <linux-usb+bounces-36001-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 06 Apr 2026 01:38:32 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8E3C3A0088
-	for <lists+linux-usb@lfdr.de>; Mon, 06 Apr 2026 00:44:29 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7D143A03D5
+	for <lists+linux-usb@lfdr.de>; Mon, 06 Apr 2026 01:38:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 7EA113003715
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Apr 2026 22:44:16 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CE3DA3004C01
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Apr 2026 23:38:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F5562DC350;
-	Sun,  5 Apr 2026 22:44:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 909EE385517;
+	Sun,  5 Apr 2026 23:38:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LBHJ2+Py"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="kdx2TwJA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF327370D48
-	for <linux-usb@vger.kernel.org>; Sun,  5 Apr 2026 22:44:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646102DFA4A;
+	Sun,  5 Apr 2026 23:38:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775429049; cv=none; b=oKhtNxXkhOxuHWWkzDiNsK/7mAswI6dpdgEK2MY5Csz6b/b0cb7MvLt7O0Xsn/eyYTH6IrLbJ6uXY0kd7PKNBpGwi9u45gm11CAZeEpNzM7/yHvogZ1CLBlk4cB580U4ZZU0Paau6NgFykdsr175SkF4M9/9t7FgPrsVoCUfS8E=
+	t=1775432306; cv=none; b=JRi3K65ufYsvI6KXPTXV9TIKMBNqYWvEEA0MNNXSbb2NjV1tMGUIVhLZk1/T+I4Srs5NK0L1xg+IZ4aq6dn+ISgIqujiYkbGQ8Hc6GFB6kz0FdQ9rv+ntLKRotzmkkZuQIdXwbB/Hc+zABhX+hQB7opvNREDG9Y+fVDsmlAPG2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775429049; c=relaxed/simple;
-	bh=+ayvcascu/jB6QBDpwMIItKmeA3EAwmQ8c0enEXgqxo=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jD66TzrZkSVCjwtIJ0nbsJllw5Wz1Ktwc90AxibeLTpeGs3xGED54DR1OjJk6ceep2itt1zXDxki2vGNfW5j5FuZAX8jdI+AEUwdR0LhgqosIXd6h9+OL4H+3MC9zYJimyA7vCTlcb2Xozoau7P7/ycSyQhWAs9JsR6rmAnH5oc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LBHJ2+Py; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B159C116C6
-	for <linux-usb@vger.kernel.org>; Sun,  5 Apr 2026 22:44:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775429049;
-	bh=+ayvcascu/jB6QBDpwMIItKmeA3EAwmQ8c0enEXgqxo=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=LBHJ2+PyhHbvgDfVQCgXBK1YltQFIGjNWJ0NVryBoQ0Iggivm/yxBMHUPhzI3m72E
-	 g6iHpe1CfMnSkY9hWY0stujRh1iTnjz27mHTvJ1NpARIqDE1V5kbGr8rDQjKzHwka8
-	 txktSuQS/fmGaJLNJdTM5om4Q6aZs3v51Lt0HvkxTq1hE+uM6pDw2doI6C58X2uZF0
-	 dMvXgFcW9lyb1bA+dVl9p59MF8SsaPF7DijF+O2m+LrAG5Z+zAQG2hXhUfmtGWYHzw
-	 SRjVf+H3TNL0WPgmU7OqRrZoGGXWTgXHBUOQvp87FG5RAGvECDc1jDLACwymyxP6+F
-	 pEZZOAaecrxog==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 82C68C41613; Sun,  5 Apr 2026 22:44:09 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 221318] mice behind ASMedia ASM1042A via Thunderbolt 2 never
- produce input, most likely due to interrupt pipe idle window during
- enumeration
-Date: Sun, 05 Apr 2026 22:44:09 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: manauer.uel@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-221318-208809-ctg2WYyiOt@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221318-208809@https.bugzilla.kernel.org/>
-References: <bug-221318-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1775432306; c=relaxed/simple;
+	bh=BlF4hdRKoQTwwkgj3MRbFI0zcGVQlP3zCR6cUM5//n4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GZzQ1MttbViw91cmdiaSGZKVQY4bkwx+vNx8wqns/hfn5Rr18fWH4Z+dAPAV5chwyaMkI3G2M5FZq1P2wgRXbCY/G9sIKmaJ4oOxBd+fDB4+scN2BylzwNHa5qdgzvgHUdBb0wruovNoD26MD9MhNO4ZONkpP1VFpqAIn57fZJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=kdx2TwJA; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=frr/vyDVrkNBFv1uvWKDe7YbXUlbwouqZpZ2NnxuGxc=; b=kdx2TwJAf2hL4jzsomRnef0xpr
+	lMlVc2vd45dVY47asp8gIONMWD76CnOSlVpnm6lOuaH9v34VYPQnEB9qLaYlUZBVmPpOqpEhjPP01
+	NPzo7ocBS+lrohHL1vJSL2FGqZOPcx47DLMasrKNVGxterpBzpNbDN3jjXyzwjw9BqQU=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1w9X2c-00Evj1-1S; Mon, 06 Apr 2026 01:38:06 +0200
+Date: Mon, 6 Apr 2026 01:38:06 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Petko Manolov <petkan@nucleusys.com>
+Cc: Simon Horman <horms@kernel.org>,
+	Morduan Zang <zhangdandan@uniontech.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	syzbot+9db6c624635564ad813c@syzkaller.appspotmail.com
+Subject: Re: [PATCH] usb: rtl8150: avoid using uninitialized CSCR value
+Message-ID: <76d6b341-27d5-44aa-92fb-3b8966d609df@lunn.ch>
+References: <93FF85BB9F33CD2B+20260402070743.20641-1-zhangdandan@uniontech.com>
+ <20260403154538.GA187715@horms.kernel.org>
+ <20260405085212.GA8491@cabron.k.g>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260405085212.GA8491@cabron.k.g>
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[lunn.ch,none];
+	R_DKIM_ALLOW(-0.20)[lunn.ch:s=20171124];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35999-lists,linux-usb=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36001-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	FROM_NO_DN(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCPT_COUNT_ONE(0.00)[1];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C8E3C3A0088
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andrew@lunn.ch,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[lunn.ch:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,netdev,9db6c624635564ad813c];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,lunn.ch:dkim,lunn.ch:mid]
+X-Rspamd-Queue-Id: E7D143A03D5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221318
+> > -	get_registers(dev, CSCR, 2, &tmp);
+> > +	if (get_registers(dev, CSCR, 2, &tmp) < 0)
+> > +		tmp = 0;
+> >  	if (tmp & CSCR_LINK_STATUS)
+> >  		netif_carrier_on(netdev);
+> >  	else
+> 
+> I was wondering if calling netif_carrier_off() is the right thing to do in case
+> get_registers() fail.
+> 
+> There are multiple get_registers() calls that don't check the error and if we do
+> this in set_carrier() maybe we should do the same thing across the whole driver?
 
---- Comment #10 from manauer.uel@gmail.com ---
-Correction to my previous comment:
+What does it actually mean if get_registers() fails? The device is
+gone? Hot unplugged? If so, you are going to get a cascade of errors,
+and then hopefully the USB core code removes the device?
 
-I said I could not rule out that the device disconnected on its own. Lookin=
-g at
-the new log more carefully, the mouse was already working with the rule act=
-ive
-when I started capturing. When I manually unplugged it, a split transaction
-error appears right at the moment of disconnect. So that error is a consequ=
-ence
-of pulling the cable.
+Are there any legitimate reasons for get_registers() to fail if the
+device is still plugged in?
 
---=20
-You may reply to this email to add a comment.
+It seems netif_carrier_off() is unnecessary?
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+   Andrew
 
