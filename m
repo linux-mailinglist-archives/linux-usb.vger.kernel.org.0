@@ -1,122 +1,141 @@
-Return-Path: <linux-usb+bounces-35994-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-35995-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aAumE2pO0mn7VwcAu9opvQ
-	(envelope-from <linux-usb+bounces-35994-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 05 Apr 2026 13:58:34 +0200
+	id gEnPNIdP0mlOWAcAu9opvQ
+	(envelope-from <linux-usb+bounces-35995-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 05 Apr 2026 14:03:19 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C904E39E34C
-	for <lists+linux-usb@lfdr.de>; Sun, 05 Apr 2026 13:58:33 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44A6A39E3A2
+	for <lists+linux-usb@lfdr.de>; Sun, 05 Apr 2026 14:03:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 590793007E07
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Apr 2026 11:58:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 80F9C30125E6
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Apr 2026 12:02:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEE883451AB;
-	Sun,  5 Apr 2026 11:58:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABB01347BDC;
+	Sun,  5 Apr 2026 12:02:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bHx+R2Qi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qQwwCeNj"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE7C31C567
-	for <linux-usb@vger.kernel.org>; Sun,  5 Apr 2026 11:58:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EB3123D7FF;
+	Sun,  5 Apr 2026 12:02:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775390300; cv=none; b=J7w3M4TLnJFGnZKNjRgiY5CLkcdlsZH0O/On+59791ke7FSO8QujR0kU1BKZEFMQLjebdZ6MMJdQrIdQw3XrpOQbzXX4hrBnVoqLo01Wn5tV1bsF9v9v2Ll+3E2gR/4UwvNcLagHlwSW92W52t+F8fz/J+TMjPtuJqx5nbD+G2U=
+	t=1775390570; cv=none; b=Tiv4Eql/vzwchH3UTdgjl1SiHbDap3dYlXhYMNI/tFwCJCY/vb82+1mMxpBdtXZh96IXK7CI8i1zC1mhK7lPxfvXzFWn5OQDFtK4Jj96el+FY2dTqSfb5HsuUjQpCbZwZL9X1pXOMsGgRi3CyF8rOidKG75qN3tNGqjWPM+Qg9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775390300; c=relaxed/simple;
-	bh=VonChlDIgTar7rRr463m3T+VJE1qv0uyuYWyw0Fonaw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WflTqHYRXQKOMyo25SfcLJzsVzB8t4ImS4+gY9+azmz0hTQFjGJ3dMsaiC3AaduVFTTRLYDE/Rx02nBsEW0Nl2xo1SjtIjsVzE7gk8Qt7yroc1D4zy1kZugqgRnx7EnVaK3TUT60Cqhj26rG+29/+z4pz82p1D/+bAY8GhGjF8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bHx+R2Qi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0BF18C116C6
-	for <linux-usb@vger.kernel.org>; Sun,  5 Apr 2026 11:58:20 +0000 (UTC)
+	s=arc-20240116; t=1775390570; c=relaxed/simple;
+	bh=VwXIPBbp0EIzPNtpB2Kh8OUpJCymQVJw7CRWHLQnyH0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=RqDOFt27ZNxrFENXuruO+Ekqfojuw3AoOrjtsYPmZIHOmk9qOLWGNFrMpIG3Vz6aL1uKf2naHhamaRhJoWZ0RLHscqargu0pP7lI9wWRnaY4f9EEfzApV6CUlMILuf6AuBUOk5Gyz/a690ghjPilDRrArpP1zg9nYqi6JLK+xOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qQwwCeNj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E64C19424;
+	Sun,  5 Apr 2026 12:02:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775390300;
-	bh=VonChlDIgTar7rRr463m3T+VJE1qv0uyuYWyw0Fonaw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=bHx+R2Qi6Hay5fwmZAAYzwYaQvxDHgHOpqY1LnI5EAum8xbKbhg9UDUpkAQzvEP15
-	 jH/5H7yEx+m/P3bBEgzqssBF4TN8PrrtcT10VEI6ZOOWmFYIPxbWnr2SxAytJX7usa
-	 rsAmDZ/7DLNXKeZ7fyKKtElIPx+Xoljm2DeqzIJbCJFF2wTdxZ+jqgBQWFBLADDLGx
-	 FJwG8230pIxCrYuO5Yp5P3IO+H5q9gQKJuImimR5pvvzkeDvJ4pzRnxWnNcFj4ys74
-	 lcqcrA+jQWY2Rt6x9YbA4X62nE3cHaV1WZHx0WEqtq/v7w1YI8Fiz8diR24/3ReMBN
-	 8WflOBdK4Ttxg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id F0523C433E1; Sun,  5 Apr 2026 11:58:19 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 221319] Certain operations via PCIe tunneling between an AMD
- USB4 host and a Thunderbolt-5 peripherals cause an instant reboot
-Date: Sun, 05 Apr 2026 11:58:19 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-221319-208809-YQGOQsuge5@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221319-208809@https.bugzilla.kernel.org/>
-References: <bug-221319-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1775390569;
+	bh=VwXIPBbp0EIzPNtpB2Kh8OUpJCymQVJw7CRWHLQnyH0=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
+	b=qQwwCeNj+saJT57yAG47jboL8X78w4/j6WpBJ1RZ4sp8PWbMz7XsL9EDbWtj55Eiv
+	 28aGEHxX84zqCSRKzt5WxDYhK2mKne18FSkXEYY++OZ6+IBYaBKFZkA86MS9bLh9Oc
+	 BYyORiDakrz6RnLk4LVZHvUx8P1LQpa7pCp8fHnA1nA9F6ZvrAlepEALLMXhhTHNG5
+	 7JaVWay0RJB3NcEhdmqtS8VF3DnUGPXm4QkCgawXIaUT/QfRxlFCiXeEIfDZt6r6xg
+	 I3uj6fM0ROLbqxk5+qZJNhPISl9Q1iNQvp6vF94UFTOtVMPHy01bKsqbxAmGzThrrM
+	 mtqWeRGNpMg3w==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 05 Apr 2026 14:02:33 +0200
+Message-Id: <DHL7FCNQ20PA.2K03T8MNSO9TT@kernel.org>
+Subject: Re: [PATCH v4 0/9] driver core: Fix some race conditions
+Cc: "Douglas Anderson" <dianders@chromium.org>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, "Alan Stern" <stern@rowland.harvard.edu>, "Saravana
+ Kannan" <saravanak@kernel.org>, "Christoph Hellwig" <hch@lst.de>, "Eric
+ Dumazet" <edumazet@google.com>, "Johan Hovold" <johan@kernel.org>, "Leon
+ Romanovsky" <leon@kernel.org>, "Alexander Lobakin"
+ <aleksander.lobakin@intel.com>, "Alexey Kardashevskiy" <aik@ozlabs.ru>,
+ "Robin Murphy" <robin.murphy@arm.com>, "Andrew Morton"
+ <akpm@linux-foundation.org>, <Frank.Li@kernel.org>, "Jason Gunthorpe"
+ <jgg@ziepe.ca>, <alex@ghiti.fr>, <alexander.stein@ew.tq-group.com>,
+ <andre.przywara@arm.com>, <andrew@codeconstruct.com.au>, <andrew@lunn.ch>,
+ <andriy.shevchenko@linux.intel.com>, <aou@eecs.berkeley.edu>,
+ <ardb@kernel.org>, <bhelgaas@google.com>, <brgl@kernel.org>,
+ <broonie@kernel.org>, <catalin.marinas@arm.com>, <chleroy@kernel.org>,
+ <davem@davemloft.net>, <david@kernel.org>, <devicetree@vger.kernel.org>,
+ <dmaengine@vger.kernel.org>, <driver-core@lists.linux.dev>,
+ <gbatra@linux.ibm.com>, <gregory.clement@bootlin.com>,
+ <hkallweit1@gmail.com>, <iommu@lists.linux.dev>, <jirislaby@kernel.org>,
+ <joel@jms.id.au>, <joro@8bytes.org>, <kees@kernel.org>,
+ <kevin.brodsky@arm.com>, <kuba@kernel.org>, <lenb@kernel.org>,
+ <lgirdwood@gmail.com>, <linux-acpi@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
+ <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-mips@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-pci@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+ <linux-serial@vger.kernel.org>, <linux-snps-arc@lists.infradead.org>,
+ <linux-usb@vger.kernel.org>, <linux@armlinux.org.uk>,
+ <linuxppc-dev@lists.ozlabs.org>, <m.szyprowski@samsung.com>,
+ <maddy@linux.ibm.com>, <mani@kernel.org>, <maz@kernel.org>,
+ <miko.lenczewski@arm.com>, <mpe@ellerman.id.au>, <netdev@vger.kernel.org>,
+ <npiggin@gmail.com>, <osalvador@suse.de>, <oupton@kernel.org>,
+ <pabeni@redhat.com>, <palmer@dabbelt.com>, <peter.ujfalusi@gmail.com>,
+ <peterz@infradead.org>, <pjw@kernel.org>, <robh@kernel.org>,
+ <sebastian.hesselbarth@gmail.com>, <tglx@kernel.org>,
+ <tsbogend@alpha.franken.de>, <vgupta@kernel.org>, <vkoul@kernel.org>,
+ <will@kernel.org>, <willy@infradead.org>, <yangyicong@hisilicon.com>,
+ <yeoreum.yun@arm.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20260404000644.522677-1-dianders@chromium.org>
+ <2026040539-sponge-publisher-2b42@gregkh>
+In-Reply-To: <2026040539-sponge-publisher-2b42@gregkh>
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MV_CASE(0.50)[];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-35994-lists,linux-usb=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FREEMAIL_CC(0.00)[chromium.org,kernel.org,rowland.harvard.edu,lst.de,google.com,intel.com,ozlabs.ru,arm.com,linux-foundation.org,ziepe.ca,ghiti.fr,ew.tq-group.com,codeconstruct.com.au,lunn.ch,linux.intel.com,eecs.berkeley.edu,davemloft.net,vger.kernel.org,lists.linux.dev,linux.ibm.com,bootlin.com,gmail.com,jms.id.au,8bytes.org,lists.infradead.org,lists.ozlabs.org,kvack.org,armlinux.org.uk,samsung.com,ellerman.id.au,suse.de,redhat.com,dabbelt.com,infradead.org,alpha.franken.de,hisilicon.com];
+	TAGGED_FROM(0.00)[bounces-35995-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_NO_DN(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[84];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dakr@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_ONE(0.00)[1];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C904E39E34C
+X-Rspamd-Queue-Id: 44A6A39E3A2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221319
+On Sun Apr 5, 2026 at 7:27 AM CEST, Greg Kroah-Hartman wrote:
+> Anyway, this looks great, unless there are any objections, other than
+> the "needs to be undefined", which a follow-on patch can handle, I'll
+> queue them up next week for 7.1-rc1.
 
---- Comment #2 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-Can you check the log from the kernel on the boot AFTER this happened? There
-will be a log event indicating the last reboot reason.
+Sounds good, for the series:
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Reviewed-by: Danilo Krummrich <dakr@kernel.org>
 
