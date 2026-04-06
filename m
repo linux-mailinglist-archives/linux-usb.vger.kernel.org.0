@@ -1,64 +1,63 @@
-Return-Path: <linux-usb+bounces-36005-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36006-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id nZ7INKcM02n3dQcAu9opvQ
-	(envelope-from <linux-usb+bounces-36005-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 06 Apr 2026 03:30:15 +0200
+	id mFVWJRUN02n3dQcAu9opvQ
+	(envelope-from <linux-usb+bounces-36006-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 06 Apr 2026 03:32:05 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EC7C3A103E
-	for <lists+linux-usb@lfdr.de>; Mon, 06 Apr 2026 03:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E932F3A1056
+	for <lists+linux-usb@lfdr.de>; Mon, 06 Apr 2026 03:32:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B3EE6300877B
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Apr 2026 01:30:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0B625300A623
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Apr 2026 01:31:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DAAE30E0C0;
-	Mon,  6 Apr 2026 01:30:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63B982DF152;
+	Mon,  6 Apr 2026 01:31:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uJLB+xz7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ojTB78Wc"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB31221B9DA;
-	Mon,  6 Apr 2026 01:30:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1643182D0;
+	Mon,  6 Apr 2026 01:31:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775439007; cv=none; b=JxT9g698YWq3YaVDM3E6eNZ6YhmBgyBY3R/aLPqUC3w1qBaTJt0BB+LltD+nkCgV1AukvrvPFdEo7QRnX72GkRwp5j0iSG3h1CDWRd/RVSdFhGSUR88NCpGysVkoJsE+S8zvXLqlQ5LgDwax7NBdvicXT+WwZohctADxO6TRBwc=
+	t=1775439115; cv=none; b=u/XQbTyU4nYg+fGzOMvcRiJh5cRg+T42He1l2JTGbKTfdviyeKPZPp+/V+ehMsiXy2lo+tE8fdNJ3fdaPFCbqZtyopCzhZqzMpZJsbBgEu7cT2qMbadBtCcOi0cOVmnbSihz9cOGd9ds9ug/uVkkVXVNnpElGbtigNNJ+tvNqZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775439007; c=relaxed/simple;
-	bh=T1klGs8lM/VYwKg8uS9wJ3HfBhUM4sSVg46v0Pk4X04=;
+	s=arc-20240116; t=1775439115; c=relaxed/simple;
+	bh=2/d3VES2wtYS1eTthHKPdxu/CyepSxHlBICjf23XUW8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t8Jpbkxcl1CmmXD1aGYN3ORnfNrvNUv/OhFau7CV0AOSZskHd7Qm6eUKAC28LZNzIYXhvJTeTYSfJrf4uld/dUc512ChqSYMSZ1/KPKgUHgBbJoyrh61vNXLWDUoVC9BnWEhIPBiLKvkKInbsnkVXyoXBgdsU/As+Pt5WW+YgyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uJLB+xz7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C664C116C6;
-	Mon,  6 Apr 2026 01:30:05 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=PwWk5BmWSp2dQrEBgY/x3OpLmscvB/co/2NtIOUDFcLs1DKSPtVsFnGw7+1FpZqEL2HxhmgW8870mDIf+VvIPt28taAKQ4nYOKLiohrIycV4jK8okAyruaYY2DFX/iUP60TbNwdavjPXs+TRlVLt+M80AuIIvdY1BvTB+h/V/Rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ojTB78Wc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39BDCC116C6;
+	Mon,  6 Apr 2026 01:31:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775439007;
-	bh=T1klGs8lM/VYwKg8uS9wJ3HfBhUM4sSVg46v0Pk4X04=;
+	s=k20201202; t=1775439114;
+	bh=2/d3VES2wtYS1eTthHKPdxu/CyepSxHlBICjf23XUW8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uJLB+xz73AK6B1Vdocq6pSiEx5D44M1lIwXXPZmWToLGqKI7qqfkaZ6pR3/8JBPFZ
-	 d8UMJ4J6VmYLhHYeBVScLA+iH7CNT5U4qLzg/4eHrtMoG9+xyYBaNunPXUIbOEooSS
-	 0pl0hglb5daAEy7U7ZG+T7NzGtVncmW53IQsXvaekRVjIXsqJjIkIpykgGLx8GLp0M
-	 OvH2oQ8NlKZehCLu462iH8LiNds/jEntflqb9auHyDfp5a0WNnXAPep+oqKbnaFbNO
-	 bJUgcy4sgCakKW/v/a8gk/3fCDBvHRMJapPwudIBTGlmkjkbRaheSBRiXaGFUYNkqZ
-	 1oMwJUw1SH0dg==
-Date: Mon, 6 Apr 2026 09:30:03 +0800
+	b=ojTB78WcBboNtkuXi0RdMyTlUAP0WxEsTmQp2++sm+2T6hj0s3PhqjCNYRA56Sr8D
+	 1F/Y+HKXoF2KxFVWGVmVTbNq4c4Qj988LpFTRHV0YQvpXDqJ6OwHdRUNUZBCYT474l
+	 Fb3zDjJgr1vBLzBv2sPTt/gg8eb9wYmgB6sRNACisgV+ijzkBf9JbybU07h8kIF8Ru
+	 vdF07GI1lhUg3OpmN36G0LXcS9aZ16SWoy1QrYbIG9GG0142wfYKiadEAle/wIrvUy
+	 LnJgRhBpuy30pi8NQ2lcgqQMXV4w0rfT963bIek/tf9UlUhueJq/Pl9c8x1lHgGVCd
+	 pTXD2Alia+t3Q==
+Date: Mon, 6 Apr 2026 09:31:50 +0800
 From: "Peter Chen (CIX)" <peter.chen@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Arnd Bergmann <arnd@kernel.org>,
+To: Pawel Laszczak <pawell@cadence.com>
+Cc: Roger Quadros <rogerq@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Pawel Laszczak <pawell@cadence.com>,
-	Roger Quadros <rogerq@kernel.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: cdns3: attempt to fix Kconfig dependencies
-Message-ID: <adMMm5kS3PR5CHFB@nchen-desktop>
-References: <20260402141008.2691819-1-arnd@kernel.org>
- <ac9xVUVB/BKfBUmE@nchen-desktop>
- <26779a33-135a-4881-8614-9987c5e90380@app.fastmail.com>
- <ac+H2dzj5t1JJJd5@nchen-desktop>
- <e650e6c7-bd19-4c35-bcd2-0c53178feb8e@app.fastmail.com>
+	Bjorn Helgaas <bhelgaas@google.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH] usb: cdnsp: Add support for device-only configuration
+Message-ID: <adMNBsPYNg497Doa@nchen-desktop>
+References: <20260331-device_only-v1-1-00378b80365c@cadence.com>
+ <ac9WnY5C+yTVi0X/@nchen-desktop>
+ <PH7PR07MB9538FCAFEBF0072EA5B5B815DD5EA@PH7PR07MB9538.namprd07.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,25 +66,26 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e650e6c7-bd19-4c35-bcd2-0c53178feb8e@app.fastmail.com>
+In-Reply-To: <PH7PR07MB9538FCAFEBF0072EA5B5B815DD5EA@PH7PR07MB9538.namprd07.prod.outlook.com>
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-36006-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36005-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	TO_DN_SOME(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[peter.chen@kernel.org,linux-usb@vger.kernel.org];
@@ -93,50 +93,63 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 1EC7C3A103E
+X-Rspamd-Queue-Id: E932F3A1056
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 26-04-03 20:50:52, Arnd Bergmann wrote:
+On 26-04-03 10:33:52, Pawel Laszczak wrote:
+> >>
+> >> +	if (cdns->no_drd) {
+> >> +		cdns->version  = CDNSP_CONTROLLER_V2;
+> >> +		cdns->dr_mode = USB_DR_MODE_PERIPHERAL;
+> >
+> >With "no_drd", are configurations fixed, no other options?
 > 
-> > @@ -13,11 +13,13 @@ config USB_CDNS_HOST
-> >  	bool
-> >  	depends on USB=y || USB=USB_CDNS_SUPPORT
-> > 
-> > -config CONFIG_USB_CDNS_PLATFORM
-> > +config USB_CDNS_PLATFORM
-> >  	tristate "Cadence USB3 generic platform support"
-> >  	depends on USB_CDNSP || USB_CDNS3
-> >  	depends on USB_CDNSP || !USB_CDNSP
-> >  	depends on USB_CDNS3 || !USB_CDNS3
-> > +	depends on USB_CDNS3_GADGET || !USB_CDNS3_GADGET
-> > +	depends on USB_CDNSP_GADGET || !USB_CDNSP_GADGET
-> >  	help
-> >  	  The platform driver support is needed on any SoC integrating
-> >  	  a variant of the Cadence USB3 or USBSSP dual-role controllers,
-> 
-> The dependencies here are rather unwieldy, but it does look like
-> this is the minimum set we need with the current code.
-> 
-> The only other alternative I see would be to split up the
-> platform driver support into separate modules for cdns3 and
-> cdnsp as well, which would make the dependencies trivial but
-> require reworking of the actual in a way that I haven't
-> been able to figure out yet. If you are already integrating
-> other changes for the next attempt, maybe you can try to
-> come up with a solution for this as well.
+> Yes, no other option.
 
-Thanks for your suggestion, creating different platform driver
-between cdns3 and cdnsp is the way we used at downstream, but
-when I try to upstream cdsnp platform driver support, I find
-the two platforms driver are 95% identical in content, so I
-would like to keep one platform driver and one binding doc.
+Is it possible for host-only configurations?
 
-By the way, are there any randconfigs I could run to avoid
-the similar break, of course, I will pass my local USB
-randconfigs tests?
+Peter
+
+> 
+> Pawel
+> 
+> >
+> >> +		return 0;
+> >> +	}
+> >> +
+> >>  	regs = devm_ioremap_resource(cdns->dev, &cdns->otg_res);
+> >>  	if (IS_ERR(regs))
+> >>  		return PTR_ERR(regs);
+> >> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h index
+> >> 406abf629be2..a931fb201402 100644
+> >> --- a/include/linux/pci_ids.h
+> >> +++ b/include/linux/pci_ids.h
+> >> @@ -2424,6 +2424,7 @@
+> >>  #define PCI_DEVICE_ID_CDNS_USBSS	0x0100
+> >>  #define PCI_DEVICE_ID_CDNS_USB		0x0120
+> >>  #define PCI_DEVICE_ID_CDNS_USBSSP	0x0200
+> >> +#define PCI_DEVICE_ID_CDNS_UDC_USBSSP	0x0400
+> >>
+> >>  #define PCI_VENDOR_ID_ARECA		0x17d3
+> >>  #define PCI_DEVICE_ID_ARECA_1110	0x1110
+> >>
+> >> ---
+> >> base-commit: 5196f2c98340297e1fdd36555285e991ceddf776
+> >> change-id: 20260331-device_only-192d539430b5
+> >>
+> >> Best regards,
+> >> --
+> >> Pawel Laszczak <pawell@cadence.com>
+> >>
+> >>
+> >
+> >--
+> >
+> >Best regards,
+> >Peter
 
 -- 
 
