@@ -1,204 +1,123 @@
-Return-Path: <linux-usb+bounces-36021-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36022-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IIKQLAYi1GlxrgcAu9opvQ
-	(envelope-from <linux-usb+bounces-36021-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 06 Apr 2026 23:13:42 +0200
+	id 6PbHIZY41GkksQcAu9opvQ
+	(envelope-from <linux-usb+bounces-36022-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 00:49:58 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20B333A770E
-	for <lists+linux-usb@lfdr.de>; Mon, 06 Apr 2026 23:13:41 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1DBB3A7EF1
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 00:49:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BF3A030547CE
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Apr 2026 21:13:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6AF213025C67
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Apr 2026 22:49:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF3A638838B;
-	Mon,  6 Apr 2026 21:12:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96BD839FCB0;
+	Mon,  6 Apr 2026 22:49:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="a95mVwEC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bB0AkAbq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 278B08634C
-	for <linux-usb@vger.kernel.org>; Mon,  6 Apr 2026 21:12:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7C239657A;
+	Mon,  6 Apr 2026 22:49:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775509979; cv=none; b=QnujvAceZLoSQZDON7rJL+kCiugTe7MUSzRB+1ROA9c6uAMoEtFAAmfymgKnfLfVIRaj7f4VgmHliMqtGDCGhDLXkgil2FHZneifDrr3Q9TgTx6OtExbqZpeStWdpSHdBcksRCfUJibJtHHrmOj2gCWA7VRhLXRH7sVElT7HEpw=
+	t=1775515791; cv=none; b=Cipwx+6OjaLoFxdgF+klQ7B+x7pcCeZ+VuF7+JbLew9lmNJDmjFD4vSL1kPXpyo4ivaA/rB6UkSTwsom7lE4+wjw/5ELUgaj+BQhEI2BYxr5ZJ5CZF0kW/YaK+BvUEmHCP06BALuiP6t3th8VliqInE9yTqO4O+p06NX17D+BsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775509979; c=relaxed/simple;
-	bh=aV8nHzi0a8jr/2WiI2qH4yf5lhEiVVMkGp3MXWjdDJY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WywfJzMfmrAo1Zt8rV+hV3Sx1l6mBkj2cDikdlLmBjfnjO8WDOUTLVrQVU7nH+/IPUdj5Nt96QeuZ9hMImKbzzmd14U6OSOXyabF7p3AzzysouLPTagdh6WDEf8fOr/J9fsYoIipOpSMLT81Ew+PKhEkOpHoVTz6VdYsm00SkfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=a95mVwEC; arc=none smtp.client-ip=209.85.210.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7dbcd92eda5so1687940a34.2
-        for <linux-usb@vger.kernel.org>; Mon, 06 Apr 2026 14:12:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1775509976; x=1776114776; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pWK3waau6Ia06c6heEcaBjF2/x2U2gZGHRskfdLqA4s=;
-        b=a95mVwECYoDHH80N3/r51E9BmqmoKcGmNQm4lew6WJo2qZU7XmVkasDHVLAtIEWKs1
-         aGoM3ELV4XNr3wGFpuhlnuPoZZ+WVA/jhT9kkY9MIbq6I0Bqi9k7tQnztRdfvCLGziaj
-         Yd+drBpxL/ac1wXxy7LKHGyB4o1AZKI6J+65k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775509976; x=1776114776;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pWK3waau6Ia06c6heEcaBjF2/x2U2gZGHRskfdLqA4s=;
-        b=OEnUDN2HA5eUdJ8b5JD4zESyV/F8kcYRnPvfWmXQNuDvFFLlywDnvuoCo4t+kI8alP
-         yCrE2If2u5bk1wXyY13dXMDChGLKiTY4pMNd1Qx2HUISWcDPqlk4epyCaa5KsI2LHeAy
-         7nk+zFxumtHPDIJnrQWOS+6ZqBG7NPXZRfTIq1h4iKkPTqr3IPgH/Rj52aJGJ3Xlkszd
-         qosbjB3dguLbefadpN5I2pZa81QfNkiXJgMx8x2UCB8kYZI0EWOxZMz9V3/5HPaUwIL3
-         P9VJ0Jd3TgJoB4Gz+ccwNfe0tzcaoLWcWu4SyZc+d2YYjqEj4aU8OGE8cvJ3ve2kY5HW
-         abYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUyVB/ZR+HyqKk9+bAaUlFlMh8TrBJjxJA4CoHFoxqRrgVIbXhlpLQGgayEPyuISP4ffV/HGf51A1A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGXHjPXAt7GdZo+A42gh3UT3jQFu+6A3vH0cPQ+knBgjQuYwf8
-	6ksMAylrC7XHnLs/ghJ24U3BeILizy9fvxRGRtMCo6f2j6Wd16t0vZp8lOsGUmOeksI=
-X-Gm-Gg: AeBDiet6hBPDya5m8kSwW+WLDYqRDK5FdFFMw4KkJ0XE+ed6M3Av5Onzgfi/to8As7d
-	GyAJMOfhmGprsrP3tnqQ0wOKHJN1l4JBCCvwBqOhLVgI8kxFp79BRvHSjNg53bQYB6ZOO3OdNhQ
-	nv8brvccuTJEQTBozDNvkJoNFc8Es/gXqla6A9SsHl2aUlh7hDH2MFE4sX2eZD7wM4gk18xUMDc
-	p2z5PbP3gOT4avzjiuPDf27Q1dxjHW3+A9rRsizW5fHOkzkrc0rvJqszeQnXXD1cXbUnl9wMP/S
-	yEbaVNdOLZWSPfALlEil+T1dFQPPrAgzZ4AC5NDj3wAHvtK/1ko12xHgYoMfCwkYWl4D2wHOjXM
-	wtrLVKC4KSTldvwrwyyZ+vF14TJwk9aZWlLRQ6i1CInaEDjjCTj560VGFC4h/3/7I0CtZCCUM1f
-	VrhYCEVR17eZVjinalp7SdbD4WdorpeUkUsO/wblHtlkJQ5Q==
-X-Received: by 2002:a05:6820:81c3:b0:67e:9a9:5ba9 with SMTP id 006d021491bc7-6821d83c791mr7929299eaf.5.1775509976040;
-        Mon, 06 Apr 2026 14:12:56 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-680a540002csm9223548eaf.1.2026.04.06.14.12.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Apr 2026 14:12:55 -0700 (PDT)
-Message-ID: <83e82b09-a617-4e56-980c-563d8fba2045@linuxfoundation.org>
-Date: Mon, 6 Apr 2026 15:12:54 -0600
+	s=arc-20240116; t=1775515791; c=relaxed/simple;
+	bh=FyE5chWO2fuq/tQbfJ07wSv55K/bw5O7LsX5IWssCPM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bSQsxqyfNg8sEvlBNtdFswq6RriJXQlTJoMIH/jr/PmDdHL7sdXo77YW2ritvA0mQ91zJwCFdBO1LWUboe/Momjp/E9foEblFBS9asxJ1NWxfGHeX490gCH9UxxnVeQyQbp+5H4iMsVpYCgRCnQoxzcNqlcWMQGDNQfa0RVoLjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bB0AkAbq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81021C4CEF7;
+	Mon,  6 Apr 2026 22:49:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775515790;
+	bh=FyE5chWO2fuq/tQbfJ07wSv55K/bw5O7LsX5IWssCPM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bB0AkAbqbIU4DzATNBFiiP9iCv4p81N4QtyPb+DniD8jmcwOs5QsI/ouikq25ykXU
+	 AjnXmDxqPPZB7GUe14SEIY05xVSNR6h/OpVzoXGquU3Kq2dwpPX/g8UgLLewFNRXFh
+	 s2WUoNzX9WnG3/Z5a/ewYug0D7RE8T9gA7+CUud/eQ1hzYuun0JRr1oe7G8P60aQTF
+	 +9hctQZulm/+8b/6nC7XwHKo5TgUDRYWagF5RtVAo76KOXL96G+DhdzAM3X53eEr4p
+	 f6nBhggrwT/a8rNhKTF2tSsF115+3DSAuHmVercSVVeatG71l079zs1ZVJDu4fLDjH
+	 FLO34HF2dDLaQ==
+Date: Mon, 6 Apr 2026 17:49:48 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Jameson Thies <jthies@google.com>
+Cc: abhishekpandit@chromium.org, akuchynski@chromium.org,
+	devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+	bleung@chromium.org, conor+dt@kernel.org,
+	linux-kernel@vger.kernel.org, heikki.krogerus@linux.intel.com,
+	linux-usb@vger.kernel.org, krzk+dt@kernel.org,
+	gregkh@linuxfoundation.org
+Subject: Re: [PATCH v1 1/2] dt-bindings: chrome: Add cros-ec-ucsi
+ compatibility to typec binding
+Message-ID: <177551578813.60654.5045933666200538178.robh@kernel.org>
+References: <20260403223357.1896403-1-jthies@google.com>
+ <20260403223357.1896403-2-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] usbip: tools: add hint when no exported devices are
- found
-To: Zongmin Zhou <min_halo@163.com>
-Cc: gregkh@linuxfoundation.org, i@zenithal.me, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, valentina.manea.m@gmail.com,
- Zongmin Zhou <zhouzongmin@kylinos.cn>, Shuah Khan <skhan@linuxfoundation.org>
-References: <8d7000a9-981c-468a-bd4b-60111e0b77e9@linuxfoundation.org>
- <20260402083204.53179-1-min_halo@163.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20260402083204.53179-1-min_halo@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260403223357.1896403-2-jthies@google.com>
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=google];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,zenithal.me,vger.kernel.org,gmail.com,kylinos.cn];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[163.com];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36021-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36022-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[skhan@linuxfoundation.org,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-0.999];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:dkim,linuxfoundation.org:email,linuxfoundation.org:mid,kylinos.cn:email]
-X-Rspamd-Queue-Id: 20B333A770E
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: F1DBB3A7EF1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 4/2/26 02:32, Zongmin Zhou wrote:
-> From: Zongmin Zhou <zhouzongmin@kylinos.cn>
+
+On Fri, 03 Apr 2026 22:33:26 +0000, Jameson Thies wrote:
+> Chrome OS devices with discrete power delivery controllers (PDCs) allow
+> the host to read port status and control port behavior through a USB
+> Type-C Connector System Software (UCSI) interface with the embedded
+> controller (EC). This uses a separate interface driver than other
+> Chrome OS devices with a Type-C port manager in the EC FW. Those use
+> a host command interface supported by cros-ec-typec. Add a cros-ec-ucsi
+> compatibility string to the existing cros-ec-typec binding.
 > 
-> When refresh_exported_devices() finds no devices, it's helpful to
-> inform users about potential causes. This could be due to:
+> Additionally, update maintainer list to reflect cros-ec-ucsi and
+> cros-ec-typec driver maintainers.
 > 
-> 1. The usbip driver module is not loaded.
-> 2. No devices have been exported yet.
-> 
-> Add an informational message to guide users when ndevs == 0.
-> 
-> Also update the condition in usbip_host_driver_open() and
-> usbip_device_driver_open() to check both ret and ndevs == 0,
-> and change err() to info().
-> 
-> Message visibility by scenario:
-> - usbipd (console mode): Show on console/serial, this allows instant
->    visibility for debugging.
-> - usbipd -D (daemon mode): Message logged to syslog, can keep logs for
->    later traceability in production. Also can use "journalctl -f" to
->    trace on console.
-> 
-> Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
-> Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
+> Signed-off-by: Jameson Thies <jthies@google.com>
 > ---
-> Changes in v4:
-> - Printing behavior adjusted as suggested.
-> Changes in v3:
-> - Just add an informational message when no devices are found.
-> Changes in v2:
-> - Use system calls directly instead of checking sysfs dir.
+>  .../bindings/chrome/google,cros-ec-typec.yaml | 19 +++++++++++++++----
+>  1 file changed, 15 insertions(+), 4 deletions(-)
 > 
->   tools/usb/usbip/libsrc/usbip_device_driver.c | 6 +++---
->   tools/usb/usbip/libsrc/usbip_host_common.c   | 3 +++
->   tools/usb/usbip/libsrc/usbip_host_driver.c   | 7 ++++---
->   3 files changed, 10 insertions(+), 6 deletions(-)
-> 
-> diff --git a/tools/usb/usbip/libsrc/usbip_device_driver.c b/tools/usb/usbip/libsrc/usbip_device_driver.c
-> index 927a151fa9aa..1dfbb76ab26c 100644
-> --- a/tools/usb/usbip/libsrc/usbip_device_driver.c
-> +++ b/tools/usb/usbip/libsrc/usbip_device_driver.c
-> @@ -137,9 +137,9 @@ static int usbip_device_driver_open(struct usbip_host_driver *hdriver)
->   	INIT_LIST_HEAD(&hdriver->edev_list);
->   
->   	ret = usbip_generic_driver_open(hdriver);
-> -	if (ret)
-> -		err("please load " USBIP_CORE_MOD_NAME ".ko and "
-> -		    USBIP_DEVICE_DRV_NAME ".ko!");
-> +	if (ret || hdriver->ndevs == 0)
-> +		info("please load " USBIP_CORE_MOD_NAME ".ko and "
-> +		     USBIP_DEVICE_DRV_NAME ".ko");
->   
->   	return ret;
->   }
-> diff --git a/tools/usb/usbip/libsrc/usbip_host_common.c b/tools/usb/usbip/libsrc/usbip_host_common.c
-> index ca78aa368476..01599cb2fa7b 100644
-> --- a/tools/usb/usbip/libsrc/usbip_host_common.c
-> +++ b/tools/usb/usbip/libsrc/usbip_host_common.c
-> @@ -149,6 +149,9 @@ static int refresh_exported_devices(struct usbip_host_driver *hdriver)
->   		}
->   	}
->   
-> +	if (hdriver->ndevs == 0)
-> +		info("Please load appropriate modules or export devices.");
 
-Is this message needed here in refresh_exported_devices()?
-usbip_host_driver_open() and usbip_device_driver_open(), the
-only two callers of refresh_exported_devices() print info
-message with this change?
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-thanks,
--- Shuah
 
