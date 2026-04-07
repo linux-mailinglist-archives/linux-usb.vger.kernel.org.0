@@ -1,191 +1,141 @@
-Return-Path: <linux-usb+bounces-36040-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36041-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8DIMOve81GmWwwcAu9opvQ
-	(envelope-from <linux-usb+bounces-36040-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 10:14:47 +0200
+	id GIwPOH7G1GlbxQcAu9opvQ
+	(envelope-from <linux-usb+bounces-36041-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 10:55:26 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 489113AB2A2
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 10:14:47 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8C3D3AB985
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 10:55:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 65C483014961
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2026 08:14:33 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 777AE300D0DA
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2026 08:55:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1BC13A4525;
-	Tue,  7 Apr 2026 08:14:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E72AE39B960;
+	Tue,  7 Apr 2026 08:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JXxLJIQp"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dn9LnTiY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D5738AC9D
-	for <linux-usb@vger.kernel.org>; Tue,  7 Apr 2026 08:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775549671; cv=pass; b=Bgmfup+4iPtCpVQO++/LJJrqsFqwOffFvzCwhG/U7UMcYe4HxEmKW0RLFVVAr1OjiokHzms9NR0bEajS56e2VQlyQd33AT8V3jRpzJNXtxiLceMWYvroIX6doz64LinV/YghpqoqVJ5znCKYGp1TXN4/LVsVVATTeGNn9H9CBaI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775549671; c=relaxed/simple;
-	bh=WVCEmjgS09zO3e5fAjq6y3FwhFjaPYnYJy0t0KPQaQA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZUhMOg859KI9YUmhngiCc88zXR46hpVwf/09Q5EjW9wJIQFPz5MwQShr9UnUI/mDRbaweiTUwjYyrhZaCdvdr7o2qZU5nBuBdZer0scKuVVJdR2mJQ9PY1136zZuMH3eztbAyNvDFUrajhi8CuUKZjdGO/BEjk9AOreLUON6ACE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JXxLJIQp; arc=pass smtp.client-ip=209.85.222.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-8d428da4300so371042085a.3
-        for <linux-usb@vger.kernel.org>; Tue, 07 Apr 2026 01:14:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775549668; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Go0jDoefhceGWmektkLr5fhb0pg5QKxftrL5tnPlq2IJpM7TzLkKp8TU0jaVFyb+XL
-         Yq7j0B5OfF+voKTvSaqkO1K5dkank6JSPw7E/u/34/x8rMmqAw7uVnc4afJ/FV7s5Ye4
-         kKb/0m/G+2Y1kK+KEncD6dBGbYUSV/5TtExWRpIoOmT81avbI9gHNrITQikgy9Vu7u0j
-         314C5073mlpD/I7Jc8IuKiwKY3EyLUdQwPhflzPmOhYivqgESCK4NXSutoaOWs/trDUU
-         Lnr+rwA3QSQ2RwD0HUTfvEl48dza03F8WcbVx0m/Tx1xinx8heAeMglXMZf0QG7i3baN
-         LrTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=NFzrP5S7sHZljreBvbCEsGL4Od0awwRFz+YQ0R4KNj0=;
-        fh=6RfTh/nJx93oSGbiIWyOMbYxS8C0pgPYjxEKaPw8q3M=;
-        b=Ym8NhJbx232d9caA1Aq/YMYgYyTPNMYlbkJR5Uxvgt/F2tFWhqbw5B5rc//i+dVCUR
-         ii6RNZFxgtwXcGvECpQlexbg9864hNtmt48+d+98Km4VL6smsG39mozqVb/38UhzCbvT
-         IGOV7z/9O8fz7VYXKHOd9NfTz/nq9k0DD2QY0Ana2du2+7WLb0t3v1u6jYxE4B0PTHyt
-         M5SH3PFVAihfYOe9QpVq/uyGXNXp/m7XakSurdNxoBH/N5l52yeN0BSYijeOGWRNCULH
-         T8nPQBoFK95WuILCOf2uhPDywGysA7tSOUOpDQg0yk110ew8ZavFa0XZRbPuX1SRrRni
-         Mpmw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775549668; x=1776154468; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NFzrP5S7sHZljreBvbCEsGL4Od0awwRFz+YQ0R4KNj0=;
-        b=JXxLJIQp2JLZGBC3W8e0FLtiQvlhPEze5exk1XB+SAMDy5vd615DMm/NEHbey3s+w2
-         qpzh/UPus27wDnRsoWkzgENm0A0Ln0W+yBvVndAqibURsiaYz4gCHKTTMTdY+/YEAzcL
-         vKwe0Sx09LJ90LEQJcAOIEtkwJEFW89F4lNGVkpibIcI/Q7rxuJ1dVHnNfmUxSvNgNvT
-         cSe9CCXzfTrhNocwep0CtXzhAr0q8jRYH7RkFeld/berGkSY+fXx0QOxsr/WVNUTyRCC
-         Ut5Yvz9MLzeNccjGRGlfXecKXXtL7WycbPUJhUM/4W6OxOhqoSU5mHlh37Qct4zKOiTh
-         sK3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775549668; x=1776154468;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=NFzrP5S7sHZljreBvbCEsGL4Od0awwRFz+YQ0R4KNj0=;
-        b=O3dTIfEE/3yIKXQXVAZHV127hzxocBGmRY56S3giU6L67Ctrun5va+rHsOG+f6UALU
-         ta3X3n03jHFld9NFRdt2DHyLfMYsN8eZ2pwGijUhFMh08H2TVpWpEjYs43xX/j4FGufb
-         yef4XIQKpyOwfQrMj48ptefiUAD0I1J8hEroMXQRTnTipsB6XGxxUpS92PCRHA118ABD
-         JyntJoAuKK6iXvutjnxfyCb0N4QoCPaSIBHd5JP2vFWWUtr1kjkhJlvxu6yhI32XLJqO
-         vXtOhih4jAXX0bgI3TlKH8PkpaE37CqeVDY9ucKso/p9pRg3rnlh5kc7/aMrQQYqADv7
-         szUw==
-X-Forwarded-Encrypted: i=1; AJvYcCWxdinwVFbRmfmslkzi2dE0Ocvn4HV3Bz3P63srjjnmYIi5KJS97Nf2rPXcfTEbwIXNuF0jZZxxP/k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXoCO1mWbwGmcRXtfShYlA5hMmLpyDrk1iV2OXDwDGoRtrEM8F
-	3D+kH15e3YUtTMJM6EK6dhjc/GO6CQn7fU4KKoudwzjpFg32GJBwwg69UpFKMxUwQWoul/8H6JY
-	BP5WJRzxcySNhfdaSlXucf3TWmkqsBgw=
-X-Gm-Gg: AeBDietBZtIZl7eyQnBTF3JNsf1rYB1I68hA+TLlJfAVo17+aDrJY3pgtMtAtihlQeF
-	k+o+tZo7OOGh5lc6Vmb2WlFVWuzLOUNR8FJEG43QNy/Qhwv3/dtCsxR9W/i0Tqoy/bBjdOfIl6K
-	6/KxlQ6Qy9eXLU1K/pQNz6VhypDkWGWbOQ4fgejfFa2K+ZK52LgWkVEYl1ooPpCXnkjRMNo6FUH
-	y5aZV7sA+ghYicfxDDn1XWvh/bkhU6keNzFCEs3f0+p+8YFWYnGCu5+/r8cwJsr/3jZcHP570XB
-	BTG4VjzAyBkZJkY9/1oKmrwNk0lbMEEAqtBodRM56+nvA6wkjGCg+VQiYSwJGfccO6qZ
-X-Received: by 2002:a05:6214:3307:b0:8a4:58ff:f0ff with SMTP id
- 6a1803df08f44-8a7024bb658mr213997486d6.17.1775549668360; Tue, 07 Apr 2026
- 01:14:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679E439B947;
+	Tue,  7 Apr 2026 08:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775552109; cv=none; b=FbxD7aunUV6z07AX903DsU2Rdh5Y+MoQFyf1bgpp9BZmtX3e4v7XoONFqUgF5avAHw7dR2bgoc8WOP0f80Ri36eMo2o8PNFnEWjmFF0TWXwq5G5YSGHfgjYiTG5h6d2HPdlJ5yVcyuJV/gg7KqGOzRfx3QajUJjNxPWTEcRdBok=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775552109; c=relaxed/simple;
+	bh=GuKln7VYxHIG8btwCkuLT0R/K1AI0ImWbV7M1cCDesI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=at50NUVFiDn9/5kc8VUKDeRsQd3szT1p7AvNhQy8riMm2ygVbivOVw/UeybVnMOI0Im48vZHLMyQeosa78duthZgkEC+v0YYINqsKiqeOvhjEnfgTDcWO+IimcF5/ifnMjug7hqbbnDBcrEttQdPtGd10LLToW0eSET6b0yz0jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=dn9LnTiY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B857C2BCAF;
+	Tue,  7 Apr 2026 08:55:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1775552109;
+	bh=GuKln7VYxHIG8btwCkuLT0R/K1AI0ImWbV7M1cCDesI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=dn9LnTiYaVNnX+1p4Taeij1Wlx6Z3lZOxtArL/Sr8GAkRT7BAJ7k8xGzJngJ9juFP
+	 1SP9kj0Vvo6E2RA+l82XFfhiS7DXVq+xXzhbA0/9GUiBUovI8dBxFX6gjMzm/Tszyw
+	 3FHG2ciJAEXX7liWeFognn6E5zgPoFXktKyN4Gjg=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	stable <stable@kernel.org>
+Subject: [PATCH] usb: gadget: f_phonet: fix skb frags[] overflow in pn_rx_complete()
+Date: Tue,  7 Apr 2026 10:55:05 +0200
+Message-ID: <2026040705-fruit-unloved-0701@gregkh>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402180008.64233-1-ethantidmore06@gmail.com>
-In-Reply-To: <20260402180008.64233-1-ethantidmore06@gmail.com>
-From: Michael Zimmermann <sigmaepsilon92@gmail.com>
-Date: Tue, 7 Apr 2026 10:14:13 +0200
-X-Gm-Features: AQROBzCq4mMlxYE8T2kEwBaPJeFI-s6QQRFc75liLxkB4_7Ab0ktxqwjyNsuG34
-Message-ID: <CAN9vWDL1-e9jhcJakZMqAJSix-_dmYSST=NcXE3qM3LsTvs6pw@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: f_hid: Add missing error code
-To: Ethan Tidmore <ethantidmore06@gmail.com>
-Cc: gregkh@linuxfoundation.org, peter@korsgaard.com, mhklinux@outlook.com, 
-	linuxhid@cosmicgizmosystems.com, danisjiang@gmail.com, kees@kernel.org, 
-	hoff.benjamin.k@gmail.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+Lines: 46
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1871; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=GuKln7VYxHIG8btwCkuLT0R/K1AI0ImWbV7M1cCDesI=; b=owGbwMvMwCRo6H6F97bub03G02pJDJlXjmWyspT0Htncnv8syvO9kozpq/Y9PW/n2wYt1Eit+ VKxd1dRRywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAExkzX2GBddU/hVUbTxcy262 QCMwuZ+JadINeYYFPSb+rMzstuJGL+I2HGDekB/OJy8KAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [2.84 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36040-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,korsgaard.com,outlook.com,cosmicgizmosystems.com,gmail.com,kernel.org,vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-36041-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	NEURAL_HAM(-0.00)[-0.997];
+	RCVD_TLS_LAST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCPT_COUNT_THREE(0.00)[4];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sigmaepsilon92@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 489113AB2A2
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linuxfoundation.org:dkim,linuxfoundation.org:email]
+X-Rspamd-Queue-Id: A8C3D3AB985
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Apr 2, 2026 at 8:00=E2=80=AFPM Ethan Tidmore <ethantidmore06@gmail.=
-com> wrote:
->
-> Currently in cdev_alloc() error path no error code is assigned.
->
-> Assign error code '-ENOMEM'.
->
-> Detected by Smatch:
-> drivers/usb/gadget/function/f_hid.c:1291 hidg_bind()
-> warn: missing error code 'status'
->
-> Fixes: 81ebd43cc0d6d ("usb: gadget: f_hid: don't call cdev_init while cde=
-v in use")
-> Signed-off-by: Ethan Tidmore <ethantidmore06@gmail.com>
-> ---
->  drivers/usb/gadget/function/f_hid.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/fun=
-ction/f_hid.c
-> index e0c3f39ee95e..c5a12a6760ea 100644
-> --- a/drivers/usb/gadget/function/f_hid.c
-> +++ b/drivers/usb/gadget/function/f_hid.c
-> @@ -1278,8 +1278,10 @@ static int hidg_bind(struct usb_configuration *c, =
-struct usb_function *f)
->
->         /* create char device */
->         hidg->cdev =3D cdev_alloc();
-> -       if (!hidg->cdev)
-> +       if (!hidg->cdev) {
-> +               status =3D -ENOMEM;
->                 goto fail_free_all;
-> +       }
->         hidg->cdev->ops =3D &f_hidg_fops;
->
->         status =3D cdev_device_add(hidg->cdev, &hidg->dev);
-> --
-> 2.53.0
->
+A broken/bored/mean USB host can overflow the skb_shared_info->frags[]
+array on a Linux gadget exposing a Phonet function by sending an
+unbounded sequence of full-page OUT transfers.
 
-Reviewed-by: Michael Zimmermann <sigmaepsilon92@gmail.com>
+pn_rx_complete() finalizes the skb only when req->actual < req->length,
+where req->length is set to PAGE_SIZE by the gadget.  If the host always
+sends exactly PAGE_SIZE bytes per transfer, fp->rx.skb will never be
+reset and each completion will add another fragment via
+skb_add_rx_frag().  Once nr_frags exceeds MAX_SKB_FRAGS (default 17),
+subsequent frag stores overwrite memory adjacent to the shinfo on the
+heap.
+
+Drop the skb and account a length error when the frag limit is reached,
+matching the fix applied in t7xx by commit f0813bcd2d9d ("net: wwan:
+t7xx: fix potential skb->frags overflow in RX path").
+
+Fixes: 9732d5232335 ("Phonet: USB CDC Phonet function for gadget framework")
+Cc: stable <stable@kernel.org>
+Assisted-by: gregkh_clanker_t1000
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/gadget/function/f_phonet.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/usb/gadget/function/f_phonet.c b/drivers/usb/gadget/function/f_phonet.c
+index 2c007790ead2..b1ee9a7c2e94 100644
+--- a/drivers/usb/gadget/function/f_phonet.c
++++ b/drivers/usb/gadget/function/f_phonet.c
+@@ -333,6 +333,15 @@ static void pn_rx_complete(struct usb_ep *ep, struct usb_request *req)
+ 		if (unlikely(!skb))
+ 			break;
+ 
++		if (unlikely(skb_shinfo(skb)->nr_frags >= MAX_SKB_FRAGS)) {
++			/* Frame count from host exceeds frags[] capacity */
++			dev_kfree_skb_any(skb);
++			if (fp->rx.skb == skb)
++				fp->rx.skb = NULL;
++			dev->stats.rx_length_errors++;
++			break;
++		}
++
+ 		if (skb->len == 0) { /* First fragment */
+ 			skb->protocol = htons(ETH_P_PHONET);
+ 			skb_reset_mac_header(skb);
+-- 
+2.53.0
+
 
