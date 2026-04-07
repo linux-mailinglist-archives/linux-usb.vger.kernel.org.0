@@ -1,367 +1,191 @@
-Return-Path: <linux-usb+bounces-36039-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36040-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WCVQIxKy1GnvwQcAu9opvQ
-	(envelope-from <linux-usb+bounces-36039-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 09:28:18 +0200
+	id 8DIMOve81GmWwwcAu9opvQ
+	(envelope-from <linux-usb+bounces-36040-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 10:14:47 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC2BD3AAC6B
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 09:28:17 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 489113AB2A2
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 10:14:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DCDA430488E1
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2026 07:27:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 65C483014961
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2026 08:14:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C41A395DAC;
-	Tue,  7 Apr 2026 07:27:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1BC13A4525;
+	Tue,  7 Apr 2026 08:14:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m30OgZ4+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JXxLJIQp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F3F3921E7;
-	Tue,  7 Apr 2026 07:27:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775546856; cv=none; b=Bq9R/r1NbPeTRsCZkqP5/1SxJRc/nh/8ogjxNd9yT2IpYUroSxScmhjJHnXpjJ6+lOS4nwR/9iiOK2MUW2y30oLoibE/Sjz6CDCS7YHaJbIMiQ8eMz1vddDwQ/6T05FlbdauCphItfGhxyiTZFxqlihslsbJjbq8amf8eD4aGo0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775546856; c=relaxed/simple;
-	bh=Ke+4cfFIuUyaAYRB85WlhtaSzn9Vsqf7eLubNm2wrC8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d0SEjTTTNPneD2ijgza6uz4htZdSOu0bhQ/KnibN6FToo/c5XgbMgvHWcXSqX5jEBmczFoPbmPpAT94Bdr5WG6adW80a0wsm2jjQ78PvPYggnD0jwtCGh/2DcHI/bdQfPCKGGWxJc31UvY+LUk1qkpeNhpaDlxjdGH86c7rd8oM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m30OgZ4+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F639C116C6;
-	Tue,  7 Apr 2026 07:27:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775546856;
-	bh=Ke+4cfFIuUyaAYRB85WlhtaSzn9Vsqf7eLubNm2wrC8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m30OgZ4+3p1ReP/oAexgtmU1wpHtdCwMpqLsPQ1M0sfld/z/FFzZXpYDh4e3fybYj
-	 /pxqvDO1Tk2YWl7SwXOzZpmgZPuybaqhOnBhM2OusK35qXxa6nPe47jMcbyPObRx9A
-	 LIBBR24hxE+0GEJyrHG5Mor7C5RciZv0K1Y119quGDDpBWRKWuWFCrZtXtkdQBW4P/
-	 0NSGF1V4uZmeRTPBIIxtlEIQSD1QF0mJS+7VB4QuEvtYAR4nRExM1YEGb6Y1NIFanM
-	 5dyrIFv4Z+WGfhdSU+6/pMy8q4brJ4lkLN1g/LKq88orVqzymK08dPIflO6p1CiWaw
-	 stDhRXnwwdSEw==
-Date: Tue, 7 Apr 2026 12:57:19 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Douglas Anderson <dianders@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Alexey Kardashevskiy <aik@ozlabs.ru>, 
-	Johan Hovold <johan@kernel.org>, Eric Dumazet <edumazet@google.com>, 
-	Leon Romanovsky <leon@kernel.org>, Christoph Hellwig <hch@lst.de>, 
-	Robin Murphy <robin.murphy@arm.com>, maz@kernel.org, Alexander Lobakin <aleksander.lobakin@intel.com>, 
-	Saravana Kannan <saravanak@kernel.org>, Mark Brown <broonie@kernel.org>, alexander.stein@ew.tq-group.com, 
-	andrew@codeconstruct.com.au, andrew@lunn.ch, andriy.shevchenko@linux.intel.com, 
-	astewart@tektelic.com, bhelgaas@google.com, brgl@kernel.org, davem@davemloft.net, 
-	devicetree@vger.kernel.org, driver-core@lists.linux.dev, hkallweit1@gmail.com, 
-	jirislaby@kernel.org, joel@jms.id.au, kees@kernel.org, kuba@kernel.org, 
-	lgirdwood@gmail.com, linux-arm-kernel@lists.infradead.org, 
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, linux@armlinux.org.uk, 
-	netdev@vger.kernel.org, pabeni@redhat.com, robh@kernel.org
-Subject: Re: [PATCH v5 8/9] driver core: Replace dev->of_node_reused with
- dev_of_node_reused()
-Message-ID: <xoo5ymm44t66hr5ti2apl3u7mmenbic66gi7siiiwxtdgn6bhh@hvfzixit53pf>
-References: <20260406232444.3117516-1-dianders@chromium.org>
- <20260406162231.v5.8.I806b8636cd3724f6cd1f5e199318ab8694472d90@changeid>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D5738AC9D
+	for <linux-usb@vger.kernel.org>; Tue,  7 Apr 2026 08:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775549671; cv=pass; b=Bgmfup+4iPtCpVQO++/LJJrqsFqwOffFvzCwhG/U7UMcYe4HxEmKW0RLFVVAr1OjiokHzms9NR0bEajS56e2VQlyQd33AT8V3jRpzJNXtxiLceMWYvroIX6doz64LinV/YghpqoqVJ5znCKYGp1TXN4/LVsVVATTeGNn9H9CBaI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775549671; c=relaxed/simple;
+	bh=WVCEmjgS09zO3e5fAjq6y3FwhFjaPYnYJy0t0KPQaQA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZUhMOg859KI9YUmhngiCc88zXR46hpVwf/09Q5EjW9wJIQFPz5MwQShr9UnUI/mDRbaweiTUwjYyrhZaCdvdr7o2qZU5nBuBdZer0scKuVVJdR2mJQ9PY1136zZuMH3eztbAyNvDFUrajhi8CuUKZjdGO/BEjk9AOreLUON6ACE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JXxLJIQp; arc=pass smtp.client-ip=209.85.222.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-8d428da4300so371042085a.3
+        for <linux-usb@vger.kernel.org>; Tue, 07 Apr 2026 01:14:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775549668; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Go0jDoefhceGWmektkLr5fhb0pg5QKxftrL5tnPlq2IJpM7TzLkKp8TU0jaVFyb+XL
+         Yq7j0B5OfF+voKTvSaqkO1K5dkank6JSPw7E/u/34/x8rMmqAw7uVnc4afJ/FV7s5Ye4
+         kKb/0m/G+2Y1kK+KEncD6dBGbYUSV/5TtExWRpIoOmT81avbI9gHNrITQikgy9Vu7u0j
+         314C5073mlpD/I7Jc8IuKiwKY3EyLUdQwPhflzPmOhYivqgESCK4NXSutoaOWs/trDUU
+         Lnr+rwA3QSQ2RwD0HUTfvEl48dza03F8WcbVx0m/Tx1xinx8heAeMglXMZf0QG7i3baN
+         LrTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=NFzrP5S7sHZljreBvbCEsGL4Od0awwRFz+YQ0R4KNj0=;
+        fh=6RfTh/nJx93oSGbiIWyOMbYxS8C0pgPYjxEKaPw8q3M=;
+        b=Ym8NhJbx232d9caA1Aq/YMYgYyTPNMYlbkJR5Uxvgt/F2tFWhqbw5B5rc//i+dVCUR
+         ii6RNZFxgtwXcGvECpQlexbg9864hNtmt48+d+98Km4VL6smsG39mozqVb/38UhzCbvT
+         IGOV7z/9O8fz7VYXKHOd9NfTz/nq9k0DD2QY0Ana2du2+7WLb0t3v1u6jYxE4B0PTHyt
+         M5SH3PFVAihfYOe9QpVq/uyGXNXp/m7XakSurdNxoBH/N5l52yeN0BSYijeOGWRNCULH
+         T8nPQBoFK95WuILCOf2uhPDywGysA7tSOUOpDQg0yk110ew8ZavFa0XZRbPuX1SRrRni
+         Mpmw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775549668; x=1776154468; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NFzrP5S7sHZljreBvbCEsGL4Od0awwRFz+YQ0R4KNj0=;
+        b=JXxLJIQp2JLZGBC3W8e0FLtiQvlhPEze5exk1XB+SAMDy5vd615DMm/NEHbey3s+w2
+         qpzh/UPus27wDnRsoWkzgENm0A0Ln0W+yBvVndAqibURsiaYz4gCHKTTMTdY+/YEAzcL
+         vKwe0Sx09LJ90LEQJcAOIEtkwJEFW89F4lNGVkpibIcI/Q7rxuJ1dVHnNfmUxSvNgNvT
+         cSe9CCXzfTrhNocwep0CtXzhAr0q8jRYH7RkFeld/berGkSY+fXx0QOxsr/WVNUTyRCC
+         Ut5Yvz9MLzeNccjGRGlfXecKXXtL7WycbPUJhUM/4W6OxOhqoSU5mHlh37Qct4zKOiTh
+         sK3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775549668; x=1776154468;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=NFzrP5S7sHZljreBvbCEsGL4Od0awwRFz+YQ0R4KNj0=;
+        b=O3dTIfEE/3yIKXQXVAZHV127hzxocBGmRY56S3giU6L67Ctrun5va+rHsOG+f6UALU
+         ta3X3n03jHFld9NFRdt2DHyLfMYsN8eZ2pwGijUhFMh08H2TVpWpEjYs43xX/j4FGufb
+         yef4XIQKpyOwfQrMj48ptefiUAD0I1J8hEroMXQRTnTipsB6XGxxUpS92PCRHA118ABD
+         JyntJoAuKK6iXvutjnxfyCb0N4QoCPaSIBHd5JP2vFWWUtr1kjkhJlvxu6yhI32XLJqO
+         vXtOhih4jAXX0bgI3TlKH8PkpaE37CqeVDY9ucKso/p9pRg3rnlh5kc7/aMrQQYqADv7
+         szUw==
+X-Forwarded-Encrypted: i=1; AJvYcCWxdinwVFbRmfmslkzi2dE0Ocvn4HV3Bz3P63srjjnmYIi5KJS97Nf2rPXcfTEbwIXNuF0jZZxxP/k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXoCO1mWbwGmcRXtfShYlA5hMmLpyDrk1iV2OXDwDGoRtrEM8F
+	3D+kH15e3YUtTMJM6EK6dhjc/GO6CQn7fU4KKoudwzjpFg32GJBwwg69UpFKMxUwQWoul/8H6JY
+	BP5WJRzxcySNhfdaSlXucf3TWmkqsBgw=
+X-Gm-Gg: AeBDietBZtIZl7eyQnBTF3JNsf1rYB1I68hA+TLlJfAVo17+aDrJY3pgtMtAtihlQeF
+	k+o+tZo7OOGh5lc6Vmb2WlFVWuzLOUNR8FJEG43QNy/Qhwv3/dtCsxR9W/i0Tqoy/bBjdOfIl6K
+	6/KxlQ6Qy9eXLU1K/pQNz6VhypDkWGWbOQ4fgejfFa2K+ZK52LgWkVEYl1ooPpCXnkjRMNo6FUH
+	y5aZV7sA+ghYicfxDDn1XWvh/bkhU6keNzFCEs3f0+p+8YFWYnGCu5+/r8cwJsr/3jZcHP570XB
+	BTG4VjzAyBkZJkY9/1oKmrwNk0lbMEEAqtBodRM56+nvA6wkjGCg+VQiYSwJGfccO6qZ
+X-Received: by 2002:a05:6214:3307:b0:8a4:58ff:f0ff with SMTP id
+ 6a1803df08f44-8a7024bb658mr213997486d6.17.1775549668360; Tue, 07 Apr 2026
+ 01:14:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260406162231.v5.8.I806b8636cd3724f6cd1f5e199318ab8694472d90@changeid>
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+References: <20260402180008.64233-1-ethantidmore06@gmail.com>
+In-Reply-To: <20260402180008.64233-1-ethantidmore06@gmail.com>
+From: Michael Zimmermann <sigmaepsilon92@gmail.com>
+Date: Tue, 7 Apr 2026 10:14:13 +0200
+X-Gm-Features: AQROBzCq4mMlxYE8T2kEwBaPJeFI-s6QQRFc75liLxkB4_7Ab0ktxqwjyNsuG34
+Message-ID: <CAN9vWDL1-e9jhcJakZMqAJSix-_dmYSST=NcXE3qM3LsTvs6pw@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: f_hid: Add missing error code
+To: Ethan Tidmore <ethantidmore06@gmail.com>
+Cc: gregkh@linuxfoundation.org, peter@korsgaard.com, mhklinux@outlook.com, 
+	linuxhid@cosmicgizmosystems.com, danisjiang@gmail.com, kees@kernel.org, 
+	hoff.benjamin.k@gmail.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36039-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-36040-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,rowland.harvard.edu,ozlabs.ru,google.com,lst.de,arm.com,intel.com,ew.tq-group.com,codeconstruct.com.au,lunn.ch,linux.intel.com,tektelic.com,davemloft.net,vger.kernel.org,lists.linux.dev,gmail.com,jms.id.au,lists.infradead.org,lists.ozlabs.org,armlinux.org.uk,redhat.com];
-	RCPT_COUNT_TWELVE(0.00)[41];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,korsgaard.com,outlook.com,cosmicgizmosystems.com,gmail.com,kernel.org,vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	NEURAL_HAM(-0.00)[-0.997];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mani@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[sigmaepsilon92@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[chromium.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: DC2BD3AAC6B
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 489113AB2A2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Apr 06, 2026 at 04:23:01PM -0700, Douglas Anderson wrote:
-> In C, bitfields are not necessarily safe to modify from multiple
-> threads without locking. Switch "of_node_reused" over to the "flags"
-> field so modifications are safe.
-> 
-> Cc: Johan Hovold <johan@kernel.org>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Reviewed-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
-> Reviewed-by: Danilo Krummrich <dakr@kernel.org>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-
-Acked-by: Manivannan Sadhasivam <mani@kernel.org> # PCI_PWRCTRL
-
-- Mani
-
+On Thu, Apr 2, 2026 at 8:00=E2=80=AFPM Ethan Tidmore <ethantidmore06@gmail.=
+com> wrote:
+>
+> Currently in cdev_alloc() error path no error code is assigned.
+>
+> Assign error code '-ENOMEM'.
+>
+> Detected by Smatch:
+> drivers/usb/gadget/function/f_hid.c:1291 hidg_bind()
+> warn: missing error code 'status'
+>
+> Fixes: 81ebd43cc0d6d ("usb: gadget: f_hid: don't call cdev_init while cde=
+v in use")
+> Signed-off-by: Ethan Tidmore <ethantidmore06@gmail.com>
 > ---
-> Not fixing any known bugs; problem is theoretical and found by code
-> inspection. Change is done somewhat manually and only lightly tested
-> (mostly compile-time tested).
-> 
-> (no changes since v4)
-> 
-> Changes in v4:
-> - Use accessor functions for flags
-> 
-> Changes in v3:
-> - New
-> 
->  drivers/base/core.c                      | 2 +-
->  drivers/base/pinctrl.c                   | 2 +-
->  drivers/base/platform.c                  | 2 +-
->  drivers/net/pcs/pcs-xpcs-plat.c          | 2 +-
->  drivers/of/device.c                      | 6 +++---
->  drivers/pci/of.c                         | 2 +-
->  drivers/pci/pwrctrl/core.c               | 2 +-
->  drivers/regulator/bq257xx-regulator.c    | 2 +-
->  drivers/regulator/rk808-regulator.c      | 2 +-
->  drivers/tty/serial/serial_base_bus.c     | 2 +-
->  drivers/usb/gadget/udc/aspeed-vhub/dev.c | 2 +-
->  include/linux/device.h                   | 7 ++++---
->  12 files changed, 17 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 8a83d7c93361..30825bf83234 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -5283,7 +5283,7 @@ void device_set_of_node_from_dev(struct device *dev, const struct device *dev2)
->  {
->  	of_node_put(dev->of_node);
->  	dev->of_node = of_node_get(dev2->of_node);
-> -	dev->of_node_reused = true;
-> +	dev_set_of_node_reused(dev);
->  }
->  EXPORT_SYMBOL_GPL(device_set_of_node_from_dev);
->  
-> diff --git a/drivers/base/pinctrl.c b/drivers/base/pinctrl.c
-> index 6e250272c843..0bbc83231234 100644
-> --- a/drivers/base/pinctrl.c
-> +++ b/drivers/base/pinctrl.c
-> @@ -24,7 +24,7 @@ int pinctrl_bind_pins(struct device *dev)
->  {
->  	int ret;
->  
-> -	if (dev->of_node_reused)
-> +	if (dev_of_node_reused(dev))
->  		return 0;
->  
->  	dev->pins = devm_kzalloc(dev, sizeof(*(dev->pins)), GFP_KERNEL);
-> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-> index d44591d52e36..199e6fb25770 100644
-> --- a/drivers/base/platform.c
-> +++ b/drivers/base/platform.c
-> @@ -856,7 +856,7 @@ struct platform_device *platform_device_register_full(
->  	pdev->dev.parent = pdevinfo->parent;
->  	pdev->dev.fwnode = pdevinfo->fwnode;
->  	pdev->dev.of_node = of_node_get(to_of_node(pdev->dev.fwnode));
-> -	pdev->dev.of_node_reused = pdevinfo->of_node_reused;
-> +	dev_assign_of_node_reused(&pdev->dev, pdevinfo->of_node_reused);
->  
->  	if (pdevinfo->dma_mask) {
->  		pdev->platform_dma_mask = pdevinfo->dma_mask;
-> diff --git a/drivers/net/pcs/pcs-xpcs-plat.c b/drivers/net/pcs/pcs-xpcs-plat.c
-> index b8c48f9effbf..f4b1b8246ce9 100644
-> --- a/drivers/net/pcs/pcs-xpcs-plat.c
-> +++ b/drivers/net/pcs/pcs-xpcs-plat.c
-> @@ -349,7 +349,7 @@ static int xpcs_plat_init_dev(struct dw_xpcs_plat *pxpcs)
->  	 * up later. Make sure DD-core is aware of the OF-node being re-used.
->  	 */
->  	device_set_node(&mdiodev->dev, fwnode_handle_get(dev_fwnode(dev)));
-> -	mdiodev->dev.of_node_reused = true;
-> +	dev_set_of_node_reused(&mdiodev->dev);
->  
->  	/* Pass the data further so the DW XPCS driver core could use it */
->  	mdiodev->dev.platform_data = (void *)device_get_match_data(dev);
-> diff --git a/drivers/of/device.c b/drivers/of/device.c
-> index f7e75e527667..be4e1584e0af 100644
-> --- a/drivers/of/device.c
-> +++ b/drivers/of/device.c
-> @@ -26,7 +26,7 @@
->  const struct of_device_id *of_match_device(const struct of_device_id *matches,
->  					   const struct device *dev)
->  {
-> -	if (!matches || !dev->of_node || dev->of_node_reused)
-> +	if (!matches || !dev->of_node || dev_of_node_reused(dev))
->  		return NULL;
->  	return of_match_node(matches, dev->of_node);
->  }
-> @@ -192,7 +192,7 @@ ssize_t of_device_modalias(struct device *dev, char *str, ssize_t len)
->  {
->  	ssize_t sl;
->  
-> -	if (!dev || !dev->of_node || dev->of_node_reused)
-> +	if (!dev || !dev->of_node || dev_of_node_reused(dev))
->  		return -ENODEV;
->  
->  	sl = of_modalias(dev->of_node, str, len - 2);
-> @@ -254,7 +254,7 @@ int of_device_uevent_modalias(const struct device *dev, struct kobj_uevent_env *
->  {
->  	int sl;
->  
-> -	if ((!dev) || (!dev->of_node) || dev->of_node_reused)
-> +	if ((!dev) || (!dev->of_node) || dev_of_node_reused(dev))
->  		return -ENODEV;
->  
->  	/* Devicetree modalias is tricky, we add it in 2 steps */
-> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-> index 9f8eb5df279e..1f9b669abdb0 100644
-> --- a/drivers/pci/of.c
-> +++ b/drivers/pci/of.c
-> @@ -38,7 +38,7 @@ int pci_set_of_node(struct pci_dev *dev)
->  	struct device *pdev __free(put_device) =
->  		bus_find_device_by_of_node(&platform_bus_type, node);
->  	if (pdev)
-> -		dev->bus->dev.of_node_reused = true;
-> +		dev_set_of_node_reused(&dev->bus->dev);
->  
->  	device_set_node(&dev->dev, of_fwnode_handle(no_free_ptr(node)));
->  	return 0;
-> diff --git a/drivers/pci/pwrctrl/core.c b/drivers/pci/pwrctrl/core.c
-> index 7754baed67f2..72963a92362a 100644
-> --- a/drivers/pci/pwrctrl/core.c
-> +++ b/drivers/pci/pwrctrl/core.c
-> @@ -39,7 +39,7 @@ static int pci_pwrctrl_notify(struct notifier_block *nb, unsigned long action,
->  		 * If we got here then the PCI device is the second after the
->  		 * power control platform device. Mark its OF node as reused.
->  		 */
-> -		dev->of_node_reused = true;
-> +		dev_set_of_node_reused(dev);
->  		break;
->  	}
->  
-> diff --git a/drivers/regulator/bq257xx-regulator.c b/drivers/regulator/bq257xx-regulator.c
-> index dab8f1ab4450..40e0f1a7ae81 100644
-> --- a/drivers/regulator/bq257xx-regulator.c
-> +++ b/drivers/regulator/bq257xx-regulator.c
-> @@ -143,7 +143,7 @@ static int bq257xx_regulator_probe(struct platform_device *pdev)
->  	struct regulator_config cfg = {};
->  
->  	pdev->dev.of_node = pdev->dev.parent->of_node;
-> -	pdev->dev.of_node_reused = true;
-> +	dev_set_of_node_reused(&pdev->dev);
->  
->  	pdata = devm_kzalloc(&pdev->dev, sizeof(struct bq257xx_reg_data), GFP_KERNEL);
->  	if (!pdata)
-> diff --git a/drivers/regulator/rk808-regulator.c b/drivers/regulator/rk808-regulator.c
-> index e66408f23bb6..8297d31cde9f 100644
-> --- a/drivers/regulator/rk808-regulator.c
-> +++ b/drivers/regulator/rk808-regulator.c
-> @@ -2115,7 +2115,7 @@ static int rk808_regulator_probe(struct platform_device *pdev)
->  	int ret, i, nregulators;
->  
->  	pdev->dev.of_node = pdev->dev.parent->of_node;
-> -	pdev->dev.of_node_reused = true;
-> +	dev_set_of_node_reused(&pdev->dev);
->  
->  	regmap = dev_get_regmap(pdev->dev.parent, NULL);
->  	if (!regmap)
-> diff --git a/drivers/tty/serial/serial_base_bus.c b/drivers/tty/serial/serial_base_bus.c
-> index a12935f6b992..5f23284a8778 100644
-> --- a/drivers/tty/serial/serial_base_bus.c
-> +++ b/drivers/tty/serial/serial_base_bus.c
-> @@ -74,7 +74,7 @@ static int serial_base_device_init(struct uart_port *port,
->  	dev->parent = parent_dev;
->  	dev->bus = &serial_base_bus_type;
->  	dev->release = release;
-> -	dev->of_node_reused = true;
-> +	dev_set_of_node_reused(dev);
->  
->  	device_set_node(dev, fwnode_handle_get(dev_fwnode(parent_dev)));
->  
-> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-> index 2ecd049dacc2..8b9449d16324 100644
-> --- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-> +++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-> @@ -593,7 +593,7 @@ int ast_vhub_init_dev(struct ast_vhub *vhub, unsigned int idx)
->  		d->gadget.max_speed = USB_SPEED_HIGH;
->  	d->gadget.speed = USB_SPEED_UNKNOWN;
->  	d->gadget.dev.of_node = vhub->pdev->dev.of_node;
-> -	d->gadget.dev.of_node_reused = true;
-> +	dev_set_of_node_reused(&d->gadget.dev);
->  
->  	rc = usb_add_gadget_udc(d->port_dev, &d->gadget);
->  	if (rc != 0)
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 5b0fb6ad4c72..a79865a212e9 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -483,6 +483,8 @@ struct device_physical_location {
->   *		driver/bus sync_state() callback.
->   * @DEV_FLAG_DMA_COHERENT: This particular device is dma coherent, even if the
->   *		architecture supports non-coherent devices.
-> + * @DEV_FLAG_OF_NODE_REUSED: Set if the device-tree node is shared with an
-> + *		ancestor device.
->   */
->  enum struct_device_flags {
->  	DEV_FLAG_READY_TO_PROBE = 0,
-> @@ -492,6 +494,7 @@ enum struct_device_flags {
->  	DEV_FLAG_DMA_OPS_BYPASS = 4,
->  	DEV_FLAG_STATE_SYNCED = 5,
->  	DEV_FLAG_DMA_COHERENT = 6,
-> +	DEV_FLAG_OF_NODE_REUSED = 7,
->  
->  	DEV_FLAG_COUNT
->  };
-> @@ -573,8 +576,6 @@ enum struct_device_flags {
->   *
->   * @offline_disabled: If set, the device is permanently online.
->   * @offline:	Set after successful invocation of bus type's .offline().
-> - * @of_node_reused: Set if the device-tree node is shared with an ancestor
-> - *              device.
->   * @flags:	DEV_FLAG_XXX flags. Use atomic bitfield operations to modify.
->   *
->   * At the lowest level, every device in a Linux system is represented by an
-> @@ -681,7 +682,6 @@ struct device {
->  
->  	bool			offline_disabled:1;
->  	bool			offline:1;
-> -	bool			of_node_reused:1;
->  
->  	DECLARE_BITMAP(flags, DEV_FLAG_COUNT);
->  };
-> @@ -715,6 +715,7 @@ __create_dev_flag_accessors(dma_skip_sync, DEV_FLAG_DMA_SKIP_SYNC);
->  __create_dev_flag_accessors(dma_ops_bypass, DEV_FLAG_DMA_OPS_BYPASS);
->  __create_dev_flag_accessors(state_synced, DEV_FLAG_STATE_SYNCED);
->  __create_dev_flag_accessors(dma_coherent, DEV_FLAG_DMA_COHERENT);
-> +__create_dev_flag_accessors(of_node_reused, DEV_FLAG_OF_NODE_REUSED);
->  
->  #undef __create_dev_flag_accessors
->  
-> -- 
-> 2.53.0.1213.gd9a14994de-goog
-> 
+>  drivers/usb/gadget/function/f_hid.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/fun=
+ction/f_hid.c
+> index e0c3f39ee95e..c5a12a6760ea 100644
+> --- a/drivers/usb/gadget/function/f_hid.c
+> +++ b/drivers/usb/gadget/function/f_hid.c
+> @@ -1278,8 +1278,10 @@ static int hidg_bind(struct usb_configuration *c, =
+struct usb_function *f)
+>
+>         /* create char device */
+>         hidg->cdev =3D cdev_alloc();
+> -       if (!hidg->cdev)
+> +       if (!hidg->cdev) {
+> +               status =3D -ENOMEM;
+>                 goto fail_free_all;
+> +       }
+>         hidg->cdev->ops =3D &f_hidg_fops;
+>
+>         status =3D cdev_device_add(hidg->cdev, &hidg->dev);
+> --
+> 2.53.0
+>
 
--- 
-மணிவண்ணன் சதாசிவம்
+Reviewed-by: Michael Zimmermann <sigmaepsilon92@gmail.com>
 
