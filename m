@@ -1,130 +1,160 @@
-Return-Path: <linux-usb+bounces-36036-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36037-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id RXWXLJCs1GnNwQcAu9opvQ
-	(envelope-from <linux-usb+bounces-36036-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 09:04:48 +0200
+	id 8e0nArSu1GnvwQcAu9opvQ
+	(envelope-from <linux-usb+bounces-36037-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 09:13:56 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 021D63AA9D2
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 09:04:47 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F0C33AAAFD
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 09:13:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BB74F3051C98
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2026 07:02:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D97F3300A638
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2026 07:13:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05AA6391E6C;
-	Tue,  7 Apr 2026 07:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C14333921E9;
+	Tue,  7 Apr 2026 07:13:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VXG7SbNI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AzSu49W1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8F030DEA6;
-	Tue,  7 Apr 2026 07:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 508C826D4E5
+	for <linux-usb@vger.kernel.org>; Tue,  7 Apr 2026 07:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775545331; cv=none; b=U3Lps3V6wigKLqVmzuctXTSXEJwvp0V4rXkaLQ2FAWQehjAdbXfMCaJE+74ggsY3zr3kYrw1uw7Df4akaAZYLQHV45tPlY+950tIi/6WtNJpcCNHfUW4nLKr4bYcgOBdFmwzh8tvseSAozxPLmketbqMkqN3mqyiRMyTPKlCxkg=
+	t=1775546030; cv=none; b=tmurBFm0VAOk6t0vrJxNJjKFeSHJzUYNQNwkMSEQGYQLYR0/wRPT+95OOqkjpK3Pwj24oZCY9oRrDc2TnFdzvzMRoGjdNumarh8zISz6WoCf+5xUer4rJJjZ05O629IxXycLBri1lgkdHMU2thx1Ki8gd6kFSNdUXRl2SRnWmbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775545331; c=relaxed/simple;
-	bh=V3Pphi3z48sC6cwOlXjuB2roYc9KI1wSiuAh2leMyzk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cw26UFFlcNhXqA8UEj5r2RYUm1TYZUjE0uxMZFrdIIj1PNIluAi+OTLeIb7Jm1cTp2sbFQZUiejSjXqFsi79UrvJjkWDxjlYJTD3golgbuYHTAejSpWtRzUka0XSABgvNu3HFFA6+NeNwUhaYsSb25o3r/afYlP9i4g1+iFGEas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VXG7SbNI; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775545330; x=1807081330;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=V3Pphi3z48sC6cwOlXjuB2roYc9KI1wSiuAh2leMyzk=;
-  b=VXG7SbNIRfKM5tYict/aZzw8lH54oyjy+xJGoc6DH44eH46WWJ3MucoA
-   5+oQdDcMhoVrsKs60S5XAN1Gqpj0cc5tRahWU6kxFPkSxTlEzvZ16qpBq
-   SiChG7iPmOu9IkN9i3GgM6EHz4+ZawqernML/XzRLWj4wyTtgFv1c8Nlg
-   7NHYdiXiZQqPtA+kiMe4Cp1h3GboeeKIllSgq7SC6eMrGsT0y1S6XIzjr
-   xasP+BVIKiSfLjySz7hTOcAPqPiu7THxlRGoqAZFQN5diBNxsUo2C3G3G
-   1yqgBX5NrtbOVbqg3fRHDm9ltb8NjJnSon+zVeiNwM58tbIiG8S4T+tWU
-   Q==;
-X-CSE-ConnectionGUID: LGBV01pBSROoi4WAA8TKJg==
-X-CSE-MsgGUID: OD69kc9eQbqeRxTi5+jM/g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11751"; a="94080815"
-X-IronPort-AV: E=Sophos;i="6.23,165,1770624000"; 
-   d="scan'208";a="94080815"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2026 00:02:10 -0700
-X-CSE-ConnectionGUID: 6HGZ4sFVRQiO9W7KR9tCcg==
-X-CSE-MsgGUID: mxdhmdZYQLKhdFIaTuKD5A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,165,1770624000"; 
-   d="scan'208";a="251375736"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa001.fm.intel.com with ESMTP; 07 Apr 2026 00:02:08 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id CFB9195; Tue, 07 Apr 2026 09:02:06 +0200 (CEST)
-Date: Tue, 7 Apr 2026 09:02:06 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: linux-usb@vger.kernel.org, Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL HARDENING (not covered by other areas):Keyword:b__counted_by(_le|_be)?b" <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCHv2] thunderbolt: tunnel: simplify allocation
-Message-ID: <20260407070206.GE3552@black.igk.intel.com>
-References: <20260401214726.3911-1-rosenp@gmail.com>
+	s=arc-20240116; t=1775546030; c=relaxed/simple;
+	bh=ZQuJbf2dmPyVAqlxkCqukNj5SyYkfKLU132+PfC8frY=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=K/SAtFIinBdSJW+Qhyb+XyDNVtrCAw2iRUAqcwNKNND6N7Miv6DBmWmvR5lr+UbofSiXNPy1Mi+1fe0ZXcjHEJGLqR7aNgYJhXtogDuxHxf66smKKoHL66iMiBuou7Dg5/PMAmXZBAOBhrog5KOKqZrXRXXY/P0ytmUGgEaeBAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AzSu49W1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 07059C2BCB1
+	for <linux-usb@vger.kernel.org>; Tue,  7 Apr 2026 07:13:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775546030;
+	bh=ZQuJbf2dmPyVAqlxkCqukNj5SyYkfKLU132+PfC8frY=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=AzSu49W1V7i7e5MtIfEew1+zwaJxFcecCvf4CqJmTPN2BhTiLAbjOX/XNwr8vnHf0
+	 PDhqT7bNKqGnxvOUDsgFZqf9QPSKuyZfj4VqNjhv8NT97y2bpHVmsV/xpePhOK/jdX
+	 /jxf7PBnmkdEDihmTm5Ra0BhdV+yt6OYta/xgUxwPc/08aazzQWV7J6wC87ds4g0e2
+	 pJVY11qiC1h6Vkc4BAmO9+Db1VDrpHzjqaE311OQ/lqUyeVyl739Gs89B6475ORZi2
+	 8ZwSwvY3KxVbCmsPfcDH3+g6F+iUStZtWYOvK6fULUTFgwvuZwAveTeG3TcJ+zrrTE
+	 kTLE6YLU8RxfA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id EA1A9C4160E; Tue,  7 Apr 2026 07:13:49 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 221318] mice behind ASMedia ASM1042A via Thunderbolt 2 never
+ produce input, most likely due to interrupt pipe idle window during
+ enumeration
+Date: Tue, 07 Apr 2026 07:13:49 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-221318-208809-fNStB0TQkj@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-221318-208809@https.bugzilla.kernel.org/>
+References: <bug-221318-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260401214726.3911-1-rosenp@gmail.com>
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,kernel.org];
-	TAGGED_FROM(0.00)[bounces-36036-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-36037-lists,linux-usb=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NO_DN(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,black.igk.intel.com:mid,intel.com:dkim]
-X-Rspamd-Queue-Id: 021D63AA9D2
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_ONE(0.00)[1];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4F0C33AAAFD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Apr 01, 2026 at 02:47:26PM -0700, Rosen Penev wrote:
-> Use a flexible array member and kzalloc_flex to combine allocations.
-> 
-> Add __counted_by for extra runtime analysis. Move counting variable
-> assignment after allocation. kzalloc_flex with GCC >= 15 does this
-> automatically.
-> 
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221318
 
-Applied to thunderbolt.git/next, thanks!
+--- Comment #19 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+The "spurious event" noise is likely from SuperSpeed device 4-1.1.2 whose B=
+ulk
+IN URBs may trigger it even on properly working hardware. The driver isn't =
+very
+good at telling apart certain valid and invalid events, it just logs them a=
+ll.
+
+Mouse interrupt endpoint has an URB at 1267010, cycle bit 1 as expected.
+ 0 0x0000000001267000: Buffer 0000000000000000 length 0 TD size 0 intr 0 ty=
+pe
+'No-Op' flags b:i:i:c:s:i:e:C
+ 0 0x0000000001267010: Buffer 000000000125e700 length 10 TD size 0 intr 0 t=
+ype
+'Normal' flags b:i:I:c:s:I:e:C
+
+Cancellation commands, Set TR Dequeue to 1267010 with cycle 1.
+ 0 0x0000000001201950: Stop Ring Command: slot 7 sp 0 ep 3 flags C
+ 0 0x0000000001201960: Set TR Dequeue Pointer Command: deq 0000000001267011
+stream 0 slot 7 ep 3 flags C
+
+Their completion events have been overwritten by SuperSpeed device activity,
+but no sign of problems was seen in logs.
+
+Endpoint is running so the doorbell has been rung after 1267010 submission.
+0x000000000125d060: State running mult 1 max P. Streams 0 interval 1000 us =
+max
+ESIT payload 10 CErr 3 Type Int IN burst 0 maxp 10 deq 0000000001267011 avg=
+ trb
+len 10, virt_state:0x0
+
+I see nothing obviously wrong here, it looks like some weird HW problem.
+
+BTW, I see that the endpoint of interest has 1ms interval too, longer inter=
+val
+is on the second endpoint of this mouse. IDK if it matters anyway.
+
+If you would like to play with intervals, see drivers/usb/host/xhci-mem.c
+function xhci_parse_frame_interval(). Replace ep->desc.bInterval with any
+number like 1 or 10, units are milliseconds. Leave *8 unchanged.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
