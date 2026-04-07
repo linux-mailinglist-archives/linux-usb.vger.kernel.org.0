@@ -1,215 +1,152 @@
-Return-Path: <linux-usb+bounces-36058-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36059-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +P7EEaxq1Wm96AcAu9opvQ
-	(envelope-from <linux-usb+bounces-36058-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 22:35:56 +0200
+	id ELDaBVaM1Wnr7QcAu9opvQ
+	(envelope-from <linux-usb+bounces-36059-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 08 Apr 2026 00:59:34 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B20473B4935
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 22:35:55 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2A0A3B563D
+	for <lists+linux-usb@lfdr.de>; Wed, 08 Apr 2026 00:59:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 965E0303A87B
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2026 20:35:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 24E683034E08
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2026 22:58:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CD9B379EF5;
-	Tue,  7 Apr 2026 20:35:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3DFF389E0C;
+	Tue,  7 Apr 2026 22:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxT4H0gM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f80.google.com (mail-oo1-f80.google.com [209.85.161.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F3B2FF17A
-	for <linux-usb@vger.kernel.org>; Tue,  7 Apr 2026 20:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C5F37B02E;
+	Tue,  7 Apr 2026 22:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775594131; cv=none; b=crmlmjAxbzlB0d+ESv7UdAVAlWVUTsYjivOSFR2R2DKkEew7/WGpPsny68KRQeh5uZ+1zo9tq6qSAbWBrYRIAzFSuSwRNyMYkpMZPznSfOXA9hAMF9ONJInkCuI9d+kzN2KUOBCgaXSg6aU/7+WJ6ovcP7sFk2wEjSDr969rNzg=
+	t=1775602726; cv=none; b=e+sI2uhKu2i/P7Z5BZNR0yR/oeOxB+SX6vGPcCc2bzdHMwLrxYb134U5MV5ks5sSOKOnxNuBvjKM2PZXlj17Hrd9wr3LSg8/AOf/19w/vl48l5Sk+QGebZiNIB1qDbU5mJaAh8JJk1uX5Zrh5KRNP0dPUFZU+81PZ0vdA9pqsbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775594131; c=relaxed/simple;
-	bh=UJQ8tTGwe60L4fGtTfOqmrArLKsfe5i/rLB7iDn6LpE=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=e+txec3JlIvKPDGhSZrcHSwetHFha4GkR7WgTAiOGrOrGvEr8uW59KFFsM+9KmeDbUjP4GMvP5c3bLp/mqKnIVR/ExIjc2Sezmz/XL/HghNCKSr94VfS1lnlaOr60jkgxqxtShuJv0iCcTIBUKrqVk1RAzbmSKlFKXKSlj6l2yE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f80.google.com with SMTP id 006d021491bc7-683b4edaab1so7764036eaf.3
-        for <linux-usb@vger.kernel.org>; Tue, 07 Apr 2026 13:35:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775594129; x=1776198929;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5KfmEpOYEOSlgLhRYLojn6YVk+Z22HFOwx4QJusbr5w=;
-        b=YeJwOjV3zRy9vI+4O2Gw9YAwu0YUSDi6VBpWr52O4Q8p7x5DvGalhGwST981Nu5d9M
-         IgbDSgCF0cCDXsplBtQgW3oVreJHF9qUtHYYM6nA2y8110q0MjqsKhBS6wjvWpwyvesP
-         Wl1zF4dGhYj8QAVEHoS/oDoLX+T7HW1nu8mFB/jHiYkPixvYWvdBCV9qUmu+n1mHKgKI
-         x0XgIoxfvz07zfWUTFU5iv4dkgWxHQVPTv9nYB+GU9aSguaHZwdY1P5hh4XqEmTpkdoc
-         KZS369xZ3H6dkySe2ba+gjVB0qbomd5sIeuN9IsOLET15cAp3kXTLQbuh772EAys6IOC
-         7SzA==
-X-Forwarded-Encrypted: i=1; AJvYcCW0SJ4/M4RJNGmBt4Rf9yw1rkpYYtww8uMcN1Yci5vBO9TjfU7V9jiVrGyuOzPbkenI4sAVsDTogXc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVCdaNTAjvkamsD2esVLVZMztdElJixq3vvNCEoGkEeeKCf3bU
-	Pzc6UPyartK7cYacAZrYuxC1dfMvAL29zViXQryw3GXhAtng7ngAZ0PD2uymfU+NyuEh5dWgMeo
-	/9MRDka8dpFS4pj/wjmRowNhvUD+6l5TP3gQCpW2yPGZBKfc10i0zP0Zfz4E=
+	s=arc-20240116; t=1775602726; c=relaxed/simple;
+	bh=ZxMhQkn/NMJTsfUq+eNI5wRqTDBwCQBg1cjTyGaGSzA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=CAFvIFUcUCh0VIHYGjMrdQEU7mL056z+zfQGxWKN+y2EY4XuEQ+udsZzjBcgQZOMoNA+EQ4UDQruMAtfVoplvx+xf66OTsQffPw2Syll1ZFr/yBHxAY6sBNTcBP4WY2reidLOzXk6Re7rfFdF3Ro6CnEnIxr81bH/Ngj88si6qA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxT4H0gM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C69C116C6;
+	Tue,  7 Apr 2026 22:58:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775602726;
+	bh=ZxMhQkn/NMJTsfUq+eNI5wRqTDBwCQBg1cjTyGaGSzA=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
+	b=YxT4H0gMU1uiOeHwbtOxxGkfFWJBaCzthqg03Sftf8l9d186Y09INkfJ8VCpcsjUT
+	 Qfd/Qlw+XjxQGpsD/+wtJtFtyh3etr3/mtV9qhSmixByvSXfzBB7nBSEJNPsodmdHd
+	 n6aWnXLqcu6DDQCkFID7N0ab2dedIpF0ftmNXCcvehsYTzafVVvpTSGtJI0Yt78qAh
+	 7zcrBzbK4e2mGEgKbxfT4/RQOcj3aPhgKqv9IwN+ABisbMsvBq2hQAvVVGI9l26vIJ
+	 NOji8KIk0pikMh4DCWmZrmRQsTJnp7fjTB24k9B9hx+3b4Laf7gnEUw1IEsuOG28xo
+	 +wM+h43SmOleg==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Received: by 2002:a05:6820:2f0d:b0:688:b145:46cb with SMTP id
- 006d021491bc7-688b14547d6mr951683eaf.32.1775594128990; Tue, 07 Apr 2026
- 13:35:28 -0700 (PDT)
-Date: Tue, 07 Apr 2026 13:35:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69d56a90.050a0220.28fc4.0002.GAE@google.com>
-Subject: [syzbot] [media?] general protection fault in em28xx_resolution_set (2)
-From: syzbot <syzbot+755151a86449f029bae0@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-0.36 / 15.00];
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 08 Apr 2026 00:58:28 +0200
+Message-Id: <DHNAMNISZJ9O.3B58NWX64GBGE@kernel.org>
+Subject: Re: [PATCH v5 0/9] driver core: Fix some race conditions
+Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, "Alan Stern" <stern@rowland.harvard.edu>, "Alexey
+ Kardashevskiy" <aik@ozlabs.ru>, "Johan Hovold" <johan@kernel.org>, "Eric
+ Dumazet" <edumazet@google.com>, "Leon Romanovsky" <leon@kernel.org>,
+ "Christoph Hellwig" <hch@lst.de>, <maz@kernel.org>, "Alexander Lobakin"
+ <aleksander.lobakin@intel.com>, "Saravana Kannan" <saravanak@kernel.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>, <Frank.Li@kernel.org>, "Jason
+ Gunthorpe" <jgg@ziepe.ca>, <alex@ghiti.fr>,
+ <alexander.stein@ew.tq-group.com>, <andre.przywara@arm.com>,
+ <andrew@codeconstruct.com.au>, <andrew@lunn.ch>,
+ <andriy.shevchenko@linux.intel.com>, <aou@eecs.berkeley.edu>,
+ <ardb@kernel.org>, <astewart@tektelic.com>, <bhelgaas@google.com>,
+ <brgl@kernel.org>, <broonie@kernel.org>, <catalin.marinas@arm.com>,
+ <chleroy@kernel.org>, <davem@davemloft.net>, <david@kernel.org>,
+ <devicetree@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+ <driver-core@lists.linux.dev>, <gbatra@linux.ibm.com>,
+ <gregory.clement@bootlin.com>, <hkallweit1@gmail.com>,
+ <iommu@lists.linux.dev>, <jirislaby@kernel.org>, <joel@jms.id.au>,
+ <joro@8bytes.org>, <kees@kernel.org>, <kevin.brodsky@arm.com>,
+ <kuba@kernel.org>, <lenb@kernel.org>, <lgirdwood@gmail.com>,
+ <linux-acpi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-aspeed@lists.ozlabs.org>, <linux-cxl@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+ <linux-mm@kvack.org>, <linux-pci@vger.kernel.org>,
+ <linux-riscv@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+ <linux-snps-arc@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+ <linux@armlinux.org.uk>, <linuxppc-dev@lists.ozlabs.org>,
+ <maddy@linux.ibm.com>, <mani@kernel.org>, <miko.lenczewski@arm.com>,
+ <mpe@ellerman.id.au>, <netdev@vger.kernel.org>, <npiggin@gmail.com>,
+ <osalvador@suse.de>, <oupton@kernel.org>, <pabeni@redhat.com>,
+ <palmer@dabbelt.com>, <peter.ujfalusi@gmail.com>, <peterz@infradead.org>,
+ <pjw@kernel.org>, <robh@kernel.org>, <sebastian.hesselbarth@gmail.com>,
+ <tglx@kernel.org>, <tsbogend@alpha.franken.de>, <vgupta@kernel.org>,
+ <vkoul@kernel.org>, <will@kernel.org>, <willy@infradead.org>,
+ <yangyicong@hisilicon.com>, <yeoreum.yun@arm.com>
+To: "Douglas Anderson" <dianders@chromium.org>, <m.szyprowski@samsung.com>,
+ "Robin Murphy" <robin.murphy@arm.com>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20260406232444.3117516-1-dianders@chromium.org>
+In-Reply-To: <20260406232444.3117516-1-dianders@chromium.org>
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=36a2baf561dcdf64];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MV_CASE(0.50)[];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36058-lists,linux-usb=lfdr.de,755151a86449f029bae0];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	SUBJECT_HAS_QUESTION(0.00)[];
-	REDIRECTOR_URL(0.00)[goo.gl];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,rowland.harvard.edu,ozlabs.ru,google.com,lst.de,intel.com,linux-foundation.org,ziepe.ca,ghiti.fr,ew.tq-group.com,arm.com,codeconstruct.com.au,lunn.ch,linux.intel.com,eecs.berkeley.edu,tektelic.com,davemloft.net,vger.kernel.org,lists.linux.dev,linux.ibm.com,bootlin.com,gmail.com,jms.id.au,8bytes.org,lists.infradead.org,lists.ozlabs.org,kvack.org,armlinux.org.uk,ellerman.id.au,suse.de,redhat.com,dabbelt.com,infradead.org,alpha.franken.de,hisilicon.com];
+	TAGGED_FROM(0.00)[bounces-36059-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[85];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dakr@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,goo.gl:url,syzkaller.appspot.com:url,storage.googleapis.com:url,googlegroups.com:email,appspotmail.com:email]
-X-Rspamd-Queue-Id: B20473B4935
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A2A0A3B563D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello,
+On Tue Apr 7, 2026 at 1:22 AM CEST, Douglas Anderson wrote:
 
-syzbot found the following issue on:
+Applied to driver-core-testing, thanks!
 
-HEAD commit:    81ebd43cc0d6 usb: gadget: f_hid: don't call cdev_init whil..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=140d45ca580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=36a2baf561dcdf64
-dashboard link: https://syzkaller.appspot.com/bug?extid=755151a86449f029bae0
-compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
+> Douglas Anderson (9):
+>   driver core: Don't let a device probe until it's ready
+>   driver core: Replace dev->can_match with dev_can_match()
+>   driver core: Replace dev->dma_iommu with dev_dma_iommu()
+>   driver core: Replace dev->dma_skip_sync with dev_dma_skip_sync()
+>   driver core: Replace dev->dma_ops_bypass with dev_dma_ops_bypass()
+>   driver core: Replace dev->state_synced with dev_state_synced()
+>   driver core: Replace dev->dma_coherent with dev_dma_coherent()
 
-Unfortunately, I don't have any reproducer for this issue yet.
+    [ Since all DEV_FLAG_DMA_COHERENT accessors are exposed unconditionally=
+,
+      also drop the CONFIG guards around dev_assign_dma_coherent() in
+      device_initialize() to ensure a correct default value. - Danilo ]
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/59aca7fb2d65/disk-81ebd43c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/87180154ea1a/vmlinux-81ebd43c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/862a7fc58ad2/bzImage-81ebd43c.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+755151a86449f029bae0@syzkaller.appspotmail.com
-
-Oops: general protection fault, probably for non-canonical address 0xdffffc0000000354: 0000 [#1] SMP KASAN PTI
-KASAN: probably user-memory-access in range [0x0000000000001aa0-0x0000000000001aa7]
-CPU: 0 UID: 0 PID: 5637 Comm: v4l_id Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
-RIP: 0010:norm_maxh drivers/media/usb/em28xx/em28xx-video.c:149 [inline]
-RIP: 0010:em28xx_resolution_set.isra.0+0xe4/0x730 drivers/media/usb/em28xx/em28xx-video.c:317
-Code: 0f 85 d5 05 00 00 48 8d bd a0 1a 00 00 44 0f b6 bb 3c 01 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 41 83 e7 10 <80> 3c 02 00 0f 85 e9 05 00 00 31 ff 44 89 fe 4c 8b a5 a0 1a 00 00
-RSP: 0018:ffffc90002027798 EFLAGS: 00010246
-
-RAX: dffffc0000000000 RBX: ffff88811f368000 RCX: ffffffff85a50292
-RDX: 0000000000000354 RSI: ffffffff85a4f799 RDI: 0000000000001aa0
-RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000002
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff88812bc88000
-R13: 1ffff92000404ef7 R14: ffff88811f36813c R15: 0000000000000000
-FS:  00007f8c837eb880(0000) GS:ffff8882686f6000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f8c839e455a CR3: 000000010735c000 CR4: 00000000003506f0
-Call Trace:
- <TASK>
- em28xx_v4l2_open+0x457/0x570 drivers/media/usb/em28xx/em28xx-video.c:2166
- v4l2_open+0x1d2/0x490 drivers/media/v4l2-core/v4l2-dev.c:433
- chrdev_open+0x234/0x6a0 fs/char_dev.c:411
- do_dentry_open+0x68b/0x14b0 fs/open.c:949
- vfs_open+0x82/0x3f0 fs/open.c:1081
- do_open fs/namei.c:4671 [inline]
- path_openat+0x208c/0x31a0 fs/namei.c:4830
- do_file_open+0x20e/0x430 fs/namei.c:4859
- do_sys_openat2+0x10d/0x1e0 fs/open.c:1366
- do_sys_open fs/open.c:1372 [inline]
- __do_sys_openat fs/open.c:1388 [inline]
- __se_sys_openat fs/open.c:1383 [inline]
- __x64_sys_openat+0x12d/0x210 fs/open.c:1383
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x106/0x7b0 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f8c838d9407
-Code: 48 89 fa 4c 89 df e8 38 aa 00 00 8b 93 08 03 00 00 59 5e 48 83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
-RSP: 002b:00007ffe5cd9fa90 EFLAGS: 00000202
- ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00007f8c837eb880 RCX: 00007f8c838d9407
-RDX: 0000000000000000 RSI: 00007ffe5cda0f21 RDI: ffffffffffffff9c
-RBP: 0000000000000002 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000000
-R13: 00007ffe5cd9fce0 R14: 00007f8c8406f000 R15: 0000555f3c43e4d8
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:norm_maxh drivers/media/usb/em28xx/em28xx-video.c:149 [inline]
-RIP: 0010:em28xx_resolution_set.isra.0+0xe4/0x730 drivers/media/usb/em28xx/em28xx-video.c:317
-Code: 0f 85 d5 05 00 00 48 8d bd a0 1a 00 00 44 0f b6 bb 3c 01 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 41 83 e7 10 <80> 3c 02 00 0f 85 e9 05 00 00 31 ff 44 89 fe 4c 8b a5 a0 1a 00 00
-RSP: 0018:ffffc90002027798 EFLAGS: 00010246
-
-RAX: dffffc0000000000 RBX: ffff88811f368000 RCX: ffffffff85a50292
-RDX: 0000000000000354 RSI: ffffffff85a4f799 RDI: 0000000000001aa0
-RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000002
-----------------
-Code disassembly (best guess):
-   0:	0f 85 d5 05 00 00    	jne    0x5db
-   6:	48 8d bd a0 1a 00 00 	lea    0x1aa0(%rbp),%rdi
-   d:	44 0f b6 bb 3c 01 00 	movzbl 0x13c(%rbx),%r15d
-  14:	00
-  15:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  1c:	fc ff df
-  1f:	48 89 fa             	mov    %rdi,%rdx
-  22:	48 c1 ea 03          	shr    $0x3,%rdx
-  26:	41 83 e7 10          	and    $0x10,%r15d
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	0f 85 e9 05 00 00    	jne    0x61d
-  34:	31 ff                	xor    %edi,%edi
-  36:	44 89 fe             	mov    %r15d,%esi
-  39:	4c 8b a5 a0 1a 00 00 	mov    0x1aa0(%rbp),%r12
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+>   driver core: Replace dev->of_node_reused with dev_of_node_reused()
+>   driver core: Replace dev->offline + ->offline_disabled with accessors
 
