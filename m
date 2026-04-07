@@ -1,155 +1,162 @@
-Return-Path: <linux-usb+bounces-36049-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36050-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MN7AJoL51GmgzQcAu9opvQ
-	(envelope-from <linux-usb+bounces-36049-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 14:33:06 +0200
+	id ODZUOGIE1WnOzQcAu9opvQ
+	(envelope-from <linux-usb+bounces-36050-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 15:19:30 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29A7C3AE6F2
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 14:33:05 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F3B93AEF03
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 15:19:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3DA2130265A6
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2026 12:27:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F1FB93020866
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2026 13:19:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60F863AA516;
-	Tue,  7 Apr 2026 12:27:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E1463B7752;
+	Tue,  7 Apr 2026 13:18:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Al53X9J4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OYKmKGJ1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37EC3A6EFB;
-	Tue,  7 Apr 2026 12:27:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4743B6BF9
+	for <linux-usb@vger.kernel.org>; Tue,  7 Apr 2026 13:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775564828; cv=none; b=A6lxcT5TMZptr9NBnRxO2U1OEQxC9wNS4RG5yhtjAFmS98MHDc8okgl76zcZMM5ts0ADv0ofAgg2wb2hPLqF2SN2TxsOT3qHXa+vcqbbFAAw3emEg2wA4SleObS4erPaoiGMCEfh7VjUqnDMj0Z+8o1PRxKRMNkw9qxj29bDfZs=
+	t=1775567938; cv=none; b=AB0v6RwZfGq0+vwy8iaHr0i+TvE5/lHQzS0YSsQVxwldEO9uSyA1hbqF7Ouz5Y6EPmdueXhmZuxzrjVosA3OVMcaJ7ZgZSUty5Ltr7GR92YAsY5jnmjp4t6HieBMiCrR+UqtZLIf8paI9Ld1ZnmcHaN+40R4bvEWPG/5iNAa31k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775564828; c=relaxed/simple;
-	bh=b0ufC1/n5RipNi7gNB1dDRMT7R4+i/QPzr+HBvbCiHw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bKJUSNRJkCcWZ7lYCt1kGLZJL/HEKmDTJI17VetC2TlKxbz1D9m2koA/YL+ejewO6vLKa96qXEnLo0me+oCcgv/W1HkLeHSzbA1hxkv6ndeiELygeO6iIfrxUL2oqdyt65OCALilGMo1Omzq8JKIC4hX0xt52iX3HPgJmhCLpZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Al53X9J4; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775564827; x=1807100827;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b0ufC1/n5RipNi7gNB1dDRMT7R4+i/QPzr+HBvbCiHw=;
-  b=Al53X9J4s8w6FuPx/EoClYf3MiwJXIXvpmUajqD+BUrCnoPw0km5iD4o
-   pZrtprPqHh/exMiKTRfrZtAfyJ5mNrfi0wpDTf4GRDMNJZXSPdr2KMTYE
-   8inekimgc6eJpNIHDxHWqTGJCGGKltgLKLxcJDniRUEfnonetO9EIzRoT
-   b9EE8ptHH+EBP6pdAnte9jyHbCue7lNLyCZar6LpM4/AUbOr9Zn0dE53k
-   GwkhLjBwl7mPhz6/55doCz7QQk2xN9hMkYCLIYrWRoIsH/qpn6npSV/ke
-   4A15aOgUo4tB7ji3dzAQinvrWOTmLedO/ghdJF7z67k4L8zl+4ehtWhW5
-   A==;
-X-CSE-ConnectionGUID: Uu/MmmrkTb6XXIJhoGrUFw==
-X-CSE-MsgGUID: U+0ar1N8TyiENJMiGKoMEg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11752"; a="76422327"
-X-IronPort-AV: E=Sophos;i="6.23,165,1770624000"; 
-   d="scan'208";a="76422327"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2026 05:27:07 -0700
-X-CSE-ConnectionGUID: j5hw7THKSwiggZo79hHREQ==
-X-CSE-MsgGUID: MGSpMxtaSEmm+STcfEhtzw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,165,1770624000"; 
-   d="scan'208";a="233027315"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa005.fm.intel.com with ESMTP; 07 Apr 2026 05:27:04 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id A593A95; Tue, 07 Apr 2026 14:27:03 +0200 (CEST)
-Date: Tue, 7 Apr 2026 15:26:14 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Nathan Rebello <nathan.c.rebello@gmail.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, tiwai@suse.de, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: skip connector validation before init
-Message-ID: <adT35i9LIZDettvC@kuha>
-References: <20260407063958.863-1-nathan.c.rebello@gmail.com>
+	s=arc-20240116; t=1775567938; c=relaxed/simple;
+	bh=/4DkTil4mGTnZH6ybTmJxsKtNcPFih1HDIzv88qeyWM=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=FHSS6cLglqitDed5PbGyVPwJm0Ld+cI/DaVKmDwGrxnK9TcDqWl+HKCp5q1y8pqBKXorvZ+t8VFFQ7ml/KBrjNDpxqrb1QdGhPxgVk6F5K2xDTfovEyaeR4fB+QsaFVuJHLNnFomdsvq/tndsd3e7vYV4GO4mCVIEur0wAY3egA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OYKmKGJ1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 88135C2BCB0
+	for <linux-usb@vger.kernel.org>; Tue,  7 Apr 2026 13:18:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775567937;
+	bh=/4DkTil4mGTnZH6ybTmJxsKtNcPFih1HDIzv88qeyWM=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=OYKmKGJ1muEpy8pvMQEYMa/xAbz0HlOw44XAiJPP0Gaxok9ZM629z/C392vkYZBL+
+	 7QAOlQwYg/2R8EhvsJtI8DfbQKtk/YmV6M9mKqRODFXnI5tq2VNO4hnevAgS2X42go
+	 xYdfmZLyA1wE6SubkJTckEBggl8D/cckRIfF2l901k81Sudi+O5BGy0k2QTCYK+6OU
+	 SpIWf6soM9kzPFlcxoUgqf7IFKuMK1eUcjPKN2j7CaHDe4Dz3+mcDsE/hlNjZ+W8bc
+	 qrEhB/qKPqhU9c2iNwoZkDlbv/fw3n0kgN5N3xhXpp5Q1xviSftR9QmETuBqtCQ6Li
+	 g3FytHpipwduQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 7BDFBC41613; Tue,  7 Apr 2026 13:18:57 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 221318] mice behind ASMedia ASM1042A via Thunderbolt 2 never
+ produce input, most likely due to interrupt pipe idle window during
+ enumeration
+Date: Tue, 07 Apr 2026 13:18:57 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: manauer.uel@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-221318-208809-HZZ1bPQ8x8@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-221318-208809@https.bugzilla.kernel.org/>
+References: <bug-221318-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260407063958.863-1-nathan.c.rebello@gmail.com>
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-36050-lists,linux-usb=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36049-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NO_DN(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,suse.de:email,intel.com:dkim,intel.com:email]
-X-Rspamd-Queue-Id: 29A7C3AE6F2
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_ONE(0.00)[1];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 7F3B93AEF03
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Apr 07, 2026 at 02:39:58AM -0400, Nathan Rebello wrote:
-> Notifications can arrive before ucsi_init() has populated
-> ucsi->cap.num_connectors via GET_CAPABILITY. At that point
-> num_connectors is still 0, causing all valid connector numbers to be
-> incorrectly rejected as bogus.
-> 
-> Skip the bounds check when num_connectors is 0 (not yet initialized).
-> Pre-init notifications are already handled safely by the early-event
-> guard in ucsi_connector_change().
-> 
-> Reported-by: Takashi Iwai <tiwai@suse.de>
-> Fixes: d2d8c17ac01a ("usb: typec: ucsi: validate connector number in ucsi_notify_common()")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Nathan Rebello <nathan.c.rebello@gmail.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221318
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+--- Comment #20 from manauer.uel@gmail.com ---
+> The "spurious event" noise is likely from SuperSpeed device 4-1.1.2 whose
+> Bulk IN URBs may trigger it even on properly working hardware.
+Good to know. I looked up 4-1.1.2, it turned out to be the Ethernet adapter
+from the USB dongle.
 
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index b77910152399..7df3a7b94a40 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -43,7 +43,8 @@ void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
->  		return;
->  
->  	if (UCSI_CCI_CONNECTOR(cci)) {
-> -		if (UCSI_CCI_CONNECTOR(cci) <= ucsi->cap.num_connectors)
-> +		if (!ucsi->cap.num_connectors ||
-> +		    UCSI_CCI_CONNECTOR(cci) <= ucsi->cap.num_connectors)
->  			ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
->  		else
->  			dev_err(ucsi->dev, "bogus connector number in CCI: %lu\n",
-> -- 
-> 2.43.0.windows.1
+> I see nothing obviously wrong here, it looks like some weird HW problem.
+The sequence looks correct on paper, the cancellation goes through cleanly =
+and
+the endpoint is left in running state with the dequeue pointer advanced past
+the old URB. Yet no new transfer ever arrives.
 
--- 
-heikki
+> BTW, I see that the endpoint of interest has 1ms interval too, longer
+> interval is on the second endpoint of this mouse.
+Yes, that matches the lsusb output.
+
+> If you would like to play with intervals, see drivers/usb/host/xhci-mem.c
+> function xhci_parse_frame_interval(). Replace ep->desc.bInterval with any
+> number like 1 or 10, units are milliseconds.
+I built and tested two patched kernels.
+
+Forcing 10ms: the mouse works without any workaround at all.
+Forcing 1ms: the mouse does not work. The udev workaround still fixes it.
+
+So the interval does matter. With 10ms the problem does not occur in the fi=
+rst
+place, with 1ms it behaves the same as on the stock kernel.
+
+One thing that does not fit this pattern: the Logitech Lightspeed Receiver
+(046d:c539) has 3 interfaces all polling at 1ms, yet it works on its own
+without any workaround. It also makes wired mice work alongside it on the s=
+tock
+kernel.
+
+I looked into this a bit. The receiver is not handled by usbhid but by the
+logitech-djreceiver driver (hid-logitech-dj). That driver has its own
+hid_ll_driver with open and close callbacks that are essentially empty. When
+udev opens and closes the hidraw device, nothing happens at the USB level, =
+so
+no URB is cancelled. This might be why the ASM1042A never gets into the bro=
+ken
+state.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
