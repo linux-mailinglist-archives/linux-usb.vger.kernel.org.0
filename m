@@ -1,55 +1,94 @@
-Return-Path: <linux-usb+bounces-36032-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36033-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oMZfNKWh1GlEwAcAu9opvQ
-	(envelope-from <linux-usb+bounces-36032-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 08:18:13 +0200
+	id UEh8Dqmi1GmAwAcAu9opvQ
+	(envelope-from <linux-usb+bounces-36033-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 08:22:33 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35E873AA311
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 08:18:12 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91EFD3AA360
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 08:22:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A4E8D300F5DF
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2026 06:18:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 65B723026F19
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2026 06:21:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54E87385513;
-	Tue,  7 Apr 2026 06:18:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28A8E382F14;
+	Tue,  7 Apr 2026 06:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S5581krN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6A03859F3;
-	Tue,  7 Apr 2026 06:17:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA37381B04
+	for <linux-usb@vger.kernel.org>; Tue,  7 Apr 2026 06:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775542682; cv=none; b=AuIWhC6b5AZmam6pRQNQYWvlSPJT5e4/saDIbGsYi30KcQ0qEtLZfFHOGh0vzHnxK24Z2fSaFQH/p46up88ouZ+wkoCWAL0yhgG7f1vie3tFZxY6gHjUVjsGu3ainr6jnGcfmw8DoPFWZaiQX9dKgclAb52d5YUZUkIcvve1CzI=
+	t=1775542910; cv=none; b=JWiHxiLBrcwxy94RygxMkjTy3pgG7rhnqn/exk7WWKmm6Tc0bNi3xF6n4v7trV2GUD2cipNDV733UgcMrbG2wnvrPE2LEId89ishBqOWkpx3wxFrrI6JwGThowl12cZa2F6206gyzsCeWQ1NUa8Cda81RdTkh4QbelQKSaPxN7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775542682; c=relaxed/simple;
-	bh=AE7++OzVyS2uYHOPGoJ81l6ph3jdIaPhRW3+Fg5L0tk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XWCkJbM/sxzgB3DSyrMh5TeSIk+GZYIYiyrSCtNVQ/hzBB632Ry2QDxuOOiFJpgBElAZGwmkvErJgi21+4facBjTjjWG3g8ZeCjD19Yhbs/OyejekSnfWkEu3nMn63Z1sEhIPqi277T2/N4XPs9/dCzKJ6tWpNsHvNQJrGE79E4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=207.46.229.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from E0006493LT.eswin.cn (unknown [10.127.112.153])
-	by app2 (Coremail) with SMTP id TQJkCgDn_J95odRpo7APAA--.792S4;
-	Tue, 07 Apr 2026 14:17:32 +0800 (CST)
-From: caohang@eswincomputing.com
+	s=arc-20240116; t=1775542910; c=relaxed/simple;
+	bh=svIk16rOxDZdvYjL960T1InOrh5WjHTfn0DXLglJZy8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gGhNliFMKW9+Z8dDaFCjhbEmY+f9p8cMV63cq7frQy+k0fB2VuZD8mPOc0pao4us/VO+TFUK4O8DMh30S9ecErECBs8pWxY1Xj/Ngheq7EM7VFMxzoAKfUiuFAHa+1hnVa0SM3bOIpuss9aKmYWoIxbYRN9JjWs+hFHOyBjZ5ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S5581krN; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2b24fede2acso25668105ad.3
+        for <linux-usb@vger.kernel.org>; Mon, 06 Apr 2026 23:21:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775542909; x=1776147709; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=svIk16rOxDZdvYjL960T1InOrh5WjHTfn0DXLglJZy8=;
+        b=S5581krNDNYXV/lfOwBRMJnitN6zyLF2xCWx5mu1jO8mHxUYPNofsThRBJGdOm2cwg
+         F4TX4jDdAR5EjbGaulyDN8ILwmEZOqDiZfoFthCOoJC8mYb0ZkjiE0pDL9jAEU3eXnKT
+         V64HELTH1EGNCP1X9uNqm+JOajPChW0THEBr/wrdHk2b+96tfjrS1a07ezfT6kweDq7S
+         VPEB/zSEyT26huNezXa+Q9KdfUK6uALz1vfSotz3Iq9wEa1poUWLrWKEVZUZ+SDzBDkm
+         zBXEM3Yx7HzDJIKDmiCW8LuuKVSMkwSI6jIzgbNgxsgndVQK+I63wYkOEGkDRHPBKjiL
+         Ae8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775542909; x=1776147709;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=svIk16rOxDZdvYjL960T1InOrh5WjHTfn0DXLglJZy8=;
+        b=c9+yiyRgAi6jrJ52naLKeRLqKDYU7Os/zjjtnC/jcFfaTVO0i7mV43uYMS0SYlzz5M
+         3J3BBLTTjANMc1Cq81qg6TvKLIrryJqA2JSeIV8sQg+wszBWrGvCpHKY1R5Dr5KaZ3FW
+         O9/e7f/mJn+VylUCTpB1Fa7WOPMxtJ6WCDWhduN1H/huet/HyGxuvihQGx2GQKKIR3u9
+         m2UXLDy6gdWEaSIYhicVDI4np9p4nUO/C3U1OaYjiakrKa3ONQHzVuZ5BXZW+SqzYxSM
+         29S1vXh88/U5YwIBmjlcPvQtj4j59RhxScnhx/od/KuZrnqe4DFpf9hHdSJ1ak2xXyBL
+         Xnlw==
+X-Gm-Message-State: AOJu0YyNZMTYVBVE/sg7S6EUmM4ksZbfc2l3a2R46NZ8yNrb7v7+BCfe
+	CvA74M4F5RgU5BkZUUr0iRusNbwgEUv2WPVxhBtKvA4jAds4/1SvCn0Y
+X-Gm-Gg: AeBDiesk9oBQ/OMKXr6fFNTMr5JfTXkCk+N2SqV9qfacBxmPTXvLRvewh8o6/DTApWC
+	wC7pcQ+UZRMptGvzOtn7LXNM9kIG3ft1PcyameVqK20zs9gQ3P26VQ/ranpJ6DKzMHQy2yUWz3F
+	JgzBAszhBdRd+jaTm0ew49t2dsW2fhIwRmSPXO4oKmEWrO1kOVjT7AjTE3wVhOrVdBQM9OYG3rf
+	hR3PEPcuN9g71RRdNDw9raMA5G8C5odGxAWHhZF/f5q+7NutIutINFBxWovP3L8dDQL7GsT8qAn
+	dtN/pnSDkyV19l/DouTo+UOEzEjZpImvJk2B5loos9k6wpZ+aJtAw6PZBFoWu5sdJ3I2z6F5NXd
+	SgAf/iabqj5RVOd9BaXfCNSZTFH4JWoRIl1FO2ohKBx1eq41FZojxZ4qEzz3a4Aw/MH1ox3r6VF
+	B5mU3jy9FZ1SOiAiwD2FHvMSlIVfhAl4KC7wpgjKaUGS8UsbNHahcY1TvOwrhK/ApmLagqcHtpV
+	ukmW8ncM+dJtcrj
+X-Received: by 2002:a17:902:da92:b0:2b2:5256:9ce7 with SMTP id d9443c01a7336-2b2818e65c4mr163971965ad.36.1775542908952;
+        Mon, 06 Apr 2026 23:21:48 -0700 (PDT)
+Received: from localhost.localdomain ([45.248.78.44])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2b118f84csm6942705ad.58.2026.04.06.23.21.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Apr 2026 23:21:48 -0700 (PDT)
+From: Nathan Rebello <nathan.c.rebello@gmail.com>
 To: gregkh@linuxfoundation.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	Thinh.Nguyen@synopsys.com,
-	p.zabel@pengutronix.de,
+	tiwai@suse.de
+Cc: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org
-Cc: ningyu@eswincomputing.com,
-	linmin@eswincomputing.com,
-	pinkesh.vaghela@einfochips.com,
-	Hang Cao <caohang@eswincomputing.com>
-Subject: [PATCH v1] dt-bindings: usb: Fix EIC7700 USB reset's issue
-Date: Tue,  7 Apr 2026 14:17:02 +0800
-Message-ID: <20260407061703.1564-1-caohang@eswincomputing.com>
-X-Mailer: git-send-email 2.45.1.windows.1
+	heikki.krogerus@linux.intel.com,
+	Nathan Rebello <nathan.c.rebello@gmail.com>
+Subject: Re: Spurious errors "ucsi_acpi USBC000:00: bogus connector number in CCI: 1" on 7.0-rc7
+Date: Tue,  7 Apr 2026 02:21:13 -0400
+Message-ID: <20260407062113.1494-1-nathan.c.rebello@gmail.com>
+X-Mailer: git-send-email 2.43.0.windows.1
+In-Reply-To: <2026040734-headfirst-tingly-e6ea@gregkh>
+References: <2026040734-headfirst-tingly-e6ea@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,101 +96,61 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:TQJkCgDn_J95odRpo7APAA--.792S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFWkur13Jr4UtFyUtF4ruFg_yoW8Wr1kpF
-	WxGFZ7GF1xZr1fuayUXF1vkw1fX3Z3AFyYkFWxCa17JFnrX3s0gr4ayrn0qFy8Cr4xZFW3
-	XFWag3y5A342yrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9E14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-	Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI4
-	8JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
-	wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjx
-	v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20E
-	Y4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
-	AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbknY7UUUUU==
-X-CM-SenderInfo: xfdrxt1qj6v25zlqu0xpsx3x1qjou0bp/
-X-Spamd-Result: default: False [1.54 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36032-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	DMARC_NA(0.00)[eswincomputing.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FROM_NO_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,linux.intel.com,gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36033-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[caohang@eswincomputing.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[nathancrebello@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.134];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	R_DKIM_NA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,eswincomputing.com:email,eswincomputing.com:mid]
-X-Rspamd-Queue-Id: 35E873AA311
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.973];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 91EFD3AA360
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Hang Cao <caohang@eswincomputing.com>
+On Tue, Apr 07, 2026 at 07:58:00AM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Apr 07, 2026 at 07:38:50AM +0200, Takashi Iwai wrote:
+> > Is this a firmware bug, or some missing piece in the code?
+> > Judging from the message, it means that ucsi->cap.num_connectors is 0,
+> > I suppose.
+>
+> Ugh, what's the odds this is an off-by-one error in the firmware? :)
+>
+> Nathan and Heikki, any ideas?
 
-The EIC7700 USB controller requires a USB PHY RESET operation.PHY RESET
-operation was missed in the verification version, as it was performed in
-ESWIN's U-Boot.
+This isn't an off-by-one or firmware bug. Takashi is right that
+num_connectors is 0. The validation checks against
+ucsi->cap.num_connectors, but notifications can arrive before
+ucsi_init() has populated that field via GET_CAPABILITY.
 
-If a non-ESWIN provided loader is used, this issue will occur, resulting
-in USB not work.This patch does not introduce any backward incompatibility
-since the dts is not upstream yet.
+Pre-init notifications are already handled safely by the early-event
+guard in ucsi_connector_change(), so the fix is to skip validation
+when num_connectors hasn't been initialized yet.
 
-Fixes: c640a4239db5 ("dt-bindings: usb: Add ESWIN EIC7700 USB controller")
-Signed-off-by: Hang Cao <caohang@eswincomputing.com>
----
- .../devicetree/bindings/usb/eswin,eic7700-usb.yaml         | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Sending a fix shortly.
 
-diff --git a/Documentation/devicetree/bindings/usb/eswin,eic7700-usb.yaml b/Documentation/devicetree/bindings/usb/eswin,eic7700-usb.yaml
-index 41c3b1b98991..658260619423 100644
---- a/Documentation/devicetree/bindings/usb/eswin,eic7700-usb.yaml
-+++ b/Documentation/devicetree/bindings/usb/eswin,eic7700-usb.yaml
-@@ -41,12 +41,13 @@ properties:
-       - const: usb_en
-
-   resets:
--    maxItems: 2
-+    maxItems: 3
-
-   reset-names:
-     items:
-       - const: vaux
-       - const: usb_rst
-+      - const: usb_phy
-
-   eswin,hsp-sp-csr:
-     description:
-@@ -85,8 +86,8 @@ examples:
-         interrupt-parent = <&plic>;
-         interrupts = <85>;
-         interrupt-names = "peripheral";
--        resets = <&reset 84>, <&hspcrg 2>;
--        reset-names = "vaux", "usb_rst";
-+        resets = <&reset 84>, <&hspcrg 2>, <&hspcrg 4>;
-+        reset-names = "vaux", "usb_rst", "usb_phy";
-         dr_mode = "peripheral";
-         maximum-speed = "high-speed";
-         phy_type = "utmi";
---
-2.34.1
-
+Thanks,
+Nathan
 
