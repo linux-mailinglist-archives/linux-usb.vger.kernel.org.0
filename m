@@ -1,181 +1,196 @@
-Return-Path: <linux-usb+bounces-36044-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36045-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CEGfIVjJ1Gk0xgcAu9opvQ
-	(envelope-from <linux-usb+bounces-36044-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 11:07:36 +0200
+	id QKhuF+L21GkjywcAu9opvQ
+	(envelope-from <linux-usb+bounces-36045-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 14:21:54 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E02EA3ABC0A
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 11:07:35 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC4F53AE3F8
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Apr 2026 14:21:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5741B30191A9
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2026 09:07:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 04A03304CA70
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2026 12:18:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A42CC39EF02;
-	Tue,  7 Apr 2026 09:07:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D05853AE199;
+	Tue,  7 Apr 2026 12:18:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="stgpB9oZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WMLuCcvi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F5538E5D7;
-	Tue,  7 Apr 2026 09:07:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 232313947A9
+	for <linux-usb@vger.kernel.org>; Tue,  7 Apr 2026 12:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775552824; cv=none; b=Fjqn5F3tvwdbpjlztTpPGuT06IHr/SKijnLgT5w9K/of2l5+7WHfUT8hj9LxMZMBmxvVbSwBDLoFrcKSGiJ0dH4492GZ01nhs8+FDajWkfnWKOUjdUxG+/NTHI4mo+G7B1NO3T+W7/EQp7NS8geTaDY0P1UhIzUlbro5/6ItaSw=
+	t=1775564312; cv=none; b=gIqGDHMtFVpRTcX7Wop6jWXDxZ2tufwh3c7RCMqC+vPxNkVcuMGpsDH7vO25MKML4k2T/jernn1gxEdnPb8PSIT9bsC4qO/SxYm/QAZTAo8aGUPCN5UzeSFCScB2BH5HlvO3ndiOlaDo/dwMiwvNN+TcVynAL4cxYPYcqYeOvXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775552824; c=relaxed/simple;
-	bh=4NERHreOtOHtxPxrg9hJfCL0sb0Gtcuiwi8WJRXUxIs=;
+	s=arc-20240116; t=1775564312; c=relaxed/simple;
+	bh=a701RaR/dQrAERZHSh0YAcH7S2e4ZJlWp4IlOzbc3cM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GFtxhR/QJQxqgQ2dNubztVIMgRaO1lz/GLGxP1nkGZHOW58RH2sCnk5ZZ4cm5Ct4HgZpTnd5hVEUF5Ry1vat0sl3IoB/Kp2zL9j9kI9jpsY59u84CzShyeu1zkgkktC64z1TZ7Ec9Cl0XeL8RVufip268nRANd0iDKFDP89Hcyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=stgpB9oZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A41DDC116C6;
-	Tue,  7 Apr 2026 09:07:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775552823;
-	bh=4NERHreOtOHtxPxrg9hJfCL0sb0Gtcuiwi8WJRXUxIs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=stgpB9oZ+np9GYARlzUA9ZMs/QvN4KIBqwa1qRYDAwyfYPqyHDzuHCzXPSnlyzgtg
-	 EAHXWcSv4E0rrXHIwU/F9B+i1mivT8/hiuEewvUz63bUM7ytEH5SQzK2thj+lYKQTs
-	 o2tisu8aVFvQIZG+/d8iAyn9lfuaOQqIZdUeq7k3DZiLr0hgqrYjSRZ2PwzXfNPDL4
-	 eowKFIJwq3yekc5lX5NoSnG1UiqaPzINQrHDk6adQBuAm9YxWQDDa+YyftbK/zR8JS
-	 kxyiSzhZcnKMojNpglf1PuMqJl8hSj8Ux7HAXRlz/T13loQq/CWQfn1V+eHwkI8KMb
-	 5kNMKJjzp6Bvg==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1wA2Oi-0000000AjGf-2EeN;
-	Tue, 07 Apr 2026 11:07:00 +0200
-Date: Tue, 7 Apr 2026 11:07:00 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Douglas Anderson <dianders@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Alexey Kardashevskiy <aik@ozlabs.ru>,
-	Eric Dumazet <edumazet@google.com>,
-	Leon Romanovsky <leon@kernel.org>, Christoph Hellwig <hch@lst.de>,
-	Robin Murphy <robin.murphy@arm.com>, maz@kernel.org,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Saravana Kannan <saravanak@kernel.org>,
-	Mark Brown <broonie@kernel.org>, alexander.stein@ew.tq-group.com,
-	andrew@codeconstruct.com.au, andrew@lunn.ch,
-	andriy.shevchenko@linux.intel.com, astewart@tektelic.com,
-	bhelgaas@google.com, brgl@kernel.org, davem@davemloft.net,
-	devicetree@vger.kernel.org, driver-core@lists.linux.dev,
-	hkallweit1@gmail.com, jirislaby@kernel.org, joel@jms.id.au,
-	kees@kernel.org, kuba@kernel.org, lgirdwood@gmail.com,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux@armlinux.org.uk, mani@kernel.org, netdev@vger.kernel.org,
-	pabeni@redhat.com, robh@kernel.org
-Subject: Re: [PATCH v5 8/9] driver core: Replace dev->of_node_reused with
- dev_of_node_reused()
-Message-ID: <adTJNMhsghRs3qwy@hovoldconsulting.com>
-References: <20260406232444.3117516-1-dianders@chromium.org>
- <20260406162231.v5.8.I806b8636cd3724f6cd1f5e199318ab8694472d90@changeid>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jJixsERJioqI5FV8r8f0RrF3oIJE4SpfbyUvPo+8D/NWDQO9xwxiwCn+kZICAwIqfwP3RH3GtHVxMUo7y0Bny0IHmqGNZxhqtLCBDu7HkFqMgd88BFnaYfofRomge5N/m1+Ro6BDsZLNhLi12WlzE//C/iTwyxmnNEs9yzEu9ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WMLuCcvi; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775564311; x=1807100311;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=a701RaR/dQrAERZHSh0YAcH7S2e4ZJlWp4IlOzbc3cM=;
+  b=WMLuCcviwYuCcBB+UaD8l+etrrbdpqfWPBEljdBHFawq1vbvQRZ/1uW1
+   tUXmkuV9lx+dkhUkqhaC22saa1987dASXOpW/s68gmZuX9L7KYhb6yR8a
+   3I9G+KOSQc0jOJ6E1eyNawPe62jG1k6daFpsEHc1yxjBVEF5XrTv93gk6
+   wSkIdH/C0x7reKaPTBjcFfrqnrlmI4XbQF/ggpT9SUQW+h9jQYCn2uPZJ
+   REck6CMH0KDzelxdJBMpulYZP84C2nX3FVkCRUU+CBKqYO8c1KTCvMwEZ
+   Np8lr4LCwZxKcIux5++FOG4moaamu10G4zRGfQEiYLAcyR8796N/sb2LW
+   w==;
+X-CSE-ConnectionGUID: eAyiShoHQw2E3dIdAHerpw==
+X-CSE-MsgGUID: cQxN0+cUS+u7L5Ey2J+0tw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11752"; a="64070065"
+X-IronPort-AV: E=Sophos;i="6.23,165,1770624000"; 
+   d="scan'208";a="64070065"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2026 05:18:30 -0700
+X-CSE-ConnectionGUID: 78DSzFA3T3auDrfN1Rke5A==
+X-CSE-MsgGUID: PUb8BFQcS6+HIfq+kjYT7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,165,1770624000"; 
+   d="scan'208";a="228061646"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa009.jf.intel.com with ESMTP; 07 Apr 2026 05:18:30 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1008)
+	id 89B7495; Tue, 07 Apr 2026 14:18:28 +0200 (CEST)
+Date: Tue, 7 Apr 2026 15:17:39 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: =?iso-8859-1?Q?Fran=E7ois?= Scala <francois@scala.name>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: altmode: Fix altmode to handle multiple
+ parners
+Message-ID: <adT144chxkINLk63@kuha>
+References: <20260402120433.22967-1-francois@scala.name>
+ <ac5uh_3N3q61efIb@kuha>
+ <8cef8b26-71ce-4fdf-a514-111d9760634c@scala.name>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260406162231.v5.8.I806b8636cd3724f6cd1f5e199318ab8694472d90@changeid>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8cef8b26-71ce-4fdf-a514-111d9760634c@scala.name>
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36044-lists,linux-usb=lfdr.de];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,rowland.harvard.edu,ozlabs.ru,google.com,lst.de,arm.com,intel.com,ew.tq-group.com,codeconstruct.com.au,lunn.ch,linux.intel.com,tektelic.com,davemloft.net,vger.kernel.org,lists.linux.dev,gmail.com,jms.id.au,lists.infradead.org,lists.ozlabs.org,armlinux.org.uk,redhat.com];
+	TAGGED_FROM(0.00)[bounces-36045-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWO(0.00)[2];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[41];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[chromium.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,hovoldconsulting.com:mid]
-X-Rspamd-Queue-Id: E02EA3ABC0A
+	NEURAL_HAM(-0.00)[-1.000];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: BC4F53AE3F8
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Apr 06, 2026 at 04:23:01PM -0700, Doug Anderson wrote:
-> In C, bitfields are not necessarily safe to modify from multiple
-> threads without locking. Switch "of_node_reused" over to the "flags"
-> field so modifications are safe.
+Hi François,
 
-This flag is only set before registering a device with driver core so
-there is no issue using the existing bitfield here (with the caveat that
-PCI pwrctrl may have gotten that wrong). I haven't checked the other
-flags, but I assume most of them work the same way.
+Thank you for the info.
 
-But apart from the commit message being misleading, switching to using
-atomic ops and accessors for consistency is fine.
+On Thu, Apr 02, 2026 at 08:10:09PM +0200, François Scala wrote:
+> Hi,
+> 
+> On 02/04/2026 15.26, Heikki Krogerus wrote:
+> > No. You can not have more than a single partner per mode. Let's figure
+> > out the root issue. Please check the svids of the partner altmodes:
+> > 
+> >          grep . /sys/class/typec/port0-partner/port0-partner.*/svid
+> 
+> /sys/class/typec/port2-partner/port2-partner.0/svid:8087
+> /sys/class/typec/port2-partner/port2-partner.1/svid:8087
 
-> Cc: Johan Hovold <johan@kernel.org>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Reviewed-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
-> Reviewed-by: Danilo Krummrich <dakr@kernel.org>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> Not fixing any known bugs; problem is theoretical and found by code
-> inspection. Change is done somewhat manually and only lightly tested
-> (mostly compile-time tested).
- 
-> diff --git a/drivers/regulator/bq257xx-regulator.c b/drivers/regulator/bq257xx-regulator.c
-> index dab8f1ab4450..40e0f1a7ae81 100644
-> --- a/drivers/regulator/bq257xx-regulator.c
-> +++ b/drivers/regulator/bq257xx-regulator.c
-> @@ -143,7 +143,7 @@ static int bq257xx_regulator_probe(struct platform_device *pdev)
->  	struct regulator_config cfg = {};
->  
->  	pdev->dev.of_node = pdev->dev.parent->of_node;
-> -	pdev->dev.of_node_reused = true;
-> +	dev_set_of_node_reused(&pdev->dev);
->  
->  	pdata = devm_kzalloc(&pdev->dev, sizeof(struct bq257xx_reg_data), GFP_KERNEL);
->  	if (!pdata)
-> diff --git a/drivers/regulator/rk808-regulator.c b/drivers/regulator/rk808-regulator.c
-> index e66408f23bb6..8297d31cde9f 100644
-> --- a/drivers/regulator/rk808-regulator.c
-> +++ b/drivers/regulator/rk808-regulator.c
-> @@ -2115,7 +2115,7 @@ static int rk808_regulator_probe(struct platform_device *pdev)
->  	int ret, i, nregulators;
->  
->  	pdev->dev.of_node = pdev->dev.parent->of_node;
-> -	pdev->dev.of_node_reused = true;
-> +	dev_set_of_node_reused(&pdev->dev);
->  
->  	regmap = dev_get_regmap(pdev->dev.parent, NULL);
->  	if (!regmap)
+Okay, the other svid should almost certainly be ff01 (the DisplayPort
+Alternate Mode), most likely the second one (port2-partner.1). 8087 is
+the Thunderbolt Alternate Mode, and it should now be always companied
+by the DisplayPort Alternate Mode.
 
-These two uses are broken currently though and should be using
-device_set_of_node_from_dev() so that an extra reference is taken to
-balance the one dropped by the platform bus code.
+>      kworker/5:2-321     [005] .....   465.001617: ucsi_connector_change:
+> port3 status: change=4000, opmode=4, connected=1, sourcing=1,
+> partner_flags=1, partner_type=2, request_data_obj=00000000, BC status=1
+>      kworker/5:2-321     [005] .....   465.111779: ucsi_connector_change:
+> port3 status: change=0060, opmode=3, connected=1, sourcing=1,
+> partner_flags=1, partner_type=2, request_data_obj=13800000, BC status=1
+>      kworker/8:1-174     [008] .....   465.429999: ucsi_connector_change:
+> port3 status: change=1000, opmode=5, connected=1, sourcing=0,
+> partner_flags=1, partner_type=2, request_data_obj=13800000, BC status=1
+>      kworker/8:1-174     [008] .....   465.532708: ucsi_connector_change:
+> port3 status: change=0060, opmode=3, connected=1, sourcing=0,
+> partner_flags=1, partner_type=2, request_data_obj=42c4b12c, BC status=1
+>     kworker/10:1-178     [010] .....   465.883679: ucsi_connector_change:
+> port3 status: change=0060, opmode=3, connected=1, sourcing=0,
+> partner_flags=1, partner_type=2, request_data_obj=42c7a9ea, BC status=1
+>      kworker/3:0-13120   [003] .....   466.330330: ucsi_connector_change:
+> port3 status: change=0060, opmode=3, connected=1, sourcing=0,
+> partner_flags=1, partner_type=2, request_data_obj=82c7d1f4, BC status=1
+>    kworker/u64:2-356     [005] .....   466.890372: ucsi_register_altmode:
+> partner alt mode: svid 8087, mode 1 vdo 8087a843
 
-I'll send two fixes to Mark, any merge conflict should be trivial to
-fixup.
+Here the vdo seems to be corrupted in the response to the
+GET_ALTERNATE_MODES command.
 
-Reviewed-by: Johan Hovold <johan@kernel.org>
+As you can see, the first 16-bits in the vdo is clearly the TBT svid
+again even though the vdo should contain the actual Vendor Defined Object
+for the TBT alt mode.
 
-Johan
+>    kworker/u64:2-356     [005] .....   467.005141: ucsi_register_altmode:
+> partner alt mode: svid 8087, mode 2 vdo 1
+
+And here the firmware is returning the TBT SVID again for the second
+time, now with vdo that looks almost valid to me. This should not
+happen.
+
+The responses to the GET_ALTERNATE_MODES look similar to what we see
+on some of the Dell laptops. The response seems almost as if it's
+customised some how. It's almost as if the first run of the command
+will return some kind of a list of the SVIDs, and the standard
+responses start only after the second run of the command.
+
+> > For acpidump you need the acpica-tools installed:
+> > 
+> >          acpidump -o my_acpi.dump
+> 
+> The file is quite large, how can I share it ? Or do you need a specific part
+> ?
+> 
+>   -rw-r--r-- 1 fs fs 4.7M Apr  2 19:05 acpi-port3-20260402.dump
+
+It does not look that big. Compress and send to me (drop the list if
+you prefer)?
+
+I still have no idea which system are you running? Can you send the
+dmesg output from freshly booted machine?
+
+thanks,
+
+-- 
+heikki
 
