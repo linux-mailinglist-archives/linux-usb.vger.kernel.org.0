@@ -1,130 +1,145 @@
-Return-Path: <linux-usb+bounces-36099-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36100-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eKm3OtF/12kLPAgAu9opvQ
-	(envelope-from <linux-usb+bounces-36099-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 09 Apr 2026 12:30:41 +0200
+	id UG94GCqL12k3PggAu9opvQ
+	(envelope-from <linux-usb+bounces-36100-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 09 Apr 2026 13:19:06 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id F13223C92B2
-	for <lists+linux-usb@lfdr.de>; Thu, 09 Apr 2026 12:30:40 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC0633C9944
+	for <lists+linux-usb@lfdr.de>; Thu, 09 Apr 2026 13:19:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 2EC023008D12
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Apr 2026 10:30:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E0D9D30182A5
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Apr 2026 11:19:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7743BA24B;
-	Thu,  9 Apr 2026 10:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 285EB3C13E1;
+	Thu,  9 Apr 2026 11:19:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bu/oHVKK"
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="FfnQa4fk";
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="WJBSuPXy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C37D63B2FC4;
-	Thu,  9 Apr 2026 10:30:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4502D7817;
+	Thu,  9 Apr 2026 11:19:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775730632; cv=none; b=uh8eR+ydUOR8zXiDx/D52Nf7w4qx09jFv1k09h2taX4ndl+xLGTh8qqnzqcNvnZb2ggSb6RPhkhHXklOWqjLmWapU8GvTycqZU3+xj5lCZwqwO7bIvMglZoaQv4WXHsATE2mhdiBSbk+Hj8zDE20C8YsZ9mzz21o2kXV1hRAh+w=
+	t=1775733541; cv=none; b=uolBZGgufUIlm8X0ks9w9kv4CNQafyikanubTgSxfgMOcLPVhAb8x2MS6WPiobS6gkwuiMzxJzsfQqRfDUzqB/38QZI9hpS9xf8EPTVEL8lVdrNtanVSuXfuJeSTF6C3FOs5A5/p84PxN1OiGWfeVum4eP1M6sDLJXMPfGEzo2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775730632; c=relaxed/simple;
-	bh=/+m5cHDh2SgATV0wc4VKWqSJKXseZ7fS0aRcXifm+gY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=cyoRQPpnMES5iSLgB8coDRmTXk7xzGdqvXaowtpMRreUokkEpQfar2ovWyZc/8hH27OLB+wogQ/Byj9uuYml7PSFRgPJridON7QS3QV9PkHQI2Lzk4RzPJArGwTln0DtGeavxX4ynuc/9OPOFssQ27k3Bza1BzrXKs0YRv8Je/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bu/oHVKK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6624CC4CEF7;
-	Thu,  9 Apr 2026 10:30:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775730632;
-	bh=/+m5cHDh2SgATV0wc4VKWqSJKXseZ7fS0aRcXifm+gY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Bu/oHVKK88nx8fAdr8FPznbkKClYGd1N6lXk9Xk2ZJXZfr7EBMuXVXEDpOYBJVzS9
-	 cVUPjJaZKqHwzHIZN1v5jtZHCaKxly8vKiPo/J2fnDf2dZ+8Y/YFJBwSU/wdsjvgXQ
-	 eXT1jUTyZsZYZnPs8tq/qtue0zRvCCpixMaa5zzJfpld3Op+FeaL1tSD4KDVKxlaT8
-	 OYCASdYi5i9qnbBYNHchnTTIdZ2DnUKh+NVWPdUJkLB7yayBqby9altvhlae9pHck8
-	 v+xU9rehzGU3Z3mFyF891q8SkmUKAI35KklXAYCDEkWg9s8MKPSG7JVysBD562v0yj
-	 ZaIBLaOuYpCRg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CE6C39307B8;
-	Thu,  9 Apr 2026 10:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1775733541; c=relaxed/simple;
+	bh=RaylboLt+2kt0iTcQEcDH12AkIlD/VlYZsyMMZTSzPQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gvsRCFCwhZ9Cw74baxg+klTBcZayAsoAZrpiP49VNyLDVKVR3YH6IHAtptS/wdNzo4I6S+cB+mhEINsoR4TUswFjUvDr4mtR7brqejulabJLiCOIqv4MDVscuWMBPHNxEZp46Rwse41hWAH9J0PYmrEctV5lwJ1uETseUpHTGaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=FfnQa4fk; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=WJBSuPXy; arc=none smtp.client-ip=23.88.97.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1775733533;
+	bh=RaylboLt+2kt0iTcQEcDH12AkIlD/VlYZsyMMZTSzPQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FfnQa4fkuas3RBsgYjJjEVhy6WKHdmKIkb5m7D4X6rYA63No5Jd7VsnyOveyN/sWu
+	 L/XrqdRKWvw0OWRCJEb+wE6Z7Luo5UcOwLXdEu9SsL9W/G01TUIffL8tq4fpkOlyIO
+	 9BJWQHrAfu52mCoIo3pXmSuSzcpM9nq02sQzZ46Bv2QTaJLMHEB+PnnIDYC4ApC5YD
+	 yANiM63e6DEe9ie0jQ6Sw7royiLigpjj14jiLUm+magvIZgLfVb5nh6WbCYgkaCU2T
+	 5UBhCYOnMjNEYmR/Xsw0c5ZvmBXGkSU5QWXySf6eyuLP1J4ItfXKE/BA6n+6ayWRpT
+	 Sn8oMJFNxHpxg==
+Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
+	id 127624095C; Thu,  9 Apr 2026 11:18:53 +0000 (UTC)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1775733531;
+	bh=RaylboLt+2kt0iTcQEcDH12AkIlD/VlYZsyMMZTSzPQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=WJBSuPXyuYEyMaBLj5dAGl9BLRT6KKZjfn4Yb1q6Eg/qn50Xykk/WUEkPXY+37lfK
+	 XBsP7B7z12tyDo9uouzsaIgVWvvRbyT3rZ3F4J+U2DjOyoF10X3LGm4JXIFepCyG6E
+	 toPFkxxt/jn6qOrey4neM6sw3EsckwF9K1NNV6JtxvgpITQ6+vHCMXoDNd9mu7C6wj
+	 KFmGp2Po+v47mD7hlbWp1EurvSuuP2rHWcnPHXTYf9/lxxLKWPj/7aLH8JbDWzfaXk
+	 NNpwbxJ9MUl6NC8hCKGeiOrc3BzDkWQ34gGFV0ZHO053HUdR5OGb2rGrVuJy57lytd
+	 KsWNlegMQ3JYA==
+Received: from [IPV6:2003:c6:9f04:eb00:1f3b:df64:6f4d:f66b] (p200300c69f04eb001f3bdf646f4df66b.dip0.t-ipconnect.de [IPv6:2003:c6:9f04:eb00:1f3b:df64:6f4d:f66b])
+	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id BC373408EC;
+	Thu,  9 Apr 2026 11:18:50 +0000 (UTC)
+Message-ID: <4b0b1179-5840-412c-b4d9-a2d068e89dfd@birger-koblitz.de>
+Date: Thu, 9 Apr 2026 13:18:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v7 0/2] r8152: Add support for the RTL8157 5Gbit
- USB Ethernet chip
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177573060829.1113011.1073124687073176218.git-patchwork-notify@kernel.org>
-Date: Thu, 09 Apr 2026 10:30:08 +0000
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v7 2/2] r8152: Add support for the RTL8157
+ hardware
+To: Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>
+Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Chih Kai Hsu <hsu.chih.kai@realtek.com>
 References: <20260404-rtl8157_next-v7-0-039121318f23@birger-koblitz.de>
-In-Reply-To: <20260404-rtl8157_next-v7-0-039121318f23@birger-koblitz.de>
-To: Birger Koblitz <mail@birger-koblitz.de>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- hsu.chih.kai@realtek.com
-X-Spamd-Result: default: False [-0.66 / 15.00];
+ <20260404-rtl8157_next-v7-2-039121318f23@birger-koblitz.de>
+ <8b324f8c-f4f8-4e90-b5d6-9b87ec3daf2b@redhat.com>
+From: Birger Koblitz <mail@birger-koblitz.de>
+Content-Language: en-US
+In-Reply-To: <8b324f8c-f4f8-4e90-b5d6-9b87ec3daf2b@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[birger-koblitz.de:+];
+	TAGGED_FROM(0.00)[bounces-36100-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[birger-koblitz.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36099-lists,linux-usb=lfdr.de,netdevbpf];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NO_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	NEURAL_HAM(-0.00)[-0.999];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: F13223C92B2
+	DBL_BLOCKED_OPENRESOLVER(0.00)[birger-koblitz.de:dkim,birger-koblitz.de:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: CC0633C9944
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Sat, 04 Apr 2026 09:57:41 +0200 you wrote:
-> Add support for the RTL8157, which is a 5GBit USB-Ethernet adapter
-> chip in the RTL815x family of chips.
+On 09/04/2026 12:16, Paolo Abeni wrote:
+> On 4/4/26 9:57 AM, Birger Koblitz wrote:
+>> @@ -6534,8 +6842,11 @@ static void rtl8156_up(struct r8152 *tp)
+>>   	ocp_word_clr_bits(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3,
+>>   			  PLA_MCU_SPDWN_EN);
+>>   
+>> -	ocp_word_clr_bits(tp, MCU_TYPE_USB, USB_SPEED_OPTION,
+>> -			  RG_PWRDN_EN | ALL_SPEED_OFF);
+>> +	ocp_word_clr_bits(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, PLA_MCU_SPDWN_EN);
 > 
-> The RTL8157 uses a different frame descriptor format, and different
-> SRAM/ADV access methods, plus offers 5GBit/s Ethernet, so support for these
-> features is added in addition to chip initialization and configuration.
+> AI review notes that the above leads to 2 consecutive:
 > 
-> [...]
+> 	ocp_word_clr_bits(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, PLA_MCU_SPDWN_EN);
+> 
+> with slightly different formatting, likely C&P error?!?
+> 
+> I think this is better handled with a follow-up, if needed, as I don't
+> see any possible issue out of it.
+> 
+> Other AI comments look not relevant.
+Thanks a lot, Paolo!
+I will follow up on this for sure, there is also the RTL8159...
+I also contacted the Realtek devs, but have not heard back so far, probably needs
+internal escalation...
 
-Here is the summary with links:
-  - [net-next,v7,1/2] r8152: Add support for 5Gbit Link Speeds and EEE
-    https://git.kernel.org/netdev/net-next/c/ebe5fd2ed20a
-  - [net-next,v7,2/2] r8152: Add support for the RTL8157 hardware
-    https://git.kernel.org/netdev/net-next/c/fd3c7d080df5
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Birger
 
