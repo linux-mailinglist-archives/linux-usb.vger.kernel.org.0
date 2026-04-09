@@ -1,289 +1,266 @@
-Return-Path: <linux-usb+bounces-36080-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36081-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eN3lIwhF12ksMAgAu9opvQ
-	(envelope-from <linux-usb+bounces-36080-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 09 Apr 2026 08:19:52 +0200
+	id TSzTOBdL12k5MQgAu9opvQ
+	(envelope-from <linux-usb+bounces-36081-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 09 Apr 2026 08:45:43 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E79C63C687E
-	for <lists+linux-usb@lfdr.de>; Thu, 09 Apr 2026 08:19:51 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 886F33C6AAE
+	for <lists+linux-usb@lfdr.de>; Thu, 09 Apr 2026 08:45:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E344C3019B88
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Apr 2026 06:19:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D395B3016521
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Apr 2026 06:45:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FBEA313523;
-	Thu,  9 Apr 2026 06:19:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EE7F346A02;
+	Thu,  9 Apr 2026 06:45:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="jhhvaAk8"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QJvk6CUJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011027.outbound.protection.outlook.com [40.107.130.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914A030F531;
-	Thu,  9 Apr 2026 06:19:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.27
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775715572; cv=fail; b=d0sX1fB6+pGyPyr+4jNhHtfZY1la3qchYehkxDF0g0z1mVoEzTKYOvZEW2T7or0vYyfroKJyXwaJxT6nnvOAKKPRa/cp75jvrdCHvpqFzw6QE8/e5W9J9glJ3sSaOQIhJIkGhkkXhUiDndAZzBTgVidvR+sCN4V3cAWlTp2++4g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775715572; c=relaxed/simple;
-	bh=ffos5oD/hxa5oySKq7uca0KuCFgxZuzluVozUmkmAjg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=UQ0HGiXyS+OayLdo0NXEqzuErtVdO6I0V4EZEOjpGwINfJ2kTOFzjnSHAJ2zmxnM3UrpTfKsa2Z9gmC1tiEQkiz63AatB31tYLoQbM2jthBNJOinD3LRvkldz361dXTflK6xDQzimcSKdIUDVFtNtEAHBLqeeyUy72C6QvvB0QI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=jhhvaAk8; arc=fail smtp.client-ip=40.107.130.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=H47x7bLGsI62LDR0g6g02FZyWdKnzpQ3XyhFyA2Ql0HZ+fwWVpAOBGXYC1wy1ogt/Tz/a2HKTVv/PCpwsOZo+ri9H/H8Bet0yJO8tElaDm8HPNvZpm8gGdvl5H3AHhXqTO7VjAzTz6YUZmfzPcG9KYk+ERmk3ATWqaxBy6V8rlxiVS7oDhogahtuj3w3J9njg4GHFAq3ANp5TIcAjlbegEXmyBLmIL231sKtb272Koinxwb/c21TWgeNDYnRuGUkwdQjDg1hn9Np9IQvE16jeFWjbt11qr+5FoSkjqUAtZnHFlDXhVCQMaIWbkW00XelrYx8wQa+Ju93dlUTXIYfAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7PJlBV62AgbPJuiBqAOSoI2ZEIOLa+DlOyyANsTF5rc=;
- b=AP3XmtZoaW74Fhd1zLYqJKu6GFPd6rvsn0SApGjCUcDW3ltlvcm6KbMvVEGYoMYFnbhYw3LAcgPPNuRye9PEKfYL+Rmqn4R1i4TTDWablS5Pre68QaR68x1+b6mvKEHSHZsZ5KfGF8TVPIKqq260jvniotQmwmnqjRu7pRRnBUW0dcKiLbapze/i/jREMiGwYHW1pRnEcVDuT+voKCiJJw2STdipGfzcxvo3nm0OUzTFnnYG0txMGze7EqL6BR0qg6j9TdEKn2Y5ogXd5GcQ0U6RGbiKIaUBLQPcgvtEueIQVYZDrDA1acXXpm35w8Au7j3ONckilxACfCiA+8q/wg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7PJlBV62AgbPJuiBqAOSoI2ZEIOLa+DlOyyANsTF5rc=;
- b=jhhvaAk8S8bq05W/BoRydWUTG5J9nav1sGRkdpALk5WF0REgLICT1j6+qcs420GrtmyEtjzWUgVedsLX7mnbauOH70iUE/NifdMiiJRVgZtPMrevL5wUQZUp5ShKCPtUvjaTOfDnQkdx7BgqysqlNkArsMaqOiuIQxurZj1UyzKW1sZV4BDyinaK4yU/FDOiwSowPOvWRmbVLph1wEifZOQ0Eq2rx6kyBgBH70L7eM5P17fpVFBBgXcY/tVJwK7d2K/dkE9yaEaoMcJrysjfj/azWWZx6t1QITUyBlriKM2wwQOUQXOEB1iyHhnjpu+MFGTjOjvoRgYDnhr96/O3Mw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB8829.eurprd04.prod.outlook.com (2603:10a6:102:20c::17)
- by GV2PR04MB12085.eurprd04.prod.outlook.com (2603:10a6:150:305::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Thu, 9 Apr
- 2026 06:19:27 +0000
-Received: from PAXPR04MB8829.eurprd04.prod.outlook.com
- ([fe80::52de:f9c9:8c2e:7dd5]) by PAXPR04MB8829.eurprd04.prod.outlook.com
- ([fe80::52de:f9c9:8c2e:7dd5%5]) with mapi id 15.20.9769.017; Thu, 9 Apr 2026
- 06:19:26 +0000
-Date: Thu, 9 Apr 2026 14:11:26 +0800
-From: Xu Yang <xu.yang_2@nxp.com>
-To: "Peter Chen (CIX)" <peter.chen@kernel.org>
-Cc: gregkh@linuxfoundation.org, jun.li@nxp.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev
-Subject: Re: [PATCH v2 2/3] usb: chipidea: core: allow ci_irq_handler()
- handle both ID and VBUS change
-Message-ID: <nxj46zagq7udixsxaupl67ehekzsyzttnkyvvwwjzzzqkq52rm@kecaausbf4ab>
-References: <20260402071457.2516021-1-xu.yang_2@nxp.com>
- <20260402071457.2516021-2-xu.yang_2@nxp.com>
- <adXqKIri+bFwIbwt@nchen-desktop>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <adXqKIri+bFwIbwt@nchen-desktop>
-X-ClientProxiedBy: SI1PR02CA0026.apcprd02.prod.outlook.com
- (2603:1096:4:1f4::11) To PAXPR04MB8829.eurprd04.prod.outlook.com
- (2603:10a6:102:20c::17)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6542FE04E
+	for <linux-usb@vger.kernel.org>; Thu,  9 Apr 2026 06:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775717136; cv=none; b=UYVxRHiEBewxOIPNr3iFXzsKkSJEs1kPrOa3ExcmtJOs8OCOBAJ3sUIc82+K5UQgt2K9vX+xqTvZj7A6NYShioz7ad7XCD+FCqFI6DOV3Yrwa14BVih1vmtXFp/wug4N2BYA/Q51Is99r5sJuTYoHhTWRSQ2CB7P4nc3nXclvJ8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775717136; c=relaxed/simple;
+	bh=pA9EE+8123iD5d+ulZpCERyBEbtOJMf9lw0edZ4W2Yw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CpSjq3nQIvZTclRp/crnJka70cery5BV45iY97aa0w1Q7VlMrqXigRPsBr4VzIO+h9PxKEFXtRAioEJa4J68TMtEvliCj8drREYA5/dyRzF70hMTNvQyz/iyt7aaRO1ajigrnjVDeteP9Jpxkh5+cu9Nvfc2GgCxGz4a6jpaKnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=QJvk6CUJ; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-65c0891f4e9so835857a12.1
+        for <linux-usb@vger.kernel.org>; Wed, 08 Apr 2026 23:45:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1775717133; x=1776321933; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BVksIoyxhbKAJWIBPCKOwVsoqnYKoaL1pl2sE2OJfqE=;
+        b=QJvk6CUJ8NvP4+6Z7DlM89G1Anr0qJ7Q5VjS7j/d5x5LpWnTSuBf1rZzmKJYi3QJT1
+         DfoZvGcqqtdA5q1GUiwlG4eK13RGUjQ9Wtbz6vAj31KkuYeb5JsLqXeuuxjtlejmu7rX
+         DFNLZ+6duoEnyfo9BkcmaWO+ddetQGkW1ZogY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775717133; x=1776321933;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BVksIoyxhbKAJWIBPCKOwVsoqnYKoaL1pl2sE2OJfqE=;
+        b=ewAWMWppROhH1Z/gCiHNzfe7uS3T1JzfluJm3ciNEt6Y0SxegO9nmrc1H4TBIxK2xs
+         BUt1SOs1VgmnjsHJcHtX++lL3PsTYZCNO2/Lgiusdz8sS8wu8wET8Cc60ADDjU90YdXY
+         BNdhBtiyNoafqeHoH7zeg8EGawbFizWs1m2lgoTAyw1mfndBwqSq8O0OSrFZY233oZW8
+         ZClAL5rCNiGP6XP9MEYbN0tgCTdj0eHQz0jwh3nhjhQM4AG1d0a40WS09unP+zRdJFiq
+         /xBMvA7Q8dBXjx7Xo27rHntSWRENNiQhojvSQJdX3wqxePP3UTcQ1J6FeOlESuYQyrre
+         vibA==
+X-Forwarded-Encrypted: i=1; AJvYcCW7EEFVPZ/4cFUitSSQgLSjxscBXIzSlJPpGzTwZHvGLOEnBBKKysqQ+y+m+TzhuMVgPaDAp9WazqE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTkxgW3FIzIG+ucee/YveAwXPM8zAMuzgFpopiY3lpkptGb+wQ
+	KvYnEwaSvNTtO68stwBY+wP1o2fvkbWHjNuxD66usmk928D+262bWqWiRPjX8gFcUBs3xtZQJYs
+	c9CnnGw==
+X-Gm-Gg: AeBDiet/c6Ij7EyuWi8rmrMKATcWz1hIWFT4hNgerisyoHXoMrLliM/ZZS190LtAZNZ
+	pOWQqtgUGZD+PVf7kUeCQfJCfxhuYOeaqhsX89ZuD8ZFArY7OgDtKSuGmvgveD/LM05L0rGtlVT
+	IE3hOL+20jikb8gXdmNKr1CDhR85bx1mqUydX7+LYcsqZOsUoKiJLJ3RYtvyHV1GyDD1NgTBOkN
+	B1Yi7+WbRrKIAMLE3ls/CFMiwd0l6iPsU6wmLeZF4vzRf4Hruu2CJKv5dvbinxoC+lYQig12IZX
+	8SMpO9/+8kfTWMwP7o5gqufO0huGKL70AYLLmXcN8femhb74BHX0iilh71RXpQ8AJSfhk26s8Dn
+	SxQmyrJhLBLXjiBcbi2rJVr99pnDHwtwmSfSmoxJ5o2kOPvagwrbY7aRwA8uq7tM320Nkwc6w3m
+	PbphwOnZg8FzGJty1pIZGm90FlnguS3oqG/38AF+ycpUNDn6xbJd/65affCl2n
+X-Received: by 2002:a17:907:3e25:b0:b9c:9fd9:e7c2 with SMTP id a640c23a62f3a-b9d47270ebbmr113802066b.12.1775717133134;
+        Wed, 08 Apr 2026 23:45:33 -0700 (PDT)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9d3a6a493dsm86323566b.62.2026.04.08.23.45.31
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Apr 2026 23:45:32 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b9c6680aaf8so85353966b.3
+        for <linux-usb@vger.kernel.org>; Wed, 08 Apr 2026 23:45:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUVUCSzoWe9wSzLtE7C3KIc4FCFt3/9VIGPKJ6x3Y7NTt9RtkInigRwaXzEpsEGoQ0ZHr7AZGhtuYE=@vger.kernel.org
+X-Received: by 2002:a17:906:ee84:b0:b98:45fc:241d with SMTP id
+ a640c23a62f3a-b9d476accb7mr105701466b.37.1775717130802; Wed, 08 Apr 2026
+ 23:45:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8829:EE_|GV2PR04MB12085:EE_
-X-MS-Office365-Filtering-Correlation-Id: 905f8250-5ead-48af-205b-08de95fff33c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|1800799024|376014|52116014|366016|22082099003|38350700014|56012099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	GOXKhwtZRdbyZZy9xugajxAOwdxWmuwti5q/QbaKXtafOGQLH/o5n+NUQ4eF8D8QXcKs/qkV4ypVNOv8ugY1hd5z0erp0EB/NQXcnoVczIjSL4udGq0RLQROa5Ancf/CMEHmYdkTTq+GlMuTsBDIDY9F8EojrkwETBNH9OAWxs6iqRFBTN85FRqI4r9B9tG5lAXgohW57Y0OWd49ETXOtWJ2gzGOOipS8ezKOH2UqcRNU4ISiezgkD6fh6r5s8OEjLedO/7Hg1DCn6baPxVbyLrVEk0C+828p2NxVXDofzqD2hjWLnXbuzUGFeRFoQ2o5s4ROUlUWSyvWbIZRryW3OkkmVHK8lathh4D33QFYocLloMeux2QAQZFYtlYFl6UNIBKS4095v9i/bHVpjWck57XcG7V8tLXjzlrYtEX47DfTElBn78JrhRhJdNbhFBmxRGrvcbmR8eb9m0xVyOpG7IoMai0c5k2fG3OhOClGHBEKXooUkpy2d/B4E3V+dzDjJCDms4qTZFV3DKnZaLluYcHtRI3TjgvZAScPv90RjJdV2Him4QFUpxIsZ9GzEVu1kyD/jq6gMv8Jx9Z4KDgAfJ7vuuRVtDunO0ZMCO3uaw0EnHqxdb0FUgt1H1kjuclqv9LSiPe8sYv887yqYPmcays9Q8ClBtncgIyCinafGdJMtJ7fWrp45u8vAbKFvEO67EepEXLx73EjFR4lsvUyqftGdPZmybYRBEz3QdSbRHfhFbfFHLvZLgx1+2N65q93ahMYjVdB0y1JVOt6KtFt/y9srUTDOwg7bX7GN8gwYo=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8829.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(1800799024)(376014)(52116014)(366016)(22082099003)(38350700014)(56012099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?/47vJWUV2aOhoTiI5JPkfHNIcpz8Ofg3nMxYdMSkFsxfH4c5UhlgtcEi/mQv?=
- =?us-ascii?Q?241BydOKTkS/fJXtRVjHduBPPFBZj/3iRiiumpMHeJoB405cxoPd1QzIxWjB?=
- =?us-ascii?Q?hxaC4VlvvZR6TUDbycLT+JApHWoKLKyLbKram19/hkpDiVSrozsKrR9Hzyej?=
- =?us-ascii?Q?SCUBzPA4Cu6x8kunGlbUcZ+1KBSTx/WPx9KTCcTjWZDmaY6G2pCRUvBiIadr?=
- =?us-ascii?Q?yj33qrhmo2GAZK3Yxg/OErWirl4TU2Jhtr4iIz6AvWJ2XMhuKeSM4S508qBE?=
- =?us-ascii?Q?kLUDbcV8wCagofA1B+lbM2xrE/NSRX8Gb8GZRGqFl2enAaGiPC9Q5g+DUhwy?=
- =?us-ascii?Q?D8Xlo+e1gY3DSiajFN95XYuNNGooBc7D3NhJD3mUpZpR4ZlSoV8/vGwSWV7o?=
- =?us-ascii?Q?JnOJAQ65C7lhtSz5ndxvii+0BUu2vWonhTEzdHHUpuwaVTJ2/tDW7J6bCQhK?=
- =?us-ascii?Q?5tDACvc0lXWxDOZuLuqokkAYNjYuC2VegB08v8HJz6ZXOO74TTpkCDuMpfiq?=
- =?us-ascii?Q?W1W0+Je2TQL+nc82FrD8kAQxohAwovE5+/XsxLMST1ELRpfQii/rMt316Cd+?=
- =?us-ascii?Q?6jy3odUUzoNDsFio5JFyeKlSJ16LKkphGPXwydICKVywxkEBHpZjNk6Fi4p5?=
- =?us-ascii?Q?99D0YEN3jysg4FND0fCMGNujbDpigrtbkcjAbkh3rJbI/Y7UKAoxskr0nli/?=
- =?us-ascii?Q?Zj6iWtCjdcnuoZGQJ5c5ONCLtnGBpYVz7PkMtqZka3SIQqKWzdXJq8l7eYra?=
- =?us-ascii?Q?5n7JHUAR1D7dQ3lUgpxQQCgUPERrydOl8m+4O/X5Hh2jdKB+AtLT17PLs6IX?=
- =?us-ascii?Q?QE58fmbdAw57MTB638JPgawUpfBoE5sHZfshbprJfxQexPkXyn/ag0/JyCfu?=
- =?us-ascii?Q?/rsrfl5B6sRpszyRo32ZflOOxd3+r8V0K9g1tcsCDL/GEmAE/z2qZ7Iyacvv?=
- =?us-ascii?Q?XLY048jJEoVrU60oUu8OUOQ2c1Lk4pkg+klPDHv3IrYk6JSk6keXw/v8YCqg?=
- =?us-ascii?Q?RuD/4FpHi109KEqNmAH9vhIr97Tit3/HDYKSyY5fpzM5EefWD7O9gnGT2l/+?=
- =?us-ascii?Q?EBcsSq3aMtNJTgArkn1ogzaMYlBr1YvT/f8bd9UEElCwFX7ZjXViA/cuef6L?=
- =?us-ascii?Q?E9yrp0s2yq9yDkYS0887V8bemDCyraG5C+JzTw4Ljntg7YjO8Zpo0ZyXFGkr?=
- =?us-ascii?Q?7kqL/rT5dmKSU99CI18VtdsVlLLXm10q5fcm66LwZfieRr8yTk30m4pZOOkm?=
- =?us-ascii?Q?C7XVz2Hvfosf/DiEHpH6KdLX+/1XlvXcmUo2OOgry0FhMYlzZ3tMP5+Jn4A/?=
- =?us-ascii?Q?Fq2UnTbRSiRoyrxDsvABlmu7HMKEGZ+G31iB2ylzZ09X/LDMRPJ7BovurCR7?=
- =?us-ascii?Q?ealDRwIYSPHAzHyMWEJK8OLlilSgeH422Q93tRG2z9HCwiQ2nrpGP9Iq5dbL?=
- =?us-ascii?Q?sFwSFB/68kG8jYm74xaTyEiBDYaspBgZEbuIG12DDgmUTpnOtVjwDpdI6fLX?=
- =?us-ascii?Q?g+fP6xUnzQTsDI9fytfbI8pLbnloSIjrn1PPtt4FkicbuFvy72BK1XXR6J2b?=
- =?us-ascii?Q?DzYFenIMChDuhEfZ4ztm+7XcTAZf23PsAJa43tbesZ0ujyPAYRHAgBLrRDbU?=
- =?us-ascii?Q?Oruqbpipj7D7EaI3kHEoBP2xsKNJUPx0KRvqfSry4XhOnqX9IeHj7yEkswq+?=
- =?us-ascii?Q?OMs4OOPqww8WSAnRqwegMkKNS3cjf9X238R8GNvIkP1qjNU8kq73J6Xss5+B?=
- =?us-ascii?Q?hbaPWGGchg=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 905f8250-5ead-48af-205b-08de95fff33c
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8829.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2026 06:19:26.7866
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Cn2PBbPlZZYw8TW53YuTqJsP4fz9c6OuMT+XbBB/36r55VwEOkUbUG+OP3eqLPlkI9teppRMWGUV5j9bExpWIA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR04MB12085
-X-Spamd-Result: default: False [0.34 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
-	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
+References: <20260331003806.212565-1-jp@jphein.com> <20260331003806.212565-3-jp@jphein.com>
+In-Reply-To: <20260331003806.212565-3-jp@jphein.com>
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Thu, 9 Apr 2026 08:45:17 +0200
+X-Gmail-Original-Message-ID: <CANiDSCvsxP+npQTHUrMTp+Z8XULYKSLTz2AFu+WQnsLbRBGa2w@mail.gmail.com>
+X-Gm-Features: AQROBzAc4hvG8y78I9rwHMbJivFNTf1X7E7WcQbREXMFtN3c6KPUWYC-6n4Rfhw
+Message-ID: <CANiDSCvsxP+npQTHUrMTp+Z8XULYKSLTz2AFu+WQnsLbRBGa2w@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] media: uvcvideo: add UVC_QUIRK_CTRL_THROTTLE for
+ fragile firmware
+To: JP Hein <jp@jphein.com>, Alan Stern <stern@rowland.harvard.edu>, 
+	Michal Pecio <michal.pecio@gmail.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede <hansg@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36080-lists,linux-usb=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-36081-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[chromium.org:+];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[jphein.com,rowland.harvard.edu,gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[xu.yang_2@nxp.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[nxp.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[ribalda@chromium.org,linux-usb@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: E79C63C687E
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid,jphein.com:email,chromium.org:dkim]
+X-Rspamd-Queue-Id: 886F33C6AAE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Apr 08, 2026 at 01:39:52PM +0800, Peter Chen (CIX) wrote:
-> On 26-04-02 15:14:56, Xu Yang wrote:
-> > For USB role switch-triggered IRQ, ID and VBUS change come together, for
-> > example when switching from host to device mode. ID indicate a role switch
-> > and VBUS is required to determine whether the device controller can start
-> > operating. Currently, ci_irq_handler() handles only a single event per
-> > invocation. This can cause an issue where switching to device mode results
-> > in the device controller not working at all. Allowing ci_irq_handler() to
-> > handle both ID and VBUS change in one call resolves this issue.
-> > 
-> > Meanwhile, this change also affects the VBUS event handling logic.
-> > Previously, if an ID event indicated host mode the VBUS IRQ will be
-> > ignored as the device disable BSE when stop() is called. With the new
-> > behavior, if ID and VBUS IRQ occur together and the target mode is host,
-> > the VBUS event is queued and ci_handle_vbus_change() will call
-> > usb_gadget_vbus_connect(), after which USBMODE is switched to device mode,
-> > causing host mode to stop working. To prevent this, an additional check is
-> > added to skip handling VBUS event when current role is not device mode.
-> > 
-> > Suggested-by: Peter Chen <peter.chen@kernel.org>
-> > Fixes: e1b5d2bed67c ("usb: chipidea: core: handle usb role switch in a common way")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > 
-> > ---
-> > Changes in v2:
-> >  - change ci_irq_handler() instead of assign id_event/b_sess_valid_event
-> >    as true and queue otg work directly
-> > ---
-> >  drivers/usb/chipidea/core.c | 45 +++++++++++++++++++------------------
-> >  drivers/usb/chipidea/otg.c  |  3 +++
-> >  2 files changed, 26 insertions(+), 22 deletions(-)
-> > 
-> > diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-> > index 87be716dff3e..7cfabb04a4fb 100644
-> > --- a/drivers/usb/chipidea/core.c
-> > +++ b/drivers/usb/chipidea/core.c
-> > @@ -544,30 +544,31 @@ static irqreturn_t ci_irq_handler(int irq, void *data)
-> >  			if (ret == IRQ_HANDLED)
-> >  				return ret;
-> >  		}
-> > -	}
-> >  
-> > -	/*
-> > -	 * Handle id change interrupt, it indicates device/host function
-> > -	 * switch.
-> > -	 */
-> > -	if (ci->is_otg && (otgsc & OTGSC_IDIE) && (otgsc & OTGSC_IDIS)) {
-> > -		ci->id_event = true;
-> > -		/* Clear ID change irq status */
-> > -		hw_write_otgsc(ci, OTGSC_IDIS, OTGSC_IDIS);
-> > -		ci_otg_queue_work(ci);
-> > -		return IRQ_HANDLED;
-> > -	}
-> > +		/*
-> > +		 * Handle id change interrupt, it indicates device/host function
-> > +		 * switch.
-> > +		 */
-> > +		if ((otgsc & OTGSC_IDIE) && (otgsc & OTGSC_IDIS)) {
-> > +			ci->id_event = true;
-> > +			/* Clear ID change irq status */
-> > +			hw_write_otgsc(ci, OTGSC_IDIS, OTGSC_IDIS);
-> > +		}
-> >  
-> > -	/*
-> > -	 * Handle vbus change interrupt, it indicates device connection
-> > -	 * and disconnection events.
-> > -	 */
-> > -	if (ci->is_otg && (otgsc & OTGSC_BSVIE) && (otgsc & OTGSC_BSVIS)) {
-> > -		ci->b_sess_valid_event = true;
-> > -		/* Clear BSV irq */
-> > -		hw_write_otgsc(ci, OTGSC_BSVIS, OTGSC_BSVIS);
-> > -		ci_otg_queue_work(ci);
-> > -		return IRQ_HANDLED;
-> > +		/*
-> > +		 * Handle vbus change interrupt, it indicates device connection
-> > +		 * and disconnection events.
-> > +		 */
-> > +		if ((otgsc & OTGSC_BSVIE) && (otgsc & OTGSC_BSVIS)) {
-> > +			ci->b_sess_valid_event = true;
-> > +			/* Clear BSV irq */
-> > +			hw_write_otgsc(ci, OTGSC_BSVIS, OTGSC_BSVIS);
-> > +		}
-> > +
-> > +		if (ci->id_event || ci->b_sess_valid_event) {
-> > +			ci_otg_queue_work(ci);
-> > +			return IRQ_HANDLED;
-> > +		}
-> >  	}
-> >  
-> >  	/* Handle device/host interrupt */
-> > diff --git a/drivers/usb/chipidea/otg.c b/drivers/usb/chipidea/otg.c
-> > index 647e98f4e351..def933b73a90 100644
-> > --- a/drivers/usb/chipidea/otg.c
-> > +++ b/drivers/usb/chipidea/otg.c
-> > @@ -130,6 +130,9 @@ enum ci_role ci_otg_role(struct ci_hdrc *ci)
-> >  
-> >  void ci_handle_vbus_change(struct ci_hdrc *ci)
-> >  {
-> > +	if (ci->role != CI_ROLE_GADGET)
-> > +		return;
-> > +
-> 
-> Are there the situations that the ci->role is not CI_ROLE_GADGET, but
-> it needs to handle VBUS? Eg, ci->role is CI_ROLE_NONE, and VBUS event
-> occurs?
+Hi JP
 
-I suppose you refer CI_ROLE_END.
+On Tue, 31 Mar 2026 at 02:38, JP Hein <jp@jphein.com> wrote:
+>
+> Some USB webcams have firmware that crashes when it receives rapid
+> consecutive UVC control transfers (SET_CUR). The Razer Kiyo Pro
+> (1532:0e05) is one such device -- after several hundred rapid control
+> changes over a few seconds, the device stops responding entirely,
+> triggering an xHCI stop-endpoint command timeout that causes the host
+> controller to be declared dead, disconnecting every USB device on the
+> bus.
 
-When the role is CI_ROLE_END, the VBUS IRQ is disabled.
- - If the controller keeps at CI_ROLE_END state and VBUS comes, the IRQ
-   won't trigger just like it is ignored as it means nothing for CI_ROLE_END.
- - If VBUS comes at CI_ROLE_END state and the controller switches to
-   CI_ROLE_GADGET later, the VBUS event was lost but the driver will lookup
-   real VBUS state and do proper actions.
+A usb device shall not be able crash the whole USB host. I believe
+that you already captured some logs and the USB guys are looking into
+it. I'd really like to hear what they have to say after reviewing
+them.
 
-So the situations seem not exist.
+>
+> The failure is amplified by the standard UVC error-code query: when a
+> SET_CUR fails with EPIPE, the driver sends a second transfer (GET_CUR
+> on UVC_VC_REQUEST_ERROR_CODE_CONTROL) to read the UVC error code. On a
+> device that is already stalling, this second transfer pushes the
+> firmware into a full lockup.
+>
+> Introduce UVC_QUIRK_CTRL_THROTTLE (0x00080000) to address both issues:
+>
+>   - Enforce a minimum 50ms interval between SET_CUR control transfers,
+>     preventing the rapid-fire pattern that overwhelms the firmware.
+>     50ms allows up to 20 control changes per second, which is sufficient
+>     for interactive slider adjustments while keeping the device stable.
+>
+>   - Skip the UVC_VC_REQUEST_ERROR_CODE_CONTROL query after EPIPE errors
+>     on devices with this quirk. EPIPE is returned directly without the
+>     follow-up query that would amplify the failure.
+>
+> The UVC control path is serialized by ctrl_mutex, so last_ctrl_set_jiffies
+> does not require additional locking.
+>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: JP Hein <jp@jphein.com>
+> ---
+>  drivers/media/usb/uvc/uvc_video.c | 32 +++++++++++++++++++++++++++++++
+>  drivers/media/usb/uvc/uvcvideo.h  |  3 +++
+>  2 files changed, 35 insertions(+)
+>
+> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> index 40c76c051..9f402f55e 100644
+> --- a/drivers/media/usb/uvc/uvc_video.c
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -75,8 +75,30 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
+>         u8 error;
+>         u8 tmp;
+>
 
-Thanks,
-Xu Yang
+Why don't do you do the rate-limit in __uvc_query_ctrl()?
+
+Are you sure that you only have to limit UVC_SET_CUR?
+
+> +       /*
+> +        * Rate-limit SET_CUR operations for devices with fragile firmware.
+> +        * The Razer Kiyo Pro locks up under sustained rapid SET_CUR
+> +        * transfers (hundreds without delay), crashing the xHCI controller.
+> +        */
+> +       if (query == UVC_SET_CUR &&
+> +           (dev->quirks & UVC_QUIRK_CTRL_THROTTLE)) {
+> +               unsigned long min_interval = msecs_to_jiffies(50);
+> +
+> +               if (dev->last_ctrl_set_jiffies &&
+> +                   time_before(jiffies,
+> +                               dev->last_ctrl_set_jiffies + min_interval)) {
+> +                       unsigned long elapsed = dev->last_ctrl_set_jiffies +
+> +                                               min_interval - jiffies;
+> +                       msleep(jiffies_to_msecs(elapsed));
+> +               }
+> +       }
+> +
+>         ret = __uvc_query_ctrl(dev, query, unit, intfnum, cs, data, size,
+>                                 UVC_CTRL_CONTROL_TIMEOUT);
+> +
+> +       if (query == UVC_SET_CUR &&
+> +           (dev->quirks & UVC_QUIRK_CTRL_THROTTLE))
+> +               dev->last_ctrl_set_jiffies = jiffies;
+>         if (likely(ret == size))
+>                 return 0;
+>
+> @@ -108,6 +130,16 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
+>                 return ret < 0 ? ret : -EPIPE;
+>         }
+>
+> +       /*
+> +        * Skip the error code query for devices that crash under load.
+> +        * The standard error-code query (GET_CUR on
+> +        * UVC_VC_REQUEST_ERROR_CODE_CONTROL) sends a second USB transfer to
+> +        * a device that is already stalling, which can amplify the failure
+> +        * into a full firmware lockup and xHCI controller death.
+> +        */
+> +       if (dev->quirks & UVC_QUIRK_CTRL_THROTTLE)
+> +               return -EPIPE;
+> +
+>         /* Reuse data[0] to request the error code. */
+>         tmp = *(u8 *)data;
+>
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index 8480d65ec..cafc71457 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -81,6 +81,7 @@
+>  #define UVC_QUIRK_INVALID_DEVICE_SOF   0x00010000
+>  #define UVC_QUIRK_MJPEG_NO_EOF         0x00020000
+>  #define UVC_QUIRK_MSXU_META            0x00040000
+> +#define UVC_QUIRK_CTRL_THROTTLE                0x00080000
+>
+>  /* Format flags */
+>  #define UVC_FMT_FLAG_COMPRESSED                0x00000001
+> @@ -579,6 +580,8 @@ struct uvc_device {
+>         struct usb_interface *intf;
+>         unsigned long warnings;
+>         u32 quirks;
+> +       /* Control transfer throttling (UVC_QUIRK_CTRL_THROTTLE) */
+> +       unsigned long last_ctrl_set_jiffies;
+>         int intfnum;
+>         char name[32];
+>
+> --
+> 2.43.0
+>
+
+
+-- 
+Ricardo Ribalda
 
