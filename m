@@ -1,207 +1,146 @@
-Return-Path: <linux-usb+bounces-36093-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36094-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4AbXAFdh12l6NQgAu9opvQ
-	(envelope-from <linux-usb+bounces-36093-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 09 Apr 2026 10:20:39 +0200
+	id WF6LImR712mXOggAu9opvQ
+	(envelope-from <linux-usb+bounces-36094-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 09 Apr 2026 12:11:48 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 929163C7AF2
-	for <lists+linux-usb@lfdr.de>; Thu, 09 Apr 2026 10:20:38 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68C0F3C9025
+	for <lists+linux-usb@lfdr.de>; Thu, 09 Apr 2026 12:11:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A62B330610E4
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Apr 2026 08:15:49 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 72C25300D548
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Apr 2026 10:11:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93EAE3A3E9E;
-	Thu,  9 Apr 2026 08:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jphein.com header.i=@jphein.com header.b="hK8QAq97"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77C403BED01;
+	Thu,  9 Apr 2026 10:11:16 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD69396B68
-	for <linux-usb@vger.kernel.org>; Thu,  9 Apr 2026 08:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775722548; cv=pass; b=kwzlro34RNrI7NYwWKEcpuyT9OMPeSCvD0SX0CnX5EmwuTTD/LXBl/+A0ldEtQLU5uJ8HsFvyMm3vLgBr1s8EN9ak69qE6aBadgPMRTGF6vRn0pyiQ6yV1Pe9zqsMY2mautGK9klWtfH7kSyD8mvX89oYTfwsOPnq/y5bAwAzb8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775722548; c=relaxed/simple;
-	bh=Dngotpoiby0FdEKfKRicFCk8dHaAyFjbpWnfFURByR0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DcaxmlK7iYssQ89GsgkuF84ZzpGu4EqWiHSlBmJ5DOMbFXNAfpGgbnRZUx9+b9PntzChsJmF9j8ms5rju2Txc7obi7wqjp2cYZX/zNb7CvzpOPIi5oqgi8zMj59mrVJ5WtcxVbHl9zBmZOsOQFXihkjiwEINkOJ80Au3miDW+d4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jphein.com; spf=pass smtp.mailfrom=jphein.com; dkim=pass (2048-bit key) header.d=jphein.com header.i=@jphein.com header.b=hK8QAq97; arc=pass smtp.client-ip=74.125.224.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jphein.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jphein.com
-Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-65003f40a22so522700d50.2
-        for <linux-usb@vger.kernel.org>; Thu, 09 Apr 2026 01:15:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775722546; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jv90z9yfgnvMin+9j12wnHt6kZOkdOIWaq5luG7PFxQIXebSqDE59Td3z4LXUtRaoL
-         pOCmJJao42o32hDzZiSfA2HSBdBYK4Rf1XFwRvnSWB5MzmDy4v1HHrUT94bTtAppkIz5
-         zPyxSzpMjIit1oTD2lN+T3p8igo9nWT2ThLkkI33wYgQUGLnR96ho46/1E1WYaWJph/v
-         9T/TvJzUrlYnapaaasYCWfjy5gAHlUZfcOfRFSPolt2Uh/Gwicm704Ua1sJNCMijVE26
-         lDeTSqm1ZHvqPg941lCebZIpqWJVlvBVsAAzEzpE7B+4I+IxY2IAHlduDvIqRUm7oIu7
-         KPXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Dngotpoiby0FdEKfKRicFCk8dHaAyFjbpWnfFURByR0=;
-        fh=3le2396DpK6eKqIfXJJhX8yOm++m5xMrSIFn+xuBLfU=;
-        b=CskaeURBbRvwdNBzuoPGIdNHUQ9ZejLGd747y8xyFRD+J8/goXWj/MwKrscTDXBe7y
-         y2D8dMrMZgjpr0k9tecTVJvlPsQfAduSJQZCsZ/QBNzINgZ6iipsLPEIU+TeDp8b7Dw3
-         KyTRUjoLrL9UrO+7+gydksojoaB2pkBbfEc5BIJ5zLkP9yqvUcDidhzTuL2Ictp2SXwD
-         LNAIlkgkP0A4wGrDRetk7bWyCUHPjB6uifPxJF+zHk2VCyOJlMNBnENwDUfa+ZgdJkBM
-         gtKJlNkMAtGayNWHvVgWT4H8/sMzdcwA4VRApWDFDOAKDOFGVKXB6nYUsMEqI6KKaD5N
-         iW1Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jphein.com; s=google; t=1775722546; x=1776327346; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dngotpoiby0FdEKfKRicFCk8dHaAyFjbpWnfFURByR0=;
-        b=hK8QAq97TlIOoUC3QXTQogSkiZ5m0vdteO2CqmRT8OD8bwfmVSQVKwb2AfKSWKd8x1
-         5omp5PoAQxvuew0sos0lP+Bez4zcRbLI51aH7r5EDDVs1bshFInZoziHjOVJ6KUw+njk
-         itjwSNNtufrhKpAf2sQRopPferDvPivo+4Z6S//3cTbO3dtR+rRR1Fuh/WJQf4ahxd3/
-         jROhSNHiPy+QkNUa3D5k8HY55knVpJw4J+Mq6tFHixiDOmujL+tS2A9beuKTntQsVTPH
-         MXNXACM+Ofx6imiR6LU+p3yqgRiC4yeAobPgxBOWan4C3sbU79Y4Ugj59GT0EWJq0IK8
-         Xe7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775722546; x=1776327346;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Dngotpoiby0FdEKfKRicFCk8dHaAyFjbpWnfFURByR0=;
-        b=oqnhdQuGfUuq9bc8+ZH6QszGvt2rOQZvp3cw4nwWQXZLeGduXVF6BU56yv99DbcXhD
-         fnBJWbUUQ5cwJKYBBrtGD18MtsAugTgShtaQYBGYK8FqSadq69JhSq6c9PzqOUnYkus0
-         Vo8bYAlXgfAuh9qrXTllYhGP28WEyUxLJYZ3VT+qjFUjO47d9KpE8G4yYbyMBPzfzDtY
-         gYHFTzLSy8M2IzreG00WypVuXaMETLkYEQeRLXY7Y3bFHQKRcCyXKD7iybQotI6A5k1K
-         23uzBi7dnDq4JqlLUd7koWEwb1fg2/YTYf0A5N/Ify7NClqvk8dHIrvb4uobY2dzv0+Y
-         05dw==
-X-Forwarded-Encrypted: i=1; AJvYcCXnuS7uoUcBTuZZNEGUjdT0+VUE0N/fqsbuMe9jGOTopvhQn7mksqlWD8YLElnxla31S/ds6racN3g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDUhYKjs6f2ENPdue1yHZu+hh/gFXZjVHPoWcfAqWO3t/r4SVL
-	Qx2Lkg2GqtVCnkJVSWCiK46PN6h3G8ckafWF4LuP1WI9qGvZCgXnkm4ifF9Ha/m7AxLZC5C2csS
-	6p82R6mV0ym5ObrbCqSl3lj1KWEv5FT96SJ3XR7O9
-X-Gm-Gg: AeBDievSQFtN1Vjc/OUWX09PC+3cy6nvgZosACvaWj3HGbLosXyJaxHH8tPOScSJAkm
-	2OQ1omzmPs8ghKHpcn6kRX8YBL4Zm2jOR9QU95bx6EKr2JSCPqC54l+UFhGVrh4uh/XvH12Fjam
-	kCHZC9REI1W2IiCGEnOSVHZXdFkfeLjDIVzsej3HcLzxhSrONp9O5E6P9jVnwKTfzYKSsfUQVs6
-	qpFRY2qIxhUO2j4qqsWYxuGZybp5Xk6BOVHNIMOThHHyYM0ojFeaze+BVmgYudt3CEs123G9Y3Z
-	wYAD
-X-Received: by 2002:a53:ea4c:0:b0:650:3039:6c7d with SMTP id
- 956f58d0204a3-65187573bf5mr1888711d50.12.1775722545547; Thu, 09 Apr 2026
- 01:15:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B09DC3BD63C;
+	Thu,  9 Apr 2026 10:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775729475; cv=none; b=VpeCWMoYv2xdBA9L9IpnTeBPl3lqx9YwTuhkE2RNkUpuLHkY5AlD54xTg00tDFrn0Fp0YFls6Sk+0GEVyrn/wpiIjA5TKIRX4G76mabsDgq+tzubNiDKJ8+2cJdGY1MthBNrvYiywdTulD91GXZmJz87T0iTeg213i8nuD6jwqg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775729475; c=relaxed/simple;
+	bh=RCmjAxaoX2mTobcPwqsXrmrHBUl6HvMDiMnPej9lPLo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SGakT3MBVZnQm2FAdCT8JW6JlR9LE6AQ3ChUQ7dNbo3309IZIfC0Qhunun7WqPKKZ+bka1qJgIpgvcr8WclQDW+foKt/m06Ev4FURPbZsNxyWDIH/cwEovfNfzxogD5Vcigfh2YCKk/CCkkXBUd8vGaftCA1h/SwaMdzt+D0P1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from dfae2b116770.home.arpa (unknown [124.16.138.129])
+	by APP-01 (Coremail) with SMTP id qwCowADXfmo6e9dpWJC6DA--.7938S2;
+	Thu, 09 Apr 2026 18:11:06 +0800 (CST)
+From: Wentao Liang <vulab@iscas.ac.cn>
+To: b-liu@ti.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Wentao Liang <vulab@iscas.ac.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH] usb: musb: omap2430: Fix use-after-free in omap2430_probe()
+Date: Thu,  9 Apr 2026 10:11:04 +0000
+Message-Id: <20260409101104.480623-1-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260331003806.212565-1-jp@jphein.com> <20260331003806.212565-3-jp@jphein.com>
- <CANiDSCvsxP+npQTHUrMTp+Z8XULYKSLTz2AFu+WQnsLbRBGa2w@mail.gmail.com> <20260409100247.7cfb62d1.michal.pecio@gmail.com>
-In-Reply-To: <20260409100247.7cfb62d1.michal.pecio@gmail.com>
-From: Jeffrey Hein <jp@jphein.com>
-Date: Thu, 9 Apr 2026 01:15:34 -0700
-X-Gm-Features: AQROBzBsC-Nkq1RmMLeEIh8sjrySSruolHrCkdk9eliqPcQqpZeF-BuE1MuBPPs
-Message-ID: <CAD5VvzCr7gOxB2J5A6Bpma5+4OTn0zFDmpyzb3N016-BS4a87A@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] media: uvcvideo: add UVC_QUIRK_CTRL_THROTTLE for
- fragile firmware
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Ricardo Ribalda <ribalda@chromium.org>, Alan Stern <stern@rowland.harvard.edu>, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede <hansg@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[jphein.com,reject];
-	R_DKIM_ALLOW(-0.20)[jphein.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qwCowADXfmo6e9dpWJC6DA--.7938S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ar1rArWDZryUXw47KF1xXwb_yoW8GF1kpw
+	s8GFWSyrW8Gr47Ka4kt34rXayktan3t3yFkr92kwn3u39xG347AryfXay0yF18KF95Ga15
+	tr4UtFW8ZayFk3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvq14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+	0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+	jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+	1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v26r12
+	6r1DMxkIecxEwVAFwVW8twCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+	C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+	wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+	v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
+	jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
+	ZFpf9x0JUBnQUUUUUU=
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiCQ4MA2nXPaPz4AAAs7
+X-Spamd-Result: default: False [0.04 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-36094-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36093-lists,linux-usb=lfdr.de];
+	DMARC_NA(0.00)[iscas.ac.cn];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[vulab@iscas.ac.cn,linux-usb@vger.kernel.org];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.932];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jp@jphein.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[jphein.com:+];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid,jphein.com:dkim,jphein.com:email]
-X-Rspamd-Queue-Id: 929163C7AF2
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[iscas.ac.cn:email,iscas.ac.cn:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 68C0F3C9025
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Michal,
+In omap2430_probe(), of_node_put(np) is called prematurely before the
+last access to np, leading to a use-after-free if the node's reference
+count drops to zero. Move the of_node_put() calls after the last use of
+np in both the success and error paths.
 
-Thanks for taking another look.
+Fixes: ffbe2feac59b ("usb: musb: omap2430: Fix probe regression for missing resources")
+Cc: stable@vger.kernel.org
+Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
+---
+ drivers/usb/musb/omap2430.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-I will reproduce the hc_died() crash with dynamic debug enabled
-(xhci_hcd +p, usbcore +p) and with all unrelated USB devices
-disconnected so the logs are clean. The slot 17 stalls in the
-previous logs may have been from another device on the bus --
-I will make sure only the Kiyo is connected for the next capture.
+diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
+index 48bb9bfb2204..333ab79f0ca9 100644
+--- a/drivers/usb/musb/omap2430.c
++++ b/drivers/usb/musb/omap2430.c
+@@ -337,7 +337,6 @@ static int omap2430_probe(struct platform_device *pdev)
+ 	} else {
+ 		device_set_of_node_from_dev(&musb->dev, &pdev->dev);
+ 	}
+-	of_node_put(np);
+ 
+ 	glue->dev			= &pdev->dev;
+ 	glue->musb			= musb;
+@@ -455,6 +454,7 @@ static int omap2430_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "failed to register musb device\n");
+ 		goto err_disable_rpm;
+ 	}
++	of_node_put(np);
+ 
+ 	return 0;
+ 
+@@ -464,6 +464,7 @@ static int omap2430_probe(struct platform_device *pdev)
+ 	if (!IS_ERR(glue->control_otghs))
+ 		put_device(glue->control_otghs);
+ err_put_musb:
++	of_node_put(np);
+ 	platform_device_put(musb);
+ 
+ 	return ret;
+-- 
+2.34.1
 
-The crash that kills the controller happens when starting a video
-stream (LPM disable failure path). I can SSH in to grab dmesg
-live during the crash since the controller death only takes out
-USB, not the network.
-
-Will follow up with the traces.
-
-Thanks,
-JP
-
-
-On Thu, Apr 9, 2026 at 1:02=E2=80=AFAM Michal Pecio <michal.pecio@gmail.com=
-> wrote:
->
-> On Thu, 9 Apr 2026 08:45:17 +0200, Ricardo Ribalda wrote:
-> > Hi JP
-> >
-> > On Tue, 31 Mar 2026 at 02:38, JP Hein <jp@jphein.com> wrote:
-> > >
-> > > Some USB webcams have firmware that crashes when it receives rapid
-> > > consecutive UVC control transfers (SET_CUR). The Razer Kiyo Pro
-> > > (1532:0e05) is one such device -- after several hundred rapid
-> > > control changes over a few seconds, the device stops responding
-> > > entirely, triggering an xHCI stop-endpoint command timeout that
-> > > causes the host controller to be declared dead, disconnecting every
-> > > USB device on the bus.
-> >
-> > A usb device shall not be able crash the whole USB host. I believe
-> > that you already captured some logs and the USB guys are looking into
-> > it. I'd really like to hear what they have to say after reviewing
-> > them.
->
-> Sorry, I forgot about this bug. I will take a closer look at logs
-> later today.
->
-> I see that there is a case which crashes the host controller, but
-> without dynamic debug. It would be helpful if this can be reproduced
-> with debug enabled.
->
-> In the future, please also make sure that there are no unrelated
-> devices spamming dmesg, like "slot 17 ep 2" in those "stall" logs.
-> Please find this device and disconnect it or unbind its driver.
->
-> The initial cause of all that may really be the device getting
-> locked up for no good reason, but not 100% sure yet.
->
-> Regards,
-> Michal
 
