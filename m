@@ -1,258 +1,167 @@
-Return-Path: <linux-usb+bounces-36141-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36142-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uDhCE6sP2Wl+lggAu9opvQ
-	(envelope-from <linux-usb+bounces-36141-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 16:56:43 +0200
+	id uFZmISQU2Wm7lwgAu9opvQ
+	(envelope-from <linux-usb+bounces-36142-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 17:15:48 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA9A93D8DA6
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 16:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C19E23D90EC
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 17:15:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 614D9309E814
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 14:52:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2166B306A82A
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 15:10:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B7603D7D7B;
-	Fri, 10 Apr 2026 14:52:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 719FA3D903F;
+	Fri, 10 Apr 2026 15:10:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bfhD2nH8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QFirdGs9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F583D7D80;
-	Fri, 10 Apr 2026 14:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C985E3D8908;
+	Fri, 10 Apr 2026 15:10:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775832728; cv=none; b=kwTpeR9V/jVNDdLFhA6GVl0lI5D7ibfAm94jTV7TURgZ49lsOlAAn3sPA9bfU0YROQzG1c5pvxQbYceh8tebwpSRfoiH4Fj33z5uK9ws8ST5sXhSV5ys4BypxLJAO5TXujzznyuZ9hAMHzV5P0jseofM4Jpt39UqSqEX2/oGO2E=
+	t=1775833813; cv=none; b=sZuJBiyBt80rUDQI/NRggInUSIV2uwpOd9NVNPKRzEAxZIdVNuCcst9HWJgOM6qXnKQIe5O4X29TfMOk0fRD1S/a5Ps3O7WjwAtIs/Zm2rJUaM67TMjxj9ZJfaNupdLO+/RbG+9tCUdn5APTo6jQcNyIjLrmAbFphZgkYytOD2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775832728; c=relaxed/simple;
-	bh=8iacYD4Q9X98eAO3t1FmQlQJSOBjoGjOTKh5Fz9WYbM=;
+	s=arc-20240116; t=1775833813; c=relaxed/simple;
+	bh=4tfyiwZUdf1g5DPae0rG1z67nH70fo5hJn2knGFgX2A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cADjnJU9cp4HTlgD6/t6MSygj/FuAxN0c3tEKKfNydtJ4vEUZJQne6ELFxQohKIb4AJwENIF/zSCYVL5MZBZTnzOf5T/DI3gi8a740/gl+WvZtoR7wU5jeNtkgplIw8Gpu0LEgGtK2lrSX4YlKf9H/+qZIUZ4cQTBcNqsOzmhVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bfhD2nH8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4422AC19421;
-	Fri, 10 Apr 2026 14:52:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775832727;
-	bh=8iacYD4Q9X98eAO3t1FmQlQJSOBjoGjOTKh5Fz9WYbM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bfhD2nH8ojSSFSzKyidMmGXnPXbqC8/vNwxzgYlvBMFniSY4zuMflUTbLUZ/YJ3Za
-	 1SuLYpMLW1RU8a9JsXRjXfYZZrbQrl4fJtPTlup54GEDtJfS3zGYxzVjpRgdJENpt3
-	 eTbSOK16DD9phgUC5Wy3QJrGrfmpJUB53zad5u5EvpRPPPCg2xmHzHAyVf8p/8qgJ1
-	 /yVpU6CvtErO4+HwMQQkxcaEHA2WsozCwIx4LB25PdWYUqBLwFcfZCYmmkhSIl5WVS
-	 AyVkMxAtg8LZALXcJSCXPilyRM8Rv0VrJh045FBX7DouhWWUkgA3Zd850blGzCEQ/C
-	 3r7nbYnCarE/A==
-Date: Fri, 10 Apr 2026 09:52:05 -0500
-From: Rob Herring <robh@kernel.org>
-To: Abel Vesa <abel.vesa@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Pankaj Patil <pankaj.patil@oss.qualcomm.com>,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Wesley Cheng <wesley.cheng@oss.qualcomm.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Subject: Re: [PATCH v7 1/2] arm64: dts: qcom: glymur: Add USB related nodes
-Message-ID: <20260410145205.GA554754-robh@kernel.org>
-References: <20260320-dts-qcom-glymur-add-usb-support-v7-0-ba367eda6010@oss.qualcomm.com>
- <20260320-dts-qcom-glymur-add-usb-support-v7-1-ba367eda6010@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=d/yOvQ5qp+4gpsz/VG/z1Q11qDXgGM9uCeUiViJ8SYIJMQjhUuJhbHWMpEp1Ng1PBr1ydj6j/Tn1FnxH/F4XoB4nN/w4K2NiGiH+kAO5oGhTUboZbBUulb+yRnTFnmLlnMM1T3L1rlgkEuBH34chNHmXgcDMIA3ORc88+L7kcW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QFirdGs9; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775833810; x=1807369810;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4tfyiwZUdf1g5DPae0rG1z67nH70fo5hJn2knGFgX2A=;
+  b=QFirdGs9LB+r9zhwnXf6KAF7PKRg2qNkZNAiuF9bgmD3EEOwg2YiFQch
+   TZMkJCmxP0UQBxwEKyDWckgJtoJ1HTDxGlN4PX2WSaDwZiUnJJLKez1XG
+   NVcIS7tGFap9/CnW/00gNAARJpUCMOoNUxvtYAhHasna1qHv3cyD/XXv/
+   Kbjv/YN4YVyLUWht3OOPE5cz4FQkP03cy98P8wQaS1WMZgEjrrX++KOqw
+   A9upecqdMpTfXU/ks7MQ1Y44mS3phlWrftNlHdgxOu/xT4RXurQWebdu4
+   eppHMyh9xKMGKMW+N4c8e30W26vOjX9wZJ35oJJSeYCix2jlChr2UKafR
+   w==;
+X-CSE-ConnectionGUID: gIDyONKpReGoxuN2qt11aw==
+X-CSE-MsgGUID: 2qIH3xjmRSmBvUJqwPBS4w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11755"; a="80446042"
+X-IronPort-AV: E=Sophos;i="6.23,171,1770624000"; 
+   d="scan'208";a="80446042"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2026 08:10:10 -0700
+X-CSE-ConnectionGUID: fW29hiNfTJG75RBzdThlPA==
+X-CSE-MsgGUID: F/TggC5MRaiJzhkqyehcfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,171,1770624000"; 
+   d="scan'208";a="234037075"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa005.fm.intel.com with ESMTP; 10 Apr 2026 08:10:08 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 69FD698; Fri, 10 Apr 2026 17:10:07 +0200 (CEST)
+Date: Fri, 10 Apr 2026 17:10:07 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Konrad Dybcio <konradybcio@kernel.org>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	usb4-upstream@oss.qualcomm.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: debugfs: Don't stop reading SB registers if
+ just one fails
+Message-ID: <20260410151007.GM3552@black.igk.intel.com>
+References: <20260409-topic-tbt_sb_debugfs-v1-1-131540e0cc2b@oss.qualcomm.com>
+ <20260409120457.GH3552@black.igk.intel.com>
+ <75c962d1-7ade-483b-bbc9-a6c6140fc0e9@oss.qualcomm.com>
+ <20260409143203.GI3552@black.igk.intel.com>
+ <7d65539f-ece6-4e7c-a13e-6b12920346fa@oss.qualcomm.com>
+ <f1af27b6-e166-46b9-91d3-5e293fd6d74b@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260320-dts-qcom-glymur-add-usb-support-v7-1-ba367eda6010@oss.qualcomm.com>
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+In-Reply-To: <f1af27b6-e166-46b9-91d3-5e293fd6d74b@oss.qualcomm.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36141-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[intel.com:+];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,oss.qualcomm.com,vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36142-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_PROHIBIT(0.00)[0.1.134.160:email];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email,fa3000:email,fa2000:email]
-X-Rspamd-Queue-Id: CA9A93D8DA6
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,black.igk.intel.com:mid]
+X-Rspamd-Queue-Id: C19E23D90EC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, Mar 20, 2026 at 12:56:52PM +0200, Abel Vesa wrote:
-> From: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+On Fri, Apr 10, 2026 at 04:43:54PM +0200, Konrad Dybcio wrote:
+> On 4/10/26 4:29 PM, Konrad Dybcio wrote:
+> > On 4/9/26 4:32 PM, Mika Westerberg wrote:
+> >> On Thu, Apr 09, 2026 at 02:59:22PM +0200, Konrad Dybcio wrote:
+> >>> On 4/9/26 2:04 PM, Mika Westerberg wrote:
+> > 
+> > [...]
+> > 
+> >>>> I assume you have tested this on a hardware that supports this too, right?
+> >>>
+> >>> Hardware that exposes that register this does not exercise the altered
+> >>> code path.
+> >>
+> >> Well it may happen now that previously we got -EIO from some other register
+> >> and we stopped there, now this changes and we actually continue reading so
+> >> this definitely should be tested.
+> > 
+> > The only register before USB4_SB_GEN4_TXFFE that isn't in-spec for
+> > both retimers in v1.0 and v2.0 is USB4_SB_LRD_TUNING (0x07). The PS8830
+> > interestingly reports all zeroes (not a bounce).
+> > 
+> > The registers following USB4_SB_GEN4_TXFFE in the array are
+> > USB4_SB_VERSION and USB4_SB_DATA. The former is not accessed anywhere
+> > else in the code, at first glance. The latter is, during NVM r/w and
+> > in margining ops, which have definitely been in use for a long time.
+> > 
+> > Plus both of them are the v1.0 spec. The USB4_SB_GEN4_TXFFE specifically
+> > isn't (the retimer supplement pdf lists it as Rsvd, the main spec pdf
+> > omits it in the SB register table), as it wasn't previously useful (since
+> > Gen4 came about in v2.0).
+> > 
+> > 
+> > I don't think there's an easy way to limit the reading of this register
+> > since the bit indicating Gen4 capability is in USB4_SB_LINK_CONF (0x0c),
+> > which is Rsvd on retimers regardless of the spec revision. A connected
+> > port could easily have higher/lower capabilities, too.
 > 
-> The Glymur USB subsystem contains three USB 3.2 Gen 2 controllers,
-> one USB 3.2 multi-port controller, and one USB 2.0-only controller.
-> This includes five SS USB QMP PHYs (three combo and two UNI) and six M31
-> eUSB2 PHYs.
-> 
-> All controllers are based on SNPS DWC3, so describe them as Qualcomm
-> flattened DWC3 nodes.
-> 
-> Signed-off-by: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
-> Co-developed-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> Tested-by: Pankaj Patil <pankaj.patil@oss.qualcomm.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
-> ---
->  arch/arm64/boot/dts/qcom/glymur.dtsi | 691 ++++++++++++++++++++++++++++++++++-
->  1 file changed, 686 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/glymur.dtsi b/arch/arm64/boot/dts/qcom/glymur.dtsi
-> index bde287f645ee..641707ba1e78 100644
-> --- a/arch/arm64/boot/dts/qcom/glymur.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/glymur.dtsi
-> @@ -750,11 +750,11 @@ gcc: clock-controller@100000 {
->  				 <0>,				/* UFS PHY RX Symbol 0 */
->  				 <0>,				/* UFS PHY RX Symbol 1 */
->  				 <0>,				/* UFS PHY TX Symbol 0 */
-> -				 <0>,				/* USB3 PHY 0 */
-> -				 <0>,				/* USB3 PHY 1 */
-> -				 <0>,				/* USB3 PHY 2 */
-> -				 <0>,				/* USB3 UNI PHY pipe 0 */
-> -				 <0>,				/* USB3 UNI PHY pipe 1 */
-> +				 <&usb_0_qmpphy QMP_USB43DP_USB3_PIPE_CLK>,
-> +				 <&usb_1_qmpphy QMP_USB43DP_USB3_PIPE_CLK>,
-> +				 <&usb_2_qmpphy QMP_USB43DP_USB3_PIPE_CLK>,
-> +				 <&usb_mp_qmpphy0 QMP_USB43DP_USB3_PIPE_CLK>,
-> +				 <&usb_mp_qmpphy1 QMP_USB43DP_USB3_PIPE_CLK>,
->  				 <0>,				/* USB4 PHY 0 pcie pipe */
->  				 <0>,				/* USB4 PHY 0 Max pipe */
->  				 <0>,				/* USB4 PHY 1 pcie pipe */
-> @@ -2264,6 +2264,254 @@ &config_noc SLAVE_QUP_0 QCOM_ICC_TAG_ALWAYS>,
->  			};
->  		};
->  
-> +		usb_hs_phy: phy@fa0000 {
-> +			compatible = "qcom,glymur-m31-eusb2-phy",
-> +				     "qcom,sm8750-m31-eusb2-phy";
-> +			reg = <0x0 0x00fa0000 0x0 0x154>;
-> +			#phy-cells = <0>;
-> +
-> +			clocks = <&tcsr TCSR_USB2_1_CLKREF_EN>;
-> +			clock-names = "ref";
-> +
-> +			resets = <&gcc GCC_QUSB2PHY_USB20_HS_BCR>;
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		usb_mp_hsphy0: phy@fa1000 {
-> +			compatible = "qcom,glymur-m31-eusb2-phy",
-> +				     "qcom,sm8750-m31-eusb2-phy";
-> +
-> +			reg = <0x0 0x00fa1000 0x0 0x29c>;
-> +			#phy-cells = <0>;
-> +
-> +			clocks = <&tcsr TCSR_USB2_1_CLKREF_EN>;
-> +			clock-names = "ref";
-> +
-> +			resets = <&gcc GCC_QUSB2PHY_HS0_MP_BCR>;
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		usb_mp_hsphy1: phy@fa2000  {
-> +			compatible = "qcom,glymur-m31-eusb2-phy",
-> +				     "qcom,sm8750-m31-eusb2-phy";
-> +
-> +			reg = <0x0 0x00fa2000 0x0 0x29c>;
-> +			#phy-cells = <0>;
-> +
-> +			clocks = <&tcsr TCSR_USB2_2_CLKREF_EN>;
-> +			clock-names = "ref";
-> +
-> +			resets = <&gcc GCC_QUSB2PHY_HS1_MP_BCR>;
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		usb_mp_qmpphy0: phy@fa3000 {
-> +			compatible = "qcom,glymur-qmp-usb3-uni-phy";
-> +			reg = <0x0 0x00fa3000 0x0 0x2000>;
-> +
-> +			clocks = <&gcc GCC_USB3_MP_PHY_AUX_CLK>,
-> +				 <&tcsr TCSR_USB3_0_CLKREF_EN>,
-> +				 <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>,
-> +				 <&gcc GCC_USB3_MP_PHY_PIPE_0_CLK>;
-> +			clock-names = "aux",
-> +				      "clkref",
-> +				      "ref",
-> +				      "com_aux",
-> +				      "pipe";
-> +
-> +			power-domains = <&gcc GCC_USB3_MP_SS0_PHY_GDSC>;
-> +
-> +			resets = <&gcc GCC_USB3_MP_SS0_PHY_BCR>,
-> +				 <&gcc GCC_USB3UNIPHY_PHY_MP0_BCR>;
-> +			reset-names = "phy",
-> +				      "phy_phy";
-> +
-> +			clock-output-names = "usb3_uni_phy_0_pipe_clk_src";
-> +			#clock-cells = <0>;
-> +			#phy-cells = <0>;
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		usb_mp_qmpphy1: phy@fa5000 {
-> +			compatible = "qcom,glymur-qmp-usb3-uni-phy";
-> +			reg = <0x0 0x00fa5000 0x0 0x2000>;
-> +
-> +			clocks = <&gcc GCC_USB3_MP_PHY_AUX_CLK>,
-> +				 <&tcsr TCSR_USB3_1_CLKREF_EN>,
-> +				 <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>,
-> +				 <&gcc GCC_USB3_MP_PHY_PIPE_1_CLK>;
-> +			clock-names = "aux",
-> +				      "clkref",
-> +				      "ref",
-> +				      "com_aux",
-> +				      "pipe";
+> Checked again, the USB4_SB_FW_VERSION (0x02) register's lowest 8 bytes
+> are 0/1 for retimers implementing USB4v1 and 2 for v2, so we may go this
+> path too
 
-New warnings:
-
-      4 (qcom,glymur-qmp-usb3-uni-phy): clock-names: ['aux', 'clkref', 'ref', 'com_aux', 'pipe'] is too long
-      4 (qcom,glymur-qmp-usb3-uni-phy): clock-names:3: 'pipe' was expected
-      4 (qcom,glymur-qmp-usb3-uni-phy): clock-names:2: 'com_aux' was expected
-      4 (qcom,glymur-qmp-usb3-uni-phy): clock-names:1: 'ref' was expected
-      1 (qcom,glymur-qmp-usb3-uni-phy): clocks: [[70, 329], [42, 9], [58, 0], [70, 331], [70, 332]] is too long
-      1 (qcom,glymur-qmp-usb3-uni-phy): clocks: [[70, 329], [42, 10], [58, 0], [70, 331], [70, 334]] is too long
-      1 (qcom,glymur-qmp-usb3-uni-phy): clocks: [[56, 329], [29, 9], [44, 0], [56, 331], [56, 332]] is too long
-      1 (qcom,glymur-qmp-usb3-uni-phy): clocks: [[56, 329], [29, 10], [44, 0], [56, 331], [56, 334]] is too long
-
-
-You did test this series for DT warnings before sending, right? Please 
-fix and ensure they get into 7.1.
-
-Rob
+I also checked from Retimer 1.0 spec and there it is still "Reserved. May
+have non-zero value". Probably not good to rely on that.
 
