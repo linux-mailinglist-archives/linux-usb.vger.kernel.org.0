@@ -1,243 +1,337 @@
-Return-Path: <linux-usb+bounces-36145-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36146-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4BAFAB4z2WmjnQgAu9opvQ
-	(envelope-from <linux-usb+bounces-36145-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 19:27:58 +0200
+	id eGYNMtBO2Wk4oQgAu9opvQ
+	(envelope-from <linux-usb+bounces-36146-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 21:26:08 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65A0E3DB0A9
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 19:27:57 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CAC83DBEFD
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 21:26:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7F0E9301DC11
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 17:27:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4BF84301701F
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 19:25:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27BD73E3C51;
-	Fri, 10 Apr 2026 17:27:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0CC535BDDC;
+	Fri, 10 Apr 2026 19:25:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="c1v5e+C2";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="UFoS4S7i"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YUCn68kt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A5E3E3C4F
-	for <linux-usb@vger.kernel.org>; Fri, 10 Apr 2026 17:27:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B8A346E7B
+	for <linux-usb@vger.kernel.org>; Fri, 10 Apr 2026 19:25:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775842061; cv=none; b=Mtar0d4zI7unFypQ7LjBCoygZ/zTfw51gSHo/KqbER4j0ysZ1PKLZ+37IRuyp90kaBPeUfyBaYiZLvWKMlxLW67yZ34MofOJ8POjiHMGrvh1LrA4QB48RgaA19guyyEqiirSfGyYyERdbZpnKZr7L/Glx3zb+3IKiF2A2ksxd4U=
+	t=1775849117; cv=none; b=rBt2AGl7BXFtlkkSCjISdOBJa+AMRf1et3A/y0K92wwBYOhzgmgLrc/+gbdberMl4hHr4lz8BgLDQx5PXH9hJNN6K+NzpDxzwpqI8I7WO6zBfJ3ja6RFlKQL3gD8vaDFo39QNk/xklrL6lBrsH6V5jIvX0RwMwYUPD/mmirTnjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775842061; c=relaxed/simple;
-	bh=IeyAHCb/x7ZLrNGXbN3ASw98xhDx98GlfZcJVTUwYm8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RPLBTAkcYcw6xDgyWv9RVcq6vSb4Et/nf/btJTNPRAAUzbnZ3k9elcgMMSEsnFqn4UyH3zidKcEx9/p7TdUAGJHornRxQzINg847R68KxrY5ncWKZ/483x0QhBNPoazZ4biHRN216EHuC7ntZUIgMH5akyJUBA0HxvRo4saVP74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=c1v5e+C2; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=UFoS4S7i; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63AB0wYT438755
-	for <linux-usb@vger.kernel.org>; Fri, 10 Apr 2026 17:27:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	hmo7gNTI5BWws0lj2sr7ZllfUU+v0nf+If/Ue4uaz3g=; b=c1v5e+C2cV65qVRm
-	1iLr7Hq+vfsK8SkBQbp+stajDret2RLYl3mxBhFXg8ZsWAYQNvyMy6csbWcvM9DD
-	ytfh1mYf5Sac+smuiczvMJe+gL4FL2FvOVAMU0ixpQyksD3Epm5p96YZM3jr16hD
-	esKnYuW7rgd9OpBa1Ou4EK/EwqDHgrttJDi70xeQ0KssI/EFVZkcnERHFrB/NNNX
-	cn3fU5grP22axKHIkQ3zFDPD7rfsiJNRg54k5iBJKo2WoSbZcNceBzI9lJCOneaN
-	uNbB3m7x51oTkspBW9gaQKTzeyB3cb2xzlEUNUuIoYRUy8g5ylZN9QNmwc5Smlwp
-	KCGziQ==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4deyy9s76s-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Fri, 10 Apr 2026 17:27:39 +0000 (GMT)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-50b4bd8e77dso4142781cf.3
-        for <linux-usb@vger.kernel.org>; Fri, 10 Apr 2026 10:27:39 -0700 (PDT)
+	s=arc-20240116; t=1775849117; c=relaxed/simple;
+	bh=HyGNKjUaw8UHRjJdnt6VyhCrwMTZ6pcFQiVCJDVCsuI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=njGNDZkIH6+i9Aa4zy/fhRSlnbsJ4gbCHqI/RMhE6vgO/2PwNe92Mc5dyk4M+sZMWyCoxPNM4Ky+L44/WVw0JwZS6SN/bDpnJa+IyM1flR5r8OZ6yny/7zisK+tzyiLwTP4PUeNv4KLNFQCqNzL/EQf7Rn/vMInJpWoB7v5aOGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YUCn68kt; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-488b00ed86fso25622285e9.3
+        for <linux-usb@vger.kernel.org>; Fri, 10 Apr 2026 12:25:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1775842059; x=1776446859; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hmo7gNTI5BWws0lj2sr7ZllfUU+v0nf+If/Ue4uaz3g=;
-        b=UFoS4S7iA7ZE4YGAESNWbylsxUdypG5WF53K/J6kha3OTvZfLDsiEJvpqAAH6RQkI9
-         CCph5Ysgmwk63CrJwXcxACtetJyoaCw8vCkLXxntsPwlLxh++0wcWgXmBHPlheWrAeiZ
-         Tf9ju514QekoDpmKwJxpukGIFedxg2yIOt4A3iXm3+fuvUzwzqm7y7Gg3G1uXCo8ouy1
-         GTtJWSKpmTb3Ln+PGI+aXcvXAVt5HOrVhNMTPyVQyu8Bn2Wb8cgAjtImjL2g+R5Y2u4y
-         eYNeNNIR4k3rm+FIQJlTEyGKj3zlk9QeyDqgeDwAoI1F7veF4c+oMTUbtpuMRwHVeMuh
-         wuQQ==
+        d=gmail.com; s=20251104; t=1775849114; x=1776453914; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DmYI2M5dHslYk9GTB/2ip8+v8uMXE6KQ+B9xsHJTP0o=;
+        b=YUCn68kty2lsbkxERxHHaJCYWht//gcwM/7bosagoURJbtXOxMYTEwq0nXi0xEorb1
+         slx1/tUlSOVOH178wFnpyeLi7lWIPi159l5rW7iNJ+eTFckSwPVOnvmZsVa/SjTNYi7n
+         ge4Ra6frblJd6DaOHYHtBPgoPkAouRDCta2vyHcjhErMPnPKWF6lBpu+CFcvzhJBwYgS
+         VUDJQRxC7ZhScmq44P//5T4IIzuaqDXWrNSQXcBNFbPK44tRNMrvltkMvwzh6v+3km7r
+         IQBG2ueHqZ2zRSn7kWsw+NBkZfHQQ0+aIw4hlxAQ4x5cDB9PokH7X/S0pXRxrnfuKhaG
+         QB3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775842059; x=1776446859;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hmo7gNTI5BWws0lj2sr7ZllfUU+v0nf+If/Ue4uaz3g=;
-        b=IY33FMFpe2ksaGRxQBOnwWmGnyynvNkTT5Jh99wDsMpy8LZYS9rK/3AS0Y81U1zQGy
-         8sYijOBfDjMlPyJv3VLT6TFfJR76osI8kuxHDWJryu79Mk5FCkCXjOvk9e//VOw7ze1i
-         e62Su7gc4l8wVwt80daoWUN+XXEj/JIzZQqRFGa6/VyUguAsvo0Tny+QTG7KC/pw9saB
-         /7pcHXqZbaVVlLZWmEgBR3Jppx8ebRWpcQoCXX8D3xQ6hcSs3eexqTkJn6bOD/47TnHZ
-         nNS4lfD/+3bfRA/gokvvoyAPL9sQ+xHHOaek0TIbKVKyFo5UR2ysPkIgVjoLUQNg5xHv
-         KHbg==
-X-Forwarded-Encrypted: i=1; AJvYcCWAd1Ub5qsEtyvB/2OXJjdcBh2mPe4L5AXXz7ypmYEVFRrHOkThQFbgdjwBomxOMmYmJGqWa1YyHCI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznxlGDD0ECAK3OR9sL/HF2wzD6wqekVWiWSocJa9XmRddFpeQ+
-	yyjgekvPtK/BQVqD8WOY023ka/4HkYPYrkYQSGkXPn0QPrja7garIWp34/jHoDE7sz70m257QXD
-	dzZ3PdgG5VbBY2nf7rCqPU5u21NU84T0vC7ys6g9va0uQlurevoXx/x2XaqHmOvw=
-X-Gm-Gg: AeBDiet3U9BNfB/O56dgoCd+AoIY68tKoDBxK1gAwSykihZb60DxEhtOJSFkK/x0tyM
-	kbTNvOosEtPAPOaep5QF+1ewszzLi1KRLCUUVhZMBRB+54doiuB0Mu3kYnLt1rDJz7ZkZESVGpk
-	zCW7G1fd3AT3dFTk1tKgt012Uu5EVn1S2ZH3wsNelhcIz5+k8epGm0CqDUSZYldmr8YxSFFy97u
-	vsGeHJh3wY+AV2ZYie+xfIiMkZyIXoc4sVpfSExZXHPo1jpR9XFpEwEuOIx7S9Wdbh+xHQtA7X3
-	gFJW7jeTOBDbbohAo9sOnX3++20MjmNXA6yfOBs9pMmiztAgPaNf4B00WOKKqm8QhqpVBkhENrk
-	D5QNSbtduCqZpkMwElSyaS0WpG9qcdbdEyi93RB2PrGKyPngb5/uRy4RvbR5plCYianGBVuRsHV
-	BOf0Q=
-X-Received: by 2002:a05:622a:351:b0:50b:5286:f757 with SMTP id d75a77b69052e-50dd5cf408emr40726931cf.4.1775842058683;
-        Fri, 10 Apr 2026 10:27:38 -0700 (PDT)
-X-Received: by 2002:a05:622a:351:b0:50b:5286:f757 with SMTP id d75a77b69052e-50dd5cf408emr40726371cf.4.1775842057852;
-        Fri, 10 Apr 2026 10:27:37 -0700 (PDT)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9d6e7c8a4fsm95465666b.54.2026.04.10.10.27.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Apr 2026 10:27:37 -0700 (PDT)
-Message-ID: <1f774a46-3080-4541-8573-d2a7023bbb13@oss.qualcomm.com>
-Date: Fri, 10 Apr 2026 19:27:34 +0200
+        d=1e100.net; s=20251104; t=1775849114; x=1776453914;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DmYI2M5dHslYk9GTB/2ip8+v8uMXE6KQ+B9xsHJTP0o=;
+        b=kVyZqgsK1VPJ/3KXQp2yX7ZFI8qucQxCsVvwb7ZnvLfqCnHhwVgl4Q5gzPHDmeAkws
+         bLLFGJCIaS86J/Oik2Qk3q6yucIF7jJwcjfUAs2cNz1RFytI6jvHdOJUKI4K4EDFERZK
+         3DSJuAub5TcjOlscpswfeysQAXnGXRNhCbGWsPs53BqLnktqbEuWnkSCgbW225Yjlvwh
+         6ruoetM0IlCnsrJMxGTO72hOwUO4fndX8PHHNgqd9VsqvvL2+TagyFNftSdWFCRExB4z
+         fpoaJFGBZRUKr5PGXP4h9f/rrS8I8r/j4y/WQ3aqRJK4uMg2WKjT2atDthS2PhnViQN/
+         E+UA==
+X-Gm-Message-State: AOJu0Ywk/pwz7g4wbauKyLPN4uMR0jkhxFERW9cmwyGHVbGgLOGD8ooA
+	kYl1gO5x45ORHfhuGMh482PCP+4QJrptsXU1jLvTh6iyEJ5/I8Giuvrd
+X-Gm-Gg: AeBDieuB4Gb+eAY5ujEQfB1pG9lIIHnClSXTLNjCBg5HI0rNOg6CkJ2HynZcrSv3V9R
+	w2v0kVh2nq0xvsjTpfoR1fjc1g6qXOKUqlQbQAifKPUy53c/u8v8vlGYHQjSgXvu4H6waITLFaW
+	SN49/nZ4OcgxPmzS0FaRy2E5xWZcOg7epMTootwj00sxkJIg6PkPMQSVMZ30vxKiJr6cHU4NyRC
+	QEEo5E8s097nZ5DGA2wWL3yx6OmEbt8TdGTp/1we3MZ167tn1FxfeqW51+6vgeXXBdJpdGIM2bG
+	CYnM5DgUIgl3h1+3hmkMj7wCQ2hqFw6om9vqwKorW+k4MwQNhJ3NamALp1kCyM/swawX6JDIJO7
+	sAkSjr4WbJqWTvDNb4y0ADtPr1inDqE+J/d8IJI7E3ePFTFOxHTieh6wRWh2pBHX2ePdrRJ7ACh
+	jrW+8PW6JC+ZxtqnGqNAdpfLNCXDfXFQ1zP5NYfJefkqwd0Iw/mA==
+X-Received: by 2002:a05:600c:45cd:b0:488:9ed3:1492 with SMTP id 5b1f17b1804b1-488d67f0bb7mr50727815e9.10.1775849113569;
+        Fri, 10 Apr 2026 12:25:13 -0700 (PDT)
+Received: from localhost.localdomain ([72.255.58.127])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d5cf2e70sm50930135e9.0.2026.04.10.12.25.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Apr 2026 12:25:13 -0700 (PDT)
+From: Mahad Ibrahim <mahad.ibrahim.dev@gmail.com>
+To: Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Mahad Ibrahim <mahad.ibrahim.dev@gmail.com>
+Subject: [PATCH] HID: usbhid: replace strlcat with better alternatives
+Date: Fri, 10 Apr 2026 15:24:47 -0400
+Message-Id: <20260410192447.7059-1-mahad.ibrahim.dev@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thunderbolt: debugfs: Don't stop reading SB registers if
- just one fails
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Konrad Dybcio <konradybcio@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Mika Westerberg <westeri@kernel.org>,
-        Yehezkel Bernat
- <YehezkelShB@gmail.com>,
-        usb4-upstream@oss.qualcomm.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20260409-topic-tbt_sb_debugfs-v1-1-131540e0cc2b@oss.qualcomm.com>
- <20260409120457.GH3552@black.igk.intel.com>
- <75c962d1-7ade-483b-bbc9-a6c6140fc0e9@oss.qualcomm.com>
- <20260409143203.GI3552@black.igk.intel.com>
- <7d65539f-ece6-4e7c-a13e-6b12920346fa@oss.qualcomm.com>
- <f1af27b6-e166-46b9-91d3-5e293fd6d74b@oss.qualcomm.com>
- <20260410151007.GM3552@black.igk.intel.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20260410151007.GM3552@black.igk.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDEwMDE2MyBTYWx0ZWRfX+AE3fYJoLH9v
- 2PAfhDnEQ8KNh+GcJeMmTz7x4ZDGpFWqOxn4KUWhfZqmNfwxpa36VQ5UubVDdMW3E5P+Gpb/oIu
- vqs8H34BfocC9zTNxqtdc+jDXZVf3NrjdoQVNa318DVIqUQ3uupfHUmhi4xTs662DuBmdwQFhTT
- PNH2Q2UCbrucyfQmBRFK73hPscVKhE94SIW9UupkaZ1efgrc4sWTylQ2ipA6MfP5JxRcO+xl2Wk
- /mjQTSqZDveSxjMrH1hjeSADtRinPnTU9g8Ka8xthDYwMxpxUt7Ue9AZq9qp5OMJjFrm+3sU+3z
- EjK+3BSFGkGXAhxmbwP2w9qRvNdhknLmploXgCz+guCC0vwhxfr44nI6CVkrU92/Qs+764zjvsK
- DB4LR5h6WrnI89JIdCyE4E+k8M3n71/QAaCLQn+YC47XzSC16i29vp6QbKyxQzYlf9JmpW21xz9
- IZzTtolrFv9bStBiLDA==
-X-Proofpoint-GUID: sJCn8fMTAywR_KomacgbA4OMkABNao9a
-X-Authority-Analysis: v=2.4 cv=d6fFDxjE c=1 sm=1 tr=0 ts=69d9330b cx=c_pps
- a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
- a=OMFt2CSnIJmYOyjttnIA:9 a=QEXdDO2ut3YA:10 a=a_PwQJl-kcHnX1M80qC6:22
-X-Proofpoint-ORIG-GUID: sJCn8fMTAywR_KomacgbA4OMkABNao9a
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-10_05,2026-04-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
- clxscore=1015 impostorscore=0 adultscore=0 bulkscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604010000 definitions=main-2604100163
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,oss.qualcomm.com,vger.kernel.org];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	TAGGED_FROM(0.00)[bounces-36145-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linuxfoundation.org,kernel.org,gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36146-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,oss.qualcomm.com:dkim,oss.qualcomm.com:mid];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mahadibrahimdev@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 65A0E3DB0A9
+	RCPT_COUNT_SEVEN(0.00)[9];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4CAC83DBEFD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 4/10/26 5:10 PM, Mika Westerberg wrote:
-> On Fri, Apr 10, 2026 at 04:43:54PM +0200, Konrad Dybcio wrote:
->> On 4/10/26 4:29 PM, Konrad Dybcio wrote:
->>> On 4/9/26 4:32 PM, Mika Westerberg wrote:
->>>> On Thu, Apr 09, 2026 at 02:59:22PM +0200, Konrad Dybcio wrote:
->>>>> On 4/9/26 2:04 PM, Mika Westerberg wrote:
->>>
->>> [...]
->>>
->>>>>> I assume you have tested this on a hardware that supports this too, right?
->>>>>
->>>>> Hardware that exposes that register this does not exercise the altered
->>>>> code path.
->>>>
->>>> Well it may happen now that previously we got -EIO from some other register
->>>> and we stopped there, now this changes and we actually continue reading so
->>>> this definitely should be tested.
->>>
->>> The only register before USB4_SB_GEN4_TXFFE that isn't in-spec for
->>> both retimers in v1.0 and v2.0 is USB4_SB_LRD_TUNING (0x07). The PS8830
->>> interestingly reports all zeroes (not a bounce).
->>>
->>> The registers following USB4_SB_GEN4_TXFFE in the array are
->>> USB4_SB_VERSION and USB4_SB_DATA. The former is not accessed anywhere
->>> else in the code, at first glance. The latter is, during NVM r/w and
->>> in margining ops, which have definitely been in use for a long time.
->>>
->>> Plus both of them are the v1.0 spec. The USB4_SB_GEN4_TXFFE specifically
->>> isn't (the retimer supplement pdf lists it as Rsvd, the main spec pdf
->>> omits it in the SB register table), as it wasn't previously useful (since
->>> Gen4 came about in v2.0).
->>>
->>>
->>> I don't think there's an easy way to limit the reading of this register
->>> since the bit indicating Gen4 capability is in USB4_SB_LINK_CONF (0x0c),
->>> which is Rsvd on retimers regardless of the spec revision. A connected
->>> port could easily have higher/lower capabilities, too.
->>
->> Checked again, the USB4_SB_FW_VERSION (0x02) register's lowest 8 bytes
->> are 0/1 for retimers implementing USB4v1 and 2 for v2, so we may go this
->> path too
-> 
-> I also checked from Retimer 1.0 spec and there it is still "Reserved. May
-> have non-zero value". Probably not good to rely on that.
+In preparation for the removal of the strlcat() API as per the KSPP,
+replace the string concatenation logic in hid-core, usbkbd, and
+usbmouse with struct seq_buf, which tracks the current write position
+and remaining space internally. The changes implemented include:
 
-In Table 4-3 below that definition, it says:
+- Replace device name and phys concatenation with seq_buf_puts().
+- Include Struct seq_buf and its initialization.
+- Include header file of seq_buf.
+- Replace strlen() with seq_buf_used() on the string buffer which was
+  tracked by seq_buf to increase speed.
+- Add size_t len in files which did not have it.
+- Use of strscpy with length in place of strlcat.
 
-"""
-Shall be set to 00h or 01h
+Testing: This driver was compiled as a module as well as in-built in
+QEMU with the QEMU basic mouse, and QEMU basic keyboard. The testing was
+done in the following steps.
+- Add Hardware Mouse in QEMU checking the usbhid module.
+- Verify dmesg string name of mouse.
+- Blacklist hidusb module from auto-loading, and removing the module via
+  rmmod.
+- Load usbmouse module, and reattach QEMU mouse.
+- Verify dmesg string name of mouse.
+- Repeat same procedure on usbkbd module.
 
-It is recommended that this field be set to 01h.
-"""
+This aligns the driver with KSPP security guidelines.
 
-But we can revisit limiting those reads another day
+Link: https://github.com/KSPP/linux/issues/370
 
-Konrad
+Signed-off-by: Mahad Ibrahim <mahad.ibrahim.dev@gmail.com>
+---
+ drivers/hid/usbhid/hid-core.c | 17 ++++++++++-------
+ drivers/hid/usbhid/usbkbd.c   | 15 ++++++++++-----
+ drivers/hid/usbhid/usbmouse.c | 15 ++++++++++-----
+ 3 files changed, 30 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+index ddd5d77fb5a5..476308378e90 100644
+--- a/drivers/hid/usbhid/hid-core.c
++++ b/drivers/hid/usbhid/hid-core.c
+@@ -27,6 +27,7 @@
+ #include <linux/wait.h>
+ #include <linux/workqueue.h>
+ #include <linux/string.h>
++#include <linux/seq_buf.h>
+ 
+ #include <linux/usb.h>
+ 
+@@ -1365,6 +1366,7 @@ static int usbhid_probe(struct usb_interface *intf, const struct usb_device_id *
+ 	struct usb_device *dev = interface_to_usbdev(intf);
+ 	struct usbhid_device *usbhid;
+ 	struct hid_device *hid;
++	struct seq_buf hid_name;
+ 	unsigned int n, has_in = 0;
+ 	size_t len;
+ 	int ret;
+@@ -1399,7 +1401,7 @@ static int usbhid_probe(struct usb_interface *intf, const struct usb_device_id *
+ 	hid->vendor = le16_to_cpu(dev->descriptor.idVendor);
+ 	hid->product = le16_to_cpu(dev->descriptor.idProduct);
+ 	hid->version = le16_to_cpu(dev->descriptor.bcdDevice);
+-	hid->name[0] = 0;
++	seq_buf_init(&hid_name, hid->name, sizeof(hid->name));
+ 	if (intf->cur_altsetting->desc.bInterfaceProtocol ==
+ 			USB_INTERFACE_PROTOCOL_MOUSE)
+ 		hid->type = HID_TYPE_USBMOUSE;
+@@ -1407,22 +1409,23 @@ static int usbhid_probe(struct usb_interface *intf, const struct usb_device_id *
+ 		hid->type = HID_TYPE_USBNONE;
+ 
+ 	if (dev->manufacturer)
+-		strscpy(hid->name, dev->manufacturer, sizeof(hid->name));
++		seq_buf_puts(&hid_name, dev->manufacturer);
+ 
+ 	if (dev->product) {
+ 		if (dev->manufacturer)
+-			strlcat(hid->name, " ", sizeof(hid->name));
+-		strlcat(hid->name, dev->product, sizeof(hid->name));
++			seq_buf_puts(&hid_name, " ");
++		seq_buf_puts(&hid_name, dev->product);
+ 	}
+ 
+-	if (!strlen(hid->name))
++	if (!seq_buf_used(&hid_name))
+ 		snprintf(hid->name, sizeof(hid->name), "HID %04x:%04x",
+ 			 le16_to_cpu(dev->descriptor.idVendor),
+ 			 le16_to_cpu(dev->descriptor.idProduct));
+ 
+ 	usb_make_path(dev, hid->phys, sizeof(hid->phys));
+-	strlcat(hid->phys, "/input", sizeof(hid->phys));
+-	len = strlen(hid->phys);
++	len = strnlen(hid->phys, sizeof(hid->phys));
++	strscpy(hid->phys + len, "/input", sizeof(hid->phys) - len);
++	len = strnlen(hid->phys, sizeof(hid->phys));
+ 	if (len < sizeof(hid->phys) - 1)
+ 		snprintf(hid->phys + len, sizeof(hid->phys) - len,
+ 			 "%d", intf->altsetting[0].desc.bInterfaceNumber);
+diff --git a/drivers/hid/usbhid/usbkbd.c b/drivers/hid/usbhid/usbkbd.c
+index 6b33e6ad0846..83d4df0d7a45 100644
+--- a/drivers/hid/usbhid/usbkbd.c
++++ b/drivers/hid/usbhid/usbkbd.c
+@@ -20,6 +20,7 @@
+ #include <linux/init.h>
+ #include <linux/usb/input.h>
+ #include <linux/hid.h>
++#include <linux/seq_buf.h>
+ 
+ /*
+  * Version Information
+@@ -266,8 +267,10 @@ static int usb_kbd_probe(struct usb_interface *iface,
+ 	struct usb_endpoint_descriptor *endpoint;
+ 	struct usb_kbd *kbd;
+ 	struct input_dev *input_dev;
++	struct seq_buf kbd_name;
+ 	int i, pipe, maxp;
+ 	int error = -ENOMEM;
++	size_t len;
+ 
+ 	interface = iface->cur_altsetting;
+ 
+@@ -292,24 +295,26 @@ static int usb_kbd_probe(struct usb_interface *iface,
+ 	kbd->usbdev = dev;
+ 	kbd->dev = input_dev;
+ 	spin_lock_init(&kbd->leds_lock);
++	seq_buf_init(&kbd_name, kbd->name, sizeof(kbd->name));
+ 
+ 	if (dev->manufacturer)
+-		strscpy(kbd->name, dev->manufacturer, sizeof(kbd->name));
++		seq_buf_puts(&kbd_name, dev->manufacturer);
+ 
+ 	if (dev->product) {
+ 		if (dev->manufacturer)
+-			strlcat(kbd->name, " ", sizeof(kbd->name));
+-		strlcat(kbd->name, dev->product, sizeof(kbd->name));
++			seq_buf_puts(&kbd_name, " ");
++		seq_buf_puts(&kbd_name, dev->product);
+ 	}
+ 
+-	if (!strlen(kbd->name))
++	if (!seq_buf_used(&kbd_name))
+ 		snprintf(kbd->name, sizeof(kbd->name),
+ 			 "USB HIDBP Keyboard %04x:%04x",
+ 			 le16_to_cpu(dev->descriptor.idVendor),
+ 			 le16_to_cpu(dev->descriptor.idProduct));
+ 
+ 	usb_make_path(dev, kbd->phys, sizeof(kbd->phys));
+-	strlcat(kbd->phys, "/input0", sizeof(kbd->phys));
++	len = strnlen(kbd->phys, sizeof(kbd->phys));
++	strscpy(kbd->phys + len, "/input0", sizeof(kbd->phys) - len);
+ 
+ 	input_dev->name = kbd->name;
+ 	input_dev->phys = kbd->phys;
+diff --git a/drivers/hid/usbhid/usbmouse.c b/drivers/hid/usbhid/usbmouse.c
+index 7cc4f9558e5f..b3b2abeee614 100644
+--- a/drivers/hid/usbhid/usbmouse.c
++++ b/drivers/hid/usbhid/usbmouse.c
+@@ -18,6 +18,7 @@
+ #include <linux/init.h>
+ #include <linux/usb/input.h>
+ #include <linux/hid.h>
++#include <linux/seq_buf.h>
+ 
+ /* for apple IDs */
+ #ifdef CONFIG_USB_HID_MODULE
+@@ -110,8 +111,10 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
+ 	struct usb_endpoint_descriptor *endpoint;
+ 	struct usb_mouse *mouse;
+ 	struct input_dev *input_dev;
++	struct seq_buf mouse_name;
+ 	int pipe, maxp;
+ 	int error = -ENOMEM;
++	size_t len;
+ 
+ 	interface = intf->cur_altsetting;
+ 
+@@ -140,24 +143,26 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
+ 
+ 	mouse->usbdev = dev;
+ 	mouse->dev = input_dev;
++	seq_buf_init(&mouse_name, mouse->name, sizeof(mouse->name));
+ 
+ 	if (dev->manufacturer)
+-		strscpy(mouse->name, dev->manufacturer, sizeof(mouse->name));
++		seq_buf_puts(&mouse_name, dev->manufacturer);
+ 
+ 	if (dev->product) {
+ 		if (dev->manufacturer)
+-			strlcat(mouse->name, " ", sizeof(mouse->name));
+-		strlcat(mouse->name, dev->product, sizeof(mouse->name));
++			seq_buf_puts(&mouse_name, " ");
++		seq_buf_puts(&mouse_name, dev->product);
+ 	}
+ 
+-	if (!strlen(mouse->name))
++	if (!seq_buf_used(&mouse_name))
+ 		snprintf(mouse->name, sizeof(mouse->name),
+ 			 "USB HIDBP Mouse %04x:%04x",
+ 			 le16_to_cpu(dev->descriptor.idVendor),
+ 			 le16_to_cpu(dev->descriptor.idProduct));
+ 
+ 	usb_make_path(dev, mouse->phys, sizeof(mouse->phys));
+-	strlcat(mouse->phys, "/input0", sizeof(mouse->phys));
++	len = strnlen(mouse->phys, sizeof(mouse->phys));
++	strscpy(mouse->phys + len, "/input0", sizeof(mouse->phys) - len);
+ 
+ 	input_dev->name = mouse->name;
+ 	input_dev->phys = mouse->phys;
+-- 
+2.39.5
+
 
