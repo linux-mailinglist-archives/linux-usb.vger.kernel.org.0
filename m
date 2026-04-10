@@ -1,162 +1,169 @@
-Return-Path: <linux-usb+bounces-36128-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36129-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aBuuLf2X2GkgfggAu9opvQ
-	(envelope-from <linux-usb+bounces-36128-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 08:26:05 +0200
+	id IGPxNQKh2GnegAgAu9opvQ
+	(envelope-from <linux-usb+bounces-36129-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 09:04:34 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29C923D2BF5
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 08:26:05 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49D8B3D30E7
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 09:04:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D18653011A73
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 06:25:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7DADE3016ECF
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2026 07:02:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 600C4370D43;
-	Fri, 10 Apr 2026 06:25:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6ADB2F5491;
+	Fri, 10 Apr 2026 07:02:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UYmx4ToD"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="l+Yx/GS4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7712C226D02
-	for <linux-usb@vger.kernel.org>; Fri, 10 Apr 2026 06:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375DE29BDBB
+	for <linux-usb@vger.kernel.org>; Fri, 10 Apr 2026 07:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775802358; cv=none; b=ZX5/wsnG9Q8TK3i0gJZ4OGYGGo0WZsXdBFze+0Z9R1iWPjcGCp1TT4UcB+QjVwZEAFKcv63ShdORk8pHOB/YZ8eGfAfH7TzxM6n32RSrMD19l0qDKGPovXReZSnXSujr2XGetuExzCd57cHu2JaTDnnR7YbL0sMKWgmbC9BKyWQ=
+	t=1775804574; cv=none; b=lgX9beb4DsmxawZ9CWmLHRpvqRBv+J/EOa3nWC4rE9sdeDmua/4vLJQhQ2swN0YdKqSI4C7JP+xsISSu12O/1B5ru436MZlR2sgYT5wNoF0VAjHU0k0Y1SzFg8izmpkXLyV1rKj7G8i6v1QFzErnjIYAzWYG0zirgLUecEtOpIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775802358; c=relaxed/simple;
-	bh=vtsaUPO8NheVCDEDwdor+TUMSk16PzgI55viKa1zLBY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=t3sggBRRjUCx3OmJIV4xlbnZ3md/J7041FMbREMFzwTsb74VFTWQsE3seCrFQKkIjoETaEFFD8Dok48Sw34jggZVfi8S6whokp2p6lxH+eKrZpOTG5fVa64UIlYGBp7fcFCa9qfkipBguKSrmYepd+G1+dTDgGLRYPtwIt5iMfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UYmx4ToD; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775802355; x=1807338355;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vtsaUPO8NheVCDEDwdor+TUMSk16PzgI55viKa1zLBY=;
-  b=UYmx4ToDQPLTkcuOXf0qOFIf7QA9dMYwksh1VbUiNwt+W57GDcFnQCUa
-   i1cKnxdkYd23++G1xGHrs0XcjWCLwTfe3o0qt+s6CcxjtNMJYvnEqkQKj
-   8cLGQIrosxmaKBnd9Oj/1ysyWJ9yjNFO+Mv7xMfOPCgXGInJamCO7WJQh
-   taeKFZWSQDiJLGN6NRCKDBbeHyQAwcDjjM44Fo7aqtNNb6ZhwktwCla9U
-   vD4ugygtZlvzOJ7bbw5zAZbayUx2jP4MawUXiIGDtnR2sre1o1X5ZtBcr
-   eP+uPPgyihvUip+qNlCl64etAxjkUtEdsCTxIvNd6YNuh0VfuUqkghOzR
-   w==;
-X-CSE-ConnectionGUID: my4lBEjdToCnE8NL+zkRkg==
-X-CSE-MsgGUID: L+xk9VdtRB26fFBp0wJXZw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11754"; a="76780970"
-X-IronPort-AV: E=Sophos;i="6.23,171,1770624000"; 
-   d="scan'208";a="76780970"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2026 23:25:55 -0700
-X-CSE-ConnectionGUID: S1oUKD20TAGfkaVnE4CLBw==
-X-CSE-MsgGUID: dHIXmsCtTzOeQlQGshdObQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,171,1770624000"; 
-   d="scan'208";a="233930738"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa005.fm.intel.com with ESMTP; 09 Apr 2026 23:25:54 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 2E52795; Fri, 10 Apr 2026 08:25:53 +0200 (CEST)
-Date: Fri, 10 Apr 2026 08:25:53 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>, Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	linux-usb@vger.kernel.org,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [GIT PULL] USB4/Thunderbolt changes for v7.1 merge window
-Message-ID: <20260410062553.GK3552@black.igk.intel.com>
+	s=arc-20240116; t=1775804574; c=relaxed/simple;
+	bh=K3hQ5jm8t2fkVfIGCGJVlfspJl1D3BTnooCoyYx0Wvc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=ZCmEkAwQPiSjsPNkQ7S9dbES9DteNsKnA8xFQaK9+V8VNjHI5Johqa2MA57G/USt0Hc/beXRU3gR0RkqEka7BLPDcXoEEe1ahOOuNvnqjAsDykxWrEHkuI621zNK+Wwm+ODNBSYySeU3dQU+0RaU5O8Rfh2ecWWoJPHjmkrkZoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=l+Yx/GS4; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20260410070248epoutp03e24ff75c7ecf13f7ac897f3f29c883e7~k7NixTHvG0128301283epoutp03Y
+	for <linux-usb@vger.kernel.org>; Fri, 10 Apr 2026 07:02:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20260410070248epoutp03e24ff75c7ecf13f7ac897f3f29c883e7~k7NixTHvG0128301283epoutp03Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1775804568;
+	bh=Ly11Qb8xbXT7ta5nbljznCsqDDGBC9Gx+vpX8sP8kH4=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=l+Yx/GS4mMC2KOyLe2mRIlEDvEHBhGbzC2VvjBLB3WF4PtNC+6h7kssmpUifPNRSz
+	 bpnVxixXadFQLcxJ7dVRjheol6fd3MSGKlVtT7KgnKmE2gEqPVQ1yyFtM5g9rcQzA4
+	 gJo0bchFUTrwft+vjZy/8FtrTDdd4FhuKIGbSwuM=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
+	20260410070246epcas5p42824d616f378776a04d39990334c5103~k7NhBXniQ0059900599epcas5p4Q;
+	Fri, 10 Apr 2026 07:02:46 +0000 (GMT)
+Received: from epcas5p4.samsung.com (unknown [182.195.38.89]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4fsSRn6nl5z6B9mR; Fri, 10 Apr
+	2026 07:02:45 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20260410070245epcas5p49355581dcb9f629641c9914ce4ce80ec~k7Nf5nw3I0059900599epcas5p4M;
+	Fri, 10 Apr 2026 07:02:45 +0000 (GMT)
+Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20260410070243epsmtip1db18ff3b1c3a232910599fcdb8087852~k7Ndsb-eF3258032580epsmtip14;
+	Fri, 10 Apr 2026 07:02:42 +0000 (GMT)
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+	paulz@synopsys.com, balbi@ti.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: jh0801.jung@samsung.com, akash.m5@samsung.com, h10.kim@samsung.com,
+	alim.akhtar@samsung.com, thiagu.r@samsung.com, muhammed.ali@samsung.com,
+	Selvarasu Ganesan <selvarasu.g@samsung.com>, stable@vger.kernel.org, Pritam
+	Manohar Sutar <pritam.sutar@samsung.com>
+Subject: [PATCH] usb: dwc3: Fix GUID register programming order
+Date: Fri, 10 Apr 2026 12:17:32 +0530
+Message-ID: <20260410064735.515-1-selvarasu.g@samsung.com>
+X-Mailer: git-send-email 2.46.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20260410070245epcas5p49355581dcb9f629641c9914ce4ce80ec
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20260410070245epcas5p49355581dcb9f629641c9914ce4ce80ec
+References: <CGME20260410070245epcas5p49355581dcb9f629641c9914ce4ce80ec@epcas5p4.samsung.com>
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
+	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmail.com,wunner.de,vger.kernel.org,linux.intel.com];
-	TAGGED_FROM(0.00)[bounces-36128-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36129-lists,linux-usb=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[samsung.com:dkim,samsung.com:email,samsung.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[samsung.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[selvarasu.g@samsung.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,black.igk.intel.com:mid]
-X-Rspamd-Queue-Id: 29C923D2BF5
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[8]
+X-Rspamd-Queue-Id: 49D8B3D30E7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Greg,
+The Linux Version Code is currently written to the GUID register before
+dwc3_core_soft_reset() is executed. Since the core soft reset clears the
+GUID register back to its default value, the version information is
+subsequently lost.
 
-The following changes since commit 11439c4635edd669ae435eec308f4ab8a0804808:
+Move the GUID register programming to occur after the core soft reset
+has completed to ensure the value persists.
 
-  Linux 7.0-rc2 (2026-03-01 15:39:31 -0800)
+Fixes: fa0ea13e9f1c ("usb: dwc3: core: write LINUX_VERSION_CODE to our GUID register")
+Cc: stable@vger.kernel.org
+Reported-by: Pritam Manohar Sutar <pritam.sutar@samsung.com>
+Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+---
+ drivers/usb/dwc3/core.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-are available in the Git repository at:
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 161a4d58b2cec..0d3c7e7b2262f 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1341,12 +1341,6 @@ int dwc3_core_init(struct dwc3 *dwc)
+ 
+ 	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+ 
+-	/*
+-	 * Write Linux Version Code to our GUID register so it's easy to figure
+-	 * out which kernel version a bug was found.
+-	 */
+-	dwc3_writel(dwc, DWC3_GUID, LINUX_VERSION_CODE);
+-
+ 	ret = dwc3_phy_setup(dwc);
+ 	if (ret)
+ 		return ret;
+@@ -1378,6 +1372,12 @@ int dwc3_core_init(struct dwc3 *dwc)
+ 	if (ret)
+ 		goto err_exit_phy;
+ 
++	/*
++	 * Write Linux Version Code to our GUID register so it's easy to figure
++	 * out which kernel version a bug was found.
++	 */
++	dwc3_writel(dwc, DWC3_GUID, LINUX_VERSION_CODE);
++
+ 	dwc3_core_setup_global_control(dwc);
+ 	dwc3_core_num_eps(dwc);
+ 
+-- 
+2.34.1
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v7.1-rc1
-
-for you to fetch changes up to 498c05821bb42f70e9bf6512c3dec4aa821815d0:
-
-  thunderbolt: tunnel: Simplify allocation (2026-04-07 09:00:26 +0200)
-
-----------------------------------------------------------------
-thunderbolt: Changes for v7.1 merge window
-
-This includes following USB4/Thunderbolt changes for the v7.1 merge
-window:
-
-  - Disable CL-states for Titan Ridge based devices with older firmware.
-  - MAINTAINER update.
-  - Simplify allocation of various structures with kzalloc_flex().
-
-All these have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Dave Hansen (1):
-      MAINTAINERS: Remove bouncing maintainer, Mika takes over DMA test driver
-
-Rene Sapiens (2):
-      thunderbolt: Read router NVM version before applying quirks
-      thunderbolt: Disable CLx on Titan Ridge-based devices with old firmware
-
-Rosen Penev (3):
-      thunderbolt: dma_port: kmalloc_array + kzalloc to flex
-      thunderbolt: Use kzalloc_flex() for struct tb_path allocation
-      thunderbolt: tunnel: Simplify allocation
-
- MAINTAINERS                    |  2 +-
- drivers/thunderbolt/dma_port.c | 15 +++------------
- drivers/thunderbolt/path.c     | 28 +++++++---------------------
- drivers/thunderbolt/quirks.c   |  7 +++++++
- drivers/thunderbolt/switch.c   | 30 ++++++++++++++++++++++++++----
- drivers/thunderbolt/tb.h       |  5 +++--
- drivers/thunderbolt/tunnel.c   | 10 ++--------
- drivers/thunderbolt/tunnel.h   |  5 +++--
- 8 files changed, 52 insertions(+), 50 deletions(-)
 
