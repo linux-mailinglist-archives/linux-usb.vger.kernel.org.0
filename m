@@ -1,176 +1,148 @@
-Return-Path: <linux-usb+bounces-36160-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36161-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id vVsYJs1P2mlv0AgAu9opvQ
-	(envelope-from <linux-usb+bounces-36160-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 15:42:37 +0200
+	id 6KeCE8Vd2mlQ0wgAu9opvQ
+	(envelope-from <linux-usb+bounces-36161-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 16:42:13 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86A713E023E
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 15:42:36 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 634FD3E0611
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 16:42:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 514DF3004403
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 13:39:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BEFF6301C150
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 14:42:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8140717B43F;
-	Sat, 11 Apr 2026 13:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC3BD386544;
+	Sat, 11 Apr 2026 14:42:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NaJqVQ36"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="XIsvNkza"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE614265CBE
-	for <linux-usb@vger.kernel.org>; Sat, 11 Apr 2026 13:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0092DA749
+	for <linux-usb@vger.kernel.org>; Sat, 11 Apr 2026 14:42:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775914783; cv=none; b=Bo23DxkLDK5P6tqVrzRTQ6AbWU/P7XgIQnzxhkalzcKE5/WFE2iwYbeMaVe9P1w0NRXtm+61jjQ2yRR/HnrbzKSQcknYN9lFRDUFG/51WK7pfVG3NtNOfD1UrDbXs5Eg7mgREetGl07quaJOcUL8gURtwGzZJvzsVqm8i6LucZk=
+	t=1775918527; cv=none; b=md1CWc38EDrxy6gNXlYV5zx6qedEwMhfTZNOp/W0DgMu/1IftqPsycrH+68BJ5mTCCmFdcjqbTEkT30//4SOpVDINRxpprrwMFratXXeeIJrBQcrDgXg6AUga/1ZuKp02vIWLZ+md8sQia4keSVZihZ+Pw27IBIECWft5bUihKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775914783; c=relaxed/simple;
-	bh=GlYCZfWgWZ+Auk8Kau0yI40Dl4yPnI6VLalMiXlRhRg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TX2b6FURSfK8PaMhd/RL3a71E9jRtuyyHj+lG8I3/EBxcsxXu86r++83yc48+4aRAIV3usqICwdd8hXLc1BdewpxM1Z9KNRoaWwYvogz/VY/kzeLLnE9WjCBLDYqWD72xjtYQ0I7zsD0JGmcEK/bnMqzP1bq8jiQ2fg/w0Qxg+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NaJqVQ36; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-488971db0fdso29116445e9.0
-        for <linux-usb@vger.kernel.org>; Sat, 11 Apr 2026 06:39:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775914780; x=1776519580; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pDRr3a1WzbFHjnYdc5Yz0jdXm1HUWqyueTEULNfk4+U=;
-        b=NaJqVQ36UnAvMXD6iIduaGM/LB1QYrOxPYSAR5JnvcrjYm0aFHr6nXJNegqNQr6CO4
-         5mB9QEvjTUFJ9YODYPs+OOl8Kc/ctWPJ7f5/NHSb4+01tml3n3zyw1b7C6GskQc+ZDH+
-         3h9mPl4gZ/U9jzNEKGV6yNMWc9wPZtl0KR5MnVKFBAoYnQzqLGEhM+1W3HLCNWeRQxF8
-         1CU1zmrGd8P3lwvc28Gt49CfLkm9mPL91GaaRYQApA49bO3DfakkZCYx6Vqx0jaPEIZc
-         48zGYJysJiLfBx70dLWSWeTXMo6yIKjk0bhKiqOj6DW2VTcHabry0aFhPNjeb4MyRCvZ
-         jaBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775914780; x=1776519580;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=pDRr3a1WzbFHjnYdc5Yz0jdXm1HUWqyueTEULNfk4+U=;
-        b=nQa2SWuD0cBHivKJLDbQ/i6T10dKZwbCqW3PKhelI9gJQI7S4pbcpPR/yiBAZPniXw
-         xwpj8PN8bDBaMxi+xO6FgI48BAVxPJlxWvkapgN0h4rjU1SOuH7+EcGu7SOEVgnmy6M8
-         0Ndcv4qcFC/VNjuxahSTgwUAC09lW6UtRh4BeXVEkVNu57KgXdAvHhcJvIc1FkfHKh72
-         QdyO/Ee2zCFB3k2fYc6oEqgevnG00OLrj6W11pel3YavDMZ6ZGHxAmHWacqIdXVp2YAu
-         zM1w2qaUlDTGWt7+TjttHr+Iw/VHBh++4nOSg/e8rid/Om5jkPE3gIhXd3rZW07fr/dQ
-         Hg7w==
-X-Forwarded-Encrypted: i=1; AJvYcCWh5YntSm+nNtDUdJbLSp9DoZarbxYgZrEBifXmKRIg6wdDCTiOr8+NodZWwNQ+tzyY7iuyoD7xxhI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxe3LwHIQK82U73DHc+TT+Iy2b/wd+94E/TFjTocFhMQoEv/mco
-	ALsp8EdQ2dSV2QANuYn19JxZ0NdhufNZZ29A95EdpYX8Z6Yhq7DYUMS4
-X-Gm-Gg: AeBDiev1ZVFVjt5ZG7O0oJw4PMblm3HtATOvOFUrtBbrvOWuWuI3HyV9yc1Q8pJNgsM
-	rw+w2iNJhr56XDR1gYJATeClZb7jafntKkjqZnRVoIjOYfHKJSskxRln6NA8BYTlMRx3oGUrGdP
-	NX0scV1/+rxBfxs9+MoNm0B229tWmuOr2VmOfgdu5t9N4cLi9k7A8ou8FWxGCglk7+7Bd6P6m7W
-	J5CDeYc0obq5z25eTd3hP1WpSVMqwd/ErOGD75t9EAL8mwHn/VBSRT9aX685brDIRF5YcRAQNgj
-	SAPZMGQYi4/uOoWwamaoWdmCZRoY5B9UgrS7EKWzhHFEWZMlOkG1xqnpmZvXYTXH+yYz0M8gj1C
-	EswD1R/yqOkPRIgzFLnlej4rhfbSU7QrtbYoe5RJkPf/fRhRcW95ax3NmwUt74rO1pj0LW7s82K
-	9eO+lFJ0wVnqK9b8o8pvOM5E4YRT1QPtq/hug=
-X-Received: by 2002:a05:600c:8585:b0:488:9bf8:7f17 with SMTP id 5b1f17b1804b1-488d684bcb0mr70355895e9.14.1775914780064;
-        Sat, 11 Apr 2026 06:39:40 -0700 (PDT)
-Received: from foxbook (bfi125.neoplus.adsl.tpnet.pl. [83.28.46.125])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d5347ea5sm169775625e9.8.2026.04.11.06.39.38
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sat, 11 Apr 2026 06:39:39 -0700 (PDT)
-Date: Sat, 11 Apr 2026 15:39:35 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Ricardo Ribalda <ribalda@chromium.org>, JP Hein <jp@jphein.com>, Alan
- Stern <stern@rowland.harvard.edu>, Laurent Pinchart
- <laurent.pinchart@ideasonboard.com>, Hans de Goede <hansg@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, linux-media@vger.kernel.org,
- linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] media: uvcvideo: add UVC_QUIRK_CTRL_THROTTLE for
- fragile firmware
-Message-ID: <20260411153935.2fc5c030.michal.pecio@gmail.com>
-In-Reply-To: <c4275422-a9b4-4519-95f9-1163a7912709@linux.intel.com>
-References: <20260331003806.212565-1-jp@jphein.com>
-	<20260331003806.212565-3-jp@jphein.com>
-	<CANiDSCvsxP+npQTHUrMTp+Z8XULYKSLTz2AFu+WQnsLbRBGa2w@mail.gmail.com>
-	<20260409100247.7cfb62d1.michal.pecio@gmail.com>
-	<20260409221749.5e6bccab.michal.pecio@gmail.com>
-	<c4275422-a9b4-4519-95f9-1163a7912709@linux.intel.com>
+	s=arc-20240116; t=1775918527; c=relaxed/simple;
+	bh=jDNje2qE5wnUiO5W68NMfsRUbTDbBEc+Q4erprxn58I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YEPwCJvz+0UhZ6S9BLmGXxMtLhHyn0Jy/B8b7d53S7rXrWKFEe3Rsstx5UCSKglvdtR+mFXmNVx6UnSN5FQppiAU3x49CmqvduXTGFFkf9p8bZnHLIdZ8bDPU+aoKKJSW4gdPKwvX+A/evbTcfjtTyT0ejscHChZoLQ7WSy8iK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=XIsvNkza; arc=none smtp.client-ip=54.254.200.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1775918500;
+	bh=RGI/m8KjnHFpnLWDkqIY3XoL8mJQCn1B5U6YOZXtvRQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=XIsvNkzaKiSoMf3kZDsclYCsVCZL20BB+TNtUl/72tYFzHXL5Kxyp6PkTI2EwU9mY
+	 RcMV5RFLbAhwp19U3psusm7o9FSCUYnxmydI8IGqkK/rVxO6I3iGAs3rqr/9Amx+vJ
+	 3AHOOxVQsB/7Zgp75Nc1ZO9+PInVxV9HACcWJZ9k=
+X-QQ-mid: zesmtpip2t1775918494te3d24484
+X-QQ-Originating-IP: WzSvb7kXZNNMN/wnXlGzfhNQOzNCWMW8/NmTxVxoOCw=
+Received: from uos-PC ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Sat, 11 Apr 2026 22:41:33 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 8893480091701257266
+From: raoxu <raoxu@uniontech.com>
+To: mathias.nyman@linux.intel.com
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org
+Subject: Question on follow-up work for secondary interrupters
+Date: Sat, 11 Apr 2026 22:41:33 +0800
+Message-ID: <47A8A9A0842FA2D5+20260411144133.1207478-1-raoxu@uniontech.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260402131342.2628648-1-mathias.nyman@linux.intel.com>
+References: <20260402131342.2628648-1-mathias.nyman@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: N82HcWlqWvaKSW7l/LmFkhJjH6x/Z5w23zlIB7cHp6gw4Ce7Mcw3zMA3
+	BRtG/ABiIC3eJfnJsUcXlC0l+vySV5JmspSK3S3aSB8i9NGnVcsDabUNsLH8E7NTJiKDPBF
+	Zg574IYBKGnjkakBR1j7EG6KvvBXhLZEQtWMHXr7oPpppaHqa/Lh1dcxiRRM0S/JxoWLIDz
+	Sgcc9nxnfWTlDj9GLv1+EuVmVsHaJ9l1++sP+28KGeK9Yc/xW1Bc0d3T+0xlPRa1gMuF3CT
+	LQHLeZi/Rr+9X6rluaExIp/VVaCJifJ/Klit0F8MIItHPSzsLFt64rCOPdjmPxk2w3LVyKb
+	KTvPLgGtYyHS9HkgT6BU/Vp90Dx0UfPqiBf4Aj7l2mOROAKz5D5DB3ONLBt6gu48+paOupq
+	wE3qMFB1iEOCpoJBKeuQwdGQBtPfh86pNY8vAj62uWFTo1XFbH6aIuix5s7DkB5wDLpj8IC
+	wromVHu5k41wKrhjAIpr0FEqEIHB74cD7a6VibXhBOxERGpKAXyTq/gmUMZc5qjMlmnua0n
+	LVFC5zvVyzGe6azjneh2UJ+nZ+eFl4yNekM5SgA0vFGXTbskisrnulQAhi2+2Y/xlbSMe9/
+	+l8j4a3SBXiyYpU8nrQi8d9WUr4r4MPaP/tv3D3zOHjnEBU7CyBlS9nbtQNy1xMI+9dk8rj
+	QQQPxcZJ7x+Y7Z5JsZbOSJbVE7zXOwXulrjkfkrwzJEY3mf/akB11DahK65mqjtGEjInGkl
+	lZ8E2cB74Xb7J57YWAt8RF0P+1kU26q7zq+dfknPhsLSWVhbeaCZaLyct2OJO6fU+7L+YWb
+	2OZNvC9qSTPCLKwYTTzm6dG342qdWMff5GFUwmyZxiNH2TNheA/KUu+PF61orUNWPAQfsgN
+	lS2vVa+wCkcAFB9GhqPtmN3U5auRs1x96mA6nU7sL0gdFtMDMtfeFCbHqqzKhA4Eo1W+iii
+	6G2i6TSmEwYiIwhtdWae3fZtrG1DDEx0XyMz4/1fDadt6rYWIHGxCAp/zZNHMd9rs3t+QSJ
+	r+d4li+CGT+iS93sncwVAiKc4DSSMgAJVF8N1N4bW9fwe8YKRP9VBJD6gRA51SXvo+ZJ3CB
+	Q==
+X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
+X-QQ-RECHKSPAM: 0
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36160-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36161-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_THREE(0.00)[3];
+	DKIM_TRACE(0.00)[uniontech.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 86A713E023E
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 634FD3E0611
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sat, 11 Apr 2026 00:48:05 +0300, Mathias Nyman wrote:
-> > Five seconds later two control URBs are unlinked:
-> > Mar 30 16:59:21 katana kernel: xhci_hcd 0000:00:14.0: Cancel URB 00000000122aa5e2, dev 3.1, ep 0x0, starting at offset 0x11e227b40
-> > Mar 30 16:59:21 katana kernel: xhci_hcd 0000:00:14.0: // Ding dong!
-> > Mar 30 16:59:21 katana kernel: xhci_hcd 0000:00:14.0: Cancel URB 000000008a55bcd3, dev 3.1, ep 0x0, starting at offset 0x11e227b20
-> > Mar 30 16:59:21 katana kernel: xhci_hcd 0000:00:14.0: Not queuing Stop Endpoint on slot 18 ep 0 in state 0x44  
+> A couple small fixes and a lot of xhci refactoring, decoupling and cleanups
+> for usb-next.
 > 
-> log continues with:
-> Mar 30 16:59:21 katana kernel: xhci_hcd 0000:00:14.0: Removing canceled TD starting at 0x11e227b40 (dma) in stream 0 URB 00000000122aa5e2
-> Mar 30 16:59:21 katana kernel: xhci_hcd 0000:00:14.0: Removing canceled TD starting at 0x11e227b20 (dma) in stream 0 URB 000000008a55bcd3
-> Mar 30 16:59:21 katana kernel: xhci_hcd 0000:00:14.0: Set TR Deq ptr 0x11e227b40, cycle 0
+> Thanks
+> Mathias
 > 
-> One theory could be that xHC control endpoint refuses to restart when
-> its dequeue pointer is moved to a no-op TD like in this case (second
-> cancelled URB).
+> Michal Pecio (3):
+>   usb: xhci: Simplify clearing the Event Interrupt bit
+>   usb: xhci: Fix debugfs bandwidth reporting
+>   usb: xhci: Make usb_host_endpoint.hcpriv survive endpoint_disable()
 
-This could explain why it doesn't work later, but not why these URBs
-have been unlinked after making no progress for 5 seconds. EP0 was
-probably still functioning normally during those submit-unlink cycles
-on 0x85 and there were no EP0 unlinks until these above.
+Hi Mathias,
 
-Another corner case which could potentially confuse HCs is Set TR Deq
-to a Link TRB, but it doesn't occur in this log on any endpoint.
+I saw your recent xHCI refactoring series for usb-next.
 
-By the way, are you able to find out what this is?
-198 falls into the "vendor defined error" range and vendor is Intel.
+In your earlier reply to my patch, you mentioned that after this
+refactoring it should be possible to use the secondary interrupter
+itself as the request_irq() data, instead of adding a separate
+array/context.
 
-crash-6.17.0-xhci-test-20260410-154243.log, isochronous URB unlink:
-[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
-[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
-[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
-[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
-[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
-[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
-[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
-[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
-[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: Transfer error for slot 36 ep 2 on endpoint
-[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
-[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: Stopped on Transfer TRB for slot 36 ep 2
+Would you say the code is now in a good state for me to continue the
+secondary interrupter work on top of it?
+
+If that is the case, I would be happy to continue from this new base
+and rework my earlier patch in the direction you suggested.
+
+Thanks,
+Xu Rao
 
