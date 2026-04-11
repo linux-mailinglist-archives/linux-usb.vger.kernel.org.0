@@ -1,89 +1,91 @@
-Return-Path: <linux-usb+bounces-36151-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36152-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id e8lxLGXE2WnFswgAu9opvQ
-	(envelope-from <linux-usb+bounces-36151-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 05:47:49 +0200
+	id CJ1nDOLG2WkGtAgAu9opvQ
+	(envelope-from <linux-usb+bounces-36152-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 05:58:26 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4864A3DE441
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 05:47:48 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89D123DE487
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 05:58:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 18D42300FA25
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 03:47:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A51F2302768A
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 03:57:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D6452D97BB;
-	Sat, 11 Apr 2026 03:47:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F11A2DCBE3;
+	Sat, 11 Apr 2026 03:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rAuQ4R+h"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jsu1go2A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAE321E091
-	for <linux-usb@vger.kernel.org>; Sat, 11 Apr 2026 03:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B42286891
+	for <linux-usb@vger.kernel.org>; Sat, 11 Apr 2026 03:57:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775879258; cv=none; b=m/Z1zQUIOBHd/yk/fy1mciteJWNaw0UjOi5cU5cKVDZ67I58YZ8RWeZQK27qmyJk5INyAQJvaF/cbibzq2wI1DUPKYeqbh1FKqv8VF/YT/y4/BeIqrjn3RB0arJVmpnneGm0zXFwHIy58CuetrS4O+B2EBfJKdIjxi+cXhIkmus=
+	t=1775879872; cv=none; b=W711JPdZ1HtFjVqf+YXnmKaeVFFpnB4oJoHLTgOYHfEx9v6lh9yZPtii16burUljSohdvEQiQ/giWX5WJ8Rm05YlJnKMzYtBHVS86YZC4CGmpXERzeyR9gvIskt87N8aGNUKTGfzt5Lq1rSrhA4ZsbMD7Z1xQ8Z9Dq8OgZBaiG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775879258; c=relaxed/simple;
-	bh=tR1X5bTvGMCjFYa5yAHh3yNIfn6edk4tK53EiK4iKFQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BhQcbgdwxhJNfi2PcwNHGJ4jMeGAkNEdbrqp/XbkvA4lW+HDLSogENn9Bymnrxbq4v7oOF6oPxL/E8kPifYPus+eyRlPIrMkVpd9sBf6/WBp34HDDpMf9MGAYBCR5Axy+JPQmzOiAPNCwHI+MeO0vEBSBDnjLXI9dk3n9Uy5W6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rAuQ4R+h; arc=none smtp.client-ip=209.85.219.54
+	s=arc-20240116; t=1775879872; c=relaxed/simple;
+	bh=Uu58r8/wIiXvJnAqLv2l6SozLHrd5sRl1mot2FjDAEI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mHlD6RBzOrHmaxD7ggtA92oydnOiARJrpK3nUuV7n/xUD2XRHhahxWOu3yD+bHIlB7oj8bpxz5JAdXU4Xhe2C0Y0GQMW89bD6y9e0UeR00sPR6Ulsdrxb06151FhQLNNgCxDN2sXtKvWUSTbx8cE8LYx1aeO1k1ytKGv2yslAd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jsu1go2A; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-8a58057d7baso30511216d6.1
-        for <linux-usb@vger.kernel.org>; Fri, 10 Apr 2026 20:47:37 -0700 (PDT)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-82ce49785a0so1257742b3a.2
+        for <linux-usb@vger.kernel.org>; Fri, 10 Apr 2026 20:57:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775879256; x=1776484056; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775879870; x=1776484670; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GTrg3tEJ6M09HWK3Sh9RrgU4ykgP07OdBKz3FVnDC70=;
-        b=rAuQ4R+hBVXNUYXwLV3egXNAwgQgy5f5tFh89hh2Gc/mb4TPA+2ntCDx9IXSt/axIk
-         gU07B1uiRF5/MGeFHZ7pyl7V9Uc8ArBil7T5EW2dGfPiCCqL6BrR1deX8Lj1iCiIwmDT
-         Ipv8kyPcbrKxT2jO6v3oLDGugw9YMWPlMwawvBEeKmb7wvHd1Jp/QTqKzs1HQSAnKRdu
-         D0jA3Nsic9wsUjgYWTMgBl0yU/yk3P3c8b1EfTmSS0xIDRpdINHZJC98W4SFxDmOphvI
-         xud+fiOE0KWi2spx3AM7ca9xzzRKTlKfj7Nyk6OYBz5dydto2ZMEQ7wtuBTT2ssDSfql
-         J1MQ==
+        bh=cwxR3TEzggrqwnYhCtbksF3x2HjY5X8G0vLpnWNk5pY=;
+        b=Jsu1go2A2PT8KmRl13UO/C4grpWQ8pAfaAVROhSOsIi1Rd1hajzXq04RtHWXIN6y98
+         iqfYf6Phs8bWGpX+m/q482fCTlAo3jU7t7hZfbjSs6QufaWqmoVbJz7eWuhF9yYK00by
+         n5DvUOI2fCxyozQlae5pjZAQXmHrrl8dbg+tItHBZvKVZ5Ib/9VCuPZICp164aXcUEj1
+         Vy+FD7ZJAIPqZyeea4vM3X24JRf8qhqPDeZfhd8UK/loVWp51PgHRf2htPcvad/1f7nm
+         RenZ7l2eFBANUqjfTzEAeWVydX7xen/od4pjxi4EVMGhEy8ctctDw7heKatNx2p7UiKI
+         4bCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775879256; x=1776484056;
+        d=1e100.net; s=20251104; t=1775879870; x=1776484670;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GTrg3tEJ6M09HWK3Sh9RrgU4ykgP07OdBKz3FVnDC70=;
-        b=LlT41qEnv2xV0lakkEiTGUcoe6cbeJb8QROBdiwuSzylFOfPLDA1XAIFW4iZkByLu7
-         CHIatdP2l3Kmuz1SBVoh+8W9Sg2UWoeYm0xktZAlwUWOof4+5ghUJxvCQ1eqx5RGLaPH
-         78uXc1U7AMu+BES0o2OBMW2Q/yAuy929erJgaJLIijSA7wkHwARPLq32pwskKlCTcBjV
-         QHz0pQs/rdO9bmbzfALcSEwhlFlHKMAL9IKc/6HvZxFARlHOXWAXWuxUDwDb66m/kpaT
-         xQt28w9J1i1I/jaR+G/aT1UTvBTOJa/nlgOQCuBcyPLsMF83YGEoUzQfyb6BFC4iIKOB
-         /KQA==
-X-Gm-Message-State: AOJu0Yw4M7td2PQCwb8FkiV5SbzZ9K3jv/3x0UItt/NsJEBxv1Yr6yi1
-	Ja2ywFyaCKxt+/Dwc69gEKsBMmNaghMNg/SLSN88SOnnz2zIfMBKJz++y3cPHw==
-X-Gm-Gg: AeBDievchdKGS/bU8s/cKnGFn3mzQQpIzy/57o2X33XfQ3OVdJdrn1VZ04Cd/k8aeEa
-	TtxSiBDQU7SbY1gnfraq2FXHGb28tlXC7SkgbA4K3RDZUWP8WE607gbk3sC/BgiO5TBcdZJurMi
-	BOstI0A4zgWoFU9IAIj5japwE6tlgTp9puZ56yggiEyqpBTPmSjq0ablP+KilD5gre9BD1LRuj2
-	PCDleStMDoN3CbZdHNH3930S5kV9IMY1yMNyj9Vu5pjeBmVvVjXGDoVHa7lZdM6a9D4UqEjvlND
-	vc50+umf/mXfIJ3+EZIXDP4o5GHyBtLJeZ+5sU5uTW7y+jzbe1JrxVH96f6ajZwzFxLaq/gEhCk
-	T/j5zdHQTsIlLshUfpxbspslJ1iCLCZY2loiEZlRRjuX4uBBFgbGmwwilyXLQpLMgGr7aSg3oK/
-	pPyCM/+n7LZws+QoGE0MQPWrq+uToZaFb+JQiooWCBJyreJu9lJES1f10=
-X-Received: by 2002:a05:6214:590a:b0:8a0:f8b7:3921 with SMTP id 6a1803df08f44-8ac862b616fmr101986536d6.41.1775879255892;
-        Fri, 10 Apr 2026 20:47:35 -0700 (PDT)
+        bh=cwxR3TEzggrqwnYhCtbksF3x2HjY5X8G0vLpnWNk5pY=;
+        b=XboP5lTg6QuV/IcBty9MYElmpNVIts9KPhrbGb7nsuzSEbkoiWkwqOYf4qUVD8iruF
+         ctkFYVyUXlvWJ5lcy7dqJWwtTqLkGwOCRzbFsJWNZ5rWUoMQLFI9oy/rz/PCLvaGnAdH
+         xigSMlP6QgHToKIoap/ZljC1fVNJeEh6hucKjjl1HN5SinCssq8dYFsUNNFfUR5IC9nk
+         V0X1/5ICUAwrhC+xnw72PH4+VyJSqZR3AELIBEtWs8JjgwJ9Pgwob4kgbddOA2u0wIyc
+         pKR/DSTQ+oo8YrQgK2ubW0YJV3f0ozk6BMMnUdX+eR/RwCM690ry4uGfe/ww2jSpYx2i
+         /xmQ==
+X-Gm-Message-State: AOJu0YyRhAGcqbzxK2m6veEq2PigmhZGU4Cq9g8PqQgh9mpAjo+o3XP7
+	S83FH2DnyTXUEschcYkYytmiVDXK6Cd670Gk5HVDXthFqkZG42OwfIAJfeoDHA==
+X-Gm-Gg: AeBDievbWqNs+QbMWNwJs1cwoal9QRP/fIm0iyNI5NhY4grRtYapUu9HUIR0MkXh7vK
+	yK+jZmeSbMxJ0wHzRvC9LcaYmyf32jIkpevj2cU6BY9+9u/0x2eQcCXGhQ3LNiYyB/DUydMdOKi
+	Ban9QdolUkgFeDRrbH8MvpEN5IjiW4994ZtD6Iek0xgdGrwiEa3nTHYwKURvCkLwaUNU8UoKhqB
+	JX/OIROsq00fE2CveRXkEWUCWSZXvGHSbpDAr1eLhE5HYmQiqTx08/xdlBUCWnb7oKOh8OCoD5n
+	s+d2F0JxJh7FOhxKEbTHyTdLhZECzpmSqOXDofPqtJMU3da5V8QMy/i7tcR29ievcf8cxoU6ysJ
+	IPnl7gT+eMIch+u0urhokJseqkw/O3TTqAkaKaaeiBOBmPS0qCnLUqV3QLbwqeP6X6fR+/umFFB
+	noJ+e4pTKMmGIDNK7SWBxdgwe7NBMJBW9ZZvuX4NtE519oCQ885oIjY8I=
+X-Received: by 2002:a05:6a20:3d12:b0:39c:bf48:11db with SMTP id adf61e73a8af0-39fe3f3d83cmr6340981637.38.1775879869733;
+        Fri, 10 Apr 2026 20:57:49 -0700 (PDT)
 Received: from ryzen ([2601:644:8000:5b5d::8bd])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ac84a10e7esm39355356d6.16.2026.04.10.20.47.33
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c79216fff97sm3986596a12.7.2026.04.10.20.57.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Apr 2026 20:47:35 -0700 (PDT)
+        Fri, 10 Apr 2026 20:57:49 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
 To: linux-usb@vger.kernel.org
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Kees Cook <kees@kernel.org>,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-arm-kernel@lists.infradead.org (moderated list:MEDIATEK USB3 DRD IP DRIVER),
+	linux-mediatek@lists.infradead.org (moderated list:MEDIATEK USB3 DRD IP DRIVER),
 	linux-kernel@vger.kernel.org (open list),
 	linux-hardening@vger.kernel.org (open list:KERNEL HARDENING (not covered by other areas):Keyword:\b__counted_by(_le|_be)?\b)
-Subject: [PATCH] usb: dwc3: qcom: allocate clks with main struct
-Date: Fri, 10 Apr 2026 20:47:19 -0700
-Message-ID: <20260411034719.161736-1-rosenp@gmail.com>
+Subject: [PATCH] usb: mtu3: allocate phys with ssusb
+Date: Fri, 10 Apr 2026 20:57:31 -0700
+Message-ID: <20260411035731.163580-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -97,13 +99,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36151-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-36152-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -112,106 +114,90 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[rosenp@gmail.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	NEURAL_HAM(-0.00)[-1.000];
 	DKIM_TRACE(0.00)[gmail.com:+];
 	TAGGED_RCPT(0.00)[linux-usb];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4864A3DE441
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 89D123DE487
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Use a flexible array member to combine allocations.
+Use a flexible array member to combine allocations. Allows removal of a
+pointless branch. A size of 0 means phys are not allocated.
 
 Add __counted_by for extra runtime analysis.
 
-Change dwc3_qcom_clk_init to a single parameter. No need to pass count
-separately now.
-
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/usb/dwc3/dwc3-qcom-legacy.c | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+ drivers/usb/mtu3/mtu3.h      |  2 +-
+ drivers/usb/mtu3/mtu3_plat.c | 18 ++++++------------
+ 2 files changed, 7 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom-legacy.c b/drivers/usb/dwc3/dwc3-qcom-legacy.c
-index d3fad0fcfdac..565d03eb01b8 100644
---- a/drivers/usb/dwc3/dwc3-qcom-legacy.c
-+++ b/drivers/usb/dwc3/dwc3-qcom-legacy.c
-@@ -74,7 +74,6 @@ struct dwc3_qcom {
- 	struct device		*dev;
- 	void __iomem		*qscratch_base;
- 	struct platform_device	*dwc3;
--	struct clk		**clks;
- 	int			num_clocks;
- 	struct reset_control	*resets;
- 	struct dwc3_qcom_port	ports[DWC3_QCOM_MAX_PORTS];
-@@ -90,6 +89,7 @@ struct dwc3_qcom {
- 	bool			pm_suspended;
- 	struct icc_path		*icc_path_ddr;
- 	struct icc_path		*icc_path_apps;
-+	struct clk		*clks[] __counted_by(num_clocks);
+diff --git a/drivers/usb/mtu3/mtu3.h b/drivers/usb/mtu3/mtu3.h
+index ba5a63669e5f..d71849388602 100644
+--- a/drivers/usb/mtu3/mtu3.h
++++ b/drivers/usb/mtu3/mtu3.h
+@@ -252,7 +252,6 @@ struct ssusb_mtk {
+ 	struct mtu3 *u3d;
+ 	void __iomem *mac_base;
+ 	void __iomem *ippc_base;
+-	struct phy **phys;
+ 	int num_phys;
+ 	int wakeup_irq;
+ 	/* common power & clock */
+@@ -272,6 +271,7 @@ struct ssusb_mtk {
+ 	struct regmap *uwk;
+ 	u32 uwk_reg_base;
+ 	u32 uwk_vers;
++	struct phy *phys[] __counted_by(num_phys);
  };
  
- static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
-@@ -653,10 +653,11 @@ static int dwc3_qcom_setup_irq(struct platform_device *pdev)
- 	return 0;
- }
+ /**
+diff --git a/drivers/usb/mtu3/mtu3_plat.c b/drivers/usb/mtu3/mtu3_plat.c
+index cc8a864dbd63..11a919fc3d47 100644
+--- a/drivers/usb/mtu3/mtu3_plat.c
++++ b/drivers/usb/mtu3/mtu3_plat.c
+@@ -240,17 +240,6 @@ static int get_ssusb_rscs(struct platform_device *pdev, struct ssusb_mtk *ssusb)
+ 	if (ret)
+ 		return ret;
  
--static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
-+static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom)
- {
- 	struct device		*dev = qcom->dev;
- 	struct device_node	*np = dev->of_node;
-+	int			count = qcom->num_clocks;
- 	int			i;
- 
- 	if (!np || !count)
-@@ -665,13 +666,6 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
- 	if (count < 0)
- 		return count;
- 
--	qcom->num_clocks = count;
+-	ssusb->num_phys = of_count_phandle_with_args(node,
+-			"phys", "#phy-cells");
+-	if (ssusb->num_phys > 0) {
+-		ssusb->phys = devm_kcalloc(dev, ssusb->num_phys,
+-					sizeof(*ssusb->phys), GFP_KERNEL);
+-		if (!ssusb->phys)
+-			return -ENOMEM;
+-	} else {
+-		ssusb->num_phys = 0;
+-	}
 -
--	qcom->clks = devm_kcalloc(dev, qcom->num_clocks,
--				  sizeof(struct clk *), GFP_KERNEL);
--	if (!qcom->clks)
--		return -ENOMEM;
--
- 	for (i = 0; i < qcom->num_clocks; i++) {
- 		struct clk	*clk;
- 		int		ret;
-@@ -736,13 +730,18 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	struct device		*dev = &pdev->dev;
- 	struct dwc3_qcom	*qcom;
- 	int			ret, i;
-+	int			num_clocks;
- 	bool			ignore_pipe_clk;
- 	bool			wakeup_source;
+ 	for (i = 0; i < ssusb->num_phys; i++) {
+ 		ssusb->phys[i] = devm_of_phy_get_by_index(dev, node, i);
+ 		if (IS_ERR(ssusb->phys[i])) {
+@@ -330,12 +319,17 @@ static int mtu3_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct ssusb_mtk *ssusb;
+ 	int ret = -ENOMEM;
++	int num_phys;
  
--	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
-+	num_clocks = of_clk_get_parent_count(np);
-+	qcom = devm_kzalloc(&pdev->dev, struct_size(qcom, clks, num_clocks),
-+			GFP_KERNEL);
- 	if (!qcom)
++	num_phys = of_count_phandle_with_args(dev->of_node,
++			"phys", "#phy-cells");
+ 	/* all elements are set to ZERO as default value */
+-	ssusb = devm_kzalloc(dev, sizeof(*ssusb), GFP_KERNEL);
++	ssusb = devm_kzalloc(dev, struct_size(ssusb, phys, num_phys), GFP_KERNEL);
+ 	if (!ssusb)
  		return -ENOMEM;
  
-+	qcom->num_clocks = num_clocks;
++	ssusb->num_phys = num_phys;
 +
- 	platform_set_drvdata(pdev, qcom);
- 	qcom->dev = &pdev->dev;
- 
-@@ -766,7 +765,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 		goto reset_assert;
- 	}
- 
--	ret = dwc3_qcom_clk_init(qcom, of_clk_get_parent_count(np));
-+	ret = dwc3_qcom_clk_init(qcom);
+ 	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
  	if (ret) {
- 		dev_err_probe(dev, ret, "failed to get clocks\n");
- 		goto reset_assert;
+ 		dev_err(dev, "No suitable DMA config available\n");
 -- 
 2.53.0
 
