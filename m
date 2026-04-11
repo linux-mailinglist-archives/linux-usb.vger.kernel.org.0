@@ -1,120 +1,147 @@
-Return-Path: <linux-usb+bounces-36156-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36157-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gwB6Isof2mnEyggAu9opvQ
-	(envelope-from <linux-usb+bounces-36156-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 12:17:46 +0200
+	id +rsNJYcp2mmRywgAu9opvQ
+	(envelope-from <linux-usb+bounces-36157-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 12:59:19 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF0163DF458
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 12:17:45 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04D7C3DF6B0
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 12:59:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4491F30265A2
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 10:17:37 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A450030205E2
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 10:53:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A5D8332EB1;
-	Sat, 11 Apr 2026 10:17:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25630340A47;
+	Sat, 11 Apr 2026 10:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bhj4RAK0"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QJMvB2Eo"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E49294A10;
-	Sat, 11 Apr 2026 10:17:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A583C248886;
+	Sat, 11 Apr 2026 10:53:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775902655; cv=none; b=tVv2t3y/pVXvoC2YzSeyDQkvwzG4tVa1l4BxFNOndvYwqhagZBZbgTZfnCwTPIKH/SyBJos+98zxqDQJ0NvQ3f9YcRq4+2mNx3hbPG4/WqtClNJR98pLK5cHYGhFCm1IDePkAJtQtdsPKCFdoBtCk3amyWVO8XBnd+yuKWzPgW4=
+	t=1775904821; cv=none; b=nlWgCXtHr+DUeSUa7mWo1fj964ItwCEI/U+i2U0ziLBKEkHnVXQGvwL7m1qsNYohWCCgRNeB+hLdI58SHryqjK4MIylXwIcuYuFhUlLnFYV9T6Nj7ZWNjGrvfPOFntkmfHeHjcTdhVElUV5BjgJljQsBWuE66pZFAymXLElbAcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775902655; c=relaxed/simple;
-	bh=wBXz9AnYy0R44YB5BpTwYTu1aNletIurdPCT1+9WUCc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=SEP/bkvF7X4istXPwOQZEF1W+ww6/FjUO7xRo1i8vsrDH5Y7DKUrgFYXhBfMN1h30NFBALxE4N33T/peuSTT0uP07lOmD/hVpbGEpfDsEr3Wj1VNFmn+JQdS4O38kdblcK8S16GzMl8sdXiGlE+Imuu6zkw4JShbptOaOABSyn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bhj4RAK0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63319C4CEF7;
-	Sat, 11 Apr 2026 10:17:34 +0000 (UTC)
+	s=arc-20240116; t=1775904821; c=relaxed/simple;
+	bh=qYTSkRz7NplvE+99a9CYOj7zPsVlqUzfO2SlX2wFwKY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f5DYMaCS/l64aSZz+gKPyavJCoixT2ogBVdxRnf9DApT1HirSQTEXhNXEjbaM1sLXBhYdyHKUxBLCL3Lqr78tTo8tcTc/gIxo66TnjtcgTNKkzWULS4ucNIQhSP7sj1500DnF6mgPCVIbd+LVAWi/fzTr9eYMCKBS5jzz0jDZuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QJMvB2Eo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C959EC4CEF7;
+	Sat, 11 Apr 2026 10:53:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1775902654;
-	bh=wBXz9AnYy0R44YB5BpTwYTu1aNletIurdPCT1+9WUCc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=bhj4RAK0zv6spoLX2T8ZGksQTr0cWYah655x1XjRCMjjFj41CV8Nmt8Ufr7iLCJR5
-	 MkSBB/Ma7ZwwOk7ufEEurqT+oLaMiPwhbcwyhXsVU0fzcYWkYbp6cCmgc+IGIcPmB5
-	 isSkegzR7yn8U9Pb4d1i5xXlgM8MMOTDWUI2cA6o=
-Date: Sat, 11 Apr 2026 12:17:32 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fix for 7.0-final
-Message-ID: <adofvBbhDgF_HUue@kroah.com>
+	s=korg; t=1775904821;
+	bh=qYTSkRz7NplvE+99a9CYOj7zPsVlqUzfO2SlX2wFwKY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=QJMvB2EoJ4sxUVOeQCH8iz/bBIQOkxxCQQSNYgDC30Yl7T5EUL3AcbvHaVa0kSP0u
+	 2TQBiOEXs/2dFadYRg9yMWpjSQIdB/0hZA1sz4jGgj2i4+NlEP7McYfzgXayfeXqDq
+	 wXPs0hPpBqyZCwu6FnwWmyRrZgyb7tElwPc847aI=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Oliver Neukum <oliver@neukum.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	stable <stable@kernel.org>
+Subject: [PATCH net] net: usb: cdc_ncm: reject negative chained NDP offsets
+Date: Sat, 11 Apr 2026 12:53:38 +0200
+Message-ID: <2026041137-comfy-eaten-a1ed@gregkh>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Lines: 43
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1677; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=qYTSkRz7NplvE+99a9CYOj7zPsVlqUzfO2SlX2wFwKY=; b=owGbwMvMwCRo6H6F97bub03G02pJDJm3NAwvJiVdt/9s/19ubYypR2OX86Kpgo5Pnq638ZazZ tZ+deN5RywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAFzkEMP8gDk+O5T+Te4yT30W lvdgxpV4742aDPPDr6fqTVpk/e3Bv3bBW6xb+MpmOnQAAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [4.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
 	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36156-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-36157-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
+	GREYLIST(0.00)[pass,body];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	NEURAL_HAM(-0.00)[-0.998];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,linuxfoundation.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,kroah.com:mid]
-X-Rspamd-Queue-Id: CF0163DF458
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,linuxfoundation.org:email,neukum.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,lunn.ch:email,davemloft.net:email]
+X-Rspamd-Queue-Id: 04D7C3DF6B0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The following changes since commit 591cd656a1bf5ea94a222af5ef2ee76df029c1d2:
+cdc_ncm_rx_fixup() reads dwNextNdpIndex from each NDP32 to chain to the
+next one.  The 32-bit value from the device is stored into the signed
+int ndpoffset so that means values with the high bit set become
+negative.  The first time this is read, the value is properly tested for
+a negative value BUT the next time through the loop, this type of check
+is missed entirely.
 
-  Linux 7.0-rc7 (2026-04-05 15:26:23 -0700)
+Fix this up by checking for a negative value when dwNextNdpIndex is read
+again in the bottom of the loop to match the top check.
 
-are available in the Git repository at:
+Commit 8d2b1a1ec9f5 ("CDC-NCM: avoid overflow in sanity checking") fixed
+a similar signed-overflow issue in the datagram offset checks of the
+same function.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-7.0-final
-
-for you to fetch changes up to 5a1140404cbf7ba40137dfb1fb96893aa9a67d68:
-
-  usb: typec: ucsi: skip connector validation before init (2026-04-07 13:35:44 +0200)
-
-----------------------------------------------------------------
-USB fix for 7.0-final
-
-Here is a single USB fix for a reported regression in a recent USB typec
-patch for 7.0-final.  Sorry for the late submission, but it does fix a
-problem that people have been seeing with 7.0-rc7 and the stable kernels
-(due to a backported fix from there.)
-
-This has been in linux-next this week with no reported issues, and the
-reporter (Takashi), has said it resolves the problem they were seeing.
-
+Cc: Oliver Neukum <oliver@neukum.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Fixes: 0fa81b304a79 ("cdc_ncm: Implement the 32-bit version of NCM Transfer Block")
+Cc: stable <stable@kernel.org>
+Assisted-by: gregkh_clanker_t1000
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/net/usb/cdc_ncm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-----------------------------------------------------------------
-Nathan Rebello (1):
-      usb: typec: ucsi: skip connector validation before init
+diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+index bb9929727eb9..b2d08c4aae54 100644
+--- a/drivers/net/usb/cdc_ncm.c
++++ b/drivers/net/usb/cdc_ncm.c
+@@ -1835,7 +1835,7 @@ int cdc_ncm_rx_fixup(struct usbnet *dev, struct sk_buff *skb_in)
+ 	else
+ 		ndpoffset = le32_to_cpu(ndp.ndp32->dwNextNdpIndex);
+ 
+-	if (ndpoffset && loopcount--)
++	if (ndpoffset > 0 && loopcount--)
+ 		goto next_ndp;
+ 
+ 	/* update stats */
+-- 
+2.53.0
 
- drivers/usb/typec/ucsi/ucsi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
