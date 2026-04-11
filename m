@@ -1,89 +1,89 @@
-Return-Path: <linux-usb+bounces-36150-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36151-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8EunHNuz2WkasQgAu9opvQ
-	(envelope-from <linux-usb+bounces-36150-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 04:37:15 +0200
+	id e8lxLGXE2WnFswgAu9opvQ
+	(envelope-from <linux-usb+bounces-36151-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 05:47:49 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA3DA3DE0BC
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 04:37:14 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4864A3DE441
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 05:47:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D93F7302835B
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 02:37:03 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 18D42300FA25
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 03:47:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C51028980F;
-	Sat, 11 Apr 2026 02:37:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D6452D97BB;
+	Sat, 11 Apr 2026 03:47:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QM+94tUo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rAuQ4R+h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A425C239E63
-	for <linux-usb@vger.kernel.org>; Sat, 11 Apr 2026 02:37:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAE321E091
+	for <linux-usb@vger.kernel.org>; Sat, 11 Apr 2026 03:47:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775875022; cv=none; b=oCLsRNNHp6aXi7zu2TFDJ5cO9sCk5pGtnIUwX8JXf+8u+S9dFajtX1NPF4uFeTsnxF+8yMzd05B1R/EF6Y26jzDhaxnkyXAJj/mIF4q6l97vyJx9Odr21d00I/SnuPXQr82Tw6yRuf8G6vzB7+BGQ7ON53grcFW32Wayua+pEpU=
+	t=1775879258; cv=none; b=m/Z1zQUIOBHd/yk/fy1mciteJWNaw0UjOi5cU5cKVDZ67I58YZ8RWeZQK27qmyJk5INyAQJvaF/cbibzq2wI1DUPKYeqbh1FKqv8VF/YT/y4/BeIqrjn3RB0arJVmpnneGm0zXFwHIy58CuetrS4O+B2EBfJKdIjxi+cXhIkmus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775875022; c=relaxed/simple;
-	bh=BFjWHuj38Nm56Fk+D4b3tbNLGWBYO5SNEW3mNCYAvSU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dtrfG8iDSyMMv67AFeg/meKN18nWnQ37qYy9I36aYfPPgA5++q/CyczpHSQnGAZIrTXWSVgK8mSA4WSQZ9IZkqYlRb/68Zbo5lAbL0FMpMnJxmRiR0RB7vaReTUo8XffUnDT7mz7W8DR+rzrfolaZMRxcVUmrtEZqPno1YrthQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QM+94tUo; arc=none smtp.client-ip=209.85.214.178
+	s=arc-20240116; t=1775879258; c=relaxed/simple;
+	bh=tR1X5bTvGMCjFYa5yAHh3yNIfn6edk4tK53EiK4iKFQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BhQcbgdwxhJNfi2PcwNHGJ4jMeGAkNEdbrqp/XbkvA4lW+HDLSogENn9Bymnrxbq4v7oOF6oPxL/E8kPifYPus+eyRlPIrMkVpd9sBf6/WBp34HDDpMf9MGAYBCR5Axy+JPQmzOiAPNCwHI+MeO0vEBSBDnjLXI9dk3n9Uy5W6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rAuQ4R+h; arc=none smtp.client-ip=209.85.219.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2aaf59c4f7cso12991615ad.1
-        for <linux-usb@vger.kernel.org>; Fri, 10 Apr 2026 19:37:01 -0700 (PDT)
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-8a58057d7baso30511216d6.1
+        for <linux-usb@vger.kernel.org>; Fri, 10 Apr 2026 20:47:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775875021; x=1776479821; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775879256; x=1776484056; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dWU5hmGaOyknlwANldU6S4LDvr9Qn1n8t583iXoLjWU=;
-        b=QM+94tUo84GzWzsd3sRrwPaqDpTEROqcLFLUG7svM5+hibTO4re2PkQZw8FhyE0mib
-         XG1LtG6yK5HVsXy6XE/pW94hhc63zNdioE9fVUWxrFoxzH2enuN/hKfBtx+7eRmgexFZ
-         0oB92elTWHzRmIa+KJ9EMq4k+Md/lJDObtFxSemu/6qCgGwmxnuH5cG8ufekZ9CH6Knu
-         TqP2wIiXreOMxPBsKe3n13Nw+wZIebdTTWf2PSnwlGszqz/J1zzITp+IZOJlYutGSQcx
-         UwifUOQjuC7byGzx0nnLI2WXotxAHRwUgiLZvuFpmgOtZa3Xz4EoUsFnVO8AGjjU7Spm
-         v7qg==
+        bh=GTrg3tEJ6M09HWK3Sh9RrgU4ykgP07OdBKz3FVnDC70=;
+        b=rAuQ4R+hBVXNUYXwLV3egXNAwgQgy5f5tFh89hh2Gc/mb4TPA+2ntCDx9IXSt/axIk
+         gU07B1uiRF5/MGeFHZ7pyl7V9Uc8ArBil7T5EW2dGfPiCCqL6BrR1deX8Lj1iCiIwmDT
+         Ipv8kyPcbrKxT2jO6v3oLDGugw9YMWPlMwawvBEeKmb7wvHd1Jp/QTqKzs1HQSAnKRdu
+         D0jA3Nsic9wsUjgYWTMgBl0yU/yk3P3c8b1EfTmSS0xIDRpdINHZJC98W4SFxDmOphvI
+         xud+fiOE0KWi2spx3AM7ca9xzzRKTlKfj7Nyk6OYBz5dydto2ZMEQ7wtuBTT2ssDSfql
+         J1MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775875021; x=1776479821;
+        d=1e100.net; s=20251104; t=1775879256; x=1776484056;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dWU5hmGaOyknlwANldU6S4LDvr9Qn1n8t583iXoLjWU=;
-        b=qKDiGYU+4qrlveQhIRt7ZB9fYOHm0xL2yp+UC/LZ6bL8EbfDFh63mnBDmFNCtGUMH+
-         S2ujnj9b/oW3sorncLzLPnHhnGdcyVawYT6HLx+Bx4hdrVV4460HemAEi6S3ZASxdcU1
-         ebPDaIT1MOhbT9h8fONUZjtfMUUyyZi4wERPe1OJa0iea5f67A+x+KeRDuEcIH1sRby/
-         EKPxK4J6/yY+evwB04v04fCpcetk1EYcsqH0YQSvBryehCu3I/aEjmmfqBhsId79Vdok
-         cJHooMbuQ9eG5Tf+nOtaToO25mGOdQj7rFcNh1ojz4SzWhh99vIEDzdYQLrpC886OE54
-         0HgQ==
-X-Gm-Message-State: AOJu0Yw9oCA3tVWkp+CXkq1sen4ZPrMPGRz9EqSLliSMZWNniY33BXkN
-	ysiSvpOtJ7Fab9shOk++fSME2qNNuekj/KQcBhCP5UHsYzr5HsVVDptbeX7QrA==
-X-Gm-Gg: AeBDietFcgkljLvLuo0CgEU6xix4CU8prftoGMHaLk2Omgpy9xQuShBZquxA1iQvtcF
-	Wy8bKiZJ2mTqSLWghIlOEnMLC1wpjuIHhTintSxs41qpkJFiopudIdgVHEpm+I5A+w7cIgGSIe4
-	1aJ60ZeqwQe1I1P4GfL+Iy1dLDouQi9hM+iSnO0HvrL8wBbsubCvOTbQ4+DCnce6rZ5GG1ZMY7e
-	mRb7i67Fy2aWYprQhwMjeSMyGUDLm1G6ErQwiw8ADQGasU75kTPa4z9DP7boxSimyUjshr73OkK
-	0c+GPX8s7sISd1M8yA7YJNytUz7nh9rhN/sZnahr8/4b38DJTOwpAuwCduM+7ry9Ewl4WdVmanf
-	wn9ZPHFbPlp78KNnZWg9ZDm/QORX4eHn/UDCpHZ2v3gLQVTY/MltnhUrRPYsI/B6ZDlPMb/NwXr
-	Egu/uqwGCXdAWPoO7qn+hV8T0uckAsMI09qqX+kwqVulscJnpP2b2fvIg=
-X-Received: by 2002:a17:902:ce0f:b0:2b0:708f:4dc7 with SMTP id d9443c01a7336-2b2d5a2a1a4mr58818985ad.29.1775875020669;
-        Fri, 10 Apr 2026 19:37:00 -0700 (PDT)
+        bh=GTrg3tEJ6M09HWK3Sh9RrgU4ykgP07OdBKz3FVnDC70=;
+        b=LlT41qEnv2xV0lakkEiTGUcoe6cbeJb8QROBdiwuSzylFOfPLDA1XAIFW4iZkByLu7
+         CHIatdP2l3Kmuz1SBVoh+8W9Sg2UWoeYm0xktZAlwUWOof4+5ghUJxvCQ1eqx5RGLaPH
+         78uXc1U7AMu+BES0o2OBMW2Q/yAuy929erJgaJLIijSA7wkHwARPLq32pwskKlCTcBjV
+         QHz0pQs/rdO9bmbzfALcSEwhlFlHKMAL9IKc/6HvZxFARlHOXWAXWuxUDwDb66m/kpaT
+         xQt28w9J1i1I/jaR+G/aT1UTvBTOJa/nlgOQCuBcyPLsMF83YGEoUzQfyb6BFC4iIKOB
+         /KQA==
+X-Gm-Message-State: AOJu0Yw4M7td2PQCwb8FkiV5SbzZ9K3jv/3x0UItt/NsJEBxv1Yr6yi1
+	Ja2ywFyaCKxt+/Dwc69gEKsBMmNaghMNg/SLSN88SOnnz2zIfMBKJz++y3cPHw==
+X-Gm-Gg: AeBDievchdKGS/bU8s/cKnGFn3mzQQpIzy/57o2X33XfQ3OVdJdrn1VZ04Cd/k8aeEa
+	TtxSiBDQU7SbY1gnfraq2FXHGb28tlXC7SkgbA4K3RDZUWP8WE607gbk3sC/BgiO5TBcdZJurMi
+	BOstI0A4zgWoFU9IAIj5japwE6tlgTp9puZ56yggiEyqpBTPmSjq0ablP+KilD5gre9BD1LRuj2
+	PCDleStMDoN3CbZdHNH3930S5kV9IMY1yMNyj9Vu5pjeBmVvVjXGDoVHa7lZdM6a9D4UqEjvlND
+	vc50+umf/mXfIJ3+EZIXDP4o5GHyBtLJeZ+5sU5uTW7y+jzbe1JrxVH96f6ajZwzFxLaq/gEhCk
+	T/j5zdHQTsIlLshUfpxbspslJ1iCLCZY2loiEZlRRjuX4uBBFgbGmwwilyXLQpLMgGr7aSg3oK/
+	pPyCM/+n7LZws+QoGE0MQPWrq+uToZaFb+JQiooWCBJyreJu9lJES1f10=
+X-Received: by 2002:a05:6214:590a:b0:8a0:f8b7:3921 with SMTP id 6a1803df08f44-8ac862b616fmr101986536d6.41.1775879255892;
+        Fri, 10 Apr 2026 20:47:35 -0700 (PDT)
 Received: from ryzen ([2601:644:8000:5b5d::8bd])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2d4dae27asm42432295ad.7.2026.04.10.19.36.59
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ac84a10e7esm39355356d6.16.2026.04.10.20.47.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Apr 2026 19:37:00 -0700 (PDT)
+        Fri, 10 Apr 2026 20:47:35 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
 To: linux-usb@vger.kernel.org
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Kees Cook <kees@kernel.org>,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	linux-kernel@vger.kernel.org (open list),
 	linux-hardening@vger.kernel.org (open list:KERNEL HARDENING (not covered by other areas):Keyword:\b__counted_by(_le|_be)?\b)
-Subject: [PATCH] usb: typec: intel_pmc_mux: combine kzalloc + kcalloc
-Date: Fri, 10 Apr 2026 19:36:42 -0700
-Message-ID: <20260411023642.146890-1-rosenp@gmail.com>
+Subject: [PATCH] usb: dwc3: qcom: allocate clks with main struct
+Date: Fri, 10 Apr 2026 20:47:19 -0700
+Message-ID: <20260411034719.161736-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -97,13 +97,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36150-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-36151-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -118,78 +118,100 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-usb];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: CA3DA3DE0BC
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4864A3DE441
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-A flexible array member can be used to combine allocations and simplify
-handling slightly.
+Use a flexible array member to combine allocations.
 
 Add __counted_by for extra runtime analysis.
 
+Change dwc3_qcom_clk_init to a single parameter. No need to pass count
+separately now.
+
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/usb/typec/mux/intel_pmc_mux.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ drivers/usb/dwc3/dwc3-qcom-legacy.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index 1698428654ab..8b0a3dd3f940 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -151,13 +151,14 @@ struct pmc_usb {
- 	u8 num_ports;
- 	struct device *dev;
- 	struct intel_scu_ipc_dev *ipc;
--	struct pmc_usb_port *port;
- 	struct acpi_device *iom_adev;
- 	void __iomem *iom_base;
- 	u32 iom_port_status_offset;
- 	u8 iom_port_status_size;
- 
- 	struct dentry *dentry;
-+
-+	struct pmc_usb_port port[] __counted_by(num_ports);
+diff --git a/drivers/usb/dwc3/dwc3-qcom-legacy.c b/drivers/usb/dwc3/dwc3-qcom-legacy.c
+index d3fad0fcfdac..565d03eb01b8 100644
+--- a/drivers/usb/dwc3/dwc3-qcom-legacy.c
++++ b/drivers/usb/dwc3/dwc3-qcom-legacy.c
+@@ -74,7 +74,6 @@ struct dwc3_qcom {
+ 	struct device		*dev;
+ 	void __iomem		*qscratch_base;
+ 	struct platform_device	*dwc3;
+-	struct clk		**clks;
+ 	int			num_clocks;
+ 	struct reset_control	*resets;
+ 	struct dwc3_qcom_port	ports[DWC3_QCOM_MAX_PORTS];
+@@ -90,6 +89,7 @@ struct dwc3_qcom {
+ 	bool			pm_suspended;
+ 	struct icc_path		*icc_path_ddr;
+ 	struct icc_path		*icc_path_apps;
++	struct clk		*clks[] __counted_by(num_clocks);
  };
  
- static struct dentry *pmc_mux_debugfs_root;
-@@ -731,27 +732,26 @@ static int pmc_usb_probe(struct platform_device *pdev)
- {
- 	struct fwnode_handle *fwnode = NULL;
- 	struct pmc_usb *pmc;
-+	u8 num_ports;
- 	int i = 0;
- 	int ret;
+ static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
+@@ -653,10 +653,11 @@ static int dwc3_qcom_setup_irq(struct platform_device *pdev)
+ 	return 0;
+ }
  
--	pmc = devm_kzalloc(&pdev->dev, sizeof(*pmc), GFP_KERNEL);
--	if (!pmc)
+-static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
++static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom)
+ {
+ 	struct device		*dev = qcom->dev;
+ 	struct device_node	*np = dev->of_node;
++	int			count = qcom->num_clocks;
+ 	int			i;
+ 
+ 	if (!np || !count)
+@@ -665,13 +666,6 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
+ 	if (count < 0)
+ 		return count;
+ 
+-	qcom->num_clocks = count;
+-
+-	qcom->clks = devm_kcalloc(dev, qcom->num_clocks,
+-				  sizeof(struct clk *), GFP_KERNEL);
+-	if (!qcom->clks)
 -		return -ENOMEM;
 -
- 	device_for_each_child_node(&pdev->dev, fwnode)
--		pmc->num_ports++;
-+		num_ports++;
+ 	for (i = 0; i < qcom->num_clocks; i++) {
+ 		struct clk	*clk;
+ 		int		ret;
+@@ -736,13 +730,18 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 	struct device		*dev = &pdev->dev;
+ 	struct dwc3_qcom	*qcom;
+ 	int			ret, i;
++	int			num_clocks;
+ 	bool			ignore_pipe_clk;
+ 	bool			wakeup_source;
  
- 	/* The IOM microcontroller has a limitation of max 4 ports. */
--	if (pmc->num_ports > 4) {
-+	if (num_ports > 4) {
- 		dev_err(&pdev->dev, "driver limited to 4 ports\n");
- 		return -ERANGE;
- 	}
- 
--	pmc->port = devm_kcalloc(&pdev->dev, pmc->num_ports,
--				 sizeof(struct pmc_usb_port), GFP_KERNEL);
--	if (!pmc->port)
-+	pmc = devm_kzalloc(&pdev->dev, struct_size(pmc, port, num_ports),
+-	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
++	num_clocks = of_clk_get_parent_count(np);
++	qcom = devm_kzalloc(&pdev->dev, struct_size(qcom, clks, num_clocks),
 +			GFP_KERNEL);
-+	if (!pmc)
+ 	if (!qcom)
  		return -ENOMEM;
  
-+	pmc->num_ports = num_ports;
++	qcom->num_clocks = num_clocks;
 +
- 	pmc->ipc = devm_intel_scu_ipc_dev_get(&pdev->dev);
- 	if (!pmc->ipc)
- 		return -EPROBE_DEFER;
+ 	platform_set_drvdata(pdev, qcom);
+ 	qcom->dev = &pdev->dev;
+ 
+@@ -766,7 +765,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 		goto reset_assert;
+ 	}
+ 
+-	ret = dwc3_qcom_clk_init(qcom, of_clk_get_parent_count(np));
++	ret = dwc3_qcom_clk_init(qcom);
+ 	if (ret) {
+ 		dev_err_probe(dev, ret, "failed to get clocks\n");
+ 		goto reset_assert;
 -- 
 2.53.0
 
