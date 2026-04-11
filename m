@@ -1,125 +1,176 @@
-Return-Path: <linux-usb+bounces-36159-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36160-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sGo8OrJG2mkrzggAu9opvQ
-	(envelope-from <linux-usb+bounces-36159-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 15:03:46 +0200
+	id vVsYJs1P2mlv0AgAu9opvQ
+	(envelope-from <linux-usb+bounces-36160-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 15:42:37 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B2F53E00B9
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 15:03:46 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86A713E023E
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 15:42:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A629D3027CDD
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 13:03:41 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 514DF3004403
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 13:39:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB9EE21C16A;
-	Sat, 11 Apr 2026 13:03:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8140717B43F;
+	Sat, 11 Apr 2026 13:39:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KQBe28LL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NaJqVQ36"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD27214813
-	for <linux-usb@vger.kernel.org>; Sat, 11 Apr 2026 13:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE614265CBE
+	for <linux-usb@vger.kernel.org>; Sat, 11 Apr 2026 13:39:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775912618; cv=none; b=pOZ1xwt3NGTvvpQO8c6osvityU8Zt1jwryYKjPfRlNR9im3zxKX/TEFt3nqGM5+/4w9yzbav2WNEjKNkXLVRyuhbcWqi2suoGh2/FJ+EjLImVo0h9MrSjM897pBZxMaSasjS++2DaWyUbB5PhKdE/lKDpsh6AD2kNh3i9G9rUAY=
+	t=1775914783; cv=none; b=Bo23DxkLDK5P6tqVrzRTQ6AbWU/P7XgIQnzxhkalzcKE5/WFE2iwYbeMaVe9P1w0NRXtm+61jjQ2yRR/HnrbzKSQcknYN9lFRDUFG/51WK7pfVG3NtNOfD1UrDbXs5Eg7mgREetGl07quaJOcUL8gURtwGzZJvzsVqm8i6LucZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775912618; c=relaxed/simple;
-	bh=5CYKuCsSiuv1mgUyGTCWvO4Y5akQsJI5yffBif8XJPk=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Z8kK5Z75eEtAqfXEVHmD9Tu/4m+tI3jRE8NgBmAF/wt0GH8LHJzzdyO1VObcNYXzHvHnz6gi980lR91ZIgbYdYOpEzgads8HHg1AoWDPxXqLzQaYtvplwtyxzD1re44/iMOvXWMdYRhNrmytt/SdfAYhCMF4XkjA/kBPjuORh9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KQBe28LL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 20902C4CEF7
-	for <linux-usb@vger.kernel.org>; Sat, 11 Apr 2026 13:03:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775912618;
-	bh=5CYKuCsSiuv1mgUyGTCWvO4Y5akQsJI5yffBif8XJPk=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=KQBe28LLUILFd+TLLj6wMrVX7oG9F32mbgKLyJJeXIYAWVQF3oxrGfh5el4nJkGav
-	 3pA5sr9EqDdkJelSVSekFylfQOWe4VPXrbNKI8DlnuffDyp84No988M4Y7rWh+IqRS
-	 wGDDPyv+GhTLM4eXcM7c4anL7ihR01MTTkEVkGWOTU0LPrdZLgaBpF/a92iCaWgW/M
-	 4lM0qJyEAgPRVSaUglczP09SSOq5EOzITsO4HUyPONSqxhIK9Z9eTJhloj0k0w0cxs
-	 pvcUSbX3ynjQXmLMPG+P5ESaqCPOT9WEcSZpKHLwVWhi04KbamXSwfGQzGqtsTxYv4
-	 ahKG0upFz+zOA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 1214DC4160E; Sat, 11 Apr 2026 13:03:38 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 221340] uas driver hangs and causes usb reset
-Date: Sat, 11 Apr 2026 13:03:37 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michal.pecio@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-221340-208809-K3hriMvrw7@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221340-208809@https.bugzilla.kernel.org/>
-References: <bug-221340-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1775914783; c=relaxed/simple;
+	bh=GlYCZfWgWZ+Auk8Kau0yI40Dl4yPnI6VLalMiXlRhRg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TX2b6FURSfK8PaMhd/RL3a71E9jRtuyyHj+lG8I3/EBxcsxXu86r++83yc48+4aRAIV3usqICwdd8hXLc1BdewpxM1Z9KNRoaWwYvogz/VY/kzeLLnE9WjCBLDYqWD72xjtYQ0I7zsD0JGmcEK/bnMqzP1bq8jiQ2fg/w0Qxg+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NaJqVQ36; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-488971db0fdso29116445e9.0
+        for <linux-usb@vger.kernel.org>; Sat, 11 Apr 2026 06:39:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775914780; x=1776519580; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pDRr3a1WzbFHjnYdc5Yz0jdXm1HUWqyueTEULNfk4+U=;
+        b=NaJqVQ36UnAvMXD6iIduaGM/LB1QYrOxPYSAR5JnvcrjYm0aFHr6nXJNegqNQr6CO4
+         5mB9QEvjTUFJ9YODYPs+OOl8Kc/ctWPJ7f5/NHSb4+01tml3n3zyw1b7C6GskQc+ZDH+
+         3h9mPl4gZ/U9jzNEKGV6yNMWc9wPZtl0KR5MnVKFBAoYnQzqLGEhM+1W3HLCNWeRQxF8
+         1CU1zmrGd8P3lwvc28Gt49CfLkm9mPL91GaaRYQApA49bO3DfakkZCYx6Vqx0jaPEIZc
+         48zGYJysJiLfBx70dLWSWeTXMo6yIKjk0bhKiqOj6DW2VTcHabry0aFhPNjeb4MyRCvZ
+         jaBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775914780; x=1776519580;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pDRr3a1WzbFHjnYdc5Yz0jdXm1HUWqyueTEULNfk4+U=;
+        b=nQa2SWuD0cBHivKJLDbQ/i6T10dKZwbCqW3PKhelI9gJQI7S4pbcpPR/yiBAZPniXw
+         xwpj8PN8bDBaMxi+xO6FgI48BAVxPJlxWvkapgN0h4rjU1SOuH7+EcGu7SOEVgnmy6M8
+         0Ndcv4qcFC/VNjuxahSTgwUAC09lW6UtRh4BeXVEkVNu57KgXdAvHhcJvIc1FkfHKh72
+         QdyO/Ee2zCFB3k2fYc6oEqgevnG00OLrj6W11pel3YavDMZ6ZGHxAmHWacqIdXVp2YAu
+         zM1w2qaUlDTGWt7+TjttHr+Iw/VHBh++4nOSg/e8rid/Om5jkPE3gIhXd3rZW07fr/dQ
+         Hg7w==
+X-Forwarded-Encrypted: i=1; AJvYcCWh5YntSm+nNtDUdJbLSp9DoZarbxYgZrEBifXmKRIg6wdDCTiOr8+NodZWwNQ+tzyY7iuyoD7xxhI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxe3LwHIQK82U73DHc+TT+Iy2b/wd+94E/TFjTocFhMQoEv/mco
+	ALsp8EdQ2dSV2QANuYn19JxZ0NdhufNZZ29A95EdpYX8Z6Yhq7DYUMS4
+X-Gm-Gg: AeBDiev1ZVFVjt5ZG7O0oJw4PMblm3HtATOvOFUrtBbrvOWuWuI3HyV9yc1Q8pJNgsM
+	rw+w2iNJhr56XDR1gYJATeClZb7jafntKkjqZnRVoIjOYfHKJSskxRln6NA8BYTlMRx3oGUrGdP
+	NX0scV1/+rxBfxs9+MoNm0B229tWmuOr2VmOfgdu5t9N4cLi9k7A8ou8FWxGCglk7+7Bd6P6m7W
+	J5CDeYc0obq5z25eTd3hP1WpSVMqwd/ErOGD75t9EAL8mwHn/VBSRT9aX685brDIRF5YcRAQNgj
+	SAPZMGQYi4/uOoWwamaoWdmCZRoY5B9UgrS7EKWzhHFEWZMlOkG1xqnpmZvXYTXH+yYz0M8gj1C
+	EswD1R/yqOkPRIgzFLnlej4rhfbSU7QrtbYoe5RJkPf/fRhRcW95ax3NmwUt74rO1pj0LW7s82K
+	9eO+lFJ0wVnqK9b8o8pvOM5E4YRT1QPtq/hug=
+X-Received: by 2002:a05:600c:8585:b0:488:9bf8:7f17 with SMTP id 5b1f17b1804b1-488d684bcb0mr70355895e9.14.1775914780064;
+        Sat, 11 Apr 2026 06:39:40 -0700 (PDT)
+Received: from foxbook (bfi125.neoplus.adsl.tpnet.pl. [83.28.46.125])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d5347ea5sm169775625e9.8.2026.04.11.06.39.38
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sat, 11 Apr 2026 06:39:39 -0700 (PDT)
+Date: Sat, 11 Apr 2026 15:39:35 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Ricardo Ribalda <ribalda@chromium.org>, JP Hein <jp@jphein.com>, Alan
+ Stern <stern@rowland.harvard.edu>, Laurent Pinchart
+ <laurent.pinchart@ideasonboard.com>, Hans de Goede <hansg@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, linux-media@vger.kernel.org,
+ linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] media: uvcvideo: add UVC_QUIRK_CTRL_THROTTLE for
+ fragile firmware
+Message-ID: <20260411153935.2fc5c030.michal.pecio@gmail.com>
+In-Reply-To: <c4275422-a9b4-4519-95f9-1163a7912709@linux.intel.com>
+References: <20260331003806.212565-1-jp@jphein.com>
+	<20260331003806.212565-3-jp@jphein.com>
+	<CANiDSCvsxP+npQTHUrMTp+Z8XULYKSLTz2AFu+WQnsLbRBGa2w@mail.gmail.com>
+	<20260409100247.7cfb62d1.michal.pecio@gmail.com>
+	<20260409221749.5e6bccab.michal.pecio@gmail.com>
+	<c4275422-a9b4-4519-95f9-1163a7912709@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36159-lists,linux-usb=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-36160-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FROM_NO_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_ONE(0.00)[1];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7B2F53E00B9
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 86A713E023E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221340
+On Sat, 11 Apr 2026 00:48:05 +0300, Mathias Nyman wrote:
+> > Five seconds later two control URBs are unlinked:
+> > Mar 30 16:59:21 katana kernel: xhci_hcd 0000:00:14.0: Cancel URB 00000000122aa5e2, dev 3.1, ep 0x0, starting at offset 0x11e227b40
+> > Mar 30 16:59:21 katana kernel: xhci_hcd 0000:00:14.0: // Ding dong!
+> > Mar 30 16:59:21 katana kernel: xhci_hcd 0000:00:14.0: Cancel URB 000000008a55bcd3, dev 3.1, ep 0x0, starting at offset 0x11e227b20
+> > Mar 30 16:59:21 katana kernel: xhci_hcd 0000:00:14.0: Not queuing Stop Endpoint on slot 18 ep 0 in state 0x44  
+> 
+> log continues with:
+> Mar 30 16:59:21 katana kernel: xhci_hcd 0000:00:14.0: Removing canceled TD starting at 0x11e227b40 (dma) in stream 0 URB 00000000122aa5e2
+> Mar 30 16:59:21 katana kernel: xhci_hcd 0000:00:14.0: Removing canceled TD starting at 0x11e227b20 (dma) in stream 0 URB 000000008a55bcd3
+> Mar 30 16:59:21 katana kernel: xhci_hcd 0000:00:14.0: Set TR Deq ptr 0x11e227b40, cycle 0
+> 
+> One theory could be that xHC control endpoint refuses to restart when
+> its dequeue pointer is moved to a no-op TD like in this case (second
+> cancelled URB).
 
---- Comment #6 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-This shows UAS driver unlinking URBs related to timed out commands as they =
-are
-being aborted, but I wondered if anything unusual happens 30 seconds prior,
-when the device stops executing SCSI commands and makes them time out.
+This could explain why it doesn't work later, but not why these URBs
+have been unlinked after making no progress for 5 seconds. EP0 was
+probably still functioning normally during those submit-unlink cycles
+on 0x85 and there were no EP0 unlinks until these above.
 
-IOW, was there anything related to uas or xhci before this snippet begins?
+Another corner case which could potentially confuse HCs is Set TR Deq
+to a Link TRB, but it doesn't occur in this log on any endpoint.
 
---=20
-You may reply to this email to add a comment.
+By the way, are you able to find out what this is?
+198 falls into the "vendor defined error" range and vendor is Intel.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+crash-6.17.0-xhci-test-20260410-154243.log, isochronous URB unlink:
+[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
+[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
+[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
+[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
+[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
+[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
+[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
+[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
+[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: Transfer error for slot 36 ep 2 on endpoint
+[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: ERROR Unknown event condition 198 for slot 36 ep 2 , HC probably busted
+[Fri Apr 10 15:44:31 2026] xhci_hcd 0000:00:14.0: Stopped on Transfer TRB for slot 36 ep 2
 
