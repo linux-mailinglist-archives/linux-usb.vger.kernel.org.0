@@ -1,127 +1,120 @@
-Return-Path: <linux-usb+bounces-36165-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36166-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sUm/Oh7H2mk46QgAu9opvQ
-	(envelope-from <linux-usb+bounces-36165-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Apr 2026 00:11:42 +0200
+	id GEdgIjoo22m49wgAu9opvQ
+	(envelope-from <linux-usb+bounces-36166-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Apr 2026 07:06:02 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 539383E1CF8
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Apr 2026 00:11:41 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2BBF3E2C15
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Apr 2026 07:06:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1ACFA302D085
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2026 22:11:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F1923301A912
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Apr 2026 05:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4305D2BE057;
-	Sat, 11 Apr 2026 22:11:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CB5436494A;
+	Sun, 12 Apr 2026 05:05:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UHU+acXB"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BfSqAwy+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F311FC8
-	for <linux-usb@vger.kernel.org>; Sat, 11 Apr 2026 22:11:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6151514F8;
+	Sun, 12 Apr 2026 05:05:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775945497; cv=none; b=txS9dT8ZwKJa4rBYyg/d436dhXk+maPvXwOF/L+BvVaNntmH1K1yyHK4hnGIujGz9P7JAcv3ymKq1ihmscc6GTrb74ENCZ7p3KTr9ioru4D+itUf9ac+0MBONseByLxdj/tdz5tQVQV3Er7qqXdYNs0yB3E2Ujdl9bJ6E0VuI8c=
+	t=1775970342; cv=none; b=F3f+2ThfXy7l0uY7gcfxxE1J8ZZ0Zl44HCSLENNBHeizNgaYOYMhsCNq9JiFNQ11op/SHWkJs8jpdYYGsDLzCwa+vPdXDw0sY29xK2bUiqZ8JJFM86MFKCYaRdmKUhkper0gUheTVzhEoV7gPUm3ol3hCIylXKcTqDLta9qX0JE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775945497; c=relaxed/simple;
-	bh=kdwLv3lhgQF/pcP3VFAiM7Ghjvg954Q56ks3+wKmyew=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mCezcKueHcdyrdV7A5Hm5meBJaC1u/+uRFMAfAOi6XbIMjSNV8vnchSlWg8/wmaJ+moFNslGXcbK0GWwPs2B59LlP7n4vY/0jCN0MH2UEkk5h/ObYHHPPl7B/Q4AmYTe+Pz/wJD4/MS0CXLtmUfYau3vk9Xxzu9x3sm/CgLjY5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UHU+acXB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 507BFC116C6
-	for <linux-usb@vger.kernel.org>; Sat, 11 Apr 2026 22:11:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775945497;
-	bh=kdwLv3lhgQF/pcP3VFAiM7Ghjvg954Q56ks3+wKmyew=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=UHU+acXBO051Y0VkTo4lJaeBb/iOd6bdmp9PU9WQXWPZt4412Qdgp5pnJ2kdtgy79
-	 QVWGofG6N8rrdtbvrRpkP6q6oFHat8F1J722AMvuL4xNYBJLENRTXOxA1QOq4otoRm
-	 0LZ94b3/VHtd/qcSY0Gpcl/m0+XLQvo/wM2oUxQFLVC3Xy7udBANcX4qKAfCysJnjf
-	 jU0OKasCqPfkeWZUGE4a4mnlMsfrWsIwovv9M/r3fHVoRqyTKLEXHhVQOuDPoOnMPn
-	 7IlWN8bADjQBfwzGiohvefnhM5rQc0t6n4qDuJFL18C+31W02q380p/kCawxf4xjeF
-	 8JAl7n697B0zQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 46C4CC4160E; Sat, 11 Apr 2026 22:11:37 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 221340] uas driver hangs and causes usb reset
-Date: Sat, 11 Apr 2026 22:11:37 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: DaisyTheFoxxo@proton.me
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-221340-208809-nNgleI8V0D@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221340-208809@https.bugzilla.kernel.org/>
-References: <bug-221340-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1775970342; c=relaxed/simple;
+	bh=je9Ga57D0+4x29jYylGg79PsMExeTZ6iunGQDBzl0Cg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=usornB1tTKOPZydxiiiERbq8zKjU9h73Sy5QRfPFVwJfCodQnB1YMrk/s/OGafAPyUrI/EXj9wNhjbqgAk0JD3AmuR2/nYnlzlpYekFwwPAn85gc/9B0f1zxdty52i8BpuIgb+zLwEKXApnVMtFkT9T/92HY+mW/QD78Q4dWV4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BfSqAwy+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E74A9C19424;
+	Sun, 12 Apr 2026 05:05:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1775970342;
+	bh=je9Ga57D0+4x29jYylGg79PsMExeTZ6iunGQDBzl0Cg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BfSqAwy+c3TRygrAAnwiUos0vWdKEVdQichPdPlupfcmjAFQdtjb8GIoIIj/oFgMc
+	 9ORaQ63dIekPe4jtaTE1seH8FzwIzEgV5ZB46GEbir5zJMgEMXSDO6iandKzB+aIc4
+	 bkHEQLdhRXak/t0wTAbZLPYTilIL7Z71VEPIIT7Y=
+Date: Sun, 12 Apr 2026 07:05:39 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Pavitra Jha <jhapavitra98@gmail.com>
+Cc: linux-usb@vger.kernel.org, stable@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: MAX3420 UDC: out-of-bounds read/write via unvalidated wIndex in
+ USB SETUP packet
+Message-ID: <2026041211-prevalent-busload-0453@gregkh>
+References: <CALFbBidSiJTD2zdczQ1_mxv8Xm9Pqspnz8LDppHp2hudkLSoxw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALFbBidSiJTD2zdczQ1_mxv8Xm9Pqspnz8LDppHp2hudkLSoxw@mail.gmail.com>
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_NONE(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCPT_COUNT_ONE(0.00)[1];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	FROM_NO_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_FROM(0.00)[bounces-36165-lists,linux-usb=lfdr.de];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_FROM(0.00)[bounces-36166-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	NEURAL_HAM(-0.00)[-0.984];
 	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+]
-X-Rspamd-Queue-Id: 539383E1CF8
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:dkim]
+X-Rspamd-Queue-Id: E2BBF3E2C15
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221340
+On Sat, Apr 11, 2026 at 11:28:08PM +0530, Pavitra Jha wrote:
+> Hello,
+> 
+> I am reporting an out-of-bounds read and write in the MAX3420 USB
+> Device Controller driver. The issue arises from using a
+> host-controlled wIndex field from a USB SETUP packet as a direct index
+> into a fixed-size endpoint array without validating that the index is
+> within bounds.
+> 
+> The driver handles USB control requests originating from an external
+> USB host and therefore must treat all request fields as untrusted.
 
---- Comment #7 from DaisyTheFoxxo@proton.me ---
-(In reply to Micha=C5=82 Pecio from comment #6)
-> This shows UAS driver unlinking URBs related to timed out commands as they
-> are being aborted, but I wondered if anything unusual happens 30 seconds
-> prior, when the device stops executing SCSI commands and makes them time =
-out.
->=20
-> IOW, was there anything related to uas or xhci before this snippet begins?
+Did you look in the mailing list archives for this driver?  This has
+been discussed in the past, most recently:
+	https://lore.kernel.org/r/20260121203944.1898-2-qikeyu2017@gmail.com
 
-there are no other logs before the aborted commands get logged
+Please get this hardware and validate that this even actually can
+happen, as last time around, it was stated that it could not due to how
+the hardware worked.  If that is incorrect, we'll be glad to take the
+change, but that needs to actually be tested, not just attempted with a
+fake device in qemu.
 
---=20
-You may reply to this email to add a comment.
+thanks,
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+greg k-h
 
