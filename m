@@ -1,157 +1,177 @@
-Return-Path: <linux-usb+bounces-36169-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36170-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WM0MADKo22lEEwkAu9opvQ
-	(envelope-from <linux-usb+bounces-36169-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Apr 2026 16:12:02 +0200
+	id WPhhAlbF22kRGgkAu9opvQ
+	(envelope-from <linux-usb+bounces-36170-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Apr 2026 18:16:22 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 583DC3E42C0
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Apr 2026 16:12:01 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D0813E4B29
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Apr 2026 18:16:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BF5BE302A07B
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Apr 2026 14:08:49 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D5986300D909
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Apr 2026 16:16:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE1BC313E10;
-	Sun, 12 Apr 2026 14:08:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A3362D94B0;
+	Sun, 12 Apr 2026 16:16:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g85NJjCK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h5oMlGnN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13432EAD1B;
-	Sun, 12 Apr 2026 14:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0771235BE2
+	for <linux-usb@vger.kernel.org>; Sun, 12 Apr 2026 16:16:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776002928; cv=none; b=cLLnf5FuWir7viNlCndtvXl81vdjya5qYTSo5bUQlQodqDxMSqKC+UMy+duF7u1O6NBH8crZqIJYQgMKmgUoEdotYpZsagGHQLLVbckZcMJ2v3pX6zSUX2a4Q0QOlSkmY9kd0r61yButXoBOGQfIVqhDYn7c2YSq5hyFtS0cmHw=
+	t=1776010574; cv=none; b=PHfVHkv63SzW+n5y8lfOV2Ap8HyX9gyHYKJsDH/Nv3yISrTSmzafskGx754SJ5doQy+V4pEGFCRx0EN2cxqY/pWRe4bJMPISuEYuZh2bXFJS3DNwrlouvT4JtLyYsCHWj46sPOAD4bhH8wliOwUJP/fDdRCI/k9GYQjghDU8DB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776002928; c=relaxed/simple;
-	bh=VY4FvtYX9a5WZ1xa6Vy+0vBfFjNoMNioD5mV53SqYj0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WH7Q2klaeR51l2qA13mJMCS3mXMkMa4wYW3qR9xvLNqkuNledl42uFgT2QJhu8CczF3w6zx4JDIu4lvlDMZ5f5lSTSGQmk8HQD5m48Ml4wQJbOouBbtCefAqjSeWpwN6Rdw8Bu4mj3BjpeoteFPdnGw5YRC9xj7flXz6r45oVj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g85NJjCK; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776002927; x=1807538927;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VY4FvtYX9a5WZ1xa6Vy+0vBfFjNoMNioD5mV53SqYj0=;
-  b=g85NJjCKIIoDPjjY21YLYtnDLrVIdytV1hRJQJxzGpKxDxj/DJHuVw//
-   Nq7V4IXRhG62CfBp6CZSvXAgnOjEPWQnT++t9YvQuvwUBWdq0sRRCMToo
-   +jg8BUQ7NGKfQSGe7vexz9F1D0A4TsBtKVe6q3qIQbJ3DIpziJaBRzBkb
-   /86m6xBYCy77b3ullkzgG/3i6ULtI+E6xs2dK6mktA+uD2ov0faOSiJRM
-   Ba1SdKSbFShEw23nExutB18i7MGF1OZSokUzdggzj8Wsr3k8CIybODTo3
-   4Dprl7PJzl+HKPhNf2Du52KkGBuGHPFk+zDLh+PE6YzBHkc8ZW65JKOg9
-   Q==;
-X-CSE-ConnectionGUID: GkfRKoU7TdCN4BUDWBjs+Q==
-X-CSE-MsgGUID: qLq3L4nfTwGmBQoJOjpPvA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11757"; a="88403220"
-X-IronPort-AV: E=Sophos;i="6.23,175,1770624000"; 
-   d="scan'208";a="88403220"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2026 07:08:46 -0700
-X-CSE-ConnectionGUID: Dnv30C5WRdiTPrWnKrfKPQ==
-X-CSE-MsgGUID: A8rY8/GvRNOKqrrzyEsnTQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,175,1770624000"; 
-   d="scan'208";a="226841295"
-Received: from lkp-server01.sh.intel.com (HELO 3eaaf1a74b89) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 12 Apr 2026 07:08:44 -0700
-Received: from kbuild by 3eaaf1a74b89 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wBvUP-000000002FB-3J2a;
-	Sun, 12 Apr 2026 14:08:41 +0000
-Date: Sun, 12 Apr 2026 22:08:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Taegu Ha <hataegu0826@gmail.com>, linux-usb@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gregkh@linuxfoundation.org, kees@kernel.org,
-	linux-kernel@vger.kernel.org, Taegu Ha <hataegu0826@gmail.com>
-Subject: Re: [PATCH] usb: gadget: f_uac1_legacy: validate control request size
-Message-ID: <202604122157.EGkANVeB-lkp@intel.com>
-References: <20260401104611.3375330-1-hataegu0826@gmail.com>
+	s=arc-20240116; t=1776010574; c=relaxed/simple;
+	bh=6IlgXTFSmFVd7hT6b2wcB0Awnk4YrKROVYLwrLdRd0w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=izJx/0kWt/0wLxsVLY9CeVszmhqurq1ehsQrZ9ZFTmeIPRv5YU1TyqZJGeeIRNmgB6BujDDPLvt9tOba8F0lzxbaRClx/bbt9RCN8aNtLnminiii2EfZE3ANO7TxuNShQw3NUIS3IhtcVEx2i/w86z29pueF43XnF1QnmXdShag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h5oMlGnN; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2aaf43014d0so22321535ad.2
+        for <linux-usb@vger.kernel.org>; Sun, 12 Apr 2026 09:16:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776010572; x=1776615372; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iBpA6cw876MX1y6VPWdZbugAryZAfoX9nVBjKfMU+gc=;
+        b=h5oMlGnNKlq/XPXcTJMDh7SS6vKhBIk6zZAm2kIwZr4vQwLHyp1bbT7cuFPVzNS9NU
+         l9bX2UxulWqsvv/VBkzVRVbbB1yWyRxs2do6uD57je8VumCD67RBTy84GceKTi9UHdLj
+         fvbJNHS4yj4bqg3FN2ltgv1fxPermhpGsiH9uwEfMv/kz+XREcmh4ykRU/+dYIGImFLN
+         vwjwpP4s3sJ3E4DzMkSeUr/7xUPcTTXG2AH4IGOK2K85lZFkT8pV6/oMcyvtvPduoPtu
+         E9e2wVK6dgefbS+m+Dmm6ppNn47e/ySdI3lCqtNzIY2BzottROug+eY/T7ZbZcqhjW1N
+         +Pmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776010572; x=1776615372;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iBpA6cw876MX1y6VPWdZbugAryZAfoX9nVBjKfMU+gc=;
+        b=ahTpHGdMqBqTVj2HppmTBCx1cmlLouvP5eMU+LrekKGP3aZLfqoNcxgpCzKyaqchdK
+         +lH6J2UUEqkXCVMsbDpLuM9VDE63qcb0f/61TbdCarciX2VANAvqgC2LJg5IbBUoGqwI
+         BWpZwrRg+hl0ZJ6eJC8sc6WZqpxa6ErGFz/GsrlG8CBC9S44YTB0d8apR96L8IjsT2GF
+         aev8+9Zdd0dfILucIfnz/XbSTvQMjoWTflO/0MpEcNmygQKYSJFUDPCYE0XXWSUXt9Xk
+         xtEaeGcp8UrepcXNO4aeZtvFON+h65tH3VW7p0DlpAZV0pVlbEdSLQkunoXB3yxUF+O2
+         Byuw==
+X-Forwarded-Encrypted: i=1; AFNElJ8nsn+3FBd7wEZiBctbztE5EfbnAO92zbOwIsz6KFmIjQUjLAkWYOZNdPrDC2cxz1/bwvtQ0w1SGuQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpJWWRMqqKYeobSw8nmQ9mDx6B8AXG/BrNtl8Q2trkehgqSpwy
+	2tQW00Kwz8sG+5+4nukGkrZuOt2P2qNJO3One63+vVwPCypk9p+9yim1
+X-Gm-Gg: AeBDiessVxnA/a3VwszkPpL2GUfaFQDM1Df6uehBUFAINFV6qBLEmVRreFCODE73rhm
+	lFSIy1uXNng4b2qVXkgUfLegXvjcKdmcq//f9pNtL6N/8ooC+heNTRbybPfGIxNr5CrwOIbRwNA
+	3U5pedLj4/h6kOp49l3uU52vj56wyC/7ka+HNXl0n/m+MaSLIul9Lodjk8m8lihP4uNYRgpP1my
+	g47UaQfWtRnCiRP7y9wHkd2nxNeLKiGwF9WPaqFdKIAIL0l3tkMcvjKZsxF7ufuUzPNOZg9QtOW
+	ESrVFYA43arnroLxcYdLhQsd0d0fRXjlA6AhTFjPCQGk2f8mMUOW89QHxgIm6f0KGKmj1Mn4AlL
+	64Oapuy0kJ2Ajaj8xa8flm7xM2VTMo+lJpl9rEzSIiLLlDC706ooBOKogwPwNg2+lsnlBTi1Gmc
+	yUp84TMLNdGt7+ZHmHVHEuTYbEpCb0EfQywA==
+X-Received: by 2002:a17:902:8211:b0:2b2:d126:4e77 with SMTP id d9443c01a7336-2b2d5975bdfmr73934235ad.11.1776010572329;
+        Sun, 12 Apr 2026 09:16:12 -0700 (PDT)
+Received: from lgs.. ([2409:893d:1188:142d:f515:539:1a62:ab91])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2d4daede9sm117501075ad.14.2026.04.12.09.16.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Apr 2026 09:16:11 -0700 (PDT)
+From: Guangshuo Li <lgs201920130244@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Ben Hoff <hoff.benjamin.k@gmail.com>,
+	Guangshuo Li <lgs201920130244@gmail.com>,
+	Yuhao Jiang <danisjiang@gmail.com>,
+	William Wu <william.wu@rock-chips.com>,
+	Terry Junge <linuxhid@cosmicgizmosystems.com>,
+	Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+	John Keeping <john@keeping.me.uk>,
+	Lee Jones <lee@kernel.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
+Subject: [PATCH] usb: gadget: f_hid: fix device reference leak in hidg_alloc()
+Date: Mon, 13 Apr 2026 00:15:55 +0800
+Message-ID: <20260412161555.2568840-1-lgs201920130244@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260401104611.3375330-1-hataegu0826@gmail.com>
-X-Spamd-Result: default: False [-1.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[lists.linux.dev,linuxfoundation.org,kernel.org,vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-36169-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-36170-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[linuxfoundation.org,suse.com,gmail.com,rock-chips.com,cosmicgizmosystems.com,collabora.com,keeping.me.uk,kernel.org,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lgs201920130244@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,intel.com:email,intel.com:mid,01.org:url]
-X-Rspamd-Queue-Id: 583DC3E42C0
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: 6D0813E4B29
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Taegu,
+hidg_alloc() initializes hidg->dev with device_initialize() before
+calling dev_set_name(). If dev_set_name() fails, the function currently
+jumps to err_unlock and returns without calling put_device().
 
-kernel test robot noticed the following build errors:
+This leaves the device reference unbalanced and prevents hidg_release()
+from being called. Calling put_device() here is also safe, since
+hidg_release() only frees resources owned by hidg.
 
-[auto build test ERROR on westeri-thunderbolt/next]
-[cannot apply to usb/usb-testing usb/usb-next usb/usb-linus linus/master v7.0-rc7 next-20260410]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Route the dev_set_name() failure path through err_put_device so the
+device reference is dropped properly.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Taegu-Ha/usb-gadget-f_uac1_legacy-validate-control-request-size/20260412-113035
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
-patch link:    https://lore.kernel.org/r/20260401104611.3375330-1-hataegu0826%40gmail.com
-patch subject: [PATCH] usb: gadget: f_uac1_legacy: validate control request size
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260412/202604122157.EGkANVeB-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260412/202604122157.EGkANVeB-lkp@intel.com/reproduce)
+Fixes: 944fe915d00d ("usb: gadget: f_hid: tidy error handling in hidg_alloc")
+Cc: stable@vger.kernel.org
+Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
+---
+ drivers/usb/gadget/function/f_hid.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604122157.EGkANVeB-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/usb/gadget/function/f_uac1_legacy.c:14:10: fatal error: 'asm/unaligned.h' file not found
-      14 | #include <asm/unaligned.h>
-         |          ^~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +14 drivers/usb/gadget/function/f_uac1_legacy.c
-
-  > 14	#include <asm/unaligned.h>
-    15	
-
+diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+index 3ddfd4f66f0b..2734ebd35bda 100644
+--- a/drivers/usb/gadget/function/f_hid.c
++++ b/drivers/usb/gadget/function/f_hid.c
+@@ -1610,7 +1610,7 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
+ 	hidg->dev.devt = MKDEV(major, opts->minor);
+ 	ret = dev_set_name(&hidg->dev, "hidg%d", opts->minor);
+ 	if (ret)
+-		goto err_unlock;
++		goto err_put_device;
+ 
+ 	hidg->bInterfaceSubClass = opts->subclass;
+ 	hidg->bInterfaceProtocol = opts->protocol;
+@@ -1647,7 +1647,6 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
+ 
+ err_put_device:
+ 	put_device(&hidg->dev);
+-err_unlock:
+ 	mutex_unlock(&opts->lock);
+ 	return ERR_PTR(ret);
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
