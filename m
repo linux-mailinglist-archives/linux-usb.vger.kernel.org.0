@@ -1,247 +1,282 @@
-Return-Path: <linux-usb+bounces-36216-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36217-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IHfRHqdC3WkubQkAu9opvQ
-	(envelope-from <linux-usb+bounces-36216-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 21:23:19 +0200
+	id wD5sHH9I3WmmbwkAu9opvQ
+	(envelope-from <linux-usb+bounces-36217-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 21:48:15 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBF213F2A1D
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 21:23:18 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7886A3F2E93
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 21:48:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AB411306B08E
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 19:20:56 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B034D301BDA1
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 19:47:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66F6C3612EE;
-	Mon, 13 Apr 2026 19:20:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A7EC3E3C51;
+	Mon, 13 Apr 2026 19:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LRyJlnQM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d1o0mPLi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9A533F5A6
-	for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 19:20:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC3D3909B0
+	for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 19:47:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776108056; cv=pass; b=d/R9oPqAm674iYWzGIYrWuO6vaRdxmNXKCUczRsDyKcCCE+95s15SIn95RAuUBvUfnQ2j+qz0/pGmSO2pKuE19hyB62G20ECpXSVYQj7wagc4e9OY+H8vOpBQ7pfpP1HRJX6Sk8eBfjdaW0D2Uf6nISYns8i2Eihy5OE2brN0ic=
+	t=1776109636; cv=pass; b=gV8OiFICj/L4T+iSsbXytgOg2VSvdaVubx0J7y8qz73Cio5frveF6m7ISeueW9dMXYKaN+bKmrtc5vq9m9IMaKQCESgP3WBv/wvM9XwGHfmW/ft9y102Neo4HLEqRY3cGRz70CZQJJmHQr6lSpF/BZOK2/rWFBmdfeCjY1bmMwk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776108056; c=relaxed/simple;
-	bh=gOZHoGsfMHU8YEyRDbAh79rI/Dyzjr9SzF5coRCsLPU=;
+	s=arc-20240116; t=1776109636; c=relaxed/simple;
+	bh=dCx0BgeP0S4iPQNUJynu0bwg/Evju3Rd90eyN3QC9wc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EE4HTP4+G2WM1DMJ3c5qb9A6yNaLg2r3iHqLehgMMscCkGrBVD75crURUnRLXXZ6MFaipQFGiOqv1HwS5tyyGtqIUpjXDUFtWUY7KCLDWYtLNdjTuab8WImrudm+NjZPTWdfQb3S5V8LdKibk/JD3wX10fuFLs0Az79En0OLjjA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LRyJlnQM; arc=pass smtp.client-ip=209.85.218.43
+	 To:Cc:Content-Type; b=uxbBDfXPhpruv2PqZN1gFXpgZX6gwd0qZBfXt5yR3ETXJeLf8KBoC0d1OjTDDiuaoB5qVWLH53K8oAEz7CSuPh45mxYLuPyid9LVXZ7T1A1BiOmDR1A7zDjoWBD6zdfM8ALYz0S7vqEh4DJBhz4aGkiMGcq0ZNnPZ/nOiEtt6TQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d1o0mPLi; arc=pass smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b8f9568e074so769326466b.0
-        for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 12:20:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776108053; cv=none;
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b941762394aso586110366b.1
+        for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 12:47:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776109633; cv=none;
         d=google.com; s=arc-20240605;
-        b=TuEDGS0WGg7ZGXrowlcIiKC7iib5G05jsJjVlHEL+qdXvUpyUjzalDbEh8N6xq4sGv
-         T48npNfjSEtn4vzEaH57eyZHVaNqnBitOT1Bu1MAYQSbF4WqLP/vAZVm9lSHcWjlWHxM
-         kEFGyNyPfCAGf8R8AJzl754UK1WC3Iw02eXMzc0Xf7cv4fM6hqyXCXdDTAmuxaM/WYfh
-         7OpW/SU/rhgh2r7pS1H2sEzSg3FjTlG6+0QzzZ/B34WZ/uVR/ASsQYIGtuqaVCarGF9a
-         llUoNXWO/RiWOiFaqoa1dJBOmAy3ZuYKwMRJd8Rluxb2tD9Ac6idmaPNC2bx57svHN7a
-         OWfw==
+        b=TiB36KkGETZ5/QQYunfrOE6aS1Z0yIpSR7pu3X3lZeH2JFc524ftTm7xHi3fCF8TEp
+         vfdakWKsTqKiIV29DTjuKMSZv/N+6f9VEapG0pOI5bmPf9S6yTgh179aS2vQ1rM9sGFT
+         rZ81HAKXB+ETQ5KOKKQRRCdVjHFMPLX8MH3xyPi4Nrlz+3ar0KC8TPX6iMqMY57yR9iY
+         X311BOFZvMuEJZbIa2JYt/JMEzbkV1okZBwCIoSwdqlS67VFJU++tCAgAolcSfas2QqN
+         aXk8ZW0TVhPry3C5c4f4NSlJATEPvKWh/G9QnJr7jTDmFAQx7fALyMiQUQt+VXRXkWzO
+         8VzA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=6j2DEXG/4irDMZVc5XFysACYZ5vdAPgoKfQ75xHiNk8=;
-        fh=pD2JYrZcSSAuTrMk8oYm4EgWqn5RgNX2Ss7Gp53u84E=;
-        b=lQFHZh7x8EcW7XHmQhy5huhxeABeyA5foG3eDGLOjgWr5cmuKbN0vE3DxtfcMIgJzR
-         o9X2nc661jSFJSCeRsbkpYCV7xqshGS/CzdKkOTChh6oMxkIwf3FT6xq2V7abzXzx7JU
-         s5JN+sZcfPY6x/aZhcGZmsKGefqGE272aX7x6qwUoVQHkwSPzinAatoSJgp1PjBeqvRG
-         V6QrW8NkMehoBxZONFnYVDxyjDVDFcTdyiVnhpUGOBRfbs2VwiNAqJjwiaTKtEivybbw
-         zBBkEZ/ocwvRb3kIm+9DSw0XCqvSYA8Y65HcOtkvlAFdvLRA5o+DDgcfTKKFFYAz3Dh/
-         iBOQ==;
+        bh=n4aauW7rIckYMi6KppeMuYBAZ0kgUOmrEq7Mca9Sx1s=;
+        fh=PIhAgsaJq8JRruAdIVFwZAxhe3Q4ldcRSyMDcV4ZcRc=;
+        b=Paa1Y+c39m2fT5WIuqJDIyVyksti1na2UDHThhLB9osi0AeAblj/9l5QtyMnVWIpt9
+         57IdBv51LXlDQy0V9GkIDfssJ/H1wSg5hwN7Acyj6O7iBiBZE3wxeDTg1YwkPfrqOrP2
+         Sh8LW5ClkbAHgZXZWqQ0gYiZQHvSbCk7JMYnmevbQEeBW472PQCog7DCErjdPccLqKau
+         lTGam6CtqniY40jvfEFvdnCpM3xqELz49yLD0AE7vRlIn6Ut/qRchKKUWKehUtwDE5Hc
+         qoxBFgXDHG4lFtnzZIKzgh6WfKPVrp5nuXDJagY8gc5AJrYO+IvDqXzSJyU7dTJAsmkt
+         +3Fw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776108053; x=1776712853; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776109633; x=1776714433; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6j2DEXG/4irDMZVc5XFysACYZ5vdAPgoKfQ75xHiNk8=;
-        b=LRyJlnQMFPoHrVT0lHiyOmwo6kPeAWNdjjVGAvwCeMyVfC7CJruGFSZ7NPaO4Q6hLQ
-         InW6K30P8CQiusXjEqyKULqlwZcu61/cYeYDw61WoAsNfpg6GGE68AAabIqvxpm7BQ0w
-         9KJsPA98oLrgm1Whs7jsaFd9GoIjQgufEbyl69VeIm4sFREGz9J5i8TEc+BrxYSp9SO7
-         dPvrQz9sdw8g3K0BI8Q4Y6QHlvwpS2LajlQ48/Y27RBJdv7FcG8U6mw2Zq4voX+6Ttub
-         U9YgFSqHQvyPgf4bxz6YgUWLP3dt7bWWVeSXPO1Q4GCAVXTDgVbNKKJrn4dWueW1kUNz
-         JKzQ==
+        bh=n4aauW7rIckYMi6KppeMuYBAZ0kgUOmrEq7Mca9Sx1s=;
+        b=d1o0mPLi7oxqk/L8zqIe4b/83Hf8YZ+EAQnwRnWOXv2N4EKRivcTU9dqbb1ensQXEs
+         lKD+FXl0Gh4RqXGZAQ9NjlSHSNosN+Z01Ez4ig8+phCEewBToCM5EWKjDpqTanWtS26G
+         +1jjPsM50hpXz5MP3krtGOs2FqL+a38oePDMk4rGuhAWPei64suiNRXxiUn28/ZWPVmH
+         J99IvmOwUbsxPLOHQTPTwcSS+et3DLefeMH87+tWj5KRIYKvjpBIV1jmEP0ZLdlghwvH
+         gHDbu2mCYcZVc/O1tfxh0LTR3snHBdQvWIjgFGMWhPPG3TqSgMqia7TvC9+XRYNz4jCf
+         KYJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776108053; x=1776712853;
+        d=1e100.net; s=20251104; t=1776109633; x=1776714433;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=6j2DEXG/4irDMZVc5XFysACYZ5vdAPgoKfQ75xHiNk8=;
-        b=O9LQGnrErzpZF48GX9iQOksVzHSxhD58NlIsf05TCDDge7+Fd/vq70vd/UOBcD+mRJ
-         WUky4TrwOlRqQczoW1rvY26Qq2tCfZK7aiee1EuWok/F7r1nmtprmE4ctgKptUtBj5j4
-         zNPwnDqfuAMNZ2htbVLXOgnHQ5pxMJ49P+EWeYmlzODm17qJNn6zHFt5s3xJ6EwbiYK8
-         xMM3NWRGvpYWAMnX7te+4ths2CdctTlWjDGp2cfQhV1dgPP2MecvUuWqPoiVnUrKhZNR
-         0g8IqYKigPYqPUpCO4hp5cJ7bQsSWvIdxZNoPvj79PkeCKgox0kQ+y1+K6os9E+wEyZ4
-         5MIw==
-X-Gm-Message-State: AOJu0Yxf5Yg+N5S7mH5+P/JSRgUa3GJ7KIh1hz7npqT+kUWSzKwpdqGh
-	FzM5WeRdCd9MtVzRmFpP02JcUVoxb3lQH5eBvxrfkz6LW9rRJfW09q7JZaolYPuxVAkcvHf6f8j
-	8As0MwTxLj9zXq5ocdWEi6M1Pfp93F8Bjkg==
-X-Gm-Gg: AeBDieuBv1PZgsTsSRyWXsCbBayunMQ2H2g39Y2AVK+Q7VE4QaRk3QSS9NgE8K3prgt
-	aLtkEF98BUJAKI9TrT2mKAS+48nJh219hbwVfHmOAO8LmdQSvHOZemJDd7/3A45LkF87UhMU8Yz
-	kFFMsZOQZDGzHERILH5wol09AVvxpOImCxajePVzm1js6mVCvNH++fp37DbtmsSKHKjNHDi+2AZ
-	tVCwoI+u1tXfva8eknqfv1dw0DFy8o0xgQTfo2zr6e9VhVknAL4FrMCgKgbVe2T0iaKJmcyu8VR
-	MFyK6aCkdQOizXPBnKH35fXtRe3oftDuXZzjZjCXX9yMDRypo/ubKGFNyh9Gio2BSRVLJ/A/fPg
-	+NmR6+Q==
-X-Received: by 2002:a17:907:1c84:b0:b97:992b:8806 with SMTP id
- a640c23a62f3a-b9d724361dbmr886354866b.11.1776108052561; Mon, 13 Apr 2026
- 12:20:52 -0700 (PDT)
+        bh=n4aauW7rIckYMi6KppeMuYBAZ0kgUOmrEq7Mca9Sx1s=;
+        b=Hf/aeDmOkn4kkI/6TWy3SXOeVnOhOU4MXwjBBidYvjDLCWIHoI2eWe0TGnTE6IfpVL
+         RuVpn97xt9LsK7M3ivNW46xzdlD2ALE/suS+TH53srB7n2Jxpr9yGYVtuKju4qjRghrX
+         1GFTPGyiCDaE4zjpnjVp+qhq1y71HJ5UqYNCj9WjbgqkkKE4LULhz0cAep3kqVaXbygK
+         Wa7+59Q9mmSObIKpBDivVEr45WJoMWSTKfLQlzTgR7USAXmTCOPf8W0w7NrLiNpQvBAi
+         vyvpCxb3+yVpdGEYy/n9+CwVHhB+5nBXo/d6AN8o4H/YjBW8dtxtcgEzJO/UH2RvITib
+         8VyA==
+X-Gm-Message-State: AOJu0YzPlbZF4aYWAVIHEtcIu3TzcWrA+p0vy3QqtuseqBgr4aLAdZPt
+	CdFUxMvl47Q8RXZC+tg79NNn/UWzMpeG7qNQdvX+R9GFevLeKZ7ueZGTVFNW8I0VLomEXVpsygM
+	kcCN+MJHofduMF+fN3mQQBTDA8fZnS6A0Jw==
+X-Gm-Gg: AeBDievmb5+jkwKEq2ZMJsDcs+wj/d4pPw00VSV9N3VWcPu/ma1qnusWVmIpcKV7/vW
+	eTuQgQ26M0HcCjsqNDj81SsQc8IW290+acGvuW8PnzwIA2ubHbedUFV8hLpOHOjCDY5829U6foU
+	JW1cdlDyQlc9EzW2iKMOrFNY0jqe0y+vD/dgn5sMDjdCbHwWWBB6fBbiZbMOG0gsBLx/UxUPIMi
+	tPS3KR7DwCol5+X0n0Vtu/iiqJ0/bTCzg16ceK8dAEGA1I11mkb+vIhNcSmloTNCEtvyX7OwN2Z
+	GE2hN5wpb1wlayU9QGUk/w32dqmY+/umtvmC+QoivnqVt4XvLioxF2xcSaFL6FSYqwQdEAWJ7Uf
+	dwDaGVdE8FHl2Wfp8
+X-Received: by 2002:a17:906:9fca:b0:b98:4f24:a6d with SMTP id
+ a640c23a62f3a-b9d7249964dmr899921366b.11.1776109633144; Mon, 13 Apr 2026
+ 12:47:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260411041252.166816-1-rosenp@gmail.com> <f8ea0484-6f6f-4426-aea6-fc45f566f692@broadcom.com>
-In-Reply-To: <f8ea0484-6f6f-4426-aea6-fc45f566f692@broadcom.com>
+References: <20260411023642.146890-1-rosenp@gmail.com> <202604131654.9GEXISW5-lkp@intel.com>
+In-Reply-To: <202604131654.9GEXISW5-lkp@intel.com>
 From: Rosen Penev <rosenp@gmail.com>
-Date: Mon, 13 Apr 2026 12:20:41 -0700
-X-Gm-Features: AQROBzDPyJ7FUAtzKiOWMEu6eQr26UUe0KIXBelmHSjDVPDSI80zsIbF6CykwyY
-Message-ID: <CAKxU2N_xvpo-vzsffPHUuNDW+Ew0gBVBupmmOts3WXJO=0D9Mw@mail.gmail.com>
-Subject: Re: [PATCH] usb: bdc: allocate phys with main struct
-To: Justin Chen <justin.chen@broadcom.com>
-Cc: linux-usb@vger.kernel.org, Al Cooper <alcooperx@gmail.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL HARDENING (not covered by other areas):Keyword:b__counted_by(_le|_be)?b" <linux-hardening@vger.kernel.org>
+Date: Mon, 13 Apr 2026 12:47:00 -0700
+X-Gm-Features: AQROBzCLUeMWLW9XnCCf_p-1qKj0CJB3Mwj1tUaY9VjQWSQTO6tl6tvfzd6JKQE
+Message-ID: <CAKxU2N9wF8ekpzu39CTx3jRA3wj=cQ=dbN8jcUXtLTmpwD_Oxw@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: intel_pmc_mux: combine kzalloc + kcalloc
+To: kernel test robot <lkp@intel.com>
+Cc: linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36216-lists,linux-usb=lfdr.de];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,broadcom.com,linuxfoundation.org,kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWO(0.00)[2];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36217-lists,linux-usb=lfdr.de];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[rosenp@gmail.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[broadcom.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: BBF213F2A1D
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid,intel.com:email]
+X-Rspamd-Queue-Id: 7886A3F2E93
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Apr 13, 2026 at 10:51=E2=80=AFAM Justin Chen <justin.chen@broadcom.=
-com> wrote:
+On Mon, Apr 13, 2026 at 1:52=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi Rosen,
+>
+> kernel test robot noticed the following build warnings:
+>
+> [auto build test WARNING on usb/usb-testing]
+> [also build test WARNING on usb/usb-next usb/usb-linus westeri-thunderbol=
+t/next linus/master v7.0-rc7 next-20260410]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Rosen-Penev/usb-ty=
+pec-intel_pmc_mux-combine-kzalloc-kcalloc/20260412-223212
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git us=
+b-testing
+> patch link:    https://lore.kernel.org/r/20260411023642.146890-1-rosenp%4=
+0gmail.com
+> patch subject: [PATCH] usb: typec: intel_pmc_mux: combine kzalloc + kcall=
+oc
+> config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/2026=
+0413/202604131654.9GEXISW5-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0=
+227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20260413/202604131654.9GEXISW5-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202604131654.9GEXISW5-lkp=
+@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> drivers/usb/typec/mux/intel_pmc_mux.c:740:3: warning: variable 'num_po=
+rts' is uninitialized when used here [-Wuninitialized]
+>      740 |                 num_ports++;
+>          |                 ^~~~~~~~~
+>    drivers/usb/typec/mux/intel_pmc_mux.c:735:14: note: initialize the var=
+iable 'num_ports' to silence this warning
+>      735 |         u8 num_ports;
+>          |                     ^
+>          |                      =3D '\0'
+>    1 warning generated.
+Yikes I forgot to do this. As the merge window is closed I assume this
+needs to wait.
 >
 >
+> vim +/num_ports +740 drivers/usb/typec/mux/intel_pmc_mux.c
 >
-> On 4/10/26 9:12 PM, Rosen Penev wrote:
-> > Use a flexible array member to combine allocations and simplify code
-> > slightly. No need for a branch deciding whether to allocate or not.
-> >
-> > Add __counted_by for extra runtime analysis.
-> >
-> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
-> > ---
-> >   drivers/usb/gadget/udc/bdc/bdc.h      |  2 +-
-> >   drivers/usb/gadget/udc/bdc/bdc_core.c | 20 +++++++-------------
-> >   2 files changed, 8 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/drivers/usb/gadget/udc/bdc/bdc.h b/drivers/usb/gadget/udc/=
-bdc/bdc.h
-> > index 2f4abf6f8f77..cc961161eb46 100644
-> > --- a/drivers/usb/gadget/udc/bdc/bdc.h
-> > +++ b/drivers/usb/gadget/udc/bdc/bdc.h
-> > @@ -409,7 +409,6 @@ struct bdc {
-> >       spinlock_t      lock;
-> >
-> >       /* generic phy */
-> > -     struct phy      **phys;
-> >       int num_phys;
-> >       /* num of endpoints for a particular instantiation of IP */
-> >       unsigned int num_eps;
-> > @@ -453,6 +452,7 @@ struct bdc {
-> >        */
-> >       struct delayed_work     func_wake_notify;
-> >       struct clk              *clk;
-> > +     struct phy              *phys[] __counted_by(num_phys);
-> >   };
-> >
-> >   static inline u32 bdc_readl(void __iomem *base, u32 offset)
-> > diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget=
-/udc/bdc/bdc_core.c
-> > index 438201dc96ca..4b16b85da450 100644
-> > --- a/drivers/usb/gadget/udc/bdc/bdc_core.c
-> > +++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
-> > @@ -487,14 +487,20 @@ static int bdc_probe(struct platform_device *pdev=
-)
-> >       int irq;
-> >       u32 temp;
-> >       struct device *dev =3D &pdev->dev;
-> > +     int num_phys;
-> >       int phy_num;
-> >
-> >       dev_dbg(dev, "%s()\n", __func__);
-> >
-> > -     bdc =3D devm_kzalloc(dev, sizeof(*bdc), GFP_KERNEL);
-> > +     num_phys =3D of_count_phandle_with_args(dev->of_node,
-> > +                                             "phys", "#phy-cells");
-> > +     bdc =3D devm_kzalloc(dev, struct_size(bdc, phys, num_phys), GFP_K=
-ERNEL);
-> >       if (!bdc)
-> >               return -ENOMEM;
-> >
-> > +     bdc->num_phys =3D num_phys;
-> > +     dev_info(dev, "Using %d phy(s)\n", bdc->num_phys);
-> > +
+>    730
+>    731  static int pmc_usb_probe(struct platform_device *pdev)
+>    732  {
+>    733          struct fwnode_handle *fwnode =3D NULL;
+>    734          struct pmc_usb *pmc;
+>    735          u8 num_ports;
+>    736          int i =3D 0;
+>    737          int ret;
+>    738
+>    739          device_for_each_child_node(&pdev->dev, fwnode)
+>  > 740                  num_ports++;
+>    741
+>    742          /* The IOM microcontroller has a limitation of max 4 port=
+s. */
+>    743          if (num_ports > 4) {
+>    744                  dev_err(&pdev->dev, "driver limited to 4 ports\n"=
+);
+>    745                  return -ERANGE;
+>    746          }
+>    747
+>    748          pmc =3D devm_kzalloc(&pdev->dev, struct_size(pmc, port, n=
+um_ports),
+>    749                          GFP_KERNEL);
+>    750          if (!pmc)
+>    751                  return -ENOMEM;
+>    752
+>    753          pmc->num_ports =3D num_ports;
+>    754
+>    755          pmc->ipc =3D devm_intel_scu_ipc_dev_get(&pdev->dev);
+>    756          if (!pmc->ipc)
+>    757                  return -EPROBE_DEFER;
+>    758
+>    759          pmc->dev =3D &pdev->dev;
+>    760
+>    761          ret =3D pmc_usb_probe_iom(pmc);
+>    762          if (ret)
+>    763                  return ret;
+>    764
+>    765          pmc->dentry =3D debugfs_create_dir(dev_name(pmc->dev), pm=
+c_mux_debugfs_root);
+>    766
+>    767          /*
+>    768           * For every physical USB connector (USB2 and USB3 combo)=
+ there is a
+>    769           * child ACPI device node under the PMC mux ACPI device o=
+bject.
+>    770           */
+>    771          for (i =3D 0; i < pmc->num_ports; i++) {
+>    772                  fwnode =3D device_get_next_child_node(pmc->dev, f=
+wnode);
+>    773                  if (!fwnode)
+>    774                          break;
+>    775
+>    776                  ret =3D pmc_usb_register_port(pmc, i, fwnode);
+>    777                  if (ret) {
+>    778                          fwnode_handle_put(fwnode);
+>    779                          goto err_remove_ports;
+>    780                  }
+>    781
+>    782                  pmc_mux_port_debugfs_init(&pmc->port[i]);
+>    783          }
+>    784
+>    785          platform_set_drvdata(pdev, pmc);
+>    786
+>    787          return 0;
+>    788
+>    789  err_remove_ports:
+>    790          for (i =3D 0; i < pmc->num_ports; i++) {
+>    791                  typec_switch_unregister(pmc->port[i].typec_sw);
+>    792                  typec_mux_unregister(pmc->port[i].typec_mux);
+>    793                  usb_role_switch_unregister(pmc->port[i].usb_sw);
+>    794          }
+>    795
+>    796          acpi_dev_put(pmc->iom_adev);
+>    797
+>    798          debugfs_remove(pmc->dentry);
+>    799
+>    800          return ret;
+>    801  }
+>    802
 >
-> This feels like a step sideways instead of an improvement IMHO. And we
-> are also moving the allocation and dev_info() print. Is there a reason
-> to change the ordering?
-Of the allocation, yes since we need the size.
-
-Of the dev_info, no. I can move it back.
->
-> Justin
->
-> >       bdc->regs =3D devm_platform_ioremap_resource(pdev, 0);
-> >       if (IS_ERR(bdc->regs))
-> >               return PTR_ERR(bdc->regs);
-> > @@ -508,18 +514,6 @@ static int bdc_probe(struct platform_device *pdev)
-> >       bdc->dev =3D dev;
-> >       dev_dbg(dev, "bdc->regs: %p irq=3D%d\n", bdc->regs, bdc->irq);
-> >
-> > -     bdc->num_phys =3D of_count_phandle_with_args(dev->of_node,
-> > -                                             "phys", "#phy-cells");
-> > -     if (bdc->num_phys > 0) {
-> > -             bdc->phys =3D devm_kcalloc(dev, bdc->num_phys,
-> > -                                     sizeof(struct phy *), GFP_KERNEL)=
-;
-> > -             if (!bdc->phys)
-> > -                     return -ENOMEM;
-> > -     } else {
-> > -             bdc->num_phys =3D 0;
-> > -     }
-> > -     dev_info(dev, "Using %d phy(s)\n", bdc->num_phys);
-> > -
-> >       for (phy_num =3D 0; phy_num < bdc->num_phys; phy_num++) {
-> >               bdc->phys[phy_num] =3D devm_of_phy_get_by_index(
-> >                       dev, dev->of_node, phy_num);
->
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
