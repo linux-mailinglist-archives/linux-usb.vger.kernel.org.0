@@ -1,167 +1,186 @@
-Return-Path: <linux-usb+bounces-36189-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36190-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QEK6Igm43Gn2VgkAu9opvQ
-	(envelope-from <linux-usb+bounces-36189-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 11:31:53 +0200
+	id yNPaLiW53GkvVwkAu9opvQ
+	(envelope-from <linux-usb+bounces-36190-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 11:36:37 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D09D83E9DE2
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 11:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C2473E9E9F
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 11:36:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F0B5A301DBA4
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 09:28:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 92FEB301C17A
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 09:35:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7B5B3B27C4;
-	Mon, 13 Apr 2026 09:28:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A95983B19BE;
+	Mon, 13 Apr 2026 09:35:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gyDZknSe"
+	dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b="RGNgTStt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx9.kaspersky-labs.com (mx9.kaspersky-labs.com [195.122.169.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5667237CD44;
-	Mon, 13 Apr 2026 09:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C8D3AE1BD;
+	Mon, 13 Apr 2026 09:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.122.169.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776072526; cv=none; b=Mv/Xk3s9tYZPc41KcRZTYJHLo21+66psxyIc8NnTD/bz5qGno6FK003bRghtRzS9edYQJgAp/l0xbmcPovV4A/kHAZuy+Z7n2EiV1CCND50Sp5jcKVGdMKXy8Wj26PBsGh6Atv051oSSUL9NTjjUCrUcpElwpTQUHwhOWqoAhbs=
+	t=1776072915; cv=none; b=aFuiCY8GELYeUvWQGdkmIt2GJ0ypUcS0JvQcwtad/YR04D9IviHEicwhzodsm4ZoZSuXrGF9kD3Ji98eDUJRR+VMYm42ludvwnEDiRE9Rs8DPG/i2g5uGF9BITQ+kIS2nc2areRWIFpsP8cxVpPNTT5WW9zHKhqj4iN7XTPOn7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776072526; c=relaxed/simple;
-	bh=swrqoNRI7b5SyUeon1VlvSsyJjrUtH0QoZ70SUxzLKg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hS3fMtp8AnxeMDwlKMvZPXekTz+7mkUtWvIuyo8LcfMwrEzOUPH5QLrrIhPReZUM02BoPXlK2v5zmiy6PH5rHgn2hgxrwudfH4B28/usCwUJ3JI6PF8IXgkNkxXZH4izJiBOpriuKRnJmkdrOCdROIQFvGpMX7XOcq5IjREo/WE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gyDZknSe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ADE2C116C6;
-	Mon, 13 Apr 2026 09:28:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1776072526;
-	bh=swrqoNRI7b5SyUeon1VlvSsyJjrUtH0QoZ70SUxzLKg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gyDZknSe9kOXSE3sMi0i4SzDbRCLiYA4OE3DsVfsKOLbnn0On0cnQ/38++ZaxKvRQ
-	 uRDaSuFHypp2hIXrzmsT4vSVmIzRh7rQGEfL4aTtC+yXiKf/H50NlVt65Kw/FVRIGP
-	 0RXDFEjxXTP3nhAgmtZZpG456tjmDtpUy3yZfKgk=
-Date: Mon, 13 Apr 2026 11:28:43 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Alexey Charkov <alchark@flipper.net>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Hans de Goede <hansg@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: typec: fusb302: Switch to threaded IRQ handler
-Message-ID: <2026041357-diabolic-knickers-e504@gregkh>
-References: <20260317-fusb302-irq-v2-1-dbabd5c5c961@flipper.net>
- <2026040344-uncouple-maroon-69a1@gregkh>
- <CAKTNdwGqKqK80-B75Bto7muzqdKoqCuCUaxVwNx=9Cs+fb8WsQ@mail.gmail.com>
+	s=arc-20240116; t=1776072915; c=relaxed/simple;
+	bh=Gd8PJVNO+FI+47itn6gPjCDr7NyRRMdoDoT/IOrW9bQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ujEdr/6CbkxKNwSwk61LghBRvgfZoQxIiYrYAL1IZHaC9WDYSVfYhhj1dy235kqxR5dso9tSWRlwUE7IJlrZxvhJ9rtKuve+8rgmLXfJAS7nZJyOb7BNt9G7ZH4e9QYEHh7lXOiHQhi5dPPGp/jgoffXONbNUe/KciPFOvaYdWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com; spf=pass smtp.mailfrom=kaspersky.com; dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b=RGNgTStt; arc=none smtp.client-ip=195.122.169.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaspersky.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kaspersky.com;
+	s=mail202505; t=1776072911;
+	bh=L8tgsMIPAABk3xNOLf0x31lY6+GVkTqigparFAp/Fj8=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+	b=RGNgTStt1e4yyTD5akMXTDOx0zwQLfnVYtDBFh/pXZG0mLnmPhSf4+qA2QUVUSxGM
+	 J+szdtQawAjisl7G8Sp84Qqu810bIbm9f5cslH2YELDaq0jc51L6FpXFV3vKAepI2f
+	 FAZRilIKrZSH3oBSWQD51uiYZj7mFiEIjNmJugwHuOKePvnjZw1ZcjorVOjqUTuKrp
+	 vv5Ie6rbDrpHuAZmR9OkCQTGP4+csRDm7T/tcJY9FSaYVeWAY3EBA2jL8aw1/6eCtR
+	 aw0vDfLO7HSvjwE/khvDLAfI0PicZ2Cbndi2r/u9pu+xCPB2KG5gGmlUKFYvTAbn1p
+	 uGqKCOcKjerjw==
+Received: from relay9.kaspersky-labs.com (localhost [127.0.0.1])
+	by relay9.kaspersky-labs.com (Postfix) with ESMTP id D3ADE8A061E;
+	Mon, 13 Apr 2026 12:35:11 +0300 (MSK)
+Received: from mail-hq2.kaspersky.com (unknown [91.103.66.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(Client CN "mail-hq2.kaspersky.com", Issuer "Kaspersky MailRelays CA G3" (verified OK))
+	by mailhub9.kaspersky-labs.com (Postfix) with ESMTPS id 42AC08A05FF;
+	Mon, 13 Apr 2026 12:35:11 +0300 (MSK)
+Received: from chesnokov.avp.ru (10.16.105.7) by HQMAILSRV2.avp.ru
+ (10.64.57.52) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Mon, 13 Apr
+ 2026 12:35:10 +0300
+From: <Alexander.Chesnokov@kaspersky.com>
+To: <gregkh@linuxfoundation.org>
+CC: <lvc-project@linuxtesting.org>, <Oleg.Kazakov@kaspersky.com>,
+	<Pavel.Zhigulin@kaspersky.com>, Alexander Chesnokov
+	<Alexander.Chesnokov@kaspersky.com>, <stable@vger.kernel.org>, Johan Hovold
+	<johan@kernel.org>, Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	Felipe Balbi <felipe.balbi@linux.intel.com>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH] usb: gadget: udc: renesas_usb3: Fix wrong comparison in usb3_dma_fill_prd()
+Date: Mon, 13 Apr 2026 12:34:57 +0300
+Message-ID: <20260413093509.44129-1-Alexander.Chesnokov@kaspersky.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKTNdwGqKqK80-B75Bto7muzqdKoqCuCUaxVwNx=9Cs+fb8WsQ@mail.gmail.com>
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+Content-Type: text/plain
+X-ClientProxiedBy: HQMAILSRV4.avp.ru (10.64.57.54) To HQMAILSRV2.avp.ru
+ (10.64.57.52)
+X-KSE-ServerInfo: HQMAILSRV2.avp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 04/13/2026 09:15:38
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 202222 [Apr 13 2026]
+X-KSE-AntiSpam-Info: Version: 6.1.1.22
+X-KSE-AntiSpam-Info: Envelope from: Alexander.Chesnokov@kaspersky.com
+X-KSE-AntiSpam-Info: LuaCore: 98 0.3.98
+ ca9d2f3beca9ca2a85e178af9d8e97d5fa2c38a3
+X-KSE-AntiSpam-Info: {Tracking_cluster_exceptions}
+X-KSE-AntiSpam-Info: {Tracking_real_kaspersky_domains}
+X-KSE-AntiSpam-Info: {Tracking_black_eng_exceptions}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;chesnokov.avp.ru:5.0.1,7.1.1;kaspersky.com:5.0.1,7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: {Tracking_white_helo}
+X-KSE-AntiSpam-Info: FromAlignment: s
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Deterministic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 04/13/2026 09:17:00
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 4/13/2026 8:25:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-KSMG-AntiPhishing: NotDetected
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.1.8310, bases: 2026/04/13 06:49:00 #28394185
+X-KSMG-AntiVirus-Status: NotDetected, skipped
+X-KSMG-LinksScanning: NotDetected
+X-KSMG-Message-Action: skipped
+X-KSMG-Rule-ID: 52
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kaspersky.com,reject];
+	R_DKIM_ALLOW(-0.20)[kaspersky.com:s=mail202505];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36189-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	DKIM_TRACE(0.00)[kaspersky.com:+];
+	TAGGED_FROM(0.00)[bounces-36190-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,linuxfoundation.org:email,flipper.net:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D09D83E9DE2
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[Alexander.Chesnokov@kaspersky.com,linux-usb@vger.kernel.org];
+	FROM_NO_DN(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxtesting.org:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 5C2473E9E9F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Apr 13, 2026 at 12:59:11PM +0400, Alexey Charkov wrote:
-> Hi Greg,
-> 
-> On Fri, Apr 3, 2026 at 10:36 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, Mar 17, 2026 at 08:30:15PM +0400, Alexey Charkov wrote:
-> > > FUSB302 fails to probe with -EINVAL if its interrupt line is connected via
-> > > an I2C GPIO expander, such as TI TCA6416.
-> > >
-> > > Switch the interrupt handler to a threaded one, which also works behind
-> > > such GPIO expanders.
-> > >
-> > > Cc: stable@vger.kernel.org
-> > > Fixes: 309b6341d557 ("usb: typec: fusb302: Revert incorrect threaded irq fix")
-> > > Signed-off-by: Alexey Charkov <alchark@flipper.net>
-> > > ---
-> > > Changes in v2:
-> > > - Re-added the IRQF_ONESHOT flag to the request_threaded_irq() call
-> > >   (thanks Hans de Goede and Sebastian Andrzej Siewior)
-> > > - Link to v1: https://lore.kernel.org/r/20260311-fusb302-irq-v1-1-7e7105706629@flipper.net
-> > > ---
-> > >  drivers/usb/typec/tcpm/fusb302.c | 5 +++--
-> > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-> > > index ce7069fb4be6..889c4c29c1b8 100644
-> > > --- a/drivers/usb/typec/tcpm/fusb302.c
-> > > +++ b/drivers/usb/typec/tcpm/fusb302.c
-> > > @@ -1764,8 +1764,9 @@ static int fusb302_probe(struct i2c_client *client)
-> > >               goto destroy_workqueue;
-> > >       }
-> > >
-> > > -     ret = request_irq(chip->gpio_int_n_irq, fusb302_irq_intn,
-> > > -                       IRQF_TRIGGER_LOW, "fsc_interrupt_int_n", chip);
-> > > +     ret = request_threaded_irq(chip->gpio_int_n_irq, NULL, fusb302_irq_intn,
-> > > +                                IRQF_ONESHOT | IRQF_TRIGGER_LOW,
-> > > +                                "fsc_interrupt_int_n", chip);
-> > >       if (ret < 0) {
-> > >               dev_err(dev, "cannot request IRQ for GPIO Int_N, ret=%d", ret);
-> > >               goto tcpm_unregister_port;
-> > >
-> >
-> > I'll take this, but the testing systems rightly point out that
-> > chip->gpio_int_n_irq may NOT be initialized before this call is made in
-> > some situations, so this whole irq handler might never be set up.
-> 
-> Thanks for the heads up. I've been staring at this code from different
-> angles for a while but I can't see how gpio_int_n_irq can remain
-> uninitialized and the function still reach this point in the control
-> flow:
-> - The whole `chip` struct gets zero-initialized at the beginning of
-> the probe function
-> - For non-zero values of `client->irq` this field is explicitly set to
-> the (non-zero) value of client->irq
-> - For zero values of `client->irq`, the helper function `init_gpio()`
-> is always called. This function either sets this field to the result
-> of a `gpiod_to_irq()` call (which must be a valid interrupt number) or
-> it errors out early, terminating the entire probe before control
-> reaches request_threaded_irq()
+From: Alexander Chesnokov <Alexander.Chesnokov@kaspersky.com>
 
-Ah, it's this last thing that I, and the compiler test, misses, sorry
-about that.
+If remain is not zero, the condition (i + 1) < USB3_DMA_NUM_PRD_ENTRIES
+is always true on the first iteration when i equals zero, causing the
+loop to break immediately and only one PRD entry to be filled.
 
-So all is good here, thanks.
+Fix the comparison operator from < to >= so the loop breaks when the
+PRD table is full.
 
-greg k-h
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+Fixes: 2d4aa21a73ba ("usb: gadget: udc: renesas_usb3: add support for dedicated DMAC")
+Cc: stable@vger.kernel.org
+
+Signed-off-by: Alexander Chesnokov <Alexander.Chesnokov@kaspersky.com>
+---
+ drivers/usb/gadget/udc/renesas_usb3.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
+index f24d63c396df..c6f2a09f561d 100644
+--- a/drivers/usb/gadget/udc/renesas_usb3.c
++++ b/drivers/usb/gadget/udc/renesas_usb3.c
+@@ -1347,7 +1347,7 @@ static void usb3_dma_fill_prd(struct renesas_usb3_ep *usb3_ep,
+ 		cur_prd->bap = dma;
+ 		remain -= len;
+ 		dma += len;
+-		if (!remain || (i + 1) < USB3_DMA_NUM_PRD_ENTRIES)
++		if (!remain || (i + 1) >= USB3_DMA_NUM_PRD_ENTRIES)
+ 			break;
+ 
+ 		cur_prd++;
+-- 
+2.43.0
+
 
