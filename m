@@ -1,63 +1,61 @@
-Return-Path: <linux-usb+bounces-36193-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36194-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sInVMYHJ3GmcWQkAu9opvQ
-	(envelope-from <linux-usb+bounces-36193-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 12:46:25 +0200
+	id WGjiL/jI3GmcWQkAu9opvQ
+	(envelope-from <linux-usb+bounces-36194-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 12:44:08 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CAE03EAC94
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 12:46:25 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 400CD3EAC66
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 12:44:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 091293051AA4
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 10:40:29 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id ECB32301384E
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 10:43:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FEFE3A5457;
-	Mon, 13 Apr 2026 10:40:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 496EF3B38BD;
+	Mon, 13 Apr 2026 10:43:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="o3ci55vA"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QB0KplN7"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2894A0C;
-	Mon, 13 Apr 2026 10:40:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C510E47A66;
+	Mon, 13 Apr 2026 10:43:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776076826; cv=none; b=U5PfT76D0WLQxl2K0hPJYDoleEuCAq8x4CMyi91kiIv4Dcxt09yAoOtYBftyjRS10l2VLBx3Sco/HL7tTyHcFp7PK3aLxU2UaKahaQSsqCQQ9Bgr0o7+2UzvXUFYD7n9oev8I/HYk8gWL4s5/xyyqhP0IYgvW1uylrl5e8wZBTY=
+	t=1776077009; cv=none; b=uq4zPjsPDAaMnFXlteMTjFs+5ICBkOG5c472NJE5YvV/z1hn0La6tibB56uRrsP8T6bZc+Wj8Q4MVqG6lCW9jZSMul3hiiAvcgysgderMTACUSDkEq4fGyrFWuxtVQmNBgu62NSs0trPnf4NGRT143/dDgXn9gspniAweFGokWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776076826; c=relaxed/simple;
-	bh=30gb6BbiHDDcRBmzTwvcKQcIicCYNVaUp+xkMGTEQuo=;
+	s=arc-20240116; t=1776077009; c=relaxed/simple;
+	bh=DzDYCviVBC/5WJuRSXlQj5r75TlhKJ7JLvqGP1sDTdQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yp5qWutysNr6uhTaAdAzLfrlwdW64svw+q/HSN9TN9WO/8XShLBWES68VH6MzkNKcQbhrdswkseHSUHTDQjdqkYr9UWfF07BFWFOa6MgF7F6I+CP1WzNGI9rZyBQwm0w0ivXJR/+VagUG4VitKCOovG+hboLN8lpTxO6tCXo5Qc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=o3ci55vA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63E4C116C6;
-	Mon, 13 Apr 2026 10:40:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=DGWOtFHQ8cw+6zOdJ4sYEipyuB+Pc0Vz0PnRo04zudPuY/Ju3UvMErok/vFio53jTDNCJp62IorSGF+BIk8DiMkIkffs0gvrSCcSHGZElamYaN351fDbHeXJDzsGvm3NJzKRmRhY659DtMvdBn96Jr7l1gozTmb2DAAOSqdEJRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QB0KplN7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12965C116C6;
+	Mon, 13 Apr 2026 10:43:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1776076826;
-	bh=30gb6BbiHDDcRBmzTwvcKQcIicCYNVaUp+xkMGTEQuo=;
+	s=korg; t=1776077009;
+	bh=DzDYCviVBC/5WJuRSXlQj5r75TlhKJ7JLvqGP1sDTdQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=o3ci55vA7y9akicILMtoPVHxzZ06cQr6KXiNSCiNq2rGqIU/42lRLn34/FgULJPHn
-	 SgYYyAMUe8vJmjsSsSNVYQjYTxQtzODvGrIgpMchfm+9FLF/MSqduh1BT5ZeieneLh
-	 s0y+bvZSjRNq6Znzra5tzJgb/D9tYKNtP2bDawhM=
-Date: Mon, 13 Apr 2026 12:40:23 +0200
+	b=QB0KplN7FxSzSGhCiuI86DT8g8uBdLBX/VVUuhHADNbIeRRwMD8p0OqwXCiP1Regn
+	 sVyQI37ugshMcrIOC1Mzq6IaKVlWZNhIZbtN0cpCP2yPNRiOwZ1KWXCC7PzwB9RTko
+	 jOF1wD6Flp5w0Q78Xvb7S7Ps8rxiUctFFiRgOfM0=
+Date: Mon, 13 Apr 2026 12:43:26 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Guangshuo Li <lgs201920130244@gmail.com>
-Cc: Marco Crivellari <marco.crivellari@suse.com>,
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	William Wu <william.wu@rock-chips.com>,
-	Yuhao Jiang <danisjiang@gmail.com>,
-	Ben Hoff <hoff.benjamin.k@gmail.com>,
-	Terry Junge <linuxhid@cosmicgizmosystems.com>,
-	Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-	John Keeping <john@keeping.me.uk>, Lee Jones <lee@kernel.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: f_hid: fix device reference leak in
- hidg_alloc()
-Message-ID: <2026041352-morally-campfire-c4cf@gregkh>
-References: <20260413081237.2677048-1-lgs201920130244@gmail.com>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	stable <stable@kernel.org>
+Subject: Re: [PATCH net] net: usb: cdc_ncm: reject negative chained NDP
+ offsets
+Message-ID: <2026041325-giggly-wrecking-e6ef@gregkh>
+References: <2026041137-comfy-eaten-a1ed@gregkh>
+ <2a6963c8-4a87-4fed-b875-d46f3ce53e42@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,7 +64,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260413081237.2677048-1-lgs201920130244@gmail.com>
+In-Reply-To: <2a6963c8-4a87-4fed-b875-d46f3ce53e42@suse.com>
 X-Spamd-Result: default: False [3.84 / 15.00];
 	MID_END_EQ_FROM_USER_PART(4.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -74,58 +72,53 @@ X-Spamd-Result: default: False [3.84 / 15.00];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
 	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-36194-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36193-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com];
+	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[14];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	FREEMAIL_CC(0.00)[suse.com,kernel.org,rock-chips.com,gmail.com,cosmicgizmosystems.com,collabora.com,keeping.me.uk,vger.kernel.org];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
 	TO_DN_SOME(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 2CAE03EAC94
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 400CD3EAC66
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Apr 13, 2026 at 04:12:37PM +0800, Guangshuo Li wrote:
-> hidg_alloc() initializes hidg->dev with device_initialize() before
-> calling dev_set_name(). If dev_set_name() fails, the function currently
-> jumps to err_unlock and returns without calling put_device().
+On Mon, Apr 13, 2026 at 10:36:19AM +0200, Oliver Neukum wrote:
 > 
-> This leaves the device reference unbalanced and prevents hidg_release()
-> from being called. Calling put_device() here is also safe, since
-> hidg_release() only frees resources owned by hidg.
 > 
-> Route the dev_set_name() failure path through err_put_device so the
-> device reference is dropped properly.
+> On 11.04.26 12:53, Greg Kroah-Hartman wrote:
+> > cdc_ncm_rx_fixup() reads dwNextNdpIndex from each NDP32 to chain to the
+> > next one.  The 32-bit value from the device is stored into the signed
+> > int ndpoffset so that means values with the high bit set become
 > 
-> Fixes: 89ff3dfac604 ("usb: gadget: f_hid: fix f_hidg lifetime vs cdev")
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Johan Hovold <johan@kernel.org>
-> Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
-> ---
-> v2:
->   - correct Fixes tag to 89ff3dfac604
->   - add Reviewed-by from Johan Hovold
+> Well, then isn't the problem rather that you should not store an
+> unsigned value in a signed variable?
 
-As you are using a tool to find/fix these things, you HAVE to mention
-that as per our documentation.  Please go and read that and then
-resubmit all of thes patches that need that attribution added.
+No.  well, yes.  but no.
+
+cdc_ncm_rx_verify_nth16() returns an int, and is negative if something
+went wrong, so we need it that way, and then we need to check it, like
+we properly do at the top of the loop, it's just that at the bottom of
+the loop we also need to do the same exact thing.
+
+So I really think this patch is the correct thing to do unless you want
+to add another temp variable here just for the sign -> unsigned
+transition and but that might be even messier.
 
 thanks,
 
