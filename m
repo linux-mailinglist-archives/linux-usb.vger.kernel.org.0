@@ -1,187 +1,132 @@
-Return-Path: <linux-usb+bounces-36208-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36209-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GJdYL1Hg3GnrXgkAu9opvQ
-	(envelope-from <linux-usb+bounces-36208-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 14:23:45 +0200
+	id YIGPNLjk3GnBXwkAu9opvQ
+	(envelope-from <linux-usb+bounces-36209-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 14:42:32 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AEF13EBE32
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 14:23:44 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9DE03EC26C
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 14:42:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B5780304EAAC
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 12:17:47 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id F1F3430074CE
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 12:42:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C6A3C4566;
-	Mon, 13 Apr 2026 12:17:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 430803C5543;
+	Mon, 13 Apr 2026 12:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="ITg7t9LP"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="qiIsM++W"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111263C278A;
-	Mon, 13 Apr 2026 12:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C592F3A9D9E;
+	Mon, 13 Apr 2026 12:42:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776082665; cv=none; b=cLyrJmyMONT0XBRTU5K76kc8UfvmdvSusAu8skDlKcfO+Mikn6okCfmDPEsnwXiqKKpUPQ7dTx5Pv7ChoAVUF0J//N6v7kMtyddNjiPeOea0eHj2IJsQbCX2U5U6CHfnAOdSp3y6/4Vlowu9WoWKQE8GcnM+X/FnrHcTXR9KDP0=
+	t=1776084144; cv=none; b=qpgkK0IkNIZNrGc8WvcP/Tf3VRu4HqGJBJAwzv9Ptr4iiP+ZX2WE5etdjdiP8QqHXqnNpaOQTp1003QcUeEzDbdSob5BzrtH/dqsnzShvb6HAFiwpzQTfX93gci6xzbezkuaZOAsZK2Q3dyLqyYXiw4x944J4b7I+3gHcxacvN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776082665; c=relaxed/simple;
-	bh=VddjetoYugZBsTP+K2fjJ3Jsx3i8QtL+52l/dv1g5PY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HXEza5KyZ6ZM6KXG3Mndrq4I14QllgmIjQosBZU/7sxCW5Qk8QoaCT2MQdGRA3XyPftp3MbgGWBS3ojiLDRKEfQwNfQyuCCHQt9pAktmGthe1EEtGOeXBzcy/asDg53Ti5sECCI3NmHJL+HmukbZIy9qTC5j7WVYhUElRP8LXrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=ITg7t9LP; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: beceda4a373211f19a16598d5ca7f8ec-20260413
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=IuZN2SYLC2G9lYXG6DFyga2vEQPqp18kfGbM5VhBs+I=;
-	b=ITg7t9LPETcKYYckFczhTnZSFP3ovF9wree38zMsXivWE5hNJYitAav7BB81vKwHwu+xixEU1UviceAXDmyMxPq/SJw7lH40E/MgJy2FR8N87KR2S8rms7YqL0uI8eRJ/SeCUVLE5tA8QuC4DLJthaBQnhGhRPwDOljXixvGqpk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:2145d9ee-60ef-48be-bc0d-51ca81257420,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:e7bac3a,CLOUDID:a2b5ce24-cb5c-4236-a89a-9a7fb20c9bc4,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|836|865|888|898,TC:-5,Cont
-	ent:0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:-1,COL:0
-	,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: beceda4a373211f19a16598d5ca7f8ec-20260413
-Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw02.mediatek.com
-	(envelope-from <chunfeng.yun@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 953262753; Mon, 13 Apr 2026 20:17:31 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Mon, 13 Apr 2026 20:17:30 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.2562.29 via Frontend Transport; Mon, 13 Apr 2026 20:17:29 +0800
-From: Chunfeng Yun <chunfeng.yun@mediatek.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, AngeloGioacchino Del
- Regno <angelogioacchino.delregno@collabora.com>
-CC: Chunfeng Yun <chunfeng.yun@mediatek.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, <linux-usb@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 2/2] usb: mtu3: add support remote wakeup of mt8196
-Date: Mon, 13 Apr 2026 20:17:26 +0800
-Message-ID: <20260413121727.4702-2-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20260413121727.4702-1-chunfeng.yun@mediatek.com>
-References: <20260413121727.4702-1-chunfeng.yun@mediatek.com>
+	s=arc-20240116; t=1776084144; c=relaxed/simple;
+	bh=jE0Qgm0u+16Hck7IZ25n1n4PjSLQV9UclFHDQiaGkF8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uB6wjzYf01fx84dql1iwdUkBR3A84jWu5rWlY8t//6wb1eKJWerDvPbgzS/bIjwCxiQ2Ap0fJC1Q74dErXv8J7zHkI4DWYriu2N7iokqQq0W1EJc2mN9vhhwi81vgnPWnzJZAVAUKXa1RHlH/Oqvf5qtyw3kiqDQTJDmdHkp1og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=qiIsM++W; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2539BC2BCAF;
+	Mon, 13 Apr 2026 12:42:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1776084144;
+	bh=jE0Qgm0u+16Hck7IZ25n1n4PjSLQV9UclFHDQiaGkF8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qiIsM++WiMmo4wsKMS+ZSAS4JWnefmbuXMmkByfsSxlqZlawzFeO9GGGy5Da3/dBs
+	 9oGYmFK8/I9jyiwAUzXgmUY7zOOjou+RmFOq3GcGpkNdAQYSNL8bbPlM0w4U1pN23E
+	 KKj0VDM/kzt0p6w8lMX/6wB8GLb30XXggbMNRmaE=
+Date: Mon, 13 Apr 2026 14:24:43 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	stable <stable@kernel.org>
+Subject: Re: [PATCH net] net: usb: cdc_ncm: reject negative chained NDP
+ offsets
+Message-ID: <2026041355-designate-spiritual-e785@gregkh>
+References: <2026041137-comfy-eaten-a1ed@gregkh>
+ <2a6963c8-4a87-4fed-b875-d46f3ce53e42@suse.com>
+ <2026041325-giggly-wrecking-e6ef@gregkh>
+ <198c1240-80a6-456c-8b12-25158c90c965@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
-X-Spamd-Result: default: False [0.84 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <198c1240-80a6-456c-8b12-25158c90c965@suse.com>
+X-Spamd-Result: default: False [3.84 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[mediatek.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[mediatek.com:s=dk];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[mediatek.com,kernel.org,gmail.com,vger.kernel.org,lists.infradead.org];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36208-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36209-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chunfeng.yun@mediatek.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[mediatek.com:+];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	NEURAL_HAM(-0.00)[-0.969];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,collabora.com:email]
-X-Rspamd-Queue-Id: 4AEF13EBE32
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: C9DE03EC26C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-There are three USB controllers on mt8196, each controller's wakeup
-control is different, add some specific versions for them.
+On Mon, Apr 13, 2026 at 02:11:50PM +0200, Oliver Neukum wrote:
+> On 13.04.26 12:43, Greg Kroah-Hartman wrote:
+> > On Mon, Apr 13, 2026 at 10:36:19AM +0200, Oliver Neukum wrote:
+> > > 
+> > > 
+> > > On 11.04.26 12:53, Greg Kroah-Hartman wrote:
+> > > > cdc_ncm_rx_fixup() reads dwNextNdpIndex from each NDP32 to chain to the
+> > > > next one.  The 32-bit value from the device is stored into the signed
+> > > > int ndpoffset so that means values with the high bit set become
+> > > 
+> > > Well, then isn't the problem rather that you should not store an
+> > > unsigned value in a signed variable?
+> > 
+> > No.  well, yes.  but no.
+> > 
+> > cdc_ncm_rx_verify_nth16() returns an int, and is negative if something
+> > went wrong, so we need it that way, and then we need to check it, like
+> > we properly do at the top of the loop, it's just that at the bottom of
+> > the loop we also need to do the same exact thing.
+> 
+> Doesn't that suggest that cdc_ncm_rx_verify_nth16() is the problem?
+> To be precise, the way it indicates errors?
+> As this is an offset into a buffer and the header must be at the start
+> of the buffer, isn't 0 the natural indication of an error?
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v4: add reviewed-by
-v3: add the ommitted third dual-role controller add acked by Conor
-v2: new patch for dual-role controllers
----
- drivers/usb/mtu3/mtu3_host.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+Maybe?  I really don't know, sorry, parsing the cdc_ncm buffer is not
+something I looked too deeply into :)
 
-diff --git a/drivers/usb/mtu3/mtu3_host.c b/drivers/usb/mtu3/mtu3_host.c
-index 7c657ea2dabd..8138b3f3096a 100644
---- a/drivers/usb/mtu3/mtu3_host.c
-+++ b/drivers/usb/mtu3/mtu3_host.c
-@@ -46,6 +46,14 @@
- #define WC1_IS_P_95		BIT(12)
- #define WC1_IS_EN_P0_95		BIT(6)
- 
-+/* mt8196 */
-+#define PERI_WK_CTRL0_8196	0x08
-+#define WC0_IS_EN_P0_96		BIT(0)
-+#define WC0_IS_EN_P1_96		BIT(7)
-+
-+#define PERI_WK_CTRL1_8196	0x10
-+#define WC1_IS_EN_P2_96		BIT(0)
-+
- /* mt2712 etc */
- #define PERI_SSUSB_SPM_CTRL	0x0
- #define SSC_IP_SLEEP_EN	BIT(4)
-@@ -59,6 +67,9 @@ enum ssusb_uwk_vers {
- 	SSUSB_UWK_V1_3,		/* mt8195 IP0 */
- 	SSUSB_UWK_V1_5 = 105,	/* mt8195 IP2 */
- 	SSUSB_UWK_V1_6,		/* mt8195 IP3 */
-+	SSUSB_UWK_V1_7, 	/* mt8196 IP0 */
-+	SSUSB_UWK_V1_8, 	/* mt8196 IP1 */
-+	SSUSB_UWK_V1_9, 	/* mt8196 IP2 */
- };
- 
- /*
-@@ -100,6 +111,21 @@ static void ssusb_wakeup_ip_sleep_set(struct ssusb_mtk *ssusb, bool enable)
- 		msk = WC0_IS_EN_P3_95 | WC0_IS_C_95(0x7) | WC0_IS_P_95;
- 		val = enable ? (WC0_IS_EN_P3_95 | WC0_IS_C_95(0x1)) : 0;
- 		break;
-+	case SSUSB_UWK_V1_7:
-+		reg = ssusb->uwk_reg_base + PERI_WK_CTRL0_8196;
-+		msk = WC0_IS_EN_P0_96;
-+		val = enable ? msk : 0;
-+		break;
-+	case SSUSB_UWK_V1_8:
-+		reg = ssusb->uwk_reg_base + PERI_WK_CTRL0_8196;
-+		msk = WC0_IS_EN_P1_96;
-+		val = enable ? msk : 0;
-+		break;
-+	case SSUSB_UWK_V1_9:
-+		reg = ssusb->uwk_reg_base + PERI_WK_CTRL1_8196;
-+		msk = WC1_IS_EN_P2_96;
-+		val = enable ? msk : 0;
-+		break;
- 	case SSUSB_UWK_V2:
- 		reg = ssusb->uwk_reg_base + PERI_SSUSB_SPM_CTRL;
- 		msk = SSC_IP_SLEEP_EN | SSC_SPM_INT_EN;
--- 
-2.45.2
-
+greg k-h
 
