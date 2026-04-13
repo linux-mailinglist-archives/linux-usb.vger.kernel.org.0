@@ -1,83 +1,105 @@
-Return-Path: <linux-usb+bounces-36204-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36205-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KDxEL5fd3GnrXgkAu9opvQ
-	(envelope-from <linux-usb+bounces-36204-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 14:12:07 +0200
+	id qIo3Dsff3GnrXgkAu9opvQ
+	(envelope-from <linux-usb+bounces-36205-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 14:21:27 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 395DC3EBBE8
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 14:12:07 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DF433EBD6C
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 14:21:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1149830128C9
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 12:12:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2BD3930641DA
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 12:15:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 532EB3C3BED;
-	Mon, 13 Apr 2026 12:12:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE07B3C3BF3;
+	Mon, 13 Apr 2026 12:15:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KoMOad7U"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="WGd+4OB2";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="I8GYFgk3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAEF53C3C0F
-	for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 12:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5893C3450
+	for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 12:15:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776082320; cv=none; b=ReWnh9fWErh331JsiUyPumW4GNsjKwHiN1dBSNmXeZ+VxlPL159JorZOkY9361NKhvdhx/KHEHAV58GQLxSU1UzTHouMlcfvDVcJhJ1Ps0FpJcyEp5ZyyIAJKPp4UfB5BJAO5+iYZIv+Q05X5Zle+gcKJMaykC2i9pC9ef6jsh4=
+	t=1776082535; cv=none; b=XgYXnpqnKmxPr1lBW1903/QovGvU0r5TjyuVpxrkugnoI/bVZRF3/W2lOukgsJKeEnweLFSUs1ENC3vF7On/zZi7KmgdnBEHkqg9tD7Hxwug+MQMGHYFm4kYjQG7hkgKtwiJTMXkAEw2s3BeuXw3o7PCYtDXNxwX9oXcDRVnHME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776082320; c=relaxed/simple;
-	bh=BOMkJNZe7ziU198TlUPDD8T7GrSLx2ZHdq3BCysj9to=;
+	s=arc-20240116; t=1776082535; c=relaxed/simple;
+	bh=b2KW6U67xE01uYo/G8RxPBUNg6BwtHFvu37L96sm9Ig=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wnq67Uh0YrOmsicsK53fOgshk51yjGHQw33Dftu9fVXSJp9cIkFUmXTTLriX5aL/8jylptD220t4cSnF9hF/MJVDeUrxxKGFpoGJ4XhYuQNsLoKYRyw3bbx3TyEPAVVmHmbbVyOAerOCG9t0Psn9GON6ypDWjar+UnfCw0kTDkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KoMOad7U; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-488ba6366a7so54588995e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 05:11:58 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=PNWMcIrZ8YAeYwMzixLYdBa7yU7+XGmfWGXkWWaCYuZxzrbXMH+wuNom1po9C2NdfHxfaL2q1SRv01xVoMhLOEevRdXzHTnB9Ce+Ioving3QMEI2zBrsu/ayXjEsPOBdJAF7V5dzuW6OyhaZ86P66+uXK31x5tkFjDcjVPG+akc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=WGd+4OB2; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=I8GYFgk3; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63D7va6d1616973
+	for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 12:15:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	MeOeo4v6EXekakSCExIcqk5douxj2pX0LuVyxBkTQv8=; b=WGd+4OB2S5ZA90eg
+	N1n89NYl3KwAH7C9a5G0cNvMxg07DcYTg+hn6ncPmBtekxIslBK+CPhvIq8gJ9w9
+	P2YY+zFPQiE8jjA5MOcAdBfIL7KrZXTHh9+EguWhJIVt4rCRq2ihCZlYdGAUfnei
+	50hJG2g1SAQzLVCWd+bNz6xjEtdzLnhlCqdSZmUhMPAEjhKudpLMZQSqtKpev4Cc
+	oQLg5/+6N62azxrqW3sL68KG9rYUi1BAchN9NeQalQsv9rfG7nR4xVe92ZhSUYLR
+	F8gONZcmdZsq+m7FN4osl4QEoChc4LowXn4I4lcVdB9OIIVM/27B/f62z+QwNayK
+	UY/jkA==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dfevtn7v1-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 12:15:32 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-50d8c183c2eso40971461cf.0
+        for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 05:15:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1776082317; x=1776687117; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1776082531; x=1776687331; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1d0Zke0oSY75WUereA/hlkl+rDQeWUvM6YTyJyDqC4o=;
-        b=KoMOad7UUU4ksFlEhIMiH26sEjv2oNaAiS3Fo49rFc3jENaHgF+5eg3m2ZHm8Cl+T2
-         jYO7IkzAEGLU3Xn3y5tSeqPLLbYfxVETDfBKtaaqOhC/RAe2HP9l8SEqRGMxGAE7ozZp
-         PrB9drUJZChI6M+0rW5sOMWMwypjTp0v+NUQ+IZR60R95uVwyGxqDZ1JNCU99XDAC3VD
-         bPftYsPjwb5jiCAtK/ivefPQFN1AO7twNB+PKvCkw71BkNXMeUY64jOqJeTvTzQJ+B5U
-         IeRtl6T41OY+GSJYvcxSMBm4u74gaXj+jrKPvWjHnEhQkvWO3fI4By1TlguIa+x6jRm2
-         FJlg==
+        bh=MeOeo4v6EXekakSCExIcqk5douxj2pX0LuVyxBkTQv8=;
+        b=I8GYFgk3avo25QoX9yQExZD62J3krO2DZtjyawJb7VeFtVJkrkU0QICNKSDAiGBGAa
+         j/sre5ZN468VBs2iQY0TBgMJ1fyEPFfbEN4aU+oVdVoJTiRWxAYLPG+COIlJAUU23yCI
+         9PH74qJU1DUXXearRO6bKS+v5oOY4J0hijXmoP0nU/WGrRTDw9wsqj0QDnbesw5nhhnE
+         9cfHmhZ3rLL6qfhVNYG+csWW5kg7U/jFhucp5yse52zu14AihqgwVdqgpmKKl9rPcc41
+         zDMpcZPbB3fPHwsYe8dVRQl9+H50plcfVmAKbvHEJvb2EBeLX607FX0KGGO9fyxmMdte
+         EESQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776082317; x=1776687117;
+        d=1e100.net; s=20251104; t=1776082531; x=1776687331;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1d0Zke0oSY75WUereA/hlkl+rDQeWUvM6YTyJyDqC4o=;
-        b=fTi+NAQ+seEgv7N03SsgGWCXoANvhBNj+HwxoS+A/4jQhLTPfR00IChRf50vrsI0aJ
-         pHhm11RjEl0tNu4QTlfiTs3MzMu4APdVe6RXCMh6Nm32nnqdfotBfWqr2PFguGF2i0nF
-         TuN8f1QebNqacbVWazfdokSprCFunXGbkOuqRD3r+gPpAmRNks7ORfRU8mElaZ+SBo+c
-         rRHSGsBAszOSe6pGNZ0hYURjk01cOQoApGALWu03HmlnC5ao1jiGKwJhcc5mLdvxU96R
-         DXrXJHoYtOY83t+r3RdqQdsORcCfDpwKN5TFnuph0539kYmye0EAM50D/Ycq275/x7Ug
-         jI7g==
-X-Gm-Message-State: AOJu0YxZOFXMQ/TpoWIXrxyK2Cnrec8bSMJX7PHZRGJ6OxNK2hr95J8d
-	2Jr3z3cWePb/uCvuuxrRJFbOi6FGND9fTuPhnDWZrzKfTXq8Q/BYASkg2edgQ+IQBgA=
-X-Gm-Gg: AeBDiesnCpGfqqZCEVyEBh5pTKannr7wn+MQjFkKZw5PUFwgNIoMsLSIFDPVdRp/sEu
-	HogG5kM58NrRCNEmeJQOlzALX819MoyF5BKrXHcC0WAyclWmMzCJveK+dtgm/O0q03Mbd+4Y6nW
-	vVm2q2gt3lqZUMV3RC1Xz21cwsT6dxcjoQZF/ws2lzsUh7RbfEy4cQW3zDguHlaISITG80Zp9V3
-	6kS6NZUERrpPBxLYgzcUePMwupyPfrkBiWc9Nco+jAvmoMnYBkqz5HDpGzmhKehNtqnPCNp5VhA
-	FAq3Bd2fQEe9fo+WhhAdOZQ3E8ZOUgQQzjgzn4meRpvZsen/RMvcniOko6nr0NI1fIkg0dflPHa
-	gfgGdUP79JntzEdNlD2k7Z5MUtHvLlItHx0DXBNXo5vmzDWpPt1QXehj5oSmw9XMYN0aqYn5X84
-	HAz+dnelsa5XTxSmsRKnO8kHR0lQmDOFTrsYCR9lHk4RvhwtLTnGjf25g5BTJb3WSSww==
-X-Received: by 2002:a05:600d:1c:b0:487:2439:b7be with SMTP id 5b1f17b1804b1-488d67bf6ebmr141736955e9.6.1776082317203;
-        Mon, 13 Apr 2026 05:11:57 -0700 (PDT)
-Received: from ?IPV6:2001:a61:1301:4901:4040:13bc:108d:8118? ([2001:a61:1301:4901:4040:13bc:108d:8118])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d531f229sm386966275e9.3.2026.04.13.05.11.56
+        bh=MeOeo4v6EXekakSCExIcqk5douxj2pX0LuVyxBkTQv8=;
+        b=gSQOsQCXsncs30B+8QMYKOOQ0TIxpdskTnK9HEi88YoNDMOs86flzZL1Py4a3ILFkJ
+         Ddno7xiV5x+2hfD53R4prj4f0bbj2goaWub2t6Yr6agMfFf3X3aFi49DFg0cU3aINQ5K
+         CAO4Fpw0jxgxncBKCjx2/16Vs5UP7Z2EhnDZ/ezM5l+ObBhF6eMNPTG3tOir9YlRpkia
+         9VYzCiYAwJdKJvx+jbErj9TRhJp6EjBTtqj/U7EcN1KRIbhzAOiksWMLfqKr0Lucuk/t
+         MU7oitNLfWR60Q2X/txzNzAtdseRrE6Yb6Jqw24XIayDog2/6Q6wiCMAf8Hb/UCC2IS7
+         M/vw==
+X-Forwarded-Encrypted: i=1; AFNElJ+Vx9ieKzgLarDH3VFx6cEzh1HD+CsKDCH6O4Fkm3R9Y4EGdCXhCpOUWXQBbZ37ech5XYZEo+42hnk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmclKIl6s6LjETJTBb1xxrGr8kGZNuvqQqA4vNFLlxXt/4LvaP
+	jN5wD/1Wtwr8SwApH2yf4rhX4nOAOFqgABNGyb1j+uIAWpr/5d2eDIvFNFJOWYu4qDJgd49Z1aW
+	y+ioQieyekaCFgBP1hMsalSdfKJbK+UmdlC2pd/rINPY6vD4QD4/Yy933NLjE+ws=
+X-Gm-Gg: AeBDieu/pxfRr4V2itFW4KUylN1NwrIDv1xCprlXhuPvoPVmHw5UXTzYKKcdU+YlpZB
+	omHSjmuzQSaw44zz9WmBSv2ytt6MzpNeuX8h8yVwsPKczxRraYfBjUCa/8V0eWfglp5lgxMmHfc
+	hwmRoNeuA68bslj7kO43i89SCRAsU9hnMQfgOJBzuVUFDpgGLyV2rBWEUqYXTuHr0vtLHYDIlmv
+	MTik9PJRI8f8ek6Frir9LEv32M/BPOGk823Kb48sHCVgC6rRbCKK4ckx0ue/6SDEpzarzs2I2l0
+	3W/jSTnWGo5mkQBWYF0zU3D5amcUuGgDbE/f6nhgUzHZjW/jr7NdByfydi8MiKlM2MKZ7x0zywg
+	1VYEBqK0rtpgEac2nGkwBekGFmrE0F84PwFOMSaFV9pRDwqoQl0iZhjdmBxNOe7GpsWrPU3ltW4
+	2F7QM=
+X-Received: by 2002:ac8:5fd1:0:b0:509:2a92:8088 with SMTP id d75a77b69052e-50dd5a9118cmr146954481cf.1.1776082531043;
+        Mon, 13 Apr 2026 05:15:31 -0700 (PDT)
+X-Received: by 2002:ac8:5fd1:0:b0:509:2a92:8088 with SMTP id d75a77b69052e-50dd5a9118cmr146953821cf.1.1776082530462;
+        Mon, 13 Apr 2026 05:15:30 -0700 (PDT)
+Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9d6dfd77f6sm307386466b.21.2026.04.13.05.15.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Apr 2026 05:11:56 -0700 (PDT)
-Message-ID: <198c1240-80a6-456c-8b12-25158c90c965@suse.com>
-Date: Mon, 13 Apr 2026 14:11:50 +0200
+        Mon, 13 Apr 2026 05:15:29 -0700 (PDT)
+Message-ID: <52e8c5d3-52ac-4e33-b6f6-88c8823abd06@oss.qualcomm.com>
+Date: Mon, 13 Apr 2026 14:15:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,80 +107,126 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] net: usb: cdc_ncm: reject negative chained NDP
- offsets
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Oliver Neukum <oneukum@suse.com>
-Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- stable <stable@kernel.org>
-References: <2026041137-comfy-eaten-a1ed@gregkh>
- <2a6963c8-4a87-4fed-b875-d46f3ce53e42@suse.com>
- <2026041325-giggly-wrecking-e6ef@gregkh>
+Subject: Re: [PATCH RFC] thunderbolt: Skip reading Rsvd SB registers on
+ older-gen hardware
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Konrad Dybcio <konradybcio@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <westeri@kernel.org>,
+        Yehezkel Bernat
+ <YehezkelShB@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gil Fine <gil.fine@intel.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20260413-topic-usb4_limit_sb_reads-v1-1-778a6eb37f7b@oss.qualcomm.com>
+ <20260413114015.GO3552@black.igk.intel.com>
+ <f59c4193-7e07-4375-b418-ab019514fdf8@oss.qualcomm.com>
+ <20260413115305.GP3552@black.igk.intel.com>
 Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <2026041325-giggly-wrecking-e6ef@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20260413115305.GP3552@black.igk.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=RYWgzVtv c=1 sm=1 tr=0 ts=69dcde64 cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=ZpdpYltYx_vBUK5n70dp:22
+ a=EUspDBNiAAAA:8 a=3vEATxqM7effXUbsBJ0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=uxP6HrT_eTzRwkO_Te1X:22
+X-Proofpoint-GUID: 3c0LVx5vbj51gJhjEpjUbjGprlTec8sf
+X-Proofpoint-ORIG-GUID: 3c0LVx5vbj51gJhjEpjUbjGprlTec8sf
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDEzMDEyMSBTYWx0ZWRfXy58WAhzroG17
+ dMZy4ScNp18NFmjt9LFKOrSs6A9n5C/hfiQmaA96JZRpoajENZEyMAvIBM+nCyy1ujTVlrKAaU6
+ 0tOSiWaKUZmBrlQUki32vZIUPLqAfC0HDhp0TVhUBL+3gZnzeEp1LiLH1z+MES+3SSox5xD0tn5
+ EAj8ci+6kjyMjPG0q/eusKWBKn7hYBPw8t4PW3N9tSuVap64iT2ACVwHsTKuj7HAKKptNZDbpga
+ OvNM8/Nywn71fzzDxIbArHzza7GN8K9sH33MKBeSZvEToyKO3nc/kZQf53vdMxL7yCmdc+Gj2zZ
+ DuER4EP1LiI/ysvlmoXWFzexX4dmmQXr9pCetTbcynPaopquXWKZJm8mk+8O/WyPM9MEYD5Irec
+ otnii3S3TMHrp86ZeYnvrIX8VZ1EmHc7NOsjd+ofZw+zeAkEBQsd5gmXAe5eaHKgevDt2FhacqS
+ o7VckWkJ1OVqnDZxmMA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-13_03,2026-04-13_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 bulkscore=0 spamscore=0 impostorscore=0 phishscore=0
+ clxscore=1015 suspectscore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604010000
+ definitions=main-2604130121
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36204-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[suse.com:+];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,linuxfoundation.org,intel.com,vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	TAGGED_FROM(0.00)[bounces-36205-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:dkim,oss.qualcomm.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:dkim,qualcomm.com:email];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,suse.com:dkim,suse.com:mid]
-X-Rspamd-Queue-Id: 395DC3EBBE8
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 7DF433EBD6C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 13.04.26 12:43, Greg Kroah-Hartman wrote:
-> On Mon, Apr 13, 2026 at 10:36:19AM +0200, Oliver Neukum wrote:
+On 4/13/26 1:53 PM, Mika Westerberg wrote:
+> On Mon, Apr 13, 2026 at 01:43:49PM +0200, Konrad Dybcio wrote:
+>> On 4/13/26 1:40 PM, Mika Westerberg wrote:
+>>> On Mon, Apr 13, 2026 at 12:54:41PM +0200, Konrad Dybcio wrote:
+>>>> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>>>>
+>>>> The Linux TBT subsystem supports hardware aligned with the latest
+>>>> USB4 v2.0 specification. In some places though, it assumes registers
+>>>> only defined in that specification version (previously marked as
+>>>> Reserved) are always accessible.
+>>>>
+>>>> Every version of the spec states:
+>>>>
+>>>> """
+>>>> Unless specified otherwise, the Connection Manager shall not write a
+>>>> register with a value that is marked as “Rsvd”. Writing a register with
+>>>> a value that is marked as “Rsvd” results in undefined behavior.
+>>>> """
+>>>>
+>>>> The effective list of SB registers that need this guarding currently
+>>>> exclusively contains ones that aren't used outside the debugfs dump
+>>>> logic, so just add the required checks there.
+>>>>
+>>>> Fixes: 54e418106c76 ("thunderbolt: Add debugfs interface")
+>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>>>> ---
+>>>>  drivers/thunderbolt/debugfs.c | 20 ++++++++++++--------
+>>>>  drivers/thunderbolt/retimer.c | 11 ++++++++++-
+>>>>  drivers/thunderbolt/sb_regs.h | 11 ++++++-----
+>>>>  drivers/thunderbolt/tb.h      |  2 ++
+>>>>  4 files changed, 30 insertions(+), 14 deletions(-)
+>>>
+>>> This is alternative for the v2 patch you sent earlier, right? I prefer that
+>>> one over this.
 >>
->>
->> On 11.04.26 12:53, Greg Kroah-Hartman wrote:
->>> cdc_ncm_rx_fixup() reads dwNextNdpIndex from each NDP32 to chain to the
->>> next one.  The 32-bit value from the device is stored into the signed
->>> int ndpoffset so that means values with the high bit set become
->>
->> Well, then isn't the problem rather that you should not store an
->> unsigned value in a signed variable?
+>> I think they're complementary. This patch ensures compliance with the
+>> quoted part of the spec, while the other one improves the UX and aids
+>> debugging.
 > 
-> No.  well, yes.  but no.
-> 
-> cdc_ncm_rx_verify_nth16() returns an int, and is negative if something
-> went wrong, so we need it that way, and then we need to check it, like
-> we properly do at the top of the loop, it's just that at the bottom of
-> the loop we also need to do the same exact thing.
+> This adds a lot of code for just debugfs access so I think we are better
+> without.
 
-Doesn't that suggest that cdc_ncm_rx_verify_nth16() is the problem?
-To be precise, the way it indicates errors?
-As this is an offset into a buffer and the header must be at the start
-of the buffer, isn't 0 the natural indication of an error?
+Just the other one works too, then.
 
-	Regards
-		Oliver
-  
+Konrad
 
