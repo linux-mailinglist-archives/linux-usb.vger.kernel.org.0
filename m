@@ -1,186 +1,212 @@
-Return-Path: <linux-usb+bounces-36191-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36192-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SC1FJ+263GliVwkAu9opvQ
-	(envelope-from <linux-usb+bounces-36191-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 11:44:13 +0200
+	id KLjeBBnF3Gn5VwkAu9opvQ
+	(envelope-from <linux-usb+bounces-36192-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 12:27:37 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46FC93E9FBB
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 11:44:13 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC4713EAA0E
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 12:27:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8129C30238C7
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 09:43:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B86CF301A2B7
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 10:26:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 653473B0AF1;
-	Mon, 13 Apr 2026 09:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C4C13B52EB;
+	Mon, 13 Apr 2026 10:26:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b="H57422gD"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="peQC83Le";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="a9hwEAfV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx9.kaspersky-labs.com (mx9.kaspersky-labs.com [195.122.169.44])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD953A383B;
-	Mon, 13 Apr 2026 09:43:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.122.169.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBF634F48D
+	for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 10:26:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776073382; cv=none; b=khh2lrogRf+7fB90TPgIln61XhMcRGxSKOdsZWy8wlUqj87S2jQENZCyaBuH7HeIyIk29hjb9wGE51tjEa//2GeqLGhdXpjNbVc4wwML/Wd6tFezKzO45Gwgw8gEN1bejzx1gyWLOmU0v5ZmAHY0vsm8CABHMQ/L4q5eoPQdWqU=
+	t=1776075992; cv=none; b=qdQJlkv0QQ5agRLFJh6klkS3J/XxM+GvkxCEE3IXZbMPydN7A+lhNDHESCnrb1a8gfy0yPZTra465ZhbCRpbM7I+FE/55SfFt0CahQKdduxYbzxef8f4gOnaINPz6yoQz+Fd53fHYfJTY+7yswBspDWONQ5a43OIAdDRBRTO//M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776073382; c=relaxed/simple;
-	bh=vjbVZzxCSA1t9isGeReY/yIpvFirFZEfJlFWah1o0xo=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZVBIGT/5JvoKCxeGq2mTaeAmIcn3wPq5qf6GV/9K+oQ6QF1yj5nbho4i4X7OJLpMBtvWqAWtESiOBKIoKVmgKuCW52t1slhG1hU4kCwro7Y06vE8m8socKdhZkc4SbTojtCsdA8KFL9uqIkGuHu51DpbQ3PcAszE2x3/+TVwzo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com; spf=pass smtp.mailfrom=kaspersky.com; dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b=H57422gD; arc=none smtp.client-ip=195.122.169.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaspersky.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kaspersky.com;
-	s=mail202505; t=1776073379;
-	bh=x4lKBSdZdsxXDAjfnVaREem6d/vq6Wg3horiq03ED18=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	b=H57422gDyYF89da/DpyAefaZZ3ZhVcjdWx0lmD+YpqIwjoC/acOTU3zK97g22AQyX
-	 5Ai1Z020l/RF/MksdfU9zEzgoj8EswTTHzMiB/iMv7bNG5KrRvMNqaz7PqUKtYL+UD
-	 AudhNHPFnmZN/iRDnpJKpgpMU2zTvw3TlhRbv2adDgKxIvjpLIxgXRKG00W0NWkGhD
-	 GDvGgrctsRT319SdVVuyJh1SIrg9gu1V7Ze/iKwuW1h72321rUYINefba4pw1yUFBX
-	 +pzNZ+9dBIYeO2Y/2scWhRw6h2gxpqKvnsXkNWdY4woUgU+BezOn/nF9ppnWwli3Gw
-	 gaOaZ8JoNqL6Q==
-Received: from relay9.kaspersky-labs.com (localhost [127.0.0.1])
-	by relay9.kaspersky-labs.com (Postfix) with ESMTP id 1C7418A0705;
-	Mon, 13 Apr 2026 12:42:59 +0300 (MSK)
-Received: from mail-hq2.kaspersky.com (unknown [91.103.66.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client CN "mail-hq2.kaspersky.com", Issuer "Kaspersky MailRelays CA G3" (verified OK))
-	by mailhub9.kaspersky-labs.com (Postfix) with ESMTPS id D3BCD8A061E;
-	Mon, 13 Apr 2026 12:42:58 +0300 (MSK)
-Received: from chesnokov.avp.ru (10.16.105.7) by HQMAILSRV2.avp.ru
- (10.64.57.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Mon, 13 Apr
- 2026 12:42:58 +0300
-From: <Alexander.Chesnokov@kaspersky.com>
-To: <gregkh@linuxfoundation.org>
-CC: <lvc-project@linuxtesting.org>, <Oleg.Kazakov@kaspersky.com>,
-	<Pavel.Zhigulin@kaspersky.com>, Alexander Chesnokov
-	<Alexander.Chesnokov@kaspersky.com>, <stable@vger.kernel.org>, Johan Hovold
-	<johan@kernel.org>, Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	Felipe Balbi <felipe.balbi@linux.intel.com>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH] usb: gadget: udc: renesas_usb3: Fix wrong comparison in usb3_dma_update_status()
-Date: Mon, 13 Apr 2026 12:42:49 +0300
-Message-ID: <20260413094256.47014-1-Alexander.Chesnokov@kaspersky.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1776075992; c=relaxed/simple;
+	bh=9g9xm0d6e3UdYPyZT9dWnvnxu6qy0sa1f/KB5OFMKDE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=j7V+tt46qKnSM1E8Pt7sKg1ke3+bKJKPfcPeMDYxQzWuTOWAM7QmD1W0Nn9TMTU/mfcuM7m1+CTuzVd9fRi/K3Lui5MgVBc7CCVD8oV3f+rFYFbv0Y8a87gzE8IbA7eW2bfY0O4FbebEVZmU8ozZ99NQqdZNWm1BX448Pdzcybs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=peQC83Le; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=a9hwEAfV; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63D790ld479862
+	for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 10:26:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	93D0c3gAvtUiPsWGltY7o+cAV8HaCq+OeVHrGhr6/7U=; b=peQC83LeqpszB92x
+	2fa2U5nOhYAu6SFBZ2W4s1eNH/lV3XSLwLKSxN1sgEV2hznlBU1lmpwdMx45oqx3
+	XzgwACplgNja1ySwSsazmqWKBf4psYdfZmqrZbIxhxcjrL/mC0VUSeuxCsg1SLgC
+	waSi9Ef093awlAZ16BYG/d1fXqbIWAjutQL6VmUMtLcHAEiH4v1W3Zs64iWbUY1D
+	2FGJMcWPXOj8P6PfhEIaLqRehOVJIj1D2EMkYMs42sI6hcIAs2bcD0CzJsASMcwf
+	kQf8hlkqtpJyfZ6EGXm6qnpjgyfrmt/kWTzOnemfwvc9CgHPpolhiAdHeZT5P45+
+	tF/dNw==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dguuj8pxe-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 10:26:30 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8e141739794so11577785a.2
+        for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 03:26:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1776075990; x=1776680790; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=93D0c3gAvtUiPsWGltY7o+cAV8HaCq+OeVHrGhr6/7U=;
+        b=a9hwEAfVlbfkGHdgqet3zaf+eBZbjgAnv0l9ClzG795kE2rB07ZYGeBp1D5DjzFS0o
+         5YvaHLboUsGaJGdfvBKfJAzBW/69f/fNdDqPoM7bWnb43ranIzcu1JyQ4nUYfDWi3zaf
+         /WSyht4Vu3fLsLI/UAgHqeze5G7ym1zHF0c835sWVP9OpxJUej0ijrll9sidfUx7tWyt
+         S0ia9qEPWQo2viQmIXwyKu3RHLjyvSMFa0LsyBTqzrWC9bAQsQec5wfcHjaQu/KvpyyT
+         S8DEK5SSA3lgJlEuSbJFst9eqJC6lD8hKs0nlOi0voTRJ7K42PWJfB0qFiGJNR0+KGGF
+         uhjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776075990; x=1776680790;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=93D0c3gAvtUiPsWGltY7o+cAV8HaCq+OeVHrGhr6/7U=;
+        b=RUtukKT3gi6OLCSyKcwlotpez3WcYQv0FGy43DjMsa5uq0obwG9cZi0ihtkHa/Jvln
+         /Y1OXgVf3oI/YiWb3xfGY3ad925YbGXG6oHKgfH2uUGMblfhuD8zSeLtl756I1as1/J6
+         jNemKjiaWLUh+ETIzCneJzCmB36tl8rXnefFjOu/VMEK+yoh+CebWJQJNfDTNkC3j7Nx
+         keaF9zGSGe1+vF45MrBbuMdOgEEsGEB+zeNxffKaBuz1C0YqUS7H7D7YVvjai8TJk3zK
+         dQETvt/I+vLgR4sEU6U9ufa2SOb3RpM/gOyDIURW6mveL/fCP7Q+hGWxe9Mo2Dwhu43F
+         CYFg==
+X-Forwarded-Encrypted: i=1; AFNElJ8KenbZdzoEM3JjaCmI3vNuRYNtYkL29jrTH7QP/E4mmXP/yVuu7oTLilUtXug50hLGlgHftlJCjaQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpCBzQBcxog1+HIJpzG6YzCxwIE4UInE+aJOapUJkRZzK82VsE
+	nclF1LjScy8fldX9M2QRoM3hP//UxS8liV4Ety2Ke8fVwHdthrqHRB1Lxl9f16gDt/o/eV9vbzy
+	QtRa/2w0PulI6jiD68Co2+r2ZcOn7FJYOdFFstCD4sFEnr8o9+kFsjQDlYBgMhSY=
+X-Gm-Gg: AeBDies2QB/P+LWxyL1bVoj2V+5jHt7YGmdFXNTrWAxcpkfwCTQsxJZB0Pqiuq1OXwa
+	wAlTH2iCSR0PqbDfnnuGtJ7/QzuuPGm5x/Nzr5DnD2ieeBeYSukH9EBoEClIyFOrGDr7I55x/rR
+	0cQT4RnuO8P1cvw7EkkGyurnyb7U+BLF99KdT/2j0EEnfSBN0ZHdrGtppiSWtitdktM4KOAUOX7
+	xQTPSESXqcxnSg8GNEj5qTW6gRKdVf0+PjM0U9GeCqV73J3w/33Y+5qtxwEHnxRVHjA3Dn2tsUD
+	nSkHvb9z1BWpA/hgC0534gj9FiEGIL4cMJsGGAKuQjxO/Qfc6xuCgL0akYymX4pPWhO2UWet55E
+	2hc//KHku30dNgKpgZJyoy/b4Xlp1IpiY7TGw0V2xZazpNCxP49SseYmAzc8nF2zScxGjgPAFPL
+	DtLhE=
+X-Received: by 2002:a05:620a:404a:b0:8cf:df37:4f6c with SMTP id af79cd13be357-8ddebbddf54mr1219961285a.5.1776075990022;
+        Mon, 13 Apr 2026 03:26:30 -0700 (PDT)
+X-Received: by 2002:a05:620a:404a:b0:8cf:df37:4f6c with SMTP id af79cd13be357-8ddebbddf54mr1219958985a.5.1776075989547;
+        Mon, 13 Apr 2026 03:26:29 -0700 (PDT)
+Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-670702eec8asm2370758a12.2.2026.04.13.03.26.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Apr 2026 03:26:28 -0700 (PDT)
+Message-ID: <7d1b6771-6e9a-4fce-b672-ec4f31daa2f7@oss.qualcomm.com>
+Date: Mon, 13 Apr 2026 12:26:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HQMAILSRV2.avp.ru (10.64.57.52) To HQMAILSRV2.avp.ru
- (10.64.57.52)
-X-KSE-ServerInfo: HQMAILSRV2.avp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 04/13/2026 09:19:39
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 202222 [Apr 13 2026]
-X-KSE-AntiSpam-Info: Version: 6.1.1.22
-X-KSE-AntiSpam-Info: Envelope from: Alexander.Chesnokov@kaspersky.com
-X-KSE-AntiSpam-Info: LuaCore: 98 0.3.98
- ca9d2f3beca9ca2a85e178af9d8e97d5fa2c38a3
-X-KSE-AntiSpam-Info: {Tracking_cluster_exceptions}
-X-KSE-AntiSpam-Info: {Tracking_real_kaspersky_domains}
-X-KSE-AntiSpam-Info: {Tracking_black_eng_exceptions}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;kaspersky.com:7.1.1,5.0.1;chesnokov.avp.ru:7.1.1,5.0.1
-X-KSE-AntiSpam-Info: {Tracking_white_helo}
-X-KSE-AntiSpam-Info: FromAlignment: s
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/13/2026 09:22:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 4/13/2026 8:25:00 AM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-KSMG-AntiPhishing: NotDetected
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.1.8310, bases: 2026/04/13 06:49:00 #28394185
-X-KSMG-AntiVirus-Status: NotDetected, skipped
-X-KSMG-LinksScanning: NotDetected
-X-KSMG-Message-Action: skipped
-X-KSMG-Rule-ID: 52
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] dt-bindings: usb: qcom,dwc3: Correct MSM8994
+ interrupts
+To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+References: <20260106185012.19551-3-krzysztof.kozlowski@oss.qualcomm.com>
+ <20260106185012.19551-4-krzysztof.kozlowski@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20260106185012.19551-4-krzysztof.kozlowski@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDEzMDEwMyBTYWx0ZWRfX/ed1bNdEUEjx
+ VM3go3gLlIe1RrPo3XmxaiIYALjSefE7ACJBSN/GOIK2aaN8qR2ldzzMp2e3Rlp69dSqlizt15s
+ bcIc+lmoZMWGVEnRb89MHnl91f//bqSH9tQWKeJpQeLBRTqU17TiXoryuGrJpbdpw9CHQfRHGbu
+ B+fHcwOcIUzCaBY2u04rejaI4+dHNR4ujHEqrm+6hFssdLuPG7v0oJCrn/LqVdfq+XV6Zo+Mt8F
+ DinB3Z7K23+2HWl3doALlXzs9gxlPtDu82/hCqVk7xW4/DPT8/c+yBZKlNSZXAiaT02+KVs/ck8
+ BY5oaWc8TntUeug1QTLXEceAqnjgwo5JsNAMPbAtwCqc4cJ2PqQeEMpqGe8LVolnAktlt8f5BQs
+ JtSb4N86blrYJ27OLHdv9J0a5A93wXIprTTuBhc9CK+VTOFfcBAZp8kU6TurWcrZYhmmy0nItc+
+ 2k/XiJwZSaqppqT3xgQ==
+X-Authority-Analysis: v=2.4 cv=c/ibhx9l c=1 sm=1 tr=0 ts=69dcc4d6 cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
+ a=FFvnmRk-8DjInUy4hlIA:9 a=QEXdDO2ut3YA:10 a=PEH46H7Ffwr30OY-TuGO:22
+X-Proofpoint-GUID: ApldpmrfhyobN7LHGabpJ0fBHYDLtUJr
+X-Proofpoint-ORIG-GUID: ApldpmrfhyobN7LHGabpJ0fBHYDLtUJr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-13_02,2026-04-13_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 bulkscore=0 spamscore=0 adultscore=0 lowpriorityscore=0
+ clxscore=1015 malwarescore=0 phishscore=0 suspectscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604010000 definitions=main-2604130103
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kaspersky.com,reject];
-	R_DKIM_ALLOW(-0.20)[kaspersky.com:s=mail202505];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[kaspersky.com:+];
-	TAGGED_FROM(0.00)[bounces-36191-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_FROM(0.00)[bounces-36192-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,qualcomm.com:dkim];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Alexander.Chesnokov@kaspersky.com,linux-usb@vger.kernel.org];
-	FROM_NO_DN(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxtesting.org:url,kaspersky.com:dkim,kaspersky.com:email,kaspersky.com:mid]
-X-Rspamd-Queue-Id: 46FC93E9FBB
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: BC4713EAA0E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Alexander Chesnokov <Alexander.Chesnokov@kaspersky.com>
+On 1/6/26 7:50 PM, Krzysztof Kozlowski wrote:
+> According to the reference manual, MSM8994 does have QUSB2 PHY and does
+> not have DP/DM IRQs interrupts.  It is also logical it has the same
+> constraints as similar device: MSM8996.
 
-If the last PRD entry flag is not set, the condition (i + 1) < 
-USB3_DMA_NUM_PRD_ENTRIES is always true on the first iteration when i
-equals zero, causing the loop to break immediately and only one PRD
-entry to be processed.
+It may be that the following mapping is true:
 
-Fix the comparison operator from < to >= so the loop breaks when the
-PRD table is exhausted.
+USB0 (DWC3)
+ DP -> MPM 49
+ DM -> MPM 58
+ hsphy -> GIC 133
+ otg (dwc3_irq?) -> 179
+ power_event -> 180
+ ee1 -> GIC 131 
+ ee2 -> GIC 246 (for IPA?)
+ hs_phy_qgic_irq (qusb2?) -> GIC 311
+ phy_id -> MPM 48
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+USB1 (CHIPIDEA)
+ DP -> MPM 55
+ DM -> MPM 54
+ hsphy -> GIC 134
+ async wakeup -> GIC 140
+ qusb2_phy -> GIC 312
 
-Fixes: 2d4aa21a73ba ("usb: gadget: udc: renesas_usb3: add support for dedicated DMAC")
-Cc: stable@vger.kernel.org
-Signed-off-by: Alexander Chesnokov <Alexander.Chesnokov@kaspersky.com>
----
- drivers/usb/gadget/udc/renesas_usb3.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Do with that what you will.. I can add looking into this more properly
+to my ever-growing TODO list (or maybe +Dmitry has a 8994 SBC?)
 
-diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
-index c6f2a09f561d..22404ef40601 100644
---- a/drivers/usb/gadget/udc/renesas_usb3.c
-+++ b/drivers/usb/gadget/udc/renesas_usb3.c
-@@ -1410,7 +1410,7 @@ static int usb3_dma_update_status(struct renesas_usb3_ep *usb3_ep,
- 		req->actual += len - remain;
- 
- 		if (cur_prd->word1 & USB3_PRD1_E ||
--		    (i + 1) < USB3_DMA_NUM_PRD_ENTRIES)
-+		    (i + 1) >= USB3_DMA_NUM_PRD_ENTRIES)
- 			break;
- 
- 		cur_prd++;
--- 
-2.43.0
-
+Konrad
 
