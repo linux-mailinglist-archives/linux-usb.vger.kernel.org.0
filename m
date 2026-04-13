@@ -1,196 +1,289 @@
-Return-Path: <linux-usb+bounces-36180-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36181-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gK3SDu6j3GkEUgkAu9opvQ
-	(envelope-from <linux-usb+bounces-36180-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 10:06:06 +0200
+	id 8JPoJOqj3GkEUgkAu9opvQ
+	(envelope-from <linux-usb+bounces-36181-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 10:06:02 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 897CD3E8C98
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 10:06:05 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BDDA3E8C80
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 10:06:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 91BCA3026C29
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 07:58:39 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4509C30065E0
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 08:05:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71DDC37C105;
-	Mon, 13 Apr 2026 07:58:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 903823A453E;
+	Mon, 13 Apr 2026 08:05:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJtlyuCw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IEIMxxgB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69F8399354
-	for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 07:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776067118; cv=pass; b=BvdFsHR2b1sOnI19RO9rx4J1LFExB5xFBJc/4PBveAfP33/qci557Jlk/eCTnxBc75+p6i6EBRWnolabj27TdpjOFzgpYsuz3b3xGqWjqZsZXLbkrkYBsvSAboubXvc/31dOIJ0+D7mWC/ya7IT4CSHuEB134ZbkD2qrszE964Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776067118; c=relaxed/simple;
-	bh=rCO1b6jT4qW3ldfK0o55NFQ/frBnnfo6DXzmtZ5lzmU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=X2JwOawoU/LLpOJrTcko9tbKIPIjAeT9Y4+Vj4G6Vy/aPIr4S0Q7A2rNZPX1n6dm2HHL3i3PRjfXLr6LrJ3qd0TzA+6s/73Wyo6YSm+xAtrgbJEcG7uzYwIUV7j/gFgbWEnaT8dw2tYXrvOEQxZ3Ex0/NYffgWcK3+IlglZ9dlU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fJtlyuCw; arc=pass smtp.client-ip=74.125.224.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600333A3E70
+	for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 08:05:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776067555; cv=none; b=HKjEjrbsH4+FT5H6sNTiIE6FULkZdh6skP5BpVlpn7vVh/8vat0Dq9z/IqeZPCaLxKrZsFWJ7iJps0PPOEo8kRKeCw54dPBcpbZKyGLJrmoXzWawsPQhoco2C60GVcRfvt4aUtwX1JYvOOnfEYcKQ7SBaWlGQ7jWoETa3tIQaU4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776067555; c=relaxed/simple;
+	bh=vrwUFCru5QZH0nEP+ZUEk+gXOzpnasIkjfdMXPqDJMg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BU4sKWJ0DW/ZdSiK4rrL4468B4LSGaYkmf04+Tc9boF/spMbA+gw9MjeoMPtXetCxujcdTf/BSq9Mr1CmS9oDFlFiTMkhu0wvspb4q9qmx9pmtbaRH6v+m0NKRkjrFF+CdlFlNzURRinKfV8yxSRggx7QIjiHwSThmjZsAdcbtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IEIMxxgB; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-651ce2484d5so491356d50.1
-        for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 00:58:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776067116; cv=none;
-        d=google.com; s=arc-20240605;
-        b=c8asUBnUYdAu6iGJ2+U3emXUJ1nTEEzul6AS0yqeC6A0q6X+ylL7GYDeQlYAOjmC+w
-         OGfDAlgAJCk42iHRVArkljIt+iRx78BP6TsRZF3udnDFlRGNH4CTJT1Ut+CBP/ae7kyl
-         SealU3rGzGiCazXyqL4h+hi/S82X/D4N7gbi+iYDIGOQ1L+G6kq1TToG8wA0JM7vdWiR
-         be9tbx2fYg+TatyKnLIvlRQ5Q9EMpOrBhdY/VSHJo7YretEa+0KpQk5XpFHFUUqm9WZe
-         waMRan4r679re0QUnZVw0tbxB828lf+Y+kPUTXCxxMAimHtzdPHOYkdiy6ojgflXvD+7
-         x9vA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=rCO1b6jT4qW3ldfK0o55NFQ/frBnnfo6DXzmtZ5lzmU=;
-        fh=0jsfbY2aZ95q2bxLAqB1ZCAUN899K28pXbeRjKP5/60=;
-        b=VvlpfS9WTyHori6OOZpuLwcur4t9Ws7Wz7U9Od7aIuizCDHVbnUWGjbxwJ5hkl4qbd
-         cLlj+Q3tzKq36n86CZX9qDJr4RGNzRwDylY4jYDD6yBJnxKI4yvN+nbK/hgX3Ix3m/Sp
-         DKeX/bbH+QpylZFDmJRN4XjrFZg1XHHtP2TrmkrrQ0BPb5PXJuwTHHaJwmM0HFwlX/zA
-         0QCitJx1NOveus8aJp9DOV+3SveiDz6dSBaVZ1wqiO/N5qWW/STZy25M7jX5+40fpK+B
-         /GLavwzxiJeeZ2U8Jl4gksQqy0R4+trUl2cx2IYvgcGFeENe/qaNRLkVz7NUkounjhby
-         jg6g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43d04fc3bf2so2430654f8f.3
+        for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 01:05:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776067116; x=1776671916; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1776067552; x=1776672352; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rCO1b6jT4qW3ldfK0o55NFQ/frBnnfo6DXzmtZ5lzmU=;
-        b=fJtlyuCwWx0MSLgj21qE5kLOBaP/bIcVdQtpz299tNutl3KVM3CJu3ZGvx3Bz2kPos
-         WTwYE24Pw475nOdXqyRQWW4PtS6q936RjafZAIuFZ95aJe1aXpcTObzJaopQSu4lg8T2
-         CV/LmkvHiZOT3sU6RQJ8TCWmjcbyLkEpvDC2UTXBFTdm4Qh6BqMoi1C7zj9vFFM2X/u8
-         Cs/23kPrW1qucbHmU7gmkc58rEfCAwH25DGotYQkgNkhAVJBVxtu17HEaQTsQ66OnnJr
-         LXit3//8tVjL8zwAZVdQF2SP2p5jlTqzYQDNnRk3GB8cEeJMmECx2310t7USjhnTeXQF
-         eC5A==
+        bh=WO2Hpq2Jz6wGmzry72RzTB9Uqdau8hUZxvRSy5IF2tk=;
+        b=IEIMxxgBK72O2a+ztuGguoKPnebWyNauNaEQpnHPuzdWk9DPI8DezRxrd1S35QCvcW
+         Xos2oHudmke8Kcw+FsLOe3wwMqlYTp67k5TpQbJTIZ8NB9i56eGOx5dOhClO8OKMKU6M
+         r+7zvE9px2H2XFH6el93bwt5ce25r9rxE6kj7TfIx5tL1H7CnS5oGRVb7A21TlRkkXlE
+         60gcmPRNzu0IizpC3jEl+cbBolJ1ewIcfv91Duaq286WClTJ+xS3vD98+U122lkHtza1
+         51gabwyHS0q7D9hMKxFgua1lj8HNhaHen6rVtulibDsMTYANy3334aLZm1v9A5AgvSUN
+         i2WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776067116; x=1776671916;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1776067552; x=1776672352;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=rCO1b6jT4qW3ldfK0o55NFQ/frBnnfo6DXzmtZ5lzmU=;
-        b=F1/EEsKokjRwMn9uM+LNlHmTQiYxanfR6t1pEu/yiE83sClhUDwSYLUoAQArr1OKY2
-         bJEEMfjwJFpHLGfjj/LzQdLK3KWVSeqHinS1J5LORLmw00exQP4JC1cmkWKsKLc6l3/v
-         0WzceCfIgqdKhBVS+iWVZg6pd/26LCwU022yF57jxrsS2qqpe//wmVR7FZZCAcxxCKgw
-         +zvW+1NJzq80TgVdcPl8RpSpIjRpqZlK1RpLxNa9FaLTk6b5WtBXUGubcjdRqRtPRtBY
-         kJ3E7hxBZ39uemOH26Te9AYmlypVXvKetn59Wy8mk+ep7pbr9fW/fSdaq7LSxRQWI34w
-         sZ+w==
-X-Forwarded-Encrypted: i=1; AFNElJ/GEeT485Wo28GosGbcOBvW032DlNVeH7BhwGrizwO4xXCNSMQV8C0leasIYbiGEz2R9iD7+3i713c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYbRyAfgRDBRbBHfwbOW51jM2vTV3giknNogcweZzYAErIosEi
-	xz3Db4wrff/LHvggti3eTyYawqgCLuKbKSw2bYJyf+fVddX7bdTJJUoLNFifuzzjwY9w79gTSrT
-	qr0oAO5LkXC83cF4NULejvgIDHdgS44Y=
-X-Gm-Gg: AeBDieu4RGo6T2N3cB23T9fpzi57wxX9oJxs8s9I6izLdVDqWJVRNsppjhA+eZlt8uV
-	xur63WSdNyiXERsqdrmSLUyWo3HGaQwmoLKDI97tpf2Shv2bON4nwApdTBwUcIFS/U8w/UpB2ec
-	ODxesxkFE5K7cADzMP9ae3vrrJdtJBwkcxiVtAuX+cy6bCcz82DeD2pstalDCGdckHhJzTYgY+F
-	Op1L2nIngqAwHu9O1Qbwyx85BotowPYa88V4ZYbK2SmhlVGv8z8unBZm7zGY+Duk5DFHg3pJowI
-	vVeZKGEIA/jJginfQg==
-X-Received: by 2002:a05:690e:e8c:b0:650:2ff9:d660 with SMTP id
- 956f58d0204a3-65198a7767amr12034664d50.1.1776067115857; Mon, 13 Apr 2026
- 00:58:35 -0700 (PDT)
+        bh=WO2Hpq2Jz6wGmzry72RzTB9Uqdau8hUZxvRSy5IF2tk=;
+        b=sl9dhCt/kW4n8v3TBTygAoXhK3QAkWU2qCeccP/JOJaEigXO/SfwD9lGFfd6N3NbhD
+         YHQwedIj4YOc+MzCTcv87dY4SdsgRqixpfQTtwiPLcuCVNz+ZwRMckS4ezihUWkhH9se
+         u/GU6a9Wk+ECHV9NJ0a27qltJBEXkpu/r3Y7Z0MWSLNaQZJf6eR+G0iFtN89tHxWvI3Z
+         z7PKbHjoPyDnH65zY704cKkdnSK8Rd/Em3CrTBDUJ1tAdEUrg3trXEWgPE6iWMZXw9gh
+         5/376TCdjWEg33ZgXqiqsaYkDx7O1lPxILC5Pvcn2Z97qWr68dfwznQwyqO3SUKLn5lH
+         HYqw==
+X-Forwarded-Encrypted: i=1; AFNElJ/OSKg+cRC9kkV4HJFMlZUZQlL7n/gHvM4KxWwHLy27dqvesy/oUBRUMGuJ5o1vFb372aIyiY27K0E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuJyhqePErKvwfpav/yP7ze6cVMFiqVOg2jYus7Y7L8UvUexDE
+	BSY4Elw3cGUUJ0j4wrCxeeF+M/yzPo9n/lVRx0jx3bZLTxRSO9wNsRAu
+X-Gm-Gg: AeBDievIvW2t66tU2Eo2YGOIvUjzacmRxgsJfuN6FPgdNXLLasgXlXb/SmlkYiNMpf6
+	x7uNAIYA2h1c3wUKqyYprqEftpk2BflNlaV6o/kMD1fhOm0c9/rPVN3bmJ+Nt0cF+IIg8Hp6sN1
+	3C4Xs6Z+AQADD0wrn2b3pom9iCx1QIw/TkFEgXGyOzJSFJNQkLXx+WzyVI3Or7zzhZrqS+QxyeK
+	0JC/VK3qp8V9fS/CnaEOMf0MawAMCG5n0rFDyBOZYf6pby1F5wRv0si4eyT/UkZLyruEyBM1qh2
+	Xj5e7IJslFZZWfSc/XM0R5Tn1AhwhCm/JnINkLOWve66zgKaMW7XqbjXIFVgtuIujxEZsEPU0XW
+	V7RoovNf6kCm++fHyxlbGLAz1gyIhrhxDH63nkR5xDs338+IBrrAiurGe4paJa+g+R+9R9H9tl8
+	u+2aDRmunKoZJiOPVJLdGyCj9+4/j4fyQPrqGVzizy7kMR+w==
+X-Received: by 2002:a5d:5f50:0:b0:43c:f7e5:817b with SMTP id ffacd0b85a97d-43d64271246mr17964446f8f.19.1776067550338;
+        Mon, 13 Apr 2026 01:05:50 -0700 (PDT)
+Received: from foxbook (bfi125.neoplus.adsl.tpnet.pl. [83.28.46.125])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d63e5ccdasm33107221f8f.34.2026.04.13.01.05.48
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 13 Apr 2026 01:05:49 -0700 (PDT)
+Date: Mon, 13 Apr 2026 10:05:45 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Jeffrey Hein <jp@jphein.com>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, Ricardo Ribalda
+ <ribalda@chromium.org>, Alan Stern <stern@rowland.harvard.edu>, Laurent
+ Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede
+ <hansg@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+ stable@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] media: uvcvideo: add UVC_QUIRK_CTRL_THROTTLE for
+ fragile firmware
+Message-ID: <20260413100545.71796c66.michal.pecio@gmail.com>
+In-Reply-To: <CAD5VvzCEV_XbHc_Gby7mFPBSgSebqKDKJf3VC8HNRrD+xWaTJg@mail.gmail.com>
+References: <20260331003806.212565-1-jp@jphein.com>
+	<20260331003806.212565-3-jp@jphein.com>
+	<CANiDSCvsxP+npQTHUrMTp+Z8XULYKSLTz2AFu+WQnsLbRBGa2w@mail.gmail.com>
+	<20260409100247.7cfb62d1.michal.pecio@gmail.com>
+	<20260409221749.5e6bccab.michal.pecio@gmail.com>
+	<c4275422-a9b4-4519-95f9-1163a7912709@linux.intel.com>
+	<CAD5VvzCEV_XbHc_Gby7mFPBSgSebqKDKJf3VC8HNRrD+xWaTJg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260412161555.2568840-1-lgs201920130244@gmail.com> <adyd3Ud2Pl_KRl6_@hovoldconsulting.com>
-In-Reply-To: <adyd3Ud2Pl_KRl6_@hovoldconsulting.com>
-From: Guangshuo Li <lgs201920130244@gmail.com>
-Date: Mon, 13 Apr 2026 15:58:27 +0800
-X-Gm-Features: AQROBzBa2pmk3obezMourkIfU8jvs5w0tQK3bUeHmsgO_W_ALcjIAu_XQYSC2cc
-Message-ID: <CANUHTR9PP4rOK2gdH2KYOcwW58qTJ57W--pqHuC4GJQzriXncQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: f_hid: fix device reference leak in hidg_alloc()
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Marco Crivellari <marco.crivellari@suse.com>, Ben Hoff <hoff.benjamin.k@gmail.com>, 
-	Yuhao Jiang <danisjiang@gmail.com>, William Wu <william.wu@rock-chips.com>, 
-	Terry Junge <linuxhid@cosmicgizmosystems.com>, 
-	Andrzej Pietrasiewicz <andrzej.p@collabora.com>, John Keeping <john@keeping.me.uk>, Lee Jones <lee@kernel.org>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36180-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,suse.com,gmail.com,rock-chips.com,cosmicgizmosystems.com,collabora.com,keeping.me.uk,kernel.org,vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lgs201920130244@gmail.com,linux-usb@vger.kernel.org];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-36181-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 897CD3E8C98
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 7BDDA3E8C80
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Johan,
+On Fri, 10 Apr 2026 16:06:43 -0700, Jeffrey Hein wrote:
+> Test 1: Michal's xhci patch + JP's UVC patches + NO_LPM
+> =========================================================
+> Active: usbcore.quirks=1532:0e05:k (NO_LPM), DKMS uvcvideo with
+> UVC_QUIRK_CTRL_THROTTLE, Michal's xhci patch.
+> 
+> Result: HC died. The crash sequence from the full log:
+> 
+> 1) 437 repeated Cancel/resubmit cycles on EP5 IN (ep 0x85, slot 5
+>    ep 10) over ~7 minutes starting mid-call:
+> 
+>   [15:18:58] Cancel URB 0000000028356cb5, dev 3.1, ep 0x85, starting
+> at offset 0x114a49080
+>   [15:18:58] Stopped on Transfer TRB for slot 5 ep 10
+>   ... (437 cancel/resubmit cycles through 15:26:04)
+> 
+>    This is the same "repeated unlinks on EP5IN" pattern you noted in
+>    the March 30 stall-6.17-stress-during-call log, Michal.
+> 
+> 2) After the last ep 0x85 cancellation + endpoint reconfigure (add
+>    ep 0x81), ~994,000 spurious SHORT_PACKET events (comp_code 13)
+>    flooded the HC for ~5 minutes:
+> 
+>   [15:26:04] add ep 0x81, slot id 5
+>   [15:26:04] Successful Endpoint Configure command
+>   [15:26:04] Spurious event dma ..., comp_code 13 after 13
 
-Thanks for the review and for pointing that out.
+That's not abnormal and it probably shouldn't be logged at all.
+I filtered out some of this noise from subsequent log snippets.
 
-You're right, the correct Fixes tag should be:
+This is interesting because it shows the isochronous video endpoint
+being enabled and then stopped and removed shortly after:
 
-Fixes: 89ff3dfac604 ("usb: gadget: f_hid: fix f_hidg lifetime vs cdev")
+[Fri Apr 10 15:26:04 2026] xhci_hcd 0000:00:14.0: add ep 0x81, slot id 5, new drop flags = 0x0, new add flags = 0x8
+[Fri Apr 10 15:26:04 2026] xhci_hcd 0000:00:14.0: xhci_check_bandwidth called for udev 00000000921e7e25
+[Fri Apr 10 15:26:04 2026] xhci_hcd 0000:00:14.0: // Ding dong!
+[Fri Apr 10 15:26:04 2026] xhci_hcd 0000:00:14.0: Successful Endpoint Configure command
+[Fri Apr 10 15:26:05 2026] xhci_hcd 0000:00:14.0: Cancel URB 0000000009b97440, dev 3.1, ep 0x81, starting at offset 0x2db0885f0
+[Fri Apr 10 15:26:05 2026] xhci_hcd 0000:00:14.0: // Ding dong!
+[Fri Apr 10 15:26:05 2026] xhci_hcd 0000:00:14.0: Stopped on Transfer TRB for slot 5 ep 2
+[...]
+[Fri Apr 10 15:26:05 2026] xhci_hcd 0000:00:14.0: drop ep 0x81, slot id 5, new drop flags = 0x8, new add flags = 0x0
 
-I'll send a v2 shortly with that fixed and include your Reviewed-by tag.
+Then EP5IN submit/unlink cycles continue.
+And video starts again:
 
-Reviewed-by: Johan Hovold johan@kernel.org
+[Fri Apr 10 15:26:09 2026] xhci_hcd 0000:00:14.0: add ep 0x81, slot id 5, new drop flags = 0x0, new add flags = 0x8
+[Fri Apr 10 15:26:09 2026] xhci_hcd 0000:00:14.0: xhci_check_bandwidth called for udev 00000000921e7e25
+[Fri Apr 10 15:26:09 2026] xhci_hcd 0000:00:14.0: // Ding dong!
+[Fri Apr 10 15:26:09 2026] xhci_hcd 0000:00:14.0: Successful Endpoint Configure command
 
-Thanks,
-Guangshuo
+Transfer error followed by normal operation, seems harmless so far:
 
-Johan Hovold <johan@kernel.org> =E4=BA=8E2026=E5=B9=B44=E6=9C=8813=E6=97=A5=
-=E5=91=A8=E4=B8=80 15:40=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Mon, Apr 13, 2026 at 12:15:55AM +0800, Guangshuo Li wrote:
-> > hidg_alloc() initializes hidg->dev with device_initialize() before
-> > calling dev_set_name(). If dev_set_name() fails, the function currently
-> > jumps to err_unlock and returns without calling put_device().
-> >
-> > This leaves the device reference unbalanced and prevents hidg_release()
-> > from being called. Calling put_device() here is also safe, since
-> > hidg_release() only frees resources owned by hidg.
->
-> Good catch.
->
-> > Route the dev_set_name() failure path through err_put_device so the
-> > device reference is dropped properly.
-> >
-> > Fixes: 944fe915d00d ("usb: gadget: f_hid: tidy error handling in hidg_a=
-lloc")
->
-> This isn't the commit that introduced the issue, though. This should be:
->
-> Fixes: 89ff3dfac604 ("usb: gadget: f_hid: fix f_hidg lifetime vs cdev")
->
-> With that fixed you can add my:
->
-> Reviewed-by: Johan Hovold <johan@kernel.org>
->
-> Johan
+[Fri Apr 10 15:29:04 2026] xhci_hcd 0000:00:14.0: Transfer error for slot 5 ep 2 on endpoint
+[Fri Apr 10 15:29:04 2026] xhci_hcd 0000:00:14.0: Error mid isoc TD, wait for final completion event
+[Fri Apr 10 15:29:04 2026] xhci_hcd 0000:00:14.0: Transfer error for slot 5 ep 2 on endpoint
+[Fri Apr 10 15:29:04 2026] xhci_hcd 0000:00:14.0: Spurious event dma 0x000000028c6fb7e0, comp_code 13 after 13
+
+EP0 stall, not seen before. A bit suspicious, but video still runs:
+
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: Spurious event dma 0x00000002db088de0, comp_code 13 after 13
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: Spurious event dma 0x00000002db088e10, comp_code 13 after 13
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: Stalled endpoint for slot 5 ep 0
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: Hard-reset ep 0, slot 5
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: // Ding dong!
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: Ignoring reset ep completion code of 1
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: Removing canceled TD starting at 0x114a485c0 (dma) in stream 0 URB 000000000ffbecf4
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: Set TR Deq ptr 0x114a485f0, cycle 0
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: // Ding dong!
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: xhci_giveback_invalidated_tds: Keep cancelled URB 000000000ffbecf4 TD as cancel_status is 2
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: Spurious event dma 0x00000002db088e40, comp_code 13 after 13
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: Successful Set TR Deq Ptr cmd, deq = @114a485f0
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000000ffbecf4 TD
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: Giveback URB 000000000ffbecf4, len = 0, expected = 4, status = -32
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: Spurious event dma 0x00000002db088e80, comp_code 13 after 13
+[Fri Apr 10 15:30:26 2026] xhci_hcd 0000:00:14.0: Spurious event dma 0x00000002db088eb0, comp_code 13 after 13
+
+EP0 timeout and unlink, video endpoint fails shortly after:
+
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Spurious event dma 0x000000028c6fbe30, comp_code 13 after 13
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Spurious event dma 0x000000028c6fbe60, comp_code 13 after 13
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Cancel URB 0000000008ead041, dev 3.1, ep 0x0, starting at offset 0x114a48290
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: // Ding dong!
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Stopped on Transfer TRB for slot 5 ep 0
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Removing canceled TD starting at 0x114a48290 (dma) in stream 0 URB 0000000008ead041
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Set TR Deq ptr 0x114a482c0, cycle 0
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: // Ding dong!
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: xhci_giveback_invalidated_tds: Keep cancelled URB 0000000008ead041 TD as cancel_status is 2
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Successful Set TR Deq Ptr cmd, deq = @114a482c0
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: xhci_handle_cmd_set_deq: Giveback cancelled URB 0000000008ead041 TD
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Giveback URB 0000000008ead041, len = 2, expected = 2, status = -115
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[Fri Apr 10 15:30:48 2026] usb 2-3.1: ThreadPoolSingl timed out on ep0in len=2/2
+[Fri Apr 10 15:30:48 2026] usb 2-3.1: Failed to query (GET_CUR) UVC control 6 on unit 1: -110 (exp. 2).
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Spurious event dma 0x000000028c6fbe90, comp_code 13 after 13
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Spurious event dma 0x000000028c6fbec0, comp_code 13 after 13
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Spurious event dma 0x000000028c6fbef0, comp_code 13 after 13
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Spurious event dma 0x000000028c6fbf30, comp_code 13 after 13
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Spurious event dma 0x000000028c6fbf60, comp_code 13 after 13
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Transfer error for slot 5 ep 2 on endpoint
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Miss service interval error for slot 5 ep 2, set skip flag
+[Fri Apr 10 15:30:48 2026] xhci_hcd 0000:00:14.0: Miss service interval error for slot 5 ep 2, set skip flag
+
+Now things are properly broken. Next EP0 URB times out too:
+
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: Cancel URB 000000008f70ed5c, dev 3.1, ep 0x0, starting at offset 0x114a482c0
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: Set TR Deq ptr 0x114a482f0, cycle 0
+[...]
+[Fri Apr 10 15:30:53 2026] usb 2-3.1: ThreadPoolSingl timed out on ep0in len=0/2
+[Fri Apr 10 15:30:53 2026] usb 2-3.1: Failed to query (GET_CUR) UVC control 6 on unit 1: -110 (exp. 2).
+
+Fololwed by Transaction Error on the next and subsequent ones:
+
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: Transfer error for slot 5 ep 0 on endpoint
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: TRB error 4, halted endpoint index = 0
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: Hard-reset ep 0, slot 5
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: // Ding dong!
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: Ignoring reset ep completion code of 1
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: Removing canceled TD starting at 0x114a482f0 (dma) in stream 0 URB 000000000ca6398c
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: Set TR Deq ptr 0x114a48320, cycle 0
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: // Ding dong!
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: xhci_giveback_invalidated_tds: Keep cancelled URB 000000000ca6398c TD as cancel_status is 2
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: Successful Set TR Deq Ptr cmd, deq = @114a48320
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000000ca6398c TD
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: Giveback URB 000000000ca6398c, len = 0, expected = 2, status = -71
+[Fri Apr 10 15:30:53 2026] xhci_hcd 0000:00:14.0: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[Fri Apr 10 15:30:53 2026] usb 2-3.1: Failed to query (GET_CUR) UVC control 6 on unit 1: -71 (exp. 2).
+
+It seems the driver stopped resubmitting video URBs here and issued
+some control transfer. It timed out and unlinking crashed the HC.
+
+[Fri Apr 10 15:30:54 2026] xhci_hcd 0000:00:14.0: Miss service interval error for slot 5 ep 2, set skip flag
+[Fri Apr 10 15:30:54 2026] xhci_hcd 0000:00:14.0: Miss service interval error for slot 5 ep 2, set skip flag
+[Fri Apr 10 15:30:54 2026] xhci_hcd 0000:00:14.0: Overrun event on slot 5 ep 2
+[Fri Apr 10 15:30:54 2026] xhci_hcd 0000:00:14.0: Skipped one TD for slot 5 ep 2
+[Fri Apr 10 15:30:59 2026] xhci_hcd 0000:00:14.0: Cancel URB 000000007f4f069a, dev 3.1, ep 0x0, starting at offset 0x114a48770
+[Fri Apr 10 15:30:59 2026] xhci_hcd 0000:00:14.0: // Ding dong!
+[Fri Apr 10 15:31:04 2026] xhci_hcd 0000:00:14.0: Command timeout, USBSTS: 0x00000000
+[Fri Apr 10 15:31:04 2026] xhci_hcd 0000:00:14.0: xHCI host not responding to stop endpoint command
+
+---
+
+Question: can you kill it by starting some video application to set the
+camera up, closing it and then running this loop?
+
+while :; do v4l2-ctl -d /dev/video0 --stream-mmap --stream-count=1; done
+
+Regards,
+Michal
 
