@@ -1,164 +1,164 @@
-Return-Path: <linux-usb+bounces-36203-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36204-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WM4HJ9bZ3GmcWQkAu9opvQ
-	(envelope-from <linux-usb+bounces-36203-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 13:56:06 +0200
+	id KDxEL5fd3GnrXgkAu9opvQ
+	(envelope-from <linux-usb+bounces-36204-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 14:12:07 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2C443EB9CD
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 13:56:05 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 395DC3EBBE8
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 14:12:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 84706304C7DE
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 11:53:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1149830128C9
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 12:12:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AABE3391518;
-	Mon, 13 Apr 2026 11:53:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 532EB3C3BED;
+	Mon, 13 Apr 2026 12:12:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ezmiYBX9"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KoMOad7U"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C63294A10;
-	Mon, 13 Apr 2026 11:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAEF53C3C0F
+	for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 12:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776081190; cv=none; b=MfG659xZraFJmtywHo9Sudv9A68+6U1BlfXYSXvFQHB0cpfKXVK1At6gwxqYEY7F9OzJtQr3pkrXck/xibde78A/R1C1JRhvxibYNJmKAoa/4mE07sNeI18bmxpibLtzeqXz6sIfRm6xg1vIZP/P2uHTRqnLUbZLED5sVgliWds=
+	t=1776082320; cv=none; b=ReWnh9fWErh331JsiUyPumW4GNsjKwHiN1dBSNmXeZ+VxlPL159JorZOkY9361NKhvdhx/KHEHAV58GQLxSU1UzTHouMlcfvDVcJhJ1Ps0FpJcyEp5ZyyIAJKPp4UfB5BJAO5+iYZIv+Q05X5Zle+gcKJMaykC2i9pC9ef6jsh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776081190; c=relaxed/simple;
-	bh=azn9P6oyXd1ug9es7KZUGTRGZGBbAQLFNvfDVy5hN/4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O2cF4KzFdqku7gsTgBOpKtQ4DZ0zQrP0jLaOfDkOARN21Guxf2tPZ9s/X2turfEX5H66W6q+TvMgT5ogBzjAeg1agbV0VtZSyHMq0Aa64d+7GeZn0dp7vasPopkxF59losWI7osaKWqfRTYHaj2RXfcVN1ND8GzlRoJn8Jq5Mjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ezmiYBX9; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776081189; x=1807617189;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=azn9P6oyXd1ug9es7KZUGTRGZGBbAQLFNvfDVy5hN/4=;
-  b=ezmiYBX96cJR+VU3AIfxXpX3Nifw/+oT+HdptBKQxeIEzlNv2YuyhOrX
-   29rvhkqHoYNyRGuxzhSGpj6Vf1UWQD78IVO4saqSaG4vQbkIyZssY/s2a
-   BVXv1QrsvWkuy/thNMVn0mfolCbVWQ+cGU9UhnZvmcp6e1amgOZjxFFT/
-   V1ficj7TiWfNIxpoh89AkSTg9d1Su5thd7xLcAgqKYaIN0y9T67XKscL+
-   76yqAnfbU65dVgyjVoxjiZcTota390cFuc9zWkrVKsNUgoToA5Pz53k8W
-   pIjy/t+y/YEVr5BRIowZJMsw6QfeB6uMqrkamDyqS+mlTm2aJhD1jodHC
-   Q==;
-X-CSE-ConnectionGUID: Bw6QMlttRuq5t5c4H0L8Dg==
-X-CSE-MsgGUID: l0kAWTgrSteSbW8iS63iNA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11757"; a="87639449"
-X-IronPort-AV: E=Sophos;i="6.23,177,1770624000"; 
-   d="scan'208";a="87639449"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2026 04:53:08 -0700
-X-CSE-ConnectionGUID: 4PONQydYSsGS5JV5GFcfdg==
-X-CSE-MsgGUID: 62EUCgz1Qxi1hC8p4Vi87Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,177,1770624000"; 
-   d="scan'208";a="223280435"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa009.fm.intel.com with ESMTP; 13 Apr 2026 04:53:06 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 3BD0298; Mon, 13 Apr 2026 13:53:05 +0200 (CEST)
-Date: Mon, 13 Apr 2026 13:53:05 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Konrad Dybcio <konradybcio@kernel.org>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Gil Fine <gil.fine@intel.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] thunderbolt: Skip reading Rsvd SB registers on
- older-gen hardware
-Message-ID: <20260413115305.GP3552@black.igk.intel.com>
-References: <20260413-topic-usb4_limit_sb_reads-v1-1-778a6eb37f7b@oss.qualcomm.com>
- <20260413114015.GO3552@black.igk.intel.com>
- <f59c4193-7e07-4375-b418-ab019514fdf8@oss.qualcomm.com>
+	s=arc-20240116; t=1776082320; c=relaxed/simple;
+	bh=BOMkJNZe7ziU198TlUPDD8T7GrSLx2ZHdq3BCysj9to=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Wnq67Uh0YrOmsicsK53fOgshk51yjGHQw33Dftu9fVXSJp9cIkFUmXTTLriX5aL/8jylptD220t4cSnF9hF/MJVDeUrxxKGFpoGJ4XhYuQNsLoKYRyw3bbx3TyEPAVVmHmbbVyOAerOCG9t0Psn9GON6ypDWjar+UnfCw0kTDkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KoMOad7U; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-488ba6366a7so54588995e9.0
+        for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 05:11:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1776082317; x=1776687117; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1d0Zke0oSY75WUereA/hlkl+rDQeWUvM6YTyJyDqC4o=;
+        b=KoMOad7UUU4ksFlEhIMiH26sEjv2oNaAiS3Fo49rFc3jENaHgF+5eg3m2ZHm8Cl+T2
+         jYO7IkzAEGLU3Xn3y5tSeqPLLbYfxVETDfBKtaaqOhC/RAe2HP9l8SEqRGMxGAE7ozZp
+         PrB9drUJZChI6M+0rW5sOMWMwypjTp0v+NUQ+IZR60R95uVwyGxqDZ1JNCU99XDAC3VD
+         bPftYsPjwb5jiCAtK/ivefPQFN1AO7twNB+PKvCkw71BkNXMeUY64jOqJeTvTzQJ+B5U
+         IeRtl6T41OY+GSJYvcxSMBm4u74gaXj+jrKPvWjHnEhQkvWO3fI4By1TlguIa+x6jRm2
+         FJlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776082317; x=1776687117;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1d0Zke0oSY75WUereA/hlkl+rDQeWUvM6YTyJyDqC4o=;
+        b=fTi+NAQ+seEgv7N03SsgGWCXoANvhBNj+HwxoS+A/4jQhLTPfR00IChRf50vrsI0aJ
+         pHhm11RjEl0tNu4QTlfiTs3MzMu4APdVe6RXCMh6Nm32nnqdfotBfWqr2PFguGF2i0nF
+         TuN8f1QebNqacbVWazfdokSprCFunXGbkOuqRD3r+gPpAmRNks7ORfRU8mElaZ+SBo+c
+         rRHSGsBAszOSe6pGNZ0hYURjk01cOQoApGALWu03HmlnC5ao1jiGKwJhcc5mLdvxU96R
+         DXrXJHoYtOY83t+r3RdqQdsORcCfDpwKN5TFnuph0539kYmye0EAM50D/Ycq275/x7Ug
+         jI7g==
+X-Gm-Message-State: AOJu0YxZOFXMQ/TpoWIXrxyK2Cnrec8bSMJX7PHZRGJ6OxNK2hr95J8d
+	2Jr3z3cWePb/uCvuuxrRJFbOi6FGND9fTuPhnDWZrzKfTXq8Q/BYASkg2edgQ+IQBgA=
+X-Gm-Gg: AeBDiesnCpGfqqZCEVyEBh5pTKannr7wn+MQjFkKZw5PUFwgNIoMsLSIFDPVdRp/sEu
+	HogG5kM58NrRCNEmeJQOlzALX819MoyF5BKrXHcC0WAyclWmMzCJveK+dtgm/O0q03Mbd+4Y6nW
+	vVm2q2gt3lqZUMV3RC1Xz21cwsT6dxcjoQZF/ws2lzsUh7RbfEy4cQW3zDguHlaISITG80Zp9V3
+	6kS6NZUERrpPBxLYgzcUePMwupyPfrkBiWc9Nco+jAvmoMnYBkqz5HDpGzmhKehNtqnPCNp5VhA
+	FAq3Bd2fQEe9fo+WhhAdOZQ3E8ZOUgQQzjgzn4meRpvZsen/RMvcniOko6nr0NI1fIkg0dflPHa
+	gfgGdUP79JntzEdNlD2k7Z5MUtHvLlItHx0DXBNXo5vmzDWpPt1QXehj5oSmw9XMYN0aqYn5X84
+	HAz+dnelsa5XTxSmsRKnO8kHR0lQmDOFTrsYCR9lHk4RvhwtLTnGjf25g5BTJb3WSSww==
+X-Received: by 2002:a05:600d:1c:b0:487:2439:b7be with SMTP id 5b1f17b1804b1-488d67bf6ebmr141736955e9.6.1776082317203;
+        Mon, 13 Apr 2026 05:11:57 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1301:4901:4040:13bc:108d:8118? ([2001:a61:1301:4901:4040:13bc:108d:8118])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d531f229sm386966275e9.3.2026.04.13.05.11.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Apr 2026 05:11:56 -0700 (PDT)
+Message-ID: <198c1240-80a6-456c-8b12-25158c90c965@suse.com>
+Date: Mon, 13 Apr 2026 14:11:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f59c4193-7e07-4375-b418-ab019514fdf8@oss.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] net: usb: cdc_ncm: reject negative chained NDP
+ offsets
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Oliver Neukum <oneukum@suse.com>
+Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ stable <stable@kernel.org>
+References: <2026041137-comfy-eaten-a1ed@gregkh>
+ <2a6963c8-4a87-4fed-b875-d46f3ce53e42@suse.com>
+ <2026041325-giggly-wrecking-e6ef@gregkh>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <2026041325-giggly-wrecking-e6ef@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,linuxfoundation.org,intel.com,vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	TAGGED_FROM(0.00)[bounces-36203-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36204-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[suse.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,black.igk.intel.com:mid]
-X-Rspamd-Queue-Id: F2C443EB9CD
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,suse.com:dkim,suse.com:mid]
+X-Rspamd-Queue-Id: 395DC3EBBE8
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Apr 13, 2026 at 01:43:49PM +0200, Konrad Dybcio wrote:
-> On 4/13/26 1:40 PM, Mika Westerberg wrote:
-> > On Mon, Apr 13, 2026 at 12:54:41PM +0200, Konrad Dybcio wrote:
-> >> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> >>
-> >> The Linux TBT subsystem supports hardware aligned with the latest
-> >> USB4 v2.0 specification. In some places though, it assumes registers
-> >> only defined in that specification version (previously marked as
-> >> Reserved) are always accessible.
-> >>
-> >> Every version of the spec states:
-> >>
-> >> """
-> >> Unless specified otherwise, the Connection Manager shall not write a
-> >> register with a value that is marked as “Rsvd”. Writing a register with
-> >> a value that is marked as “Rsvd” results in undefined behavior.
-> >> """
-> >>
-> >> The effective list of SB registers that need this guarding currently
-> >> exclusively contains ones that aren't used outside the debugfs dump
-> >> logic, so just add the required checks there.
-> >>
-> >> Fixes: 54e418106c76 ("thunderbolt: Add debugfs interface")
-> >> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> >> ---
-> >>  drivers/thunderbolt/debugfs.c | 20 ++++++++++++--------
-> >>  drivers/thunderbolt/retimer.c | 11 ++++++++++-
-> >>  drivers/thunderbolt/sb_regs.h | 11 ++++++-----
-> >>  drivers/thunderbolt/tb.h      |  2 ++
-> >>  4 files changed, 30 insertions(+), 14 deletions(-)
-> > 
-> > This is alternative for the v2 patch you sent earlier, right? I prefer that
-> > one over this.
+On 13.04.26 12:43, Greg Kroah-Hartman wrote:
+> On Mon, Apr 13, 2026 at 10:36:19AM +0200, Oliver Neukum wrote:
+>>
+>>
+>> On 11.04.26 12:53, Greg Kroah-Hartman wrote:
+>>> cdc_ncm_rx_fixup() reads dwNextNdpIndex from each NDP32 to chain to the
+>>> next one.  The 32-bit value from the device is stored into the signed
+>>> int ndpoffset so that means values with the high bit set become
+>>
+>> Well, then isn't the problem rather that you should not store an
+>> unsigned value in a signed variable?
 > 
-> I think they're complementary. This patch ensures compliance with the
-> quoted part of the spec, while the other one improves the UX and aids
-> debugging.
+> No.  well, yes.  but no.
+> 
+> cdc_ncm_rx_verify_nth16() returns an int, and is negative if something
+> went wrong, so we need it that way, and then we need to check it, like
+> we properly do at the top of the loop, it's just that at the bottom of
+> the loop we also need to do the same exact thing.
 
-This adds a lot of code for just debugfs access so I think we are better
-without.
+Doesn't that suggest that cdc_ncm_rx_verify_nth16() is the problem?
+To be precise, the way it indicates errors?
+As this is an offset into a buffer and the header must be at the start
+of the buffer, isn't 0 the natural indication of an error?
+
+	Regards
+		Oliver
+  
 
