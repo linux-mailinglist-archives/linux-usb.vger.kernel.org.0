@@ -1,229 +1,169 @@
-Return-Path: <linux-usb+bounces-36187-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36188-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UA2PCfyx3GmbVQkAu9opvQ
-	(envelope-from <linux-usb+bounces-36187-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 11:06:04 +0200
+	id EE98Biez3GkDVgkAu9opvQ
+	(envelope-from <linux-usb+bounces-36188-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 11:11:03 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CDDD3E989D
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 11:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 66C733E9A11
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 11:11:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B15683010DB8
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 08:59:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 057353076A0C
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 09:02:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1370A3AE6FA;
-	Mon, 13 Apr 2026 08:59:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22D433AF65B;
+	Mon, 13 Apr 2026 09:02:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="COkrJ2g2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RNfohFTr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3363A7581
-	for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 08:59:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776070762; cv=pass; b=OojL29HagINSsTxrRTPfLutrmPGdQLqhkwfs4x7JFtqDhtIJlM0169U/6iN6MCpmfUfyY5wOgGpmesqk/MUv7JAvIfIily6RrCrU+rT6My45v2v1ucmlZWGMmBQ617RKlftOGANtXFUg10oQzefT8p91IWbsnsgFeLSmUtJSbTI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776070762; c=relaxed/simple;
-	bh=OZDnoThjdvQ5hGBpd2Z0yEv5u4OPjen6GiJaG+8kNwE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MCdIjH3SITjFe1NCuuxfiBcsCG1quO0suw5nupdwtt92Hhe6Z0yikqwFWzWzGtY1GEWUdAtefpdE5YODh342wFYyrYWZnN9VHA/jQDxWMEQGvd3JODRR0RoFixs4ZtpKfwMAei9UBzi1V2Ono0uczHO06s505R5M3RhmlSsHNh4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=COkrJ2g2; arc=pass smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-66e8cf72a93so4697049a12.0
-        for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 01:59:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776070759; cv=none;
-        d=google.com; s=arc-20240605;
-        b=bjnLyBGeD3jrvJkRnWUOl0rvoFRFUHnGnanKQ9ZQ3adDPcENB/w+/N/kqwSnaDbxoY
-         X8YTskRmai/87wO4gggxNa4rhmOY6w5eL/SvPv6iQNthpPUn7xe45viFXcUq1SnOB3W/
-         /VPdT+3E0PTc9YOZUNN1kaFQRYNVLjsj9Iu+9cffEtU6r1JXpunRAnTMwI38/4jHSOx3
-         YRdAtaDJ/4a1Az0Rxh5nQnPWeMcDuBmoBiAy111KLhVeCKEmkw5F3tLDWnpiMwLcXFDh
-         jdkBmGkjaKAPCuVXBcQi6MVXmgaI7+EDKM8dfp/j+yetXWop1w33iS32JE/IXp7OlnhF
-         9HBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=DAMWWoHN87Ee/+pyKFMzgtVkPA85yfs/c3PtD+48H+0=;
-        fh=RRT8+JVsmh5GeJCR2HMpLz6a96Q5ZWFH+cYg+dwEqSY=;
-        b=OgTJxMHP1baVbhx6A1qNi5x97RCLd+QwS9k0KoCkBIcT8ZTBK7GFHZFfEKhlTVhUWh
-         gjaKO1ZrAqT2cEi9UbhAutH+MI7b9WLUtx6jPIrJwyzpYSXQ3Cs4cAHXMBUZ8pqxvcYq
-         cxALqfJ8+3Cs3Ni2aa5q4H9d2r4khnfuK5UnLUbW6s/XL06L9G4KxaQC8wfVriTP4jLi
-         2PijmzSZBvqy0LFEvcNfmLANHd0QlmtwWinFOmgV/vuLG945TUS+f/+aYGyUpx4Ap7Lv
-         sMKFXEhGUGflf3g9oKmik6EHjqpFs17wkYS2NIP/NmAJpYxUZ7tK6FFoMDHmoVcONF/Z
-         XqAw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flipper.net; s=google; t=1776070759; x=1776675559; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DAMWWoHN87Ee/+pyKFMzgtVkPA85yfs/c3PtD+48H+0=;
-        b=COkrJ2g22hnfxMMHeJr4yP7Jr+/nm/G7dsrmq9LyuBwAAa5XjyiVgqGeuv3MaAKqgi
-         ev4REzCRNx1REORCdHsl/twSyAWGEcc/4FUM1WQvcmXVaMaHnvcSKwHYHoPSMM0FCIwN
-         ze6Z4ci8QTUiNb/wrDhcV4NpNCai7NP7hw6/F4H4Lavcnazh7ThBgNaq6xEfOwDmwbqG
-         DW2eg9UOv8k4xWdxvJ9jfuCSa0tGFjry+k3clEyJHA9QFQtLZxy7Bkc7L6F/sLG1ICHC
-         rD9X02w4zUSxNr69bciLn+GGUH1TP1EwVGO7oZoJ0dJDsO0N1CWOywUp+uQ5sFWEttHU
-         IMbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776070759; x=1776675559;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=DAMWWoHN87Ee/+pyKFMzgtVkPA85yfs/c3PtD+48H+0=;
-        b=mpyFcc1tsRMTAeMIuG4ShvhjKyBd1YqsY/QcGtec45x/auIpxBcCOSsV6C/BMkgDGq
-         Ij1INH9nP5TF2SSAtfFle82KBIn5v94POIaulTgznbxz4iE9Nf2hoerZvny13Eu9JTvv
-         oBqTf5Eav0DS81FBHO40R7Gb3j+plGKueaey4+6PP6PoidICl1Uo5Ug+WUPGBgTRBLoW
-         29WDb6TIPZE6u44XPGfVM/bStj7jHkgIePgZ4VzrsuZCBLju0q2W/0NBgrog9HnQ+cHp
-         GUp8pD7v5vyXYXf4yKVYoST0n9EkhoGvKSI+7oDTzYO2Z5yNVXwQLM3G5tPqC05Ma+43
-         jgLg==
-X-Forwarded-Encrypted: i=1; AJvYcCUthl4sc+E2QiY9LYkUprXcEMuOlvlum75ha5+TWzJBBckekc0EDBx8oAcsBZXK1RULR0fB5j+zSpQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw704582KTqjzHQMw/Dg99S7jWZQK2o2050ypb3qoAw0II+GRkM
-	vYwJKUiVJ3xMqw0HwpSiXB1Xj8uRMPMtGov0VzhCkpd+hUajoxFiWEqn/m8NAXkm+U3+R3HH5uS
-	zwtwgtG9t4Fcb/LxR4H5uwNql6o98QfswAI6W19rbdA==
-X-Gm-Gg: AeBDieuEWceQEO97MlJYPC+ZCAZUbt/rx1tYs+pwBCI7MhDW89LWo9wnyr5vV3G/+6J
-	Jzlc8767LeNdKJ9nnoKHV7hG2O7W820jl4tKEyh56MZT+XbVLjXzTlSxmk7Aw9GUVqAivTWvAQG
-	P7TqW5BBFQdglo+GDsmfnzV7inwKD5SNI6s//9OTB7WA8zjQxv/nQVXq4ibQ1Wtnxe54EPRqWK9
-	axOEB1+uIGbexCPlr6Use6C0uZsoe59PXC4yMuTA86dnLVTFqhhnLkvRyORuB0Rqx6KhRF+5WLO
-	H2dOWSU=
-X-Received: by 2002:a17:907:6d08:b0:b9c:c855:d93e with SMTP id
- a640c23a62f3a-b9d72657330mr599135366b.29.1776070759354; Mon, 13 Apr 2026
- 01:59:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1EA18AFE;
+	Mon, 13 Apr 2026 09:02:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776070970; cv=none; b=k/jn1EfFxqDiI3E1P7/3/PpjMyPWBlRsG7jNjsvSTdkCrbwNbNGV5Bl/ItEoZ2xoPyVXR7b9aKSHDPQ0G0p5Gy9ilDVQjGEUlVriy7OHv6wyDLcXxnZj4H2qVZFNCe0p4sqf66PzvcIQilfWmZ/6E6WdU1Jg/ym/r3O8TeH9Tpc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776070970; c=relaxed/simple;
+	bh=rcZeXGiqbthiYx6Cno0IXd+gSzqcO3caideTKwiKdqU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=UD8WJawsi695gJosKnNWHlD4xnChQyVGsRjvaQD0Xpp5cX9jc3knH0AH6e5otIa9wzelTdo2UTtnWbn3ewBFEDtL0SJ4rz8eWJ7pwrwJrm0wcr9g+CES/WdDbP8PXfYL42t5K9KPPAjidC8uqIqPCbj/sWk/EzvXvBn6UW20AjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RNfohFTr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5AAEC2BCAF;
+	Mon, 13 Apr 2026 09:02:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776070970;
+	bh=rcZeXGiqbthiYx6Cno0IXd+gSzqcO3caideTKwiKdqU=;
+	h=From:Date:Subject:To:Cc:From;
+	b=RNfohFTruHtr7zM0IsyVRn6IQmWDdutm0kUw/8kKJ2mZ+p6VyZ3CnQzts3hF2NExP
+	 +MY1aQcbwKEWEhFlcbGPES5ngR7jIBIkgMrJyvC9oGDV4nG4YaguSoMlJQF+LXbnpL
+	 Sp6LK3+qRnew3vdVP/j5qHL3vwjbJhVQ6hW8jITbyKaoUjNPKr/qcu36SW6FaBAn8i
+	 2W7GD3xTDQMeGg8Goc6ZOJVIc+MCdyXyZ09RnTujNEqjWnSVn0sqCE6X3woWPGijRP
+	 xdjV77gAlWHBQiQvzIQzq0y0D/aPymsBEt/qEoCTmTgGCZ+rsrwDhMt2jorQVAhuRt
+	 WHFNJumiDmMdQ==
+From: Konrad Dybcio <konradybcio@kernel.org>
+Date: Mon, 13 Apr 2026 11:02:43 +0200
+Subject: [PATCH v2] thunderbolt: debugfs: Don't stop reading SB registers
+ if just one fails
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260317-fusb302-irq-v2-1-dbabd5c5c961@flipper.net> <2026040344-uncouple-maroon-69a1@gregkh>
-In-Reply-To: <2026040344-uncouple-maroon-69a1@gregkh>
-From: Alexey Charkov <alchark@flipper.net>
-Date: Mon, 13 Apr 2026 12:59:11 +0400
-X-Gm-Features: AQROBzDVkGFL5JJ3iG4BGVyI5-KaGi92PFmHIl19t6XVa-P1xFEcB47n7Pxo9r4
-Message-ID: <CAKTNdwGqKqK80-B75Bto7muzqdKoqCuCUaxVwNx=9Cs+fb8WsQ@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: typec: fusb302: Switch to threaded IRQ handler
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>, Hans de Goede <hansg@kernel.org>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[flipper.net,quarantine];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260413-topic-tbt_sb_debugfs-v2-1-97a23d4d0568@oss.qualcomm.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WNUQqDMBBEryL73ciaqsV+9R5FxMRVF2pjs1Fax
+ Ls39QJlYOANzMwGQp5J4Jps4GllYfeMoE8J2LF9DqS4iwwadYk5Viq4ma0KJjRimo7MMvSiNBW
+ IPVF1wRJidfbU8/uYvdeRR5bg/Od4WbNf+mdwzVTUOStyJLRWm5sTSV9L+7BumtJoUO/7/gUEj
+ wsAvwAAAA==
+X-Change-ID: 20260409-topic-tbt_sb_debugfs-2e500fee9706
+To: Andreas Noever <andreas.noever@gmail.com>, 
+ Mika Westerberg <westeri@kernel.org>, 
+ Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>, 
+ usb4-upstream@oss.qualcomm.com, linux-usb@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776070967; l=2211;
+ i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
+ bh=LRG59XEk+P92qxtny1ICLySYOyikvHS6fpB+D3I2z5Y=;
+ b=s7WvgwZIXuazCf29OMRUMvtwmxJ6Svt/IYJsEJ7jjh1Lu7sqGIkIWe5qA/w416HgyVXQR2M1A
+ FiI/FiZ8BC4DITSUD1FkQZjT+YQjPIjsPJdgehA4icLWpA/dOyT26DV
+X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[flipper.net:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36187-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36188-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[flipper.net:+];
+	FROM_HAS_DN(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alchark@flipper.net,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[konradybcio@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,flipper.net:dkim,flipper.net:email,mail.gmail.com:mid,linuxfoundation.org:email]
-X-Rspamd-Queue-Id: 6CDDD3E989D
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email,oss.qualcomm.com:mid]
+X-Rspamd-Queue-Id: 66C733E9A11
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Greg,
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-On Fri, Apr 3, 2026 at 10:36=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Mar 17, 2026 at 08:30:15PM +0400, Alexey Charkov wrote:
-> > FUSB302 fails to probe with -EINVAL if its interrupt line is connected =
-via
-> > an I2C GPIO expander, such as TI TCA6416.
-> >
-> > Switch the interrupt handler to a threaded one, which also works behind
-> > such GPIO expanders.
-> >
-> > Cc: stable@vger.kernel.org
-> > Fixes: 309b6341d557 ("usb: typec: fusb302: Revert incorrect threaded ir=
-q fix")
-> > Signed-off-by: Alexey Charkov <alchark@flipper.net>
-> > ---
-> > Changes in v2:
-> > - Re-added the IRQF_ONESHOT flag to the request_threaded_irq() call
-> >   (thanks Hans de Goede and Sebastian Andrzej Siewior)
-> > - Link to v1: https://lore.kernel.org/r/20260311-fusb302-irq-v1-1-7e710=
-5706629@flipper.net
-> > ---
-> >  drivers/usb/typec/tcpm/fusb302.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/=
-fusb302.c
-> > index ce7069fb4be6..889c4c29c1b8 100644
-> > --- a/drivers/usb/typec/tcpm/fusb302.c
-> > +++ b/drivers/usb/typec/tcpm/fusb302.c
-> > @@ -1764,8 +1764,9 @@ static int fusb302_probe(struct i2c_client *clien=
-t)
-> >               goto destroy_workqueue;
-> >       }
-> >
-> > -     ret =3D request_irq(chip->gpio_int_n_irq, fusb302_irq_intn,
-> > -                       IRQF_TRIGGER_LOW, "fsc_interrupt_int_n", chip);
-> > +     ret =3D request_threaded_irq(chip->gpio_int_n_irq, NULL, fusb302_=
-irq_intn,
-> > +                                IRQF_ONESHOT | IRQF_TRIGGER_LOW,
-> > +                                "fsc_interrupt_int_n", chip);
-> >       if (ret < 0) {
-> >               dev_err(dev, "cannot request IRQ for GPIO Int_N, ret=3D%d=
-", ret);
-> >               goto tcpm_unregister_port;
-> >
->
-> I'll take this, but the testing systems rightly point out that
-> chip->gpio_int_n_irq may NOT be initialized before this call is made in
-> some situations, so this whole irq handler might never be set up.
+The GEN4 TxFFE register is not part of the USB4 v1.0 specification, so
+understandably some pre-USB4v2 retimers (like the Parade PS8830) don't
+seem to implement it.
 
-Thanks for the heads up. I've been staring at this code from different
-angles for a while but I can't see how gpio_int_n_irq can remain
-uninitialized and the function still reach this point in the control
-flow:
-- The whole `chip` struct gets zero-initialized at the beginning of
-the probe function
-- For non-zero values of `client->irq` this field is explicitly set to
-the (non-zero) value of client->irq
-- For zero values of `client->irq`, the helper function `init_gpio()`
-is always called. This function either sets this field to the result
-of a `gpiod_to_irq()` call (which must be a valid interrupt number) or
-it errors out early, terminating the entire probe before control
-reaches request_threaded_irq()
+The immediate idea to counter this would be to introduce a version
+check for that specific register, but on a second thought, the current
+flow only returns a quiet -EIO if there's any failures, without hinting
+at what the actual problem is.
 
-Please let me know if I've missed anything here.
+To take care of both of these issues, simply print an error line for
+each SB register read that fails and go on with attempting to read the
+others.
 
-What can be problematic is that the check `if (chip->irq)` is too lax,
-because any negative errno or IRQ_NOTCONNECTED (a.k.a. -2147483648)
-would be treated as a usable interrupt, which it is not. I believe
-request_threaded_irq() would fail on them anyway, but the code's
-intent seems to have rather been `if (chip->irq > 0)`.
+Note that this is not quite in-spec behavior ("The SB Register Space
+registers shall have the structure and fields described in Table 4-17.
+Registers not listed in Table 4-20 are undefined and shall not be
+used."), but it's the easiest fix that shouldn't have real-world bad
+side effects.
 
-> I know your change didn't cause that logic bug to show up, but can you
-> send a patch to fix that, as you have the ability to test these types of
-> changes?
+Fixes: 6d241fa00159 ("thunderbolt: Add sideband register access to debugfs")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+---
+Changes in v2:
+- Don't print the error retval, replace the message with '<not
+  accessible>' to mimic other error paths in the sys/debugfs TBT code
+- Slightly reword the commit message
+- Link to v1: https://lore.kernel.org/r/20260409-topic-tbt_sb_debugfs-v1-1-131540e0cc2b@oss.qualcomm.com
+---
+ drivers/thunderbolt/debugfs.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Sure, I'll test the change on chip->irq to filter out negative values
-and send a patch if all goes well.
+diff --git a/drivers/thunderbolt/debugfs.c b/drivers/thunderbolt/debugfs.c
+index 042f6a0d0f7f..d089d2decedd 100644
+--- a/drivers/thunderbolt/debugfs.c
++++ b/drivers/thunderbolt/debugfs.c
+@@ -2361,8 +2361,10 @@ static int sb_regs_show(struct tb_port *port, const struct sb_reg *sb_regs,
+ 		memset(data, 0, sizeof(data));
+ 		ret = usb4_port_sb_read(port, target, index, regs->reg, data,
+ 					regs->size);
+-		if (ret)
+-			return ret;
++		if (ret) {
++			seq_printf(s, "0x%02x <not accessible>\n", regs->reg);
++			continue;
++		}
+ 
+ 		seq_printf(s, "0x%02x", regs->reg);
+ 		for (j = 0; j < regs->size; j++)
+
+---
+base-commit: db7efce4ae23ad5e42f5f55428f529ff62b86fab
+change-id: 20260409-topic-tbt_sb_debugfs-2e500fee9706
 
 Best regards,
-Alexey
+-- 
+Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+
 
