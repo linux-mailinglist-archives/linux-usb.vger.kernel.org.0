@@ -1,53 +1,89 @@
-Return-Path: <linux-usb+bounces-36230-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36231-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cPHtChcX3mkonAkAu9opvQ
-	(envelope-from <linux-usb+bounces-36230-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 12:29:43 +0200
+	id QOTVGQ8n3mk7oQkAu9opvQ
+	(envelope-from <linux-usb+bounces-36231-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 13:37:51 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 165B53F8B11
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 12:29:42 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A3983F9704
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 13:37:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 1833F3055541
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 10:20:55 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 57301301061F
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 11:37:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A742B39A80E;
-	Tue, 14 Apr 2026 10:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B15703D9DD6;
+	Tue, 14 Apr 2026 11:37:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NzAizErS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ehgQ9oez"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D751A3D410B;
-	Tue, 14 Apr 2026 10:20:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B385D3947AD
+	for <linux-usb@vger.kernel.org>; Tue, 14 Apr 2026 11:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776162036; cv=none; b=hMmaKgJiBcVWqZ9Ltx9n5+yVB9uo8tv1AYzODXP43OALIjtmbHY/NxhYXDsPSgSbBW4ViJWX/vFq8jdhswPLAtFEUWvipi3oHIbsDeVtkWoeBDhLAybFzaiqGODGwNJ+fdEY+tBtDkW3IWsu/8xDQEVdounQ34KbHnjBsZag6Lk=
+	t=1776166666; cv=none; b=dy6g2CNj8mw65eUhJ1DqlZiTyGWEwTadUVcidGCIaikp9vvwzd8nYKLSK1tFomcmJLfKY1uiHYSfWGSMwkoI6oLGv1bcM4WXGCfs3oe7cVVFaq5fSdy84XHxofk2GBh2E66LnAdyxgCl7zTdg3M1bqTNtmXUXsw9VD561hhr+gU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776162036; c=relaxed/simple;
-	bh=DB088bkm+R5WzfKl/khDK+zsssDou6km3IYDge0gM04=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=KBL/uDCCoaX5EVYIEnfue876Es0Eg1iltiswq1qANdHK6RkC91uw8ofkJQTW+1TYnvVUqvo8WiJfgJlY6zeVcy5pwoou7uec4tPLzGDJmhhJ0ihrg95FKNZHBUYCaZJiJQQKDPrvY5IIC1fLCc/IWIKhPwDMZuKP/D4LBVCHrNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NzAizErS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073B0C19425;
-	Tue, 14 Apr 2026 10:20:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776162035;
-	bh=DB088bkm+R5WzfKl/khDK+zsssDou6km3IYDge0gM04=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=NzAizErS7RdqwA5glbaZAR/AHwe+hpjztJoEJN8bfUPl1Zw0SiUsQ5PwfDQrtrTXs
-	 h0T+9r8I+GTXi7ZtjO122qUfZ2dvf7OUwYUCql36lhUP3QE3flEMcN7wK3YOh0mvXD
-	 MibOfTVp4SwleJUW0Dw4jEaKzLEPcOuGA22c5FL5ib72XxkHouqHUUWDCDHWU+oDmH
-	 bZIpbODTr1VpoRcZ4EfpmcBc5Iw5O7DuobrHD8bJLFjzZ6Q58/XwtSPGgOOs6XVmYu
-	 rTWAMYYgn+GALGeniyrQM4SqP4cxAGzBeKSzz8FTy2hCrxZ2S1g2kdMZfX2vGH8KP1
-	 kXlZbe5Egg5bw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02D2A380A957;
-	Tue, 14 Apr 2026 10:20:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1776166666; c=relaxed/simple;
+	bh=i8+Rp2lm8fLOSvJCut0Z28GxDZMXSKPLZaUW+1NBCtk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QG+wO6oYbq/IX3fiUg34nETYdGAVrqNTg/pnFavzR3dUQWv3l0Ww0G+H5rfVqZD3/OhH8chuJfgQxmCcuCO25PHcLov2kHpTtRRXie1UhFf4U/TNa/hOv3IRVyHfkngLCQhXf05FcSMM0n81cOS622y7prDb6zGpH0jxbjRql+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ehgQ9oez; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-823c56765fdso3044524b3a.1
+        for <linux-usb@vger.kernel.org>; Tue, 14 Apr 2026 04:37:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776166664; x=1776771464; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=u0ActCVXLFthIaGOw+Dmt/Wj5PFa88ClW2h23NoquNs=;
+        b=ehgQ9oezirx6YrYn1I2tQNT4PaLX3lV2eaceu+o85JXN1oWD9Neg44deJuDyHbQzH/
+         Yz/McnNg0/ryjzl5eELS0JdlzyiX12008tLYnSJF6UYqkeJ1Slhu5sLKy/KnOVukdaaO
+         g6WBy1hn16a+imL2bJwvjZY4FppvR6LaI5VxFjNbsby4S3lxxdtVcCRhx64ey0Z/9rIs
+         OUik7lniFFeGmSCizj1UUmPU3731scgxRDjEUnAjL5yvHK36CLsckPTnCwBOFIZNUPdR
+         rVSMrSMZQ3DZm+Nfe/njjZ8Zj7RUi59iyfKiwA8fII8BoNoWsUObDtnl6+hwLMOF2Kfw
+         AxiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776166664; x=1776771464;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u0ActCVXLFthIaGOw+Dmt/Wj5PFa88ClW2h23NoquNs=;
+        b=Lu2a8Vke8AKReGcS3JHbSljqMgltTcaJ6J/joEk4twa8Z7SHTMB2EGeuBjckVgYJQQ
+         UqbIwDADMl3WLbObz5Pr930Wc6b/XMzw6lope+ZcjzcNrtKu8RraNBTRi7QOliGxKMpO
+         V+Aqj2wQ+W5jdS/fEtmReXT/4L3mZdtu+AqqnHIvm/4X5CGkScmOz0bXcw/ImOqYRdHA
+         XcXv/M7dCYU8oKJoMnIXgWHhOaPuTzMHzo3jnmZbq4AGQdduAHvTSYqytddZnD85Cxf6
+         CbfTOBsHwPgjcvS7xnRd+X+vaFO8JZNsKFpC88g6EEMTnbfVEm26uDAgLkphgj3kqNn4
+         mCaQ==
+X-Gm-Message-State: AOJu0YzrDLtg7lSdjSa6uBqwIiWOvMQem70tE/6b/7tURR813+JQP7QI
+	wiDMAelQGPDjB0DZxJBXqgipkUGj02tO8vuvszk+VrG2Ur+CT3OfocfWJPhKeFOp
+X-Gm-Gg: AeBDiesclw07joT+tMev+GO49zu13tlcVjV3mD19TPizwlB+TaEfqhlI9w9yIjh8+hL
+	+tIsP6ZbQ1c1UxVzLcJVA0Igv9C7NMbGUna4M0ju430yt3tYvTBJKG+5OuyG7bCFxdG+3N3BpO+
+	3fAoUQJpHCZ4+yHF5N9Ja/qriB3uNK2qp1Wr7RXJZ4pSQFWgEMmR5CzpHbD5kGT0g9qclW0lFeq
+	zat/idJ9QfVgatNtcRY3hnDko/R2A1n+SHaQ9RcHCgr65jp0+J3L0K3L7oMAV4XO8fIfkkq5EK5
+	QG8g5EPJ9wE5cJFp3/RhzJbjPaREdWhtOyBqIBIyhC92SrXRdH6mngMApZsJtRdcZHKVJcLrEPM
+	MuO/dkBr7F6VeAwfpDBLfCqbmS/cL0YNxmekieycrycy6fpYXfj1RJUVXBAedrBYO0NjYWgpiKV
+	yij56C/FS7woZM6PfDJzSnKKf6x/w=
+X-Received: by 2002:a05:6a00:2407:b0:82a:1499:263b with SMTP id d2e1a72fcca58-82f0c2df3dfmr17411423b3a.52.1776166664006;
+        Tue, 14 Apr 2026 04:37:44 -0700 (PDT)
+Received: from localhost ([2001:67c:1562:8007::aac:4468])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0c4e2119sm17100132b3a.47.2026.04.14.04.37.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2026 04:37:43 -0700 (PDT)
+Sender: AceLan Kao <acelan@gmail.com>
+From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+To: Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] thunderbolt: Skip mapped PCIe down port when config read fails
+Date: Tue, 14 Apr 2026 19:37:35 +0800
+Message-ID: <20260414113735.51730-1-acelan.kao@canonical.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,75 +91,104 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: usb: cdc-phonet: fix skb frags[] overflow in
- rx_complete()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177616200580.811155.3079803654201633076.git-patchwork-notify@kernel.org>
-Date: Tue, 14 Apr 2026 10:20:05 +0000
-References: <2026041134-dreamboat-buddhism-d1ec@gregkh>
-In-Reply-To: <2026041134-dreamboat-buddhism-d1ec@gregkh>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, stable@kernel.org
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [1.84 / 15.00];
+	DMARC_POLICY_REJECT(2.00)[canonical.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),reject];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-usb@vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36230-lists,linux-usb=lfdr.de,netdevbpf];
-	MIME_TRACE(0.00)[0:+];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-36231-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com,kernel.org];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[acelan.kao@canonical.com,linux-usb@vger.kernel.org];
+	NEURAL_HAM(-0.00)[-0.999];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,canonical.com:email,canonical.com:mid];
 	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NO_DN(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 165B53F8B11
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	PRECEDENCE_BULK(0.00)[]
+X-Rspamd-Queue-Id: 3A3983F9704
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello:
+tb_find_pcie_down() uses tb_pci_port_is_enabled() to check whether a
+mapped downstream PCIe port is already in use before returning it for
+tunnel activation. tb_pci_port_is_enabled() returns false both when the
+port is genuinely disabled and when tb_port_read() fails (e.g. -EIO).
 
-This patch was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+After resume on TBT5/PTL hardware the host router is not immediately
+accessible. A config read on the mapped port returns -EIO. This causes
+tb_pci_port_is_enabled() to return false, making tb_find_pcie_down()
+treat the still-mapped port as free. tb_tunnel_activate() is then
+called on this already-mapped port, fails with -EIO, and logs:
 
-On Sat, 11 Apr 2026 13:01:35 +0200 you wrote:
-> A malicious USB device claiming to be a CDC Phonet modem can overflow
-> the skb_shared_info->frags[] array by sending an unbounded sequence of
-> full-page bulk transfers.
-> 
-> Drop the skb and increment the length error when the frag limit is
-> reached.  This matches the same fix that commit f0813bcd2d9d ("net:
-> wwan: t7xx: fix potential skb->frags overflow in RX path") did for the
-> t7xx driver.
-> 
-> [...]
+  "PCIe tunnel activation failed, aborting"
 
-Here is the summary with links:
-  - [net] net: usb: cdc-phonet: fix skb frags[] overflow in rx_complete()
-    https://git.kernel.org/netdev/net/c/600dc40554dc
+The display connected via the Thunderbolt dock is then lost until the
+dock is unplugged and replugged.
 
-You are awesome, thank you!
+Fix this by inlining the config read in tb_find_pcie_down() and
+distinguishing three outcomes:
+  - Read succeeds, PE bit set   -> port in use, skip (goto out)
+  - Read succeeds, PE bit clear -> port free, return it
+  - Read fails                  -> hardware not ready, skip (goto out)
+
+When hardware is not ready the function falls through to
+tb_find_unused_port() which returns NULL, causing tb_tunnel_pci() to
+return 0 gracefully. The Connection Manager will retry via the hotplug
+event when the device re-announces itself once the link is up.
+
+Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+---
+ drivers/thunderbolt/tb.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index c69c323e6952a..2712927b3837e 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -1848,9 +1848,26 @@ static struct tb_port *tb_find_pcie_down(struct tb_switch *sw,
+ 	}
+ 
+ 	if (down) {
++		u32 data;
++		int ret;
++
+ 		if (WARN_ON(!tb_port_is_pcie_down(down)))
+ 			goto out;
+-		if (tb_pci_port_is_enabled(down))
++
++		ret = tb_port_read(down, &data, TB_CFG_PORT,
++				   down->cap_adap + ADP_PCIE_CS_0, 1);
++		if (ret) {
++			/*
++			 * Cannot read the adapter register, this could
++			 * mean the hardware is not ready yet (e.g. after
++			 * resume). Skip this port and fall back to
++			 * finding an unused port to avoid activating a
++			 * tunnel on an already mapped port.
++			 */
++			tb_port_dbg(down, "failed to read PCIe adapter status: %d\n", ret);
++			goto out;
++		}
++		if (data & ADP_PCIE_CS_0_PE)
+ 			goto out;
+ 
+ 		return down;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.53.0
 
 
