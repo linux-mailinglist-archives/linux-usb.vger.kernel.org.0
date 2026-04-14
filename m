@@ -1,180 +1,203 @@
-Return-Path: <linux-usb+bounces-36219-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36220-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GJXvCNJU3WkFcQkAu9opvQ
-	(envelope-from <linux-usb+bounces-36219-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 22:40:50 +0200
+	id ANXNDLWR3WkLfwkAu9opvQ
+	(envelope-from <linux-usb+bounces-36220-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 03:00:37 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DF6E3F32AF
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 22:40:49 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FC4D3F4B39
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 03:00:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4B6FF3030769
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Apr 2026 20:40:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 965CD30488D5
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 00:58:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2E1A3947B1;
-	Mon, 13 Apr 2026 20:40:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AC32257435;
+	Tue, 14 Apr 2026 00:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kQqzVKc0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZJepyMiE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 434781A275
-	for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 20:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E87A423A9BD;
+	Tue, 14 Apr 2026 00:58:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776112845; cv=none; b=BYRpAuwDq/so70/ZGkrILIRel1DmZtjeazQ/z2beLzorm46uUi983J6sIVOi9XfQFaMLYvlM2mKN9RZHmq8V5zmAek0oTL56hV2GY+JQAr55TUS/F2MErSNVgASYkOFl7uGQ4JDm6Z7y0IsphaD6k8ZhM4rebhEIIGemaT0YCZU=
+	t=1776128318; cv=none; b=KBKm9qoFrmdD4f381SzI1ZtNQbXXCGKuQuTg3MVZwjPTWnCLVePTjPCcdys9yp02TTZx+HHVGoOJPBca9V1ilCI5BScA90urY0wSSVNYMKjiExz5OCsuy+6us8o/Aa5Y6iNmVxDcmKVggDGy4k3PqtZyYuTERm/3ut8EPNpzHHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776112845; c=relaxed/simple;
-	bh=R3kn1jILB660u5Pxb1ERxXiYL0nF6pdPiO1AeCh0R1w=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=K062xyMap/M9pWal3K+4C4jWizIfea4/pS7eTaql3IKJ5wI3jYMkr0NPaQ7BzsAgaFwmpiUZ2Lvsv2hyIQ0Yti+woMaK9fjDRDG0nK5xI4BB/4LcHqE1RQxK9NfcnmiIrCchz1tt1AAoK5DrjGtzqm5tMvXDQ+zt8ETz6O2lQXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kQqzVKc0; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-488c2690057so47113335e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 13 Apr 2026 13:40:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776112843; x=1776717643; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xHse7VJY5zHeWLFBiB9crv5GdzNEc2krImA0dhR/Srg=;
-        b=kQqzVKc0V30ahS7XYK6UNMpfvf3vVLfeNoHdhpzI5QVIX0dIGOCkBSueI1FoV49tAi
-         2GfBBz+qS1cFrU/+ILhmZWg3laB/gPHqZmYCHm6WlmIrBe8qK8TQ/geTEpUGRN912R6I
-         3y1jgbIlJkOfZf3sDweaqCUyMOVbN5POhLm22fg1S/ar7xdr3ol2AXv3FNyonpxAtVOx
-         qW4C1RSgWIsNcBaXpdYI8bb+GLAA7JClJmaSGl6wwldYOCwGUUsoxVjsq7bgKIr7MPNs
-         pqiaLnmnN/hufYn9Iom98wAZ84RMIGFAVIHyIEuQXmKHa9K0fB9AKswBUtFyetR13P7M
-         PUTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776112843; x=1776717643;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=xHse7VJY5zHeWLFBiB9crv5GdzNEc2krImA0dhR/Srg=;
-        b=eeOJFwmDkT+J99OCPsk+4M6gLHOqR5SCtPJDNNRwS0uhngLRD+8ib6pgX60hbdamad
-         3w+ZNRVK5LIMVTBVCx2ExV3XWfFEJ9yk6Cj+RXRVg3hyWAUk3+I4XSzTbJsCA+TBxNpS
-         AV4WAVEbBOO5bsMRGN8NW2T5wD7Rq9r9/UoFXfUoEAHOxseac13pSaHrNu/aq9xZFhSN
-         doPra/DxU6/jY28KQxZqcz8vIbEAYRZytDnhzrmPlT3pq1tXoDzMsuhgn2ilSVEIPm+I
-         yUoicgK3JHEByJthxw/8gilxUA9n9JMRwTYPT91HH2K/5UGSSRoPX9tXRsnfK2EjrWKJ
-         x2Ww==
-X-Forwarded-Encrypted: i=1; AFNElJ/K3Ud9F8D1Iw/YrqHECrbPXi3e98iDF1S8ugu/VGb5PLI0evooLzGYNR9fr+bL1FruNrR5ugM3Sgg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXM/H/bPurYS0N8TzG+oQFv/cqjrNk6xd72p7YQrnwrTTBeeQt
-	zMoMNxl/fOpwfTP00OgZbLPzBxdtw7F2OC9NvaCqFPqB4WeClF4+NkeB
-X-Gm-Gg: AeBDies2Gr8ji4ADSEaxEgq62iseufkoFfOy+GDogIAKFtm2buTc/OP9mgyPCATH9E7
-	VP0ehQrGO5pL0qig7bdthXWbAxyUQEPVXdyBdeXE0BN8lFAX7jPMCThPOfebpRw3rCUCqQXVElS
-	kw4nz9C8QG2GWnyl+2tNKLefstTwKjzYhFUy2M6MB0QAl56j3zTm9kGbabmsNvd/6siBwmr5zuu
-	gLzDNtJme5QWVnvXxwY8RmpjyElJGKA1owcAN99G9rO6DCPHOLciNDAqBv0TeszS0PT5/I1Lesg
-	uNNG5tnuoZtzxULmoZs6OnumeACV8+E96/+R0qUTz0hUmk5Di3mHaLD+vCVWW+m0s8kNMSDn1Ur
-	YN+9idVm5MRR2Cm5/UQ3uv6hlO1RG66bpHu8fEbBad77Jk1m3GAbhfDcsfJ7tPF8oQJpLhPRe2g
-	mr0jR+Z7EkPWBavNDl1IsQxt1b6dfMVhb9VBg=
-X-Received: by 2002:a05:600c:8591:b0:488:a824:fe04 with SMTP id 5b1f17b1804b1-488d6abe9e4mr148996225e9.26.1776112842604;
-        Mon, 13 Apr 2026 13:40:42 -0700 (PDT)
-Received: from foxbook (bfi125.neoplus.adsl.tpnet.pl. [83.28.46.125])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d58bb830sm330181675e9.7.2026.04.13.13.40.41
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 13 Apr 2026 13:40:42 -0700 (PDT)
-Date: Mon, 13 Apr 2026 22:40:38 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: JP Hein <jp@jphein.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede
- <hansg@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-media@vger.kernel.org, linux-usb@vger.kernel.org, Ricardo Ribalda
- <ribalda@chromium.org>
-Subject: Re: [PATCH v7 0/2] media: uvcvideo: Add quirks to prevent Razer
- Kiyo Pro xHCI cascade failure
-Message-ID: <20260413224038.641af363.michal.pecio@gmail.com>
-In-Reply-To: <20260410002831.1046407-1-jp@jphein.com>
-References: <20260331003806.212565-1-jp@jphein.com>
-	<20260410002831.1046407-1-jp@jphein.com>
+	s=arc-20240116; t=1776128318; c=relaxed/simple;
+	bh=EhlDXWWFWBQauZ8tAGQwPzKqjMsudNfavuhsO/FbfYk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=OfBjV1AWjHo1YP++DHmNtWsi3mN7GISRWQWkJJAQHSz6QC1j1YbDsdcqjtfCj/CDriXafNeGCOUM+kK3Z+FTdFkdsdrje4pNOCX4iDOYKfS/QxC1zw9ZdG4npp1UrefN6Uv95fDSjVofC/6TXI63EL7YTs1lkro9ueeyvXCCSw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZJepyMiE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8D59DC2BCB5;
+	Tue, 14 Apr 2026 00:58:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776128317;
+	bh=EhlDXWWFWBQauZ8tAGQwPzKqjMsudNfavuhsO/FbfYk=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=ZJepyMiE6yyEVV/naeEWlF9+63AdNCuR9pYNLXNuG9YNCYrhIXXY7NNgoIX9dx9LI
+	 hY6iOuPVdxBQZrfhDnKThEw81EfYNmtdeDjdC/RpXbVK0k5mj1W2V5iLCNNbbxvRci
+	 qXWYf3l40EhVdKXYh+H4XqmTWonIJo8tk3pFlH3lls5H0WoL+nzpj4ZTlDmydWM8uJ
+	 PFNVHssM40txcyNZK1Zkop/wH5WHVRhbGwr+trXUsEQ1DehkguDnDvZq53DDqgFA6s
+	 YcuEg09IIP9S68ARbjG8Jtj6NuyErt/wLTIwAb1JVTFtGTjKcYZkgUVwJxB9wpwts/
+	 HMmKLG2ypZy+Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82FB4F531C6;
+	Tue, 14 Apr 2026 00:58:37 +0000 (UTC)
+From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
+Date: Tue, 14 Apr 2026 00:58:32 +0000
+Subject: [PATCH] usb: typec: tcpm: reset internal port states on soft reset
+ AMS
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Message-Id: <20260414-fix-soft-reset-v1-1-01d7cb9764e2@google.com>
+X-B4-Tracking: v=1; b=H4sIADeR3WkC/x2MSwqAMBDFriKzdqD+WvUq4kL0VWej0hERine3u
+ AwkiaQIAqU+ixRwi8qxJyjyjOZt2lewLImpNKU1tXHs5WE9/MUBiovRNs77Bt1SWUrRGZCMfzi
+ M7/sB9IS4XWAAAAA=
+X-Change-ID: 20260407-fix-soft-reset-e857ff5e9d36
+To: Badhri Jagan Sridharan <badhri@google.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Kyle Tso <kyletso@google.com>, Guenter Roeck <groeck@chromium.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ RD Babiera <rdbabiera@google.com>, Amit Sunil Dhamne <amitsd@google.com>, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776128317; l=3756;
+ i=amitsd@google.com; s=20241031; h=from:subject:message-id;
+ bh=NwZV1h3KslKY2J3kpCMvfsd4RiG9+nem3pcyoUztlBQ=;
+ b=L+zGllswkMyHtEnmJRQti/NK1h3u/2HnMp/iO2cCjE6AKAR/VOsOinXE0DbEqjv2eAOmXPU3D
+ HijQCI6ofuaCnb2vcFX4QQ1G3hCauX6vX5JfKrIStEYr/36GsyaQhcl
+X-Developer-Key: i=amitsd@google.com; a=ed25519;
+ pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
+X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
+ auth_id=262
+X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
+Reply-To: amitsd@google.com
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_RHS_MATCH_TO(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_FROM(0.00)[bounces-36220-lists,linux-usb=lfdr.de,amitsd.google.com];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	REPLYTO_DOM_EQ_TO_DOM(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36219-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	HAS_REPLYTO(0.00)[amitsd@google.com];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8DF6E3F32AF
+	RCPT_COUNT_SEVEN(0.00)[10];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8FC4D3F4B39
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu,  9 Apr 2026 17:28:29 -0700, JP Hein wrote:
-> The Razer Kiyo Pro (1532:0e05) is a USB 3.0 webcam whose firmware has
-> a well-documented failure mode that cascades into complete xHCI host
-> controller death, disconnecting every USB device on the bus --
-> including keyboards and mice, requiring a hard reboot.
+From: Amit Sunil Dhamne <amitsd@google.com>
 
-For the record, reloading xhci-pci is usually enough to fix this.
+Reset internal port states (such as vdm_sm_running and
+explicit_contract) on soft reset AMS as the port needs to negotiate a
+new contract. The consequence of leaving the states in as-is cond are as
+follows:
+  * port is in SRC power role and an explicit contract is negotiated
+    with the port partner (in sink role)
+  * port partner sends a Soft Reset AMS while VDM State Machine is
+    running
+  * port accepts the Soft Reset request and the port advertises src caps
+  * port partner sends a Request message but since the explicit_contract
+    and vdm_sm_running are true from previous negotiation, the port ends
+    up sending Soft Reset instead of Accept msg.
 
-> The device has two crash triggers:
-> 
->   1. LPM/autosuspend resume: Device enters LPM or autosuspend, fails
->      to reinitialize on resume, producing EPIPE (-32) on UVC SET_CUR.
->      The stalled endpoint triggers an xHCI stop-endpoint timeout, and
->      the kernel declares the host controller dead.
-> 
->   2. Rapid control transfers: sustained rapid UVC control operations
->      (hundreds over several seconds) overwhelm the firmware.
+Stub Log:
+[  203.653942] AMS DISCOVER_IDENTITY start
+[  203.653947] PD TX, header: 0x176f
+[  203.655901] PD TX complete, status: 0
+[  203.657470] PD RX, header: 0x124f [1]
+[  203.657477] Rx VDM cmd 0xff008081 type 2 cmd 1 len 1
+[  203.657482] AMS DISCOVER_IDENTITY finished
+[  203.657484] cc:=4
+[  204.155698] PD RX, header: 0x144f [1]
+[  204.155718] Rx VDM cmd 0xeeee8001 type 0 cmd 1 len 1
+[  204.155741] PD TX, header: 0x196f
+[  204.157622] PD TX complete, status: 0
+[  204.160060] PD RX, header: 0x4d [1]
+[  204.160066] state change SRC_READY -> SOFT_RESET [rev2 SOFT_RESET_AMS]
+[  204.160076] PD TX, header: 0x163
+[  204.162486] PD TX complete, status: 0
+[  204.162832] AMS SOFT_RESET_AMS finished
+[  204.162840] cc:=4
+[  204.162891] AMS POWER_NEGOTIATION start
+[  204.162896] state change SOFT_RESET -> AMS_START [rev2 POWER_NEGOTIATION]
+[  204.162908] state change AMS_START -> SRC_SEND_CAPABILITIES [rev2 POWER_NEGOTIATION]
+[  204.162913] PD TX, header: 0x1361
+[  204.165529] PD TX complete, status: 0
+[  204.165571] pending state change SRC_SEND_CAPABILITIES -> SRC_SEND_CAPABILITIES_TIMEOUT @ 60 ms [rev2 POWER_NEGOTIATION]
+[  204.166996] PD RX, header: 0x1242 [1]
+[  204.167009] state change SRC_SEND_CAPABILITIES -> SRC_SOFT_RESET_WAIT_SNK_TX [rev2 POWER_NEGOTIATION]
+[  204.167019] AMS POWER_NEGOTIATION finished
+[  204.167020] cc:=4
+[  204.167083] AMS SOFT_RESET_AMS start
+[  204.167086] state change SRC_SOFT_RESET_WAIT_SNK_TX -> SOFT_RESET_SEND [rev2 SOFT_RESET_AMS]
+[  204.167092] PD TX, header: 0x16d
+[  204.168824] PD TX complete, status: 0
+[  204.168854] pending state change SOFT_RESET_SEND -> HARD_RESET_SEND @ 60 ms [rev2 SOFT_RESET_AMS]
+[  204.171876] PD RX, header: 0x43 [1]
+[  204.171879] AMS SOFT_RESET_AMS finished
 
-That's a bit speculative, it's not entirely clear what happens here.
-2 seems possible, but Stop Endpoint timeout and some weird error codes
-seen in those logs looks like problems with the HC.
+This causes COMMON.PROC.PD.11.2 check failure for
+TEST.PD.VDM.SRC.2_Rev2Src test on the PD compliance tester.
 
-And I known that some HCs are reliably killed by stopping SuperSpeed
-UVC streams, at least with my camera.
+Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+Fixes: 8d3a0578ad1a ("usb: typec: tcpm: Respond Wait if VDM state machine is running")
+Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
+Cc: stable@vger.kernel.org
+Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Patch 1 of the original 3-patch series (USB_QUIRK_NO_LPM for
-> 1532:0e05) has been merged by Greg Kroah-Hartman and backported to
-> stable kernels 6.1, 6.6, 6.12, 6.18, and 6.19.
-> 
-> This v7 series covers the remaining two UVC patches:
-> 
-> Patch 1/2: UVC driver -- introduce UVC_QUIRK_CTRL_THROTTLE to
-> rate-limit all USB control transfers (50ms minimum interval) in
-> __uvc_query_ctrl().
-> 
-> Patch 2/2: UVC driver -- add Razer Kiyo Pro device table entry with
->   UVC_QUIRK_CTRL_THROTTLE, UVC_QUIRK_DISABLE_AUTOSUSPEND, and
->   UVC_QUIRK_NO_RESET_RESUME.
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 8e0e14a2704e..c73e5daafcf1 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -5534,6 +5534,8 @@ static void run_state_machine(struct tcpm_port *port)
+ 		usb_power_delivery_unregister_capabilities(port->partner_source_caps);
+ 		port->partner_source_caps = NULL;
+ 		tcpm_pd_send_control(port, PD_CTRL_ACCEPT, TCPC_TX_SOP);
++		port->vdm_sm_running = false;
++		port->explicit_contract = false;
+ 		tcpm_ams_finish(port);
+ 		if (port->pwr_role == TYPEC_SOURCE) {
+ 			port->upcoming_state = SRC_SEND_CAPABILITIES;
 
-Do these patches actually make a practical difference?
+---
+base-commit: 81dc1e4d32b064ac47abc60b0acbf49b66a34d52
+change-id: 20260407-fix-soft-reset-e857ff5e9d36
 
-If I'm not mistaken, the results of testing on 6.17 are:
+Best regards,
+-- 
+Amit Sunil Dhamne <amitsd@google.com>
 
-1. The original trigger (spamming UVC control requests alone) doesn't
-   cause breakage anymore.
 
-2. New problems are seen when doing the above while streaming video,
-   and they are still seen even with the UVC patches applied.
 
