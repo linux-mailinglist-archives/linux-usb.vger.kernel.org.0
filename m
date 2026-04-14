@@ -1,205 +1,158 @@
-Return-Path: <linux-usb+bounces-36232-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36233-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2J/QDH0u3mnxogkAu9opvQ
-	(envelope-from <linux-usb+bounces-36232-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 14:09:33 +0200
+	id 8N8iNbU23mlxpQkAu9opvQ
+	(envelope-from <linux-usb+bounces-36233-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 14:44:37 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5829B3F9CF4
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 14:09:32 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B3073FA1C1
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 14:44:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 7667B30298FA
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 12:05:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8517F3096128
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2026 12:39:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CC413E5EE4;
-	Tue, 14 Apr 2026 12:05:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7E3D3E556D;
+	Tue, 14 Apr 2026 12:39:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="V9M9iO9W"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dCEkRF16"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 194A73E5566
-	for <linux-usb@vger.kernel.org>; Tue, 14 Apr 2026 12:05:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1114E3E5ECE;
+	Tue, 14 Apr 2026 12:39:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776168334; cv=none; b=Z5h0K3Kjw+qjvZfRFahJ2NrR5ILSZyRgAT79hq7sMKzozedU4lBKZ2OkJAL4YVltSeyVghqcks3kR+IMFGRej7TQ4hSXTWrIQANGDHewlk9oxyaUHde1dPL+5EL7k/bQDSGuxec1TMdothi3/BniyXlMcErtGlPXD5YdHp1B4M8=
+	t=1776170393; cv=none; b=GjLL0zs4SX11PE8APxdYK9PvONE6bpG/NBnz1jZgi3ZYUqQ6YWHs6fU7pr99bhod4mY+G3okRWPPKYJh6siG+UAtzxD4uJwuZFWBIC/D1BZDWCveBWUhku2V33XB3z0+IuLDzUpRQncykXTEonZFL2jt7eg8QyhYj81kgleUl8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776168334; c=relaxed/simple;
-	bh=tLbh6Dtabtd0bULDfZQM4nBsiH734PBHEQmrg6Ik+TI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=La1rPCbtnk4//HxFn8nnMr3q4ovF8pFLIc7eX9JHNS1O85OC76KwGtEsWuAQ7+lj/zxaoYtBJViKlMgNxZUrfX2LW3fygsnllzwYSF6FzDZM8wwae3xXDhKq/fRbkelNCdPVmXxTkRKIDqfDFt74nyGXrK5gprDUTiE21lxz0Os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=V9M9iO9W; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20260414120522epoutp04dcdd57c585985455385fb8f831d326e3~mN620Ai2Q2668926689epoutp04n
-	for <linux-usb@vger.kernel.org>; Tue, 14 Apr 2026 12:05:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20260414120522epoutp04dcdd57c585985455385fb8f831d326e3~mN620Ai2Q2668926689epoutp04n
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1776168322;
-	bh=7LMcgHYoyDKjt5p7XcIwEBqvkpHrB91lMgYwqIJMSQ0=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=V9M9iO9WPKYIqqr5YCkcks27w9d9cSmBZyqhCYFR/JFT+WKSH82dfP0XBUGdCULLk
-	 K5+89rPy7wNRQ3QKH1V470GcgJu9To84UpN3bUi9HUzhNYETHEON/kvMTtQRgWeTwX
-	 lHVcUQcHVIDsrL80dP+T0bABKk9X7M0RSyZWpSUQ=
-Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
-	20260414120521epcas5p4dac48d96a4988f18a449c074669c7025~mN62RRFAK2879428794epcas5p4Z;
-	Tue, 14 Apr 2026 12:05:21 +0000 (GMT)
-Received: from epcas5p2.samsung.com (unknown [182.195.38.94]) by
-	epsnrtp03.localdomain (Postfix) with ESMTP id 4fw2z46Nq5z3hhT3; Tue, 14 Apr
-	2026 12:05:20 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20260414120520epcas5p1af40edf6f26de616e19cbc98174f63ae~mN61HBdF60316703167epcas5p1k;
-	Tue, 14 Apr 2026 12:05:20 +0000 (GMT)
-Received: from [107.122.5.126] (unknown [107.122.5.126]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20260414120518epsmtip2d6510d55c1caec1d3e6193ef60fd3418~mN6zHDeJT0669906699epsmtip27;
-	Tue, 14 Apr 2026 12:05:18 +0000 (GMT)
-Message-ID: <d2be3f54-5375-4f1b-ab4b-e2ff81c43630@samsung.com>
-Date: Tue, 14 Apr 2026 17:35:16 +0530
+	s=arc-20240116; t=1776170393; c=relaxed/simple;
+	bh=FNaDUpmHuSZWoiSHVvGXLyLouLYIWi3b34Km6GgwrdM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cFOw1iWnvD9S1bhy29E+GJaZXD93df4GYSgZYiKY8w/wyQf/zxvbYTUhVxiopWOGHnpKWfY5V/IkZmoy5dTQrNsL4Qh+FOqbx4ETuwwG3zgwHfzfFjuFgBTCIptCA2H1IRuKlg6xL8UKEaGSNtf8mnFxHQqJnX0Uotk/A/q4yjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dCEkRF16; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776170392; x=1807706392;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FNaDUpmHuSZWoiSHVvGXLyLouLYIWi3b34Km6GgwrdM=;
+  b=dCEkRF16y9EuquG8Qe1+t5jqiF3AEgiaT7aG0OaiXJjAAustSzpUTGYx
+   jZpSJmxVBZPfH430Fcr6YgLz9SOgJb8FD5GwyXxhbYiTZ8ujYzyYtWYJ4
+   9YEBnUmhT29Q34N78eduMvokgtOckDsV2Un1Cf4cBztaMTfyUmu8ubraS
+   /xyuIxjt3WTvkXLGqApqoYrw7JAyi6OYKuYY7olW7BbFg5IdKYNezvGn2
+   q0ur40oP9kPlYHXvoEOGKwJ2o2rfautT6LkXZ++hCpgFoQxBmQ0LHosDp
+   jHB0n5BMH7RaHQVTTcqy/J6uWP7EqybozB/QVO2FrPeg1cY/sDEdCwprh
+   w==;
+X-CSE-ConnectionGUID: ixFHGLgwRJmrFd8rNMREqg==
+X-CSE-MsgGUID: iDw8xyiQRrmXX5iTn6th5A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11759"; a="80988971"
+X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
+   d="scan'208";a="80988971"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 05:39:52 -0700
+X-CSE-ConnectionGUID: U0JpRi5tSzak7LCdxDvRuw==
+X-CSE-MsgGUID: 8W/t/WaHTSmvW69KHabRjg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
+   d="scan'208";a="230014489"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa008.jf.intel.com with ESMTP; 14 Apr 2026 05:39:50 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 2792E95; Tue, 14 Apr 2026 14:39:49 +0200 (CEST)
+Date: Tue, 14 Apr 2026 14:39:49 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+Cc: Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: Skip mapped PCIe down port when config read
+ fails
+Message-ID: <20260414123949.GQ3552@black.igk.intel.com>
+References: <20260414113735.51730-1-acelan.kao@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: Fix GUID register programming order
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"paulz@synopsys.com" <paulz@synopsys.com>, "balbi@ti.com" <balbi@ti.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>, "akash.m5@samsung.com"
-	<akash.m5@samsung.com>, "h10.kim@samsung.com" <h10.kim@samsung.com>,
-	"alim.akhtar@samsung.com" <alim.akhtar@samsung.com>, "thiagu.r@samsung.com"
-	<thiagu.r@samsung.com>, "muhammed.ali@samsung.com"
-	<muhammed.ali@samsung.com>, "stable@vger.kernel.org"
-	<stable@vger.kernel.org>, Pritam Manohar Sutar <pritam.sutar@samsung.com>
-Content-Language: en-US
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-In-Reply-To: <20260414010532.sxciijnzak3ldw35@synopsys.com>
-Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20260414120520epcas5p1af40edf6f26de616e19cbc98174f63ae
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20260410070245epcas5p49355581dcb9f629641c9914ce4ce80ec
-References: <CGME20260410070245epcas5p49355581dcb9f629641c9914ce4ce80ec@epcas5p4.samsung.com>
-	<20260410064735.515-1-selvarasu.g@samsung.com>
-	<20260414010532.sxciijnzak3ldw35@synopsys.com>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260414113735.51730-1-acelan.kao@canonical.com>
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[samsung.com:+];
-	TAGGED_FROM(0.00)[bounces-36232-lists,linux-usb=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,samsung.com:dkim,samsung.com:email,samsung.com:mid];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[selvarasu.g@samsung.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-36233-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[intel.com:+];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_SEVEN(0.00)[8]
-X-Rspamd-Queue-Id: 5829B3F9CF4
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim]
+X-Rspamd-Queue-Id: 0B3073FA1C1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Hi,
 
-On 4/14/2026 6:35 AM, Thinh Nguyen wrote:
-> On Fri, Apr 10, 2026, Selvarasu Ganesan wrote:
->> The Linux Version Code is currently written to the GUID register before
->> dwc3_core_soft_reset() is executed. Since the core soft reset clears the
->> GUID register back to its default value, the version information is
->> subsequently lost.
-> This is not right. Soft reset should not clear the GUID register.
-> Something else must have cleared it. Did you assert Vcc reset (hard
-> reset) during phy reset/initialization?
->
-> BR,
-> Thinh
+On Tue, Apr 14, 2026 at 07:37:35PM +0800, Chia-Lin Kao (AceLan) wrote:
+> tb_find_pcie_down() uses tb_pci_port_is_enabled() to check whether a
+> mapped downstream PCIe port is already in use before returning it for
+> tunnel activation. tb_pci_port_is_enabled() returns false both when the
+> port is genuinely disabled and when tb_port_read() fails (e.g. -EIO).
+> 
+> After resume on TBT5/PTL hardware the host router is not immediately
+> accessible. A config read on the mapped port returns -EIO. This causes
+> tb_pci_port_is_enabled() to return false, making tb_find_pcie_down()
+> treat the still-mapped port as free. tb_tunnel_activate() is then
+> called on this already-mapped port, fails with -EIO, and logs:
+> 
+>   "PCIe tunnel activation failed, aborting"
+> 
+> The display connected via the Thunderbolt dock is then lost until the
+> dock is unplugged and replugged.
+> 
+> Fix this by inlining the config read in tb_find_pcie_down() and
+> distinguishing three outcomes:
+>   - Read succeeds, PE bit set   -> port in use, skip (goto out)
+>   - Read succeeds, PE bit clear -> port free, return it
+>   - Read fails                  -> hardware not ready, skip (goto out)
 
-Hi Thinh,
+There should really be no "hardware not ready" when the host router is
+enumerated. Lets try to figure out what is happening there.
 
-Thank you for the clarification. Yes, you are correct, this issue is not 
-related to a dwc3 core soft reset. Instead, the GUID value reverts to 
-its default state when the PHY link_sw_reset completes during PHY init 
-sequence.
+Can you enable tracing, reproduce and send me full dmesg + trace?
 
-We are using the Synopsys eUSB PHY, this reset is triggered from our 
-downstream driver during the PHY init sequence (invoked through 
-|dwc3_core_init|).
+You can do it like:
 
-Could you please suggest the best way to retrieve the correct linux 
-version information from the GUID?
-Additionally, would it be feasible to update the GUID register after the 
-PHY init sequence (triggered by |dwc3_core_init|) completes?
+# tbtrace enable
 
-Thanks, Selva
+Then repro, and then:
 
->
->> Move the GUID register programming to occur after the core soft reset
->> has completed to ensure the value persists.
->>
->> Fixes: fa0ea13e9f1c ("usb: dwc3: core: write LINUX_VERSION_CODE to our GUID register")
->> Cc: stable@vger.kernel.org
->> Reported-by: Pritam Manohar Sutar <pritam.sutar@samsung.com>
->> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
->> ---
->>   drivers/usb/dwc3/core.c | 12 ++++++------
->>   1 file changed, 6 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index 161a4d58b2cec..0d3c7e7b2262f 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -1341,12 +1341,6 @@ int dwc3_core_init(struct dwc3 *dwc)
->>   
->>   	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
->>   
->> -	/*
->> -	 * Write Linux Version Code to our GUID register so it's easy to figure
->> -	 * out which kernel version a bug was found.
->> -	 */
->> -	dwc3_writel(dwc, DWC3_GUID, LINUX_VERSION_CODE);
->> -
->>   	ret = dwc3_phy_setup(dwc);
->>   	if (ret)
->>   		return ret;
->> @@ -1378,6 +1372,12 @@ int dwc3_core_init(struct dwc3 *dwc)
->>   	if (ret)
->>   		goto err_exit_phy;
->>   
->> +	/*
->> +	 * Write Linux Version Code to our GUID register so it's easy to figure
->> +	 * out which kernel version a bug was found.
->> +	 */
->> +	dwc3_writel(dwc, DWC3_GUID, LINUX_VERSION_CODE);
->> +
->>   	dwc3_core_setup_global_control(dwc);
->>   	dwc3_core_num_eps(dwc);
->>   
->> -- 
->> 2.34.1
+# tbtrace disable
+# tbtrace dump -vv > trace.out
+
+and send me that and full dmesg.
 
