@@ -1,233 +1,171 @@
-Return-Path: <linux-usb+bounces-36241-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36242-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id jN5REgA232nAQQAAu9opvQ
-	(envelope-from <linux-usb+bounces-36241-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 08:53:52 +0200
+	id +GJlOold32m5SAAAu9opvQ
+	(envelope-from <linux-usb+bounces-36242-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 11:42:33 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD7B44011B0
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 08:53:51 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id F24A0402BF3
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 11:42:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5A05E3072E01
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 06:53:48 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 4197C3048922
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 09:38:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9362F3921F6;
-	Wed, 15 Apr 2026 06:53:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E33D533A029;
+	Wed, 15 Apr 2026 09:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ceDU4Daj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jZPr+B3H"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBB23921E4
-	for <linux-usb@vger.kernel.org>; Wed, 15 Apr 2026 06:53:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6077B33AD85;
+	Wed, 15 Apr 2026 09:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776236027; cv=none; b=gny8/chI+8hSYT49ML2GgA5qQlmkBqOoSzSjte6xU/ImJUhUzKU0ACy7kgRjGs0YAtcy+vgeEwLtbK4ab/VVVSIc4xz+VVpkPg3OUYqxfEwJXpFx7aklWI56xF7UAfoJwdXyKLCK2H3nbR3kw+VNHLgp556lvx3EpAT2Asl3yJ8=
+	t=1776245929; cv=none; b=bbgJ9f+ZAFI3sIw7JBp1gVmr9X0wQXMg91TcZzqneqOkT2Ki4ghReNAH3EVQnQTbmJpCl5aK0vFxJMksx7SW8t+FDKnYDbtxA++d8W4mVJiC4FQEP7z/w9MYyc2fXWA6c42J7T27LuPM8Y/tK/NjQrny9QiWixwy/ATITbK0GGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776236027; c=relaxed/simple;
-	bh=h06io7gcIU78lOPpiwU/zAiBmWgRW7eARf65dBcgVI8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=ggc1scragC59ZTmBNC8qj3vA55VTAgQFZemycUUvafKymhfsD4+sOYvllWNToXjDJ5gW7h2kAxanWdxfkd2iopnYKg5sSrbCOn0sx77p6NGZ+8zwCfgRGgWT34RVlQ3QhalfHuWGl4M2ENFRdqZRZLO/OWBrmhcAvRlWA3oHm6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=ceDU4Daj; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20260415065336epoutp018d442fe56a885c4af30e987d1c88bce0~mdT8FKD3R0752107521epoutp01R
-	for <linux-usb@vger.kernel.org>; Wed, 15 Apr 2026 06:53:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20260415065336epoutp018d442fe56a885c4af30e987d1c88bce0~mdT8FKD3R0752107521epoutp01R
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1776236016;
-	bh=A2Oe+K6G+so/eNF7+ZZwIvrKnrLwucXjD0QcuG1eQEs=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=ceDU4DajGDypaXxcPwkaRQaj5Pc+xvQ4HdZ7TkWqhbsPFKnPDSpYgZTgNqspQ2vxo
-	 1W5zl4gVzOo1lFA30Ydex0Mpren4gOWwhBpxuJToivwDQ6AzSMkujhpXGMJhsfuWGg
-	 rgIdurnX3W1ABjnRolt/SiINeibUsG1TCm0H/7WM=
-Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
-	20260415065335epcas5p1921d6dbdf504c8df78b9d53d2cf52023~mdT7YQFHv1005610056epcas5p1C;
-	Wed, 15 Apr 2026 06:53:35 +0000 (GMT)
-Received: from epcas5p3.samsung.com (unknown [182.195.38.89]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4fwX0t4pwXz6B9m6; Wed, 15 Apr
-	2026 06:53:34 +0000 (GMT)
-Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20260415065334epcas5p3ccec0106ebbf98ae036feab1b762bf9a~mdT52vxcV1892218922epcas5p3Z;
-	Wed, 15 Apr 2026 06:53:34 +0000 (GMT)
-Received: from [107.122.5.126] (unknown [107.122.5.126]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20260415065331epsmtip1ab8cbeb56395313abb9076b4a268a4c1~mdT3kVRLg0303303033epsmtip1d;
-	Wed, 15 Apr 2026 06:53:31 +0000 (GMT)
-Message-ID: <242b06d2-7785-4728-8286-ff79a8dfaaa6@samsung.com>
-Date: Wed, 15 Apr 2026 12:23:29 +0530
+	s=arc-20240116; t=1776245929; c=relaxed/simple;
+	bh=r5vc1JuI0NmO1ufLcnSujmQ430UsiCtxiof7usGgCuM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bsmkvzi5yujBZzpcRwbj+4668DKYT4ptDSrfUXp1rbf/Yc0EgauhSBkMe+DYINA8STqPM0Wpy0WHMkIrpFLi3+UH155BApijonYMBwLIuvRxe7sHzOAc3RPoqQ9TOitQsLOoNjvOxShx3MBm90X7RPjq5qepTK4UmiqvMhwNOCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jZPr+B3H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 141A6C2BCB4;
+	Wed, 15 Apr 2026 09:38:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776245929;
+	bh=r5vc1JuI0NmO1ufLcnSujmQ430UsiCtxiof7usGgCuM=;
+	h=From:Subject:Date:To:Cc:From;
+	b=jZPr+B3HsYd+hr9A+OTyz2y2Qq9/mSlpx+Y3rQBn0bX9iXAA8Kq+YQZD4oO/5WsTJ
+	 wsX6U12u+KWLAcvDZJAk6+C7etgNNsqXR94dURIf0F9W4RWKaIVEif5UFnLDbgwGLY
+	 Igf8rjwptq085OkTDDSgirkT/3rllZNVHGustb3S7Uj/KogefD63zjO8LCK2jLrT6D
+	 4OU5RfJfgD/+dBIA+slguwXxLa6aRVy1It2hK3C+rtcaf/A11vF4V2HT4bWKkE5+aJ
+	 E0ZKsX/W+oypfijaOc7IML4Lilt4QF+4sBVP/NIqFY2ZAOIYSpiTV3KtIxC8apoJX4
+	 drVLksX5TXXvQ==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Subject: [PATCH 0/4] HID: Proper fix for OOM in hid-core
+Date: Wed, 15 Apr 2026 11:38:13 +0200
+Message-Id: <20260415-wip-fix-core-v1-0-ed3c4c823175@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: Fix GUID register programming order
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"paulz@synopsys.com" <paulz@synopsys.com>, "balbi@ti.com" <balbi@ti.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>, "akash.m5@samsung.com"
-	<akash.m5@samsung.com>, "h10.kim@samsung.com" <h10.kim@samsung.com>,
-	"alim.akhtar@samsung.com" <alim.akhtar@samsung.com>, "thiagu.r@samsung.com"
-	<thiagu.r@samsung.com>, "muhammed.ali@samsung.com"
-	<muhammed.ali@samsung.com>, "stable@vger.kernel.org"
-	<stable@vger.kernel.org>, Pritam Manohar Sutar <pritam.sutar@samsung.com>
-Content-Language: en-US
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-In-Reply-To: <20260415014620.mjmlt6w3ttlzosr3@synopsys.com>
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20260415065334epcas5p3ccec0106ebbf98ae036feab1b762bf9a
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20260410070245epcas5p49355581dcb9f629641c9914ce4ce80ec
-References: <CGME20260410070245epcas5p49355581dcb9f629641c9914ce4ce80ec@epcas5p4.samsung.com>
-	<20260410064735.515-1-selvarasu.g@samsung.com>
-	<20260414010532.sxciijnzak3ldw35@synopsys.com>
-	<d2be3f54-5375-4f1b-ab4b-e2ff81c43630@samsung.com>
-	<20260415014620.mjmlt6w3ttlzosr3@synopsys.com>
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MQQqAIBAAvyJ7bkEjTfpKdAjdai8qChWIf086D
+ sNMhUKZqcAiKmS6uXAMHdQgwF17OAnZd4ZRjkZOSuPDCQ9+0cVMOHurndXKkJfQk5Spu3+3bq1
+ 9oIjJHl4AAAA=
+X-Change-ID: 20260415-wip-fix-core-7d85c8516ed0
+To: Jiri Kosina <jikos@kernel.org>, 
+ =?utf-8?q?Filipe_La=C3=ADns?= <lains@riseup.net>, 
+ Bastien Nocera <hadess@hadess.net>, Ping Cheng <ping.cheng@wacom.com>, 
+ Jason Gerecke <jason.gerecke@wacom.com>, Viresh Kumar <vireshk@kernel.org>, 
+ Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev, 
+ linux-usb@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776245925; l=2605;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=r5vc1JuI0NmO1ufLcnSujmQ430UsiCtxiof7usGgCuM=;
+ b=AEVtDlGIETuRO7ZbHuSO1IbBMWRBRslLQwsR1ORqtNTPP4CHo2ExMTjVQlAguVTyl4lsnFMPZ
+ qkPY2we0cJuCMY3TPltDvi+xnK5tuWvm4kNGP8xLzYkuGmOTwmsx7yP
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[samsung.com:+];
-	TAGGED_FROM(0.00)[bounces-36241-lists,linux-usb=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
+	TAGGED_FROM(0.00)[bounces-36242-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[selvarasu.g@samsung.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bentiss@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_SEVEN(0.00)[8]
-X-Rspamd-Queue-Id: CD7B44011B0
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: F24A0402BF3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Commit 0a3fe972a7cb ("HID: core: Mitigate potential OOB by removing
+bogus memset()") enforced the provided data to be at least the size of
+the declared buffer in the report descriptor to prevent a buffer
+overflow.
 
-On 4/15/2026 7:16 AM, Thinh Nguyen wrote:
-> On Tue, Apr 14, 2026, Selvarasu Ganesan wrote:
->> On 4/14/2026 6:35 AM, Thinh Nguyen wrote:
->>> On Fri, Apr 10, 2026, Selvarasu Ganesan wrote:
->>>> The Linux Version Code is currently written to the GUID register before
->>>> dwc3_core_soft_reset() is executed. Since the core soft reset clears the
->>>> GUID register back to its default value, the version information is
->>>> subsequently lost.
->>> This is not right. Soft reset should not clear the GUID register.
->>> Something else must have cleared it. Did you assert Vcc reset (hard
->>> reset) during phy reset/initialization?
->>>
->>> BR,
->>> Thinh
->> Hi Thinh,
->>
->> Thank you for the clarification. Yes, you are correct, this issue is not
->> related to a dwc3 core soft reset. Instead, the GUID value reverts to
->> its default state when the PHY link_sw_reset completes during PHY init
->> sequence.
->>
->> We are using the Synopsys eUSB PHY, this reset is triggered from our
->> downstream driver during the PHY init sequence (invoked through
->> |dwc3_core_init|).
->>
->> Could you please suggest the best way to retrieve the correct linux
->> version information from the GUID?
->> Additionally, would it be feasible to update the GUID register after the
->> PHY init sequence (triggered by |dwc3_core_init|) completes?
->>
-> Yes. Just fix up the changelog to properly describe the problem and
-> solution.
->
-> BR,
-> Thinh
-Hi Thinh,
+We only had corner cases of malicious devices exposing the OOM because
+in most cases, the buffer provided by the transport layer needs to be
+allocated at probe time and is large enough to handle all the possible
+reports.
 
-Thanks for the confirmation. I have modified the changelog as shown 
-below, please review it once then i will post updated patchset.
+However, the patch from above, which enforces the spec a little bit more
+introduced both regressions for devices not following the spec (not
+necesserally malicious), but also a stream of errors for those devices.
 
+Let's revert to the old behavior by giving more information to HID core
+to be able to decide whether it can or not memset the rest of the buffer
+to 0 and continue the processing.
 
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-Date: Thu, 9 Apr 2026 18:34:03 +0530
-Subject: [PATCH v2] usb: dwc3: Move GUID programming after PHY 
-initialization
+Note that the first commit makes an API change, but the callers are
+relatively limited, so it should be fine on its own. The second patch
+can't really make the same kind of API change because we have too many
+callers in various subsystems. We can switch them one by one to the safe
+approach when needed.
 
-The Linux Version Code is currently written to the GUID register before
-PHY initialization. Certain PHY implementations (such as Synopsys eUSB
-PHY performing link_sw_reset) clear the GUID register to its default
-value during initialization, causing the kernel version information to
-be lost.
+The last 2 patches are small cleanups I initially put together with the
+2 first patches, but they can be applied on their own and don't need to
+be pulled in stable like the first 2.
 
-Move the GUID register programming to occur after PHY initialization
-completes to ensure the Linux version information persists.
+Cheers,
+Benjamin
 
-Fixes: fa0ea13e9f1c ("usb: dwc3: core: write LINUX_VERSION_CODE to our 
-GUID register")
-Cc: stable@vger.kernel.org
-Reported-by: Pritam Manohar Sutar <pritam.sutar@samsung.com>
-Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
-  drivers/usb/dwc3/core.c | 12 ++++++------
-  1 file changed, 6 insertions(+), 6 deletions(-)
+Benjamin Tissoires (4):
+      HID: pass the buffer size to hid_report_raw_event
+      HID: core: introduce hid_safe_input_report()
+      HID: multitouch: use __free(kfree) to clean up temporary buffers
+      HID: wacom: use __free(kfree) to clean up temporary buffers
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 161a4d58b2cec..8b9e9d3e9589a 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1341,12 +1341,6 @@ int dwc3_core_init(struct dwc3 *dwc)
+ drivers/hid/bpf/hid_bpf_dispatch.c |  6 ++--
+ drivers/hid/hid-core.c             | 63 +++++++++++++++++++++++++++++---------
+ drivers/hid/hid-gfrm.c             |  4 +--
+ drivers/hid/hid-logitech-hidpp.c   |  2 +-
+ drivers/hid/hid-multitouch.c       | 18 +++++------
+ drivers/hid/hid-primax.c           |  2 +-
+ drivers/hid/hid-vivaldi-common.c   |  2 +-
+ drivers/hid/i2c-hid/i2c-hid-core.c |  7 +++--
+ drivers/hid/usbhid/hid-core.c      | 11 ++++---
+ drivers/hid/wacom_sys.c            | 46 ++++++++++------------------
+ drivers/staging/greybus/hid.c      |  2 +-
+ include/linux/hid.h                |  6 ++--
+ include/linux/hid_bpf.h            | 14 ++++++---
+ 13 files changed, 105 insertions(+), 78 deletions(-)
+---
+base-commit: 7df6572f1cb381d6b89ceed58e3b076c233c2cd0
+change-id: 20260415-wip-fix-core-7d85c8516ed0
 
-         hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+Best regards,
+-- 
+Benjamin Tissoires <bentiss@kernel.org>
 
--       /*
--        * Write Linux Version Code to our GUID register so it's easy to 
-figure
--        * out which kernel version a bug was found.
--        */
--       dwc3_writel(dwc, DWC3_GUID, LINUX_VERSION_CODE);
--
-         ret = dwc3_phy_setup(dwc);
-         if (ret)
-                 return ret;
-@@ -1374,6 +1368,12 @@ int dwc3_core_init(struct dwc3 *dwc)
-         if (ret)
-                 goto err_exit_ulpi;
-
-+       /*
-+        * Write Linux Version Code to our GUID register so it's easy to 
-figure
-+        * out which kernel version a bug was found.
-+        */
-+       dwc3_writel(dwc, DWC3_GUID, LINUX_VERSION_CODE);
-+
-         ret = dwc3_core_soft_reset(dwc);
-         if (ret)
-                 goto err_exit_phy;
---
-2.34.1
-
-Thanks,
-Selva
 
