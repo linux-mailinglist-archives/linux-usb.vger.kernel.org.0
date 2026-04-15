@@ -1,80 +1,80 @@
-Return-Path: <linux-usb+bounces-36254-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36255-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sDK5BGiL32lFVQAAu9opvQ
-	(envelope-from <linux-usb+bounces-36254-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 14:58:16 +0200
+	id GMP4ITaN32l5VAAAu9opvQ
+	(envelope-from <linux-usb+bounces-36255-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 15:05:58 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C06CC404965
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 14:58:14 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 519A2404A7B
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 15:05:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CE0B83060CB8
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 12:57:57 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 262CA306811C
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 13:00:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D12543321A3;
-	Wed, 15 Apr 2026 12:57:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A9638B13E;
+	Wed, 15 Apr 2026 13:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D+vJCZb7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IbNZ7LSN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0863254A3;
-	Wed, 15 Apr 2026 12:57:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA92738AC70;
+	Wed, 15 Apr 2026 13:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776257876; cv=none; b=ISMlRGL9muCKRnXgmWPER7WEZiyKRk6ELyyQSqQBbQ7ZMtdg35fv1rbE8/0GbnSGpA7O2JXTeVci4P7TR8gjg9g4e6dP9EhN+DmfzqvrOD3j5uNljCHQoI1RrFpBj6PAekqFV67f5xFwEU3DBTv2ADs0yw9RryWy0+DwUoKbo3Y=
+	t=1776258046; cv=none; b=UCfZ7AdoRdgy1w3O0zfKFiS6se+lFPR90ZaP5BVrckyswh25G7J/qehcquiHTUvWMdq9612NyEe/Ku6sAaBcBDpCQKnXqpLoRleyfwgQFOf69yHY1cUEFwhpCSKKsz06tB0/Q4LsUUtD3nTHicpVXBoGBXKjuSHnocBwbYWGFE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776257876; c=relaxed/simple;
-	bh=2BKXwGlQdAGj6DmioexaKwuxqrJSh3vgNJu/czIJiXk=;
+	s=arc-20240116; t=1776258046; c=relaxed/simple;
+	bh=/wccTYWZkHPLieysDH0nItTYtUN2HBNV8VPv1JcjhNY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EsnV1HbOhfRht/v44JCT7OUCAb4TFyQz8ADaSSSlW4p7qbINSZzEE8JsrETfLlEvmQ99h1ilCRZfx8/Xmr3da0MTRK/ZC26UD3ugC7xf2ugKNO71F8lK+A2hSguwkm5x+myz3/Cs358HpZglWSsxXSFpQ7rDpxxWU67WFaH1qmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D+vJCZb7; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZKYMyyn4b718+bxFhwwP6uGNzJKwlMsFdvLJ8k8Yjqe1SHtSxKH9N/5tEzhSQNr+PG3ZFevhz2G3kzBy4ixtsbDnvXy2WCSHf8sskeDJeQzpCe5PDxBrIc8eATDVSOsr2/an3ABO0Pqi+4NxwVJmLSkLiaoi/4WT5HvWtv/j8Hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IbNZ7LSN; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776257875; x=1807793875;
+  t=1776258046; x=1807794046;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=2BKXwGlQdAGj6DmioexaKwuxqrJSh3vgNJu/czIJiXk=;
-  b=D+vJCZb7LfzxR8p3o/GTyk9DPVk2m1pneGtYhX5jYKo+fYCE7e8IUVui
-   mij+grm8BHQ5jLQa4U3701QmyjOSW/WwJdHv2iyAvI0UMsgmBJcfND64R
-   3rCp7eh7fUGaeMHgRpmBLBpTeMlL5HCpBelg2Fm0YsUIFWlC17x4+ob0k
-   Wswj04VPSjQzSfMZWYnNJTJ9GlD80GkOzv5iS7S/vQ7xwSecB7+yBs9pP
-   GnALdIYEL7c/msRQVnyB+lASVWm9i6SYrtnekJW8zOisg7PD/vutmvFu3
-   UObBI74N7Ow9F00nMqKIJtyOKeORCW7H8Q6IFXHmYO4PviYJd3ZcJjQgp
-   Q==;
-X-CSE-ConnectionGUID: k053F4enTHGis9BqhXk4cQ==
-X-CSE-MsgGUID: 4fuZ9PdOR5uolAGLFYKqMQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11759"; a="77413503"
+  bh=/wccTYWZkHPLieysDH0nItTYtUN2HBNV8VPv1JcjhNY=;
+  b=IbNZ7LSNPBdbTEtPHL/V+92f7QoFGPJIRh5MnktbOe6iSxOmJzwc4Ih1
+   Xj6vy0uANHDL3+7/49RcXW4worSjGlnw464CRh7lmEx8ZdZNKTw8Giw14
+   ka+yPRFBlbEbdVCdycP8Ww0ZQWjgT30Y/4slHHnfBSnowO/i84JttSOtT
+   /TPos6M1R7dYWPOdPMQKrnt89DyQfHopTm08cJnzfbgcdK5ZvtvRO+dvD
+   y6v1NxeLTj8Y93QDzQ6wf5hh+Id5OHGzc2gZcxVp3tdPOZestmOpn/yBQ
+   bNVQozEJfeFN+wweWJo8X0ScxsevUEP/7wvAnNxXfQuw0XlO5n8j9E4mg
+   A==;
+X-CSE-ConnectionGUID: yPNtaw3GQ3624iNqXETOtw==
+X-CSE-MsgGUID: KBjWguGiQwe8XUUhK9qZhg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11759"; a="88313864"
 X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="77413503"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2026 05:57:54 -0700
-X-CSE-ConnectionGUID: CeRzRc6oQ8K/pSCRXJnIHA==
-X-CSE-MsgGUID: tg/GxUOLT3CPACJw8F54gQ==
+   d="scan'208";a="88313864"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2026 06:00:45 -0700
+X-CSE-ConnectionGUID: 0y2B0AZdSyKAIrvs1wiC8Q==
+X-CSE-MsgGUID: U+Luu9TuSl2B/4+jYIOGyw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="230266875"
+   d="scan'208";a="223912003"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa009.jf.intel.com with ESMTP; 15 Apr 2026 05:57:52 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 15 Apr 2026 06:00:42 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 0F68D95; Wed, 15 Apr 2026 14:57:51 +0200 (CEST)
-Date: Wed, 15 Apr 2026 15:56:59 +0300
+	id 12B2495; Wed, 15 Apr 2026 15:00:41 +0200 (CEST)
+Date: Wed, 15 Apr 2026 15:59:49 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: linux-usb@vger.kernel.org,
+To: amitsd@google.com
+Cc: Badhri Jagan Sridharan <badhri@google.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL HARDENING (not covered by other areas):Keyword:b__counted_by(_le|_be)?b" <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH] usb: typec: intel_pmc_mux: combine kzalloc + kcalloc
-Message-ID: <ad-LG9g4GI3uuhrE@kuha>
-References: <20260411023642.146890-1-rosenp@gmail.com>
+	Kyle Tso <kyletso@google.com>, Guenter Roeck <groeck@chromium.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	RD Babiera <rdbabiera@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: tcpm: reset internal port states on soft
+ reset AMS
+Message-ID: <ad-LxWf5pYemrT9c@kuha>
+References: <20260414-fix-soft-reset-v1-1-01d7cb9764e2@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -83,117 +83,126 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260411023642.146890-1-rosenp@gmail.com>
+In-Reply-To: <20260414-fix-soft-reset-v1-1-01d7cb9764e2@google.com>
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36254-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36255-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim]
-X-Rspamd-Queue-Id: C06CC404965
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:dkim,intel.com:email]
+X-Rspamd-Queue-Id: 519A2404A7B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Rosen,
-
-On Fri, Apr 10, 2026 at 07:36:42PM -0700, Rosen Penev wrote:
-> A flexible array member can be used to combine allocations and simplify
-> handling slightly.
+On Tue, Apr 14, 2026 at 12:58:32AM +0000, Amit Sunil Dhamne via B4 Relay wrote:
+> From: Amit Sunil Dhamne <amitsd@google.com>
 > 
-> Add __counted_by for extra runtime analysis.
+> Reset internal port states (such as vdm_sm_running and
+> explicit_contract) on soft reset AMS as the port needs to negotiate a
+> new contract. The consequence of leaving the states in as-is cond are as
+> follows:
+>   * port is in SRC power role and an explicit contract is negotiated
+>     with the port partner (in sink role)
+>   * port partner sends a Soft Reset AMS while VDM State Machine is
+>     running
+>   * port accepts the Soft Reset request and the port advertises src caps
+>   * port partner sends a Request message but since the explicit_contract
+>     and vdm_sm_running are true from previous negotiation, the port ends
+>     up sending Soft Reset instead of Accept msg.
+> 
+> Stub Log:
+> [  203.653942] AMS DISCOVER_IDENTITY start
+> [  203.653947] PD TX, header: 0x176f
+> [  203.655901] PD TX complete, status: 0
+> [  203.657470] PD RX, header: 0x124f [1]
+> [  203.657477] Rx VDM cmd 0xff008081 type 2 cmd 1 len 1
+> [  203.657482] AMS DISCOVER_IDENTITY finished
+> [  203.657484] cc:=4
+> [  204.155698] PD RX, header: 0x144f [1]
+> [  204.155718] Rx VDM cmd 0xeeee8001 type 0 cmd 1 len 1
+> [  204.155741] PD TX, header: 0x196f
+> [  204.157622] PD TX complete, status: 0
+> [  204.160060] PD RX, header: 0x4d [1]
+> [  204.160066] state change SRC_READY -> SOFT_RESET [rev2 SOFT_RESET_AMS]
+> [  204.160076] PD TX, header: 0x163
+> [  204.162486] PD TX complete, status: 0
+> [  204.162832] AMS SOFT_RESET_AMS finished
+> [  204.162840] cc:=4
+> [  204.162891] AMS POWER_NEGOTIATION start
+> [  204.162896] state change SOFT_RESET -> AMS_START [rev2 POWER_NEGOTIATION]
+> [  204.162908] state change AMS_START -> SRC_SEND_CAPABILITIES [rev2 POWER_NEGOTIATION]
+> [  204.162913] PD TX, header: 0x1361
+> [  204.165529] PD TX complete, status: 0
+> [  204.165571] pending state change SRC_SEND_CAPABILITIES -> SRC_SEND_CAPABILITIES_TIMEOUT @ 60 ms [rev2 POWER_NEGOTIATION]
+> [  204.166996] PD RX, header: 0x1242 [1]
+> [  204.167009] state change SRC_SEND_CAPABILITIES -> SRC_SOFT_RESET_WAIT_SNK_TX [rev2 POWER_NEGOTIATION]
+> [  204.167019] AMS POWER_NEGOTIATION finished
+> [  204.167020] cc:=4
+> [  204.167083] AMS SOFT_RESET_AMS start
+> [  204.167086] state change SRC_SOFT_RESET_WAIT_SNK_TX -> SOFT_RESET_SEND [rev2 SOFT_RESET_AMS]
+> [  204.167092] PD TX, header: 0x16d
+> [  204.168824] PD TX complete, status: 0
+> [  204.168854] pending state change SOFT_RESET_SEND -> HARD_RESET_SEND @ 60 ms [rev2 SOFT_RESET_AMS]
+> [  204.171876] PD RX, header: 0x43 [1]
+> [  204.171879] AMS SOFT_RESET_AMS finished
+> 
+> This causes COMMON.PROC.PD.11.2 check failure for
+> TEST.PD.VDM.SRC.2_Rev2Src test on the PD compliance tester.
+> 
+> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> Fixes: 8d3a0578ad1a ("usb: typec: tcpm: Respond Wait if VDM state machine is running")
+> Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
 
-One nitpick below.
-Otherwise this looks okay to me.
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
 > ---
->  drivers/usb/typec/mux/intel_pmc_mux.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
+>  drivers/usb/typec/tcpm/tcpm.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-> index 1698428654ab..8b0a3dd3f940 100644
-> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-> @@ -151,13 +151,14 @@ struct pmc_usb {
->  	u8 num_ports;
->  	struct device *dev;
->  	struct intel_scu_ipc_dev *ipc;
-> -	struct pmc_usb_port *port;
->  	struct acpi_device *iom_adev;
->  	void __iomem *iom_base;
->  	u32 iom_port_status_offset;
->  	u8 iom_port_status_size;
->  
->  	struct dentry *dentry;
-> +
-> +	struct pmc_usb_port port[] __counted_by(num_ports);
->  };
->  
->  static struct dentry *pmc_mux_debugfs_root;
-> @@ -731,27 +732,26 @@ static int pmc_usb_probe(struct platform_device *pdev)
->  {
->  	struct fwnode_handle *fwnode = NULL;
->  	struct pmc_usb *pmc;
-> +	u8 num_ports;
->  	int i = 0;
->  	int ret;
->  
-> -	pmc = devm_kzalloc(&pdev->dev, sizeof(*pmc), GFP_KERNEL);
-> -	if (!pmc)
-> -		return -ENOMEM;
-> -
->  	device_for_each_child_node(&pdev->dev, fwnode)
-> -		pmc->num_ports++;
-> +		num_ports++;
->  
->  	/* The IOM microcontroller has a limitation of max 4 ports. */
-> -	if (pmc->num_ports > 4) {
-> +	if (num_ports > 4) {
->  		dev_err(&pdev->dev, "driver limited to 4 ports\n");
->  		return -ERANGE;
->  	}
->  
-> -	pmc->port = devm_kcalloc(&pdev->dev, pmc->num_ports,
-> -				 sizeof(struct pmc_usb_port), GFP_KERNEL);
-> -	if (!pmc->port)
-> +	pmc = devm_kzalloc(&pdev->dev, struct_size(pmc, port, num_ports),
-> +			GFP_KERNEL);
-
-One line is enough for that.
-
-> +	if (!pmc)
->  		return -ENOMEM;
->  
-> +	pmc->num_ports = num_ports;
-> +
->  	pmc->ipc = devm_intel_scu_ipc_dev_get(&pdev->dev);
->  	if (!pmc->ipc)
->  		return -EPROBE_DEFER;
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 8e0e14a2704e..c73e5daafcf1 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -5534,6 +5534,8 @@ static void run_state_machine(struct tcpm_port *port)
+>  		usb_power_delivery_unregister_capabilities(port->partner_source_caps);
+>  		port->partner_source_caps = NULL;
+>  		tcpm_pd_send_control(port, PD_CTRL_ACCEPT, TCPC_TX_SOP);
+> +		port->vdm_sm_running = false;
+> +		port->explicit_contract = false;
+>  		tcpm_ams_finish(port);
+>  		if (port->pwr_role == TYPEC_SOURCE) {
+>  			port->upcoming_state = SRC_SEND_CAPABILITIES;
+> 
+> ---
+> base-commit: 81dc1e4d32b064ac47abc60b0acbf49b66a34d52
+> change-id: 20260407-fix-soft-reset-e857ff5e9d36
+> 
+> Best regards,
 > -- 
-> 2.53.0
-
-thanks,
+> Amit Sunil Dhamne <amitsd@google.com>
+> 
 
 -- 
 heikki
