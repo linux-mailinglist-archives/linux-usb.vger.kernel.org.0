@@ -1,309 +1,158 @@
-Return-Path: <linux-usb+bounces-36246-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36247-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EAp9J+Bc32n1RwAAu9opvQ
-	(envelope-from <linux-usb+bounces-36246-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 11:39:44 +0200
+	id qJExNQZ632nFTgAAu9opvQ
+	(envelope-from <linux-usb+bounces-36247-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 13:44:06 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80177402B5F
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 11:39:44 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39276403F8C
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 13:44:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 976203044EE2
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 09:39:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6743D3014BEB
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 11:41:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDAF734404E;
-	Wed, 15 Apr 2026 09:39:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 665E534A3DB;
+	Wed, 15 Apr 2026 11:41:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c0aN0MKJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rnomJd9M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E9733EAED;
-	Wed, 15 Apr 2026 09:39:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776245943; cv=none; b=RKRzpa5NLw2to+Gr4Gjmlj25992qqTZCF1xTrfB5/i1nfo/T9g7aTuWKfndtOWwP9KcCuq/6hCuUJXHL4y8jEYPF0aJf4/HTHl9NdTB0DetOtrzIzoVjt2n8TmAB1rzIbiml3En0juI/M/z+bTb7jIRbbGJ2yuKeHNya0evuQRY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776245943; c=relaxed/simple;
-	bh=Pa/2L7eIdmrjdbfKI3MgdidyJjVklBaEyUx380P8wuQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=A1HzpcS2g/tp6wiJEAgHn5CU0wsVyq0QNWjju1HiVDfQFe7M0xpyxDEphA7vMkGy8vlYHss0StTBq/txO3h0HaA4aJ4rJps5tNUOxepSkdyiOAucH5eDydqG2dxzGqc7uSrTOFae/VESusUVW+3yp05X1Go2pcBGiBj7xzizYtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c0aN0MKJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B43DC2BCB5;
-	Wed, 15 Apr 2026 09:39:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776245943;
-	bh=Pa/2L7eIdmrjdbfKI3MgdidyJjVklBaEyUx380P8wuQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=c0aN0MKJyBm9bTh6R4TV4N2SEYc7mLxtaBzqWedRdWwfUe1tU2kMwH+QaWFYaBYVV
-	 KlCd4YsGAbO5YrrJ5xRKCQtEZYrFcrMXAT7QgD/JSGlRNUCVRc7z7BsRuLr9M01X/e
-	 Ksyy/LlZRxjkr1usvyBIR6xEQ1DyxJ3W8cdAKi1RahJecm9n+xXffDptiw6xaw3c1V
-	 zzCwT8hI6TUuJRXX4vj2QXsrZFPn3MQBqYikeo6T6L9sg6ptFBbFQXfJ1fQksw2/rJ
-	 h1EYlQ5b3lS25HJyMZqwdmn0kgitQBDKge5BoDLMnsI0seFDSm1dEoWVPPbkOcvbsR
-	 3qaRoVOiiaizw==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Wed, 15 Apr 2026 11:38:17 +0200
-Subject: [PATCH 4/4] HID: wacom: use __free(kfree) to clean up temporary
- buffers
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A8D33EB0E
+	for <linux-usb@vger.kernel.org>; Wed, 15 Apr 2026 11:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776253293; cv=pass; b=Gmws4o9Sj1mDIREZnYgv+CfaLwhPAmLJSlExukTCJvLkjQNp/ItEcaZWrCn0rLVcndz3oBuK7+BYIMuSbdgpnO+ZJ+UEcfWzZj1OyWtB/YyyP4gnCbAh9Kz3IyyMzi8Szce3hS182BTtOgBjpAcsl2HE7MBfz8+umINPMnwAkms=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776253293; c=relaxed/simple;
+	bh=XtvTXhSZYqUwWyop+bM9L7kSLPdbl+twBxtseI9Z8Zg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AZev5rOx1Ng7QFiXqiKtjtGDpNYPzseJXBvOLxvsX9Xc+AP1AeQKxrD+NHsRJzKVwsTumCQO2lTzrrnPe7rv8SOG31i0tOv5w/vGaZkI2SzD23UXHx8g4aMLu6aAUcH8mHVH8SuKoVrLgmm+HrodUMsjD/V/lW89RJI+epmt91U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rnomJd9M; arc=pass smtp.client-ip=74.125.224.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-651bf4a4140so3955553d50.0
+        for <linux-usb@vger.kernel.org>; Wed, 15 Apr 2026 04:41:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776253291; cv=none;
+        d=google.com; s=arc-20240605;
+        b=YDGQd8/6AEP2brJMB/NDF6ZPx6KjQ1FRr2cf79e5NXeBS49Qp9mZezIAqthi7ANivQ
+         P3otmHBGfURrJdarbSJH2u/uISGZhIUpHB1w1eLSnaEvLlROizuzOZkqzm3skXybP3M5
+         Xn2yzEYU2dFA8QN1mh+TCFBJMprC9VuXFyOoVnGDhjc6NFeT8fq+ZeOoeRhiHOsQCKxv
+         QFU9D3oOAONTWaHPVWcbhpKq1eH8kURS+mYQNn+qHTMQJuty8iGmfgD2WGpLwGaYEsGn
+         hCd0b0uEKkBu6PhYjfC4Fh3yDHtCgHLVk4+IDAkeWHs3wyxmDbMguckWOkK4TCkV6czg
+         dPWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=h2zOB9TAg/s8m5HPIg6Gu5ZC7aBbUnPW4iigiNwSb9k=;
+        fh=m3kMK+8hLg7Az/x45Jz+UYr6QDJ69x+rnefpMpYOQJY=;
+        b=XwVIFsn7ktQwVNOVH5xbFLAQbAlEZqc/AgfNU6l59/ITm/ZExzzb/l/nN/4svXaTGM
+         9HY7f2dlx/4du94qxKmN/tNkcvmzmMn6rxagVwbgwgyZwkVBrUqaKHeCmtGB4DoAR2M7
+         N/Hf69jVxrI3tUgKN0A8zuPGZesZowARrpPZhPxZ/y8PTyBvSLrR0HHhSoXoKWEMQghh
+         jO1OswvTcp/8phpvb3+c2Qd4EGksXFnQ9PGbQ8TRmeTRri0uVQtCrVs+Y9F6tt4ffyK6
+         lbXrj94Wra1qju+S5fHqODBPZS0dZXC3YMhrGvVNYO4aAJbOREFzRbffZi5fjFg/PJ9j
+         cDnw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776253291; x=1776858091; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h2zOB9TAg/s8m5HPIg6Gu5ZC7aBbUnPW4iigiNwSb9k=;
+        b=rnomJd9MMJKYtKg7kuGDO8nEsS3VWRlvGHj0yt7ySsqUM3x6q0V6yX3PFc78oytbq/
+         GcfO9YJNJVwsr2Lq6CgrHnx7Z2BBGCdbSmlQC9liUC4IwkfJepot5IbNehBXsJMb/05Z
+         gsa+sWEyq24A7Ewn5J7AcFmKnZe4Htaw26Ne1xxfHkg8yOZhINWFLXmdomfiRrc5Wg38
+         BbiZQ1XQjb/aY9cEczcP4GCm1KW+m3TrX8Jjp29vL/q8/xe2lMeBAG9achzjNEPhM8ha
+         CiIrwqAE/Oam+x10t18OQJrUybdPT4m8G3jzNny3GlpbxgKQ9BGTTGaD8Ue6Hs+GEqxi
+         tNCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776253291; x=1776858091;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=h2zOB9TAg/s8m5HPIg6Gu5ZC7aBbUnPW4iigiNwSb9k=;
+        b=YUYGNNgLX13q/VvnxJl8Qetk1m6VkudZO7eovaiC0Y3+rpftW8XVYtmvM1QpvdWNBv
+         EZYK6oapbB4PJJGdcLiNaG1YkDFeSaX71AlUgueVfdLksJCgAoXX0M3TcydruwphscmD
+         jl/kLyK51SPzc2eND1/awqH81ZQkWElIvWWPzz716hyO7PyGpNH2k/OVU+tDnpriKu6e
+         52D7l7A9sEnEsFDtpOWB3/vTr+xm9b2QwZ//7ZnqGBg388iObjdGR8ybgrIoIGLgYQYC
+         m1xwF8jrLxGr4K3URnBxLFIii/yqQQx25Le6M2nxJFtjPPjxMBWAgpuOcr5aERHe191K
+         NfgQ==
+X-Gm-Message-State: AOJu0YyFLDI+mj1k/41J/qc5+FMHJu34GxwNbraJSAL8ReWqeRRNQm/f
+	MjlRW7pXQVOO1n2vM3NTZyQoAKZLhAGufEPbg67h7VyO3NQskJEClpQ/y535xUO12f/P/LVcwqG
+	J2d75lKEFXDCb2zSOTStn1XTirLgt21Y=
+X-Gm-Gg: AeBDiesATHq+Oh+I9+R/ObMatQ7NfGmEGfO7GOvkLOkaBXYFLyf3wxjNkcWzLRRYMjB
+	iMZxZf1l5/h8WMYNdpFQNHYnjk2YKrOE6YJu0s9lrf6rfRIG8OcLjOKuAZYHFydayR+4LJgXg9p
+	/eHl6Z6VpytM/dmGDkmqUhwe+qMkWeGRKIBMxgtBFcMgDn7A98VDajmaW5VICvQrf5KkSyBcWg6
+	M37U6BUrjiiHoddQ/cv5J5+oTwUWIavNJerdMrStz9vKmcPq2Yr4uvbcS46Gbcc4gV+vveFSxwA
+	TMDlHbXXU4hD+9xCCC+RIPfOcdZWOIjlt8f6LB1Y3lyrV5o=
+X-Received: by 2002:a05:690e:4087:b0:651:b774:5f65 with SMTP id
+ 956f58d0204a3-651b77469eamr14707540d50.57.1776253290931; Wed, 15 Apr 2026
+ 04:41:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260415-wip-fix-core-v1-4-ed3c4c823175@kernel.org>
-References: <20260415-wip-fix-core-v1-0-ed3c4c823175@kernel.org>
-In-Reply-To: <20260415-wip-fix-core-v1-0-ed3c4c823175@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, 
- =?utf-8?q?Filipe_La=C3=ADns?= <lains@riseup.net>, 
- Bastien Nocera <hadess@hadess.net>, Ping Cheng <ping.cheng@wacom.com>, 
- Jason Gerecke <jason.gerecke@wacom.com>, Viresh Kumar <vireshk@kernel.org>, 
- Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>
-Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
- greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev, 
- linux-usb@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1776245925; l=6343;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=Pa/2L7eIdmrjdbfKI3MgdidyJjVklBaEyUx380P8wuQ=;
- b=vhEu+X9T66hBNoOYo7P05gF1lMEmsh9t5aU8x+zJIuPvy9dGXF9cn/pcOPluf0mPx1Ul5LioQ
- SLmszMqNYXgDDA9cGsq1vxSJqCI1Kf+daEzRjJYf5wfIfoypihzpRoZ
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+References: <20260415032335.2826412-1-michael.bommarito@gmail.com>
+ <20260415032335.2826412-2-michael.bommarito@gmail.com> <20260415045246.GR3552@black.igk.intel.com>
+In-Reply-To: <20260415045246.GR3552@black.igk.intel.com>
+From: Michael Bommarito <michael.bommarito@gmail.com>
+Date: Wed, 15 Apr 2026 07:41:19 -0400
+X-Gm-Features: AQROBzBiK2K2kOfuGetdT2HWOxscLehtzCui_N48TT7VXvWcAO_8-a8BpIp726w
+Message-ID: <CAJJ9bXwb+de7k3cYZ2nbX1bBFjLC_qJVS36UNfxwGBuPd_DM4w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thunderbolt: property: harden XDomain property parser
+ against crafted peer
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, Mika Westerberg <westeri@kernel.org>, 
+	Andreas Noever <andreas.noever@gmail.com>, Yehezkel Bernat <YehezkelShB@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36246-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,gmail.com,linuxfoundation.org];
+	TAGGED_FROM(0.00)[bounces-36247-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bentiss@kernel.org,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[michaelbommarito@gmail.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 80177402B5F
+	RCPT_COUNT_SEVEN(0.00)[8];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com]
+X-Rspamd-Queue-Id: 39276403F8C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-This simplifies error handling and protects against memory leaks.
+On Wed, Apr 15, 2026 at 12:52=E2=80=AFAM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+> Please split this patch into 3 patches that all deal with one issue at th=
+e
+> time.
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
----
- drivers/hid/wacom_sys.c | 40 +++++++++++++---------------------------
- 1 file changed, 13 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
-index a32320b351e3..adb31f54e524 100644
---- a/drivers/hid/wacom_sys.c
-+++ b/drivers/hid/wacom_sys.c
-@@ -70,11 +70,10 @@ static void wacom_wac_queue_flush(struct hid_device *hdev,
- {
- 	while (!kfifo_is_empty(fifo)) {
- 		int size = kfifo_peek_len(fifo);
--		u8 *buf;
- 		unsigned int count;
- 		int err;
- 
--		buf = kzalloc(size, GFP_KERNEL);
-+		u8 *buf __free(kfree) = kzalloc(size, GFP_KERNEL);
- 		if (!buf) {
- 			kfifo_skip(fifo);
- 			continue;
-@@ -87,7 +86,6 @@ static void wacom_wac_queue_flush(struct hid_device *hdev,
- 			// to flush seems reasonable enough, however.
- 			hid_warn(hdev, "%s: removed fifo entry with unexpected size\n",
- 				 __func__);
--			kfree(buf);
- 			continue;
- 		}
- 		err = hid_report_raw_event(hdev, HID_INPUT_REPORT, buf, size, size, false);
-@@ -95,8 +93,6 @@ static void wacom_wac_queue_flush(struct hid_device *hdev,
- 			hid_warn(hdev, "%s: unable to flush event due to error %d\n",
- 				 __func__, err);
- 		}
--
--		kfree(buf);
- 	}
- }
- 
-@@ -311,7 +307,6 @@ static void wacom_feature_mapping(struct hid_device *hdev,
- 	struct wacom_features *features = &wacom->wacom_wac.features;
- 	struct hid_data *hid_data = &wacom->wacom_wac.hid_data;
- 	unsigned int equivalent_usage = wacom_equivalent_usage(usage->hid);
--	u8 *data;
- 	int ret;
- 	u32 n;
- 
-@@ -325,10 +320,11 @@ static void wacom_feature_mapping(struct hid_device *hdev,
- 		/* leave touch_max as is if predefined */
- 		if (!features->touch_max) {
- 			/* read manually */
--			n = hid_report_len(field->report);
--			data = hid_alloc_report_buf(field->report, GFP_KERNEL);
-+			u8 *data __free(kfree) = hid_alloc_report_buf(field->report, GFP_KERNEL);
-+
- 			if (!data)
- 				break;
-+			n = hid_report_len(field->report);
- 			data[0] = field->report->id;
- 			ret = wacom_get_report(hdev, HID_FEATURE_REPORT,
- 					       data, n, WAC_CMD_RETRIES);
-@@ -344,7 +340,6 @@ static void wacom_feature_mapping(struct hid_device *hdev,
- 					 "defaulting to %d\n",
- 					  features->touch_max);
- 			}
--			kfree(data);
- 		}
- 		break;
- 	case HID_DG_INPUTMODE:
-@@ -386,10 +381,11 @@ static void wacom_feature_mapping(struct hid_device *hdev,
- 	case WACOM_HID_WD_OFFSETRIGHT:
- 	case WACOM_HID_WD_OFFSETBOTTOM:
- 		/* read manually */
--		n = hid_report_len(field->report);
--		data = hid_alloc_report_buf(field->report, GFP_KERNEL);
-+		u8 *data __free(kfree) = hid_alloc_report_buf(field->report, GFP_KERNEL);
-+
- 		if (!data)
- 			break;
-+		n = hid_report_len(field->report);
- 		data[0] = field->report->id;
- 		ret = wacom_get_report(hdev, HID_FEATURE_REPORT,
- 					data, n, WAC_CMD_RETRIES);
-@@ -400,7 +396,6 @@ static void wacom_feature_mapping(struct hid_device *hdev,
- 			hid_warn(hdev, "%s: could not retrieve sensor offsets\n",
- 				 __func__);
- 		}
--		kfree(data);
- 		break;
- 	}
- }
-@@ -581,7 +576,6 @@ static int wacom_hid_set_device_mode(struct hid_device *hdev)
- static int wacom_set_device_mode(struct hid_device *hdev,
- 				 struct wacom_wac *wacom_wac)
- {
--	u8 *rep_data;
- 	struct hid_report *r;
- 	struct hid_report_enum *re;
- 	u32 length;
-@@ -595,7 +589,7 @@ static int wacom_set_device_mode(struct hid_device *hdev,
- 	if (!r)
- 		return -EINVAL;
- 
--	rep_data = hid_alloc_report_buf(r, GFP_KERNEL);
-+	u8 *rep_data __free(kfree) = hid_alloc_report_buf(r, GFP_KERNEL);
- 	if (!rep_data)
- 		return -ENOMEM;
- 
-@@ -614,8 +608,6 @@ static int wacom_set_device_mode(struct hid_device *hdev,
- 		 rep_data[1] != wacom_wac->mode_report &&
- 		 limit++ < WAC_MSG_RETRIES);
- 
--	kfree(rep_data);
--
- 	return error < 0 ? error : 0;
- }
- 
-@@ -921,7 +913,6 @@ static int wacom_add_shared_data(struct hid_device *hdev)
- 
- static int wacom_led_control(struct wacom *wacom)
- {
--	unsigned char *buf;
- 	int retval;
- 	unsigned char report_id = WAC_CMD_LED_CONTROL;
- 	int buf_size = 9;
-@@ -940,7 +931,8 @@ static int wacom_led_control(struct wacom *wacom)
- 		report_id = WAC_CMD_WL_INTUOSP2;
- 		buf_size = 51;
- 	}
--	buf = kzalloc(buf_size, GFP_KERNEL);
-+
-+	unsigned char *buf __free(kfree) = kzalloc(buf_size, GFP_KERNEL);
- 	if (!buf)
- 		return -ENOMEM;
- 
-@@ -996,7 +988,6 @@ static int wacom_led_control(struct wacom *wacom)
- 
- 	retval = wacom_set_report(wacom->hdev, HID_FEATURE_REPORT, buf, buf_size,
- 				  WAC_CMD_RETRIES);
--	kfree(buf);
- 
- 	return retval;
- }
-@@ -1004,11 +995,10 @@ static int wacom_led_control(struct wacom *wacom)
- static int wacom_led_putimage(struct wacom *wacom, int button_id, u8 xfer_id,
- 		const unsigned len, const void *img)
- {
--	unsigned char *buf;
- 	int i, retval;
- 	const unsigned chunk_len = len / 4; /* 4 chunks are needed to be sent */
- 
--	buf = kzalloc(chunk_len + 3 , GFP_KERNEL);
-+	unsigned char *buf __free(kfree) = kzalloc(chunk_len + 3, GFP_KERNEL);
- 	if (!buf)
- 		return -ENOMEM;
- 
-@@ -1018,7 +1008,7 @@ static int wacom_led_putimage(struct wacom *wacom, int button_id, u8 xfer_id,
- 	retval = wacom_set_report(wacom->hdev, HID_FEATURE_REPORT, buf, 2,
- 				  WAC_CMD_RETRIES);
- 	if (retval < 0)
--		goto out;
-+		return retval;
- 
- 	buf[0] = xfer_id;
- 	buf[1] = button_id & 0x07;
-@@ -1038,8 +1028,6 @@ static int wacom_led_putimage(struct wacom *wacom, int button_id, u8 xfer_id,
- 	wacom_set_report(wacom->hdev, HID_FEATURE_REPORT, buf, 2,
- 			 WAC_CMD_RETRIES);
- 
--out:
--	kfree(buf);
- 	return retval;
- }
- 
-@@ -1948,10 +1936,9 @@ static int wacom_remote_create_attr_group(struct wacom *wacom, __u32 serial,
- static int wacom_cmd_unpair_remote(struct wacom *wacom, unsigned char selector)
- {
- 	const size_t buf_size = 2;
--	unsigned char *buf;
- 	int retval;
- 
--	buf = kzalloc(buf_size, GFP_KERNEL);
-+	unsigned char *buf __free(kfree) = kzalloc(buf_size, GFP_KERNEL);
- 	if (!buf)
- 		return -ENOMEM;
- 
-@@ -1960,7 +1947,6 @@ static int wacom_cmd_unpair_remote(struct wacom *wacom, unsigned char selector)
- 
- 	retval = wacom_set_report(wacom->hdev, HID_OUTPUT_REPORT, buf,
- 				  buf_size, WAC_CMD_RETRIES);
--	kfree(buf);
- 
- 	return retval;
- }
-
--- 
-2.53.0
-
+Will do.  Sorry for the verbosity and bus confusion!  Look for another vers=
+ion
+shortly.
 
