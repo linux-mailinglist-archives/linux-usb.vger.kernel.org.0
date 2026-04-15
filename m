@@ -1,164 +1,233 @@
-Return-Path: <linux-usb+bounces-36240-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36241-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ADR4MLwz32lqQAAAu9opvQ
-	(envelope-from <linux-usb+bounces-36240-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 08:44:12 +0200
+	id jN5REgA232nAQQAAu9opvQ
+	(envelope-from <linux-usb+bounces-36241-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 08:53:52 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38675400FCC
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 08:44:12 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD7B44011B0
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 08:53:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C2E623032984
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 06:43:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5A05E3072E01
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2026 06:53:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82FE83909AC;
-	Wed, 15 Apr 2026 06:42:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9362F3921F6;
+	Wed, 15 Apr 2026 06:53:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ceDU4Daj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AF4B1F2380;
-	Wed, 15 Apr 2026 06:42:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBB23921E4
+	for <linux-usb@vger.kernel.org>; Wed, 15 Apr 2026 06:53:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776235379; cv=none; b=YxomhkmhVRoPEKXG8NBiXWCCZrmVhHxhkC9DzTVvk/Q2Ki1v9a01yhxsAdoYfN3hRxihihzrMnBb9TWPNuSBHiyb+6Zj6KQ/vsnKBUmbw3XIL5ig5NXgDJ1DJHMDo0+ThAW+apQDAXKyvq/l2GtarldpmZVTkj2Juv8h/UZhOr4=
+	t=1776236027; cv=none; b=gny8/chI+8hSYT49ML2GgA5qQlmkBqOoSzSjte6xU/ImJUhUzKU0ACy7kgRjGs0YAtcy+vgeEwLtbK4ab/VVVSIc4xz+VVpkPg3OUYqxfEwJXpFx7aklWI56xF7UAfoJwdXyKLCK2H3nbR3kw+VNHLgp556lvx3EpAT2Asl3yJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776235379; c=relaxed/simple;
-	bh=4feWVL1jWWFUHUQ97/N4BrM5XufWLfKISIcTIH8Q0pM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nNQfRE8COq7vQlfbbmFUn3VroTWF7Z1/RPznMb6PlYVFormvSRpp+DyyOcTf6ko5vETSPK7dyK30CXvGGO3SrYU+2IHPt1IPotqAd7E4vUWRqitNU9A8ytL++W1XZ2iPS6Y9vnFjEoIN2OPMtYFToJf3K4rmZAyr2XTj/Mx/T9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=4.193.249.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from E0006493LT.eswin.cn (unknown [10.127.112.153])
-	by app1 (Coremail) with SMTP id TAJkCgDniHJhM99pLN0RAA--.7331S4;
-	Wed, 15 Apr 2026 14:42:43 +0800 (CST)
-From: caohang@eswincomputing.com
-To: gregkh@linuxfoundation.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	Thinh.Nguyen@synopsys.com,
-	p.zabel@pengutronix.de,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org
-Cc: ningyu@eswincomputing.com,
-	linmin@eswincomputing.com,
-	pinkesh.vaghela@einfochips.com,
-	Hang Cao <caohang@eswincomputing.com>
-Subject: [PATCH v2 1/1] dt-bindings: usb: Fix EIC7700 USB reset's issue
-Date: Wed, 15 Apr 2026 14:42:38 +0800
-Message-ID: <20260415064238.1784-1-caohang@eswincomputing.com>
-X-Mailer: git-send-email 2.45.1.windows.1
-In-Reply-To: <20260415064056.1757-1-caohang@eswincomputing.com>
-References: <20260415064056.1757-1-caohang@eswincomputing.com>
+	s=arc-20240116; t=1776236027; c=relaxed/simple;
+	bh=h06io7gcIU78lOPpiwU/zAiBmWgRW7eARf65dBcgVI8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=ggc1scragC59ZTmBNC8qj3vA55VTAgQFZemycUUvafKymhfsD4+sOYvllWNToXjDJ5gW7h2kAxanWdxfkd2iopnYKg5sSrbCOn0sx77p6NGZ+8zwCfgRGgWT34RVlQ3QhalfHuWGl4M2ENFRdqZRZLO/OWBrmhcAvRlWA3oHm6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=ceDU4Daj; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20260415065336epoutp018d442fe56a885c4af30e987d1c88bce0~mdT8FKD3R0752107521epoutp01R
+	for <linux-usb@vger.kernel.org>; Wed, 15 Apr 2026 06:53:36 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20260415065336epoutp018d442fe56a885c4af30e987d1c88bce0~mdT8FKD3R0752107521epoutp01R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1776236016;
+	bh=A2Oe+K6G+so/eNF7+ZZwIvrKnrLwucXjD0QcuG1eQEs=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=ceDU4DajGDypaXxcPwkaRQaj5Pc+xvQ4HdZ7TkWqhbsPFKnPDSpYgZTgNqspQ2vxo
+	 1W5zl4gVzOo1lFA30Ydex0Mpren4gOWwhBpxuJToivwDQ6AzSMkujhpXGMJhsfuWGg
+	 rgIdurnX3W1ABjnRolt/SiINeibUsG1TCm0H/7WM=
+Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
+	20260415065335epcas5p1921d6dbdf504c8df78b9d53d2cf52023~mdT7YQFHv1005610056epcas5p1C;
+	Wed, 15 Apr 2026 06:53:35 +0000 (GMT)
+Received: from epcas5p3.samsung.com (unknown [182.195.38.89]) by
+	epsnrtp01.localdomain (Postfix) with ESMTP id 4fwX0t4pwXz6B9m6; Wed, 15 Apr
+	2026 06:53:34 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20260415065334epcas5p3ccec0106ebbf98ae036feab1b762bf9a~mdT52vxcV1892218922epcas5p3Z;
+	Wed, 15 Apr 2026 06:53:34 +0000 (GMT)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20260415065331epsmtip1ab8cbeb56395313abb9076b4a268a4c1~mdT3kVRLg0303303033epsmtip1d;
+	Wed, 15 Apr 2026 06:53:31 +0000 (GMT)
+Message-ID: <242b06d2-7785-4728-8286-ff79a8dfaaa6@samsung.com>
+Date: Wed, 15 Apr 2026 12:23:29 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: dwc3: Fix GUID register programming order
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"paulz@synopsys.com" <paulz@synopsys.com>, "balbi@ti.com" <balbi@ti.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>, "akash.m5@samsung.com"
+	<akash.m5@samsung.com>, "h10.kim@samsung.com" <h10.kim@samsung.com>,
+	"alim.akhtar@samsung.com" <alim.akhtar@samsung.com>, "thiagu.r@samsung.com"
+	<thiagu.r@samsung.com>, "muhammed.ali@samsung.com"
+	<muhammed.ali@samsung.com>, "stable@vger.kernel.org"
+	<stable@vger.kernel.org>, Pritam Manohar Sutar <pritam.sutar@samsung.com>
+Content-Language: en-US
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <20260415014620.mjmlt6w3ttlzosr3@synopsys.com>
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:TAJkCgDniHJhM99pLN0RAA--.7331S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFWktF1kWryxWFWrZrWkZwb_yoW8Cr4fpa
-	y3GFs2qrn7Xr1fCayUXF10k3WxW3Z3AF4YkFZ7Ca17XF1DX345tr13t3WYgF1UCr4xZrWa
-	vFWagw15Ca42yrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-	Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMxkF7I0En4kS14v26r1q6r43MxkIecxEwVCm-wCF04
-	k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
-	MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
-	1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
-	IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
-	A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUXJ5wUUUUU=
-X-CM-SenderInfo: xfdrxt1qj6v25zlqu0xpsx3x1qjou0bp/
-X-Spamd-Result: default: False [1.54 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-CMS-MailID: 20260415065334epcas5p3ccec0106ebbf98ae036feab1b762bf9a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20260410070245epcas5p49355581dcb9f629641c9914ce4ce80ec
+References: <CGME20260410070245epcas5p49355581dcb9f629641c9914ce4ce80ec@epcas5p4.samsung.com>
+	<20260410064735.515-1-selvarasu.g@samsung.com>
+	<20260414010532.sxciijnzak3ldw35@synopsys.com>
+	<d2be3f54-5375-4f1b-ab4b-e2ff81c43630@samsung.com>
+	<20260415014620.mjmlt6w3ttlzosr3@synopsys.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36240-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[samsung.com:+];
+	TAGGED_FROM(0.00)[bounces-36241-lists,linux-usb=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	DMARC_NA(0.00)[eswincomputing.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FROM_NO_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[caohang@eswincomputing.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.919];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	R_DKIM_NA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,eswincomputing.com:mid,eswincomputing.com:email]
-X-Rspamd-Queue-Id: 38675400FCC
+	FROM_NEQ_ENVFROM(0.00)[selvarasu.g@samsung.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCVD_COUNT_SEVEN(0.00)[8]
+X-Rspamd-Queue-Id: CD7B44011B0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Hang Cao <caohang@eswincomputing.com>
 
-The EIC7700 USB requires a USB PHY reset operation; otherwise, the USB
-will not work. The reason why the USB driver that was applied can work
-properly is that the USB PHY has already been reset in ESWIN's U-Boot.
+On 4/15/2026 7:16 AM, Thinh Nguyen wrote:
+> On Tue, Apr 14, 2026, Selvarasu Ganesan wrote:
+>> On 4/14/2026 6:35 AM, Thinh Nguyen wrote:
+>>> On Fri, Apr 10, 2026, Selvarasu Ganesan wrote:
+>>>> The Linux Version Code is currently written to the GUID register before
+>>>> dwc3_core_soft_reset() is executed. Since the core soft reset clears the
+>>>> GUID register back to its default value, the version information is
+>>>> subsequently lost.
+>>> This is not right. Soft reset should not clear the GUID register.
+>>> Something else must have cleared it. Did you assert Vcc reset (hard
+>>> reset) during phy reset/initialization?
+>>>
+>>> BR,
+>>> Thinh
+>> Hi Thinh,
+>>
+>> Thank you for the clarification. Yes, you are correct, this issue is not
+>> related to a dwc3 core soft reset. Instead, the GUID value reverts to
+>> its default state when the PHY link_sw_reset completes during PHY init
+>> sequence.
+>>
+>> We are using the Synopsys eUSB PHY, this reset is triggered from our
+>> downstream driver during the PHY init sequence (invoked through
+>> |dwc3_core_init|).
+>>
+>> Could you please suggest the best way to retrieve the correct linux
+>> version information from the GUID?
+>> Additionally, would it be feasible to update the GUID register after the
+>> PHY init sequence (triggered by |dwc3_core_init|) completes?
+>>
+> Yes. Just fix up the changelog to properly describe the problem and
+> solution.
+>
+> BR,
+> Thinh
+Hi Thinh,
 
-However, the proper functioning of the USB driver should not be dependent
-on the bootloader. Therefore, it is necessary to incorporate the USB PHY
-reset signal into the DT bindings.
+Thanks for the confirmation. I have modified the changelog as shown 
+below, please review it once then i will post updated patchset.
 
-This patch does not introduce any backward incompatibility since the dts
-is not upstream yet. As array of reset operations are used in the driver,
-no modifications to the USB controller driver are needed.
 
-Fixes: c640a4239db5 ("dt-bindings: usb: Add ESWIN EIC7700 USB controller")
-Signed-off-by: Hang Cao <caohang@eswincomputing.com>
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+Date: Thu, 9 Apr 2026 18:34:03 +0530
+Subject: [PATCH v2] usb: dwc3: Move GUID programming after PHY 
+initialization
+
+The Linux Version Code is currently written to the GUID register before
+PHY initialization. Certain PHY implementations (such as Synopsys eUSB
+PHY performing link_sw_reset) clear the GUID register to its default
+value during initialization, causing the kernel version information to
+be lost.
+
+Move the GUID register programming to occur after PHY initialization
+completes to ensure the Linux version information persists.
+
+Fixes: fa0ea13e9f1c ("usb: dwc3: core: write LINUX_VERSION_CODE to our 
+GUID register")
+Cc: stable@vger.kernel.org
+Reported-by: Pritam Manohar Sutar <pritam.sutar@samsung.com>
+Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
 ---
- .../devicetree/bindings/usb/eswin,eic7700-usb.yaml         | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+  drivers/usb/dwc3/core.c | 12 ++++++------
+  1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/eswin,eic7700-usb.yaml b/Documentation/devicetree/bindings/usb/eswin,eic7700-usb.yaml
-index 41c3b1b98991..658260619423 100644
---- a/Documentation/devicetree/bindings/usb/eswin,eic7700-usb.yaml
-+++ b/Documentation/devicetree/bindings/usb/eswin,eic7700-usb.yaml
-@@ -41,12 +41,13 @@ properties:
-       - const: usb_en
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 161a4d58b2cec..8b9e9d3e9589a 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1341,12 +1341,6 @@ int dwc3_core_init(struct dwc3 *dwc)
 
-   resets:
--    maxItems: 2
-+    maxItems: 3
+         hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
 
-   reset-names:
-     items:
-       - const: vaux
-       - const: usb_rst
-+      - const: usb_phy
+-       /*
+-        * Write Linux Version Code to our GUID register so it's easy to 
+figure
+-        * out which kernel version a bug was found.
+-        */
+-       dwc3_writel(dwc, DWC3_GUID, LINUX_VERSION_CODE);
+-
+         ret = dwc3_phy_setup(dwc);
+         if (ret)
+                 return ret;
+@@ -1374,6 +1368,12 @@ int dwc3_core_init(struct dwc3 *dwc)
+         if (ret)
+                 goto err_exit_ulpi;
 
-   eswin,hsp-sp-csr:
-     description:
-@@ -85,8 +86,8 @@ examples:
-         interrupt-parent = <&plic>;
-         interrupts = <85>;
-         interrupt-names = "peripheral";
--        resets = <&reset 84>, <&hspcrg 2>;
--        reset-names = "vaux", "usb_rst";
-+        resets = <&reset 84>, <&hspcrg 2>, <&hspcrg 4>;
-+        reset-names = "vaux", "usb_rst", "usb_phy";
-         dr_mode = "peripheral";
-         maximum-speed = "high-speed";
-         phy_type = "utmi";
++       /*
++        * Write Linux Version Code to our GUID register so it's easy to 
+figure
++        * out which kernel version a bug was found.
++        */
++       dwc3_writel(dwc, DWC3_GUID, LINUX_VERSION_CODE);
++
+         ret = dwc3_core_soft_reset(dwc);
+         if (ret)
+                 goto err_exit_phy;
 --
 2.34.1
 
+Thanks,
+Selva
 
