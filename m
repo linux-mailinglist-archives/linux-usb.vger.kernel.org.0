@@ -1,250 +1,246 @@
-Return-Path: <linux-usb+bounces-36271-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36272-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ADk0FbGr4GkCkwAAu9opvQ
-	(envelope-from <linux-usb+bounces-36271-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 11:28:17 +0200
+	id WPsKBqit4GkRkwAAu9opvQ
+	(envelope-from <linux-usb+bounces-36272-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 11:36:40 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A324840C59E
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 11:28:16 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C1FD40C7A0
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 11:36:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 78A7431AF7A0
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 09:23:25 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2F6453012D53
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 09:36:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7913392811;
-	Thu, 16 Apr 2026 09:23:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ap94uOsO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B49A39C002;
+	Thu, 16 Apr 2026 09:36:31 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 102BC3BB57;
-	Thu, 16 Apr 2026 09:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6292D33F595;
+	Thu, 16 Apr 2026 09:36:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776331403; cv=none; b=GnPP8F3PqFS/ZMrdvcwTe25TPXAQALkq6g63ecpWvruZk8CNvqcMFcci9Gh3qC/PToB70Ea6sMeD7RrNYLu83baN1DXRd1cHy1HKsehnyb4Fm+j4XT6cCmjPnZUq6HGDww75J9dpxpVUK9TSFgIIPDne9Dtc0EiM0Rv6LIYW2xs=
+	t=1776332191; cv=none; b=OexlQURCq07lQ5vgl/KNC/5soXh6S7E7gS3tqWevHmYI89gkn12ScKHmqQpteAymr7fdHohz5tNPvMPA2Kf5ZRSaQF5x5tQS0B7pRbLkgmVC14MH1HjxW9aWfd5MuXD02tZmW7vMA1JkXAlbyUAzKAHdb4ElOXxlIS+A7jKBCDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776331403; c=relaxed/simple;
-	bh=BiOroty+4tMLVSCVNLjdt2BqV7cauMWIPzl2wGTcNQo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=unyIMFTxEtI3rV2k66J+LB+JcEVZxsL/VQr7z4MGRVUZbg3LVxlouhxaWy/I3mmAxOku+ecRUohCfi4LjUnkcR2DMjmkP3l8wcKLMwn4Ma8lBvh2OZzc/O6KPJFFiYZ5cXtGXk1f6vPo3MnwPOayIp0Pw6qr24F5YeBVbjOBx/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ap94uOsO; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776331402; x=1807867402;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BiOroty+4tMLVSCVNLjdt2BqV7cauMWIPzl2wGTcNQo=;
-  b=Ap94uOsOhWxfpPoTZprwfZAIr0swa/SOov9Wod0nhrYh/C6md6oPK1yM
-   p6q+g8YAJt9zTnVUfjT+MGSzS4a2UGIqpYEZUNpUKfBIF2gJmvlw/N9/l
-   QvQEZmKcX9nYjP9BbgNNgCyUSbMsClMkgSOIxz49vKHnQu60vPlugDxIk
-   U9I8nslIvxslBO+WYK1YqTWs3DP/h8rGMnzLshyGD/NnbB+EtvyPVmcf9
-   16UfEC5eWeIzRtopm4YMoq4V/TBACTyEf3PusIL6lUxBXOGRscSjuGmwt
-   yhApMlieJp12+LV7YiM2m0SLpVYqcn7IwL+6Q02aW6pwxtFgDIVWCxHlv
-   g==;
-X-CSE-ConnectionGUID: rZU1WF2oQrCsVWuQZgf1wg==
-X-CSE-MsgGUID: M/To/TXLR6O9cyjwQBfe9w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11760"; a="77507541"
-X-IronPort-AV: E=Sophos;i="6.23,181,1770624000"; 
-   d="scan'208";a="77507541"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2026 02:23:21 -0700
-X-CSE-ConnectionGUID: nlk2imh8TsC+WwOyg3XFRQ==
-X-CSE-MsgGUID: PolV7t/vTWKsRCM8VMH71Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,181,1770624000"; 
-   d="scan'208";a="253926695"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa002.fm.intel.com with ESMTP; 16 Apr 2026 02:23:19 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id D382495; Thu, 16 Apr 2026 11:23:17 +0200 (CEST)
-Date: Thu, 16 Apr 2026 12:22:26 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrei Kuchynski <akuchynski@chromium.org>,
-	Johan Hovold <johan@kernel.org>, Jameson Thies <jthies@google.com>,
-	Pooja Katiyar <pooja.katiyar@intel.com>,
-	Hsin-Te Yuan <yuanhsinte@chromium.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] usb: typec: ucsi: Detect and skip duplicate
- altmodes from buggy firmware
-Message-ID: <aeCqUma3QeGoIFJL@kuha>
-References: <20260413073552.894395-1-acelan.kao@canonical.com>
+	s=arc-20240116; t=1776332191; c=relaxed/simple;
+	bh=hoInmZ73SZ0TC4oz/P60lYrFRq/SfRLDJNoAx+zCHxo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jDso2UW7spHzsE6bCzPoUqJC9yrr+6gQ4aEoyocUeByPAiGpaEepXKCmgfixIHWUMeqhnHHmRRIWVH+yzxPuxCcknscoYfCRUNCFvhE86uRGxGV3kTZOk2FMFm/SYxQGectfWpjPJpF37Jpjhj86lGQzCPGVD+yzNP2TcH/Qlbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hadess.net; spf=pass smtp.mailfrom=hadess.net; arc=none smtp.client-ip=217.70.178.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hadess.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hadess.net
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	by mslow3.mail.gandi.net (Postfix) with ESMTP id C822B5830F6;
+	Thu, 16 Apr 2026 09:32:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7DB5F3EBD5;
+	Thu, 16 Apr 2026 09:32:14 +0000 (UTC)
+Message-ID: <8fedad8e9caecd379f2296562cd6abd37f7cee46.camel@hadess.net>
+Subject: Re: [PATCH 2/4] HID: core: introduce hid_safe_input_report()
+From: Bastien Nocera <hadess@hadess.net>
+To: Benjamin Tissoires <bentiss@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+  Filipe =?ISO-8859-1?Q?La=EDns?=	 <lains@riseup.net>, Ping Cheng
+ <ping.cheng@wacom.com>, Jason Gerecke	 <jason.gerecke@wacom.com>, Viresh
+ Kumar <vireshk@kernel.org>, Johan Hovold	 <johan@kernel.org>, Alex Elder
+ <elder@kernel.org>, Greg Kroah-Hartman	 <gregkh@linuxfoundation.org>, Lee
+ Jones <lee@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev, 
+	linux-usb@vger.kernel.org, stable@vger.kernel.org
+Date: Thu, 16 Apr 2026 11:32:14 +0200
+In-Reply-To: <20260415-wip-fix-core-v1-2-ed3c4c823175@kernel.org>
+References: <20260415-wip-fix-core-v1-0-ed3c4c823175@kernel.org>
+	 <20260415-wip-fix-core-v1-2-ed3c4c823175@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260413073552.894395-1-acelan.kao@canonical.com>
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-GND-Sasl: hadess@hadess.net
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: dmFkZTEqBTRK5tvLZzwWSgB/1iJazKNDFIG9byJ8UVkzpHcdH0usiWKsROoc8Q2CRru0qWFQORNAF/Tb04YmWqG32X+x5nBDVo/u8NkoEzWCUHzK2un2k1fYD5mKn6XzX6mYnfVOHNLU9m0W90nOhD0PA3yoG4nrzzlK0PtSmD82ncFPd7HIZGaxRdIIlljDzx2aitBkm2FkdYbs6FVpZK/Lmx7w8ejEhx3SbTi0JL0QI1Oi4JbCJXQlRtjvcZzLkoGGGZYoPjaP3qXrxOcWXyn4LQjwvCgp+DR30ABShmHhs5abvDEv2veZG1z1PX4KhVg+iKO5vRt3Yj82Fq/dJ/ucBHNNJ68t643Vg0eFUdAXvO0oGI4TRUIgFg1DAIW4xdq89pBlAjnI4UEWBs/UBJk2uMQ3ksqBBmey/z0Jm8GpMvkXHf4xWwS0HnfiYFAOWaZiRKnZmegara1pPlzIAgn064hqdZ6OV6qGb54kpGE1/jQpL33e26TrDmyizOFueMs+WI42ez5u6TWtWeZQ1Dg+DBzySQFowwqKiy7TTOlHSUEnP8nPG/xC1HlnctqmDegj4xZs8oB9Iwfk9OVbWc4uVXAl7OzVREg73SnT0vo7Q30SGCGO+1pumgOyVBtpy0oohmiCbfq9lFVMFL0IHZ3Vy+abHKSCboIOrhy5siR8YCE1sA
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36271-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_FROM(0.00)[bounces-36272-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[hadess.net];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_NEQ_ENVFROM(0.00)[hadess@hadess.net,linux-usb@vger.kernel.org];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_DKIM_NA(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,canonical.com:email]
-X-Rspamd-Queue-Id: A324840C59E
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,hadess.net:mid]
+X-Rspamd-Queue-Id: 2C1FD40C7A0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Apr 13, 2026 at 03:35:49PM +0800, Chia-Lin Kao (AceLan) wrote:
-> Some firmware implementations incorrectly return the same altmode
-> multiple times at different offsets when queried via UCSI_GET_ALTERNATE_MODES.
-> This causes sysfs duplicate filename errors and kernel call traces when
-> the driver attempts to register the same altmode twice:
-> 
->   sysfs: cannot create duplicate filename '/devices/.../typec/port0/port0.0/partner'
->   typec-thunderbolt port0-partner.1: failed to create symlinks
->   typec-thunderbolt port0-partner.1: probe with driver typec-thunderbolt failed with error -17
-> 
-> Detect duplicate altmodes by comparing SVID and VDO before registration.
-> If a duplicate is detected, skip it and print a single clean warning
-> message instead of generating a kernel call trace:
-> 
->   ucsi_acpi USBC000:00: con2: Firmware bug: duplicate partner altmode SVID 0x8087 (VDO 0x8087a043 vs 0x00000001) at offset 1, ignoring. Please update your system firmware.
-> 
-> This makes the error handling more user-friendly while still alerting
-> users to the firmware bug.
-> 
-> The duplicate detection logic is implemented in a reusable helper
-> function ucsi_altmode_is_duplicate() and used in ucsi_register_altmodes().
-> The fix applies to all three recipient types: partner (SOP), port (CON),
-> and plug (SOP_P) altmodes.
-> 
-> Fixes: a79f16efcd00 ("usb: typec: ucsi: Add support for the partner USB Modes")
+On Wed, 2026-04-15 at 11:38 +0200, Benjamin Tissoires wrote:
+> hid_input_report() is used in too many places to have a commit that
+> doesn't cross subsystem borders. Instead of changing the API,
+> introduce
+> a new one when things matters in the transport layers:
+> - usbhid
+> - i2chid
+>=20
+> This effectively revert to the old behavior for those two transport
+> layers.
+>=20
+> Fixes: 0a3fe972a7cb ("HID: core: Mitigate potential OOB by removing
+> bogus memset()")
 > Cc: stable@vger.kernel.org
-> Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 > ---
-> v4. rebase
-> v3. 1. move ucsi_altmode_is_duplicate() before ucsi_register_altmodes_nvidia()
->        for later modification on ucsi_register_altmodes_nvidia()
->     2. use struct typec_altmode **altmodes to simplify the logic
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 76 +++++++++++++++++++++++++++++++++++
->  1 file changed, 76 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index f181afca2bb28..eebbb80fae566 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -498,6 +498,73 @@ static int ucsi_register_altmode(struct ucsi_connector *con,
->  	return ret;
->  }
->  
-> +/*
-> + * Check if an altmode is a duplicate. Some firmware implementations
-> + * incorrectly return the same altmode multiple times, causing sysfs errors.
-> + * Returns true if the altmode should be skipped.
+> =C2=A0drivers/hid/hid-core.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 21 +++++++++++++++++++++
+> =C2=A0drivers/hid/i2c-hid/i2c-hid-core.c |=C2=A0 7 ++++---
+> =C2=A0drivers/hid/usbhid/hid-core.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 11 ++=
+++++-----
+> =C2=A0include/linux/hid.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 2 ++
+> =C2=A04 files changed, 33 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+> index a806820df7e5..cb0ad99e7a0a 100644
+> --- a/drivers/hid/hid-core.c
+> +++ b/drivers/hid/hid-core.c
+> @@ -2191,6 +2191,27 @@ int hid_input_report(struct hid_device *hid,
+> enum hid_report_type type, u8 *data
+> =C2=A0}
+> =C2=A0EXPORT_SYMBOL_GPL(hid_input_report);
+> =C2=A0
+> +/**
+> + * hid_safe_input_report - report data from lower layer (usb, bt...)
+> + *
+> + * @hid: hid device
+> + * @type: HID report type (HID_*_REPORT)
+> + * @data: report contents
+> + * @bufsize: allocated size of the data buffer
+> + * @size: useful size of data parameter
+> + * @interrupt: distinguish between interrupt and control transfers
+> + *
+> + * This is data entry for lower layers.
+
+You probably want to explain why it should be used instead of
+hid_input_report() in this doc blurb, and modify the hid_input_report()
+docs to mention that this should be used.
+
+Maybe hid_input_report() should also be marked as deprecated somehow,
+to avoid new users?
+
+Cheers
+
 > + */
-> +static bool ucsi_altmode_is_duplicate(struct ucsi_connector *con, u8 recipient,
-> +				      const struct ucsi_altmode *alt_batch, int batch_idx,
-> +				      u16 svid, u32 vdo, int offset)
+> +int hid_safe_input_report(struct hid_device *hid, enum
+> hid_report_type type, u8 *data,
+> +			=C2=A0 size_t bufsize, u32 size, int interrupt)
 > +{
-> +	struct typec_altmode **altmodes;
-> +	const char *recipient_name;
-> +	int k;
-> +
-> +	/* Check for duplicates within the current batch first */
-> +	for (k = 0; k < batch_idx; k++) {
-> +		if (alt_batch[k].svid == svid && alt_batch[k].mid == vdo) {
-> +			dev_warn_once(con->ucsi->dev,
-> +				      "con%d: Firmware bug: duplicate altmode SVID 0x%04x in same response at offset %d, ignoring. Please update your system firmware.\n",
-> +				      con->num, svid, offset);
-> +			return true;
-> +		}
-> +	}
-
-What is this loop meant to do? It will now always return true because
-the svid is always from one of the altmodes in the alt_batch, no?
-
-The "batch" here means what the PPM returns to the GET_ALTERNATE_MODES
-command (right?), so you can have maximum of two entries in it. So
-wouldn't it be simpler to just check if there is two (instead of only
-the one that was requested) altmodes returned, and then just directly
-compare the two (alt[0].* == alt[1].*)?
-
-> +	/* Check for duplicates in already registered altmodes */
-> +
-> +	switch (recipient) {
-> +	case UCSI_RECIPIENT_CON:
-> +		altmodes = con->port_altmode;
-> +		recipient_name = "port";
-> +		break;
-> +	case UCSI_RECIPIENT_SOP:
-> +		altmodes = con->partner_altmode;
-> +		recipient_name = "partner";
-> +		break;
-> +	case UCSI_RECIPIENT_SOP_P:
-> +		altmodes = con->plug_altmode;
-> +		recipient_name = "plug";
-> +		break;
-> +	default:
-> +		return false;
-> +	}
-> +
-> +	for (k = 0; k < UCSI_MAX_ALTMODES; k++) {
-> +		if (!altmodes[k])
-> +			break;
-> +
-> +		/* Check SVID for all, VDO only for non-SOP */
-> +		if (altmodes[k]->svid != svid)
-> +			continue;
-> +		if (recipient != UCSI_RECIPIENT_SOP && altmodes[k]->vdo != vdo)
-> +			continue;
-> +
-> +		if (recipient == UCSI_RECIPIENT_SOP) {
-> +			dev_warn(con->ucsi->dev,
-> +				 "con%d: Firmware bug: duplicate %s altmode SVID 0x%04x (VDO 0x%08x vs 0x%08x) at offset %d, ignoring. Please update your system firmware.\n",
-> +				 con->num, recipient_name, svid, altmodes[k]->vdo, vdo, offset);
-> +		} else {
-> +			dev_warn_once(con->ucsi->dev,
-> +				      "con%d: Firmware bug: duplicate %s altmode SVID 0x%04x at offset %d, ignoring. Please update your system firmware.\n",
-> +				      con->num, recipient_name, svid, offset);
-
-You have to clean up these prints. Provide a helper function for them.
-You can split the print in two. A generic part, and separate for
-details if necessary.
-
-With the "recipient_name" I would use a lookup table.
-
-> +		}
-> +		return true;
-> +	}
-> +
-> +	return false;
+> +	return __hid_input_report(hid, type, data, bufsize, size,
+> interrupt, 0,
+> +				=C2=A0 false, /* from_bpf */
+> +				=C2=A0 false /* lock_already_taken */);
 > +}
-
-thanks,
-
--- 
-heikki
+> +EXPORT_SYMBOL_GPL(hid_safe_input_report);
+> +
+> =C2=A0bool hid_match_one_id(const struct hid_device *hdev,
+> =C2=A0		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const struct hid_device_id *id)
+> =C2=A0{
+> diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-
+> hid/i2c-hid-core.c
+> index 5a183af3d5c6..e0a302544cef 100644
+> --- a/drivers/hid/i2c-hid/i2c-hid-core.c
+> +++ b/drivers/hid/i2c-hid/i2c-hid-core.c
+> @@ -574,9 +574,10 @@ static void i2c_hid_get_input(struct i2c_hid
+> *ihid)
+> =C2=A0		if (ihid->hid->group !=3D HID_GROUP_RMI)
+> =C2=A0			pm_wakeup_event(&ihid->client->dev, 0);
+> =C2=A0
+> -		hid_input_report(ihid->hid, HID_INPUT_REPORT,
+> -				ihid->inbuf + sizeof(__le16),
+> -				ret_size - sizeof(__le16), 1);
+> +		hid_safe_input_report(ihid->hid, HID_INPUT_REPORT,
+> +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ihid->inbuf + sizeof(__le16),
+> +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ihid->bufsize -
+> sizeof(__le16),
+> +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret_size - sizeof(__le16), 1);
+> =C2=A0	}
+> =C2=A0
+> =C2=A0	return;
+> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-
+> core.c
+> index fbbfc0f60829..5af93b9b1fb5 100644
+> --- a/drivers/hid/usbhid/hid-core.c
+> +++ b/drivers/hid/usbhid/hid-core.c
+> @@ -283,9 +283,9 @@ static void hid_irq_in(struct urb *urb)
+> =C2=A0			break;
+> =C2=A0		usbhid_mark_busy(usbhid);
+> =C2=A0		if (!test_bit(HID_RESUME_RUNNING, &usbhid->iofl)) {
+> -			hid_input_report(urb->context,
+> HID_INPUT_REPORT,
+> -					 urb->transfer_buffer,
+> -					 urb->actual_length, 1);
+> +			hid_safe_input_report(urb->context,
+> HID_INPUT_REPORT,
+> +					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 urb->transfer_buffer,
+> urb->transfer_buffer_length,
+> +					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 urb->actual_length,
+> 1);
+> =C2=A0			/*
+> =C2=A0			 * autosuspend refused while keys are
+> pressed
+> =C2=A0			 * because most keyboards don't wake up when
+> @@ -482,9 +482,10 @@ static void hid_ctrl(struct urb *urb)
+> =C2=A0	switch (status) {
+> =C2=A0	case 0:			/* success */
+> =C2=A0		if (usbhid->ctrl[usbhid->ctrltail].dir =3D=3D
+> USB_DIR_IN)
+> -			hid_input_report(urb->context,
+> +			hid_safe_input_report(urb->context,
+> =C2=A0				usbhid->ctrl[usbhid-
+> >ctrltail].report->type,
+> -				urb->transfer_buffer, urb-
+> >actual_length, 0);
+> +				urb->transfer_buffer, urb-
+> >transfer_buffer_length,
+> +				urb->actual_length, 0);
+> =C2=A0		break;
+> =C2=A0	case -ESHUTDOWN:	/* unplug */
+> =C2=A0		unplug =3D 1;
+> diff --git a/include/linux/hid.h b/include/linux/hid.h
+> index ac432a2ef415..bfb9859f391e 100644
+> --- a/include/linux/hid.h
+> +++ b/include/linux/hid.h
+> @@ -1030,6 +1030,8 @@ struct hid_field *hid_find_field(struct
+> hid_device *hdev, unsigned int report_ty
+> =C2=A0int hid_set_field(struct hid_field *, unsigned, __s32);
+> =C2=A0int hid_input_report(struct hid_device *hid, enum hid_report_type
+> type, u8 *data, u32 size,
+> =C2=A0		=C2=A0=C2=A0=C2=A0=C2=A0 int interrupt);
+> +int hid_safe_input_report(struct hid_device *hid, enum
+> hid_report_type type, u8 *data,
+> +			=C2=A0 size_t bufsize, u32 size, int interrupt);
+> =C2=A0struct hid_field *hidinput_get_led_field(struct hid_device *hid);
+> =C2=A0unsigned int hidinput_count_leds(struct hid_device *hid);
+> =C2=A0__s32 hidinput_calc_abs_res(const struct hid_field *field, __u16
+> code);
 
