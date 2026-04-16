@@ -1,179 +1,250 @@
-Return-Path: <linux-usb+bounces-36270-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36271-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +BpxOoaa4GlMkAAAu9opvQ
-	(envelope-from <linux-usb+bounces-36270-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 10:15:02 +0200
+	id ADk0FbGr4GkCkwAAu9opvQ
+	(envelope-from <linux-usb+bounces-36271-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 11:28:17 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE2A740B650
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 10:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A324840C59E
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 11:28:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BE213312EA96
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 08:10:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 78A7431AF7A0
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 09:23:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36E4C22FF22;
-	Thu, 16 Apr 2026 08:10:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7913392811;
+	Thu, 16 Apr 2026 09:23:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="pWjsSEEG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ap94uOsO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB28033123B;
-	Thu, 16 Apr 2026 08:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 102BC3BB57;
+	Thu, 16 Apr 2026 09:23:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776327018; cv=none; b=OHG4LTT+O5x8CFsUQdTIi87hk2ryclaS/QQBCGTrNiBRh7G/mVYRNKAimzf8FRqszriesHRwPbeU5qncIT6WJJgEYrmW1sdvGfLJAo/offJEbwJsjWKaia7dk6fM9/G6rS9jV4pM1EjdpWb3rt/Q1+5QEkFM0fw26iBQxS2hiZ8=
+	t=1776331403; cv=none; b=GnPP8F3PqFS/ZMrdvcwTe25TPXAQALkq6g63ecpWvruZk8CNvqcMFcci9Gh3qC/PToB70Ea6sMeD7RrNYLu83baN1DXRd1cHy1HKsehnyb4Fm+j4XT6cCmjPnZUq6HGDww75J9dpxpVUK9TSFgIIPDne9Dtc0EiM0Rv6LIYW2xs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776327018; c=relaxed/simple;
-	bh=g7f/Flf2ul/YLdxmLv00ymzR+4jdIi46fIJJ0uhUQ7Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aNzagPwkgH4msiVMzZ5eOHN6YE29yKmc1XdYSUu/8Q3R1m3EufFFnR9mPA00eejKlwSDwEEsW79AJGJYYzkQI3Z9xmm1Kv7Kgmw/KAQi37tIU4BR1T7r6HlPh/HNMiD+LDQJRbsBXDa8KyNg90+JMRNlwIU8ZuHD70YnK30sk7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=pWjsSEEG; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from [192.168.88.20] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 14C9DC6C;
-	Thu, 16 Apr 2026 10:08:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1776326915;
-	bh=g7f/Flf2ul/YLdxmLv00ymzR+4jdIi46fIJJ0uhUQ7Y=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=pWjsSEEGtmYTjmh1L3vxjLjJOdT9c2tbeZUNXWjczBqPbKqdjpZMp4rqczxJP58Jf
-	 zLFaAukADLLma/Vw4PR1ekKd/GJOEikDsklce9HMwHIqA6dJSLu3TaWUZStlGcDAtB
-	 up2qmcbfrGPR9jIeuRwjWAgLZdc7PMji46McCOyU=
-Message-ID: <51b7c44e-36c9-461f-983a-eaa86eeb8cfd@ideasonboard.com>
-Date: Thu, 16 Apr 2026 11:10:03 +0300
+	s=arc-20240116; t=1776331403; c=relaxed/simple;
+	bh=BiOroty+4tMLVSCVNLjdt2BqV7cauMWIPzl2wGTcNQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=unyIMFTxEtI3rV2k66J+LB+JcEVZxsL/VQr7z4MGRVUZbg3LVxlouhxaWy/I3mmAxOku+ecRUohCfi4LjUnkcR2DMjmkP3l8wcKLMwn4Ma8lBvh2OZzc/O6KPJFFiYZ5cXtGXk1f6vPo3MnwPOayIp0Pw6qr24F5YeBVbjOBx/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ap94uOsO; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776331402; x=1807867402;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BiOroty+4tMLVSCVNLjdt2BqV7cauMWIPzl2wGTcNQo=;
+  b=Ap94uOsOhWxfpPoTZprwfZAIr0swa/SOov9Wod0nhrYh/C6md6oPK1yM
+   p6q+g8YAJt9zTnVUfjT+MGSzS4a2UGIqpYEZUNpUKfBIF2gJmvlw/N9/l
+   QvQEZmKcX9nYjP9BbgNNgCyUSbMsClMkgSOIxz49vKHnQu60vPlugDxIk
+   U9I8nslIvxslBO+WYK1YqTWs3DP/h8rGMnzLshyGD/NnbB+EtvyPVmcf9
+   16UfEC5eWeIzRtopm4YMoq4V/TBACTyEf3PusIL6lUxBXOGRscSjuGmwt
+   yhApMlieJp12+LV7YiM2m0SLpVYqcn7IwL+6Q02aW6pwxtFgDIVWCxHlv
+   g==;
+X-CSE-ConnectionGUID: rZU1WF2oQrCsVWuQZgf1wg==
+X-CSE-MsgGUID: M/To/TXLR6O9cyjwQBfe9w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11760"; a="77507541"
+X-IronPort-AV: E=Sophos;i="6.23,181,1770624000"; 
+   d="scan'208";a="77507541"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2026 02:23:21 -0700
+X-CSE-ConnectionGUID: nlk2imh8TsC+WwOyg3XFRQ==
+X-CSE-MsgGUID: PolV7t/vTWKsRCM8VMH71Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,181,1770624000"; 
+   d="scan'208";a="253926695"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa002.fm.intel.com with ESMTP; 16 Apr 2026 02:23:19 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1008)
+	id D382495; Thu, 16 Apr 2026 11:23:17 +0200 (CEST)
+Date: Thu, 16 Apr 2026 12:22:26 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andrei Kuchynski <akuchynski@chromium.org>,
+	Johan Hovold <johan@kernel.org>, Jameson Thies <jthies@google.com>,
+	Pooja Katiyar <pooja.katiyar@intel.com>,
+	Hsin-Te Yuan <yuanhsinte@chromium.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] usb: typec: ucsi: Detect and skip duplicate
+ altmodes from buggy firmware
+Message-ID: <aeCqUma3QeGoIFJL@kuha>
+References: <20260413073552.894395-1-acelan.kao@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/6] drm/connector: report IRQ_HPD events to
- drm_connector_oob_hotplug_event()
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, intel-gfx@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
- freedreno@lists.freedesktop.org,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Adrien Grassein <adrien.grassein@gmail.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Tvrtko Ursulin <tursulin@ursulin.net>, Kevin Hilman <khilman@baylibre.com>,
- Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Rob Clark <robin.clark@oss.qualcomm.com>, Dmitry Baryshkov
- <lumag@kernel.org>, Abhinav Kumar <abhinav.kumar@linux.dev>,
- Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Pengyu Luo <mitltlatltl@gmail.com>,
- Nikita Travkin <nikita@trvn.ru>, Yongxing Mou <yongxing.mou@oss.qualcomm.com>
-References: <20260416-hpd-irq-events-v1-0-1ab1f1cfb2b2@oss.qualcomm.com>
- <20260416-hpd-irq-events-v1-1-1ab1f1cfb2b2@oss.qualcomm.com>
-Content-Language: en-US
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20260416-hpd-irq-events-v1-1-1ab1f1cfb2b2@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260413073552.894395-1-acelan.kao@canonical.com>
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ideasonboard.com,none];
-	R_DKIM_ALLOW(-0.20)[ideasonboard.com:s=mail];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36270-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[42];
-	ASN_FAIL(0.00)[10.253.234.172.asn.rspamd.com:server fail];
+	TAGGED_FROM(0.00)[bounces-36271-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[ideasonboard.com:+];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tomi.valkeinen@ideasonboard.com,linux-usb@vger.kernel.org];
-	FREEMAIL_CC(0.00)[lists.freedesktop.org,vger.kernel.org,lists.infradead.org,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,linuxfoundation.org,intel.com,linaro.org,ideasonboard.com,kwiboo.se,ursulin.net,baylibre.com,googlemail.com,oss.qualcomm.com,linux.dev,poorly.run,somainline.org,trvn.ru];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	DKIM_TRACE(0.00)[intel.com:+];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,ideasonboard.com:dkim,ideasonboard.com:mid]
-X-Rspamd-Queue-Id: AE2A740B650
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,canonical.com:email]
+X-Rspamd-Queue-Id: A324840C59E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
-
-On 16/04/2026 02:22, Dmitry Baryshkov wrote:
-> The DisplayPort standard defines a special kind of events called IRQ.
-> These events are used to notify DP Source about the events on the Sink
-> side. It is extremely important for DP MST handling, where the MST
-> events are reported through this IRQ.
+On Mon, Apr 13, 2026 at 03:35:49PM +0800, Chia-Lin Kao (AceLan) wrote:
+> Some firmware implementations incorrectly return the same altmode
+> multiple times at different offsets when queried via UCSI_GET_ALTERNATE_MODES.
+> This causes sysfs duplicate filename errors and kernel call traces when
+> the driver attempts to register the same altmode twice:
 > 
-> In case of the USB-C DP AltMode there is no actual HPD pulse, but the
-> events are ported through the bits in the AltMode VDOs.
+>   sysfs: cannot create duplicate filename '/devices/.../typec/port0/port0.0/partner'
+>   typec-thunderbolt port0-partner.1: failed to create symlinks
+>   typec-thunderbolt port0-partner.1: probe with driver typec-thunderbolt failed with error -17
 > 
-> Extend the drm_connector_oob_hotplug_event() interface and report IRQ
-> events to the DisplayPort Sink drivers.
+> Detect duplicate altmodes by comparing SVID and VDO before registration.
+> If a duplicate is detected, skip it and print a single clean warning
+> message instead of generating a kernel call trace:
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+>   ucsi_acpi USBC000:00: con2: Firmware bug: duplicate partner altmode SVID 0x8087 (VDO 0x8087a043 vs 0x00000001) at offset 1, ignoring. Please update your system firmware.
+> 
+> This makes the error handling more user-friendly while still alerting
+> users to the firmware bug.
+> 
+> The duplicate detection logic is implemented in a reusable helper
+> function ucsi_altmode_is_duplicate() and used in ucsi_register_altmodes().
+> The fix applies to all three recipient types: partner (SOP), port (CON),
+> and plug (SOP_P) altmodes.
+> 
+> Fixes: a79f16efcd00 ("usb: typec: ucsi: Add support for the partner USB Modes")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
 > ---
->   drivers/gpu/drm/drm_connector.c          |  4 +++-
->   drivers/usb/typec/altmodes/displayport.c | 12 ++++++++----
->   include/drm/drm_connector.h              |  3 ++-
->   3 files changed, 13 insertions(+), 6 deletions(-)
+> v4. rebase
+> v3. 1. move ucsi_altmode_is_duplicate() before ucsi_register_altmodes_nvidia()
+>        for later modification on ucsi_register_altmodes_nvidia()
+>     2. use struct typec_altmode **altmodes to simplify the logic
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 76 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 76 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-> index 47dc53c4a738..5fdacbd84bd7 100644
-> --- a/drivers/gpu/drm/drm_connector.c
-> +++ b/drivers/gpu/drm/drm_connector.c
-> @@ -3510,6 +3510,7 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
->    * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
->    * @connector_fwnode: fwnode_handle to report the event on
->    * @status: hot plug detect logical state
-> + * @irq_hpd: HPD pulse detected
->    *
->    * On some hardware a hotplug event notification may come from outside the display
->    * driver / device. An example of this is some USB Type-C setups where the hardware
-> @@ -3520,7 +3521,8 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
->    * a drm_connector reference through calling drm_connector_find_by_fwnode().
->    */
->   void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
-> -				     enum drm_connector_status status)
-> +				     enum drm_connector_status status,
-> +				     bool irq_hpd)
-I find the "IRQ HPD" naming always confusing, even if I'm somewhat 
-familiar with DP, but if someone has mainly worked on HDMI, I'm sure 
-it's even worse.
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index f181afca2bb28..eebbb80fae566 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -498,6 +498,73 @@ static int ucsi_register_altmode(struct ucsi_connector *con,
+>  	return ret;
+>  }
+>  
+> +/*
+> + * Check if an altmode is a duplicate. Some firmware implementations
+> + * incorrectly return the same altmode multiple times, causing sysfs errors.
+> + * Returns true if the altmode should be skipped.
+> + */
+> +static bool ucsi_altmode_is_duplicate(struct ucsi_connector *con, u8 recipient,
+> +				      const struct ucsi_altmode *alt_batch, int batch_idx,
+> +				      u16 svid, u32 vdo, int offset)
+> +{
+> +	struct typec_altmode **altmodes;
+> +	const char *recipient_name;
+> +	int k;
+> +
+> +	/* Check for duplicates within the current batch first */
+> +	for (k = 0; k < batch_idx; k++) {
+> +		if (alt_batch[k].svid == svid && alt_batch[k].mid == vdo) {
+> +			dev_warn_once(con->ucsi->dev,
+> +				      "con%d: Firmware bug: duplicate altmode SVID 0x%04x in same response at offset %d, ignoring. Please update your system firmware.\n",
+> +				      con->num, svid, offset);
+> +			return true;
+> +		}
+> +	}
 
-Can we define this a bit more precisely? Is 'irq_hpd' only for 
-displayport?  If so, perhaps 'dp_irq_hpd' or 'displayport_irq_hpd'. I 
-might even call it 'dp_hpd_pulse', but maybe that's not good as the spec 
-talks about HPD pulse for both short and long ones (although in the 
-kernel doc you just write "HPD pulse")... The kernel doc could be 
-expanded a bit to make it clear what this flag indicates.
+What is this loop meant to do? It will now always return true because
+the svid is always from one of the altmodes in the alt_batch, no?
 
-  Tomi
+The "batch" here means what the PPM returns to the GET_ALTERNATE_MODES
+command (right?), so you can have maximum of two entries in it. So
+wouldn't it be simpler to just check if there is two (instead of only
+the one that was requested) altmodes returned, and then just directly
+compare the two (alt[0].* == alt[1].*)?
 
+> +	/* Check for duplicates in already registered altmodes */
+> +
+> +	switch (recipient) {
+> +	case UCSI_RECIPIENT_CON:
+> +		altmodes = con->port_altmode;
+> +		recipient_name = "port";
+> +		break;
+> +	case UCSI_RECIPIENT_SOP:
+> +		altmodes = con->partner_altmode;
+> +		recipient_name = "partner";
+> +		break;
+> +	case UCSI_RECIPIENT_SOP_P:
+> +		altmodes = con->plug_altmode;
+> +		recipient_name = "plug";
+> +		break;
+> +	default:
+> +		return false;
+> +	}
+> +
+> +	for (k = 0; k < UCSI_MAX_ALTMODES; k++) {
+> +		if (!altmodes[k])
+> +			break;
+> +
+> +		/* Check SVID for all, VDO only for non-SOP */
+> +		if (altmodes[k]->svid != svid)
+> +			continue;
+> +		if (recipient != UCSI_RECIPIENT_SOP && altmodes[k]->vdo != vdo)
+> +			continue;
+> +
+> +		if (recipient == UCSI_RECIPIENT_SOP) {
+> +			dev_warn(con->ucsi->dev,
+> +				 "con%d: Firmware bug: duplicate %s altmode SVID 0x%04x (VDO 0x%08x vs 0x%08x) at offset %d, ignoring. Please update your system firmware.\n",
+> +				 con->num, recipient_name, svid, altmodes[k]->vdo, vdo, offset);
+> +		} else {
+> +			dev_warn_once(con->ucsi->dev,
+> +				      "con%d: Firmware bug: duplicate %s altmode SVID 0x%04x at offset %d, ignoring. Please update your system firmware.\n",
+> +				      con->num, recipient_name, svid, offset);
+
+You have to clean up these prints. Provide a helper function for them.
+You can split the print in two. A generic part, and separate for
+details if necessary.
+
+With the "recipient_name" I would use a lookup table.
+
+> +		}
+> +		return true;
+> +	}
+> +
+> +	return false;
+> +}
+
+thanks,
+
+-- 
+heikki
 
