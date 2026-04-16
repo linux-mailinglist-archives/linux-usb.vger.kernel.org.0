@@ -1,215 +1,288 @@
-Return-Path: <linux-usb+bounces-36277-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36278-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CH6FNdPW4GlymgAAu9opvQ
-	(envelope-from <linux-usb+bounces-36277-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 14:32:19 +0200
+	id WMzNDZ7j4GlhnAAAu9opvQ
+	(envelope-from <linux-usb+bounces-36278-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 15:26:54 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C8DB40E405
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 14:32:19 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AAFD40ECC7
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 15:26:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6294730F75B3
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 12:31:02 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8C9FA30978A6
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 13:20:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72EA23BED69;
-	Thu, 16 Apr 2026 12:30:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B40B3BC675;
+	Thu, 16 Apr 2026 13:19:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aREs4pY9"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="GfImRmQV";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="q+jsHmXN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A13221256C;
-	Thu, 16 Apr 2026 12:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F8D3BAD85;
+	Thu, 16 Apr 2026 13:19:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776342653; cv=none; b=BpLC0ibD52CUIy8KbC86N76NvLCW4umShQAcsp44UP6OODHNvLoy0MFi06L6nmNEy6QenxEV0PmCTY0VyLeG9krY1YUEXPYr2ab9KgqSmCtA6FVdLulH6sklAE09duHc311isI68hsXqE4wWz6E+d497/buXWYQhyf5u2mYc8mQ=
+	t=1776345570; cv=none; b=XpJDoA6+F3jXswMiFCfTt/1u1Da4NYWKEIlxZq9uBKrExaFxnKEAe+Hh6P+R1VHkb1MLG9/0z8TBP+1UAAcGFHIrVxTqhsbllIEr3EqttKSP0Av71nhrx+20yQ3r7gTlT3/YX6PNtW6L8brEfZxcelvuiWBIviI9W7aQ2slRh7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776342653; c=relaxed/simple;
-	bh=0+upWZt1SQSfIz6OgmfLK1joGZgudnQ2lP+Bv+7s1DM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uY5j+eRGJwaUdgIOC2wLp7JJWLC8KQMerzLOZh5DMvxrB6t2JpmbgQo4UGJl3ZxmdQG9NKK0xe399S40n2RHiyoBpEp85ydqeSaOEqsvaCTpw1iILu6o9zQb2ZHR7YZXH1zQFt28BRMIAOSMt8WojY9cLwve3nXYQDHjoMWxcpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aREs4pY9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB8D2C2BCAF;
-	Thu, 16 Apr 2026 12:30:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776342653;
-	bh=0+upWZt1SQSfIz6OgmfLK1joGZgudnQ2lP+Bv+7s1DM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aREs4pY9AFWiyPis1yCUHi655kH6F2cmateO3OS3vwiWh4XGstegazkXh9fTeJRQW
-	 F7PNlGo+5uv4JS1ghUA7GmLt/nGdKTIiz0N3eNo0k9qdgxnlZ6UVo1xvuY/jm0Jsgz
-	 6OXZlHvLM95FlzgQqthFFGhbIejPY5s4jQOos8SHiaMv+4GNWDNJ4NBjKmastJKLl9
-	 B+kLcT7cwceOa9aKNihg3CZG+65E3BtgCcBvAVf5SIS4E47zAqVB8uUKfjkayyutdK
-	 0Jj6v6r/4toyxe6BrveBQ3dEYq/LaiTL2nhXiDsBmOQK54Y4zcD7qDew9ISAzQHpha
-	 d9g1fsIICa3fA==
-Message-ID: <1fba96bd-124d-431d-8de8-78688c248600@kernel.org>
-Date: Thu, 16 Apr 2026 14:30:37 +0200
+	s=arc-20240116; t=1776345570; c=relaxed/simple;
+	bh=GmbM3QWjiQ5Yz7areFLtXjjfG79OxvE9GJ91cyENfrA=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=sYYnX9Yeaiwaun+jr+lguddsPRKDIGcbo+U7TAnH/ZT7WoYg87eGY4URN5+785MV1klgVJT23f6Hyl4i/IxBcbXn03titsA2AkbdJt2cYODJmGhvN6STPDCmMSqhb2vuxzS3N36C0cY8dXPNxKwhZ/yctXCr1R8B4Oa40fl41b8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=GfImRmQV; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=q+jsHmXN; arc=none smtp.client-ip=103.168.172.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id C991E1400045;
+	Thu, 16 Apr 2026 09:19:27 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Thu, 16 Apr 2026 09:19:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1776345567;
+	 x=1776431967; bh=K/rAy+ruILoOU0xvxjRUcwJ3Eb9dwl1lQFI0ZJRDyeM=; b=
+	GfImRmQVQk22yfySbwRRzj78EMGmlB9XBro9jPwfUI49CWrFuetJctbeCQSfDXdl
+	JLPL30q71n85KslKPxZ7lV+tm3ZVr8kppwRXhY6k12JY2okkED5fgn+dBaXnrm/G
+	3vdk/Brkb3s9Yk9PXoJ1n3eVMU0QYkryv+li9mrxwqoisAYJHJmD/DdDj6Su06me
+	WGeAEv+Ft/VfG4oF+CDDw3ZnMvSmDDEhy0VMRbEanZvGGU02f4uLNB5peeIz08Sc
+	eHSRpNZQO9MBNq+ckWmCu1PYSgFyJCCafOMh40jZWpl/XTgto90vm9X/uB5ddhTe
+	TgZh1gX+JIsbT7g+A2xhAQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1776345567; x=
+	1776431967; bh=K/rAy+ruILoOU0xvxjRUcwJ3Eb9dwl1lQFI0ZJRDyeM=; b=q
+	+jsHmXN7Rmm2TyoxW3rcuJR2+iWwq08CoD470k7c7wg5UNMBYJyeO/wrGzHiPNcO
+	+koMqZJvBbHE3uPX00wyLh8j8OjVX0ddtZt7tY7txQlDJMQWOKt1LTGI8W1dHE3s
+	qcH9h1RXPXu24NdHJ1/nRrx5qL82UibqaeVjXrrqcqpU4LdSSV0BXyfUN+SXSJzs
+	yQHFf1RjYizR+RrvPMU48fc9c2rzGMOvNRC/ppRebmCLG91503xiGIDzHySHURB7
+	fKpH2Q6plyrAOkSZEQ8bKFjLLpuD/Un8zJcqHZGZ9WP2/NYDClvGFfA5YRxLGo2m
+	jGMYlV3dZu3sYqvA/g42A==
+X-ME-Sender: <xms:3-HgaU0B-YInxL7DfJgvYOrSAMrqezAMZ-glmRJOVo3HQBVBAW_MYA>
+    <xme:3-HgaZ6Pu0_Oweww3vdZHvaHcQKGpeWpTWj694UVYgqkm_N2UAck733QdBGVGxhhX
+    9sAhyxhsouFxOcG4LDl6TvZ5Gx8v1xUKokCpj9FfCXxs23d4jzUwg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdegjeduudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeejpdhmohguvgepshhmthhpohhuthdp
+    rhgtphhtthhopehprgifvghllhestggruggvnhgtvgdrtghomhdprhgtphhtthhopegrrh
+    hnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgvthgvrhdrtghhvghnsehkvghr
+    nhgvlhdrohhrghdprhgtphhtthhopehrohhgvghrqheskhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghp
+    thhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtoheplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:3-HgaWf7xgCx-83o7WKEnvGhhSsIatklebKdNxoaeWDMBGY5vFLs9Q>
+    <xmx:3-HgaaT02IFF6fp1LQJ23wgqyGqJuSu_91n_wTjanOzRJ_t_oyOsxw>
+    <xmx:3-HgaXbdNWiHaleZnWS7Zw0dqv6S9_zMi-rKWk496uNaW6GZG5xZLg>
+    <xmx:3-HgaVdKGM9mEIi_fNIOGOSzeVd43xJ_qQYAqpZ0JOfTjEH4xcgLuw>
+    <xmx:3-HgaXWHaejmB0TcmqKa_ZqD94Y9VnbQm54H4TlvzrAv8Fb5taG9Gtrz>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 7F124700065; Thu, 16 Apr 2026 09:19:27 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/61] Coccinelle: Prefer IS_ERR_OR_NULL over manual NULL
- check
-To: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org,
- apparmor@lists.ubuntu.com, bpf@vger.kernel.org, ceph-devel@vger.kernel.org,
- cocci@inria.fr, dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
- gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
- intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
- kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
- linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
- linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
- linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
- linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
- ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
- sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
- tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev
-Cc: Julia Lawall <Julia.Lawall@inria.fr>,
- Nicolas Palix <nicolas.palix@imag.fr>
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
- <20260310-b4-is_err_or_null-v1-1-bd63b656022d@avm.de>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260310-b4-is_err_or_null-v1-1-bd63b656022d@avm.de>
-Content-Type: text/plain; charset=UTF-8
+X-ThreadId: AlVvYKQckCPF
+Date: Thu, 16 Apr 2026 15:19:06 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Peter Chen" <peter.chen@kernel.org>
+Cc: "Arnd Bergmann" <arnd@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Pawel Laszczak" <pawell@cadence.com>, "Roger Quadros" <rogerq@kernel.org>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <cb70271c-3ddb-422c-bf24-1cf019473f7e@app.fastmail.com>
+In-Reply-To: <aeDLUpWuhBAu8XXW@nchen-desktop>
+References: <20260402141008.2691819-1-arnd@kernel.org>
+ <ac9xVUVB/BKfBUmE@nchen-desktop>
+ <26779a33-135a-4881-8614-9987c5e90380@app.fastmail.com>
+ <ac+H2dzj5t1JJJd5@nchen-desktop>
+ <e650e6c7-bd19-4c35-bcd2-0c53178feb8e@app.fastmail.com>
+ <adMMm5kS3PR5CHFB@nchen-desktop>
+ <51c96cbd-1d46-47ff-b553-5b81efd39067@app.fastmail.com>
+ <aeDLUpWuhBAu8XXW@nchen-desktop>
+Subject: Re: [PATCH] usb: cdns3: attempt to fix Kconfig dependencies
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.15 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[arndb.de,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[arndb.de:s=fm1,messagingengine.com:s=fm2];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36277-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36278-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[arndb.de:+,messagingengine.com:+];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[kernel.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[56];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[arnd@arndb.de,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[avm.de:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,imag.fr:email,inria.fr:email]
-X-Rspamd-Queue-Id: 5C8DB40E405
+	DBL_BLOCKED_OPENRESOLVER(0.00)[app.fastmail.com:mid,messagingengine.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 3AAFD40ECC7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 10/03/2026 12:48, Philipp Hahn wrote:
-> Find and convert uses of IS_ERR() plus NULL check to IS_ERR_OR_NULL().
-> 
-> There are several cases where `!ptr && WARN_ON[_ONCE](IS_ERR(ptr))` is
-> used:
-> - arch/x86/kernel/callthunks.c:215 WARN_ON_ONCE
-> - drivers/clk/clk.c:4561 WARN_ON_ONCE
-> - drivers/interconnect/core.c:793 WARN_ON
-> - drivers/reset/core.c:718 WARN_ON
-> The change is not 100% semantical equivalent as the warning will now
-> also happen when the pointer is NULL.
-> 
-> To: Julia Lawall <Julia.Lawall@inria.fr>
-> To: Nicolas Palix <nicolas.palix@imag.fr>
-> Cc: cocci@inria.fr
-> Cc: linux-kernel@vger.kernel.org
-> 
-> ---
-> drivers/clocksource/mips-gic-timer.c:283 looks suspicious: ret != clk,
-> but Daniel Lezcano verified it as cottect.
-> 
-> There are some cases where the checks are part of a larger expression:
-> - mm/kmemleak.c:1095
-> - mm/kmemleak.c:1155
-> - mm/kmemleak.c:1173
-> - mm/kmemleak.c:1290
-> - mm/kmemleak.c:1328
-> - mm/kmemleak.c:1241
-> - mm/kmemleak.c:1310
-> - mm/kmemleak.c:1258
-> - net/netlink/af_netlink.c:2670
-> Thanks to Julia Lawall for the help to also handle them.
-> 
-> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
-> ---
->  scripts/coccinelle/api/is_err_or_null.cocci | 125 ++++++++++++++++++++++++++++
->  1 file changed, 125 insertions(+)
-> 
+On Thu, Apr 16, 2026, at 13:43, Peter Chen (CIX) wrote:
+> On 26-04-13 18:45:38, Arnd Bergmann wrote:
+>> On Mon, Apr 6, 2026, at 03:30, Peter Chen (CIX) wrote:
+>> > On 26-04-03 20:50:52, Arnd Bergmann wrote:
+>> - turn drivers/usb/cdns3/cdns3-plat.c into a library module
+>>   that exports the probe/remove/suspend/resume functions
+>> - Remove the of_platform_populate()/platform_device_unregister()
+>>   calls from soc specific drivers
+>> - Change the individual probe/remove callbacks to
+>>   call the exported functions from the generic driver
+>> - Integrate cdns3_platform_data into struct cdns, and
+>>   pass that from the soc specific driver into the common
+>>   code
+>> - Set cdns->gadget_init in the soc specific driver
+>> 
+>> There may be additional steps needed to make this work, but
+>> the result should be much cleaner.
+>
+> Thanks for your time to improve this issue. But for Cadence IP,
+> we began the architecture with parent (SoC) and child (IP) topology,
+> created parent/child device tree yaml files
+> (eg, fsl,imx8qm-cdns3.yaml/cdns,usb3.yaml) as well.
+>
+> If we kept the DT node but dropped a real struct device for the IP controller
+> (e.g. only the glue struct device existed while the IP stayed "node-only"),
+> several things become fragile or outright wrong, even we could change cdns3
+> code to use parent device, and work out for solution like 
+> "device_property_read_bool(dev, "usb-role-switch") on cdns->dev.
+> But for usb-role-switch and Type-C graph/connection logic are
+> the painful case, and could not easy to find the solution.
 
-Neither this, nor try from 2011, nor any future try should be accepted,
-because it creates impression IS_ERR_OR_NULL is somehow okay. No, it is
-not okay, it is a discouraged pattern leading to less readable and
-maintainable code. We should not have therefore any tools suggesting
-usage of IS_ERR_OR_NULL, because people will be converting poor code
-into that, instead of fixing that poor code.
+Hi Peter,
 
-Best regards,
-Krzysztof
+I agree that this will stay a little awkward due to the currently
+defined DT binding, but I would expect that even for the driver
+itself, the normal way to handle this becomes simpler rather
+than adding problems. E.g. the use of DMA on the child device
+is rather questionable since the parent device is the actual
+DMA master, and any properties defining how DMA works on
+the parent bus (dma-ranges, iommu, ...) don't directly propagate
+to the cdns3 device when that bypasses the normal platform
+device probing.
+
+> When something (e.g. Type-C/connector path) tries to resolve
+> a "usb-role-switch" connection, the match callback does:
+>
+> static void *usb_role_switch_match(const struct fwnode_handle *fwnode,
+> 	       	const char *id,
+> 		void *data)
+> {
+> 	struct device *dev;
+> 	if (id && !fwnode_property_present(fwnode, id))
+> 		return NULL;
+> 	dev = class_find_device_by_fwnode(&role_class, fwnode);
+> 	return dev ? to_role_switch(dev) : ERR_PTR(-EPROBE_DEFER);
+> }
+>
+> class_find_device_by_fwnode() ultimately uses device_match_fwnode,
+> which is pointer equality on dev_fwnode(dev):
+>
+> int device_match_fwnode(struct device *dev, const void *fwnode)
+> {
+> 	return fwnode && dev_fwnode(dev) == fwnode;
+> }
+>
+> So the only role switch that matches is one whose registered sw->dev has
+> dev_fwnode(&sw->dev) equal to the fwnode passed into usb_role_switch_match()
+> (whatever the graph/connection layer produced for that link often is 
+>  cdns,usb3 child, but not the SoC glue parent).
+
+Could the callers of usb_role_switch_get() change to calling
+fwnode_usb_role_switch_get() instead? It looks like that
+already handles the case of an device node without a struct device
+attached to it.
+
+> So we are not arguing for "DT for documentation only"; we need the child
+> platform device as the anchor that matches the IP node and the properties
+> that the Cadence DRD code actually consumes.
+
+I'm not convinced that "need" is correct here, since no other subsystem
+aside from cdns3 and xhci seems to follow the idea of having a
+separate platform device for a common component inside of a SoC
+integration. The DT binding of course can't be fixed any more,
+but the code should be flexible enough to just make it work
+either way.
+
+> Brief summary of what I did:
+>
+> Expose Cadence USBSSP through the same platform path as USBSS, trim
+> Kconfig and Makefile: one core loadable object plus separate glue .ko
+> files.
+>
+> Single cdns.ko bundles core, DRD, the generic "cdns,usb3" platform
+> driver in cdns3-plat.c, optional host.o, and optional gadget objects.
+> Use CONFIG_USB_CDNS3_GADGET as a bool to compile gadget support into
+> that module. Remove duplicate MODULE_* declarations from cdns3-plat.c
+> now that it links into the same module.
+
+Right, as far as I can tell, this should work correctly and is a
+nice simplification.
+
+> Kconfig: the generic platform driver is selected via CONFIG_USB_CDNS3.
+> Move CONFIG_USB_CDNSP_PCI beside CONFIG_USB_CDNS3_PCI_WRAP
+> under "Platform glue driver support". SoC glue entries (TI, i.MX, StarFive)
+> depend only on CONFIG_USB_CDNS3.
+>
+> Export cdns_core_init_role and re-orginize the function cdns_init, and
+> controller version could be gotten before the gadget init function is
+> decided per controller.
+>
+> Keep host_init / gadget_init callbacks in struct cdns, so core.c does
+> not need direct linkage to host or gadget objects. Refactor cdnsp-pci.c
+> into a thin PCI-to-platform wrapper.
+>
+> drivers/usb/Makefile: descend into drivers/usb/cdns3/ only when
+> CONFIG_USB_CDNS_SUPPORT is enabled.
+>
+> Is this solution okay for you?
+
+I can certainly live with that. I would still prefer the internal
+platform device to go away completely, but that would not be a
+functional change, only internal cosmetics, and it has no impact
+on configuration questions.
+
+I'll leave it up to Greg to chime in if he has a strong opinion
+on the matter, but I assume he's fine with your patch as well.
+
+A minor variation you could consider would be to make the common
+module just
+
+      depends on USB || USB_GADGET
+      depends on USB if !USB_GADGET
+      depends on USB_GADGET if !USB
+
+to make it always a loadable module if either USB or USB_GADGET
+is =m, and hide the symbols controlling host and gadget mode
+individually.
+
+       Arnd
 
