@@ -1,230 +1,204 @@
-Return-Path: <linux-usb+bounces-36275-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36276-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oEZHBGbM4GkdmAAAu9opvQ
-	(envelope-from <linux-usb+bounces-36275-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 13:47:50 +0200
+	id GCR2B17W4GlymgAAu9opvQ
+	(envelope-from <linux-usb+bounces-36276-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 14:30:22 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F36640DA30
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 13:47:49 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF48140E2B6
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 14:30:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 322FD302351A
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 11:43:24 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C3C68312583F
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2026 12:25:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DA033B0AFB;
-	Thu, 16 Apr 2026 11:43:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DEF63BAD89;
+	Thu, 16 Apr 2026 12:25:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IyTWukIf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GQGv29sX"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E072394782;
-	Thu, 16 Apr 2026 11:43:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C69337C924;
+	Thu, 16 Apr 2026 12:25:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776339799; cv=none; b=WkKS6vArA+HUrp4UT513U5vTvZlScY0VxcappfnnQSS+cDfrn+r85E7eosBNOdf0Qf1JfdqKS9cOMyePqYPl5uyFdqr90Xo+YQogL831YXrn/fNFQomRWFHbd/bG5qYp8x+T42wfGepwGVU4RTZUBRG4j90ZyDlrIhKNyOwZT5k=
+	t=1776342318; cv=none; b=BxN9ADopjT0HG67ERqv27hTKoTqduufKYyqNQQVEskErZusc7h4cHqQrNDfWE/SFLyKX16g5jXT54Xde2HaMrxPV4Q6gUQOSGC3FPPnSWxfIbdpoGLYoNnXoowfaZAPpalMqUekDmhLyuprL40HoH41iMxukcXlhldI0BRF2E7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776339799; c=relaxed/simple;
-	bh=zM5mgse4oacmHVRx0YuDqIQ/cA7IFrxVzzxUGmfFqIw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mg+mj5fMe1+xTv6S8qD5lSWAmGXUq1e4N/g22FQPT7/NPng+LDV1IX6XeFlSVna36+zZlmAl4hwrrM0n7N1GfQ2CyLVdJqOOZbVsr5H0X2Q4cXTMxXsMHsNeF5eLV0p3NYbUXPs21sg3MeJHj58RLwoSzWP/Va+9Y2YznAa5t2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IyTWukIf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91ED3C2BCAF;
-	Thu, 16 Apr 2026 11:43:17 +0000 (UTC)
+	s=arc-20240116; t=1776342318; c=relaxed/simple;
+	bh=gECMS4EGrtN1lWkNcMdqV1cQaJPbxrgRQTXN3zouHSg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Qdy/3MK0MwfEslDJpUvmQ3NbrxoYe4MuYEDd5I/0hg/Nklg/98f/WeraW+0hZjOYR3ll5HB/lln9Vf/aNZ/P5qvUZTryMZaQMBekQrlZ6d0uvRI+GqT9D3Ogs1R7/zYBLCu6V41SnsfnNkoGkdpGsPaklv/lrlL6JXwJhjAW5P8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GQGv29sX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4797C2BCB3;
+	Thu, 16 Apr 2026 12:25:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776339798;
-	bh=zM5mgse4oacmHVRx0YuDqIQ/cA7IFrxVzzxUGmfFqIw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IyTWukIfuLjLrkC9izBM3L6githAWM6AoDl/P/wGn9XOQ79KAtu+SL8DQ5k2kvU2t
-	 eDdMuwEFiAesKQAVSt8WIbbGnB7pHf0Lxu+Bre0DYKwdE4I/mzxsK/RRgs5899WhM/
-	 E2QgP249xWnZ8EEtSKTxtHUU4V15jFM5GKZKIgU1pZRD72z8QqkkLBw7uw5STlHiJH
-	 x/Y7vS47aP/UPwvv+PC2PKI2XYy+hlwcsGSjsbWkTIxmFfWyx656TIGuQIQKz5NDKX
-	 hWW9gxgBBajJLlpaMFI/mOx/21o3yGGPRzu7g0Zxq95LTRH0cdaPMaiuiDuX4EqmLh
-	 bcDkF7h2ovZaw==
-Date: Thu, 16 Apr 2026 19:43:14 +0800
-From: "Peter Chen (CIX)" <peter.chen@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Arnd Bergmann <arnd@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Pawel Laszczak <pawell@cadence.com>,
-	Roger Quadros <rogerq@kernel.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: cdns3: attempt to fix Kconfig dependencies
-Message-ID: <aeDLUpWuhBAu8XXW@nchen-desktop>
-References: <20260402141008.2691819-1-arnd@kernel.org>
- <ac9xVUVB/BKfBUmE@nchen-desktop>
- <26779a33-135a-4881-8614-9987c5e90380@app.fastmail.com>
- <ac+H2dzj5t1JJJd5@nchen-desktop>
- <e650e6c7-bd19-4c35-bcd2-0c53178feb8e@app.fastmail.com>
- <adMMm5kS3PR5CHFB@nchen-desktop>
- <51c96cbd-1d46-47ff-b553-5b81efd39067@app.fastmail.com>
+	s=k20201202; t=1776342318;
+	bh=gECMS4EGrtN1lWkNcMdqV1cQaJPbxrgRQTXN3zouHSg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=GQGv29sXj5S5z7UPKnXaUJAuD1qc92DQaWs8UXQ6wwBCK62RBOeMuB3RtNcxzLs+n
+	 PPcHL7L8pFqT/h2G0bvvPkUySB8nqp1hX+g8DsxNBEPpxoa8+yXm1bMdZVixBjqxgs
+	 n60V3osh+8lSW6pt2nDmsfqoDHDW6Auv9CDrXKgdtoPlM9Xla54AXl1OSAYSKpcXrA
+	 NmL+fSV7Qk/BTzx5WK8y+vV+U+fxOTS5SiuiemUg0UByoPARoWSlKdZYhXUYnMvTFf
+	 DgJsTYvf1ogHE4V/gC2FO90mA6aK9sVcz0Z1Cm9dDcGVpaCAj1nCKENYb7/YBcL1F4
+	 1oc9q29NjGBrg==
+Message-ID: <1fd72d1b-f5cd-447f-ae11-6f4d4426b8e8@kernel.org>
+Date: Thu, 16 Apr 2026 14:24:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <51c96cbd-1d46-47ff-b553-5b81efd39067@app.fastmail.com>
-X-Spamd-Result: default: False [-1.66 / 15.00];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 55/61] interconnect: Prefer IS_ERR_OR_NULL over manual
+ NULL check
+To: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org,
+ apparmor@lists.ubuntu.com, bpf@vger.kernel.org, ceph-devel@vger.kernel.org,
+ cocci@inria.fr, dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
+ gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+ intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
+ kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+ linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+ linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
+ sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
+ tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev
+Cc: Georgi Djakov <djakov@kernel.org>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+ <20260310-b4-is_err_or_null-v1-55-bd63b656022d@avm.de>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
+ QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
+ +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
+ ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
+ 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
+ hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
+ tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
+ 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
+ naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
+ hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
+ whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
+ qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
+ RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
+ Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
+ H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
+ dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
+ AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
+ jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
+ zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
+ XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
+In-Reply-To: <20260310-b4-is_err_or_null-v1-55-bd63b656022d@avm.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36275-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-36276-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peter.chen@kernel.org,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 6F36640DA30
+	RCPT_COUNT_GT_50(0.00)[55];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,avm.de:email]
+X-Rspamd-Queue-Id: BF48140E2B6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 26-04-13 18:45:38, Arnd Bergmann wrote:
-> On Mon, Apr 6, 2026, at 03:30, Peter Chen (CIX) wrote:
-> > On 26-04-03 20:50:52, Arnd Bergmann wrote:
-> >> 
-> >> The only other alternative I see would be to split up the
-> >> platform driver support into separate modules for cdns3 and
-> >> cdnsp as well, which would make the dependencies trivial but
-> >> require reworking of the actual in a way that I haven't
-> >> been able to figure out yet. If you are already integrating
-> >> other changes for the next attempt, maybe you can try to
-> >> come up with a solution for this as well.
-> >
-> > Thanks for your suggestion, creating different platform driver
-> > between cdns3 and cdnsp is the way we used at downstream, but
-> > when I try to upstream cdsnp platform driver support, I find
-> > the two platforms driver are 95% identical in content, so I
-> > would like to keep one platform driver and one binding doc.
+On 10/03/2026 12:49, Philipp Hahn wrote:
+> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
+> check.
 > 
-> I gave this some more thought and realized that the best
-> way to handle it is probably by reworking the cdns3 driver
-> to no longer require the separate platform_device registration
-> for the child device. This would make it work like most other
-> drivers in the kernel, which helps both with the module
-> dependencies and with new developers working on it.
+> Semantich change: Previously the code only printed the warning on error,
+> but not when the pointer was NULL. Now the warning is printed in both
+> cases!
+
+NAK, read the code
+
 > 
-> The way I think this can work would be:
+> Change found with coccinelle.
 > 
-> - turn drivers/usb/cdns3/cdns3-plat.c into a library module
->   that exports the probe/remove/suspend/resume functions
-> - Remove the of_platform_populate()/platform_device_unregister()
->   calls from soc specific drivers
-> - Change the individual probe/remove callbacks to
->   call the exported functions from the generic driver
-> - Integrate cdns3_platform_data into struct cdns, and
->   pass that from the soc specific driver into the common
->   code
-> - Set cdns->gadget_init in the soc specific driver
+> To: Georgi Djakov <djakov@kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+> ---
+>  drivers/interconnect/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> There may be additional steps needed to make this work, but
-> the result should be much cleaner.
-> 
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index 8569b78a18517b33abeafac091978b25cbc1acc7..22e92b30f73853d5bd2e05b4f52cb5aa22556468 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -790,7 +790,7 @@ void icc_put(struct icc_path *path)
+>  	size_t i;
+>  	int ret;
+>  
+> -	if (!path || WARN_ON(IS_ERR(path)))
+> +	if (WARN_ON(IS_ERR_OR_NULL(path)))
 
-Hi Arnd,
-
-Thanks for your time to improve this issue. But for Cadence IP,
-we began the architecture with parent (SoC) and child (IP) topology,
-created parent/child device tree yaml files
-(eg, fsl,imx8qm-cdns3.yaml/cdns,usb3.yaml) as well.
-
-If we kept the DT node but dropped a real struct device for the IP controller
-(e.g. only the glue struct device existed while the IP stayed "node-only"),
-several things become fragile or outright wrong, even we could change cdns3
-code to use parent device, and work out for solution like 
-"device_property_read_bool(dev, "usb-role-switch") on cdns->dev.
-But for usb-role-switch and Type-C graph/connection logic are
-the painful case, and could not easy to find the solution.
-
-When something (e.g. Type-C/connector path) tries to resolve
-a "usb-role-switch" connection, the match callback does:
-
-static void *usb_role_switch_match(const struct fwnode_handle *fwnode,
-	       	const char *id,
-		void *data)
-{
-	struct device *dev;
-	if (id && !fwnode_property_present(fwnode, id))
-		return NULL;
-	dev = class_find_device_by_fwnode(&role_class, fwnode);
-	return dev ? to_role_switch(dev) : ERR_PTR(-EPROBE_DEFER);
-}
-
-class_find_device_by_fwnode() ultimately uses device_match_fwnode,
-which is pointer equality on dev_fwnode(dev):
-
-int device_match_fwnode(struct device *dev, const void *fwnode)
-{
-	return fwnode && dev_fwnode(dev) == fwnode;
-}
-
-So the only role switch that matches is one whose registered sw->dev has
-dev_fwnode(&sw->dev) equal to the fwnode passed into usb_role_switch_match()
-(whatever the graph/connection layer produced for that link often is 
- cdns,usb3 child, but not the SoC glue parent).
-
-So we are not arguing for "DT for documentation only"; we need the child
-platform device as the anchor that matches the IP node and the properties
-that the Cadence DRD code actually consumes.
-
-I have an new idea for how to improve cdns3 Kconfig/Makefile structure, and I push
-the code at: https://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/cix.git/
-branch: cdns3_kconfig_reorg
-
-Brief summary of what I did:
-
-Expose Cadence USBSSP through the same platform path as USBSS, trim
-Kconfig and Makefile: one core loadable object plus separate glue .ko
-files.
-
-Single cdns.ko bundles core, DRD, the generic "cdns,usb3" platform
-driver in cdns3-plat.c, optional host.o, and optional gadget objects.
-Use CONFIG_USB_CDNS3_GADGET as a bool to compile gadget support into
-that module. Remove duplicate MODULE_* declarations from cdns3-plat.c
-now that it links into the same module.
-
-Kconfig: the generic platform driver is selected via CONFIG_USB_CDNS3.
-Move CONFIG_USB_CDNSP_PCI beside CONFIG_USB_CDNS3_PCI_WRAP
-under "Platform glue driver support". SoC glue entries (TI, i.MX, StarFive)
-depend only on CONFIG_USB_CDNS3.
-
-Export cdns_core_init_role and re-orginize the function cdns_init, and
-controller version could be gotten before the gadget init function is
-decided per controller.
-
-Keep host_init / gadget_init callbacks in struct cdns, so core.c does
-not need direct linkage to host or gadget objects. Refactor cdnsp-pci.c
-into a thin PCI-to-platform wrapper.
-
-drivers/usb/Makefile: descend into drivers/usb/cdns3/ only when
-CONFIG_USB_CDNS_SUPPORT is enabled.
-
-Is this solution okay for you?
-
--- 
+IS_ERR_OR_NULL is simply discouraged, but beside of code preference, you
+just added bug here. This is clearly not equivalent and you emit warn on
+perfectly valid case!
 
 Best regards,
-Peter
+Krzysztof
 
