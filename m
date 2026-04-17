@@ -1,184 +1,192 @@
-Return-Path: <linux-usb+bounces-36297-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36298-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CEDRMY5x4mlP6AAAu9opvQ
-	(envelope-from <linux-usb+bounces-36297-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2026 19:44:46 +0200
+	id XHgDFBWr4mlk8wAAu9opvQ
+	(envelope-from <linux-usb+bounces-36298-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2026 23:50:13 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A0AD41DA87
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2026 19:44:42 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EB4A41EC3E
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2026 23:50:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E1A6530E720C
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2026 17:39:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7A9EE3056155
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2026 21:48:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E99836D51D;
-	Fri, 17 Apr 2026 17:38:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89D9A36AB46;
+	Fri, 17 Apr 2026 21:48:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="HTXzYNzI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MhjJ2hxp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6413364950
-	for <linux-usb@vger.kernel.org>; Fri, 17 Apr 2026 17:38:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADC833D51A
+	for <linux-usb@vger.kernel.org>; Fri, 17 Apr 2026 21:48:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776447533; cv=none; b=msfPBz0q+4m4RWXfNWHuXl/cLQVZkDFRyNmtfA+/AIMQioq2y6caM/OSLSD0LaDHskKC0EhFYvWR3stVLYCqMxo9br77aGGZkgwHnwm13TmoCBLqnTyahhwzdCKAZV3GkOPZIxOY7aFJI6aqkwS4e7rufsGhI8LV5cs5tpx+w+0=
+	t=1776462538; cv=none; b=QmpEKUuX7f2vh73/bWxlR1fSIKHfl/dFT+7n6Ej4zulBvvV4yxw5YoTIJaWptMN2A82IKlCWNLJReg285UsIZsA44Vhl0z5KrPJG5MTmTFB3oUJ0dZGXH0USUHDj5jBWw573L2+IQVW8Mxqndrt96D+N07j7zISyxcMxicRfrUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776447533; c=relaxed/simple;
-	bh=BM4SD75ZVrKouBOSJTG7TJVawqlE9siK/NlC62TRYLw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cv3UL9x9NdrvYQVyBTjFs1hKIy5VwaUR8UjhQJRLyXKA2Lar1+ADjBLLu1t43RpO5/jt4EFmqXbxyieX3EHvjUlr4GTjUuyhuvvGOg5Y3+fdA/ZRFIbDXX120WdrTx09zegn+/MCciFC5rAhNw75RurJMLywV5OI2njtKsK6Jjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=HTXzYNzI; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-8a58057d7baso10485346d6.1
-        for <linux-usb@vger.kernel.org>; Fri, 17 Apr 2026 10:38:51 -0700 (PDT)
+	s=arc-20240116; t=1776462538; c=relaxed/simple;
+	bh=2z4Tft8CsIhs2gItlcE98Ljn5UyuCu6zy6ns/8fGoVs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DIL8FvJOIjSgsb+ellkvXW/i9JgbMz3/dYO5Ez2LlpnqmVcJuZnmwPIWnykeYXr2U7ajmB9SiG4bSrNegC+s3uq+xcN223x1QV93ff9vxLRLJ6+yAmgwTr8plPJ6b8XnEfmYFL6a9OzhU3hyNX1Y2e29/gL1wdo0+YnNTko6BMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MhjJ2hxp; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5a413f83226so1767770e87.1
+        for <linux-usb@vger.kernel.org>; Fri, 17 Apr 2026 14:48:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1776447530; x=1777052330; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+ScrvFm8dcecLK0fYKosu2aiHEOcHD9LwOrMZOf2kDo=;
-        b=HTXzYNzIbsbZJF6IlpOTZgqG5RPsyH5F8lEHZfx85ueNhhxf9Vx41zlzFEKbs4vGu9
-         k6qOPFfe4if4b5OGSB8lHWxtPq0eW+K/MUXSnNYvIkKfmDDpUpE/xZusqCUvqsWIbRjD
-         KEaSMKwpaCzL7j6ZHl3rrM0S7rcV6wBqbdPNApL44jo2Te4fUhC2jDh/z9I/AiY7epHP
-         rgtn3RnLFKqkyJGPWEN7LRb1e54FFkIOa4jF8WyNS4KNSoDutI/+knjlFtoNvwsfvlmy
-         nwXQeDTez/eSE6ppSNzR7dwioo5zb8OksZtQDMMyBWs9MtuYx+2zMX3vCJ+/h/A++h2s
-         FH/w==
+        d=gmail.com; s=20251104; t=1776462535; x=1777067335; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y3nXeSYcIGleoob8/DCIXu7Y4rEO2zp9+YsUhzFG5/s=;
+        b=MhjJ2hxpDC0g/U0iHnbf9kb46paGKVbXC9rx8+HEZ3zWZozw95OoddpHCqk8HZhmNZ
+         TLk2aqy24R/eg2u/Orq8tKflnJSurokXLwDZyk8WkNeyNURnc9RZIqTzVaaIttcBbQIB
+         BolSwl8fGf4t4MIQrknlMxQFlHqbLoQBFpoSaRgBORGFm5ufa0fKTGPVNRHtMtqWQcps
+         6Yx68T+4ZuJLFfzDRayJneEFIN4MCRuNNtDezyM3jYVabfspZKGaVskos4j2VK4CL9I5
+         p6J+fYuBHCmScboepnio0yOy+1lk985JUeSn8BIc5CX49oMdDwqHE14row3Q+1l5HFxR
+         3trQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776447530; x=1777052330;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+ScrvFm8dcecLK0fYKosu2aiHEOcHD9LwOrMZOf2kDo=;
-        b=Lv28u9pmw9Hs6LDdoS2SKFaazcryW2SaIvYd7m2DvFaqulmSI4c7e8Byg7bsYH6v9T
-         ZRF0eBCwFBXTIkB3fA15krRRKBcbXnF6DtrEURkKvAEL9TWOZ59DlP552rieVEleT7zl
-         UZ35fZZgREwiLujIyczYEPHFblBrVqXZrQn9oGTLskbuYfALKEGwPRGLq4ELpoel4/Xm
-         fZg4zAwSkuWD0n3CWUQKdK8gr5JRPpwy+xUYoK60vySIT6pPL6IqWg0NcABI7oraF0Jh
-         +9PrEvLluqU3E+thDElBJppZofo2ZCtLPkbz+KEWj+ca11KY9tkmZSP1LV2q767C0+iR
-         KgPg==
-X-Forwarded-Encrypted: i=1; AFNElJ/CGcUbZgrhvSyxq8x2UPf8uWA21dx6q6dUyHFbOLn7HQIJsibppSMMcVl9QCNNDx19jJEsZXfHWnI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKy8gUfckfisRioIpZfB4iLTYJCVXeoTM3VpQXONUrY0M3ymv2
-	BXIGHlan79d5CCFS9F8edpTC+iT6kEm9oL98HRruwpepB8HxTvqdiQVMEq70bDFz4w==
-X-Gm-Gg: AeBDietI2QdLDC+hLr/EjJo6DZgwJpKWBxSeAmDoEI2xJw4wBjac37wjicrmBJJI0A/
-	+UC5s7yG5uG6op+gX5zKKCiqBKzCFYixmHryQ1flF9oab3x3oXGmcl3J1ce96iyTUuFNtdJudRM
-	fNxB0aWSWRO11Ret9qc2CGvcXXSVDB0X1uhuMCuYOQ8qXh+3NXM50ww5vxkqz0udeXik7WWdZD2
-	oIAWKOi3aEvJ1yvrIYagz+ivZOY+5btw3g3tDU2OGu09a1a3Cyk+CO+vDl6qz8WexAZ/ot7yPTj
-	YFWueoxQncqTxSe8eEAal9rjHNMBFAJQb8cFWUQrhPqwwXCnPSTfga6hZyDkFBb+lE7yKmCErO2
-	cpi85STSyQCTCxuaQ3yJnWhDlvTjhTH0pImSdbPRXBzsFqV1E1/Aqg6kD8K+Xz47kaDdtyTewaR
-	IgQlmrbUj+i0t/V8PD3iiwbUrYizVZ+sGKWw8=
-X-Received: by 2002:a05:6214:2686:b0:8a4:8b2c:428f with SMTP id 6a1803df08f44-8b027ff8849mr70210706d6.2.1776447530489;
-        Fri, 17 Apr 2026 10:38:50 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::5a82])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b02ae6133dsm15421116d6.25.2026.04.17.10.38.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2026 10:38:49 -0700 (PDT)
-Date: Fri, 17 Apr 2026 13:38:46 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"michal.pecio@gmail.com" <michal.pecio@gmail.com>,
-	"oneukum@suse.com" <oneukum@suse.com>,
-	"niklas.neronin@linux.intel.com" <niklas.neronin@linux.intel.com>
+        d=1e100.net; s=20251104; t=1776462535; x=1777067335;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=y3nXeSYcIGleoob8/DCIXu7Y4rEO2zp9+YsUhzFG5/s=;
+        b=cMnYpfSAszvTTO3Sz7KJXXEyWHRlCEHz3SinUiTNmrGhSKOvbyr5YDu+qfdd5i0EUv
+         uFilTFk+mo9jRMDAaT+d3j36M4bRRWmLUOyRzsTgIFCJDwq9NqRQTYENBOhpjtBxo7BM
+         dgXZ5fNjoBTMjXEL/gs33JC7JJJA67mLHdhpjlCnKOblaz/4YL+fZDFMNQhWbsUTzzs4
+         mheWFBvfAKhicOdsVBO/W5mDlbwEJKs+C2lSmt5nJVHN2Y3gugEx9sBX0UgQTxWjuTNV
+         XDXH+wxKqAFHjWLVM4Zvaix8RrA+DbGh2UHdLZvYqcVl+DD+bgWOj68TYWmvfNngwuDa
+         LUUg==
+X-Forwarded-Encrypted: i=1; AFNElJ8OAU2WY3F7uu6itbz3WR4MflS63b7R9jOoYzJgzKtSgCluRAKy6Zq9SntdgJxkT59wPdWfFqACC4o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYXX9GBTQCOCVHYFfJuNEpMKepvdqCW+mO2meMO9boTR79xBvC
+	lv4nP7hlBftvDEiK8j5lWDyLkbpSib4OFemOrwWZlHPpcGpLNGCtm4fW
+X-Gm-Gg: AeBDietlL5icRFgSzqv41OHBFtUmMLShIrdo5vyXLYvvuMl8GzrqdKbPw2r41hjAZuD
+	7+ddlEs07WtW2oAEeqTFGe1+/Z3pOgtFEicQBRp1HGscPAbg6THFqvZSOgTAnas4AW1otq9clZf
+	qvRVrEsHAKdALJEmCOikqxyc/5uwbG3fkssWPEMwj1n8Ri3JYh6MvvOuy6aeumb5eQU23chma5b
+	iMTNaHbD1zJzK19ojJqtXuZWXLO3FscyQ3uA/L6AhobxljKz3ueO2D4JejmnFfYPC1iL+FLtcuT
+	L/t6sd7VcSTJCiJ+bACLLXiPdI/uDCQ5vqn1hJUWaWMUDtH18O0vDbdjZvIyPid1MckpkNm/CLd
+	aEGdLcJzCMhHmR7HIYxXz0/8pPLZVJ38N4ZvF1LOw7oAm+SmQLIm6v54F2w3qNZnbZoLw/ekhxy
+	X+WZfHCYreq2TO07YUF8qxPRNnbP7S6rLg5hNVI3Bj1w5Sdu9y7xQbauGy
+X-Received: by 2002:a05:6512:318f:b0:5a4:4f9:be5 with SMTP id 2adb3069b0e04-5a41716e54emr1368726e87.5.1776462534702;
+        Fri, 17 Apr 2026 14:48:54 -0700 (PDT)
+Received: from foxbook (bfi125.neoplus.adsl.tpnet.pl. [83.28.46.125])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a4187ebf9bsm742296e87.81.2026.04.17.14.48.51
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Fri, 17 Apr 2026 14:48:53 -0700 (PDT)
+Date: Fri, 17 Apr 2026 23:48:46 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, Thinh Nguyen
+ <Thinh.Nguyen@synopsys.com>, "linux-usb@vger.kernel.org"
+ <linux-usb@vger.kernel.org>, "oneukum@suse.com" <oneukum@suse.com>,
+ "niklas.neronin@linux.intel.com" <niklas.neronin@linux.intel.com>
 Subject: Re: [RFC PATCH 1/2] xhci: prevent automatic endpoint restart after
  stall or error
-Message-ID: <4a484a89-f52a-48c2-af43-c0029878ddaf@rowland.harvard.edu>
+Message-ID: <20260417234846.41a24089.michal.pecio@gmail.com>
+In-Reply-To: <4a484a89-f52a-48c2-af43-c0029878ddaf@rowland.harvard.edu>
 References: <20260404011530.aukxllvizvmc3f3x@synopsys.com>
- <616e2a64-6feb-4ee6-bf39-a6284549f18f@rowland.harvard.edu>
- <20260404204133.3mcizeeokw3ln5r4@synopsys.com>
- <243af5f2-3925-4960-be7b-8d0c273ae629@rowland.harvard.edu>
- <20260404221533.woepax7jxwefy3fq@synopsys.com>
- <20260404222818.t5y52gnd2gvalvp5@synopsys.com>
- <b4e2edd9-2616-4cfe-90a5-438fb6625706@rowland.harvard.edu>
- <20260405030954.32jbg3fphi5xdla3@synopsys.com>
- <74ac9ea2-34d1-4999-9048-c03a0f978b5d@rowland.harvard.edu>
- <65682e07-e18c-4674-bfa7-2cc27abb5ede@linux.intel.com>
+	<616e2a64-6feb-4ee6-bf39-a6284549f18f@rowland.harvard.edu>
+	<20260404204133.3mcizeeokw3ln5r4@synopsys.com>
+	<243af5f2-3925-4960-be7b-8d0c273ae629@rowland.harvard.edu>
+	<20260404221533.woepax7jxwefy3fq@synopsys.com>
+	<20260404222818.t5y52gnd2gvalvp5@synopsys.com>
+	<b4e2edd9-2616-4cfe-90a5-438fb6625706@rowland.harvard.edu>
+	<20260405030954.32jbg3fphi5xdla3@synopsys.com>
+	<74ac9ea2-34d1-4999-9048-c03a0f978b5d@rowland.harvard.edu>
+	<65682e07-e18c-4674-bfa7-2cc27abb5ede@linux.intel.com>
+	<4a484a89-f52a-48c2-af43-c0029878ddaf@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <65682e07-e18c-4674-bfa7-2cc27abb5ede@linux.intel.com>
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[synopsys.com,vger.kernel.org,gmail.com,suse.com,linux.intel.com];
-	TAGGED_FROM(0.00)[bounces-36297-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36298-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5A0AD41DA87
+	RCPT_COUNT_FIVE(0.00)[6]
+X-Rspamd-Queue-Id: 9EB4A41EC3E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Apr 07, 2026 at 11:24:01PM +0300, Mathias Nyman wrote:
-> On 4/7/26 18:23, Alan Stern wrote:
-> > It's been a while now, and nobody has objected to the proposed plan for
-> > handling this issue, so I'm going to assume that everyone is on board
-> > with the idea.
+On Fri, 17 Apr 2026 13:38:46 -0400, Alan Stern wrote:
+> The behavior for control endpoints isn't clear.  When a transaction 
+> error occurs in a control transfer, does xHCI stop the endpoint
+> queue? Presumably usb_clear_halt() isn't needed, but what about 
+> usb_reset_endpoint()?
 > 
-> Yes, I support this
-> 
-> So basically usb core will call usb_clear_halt() after EPROTO URB completion
-> handler finishes, and xhci-hcd needs to prevent bulk/interrupt endpoint
-> from restarting after returning a EPROTO URB up until usb_reset_endpoint()
-> is called
-> 
-> I also support adding usb_purge_endpoint_queue(), but it doesn't have to
-> be done at the same time as the EPROTO changes.
+> I will assume that all stalls for control endpoints are protocol
+> stalls and therefore do not need to be cleared (the device will
+> automatically clear the halt condition when it receives the next
+> SETUP packet for the endpoint).  But does xhci-hcd still require a
+> usb_reset_endpoint() after a control stall?
 
-I've started working on an implementation of this, and there are a few 
-edge cases.  Can anyone answer these questions?
+Nope.
 
-The behavior for control endpoints isn't clear.  When a transaction 
-error occurs in a control transfer, does xHCI stop the endpoint queue?  
-Presumably usb_clear_halt() isn't needed, but what about 
-usb_reset_endpoint()?
+The host endpoint halts on every STALL handshake or non-isoc protocol
+error, but the driver immediately resets every halted endpoint because
+it's a precondition to even remove the failed URB from the HW queue
+before giving it back, which looks like a prudent thing to do.
 
-I will assume that all stalls for control endpoints are protocol stalls 
-and therefore do not need to be cleared (the device will automatically 
-clear the halt condition when it receives the next SETUP packet for the 
-endpoint).  But does xhci-hcd still require a usb_reset_endpoint() 
-after a control stall?
+Currently, by the time the URB is given back, its endpoint is already
+in a "stopped but runnable" state and its sequence state is zeroed.
+And it may have already been restarted if there are more pending URBs.
 
-Recovery from a transaction error on a bulk or interrupt endpoint 
-involves sending a Clear-Halt request to the device.  But if the error 
-was caused by some sort of transient interference that hasn't ended yet, 
-the Clear-Halt might itself fail with the same error.  To handle this, 
-we should retry the Clear-Halt at increasing time intervals.  At what 
-point should the core give up?
+This seems to need no change for control endpoints?
 
-When the error recovery mechanism is in place and working, should 
-usb_bulk_msg() and friends automatically retry when a transaction error 
-occurs?  If they do, how many times?
+For bulk/interrupt it also means that if we delay the restart until
+endpoint_reset() then endpoint_reset() has nothing to do besides
+restarting the endpoint, which is a good thing because this method
+under normal conditions requires no URBs to be present.
 
-Alan Stern
+> Recovery from a transaction error on a bulk or interrupt endpoint 
+> involves sending a Clear-Halt request to the device.  But if the
+> error was caused by some sort of transient interference that hasn't
+> ended yet, the Clear-Halt might itself fail with the same error. To
+> handle this, we should retry the Clear-Halt at increasing time
+> intervals.  At what point should the core give up?
+
+Good question, I don't know. One thing I noticed is that Windows does
+tend to lose patience with completely unresponsive devices and kicks
+them out, but I don't know the exact criteria.
+
+And if core is to clear halt autonomously, things may get interesting
+if a driver tries to do the same, or something else like removing the
+endpoint with usb_set_interface().
+
+A related issue is clearing TT buffers. AFAIK this has no retries, it
+fails silently and leaves the endpoint potentially broken, and it is
+waited for to complete in case of usb_set_interface().
+
+Regards,
+Michal
 
