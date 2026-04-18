@@ -1,423 +1,232 @@
-Return-Path: <linux-usb+bounces-36305-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36306-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kCSeGIrg4mmy/gAAu9opvQ
-	(envelope-from <linux-usb+bounces-36305-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 03:38:18 +0200
+	id CFrrJZnu4mlLAQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36306-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 04:38:17 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBFDB41F9BF
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 03:38:17 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10C0841FB3C
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 04:38:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id DB4BC301C5E5
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 01:38:16 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 73EF230B3F90
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 02:35:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1612F283FE6;
-	Sat, 18 Apr 2026 01:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D8E2330B09;
+	Sat, 18 Apr 2026 02:35:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vQNs7xxk"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="E5d4WD2A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994B240DFA4;
-	Sat, 18 Apr 2026 01:38:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A5432470E
+	for <linux-usb@vger.kernel.org>; Sat, 18 Apr 2026 02:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776476291; cv=none; b=e0fImoIQZVxUUhTld2ss03POxt8cSMjirg4Q8jxE8ssrgzsDJ0wUkgBhbsCGjvWjTfIajqwzDGoqov7oCDe8IoTsTnGNqo4mCx3KzsRQAi3jdL7kaN/zzZhnegk2W+RblFs/4Os3Nz92ZO8UmF0dT4uvvzbLR/W6QtTOSAo3bhw=
+	t=1776479704; cv=none; b=mzD33oqbhpvfvlBYbkWIp7cNTbWLjsaPZEY27NFTOodYa7oYfAhewPsZkxWiL/kcQ7HZEOzIq7IQLQRQTOLGpvoHzZxzODGqTyksteyzT/cULRJMK9LUF25HP/WcWn60W7dO7smMHtaHLa8TRfX+tolw3KXMHWHxqy0/PXNX7SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776476291; c=relaxed/simple;
-	bh=lXL04+CAknW4T8cDuWSzocHz/oIQXU5M2qSqvOYONR0=;
+	s=arc-20240116; t=1776479704; c=relaxed/simple;
+	bh=R7Ceb6L48ow5uSGfUnSj0/B4/WceoqVmBK0QwALbJuE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dLdF9qaEoRKNgHMXwAAyI16gEciiBZSWbsixQ3z404cwL1kAOdQIfV0qI3oH4sZgpSsVXdU5rvDy9A0XvRhB/C+tjC1zGjSNr+MjxAMSmkECVDOfJoN1kpiVswwMWlsNnOWwDhy0o2tqvTiBWj2CpDhNjmS0zznpSKk3hnc802g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vQNs7xxk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68F8BC19425;
-	Sat, 18 Apr 2026 01:38:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776476291;
-	bh=lXL04+CAknW4T8cDuWSzocHz/oIQXU5M2qSqvOYONR0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vQNs7xxkz1hL4vd3eo1a9TsF1wLwHQHtsFu86r3FU+B0SzU5sPDRCa2SRCUg67wbV
-	 hytDPOz1OV8AoP+2U0F+nIPj2OGjLVngkGSsjIkMSpbBsBwk2/al1+Vfpu2E8k1II0
-	 qCoPlLu2ylsFX35LKSC8IjDNcNIYunW7k/54+S4OWQJdLe+8BdO+pin+hCB3nIPpPM
-	 f0iKsWx1ojS65N/EP/P+i0dOZpZLQLkOvfo8DlifSYkzGEUPc1niLfEkZ12qi45mh4
-	 1LHd1DGXAY0O9vUsPbbz8J3t+U1PE8Sae/BXeJCbE1hXuXdo1w9DSeZl0TrA4RRihI
-	 JxjI6JtcI966w==
-Date: Sat, 18 Apr 2026 09:38:07 +0800
-From: "Peter Chen (CIX)" <peter.chen@kernel.org>
-To: pawell@cadence.com
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: cdnsp: add support for eUSB2v2 port
-Message-ID: <aeLgf7Q0iZNOniQs@nchen-desktop>
-References: <20260417-eusb2v2_upstream-v1-1-3340d9d9bf0e@cadence.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=skXBIBLe0HUX602R3PNrXEF5+/oWWQirsGz2YTPCjNNQDrZYYcfmq6OLq0gjTobBdcqb1kYWFnZ5HqGcDpqvkhyTT4CCNM9d59rGlMkO5CiL6tqkxfR+sorhqcedyowRDAsY2L03v2wb3eu9ra8tGdTeKASAIewawCSIQmsS0RY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=E5d4WD2A; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-8d424af6282so140015085a.0
+        for <linux-usb@vger.kernel.org>; Fri, 17 Apr 2026 19:35:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1776479702; x=1777084502; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=k3RpLt6YZRJTexrE0XEFoY9Z7CJnQO6lPu+1lOtOsVU=;
+        b=E5d4WD2A6pQWEkuFHBLJXKzIi+Wz/1oNr/qMLUgYRUhToOR/z9jCYgKtI3/Ztxpg32
+         COYhseOKj17X+v/a7PeHGU7gXMS+g/3KjlCBvFMxvRsTwylekWjeUh4w5YNzomA0qYwp
+         ltfsoaOHCmnefSbLUyoqAjkYarXaNkAhdkMv3yko/SScREsMZAoUkB5jW4aCL5apTFTb
+         O+qOxoBf/D077cHb4bDXclj5kF7TeT/QwmgWZaEzpJiOYQkrk1l+N6lzu3TLjuZNwbES
+         t6JKvnV7QuRw1vez+EKED5zrV+f0H8n0kkp5CWWgei8S6M1mqkhfGbqVWneZz1eB0D9X
+         Hmrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776479702; x=1777084502;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k3RpLt6YZRJTexrE0XEFoY9Z7CJnQO6lPu+1lOtOsVU=;
+        b=NVYBSV2froJPDH82X2xJsEGHgZtMlLtY3a0bH9W2iJ/YhLIYGogolqjI1d+NtBbErQ
+         TEYmBsO1uaH6ulqTvcFF7iKg85520CAQTrckQkCD6GH0F15FXgqztMrK5NTuyhBc7oHU
+         vN38BVE/C/M5J+pmIAoWkSL6l4bCUksj3FJgyHOZEthy0goL/AteomuC/1Pduw4GqpCt
+         WFNmyixoKJTHhypzbhafyzq23gIPtdgWVYVV/7jalan3iAQ7I8Ny6vqTEfU5VPDSo8Y3
+         kXrKzLKDWXzNr2SGWvqzzaRYEnBjAPLvhY54iKKVA0+HkuRRxX4C4b3idDoXUyBWsRFL
+         WhJg==
+X-Forwarded-Encrypted: i=1; AFNElJ+ImVTOxaTQUJcwmusGnHqBhSf3ipkcziXNL+TYhyA63+aN31H4lWUQYkIiUz1NLCU9zWNMHLqUAlg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIPni3tUX7G0qTMOt/cA3MDOqKm77aMe+TudIxkE0kJXGENHVd
+	UVGFcFLw3uV7a6ZrPzNNyAiqv+BQz2984LTIUHTfOmOC7iywJSG2By5I968hr59eG5CYEYL1Odp
+	pApcAFg==
+X-Gm-Gg: AeBDievx/qh+JE3tHQMar4uqAmPzKDcynpWdC9LIT+DG8ioCOuLyibJ4erC/9WXObi8
+	sCUxGpzxqX7XAgHjxLtJdYqqx2KCVcOxkEUjhy/Z6C/EONY1hWc68AN3tClHtj8ca3hz7FWg+a2
+	1fab5nxJgWF9wHzb8kw8nUCADQDdD/lf4t7ruOkkYcg0RaKCurnWpQPedvWJlAm/kYpZhal+tST
+	LR0Mu6gixkwGiCEOnc4F6dYh9KtUI4q3USZYsn1JqRtIK1iGcP6a3o6y+hpU68CnaRvQgsBkPQl
+	zTsmk2c30l4vzd7pxomSO5MgGW2f5ifLceKhBg4HyAmLvLVA26Q2mtKHa7cGZ+xaS/mmD5xikI6
+	hcyYL23VGVkOmba/Y9pe00pBmLXwsH4Pl1ufFScr8LTCqIE3LDDSn+VciglaTrMvzkVmGm+brPk
+	iI+cndjc8ujJJVFU/RBho868/Xc+xOHdN/Ef2yisOOXvPkag==
+X-Received: by 2002:a05:620a:1a26:b0:8cf:d565:fcbb with SMTP id af79cd13be357-8e78f44328amr782520385a.11.1776479701892;
+        Fri, 17 Apr 2026 19:35:01 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d01:d210::5a82])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8e7d95d4282sm268802685a.42.2026.04.17.19.35.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Apr 2026 19:35:00 -0700 (PDT)
+Date: Fri, 17 Apr 2026 22:34:58 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"oneukum@suse.com" <oneukum@suse.com>,
+	"niklas.neronin@linux.intel.com" <niklas.neronin@linux.intel.com>
+Subject: Re: [RFC PATCH 1/2] xhci: prevent automatic endpoint restart after
+ stall or error
+Message-ID: <e89a6683-4570-4ca6-95ea-0e9932614974@rowland.harvard.edu>
+References: <20260404204133.3mcizeeokw3ln5r4@synopsys.com>
+ <243af5f2-3925-4960-be7b-8d0c273ae629@rowland.harvard.edu>
+ <20260404221533.woepax7jxwefy3fq@synopsys.com>
+ <20260404222818.t5y52gnd2gvalvp5@synopsys.com>
+ <b4e2edd9-2616-4cfe-90a5-438fb6625706@rowland.harvard.edu>
+ <20260405030954.32jbg3fphi5xdla3@synopsys.com>
+ <74ac9ea2-34d1-4999-9048-c03a0f978b5d@rowland.harvard.edu>
+ <65682e07-e18c-4674-bfa7-2cc27abb5ede@linux.intel.com>
+ <4a484a89-f52a-48c2-af43-c0029878ddaf@rowland.harvard.edu>
+ <20260417234846.41a24089.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260417-eusb2v2_upstream-v1-1-3340d9d9bf0e@cadence.com>
-X-Spamd-Result: default: False [-1.66 / 15.00];
+In-Reply-To: <20260417234846.41a24089.michal.pecio@gmail.com>
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36305-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36306-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peter.chen@kernel.org,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: EBFDB41F9BF
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 10C0841FB3C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 26-04-17 10:37:31, Pawel Laszczak via B4 Relay wrote:
-> From: Pawel Laszczak <pawell@cadence.com>
+On Fri, Apr 17, 2026 at 11:48:46PM +0200, Michal Pecio wrote:
+> On Fri, 17 Apr 2026 13:38:46 -0400, Alan Stern wrote:
+> > The behavior for control endpoints isn't clear.  When a transaction 
+> > error occurs in a control transfer, does xHCI stop the endpoint
+> > queue? Presumably usb_clear_halt() isn't needed, but what about 
+> > usb_reset_endpoint()?
+> > 
+> > I will assume that all stalls for control endpoints are protocol
+> > stalls and therefore do not need to be cleared (the device will
+> > automatically clear the halt condition when it receives the next
+> > SETUP packet for the endpoint).  But does xhci-hcd still require a
+> > usb_reset_endpoint() after a control stall?
 > 
-> The Cadence CDNSP controller optionally supports eUSB2 (embedded USB2)
-> port. While this port type operates logically like high-speed USB 2.0,
-> it utilizes a different physical layer signaling.
+> Nope.
 > 
-> This patch:
-> - Extends the port detection logic to recognize the eUSB2 protocol.
-> - Tracks the eUSB2 port offset in the cdnsp_device structure.
-> - Ensures that eUSB2 ports are correctly handled during Link State
->   transitions, specifically forcing L0 when LPM is capable, similar
->   to standard USB 2.0 ports.
+> The host endpoint halts on every STALL handshake or non-isoc protocol
+> error, but the driver immediately resets every halted endpoint because
+> it's a precondition to even remove the failed URB from the HW queue
+> before giving it back, which looks like a prudent thing to do.
+
+Okay, good, we'll require all HCDs to reset control endpoints 
+automatically after every error and stall.
+
+> Currently, by the time the URB is given back, its endpoint is already
+> in a "stopped but runnable" state and its sequence state is zeroed.
+> And it may have already been restarted if there are more pending URBs.
+
+Ah, I was going to ask about that.  This will be different from the way 
+bulk and interrupt endpoints will behave, but I think it is acceptable.  
+Control endpoints aren't used for anything that requires high 
+throughput; if a driver wants an error to prevent later transfers from 
+starting right away then it can simply avoid submitting those later 
+transfers until the earlier ones have completed.
+
+> This seems to need no change for control endpoints?
+
+No change needed.
+
+> For bulk/interrupt it also means that if we delay the restart until
+> endpoint_reset() then endpoint_reset() has nothing to do besides
+> restarting the endpoint, which is a good thing because this method
+> under normal conditions requires no URBs to be present.
+
+That could be an issue, because there may well be some URBs that were on 
+the queue when the error occurred and were not unlinked, or were added 
+afterward but before usb_endpoint_reset() could be called.
+
+> > Recovery from a transaction error on a bulk or interrupt endpoint 
+> > involves sending a Clear-Halt request to the device.  But if the
+> > error was caused by some sort of transient interference that hasn't
+> > ended yet, the Clear-Halt might itself fail with the same error. To
+> > handle this, we should retry the Clear-Halt at increasing time
+> > intervals.  At what point should the core give up?
 > 
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> Good question, I don't know. One thing I noticed is that Windows does
+> tend to lose patience with completely unresponsive devices and kicks
+> them out, but I don't know the exact criteria.
 
-Pawel, I would like double confirm if you have tested current USB2 and
-USB3 device mode, basically, I think you did it.
+Two reasonable possibilities are 250 ms (because that's about how long 
+an intermediate hub might take to notify the core about a disconnect) or 
+5 seconds (the normal timeout for control transfers).  Of course, 5 
+seconds is an awfully long time to wait for a mouse or keyboard to 
+recover, so maybe something in between would be best.
 
-> ---
->  drivers/usb/cdns3/cdnsp-gadget.c | 49 ++++++++++++++++++---------
->  drivers/usb/cdns3/cdnsp-gadget.h |  1 +
->  drivers/usb/cdns3/cdnsp-mem.c    | 73 +++++++++++++++++++++++++++-------------
->  drivers/usb/cdns3/cdnsp-ring.c   |  9 +++--
->  4 files changed, 90 insertions(+), 42 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-> index 6b3815f8a6e5..2c71c77e6ec3 100644
-> --- a/drivers/usb/cdns3/cdnsp-gadget.c
-> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
-> @@ -124,20 +124,28 @@ void cdnsp_set_link_state(struct cdnsp_device *pdev,
->  }
->  
->  static void cdnsp_disable_port(struct cdnsp_device *pdev,
-> -			       __le32 __iomem *port_regs)
-> +			       struct cdnsp_port *port)
->  {
-> -	u32 temp = cdnsp_port_state_to_neutral(readl(port_regs));
-> +	u32 temp;
-> +
-> +	if (!port->exist)
-> +		return;
->  
-> -	writel(temp | PORT_PED, port_regs);
-> +	temp = cdnsp_port_state_to_neutral(readl(&port->regs->portsc));
-> +	writel(temp | PORT_PED, &port->regs->portsc);
->  }
+> And if core is to clear halt autonomously, things may get interesting
+> if a driver tries to do the same, or something else like removing the
+> endpoint with usb_set_interface().
 
-Why above changes are added, is it related to this change?
+I will set things up so that an extraneous clear-halt (such as one 
+submitted by the driver) will prevent the core from doing its own.  This 
+leaves the possibility of the core clearing the halt and restarting the 
+endpoint and then the driver doing it again, while the endpoint is 
+running and the queue is nonempty.  Hopefully drivers avoid doing this.  
+But if it helps, I could print a warning if usb_clear_halt() is called 
+for an endpoint that isn't stopped and has a nonempty queue.
 
->  
->  static void cdnsp_clear_port_change_bit(struct cdnsp_device *pdev,
-> -					__le32 __iomem *port_regs)
-> +					struct cdnsp_port *port)
->  {
-> -	u32 portsc = readl(port_regs);
-> +	u32 portsc;
-> +
-> +	if (!port->exist)
-> +		return;
->  
-> +	portsc = readl(&port->regs->portsc);
->  	writel(cdnsp_port_state_to_neutral(portsc) |
-> -	       (portsc & PORT_CHANGE_BITS), port_regs);
-> +	       (portsc & PORT_CHANGE_BITS), &port->regs->portsc);
->  }
+Also I will be careful to make the core's actions mutually exclusive 
+with: suspend/resume, reset, disconnect, set-config, and set-interface.
+Should anything else be added to this list?
 
-ditto
+> A related issue is clearing TT buffers. AFAIK this has no retries, it
+> fails silently and leaves the endpoint potentially broken, and it is
+> waited for to complete in case of usb_set_interface().
 
->  
->  static void cdnsp_set_apb_timeout_value(struct cdnsp_device *pdev)
-> @@ -944,7 +952,7 @@ void cdnsp_set_usb2_hardware_lpm(struct cdnsp_device *pdev,
->  				 struct usb_request *req,
->  				 int enable)
->  {
-> -	if (pdev->active_port != &pdev->usb2_port || !pdev->gadget.lpm_capable)
-> +	if (pdev->active_port == &pdev->usb3_port || !pdev->gadget.lpm_capable)
->  		return;
->  
->  	trace_cdnsp_lpm(enable);
-> @@ -1310,20 +1318,26 @@ static int cdnsp_run(struct cdnsp_device *pdev,
->  		break;
->  	}
->  
-> -	if (speed >= USB_SPEED_SUPER) {
-> +	if (pdev->usb3_port.exist && speed >= USB_SPEED_SUPER) {
->  		writel(temp, &pdev->port3x_regs->mode_addr);
->  		cdnsp_set_link_state(pdev, &pdev->usb3_port.regs->portsc,
->  				     XDEV_RXDETECT);
->  	} else {
-> -		cdnsp_disable_port(pdev, &pdev->usb3_port.regs->portsc);
-> +		cdnsp_disable_port(pdev, &pdev->usb3_port);
->  	}
->  
-> -	cdnsp_set_link_state(pdev, &pdev->usb2_port.regs->portsc,
-> -			     XDEV_RXDETECT);
-> +	if (pdev->usb2_port.exist) {
-> +		cdnsp_set_link_state(pdev, &pdev->usb2_port.regs->portsc,
-> +				     XDEV_RXDETECT);
-> +		writel(PORT_REG6_L1_L0_HW_EN | fs_speed, &pdev->port20_regs->port_reg6);
-> +	}
-> +
-> +	if (pdev->eusb_port.exist)
-> +		cdnsp_set_link_state(pdev, &pdev->eusb_port.regs->portsc,
-> +				     XDEV_RXDETECT);
->  
->  	cdnsp_gadget_ep0_desc.wMaxPacketSize = cpu_to_le16(512);
->  
-> -	writel(PORT_REG6_L1_L0_HW_EN | fs_speed, &pdev->port20_regs->port_reg6);
->  
->  	ret = cdnsp_start(pdev);
->  	if (ret) {
-> @@ -1469,8 +1483,10 @@ static void cdnsp_stop(struct cdnsp_device *pdev)
->  			cdnsp_ep_dequeue(&pdev->eps[0], req);
->  	}
->  
-> -	cdnsp_disable_port(pdev, &pdev->usb2_port.regs->portsc);
-> -	cdnsp_disable_port(pdev, &pdev->usb3_port.regs->portsc);
-> +	cdnsp_disable_port(pdev, &pdev->usb2_port);
-> +	cdnsp_disable_port(pdev, &pdev->usb3_port);
-> +	cdnsp_disable_port(pdev, &pdev->eusb_port);
-> +
->  	cdnsp_disable_slot(pdev);
->  	cdnsp_halt(pdev);
->  
-> @@ -1479,8 +1495,9 @@ static void cdnsp_stop(struct cdnsp_device *pdev)
->  	temp = readl(&pdev->ir_set->irq_pending);
->  	writel(IMAN_IE_CLEAR(temp), &pdev->ir_set->irq_pending);
->  
-> -	cdnsp_clear_port_change_bit(pdev, &pdev->usb2_port.regs->portsc);
-> -	cdnsp_clear_port_change_bit(pdev, &pdev->usb3_port.regs->portsc);
-> +	cdnsp_clear_port_change_bit(pdev, &pdev->usb2_port);
-> +	cdnsp_clear_port_change_bit(pdev, &pdev->eusb_port);
-> +	cdnsp_clear_port_change_bit(pdev, &pdev->usb3_port);
->  
->  	/* Clear interrupt line */
->  	temp = readl(&pdev->ir_set->irq_pending);
-> diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-gadget.h
-> index a91cca509db0..c44bca348a41 100644
-> --- a/drivers/usb/cdns3/cdnsp-gadget.h
-> +++ b/drivers/usb/cdns3/cdnsp-gadget.h
-> @@ -1474,6 +1474,7 @@ struct cdnsp_device {
->  	unsigned int link_state;
->  
->  	struct cdnsp_port usb2_port;
-> +	struct cdnsp_port eusb_port;
->  	struct cdnsp_port usb3_port;
->  	struct cdnsp_port *active_port;
->  	u16 test_mode;
-> diff --git a/drivers/usb/cdns3/cdnsp-mem.c b/drivers/usb/cdns3/cdnsp-mem.c
-> index a2a1b21f2ef8..932071818d1e 100644
-> --- a/drivers/usb/cdns3/cdnsp-mem.c
-> +++ b/drivers/usb/cdns3/cdnsp-mem.c
-> @@ -1088,11 +1088,9 @@ void cdnsp_mem_cleanup(struct cdnsp_device *pdev)
->  			  pdev->dcbaa, pdev->dcbaa->dma);
->  
->  	pdev->dcbaa = NULL;
-> -
-> -	pdev->usb2_port.exist = 0;
-> -	pdev->usb3_port.exist = 0;
-> -	pdev->usb2_port.port_num = 0;
-> -	pdev->usb3_port.port_num = 0;
-> +	memset(&pdev->usb2_port, 0, sizeof(struct cdnsp_port));
-> +	memset(&pdev->eusb_port, 0, sizeof(struct cdnsp_port));
-> +	memset(&pdev->usb3_port, 0, sizeof(struct cdnsp_port));
->  	pdev->active_port = NULL;
->  }
->  
-> @@ -1133,6 +1131,18 @@ static void cdnsp_add_in_port(struct cdnsp_device *pdev,
->  	port_offset = CDNSP_EXT_PORT_OFF(temp);
->  	port_count = CDNSP_EXT_PORT_COUNT(temp);
->  
-> +	if (port == &pdev->eusb_port) {
-> +		/*
-> +		 * If controller has usb2 + eusb port then eusb is as
-> +		 * second port
-> +		 */
+Is there anything we can do besides calling usb_clear_halt() and 
+usb_reset_endpoint()?  If not, and data loss is unavoidable, then so be 
+it.
 
-What kinds of topology like below usb2 + eusb?
-
-> +		if (port_count == 2)
-> +			port_offset++;
-> +
-> +		if (port_count == 1 && pdev->usb2_port.exist)
-> +			return;
-> +	}
-> +
->  	trace_cdnsp_port_info(addr, port_offset, port_count, port->maj_rev);
->  
->  	port->port_num = port_offset;
-> @@ -1152,13 +1162,10 @@ static int cdnsp_setup_port_arrays(struct cdnsp_device *pdev)
->  	base = &pdev->cap_regs->hc_capbase;
->  	offset = cdnsp_find_next_ext_cap(base, 0,
->  					 EXT_CAP_CFG_DEV_20PORT_CAP_ID);
-> -	pdev->port20_regs = base + offset;
-> -
-> -	offset = cdnsp_find_next_ext_cap(base, 0, D_XEC_CFG_3XPORT_CAP);
-> -	pdev->port3x_regs =  base + offset;
-> +	if (offset)
-> +		pdev->port20_regs = base + offset;
->  
->  	offset = 0;
-> -	base = &pdev->cap_regs->hc_capbase;
->  
->  	/* Driver expects max 2 extended protocol capability. */
->  	for (i = 0; i < 2; i++) {
-> @@ -1173,26 +1180,46 @@ static int cdnsp_setup_port_arrays(struct cdnsp_device *pdev)
->  			cdnsp_add_in_port(pdev, &pdev->usb3_port,
->  					  base + offset);
->  
-> -		if (CDNSP_EXT_PORT_MAJOR(temp) == 0x02 &&
-> -		    !pdev->usb2_port.port_num)
-> -			cdnsp_add_in_port(pdev, &pdev->usb2_port,
-> -					  base + offset);
-> +		if (CDNSP_EXT_PORT_MAJOR(temp) == 0x02) {
-> +			if (!pdev->usb2_port.port_num && pdev->port20_regs)
-
-Why "&& pdev->port20_regs" is added?
-
-> +				cdnsp_add_in_port(pdev, &pdev->usb2_port,
-> +						  base + offset);
-> +
-> +			if (!pdev->eusb_port.port_num)
-> +				cdnsp_add_in_port(pdev, &pdev->eusb_port,
-> +						  base + offset);
-> +		}
->  	}
->  
-> -	if (!pdev->usb2_port.exist || !pdev->usb3_port.exist) {
-> -		dev_err(pdev->dev, "Error: Only one port detected\n");
-> +	if (!pdev->usb2_port.exist && !pdev->eusb_port.exist &&
-> +	    !pdev->usb3_port.exist) {
-> +		dev_err(pdev->dev, "Error: No port detected\n");
->  		return -ENODEV;
->  	}
->  
-> -	trace_cdnsp_init("Found USB 2.0 ports and  USB 3.0 ports.");
-> +	if (pdev->usb2_port.exist) {
-> +		pdev->usb2_port.regs = (struct cdnsp_port_regs __iomem *)
-> +				       (&pdev->op_regs->port_reg_base + NUM_PORT_REGS *
-> +					(pdev->usb2_port.port_num - 1));
-> +		trace_cdnsp_init("Found USB 2.0 port.");
-> +	}
->  
-> -	pdev->usb2_port.regs = (struct cdnsp_port_regs __iomem *)
-> -			       (&pdev->op_regs->port_reg_base + NUM_PORT_REGS *
-> -				(pdev->usb2_port.port_num - 1));
-> +	if (pdev->eusb_port.exist) {
-> +		pdev->eusb_port.regs = (struct cdnsp_port_regs __iomem *)
-> +				       (&pdev->op_regs->port_reg_base + NUM_PORT_REGS *
-> +					(pdev->eusb_port.port_num - 1));
-> +		trace_cdnsp_init("Found eUSB 2.0 port.");
-> +	}
-> +
-> +	if (pdev->usb3_port.exist) {
-> +		offset = cdnsp_find_next_ext_cap(base, 0, D_XEC_CFG_3XPORT_CAP);
-> +		pdev->port3x_regs =  base + offset;
->  
-> -	pdev->usb3_port.regs = (struct cdnsp_port_regs __iomem *)
-> -			       (&pdev->op_regs->port_reg_base + NUM_PORT_REGS *
-> -				(pdev->usb3_port.port_num - 1));
-> +		pdev->usb3_port.regs = (struct cdnsp_port_regs __iomem *)
-> +				       (&pdev->op_regs->port_reg_base + NUM_PORT_REGS *
-> +					(pdev->usb3_port.port_num - 1));
-> +		trace_cdnsp_init("Found  USB 3.x port.");
-
-One More blank space after "Found"
-
-Peter
-> +	}
->  
->  	return 0;
->  }
-> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-> index 0758f171f73e..715658c981ff 100644
-> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> @@ -259,7 +259,7 @@ static bool cdnsp_room_on_ring(struct cdnsp_device *pdev,
->   */
->  static void cdnsp_force_l0_go(struct cdnsp_device *pdev)
->  {
-> -	if (pdev->active_port == &pdev->usb2_port && pdev->gadget.lpm_capable)
-> +	if (pdev->active_port != &pdev->usb3_port && pdev->gadget.lpm_capable)
->  		cdnsp_set_link_state(pdev, &pdev->active_port->regs->portsc, XDEV_U0);
->  }
->  
-> @@ -763,6 +763,8 @@ static int cdnsp_update_port_id(struct cdnsp_device *pdev, u32 port_id)
->  
->  	if (port_id == pdev->usb2_port.port_num) {
->  		port = &pdev->usb2_port;
-> +	} else if (port_id == pdev->eusb_port.port_num) {
-> +		port = &pdev->eusb_port;
->  	} else if (port_id == pdev->usb3_port.port_num) {
->  		port  = &pdev->usb3_port;
->  	} else {
-> @@ -779,7 +781,8 @@ static int cdnsp_update_port_id(struct cdnsp_device *pdev, u32 port_id)
->  		cdnsp_enable_slot(pdev);
->  	}
->  
-> -	if (port_id == pdev->usb2_port.port_num)
-> +	if ((pdev->usb2_port.exist && port_id == pdev->usb2_port.port_num) ||
-> +	    (pdev->eusb_port.exist && port_id == pdev->eusb_port.port_num))
->  		cdnsp_set_usb2_hardware_lpm(pdev, NULL, 1);
->  	else
->  		writel(PORT_U1_TIMEOUT(1) | PORT_U2_TIMEOUT(1),
-> @@ -808,7 +811,7 @@ static void cdnsp_handle_port_status(struct cdnsp_device *pdev,
->  
->  	port_regs = pdev->active_port->regs;
->  
-> -	if (port_id == pdev->usb2_port.port_num)
-> +	if (port_id == pdev->usb2_port.port_num || port_id == pdev->eusb_port.port_num)
->  		port2 = true;
->  
->  new_event:
-> 
-> ---
-> base-commit: 1c7cc4904160c6fc6377564140062d68a3dc93a0
-> change-id: 20260417-eusb2v2_upstream-80c5b29a7bba
-> 
-> Best regards,
-> --  
-> Pawel Laszczak <pawell@cadence.com>
-> 
-> 
-
--- 
-
-Best regards,
-Peter
+Alan Stern
 
