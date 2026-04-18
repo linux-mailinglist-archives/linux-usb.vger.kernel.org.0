@@ -1,165 +1,165 @@
-Return-Path: <linux-usb+bounces-36307-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36308-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4GqIO+Hz4mmRAgEAu9opvQ
-	(envelope-from <linux-usb+bounces-36307-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 05:00:50 +0200
+	id IGr0HHIv42l9DAEAu9opvQ
+	(envelope-from <linux-usb+bounces-36308-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 09:14:58 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A32941FD08
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 05:00:48 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBB6F4203FD
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 09:14:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EAE74305E10D
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 02:58:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 14F05303C4C8
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 07:14:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5F4B330328;
-	Sat, 18 Apr 2026 02:58:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39BE935839C;
+	Sat, 18 Apr 2026 07:14:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=exponent-digital.20251104.gappssmtp.com header.i=@exponent-digital.20251104.gappssmtp.com header.b="aMQq/Jz8"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="D0UlEWiG";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="uSPPKZB+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D794628466C
-	for <linux-usb@vger.kernel.org>; Sat, 18 Apr 2026 02:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86671326938;
+	Sat, 18 Apr 2026 07:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776481117; cv=none; b=W5DytpXydszlRfFp8Ru7nEMG2HAM8C4Ru4HIDawqRcOmiDkDfYXx0zcDcCYAf+8iTv7JOfR7NnNAdgI0HN2sIbkjXyZIYic5VahGpLT8LJLd+HrKnVFHOx7CeWvEv5D43BJ8TYKWyIxjIFimI8AYkBTO32aAixQ/hUxu0rRq3Zk=
+	t=1776496483; cv=none; b=SLoTSGtPmGfCjEB5QqdVp7SF665rR+1C0J/ZoYTbLq9q1iVnB4DIZA3/nyLyJc+2kf89OYhNmOFgS+wwYywYu+6IMin2fVIwMo7VsdlNhPalUNaWvTm2kDoaWTa4xoj3KY1lOeNPnbjXSFamiPSEyo03H3/DJnmKo+GmBrtqoNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776481117; c=relaxed/simple;
-	bh=Os3Qd2/rEF3RFRrAtbvsX0CsqiUOJRcpfnFRti8hRTE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DBF//WhzrWBPRU0Qw5JvQFamVehQg/fNiYpbrQOBUIhxjk24UzZm/z1sFexGoZ+rvoDoGwNhaapTzr/j7Q+43eWZi6yaHSqzfPXKSkwTTJIywNMHmGYRlrzYAGGFZZp4A357/gjZwhfeEqznhF2z7c+6R3dbOF4qziSar70SPvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=exponent.digital; spf=pass smtp.mailfrom=exponent.digital; dkim=pass (2048-bit key) header.d=exponent-digital.20251104.gappssmtp.com header.i=@exponent-digital.20251104.gappssmtp.com header.b=aMQq/Jz8; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=exponent.digital
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=exponent.digital
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-82f37c09352so1591548b3a.0
-        for <linux-usb@vger.kernel.org>; Fri, 17 Apr 2026 19:58:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=exponent-digital.20251104.gappssmtp.com; s=20251104; t=1776481114; x=1777085914; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wimO4t98B94X++UZm1VpEFfwrjNwlS6cYzn0ZUHBaAs=;
-        b=aMQq/Jz8zocx4LSV0PkiQKMh2LR10TOFmWSu6Uh5tjahwZiv408BLMhKPvUmEjEGsE
-         AyN+8mxnK8xmQLXelSD1CYfvuPj1DJ/xLWlO++TFujCPjhjVrFmGXLzrVrdpeo8HICSl
-         qnDaeZh9PQFHSRUSxSeM55mMY0ppjlefeDwVqjBWPhLlrnZX8G22h91uBiDWy19wsF1f
-         Vlz1hwLPXQtxbU/V6wMem+D/Tgrxm1/SMSgdeIfGDn8abgLRHUTsOfydjqHndBiDs/Mi
-         bAcOvlPUDrb3JxSL3FOzLEz8rbQGbaq/PQtYQP7N6sI9Xl0m8RkARmMXaNm2vIRB37lx
-         duPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776481114; x=1777085914;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wimO4t98B94X++UZm1VpEFfwrjNwlS6cYzn0ZUHBaAs=;
-        b=RB0DAF4a3GV1a3xdqmm/tXeXceTuyoZ7CL4ZHCKG1CSJRaCM3HDnjuIegp61aC8nkF
-         alawxIDusO9eBhcrrngy86ZYqqkyJq4Y5JdQWVXtOUyayuKFAdno+KWXUxutJRwStZsf
-         8OdOd8l6zgPzEVNhtwoh4ZBLxQldxvK/5i03oXLRzG+v9Zj3KYFvfsNzoOGDtj95V0yC
-         eiga1e83ij23dXVQjvNRpm1tUoGCIOCsqLCakjbBz2Ut3fZeWo9Mig0d/6EtIykN5S4q
-         I+5l9MKhBR/8W/V6w+VcWvPXIShrlqw6oowLGv1jEf3tFC01wbjReI2kCZmDFjUbrnXL
-         Gkmw==
-X-Gm-Message-State: AOJu0Yy8xxNyNWibpYL2PE7Au6xP2namceNk/GKAEoEwQSIh+2fxT2PM
-	bxOKiXidAqHniAN5bdPd54vKakIQjUgHVUOtMndfoos3o/mkzn8l/wRHIcf6KdngjeM=
-X-Gm-Gg: AeBDiesQQI6i9nquF9a50Ruj475doXKZp1D3dBeCuP6nWGDId0O6xPIw77ucmCb0xD0
-	Dd93j4xeVGuWU39UOodIhUowNH9/ZPzgXtGQXEKTaCh/D6UQ/ZIFCP648zHwz+OsPHYsUHYm39D
-	7GZFQ+6qBG4PQSEC5Srv9kvoeGa6tz3FcmZ66ebwomCDSSa5k09RM+pvJ+9uAUD18HesTzM6DCJ
-	NLjFerMfKZSAdryTFnDRfA/GU+n9aQsBdE+Y7GjSazAAtPelSAnLuqZPdDyPaMZB0m0WCP5RzHC
-	oKhIDhERhd8MXQPNHRvEcoYDozEpJb7fwANqwuqOkPiA8r/tzg9NvncnTTjg6jJJfJClGOD4LfC
-	1Q/l+05az39Um9/u2Wi6X4v8WA6rUkYGhKFU+/nlVKVug5k69dUaJj3Elf0NLxnRYh0YN1v2EtB
-	oYuoV+GDiiP5USEUI15teKFnFFOQXogE3Tc7Cw7hE3AuFnNQqfCKx+UUTRrYw=
-X-Received: by 2002:a05:6a00:27ab:b0:82f:4725:f6d0 with SMTP id d2e1a72fcca58-82f8b5476bdmr4184949b3a.29.1776481114219;
-        Fri, 17 Apr 2026 19:58:34 -0700 (PDT)
-Received: from yohji.localdomain ([101.100.136.235])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8e9819e5sm3524552b3a.2.2026.04.17.19.58.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2026 19:58:33 -0700 (PDT)
-From: Taylor Hewetson <taylor@exponent.digital>
-To: Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>
-Cc: linux-usb@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Taylor Hewetson <taylor@exponent.digital>
-Subject: [PATCH] HID: usbhid: sanitize hid->uniq against non-printable bytes
-Date: Sat, 18 Apr 2026 14:58:23 +1200
-Message-ID: <20260418025823.21767-1-taylor@exponent.digital>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1776496483; c=relaxed/simple;
+	bh=9gkKROIrKMDYokgdoKbSwsI9W1L9HMdv/hQ5Qmf9yYI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WLQuz4rjTun0dbX+BCVKlKxqNC2mRG6YZ+vVZPdv5q32lNaEJBmjzFY9t+CLhtfN74KL5TcupmlkeaLRbVIYQxCKxbgL/I1xV1UzHGoMdWjt2GNpM4xVhhoM4X7yIf5KDq4X0VLSfeh4KbCy6bDPDwmw04EaAMDZguruNjP7xjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=D0UlEWiG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=uSPPKZB+; arc=none smtp.client-ip=103.168.172.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id BB0F41400095;
+	Sat, 18 Apr 2026 03:14:40 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Sat, 18 Apr 2026 03:14:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1776496480; x=1776582880; bh=GtnYZp7AKb
+	GAz+DaPar8dtMqZFmTpMDldNC/2g0WWao=; b=D0UlEWiGpTmJ5HplBfqkgIcIWL
+	+h3OyKmM9UyrGd/ppWKFYS5IohNTWuls0bZpqF40DT/7Z/rlde4+3tZoyRtHa2eS
+	R8Nlt+TsKAF44nUyAxsiTycEhFLxsSbHhXGh1/do4tPzARyVBiQjnPp1clNNCM+q
+	3bXSIM1lVIJvhBFejY9SvVF9boJOp9FLleLVZCFmfjbwSwO0SdlW8Pcq74bKLhHK
+	eno4uERm4ojQy/zJ6DCbGqh0FeOhneUfc/g/FDzdVn4POByZaeV4VQV0z06sGm/n
+	e9cFMx1TpdGdMCvxc4WXYE4prGZXr2Ppir0uGGa9a7qbziunDzbutOqKrdig==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1776496480; x=1776582880; bh=GtnYZp7AKbGAz+DaPar8dtMqZFmTpMDldNC
+	/2g0WWao=; b=uSPPKZB+mcA25MUIGNUpxRNJujlFMHOi4scYPvlNfdH9R3nouOu
+	Z4CgOiUqDXb+PSc/jG9n2sUXJzb1iArxNM871DzOiBv9Sp2P+MbVmKQMIkQbf0GV
+	qB2GMM9HlfVtLhuqk+xJR03+y0kZn/fRYFbFfhT+sSJc+cFJakphF4EV8QSV5nK2
+	XOz/kt+/AINIzR6mOls3AoP7xQBYdwO4F5OBExfVt7eFhaL+ke08wBiExb2nKSF1
+	95wlDRmiHWvN8mV8Qps5HAbsKcev23Y8Rld38LDi2mT5YQMhlKeAaAQVcmEcSXh2
+	Fyeb1DWBNJ6/odNzDjuPXBfPOKNkM9YHEuw==
+X-ME-Sender: <xms:YC_jaZn4wn2Yc_NPPeOPKWfu7cH_yLJ-LvbyZx4vKvIql9z82J_Xkw>
+    <xme:YC_jaRibE6A1x7cRgbBR0eYL95AGqVF9Mof_1Za7WTFONsAq5d58DYoq1j2tdNoHp
+    80il8lJHRnkM14GvtnUAi0KJdF5V7jRk0Cr5Rpk0SsAY1j0Mg>
+X-ME-Received: <xmr:YC_jaTh8vgljbTmWzxkOmKGfNKmRvRjTO5xtCxwa_I9v95qbZG7wpi-r5g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdehvddufecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcumffj
+    uceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvvedvle
+    ejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushhtvghr
+    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtg
+    homhdpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhpohhuthdprhgtphhtthho
+    pehtrgihlhhorhesvgigphhonhgvnhhtrdguihhgihhtrghlpdhrtghpthhtohepjhhikh
+    hosheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsggvnhhtihhssheskhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtoheplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehlihhnuhigqdhinhhpuhhtsehvghgvrhdrkhgvrhhnvghlrdho
+    rhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrd
+    horhhg
+X-ME-Proxy: <xmx:YC_jaTsnG_u62w8sRheLlORiBLjLDIM442fdPfYQzGSIbuDSSLo9yA>
+    <xmx:YC_jabsDqmvzDO0Nh1xa1b61i6wC-BZMedeIApgLudbxY0nLEL-PxQ>
+    <xmx:YC_jaRrgoWF7JDzvbIFV0G-vrW5yCvfQlwH-wTSgSPU18b0N7qi_kA>
+    <xmx:YC_jaSJPpkQmtLH1YCkOQHRIhzMJWgJB4rVeNVHuukjNw_AZKumqzg>
+    <xmx:YC_jaSZO-G0QqeknlxNuCW_XGu9Eq4t4BNuWhJeBMc-mHRmnvN8YKAxq>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 18 Apr 2026 03:14:40 -0400 (EDT)
+Date: Sat, 18 Apr 2026 09:14:08 +0200
+From: Greg KH <greg@kroah.com>
+To: Taylor Hewetson <taylor@exponent.digital>
+Cc: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
+	linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: usbhid: sanitize hid->uniq against non-printable
+ bytes
+Message-ID: <2026041845-approve-pelvis-9845@gregkh>
+References: <20260418025823.21767-1-taylor@exponent.digital>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.16 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260418025823.21767-1-taylor@exponent.digital>
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[exponent-digital.20251104.gappssmtp.com:s=20251104];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kroah.com,none];
+	R_DKIM_ALLOW(-0.20)[kroah.com:s=fm2,messagingengine.com:s=fm2];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_NA(0.00)[exponent.digital];
 	RCVD_TLS_LAST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36307-lists,linux-usb=lfdr.de];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36308-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[kroah.com:+,messagingengine.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[greg@kroah.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[taylor@exponent.digital,linux-usb@vger.kernel.org];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[5];
-	DKIM_TRACE(0.00)[exponent-digital.20251104.gappssmtp.com:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
 	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[exponent.digital:mid,exponent.digital:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,exponent-digital.20251104.gappssmtp.com:dkim]
-X-Rspamd-Queue-Id: 3A32941FD08
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: DBB6F4203FD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Some USB HID devices (observed on ASUS ROG Azoth via its 2.4GHz
-dongle, USB ID 0b05:1a85) report an iSerialNumber string whose
-USB string descriptor declares a longer length than the actual
-serial, leaving uninitialized firmware memory - including control
-characters such as 0x18 - appended to the returned string.
+On Sat, Apr 18, 2026 at 02:58:23PM +1200, Taylor Hewetson wrote:
+> Some USB HID devices (observed on ASUS ROG Azoth via its 2.4GHz
+> dongle, USB ID 0b05:1a85) report an iSerialNumber string whose
+> USB string descriptor declares a longer length than the actual
+> serial, leaving uninitialized firmware memory - including control
+> characters such as 0x18 - appended to the returned string.
+> 
+> These non-printable bytes propagate into hid->uniq, which in turn
+> populates /sys/class/input/inputN/uniq. Downstream userspace
+> components (systemd sd-device property_is_valid(), and by extension
+> mutter input enumeration on GNOME Wayland sessions) reject devices
+> with control characters in their uniq, rendering otherwise-
+> functional input devices unusable in graphical sessions despite
+> the kernel input layer correctly translating keypresses.
+> 
+> Truncate hid->uniq at the first byte outside the printable ASCII
+> range (0x20..0x7e) after the serial is read.
 
-These non-printable bytes propagate into hid->uniq, which in turn
-populates /sys/class/input/inputN/uniq. Downstream userspace
-components (systemd sd-device property_is_valid(), and by extension
-mutter input enumeration on GNOME Wayland sessions) reject devices
-with control characters in their uniq, rendering otherwise-
-functional input devices unusable in graphical sessions despite
-the kernel input layer correctly translating keypresses.
+Why aren't we doing this in the USB core instead of forcing all users of
+this to do it instead?
 
-Truncate hid->uniq at the first byte outside the printable ASCII
-range (0x20..0x7e) after the serial is read.
+thanks,
 
-Signed-off-by: Taylor Hewetson <taylor@exponent.digital>
----
---- a/drivers/hid/usbhid/hid-core.c
-+++ b/drivers/hid/usbhid/hid-core.c
-@@ -1427,8 +1427,17 @@
- 		snprintf(hid->phys + len, sizeof(hid->phys) - len,
- 			 "%d", intf->altsetting[0].desc.bInterfaceNumber);
- 
--	if (usb_string(dev, dev->descriptor.iSerialNumber, hid->uniq, 64) <= 0)
-+	if (usb_string(dev, dev->descriptor.iSerialNumber, hid->uniq, 64) <= 0) {
- 		hid->uniq[0] = 0;
-+	} else {
-+		size_t i;
-+		for (i = 0; i < sizeof(hid->uniq) && hid->uniq[i]; i++) {
-+			if (hid->uniq[i] < 0x20 || hid->uniq[i] > 0x7e) {
-+				hid->uniq[i] = 0;
-+				break;
-+			}
-+		}
-+	}
- 
- 	usbhid = kzalloc(sizeof(*usbhid), GFP_KERNEL);
- 	if (usbhid == NULL) {
+greg k-h
 
