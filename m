@@ -1,292 +1,284 @@
-Return-Path: <linux-usb+bounces-36310-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36311-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SEzSINWb42mCJAEAu9opvQ
-	(envelope-from <linux-usb+bounces-36310-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 16:57:25 +0200
+	id ALI0I8i+42muKQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36311-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 19:26:32 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD7F1421649
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 16:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FF29421CD6
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 19:26:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5A4B6302BE9E
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 14:57:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E72693023DEA
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2026 17:26:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56CEE395DB4;
-	Sat, 18 Apr 2026 14:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F41183290D3;
+	Sat, 18 Apr 2026 17:26:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ECTGDBmt"
+	dkim=pass (2048-bit key) header.d=jphein.com header.i=@jphein.com header.b="kBlEteeT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5753633F8C6
-	for <linux-usb@vger.kernel.org>; Sat, 18 Apr 2026 14:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776524220; cv=none; b=H3LHPb6jGeSJP9DIuEmxQvbcvmdNHJFIofOBqkMWixemnLr8krSWBEZi8JIYaaKM8uExvSzK8YOWMW1rY/CwNLuYV2a4pE5IZUSXyOmYRPWnoSkNgnTebibuxmCGfTeHdc/3J0WWeYYSdu5mG6jbcoMK+bDXgzreMjvsxGaK+IA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776524220; c=relaxed/simple;
-	bh=GoSBbEcCO3UjQvd7U82+jFRIp8C9uD1R0WHOOYXmWvQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S355g0UG54aDC4Ek8k6SAdWzWaczlN40jfQuI67UbwAHbemZsrtSXKn3zOxUxhb8RPPbGcaq3Hjfo600Dp47qbGpzxHp62N/Fx3xr2FKezM+XaOdfOBFB7b6zL8U6jP5CbyIAD4hT56Id9vjCyTwz4h6uTFVam/IVDCIozR9cfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ECTGDBmt; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8acb7f2586bso19547486d6.1
-        for <linux-usb@vger.kernel.org>; Sat, 18 Apr 2026 07:56:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6943101D0
+	for <linux-usb@vger.kernel.org>; Sat, 18 Apr 2026 17:26:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776533185; cv=pass; b=o/LswD/SdQwGT2yjTJceXH2Ap/9wMDIZFA9ujYM5a73qHmetHtX87bHTTJMaeYhyWvoGBgUeHfGlt5L/RJl2CXgwHlF7TclE1jUFbtWKpjOOkf27cGH0flzDbGr6pmx++6dC7z3Y1+oi1P/nk8M2yTt1GNBIiNb5oZS4c9o16jI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776533185; c=relaxed/simple;
+	bh=9OVsWG6+yc4+IAvVazyFSY2sDQ3pP+4KRfr8oJkRS/w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iR1BbzVxlgaOhfLvkS0NZyLUAVDM1P+Q4UmDFd3l3d9PMHym1p1gw/1/0ILjlftEIfho1DAgbzRNaYEV/JSXdOiRgETu04/AcTrV9UFrOnWsniTdi/K0xrzrmCx63WEqe6MOnwLR4GCBH7pPcRmWQ3eq9lGAbh2QQN+oscM6C0c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jphein.com; spf=pass smtp.mailfrom=jphein.com; dkim=pass (2048-bit key) header.d=jphein.com header.i=@jphein.com header.b=kBlEteeT; arc=pass smtp.client-ip=74.125.224.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jphein.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jphein.com
+Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-651b4d09141so2399358d50.1
+        for <linux-usb@vger.kernel.org>; Sat, 18 Apr 2026 10:26:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776533183; cv=none;
+        d=google.com; s=arc-20240605;
+        b=dkv9qgpBzMD15N99S9eMsGEmoOjJhJ9FRh+V729aPZwDuTYN73S4eL+26NcC/JxAAz
+         P0YxO6u/hB04zO8ntTlA5ytc12DDbWa3TDs/JOJA4+wIGN7mx5gVm5m3aMXJLy/Vzlh/
+         OpBTvMpyeLaf+HN2754z6XOOEBzP3QjUNErQEIloQGIy5i5Ho/8MRKbttJJ86LZazYNZ
+         MnILyiZyKZSxiwyBiTYzX1CqYXw/PGrw1CltN15ftz93Gyh/E2cbITgFDLwCecBlaXn+
+         Sbbhuobgciil8VEeIxccBKyqOF2DCbU424tWlJ6CNYhLKIFhYDDgEIBkeAxMMNN0UpwS
+         NMDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=qr4o9m1Sz2A5IAyiMrV0/JGv2mxMgPeLICxxVAR+oDc=;
+        fh=U0cN0snnhXyBiCTEFwvRBFJvTWoDGnskA8MciTZU4Hc=;
+        b=ebvWzLGmdxLcmF6/m54UHLmnpYEXe4x7xF0Ht5gWe0ke4hpVD69Av+sg7y478928Pd
+         FQnlElUe4yJxovXMu5aDnXYMp3/0nyo5irLJLBZmlKoa4yDo0ckRCplnn9gdKZTSMzil
+         6n6SFexQ5c/wCLJcTx+oIKQzUhcG6ZhH1sTPmOcUIaRCG62fjLpcH+EDhG/n0/Hj33V5
+         XglxeRQOb1dLO3inDfQ4Q5lfe9MNysCrKIErhoc1E08qc6V4rOwGY/eYQYxW1ZKiaMwF
+         p/PuRGjloLuadQG6POeXckRF0h0ybHzQGB3JqPWMO5RMz+5G7o32UBKcODDAU10Qb32X
+         AUvA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1776524218; x=1777129018; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ozgYvTPNEDJCi2kNheNemEWvMX1/xmXDUXCuDENTok=;
-        b=ECTGDBmtM2cNOQaGEDGCaOSaOpe19VXfryBYhZsEEfJkYBrXG868T1Alk3usbqT5lP
-         ZRwsb2m7FBvnfoPOwb5YuTR7Yr69J3CH7CJkOLMG9UU9pxvr6AWY22C13uCm1Pl/cApy
-         AJ68M5zDIZfnMOlE1Y9D81XkqzKl2HUWyHSfHMUENeBn4jmbW0pbJYXSMIGAcpihbggI
-         v4SlyCM0L/DkCH4F8+g/f/qaSLCrbImUQ0oWfHAUJUjaFC5INv2oagK9odFh7NGYC5AM
-         guzUuDTgQGdBrCMyJZPY8+JSVInZzJZqChHGBdjD5SVvve94SVgN8ecmA4/w+U+uLiBw
-         aAjw==
+        d=jphein.com; s=google; t=1776533183; x=1777137983; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qr4o9m1Sz2A5IAyiMrV0/JGv2mxMgPeLICxxVAR+oDc=;
+        b=kBlEteeTSQbhKrYiIBlvUR+L7J957RLNnvCHYJBbbAzwbO/vFLLoa+/sFl8VXSWeFR
+         pZZztKTSgwZFVG+GMgfzrGyGq+YCXb3g17wVLx6Ol2hesU8vemN3yvwuqRtBU8w/yfhR
+         U+bjNfLQi3PY96Fa4K/kSG5eLTw/8VMp7JI18BGXNCe2eNYMqV+CF0Yn/c8kXZbztBjS
+         g2jUmrrmw0uP5+wsyDWAQAhLn6PdcgTJa3648rruloIhE7EmgAFG7tt2/9qXwx874HXf
+         Hs10CzuUUbxGR3iAfN3nn2FzmfRskc8lJ7U95l5TOQJosBpaOyKF0wNWjBlGmT90eQkZ
+         N/mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776524218; x=1777129018;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9ozgYvTPNEDJCi2kNheNemEWvMX1/xmXDUXCuDENTok=;
-        b=SdZ46WIyjAfqI3wn5ipYFtpxYx+y8vJSkuONrM1KhhhgEJ3oa5Mm7hmOb2aOhJrzCq
-         36WJEizs3d9drfU7cj1+VmSx8NDmcPCPnLdNlDlKg1jJCUbIYh+GqkJHtGLUG2BoG4F6
-         h8WCyC6NCo2hX1jyQPRRxW5cauUPRN4C5xdgJ0Ki002Rl1CoYUoh2oQN7jLhc2kLraMO
-         a2mx+KosFTZHv0L/mYmmMfquQ7Z8Pxi3PxTBEBJWz+eQiQ8z2I4k4aAp4r4bsvjciOzn
-         5fion1q6anSJ6sMxBAHlmKyAgGqzTguuitvay4DX5ce8MJMeg6jzlS/La1ZytvcPl2Gu
-         nQCA==
-X-Forwarded-Encrypted: i=1; AFNElJ8W4gA53sEGnFk9bhE68fgsVhDaxGTgJ+zieVXudtfGWTiN55lSjLVw8izqPqSL/8I1w/bw4zTJGkw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8ePf4zo96Ln6LEvpPpfJhUo666gBrDDTi5UKpD/d4hZmNOpfv
-	fxYWgiiR24JTJt+KekRNLcxwOnuq/ggknACiug9vA6aY89ZPg9M1hJOqEEOnzgbJ7Nyj/oi0Y7w
-	8+VDe1g==
-X-Gm-Gg: AeBDieujdwpo3ug+0c2KDiPaFU0VNk727w8pc3Nd09uqQwyvDx9ui6vdxfFEs6W9Kwr
-	sboOq6vkmdunT/5CbxyHElDlsdgW7hvUTD/rbHnj0Iq/7EjahX+GgjPG1jxvKpyVdYI6EIVrl0X
-	EoR56JTe9xoQkp5t68lR1TWHYUtxNPbOE9b8b/vHux0js+wWdx9oLCdja+75p8hYigT01OPWUc3
-	+AFPuYLIM3ZMk19it8rb4X+9dUhzglbE7XIm1WtWtRzsmWEcsOAhhmq86VtaXEbJRdeBBnyab8a
-	kPurALuZlbTW0YUO1+mWFL94LZt7WdxSBUhsYKwJhZCSxb0Qr0Vwb1lXgeQ/J1ObxZbxMWLkoW+
-	XM0brkPGn8JhskJUYOoIPUA6TA2AiZTA0x0Xhlm8ofjV1CjkIHCiT04gWWzHkRJ9g1hq/Uc1HfE
-	IjauxQcjp864ihlvGKavfzG2fixyT3Psl7+do=
-X-Received: by 2002:a05:6214:4019:b0:89c:da2b:4903 with SMTP id 6a1803df08f44-8b02822c9cfmr112479536d6.46.1776524218003;
-        Sat, 18 Apr 2026 07:56:58 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::5a82])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b02ae5eaf1sm35473296d6.30.2026.04.18.07.56.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Apr 2026 07:56:57 -0700 (PDT)
-Date: Sat, 18 Apr 2026 10:56:54 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"oneukum@suse.com" <oneukum@suse.com>,
-	"niklas.neronin@linux.intel.com" <niklas.neronin@linux.intel.com>
-Subject: Re: [RFC PATCH 1/2] xhci: prevent automatic endpoint restart after
- stall or error
-Message-ID: <b72854a7-d6f9-4879-a571-affd76d8c597@rowland.harvard.edu>
-References: <20260404221533.woepax7jxwefy3fq@synopsys.com>
- <20260404222818.t5y52gnd2gvalvp5@synopsys.com>
- <b4e2edd9-2616-4cfe-90a5-438fb6625706@rowland.harvard.edu>
- <20260405030954.32jbg3fphi5xdla3@synopsys.com>
- <74ac9ea2-34d1-4999-9048-c03a0f978b5d@rowland.harvard.edu>
- <65682e07-e18c-4674-bfa7-2cc27abb5ede@linux.intel.com>
- <4a484a89-f52a-48c2-af43-c0029878ddaf@rowland.harvard.edu>
- <20260417234846.41a24089.michal.pecio@gmail.com>
- <e89a6683-4570-4ca6-95ea-0e9932614974@rowland.harvard.edu>
- <20260418112146.3ae60b58.michal.pecio@gmail.com>
+        d=1e100.net; s=20251104; t=1776533183; x=1777137983;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qr4o9m1Sz2A5IAyiMrV0/JGv2mxMgPeLICxxVAR+oDc=;
+        b=O06swtVHEsOWh7Yy81IEL7MtmLPmpT28EnEkpbVkSVzm9SW7RE7sRZKH4wd014SA33
+         BhN4CWX3lJn2OHFDF8baDtc23cGxhUGpbpQyN7iAi3bucCZlyFZQtAERhNuqnDLi1FyT
+         vrrvzVKgfvmxPmRfup1Zdy3TZZGGtndupBMb0CoBAy/+WSjY/ENohYxEA2cXn4nRndNx
+         1EAzfzojyYvtTCvysXfZ2x5tJ2NpbgR8m1yEyhUWUrw3WJe7ojr0Bkg8YVVgKBsoMQSg
+         US+X55o630ujl8L7OsSlmap2ew3olchOr5YnJUA+URzMOUovcXFlDsbNKi94SRzoJ8jl
+         5jHQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/469dMB2ikJWSdufUstqszNZYf7dAXPFYb33zCV0zJgHQk6RjzMOi7vfRf73QSRrzk4RzcsVGLfws=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNiZaDUhQkX8gc4ypy7NuQqxt1mcBhAiXv4MIiWBKRe1qyJr0F
+	RWLRDUNZGZCyHt8tnHaM4aYyQzqR/2u5t8ydoMxB6tAu6YuAGIHPxEhd0nHpdVBLIUVyOfYyzqi
+	0T/Jx2HwY68OrldtHvJOG5HpAJhXHyvfzCU664uyO
+X-Gm-Gg: AeBDieumu2qC6jlBtHIdTJSk7cNNoJFsT6bfHjcpi0Rzf3X24OMrrQ6JtXVjaVnWvkW
+	jBvh3kC1Vgk02utmC6jF+Uy5lqtGDAk8ez1TWZLkAf9VrcKOzGMI/CaABPweV5iEQxIwK3xxx3A
+	QPY9TdTGNi3SdFjMyLSAVgdBUATsnMvBC9sg1uJsGyCVlwqFQYNwn448k8PWq9Rs+ia5V/G6kdK
+	6cLsfX55zJbWxsmEEdE51zngXr/LrKPX/mIHThB3N2mXSfb4udQsP1u5i9KZzruhIK81ICnK24/
+	ug1KpFne0K8xzfaAPlK31IP6xNFZTCTreT1UovIYo8fNAXO/+WgRcRXtbKpDqfVVn0reTsvWV78
+	RtZfMY6ti7fw=
+X-Received: by 2002:a05:690e:4012:b0:650:26c1:ee84 with SMTP id
+ 956f58d0204a3-653119490b8mr5649970d50.11.1776533182977; Sat, 18 Apr 2026
+ 10:26:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260418112146.3ae60b58.michal.pecio@gmail.com>
+References: <20260331003806.212565-1-jp@jphein.com> <20260410002831.1046407-1-jp@jphein.com>
+ <20260413224038.641af363.michal.pecio@gmail.com>
+In-Reply-To: <20260413224038.641af363.michal.pecio@gmail.com>
+From: Jeffrey Hein <jp@jphein.com>
+Date: Sat, 18 Apr 2026 10:26:12 -0700
+X-Gm-Features: AQROBzCJK66u477M-5iydhRUHoCBK8pZ0OF1PsxdK9d8NCvSpOfl9itMzhHM0ys
+Message-ID: <CAD5VvzDpq2CTzZNCx28aNzNvqV4TkJpB19DbJr2ZZKWtYUe0Qg@mail.gmail.com>
+Subject: Re: [PATCH v7 0/2] media: uvcvideo: Add quirks to prevent Razer Kiyo
+ Pro xHCI cascade failure
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede <hansg@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[jphein.com,reject];
+	R_DKIM_ALLOW(-0.20)[jphein.com:s=google];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36310-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36311-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jp@jphein.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[jphein.com:+];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,rowland.harvard.edu:dkim,rowland.harvard.edu:mid]
-X-Rspamd-Queue-Id: DD7F1421649
+	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[jphein.com:dkim,jphein.com:url,mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 1FF29421CD6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sat, Apr 18, 2026 at 11:21:46AM +0200, Michal Pecio wrote:
-> On Fri, 17 Apr 2026 22:34:58 -0400, Alan Stern wrote:
-> > Okay, good, we'll require all HCDs to reset control endpoints 
-> > automatically after every error and stall.
-> 
-> Are they not doing it?
+On Mon, 13 Apr 2026 22:40:38 +0200, Michal Pecio wrote:
+> For the record, reloading xhci-pci is usually enough to fix this.
 
-As far as I know, they are.  But it's not currently a requirement.  In 
-fact, I don't know of any place in the source code where all the special 
-requirements for HCDs are listed.  Probably the best locations are the 
-kerneldoc for usb_submit_urb() and usb_unlink_urb().
+You're right that reloading xhci-pci is a recovery path -- I'll note
+it. The reason the cover letter says "hard reboot" is that when the HC
+dies, every USB device on the bus disconnects with it, keyboard and
+mouse included, so triggering the reload requires SSH from a second
+machine, SysRq, or some other non-USB input path. For most users on a
+single-machine desktop the practical recovery is a reboot. I'll reword
+in the next respin to capture both: "recovery requires rmmod/modprobe
+xhci-pci or a reboot; since the local input devices disconnect with
+the HC, most single-machine users will reboot."
 
-> Say that something like lsusb encounters protocol stall while another
-> URB from the class driver is pending, will the other URB time out just
-> because host endpoint halted on an earlier one?
+> That's a bit speculative, it's not entirely clear what happens here.
+> 2 seems possible, but Stop Endpoint timeout and some weird error codes
+> seen in those logs looks like problems with the HC.
 
-Even if that were true now (although I don't think it is), it won't be 
-true once this new mechanism is added.
+Fair. I'll reword trigger #2 to drop the firmware-internals claim and
+describe only what we can observe: sustained rapid control activity
+correlates with the device entering a stalled state that then triggers
+a separate xHCI-layer failure. Your dual-cancel discussion with Mathias
+and the vendor-defined event 198 are the right place to characterise
+the HC-side mechanism; these UVC patches don't claim to explain or fix
+it.
 
-However, I did change my mind about one thing.  It would be a good idea 
-for a control endpoint's queue to stop when a transaction error (not a 
-stall) occurs, until usb_endpoint_reset() is called.  Or maybe 
-usb_restart_endpoint(), a new callback that I will add.  (It's needed 
-for HCDs that stop the queue when there's a short packet and 
-URB_SHORT_NOT_OK is set; in this situation the endpoint doesn't need to 
-be reset, because the host side is still in sync with the device side.  
-The queue merely has to be restarted.)
+> Do these patches actually make a practical difference?
 
-This will allow the core's centralized backoff-and-retry approach to 
-prevent ep0 resubmissions and failures from getting into a tight loop 
-when a device disconnects.
+For CTRL_THROTTLE vs no mitigation, yes -- and I should have led with
+this. Without any patches the stress test crashes the HC reproducibly
+at round ~25 (many dmesg captures on file). With CTRL_THROTTLE alone
+the same stress test runs 500+ rounds without failure. I also tested
+USB_QUIRK_NO_LPM, DISABLE_AUTOSUSPEND, and avoid_reset_quirk
+individually via sysfs, and each failed to prevent the stress-test
+crash in isolation; a combined udev rule with all three still crashed
+at ~round 25. Only CTRL_THROTTLE (or the coarser
+USB_QUIRK_DELAY_CTRL_MSG at 200 ms) prevented it.
 
-> > > Currently, by the time the URB is given back, its endpoint is
-> > > already in a "stopped but runnable" state and its sequence state is
-> > > zeroed. And it may have already been restarted if there are more
-> > > pending URBs.  
-> > 
-> > Ah, I was going to ask about that.  This will be different from the
-> > way bulk and interrupt endpoints will behave, but I think it is
-> > acceptable. Control endpoints aren't used for anything that requires
-> > high throughput; if a driver wants an error to prevent later
-> > transfers from starting right away then it can simply avoid
-> > submitting those later transfers until the earlier ones have
-> > completed.
+Where my data is actually thin is the interaction with your xhci test
+patch specifically. The Apr 10 runs comparing "full stack + your
+patch" (HC died) against "your patch alone" (HC survived) are N=3D1
+each, and the lock-up path is timing-sensitive, so I shouldn't be
+drawing conclusions from single outcomes on that axis. Before
+respinning, I'll run a replication matrix on 6.17:
 
-So this would have to be changed.  It will be okay for the control 
-endpoint to be in a "stopped but runnable" state, but not okay for it to 
-be restarted.  Not until the core explicitly restarts it.
+  * stock (no patches)
+  * stock + your xhci test patch
+  * stock + NO_LPM
+  * stock + NO_LPM + CTRL_THROTTLE
+  * stock + NO_LPM + CTRL_THROTTLE + your xhci test patch
 
-> Or it could unlink if the async giveback race is fixed with a new
-> callback separate from endpoint_reset(), but IDK if any demand exists.
-> 
-> Same thing with "chain unlinking" - unlink one URB and expect others
-> not to execute so that unlink completion can unlink them later. Looks
-> odd, but it's guaranteed by kerneldocs. And currently broken.
+each under two workloads -- control-spam only, and control-spam during
+an active v4l2 stream -- at N >=3D 5 per cell, with xhci_hcd and usbcore
+dynamic debug enabled. I'll post the matrix with logs before the next
+respin. That should tell us whether CTRL_THROTTLE still earns its keep
+once your xhci patch is applied, which is the real open question.
 
-I'm not sure what async giveback race you're talking about.  In any 
-case, the proper way to unlink a sequence of URBs is in reverse order of 
-submission.  That way there is no possibility for the HCD to skip some 
-URBs and then execute the later ones before they can be unlinked.  This 
-is how usb_flush_endpoint() will work.
+Two things I'll fold in regardless of how the matrix reads:
 
-And I intend to change the kerneldoc.
+  1. The cover-letter language fixes above.
 
-> > > > Recovery from a transaction error on a bulk or interrupt endpoint 
-> > > > involves sending a Clear-Halt request to the device.  But if the
-> > > > error was caused by some sort of transient interference that
-> > > > hasn't ended yet, the Clear-Halt might itself fail with the same
-> > > > error. To handle this, we should retry the Clear-Halt at
-> > > > increasing time intervals. At what point should the core give up?
-> > > 
-> > > Good question, I don't know. One thing I noticed is that Windows
-> > > does tend to lose patience with completely unresponsive devices and
-> > > kicks them out, but I don't know the exact criteria.  
-> > 
-> > Two reasonable possibilities are 250 ms (because that's about how
-> > long an intermediate hub might take to notify the core about a
-> > disconnect) or 5 seconds (the normal timeout for control transfers).
-> > Of course, 5 seconds is an awfully long time to wait for a mouse or
-> > keyboard to recover, so maybe something in between would be best.
-> 
-> What happens after giving up? If control requests don't work, most
-> likely nothing works anyway. Reset may work, or not if it's bad cable.
+  2. Clarifying in the commit messages that CTRL_THROTTLE and the
+     device-table entry are a device-local firmware-workaround layer,
+     not a claim on the HC-side issue -- which is Mathias's territory
+     and I don't want to conflate them.
 
-As I see it, there are two possibilities: (1) Try doing a reset.  (2) Do 
-nothing at all, leaving the device in a non-working state until the user 
-unplugs it.
+If the matrix shows the throttle doesn't buy anything above your xhci
+patch, I'll say so plainly and we can discuss whether the device-table
+entry alone (DISABLE_AUTOSUSPEND + NO_RESET_RESUME, matching the
+Logitech Rally Bar entry in uvc_driver.c) is still worth landing on
+its own.
 
-Remember that the vast majority of transaction errors that will occur 
-will be the result of a device being unplugged while it is in use.  What 
-we do in this case doesn't matter much.
+Thanks for the pushback -- it forced me to look harder at my own data.
 
-> Retrying too long may cause class drivers to time out on pending URBs,
-> not sure if it matters. Drivers may have no way to distinguish this
-> from any other timeout, not sure if this matters either.
+JP
 
-I suspect it doesn't.
 
-> > I will set things up so that an extraneous clear-halt (such as one 
-> > submitted by the driver) will prevent the core from doing its own.
-> > This leaves the possibility of the core clearing the halt and
-> > restarting the endpoint and then the driver doing it again, while the
-> > endpoint is running and the queue is nonempty.  Hopefully drivers
-> > avoid doing this.
-> 
-> Yes, that's just dodgy, what would such driver even expect to happen?
-> An URB may be in progress and then what? On xHCI we would need to throw
-> out this URB, so it simply isn't supported.
-> 
-> > But if it helps, I could print a warning if usb_clear_halt() is
-> > called for an endpoint that isn't stopped and has a nonempty queue.
-> 
-> Not sure what core considers a "stopped" endpoint. FYI, xhci-hcd
-> logs dev_err() when reset is attempted while URBs are running.
+On Mon, Apr 13, 2026 at 1:40=E2=80=AFPM Michal Pecio <michal.pecio@gmail.co=
+m> wrote:
+>
+> On Thu,  9 Apr 2026 17:28:29 -0700, JP Hein wrote:
+> > The Razer Kiyo Pro (1532:0e05) is a USB 3.0 webcam whose firmware has
+> > a well-documented failure mode that cascades into complete xHCI host
+> > controller death, disconnecting every USB device on the bus --
+> > including keyboards and mice, requiring a hard reboot.
+>
+> For the record, reloading xhci-pci is usually enough to fix this.
+>
+> > The device has two crash triggers:
+> >
+> >   1. LPM/autosuspend resume: Device enters LPM or autosuspend, fails
+> >      to reinitialize on resume, producing EPIPE (-32) on UVC SET_CUR.
+> >      The stalled endpoint triggers an xHCI stop-endpoint timeout, and
+> >      the kernel declares the host controller dead.
+> >
+> >   2. Rapid control transfers: sustained rapid UVC control operations
+> >      (hundreds over several seconds) overwhelm the firmware.
+>
+> That's a bit speculative, it's not entirely clear what happens here.
+> 2 seems possible, but Stop Endpoint timeout and some weird error codes
+> seen in those logs looks like problems with the HC.
+>
+> And I known that some HCs are reliably killed by stopping SuperSpeed
+> UVC streams, at least with my camera.
+>
+> > Patch 1 of the original 3-patch series (USB_QUIRK_NO_LPM for
+> > 1532:0e05) has been merged by Greg Kroah-Hartman and backported to
+> > stable kernels 6.1, 6.6, 6.12, 6.18, and 6.19.
+> >
+> > This v7 series covers the remaining two UVC patches:
+> >
+> > Patch 1/2: UVC driver -- introduce UVC_QUIRK_CTRL_THROTTLE to
+> > rate-limit all USB control transfers (50ms minimum interval) in
+> > __uvc_query_ctrl().
+> >
+> > Patch 2/2: UVC driver -- add Razer Kiyo Pro device table entry with
+> >   UVC_QUIRK_CTRL_THROTTLE, UVC_QUIRK_DISABLE_AUTOSUSPEND, and
+> >   UVC_QUIRK_NO_RESET_RESUME.
+>
+> Do these patches actually make a practical difference?
+>
+> If I'm not mistaken, the results of testing on 6.17 are:
+>
+> 1. The original trigger (spamming UVC control requests alone) doesn't
+>    cause breakage anymore.
+>
+> 2. New problems are seen when doing the above while streaming video,
+>    and they are still seen even with the UVC patches applied.
 
-Similar things can be done in the other HCDs.  Good enough.
 
-> > > A related issue is clearing TT buffers. AFAIK this has no retries,
-> > > it fails silently and leaves the endpoint potentially broken, and
-> > > it is waited for to complete in case of usb_set_interface().  
-> > 
-> > Is there anything we can do besides calling usb_clear_halt() and 
-> > usb_reset_endpoint()?  If not, and data loss is unavoidable, then so
-> > be it.
-> 
-> If this "clear-halt by usbcore" materializes and survives confrotation
-> with the real world, it could make sense to look into combining TT
-> clearing with it. It's a similar thing, but tracked separately now.
 
-That hadn't occurred to me, but sure.
-
-> One thing that could reduce data loss is never giving up on those
-> control requests, or resetting/disconnecting the device if giving up.
-> It's a general problem that control requests can fail and nobody has
-> much idea what to do then. Some drivers ignore errors. If the device
-> returns to operation, it may end up running in an unknown state.
-> 
-> This is apparently rare enough that nobody complains, though on
-> low- and full-speed it's relatively easy to produce artificially with
-> a particularly defective cable.
-
-Yes.  It seems that there isn't much the kernel can do; user 
-intervention will be needed.
-
-And come to think of it, usb_reset_and_verify_device() does a logical 
-disconnect if the reset fails.  So if (1) above doesn't work, there's 
-nothing left to do.  In any case, we can settle this issue later on.
-
-Alan Stern
+--=20
+Jeffrey Pine Hein
+Just plain helpful.
+jphein.com =E2=98=80=EF=B8=8F techempower.org
+(530) 798-4099
 
