@@ -1,292 +1,186 @@
-Return-Path: <linux-usb+bounces-36318-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36319-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uAOzExb/5GnDcwEAu9opvQ
-	(envelope-from <linux-usb+bounces-36318-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2026 18:13:10 +0200
+	id KG+lE1QC5WlCdQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36319-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2026 18:27:00 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A74444249EA
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2026 18:13:09 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B72AD424B0B
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2026 18:26:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0E638303182D
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2026 16:12:40 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EBC8E30099A3
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2026 16:26:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F82A2C0F93;
-	Sun, 19 Apr 2026 16:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F4A02C21D0;
+	Sun, 19 Apr 2026 16:26:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HznOBMEh"
+	dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b="nsdRXPDA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7942874FB
-	for <linux-usb@vger.kernel.org>; Sun, 19 Apr 2026 16:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776615158; cv=none; b=gFv2E7qXzniHzk7Khpo+33k1UM0ZwWiIPxhy/WHm3PRheI7EW/vmWCY8Em8BzJqz1UAUiQJ8mEq3b+bZencnrPGX39bWhn3e3+JnLirgHE7/9JzEpcRKV8qjb83mRzCA9OkoOIejmyOU+8SsL661ehEjHPC0s2//1E0TjiKStqs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776615158; c=relaxed/simple;
-	bh=6TROq5XU8fpGmkxwOEqRCkJZI5Po9h42BuGo6+mvmk0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bi0wE5HM68Hx4I0NCPoYAUVG9Pdd5RNbx6Q2yNErLqJS3H0KJsHj+Y7kK//A6ouat3wUzm2dxXgTjXk1arU5oNTCXGshr8GfU/PqED0c4Lsn/XYX/kn0DoNafnOhvR99gZTL3VbEn4lyx6TXuRwPURja4nEt6Cg4NjxuGSDKfhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HznOBMEh; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8d76492e51bso240031685a.0
-        for <linux-usb@vger.kernel.org>; Sun, 19 Apr 2026 09:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776615155; x=1777219955; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=B17bAyfAm7uzzttww80XtUu6/K1MgSIE6Bs+vc9UHtw=;
-        b=HznOBMEhx/c230S9LKk1dua6oCbdfZpcCccoeUKOaEVRf+kWwKC8e5NIWDogOxSw5l
-         iOnY1WtdoqurKtj6UNUtoAi1zw9PClQR8VNf/0FZzC2u/3JGHfPcCkUEsAzoARkKhI0z
-         SlKXcSc34ZpjHxZkm+Bvp24wAauzmD9os+zzAFiNldPe3JEYVip6P82RLkfWpqLWInHY
-         GlwrhsHihDQVbQgstrFh9id76UP5Ust3PjNkLa0AnyiN7R+rkBoyMM0Nhf9AG+yNSVxp
-         yEkD6nLdCjJDp9c42mJ+YgaLWApO0tsWzjkTaYlzcr/+Jv3+niEMJ1mkrSnOD4vXO68H
-         zPYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776615155; x=1777219955;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B17bAyfAm7uzzttww80XtUu6/K1MgSIE6Bs+vc9UHtw=;
-        b=fBrGeV53Dugz4oBGYgM0BDmEjAE+cDSnV4W8QWV1oUolHZgrPXmsSQBLa1mCf9Fjdf
-         iZoLpIZvRdLTywd7r21c1G6ui40h0ne7gscRYCKHPgsGWePwyodCOjkwkCqOmYNiyDZf
-         3+ojDsw0/Fbh9xeJHUxsSZFh/Zd2No3TKvTuwANxceArzFDxEKpQIGV0MSkRWQWsxup3
-         FgxxBNaikHGeMoXA/9kKLKKbbEDOTdtv6oP4Ktvn0k1yYkq7S0Mk9OBcrJHaC5eg6upi
-         hGRYq4LFg5Lg+tuHYJ6705SvLbhOH8jLSYVjpqm3D6yrxn08PE7fl8MhQRRkfwjROI4u
-         m+9A==
-X-Forwarded-Encrypted: i=1; AFNElJ/bAkSVSnw6J5WqaKnmPOiDX0EiY2u/YEVNzYppWzyRD/2p9jBGhFuPUFPsW3gtccrmDBcLYaq8hT8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyiXdxS3jTURBj+YSvcL7hT89uhRjoQLeCH7NZXTSJwKmMKpYUc
-	R1JBcCcfm2KDHVKfl30pJOoooi+LM1/QO+YqdJDyP3M6ZJg2c5G/qb3N
-X-Gm-Gg: AeBDiesD8UCqpc1ASUF6RnB0smbxJFJXUC67JA7YRvsTkI8AhJBl6IS0YnD8B12Ew1a
-	vWxdnlILFJkJG9JHX3jrzfCoHfIdmnXS4y8VzQDcljV3mkAaCz4yjAHueXae0TfmgSERTgGzaX3
-	PBEmVmVf6UHPveFe8xVE+eHpa4aW0MGfIJovdBQiukpQGYZMCE61fodQQcY0EpZT0PYm48HFH0H
-	l1RcjoiNN0eDqx0pzyppn1KDm6KAOxuYGOBY27O0frCxYlZPWBFv5prqJKtAZBSEowxkbf6DA45
-	2GLJCU/j4ELzB/um9RRolgkEbr+uZ4pPb4TiOhTJ+TLSb4SyckxZvtuaGg66Qc6LXWAhQLUCDWF
-	Glke7clAcPa0eeUlQzQhmuStf0T1ts+ch80cKZpF0Bj60AZNx06d/VRHcuHcJt7guNgToBSWGlO
-	/KntwnkecRDQx+HUUjwzvnUuX2MdpQo/3D73WstoLfYbjdHe0mwlbBvWralWhdhCRBQixjIApCT
-	e4092u6C7OFG6L6waG1MOigTcFBLmg=
-X-Received: by 2002:a05:620a:2844:b0:8b2:1ee9:dcfb with SMTP id af79cd13be357-8e78f82cf5emr1427279685a.8.1776615155112;
-        Sun, 19 Apr 2026 09:12:35 -0700 (PDT)
-Received: from server0 (c-68-48-65-54.hsd1.mi.comcast.net. [68.48.65.54])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8e7d8edb795sm598271385a.25.2026.04.19.09.12.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Apr 2026 09:12:34 -0700 (PDT)
-From: Michael Bommarito <michael.bommarito@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>,
-	Sam Day <me@samcday.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Ingo Rohloff <ingo.rohloff@lauterbach.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian Koenig <christian.koenig@amd.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Kees Cook <kees@kernel.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org,
-	dri-devel@lists.freedesktop.org
-Subject: [PATCH] usb: gadget: f_fs: serialize DMABUF cancel against request completion
-Date: Sun, 19 Apr 2026 12:12:27 -0400
-Message-ID: <20260419161227.1587668-1-michael.bommarito@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A68727FB0E;
+	Sun, 19 Apr 2026 16:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776616015; cv=pass; b=oUT6hLm/fxhoa8NT7T+NoCAk0LX3sAyLp7sZaxy4WPxwCnEGGCR6RlAhzbqtJmXimhFbE3EF0JDlSJMg0N+6xW8wHB7bdyl0zBWWXg0GCYVye+UoRcAtjyoQWW2Byg5XV+3LisNTMqxrvJP+Y2Cf4EjQH77DdNNXRozzbPbPMfY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776616015; c=relaxed/simple;
+	bh=yxjEoMXGzc/WdkfSdsocpIic0FHGlTrW9jCQZ5b8YNk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Xmd9ieqHhzPFJQTEaFrON9XhR66J5gYyCBjmqfET3ClDk805LXdaxaqNZYKsbttI8MadJy1yDfS4x+q2/DOciRX1XcyiHOJYj/ZsOPaQwqYiecHgbgq5lYLz6/ED/S0WcwY+nIgwOaYrxFMxzWNNOtBlAnrmMBaT20nZSwrQgC4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me; spf=pass smtp.mailfrom=icenowy.me; dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b=nsdRXPDA; arc=pass smtp.client-ip=136.143.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icenowy.me
+ARC-Seal: i=1; a=rsa-sha256; t=1776615992; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=kQSnz1iBfr3zPc9JyMtd71bSN55fRDtkz8V+izPOrszcIFWW8eiE2GQ805NYkzw77JS5KVENc6lXWNqZOe+/sKNLz69fHuCgfAF9oCtd1e5aU6VeHPwPIef8/XgyMuaMjGAkUPZoJNTH9pAZNy3PCt9oSc0vBJAAF2REgRnjEu4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1776615992; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=XDxRzUYghQyLSOtVSFJCCp821NYg75PtJOz/TeevvgQ=; 
+	b=F+vTlr3zGS9R9vpQsoUo6w/jtWCGwtwsWifitwBJRmWj5Oc0ZJqTvR+Qoq63JAbiZzaKyzNxjDWmicFYMzfQHkC/DurWfG2e41wz5IDi9JM0qfH7bNq2MXicFJ5hGdhAwEKiTYXPVCcLFzOZxN2YXPJqlTA/9X+LVqyuTqv5uT4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=icenowy.me;
+	spf=pass  smtp.mailfrom=uwu@icenowy.me;
+	dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1776615992;
+	s=zmail2; d=icenowy.me; i=uwu@icenowy.me;
+	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+	bh=XDxRzUYghQyLSOtVSFJCCp821NYg75PtJOz/TeevvgQ=;
+	b=nsdRXPDAm9LAwbVoZpAUCLGasQ0RZhdslKj90S5qOE/YGg6tTQNGWI++ab7vFRhm
+	tPo+C6x4ZEwqbQgprBNDC0VpMnZPpBVq519MrRKAXD6UrRI9aeEjP6c8p4sHI0me7oj
+	+vk8EP4DaZcvoR9xvAB77dl7f+W2Q8fdGtIrAED43YQ8fZWfGYPKZ9CSX/3D4+L/m8I
+	FSskX4UJkqr4+vW0c++dI1oahwaQ7tafT9MGLcOpXrj1JlRj7GDhF5w9z0qdiuGmiPP
+	iI5D7oJdTY/7n1AwonQDyHr22e2tyhDVq198BodPjidz+iYfWris+qlVcGt+fn+Zg5O
+	imvgwHnlNg==
+Received: by mx.zohomail.com with SMTPS id 1776615989353789.8106081725186;
+	Sun, 19 Apr 2026 09:26:29 -0700 (PDT)
+Message-ID: <938e8afadcbf2d7b9f0397e24926224985d9c385.camel@icenowy.me>
+Subject: Re: [PATCH v2 1/4] HID: pass the buffer size to hid_report_raw_event
+From: Icenowy Zheng <uwu@icenowy.me>
+To: Benjamin Tissoires <bentiss@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+  Filipe =?ISO-8859-1?Q?La=EDns?=	 <lains@riseup.net>, Bastien Nocera
+ <hadess@hadess.net>, Ping Cheng	 <ping.cheng@wacom.com>, Jason Gerecke
+ <jason.gerecke@wacom.com>, Viresh Kumar	 <vireshk@kernel.org>, Johan Hovold
+ <johan@kernel.org>, Alex Elder	 <elder@kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Lee Jones	 <lee@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev, 
+	linux-usb@vger.kernel.org, stable@vger.kernel.org
+Date: Mon, 20 Apr 2026 00:26:21 +0800
+In-Reply-To: <20260416-wip-fix-core-v2-1-be92570e5627@kernel.org>
+References: <20260416-wip-fix-core-v2-0-be92570e5627@kernel.org>
+	 <20260416-wip-fix-core-v2-1-be92570e5627@kernel.org>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+X-ZohoMailClient: External
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[icenowy.me,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
+	R_DKIM_ALLOW(-0.20)[icenowy.me:s=zmail2];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36318-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_NEQ_ENVFROM(0.00)[michaelbommarito@gmail.com,linux-usb@vger.kernel.org];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	TAGGED_FROM(0.00)[bounces-36319-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	HAS_ORG_HEADER(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	DKIM_TRACE(0.00)[icenowy.me:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A74444249EA
+	FROM_NEQ_ENVFROM(0.00)[uwu@icenowy.me,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[icenowy.me:dkim,icenowy.me:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B72AD424B0B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-ffs_epfile_dmabuf_io_complete() calls usb_ep_free_request() on the
-completed request but leaves priv->req, the back-pointer that
-ffs_dmabuf_transfer() set on submission, pointing at the freed
-memory.  A later FUNCTIONFS_DMABUF_DETACH ioctl or
-ffs_epfile_release() on the close path still sees priv->req
-non-NULL under ffs->eps_lock:
+=E5=9C=A8 2026-04-16=E5=9B=9B=E7=9A=84 16:48 +0200=EF=BC=8CBenjamin Tissoir=
+es=E5=86=99=E9=81=93=EF=BC=9A
+> commit 0a3fe972a7cb ("HID: core: Mitigate potential OOB by removing
+> bogus memset()") enforced the provided data to be at least the size
+> of
+> the declared buffer in the report descriptor to prevent a buffer
+> overflow. However, we can try to be smarter by providing both the
+> buffer
+> size and the data size, meaning that hid_report_raw_event() can make
+> better decision whether we should plaining reject the buffer (buffer
+> overflow attempt) or if we can safely memset it to 0 and pass it to
+> the
+> rest of the stack.
+>=20
+> Fixes: 0a3fe972a7cb ("HID: core: Mitigate potential OOB by removing
+> bogus memset()")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> ---
+> =C2=A0drivers/hid/bpf/hid_bpf_dispatch.c |=C2=A0 6 ++++--
+> =C2=A0drivers/hid/hid-core.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 42 +++++++++++++++++++++++++---
+> ----------
+> =C2=A0drivers/hid/hid-gfrm.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 4 ++--
+> =C2=A0drivers/hid/hid-logitech-hidpp.c=C2=A0=C2=A0 |=C2=A0 2 +-
+> =C2=A0drivers/hid/hid-multitouch.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
+=C2=A0 2 +-
+> =C2=A0drivers/hid/hid-primax.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +-
+> =C2=A0drivers/hid/hid-vivaldi-common.c=C2=A0=C2=A0 |=C2=A0 2 +-
+> =C2=A0drivers/hid/wacom_sys.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 6 +++---
+> =C2=A0drivers/staging/greybus/hid.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=
+ 2 +-
+> =C2=A0include/linux/hid.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 4 ++--
+> =C2=A0include/linux/hid_bpf.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 | 14 ++++++++-----
+> =C2=A011 files changed, 53 insertions(+), 33 deletions(-)
 
-    if (priv->ep && priv->req)
-            usb_ep_dequeue(priv->ep, priv->req);
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D 8< =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D
 
-so usb_ep_dequeue() is called on a freed usb_request.
+> diff --git a/drivers/staging/greybus/hid.c
+> b/drivers/staging/greybus/hid.c
+> index 1f58c907c036..37e8605c6767 100644
+> --- a/drivers/staging/greybus/hid.c
+> +++ b/drivers/staging/greybus/hid.c
+> @@ -201,7 +201,7 @@ static void gb_hid_init_report(struct gb_hid
+> *ghid, struct hid_report *report)
+> =C2=A0	 * we just need to setup the input fields, so using
+> =C2=A0	 * hid_report_raw_event is safe.
+> =C2=A0	 */
+> -	hid_report_raw_event(ghid->hid, report->type, ghid->inbuf,
+> size, 1);
+> +	hid_report_raw_event(ghid->hid, report->type, ghid->inbuf,
+> ghib->bufsize, size, 1);
 
-On dummy_hcd the dequeue path only walks a live queue and
-pointer-compares, so the freed pointer reads without faulting and
-KASAN requires an explicit check at the FunctionFS call site to
-surface the use-after-free.  On SG-capable in-tree UDCs the
-dequeue path dereferences the supplied request immediately:
+Oops, "ghid" is misspelled here...
 
-  * chipidea's ep_dequeue() does
-    container_of(req, struct ci_hw_req, req) and reads
-    hwreq->req.status before acquiring its own lock.
-  * cdnsp's cdnsp_gadget_ep_dequeue() reads request->status first.
+Found this when building some gaint kernel with this patchset.
 
-The narrower option of clearing priv->req via cmpxchg() in the
-completion does not close the race: the completion runs without
-eps_lock, so a cancel path holding eps_lock can still observe
-priv->req non-NULL, race a concurrent completion that clears and
-frees, and pass the freed pointer to usb_ep_dequeue().  A slightly
-longer fix that moves the free into the cleanup work is needed.
+Thanks,
+Icenowy
 
-Same class of lifetime race as the recent usbip-vudc timer fix [1].
-
-Take eps_lock in the sole place that mutates priv->req from the
-callback direction by moving usb_ep_free_request() out of the
-completion into ffs_dmabuf_cleanup(), the existing work handler
-scheduled by ffs_dmabuf_signal_done() on
-ffs->io_completion_wq.  Clear priv->req there under eps_lock
-before freeing, and only clear if priv->req still names our
-request (a subsequent ffs_dmabuf_transfer() on the same
-attachment may have queued a new one).
-
-This keeps the existing dummy_hcd sync-dequeue invariant: the
-completion callback is still invoked by the UDC without
-eps_lock held (dummy_hcd drops its own lock before calling the
-callback), and the callback now takes no f_fs lock at all.
-Serialization against the cancel path happens in cleanup, which
-runs from the workqueue with no f_fs lock held on entry.
-
-The priv ref count protects the containing ffs_dmabuf_priv:
-ffs_dmabuf_transfer() takes a ref via ffs_dmabuf_get(), cleanup
-drops it via ffs_dmabuf_put(), so priv stays live for the
-cleanup even after the cancel path's list_del + ffs_dmabuf_put.
-
-The ffs_dmabuf_transfer() error path no longer frees usb_req
-inline: fence->req and fence->ep are set before usb_ep_queue(),
-so ffs_dmabuf_cleanup() (scheduled by the error-path
-ffs_dmabuf_signal_done()) owns the free regardless of whether
-the queue succeeded.
-
-Reproduced under KASAN on both detach and close paths against
-dummy_hcd with an observability hook
-(kasan_check_byte(priv->req) immediately before usb_ep_dequeue)
-at the two FunctionFS cancel sites to surface the stale-pointer
-access; the hook is not part of this patch.  The KASAN
-allocator / free stacks in the captured splats identify the
-same request: alloc in dummy_alloc_request, free in
-dummy_timer, fault reached from ffs_epfile_release (close) and
-from the FUNCTIONFS_DMABUF_DETACH ioctl (detach).  With the
-patch applied, both paths are silent under the same hook.
-
-The bug is reached from the FunctionFS device node, which in
-real deployments is owned by the privileged gadget daemon
-(adbd, UMS, composite gadget services, etc.); it is not
-reachable from unprivileged userspace or from a USB host on the
-cable.  FunctionFS mounts default to GLOBAL_ROOT_UID, but the
-filesystem supports uid=, gid=, and fmode= delegation to a
-non-root gadget daemon, so on real deployments the attacker may
-be a less-privileged service rather than root.
-
-Fixes: 7b07a2a7ca02 ("usb: gadget: functionfs: Add DMABUF import interface")
-Link: https://lore.kernel.org/all/20260417163552.807548-1-michael.bommarito@gmail.com/ [1]
-Cc: stable@vger.kernel.org
-Assisted-by: Claude:claude-opus-4-7
-Signed-off-by: Michael Bommarito <michael.bommarito@gmail.com>
----
- drivers/usb/gadget/function/f_fs.c | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 815639506520..75912ce6ab55 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -150,6 +150,8 @@ struct ffs_dma_fence {
- 	struct dma_fence base;
- 	struct ffs_dmabuf_priv *priv;
- 	struct work_struct work;
-+	struct usb_ep *ep;
-+	struct usb_request *req;
- };
- 
- struct ffs_epfile {
-@@ -1385,6 +1387,21 @@ static void ffs_dmabuf_cleanup(struct work_struct *work)
- 	struct ffs_dmabuf_priv *priv = dma_fence->priv;
- 	struct dma_buf_attachment *attach = priv->attach;
- 	struct dma_fence *fence = &dma_fence->base;
-+	struct usb_request *req = dma_fence->req;
-+	struct usb_ep *ep = dma_fence->ep;
-+
-+	/*
-+	 * eps_lock pairs with the cancel paths so they cannot pass a freed
-+	 * req to usb_ep_dequeue().  Only clear if priv->req still names ours;
-+	 * a re-queue on the same attachment may have taken that slot.
-+	 */
-+	spin_lock_irq(&priv->ffs->eps_lock);
-+	if (priv->req == req)
-+		priv->req = NULL;
-+	spin_unlock_irq(&priv->ffs->eps_lock);
-+
-+	if (ep && req)
-+		usb_ep_free_request(ep, req);
- 
- 	ffs_dmabuf_put(attach);
- 	dma_fence_put(fence);
-@@ -1414,8 +1431,8 @@ static void ffs_epfile_dmabuf_io_complete(struct usb_ep *ep,
- 					  struct usb_request *req)
- {
- 	pr_vdebug("FFS: DMABUF transfer complete, status=%d\n", req->status);
-+	/* req is freed by ffs_dmabuf_cleanup() under eps_lock. */
- 	ffs_dmabuf_signal_done(req->context, req->status);
--	usb_ep_free_request(ep, req);
- }
- 
- static const char *ffs_dmabuf_get_driver_name(struct dma_fence *fence)
-@@ -1699,6 +1716,10 @@ static int ffs_dmabuf_transfer(struct file *file,
- 	usb_req->context  = fence;
- 	usb_req->complete = ffs_epfile_dmabuf_io_complete;
- 
-+	/* ffs_dmabuf_cleanup() frees usb_req via these two fields. */
-+	fence->req = usb_req;
-+	fence->ep = ep->ep;
-+
- 	cookie = dma_fence_begin_signalling();
- 	ret = usb_ep_queue(ep->ep, usb_req, GFP_ATOMIC);
- 	dma_fence_end_signalling(cookie);
-@@ -1708,7 +1729,6 @@ static int ffs_dmabuf_transfer(struct file *file,
- 	} else {
- 		pr_warn("FFS: Failed to queue DMABUF: %d\n", ret);
- 		ffs_dmabuf_signal_done(fence, ret);
--		usb_ep_free_request(ep->ep, usb_req);
- 	}
- 
- 	spin_unlock_irq(&epfile->ffs->eps_lock);
--- 
-2.53.0
-
+> =C2=A0}
+> =C2=A0
+> =C2=A0static void gb_hid_init_reports(struct gb_hid *ghid)
 
