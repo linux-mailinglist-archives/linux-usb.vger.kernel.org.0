@@ -1,149 +1,91 @@
-Return-Path: <linux-usb+bounces-36346-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36347-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QKJXG5Qa5mkprgEAu9opvQ
-	(envelope-from <linux-usb+bounces-36346-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 14:22:44 +0200
+	id GAhvAm5V5mkDuwEAu9opvQ
+	(envelope-from <linux-usb+bounces-36347-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 18:33:50 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD5A842A9F1
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 14:22:43 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAB5442F9FE
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 18:33:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7832B302BA5B
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 12:22:31 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5A16132C3755
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 14:56:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2E3239EF2E;
-	Mon, 20 Apr 2026 12:22:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EC03372686;
+	Mon, 20 Apr 2026 14:10:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="pFm2CzEj";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="GhJdoZSe"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="GOcB2bjI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101E5389E05
-	for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 12:22:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288DD371CEE
+	for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 14:10:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776687750; cv=none; b=EizwqF5v0LoWlfsBjRQu3o6z6KOPHQYFaz9lcDVouHijgYNpPA3o4/QrUZh5uHbcax6F1rkgmkACdH8tsi529AP8A5M224brgZ6fOgPTLBlkpflF4GDwrT8ME270YIdgx3qXdXovQrBo2WHElqXP649I/DGyr8DTrE7AOc56hRc=
+	t=1776694227; cv=none; b=XocpVffvf4oactTvcbEgh6zpU/t9oByzJyv51yJjFN7fRpIbYZhjWZ8stomBBm6Nce9Dgn4982vgnvDQuZv5qF1FqWl4cIxNajbeiyINb6RGKN6oqvBD6hdqXDPPrA/E4U1Yr2YZswW1G42oeVxefoyR2MGMGAD+2XxBAVCQuSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776687750; c=relaxed/simple;
-	bh=JvKAl/VQcOEJRVKgCG5FcJaKEtHpQdTDs0Ik6qpcA34=;
+	s=arc-20240116; t=1776694227; c=relaxed/simple;
+	bh=AUtBJBDhJI3d5YxgERT8DM9QGsBT6Qtol103bc/NIDk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CrHmbf7OkWSRYigcbeodyPEmtMLgolKUGpReZ1qcQHX60CXpQEKYRQq+DVd4E0igbnCu6Z15jxE1mnaGDSvoTcIrokQohQwKiQQJC6Bd1i46FRUnUOcuxSLMIEZsuscZ/FTFCHWI1AEe/yjDdWFMu/ww5PPhjK34yZ7899Eji/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=pFm2CzEj; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=GhJdoZSe; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63K97rBv1600322
-	for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 12:22:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=d9qLWgpjbDnzk8XgHlDYIL/w
-	cQIT1V1yN9ePl+7ekJQ=; b=pFm2CzEjU67veNp4ikkvqwTF3+41XmtO15IKPDro
-	NDY6++5+hzKyTPyeSnqoMG0t56qJEqBLOqdCmtrjICL/OtPyWY+qKxdN+teD3Wjf
-	lj24IRTlTRxPcu0JV+dMxkw6i+5R4QR3ToAYbfw3LGa9AjG2KArIojx+rF5f8Aj9
-	PSl2zHEqjq4XmKubM/jFEr6AavEmg6UquQnm+6Dnh71icpvlTYrgVTw8XCgyisc4
-	jAgr6KJoWrfRqdB4N4HJsGycvk0sp8stpRMKZY/9k/pvM0WstD4f8V9evEq1/0gC
-	c2Gpgil84noEkTDnWqwIHV3EwAPvsNHz7KvYOVNHpcwl0Q==
-Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com [209.85.222.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dnh898mnj-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 12:22:25 +0000 (GMT)
-Received: by mail-ua1-f72.google.com with SMTP id a1e0cc1a2514c-953f6e0f1e0so3289387241.3
-        for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 05:22:25 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=q1PnccFi70Xxw6H+XZN0ohqDFWe24l1KZdn8VSDCxsawH4IWgiZO8TnregmWU4U0HCStgXrN395EhYGgaN74RjhE6U3U+jF6JSjCfXbKem9V0+Y4WSmWRzDHH65P6rQf9t07mfoEvNxIITaO5SnZOWLhkCpDGf4AwnNPt2NdYnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=GOcB2bjI; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-7927261a3acso24544977b3.0
+        for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 07:10:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1776687745; x=1777292545; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1776694224; x=1777299024; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=d9qLWgpjbDnzk8XgHlDYIL/wcQIT1V1yN9ePl+7ekJQ=;
-        b=GhJdoZSe8CRb9qfoOMzVTfZn4aQBb7b4YXFxE5m4isH/cRM9m6gXV8C2Qx0nR1/Ve9
-         +c0bi2ncU1Y3kOlnHrSYnDh9Mrk+Cjq9ZEtRj8+hMeVCpaDjbqI8Y5FxT2j5bIE8c78y
-         JnTaPSZNSR7nGMTbvt7naUDzqPKctmIWLxnpHI4UZNLhnS2/C2dK1FR2miWEmVkpyBum
-         tu3PSZs7se5gHwrkst3vxsKC2XW8IEG2xaAxyVW4sUDCjSNTeS0OyFUsdshXuIdLmtUh
-         fuHwloh+P9tYQW9A9eEHxsQViTa1ojOLnrPBFUYg7Btqdur/GzqX79nmYIlPbFJe4+S2
-         +a5w==
+        bh=l1Ivi3VS3OoyGlZKYKU74XAauef/UB3Zz0gmwHh1M2g=;
+        b=GOcB2bjIOYz/7iscWSIbqmc4wHwdSp3jGZ5W3KLPferNG5EXeS2gdgRxwGzOoMkYZK
+         5vt81iCckWHpf9KcEYcOCuLbIAEra7BD9W/t0QjkklsTSbDX3wLPNG02wiNRbObRdu4v
+         c98hNopt2eT1eVmqpGBHvD9XOnPDl+vZsPAy7E3g7T+h6mS4a3Ii1tCB/OEvLGDt28b7
+         88YlH/ra0VPZUZm495dRi5H8qNHKps2bvNaAVA9ix5xQpEoQm7vys6YMLIXE/W+RhYKd
+         vjWvAD16EwoOTXL65wr515IqZI+uP5ZhK7BIMQwP/jKHfQXSfTcJ+tgtkZKV0I5k1rxU
+         5Fag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776687745; x=1777292545;
+        d=1e100.net; s=20251104; t=1776694224; x=1777299024;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=d9qLWgpjbDnzk8XgHlDYIL/wcQIT1V1yN9ePl+7ekJQ=;
-        b=kz9lkwOzbMcuU5MArhi3la6asSsztqJIk9KuBmGA91Y1TwrYTBLwmOY4lZe+yvMJpl
-         BCneodI3LEVWySlQtQ8jWMQxwQ5Skk+RDHCyHSCntvM6q5AmpG8maa+GZhEvpnUpJpkV
-         gb+i4rZ6NnYb6UDKkEoRmbUrsOmYq8Wxs/TAt1ujykJPx8H5rXVKxBgJPZyH/3SzsNTg
-         liMQxNks22pcdqEMkdugHI8I+JH50OTS919YU/NhhPIWcBsmiL/BD15AkwNaI9TyrbuO
-         Ycf/3UrG6X/uA/UAj++Ut62r2Oai9GNjBOS4Bmj5M1ZE1BVHm4S7y6QWnsiC7P7T03pP
-         Brcg==
-X-Forwarded-Encrypted: i=1; AFNElJ+ExAKgLE2BI5nZbemRG2xNKK/mITp4qrhyDVaLX4rPqdWLIO+UQGX3iP8eFnQWQseCIj+VXy0HXuY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZfZStpQoKmI/xYuj/2O51KD3lhY41Sc5oUIhZdVks/PlkLyqA
-	sWufk0DSICN33Oiw7+cjNShN9s92ZjQL2RMgnHtrCn74bqJ6m+Gdx3vFSUmcMnbJpS6ERejJCD2
-	/kSwBMewRki3vd3qeMOgwPg+QQp9hPwyDWuCes89rWpvwvAlK3uIMTQ2ltSFWVzg=
-X-Gm-Gg: AeBDieslwfyC/Gql42XW81yyWw1Zv5zsUA9znUjgslI6ESlbVhgEaTDfvGVSwJJOwqk
-	RzzeKVhYT4ofsPD9W+uXxa7SKXg81GXliEgYbydnYksJ0YsE2SE1c66Y25uzc4pFwpOP///lD/3
-	iXH/glm3MfQdg9CmejLrozuHSZEHGO2rbFRGA3FSgu3r4kaLcxC7dmuXsz6aplhI7jb3jxjAGxK
-	iyhoAW2OZLU+o0U2Kpg1eoIA9lYOERC69W9IZHBuAYVdCx+xnm96g2DNkgSY6dbtQH9V7gooToJ
-	c3hpLZMURy8ejrgF+OsE9TxESSit4hi1talo0gcKbMm5ILKrcCT3EEFSfNcGccrnaYqgwHeZs5h
-	l5+gDuQVFGxk2feGD2KSMFr88aZjmlKVHhegREQbkt6pwCYkzDLaa0Syf97vMpMNAdMuO/IUt2+
-	6kGxw8iXt1ZmmBm5LsijkH7+Y0MJakCSTiYknY22hn+8fFsQ==
-X-Received: by 2002:a05:6102:605b:b0:607:7991:8edd with SMTP id ada2fe7eead31-616f69cf898mr5180327137.19.1776687745101;
-        Mon, 20 Apr 2026 05:22:25 -0700 (PDT)
-X-Received: by 2002:a05:6102:605b:b0:607:7991:8edd with SMTP id ada2fe7eead31-616f69cf898mr5180299137.19.1776687744603;
-        Mon, 20 Apr 2026 05:22:24 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-38ecb6f07b3sm25155421fa.22.2026.04.20.05.22.23
+        bh=l1Ivi3VS3OoyGlZKYKU74XAauef/UB3Zz0gmwHh1M2g=;
+        b=DY8FhTs6uPijau0+XqKoow43yt5mqLcw3bNia/8yVTEFA4jYoeYkLIGCA7m4+ZYguF
+         EmmyCNgbJ42anN2BpKzgIZIn5m3KLZw8sEDNs8/01J3YHe8oTJg4NO5juUl1Jplj8uFJ
+         r2I+m46thnMXD+2OrB42BdScLHoSLObHxND5poV84Y51PHqZdZw60/HOMKha6A3vx7Kx
+         etMlbAFGglJ98/I3q1BSebNuob7x4naISDLoawoY+6GEEobriR0rgpTjyY8hM3irVOZI
+         AGcE1CZmFZqPvD40wXWQ+IF9ECHTK+OZndzsugC3peGlsADjaADKQzBYebOxtm6WNPI/
+         1Hmw==
+X-Forwarded-Encrypted: i=1; AFNElJ/HIBzkutgH4ZHGM3NRshUFvVDpyaky9EmlmhigtUdeVKxlr5GHC6T0QfLUUmyFDAS5tual32XfIA8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeXY8gIdsoQzN3nILAd7J6/9PK7wJNVrZkBOLoKxnhwGzo0na4
+	r0l3Suh79e3y6sM33tPfI0X98s6NN/OYjKHvBqVuzmUqNC3p19VxQy/JV5wOW3ihzw==
+X-Gm-Gg: AeBDiesKghzdrVBh9LtezpEsTINPG7IFo2DrZwQ5FmmbMejyk2a3r2THt9yMDAQ2VHg
+	NxYll6bbkuNks5pm5WXmu8tx5N/5t35InH4mBzG3sOXFjMz+oL9/1e742//T+9+xwJX4rGRKmgv
+	g0uQm1u/5S6+PY7hFKZUOzOxuzMG2Iwuv8gVYh4DA+bHZcR2PAws1EBdIcSWjrhzVhbDKBD1oN/
+	sqsnSFOXmBq6ROWkGCJns3Hd8ctYt5YyXiaMwQbi2MgEYGMZs4dArq7ucNlKkj6M58usjtowT8V
+	8ev7qvsFPoVUWHct92DVfOgU/HRyePdaesGxfamrRatClO7SvjyOm2mSaDD/NKbBGAZTyviDkX0
+	tcwQLQp7K/lKsPFCOP4IOsybE2JV5SDLLmljtUkw8kRf1Xj2Sy+wYrKgTyNgYlymq+Vu/xPhiCa
+	+kULUZmzjCOm6u/jkmIthwFhygQ2dd8sF9hRoYmY7NXTVhnLrfSgkq
+X-Received: by 2002:a05:690c:498f:b0:7b8:f152:7538 with SMTP id 00721157ae682-7b9ece761fdmr149670647b3.1.1776694224093;
+        Mon, 20 Apr 2026 07:10:24 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8e7d64cbbdbsm860158085a.12.2026.04.20.07.10.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2026 05:22:23 -0700 (PDT)
-Date: Mon, 20 Apr 2026 15:22:21 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        intel-xe@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Adrien Grassein <adrien.grassein@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tursulin@ursulin.net>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Clark <robin.clark@oss.qualcomm.com>,
-        Dmitry Baryshkov <lumag@kernel.org>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Pengyu Luo <mitltlatltl@gmail.com>, Nikita Travkin <nikita@trvn.ru>,
-        Yongxing Mou <yongxing.mou@oss.qualcomm.com>
-Subject: Re: [PATCH 1/6] drm/connector: report IRQ_HPD events to
- drm_connector_oob_hotplug_event()
-Message-ID: <ugeikq47wb2b4vnowp3lyjmp3utyq533qczf2y3uc5dtjo7gpa@v7vclmntisob>
-References: <20260416-hpd-irq-events-v1-0-1ab1f1cfb2b2@oss.qualcomm.com>
- <20260416-hpd-irq-events-v1-1-1ab1f1cfb2b2@oss.qualcomm.com>
- <51b7c44e-36c9-461f-983a-eaa86eeb8cfd@ideasonboard.com>
- <6z572fdjkvjqvedifwvotgdy4lcrifiqvkjpnutousjqc6764r@zepfzkqy2kbu>
- <a2e60e74-a1be-469d-8f4d-ecce1f30b517@ideasonboard.com>
- <3vrqk67oivkgo26xdc3r774rvj3jn3t6sfydhlytyrfiftubhg@cipain7xxcjz>
- <f74ecd0a-3ff3-45b4-935e-44b89cd0c92d@ideasonboard.com>
- <v7h3a5pwx32dfcumc3diysylja6lhkhobyzemfthb6dsadcxnp@2kkidnsgov4e>
- <ac330f76-24dc-4f6b-aeaf-69176eb41298@ideasonboard.com>
+        Mon, 20 Apr 2026 07:10:23 -0700 (PDT)
+Date: Mon, 20 Apr 2026 10:10:20 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Huisong Li <lihuisong@huawei.com>
+Cc: gregkh@linuxfoundation.org, khtsai@google.com, hhhuuu@google.com,
+	kees@kernel.org, kexinsun@smail.nju.edu.cn,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linuxarm@huawei.com, zhanjie9@hisilicon.com
+Subject: Re: [PATCH] usb: gadget: udc: Fix overwriting the gadget driver of
+ occupied udc
+Message-ID: <ec166527-2064-4d48-b2c5-fd2e3e5afd87@rowland.harvard.edu>
+References: <20260420040223.1232745-1-lihuisong@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -152,224 +94,95 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ac330f76-24dc-4f6b-aeaf-69176eb41298@ideasonboard.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDIwMDEyMSBTYWx0ZWRfX9lfUvoy9T0Ub
- Y9120gaE1kKFaQB/+v1GJiw3ydqnIrZ5FkxRdSHUo0MBgkWPpItK/9mK2DnHKP208QnXLyj0ity
- pJKw7/TFdn7dQ/vzhtpdaLLpcQjya4hPNgY78nepymMWzO3p24ROZnehf98CCWw64Z0M0HwFuC1
- kyW5P/qm/Ox2X6XaCc8LGzKXzuYBI0Hmv18wmX1XjKTvbT3zm2ulQESYnnBMukfmqpD4ME9ulfC
- CRH4NuAifiYb2TYkxfpgWkma4arQeTt4IIZp+Q5eCgRMPXl5YY4rI7hKAezcgymcyErcPa8eOED
- A1hbtE2M5WpnsjR2vLH3AqjfbKq6ouGxBwGRumiPCZ544XgmairSwXiCFsujvkdf6jFUtNhFiFh
- NBQGWcqKmN7WB7a7DPBJdI+scW3Ra82AJTFwig0IMPOjH369Pam45iatppSehrDEuqR3uReKsZt
- rwYxVPLoySDnee/myvg==
-X-Authority-Analysis: v=2.4 cv=D6B37PRj c=1 sm=1 tr=0 ts=69e61a81 cx=c_pps
- a=ULNsgckmlI/WJG3HAyAuOQ==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22 a=JfrnYn6hAAAA:8
- a=EUspDBNiAAAA:8 a=NVKd20UARjXkfPC9qNsA:9 a=CjuIK1q_8ugA:10
- a=1WsBpfsz9X-RYQiigVTh:22 a=1CNFftbPRP8L7MoqJWF3:22
-X-Proofpoint-ORIG-GUID: JB0B9HHcOBHySpnZYPhUmxRDOto3eSUR
-X-Proofpoint-GUID: JB0B9HHcOBHySpnZYPhUmxRDOto3eSUR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-20_02,2026-04-17_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 phishscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
- malwarescore=0 suspectscore=0 priorityscore=1501 impostorscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604200121
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+In-Reply-To: <20260420040223.1232745-1-lihuisong@huawei.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36346-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[42];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[lists.freedesktop.org,vger.kernel.org,lists.infradead.org,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,linuxfoundation.org,intel.com,linaro.org,ideasonboard.com,kwiboo.se,ursulin.net,baylibre.com,googlemail.com,oss.qualcomm.com,linux.dev,poorly.run,somainline.org,trvn.ru];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oss.qualcomm.com:dkim,qualcomm.com:dkim,qualcomm.com:email,infradead.org:url,infradead.org:email];
-	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dmitry.baryshkov@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36347-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: BD5A842A9F1
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,huawei.com:email,rowland.harvard.edu:dkim,rowland.harvard.edu:mid]
+X-Rspamd-Queue-Id: EAB5442F9FE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Apr 20, 2026 at 02:51:49PM +0300, Tomi Valkeinen wrote:
-> Hi,
-> 
-> On 20/04/2026 14:45, Dmitry Baryshkov wrote:
-> > On Mon, Apr 20, 2026 at 02:01:57PM +0300, Tomi Valkeinen wrote:
-> > > Hi,
-> > > 
-> > > On 20/04/2026 12:50, Dmitry Baryshkov wrote:
-> > > > On Mon, Apr 20, 2026 at 07:50:46AM +0300, Tomi Valkeinen wrote:
-> > > > > Hi,
-> > > > > 
-> > > > > On 18/04/2026 01:32, Dmitry Baryshkov wrote:
-> > > > > > On Thu, Apr 16, 2026 at 11:10:03AM +0300, Tomi Valkeinen wrote:
-> > > > > > > Hi,
-> > > > > > > 
-> > > > > > > On 16/04/2026 02:22, Dmitry Baryshkov wrote:
-> > > > > > > > The DisplayPort standard defines a special kind of events called IRQ.
-> > > > > > > > These events are used to notify DP Source about the events on the Sink
-> > > > > > > > side. It is extremely important for DP MST handling, where the MST
-> > > > > > > > events are reported through this IRQ.
-> > > > > > > > 
-> > > > > > > > In case of the USB-C DP AltMode there is no actual HPD pulse, but the
-> > > > > > > > events are ported through the bits in the AltMode VDOs.
-> > > > > > > > 
-> > > > > > > > Extend the drm_connector_oob_hotplug_event() interface and report IRQ
-> > > > > > > > events to the DisplayPort Sink drivers.
-> > > > > > > > 
-> > > > > > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-> > > > > > > > ---
-> > > > > > > >      drivers/gpu/drm/drm_connector.c          |  4 +++-
-> > > > > > > >      drivers/usb/typec/altmodes/displayport.c | 12 ++++++++----
-> > > > > > > >      include/drm/drm_connector.h              |  3 ++-
-> > > > > > > >      3 files changed, 13 insertions(+), 6 deletions(-)
-> > > > > > > > 
-> > > > > > > > diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-> > > > > > > > index 47dc53c4a738..5fdacbd84bd7 100644
-> > > > > > > > --- a/drivers/gpu/drm/drm_connector.c
-> > > > > > > > +++ b/drivers/gpu/drm/drm_connector.c
-> > > > > > > > @@ -3510,6 +3510,7 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
-> > > > > > > >       * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
-> > > > > > > >       * @connector_fwnode: fwnode_handle to report the event on
-> > > > > > > >       * @status: hot plug detect logical state
-> > > > > > > > + * @irq_hpd: HPD pulse detected
-> > > > > > > >       *
-> > > > > > > >       * On some hardware a hotplug event notification may come from outside the display
-> > > > > > > >       * driver / device. An example of this is some USB Type-C setups where the hardware
-> > > > > > > > @@ -3520,7 +3521,8 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
-> > > > > > > >       * a drm_connector reference through calling drm_connector_find_by_fwnode().
-> > > > > > > >       */
-> > > > > > > >      void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
-> > > > > > > > -				     enum drm_connector_status status)
-> > > > > > > > +				     enum drm_connector_status status,
-> > > > > > > > +				     bool irq_hpd)
-> > > > > > > I find the "IRQ HPD" naming always confusing, even if I'm somewhat familiar
-> > > > > > > with DP, but if someone has mainly worked on HDMI, I'm sure it's even worse.
-> > > > > > > 
-> > > > > > > Can we define this a bit more precisely? Is 'irq_hpd' only for displayport?
-> > > > > > > If so, perhaps 'dp_irq_hpd' or 'displayport_irq_hpd'. I might even call it
-> > > > > > > 'dp_hpd_pulse', but maybe that's not good as the spec talks about HPD pulse
-> > > > > > > for both short and long ones (although in the kernel doc you just write "HPD
-> > > > > > > pulse")... The kernel doc could be expanded a bit to make it clear what this
-> > > > > > > flag indicates.
-> > > > > > 
-> > > > > > I attempted to stay away from defining a DP-specific flag, keeping it
-> > > > > > generic enough. HDMI is pretty close (IMO) to requiring separate flag in
-> > > > > 
-> > > > > If it's not specifically the DP IRQ HPD, then we need to define what it
-> > > > > means. I tried to think what it would mean with HDMI, but I didn't come up
-> > > > > with anything.
-> > > > 
-> > > > I might be mistaken, but I had someting like HEAC HPD / EDID status
-> > > > changes in mind (or HDCP-triggered HPD status changes). But here I
-> > > > admit, I hadn't checked if it is actually applicable or not.
-> > > 
-> > > Possibly, I'm not familiar with those.
-> > > 
-> > > > Anyway, for e.g. DVI or VGA that means nothing. But, my point really is
-> > > > to abstain from defining someting as DP-only in the top-level API.
-> > > 
-> > > I'm fine with that, but then it really has to be defined =).
-> > > 
-> > > > > > Linux. Likewise I'd rather not use "pulse". The DP AltMode defines a bit
-> > > > > > in the VDO rather than a pulse.
-> > > > > > 
-> > > > > > Anyway, if irq_hpd doesn't sound precise enough, what about "bool
-> > > > > > extra_irq"? This would convey that this is the extra hpd-related IRQ,
-> > > > > > but it would also be obvious that it's not related to the HPD pin
-> > > > > > itself.
-> > > > > We'd still need to define what exactly it means. I think it might be better
-> > > > > to just define it as the DP IRQ HPD, as then the meaning is clear.
-> > > > > 
-> > > > > Also, would an enum flags parameter be better than a bool parameter?
-> > > > 
-> > > > Maybe not enum, but u32 param. Then it can become:
-> > > > 
-> > > > @extra_status: additional type-specific information provided by the sink
-> > > > without changing the HPD state
-> > > > 
-> > > > void drm_connector_oob_hotplug_event(..., u32 extra_status);
-> > > > 
-> > > > /* DP short HPD pulse or corresponding AltMode flag */
-> > > > #define DRM_CONNECTOR_OOB_DP_IRQ_HPD BIT(0)
-> > > > /* DP long HPD pulse, debounced XXX: do we need this? */
-> > > > #define DRM_CONNECTOR_OOB_DP_REPLUG BIT(1)
-> > > 
-> > > Why is u32 better than enum? So that we could e.g. pass short values inside
-> > > the extra_status?
-> > 
-> > No, my thought was to be able to define values specific to the
-> > particular connector types and to be able to combine those values.
-> > 
-> > After sending the email I started thinking about the bridged and
-> > corresponding notifications. There having overlapping values will not
-> > work becasue bridges in the chanin don't easily know the final connector
-> > type.
-> 
-> An enum can have overlapping values. I don't think there's much difference
-> between u32 and an enum in C. I just like enum because 1) it groups the
-> possible values in the header file, and 2) the function parameters can use
-> the enum type, making it obvious what flags you are supposed to use there.
-> 
-> > I think you are correct here, it should be the enum. With the first
-> > iteration defined as:
-> > 
-> > /**
-> >   * enum drm_connector_status_extra - additional events sent by the sink
-> >   * together or in replacement of the HPD status changes
-> >   /
-> > enum drm_connector_status_extra {
-> >    /**
-> >     * @DRM_CONNECTOR_DP_IRQ_HPD: DisplayPort Sink has sent the
-> >     * IRQ_HPD (either by the HPD short pulse or via the AltMode event).
-> >     */
-> >    DRM_CONNECTOR_DP_IRQ_HPD = BIT(0),
-> > };
-> > 
-> > /**
-> >    * @extra_status: additional information provided by the sink without
-> >    * changing the HPD state (or in addition to such a change). It is an
-> >    * OR of the values defined in the drm_connector_status_extra enum.
-> >    */
-> > void drm_connector_oob_hotplug_event(..., u32 extra_status);
-> 
-> Looks good to me, except I'd use "enum drm_connector_status_extra" instead
-> of u32 there in the function parameters.
+How did you find this "problem"?  By encountering a crash?  By code 
+review?  Some other way?
 
-I had bad feelings about passing OR or enum values as an enum value.
-But then... I don't see values to OR. All expected events come one by
-one. Let's drop that part too. Thanks for your comments!
+On Mon, Apr 20, 2026 at 12:02:23PM +0800, Huisong Li wrote:
+> In gadget_match_driver(), the core only validates whether the gadget
+> driver is already bound, but it doesn't check the current state of
+> the UDC. This leads to gadget_bind_driver() (the probe stage) being
+> invoked for an already occupied UDC.
 
-> 
->  Tomi
-> 
-> 
-> _______________________________________________
-> linux-amlogic mailing list
-> linux-amlogic@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-amlogic
+No it doesn't.  It is not possible for gadget_bind_driver() to be called 
+if the UDC is already bound to a driver.  That's because this routine is 
+a .probe() callback, and the device core only probes devices that aren't 
+already bound to a driver.
 
--- 
-With best wishes
-Dmitry
+It's true that gadget_bind_driver() is a probe routine for the gadget 
+bus, not whatever bus the UDC was registered on, but that doesn't matter 
+because the UDC's driver is always assigned and cleared along with the 
+gadget's driver.
+
+> In gadget_bind_driver(), the code proceeds to overwrite 'udc->driver'
+> and forcibly modify the UDC speed without checking if the UDC is
+> currently in use. This results in state inconsistency and disruption
+> of the existing connection.
+> 
+> Fix this by adding a check for 'udc->driver' in
+> gadget_bind_driver().
+
+This change is not necessary.
+
+Alan Stern
+
+> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
+> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> ---
+>  drivers/usb/gadget/udc/core.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> index e8861eaad907..47e50fe1b75b 100644
+> --- a/drivers/usb/gadget/udc/core.c
+> +++ b/drivers/usb/gadget/udc/core.c
+> @@ -1615,6 +1615,13 @@ static int gadget_bind_driver(struct device *dev)
+>  	int ret = 0;
+>  
+>  	mutex_lock(&udc_lock);
+> +	if (udc->driver) {
+> +		dev_err(&udc->dev, "UDC (%s) is already in use.\n",
+> +			dev_name(&udc->dev));
+> +		mutex_unlock(&udc_lock);
+> +		return -EBUSY;
+> +	}
+> +
+>  	if (driver->is_bound) {
+>  		mutex_unlock(&udc_lock);
+>  		return -ENXIO;		/* Driver binds to only one gadget */
+> -- 
+> 2.33.0
+> 
+> 
 
