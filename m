@@ -1,143 +1,270 @@
-Return-Path: <linux-usb+bounces-36357-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36359-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CBD4F2pS5mkDuwEAu9opvQ
-	(envelope-from <linux-usb+bounces-36357-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 18:20:58 +0200
+	id YJ+QM3Vh5mmavgEAu9opvQ
+	(envelope-from <linux-usb+bounces-36359-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 19:25:09 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E9B442F56B
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 18:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 693C143125D
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 19:25:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 4A5A6303D373
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 16:15:08 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CE05B300E006
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 17:24:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73715346771;
-	Mon, 20 Apr 2026 16:15:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7558239D6C8;
+	Mon, 20 Apr 2026 17:23:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HzGsR6WT"
+	dkim=pass (2048-bit key) header.d=interstellar.eu header.i=@interstellar.eu header.b="KeQAZ+SP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-43170.protonmail.ch (mail-43170.protonmail.ch [185.70.43.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFF582FD1B1;
-	Mon, 20 Apr 2026 16:15:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE002FE057
+	for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 17:23:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776701706; cv=none; b=YCXQ7CIdKA0ivN04/InTyCsCGO7/DMtLa4CgdfpHDLRHFg4AVUA81RQcZUatY1/sZljiZRVbzJBWU3MJHVvqjCst1aUuq58PHH5LXNe73dLI57+zpB6RySPGB9ChdtAr4PmKr596FAt86aSvKgnTQFl9RkkOB8EHiFvs7ZUgg8Q=
+	t=1776705833; cv=none; b=JBE3jB6QjnHyCkQS6CKQ3+rBdSb2NqjnVwkqDZ3N6MdwJ+58QgNAmiscFwYbS1LxBhrJxJcYe0wrbRO/wFqzBOlM36daGq0keXQFib1w91F3xtWTXYmgskufJoEGyVJdYRI3irr25+jc9P7d2gO12tW+YvjPByaihJ+9aHdCarE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776701706; c=relaxed/simple;
-	bh=yAClQ7viy0pdkoODuFLYVq+YeIsI6rgXW6pLrwHGXHI=;
+	s=arc-20240116; t=1776705833; c=relaxed/simple;
+	bh=pvx3CWz+TqQc6WJSltspQ72Rhx6daBmFJ2BQnCBkA9U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C0Idht3dHkW6oHLCoXCTvJRrp1LwFHXro6+O5lr7NTYs01Ow3WUD8N5rY4XGV/DfbhK08d699Iza28qm675Mx6eAbHiEmmwkHrWtwgmDfr8THT/fqQb5rXF59bS6lHAIpgBayISgxL7CYj3qwYECe5mPgUWiCAOCB4aoqvaliSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HzGsR6WT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8184CC19425;
-	Mon, 20 Apr 2026 16:15:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1776701705;
-	bh=yAClQ7viy0pdkoODuFLYVq+YeIsI6rgXW6pLrwHGXHI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HzGsR6WT63Bt0NCJHya7Trj5wv/qWK9hqKjfdGeunCVusXnuBz5es2XWPnioqC9Xg
-	 Y4tv8VYG+Ma+NkUHDEee7rkJHNRAuWTk+MWpVWYiTPH5hL8hqC0MGfBHtZkUgnL6Y9
-	 RbNmZDV69OoBFC1wTqpCSBUTbpLf2HD7QFU7bdCY=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+	 MIME-Version; b=N3CC/jhzB9KXji3XwICkXK89/U45EejhXOBeWcit2gyPK88zZ8Ye8eI4vDUVPoQi5W0NbUDdGiD//4jbAvO70KQGrfHcVhHYfrJefHYouWZlaRFYyTuTzA7foiLAgfbTIiZFmK9ilQGx7ScEwXe+W5DU2yEi0EZcSIjoyeKOFf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=interstellar.eu; spf=pass smtp.mailfrom=interstellar.eu; dkim=pass (2048-bit key) header.d=interstellar.eu header.i=@interstellar.eu header.b=KeQAZ+SP; arc=none smtp.client-ip=185.70.43.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=interstellar.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=interstellar.eu
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=interstellar.eu;
+	s=protonmail; t=1776705826; x=1776965026;
+	bh=WYCawyjvHVblqdq50fKpr98NNV0nEOAvFs9GqNKVKh4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:From:To:
+	 Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=KeQAZ+SP9Wshq2OpVFuw/8ItRN1+DoZWIjZ0pJwhCExjGlbUlMBpRT5zRXck8fep2
+	 7wqbSpdcXtMBlJLv3dMuLooC/EQgIVrwM0ZMEfY6QiDEYKpthqqML6FFEg/dAnhAzT
+	 1OlfTsZ4f6InlOu21mG686Tx48xPG6gEguk7d/Sej85sXUU5UIIKMSt9Jnc9Dll9rA
+	 YW7kerV1qs4iZDFYlr7VsZkquSufrFf/j+uf56TKWUqjL2cbsoM5mZPl+Eb1s6bx2h
+	 b89vMSxqow4L1tcWng03nC2T3wWKvQ9eccP1DtHkV3ePKWFYYQ+Cf/SSTZoOdzLGWd
+	 /GQMyUrKOR0jQ==
+X-Pm-Submission-Id: 4fzslh1xGQz2ScWp
+From: Francesco Orro <ncesco@interstellar.eu>
 To: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Pete Zaitcev <zaitcev@redhat.com>,
-	stable <stable@kernel.org>
-Subject: [PATCH 2/2] usb: usblp: fix uninitialized heap leak via LPGETSTATUS ioctl
-Date: Mon, 20 Apr 2026 18:11:04 +0200
-Message-ID: <2026042011-shredder-savage-48c6@gregkh>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <2026042002-unicorn-greedily-3c63@gregkh>
-References: <2026042002-unicorn-greedily-3c63@gregkh>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg KH <gregkh@linuxfoundation.org>
+Subject: [PATCH v7] usb: typec: ucsi: acpi: bootstrap PPM on systems with empty _DSM func 2
+Date: Mon, 20 Apr 2026 19:23:41 +0200
+Message-ID: <20260420172343.84456-1-ncesco@interstellar.eu>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <f3M_fpjtt8FxDqGKcA84vqXmRbKzCBfpCrIK4-jCWvIscER51zkD8qD8FYpz75qZw51rMDRSkUyYlrBvLvdM8CGRY2l8TFVvr4MC1LdTzbc=@interstellar.eu>
+References: <f3M_fpjtt8FxDqGKcA84vqXmRbKzCBfpCrIK4-jCWvIscER51zkD8qD8FYpz75qZw51rMDRSkUyYlrBvLvdM8CGRY2l8TFVvr4MC1LdTzbc=@interstellar.eu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Lines: 44
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1687; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=yAClQ7viy0pdkoODuFLYVq+YeIsI6rgXW6pLrwHGXHI=; b=owGbwMvMwCRo6H6F97bub03G02pJDJnPAuTrnnHPOnkzrKNbb3N2krHKz4CbkQY3XWeUln7SP 7CrwP9tRywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAEzEto1hnlpfr5DHchlJ16jC JQX2W3m5as40M8wvnLdFZoHfyoqABpW7ZnaMtZe+fD8GAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [2.84 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	DMARC_POLICY_ALLOW(-0.50)[interstellar.eu,quarantine];
+	R_DKIM_ALLOW(-0.20)[interstellar.eu:s=protonmail];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	RCPT_COUNT_THREE(0.00)[3];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-36359-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36357-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ncesco@interstellar.eu,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	NEURAL_HAM(-0.00)[-0.996];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[interstellar.eu:+];
+	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linuxfoundation.org:dkim,linuxfoundation.org:email]
-X-Rspamd-Queue-Id: 1E9B442F56B
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,interstellar.eu:email,interstellar.eu:dkim,interstellar.eu:mid]
+X-Rspamd-Queue-Id: 693C143125D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Just like in a previous problem in this driver, usblp_ctrl_msg() will
-collapse the usb_control_msg() return value to 0/-errno, discarding the
-actual number of bytes transferred.
+On HP ZBook Fury G1i 16 inch (BIOS X96 01.03.04) the SSDT16 "UcsiAcpi"
+exposes a _DSM function 2 (READ) whose body is empty, so UCSI_VERSION
+stays 0x0000 after the read. ucsi_init() treats VERSION=0 as firmware
+absent and bails with -ENODEV, so /sys/class/typec is empty and no
+alt-mode info reaches userspace.
 
-Ideally that short command should be detected and error out, but many
-printers are known to send "incorrect" responses back so we can't just
-do that.
+The PPM is alive: writing UCSI_PPM_RESET through _DSM function 1 (WRITE)
+drives RESET_COMPLETE in CCI. We can therefore bootstrap the PPM
+explicitly on probe when necessary and, once RESET_COMPLETE is observed,
+default VERSION to UCSI 1.2 - which matches the semantics advertised by
+the SSDT tables on this platform.
 
-statusbuf is kmalloc(8) at probe time and never filled before the first
-LPGETSTATUS ioctl.
+The bootstrap checks CCI first and returns early if RESET_COMPLETE is
+already set, to avoid resetting a PPM left in a stable state by
+firmware. Note that this early-return path was not exercised on the
+tested platform: on cold boot CCI did not have RESET_COMPLETE at probe
+time and the PPM_RESET was issued. Consequently, alt-mode state
+negotiated during BIOS POST (in this case a Thunderbolt dock's TBT
+alt-mode) was disrupted at boot. Linux UCSI core later calls
+ucsi_reset_ppm() in ucsi_init() regardless, so the PPM reset on probe
+is arguably not the root cause of the disruption, but the patch leaves
+the door open to avoid the early reset when firmware does leave the
+flag set.
 
-usblp_read_status() requests 1 byte. If a malicious printer responds
-with zero bytes, *statusbuf is one byte of stale kmalloc heap,
-sign-extended into the local int status, which the LPGETSTATUS path then
-copy_to_user()s directly to the ioctl caller.
+Bootstrap failure is non-fatal: we log a warning and continue. If the
+PPM later reaches RESET_COMPLETE asynchronously, read_version() still
+recovers via the UCSI_CCI_RESET_COMPLETE check gated by the
+needs_bootstrap flag.
 
-Fix this all by just zapping out the memory buffer when allocated at
-probe time.  If a later call does a short read, the data will be
-identical to what the device sent it the last time, so there is no
-"leak" of information happening.
+The behaviour is gated by DMI because unconditionally issuing a
+PPM_RESET on systems whose firmware _does_ populate VERSION correctly
+would be aggressive and unjustified. The DMI match starts with HP ZBook
+Fury G1i 16 inch; other vendors/models can be added as they are
+confirmed.
 
-Cc: Pete Zaitcev <zaitcev@redhat.com>
-Assisted-by: gkh_clanker_t1000
-Cc: stable <stable@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Tested on HP ZBook Fury G1i 16 inch Mobile Workstation PC with kernel
+6.19.13. Before the patch ucsi_acpi probe returns -ENODEV; after the
+patch /sys/class/typec/port{0,1,2} appear with partner altmodes
+exposed when a USB4/TBT device is connected.
+
+Signed-off-by: Francesco Orro <ncesco@interstellar.eu>
 ---
- drivers/usb/class/usblp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Resending: previous send was mangled by quoted-printable encoding.
+No content changes.
 
-diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
-index e9b848622a3a..746414763da5 100644
---- a/drivers/usb/class/usblp.c
-+++ b/drivers/usb/class/usblp.c
-@@ -1178,7 +1178,7 @@ static int usblp_probe(struct usb_interface *intf,
- 	}
+--- a/drivers/usb/typec/ucsi/ucsi_acpi.c	2026-04-18 10:46:48.000000000 +0200
++++ b/drivers/usb/typec/ucsi/ucsi_acpi.c	2026-04-20 17:47:45.529559324 +0200
+@@ -9,6 +9,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/module.h>
+ #include <linux/acpi.h>
++#include <linux/delay.h>
+ #include <linux/dmi.h>
  
- 	/* Allocate buffer for printer status */
--	usblp->statusbuf = kmalloc(STATUS_BUF_SIZE, GFP_KERNEL);
-+	usblp->statusbuf = kzalloc(STATUS_BUF_SIZE, GFP_KERNEL);
- 	if (!usblp->statusbuf) {
- 		retval = -ENOMEM;
- 		goto abort;
--- 
-2.53.0
-
+ #include "ucsi.h"
+@@ -17,11 +18,15 @@
+ #define UCSI_DSM_FUNC_WRITE	1
+ #define UCSI_DSM_FUNC_READ	2
+ 
++#define UCSI_ACPI_BOOTSTRAP_RETRIES	20
++#define UCSI_ACPI_BOOTSTRAP_DELAY_MS	50
++
+ struct ucsi_acpi {
+ 	struct device *dev;
+ 	struct ucsi *ucsi;
+ 	void *base;
+ 	bool check_bogus_event;
++	bool needs_bootstrap;
+ 	guid_t guid;
+ 	u64 cmd;
+ };
+@@ -46,6 +51,7 @@
+ {
+ 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+ 	int ret;
++	u32 cci;
+ 
+ 	ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
+ 	if (ret)
+@@ -53,6 +59,21 @@
+ 
+ 	memcpy(version, ua->base + UCSI_VERSION, sizeof(*version));
+ 
++	/*
++	 * Some firmwares (observed on HP ZBook Fury 16 G1i, SSDT16
++	 * "UcsiAcpi") leave the VERSION field untouched by _DSM func 2.
++	 * If the PPM has reached RESET_COMPLETE - typically because the
++	 * firmware (or our bootstrap on probe) left it in that state -
++	 * fall back to UCSI 1.2 which matches what those SSDTs advertise.
++	 */
++	if (!*version && ua->needs_bootstrap) {
++		memcpy(&cci, ua->base + UCSI_CCI, sizeof(cci));
++		if (cci & UCSI_CCI_RESET_COMPLETE) {
++			dev_info(ua->dev, "VERSION unpopulated; defaulting to UCSI 1.2 after PPM RESET_COMPLETE\n");
++			*version = UCSI_VERSION_1_2;
++		}
++	}
++
+ 	return 0;
+ }
+ 
+@@ -143,6 +164,56 @@
+ 	.async_control = ucsi_acpi_async_control
+ };
+ 
++/*
++ * DMI list of systems whose UCSI ACPI firmware does not populate VERSION
++ * from _DSM func 2 (READ). Entries here opt into ucsi_acpi_bootstrap_ppm()
++ * at probe time.
++ */
++static const struct dmi_system_id ucsi_acpi_bootstrap_quirk[] = {
++	{
++		.ident = "HP ZBook Fury G1i 16 inch",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
++			DMI_MATCH(DMI_PRODUCT_NAME,
++				  "HP ZBook Fury G1i 16 inch"),
++		},
++	},
++	{ }
++};
++
++/*
++ * Drive PPM_RESET via _DSM WRITE and wait for RESET_COMPLETE, but only if
++ * the firmware hasn't already left the PPM in that state. Skipping the
++ * reset avoids disrupting alt mode state already negotiated by firmware
++ * (e.g. a Thunderbolt dock attached at boot whose TBT alt mode entry
++ * would otherwise be torn down by a fresh PPM reset).
++ */
++static int ucsi_acpi_bootstrap_ppm(struct ucsi_acpi *ua)
++{
++	u64 cmd = UCSI_PPM_RESET;
++	u32 cci;
++	int retries;
++
++	memcpy(&cci, ua->base + UCSI_CCI, sizeof(cci));
++	if (cci & UCSI_CCI_RESET_COMPLETE) {
++		dev_info(ua->dev, "PPM already in RESET_COMPLETE, skipping bootstrap\n");
++		return 0;
++	}
++
++	memcpy(ua->base + UCSI_CONTROL, &cmd, sizeof(cmd));
++	if (ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_WRITE))
++		return -EIO;
++
++	for (retries = UCSI_ACPI_BOOTSTRAP_RETRIES; retries > 0; retries--) {
++		msleep(UCSI_ACPI_BOOTSTRAP_DELAY_MS);
++		memcpy(&cci, ua->base + UCSI_CCI, sizeof(cci));
++		if (cci & UCSI_CCI_RESET_COMPLETE)
++			return 0;
++	}
++
++	return -ETIMEDOUT;
++}
++
+ static const struct dmi_system_id ucsi_acpi_quirks[] = {
+ 	{
+ 		.matches = {
+@@ -201,6 +272,15 @@
+ 
+ 	ua->dev = &pdev->dev;
+ 
++	if (dmi_check_system(ucsi_acpi_bootstrap_quirk)) {
++		ua->needs_bootstrap = true;
++		ret = ucsi_acpi_bootstrap_ppm(ua);
++		if (ret)
++			dev_warn(&pdev->dev,
++				 "PPM bootstrap did not complete (%d); continuing anyway\n",
++				 ret);
++	}
++
+ 	id = dmi_first_match(ucsi_acpi_quirks);
+ 	if (id)
+ 		ops = id->driver_data;
 
