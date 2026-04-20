@@ -1,131 +1,260 @@
-Return-Path: <linux-usb+bounces-36361-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36362-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GBIqKUBx5mlgwgEAu9opvQ
-	(envelope-from <linux-usb+bounces-36361-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 20:32:32 +0200
+	id kLuuLe2Q5mlWyQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36362-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 22:47:41 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B9F8432E2D
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 20:32:31 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DF8D433CFD
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 22:47:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E2F1A3021A52
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 18:21:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AFD013011110
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 20:47:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57C3D3AA510;
-	Mon, 20 Apr 2026 18:21:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 115FE3876DA;
+	Mon, 20 Apr 2026 20:47:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=interstellar.eu header.i=@interstellar.eu header.b="dtiSTQZ9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rb+G+phM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-43171.protonmail.ch (mail-43171.protonmail.ch [185.70.43.171])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6710A3AB289
-	for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 18:21:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776709294; cv=none; b=ET/t9d5eeE0sIo7UHgDKZpI4IwcPCv5v3ZcSh5P7qJSgkzpoajWnF2laBuX0bk/IWoY7dBQ/0fAXiNaKPR6x46EuE+pBj6ZDNi5HZDsh2eZTw63fBVG+++LIZ0RonGfaoxRlSSUKJQNCwOVrjsUtu9n+cF8myexbQBvoB2olTlw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776709294; c=relaxed/simple;
-	bh=a86wBCZ8FcWMZwEAnLyuLGfzrWdMRVEeqEVkdSJ4eJc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TQQYpV9RqW/2PwVQhdTpiQfkuHuJYMeZR9CaAqtearpy2NDNVl5OVNRCQTHp2JZHcR5eV6kdKNsY44rsSGLuuV65SP9ykBCDeA4kQ972Yi3lJ9KbYUf8f8a7P1YPHBNCLfjXGuwxDA4H0m3ponETRCeypddHM6VvTzgOspJ2wPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=interstellar.eu; spf=pass smtp.mailfrom=interstellar.eu; dkim=pass (2048-bit key) header.d=interstellar.eu header.i=@interstellar.eu header.b=dtiSTQZ9; arc=none smtp.client-ip=185.70.43.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=interstellar.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=interstellar.eu
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=interstellar.eu;
-	s=protonmail; t=1776709281; x=1776968481;
-	bh=U6QW8H+mVzKMebf+OAfeRwVU/AIeHU7ID1WJmYZkn+I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:From:To:
-	 Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=dtiSTQZ9//mAQNSY2r/iB+xop/3HvSX+OUmR1oJgPZwshJTK6jbVClmhIxEEBcXxb
-	 M4XYFhCqyetnKhVsBFf4RKOCoHxOdchL36JTCkLriL0IlzDmGOBWlJg0GUbKflGKgh
-	 S4mHONcwiQplFDrZ6GuUBMq/GOBf2167HRVRQrzAMix9RhomfzgxvCsi4mjWGGaBrM
-	 rWeO+wz6Wp5VJT1tEiQZl6fYU/SM6Y7+XZhiIiRr1N+aHgsuXXROwCKS01jaKD5Jpq
-	 nqZsmHW9yNvVoG7ZIfSi1skG5zSX7a5pHyThpSTdZmle4DFplWg36JLCuc7qD+ScxS
-	 HA1wgxOj8EfjQ==
-X-Pm-Submission-Id: 4fzv2803skz1DDrp
-From: Francesco Orro <ncesco@interstellar.eu>
-To: incredibletails@tutamail.com
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [BUG] USB-C DisplayPort Alt-Mode not detected on MSI Cyborg 15 A12VE (Alder Lake + RTX 4050)
-Date: Mon, 20 Apr 2026 20:21:17 +0200
-Message-ID: <20260420182117.257522-1-ncesco@interstellar.eu>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <OhsTeeC--F-9@tutamail.com>
-References: <OhsTeeC--F-9@tutamail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F45E274FD0
+	for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 20:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776718057; cv=fail; b=ZRumL9QErT0HCTc4bycR90RApQ5XUTvQnjTVzRwO670yj8UAdI1nobXgXj4/m0qgSz+NPptPJEuSJxuB+Em6VRnY8aEtl7BUBtuO0M9Sa+7LCeXqHI14+kggxniu9BEQAbiAT0rNpblHmK9aKoEwxL13VGL0yTy2uDOzue8ITY4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776718057; c=relaxed/simple;
+	bh=NrgDvptQjwP0NocK+GxPRCWs+4qfXFZ2iiNheV/ib3s=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=eeLMBd7sOTYkuYfLtZLNwZrsEZ7yHu9t4eGYU5wndkkKjlFWL7+FW2Z3APAbA7oLwWo425H5b69CJxRyvto35rad7ebPbL68ryitKAo2DIKLmypeP3DcoS+NFeajsdoWSYCAxTxE86+WSN6L925ecISSmnrtQiMTs9GXP4+LmMQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rb+G+phM; arc=fail smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776718054; x=1808254054;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=NrgDvptQjwP0NocK+GxPRCWs+4qfXFZ2iiNheV/ib3s=;
+  b=Rb+G+phM8+D6Xo6y7nCWBQ/EO0IxiuxQSQNK+7Luh9wu+MLDbZmGPat3
+   CO8tKBDHGHWYtztl8kSw5pWcOVA8oaNHghXOV60rE2KxGEB5VHq1whjoO
+   xfOMn495vnHRykVX2QEXasDZlIeZxJWCjO6MaXF2nJXqEKnS5UsCyjjKa
+   H9rim7XYWkMbipJxf1o1k4eXONJ5F3tq6U2yb9CDS4w2UALQXCNTbDCyh
+   p7VYLxpzdWoCFUXjp+PCUpXgvsrqZx5piHsgANxUtnA/cR+SJwylaXhLD
+   YRFUTJHPLlZ7B97MZUrgb1uLANIxsMAeic57swDh3d3t8JaQLd31EWa5g
+   Q==;
+X-CSE-ConnectionGUID: 9CUFhCRqSSq1xFF4gQXAlQ==
+X-CSE-MsgGUID: waW9HRIGSVKa/Dj3OgY0gg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11762"; a="95201196"
+X-IronPort-AV: E=Sophos;i="6.23,190,1770624000"; 
+   d="scan'208";a="95201196"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2026 13:47:34 -0700
+X-CSE-ConnectionGUID: sc5LPoLpQrCK0hNA4TQROw==
+X-CSE-MsgGUID: uV+ZE3BQRQSSoCNxRbv2NA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,190,1770624000"; 
+   d="scan'208";a="227187545"
+Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2026 13:47:35 -0700
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Mon, 20 Apr 2026 13:47:34 -0700
+Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Mon, 20 Apr 2026 13:47:34 -0700
+Received: from PH8PR06CU001.outbound.protection.outlook.com (40.107.209.1) by
+ edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Mon, 20 Apr 2026 13:47:32 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MdYDuivtGpWso/xjh7be8THBYbNm9T9Dj443oLhB7+unowr3HkH9cRDgzoJ71b8myKlESvpWAI1SpKcj0DGqIuiMsQ4Rf/MUsconCU+5/alhzFBbF18kxMxXQW4Jh/aukfyQHQavXCswDvQPrlgZ9fdbnD9MPZWt+lfYHJPvkHgshiXN3Zv7AgbglDh7Im7cNuFtOaNWy6Q/1JHCWh3R8MYraetkP9y8qyhd2CUTFKt1oZkwa+mxzv6HKkad8AADrvoA+VLP54yIrk2QG3jFdpO9TLdue7JOYU96ULyK8FGknF6dxVoppqlteVtl8XqfusxQYaY4wsq9V0Aaknw15A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Gc4fjLX8q1X9rfXstSi1viAHwLrx2KibCsCAbJte4/k=;
+ b=NdZaGuLtI4E49uJ1oR/u0szGKespT5LTK2sHVnI/dUltbwH1hZtte5xkpQaHy+zMqCkIgilnHDRlusxUgts7MlvsxB/tigwqiY62yAd2N99sGbfar3CEdt01x7LovotlmEMW3/8bV415OvnhfBCyYGLLxMYvOU3oyIbQXuVSHoavL2+RsKMmfXhxUAkvbhoun3bJAlGG++P0I9XDRqwyqBCWETOegV7j6hth9DsRWwyBll5o8O8LEEk1reRNwYJbmvU8pA/LSjLTMFsWH3sWKvBVSrO3+We8lAPIVeK73luTe22AJx7fzrfT1iw8j3svybCm1vM+hOheUsT4UuZwTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CYYPR11MB8430.namprd11.prod.outlook.com (2603:10b6:930:c6::19)
+ by MW5PR11MB5930.namprd11.prod.outlook.com (2603:10b6:303:1a1::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.16; Mon, 20 Apr
+ 2026 20:47:30 +0000
+Received: from CYYPR11MB8430.namprd11.prod.outlook.com
+ ([fe80::1d86:a34:519a:3b0d]) by CYYPR11MB8430.namprd11.prod.outlook.com
+ ([fe80::1d86:a34:519a:3b0d%5]) with mapi id 15.20.9846.014; Mon, 20 Apr 2026
+ 20:47:30 +0000
+Date: Mon, 20 Apr 2026 16:47:25 -0400
+From: Rodrigo Vivi <rodrigo.vivi@intel.com>
+To: Francesco Orro <ncesco@interstellar.eu>,
+	<intel-gfx@lists.freedesktop.org>, Imre Deak <imre.deak@intel.com>, Ville
+ =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>, Uma Shankar
+	<uma.shankar@intel.com>
+CC: "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, Mika Westerberg
+	<mika.westerberg@linux.intel.com>, Jani Nikula <jani.nikula@linux.intel.com>
+Subject: Re: DP routing from iGPU to discrete Barlow Ridge TB5 on HP ZBook
+ Fury G1i
+Message-ID: <aeaQ3Vlh6bp8-rwW@intel.com>
+References: <pCmilDgt3Xijjdzu7H1d30dzm8IJbXFnle3yQ5nSR1Pj-snchn5xNpcq9Gb7hlh5bnsA3Efnm9cOR_VKi9RyxcRJxHlrqTW7WRPG36UgY5Q=@interstellar.eu>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <pCmilDgt3Xijjdzu7H1d30dzm8IJbXFnle3yQ5nSR1Pj-snchn5xNpcq9Gb7hlh5bnsA3Efnm9cOR_VKi9RyxcRJxHlrqTW7WRPG36UgY5Q=@interstellar.eu>
+X-ClientProxiedBy: SJ0PR03CA0050.namprd03.prod.outlook.com
+ (2603:10b6:a03:33e::25) To CYYPR11MB8430.namprd11.prod.outlook.com
+ (2603:10b6:930:c6::19)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[interstellar.eu,quarantine];
-	R_DKIM_ALLOW(-0.20)[interstellar.eu:s=protonmail];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CYYPR11MB8430:EE_|MW5PR11MB5930:EE_
+X-MS-Office365-Filtering-Correlation-Id: 761f13bf-db16-4cfa-00a5-08de9f1e0a08
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info: UAfQA2+Bn+InO5si01Cv1bEklSjJg2RccOUyvF6Xv3iSzlx4h/fxIfTyErZpB6nZTxsNZfCP3rvrTPGpM7iBkn4rexsCClJewuDJHFtw+70XGVxj8sQX93MOPCXfPxY8cdz133KJHoAZpVUouzRzhCp/dYvz7smdtNdq6z5J0/EwNSCWF1FHkSCSIxsYvEHzFkMkBamKwOPQPXzkR9FAm2NeUt6mPCKWeP1zOIxkdkpKI+zxA+lSVlTdTrVlET+vDAsCv8jiQUPPGZ9P0ApaOqdwVeE+mEBsNg74pryPC2Tgnfc7va9ReVhCGprVMKuQWzc5PQpa/zEPyLL9PzFl+w1sAKAacAx1SznXPRBy2zHNZAZYsJFtRXQvt16I3AOvZQOo9qvivPZJmzkAZJamsCysMfTLAVU+qZ4xMO6TH2R1MJ3UQkj3r7YQqYBS/BBVRqKJh8ZBWuMsA0v3AfcXZLIvlqiTShQyG+Oc+5pD8YCidhuqfiuVtVvMqQmSSDRvtkgoZH8w5bxCvTcpwR/EJaSLF7CkVrp9dDR8A18a8Y+IwUmR//lu2cvQMXu+WEjX6bNm8XB0/Mg/TMGKbUhvnbX9wzTWahdkdg+W4wW7ibLic53w3facoP6b1OycIX7fYIQh33WFrEX7DqMoq4QSx8kEuUobzqtnXI5GwMy9V+ltERyyAP4e9jygfVQusNMEPbLh566mU7hzNIP0BX+Jr7GtI4Unr5NHJ1eVisSLa3s=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CYYPR11MB8430.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZXI3vdMlExbOcwhK1amgFvcrCR5kBLeEY3R9Usx5qXgSt07GnJRLwbYR1q6V?=
+ =?us-ascii?Q?rmM1mwQBliHiprd1r71rWCDq+DW+8I4LkCfv0eBNMKtkefHnqBqYz9rffsbL?=
+ =?us-ascii?Q?8biknsO35ZiAhxjGGhCxuoHTkFIhr+llmEVGCmo7SkE2LtxZbo4XjQ8j//lH?=
+ =?us-ascii?Q?epm5b9OZAKXElwfi8VNdZCvKGiSEYDDTAXcB8wDfNyuMpgh0VytTaI4soCtm?=
+ =?us-ascii?Q?9vFr7+xEEkOOHNaWFss3ts68f8GRwLm8I3fAeJ1GrHKp/aMP3+O9WujA0+RQ?=
+ =?us-ascii?Q?/oEcr8Oyf7t3xArQRinHPrJZDtE/wvWOjIsA5PShEXLQYDDgce0lLejSKX4k?=
+ =?us-ascii?Q?8e8XamSyTsfpTLzWx+vfDdTKoDaOMnHaOuG2DgVpZn42QJpx8mMlCFTpdFs0?=
+ =?us-ascii?Q?s0lNw157eW4ibHrZ4z9/nSasIg5geI7AJGg3m75978Wqn8EO7mjggz2exRwU?=
+ =?us-ascii?Q?QH4Lv+h/EE7+rsta3I3Jk3h1jkIw9piSiH04LzLn1JGs61XMzzOXPxe+Eab9?=
+ =?us-ascii?Q?JsH3gq7f31KVzza2CrR/Aagg7zbZQiF2mtdVRfau82WWxuW5bjEoKTv4xEq6?=
+ =?us-ascii?Q?ESX5TocD3+Ezqn/sOxS2P63zAX8ipTfSt7Ht229qmFxxXHmSBhsU7WA/m2wS?=
+ =?us-ascii?Q?52jcEre4opVLQjPR7DyuejxBZohAsKwtyo5EnakUW10JAJtITWqhJfl3PJnG?=
+ =?us-ascii?Q?Iu2R9N4oOjHJK6LYmM/VCNXczR77PTN2nFjQnhDZjMOhF3/FtGcHiCinXVsa?=
+ =?us-ascii?Q?b5c52myed6aTffoq2186/9dmOs5sGDV/eD00tHVGcknGAtt9C5L2v+Q2t6RU?=
+ =?us-ascii?Q?omnbV/kZX7wgxE8FjuKsou+UmGpZ79aG1QbP8eijonyUHgdXsIiBwIn/LzFi?=
+ =?us-ascii?Q?4iZT3KEfBRbG8Eagjx1KPN3E9cgnZBFWkkGk4Go989fhxhMuaYZ3nfvV8Gp1?=
+ =?us-ascii?Q?GtjTCzDo+mXFdn1tWpcyAUe815GXBvX+chfSIMfPx4Csj+5UM1v10FccOcYz?=
+ =?us-ascii?Q?TeY0Hpq83PykHVFlllVfJ77wr8bu9mchMAGn4CU1Wj7Z2rvKflKjt9DOiNxN?=
+ =?us-ascii?Q?2G8/wNv92qfdKCMbAEhyu30UhLcm8KERPtkj+6i0iUZhcUR7htRHrHnyUrz2?=
+ =?us-ascii?Q?TCU72mTbHfns62nCGcFVq8RHjNbUP+pnRlO6QVWfwMstRldncRgYNEE1SbDo?=
+ =?us-ascii?Q?dZaInp+x5OHWQLxuHA+lCoSqRsE1hZfw3APtqiV/EYL7Wh1uS6mOwOrgz3no?=
+ =?us-ascii?Q?bH/z6R6yKRBmqO1wD8TBbUkKPkLA3K0aB4whv/Qnej2oV84gIBiEI/tzbIWU?=
+ =?us-ascii?Q?qPtIhfASXlybfLWZm4RtMcAwQDw0D7dz4S2xaxwRvGhpB4C6YoKBkKxbD7ug?=
+ =?us-ascii?Q?9ajV8sY+EAjAJdhqzLyeyvt3OAo6+ZgzTNjJKAK0n3Aqd3h/Rgko1yW6xTgp?=
+ =?us-ascii?Q?g2wa80qccJ0rT/Sk55q9gS4q3rK6Yxn5OCHhJoLt9FNI23qDRzSFdkrX6ZNd?=
+ =?us-ascii?Q?5QIkpuzFb/AKSDu5cXU8zE59w6tWhTxEcoUiWwKM23cr9h0XJf0UI3AzKnEN?=
+ =?us-ascii?Q?KdH5PEBnjntb53f+OKYNLsuj/IIALf6yOi6ivn+di8kbp/+on6e+wbB6M1dC?=
+ =?us-ascii?Q?8xJrJG5CzUgXAYNyaZzhEsPChLcuUvrYjTrOwzBWBd+v97lxenw6oyjKPv79?=
+ =?us-ascii?Q?pDr2i/bqoiFUoSpeIY8hZYTiUKMIwnPkai2ZvSoKMHBiQXXrDM1nlqAJue4v?=
+ =?us-ascii?Q?DMCVnhLGdQ=3D=3D?=
+X-Exchange-RoutingPolicyChecked: X2V/KpISmewG5WrgMECGdV1/6GbkAwbvKZS/gc2Tb5FC+8U1H1RWbIwnyQbNzSIzWLEvNgwBNbiVkWF94hCsJNs0jZ8JXJl9iv5hRrxZO8pepkXOU6MsKvHVsaXvi7QxHxirPA1qIYboci/q7674teoLPWyzJAaLdngYvNZwzqSa60rrX6pLb/a4AF/0SdCj0/VTSyu++iRDVNBL8jV1gMYXw2u9+PPQiceopR7dH7fpIYW4A/Lav/Eqg50CevY15GunR6+ra0i7w3v3MM7aEcM/B+SK4GYYPR+eA4idtiX9WUYLaQmp6LBncphhmQJXG8A2BNxg9FO0Dt1V3c2u9w==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 761f13bf-db16-4cfa-00a5-08de9f1e0a08
+X-MS-Exchange-CrossTenant-AuthSource: CYYPR11MB8430.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2026 20:47:30.1191
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: M1zp/451a7IL8bphhaQNw/768Jm2Vrs2WgsK1vnpSE4+K4y+UKSd6u+xUIR8G3gBIr0QFQbHeXnEtHbah2WXEA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5930
+X-OriginatorOrg: intel.com
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWO(0.00)[2];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-36362-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36361-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[interstellar.eu:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[ncesco@interstellar.eu,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	TO_DN_NONE(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rodrigo.vivi@intel.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,interstellar.eu:dkim,interstellar.eu:mid]
-X-Rspamd-Queue-Id: 9B9F8432E2D
+	RCVD_COUNT_SEVEN(0.00)[10]
+X-Rspamd-Queue-Id: 1DF8D433CFD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
+On Mon, Apr 20, 2026 at 04:04:02PM +0000, Francesco Orro wrote:
+> Hi,
+> 
+> Setup:
+>   HP ZBook Fury G1i 16 inch, BIOS X96 01.03.04
+>   Intel Arrow Lake-HX + Nvidia RTX PRO 1000 Blackwell (hybrid graphics)
+>   Kernel 6.19.13
+> 
+> The laptop exposes Thunderbolt 5 on both the integrated MTL iTBT (right
+> USB-C, domain0, 00:0d.2) and a discrete Intel Barlow Ridge (left USB-C,
+> domain1, 00:06.1 -> 05:00.0).
+> 
+> - Right port: i915 drives a DP tunnel over the iTBT host without issues.
+> - Left port: no i915 connector ever sees the external monitor. The TB
+>   driver allocates a DP tunnel on demand but DPRX reads time out, no DP
+>   source is feeding the Barlow DP_IN adapter.
+> - With nvidia-drm.modeset=1, a DP-MST connector on the Nvidia DRM device
+>   sees the monitor via the left port (EDID readable, modes negotiated).
+>   The path Nvidia -> Barlow DP_IN is functional.
+> 
+> Current hypothesis: on this board the discrete Barlow Ridge DP_IN is
+> either hardwired to a Nvidia output or behind a firmware-programmed mux
+> that BIOS latches to Nvidia at POST and is not exposed to the OS. i915
+> would therefore have no path to drive the left ports, by design.
 
-One of the symptoms you describe (no Type-C ports under /sys/class/typec)
-matches a firmware quirk I recently ran into on an HP ZBook Fury G1i,
-and posted a WIP patch for:
+yes, that is usually the case.
 
-  https://lore.kernel.org/linux-usb/20260420172343.84456-1-ncesco@interstellar.eu/
+> 
+> Tests done that did not surface an OS-visible lever:
+> - i2cdetect across all SMBus/i801 busses: no DP mux/retimer at plausible
+>   addresses (0x60-0x7F).
+> - DSDT/SSDT dump (iasl -d): no Device/Method referring to DP routing,
+>   DPMUX, retimer programming, or dock display source selection.
+> - HP WMI + /sys/devices/virtual/firmware-attributes/hp-bioscfg attribute
+>   enumeration: nothing switching dock display source. "Graphics"
+>   attribute only offers Hybrid/Discrete.
+> - PCI config dump of Barlow Ridge: standard USB4 NHI, no vendor-specific
+>   capability hinting at source selection.
+> - acpi.no_usb4_osc kernel param (locally patched) to opt out of OSC USB4
+>   native support: no change in i915 visibility of the dock.
+> 
+> Is there any known way to route an Intel DDI output to a PCIe-attached
+> Barlow Ridge DP_IN adapter, or is this strictly a design where the dGPU
+> is the only valid DP source for the discrete TB controller on this class
+> of HP workstations?
 
-In my case the HP "UcsiAcpi" SSDT exposes a _DSM function 2 (READ) whose
-body is empty, so UCSI_VERSION stays 0x0000 and ucsi_init() bails with
--ENODEV. The patch (DMI-gated) bootstraps the PPM via _DSM func 1
-(WRITE) at probe time and falls back to UCSI 1.2. After that,
-/sys/class/typec/port* appears with partner alt-modes populated.
+I believe this is physically connected or static mux without any way to
+re-route this. But I might be wrong.
 
-If the same firmware quirk is present on your MSI, adding its DMI match
-to the quirk list in the patch should be enough to get typec ports to
-show up. It won't necessarily fix the DP alt-mode negotiation by itself,
-but it is a prerequisite for the typec stack to do anything.
+So, bringing some more folks to the discussion.
 
-Could you share:
-1. `dmesg | grep -iE 'ucsi|USBC000'` from a fresh boot
-2. The contents of your "UcsiAcpi" SSDT - run:
-     sudo apt install acpica-tools
-     mkdir /tmp/acpi && cd /tmp/acpi
-     sudo acpidump -b
-     iasl -d *.dat
-     grep -lF 'UcsiAcpi' *.dsl
-   and attach the matching ssdtNN.dsl
-3. `cat /sys/class/dmi/id/sys_vendor /sys/class/dmi/id/product_name`
-
-If point 2 shows an empty _DSM func 2 body similar to what I described,
-we can add your laptop to the quirk list and you can test the patch
-locally.
-
-Regards,
-Francesco Orro
+> 
+> Happy to share the DSDT dump, lspci -vvv, full dmesg, or run any test.
+> 
+> Regards,
+> Francesco Orro
 
