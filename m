@@ -1,420 +1,257 @@
-Return-Path: <linux-usb+bounces-36341-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36342-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CCHmHVn85Wm/pwEAu9opvQ
-	(envelope-from <linux-usb+bounces-36341-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 12:13:45 +0200
+	id qOgEBtwI5mkjqwEAu9opvQ
+	(envelope-from <linux-usb+bounces-36342-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 13:07:08 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D14E3429419
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 12:13:44 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 906D9429C5C
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 13:07:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E77DB3048DE3
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 10:09:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 599B9307363E
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 11:02:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F4583939C1;
-	Mon, 20 Apr 2026 10:09:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEA6839E191;
+	Mon, 20 Apr 2026 11:02:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TdweIhB1"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="wZRLo91Y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27B930EF95;
-	Mon, 20 Apr 2026 10:09:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874C339C00C;
+	Mon, 20 Apr 2026 11:02:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776679756; cv=none; b=P4YlabGZ4JO9AM2K7efJoz8+WIlHYArAzSX2ZJOJvu9YnahGJYlTiMEmUgiG/1ErJ2N2zTwn1M50FWEK/vvCtbaswWlrbk/AlDGYXJnZK+IfbEU5gIW8LtqmxBgt+Ux3Ww58VTPcVjTYlBAIhphJYeLlH6B7rbgbgMk9yUDgL9k=
+	t=1776682930; cv=none; b=o8+drhaBqY0Rf+eSYsVkcw/znX0yEY3pplMqkmCQdMhs3d0O1IIKrX3IPWBltcIiP7Mdneja5I43dr6CiDKi6rthCQfB2XH6dtHRl5Ghbqszt2FpCmpLUpcklDlDffaBJbPehfj3L360d8rjF2GTOr9OB61Q5mHJe7dfSwXJNug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776679756; c=relaxed/simple;
-	bh=Ndid9a7WggsDxQpOO5S0aMO0PPvq17hsq3KUVPs1w10=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=oDj18gCCho7hLL6ICmJs/RLtT1lyKJtm51n80/ESgO52cZ6NiIK3OkIHFBN05LwBiXfnV17O4JXlTz+f8QRJrb15C9KL6Pxe0ESZ85q8R5hS9lERYvM8GuPk2U92KALYpQOX9IL2E/wiC6FdhMjsQqR0KXWorc08cHraHZxN5fY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TdweIhB1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 90277C19425;
-	Mon, 20 Apr 2026 10:09:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776679755;
-	bh=Ndid9a7WggsDxQpOO5S0aMO0PPvq17hsq3KUVPs1w10=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=TdweIhB1/WmDnv/eOky/3kKTN9zf/0Q2k/ySNbBS8NSdrcXfoV2fWCNxKfVAjktuY
-	 Y10mDlS5wErzphlC9aCYaO4jTFYFB3IlmtqZ0/eqINkkLt/pquaJYQs3DkOehY3JPD
-	 FSBWPGUgPz/eKPdKNuoPJfbmrMj0irICiDMNjk0cNCdYqaKcClKmfTFB5TgNIg1IyR
-	 EU7Nf6ELU8+XOOptUnYi9+92j3LiWna1lm97LZ0ggYUxKp4taS2PJ27F8d9NN9VH1A
-	 MbBP7zmqahlv+SV2nvNy1tDEUZg12t46hoX1wupMUggtFhwTz4vDMAcDLZYvGyV+vV
-	 ER9dK/YMVTtPw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81D66F557EF;
-	Mon, 20 Apr 2026 10:09:15 +0000 (UTC)
-From: Pawel Laszczak via B4 Relay <devnull+pawell.cadence.com@kernel.org>
-Date: Mon, 20 Apr 2026 12:23:57 +0200
-Subject: [PATCH v2] usb: cdnsp: add support for eUSB2v2 port
+	s=arc-20240116; t=1776682930; c=relaxed/simple;
+	bh=3GoDVjcVfcMdyNd/4s5GQU45wo7ysjQ0yDXPdAnGTVg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aJ35bsPdwrBs6/bTlNFk/c2oiNx1FkMjHTN1TgNsc2m89KnWo+QxYorp/mKiBR7OsigYzv+6aRUupxhjw+zv2OHQbG8BvkYj/FEukDncb7pAFpIB08hdAoIvS5X1DjCWyrdcuIwqk+eiikNXB8nagJCTZ2X+B79soJ0/uUMlX9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=wZRLo91Y; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from [192.168.88.20] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 61711E45;
+	Mon, 20 Apr 2026 13:00:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1776682826;
+	bh=3GoDVjcVfcMdyNd/4s5GQU45wo7ysjQ0yDXPdAnGTVg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=wZRLo91Yw4q2iLo7Jpebvtoz34atXay7MgSGlDzNv5NZVZHMvk/k71YVcMfV3/ohH
+	 2QZCeKuMvVhNlNgoEBaLNUG1SEYNKvpF9tLlomfvYAxYy2+RkkHymazLhbC6O8mkYf
+	 SSaJvybVWgwoS54+ar342tLiLzBET4kE7euo+MqA=
+Message-ID: <f74ecd0a-3ff3-45b4-935e-44b89cd0c92d@ideasonboard.com>
+Date: Mon, 20 Apr 2026 14:01:57 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/6] drm/connector: report IRQ_HPD events to
+ drm_connector_oob_hotplug_event()
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+ intel-xe@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+ freedreno@lists.freedesktop.org,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Adrien Grassein <adrien.grassein@gmail.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Tvrtko Ursulin <tursulin@ursulin.net>, Kevin Hilman <khilman@baylibre.com>,
+ Jerome Brunet <jbrunet@baylibre.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Rob Clark <robin.clark@oss.qualcomm.com>, Dmitry Baryshkov
+ <lumag@kernel.org>, Abhinav Kumar <abhinav.kumar@linux.dev>,
+ Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Pengyu Luo <mitltlatltl@gmail.com>,
+ Nikita Travkin <nikita@trvn.ru>, Yongxing Mou <yongxing.mou@oss.qualcomm.com>
+References: <20260416-hpd-irq-events-v1-0-1ab1f1cfb2b2@oss.qualcomm.com>
+ <20260416-hpd-irq-events-v1-1-1ab1f1cfb2b2@oss.qualcomm.com>
+ <51b7c44e-36c9-461f-983a-eaa86eeb8cfd@ideasonboard.com>
+ <6z572fdjkvjqvedifwvotgdy4lcrifiqvkjpnutousjqc6764r@zepfzkqy2kbu>
+ <a2e60e74-a1be-469d-8f4d-ecce1f30b517@ideasonboard.com>
+ <3vrqk67oivkgo26xdc3r774rvj3jn3t6sfydhlytyrfiftubhg@cipain7xxcjz>
+Content-Language: en-US
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <3vrqk67oivkgo26xdc3r774rvj3jn3t6sfydhlytyrfiftubhg@cipain7xxcjz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260420-eusb2v2_upstream-v2-1-9883645e2ede@cadence.com>
-X-B4-Tracking: v=1; b=H4sIALz+5WkC/32Nyw6CMBBFf4XM2pq2oIgr/8MQ08cgNYGSDm00h
- H+34N7lSc49dwHC4JDgWiwQMDlyfswgDwWYXo1PZM5mBsnlmVeiZhhJyyQfcaI5oBrYhZuTlo2
- qtVaQZ1PAzr335L39MUX9QjNvnc3oHc0+fPbPJDbvTz4JJlhZVtw2ttEdx5tRFkeDR+MHaNd1/
- QKQvXkmxAAAAA==
-X-Change-ID: 20260417-eusb2v2_upstream-80c5b29a7bba
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- peter.chen@kernel.org, Pawel Laszczak <pawell@cadence.com>
-X-Mailer: b4 0.15.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1776680652; l=10753;
- i=pawell@cadence.com; h=from:subject:message-id;
- bh=1S2xw8eKEGUe+bnE03nIXmCBqk4ynYOJ3VbC74u7qJ0=;
- b=EOaOmceN0jXVtNJSPBaLEpPZl8pfC6bnazbbz+5n95jeeo169ydpW4V5uuKYwSNwogwSJDrzR
- CS2cysffA8vCpcIvSD6M1HrIQYaa/e2nuXxMrOyOMP/T1CFIKOdG7Bz
-X-Developer-Key: i=pawell@cadence.com; a=ed25519;
- pk=EUPBvLO9CDg7j6defeDl2iqi+z5Ivqu4Z46aiqe7dYc=
-X-Endpoint-Received: by B4 Relay for pawell@cadence.com/default with
- auth_id=707
-X-Original-From: Pawel Laszczak <pawell@cadence.com>
-Reply-To: pawell@cadence.com
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[ideasonboard.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[ideasonboard.com:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36341-lists,linux-usb=lfdr.de,pawell.cadence.com];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FREEMAIL_CC(0.00)[lists.freedesktop.org,vger.kernel.org,lists.infradead.org,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,linuxfoundation.org,intel.com,linaro.org,ideasonboard.com,kwiboo.se,ursulin.net,baylibre.com,googlemail.com,oss.qualcomm.com,linux.dev,poorly.run,somainline.org,trvn.ru];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-36342-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	HAS_REPLYTO(0.00)[pawell@cadence.com];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[cadence.com:email,cadence.com:replyto,cadence.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D14E3429419
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tomi.valkeinen@ideasonboard.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[ideasonboard.com:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_TWELVE(0.00)[42];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 906D9429C5C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Pawel Laszczak <pawell@cadence.com>
+Hi,
 
-The Cadence CDNSP controller optionally supports eUSB2 (embedded USB2)
-port. While this port type operates logically like high-speed USB 2.0,
-it utilizes a different physical layer signaling.
+On 20/04/2026 12:50, Dmitry Baryshkov wrote:
+> On Mon, Apr 20, 2026 at 07:50:46AM +0300, Tomi Valkeinen wrote:
+>> Hi,
+>>
+>> On 18/04/2026 01:32, Dmitry Baryshkov wrote:
+>>> On Thu, Apr 16, 2026 at 11:10:03AM +0300, Tomi Valkeinen wrote:
+>>>> Hi,
+>>>>
+>>>> On 16/04/2026 02:22, Dmitry Baryshkov wrote:
+>>>>> The DisplayPort standard defines a special kind of events called IRQ.
+>>>>> These events are used to notify DP Source about the events on the Sink
+>>>>> side. It is extremely important for DP MST handling, where the MST
+>>>>> events are reported through this IRQ.
+>>>>>
+>>>>> In case of the USB-C DP AltMode there is no actual HPD pulse, but the
+>>>>> events are ported through the bits in the AltMode VDOs.
+>>>>>
+>>>>> Extend the drm_connector_oob_hotplug_event() interface and report IRQ
+>>>>> events to the DisplayPort Sink drivers.
+>>>>>
+>>>>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+>>>>> ---
+>>>>>     drivers/gpu/drm/drm_connector.c          |  4 +++-
+>>>>>     drivers/usb/typec/altmodes/displayport.c | 12 ++++++++----
+>>>>>     include/drm/drm_connector.h              |  3 ++-
+>>>>>     3 files changed, 13 insertions(+), 6 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+>>>>> index 47dc53c4a738..5fdacbd84bd7 100644
+>>>>> --- a/drivers/gpu/drm/drm_connector.c
+>>>>> +++ b/drivers/gpu/drm/drm_connector.c
+>>>>> @@ -3510,6 +3510,7 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
+>>>>>      * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
+>>>>>      * @connector_fwnode: fwnode_handle to report the event on
+>>>>>      * @status: hot plug detect logical state
+>>>>> + * @irq_hpd: HPD pulse detected
+>>>>>      *
+>>>>>      * On some hardware a hotplug event notification may come from outside the display
+>>>>>      * driver / device. An example of this is some USB Type-C setups where the hardware
+>>>>> @@ -3520,7 +3521,8 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
+>>>>>      * a drm_connector reference through calling drm_connector_find_by_fwnode().
+>>>>>      */
+>>>>>     void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
+>>>>> -				     enum drm_connector_status status)
+>>>>> +				     enum drm_connector_status status,
+>>>>> +				     bool irq_hpd)
+>>>> I find the "IRQ HPD" naming always confusing, even if I'm somewhat familiar
+>>>> with DP, but if someone has mainly worked on HDMI, I'm sure it's even worse.
+>>>>
+>>>> Can we define this a bit more precisely? Is 'irq_hpd' only for displayport?
+>>>> If so, perhaps 'dp_irq_hpd' or 'displayport_irq_hpd'. I might even call it
+>>>> 'dp_hpd_pulse', but maybe that's not good as the spec talks about HPD pulse
+>>>> for both short and long ones (although in the kernel doc you just write "HPD
+>>>> pulse")... The kernel doc could be expanded a bit to make it clear what this
+>>>> flag indicates.
+>>>
+>>> I attempted to stay away from defining a DP-specific flag, keeping it
+>>> generic enough. HDMI is pretty close (IMO) to requiring separate flag in
+>>
+>> If it's not specifically the DP IRQ HPD, then we need to define what it
+>> means. I tried to think what it would mean with HDMI, but I didn't come up
+>> with anything.
+> 
+> I might be mistaken, but I had someting like HEAC HPD / EDID status
+> changes in mind (or HDCP-triggered HPD status changes). But here I
+> admit, I hadn't checked if it is actually applicable or not.
 
-This patch:
-- Extends the port detection logic to recognize the eUSB2 protocol.
-- Tracks the eUSB2 port offset in the cdnsp_device structure.
-- Ensures that eUSB2 ports are correctly handled during Link State
-  transitions, specifically forcing L0 when LPM is capable, similar
-  to standard USB 2.0 ports.
+Possibly, I'm not familiar with those.
 
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-Acked-by: Peter Chen <peter.chen@kernel.org>
----
-Changes in v2:
-- Removed unnecessary space.
-- Added Acked-by: Peter Chen.
----
- drivers/usb/cdns3/cdnsp-gadget.c | 49 ++++++++++++++++++---------
- drivers/usb/cdns3/cdnsp-gadget.h |  1 +
- drivers/usb/cdns3/cdnsp-mem.c    | 73 +++++++++++++++++++++++++++-------------
- drivers/usb/cdns3/cdnsp-ring.c   |  9 +++--
- 4 files changed, 90 insertions(+), 42 deletions(-)
+> Anyway, for e.g. DVI or VGA that means nothing. But, my point really is
+> to abstain from defining someting as DP-only in the top-level API.
 
-diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-index 6b3815f8a6e5..2c71c77e6ec3 100644
---- a/drivers/usb/cdns3/cdnsp-gadget.c
-+++ b/drivers/usb/cdns3/cdnsp-gadget.c
-@@ -124,20 +124,28 @@ void cdnsp_set_link_state(struct cdnsp_device *pdev,
- }
- 
- static void cdnsp_disable_port(struct cdnsp_device *pdev,
--			       __le32 __iomem *port_regs)
-+			       struct cdnsp_port *port)
- {
--	u32 temp = cdnsp_port_state_to_neutral(readl(port_regs));
-+	u32 temp;
-+
-+	if (!port->exist)
-+		return;
- 
--	writel(temp | PORT_PED, port_regs);
-+	temp = cdnsp_port_state_to_neutral(readl(&port->regs->portsc));
-+	writel(temp | PORT_PED, &port->regs->portsc);
- }
- 
- static void cdnsp_clear_port_change_bit(struct cdnsp_device *pdev,
--					__le32 __iomem *port_regs)
-+					struct cdnsp_port *port)
- {
--	u32 portsc = readl(port_regs);
-+	u32 portsc;
-+
-+	if (!port->exist)
-+		return;
- 
-+	portsc = readl(&port->regs->portsc);
- 	writel(cdnsp_port_state_to_neutral(portsc) |
--	       (portsc & PORT_CHANGE_BITS), port_regs);
-+	       (portsc & PORT_CHANGE_BITS), &port->regs->portsc);
- }
- 
- static void cdnsp_set_apb_timeout_value(struct cdnsp_device *pdev)
-@@ -944,7 +952,7 @@ void cdnsp_set_usb2_hardware_lpm(struct cdnsp_device *pdev,
- 				 struct usb_request *req,
- 				 int enable)
- {
--	if (pdev->active_port != &pdev->usb2_port || !pdev->gadget.lpm_capable)
-+	if (pdev->active_port == &pdev->usb3_port || !pdev->gadget.lpm_capable)
- 		return;
- 
- 	trace_cdnsp_lpm(enable);
-@@ -1310,20 +1318,26 @@ static int cdnsp_run(struct cdnsp_device *pdev,
- 		break;
- 	}
- 
--	if (speed >= USB_SPEED_SUPER) {
-+	if (pdev->usb3_port.exist && speed >= USB_SPEED_SUPER) {
- 		writel(temp, &pdev->port3x_regs->mode_addr);
- 		cdnsp_set_link_state(pdev, &pdev->usb3_port.regs->portsc,
- 				     XDEV_RXDETECT);
- 	} else {
--		cdnsp_disable_port(pdev, &pdev->usb3_port.regs->portsc);
-+		cdnsp_disable_port(pdev, &pdev->usb3_port);
- 	}
- 
--	cdnsp_set_link_state(pdev, &pdev->usb2_port.regs->portsc,
--			     XDEV_RXDETECT);
-+	if (pdev->usb2_port.exist) {
-+		cdnsp_set_link_state(pdev, &pdev->usb2_port.regs->portsc,
-+				     XDEV_RXDETECT);
-+		writel(PORT_REG6_L1_L0_HW_EN | fs_speed, &pdev->port20_regs->port_reg6);
-+	}
-+
-+	if (pdev->eusb_port.exist)
-+		cdnsp_set_link_state(pdev, &pdev->eusb_port.regs->portsc,
-+				     XDEV_RXDETECT);
- 
- 	cdnsp_gadget_ep0_desc.wMaxPacketSize = cpu_to_le16(512);
- 
--	writel(PORT_REG6_L1_L0_HW_EN | fs_speed, &pdev->port20_regs->port_reg6);
- 
- 	ret = cdnsp_start(pdev);
- 	if (ret) {
-@@ -1469,8 +1483,10 @@ static void cdnsp_stop(struct cdnsp_device *pdev)
- 			cdnsp_ep_dequeue(&pdev->eps[0], req);
- 	}
- 
--	cdnsp_disable_port(pdev, &pdev->usb2_port.regs->portsc);
--	cdnsp_disable_port(pdev, &pdev->usb3_port.regs->portsc);
-+	cdnsp_disable_port(pdev, &pdev->usb2_port);
-+	cdnsp_disable_port(pdev, &pdev->usb3_port);
-+	cdnsp_disable_port(pdev, &pdev->eusb_port);
-+
- 	cdnsp_disable_slot(pdev);
- 	cdnsp_halt(pdev);
- 
-@@ -1479,8 +1495,9 @@ static void cdnsp_stop(struct cdnsp_device *pdev)
- 	temp = readl(&pdev->ir_set->irq_pending);
- 	writel(IMAN_IE_CLEAR(temp), &pdev->ir_set->irq_pending);
- 
--	cdnsp_clear_port_change_bit(pdev, &pdev->usb2_port.regs->portsc);
--	cdnsp_clear_port_change_bit(pdev, &pdev->usb3_port.regs->portsc);
-+	cdnsp_clear_port_change_bit(pdev, &pdev->usb2_port);
-+	cdnsp_clear_port_change_bit(pdev, &pdev->eusb_port);
-+	cdnsp_clear_port_change_bit(pdev, &pdev->usb3_port);
- 
- 	/* Clear interrupt line */
- 	temp = readl(&pdev->ir_set->irq_pending);
-diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-gadget.h
-index a91cca509db0..c44bca348a41 100644
---- a/drivers/usb/cdns3/cdnsp-gadget.h
-+++ b/drivers/usb/cdns3/cdnsp-gadget.h
-@@ -1474,6 +1474,7 @@ struct cdnsp_device {
- 	unsigned int link_state;
- 
- 	struct cdnsp_port usb2_port;
-+	struct cdnsp_port eusb_port;
- 	struct cdnsp_port usb3_port;
- 	struct cdnsp_port *active_port;
- 	u16 test_mode;
-diff --git a/drivers/usb/cdns3/cdnsp-mem.c b/drivers/usb/cdns3/cdnsp-mem.c
-index a2a1b21f2ef8..5d8cdc91927d 100644
---- a/drivers/usb/cdns3/cdnsp-mem.c
-+++ b/drivers/usb/cdns3/cdnsp-mem.c
-@@ -1088,11 +1088,9 @@ void cdnsp_mem_cleanup(struct cdnsp_device *pdev)
- 			  pdev->dcbaa, pdev->dcbaa->dma);
- 
- 	pdev->dcbaa = NULL;
--
--	pdev->usb2_port.exist = 0;
--	pdev->usb3_port.exist = 0;
--	pdev->usb2_port.port_num = 0;
--	pdev->usb3_port.port_num = 0;
-+	memset(&pdev->usb2_port, 0, sizeof(struct cdnsp_port));
-+	memset(&pdev->eusb_port, 0, sizeof(struct cdnsp_port));
-+	memset(&pdev->usb3_port, 0, sizeof(struct cdnsp_port));
- 	pdev->active_port = NULL;
- }
- 
-@@ -1133,6 +1131,18 @@ static void cdnsp_add_in_port(struct cdnsp_device *pdev,
- 	port_offset = CDNSP_EXT_PORT_OFF(temp);
- 	port_count = CDNSP_EXT_PORT_COUNT(temp);
- 
-+	if (port == &pdev->eusb_port) {
-+		/*
-+		 * If controller has usb2 + eusb port then eusb is as
-+		 * second port
-+		 */
-+		if (port_count == 2)
-+			port_offset++;
-+
-+		if (port_count == 1 && pdev->usb2_port.exist)
-+			return;
-+	}
-+
- 	trace_cdnsp_port_info(addr, port_offset, port_count, port->maj_rev);
- 
- 	port->port_num = port_offset;
-@@ -1152,13 +1162,10 @@ static int cdnsp_setup_port_arrays(struct cdnsp_device *pdev)
- 	base = &pdev->cap_regs->hc_capbase;
- 	offset = cdnsp_find_next_ext_cap(base, 0,
- 					 EXT_CAP_CFG_DEV_20PORT_CAP_ID);
--	pdev->port20_regs = base + offset;
--
--	offset = cdnsp_find_next_ext_cap(base, 0, D_XEC_CFG_3XPORT_CAP);
--	pdev->port3x_regs =  base + offset;
-+	if (offset)
-+		pdev->port20_regs = base + offset;
- 
- 	offset = 0;
--	base = &pdev->cap_regs->hc_capbase;
- 
- 	/* Driver expects max 2 extended protocol capability. */
- 	for (i = 0; i < 2; i++) {
-@@ -1173,26 +1180,46 @@ static int cdnsp_setup_port_arrays(struct cdnsp_device *pdev)
- 			cdnsp_add_in_port(pdev, &pdev->usb3_port,
- 					  base + offset);
- 
--		if (CDNSP_EXT_PORT_MAJOR(temp) == 0x02 &&
--		    !pdev->usb2_port.port_num)
--			cdnsp_add_in_port(pdev, &pdev->usb2_port,
--					  base + offset);
-+		if (CDNSP_EXT_PORT_MAJOR(temp) == 0x02) {
-+			if (!pdev->usb2_port.port_num && pdev->port20_regs)
-+				cdnsp_add_in_port(pdev, &pdev->usb2_port,
-+						  base + offset);
-+
-+			if (!pdev->eusb_port.port_num)
-+				cdnsp_add_in_port(pdev, &pdev->eusb_port,
-+						  base + offset);
-+		}
- 	}
- 
--	if (!pdev->usb2_port.exist || !pdev->usb3_port.exist) {
--		dev_err(pdev->dev, "Error: Only one port detected\n");
-+	if (!pdev->usb2_port.exist && !pdev->eusb_port.exist &&
-+	    !pdev->usb3_port.exist) {
-+		dev_err(pdev->dev, "Error: No port detected\n");
- 		return -ENODEV;
- 	}
- 
--	trace_cdnsp_init("Found USB 2.0 ports and  USB 3.0 ports.");
-+	if (pdev->usb2_port.exist) {
-+		pdev->usb2_port.regs = (struct cdnsp_port_regs __iomem *)
-+				       (&pdev->op_regs->port_reg_base + NUM_PORT_REGS *
-+					(pdev->usb2_port.port_num - 1));
-+		trace_cdnsp_init("Found USB 2.0 port.");
-+	}
- 
--	pdev->usb2_port.regs = (struct cdnsp_port_regs __iomem *)
--			       (&pdev->op_regs->port_reg_base + NUM_PORT_REGS *
--				(pdev->usb2_port.port_num - 1));
-+	if (pdev->eusb_port.exist) {
-+		pdev->eusb_port.regs = (struct cdnsp_port_regs __iomem *)
-+				       (&pdev->op_regs->port_reg_base + NUM_PORT_REGS *
-+					(pdev->eusb_port.port_num - 1));
-+		trace_cdnsp_init("Found eUSB 2.0 port.");
-+	}
-+
-+	if (pdev->usb3_port.exist) {
-+		offset = cdnsp_find_next_ext_cap(base, 0, D_XEC_CFG_3XPORT_CAP);
-+		pdev->port3x_regs =  base + offset;
- 
--	pdev->usb3_port.regs = (struct cdnsp_port_regs __iomem *)
--			       (&pdev->op_regs->port_reg_base + NUM_PORT_REGS *
--				(pdev->usb3_port.port_num - 1));
-+		pdev->usb3_port.regs = (struct cdnsp_port_regs __iomem *)
-+				       (&pdev->op_regs->port_reg_base + NUM_PORT_REGS *
-+					(pdev->usb3_port.port_num - 1));
-+		trace_cdnsp_init("Found USB 3.x port.");
-+	}
- 
- 	return 0;
- }
-diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-index 0758f171f73e..715658c981ff 100644
---- a/drivers/usb/cdns3/cdnsp-ring.c
-+++ b/drivers/usb/cdns3/cdnsp-ring.c
-@@ -259,7 +259,7 @@ static bool cdnsp_room_on_ring(struct cdnsp_device *pdev,
-  */
- static void cdnsp_force_l0_go(struct cdnsp_device *pdev)
- {
--	if (pdev->active_port == &pdev->usb2_port && pdev->gadget.lpm_capable)
-+	if (pdev->active_port != &pdev->usb3_port && pdev->gadget.lpm_capable)
- 		cdnsp_set_link_state(pdev, &pdev->active_port->regs->portsc, XDEV_U0);
- }
- 
-@@ -763,6 +763,8 @@ static int cdnsp_update_port_id(struct cdnsp_device *pdev, u32 port_id)
- 
- 	if (port_id == pdev->usb2_port.port_num) {
- 		port = &pdev->usb2_port;
-+	} else if (port_id == pdev->eusb_port.port_num) {
-+		port = &pdev->eusb_port;
- 	} else if (port_id == pdev->usb3_port.port_num) {
- 		port  = &pdev->usb3_port;
- 	} else {
-@@ -779,7 +781,8 @@ static int cdnsp_update_port_id(struct cdnsp_device *pdev, u32 port_id)
- 		cdnsp_enable_slot(pdev);
- 	}
- 
--	if (port_id == pdev->usb2_port.port_num)
-+	if ((pdev->usb2_port.exist && port_id == pdev->usb2_port.port_num) ||
-+	    (pdev->eusb_port.exist && port_id == pdev->eusb_port.port_num))
- 		cdnsp_set_usb2_hardware_lpm(pdev, NULL, 1);
- 	else
- 		writel(PORT_U1_TIMEOUT(1) | PORT_U2_TIMEOUT(1),
-@@ -808,7 +811,7 @@ static void cdnsp_handle_port_status(struct cdnsp_device *pdev,
- 
- 	port_regs = pdev->active_port->regs;
- 
--	if (port_id == pdev->usb2_port.port_num)
-+	if (port_id == pdev->usb2_port.port_num || port_id == pdev->eusb_port.port_num)
- 		port2 = true;
- 
- new_event:
+I'm fine with that, but then it really has to be defined =).
 
----
-base-commit: 1c7cc4904160c6fc6377564140062d68a3dc93a0
-change-id: 20260417-eusb2v2_upstream-80c5b29a7bba
+>>> Linux. Likewise I'd rather not use "pulse". The DP AltMode defines a bit
+>>> in the VDO rather than a pulse.
+>>>
+>>> Anyway, if irq_hpd doesn't sound precise enough, what about "bool
+>>> extra_irq"? This would convey that this is the extra hpd-related IRQ,
+>>> but it would also be obvious that it's not related to the HPD pin
+>>> itself.
+>> We'd still need to define what exactly it means. I think it might be better
+>> to just define it as the DP IRQ HPD, as then the meaning is clear.
+>>
+>> Also, would an enum flags parameter be better than a bool parameter?
+> 
+> Maybe not enum, but u32 param. Then it can become:
+> 
+> @extra_status: additional type-specific information provided by the sink
+> without changing the HPD state
+> 
+> void drm_connector_oob_hotplug_event(..., u32 extra_status);
+> 
+> /* DP short HPD pulse or corresponding AltMode flag */
+> #define DRM_CONNECTOR_OOB_DP_IRQ_HPD BIT(0)
+> /* DP long HPD pulse, debounced XXX: do we need this? */
+> #define DRM_CONNECTOR_OOB_DP_REPLUG BIT(1)
 
-Best regards,
---  
-Pawel Laszczak <pawell@cadence.com>
+Why is u32 better than enum? So that we could e.g. pass short values 
+inside the extra_status?
 
+> For HDMI we might want to define:
+> 
+> /* HDMI 1.4b 8.5, HPD pulse */
+> #define DRM_CONNECTOR_OOB_HDMI_REPLUG BIT(0)
+> 
+> Or might not, 100ms is long enough for all debouncers.
+
+As I read the spec, there's no usable HPD pulse in HDMI as such. It just 
+means that if HPD is low less than 100ms, it should be ignored, and if 
+it's low more than 100ms, it should be handled. In other words, from 
+spec perspective there's no difference between HPD being low 105ms or 
+five days, there's no upper limit for the "pulse".
+
+Still, we probably want to handle the case where the HPD is low only for 
+a short period, so that we don't do a full disable/enable-cycle. We can 
+interpret it as the same monitor still being connected, we just need to 
+check the EDID again.
+
+But isn't that just a drm_connector_hotplug_event with 
+drm_connector_status staying connected? The callee can see that the 
+connector was connected before, it's connected now, but we got an event, 
+so let's read the EDID again.
+
+  Tomi
 
 
