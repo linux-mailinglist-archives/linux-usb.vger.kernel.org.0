@@ -1,260 +1,248 @@
-Return-Path: <linux-usb+bounces-36362-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36363-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kLuuLe2Q5mlWyQEAu9opvQ
-	(envelope-from <linux-usb+bounces-36362-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 22:47:41 +0200
+	id yPmsBGKd5mmeywEAu9opvQ
+	(envelope-from <linux-usb+bounces-36363-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 23:40:50 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DF8D433CFD
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 22:47:41 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 657984344AC
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 23:40:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AFD013011110
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 20:47:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3BBF23036D4D
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 21:36:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 115FE3876DA;
-	Mon, 20 Apr 2026 20:47:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rb+G+phM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05FCA39F174;
+	Mon, 20 Apr 2026 21:36:24 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f78.google.com (mail-ot1-f78.google.com [209.85.210.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F45E274FD0
-	for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 20:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776718057; cv=fail; b=ZRumL9QErT0HCTc4bycR90RApQ5XUTvQnjTVzRwO670yj8UAdI1nobXgXj4/m0qgSz+NPptPJEuSJxuB+Em6VRnY8aEtl7BUBtuO0M9Sa+7LCeXqHI14+kggxniu9BEQAbiAT0rNpblHmK9aKoEwxL13VGL0yTy2uDOzue8ITY4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776718057; c=relaxed/simple;
-	bh=NrgDvptQjwP0NocK+GxPRCWs+4qfXFZ2iiNheV/ib3s=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=eeLMBd7sOTYkuYfLtZLNwZrsEZ7yHu9t4eGYU5wndkkKjlFWL7+FW2Z3APAbA7oLwWo425H5b69CJxRyvto35rad7ebPbL68ryitKAo2DIKLmypeP3DcoS+NFeajsdoWSYCAxTxE86+WSN6L925ecISSmnrtQiMTs9GXP4+LmMQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rb+G+phM; arc=fail smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776718054; x=1808254054;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=NrgDvptQjwP0NocK+GxPRCWs+4qfXFZ2iiNheV/ib3s=;
-  b=Rb+G+phM8+D6Xo6y7nCWBQ/EO0IxiuxQSQNK+7Luh9wu+MLDbZmGPat3
-   CO8tKBDHGHWYtztl8kSw5pWcOVA8oaNHghXOV60rE2KxGEB5VHq1whjoO
-   xfOMn495vnHRykVX2QEXasDZlIeZxJWCjO6MaXF2nJXqEKnS5UsCyjjKa
-   H9rim7XYWkMbipJxf1o1k4eXONJ5F3tq6U2yb9CDS4w2UALQXCNTbDCyh
-   p7VYLxpzdWoCFUXjp+PCUpXgvsrqZx5piHsgANxUtnA/cR+SJwylaXhLD
-   YRFUTJHPLlZ7B97MZUrgb1uLANIxsMAeic57swDh3d3t8JaQLd31EWa5g
-   Q==;
-X-CSE-ConnectionGUID: 9CUFhCRqSSq1xFF4gQXAlQ==
-X-CSE-MsgGUID: waW9HRIGSVKa/Dj3OgY0gg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11762"; a="95201196"
-X-IronPort-AV: E=Sophos;i="6.23,190,1770624000"; 
-   d="scan'208";a="95201196"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2026 13:47:34 -0700
-X-CSE-ConnectionGUID: sc5LPoLpQrCK0hNA4TQROw==
-X-CSE-MsgGUID: uV+ZE3BQRQSSoCNxRbv2NA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,190,1770624000"; 
-   d="scan'208";a="227187545"
-Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2026 13:47:35 -0700
-Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
- fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Mon, 20 Apr 2026 13:47:34 -0700
-Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
- FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Mon, 20 Apr 2026 13:47:34 -0700
-Received: from PH8PR06CU001.outbound.protection.outlook.com (40.107.209.1) by
- edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Mon, 20 Apr 2026 13:47:32 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MdYDuivtGpWso/xjh7be8THBYbNm9T9Dj443oLhB7+unowr3HkH9cRDgzoJ71b8myKlESvpWAI1SpKcj0DGqIuiMsQ4Rf/MUsconCU+5/alhzFBbF18kxMxXQW4Jh/aukfyQHQavXCswDvQPrlgZ9fdbnD9MPZWt+lfYHJPvkHgshiXN3Zv7AgbglDh7Im7cNuFtOaNWy6Q/1JHCWh3R8MYraetkP9y8qyhd2CUTFKt1oZkwa+mxzv6HKkad8AADrvoA+VLP54yIrk2QG3jFdpO9TLdue7JOYU96ULyK8FGknF6dxVoppqlteVtl8XqfusxQYaY4wsq9V0Aaknw15A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Gc4fjLX8q1X9rfXstSi1viAHwLrx2KibCsCAbJte4/k=;
- b=NdZaGuLtI4E49uJ1oR/u0szGKespT5LTK2sHVnI/dUltbwH1hZtte5xkpQaHy+zMqCkIgilnHDRlusxUgts7MlvsxB/tigwqiY62yAd2N99sGbfar3CEdt01x7LovotlmEMW3/8bV415OvnhfBCyYGLLxMYvOU3oyIbQXuVSHoavL2+RsKMmfXhxUAkvbhoun3bJAlGG++P0I9XDRqwyqBCWETOegV7j6hth9DsRWwyBll5o8O8LEEk1reRNwYJbmvU8pA/LSjLTMFsWH3sWKvBVSrO3+We8lAPIVeK73luTe22AJx7fzrfT1iw8j3svybCm1vM+hOheUsT4UuZwTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CYYPR11MB8430.namprd11.prod.outlook.com (2603:10b6:930:c6::19)
- by MW5PR11MB5930.namprd11.prod.outlook.com (2603:10b6:303:1a1::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.16; Mon, 20 Apr
- 2026 20:47:30 +0000
-Received: from CYYPR11MB8430.namprd11.prod.outlook.com
- ([fe80::1d86:a34:519a:3b0d]) by CYYPR11MB8430.namprd11.prod.outlook.com
- ([fe80::1d86:a34:519a:3b0d%5]) with mapi id 15.20.9846.014; Mon, 20 Apr 2026
- 20:47:30 +0000
-Date: Mon, 20 Apr 2026 16:47:25 -0400
-From: Rodrigo Vivi <rodrigo.vivi@intel.com>
-To: Francesco Orro <ncesco@interstellar.eu>,
-	<intel-gfx@lists.freedesktop.org>, Imre Deak <imre.deak@intel.com>, Ville
- =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>, Uma Shankar
-	<uma.shankar@intel.com>
-CC: "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, Mika Westerberg
-	<mika.westerberg@linux.intel.com>, Jani Nikula <jani.nikula@linux.intel.com>
-Subject: Re: DP routing from iGPU to discrete Barlow Ridge TB5 on HP ZBook
- Fury G1i
-Message-ID: <aeaQ3Vlh6bp8-rwW@intel.com>
-References: <pCmilDgt3Xijjdzu7H1d30dzm8IJbXFnle3yQ5nSR1Pj-snchn5xNpcq9Gb7hlh5bnsA3Efnm9cOR_VKi9RyxcRJxHlrqTW7WRPG36UgY5Q=@interstellar.eu>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <pCmilDgt3Xijjdzu7H1d30dzm8IJbXFnle3yQ5nSR1Pj-snchn5xNpcq9Gb7hlh5bnsA3Efnm9cOR_VKi9RyxcRJxHlrqTW7WRPG36UgY5Q=@interstellar.eu>
-X-ClientProxiedBy: SJ0PR03CA0050.namprd03.prod.outlook.com
- (2603:10b6:a03:33e::25) To CYYPR11MB8430.namprd11.prod.outlook.com
- (2603:10b6:930:c6::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E642D3859E3
+	for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 21:36:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.78
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776720983; cv=none; b=bQX9ATlpQHHYYBcxXMbdYAsVpLUPCDkJvvT2U8Hn7kKeRdlkTRUYxL/Qt4X3HIJHADLdfbsTj4ordhNhJ9ouFN9fCtWyIjehS7pgyXPwqdVgsIvEmVI9OftWc8pXQVgfhbFitind1OI9r15AHYMi/jwE5Z1LHBaVPBreqeL8B2Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776720983; c=relaxed/simple;
+	bh=zUSqDae8ehhpIsaM8InHRH02iEAP/P1P5q7nP5d4CWE=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Mh0be0fh6xn30a/ZEH0yR/N0liyIlDqjdPbgOIv+ef1SxhPZyV+6ujb7+6wROG7+G+yZedMg69NvF+zwoDZZF4DgKHfgbocptEh52hBi/U1t/u96j00bPgxCuyP70xlOHt0/cSQQZht+RxbrqGD8UxEUtEiSFr8mkWV+RAgJ9tA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-ot1-f78.google.com with SMTP id 46e09a7af769-7dbb6b95836so7363583a34.3
+        for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 14:36:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776720981; x=1777325781;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DEXQxlFpDs5DHiWxH1HFe8jxhbypKF6txLcWt+SIIVs=;
+        b=hoTquDJDB2yaG85emf9tcX1GaLF2fDOqTp4D2+hEorWkccd88AosPy72IU48mnkoOV
+         546m4WlZpuaUKd+WQGHMlH4eGOb79s4ycnGnkCxClqkyofI9X/LJwYKfzFqao9rvBmRD
+         hHTWdIRQcRORh6EaJy4b5aYSgucwuQwiuBhoAuNmNMTI27WrJWmqHblswvIQsz6RKARG
+         6jcMI2NDdwphAKSyKMQSp1w7kDZAdb+EvfzweklXiPb+zEpjO/x0h8bpWUZYuSEN3pom
+         v34OlLOpw7RZKxJ/bhloAaw4/H0kSbUwK/HdlAxct2fMnbfjYVr0LZ6ChFg/Hd/6UOOM
+         BNnQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+hO/7Q5ODMxBvPYV+T6fhsiZc7usXmnTf+w1I4ee+5Oe20u5dIRNA1JW5f7R7F7cWRj+qUoTHjaIM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlKdNpMvW1Icn2SUlWoadprFHTb9T2DlXxH2fxAgTdhzxwI09f
+	c06ARXe24aiWC5AuNI0871GEnXFr19c1HEDXbbXQbkOjunO6o7OL0LQTgMVqK4sbX3XXKAAlzOK
+	MnSK4PUCkBZe4DUcnkYY/pOqqa6o29J8fk95mgBtN/63KdWcZpP5mKUtSErQ=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CYYPR11MB8430:EE_|MW5PR11MB5930:EE_
-X-MS-Office365-Filtering-Correlation-Id: 761f13bf-db16-4cfa-00a5-08de9f1e0a08
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info: UAfQA2+Bn+InO5si01Cv1bEklSjJg2RccOUyvF6Xv3iSzlx4h/fxIfTyErZpB6nZTxsNZfCP3rvrTPGpM7iBkn4rexsCClJewuDJHFtw+70XGVxj8sQX93MOPCXfPxY8cdz133KJHoAZpVUouzRzhCp/dYvz7smdtNdq6z5J0/EwNSCWF1FHkSCSIxsYvEHzFkMkBamKwOPQPXzkR9FAm2NeUt6mPCKWeP1zOIxkdkpKI+zxA+lSVlTdTrVlET+vDAsCv8jiQUPPGZ9P0ApaOqdwVeE+mEBsNg74pryPC2Tgnfc7va9ReVhCGprVMKuQWzc5PQpa/zEPyLL9PzFl+w1sAKAacAx1SznXPRBy2zHNZAZYsJFtRXQvt16I3AOvZQOo9qvivPZJmzkAZJamsCysMfTLAVU+qZ4xMO6TH2R1MJ3UQkj3r7YQqYBS/BBVRqKJh8ZBWuMsA0v3AfcXZLIvlqiTShQyG+Oc+5pD8YCidhuqfiuVtVvMqQmSSDRvtkgoZH8w5bxCvTcpwR/EJaSLF7CkVrp9dDR8A18a8Y+IwUmR//lu2cvQMXu+WEjX6bNm8XB0/Mg/TMGKbUhvnbX9wzTWahdkdg+W4wW7ibLic53w3facoP6b1OycIX7fYIQh33WFrEX7DqMoq4QSx8kEuUobzqtnXI5GwMy9V+ltERyyAP4e9jygfVQusNMEPbLh566mU7hzNIP0BX+Jr7GtI4Unr5NHJ1eVisSLa3s=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CYYPR11MB8430.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZXI3vdMlExbOcwhK1amgFvcrCR5kBLeEY3R9Usx5qXgSt07GnJRLwbYR1q6V?=
- =?us-ascii?Q?rmM1mwQBliHiprd1r71rWCDq+DW+8I4LkCfv0eBNMKtkefHnqBqYz9rffsbL?=
- =?us-ascii?Q?8biknsO35ZiAhxjGGhCxuoHTkFIhr+llmEVGCmo7SkE2LtxZbo4XjQ8j//lH?=
- =?us-ascii?Q?epm5b9OZAKXElwfi8VNdZCvKGiSEYDDTAXcB8wDfNyuMpgh0VytTaI4soCtm?=
- =?us-ascii?Q?9vFr7+xEEkOOHNaWFss3ts68f8GRwLm8I3fAeJ1GrHKp/aMP3+O9WujA0+RQ?=
- =?us-ascii?Q?/oEcr8Oyf7t3xArQRinHPrJZDtE/wvWOjIsA5PShEXLQYDDgce0lLejSKX4k?=
- =?us-ascii?Q?8e8XamSyTsfpTLzWx+vfDdTKoDaOMnHaOuG2DgVpZn42QJpx8mMlCFTpdFs0?=
- =?us-ascii?Q?s0lNw157eW4ibHrZ4z9/nSasIg5geI7AJGg3m75978Wqn8EO7mjggz2exRwU?=
- =?us-ascii?Q?QH4Lv+h/EE7+rsta3I3Jk3h1jkIw9piSiH04LzLn1JGs61XMzzOXPxe+Eab9?=
- =?us-ascii?Q?JsH3gq7f31KVzza2CrR/Aagg7zbZQiF2mtdVRfau82WWxuW5bjEoKTv4xEq6?=
- =?us-ascii?Q?ESX5TocD3+Ezqn/sOxS2P63zAX8ipTfSt7Ht229qmFxxXHmSBhsU7WA/m2wS?=
- =?us-ascii?Q?52jcEre4opVLQjPR7DyuejxBZohAsKwtyo5EnakUW10JAJtITWqhJfl3PJnG?=
- =?us-ascii?Q?Iu2R9N4oOjHJK6LYmM/VCNXczR77PTN2nFjQnhDZjMOhF3/FtGcHiCinXVsa?=
- =?us-ascii?Q?b5c52myed6aTffoq2186/9dmOs5sGDV/eD00tHVGcknGAtt9C5L2v+Q2t6RU?=
- =?us-ascii?Q?omnbV/kZX7wgxE8FjuKsou+UmGpZ79aG1QbP8eijonyUHgdXsIiBwIn/LzFi?=
- =?us-ascii?Q?4iZT3KEfBRbG8Eagjx1KPN3E9cgnZBFWkkGk4Go989fhxhMuaYZ3nfvV8Gp1?=
- =?us-ascii?Q?GtjTCzDo+mXFdn1tWpcyAUe815GXBvX+chfSIMfPx4Csj+5UM1v10FccOcYz?=
- =?us-ascii?Q?TeY0Hpq83PykHVFlllVfJ77wr8bu9mchMAGn4CU1Wj7Z2rvKflKjt9DOiNxN?=
- =?us-ascii?Q?2G8/wNv92qfdKCMbAEhyu30UhLcm8KERPtkj+6i0iUZhcUR7htRHrHnyUrz2?=
- =?us-ascii?Q?TCU72mTbHfns62nCGcFVq8RHjNbUP+pnRlO6QVWfwMstRldncRgYNEE1SbDo?=
- =?us-ascii?Q?dZaInp+x5OHWQLxuHA+lCoSqRsE1hZfw3APtqiV/EYL7Wh1uS6mOwOrgz3no?=
- =?us-ascii?Q?bH/z6R6yKRBmqO1wD8TBbUkKPkLA3K0aB4whv/Qnej2oV84gIBiEI/tzbIWU?=
- =?us-ascii?Q?qPtIhfASXlybfLWZm4RtMcAwQDw0D7dz4S2xaxwRvGhpB4C6YoKBkKxbD7ug?=
- =?us-ascii?Q?9ajV8sY+EAjAJdhqzLyeyvt3OAo6+ZgzTNjJKAK0n3Aqd3h/Rgko1yW6xTgp?=
- =?us-ascii?Q?g2wa80qccJ0rT/Sk55q9gS4q3rK6Yxn5OCHhJoLt9FNI23qDRzSFdkrX6ZNd?=
- =?us-ascii?Q?5QIkpuzFb/AKSDu5cXU8zE59w6tWhTxEcoUiWwKM23cr9h0XJf0UI3AzKnEN?=
- =?us-ascii?Q?KdH5PEBnjntb53f+OKYNLsuj/IIALf6yOi6ivn+di8kbp/+on6e+wbB6M1dC?=
- =?us-ascii?Q?8xJrJG5CzUgXAYNyaZzhEsPChLcuUvrYjTrOwzBWBd+v97lxenw6oyjKPv79?=
- =?us-ascii?Q?pDr2i/bqoiFUoSpeIY8hZYTiUKMIwnPkai2ZvSoKMHBiQXXrDM1nlqAJue4v?=
- =?us-ascii?Q?DMCVnhLGdQ=3D=3D?=
-X-Exchange-RoutingPolicyChecked: X2V/KpISmewG5WrgMECGdV1/6GbkAwbvKZS/gc2Tb5FC+8U1H1RWbIwnyQbNzSIzWLEvNgwBNbiVkWF94hCsJNs0jZ8JXJl9iv5hRrxZO8pepkXOU6MsKvHVsaXvi7QxHxirPA1qIYboci/q7674teoLPWyzJAaLdngYvNZwzqSa60rrX6pLb/a4AF/0SdCj0/VTSyu++iRDVNBL8jV1gMYXw2u9+PPQiceopR7dH7fpIYW4A/Lav/Eqg50CevY15GunR6+ra0i7w3v3MM7aEcM/B+SK4GYYPR+eA4idtiX9WUYLaQmp6LBncphhmQJXG8A2BNxg9FO0Dt1V3c2u9w==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 761f13bf-db16-4cfa-00a5-08de9f1e0a08
-X-MS-Exchange-CrossTenant-AuthSource: CYYPR11MB8430.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2026 20:47:30.1191
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M1zp/451a7IL8bphhaQNw/768Jm2Vrs2WgsK1vnpSE4+K4y+UKSd6u+xUIR8G3gBIr0QFQbHeXnEtHbah2WXEA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5930
-X-OriginatorOrg: intel.com
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+X-Received: by 2002:a05:6820:16a2:b0:67e:42b0:b35e with SMTP id
+ 006d021491bc7-69462dee1dfmr7430813eaf.4.1776720981030; Mon, 20 Apr 2026
+ 14:36:21 -0700 (PDT)
+Date: Mon, 20 Apr 2026 14:36:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69e69c55.050a0220.24bfd3.0029.GAE@google.com>
+Subject: [syzbot] [i2c?] [usb?] WARNING: ODEBUG bug in i2c_device_remove (2)
+From: syzbot <syzbot+019ced393ab913002b75@syzkaller.appspotmail.com>
+To: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
+	wsa+renesas@sang-engineering.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [1.14 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=10db2bdce6adb49e];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36362-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36363-lists,linux-usb=lfdr.de,019ced393ab913002b75];
+	RCVD_COUNT_THREE(0.00)[4];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rodrigo.vivi@intel.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[172.234.253.10:from];
 	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[syzkaller.appspot.com:url,googlegroups.com:email,appspotmail.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,storage.googleapis.com:url];
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	TO_DN_NONE(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_SEVEN(0.00)[10]
-X-Rspamd-Queue-Id: 1DF8D433CFD
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[100.90.174.1:received,209.85.210.78:received];
+	R_DKIM_NA(0.00)[];
+	REDIRECTOR_URL(0.00)[goo.gl];
+	TAGGED_RCPT(0.00)[linux-usb,renesas];
+	SUBJECT_HAS_QUESTION(0.00)[]
+X-Rspamd-Queue-Id: 657984344AC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Apr 20, 2026 at 04:04:02PM +0000, Francesco Orro wrote:
-> Hi,
-> 
-> Setup:
->   HP ZBook Fury G1i 16 inch, BIOS X96 01.03.04
->   Intel Arrow Lake-HX + Nvidia RTX PRO 1000 Blackwell (hybrid graphics)
->   Kernel 6.19.13
-> 
-> The laptop exposes Thunderbolt 5 on both the integrated MTL iTBT (right
-> USB-C, domain0, 00:0d.2) and a discrete Intel Barlow Ridge (left USB-C,
-> domain1, 00:06.1 -> 05:00.0).
-> 
-> - Right port: i915 drives a DP tunnel over the iTBT host without issues.
-> - Left port: no i915 connector ever sees the external monitor. The TB
->   driver allocates a DP tunnel on demand but DPRX reads time out, no DP
->   source is feeding the Barlow DP_IN adapter.
-> - With nvidia-drm.modeset=1, a DP-MST connector on the Nvidia DRM device
->   sees the monitor via the left port (EDID readable, modes negotiated).
->   The path Nvidia -> Barlow DP_IN is functional.
-> 
-> Current hypothesis: on this board the discrete Barlow Ridge DP_IN is
-> either hardwired to a Nvidia output or behind a firmware-programmed mux
-> that BIOS latches to Nvidia at POST and is not exposed to the OS. i915
-> would therefore have no path to drive the left ports, by design.
+Hello,
 
-yes, that is usually the case.
+syzbot found the following issue on:
 
-> 
-> Tests done that did not surface an OS-visible lever:
-> - i2cdetect across all SMBus/i801 busses: no DP mux/retimer at plausible
->   addresses (0x60-0x7F).
-> - DSDT/SSDT dump (iasl -d): no Device/Method referring to DP routing,
->   DPMUX, retimer programming, or dock display source selection.
-> - HP WMI + /sys/devices/virtual/firmware-attributes/hp-bioscfg attribute
->   enumeration: nothing switching dock display source. "Graphics"
->   attribute only offers Hybrid/Discrete.
-> - PCI config dump of Barlow Ridge: standard USB4 NHI, no vendor-specific
->   capability hinting at source selection.
-> - acpi.no_usb4_osc kernel param (locally patched) to opt out of OSC USB4
->   native support: no change in i915 visibility of the dock.
-> 
-> Is there any known way to route an Intel DDI output to a PCIe-attached
-> Barlow Ridge DP_IN adapter, or is this strictly a design where the dGPU
-> is the only valid DP source for the discrete TB controller on this class
-> of HP workstations?
+HEAD commit:    c7275b05bc42 Add linux-next specific files for 20260417
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1782f4ce580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=10db2bdce6adb49e
+dashboard link: https://syzkaller.appspot.com/bug?extid=019ced393ab913002b75
+compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10b79906580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16688cf2580000
 
-I believe this is physically connected or static mux without any way to
-re-route this. But I might be wrong.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ffefe34549f8/disk-c7275b05.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f679e5d59c0c/vmlinux-c7275b05.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/714f96953b57/bzImage-c7275b05.xz
 
-So, bringing some more folks to the discussion.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+019ced393ab913002b75@syzkaller.appspotmail.com
 
-> 
-> Happy to share the DSDT dump, lspci -vvv, full dmesg, or run any test.
-> 
-> Regards,
-> Francesco Orro
+usb 1-1: DVB: registering adapter 1 frontend 0 (Realtek RTL2832 (DVB-T))...
+dvbdev: dvb_create_media_entity: media entity 'Realtek RTL2832 (DVB-T)' registered.
+DVB: Unable to find symbol r820t_attach()
+------------[ cut here ]------------
+ODEBUG: free active (active state 0) object: ffff8880258626e8 object type: timer_list hint: rtl2832_i2c_gate_work+0x0/0x100 drivers/media/dvb-frontends/rtl2832.c:-1
+WARNING: lib/debugobjects.c:632 at debug_print_object lib/debugobjects.c:629 [inline], CPU#1: kworker/1:2/821
+WARNING: lib/debugobjects.c:632 at __debug_check_no_obj_freed lib/debugobjects.c:1116 [inline], CPU#1: kworker/1:2/821
+WARNING: lib/debugobjects.c:632 at debug_check_no_obj_freed+0x405/0x550 lib/debugobjects.c:1146, CPU#1: kworker/1:2/821
+Modules linked in:
+CPU: 1 UID: 0 PID: 821 Comm: kworker/1:2 Not tainted syzkaller #0 PREEMPT_{RT,(full)} 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/18/2026
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:debug_print_object lib/debugobjects.c:629 [inline]
+RIP: 0010:__debug_check_no_obj_freed lib/debugobjects.c:1116 [inline]
+RIP: 0010:debug_check_no_obj_freed+0x44a/0x550 lib/debugobjects.c:1146
+Code: 89 44 24 20 e8 87 40 6f fd 48 8b 44 24 20 4c 8b 4d 00 4c 89 ef 48 c7 c6 a0 61 ca 8b 48 c7 c2 20 67 ca 8b 8b 0c 24 4d 89 f8 50 <67> 48 0f b9 3a 48 83 c4 08 4c 8b 6c 24 18 48 b9 00 00 00 00 00 fc
+RSP: 0018:ffffc90004fa67b8 EFLAGS: 00010246
+RAX: ffffffff8767dab0 RBX: ffffffff99edac98 RCX: 0000000000000000
+RDX: ffffffff8bca6720 RSI: ffffffff8bca61a0 RDI: ffffffff8fd9d990
+RBP: ffffffff8b6f5560 R08: ffff8880258626e8 R09: ffffffff8b6f68e0
+R10: dffffc0000000000 R11: ffffffff81b15270 R12: ffff888025862800
+R13: ffffffff8fd9d990 R14: ffff888025862000 R15: ffff8880258626e8
+FS:  0000000000000000(0000) GS:ffff888125b62000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f2ec609ae9c CR3: 000000003956c000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ slab_free_hook mm/slub.c:2620 [inline]
+ slab_free mm/slub.c:6246 [inline]
+ kfree+0x13e/0x6c0 mm/slub.c:6561
+ i2c_device_remove+0x88/0x220 drivers/i2c/i2c-core-base.c:631
+ device_remove drivers/base/dd.c:619 [inline]
+ __device_release_driver drivers/base/dd.c:1352 [inline]
+ device_release_driver_internal+0x46f/0x870 drivers/base/dd.c:1375
+ bus_remove_device+0x45a/0x570 drivers/base/bus.c:657
+ device_del+0x52b/0x900 drivers/base/core.c:3895
+ device_unregister+0x21/0xf0 drivers/base/core.c:3936
+ rtl28xxu_frontend_detach+0x168/0x210 drivers/media/usb/dvb-usb-v2/rtl28xxu.c:1105
+ dvb_usbv2_adapter_frontend_exit drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:733 [inline]
+ dvb_usbv2_adapter_exit drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:830 [inline]
+ dvb_usbv2_exit+0x44c/0xb80 drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:844
+ dvb_usbv2_probe+0x4c0/0x3c20 drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:994
+ usb_probe_interface+0x659/0xc70 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x267/0xaf0 drivers/base/dd.c:709
+ __driver_probe_device+0x1ef/0x380 drivers/base/dd.c:871
+ driver_probe_device+0x4f/0x240 drivers/base/dd.c:901
+ __device_attach_driver+0x279/0x430 drivers/base/dd.c:1029
+ bus_for_each_drv+0x25b/0x2f0 drivers/base/bus.c:500
+ __device_attach+0x2c8/0x450 drivers/base/dd.c:1101
+ device_initial_probe+0xa1/0xd0 drivers/base/dd.c:1156
+ bus_probe_device+0x12d/0x220 drivers/base/bus.c:613
+ device_add+0x7e9/0xbb0 drivers/base/core.c:3706
+ usb_set_configuration+0x1a87/0x2110 drivers/usb/core/message.c:2268
+ usb_generic_driver_probe+0x8d/0x150 drivers/usb/core/generic.c:250
+ usb_probe_device+0x1c4/0x3b0 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x267/0xaf0 drivers/base/dd.c:709
+ __driver_probe_device+0x1ef/0x380 drivers/base/dd.c:871
+ driver_probe_device+0x4f/0x240 drivers/base/dd.c:901
+ __device_attach_driver+0x279/0x430 drivers/base/dd.c:1029
+ bus_for_each_drv+0x25b/0x2f0 drivers/base/bus.c:500
+ __device_attach+0x2c8/0x450 drivers/base/dd.c:1101
+ device_initial_probe+0xa1/0xd0 drivers/base/dd.c:1156
+ bus_probe_device+0x12d/0x220 drivers/base/bus.c:613
+ device_add+0x7e9/0xbb0 drivers/base/core.c:3706
+ usb_new_device+0x9f8/0x16e0 drivers/usb/core/hub.c:2695
+ hub_port_connect drivers/usb/core/hub.c:5567 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
+ port_event drivers/usb/core/hub.c:5871 [inline]
+ hub_event+0x2a49/0x4f60 drivers/usb/core/hub.c:5953
+ process_one_work+0x9a3/0x1710 kernel/workqueue.c:3312
+ process_scheduled_works kernel/workqueue.c:3403 [inline]
+ worker_thread+0xba8/0x11e0 kernel/workqueue.c:3489
+ kthread+0x388/0x470 kernel/kthread.c:436
+ ret_from_fork+0x514/0xb70 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	89 44 24 20          	mov    %eax,0x20(%rsp)
+   4:	e8 87 40 6f fd       	call   0xfd6f4090
+   9:	48 8b 44 24 20       	mov    0x20(%rsp),%rax
+   e:	4c 8b 4d 00          	mov    0x0(%rbp),%r9
+  12:	4c 89 ef             	mov    %r13,%rdi
+  15:	48 c7 c6 a0 61 ca 8b 	mov    $0xffffffff8bca61a0,%rsi
+  1c:	48 c7 c2 20 67 ca 8b 	mov    $0xffffffff8bca6720,%rdx
+  23:	8b 0c 24             	mov    (%rsp),%ecx
+  26:	4d 89 f8             	mov    %r15,%r8
+  29:	50                   	push   %rax
+* 2a:	67 48 0f b9 3a       	ud1    (%edx),%rdi <-- trapping instruction
+  2f:	48 83 c4 08          	add    $0x8,%rsp
+  33:	4c 8b 6c 24 18       	mov    0x18(%rsp),%r13
+  38:	48                   	rex.W
+  39:	b9 00 00 00 00       	mov    $0x0,%ecx
+  3e:	00 fc                	add    %bh,%ah
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
