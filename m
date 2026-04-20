@@ -1,63 +1,66 @@
-Return-Path: <linux-usb+bounces-36358-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36357-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YPghCH5S5mkDuwEAu9opvQ
-	(envelope-from <linux-usb+bounces-36358-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 18:21:18 +0200
+	id CBD4F2pS5mkDuwEAu9opvQ
+	(envelope-from <linux-usb+bounces-36357-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 18:20:58 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAA3C42F587
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 18:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E9B442F56B
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 18:20:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D87BD3063FD8
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 16:15:17 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4A5A6303D373
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 16:15:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C39C346771;
-	Mon, 20 Apr 2026 16:15:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73715346771;
+	Mon, 20 Apr 2026 16:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="h9VSXB8t"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HzGsR6WT"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B733E346E57;
-	Mon, 20 Apr 2026 16:15:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFF582FD1B1;
+	Mon, 20 Apr 2026 16:15:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776701708; cv=none; b=sJ1CStyGitucULMidArjKaGaoqx09m+dHrBHi88objySJiyQMSlmtEnMv8Ua9DWNsGectwnyL8wSZIbbWL9KvbaQ7p3DnJ9JlqVKMzTmChC4uubNxuiCMa9U+Igt2aC8KrcgGnE/NLOcWoCa72oLUiGzcjF1eIwoKpdFfTTukq4=
+	t=1776701706; cv=none; b=YCXQ7CIdKA0ivN04/InTyCsCGO7/DMtLa4CgdfpHDLRHFg4AVUA81RQcZUatY1/sZljiZRVbzJBWU3MJHVvqjCst1aUuq58PHH5LXNe73dLI57+zpB6RySPGB9ChdtAr4PmKr596FAt86aSvKgnTQFl9RkkOB8EHiFvs7ZUgg8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776701708; c=relaxed/simple;
-	bh=rfStXcjDmlJ+iCB1csg/EHrN0X3+o3/QbLv/IAnXTsw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MtWJtcTlgoxX/iTb8QcSgI1ViFtT0q8Y1IsszyDPxjVANUxWNqpEtA8wN9WPVseQAGA/UDMbBnhbs6kkgD7ib97TNfPRBsjxQuwPsc/DfMT/dAueNKw/g5FNBg1yUwBfNf5Ntjv/au3DyQKKqzCbD5F6ne7M2/Q5XgPEqSB8Urk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=h9VSXB8t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 184A1C2BCB4;
-	Mon, 20 Apr 2026 16:15:07 +0000 (UTC)
+	s=arc-20240116; t=1776701706; c=relaxed/simple;
+	bh=yAClQ7viy0pdkoODuFLYVq+YeIsI6rgXW6pLrwHGXHI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=C0Idht3dHkW6oHLCoXCTvJRrp1LwFHXro6+O5lr7NTYs01Ow3WUD8N5rY4XGV/DfbhK08d699Iza28qm675Mx6eAbHiEmmwkHrWtwgmDfr8THT/fqQb5rXF59bS6lHAIpgBayISgxL7CYj3qwYECe5mPgUWiCAOCB4aoqvaliSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HzGsR6WT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8184CC19425;
+	Mon, 20 Apr 2026 16:15:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1776701708;
-	bh=rfStXcjDmlJ+iCB1csg/EHrN0X3+o3/QbLv/IAnXTsw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=h9VSXB8tq+46W2DahthN8op4IcMrHdNIQO+aHZRhJG63LLnOkJWn1V39yq37fkgy6
-	 MSU0w6zTWEbYr0jMKN1chZbI7DPV40+l6oLetDoXzkYd44Ge9WtZdkdnyUQb2+ME/l
-	 brbn6pQy4LT2CM5fUipP+6z/8F4A2eyFEI2ARmOM=
+	s=korg; t=1776701705;
+	bh=yAClQ7viy0pdkoODuFLYVq+YeIsI6rgXW6pLrwHGXHI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=HzGsR6WT63Bt0NCJHya7Trj5wv/qWK9hqKjfdGeunCVusXnuBz5es2XWPnioqC9Xg
+	 Y4tv8VYG+Ma+NkUHDEee7rkJHNRAuWTk+MWpVWYiTPH5hL8hqC0MGfBHtZkUgnL6Y9
+	 RbNmZDV69OoBFC1wTqpCSBUTbpLf2HD7QFU7bdCY=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: linux-usb@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Pete Zaitcev <zaitcev@redhat.com>,
 	stable <stable@kernel.org>
-Subject: [PATCH 1/2] usb: usblp: fix heap leak in IEEE 1284 device ID via short response
-Date: Mon, 20 Apr 2026 18:11:03 +0200
-Message-ID: <2026042002-unicorn-greedily-3c63@gregkh>
+Subject: [PATCH 2/2] usb: usblp: fix uninitialized heap leak via LPGETSTATUS ioctl
+Date: Mon, 20 Apr 2026 18:11:04 +0200
+Message-ID: <2026042011-shredder-savage-48c6@gregkh>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <2026042002-unicorn-greedily-3c63@gregkh>
+References: <2026042002-unicorn-greedily-3c63@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Lines: 43
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1753; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=rfStXcjDmlJ+iCB1csg/EHrN0X3+o3/QbLv/IAnXTsw=; b=kA0DAAIRMUfUDdst+ykByyZiAGnmUBagRSG0mguGDMVaaMVBt9eFYCdtY0cT39h/+/+daAD3Q IhdBAARAgAdFiEE9LYMxb94wiFKMT3LMUfUDdst+ykFAmnmUBYACgkQMUfUDdst+ynl6wCdHluS dzg79R8xFfUw2rGXSHsUCAYAniwIHIlNumqH1u0pketc3v38z3Ae
+Lines: 44
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1687; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=yAClQ7viy0pdkoODuFLYVq+YeIsI6rgXW6pLrwHGXHI=; b=owGbwMvMwCRo6H6F97bub03G02pJDJnPAuTrnnHPOnkzrKNbb3N2krHKz4CbkQY3XWeUln7SP 7CrwP9tRywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAEzEto1hnlpfr5DHchlJ16jC JQX2W3m5as40M8wvnLdFZoHfyoqABpW7ZnaMtZe+fD8GAA==
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [2.84 / 15.00];
@@ -75,7 +78,7 @@ X-Spamd-Result: default: False [2.84 / 15.00];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36358-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-36357-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -88,51 +91,52 @@ X-Spamd-Result: default: False [2.84 / 15.00];
 	TAGGED_RCPT(0.00)[linux-usb];
 	RCPT_COUNT_FIVE(0.00)[5];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linuxfoundation.org:dkim,linuxfoundation.org:email]
-X-Rspamd-Queue-Id: CAA3C42F587
+X-Rspamd-Queue-Id: 1E9B442F56B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-usblp_ctrl_msg() collapses the usb_control_msg() return value to
-0/-errno, discarding the actual number of bytes transferred.  A broken
-printer can complete the GET_DEVICE_ID control transfer short and the
-driver has no way to know.
+Just like in a previous problem in this driver, usblp_ctrl_msg() will
+collapse the usb_control_msg() return value to 0/-errno, discarding the
+actual number of bytes transferred.
 
-usblp_cache_device_id_string() reads the 2-byte big-endian length prefix
-from the response and trusts it (clamped only to the buffer bounds).
-The buffer is kmalloc(1024) at probe time. A device that sends exactly
-two bytes (e.g. 0x03 0xFF, claiming a 1023-byte ID) leaves
-device_id_string[2..1022] holding stale kmalloc heap.
+Ideally that short command should be detected and error out, but many
+printers are known to send "incorrect" responses back so we can't just
+do that.
 
-That stale data is then exposed:
-  - via the ieee1284_id sysfs attribute (sprintf("%s", buf+2), truncated
-    at the first NUL in the stale heap), and
-  - via the IOCNR_GET_DEVICE_ID ioctl, which copy_to_user()s the full
-    claimed length regardless of NULs, up to 1021 bytes of uninitialized
-    heap, with the leak size chosen by the device.
+statusbuf is kmalloc(8) at probe time and never filled before the first
+LPGETSTATUS ioctl.
 
-Fix this up by just zapping the buffer with zeros before each request
-sent to the device.
+usblp_read_status() requests 1 byte. If a malicious printer responds
+with zero bytes, *statusbuf is one byte of stale kmalloc heap,
+sign-extended into the local int status, which the LPGETSTATUS path then
+copy_to_user()s directly to the ioctl caller.
+
+Fix this all by just zapping out the memory buffer when allocated at
+probe time.  If a later call does a short read, the data will be
+identical to what the device sent it the last time, so there is no
+"leak" of information happening.
 
 Cc: Pete Zaitcev <zaitcev@redhat.com>
 Assisted-by: gkh_clanker_t1000
 Cc: stable <stable@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/class/usblp.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/class/usblp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
-index 669b9e6879bf..e9b848622a3a 100644
+index e9b848622a3a..746414763da5 100644
 --- a/drivers/usb/class/usblp.c
 +++ b/drivers/usb/class/usblp.c
-@@ -1377,6 +1377,7 @@ static int usblp_cache_device_id_string(struct usblp *usblp)
- {
- 	int err, length;
+@@ -1178,7 +1178,7 @@ static int usblp_probe(struct usb_interface *intf,
+ 	}
  
-+	memset(usblp->device_id_string, 0, USBLP_DEVICE_ID_SIZE);
- 	err = usblp_get_id(usblp, 0, usblp->device_id_string, USBLP_DEVICE_ID_SIZE - 1);
- 	if (err < 0) {
- 		dev_dbg(&usblp->intf->dev,
+ 	/* Allocate buffer for printer status */
+-	usblp->statusbuf = kmalloc(STATUS_BUF_SIZE, GFP_KERNEL);
++	usblp->statusbuf = kzalloc(STATUS_BUF_SIZE, GFP_KERNEL);
+ 	if (!usblp->statusbuf) {
+ 		retval = -ENOMEM;
+ 		goto abort;
 -- 
 2.53.0
 
