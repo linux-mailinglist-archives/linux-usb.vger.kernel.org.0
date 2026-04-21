@@ -1,164 +1,154 @@
-Return-Path: <linux-usb+bounces-36396-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36397-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +LrULC+M52lY9wEAu9opvQ
-	(envelope-from <linux-usb+bounces-36396-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 16:39:43 +0200
+	id qKVlEJyX52mp+AEAu9opvQ
+	(envelope-from <linux-usb+bounces-36397-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 17:28:28 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2241743C2C0
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 16:39:43 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 970CA43CBC6
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 17:28:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C8A80301CE4B
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 14:38:05 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EA6B9301486F
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 15:28:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D0A5387590;
-	Tue, 21 Apr 2026 14:38:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D129C3D904D;
+	Tue, 21 Apr 2026 15:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="LAgKP+y8"
+	dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b="MfDPEGTZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dilbert.mork.no (dilbert.mork.no [65.108.154.246])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F191212D7C
-	for <linux-usb@vger.kernel.org>; Tue, 21 Apr 2026 14:37:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6141B3D75D3;
+	Tue, 21 Apr 2026 15:28:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.108.154.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776782280; cv=none; b=K5ean2s9rY7pxIsfPQilUquIq+2/borTrV8tgAL13TB4+jKzw/Z8I+jF6chwC/HzT+LGODeJG4Vx8Ur83H4W0TgcMoYNbxur7BpBii8er1MgQld3YkaKyl2oG9XXmfROhdn2ahULDHQTBwQMoTLXhaJi+jgKhzXPWGNmRpc0Lak=
+	t=1776785303; cv=none; b=HHWSCT4/9q9I8tTWLfhR9wmYycjF4o404N6Mn8CpYSAadgJe7+0nXoVBwHiJFozxJ0FJZW+DjJ3Z1bkvpiIA1Zu7ncckeT8VIcmRAtJOd/evVHJL39B6Ho/JHDv6yUI+YgZj6O63KvWwRY/qSdJKnQVUCf6ttI8uqxzqDJJFVOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776782280; c=relaxed/simple;
-	bh=AHJgGnpeX5LVzY/GceNPIBAEzVpq45DA7bIyL1jAogY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s4alfwG+RmD33WvRTJ4YyXItan7QZBwwp3AqDYyRwYbEBtJyemSnXeDLtUHsumk1WNlPaRBzIClpAeA99FNhpN2zSDiyu3dtKAB1xG33Wbe11xYRjtAfsBFztF+NMMj5BGUtBSPpdrzDe7HCtxwMChi99GDz5rEuaL5Prz5YDDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=LAgKP+y8; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-506a7bbe9d0so36547961cf.0
-        for <linux-usb@vger.kernel.org>; Tue, 21 Apr 2026 07:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1776782277; x=1777387077; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=47UOho7cFXU9Cx0PBlLkPD/xoymRf95gp8yIK25T/BY=;
-        b=LAgKP+y8iWwXPnqDPnrv3QD2sGY35izXvwkHzLrTFqXnM1nJx9kdZdZaGqYJooheoq
-         BdZrOgYuRZvMkFEcX+c7Yt956lisQzHetC9XpiyF31oaf4swxA3hSZuHyvNfpSlxQtbu
-         aH3yNP1GJL1ZTVVQoju6Ien/FFmTk4cRq+Z9vVv+jWLl1iGUMeL5IvxZLeGoCrQMJNp5
-         OaLFyNTZ8RbNDLftaSgAq0OjLdggMwo94Gu24v23Jkm5vfDU7oDq/mB2rVpQL7RVTFYe
-         PuYWcXLpXBWOAsteY2i7zYnWVib0ZXDWQHWZlH46GgZkc14q8qUw9PnsxSOpxytse6zW
-         tCFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776782277; x=1777387077;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=47UOho7cFXU9Cx0PBlLkPD/xoymRf95gp8yIK25T/BY=;
-        b=JChcJcLKIMfT6yMUoEjzzgVPQCetYKqsMPFquMjIzs9TtRF8y3iIpFeIFN/I4QJL4A
-         j+hw3Qwc/nXaj6tRhDrh5AlADANZc7ei2vpi/Kw4wh40sB88lDwdXEaXOSSgCdHhqhFa
-         AUWQyH6a3OqgepSlnfcP4okGBPyxyCmjVE+/qDkdZYiFgHeCI/gDh3/JjcxfJdzlH7QM
-         9U0GDf9tGATYwoMbDPjyDad4Bz6/slG/TkJXX2BWrXpDU1vmg/61e5pxB4KGu/061M4x
-         S8aGrCH5aizdnYxh2GqJjnJyP7ZcSQpe3GXZnvFnsVeg2lbnlFF7u2aeGrMg9JcRB8LL
-         Xg0A==
-X-Forwarded-Encrypted: i=1; AFNElJ/DlgkJUtR9NTy5E+iPIt0tP7P7Fwkns+hbUXs5HWh9kRf7R9K13/gzCrdAhdx6AxV4QZfC3upxQxo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo2E82pUufIGurcDuzO08niQ76OCrCYNB0RCFp90bdFhDJIFUD
-	RPKn1KeQYxAJUWZars/C4nSd3OrM57Ksytq2VoXeG/H2YyK5ZhhtM03QUGsAMxYKWg==
-X-Gm-Gg: AeBDievvJJJnrhDKLhYYCnCDLroW2lAwjQCeS7WfNIgUUFPcGUdxzZLNipM5IL6/pUh
-	7UBL+1jCemStrC+KKW/STiHM09IecsU/jEv3MENtmDdM/p1je94ujldTkyAKWTNUN3EKKtRHHPO
-	eToGPYi2jRbK2OVs48XG8+u37sE/2yh7PbrW32wAbK4FDQSbCv24rsDrTDkAcXOUcIDu8qPiIyR
-	b2Nd/+3kbuCf5hZ16tCcnw3NCF3zlz4quPJ2/m3DMNW+z+pa82NdtOcIJTLUT7zHV/ykY/5kcAE
-	iUVJacXz+ty9AD4mO4wxSnOnh5pi5NkExfAh3akZI8/IdRLn1y/dXBGZRoMPWFi8zbyonEaD6Q6
-	vjvKpkWrQwjiWc2pzbt4KfKVXmF6A6/SPSqX4dOobMTboQ2oreiSrTu3qhBysycEZ5LOgSmXUm6
-	ib3ziPdSiqZcAWXOoOxaF6bwGru+/Tc5TqPGOuOKq6lBbBfA==
-X-Received: by 2002:ac8:7f0f:0:b0:50d:6557:5c83 with SMTP id d75a77b69052e-50e36c1165emr233206841cf.25.1776782276532;
-        Tue, 21 Apr 2026 07:37:56 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::5a82])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50e5d5ecffdsm53553121cf.29.2026.04.21.07.37.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2026 07:37:56 -0700 (PDT)
-Date: Tue, 21 Apr 2026 10:37:53 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: gregkh@linuxfoundation.org, khtsai@google.com,
-	kexinsun@smail.nju.edu.cn, hhhuuu@google.com, kees@kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev, jun.li@nxp.com
+	s=arc-20240116; t=1776785303; c=relaxed/simple;
+	bh=sudIl/MO5640I3hwPUJJDdibc6FcDmokiN6s4Qznqjs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=OMjiHScora2XZi4tdsIa4xM2JvlCgjVYzHNocyIShM6Nn7cab+Y3htY+WAVJnHX9B4543v7DUAl979qOvlNr9q/JDLLAgrs1qfCbvokFkoIvHRKMDsvkpgScsZds3W3H4MawtstkCsfKTHerVTEENqMHvEdn47lF0MPj/ZYEtnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mork.no; spf=pass smtp.mailfrom=miraculix.mork.no; dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b=MfDPEGTZ; arc=none smtp.client-ip=65.108.154.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mork.no
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=miraculix.mork.no
+Authentication-Results: dilbert.mork.no;
+	dkim=pass (1024-bit key; secure) header.d=mork.no header.i=@mork.no header.a=rsa-sha256 header.s=b header.b=MfDPEGTZ;
+	dkim-atps=neutral
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:10e2:d900:0:0:0:1])
+	(authenticated bits=0)
+	by dilbert.mork.no (8.18.1/8.18.1) with ESMTPSA id 63LFRWAm2844840
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Tue, 21 Apr 2026 16:27:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+	t=1776785252; bh=FGZYfonOzj3LWdcmpezBnWOMi5Dm/iVF2dnKqO4i3aE=;
+	h=From:To:Cc:Subject:References:Date:Message-ID:From;
+	b=MfDPEGTZAXpnb1i8xxoO4+LzIzx/z/Smz2dHN9V3Xmk8Qui38dQK7g+n4rU5QZSWD
+	 qcIvBtt9PvfjOIcuYjUWyN9tmyOUaINgrOxGZcFr20kU46yw0Ev7EANqUbTIyo19wo
+	 5Ph3LZR2leQv8S2i1YSqa6Z4+Mf+UoW292jisiMc=
+Received: from miraculix.mork.no ([IPv6:2a01:799:10e2:d90a:6f50:7559:681d:630c])
+	(authenticated bits=0)
+	by canardo.dyn.mork.no (8.18.1/8.18.1) with ESMTPSA id 63LFRWpb2948045
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Tue, 21 Apr 2026 17:27:32 +0200
+Received: (nullmailer pid 2973842 invoked by uid 1000);
+	Tue, 21 Apr 2026 15:27:32 -0000
+From: =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Xu Yang <xu.yang_2@nxp.com>, gregkh@linuxfoundation.org, khtsai@google.com,
+        kexinsun@smail.nju.edu.cn, hhhuuu@google.com, kees@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        imx@lists.linux.dev, jun.li@nxp.com
 Subject: Re: [PATCH] usb: gadget: udc: skip pullup() if already connected
-Message-ID: <e431e2f9-ce24-491a-9447-1b872099ab25@rowland.harvard.edu>
+In-Reply-To: <e431e2f9-ce24-491a-9447-1b872099ab25@rowland.harvard.edu> (Alan
+	Stern's message of "Tue, 21 Apr 2026 10:37:53 -0400")
+Organization: m
 References: <20260421082050.1260823-1-xu.yang_2@nxp.com>
+	<e431e2f9-ce24-491a-9447-1b872099ab25@rowland.harvard.edu>
+Date: Tue, 21 Apr 2026 17:27:32 +0200
+Message-ID: <87v7dkpc4b.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260421082050.1260823-1-xu.yang_2@nxp.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 1.4.3 at canardo.mork.no
+X-Virus-Status: Clean
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[mork.no,reject];
+	R_DKIM_ALLOW(-0.20)[mork.no:s=b];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	DKIM_TRACE(0.00)[mork.no:+];
+	TAGGED_FROM(0.00)[bounces-36397-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36396-lists,linux-usb=lfdr.de];
+	HAS_ORG_HEADER(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bjorn@mork.no,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 2241743C2C0
+	RCPT_COUNT_SEVEN(0.00)[11];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mork.no:dkim,miraculix.mork.no:mid,harvard.edu:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 970CA43CBC6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Apr 21, 2026 at 04:20:50PM +0800, Xu Yang wrote:
-> The device controller may update vbus status via usb_udc_vbus_handler(),
-> which tries to connect the gadget even though gadget_bind_driver() has
-> already called usb_udc_connect_control_locked(). This causes pullup() to
-> be called twice. Avoid this by checking if gadget->connected is true.
+Alan Stern <stern@rowland.harvard.edu> writes:
 
-This patch is wrong.  To see why, read the comments just below the end 
-of the patch and see also usb_gadget_activate().
+> This patch is wrong.  To see why, read the comments just below the end=20
+> of the patch and see also usb_gadget_activate().
 
-(Also, is there really anything wrong with calling pullup() twice in a 
-row?)
 
-Alan Stern
+Made me look...
 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> ---
->  drivers/usb/gadget/udc/core.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index e8861eaad907..be29daa7ad3c 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -712,6 +712,9 @@ static int usb_gadget_connect_locked(struct usb_gadget *gadget)
->  		goto out;
->  	}
->  
-> +	if (gadget->connected)
-> +		goto out;
-> +
->  	if (gadget->deactivated || !gadget->udc->allow_connect || !gadget->udc->started) {
->  		/*
->  		 * If the gadget isn't usable (because it is deactivated,
-> -- 
-> 2.34.1
-> 
-> 
+Must say. This strikes me as a nice way to filter out humans from the
+rest of the submitters:
+
+                gadget->connected =3D true;
+                goto out;
+        }
+=20
+        ret =3D gadget->ops->pullup(gadget, 1);
+        if (!ret)
+                gadget->connected =3D 1;
+
+
+The indecisiveness looks strange. There's a nice symmetry with
+usb_gadget_disconnect_locked() though:
+
+                gadget->connected =3D false;
+                goto out;
+        }
+=20
+        ret =3D gadget->ops->pullup(gadget, 0);
+        if (!ret)
+                gadget->connected =3D 0;
+
+
+
+
+What surprised me most was that the different variants were added by the
+same commit
+ccdf138fe3e2 ("usb: gadget: add usb_gadget_activate/deactivate functions").
+
+
+Bj=C3=B8rn
 
