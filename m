@@ -1,196 +1,178 @@
-Return-Path: <linux-usb+bounces-36401-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36402-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8CXLHjHY52kBBwIAu9opvQ
-	(envelope-from <linux-usb+bounces-36401-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 22:04:01 +0200
+	id kM0KMxja52kBBwIAu9opvQ
+	(envelope-from <linux-usb+bounces-36402-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 22:12:08 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E45E843F337
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 22:04:00 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 389DF43F4ED
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 22:12:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D77A930761EE
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 20:00:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7BF9330CBD17
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 20:05:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E05CC3DDDAE;
-	Tue, 21 Apr 2026 20:00:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 130133DD52C;
+	Tue, 21 Apr 2026 20:05:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q3Ls/D6b"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LfboG50J"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513E03D9DDA;
-	Tue, 21 Apr 2026 20:00:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20D753DCDB6
+	for <linux-usb@vger.kernel.org>; Tue, 21 Apr 2026 20:05:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776801617; cv=none; b=rh9tp3DjZdP3oDA3sa4lxMJEgpMU0OkdPqhQgu9nHbsFPe8JNk4NlGznUXZc43K9GsLR8qwzS2YQAK/100lQcftDISxPQgHH7lOU066Omjtjx3YgoEw8CXWwgfOhqPpHsPIXP5a1fLDilyPW5k5+3EolkPBLMNeeIixx4VErQJo=
+	t=1776801957; cv=none; b=ubAJQbjldyRYiyYFXMKcQGA7yfxDjTz4X4Z5KysRClERBD5dsj6v6E8d9GAPaQHhZH6RE69lF+nRUSCsq8e5H7q0Bx0QP5ybfvg7+kh+m2gK7BBmSTeopDPW5HNmb2GeRAIECBIrrexaXLN2soYlBBSwcKcUTWHINrQkMibYw1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776801617; c=relaxed/simple;
-	bh=Zlc1xvs7V1MA2mbAbpURS34qCSlGhYRGswgZIBC4UrY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l7s0wRpKAUaRlTYNweTQaSxXgHpVC+TQoOf8xJjGmK4DfcO3cqS7QSLgdu6QKqE4jKZC7j//X4Qpdpu4onodJ3m9mdjgH55Zz1Pc5qvFuxim0UxMGF4mC82ODfPgqQ0x1zeSgosQ1CPRzUK/l3tijUsZTwLE6KyDMzG3uzgtGRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q3Ls/D6b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F1E0C2BCB0;
-	Tue, 21 Apr 2026 20:00:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776801617;
-	bh=Zlc1xvs7V1MA2mbAbpURS34qCSlGhYRGswgZIBC4UrY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q3Ls/D6bQyexm8rodqpy6NEtHra1oMoMVRLg3U9JMkuJrvmpKemOoLsPg8viOmxAA
-	 oqbL97hhSfvKpFblHAkaTwKXjjjZLWkOveAAbzSfAq6JcamM1T1fjT2bPzUSogslAK
-	 +zvD75CC72k7pSEbCjzlxRdWV5d56eR8iYLCZ//CrhVjnarDFCciD4iZ3S+xX53yHk
-	 JTeIP7kLtxMiNbsa1tHstJOkS9fk+Nvrwwvv0ksP1PkgiT2k6Bx4ENQF1dlHWnOOKe
-	 HidJJmzeMoiBAw/SATUP6S23FVd3QT8sw7/HfUkMqBjCCQnnLWyBosurg75kP4c4BR
-	 TJbjwsrX4yqUA==
-Date: Tue, 21 Apr 2026 21:00:06 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Jeff Johnson <jjohnson@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Yang Xiwen <forbidden405@outlook.com>,
-	Alex Elder <elder@kernel.org>,
-	Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
-	Sibi Sankar <sibi.sankar@oss.qualcomm.com>,
-	Rao Mandadapu <quic_srivasam@quicinc.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Xu Yang <xu.yang_2@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
-	linux-wireless@vger.kernel.org, ath10k@lists.infradead.org,
-	ath11k@lists.infradead.org, linux-pci@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix phandle-array constraints, again
-Message-ID: <ddeb29fc-1292-4191-8963-8ba817410740@sirena.org.uk>
-Mail-Followup-To: "Rob Herring (Arm)" <robh@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Jeff Johnson <jjohnson@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Yang Xiwen <forbidden405@outlook.com>,
-	Alex Elder <elder@kernel.org>,
-	Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
-	Sibi Sankar <sibi.sankar@oss.qualcomm.com>,
-	Rao Mandadapu <quic_srivasam@quicinc.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Xu Yang <xu.yang_2@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
-	linux-wireless@vger.kernel.org, ath10k@lists.infradead.org,
-	ath11k@lists.infradead.org, linux-pci@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20260421195836.1547469-1-robh@kernel.org>
+	s=arc-20240116; t=1776801957; c=relaxed/simple;
+	bh=phULm1Ywed9W8M33T49Q6eS8se2Hvypqz3ZZdmbjhJM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tw4vr254WS5vqspxi3PDSAevI0CpOz0bCi6hJZo0WCe8A+fQDB7HFEMzOcuf5YieWoFKqIVLcHwWHWyE5pwLqX2tbx1mkgCJ2pNcHG+Zaoq02OW7U5GHs7Xj0/pXAAfErl6cfass/9DqbVNA+72DNApLHtxsXheIgyt6fFmQ0Yg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LfboG50J; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5a0ff30b240so6975946e87.0
+        for <linux-usb@vger.kernel.org>; Tue, 21 Apr 2026 13:05:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776801954; x=1777406754; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aK4izauZRRt/B/VXYkiUQKoI5K7lJzjxQ+RWvCNLSKk=;
+        b=LfboG50JLmVr+cFmySs7f1HhhIew/QilyA0gHA4pXVhSqqQq9W5Qtv0lEGdXZTRrCl
+         J7G3U5HWvFalRlTiwCLWoA2zNVZ+6DvHuSYO6d8aASyd8zfOzUVM1ki4N5GmKOjWjhee
+         5cgVNihXuWFoctzZ2ESS3+uLBPaZxqd4glk5C3Onm2qJgkRBnHRG/+Dyt3qR8sKXt9b2
+         ZJsWNY/JmB3IbVP8PGNQ19w51sjFmN/Y/9FKMuvWllbAtBlbhEHRQejuxVbCcYNfy0Hc
+         733uVBUofTxPifcjEpfYL3l/LbMP/9Fo10iz5YIv1vdHGdFCw9NC/9O8+K4ZmnhJtYSK
+         0hjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776801954; x=1777406754;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=aK4izauZRRt/B/VXYkiUQKoI5K7lJzjxQ+RWvCNLSKk=;
+        b=X8rNPqejo7bmhQEGXJWX9+Nq4wtxZ/dvBU6/uY3C8e0GLVLSNeR/KFAGbMzniRmD5c
+         AkWRV66Duc5KL6VaZl/rI+zLgMZ7iowxrwrGkGy/+tqElVgNzTQvSKOhj74LoIkXYE9q
+         RFxnTOqEoexT2m6I1ozRkCtEQDww2/sgnGpK4vh9p39JDVtGwRMg3P0xUChcIJl1Rwf8
+         3+SWJ4U0dJNrpse0lPOpv5xtuBLFwg4Sg8k+I5fbQvIB5bgoSQMLSjHgCwCeBokUJxoG
+         C7hjan1tatozC+/04MSTW1/VPOEMGE6y+dTJp+A3hCZ77V5JxbDhMlSs6eQFdYDcRmfB
+         p3eg==
+X-Forwarded-Encrypted: i=1; AFNElJ/UNzvzUatcmfe2z80AN9LpNtfObuPZBwzlLo2TsWsWD8MpgdOJg89N1aLgLXMWTYJsy/eBaL8JTag=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycTjWHS9BHlCKjw9QM+cDst8nj233fSkdMvjPZP4MjzAm+42EN
+	CZnVwEiuVyWRXSEaVmyFimR0aUKqEmuC7iqjTiKd4eBR4BwkoBsPibRz
+X-Gm-Gg: AeBDievJc84gr51ONOg3b/okM9AU5d3BkDj0XahhtlcbMrsQtubhkl/0IEtp2CibFO3
+	8PhR8gOH2dUps95cMleDTeelSHPUEihnpC3ACDcDiWw75DcN/YlevYoExTp2XAUZx5tlYR6UFqn
+	zYLNzMFxL3uywIojLthktmzlORBHKt53xZXbvJ+bD5kl5SxQi46t7/10uPVpXLtIZ8z2DfVzbL5
+	nR4WMHuF2CjdtGHF3OLQ9359RkN9r7vf0lXnM6IqWgN+Tbazn929JuUfDiqDe4davX/yBhdI/E+
+	ZDjvnsyIPMTXpMFXiszAOb86aSgVxM0b8tEnRx6e+aC2w7owLxdy8vFCws2RQ6tsTOlSmBqcuts
+	9yoKjguwal2T9m0xEtI5Dmze9JgV/2Lp4pr03Xp0e5VvLFnYIN4Wlk3BoXte2ja8dpVxUqQpGTo
+	uLmXfwn6AecEt0ACY3wZDOOqdkSCvbwAKY2JB1eNgDq9U=
+X-Received: by 2002:a05:6512:3b12:b0:5a3:f3a4:1aff with SMTP id 2adb3069b0e04-5a4172e87afmr5498771e87.38.1776801954040;
+        Tue, 21 Apr 2026 13:05:54 -0700 (PDT)
+Received: from foxbook (bfh75.neoplus.adsl.tpnet.pl. [83.28.45.75])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a4187e11ecsm3934256e87.47.2026.04.21.13.05.51
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 21 Apr 2026 13:05:52 -0700 (PDT)
+Date: Tue, 21 Apr 2026 22:05:47 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Morduan Zang <zhangdandan@uniontech.com>
+Cc: petkan@nucleusys.com, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, andrew+netdev@lunn.ch,
+ linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com, Zhan Jun
+ <zhanjun@uniontech.com>,
+ syzbot+3f46c095ac0ca048cb71@syzkaller.appspotmail.com
+Subject: Re: [PATCH] net: usb: rtl8150: fix use-after-free in
+ rtl8150_start_xmit()
+Message-ID: <20260421220547.2f7f9d85.michal.pecio@gmail.com>
+In-Reply-To: <73ACB7391A6DE033+20260421110412.14795-1-zhangdandan@uniontech.com>
+References: <73ACB7391A6DE033+20260421110412.14795-1-zhangdandan@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="SlEK5XXQLOw6MldA"
-Content-Disposition: inline
-In-Reply-To: <20260421195836.1547469-1-robh@kernel.org>
-X-Cookie: Jenkinson's Law:
-X-Spamd-Result: default: False [-2.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36401-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linux.intel.com,kernel.org,linaro.org,gerhold.net,lunn.ch,davemloft.net,google.com,redhat.com,sipsolutions.net,samsung.com,gmail.com,linuxfoundation.org,outlook.com,oss.qualcomm.com,quicinc.com,foss.st.com,nxp.com,suse.de,vger.kernel.org,lists.infradead.org];
-	RCPT_COUNT_TWELVE(0.00)[45];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	TAGGED_FROM(0.00)[bounces-36402-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[broonie@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt,netdev];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev,3f46c095ac0ca048cb71];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,sirena.org.uk:mid]
-X-Rspamd-Queue-Id: E45E843F337
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[uniontech.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 389DF43F4ED
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+On Tue, 21 Apr 2026 19:04:12 +0800, Morduan Zang wrote:
+> From: Zhan Jun <zhanjun@uniontech.com>
+> 
+> syzbot reported a KASAN slab-use-after-free read in rtl8150_start_xmit()
+> when accessing skb->len for tx statistics after usb_submit_urb() has
+> been called:
+> 
+>   BUG: KASAN: slab-use-after-free in rtl8150_start_xmit+0x71f/0x760
+>     drivers/net/usb/rtl8150.c:712
+>   Read of size 4 at addr ffff88810eb7a930 by task kworker/0:4/5226
+> 
+> The URB completion handler write_bulk_callback() frees the skb via
+> dev_kfree_skb_irq(dev->tx_skb). The URB may complete on another CPU
+> in softirq context before usb_submit_urb() returns in the submitter,
+> so by the time the submitter reads skb->len the skb has already been
+> queued to the per-CPU completion_queue and freed by net_tx_action():
+> 
+>   CPU A (xmit)                      CPU B (USB completion softirq)
+>   ------------                      ------------------------------
+>   dev->tx_skb = skb;
+>   usb_submit_urb()      --+
+>                           |-------> write_bulk_callback()
+>                           |           dev_kfree_skb_irq(dev->tx_skb)
+>                           |         net_tx_action()
+>                           |           napi_skb_cache_put()   <-- free
+>   netdev->stats.tx_bytes  |
+>     += skb->len;          <-- UAF read
+> 
+> Fix it by caching skb->len before submitting the URB and using the
+> cached value when updating the tx_bytes counter.
 
---SlEK5XXQLOw6MldA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Question:
+Is it correct that ETH_ZLEN padding isn't counted in tx_bytes?
 
-On Tue, Apr 21, 2026 at 02:55:25PM -0500, Rob Herring (Arm) wrote:
-> The unfortunately named 'phandle-array' property type is really a matrix
-> with phandle and fixed arg cells entries. A matrix property should have 2
-> levels of items constraints.
+> This mirrors the fix pattern used by other USB network drivers.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Which ones? I looked at a few and they either:
 
---SlEK5XXQLOw6MldA
-Content-Type: application/pgp-signature; name="signature.asc"
+- appear to have the same bug (kaweth)
+- update stats on URB completion, right before freeing skb
+- copy data out of skb, update stats, free skb before URB completion
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmnn10UACgkQJNaLcl1U
-h9C8Vgf/TIh3jOwQkzaSh+ITMEgUCeXAFPb4VUUhIGQS66939JxKIGlaCr8kVeam
-fIS+iyN8BAflGToJHouS473TERLm3pmQaKv4FHy2m/XW3E7aNKl/WZ6nuPJbZzLH
-jN5jU8h19JcMriiidDPn73PPnDdSLZHsxuegwuYvWjjutnanS7pzFFJnvB5FqglH
-DmQVRssnzzYzUBCLII2ARQtKPwTAkv1thWPjVRwXU0AxPSrEWA2+9xpNDedbe86f
-gZJyKDlrKgAXce/tnTDNOJYTUAUwUf66KgGMWLOjfRI+tbwsRV/Z1s6TbSIGgVif
-0AXVOMGUdqpfkYJFeGJGk/8tGGdtZw==
-=Hh8L
------END PGP SIGNATURE-----
-
---SlEK5XXQLOw6MldA--
+Regards,
+Michal
 
