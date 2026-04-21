@@ -1,130 +1,181 @@
-Return-Path: <linux-usb+bounces-36393-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36394-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eBPiN8tv52ke8AEAu9opvQ
-	(envelope-from <linux-usb+bounces-36393-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 14:38:35 +0200
+	id ICFnOdWF52m+9gEAu9opvQ
+	(envelope-from <linux-usb+bounces-36394-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 16:12:37 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 564C043AB95
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 14:38:35 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B94C43BD0D
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 16:12:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 49CB63049786
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 12:34:59 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 309AF30241AA
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 14:10:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8EE3D3009;
-	Tue, 21 Apr 2026 12:34:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 280AB3D6CB8;
+	Tue, 21 Apr 2026 14:10:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="f8uIoB+l"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YhcDVgzC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B8FB34CDD;
-	Tue, 21 Apr 2026 12:34:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828F13D7D76
+	for <linux-usb@vger.kernel.org>; Tue, 21 Apr 2026 14:10:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776774894; cv=none; b=DFdgw1FcXMPzZfErTX0lPKcGHxF2fGmBJtLjiz0wbU7XfXW3/pxWwdriEaOCZ8NyZQrQ4gXkS7VxyQzIWv3xoDaGCEEuhFxWpoVkVcneLr0HZ9OJj0j7Cebp5/tekMOqIip1ntuBziFsuApH8UIlHOQm75IvFE/657DeEKyHAQo=
+	t=1776780621; cv=none; b=jADTVSjc0jsFLShD6mdGzF0x2x1ihcal/SImtipcc2hUFKtOtn5RmCOE3YrtsNdAeeINRyK+cwutIxVjumgAVY4zEZw5hf4xhFyMVeWcU4bS7Osa+qLBkAcNdFJV2Yh2zIC55Gl+HgKl/rhMqlW/hIJ0ayDM2mF5JhKBnKJDYT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776774894; c=relaxed/simple;
-	bh=rwsA0pldTCqnZF90Sq2pS3bZwkJCbwSzoNZXgZew500=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mk1PODZiyWzoh6F+Dgsh1Is2/UVuMcbANSGvV0YmSlX02swui+Mo0FoM9zraZ6ibglt0hCWtH3yZqE6JgZvVsM2kB0x3AomIOeF0ToGNRY4P9azkE7u+MwZqNPKax9K/X8h3Jl2e7U8OE6yYZ/8aBWA914S/cmO/iJFGNHERY4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=f8uIoB+l; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=eQZ7su/6OU1So8UuL+bxoFXHxezoh2xag7pgncwwvlE=; b=f8uIoB+liwnukidODaj7xp9eyM
-	n2K+rbbrM70JrLUxvVxaPWylYzGaf6IyqqR0Dv9C1DZgd+N5qJRNIDM0V4IFc/U9qDFPklLkH6FIj
-	NB3bVl5SYMcrn6+yMgvjTyIoDT4wB+pf9BDiUE4kNqzUR/jOsEkLrgIWtJbg7Wrgqs8c=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1wFAJP-00GtN3-UJ; Tue, 21 Apr 2026 14:34:43 +0200
-Date: Tue, 21 Apr 2026 14:34:43 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Morduan Zang <zhangdandan@uniontech.com>
-Cc: Petko Manolov <petkan@nucleusys.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: rtl8150: free skb on usb_submit_urb() failure
- in xmit
-Message-ID: <a5d743ed-d1db-401d-a3cb-2986a08b98bb@lunn.ch>
-References: <678BC10BB9E39322+20260421111025.15833-1-zhangdandan@uniontech.com>
+	s=arc-20240116; t=1776780621; c=relaxed/simple;
+	bh=kIm5kH85UH7+YNKd5iqnnO1F9CcZhlSMdP4GNhN/Tck=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KUP74w+X3yTpygz/H1AAI8VNIXGnvzL48ABMR5fqT8UarzHxURYmBxPkuJigDWo+UKR2ArhwTbYrEaXrEmstxX30zpHxJ/R6YzMYHnqxHBibhCONF265dDvllNCFVPQZL64xaknTc9hfD0B68BcGIgcWkuE0EMmrcAMfT6htvcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YhcDVgzC; arc=none smtp.client-ip=74.125.82.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-12c6df0b9bbso401104c88.1
+        for <linux-usb@vger.kernel.org>; Tue, 21 Apr 2026 07:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776780619; x=1777385419; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qY87NJeBopBZl+AvWsat0W4p5pkhAeY8QFNi7OA2YE0=;
+        b=YhcDVgzCYZ9mHwwA07q2HfXzqGm6Tfld5Hlt+8ux6yxRh2gL/43tYtShuSiZ35XxUG
+         jRMV9Go/GF6JmNISgFfq28ZSEzTfZKfMwYcDCOIChpMkl0NlS58bpsX/l/Fq5rbiKrQq
+         KLbKlMOpOWizjYaYUHaoBcnBfZMdb32HpN5lq/PHoKeFHC/TaMHZg+Dv3jBjrGKVZW3o
+         4n1BZ+bO/4x8+OwJT9nbEDdVK5kDRfyi2EfOIiyMOCCVfVTP2S4/5LnIqPVsute6DimE
+         hdfZ7HVGoxDt36h2Zx71+fa23TO8qBD4BSkr/p7bT+E6dyJd3nxuy40CmlgmivYL9G3u
+         /zfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776780619; x=1777385419;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qY87NJeBopBZl+AvWsat0W4p5pkhAeY8QFNi7OA2YE0=;
+        b=f8/ik2nCa+WTSodPoYgRYp6l8BHnJth2O0ltAvadzVJ5I/p2LbYIONF/Fw6fzNE8zP
+         6txpcl97jYHpojfBJYlttMgtgU2cwWPDWu/k1MiTj85IMfrmad6kBEBammtVnvVUob8C
+         aCGG7watP4mRSLb5aEM6NzIuTrR9ZYVXL8Supg+dHVib9C6he598wKwsZ9b5VqDXquE9
+         Cm+Vt8EJMc/jI4pz2jBoc08vV4tpp0xEPxlix5PeQef2bzsfT1iRRm+S93zWUhgrHfkY
+         /PRhJ71Cb0fbX8447rCcdplx7IYF2c1O3fY72Re+8JvSh0iLDxosQt6+DzMzftmzChCb
+         CEog==
+X-Gm-Message-State: AOJu0Yz6Xn5xmNiThCnZaR+Qfat6iKGWxh5pebICw3ZkAeukAd7XZxi9
+	b4kYBH8zsojIN3et0eZZSBF50xOLyluwUbxGoGUQQGlKFED0i1b6NoN4
+X-Gm-Gg: AeBDieu5pW1U7Q6ry0jCo7NmlPZNEC98tFvPc4y5DDkeK4Z9mVwsRM4UylckXl1cSuZ
+	/O6p9+z+S3rqb0DhCyz9zeJLXBLiUyAtLV0fPB3STjQqSUKlsqfwVgDdwLoddKy3C/kxS5KJASF
+	mLiH0BtZcTOiHvFeOK7fVLenUK7zGQ+pLWrNaUUUMkdajRaKg1NHEGaekLw6z/ZIIy6FBaYjZSA
+	4ZCysFypjy0hF69HXI2WC9dMwun9/qVGTufN32mjvTEuifeJ7N9vL2AS6Um9tG8kJj4CyxNIuAu
+	XcuSgv+Fd+/ns9Q2wpvtnIgogt2XwxA0scACtMLknDw5TBaYt0DfI9hAP47vHz2Z3GsCSjvwGkn
+	mjk0NxmnU6hhkjYu3Kp58kPyMA2qVCWYkKsktm0selX9xjXIdfhlNGw6WrQKFJITTQJVnVOjQXW
+	w2ZtNxHx55zmd0DZhtcmAl4WF1rEdXcG7A+VRnW49YTxKdJvmAY8awOmTMxLFROuHAjPJntCsGN
+	QKeqdB9
+X-Received: by 2002:a05:7022:6988:b0:128:bae0:e03c with SMTP id a92af1059eb24-12c73fac23bmr9805997c88.30.1776780619321;
+        Tue, 21 Apr 2026 07:10:19 -0700 (PDT)
+Received: from localhost.localdomain ([159.54.180.171])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c831d5b29sm17997432c88.8.2026.04.21.07.10.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2026 07:10:18 -0700 (PDT)
+From: Bingquan Chen <patzilla007@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	security@kernel.org,
+	Bingquan Chen <patzilla007@gmail.com>
+Subject: [PATCH] usb: gadget: configfs: fix 1-byte OOB read in ext_prop_data_show()
+Date: Tue, 21 Apr 2026 22:10:10 +0800
+Message-ID: <20260421141010.5607-1-patzilla007@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <678BC10BB9E39322+20260421111025.15833-1-zhangdandan@uniontech.com>
+Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[lunn.ch,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[lunn.ch:s=20171124];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36393-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-36394-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[lunn.ch:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andrew@lunn.ch,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,uniontech.com:email,lunn.ch:email,lunn.ch:dkim,lunn.ch:mid]
-X-Rspamd-Queue-Id: 564C043AB95
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[patzilla007@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4B94C43BD0D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Apr 21, 2026 at 07:10:25PM +0800, Morduan Zang wrote:
-> When rtl8150_start_xmit() fails to submit the tx URB, the URB is never
-> handed to the USB core and write_bulk_callback() will not run.  The
-> driver returns NETDEV_TX_OK, which tells the networking stack that the
-> skb has been consumed, but nothing actually frees the skb on this
-> error path:
-> 
->   dev->tx_skb = skb;
->   ...
->   if ((res = usb_submit_urb(dev->tx_urb, GFP_ATOMIC))) {
->           ...
->           /* no kfree_skb here */
->   }
->   return NETDEV_TX_OK;
-> 
-> This leaks the skb on every submit failure and also leaves dev->tx_skb
-> pointing at memory that the driver itself may later free, which is
-> fragile.
-> 
-> Free the skb with dev_kfree_skb_any() in the error path and clear
-> dev->tx_skb so no stale pointer is left behind.
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Morduan Zang <zhangdandan@uniontech.com>
+In ext_prop_data_store(), for unicode property types, the data buffer
+is allocated via kmemdup() with size 'len', but data_len is inflated
+to len*2+2 to account for the UTF-16 encoding and a 2-byte null
+terminator. The null terminator is not actually stored in the data
+buffer.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+When ext_prop_data_show() reads the data back, it computes the read
+length as data_len >> 1 = len+1, then does memcpy(page, data, len+1),
+reading 1 byte past the allocated buffer. This is a slab-out-of-bounds
+read that leaks 1 byte of adjacent heap data to userspace via configfs.
 
-    Andrew
+KASAN report (5.10.252):
+
+  BUG: KASAN: slab-out-of-bounds in ext_prop_data_show+0x4a/0x60
+  Read of size 9 at addr ffff888005546008 by task poc/62
+
+  Allocated by task 62:
+   kmemdup+0x17/0x40
+   ext_prop_data_store+0x52/0x130
+   configfs_write_file+0x168/0x200
+
+  The buggy address belongs to the object at ffff888005546008
+   which belongs to the cache kmalloc-8 of size 8
+
+Fix by allocating len+1 bytes and null-terminating the buffer, so the
+extra byte read in show() returns a known-zero byte instead of
+adjacent slab data.
+
+Fixes: 7419485f197c ("usb: gadget: configfs: OS Extended Properties descriptors support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Bingquan Chen <patzilla007@gmail.com>
+---
+ drivers/usb/gadget/configfs.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 183a25f65ac8..a1b2c3d4e5f6 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -1352,8 +1352,11 @@ static ssize_t ext_prop_data_store(struct config_item *item,
+
+ 	if (page[len - 1] == '\n' || page[len - 1] == '\0')
+ 		--len;
+-	new_data = kmemdup(page, len, GFP_KERNEL);
++	new_data = kmalloc(len + 1, GFP_KERNEL);
+ 	if (!new_data)
+ 		return -ENOMEM;
++	memcpy(new_data, page, len);
++	new_data[len] = '\0';
+
+ 	if (desc->opts_mutex)
+--
+2.43.0
 
