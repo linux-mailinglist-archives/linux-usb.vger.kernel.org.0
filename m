@@ -1,256 +1,220 @@
-Return-Path: <linux-usb+bounces-36371-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36372-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8OrEMgK55mlJ0AEAu9opvQ
-	(envelope-from <linux-usb+bounces-36371-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 01:38:42 +0200
+	id ACf8CZzi5mmr1gEAu9opvQ
+	(envelope-from <linux-usb+bounces-36372-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 04:36:12 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 317EC434EA7
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 01:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 86BD4435862
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 04:36:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 454823065887
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2026 23:34:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A4566301F9D1
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2026 02:35:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD15A3CF049;
-	Mon, 20 Apr 2026 23:34:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="HpvBvE1Q";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="cLxn6V8o"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8746280329;
+	Tue, 21 Apr 2026 02:35:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11022127.outbound.protection.outlook.com [40.107.75.127])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9E33CD8CB
-	for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 23:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776728045; cv=none; b=WZ1/y6V5rzTJGXkUVNRLBN2RcFs9YzfNt0dHpmcsaLl88lNq7s0FE6naMjuXbpLVHVj7/4SjLfl4jv953muo2AhyK8jHKOOb3GhE3/K8mE6IQkdqeIP/pyGi3U6YvDUEmHMzsVTe8H4PTYY8GkJy9e5r/+YPw1Nn8m1skGY36KI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776728045; c=relaxed/simple;
-	bh=mxGolAt7ROQ681cKNciUMVefMdiRDsSwC5zox5THv9w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=spdvkJTNClQG4T2f12YpU1jX+zyS/Mq4L8kQa/tqdIz6ESEvHLehytAtx2iYGpYsouHKxD0Zfj0ah74xotNbKQ54CqMAU9dZ/2yOCWlfk6PP7n5AtqvIOiRWdGL7AjfUl7IU92S87Rf+uTwyouhQhXPx/1MAKkaykmFGA0xhafE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=HpvBvE1Q; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=cLxn6V8o; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63KIrKHd3455270
-	for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 23:34:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	li1QTXDLKUg9Sb2Wzb5S3vgbZrLxrrKq59N8rWxZa0g=; b=HpvBvE1QLHNxgFMc
-	QoUecGt/rJg9vNlE4G4+5je7Lv52Wc44BKL4NREup+GtkJlzefSb9vMblGPkSi07
-	ssTeEQHMaSu89LcWDOxAHa/PJL+Yf8BE0ke+O2jJfO0FpawHKOcX1KLkIqHvcn1E
-	gBG+0dRkFjFCmb1LR8re7MIJVF4MmVbox0mXkUWK8uWMxtq09/mu9qzVtW9uZkZA
-	xv+A/lnE9lVAnDglO/OJuphfp2iKqnhgqrn6HY4ejWe8pYxvZxopCN2STQcdgeP8
-	I2cyMh/ZdSD8PqhlianfkMpq4FGHhh37vXF/fTe9/kimWd6Q1USMiJ9QOyLukYDL
-	czPPFw==
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dnfvjufeu-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 23:34:00 +0000 (GMT)
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-8aca29dcd69so90577666d6.1
-        for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2026 16:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1776728040; x=1777332840; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=li1QTXDLKUg9Sb2Wzb5S3vgbZrLxrrKq59N8rWxZa0g=;
-        b=cLxn6V8orZuinT8B3D9DZyz3wfumGzTN5OrYuG47hpkOCs5g5U7V9kV5QXGQBmGEcM
-         qQJ4dkODmbavBzVAhUi26jgTGCZ4ATZ8BHOy5047Bg3hq1yiOvebuO1pdWseABVnO1Wb
-         v24iwQt25hZ/Rm089H2N4fC+hJ6R8QBzTBzR36Hw/D3ahKVSwTyl2IRi/dKbcIAAQBFp
-         JI4I+y3x+NmLOYBNOkQkymMMtN/Ex47RuFISWbqtg1wiOsIaBPuUWVJwpRHBa91Nufeq
-         j1I4T+vYPp0wYCqAYQjYmRlEgftP2ekJq6keDE9N7KGbUTFBAVdWdg6OjuYbAo3Iwbvj
-         KDfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776728040; x=1777332840;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=li1QTXDLKUg9Sb2Wzb5S3vgbZrLxrrKq59N8rWxZa0g=;
-        b=EQtn9pGWIMYQgsbgbM+xemz7avtxGsjo8Lq3pSwDLeHdbb5fdunVdaD/IYa0gcOCCO
-         YGZI6PztrE9lp3AK70pwiNnX7kGz1xzzq7G+vf6YmnyHKYVxbZns16mQS214glNUtNZa
-         canrN+0TyJis382IJxZlldPsbSlbXue7bt0Mp14m0i//5ihcnAHhp8S4q2Fs8X2x+b4H
-         dvIuLyKZa+ODc/6nh7/PhnNCQlYhszVqUoVkmbg2ATZPirnZ3xdwXAvDx+UiKEJEMKy7
-         n8Firp8PxLho+Efk4zJ+/wQVUJ8ckcHI41FgXM/Hbeqf0eT5ylF+BMYolcr7Y1/y5zy4
-         FZmg==
-X-Forwarded-Encrypted: i=1; AFNElJ9+SuQeia15nV5QLr0SaxcQFUBRcJVjw4qIjnzBaa70zIIrPoPvivarlnFzRp/IxDX3VoAkkyZHLBU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxiQfqWpWDutJ+BOqZODew1LWmYniugLRcrr73FI+eZP1/Tbjh3
-	c6ZAFGmedeN4WkCu0ZljMZdkr2bnYY9jjMeAVzg4obzDhgbhErPuQ5v+LUKTe10H37S+12lIRMQ
-	vnCil8kBSNd1xjfU2urEHDFTHAN5iTbk2LlIHYfzpyiikkDWgHXBL4E5hCj7X9xs=
-X-Gm-Gg: AeBDieuwcguY/r61U/m/omLdhEwn8EVoYhJrWbfCQW0AmqwDx8jqeWLtQHJDo19pa5V
-	tJrNM6q79uCYUt+0VzKxedI4LcAlZru/6OmKaAl46l+Zi3QMygsJmR8t7Tv9mUz2fD0wAg6TU7s
-	PF7IxIFrV51egMpQLotx0f3XbNM+kJeAm0Z4Ko7H8DlPZGwF7wS4ma26nioXs8VWscWDM0KA7qa
-	UuRsgODv40mtmSP73sGCnYKNRpM9+fXZudH1wOqEjt3y5r2b5AkOGoZNpi64XF0ZhnZ8vRN9+D1
-	J4a1fKyEXkOD0uY3J85fSb5FNQ9xllvhPdqHWrDNhnfXJhEJtVZlscWuztVFg8ZK/1Xkt4Ljp6V
-	4LMo9CDuPvJf+yl5masUJeXjH4q2uuD1IRlDhkP0AqzqNdlvJIv2uuZ0bcQfBeGETLA2e6eWAn2
-	IuR6z8n/uGxJzSp/l4TKYe3kuhMcEe+6tKkUXNbgkisRkEwQ==
-X-Received: by 2002:a05:622a:4245:b0:50d:8056:da41 with SMTP id d75a77b69052e-50e36836149mr208589711cf.2.1776728040276;
-        Mon, 20 Apr 2026 16:34:00 -0700 (PDT)
-X-Received: by 2002:a05:622a:4245:b0:50d:8056:da41 with SMTP id d75a77b69052e-50e36836149mr208589331cf.2.1776728039743;
-        Mon, 20 Apr 2026 16:33:59 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a4185bc627sm3320714e87.29.2026.04.20.16.33.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2026 16:33:57 -0700 (PDT)
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Date: Tue, 21 Apr 2026 02:33:36 +0300
-Subject: [PATCH v3 6/6] usb: typec: ucsi: huawei-gaokun: pass down HPD_IRQ
- events
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715F5242D67;
+	Tue, 21 Apr 2026 02:35:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.127
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776738907; cv=fail; b=IMv8T0Hr6qpt8hG0zUa1WUtBiqMDOy4iQSc+C5R20yy+mW3Ed6YI95u1vRFfluEwmiNu1jacHMK+ajEItbf2qwIKOxm8R5HD81Uw9ZX92t3Y70OrVn8MoR0cmLyIxtW53avx8CtrE1C1E08suYpod7xI55w/A3fw7iFEjuzzG4Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776738907; c=relaxed/simple;
+	bh=4yPi1kJ3h4w/pvKqYuA29bVzO4lpXzs435YQUSAKy9Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Zi/O/nhHklWiMg7sC5drhg3+K7Ct7/NBikXIxX1RcPVx56RMs91QQE/cS34fd1G6PMDQMAoICfUD6Lh8pWEzISu/Sf19BJaVreUKuN9j9d4NODkTahVehhJtmsR9ryASKXqx+3MH/IPb/s9jr+d9rShxKPmcceHmTaCqxuIIoZg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com; spf=pass smtp.mailfrom=cixtech.com; arc=fail smtp.client-ip=40.107.75.127
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cixtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MzYRjVvbxr3xl8NMV0+Ar76vRwAPO+t0ifpbENbNnN9sv2mp/UX4z7SBz54+/vHfrahSwZjH5yP25CCkY2Z7AiUbL24IVvguAhJV1ePiizX1TdvYZRjExf6HUTI89yQN+VhfvICxWvlT+RAUwPSyYSXoDkbc75loT7vthEXgpjO7RitD8+/pFvVygwCDhY/GNY7e6KiK+L9woklhcPBKF6HxbGuVWSCsi1uE6f1EEdVOpGI0AlTAMeV4EBvA8BBSg6YeleP5knmVLV9ZYdM1o5yz+wm3HUkisyxfvzjOvVmwz1WaTeRjJ50hZGChTR7QOc+IcGaU6hGiLHmTxy63Jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Fcw9HdpdZhZxreJQ5CNFu0Y9x+TPNxuX0hDC1J+8fn0=;
+ b=V+6dwSki+v/sKOowSwiYYFGARy6wj6Ws5fo2v/1vzkpNhsFWnjf/7m09pDv2/1W8VOkldKodJG32iRcdMiPLi25E00ahP0DFQ1N3+D1d6Gov6gMcSbJ9Ti/uv8ZAbO5JPxVA4+w7//kvwESChdGiEXmtcd7RAWQTYv2Qultuq4mRFLJKi1zGORva25acSwm39NneVCQ6E82a4IyM/g6FZ+gF3mnVs/xazGc9GZS9em+HIOIQYXqc5EXOyYV1qFa+/JuBQeO7NHU+2lMPG2ACmSBKUL3qz4ouoKjObcmtKWo09lVy6ppJaDFuAXAOWLSP929PEDiOsgKhIxnjm/MaLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 222.71.101.198) smtp.rcpttodomain=arndb.de smtp.mailfrom=cixtech.com;
+ dmarc=bestguesspass action=none header.from=cixtech.com; dkim=none (message
+ not signed); arc=none (0)
+Received: from SI2PR02CA0009.apcprd02.prod.outlook.com (2603:1096:4:194::11)
+ by KL1PR06MB6555.apcprd06.prod.outlook.com (2603:1096:820:f1::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9818.33; Tue, 21 Apr
+ 2026 02:35:01 +0000
+Received: from OSA0EPF000000CC.apcprd02.prod.outlook.com
+ (2603:1096:4:194:cafe::48) by SI2PR02CA0009.outlook.office365.com
+ (2603:1096:4:194::11) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9791.48 via Frontend Transport; Tue,
+ 21 Apr 2026 02:35:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 222.71.101.198)
+ smtp.mailfrom=cixtech.com; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none header.from=cixtech.com;
+Received-SPF: Pass (protection.outlook.com: domain of cixtech.com designates
+ 222.71.101.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=222.71.101.198; helo=smtprelay.cixcomputing.com; pr=C
+Received: from smtprelay.cixcomputing.com (222.71.101.198) by
+ OSA0EPF000000CC.mail.protection.outlook.com (10.167.240.58) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9791.48 via Frontend Transport; Tue, 21 Apr 2026 02:35:00 +0000
+Received: from nchen-desktop (unknown [172.16.64.25])
+	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id 63B554079A20;
+	Tue, 21 Apr 2026 10:34:59 +0800 (CST)
+From: Peter Chen <peter.chen@cixtech.com>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	arnd@arndb.de,
+	gregkh@linuxfoundation.org,
+	pawell@cadence.com,
+	rogerq@kernel.org
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	cix-kernel-upstream@cixtech.com,
+	Peter Chen <peter.chen@cixtech.com>
+Subject: [PATCH v3 0/2] usb: cdns3: USBSSP platform driver support
+Date: Tue, 21 Apr 2026 10:34:57 +0800
+Message-ID: <20260421023459.506145-1-peter.chen@cixtech.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260421-hpd-irq-events-v3-6-44d2bf40dfc2@oss.qualcomm.com>
-References: <20260421-hpd-irq-events-v3-0-44d2bf40dfc2@oss.qualcomm.com>
-In-Reply-To: <20260421-hpd-irq-events-v3-0-44d2bf40dfc2@oss.qualcomm.com>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Adrien Grassein <adrien.grassein@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tursulin@ursulin.net>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Clark <robin.clark@oss.qualcomm.com>,
-        Dmitry Baryshkov <lumag@kernel.org>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Pengyu Luo <mitltlatltl@gmail.com>, Nikita Travkin <nikita@trvn.ru>,
-        Yongxing Mou <yongxing.mou@oss.qualcomm.com>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        intel-xe@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org
-X-Mailer: b4 0.15.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1309;
- i=dmitry.baryshkov@oss.qualcomm.com; h=from:subject:message-id;
- bh=mxGolAt7ROQ681cKNciUMVefMdiRDsSwC5zox5THv9w=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBp5rfNcYA6Kn6vJQasDmoVbhaWkp9oc1LDRkXYb
- fBIXvmCUy2JATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCaea3zQAKCRCLPIo+Aiko
- 1R4BB/9GohI0ZFgi+xqrkYGMe/3Udg5Nue1jmSANu/Otqvi7uD155XM2P9LxdiNxtumuSBIOZV0
- ZM2YwJ0094hTPQVf33GGO2TTcvusZV5uQYJ6XLsZYcjreXdNaU7hK/gy3K8J4CDrGah5ai3YG9m
- YPp1Ywnej+ym0q/P04Fko3yj+I+nVVhCJX0grp75+IBHoxlXcN3UQoN52HycYjjeL4oagQReQym
- NR8P+cZwdhtT8RR8dl13lWVTAt92Z7A+IJLUpzga0kyQWAuxOxI4W8RLlO1AGkhOTjPYzfNV+2S
- 1iHdUU4TuohfcHIGhYbTI1erKqCzoEvMrcoEnptsZKObh68L
-X-Developer-Key: i=dmitry.baryshkov@oss.qualcomm.com; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
-X-Proofpoint-ORIG-GUID: 3AtyQQOsgcfEmxJhbGVohvuylIVOQ74a
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDIwMDIzMCBTYWx0ZWRfX1feE1HAO3JSb
- r0FHihMjgRF7PLJkN6dzHrq92B24CRXgunfXUlGqSoXYZAA7lM6u7V9qyDzQo7UQeTgAMrHV0fu
- LMwf0h9gLYGf4ksqYG/2YXple17cocBkWLaq4lrpmAK++VibLIit8K68zmTEzG73k0LJnq+E6HY
- U/bYfLtEFEEzsrKlCGi66IeQeyuJJJS5F2M2rGWNvDIihH0tf0Y5tV5MDYyFyVSf68fMyh93UWq
- dXiVE8T0ZX3HPwb0fv6ggkVudZXE9jmnBcaDPL+1fshAePD5m+HP1JzZ2eH6MmeqZ3LAhWS/6AE
- sEOOgfmN3EGQFM1KlAtfW+sWvxVm6s+UWP3KRRwA7apwAGCFLwG2gBokzZ/tH3ktLZFenibRFQD
- 6IfawbZ996Ddc2rv2q3AMJ/wvioM3eM4TpU2xK34ITWercdqrQXs8hh6jGdzxQ+Gv/FZzF74Jxo
- MjBlWdY6XkT13bGMNXw==
-X-Authority-Analysis: v=2.4 cv=XNMAjwhE c=1 sm=1 tr=0 ts=69e6b7e8 cx=c_pps
- a=UgVkIMxJMSkC9lv97toC5g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22 a=pGLkceISAAAA:8
- a=QyXUC8HyAAAA:8 a=EUspDBNiAAAA:8 a=xNxaoOyMFJLcTYWjjPMA:9 a=QEXdDO2ut3YA:10
- a=1HOtulTD9v-eNWfpl4qZ:22
-X-Proofpoint-GUID: 3AtyQQOsgcfEmxJhbGVohvuylIVOQ74a
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-20_04,2026-04-20_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 adultscore=0 impostorscore=0 suspectscore=0 clxscore=1015
- phishscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604200230
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: OSA0EPF000000CC:EE_|KL1PR06MB6555:EE_
+X-MS-Office365-Filtering-Correlation-Id: 149167b3-5e92-4d73-6dda-08de9f4e95e6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|36860700016|7416014|1800799024|56012099003|18002099003|11006099003;
+X-Microsoft-Antispam-Message-Info:
+	lJPpwHhVYzZgTCV+rgD1iUvBt07kDCrmRKkUVDVnRR5AjiOow3C89ka9bpYzFJyDHC0H9BMvVCxyXdRQxkqCtjCTpW3jsUJ/C/LBrrR/bxjLVcr6K2fHpUFkFYlzefoEHAFXyMZ8cYMzYNO0SvX4piQhI2pulOm9KfwlutzIun23bDpk3MTB+IwKbTQZuNUVpQuWK6Ba4sv2xjUnpc4RsSTEbKTpV9vd/1eneY6j3X8+D8h+QuwfJ7tqgvqt7Jn5Hqqs3JDovfGhAYhgheI/mlhv+cyQ0LqIrchm3zKOIc7gT+RD4C0KqvmA+gUJtBe8woiUYRjzcoLg3mujgKVrIFzm1YhVBXNc5YLlf/I0zXc5I4/DcYIfnQu3k31CbP/AQ3Q0BXIv73w/9oxDLxD5IJ7oEjn+6CU1tsDCgnljSjxhSG3lTkUDzx6CfwxjtRKAJqI51pv0GsXKaY/Rb3a6y/dLTlniUPkfAYWFtUyM/y8XZcGTkxASnkFk1nRveAHvoDgwdTFaWH3O30xeUBcrVIS97a0JulVXOKux9vSPwXR8wmuD8cUuLzHiTr27WpAW3Kfp/i6hkvHKVSp4z4CqJqPbxapZIXvFgIhGNqjHsP7N8dl4ZvEhMsUr0Zgc0RgUxGjjqsk1f11rQcgHmn1XHKba1BlAj/S6HouD1PcWmm/FK583fpWt4Bw2dMExpxUtI7GCyqMOCjS2U3e6VnvetSikfZwKPCg9gcYNTgsuxhv0ZWMqyAW84ETvXEKONHdtLsItfyFtou74qAlR4n1Rdg==
+X-Forefront-Antispam-Report:
+	CIP:222.71.101.198;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtprelay.cixcomputing.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700016)(7416014)(1800799024)(56012099003)(18002099003)(11006099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	yyor9QaIACsX7z28nsFKWJ3zcajgMhOjHa99VDNtocdfV3dLmt/KQe71WHGE+sRwz0wHMbqdU+Sjbht80yy9XA9QF7WgJUjqnzbe/AEPlH2szLh4bsfPhz6QoPERqhikXExWx+qHeXfJpp0EmX/EEvuUiolf9lZ7TdCYd6hmFFQqKgwYyh2m8mNtX5cInrK8Z7dR41gH6mJq6NEoBrsGEh/eTaSAAyCusKzvvgR//tuBuYhAWmFm7mSkMPkYmZkzhcjwbFKye9+NKVitywuSqv6ipdMzOsXx/n9ZiSnoAw7P47cmlBeTbqRhIyJpgiB5f/HV5X3TFcSKs+OH5LgQy8y4EJQ2bhniuouyuOKl6W4QwEWERS602WAzjOc/sRw5qJaIDy0TkOV8nZCCmkW0TR2wSGlvq4uuTUIMJA2g3KR+riT7YhlB3s38iqVR9RYn
+X-OriginatorOrg: cixtech.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2026 02:35:00.2127
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 149167b3-5e92-4d73-6dda-08de9f4e95e6
+X-MS-Exchange-CrossTenant-Id: 0409f77a-e53d-4d23-943e-ccade7cb4811
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0409f77a-e53d-4d23-943e-ccade7cb4811;Ip=[222.71.101.198];Helo=[smtprelay.cixcomputing.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	OSA0EPF000000CC.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB6555
+X-Spamd-Result: default: False [3.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_CONTAINS_FROM(1.00)[];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36371-lists,linux-usb=lfdr.de];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,linuxfoundation.org,intel.com,linaro.org,ideasonboard.com,kwiboo.se,ursulin.net,baylibre.com,googlemail.com,oss.qualcomm.com,linux.dev,poorly.run,somainline.org,trvn.ru];
-	RCPT_COUNT_TWELVE(0.00)[42];
 	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,oss.qualcomm.com:dkim,oss.qualcomm.com:mid,qualcomm.com:dkim,qualcomm.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-36372-lists,linux-usb=lfdr.de];
+	DMARC_NA(0.00)[cixtech.com];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dmitry.baryshkov@oss.qualcomm.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[peter.chen@cixtech.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	R_DKIM_NA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 317EC434EA7
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,cixtech.com:mid]
+X-Rspamd-Queue-Id: 86BD4435862
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Pass IRQ_HPD events to the HPD bridge, letting those to be delivered to
-the DisplayPort driver.
+This series adds platform driver support for the Cadence USBSSP (CDNSP)
+controller, which was previously only accessible through PCI.  The USBSSP
+controller is auto-detected at runtime by reading the DRD/OTG Device ID
+register; both USBSS and USBSSP use the "cdns,usb3" compatible string
+(binding update in patch 1).
 
-Reviewed-by: Pengyu Luo <mitltlatltl@gmail.com>
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
----
- drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+Changes since v2 (vs the v2 series on list)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-index ca749fde49bd..5e3f887ecbd8 100644
---- a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-+++ b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-@@ -299,10 +299,13 @@ static void gaokun_ucsi_handle_altmode(struct gaokun_ucsi_port *port)
- 
- 	/* UCSI callback .connector_status() have set orientation */
- 	if (port->bridge)
--		drm_aux_hpd_bridge_notify(&port->bridge->dev,
--					  port->hpd_state ?
--					  connector_status_connected :
--					  connector_status_disconnected);
-+		drm_aux_hpd_bridge_notify_extra(&port->bridge->dev,
-+						port->hpd_state ?
-+						connector_status_connected :
-+						connector_status_disconnected,
-+						port->hpd_irq ?
-+						DRM_CONNECTOR_DP_IRQ_HPD :
-+						DRM_CONNECTOR_NO_EXTRA_STATUS);
- 
- 	gaokun_ec_ucsi_pan_ack(uec->ec, port->idx);
- }
+v2 split CONFIG_USB_CDNSP into its own cdnsp.ko-style path and built
+cdns3-plat as a standalone module next to cdns-usb-common.  v3 folds the
+integration back into one driver module:
+
+ - Single cdns.ko (CONFIG_USB_CDNS3) bundles core, DRD, the generic
+   cdns3-plat binding, optional host.o (CONFIG_USB_CDNS3_HOST) and optional
+   gadget objects (CONFIG_USB_CDNS3_GADGET).  SoC and PCI glue stay
+   separate small .ko files.
+
+ - CONFIG_USB_CDNS_SUPPORT depends on USB and USB_GADGET using the usual
+   pattern (depends on USB || USB_GADGET; depends on USB if !USB_GADGET;
+   depends on USB_GADGET if !USB) so the umbrella tracks host or gadget
+   when either is built as a module (Suggested-by: Arnd Bergmann).
+
+ - USB_CDNS3_HOST / USB_CDNS3_GADGET are matched to the cdns.ko tristate
+   with USB=USB_CDNS3 and USB_GADGET=USB_CDNS3 instead of tying gadget
+   only to CONFIG_USB_CDNS_SUPPORT, which mis-handled =y / =m splits when
+   CONFIG_USB_CDNS_SUPPORT=y but CONFIG_USB_CDNS3=m.
+
+ - Drop CONFIG_USB_CDNS_HOST; Makefile and host-export.h use
+   CONFIG_USB_CDNS3_HOST only.
+
+ - gadget-export.h uses IS_ENABLED(CONFIG_USB_CDNS3_GADGET) for stubs now
+   that gadget is a bool compiled into the unified module (v2 used
+   IS_REACHABLE on separate CONFIG_USB_CDNS3 / CONFIG_USB_CDNSP tristates).
+
+ - Patch 2 still refactors cdnsp-pci.c into a PCI-to-platform wrapper,
+   keeps host_init / gadget_init callbacks, exports cdns_core_init_role,
+   and limits drivers/usb/cdns3/ to CONFIG_USB_CDNS_SUPPORT.
+
+ - Add Rob Herring's ACK for Patch 1.
+
+Build verification
+
+Exhaustive Kconfig sweep: 79 unique resolved configurations (deduped on
+CONFIG_USB, CONFIG_USB_GADGET, CONFIG_USB_CDNS_SUPPORT,
+CONFIG_USB_CDNS3_HOST, CONFIG_USB_CDNS3, CONFIG_USB_CDNSP_PCI,
+CONFIG_USB_CDNS3_GADGET), arm64 cross-build, each run through
+make O=out/cix olddefconfig, then Image + modules, then modules_install
+into a clean INSTALL_MOD_PATH:
+
+	PASS 79 / 79; build failures 0; depmod / module graph failures 0.
+
+Peter Chen (2):
+  dt-bindings: usb: cdns,usb3: document USBSSP controller support
+  usb: cdns3: Add USBSSP platform driver support
+
+ .../devicetree/bindings/usb/cdns,usb3.yaml    |  10 +-
+ drivers/usb/Makefile                          |   2 -
+ drivers/usb/cdns3/Kconfig                     | 112 ++++-----
+ drivers/usb/cdns3/Makefile                    |  44 ++--
+ drivers/usb/cdns3/cdns3-gadget.c              |   1 +
+ drivers/usb/cdns3/cdns3-plat.c                |  27 ++-
+ drivers/usb/cdns3/cdnsp-gadget.c              |   1 +
+ drivers/usb/cdns3/cdnsp-pci.c                 | 217 ++++++++----------
+ drivers/usb/cdns3/core.c                      |  45 ++--
+ drivers/usb/cdns3/core.h                      |   5 +-
+ drivers/usb/cdns3/gadget-export.h             |  10 +-
+ drivers/usb/cdns3/host-export.h               |   4 +-
+ 12 files changed, 209 insertions(+), 269 deletions(-)
 
 -- 
-2.47.3
-
+2.50.1
 
