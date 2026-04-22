@@ -1,185 +1,308 @@
-Return-Path: <linux-usb+bounces-36408-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36409-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2DT7Lto36GkbHAIAu9opvQ
-	(envelope-from <linux-usb+bounces-36408-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 04:52:10 +0200
+	id SMIlAmI56GnTHAIAu9opvQ
+	(envelope-from <linux-usb+bounces-36409-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 04:58:42 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61408441A02
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 04:52:10 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F9DB441A9C
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 04:58:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 310CB307B032
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 02:39:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 305CB300E14F
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 02:58:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA77391E7A;
-	Wed, 22 Apr 2026 02:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D3839D6F7;
+	Wed, 22 Apr 2026 02:58:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZZpQO593"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HvU3J7YT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3310730C632
-	for <linux-usb@vger.kernel.org>; Wed, 22 Apr 2026 02:39:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE9139A7F0;
+	Wed, 22 Apr 2026 02:58:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776825580; cv=none; b=Hw3Yp/UoXZFSYLX/WkZKI7sTVaRZX1jEFqP7lfW7LbLMsEhUtNXCr7XMfdvUVCCwdCAgUXVoiGpyO9ddM/gkQ18napPBA9wrkk7Y9RWEghin4e8aqnvkJMDkO7HC6bT1KoE5XgW/gPpiVRwCMjpVLimoeyYazrGXrh95ThIz5tg=
+	t=1776826708; cv=none; b=T3DWfyO3mNlOh5qdoTRXlSNVP8c8aFHz7Ms98BiLGoi1eMsr/hXLJxMAHH8M1kmGbRVdSYCA7lgW1zXr4esKmUWsCaWd2bme1dHZW1QgHyofqwUE6oNpuyHQPW9ZIhioEs7pPw1CdhmVsU0Ek06hRjv6cMKqaGGGOR/VZABfkII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776825580; c=relaxed/simple;
-	bh=yGfvG2cBrEHidy4K2K9IqvK7y2YzIga4aXzMCqEx6Xw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e56Z9QR7RZtorXrMK945do891VtC4K8rH20O8NmlDUcti6KlfZxf8kOszRvpSgifJCaZkc7kZ/03XbQx0NowA10GGzteoeczrW9cLYhUqlVrMY0sSkD3botgb66M1siZGsx2gavosufsxddqlj9QWe+ZXz3SOSAvbVZBGVksh54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZZpQO593; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2ad21f437eeso31865585ad.0
-        for <linux-usb@vger.kernel.org>; Tue, 21 Apr 2026 19:39:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776825565; x=1777430365; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jIzrzYUxwj+eWN+y9Ww82vKCDAA7PiDEJITHsFxKlBM=;
-        b=ZZpQO593G6+ys2LgqHXSldPqAnbOFvW0Wgd2EFBtXvxi5Oj+5lovD6gBdp+eOe08l6
-         bm1W0KBMDntwkD6xtNTzBBYUXUrJcYX2uOQ6j6gLG1NDTHZr5PgteIrpbnpLC0tAfVC7
-         a0tq8X05i3Dw9Xk7r3LIiRPNbM2oHmUsglB1uCw/ZXKWKTcFZBf6UQSXNUd67qDA2NX3
-         DLAjSPWEYsNvpHR8mJdIlem7rWotgD7OdyJim6oJP6QVB4nQE/KyMvbCFPyv/dG3rwo6
-         hKpa3FbYiviMqUgNoqwowaPZl1qYxAL2yKbsRXyRi3dQOD0QSOkoW5chCPh8tVhCIyGv
-         iKuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776825565; x=1777430365;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jIzrzYUxwj+eWN+y9Ww82vKCDAA7PiDEJITHsFxKlBM=;
-        b=Sl7fzBfkrOTJcl/+W+a6SCvTI0MQkhPv0nVWSCV8gMSWvTpVdJGK2sU1GquCHFnr2o
-         3+8ZGP7telIvSA+PtbTyhq0V/dhM0068BY3vuBjX7o5TW40COF28yxvj6jdvpiH9hhSa
-         tM98b+gLKtt9DOa5HnFTUOid+CFVR+XBsmNX8URBSpMDjQJiW3YwNLk8hSuyT5c199L9
-         WZzrVQ4x+KpZQHbeTtTxsetvlyPhqUg26v3Fb3Ac1lPhP6FYprDgVlK4sjmFN2gSuN5q
-         Uw7YZcGjK7cPEZgE8IUHEvjT5iTahsB3U6HLac31aN6Zkj30XlD10a5nZIayNmS68gA4
-         kyZw==
-X-Gm-Message-State: AOJu0YyKd24FEz0EVB6wAOU7dk924fAWFhZO5EUiE1Cibe4WqViNkEH8
-	MNuTwgrJB7JUtdei3gR0BwAd8Aq/9jX9KXKHLLEIp8zpczDUveeTDjvI
-X-Gm-Gg: AeBDieuqtinxPSW3Bum0GLJx2d5Pm1+0cNXnb/+h0YJNTV5xOMT5EcwO9IWhPLtBQx+
-	pfzhTaRTAvgWtuAw/kcULNyCv9hPdRjZbqSNYWRBItZdgRb0Y9t4IWkatVVC+vdVueq5W81PCu5
-	uPrhj5qa5fWIfhjxzWRCxLmo+vJ1mT87JpCSfz+lnfOmQyY/P3F9VeVDsMfpgspwKcpGIDfYn1J
-	/JBOAf3QJxD3YnP/tPnX8u5eSq1U+R1zQ57XqW7paOHLMd3eHJ3Bs3P5/x7cr13kV0rXfVI2xY6
-	/K3ncMT8W2tldUGrl09P1xpAtSzoaqcBzmbbO1BhA907XbU43CFwd1J9BfzlnEXtoYo5NA1e+Fz
-	BXGz5mcn9gdTPytf2fQjsLJQ4vZAj4zxGDHmHabXLAYtdgK4qFynUNcOceYjBCZrnxkN3PuvJRS
-	+7Zaq9bcSV2sCoUDa7gfEks1Czh7+tzQ/z+4IfxB30Ky9tFmhWbPQMgqIdPEKeIFwWnaTPPpoDy
-	YmpwiYRba54LoZ4
-X-Received: by 2002:a17:902:db11:b0:2b2:5070:8b with SMTP id d9443c01a7336-2b5f9da50b3mr187447215ad.1.1776825565303;
-        Tue, 21 Apr 2026 19:39:25 -0700 (PDT)
-Received: from localhost.localdomain ([156.59.4.114])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab28e35sm147548145ad.64.2026.04.21.19.39.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2026 19:39:24 -0700 (PDT)
-From: Bingquan Chen <patzilla007@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	security@kernel.org,
-	Bingquan Chen <patzilla007@gmail.com>
-Subject: [PATCH v2] usb: gadget: configfs: fix OOB read in ext_prop_data_show()
-Date: Wed, 22 Apr 2026 10:39:19 +0800
-Message-ID: <20260422023919.37588-1-patzilla007@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1776826708; c=relaxed/simple;
+	bh=BHJEUobqOTAr0RO/CwhDxdht8RIZ3yFaV1WkE/uG8WA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZmGpWUV+g/dUXC0zHmEGmgfgvLZiSNvdh9TeXpIc7o1dzcseathNzcnAz98Al4Q45PKFNUwW6+aWEPmipZZPusTn2Gt6RTXPoV1rNr96cAs16V3qHpWwtjdKPau9uNH1N3xMUHGix3c7S8LSHQEZebR5akJ9qmwGr4OnrNWrtac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HvU3J7YT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24C38C2BCB0;
+	Wed, 22 Apr 2026 02:58:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776826707;
+	bh=BHJEUobqOTAr0RO/CwhDxdht8RIZ3yFaV1WkE/uG8WA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HvU3J7YTWVFpBtUa9RjNu5zWYPwaZo0kvkbhDi3nNFcpT7gAqBLaFJjAP1fr96I7d
+	 BuO8rRsGiRHJevAOdNMw2RawT0FRxYZvGn589pOYhpqsDqGwwnWptmOUb766PN/hxo
+	 1a5E8MSGh7GcKYDDOFG/Xh5uYP9BaijT+6o91/WnAWCEyD4978AipJeIkOptkNzm7R
+	 GqcBHxgymkG/R/dGMjKaAQVsVhNv7eIDsFN3addsl6vOwsd/TiSmfjjokrKpnVNrhe
+	 1PlzyxnlvJdvnTSSzcQ0fBkWzLguxBLb7yfjP4qEtigJUiwxOkXp4ryWlHLaGSkkPj
+	 Tm+a8Nv3Rd8gQ==
+Date: Wed, 22 Apr 2026 10:58:23 +0800
+From: "Peter Chen (CIX)" <peter.chen@kernel.org>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: gregkh@linuxfoundation.org, jun.li@nxp.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev
+Subject: Re: [PATCH 2/3] usb: chipidea: udc: support dynamic gadget add/remove
+Message-ID: <aeg5TwH33EC9iFWo@nchen-desktop>
+References: <20260421082436.1264442-1-xu.yang_2@nxp.com>
+ <20260421082436.1264442-2-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260421082436.1264442-2-xu.yang_2@nxp.com>
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,gmail.com];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36408-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-36409-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[patzilla007@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FROM_NEQ_ENVFROM(0.00)[peter.chen@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 61408441A02
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6]
+X-Rspamd-Queue-Id: 9F9DB441A9C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-In ext_prop_data_store(), for unicode property types, the data buffer
-is allocated via kmemdup() with size 'len', but data_len is set to
-len*2+2 to account for the UTF-16 encoding and a 2-byte null
-terminator, as required by the Microsoft OS Extended Properties
-Descriptor specification (dwPropertyDataLength must include the
-terminator).
+On 26-04-21 16:24:35, Xu Yang wrote:
+> When the device is connected and enumerated by the host, switching the
+> role from device to host leaves an asynchronous vbus_event_work() to be
+> run. This can affect EHCI host controller initialization process.
+> 
+> If vbus_event_work() runs after ehci_run() sets USBCMD.RUNSTOP bit, then
+> RUNSTOP bit will be cleared. As a result, the host controller fails to
+> operate.
+> 
+> The log below shows what happens:
+> 
+> [   87.819925] ci_hdrc ci_hdrc.0: EHCI Host Controller
+> [   87.819963] ci_hdrc ci_hdrc.0: new USB bus registered, assigned bus number 1
+> [   87.955634] ci_hdrc ci_hdrc.0: USB 2.0, controller refused to start: -110
+> [   87.955658] ci_hdrc ci_hdrc.0: startup error -110
+> [   87.955682] ci_hdrc ci_hdrc.0: USB bus 1 deregistered
+> 
+> The problem is that the chipidea UDC driver call usb_udc_vbus_handler() to
+> pull down data line but it doesn't guarantee that this operation has
+> completed before the host controller starts running.
+> 
+> Now UDC core can properly delete usb gadget device and make sure that vbus
+> work is cancelled or completed after usb_del_gadget_udc() is returned. But
+> the udc.c only call usb_del_gadget_udc() in ci_hdrc_gadget_destroy(). To
+> avoid above issue, let the gadget device add/remove dynamically during USB
+> role switching.
+> 
+> To support dynamic gadget add/remove, this firstly clear ci->gadget and
+> ci->ci_hw_ep memory so the driver won't access stale data when initialize
+> and reuse these data structures again. Secondly, this assign udc_start()
+> and udc_stop() to rdrv->start and rdrv->stop, meanwhile it removes
+> udc_id_switch_for_device() and udc_id_switch_for_host(). The things in
+> them also properly be merged to udc_start()/udc_stop().
+> 
+> Since ci_hdrc_gadget_init() doesn't add gadget anymore, this also adjust
+> the order of ci_handle_vbus_change() and ci_role_start(), otherwise, NULL
+> pointer will be met.
+> 
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-However, the null terminator is never actually stored in the data
-buffer. When ext_prop_data_show() reads the data back, it computes the
-read length as data_len >> 1 = len+1, then does memcpy(page, data,
-len+1), reading 1 byte past the allocated buffer. This is a
-slab-out-of-bounds read that leaks 1 byte of adjacent heap data to
-userspace via configfs.
+Acked-by: Peter Chen <peter.chen@kernel.org>
 
-KASAN report (5.10.252):
+Peter
+> ---
+>  drivers/usb/chipidea/core.c | 11 +++----
+>  drivers/usb/chipidea/udc.c  | 65 +++++++++++++++++++------------------
+>  2 files changed, 38 insertions(+), 38 deletions(-)
+> 
+> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> index 7cfabb04a4fb..95d9db159ce8 100644
+> --- a/drivers/usb/chipidea/core.c
+> +++ b/drivers/usb/chipidea/core.c
+> @@ -1191,19 +1191,16 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+>  
+>  	ci->role = ci_get_role(ci);
+>  	if (!ci_otg_is_fsm_mode(ci)) {
+> -		/* only update vbus status for peripheral */
+> -		if (ci->role == CI_ROLE_GADGET) {
+> -			/* Pull down DP for possible charger detection */
+> -			hw_write(ci, OP_USBCMD, USBCMD_RS, 0);
+> -			ci_handle_vbus_change(ci);
+> -		}
+> -
+>  		ret = ci_role_start(ci, ci->role);
+>  		if (ret) {
+>  			dev_err(dev, "can't start %s role\n",
+>  						ci_role(ci)->name);
+>  			goto stop;
+>  		}
+> +
+> +		/* only update vbus status for peripheral */
+> +		if (ci->role == CI_ROLE_GADGET)
+> +			ci_handle_vbus_change(ci);
+>  	}
+>  
+>  	ret = devm_request_irq(dev, ci->irq, ci_irq_handler, IRQF_SHARED,
+> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+> index d4277d6611ee..d52f89489893 100644
+> --- a/drivers/usb/chipidea/udc.c
+> +++ b/drivers/usb/chipidea/udc.c
+> @@ -2044,6 +2044,8 @@ static int init_eps(struct ci_hdrc *ci)
+>  {
+>  	int retval = 0, i, j;
+>  
+> +	memset(ci->ci_hw_ep, 0, sizeof(ci->ci_hw_ep));
+> +
+>  	for (i = 0; i < ci->hw_ep_max/2; i++)
+>  		for (j = RX; j <= TX; j++) {
+>  			int k = i + j * ci->hw_ep_max/2;
+> @@ -2289,6 +2291,8 @@ static int udc_start(struct ci_hdrc *ci)
+>  	struct usb_otg_caps *otg_caps = &ci->platdata->ci_otg_caps;
+>  	int retval = 0;
+>  
+> +	memset(&ci->gadget, 0, sizeof(ci->gadget));
+> +
+>  	ci->gadget.ops          = &usb_gadget_ops;
+>  	ci->gadget.speed        = USB_SPEED_UNKNOWN;
+>  	ci->gadget.max_speed    = USB_SPEED_HIGH;
+> @@ -2327,10 +2331,15 @@ static int udc_start(struct ci_hdrc *ci)
+>  
+>  	ci->gadget.ep0 = &ci->ep0in->ep;
+>  
+> +	if (ci->platdata->pins_device)
+> +		pinctrl_select_state(ci->platdata->pctl,
+> +				     ci->platdata->pins_device);
+> +
+>  	retval = usb_add_gadget_udc(dev, &ci->gadget);
+>  	if (retval)
+>  		goto destroy_eps;
+>  
+> +	ci_udc_enable_vbus_irq(ci, true);
+>  	return retval;
+>  
+>  destroy_eps:
+> @@ -2342,38 +2351,20 @@ static int udc_start(struct ci_hdrc *ci)
+>  	return retval;
+>  }
+>  
+> -/*
+> - * ci_hdrc_gadget_destroy: parent remove must call this to remove UDC
+> - *
+> - * No interrupts active, the IRQ has been released
+> +/**
+> + * udc_stop: deinitialize gadget role
+> + * @ci: chipidea controller
+>   */
+> -void ci_hdrc_gadget_destroy(struct ci_hdrc *ci)
+> +static void udc_stop(struct ci_hdrc *ci)
+>  {
+> -	if (!ci->roles[CI_ROLE_GADGET])
+> -		return;
+> -
+> +	ci_udc_enable_vbus_irq(ci, false);
+>  	usb_del_gadget_udc(&ci->gadget);
+> +	ci->vbus_active = 0;
+>  
+>  	destroy_eps(ci);
+>  
+>  	dma_pool_destroy(ci->td_pool);
+>  	dma_pool_destroy(ci->qh_pool);
+> -}
+> -
+> -static int udc_id_switch_for_device(struct ci_hdrc *ci)
+> -{
+> -	if (ci->platdata->pins_device)
+> -		pinctrl_select_state(ci->platdata->pctl,
+> -				     ci->platdata->pins_device);
+> -
+> -	ci_udc_enable_vbus_irq(ci, true);
+> -	return 0;
+> -}
+> -
+> -static void udc_id_switch_for_host(struct ci_hdrc *ci)
+> -{
+> -	ci_udc_enable_vbus_irq(ci, false);
+> -	ci->vbus_active = 0;
+>  
+>  	if (ci->platdata->pins_device && ci->platdata->pins_default)
+>  		pinctrl_select_state(ci->platdata->pctl,
+> @@ -2422,7 +2413,6 @@ static void udc_resume(struct ci_hdrc *ci, bool power_lost)
+>  int ci_hdrc_gadget_init(struct ci_hdrc *ci)
+>  {
+>  	struct ci_role_driver *rdrv;
+> -	int ret;
+>  
+>  	if (!hw_read(ci, CAP_DCCPARAMS, DCCPARAMS_DC))
+>  		return -ENXIO;
+> @@ -2431,8 +2421,8 @@ int ci_hdrc_gadget_init(struct ci_hdrc *ci)
+>  	if (!rdrv)
+>  		return -ENOMEM;
+>  
+> -	rdrv->start	= udc_id_switch_for_device;
+> -	rdrv->stop	= udc_id_switch_for_host;
+> +	rdrv->start	= udc_start;
+> +	rdrv->stop	= udc_stop;
+>  #ifdef CONFIG_PM_SLEEP
+>  	rdrv->suspend	= udc_suspend;
+>  	rdrv->resume	= udc_resume;
+> @@ -2440,9 +2430,22 @@ int ci_hdrc_gadget_init(struct ci_hdrc *ci)
+>  	rdrv->irq	= udc_irq;
+>  	rdrv->name	= "gadget";
+>  
+> -	ret = udc_start(ci);
+> -	if (!ret)
+> -		ci->roles[CI_ROLE_GADGET] = rdrv;
+> +	ci->roles[CI_ROLE_GADGET] = rdrv;
+>  
+> -	return ret;
+> +	/* Pull down DP for possible charger detection */
+> +	hw_write(ci, OP_USBCMD, USBCMD_RS, 0);
+> +	return 0;
+> +}
+> +
+> +/*
+> + * ci_hdrc_gadget_destroy: parent remove must call this to remove UDC
+> + *
+> + * No interrupts active, the IRQ has been released
+> + */
+> +void ci_hdrc_gadget_destroy(struct ci_hdrc *ci)
+> +{
+> +	struct device *dev = &ci->gadget.dev;
+> +
+> +	if (ci->roles[CI_ROLE_GADGET] && device_is_registered(dev))
+> +		udc_stop(ci);
+>  }
+> -- 
+> 2.34.1
+> 
 
-  BUG: KASAN: slab-out-of-bounds in ext_prop_data_show+0x4a/0x60
-  Read of size 9 at addr ffff888005546008 by task poc/62
+-- 
 
-  Allocated by task 62:
-   kmemdup+0x17/0x40
-   ext_prop_data_store+0x52/0x130
-   configfs_write_file+0x168/0x200
-
-  The buggy address belongs to the object at ffff888005546008
-   which belongs to the cache kmalloc-8 of size 8
-
-Fix by allocating len+2 bytes and explicitly zero-terminating with a
-full 2-byte UTF-16 null terminator. This ensures the buffer fully
-matches the dwPropertyDataLength semantics (len*2+2) while eliminating
-the OOB read.
-
-Fixes: 7419485f197c ("usb: gadget: configfs: OS Extended Properties descriptors support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Bingquan Chen <patzilla007@gmail.com>
----
- drivers/usb/gadget/configfs.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index 183a25f65ac8..b2c3d4e5f6a7 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -1352,8 +1352,12 @@ static ssize_t ext_prop_data_store(struct config_item *item,
-
- 	if (page[len - 1] == '\n' || page[len - 1] == '\0')
- 		--len;
--	new_data = kmemdup(page, len, GFP_KERNEL);
-+	new_data = kmalloc(len + 2, GFP_KERNEL);
- 	if (!new_data)
- 		return -ENOMEM;
-+	memcpy(new_data, page, len);
-+	new_data[len]     = '\0';
-+	new_data[len + 1] = '\0';
-
- 	if (desc->opts_mutex)
---
-2.43.0
+Best regards,
+Peter
 
