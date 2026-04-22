@@ -1,203 +1,248 @@
-Return-Path: <linux-usb+bounces-36417-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36418-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cDwTIryy6GmIOwIAu9opvQ
-	(envelope-from <linux-usb+bounces-36417-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 13:36:28 +0200
+	id IBMdI7bF6GmYQAIAu9opvQ
+	(envelope-from <linux-usb+bounces-36418-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 14:57:26 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87F0144576D
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 13:36:27 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A7E4446507
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 14:57:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id BE5843022322
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 11:32:14 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4056F3036C0C
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 12:55:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AFDD3D1CC0;
-	Wed, 22 Apr 2026 11:32:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2123E9F82;
+	Wed, 22 Apr 2026 12:55:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="kXormyA2"
+	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="xAoMSe1t"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011033.outbound.protection.outlook.com [52.101.70.33])
+Received: from ixit.cz (ixit.cz [185.100.197.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5E33D1CA5;
-	Wed, 22 Apr 2026 11:32:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.33
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776857528; cv=fail; b=XiU4L7+siQbdhnWdNuTWawbcjaojRT9c4lJLgcJrPV+6IUBf0GP4cSdLkpwb8BTcuGX/iftucs2iRp5FHmFZAF+UyjO38vemOshfGmMEs6P1t7ZXxomkmPNaVGQDj+Pj22EC+e20x4A6tiKyrTlnXTqGpveMkc7045fshMaJKEs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776857528; c=relaxed/simple;
-	bh=Z3LgIHOf4i5262wo6o6a2oZH/iiGghHy22G0RTe6KeE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=B627tQ+svtq7UdKjDw+Z1eJ166O3HLorcFNT4IsWx1dz9IluW7BF3de0vEI6svk4IW/X3VhgXjymIVWU+Fn/kWHSKsBcAg4FkXs8+CzuTH8zsYo/nckVRVbAwOtWJDVrOGHzSxjqGgdm2Flyf4KMEAE2Dn3/y3pnPAbm7rR3/TI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=kXormyA2; arc=fail smtp.client-ip=52.101.70.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wKzeWRgz/sifC2qpaY08wAVutUaEQ7Gy/WDAjZidEUD96JxonJ6QsqJPr5R+dWZon+M1yhfWP3qNvImkuKKVB5pPPNPv1qxitOqV+WDIT6xlEmufI7i1u3reLK+w0YDIswrmWzrAINWoz810xv+ktXV4Ll52DmBsUZGqPy3VM1E6IDMot1ap7qQ1d+tnWXDxB1N8j6V9HA2VLOupsz3+R1vWQdBGWG0nBn/IPwuC2WiNHKx7dw/8K9V45/NDjkYtcV0b2+huNQsSJ4dtfoIzXcOEvBa25Avk7O0zu2xXx7ymJcQc1bgpM0EvvahgBTvEsQ08fVvCkjI1nn64oySoHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xRDzRsPPae5aeL/rEEkKKNgLiUAreAr7P08x/FNsIp0=;
- b=VT+zlxKh9CyY+BqHw9bcgTx+q4dvm2TTP9MsbK12XQ3MtKSNYtPmFw4MtiwQXU2O8ITDBDgdAvElSDPRZiU0GYfZJbTcrtzITxPunSpsqyWAcoQDGkpLb7UmCAUfNyVHa/Q+mgauPT6iSY7A08EMOGfJR2HrSUT4Idjm42lJOPxCMAA0pV7bcSbmQ9EoIj+PD+xwQ85Y5tEKOfiVkpOjRs9fTXvowj9Gi+V09rg+A9mDpFp1WtwO8N4/o0yA9VCjOz87915yVNh3nZCmLcZfJNcIwk2JwWJZXndhrx6RpdyPGH34KKuusKt8iTDxnHhtehPfO3hepgObc7zu+fgDUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xRDzRsPPae5aeL/rEEkKKNgLiUAreAr7P08x/FNsIp0=;
- b=kXormyA2defXDNYd4sfrgH0SsyukbTvjelEkSmY1ry9k1faAqslGHNJ2qnVNGZjPCmfZ5PD+ucQyv6NXn9CevkhYGJ/OLxir48sCjFSm0ffRVFNuf0QGxZpYmJujq1EERezr0i8CouM3iOpWUG86CNbYTJnnTMp2+Y3AvF3SlN4GZiwluwSaGDtaL/OJDBS3CdqmjQd3grGEpqqihYW5qJ1+TI3LP9k0Tl1fjicP/YkErMDmekZgo8aYG0EWVEryM/bUdnElO2lWhiub0Fr5oue0tSvYJHcGel90rxr/WjwTDnKuZMPAgy0rPL4SrBgdEaN043JLFTkt83iwHLDtSQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by DU4PR04MB10599.eurprd04.prod.outlook.com (2603:10a6:10:593::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.18; Wed, 22 Apr
- 2026 11:32:04 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::c67b:71cd:6338:9dce]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::c67b:71cd:6338:9dce%5]) with mapi id 15.20.9846.019; Wed, 22 Apr 2026
- 11:32:04 +0000
-Date: Wed, 22 Apr 2026 19:31:16 +0800
-From: Xu Yang <xu.yang_2@nxp.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: gregkh@linuxfoundation.org, khtsai@google.com, 
-	kexinsun@smail.nju.edu.cn, hhhuuu@google.com, kees@kernel.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH] usb: gadget: udc: skip pullup() if already connected
-Message-ID: <5ybgpy342zdtcudp3brizuxyisrv5zxsfegwawtaxyvlncnvcn@htqd6bnqdv5j>
-References: <20260421082050.1260823-1-xu.yang_2@nxp.com>
- <e431e2f9-ce24-491a-9447-1b872099ab25@rowland.harvard.edu>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e431e2f9-ce24-491a-9447-1b872099ab25@rowland.harvard.edu>
-X-ClientProxiedBy: MA5PR01CA0241.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:1f4::15) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B3C3E95BC;
+	Wed, 22 Apr 2026 12:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.100.197.86
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776862550; cv=none; b=OGFl5IdxPLOwELi+jQroP5hRBWAA55XOahh92ASrgUvSs0EEE/MaJnVrsQpvwdO36I/YhNHq3qtASXA1l1HxgTZWqa0BH6es9915B2Svx1kIRO6+elpxwAQQkHZZfzjbwaNW1HzBETng9P6HopFqfUSLAYJRBUkoRQMQbHhuPm8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776862550; c=relaxed/simple;
+	bh=nBUjkqzbsW9h+giptbytXPunGV8VSmqDApV+jbaJ0t4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Isti7sdq+WQAZd90ORjkKRoc5+WPGhIubaVxn1+IzDGc1bE6LCrUQPMbC8ZrEasW59Ch3dnFSVobvrNoZt7j5PYkvtk9hG23nly5RjOg0YoyIW8+5sONZ49CincgndV3dVDLDzmIqPS3WicGbPf9d1n7IvNfIb6TXmCQotzlnh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz; spf=pass smtp.mailfrom=ixit.cz; dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b=xAoMSe1t; arc=none smtp.client-ip=185.100.197.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ixit.cz
+Received: from [10.0.0.200] (unknown [10.88.125.21])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ixit.cz (Postfix) with ESMTPSA id EF1965340EE8;
+	Wed, 22 Apr 2026 14:55:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+	t=1776862537;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=ojAsEz/PoKdOZTVN4oyKv/PPli0YBdhtuXDaezDgRv8=;
+	b=xAoMSe1tzLS7DaQbIWbjsFaTCqDdym43eHBRISfZlTg07z8iJ5JKv5es7M5rBJf1B3Ck3g
+	zv2D73NW9Oz15INGuKhnQ5FkY+mPUY/Lrm0UeUo35pKddnRBOrgdnpLkb6YtHdJnr2AqPx
+	zdnkl5/jOXXXfj6ib/z/B/1rUgW9UMU=
+Message-ID: <f7aedad7-cece-463b-a6f4-9303a552f5f0@ixit.cz>
+Date: Wed, 22 Apr 2026 14:55:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|DU4PR04MB10599:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8c1e07b4-acee-4dc7-eddd-08dea062c718
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|52116014|376014|19092799006|38350700014|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	brdEgkCDInf71xEMgCNsVB6E7X0UhB9pUFELroyytbqSsdU5p+kh0HV1Nip90spVo9CX/ILbXmno6zHBNzYzmm5diXjhaDVXPdhIViPcpxnJa0eUHNy7joHg3wL48YeUmxOugq00aKaxVLoRc1g1UAwViY5/mkqGIAsIzqdH51/UNzevzVfkB3MCGa8mUz0vOmQkyCoFwJ9m74hOZx98L2gbWJfoo1GanP2Y0pym/qeV3XZstrPRCQ1Y35PstamMBBbINztlQ4D0dyathR4rqALE4zJVA/AXlgeNg215N7CglINzpUPzWa8goFiXOnA306R5TEwE0n7ISd80+B+Y/SUrf9FXmf8twgFJtcNaBOh6yhmr9yCy0YdylXHPVyz41nJJXiG5lZ0ASv3kiWLoMXLtrluXH7ztKf+oa/w2Ol1lbxbZQGhX83bpwKV7b9GqnMs7NuiWOZdktMzY8cIHRBUuuVMX8O0AOuIe3PHihTnNeEHBD3EM5g1Diep1MlPE/AJgvN5NfNkUMp8R4Cfn2XBpyFlOBpNGnINkxo5nlZ4XyudWGtvItfKcHXWYHxuW4c5tF7Xx7TA8nTmIzbHi5gZmkMXTbq19D+jZTii5632J1Xn/ct+vabZsiGP8dD8SwT3u1umPinkMSl4hbPBUJ+QCAErGvi1jmtpGO1sqJqWNH0bYthnaatEDWCJYbJwKltTNag3k6C/UmJKOeuK9IgM7b+qM1b7rpaX3E90wTEPl5E+LnwO7DSwzCgfP3y0X9saulZKkjx3S6NNdnSwnIjEEnUxSra+vkbOgR5rwXoY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(52116014)(376014)(19092799006)(38350700014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?qdOiYqLuluIXIARHadtXqjvvbjftNSLNknqJjFbPF2Q0YUKQht98rJD3YbkS?=
- =?us-ascii?Q?BRmH07zWVe7MYrYMOkA1rRQg3h1uM3xwHHdAyN7EET/8TFNqE+ro14KyaT9i?=
- =?us-ascii?Q?ivLY3TcIj924mDAWi9qR3smL2ut4ifU8zSoOFBzLmZhwsWvAbeqr5k/Si9kV?=
- =?us-ascii?Q?LpHlO6ueRFq3LB7Cu2I6M7uVo2L2KJAuJ4eeG8Z2SaXtlUTKGa1pSHxXadwd?=
- =?us-ascii?Q?jRaoBT9VGxTSAeS4YcAm/tBT7aICNTyfz7JIIlkYZxYwGLonsXRgmcHkjjuK?=
- =?us-ascii?Q?OvNs/ikVgA55C71TeFdByztt37wGOurzKTEK6EciBnjZ14SAmXjUsd6yfh4w?=
- =?us-ascii?Q?iz0opGT3oiaB1qm3rMvmROR9c9UWrylrcKKtjcaABRTsYej1qzfOmoywYkNs?=
- =?us-ascii?Q?6X/LampP/qE/ioMNyr5Vmwm/LgszZybDEjuDvo1Pwq3930+mh96ANhQ0P3I7?=
- =?us-ascii?Q?9fniLnUCMpWGORTp4YT8+Zw7ZX/C3q/zfsrYe+cN+1Fd+3qtGrxhRwZKRM4s?=
- =?us-ascii?Q?EEFR0N3hKpsK0dTYApCkJeMT/vGNs7qPLCb9Ng4RwDtOmhPgBzwcFs7JvtKv?=
- =?us-ascii?Q?HzDLGcztRU2aWM//60j/tuFZ3DVhNN3r5VagGcdXlsIabyZY5/ePCymle88v?=
- =?us-ascii?Q?PKbglYrbiz2D2JkIRkR+vC+Rg44t/lFo+N5BLntZ8UKqpE/gGWOl/RGZOggK?=
- =?us-ascii?Q?04buSnfiia+BEH9tO1DPWIt/zmn8RuX/T1+jlOMHp/CyFsbaVAE8CRKqYGym?=
- =?us-ascii?Q?Ycwx0wpXMzcmWodEyDV0yTmlZAiudzDb524Cy+oBJPtPinPl157Ky2VfZYZt?=
- =?us-ascii?Q?B4Xq31gv+sL4S0dmfOXLtheSoGMRlfjoAfpvray1Rt5exY0HnwPyxPmp+1qU?=
- =?us-ascii?Q?1hl34y4d+eevr4VRL77rSOu1qWC1P03pF9ThX1CSshfsuZ9OobDLVeafDuzC?=
- =?us-ascii?Q?vl7ZFJHGrUqzIVVMEp5y6rLzhLVkyk+5hPrYLcQLMmtlpNJ3l2gqoL9u2Csf?=
- =?us-ascii?Q?+U90jJNU9ZlI9PuYa4XYDjCGog04RUolxMXarf0b8SJvi/b3oaR/NrnMEtzd?=
- =?us-ascii?Q?mOSLTJwF0FIp3zO+eOk8IRNHD2G/PKsDN6OYCaiKf8Da7dP18DJAc/96tH1k?=
- =?us-ascii?Q?i2MBJXADj08NDQsRTnJsh9kVhgnIlqnVH2rdnZYSk4RAR2itdBnqO6WPfnjs?=
- =?us-ascii?Q?ULY8Fep6R1MbuWfg9obBdr7pXm07qV9yP8iCrlFZlXCfgYsIEGm3divUqdSv?=
- =?us-ascii?Q?oP7upWWHVWIBP34VyHprbe0W9/CbzNKFuWM8XR0vIC6LGZctn+QiU1cdXpcA?=
- =?us-ascii?Q?sfU8sXMRkR7FtCk6ZmLiuj2mBmX3ueC7NtzG2P7KGTiwVvsrIhoICe58aGyt?=
- =?us-ascii?Q?aHUISSMD6abkeizStW4nZ+/5yGrUo/rC/sF+GnRSvZRd5PzhM7a2MIJ3Op2+?=
- =?us-ascii?Q?U+dQO2iRvgVjQ6JKukzws5cuqhuZj2dhWp1VnJNYWM3BG1y3WsuMHhY6rQNp?=
- =?us-ascii?Q?RA6IG5EUSM5ETBZlEGgFKTprQc3wtq05TelkNiYzesMAcOFFxck8tV+hAhZq?=
- =?us-ascii?Q?p18MOK5J9t0W2j19c5Zkri2QbTMTJNF2xmO7J9GQnxQ0mAgM6LsZT/bVuSsd?=
- =?us-ascii?Q?cjSWn5Syk45LtqHxxY4JtUJYlRGBFW9be4X0q+lDzs57V8F9nF8WGWTdW3/k?=
- =?us-ascii?Q?mtajKFbQFeQdQLBX8icSE6s5tXwp8tTTp51EodujNAo0r6GEKTdZTI2EWxIr?=
- =?us-ascii?Q?snGlQXQ9Nw=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c1e07b4-acee-4dc7-eddd-08dea062c718
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2026 11:32:04.2295
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gIfs2ePhsqhhAsWOvQ6QMB0KqoL75ao/0uqEN7mtBrZC8nKbdkYjOU938zML/LxrXWsPGH/2QchgV1VuE+9aJQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4PR04MB10599
-X-Spamd-Result: default: False [0.34 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
+To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Corentin Labbe <clabbe@baylibre.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
+References: <aINXS813fmWNJh3A@hovoldconsulting.com>
+ <CAFBinCBMTOM-FMgENS-mrnV17HbKzhtPUd44_dDiwnD=+HVMWQ@mail.gmail.com>
+ <aIiXyEuPmWU00hFf@hovoldconsulting.com>
+ <CAFBinCBZhjs7DGEgxhz54Dg8aW3NX9_LdnoZeUZpm5ohaT_-oQ@mail.gmail.com>
+ <aJCoRFe-RFW1MuDk@hovoldconsulting.com>
+ <CAFBinCCYsWHsNwi99kFqvLv+xOYtp9u3omhrPdV-hdH+5Cfyew@mail.gmail.com>
+ <aK7Y9rRIsGBKRFAO@hovoldconsulting.com>
+ <CAFBinCD19CVc0kX-aqa8pw71O2F3Nwy9ght+2TCn9B4PbOCBfw@mail.gmail.com>
+ <aS2hxeBR-tptevYd@hovoldconsulting.com>
+ <CAFBinCAt1DevnggWJdzBzh3X1Yfb0ScZXYsgkrA1cGrUmfXVwg@mail.gmail.com>
+ <aWZlYuFXYd5eAZTT@hovoldconsulting.com>
+Content-Language: en-US
+From: David Heidelberg <david@ixit.cz>
+Autocrypt: addr=david@ixit.cz; keydata=
+ xsFNBF5v1x4BEADS3EddwsNsvVAI1XF8uQKbdYPY/GhjaSLziwVnbwv5BGwqB1tfXoHnccoA
+ 9kTgKAbiXG/CiZFhD6l4WCIskQDKzyQN3JhCUIxh16Xyw0lECI7iqoW9LmMoN1dNKcUmCO9g
+ lZxQaOl+1bY/7ttd7DapLh9rmBXJ2lKiMEaIpUwb/Nw0d7Enp4Jy2TpkhPywIpUn8CoJCv3/
+ 61qbvI9y5utB/UhfMAUXsaAgwEJyGPAqHlC0YZjaTwOu+YQUE3AFzhCbksq95CwDz4U4gdls
+ dmv9tkATfu2OmzERZQ6vJTehK0Pu4l5KmCAzYg42I9Dy4E6b17x6NncKbcByQFOXMtG0qVUk
+ F1yeeOQUHwu+8t3ZDMBUhCkRL/juuoqLmyDWKMc0hKNNeZ9BNXgB8fXkRLWEUfgDXsFyEkKp
+ NxUy5bDRlivf6XfExnikk5kj9l2gGlNQwqROti/46bfbmlmc/a2GM4k8ZyalHNEAdwtXYSpP
+ 8JJmlbQ7hNTLkc3HQLRsIocN5th/ur7pPMz1Beyp0gbE9GcOceqmdZQB80vJ01XDyCAihf6l
+ AMnzwpXZsjqIqH9r7T7tM6tVEVbPSwPt4eZYXSoJijEBC/43TBbmxDX+5+3txRaSCRQrG9dY
+ k3mMGM3xJLCps2KnaqMcgUnvb1KdTgEFUZQaItw7HyRd6RppewARAQABzSBEYXZpZCBIZWlk
+ ZWxiZXJnIDxkYXZpZEBpeGl0LmN6PsLBlAQTAQgAPgIbAwULCQgHAgYVCgkICwIEFgIDAQIe
+ AQIXgBYhBNd6Cc/u3Cu9U6cEdGACP8TTSSByBQJl+KksBQkPDaAOAAoJEGACP8TTSSBy6IAQ
+ AMqFqVi9LLxCEcUWBn82ssQGiVSDniKpFE/tp7lMXflwhjD5xoftoWOmMYkiWE86t5x5Fsp7
+ afALx7SEDz599F1K1bLnaga+budu55JEAYGudD2WwpLJ0kPzRhqBwGFIx8k6F+goZJzxPDsf
+ loAtXQE62UvEKa4KRRcZmF0GGoRsgA7vE7OnV8LMeocdD3eb2CuXLzauHAfdvqF50IfPH/sE
+ jbzROiAZU+WgrwU946aOzrN8jVU+Cy8XAccGAZxsmPBfhTY5f2VN1IqvfaRdkKKlmWVJWGw+
+ ycFpAEJKFRdfcc5PSjUJcALn5C+hxzL2hBpIZJdfdfStn+DWHXNgBeRDiZj1x6vvyaC43RAb
+ VXvRzOQfG4EaMVMIOvBjBA/FtIpb1gtXA42ewhvPnd5RVCqD9YYUxsVpJ9d+XsAy7uib3BsV
+ W2idAEsPtoqhVhq8bCUs/G4sC2DdyGZK8MRFDJqciJSUbqA+5z1ZCuE8UOPDpZKiW6H/OuOM
+ zDcjh0lOzr4p+/1TSg1PbUh7fQ+nbMuiT044sC1lLtJK0+Zyn0GwhR82oNM4fldNsaHRW42w
+ QGD35+eNo5Pvb3We5XRMlBdhFnj7Siggp4J8/PJ6MJvRyC+RIJPGtbdMB2/RxWunFLn87e5w
+ UgwR9jPMHAstuTR1yR23c4SIYoQ2fzkrRzuazsFNBF5v1x4BEADnlrbta2WL87BlEOotZUh0
+ zXANMrNV15WxexsirLetfqbs0AGCaTRNj+uWlTUDJRXOVIwzmF76Us3I2796+Od2ocNpLheZ
+ 7EIkq8budtLVd1c06qJ+GMraz51zfgSIazVInNMPk9T6fz0lembji5yEcNPNNBA4sHiFmXfo
+ IhepHFOBApjS0CiOPqowYxSTPe/DLcJ/LDwWpTi37doKPhBwlHev1BwVCbrLEIFjY0MLM0aT
+ jiBBlyLJaTqvE48gblonu2SGaNmGtkC3VoQUQFcVYDXtlL9CVbNo7BAt5gwPcNqEqkUL60Jh
+ FtvVSKyQh6gn7HHsyMtgltjZ3NKjv8S3yQd7zxvCn79tCKwoeNevsvoMq/bzlKxc9QiKaRPO
+ aDj3FtW7R/3XoKJBY8Hckyug6uc2qYWRpnuXc0as6S0wfek6gauExUttBKrtSbPPHiuTeNHt
+ NsT4+dyvaJtQKPBTbPHkXpTO8e1+YAg7kPj3aKFToE/dakIh8iqUHLNxywDAamRVn8Ha67WO
+ AEAA3iklJ49QQk2ZyS1RJ2Ul28ePFDZ3QSr9LoJiOBZv9XkbhXS164iRB7rBZk6ZRVgCz3V6
+ hhhjkipYvpJ/fpjXNsVL8jvel1mYNf0a46T4QQDQx4KQj0zXJbC2fFikAtu1AULktF4iEXEI
+ rSjFoqhd4euZ+QARAQABwsF8BBgBCAAmAhsMFiEE13oJz+7cK71TpwR0YAI/xNNJIHIFAmX4
+ qVAFCQ8NoDIACgkQYAI/xNNJIHKN4A/+Ine2Ii7JiuGITjJkcV6pgKlfwYdEs4eFD1pTRb/K
+ 5dprUz3QSLP41u9OJQ23HnESMvn31UENk9ffebNoW7WxZ/8cTQY0JY/cgTTrlNXtyAlGbR3/
+ 3Q/VBJptf04Er7I6TaKAmqWzdVeKTw33LljpkHp02vrbOdylb4JQG/SginLV9purGAFptYRO
+ 8JNa2J4FAQtQTrfOUjulOWMxy7XRkqK3QqLcPW79/CFn7q1yxamPkpoXUJq9/fVjlhk7P+da
+ NYQpe4WQQnktBY29SkFnvfIAwqIVU8ix5Oz8rghuCcAdR7lEJ7hCX9bR0EE05FOXdZy5FWL9
+ GHvFa/Opkq3DPmFl/0nt4HJqq1Nwrr+WR6d0414oo1n2hPEllge/6iD3ZYwptTvOFKEw/v0A
+ yqOoYSiKX9F7Ko7QO+VnYeVDsDDevKic2T/4GDpcSVd9ipiKxCQvUAzKUH7RUpqDTa+rYurm
+ zRKcgRumz2Tc1ouHj6qINlzEe3a5ldctIn/dvR1l2Ko7GBTG+VGp9U5NOAEkGpxHG9yg6eeY
+ fFYnMme51H/HKiyUlFiE3yd5LSmv8Dhbf+vsI4x6BOOOq4Iyop/Exavj1owGxW0hpdUGcCl1
+ ovlwVPO/6l/XLAmSGwdnGqok5eGZQzSst0tj9RC9O0dXO1TZocOsf0tJ8dR2egX4kxM=
+In-Reply-To: <aWZlYuFXYd5eAZTT@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[ixit.cz,quarantine];
+	R_DKIM_ALLOW(-0.20)[ixit.cz:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36417-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[nxp.com:+];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36418-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[googlemail.com,baylibre.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[xu.yang_2@nxp.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[david@ixit.cz,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[ixit.cz:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 87F0144576D
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 1A7E4446507
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Apr 21, 2026 at 10:37:53AM -0400, Alan Stern wrote:
-> On Tue, Apr 21, 2026 at 04:20:50PM +0800, Xu Yang wrote:
-> > The device controller may update vbus status via usb_udc_vbus_handler(),
-> > which tries to connect the gadget even though gadget_bind_driver() has
-> > already called usb_udc_connect_control_locked(). This causes pullup() to
-> > be called twice. Avoid this by checking if gadget->connected is true.
+kind ping, I'm still hoping one day we get the driver without need of manual 
+building aside.
+
+Thank you for your the efforts you put all into it
+David
+
+01/2026 16:31, Johan Hovold wrote:
+> On Mon, Dec 15, 2025 at 03:10:29AM +0100, Martin Blumenstingl wrote:
+>> On Mon, Dec 1, 2025 at 3:10 PM Johan Hovold <johan@kernel.org> wrote:
 > 
-> This patch is wrong.  To see why, read the comments just below the end 
-> of the patch and see also usb_gadget_activate().
-
-OK. So it breaks usb_gadget_activate() as usb_udc_connect_control_locked()
-return early.
-
-I think usb_gadget_activate() needs to set gadget->connected as false before
-running usb_gadget_connect_locked() just like usb_gadget_deactivate() sets
-gadget->connected as true after running usb_gadget_disconnect_locked().
-
-Then it will work correctly, do you agree?
-
+>>>> Unfortunately I don't know how to read the HW flow control state from
+>>>> the hardware.
+>>>> Do you have any suggestions, how I can test HW flow control (after
+>>>> manually enabling it for a port)?
+>>>
+>>> You can try disabling reading from the device (e.g. never submit the
+>>> read urbs) and see if the RTS is deasserted when the buffer fills up.
 > 
-> (Also, is there really anything wrong with calling pullup() twice in a 
-> row?)
+>> Doing so results in:
+>> - lots of UART_LSR_OE
+>> - RTS stays LOW (pulled to GND)
+>>
+>> UART_LSR_OE increasing seems correct as far as I understand this.
+>> RTS being LOW is wrong and I cannot manage to get ch348 to pull it to HIGH.
+>>
+>> I did some more research and found that ch348 implements UART_IIR_MSI
+>> and provides a fully standard compatible UART_MSR.
+>> This is either triggered by a status change on the pins (UART_MSR
+>> delta bits and the actual status bits), or by requesting an update
+>> using the VEN_R command (UART_MSR status bits only, no delta bits).
+>>
+>> In a very simple test-case I've used jumper cables on port #0 of ch348:
+>> - RX and TX connected together
+>> - CTS and RTS connected together
+>>
+>> If I remove the jumper between CTS and RTS I get:
+>>    ch348 ttyUSB0: got MSR = 0x01 // jumper removed
+>>    ch348 ttyUSB0: got MSR = 0x11 // jumper connected again
+>>    ch348 ttyUSB0: got MSR = 0x01 // jumper removed again
+>>
+>> So the hardware does register the change.
+>>
+>> Earlier I thought I found a fix: I had the values for
+>> R_C4_HW_FLOW_CONTROL_OFF and R_C4_HW_FLOW_CONTROL_ON swapped.
+>> That however didn't fix it.
+>>
+>> My current work can be found here: [0]
+>> If you also don't have any further ideas then I'll drop the whole
+>> RTS/CTS code for now so the ch348 driver can finally make it into
+>> Linux 6.20
+> 
+> Or you can include it and just document the known issue with RTS control
+> for port 1. It seems you have everything else working, right?
+> 
+>>> And in the other direction, verify that writes are buffered after you
+>>> deassert RTS manually on the other end. That should be easier.
+> 
+>> This seems to work: if I pull CTS up then ch348 stops sending data
+> 
+> So that means hardware flow control (CRTSCTS) is enabled, which could
+> prevent manual control of RTS. Which port did you test this on? Or is it
+> the same behaviour on all ports (0-3)?
+> 
+> Going back to archives, it seems like you can control RTS on ports 0, 2
+> and 3. (And DTR/RTS is not available for ports 4-7).
+> 
+> Hardware flow being enabled on just port 1 may explain the difference
+> even if you would expect the device to also deassert RTS in the overflow
+> test (unless there are separate bits for controlling auto-rts and
+> auto-cts).
+> 
+>>>> In case I can't easily figure it out: would you also accept a driver
+>>>> that doesn't support RTS/CTS for its initial version?
+>>>
+>>> It's good to at least be able to control DTR/RST at open/close (i.e.
+>>> implement dtr_rts()) so that you can communicate when the other end
+>>> has hw flow enabled. Sound like you're really close to doing so.
+> 
+>> In the meantime I found out why I had trouble with the DTR signal on port 1.
+>> It was a user(space) error. I've been using [1] for some of my tests
+>> and it has a bug where it would clear c_cflag HUPCL [2], which
+>> prevents the kernel from turning DTR off on port close.
+> 
+> Ah, good that you found that.
+> 
+> Johan
 
-It depends on the device controller driver. But currently only a few drivers
-call usb_udc_vbus_handler(), so I think the issue hasn't shown up.
+-- 
+David Heidelberg
 
-When you look at the pullup() implementation of some UDC driver, you may see
-they do more complicated thing than just pulling the data line up. Such as
-cdnsp_gadget_pullup(), dwc3_gadget_pullup(), etc.
-
-Therefore, I think the UDC core need to handle this well to avoid calling
-pullup() twice in a row.
-
-Thanks,
-Xu Yang
 
