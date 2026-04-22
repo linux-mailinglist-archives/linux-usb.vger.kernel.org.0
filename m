@@ -1,233 +1,169 @@
-Return-Path: <linux-usb+bounces-36421-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36422-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YGTNJ3fW6GlJQwIAu9opvQ
-	(envelope-from <linux-usb+bounces-36421-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 16:08:55 +0200
+	id mJe3E0bb6GnOQwIAu9opvQ
+	(envelope-from <linux-usb+bounces-36422-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 16:29:26 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id B702B44714C
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 16:08:54 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8351447402
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 16:29:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 6D73D302304B
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 14:07:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D14703040AB2
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 14:24:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD32B3ED5A7;
-	Wed, 22 Apr 2026 14:07:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3A493EC2EB;
+	Wed, 22 Apr 2026 14:24:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="PTz2utpP"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Zvd+ipeU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bg1.exmail.qq.com (bg1.exmail.qq.com [114.132.77.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339D9332634;
-	Wed, 22 Apr 2026 14:07:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.132.77.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3A2830BF4F
+	for <linux-usb@vger.kernel.org>; Wed, 22 Apr 2026 14:24:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776866871; cv=none; b=aC6LACKB6XbZcePP8sCqVRaLGRHPhCuC1dsYbwne5b/j4l2WAH84RTllguMkHqBcl8F5f95aAyodPmZzBfoYl9lThKBEKjDvLZgMPIH8ARNrf72K8zOkh6OJneMXvMN8Z2Isf0vAO7kCEGSo2C4bnyeglqQfojm9bjT/igKM8Sc=
+	t=1776867879; cv=none; b=G6vnJ2u0bT9v/XM/qvYDQQlqETu4j5WZNuZDKRk8lk8xjJ/KgjgqneDnfuWLYxUHnIm5c1GWWFn1/bIBAP7rKQ6+dZ2lBux7d4HsIbtdXHxk+iJQ85vzhLOkg5IqBavo8ePJ8pRFfj+Y70ae4qKJ85CuGtW1cDL+XpNftr/Zo3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776866871; c=relaxed/simple;
-	bh=uGFvtLAWamxcAKGzomzYdxJMOB56FEC0xZY1zIHrnAY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PsGemtbHDUA9KmN9hENBUUSyaNc6IcpVDwSfgPS4WOSDZpSmFkhMu7at6HfBmPYDHya8TQC7U0r6NBnuedS4Q5ib9omBwjbhrmHSgACzCYS40gmQYdMzRLYszJSu6FrBmK5lkhMfwXwKM5trOLdh6PIUzn+vt7rGivk7dkw5Vz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=PTz2utpP; arc=none smtp.client-ip=114.132.77.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1776866853;
-	bh=Pzt9GPYqHlrWqMYF6Atgi6G7hlhArIM+lXCWpMBLm64=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=PTz2utpPHnseddN8RO57oT43bhQnRj1D9ged1D5L4rej6fPZh8s+aVo9uQLi6jV6c
-	 wpwP7yne1wvnYBOwnj2Nrb2gjm+miV1j5csyzD3sjfIC0fkUp0PAGheTiHiB0I/SsM
-	 2EAwSJc0IjoWjtSpVOitQiUPoxO17SfW+s9N44Xs=
-X-QQ-mid: esmtpsz20t1776866828tcbf70014
-X-QQ-Originating-IP: D89ux7nbIrZe8FgffEeW4vPH0ULFL2ShFsaUTkYnHy8=
-Received: from uos-PC ( [117.152.201.246])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 22 Apr 2026 22:07:05 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 8588048875818352576
-EX-QQ-RecipientCnt: 15
-From: Morduan Zang <zhangdandan@uniontech.com>
-To: michal.pecio@gmail.com
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	petkan@nucleusys.com,
-	syzbot+3f46c095ac0ca048cb71@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com,
-	zhangdandan@uniontech.com,
-	zhanjun@uniontech.com,
-	Andrew Lunn <andrew@lunn.ch>
-Subject: [PATCH net v2] net: usb: rtl8150: fix use-after-free in rtl8150_start_xmit()
-Date: Wed, 22 Apr 2026 22:07:02 +0800
-Message-ID: <EAE04AB0AE928B9F+20260422140703.103227-1-zhangdandan@uniontech.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260421220547.2f7f9d85.michal.pecio@gmail.com>
-References: <20260421220547.2f7f9d85.michal.pecio@gmail.com>
+	s=arc-20240116; t=1776867879; c=relaxed/simple;
+	bh=Uxvd0KqwaXo0u2n8Yj1F6rTUdVtaeT+W3t/FWkIUrKk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eN+t8s5GRu4NGz79IjUdY1OjeARXCy2jeoBgO/7cC8z5iN/jkExx9Pi0rZnRvvBlB9h1T2edtmJZ+rbip5cMEk1xdKrTHzsJ7o6asR4qXNhaPY6jCremAMGlzYW6udOzgJ66v4mU78857t7f5RvFJyisoDlKEOY8IXGSzqviE1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Zvd+ipeU; arc=none smtp.client-ip=209.85.222.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-8d68f702851so614953085a.0
+        for <linux-usb@vger.kernel.org>; Wed, 22 Apr 2026 07:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1776867877; x=1777472677; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R+YAjpkmeo8k9M81XAobtJXWA9yyNfkttkyDTeEyrG8=;
+        b=Zvd+ipeUmXjjdtcDbUnUEBDRv6IugiIuB/B8wcqWswvDwpcPxdwy028RKeneC1TnJF
+         Pogj0Pb/3ELqIh9ZeXZUYCsQlufmE6yQh8XZiNWiVhhCmmnZJg7fS9YneWr8erUvo2G+
+         ZgFYl54OQ9hsVM+4MwN5JPsF8XjylwQnbISZDEaeqoyaziZdhU4s/UCadS0W8d07yFkJ
+         vyYl2ZIZH/Hohxtp1G57KvW7JRUU1LxjtdKsAAG4qrdZyS5nnskjYdsRvGqSQg3QtYUg
+         RlURglUovX1iksxmbSqw4uvVbqcmu4Th7ffDQHXv3Gc5V+UyVBMJDiZWaOEF4+2cE6Ae
+         KtPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776867877; x=1777472677;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R+YAjpkmeo8k9M81XAobtJXWA9yyNfkttkyDTeEyrG8=;
+        b=hvNGQ3ENeRu61qZtwnseAG6peV1VQI32d60fsLrxAKDXxLxTP77mxgN9ZqJFuBRaSY
+         nkkrFzt33nR9XWcozIqHhD7J0jV4kdsfUNno0tlQAfKk1Ua21qxHOKw7Mz9ZzdLw9nLZ
+         m6wQKyhBfV10HfDoWBZ3Aon1Rs5xTYUqjc4uTcFX7O+Y0GqDnsNbXhEm+kHRqH2txwT2
+         v9+Vow9wyaIUA6V/5vtLW07adhXOWOcBJxL5F4puPX8cFhls4wZgDJ/lGp2JXP2tAryW
+         InI3zYmkbDGk0XurH83+YGJXLzIDR4Mrgqli4Y6aqVUarDDtrMtGMq7Uc3hpy68qJSVR
+         dkLQ==
+X-Forwarded-Encrypted: i=1; AFNElJ89QYpp5K9PdB5uTYKvIGDe+7kd7SVYLjz9gn7K2qDX2FiJGt2qKTQWqFpW5KTPP7wcsBAQ4P+ljTs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8Z0oiZ6MHBybLD4u+BxKN7ikAe8vpq7cqjKuVxf11l86U/BfJ
+	R/s1QNCoezkfFRMnI5Xcuef3SW0N/l91YwZPyry+0tNgkX0icRX2AoyuBAtoVxbPzA==
+X-Gm-Gg: AeBDiesRyj5WdP/1LSbYw2EzWlfVByGgqNK8B5Rzftq+/th/SxGxK/h5pV2+bTUH8b0
+	XRwBHap1fOSwifxPQctGskodUe68QfsMa/rRgpL6+8upb1/u9KffMQs3NkFztC7zMP6t3GapFvL
+	N3oCcMvpNR2cpjCT1jL0EUXL6im/m0Es7HfBXNr4i86frL038mpMjG2LPVpOETTKHnsh2HVPkhi
+	9SZCNjb4iErAahPMY1ipNFvdALGD5SO/VooQTP5dlJsy3I/JmUDnrl2YdOycOl6tgwkbaynr1eA
+	iII1nhi6u2icjaLDvwPd2vc9uJPo29MxiMPyWEoXiLqAUSMOvok7uFKgbUcZJrOh7OAEhDglEa4
+	LI2X7XAoi+pEWr3Jm2/UTTDIrAf+XjBcgtew7R+C11qBfumizf9ujJW1UnMPdJ52IFAB4DZv+1f
+	JdfuYynLBBn9Zk/8U9B2FhT4LWy42PhiX/ZSocKpDu6HwLKQW1xuOS
+X-Received: by 2002:a05:620a:40d6:b0:8ed:2b66:9eb2 with SMTP id af79cd13be357-8ed2b66a1f2mr1490304485a.15.1776867876500;
+        Wed, 22 Apr 2026 07:24:36 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ee67115aeasm467576585a.44.2026.04.22.07.24.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Apr 2026 07:24:35 -0700 (PDT)
+Date: Wed, 22 Apr 2026 10:24:33 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: gregkh@linuxfoundation.org, khtsai@google.com,
+	kexinsun@smail.nju.edu.cn, hhhuuu@google.com, kees@kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH] usb: gadget: udc: skip pullup() if already connected
+Message-ID: <9832a30a-ee4b-4e94-94d4-36bc1e658d9a@rowland.harvard.edu>
+References: <20260421082050.1260823-1-xu.yang_2@nxp.com>
+ <e431e2f9-ce24-491a-9447-1b872099ab25@rowland.harvard.edu>
+ <5ybgpy342zdtcudp3brizuxyisrv5zxsfegwawtaxyvlncnvcn@htqd6bnqdv5j>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: NoAfPw89eVWhelEs7weV/9IGsjQ/pECZvVQlLIdKw+uy9HbpaGmUzXI5
-	RYeOyc4trlylqWYn0S/FrmWmL3+dZhX1gIJBBTifYkaKGokDxrrKyvliDO40AlRuIs+L/y8
-	FI4d+y16HrShDk2lBzl7Gtj43pD8rlDxy/gYd2y84xEhtObwoGytKeQ9OuEWNIl4cm+UIgn
-	w6L8DqPtKY+Dnl1umf5J2xyp0qbV97Kha4XbZp983IclYNfugHtg+9QhlQDLblpmOrUmbEF
-	lMpHd3AeVrJ89e+dGpvgsoBAjdL37ExroM5wMr0fbIjvVU1Oby52f+FVn5nGpciWsNBxJoC
-	gnLNwOkSG59LpnCrgfFXxQKFQ4dQ+ibAvzQ4K3RtCvZKT3kxiloYP7U3cn6fEthskFZcyDL
-	aVW+e+ZOHNfES1GzNRSeevSoenD+drSRisjI7p4dwzPtS+5sJk3vKLiWgM4dDn5DIv0bP/s
-	keDuzT/KjhWgfKZ0RckWgktg8j2vfn3QHGbEoxYsQADEZ1HZlFfkIjjn292qQKcUGs15j0p
-	aUHjrffYLe0CiFqVTE3i1G6NJn0IaCe1Iiyi3+sEiAwPwerfTJBFcFW/Xbo5hSZXqoRKOs0
-	K84FrViBYpkhqkbdHgW3urzxFky7/VAzxNYwgyOMPwuDeXbkv8kY9P1EY6lxZ4krXyqmVZL
-	7FFGxpCZjefmtw3fXbvqiZZ8w9rbVrrA9Hxk/hVkzYr+FU5UWRCWQH9Gd8kHkLcRc+nXXk/
-	dpuX5nGTxg33saRKCKXV6MaGsNf9yVHcJc/poq53vyNVtbm2vsyL88lJSXcXzEEZz1Pru9e
-	oDtWA6t22tYSw3iDIzSELXaYoGFtQoE3zemZfPfQFip0SxGbNSGrqoV3FpgoDb4A9q79EAf
-	rZMNnjOylhX2Q/emTA3JlyaSbGBjg6nOivx5y49IH8AYl3q1Eb1i0AQzSKBbvVuHGSh4Wbb
-	xGWUGM26z6/UpRi8XfgZNMdBzDAyaVOG5k1TftYLCXDIKb99FpQVws4StWy6XnX68zRbBrv
-	HYMf8PPoqs5a2+4BHoX9D2CkvmcifbMWZ4SX/89UXYHjr5KsUWIy7CYDV569RNwCV3Sk0WD
-	utMlSS3tAIxKL9EuCYrYudkDcsp6T+Yrw==
-X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
-X-QQ-RECHKSPAM: 0
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5ybgpy342zdtcudp3brizuxyisrv5zxsfegwawtaxyvlncnvcn@htqd6bnqdv5j>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36421-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[uniontech.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zhangdandan@uniontech.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
 	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36422-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev,3f46c095ac0ca048cb71];
-	NEURAL_HAM(-0.00)[-0.999];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[syzkaller.appspot.com:url,lunn.ch:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,uniontech.com:email,uniontech.com:dkim,uniontech.com:mid,appspotmail.com:email]
-X-Rspamd-Queue-Id: B702B44714C
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D8351447402
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Zhan Jun <zhanjun@uniontech.com>
+On Wed, Apr 22, 2026 at 07:31:16PM +0800, Xu Yang wrote:
+> On Tue, Apr 21, 2026 at 10:37:53AM -0400, Alan Stern wrote:
+> > On Tue, Apr 21, 2026 at 04:20:50PM +0800, Xu Yang wrote:
+> > > The device controller may update vbus status via usb_udc_vbus_handler(),
+> > > which tries to connect the gadget even though gadget_bind_driver() has
+> > > already called usb_udc_connect_control_locked(). This causes pullup() to
+> > > be called twice. Avoid this by checking if gadget->connected is true.
+> > 
+> > This patch is wrong.  To see why, read the comments just below the end 
+> > of the patch and see also usb_gadget_activate().
+> 
+> OK. So it breaks usb_gadget_activate() as usb_udc_connect_control_locked()
+> return early.
+> 
+> I think usb_gadget_activate() needs to set gadget->connected as false before
+> running usb_gadget_connect_locked() just like usb_gadget_deactivate() sets
+> gadget->connected as true after running usb_gadget_disconnect_locked().
+> 
+> Then it will work correctly, do you agree?
 
-syzbot reported a KASAN slab-use-after-free read in rtl8150_start_xmit()
-when accessing skb->len for tx statistics after usb_submit_urb() has
-been called:
+Yes, that should take care of it.  Don't forget to update the patch 
+description as well.
 
-  BUG: KASAN: slab-use-after-free in rtl8150_start_xmit+0x71f/0x760
-    drivers/net/usb/rtl8150.c:712
-  Read of size 4 at addr ffff88810eb7a930 by task kworker/0:4/5226
+> > (Also, is there really anything wrong with calling pullup() twice in a 
+> > row?)
+> 
+> It depends on the device controller driver. But currently only a few drivers
+> call usb_udc_vbus_handler(), so I think the issue hasn't shown up.
+> 
+> When you look at the pullup() implementation of some UDC driver, you may see
+> they do more complicated thing than just pulling the data line up. Such as
+> cdnsp_gadget_pullup(), dwc3_gadget_pullup(), etc.
+> 
+> Therefore, I think the UDC core need to handle this well to avoid calling
+> pullup() twice in a row.
 
-The URB completion handler write_bulk_callback() frees the skb via
-dev_kfree_skb_irq(dev->tx_skb). The URB may complete on another CPU
-in softirq context before usb_submit_urb() returns in the submitter,
-so by the time the submitter reads skb->len the skb has already been
-queued to the per-CPU completion_queue and freed by net_tx_action():
+Okay.
 
-  CPU A (xmit)                      CPU B (USB completion softirq)
-  ------------                      ------------------------------
-  dev->tx_skb = skb;
-  usb_submit_urb()      --+
-                          |-------> write_bulk_callback()
-                          |           dev_kfree_skb_irq(dev->tx_skb)
-                          |         net_tx_action()
-                          |           napi_skb_cache_put()   <-- free
-  netdev->stats.tx_bytes  |
-    += skb->len;          <-- UAF read
-
-Fix it by caching skb->len before submitting the URB and using the
-cached value when updating the tx_bytes counter.
-
-The pre-existing tx_bytes semantics are preserved: the counter tracks
-the original frame length (skb->len), not the ETH_ZLEN/USB-alignment
-padded "count" value that is handed to the device.  Changing that
-would be a user-visible accounting change and is out of scope for
-this UAF fix.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: syzbot+3f46c095ac0ca048cb71@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/all/69e69ee7.050a0220.24bfd3.002b.GAE@google.com/
-Closes: https://syzkaller.appspot.com/bug?extid=3f46c095ac0ca048cb71
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Zhan Jun <zhanjun@uniontech.com>
----
-Changes in v2:
- - Drop the vague "This mirrors the fix pattern used by other USB
-   network drivers." claim from the changelog (Michal Pecio).
- - Clarify that the patch intentionally preserves the existing
-   tx_bytes semantics (no ETH_ZLEN/USB padding accounted), and that
-   adjusting that is out of scope for this UAF fix (Michal Pecio).
- - Use the correct "[PATCH net]" subject prefix per
-   Documentation/process/maintainer-netdev.rst (Andrew Lunn).
- - Add Reviewed-by: Andrew Lunn.
- - No functional changes; code diff is identical to v1.
-
-v1: https://lore.kernel.org/all/73ACB7391A6DE033+20260421110412.14795-1-zhangdandan@uniontech.com/
----
- drivers/net/usb/rtl8150.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
-index 4cda0643afb6..6fc6be0cced6 100644
---- a/drivers/net/usb/rtl8150.c
-+++ b/drivers/net/usb/rtl8150.c
-@@ -683,6 +683,7 @@ static netdev_tx_t rtl8150_start_xmit(struct sk_buff *skb,
- 					    struct net_device *netdev)
- {
- 	rtl8150_t *dev = netdev_priv(netdev);
-+	unsigned int skb_len;
- 	int count, res;
- 
- 	/* pad the frame and ensure terminating USB packet, datasheet 9.2.3 */
-@@ -694,6 +695,14 @@ static netdev_tx_t rtl8150_start_xmit(struct sk_buff *skb,
- 		return NETDEV_TX_OK;
- 	}
- 
-+	/*
-+	 * Cache skb->len before submitting the URB: the URB completion
-+	 * handler (write_bulk_callback) frees the skb, and it may run
-+	 * on another CPU before usb_submit_urb() returns, which would
-+	 * leave skb dangling here.
-+	 */
-+	skb_len = skb->len;
-+
- 	netif_stop_queue(netdev);
- 	dev->tx_skb = skb;
- 	usb_fill_bulk_urb(dev->tx_urb, dev->udev, usb_sndbulkpipe(dev->udev, 2),
-@@ -709,7 +718,7 @@ static netdev_tx_t rtl8150_start_xmit(struct sk_buff *skb,
- 		}
- 	} else {
- 		netdev->stats.tx_packets++;
--		netdev->stats.tx_bytes += skb->len;
-+		netdev->stats.tx_bytes += skb_len;
- 		netif_trans_update(netdev);
- 	}
- 
--- 
-2.51.0
-
+Alan Stern
 
