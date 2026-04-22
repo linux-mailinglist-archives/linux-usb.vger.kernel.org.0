@@ -1,239 +1,185 @@
-Return-Path: <linux-usb+bounces-36407-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36408-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EIe5HSo06Gk6GwIAu9opvQ
-	(envelope-from <linux-usb+bounces-36407-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 04:36:26 +0200
+	id 2DT7Lto36GkbHAIAu9opvQ
+	(envelope-from <linux-usb+bounces-36408-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 04:52:10 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDC6A4417D8
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 04:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 61408441A02
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 04:52:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5A5CE3055EA2
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 02:30:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 310CB307B032
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 02:39:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3FCD36E473;
-	Wed, 22 Apr 2026 02:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA77391E7A;
+	Wed, 22 Apr 2026 02:39:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="SxLAhONE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZZpQO593"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010026.outbound.protection.outlook.com [52.101.84.26])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0738B36167E;
-	Wed, 22 Apr 2026 02:30:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.26
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776825009; cv=fail; b=UpnWRX0g2Xu4nGMxNmN0dNir2h0a2glhMVW+dsg+zkv3nnujtmBp49YIB7LmL+t4ExEDEuYWXdio7uW9yehcl/M8c9mt2FDIeAUvaVYbMffrCGV4rTaq+e1wnn26MmxBcz8a0XkMLJLMmFGyrmD6AleSChtYgojcq3zwYa2g0s8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776825009; c=relaxed/simple;
-	bh=Ac2/Lh7oKlytFYhGUDk7MXRJALKnKR7DpM4A4+gxw+s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=q0TLrDnVGwQdEqZ1vV7fZdTraiTimL8fbq7jgtoq2nFPLpO2EJA4QQl2bB6qrNQMLKizAEu8a0maGH18lr1xhGqbRestwZKAO8yqBhr+QoNMpXJoiwfYPsKH2tkM2yOXN6v4/aTuQQm4m6oMnAEkAt5PSz3JaDGeDpa04IcNkYg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=SxLAhONE; arc=fail smtp.client-ip=52.101.84.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Lmxp+Q4xnCsfc4RPWDBKsR9oGLl8YOABR5Szzumuz5PSqPIe6s47cjaIjEedrrQ/Ju5C0H0AW13zLu4SBtbyjvrSv1lAps1jix/aTntV3sDU01zhNzA6neGGf4WvBAuI2JBTB/RSYCPkMriHIEE3PynhG3SwiIEri88gig9mg9WI7YzoF+0rgRlqgBeuua82zjw6H+PIPjJZZR1KZkakZ01ETiDSRb4dMNU3JzYlVsyzKfhgH5eQlTFTNN25lalQVWZ54A3yJaBvHtuTht5o3Vlfuph6pKQUO7mjhhrRo8SFhEtwT1k0U3CdqT8Upkcvm0uzCV5h6YROcCZhcio8Yw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xgpM79U2BzpzVA8aZWaa3KBxiO/UrmFYx6aoUmp/vJ8=;
- b=sY+KgMb+QpjXXHoAvQlYXjFFiwc3RYr9U50ftWyCUqmWoUwvxHn2JlZElogAsAMHo01jv8yV6v98LZVzhQiWIBoduHf40d9nzHhJjZHh4K9SsGxoBy4jWdDL8/mP0be79A+GMyj5ATv5cgZkPm0pYtgXY+ZNQfVdCny3XzDckIht5z9zKTgrFEOX4p6AQOpHIezQJkbwl+rHOL9lg2VXit5m2iQPOD4EwsV1nUJU1W5SXftqKXX0Ed+QzS4lLMGHJ2K3bmz0kulROHP/lK+O9U6aScrCe5HL8YogWfgOGbEMwsKZ2m9a36ba7TzdV7y1oqECEKeBtaTSmBQQrk8WLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xgpM79U2BzpzVA8aZWaa3KBxiO/UrmFYx6aoUmp/vJ8=;
- b=SxLAhONEolNtLt08CWZuLytzIIp/Z6CmUJ2otjpm9ihKHcOcnywTD8YaaN0DgFIKYpBJVKWTk5e2FbDggcAg1pWVGyZsx9McD5CDaiB9yWkP7OO6rsngHW+yDXdvCM27qVReuT+cbiH0Db1et9Ap/LHhdfg3Z8P+RAxBgvHqi+ze7Pk9rdax1EnfSFgWdGCUPi7nfLCikoHHtJKGSFSQCNZI5cbWVCMMS7QIqrNpKVmDHxhpDhcxR6RRCzCkjVu8sorFJEGGC0AZDQInE1NzXVIJV6TuXum2qB5848mAMuz4DAAD1/NJAfZGPS3XbN1q0lLq2XU34fH5CW8d3W+h3w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PA4PR04MB9366.eurprd04.prod.outlook.com (2603:10a6:102:2a9::8)
- by PAXPR04MB8640.eurprd04.prod.outlook.com (2603:10a6:102:21f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.16; Wed, 22 Apr
- 2026 02:30:00 +0000
-Received: from PA4PR04MB9366.eurprd04.prod.outlook.com
- ([fe80::75e4:8143:ddbc:6588]) by PA4PR04MB9366.eurprd04.prod.outlook.com
- ([fe80::75e4:8143:ddbc:6588%6]) with mapi id 15.20.9846.016; Wed, 22 Apr 2026
- 02:30:00 +0000
-Date: Tue, 21 Apr 2026 22:29:42 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: peter.chen@kernel.org, gregkh@linuxfoundation.org, jun.li@nxp.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev
-Subject: Re: [PATCH 3/3] usb: chipidea: core: convert ci_role_switch to local
- variable
-Message-ID: <aegyltY3LiX7YU0T@lizhi-Precision-Tower-5810>
-References: <20260421082436.1264442-1-xu.yang_2@nxp.com>
- <20260421082436.1264442-3-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260421082436.1264442-3-xu.yang_2@nxp.com>
-X-ClientProxiedBy: SA9PR13CA0123.namprd13.prod.outlook.com
- (2603:10b6:806:27::8) To PA4PR04MB9366.eurprd04.prod.outlook.com
- (2603:10a6:102:2a9::8)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3310730C632
+	for <linux-usb@vger.kernel.org>; Wed, 22 Apr 2026 02:39:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776825580; cv=none; b=Hw3Yp/UoXZFSYLX/WkZKI7sTVaRZX1jEFqP7lfW7LbLMsEhUtNXCr7XMfdvUVCCwdCAgUXVoiGpyO9ddM/gkQ18napPBA9wrkk7Y9RWEghin4e8aqnvkJMDkO7HC6bT1KoE5XgW/gPpiVRwCMjpVLimoeyYazrGXrh95ThIz5tg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776825580; c=relaxed/simple;
+	bh=yGfvG2cBrEHidy4K2K9IqvK7y2YzIga4aXzMCqEx6Xw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e56Z9QR7RZtorXrMK945do891VtC4K8rH20O8NmlDUcti6KlfZxf8kOszRvpSgifJCaZkc7kZ/03XbQx0NowA10GGzteoeczrW9cLYhUqlVrMY0sSkD3botgb66M1siZGsx2gavosufsxddqlj9QWe+ZXz3SOSAvbVZBGVksh54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZZpQO593; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2ad21f437eeso31865585ad.0
+        for <linux-usb@vger.kernel.org>; Tue, 21 Apr 2026 19:39:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776825565; x=1777430365; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jIzrzYUxwj+eWN+y9Ww82vKCDAA7PiDEJITHsFxKlBM=;
+        b=ZZpQO593G6+ys2LgqHXSldPqAnbOFvW0Wgd2EFBtXvxi5Oj+5lovD6gBdp+eOe08l6
+         bm1W0KBMDntwkD6xtNTzBBYUXUrJcYX2uOQ6j6gLG1NDTHZr5PgteIrpbnpLC0tAfVC7
+         a0tq8X05i3Dw9Xk7r3LIiRPNbM2oHmUsglB1uCw/ZXKWKTcFZBf6UQSXNUd67qDA2NX3
+         DLAjSPWEYsNvpHR8mJdIlem7rWotgD7OdyJim6oJP6QVB4nQE/KyMvbCFPyv/dG3rwo6
+         hKpa3FbYiviMqUgNoqwowaPZl1qYxAL2yKbsRXyRi3dQOD0QSOkoW5chCPh8tVhCIyGv
+         iKuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776825565; x=1777430365;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jIzrzYUxwj+eWN+y9Ww82vKCDAA7PiDEJITHsFxKlBM=;
+        b=Sl7fzBfkrOTJcl/+W+a6SCvTI0MQkhPv0nVWSCV8gMSWvTpVdJGK2sU1GquCHFnr2o
+         3+8ZGP7telIvSA+PtbTyhq0V/dhM0068BY3vuBjX7o5TW40COF28yxvj6jdvpiH9hhSa
+         tM98b+gLKtt9DOa5HnFTUOid+CFVR+XBsmNX8URBSpMDjQJiW3YwNLk8hSuyT5c199L9
+         WZzrVQ4x+KpZQHbeTtTxsetvlyPhqUg26v3Fb3Ac1lPhP6FYprDgVlK4sjmFN2gSuN5q
+         Uw7YZcGjK7cPEZgE8IUHEvjT5iTahsB3U6HLac31aN6Zkj30XlD10a5nZIayNmS68gA4
+         kyZw==
+X-Gm-Message-State: AOJu0YyKd24FEz0EVB6wAOU7dk924fAWFhZO5EUiE1Cibe4WqViNkEH8
+	MNuTwgrJB7JUtdei3gR0BwAd8Aq/9jX9KXKHLLEIp8zpczDUveeTDjvI
+X-Gm-Gg: AeBDieuqtinxPSW3Bum0GLJx2d5Pm1+0cNXnb/+h0YJNTV5xOMT5EcwO9IWhPLtBQx+
+	pfzhTaRTAvgWtuAw/kcULNyCv9hPdRjZbqSNYWRBItZdgRb0Y9t4IWkatVVC+vdVueq5W81PCu5
+	uPrhj5qa5fWIfhjxzWRCxLmo+vJ1mT87JpCSfz+lnfOmQyY/P3F9VeVDsMfpgspwKcpGIDfYn1J
+	/JBOAf3QJxD3YnP/tPnX8u5eSq1U+R1zQ57XqW7paOHLMd3eHJ3Bs3P5/x7cr13kV0rXfVI2xY6
+	/K3ncMT8W2tldUGrl09P1xpAtSzoaqcBzmbbO1BhA907XbU43CFwd1J9BfzlnEXtoYo5NA1e+Fz
+	BXGz5mcn9gdTPytf2fQjsLJQ4vZAj4zxGDHmHabXLAYtdgK4qFynUNcOceYjBCZrnxkN3PuvJRS
+	+7Zaq9bcSV2sCoUDa7gfEks1Czh7+tzQ/z+4IfxB30Ky9tFmhWbPQMgqIdPEKeIFwWnaTPPpoDy
+	YmpwiYRba54LoZ4
+X-Received: by 2002:a17:902:db11:b0:2b2:5070:8b with SMTP id d9443c01a7336-2b5f9da50b3mr187447215ad.1.1776825565303;
+        Tue, 21 Apr 2026 19:39:25 -0700 (PDT)
+Received: from localhost.localdomain ([156.59.4.114])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab28e35sm147548145ad.64.2026.04.21.19.39.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2026 19:39:24 -0700 (PDT)
+From: Bingquan Chen <patzilla007@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	security@kernel.org,
+	Bingquan Chen <patzilla007@gmail.com>
+Subject: [PATCH v2] usb: gadget: configfs: fix OOB read in ext_prop_data_show()
+Date: Wed, 22 Apr 2026 10:39:19 +0800
+Message-ID: <20260422023919.37588-1-patzilla007@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR04MB9366:EE_|PAXPR04MB8640:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1f15ea22-adc9-4c02-a482-08dea0170cff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|366016|1800799024|376014|52116014|38350700014|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	BVBQQ5y63g9O7ErdSkOHhAhAJPDUn3zPNf8GmT0KDXQTL8vwSOMXUuGzdMaHmpDuPla+fFPHIBGgBhRBJAafJGX+YRX4/mvIIkoYPUuN50FvbdHsjbzDRbfvvv5LkLx8qxxv0wDqiNFdHoafKPrD6GT9e8yVcvowOu+DC0uV0e0Tdlekb/QpRC6/qlWei1YPBsppXff3D45vqczTasX4Gu65rzXgbQ9dCYIW8UO0lyBa2RnZn70UMJ5QGmkG3NGXMdmm7b8qfTHqC3PAGFfqitZa7Ak+Pn7mscnrSJFjSt2vMwxbud0z3r2v+XV+YTEjd0uvPGvA6SvG8Y28XnxYGJcfEpNPt2V1kWDyZAxM761KtghrTntWBHhV+XGQkOibcmuvArGRbaSPvonFtWJeOQR07iT6j00VyuDo+sWTMb4pp8XK0C9aFC4PccOBgqOeN/y4xIXi+vTCtjESvI0uB1EXQ3XzSo9G5uMoVIUWeRshVSxMJGOBkECVhQIslxc+zCi8Oc61JFUj7PSsduXjRkEpSVbuS7AXvLubICKAzN5PUXn9Dy6QQmTBHru1PLBD4eImk25iQ6Ca3aayv2GRSGs+m8hHZlCxGg2Epax79OH0ouQq3Et+JTjCMjJ0Bmrsbz/oBCq+AtiQij9FCi0OzTNrGHBqxgawRJ8HqqHM6I7oPPRyczRKw1LnQheu0HXiANbWPWG+ungSa5tbobnaw6i4MTADo5z5louMC+HgrNn+XBFKTddxmmPs1I9qUn4FEIhfR2f39NtVPoOnlM+ahCOwzXD5bGLZLScxZ37RJP4=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9366.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(366016)(1800799024)(376014)(52116014)(38350700014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?h+F19K+Xs+rnvJ2VnIsYzMinPF1avbEEJSoSDgtUSCYLQHUazAYZOM8u8Ei8?=
- =?us-ascii?Q?u5cZM9dV5y2uR/wxLhWBp4Kdi4oxdJ0KatqVyRRhtcB2JuH1N5qcyEbEwEOv?=
- =?us-ascii?Q?bzDpX7QlHqrmr1m80jhkaUwHd5wU5kgMkn3uoCi446hOnOF9PIGGJ8YUEgRi?=
- =?us-ascii?Q?u6NmTO55pQNHg0t1XlgXoHKe4M40Nq+XCJnbn+0ol6Me1Jr7neu5M2gdgloQ?=
- =?us-ascii?Q?azbnNzoZSafgnciXuFSk1L2IzQefGC3zKmEAkbzLBTD5UX/39woudsWuBfos?=
- =?us-ascii?Q?xi3YhgbCaIXAm+Hpahpjmrl+IPIvI+a90gZ7ddMrhA+VSOtioQEX83iRkD1G?=
- =?us-ascii?Q?sdcxCo/Zp/hvpLkRxjDirhjgCoalMjTSxgjQwKqBMh7snz5C03czljGzLSAi?=
- =?us-ascii?Q?PlmEdpQGHCEvgbPvQzkevh/PD0CJowoyV7UXOIu6k/ZHydS034MbnrL0urQR?=
- =?us-ascii?Q?K57VluU5cmO9SdjDUPqRIhfpHz1hI2z9xMERWePtzJj446WvoqAG1GH824oL?=
- =?us-ascii?Q?XwcuM3bWJ68Y8+GXZ1vRjJaxEkjCY1YiKv24y42+YD3frJHKcHyzZBL+Z+7S?=
- =?us-ascii?Q?+pdL+ELMBvocrZhXpl1/g783qR+3ol/74vEXyoQiYSqKNAaE0zNs7mtC2zQ7?=
- =?us-ascii?Q?DTZSYmkr3XFnvGWiXJr/LPab0fjYzAYYkcKUVKntuacQ/Z24eMAqYl84NsGh?=
- =?us-ascii?Q?1mOdfv7FxrdC0wGesokNS+YwyrLcKtENO0WUJwrm12pXMa/aJNZoIfhJ+nQA?=
- =?us-ascii?Q?QroMALQIr9q0tiFpp0BazzhEwCoo2OOOUA1Ip+la30Ioe8FOWj6WPENDgoQK?=
- =?us-ascii?Q?juAiPn81vuTAR3HJ6e3rI1qkBTiTA+nvR8VP9E6UvK7Q7uIdc+w4Zk+JSWzX?=
- =?us-ascii?Q?fhXQlirk9D7yqvmMcpcOPQo98nXDdrrughJ5SHPRpDmiXz8QlfcQnPDcYzYD?=
- =?us-ascii?Q?tTjYbCeSjw1vqVrylRxEed2/XVrFiUXfqGKNvLr96JDSvcBoLdEj3qD4mtgr?=
- =?us-ascii?Q?qqROqh0CMGFf+dz/EsNLWV03mngDjaiJenXSehm1s012qbhGvFqgU4m7WKaB?=
- =?us-ascii?Q?+x8OzOdP0DOC5Z3JaI/O7p6zA2dgFIhmLquvONXyCHvJd3CKV/fROI8rD8wX?=
- =?us-ascii?Q?4mF4infRfDy+aK143EhJ3VZ4lm6CS5D7EdsXN4rCtXxbLgmKWsY1vW6qPvYt?=
- =?us-ascii?Q?4tRFrpWkqZ45nFcCnPHE3B/TNJNmFQg3WZLW9zY6/GadWCCcKcuQM3/fr5Va?=
- =?us-ascii?Q?f3OpIQsEzxuBa+AJNEdqre2dMaH4pcmOs6ThfYYpjfEHaAuLK/Ottzhl3RiA?=
- =?us-ascii?Q?EIcv7syJtCjImnY9zIc7Ssb1WFlS4tRvRnOPAljtl/gQ82Q8CSIaI6MxtW99?=
- =?us-ascii?Q?pp/IH/1kA4nAaNvzjfdLhO902ZEHsWS+JwsoO3cbXbPr2729zfGIVT2bF91x?=
- =?us-ascii?Q?AtT5ljhVO5z+39t6/q3XymLffzZ4OelIzeT/UP9gP6/DvqUYPIyZon0YpJwt?=
- =?us-ascii?Q?ykO1/ZHbQsiiq9LMLk92bQ5Zyd+chxZvOi1Ewnk6ovXjmzgSSJbiyYpjlLD+?=
- =?us-ascii?Q?ylWqXaP9puvAk8DfMPlVEKnYCPvDdtmo7ZZe5SbdaLQzecQvVSDij/A72FHx?=
- =?us-ascii?Q?DLFxGSe88xTHWtg3z1rUqtV4KJ/eXlor8bugzQXlNGTKs6CCk89WCdejvM/l?=
- =?us-ascii?Q?w/kS9OqKFt5BM38Sfwg3ozPCwpFGbr1cjW/vg5VdPcssMpTwDFAibJYeV7KG?=
- =?us-ascii?Q?b/rCX3gvJA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f15ea22-adc9-4c02-a482-08dea0170cff
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9366.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2026 02:30:00.0202
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GXrvA2xl1cRYugo9+vl1TEREqkXtkdKi5pFaAEKrBfLIEKN1O2T14AP4T3Mvl/qgzmf0wDlpz6WR3nnz+yg6FA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8640
-X-Spamd-Result: default: False [0.34 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
-	MID_RHS_NOT_FQDN(0.50)[];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36407-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[nxp.com:+];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,gmail.com];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36408-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Frank.li@nxp.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[patzilla007@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: CDC6A4417D8
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: 61408441A02
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Apr 21, 2026 at 04:24:36PM +0800, Xu Yang wrote:
-> When a system contains multiple USB controllers, the global ci_role_switch
-> variable may be overwritten by subsequent driver initialization code.
->
-> This can cause issues in the following cases:
->  - The 2nd ci_hdrc_probe() sees ci_role_switch.fwnode as non-NULL even
->    though the "usb-role-switch" property is not present for the controller.
->  - When the ci_hdrc device is unbound and bound again, ci_role_switch
->    fwnode will not be reassigned, and the old value will be used instead.
->
-> Convert ci_role_switch to a local variable to fix these issues.
->
-> Fixes: 05559f10ed79 ("usb: chipidea: add role switch class support")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> ---
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
->  drivers/usb/chipidea/core.c | 16 ++++++----------
->  1 file changed, 6 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-> index 95d9db159ce8..07563be0013f 100644
-> --- a/drivers/usb/chipidea/core.c
-> +++ b/drivers/usb/chipidea/core.c
-> @@ -655,12 +655,6 @@ static enum ci_role ci_get_role(struct ci_hdrc *ci)
->  	return role;
->  }
->
-> -static struct usb_role_switch_desc ci_role_switch = {
-> -	.set = ci_usb_role_switch_set,
-> -	.get = ci_usb_role_switch_get,
-> -	.allow_userspace_control = true,
-> -};
-> -
->  static int ci_get_platdata(struct device *dev,
->  		struct ci_hdrc_platform_data *platdata)
->  {
-> @@ -787,9 +781,6 @@ static int ci_get_platdata(struct device *dev,
->  			cable->connected = false;
->  	}
->
-> -	if (device_property_read_bool(dev, "usb-role-switch"))
-> -		ci_role_switch.fwnode = dev->fwnode;
-> -
->  	platdata->pctl = devm_pinctrl_get(dev);
->  	if (!IS_ERR(platdata->pctl)) {
->  		struct pinctrl_state *p;
-> @@ -1033,6 +1024,7 @@ ATTRIBUTE_GROUPS(ci);
->
->  static int ci_hdrc_probe(struct platform_device *pdev)
->  {
-> +	struct usb_role_switch_desc ci_role_switch = {};
->  	struct device	*dev = &pdev->dev;
->  	struct ci_hdrc	*ci;
->  	struct resource	*res;
-> @@ -1179,7 +1171,11 @@ static int ci_hdrc_probe(struct platform_device *pdev)
->  		}
->  	}
->
-> -	if (ci_role_switch.fwnode) {
-> +	if (device_property_read_bool(dev, "usb-role-switch")) {
-> +		ci_role_switch.set = ci_usb_role_switch_set;
-> +		ci_role_switch.get = ci_usb_role_switch_get;
-> +		ci_role_switch.allow_userspace_control = true;
-> +		ci_role_switch.fwnode = dev_fwnode(dev);
->  		ci_role_switch.driver_data = ci;
->  		ci->role_switch = usb_role_switch_register(dev,
->  					&ci_role_switch);
-> --
-> 2.34.1
->
+In ext_prop_data_store(), for unicode property types, the data buffer
+is allocated via kmemdup() with size 'len', but data_len is set to
+len*2+2 to account for the UTF-16 encoding and a 2-byte null
+terminator, as required by the Microsoft OS Extended Properties
+Descriptor specification (dwPropertyDataLength must include the
+terminator).
+
+However, the null terminator is never actually stored in the data
+buffer. When ext_prop_data_show() reads the data back, it computes the
+read length as data_len >> 1 = len+1, then does memcpy(page, data,
+len+1), reading 1 byte past the allocated buffer. This is a
+slab-out-of-bounds read that leaks 1 byte of adjacent heap data to
+userspace via configfs.
+
+KASAN report (5.10.252):
+
+  BUG: KASAN: slab-out-of-bounds in ext_prop_data_show+0x4a/0x60
+  Read of size 9 at addr ffff888005546008 by task poc/62
+
+  Allocated by task 62:
+   kmemdup+0x17/0x40
+   ext_prop_data_store+0x52/0x130
+   configfs_write_file+0x168/0x200
+
+  The buggy address belongs to the object at ffff888005546008
+   which belongs to the cache kmalloc-8 of size 8
+
+Fix by allocating len+2 bytes and explicitly zero-terminating with a
+full 2-byte UTF-16 null terminator. This ensures the buffer fully
+matches the dwPropertyDataLength semantics (len*2+2) while eliminating
+the OOB read.
+
+Fixes: 7419485f197c ("usb: gadget: configfs: OS Extended Properties descriptors support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Bingquan Chen <patzilla007@gmail.com>
+---
+ drivers/usb/gadget/configfs.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 183a25f65ac8..b2c3d4e5f6a7 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -1352,8 +1352,12 @@ static ssize_t ext_prop_data_store(struct config_item *item,
+
+ 	if (page[len - 1] == '\n' || page[len - 1] == '\0')
+ 		--len;
+-	new_data = kmemdup(page, len, GFP_KERNEL);
++	new_data = kmalloc(len + 2, GFP_KERNEL);
+ 	if (!new_data)
+ 		return -ENOMEM;
++	memcpy(new_data, page, len);
++	new_data[len]     = '\0';
++	new_data[len + 1] = '\0';
+
+ 	if (desc->opts_mutex)
+--
+2.43.0
 
