@@ -1,225 +1,144 @@
-Return-Path: <linux-usb+bounces-36424-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36425-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sOPUBcvr6Gl4RgIAu9opvQ
-	(envelope-from <linux-usb+bounces-36424-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 17:39:55 +0200
+	id 2JyXIFBK6Wl1XQIAu9opvQ
+	(envelope-from <linux-usb+bounces-36425-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2026 00:23:12 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7190F447FEC
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 17:39:54 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD81544B41A
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2026 00:23:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8F00B3032986
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 15:35:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 27958306EC7D
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 22:22:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A5E6340293;
-	Wed, 22 Apr 2026 15:35:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A467345749;
+	Wed, 22 Apr 2026 22:22:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ogVp2v7o"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="RiYrlUv7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86986345CCE
-	for <linux-usb@vger.kernel.org>; Wed, 22 Apr 2026 15:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87CC31A56D;
+	Wed, 22 Apr 2026 22:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776872149; cv=none; b=kewky7TivYDDGIBlTICbzRAoF2OTKnFzNNSOQEC5IUciABzo1I+uVitdWM/cPgRitlLfW8EJqurBCALpGAGY/Hc20SB08zrQ//nBW6nC8H+hnZxSYW+hrMNdw31e7DHPCklvCxgB+nk4T26QUFIpCjPPRDnPtWjaOIsbBKj+60Q=
+	t=1776896551; cv=none; b=KvNpEPK5xbOZbQm1EZWf+Imaqd0AGwdO26mF/Pb9P7pBIPjYHQYh2sloeH7SwqHv15JTC4kry8EmAkCkH0An+ewZjPPlVdUBLds0VUKbblHTIFNXKBCRWzyDvrnRQP656ZVBakDpWpo0Esh7laLcEPUFM14pE33xiOxGbXpsP8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776872149; c=relaxed/simple;
-	bh=vGrdmRdn4nAl0WpcnXoVykDnTnzwMG1K9xQy4vqFJ3Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P91cxIRnOqCPzlElTGrARkC9ZE1MSe9nDv305A0Gje+G41TeKXW1Ilhl6sy4EXIFUENzfNF20MvUH5gcvGLKBLvJhZx/Dv1Pigdm1gVAeFxMoNKLmAXihycqPfKbIZaoJfJmpUrzVrXksTUjeYLSPAK1iiRPf1/DbNZGdlj7u7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ogVp2v7o; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-8acb09ddbf6so80133586d6.2
-        for <linux-usb@vger.kernel.org>; Wed, 22 Apr 2026 08:35:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1776872146; x=1777476946; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pQKUgrY2iA9H6zHnkb6AzQDK1yuwhYoTX1nS3ML0hFE=;
-        b=ogVp2v7ol9xj3OTEAVaQiDSTAmWXz/6OW7nAk3VzVc9wLMPhpspnK/7wnXv8o/2ve4
-         oGhE2yz1ABVT2jhMXixhX6Oib74hapD0S/Joe38HqcgeKU11Pf9kI253CBSXSo0TpjAi
-         +4tFyIlvTROSXP20sw5F1tzJ3XPuSW8dmU2W4+Z4AjyvTw8osACYlgnsNnxFb0jsmsO7
-         d2rbz8bWeYUjEkd2K1ACQ2HXo3sUYFpiEJXNCw/rieSRuP1hEMVQ1LBkSiGviqEGZnUh
-         Zmod3Cv8m12F9jHD3WpyBRVONd3XQ/WUrFGtpu5tsnLvX6Kf1ELLksZrYyxLCHHG5YJe
-         FqKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776872146; x=1777476946;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pQKUgrY2iA9H6zHnkb6AzQDK1yuwhYoTX1nS3ML0hFE=;
-        b=DH6UNuhsZWOvRnHUP/4Lg9XlCWVGQegmmMXR+Nb75gWUjV+XSeEcwJB2ogFGz1Iu5z
-         Xn6zZIMJEWL2Ndd1dM7vM5p9uRqLYCmz+/3VCi4jRsVE6JTt/aH2q/w0x1RgEyTXXbdE
-         w95ZFEEYWo+C6MhART9L240OfSSEnhscgsJ83RX64f+cnUJgMkYJTvjC3jipy0w/s/qK
-         dKdO3cX1zPNsVib5y8S0lQyOjPE0GxdQQA0egcQNG3CPOw75kZ3XKvVXv2eWN+xDwYW5
-         W1gdaModwG0WsjCct66JWbvrKKMcQXcQk1FoxYhO33UYq0dMnU6Zebhaaiz4F8FZiPxv
-         +WXw==
-X-Forwarded-Encrypted: i=1; AFNElJ9ekY3swLDCDnw7TeiW8hTPuntBOVvwprXq3GRyWXldUXke4u6l6ZIVmjZLp44TsNeGx49hRQQ98tM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsVvfwRZxjq0kGNbPrmjXuHV14RzUuTQuY2ETzuSEnRvOlTdHu
-	fMAg4u9h7Fqux3YL2Qc9J/Je8voLwEoiNr9Fs7gFovYRHrqXxpt5IF/cxuZ85VA4dg==
-X-Gm-Gg: AeBDievkV+qEddkvzNN0H+zbBbUx/ErijzTfYUCPLg+3gRxQ8qEW2hily6/7xIyYuSP
-	Cp+ihoLpePgZ/11fjY5qidJS6rc1COgedCFSp+NN0A19/zOq002hfUE09fpAJ1FqJUEpEWXGfW4
-	xak8qveY2IpoucGlYTjEKA1bpFSpyUQUL+K1xtPYmAqHForD9LY9DUGTAOwqPddE3ZOTWbPk8Fv
-	y8GmkBUqZLlcnmU8+XC/IBmrZziTjpuY9Mi5YoCgYhX8YE4TFfdYyHAphYfYjEIMNdypatXCZ+/
-	S7EvID0drck32Uek+nngevoRbmF8lmqIwBWhqZY4TdgQc3AlOO5QcVjYdieB7sK+cStaiT5ZJvF
-	B76N1uRSCkAYtDKbRTCGIRrNacqWIoOV2TZ3MvzyYFMawciFSR8BQYk9yxpVnuviMTZyfU+C7rT
-	+RYnKV78ra6VPhHHh4w9e95h4qUYdsOHBAX+zT3Ti8r+fh49bkNEKJ
-X-Received: by 2002:ad4:5aee:0:b0:8ac:a757:c1ef with SMTP id 6a1803df08f44-8b027ebe48emr383717586d6.0.1776872146080;
-        Wed, 22 Apr 2026 08:35:46 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b02ae79733sm133814206d6.33.2026.04.22.08.35.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2026 08:35:45 -0700 (PDT)
-Date: Wed, 22 Apr 2026 11:35:42 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Michal Pecio <michal.pecio@gmail.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"oneukum@suse.com" <oneukum@suse.com>,
-	"niklas.neronin@linux.intel.com" <niklas.neronin@linux.intel.com>
-Subject: Re: [RFC PATCH 1/2] xhci: prevent automatic endpoint restart after
- stall or error
-Message-ID: <143b5a40-4ad3-4ec2-b061-bc083635542b@rowland.harvard.edu>
-References: <243af5f2-3925-4960-be7b-8d0c273ae629@rowland.harvard.edu>
- <20260404221533.woepax7jxwefy3fq@synopsys.com>
- <20260404222818.t5y52gnd2gvalvp5@synopsys.com>
- <b4e2edd9-2616-4cfe-90a5-438fb6625706@rowland.harvard.edu>
- <20260405030954.32jbg3fphi5xdla3@synopsys.com>
- <74ac9ea2-34d1-4999-9048-c03a0f978b5d@rowland.harvard.edu>
- <65682e07-e18c-4674-bfa7-2cc27abb5ede@linux.intel.com>
- <54fd265d-4ae8-4573-b618-587af98176c9@rowland.harvard.edu>
- <20260422073054.0bd482ba.michal.pecio@gmail.com>
- <e06dcae8-5b8e-4e58-a0cc-1c67e5a08170@linux.intel.com>
+	s=arc-20240116; t=1776896551; c=relaxed/simple;
+	bh=mySrrGpsV94xAvpH+X4XlcQKwQ29kAU0hJ9DU3CY2bs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=C4EyScDhWo56vGk7Vzxb4IDRf7WNsjiNd0FGTsfiEBqiYF/0lInsKhpEyv7WKCbU6Sofd5iz2VhOEiET/pJbpfVemfH8fEcbUatIu763RCmh5qa+wHnO5sgMu8O7VZZgb0PbHw9+jWMHxRRWFTSUPOoej3bm8Nw4vbZA3D/RAvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=RiYrlUv7; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Cc:To:Message-Id:Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:Content-Description
+	:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=PJxmFD7oVhowjFfRLMd/wJWbXNgSckWUxtHXXfyc+o4=; b=RiYrlUv7UE8f6KVaY2hxtR3ODM
+	mq0oSCxtqaAix7fGuhTSjHE41CssQJaA3/tGa4OHWZZFaO8lGrlZJudnYtb5RZlfHe/bAur6+4743
+	ZUEE4/G+TCRgcBzCgE0M4xqWHRqMxdM0NGwJuFPOdEmt/CW/FTo1iEXQpV8CM1SV2FSrl7H59LNwr
+	SMEeLOAu4BEr6CUnmaNoBjLae7T8EEGT80R0Rq0RqJ0I00v14XcJjYcgGBSxDUZgkUeKYyQTMWTzk
+	N5CqCK6E8Op5QPOXq3RInvGEbKy+2xUmwYu5wPsdvvv0v4WhDxnVqDTnWtPq0dV6hWfFlkNgb8uf5
+	HCVvl0Ig==;
+Received: from 177-136-93-33.vmaxnet.com.br ([177.136.93.33] helo=[192.168.1.54])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1wFfxh-000TZ2-Me; Thu, 23 Apr 2026 00:22:25 +0200
+From: Heitor Alves de Siqueira <halves@igalia.com>
+Date: Wed, 22 Apr 2026 19:22:09 -0300
+Subject: [PATCH] usb: usbtmc: Allocate enough space for interrupt-IN buffer
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e06dcae8-5b8e-4e58-a0cc-1c67e5a08170@linux.intel.com>
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260422-usbtmc-iin-size-v1-1-5dc44b4389aa@igalia.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQqDMBBA0avIrDuQhJCFV5Eu4jjREUxLRkupe
+ HejXb7F/zsoF2GFttmh8EdUXrnCPhqgKeaRUYZqcMYF453DTft1IRTJqPJjTDbGZHwM5Alq9S6
+ c5Hsfu+ffuvUz03pt4DhOpaPekXMAAAA=
+X-Change-ID: 20260422-usbtmc-iin-size-f1aaf04a6c4c
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel-dev@igalia.com, 
+ syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com, stable@kernel.org
+X-Mailer: b4 0.15.2
+X-Spamd-Result: default: False [1.14 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	R_DKIM_REJECT(1.00)[igalia.com:s=20170329];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmail.com,synopsys.com,vger.kernel.org,suse.com,linux.intel.com];
-	TAGGED_FROM(0.00)[bounces-36424-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36425-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-0.972];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[halves@igalia.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[igalia.com:-];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,rowland.harvard.edu:dkim,rowland.harvard.edu:mid]
-X-Rspamd-Queue-Id: 7190F447FEC
+	TAGGED_RCPT(0.00)[linux-usb,abbfd103085885cf16a2];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[igalia.com:mid,igalia.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,syzkaller.appspot.com:url,appspotmail.com:email]
+X-Rspamd-Queue-Id: DD81544B41A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Apr 22, 2026 at 04:51:30PM +0300, Mathias Nyman wrote:
-> On 4/22/26 08:30, Michal Pecio wrote:
-> > On Tue, 21 Apr 2026 22:11:41 -0400, Alan Stern wrote:
-> > > Can you confirm that it's also possible for xhci-hcd to prevent
-> > > control endpoints from restarting when a transaction error (-EPROTO)
-> > > occurs?  Up until usb_reset_endpoint() or a new callback?
-> > 
-> > Doable. They halt like any other and it's SW's choice how to restart.
-> 
-> Yes, doable.
-> 
-> Would this be used in cases where all hope is lost and we want to reset the
-> device, canceling all pending control URBs before restarting the ring,
-> thus avoiding sending any extra URBs to the device just to wait for
-> them to fail or timeout?
+The USBTMC driver allocates the Interrupt-IN buffer according to the
+wMaxPacketSize value obtained from the USB endpoint. If a USB device
+advertises a small enough wMaxPacketSize (e.g. a malfunctioning device
+or an endpoint constructed by syzbot), the buffer will not have enough
+space for the mandatory headers and will trigger an out-of-bounds read.
 
-That wasn't my intention.  The purpose was to avoid getting into a tight 
-loop such as in fuzzing tests with dummy-hcd.  When a device is 
-disconnected, if the class driver's completion handler immediately 
-resubmits after a -EPROTO error, and the resubmitted URB immediately 
-fails with -EPROTO status, the resulting loop can use enough of a CPU's 
-time to cause a "CPU hung" error.
+Fix by ensuring the driver will allocate at least enough space to fit
+the headers for Interrupt-IN packets (bNotify1 and bNotify2).
 
-The same sort of thing can happen with real host controllers, although 
-the loop won't be quite so tight.  But if we prevent resubmitted URBs 
-from failing until the endpoint is reset or restarted, that will slow 
-down the loop a lot.  Especially with a series of increasing delays 
-between the restarts.
+Fixes: dbf3e7f654c0 ("Implement an ioctl to support the USMTMC-USB488 READ_STATUS_BYTE operation.")
+Reported-by: syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=abbfd103085885cf16a2
+Cc: stable@kernel.org
+Signed-off-by: Heitor Alves de Siqueira <halves@igalia.com>
+---
+ drivers/usb/class/usbtmc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> In most cases I can think of it would make sense to keep the control endpoint
-> running. Just let the hcd move to the SETUP stage of the next control transfer
-> URB and continue.
+diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+index bd9347804dec..22efa74008f8 100644
+--- a/drivers/usb/class/usbtmc.c
++++ b/drivers/usb/class/usbtmc.c
+@@ -2452,7 +2452,7 @@ static int usbtmc_probe(struct usb_interface *intf,
+ 		kref_get(&data->kref);
+ 
+ 		/* allocate buffer for interrupt in */
+-		data->iin_buffer = kmalloc(data->iin_wMaxPacketSize,
++		data->iin_buffer = kmalloc(max(2, data->iin_wMaxPacketSize),
+ 					GFP_KERNEL);
+ 		if (!data->iin_buffer) {
+ 			retcode = -ENOMEM;
 
-I'd be in favor of that except for this tight-loop problem.
+---
+base-commit: 70c8a7ec6715b5fb14e501731b5b9210a16684f7
+change-id: 20260422-usbtmc-iin-size-f1aaf04a6c4c
 
-> For example EMF causing transaction error (-EPROTO) on active IN and OUT bulk
-> transfers. Two clear-halt requests are queued, one for each endpoint.
-> If first clear-halt request fails with -EPROTO  we still want to continue with
-> the next request.
+Best regards,
+--  
+Heitor Alves de Siqueira <halves@igalia.com>
 
-Actually no, we don't.  If the first clear-halt request fails, it means 
-the EMF is still present.  We want to wait for a short time before 
-sending the next request.  If we don't, and the next request gets sent 
-right away, it will probably fail also.
-
-> Shouldn't be any toggle/seq-nr issues here on the control endpoint.
-
-Indeed.
-
-> Most control transfer STALL (EPIPE) cases are protocol stalls, and we should
-> just continue running. Exception here might be a STALL response
-> to a clear-halt request. I assume (didn't check) device must support those.
-> So in that case we may want to reset the device.
-
-As I said to Michal, we can treat this the same as a transaction error: 
-delay and retry, then eventually reset if needed.
-
-In theory there's a risk of racing with a Set-Interface or Set-Config 
-request, so that the clear-halt refers to an endpoint that doesn't exist 
-any more.  This race can be prevented by making usb_set_interface() and 
-usb_set_configuration() wait until all pending error recovery is done.
-
-> There's also a risk that the control endpoint isn't started when it should.
-> For example class driver could potentially call usb_clear_halt() on the control
-> endpoint, synchronously waiting  for the clear-halt request to complete before
-> calling usb_reset_endpoint(). If endpoint restarts at usb_reset_endpoint() then
-> the clear-halt control transfer would time out.
-
-You're suggesting that the clear-halt request might not be sent to the 
-device (and would therefore time out) because the endpoint queue isn't 
-running, and it won't start running until usb_reset_endpoint() is 
-called?  That objection applies only to ep0.  Other control endpoints 
-don't have this problem because the clear-halt request is always sent to 
-ep0.
-
-ep0 is a special case.  If it ever does halt in such an extreme fashion 
-that it can't even accept SETUP packets then there's no way to 
-communicate with it at all.  The USB 2.0 spec mentions this possibility 
-in section 5.5.5; it says the only way to recover is then to reset the 
-device.  There should never be any reason to send a clear-halt request 
-for ep0.
-
-Alan Stern
 
