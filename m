@@ -1,57 +1,58 @@
-Return-Path: <linux-usb+bounces-36418-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36419-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IBMdI7bF6GmYQAIAu9opvQ
-	(envelope-from <linux-usb+bounces-36418-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 14:57:26 +0200
+	id uJeTMGTO6GklQQIAu9opvQ
+	(envelope-from <linux-usb+bounces-36419-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 15:34:28 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A7E4446507
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 14:57:26 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4241A446C9B
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 15:34:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 4056F3036C0C
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 12:55:56 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 3E0BB301C810
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2026 13:26:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2123E9F82;
-	Wed, 22 Apr 2026 12:55:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35FC13E024E;
+	Wed, 22 Apr 2026 13:26:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="xAoMSe1t"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="WBr/Eisv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from ixit.cz (ixit.cz [185.100.197.86])
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B3C3E95BC;
-	Wed, 22 Apr 2026 12:55:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.100.197.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F284F3EB815;
+	Wed, 22 Apr 2026 13:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776862550; cv=none; b=OGFl5IdxPLOwELi+jQroP5hRBWAA55XOahh92ASrgUvSs0EEE/MaJnVrsQpvwdO36I/YhNHq3qtASXA1l1HxgTZWqa0BH6es9915B2Svx1kIRO6+elpxwAQQkHZZfzjbwaNW1HzBETng9P6HopFqfUSLAYJRBUkoRQMQbHhuPm8=
+	t=1776864395; cv=none; b=lIY/QU+TNdtmh0Ee37Une0qVwbdC5quifhts7Dd1VF5qCp2x0/GbvJUMZoU7YVRSw0/P5KToI8GSGmwXuY9MzdEqeWYpLBvOoLWIYakHmGNqyPFcxrtqJmlOAw0LIO8sclLT+BhWODM02RFxWX8cvFc1UThaz7SkxlCNlSzHu5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776862550; c=relaxed/simple;
-	bh=nBUjkqzbsW9h+giptbytXPunGV8VSmqDApV+jbaJ0t4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Isti7sdq+WQAZd90ORjkKRoc5+WPGhIubaVxn1+IzDGc1bE6LCrUQPMbC8ZrEasW59Ch3dnFSVobvrNoZt7j5PYkvtk9hG23nly5RjOg0YoyIW8+5sONZ49CincgndV3dVDLDzmIqPS3WicGbPf9d1n7IvNfIb6TXmCQotzlnh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz; spf=pass smtp.mailfrom=ixit.cz; dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b=xAoMSe1t; arc=none smtp.client-ip=185.100.197.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ixit.cz
-Received: from [10.0.0.200] (unknown [10.88.125.21])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ixit.cz (Postfix) with ESMTPSA id EF1965340EE8;
-	Wed, 22 Apr 2026 14:55:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-	t=1776862537;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ojAsEz/PoKdOZTVN4oyKv/PPli0YBdhtuXDaezDgRv8=;
-	b=xAoMSe1tzLS7DaQbIWbjsFaTCqDdym43eHBRISfZlTg07z8iJ5JKv5es7M5rBJf1B3Ck3g
-	zv2D73NW9Oz15INGuKhnQ5FkY+mPUY/Lrm0UeUo35pKddnRBOrgdnpLkb6YtHdJnr2AqPx
-	zdnkl5/jOXXXfj6ib/z/B/1rUgW9UMU=
-Message-ID: <f7aedad7-cece-463b-a6f4-9303a552f5f0@ixit.cz>
-Date: Wed, 22 Apr 2026 14:55:36 +0200
+	s=arc-20240116; t=1776864395; c=relaxed/simple;
+	bh=5NVf2ZfPjVuZ5oUZXbVk2S5LJa86nGbWaJ9Sv3sqrRM=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=mv838Q73i6Id8/2kyowCg2ucQN/k6iDKqvrVewLdlyHSVO7z+C7wc7nL2+v9QQ0RdBHFkLr7SNVLNLsInjSPh1TI6y3ZIYgZdiP7Yyz5owUmGi0jGnXRMt6ThmpgekvjhqMW6g+3VMUmiomPg9oLBFaI39bE5BOdsXdmyQGrpKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=WBr/Eisv; arc=none smtp.client-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=lx6LkUlHkM0WbGTScpoYtlN2/wIUBYmDWdLoikLccvA=;
+	b=WBr/Eisvxhm53hPlLbdMoq6oV6qnfi3zDsWibJrGz2D/jlMu3SSd9hVNhI/YiXYnEbGmh9hCi
+	k9WGZ1BCGNybN6H1hYPrGAP3ozyarBeOz28XBsDmAYbMxcA6JkJLZMg/HaOZViVSThCUto4xYyO
+	/UBFrgfHbJsMu/pssTH32Oo=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4g10FW2p7dz1prLm;
+	Wed, 22 Apr 2026 21:19:59 +0800 (CST)
+Received: from kwepemk100018.china.huawei.com (unknown [7.202.194.66])
+	by mail.maildlp.com (Postfix) with ESMTPS id DBD5440561;
+	Wed, 22 Apr 2026 21:26:24 +0800 (CST)
+Received: from [10.164.148.136] (10.164.148.136) by
+ kwepemk100018.china.huawei.com (7.202.194.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.36; Wed, 22 Apr 2026 21:26:24 +0800
+Message-ID: <00ad170a-2546-4d7a-8f8b-af6d46e09a73@huawei.com>
+Date: Wed, 22 Apr 2026 21:26:23 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,190 +60,193 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
-To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Corentin Labbe <clabbe@baylibre.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
-References: <aINXS813fmWNJh3A@hovoldconsulting.com>
- <CAFBinCBMTOM-FMgENS-mrnV17HbKzhtPUd44_dDiwnD=+HVMWQ@mail.gmail.com>
- <aIiXyEuPmWU00hFf@hovoldconsulting.com>
- <CAFBinCBZhjs7DGEgxhz54Dg8aW3NX9_LdnoZeUZpm5ohaT_-oQ@mail.gmail.com>
- <aJCoRFe-RFW1MuDk@hovoldconsulting.com>
- <CAFBinCCYsWHsNwi99kFqvLv+xOYtp9u3omhrPdV-hdH+5Cfyew@mail.gmail.com>
- <aK7Y9rRIsGBKRFAO@hovoldconsulting.com>
- <CAFBinCD19CVc0kX-aqa8pw71O2F3Nwy9ght+2TCn9B4PbOCBfw@mail.gmail.com>
- <aS2hxeBR-tptevYd@hovoldconsulting.com>
- <CAFBinCAt1DevnggWJdzBzh3X1Yfb0ScZXYsgkrA1cGrUmfXVwg@mail.gmail.com>
- <aWZlYuFXYd5eAZTT@hovoldconsulting.com>
-Content-Language: en-US
-From: David Heidelberg <david@ixit.cz>
-Autocrypt: addr=david@ixit.cz; keydata=
- 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
-In-Reply-To: <aWZlYuFXYd5eAZTT@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH] usb: core: Fix bandwidth for devices with invalid
+ wBytesPerInterval
+From: "Xuetao (kirin)" <xuetao09@huawei.com>
+To: Greg KH <gregkh@linuxfoundation.org>, Alan Stern
+	<stern@rowland.harvard.edu>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<caiyadong@huawei.com>, <stable@kernel.org>, Michal Pecio
+	<michal.pecio@gmail.com>
+References: <20260402021400.28853-1-xuetao09@huawei.com>
+ <2026040241-purveyor-bakery-a9f1@gregkh>
+ <c463f9ed-22ed-4ee6-b4fa-2933770e9c4c@huawei.com>
+ <74f1bb0d-24c3-44be-9583-0585863cdae3@rowland.harvard.edu>
+ <2026040221-reclusive-garland-6281@gregkh>
+ <c2d89ac0-1d5c-45b8-ab68-53214546a7ae@huawei.com>
+In-Reply-To: <c2d89ac0-1d5c-45b8-ab68-53214546a7ae@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemk100018.china.huawei.com (7.202.194.66)
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ixit.cz,quarantine];
-	R_DKIM_ALLOW(-0.20)[ixit.cz:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,huawei.com,kernel.org,gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36418-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[googlemail.com,baylibre.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[huawei.com:+];
+	TAGGED_FROM(0.00)[bounces-36419-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[david@ixit.cz,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[ixit.cz:+];
+	FROM_NEQ_ENVFROM(0.00)[xuetao09@huawei.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 1A7E4446507
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:dkim,huawei.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4241A446C9B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-kind ping, I'm still hoping one day we get the driver without need of manual 
-building aside.
 
-Thank you for your the efforts you put all into it
-David
 
-01/2026 16:31, Johan Hovold wrote:
-> On Mon, Dec 15, 2025 at 03:10:29AM +0100, Martin Blumenstingl wrote:
->> On Mon, Dec 1, 2025 at 3:10 PM Johan Hovold <johan@kernel.org> wrote:
+在 2026/4/3 9:20, Xuetao (kirin) 写道:
 > 
->>>> Unfortunately I don't know how to read the HW flow control state from
->>>> the hardware.
->>>> Do you have any suggestions, how I can test HW flow control (after
->>>> manually enabling it for a port)?
+> 
+> 在 2026/4/2 22:09, Greg KH 写道:
+>> On Thu, Apr 02, 2026 at 09:56:51AM -0400, Alan Stern wrote:
+>>> On Thu, Apr 02, 2026 at 02:59:35PM +0800, Xuetao (kirin) wrote:
+>>>> 2、Following Alan's suggestion in another email, should I check whether
+>>>> wBytesPerInterval is a valid value and handle it in the
+>>>> usb_parse_ss_endpoint_companion() ?
 >>>
->>> You can try disabling reading from the device (e.g. never submit the
->>> read urbs) and see if the RTS is deasserted when the buffer fills up.
-> 
->> Doing so results in:
->> - lots of UART_LSR_OE
->> - RTS stays LOW (pulled to GND)
->>
->> UART_LSR_OE increasing seems correct as far as I understand this.
->> RTS being LOW is wrong and I cannot manage to get ch348 to pull it to HIGH.
->>
->> I did some more research and found that ch348 implements UART_IIR_MSI
->> and provides a fully standard compatible UART_MSR.
->> This is either triggered by a status change on the pins (UART_MSR
->> delta bits and the actual status bits), or by requesting an update
->> using the VEN_R command (UART_MSR status bits only, no delta bits).
->>
->> In a very simple test-case I've used jumper cables on port #0 of ch348:
->> - RX and TX connected together
->> - CTS and RTS connected together
->>
->> If I remove the jumper between CTS and RTS I get:
->>    ch348 ttyUSB0: got MSR = 0x01 // jumper removed
->>    ch348 ttyUSB0: got MSR = 0x11 // jumper connected again
->>    ch348 ttyUSB0: got MSR = 0x01 // jumper removed again
->>
->> So the hardware does register the change.
->>
->> Earlier I thought I found a fix: I had the values for
->> R_C4_HW_FLOW_CONTROL_OFF and R_C4_HW_FLOW_CONTROL_ON swapped.
->> That however didn't fix it.
->>
->> My current work can be found here: [0]
->> If you also don't have any further ideas then I'll drop the whole
->> RTS/CTS code for now so the ch348 driver can finally make it into
->> Linux 6.20
-> 
-> Or you can include it and just document the known issue with RTS control
-> for port 1. It seems you have everything else working, right?
-> 
->>> And in the other direction, verify that writes are buffered after you
->>> deassert RTS manually on the other end. That should be easier.
-> 
->> This seems to work: if I pull CTS up then ch348 stops sending data
-> 
-> So that means hardware flow control (CRTSCTS) is enabled, which could
-> prevent manual control of RTS. Which port did you test this on? Or is it
-> the same behaviour on all ports (0-3)?
-> 
-> Going back to archives, it seems like you can control RTS on ports 0, 2
-> and 3. (And DTR/RTS is not available for ports 4-7).
-> 
-> Hardware flow being enabled on just port 1 may explain the difference
-> even if you would expect the device to also deassert RTS in the overflow
-> test (unless there are separate bits for controlling auto-rts and
-> auto-cts).
-> 
->>>> In case I can't easily figure it out: would you also accept a driver
->>>> that doesn't support RTS/CTS for its initial version?
+>>> Yes, IMO.
 >>>
->>> It's good to at least be able to control DTR/RST at open/close (i.e.
->>> implement dtr_rts()) so that you can communicate when the other end
->>> has hw flow enabled. Sound like you're really close to doing so.
+>>>> However, when parsing the device descriptor, we do not know whether the
+>>>> actual data length transmitted by the peripheral is greater than
+>>>> wBytesPerInterval.
+>>>
+>>> Note: wBytesPerInterval is in the endpoint descriptor, not the device
+>>> descriptor.
+>>>
 > 
->> In the meantime I found out why I had trouble with the DTR signal on port 1.
->> It was a user(space) error. I've been using [1] for some of my tests
->> and it has a bug where it would clear c_cflag HUPCL [2], which
->> prevents the kernel from turning DTR off on port close.
+> Thank you for your review. I will correct the description in the 
+> subsequent patch.
 > 
-> Ah, good that you found that.
+>>>> Therefore, would it be sufficient to only add a check for whether
+>>>> wBytesPerInterval is 0 in the existing flow, and if it is 0, set
+>>>> wBytesPerInterval to cpu_to_le16(max_tx) by default?
+>>>>
+>>>> For example, modify it in the following way：
+>>>>
+>>>>       if (le16_to_cpu(desc->wBytesPerInterval) > max_tx ||
+>>>> le16_to_cpu(desc->wBytesPerInterval) == 0) {
+>>>>          dev_notice(ddev, "%s endpoint with wBytesPerInterval of %d 
+>>>> in "
+>>>>                  "config %d interface %d altsetting %d ep %d: "
+>>>>                  "setting to %d\n",
+>>>>                  usb_endpoint_xfer_isoc(&ep->desc) ? "Isoc" : "Int",
+>>>>                  le16_to_cpu(desc->wBytesPerInterval),
+>>>>                  cfgno, inum, asnum, ep->desc.bEndpointAddress,
+>>>>                  max_tx);
+>>>>          ep->ss_ep_comp.wBytesPerInterval = cpu_to_le16(max_tx);
+>>>>      }
+>>>>
+>>>>   Could you please give me some advice? Thanks.
+>>>
+>>> Try it and see if it fixes the problems you see with the network
+>>> adapters.
+>>>
 > 
-> Johan
+> Okay, I will verify the effectiveness of this modification and provide 
+> feedback on the results.
+> 
 
--- 
-David Heidelberg
+By adding debug and capturing USB protocol analyzer traces, I have 
+identified the pattern of this issue:
+
+1. Why doesn't the Realtek USB 3.0 network adapter have this problem?
+
+Realtek has two different types of interrupt endpoints:
+(1) wMaxPacketSize = 0x10, bMaxBurst = 0, wBytesPerInterval = 0x8
+(2) wMaxPacketSize = 0x2, bMaxBurst = 0, wBytesPerInterval = 0x2
+
+The Realtek network adapter uses the r8152.c driver. In rtl8152_open() 
+-> usb_submit_urb(tp->intr_urb, GFP_KERNEL), the length of tp->intr_urb 
+is fixed at 0x2.
+The Realtek USB 3.0 network adapter uses the endpoint with 
+wBytesPerInterval = 0x2 for network status queries. Since 
+wBytesPerInterval = wMaxPacketSize × (bMaxBurst + 1) = 2, there is no 
+problem.
+
+2. The ASIX AX88179 USB 3.0 network adapter exhibits two different symptoms:
+
+ASIX AX88179 has two different interrupt endpoint descriptors:
+(1) wMaxPacketSize = 0x10, bMaxBurst = 0, wBytesPerInterval = 0x0
+(2) wMaxPacketSize = 0x10, bMaxBurst = 0, wBytesPerInterval = 0x8
+
+The ASIX AX88179 network adapter uses the ax88179_178a.c driver. In 
+usbnet_open() -> usbnet_status_start() -> usb_submit_urb(dev->interrupt, 
+mem_flags), the length of dev->interrupt is 0x10.
+
+(1) When wBytesPerInterval = 0x8: When the software submits the INT URB, 
+the host controller can normally send an INT IN request. If the device 
+returns data length ≤ 8 bytes, the host and device interact normally, 
+and the network works.
+However, if the network adapter responds within one interval with a 
+packet carrying 16 bytes of data, a specific host controller reports a 
+babble error, causing network failure.
+
+(2) When wBytesPerInterval = 0x0: The host controller does not reserve 
+any bandwidth for the device. When the software submits the INT URB, a 
+specific host controller does not issue an INT IN request to the device, 
+nor does it report an error to the software. The device controller never 
+receives the INT IN request, so the network fails.
+
+
+Verification results:
+
+Patch 1:
+In usb_parse_ss_endpoint_companion(), if the interrupt endpoint's 
+wBytesPerInterval is 0, set wBytesPerInterval to wMaxPacketSize × 
+(bMaxBurst + 1).
+
+Result 1:
+This resolves the issue for ASIX AX88179 adapters with wBytesPerInterval 
+= 0. However, for the scenario where wBytesPerInterval = 0x8, 
+wMaxPacketSize = 0x10, and the device returns a 16-byte data payload, a 
+babble error still occurs.
+
+Patch 2:
+In xhci_get_max_esit_payload(), when udev->speed >= USB_SPEED_SUPER, for 
+interrupt endpoints return the maximum value between 
+ep->ss_ep_comp.wBytesPerInterval and (max_burst + 1) × max_packet.
+
+Result 2:
+This resolves both scenarios described above. The only downside is that 
+this modification may cause the host to waste a small amount of bandwidth.
+
+
+> I guess that for the scenario where wBytesPerInterval is 0, it should be 
+> solvable. However, for the scenario where wBytesPerInterval is 8 but the 
+> peripheral sends a data length greater than 8 (e.g., 16), there might be 
+> an issue. I will test both of the above scenarios.
+> 
+>>> I saw the Greg said not to change the descriptors and just fail the
+>>> device, but we already make this sort of change to correct other errors
+>>> so there doesn't seem to be any reason not to do it here as well.
+>>> Especially if it allows people to use devices that otherwise would not
+>>> work.
+>>
+>> I didn't realize this was on "real" devices, sorry.  I thought this was
+>> only a fuzzing thing.  So yes, fix up the broken descriptor after
+>> warning about it is the correct thing to do.
+>>
+>> thanks,
+>>
+>> greg k-h
+> 
 
 
