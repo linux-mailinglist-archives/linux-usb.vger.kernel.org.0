@@ -1,140 +1,138 @@
-Return-Path: <linux-usb+bounces-36429-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36430-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eKykCTCw6WlchgIAu9opvQ
-	(envelope-from <linux-usb+bounces-36429-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2026 07:37:52 +0200
+	id cA5KKMC06WkJiAIAu9opvQ
+	(envelope-from <linux-usb+bounces-36430-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2026 07:57:20 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CF2844D4BF
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2026 07:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CC3244D5DC
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2026 07:57:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B2AF23024CB9
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2026 05:37:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 77081304C61B
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2026 05:56:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C891A3C198D;
-	Thu, 23 Apr 2026 05:37:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C86D3CD8CB;
+	Thu, 23 Apr 2026 05:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wxMot4BB"
+	dkim=pass (2048-bit key) header.d=cachyos.org header.i=@cachyos.org header.b="WOrLv112"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ptr1337.dev (mail.ptr1337.dev [202.61.224.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBE21F8AC5;
-	Thu, 23 Apr 2026 05:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E112DB7BA;
+	Thu, 23 Apr 2026 05:56:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.61.224.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776922664; cv=none; b=GklJvAx2r14Z7J0ssUJDY6/qDnoCp/TFcZEAU618YCsVz+ie+SCHaS1whfM4FCVL7kaoTcEDPUVLJNp5lRHmqyaClJpBjFgzmM17cQuarCQ+AzK5ZSZGmGd6Vsi/hc09tzTICuCUp/rsSIJYcrHhl6TL1BibTPnQtH6/tjXVN40=
+	t=1776923769; cv=none; b=drT5O4NWUJAmdx7b0SNITQzy6IAo076bq5BGAoyVq9/7dWxdMS6ZLWNOHWRVcYdauUpk9pDhdJ4n+ce91E9hqkKQCeeiPHHsFS+aEQVg1sIIJLcrxJCamP3BVbLTvV8KXafPt15voezF/6JmQHci6zGgH1rN0wq7eKg1UK5UK/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776922664; c=relaxed/simple;
-	bh=RLaxu+jzommh9hxoAa0X08by/eNE2hioT5krWwYB6WQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uTI1VWN91KgpyaJvWDYWQMVA9MXLNPKvKxBDMmdznQGLzh6HORDzrL0ANr4qhxKijyYMAOW75ZNbR4JNmnpxz0QEp0LlupNO6Vt5MhLWlQbU4D9hpx1qFHlqPXjE5aRLe56H4Al6RKXKBhN5qtACIJ7x8CCaKaHn7JH9QB//xSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wxMot4BB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A17C0C2BCAF;
-	Thu, 23 Apr 2026 05:37:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1776922664;
-	bh=RLaxu+jzommh9hxoAa0X08by/eNE2hioT5krWwYB6WQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=wxMot4BBlMQOtks2VWe326WZZ4aRwVM1Lb4rVG4Ta9tN2uEk1yHFYFEgAvuleBsS8
-	 vN6kZnT56L9pBhLsRJ00zSCUmjXYDDkwCr2qS15iBsb+Pyw9w9l1t1bCcHokCqm/Bi
-	 MUCQYtI4YCS5sbl+GW16vMJrxPtRlfFmc4BoElgg=
-Date: Thu, 23 Apr 2026 07:37:41 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Heitor Alves de Siqueira <halves@igalia.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
-	syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com,
-	stable@kernel.org
-Subject: Re: [PATCH] usb: usbtmc: Allocate enough space for interrupt-IN
- buffer
-Message-ID: <2026042305-automated-unaudited-ef5c@gregkh>
-References: <20260422-usbtmc-iin-size-v1-1-5dc44b4389aa@igalia.com>
- <20260423073307.2b81543c.michal.pecio@gmail.com>
+	s=arc-20240116; t=1776923769; c=relaxed/simple;
+	bh=y2T59Rw3vxwCrlZYZiYw4dVdhS+aAg5edBljwda3arI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gqWoZ5bV4FMW3r9muN+5EROEM3du+oTsS6IF+zRP2s/zWzzPRhXwTkfxSk85ZnCO1HLrB1rq+BCi87zT5V+tj4AqEX+tM7CB+mUXreFt/H46YHLy5jf105T71PuwsDIcjXw3/lUkJSQsRIRi7gUTUNwvMh/OlMq4EKOj+DLLODQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cachyos.org; spf=pass smtp.mailfrom=cachyos.org; dkim=pass (2048-bit key) header.d=cachyos.org header.i=@cachyos.org header.b=WOrLv112; arc=none smtp.client-ip=202.61.224.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cachyos.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cachyos.org
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B2785285E29;
+	Thu, 23 Apr 2026 07:56:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cachyos.org; s=dkim;
+	t=1776923765; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=QYpQy/uD+KUgLec3Od9MDMAF7kM14x1itr/KOHrURSc=;
+	b=WOrLv112ayAi3eMRvGPj9hSvS9LDNs970/E0SJbeCaR65wmOAibmOg/nZcRj3YKZfTdWMN
+	9KY8xN+/LD8k/6LmdMfNCzKbmq1HugPeijfoBVA+yeikzxNg7U2+fRiDiaJe1rS+h2M0Fs
+	4elylBhFSB9cYQJqayoOoaDvCbN0LsTTlbAABAyu8PdlxziBtAesFNw79hDmVDJjdIxMk7
+	DkDUNoHl2e3YAFOKb0zltJY8F/7gzIzmZ09On4pXTaulJDjiZ/K/r/aD5pmgr4hColfYEv
+	lK5b+kkeotd6hTX/pm11eHaWonhSvKiuhEOGmz06Vxv2Ttvz3ZH0l6GlWhl/KA==
+Message-ID: <81ef5ca0-b070-4afc-bda7-3e5a49677115@cachyos.org>
+Date: Thu, 23 Apr 2026 05:55:00 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260423073307.2b81543c.michal.pecio@gmail.com>
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+Subject: Re: [PATCH] HID: usbhid: sanitize hid->uniq against non-printable
+ bytes
+To: Greg KH <greg@kroah.com>, Taylor Hewetson <taylor@exponent.digital>
+Cc: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
+ linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260418025823.21767-1-taylor@exponent.digital>
+ <2026041845-approve-pelvis-9845@gregkh>
+From: Eric Naim <dnaim@cachyos.org>
+In-Reply-To: <2026041845-approve-pelvis-9845@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	DMARC_POLICY_ALLOW(-0.50)[cachyos.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[cachyos.org:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36429-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36430-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	DKIM_TRACE(0.00)[cachyos.org:+];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dnaim@cachyos.org,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
 	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,abbfd103085885cf16a2];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,syzkaller.appspot.com:url,appspotmail.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,igalia.com:email]
-X-Rspamd-Queue-Id: 7CF2844D4BF
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,cachyos.org:dkim,cachyos.org:mid]
+X-Rspamd-Queue-Id: 0CC3244D5DC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Apr 23, 2026 at 07:33:07AM +0200, Michal Pecio wrote:
-> On Wed, 22 Apr 2026 19:22:09 -0300, Heitor Alves de Siqueira wrote:
-> > The USBTMC driver allocates the Interrupt-IN buffer according to the
-> > wMaxPacketSize value obtained from the USB endpoint. If a USB device
-> > advertises a small enough wMaxPacketSize (e.g. a malfunctioning device
-> > or an endpoint constructed by syzbot), the buffer will not have enough
-> > space for the mandatory headers and will trigger an out-of-bounds read.
-> > 
-> > Fix by ensuring the driver will allocate at least enough space to fit
-> > the headers for Interrupt-IN packets (bNotify1 and bNotify2).
-> > 
-> > Fixes: dbf3e7f654c0 ("Implement an ioctl to support the USMTMC-USB488 READ_STATUS_BYTE operation.")
-> > Reported-by: syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com
-> > Closes: https://syzkaller.appspot.com/bug?extid=abbfd103085885cf16a2
-> > Cc: stable@kernel.org
-> > Signed-off-by: Heitor Alves de Siqueira <halves@igalia.com>
-> > ---
-> >  drivers/usb/class/usbtmc.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
-> > index bd9347804dec..22efa74008f8 100644
-> > --- a/drivers/usb/class/usbtmc.c
-> > +++ b/drivers/usb/class/usbtmc.c
-> > @@ -2452,7 +2452,7 @@ static int usbtmc_probe(struct usb_interface *intf,
-> >  		kref_get(&data->kref);
-> >  
-> >  		/* allocate buffer for interrupt in */
-> > -		data->iin_buffer = kmalloc(data->iin_wMaxPacketSize,
-> > +		data->iin_buffer = kmalloc(max(2, data->iin_wMaxPacketSize),
-> >  					GFP_KERNEL);
+On 4/18/26 3:14 PM, Greg KH wrote:
+> On Sat, Apr 18, 2026 at 02:58:23PM +1200, Taylor Hewetson wrote:
+>> Some USB HID devices (observed on ASUS ROG Azoth via its 2.4GHz
+>> dongle, USB ID 0b05:1a85) report an iSerialNumber string whose
+>> USB string descriptor declares a longer length than the actual
+>> serial, leaving uninitialized firmware memory - including control
+>> characters such as 0x18 - appended to the returned string.
+>>
+>> These non-printable bytes propagate into hid->uniq, which in turn
+>> populates /sys/class/input/inputN/uniq. Downstream userspace
+>> components (systemd sd-device property_is_valid(), and by extension
+>> mutter input enumeration on GNOME Wayland sessions) reject devices
+>> with control characters in their uniq, rendering otherwise-
+>> functional input devices unusable in graphical sessions despite
+>> the kernel input layer correctly translating keypresses.
+>>
+>> Truncate hid->uniq at the first byte outside the printable ASCII
+>> range (0x20..0x7e) after the serial is read.
 > 
-> This changes OOB read into uninitialized memory read, which syzbot
-> may complain about again next week.
+> Why aren't we doing this in the USB core instead of forcing all users of
+> this to do it instead?
+
+Should it be up to the kernel to do this as well? Currently this is only a
+problem with systemd because they added this check, and it looks like they
+have something in mind to fix it as well [1].
+
+[1] https://github.com/systemd/systemd/issues/41339#issuecomment-4266429563
+
 > 
-> More reliable fix would be to reject such devices if they are illegal,
+> thanks,
+> 
+> greg k-h
 
-That's the best thing to do.
 
-thanks,
-
-greg k-h
+-- 
+Regards,
+  Eric
 
