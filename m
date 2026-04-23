@@ -1,152 +1,150 @@
-Return-Path: <linux-usb+bounces-36452-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36453-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yKCBH6BD6mnqxQIAu9opvQ
-	(envelope-from <linux-usb+bounces-36452-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2026 18:06:56 +0200
+	id kDAQJXRH6mkhxgIAu9opvQ
+	(envelope-from <linux-usb+bounces-36453-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2026 18:23:16 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 836D2454A46
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2026 18:06:55 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1D64454D21
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2026 18:23:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 035B9300BB8F
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2026 16:06:33 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E9BD430A6945
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2026 16:16:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 932F837187E;
-	Thu, 23 Apr 2026 16:06:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 486D6393DDB;
+	Thu, 23 Apr 2026 16:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="dUabLEIL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m1973173.qiye.163.com (mail-m1973173.qiye.163.com [220.197.31.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C9B36E47A;
-	Thu, 23 Apr 2026 16:06:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710FE3B5832
+	for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2026 16:11:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776960389; cv=none; b=L13tHw5JgFs+H7TiPxPR8LEsyWNZkoLo8AW9I8Ph3o6m5RMKfu5er6P6Rzhh0o1bZ8tsFtBBOWXYrkYSTMshbkQO0WnDL6RK33ImoOPvRPEDsh8yCoz37FskqAlXRYOGDPLwCQ74fO4PwDH/vKiCGaQI7JxZWis13ckAFrKnSmg=
+	t=1776960709; cv=none; b=OXzxqCRsbXKE3Ux7FxZeiE6J1NBtuBmqpOLaXvhG0YOFB2R/7BW4zxKccIXUCDhnFrswwKViHqms0Ba20K+DtwHUVpiq49x6lqkmb8WoEJsC0IMGGEe5abQogtHLmM4uc2MC+irllkCQfQc6xkAgeK2u2z3PZJY0iFAxqtQsyYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776960389; c=relaxed/simple;
-	bh=1JrHli4SssiBkayVs215LdfbzOlofYgSJbx/Op1ZIIY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Nt415/c7wpGemLguDOsoe4bZ4o0jQGT/3RV5w524nfOsKQlAqI9838zBgduoJ9TnVzXOz/sOSOA6sfAQJsMJEUnj/3eWo1rLVEPg01KbAA4i4W6OAGcMw18fDGST2ZxM+74p+vGVgUX863xeyA8sz5TEq92CFhPfdttTjibU3d8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=autochips.com; spf=pass smtp.mailfrom=autochips.com; arc=none smtp.client-ip=220.197.31.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=autochips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=autochips.com
-Received: from H20F120008.autochips.inc (unknown [223.244.89.246])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 3be7c0b5a;
-	Fri, 24 Apr 2026 00:06:12 +0800 (GMT+08:00)
-From: Yongchao Wu <yongchao.wu@autochips.com>
-To: peter.chen@kernel.org,
-	pawell@cadence.com
-Cc: rogerq@kernel.org,
-	gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	stable@vger.kernel.org,
-	Yongchao Wu <yongchao.wu@autochips.com>
-Subject: [PATCH] usb: cdns3: gadget: fix request skipping after clearing halt
-Date: Fri, 24 Apr 2026 00:06:01 +0800
-Message-ID: <20260423160601.2949010-1-yongchao.wu@autochips.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1776960709; c=relaxed/simple;
+	bh=YV5X2bCjv6GGS7dEsT4XonzRN49kh1U6A1xYA4r13z4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RinNG/PjSGcJiRmZyPGXAwOkgj7Yuq56ixdw7um5w30EqDfni04OIAHMwuzXrWbDLHRAHVG3zVz0mcaLAGD64OYabfsbd/00poFqim5UznDTSC13fkW7Kkkcv39FugZQWBxSoX0hoNxye4mKWNfV+hToi8en9Kh76grKcAfz9Rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=dUabLEIL; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-50d75bfb259so50862471cf.1
+        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2026 09:11:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1776960707; x=1777565507; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vgObJLNSNVstrwi8WPQbb2HH8PTQiVBip10GVZVqWOY=;
+        b=dUabLEILthTuGBZgRpMgQZtt2NTPMHbfDE1BwfNIS617TaIiucE+6+EZlGWuocUOKx
+         zlCN9oYqnhx/SjUKHOArUgr/V9UCtCgNUbpgRq7SPwx+08x+MOuurY62qTYmUK27sRWc
+         RL7ZVIKIuCSzfDz7qcsWj+vhfXxDwqupAJkR2vEN03msLzXR9t8DKAVUGb8indNNlhQ4
+         0GuQfZs+04wcKY0Plgv02OCo3P/bRiF4h3dOHPIDOXauE/ep4qYiDsLZVTV3TbhwxCOg
+         jVTmwuJGelS+l26naLvH4Fv9G9N7fF+v9bx8ot02OwmgLD5hI+7AjrrtIUudrSARqktA
+         Wk2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776960707; x=1777565507;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vgObJLNSNVstrwi8WPQbb2HH8PTQiVBip10GVZVqWOY=;
+        b=RxtvXNpH125Mnl0pXXGNrshvoxOa3dGGErxV6MPEXhx+HFOJfVzrEWNL0N5CMaPg+M
+         biUtFV1mn0YXcwhkkYvuMCjLbs3Px4CDXRGtpSMFtN14ZSCeecm2SBytfte7ms35NQ7N
+         3MWztA5AJ0TUX/ukB1Lxlafym6wj7nKHub6CIQuxuH4a2Ks9VROIOq8ws7I6tHFTV07q
+         /bq9mcAwyVhmYOKnF6u3E1vv2yql79t5wNOBUT8+4MuD5V4d1Fbk/hghZUhcAJCRXJwB
+         A5JX0l5OZUDn8g3vN7w/CZrznA0VvUaeDGuv5vTl6HhaPZ8mXZzvZulTjhmGToaak+0w
+         X2MQ==
+X-Gm-Message-State: AOJu0Ywf8RhmPgMEEekWKcb1bWrrJFchM4O0qRTzjbfN9zEsQoBVJnv3
+	HO6sf4fWv2ii0HLafnnidj0msDFQSId3Lz3tCUdxwBKILSYF5p6Em5KhWklcNM9XqA==
+X-Gm-Gg: AeBDietnDgRxHoRHKnwlQ/OAiw0Ltc/IpOI4RbpBp+ze7axyTKY1hboUmWoXKBId7WB
+	eU7KYNTJhP10plJTYlRul8nu6Hs7N3PE6m/KrFCE70mwiPVzvbqB87kJ//5b5m2/XZtPThzWBqD
+	dmZo//mQWAAN2Hh0VMuriVpsDIM93d+FtNV4FoGwpTzW/UBuRkMjuRVuxdzk5RVTwKfEDIa1iSw
+	M6y33fxGFyjMJI6pV3OD2aUH7W4xkcHjv42xxCWETlWHqvkjvJj+iqFNWgGApC5rnxx3qwxXZvk
+	LuL27i0fefVngIwm5B7GX6sNuclOvDvbqK3s6RIizt3AEItiZe3VrqyZnQuVEt9b2ShUIN93F5n
+	2sEud3FGH/l2bO7zqdm+MFnoN6wFWXOheN9ZPG+XAb9b5FkweOzSjUtGlrS+rnqZpwWtOuYn0T2
+	467iSbxUMcfuFfB9mfalK6Rr0bPTRXUIrbEm+Kwam9/cFUVelqO2R0SFelYM3ypSpRcuqTTFljG
+	sAs/88UopbiAItU
+X-Received: by 2002:a05:622a:1b24:b0:50f:c26d:f31f with SMTP id d75a77b69052e-50fc26e284fmr113945511cf.19.1776960707353;
+        Thu, 23 Apr 2026 09:11:47 -0700 (PDT)
+Received: from rowland.harvard.edu ([2607:fb60:1011:2006:349c:f507:d5eb:5d9e])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50fad4dcc46sm92673771cf.31.2026.04.23.09.11.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Apr 2026 09:11:46 -0700 (PDT)
+Date: Thu, 23 Apr 2026 12:11:45 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: syzbot <syzbot+4d3749e9612c2cfab956@syzkaller.appspotmail.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: INFO: rcu detected stall in dummy_timer (3)
+Message-ID: <97b26c3e-d025-44c9-b384-b33db0f01a62@rowland.harvard.edu>
+References: <c23ff4f3-16a1-46ff-946e-b5dbda209f57@rowland.harvard.edu>
+ <69ea4352.a00a0220.17a17.0041.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9dbb177f6f03ackunm83a281af13c76d
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDGU9PVk5OSUoaQx1IGUNMTVYVFA
-	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUhVSU9PVUNCVUlPTVlXWRYaDxIVHRRZQVlPS0hVSk
-	tJT09PSFVKS0tVSkJLS1kG
-X-Spamd-Result: default: False [1.54 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[autochips.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <69ea4352.a00a0220.17a17.0041.GAE@google.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36452-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FROM_NEQ_ENVFROM(0.00)[yongchao.wu@autochips.com,linux-usb@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	RCPT_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-36453-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,autochips.com:mid,autochips.com:email]
-X-Rspamd-Queue-Id: 836D2454A46
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb,4d3749e9612c2cfab956];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[rowland.harvard.edu:dkim,rowland.harvard.edu:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: F1D64454D21
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-According to the cdns3 datasheet, the EPRST (Endpoint Reset) command
-causes the DMA engine to reposition its internal pointer to the next
-Transfer Descriptor (TD) if it was already processing one.
+On Thu, Apr 23, 2026 at 09:05:38AM -0700, syzbot wrote:
+> > I'm revisiting an old syzbot bug caused by a tight resubmit loop, this 
+> > one in mceusb.  The bug was fixed by commit 476db72e5219 ("media: 
+> > mceusb: return without resubmitting URB in case of -EPROTO error."), but 
+> > I want to try fixing it a different way, by changing dummy-hcd.
+> >
+> > This is a preliminary test, to make sure the bug can still be triggered.  
+> > The patch below doesn't do anything -- yet!
+> >
+> > Alan Stern
+> >
+> > #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 811d22141369
+> 
+> This bug is already marked as fixed. No point in testing.
 
-This issue is consistently observed during the ADB identification
-process on macOS hosts, where the host issues a Clear_Halt. Although
-commit 4bf2dd65135a ("usb: cdns3: gadget: toggle cycle bit before reset
-endpoint") attempted to avoid DMA advance by toggling the cycle bit,
-trace logs show that on certain hosts like macOS, the DMA pointer
-(EP_TRADDR) still shifts after EPRST:
+All right.  I'm going to do something rather heavy-handed to convince 
+syzbot to run the test.  I'll try to remember to undo this action after 
+the testing is all finished.
 
-  cdns3_ctrl_req: Clear Endpoint Feature(Halt ep1out)
-  cdns3_doorbell_epx: ep1out, ep_trbaddr f9c04030  <-- Should be f9c04000
-  cdns3_gadget_giveback: ep1out: req: ... length: 16384/16384
+Alan Stern
 
-As shown above, the DMA pointer jumped to index 3 (offset 0x30), causing
-the controller to skip the initial TRBs of the request. This leads to
-data misalignment and ADB protocol hangs on macOS.
-
-Fix this by manually restoring the EP_TRADDR register to the starting
-physical address of the current request after the EPRST operation is
-complete.
-
-Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
-Cc: stable@vger.kernel.org
-Cc: Peter Chen <peter.chen@kernel.org>
-Signed-off-by: Yongchao Wu <yongchao.wu@autochips.com>
----
- drivers/usb/cdns3/cdns3-gadget.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-index d59a60a16ec77..96653c7d18f20 100644
---- a/drivers/usb/cdns3/cdns3-gadget.c
-+++ b/drivers/usb/cdns3/cdns3-gadget.c
-@@ -2814,9 +2814,19 @@ int __cdns3_gadget_ep_clear_halt(struct cdns3_endpoint *priv_ep)
- 	priv_ep->flags &= ~(EP_STALLED | EP_STALL_PENDING);
- 
- 	if (request) {
--		if (trb)
-+		if (trb) {
- 			*trb = trb_tmp;
- 
-+			/*
-+			 * Per datasheet, EPRST causes DMA to reposition to the next TD.
-+			 * Manually reset EP_TRADDR to the current TRB to prevent
-+			 * the hardware from skipping the interrupted request.
-+			 */
-+			writel(EP_TRADDR_TRADDR(priv_ep->trb_pool_dma +
-+						priv_req->start_trb * TRB_SIZE),
-+						&priv_dev->regs->ep_traddr);
-+		}
-+
- 		cdns3_rearm_transfer(priv_ep, 1);
- 	}
- 
-
-base-commit: 46b513250491a7bfc97d98791dbe6a10bcc8129d
--- 
-2.43.0
+#syz unfix
 
 
