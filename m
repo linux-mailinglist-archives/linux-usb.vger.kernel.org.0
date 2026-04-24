@@ -1,133 +1,153 @@
-Return-Path: <linux-usb+bounces-36472-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36473-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cE3xAAOb62naPAAAu9opvQ
-	(envelope-from <linux-usb+bounces-36472-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 18:32:03 +0200
+	id sJI9FszI62mHRQAAu9opvQ
+	(envelope-from <linux-usb+bounces-36473-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 21:47:24 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55F7C461519
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 18:32:02 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B292846302B
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 21:47:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 93F8B300FEE9
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 16:31:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5F8C6300F124
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 19:47:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2D2633508E;
-	Fri, 24 Apr 2026 16:31:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4844366820;
+	Fri, 24 Apr 2026 19:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="RnXbpDgP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tGO2zL8D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18EE74F5E0;
-	Fri, 24 Apr 2026 16:31:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 636201DF261
+	for <linux-usb@vger.kernel.org>; Fri, 24 Apr 2026 19:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777048316; cv=none; b=Y7w0LW84QvL7FudzQwXU2aQx4KAQDhv9bW5gSWlZpVQm0dLk1uuWGomBVztsrB3wqvWoQRAq/1Y7F/SogQdd6xJwMc2SAt5z3r01sqcHZs0e4XPJvkAU/aRe//nNXCNc0J91fMgdTdUzMWb5Ea9/rVAZUHFfqBmHwbHrHbtxf2c=
+	t=1777060041; cv=none; b=MQVky98b8F8ix8vjGALUYdy6RVZKZ11zNP9dEWQOk02CYIyb3Hycjybaz5S7Iv999SI3kQ1lZ1GNbReEQi+1Zsm/r5AHu86+F5QM0+CzztJYTaC/pXNJ9Q2+Kge+BWFU9q0Zp/ge+Ar9yTkm0FGCGR3D1xMnkFUDByTtTaxwWAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777048316; c=relaxed/simple;
-	bh=H3PB4GezZDhLhVoGfLAORE8hfvdvlDfdNFCf9xAZg9w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P9/IHcJK7ZCnIXaddIUrEs7MA31N28PgFrTt07NEYXUjfmeX47k/dPa1l7fDTFZFEV6GuEhudLCN29E3bF8fcjMrv7m7FO6WvSAxcllMSz51q+ifpOqdE51e73sJcQVTKRi7ICpwnXkptphznfH0THdqpFL5RkeimCU+tc38SmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=RnXbpDgP; arc=none smtp.client-ip=80.241.56.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4g2JPs6Wmxz9v7t;
-	Fri, 24 Apr 2026 18:31:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1777048305;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H3PB4GezZDhLhVoGfLAORE8hfvdvlDfdNFCf9xAZg9w=;
-	b=RnXbpDgPGWvC6Hq5ZCyqqsGsjfEWFT7EJib/H1q8nmgFiyzni6+/zY6GyTyX/q7WuRMg9A
-	fws8zBq9+g72BR83lRIsMiD+FTS8vpXkjRsJw0kCYb7acUbtcuElBuYmiTq8ebezjYYK3x
-	d6Ca9LTBDFo6wdZmwbnC63WLJaxDmB410ly0qd3IZap+eIYLugdqBweD2p7kywQNExxn1b
-	BNzoHZPEezfly/lmI4fsY3pG6eTFgWYuvTm1Pbod03FqWJMrhIyedVlkcF4eqIMwBBfKwz
-	qLYVW+D5KwtUUP7DPJ6fdGOmyvDxkoWUQ3i87NfD9kGitNhh3O+AdDku1kBuEA==
-Date: Fri, 24 Apr 2026 18:31:41 +0200
-From: Anthony Ruhier <aruhier@mailbox.org>
-To: Konrad Dybcio <konradybcio@kernel.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	usb4-upstream@oss.qualcomm.com, Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, Jack Pham <jack.pham@oss.qualcomm.com>
-Subject: Re: [PATCH] usb: typec: mux: ps883x: Power the retimer off when not
- in use
-Message-ID: <aeuWdwF0xO6HDgvp@tour-anthony.aruhier.fr>
-References: <20260420-topic-ps883x_unused_reset-v1-1-7aabf7004d2a@oss.qualcomm.com>
+	s=arc-20240116; t=1777060041; c=relaxed/simple;
+	bh=Oo2N6AsdG3JggC2xST//fi6pINfdW9XNToK7cR1EPhE=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=q1Q7l4MlhP0PI7a/v4QNIWKF/tG8aTTczHoGQrD4JqF7oFED9aYwi0OvKFAt+U6cvuYurvz4rkSjlgtvWq+g39/fA4fkmY5/68pss2up8RcDXjkTjyJx2Kqs7v72/bWFh7zbdO4p+TuLAD0E5HSJac/eXzl7IhJfDh5gXp50p9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tGO2zL8D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 14619C2BCC4
+	for <linux-usb@vger.kernel.org>; Fri, 24 Apr 2026 19:47:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777060041;
+	bh=Oo2N6AsdG3JggC2xST//fi6pINfdW9XNToK7cR1EPhE=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=tGO2zL8DxU5tUzUd0jr5cY2d0O22/BVlfAi2ZNoagmmi4ZkM05aCnD58WQMuVXxeN
+	 BpwyKobOTQjlUuF4dpAx4tnlevzRmPobLhnCECkwF1WcfGTNPYhaSIYI8TUeCehHAM
+	 Sm5poMSfout5EDInorH4bHfBgSlheQgRfGKpNf0D1nD79yxYsLonSAdt5oJ1iQo/SZ
+	 5u4hCZiwIaQLGrNVKirKsdL2xY6iq6cecXB4eDeIpjV3aDY3j/sazBxbNzNsS0Gj4t
+	 9nyYT7wWek3HJGQPBJCwH2Su+D4yOufNDq1mJQAdFPdxOAjZFvOkJeW/18Hyb9YClH
+	 nAx63QIsaLweg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 0E7BFC4160E; Fri, 24 Apr 2026 19:47:21 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 216728] Thunderbolt USB Controller died after resume on Intel
+ CometLake platform
+Date: Fri, 24 Apr 2026 19:47:20 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: strasharo2000@yahoo.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-216728-208809-oFggVGt8Hr@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216728-208809@https.bugzilla.kernel.org/>
+References: <bug-216728-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260420-topic-ps883x_unused_reset-v1-1-7aabf7004d2a@oss.qualcomm.com>
-X-MBO-RS-META: 3ief7gdfzsrmrtqda9c5rsy79xumtd76
-X-MBO-RS-ID: 74a84421344d28f9e79
-X-Rspamd-Queue-Id: 55F7C461519
+X-Rspamd-Queue-Id: B292846302B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[mailbox.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[mailbox.org:s=mail20150812];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36472-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[mailbox.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_NONE(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_ONE(0.00)[1];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	FROM_NO_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[aruhier@mailbox.org,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_FROM(0.00)[bounces-36473-lists,linux-usb=lfdr.de];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mailbox.org:dkim,mailbox.org:email,qualcomm.com:email,tour-anthony.aruhier.fr:mid]
+	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+]
 
-On Mon, Apr 20, 2026 at 01:40:28PM +0200, Konrad Dybcio wrote:
-> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->
-> When there's nothing going through the retimer, there's no reason to
-> keep it online. Put it in reset when possible to save power.
->
-> Also, remove the register cache-compare optimization as it makes little
-> sense now that the chip resets during almost all transitions and
-> tracking the validity of that cache becomes a headache.
->
-> Suggested-by: Jack Pham <jack.pham@oss.qualcomm.com>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> --
-> Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216728
 
-Tested-by: Anthony Ruhier <aruhier@mailbox.org>
+--- Comment #48 from STRSHR (strasharo2000@yahoo.com) ---
+Still reproducible on kernel 6.19.13 (Fedora 43), ThinkPad P1 Gen 3, Intel
+Comet Lake-H.
 
-Thanks a lot for this patch, on a Yoga Slim 7x (x1e80100) the power saving is
-huge. The laptop would rarely idle below 6.9W, now it reaches 4.6W (same 7.0.1
-kernel, the only difference is this patch). Screen off, the laptop was idling
-at 3.5W, now it reaches 2W.
+Hardware: Intel JHL7540 Thunderbolt 3 USB Controller [Titan Ridge 4C 2018]
+(8086:15ec, rev 06) at 0000:2c:00.0
 
-I tested that DP-alt and USB-C devices continued to work well with this patch,
-and it works as expected.
+Trigger: Hotplugging a USB-C Ethernet adapter (Realtek r8152 chipset) into a
+Thunderbolt 3 port. No dock involved =C3=A2 a plain USB-C adapter is suffic=
+ient to
+reproduce.
 
---
-Anthony Ruhier
+Sequence: The adapter enumerates fine (~37s after boot). ~52 seconds later =
+the
+runtime PM puts the xHCI controller to D3. On the next access the resume fa=
+ils:
+
+  xhci_hcd 0000:2c:00.0: Controller not ready at resume -19
+  xhci_hcd 0000:2c:00.0: PCI post-resume error -19!
+  xhci_hcd 0000:2c:00.0: HC died; cleaning up
+  xhci_hcd 0000:2c:00.0: xHCI host controller not responding, assume dead
+  xhci_hcd 0000:2c:00.0: HC died; cleaning up
+  xhci_hcd 0000:2c:00.0: Timeout while waiting for configure endpoint comma=
+nd
+
+The system continues running for several minutes with the dead controller, =
+then
+freezes hard (requires power button hold).
+
+Workaround: Keeping the controller out of D3 prevents the crash entirely:
+  echo on > /sys/bus/pci/devices/0000:2c:00.0/power/control
+
+Persisted via udev rule matching vendor/device IDs:
+  ACTION=3D=3D"add", SUBSYSTEM=3D=3D"pci", ATTR{vendor}=3D=3D"0x8086",
+ATTR{device}=3D=3D"0x15ec", ATTR{power/control}=3D"on"
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
