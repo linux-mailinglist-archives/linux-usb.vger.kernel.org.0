@@ -1,286 +1,287 @@
-Return-Path: <linux-usb+bounces-36461-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36462-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CJppK0646mmNCwAAu9opvQ
-	(envelope-from <linux-usb+bounces-36461-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 02:24:46 +0200
+	id GITnMLrC6mlLDQAAu9opvQ
+	(envelope-from <linux-usb+bounces-36462-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 03:09:14 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2000345890A
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 02:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C2D0E458A8F
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 03:09:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7A35E301413F
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 00:23:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DDF1C300EA88
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 01:09:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6D0E21CC4F;
-	Fri, 24 Apr 2026 00:23:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3F0F234964;
+	Fri, 24 Apr 2026 01:09:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G6c49eT2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-f77.google.com (mail-oa1-f77.google.com [209.85.160.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29521A2545
-	for <linux-usb@vger.kernel.org>; Fri, 24 Apr 2026 00:23:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551DA1E8826;
+	Fri, 24 Apr 2026 01:09:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776990213; cv=none; b=XGg+KCMumb2Se+HutPzdMzWtLeTAlQKw7zEgVYvzFSyDAKUATJ1fHsrDfvrm8ph2xvg4O5QtELjCYE3XBujojI0ru661pCR2S6InC2VT35yQqrOhXQDiD/2XULblneWZrAao3ixTdUXSPrVGmsAjiMT+u6L3sGRbAV7NxnZRoXk=
+	t=1776992943; cv=none; b=Vv9f2sy2mUYsSmRCEUysSbYyCS9op35wU62lhCjVGgBdLyBG4YCjjNGWGMmAZ4iki+9z3c7MfaSAy7cZdOisy7i74yJn8ZkvpiVM1IEF5SowhdvTnkUMztRvEs6YyqPhkEtw9V6y4AhmaeGpG9LDCTAwSbvizYeUlSzQdnE6ar4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776990213; c=relaxed/simple;
-	bh=5m7vaCWCW/Dp50arIK7vZoYoBwVtPNWeTXYDEj46N3U=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=fkogTw5dpPxIRqoBb/vhr1W0Eo5X5JJqNZl90bYr/6cGKlcPBfekBuLCMeQ9DMBrgnrn7Nid/j5gTonBWmYgRmrTRvsawlVhIcRunzy8IdjCkMRHy0eLM4oTDOhvu7my4dltEstuB2Be6NpkbEkeTARI7R0hEg/r1d9NXwbpTKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.160.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oa1-f77.google.com with SMTP id 586e51a60fabf-423306870bdso12874431fac.3
-        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2026 17:23:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776990211; x=1777595011;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IaunhynHfLXlsj+OKWi/KTfUfNlbIvYRUylj6i26Qx8=;
-        b=EaewxvF+6oJeIXh36QHUJZhIxNOAknv4NiJ3aZ4e7R5K3jZ0u0hrMbV6udT9nTR8qe
-         cYBkrnhx4U0OnDXp193/mFBKWmk4p/q2vL0plVL8uFlcXl/XnimtZSL1hXMCO6Z2TBjI
-         IUiDcBzvlytyyYhKbH1Yp7dJBrxByWsySG82zuGFUoyAPWuAkhIUW/ozvVqcGObOhbWz
-         j2/q5cxk+7iBtUHecr6xVGE7ul82Sh7cAYyWnmAXg+yj6YDHHH0/bTgExysaoYjDEXkX
-         UAstEIXZbPu5ltiMUk3Pyyr7I6S2cOuYr9fmlAPcnrnlD1lS0uDlUYv9id7BzzUEnZM3
-         HWCw==
-X-Forwarded-Encrypted: i=1; AFNElJ/mlNdPXdiWllzGkzYUqP8AwPvV5yFOn+p15OJMoC9tvuvVcVdS55iTw1J6EL9aqr9SNYbLoHRILwY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3QiJhCLIUMFSqqMSXc93gA9/YjSGxXXxFIejE9EkQCpBHJRZQ
-	+/XEHHaFLLuex8FB3yeHLh2YL0CjwsT7u2Ybg3B7yDxcQBMu+8GyznlNf9pk2BxnjLud5oLLRmz
-	rMBoHawhZR6fSRz/B9Qc5dieDzBbv06FjjV4Ia580Qo/9BWBDZt9XvCM7DFw=
+	s=arc-20240116; t=1776992943; c=relaxed/simple;
+	bh=0zkjJP1zHYwltE31Ri1er1j8LFZiRVKxMvtOSk6Erp4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FtpYDQylB8S0WRCuFsm9LDGATiFZ5x+aqoDQYDCMgOnu/WEhjejZaGDoFkXE8DIolktOP2chhqiTdNg48HSJxZ40fHSIjbS6xgRb2x8lpFp0PqTOSCJ3BVSAGiaNanpo+Qf8WZWf4KD4JEqNMkx7yrlNvnp7jgFKmdpm6Nb5ANY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G6c49eT2; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776992940; x=1808528940;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0zkjJP1zHYwltE31Ri1er1j8LFZiRVKxMvtOSk6Erp4=;
+  b=G6c49eT2xxfGfJC6qz4FBINuKmmGCuQmxu5s0q/EG2jYm8av7mkZPYKE
+   ooR9VELtzp+KvpMZ9I6f0Co7ZLdVoYunMXpWkDmfMqPKDTF8MOqeEBtwq
+   lNUKqC4rKf9WangkpNWmfRImw0TEp1AF2T4iCmfPtgYeL2j+zNT9PPw5+
+   HFtI9Cipcm/Z0Vf5m7S/UHvWmCWvdhuaOvkUR/5w3WU8Vn5JiTyCp8I7S
+   2eu/sRMR26Ol5cwUeCf9801fCFnYQJ9qiXQicygWwes7IiIGOwfXaW/pv
+   IXN+KY23g63wDEmsxo0c2dNU0ZFKKGCsFr6nE4Hx4/5+q4FWLw8dYpzXX
+   g==;
+X-CSE-ConnectionGUID: fT52gSvgSvqYHbVsQUXbZw==
+X-CSE-MsgGUID: aup04TeCSLGy2HfBFO0cUw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11765"; a="103434921"
+X-IronPort-AV: E=Sophos;i="6.23,195,1770624000"; 
+   d="scan'208";a="103434921"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2026 18:09:00 -0700
+X-CSE-ConnectionGUID: 30x24oQRTGCM+k+szEK56Q==
+X-CSE-MsgGUID: zzKOK609RIGMo/pUoCBycw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,195,1770624000"; 
+   d="scan'208";a="228246883"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by fmviesa006.fm.intel.com with ESMTP; 23 Apr 2026 18:08:56 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wG52L-0000000038n-3zcG;
+	Fri, 24 Apr 2026 01:08:53 +0000
+Date: Fri, 24 Apr 2026 03:08:03 +0200
+From: kernel test robot <lkp@intel.com>
+To: Benjamin Tissoires <bentiss@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>,
+	Bastien Nocera <hadess@hadess.net>,
+	Ping Cheng <ping.cheng@wacom.com>,
+	Jason Gerecke <jason.gerecke@wacom.com>,
+	Viresh Kumar <vireshk@kernel.org>, Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Lee Jones <lee@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org, greybus-dev@lists.linaro.org,
+	linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
+	Benjamin Tissoires <bentiss@kernel.org>
+Subject: Re: [PATCH v2 4/4] HID: wacom: use __free(kfree) to clean up
+ temporary buffers
+Message-ID: <202604240311.WgVgLjLa-lkp@intel.com>
+References: <20260416-wip-fix-core-v2-4-be92570e5627@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:2901:b0:694:9d3d:e040 with SMTP id
- 006d021491bc7-6949d3de22cmr7931783eaf.31.1776990210905; Thu, 23 Apr 2026
- 17:23:30 -0700 (PDT)
-Date: Thu, 23 Apr 2026 17:23:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69eab802.a00a0220.17a17.0049.GAE@google.com>
-Subject: [syzbot] [wireless?] [usb?] KASAN: stack-out-of-bounds Write in carl9170_handle_command_response
-From: syzbot <syzbot+5c1ca6ccaa1215781cac@syzkaller.appspotmail.com>
-To: chunkeey@googlemail.com, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 2000345890A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260416-wip-fix-core-v2-4-be92570e5627@kernel.org>
+X-Rspamd-Queue-Id: C2D0E458A8F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.36 / 15.00];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=37c3a614a8bc8d27];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36461-lists,linux-usb=lfdr.de,5c1ca6ccaa1215781cac];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[googlemail.com,vger.kernel.org,googlegroups.com];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[googlegroups.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-36462-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	REDIRECTOR_URL(0.00)[goo.gl];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[intel.com:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
-	SUBJECT_HAS_QUESTION(0.00)[]
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,intel.com:mid,01.org:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-Hello,
+Hi Benjamin,
 
-syzbot found the following issue on:
+kernel test robot noticed the following build warnings:
 
-HEAD commit:    2e6803928193 Merge tag 'tracefs-v7.1-2' of git://git.kerne..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=113342ce580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=37c3a614a8bc8d27
-dashboard link: https://syzkaller.appspot.com/bug?extid=5c1ca6ccaa1215781cac
-compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12acb1ba580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16acb1ba580000
+[auto build test WARNING on 7df6572f1cb381d6b89ceed58e3b076c233c2cd0]
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/592131f484c3/disk-2e680392.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2ca791aa3d9c/vmlinux-2e680392.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3aaca7d6d8d9/bzImage-2e680392.xz
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Tissoires/HID-pass-the-buffer-size-to-hid_report_raw_event/20260422-150759
+base:   7df6572f1cb381d6b89ceed58e3b076c233c2cd0
+patch link:    https://lore.kernel.org/r/20260416-wip-fix-core-v2-4-be92570e5627%40kernel.org
+patch subject: [PATCH v2 4/4] HID: wacom: use __free(kfree) to clean up temporary buffers
+config: i386-randconfig-2006-20250804 (https://download.01.org/0day-ci/archive/20260424/202604240311.WgVgLjLa-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260424/202604240311.WgVgLjLa-lkp@intel.com/reproduce)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5c1ca6ccaa1215781cac@syzkaller.appspotmail.com
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604240311.WgVgLjLa-lkp@intel.com/
 
-usb 4-1: received invalid command response:got 60, instead of 0
-usb 4-1: restart device (9)
-usb 4-1: received invalid command response:got -2, instead of 0
-usb 4-1: received invalid command response:got 60, instead of 4
-==================================================================
-BUG: KASAN: stack-out-of-bounds in carl9170_cmd_callback drivers/net/wireless/ath/carl9170/rx.c:153 [inline]
-BUG: KASAN: stack-out-of-bounds in carl9170_handle_command_response+0x21f/0xc50 drivers/net/wireless/ath/carl9170/rx.c:168
-Write of size 60 at addr ffffc900001e7a38 by task swapper/1/0
+All warnings (new ones prefixed by >>):
 
-CPU: 1 UID: 0 PID: 0 Comm: swapper/1 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x100/0x190 lib/dump_stack.c:120
- print_address_description mm/kasan/report.c:378 [inline]
- print_report+0x13d/0x4b0 mm/kasan/report.c:482
- kasan_report+0xdf/0x1d0 mm/kasan/report.c:595
- check_region_inline mm/kasan/generic.c:186 [inline]
- kasan_check_range+0x10f/0x1e0 mm/kasan/generic.c:200
- __asan_memcpy+0x3c/0x60 mm/kasan/shadow.c:106
- carl9170_cmd_callback drivers/net/wireless/ath/carl9170/rx.c:153 [inline]
- carl9170_handle_command_response+0x21f/0xc50 drivers/net/wireless/ath/carl9170/rx.c:168
- carl9170_usb_rx_irq_complete+0xfc/0x1b0 drivers/net/wireless/ath/carl9170/usb.c:307
- __usb_hcd_giveback_urb+0x38d/0x610 drivers/usb/core/hcd.c:1657
- usb_hcd_giveback_urb+0x3ca/0x4a0 drivers/usb/core/hcd.c:1741
- dummy_timer+0xda1/0x36c0 drivers/usb/gadget/udc/dummy_hcd.c:2005
- __run_hrtimer kernel/time/hrtimer.c:1930 [inline]
- __hrtimer_run_queues+0x470/0xa00 kernel/time/hrtimer.c:1994
- hrtimer_run_softirq+0x17d/0x2c0 kernel/time/hrtimer.c:2011
- handle_softirqs+0x1dd/0x9e0 kernel/softirq.c:622
- __do_softirq kernel/softirq.c:656 [inline]
- invoke_softirq kernel/softirq.c:496 [inline]
- __irq_exit_rcu+0x160/0x210 kernel/softirq.c:735
- irq_exit_rcu+0x9/0x30 kernel/softirq.c:752
- instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1061 [inline]
- sysvec_apic_timer_interrupt+0x8f/0xb0 arch/x86/kernel/apic/apic.c:1061
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
-RIP: 0010:pv_native_safe_halt+0xf/0x20 arch/x86/kernel/paravirt.c:63
-Code: d4 b4 01 c3 cc cc cc cc 0f 1f 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 66 90 0f 00 2d 63 9d 15 00 fb f4 <e9> 7c f2 02 00 66 2e 0f 1f 84 00 00 00 00 00 66 90 90 90 90 90 90
-RSP: 0018:ffffc9000013fe00 EFLAGS: 00000246
-RAX: 0000000000046e1b RBX: ffff8881022d9dc0 RCX: ffffffff8770e3f5
-RDX: 0000000000000000 RSI: ffffffff890d1d42 RDI: ffffffff87b03fe0
-RBP: 0000000000000000 R08: 0000000000000001 R09: ffffed103eae673d
-R10: ffff8881f57339eb R11: 0000000000000000 R12: 0000000000000001
-R13: ffffed102045b3b8 R14: 0000000000000001 R15: ffffffff8af1a1d0
- arch_safe_halt arch/x86/include/asm/paravirt.h:62 [inline]
- default_idle+0x9/0x10 arch/x86/kernel/process.c:767
- default_idle_call+0x6c/0xb0 kernel/sched/idle.c:122
- cpuidle_idle_call kernel/sched/idle.c:199 [inline]
- do_idle+0x464/0x590 kernel/sched/idle.c:352
- cpu_startup_entry+0x4f/0x60 kernel/sched/idle.c:451
- start_secondary+0x21d/0x2d0 arch/x86/kernel/smpboot.c:312
- common_startup_64+0x13e/0x148
- </TASK>
-
-The buggy address belongs to a 8-page vmalloc region starting at 0xffffc900001e0000 allocated at kernel_clone+0x12e/0x9c0 kernel/fork.c:2723
-The buggy address belongs to the physical page:
-page: refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x102aa7
-flags: 0x200000000000000(node=0|zone=2)
-raw: 0200000000000000 ffffea00040aa9c8 ffffea00040aa9c8 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x29c2(GFP_NOWAIT|__GFP_HIGHMEM|__GFP_IO|__GFP_FS|__GFP_ZERO), pid 2, tgid 2 (kthreadd), ts 2543325669, free_ts 0
- set_page_owner include/linux/page_owner.h:32 [inline]
- post_alloc_hook+0x153/0x170 mm/page_alloc.c:1858
- prep_new_page mm/page_alloc.c:1866 [inline]
- get_page_from_freelist+0xf34/0x3a90 mm/page_alloc.c:3946
- __alloc_frozen_pages_noprof+0x273/0x28a0 mm/page_alloc.c:5226
- __alloc_pages_noprof+0xb/0x110 mm/page_alloc.c:5260
- __alloc_pages_node_noprof include/linux/gfp.h:289 [inline]
- alloc_pages_node_noprof include/linux/gfp.h:316 [inline]
- vm_area_alloc_pages mm/vmalloc.c:3655 [inline]
- __vmalloc_area_node mm/vmalloc.c:3878 [inline]
- __vmalloc_node_range_noprof+0xe0c/0x1630 mm/vmalloc.c:4064
- __vmalloc_node_noprof+0xad/0xf0 mm/vmalloc.c:4124
- alloc_thread_stack_node kernel/fork.c:357 [inline]
- dup_task_struct kernel/fork.c:926 [inline]
- copy_process+0x7fb/0x7d20 kernel/fork.c:2088
- kernel_clone+0x12e/0x9c0 kernel/fork.c:2723
- kernel_thread+0xdb/0x120 kernel/fork.c:2784
- create_kthread kernel/kthread.c:459 [inline]
- kthreadd+0x498/0x7a0 kernel/kthread.c:817
- ret_from_fork+0x69a/0xc80 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffffc900001e7900: f1 f1 f1 00 00 00 f3 f3 f3 f3 f3 00 00 00 00 00
- ffffc900001e7980: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffffc900001e7a00: 00 f1 f1 f1 f1 f1 f1 04 f2 04 f3 f3 f3 00 00 00
-                                        ^
- ffffc900001e7a80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc900001e7b00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	b4 01                	mov    $0x1,%ah
-   2:	c3                   	ret
-   3:	cc                   	int3
-   4:	cc                   	int3
-   5:	cc                   	int3
-   6:	cc                   	int3
-   7:	0f 1f 00             	nopl   (%rax)
-   a:	90                   	nop
-   b:	90                   	nop
-   c:	90                   	nop
-   d:	90                   	nop
-   e:	90                   	nop
-   f:	90                   	nop
-  10:	90                   	nop
-  11:	90                   	nop
-  12:	90                   	nop
-  13:	90                   	nop
-  14:	90                   	nop
-  15:	90                   	nop
-  16:	90                   	nop
-  17:	90                   	nop
-  18:	90                   	nop
-  19:	90                   	nop
-  1a:	f3 0f 1e fa          	endbr64
-  1e:	66 90                	xchg   %ax,%ax
-  20:	0f 00 2d 63 9d 15 00 	verw   0x159d63(%rip)        # 0x159d8a
-  27:	fb                   	sti
-  28:	f4                   	hlt
-* 29:	e9 7c f2 02 00       	jmp    0x2f2aa <-- trapping instruction
-  2e:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
-  35:	00 00 00
-  38:	66 90                	xchg   %ax,%ax
-  3a:	90                   	nop
-  3b:	90                   	nop
-  3c:	90                   	nop
-  3d:	90                   	nop
-  3e:	90                   	nop
+   In file included from include/linux/device.h:15,
+                    from include/linux/input.h:19,
+                    from drivers/hid/hid-core.c:25:
+   drivers/hid/hid-core.c: In function 'hid_report_raw_event':
+>> drivers/hid/hid-core.c:2053:43: warning: format '%ld' expects argument of type 'long int', but argument 5 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+    2053 |                 hid_warn_ratelimited(hid, "Event data for report %d is incorrect (%d vs %ld)\n",
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:156:61: note: in expansion of macro 'dev_fmt'
+     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                             ^~~~~~~
+   include/linux/dev_printk.h:215:17: note: in expansion of macro 'dev_warn'
+     215 |                 dev_level(dev, fmt, ##__VA_ARGS__);                     \
+         |                 ^~~~~~~~~
+   include/linux/dev_printk.h:227:9: note: in expansion of macro 'dev_level_ratelimited'
+     227 |         dev_level_ratelimited(dev_warn, dev, fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/hid.h:1340:9: note: in expansion of macro 'dev_warn_ratelimited'
+    1340 |         dev_warn_ratelimited(&(hid)->dev, fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-core.c:2053:17: note: in expansion of macro 'hid_warn_ratelimited'
+    2053 |                 hid_warn_ratelimited(hid, "Event data for report %d is incorrect (%d vs %ld)\n",
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-core.c:2053:91: note: format string is defined here
+    2053 |                 hid_warn_ratelimited(hid, "Event data for report %d is incorrect (%d vs %ld)\n",
+         |                                                                                         ~~^
+         |                                                                                           |
+         |                                                                                           long int
+         |                                                                                         %d
+   drivers/hid/hid-core.c:2075:43: warning: format '%ld' expects argument of type 'long int', but argument 5 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+    2075 |                 hid_warn_ratelimited(hid, "Event data for report %d was too short (%d vs %ld)\n",
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:156:61: note: in expansion of macro 'dev_fmt'
+     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                             ^~~~~~~
+   include/linux/dev_printk.h:215:17: note: in expansion of macro 'dev_warn'
+     215 |                 dev_level(dev, fmt, ##__VA_ARGS__);                     \
+         |                 ^~~~~~~~~
+   include/linux/dev_printk.h:227:9: note: in expansion of macro 'dev_level_ratelimited'
+     227 |         dev_level_ratelimited(dev_warn, dev, fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/hid.h:1340:9: note: in expansion of macro 'dev_warn_ratelimited'
+    1340 |         dev_warn_ratelimited(&(hid)->dev, fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-core.c:2075:17: note: in expansion of macro 'hid_warn_ratelimited'
+    2075 |                 hid_warn_ratelimited(hid, "Event data for report %d was too short (%d vs %ld)\n",
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-core.c:2075:92: note: format string is defined here
+    2075 |                 hid_warn_ratelimited(hid, "Event data for report %d was too short (%d vs %ld)\n",
+         |                                                                                          ~~^
+         |                                                                                            |
+         |                                                                                            long int
+         |                                                                                          %d
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +2053 drivers/hid/hid-core.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+  2035	
+  2036	int hid_report_raw_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
+  2037				 size_t bufsize, u32 size, int interrupt)
+  2038	{
+  2039		struct hid_report_enum *report_enum = hid->report_enum + type;
+  2040		struct hid_report *report;
+  2041		struct hid_driver *hdrv;
+  2042		int max_buffer_size = HID_MAX_BUFFER_SIZE;
+  2043		u32 rsize, csize = size;
+  2044		size_t bsize = bufsize;
+  2045		u8 *cdata = data;
+  2046		int ret = 0;
+  2047	
+  2048		report = hid_get_report(report_enum, data);
+  2049		if (!report)
+  2050			return 0;
+  2051	
+  2052		if (unlikely(bsize < csize)) {
+> 2053			hid_warn_ratelimited(hid, "Event data for report %d is incorrect (%d vs %ld)\n",
+  2054					     report->id, csize, bsize);
+  2055			return -EINVAL;
+  2056		}
+  2057	
+  2058		if (report_enum->numbered) {
+  2059			cdata++;
+  2060			csize--;
+  2061			bsize--;
+  2062		}
+  2063	
+  2064		rsize = hid_compute_report_size(report);
+  2065	
+  2066		if (hid->ll_driver->max_buffer_size)
+  2067			max_buffer_size = hid->ll_driver->max_buffer_size;
+  2068	
+  2069		if (report_enum->numbered && rsize >= max_buffer_size)
+  2070			rsize = max_buffer_size - 1;
+  2071		else if (rsize > max_buffer_size)
+  2072			rsize = max_buffer_size;
+  2073	
+  2074		if (bsize < rsize) {
+  2075			hid_warn_ratelimited(hid, "Event data for report %d was too short (%d vs %ld)\n",
+  2076					     report->id, rsize, bsize);
+  2077			return -EINVAL;
+  2078		}
+  2079	
+  2080		if (csize < rsize) {
+  2081			dbg_hid("report %d is too short, (%d < %d)\n", report->id,
+  2082				csize, rsize);
+  2083			memset(cdata + csize, 0, rsize - csize);
+  2084		}
+  2085	
+  2086		if ((hid->claimed & HID_CLAIMED_HIDDEV) && hid->hiddev_report_event)
+  2087			hid->hiddev_report_event(hid, report);
+  2088		if (hid->claimed & HID_CLAIMED_HIDRAW) {
+  2089			ret = hidraw_report_event(hid, data, size);
+  2090			if (ret)
+  2091				return ret;
+  2092		}
+  2093	
+  2094		if (hid->claimed != HID_CLAIMED_HIDRAW && report->maxfield) {
+  2095			hid_process_report(hid, report, cdata, interrupt);
+  2096			hdrv = hid->driver;
+  2097			if (hdrv && hdrv->report)
+  2098				hdrv->report(hid, report);
+  2099		}
+  2100	
+  2101		if (hid->claimed & HID_CLAIMED_INPUT)
+  2102			hidinput_report_event(hid, report);
+  2103	
+  2104		return ret;
+  2105	}
+  2106	EXPORT_SYMBOL_GPL(hid_report_raw_event);
+  2107	
+  2108	
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
