@@ -1,287 +1,189 @@
-Return-Path: <linux-usb+bounces-36462-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36463-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GITnMLrC6mlLDQAAu9opvQ
-	(envelope-from <linux-usb+bounces-36462-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 03:09:14 +0200
+	id BwIbH/TN6mkxEAAAu9opvQ
+	(envelope-from <linux-usb+bounces-36463-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 03:57:08 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2D0E458A8F
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 03:09:13 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A151458EE5
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 03:57:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DDF1C300EA88
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 01:09:04 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C70A23004610
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 01:57:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3F0F234964;
-	Fri, 24 Apr 2026 01:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 006F723D290;
+	Fri, 24 Apr 2026 01:57:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G6c49eT2"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="CqFWV5Y2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551DA1E8826;
-	Fri, 24 Apr 2026 01:09:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D61876025;
+	Fri, 24 Apr 2026 01:56:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776992943; cv=none; b=Vv9f2sy2mUYsSmRCEUysSbYyCS9op35wU62lhCjVGgBdLyBG4YCjjNGWGMmAZ4iki+9z3c7MfaSAy7cZdOisy7i74yJn8ZkvpiVM1IEF5SowhdvTnkUMztRvEs6YyqPhkEtw9V6y4AhmaeGpG9LDCTAwSbvizYeUlSzQdnE6ar4=
+	t=1776995824; cv=none; b=fLm/FoszpzG5Fp69jHgLtsaKdSh2XJorEocu+kCMlJDeKdiON9I5GlqkvjBrgkDlocQPz7HYnVOlprmWdCDEEYQPEnAIDGx9KtISCHI9tRtroWvfKJJJnuB4NXmA19xm9gNAO1dU68PUwimR+HxS/zsqAK5J0dQ56KXbl3PXk1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776992943; c=relaxed/simple;
-	bh=0zkjJP1zHYwltE31Ri1er1j8LFZiRVKxMvtOSk6Erp4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FtpYDQylB8S0WRCuFsm9LDGATiFZ5x+aqoDQYDCMgOnu/WEhjejZaGDoFkXE8DIolktOP2chhqiTdNg48HSJxZ40fHSIjbS6xgRb2x8lpFp0PqTOSCJ3BVSAGiaNanpo+Qf8WZWf4KD4JEqNMkx7yrlNvnp7jgFKmdpm6Nb5ANY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G6c49eT2; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776992940; x=1808528940;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0zkjJP1zHYwltE31Ri1er1j8LFZiRVKxMvtOSk6Erp4=;
-  b=G6c49eT2xxfGfJC6qz4FBINuKmmGCuQmxu5s0q/EG2jYm8av7mkZPYKE
-   ooR9VELtzp+KvpMZ9I6f0Co7ZLdVoYunMXpWkDmfMqPKDTF8MOqeEBtwq
-   lNUKqC4rKf9WangkpNWmfRImw0TEp1AF2T4iCmfPtgYeL2j+zNT9PPw5+
-   HFtI9Cipcm/Z0Vf5m7S/UHvWmCWvdhuaOvkUR/5w3WU8Vn5JiTyCp8I7S
-   2eu/sRMR26Ol5cwUeCf9801fCFnYQJ9qiXQicygWwes7IiIGOwfXaW/pv
-   IXN+KY23g63wDEmsxo0c2dNU0ZFKKGCsFr6nE4Hx4/5+q4FWLw8dYpzXX
-   g==;
-X-CSE-ConnectionGUID: fT52gSvgSvqYHbVsQUXbZw==
-X-CSE-MsgGUID: aup04TeCSLGy2HfBFO0cUw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11765"; a="103434921"
-X-IronPort-AV: E=Sophos;i="6.23,195,1770624000"; 
-   d="scan'208";a="103434921"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2026 18:09:00 -0700
-X-CSE-ConnectionGUID: 30x24oQRTGCM+k+szEK56Q==
-X-CSE-MsgGUID: zzKOK609RIGMo/pUoCBycw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,195,1770624000"; 
-   d="scan'208";a="228246883"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by fmviesa006.fm.intel.com with ESMTP; 23 Apr 2026 18:08:56 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wG52L-0000000038n-3zcG;
-	Fri, 24 Apr 2026 01:08:53 +0000
-Date: Fri, 24 Apr 2026 03:08:03 +0200
-From: kernel test robot <lkp@intel.com>
-To: Benjamin Tissoires <bentiss@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>,
-	Bastien Nocera <hadess@hadess.net>,
-	Ping Cheng <ping.cheng@wacom.com>,
-	Jason Gerecke <jason.gerecke@wacom.com>,
-	Viresh Kumar <vireshk@kernel.org>, Johan Hovold <johan@kernel.org>,
-	Alex Elder <elder@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lee Jones <lee@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org, greybus-dev@lists.linaro.org,
-	linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
-	Benjamin Tissoires <bentiss@kernel.org>
-Subject: Re: [PATCH v2 4/4] HID: wacom: use __free(kfree) to clean up
- temporary buffers
-Message-ID: <202604240311.WgVgLjLa-lkp@intel.com>
-References: <20260416-wip-fix-core-v2-4-be92570e5627@kernel.org>
+	s=arc-20240116; t=1776995824; c=relaxed/simple;
+	bh=HdOtbwdk9FpqvYfnRdX3mN0oIsQ5L+ZuvG2V0TIlPyQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=CWDpCsyszMn4PRtEuOCBhf6DlH5m4QQygIOcIclxTbLrBhZKQRIIUbNX83Q4RRAx/DghVQGYJ3NRSYUgiRzGRhZAJVASunzEI7ET8Lh9iL6Ctunxd9Up05CMqdhPqgheTc9dwG4iYRYNMeQ3qC/u6AoQajxYYBso9kNjciDjfg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=CqFWV5Y2; arc=none smtp.client-ip=54.92.39.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1776995739;
+	bh=/WbhmryfbR5rTtIxz68wt1Q3jNDu5a6qDNLkLdm52qE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=CqFWV5Y22diwVcsdaCir4tuD+VmAIrzkTzw01PdL1jbg2ER4Maw9RFzCc0i3h5WPa
+	 +xCPYOXqnZ6iOl5Ra1Orsh9kkzr/r6jhI6awo4EZlRlzpeoXNwTwXivKWFP2OHH8gX
+	 F+OZTd7WwcKIhblVphw2ztsPslHZ/GccGdyd9iBY=
+X-QQ-mid: zesmtpip2t1776995722t1f251fe9
+X-QQ-Originating-IP: U4i7rVTqbazz0Zv0ycg9ZtpkPwmjJiTQyT/w9lb7LYE=
+Received: from uos-PC ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 24 Apr 2026 09:55:19 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 15541475564338445808
+EX-QQ-RecipientCnt: 11
+From: Morduan Zang <zhangdandan@uniontech.com>
+To: Jakub Kicinski <kuba@kernel.org>,
+	Petko Manolov <petkan@nucleusys.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Morduan Zang <zhangdandan@uniontech.com>,
+	Andrew Lunn <andrew@lunn.ch>
+Subject: [PATCH net v2] net: usb: rtl8150: free skb on usb_submit_urb() failure in xmit
+Date: Fri, 24 Apr 2026 09:55:17 +0800
+Message-ID: <E7D3E1C013C5A859+20260424015517.9574-1-zhangdandan@uniontech.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <678BC10BB9E39322+20260421111025.15833-1-zhangdandan@uniontech.com>
+References: <678BC10BB9E39322+20260421111025.15833-1-zhangdandan@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260416-wip-fix-core-v2-4-be92570e5627@kernel.org>
-X-Rspamd-Queue-Id: C2D0E458A8F
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: MDGUoPnBmw7sPREF4YgrfPnyBu3MQcPuA2pnCLNq9yHGg1Ilh5cXONuO
+	v2wjzIt+Jx7HqIOJNWrstpwJEwo87K9czI72fV4lXYMDoGVBnA1Cs/FBjoprIIMg3WD8/wR
+	XfiHBHPRF5hRNARXksculVzd6W43pStWvtBvkdEqZQ9mAiYObl2EujjGE3g1W7b1j0Yb9GI
+	crUXUxEhHAlwU8th96SFpliQzj68g1ku+wxGLLe3m/x2LTcLXRdrTiFrm4DaJF3oO+kmCQ/
+	7d3xrl96eWD/3NhV5M0Dkyz170H/IZhaqjBI24WUDZQprbALw14njFpjEhByYWqkT9hddBh
+	vASGk11V9gI9hiyAlarBCANTsY7Cve8aEvJGUGpPe+inxLLw32lyBdE6yxobPnbJ6tVjo/a
+	VCpKmPrAuIeKWDlM+myeFIeQxB+FOJkwrlXBO8pzTPUcNO6ZdF1RQAVr0rcfCt5ykNRLDRp
+	3bpydjRw6mpJAA4C/g9hJvawg00sKwccookIgadqqVZW1qX2Z9bY9MNhnfqINyguhoP27ii
+	Hdqnr7xx2C8uhOH/N9/R7ra+YLFtHH7NqNhcd+BLqI7v9m8vUOmbDDgs2AmKTy+0GPGF+i+
+	+ilESa9F2lLTCCzc/W/yS8t5reicxbcG+sYT2Q782nno3Nwq/UpyJqh1YlOXNk5M21jnrPM
+	nN6QO8IHtiopp4IQb7t0vUZ0gDUIeDcBrtdu6A1xB1bpY8LncR8r1yAnkvTSs/4JQKDUET1
+	hgLUTgup8qYRbLJRgX+7xa8Qpnj4g6umZDFZM+yRRKet4IDWvhGedBezSKFkgVVolfKLy9f
+	EeXGSmiVzLevvLziCHwOFCJo/ujFO7sei1Dbv4WFPbqzcKGjKpXlA0kLEIK0DXB5UvZF0LT
+	usXezy1zIfpyzjvxGr4sPKa8bPTmI6IXi4vul/ky6caxOwQhV+s/E9Xyh4eFLu8uJsXajkI
+	6nphfoFtsZVTfuue8l0UjlNd5rNpy2Yeeioos5Y4XQ1pI12vCxNZ3PUO2i8VJjvv68hPwze
+	5SGParR4Ax38oFsKTu/s121+qyXIqfH929CGBLnQ==
+X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
+X-QQ-RECHKSPAM: 0
+X-Rspamd-Queue-Id: 9A151458EE5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
+	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36462-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-36463-lists,linux-usb=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zhangdandan@uniontech.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[uniontech.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,intel.com:mid,01.org:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,uniontech.com:email,uniontech.com:dkim,uniontech.com:mid]
 
-Hi Benjamin,
+When rtl8150_start_xmit() fails to submit the tx URB, the URB is never
+handed to the USB core and write_bulk_callback() will not run.  The
+driver returns NETDEV_TX_OK, which tells the networking stack that the
+skb has been consumed, but nothing actually frees the skb on this
+error path:
 
-kernel test robot noticed the following build warnings:
+  dev->tx_skb = skb;
+  ...
+  if ((res = usb_submit_urb(dev->tx_urb, GFP_ATOMIC))) {
+          ...
+          /* no kfree_skb here */
+  }
+  return NETDEV_TX_OK;
 
-[auto build test WARNING on 7df6572f1cb381d6b89ceed58e3b076c233c2cd0]
+This leaks the skb on every submit failure and also leaves dev->tx_skb
+pointing at memory that the driver itself may later free, which is
+fragile.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Tissoires/HID-pass-the-buffer-size-to-hid_report_raw_event/20260422-150759
-base:   7df6572f1cb381d6b89ceed58e3b076c233c2cd0
-patch link:    https://lore.kernel.org/r/20260416-wip-fix-core-v2-4-be92570e5627%40kernel.org
-patch subject: [PATCH v2 4/4] HID: wacom: use __free(kfree) to clean up temporary buffers
-config: i386-randconfig-2006-20250804 (https://download.01.org/0day-ci/archive/20260424/202604240311.WgVgLjLa-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260424/202604240311.WgVgLjLa-lkp@intel.com/reproduce)
+Free the skb with dev_kfree_skb_any() in the error path and clear
+dev->tx_skb so no stale pointer is left behind.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604240311.WgVgLjLa-lkp@intel.com/
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Morduan Zang <zhangdandan@uniontech.com>
+---
+Changes in v2:
+ - Rebase on net/main as requested (Jakub Kicinski).  v1 was based on
+   a tree that also carried the pending UAF fix ("net: usb: rtl8150:
+   fix use-after-free in rtl8150_start_xmit()"), so v1 did not apply
+   on net/main.  v2 is an independent fix that applies cleanly to
+   net/main on its own; it does not depend on the UAF fix being
+   applied first.
+ - No code change besides the rebase context.
 
-All warnings (new ones prefixed by >>):
+v1: https://lore.kernel.org/all/678BC10BB9E39322+20260421111025.15833-1-zhangdandan@uniontech.com/
+---
+ drivers/net/usb/rtl8150.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-   In file included from include/linux/device.h:15,
-                    from include/linux/input.h:19,
-                    from drivers/hid/hid-core.c:25:
-   drivers/hid/hid-core.c: In function 'hid_report_raw_event':
->> drivers/hid/hid-core.c:2053:43: warning: format '%ld' expects argument of type 'long int', but argument 5 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-    2053 |                 hid_warn_ratelimited(hid, "Event data for report %d is incorrect (%d vs %ld)\n",
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:156:61: note: in expansion of macro 'dev_fmt'
-     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                             ^~~~~~~
-   include/linux/dev_printk.h:215:17: note: in expansion of macro 'dev_warn'
-     215 |                 dev_level(dev, fmt, ##__VA_ARGS__);                     \
-         |                 ^~~~~~~~~
-   include/linux/dev_printk.h:227:9: note: in expansion of macro 'dev_level_ratelimited'
-     227 |         dev_level_ratelimited(dev_warn, dev, fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/hid.h:1340:9: note: in expansion of macro 'dev_warn_ratelimited'
-    1340 |         dev_warn_ratelimited(&(hid)->dev, fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~
-   drivers/hid/hid-core.c:2053:17: note: in expansion of macro 'hid_warn_ratelimited'
-    2053 |                 hid_warn_ratelimited(hid, "Event data for report %d is incorrect (%d vs %ld)\n",
-         |                 ^~~~~~~~~~~~~~~~~~~~
-   drivers/hid/hid-core.c:2053:91: note: format string is defined here
-    2053 |                 hid_warn_ratelimited(hid, "Event data for report %d is incorrect (%d vs %ld)\n",
-         |                                                                                         ~~^
-         |                                                                                           |
-         |                                                                                           long int
-         |                                                                                         %d
-   drivers/hid/hid-core.c:2075:43: warning: format '%ld' expects argument of type 'long int', but argument 5 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-    2075 |                 hid_warn_ratelimited(hid, "Event data for report %d was too short (%d vs %ld)\n",
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:156:61: note: in expansion of macro 'dev_fmt'
-     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                             ^~~~~~~
-   include/linux/dev_printk.h:215:17: note: in expansion of macro 'dev_warn'
-     215 |                 dev_level(dev, fmt, ##__VA_ARGS__);                     \
-         |                 ^~~~~~~~~
-   include/linux/dev_printk.h:227:9: note: in expansion of macro 'dev_level_ratelimited'
-     227 |         dev_level_ratelimited(dev_warn, dev, fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/hid.h:1340:9: note: in expansion of macro 'dev_warn_ratelimited'
-    1340 |         dev_warn_ratelimited(&(hid)->dev, fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~
-   drivers/hid/hid-core.c:2075:17: note: in expansion of macro 'hid_warn_ratelimited'
-    2075 |                 hid_warn_ratelimited(hid, "Event data for report %d was too short (%d vs %ld)\n",
-         |                 ^~~~~~~~~~~~~~~~~~~~
-   drivers/hid/hid-core.c:2075:92: note: format string is defined here
-    2075 |                 hid_warn_ratelimited(hid, "Event data for report %d was too short (%d vs %ld)\n",
-         |                                                                                          ~~^
-         |                                                                                            |
-         |                                                                                            long int
-         |                                                                                          %d
-
-
-vim +2053 drivers/hid/hid-core.c
-
-  2035	
-  2036	int hid_report_raw_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
-  2037				 size_t bufsize, u32 size, int interrupt)
-  2038	{
-  2039		struct hid_report_enum *report_enum = hid->report_enum + type;
-  2040		struct hid_report *report;
-  2041		struct hid_driver *hdrv;
-  2042		int max_buffer_size = HID_MAX_BUFFER_SIZE;
-  2043		u32 rsize, csize = size;
-  2044		size_t bsize = bufsize;
-  2045		u8 *cdata = data;
-  2046		int ret = 0;
-  2047	
-  2048		report = hid_get_report(report_enum, data);
-  2049		if (!report)
-  2050			return 0;
-  2051	
-  2052		if (unlikely(bsize < csize)) {
-> 2053			hid_warn_ratelimited(hid, "Event data for report %d is incorrect (%d vs %ld)\n",
-  2054					     report->id, csize, bsize);
-  2055			return -EINVAL;
-  2056		}
-  2057	
-  2058		if (report_enum->numbered) {
-  2059			cdata++;
-  2060			csize--;
-  2061			bsize--;
-  2062		}
-  2063	
-  2064		rsize = hid_compute_report_size(report);
-  2065	
-  2066		if (hid->ll_driver->max_buffer_size)
-  2067			max_buffer_size = hid->ll_driver->max_buffer_size;
-  2068	
-  2069		if (report_enum->numbered && rsize >= max_buffer_size)
-  2070			rsize = max_buffer_size - 1;
-  2071		else if (rsize > max_buffer_size)
-  2072			rsize = max_buffer_size;
-  2073	
-  2074		if (bsize < rsize) {
-  2075			hid_warn_ratelimited(hid, "Event data for report %d was too short (%d vs %ld)\n",
-  2076					     report->id, rsize, bsize);
-  2077			return -EINVAL;
-  2078		}
-  2079	
-  2080		if (csize < rsize) {
-  2081			dbg_hid("report %d is too short, (%d < %d)\n", report->id,
-  2082				csize, rsize);
-  2083			memset(cdata + csize, 0, rsize - csize);
-  2084		}
-  2085	
-  2086		if ((hid->claimed & HID_CLAIMED_HIDDEV) && hid->hiddev_report_event)
-  2087			hid->hiddev_report_event(hid, report);
-  2088		if (hid->claimed & HID_CLAIMED_HIDRAW) {
-  2089			ret = hidraw_report_event(hid, data, size);
-  2090			if (ret)
-  2091				return ret;
-  2092		}
-  2093	
-  2094		if (hid->claimed != HID_CLAIMED_HIDRAW && report->maxfield) {
-  2095			hid_process_report(hid, report, cdata, interrupt);
-  2096			hdrv = hid->driver;
-  2097			if (hdrv && hdrv->report)
-  2098				hdrv->report(hid, report);
-  2099		}
-  2100	
-  2101		if (hid->claimed & HID_CLAIMED_INPUT)
-  2102			hidinput_report_event(hid, report);
-  2103	
-  2104		return ret;
-  2105	}
-  2106	EXPORT_SYMBOL_GPL(hid_report_raw_event);
-  2107	
-  2108	
-
+diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
+index 4cda0643afb6..9999484d2c5e 100644
+--- a/drivers/net/usb/rtl8150.c
++++ b/drivers/net/usb/rtl8150.c
+@@ -707,6 +707,13 @@ static netdev_tx_t rtl8150_start_xmit(struct sk_buff *skb,
+ 			netdev->stats.tx_errors++;
+ 			netif_start_queue(netdev);
+ 		}
++		/*
++		 * The URB was not submitted, so write_bulk_callback() will
++		 * never run to free dev->tx_skb.  Drop the skb here and
++		 * clear tx_skb to avoid leaving a stale pointer.
++		 */
++		dev->tx_skb = NULL;
++		dev_kfree_skb_any(skb);
+ 	} else {
+ 		netdev->stats.tx_packets++;
+ 		netdev->stats.tx_bytes += skb->len;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.50.1
+
 
