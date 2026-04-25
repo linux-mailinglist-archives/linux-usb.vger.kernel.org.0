@@ -1,260 +1,196 @@
-Return-Path: <linux-usb+bounces-36474-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36475-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oN1SOcXf62mdSQAAu9opvQ
-	(envelope-from <linux-usb+bounces-36474-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 23:25:25 +0200
+	id GMDkGggc7GkzUgAAu9opvQ
+	(envelope-from <linux-usb+bounces-36475-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Apr 2026 03:42:32 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 672C24637A2
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 23:25:25 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D1E2464767
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Apr 2026 03:42:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3C8D2301F4A5
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2026 21:24:53 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3D1A330234F9
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Apr 2026 01:42:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AAE33D47A3;
-	Fri, 24 Apr 2026 21:24:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B62AA221275;
+	Sat, 25 Apr 2026 01:42:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dY/+1xtx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TtNcuHTq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0AC331202
-	for <linux-usb@vger.kernel.org>; Fri, 24 Apr 2026 21:24:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B702204F93
+	for <linux-usb@vger.kernel.org>; Sat, 25 Apr 2026 01:42:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777065892; cv=none; b=iJKgeX7kJ66yezj/P6dIZBvtelOPhdkTztBuwHB6eY7P/7Is5Bu7UudsV87Wc77V7h0/tTJHtK9mbqN2w0kj5lNUiWuFtFu6QqkcrN64uUzysVSxH17mEPTu6Io1/AOJY01iojNshwE6VegbfGeYg3QNJ6fOw847gkqW4+H6tt8=
+	t=1777081341; cv=none; b=FU2ZeWdn1pkCNI5eRXkZw8XhHj7t0VWoYk6xMwkRBOkqyam3A4IP2tHSNOSgstk3qWFKJ5DdhQdydpXmeYUcky6+7nE/LcTS93FN9d6Pbe1lIJGS8AQLjOEaqOcbPW8zK55k+xo45jJAaDr6DTkKYfft4JJhPcb//gZYYLCT+Tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777065892; c=relaxed/simple;
-	bh=OOvCfNvP/t9snDp0xVHuGAvs/3wkRapGCm8Nkw6btaI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FGYBy88zLgx4k+eNubTRI/UhQCwygIHNy20bxNdhmZdjsyrVpqShXPdjgIk1dl5Uo8IWDfkOewOtUylE9tKBhPt19OpnZ3szk+5cyr7/wlF6RUZK+VUy89NRoh9umiiBdHzJ3SoULVz9WexBkxlfhZaiHMimJm/LPrNNTzkDMUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dY/+1xtx; arc=none smtp.client-ip=209.85.161.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6948b5b1c53so3476920eaf.1
-        for <linux-usb@vger.kernel.org>; Fri, 24 Apr 2026 14:24:50 -0700 (PDT)
+	s=arc-20240116; t=1777081341; c=relaxed/simple;
+	bh=mj3qfGYlr+bMveVNY0NmGwQ8Jz+/4iRwZC+w+LJ21Ww=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A/IIYVdQ93+yiNxOuuaDm+vGIjGL3CzTQjKLZwfdGeLQG7rxcmLzZjDNGaeXzba4sMHUO7Ljgto5Lk2rGMlK/Pv3JI3n2TIr9wfSF8Wuo+Pbuw6heZgrJL7SWS+UiPT12WKAIclBg4Z45+ro4m8+Cc+aHUpAeHADI5fe/9qa7sE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TtNcuHTq; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-35d971fb6f1so6715622a91.0
+        for <linux-usb@vger.kernel.org>; Fri, 24 Apr 2026 18:42:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777065889; x=1777670689; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iJNaihlk3IRG5/RkBM+hnzAM1yk0Bb5wvtfDGLFoLmg=;
-        b=dY/+1xtx+SuuEEFMy/nyh1hV0VYfqpre0zlY6Bale8cZz0M3edtnJlFm5fXXU9U6Bq
-         wWknaXzBWyFeiNwkYLWzb/s2+Vgufruy/D5AiBRb+l4D7q+2veCOoBMPmBt0qwRObXXD
-         B9IlaiBBgNbxTvKpwUt6Ht8H28aBqv1U9h08epaK92kdYeAi0BikoLoSBXrn8wYilOS7
-         9IAfX83cFuRWTjVfAhRIMTRMf8OKg0mwd3B73rriWJ0EATF4mSnVqcgHmhHNJ7igo0Qc
-         FhPux1joKW+DLHLuzXrHq9oQ7gEt4YEJ1PDUkKhLBfVB4Z5gYxcr2dRdCNJgUi50mJA/
-         W1jg==
+        d=gmail.com; s=20251104; t=1777081339; x=1777686139; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4OxYR+RFt6UrbmMauhFwdJjJ5w7Lq82SA2vzvpVn2KI=;
+        b=TtNcuHTqY8iR0xBAIn/qlkWOiuLT3CMqmKxEL0x6cgAXG7sP0QN2htCPZc5KeZxjE8
+         cQJy02bNPs+jD5Fh7W7vIO09kChXVTkMcKbrg+uDd1hRPplxoP95eYi+PM7qxgmbUv1S
+         G12G0LI0yVSlb7NZfwhk1ckzgZNGet6Z/UoiTIX1eyB2hD5/xN4+uY+/jNEDeBcQvgci
+         InTnxYPGIvl1gDB+ds1VHXkEt5P9Hb6q7Lb0y5lB6TmL5KFyG0pXlgUpBEGM8Zyovigj
+         waJRvO02yIwlWF9f+cjszwDpdkh0AdnUIg/R5ntxH860gzUOogPREcUzO9ZjFGdCdAOf
+         KRGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777065889; x=1777670689;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iJNaihlk3IRG5/RkBM+hnzAM1yk0Bb5wvtfDGLFoLmg=;
-        b=B0Ra0UA3IypLF//Z39QpoW7SqmRvxOc6kEWhpsxHE+eEOOTk6HD4LzJEKOo7BOO1By
-         8ENB1APIKA78HxTTmezSF6f5xYlJZ1/+UTnSX/+QMuM0E/M9JIvyyekGaRI7nsCp0vcg
-         lhmomT1WCV2gZw4UpgOfdzOzu871r8edEcq9TDO6C7stFYJAoyH9ecf3+aojZpBqgA29
-         T1vVTxZoacLcXhBP02InaOYdt47SMwiBuhRAuZKjLcqp7t7vDPLXOFEUbzwmifCigTmi
-         PqutHoQcOOiXyg0ZefKdmbllNS5gKyZfaidQIE0YsU3DJEs/Ieq2T3nUy2DR/TDlmfEE
-         lRnQ==
-X-Gm-Message-State: AOJu0YxpKRcIXQbRhlj/cee6XVrgmD4AMUY0pFGF3KaEHqmKsgz7P3Dj
-	gVbzLCPi1wPtn1gTje/ET9giP5HvvYCaO4RhAxP5SE33as6LwCJiY3uGErP0nkUwKA==
-X-Gm-Gg: AeBDievoOrxXsQYXnxrFH15VR8CssNcmgcOqdC/qnxzOYLgfNQQNH5hiKrLYYD8uMb4
-	TpixYnQjj7aqT3CLaZ5n+ASlzQjNobdhP4DLe/5MiT3s4bZGwALLex+xgS/if9R2cvfGz3QZtRz
-	2p30AbVnaaIzKekj0VxX81EkJKW2aq1R9t4av5tbR7oAALmwpjQ21W6S6bW/DRaxryaCuMTuCMR
-	bodDqwwRAANnI+gdLy1mFFbo9kPiFjEFq5AZh9s8pA3/rH661iq5DN9KW0Nco+kl/GYKBkL41Nl
-	Y4LkZssQ7yCsbs0FhN/McT4k6a/MWaj1GOucvHR4v2FqhXtHF2xis0PBGc+oq8NKZpu4ppT6MQb
-	fDMsqBKYoYP6PHE3JcoL+/b/8lyv+1dnF047guCdvcdBbabI+w2gmSbmYQezYKONiJpPwUiDAUl
-	sbf+HfCoO44CZr9Pa3H+tHUoc5jcd2086ePwiZKepXmTb+n3gvXFVa+RPERwWg3Rp3YHlCrDgHM
-	IK97uogj0j0+EwVNAuv
-X-Received: by 2002:a05:6820:f026:b0:694:97ca:9ecf with SMTP id 006d021491bc7-69497caa1abmr10550455eaf.31.1777065888893;
-        Fri, 24 Apr 2026 14:24:48 -0700 (PDT)
-Received: from ?IPV6:2600:1700:4570:89a0:8f46:c3fb:92e2:2f40? ([2600:1700:4570:89a0:8f46:c3fb:92e2:2f40])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69489e52aacsm9895971eaf.9.2026.04.24.14.24.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Apr 2026 14:24:48 -0700 (PDT)
-Message-ID: <79039de4-aa33-430c-b004-ae98b2541f63@google.com>
-Date: Fri, 24 Apr 2026 14:24:44 -0700
+        d=1e100.net; s=20251104; t=1777081339; x=1777686139;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4OxYR+RFt6UrbmMauhFwdJjJ5w7Lq82SA2vzvpVn2KI=;
+        b=WekDTgE9yT94mXkM40VEjb0/xvorGVL2ApIYBkBJbQojlz62Mk0vdD2dZeEK5I0RgK
+         gpBJljdTa26UxObwOoG6d2m7GGThyAwOjp0ij2vbKqK907IQWdjQZuLcKdUc/WHVgQT+
+         I6dagcj/J/yOBX6k2X3VodMSU4pIT5sLwpQtDLqwhURHflAHvgzxGp2yvvXcW3OljggX
+         eDB7WnZ0LpD5Mti61kztQVYMV7vdgj0+//bkXcOhMGtQ68p7T93OGgmMKGOThGgd+RQH
+         jWYBocgPN+wL0pQecKVeZmjVrYOsvZkVDCXgAx8xr/wRzf78PPz3jy+HlL0RntsE+Bjs
+         jzFw==
+X-Gm-Message-State: AOJu0YzE/7URwYNfulM2iEOrTJzzlv8OartPVmmh25WR5XZ/EsPQCrC3
+	U/aMifCB5LZGpln29PH2BYTb8sZlPVR2o/augmMhDQx/xymby5VyMsshP+nAOA==
+X-Gm-Gg: AeBDieu2hEuhNUg8gltW144JTstaxaI6aCDKSjysNbGmB8AXXTxmeGenkvIUriEm9L2
+	zGYjMpZkAkyZM+9KnK2LyQxE0KBsyZrCNBOI/2HDDW4henA1PleCRmYS+ty7wycc7oglkJBA8QU
+	6rKOqTvgVt0uvqrZZD7KjBSwZBvuvrgrOuDoBgQCAHXqE/Qj/MfBYFY5HgZD0cblZ9vW/coToDK
+	m78PfLSQLGnj2XLqJbpN47zU7Upx5s8GKebE5fN2bEua1UrbV9cdncnD6NWDIpFRzkAsspDGyNm
+	j6PNWVgQo+vTN0XKoddy3t+SP25CGmG0PbQumBIkvhNHxEdCPFKJDkLjsfEOMa5mJj51uyI/rni
+	1U3hqgH07YoOQJ6AAin+FrloME0mowN6kpEIu871l6SVFjhxS3Mp11CEbxbvmWlaKkBXA4Iab+X
+	HA62g/IOwleseqfkgNWP/6WITgUd+AzlJTrHiK1CcvmB62h7g+KJjg6rb/RGlIQlAcG+cfXd1Mm
+	KUxBlGEtmRQO00aBquUWg5MAnS63Qm4b3Xk
+X-Received: by 2002:a17:90b:4fcc:b0:35f:b293:7ac6 with SMTP id 98e67ed59e1d1-361403bd8camr37022135a91.6.1777081339252;
+        Fri, 24 Apr 2026 18:42:19 -0700 (PDT)
+Received: from ryzen ([2601:644:8000:5b5d::8bd])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-362c69b8257sm9967412a91.7.2026.04.24.18.42.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Apr 2026 18:42:18 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-kernel@vger.kernel.org (open list),
+	linux-hardening@vger.kernel.org (open list:KERNEL HARDENING (not covered by other areas):Keyword:\b__counted_by(_le|_be)?\b)
+Subject: [PATCH] usb: typec: intel_pmc_mux: combine kzalloc + kcalloc
+Date: Fri, 24 Apr 2026 18:42:01 -0700
+Message-ID: <20260425014201.439251-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: typec: tcpm: fix debug accessory mode detection
- for sink ports
-To: Xu Yang <xu.yang_2@nxp.com>, badhri@google.com,
- heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
- m.grzeschik@pengutronix.de
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, jun.li@nxp.com
-References: <20260424074009.2979266-1-xu.yang_2@nxp.com>
-From: Amit Sunil Dhamne <amitsd@google.com>
-Content-Language: en-US
-In-Reply-To: <20260424074009.2979266-1-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 672C24637A2
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 2D1E2464767
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[google.com:+];
-	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36474-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[amitsd@google.com,linux-usb@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36475-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rosenp@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 
+A flexible array member can be used to combine allocations and simplify
+handling slightly.
 
-On 4/24/26 12:40 AM, Xu Yang wrote:
-> The port in debug accessory mode can be either a source or sink. The
-> previous tcpm_port_is_debug() function only checked for source port.
->
-> Commit 8db73e6a42b6 ("usb: typec: tcpm: allow sink (ufp) to toggle into
-> accessory mode debug") changed the detection logic to support both roles,
-> but left some logic in _tcpm_cc_change() unchanged, This causes the state
-> machine to transition to an incorrect state when operating as a sink in
-> debug accessory mode. Log as below:
->
-> [  978.637541] CC1: 0 -> 5, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-> [  978.637567] state change TOGGLING -> SRC_ATTACH_WAIT [rev1 NONE_AMS]
-> [  978.637596] pending state change SRC_ATTACH_WAIT -> DEBUG_ACC_ATTACHED @ 180 ms [rev1 NONE_AMS]
-> [  978.647098] CC1: 5 -> 0, CC2: 5 -> 5 [state SRC_ATTACH_WAIT, polarity 0, connected]
-> [  978.647115] state change SRC_ATTACH_WAIT -> SRC_ATTACH_WAIT [rev1 NONE_AMS]
->
-> It should go to SNK_ATTACH_WAIT instead of SRC_ATTACH_WAIT state.
->
-> To fix this, add tcpm_port_is_debug_source() and tcpm_port_is_debug_sink()
-> helper to explicitly identify the power mode in debug accessory mode.
-> Update the state transition logic in _tcpm_cc_change() to ensure the state
-> machine transitions comply with Type-C specification. Also update the logic
-> in run_state_machine() to keep consistency.
->
-> Fixes: 8db73e6a42b6 ("usb: typec: tcpm: allow sink (ufp) to toggle into accessory mode debug")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+Add __counted_by for extra runtime analysis.
 
-Reviewed-by: Amit Sunil Dhamne <amitsd@google.com>
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ drivers/usb/typec/mux/intel_pmc_mux.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
+diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+index 1698428654ab..e22b070a140f 100644
+--- a/drivers/usb/typec/mux/intel_pmc_mux.c
++++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+@@ -151,13 +151,14 @@ struct pmc_usb {
+ 	u8 num_ports;
+ 	struct device *dev;
+ 	struct intel_scu_ipc_dev *ipc;
+-	struct pmc_usb_port *port;
+ 	struct acpi_device *iom_adev;
+ 	void __iomem *iom_base;
+ 	u32 iom_port_status_offset;
+ 	u8 iom_port_status_size;
+ 
+ 	struct dentry *dentry;
++
++	struct pmc_usb_port port[] __counted_by(num_ports);
+ };
+ 
+ static struct dentry *pmc_mux_debugfs_root;
+@@ -731,27 +732,25 @@ static int pmc_usb_probe(struct platform_device *pdev)
+ {
+ 	struct fwnode_handle *fwnode = NULL;
+ 	struct pmc_usb *pmc;
++	u8 num_ports;
+ 	int i = 0;
+ 	int ret;
+ 
+-	pmc = devm_kzalloc(&pdev->dev, sizeof(*pmc), GFP_KERNEL);
+-	if (!pmc)
+-		return -ENOMEM;
+-
+ 	device_for_each_child_node(&pdev->dev, fwnode)
+-		pmc->num_ports++;
++		num_ports++;
+ 
+ 	/* The IOM microcontroller has a limitation of max 4 ports. */
+-	if (pmc->num_ports > 4) {
++	if (num_ports > 4) {
+ 		dev_err(&pdev->dev, "driver limited to 4 ports\n");
+ 		return -ERANGE;
+ 	}
+ 
+-	pmc->port = devm_kcalloc(&pdev->dev, pmc->num_ports,
+-				 sizeof(struct pmc_usb_port), GFP_KERNEL);
+-	if (!pmc->port)
++	pmc = devm_kzalloc(&pdev->dev, struct_size(pmc, port, num_ports), GFP_KERNEL);
++	if (!pmc)
+ 		return -ENOMEM;
+ 
++	pmc->num_ports = num_ports;
++
+ 	pmc->ipc = devm_intel_scu_ipc_dev_get(&pdev->dev);
+ 	if (!pmc->ipc)
+ 		return -EPROBE_DEFER;
+-- 
+2.54.0
 
-BR,
-
-Amit
-
->
-> ---
-> Changes in v2:
->  - update tcpm_port_is_debug() in run_state_machine() as well
->    as suggested by Amit
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 25 ++++++++++++++++---------
->  1 file changed, 16 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index dfbb94ddc98a..6d258efae6f0 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -732,9 +732,14 @@ static const char * const pd_rev[] = {
->  	 (tcpm_cc_is_source((port)->cc2) && \
->  	  !tcpm_cc_is_source((port)->cc1)))
->  
-> +#define tcpm_port_is_debug_source(port) \
-> +	(tcpm_cc_is_source((port)->cc1) && tcpm_cc_is_source((port)->cc2))
-> +
-> +#define tcpm_port_is_debug_sink(port) \
-> +	(tcpm_cc_is_sink((port)->cc1) && tcpm_cc_is_sink((port)->cc2))
-> +
->  #define tcpm_port_is_debug(port) \
-> -	((tcpm_cc_is_source((port)->cc1) && tcpm_cc_is_source((port)->cc2)) || \
-> -	 (tcpm_cc_is_sink((port)->cc1) && tcpm_cc_is_sink((port)->cc2)))
-> +	(tcpm_port_is_debug_source(port) || tcpm_port_is_debug_sink(port))
->  
->  #define tcpm_port_is_audio(port) \
->  	(tcpm_cc_is_audio((port)->cc1) && tcpm_cc_is_audio((port)->cc2))
-> @@ -5176,7 +5181,7 @@ static void run_state_machine(struct tcpm_port *port)
->  			tcpm_set_state(port, SNK_UNATTACHED, PD_T_DRP_SNK);
->  		break;
->  	case SRC_ATTACH_WAIT:
-> -		if (tcpm_port_is_debug(port))
-> +		if (tcpm_port_is_debug_source(port))
->  			tcpm_set_state(port, DEBUG_ACC_ATTACHED,
->  				       port->timings.cc_debounce_time);
->  		else if (tcpm_port_is_audio(port))
-> @@ -5434,7 +5439,7 @@ static void run_state_machine(struct tcpm_port *port)
->  			tcpm_set_state(port, SRC_UNATTACHED, PD_T_DRP_SRC);
->  		break;
->  	case SNK_ATTACH_WAIT:
-> -		if (tcpm_port_is_debug(port))
-> +		if (tcpm_port_is_debug_sink(port))
->  			tcpm_set_state(port, DEBUG_ACC_ATTACHED,
->  				       PD_T_CC_DEBOUNCE);
->  		else if (tcpm_port_is_audio(port))
-> @@ -5454,7 +5459,7 @@ static void run_state_machine(struct tcpm_port *port)
->  		if (tcpm_port_is_disconnected(port))
->  			tcpm_set_state(port, SNK_UNATTACHED,
->  				       PD_T_PD_DEBOUNCE);
-> -		else if (tcpm_port_is_debug(port))
-> +		else if (tcpm_port_is_debug_sink(port))
->  			tcpm_set_state(port, DEBUG_ACC_ATTACHED,
->  				       PD_T_CC_DEBOUNCE);
->  		else if (tcpm_port_is_audio(port))
-> @@ -6360,10 +6365,10 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
->  
->  	switch (port->state) {
->  	case TOGGLING:
-> -		if (tcpm_port_is_debug(port) || tcpm_port_is_audio(port) ||
-> +		if (tcpm_port_is_debug_source(port) || tcpm_port_is_audio(port) ||
->  		    tcpm_port_is_source(port))
->  			tcpm_set_state(port, SRC_ATTACH_WAIT, 0);
-> -		else if (tcpm_port_is_sink(port))
-> +		else if (tcpm_port_is_debug_sink(port) || tcpm_port_is_sink(port))
->  			tcpm_set_state(port, SNK_ATTACH_WAIT, 0);
->  		break;
->  	case CHECK_CONTAMINANT:
-> @@ -6371,9 +6376,11 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
->  		break;
->  	case SRC_UNATTACHED:
->  	case ACC_UNATTACHED:
-> -		if (tcpm_port_is_debug(port) || tcpm_port_is_audio(port) ||
-> +		if (tcpm_port_is_debug_source(port) || tcpm_port_is_audio(port) ||
->  		    tcpm_port_is_source(port))
->  			tcpm_set_state(port, SRC_ATTACH_WAIT, 0);
-> +		else if (tcpm_port_is_debug_sink(port))
-> +			tcpm_set_state(port, SNK_ATTACH_WAIT, 0);
->  		break;
->  	case SRC_ATTACH_WAIT:
->  		if (tcpm_port_is_disconnected(port) ||
-> @@ -6395,7 +6402,7 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
->  		}
->  		break;
->  	case SNK_UNATTACHED:
-> -		if (tcpm_port_is_debug(port) || tcpm_port_is_audio(port) ||
-> +		if (tcpm_port_is_debug_sink(port) || tcpm_port_is_audio(port) ||
->  		    tcpm_port_is_sink(port))
->  			tcpm_set_state(port, SNK_ATTACH_WAIT, 0);
->  		break;
 
