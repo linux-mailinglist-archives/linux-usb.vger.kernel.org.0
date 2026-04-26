@@ -1,120 +1,137 @@
-Return-Path: <linux-usb+bounces-36495-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36487-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cA1sEfLe7ml7ywAAu9opvQ
-	(envelope-from <linux-usb+bounces-36495-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 05:58:42 +0200
+	id QE9vATOJ7mlCvAAAu9opvQ
+	(envelope-from <linux-usb+bounces-36487-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2026 23:52:51 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F0F846CB47
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 05:58:41 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B774546B51C
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2026 23:52:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 540683090243
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 03:52:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 360A7301947F
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2026 21:49:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42683390CB7;
-	Mon, 27 Apr 2026 03:51:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6C9C24A044;
+	Sun, 26 Apr 2026 21:49:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="kBdGJvI7"
+	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="MzOhzEeX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE70390C90;
-	Mon, 27 Apr 2026 03:51:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98FD219EB
+	for <linux-usb@vger.kernel.org>; Sun, 26 Apr 2026 21:49:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777261897; cv=none; b=C1m9Ocd1zZKqNq9TbFPmw5nztZgA04fZyJe5RAiaVk8yjlQQ/afJhjRXb953p8f8zROL8rxdnUlYiiekJFKWtf5qbt/AZlHkC73bfijU+ufG2GwB4XaoGi9cxlZL9VbEoaozYwWask9agoobLzC4cBIBhEx56N5L/YqlODa/KfQ=
+	t=1777240162; cv=none; b=gUZitJHFuV2I+1zjqgGoSpIyVgz1j6rDRr1ir7gP4QpKgTCeuhZlgn6ZPi/hzYF8XGGv2Kq99mo/jcwq8i+Z8WZizpxAkYtYbzM5fgjUZdCXMMmKMy/11QgTPkh2J5JQvpRZLLe5uVuXQaZ2CqIubx5bjqBKrBfz2M5DD3Y90ZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777261897; c=relaxed/simple;
-	bh=9OUyQeeITyTHFWrfXU6VFeIRYwZiT6wNkksq/mESYrc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tGbDh9egnnYtYsvAwKM8uuAen/9G3EXf/QvP4v6ChSN7bFM1TInZ/X85LpQ/4lSOqa0bM2RhpT27pkU2xpvHPaQqxKz/A7WssPmk68tUqqlhBZzsYyoEPZhsmjuGhKY014O7Qrp00vWwr7t0MeAnrrAuAWrpOjWgmaAepJgalks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=kBdGJvI7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FBF3C19425;
-	Mon, 27 Apr 2026 03:51:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1777261897;
-	bh=9OUyQeeITyTHFWrfXU6VFeIRYwZiT6wNkksq/mESYrc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kBdGJvI73SuDrM6usrGN3P4Iz12lpxM1CROfTHYKBGngtpsWPHeiHhIZkr7r94WQu
-	 QlxTuSQtedLTjkkTq9qMdrVtKtBL8ljuXqfFUO6vA0E4hB3WaSPNR+dawYtOKBYfaB
-	 RBxTNDBZ0Ul8ZXaRZnzhH01Jwbgn2kbARImL8n1I=
-Date: Sun, 26 Apr 2026 22:29:44 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: peter.chen@kernel.org, jun.li@nxp.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev
-Subject: Re: [PATCH v2 3/3] usb: chipidea: core: convert ci_role_switch to
- local variable
-Message-ID: <2026042606-plaything-elusive-592f@gregkh>
-References: <20260423102002.2675414-1-xu.yang_2@nxp.com>
- <20260423102002.2675414-3-xu.yang_2@nxp.com>
+	s=arc-20240116; t=1777240162; c=relaxed/simple;
+	bh=hqc/CK0y2YVF3dMMJiIgh0dUs3rUUbZBVUb0oTGFGbI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C3D79XhXA7nTla8CsUhatvmffkqWUYZM+x+KoYqCyMjVvMWzfavsghvLxtB4cZ63Vu1OWgK9xg1v662A7EFLlOLORVNIss/pbNp6/XGg3uHYUOt704VbEyf4dLQVQtKoFi7yfr8w2ba8R/LRfIC6nY/pOww93gPFR3InLcOyo4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=MzOhzEeX; arc=none smtp.client-ip=212.77.101.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
+Received: (wp-smtpd smtp.wp.pl 23436 invoked from network); 26 Apr 2026 23:49:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
+          t=1777240151; bh=wNiG3vmaZvmJc/Ed24L3ke+xWsq9YoBhZy8VatvB0CY=;
+          h=From:To:Cc:Subject;
+          b=MzOhzEeX0WBcWZhX5JGkOt/ze9j2PrSpXwWk8+I6idbLvFY59mr/S0KAPo9IYd8eI
+           5X3iDJzMR2ag+YP97YlWQN4S57HwM71TTnVS5rt60X4fdgajMCR2JJdXSbU1kxA6s9
+           TUKYebkCYqzDvswpHHypuu2eylRQaY8dqjQ6l7G9empyiuQM9xBsZs9JkCvtXp9moE
+           E5EihUC/hu7z/lZay+h+4hoxDOhsSlf/iP5c294toQPr/5VaVNLLTblK6MYSXeycUg
+           0HnqVVcjyAT4hPY6RkA2hoOwQT1dDStY1Pj0UZAwp7fr/lhd7jNnbVxbk6PcsobdSn
+           XD0C/O1ssB/5A==
+Received: from 83.24.138.167.ipv4.supernova.orange.pl (HELO abajkowski.lan) (olek2@wp.pl@[83.24.138.167])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with TLS_AES_256_GCM_SHA384 encrypted SMTP
+          for <andrew+netdev@lunn.ch>; 26 Apr 2026 23:49:11 +0200
+From: Aleksander Jan Bajkowski <olek2@wp.pl>
+To: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	hayeswang@realtek.com,
+	hsu.chih.kai@realtek.com,
+	kees@kernel.org,
+	mail@birger-koblitz.de,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Aleksander Jan Bajkowski <olek2@wp.pl>
+Subject: [PATCH net-next] net: usb: r8152: add TRENDnet TUC-ET2G v2.0
+Date: Sun, 26 Apr 2026 23:49:00 +0200
+Message-ID: <20260426214909.3426105-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260423102002.2675414-3-xu.yang_2@nxp.com>
-X-Rspamd-Queue-Id: 9F0F846CB47
+Content-Transfer-Encoding: 8bit
+X-WP-DKIM-Status: good (id: wp.pl)                                                      
+X-WP-MailID: 596669f7ac28c279c4a913887e3b90b9
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [8YMk]                               
+X-Rspamd-Queue-Id: B774546B51C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[wp.pl,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[wp.pl:s=20241105];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-36487-lists,linux-usb=lfdr.de];
+	FREEMAIL_FROM(0.00)[wp.pl];
 	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36495-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_THREE(0.00)[4];
+	DKIM_TRACE(0.00)[wp.pl:+];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:dkim]
+	FROM_NEQ_ENVFROM(0.00)[olek2@wp.pl,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[wp.pl];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[wp.pl:email,wp.pl:dkim,wp.pl:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 
-On Thu, Apr 23, 2026 at 06:20:02PM +0800, Xu Yang wrote:
-> When a system contains multiple USB controllers, the global ci_role_switch
-> variable may be overwritten by subsequent driver initialization code.
-> 
-> This can cause issues in the following cases:
->  - The 2nd ci_hdrc_probe() sees ci_role_switch.fwnode as non-NULL even
->    though the "usb-role-switch" property is not present for the controller.
->  - When the ci_hdrc device is unbound and bound again, ci_role_switch
->    fwnode will not be reassigned, and the old value will be used instead.
-> 
-> Convert ci_role_switch to a local variable to fix these issues.
-> 
-> Fixes: 05559f10ed79 ("usb: chipidea: add role switch class support")
-> Cc: stable@vger.kernel.org
-> Acked-by: Peter Chen <peter.chen@kernel.org>
-> Reviewed-by: Frank Li <Frank.Li@nxp.com>
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+The TRENDnet TUC-ET2G V2.0 is an RTL8156B based 2.5G Ethernet controller.
 
-You can not have patch 3 out of 3 be only for stable kernels.  Please
-break this up into 2 different patch series, one for bugfixes to go to
-7.1-final, and the other for new stuff for 7.2-rc1.
+Add the vendor and product ID values to the driver. This makes Ethernet
+work with the adapter.
 
-thanks,
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+---
+ drivers/net/usb/r8152.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-greg k-h
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 7337bf1b7d6a..1ace1d2398c9 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -10138,6 +10138,7 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_DELL,    0xb097) },
+ 	{ USB_DEVICE(VENDOR_ID_ASUS,    0x1976) },
+ 	{ USB_DEVICE(VENDOR_ID_TRENDNET, 0xe02b) },
++	{ USB_DEVICE(VENDOR_ID_TRENDNET, 0xe02c) },
+ 	{}
+ };
+ 
+-- 
+2.53.0
+
 
