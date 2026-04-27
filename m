@@ -1,81 +1,93 @@
-Return-Path: <linux-usb+bounces-36549-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36550-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GOMcKf2G72kPCQEAu9opvQ
-	(envelope-from <linux-usb+bounces-36549-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 17:55:41 +0200
+	id EFN1DoOX72mLDAEAu9opvQ
+	(envelope-from <linux-usb+bounces-36550-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 19:06:11 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AC3F475AF9
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 17:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C53FB476D30
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 19:06:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 28FFE30CB1C9
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 15:43:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 71341304CA41
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 17:01:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 665933446CB;
-	Mon, 27 Apr 2026 15:43:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B48C13DBD67;
+	Mon, 27 Apr 2026 17:01:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G1zVc9Am"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ulMWtvDi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A10337B97;
-	Mon, 27 Apr 2026 15:43:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16813DBD59
+	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 17:01:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777304620; cv=none; b=m9/m00xGw8fYDtomACvfn0R+PW2ccEdpSVc7G7F2T+nR+50jQ0xYxJDerhMTeL+K3g5/lUfgBhgR/VcobAa6Z6Ugno4B79UtNhhvUuvt4p2GY7JhILcOzUV9cFjSlqhrbrXXU0qfJHy7re/jsv9lfbxVEJcbxbMi5Vzgtfn77BY=
+	t=1777309267; cv=none; b=WRpZoS1d5i+Mndru7Ep9T/RlnrRZZZbLuq9DzS03CvTWu30cZpZZHYViYjMLKCi7FvtUtHSRyW6txtVvUzm1SThguwDrI2WMDmNivQ/GLlOQndyXW2XotZSmAZOq5wo3R32P5OevwsjpTQbNX5PJ0kKU5Y0+BeT7F65bySgv3Ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777304620; c=relaxed/simple;
-	bh=6ISVTMtRX4NqFtLqj4qSZrtb1sJJjw46nVYpkNvtzzE=;
+	s=arc-20240116; t=1777309267; c=relaxed/simple;
+	bh=pacyqXrJb+QD6vWxFL2HI6p/62pewGR8xTCIDlVEmKI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qGf9jvaWjBKwv6QCs3/18vbUqepBaviGk1RzOPCSp6WuvVEe1goDvBuY7qnBUTyNd6vab53JhzpcYd9NAbKxiPdac1OKpExgGs67Bc4cEX34zp8oOb98/DrA3F2LsxE3k1hgwk6UFs5DaMa4CTx3/dpHHuNMFJ6LXTRe3zERluM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G1zVc9Am; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777304618; x=1808840618;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6ISVTMtRX4NqFtLqj4qSZrtb1sJJjw46nVYpkNvtzzE=;
-  b=G1zVc9Am0lg0OLEg0IaI2O93vquAA+1aB7uJwL2FFFUoHkoN1wWbMQGt
-   5vEjNa5dzQkTtpqQVVZmZLXCNeg7WPvUJ4gdh5cCh8OiN99ww4OjG8+7F
-   bEzVFHJepQMpR24mq92heRJmi4hD0UE9cjybDfryspqclBIqxLAvdOiyC
-   NXi82JGeJ5atAUruEA2A/yDhzJldBGqUYTFaBf3VeXr0cgq0az6qUUsSC
-   uf8c/0/U0qo5dSl4VtAwVdrTkVyezQZu+qODHJ7Sl2Yu64eg0JRh8yN51
-   ZnzqtFI7iJ2X+09mB4ubkdgp8+OeCZqTvSXFlESMI5blDcDb8XN+gvvFB
-   A==;
-X-CSE-ConnectionGUID: pkfnsPSvSaqbuizfOlhiyg==
-X-CSE-MsgGUID: kqlQ3sM3ScmYFVbfEsrwtw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11769"; a="103656950"
-X-IronPort-AV: E=Sophos;i="6.23,202,1770624000"; 
-   d="scan'208";a="103656950"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2026 08:43:38 -0700
-X-CSE-ConnectionGUID: MSbhwIMpSU6XPZgGx/cnPg==
-X-CSE-MsgGUID: VNR5LbqfS7Cae+5Twd97QQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,202,1770624000"; 
-   d="scan'208";a="238660909"
-Received: from fpallare-mobl4.ger.corp.intel.com (HELO localhost) ([10.245.244.2])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2026 08:43:35 -0700
-Date: Mon, 27 Apr 2026 18:43:33 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Arnd Bergmann <arnd@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mATrri2yIxsqPLn7GWxUfOzEAOjMz0no3phVabayjt2NHtpSYFmcIo9ZxxPPQVvVej26+sHgoFQXtsKc6FPlUyGKEwCfPRYNsNinjHtcv8JeR2Qd9uANp973b3az6Lg33IEdP5ABPsaDWgatueHjguun8U+tEWs4wj4hpJEK39c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ulMWtvDi; arc=none smtp.client-ip=209.85.222.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-953a2a4761cso5428243241.1
+        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 10:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1777309264; x=1777914064; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KdmGrxzHwwSFvziMDFmAGnpnOEmYArtlK4bqqD+AiPk=;
+        b=ulMWtvDiilG+gQPQvi+xruQnbNOGKxAcg+bgjtdp0/a7JrjOqpupYLm0hiuZ+lXyd4
+         CZHTOyZubFTzvZDlZXKktEE3fenVciwDfRneCm26g3I+POitpDvnLBs2gEeAwuLwZsPA
+         z8BXXe8KG0b3+uLWyfShXa83/WndMVtYPqHICP7oXobmXPYdCcArUgMPCbAN3WMcwtUn
+         qbdMzS730aepO482I0g1t3NogxhXMAhTdKIJzefHKgi39etg+pymrdaP98NqL1y/albE
+         lKxKmHp0ts91IXoBDWGFzNkQMp8E0G32Bwb9YI5IA4U7kDh2dOgSeXibJqYl42ockU5y
+         Ux0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777309264; x=1777914064;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KdmGrxzHwwSFvziMDFmAGnpnOEmYArtlK4bqqD+AiPk=;
+        b=MdVSsCF8N1ecaFCwRFjAcBsGoc5KLQjQEIVEmE/1dPVo8a/7BC/NB+y871LwOgUM73
+         9QnRpljYUnritw6+X2k5gigTivYW8UsCWP2X9e9DWhQ/H/BjF5HVfktDxnxNgdMpDu6S
+         VzHcqpxdBwWsOhRhmjyofEjddoJBHRvXQP/Om+uc2+kxzBq1pWjGReflakSzeQ4im4pv
+         h4UpPOYmynD1A0zQXloeAszmT91j66WDtBuVBIr0sGbbk/9JSh3dcm4KzbpsovJTnaF3
+         UJvcFFFx7Us91Cu+TRv/Zy5cnUTwJV2u7ecOv913Otxxl1XVnSlWHfCiK+kvx4BoFC9X
+         CjaA==
+X-Forwarded-Encrypted: i=1; AFNElJ/mUciL5IgdUoDMl37jpqobEQuOVfpfXd9h5EAzsyg9TKzQRbZhhQC/7mNrnPf32H21Zfvs3bNammQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiXEtbVDoq4R49HijQwg3NVnkMZvFSaVrb/rf4BkF2msUnDizP
+	md/BQFip2Oaf6E0pTTCze4g5+R1Ev+0HZ+hbWzT7WQX6HsHdFQjcI2qtikGvktZSpA==
+X-Gm-Gg: AeBDieuv4eAGZd9U8R0QSTTlMN8XjQ2t4YILcxVnl6YChx5bfpPqGsNRSGvbXy9TlIp
+	bcuInczpFtTlaszbgV70CZ7svVYNiYIdZtvSfewI6tuIHZ7N8/ZXVJeCAa06Uk82xAgF7+sykyc
+	zTcPZRZwbEu9Vbwkj6KfDnTzElReYfveGYKCJltzKA3sh33N8cqxKgT5sS5cyqCX9fyl48yQAHR
+	Ud/0UKF5CSktI3bKEL9fNGFKPz2JE8+gEVLYH8HV9uQHGk5PvtvkwdQ4CrFjM9rZMHzqGfpLn7I
+	SXkJNAo1HRN6YrEafNUmb8q3kwYjw8zyCzBmd1jNLejvL4C3NNYZgFalUnOcs98ryuKUH9KaUWK
+	0nGFxAJH33PL4YXb3STFV7OBI6B+T1gBCA0oD156WyzZDfQWWxPI5EopYOnS41EMS7vfFv+iiXB
+	3uJj+1R/trdTVxYUEhnWTLh9n3imSD0za8TvmelWOFNAv+6OrPrJcIIAVnSh6QoAVN9pwiB3UfI
+	u+1Og==
+X-Received: by 2002:a05:6102:dcd:b0:610:6e69:5235 with SMTP id ada2fe7eead31-627d55c69efmr111775137.22.1777309260365;
+        Mon, 27 Apr 2026 10:01:00 -0700 (PDT)
+Received: from rowland.harvard.edu ([2607:fb60:1011:2006:349c:f507:d5eb:5d9e])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8e7d9abce59sm3155409985a.46.2026.04.27.10.00.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Apr 2026 10:00:59 -0700 (PDT)
+Date: Mon, 27 Apr 2026 13:00:57 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Guangshuo Li <lgs201920130244@gmail.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH] usb: udc: pxa: remove unused platform_data
-Message-ID: <ae-EJW3UXgVbiXt0@ashevche-desk.local>
-References: <20260427143300.2887692-1-arnd@kernel.org>
- <ae-D4Qki41GpOHyx@ashevche-desk.local>
+	Kees Cook <kees@kernel.org>, Chen Ni <nichen@iscas.ac.cn>,
+	Felipe Balbi <balbi@kernel.org>, Peter Chen <peter.chen@nxp.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: gadget: net2280: Fix double free in probe error
+ path
+Message-ID: <8d5e84a2-326d-4586-8802-553503f940da@rowland.harvard.edu>
+References: <20260427153651.337846-1-lgs201920130244@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -84,61 +96,85 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ae-D4Qki41GpOHyx@ashevche-desk.local>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
-X-Rspamd-Queue-Id: 0AC3F475AF9
+In-Reply-To: <20260427153651.337846-1-lgs201920130244@gmail.com>
+X-Rspamd-Queue-Id: C53FB476D30
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,arndb.de,zonque.org,gmail.com,free.fr,kernel.org,lists.infradead.org,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-36549-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36550-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,ashevche-desk.local:mid,intel.com:dkim]
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,harvard.edu:email,rowland.harvard.edu:dkim,rowland.harvard.edu:mid]
 
-On Mon, Apr 27, 2026 at 06:42:31PM +0300, Andy Shevchenko wrote:
-> On Mon, Apr 27, 2026 at 04:32:10PM +0200, Arnd Bergmann wrote:
-
-...
-
-> I even wouldn't mind this to be long single line
+On Mon, Apr 27, 2026 at 11:36:51PM +0800, Guangshuo Li wrote:
+> usb_initialize_gadget() installs gadget_release() as the release
+> callback for the embedded gadget device.  The struct net2280 instance is
+> therefore released through gadget_release() when the gadget device's last
+> reference is dropped.
 > 
-> 		dev_dbg(dev, "can't get pullup GPIO: %ld\n", PTR_ERR(dev->pullup_gpio));
+> The probe error path calls net2280_remove(), which tears down the
+> partially initialized device and drops the gadget reference with
+> usb_put_gadget().  Calling kfree(dev) afterwards can free the same object
+> again.
 > 
-> (I dropped ' err' part in this variant, though).
+> Drop the explicit kfree() and let the gadget device release callback
+> handle the final free.  This issue was found by a static analysis tool
+> I am developing.
+> 
+> Fixes: f770fbec4165 ("USB: UDC: net2280: Fix memory leaks")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
+> ---
 
-Or even
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
-		dev_dbg(dev, "can't get pullup GPIO: %pe\n", dev->pullup_gpio);
-
-which fits 80.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> v2:
+>   - Remove the unnecessary braces around the single-statement if block.
+>   - Correct the Fixes tag to f770fbec4165.
+> 
+>  drivers/usb/gadget/udc/net2280.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
+> index d02765bd49ce..7c5f30cfd24d 100644
+> --- a/drivers/usb/gadget/udc/net2280.c
+> +++ b/drivers/usb/gadget/udc/net2280.c
+> @@ -3790,10 +3790,8 @@ static int net2280_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  	return 0;
+>  
+>  done:
+> -	if (dev) {
+> +	if (dev)
+>  		net2280_remove(pdev);
+> -		kfree(dev);
+> -	}
+>  	return retval;
+>  }
+>  
+> -- 
+> 2.43.0
+> 
 
