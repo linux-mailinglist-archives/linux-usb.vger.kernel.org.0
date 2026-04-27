@@ -1,193 +1,254 @@
-Return-Path: <linux-usb+bounces-36499-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36500-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QN0mJc4D72kj3wAAu9opvQ
-	(envelope-from <linux-usb+bounces-36499-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 08:35:58 +0200
+	id CctdD0IF72ng3wAAu9opvQ
+	(envelope-from <linux-usb+bounces-36500-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 08:42:10 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42D4B46D9D4
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 08:35:57 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A25FD46DB99
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 08:42:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 82EBE30039A9
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 06:35:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CF6D3303BB04
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 06:36:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D22DD37D138;
-	Mon, 27 Apr 2026 06:35:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE0333815E7;
+	Mon, 27 Apr 2026 06:36:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+ait0+i"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DCrrnBGQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7BF237DE9C
-	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 06:35:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022133806AA
+	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 06:36:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777271735; cv=none; b=mTcooS8sqZ4MgFJ2TFoa/SRWH1Ne+wrz2w7Vf7xebpHif3OMHXd33z27WqwXwFLnIM9B8xYJlsJXNqulONYkivcocUJTSDM5rSJfgtSbTp9JKQnZJplj6WDyvBhbPdx1taOBV3ZM6hM0rH40Mx6YjUP4OatN7F3IZx0RVtHsc5A=
+	t=1777271763; cv=none; b=NTaLJFHFR4su1ax/XFdG0tHrwnI+QzWWiYzD13LG+k0Jg1tkYTdQSm1SrO2HTESFSQo+KVauDfZdpt5EoZ8sTAtySbqNW80f9qvngejJAAM13KpgJ5u6aOcyvck8LPss5Qugeww1uqVRzzoww9pGbS+rwn7KkL0rjE8NbH0fIQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777271735; c=relaxed/simple;
-	bh=83kGaKxHzSO8hHoFuPeKCYAcFLsQi0uBaeCr/GadHns=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nNBGZj9CLHmstOw2mrvW9vR3F2zqtAG54ir0xRPPqABSPB6Gax+KjYa/w/n9fHupkfZ0fKVlmEZVhwPSCf0AbzyoLT5MaoUc40BW0f2GozLQzDjbTlE4X7mwosQsCqARvOq75Y+G++2JrTiK3blL5rccVRLvxdV0z3lUhsa29Xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G+ait0+i; arc=none smtp.client-ip=209.85.216.51
+	s=arc-20240116; t=1777271763; c=relaxed/simple;
+	bh=DoIRs2ewmXmKoxeu+LwDciZNxgzLEyxBy3ROzfHrEhM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kU6AERuDAuo4pcjnRmeoLN45DY6BvZ3JMbGid0k/jIAWRpB7vBLMeVYfLjH0TW6L4yN6EMeavI8XuPoBogIvOpaPRE2f+p9gJ/aik+M+TdAPWFEU6TfNM15JI8nB7b1Fjs5MYaF4tvS4QB7eWllFQ6m6Zw6DbYaAwq0HApDKifY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DCrrnBGQ; arc=none smtp.client-ip=209.85.167.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-35e576110adso6705636a91.0
-        for <linux-usb@vger.kernel.org>; Sun, 26 Apr 2026 23:35:33 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5a402dea4a5so9872584e87.2
+        for <linux-usb@vger.kernel.org>; Sun, 26 Apr 2026 23:36:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777271733; x=1777876533; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ns52I0KO1Mcmsyv5tl+0F3WvrsFMKPBrKCKAz24hMk=;
-        b=G+ait0+i14kr1MLn8YpBH1/Lb7Ts6v0bR1XDI6+nonowYef6Gd2zrqc+uaT7aCDBiQ
-         3kTHbO/g7ShBv9/JE0RngQXNqMhFnLieTDBejkvAyv25C6pi6so3V74tGbIIgaJKCUxj
-         5HQZT31vFbeCdFMI+M4JTTX0ZHbUvWnlQzP2FbOpu9/dJi5LaM3hntAgDaQxLpcfQK+b
-         eVmiYvcUdX/81hcFeI/0FPRm648Nm7BuMAzcy9MrRjBdEYs2Jj+sjNovA3/DFaFhtSV4
-         UjBwuWikS8WVprtkq8c2Dy9L9eK6h4my7m0HGZC/JNzYTFiYaV+1DcD0b/3lWG+1gmYE
-         gBrQ==
+        d=gmail.com; s=20251104; t=1777271760; x=1777876560; darn=vger.kernel.org;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ob6hAxn4b2XJbstB2WIYNRqhZDHJqLJB6rp2bFlZgjg=;
+        b=DCrrnBGQZlmqii1jcrhEBQ1AmWiOgMsjDskG4yKdb2+p+TAnpVP8TVJiiOsmdOxZoS
+         VczEHy7xxhZdiUlTZkzGMEkTL7cRbEtGaQadNzn6OozG9k//Ps5xdf51qYxcqOJx717t
+         /q96bkCHL7QdLBwBTnXrJ0Xhn5dXs7tqSMLj2DJIiuUExhwYXVc/1c0UicaJNqXn3gqC
+         yQAhtSWv2spmp4R1o+pOsSAuTV4RuFAXhBehFc/Uai6twFt4msZvXoFFfS5E0lasjksw
+         4eQUHVvIswPgzTdyyWGiNRCWcz08erDSqJbnP0qs2zI53ag1ftceIJmPMnpfuizk8jbc
+         IA9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777271733; x=1777876533;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9ns52I0KO1Mcmsyv5tl+0F3WvrsFMKPBrKCKAz24hMk=;
-        b=lkyFXkInJtBxBpqjy3aUsy19ZHGr/p6IdmwXASghBTIPigzhaqccAO2Gs+rjKhyyYY
-         LdhCLSOYYVpnZU3VCBhGg1913OAv4x/dgONldGyETaWJfb6eQpsf4yCfDmjrJjuwYW9a
-         on0NbK0iaWje0a+/j+uqCNffOVFIuszbeQqaZd3Y1DsGWTh8VpwLhgzP4/cDOtep2MKj
-         tqRv6LVP8zYKK4fbmMyT+1n9JB1xd/ZPTmQc4i+9mtvsGZOhxP5o2VRmjAPI4p8w+axW
-         4MQQJ86rfe1IIjL58sPZsDBnbFEUE1dER8/UsaiuFaqUPoAiB5GCw+CDopS6trJbrI49
-         TBMg==
-X-Gm-Message-State: AOJu0YxakrpZLAWk6YkWo3+EZkpYT4u6Sbyh+/NW7oMg4yTy8KHJykXZ
-	eazVTQb2U7np9WZYOaxfB59tMU5pdquuaifcwt3GZ5+to/XWsOlbtzX7
-X-Gm-Gg: AeBDieuWrwuSovVGUIbQaVFGNjDnOYvGPchy9hCmWodnMcn8ZDHOmPc99p9MWwQCIvS
-	mnUdbTHz188i0/WM2YI9PNpPWLeJsQ8JyTKs9/ntQ7+UQwZFArRilQF3F8VTv9llUHRYt9CXjTa
-	Fa1wDZ79QT+5HqOD4S/paxoazrkeNLvZ+XcwDtNQ1fW+xodAFFxoyrR20kV/R7BcpNQ03uFfy/x
-	gQC/MU49nHGZDCAxx+Mrx53al5i6p76BQ1E/jTZCeOb2faAsHRYk6PeXNEXV3MXyZVLU/jOiLre
-	UoYVboGh0RrfOjOEWM0bz9qq2FUi3xeHj5HVMMxOgfIZStjPgBnQM6Kv7iySENtNLp8cQolX8lO
-	TqpQ2ukNbEIMvDneJn7fd1GgdObeqnOjxwzH/aNViG+1MCRMz7SbcBO+KGQ/FdaTfNkgEOO6VSH
-	oYMpYC9smvqTEHsiX+d4bFXDZSowhiInNxPDXAmoXaxrqGPlGnfhatU/PqMcdcWmtw
-X-Received: by 2002:a17:90b:3ec5:b0:35f:b4c1:91ea with SMTP id 98e67ed59e1d1-361402ee818mr32903461a91.13.1777271732777;
-        Sun, 26 Apr 2026 23:35:32 -0700 (PDT)
-Received: from localhost (61-219-108-167.hinet-ip.hinet.net. [61.219.108.167])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36141868906sm29987454a91.3.2026.04.26.23.35.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Apr 2026 23:35:32 -0700 (PDT)
-From: Jack Wu <wojackbb@gmail.com>
-X-Google-Original-From: Jack Wu <jackbb_wu@compal.com>
-To: Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: serial: qcserial: add new usb-id for Dell Wireless DW5826e-m
-Date: Mon, 27 Apr 2026 14:35:02 +0800
-Message-Id: <20260427063502.2314843-1-jackbb_wu@compal.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20251104; t=1777271760; x=1777876560;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ob6hAxn4b2XJbstB2WIYNRqhZDHJqLJB6rp2bFlZgjg=;
+        b=Xq+p+Qgk3IvmlB6ZjklJPKlxFrIGU9yqMdbE4IvE31G5To7Sntw2rlejlcReAwO0us
+         APO2fvw7gF2vN44mEiq/RkAoFIZv9zXqyqR1gnSq4/mhP2XbQpeSaPJ/EjRwxj4jqc3M
+         ySHIqrfbevIZYuq444LjfEfiXE7xc8L2GGoSWRpixvz1KelgjVimfrDYiIRBlFCJG7vB
+         rNRv9gdz8r4ZQ1yH+xbqJC85ZvYq6SrqUkwpSXG0oslSszeQi/nc9XVC+iTvUrtjOtu+
+         SdFAl4PjBMbEjEiK9wNV7ZUqq3tN+2MkFhQhX8d+8a775Bg5a9E7EvWAcClPkomz9NcT
+         D7sA==
+X-Forwarded-Encrypted: i=1; AFNElJ+MpfPKOG/52YJTbiQg8EakgTxq/hfsvQdGO6Zsj7QUQW5QGYvtb53GauCe3eBa/SbI2jFNtn9RYEM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3TAw2l3PgZSvMMcBXUPv9kMhFG2YbEFydcV4PAIXf3drL+urm
+	hO2pzS9vQvpejLVYSUZ/uFkKp0108+fsdWxBd0eNDFviayNI3Zkd2bed
+X-Gm-Gg: AeBDieutJ9IvOU5CYdBaWmhrsjkLxgNaavRVAhEPYZD2c82lxdkfl4VDPhsap8SkYRW
+	bULYo+mCX+TyOyIkqWVbiS4utW8IDUOmLpSkaogMItk13bMdEuJsi4jJWJSe2abljRmtnOXl6/v
+	HyZBUn86Zn105FQQrJiy/+4GUgOcfNtT+CSmc8gkIqLyFb3p7XN3+mMekLrKibudT1jypjGcdWV
+	uvj6iPMJtk/wj4HRC5jT0QrPU8+noRwrvKsDp6iayDLO7tDq2bkX7gHJOmEPsWNrHzZF/CQL6WB
+	5NGFRILUjOkpr4QnlyUszHCXwnul9UuxACMd2K1LtCfnThKs3/MRaoewZzsTer0wHc62+XyqY6+
+	Ep0ZUJxQ2bfVbvYL7rxrUP1mQ+kqzChj7p6HKPRrPn2qk/FNO44BzDY10n3SoifNuyjX/KG4qup
+	DdInZnd3WDX2gdq2Srh3lNSBzWUb8ERLMYyAmLQQUyPrM=
+X-Received: by 2002:a05:6512:3ca9:b0:5a1:3437:84ac with SMTP id 2adb3069b0e04-5a4172ee6b9mr13124133e87.31.1777271759755;
+        Sun, 26 Apr 2026 23:35:59 -0700 (PDT)
+Received: from foxbook (bfh75.neoplus.adsl.tpnet.pl. [83.28.45.75])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-38ecb5f652asm64457991fa.12.2026.04.26.23.35.57
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sun, 26 Apr 2026 23:35:58 -0700 (PDT)
+Date: Mon, 27 Apr 2026 08:35:53 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Jeffrey Hein <jp@jphein.com>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, Ricardo Ribalda
+ <ribalda@chromium.org>, Alan Stern <stern@rowland.harvard.edu>, Laurent
+ Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede
+ <hansg@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+ stable@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] media: uvcvideo: add UVC_QUIRK_CTRL_THROTTLE for
+ fragile firmware
+Message-ID: <20260427083553.36ff4731.michal.pecio@gmail.com>
+In-Reply-To: <20260413100545.71796c66.michal.pecio@gmail.com>
+References: <20260331003806.212565-1-jp@jphein.com>
+	<20260331003806.212565-3-jp@jphein.com>
+	<CANiDSCvsxP+npQTHUrMTp+Z8XULYKSLTz2AFu+WQnsLbRBGa2w@mail.gmail.com>
+	<20260409100247.7cfb62d1.michal.pecio@gmail.com>
+	<20260409221749.5e6bccab.michal.pecio@gmail.com>
+	<c4275422-a9b4-4519-95f9-1163a7912709@linux.intel.com>
+	<CAD5VvzCEV_XbHc_Gby7mFPBSgSebqKDKJf3VC8HNRrD+xWaTJg@mail.gmail.com>
+	<20260413100545.71796c66.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 42D4B46D9D4
+Content-Type: multipart/mixed; boundary="MP_/.OkknVOR4gOuo.3Taa06e1K"
+X-Rspamd-Queue-Id: A25FD46DB99
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.56 / 15.00];
+	MIME_BAD_ATTACHMENT(1.60)[c:text/x-c++src];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
+	MIME_GOOD(-0.10)[multipart/mixed,text/plain,text/x-c++src];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36499-lists,linux-usb=lfdr.de];
+	HAS_ATTACHMENT(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-36500-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+,1:+,2:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wojackbb@gmail.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,compal.com:mid,compal.com:email]
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-Add support for Dell DW5826e-m with USB-id 0x413c:0x81ea & 0x413c:0x81eb.
+--MP_/.OkknVOR4gOuo.3Taa06e1K
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-It is 0x413c:0x81ea
-T:  Bus=02 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#=110 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=413c ProdID=81ea Rev= 5.04
-S:  Manufacturer=DELL
-S:  Product=DW5826e-m Qualcomm Snapdragon X12 Global LTE-A
-S:  SerialNumber=358988870177734
-C:* #Ifs= 7 Cfg#= 1 Atr=a0 MxPwr=500mA
-A:  FirstIf#=12 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=qcserial
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=qcserial
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=qcserial
-E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-E:  Ad=87(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:* If#=12 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#=13 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:* If#=13 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+On Mon, 13 Apr 2026 10:05:45 +0200, Michal Pecio wrote:
+> Question: can you kill it by starting some video application to set
+> the camera up, closing it and then running this loop?
+> 
+> while :; do v4l2-ctl -d /dev/video0 --stream-mmap --stream-count=1; done
 
-It is 0x413c:0x81eb
-T:  Bus=02 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#=109 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=413c ProdID=81eb Rev= 0.00
-S:  Manufacturer=DELL
-S:  Product=DW5826e-m Qualcomm Snapdragon X12 Global LTE-A
-S:  SerialNumber=358988870177734
-C:* #Ifs= 1 Cfg#= 1 Atr=a0 MxPwr=  2mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=qcserial
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+Hi again,
 
-Signed-off-by: Jack Wu <jackbb_wu@compal.com>
----
- drivers/usb/serial/qcserial.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Any chance you could try it? And also the attached test program:
 
-diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-index 1a930dc668e4..7322a984509a 100644
---- a/drivers/usb/serial/qcserial.c
-+++ b/drivers/usb/serial/qcserial.c
-@@ -188,7 +188,8 @@ static const struct usb_device_id id_table[] = {
- 	{DEVICE_SWI(0x413c, 0x81d2)},   /* Dell Wireless 5818 */
- 	{DEVICE_SWI(0x413c, 0x8217)},	/* Dell Wireless DW5826e */
- 	{DEVICE_SWI(0x413c, 0x8218)},	/* Dell Wireless DW5826e QDL */
--
-+	{DEVICE_SWI(0x413c, 0x81ea)},	/* Dell Wireless DW5826e-m */
-+	{DEVICE_SWI(0x413c, 0x81eb)},	/* Dell Wireless DW5826e-m QDL */
- 	/* Huawei devices */
- 	{DEVICE_HWI(0x03f0, 0x581d)},	/* HP lt4112 LTE/HSPA+ Gobi 4G Modem (Huawei me906e) */
+cc -lusb-1.0 hammerint.c -o hammerint
+sudo ./hammerint 1532 0e05 0 85
 
---
-2.34.1
+Initial arguments are VID:PID of the device, next is the number of
+an interface containing some interrupt endpoint and then the endpoint
+address (including 8_ if IN).
 
+I tried with a variety of SuperSpeed devices (UVC, NICs, hubs) and this
+reliably breaks ASMedia HCs within seconds. If the same is the case on
+Intel then it's a bigger problem than just UVC.
+
+The video streaming loop breaks even more controllers. I have some
+general idea how the streaming case could be dealt with, but not so
+much the interrupt one. Maybe rate limiting. I found that avoiding
+Set TR Dequeue to Link TRBs reduces failure rate, but not to zero.
+
+Long ago I also looked at the issued command sequences and I haven't
+noticed obvious errors or spec violations. Looks like a HW bug.
+
+Regards,
+Michal
+
+--MP_/.OkknVOR4gOuo.3Taa06e1K
+Content-Type: text/x-c++src
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename=hammerint.c
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <libusb-1.0/libusb.h>
+
+void comp(struct libusb_transfer *t) {
+	char c = t->status == LIBUSB_TRANSFER_CANCELLED ? '.' :
+		t->status == LIBUSB_TRANSFER_COMPLETED ? ',' : '-';
+	fputc(c, stdout);
+	fflush(stdout);
+}
+
+int hammer(int vid, int pid, int ifc, int ep) {
+	struct libusb_device_handle *d;
+	struct libusb_transfer *t;
+	char bufi[1024] = {0};
+	char bufc[2];
+	int r;
+
+	r = libusb_init(NULL);
+	t = libusb_alloc_transfer(0);
+	if (r || !t)
+		return 1;
+
+	d = libusb_open_device_with_vid_pid(NULL, vid, pid);
+	if (!d)
+		return 2;
+
+	libusb_detach_kernel_driver(d, ifc);
+	r = libusb_claim_interface(d, ifc);
+	if (r)
+		return 3;
+
+	libusb_fill_interrupt_transfer(t, d, ep, bufi, sizeof(bufi), comp, NULL, 0);
+
+	for (;;) {
+		/* GET_STATUS(DEVICE) */
+		r = libusb_control_transfer(d, 0x80, 0, 0, 0, bufc, sizeof(bufc), 100);
+		if (r != sizeof(bufc))
+			return 4;
+
+		r = libusb_submit_transfer(t);
+		if (r)
+			return 5;
+		r = libusb_cancel_transfer(t);
+		if (r)
+			return 6;
+		r = libusb_handle_events(NULL);
+		if (r)
+			return 7;
+	}
+}
+
+int main (int argc, char **argv) {
+	int vid, pid, ifc, ep;
+	int r;
+
+	if (argc != 5) {
+		fprintf(stderr, "USAGE: %s vid pid ifc ep\n", argv[0]);
+		return 1;
+	}
+
+	vid = strtol(argv[1], NULL, 16);
+	pid = strtol(argv[2], NULL, 16);
+	ifc = strtol(argv[3], NULL, 16);
+	ep = strtol(argv[4], NULL, 16);
+
+	r = hammer(vid, pid, ifc, ep);
+	printf("%d\n", r);
+}
+
+--MP_/.OkknVOR4gOuo.3Taa06e1K--
 
