@@ -1,63 +1,64 @@
-Return-Path: <linux-usb+bounces-36503-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36504-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cJfSETwW72kQ6AAAu9opvQ
-	(envelope-from <linux-usb+bounces-36503-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 09:54:36 +0200
+	id UBK7BUMW72kQ6AAAu9opvQ
+	(envelope-from <linux-usb+bounces-36504-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 09:54:43 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAF5146EA3A
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 09:54:35 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB41A46EA42
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 09:54:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E6B97300462D
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 07:54:34 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id DB7443006112
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 07:54:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70FD43988F1;
-	Mon, 27 Apr 2026 07:54:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F62B39891D;
+	Mon, 27 Apr 2026 07:54:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="QRQ7ricn"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="YfVdp253"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010046.outbound.protection.outlook.com [52.101.84.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF87370D7B;
-	Mon, 27 Apr 2026 07:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B4A397E9D;
+	Mon, 27 Apr 2026 07:54:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777276471; cv=fail; b=FIJUicInOg0U32+4bmbY0Q9QnW5JjIBkS0P29M5XQSeARqoQnWI+NNRlGdi45uD+TJQjJ9ClbsXpk6ZnHOJkFxo3KJq0TIXsLMT9yeOUZjhtaqaIdAHG0TpOCV9rD5XXaKiRY0GnMQYzGdrJV+GgcaMbShMV93IhTQvaEpRsILs=
+	t=1777276474; cv=fail; b=aZLGbcqxT+0nYEGYouwf37KFf3RE9w/paQDnLFAfp6TDkW46Prw2Dnn4bqhlcNJd7FqhOtKzMiklC2fxDfU5UHiYg6w/UhDhapcdXnkpI9Rp1q4XbJSWq22QG/n/anT/j9nYYQdc956x/Ya40KdBw7X1D5J5EcHIhqDNwzZjXCE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777276471; c=relaxed/simple;
-	bh=i6Z0Wsutw6pt7yXlSSTEJGAQ+txz0TymwJe7C9nVevw=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=Hg0LRvGw6/zH2jJVyX9U78x96duE1L5KBXeuSwqxy+0qEDPggn+kVZ4ulGWGJ0Dt3dtBjZuLN3AkkZ4Y4VJhK7stnTS/6xFvfpI8s1Rm1Go7dAXoOFg7xL97u8HCG4U63E1mPWigU0JAmOBJEPCMzA2+U+K7EZHYZ8gdIRYUW5I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=QRQ7ricn; arc=fail smtp.client-ip=52.101.84.46
+	s=arc-20240116; t=1777276474; c=relaxed/simple;
+	bh=huecIpbzKaWKaLawSUZRj0JKmQcLK6c7M56rI8YZcHU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=X3J9f9jF//1QG1VMRdI+vFExq/iFtCBRglHy/VV+7Zu+oHpfu8Ea00cqDmz6GUEZZS1XvL3fTiP8jRMP+XbHARRAZxyh90k8B6vWzixwGQozy2YLklE5x8kUr67FM5YqATJ7mI5lw2vkmhfMnVjEfv4fcErU6BQ/LIC36NSna44=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=YfVdp253; arc=fail smtp.client-ip=52.101.84.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=I7ThJzsjBSfsLjsnLaxN36Uae/LVjMg5XjBCK/+c9Ek1R5z7Gic0uxBEnEgezZtOUxRdd7SyfAoh0ujNSVwXV5pJGyzIzjUkZ2b1b4ouVf2WJLugFm2JJWZXtUWwYUJaIsyu4/zxgLEzFZtSWPcR8OKVOxv3BE7h0biCndETpHPs+4ESFmLhbndmi9bjfxSf/jWBMVqa0pHPZxxgi+SS079mvmdH22DTQubZWCY+oImGix6AqmcOp32yA1Ix7ZOTN4I7vidU6mJIWt+tswthkNiYRODpW22oW+jDv3I/mEAi2+nfbgOlenFHrKbO2t5Be71IOhlY0O1thu7/HpDe4Q==
+ b=WMt9DqcJTYICRcBjT2CKbXjFGV8CMlNSti1uwzmS8VnALT91/e59dxiBV/XeKqrqf9pvjgWn/xCCeTcR8wMNAysgbxVHl+dua6gl/2GoWQO8ZkDyX68T5ZJU9tynX9+kxOf0nvIkPMgJnhrHqR8eh0b/+5MXsKNIdV/sleqcEHtNGJfnQH2H/X2E9JI88t7LxhLOuQy6rPfS/KzpM+3VSk/lmFlR9wNx0Z4F+KpKDAVLurw5AM9b7E1A3iWez/w4pdeDJIcame4OjKXIOzvyzxugrfrq/UuXWHlmP7zCM84E+6PcvlMjvoL6tOHgEnfA5AwMZInli9G2TNt1nUMjUA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t1pCtkCNev52UEJzv+IQPFKdy+2avvpKDuYoGjnE2p8=;
- b=KJ+gtIpVlKhfR1CfVoO1isn7JCEO6dlGquHq8txNYNySFx8tMD+B2jvkFThkTJIOL983+IHkmbt4i0pkZprbJ71BhMCEBKt+FM6tbEwmYpdC7raX/wz+mDGCtqMKQgp+Rkbg63ZlfLFCkz3oKdK0xv1l/55QjXPkq5pm5Nmru5feEUrIVZMUkvj4/4d45TYCK91UFtydMZeOvTZZWlHoTpafGzW9Y5ebD60+uNbm0hSGvkBDOKcVaiMz463SRIbi0h3iEMB5wB2tl6XOFpd+bOjq+TWzJOwL/+9OIUer/KvHodrwwfl8ZQxEFdOJErabY6rwRMRKVTOJrg5Y+GBJ/g==
+ bh=+ZrhfQf7dUDlM10Yg1MnlRZYgndKk8d6WSXtvbkQgLM=;
+ b=CgeISvHe7zVNRBbnaC1SkWprJbrY0WDLH97eS3az6T0DpOjQfhzFVLOyx05CrS9xD4myAbbXkgNInfBvFkSYDxVPzUeWU3nY2sZEBHt5d0D1DJPWiF568OuygzdvTYWDVgubVUXTuFIe6m4Rg9d6I6mu0M8bdEJXAdVlYguLhOxCQvUbDt40P1KGetOrQ2XwjASYsasLedFAV5oC0W22n9+DZV9XvWqyuWA47B76XrX3JiCHi2vqn7lFm/yTHAwaiVpKaBxBH7nQQ8g0wLQ9fpcAwtjYKioqFvkKhh2NUnMLCj5zF8WGXxxSS+kYiB5+ugz9kjhMphh/BSPWzzSo8Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t1pCtkCNev52UEJzv+IQPFKdy+2avvpKDuYoGjnE2p8=;
- b=QRQ7ricnWn0TKnpU3Pg5lft1Tzqhgz9X4jSoR7bx4mPBhGnT9mw+MRB0wXggobHgSIKjeHtUw80OR7HtL5VeZEiemcSFe39qcaH4SxVH0shCMsye276kLRsLvv3kW3vdnY9qI6C/NSnrvdXJwj+i5LjFFTbGF7SHU6q5vr8GZ01yil0NHZF8B+rA4Wncl8nLCRPVabK1i5ybobyPIUg31V0mWgrTk5RLZVrpbG8x4mmshEBQAeJrHSVni+gjsshgHwwU0I5PBD6iriuzn1wrkovsPD/pVlzE6SCHex2wOvDZHTwvUR/INPxBJmvjEymP26TaTJeIAG7wNlqXcucUEw==
+ bh=+ZrhfQf7dUDlM10Yg1MnlRZYgndKk8d6WSXtvbkQgLM=;
+ b=YfVdp253Wi9UHsGGjr/keX8kRMFw5pvVZfHgtBKFR0BfF/S/lpCcU3WP7HVN/R/rhQYMqjPMrgj0Ls9lUn5hxpJgmSx/il9mq7HiIV+3+rZaOgZxhshI5Zl5IxGNUIaodlf9FBIRUs5f2uFgmgcc7NT/tYdoK7KPeaEFlyMhq7dHbVwQQY9lijymyEAIfd9pQNUIAgJ67Vu8yrLO1Z5LFPgDpHCxhuDXyxAX0bJ7wvH1atna7LCK3yCbDahWCYmTY7FlGhKY75KT7rp5KkSvaaNnK7lh7AXwoz7kobEr9tQMegiA+yioAEj8TXhgdRGbQMNwqRujpKx3QgJIp9kxHQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
  by AM9PR04MB8440.eurprd04.prod.outlook.com (2603:10a6:20b:3df::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.26; Mon, 27 Apr
- 2026 07:54:24 +0000
+ 2026 07:54:27 +0000
 Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
  ([fe80::c67b:71cd:6338:9dce]) by DU2PR04MB8822.eurprd04.prod.outlook.com
  ([fe80::c67b:71cd:6338:9dce%5]) with mapi id 15.20.9846.025; Mon, 27 Apr 2026
- 07:54:24 +0000
+ 07:54:27 +0000
 From: Xu Yang <xu.yang_2@nxp.com>
 To: peter.chen@kernel.org,
 	gregkh@linuxfoundation.org,
@@ -65,10 +66,12 @@ To: peter.chen@kernel.org,
 Cc: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	imx@lists.linux.dev
-Subject: [PATCH v3 1/2] usb: chipidea: udc: add a helper ci_udc_enable_vbus_irq()
-Date: Mon, 27 Apr 2026 15:56:52 +0800
-Message-Id: <20260427075653.3611180-1-xu.yang_2@nxp.com>
+Subject: [PATCH v3 2/2] usb: chipidea: udc: support dynamic gadget add/remove
+Date: Mon, 27 Apr 2026 15:56:53 +0800
+Message-Id: <20260427075653.3611180-2-xu.yang_2@nxp.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260427075653.3611180-1-xu.yang_2@nxp.com>
+References: <20260427075653.3611180-1-xu.yang_2@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: MA5P287CA0197.INDP287.PROD.OUTLOOK.COM
@@ -82,77 +85,77 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AM9PR04MB8440:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0031752b-d987-4e3e-7cb7-08dea43232ca
+X-MS-Office365-Filtering-Correlation-Id: 932176aa-dbd1-4e6b-a0d9-08dea4323454
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|19092799006|52116014|376014|38350700014|18002099003|56012099003;
+	BCL:0;ARA:13230040|366016|1800799024|19092799006|52116014|376014|38350700014|18002099003|56012099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	9n9lzJ3qnq7Bm0g6fKTtrJ8RY4+J8oQ70T49fgTxvF5I7gaCSYsduMoTDMe1aZBqcsIYCnbGjoqXYQNAo5gOlsDCLhyk84VR+nNcyY0GOMmDQhZ0Rc4QX7kfH6zb+jpnK053F4ZEu30GO3Dxlr7NVmAt3khfx0H+RfFFG0B29Hx5ntbHvU8lC+1HHatbslPuWCGnJmFr6vlHyZWs0IFHNm0D4SP0QFVicveBPd/JHS4b7IUVUi4IREB2I1SIFRaI2D9euhljcXm7NwHjjWUJH1LCs/UJonz4N6Hah2y7af6DaX2kF2CVK61yalGy5UcvoIYJusbXRqx4b29FU2L1dnfYm1Ko4+VnjVf+SrYoUaMMc3P+suXqDRh+S9VbDjY97KUoVjJU0pz6UOXZts/nFpsSlrljDciA1DuC+63XzEo/On0vRLN6pwh//tUIWRTh7npLvULWP5RGj3BBqFaHxIevIV5koF1+wmgdSVcf5cEyLClWVB08RAkxcoocyCB+2kvatXe7a68nJBcnfh1csogvmVWzHdvv/wfqwy5evE3gwe5ypLB4tkumJMxsPWXd+LngxaQHe1DJEsSjbLFS3ltxVL4vjeFP1IXpnWeiKlkyvYxNuHAgp59C0wmKH/MtawMITKE4D+M3qEPVDVAdIX/zTunyz0OlPzZPUH4gGnKEeAnpJMzwtUzba3KV8f6ZUY1m4q5A8U9B+OJJsNa2xoZju7LtmlNSYEDIQXEEa3GCBhOj4AFWIj9ByJhpL17V6sHquqdyZs1wKFz+pHlAm3f0ddUs5xCIxH3eci5Y9cM=
+	Xb4DmAAiSdKiUtHNoKODOmm7AU2sAxIMIvi30VtEIrW8+a1ns5/0q++1pIjdOZt508TIkpUQHmJjP8+UdYArBjvKP19Qo+5u2fhy+SSvDGoNupi16T1nfhDoP+AqxAypyV5bMiJtLnyZ7/cV+jfh+vNNbWgoMVhFbYopJ2uk+De3d564FEWxPnJ22Dl+S5y3VxfoZO/kctiY9QPaBrCVCa5tUqGyF1RqmsdYrN+zUaCS++SPBrvhPtGsON11pPLn0igLCcRJifzXUOYjEC+bkxq3CJJgyoAjpe8wlVGYyrRjiBPXZB3Sa0Dx6OrY+YZP/FcWNPdNUGPn43SWvu0HH64rhR+wcxB0E52Uequ5LTYgpLj8LHbRKYms5VKDwSgatiFrwPg5+7eU983Wp6mHDNTg4Pq9HVAdBVjzUAtP22koHeeH3cHnAhRzU3YHsVYykVfyUr9Tz9Tgzs20zmSXDMR5+NI9w/CRJaahU5/0NAi/vfFarJX5NexAmL1F/7ZbMA/ovxQsDU83Ng1zcBkdAC0endXMiPerj9HZ6JBLHOAYq38VX2ohWl3H3wQVqzm+xHnFbtd8DB/STykAJR9KYiLt1fDzRdkqWbbsKciANn81K+/8RKu+YCm8jzbvOTsmPEn+31LRrARgGULoDSbtXbzwFFSy0GvZyPt0TgNSW1XsYFGzX5L2HwNYYM5QFlwGxxHGqNF9Gb8bbuXlpxw/4omHYQL3ntQgme1wVFDGoszDsxpeYqyiTFc6b01TTXNzD6WrNePyzI7ZDBKyZvvKuZvSTpSiSObTPGbE7mlgA4M=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(19092799006)(52116014)(376014)(38350700014)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(19092799006)(52116014)(376014)(38350700014)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?czbtvyoyJnWKrBFjVc0foWOeSEtnOm02uihh5p0PI8Nb3z7gEI5Z/IzLaQSz?=
- =?us-ascii?Q?p+RrO2erg4nO1oQ81BFI753RC+WTuZY9NiSLOeknfT9xl4Qd7B7wE6BbLljK?=
- =?us-ascii?Q?dIYk4R+M7oEZvomJr3xKanOs7u3/ZvpGHsYgpLAAQDjspEeZd6csrkx1Yzx3?=
- =?us-ascii?Q?4nf46xSzSs78No0JXrRBtitwM3kqokm0nWdZ3/vzlzfD7Tu/ceP3jYWBVUT5?=
- =?us-ascii?Q?2C2BDbO6MHW3CxzxVfcXTFEpV6Q8o4qrozXvQvVa2+DYhr3BxsHF4G63pVjw?=
- =?us-ascii?Q?whG05tfwaNh5utbsUjqcH+sfHcQv0Kfm84Z21Wf+5+GPLmcc0r/0fiFn8Z1E?=
- =?us-ascii?Q?1XOnHakn209RYguhXLN0YN3lwPOstnRMxvT4ERSZ9ns6q2KH/A04cEIYX+ff?=
- =?us-ascii?Q?PqYTcupuk8543cglr9CeEyLlzx1y0YVN4UUfYNjIlMcO3V4geevc5Jk3LvWM?=
- =?us-ascii?Q?c6WkuQiErpU056ep5FPZD6fO9g+9OkY7qMDADeN58IiDLvVHDk1ceO2JJNAh?=
- =?us-ascii?Q?P44bKHzcrNFrXdjxMRxInFmDLLxiFDIgodUgq0IY4xxmA/MXZoAg5fjZtzBt?=
- =?us-ascii?Q?EkitfbVYT7moL3Kz2COlTqkz0qDWXQZjeJ8ApuOzmACQL9uAqe0ChFIXFNba?=
- =?us-ascii?Q?CemNm1UkTp2lALdqzWBrUb4/6rOeuA160cNZ6Ju7h80YxIGFtg/PaDQ94Fpp?=
- =?us-ascii?Q?BVmyTE4jDLbNR6ugs4QEN1RNOGZ2k14bWvDKoRsTBtUXWloI9xwvPIP/vaAY?=
- =?us-ascii?Q?4ROrgA8By3sb9+ZZCdHJU73XbF3qOEkIgZViN8hA/gjLnrx7XiiO6gtpZjKY?=
- =?us-ascii?Q?i97lpcr3AkApg3ps02qo241i4sOeHh8xb5Qsk1337S7euqNQUEt3UncjcwZU?=
- =?us-ascii?Q?0ZzkZdeT3fqtv+/clM1sIDdgHiLn7oo3IPVqc5qFwiLWMi04xk1+VXn2zHsO?=
- =?us-ascii?Q?qTwibzBRq37nGlF81ZhiuCjOG01h4R6uN2sCvHDkVaOe86ngbdd0yMd0VA/W?=
- =?us-ascii?Q?hJH/KUkpDbTvYvfAJq0dzp0X3vHsVpoIX3wh6GUXE4Epe/GP2j5zB+fb0h7I?=
- =?us-ascii?Q?Hnd+hLqXnj2ZzV3Mnv+2PWyZVxK91+nghdmZTt8eonqNcHFMc0Erd1sQKc42?=
- =?us-ascii?Q?0zh5+3BEMKXA/e8TQtHZlCuOFXvSV7++gRldGAsm8moeJAafEnqyH4QFY1cC?=
- =?us-ascii?Q?55aHwXv6qjsuWIW3JU/IpJ9qkDa3LQXxrOud7XAj9+cMtybCaiyFuDTQkz2s?=
- =?us-ascii?Q?9Ogzvd6FoF1iZOOUgQuupVdksLdlBryDH6yUDsyFNPnmxmN6NyAi5TNcsXSV?=
- =?us-ascii?Q?gXwmdus5UF5fePD/o2BKto0w0DkhySGyLaiTprSqlXr1TwYm8u0ZCa+5S1Ak?=
- =?us-ascii?Q?FzvrpQnWJPOOVUEOL4qjSz2dHNdaSujKOxktru0+7ikQvEuPkXmBWPl96qXJ?=
- =?us-ascii?Q?sw74cNCg0XCgYQ7ieKo7VMa4udHIXq5CUZcDEnln+6w/7tB6r6VGlWroam0T?=
- =?us-ascii?Q?VZymue7iHqQK0mats6WQQIxgV6tI2MHDVy4ce5BIxIxmrMBMdyGUTtkk2LbK?=
- =?us-ascii?Q?/p+Menok/jjZ9xNQg9QkFs/5LuRlcJ+mGtUO7CySP4SbawuhV0jeZKHwHVjV?=
- =?us-ascii?Q?VyfvQHgnoII7XsWkpT6N7Nvojh41z5U9XK1DtcTML1N0hMg39lDEk5UIbMpZ?=
- =?us-ascii?Q?BPm1dgcSVNr7XJbvUz5S0qV/KDhc4bAT9ssT4UqLhzSp4segfPeNMy2Za5Ir?=
- =?us-ascii?Q?+JdNsrebXQ=3D=3D?=
+	=?us-ascii?Q?pNeFGQfWo53W88ztrR1wGp8oUxToAbTOwDvo/090K7OyqWJ5X/QREroQm6j0?=
+ =?us-ascii?Q?OM2D6dKBupXLx5+px3NVppfCWduX3mAK/3uY+JkPoRAYFKsIxDEINCeyT5Kn?=
+ =?us-ascii?Q?TAalVv/WCqMXq8/b6hM7X61TiEQFuFQUrk7ElVSSTwfiAAbiz2BzKztAXAMR?=
+ =?us-ascii?Q?9KL8rp4U3nE9cSKP6el+gPHqD6sxwOeXOnePgvlA4VeJ9VBig2phRAO6SMDk?=
+ =?us-ascii?Q?c6JiLTu/CkHD0pGaYndZz2vMiuQOf2glwWblXi2NdjT5D0j/JdCo4Qq51ela?=
+ =?us-ascii?Q?4HsfpSlODAUTT9b9QivM5DeJ1sdoHC8imRod5U7cAv1oRlvRyYIMua6I87/s?=
+ =?us-ascii?Q?e41mtY+fU+8RjLbOn4BN14qi1hr7Ftk7UX653175GUeOPsbv9eLg/KMqgZwu?=
+ =?us-ascii?Q?d9KJW3Yn357wPTj1cMBCOZ0LDrjnuG0FDR2lONlcEuJBGWf/oxoV0CUFrns1?=
+ =?us-ascii?Q?pkQU08gw7zCStwBZTCdWU4n29/ZyZjU74H8EkoA2diKuFB5/Cp9La0KeyLVr?=
+ =?us-ascii?Q?8l6ci3b6ukOXx+6eLnacNB6coKXE2NJn1lDMBgOnvfB7c/3QRTjrxNvTeU5G?=
+ =?us-ascii?Q?72Y/TLaQSE3wzPQb4pfo8bP8froaVX2Z4dCXvSyunYgu4CDHrtll/EulMi5n?=
+ =?us-ascii?Q?g7g0sxs1OHl6CnwBkmHhe0Ht4kkbaMJKH7/zAG/DkJ7aW9NZTe+DstRt93Xx?=
+ =?us-ascii?Q?l1oS6kG18e9JjbUTBNvd9aVyAtduApPgAeC3ckiGF8wn20jpAnJfszfi20XY?=
+ =?us-ascii?Q?f5sJn2LfLLJYsxcBLK2J9LMg63l1DYBx6BZ8wpnOayzitci5NW/jip1J5JtF?=
+ =?us-ascii?Q?lFODLSYce1IJGYoj7jAmsqu4IllPt54Xa0P/B3gMtRP5GVKhq5VqYTSn6jkR?=
+ =?us-ascii?Q?SGmwWYOp9TQ7lxxbZx53/KHyD7OEADPvfdGXrJCF2W7GAWmEfQM8mAEiA9+R?=
+ =?us-ascii?Q?1tGdJh6zr8D5x8nTkDErfJ7gBw8PAWoZ2OwsgfHHhrXgKctDR4XjoQtG5zxC?=
+ =?us-ascii?Q?+fRaQNmXdKe1EL+THd63SeeJ+Wbx0tUZfmPM8XtwTTS9Q6vd/98obSZPPPXF?=
+ =?us-ascii?Q?99oNBCW2wYMAtn8X97PG27s08B+YetOHc8LV1xioOKA7aBSQXlyqEYLVERBR?=
+ =?us-ascii?Q?EMXKO4eTM1yAHbcvu+K7OB6W4RJQPAQ8AqB6J8T9aJfMsBlPEK+/csIQUdBA?=
+ =?us-ascii?Q?RKGnnHosmPoZizQ2lQ5skF2AHsS05um7ZL15F2dX2PXsg8ZsBAW4VTYB0cPp?=
+ =?us-ascii?Q?Jez9SHXkZWUCt/sk8Vc7fltnTTXfj3RhZjdNmXCKUBCIZC9q/+/1rgXVFAJi?=
+ =?us-ascii?Q?jaMK0DM9FLVYQgrz/bHmWVTlVENUZ1dScDftg1alcfsg9M3lQMzjqy0U9eRM?=
+ =?us-ascii?Q?3FgM0TzuioR5AQ6TlduPAY6e3BEXNo/6G2wK8KiJnTZMzMhg/7LFroo+EOTY?=
+ =?us-ascii?Q?t9CCIjGb8FcC5j70Lf/6mDyYWCCxO0bCWcCc37dZ4Gan8hEz6Ow/kmfWlIGE?=
+ =?us-ascii?Q?UEuW1YCaOJXxXxcj5KOtOK6oR0LJAqDLFQVSUMUT5iyWUHi+GM4kMfmKYc6X?=
+ =?us-ascii?Q?QK9OToHU+/AGXK+EJVuhCag+0YqSKYCaitsxJyUAKWmvwTOzZIws3aID81MA?=
+ =?us-ascii?Q?9E95WLdN2aaXRrU493q0hnHXPiw67HbU2HAxDd/+c0R2gA+l4oihdqrM/iMP?=
+ =?us-ascii?Q?F5+9X7oc6UMkd9CRI+4Hru6tDM6GlHOULgUXlmZKaT3Tg1mhrKtSzCC9vkEk?=
+ =?us-ascii?Q?GvP1YPbmEg=3D=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0031752b-d987-4e3e-7cb7-08dea43232ca
+X-MS-Exchange-CrossTenant-Network-Message-Id: 932176aa-dbd1-4e6b-a0d9-08dea4323454
 X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2026 07:54:24.2980
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2026 07:54:26.9544
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TT6u6Ln1ndfIJJaJkyeWQCj1Lb9q3/rE74D2UUev8YdelZb4wXFrxPmywfGmkytW5UKLsf7zrULDdwzOuGAkGg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: WkN8ANfk18H8KTwVn9I/kuEWlBHCjrHl1XbiJ6B3xoxL0C6s919q5dHOFdXUIdoqEXZxYUizbQ2K3ieNCG9vrA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8440
-X-Rspamd-Queue-Id: DAF5146EA3A
+X-Rspamd-Queue-Id: AB41A46EA42
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.34 / 15.00];
 	ARC_REJECT(1.00)[cv is fail on i=2];
 	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36503-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-36504-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[nxp.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[xu.yang_2@nxp.com,linux-usb@vger.kernel.org];
@@ -164,84 +167,209 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	TAGGED_RCPT(0.00)[linux-usb];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 
-The VBUS interrupt is configured in multiple places, add a helper function
-ci_udc_enable_vbus_irq() to simplify the code.
+An asynchronous vbus_event_work() keep running when switch the role from
+device to host. This affects EHCI host controller initialization.
+
+USBCMD.RUNSTOP bit is set at ehci_run() and cleared by following
+vbus_event_work() if bus_event_work() run after ehci_run().
+
+The log below shows what happens:
+
+[   87.819925] ci_hdrc ci_hdrc.0: EHCI Host Controller
+[   87.819963] ci_hdrc ci_hdrc.0: new USB bus registered, assigned bus number 1
+[   87.955634] ci_hdrc ci_hdrc.0: USB 2.0, controller refused to start: -110
+[   87.955658] ci_hdrc ci_hdrc.0: startup error -110
+[   87.955682] ci_hdrc ci_hdrc.0: USB bus 1 deregistered
+
+The problem is that the chipidea UDC driver call usb_udc_vbus_handler() to
+pull down data line but it don't wait for completion before host controller
+starts running.
+
+Now UDC core can properly delete usb gadget device and make sure that vbus
+work is cancelled or completed after usb_del_gadget_udc() is returned. But
+the udc.c only call usb_del_gadget_udc() in ci_hdrc_gadget_destroy(). To
+avoid above issue, add/remove the gadget device dynamically during USB role
+switching.
+
+To support dynamic gadget add/remove, do below steps:
+  - clear ci->gadget and ci->ci_hw_ep at initialization.
+  - assign udc_[start|stop]() to rdrv->[start|stop] and properly merge the
+    operations in udc_id_switch_for_[device|host]() to udc_[start|stop]()
+
+Adjust the order ci_handle_vbus_change() and ci_role_start() to avoid NULL
+pointer reference since ci_hdrc_gadget_init() doesn't add gadget anymore.
 
 Acked-by: Peter Chen <peter.chen@kernel.org>
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
 Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
 ---
 Changes in v2:
- - add R-b and A-b tag
+ - add A-b tag
+ - refine the commit message
 Changes in v3:
  - no change
 ---
- drivers/usb/chipidea/udc.c | 32 +++++++++++++++++---------------
- 1 file changed, 17 insertions(+), 15 deletions(-)
+ drivers/usb/chipidea/core.c | 11 +++----
+ drivers/usb/chipidea/udc.c  | 65 +++++++++++++++++++------------------
+ 2 files changed, 38 insertions(+), 38 deletions(-)
 
+diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+index 7cfabb04a4fb..95d9db159ce8 100644
+--- a/drivers/usb/chipidea/core.c
++++ b/drivers/usb/chipidea/core.c
+@@ -1191,19 +1191,16 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+ 
+ 	ci->role = ci_get_role(ci);
+ 	if (!ci_otg_is_fsm_mode(ci)) {
+-		/* only update vbus status for peripheral */
+-		if (ci->role == CI_ROLE_GADGET) {
+-			/* Pull down DP for possible charger detection */
+-			hw_write(ci, OP_USBCMD, USBCMD_RS, 0);
+-			ci_handle_vbus_change(ci);
+-		}
+-
+ 		ret = ci_role_start(ci, ci->role);
+ 		if (ret) {
+ 			dev_err(dev, "can't start %s role\n",
+ 						ci_role(ci)->name);
+ 			goto stop;
+ 		}
++
++		/* only update vbus status for peripheral */
++		if (ci->role == CI_ROLE_GADGET)
++			ci_handle_vbus_change(ci);
+ 	}
+ 
+ 	ret = devm_request_irq(dev, ci->irq, ci_irq_handler, IRQF_SHARED,
 diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index f2de86d0ce40..d4277d6611ee 100644
+index d4277d6611ee..d52f89489893 100644
 --- a/drivers/usb/chipidea/udc.c
 +++ b/drivers/usb/chipidea/udc.c
-@@ -1835,6 +1835,20 @@ static const struct usb_ep_ops usb_ep_ops = {
-  * GADGET block
-  *****************************************************************************/
- 
-+static void ci_udc_enable_vbus_irq(struct ci_hdrc *ci, bool enable)
-+{
-+	u32 reg = OTGSC_BSVIS;
-+
-+	if (!ci->is_otg)
-+		return;
-+
-+	if (enable)
-+		reg |= OTGSC_BSVIE;
-+
-+	/* Clear pending BSVIS and enable/disable BSVIE */
-+	hw_write_otgsc(ci, OTGSC_BSVIE | OTGSC_BSVIS, reg);
-+}
-+
- static int ci_udc_get_frame(struct usb_gadget *_gadget)
+@@ -2044,6 +2044,8 @@ static int init_eps(struct ci_hdrc *ci)
  {
- 	struct ci_hdrc *ci = container_of(_gadget, struct ci_hdrc, gadget);
-@@ -2352,23 +2366,13 @@ static int udc_id_switch_for_device(struct ci_hdrc *ci)
- 		pinctrl_select_state(ci->platdata->pctl,
- 				     ci->platdata->pins_device);
+ 	int retval = 0, i, j;
  
--	if (ci->is_otg)
--		/* Clear and enable BSV irq */
--		hw_write_otgsc(ci, OTGSC_BSVIS | OTGSC_BSVIE,
--					OTGSC_BSVIS | OTGSC_BSVIE);
--
++	memset(ci->ci_hw_ep, 0, sizeof(ci->ci_hw_ep));
++
+ 	for (i = 0; i < ci->hw_ep_max/2; i++)
+ 		for (j = RX; j <= TX; j++) {
+ 			int k = i + j * ci->hw_ep_max/2;
+@@ -2289,6 +2291,8 @@ static int udc_start(struct ci_hdrc *ci)
+ 	struct usb_otg_caps *otg_caps = &ci->platdata->ci_otg_caps;
+ 	int retval = 0;
+ 
++	memset(&ci->gadget, 0, sizeof(ci->gadget));
++
+ 	ci->gadget.ops          = &usb_gadget_ops;
+ 	ci->gadget.speed        = USB_SPEED_UNKNOWN;
+ 	ci->gadget.max_speed    = USB_SPEED_HIGH;
+@@ -2327,10 +2331,15 @@ static int udc_start(struct ci_hdrc *ci)
+ 
+ 	ci->gadget.ep0 = &ci->ep0in->ep;
+ 
++	if (ci->platdata->pins_device)
++		pinctrl_select_state(ci->platdata->pctl,
++				     ci->platdata->pins_device);
++
+ 	retval = usb_add_gadget_udc(dev, &ci->gadget);
+ 	if (retval)
+ 		goto destroy_eps;
+ 
 +	ci_udc_enable_vbus_irq(ci, true);
- 	return 0;
+ 	return retval;
+ 
+ destroy_eps:
+@@ -2342,38 +2351,20 @@ static int udc_start(struct ci_hdrc *ci)
+ 	return retval;
  }
  
- static void udc_id_switch_for_host(struct ci_hdrc *ci)
+-/*
+- * ci_hdrc_gadget_destroy: parent remove must call this to remove UDC
+- *
+- * No interrupts active, the IRQ has been released
++/**
++ * udc_stop: deinitialize gadget role
++ * @ci: chipidea controller
+  */
+-void ci_hdrc_gadget_destroy(struct ci_hdrc *ci)
++static void udc_stop(struct ci_hdrc *ci)
  {
--	/*
--	 * host doesn't care B_SESSION_VALID event
--	 * so clear and disable BSV irq
--	 */
--	if (ci->is_otg)
--		hw_write_otgsc(ci, OTGSC_BSVIE | OTGSC_BSVIS, OTGSC_BSVIS);
+-	if (!ci->roles[CI_ROLE_GADGET])
+-		return;
 -
 +	ci_udc_enable_vbus_irq(ci, false);
- 	ci->vbus_active = 0;
+ 	usb_del_gadget_udc(&ci->gadget);
++	ci->vbus_active = 0;
+ 
+ 	destroy_eps(ci);
+ 
+ 	dma_pool_destroy(ci->td_pool);
+ 	dma_pool_destroy(ci->qh_pool);
+-}
+-
+-static int udc_id_switch_for_device(struct ci_hdrc *ci)
+-{
+-	if (ci->platdata->pins_device)
+-		pinctrl_select_state(ci->platdata->pctl,
+-				     ci->platdata->pins_device);
+-
+-	ci_udc_enable_vbus_irq(ci, true);
+-	return 0;
+-}
+-
+-static void udc_id_switch_for_host(struct ci_hdrc *ci)
+-{
+-	ci_udc_enable_vbus_irq(ci, false);
+-	ci->vbus_active = 0;
  
  	if (ci->platdata->pins_device && ci->platdata->pins_default)
-@@ -2395,9 +2399,7 @@ static void udc_suspend(struct ci_hdrc *ci)
- static void udc_resume(struct ci_hdrc *ci, bool power_lost)
+ 		pinctrl_select_state(ci->platdata->pctl,
+@@ -2422,7 +2413,6 @@ static void udc_resume(struct ci_hdrc *ci, bool power_lost)
+ int ci_hdrc_gadget_init(struct ci_hdrc *ci)
  {
- 	if (power_lost) {
--		if (ci->is_otg)
--			hw_write_otgsc(ci, OTGSC_BSVIS | OTGSC_BSVIE,
--					OTGSC_BSVIS | OTGSC_BSVIE);
-+		ci_udc_enable_vbus_irq(ci, true);
- 		if (ci->vbus_active)
- 			usb_gadget_vbus_disconnect(&ci->gadget);
- 	} else if (ci->vbus_active && ci->driver &&
+ 	struct ci_role_driver *rdrv;
+-	int ret;
+ 
+ 	if (!hw_read(ci, CAP_DCCPARAMS, DCCPARAMS_DC))
+ 		return -ENXIO;
+@@ -2431,8 +2421,8 @@ int ci_hdrc_gadget_init(struct ci_hdrc *ci)
+ 	if (!rdrv)
+ 		return -ENOMEM;
+ 
+-	rdrv->start	= udc_id_switch_for_device;
+-	rdrv->stop	= udc_id_switch_for_host;
++	rdrv->start	= udc_start;
++	rdrv->stop	= udc_stop;
+ #ifdef CONFIG_PM_SLEEP
+ 	rdrv->suspend	= udc_suspend;
+ 	rdrv->resume	= udc_resume;
+@@ -2440,9 +2430,22 @@ int ci_hdrc_gadget_init(struct ci_hdrc *ci)
+ 	rdrv->irq	= udc_irq;
+ 	rdrv->name	= "gadget";
+ 
+-	ret = udc_start(ci);
+-	if (!ret)
+-		ci->roles[CI_ROLE_GADGET] = rdrv;
++	ci->roles[CI_ROLE_GADGET] = rdrv;
+ 
+-	return ret;
++	/* Pull down DP for possible charger detection */
++	hw_write(ci, OP_USBCMD, USBCMD_RS, 0);
++	return 0;
++}
++
++/*
++ * ci_hdrc_gadget_destroy: parent remove must call this to remove UDC
++ *
++ * No interrupts active, the IRQ has been released
++ */
++void ci_hdrc_gadget_destroy(struct ci_hdrc *ci)
++{
++	struct device *dev = &ci->gadget.dev;
++
++	if (ci->roles[CI_ROLE_GADGET] && device_is_registered(dev))
++		udc_stop(ci);
+ }
 -- 
 2.34.1
 
