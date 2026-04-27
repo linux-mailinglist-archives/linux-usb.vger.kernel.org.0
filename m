@@ -1,68 +1,68 @@
-Return-Path: <linux-usb+bounces-36520-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36517-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EIuxOi4a72lr6gAAu9opvQ
-	(envelope-from <linux-usb+bounces-36520-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 10:11:26 +0200
+	id kG3lJlEa72lx6gAAu9opvQ
+	(envelope-from <linux-usb+bounces-36517-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 10:12:01 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7132F46ED81
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 10:11:26 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01DE746EDD8
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 10:12:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A96A030055AF
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 08:11:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8820C302A2DB
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 08:11:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 352EF39934B;
-	Mon, 27 Apr 2026 08:11:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC58939A058;
+	Mon, 27 Apr 2026 08:11:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IAZZP9sr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OwUhaWs3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919D739936F
-	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 08:11:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D6839A077
+	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 08:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777277483; cv=none; b=c7WkHYroafq5pZB8oSuJOTwN0Qf4Kogkgbut3sktDNXlxkwHcX+ofX/YhlAZLJ7aPksyoobGidCl0FzZZRLOu65bdi4A+T2RL7zYn8mPHcgZ6norKs+9gGNtFEpsKrcD2V46tp9gFi9CjIHoGFYSaoDWffiK0qZS+I6pPUZKGW0=
+	t=1777277477; cv=none; b=Jc6my/U7qSGZF35WfXTnY8ELk3z88XdAP8C74KV1WP4WwiD8/1Qu24hDipxTwT0GG/8laEfc00UtHGCIXOvc08mbzUmqDpGBAxt3IEuKwliCF+VFTNbYIcX3p1eUu9LKFr4hS5Gf0sYkJw0qnxjYNWGZX2v1wTVgNi0+TNWh/hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777277483; c=relaxed/simple;
-	bh=JbVQB2TJjhnPnYjWP78pRddv3rZFpJoKdXWt8kg3U9s=;
+	s=arc-20240116; t=1777277477; c=relaxed/simple;
+	bh=QfjOQ/HqJ0/a8+UtFT2xeGrvqhKTTlmENoSKnzKE0Vs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MuhEdEVfLc9muQcPKin8kmfRa4FUV0LR/VFaqPt9Po7lYRwByvVE7zifmFcwvOUKbB9WTdgHEUjpdEdGiKgsW/z594hQXlupPETmrw4/YQMvpV7CQw0Olw2w+qYVtqrIwycgX8s8+C9/d4a2AevjEtxKleK2SUNNwpXL2eQntpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IAZZP9sr; arc=none smtp.client-ip=192.198.163.17
+	 MIME-Version; b=nu85/7+/Eh1A7WMUegcjOyejnvPrvQ9ozQhoyzJovgPhCL+ER+a0aWoYvZuoH5wmYtRQKZSJBqFbHRLSwCtvIR0nm9JHRaMQP5pfFcMUzlod/fM64Zoq0NvfzL7wNtd81mn1gA6N74ObO5PcrPQ52+Zae+//2g3gqdZfe/GtFVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OwUhaWs3; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777277480; x=1808813480;
+  t=1777277476; x=1808813476;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=JbVQB2TJjhnPnYjWP78pRddv3rZFpJoKdXWt8kg3U9s=;
-  b=IAZZP9srHUpIjPjr9Af+8mbO6a9Y7JqQufEA12Ri0I26S70SbIz45waZ
-   cVzSWgaG//z0+5iaMf6wW+Te+8ek0e23bzCaseyjrV6rRn4rCdr12aF3C
-   49/y8131wbrxcHNP8Cxj4izv++IPf5UIlJf4Lc+ajJ66UFWIalFthEOsG
-   CcDoQ+W75uJ+krJdz681IYnScq8u860+3DE+H/pWPir5sj8hb7n3aoRVV
-   DlLGQ/Y/iuNYVwb1DBzSDoOGTFPSCQJmum1j5FN1fJMDvtzrVm7DPSks2
-   FBV3ZzsjqL/tHtBpZ4y5OT+52h8xG/DmS17UpOQV3p0QcYiaw1JCsD0ts
-   A==;
-X-CSE-ConnectionGUID: ycbR00EwQQGe9KOevtwILA==
-X-CSE-MsgGUID: 6qUr03iORcCe5x89nnWtRQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11768"; a="78034454"
+  bh=QfjOQ/HqJ0/a8+UtFT2xeGrvqhKTTlmENoSKnzKE0Vs=;
+  b=OwUhaWs3h6Ksx2kSyLdhFj/ItAqYKpgZMK95wPT78wT2Zli4PgXS6UsQ
+   jvQeYWWc8o7niAT10y/yF7oE+iyToGzhhNrsee6+ADc2J+7LWi6qzTHKt
+   /wcbBH/klqi7+a05q5MBlLlCTQ7gVs0eto4/6skhfxyj+YIFwvkDYd4Tn
+   RScs3qrdFV0pl6U3ZZFBI1E9KCJ5aydCJP7i5KuvUUxLkYMcBNTF1V2Yo
+   LZNn95Ztldc8OQ5HuHJ1MZrXkD8U5tM5+AdxuXXmY8HwH3TB7M89xebnG
+   FZlOeq/78B7rEy2p/XKCW+3xXNy/xbyg7UBqjmbCgnhE0nxScbA0Us8O7
+   w==;
+X-CSE-ConnectionGUID: UUaduL4IRMKjrYuAiJfvxg==
+X-CSE-MsgGUID: SGTRWDvzTey4EDd76dKHeQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11768"; a="77863257"
 X-IronPort-AV: E=Sophos;i="6.23,201,1770624000"; 
-   d="scan'208";a="78034454"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2026 01:11:19 -0700
-X-CSE-ConnectionGUID: EYBX/2VXQaaQDpM+MpkUpw==
-X-CSE-MsgGUID: +tnoQg53TUWmnaRxzn7E3A==
+   d="scan'208";a="77863257"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2026 01:11:14 -0700
+X-CSE-ConnectionGUID: MT5rY3dXRomDnwfAs0+rVQ==
+X-CSE-MsgGUID: Xf//yORSTPGa2jtz+88nIA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,201,1770624000"; 
-   d="scan'208";a="237531373"
+   d="scan'208";a="229008935"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa003.jf.intel.com with ESMTP; 27 Apr 2026 01:11:18 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 27 Apr 2026 01:11:12 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 801E0A4; Mon, 27 Apr 2026 10:11:09 +0200 (CEST)
+	id 8299BA5; Mon, 27 Apr 2026 10:11:09 +0200 (CEST)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: linux-usb@vger.kernel.org
 Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -71,9 +71,9 @@ Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
 	Gil Fine <gil.fine@linux.intel.com>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 08/12] thunderbolt: Keep XDomain reference during the lifetime of a service
-Date: Mon, 27 Apr 2026 10:11:05 +0200
-Message-ID: <20260427081109.2337731-9-mika.westerberg@linux.intel.com>
+Subject: [PATCH 09/12] thunderbolt: dma_test: No need to store debugfs directory pointer
+Date: Mon, 27 Apr 2026 10:11:06 +0200
+Message-ID: <20260427081109.2337731-10-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260427081109.2337731-1-mika.westerberg@linux.intel.com>
 References: <20260427081109.2337731-1-mika.westerberg@linux.intel.com>
@@ -84,7 +84,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 7132F46ED81
+X-Rspamd-Queue-Id: 01DE746EDD8
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
@@ -93,18 +93,18 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36520-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-36517-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FREEMAIL_CC(0.00)[gmail.com,wunner.de,linux.intel.com];
 	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
@@ -114,37 +114,74 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[7];
 	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,intel.com:dkim,intel.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.intel.com:mid]
 
-This is needed because we release the service ID in tb_service_release()
-and the ID array is owned by the parent XDomain.
+We don't actually need to store the debugfs directory pointer inside
+struct dma_test. Instead we can use the debugfs_lookup_and_remove()
+which also handles the case if the debugfs directory is already removed
+by the core driver (for example when cable is disconnected).
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/xdomain.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/thunderbolt/dma_test.c | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
-index a1887a15a284..0e97d0ad7733 100644
---- a/drivers/thunderbolt/xdomain.c
-+++ b/drivers/thunderbolt/xdomain.c
-@@ -1039,6 +1039,7 @@ static void tb_service_release(struct device *dev)
- 	ida_free(&xd->service_ids, svc->id);
- 	kfree(svc->key);
- 	kfree(svc);
-+	tb_xdomain_put(xd);
+diff --git a/drivers/thunderbolt/dma_test.c b/drivers/thunderbolt/dma_test.c
+index b4aa79d482a0..af1e6bc9c7cd 100644
+--- a/drivers/thunderbolt/dma_test.c
++++ b/drivers/thunderbolt/dma_test.c
+@@ -87,7 +87,6 @@ static const char * const dma_test_result_names[] = {
+  * @error_code: Error code of the last run
+  * @complete: Used to wait for the Rx to complete
+  * @lock: Lock serializing access to this structure
+- * @debugfs_dir: dentry of this dma_test
+  */
+ struct dma_test {
+ 	const struct tb_service *svc;
+@@ -108,7 +107,6 @@ struct dma_test {
+ 	enum dma_test_test_error error_code;
+ 	struct completion complete;
+ 	struct mutex lock;
+-	struct dentry *debugfs_dir;
+ };
+ 
+ /* DMA test property directory UUID: 3188cd10-6523-4a5a-a682-fdca07a248d8 */
+@@ -619,18 +617,18 @@ DEFINE_SHOW_ATTRIBUTE(status);
+ 
+ static void dma_test_debugfs_init(struct tb_service *svc)
+ {
+-	struct dma_test *dt = tb_service_get_drvdata(svc);
++	struct dentry *debugfs_dir;
+ 
+-	dt->debugfs_dir = debugfs_create_dir("dma_test", svc->debugfs_dir);
++	debugfs_dir = debugfs_create_dir("dma_test", svc->debugfs_dir);
+ 
+-	debugfs_create_file("lanes", 0600, dt->debugfs_dir, svc, &lanes_fops);
+-	debugfs_create_file("speed", 0600, dt->debugfs_dir, svc, &speed_fops);
+-	debugfs_create_file("packets_to_receive", 0600, dt->debugfs_dir, svc,
++	debugfs_create_file("lanes", 0600, debugfs_dir, svc, &lanes_fops);
++	debugfs_create_file("speed", 0600, debugfs_dir, svc, &speed_fops);
++	debugfs_create_file("packets_to_receive", 0600, debugfs_dir, svc,
+ 			    &packets_to_receive_fops);
+-	debugfs_create_file("packets_to_send", 0600, dt->debugfs_dir, svc,
++	debugfs_create_file("packets_to_send", 0600, debugfs_dir, svc,
+ 			    &packets_to_send_fops);
+-	debugfs_create_file("status", 0400, dt->debugfs_dir, svc, &status_fops);
+-	debugfs_create_file("test", 0200, dt->debugfs_dir, svc, &test_fops);
++	debugfs_create_file("status", 0400, debugfs_dir, svc, &status_fops);
++	debugfs_create_file("test", 0200, debugfs_dir, svc, &test_fops);
  }
  
- const struct device_type tb_service_type = {
-@@ -1147,7 +1148,7 @@ static void enumerate_services(struct tb_xdomain *xd)
- 		svc->id = id;
- 		svc->dev.bus = &tb_bus_type;
- 		svc->dev.type = &tb_service_type;
--		svc->dev.parent = &xd->dev;
-+		svc->dev.parent = get_device(&xd->dev);
- 		dev_set_name(&svc->dev, "%s.%d", dev_name(&xd->dev), svc->id);
+ static int dma_test_probe(struct tb_service *svc, const struct tb_service_id *id)
+@@ -658,7 +656,7 @@ static void dma_test_remove(struct tb_service *svc)
+ 	struct dma_test *dt = tb_service_get_drvdata(svc);
  
- 		tb_service_debugfs_init(svc);
+ 	mutex_lock(&dt->lock);
+-	debugfs_remove_recursive(dt->debugfs_dir);
++	debugfs_lookup_and_remove("dma_test", svc->debugfs_dir);
+ 	mutex_unlock(&dt->lock);
+ }
+ 
 -- 
 2.50.1
 
