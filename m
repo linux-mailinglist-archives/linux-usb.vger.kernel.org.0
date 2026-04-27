@@ -1,171 +1,265 @@
-Return-Path: <linux-usb+bounces-36524-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36525-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eCJKB64o72k38gAAu9opvQ
-	(envelope-from <linux-usb+bounces-36524-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 11:13:18 +0200
+	id aA3CMaMr72mb8wAAu9opvQ
+	(envelope-from <linux-usb+bounces-36525-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 11:25:55 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A56DB46FA46
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 11:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BAA046FE2D
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 11:25:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9B557302A1B6
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 09:09:31 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 23E88307A79C
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 09:18:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2E633AF650;
-	Mon, 27 Apr 2026 09:09:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A033B19D5;
+	Mon, 27 Apr 2026 09:18:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bI3A5t+d"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JLhb9bUi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C9C53537FF
-	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 09:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA4B39B943
+	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 09:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777280970; cv=none; b=Xnw7ivi0IxciMQjxExpQOfDudn2vzCcJXt6vF7h6oHDFhFA7EuAe+1ywBUm+0fymgLyh5xayFbNNw4C3MXvghWctn1Ff7jDh0pfdOLWipZdVHoxAqSl9iWOUDVW/zwUc/lK+QDMDrt6HfTEoRA80ntDWOAwYIy2jKqpt71+IDOo=
+	t=1777281488; cv=none; b=UPWS2niyj2a23jLHhKUTQ4OfOLiCCXALe+XvEKKIqHtdKPeL+845AR582tr1NyC21WvKbIYi3xJhT36Tl1Gsp+DZgFK32gUVueJ08bKd5TMmL22ngVM8j9bigsyWqh8HjRqpAbiHSUUNSXxinmQDPGXufKlNueNqzW6aEZmXVo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777280970; c=relaxed/simple;
-	bh=A8WDo7yV3f/r8i86dANzRoNnd0DPzsbpyCoCk3w2r0M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ilFUoI2O3KgZwP2eq2LiPGn/ywr6XI30McQa8gVbJetE7GhD/8OD6lWWJg2jgHydblbXuvScm1bUeeOjV1fW+u+K3/bXXJmWAEohuZdal+eY8uoJ4kXT5eO5ObWpjJWvv24ZQ/AhIFIJu/n2OZHUMumbvO7LhTz4X+pcRS4JsKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bI3A5t+d; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777280969; x=1808816969;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=A8WDo7yV3f/r8i86dANzRoNnd0DPzsbpyCoCk3w2r0M=;
-  b=bI3A5t+dvXjAW0aGDZxN1PTjT29nGGceg3srZ862QLfmOI0jsQIIKJVA
-   s8rm10FcNU7Js+XFoHR4EJPwamD9FVksMUfIfJV0keEVWTzqNFnJw0OJX
-   +PmJXW/Thgz9desa3WUIZs4oaeN3132q2Qm6P2LoSDGHXRanTJHHLiZQK
-   UnzvLf4IupcTzbowKiTibNmDfQbQP32TrqmuUFiAqkhbY38aO0nfVm4yj
-   Et0sY+YUei2LfJpgNvLdWiOyHgYqB2oawRfjEMty6oBZihsRuEcOrSBIB
-   K7wF/0p2vPZsj+3w6bMvWo9h5dLFac6squX75BvkTajLdX0RwlLc8FIWF
-   Q==;
-X-CSE-ConnectionGUID: U2VdyAbDS7SPUsS7WXrU9w==
-X-CSE-MsgGUID: QH+hLwGXTn6UcHP50rvwcQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11768"; a="77189218"
-X-IronPort-AV: E=Sophos;i="6.23,201,1770624000"; 
-   d="scan'208";a="77189218"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2026 02:09:29 -0700
-X-CSE-ConnectionGUID: hnuo2RTZQqe00/fPMJjE+A==
-X-CSE-MsgGUID: l+axTxy4Rbq/00HDTf7QnA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,201,1770624000"; 
-   d="scan'208";a="233469835"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa008.jf.intel.com with ESMTP; 27 Apr 2026 02:09:28 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 8039795; Mon, 27 Apr 2026 11:09:26 +0200 (CEST)
-Date: Mon, 27 Apr 2026 12:09:24 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Daniel Dev <daniel.dev@noex.uk>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Subject: Re: [BUG] ucsi_acpi: Fails to bind on USBC000 devices, version=0 in
- NVS blocks probe
-Message-ID: <ae8nxNSEGd2hGh5T@kuha>
-References: <b1Wn_eFvTFShGbd970WWl4CWhge_6P2x7Wb6rab3QHNlE4OJ4p__O-QN3B6I-308ftr5oV5Zr7vywA0vdvmtNw6E0YJnVM2ek_5DcFnkXB0=@noex.uk>
+	s=arc-20240116; t=1777281488; c=relaxed/simple;
+	bh=fnN35qESeOdgi4tF4w09XQRiEb7fMrqlZft8OZ4lmno=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FCcF7RqFAJy+/SnLkYKoyVJptDhrd2Gfu2KXS1qg92N4WEJQIcEQ9ZEl90yXzfohkCnfGYdDMe7Q8sXFn08xtNWAzLoPZOLTGDiUBgTidJRt8wKXtwcLcxJj7bff26lE5/WozTwOT3hXfbeOpN/UvWEby8Euf1WVo7evJOvi3Zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JLhb9bUi; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4891e86fabeso108069505e9.1
+        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 02:18:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777281486; x=1777886286; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G5GEpNVWjonWBwD4A06zP9qS6FFrJA5lpTK9sFcNHDE=;
+        b=JLhb9bUi3fM7++ocNF/cyD3hgm5Y7+r8V9qPsL+M6JVBy6RvfN7vTVwQQHhuHa2tyi
+         lkbiCNqPv+2t5tqrpCpJJ0jr9PMxBBt2H9eLadLNZExRnQjGXXSINZC+dRHMnBGTNTOj
+         7Wqc6vsaG7Z45yQbhiUOj88Bpi2VwRSpj1NY8DiZz59NYaIFE4lpST+eXGPzFdlELu5m
+         dxs9i/fuQdOAO1J2hwfubsc4Rp7Vtvf5HtloVwSzSHMVdN9O+zHiRe0kQWaAd4aHuoKE
+         VzBf3dgfZAOPqyyXEfNQe0v27TxcnIV+GpQQn/jeBpzus/uMjUCOnn7JzZ1c4wmDZldr
+         5AmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777281486; x=1777886286;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G5GEpNVWjonWBwD4A06zP9qS6FFrJA5lpTK9sFcNHDE=;
+        b=Nv5TeBzOnowL+KTPwCHtKNBoxM/ojL8aWOeOVaABYZKZVEV1N9XsLCRhTjEg5fuY/K
+         Nnjie4kYUsPTgYP4uykpK+HAWS0j4eSFEGHrNqiYMsaP6v6rXqeIJlpvCCAFrH1BuP8q
+         FbRBO28Rh1cjaxPyqNbBZp9nYT9H2wpL/dRt1B0arLWDCtpkXFIxMLs1nJIxpkjGJ5ly
+         uxcOFp2QvRv4qIaTUIPWdpJi/UBFVrU0xuXJV0ERH3B1vikec3Jpvy1GZGFkiOmdqS6j
+         73HPMDxKdYtK4L9kOl0bdXin91Y8wvyKLTKstGF/Boc2EYc3ayjyzf3ExV5ysNqt9AUT
+         leZg==
+X-Forwarded-Encrypted: i=1; AFNElJ+2p6YLqRyv3OzkK+NCaol7EPdUvIYZr+nH57oYuWE9xdti0CnFQuCkk8KEE5NHpiSR+xomj00P0jY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzi9tmbzIoeTTwGIvt9SHsaLsMDya0UkLyJlbiCYCWXqN4FVTDX
+	oawX+7ojXlkVCr2/9MzXQ/d4NmopitEQfHdd4Xqzzxga5dHIMSjy8J3g
+X-Gm-Gg: AeBDievQFn03lnyoopWVOSxxgpWRtjrPp/OLeeo/LSqUwnNr9SfyIa2NGKBholZqJqr
+	Q2ZHZPhUINI8PxR3s61BcfZ1AWgkVF9gPCc3mOEsXElDm2kfIJPPp4aLV9Wxcj/1ypuqgUbwf4Q
+	EMYG7aQ4ZC+zr2Xf67rVyK98cvs7sBfp6c0QjV7D5rp44pPzM58WpgUMsGBUXc1qC69fwmHgPod
+	NdqmKfC7XLDZAsf/Ej+xBZ96e0yV+dURSMKkALASS7cs/E0wkZRklMLAYOyDUfyQXz/54+i1hQG
+	nuhd9yXq4+qfNDqFFbSp9AioHD+afPPRXhmiV8MrYHeBrzdZtEFGiCS9nniYba5znZcFNdycFjV
+	9cWvKMz6sWGxZcnvQwL9wWu0Ue3Z5unc6q0RCJ1mlAt33IZc0sZE/PT8HVWqZ3Wzlu8n1Fd0mQq
+	cqTeUxfGm9ECBRapE1Mw0TEtVHcsGUxRdO0i2mb9efV6/WznFdZpZejcCy7+cXI/L7vfp8fE/DY
+	GEk00XQELb53Ke/1H8HQMiIGNekO9GkDPVsWGcIlJWgyk/FuLCJ
+X-Received: by 2002:a05:600c:2d09:b0:489:c57:7836 with SMTP id 5b1f17b1804b1-4890c5778ffmr279466465e9.27.1777281485373;
+        Mon, 27 Apr 2026 02:18:05 -0700 (PDT)
+Received: from labdl-itc-sw01.tmt.telital.com ([2a01:7d0:4800:7:a04:488a:882a:de93])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a525a0b1asm231769375e9.2.2026.04.27.02.18.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Apr 2026 02:18:04 -0700 (PDT)
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+To: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	Daniele Palmas <dnlplm@gmail.com>,
+	Fabio Porcedda <fabio.porcedda@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v2] USB: serial: option: add Telit Cinterion LE910Cx compositions
+Date: Mon, 27 Apr 2026 11:17:46 +0200
+Message-ID: <20260427091746.592613-1-fabio.porcedda@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b1Wn_eFvTFShGbd970WWl4CWhge_6P2x7Wb6rab3QHNlE4OJ4p__O-QN3B6I-308ftr5oV5Zr7vywA0vdvmtNw6E0YJnVM2ek_5DcFnkXB0=@noex.uk>
-X-Rspamd-Queue-Id: A56DB46FA46
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4BAA046FE2D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36524-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36525-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	FORGED_SENDER_MAILLIST(0.00)[]
+	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[fabioporcedda@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 
-Hi Daniel,
+Add the following Telit Cinterion LE910Cx compositions:
 
-On Tue, Apr 21, 2026 at 11:15:56AM +0000, Daniel Dev wrote:
-> Hello everyone,
-> 
-> I am reporting two related issues in ucsi_acpi that prevent it from binding on Lenovo ThinkPad T14 Gen 2a (AMD) platforms. The result is that /sys/class/typec/ is empty and USB-C display hotplug is non-functional unless a manual workaround is applied.
-> 
-> Hardware:
-> - Machine: Lenovo ThinkPad T14 Gen 2a (20XLS10M00)
-> - CPU: AMD Ryzen 7 PRO 5850U
-> - Kernel: 6.19.12-200.fc43.x86_64 (Reproduced on 6.19.12, 6.19.9, and 6.18.19)
-> - Distros tested: Fedora 43, CachyOS (Arch-based), Arch and Kubuntu (Debian-based)
-> 
-> ---
-> 
-> ### Bug 1: HID Mismatch (USBC000 vs PNP0CA0)
-> The ACPI device uses "USBC000" as its primary HID, with "PNP0CA0" as a Compatible ID (CID).
-> ```bash
-> $ cat /sys/bus/platform/devices/USBC000:00/modalias
-> acpi:USBC000:PNP0CA0:
-> ```
-> Because ucsi_acpi only matches on PNP0CA0, the ACPI bus does not automatically bind the driver. Adding USBC000 to the acpi_device_id table is required for automatic discovery on these platforms.
+0x1251: RNDIS + tty (AT/NMEA) + tty (AT) + tty (AT) + tty (SAP)
+T:  Bus=01 Lev=01 Prnt=21 Port=06 Cnt=01 Dev#=108 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1251 Rev=03.18
+S:  Manufacturer=Android
+S:  Product=LE910C1-EU
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=02 Prot=ff Driver=rndis_host
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8a(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
 
-This sounds really odd? Why would this become a problem now, and not
-before?
+0x1253: ECM + tty (AT/NMEA) + tty (AT) + tty (AT) + tty (SAP)
+T:  Bus=01 Lev=01 Prnt=21 Port=06 Cnt=01 Dev#=121 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1253 Rev=03.18
+S:  Manufacturer=Android
+S:  Product=LE910C1-EU
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
+E:  Ad=82(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8a(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
 
-I'll see if I can reproduce this.
+0x1254: tty (AT) + tty (AT)
+T:  Bus=01 Lev=01 Prnt=21 Port=06 Cnt=01 Dev#=122 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1254 Rev=03.18
+S:  Manufacturer=Android
+S:  Product=LE910C1-EU
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 2 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
 
-> ---
-> 
-> ### Bug 2: UCSI NVS Version = 0x0000 blocks probe
-> Even when forced to bind (via driver_override), the probe fails because the BIOS does not populate the VERSION field in the UCSI ACPI NVS region at runtime.
-> 
-> Actual probe failure log:
-> ```text
-> Apr 21 11:29:37 fedora kernel: platform USBC000:00: bus: 'platform': __driver_probe_device: matched device with driver ucsi_acpi
-> Apr 21 11:29:37 fedora kernel: platform USBC000:00: bus: 'platform': really_probe: probing driver ucsi_acpi with device
-> Apr 21 11:29:39 fedora kernel: ucsi_acpi USBC000:00: probe with driver ucsi_acpi rejects match -19
-> ```
-> 
-> Actual Raw NVS Dump (from UCSI region 0xCBC37000):
-> ```text
-> Apr 21 11:41:28 fedora kernel: ucsi_peek: version=0x0000 cci=0x00000002
-> Apr 21 11:41:28 fedora kernel: ucsi_peek: raw NVS dump:
->                                  +00: 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00
->                                  +10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->                                  +20: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> ```
+0x1255: tty (AT/NMEA) + tty (AT) + tty (AT) + tty (SAP)
+T:  Bus=01 Lev=01 Prnt=21 Port=06 Cnt=01 Dev#=123 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1255 Rev=03.18
+S:  Manufacturer=Android
+S:  Product=LE910C1-EU
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
 
-Again with the missing version. Please contact Lenovo. This is a bug
-in their firmware. The version field must supply the actual ucsi
-version.
+Cc: stable@vger.kernel.org
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+v2:
+- Add stable tag
 
-thanks,
+v1:
+- Link: https://lore.kernel.org/linux-usb/20260427090047.582858-1-fabio.porcedda@gmail.com
 
+ drivers/usb/serial/option.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 0cd65b782488..d2db0005ea24 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1513,7 +1513,11 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1231, 0xff),	/* Telit LE910Cx (RNDIS) */
+ 	  .driver_info = NCTRL(2) | RSVD(3) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x1250, 0xff, 0x00, 0x00) },	/* Telit LE910Cx (rmnet) */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1251, 0xff) },	/* Telit LE910Cx (RNDIS) */
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1252, 0xff) },	/* Telit LE910Cx (MBIM) */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1253, 0xff) },	/* Telit LE910Cx (ECM) */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1254, 0xff) },	/* Telit LE910Cx */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1255, 0xff) },	/* Telit LE910Cx */
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1260),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1261),
 -- 
-heikki
+2.53.0
+
 
