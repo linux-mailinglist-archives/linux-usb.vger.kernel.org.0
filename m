@@ -1,182 +1,213 @@
-Return-Path: <linux-usb+bounces-36488-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36489-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uI8kIJar7mlXwgAAu9opvQ
-	(envelope-from <linux-usb+bounces-36488-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 02:19:34 +0200
+	id aDTqCtm27mlfxAAAu9opvQ
+	(envelope-from <linux-usb+bounces-36489-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 03:07:37 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 119D946BA9F
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 02:19:34 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A0D946BCE8
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 03:07:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F325E30068FB
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 00:19:31 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2E0D230068F3
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 01:07:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDCEE1EE7C6;
-	Mon, 27 Apr 2026 00:19:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09E211C8603;
+	Mon, 27 Apr 2026 01:07:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Co9Xs1UR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jrBcctA8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A6113C918
-	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 00:19:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777249170; cv=pass; b=qfCznu4qjssKIiX1IO2SFxp/KOM1UjXV8UwNNsfc2GHVnn7+1A1HDNbMUa5Xv/aoFns6a8Lc0CG3GhFtC8F7PFThDB3oKcM7CzEnZDuujIP+BurmfHE9ku9NwHMo/+dkmZXAh5n0iGPpPgOx5JPaGOCNGEgX1TTr6MqH08G3uXc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777249170; c=relaxed/simple;
-	bh=ugOVfCCiJp+93ixYgWWnYCXqvdHveCQmPGZim7XNpME=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ko39+7c85WhTvvI9hWPdspawFvKfOz3fhgQz3p8hSwUolttxAFSG74licV9t5gVHPlM/L6/3dXOTb6ycNRQIZq4RhD7h8Le6kmW/5oklZMEkhjgayq/uebjFMqVHQiDLxz4BCy1ZmcAeNJPbvT0BwjfJA11ZotHIm+bZ1YcDJv0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Co9Xs1UR; arc=pass smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-358e3cc5e7eso5515243a91.0
-        for <linux-usb@vger.kernel.org>; Sun, 26 Apr 2026 17:19:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777249169; cv=none;
-        d=google.com; s=arc-20240605;
-        b=CzweG4dHsZfcvEU3kG0iMeYWrtrhrw+U1jRSEUQHIrfHJoF+P+ZIW8eSjci4z5+izt
-         EZ1sEY2/im0xKHlYFwszU2euP8mOiwxcNKT4KpYkWjcTMrMNfMdgNYCXNcb/mPiOcm9y
-         76uNVCqXHyILDhxOHDC2LzNz+PklPhaQTy8tFkJSxcmMsvw3kqUH/+CiOd8Tg6tg95cp
-         TsVkHhwCzlWbqbihPezh5pQ7Mf++9Qs4CSMQqwRzPZjkgIW2ZYl0c4KFMC54FArAo8uo
-         6uhPcFB1yU2ZdDHYTBhIqCsT2FQs0HjKQI8o0SdfIyEJk8W2Aru/TSBPy+kHeaYC9r5s
-         Xbdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ugOVfCCiJp+93ixYgWWnYCXqvdHveCQmPGZim7XNpME=;
-        fh=Wq+Tfz3YtycUQTj9QxKMyHU0g2WGEGHZSwY8Hfh4VCY=;
-        b=fuE6wD+fWPakfruV2AWVJw3y8f67pnivKbUOlb3sbN6jan4TgcN3RojPrTULEkZKr2
-         QusSpV6B5SO52hri7Bxl3yI5knX6Y5T00+0Si2hLVySqE7YoLhKoARsUpvEiRBibuHe1
-         1jUqpYyp3a+65xurc09cDjO1q0Nhg3p5UA/g5FxWmqZokcHWZgIkTlDZC1IIj064CT/x
-         SAQFSWWHBpLpA0U7zpeWuin8TYE7XqchXw7olsF1nZiJXZqSde6fombgEMC43zWoE/eV
-         lpUZ8lpDiQir8PEOXRUxy6J27Gd7nYjGUEyM18xn+t2XsvfbGp5tBp4AlxCglVz/064h
-         cItg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777249169; x=1777853969; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ugOVfCCiJp+93ixYgWWnYCXqvdHveCQmPGZim7XNpME=;
-        b=Co9Xs1UR/5GhVp/Mg8sBa3+wMayef/UGATUJ7MRs67G8STwVmPgA+6PkXYCciMICP4
-         i/Qza1CJGAjizMKd9JLnz3pJY3CU71o9uRGE9+acb9RBSyVsIdNoTlSGpifhOqnnjWto
-         Rb/tUCtdcua6+8VL3TrrPLjaNU9XJ2+6Wn4MCHbXXAanr+8magUJCH8cGzFn1l8HPjmj
-         kuxIJ9i5xQ5/kkH1Kh52hWJTxRYBhzAf0cJHB5hE5Mm/hWLbh2YKUMXaQspcP1FCHKN8
-         qWXgWJXHNliqbIk83Ca0EcutmocwBhKfRVDD18qsgbuk/S2dVBmrro9gHudHbm5g9YSD
-         Pc5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777249169; x=1777853969;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ugOVfCCiJp+93ixYgWWnYCXqvdHveCQmPGZim7XNpME=;
-        b=qNJs/uO4LVb6VBnnVjkXJWAmIKr/IXio2fKjauyo2VUFe6/57o6q8K17BC7HP9O2oe
-         FYCt5F0i5TotpswuyNSg3FrMxIlGHGQwBGFeZstRc28X0jj1N8Wxv++qoELeSDeV1n0w
-         O6+eafSsjZFQH2y18FvRArYQyqHAdbuHQSw4hgBc6Z87oon/MmLW38E5fFAWj5453lVC
-         YF17nPkgBM/P6xRFb+M9Taijd3hssapRMdRZ7XI9kkEY0XF5uV/zORfGLb+H0u77q+17
-         qOU0nhHGWg6HcBXJvAkR6tTeiqKQr5NBrC07UFgAFwqYOIevuedfX5TjvdKBx2C67OJh
-         5Dbw==
-X-Forwarded-Encrypted: i=1; AFNElJ/0Ss4rISrHQOxy+e8dtZmVWmKLtsCd0GDwwbpfM3R45XjRu8uqnb6Rn4LIwGMAgA9r2cjafFpSdMU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQgTUCSbJTlwXYQEl095nGGCz6W4BMtl1v/N5r58wLiSCWuiBK
-	aMkMrFYIzw8+3UsFy5nhqJEBFF5rlWxJx6MXFo1cScnjHjk4izNGb4flDPTD+WRudcm3qlJUt8P
-	AZzAKi5i+rGBm3XwlphOu+Mei5g0Uavk=
-X-Gm-Gg: AeBDietb7coV122S2pNLzJdyrwmiN3UHr+Uk5b6VBJzW/anLY4sSZn5EUcqK9nerOMh
-	x8YESUtiCxSuUArNGOminRyjTsydMatPdMW3/6blDZ9q5J82MaXI5WHtWRaBavhKbjja6OkuQzB
-	DEEFFeCM6FkPxA0WDyAemiDlSa05Q/Q8/WbV2JYN0eNI3ZakuKErNCf9ty5VltF0P6kuKR/7+LI
-	c1paCLLkzCEdT7oFYzEMSYEWu3VF9h15nCCczWNnxs/383wb0bFyT7+7qjgDpnvmEHCImAm4I5F
-	RknnfQkUTRPLwuDTPPAATNzxlK06/1d0Gu1OK5YTAQ4FBf8=
-X-Received: by 2002:a17:90b:3b4a:b0:35d:a4c0:a0ac with SMTP id
- 98e67ed59e1d1-361403d61camr40703643a91.3.1777249168661; Sun, 26 Apr 2026
- 17:19:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2DA76026
+	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 01:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777252053; cv=none; b=Dc4oEBwJEjhtpY+9kbwIRjusApyQlA01sCCzaub1XjPBjQNpC98moGfmR+LSvsIQRdZ+hNbUjWDrP2oAhD1hpz9Kj39lUioCVjZgznaJv45d5shgE7TgSCxcZy/xbr0eLFT18ii3NtbWN26DPOOdVUcJnMDs96A1UNse43bHXSU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777252053; c=relaxed/simple;
+	bh=gt31j89Ys9Ist/r0+qS4Ol3QFCzTKMbSKrPWDeBRGQg=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=JZswP9yrJ8WGnwb+WeYhWeHKLRKiRMKFRY8LXIygeLnyiwck2IGUvLxcAwlTQC1H5cbia8k2HaqNESS+VN/iqXrk+4Tc3zn+4HenPRuRYUw1297kErRsr9aUzUUDmyFt+mCgrWjLPHOCKPfUIS6nG69eKkWSh2v1/nanN0pxwkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jrBcctA8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E23AC2BCAF
+	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 01:07:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777252053;
+	bh=gt31j89Ys9Ist/r0+qS4Ol3QFCzTKMbSKrPWDeBRGQg=;
+	h=From:To:Subject:Date:From;
+	b=jrBcctA8F9cvd+bBt1y+cm9I+b3Vj3u1nTyaODWKyEmMu9oLNDMDa8ET0oEOcYtDM
+	 UNSOUd6pRjUexTJEs1U5BDYQ1pUwQOabFZKA32kMyOskv3mBAqJnfTJ5aviOwf2hRe
+	 yJGjCP8OJZMWCWZA0vWnznrPRPiEGmX9G6pLpHgaFvkpfcTTaQcz8YTpz/ozCni83T
+	 Z3RYZmqQyJMdk/fhIUScBKPeUwl+smY/JsS4QvRR31dbHT0ieKI/RtvzIyjmib3jxY
+	 sxZ0yYG/PMgamFkMS96ZGOvIPnR8IDXUWLLApSSCW+Xayd7KbYtudwYt6KtI9n5WuD
+	 4f7nr+MEC9fRw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 2E5D0C3279F; Mon, 27 Apr 2026 01:07:33 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 221422] New: xhci_hcd host controller dies on Intel NUC8i5BEH
+ with USB audio interfaces (POD HD500X, Mbox 2)
+Date: Mon, 27 Apr 2026 01:07:33 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: hmoller@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression
+Message-ID: <bug-221422-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260417021858.6582-1-phucduc.bui@gmail.com> <a145db93-a8ad-4bee-8404-21f356d7d4ab@kernel.org>
-In-Reply-To: <a145db93-a8ad-4bee-8404-21f356d7d4ab@kernel.org>
-From: Bui Duc Phuc <phucduc.bui@gmail.com>
-Date: Mon, 27 Apr 2026 07:19:13 +0700
-X-Gm-Features: AQROBzDh5S1ZBzuVxFYQ8RBWiB9vcWv-M3KhV5VA_7nj_DMjt8E8DfNhVOVUkdY
-Message-ID: <CAABR9nE_vwzWwZ=2bbwTYgEtp=SGDnzVUA5Y8jp7gp-Ky8MN-Q@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Remove the redundant 'type: boolean'
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	nick@shmanahar.org, dmitry.torokhov@gmail.com, nicolas.ferre@microchip.com, 
-	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, lee@kernel.org, 
-	heiko@sntech.de, gregkh@linuxfoundation.org, linusw@kernel.org, 
-	zyw@rock-chips.com, zhangqing@rock-chips.com, gene_chen@richtek.com, 
-	linux-input@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 119D946BA9F
+X-Rspamd-Queue-Id: 9A0D946BCE8
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-36489-lists,linux-usb=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36488-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_ONE(0.00)[1];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	FREEMAIL_CC(0.00)[kernel.org,shmanahar.org,gmail.com,microchip.com,bootlin.com,tuxon.dev,sntech.de,linuxfoundation.org,rock-chips.com,richtek.com,vger.kernel.org,lists.infradead.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NO_DN(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[phucducbui@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 
-Hi Krzysztof,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221422
 
-> Why did you change one file and ignore the rest?
+            Bug ID: 221422
+           Summary: xhci_hcd host controller dies on Intel NUC8i5BEH with
+                    USB audio interfaces (POD HD500X, Mbox 2)
+           Product: Drivers
+           Version: 2.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: hmoller@gmail.com
+        Regression: No
 
-I'm processing the remaining files with caution. Files without
-significant descriptions or context will be updated in the upcoming
-patches.
-Those with specific descriptions require deeper review and will be
-handled in separate patch series later.
+Hardware:
+- Intel NUC8i5BEH (Bean Canyon)
+- BIOS versions tested: 0092, 0095, 0098
+- CPU: Intel i5-8259U
 
-> Why did you not mention previous feedback I gave you on your patches
+Affected USB audio devices:
+- Line 6 POD HD500X (driver: snd_usb_podhd)
+- Digidesign Mbox 2
 
-> (some time ago), that there are TWO TYPES defined for wakeup-source.
+Kernel:
+- Reproduced on Ubuntu 24.04 kernels 6.8, 6.14, 6.17
+- Same Linux kernel works correctly on another machine (ASUS Zenbook 8th gen
+Intel) with the same USB audio devices
 
-Thanks for mentioning this.
-In v2 of the patch, I reviewed the previous discussion between you and
-Connor regarding the two types for wakeup-source.
-https://lore.kernel.org/all/20260316034606.11304-1-phucduc.bui@gmail.com/
+Problem:
+On this NUC, USB audio streaming eventually causes xHCI host controller
+failure.
+Sometimes it also happens on device disconnect.
 
-When moving to v3, I followed Rob=E2=80=99s suggestion to use true. I also
-sent a follow-up email to confirm this approach,
-and since I did not receive further comments, I assumed this direction
-was acceptable.
+Typical sequence:
+- device enumerates correctly
+- driver attaches successfully
+- after some time with active audio, or on disconnect, I get:
+  - timeout: still 16 active urbs..
+  - xhci_hcd: xHCI host controller not responding
+  - xhci_hcd: HC died; cleaning up
+  - USB disconnect of the audio device
 
-https://lore.kernel.org/all/CAABR9nH3hr+Y5ksD0cn3Gd9XUvmb07X7zJw0b4k_yVbnAu=
-z9=3Dw@mail.gmail.com/
+Important observation:
+This is not limited to one interface:
+- Line 6 POD HD500X
+- Digidesign Mbox 2
 
+Both interfaces work correctly on another laptop with the same Linux kernel=
+, so
+this appears to be platform-specific to the NUC8i5BEH/xHCI implementation.
 
-Best Regards,
-Phuc
+What I already tested:
+- multiple USB cables
+- direct connection and hub
+- USB-A and USB-C ports
+- multiple kernels (6.8 / 6.14 / 6.17)
+- BIOS 0092, 0095 and 0098
+- intel_iommu=3Doff
+- processor.max_cstate=3D1 intel_idle.max_cstate=3D1
+- different audio buffer settings (larger buffer (64x3) minimice or disapear
+(64x5) problem)
+- reproduced both with active audio streaming and on disconnect
+
+Expected behavior:
+Even if the device/stream fails, the xHCI host controller should not die
+completely.
+
+Observed behavior:
+The host controller dies and all devices on that bus disconnect.
+
+To make them work again need to:
+echo -n "0000:c2:00.4" | sudo tee /sys/bus/pci/drivers/xhci_hcd/unbind
+echo -n "0000:c2:00.4" | sudo tee /sys/bus/pci/drivers/xhci_hcd/bind
+
+Same kernel, same USB audio devices, different hardware:
+works on ASUS Zenbook i5 8th gen, fails on Intel NUC8i5BEH.
+This may be a hardware/firmware-specific xHCI issue on the NUC platform rat=
+her
+than a generic kernel regression, but I am reporting it here because the ke=
+rnel
+might still be able to add a quirk or workaround.
+
+$uname -a
+Linux nuc8i5beh 6.17.0-22-generic #22~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu
+Mar 26 15:25:54 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+
+$ sudo dmidecode -s bios-version
+BECFL357.86A.0098.2026.0204.1428
+
+$ cat /proc/cmdline
+BOOT_IMAGE=3D/boot/vmlinuz-6.17.0-22-generic
+root=3DUUID=3Db116f7d7-5bb8-44d5-a83c-527892de0889 ro quiet splash threadir=
+qs
+preempt=3Dfull vt.handoff=3D7
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
