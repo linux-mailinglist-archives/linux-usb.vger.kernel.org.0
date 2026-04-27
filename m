@@ -1,882 +1,176 @@
-Return-Path: <linux-usb+bounces-36576-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36578-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aElNLpXY72l/GwEAu9opvQ
-	(envelope-from <linux-usb+bounces-36576-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 23:43:49 +0200
+	id EI7lEq3a72mvGwEAu9opvQ
+	(envelope-from <linux-usb+bounces-36578-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 23:52:45 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id A202E47ACE2
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 23:43:49 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8D4A47AF78
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 23:52:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D7E4F301287B
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 21:43:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8341B306AFEA
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 21:52:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 088B03AE1BD;
-	Mon, 27 Apr 2026 21:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 171E239184B;
+	Mon, 27 Apr 2026 21:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="QmnCGXP7";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="HUTf9Atv"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="NH0RQa3n"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152A63AD50E
-	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 21:42:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D19D2750ED
+	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 21:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777326168; cv=none; b=O1GfuFGbNj/5O9xLI7608iWjopRt+CV0R4XY42Tdsy7yko1fXlShAKTFn4ZtmtpFzQMOjdm6dR57cugu4n24vf0c80nUdHY8+M0IdZuCVCjDgFByLYWEMCK9+90gcoj9kpD9/3k/ZQfc+ENVE+gSAmtObVNkQGH3hecwyZnizbM=
+	t=1777326747; cv=none; b=ny27GlbZHirrsftpU+AwXIyAmyN764y5epUV9tMWHzU0v0SLbMVBuIaxGtNgjkSaksnFoMs5mXwdfDfE+SHfgn2zyLqxRwD3LyVmIWUI0b/6tVOngrLIRcaNoZyLnwpxV5Uxtbz6VJ7HFUdQz19PmqfnavrchVAR6LnqpU4yR6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777326168; c=relaxed/simple;
-	bh=uw4V+B7+t2cS9fxUGJzEQ7PDOrnJ0Qlz4lTdJNTmnow=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Qd/mQ94qyXVCsljLTzwmu0z/fZqjtcWa//mT0kP907664IE0fxSTFgdqickZPmIn499KsFkZyRXUPZ0dZWpyj5Cr38fu8THrISOUx3l88QOdwhDTlK+XLsWYQEGJc21puXvnEKQZkVC98XK1f6RLpvITWUSI4+cq2a4PNTR9skY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=QmnCGXP7; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=HUTf9Atv; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63RE0Wu22913809
-	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 21:42:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=jOnqOHnDIgR
-	D38YYduiVZKhDrJNGyymPdUYwPxflU+g=; b=QmnCGXP7w66E4B3ZVS2p+RudyVG
-	txhXOVcurLkyYuWbxxy26asXZTPOyyoy1BiYnc5uuDNprh19ZFfoQ65y6DogcogP
-	kL+YZvHIjnznjbRmEXAIu0+mgcoG5xYQYRUbfeTMbCIsuyHWmRmEhvshy0Q2cHrR
-	gMcQLdUnl5nwSFAniecwYVg4OfHLfueuzhL5d5U0vsUtzHuGsQt1m6U6kLaEaTEg
-	ebjSXWg1rraME9FKkhWnpl6DA+tFmJzU6byjqqV4vPfyDAuNyDMtHydfiQpv1WwM
-	Sr6Rhq4jeS5ToOdyxM3YlrWjY9vLgn+BcBrFJr2wwcHNqOMT+skC4NPmL3w==
-Received: from mail-dl1-f72.google.com (mail-dl1-f72.google.com [74.125.82.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dt26xkg60-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 21:42:44 +0000 (GMT)
-Received: by mail-dl1-f72.google.com with SMTP id a92af1059eb24-12c21dbc9c1so40507679c88.0
-        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 14:42:44 -0700 (PDT)
+	s=arc-20240116; t=1777326747; c=relaxed/simple;
+	bh=7P7VU36hQu4iMsGekLZKiPL3rBFQOW0TOaXA+fXfycA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KUg+bkNz3PNsID+LqtvEoHE2Sur0aNQjrJ7Tb7hwgiHTv/0J9D0srlCj/pcrFuOtmyuCZYrW5Tfwvhhryc9xwNG8nMPoevANjUco6/UoLFgbVsasF8SicespU6qE4UUG3QB+a/n7+XDeoDsr5nGtPh3IMm3/VYsojazh6nd8Fys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=NH0RQa3n; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-66e8cf72a93so13200550a12.0
+        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 14:52:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1777326164; x=1777930964; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jOnqOHnDIgRD38YYduiVZKhDrJNGyymPdUYwPxflU+g=;
-        b=HUTf9AtvulKsijy+gF6YXYkSXsQW69ygjCK9JVFbU3f5P1Af2r85LEvewM37riIZsf
-         7Djo0V/kIGhNpLv1Mx+yuUytTgU2rJFrLxnNnSLCLfJW/eQsJwE7hT5KGPTCYSmC8Nc9
-         5f4OxoOWKVWR6tAIvaudAgqiJRQkWvQhQ4AJ4itb2/HRAMPc7BUpR2nllxNHjVBFDC7C
-         Usd71r33rdYR3IBUMmHktLqMwnK5yQuyj6Kt0MVwiPsd1vh63X1688z3Fb4ESYnTQnSv
-         UElf3HN5O1mW2dsNYcwlGvhWwPHuG82T7xQjqLR5oS7LvUOKQLgDJPxM7RTtqExsnI8r
-         Q1SA==
+        d=linux-foundation.org; s=google; t=1777326745; x=1777931545; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eodThUBj1SnOvacXe/3ftYxEWQMFbYqc4B0FCa9Alx4=;
+        b=NH0RQa3nQ3uyg+gIj38iYhfkKJaXQXJd5JtEjohwNyEHHtzQsZRivXRovcFpjLAbR/
+         vuRfqvXSP9QgTautbAAy4/9EiRxlqgwlBI1gcfbW/aJ7PGSFInfhd1uXrmqJpGryeQlE
+         chSY3nb59T2h8Yu3Rk8snYN2NzExsmuU1D7kY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777326164; x=1777930964;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jOnqOHnDIgRD38YYduiVZKhDrJNGyymPdUYwPxflU+g=;
-        b=mfLMxJz29IMJS9ayaf17kObAsbVU3CcJSIOhQJ0rcSs6FZGY9G05cikZGnxFLZB45F
-         ynC+9WyjuNtKxFLeXNLmH14eH97Nrc31k/JPAN9qMSQdVo74cyqmHtfIP8Ri3CLQhGL1
-         zuWLiRpoy9WAfQQYL+dSkb/SELXJUquD3/JDoJEKZ+fyE2K2zBH0WXu1Js4D46/Z7lbq
-         rJ0UkugPoyx0auWRar4lGV+gf8OyxNqQj2zucO4ez1ZEGe75pI2xlrWdCCZiEF/+sdOn
-         Vh2A8c4quw0eP5RMO8j2OirF2URVnAsOhqLwf5bbv2nyOYgkF3VYC3d7e8jx+lq1Ho1H
-         SOOA==
-X-Forwarded-Encrypted: i=1; AFNElJ+UieBEeo+Pjza4nSH3M4n+am66WuplmSHdlbH+KwEvFNOwKpSJ7fLIQVPZjro4xumXwoBR7n+eosA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvmPQhQhIEKuiDEdOfmH02fjw+FVUmb9xJNDUXDOPuIDxhWnUz
-	bVK3/uHr5hi1LsNQKLOcLZR2HvDY+PPBtfeyVXfc9WUXpqhEg6L88jsEXdYPN/OblTo4GO1ui9r
-	fakM3DuuFcO189c0qlDWKf21J4A6bbtK0ycT2AJW9PhX8eTvXTcdeSyK0kVN8AHI=
-X-Gm-Gg: AeBDiet/tco1lXcU/r/3/aH/X910oJYerjuJcQzJkPnj4utfIjHvcai6EO1hY9uZ3jU
-	OXaQcvCZxX759rrbm0LEDUwFdwu//f39nLvrWsmKnCCr8zXWqAH4+myT99vnDw5/wE66MfRWImK
-	ky+NDs7+iN/m5rcu0a5CcQOwQbFgBGpLZo45b7S8z9UTzM2AyK912HnCI26tFQkzYYnFucFqnZO
-	n2AjSxMrjdRbC+mK/8qqc5H2DCSLXRnUOKtVjJYRLrPrEvnZNU8586R57adAxx86qOoSrOTdj6F
-	FPmb8Jwz1IBJeRTmxd4/GJbolxlEuZjC38okY/7kmPDm9blZFVC+10XYdpdGFzMOnw0dYozlLMk
-	6yPrqCOaVfA5i6iXL4gRm+e/ZrysbPROx/IXGSqqCljwP/GmiQe1s/OumQYt42Xyci0ae28LiZV
-	EOQcv5nwO3fQ==
-X-Received: by 2002:a05:7022:b8a:b0:12d:b8e5:5b4 with SMTP id a92af1059eb24-12ddd986d02mr322138c88.17.1777326163568;
-        Mon, 27 Apr 2026 14:42:43 -0700 (PDT)
-X-Received: by 2002:a05:7022:b8a:b0:12d:b8e5:5b4 with SMTP id a92af1059eb24-12ddd986d02mr322096c88.17.1777326162779;
-        Mon, 27 Apr 2026 14:42:42 -0700 (PDT)
-Received: from hu-rraheja-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12ddd927bbbsm653119c88.2.2026.04.27.14.42.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Apr 2026 14:42:42 -0700 (PDT)
-From: Ronak Raheja <ronak.raheja@oss.qualcomm.com>
-To: vkoul@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, robh@kernel.org,
-        neil.armstrong@linaro.org, gregkh@linuxfoundation.org
-Cc: dmitry.baryshkov@oss.qualcomm.com, konrad.dybcio@oss.qualcomm.com,
-        abel.vesa@oss.qualcomm.com, wesley.cheng@oss.qualcomm.com,
-        krzysztof.kozlowski@oss.qualcomm.com, ronak.raheja@oss.qualcomm.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] phy: qualcomm: qmp-combo: Add support for Hawi SoC
-Date: Mon, 27 Apr 2026 14:42:17 -0700
-Message-Id: <20260427214217.2735240-5-ronak.raheja@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260427214217.2735240-1-ronak.raheja@oss.qualcomm.com>
-References: <20260427214217.2735240-1-ronak.raheja@oss.qualcomm.com>
+        d=1e100.net; s=20251104; t=1777326745; x=1777931545;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eodThUBj1SnOvacXe/3ftYxEWQMFbYqc4B0FCa9Alx4=;
+        b=O6a6vPQBRShAEH7nhPfkjKjppbrk6/2nBdrhr1RZxzRZD3tXW8HKSSnLuQi0PepZJK
+         MFHk7vbSlBJwZHVEU+J01FLzvW6uWa2cFW29soMIxgtnbPwIOkf7pw/nOTwJY9TsmjaB
+         jrC0E+yInmPMgIKxUDtfhNgNWf+5hk0Qtzb7QkEt/O9mGYsYR/zYl/0aKgu/2KLoka2m
+         xBkNi/qaYf/3hcy18Ejp8jOX1Ij615GMy357aLclS99F/FWO6x+zREeSnErpcFAOkL8m
+         utjn53/P0qPfn30nMXkCKk/XbnhSc3/3NTqsGMsNr5PHam/G8y7AFbaWAhBW/QPtf2Dt
+         5pcg==
+X-Forwarded-Encrypted: i=1; AFNElJ/CfRds1XVJJN3TTfvIcJIiI5Lhh0ZyVBlTAjBWglisc3CHiiWkeCtVfd3LLlEDY1SPxpTuB0yQYjY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8Erh/WwH1bWi+vRb2S8CaSot/VGHgBxql1J/+LOkIY4Li6Qpy
+	OrA+dZwFfo/BD4WTHN516549WjRiXb2k+epQFW2H247Gsm09e7LaxLNXa16pQi+GcQr0jlrMMLe
+	8l86yqrUpEQ==
+X-Gm-Gg: AeBDievCjr6ijcC/UwknKDvbpNO2aX/UUw7Uw1nziqbk7qgRyGB4onAaDy8+f8Pt1qd
+	miA+yd+0RxC695F4cBLp3TySKeXKq/PKdgIGoPoZN1Oagme0rFfCr9jJCkz0Hcr3vO+B0SmUwfB
+	bzXno/QT+RqXidkBjhLieHhmlOcSaGP2pryMn1LfkIrDzgs8N5NIWS5oRPJ2Ni/mjbGYG5F4K62
+	zE32hAVjuZswRpDGSg7JFGW87oNP5pwuOExCBgAnahfid8aE43PJTBpiumh5nz8mTdgGYics8X1
+	Q0TlI6g8m2/N0e1N6tUmrC/nN0/73n9ly4odWJB8tqsP3GOITFdWFDGoVi97jiF3K0FJfCunFzI
+	7MFGGiqlwVaSl6QPDuXceTYpd/JigmEysnnV5EyZU7G9vEi3v4hAtnSP8wvr1lgi8UQ1C9OdWAG
+	gDhQNPN3ZVgCfXNDWRCh8woszWRc/sZ5x7cqAp7NlSqC6Gr3fjmppgtx8Rpg6/Wpn29YR8hDYut
+	pUb6+hRP3k=
+X-Received: by 2002:a05:6402:2114:b0:66b:aa56:ee5c with SMTP id 4fb4d7f45d1cf-679bb09ac88mr184476a12.28.1777326744611;
+        Mon, 27 Apr 2026 14:52:24 -0700 (PDT)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-679b6843097sm149184a12.19.2026.04.27.14.52.22
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Apr 2026 14:52:23 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-670ab084a39so16193140a12.3
+        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 14:52:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ/pCc24UgDFV6vU/sOOPw6XxFtnGVyLznRfP3kMqBAQmwmEs9NIORqQwQFCQNWE+m+bhnpKl1xUpuI=@vger.kernel.org
+X-Received: by 2002:a05:6402:35c2:b0:677:270f:6f4b with SMTP id
+ 4fb4d7f45d1cf-679bb04a8a7mr185115a12.1.1777326742385; Mon, 27 Apr 2026
+ 14:52:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 9_nUEk3n_oq6UwTP_9DtEL0UYBYDFdqJ
-X-Proofpoint-ORIG-GUID: 9_nUEk3n_oq6UwTP_9DtEL0UYBYDFdqJ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI3MDIzMCBTYWx0ZWRfX95PLefDaKKwz
- rQ/AINCbVfq+QMfoNhFORQ6vtBUhd7EGJPcqieHusbz+/oolaScmd0jhoYoM5nvmPejcU9e7b4Z
- gD00FIELRnlqx3xj7me8oUURrRfnhJxYxq6JS7eAAMjicD6o98ncMtJ+Se0pUb/XOqmPyY7K273
- 5tLdFepIqgPjRcZ4gabC0K/x4BuvnUCEvfcVuHUCEe8JPPV3URIdTuGLCXu5s/+mixNBdyIUKtv
- mFThzMpp9Tcrxg8Gw6ytITE9Pv+jJg4LmAeFyY7u+CtmM0+CGIlUIN04669x5q7Z89Ex+seEdCZ
- /YeBiwhO6yypO1cKvPOVBaMecsdP1zYSo4pPGJi+gBtiGpLwHDCsh9T7R005ufJ8nknDFFoiI19
- Yvd5TX2Htxqh5+l47s3e17RgFCOTa4L0aMGx1l/G2FtlZtaOB/HvGGuG/DtCz/HMEAFcCDbAbCL
- SIpDmYpCNEQxUELJfjg==
-X-Authority-Analysis: v=2.4 cv=FM8rAeos c=1 sm=1 tr=0 ts=69efd855 cx=c_pps
- a=bS7HVuBVfinNPG3f6cIo3Q==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22 a=EUspDBNiAAAA:8
- a=94TNKR-hkEinp_EYofMA:9 a=vBUdepa8ALXHeOFLBtFW:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-27_04,2026-04-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 suspectscore=0 adultscore=0 bulkscore=0 phishscore=0
- spamscore=0 malwarescore=0 priorityscore=1501 impostorscore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2604270230
-X-Rspamd-Queue-Id: A202E47ACE2
+References: <cover.1777306795.git.chleroy@kernel.org> <0ee46bb228d97163fbdc14f2a7c52b93d8bc34ce.1777306795.git.chleroy@kernel.org>
+ <ae-j2_QirCySZD02@yury> <63a4d0f6-0eb3-48cd-9f98-bf7b223b2606@kernel.org> <ae-2yLWSGnfeTvh1@yury>
+In-Reply-To: <ae-2yLWSGnfeTvh1@yury>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 27 Apr 2026 14:52:05 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgPrLy0FR3sEWBYQuNAac1axDASYMnTuPuxEU0WytzL7w@mail.gmail.com>
+X-Gm-Features: AVHnY4LQUFWo9ODz4M3q2vZC9Gn8nsdYr95Nd4ky5ERVHHxIyN_9ZXY5zjebfdc
+Message-ID: <CAHk-=wgPrLy0FR3sEWBYQuNAac1axDASYMnTuPuxEU0WytzL7w@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 7/9] x86: Add unsafe_copy_from_user()
+To: Yury Norov <ynorov@nvidia.com>
+Cc: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Laight <david.laight.linux@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	linux-alpha@vger.kernel.org, Yury Norov <yury.norov@gmail.com>, 
+	linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-um@lists.infradead.org, 
+	dmaengine@vger.kernel.org, linux-efi@vger.kernel.org, 
+	linux-fsi@lists.ozlabs.org, amd-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, 
+	linux-wpan@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-staging@lists.linux.dev, 
+	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-fsdevel@vger.kernel.org, 
+	ocfs2-devel@lists.linux.dev, bpf@vger.kernel.org, kasan-dev@googlegroups.com, 
+	linux-mm@kvack.org, linux-x25@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-sound@vger.kernel.org, sound-open-firmware@alsa-project.org, 
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-sh@vger.kernel.org, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Rspamd-Queue-Id: E8D4A47AF78
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_DKIM_ALLOW(-0.20)[linux-foundation.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TAGGED_FROM(0.00)[bounces-36576-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36578-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ronak.raheja@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[linux-foundation.org];
+	RCPT_COUNT_TWELVE(0.00)[49];
 	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	FREEMAIL_CC(0.00)[kernel.org,linux-foundation.org,gmail.com,linutronix.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org,lists.freedesktop.org,lists.linux.dev,lists.xenproject.org,googlegroups.com,kvack.org,alsa-project.org,lists.linux-m68k.org];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[torvalds@linux-foundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linux-foundation.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,oss.qualcomm.com:dkim,oss.qualcomm.com:mid];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCPT_COUNT_TWELVE(0.00)[17];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,linux-foundation.org:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,nvidia.com:email]
 
-Add support for the USB3-DP combo PHY found on Hawi platform.
+On Mon, 27 Apr 2026 at 12:19, Yury Norov <ynorov@nvidia.com> wrote:
+>
+> This is what Linus said when added x86 implementation for copy_from_user()
+> in c512c69187197:
 
-The QMP PHY for Hawi uses QSERDES V10 register layouts. Add the required
-PHY sequences from the hardware programming guide and new V10 register
-header files. Also add a new v10 offset structure to incorporate the new
-COM AON register module.
+Note that some things have happily changed in the six+ years since...
 
-Signed-off-by: Ronak Raheja <ronak.raheja@oss.qualcomm.com>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
----
- .../phy/qualcomm/phy-qcom-qmp-com-aon-v10.h   |  15 ++
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c     | 231 +++++++++++++++++-
- .../phy/qualcomm/phy-qcom-qmp-dp-phy-v10.h    |  15 ++
- .../phy/qualcomm/phy-qcom-qmp-pcs-aon-v10.h   |  13 +
- .../phy/qualcomm/phy-qcom-qmp-pcs-usb-v10.h   |  19 ++
- drivers/phy/qualcomm/phy-qcom-qmp-pcs-v10.h   |  34 +++
- .../qualcomm/phy-qcom-qmp-qserdes-com-v10.h   |  89 +++++++
- .../qualcomm/phy-qcom-qmp-qserdes-txrx-v10.h  |  89 +++++++
- drivers/phy/qualcomm/phy-qcom-qmp.h           |   5 +
- 9 files changed, 506 insertions(+), 4 deletions(-)
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-com-aon-v10.h
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-dp-phy-v10.h
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-aon-v10.h
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-usb-v10.h
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-v10.h
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-qserdes-com-v10.h
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v10.h
+>   That's partly because we have no current users of it, but also partly
+>   because the copy_from_user() case is slightly different and cannot
+>   efficiently be implemented in terms of a unsafe_get_user() loop (because
+>   gcc can't do asm goto with outputs).
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-com-aon-v10.h b/drivers/phy/qualcomm/phy-qcom-qmp-com-aon-v10.h
-new file mode 100644
-index 000000000000..6542b586be89
---- /dev/null
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-com-aon-v10.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2026, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef QCOM_PHY_QMP_COM_AON_V10_H_
-+#define QCOM_PHY_QMP_COM_AON_V10_H_
-+
-+/* Only for QMP V10 PHY - COM AON registers */
-+
-+#define QPHY_V10_COM_AON_USB3_AON_TOGGLE_ENABLE         0x00
-+#define QPHY_V10_COM_AON_DP_AON_TOGGLE_ENABLE           0x04
-+#define QPHY_V10_COM_AON_DUMMY_STATUS                   0x08
-+
-+#endif
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index 93f1aa10d400..53b709ea93d5 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -32,6 +32,7 @@
- #include "phy-qcom-qmp.h"
- #include "phy-qcom-qmp-pcs-aon-v6.h"
- #include "phy-qcom-qmp-pcs-aon-v8.h"
-+#include "phy-qcom-qmp-pcs-aon-v10.h"
- #include "phy-qcom-qmp-pcs-misc-v3.h"
- #include "phy-qcom-qmp-pcs-misc-v4.h"
- #include "phy-qcom-qmp-pcs-misc-v5.h"
-@@ -40,6 +41,7 @@
- #include "phy-qcom-qmp-pcs-usb-v5.h"
- #include "phy-qcom-qmp-pcs-usb-v6.h"
- #include "phy-qcom-qmp-pcs-usb-v8.h"
-+#include "phy-qcom-qmp-pcs-usb-v10.h"
- 
- #include "phy-qcom-qmp-dp-com-v3.h"
- 
-@@ -49,9 +51,12 @@
- #include "phy-qcom-qmp-dp-phy-v5.h"
- #include "phy-qcom-qmp-dp-phy-v6.h"
- #include "phy-qcom-qmp-dp-phy-v8.h"
-+#include "phy-qcom-qmp-dp-phy-v10.h"
- 
- #include "phy-qcom-qmp-usb43-pcs-v8.h"
- 
-+#include "phy-qcom-qmp-com-aon-v10.h"
-+
- /* QPHY_V3_DP_COM_RESET_OVRD_CTRL register bits */
- /* DP PHY soft reset */
- #define SW_DPPHY_RESET				BIT(0)
-@@ -268,6 +273,36 @@ static const unsigned int qmp_v8_usb3phy_regs_layout[QPHY_LAYOUT_SIZE] = {
- 	[QPHY_TX_TRANSCEIVER_BIAS_EN]	= QSERDES_V8_TX_TRANSCEIVER_BIAS_EN,
- };
- 
-+static const unsigned int qmp_v10_usb3phy_regs_layout[QPHY_LAYOUT_SIZE] = {
-+	[QPHY_SW_RESET]			= QPHY_V10_PCS_SW_RESET,
-+	[QPHY_START_CTRL]		= QPHY_V10_PCS_START_CONTROL,
-+	[QPHY_PCS_STATUS]		= QPHY_V10_PCS_PCS_STATUS1,
-+	[QPHY_PCS_POWER_DOWN_CONTROL]	= QPHY_V10_PCS_POWER_DOWN_CONTROL,
-+
-+	/* In PCS_USB */
-+	[QPHY_PCS_AUTONOMOUS_MODE_CTRL]	= QPHY_V10_PCS_USB3_AUTONOMOUS_MODE_CTRL,
-+	[QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR] = QPHY_V10_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR,
-+
-+	[QPHY_PCS_CLAMP_ENABLE]		= QPHY_V10_PCS_AON_CLAMP_ENABLE,
-+
-+	[QPHY_AON_TOGGLE_ENABLE]	= QPHY_V10_COM_AON_USB3_AON_TOGGLE_ENABLE,
-+	[QPHY_DP_AON_TOGGLE_ENABLE]	= QPHY_V10_COM_AON_DP_AON_TOGGLE_ENABLE,
-+
-+	[QPHY_COM_RESETSM_CNTRL]	= QSERDES_V10_COM_RESETSM_CNTRL,
-+	[QPHY_COM_C_READY_STATUS]	= QSERDES_V10_COM_C_READY_STATUS,
-+	[QPHY_COM_CMN_STATUS]		= QSERDES_V10_COM_CMN_STATUS,
-+	[QPHY_COM_BIAS_EN_CLKBUFLR_EN]	= QSERDES_V10_COM_BIAS_EN_CLKBUFLR_EN,
-+
-+	[QPHY_DP_PHY_STATUS]		= QSERDES_V10_DP_PHY_STATUS,
-+	[QPHY_DP_PHY_VCO_DIV]		= QSERDES_V10_DP_PHY_VCO_DIV,
-+
-+	[QPHY_TX_TX_POL_INV]		= QSERDES_V10_TX_TX_POL_INV,
-+	[QPHY_TX_TX_DRV_LVL]		= QSERDES_V10_TX_TX_DRV_LVL,
-+	[QPHY_TX_TX_EMP_POST1_LVL]	= QSERDES_V10_TX_TX_EMP_POST1_LVL,
-+	[QPHY_TX_HIGHZ_DRVR_EN]		= QSERDES_V10_TX_HIGHZ_DRVR_EN,
-+	[QPHY_TX_TRANSCEIVER_BIAS_EN]	= QSERDES_V10_TX_TRANSCEIVER_BIAS_EN,
-+};
-+
- static const unsigned int qmp_v8_n3_usb43dpphy_regs_layout[QPHY_LAYOUT_SIZE] = {
- 	[QPHY_SW_RESET]			= QPHY_V8_USB43_PCS_SW_RESET,
- 	[QPHY_START_CTRL]			= QPHY_V8_USB43_PCS_START_CONTROL,
-@@ -2058,6 +2093,141 @@ static const struct qmp_phy_init_tbl x1e80100_usb43dp_pcs_usb_tbl[] = {
- 	QMP_PHY_INIT_CFG(QPHY_V6_PCS_USB3_RXEQTRAINING_DFE_TIME_S2, 0x07),
- };
- 
-+static const struct qmp_phy_init_tbl hawi_usb3_serdes_tbl[] = {
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_SSC_STEP_SIZE1_MODE1, 0xc0),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_SSC_STEP_SIZE2_MODE1, 0x01),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_CP_CTRL_MODE1, 0x02),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_PLL_RCTRL_MODE1, 0x16),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_PLL_CCTRL_MODE1, 0x36),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_CORECLK_DIV_MODE1, 0x04),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_LOCK_CMP1_MODE1, 0x16),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_LOCK_CMP2_MODE1, 0x41),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_DEC_START_MODE1, 0x41),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_DEC_START_MSB_MODE1, 0x00),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_DIV_FRAC_START1_MODE1, 0x55),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_DIV_FRAC_START2_MODE1, 0x75),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_DIV_FRAC_START3_MODE1, 0x01),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_HSCLK_SEL_1, 0x01),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_VCO_TUNE1_MODE1, 0x25),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_VCO_TUNE2_MODE1, 0x02),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_BIN_VCOCAL_CMP_CODE1_MODE1, 0x5c),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_BIN_VCOCAL_CMP_CODE2_MODE1, 0x0f),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_BIN_VCOCAL_CMP_CODE1_MODE0, 0x5c),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_BIN_VCOCAL_CMP_CODE2_MODE0, 0x0f),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_SSC_STEP_SIZE1_MODE0, 0xc0),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_SSC_STEP_SIZE2_MODE0, 0x01),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_CP_CTRL_MODE0, 0x02),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_PLL_RCTRL_MODE0, 0x16),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_PLL_CCTRL_MODE0, 0x36),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_PLL_CORE_CLK_DIV_MODE0, 0x0a),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_LOCK_CMP1_MODE0, 0x08),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_LOCK_CMP2_MODE0, 0x1a),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_DEC_START_MODE0, 0x41),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_DEC_START_MSB_MODE0, 0x00),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_DIV_FRAC_START1_MODE0, 0x55),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_DIV_FRAC_START2_MODE0, 0x75),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_DIV_FRAC_START3_MODE0, 0x01),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_VCO_TUNE1_MODE0, 0x25),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_VCO_TUNE2_MODE0, 0x02),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_BG_TIMER, 0x0a),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_SSC_EN_CENTER, 0x01),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_SSC_PER1, 0x62),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_SSC_PER2, 0x02),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_SYSCLK_BUF_ENABLE, 0x0c),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_SYSCLK_EN_SEL, 0x1a),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_LOCK_CMP_CFG, 0x14),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_VCO_TUNE_MAP, 0x04),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_CORE_CLK_EN, 0x20),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_CMN_CONFIG_1, 0x16),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_AUTO_GAIN_ADJ_CTRL_1, 0xb6),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_AUTO_GAIN_ADJ_CTRL_2, 0x4a),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_AUTO_GAIN_ADJ_CTRL_3, 0x36),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_COM_ADDITIONAL_MISC, 0x0c),
-+};
-+
-+static const struct qmp_phy_init_tbl hawi_usb3_tx_tbl[] = {
-+	QMP_PHY_INIT_CFG(QSERDES_V10_TX_RES_CODE_LANE_TX, 0x00),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_TX_RES_CODE_LANE_RX, 0x00),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_TX_RES_CODE_LANE_OFFSET_TX, 0x1f),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_TX_RES_CODE_LANE_OFFSET_RX, 0x09),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_TX_LANE_MODE_1, 0xe5),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_TX_LANE_MODE_2, 0x02),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_TX_LANE_MODE_3, 0x11),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_TX_LANE_MODE_4, 0x31),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_TX_LANE_MODE_5, 0x5d),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_TX_RCV_DETECT_LVL_2, 0x12),
-+	QMP_PHY_INIT_CFG_LANE(QSERDES_V10_TX_PI_QEC_CTRL, 0x21, 1),
-+	QMP_PHY_INIT_CFG_LANE(QSERDES_V10_TX_PI_QEC_CTRL, 0x05, 2),
-+};
-+
-+static const struct qmp_phy_init_tbl hawi_usb3_rx_tbl[] = {
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_UCDR_FO_GAIN, 0x0a),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_UCDR_SO_GAIN, 0x06),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_UCDR_FASTLOCK_FO_GAIN, 0x2f),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_UCDR_SO_SATURATION_AND_ENABLE, 0x7f),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_UCDR_FASTLOCK_COUNT_LOW, 0xff),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_UCDR_FASTLOCK_COUNT_HIGH, 0x0f),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_UCDR_PI_CONTROLS, 0x99),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_UCDR_SB2_THRESH1, 0x08),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_UCDR_SB2_THRESH2, 0x08),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_UCDR_SB2_GAIN1, 0x00),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_UCDR_SB2_GAIN2, 0x0a),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_AUX_DATA_TCOARSE_TFINE, 0x20),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_VGA_CAL_CNTRL1, 0x54),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_VGA_CAL_CNTRL2, 0x0f),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_GM_CAL, 0x13),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_EQU_ADAPTOR_CNTRL2, 0x0e),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_EQU_ADAPTOR_CNTRL3, 0x4a),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_EQU_ADAPTOR_CNTRL4, 0x0a),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_IDAC_TSETTLE_LOW, 0x07),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_IDAC_TSETTLE_HIGH, 0x00),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_EQ_OFFSET_ADAPTOR_CNTRL1, 0x27),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_SIGDET_ENABLES, 0x0c),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_SIGDET_CNTRL, 0x04),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_SIGDET_DEGLITCH_CNTRL, 0x0e),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_MODE_00_LOW, 0x3f),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_MODE_00_HIGH, 0xbf),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_MODE_00_HIGH2, 0xff),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_MODE_00_HIGH3, 0xdf),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_MODE_00_HIGH4, 0xed),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_MODE_01_LOW, 0x19),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_MODE_01_HIGH, 0x09),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_MODE_01_HIGH2, 0x91),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_MODE_01_HIGH3, 0xb7),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_RX_MODE_01_HIGH4, 0xaa),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_DFE_EN_TIMER, 0x04),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_DFE_CTLE_POST_CAL_OFFSET, 0x38),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_DCC_CTRL1, 0x0c),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_VTH_CODE, 0x10),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_SIGDET_CAL_CTRL1, 0x14),
-+	QMP_PHY_INIT_CFG(QSERDES_V10_RX_SIGDET_CAL_TRIM, 0x08),
-+};
-+
-+static const struct qmp_phy_init_tbl hawi_usb3_pcs_tbl[] = {
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_LOCK_DETECT_CONFIG1, 0xc4),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_LOCK_DETECT_CONFIG2, 0x89),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_LOCK_DETECT_CONFIG3, 0x20),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_LOCK_DETECT_CONFIG6, 0x13),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_REFGEN_REQ_CONFIG1, 0x21),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_RX_SIGDET_LVL, 0x55),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_RCVR_DTCT_DLY_P1U2_L, 0xe7),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_RCVR_DTCT_DLY_P1U2_H, 0x03),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_RX_CONFIG, 0x0a),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_ALIGN_DETECT_CONFIG1, 0x88),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_ALIGN_DETECT_CONFIG2, 0x13),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_PCS_TX_RX_CONFIG, 0x04),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_PCS_TX_RX_CONFIG2, 0x01),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_EQ_CONFIG1, 0x4b),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_EQ_CONFIG5, 0x10),
-+};
-+
-+static const struct qmp_phy_init_tbl hawi_usb3_pcs_usb_tbl[] = {
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_USB3_LFPS_DET_HIGH_COUNT_VAL, 0xf8),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_USB3_RXEQTRAINING_DFE_TIME_S2, 0x07),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_USB3_RCVR_DTCT_DLY_U3_L, 0x40),
-+	QMP_PHY_INIT_CFG(QPHY_V10_PCS_USB3_RCVR_DTCT_DLY_U3_H, 0x00),
-+};
-+
- /* list of regulators */
- static struct regulator_bulk_data qmp_phy_vreg_l[] = {
- 	{ .supply = "vdda-phy", .init_load_uA = 21800, },
-@@ -2198,6 +2368,7 @@ struct qmp_combo_offsets {
- 	u16 dp_txa;
- 	u16 dp_txb;
- 	u16 dp_dp_phy;
-+	u16 aon_toggle;
- };
- 
- struct qmp_phy_cfg {
-@@ -2270,6 +2441,7 @@ struct qmp_combo {
- 	const struct qmp_phy_cfg *cfg;
- 
- 	void __iomem *com;
-+	void __iomem *aon_toggle;
- 
- 	void __iomem *serdes;
- 	void __iomem *tx;
-@@ -2416,6 +2588,24 @@ static const struct qmp_combo_offsets qmp_combo_offsets_v8 = {
- 	.dp_dp_phy	= 0x3c00,
- };
- 
-+static const struct qmp_combo_offsets qmp_combo_offsets_v10 = {
-+	.com		= 0x0000,
-+	.aon_toggle	= 0x0400,
-+	.txa		= 0x1400,
-+	.rxa		= 0x1600,
-+	.txb		= 0x1800,
-+	.rxb		= 0x1a00,
-+	.usb3_serdes	= 0x1000,
-+	.usb3_pcs_misc	= 0x1c00,
-+	.usb3_pcs	= 0x1e00,
-+	.usb3_pcs_aon	= 0x2000,
-+	.usb3_pcs_usb	= 0x2100,
-+	.dp_serdes	= 0x3000,
-+	.dp_txa		= 0x3400,
-+	.dp_txb		= 0x3800,
-+	.dp_dp_phy	= 0x3c00,
-+};
-+
- static const struct qmp_combo_offsets qmp_combo_usb43dp_offsets_v8 = {
- 	.com		= 0x0000,
- 	.usb3_pcs_aon	= 0x0100,
-@@ -2705,6 +2895,27 @@ static const struct qmp_phy_cfg x1e80100_usb3dpphy_cfg = {
- 	.regs			= qmp_v6_n4_usb3phy_regs_layout,
- };
- 
-+static const struct qmp_phy_cfg hawi_usb3dpphy_cfg = {
-+	.offsets		= &qmp_combo_offsets_v10,
-+
-+	.serdes_tbl		= hawi_usb3_serdes_tbl,
-+	.serdes_tbl_num		= ARRAY_SIZE(hawi_usb3_serdes_tbl),
-+	.tx_tbl			= hawi_usb3_tx_tbl,
-+	.tx_tbl_num		= ARRAY_SIZE(hawi_usb3_tx_tbl),
-+	.rx_tbl			= hawi_usb3_rx_tbl,
-+	.rx_tbl_num		= ARRAY_SIZE(hawi_usb3_rx_tbl),
-+	.pcs_tbl		= hawi_usb3_pcs_tbl,
-+	.pcs_tbl_num		= ARRAY_SIZE(hawi_usb3_pcs_tbl),
-+	.pcs_usb_tbl		= hawi_usb3_pcs_usb_tbl,
-+	.pcs_usb_tbl_num	= ARRAY_SIZE(hawi_usb3_pcs_usb_tbl),
-+
-+	.regs			= qmp_v10_usb3phy_regs_layout,
-+	.reset_list		= msm8996_usb3phy_reset_l,
-+	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
-+	.vreg_list		= qmp_phy_vreg_l,
-+	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-+};
-+
- static const struct qmp_phy_cfg sm6350_usb3dpphy_cfg = {
- 	.offsets		= &qmp_combo_offsets_v3,
- 
-@@ -3662,13 +3873,18 @@ static int qmp_combo_com_init(struct qmp_combo *qmp, bool force)
- {
- 	const struct qmp_phy_cfg *cfg = qmp->cfg;
- 	void __iomem *com = qmp->com;
--	void __iomem *pcs_aon = qmp->pcs_aon;
-+	void __iomem *aon_toggle;
- 	int ret;
- 	u32 val;
- 
- 	if (!force && qmp->init_count++)
- 		return 0;
- 
-+	if (qmp->aon_toggle)
-+		aon_toggle = qmp->aon_toggle;
-+	else
-+		aon_toggle = qmp->pcs_aon;
-+
- 	ret = regulator_bulk_enable(cfg->num_vregs, qmp->vregs);
- 	if (ret) {
- 		dev_err(qmp->dev, "failed to enable regulators, err=%d\n", ret);
-@@ -3699,9 +3915,9 @@ static int qmp_combo_com_init(struct qmp_combo *qmp, bool force)
- 			SW_USB3PHY_RESET_MUX | SW_USB3PHY_RESET);
- 
- 	/* override hardware control for reset of qmp phy */
--	if (pcs_aon && cfg->regs[QPHY_AON_TOGGLE_ENABLE]) {
--		qphy_clrbits(pcs_aon, cfg->regs[QPHY_AON_TOGGLE_ENABLE], 0x1);
--		qphy_clrbits(pcs_aon, cfg->regs[QPHY_DP_AON_TOGGLE_ENABLE], 0x1);
-+	if (aon_toggle && cfg->regs[QPHY_AON_TOGGLE_ENABLE]) {
-+		qphy_clrbits(aon_toggle, cfg->regs[QPHY_AON_TOGGLE_ENABLE], 0x1);
-+		qphy_clrbits(aon_toggle, cfg->regs[QPHY_DP_AON_TOGGLE_ENABLE], 0x1);
- 	}
- 
- 	/* Use software based port select and switch on typec orientation */
-@@ -4733,6 +4949,9 @@ static int qmp_combo_parse_dt(struct qmp_combo *qmp)
- 	}
- 	qmp->dp_dp_phy = base + offs->dp_dp_phy;
- 
-+	if (offs->aon_toggle)
-+		qmp->aon_toggle = base + offs->aon_toggle;
-+
- 	ret = qmp_combo_clk_init(qmp);
- 	if (ret)
- 		return ret;
-@@ -4986,6 +5205,10 @@ static const struct of_device_id qmp_combo_of_match_table[] = {
- 		.compatible = "qcom,glymur-qmp-usb3-dp-phy",
- 		.data = &glymur_usb3dpphy_cfg,
- 	},
-+	{
-+		.compatible = "qcom,hawi-qmp-usb3-dp-phy",
-+		.data = &hawi_usb3dpphy_cfg,
-+	},
- 	{
- 		.compatible = "qcom,sar2130p-qmp-usb3-dp-phy",
- 		.data = &sar2130p_usb3dpphy_cfg,
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-dp-phy-v10.h b/drivers/phy/qualcomm/phy-qcom-qmp-dp-phy-v10.h
-new file mode 100644
-index 000000000000..6f3ea7d13556
---- /dev/null
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-dp-phy-v10.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2026, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef QCOM_PHY_QMP_DP_PHY_V10_H_
-+#define QCOM_PHY_QMP_DP_PHY_V10_H_
-+
-+/* Only for QMP V10 PHY - DP PHY registers */
-+
-+#define QSERDES_V10_DP_PHY_VCO_DIV			0x070
-+#define QSERDES_V10_DP_PHY_AUX_INTERRUPT_STATUS		0x0e0
-+#define QSERDES_V10_DP_PHY_STATUS			0x0e4
-+
-+#endif
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcs-aon-v10.h b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-aon-v10.h
-new file mode 100644
-index 000000000000..b858381bc238
---- /dev/null
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-aon-v10.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2026, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef QCOM_PHY_QMP_PCS_AON_V10_H_
-+#define QCOM_PHY_QMP_PCS_AON_V10_H_
-+
-+/* Only for QMP V10 PHY - PCS AON registers */
-+
-+#define QPHY_V10_PCS_AON_CLAMP_ENABLE			0x00
-+
-+#endif
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcs-usb-v10.h b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-usb-v10.h
-new file mode 100644
-index 000000000000..0cc25e6acf58
---- /dev/null
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-usb-v10.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2026, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef QCOM_PHY_QMP_PCS_USB_V10_H_
-+#define QCOM_PHY_QMP_PCS_USB_V10_H_
-+
-+/* Only for QMP V10 PHY - USB PCS registers */
-+
-+#define QPHY_V10_PCS_USB3_POWER_STATE_CONFIG1		0x00
-+#define QPHY_V10_PCS_USB3_AUTONOMOUS_MODE_CTRL		0x08
-+#define QPHY_V10_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR		0x14
-+#define QPHY_V10_PCS_USB3_LFPS_DET_HIGH_COUNT_VAL	0x18
-+#define QPHY_V10_PCS_USB3_RXEQTRAINING_DFE_TIME_S2	0x3c
-+#define QPHY_V10_PCS_USB3_RCVR_DTCT_DLY_U3_L		0x40
-+#define QPHY_V10_PCS_USB3_RCVR_DTCT_DLY_U3_H		0x44
-+
-+#endif
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcs-v10.h b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-v10.h
-new file mode 100644
-index 000000000000..ac0fc434984b
---- /dev/null
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-v10.h
-@@ -0,0 +1,34 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2026, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef QCOM_PHY_QMP_PCS_V10_H_
-+#define QCOM_PHY_QMP_PCS_V10_H_
-+
-+/* Only for QMP V10 PHY - PCS registers */
-+
-+#define QPHY_V10_PCS_SW_RESET				0x000
-+#define QPHY_V10_PCS_PCS_STATUS1			0x014
-+#define QPHY_V10_PCS_POWER_DOWN_CONTROL			0x040
-+#define QPHY_V10_PCS_START_CONTROL			0x044
-+#define QPHY_V10_PCS_POWER_STATE_CONFIG1		0x090
-+#define QPHY_V10_PCS_LOCK_DETECT_CONFIG1		0x0c4
-+#define QPHY_V10_PCS_LOCK_DETECT_CONFIG2		0x0c8
-+#define QPHY_V10_PCS_LOCK_DETECT_CONFIG3		0x0cc
-+#define QPHY_V10_PCS_LOCK_DETECT_CONFIG6		0x0d8
-+#define QPHY_V10_PCS_REFGEN_REQ_CONFIG1			0x0dc
-+#define QPHY_V10_PCS_RX_SIGDET_LVL			0x188
-+#define QPHY_V10_PCS_RCVR_DTCT_DLY_P1U2_L		0x190
-+#define QPHY_V10_PCS_RCVR_DTCT_DLY_P1U2_H		0x194
-+#define QPHY_V10_PCS_RATE_SLEW_CNTRL1			0x198
-+#define QPHY_V10_PCS_RX_CONFIG				0x1b0
-+#define QPHY_V10_PCS_ALIGN_DETECT_CONFIG1		0x1c0
-+#define QPHY_V10_PCS_ALIGN_DETECT_CONFIG2		0x1c4
-+#define QPHY_V10_PCS_PCS_TX_RX_CONFIG			0x1d0
-+#define QPHY_V10_PCS_PCS_TX_RX_CONFIG2			0x1d4
-+#define QPHY_V10_PCS_EQ_CONFIG1				0x1e0
-+#define QPHY_V10_PCS_EQ_CONFIG2				0x1e4
-+#define QPHY_V10_PCS_EQ_CONFIG5				0x1f0
-+
-+#endif
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-com-v10.h b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-com-v10.h
-new file mode 100644
-index 000000000000..92fbde7c9c7c
---- /dev/null
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-com-v10.h
-@@ -0,0 +1,89 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2026, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef QCOM_PHY_QMP_QSERDES_COM_V10_H_
-+#define QCOM_PHY_QMP_QSERDES_COM_V10_H_
-+
-+/* Only for QMP V10 PHY - QSERDES COM registers */
-+
-+#define QSERDES_V10_COM_SSC_STEP_SIZE1_MODE1			0x00
-+#define QSERDES_V10_COM_SSC_STEP_SIZE2_MODE1			0x04
-+#define QSERDES_V10_COM_CP_CTRL_MODE1				0x10
-+#define QSERDES_V10_COM_PLL_RCTRL_MODE1				0x14
-+#define QSERDES_V10_COM_PLL_CCTRL_MODE1				0x18
-+#define QSERDES_V10_COM_CORECLK_DIV_MODE1			0x1c
-+#define QSERDES_V10_COM_LOCK_CMP1_MODE1				0x20
-+#define QSERDES_V10_COM_LOCK_CMP2_MODE1				0x24
-+#define QSERDES_V10_COM_DEC_START_MODE1				0x28
-+#define QSERDES_V10_COM_DEC_START_MSB_MODE1			0x2c
-+#define QSERDES_V10_COM_DIV_FRAC_START1_MODE1			0x30
-+#define QSERDES_V10_COM_DIV_FRAC_START2_MODE1			0x34
-+#define QSERDES_V10_COM_DIV_FRAC_START3_MODE1			0x38
-+#define QSERDES_V10_COM_HSCLK_SEL_1				0x3c
-+#define QSERDES_V10_COM_INTEGLOOP_GAIN0_MODE1			0x40
-+#define QSERDES_V10_COM_INTEGLOOP_GAIN1_MODE1			0x44
-+#define QSERDES_V10_COM_VCO_TUNE1_MODE1				0x48
-+#define QSERDES_V10_COM_VCO_TUNE2_MODE1				0x4c
-+#define QSERDES_V10_COM_BIN_VCOCAL_CMP_CODE1_MODE1		0x50
-+#define QSERDES_V10_COM_BIN_VCOCAL_CMP_CODE2_MODE1		0x54
-+#define QSERDES_V10_COM_BIN_VCOCAL_CMP_CODE1_MODE0		0x58
-+#define QSERDES_V10_COM_BIN_VCOCAL_CMP_CODE2_MODE0		0x5c
-+#define QSERDES_V10_COM_SSC_STEP_SIZE1_MODE0			0x60
-+#define QSERDES_V10_COM_SSC_STEP_SIZE2_MODE0			0x64
-+#define QSERDES_V10_COM_CP_CTRL_MODE0				0x70
-+#define QSERDES_V10_COM_PLL_RCTRL_MODE0				0x74
-+#define QSERDES_V10_COM_PLL_CCTRL_MODE0				0x78
-+#define QSERDES_V10_COM_PLL_CORE_CLK_DIV_MODE0			0x7c
-+#define QSERDES_V10_COM_LOCK_CMP1_MODE0				0x80
-+#define QSERDES_V10_COM_LOCK_CMP2_MODE0				0x84
-+#define QSERDES_V10_COM_DEC_START_MODE0				0x88
-+#define QSERDES_V10_COM_DEC_START_MSB_MODE0			0x8c
-+#define QSERDES_V10_COM_DIV_FRAC_START1_MODE0			0x90
-+#define QSERDES_V10_COM_DIV_FRAC_START2_MODE0			0x94
-+#define QSERDES_V10_COM_DIV_FRAC_START3_MODE0			0x98
-+#define QSERDES_V10_COM_HSCLK_HS_SWITCH_SEL_1			0x9c
-+#define QSERDES_V10_COM_INTEGLOOP_GAIN0_MODE0			0xa0
-+#define QSERDES_V10_COM_INTEGLOOP_GAIN1_MODE0			0xa4
-+#define QSERDES_V10_COM_VCO_TUNE1_MODE0				0xa8
-+#define QSERDES_V10_COM_VCO_TUNE2_MODE0				0xac
-+#define QSERDES_V10_COM_BG_TIMER				0xbc
-+#define QSERDES_V10_COM_SSC_EN_CENTER				0xc0
-+#define QSERDES_V10_COM_SSC_ADJ_PER1				0xc4
-+#define QSERDES_V10_COM_SSC_PER1				0xcc
-+#define QSERDES_V10_COM_SSC_PER2				0xd0
-+#define QSERDES_V10_COM_POST_DIV_MUX				0xd8
-+#define QSERDES_V10_COM_BIAS_EN_CLKBUFLR_EN			0xdc
-+#define QSERDES_V10_COM_CLK_ENABLE1				0xe0
-+#define QSERDES_V10_COM_SYS_CLK_CTRL				0xe4
-+#define QSERDES_V10_COM_SYSCLK_BUF_ENABLE			0xe8
-+#define QSERDES_V10_COM_PLL_IVCO				0xf4
-+#define QSERDES_V10_COM_PLL_IVCO_MODE1				0xf8
-+#define QSERDES_V10_COM_CMN_IETRIM				0xfc
-+#define QSERDES_V10_COM_CMN_IPTRIM				0x100
-+#define QSERDES_V10_COM_SYSCLK_EN_SEL				0x110
-+#define QSERDES_V10_COM_RESETSM_CNTRL				0x118
-+#define QSERDES_V10_COM_LOCK_CMP_EN				0x120
-+#define QSERDES_V10_COM_LOCK_CMP_CFG				0x124
-+#define QSERDES_V10_COM_VCO_TUNE_CTRL				0x13c
-+#define QSERDES_V10_COM_VCO_TUNE_MAP				0x140
-+#define QSERDES_V10_COM_VCO_TUNE_INITVAL2			0x148
-+#define QSERDES_V10_COM_VCO_TUNE_MAXVAL2			0x158
-+#define QSERDES_V10_COM_CLK_SELECT				0x164
-+#define QSERDES_V10_COM_CORE_CLK_EN				0x170
-+#define QSERDES_V10_COM_CMN_CONFIG_1				0x174
-+#define QSERDES_V10_COM_SVS_MODE_CLK_SEL			0x17c
-+#define QSERDES_V10_COM_CMN_MISC_1				0x184
-+#define QSERDES_V10_COM_CMN_MODE				0x188
-+#define QSERDES_V10_COM_PLL_VCO_DC_LEVEL_CTRL			0x198
-+#define QSERDES_V10_COM_AUTO_GAIN_ADJ_CTRL_1			0x1a4
-+#define QSERDES_V10_COM_AUTO_GAIN_ADJ_CTRL_2			0x1a8
-+#define QSERDES_V10_COM_AUTO_GAIN_ADJ_CTRL_3			0x1ac
-+#define QSERDES_V10_COM_ADDITIONAL_MISC				0x1b4
-+#define QSERDES_V10_COM_ADDITIONAL_MISC_2			0x1b8
-+#define QSERDES_V10_COM_ADDITIONAL_MISC_3			0x1bc
-+#define QSERDES_V10_COM_CMN_STATUS				0x2c8
-+#define QSERDES_V10_COM_C_READY_STATUS				0x2f0
-+
-+#endif
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v10.h b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v10.h
-new file mode 100644
-index 000000000000..84f1adee5ff7
---- /dev/null
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v10.h
-@@ -0,0 +1,89 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2026, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef QCOM_PHY_QMP_QSERDES_TXRX_V10_H_
-+#define QCOM_PHY_QMP_QSERDES_TXRX_V10_H_
-+
-+/* Only for QMP V10 PHY - QSERDES TX/RX registers */
-+
-+/* TX registers */
-+#define QSERDES_V10_TX_CLKBUF_ENABLE				0x08
-+#define QSERDES_V10_TX_TX_EMP_POST1_LVL				0x0c
-+#define QSERDES_V10_TX_TX_DRV_LVL				0x14
-+#define QSERDES_V10_TX_RESET_TSYNC_EN				0x1c
-+#define QSERDES_V10_TX_PRE_STALL_LDO_BOOST_EN			0x20
-+#define QSERDES_V10_TX_TX_BAND					0x24
-+#define QSERDES_V10_TX_INTERFACE_SELECT				0x2c
-+#define QSERDES_V10_TX_RES_CODE_LANE_TX				0x34
-+#define QSERDES_V10_TX_RES_CODE_LANE_RX				0x38
-+#define QSERDES_V10_TX_RES_CODE_LANE_OFFSET_TX			0x3c
-+#define QSERDES_V10_TX_RES_CODE_LANE_OFFSET_RX			0x40
-+#define QSERDES_V10_TX_TRANSCEIVER_BIAS_EN			0x54
-+#define QSERDES_V10_TX_HIGHZ_DRVR_EN				0x58
-+#define QSERDES_V10_TX_TX_POL_INV				0x5c
-+#define QSERDES_V10_TX_PARRATE_REC_DETECT_IDLE_EN		0x60
-+#define QSERDES_V10_TX_BIST_PATTERN7				0x7c
-+#define QSERDES_V10_TX_LANE_MODE_1				0x84
-+#define QSERDES_V10_TX_LANE_MODE_2				0x88
-+#define QSERDES_V10_TX_LANE_MODE_3				0x8c
-+#define QSERDES_V10_TX_LANE_MODE_4				0x90
-+#define QSERDES_V10_TX_LANE_MODE_5				0x94
-+#define QSERDES_V10_TX_RCV_DETECT_LVL_2				0xa4
-+#define QSERDES_V10_TX_TRAN_DRVR_EMP_EN				0xc0
-+#define QSERDES_V10_TX_TX_INTERFACE_MODE			0xc4
-+#define QSERDES_V10_TX_VMODE_CTRL1				0xc8
-+#define QSERDES_V10_TX_PI_QEC_CTRL				0xe4
-+
-+/* RX registers */
-+#define QSERDES_V10_RX_UCDR_FO_GAIN				0x08
-+#define QSERDES_V10_RX_UCDR_SO_GAIN				0x14
-+#define QSERDES_V10_RX_UCDR_FASTLOCK_FO_GAIN			0x30
-+#define QSERDES_V10_RX_UCDR_SO_SATURATION_AND_ENABLE		0x34
-+#define QSERDES_V10_RX_UCDR_FASTLOCK_COUNT_LOW			0x3c
-+#define QSERDES_V10_RX_UCDR_FASTLOCK_COUNT_HIGH			0x40
-+#define QSERDES_V10_RX_UCDR_PI_CONTROLS				0x44
-+#define QSERDES_V10_RX_UCDR_SB2_THRESH1				0x4c
-+#define QSERDES_V10_RX_UCDR_SB2_THRESH2				0x50
-+#define QSERDES_V10_RX_UCDR_SB2_GAIN1				0x54
-+#define QSERDES_V10_RX_UCDR_SB2_GAIN2				0x58
-+#define QSERDES_V10_RX_AUX_DATA_TCOARSE_TFINE			0x60
-+#define QSERDES_V10_RX_TX_ADAPT_POST_THRESH			0xcc
-+#define QSERDES_V10_RX_VGA_CAL_CNTRL1				0xd4
-+#define QSERDES_V10_RX_VGA_CAL_CNTRL2				0xd8
-+#define QSERDES_V10_RX_GM_CAL					0xdc
-+#define QSERDES_V10_RX_RX_EQU_ADAPTOR_CNTRL2			0xec
-+#define QSERDES_V10_RX_RX_EQU_ADAPTOR_CNTRL3			0xf0
-+#define QSERDES_V10_RX_RX_EQU_ADAPTOR_CNTRL4			0xf4
-+#define QSERDES_V10_RX_RX_IDAC_TSETTLE_LOW			0xf8
-+#define QSERDES_V10_RX_RX_IDAC_TSETTLE_HIGH			0xfc
-+#define QSERDES_V10_RX_RX_IDAC_ENABLES				0x100
-+#define QSERDES_V10_RX_RX_TERM_AC_BYPASS_DC_COUPLE_OFFSET	0x104
-+#define QSERDES_V10_RX_RX_EQ_OFFSET_ADAPTOR_CNTRL1		0x110
-+#define QSERDES_V10_RX_SIGDET_ENABLES				0x118
-+#define QSERDES_V10_RX_SIGDET_CNTRL				0x11c
-+#define QSERDES_V10_RX_SIGDET_DEGLITCH_CNTRL			0x124
-+#define QSERDES_V10_RX_RX_MODE_00_LOW				0x15c
-+#define QSERDES_V10_RX_RX_MODE_00_HIGH				0x160
-+#define QSERDES_V10_RX_RX_MODE_00_HIGH2				0x164
-+#define QSERDES_V10_RX_RX_MODE_00_HIGH3				0x168
-+#define QSERDES_V10_RX_RX_MODE_00_HIGH4				0x16c
-+#define QSERDES_V10_RX_RX_MODE_01_LOW				0x170
-+#define QSERDES_V10_RX_RX_MODE_01_HIGH				0x174
-+#define QSERDES_V10_RX_RX_MODE_01_HIGH2				0x178
-+#define QSERDES_V10_RX_RX_MODE_01_HIGH3				0x17c
-+#define QSERDES_V10_RX_RX_MODE_01_HIGH4				0x180
-+#define QSERDES_V10_RX_RX_MODE_10_LOW				0x184
-+#define QSERDES_V10_RX_RX_MODE_10_HIGH				0x188
-+#define QSERDES_V10_RX_RX_MODE_10_HIGH2				0x18c
-+#define QSERDES_V10_RX_RX_MODE_10_HIGH3				0x190
-+#define QSERDES_V10_RX_RX_MODE_10_HIGH4				0x194
-+#define QSERDES_V10_RX_DFE_EN_TIMER				0x1a0
-+#define QSERDES_V10_RX_DFE_CTLE_POST_CAL_OFFSET			0x1a4
-+#define QSERDES_V10_RX_DCC_CTRL1				0x1a8
-+#define QSERDES_V10_RX_VTH_CODE					0x1b0
-+#define QSERDES_V10_RX_SIGDET_CAL_CTRL1				0x1e4
-+#define QSERDES_V10_RX_SIGDET_CAL_TRIM				0x1f8
-+
-+#endif
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.h b/drivers/phy/qualcomm/phy-qcom-qmp.h
-index a873bdd7bffe..7af77572970e 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp.h
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.h
-@@ -39,6 +39,9 @@
- #include "phy-qcom-qmp-qserdes-txrx-v8.h"
- #include "phy-qcom-qmp-qserdes-lalb-v8.h"
- 
-+#include "phy-qcom-qmp-qserdes-com-v10.h"
-+#include "phy-qcom-qmp-qserdes-txrx-v10.h"
-+
- #include "phy-qcom-qmp-qserdes-pll.h"
- 
- #include "phy-qcom-qmp-pcs-v2.h"
-@@ -65,6 +68,8 @@
- 
- #include "phy-qcom-qmp-pcs-v8_50.h"
- 
-+#include "phy-qcom-qmp-pcs-v10.h"
-+
- /* QPHY_SW_RESET bit */
- #define SW_RESET				BIT(0)
- /* QPHY_POWER_DOWN_CONTROL */
--- 
-2.34.1
+now everybody can do asm goto with outputs.
 
+Yes, it's disabled on older versions, so it's not *always* available,
+but all modern versions do it. And if you care about performance, you
+won't be using an old compiler.
+
+             Linus
 
