@@ -1,236 +1,165 @@
-Return-Path: <linux-usb+bounces-36518-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36521-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YEk5NjAa72lw6gAAu9opvQ
-	(envelope-from <linux-usb+bounces-36518-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 10:11:28 +0200
+	id uETOJdYh72lV7gAAu9opvQ
+	(envelope-from <linux-usb+bounces-36521-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 10:44:06 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57A6346ED8E
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 10:11:28 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33F7746F46D
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 10:44:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id DB71130164B6
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 08:11:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9556730191A7
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 08:39:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A0FA39A071;
-	Mon, 27 Apr 2026 08:11:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBCD539B4A5;
+	Mon, 27 Apr 2026 08:39:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bwvlKpy+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d/RMeQWa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EBD39A7E7
-	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 08:11:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D8EB399004
+	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 08:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777277477; cv=none; b=PKDWAGTpD6kE799FprorFnPv7yPB45lZNtSF1pxfNPlllWCdLDlTXSahE8Hh9rMcpyWMuoAwOA3pwa2TXgpOVPEACDlPPP8Osl5nbHJIiUUxklaKjsYOfvs9BlHCndymlETUA2HwpxdaFYw7V/7KD4c7n/JVfoGvEflwqvBO5mE=
+	t=1777279153; cv=none; b=WE5qQB7ZbR+4Xn91IiApncBRAujKetm34KtOCEnXysPAJrXG3/UH1DCeNbbjlbTiZXH21KVQa8NnBANl2izK2yVpwpXfrEyZXhMbPpqwkarq4HZU3LaOfFmc/xNiI5NX4QG+ppq5xpSGbjrkklekIvdEhREHJPyY5XQhpOonS+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777277477; c=relaxed/simple;
-	bh=eOI3KNax4HuobgQtj6+U+qYdv9x3U0X5EyyJqr+9z+I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rsWZar+oY+PLuUfdxCKXsv7waxVUOgBf074ExoxzRfknIDtxShj0pttgpj0yp8JDPs9LRb9iv+OlD3mh2dvY2dCp+Sgpk3GF9wtstvi/dPq0/sX70DhTsCYWvS4Mjs62oIifZSm7M4BMEK+CmrfUEjEyj7tvK/PCr25PGl57e5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bwvlKpy+; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1777279153; c=relaxed/simple;
+	bh=2DcBJsqBcjLhy4vfdagro6yXUs+8LFEzaKk9tIyFTpU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ck2ZSgjbkqreccelLmgoms9DSCfnGLgDdzzLG9+IfNpNWREa7AWSwbGzDLloITkROmiOqwGXrA+TH4l7HIYrtLF7+a+3xO8mNrvW8d3eBTMvm9/vJLDZKA+toEQfm15AW24WlhDEsKBNbpl+H07skjSJMEP8t3CSW37NopEimgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d/RMeQWa; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777277476; x=1808813476;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=eOI3KNax4HuobgQtj6+U+qYdv9x3U0X5EyyJqr+9z+I=;
-  b=bwvlKpy+xe6CF0sItF6AhjRI8SB29/CImdzfs2yaJtEu7iT4+T7uyMqN
-   7c/+9nI6nOShjON+YU6j+FCAsNxHieGbWq5FFexS80EuYAfT7bmwHXVTw
-   lOL7Pl1xuTPQjiVeBPLxAZ3s4KzkXX1AqwgOFJytbXsjtgo/CDIq/FS3a
-   s6w3xQ0+PaKCS6cPOfo5yjc4GTN8sQYNTHFq7ag7I0YLpOxloqotCsDd8
-   nDXLHh1u45GaWynswFvwJmpD/gma8/GsDx9rHre5Bh5YqoFV0ccF/VQ7H
-   orYaQ46703bR820HFsRxaEJ78L6N1apSf8iDniGVhiVyV8/6CmW5blICF
-   Q==;
-X-CSE-ConnectionGUID: IZ0s2iPgStigfcnl/4SGBg==
-X-CSE-MsgGUID: xXIsmGxgSaOe1wflSNaqtQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11768"; a="77863259"
+  t=1777279153; x=1808815153;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2DcBJsqBcjLhy4vfdagro6yXUs+8LFEzaKk9tIyFTpU=;
+  b=d/RMeQWaIJWmjTv2/tTUbiEUwVga7wjuJjHNIBBWtA/SZm155Gxd4Mu+
+   1TVE4tRX7zsZlsq/Rge0SI4hdkVRQlaGdAkppItbBxGzzp8KfaDQxh8Al
+   QAmfco2VF4ugHCqLGw2R+t3aglouqD+oA/h/zg9LqWl28h84fEjpEHg9e
+   S7FoG5m6vvjIukuMgQtwWyI7RG0W+kx7/WAaBNoTo/tapPoYcYKLhQkec
+   759hDNw7Yyl51tuyDBD/jImAZtBdJvBzPUisNelKTC8zaxa9UbfgLc8Qa
+   TuC8o8Ej3GavY2SGX0/9pBrjSlvaKtGP1g6iiajVXgxuZ2s22Vtm+h8Ry
+   A==;
+X-CSE-ConnectionGUID: P1uE1jYVT9+ehuGbTam29w==
+X-CSE-MsgGUID: RxSbcwFcT2qS4wLv876AKw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11768"; a="78078200"
 X-IronPort-AV: E=Sophos;i="6.23,201,1770624000"; 
-   d="scan'208";a="77863259"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2026 01:11:15 -0700
-X-CSE-ConnectionGUID: FOSs8vaSQ7iyQCA2lBFrjQ==
-X-CSE-MsgGUID: FqhXUCf2R2iYKIE9T5650A==
+   d="scan'208";a="78078200"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2026 01:39:12 -0700
+X-CSE-ConnectionGUID: OFdToTRjQvmRHpBZN6UESA==
+X-CSE-MsgGUID: ckGsLMaJS4adoolrCLF4xw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,201,1770624000"; 
-   d="scan'208";a="229008936"
+   d="scan'208";a="233848434"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa006.fm.intel.com with ESMTP; 27 Apr 2026 01:11:12 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 8B30FA8; Mon, 27 Apr 2026 10:11:09 +0200 (CEST)
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
-	Gil Fine <gil.fine@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 12/12] thunderbolt: Don't create multiple DMA tunnels on firmware connection manager
-Date: Mon, 27 Apr 2026 10:11:09 +0200
-Message-ID: <20260427081109.2337731-13-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260427081109.2337731-1-mika.westerberg@linux.intel.com>
-References: <20260427081109.2337731-1-mika.westerberg@linux.intel.com>
+  by orviesa007.jf.intel.com with ESMTP; 27 Apr 2026 01:39:10 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1008)
+	id A486995; Mon, 27 Apr 2026 10:39:09 +0200 (CEST)
+Date: Mon, 27 Apr 2026 11:39:08 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Francesco Orro <ncesco@interstellar.eu>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [RFC PATCH] usb: typec: ucsi: acpi: bootstrap PPM on HP systems
+ with empty _DSM func 2
+Message-ID: <ae8grG-g0PqsScEn@kuha>
+References: <f3M_fpjtt8FxDqGKcA84vqXmRbKzCBfpCrIK4-jCWvIscER51zkD8qD8FYpz75qZw51rMDRSkUyYlrBvLvdM8CGRY2l8TFVvr4MC1LdTzbc=@interstellar.eu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 57A6346ED8E
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f3M_fpjtt8FxDqGKcA84vqXmRbKzCBfpCrIK4-jCWvIscER51zkD8qD8FYpz75qZw51rMDRSkUyYlrBvLvdM8CGRY2l8TFVvr4MC1LdTzbc=@interstellar.eu>
+X-Rspamd-Queue-Id: 33F7746F46D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
+	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36518-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,wunner.de,linux.intel.com];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36521-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	SEM_URIBL_UNKNOWN_FAIL(0.00)[interstellar.eu:query timed out];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[intel.com:+];
+	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
 	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:dkim,intel.com:email,linux.intel.com:mid]
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-From: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
+Hi,
 
-Firmware connection manager supports only one DMA tunnel per XDomain
-connection. Firmware prior Intel Titan Ridge failed the operation
-directly but the same does not happen anymore on Titan Ridge and
-forward. For this reason add an explicit check, and fail the operation
-accordingly in the driver.
+On Mon, Apr 20, 2026 at 04:05:47PM +0000, Francesco Orro wrote:
+> Hi,
+> 
+> The attached RFC patch lets ucsi_acpi probe successfully on HP ZBook
+> Fury G1i 16 inch (and likely other HP workstations shipping the same
+> "UcsiAcpi" SSDT), where _DSM func 2 (READ) is a stub and UCSI_VERSION
+> stays 0. Details in the commit message below.
 
-Signed-off-by: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/thunderbolt/icm.c     | 10 ++++++++++
- drivers/thunderbolt/xdomain.c | 25 +++++++++++++++++++------
- include/linux/thunderbolt.h   |  2 ++
- 3 files changed, 31 insertions(+), 6 deletions(-)
+Please report this to HP. We really need to know which version they
+support.
 
-diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
-index 2f93a7bccad5..c492995166f7 100644
---- a/drivers/thunderbolt/icm.c
-+++ b/drivers/thunderbolt/icm.c
-@@ -587,6 +587,11 @@ static int icm_fr_approve_xdomain_paths(struct tb *tb, struct tb_xdomain *xd,
- 	struct icm_fr_pkg_approve_xdomain request;
- 	int ret;
- 
-+	if (atomic_read(&xd->ntunnels) >= 1) {
-+		tb_warn(tb, "only one tunnel is supported by the firmware\n");
-+		return -EOPNOTSUPP;
-+	}
-+
- 	memset(&request, 0, sizeof(request));
- 	request.hdr.code = ICM_APPROVE_XDOMAIN;
- 	request.link_info = xd->depth << ICM_LINK_INFO_DEPTH_SHIFT | xd->link;
-@@ -1158,6 +1163,11 @@ static int icm_tr_approve_xdomain_paths(struct tb *tb, struct tb_xdomain *xd,
- 	struct icm_tr_pkg_approve_xdomain request;
- 	int ret;
- 
-+	if (atomic_read(&xd->ntunnels) >= 1) {
-+		tb_warn(tb, "only one tunnel is supported by the firmware\n");
-+		return -EOPNOTSUPP;
-+	}
-+
- 	memset(&request, 0, sizeof(request));
- 	request.hdr.code = ICM_APPROVE_XDOMAIN;
- 	request.route_hi = upper_32_bits(xd->route);
-diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
-index 9a30fe36c4be..6e83f93eee83 100644
---- a/drivers/thunderbolt/xdomain.c
-+++ b/drivers/thunderbolt/xdomain.c
-@@ -2038,6 +2038,7 @@ struct tb_xdomain *tb_xdomain_alloc(struct tb *tb, struct device *parent,
- 	INIT_DELAYED_WORK(&xd->state_work, tb_xdomain_state_work);
- 	INIT_DELAYED_WORK(&xd->properties_changed_work,
- 			  tb_xdomain_properties_changed);
-+	atomic_set(&xd->ntunnels, 0);
- 
- 	xd->local_uuid = kmemdup(local_uuid, sizeof(uuid_t), GFP_KERNEL);
- 	if (!xd->local_uuid)
-@@ -2328,9 +2329,15 @@ int tb_xdomain_enable_paths(struct tb_xdomain *xd, int transmit_path,
- 			    int transmit_ring, int receive_path,
- 			    int receive_ring)
- {
--	return tb_domain_approve_xdomain_paths(xd->tb, xd, transmit_path,
--					       transmit_ring, receive_path,
--					       receive_ring);
-+	int ret;
-+
-+	ret = tb_domain_approve_xdomain_paths(xd->tb, xd, transmit_path,
-+					      transmit_ring, receive_path,
-+					      receive_ring);
-+	if (ret)
-+		return ret;
-+	atomic_inc(&xd->ntunnels);
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(tb_xdomain_enable_paths);
- 
-@@ -2353,9 +2360,15 @@ int tb_xdomain_disable_paths(struct tb_xdomain *xd, int transmit_path,
- 			     int transmit_ring, int receive_path,
- 			     int receive_ring)
- {
--	return tb_domain_disconnect_xdomain_paths(xd->tb, xd, transmit_path,
--						  transmit_ring, receive_path,
--						  receive_ring);
-+	int ret;
-+
-+	ret = tb_domain_disconnect_xdomain_paths(xd->tb, xd, transmit_path,
-+						 transmit_ring, receive_path,
-+						 receive_ring);
-+	if (ret)
-+		return ret;
-+	atomic_dec(&xd->ntunnels);
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(tb_xdomain_disable_paths);
- 
-diff --git a/include/linux/thunderbolt.h b/include/linux/thunderbolt.h
-index a5ef7100a6d3..bbdbbc84c999 100644
---- a/include/linux/thunderbolt.h
-+++ b/include/linux/thunderbolt.h
-@@ -228,6 +228,7 @@ enum tb_link_width {
-  *				changed notification
-  * @bonding_possible: True if lane bonding is possible on local side
-  * @target_link_width: Target link width from the remote host
-+ * @ntunnels: Keeps track of how many tunnels go through this XDomain
-  * @link: Root switch link the remote domain is connected (ICM only)
-  * @depth: Depth in the chain the remote domain is connected (ICM only)
-  *
-@@ -273,6 +274,7 @@ struct tb_xdomain {
- 	int properties_changed_retries;
- 	bool bonding_possible;
- 	u8 target_link_width;
-+	atomic_t ntunnels;
- 	u8 link;
- 	u8 depth;
- };
+> Main open question for the list: is there a known-good pattern for
+> ucsi_acpi drivers to avoid disrupting alt-mode state already negotiated
+> by BIOS? On cold boot with a Thunderbolt dock attached, the PPM_RESET
+> issued by this patch - and later by Linux UCSI core in ucsi_init() -
+> tears down the TBT alt-mode the BIOS had set up, and the DP tunnel to
+> the dock dies until the user physically replugs. My local workaround
+> is to late-load ucsi_acpi via a systemd service after the thunderbolt
+> driver has adopted the tunnels, but that feels like papering over a
+> design assumption I am missing.
+
+I'm surprised that PPM_RESET has that effect on your system, because
+it does not reset the connectors. If you want to reset the connectors
+you are expected to explicitly reset each of them before the executing
+PPM_RESET. I'm not sure the PPM on this platform is behaving correctly,
+so I think you need to contact HP about this too.
+
+> Tested on one machine only. Happy to refine the patch if the direction
+> is acceptable.
+> 
+> Regards,
+> Francesco Orro
+> 
+> ---
+> 
+> From: Francesco Orro <ncesco@interstellar.eu>
+> Date: Mon, 20 Apr 2026 16:40:00 +0200
+> Subject: [PATCH v7] usb: typec: ucsi: acpi: bootstrap PPM on systems with empty _DSM func 2
+
+Please avoid attaching the patch to the coverletter like this. It is
+a bit confusing. Is this the same patch as the one you've sent
+separately in this thread?
+
+thanks,
+
 -- 
-2.50.1
-
+heikki
 
