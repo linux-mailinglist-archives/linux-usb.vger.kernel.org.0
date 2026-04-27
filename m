@@ -1,77 +1,77 @@
-Return-Path: <linux-usb+bounces-36523-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36524-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MK2LCp4n72lE8AAAu9opvQ
-	(envelope-from <linux-usb+bounces-36523-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 11:08:46 +0200
+	id eCJKB64o72k38gAAu9opvQ
+	(envelope-from <linux-usb+bounces-36524-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 11:13:18 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EF3F46F938
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 11:08:45 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id A56DB46FA46
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 11:13:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 351F1305FC33
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 09:02:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9B557302A1B6
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 09:09:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CDEE3AEF4E;
-	Mon, 27 Apr 2026 09:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2E633AF650;
+	Mon, 27 Apr 2026 09:09:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZlfsAumQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bI3A5t+d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D928E3AEF3E
-	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 09:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C9C53537FF
+	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 09:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777280564; cv=none; b=P7Ko3WAOATM/H+Db5zMab72lK13j/TDvYFtBIbCuuBsJej2ErfUFAmXhBS0DGq3+aD2LycvWjT7h191Q9L9U8MZr1cVaXXagZfP2z5qpCr71mgT85nvnhNwcWaBHGqBJB33X2aoEjb5YT1ffr594QP7ClJVGqM/n2Xe1C1XTtw4=
+	t=1777280970; cv=none; b=Xnw7ivi0IxciMQjxExpQOfDudn2vzCcJXt6vF7h6oHDFhFA7EuAe+1ywBUm+0fymgLyh5xayFbNNw4C3MXvghWctn1Ff7jDh0pfdOLWipZdVHoxAqSl9iWOUDVW/zwUc/lK+QDMDrt6HfTEoRA80ntDWOAwYIy2jKqpt71+IDOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777280564; c=relaxed/simple;
-	bh=PmAR+tmIK07/4zBWgkasFU9pfx6OVs3M1n+LLHR1cOo=;
+	s=arc-20240116; t=1777280970; c=relaxed/simple;
+	bh=A8WDo7yV3f/r8i86dANzRoNnd0DPzsbpyCoCk3w2r0M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LKT+DOavRD1+1vCYCiuAMjndOWcHNxwaTWCZNVRUBSxoZLJ7vT1Q8rNpp2qUa65FKULZ4RtMwqG9aJnHGrc1XmodrHJ1YrNZVgOiu//NQrr0cllsyqsbwA1O1zKbb3FupAKX+K4bLOup0e685Iv5js7ETMnzZLJFAY+rMQvhfAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZlfsAumQ; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=ilFUoI2O3KgZwP2eq2LiPGn/ywr6XI30McQa8gVbJetE7GhD/8OD6lWWJg2jgHydblbXuvScm1bUeeOjV1fW+u+K3/bXXJmWAEohuZdal+eY8uoJ4kXT5eO5ObWpjJWvv24ZQ/AhIFIJu/n2OZHUMumbvO7LhTz4X+pcRS4JsKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bI3A5t+d; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777280563; x=1808816563;
+  t=1777280969; x=1808816969;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=PmAR+tmIK07/4zBWgkasFU9pfx6OVs3M1n+LLHR1cOo=;
-  b=ZlfsAumQjbJUKg9XUH1F7wiBrxzHpR3S8BTKeeoLM3SNqkiGTYFG9EwP
-   ik9cjOoOJAjmS0D2IsPOCvNhXOYYwLzSlY0/1ssovfuwjPt9+JWuUfLbM
-   i+OSYDQ7AC47cFJXfpmhuTD9MV6XJ1tTB9O1yOxZenYMS8RLzOpFsw1WO
-   qqVfLXt1oOn8OQH7NCXyXUurfIHzaSPJw8d7dOWq3PRCKncEU6u/cpyQL
-   jIs/mf0oaEnlWHLagt3aThhPSqzGVAHkE8gPEPVyadv1f7f2oZLrYKzSt
-   Bfo38vTZSSvVUmh9pTxjW41IdrPQOjIayDJgM9KFWTZPDs62r269JpiN4
-   A==;
-X-CSE-ConnectionGUID: S7NtDh01Tm+ALfo1uHASHA==
-X-CSE-MsgGUID: 6fNqSBhARh+UsgAAm60Ljw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11768"; a="78222351"
+  bh=A8WDo7yV3f/r8i86dANzRoNnd0DPzsbpyCoCk3w2r0M=;
+  b=bI3A5t+dvXjAW0aGDZxN1PTjT29nGGceg3srZ862QLfmOI0jsQIIKJVA
+   s8rm10FcNU7Js+XFoHR4EJPwamD9FVksMUfIfJV0keEVWTzqNFnJw0OJX
+   +PmJXW/Thgz9desa3WUIZs4oaeN3132q2Qm6P2LoSDGHXRanTJHHLiZQK
+   UnzvLf4IupcTzbowKiTibNmDfQbQP32TrqmuUFiAqkhbY38aO0nfVm4yj
+   Et0sY+YUei2LfJpgNvLdWiOyHgYqB2oawRfjEMty6oBZihsRuEcOrSBIB
+   K7wF/0p2vPZsj+3w6bMvWo9h5dLFac6squX75BvkTajLdX0RwlLc8FIWF
+   Q==;
+X-CSE-ConnectionGUID: U2VdyAbDS7SPUsS7WXrU9w==
+X-CSE-MsgGUID: QH+hLwGXTn6UcHP50rvwcQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11768"; a="77189218"
 X-IronPort-AV: E=Sophos;i="6.23,201,1770624000"; 
-   d="scan'208";a="78222351"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2026 02:02:42 -0700
-X-CSE-ConnectionGUID: zdmIP4jZT4ShyJr2gNVaKA==
-X-CSE-MsgGUID: 7TSKYifbQCy1XQZrsT+h6Q==
+   d="scan'208";a="77189218"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2026 02:09:29 -0700
+X-CSE-ConnectionGUID: hnuo2RTZQqe00/fPMJjE+A==
+X-CSE-MsgGUID: l+axTxy4Rbq/00HDTf7QnA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,201,1770624000"; 
-   d="scan'208";a="263990245"
+   d="scan'208";a="233469835"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa002.jf.intel.com with ESMTP; 27 Apr 2026 02:02:41 -0700
+  by orviesa008.jf.intel.com with ESMTP; 27 Apr 2026 02:09:28 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 7CFDD95; Mon, 27 Apr 2026 11:02:39 +0200 (CEST)
-Date: Mon, 27 Apr 2026 12:02:37 +0300
+	id 8039795; Mon, 27 Apr 2026 11:09:26 +0200 (CEST)
+Date: Mon, 27 Apr 2026 12:09:24 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Francesco Orro <ncesco@interstellar.eu>
-Cc: linux-usb@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v7] usb: typec: ucsi: acpi: bootstrap PPM on systems with
- empty _DSM func 2
-Message-ID: <ae8mLUvhpF4hIrum@kuha>
-References: <f3M_fpjtt8FxDqGKcA84vqXmRbKzCBfpCrIK4-jCWvIscER51zkD8qD8FYpz75qZw51rMDRSkUyYlrBvLvdM8CGRY2l8TFVvr4MC1LdTzbc=@interstellar.eu>
- <20260420172343.84456-1-ncesco@interstellar.eu>
+To: Daniel Dev <daniel.dev@noex.uk>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Subject: Re: [BUG] ucsi_acpi: Fails to bind on USBC000 devices, version=0 in
+ NVS blocks probe
+Message-ID: <ae8nxNSEGd2hGh5T@kuha>
+References: <b1Wn_eFvTFShGbd970WWl4CWhge_6P2x7Wb6rab3QHNlE4OJ4p__O-QN3B6I-308ftr5oV5Zr7vywA0vdvmtNw6E0YJnVM2ek_5DcFnkXB0=@noex.uk>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,99 +80,89 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260420172343.84456-1-ncesco@interstellar.eu>
-X-Rspamd-Queue-Id: 7EF3F46F938
+In-Reply-To: <b1Wn_eFvTFShGbd970WWl4CWhge_6P2x7Wb6rab3QHNlE4OJ4p__O-QN3B6I-308ftr5oV5Zr7vywA0vdvmtNw6E0YJnVM2ek_5DcFnkXB0=@noex.uk>
+X-Rspamd-Queue-Id: A56DB46FA46
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[intel.com:+];
+	TAGGED_FROM(0.00)[bounces-36524-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36523-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
 	RCPT_COUNT_THREE(0.00)[3];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[]
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[]
 
-Hi Francesco,
+Hi Daniel,
 
-On Mon, Apr 20, 2026 at 07:23:41PM +0200, Francesco Orro wrote:
-> On HP ZBook Fury G1i 16 inch (BIOS X96 01.03.04) the SSDT16 "UcsiAcpi"
-> exposes a _DSM function 2 (READ) whose body is empty, so UCSI_VERSION
-> stays 0x0000 after the read. ucsi_init() treats VERSION=0 as firmware
-> absent and bails with -ENODEV, so /sys/class/typec is empty and no
-> alt-mode info reaches userspace.
+On Tue, Apr 21, 2026 at 11:15:56AM +0000, Daniel Dev wrote:
+> Hello everyone,
 > 
-> The PPM is alive: writing UCSI_PPM_RESET through _DSM function 1 (WRITE)
-> drives RESET_COMPLETE in CCI. We can therefore bootstrap the PPM
-> explicitly on probe when necessary and, once RESET_COMPLETE is observed,
-> default VERSION to UCSI 1.2 - which matches the semantics advertised by
-> the SSDT tables on this platform.
+> I am reporting two related issues in ucsi_acpi that prevent it from binding on Lenovo ThinkPad T14 Gen 2a (AMD) platforms. The result is that /sys/class/typec/ is empty and USB-C display hotplug is non-functional unless a manual workaround is applied.
 > 
-> The bootstrap checks CCI first and returns early if RESET_COMPLETE is
-> already set, to avoid resetting a PPM left in a stable state by
-> firmware. Note that this early-return path was not exercised on the
-> tested platform: on cold boot CCI did not have RESET_COMPLETE at probe
-> time and the PPM_RESET was issued. Consequently, alt-mode state
-> negotiated during BIOS POST (in this case a Thunderbolt dock's TBT
-> alt-mode) was disrupted at boot. Linux UCSI core later calls
-> ucsi_reset_ppm() in ucsi_init() regardless, so the PPM reset on probe
-> is arguably not the root cause of the disruption, but the patch leaves
-> the door open to avoid the early reset when firmware does leave the
-> flag set.
+> Hardware:
+> - Machine: Lenovo ThinkPad T14 Gen 2a (20XLS10M00)
+> - CPU: AMD Ryzen 7 PRO 5850U
+> - Kernel: 6.19.12-200.fc43.x86_64 (Reproduced on 6.19.12, 6.19.9, and 6.18.19)
+> - Distros tested: Fedora 43, CachyOS (Arch-based), Arch and Kubuntu (Debian-based)
 > 
-> Bootstrap failure is non-fatal: we log a warning and continue. If the
-> PPM later reaches RESET_COMPLETE asynchronously, read_version() still
-> recovers via the UCSI_CCI_RESET_COMPLETE check gated by the
-> needs_bootstrap flag.
-> 
-> The behaviour is gated by DMI because unconditionally issuing a
-> PPM_RESET on systems whose firmware _does_ populate VERSION correctly
-> would be aggressive and unjustified. The DMI match starts with HP ZBook
-> Fury G1i 16 inch; other vendors/models can be added as they are
-> confirmed.
-> 
-> Tested on HP ZBook Fury G1i 16 inch Mobile Workstation PC with kernel
-> 6.19.13. Before the patch ucsi_acpi probe returns -ENODEV; after the
-> patch /sys/class/typec/port{0,1,2} appear with partner altmodes
-> exposed when a USB4/TBT device is connected.
-> 
-> Signed-off-by: Francesco Orro <ncesco@interstellar.eu>
 > ---
-> Resending: previous send was mangled by quoted-printable encoding.
-> No content changes.
+> 
+> ### Bug 1: HID Mismatch (USBC000 vs PNP0CA0)
+> The ACPI device uses "USBC000" as its primary HID, with "PNP0CA0" as a Compatible ID (CID).
+> ```bash
+> $ cat /sys/bus/platform/devices/USBC000:00/modalias
+> acpi:USBC000:PNP0CA0:
+> ```
+> Because ucsi_acpi only matches on PNP0CA0, the ACPI bus does not automatically bind the driver. Adding USBC000 to the acpi_device_id table is required for automatic discovery on these platforms.
 
-Where did you send it? Or do you mean the patch you attached to the
-cover-letter? I also can't find v1, v2, v3, v4, v5 or v6 anywhere, so
-where did you send them?
+This sounds really odd? Why would this become a problem now, and not
+before?
 
-In any case, you need to start by reporting these issues to HP.
+I'll see if I can reproduce this.
 
-The version field must return the actual ucsi version, so that really
-needs to be fixed this platform. Guessing the version is a really
-fragile solution.
+> ---
+> 
+> ### Bug 2: UCSI NVS Version = 0x0000 blocks probe
+> Even when forced to bind (via driver_override), the probe fails because the BIOS does not populate the VERSION field in the UCSI ACPI NVS region at runtime.
+> 
+> Actual probe failure log:
+> ```text
+> Apr 21 11:29:37 fedora kernel: platform USBC000:00: bus: 'platform': __driver_probe_device: matched device with driver ucsi_acpi
+> Apr 21 11:29:37 fedora kernel: platform USBC000:00: bus: 'platform': really_probe: probing driver ucsi_acpi with device
+> Apr 21 11:29:39 fedora kernel: ucsi_acpi USBC000:00: probe with driver ucsi_acpi rejects match -19
+> ```
+> 
+> Actual Raw NVS Dump (from UCSI region 0xCBC37000):
+> ```text
+> Apr 21 11:41:28 fedora kernel: ucsi_peek: version=0x0000 cci=0x00000002
+> Apr 21 11:41:28 fedora kernel: ucsi_peek: raw NVS dump:
+>                                  +00: 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00
+>                                  +10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>                                  +20: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> ```
 
-In the UCSI specification the behaviour from PPM_RESET is a bit vague
-in deed. However, the specification, starting from at least UCSI
-1.2, does make a note that the connectors need to be reset separately.
-So the connection states of the connectors should not be affected by
-PPM_RESET.
+Again with the missing version. Please contact Lenovo. This is a bug
+in their firmware. The version field must supply the actual ucsi
+version.
 
 thanks,
 
