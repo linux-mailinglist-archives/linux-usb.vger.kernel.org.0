@@ -1,254 +1,219 @@
-Return-Path: <linux-usb+bounces-36500-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36501-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CctdD0IF72ng3wAAu9opvQ
-	(envelope-from <linux-usb+bounces-36500-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 08:42:10 +0200
+	id 6CgZIcAJ72n14QAAu9opvQ
+	(envelope-from <linux-usb+bounces-36501-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 09:01:20 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A25FD46DB99
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 08:42:09 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40F2F46DF76
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 09:01:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CF6D3303BB04
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 06:36:16 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 229233006D66
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 07:01:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE0333815E7;
-	Mon, 27 Apr 2026 06:36:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E742F39099C;
+	Mon, 27 Apr 2026 07:00:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DCrrnBGQ"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="hbPo/CTd";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ZFjOMu6A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022133806AA
-	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 06:36:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59979370D62
+	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 07:00:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777271763; cv=none; b=NTaLJFHFR4su1ax/XFdG0tHrwnI+QzWWiYzD13LG+k0Jg1tkYTdQSm1SrO2HTESFSQo+KVauDfZdpt5EoZ8sTAtySbqNW80f9qvngejJAAM13KpgJ5u6aOcyvck8LPss5Qugeww1uqVRzzoww9pGbS+rwn7KkL0rjE8NbH0fIQE=
+	t=1777273253; cv=none; b=a8RM0qGfJZjLGw/NVAVQPkEAcNuXyCk9dqVGws3tIl4iHn64Ugex7cGvl/I9c9jVWUEJbg4ou5W29YJe9TS5b2xXsqYSiuF8ykBk//D1xrFHOP4VCZO5OP3XVYzQ8v0bncljjBCpSzxHBM+gDPhETiY00EDSWH2kJm5Xp51wmug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777271763; c=relaxed/simple;
-	bh=DoIRs2ewmXmKoxeu+LwDciZNxgzLEyxBy3ROzfHrEhM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kU6AERuDAuo4pcjnRmeoLN45DY6BvZ3JMbGid0k/jIAWRpB7vBLMeVYfLjH0TW6L4yN6EMeavI8XuPoBogIvOpaPRE2f+p9gJ/aik+M+TdAPWFEU6TfNM15JI8nB7b1Fjs5MYaF4tvS4QB7eWllFQ6m6Zw6DbYaAwq0HApDKifY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DCrrnBGQ; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5a402dea4a5so9872584e87.2
-        for <linux-usb@vger.kernel.org>; Sun, 26 Apr 2026 23:36:01 -0700 (PDT)
+	s=arc-20240116; t=1777273253; c=relaxed/simple;
+	bh=JGNSq690wg01fTJ6rahHFerhs4Oh4Eua11CdfuxCEPs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QJHFp6r5R2TiwUwMAOoimPWfMpALOU+SzpbUsp27eaonkhylntTyV6njwt6+hqljPGzb2A8eO2M/3Oyk7yaV++VAsIusU/blkkaV+smz2LznDdgNHltd3xmB1IMOg/bRjlJBPRJeGm0pH9cfxBELXqkvgNMPKDDTJTfXEbSGQUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=hbPo/CTd; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ZFjOMu6A; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63R4bqAf2387970
+	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 07:00:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=2noFOt6s1RRzT38f93pKYK77wkjlKoO1L7c
+	jckqJr4c=; b=hbPo/CTdUU37j5jamuvIKPHWY9+i810+wWXJ8gnZ8ciDiODtFdz
+	ERI7lfe5VEDDt1ly2JCrkOLfK99PMLd7kPXWk4kQbV068Tn+BB/CG6TBY3nVvE1b
+	508qpEyGB8wFrmhH96CzRHaJFtI4UTm2teuzM9wTOjk0j+SYvaWd9naqsXP08wuI
+	24iZeLEx58yShSYvVPddH3Fr5YHcisSxzwyw0Hqaz1KEqVBLIBBMLBpF0xqR/nAQ
+	nFj8FymiMYQYruKNSopAs5Gbm57gMg6VNdoZ2JIYKv0RPyVDBmEUO4tYioUETvnv
+	GZth8kr75QelAo+c1gSdB3DC6h0qT7C8SDw==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4drnpw4tk8-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 07:00:49 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-50edf01172bso188506781cf.2
+        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 00:00:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777271760; x=1777876560; darn=vger.kernel.org;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ob6hAxn4b2XJbstB2WIYNRqhZDHJqLJB6rp2bFlZgjg=;
-        b=DCrrnBGQZlmqii1jcrhEBQ1AmWiOgMsjDskG4yKdb2+p+TAnpVP8TVJiiOsmdOxZoS
-         VczEHy7xxhZdiUlTZkzGMEkTL7cRbEtGaQadNzn6OozG9k//Ps5xdf51qYxcqOJx717t
-         /q96bkCHL7QdLBwBTnXrJ0Xhn5dXs7tqSMLj2DJIiuUExhwYXVc/1c0UicaJNqXn3gqC
-         yQAhtSWv2spmp4R1o+pOsSAuTV4RuFAXhBehFc/Uai6twFt4msZvXoFFfS5E0lasjksw
-         4eQUHVvIswPgzTdyyWGiNRCWcz08erDSqJbnP0qs2zI53ag1ftceIJmPMnpfuizk8jbc
-         IA9g==
+        d=oss.qualcomm.com; s=google; t=1777273249; x=1777878049; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2noFOt6s1RRzT38f93pKYK77wkjlKoO1L7cjckqJr4c=;
+        b=ZFjOMu6Ag2J2gcMpqclrhKEJtOo/JWOysRl+WL3cunVDT7hraDKHlVrlQtoDtq1z5n
+         G439TSq7lctut7AcXu7z7REH2AiFiEk3e87rF67TJ43edRh1D+1qGFIWX5+MYXUbdpUH
+         LwptTGJTG9WuxUXaFXavqyAVi4TxlHhrkG9mi5GdMmZHp0m314CNcIXp05c2pvxfyueS
+         eTQWN1RcGO/nbZ53uxVs4ordkaCKllAgjl8IFml8oZ+hOk88hxqy2mz9xIhOLuVOhleM
+         ZdFcOAgLm1QhAO6lqSg9Z58sXRf4NAHGMNegQZ4NUPqLyIcUmN4y2ZyYFr1UlArGhUPp
+         Hlvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777271760; x=1777876560;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ob6hAxn4b2XJbstB2WIYNRqhZDHJqLJB6rp2bFlZgjg=;
-        b=Xq+p+Qgk3IvmlB6ZjklJPKlxFrIGU9yqMdbE4IvE31G5To7Sntw2rlejlcReAwO0us
-         APO2fvw7gF2vN44mEiq/RkAoFIZv9zXqyqR1gnSq4/mhP2XbQpeSaPJ/EjRwxj4jqc3M
-         ySHIqrfbevIZYuq444LjfEfiXE7xc8L2GGoSWRpixvz1KelgjVimfrDYiIRBlFCJG7vB
-         rNRv9gdz8r4ZQ1yH+xbqJC85ZvYq6SrqUkwpSXG0oslSszeQi/nc9XVC+iTvUrtjOtu+
-         SdFAl4PjBMbEjEiK9wNV7ZUqq3tN+2MkFhQhX8d+8a775Bg5a9E7EvWAcClPkomz9NcT
-         D7sA==
-X-Forwarded-Encrypted: i=1; AFNElJ+MpfPKOG/52YJTbiQg8EakgTxq/hfsvQdGO6Zsj7QUQW5QGYvtb53GauCe3eBa/SbI2jFNtn9RYEM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3TAw2l3PgZSvMMcBXUPv9kMhFG2YbEFydcV4PAIXf3drL+urm
-	hO2pzS9vQvpejLVYSUZ/uFkKp0108+fsdWxBd0eNDFviayNI3Zkd2bed
-X-Gm-Gg: AeBDieutJ9IvOU5CYdBaWmhrsjkLxgNaavRVAhEPYZD2c82lxdkfl4VDPhsap8SkYRW
-	bULYo+mCX+TyOyIkqWVbiS4utW8IDUOmLpSkaogMItk13bMdEuJsi4jJWJSe2abljRmtnOXl6/v
-	HyZBUn86Zn105FQQrJiy/+4GUgOcfNtT+CSmc8gkIqLyFb3p7XN3+mMekLrKibudT1jypjGcdWV
-	uvj6iPMJtk/wj4HRC5jT0QrPU8+noRwrvKsDp6iayDLO7tDq2bkX7gHJOmEPsWNrHzZF/CQL6WB
-	5NGFRILUjOkpr4QnlyUszHCXwnul9UuxACMd2K1LtCfnThKs3/MRaoewZzsTer0wHc62+XyqY6+
-	Ep0ZUJxQ2bfVbvYL7rxrUP1mQ+kqzChj7p6HKPRrPn2qk/FNO44BzDY10n3SoifNuyjX/KG4qup
-	DdInZnd3WDX2gdq2Srh3lNSBzWUb8ERLMYyAmLQQUyPrM=
-X-Received: by 2002:a05:6512:3ca9:b0:5a1:3437:84ac with SMTP id 2adb3069b0e04-5a4172ee6b9mr13124133e87.31.1777271759755;
-        Sun, 26 Apr 2026 23:35:59 -0700 (PDT)
-Received: from foxbook (bfh75.neoplus.adsl.tpnet.pl. [83.28.45.75])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-38ecb5f652asm64457991fa.12.2026.04.26.23.35.57
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sun, 26 Apr 2026 23:35:58 -0700 (PDT)
-Date: Mon, 27 Apr 2026 08:35:53 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Jeffrey Hein <jp@jphein.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, Ricardo Ribalda
- <ribalda@chromium.org>, Alan Stern <stern@rowland.harvard.edu>, Laurent
- Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede
- <hansg@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
- stable@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] media: uvcvideo: add UVC_QUIRK_CTRL_THROTTLE for
- fragile firmware
-Message-ID: <20260427083553.36ff4731.michal.pecio@gmail.com>
-In-Reply-To: <20260413100545.71796c66.michal.pecio@gmail.com>
-References: <20260331003806.212565-1-jp@jphein.com>
-	<20260331003806.212565-3-jp@jphein.com>
-	<CANiDSCvsxP+npQTHUrMTp+Z8XULYKSLTz2AFu+WQnsLbRBGa2w@mail.gmail.com>
-	<20260409100247.7cfb62d1.michal.pecio@gmail.com>
-	<20260409221749.5e6bccab.michal.pecio@gmail.com>
-	<c4275422-a9b4-4519-95f9-1163a7912709@linux.intel.com>
-	<CAD5VvzCEV_XbHc_Gby7mFPBSgSebqKDKJf3VC8HNRrD+xWaTJg@mail.gmail.com>
-	<20260413100545.71796c66.michal.pecio@gmail.com>
+        d=1e100.net; s=20251104; t=1777273249; x=1777878049;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2noFOt6s1RRzT38f93pKYK77wkjlKoO1L7cjckqJr4c=;
+        b=Epidxv/YqUFxdD6qZrgc6WfoOfjcamzDnQHsX5V3m0e45GJa9e/XpMWrkPbLnhCOG5
+         ajHqkovdo7bZe0jkdBP0EKCMI+KncEwc0fvVlWWQVQLLcAX7wQXgLyGi5+AZtwtLk59F
+         J2UV0E7mxAZCHpz/RdFsTzcx/KdG6qzlsqsMTMmKfEmUmyfSPwB9TNOXph6JTcyYFq4D
+         R4iV5rx8P9ikNpWg8UnnbwZ9cTxZ0Y3oqp6kDolrcdlvhMQRub+5pgW0VhQdp7yQOrmj
+         lXDod2Jv29Yix5slr0tknbkGALhYrrvlHkxZ2m3f+eel7V8D5HJz9yRzykwmVrC+XZQr
+         +zhg==
+X-Forwarded-Encrypted: i=1; AFNElJ/O4ABEd0aPuxHhQTkRTY5s2IHtOpTJrX9i0eTq/W1cmawcQW3pvYBs/IYAgUv+rsLoEiZLG3fdSyM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4as7tHp3w6pMWIYZN7qfd23xzDfPmDZssNlOj5JdVhoEnw4uO
+	6gcGidK1Hpoe+PvvZdu6rdhRWph18Q3WflrfMu/BTW5Gym1ZK1pfIOie94w87f1NxdLpIoaiJek
+	TvQ4kvp+lesZpNRWNQguTlCG8xk3aulJNHDCy9m57oYID4Ml7sJENrdopjiIEsvY=
+X-Gm-Gg: AeBDiescbzldHGsjAFeHK1AbJoHefMYsavZEqd2QgkN+NdHQc1GhIGI4mIE883jCc19
+	KoCz/BEsfZocEKzU6HiKvF0ibSboGcoYH3SMU5kbVG5Lpl6awC3iHg6hhI6/CsCE8WW8WGBDhQi
+	eynfht4CeIUlDoLNm1U84RLCdc4MXeAF9cBFRi07/lY/Et0OjrGRhUccz9hAiPLKg+jjIKoUOTJ
+	T0nJ+FuVQszeIQx9eEr7E56wWkX8w+kBuJHgRLsmc1odEYxny59+RMjeH5eyc0Gv36MJveAe1Ix
+	Cl1cKolZiqtbuz9RRyThZDMpZGzbxdAuvHw1b0J2O27TzcBfLjniUMhwI0FgKhjgXzhdi3oOnEq
+	fd4lQx7uIC15p/u9jfbbEZJ/puFi6Fhoc7wzE4gx7SCqV7OTxQrHQE0uMRoyyxnkMi/eM0BEONh
+	vXVeSmSmSWjg==
+X-Received: by 2002:ac8:7d4a:0:b0:50f:aeaf:b127 with SMTP id d75a77b69052e-50faeafc0a0mr418136531cf.53.1777273248695;
+        Mon, 27 Apr 2026 00:00:48 -0700 (PDT)
+X-Received: by 2002:ac8:7d4a:0:b0:50f:aeaf:b127 with SMTP id d75a77b69052e-50faeafc0a0mr418135641cf.53.1777273247940;
+        Mon, 27 Apr 2026 00:00:47 -0700 (PDT)
+Received: from quoll (5-226-109-134.static.ip.netia.com.pl. [5.226.109.134])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4e3a166sm77794640f8f.19.2026.04.27.00.00.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Apr 2026 00:00:46 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc: =Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Subject: [PATCH] USB: qcom: Unify user-visible "Qualcomm" name
+Date: Mon, 27 Apr 2026 09:00:45 +0200
+Message-ID: <20260427070044.17974-2-krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="MP_/.OkknVOR4gOuo.3Taa06e1K"
-X-Rspamd-Queue-Id: A25FD46DB99
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1199; i=krzysztof.kozlowski@oss.qualcomm.com;
+ h=from:subject; bh=JGNSq690wg01fTJ6rahHFerhs4Oh4Eua11CdfuxCEPs=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBp7wmcbavafihL2sqE2uvD6YHS+VB3KMbSZ+NUE
+ hwz28X9L+yJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCae8JnAAKCRDBN2bmhouD
+ 1853D/9W9yJe7w/7hu26FpiH+c/ITI7QjckbusRgUFYg5+UbyWPanz85DLUgnYY8REypHmG+g/7
+ hsFupovSMBZRy8MvMtKJToC0gMEDnqPteVR/kXE3moHC3vXmNMrLo64K09agKEGEi97fo05tFrt
+ fafZorc0iM0Grcie715HwWx8M4EGFeu1XmZ3puh/3zxtzxfDIP6bODUiguduDRx9N2fTlUfkM64
+ qelfNvboJDpF6PQLiAxdsk4xZDK6B3hrk44LsmD2JBq2bsOQrHGhBhkl3t1n6oL1jASTBg74j7+
+ /SO9rKMQPZ9QVuVM8SYRQaLW236A/ipp9nXZ6iQRVf221H4N0E6ZCCO3QubWO0byzubQLXoW7Jl
+ KzWcFmKbqdGfz5TItL5IEdgL7JLO2uvms0hdA4Plsdm3iAgHC/+6nZurLO+ygOI+SwXRI7YW4nT
+ Z5K+YmNzFvbSBw4wgOIk7AudgNFVweDWB6TTx2r48cYHaD2Ywk0Q59gOS+RCefzpzTEcCKbFDNw
+ CeAy20qP2oTD4Ur64a94Yq/8O1pNCttjZ8y6TcL3hTjGK+WYRH6okz1qKnUY1GadNwt86jt1G3U
+ 6K6+e+YEEFLLjhr4NhPq2W1VMeCMGTmyi93gJl/KgAj0WWlgUuDu11NgxCuKqHwfBzRQwcaGgiP h8n+pgs4FDK/hOA==
+X-Developer-Key: i=krzysztof.kozlowski@oss.qualcomm.com; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI3MDA3MyBTYWx0ZWRfX/FoozlB1LV+j
+ XsPFmyrUyx4rnVnop+StHKdCA5c6fBRkQ6L6O++xVhYWJeK0e0N4tc6A3phyxP4x89wlk38m8bT
+ 02TxwXY7v/kEcj0asNkh3HVp+Wi86AYhhZh59vHSRCdim4tzneQ03R+6n/Kzfm7pY39FJHmiiMi
+ iFg74UecbHOQ2zlKuYl76ZcnvfgRNMTRo7NEfKgZ89LZmXyQ8DvZKrLK47VpN6itU+/mWU+ZPva
+ h8h210u71xFfyBs/JVqiVZ3bZalZGWVEkYE3lcuStE2WDl7WmbesRr1rfbCS0IHEMR9GBMtEEtl
+ CYFGpzH+5iGTLp0ZaW/2T/v6ebCp9ySyWtyWXFYSJ5Qw+pVP6HbzbSO0vj5RR/DDkBI/mPfxG2G
+ V7fZfh9fu8fSLpQUKOrSu5KbWoeY/rK3anDlE2pLnnk0wykzuiHdp2O8HQw2vIPNWmuMg8faiYe
+ gGiPi+usQMdhHhnOifQ==
+X-Proofpoint-ORIG-GUID: PG4F7_IqrXnrh6bE4lzps4DouJ_IYH6j
+X-Authority-Analysis: v=2.4 cv=RaGgzVtv c=1 sm=1 tr=0 ts=69ef09a1 cx=c_pps
+ a=WeENfcodrlLV9YRTxbY/uA==:117 a=nnYKl1aPHK5ktf5uHVwi7Q==:17
+ a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22 a=VwQbUJbxAAAA:8
+ a=EUspDBNiAAAA:8 a=XNgau8SRxIOjiplQv84A:9 a=kacYvNCVWA4VmyqE58fU:22
+X-Proofpoint-GUID: PG4F7_IqrXnrh6bE4lzps4DouJ_IYH6j
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-27_02,2026-04-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 priorityscore=1501 bulkscore=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 spamscore=0 clxscore=1015 suspectscore=0
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604200000
+ definitions=main-2604270073
+X-Rspamd-Queue-Id: 40F2F46DF76
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.56 / 15.00];
-	MIME_BAD_ATTACHMENT(1.60)[c:text/x-c++src];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain,text/x-c++src];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	HAS_ATTACHMENT(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36501-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36500-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[krzysztof.kozlowski@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,oss.qualcomm.com:dkim,oss.qualcomm.com:mid,qualcomm.com:dkim,qualcomm.com:email];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	RCVD_COUNT_SEVEN(0.00)[7]
 
---MP_/.OkknVOR4gOuo.3Taa06e1K
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Various names for Qualcomm as a company are used in user-visible config
+options: QCOM, Qualcomm and Qualcomm Technologies.  Switch to unified
+"Qualcomm" so it will be easier for users to identify the options when
+for example running menuconfig.
 
-On Mon, 13 Apr 2026 10:05:45 +0200, Michal Pecio wrote:
-> Question: can you kill it by starting some video application to set
-> the camera up, closing it and then running this loop?
-> 
-> while :; do v4l2-ctl -d /dev/video0 --stream-mmap --stream-count=1; done
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-Hi again,
+---
 
-Any chance you could try it? And also the attached test program:
+And "Qualcomm Technologies" has even variations over the tree:
+Qualcomm Technologies
+Qualcomm Technologies Inc.
+Qualcomm Technologies, Inc.
 
-cc -lusb-1.0 hammerint.c -o hammerint
-sudo ./hammerint 1532 0e05 0 85
+I am doing this tree wide:
+https://lore.kernel.org/all/?q=f%3Akrzysztof+s%3A%22Unify+user-visible%22+s%3AQualcomm
+---
+ drivers/usb/misc/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Initial arguments are VID:PID of the device, next is the number of
-an interface containing some interrupt endpoint and then the endpoint
-address (including 8_ if IN).
+diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+index 0b56b773dbdf..91b62acb537b 100644
+--- a/drivers/usb/misc/Kconfig
++++ b/drivers/usb/misc/Kconfig
+@@ -145,7 +145,7 @@ config USB_APPLEDISPLAY
+ 	  Displays over USB. This driver provides a sysfs interface.
+ 
+ config USB_QCOM_EUD
+-	tristate "QCOM Embedded USB Debugger(EUD) Driver"
++	tristate "Qualcomm Embedded USB Debugger(EUD) Driver"
+ 	depends on ARCH_QCOM || COMPILE_TEST
+ 	select QCOM_SCM
+ 	select USB_ROLE_SWITCH
+-- 
+2.51.0
 
-I tried with a variety of SuperSpeed devices (UVC, NICs, hubs) and this
-reliably breaks ASMedia HCs within seconds. If the same is the case on
-Intel then it's a bigger problem than just UVC.
-
-The video streaming loop breaks even more controllers. I have some
-general idea how the streaming case could be dealt with, but not so
-much the interrupt one. Maybe rate limiting. I found that avoiding
-Set TR Dequeue to Link TRBs reduces failure rate, but not to zero.
-
-Long ago I also looked at the issued command sequences and I haven't
-noticed obvious errors or spec violations. Looks like a HW bug.
-
-Regards,
-Michal
-
---MP_/.OkknVOR4gOuo.3Taa06e1K
-Content-Type: text/x-c++src
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment; filename=hammerint.c
-
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <libusb-1.0/libusb.h>
-
-void comp(struct libusb_transfer *t) {
-	char c = t->status == LIBUSB_TRANSFER_CANCELLED ? '.' :
-		t->status == LIBUSB_TRANSFER_COMPLETED ? ',' : '-';
-	fputc(c, stdout);
-	fflush(stdout);
-}
-
-int hammer(int vid, int pid, int ifc, int ep) {
-	struct libusb_device_handle *d;
-	struct libusb_transfer *t;
-	char bufi[1024] = {0};
-	char bufc[2];
-	int r;
-
-	r = libusb_init(NULL);
-	t = libusb_alloc_transfer(0);
-	if (r || !t)
-		return 1;
-
-	d = libusb_open_device_with_vid_pid(NULL, vid, pid);
-	if (!d)
-		return 2;
-
-	libusb_detach_kernel_driver(d, ifc);
-	r = libusb_claim_interface(d, ifc);
-	if (r)
-		return 3;
-
-	libusb_fill_interrupt_transfer(t, d, ep, bufi, sizeof(bufi), comp, NULL, 0);
-
-	for (;;) {
-		/* GET_STATUS(DEVICE) */
-		r = libusb_control_transfer(d, 0x80, 0, 0, 0, bufc, sizeof(bufc), 100);
-		if (r != sizeof(bufc))
-			return 4;
-
-		r = libusb_submit_transfer(t);
-		if (r)
-			return 5;
-		r = libusb_cancel_transfer(t);
-		if (r)
-			return 6;
-		r = libusb_handle_events(NULL);
-		if (r)
-			return 7;
-	}
-}
-
-int main (int argc, char **argv) {
-	int vid, pid, ifc, ep;
-	int r;
-
-	if (argc != 5) {
-		fprintf(stderr, "USAGE: %s vid pid ifc ep\n", argv[0]);
-		return 1;
-	}
-
-	vid = strtol(argv[1], NULL, 16);
-	pid = strtol(argv[2], NULL, 16);
-	ifc = strtol(argv[3], NULL, 16);
-	ep = strtol(argv[4], NULL, 16);
-
-	r = hammer(vid, pid, ifc, ep);
-	printf("%d\n", r);
-}
-
---MP_/.OkknVOR4gOuo.3Taa06e1K--
 
