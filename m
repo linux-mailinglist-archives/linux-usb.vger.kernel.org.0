@@ -1,168 +1,176 @@
-Return-Path: <linux-usb+bounces-36546-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36547-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aD3eK62D72klCAEAu9opvQ
-	(envelope-from <linux-usb+bounces-36546-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 17:41:33 +0200
+	id +CrUMJCF72lpCAEAu9opvQ
+	(envelope-from <linux-usb+bounces-36547-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 17:49:36 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A0B74755FE
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 17:41:32 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74AE4475895
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 17:49:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 61C6A3061708
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 15:34:19 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3053730D1278
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2026 15:40:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D90B3DE43D;
-	Mon, 27 Apr 2026 15:30:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8666D355F52;
+	Mon, 27 Apr 2026 15:37:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KZl7rvb8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lV5nh9+a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DC83DCD81
-	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 15:30:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777303822; cv=pass; b=C6s5sfxX6rse7anOX2pPjqbsPTXa/e5KOccdvZHDD9vpXvdMxPuFbPh+caYkbGI/Lko6TxUIwsoYRHzjx9R3p1pYNjyQmHhn7Y18pzwog0XTI1SwzXUx99Xh1+mqpfSmfJvdZZhfZ9pXmcYWr6MxVyPvKr5qqIsRAYiKfMBPAJc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777303822; c=relaxed/simple;
-	bh=GCwKatNNar+3ytGo3nZKd7tNZGkjdIGeJgU5RLwcvj4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h+hkiMbx4tyxVmQ8wKf/dcLyB6nIK3/ewLOWwRAOipUX/5HR/EiQE7W/7I1cluRvTublXGq8+6i1Yumeql535TlXe5JGCkOUQNoEILQvhwAgXn/RBDmE8evZgrN7D1KbI/HzAKAYwVHk+KL/W4q45v+g1WRCeN814cuHtuNYF2Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KZl7rvb8; arc=pass smtp.client-ip=74.125.224.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B6E34F498
+	for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 15:37:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777304225; cv=none; b=d165B9z5sqxJgwKllOCfo9FaVZJK8MykieLQZayUwbCMzcm4gnqSRRIIEPpp2gO7AVF1YOX69WybXlNcYbGC5cWxaJhSCZ9ZqPwvOwOkbGsRre2isToiJExiAVENiqtMG4/JAzAdH5xydtU6jvf3ND704F8GspAoc0pb6KVbdT0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777304225; c=relaxed/simple;
+	bh=k2eHeOh1ypEyik00unMmMsD3cRYTWKvd5TA7e2KeNHM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=m2JDUIiNeLTyygVrBCyWdq4vUlgxXqqqW1f5VNbBlAu19JnRuUmlYg/ZsljU2kb19N/0/aSBAyYWrLrIoEMzhqbWADGRXzgFQqfSpfcL6j1YXW3oDOQnl2EfEh5WojLDdtP+MZONNydjV/L7UOx/W6V3cnSn8O3JIHAK7niKaX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lV5nh9+a; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-6501c9903edso10453774d50.1
-        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 08:30:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777303819; cv=none;
-        d=google.com; s=arc-20240605;
-        b=P1NnR1kiUg8qBw0AFZXFuX9kTJJ609mcEZH5SWiTN48lK+d77DSYdF0phQ04FKIQ3S
-         g01gEACTrSZmcMqbCGMRhn4ZlB5CIBQDzBkLJqPypiH3naqhMA0IU00nL5CqheLeHh3Q
-         OFwe7R/G5cD9zW0kgIQ5BxDM85SbfUqVpZHTfHB21hhZ+2flv2LK3Qz+CiqrBbKbIyvQ
-         h6qWw+110ot71a005xL/kRqoryYe/0kasUT+NBQ4mfy58Gmu+KiDSgenN9fiZEHB61Hj
-         ZKBryEJVu4Uls5ucTF8mhEmVcFI2t8siwux/PyPx0bWLZ2MgTvHffDIEV61Ab0IIKpgO
-         GV9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=wopAs40F+RJFZTUGjaEGMPUBPuNhbGRlaz39GhporOM=;
-        fh=eOuc8maQ4jFxi5WKKceJF3lrLNwql5A639QtwdfHMtk=;
-        b=OdLMGua3jvWROSurwkzBKOO8w79dUGfDDizKisW+Y7pKImAR5xU8mobGeI58enJ9dw
-         vrCSPKZWGl39myZ1OdGr8DTpP7hGt/okldyYcmYDzJ0EaTPD1LWPOHk+Kk105752j83i
-         e0akojIeMse2ONf1fy6Stp/Mj+9/b7h9mQcPALaVZKc89fOWYvYwk7omTAL8hW5+rELg
-         A7WSQHhFgHyxLLFeMT6A0K9VRBRQ2biVoatWyWfw6Oyw7WuuMVjEM1sLlboZog6ued0d
-         P2s8svc1TWWZt1ni7BJm2RuxAK0fnNRBZKJN+DeVyhrM+vKEtxThbtTZBP4TlvKPorTS
-         jMTg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-35da2d35eccso7012789a91.0
+        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 08:37:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777303819; x=1777908619; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wopAs40F+RJFZTUGjaEGMPUBPuNhbGRlaz39GhporOM=;
-        b=KZl7rvb8lf+sBbOnk4jHtaoH1vNRh94P/hVDm7+cs2/FKBCPa46GXQ2tp/jWtyeVI2
-         FA8mxlmk7eKobRckE8qSOokqGx+oGCFY3ZQAvSxaAI1wxA5fvf2mVUexoG/icCVk1TMy
-         KyYUVyzKUXyvrZQF1bs8WZEcGS2g9fDj1tyTPUyPXKHlQRE5Hdp24jNdA2//pZWA96Sb
-         OsIc7ZX4RD/5GAwqiECwwcVmMtsZn2WbENhakwf0Qni0yZvNVabQcI5468V+4ToznKfl
-         QmJW5/DvIuWgVSOcCb0Zib9yKLvE+tsjWJcbrb2yFhHOnjWR/gfSztjZx5lQ7cItr91c
-         eUww==
+        d=gmail.com; s=20251104; t=1777304223; x=1777909023; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0hpvNH1EUa3cOnUyhzEEF6VXuaHHXz+8JvdcA+bX2rM=;
+        b=lV5nh9+aI7CTiI2BJitPX84JGqexpETdo34LW164BUweNX9rd00KscHIfEPpIEnwwn
+         lUuokwwr0ONpxQP5V+0AwLn+DO3co9hmmyLtfTko06c4RGrOqfN7rskZOoQMoSBQ7Gis
+         EWcWrK4w5loTbuI/yFT0uhrzuFw2dvs6WiNdTwwUiopbMRsfwgszV6V8Zh1WMRRJK2FJ
+         +0SO5T7vpd2CD3tGSXZeAe0umhbELe9BnN9XRFZPWSxsf4jb5sZxZvfYPs5x/4cS6Syv
+         xS6My8cYM1e9B6GFpEa+tvIQIWzth2TXX9D3A2PsEPFREp7J1igWEcigN4mvgrx+TOLR
+         R6gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777303819; x=1777908619;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1777304223; x=1777909023;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wopAs40F+RJFZTUGjaEGMPUBPuNhbGRlaz39GhporOM=;
-        b=ohJgxGxXA1B3rfeAUwSF/fyPfAuk2r1wLw0v8jeEXGUGPuG8TS7r9h2z8A2MGvr+RI
-         j5tzeGzHg5CzrCNPIiCFrNXeO8SVAwIC+vjzjd3C3TxqC+j4i1Sb4c4XY39t/tcUHTF7
-         6Hvnr56N4oKxjqod28zpgUjO5DJngwddiNKeW4VbOV0lLziXC8p0AtcoefYyDCb+twIo
-         cqlJT3T1lqnMQGA1y+QwQlDvv9KiJXGm7tx4Nh5QRaBAmVpIdN+AS3Tu83bdO6QM8lpJ
-         nPf8ptA0n7QfB0V/kpOkkAWCANfT1DC4uJgqmLS/4vzc4UjRClAsmlkkrpV/eZikMylp
-         UbLw==
-X-Forwarded-Encrypted: i=1; AFNElJ9cnDsTzt/gdGeBOkumFqU61MjkKGNVjypRxAi+eyIB33IrqY4kYw4jHEmIWwBmTLMc17Mgk5evdh8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuTAH/Mdph/6zp513oJtb0JuCRYkVjlZltOWcsjVt1+1iT888E
-	FatlxR5fov4esdu37nCuTJoWv17pJgmzbc9qEext/491LdudRRhoRTCX3PL5qYlBd/bdd8fGjNW
-	DJgTeLFxjhVkY6ASc0lgiPSNYIFtox1UobHimT5cFSg==
-X-Gm-Gg: AeBDiet1tI3adpFkSEAKynBD0fNI/UyZdJ4EtVXxTm0zEnAxxaajQ4JOFVIBXH8CrJp
-	z3x2hifWtngLF73R7VI5FmW43EesV98UGAATUCKsgfZgCiIzBOaJRgSqdDzJE4Lcaril6yrSNTo
-	B9XwD7oCWkSuLfIyj5b5Fu0z7ALbkUFHWRWGQKhBeB2lWqr7+o11Q7rsYG/T2vhgJXJII1TxspM
-	Zmk+JnIK7pBXwU51StvpidI3Ja0MBpSjSmID5pQ88/sKo5yxsvXFrkIQgjJp/t6XwumxoDP+aWt
-	S9wInTMhFrNOV2eUqhum
-X-Received: by 2002:a05:690e:1918:b0:654:9654:f91 with SMTP id
- 956f58d0204a3-65496541a13mr15482214d50.46.1777303819396; Mon, 27 Apr 2026
- 08:30:19 -0700 (PDT)
+        bh=0hpvNH1EUa3cOnUyhzEEF6VXuaHHXz+8JvdcA+bX2rM=;
+        b=PRVa5rjENglS5Dy0watXrcmqq+t3QxC/o/0p5qjX3zUUhlzRRCCN/U1Yq4WwZXB7dV
+         8hgTObELLTmOqY5m+Umd3G/rucZTcd2vURmm3BgwVQN//txlrfFZxHhWNO6lMwfkU4q+
+         46vpZYFkvcYaWqGrLLHdn/HCt44Y+tXQf6NQ8ScieX2MynCS2ZHDK8FyclKkeDE0OGi5
+         lFtyo2ubjZP5k/QZPgqwDGa3q4xhEsKf379r62Nc/zTuy9Ef3uywIEBzXWnHIp5SgIUO
+         4x6xMuI6JVu05SHT538m6OkKgn13x1htjLjrxFgJCxpEKkSOa8T4DoWggx34Bvvfhaav
+         evwg==
+X-Forwarded-Encrypted: i=1; AFNElJ+vrL/FxbE4l0kkf94unkIyQpSsO1Wti7LNo/8Ll23fm18jtQy8CkbwjeossVo/yHIFY5ufImNdSf4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxkWD2/3wMFh+1UifnrTaMGLYfLBKL483nGbLTHqXc4p2LQTTL
+	G3PwiYinwox7XYmg+MpYZdCfh8T/PYhInbEzSgWotTkD2207x0WKbJQQ
+X-Gm-Gg: AeBDievCVP/in4sDiWk5OyXbNwcnsXamegvax85UUFuGOXpAVxdrYxrd9MYvA9A901n
+	Fdy12nzHRXpLpBhMhRLVKP8060l9afh/TLaf3wzY/w8FcA/WtjWiT0uCozls3rZYi6p58V1OJOg
+	ZqRH2ROBk8gNUARG5CoXbgQeaQzVkqcXdC/KAzNICfThuoi0C4L+x7aegfeU64s9mDtLbyarcsx
+	/pcRJu4GBdJ9qL4pVg4qinZq9Mwgkh4DeDgZp45MYvhqz0MPqQ/mPP6lqw0sWnmvsdA5xKqILex
+	sEkxQ5qcZdMcd36f2Qiz3PK+ovTMQ0Mi94PNj1RZu+G+fesC+Ff8xTzVwgKz3AdYCLlSaCo1UI6
+	RLnuSayMhHEHULpl0kHH6WqiB1enio4SZwQl6NSkYuNd7wAdfzKqOlOMcERnvLsmwNb/XQ66Ikc
+	pBcji9xnz+LWz2c6eTgBGtWNQNQnlbTCVWeQI=
+X-Received: by 2002:a17:90a:f09:b0:361:4521:d311 with SMTP id 98e67ed59e1d1-362e8d70725mr10652817a91.18.1777304223057;
+        Mon, 27 Apr 2026 08:37:03 -0700 (PDT)
+Received: from lgs.. ([2408:8418:1110:2369:e656:cc2d:236e:9079])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36146ae9cd8sm30014315a91.11.2026.04.27.08.36.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Apr 2026 08:37:02 -0700 (PDT)
+From: Guangshuo Li <lgs201920130244@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guangshuo Li <lgs201920130244@gmail.com>,
+	Kees Cook <kees@kernel.org>,
+	Chen Ni <nichen@iscas.ac.cn>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Felipe Balbi <balbi@kernel.org>,
+	Peter Chen <peter.chen@nxp.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
+Subject: [PATCH v2] usb: gadget: net2280: Fix double free in probe error path
+Date: Mon, 27 Apr 2026 23:36:51 +0800
+Message-ID: <20260427153651.337846-1-lgs201920130244@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260427133107.334429-1-lgs201920130244@gmail.com> <982f5452-36be-4401-acac-c9f8ba8ff83a@rowland.harvard.edu>
-In-Reply-To: <982f5452-36be-4401-acac-c9f8ba8ff83a@rowland.harvard.edu>
-From: Guangshuo Li <lgs201920130244@gmail.com>
-Date: Mon, 27 Apr 2026 23:30:12 +0800
-X-Gm-Features: AVHnY4IGM9jn954jisHrVPvAVF-ro04mTTaDdyMTsp7VWKWZEgW3x5qekBjo2Yc
-Message-ID: <CANUHTR9uTfR3CQF3RLxYVWFSoGZ8B7yV=vowOqx4BBWGHk9Srg@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: net2280: Fix double free in probe error path
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook <kees@kernel.org>, 
-	Chen Ni <nichen@iscas.ac.cn>, Evgeny Novikov <novikov@ispras.ru>, Felipe Balbi <balbi@kernel.org>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 1A0B74755FE
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 74AE4475895
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36546-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_FROM(0.00)[bounces-36547-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[linuxfoundation.org,gmail.com,kernel.org,iscas.ac.cn,rowland.harvard.edu,nxp.com,vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[lgs201920130244@gmail.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
 	FREEMAIL_FROM(0.00)[gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[harvard.edu:email,mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 
-Hi Alan,
+usb_initialize_gadget() installs gadget_release() as the release
+callback for the embedded gadget device.  The struct net2280 instance is
+therefore released through gadget_release() when the gadget device's last
+reference is dropped.
 
-Thank you for the review and correction.
+The probe error path calls net2280_remove(), which tears down the
+partially initialized device and drops the gadget reference with
+usb_put_gadget().  Calling kfree(dev) afterwards can free the same object
+again.
 
-On Mon, 27 Apr 2026 at 22:36, Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> You should remove the braces in the "if" statement as they are now
-> unnecessary.  Also, the Fixes: tag is wrong; it should say:
->
-> Fixes: f770fbec4165 ("USB: UDC: net2280: Fix memory leaks")
->
-> The code before that commit was okay.
->
-> Alan Stern
-
-I will remove the now-unnecessary braces and update the Fixes tag to:
+Drop the explicit kfree() and let the gadget device release callback
+handle the final free.  This issue was found by a static analysis tool
+I am developing.
 
 Fixes: f770fbec4165 ("USB: UDC: net2280: Fix memory leaks")
+Cc: stable@vger.kernel.org
+Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
+---
+v2:
+  - Remove the unnecessary braces around the single-statement if block.
+  - Correct the Fixes tag to f770fbec4165.
 
-I will send a v2 shortly.
+ drivers/usb/gadget/udc/net2280.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Best regards,
-Guangshuo
+diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
+index d02765bd49ce..7c5f30cfd24d 100644
+--- a/drivers/usb/gadget/udc/net2280.c
++++ b/drivers/usb/gadget/udc/net2280.c
+@@ -3790,10 +3790,8 @@ static int net2280_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	return 0;
+ 
+ done:
+-	if (dev) {
++	if (dev)
+ 		net2280_remove(pdev);
+-		kfree(dev);
+-	}
+ 	return retval;
+ }
+ 
+-- 
+2.43.0
+
 
