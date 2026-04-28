@@ -1,213 +1,160 @@
-Return-Path: <linux-usb+bounces-36627-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36628-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UII7Myui8GlAWgEAu9opvQ
-	(envelope-from <linux-usb+bounces-36627-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 14:03:55 +0200
+	id MDp9Ez6x8GnVXQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36628-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 15:08:14 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id A90D34847DB
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 14:03:55 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2E0B485896
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 15:08:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id ABD5D3010262
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:03:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E647530D8B80
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:58:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8A5E3F7A95;
-	Tue, 28 Apr 2026 12:03:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C65E4418F0;
+	Tue, 28 Apr 2026 12:55:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nfL3Lx3d"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="K7ZXU0pL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E52CB3F7893;
-	Tue, 28 Apr 2026 12:03:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794FB42EEDE;
+	Tue, 28 Apr 2026 12:55:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777377808; cv=none; b=BmTkuNJrVXw9/cvX9sp6ZVtWmqO9cVytcDaVEWmQmqjhwg6DoFipcrvkLTI3x33n18Kvev6az9KuH2859zDCTfGm9gomC5zE7HHLSIuiqXD4H4+fAA9PqWbNgOhMD6Qt7VRSUzyhvJqf7BbEkNWZIvemkkfxInAKNlWpMIUcGQs=
+	t=1777380918; cv=none; b=PBUXw2oD+QnztDbi6IibjpSmAOjvo/1tASHwJ4p4yfKfyylPr1ab4ihXpUoXHFY/Cv9NQdcO4Ti4nK7+Dh2U1EOJFmF56CFWorBzi1apawVu2PUv3KAhaNEJCyqKlkKO2o05xGHJS/YGZAluQiUWq+eTQdQIIqR+U1KsRVwgRLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777377808; c=relaxed/simple;
-	bh=B+ThJdoDbCLUDpaAhzYTccRhzuhmRiFnuK0Nnh2/1qU=;
+	s=arc-20240116; t=1777380918; c=relaxed/simple;
+	bh=a1ZZm/Iozun+ZbTEhHDPr3ej5NSHii1BqGtjixoOkL4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oMGfsCctWEXrAxWwwFDwTM2Zv0FgqzJNqwzWZ/TSo5LqCS+j7TXHvsnjwJHafee0RlON6AvF/sERrqi40fpN7ewX0/79Vp6DrIqpn96/8DS8pmBYwMgw3hMbvRexwc7jMoxfUk00V7QFuuqG7/BdCwpyVXPzkYRC/B1v5+aOcpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nfL3Lx3d; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777377803; x=1808913803;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B+ThJdoDbCLUDpaAhzYTccRhzuhmRiFnuK0Nnh2/1qU=;
-  b=nfL3Lx3dLnARA/5PFIlon+j+wNYUM91KH2H+5DR+peLt2OTEIFhVchWS
-   PD5xiXULgRtNt/Bfb8VWG3Y55Gf/pvicG0ENVSBocia9ZO1K1I02jwLcm
-   xYYbAcGD/rrRF3gNTH7yWxfDA4KpOmL8tvMDnFTJJGGgPTw06b5zmT8lk
-   sRRLcVyVkaERBVs7v/G2nDqS/yZ5Glq1B+0bZ6Q3q2aTuyGlCvYjqSEo4
-   LjAwgMT/gfnx3+0bO29kbLnUHgzg294q5DIweSmz3/QepSC2qWBumNc/0
-   ox+yOcFGeyFy8N/zlKkvmvyMi/srLV58STJnmLRVPHsVCKTrs2/uvOb7h
-   g==;
-X-CSE-ConnectionGUID: whbu//mYQ/Wsmw15I+yYBg==
-X-CSE-MsgGUID: WXZZitELSwyFtNjOoBQT5w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11769"; a="82148448"
-X-IronPort-AV: E=Sophos;i="6.23,204,1770624000"; 
-   d="scan'208";a="82148448"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2026 05:03:20 -0700
-X-CSE-ConnectionGUID: SOxCwyFGSwmTAuw3J76sZA==
-X-CSE-MsgGUID: 00G44KCzRdiqJF7ZgoSOqA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,204,1770624000"; 
-   d="scan'208";a="238278357"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa004.jf.intel.com with ESMTP; 28 Apr 2026 05:03:16 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 0318C95; Tue, 28 Apr 2026 14:03:15 +0200 (CEST)
-Date: Tue, 28 Apr 2026 14:03:14 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Lukas Wunner <lukas@wunner.de>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=StQ+mXeVju8FAudw6zQw9mSu0ZKuo7bfZh6lI0AmkBoEEJxgCnbciXalUmAbsqmfI41Mrk3g2LfQ2WHDR5DQCC8kXEdzYi6F9CSWXXqFTo/wazsDk0ITtHqJs8lzUv+A/neXQLoNiww9daYRVPEeFg7z60WiZ3UQFsIVwLWJXiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=K7ZXU0pL; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=fUaCObTGRM6UBfBvOpQYGdHAf6QVLe7Kbol2ukJsrC0=; b=K7ZXU0pLa/LfeR89XUrfMS/bCU
+	o7bgwA7P2X0VpFw48MCbjA5Fs5VkQu9jWOnqrQWYJDc311ji5jHvvtzaEOMVv2A4MRylDBBpELMzO
+	jdOn63t3LxkOQv+x4FGwD1Mg/xDpCHow4Rk/Cz7g/qMhNPyYJBGd9lR3zGdnHJKNS+Xc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1wHhxq-000Kod-J7; Tue, 28 Apr 2026 14:54:58 +0200
+Date: Tue, 28 Apr 2026 14:54:58 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Benjamin Berman <benjamin.s.berman@gmail.com>,
 	Andreas Noever <andreas.noever@gmail.com>,
-	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S . Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH 9/9] thunderbolt: Add support for USB4STREAM
-Message-ID: <20260428120314.GR557136@black.igk.intel.com>
-References: <20260428072209.3084930-1-mika.westerberg@linux.intel.com>
- <20260428072209.3084930-10-mika.westerberg@linux.intel.com>
- <2026042848-cubical-penalize-807c@gregkh>
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] net: thunderbolt: enlarge RX/TX ring and set NAPI
+ weight for sustained load
+Message-ID: <e6a249d5-8b11-43cf-89ee-14d436c70cf8@lunn.ch>
+References: <20260428015521.3454006-1-benjamin.s.berman@gmail.com>
+ <20260428015521.3454006-3-benjamin.s.berman@gmail.com>
+ <20260428074253.GP557136@black.igk.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2026042848-cubical-penalize-807c@gregkh>
-X-Rspamd-Queue-Id: A90D34847DB
+In-Reply-To: <20260428074253.GP557136@black.igk.intel.com>
+X-Rspamd-Queue-Id: C2E0B485896
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[lunn.ch,none];
+	R_DKIM_ALLOW(-0.20)[lunn.ch:s=20171124];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,wunner.de,linux.intel.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com];
-	TAGGED_FROM(0.00)[bounces-36627-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-36628-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,lunn.ch,davemloft.net,google.com,redhat.com,vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andrew@lunn.ch,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[lunn.ch:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,intel.com:dkim]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lunn.ch:dkim,lunn.ch:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,anthropic.com:email]
 
-On Tue, Apr 28, 2026 at 05:57:37AM -0600, Greg KH wrote:
-> On Tue, Apr 28, 2026 at 09:22:09AM +0200, Mika Westerberg wrote:
-> > Introduce USB4STREAM protocol and Linux implementation. This allows two
-> > (or more) hosts to transfer data directly over Thunderbolt/USB4 cable
-> > through a character device without need to go through the network stack.
+On Tue, Apr 28, 2026 at 09:42:53AM +0200, Mika Westerberg wrote:
+> On Mon, Apr 27, 2026 at 06:55:21PM -0700, Benjamin Berman wrote:
+> > The default TBNET_RING_SIZE of 256 and the NAPI_POLL_WEIGHT of 64
+> > implicit in netif_napi_add() are too small for host-to-host Thunderbolt
+> > networking under sustained bulk traffic.  Running NCCL all-reduce over
+> > tb-lo on a three-node chain (two TB3 endpoints plus a TB4 Maple Ridge
+> > transit) produces rx_missed_errors at ~1 % of rx_packets on the transit
+> > and ~0.6 % on the endpoints, with rx_packets stalling against a peer's
+> > continuing tx_packets.
 > > 
-> > Any application that supports read(2) and write(2) in some form should
-> > be able to use the device without changes. The data is sent out to the
-> > other side over a tunnel inside Thunderbolt/USB4 fabric. The character
-> > device is called /dev/tbstreamX where X is the minor number starting
-> > from 0.
+> > Raise TBNET_RING_SIZE to 2048 (8x) and use netif_napi_add_weight() with
+> > a per-NAPI weight of 256 so tbnet_poll() drains more frames per softirq
+> > invocation.  With matching sysctls (net.core.netdev_budget=1024,
+> > net.core.netdev_budget_usecs=8000) rx_missed_errors stays below 0.005 %
+> > over a 192 GB all-reduce workload on the same hardware.
 > > 
-> > All stream devices need to be configured first. This is done through
-> > ConfigFS interface. There can be multiple streams at the same time (this
-> > depends on number of DMA rings and available HopIDs) and a single stream
-> > supports traffic in both directions. For example there could be an
-> > application that uses one stream as control channel and another one as
-> > bi-directional data channel.
-> > 
-> > A real use-case for this is to take a backup as a part of recovery
-> > initramfs tooling (no need to setup networking or have ssh or similar
-> > tooling as part of the initramfs). Say we want to backup the disk of
-> > host1 to host2. First Thunderbolt/USB4 cable is connected between the
-> > hosts (there can be devices in the middle too) then the receiving side
-> > configures the stream:
-> > 
-> >   host2 # mkdir /sys/kernel/config/thunderbolt/stream/0-1.0
-> >   host2 # mkdir /sys/kernel/config/thunderbolt/stream/0-1.0/backup
-> >   host2 # echo -1 > /sys/kernel/config/thunderbolt/stream/0-1.0/backup/in_hopid
-> >   host2 # echo -1 > /sys/kernel/config/thunderbolt/stream/0-1.0/backup/out_hopid
-> > 
-> > We use automatic HopID allocation (writing -1 to HopIDs) for simplicity.
-> > >From this point forward the /dev/tbstream0 can be used pretty much as
-> > regular file:
-> > 
-> >   host2 # dd if=/dev/tbstream0 of=/tmp/host1.nvme0n1.backup-$(date +%F) bs=256k
-> > 
-> > The host that is being backed up then configures the stream accordingly:
-> > 
-> >   host1 # mkdir /sys/kernel/config/thunderbolt/stream/0-503.0
-> >   host1 # mkdir /sys/kernel/config/thunderbolt/stream/0-503.0/backup
-> > 
-> > Here we take advantage of the fact that host2 also announces the active
-> > streams through XDomain properties so the name "backup" gives us the
-> > HopIDs. It is also possible to configure them manually in the same way
-> > we did for host2.
-> > 
-> > Then it is just a matter of copying the data over:
-> > 
-> >   host1 # dd if=/dev/nvme0n1 of=/dev/tbstream0 bs=256k
-> > 
-> > Similarly it is possible to transfer parts of the filesystem. For
-> > example copy contents of mydir over to the host2:
-> > 
-> >   host2 # gunzip < /dev/tbstream0 | tar xf -
-> >   host1 # tar cf - mydir | gzip > /dev/tbstream0
-> > 
-> > Other end of the spectrum use-case is "borrowing" laptop (host1) camera
-> > to desktop (host2):
-> > 
-> >   host2 # gst-launch-1.0 filesrc location=/dev/tbstream0 ! jpegdec ! videoconvert ! \
-> >                          autovideosink
-> > 
-> >   host1 # gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1920,height=1080 ! \
-> >                          jpegenc quality=90 ! filesink location=/dev/tbstream0
-> > 
-> > Once the streams are no longer needed they can be removed:
-> > 
-> >   host1 # cd /sys/kernel/config/thunderbolt/stream/
-> >   host1 # rmdir -p 0-503.0/backup
-> > 
-> >   host2 # cd /sys/kernel/config/thunderbolt/stream
-> >   host2 # rmdir -p 0-1.0/backup
+> > Generated-by: Claude Opus 4.7 <claude-opus-4-7@anthropic.com>
+> > Tested-by: Benjamin Berman <benjamin.s.berman@gmail.com>
+> > Signed-off-by: Benjamin Berman <benjamin.s.berman@gmail.com>
 > 
-> Very cool, but shouldn't the above be in some documentation somewhere so
-> that people know how to use it?
+> For ring size I don't have any objections. The current ring size 256 is
+> arbitrary and at the time seemed reasonable.
+> 
+> For the poll weigth there is the comment in netdevice.h:
+> 
+> /* Default NAPI poll() weight
+>  * Device drivers are strongly advised to not use bigger value
+>  */
+> #define NAPI_POLL_WEIGHT 64
+> 
+> But if you see improvement using 256 here I'm fine with that unless the
+> network folks advice otherwise.
 
-Sure, I can add it part of the Documentation/admin-guide/thunderbolt.rs for
-example.
+I just did a quick sample of other drivers which change the NAPI
+weight. Of the 10 i looked at, 9 reduced the weight. Only one
+increased it.
 
-> And why do you need a whole major for this, why not just use a misc
-> device that it dynamically created for every new dev?
+I would like the core netdev people to comment on this, before it is
+accepted.
 
-We do use this:
+Questions which come to mind:
 
-       ret = alloc_chrdev_region(&tbstream_devt, 0, TBSTREAM_DEV_MINORS,
-                                  "tbstream");
+Why is the polling not happening frequently enough? 
 
-that should be dynamically allocated, no?
+Is it frequently swapping between polling and interrupts?
+
+Is there interrupt coalesce going on, and the coalesce time set too
+high, so that by the time the interrupt fires the ring is full? Can
+you play with ethtool -C?
+
+	Andrew
+
 
