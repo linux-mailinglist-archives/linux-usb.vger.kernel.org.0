@@ -1,461 +1,215 @@
-Return-Path: <linux-usb+bounces-36656-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36657-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sGOiA0Qo8WmAeAEAu9opvQ
-	(envelope-from <linux-usb+bounces-36656-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 23:36:04 +0200
+	id +HWJMMsx8WkgegEAu9opvQ
+	(envelope-from <linux-usb+bounces-36657-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 00:16:43 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6683A48C589
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 23:36:02 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D2C648C844
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 00:16:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AF735302A6C2
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 21:35:59 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A800430338A3
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 22:16:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABF7D3C2775;
-	Tue, 28 Apr 2026 21:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D6D2347500;
+	Tue, 28 Apr 2026 22:16:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FwnC3Lsf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RIGgBD17"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8B22E8DE3;
-	Tue, 28 Apr 2026 21:35:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF8521CA02
+	for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 22:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777412158; cv=none; b=nGPGWhClZnELmrT0I0nlMS18QW4qth+Zpxe3u24iaCCgOjMz2pmS21PyhEXDyHUcelhimg/AmpPgxM9b8iScejXEp6m65Z96sjGKvugizUITCA8nkSe1vu97pqPTcynOz7oLH3/5RKLG+tD2JOgNJ6N4dzZplRLU0bMtiBVU8L8=
+	t=1777414595; cv=none; b=LzLu9CTzOBTwxHh2LZ3a1w20mbhaJ0mRn9RLA3ovI8w9++SenmRuVb6h9rmJVwBiqeSgNxds3YvoKMtdFNM3dIp7txBYC0lmGgRQzoTg3xIT5d5FJtHO6DwvqsJxaYTrCDNBO1RcBYie65EHyay+qBhq1N4B/z+GI9kM5HPH2qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777412158; c=relaxed/simple;
-	bh=4WF/96wjnOrMMUrAFfoOywj5EFUl8oXxhUnuXCwOogE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QgT+gpbnyw7J1xCFOQocNmIXekUwRF6dnVNfFjT0uW2u0/74JJQZJE96bcIymx5Vm1KWW1bQzZz7FMRIb6d3oVCGdEDBHfrS19bXMaT2Z0dypRHdNS+qGG6HO+oc5UTXyv9Rdewt0o4+SkC35ZK6ErBE89QFPW3WBqkC3jgt17w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FwnC3Lsf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B926DC2BCAF;
-	Tue, 28 Apr 2026 21:35:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777412157;
-	bh=4WF/96wjnOrMMUrAFfoOywj5EFUl8oXxhUnuXCwOogE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FwnC3LsfMBcgkbdu5ezB9EAvkyjyZxI+PWh3R9OjsI+IDpZtXQAF+K9MLqK+tFID4
-	 R7HP8i5tCt6x9+NEjMs18zuqSiVjqAQYBU/8fIuOEaM51qHu2YmtgSgrx0zmTjI1kZ
-	 geG8nCjQLQAp7AmgFrd/TSsc0GuIDiXqDuVhL997jh0BfBRFugt7/mOCEoG6iNcIoX
-	 tpux+r9HQa+7+kRW9UPr1muGm3oTuHllW8TIq4LqcBLOtCbburZ2RY08ZH50/x+ibg
-	 qpN0K6lQiSkDagzwdt9lNr6A8vA5W/hyvsrm7i2eqBIFWHGpNAYwOtPMCsVPVc81+M
-	 EvTogoz/IjHyQ==
-Received: by venus (Postfix, from userid 1000)
-	id 1743C182957; Tue, 28 Apr 2026 23:35:56 +0200 (CEST)
-Date: Tue, 28 Apr 2026 23:35:55 +0200
-From: Sebastian Reichel <sre@kernel.org>
-To: Konrad Dybcio <konradybcio@kernel.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	usb4-upstream@oss.qualcomm.com, Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, Jack Pham <jack.pham@oss.qualcomm.com>
-Subject: Re: [PATCH] usb: typec: mux: ps883x: Power the retimer off when not
- in use
-Message-ID: <afEoAvbgzDvFbKo3@venus>
-References: <20260420-topic-ps883x_unused_reset-v1-1-7aabf7004d2a@oss.qualcomm.com>
+	s=arc-20240116; t=1777414595; c=relaxed/simple;
+	bh=zutEqipAXy30WvagOv6LdOcoZcFCcGn0PRgag/sheCk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZR8UU0+1lFYcvyZdldjq3zyAP4fcU6Rn3Bhypan4ND6KokJzncmKz4NhFmskJjp2xIY4M3+4W9ZPcBt7yrcrLcus2a8zmNAywyVrCOJlCAQJ69kI5ZEW/mBkne6LtVMwS6olXBsn7VvpBenxx4Three6O0Pf267vS6xaheo9Ypo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RIGgBD17; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5a4113ab355so12951826e87.1
+        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 15:16:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777414592; x=1778019392; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YbCXFZ6lSLfvvF1eaUf3LQFQLtDBatPhoQY3ddj37NE=;
+        b=RIGgBD17y/YP2ax/xfmx5/tEUnj/kQj86QXpMKt7LoPBLZWUi5/hj9MDrxdQXqCyaz
+         wzZMyOzcMEdEntCz6TGwzj0MxKuL25cLFEFJMu+kzEss4Huqpm9HgDZSrRPlLl4kXG59
+         nuEzk1CC2fbXJ8Drc0TuTI2/FfbIrVsTd8nlEOMX13LfWwF5MacLGROOQsVGFq27IlXg
+         gujP72D0lZYreyh+Ioa5ReEdcZ/RsXElK1E2C3wmNIZxafqfU8Qa7T92Sd55G+KYk6qR
+         9mMydFakK1FC4V1U+9eA9/KEbDjyBgIOpTgci87BhLkhjcs+ybe0+VZhk19J3it4Hmr/
+         WC9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777414592; x=1778019392;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=YbCXFZ6lSLfvvF1eaUf3LQFQLtDBatPhoQY3ddj37NE=;
+        b=sZ8Uzwmm+3gqYu1K7urpPKIPo5fY6nW+mgvXIZfzuG1cNMvArYxjj2x29F7MG7Lj53
+         Fb35MYyKOoKl18npAQe8HvL5bKn3qvFKLO95I7hBuCmgU66SMjBHKUgIiMICE6GslJbh
+         9CCDYvck6zao8CYQaPsABIbMelkiGzzKjEqvHhepltovDuXE0xw7aGxZ+T9ft35zenX/
+         YoYFKTIoxyVLF+WIWANmsLF7qy4pYCYg4YKW4oGlANRdkohAECoVV/ZSNKw8aTIf3ynW
+         DZZMHO+vPyB4Eg4fW1bIv+LubiDGVu57ZU6XFiL/MNYsUvqg1v43AuBdclgy2dZuOnkh
+         VImg==
+X-Forwarded-Encrypted: i=1; AFNElJ9YF3GY7KRXbsnunhYyBtmdcMPKkMuXy44Q4vGtvDMFHUAa1DMbR3TAem9jXcJoH81tlis8zH9br9c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqckoFB+ZL9jonylruP9z/uaxlrvQUMZRp5yl6cgf69v8H21zK
+	njsZwclwYLW2NxSfIxE6fsb8hFwWXpKYHSZ775FaPV9o+Ps9LdmW+0CwvKTOjg==
+X-Gm-Gg: AeBDietsTkjKBwn9B5SGTNY+ITl2Pw4362H3LBOFL0QBGCPy6e4idkEr4GpEKYDELsp
+	NEOI4AXdr2PA2/ppv9+1SVGK3w/rC3xyMA1uKHlDtqd2Nva109olwmdqKuTk7+u7u+IfemigGKp
+	LXk3I73Tndq5lS8uZr/nJY6nL8F8oAmjxLqJfWtmJR2tYQXwv+WZJmqzcFCsrzYg05dpXXc5Hof
+	Uh/loQfChbDn+hfU3B/15sCtctsuGL86nyj6INUXnmIaUrasphi43OutfdQTdpdFueB72+YXo5V
+	cDyRGmB1l9gz+Uk+7hRCbYMt/vQi17ybwtepkPVrub/IU8LrGtrOKIlTJsvNB3gmDU0bZoyxVON
+	1acXqEYIanSymhzqi4dy5LsOG+lkspbRKj6UJfR9itzepgg+/X6hCW/wVsgPpCH54zLDle+rmkk
+	jyCSBFTkswYhjtfkhLdqoE2O0iZ+veDkVYL4Rt3lOtQs49DUv6lObJWg==
+X-Received: by 2002:a05:6512:3194:b0:5a3:ffd1:fbcf with SMTP id 2adb3069b0e04-5a74640ecf9mr2210824e87.17.1777414592231;
+        Tue, 28 Apr 2026 15:16:32 -0700 (PDT)
+Received: from foxbook (bfh75.neoplus.adsl.tpnet.pl. [83.28.45.75])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a74a7627f4sm60251e87.56.2026.04.28.15.16.29
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 28 Apr 2026 15:16:31 -0700 (PDT)
+Date: Wed, 29 Apr 2026 00:16:26 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: "Heitor Alves de Siqueira" <halves@igalia.com>
+Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <kernel-dev@igalia.com>,
+ <syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com>,
+ <stable@kernel.org>
+Subject: Re: [PATCH v2] usb: usbtmc: reject invalid interrupt endpoints
+Message-ID: <20260429001626.2f08b991.michal.pecio@gmail.com>
+In-Reply-To: <DI51WD2C7TJF.1X6B12NO0OO4@igalia.com>
+References: <20260423-usbtmc-iin-size-v2-1-31afa4874f71@igalia.com>
+	<20260424002839.5ad25517.michal.pecio@gmail.com>
+	<DI51WD2C7TJF.1X6B12NO0OO4@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="k323naxkp6axmw45"
-Content-Disposition: inline
-In-Reply-To: <20260420-topic-ps883x_unused_reset-v1-1-7aabf7004d2a@oss.qualcomm.com>
-X-Rspamd-Queue-Id: 6683A48C589
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 3D2C648C844
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-3.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36656-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TAGGED_FROM(0.00)[bounces-36657-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sre@kernel.org,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email]
+	TAGGED_RCPT(0.00)[linux-usb,abbfd103085885cf16a2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[appspotmail.com:email,igalia.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,syzkaller.appspot.com:url,msgid.link:url]
 
+On Tue, 28 Apr 2026 16:55:58 -0300, Heitor Alves de Siqueira wrote:
+> On Thu Apr 23, 2026 at 7:28 PM -03, Michal Pecio wrote:
+> > On Thu, 23 Apr 2026 15:04:38 -0300, Heitor Alves de Siqueira wrote:  
+> >> The USBTMC driver allocates the Interrupt-IN buffer according to the
+> >> wMaxPacketSize value obtained from the USB endpoint. If a USB device
+> >> advertises a small enough wMaxPacketSize (e.g. a malfunctioning device
+> >> or an endpoint constructed by syzbot), the buffer will not have enough
+> >> space for the mandatory headers and will trigger an out-of-bounds read.
+> >> 
+> >> Fix by rejecting devices advertising interrupt endpoints that don't fit
+> >> at least the mandatory headers (bNotify1 and bNotify2).
+> >> 
+> >> Fixes: dbf3e7f654c0 ("Implement an ioctl to support the USMTMC-USB488 READ_STATUS_BYTE operation.")
+> >> Reported-by: syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com
+> >> Closes: https://syzkaller.appspot.com/bug?extid=abbfd103085885cf16a2
+> >> Cc: stable@kernel.org
+> >> Suggested-by: Michal Pecio <michal.pecio@gmail.com>
+> >> Signed-off-by: Heitor Alves de Siqueira <halves@igalia.com>
+> >> ---
+> >> Changes in v2:
+> >> - Instead of ensuring buffer size, reject devices that advertise illegal/invalid interrupt endpoints
+> >> - Link to v1: https://patch.msgid.link/20260422-usbtmc-iin-size-v1-1-5dc44b4389aa@igalia.com  
+> >
+> > On second thought, this may be not enough. A wMaxPacketSize == 2 device
+> > can still send only 1 byte (or even 0) and cause unititialized read.
+> > Better check if the URB completed with expected actual_length before
+> > trying to parse the message.  
+> 
+> You're right, although I think these are two separate issues. There
+> are indeed no checks for actual_length in usbtmc_interrupt(), and I'd
+> be happy to include those in a v3 (or a separate patch) if you agree
+> with this approach. For these cases though, I wonder if we can just
+> ignore the URB, as actual_length<2 would imply that either the headers
+> are missing, or the payload length is 0.
 
---k323naxkp6axmw45
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] usb: typec: mux: ps883x: Power the retimer off when not
- in use
-MIME-Version: 1.0
+I'm completely unfamiliar with this class, but my understanding of
+USBTMC spec is that bNotify1 is mandatory while bNotify2 may have
+any length, likely including zero, though it's a bit imprecise.
 
-Hi,
+The driver only supports notifications defined in the separate USB488
+spec and for these, bNotify2 should be one byte. It also warns on
+every unrecognized notification.
 
-On Mon, Apr 20, 2026 at 01:40:28PM +0200, Konrad Dybcio wrote:
-> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->=20
-> When there's nothing going through the retimer, there's no reason to
-> keep it online. Put it in reset when possible to save power.
->=20
-> Also, remove the register cache-compare optimization as it makes little
-> sense now that the chip resets during almost all transitions and
-> tracking the validity of that cache becomes a headache.
->=20
-> Suggested-by: Jack Pham <jack.pham@oss.qualcomm.com>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> ---
-> Note most of the diff happens to be there because I need to move
-> ps883x_(en/dis)able_vregs() around..
-> ---
+I think a minimal fix which mostly preserves existing behavior would
+be adding "urb->actual_length == 2" as a requirement for all USB488
+notifications. Then any truncated message will be ignored and logged.
 
-Tested-by: Sebastian Reichel <sre@kernel.org> # T14s Gen6 Snapdragon
+wMaxPacketSize is a separate issue indeed and it seems that a USB488
+device could legally set it to 1, though it would be crazy. Your v1
+patch would probably make such devices work, if anyone cares.
 
-Greetings,
+> > And by the way, an interrupt transfer may span multiple intervals
+> > and exceed wMaxPacketSize, USBTMC spec alludes to it.
+> > Theoretically, even wMaxPacketSize == 1 seems possible, though it
+> > would be crazy and likely no such HW exists because nobody
+> > complains that it doesn't work.  
+> 
+> Yes, but aren't such cases already handled as long as we validate the
+> bNotify headers? USBTMC interrupt payloads must include at least two
+> bytes for bNotify1 and bNotify2, so URBs that don't fit those should
+> be considered invalid, right?
 
--- Sebastian
+Not entirely sure what you mean, but obviously a notification which
+doesn't even have bNotify1 is bogus, as is one where bNotify2 is
+shorter than requiredy by particular value of bNotify1 and protocol.
 
->  drivers/usb/typec/mux/ps883x.c | 196 ++++++++++++++++++++++++-----------=
-------
->  1 file changed, 114 insertions(+), 82 deletions(-)
->=20
-> diff --git a/drivers/usb/typec/mux/ps883x.c b/drivers/usb/typec/mux/ps883=
-x.c
-> index 1256252eceed..f52443638ee2 100644
-> --- a/drivers/usb/typec/mux/ps883x.c
-> +++ b/drivers/usb/typec/mux/ps883x.c
-> @@ -61,19 +61,110 @@ struct ps883x_retimer {
->  	struct mutex lock; /* protect non-concurrent retimer & switch */
-> =20
->  	enum typec_orientation orientation;
-> -	u8 cfg0;
-> -	u8 cfg1;
-> -	u8 cfg2;
-> +	bool in_reset;
->  };
-> =20
-> +static int ps883x_enable_vregs(struct ps883x_retimer *retimer)
-> +{
-> +	struct device *dev =3D &retimer->client->dev;
-> +	int ret;
-> +
-> +	ret =3D regulator_enable(retimer->vdd33_supply);
-> +	if (ret) {
-> +		dev_err(dev, "cannot enable VDD 3.3V regulator: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret =3D regulator_enable(retimer->vdd33_cap_supply);
-> +	if (ret) {
-> +		dev_err(dev, "cannot enable VDD 3.3V CAP regulator: %d\n", ret);
-> +		goto err_vdd33_disable;
-> +	}
-> +
-> +	usleep_range(4000, 10000);
-> +
-> +	ret =3D regulator_enable(retimer->vdd_supply);
-> +	if (ret) {
-> +		dev_err(dev, "cannot enable VDD regulator: %d\n", ret);
-> +		goto err_vdd33_cap_disable;
-> +	}
-> +
-> +	ret =3D regulator_enable(retimer->vddar_supply);
-> +	if (ret) {
-> +		dev_err(dev, "cannot enable VDD AR regulator: %d\n", ret);
-> +		goto err_vdd_disable;
-> +	}
-> +
-> +	ret =3D regulator_enable(retimer->vddat_supply);
-> +	if (ret) {
-> +		dev_err(dev, "cannot enable VDD AT regulator: %d\n", ret);
-> +		goto err_vddar_disable;
-> +	}
-> +
-> +	ret =3D regulator_enable(retimer->vddio_supply);
-> +	if (ret) {
-> +		dev_err(dev, "cannot enable VDD IO regulator: %d\n", ret);
-> +		goto err_vddat_disable;
-> +	}
-> +
-> +	return 0;
-> +
-> +err_vddat_disable:
-> +	regulator_disable(retimer->vddat_supply);
-> +err_vddar_disable:
-> +	regulator_disable(retimer->vddar_supply);
-> +err_vdd_disable:
-> +	regulator_disable(retimer->vdd_supply);
-> +err_vdd33_cap_disable:
-> +	regulator_disable(retimer->vdd33_cap_supply);
-> +err_vdd33_disable:
-> +	regulator_disable(retimer->vdd33_supply);
-> +
-> +	return ret;
-> +}
-> +
-> +static void ps883x_disable_vregs(struct ps883x_retimer *retimer)
-> +{
-> +	regulator_disable(retimer->vddio_supply);
-> +	regulator_disable(retimer->vddat_supply);
-> +	regulator_disable(retimer->vddar_supply);
-> +	regulator_disable(retimer->vdd_supply);
-> +	regulator_disable(retimer->vdd33_cap_supply);
-> +	regulator_disable(retimer->vdd33_supply);
-> +}
-> +
-> +static void ps883x_reset(struct ps883x_retimer *retimer)
-> +{
-> +	if (retimer->in_reset)
-> +		return;
-> +
-> +	gpiod_set_value(retimer->reset_gpio, 1);
-> +	ps883x_disable_vregs(retimer);
-> +	retimer->in_reset =3D true;
-> +}
-> +
->  static int ps883x_configure(struct ps883x_retimer *retimer, int cfg0,
-> -			    int cfg1, int cfg2)
-> +			    int cfg1, int cfg2, bool reset)
->  {
->  	struct device *dev =3D &retimer->client->dev;
->  	int ret;
-> =20
-> -	if (retimer->cfg0 =3D=3D cfg0 && retimer->cfg1 =3D=3D cfg1 && retimer->=
-cfg2 =3D=3D cfg2)
-> +	if (reset) {
-> +		ps883x_reset(retimer);
-> +
->  		return 0;
-> +	} else if (retimer->in_reset) {
-> +		ret =3D ps883x_enable_vregs(retimer);
-> +		if (ret)
-> +			return ret;
-> +
-> +		gpiod_set_value(retimer->reset_gpio, 0);
-> +
-> +		/* firmware initialization delay */
-> +		msleep(60);
-> +
-> +		retimer->in_reset =3D false;
-> +	}
-> =20
->  	ret =3D regmap_write(retimer->regmap, REG_USB_PORT_CONN_STATUS_0, cfg0);
->  	if (ret) {
-> @@ -93,10 +184,6 @@ static int ps883x_configure(struct ps883x_retimer *re=
-timer, int cfg0,
->  		return ret;
->  	}
-> =20
-> -	retimer->cfg0 =3D cfg0;
-> -	retimer->cfg1 =3D cfg1;
-> -	retimer->cfg2 =3D cfg2;
-> -
->  	return 0;
->  }
-> =20
-> @@ -107,6 +194,7 @@ static int ps883x_set(struct ps883x_retimer *retimer,=
- struct typec_retimer_state
->  	int cfg0 =3D CONN_STATUS_0_CONNECTION_PRESENT;
->  	int cfg1 =3D 0x00;
->  	int cfg2 =3D 0x00;
-> +	bool reset =3D false;
-> =20
->  	if (retimer->orientation =3D=3D TYPEC_ORIENTATION_REVERSE)
->  		cfg0 |=3D CONN_STATUS_0_ORIENTATION_REVERSED;
-> @@ -148,9 +236,13 @@ static int ps883x_set(struct ps883x_retimer *retimer=
-, struct typec_retimer_state
->  		}
->  	} else {
->  		switch (state->mode) {
-> +		/* SAFE can be transient or point to an actual disconnect */
->  		case TYPEC_STATE_SAFE:
-> +			reset =3D retimer->orientation =3D=3D TYPEC_ORIENTATION_NONE;
-> +			break;
->  		/* USB2 pins don't even go through this chip */
->  		case TYPEC_MODE_USB2:
-> +			reset =3D true;
->  			break;
->  		case TYPEC_STATE_USB:
->  		case TYPEC_MODE_USB3:
-> @@ -171,7 +263,7 @@ static int ps883x_set(struct ps883x_retimer *retimer,=
- struct typec_retimer_state
->  		}
->  	}
-> =20
-> -	return ps883x_configure(retimer, cfg0, cfg1, cfg2);
-> +	return ps883x_configure(retimer, cfg0, cfg1, cfg2, reset);
->  }
-> =20
->  static int ps883x_sw_set(struct typec_switch_dev *sw,
-> @@ -184,11 +276,19 @@ static int ps883x_sw_set(struct typec_switch_dev *s=
-w,
->  	if (ret)
->  		return ret;
-> =20
-> -	mutex_lock(&retimer->lock);
-> +	guard(mutex)(&retimer->lock);
-> =20
->  	if (retimer->orientation !=3D orientation) {
->  		retimer->orientation =3D orientation;
-> =20
-> +		/*
-> +		 * Orientation notifications usually come prior to mode switch
-> +		 * events. If the retimer is already in reset, we still want to
-> +		 * cache the new orientation value for the subsequent ps883x_set().
-> +		 */
-> +		if (retimer->in_reset)
-> +			return 0;
-> +
->  		ret =3D regmap_assign_bits(retimer->regmap, REG_USB_PORT_CONN_STATUS_0,
->  					 CONN_STATUS_0_ORIENTATION_REVERSED,
->  					 orientation =3D=3D TYPEC_ORIENTATION_REVERSE);
-> @@ -196,8 +296,6 @@ static int ps883x_sw_set(struct typec_switch_dev *sw,
->  			dev_err(&retimer->client->dev, "failed to set orientation: %d\n", ret=
-);
->  	}
-> =20
-> -	mutex_unlock(&retimer->lock);
-> -
->  	return ret;
->  }
-> =20
-> @@ -222,75 +320,6 @@ static int ps883x_retimer_set(struct typec_retimer *=
-rtmr,
->  	return typec_mux_set(retimer->typec_mux, &mux_state);
->  }
-> =20
-> -static int ps883x_enable_vregs(struct ps883x_retimer *retimer)
-> -{
-> -	struct device *dev =3D &retimer->client->dev;
-> -	int ret;
-> -
-> -	ret =3D regulator_enable(retimer->vdd33_supply);
-> -	if (ret) {
-> -		dev_err(dev, "cannot enable VDD 3.3V regulator: %d\n", ret);
-> -		return ret;
-> -	}
-> -
-> -	ret =3D regulator_enable(retimer->vdd33_cap_supply);
-> -	if (ret) {
-> -		dev_err(dev, "cannot enable VDD 3.3V CAP regulator: %d\n", ret);
-> -		goto err_vdd33_disable;
-> -	}
-> -
-> -	usleep_range(4000, 10000);
-> -
-> -	ret =3D regulator_enable(retimer->vdd_supply);
-> -	if (ret) {
-> -		dev_err(dev, "cannot enable VDD regulator: %d\n", ret);
-> -		goto err_vdd33_cap_disable;
-> -	}
-> -
-> -	ret =3D regulator_enable(retimer->vddar_supply);
-> -	if (ret) {
-> -		dev_err(dev, "cannot enable VDD AR regulator: %d\n", ret);
-> -		goto err_vdd_disable;
-> -	}
-> -
-> -	ret =3D regulator_enable(retimer->vddat_supply);
-> -	if (ret) {
-> -		dev_err(dev, "cannot enable VDD AT regulator: %d\n", ret);
-> -		goto err_vddar_disable;
-> -	}
-> -
-> -	ret =3D regulator_enable(retimer->vddio_supply);
-> -	if (ret) {
-> -		dev_err(dev, "cannot enable VDD IO regulator: %d\n", ret);
-> -		goto err_vddat_disable;
-> -	}
-> -
-> -	return 0;
-> -
-> -err_vddat_disable:
-> -	regulator_disable(retimer->vddat_supply);
-> -err_vddar_disable:
-> -	regulator_disable(retimer->vddar_supply);
-> -err_vdd_disable:
-> -	regulator_disable(retimer->vdd_supply);
-> -err_vdd33_cap_disable:
-> -	regulator_disable(retimer->vdd33_cap_supply);
-> -err_vdd33_disable:
-> -	regulator_disable(retimer->vdd33_supply);
-> -
-> -	return ret;
-> -}
-> -
-> -static void ps883x_disable_vregs(struct ps883x_retimer *retimer)
-> -{
-> -	regulator_disable(retimer->vddio_supply);
-> -	regulator_disable(retimer->vddat_supply);
-> -	regulator_disable(retimer->vddar_supply);
-> -	regulator_disable(retimer->vdd_supply);
-> -	regulator_disable(retimer->vdd33_cap_supply);
-> -	regulator_disable(retimer->vdd33_supply);
-> -}
-> -
->  static int ps883x_get_vregs(struct ps883x_retimer *retimer)
->  {
->  	struct device *dev =3D &retimer->client->dev;
-> @@ -422,6 +451,9 @@ static int ps883x_retimer_probe(struct i2c_client *cl=
-ient)
->  		}
->  	}
-> =20
-> +	/* Keep the retimer in reset until a Type-C notification comes */
-> +	ps883x_reset(retimer);
-> +
->  	sw_desc.drvdata =3D retimer;
->  	sw_desc.fwnode =3D dev_fwnode(dev);
->  	sw_desc.set =3D ps883x_sw_set;
->=20
-> ---
-> base-commit: c7275b05bc428c7373d97aa2da02d3a7fa6b9f66
-> change-id: 20260420-topic-ps883x_unused_reset-9af0909cefac
->=20
-> Best regards,
-> --=20
-> Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->=20
->=20
+> Even if the payload is split between multiple transfers, these
+> headers should be present in individual URBs. Checking if
+> actual_length fits both bNotify headers should be sufficient, as data
+> buffers will have enough space for at least wMaxPacketSize, and the
+> overflow case is already handled in usbtmc_interrupt().
 
---k323naxkp6axmw45
-Content-Type: application/pgp-signature; name="signature.asc"
+Not sure what you mean, and I'm not sure if a long multi-packet
+vendor notification must have bNotify1 header in every packet.
+I think it doesn't, note that transfer != transaction. A device
+actually sending such messages could be painful to handle.
+But that's yet another separate issue, if such HW even exists.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmnxKDgACgkQ2O7X88g7
-+przRQ/+JsrZ1UlHL6mePbTo2gdVfYOXP/I75Z8p6xKg0ywaGFFNQEZjxeF97JWc
-EONsfthfTKz3jjwwZBTw1CZf/wlryLKRWD0eo/VlCrxLrjYKbE/prgoLQqSgS3vV
-1XpEkEDN5nXeHf1NcU+1QkFdZ5gmErki/yF5aBXnVT2SFDU2vQIGO69jjigwR6Zc
-tCIzAshW81k0tL9v68FX/SuxAG8XT92h/wOF7mIP2tqyvI3LFFr2J1jDAl5n9nLM
-DlZFzjsBMf3PvcZzoKdsJJD9ErytEh0nf8plGZrb9An87OcFLocQ3AantK91vTbI
-BZiEvmH7rPInHaHABumvBXh7F3s5oc0QuLkvov162+o9vlTMDE+w4AuTWJdlWnFF
-aTkV17FC51l+6P2D8zECjy/aU/fdJfiSKIp2mmRYxsO7NzBgDR1v8TIwkxzSlgOp
-vzULDD7Hv22dByP80K3icVlkCrlM/Q0oZ0H/IFu+2+munJoPcQaiJXgA4PKGXd5P
-VxgH4ZtfftcHJROGxcKJTpsRfgMNg8TJfmz/ds0TfRauzisBPJZiOSbtOHNmDgdx
-/B3CnG0TtovlyfLiPSDgb1t7FcHnhS3uaoimQ/tqcfoa9F0O2V2P5WjHBsGNilWf
-oM1oka4en6O5U+pUXl6Eup1/jBi44BugN0+o871Do6HqzR7T0kw=
-=OdeZ
------END PGP SIGNATURE-----
-
---k323naxkp6axmw45--
+Regards,
+Michal
 
