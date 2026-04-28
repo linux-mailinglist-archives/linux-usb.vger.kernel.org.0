@@ -1,215 +1,205 @@
-Return-Path: <linux-usb+bounces-36657-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36658-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +HWJMMsx8WkgegEAu9opvQ
-	(envelope-from <linux-usb+bounces-36657-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 00:16:43 +0200
+	id KCEFG8s+8WmhfAEAu9opvQ
+	(envelope-from <linux-usb+bounces-36658-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 01:12:11 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D2C648C844
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 00:16:43 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A2D948CE84
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 01:12:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A800430338A3
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 22:16:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B1EF5305129C
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 23:11:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D6D2347500;
-	Tue, 28 Apr 2026 22:16:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07576386C03;
+	Tue, 28 Apr 2026 23:11:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RIGgBD17"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PJtjKkFQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF8521CA02
-	for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 22:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF2733ADAE;
+	Tue, 28 Apr 2026 23:11:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777414595; cv=none; b=LzLu9CTzOBTwxHh2LZ3a1w20mbhaJ0mRn9RLA3ovI8w9++SenmRuVb6h9rmJVwBiqeSgNxds3YvoKMtdFNM3dIp7txBYC0lmGgRQzoTg3xIT5d5FJtHO6DwvqsJxaYTrCDNBO1RcBYie65EHyay+qBhq1N4B/z+GI9kM5HPH2qs=
+	t=1777417905; cv=none; b=MSgsCB1iShRbCR6wRaOTHb3B+QPvUM3nrtvUIWvO6/MyGs9jPfiVmJ0iks6CDMVRDQxlqWvNUcBw4q2vySTLX5Ga7y7BVsxW+8ITPkcNfYMauqYCarTX9tRK77VBpEoDG/EHNWqZga5nStpUElDURnVatx9RWWG6sBGXpJw72Ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777414595; c=relaxed/simple;
-	bh=zutEqipAXy30WvagOv6LdOcoZcFCcGn0PRgag/sheCk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZR8UU0+1lFYcvyZdldjq3zyAP4fcU6Rn3Bhypan4ND6KokJzncmKz4NhFmskJjp2xIY4M3+4W9ZPcBt7yrcrLcus2a8zmNAywyVrCOJlCAQJ69kI5ZEW/mBkne6LtVMwS6olXBsn7VvpBenxx4Three6O0Pf267vS6xaheo9Ypo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RIGgBD17; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5a4113ab355so12951826e87.1
-        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 15:16:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777414592; x=1778019392; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YbCXFZ6lSLfvvF1eaUf3LQFQLtDBatPhoQY3ddj37NE=;
-        b=RIGgBD17y/YP2ax/xfmx5/tEUnj/kQj86QXpMKt7LoPBLZWUi5/hj9MDrxdQXqCyaz
-         wzZMyOzcMEdEntCz6TGwzj0MxKuL25cLFEFJMu+kzEss4Huqpm9HgDZSrRPlLl4kXG59
-         nuEzk1CC2fbXJ8Drc0TuTI2/FfbIrVsTd8nlEOMX13LfWwF5MacLGROOQsVGFq27IlXg
-         gujP72D0lZYreyh+Ioa5ReEdcZ/RsXElK1E2C3wmNIZxafqfU8Qa7T92Sd55G+KYk6qR
-         9mMydFakK1FC4V1U+9eA9/KEbDjyBgIOpTgci87BhLkhjcs+ybe0+VZhk19J3it4Hmr/
-         WC9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777414592; x=1778019392;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=YbCXFZ6lSLfvvF1eaUf3LQFQLtDBatPhoQY3ddj37NE=;
-        b=sZ8Uzwmm+3gqYu1K7urpPKIPo5fY6nW+mgvXIZfzuG1cNMvArYxjj2x29F7MG7Lj53
-         Fb35MYyKOoKl18npAQe8HvL5bKn3qvFKLO95I7hBuCmgU66SMjBHKUgIiMICE6GslJbh
-         9CCDYvck6zao8CYQaPsABIbMelkiGzzKjEqvHhepltovDuXE0xw7aGxZ+T9ft35zenX/
-         YoYFKTIoxyVLF+WIWANmsLF7qy4pYCYg4YKW4oGlANRdkohAECoVV/ZSNKw8aTIf3ynW
-         DZZMHO+vPyB4Eg4fW1bIv+LubiDGVu57ZU6XFiL/MNYsUvqg1v43AuBdclgy2dZuOnkh
-         VImg==
-X-Forwarded-Encrypted: i=1; AFNElJ9YF3GY7KRXbsnunhYyBtmdcMPKkMuXy44Q4vGtvDMFHUAa1DMbR3TAem9jXcJoH81tlis8zH9br9c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqckoFB+ZL9jonylruP9z/uaxlrvQUMZRp5yl6cgf69v8H21zK
-	njsZwclwYLW2NxSfIxE6fsb8hFwWXpKYHSZ775FaPV9o+Ps9LdmW+0CwvKTOjg==
-X-Gm-Gg: AeBDietsTkjKBwn9B5SGTNY+ITl2Pw4362H3LBOFL0QBGCPy6e4idkEr4GpEKYDELsp
-	NEOI4AXdr2PA2/ppv9+1SVGK3w/rC3xyMA1uKHlDtqd2Nva109olwmdqKuTk7+u7u+IfemigGKp
-	LXk3I73Tndq5lS8uZr/nJY6nL8F8oAmjxLqJfWtmJR2tYQXwv+WZJmqzcFCsrzYg05dpXXc5Hof
-	Uh/loQfChbDn+hfU3B/15sCtctsuGL86nyj6INUXnmIaUrasphi43OutfdQTdpdFueB72+YXo5V
-	cDyRGmB1l9gz+Uk+7hRCbYMt/vQi17ybwtepkPVrub/IU8LrGtrOKIlTJsvNB3gmDU0bZoyxVON
-	1acXqEYIanSymhzqi4dy5LsOG+lkspbRKj6UJfR9itzepgg+/X6hCW/wVsgPpCH54zLDle+rmkk
-	jyCSBFTkswYhjtfkhLdqoE2O0iZ+veDkVYL4Rt3lOtQs49DUv6lObJWg==
-X-Received: by 2002:a05:6512:3194:b0:5a3:ffd1:fbcf with SMTP id 2adb3069b0e04-5a74640ecf9mr2210824e87.17.1777414592231;
-        Tue, 28 Apr 2026 15:16:32 -0700 (PDT)
-Received: from foxbook (bfh75.neoplus.adsl.tpnet.pl. [83.28.45.75])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a74a7627f4sm60251e87.56.2026.04.28.15.16.29
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 28 Apr 2026 15:16:31 -0700 (PDT)
-Date: Wed, 29 Apr 2026 00:16:26 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: "Heitor Alves de Siqueira" <halves@igalia.com>
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <kernel-dev@igalia.com>,
- <syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com>,
- <stable@kernel.org>
-Subject: Re: [PATCH v2] usb: usbtmc: reject invalid interrupt endpoints
-Message-ID: <20260429001626.2f08b991.michal.pecio@gmail.com>
-In-Reply-To: <DI51WD2C7TJF.1X6B12NO0OO4@igalia.com>
-References: <20260423-usbtmc-iin-size-v2-1-31afa4874f71@igalia.com>
-	<20260424002839.5ad25517.michal.pecio@gmail.com>
-	<DI51WD2C7TJF.1X6B12NO0OO4@igalia.com>
+	s=arc-20240116; t=1777417905; c=relaxed/simple;
+	bh=mOd1+/pjP+EGTIv5fUtzevodrBcPg1AohOW3V9tki6k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XR52Aix8xWpfF6YTod2WBxUNgokzcS8lIiVsC+W5papvJfDxwvZBhqZ8ra3ErWzlE9y3cbZL9SJvG4EwCPkLo7tn/IhYSj1yCU1gtLaaUW0KdG9tn8U1MVZgwW6/hh25u8M0claRcF2Ptm2uskACFd90gAiHVqeWTOLCNWPtXNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PJtjKkFQ; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777417903; x=1808953903;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mOd1+/pjP+EGTIv5fUtzevodrBcPg1AohOW3V9tki6k=;
+  b=PJtjKkFQGBvbYpqKqA9pWd6ckFB2BMIesRHc6+4DQvuc9t5F3lcCYNDe
+   zMX/dVCvYyCp/7tvMA610rwql2e0Jy54czAJWgHuwFcPE08kMCW2K9Ar+
+   TCgoufGFFRD4JvT45YOHqeB90CaGt/038cfTfwxsPXwyVt3VwUuElrTmy
+   S9RtscIWZxAdUMCEStOXatO7/6Z3/dVJeCxJv3BFU6WBZ3xuz1kIrGS3F
+   uqAditlqstSkt/0Ntf6chJowmEL1bXurArsaaRvTOHlunKqD9T4wQxeWU
+   o1D2Q7n6eNA/K/ndG2peWluuqGNPMqbFmOAWrpmFD8YTju0kjSqSH1AEc
+   A==;
+X-CSE-ConnectionGUID: 23Yg6JYkT4mtwJ++VMy6eg==
+X-CSE-MsgGUID: ppvR8qSiTouBACHDhWe/UA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11770"; a="77506572"
+X-IronPort-AV: E=Sophos;i="6.23,205,1770624000"; 
+   d="scan'208";a="77506572"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2026 16:11:42 -0700
+X-CSE-ConnectionGUID: oJsrIaKiQVyaW2JaRn9r3g==
+X-CSE-MsgGUID: PAPkm0WuQcacjzYfPZAOXQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,205,1770624000"; 
+   d="scan'208";a="233068293"
+Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 28 Apr 2026 16:11:39 -0700
+Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wHraa-00000000ALU-2Aes;
+	Tue, 28 Apr 2026 23:11:36 +0000
+Date: Wed, 29 Apr 2026 07:11:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maxwell Doose <m32285159@gmail.com>, badhri@google.com,
+	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: tcpm: replace strcpy with strscpy
+Message-ID: <202604290711.kHqUSJ8v-lkp@intel.com>
+References: <20260419213638.38291-2-m32285159@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 3D2C648C844
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260419213638.38291-2-m32285159@gmail.com>
+X-Rspamd-Queue-Id: 9A2D948CE84
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36657-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36658-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,google.com,linux.intel.com,linuxfoundation.org];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
 	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,abbfd103085885cf16a2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[appspotmail.com:email,igalia.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,syzkaller.appspot.com:url,msgid.link:url]
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,01.org:url]
 
-On Tue, 28 Apr 2026 16:55:58 -0300, Heitor Alves de Siqueira wrote:
-> On Thu Apr 23, 2026 at 7:28 PM -03, Michal Pecio wrote:
-> > On Thu, 23 Apr 2026 15:04:38 -0300, Heitor Alves de Siqueira wrote:  
-> >> The USBTMC driver allocates the Interrupt-IN buffer according to the
-> >> wMaxPacketSize value obtained from the USB endpoint. If a USB device
-> >> advertises a small enough wMaxPacketSize (e.g. a malfunctioning device
-> >> or an endpoint constructed by syzbot), the buffer will not have enough
-> >> space for the mandatory headers and will trigger an out-of-bounds read.
-> >> 
-> >> Fix by rejecting devices advertising interrupt endpoints that don't fit
-> >> at least the mandatory headers (bNotify1 and bNotify2).
-> >> 
-> >> Fixes: dbf3e7f654c0 ("Implement an ioctl to support the USMTMC-USB488 READ_STATUS_BYTE operation.")
-> >> Reported-by: syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com
-> >> Closes: https://syzkaller.appspot.com/bug?extid=abbfd103085885cf16a2
-> >> Cc: stable@kernel.org
-> >> Suggested-by: Michal Pecio <michal.pecio@gmail.com>
-> >> Signed-off-by: Heitor Alves de Siqueira <halves@igalia.com>
-> >> ---
-> >> Changes in v2:
-> >> - Instead of ensuring buffer size, reject devices that advertise illegal/invalid interrupt endpoints
-> >> - Link to v1: https://patch.msgid.link/20260422-usbtmc-iin-size-v1-1-5dc44b4389aa@igalia.com  
-> >
-> > On second thought, this may be not enough. A wMaxPacketSize == 2 device
-> > can still send only 1 byte (or even 0) and cause unititialized read.
-> > Better check if the URB completed with expected actual_length before
-> > trying to parse the message.  
-> 
-> You're right, although I think these are two separate issues. There
-> are indeed no checks for actual_length in usbtmc_interrupt(), and I'd
-> be happy to include those in a v3 (or a separate patch) if you agree
-> with this approach. For these cases though, I wonder if we can just
-> ignore the URB, as actual_length<2 would imply that either the headers
-> are missing, or the payload length is 0.
+Hi Maxwell,
 
-I'm completely unfamiliar with this class, but my understanding of
-USBTMC spec is that bNotify1 is mandatory while bNotify2 may have
-any length, likely including zero, though it's a bit imprecise.
+kernel test robot noticed the following build errors:
 
-The driver only supports notifications defined in the separate USB488
-spec and for these, bNotify2 should be one byte. It also warns on
-every unrecognized notification.
+[auto build test ERROR on v7.0]
+[cannot apply to usb/usb-testing usb/usb-next usb/usb-linus linus/master next-20260428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I think a minimal fix which mostly preserves existing behavior would
-be adding "urb->actual_length == 2" as a requirement for all USB488
-notifications. Then any truncated message will be ignored and logged.
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxwell-Doose/usb-typec-tcpm-replace-strcpy-with-strscpy/20260427-011111
+base:   v7.0
+patch link:    https://lore.kernel.org/r/20260419213638.38291-2-m32285159%40gmail.com
+patch subject: [PATCH] usb: typec: tcpm: replace strcpy with strscpy
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260429/202604290711.kHqUSJ8v-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260429/202604290711.kHqUSJ8v-lkp@intel.com/reproduce)
 
-wMaxPacketSize is a separate issue indeed and it seems that a USB488
-device could legally set it to 1, though it would be crazy. Your v1
-patch would probably make such devices work, if anyone cares.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604290711.kHqUSJ8v-lkp@intel.com/
 
-> > And by the way, an interrupt transfer may span multiple intervals
-> > and exceed wMaxPacketSize, USBTMC spec alludes to it.
-> > Theoretically, even wMaxPacketSize == 1 seems possible, though it
-> > would be crazy and likely no such HW exists because nobody
-> > complains that it doesn't work.  
-> 
-> Yes, but aren't such cases already handled as long as we validate the
-> bNotify headers? USBTMC interrupt payloads must include at least two
-> bytes for bNotify1 and bNotify2, so URBs that don't fit those should
-> be considered invalid, right?
+All errors (new ones prefixed by >>):
 
-Not entirely sure what you mean, but obviously a notification which
-doesn't even have bNotify1 is bogus, as is one where bNotify2 is
-shorter than requiredy by particular value of bNotify1 and protocol.
+>> drivers/usb/typec/tcpm/tcpm.c:728:52: error: expected ';' after expression
+                   strscpy(tmpbuffer, "overflow", sizeof(tmpbuffer))
+                                                                    ^
+                                                                    ;
+   1 error generated.
 
-> Even if the payload is split between multiple transfers, these
-> headers should be present in individual URBs. Checking if
-> actual_length fits both bNotify headers should be sufficient, as data
-> buffers will have enough space for at least wMaxPacketSize, and the
-> overflow case is already handled in usbtmc_interrupt().
 
-Not sure what you mean, and I'm not sure if a long multi-packet
-vendor notification must have bNotify1 header in every packet.
-I think it doesn't, note that transfer != transaction. A device
-actually sending such messages could be painful to handle.
-But that's yet another separate issue, if such HW even exists.
+vim +728 drivers/usb/typec/tcpm/tcpm.c
 
-Regards,
-Michal
+   706	
+   707	__printf(2, 0)
+   708	static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
+   709	{
+   710		char tmpbuffer[LOG_BUFFER_ENTRY_SIZE];
+   711		u64 ts_nsec = local_clock();
+   712		unsigned long rem_nsec;
+   713	
+   714		mutex_lock(&port->logbuffer_lock);
+   715		if (!port->logbuffer[port->logbuffer_head]) {
+   716			port->logbuffer[port->logbuffer_head] =
+   717					kzalloc(LOG_BUFFER_ENTRY_SIZE, GFP_KERNEL);
+   718			if (!port->logbuffer[port->logbuffer_head]) {
+   719				mutex_unlock(&port->logbuffer_lock);
+   720				return;
+   721			}
+   722		}
+   723	
+   724		vsnprintf(tmpbuffer, sizeof(tmpbuffer), fmt, args);
+   725	
+   726		if (tcpm_log_full(port)) {
+   727			port->logbuffer_head = max(port->logbuffer_head - 1, 0);
+ > 728			strscpy(tmpbuffer, "overflow", sizeof(tmpbuffer))
+   729		}
+   730	
+   731		if (port->logbuffer_head < 0 ||
+   732		    port->logbuffer_head >= LOG_BUFFER_ENTRIES) {
+   733			dev_warn(port->dev,
+   734				 "Bad log buffer index %d\n", port->logbuffer_head);
+   735			goto abort;
+   736		}
+   737	
+   738		if (!port->logbuffer[port->logbuffer_head]) {
+   739			dev_warn(port->dev,
+   740				 "Log buffer index %d is NULL\n", port->logbuffer_head);
+   741			goto abort;
+   742		}
+   743	
+   744		rem_nsec = do_div(ts_nsec, 1000000000);
+   745		scnprintf(port->logbuffer[port->logbuffer_head],
+   746			  LOG_BUFFER_ENTRY_SIZE, "[%5lu.%06lu] %s",
+   747			  (unsigned long)ts_nsec, rem_nsec / 1000,
+   748			  tmpbuffer);
+   749		port->logbuffer_head = (port->logbuffer_head + 1) % LOG_BUFFER_ENTRIES;
+   750	
+   751	abort:
+   752		mutex_unlock(&port->logbuffer_lock);
+   753	}
+   754	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
