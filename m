@@ -1,195 +1,145 @@
-Return-Path: <linux-usb+bounces-36634-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36635-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6MQpGiHK8GkKYwEAu9opvQ
-	(envelope-from <linux-usb+bounces-36634-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 16:54:25 +0200
+	id MOFZA9/Q8GnDYwEAu9opvQ
+	(envelope-from <linux-usb+bounces-36635-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 17:23:11 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C06AD487613
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 16:54:24 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B4EF487BDB
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 17:23:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 677B13021EB4
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 14:49:15 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DEE26308D7EA
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 15:00:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA7BA43E4BD;
-	Tue, 28 Apr 2026 14:49:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9269C44CAF5;
+	Tue, 28 Apr 2026 15:00:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="wlOGnx/Z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m1973176.qiye.163.com (mail-m1973176.qiye.163.com [220.197.31.76])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48A643E498;
-	Tue, 28 Apr 2026 14:49:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5C044BC91;
+	Tue, 28 Apr 2026 15:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777387753; cv=none; b=Nr3hwBUvCldEs0tQX77GYW4Wvmn2kH3cfCXvZtXqYjq/HjAOc120pQPBf9vGcrVagwfYw1C9lNgk/PWrsLFzIZO8H28pTpi099OD5xIRNRPvytCY4YtMhyEJJnYWmthg9uI5hcYjX+pvqQXj/srA0SQE3alaMf2o38nAuCJcIyY=
+	t=1777388412; cv=none; b=nBokanHwbC+qtTqSWaulC0B/vzrF7syZY58m6tuX0Uj2YWZQpyOE/v2EmSSwYWx/gazTdvkRtpK/4k8mjXocJg2Go4t+LjwjBIdzsJMBKjO0uhb/8gtzT0OJj0Eulm8Duwje+IjzNyX4rhgc3dGdoy0t7OZPOMMfIEOIjfxBE9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777387753; c=relaxed/simple;
-	bh=7C2tT2XPsJ0tnqj+PNUNEghNWd4eaESITOn65UauzJA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l6ymYdNzbfdH1jk8ha3uYk2D5/zKtDDHTAbGdoX3pz+C56JbKT06A2LdsB9b8KzCAPqXzZhCTrjPKAWndqBIwxFso2Uu906vsy1iuWJiGrL5JMieLHB5/P4Fn5FBIcr3jZJQcXWduDijSpRPkSCsJN1/w6YOtQvf7458b5teDoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=autochips.com; spf=pass smtp.mailfrom=autochips.com; arc=none smtp.client-ip=220.197.31.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=autochips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=autochips.com
-Received: from [172.25.88.78] (unknown [223.244.89.246])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 3c7c38f73;
-	Tue, 28 Apr 2026 22:48:57 +0800 (GMT+08:00)
-Message-ID: <49e3cff9-9ace-4eed-aa2c-7f83825c44ee@autochips.com>
-Date: Tue, 28 Apr 2026 22:48:57 +0800
+	s=arc-20240116; t=1777388412; c=relaxed/simple;
+	bh=8eRTBOr56lXyw5Nl1lPGUcROBTmAChk2KA3FfKO+tWc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GNcMLSIMZ1dUB56WGngVSjo20d95lCR6fIkFe5XP4IsSUchXHBXi5kX/xMa9yqTxvnawb2iBnjAEFS7qKT3gbN9VT9+XIcKFVAHBqXnFVEe+dNmIXVhjqusty81d1ga9xfqutbJPjfaGGBloOy3vatKrF4hkm29ddaEoPQSl4lA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=wlOGnx/Z; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=ThRatxI+ujPQ6DbNmNbwWdlsSWBi02bJgBeBRB/F5PE=; b=wlOGnx/ZeXAh9EdmKTRIryT+5+
+	5Aq8f+cuo59z+0RjJMSKp82Q/plTczdwW0MonludM95gzkuVt/KI4GHF/cwa81S/D4xPZVnuab0IM
+	xccErjFqLKw/yphhoj5rmImWOnKe4hXxwhh8vboLixOR98ZH/al0/a9y6TjA6IQsh2pE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1wHjuo-000M3b-FK; Tue, 28 Apr 2026 16:59:58 +0200
+Date: Tue, 28 Apr 2026 16:59:58 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH 5/9] thunderbolt / net: Let the service drivers configure
+ interrupt throttling
+Message-ID: <a0d3eec7-4c11-404f-804c-fa46515d25fe@lunn.ch>
+References: <20260428072209.3084930-1-mika.westerberg@linux.intel.com>
+ <20260428072209.3084930-6-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: cdns3: gadget: fix request skipping after clearing
- halt
-To: Pawel Laszczak <pawell@cadence.com>,
- "Peter Chen (CIX)" <peter.chen@kernel.org>
-Cc: "rogerq@kernel.org" <rogerq@kernel.org>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20260423160601.2949010-1-yongchao.wu@autochips.com>
- <ae66WphA+lO6t3rE@nchen-desktop>
- <PH7PR07MB9538E83DB108635EAE7B21E3DD362@PH7PR07MB9538.namprd07.prod.outlook.com>
- <ae/qXIT19Z2zWsDs@nchen-desktop>
- <e963d293-63cd-4124-9a53-8fc16e44ec72@autochips.com>
- <PH7PR07MB95388984DB7A5265770CEE58DD372@PH7PR07MB9538.namprd07.prod.outlook.com>
-Content-Language: en-US
-From: Yongchao Wu <yongchao.wu@autochips.com>
-In-Reply-To: <PH7PR07MB95388984DB7A5265770CEE58DD372@PH7PR07MB9538.namprd07.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-HM-Tid: 0a9dd490928303ackunmd1caf043686ad8
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCSktDVksZT0pLTEsfS0lJGVYVFA
-	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUhVSU9PVUNCVUlPTVlXWRYaDxIVHRRZQVlPS0hVSk
-	tJT09PSFVKS0tVSkJLS1kG
-X-Rspamd-Queue-Id: C06AD487613
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260428072209.3084930-6-mika.westerberg@linux.intel.com>
+X-Rspamd-Queue-Id: 6B4EF487BDB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[autochips.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[lunn.ch,none];
+	R_DKIM_ALLOW(-0.20)[lunn.ch:s=20171124];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36634-lists,linux-usb=lfdr.de];
-	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36635-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,wunner.de,linux.intel.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yongchao.wu@autochips.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.954];
+	FROM_NEQ_ENVFROM(0.00)[andrew@lunn.ch,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[lunn.ch:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	R_DKIM_NA(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,lunn.ch:dkim,lunn.ch:mid]
 
-On 4/28/2026 5:58 PM, Pawel Laszczak wrote:
+On Tue, Apr 28, 2026 at 09:22:05AM +0200, Mika Westerberg wrote:
+> Instead of the core driver programming fixed value for throttling let
+> the service drivers to specify the interval if they need this. We also
+> allow user to tune this through a module parameter if the default is not
+> good fit.
 > 
->>
->> On 26-04-27 09:01:47, Pawel Laszczak wrote:
->>>>
->>>>
->>>> On 26-04-24 00:06:01, Yongchao Wu wrote:
->>>>> According to the cdns3 datasheet, the EPRST (Endpoint Reset) command
->>>>> causes the DMA engine to reposition its internal pointer to the next
->>>>> Transfer Descriptor (TD) if it was already processing one.
->>>>>
->>>>> This issue is consistently observed during the ADB identification
->>>>> process on macOS hosts, where the host issues a Clear_Halt. Although  
->>>>> commit 4bf2dd65135a ("usb: cdns3: gadget: toggle cycle bit before   reset
->>>>> reset endpoint") attempted to avoid DMA advance by toggling the cycle bit,
->>>>> trace logs show that on certain hosts like macOS, the DMA pointer  
->>>>> (EP_TRADDR) still shifts after EPRST:
->>>>>
->>>>>    cdns3_ctrl_req: Clear Endpoint Feature(Halt ep1out)
->>>>>    cdns3_doorbell_epx: ep1out, ep_trbaddr f9c04030  <- Should be f9c04000
->>>>>    cdns3_gadget_giveback: ep1out: req: ... length: 16384/16384
->>>>>
->>>>> As shown above, the DMA pointer jumped to index 3 (offset 0x30),  
->>>>> causing the controller to skip the initial TRBs of the request. This  
->>>>> leads to data misalignment and ADB protocol hangs on macOS.
->>>>
->>>> Pawel, Is it a hardware issue? The cycle bit has already been toggled before the  
->>>> endpoint has been reset, why the DMA pointer still advances?
->>>
->>> Yongchao, could you confirm if the TD consists of three TRBs?
->> In our case, each TD consists of 4 TRBs.
->> The DMA pointer appears to advance within the same TD after EPRST.
->>
->> Each 16KB request is split into 4 TRBs (4KB each):
->> - TRB0 - TRB2: CHAIN
->> - TRB3: IOC (last TRB of the TD)
->>
->> After enqueue, the initial EP_TRADDR points to the first TRB:
->>    EP_TRADDR = 0xf9c04000 (TRB0)
->>
->> After Clear_Halt (EPRST), it becomes:
->>    EP_TRADDR = 0xf9c04030 (TRB3)
->>
->> Since each TRB is 12 bytes, the offset 0x30 corresponds to 4 TRBs.
->> This indicates that after EPRST, the DMA pointer skipped the entire current
->> Request and jumped directly to the start of the next Request at 0xf9c04030
->>
->> Below is the relevant trace (trimmed):
->>
->> // enqueue request (16KB -> 4 TRBs)
->> cdns3_prepare_trb: dma buf: 0xf7abc000, size: 4096, ctrl: 0x00200415
->> cdns3_prepare_trb: dma buf: 0xf7abd000, size: 4096, ctrl: 0x00000415
->> cdns3_prepare_trb: dma buf: 0xf7abe000, size: 4096, ctrl: 0x00000415
->> cdns3_prepare_trb: dma buf: 0xf7abf000, size: 4096, ctrl: 0x00000425
->>
->> cdns3_doorbell_epx: ep1out, ep_trbaddr f9c04000
->>
->> // Clear_Halt
->> cdns3_ctrl_req: Clear Endpoint Feature(Halt ep1out)
->> cdns3_doorbell_epx: ep1out, ep_trbaddr f9c04030
->>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> ---
+>  drivers/net/thunderbolt/main.c |  7 ++++
+>  drivers/thunderbolt/dma_test.c |  5 +++
+>  drivers/thunderbolt/nhi.c      | 58 ++++++++++++++++++----------------
+>  drivers/thunderbolt/nhi_regs.h |  3 +-
+>  include/linux/thunderbolt.h    |  5 +++
+>  5 files changed, 50 insertions(+), 28 deletions(-)
 > 
-> Can you confirm whether the host had already sent some data for this TD
-> prior to the endpoint reset operation?
->
+> diff --git a/drivers/net/thunderbolt/main.c b/drivers/net/thunderbolt/main.c
+> index 49673f7e0055..8771ca807933 100644
+> --- a/drivers/net/thunderbolt/main.c
+> +++ b/drivers/net/thunderbolt/main.c
+> @@ -218,6 +218,10 @@ static bool tbnet_e2e = true;
+>  module_param_named(e2e, tbnet_e2e, bool, 0444);
+>  MODULE_PARM_DESC(e2e, "USB4NET full end-to-end flow control (default: true)");
+>  
+> +static unsigned int tbnet_throttling = 128000;
+> +module_param_named(throttling, tbnet_throttling, uint, 0444);
+> +MODULE_PARM_DESC(throttling, "Interrupt throttling rate in ns (default: 128000)");
 
-I confirm that the host sent no data prior to or during the EPRST operation.
+As i mentioned elsewhere, netdev does not allow module
+parameters. They are hard to use, especially when you have lots of
+instances of a device, or you need to set it on the kernel command
+line because by the time the kernel has booted, it is too late, etc.
+And they are undocumented, and every driver does it differently.
 
-TotalPhase Trace:
-0,HS,2700,0:06.078.671,2.057.666 ms,0 B,,13,00,Set Configuration,Configuration=1
-0,HS,2710,0:06.080.811,1.125.266 ms,,,,,[10 SOF],[Frames: 1243.7 - 1245.0]
-0,HS,2711,0:06.080.955,992.550 us,2 B,,13,00,Get String Descriptor,Index=5 Length=2
-0,HS,2733,0:06.082.061,125.083 us,,,,,[2 SOF],[Frames: 1245.1 - 1245.2]
-0,HS,2734,0:06.082.119,104.566 us,28 B,,13,00,Get String Descriptor,Index=5 Length=28
-0,HS,2756,0:06.082.311,355.935.283 ms,,,,,[2848 SOF],[Frames: 1245.3 - 1601.2]
-0,HS,2757,0:06.438.196,105.033 us,4 B,,13,00,Get String Descriptor,Index=0 Length=256
-0,HS,2778,0:06.438.371,875.233 us,,,,,[8 SOF],[Frames: 1601.3 - 1602.2]
-//1. Host issues Clear_Halt
-0,HS,2779,0:06.439.278,51.433 us,0 B,,13,00,Clear Endpoint Feature,Halt Endpoint 01 OUT
-0,HS,2789,0:06.439.371,500.150 us,,,,,[5 SOF],[Frames: 1602.3 - 1602.7]
-0,HS,2790,0:06.439.874,51.416 us,0 B,,13,00,Clear Endpoint Feature,Halt Endpoint 01 IN
-0,HS,2800,0:06.439.996,250.116 us,,,,,[3 SOF],[Frames: 1603.0 - 1603.2]
-//2. First OUT transaction happens
-0,HS,2801,0:06.440.350,1.066 us,24 B,,13,01,OUT txn,43 4E 58 4E 01 00 00 01 00 00 10 00..
-0,HS,2805,0:06.440.371,66 ns,,,,,[1 SOF],[Frame: 1603.3]
-0,HS,2806,0:06.440.453,4.283 us,218 B,,13,01,OUT txn,68 6F 73 74 3A 3A 66 65 61 74 75 72..
+The correct way to do this for netdev it ethtool -C.
 
-> Pawel
-> 
->> Best regards,
->> Yongchao
->> Best regards,
->> Yongchao
+For something which is not a netdev, like your stream file, you have
+more flexibility, but the same usability issues apply.
 
+	Andrew
 
