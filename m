@@ -1,167 +1,194 @@
-Return-Path: <linux-usb+bounces-36652-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36653-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GCtxGZ0R8WmXcQEAu9opvQ
-	(envelope-from <linux-usb+bounces-36652-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 21:59:25 +0200
+	id iMhEAd0Y8Wm6dAEAu9opvQ
+	(envelope-from <linux-usb+bounces-36653-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 22:30:21 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0EFC48B67B
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 21:59:20 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0245548BC4D
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 22:30:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 12CFB30AB848
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 19:56:19 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 9A8F7301A14D
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 20:30:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8578D3B8958;
-	Tue, 28 Apr 2026 19:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CB0C2FFDCC;
+	Tue, 28 Apr 2026 20:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="QlEPR7/t"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="O86fvf0n"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2370F3290C5;
-	Tue, 28 Apr 2026 19:56:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01ECA2DEA8F
+	for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 20:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777406178; cv=none; b=il/QP258NpEJPHBNxgbUXNA6QiWbi0JX7qe3HVoLKXcFxv0qcz59lougGUzjFiRAwmgVc8jKEtfEwMcVRSS61qJZ0b+XBPLpTku9IZcglZdAiCaQATNierj4jwbqL+2A/CgI2aSSefqrmNO6Y6ynLL+inJMtrWi2LGnE8ROJoc8=
+	t=1777408207; cv=none; b=MNqA2VeV0ztgAffvM/fi8WRnvdHiogsMPCgnY5hKpr7m6BRc1ijYh+Hz7KmfVZBnWGTdXMZ9oAjpZHZdeWmJ9i1wAQeUkZjLQXpKjDo1kHGAJptWOCVki0tG0uhwgmH52OQkn2zoj6wh9ww+O0kHaCuy6FX0xB9EllAkdyP+hEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777406178; c=relaxed/simple;
-	bh=J8wqvTcK39l6+nXBzikh7BzxR2KJJqZEtAy+55It6kU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=DL1ogmzvi4dSg4fFbbONdpjizZbIXX+6eYX5HaDEM/Vk05LziAtmeGljk9WrxUloEhGByWp5prHFHlj52VPunovx3JvpguYehoUHurQgFOMmcTD6A4HmVpLIFqDd51ePwQNWFdiCMsngs/3KtAuoZ1gowTLkaOSMH/e03vQ1qBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=QlEPR7/t; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=In-Reply-To:References:From:Subject:Cc:To:Message-Id:Date:
-	Content-Type:Content-Transfer-Encoding:Mime-Version:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=J8wqvTcK39l6+nXBzikh7BzxR2KJJqZEtAy+55It6kU=; b=QlEPR7/txw270mOz6ariFvQPW0
-	VDyyOi0a/M+iJVT7W0EgdFr5vaJEhuiSI3pMCJWEyN4dlrpMq4eMtsiNcGYGiQ+1LdUo7HLR1bp+z
-	pjLmHvEouauzxOA4/Z5xiQxVFG1rWlxD701ToouuMqW0ToEgrhLueU8anzwId6lH9dCy7HsMd/0rH
-	CjTtXeFl4W3T+/LIapdaEzuPj7s8j0fIWiqOJRjM3e+sFuj2BCoiDqsEo69EvygdhrsooSltjCfQu
-	p+yy/193D/ZEyMSXkutsSGfgDfI1q+ujP5luo0F4CbHknwW5eJCGzhpLmPCGbLnGnTknT9sNuLL4b
-	I2LAfmQg==;
-Received: from 177-136-93-123.vmaxnet.com.br ([177.136.93.123] helo=localhost)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1wHoXN-003Y2R-MC; Tue, 28 Apr 2026 21:56:05 +0200
+	s=arc-20240116; t=1777408207; c=relaxed/simple;
+	bh=YehqAfqF13ddP+X2+d1JomqRj+37J2/q9EvejNym0Cc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rSErXDXbZzuJrWUFXV3aq0r3wlctNktKsGNXYsBxjb9Ch3+aN6iIgg3N4ExcKAl5Uaj+U45D+O2e6yoTpu7s2LzLws8g5T7Rv7HsM0x8eM7koPqTbiTs/fYvVHHoEZIvLTsrT5hW8fkkJSrA57jqwbOrqkPhOINJdirScZpHTGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=O86fvf0n; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-5062fc5d86aso95888701cf.1
+        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 13:30:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1777408202; x=1778013002; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/MkENzSVBbBTjs3fyFaBN9uibCTbN0NN0fiY/kA8lms=;
+        b=O86fvf0nYILzN0+XGCxvgZ0k128liB+EFDtn31k2luD8to9BYsAnogPo+gJVmGaVnw
+         lXVWFTjXid/vXh3CMjkOHk4nFGypMua2MF9Fek4kPTzSlCFj6DDu6Eno4r+S8SBIl4kV
+         /sla+gRFtMaVoJKgMBWgAp0ZxyTuotzLHg4d5PfpooI87f2qy/BdNn4jUrFmyD3RNST6
+         8ExR+2LSYhORrSeS5Ud+BMNitk17ZuhFnFC4kXMr/3AL8KUS867fSKxqFg0+CnsRyV/u
+         zEvQaSUBsaM8uYEdlG6qKzEgn5EyqN5tdouuHAbMBQgvNGjL+zJOSy3oyyAlFZ6yaMEW
+         T05g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777408202; x=1778013002;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/MkENzSVBbBTjs3fyFaBN9uibCTbN0NN0fiY/kA8lms=;
+        b=Nw4201z70B/oVDeq1GjlBenBZaPhAfP77QW2Uq63aowcPRitwzQEfJ217l/Dej/EEN
+         HHQgin2xuqG6rS91afTZikXuEu1CYrz02CfTq5y0ZIZeuFE9nVOB+jp0o5W5BliOAtU4
+         P9Z4eHm30MaCBeRLdT2PUI3JIzBjtsiP3IA09OsSPRkaoDe6NIfuo9M1Jr+M0bTEJ2YL
+         5HEO3Ow7JVQ5RzEgrCJ4frW/7SBtD/5QrUvRirgANHAeubdO1UOvUQyJntp5Ue8AmIyF
+         QaLLHPxwz92iLy2YTPh8+4gyl4yr7rbdeQiA+64KG2Wpm6DjZ90YiNgTQ2/MxWEXhn6F
+         lxLw==
+X-Forwarded-Encrypted: i=1; AFNElJ8rZdpQXqEorCke3ylo3PtqOXdgJ/NDYWb+s6uc9J4+GdpSXqgGyE+8VRm19xwWzbwNDRthyXUQXXU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyG54PXakerOwpzGhZ4iT3iH5LYhz2i93tCAp0WDzh7z1cAR4Eq
+	4rZYjI8fXXx7nRDzloFwUqD+1TXVhku+gJLgSu/FnwCMM44gjpSf3+Z7KjrmvpCPdA==
+X-Gm-Gg: AeBDies9ZEeoTYCdKU1cl6QKy2DgDzfCrAaDWuOGbXkt7tR/WC+nt+VFNlyRff8AKl7
+	LVBgWw0OQ1GIMASQ6IUUSV4ajgK98e/Q3mtjNtiQW+ZH3Na2XI2O/7Ejz0FDi8LUD1Azb6styAL
+	V43P6w+BizT4LXsF4jeZOoRyQrYLEcEvz6ST3d9UlAy6WWwvgeuOX9SzuHqzr0z90cysaEXk4ed
+	vm7rwdnBa0k29eM9Y81+wi90br8pkt+ALZI/MTkAfDxx3dIWRszlNilR4VIWPQN5MeFIHsP/7Lq
+	yUmigVTMSdkYJL04qhDNoEnUxA4Be8XC7V8RfBxSGABrwfLyhexBGF54VNXGEraCezeueQT/zVd
+	E8K9EBH9uK5TBf2rwWz/oyYDKKNQwTmZP8K9SY93keNcXf61kyJRTsaYuIa4aDXar9KmVMFJhJx
+	shv/ujev0Beq/Nf9ZaEPoeXy+qgsFn0H1zW14=
+X-Received: by 2002:a05:622a:507:b0:50d:82db:773e with SMTP id d75a77b69052e-5100e1e0c5amr65265071cf.47.1777408202030;
+        Tue, 28 Apr 2026 13:30:02 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d01:d210::a0bd])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51014182afesm14843261cf.28.2026.04.28.13.30.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Apr 2026 13:30:01 -0700 (PDT)
+Date: Tue, 28 Apr 2026 16:29:59 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Greg KH <greg@kroah.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Andrew Lunn <andrew@lunn.ch>, linux-usb@vger.kernel.org,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH 5/9] thunderbolt / net: Let the service drivers configure
+ interrupt throttling
+Message-ID: <4f71abbd-0faf-4aaa-9aa3-8816251b84a4@rowland.harvard.edu>
+References: <20260428072209.3084930-1-mika.westerberg@linux.intel.com>
+ <20260428072209.3084930-6-mika.westerberg@linux.intel.com>
+ <a0d3eec7-4c11-404f-804c-fa46515d25fe@lunn.ch>
+ <20260428172629.GW557136@black.igk.intel.com>
+ <2026042827-pep-deeply-edc9@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 28 Apr 2026 16:55:58 -0300
-Message-Id: <DI51WD2C7TJF.1X6B12NO0OO4@igalia.com>
-To: "Michal Pecio" <michal.pecio@gmail.com>
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <kernel-dev@igalia.com>,
- <syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com>,
- <stable@kernel.org>
-Subject: Re: [PATCH v2] usb: usbtmc: reject invalid interrupt endpoints
-From: "Heitor Alves de Siqueira" <halves@igalia.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260423-usbtmc-iin-size-v2-1-31afa4874f71@igalia.com>
- <20260424002839.5ad25517.michal.pecio@gmail.com>
-In-Reply-To: <20260424002839.5ad25517.michal.pecio@gmail.com>
-X-Rspamd-Queue-Id: E0EFC48B67B
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2026042827-pep-deeply-edc9@gregkh>
+X-Rspamd-Queue-Id: 0245548BC4D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.64 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	R_DKIM_REJECT(1.00)[igalia.com:s=20170329];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[linux.intel.com,lunn.ch,vger.kernel.org,gmail.com,wunner.de,davemloft.net,google.com,kernel.org,redhat.com];
+	TAGGED_FROM(0.00)[bounces-36653-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36652-lists,linux-usb=lfdr.de];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[igalia.com:-];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_SPAM(0.00)[0.485];
-	MID_RHS_MATCH_FROM(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[halves@igalia.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,abbfd103085885cf16a2];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,appspotmail.com:email]
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:email]
 
-On Thu Apr 23, 2026 at 7:28 PM -03, Michal Pecio wrote:
-> On Thu, 23 Apr 2026 15:04:38 -0300, Heitor Alves de Siqueira wrote:
->> The USBTMC driver allocates the Interrupt-IN buffer according to the
->> wMaxPacketSize value obtained from the USB endpoint. If a USB device
->> advertises a small enough wMaxPacketSize (e.g. a malfunctioning device
->> or an endpoint constructed by syzbot), the buffer will not have enough
->> space for the mandatory headers and will trigger an out-of-bounds read.
->>=20
->> Fix by rejecting devices advertising interrupt endpoints that don't fit
->> at least the mandatory headers (bNotify1 and bNotify2).
->>=20
->> Fixes: dbf3e7f654c0 ("Implement an ioctl to support the USMTMC-USB488 RE=
-AD_STATUS_BYTE operation.")
->> Reported-by: syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com
->> Closes: https://syzkaller.appspot.com/bug?extid=3Dabbfd103085885cf16a2
->> Cc: stable@kernel.org
->> Suggested-by: Michal Pecio <michal.pecio@gmail.com>
->> Signed-off-by: Heitor Alves de Siqueira <halves@igalia.com>
->> ---
->> Changes in v2:
->> - Instead of ensuring buffer size, reject devices that advertise illegal=
-/invalid interrupt endpoints
->> - Link to v1: https://patch.msgid.link/20260422-usbtmc-iin-size-v1-1-5dc=
-44b4389aa@igalia.com
->
-> On second thought, this may be not enough. A wMaxPacketSize =3D=3D 2 devi=
-ce
-> can still send only 1 byte (or even 0) and cause unititialized read.
-> Better check if the URB completed with expected actual_length before
-> trying to parse the message.
+On Tue, Apr 28, 2026 at 12:10:49PM -0600, Greg KH wrote:
+> On Tue, Apr 28, 2026 at 07:26:29PM +0200, Mika Westerberg wrote:
+> > On Tue, Apr 28, 2026 at 04:59:58PM +0200, Andrew Lunn wrote:
+> > > On Tue, Apr 28, 2026 at 09:22:05AM +0200, Mika Westerberg wrote:
+> > > > Instead of the core driver programming fixed value for throttling let
+> > > > the service drivers to specify the interval if they need this. We also
+> > > > allow user to tune this through a module parameter if the default is not
+> > > > good fit.
+> > > > 
+> > > > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > > ---
+> > > >  drivers/net/thunderbolt/main.c |  7 ++++
+> > > >  drivers/thunderbolt/dma_test.c |  5 +++
+> > > >  drivers/thunderbolt/nhi.c      | 58 ++++++++++++++++++----------------
+> > > >  drivers/thunderbolt/nhi_regs.h |  3 +-
+> > > >  include/linux/thunderbolt.h    |  5 +++
+> > > >  5 files changed, 50 insertions(+), 28 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/net/thunderbolt/main.c b/drivers/net/thunderbolt/main.c
+> > > > index 49673f7e0055..8771ca807933 100644
+> > > > --- a/drivers/net/thunderbolt/main.c
+> > > > +++ b/drivers/net/thunderbolt/main.c
+> > > > @@ -218,6 +218,10 @@ static bool tbnet_e2e = true;
+> > > >  module_param_named(e2e, tbnet_e2e, bool, 0444);
+> > > >  MODULE_PARM_DESC(e2e, "USB4NET full end-to-end flow control (default: true)");
+> > > >  
+> > > > +static unsigned int tbnet_throttling = 128000;
+> > > > +module_param_named(throttling, tbnet_throttling, uint, 0444);
+> > > > +MODULE_PARM_DESC(throttling, "Interrupt throttling rate in ns (default: 128000)");
+> > > 
+> > > As i mentioned elsewhere, netdev does not allow module
+> > > parameters. They are hard to use, especially when you have lots of
+> > > instances of a device, or you need to set it on the kernel command
+> > > line because by the time the kernel has booted, it is too late, etc.
+> > > And they are undocumented, and every driver does it differently.
+> > 
+> > Right. This was meant to be a "chicken bit" or "escape hatch" not something
+> > used in daily basis.
+> 
+> Put it in configfs if you really want it.
 
-You're right, although I think these are two separate issues. There
-are indeed no checks for actual_length in usbtmc_interrupt(), and I'd
-be happy to include those in a v3 (or a separate patch) if you agree
-with this approach. For these cases though, I wonder if we can just
-ignore the URB, as actual_length<2 would imply that either the headers
-are missing, or the payload length is 0.
+Or even debugfs, if that's appropriate for the use case.
 
-> And by the way, an interrupt transfer may span multiple intervals and
-> exceed wMaxPacketSize, USBTMC spec alludes to it. Theoretically, even
-> wMaxPacketSize =3D=3D 1 seems possible, though it would be crazy and like=
-ly
-> no such HW exists because nobody complains that it doesn't work.
+Alan Stern
 
-Yes, but aren't such cases already handled as long as we validate the
-bNotify headers? USBTMC interrupt payloads must include at least two
-bytes for bNotify1 and bNotify2, so URBs that don't fit those should be
-considered invalid, right? Even if the payload is split between multiple
-transfers, these headers should be present in individual URBs. Checking
-if actual_length fits both bNotify headers should be sufficient, as
-data buffers will have enough space for at least wMaxPacketSize, and the
-overflow case is already handled in usbtmc_interrupt().
-
-Please let me know what you think, and I can submit a v3 with checks for
-wMaxPacketSize in usbtmc_probe() as well as for actual_length in
-usbtmc_interrupt().
-
-Best regards,
-Heitor
+> You shouldn't need any new module parameters.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
