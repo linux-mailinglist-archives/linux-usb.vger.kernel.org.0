@@ -1,143 +1,158 @@
-Return-Path: <linux-usb+bounces-36619-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36620-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6CCRKayd8GkRWQEAu9opvQ
-	(envelope-from <linux-usb+bounces-36619-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 13:44:44 +0200
+	id kNmeGm+g8GkRWQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36620-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 13:56:31 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FB1C4841C2
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 13:44:43 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id D680E4845DD
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 13:56:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 908243109031
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 11:26:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D56C83088926
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 11:28:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 012BB3F1674;
-	Tue, 28 Apr 2026 11:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ufuqi324"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1BE33FD158;
+	Tue, 28 Apr 2026 11:21:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8843B2FFC
-	for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 11:17:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D44FE3E639B;
+	Tue, 28 Apr 2026 11:21:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777375075; cv=none; b=HyM1Hxkgk5XnF7nLD8wSps26lO7ESX7xuLeFKTJiKbgyIEiuRFhSS3cxf2VQsLCh/4EN+wB51PP5W1iVDQq9vU3zo0kus91nFSicfyaWq8xO+7acE5lF+VobHNpDFEsMTZspmm8Gq0o3+6CsbM0riPwBPS4xYcLtpZ+oCPjOefw=
+	t=1777375287; cv=none; b=rsLv5ksg+pZccawDdmqPDJtrde+qLU4mI+UjlpegBcAMMWRV+pcpyRQdnHPCcQR4zxv9unPXU9QkuPaQjm7B8GoMYylO7ATav9HNfdZZLS3ZV2quCKKN36PvemkmRjlawVOQjlR6tHRs3rWhre5HFI2q9XrRRcFu0VMUyBaPZMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777375075; c=relaxed/simple;
-	bh=LvuYRn5Fx0xp0wQtnIbEg63XTpK4I8u8c2Aakt3SzFc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZqoiQhnA41IWTe8EIsP95B9N9CEPTwSkylIVfwGtToIwLUyl8jKq4Ak6i8jeshBm5+dITDBLzLMRPFixj7u4Mbw4DDCUCBmFzafPMxYCCIspiZ4Qd9DJ/zOerO7CJDcvqiBlf1Ql8R83yTqFPhgE9GP1oBEdNH92a6+tfdVBD8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ufuqi324; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2C70CC2BCB5
-	for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 11:17:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777375075;
-	bh=LvuYRn5Fx0xp0wQtnIbEg63XTpK4I8u8c2Aakt3SzFc=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ufuqi324vCcexRgxDlAZS9pfNXm0m6UsfIogK9MRsJlIQnVcPSP436HHHy0FnvNVY
-	 whVGhOZe4o2HsbGMbiTAfscPjulbzIvN5oPSnFDCel0m4Ybj+o6nYYIVnOmFWNhvXx
-	 GOYgbfGfRBXGjO4BnYbHAlqFnSFTm2BncI6lKRiEyHjsMUplXVp1LN6/oKI15FGe9b
-	 rKaF7fH/mbwIB2rmk2vDGJYPeJSnNOAG/7VtGqzDuxsx77JzgEABspnS3iPrMs9Cw+
-	 yNEXp/UiDI9zbjw89HdKPzHicfzG7i4kOHscWDGTuo4fDo1jlq8QkCLDu2e0mqZoZ/
-	 joTbnAfiRo2CQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 1D454C433E1; Tue, 28 Apr 2026 11:17:55 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 221422] xhci_hcd host controller dies on Intel NUC8i5BEH with
- USB audio interfaces (POD HD500X, Mbox 2)
-Date: Tue, 28 Apr 2026 11:17:54 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-221422-208809-pzVcuECJe0@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-221422-208809@https.bugzilla.kernel.org/>
-References: <bug-221422-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1777375287; c=relaxed/simple;
+	bh=5DkX/L9B3d/cRrLHprvgAdk9AfWqqBG9xKTQLL8w4bk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ifTVo8zGagZ/MdjS/wuYsnorXKSpevC5JrwBnXijCGbLDkP4n0uhlrMnDm5YbFML5zbc/ed6U1ZpueaIm5J+BoI9Q68K4BirJZ1cHKBEdd09J0VmkeuTJuvVmAyjq1vl2EUPTwOpOaF/9cyCGZ3sr9duv3ZqHA/bN7RVjE4yzSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
+Received: from gate.crashing.org (localhost [127.0.0.1])
+	by gate.crashing.org (8.18.1/8.18.1/Debian-2) with ESMTP id 63SBKIxF1057213;
+	Tue, 28 Apr 2026 06:20:18 -0500
+Received: (from segher@localhost)
+	by gate.crashing.org (8.18.1/8.18.1/Submit) id 63SBKHXo1057211;
+	Tue, 28 Apr 2026 06:20:17 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Tue, 28 Apr 2026 06:20:17 -0500
+From: Segher Boessenkool <segher@kernel.crashing.org>
+To: Yury Norov <ynorov@nvidia.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Laight <david.laight.linux@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>, linux-alpha@vger.kernel.org,
+        Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        dmaengine@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-fsi@lists.ozlabs.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-fsdevel@vger.kernel.org,
+        ocfs2-devel@lists.linux.dev, bpf@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-x25@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-sound@vger.kernel.org, sound-open-firmware@alsa-project.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH v1 7/9] x86: Add unsafe_copy_from_user()
+Message-ID: <afCX8WlnEFUei1y6@gate>
+References: <cover.1777306795.git.chleroy@kernel.org>
+ <0ee46bb228d97163fbdc14f2a7c52b93d8bc34ce.1777306795.git.chleroy@kernel.org>
+ <ae-j2_QirCySZD02@yury>
+ <63a4d0f6-0eb3-48cd-9f98-bf7b223b2606@kernel.org>
+ <ae-2yLWSGnfeTvh1@yury>
+ <CAHk-=wgPrLy0FR3sEWBYQuNAac1axDASYMnTuPuxEU0WytzL7w@mail.gmail.com>
+ <ae_jeJLlVWjJ4sOY@yury>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 0FB1C4841C2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae_jeJLlVWjJ4sOY@yury>
+X-Rspamd-Queue-Id: D680E4845DD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.54 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36619-lists,linux-usb=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[linux-foundation.org,kernel.org,gmail.com,linutronix.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org,lists.freedesktop.org,lists.linux.dev,lists.xenproject.org,googlegroups.com,kvack.org,alsa-project.org];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36620-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FROM_NO_DN(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
+	DMARC_NA(0.00)[crashing.org];
+	RCVD_TLS_LAST(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[segher@kernel.crashing.org,linux-usb@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	HAS_XAW(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-0.877];
+	RCPT_COUNT_GT_50(0.00)[50];
 	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_ONE(0.00)[1];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email]
+	R_DKIM_NA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,nvidia.com:email]
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D221422
+Hi!
 
-Mathias Nyman (mathias.nyman@linux.intel.com) changed:
+On Mon, Apr 27, 2026 at 06:30:16PM -0400, Yury Norov wrote:
+> On Mon, Apr 27, 2026 at 02:52:05PM -0700, Linus Torvalds wrote:
+> > On Mon, 27 Apr 2026 at 12:19, Yury Norov <ynorov@nvidia.com> wrote:
+> > >
+> > > This is what Linus said when added x86 implementation for copy_from_user()
+> > > in c512c69187197:
+> > 
+> > Note that some things have happily changed in the six+ years since...
+> > 
+> > >   That's partly because we have no current users of it, but also partly
+> > >   because the copy_from_user() case is slightly different and cannot
+> > >   efficiently be implemented in terms of a unsafe_get_user() loop (because
+> > >   gcc can't do asm goto with outputs).
+> > 
+> > now everybody can do asm goto with outputs.
+> > 
+> > Yes, it's disabled on older versions, so it's not *always* available,
+> > but all modern versions do it. And if you care about performance, you
+> > won't be using an old compiler.
+> 
+> The minimal GCC version is 8.1, and asm goto with outputs is supported
+> since GCC-11. That would brake the build, if we just switch to using it
+> without "CC_IS_GCC && (GCC_VERSION >= 110100)" guard.
+> 
+> Is it worth to maintain 2 version of the function? I don't know...
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mathias.nyman@linux.intel.c
-                   |                            |om
+GCC 11 was released five years and a day ago.  The last GCC 11 release
+(that of 11.5) is not even two years ago though (but there will be no
+more!)
 
---- Comment #1 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-Does preventing xHC runtime suspend help:
+So it would be not conservative at all to require GCC 11 as minimum now,
+some people might even call it a bit aggressive.  But in a year (or
+maybe two) the lay of the land will be rather different.
 
-echo on > /sys/bus/pci/devices/0000:c2:00.4/power/control=20
 
-Could you also collect xhci trace and dmesg with dynamic debugs enabled when
-triggering this issue
-
-mount -t debugfs none /sys/kernel/debug
-echo 'module xhci_hcd =3Dp' >/sys/kernel/debug/dynamic_debug/control
-echo 'module usbcore =3Dp' >/sys/kernel/debug/dynamic_debug/control
-echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
-echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-echo 1 > /sys/kernel/debug/tracing/tracing_on
-< Reproduce issue >
-Send output of dmesg
-Send content of /sys/kernel/debug/tracing/trace
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Segher
 
