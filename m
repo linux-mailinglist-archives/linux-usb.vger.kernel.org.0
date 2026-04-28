@@ -1,63 +1,62 @@
-Return-Path: <linux-usb+bounces-36616-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36617-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wKXuAHiS8GlvVAEAu9opvQ
-	(envelope-from <linux-usb+bounces-36616-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:56:56 +0200
+	id CGfOJpKS8GlvVAEAu9opvQ
+	(envelope-from <linux-usb+bounces-36617-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:57:22 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ED29483184
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:56:54 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09C3F4831AD
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:57:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5094F30AFFB4
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 10:48:19 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E5D87309741D
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 10:52:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02387401A10;
-	Tue, 28 Apr 2026 10:42:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E97FD423A7F;
+	Tue, 28 Apr 2026 10:43:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MQE6Glyc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eCniSFWe"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421AC402433;
-	Tue, 28 Apr 2026 10:42:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A10A3F20E2;
+	Tue, 28 Apr 2026 10:43:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777372949; cv=none; b=sNuzmgqnx25UATVqq/mfuDdncBikjvoBW6WXjviJV0If6R6eonAmcBB8L/DIdTnhDp8at16IGy2lGAd2qXpfsFqHO3avHHUbsYsL1Q+Fh/gBULEnAFMEU1Fm2BXhcVfoGtk9AZVmIfRbI0IqhnrVHbh/EwDmZ0oBiDGaiEBFezU=
+	t=1777372982; cv=none; b=SE/dVi3D3uIdOrxrnQcOdjKQDZ2EkvFI2UIZeRZsFweF4bGlpdVhmsIrnt67+vEcexU2P5ANnPzb+QJNjKsN1plc6rWa6G9caYrirHOjHMw14huQYo9PQPio5IY4iCECkJpYJ/oAi0jV9HAfuaiaHPjYFlTdw3Aw4+cDpZKL34M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777372949; c=relaxed/simple;
-	bh=WgpkKhPY4oGY/RREmhHzxoDiM6S+HMUhToabAPFHDVk=;
+	s=arc-20240116; t=1777372982; c=relaxed/simple;
+	bh=oxwZ+df9sdj9d8pZqmxa0D9SpL3piJsAkSAjfw5krLE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B6YT8JOjNKa12g608l1ugLg5pRe+yfdl8+583EsF92NUt4T/al1uGqaUVlhYKcz+/bLXE9WuuIDH3gSZr7wIphRxzCCtaBhVdTbu7gw/P6dzTZXAnfn539Hh9CuCWITSGr0hu/9yboSPag5xYcwH9wr2B63HGjfkGU1ikualejk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MQE6Glyc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4395C2BCB8;
-	Tue, 28 Apr 2026 10:42:27 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Y4GA66hKwZY8Dwmb2kTASHKbDrgVzO6LkjuqntJDhYbq2t7Lk7w7vMDefhcLvIGZv/NdRadDifR1zAoucSwSPjhfKEynqStoASCM/6Lzs+qAQnDFKVJnx71/cV7WZ84KUOYgyYOVGFjkaGZHwxFRGO41owX5+KtM6sQiu/6jo4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eCniSFWe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A61C2BCAF;
+	Tue, 28 Apr 2026 10:43:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777372949;
-	bh=WgpkKhPY4oGY/RREmhHzxoDiM6S+HMUhToabAPFHDVk=;
+	s=k20201202; t=1777372981;
+	bh=oxwZ+df9sdj9d8pZqmxa0D9SpL3piJsAkSAjfw5krLE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MQE6GlycKB4/AUeCTbteb1KEIz/rb2iJXiQZ9g4VKpV6PIsgJgXNvWiGkQHZU3H+s
-	 2XKzDqVWnlLtjuZ0qFsrzZzZUjFSb5JbRce7JKBYLfb+FNZJJmMFydHJsadDeE+w8b
-	 +aYsGoEwOMR4rve1ukl9ixEOStloxhactlysSSHUF7WjkFF92Sw3R32xsbxG79RpGM
-	 ACBiLj74qSYkyJm/iezwOWsrJM/fDksAHAdPxeVtkcrx/9PHQIX2jJpez+xkgPBKPI
-	 9ANkehm8Iog0KZQzhcnJDuEO5Idl+ZlsgAkQ9SXc5Bm+BGthnY7kWISKSBNGV73FpA
-	 x0m8u/NJPlAIA==
+	b=eCniSFWeg71Sju8BiB48e4qO6uz7KBCa3Bw/jjW1QDiMiOSBS8UBmvtafhK5GIjvP
+	 VXOrWbDy0LEtEfTvBhOrTnqjk+4Db6fjRxI8T4BAcIA/l7bqS8wWvjUw1SWet23gy7
+	 3lLyg6oLP5X3SADgbBoHsgYyRQVq/2ctKdq8WBRlbbAVqKtj/pms5D9KxqGV3F+eZw
+	 axc51Rvbb10Rb9cyFiOppuXx2J9ACCPcwZFh46hLI6DImoGpF7iFLJaYZcfoZfjyBv
+	 eaaTmj3T1Cm4iftrEzXhoUnJBZRMK2Xa5n/7lklfSM05Cta1tn6HEuJilbbYnurUc1
+	 R/a1xfdSoT2qQ==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Pengpeng Hou <pengpeng@iscas.ac.cn>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Justin Chen <justin.chen@broadcom.com>,
+Cc: Kelvin Mbogo <addcontent08@gmail.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	alcooperx@gmail.com,
+	valentina.manea.m@gmail.com,
+	shuah@kernel.org,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 7.0-5.10] usb: gadget: bdc: validate status-report endpoint indices
-Date: Tue, 28 Apr 2026 06:40:50 -0400
-Message-ID: <20260428104133.2858589-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 7.0-5.10] usb: usbip: fix integer overflow in usbip_recv_iso()
+Date: Tue, 28 Apr 2026 06:41:12 -0400
+Message-ID: <20260428104133.2858589-61-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260428104133.2858589-1-sashal@kernel.org>
 References: <20260428104133.2858589-1-sashal@kernel.org>
@@ -72,410 +71,400 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 7.0.2
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4ED29483184
+X-Rspamd-Queue-Id: 09C3F4831AD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[iscas.ac.cn,broadcom.com,linuxfoundation.org,kernel.org,gmail.com,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-36616-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[gmail.com,linuxfoundation.org,kernel.org,vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-36617-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,msgid.link:url,iscas.ac.cn:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,broadcom.com:email]
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,lo:url,msgid.link:url]
 
-From: Pengpeng Hou <pengpeng@iscas.ac.cn>
+From: Kelvin Mbogo <addcontent08@gmail.com>
 
-[ Upstream commit a402532ab855620e02a16950aea86fc621c6f87c ]
+[ Upstream commit 1897852293faca4c2be51e0a19f739622f771623 ]
 
-bdc_sr_xsf() decodes a 5-bit endpoint number from the hardware status
-report and uses it to index bdc->bdc_ep_array[] directly. The array is
-only allocated to bdc->num_eps for the current controller instance, so a
-status report can carry an endpoint number that still fits the 5-bit
-field but does not fit the runtime-sized endpoint table.
+usbip_recv_iso() computes the iso descriptor buffer size as:
 
-Reject status reports whose endpoint number is outside bdc->num_eps
-before indexing the endpoint array.
+    int size = np * sizeof(*iso);
 
-Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Tested-by: Justin Chen <justin.chen@broadcom.com>
-Link: https://patch.msgid.link/20260323121730.75245-1-pengpeng@iscas.ac.cn
+where np comes straight from the wire (urb->number_of_packets, set by
+usbip_pack_ret_submit() before we get here).  With np = 0x10000001 and
+sizeof(*iso) == 16 the product is 0x100000010 which truncates to 16 on
+a 32-bit int.  kzalloc(16) succeeds but the following receive loop
+writes np * 16 bytes into it - game over.
+
+USBIP_MAX_ISO_PACKETS (1024) already exists in usbip_common.h for the
+submit path but was never enforced on the receive side.
+
+Clamp np to [1, USBIP_MAX_ISO_PACKETS] and switch to kcalloc() so
+the allocator itself can catch overflows in the future.  Fold the
+existing np == 0 early return into the new bounds check.
+
+usbip_pack_ret_submit() already copied the bogus np into
+urb->number_of_packets before we run, so just returning -EPROTO is
+not enough - processcompl() in the HCD will still iterate that many
+iso_frame_desc entries when it completes the failed URB.  Zero out
+urb->number_of_packets before bailing to prevent that secondary crash
+(confirmed on 6.12.0, processcompl+0x63 with CR2 in unmapped slab).
+
+Signed-off-by: Kelvin Mbogo <addcontent08@gmail.com>
+Link: https://patch.msgid.link/20260325103640.8090-1-addcontent08@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-Now I have enough context. Let me write up the complete analysis.
+Based on my investigation, I now have enough information to complete the
+analysis.
 
-## Analysis
+## Phase 1: Commit Message Forensics
 
-### PHASE 1: COMMIT MESSAGE FORENSICS
+**Step 1.1 - Subject line parsing:**
+Record: Subsystem `usb: usbip:`, action verb `fix`, summary: "fix
+integer overflow in usbip_recv_iso()"
 
-**Step 1.1: Subject line**
-- Subsystem: `usb: gadget: bdc:`
-- Action verb: "validate" (typical hardening language; equivalent to
-  "add missing bounds check")
-- Record: "usb gadget BDC driver adds bounds check on endpoint number
-  decoded from hardware status report before indexing the endpoint
-  array"
-
-**Step 1.2: Tags**
-- `Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>` (author)
-- `Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>`
-  (Broadcom maintainer)
-- `Tested-by: Justin Chen <justin.chen@broadcom.com>` (Broadcom
-  engineer)
+**Step 1.2 - Tags parsed:**
+Record:
+- `Signed-off-by: Kelvin Mbogo` (author)
 - `Link:
-  https://patch.msgid.link/20260323121730.75245-1-pengpeng@iscas.ac.cn`
-- `Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>` (USB
-  maintainer)
-- No `Fixes:` tag (expected per instructions)
-- No `Cc: stable` (expected per instructions)
-- No `Reported-by:` (no external bug report)
-- Record: reviewed by hardware vendor's kernel team and tested by a
-  Broadcom engineer; strong quality signal
+  https://patch.msgid.link/20260325103640.8090-1-addcontent08@gmail.com`
+- `Signed-off-by: Greg Kroah-Hartman` (subsystem maintainer applied it)
+- No Fixes: tag, no explicit Cc: stable (but mbox shows v2 "Drop
+  security@kernel.org CC" — the author originally reported this as a
+  security issue)
 
-**Step 1.3: Commit body**
-- Bug described: `bdc_sr_xsf()` decodes a 5-bit endpoint number from the
-  hardware status report and indexes `bdc->bdc_ep_array[]` without
-  validating it. The array is only `bdc->num_eps` entries long.
-- Symptom/failure mode: if hardware delivers an `ep_num` in [num_eps,
-  32), an out-of-bounds read occurs followed by a dereference of
-  whatever garbage pointer was read.
-- Record: author clearly identifies the OOB mechanism; this is a
-  defensive bounds check
+**Step 1.3 - Body analysis:**
+Record: Integer overflow in `size = np * sizeof(*iso)` when `np` (wire-
+supplied `urb->number_of_packets`) is large enough. Example: `np =
+0x10000001 * 16 = 0x100000010` truncates to 16 on 32-bit int. Small
+`kzalloc(16)` is followed by a receive loop that writes `np * 16` bytes
+= massive heap overflow. Also mentions secondary crash reproduced on
+6.12.0 at `processcompl+0x63`.
 
-**Step 1.4: Hidden bug fix detection**
-- "validate" + "Reject status reports whose endpoint number is outside
-  bdc->num_eps before indexing the endpoint array" = hardening that
-  prevents OOB array read; this IS a bug fix
-- Record: bounds-check fix, effectively a buffer-overread fix
+**Step 1.4 - Hidden bug fix detection:**
+Record: Not hidden — explicitly labeled "fix integer overflow". Real
+security bug (heap overflow).
 
-### PHASE 2: DIFF ANALYSIS
+## Phase 2: Diff Analysis
 
-**Step 2.1: Inventory**
-- 1 file changed: `drivers/usb/gadget/udc/bdc/bdc_ep.c`
-- +4/-0 lines
-- Function modified: `bdc_sr_xsf()`
-- Record: single-file surgical fix, minimal scope
+**Step 2.1 - Inventory:**
+Record: 1 file (`drivers/usb/usbip/usbip_common.c`), +15/-5 lines,
+single function `usbip_recv_iso()`. Classification: surgical single-file
+fix.
 
-**Step 2.2: Code flow change**
-- Before: decodes `ep_num` from `sreport->offset[3]`, then directly uses
-  it as array index into `bdc_ep_array[]`. The subsequent `!ep` check
-  only catches the case where the out-of-bounds read happens to return
-  NULL.
-- After: rejects and logs out-of-range `ep_num` before touching the
-  array.
-- Record: adds bounds validation on the IRQ-context transfer-complete
-  status path
+**Step 2.2 - Code flow change:**
+Record: Before: `size = np * sizeof(*iso)` computed before any
+validation, with only `np == 0` check. After: clamp `np` to `[1,
+USBIP_MAX_ISO_PACKETS]` range, zero `urb->number_of_packets` on error
+(prevents processcompl from iterating OOB in `iso_frame_desc[]`), switch
+`kzalloc` to `kcalloc` for overflow-safe allocation.
 
-**Step 2.3: Bug mechanism**
-- Category (f): memory safety / bounds check
-- `bdc->num_eps = num_ieps + num_oeps + 2`, each from 4-bit `NUM_NCS`
-  register field (see `drivers/usb/gadget/udc/bdc/bdc_core.c:392-400`),
-  so `num_eps` can be as low as 2 and up to 32.
-- `ep_num = (le32_to_cpu(sreport->offset[3])>>4) & 0x1f;` yields 0..31.
-- For any controller variant where `num_eps < 32`, a status report with
-  `ep_num >= num_eps` triggers an out-of-bounds read on
-  `bdc_ep_array[ep_num]`, then `ep->flags` dereferences whatever pointer
-  was read.
-- Record: classic array-index-OOB read on a dynamically-sized array,
-  potential NULL-check bypass + dereference of uninitialized/unrelated
-  kernel memory
+**Step 2.3 - Bug mechanism:**
+Record: Integer overflow in multiplication → undersized heap allocation
+→ OOB heap write in receive loop (category: buffer overflow / memory
+safety). Also fixes cascading NULL deref in `processcompl()` via
+`urb->number_of_packets` reset.
 
-**Step 2.4: Fix quality**
-- Obviously correct: `if (ep_num >= bdc->num_eps) return;` is a textbook
-  guard.
-- Minimal: 4 lines, no unrelated changes.
-- Regression risk: ~zero. The only new behavior is rejecting status
-  reports with out-of-range endpoint numbers — which the existing code
-  could never service correctly anyway.
-- Record: fix quality very high; virtually no regression risk
+**Step 2.4 - Fix quality:**
+Record: Fix is obviously correct. Uses already-existing
+`USBIP_MAX_ISO_PACKETS` (1024) from `usbip_common.h` that was already
+enforced on the submit path in `stub_rx.c:381`. Mirrors existing
+validation pattern. No regression risk: bounds check is strictly tighter
+than kzalloc behavior.
 
-### PHASE 3: GIT HISTORY INVESTIGATION
+## Phase 3: Git History Investigation
 
-**Step 3.1: Blame**
-- `git blame` on the target lines shows the buggy code was introduced by
-  `efed421a94e62` ("usb: gadget: Add UDC driver for Broadcom USB3.0
-  device controller IP BDC") by Ashwini Pahuja, 2014-11-13.
-- `git describe --contains efed421a94e62` → `v3.19-rc1~80^2~32^2~37`.
-  Code present since v3.19 (2015).
-- Record: bug has been latent in the driver since v3.19 — present in
-  every currently supported stable tree
+**Step 3.1 - Blame:**
+Record: The buggy code (`int size = np * sizeof(*iso)`) has been in
+`usbip_recv_iso()` since the function was first introduced in commit
+`05a1f28e879e3` ("Staging: USB/IP: add common functions needed",
+2008-07-09). The bug has existed for ~18 years.
 
-**Step 3.2: Fixes: tag**
-- None present (expected).
-- Record: no explicit Fixes target; buggy code is the original driver
-  submission
+**Step 3.2 - Follow Fixes: tag:**
+Record: No Fixes: tag in the commit (the bug predates git history
+cleanup). Confirmed original buggy introduction in 2008.
 
-**Step 3.3: Related file history**
-- `git log --oneline -20 -- drivers/usb/gadget/udc/bdc/bdc_ep.c` shows
-  only minor cleanups since 2014 — no semantic churn.
-- Record: no prerequisites; patch is self-contained
+**Step 3.3 - File history:**
+Record: The follow-up series has three related fixes (`1897852293fac`,
+`591c1d972d8f1`, `74a2287209a85`) plus a later independent fix
+`2ab833a16a825` ("usbip: validate number_of_packets in
+usbip_pack_ret_submit()") which carries **explicit `Cc: stable
+<stable@kernel.org>` and `Acked-by: Shuah Khan` (usbip maintainer)**.
+Commit 2ab833a16a825 explicitly references Kelvin Mbogo's series as
+complementary.
 
-**Step 3.4: Author history**
-- Author Pengpeng Hou is a systematic hardening contributor doing
-  "validate X indices" / "bound Y buffer" patches across multiple
-  subsystems (wifi, NFC, Bluetooth, USB, tracing, etc.).
-- Record: author has a consistent track record of bounds-check hardening
-  fixes
+**Step 3.4 - Author's other commits:**
+Record: Author Kelvin Mbogo submitted a 3-patch security series. Patch
+went through v1→v2 with review from Greg KH (USB maintainer). This
+specific commit is self-contained and standalone.
 
-**Step 3.5: Dependencies**
-- None; patch only adds a local `if` block. No new functions or
-  structures referenced.
-- Record: standalone fix
+**Step 3.5 - Dependencies:**
+Record: Uses `USBIP_MAX_ISO_PACKETS` macro which exists in all stable
+trees (verified in 5.10.y through 6.19.y). No dependencies. Standalone.
 
-### PHASE 4: MAILING LIST RESEARCH
+## Phase 4: Mailing List Research
 
-**Step 4.1: b4 dig**
-- `b4 dig -c a402532ab8556` found the original thread:
-  https://patch.msgid.link/20260323121730.75245-1-pengpeng@iscas.ac.cn
-- `b4 dig -c a402532ab8556 -a` shows only v1 exists; applied version is
-  the submitted version.
-- Mbox thread read: Florian Fainelli (Broadcom) Reviewed-by; Justin Chen
-  (Broadcom) Tested-by. No NAKs, no concerns, no stable discussion.
+**Step 4.1 - Original discussion (b4 dig):**
+Record:
+- `b4 dig -c 1897852293faca` → found at `https://lore.kernel.org/all/202
+  60325104841.8282-1-addcontent08@gmail.com/`
+- `b4 dig -a` → patch went through v1→v2; v2 is what was applied
+- v2 changelog mentions: "Drop security@kernel.org CC" — proving the
+  author initially reported this through the security channel
 
-**Step 4.2: Recipients**
-- `b4 dig -c ... -w`: Justin Chen, Al Cooper, Broadcom kernel feedback
-  list, Greg KH, linux-usb, LKML. Correct mailing lists and Broadcom
-  maintainers were CC'd.
+**Step 4.2 - Reviewers:**
+Record: Greg KH (USB maintainer) reviewed and applied; Shuah Khan (usbip
+maintainer) acked the follow-up patch that explicitly mentions this
+series and is marked for stable.
 
-**Step 4.3: Bug report**
-- No `Reported-by:` tag, no syzbot/bugzilla link. Patch is author-
-  initiated hardening.
+**Step 4.3 - Bug report:**
+Record: Multiple independent security researchers have reported related
+usbip vulnerabilities in this area (Kelvin Mbogo, Nathan Rebello,
+Sebastián Alba Vives). Nathan Rebello's patch confirms "KASAN confirmed
+this with kernel 7.0.0-rc5: BUG: KASAN: slab-out-of-bounds in
+usbip_recv_iso+0x46a/0x640, Write of size 4 at addr ffff888106351d40".
+The commit message confirms reproduction on 6.12.0.
 
-**Step 4.4: Series**
-- Single-patch series; no dependencies.
+**Step 4.4 - Related patches:**
+Record: This is patch 1/3 of a series. Patches 2 and 3 have been applied
+as `591c1d972d8f1` and `74a2287209a85`. The companion commit
+`2ab833a16a825` by Nathan Rebello has explicit `Cc: stable`.
 
-**Step 4.5: Stable list**
-- No explicit stable nomination in the thread.
+**Step 4.5 - Stable list:**
+Record: Sebastián Alba Vives posted this category of issue as
+`[SECURITY]` on the stable mailing list
+(spinics.net/lists/stable/msg928028.html), describing the vulnerability
+as causing "OOB memmove that corrupts kernel heap memory. No
+authentication required."
 
-### PHASE 5: CODE SEMANTIC ANALYSIS
+## Phase 5: Code Semantic Analysis
 
-**Step 5.1: Functions modified**
-- `bdc_sr_xsf()` only.
+**Step 5.1-5.4 - Callers:**
+Record: `usbip_recv_iso()` is called from:
+- `vhci_rx.c:86` (`vhci_recv_ret_submit` → invoked from the vhci_rx
+  kthread)
+- `stub_rx.c:605`
+- `vudc_rx.c:173`
 
-**Step 5.2: Callers**
-- `bdc->sr_handler[0] = bdc_sr_xsf;` in `bdc_core.c:301`
-- Called from `bdc_udc_interrupt()` in `bdc_udc.c:331` via the
-  sr_handler dispatch
-- Context: hard IRQ handler, executes whenever hardware posts a
-  transfer-complete status report into the SRR ring (DMA-backed memory
-  read via `rmb()`)
-- Record: hot path in the IRQ handler, runs on every transfer completion
+Call chain from userspace: User creates a VHCI device via sysfs
+(`attach` command), passes a TCP socket, vhci_rx kthread reads PDUs from
+the socket → `vhci_recv_ret_submit()` → `usbip_pack_ret_submit()` copies
+`number_of_packets` from wire → `usbip_recv_iso()` computes size with
+overflow → OOB heap write. **The bug is reachable over the network with
+no authentication.**
 
-**Step 5.3: Callees**
-- Reads DMA-backed `sreport`, indexes `bdc_ep_array[]`, dispatches by
-  sr_status.
+**Step 5.5 - Similar patterns:**
+Record: `stub_rx.c:379-386` already validates `number_of_packets`
+against `USBIP_MAX_ISO_PACKETS` on the CMD_SUBMIT path. This commit
+applies the symmetric validation that was missing on the RET_SUBMIT
+path.
 
-**Step 5.4: Call chain reachability**
-- Any functioning USB gadget transfer on BDC-based hardware will
-  generate XSF status reports. The path is reachable every time a device
-  does USB I/O.
+## Phase 6: Cross-Referencing Stable Trees
 
-**Step 5.5: Similar patterns**
-- Multiple "validate endpoint index" siblings exist in USB gadget UDC
-  drivers, all have gone through stable:
-  - `ee0d382feb44` usb: gadget: aspeed_udc: validate endpoint index — in
-    6.1.y, 6.6.y, 6.12.y
-  - `ce9daa2efc08` usb: gadget: fsl_qe_udc: validate endpoint index — in
-    pending-6.6
-  - `f880aac8a57e` (cherry `e4c25cedbbeee`) usb: gadget: renesas_usb3:
-    validate endpoint index — in pending-6.6
-  - `7f14c7227f34` USB: gadget: validate endpoint index for xilinx udc —
-    has Cc: stable
-- Record: consistent pattern; this is exactly the same class of fix
+**Step 6.1 - Code exists in stable:**
+Record: Verified identical buggy code in every stable tree:
+`linux-5.10.y`, `linux-5.15.y`, `linux-6.1.y`, `linux-6.6.y`,
+`linux-6.12.y`, `linux-6.18.y`, `linux-6.19.y`. Bug has been present
+since staging era (2008).
 
-### PHASE 6: STABLE TREE ANALYSIS
+**Step 6.2 - Backport complications:**
+Record: `git apply --check --3way` confirms patch applies cleanly to
+current tree. Since all stable branches have identical code, the patch
+will apply cleanly with no conflicts.
 
-**Step 6.1: Code in stable?**
-- Checked `stable/linux-6.1.y`, `stable/linux-6.6.y`,
-  `stable/linux-6.12.y` — the vulnerable snippet in `bdc_sr_xsf()` is
-  identical to mainline pre-patch. Present since v3.19.
-- Record: all active stable trees (6.1+) contain the buggy code
+**Step 6.3 - Related fixes in stable:**
+Record: No related fix already in stable. `USBIP_MAX_ISO_PACKETS` exists
+in all stable trees (1024) so the fix uses an already-present constant.
 
-**Step 6.2: Backport complications**
-- The surrounding function is unchanged in all stable branches; patch
-  applies verbatim.
-- Record: clean apply expected
+## Phase 7: Subsystem Context
 
-**Step 6.3: Related fixes already in stable?**
-- None. The other UDC driver "validate endpoint" fixes target different
-  files.
+**Step 7.1 - Subsystem:**
+Record: `drivers/usb/usbip/` — USB/IP network-attached USB. Criticality:
+IMPORTANT (network-reachable code path, security-sensitive). Used by
+users with USB-over-IP functionality; enabled in many distros.
 
-### PHASE 7: SUBSYSTEM CONTEXT
+**Step 7.2 - Activity:**
+Record: Actively maintained; multiple security fixes in 2026 (this
+series plus independent Nathan Rebello and Sebastián Alba Vives
+contributions).
 
-**Step 7.1: Subsystem**
-- `drivers/usb/gadget/udc/bdc/` — USB gadget device controller driver
-  for Broadcom STB SoCs
-- Criticality: PERIPHERAL — specific Broadcom SoC hardware
-- Record: niche driver but active; used on Broadcom STB/set-top box
-  platforms
+## Phase 8: Impact and Risk Assessment
 
-**Step 7.2: Activity**
-- Low-churn driver; mostly cleanup commits in the past years, no major
-  refactors.
+**Step 8.1 - Who is affected:**
+Record: Any user who runs vhci-hcd (USB/IP client) and attaches to an
+untrusted USB/IP server. Also stub-side and vudc-side code paths.
+Config-dependent on `CONFIG_USBIP_CORE`.
 
-### PHASE 8: IMPACT / RISK
+**Step 8.2 - Trigger conditions:**
+Record: A malicious USB/IP server sends a RET_SUBMIT PDU with crafted
+`number_of_packets = 0x10000001` or similar. **No authentication
+required — reachable entirely from the network peer.**
 
-**Step 8.1: Affected users**
-- Users of BDC-based Broadcom hardware (ARM STB platforms with USB
-  gadget).
-- Record: driver-specific; small-to-moderate population
+**Step 8.3 - Failure mode severity:**
+Record: **CRITICAL.** Heap out-of-bounds write with controlled size and
+partially controlled content (iso descriptor bytes received from
+network). Confirmed by KASAN report. The author reproduced a secondary
+NULL deref crash in `processcompl()` at CR2 in unmapped slab. Security
+vulnerability exploitable over network.
 
-**Step 8.2: Trigger conditions**
-- `num_eps` is derived from hardware registers
-  (`BDC_FSCNIC`/`BDC_FSCNOC`, `NUM_NCS() = val >> 28`, so 4-bit
-  quantities). For any BDC variant with fewer than 30 configurable
-  endpoints, `num_eps < 32` and the 5-bit `ep_num` space can overflow
-  the array. Triggering requires the hardware/firmware to post a status
-  report with an unexpected `ep_num`, or DMA corruption, or a stale
-  entry in the SRR.
-- Record: not user-triggerable directly; triggered by hardware/firmware
-  behavior
+**Step 8.4 - Risk/benefit:**
+Record:
+- Benefit: **Very high** — fixes a network-reachable heap overflow;
+  security vulnerability.
+- Risk: **Very low** — 20-line change using an already-existing
+  constant; bounds checks are strictly tighter than existing behavior;
+  no API changes.
+- Ratio: Strongly favorable for backport.
 
-**Step 8.3: Failure mode severity**
-- OOB read of a `struct bdc_ep *` pointer beyond the kzalloc'd array →
-  dereference at `ep->flags` of arbitrary adjacent heap data. Potential
-  outcomes:
-  - If read yields 0: caught by `!ep` check (benign).
-  - If read yields non-NULL garbage: kernel dereferences it → oops /
-    crash / info leak / possibly exploitable.
-- Severity: MEDIUM-HIGH (kernel OOB read + potential crash in IRQ
-  context)
+## Phase 9: Final Synthesis
 
-**Step 8.4: Risk-benefit**
-- Benefit: eliminates a real OOB array read in an IRQ handler of a long-
-  lived driver; matches a widely-backported pattern for UDC drivers.
-- Risk: 4-line additive guard on an error path; cannot affect valid code
-  flow.
-- Record: very favorable risk/benefit
+**Evidence FOR backporting:**
+- Security vulnerability: integer overflow → heap OOB write, reachable
+  from malicious network peer
+- Small, surgical fix (1 file, +15/-5 lines) using existing
+  `USBIP_MAX_ISO_PACKETS` constant
+- Original submission was sent via `security@kernel.org` (per v2
+  changelog)
+- Reviewed and applied by Greg KH (USB maintainer)
+- Companion patch (2ab833a16a825) has explicit `Cc: stable` and `Acked-
+  by: Shuah Khan` (usbip maintainer) and references this series
+- Independent security researchers (Nathan Rebello, Sebastián Alba
+  Vives) confirmed related vulnerabilities via KASAN and manual audit
+- KASAN confirmed heap OOB write in this exact function
+- Author also fixes a cascading NULL deref in `processcompl()` (verified
+  at kernel 6.12.0)
+- Buggy code is identical in every stable tree (5.10.y – 7.0.y)
+- Patch applies cleanly to stable (verified with `git apply --check`)
 
-### PHASE 9: SYNTHESIS
-
-**Evidence for backport:**
-- Real OOB array access (array dynamically sized to `num_eps < 32`,
-  index from 5-bit field 0..31)
-- Small, obviously correct 4-line fix
-- Reviewed by the Broadcom maintainer (Florian Fainelli)
-- Tested by a Broadcom engineer (Justin Chen)
-- Applied by the USB subsystem maintainer (Greg KH)
-- Clean apply to all active stable trees
-- Strong and consistent precedent: identical "validate endpoint index"
-  patches in `aspeed_udc`, `fsl_qe_udc`, `renesas_usb3`, `xilinx udc`
-  have all been taken into stable, many without `Fixes:` tags
-- Latent since v3.19; present in every supported stable tree
-
-**Evidence against:**
-- No concrete crash report / `Reported-by:` / syzbot link
-- Hardware/firmware-triggered rather than userspace-triggered
-- Driver is peripheral (Broadcom STB hardware)
+**Evidence AGAINST backporting:**
+- None.
 
 **Stable rules checklist:**
-1. Obviously correct and tested? YES (reviewed and tested by the
-   hardware vendor)
-2. Fixes a real bug? YES (OOB array read potential)
-3. Important issue (crash/security)? YES (kernel OOB in IRQ context)
-4. Small and contained? YES (+4 lines)
-5. No new features/APIs? YES
-6. Applies cleanly? YES
-
-**Exception category:** hardware hardening fix — matches the well-
-established "validate endpoint index" pattern for USB UDC drivers.
+1. Obviously correct and tested? **YES** — clamp to existing limit,
+   kcalloc replaces kzalloc
+2. Real bug affecting users? **YES** — heap OOB write, KASAN-confirmed
+3. Important issue? **YES** — CRITICAL security vulnerability, network-
+   reachable
+4. Small and contained? **YES** — 20 lines in 1 file, 1 function
+5. No new features? **YES** — pure defensive validation
+6. Applies to stable? **YES** — verified clean apply
 
 ## Verification
 
-- [Phase 1] Parsed all tags via `git show a402532ab8556`: Reviewed-by
-  Florian Fainelli (Broadcom), Tested-by Justin Chen (Broadcom), Signed-
-  off-by Greg KH. No Fixes/Cc-stable/Reported-by.
-- [Phase 2] Diff analysis: 4 lines added at `bdc_ep.c:1650`, bounds
-  check `if (ep_num >= bdc->num_eps)` before `ep =
-  bdc->bdc_ep_array[ep_num]`.
-- [Phase 2] Confirmed `num_eps` derivation in
-  `drivers/usb/gadget/udc/bdc/bdc_core.c:392-400`: `num_ieps + num_oeps
-  + 2`, where each comes from `NUM_NCS()` (4-bit hardware register
-  field). `num_eps` range ≤ 32.
-- [Phase 3] `git blame -L 1646,1656
-  drivers/usb/gadget/udc/bdc/bdc_ep.c`: buggy code from `efed421a94e62`
-  (2014).
-- [Phase 3] `git describe --contains efed421a94e62` →
-  `v3.19-rc1~80^2~32^2~37` (v3.19 kernel).
-- [Phase 4] `b4 dig -c a402532ab8556`: original submission found.
-- [Phase 4] `b4 dig -c a402532ab8556 -a`: only v1 exists.
-- [Phase 4] `b4 dig -c a402532ab8556 -w`: correct Broadcom maintainers
-  CC'd.
-- [Phase 4] Read `/tmp/bdc/thread.mbox`: Florian Fainelli Reviewed-by,
-  Justin Chen Tested-by, no concerns raised.
-- [Phase 5] `git grep sr_handler`: caller is `bdc_udc_interrupt()` in
-  `drivers/usb/gadget/udc/bdc/bdc_udc.c:331`. Runs in hard IRQ context
-  on every transfer completion.
-- [Phase 5] Sibling "validate endpoint index" patches identified:
-  `ee0d382feb44` aspeed, `ce9daa2efc08` fsl_qe_udc, `f880aac8a57e`
-  renesas_usb3, `7f14c7227f34` xilinx.
-- [Phase 6] `git show
-  stable/linux-6.1.y:drivers/usb/gadget/udc/bdc/bdc_ep.c`, same for
-  6.6.y and 6.12.y: identical pre-patch code present — patch applies
-  cleanly to all active stable trees.
-- [Phase 6] `git log --grep="aspeed_udc: validate endpoint"
-  stable/linux-{6.1,6.6,6.12}.y`: confirmed identical-pattern aspeed_udc
-  patch was backported to all three stable trees despite having no
-  Fixes: tag and no Cc: stable.
-- [Phase 8] Failure mode: OOB read of `struct bdc_ep *` beyond kzalloc'd
-  array in IRQ context → potential oops when the garbage pointer is
-  dereferenced at `ep->flags`; severity MEDIUM-HIGH.
-- UNVERIFIED: I did not confirm specific BDC hardware variants ship with
-  `num_eps < 32`, though the register encoding clearly allows it and the
-  commit message plus hardware-vendor Tested-by imply it is realistic.
-  The precedent-based reasoning does not depend on this detail.
+- [Phase 1] `git show 1897852293fac`: confirmed full commit message, no
+  Fixes: tag, no explicit Cc: stable in final version
+- [Phase 2] Read diff in `drivers/usb/usbip/usbip_common.c`: confirmed
+  +15/-5 surgical change in `usbip_recv_iso()`
+- [Phase 3] `git log
+  -L:usbip_recv_iso:drivers/usb/usbip/usbip_common.c`: buggy code traced
+  to original commit `05a1f28e879e3` (2008-07-09, "Staging: USB/IP: add
+  common functions needed")
+- [Phase 3] `git show 2ab833a16a825`: related follow-up has explicit
+  `Cc: stable <stable@kernel.org>` and `Acked-by: Shuah Khan
+  <skhan@linuxfoundation.org>`
+- [Phase 4] `b4 dig -c 1897852293faca`: found lore thread at `https://lo
+  re.kernel.org/all/20260325104841.8282-1-addcontent08@gmail.com/`
+- [Phase 4] `b4 dig -a`: confirmed v1→v2 progression; v2 applied is the
+  latest
+- [Phase 4] mbox thread inspection: v2 changelog says "Drop
+  security@kernel.org CC" — confirming security channel origin; Greg KH
+  reviewed Nathan Rebello's complementary patch
+- [Phase 4] Web search confirmed multiple security researchers (Kelvin
+  Mbogo, Nathan Rebello, Sebastián Alba Vives) reported related
+  vulnerabilities; Nathan's patch cites KASAN slab-out-of-bounds report
+- [Phase 5] `rg usbip_recv_iso`: confirmed 3 call sites (vhci_rx.c,
+  stub_rx.c, vudc_rx.c), all invoked from kthread loops reading network
+  PDUs
+- [Phase 5] Read `vhci_rx.c:vhci_rx_pdu`: confirmed trigger path from
+  TCP socket → `vhci_recv_ret_submit` → `usbip_recv_iso`, no
+  authentication required
+- [Phase 5] `rg USBIP_MAX_ISO_PACKETS`: confirmed constant exists in
+  `usbip_common.h:130` and is used symmetrically in `stub_rx.c:381`
+- [Phase 6] Verified buggy code is identical in stable-
+  push/linux-{5.10.y, 5.15.y, 6.1.y, 6.6.y, 6.12.y, 6.18.y, 6.19.y} and
+  `USBIP_MAX_ISO_PACKETS` exists in all of them
+- [Phase 6] `git apply --check`: patch applies cleanly to current HEAD
+  (stable/linux-7.0.y)
+- [Phase 8] Failure mode verified as heap OOB write, KASAN-confirmed by
+  Nathan Rebello on kernel 7.0.0-rc5; secondary NULL deref in
+  `processcompl()` confirmed on 6.12.0
 
-The fix is a minimal, obviously-correct bounds check that prevents a
-real out-of-bounds array read in an interrupt handler of a driver
-present since v3.19. It has been reviewed by the subsystem maintainer,
-tested by the hardware vendor, and precisely matches a pattern
-("validate endpoint index for <udc>") that stable has consistently
-accepted, including patches without `Fixes:` tags.
+This commit is a textbook YES for stable: it fixes a network-reachable,
+unauthenticated heap buffer overflow present in every supported stable
+tree. The fix is minimal, uses an already-existing constant, was vetted
+by the USB maintainer, and has been reproduced with KASAN by independent
+researchers. The companion patch in the same area explicitly carries
+`Cc: stable`.
 
 **YES**
 
- drivers/usb/gadget/udc/bdc/bdc_ep.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/usb/usbip/usbip_common.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/bdc/bdc_ep.c b/drivers/usb/gadget/udc/bdc/bdc_ep.c
-index c0ab3347059a0..a7a22e5ec47ba 100644
---- a/drivers/usb/gadget/udc/bdc/bdc_ep.c
-+++ b/drivers/usb/gadget/udc/bdc/bdc_ep.c
-@@ -1647,6 +1647,10 @@ void bdc_sr_xsf(struct bdc *bdc, struct bdc_sr *sreport)
- 	u8 ep_num;
+diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
+index 29d776fbeef74..fd620e9600394 100644
+--- a/drivers/usb/usbip/usbip_common.c
++++ b/drivers/usb/usbip/usbip_common.c
+@@ -662,7 +662,7 @@ int usbip_recv_iso(struct usbip_device *ud, struct urb *urb)
+ 	void *buff;
+ 	struct usbip_iso_packet_descriptor *iso;
+ 	int np = urb->number_of_packets;
+-	int size = np * sizeof(*iso);
++	int size;
+ 	int i;
+ 	int ret;
+ 	u32 total_length = 0;
+@@ -670,11 +670,21 @@ int usbip_recv_iso(struct usbip_device *ud, struct urb *urb)
+ 	if (!usb_pipeisoc(urb->pipe))
+ 		return 0;
  
- 	ep_num = (le32_to_cpu(sreport->offset[3])>>4) & 0x1f;
-+	if (ep_num >= bdc->num_eps) {
-+		dev_err(bdc->dev, "xsf for invalid ep %u\n", ep_num);
-+		return;
+-	/* my Bluetooth dongle gets ISO URBs which are np = 0 */
+-	if (np == 0)
+-		return 0;
++	if (np <= 0 || np > USBIP_MAX_ISO_PACKETS) {
++		dev_err(&urb->dev->dev,
++			"recv iso: invalid number_of_packets %d\n", np);
++		/*
++		 * usbip_pack_ret_submit() already set urb->number_of_packets
++		 * from the wire.  Zero it so processcompl() does not iterate
++		 * OOB descriptors on the way out.
++		 */
++		urb->number_of_packets = 0;
++		return -EPROTO;
 +	}
- 	ep = bdc->bdc_ep_array[ep_num];
- 	if (!ep || !(ep->flags & BDC_EP_ENABLED)) {
- 		dev_err(bdc->dev, "xsf for ep not enabled\n");
++
++	size = np * sizeof(*iso);
+ 
+-	buff = kzalloc(size, GFP_KERNEL);
++	buff = kcalloc(np, sizeof(*iso), GFP_KERNEL);
+ 	if (!buff)
+ 		return -ENOMEM;
+ 
 -- 
 2.53.0
 
