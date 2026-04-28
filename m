@@ -1,133 +1,121 @@
-Return-Path: <linux-usb+bounces-36638-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36639-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yMErIr3R8GmRZAEAu9opvQ
-	(envelope-from <linux-usb+bounces-36638-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 17:26:53 +0200
+	id uIPmAIjh8GmoagEAu9opvQ
+	(envelope-from <linux-usb+bounces-36639-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 18:34:16 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01241487CE1
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 17:26:52 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45B43489048
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 18:34:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EE8AF31108D1
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 15:13:21 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 7B0C831D205A
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 16:04:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2FE842E00F;
-	Tue, 28 Apr 2026 15:13:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A88F23E556B;
+	Tue, 28 Apr 2026 16:02:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lwScEoKi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d7TTGj1J"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 079BB38F251;
-	Tue, 28 Apr 2026 15:13:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AB7413224;
+	Tue, 28 Apr 2026 16:02:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777389197; cv=none; b=larOQGcic7701EpiNHM4JkCIBcAFY2/5qc9cVUU6P+C6WXExMJThoPtGE62pt1vpeNOfb8z1b3j4iQrc9PbsFtBHclrTDhG8vkPUc/dHLpXGbJu3B9V3Vo2F7BhxhJfjzv47PCW3qvMJjqvKrhx2k0qcj4YXw2O70NIv7zdvbzc=
+	t=1777392154; cv=none; b=nDBBU6nWRuZp4NaeP0l+Q4/dGR4Eo7gacsJjjlNhrfKbRXQZi8JNU2rj/YE6vy3Olwa+6w0MHv1nd53Al+ldcWkslRIzLHqp+qxoWjFuwMbU6X0ux0Ke3Fgu6N3Lh0O5eTnAP9imWbqon+bMalu0N3UuIc3Y+w/Zu7ueaZfbzig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777389197; c=relaxed/simple;
-	bh=6fFHNJC7+5kKW56ZhJcKHcNKRLt3YELgG+gR/jUoZxQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hz/I25mZOM2pobdT2YyFiuEFva72HBcvKw8Ey9RMyKspDs8AYj32p5xJ9aqXJRi9Q37UyOKtIMHDmNZ5Y86NjPziLdX0Gai6nklZzXGxMhaSSgvnP9pT4O0zCQQ2ZkSr+6gTlnn1nOmJJ2jNEjJNxRuN2w71vEzFc2AyhxCR3c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lwScEoKi; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777389196; x=1808925196;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6fFHNJC7+5kKW56ZhJcKHcNKRLt3YELgG+gR/jUoZxQ=;
-  b=lwScEoKiFvfAWz55lUcwFi4bp9w371mp0t5LRMbUDfU0O9eOOk6ocsEx
-   1GmVlc6BmJxS3BD4KNCwML4u0rrAIOoHaFWHmI3P3KV9aCFOz9zT7sBS3
-   xrbh+d5lIjWeM+CS1Wt3UysrTUAMJRbImTx5gSJ1DpawXGfdZEYazvqCy
-   wqTV717+11LhgqC8OZPGpoG4NsMViByRDSaKPS6ktuvwphdb7vI7pmehm
-   eR1ZQtfOE8IIEo6msJSxZoT/4zK03DkXmYSv5aow3OZe2QGCinwvpPO4O
-   ZIuM9C+7k0S3fNHq+7ZBw2pvSoAJbukPuY+hXgLplUTX7u0ryrVQ+n7/a
-   w==;
-X-CSE-ConnectionGUID: RYv6iywuQgGWB+eti7FrTw==
-X-CSE-MsgGUID: +5GL9bgDS26lfqZWW4CQ3A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11770"; a="78216045"
-X-IronPort-AV: E=Sophos;i="6.23,204,1770624000"; 
-   d="scan'208";a="78216045"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2026 08:13:16 -0700
-X-CSE-ConnectionGUID: oeIz82csT92U4pNTOoVXmQ==
-X-CSE-MsgGUID: s21mIPu1RreP3ubRGO3BYA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,204,1770624000"; 
-   d="scan'208";a="234280367"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa007.jf.intel.com with ESMTP; 28 Apr 2026 08:13:13 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id B998C95; Tue, 28 Apr 2026 17:13:11 +0200 (CEST)
-Date: Tue, 28 Apr 2026 17:13:11 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH 9/9] thunderbolt: Add support for USB4STREAM
-Message-ID: <20260428151311.GU557136@black.igk.intel.com>
-References: <20260428072209.3084930-1-mika.westerberg@linux.intel.com>
- <20260428072209.3084930-10-mika.westerberg@linux.intel.com>
- <ef5411f4-0e4c-4ac1-8ae0-0d557fc0ebd2@lunn.ch>
+	s=arc-20240116; t=1777392154; c=relaxed/simple;
+	bh=PR0HAnHcP9FFw0OW3Pb/wZoEnXpkvSX5gNthc8F6qiA=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=pRJNT3zPpQSbRVUJ4pxpq8uY1yNfCmzyrvdTf3I0hFjsE7YgLx1X2COvw6DIkLc2juusfwJ37hW2Ob7MPVAUfvvotPJZe0nVg7lReX3L6JKZPtQrtESgsWNIZgWzYv8gyiaOneIdrS5old7x0fFj4+mEssXVSj4S3F6bTgXtCuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d7TTGj1J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3048C2BCAF;
+	Tue, 28 Apr 2026 16:02:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777392154;
+	bh=PR0HAnHcP9FFw0OW3Pb/wZoEnXpkvSX5gNthc8F6qiA=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=d7TTGj1JLMspUrS4pJjw8m2t52WE6MAaG6EASicDPphkulmgsrMlDNXNCr762mZMV
+	 aJ+WOCixlTi+dxqhkt2LhqU2937ePIiGIreDJKfW2+c8lip/iIAJQBC0yeJvwN8nCU
+	 +6/kkDQrlTHnMMb38ICuWpftjA82BUMEpoUkl/5ekOtTMYj97c1O4xVKMqfShrFQ8u
+	 Hc0nW6wYmC7MxDs0UwcAiHcBkF1/ieW2mBF/e4rbHQB5kCTZomZMCY9UTzYlUSu3gg
+	 UJZ567b8R5H48SNx3ghhNxseBk+iof7rsWqV0hk+3Y7R37SDcffl4qPmZyEWkiYy/I
+	 Afw8Lq5m9Um+g==
+Date: Tue, 28 Apr 2026 18:02:31 +0200 (CEST)
+From: Jiri Kosina <jikos@kernel.org>
+To: Benjamin Tissoires <bentiss@kernel.org>
+cc: Icenowy Zheng <uwu@icenowy.me>, 
+    =?ISO-8859-15?Q?Filipe_La=EDns?= <lains@riseup.net>, 
+    Bastien Nocera <hadess@hadess.net>, Ping Cheng <ping.cheng@wacom.com>, 
+    Jason Gerecke <jason.gerecke@wacom.com>, Viresh Kumar <vireshk@kernel.org>, 
+    Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>, 
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+    Lee Jones <lee@kernel.org>, linux-input@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, greybus-dev@lists.linaro.org, 
+    linux-staging@lists.linux.dev, linux-usb@vger.kernel.org, 
+    stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] HID: pass the buffer size to
+ hid_report_raw_event
+In-Reply-To: <aeXdKFJe8JyatqLR@beelink>
+Message-ID: <7679n429-n1o7-s252-rs3s-q6os44979sro@xreary.bet>
+References: <20260416-wip-fix-core-v2-0-be92570e5627@kernel.org> <20260416-wip-fix-core-v2-1-be92570e5627@kernel.org> <938e8afadcbf2d7b9f0397e24926224985d9c385.camel@icenowy.me> <aeXdKFJe8JyatqLR@beelink>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ef5411f4-0e4c-4ac1-8ae0-0d557fc0ebd2@lunn.ch>
-X-Rspamd-Queue-Id: 01241487CE1
+Content-Type: text/plain; charset=US-ASCII
+X-Rspamd-Queue-Id: 45B43489048
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,wunner.de,linux.intel.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com];
-	TAGGED_FROM(0.00)[bounces-36638-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-36639-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[jikos@kernel.org,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,xreary.bet:mid]
 
-On Tue, Apr 28, 2026 at 05:08:55PM +0200, Andrew Lunn wrote:
-> On Tue, Apr 28, 2026 at 09:22:09AM +0200, Mika Westerberg wrote:
-> > Introduce USB4STREAM protocol and Linux implementation. This allows two
-> > (or more) hosts to transfer data directly over Thunderbolt/USB4 cable
-> > through a character device without need to go through the network stack.
+On Mon, 20 Apr 2026, Benjamin Tissoires wrote:
+
+
+> > Oops, "ghid" is misspelled here...
 > 
-> Is this mutually exclusive to networking, on a device?
+> Damn, you're correct. Sorry.
+> 
+> Jiri, do you want me to send v3? Or can you fix it while applying?
 
-No - they can co-exist.
+Normally I'd fix it manually while applying, but kernel test robot found 
+newly added compiler warnings in the meantime, so please include that in 
+the followup v3.
+
+Thanks,
+
+-- 
+Jiri Kosina
+SUSE Labs
+
 
