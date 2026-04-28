@@ -1,151 +1,141 @@
-Return-Path: <linux-usb+bounces-36622-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36623-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mDpfBZic8GmGVwEAu9opvQ
-	(envelope-from <linux-usb+bounces-36622-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 13:40:08 +0200
+	id MHewL1Kf8GkRWQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36623-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 13:51:46 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id C729B484039
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 13:40:07 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4898E484416
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 13:51:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 90E36304D604
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 11:33:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A84733173FEA
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 11:35:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0EA23ACA6A;
-	Tue, 28 Apr 2026 11:33:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CGj8P96u"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFF513B2FF7;
+	Tue, 28 Apr 2026 11:34:42 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0102935DA41
-	for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 11:33:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0EAF3914E8;
+	Tue, 28 Apr 2026 11:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777376010; cv=none; b=ZQj0kEAx4wWwOGiKf6BepPCzHoZHkOc/7xDM1o+jPEV353k3RNpWmngR8CYlVbKXzi8b43PyNmvqwr6wkZoUvu++uroR/1Veh4Lkwm252tvyz4ChJAA2cmd5ZwCur0P9XdMw35Cy3PlgA5lmIsjpLqoVqFx7Y2ZLgEy77CsZY0M=
+	t=1777376082; cv=none; b=gFEykjUwBqBHr8Ht2WmfT1dJJrIY8qYeBOCIzrPJU6rncOpGCdZS1EWdzY8VTJbpi67Gu7Dh36rz5sy6fgV8ZNatQeMjUh3ON7gl490+Jv12QAXQFv8qS6eyMMxYgKsA0WNnZYKKtQTJ1ml/NIm86ZUi9IwOm/G3PkE/OkLUwJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777376010; c=relaxed/simple;
-	bh=g8nUliw/hWQbN5M0FZl75SElbuDa2QholzG3VSRW7O4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J2YexYDzOjho4DsnG4zT6X1h1j/prIlE7ujw6G3HvzYa4+ABs+2nGl7PMl1HJNk0grTBLqPGGnQcS5v2zmVWkHrYrthITAvmZevtOcplcPU4WGt3I5YSt6l3k7iN/nUDqNQasJoT4UsHLY+1vn6k5s92XFqEkYIZKQafRyW7KXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CGj8P96u; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43d75312379so8060898f8f.1
-        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 04:33:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1777376007; x=1777980807; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=10W4QpEE/WuLK6YZDLyMPAJfJraP2DAdC3O6Ax3ih1E=;
-        b=CGj8P96uZkrOrdvuYzAd2x7a/oyg57aStG8vBE1AU3LGb9S4h1NkLrV8UZlES1M44Z
-         x+X2JaupPdwFGG852Ichd7RWMcX51Dxe6TVes4vVDZjHCHPWI3zFRjB4FDfpkXZ4ZGv/
-         LXXdMd6y6W2XmalLPKt1iRe53f4/XPxQebDSD6DAGtadPWp2qcuZAhZ7byCqgZ7ba9w4
-         RjuV0sbEZdWqK7LxIl/TjJLSHWLiNoF+Ab6MKntXXKA4PGD+soEYmLY+r0t/B3lPORo/
-         9gZAadWP0DLsI+NZ2xzFHFMtJCNIVHF+mJHc5JaoOqVFjVG8NxwWtEsrr1vTyebAqsMm
-         bHsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777376007; x=1777980807;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=10W4QpEE/WuLK6YZDLyMPAJfJraP2DAdC3O6Ax3ih1E=;
-        b=IqxdLEsGq1WzmINJWLb0DGkYRC7/J1Qy5aGKUVX+YICysBFlOJKki7a6zxkcovZQXG
-         9/vHZzWHtYbXAVE8dq9NVr8YxNCuut63KoSvAyzmCTtwPdrRCL/7Y9tEdARJsxJQViqX
-         ONM/IQr3UMSmO57jL1dlDs3SjZa3XIHN6xCwjfB/WfdNBN/5iuOBJzcxrFhv+I1Qi+Hm
-         XYQ7J83zBt1IzhhUJcB2GCQZrF4YPOK+wOgAaeDkcfGEM0Q8umY5rdEO04It7qROb6YY
-         4/LFBHNYe3u25OJ8/u3pvzDTPKyuC65B/5huF0U0wIbf0dsFo5nSMEk5e1lYIdlqpu5y
-         j+Fg==
-X-Forwarded-Encrypted: i=1; AFNElJ+pyj3t6Jvii11sEVVywDQIGtf2wcxpSdwDrwcEbyZouGRuN0GZCuBn+Z6a9DWvnZ5IibC/9x8htLE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywcyb0g3OaQBR2UH45HcvxKMGGeFCOVz/0ceMrW0hzDFGNolprw
-	FDeT2/7JDWjp+TrAYsEVKVtM2sXdJxwCUOVxbEgSzx5bfHsscPUlRyly5RdN1CB/sck=
-X-Gm-Gg: AeBDiesdnkg5ZF1z6rgqCSeDmJ47A2JlG5LkOcflkoV3IUbKsIpTjHHLfXVJMsMQEZL
-	Jj4sPW8h0cDXEmMEV4M303qZmu7NBeV+1Luq0Mhi2yW6uV/d+9NyfyFX7t7WAxhFVFf4/dHtl69
-	9zFQoC9VUe13CB7+VzzxbuSoUM95uAB7Nz+XII6w+m/d+GHiLf1tAi7bkCoO0xTwTN3aTiC8F+O
-	rP0/nSzN4bceapvTz6lfpjXqN98WzV13yd4fPvW0irIwzd3pvjrHxeP5kMnVboNWNJdOSn7vyks
-	DeEQPh8RTOWA1aza5vOe2LLh4t5UZ2sLMKUsRIZEpBvXho8Oovh246PTrGEXr7zPmAb115X6k99
-	FpYGgh2efwiMeli/FpOBarCBfXbxiGuIT22Jd8hfyCPbH0FqxPN15y0tMII1iidpR5X1xvu79ws
-	Nws7rt9om16lUrFM6nDYzQy9VoIPch/OJQXiEsI3ndcu7EoEyWjFp16ETkos226whzjPGuHtiuD
-	Is=
-X-Received: by 2002:a05:600c:a08b:b0:48a:53cb:8604 with SMTP id 5b1f17b1804b1-48a78a536acmr31307515e9.14.1777376007300;
-        Tue, 28 Apr 2026 04:33:27 -0700 (PDT)
-Received: from ?IPV6:2001:a61:1399:ff01:bd7:b9d5:f4ba:1161? ([2001:a61:1399:ff01:bd7:b9d5:f4ba:1161])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a773b9b5dsm54235445e9.7.2026.04.28.04.33.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Apr 2026 04:33:26 -0700 (PDT)
-Message-ID: <5c8e6c36-e8e5-4e88-b789-0f46614cb03e@suse.com>
-Date: Tue, 28 Apr 2026 13:33:20 +0200
+	s=arc-20240116; t=1777376082; c=relaxed/simple;
+	bh=hyfrXCz4cakoGqEZMfZnxEs8TTQzFbHPgNHVJxhRWN4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jnn94cM/o0HiOSruXStCQtUYg2jtlOmYJTM+tMLMcDXRMCG+lK2UjENZt0PgtAWSKkxIjSc56uYeacZaWuX69xh+JCg0ohPoDxo3fIKM21CBEpXwkQ7xjGlH9Sbtp57SQZhwuO6NpnD08s9unbu/usyuuOlnKbT+Bhy2gAKyZgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
+Received: from gate.crashing.org (localhost [127.0.0.1])
+	by gate.crashing.org (8.18.1/8.18.1/Debian-2) with ESMTP id 63SBY0U31059939;
+	Tue, 28 Apr 2026 06:34:00 -0500
+Received: (from segher@localhost)
+	by gate.crashing.org (8.18.1/8.18.1/Submit) id 63SBY0B51059937;
+	Tue, 28 Apr 2026 06:34:00 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Tue, 28 Apr 2026 06:34:00 -0500
+From: Segher Boessenkool <segher@kernel.crashing.org>
+To: Andrew Cooper <andrew.cooper3@citrix.com>
+Cc: Yury Norov <ynorov@nvidia.com>,
+        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Laight <david.laight.linux@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>, linux-alpha@vger.kernel.org,
+        Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        dmaengine@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-fsi@lists.ozlabs.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-fsdevel@vger.kernel.org,
+        ocfs2-devel@lists.linux.dev, bpf@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-x25@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-sound@vger.kernel.org, sound-open-firmware@alsa-project.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH v1 2/9] uaccess: Convert INLINE_COPY_{TO/FROM}_USER
+ to kconfig and reduce ifdefery
+Message-ID: <afCbKJg_Cq7yNO9j@gate>
+References: <cover.1777306795.git.chleroy@kernel.org>
+ <9fe875d2f55af59c12708336c571a46038528678.1777306795.git.chleroy@kernel.org>
+ <ae-tVFVfx72oCC_i@yury>
+ <f54c3c2b-33da-42a0-80b7-0f6615d930ce@citrix.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [usb?] memory leak in hub_event (4)
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: syzbot <syzbot+2afd7e71155c7e241560@syzkaller.appspotmail.com>,
- gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <69ec231a.a00a0220.7773.000c.GAE@google.com>
- <9fea44a5-83de-41ed-9531-11e5d471dca4@suse.com>
- <bb39abcf-aefd-42f6-b9e3-e576dbb5fc37@rowland.harvard.edu>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <bb39abcf-aefd-42f6-b9e3-e576dbb5fc37@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: C729B484039
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f54c3c2b-33da-42a0-80b7-0f6615d930ce@citrix.com>
+X-Rspamd-Queue-Id: 4898E484416
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[nvidia.com,kernel.org,linux-foundation.org,gmail.com,linutronix.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org,lists.freedesktop.org,lists.linux.dev,lists.xenproject.org,googlegroups.com,kvack.org,alsa-project.org];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36622-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[suse.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[crashing.org];
+	TAGGED_FROM(0.00)[bounces-36623-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,suse.com:dkim,suse.com:mid];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	HAS_XAW(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[segher@kernel.crashing.org,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,2afd7e71155c7e241560];
-	SUBJECT_HAS_QUESTION(0.00)[]
+	NEURAL_HAM(-0.00)[-0.901];
+	RCPT_COUNT_GT_50(0.00)[51];
+	TAGGED_RCPT(0.00)[linux-usb];
+	R_DKIM_NA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-
-
-On 27.04.26 16:19, Alan Stern wrote:
-  
-> This is not needed.  dev->rawdescriptors and dev->config are deallocated
-> in usb_destroy_configuration(), which gets called when the usb_device
-> structure is released.
+On Mon, Apr 27, 2026 at 09:39:33PM +0100, Andrew Cooper wrote:
+> On 27/04/2026 7:39 pm, Yury Norov wrote:
+> > On Mon, Apr 27, 2026 at 07:13:43PM +0200, Christophe Leroy (CS GROUP) wrote:
+> >> Among the 21 architectures supported by the kernel, 16 define both
+> >> INLINE_COPY_TO_USER and INLINE_COPY_FROM_USER while the 5 other ones
+> >> don't define any of the two.
+> >>
+> >> To simplify and reduce risk of mistakes, convert them to a single
+> >> kconfig item named CONFIG_ARCH_WANTS_NOINLINE_COPY which will be
+> > We've got a special word for it: outline. Can you name it
+> > CONFIG_OUTLINE_USERCOPY, or similar?
 > 
-> The memory leak must have a different cause.
+> You can't swap the "in" for "out" like this.  "out of line" is the
+> opposite of "inline" in this context, while "outline" means something
+> different and unrelated.
 
-You are correct. Yet I can see no way for usb_destroy_configuration()
-to not run. Hence we must be overlooking something.
+Yeah.  Technically much more correct for it is inline vs. functional.
+Not that that term won't be misunderstood as well :-)
 
-	Regards
-		Oliver
 
+Segher
 
