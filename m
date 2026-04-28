@@ -1,156 +1,133 @@
-Return-Path: <linux-usb+bounces-36637-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36638-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iACBLdTe8Gl5agEAu9opvQ
-	(envelope-from <linux-usb+bounces-36637-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 18:22:44 +0200
+	id yMErIr3R8GmRZAEAu9opvQ
+	(envelope-from <linux-usb+bounces-36638-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 17:26:53 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB597488C74
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 18:22:41 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01241487CE1
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 17:26:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 9E05D3139E04
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 15:12:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EE8AF31108D1
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 15:13:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 497AF42B75E;
-	Tue, 28 Apr 2026 15:12:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2FE842E00F;
+	Tue, 28 Apr 2026 15:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="alyhf9Ed"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lwScEoKi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9668C2FFDCC
-	for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 15:12:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 079BB38F251;
+	Tue, 28 Apr 2026 15:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777389148; cv=none; b=G4GtwUK7zePXdvug3iHQjcIWvL8kBLlBS2oi47sLylqaFNgHqMycIP3JwN+aEUGZRzebOXGJbBNxgQYCmdjnI4YP2gZoa1/QuFytQOtFqznM+TMBXwXCHdefvDb1BvcUMipllz1jqX4pYWiYwC3WGNlY37ebYXk1Jpfzlnk1/3A=
+	t=1777389197; cv=none; b=larOQGcic7701EpiNHM4JkCIBcAFY2/5qc9cVUU6P+C6WXExMJThoPtGE62pt1vpeNOfb8z1b3j4iQrc9PbsFtBHclrTDhG8vkPUc/dHLpXGbJu3B9V3Vo2F7BhxhJfjzv47PCW3qvMJjqvKrhx2k0qcj4YXw2O70NIv7zdvbzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777389148; c=relaxed/simple;
-	bh=d07RbXnaQm9iiHQRxgoSOAz2uScnk3dI9+tWqWrDdzA=;
+	s=arc-20240116; t=1777389197; c=relaxed/simple;
+	bh=6fFHNJC7+5kKW56ZhJcKHcNKRLt3YELgG+gR/jUoZxQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jb0L9lGzOyCK/tpeFjqYMTy1q8AgI4Mof4jzNDLMXqJiBzwhySpBcjFh72CIa6UcN1q/49yZnp9rkE4gvstvKfKcOaeNT2X/iL4WVXjd6i/LjfBhN+MYup21lgd6G61w7/s/SpsTOPzpNzIuxG2yZPqeK29peIPdv9MmXI/K/xI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=alyhf9Ed; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-50fbd79350dso74393001cf.3
-        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 08:12:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1777389146; x=1777993946; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IaXwzGtLpoQm6CnRmabP6IiFbWb62yALGjzCIAMjPPg=;
-        b=alyhf9EdfwCMEHZ5Q+gjfxgJvBWqSEzA0ZAL3HZ3C87VOlDhqbOhufcqfk0Q1vPxYI
-         OBS7PxTeG0fpoW1lUBBeMbDpg0ylidQNvvKwGuQsO4X1gcYnatWk3+NGpvDJNBEy6ei9
-         G6R0t4dNJ9O9ymVXCaW4IeegMuw/977ySkarYe2IXG3UfB8H8RYmj+BNa8lQm+43Fwlc
-         md4vaZs5j0bZhavGxAYtU4JnMHKhdM2MjFMNWcNppxaDzpGxkew+IEbLH/UxHAH+beR4
-         lRgGm7WIZnUdxPoxPGNNx5BYf7V0LpjpSwgtUmUchscSaia99C6prRjqM2Luccb/tlRv
-         XG2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777389146; x=1777993946;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IaXwzGtLpoQm6CnRmabP6IiFbWb62yALGjzCIAMjPPg=;
-        b=l4kZDeCXsHoMNqwklXc524jKd4bFTAuFcp5QEdjA9C9ec9L3JpNpdByBTlyvF1wV4N
-         Yeoa3ARBT4W7CkmtKr19jc0reFEba7vgps+cB0jHqbRIKYqgZMV5VUSeSZ/55d3TtWFn
-         nMYTZRv71SFLTeYYgeRxBzyHzhBFkhGmESUhUWBSYvW1LtkW4DGorXq5IW5emWA1bBUD
-         mraNrfy5DbaBGTUXcxNWJDLZTAp1+S0fsTFHVMkpQoX6k9cQwet5pYmQ0u9JK/KbtUsC
-         uD7d5Nm2dx+mLoqBvv9OhA66XS/oJxUM0m4sDbJ1s79EAcwb+u3ZHuXtdVLp8QV02yBW
-         ETKg==
-X-Forwarded-Encrypted: i=1; AFNElJ/SGnhb2LElNrclxGGKLQx/RzgNR8PzTPptl8J3UkEktJCxTlKeIUvTfqm78XsWKz0fLOS6aOcJrB4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8dF2o5OB29JKZmwcg4MyRMdPNqJQ6Ie9GYNhHcFLwzlPF+rjs
-	xVg7NLDIA3NR2xupvg0XGGqPnGjUdJsyL0Sg3H27mTemm7cXEIFHmtiivlWfaEM9MA==
-X-Gm-Gg: AeBDiev97RelgmwBsPBGQ+gzzO1t844QGPOELtFjUk4oNRMZ55pBJM2+VctD1x6OQSX
-	tCu+PTGNZpYeKjnLLeKRiXaxEMGJJvJqLJBwiO/r5HBTeK9XZOmoj9wtVJ5rYkUZA6SAIgOjhmv
-	80+aPQJC0B4Erc9KTpYU+ngFZihLlbFmo1AZdUDf4qcJ+HXbs7tayoEQGFNYRb6q+YQf+6jbdN4
-	pX6/elCE9zh4TznHGTMj2Xnu+MZvdN9oXAzuEVnBZpzB3fovWvFPQ7EvS44zRPLK8Rhbq9+9U4O
-	sI2jPryAlk4n27O6ZOM3OFJiUsltEAiUoJSKcvOb2ZqDqEY5mmBzZZaEDIBTK2gdqiDhIWS4OnN
-	76NjDjQkubuXgIxLfRh4Atq+NW5dFH16VECS0eM0FeC1AwIRIYo1kgcePZ18FKtbqLQi6im2PWi
-	ofa1G8bXIOyjyGCJJnn3/G8uN5Ln75Fj3Vj/s=
-X-Received: by 2002:a05:622a:1f0a:b0:50f:b1be:76f9 with SMTP id d75a77b69052e-5100e12c308mr42084761cf.24.1777389146335;
-        Tue, 28 Apr 2026 08:12:26 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::a0bd])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5100da4d312sm19121911cf.1.2026.04.28.08.12.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2026 08:12:25 -0700 (PDT)
-Date: Tue, 28 Apr 2026 11:12:23 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: syzbot <syzbot+2afd7e71155c7e241560@syzkaller.appspotmail.com>,
-	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] memory leak in hub_event (4)
-Message-ID: <e33625b0-70d1-498d-8605-68bfa8dac817@rowland.harvard.edu>
-References: <69ec231a.a00a0220.7773.000c.GAE@google.com>
- <9fea44a5-83de-41ed-9531-11e5d471dca4@suse.com>
- <bb39abcf-aefd-42f6-b9e3-e576dbb5fc37@rowland.harvard.edu>
- <5c8e6c36-e8e5-4e88-b789-0f46614cb03e@suse.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=hz/I25mZOM2pobdT2YyFiuEFva72HBcvKw8Ey9RMyKspDs8AYj32p5xJ9aqXJRi9Q37UyOKtIMHDmNZ5Y86NjPziLdX0Gai6nklZzXGxMhaSSgvnP9pT4O0zCQQ2ZkSr+6gTlnn1nOmJJ2jNEjJNxRuN2w71vEzFc2AyhxCR3c8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lwScEoKi; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777389196; x=1808925196;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6fFHNJC7+5kKW56ZhJcKHcNKRLt3YELgG+gR/jUoZxQ=;
+  b=lwScEoKiFvfAWz55lUcwFi4bp9w371mp0t5LRMbUDfU0O9eOOk6ocsEx
+   1GmVlc6BmJxS3BD4KNCwML4u0rrAIOoHaFWHmI3P3KV9aCFOz9zT7sBS3
+   xrbh+d5lIjWeM+CS1Wt3UysrTUAMJRbImTx5gSJ1DpawXGfdZEYazvqCy
+   wqTV717+11LhgqC8OZPGpoG4NsMViByRDSaKPS6ktuvwphdb7vI7pmehm
+   eR1ZQtfOE8IIEo6msJSxZoT/4zK03DkXmYSv5aow3OZe2QGCinwvpPO4O
+   ZIuM9C+7k0S3fNHq+7ZBw2pvSoAJbukPuY+hXgLplUTX7u0ryrVQ+n7/a
+   w==;
+X-CSE-ConnectionGUID: RYv6iywuQgGWB+eti7FrTw==
+X-CSE-MsgGUID: +5GL9bgDS26lfqZWW4CQ3A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11770"; a="78216045"
+X-IronPort-AV: E=Sophos;i="6.23,204,1770624000"; 
+   d="scan'208";a="78216045"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2026 08:13:16 -0700
+X-CSE-ConnectionGUID: oeIz82csT92U4pNTOoVXmQ==
+X-CSE-MsgGUID: s21mIPu1RreP3ubRGO3BYA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,204,1770624000"; 
+   d="scan'208";a="234280367"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa007.jf.intel.com with ESMTP; 28 Apr 2026 08:13:13 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id B998C95; Tue, 28 Apr 2026 17:13:11 +0200 (CEST)
+Date: Tue, 28 Apr 2026 17:13:11 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH 9/9] thunderbolt: Add support for USB4STREAM
+Message-ID: <20260428151311.GU557136@black.igk.intel.com>
+References: <20260428072209.3084930-1-mika.westerberg@linux.intel.com>
+ <20260428072209.3084930-10-mika.westerberg@linux.intel.com>
+ <ef5411f4-0e4c-4ac1-8ae0-0d557fc0ebd2@lunn.ch>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5c8e6c36-e8e5-4e88-b789-0f46614cb03e@suse.com>
-X-Rspamd-Queue-Id: CB597488C74
+In-Reply-To: <ef5411f4-0e4c-4ac1-8ae0-0d557fc0ebd2@lunn.ch>
+X-Rspamd-Queue-Id: 01241487CE1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,wunner.de,linux.intel.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com];
+	TAGGED_FROM(0.00)[bounces-36638-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36637-lists,linux-usb=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[intel.com:+];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,rowland.harvard.edu:dkim,rowland.harvard.edu:mid];
-	RCPT_COUNT_FIVE(0.00)[6];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,2afd7e71155c7e241560];
-	SUBJECT_HAS_QUESTION(0.00)[]
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 
-On Tue, Apr 28, 2026 at 01:33:20PM +0200, Oliver Neukum wrote:
+On Tue, Apr 28, 2026 at 05:08:55PM +0200, Andrew Lunn wrote:
+> On Tue, Apr 28, 2026 at 09:22:09AM +0200, Mika Westerberg wrote:
+> > Introduce USB4STREAM protocol and Linux implementation. This allows two
+> > (or more) hosts to transfer data directly over Thunderbolt/USB4 cable
+> > through a character device without need to go through the network stack.
 > 
-> 
-> On 27.04.26 16:19, Alan Stern wrote:
-> > This is not needed.  dev->rawdescriptors and dev->config are deallocated
-> > in usb_destroy_configuration(), which gets called when the usb_device
-> > structure is released.
-> > 
-> > The memory leak must have a different cause.
-> 
-> You are correct. Yet I can see no way for usb_destroy_configuration()
-> to not run. Hence we must be overlooking something.
+> Is this mutually exclusive to networking, on a device?
 
-Maybe the usb_device structures are not being released at all.  For 
-instance, the snd_usb_audio or snd_usb_caiaq driver may forget to drop a 
-reference in an error pathway.
-
-It seems odd that the bug report says there are 5 suspected memory leaks 
-right after 5 devices have disconnected, yet the tracebacks are for 
-different size allocations, implying that they all refer to the same 
-device (i.e., not the same allocation for each of the 5 devices).  But 
-it could just be a coincidence.
-
-Alan Stern
+No - they can co-exist.
 
