@@ -1,63 +1,61 @@
-Return-Path: <linux-usb+bounces-36613-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36614-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QDzYMh6R8GlZVAEAu9opvQ
-	(envelope-from <linux-usb+bounces-36613-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:51:10 +0200
+	id iOo3Hk2S8GlvVAEAu9opvQ
+	(envelope-from <linux-usb+bounces-36614-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:56:13 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E212482F4F
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:51:09 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90DD4483145
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:56:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6ECD930D552A
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 10:42:49 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 740C63070F6A
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 10:43:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DBFA3F7870;
-	Tue, 28 Apr 2026 10:41:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2BB53F9F2A;
+	Tue, 28 Apr 2026 10:41:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QAC3yDVz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g+6UM30V"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A27D3F6612;
-	Tue, 28 Apr 2026 10:41:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187A93F0A9F;
+	Tue, 28 Apr 2026 10:41:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777372909; cv=none; b=YnegReBNoF07aacgG1MTi/xIiTaajdGsT96ulUDD4uSA79AeAZTFzizR0Uv8z97Rb56xX6zm+LId0uYYeUM8nxPYcTzsatmcFhXI4e0iKDpiijzdZ9duci9uem8bHRuxWNYAk8au6DvWdOswv38beODi42lzc/zom+l6lCXN+Mg=
+	t=1777372915; cv=none; b=JEd98pCPpN5TZ48NSav9zjrtVwV0Fsk+VX9bgx2He9OD4mZuHJGUDSEXvcjzZ8vJ2+2fnFRUkDZpDnjchpjy+WlqXzIc6tgfCOhT1jjDvenuuIEOPYl8hJb7+c8nHUXbgu3sN9JxDAWkswnruKYwjsqJpz+rJ3vpKEpOUACud64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777372909; c=relaxed/simple;
-	bh=MrijHnSukrGEA7lvsUJDFJZkv206sKWIDXoibZ3pi54=;
+	s=arc-20240116; t=1777372915; c=relaxed/simple;
+	bh=8rDn52k5i7AdEtw+uSk9xJGT9Vfuz1AEri/r6JeOEMs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jcbtUJSLe/o7uNuc6Ulht3rLP0lqLwU6dqAnCPaL39mMzA6zeKMAtgtSSCNa5Vs3P7g0igxSNhh3QNh5ZLs7RtnrBCgEdYtSONF+JVhKZNTR8d7CTcIH5UN/DaQznbHz/XDgl456cAs9DnOd/z2o6rOlXk0AyNP0DHbt7dYvaXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QAC3yDVz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C0DC2BCB6;
-	Tue, 28 Apr 2026 10:41:48 +0000 (UTC)
+	 MIME-Version:Content-Type; b=gca6Yh7qBLlBu/BaTUocY4LYZgPiBkXWlS0Lfqxt49jlfGGkRoL/sCX8DmvQUMmJ1rbVR5tWfy6xj6FiPwxYkCQQ3M2HFEStk0MlrVzsqSTlKBeG8uI60roxY9M9YuhxAYO+pMqj1NL1KXCoS4IqAVfNWQ7NdaZU+cC8ssjG5QQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g+6UM30V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1258CC2BCAF;
+	Tue, 28 Apr 2026 10:41:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777372909;
-	bh=MrijHnSukrGEA7lvsUJDFJZkv206sKWIDXoibZ3pi54=;
+	s=k20201202; t=1777372914;
+	bh=8rDn52k5i7AdEtw+uSk9xJGT9Vfuz1AEri/r6JeOEMs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QAC3yDVz57Z3meDtVxo9vPLbl/9sjM5vBy7XfSfIKzwluGou1FFgRqXf+k+q+knoZ
-	 /iVDjXrsL2bera6KqRlPa1ej3rS4Qb/8f2jGGnioR2yFCLJ/CkudAlspcUavcgLiCK
-	 tOnX87OGn3jXKh2WLxxKiNEZ1QHeykrAp+4FB7WG31ugkj+P7z0MJnGZS4ovLsn3AE
-	 fSGmQxTiu1YY97kNhLUjeAcyh1O7tiQoDtJYpZVacG0I9gzwArbefGvMOwJQ8teJJD
-	 u3kZgL977QTgGoJ/IXrPnf8OlfpLQZGOg4/Jbxh9ttNndEDHCWb9ydk0XbVany64Nd
-	 g0Z0kJsVg2hig==
+	b=g+6UM30VpS3UCgJvZF4fyWrmCNBNYF2qE2mXXVOrytiW/hfdFhpmxqGSPFhS4MyGs
+	 yr/XO4PNr1nMjXTfgSCCrJ5YYZimCayl7B6tcxybw84C8e+4vJwqT/xaHGWjGkpHDr
+	 hbqVl+coPod+F5nzppYy9Mn7u8IvatbNg2K2FWLzpmSSVO6+elG/hsvF1pDbvZJjum
+	 X0Wb2UQCLHbwLQyweU7Lcg73DZg00IB9ZepybdeCWKCkySSN10x/ATy9WUW6pAcOLd
+	 bqj3+gz5eL28h2KULAqcc5crKyVo9NAWQ+hQ2R4LVeQmIY/fk9WSNJ87k1S0/Hlr4t
+	 37vqyIkDDn9Tw==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Rene Sapiens <rene.sapiens@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
+Cc: Ingo Rohloff <ingo.rohloff@lauterbach.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	andreas.noever@gmail.com,
-	michael.jamet@intel.com,
-	YehezkelShB@gmail.com,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 7.0-6.1] thunderbolt: Disable CLx on Titan Ridge-based devices with old firmware
-Date: Tue, 28 Apr 2026 06:40:22 -0400
-Message-ID: <20260428104133.2858589-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 7.0-6.12] usb: dwc3: Support USB3340x ULPI PHY high-speed negotiation.
+Date: Tue, 28 Apr 2026 06:40:26 -0400
+Message-ID: <20260428104133.2858589-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260428104133.2858589-1-sashal@kernel.org>
 References: <20260428104133.2858589-1-sashal@kernel.org>
@@ -72,436 +70,562 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 7.0.2
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 1E212482F4F
+X-Rspamd-Queue-Id: 90DD4483145
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_CC(0.00)[linux.intel.com,kernel.org,gmail.com,intel.com,vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36613-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36614-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,yhbt.net:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lauterbach.com:email,msgid.link:url,linuxfoundation.org:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,synopsys.com:email,lore:url]
 
-From: Rene Sapiens <rene.sapiens@linux.intel.com>
+From: Ingo Rohloff <ingo.rohloff@lauterbach.com>
 
-[ Upstream commit 59b03d12b1f6d14d936a3ebec225f8d914dc3b70 ]
+[ Upstream commit a28de63356575612954d4e5d5f48a2488f50e16d ]
 
-Thunderbolt 3 devices based on Titan Ridge routers with NVM firmware
-version < 0x65 have been observed to become unstable when CL states are
-enabled. This can lead to link disconnect events and the device failing
-to enumerate.
+The Microchip USB3340x ULPI PHY requires a delay when switching to the
+high-speed transmitter. See:
+    http://ww1.microchip.com/downloads/en/DeviceDoc/80000645A.pdf
+    Module 2 "Device Enumeration Failure with Link IP Systems"
 
-Enable CLx on Titan Ridge only when the running NVM firmware version
-is >= 0x65.
+For details on the behavior and fix, refer to the AMD (formerly Xilinx)
+forum post: "USB stuck in full speed mode with USB3340 ULPI PHY, ZynqMP."
 
-Signed-off-by: Rene Sapiens <rene.sapiens@linux.intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+This patch uses the USB PHY Vendor-ID and Product-ID to detect the
+USB3340 PHY and then applies the necessary fix if this PHY is found.
+
+Signed-off-by: Ingo Rohloff <ingo.rohloff@lauterbach.com>
+Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Link: https://patch.msgid.link/20260305121452.54082-2-ingo.rohloff@lauterbach.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-Now I have all the information needed. Let me compile the analysis.
+Now I have enough information to complete the full phase-by-phase
+analysis.
 
----
-
-# Analysis: thunderbolt: Disable CLx on Titan Ridge-based devices with
-old firmware
+# Full 9-Phase Analysis
 
 ## PHASE 1: COMMIT MESSAGE FORENSICS
 
-**Step 1.1 - Subject line parsed:**
-Record: [thunderbolt (subsystem)] [Disable (action verb - indicates a
-bug workaround)] [CLx on Titan Ridge-based devices with old NVM
-firmware]
+**Step 1.1: Subject line parsing**
+- Subsystem: `usb: dwc3:` (DesignWare USB3 controller driver)
+- Action verb: "Support" (often hides a bug fix – here it is supporting
+  HS negotiation that is broken)
+- Record: `usb: dwc3` – "Support" – one-line: enable HS chirp delay
+  workaround for Microchip USB3340x ULPI PHY
 
-**Step 1.2 - Tags parsed:**
-Record: Two `Signed-off-by:` tags — Rene Sapiens (author) and Mika
-Westerberg (subsystem maintainer). NO `Fixes:`, NO `Cc: stable`, NO
-`Reported-by:`, NO `Link:`, NO `Reviewed-by:`, NO `Tested-by:`.
-(Expected — that's why this commit needs review.)
+**Step 1.2: Tag parsing**
+- Fixes: (absent – expected for candidate review)
+- Reported-by: (absent)
+- Tested-by: (absent)
+- Reviewed-by: (absent)
+- Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com> (the DWC3 subsystem
+  maintainer)
+- Link: patch.msgid.link to v5 submission
+- Cc: stable: absent
+- Signed-off-by: author Ingo Rohloff + Greg KH (USB subsystem
+  maintainer)
+- Record: The dwc3 maintainer explicitly Acked this; Greg KH merged it.
+  Strong quality signal.
 
-**Step 1.3 - Commit body:**
-Record: Bug description: "Thunderbolt 3 devices based on Titan Ridge
-routers with NVM firmware version < 0x65 have been observed to become
-unstable when CL states are enabled." Symptoms: "link disconnect events
-and the device failing to enumerate." Failure mode: link instability,
-device enumeration failure (user-visible — Thunderbolt device doesn't
-work). Author's mechanism: old NVM firmware has a hardware/firmware bug
-triggered when CL (low-power link) states are entered.
+**Step 1.3: Body analysis**
+- Bug described: Microchip USB3340x ULPI PHY fails HS negotiation – USB
+  stays stuck in full-speed
+- References Microchip erratum doc 80000645A.pdf, Module 2 "Device
+  Enumeration Failure with Link IP Systems"
+- References AMD/Xilinx forum post "USB stuck in full speed mode with
+  USB3340 ULPI PHY, ZynqMP"
+- Mechanism: delay needed when switching to the high-speed transmitter
+  (TxValid during HS Chirp)
+- Record: Real hardware-level bug documented by silicon vendor, with
+  user-visible symptom (USB devices don't work at high speed on ZynqMP +
+  USB3340 boards).
 
-**Step 1.4 - Hidden bug fix detection:**
-Record: Not hidden — the commit is clearly a bug-triggered hardware
-workaround/quirk. "Disable" here means "disable the broken low-power
-states on broken hardware/firmware combinations."
+**Step 1.4: Hidden bug fix detection**
+- "Support" often hides a functional fix – the PHY doesn't work without
+  this patch on affected boards
+- Record: This IS a bug fix presented as hardware enablement. The
+  underlying bug is a hardware silicon erratum that requires a software
+  workaround (controller-side XCVRDLY bit).
 
-## PHASE 2: DIFF ANALYSIS - LINE BY LINE
+## PHASE 2: DIFF ANALYSIS
 
-**Step 2.1 - Inventory:**
-Record: 1 file changed: `drivers/thunderbolt/quirks.c`, +7 / -0.
-Functions modified: `quirk_clx_disable()` (3 lines added); table
-`tb_quirks[]` (1 new entry, 4 lines including blank and comment). Scope:
-single-file surgical fix.
+**Step 2.1: Inventory**
+- `drivers/usb/dwc3/core.c`: +20 lines (new `dwc3_ulpi_setup()` helper +
+  one call site)
+- `drivers/usb/dwc3/core.h`: +4 lines (new `DWC3_GUSB2PHYCFG_XCVRDLY
+  BIT(9)`, new struct field `enable_usb2_transceiver_delay:1`,
+  kerneldoc)
+- `drivers/usb/dwc3/ulpi.c`: +25 lines (new `dwc3_ulpi_detect_config()`,
+  `#include <linux/ulpi/driver.h>`, `USB_VENDOR_MICROCHIP` macro, call
+  in `dwc3_ulpi_init()`)
+- Total: +49 / -0, contained in 3 files of one driver subdir
+- Record: Single-driver surgical change, no cross-subsystem impact.
 
-**Step 2.2 - Code flow change:**
-Record:
-- Before: `quirk_clx_disable()` was only invoked from AMD Yellow Carp /
-  Pink Sardine table entries. When invoked, it unconditionally set
-  `QUIRK_NO_CLX`.
-- After: A new table entry matches Intel Titan Ridge DD bridge
-  (0x8086:0x15ef) and invokes `quirk_clx_disable()`. Inside, if the
-  switch is Titan Ridge AND `sw->nvm->major >= 0x65`, the function
-  returns early without applying `QUIRK_NO_CLX`; otherwise it applies it
-  as before. AMD path behavior is preserved
-  (`tb_switch_is_titan_ridge(sw)` returns false for AMD parts).
+**Step 2.2: Code flow**
+- `dwc3_ulpi_init()`: after registering ULPI interface, now calls
+  `dwc3_ulpi_detect_config()` which reads the ULPI PHY vendor/product
+  IDs and sets `dwc->enable_usb2_transceiver_delay` only when it sees
+  Microchip (0x0424) product 0x0009.
+- `dwc3_core_init()`: after ULPI init, calls new `dwc3_ulpi_setup()`
+  which, for the specific PHY only, sets `DWC3_GUSB2PHYCFG_XCVRDLY`
+  (BIT(9)) on every USB2 port's GUSB2PHYCFG register.
+- Record: Default behavior is completely unchanged; the new code path is
+  gated by a specific vendor/product ID and by presence of an ULPI PHY
+  (`if (!dwc->ulpi) return;`).
 
-**Step 2.3 - Bug mechanism:**
-Record: Category (h) Hardware workaround — a vendor-identified firmware
-bug on the device causes link instability under CL states. Fix adds a
-device-specific quirk table entry plus a firmware-version guard.
+**Step 2.3: Bug mechanism class**
+- Category (h) Hardware workaround: quirk activated via ULPI
+  vendor/product match, writes a controller-side delay bit per the
+  Microchip erratum.
+- Record: Pure hardware quirk – no locking, no refcount, no allocation
+  changes.
 
-**Step 2.4 - Fix quality:**
-Record: Small, contained, obviously correct IF `sw->nvm` is populated at
-`tb_check_quirks()` time. The fix itself cannot cause regressions on AMD
-devices or non-Titan-Ridge Intel devices, since the new check is guarded
-by `tb_switch_is_titan_ridge(sw)`. Key concern: whether `sw->nvm` is
-populated when this runs — see Phase 3.5.
+**Step 2.4: Fix quality**
+- Obviously correct: reads the register, ORs the bit, writes back (per
+  erratum's documented workaround)
+- Minimal/surgical and tightly gated by vendor+product ID
+- Regression risk for any other hardware is essentially zero
+  (`enable_usb2_transceiver_delay` only becomes true for one specific
+  ULPI PHY)
+- Record: Low risk, high confidence.
 
 ## PHASE 3: GIT HISTORY INVESTIGATION
 
-**Step 3.1 - Blame:**
-Record: CLx support on Titan Ridge was introduced by `43f977bc60b1c`
-("thunderbolt: Enable CL0s for Intel Titan Ridge") in v5.17-rc1 and
-expanded by `b017a46d486cd` ("thunderbolt: Add CL1 support for USB4 and
-Titan Ridge routers") in v6.0-rc1. So the bug window (CLx enabled with
-no firmware guard on Titan Ridge DD) is v5.17+.
+**Step 3.1: Blame**
+- The `dwc3_hs_phy_setup()` / `dwc3_phy_setup()` loop structure using
+  `num_usb2_ports` was introduced by `921e109c62007` ("usb: dwc3: core:
+  Access XHCI address space temporarily to read port info") which is in
+  `v6.10-rc1`.
+- Record: The per-port iteration model, and therefore the patch's `for
+  (index = 0; index < dwc->num_usb2_ports; index++)` construct, cleanly
+  matches v6.10.y and newer.
 
-**Step 3.2 - Fixes: tag:**
-Record: No `Fixes:` tag. Implicit target would be `43f977bc60b1c` /
-`b017a46d486cd` (v5.17 / v6.0). The `QUIRK_NO_CLX` infrastructure itself
-came from `7af9da8ce8f9a` ("thunderbolt: Add quirk to disable CLx") in
-v6.3-rc1 and was explicitly tagged `Cc: stable@vger.kernel.org`.
+**Step 3.2: Fixes: tag follow-up**
+- No Fixes: tag; the bug is a silicon erratum, not a prior kernel commit
+- Record: N/A (expected).
 
-**Step 3.3 - Related file history:**
-Record: Recent `quirks.c` changes (`a75e0684`, `0c35ac18`, `f2bfa944`,
-`ccdb0900`, `f14d177e`, `f0a57dd3`, `7af9da8c`) are all similar tiny
-additions of hardware quirks/logging — the file has low churn and stable
-structure.
+**Step 3.3: Related history**
+- Prior dwc3 ulpi history (`e5f4ca3fce90a`, `fca3f13810572`,
+  `ce722da66d3e9`, `e0082698b6898`, `98112041bcca1`, `88bc9d194ff69`)
+  shows the ULPI infrastructure has been in place since v4.x, with the
+  `dwc->ulpi_ready` / `dwc3_core_ulpi_init()` flow in place since v4.16.
+- Record: Standalone patch – no unlanded prerequisites outside the dwc3
+  driver itself.
 
-**Step 3.4 - Author context:**
-Record: Rene Sapiens (author) has recent thunderbolt work (margining,
-structure cleanups). Mika Westerberg (co-Signed-off-by) is the
-Thunderbolt subsystem maintainer and applied the patch directly to
-`thunderbolt.git/next`. Strong authority signal.
+**Step 3.4: Author**
+- Ingo Rohloff (Lauterbach) – embedded/debug tools vendor, not a dwc3
+  regular; patch went through 5 revisions to get maintainer acceptance.
+- Record: External contributor, but maintainer Ack and Greg KH merge
+  provides the quality signal.
 
-**Step 3.5 - Dependencies (CRITICAL):**
-Record: This commit is PART 2 of a 2-patch series. The prerequisite is
-commit `4573add760b8d` ("thunderbolt: Read router NVM version before
-applying quirks"). That prerequisite splits `tb_switch_nvm_add()` into
-`tb_switch_nvm_init()` (populates `sw->nvm` / reads version) and
-`tb_switch_nvm_add()` (registers nvmem), and calls
-`tb_switch_nvm_init()` from `tb_switch_add()` BEFORE
-`tb_check_quirks()`. Without the prerequisite, `sw->nvm` is NULL when
-`tb_check_quirks()` runs, so the new guard `sw->nvm && sw->nvm->major >=
-0x65` is always false, and `QUIRK_NO_CLX` is applied to ALL Titan Ridge
-DD devices regardless of firmware version. The commit still fixes the
-bug (pessimistically) but loses power-savings on newer firmware.
+**Step 3.5: Dependencies**
+- Relies on `dwc->num_usb2_ports` (added v6.10) and the per-port HS PHY
+  setup model.
+- On the current 7.0 tree it uses `dwc3_readl(dwc->regs, ...)` – this is
+  the legacy API; commit `9accc68b1cf0a` renamed the first arg to `dwc`.
+  Both forms are functionally identical; any merge conflict with that
+  rename is trivial (one-arg swap).
+- Record: Applies cleanly to 6.10.y+ stable trees; for 6.1.y/6.6.y
+  backport would need to be rewritten to use single-port indexing (not
+  just the XHCI-port probing).
 
-## PHASE 4: MAILING LIST AND EXTERNAL RESEARCH
+## PHASE 4: MAILING LIST / EXTERNAL RESEARCH
 
-**Step 4.1 - b4 dig:**
-Record: `b4 dig -c 59b03d12b1f6d` could not find a match (lore search
-returned nothing). Manual search via `yhbt.net/lore/linux-usb`
-succeeded: cover letter at
-`20260224070150.3320641-1-mika.westerberg@linux.intel.com`, patch 2/2 at
-`20260224070150.3320641-3-...`, patch 1/2 at
-`20260224070150.3320641-2-...`. Only v1 was submitted — no v2/v3.
+**Step 4.1: b4 dig**
+- `b4 dig -c a28de63356575` → matched thread at `https://lore.kernel.org
+  /all/20260305121452.54082-2-ingo.rohloff@lauterbach.com/`
+- `b4 dig -a` shows v1 (Feb 24) → v2 (Feb 25) → v3 (Feb 27) → v4 (Mar 3)
+  → v5 (Mar 5 — applied)
+- v1/v2 used a DT property (`snps,enable_xcvrdly_quirk`) but reviewers
+  asked for autodetection; v3 switched to vendor/product-ID detection.
+- Record: 5 revisions, significant review feedback addressed, applied
+  version is the latest.
 
-**Step 4.2 - Reviewers:**
-Record: CC list: Yehezkel Bernat, Lukas Wunner, Andreas Noever (past
-Thunderbolt co-maintainers), Rene Sapiens (author). Mailing list: linux-
-usb@vger.kernel.org. Mika Westerberg (current Thunderbolt maintainer)
-submitted and applied. No Reviewed-by/Acked-by/Tested-by tags were added
-in the mailing-list discussion before application, but the maintainer
-applied it directly.
+**Step 4.2: b4 dig -w / recipients**
+- Thread recipients include Thinh Nguyen (dwc3 maintainer), Greg KH,
+  linux-usb
+- Record: Correct maintainers and list involved; Ack came from the
+  maintainer.
 
-**Step 4.3 - Bug report:**
-Record: No public Link: tag. Cover letter: "There is known issue on
-Titan Ridge with older firmware that makes the link unstable if CL
-states are enabled." Phrasing indicates this is a vendor-known hardware
-issue (Intel internal knowledge), not a user-reported bug traceable via
-lore.
+**Step 4.3: Bug report**
+- External reports referenced in the commit message:
+  - Microchip erratum 80000645A ("Device Enumeration Failure with Link
+    IP Systems")
+  - AMD/Xilinx forum thread about USB stuck in full-speed on ZynqMP
+- Record: Verified documented hardware issue affecting a real shipping
+  platform (Xilinx/AMD ZynqMP with USB3340 PHY).
 
-**Step 4.4 - Related patches / series:**
-Record: 2-patch series. Patch 1/2 (prerequisite) is `4573add760b8d` —
-refactor making NVM version available early. Patch 2/2 is this commit.
-Both applied as the series by Mika on 2026-03-02.
+**Step 4.4: Series context**
+- Mbox shows this is the only patch in the v5 series (1/1); earlier
+  versions had a DT binding patch (2/2) that was dropped when approach
+  changed to autodetection
+- Record: Standalone patch, no missing prerequisites.
 
-**Step 4.5 - Stable ML:**
-Record: No prior stable@ discussion found for this fix. No explicit
-stable nomination by reviewers (thread only has cover-letter "Applied"
-reply).
+**Step 4.5: Stable-list discussion**
+- No explicit Cc: stable in the patch, and the maintainer's Ack ("Acked-
+  by: Thinh Nguyen ... Thanks, Thinh") did not discuss stable
+- Record: No explicit stable nomination, but none is required for
+  candidate review.
 
 ## PHASE 5: CODE SEMANTIC ANALYSIS
 
-**Step 5.1 - Key functions:**
-Record: `quirk_clx_disable()` (modified), and the `tb_quirks[]` table
-(new entry).
+**Step 5.1: Key functions**
+- New: `dwc3_ulpi_setup()`, `dwc3_ulpi_detect_config()`
+- Modified call sites: `dwc3_core_init()`, `dwc3_ulpi_init()`
 
-**Step 5.2 - Callers:**
-Record: `quirk_clx_disable` is called by `tb_check_quirks()` in
-`drivers/thunderbolt/quirks.c` at line 135 via the table dispatch.
-`tb_check_quirks()` is called once by `tb_switch_add()` at
-`drivers/thunderbolt/switch.c:3341`. `tb_switch_add()` is the mandatory
-router-addition path — reachable on every Thunderbolt device
-enumeration.
+**Step 5.2: Callers**
+- `dwc3_core_init()` is called from `dwc3_probe()` and from runtime
+  resume paths – core device bring-up path
+- `dwc3_ulpi_init()` is called from `dwc3_core_ulpi_init()` which is
+  called from `dwc3_core_init()` only when the HW params indicate a ULPI
+  interface
+- Record: New code runs only during dwc3 init; not in hot data paths,
+  IRQ context, or sleep paths.
 
-**Step 5.3 - Callees:**
-Record: `tb_switch_is_titan_ridge(sw)` (inline predicate on
-vendor/device IDs). Access to `sw->nvm->major`. `tb_sw_dbg()` for the
-debug message. No locking / no allocation / no I/O — safe.
+**Step 5.3: Callees**
+- `dwc3_readl`/`dwc3_writel` (MMIO) – bounded, no allocation, no lock
+- Record: Minimal side effects; just register writes.
 
-**Step 5.4 - Call chain reachability:**
-Record: User plugs a Thunderbolt device → PCI enumeration →
-`tb_switch_add()` → `tb_check_quirks()` → this quirk. Reachable on every
-plug/unplug and on every boot for integrated routers. Universal trigger
-for affected hardware.
+**Step 5.4: Reachability**
+- Path: user boots board → dwc3 probe → `dwc3_core_init()` → (if ULPI)
+  `dwc3_ulpi_init()` → register PHY → read vendor/product ID → set flag;
+  then `dwc3_ulpi_setup()` applies XCVRDLY bit
+- Reachable on every boot on affected ZynqMP/USB3340 boards; inert on
+  every other board
+- Record: Trigger is "boot with USB3340 ULPI PHY", which is exactly the
+  affected population.
 
-**Step 5.5 - Similar patterns:**
-Record: The same `quirk_clx_disable` is already used for AMD Yellow Carp
-/ Pink Sardine (by `7af9da8ce8f9a`, which was tagged `Cc:
-stable@vger.kernel.org`) — direct precedent of this exact quirk being
-stable-worthy.
+**Step 5.5: Similar patterns**
+- The dwc3 driver already has many per-quirk bitfields
+  (`ulpi_ext_vbus_drv`, `dis_enblslpm_quirk`,
+  `dis_u2_freeclk_exists_quirk`, etc.)
+- Record: New `enable_usb2_transceiver_delay` fits the existing quirk-
+  flag pattern.
 
 ## PHASE 6: CROSS-REFERENCING AND STABLE TREE ANALYSIS
 
-**Step 6.1 - Code in stable:**
-Record: `quirks.c` with `quirk_clx_disable()` exists in stable since 6.3
-(7af9da8ce8f9a). Titan Ridge CLx support in tree since 5.17. All active
-stable trees (6.1.y, 6.6.y, 6.12.y, 6.16.y, etc.) have both the CLx-
-enablement code AND the `quirk_clx_disable` infrastructure needed to
-apply this patch.
+**Step 6.1: Stable trees containing buggy code**
+- The underlying "bug" is a PHY silicon defect that exists in the
+  hardware regardless of kernel version. The affected kernel construct
+  (`num_usb2_ports`, per-port HS setup) has been present since v6.10.
+- Record: 6.10.y, 6.12.y (LTS), 6.14+, 6.16+, 6.17+ are applicable
+  targets.
 
-**Step 6.2 - Backport difficulty:**
-Record: The `quirks.c` hunk will apply cleanly to all modern stable
-trees — the file's structure is unchanged in the surrounding context.
-HOWEVER, the fix depends on `sw->nvm` being populated at
-`tb_check_quirks()` time, which requires the prerequisite
-`4573add760b8d` to be applied as well. If only this commit is
-backported, `sw->nvm` will be NULL and the firmware-version guard will
-always be false, causing the quirk to apply to ALL Titan Ridge DD
-devices (over-aggressive but functionally safe — bug is still fixed for
-affected users).
+**Step 6.2: Backport complications**
+- v6.10.y+: patch applies essentially as-is (minor textual offset
+  likely)
+- v6.6.y and older: the per-port `num_usb2_ports` model does not exist;
+  would need the single-port form (just GUSB2PHYCFG(0)). Still trivially
+  doable but requires an adjusted patch.
+- The `dwc3_readl` API rename (`9accc68b1cf0a`) is only in 7.0-stream;
+  any stable tree older than that uses the same `(dwc->regs, reg)`
+  signature this patch writes, so no conflict there.
+- Record: Clean apply to recent stable trees; minor rewrite needed for
+  older ones.
 
-**Step 6.3 - Related fixes already in stable:**
-Record: No earlier form of this fix exists in stable. The related
-`quirk_clx_disable` for AMD is in stable trees.
+**Step 6.3: Related fixes already in stable**
+- No prior fix for this specific USB3340 issue exists in stable; this is
+  the first/only fix
+- Record: No duplication concern.
 
 ## PHASE 7: SUBSYSTEM AND MAINTAINER CONTEXT
 
-**Step 7.1 - Subsystem/criticality:**
-Record: `drivers/thunderbolt/` — PERIPHERAL driver. Affects users with
-Thunderbolt 3 hardware based on Intel Titan Ridge DD bridge (0x15ef).
-Users include many Intel-based laptops, eGPU docks, Thunderbolt 3 AICs
-with older shipped firmware.
+**Step 7.1: Subsystem/criticality**
+- Subsystem: `drivers/usb/dwc3/` – DWC3 USB controller driver (used on
+  Qualcomm, Xilinx/AMD ZynqMP, Rockchip, Intel, i.MX, TI, etc.)
+- Criticality: IMPORTANT (widely deployed, but the fix only affects
+  boards with USB3340 ULPI PHY – primarily ZynqMP-based systems)
+- Record: Important driver, narrow board-specific impact.
 
-**Step 7.2 - Subsystem activity:**
-Record: Thunderbolt is moderately active — regular fixes, hardware
-quirks. Mature enough that a firmware-specific quirk is plausible long-
-term.
+**Step 7.2: Activity**
+- Very active subsystem – many recent commits in drivers/usb/dwc3 in the
+  past year
+- Record: Actively maintained, maintainer is engaged.
 
 ## PHASE 8: IMPACT AND RISK ASSESSMENT
 
-**Step 8.1 - Affected users:**
-Record: Hardware-specific — owners of Thunderbolt 3 devices that use the
-Intel Titan Ridge DD bridge (0x15ef) variant with NVM firmware < 0x65.
-Also affected: host controllers that haven't had their NVM updated.
+**Step 8.1: Who is affected**
+- Users of boards combining a DWC3 controller with a Microchip USB3340
+  ULPI PHY (notably AMD/Xilinx ZynqMP UltraScale+ platforms)
+- Record: Driver-specific / hardware-specific population; but a real,
+  shipping HW combination.
 
-**Step 8.2 - Trigger conditions:**
-Record: Triggered whenever CL states are entered on an affected Titan
-Ridge DD device. Does not require privileges — user just needs to have
-affected hardware plugged in.
+**Step 8.2: Trigger conditions**
+- Every boot on affected hardware
+- No special privilege needed; just plugging in any USB device
+  reproduces the symptom (full-speed instead of high-speed)
+- Record: Easy to reproduce – it is the default behavior on affected HW
+  without the fix.
 
-**Step 8.3 - Failure mode:**
-Record: "Link disconnect events and the device failing to enumerate."
-Severity: HIGH — the Thunderbolt device becomes unusable. Not a
-crash/security issue, but data-path failure for peripheral connectivity
-(including storage/display/networking that goes over Thunderbolt).
+**Step 8.3: Failure mode**
+- Functional degradation: USB stuck at 12 Mbit/s full-speed instead of
+  480 Mbit/s high-speed, plus outright "device enumeration failure" per
+  Microchip erratum
+- Severity: HIGH (functional breakage of USB HS on affected boards; not
+  a crash, but USB effectively doesn't work properly).
 
-**Step 8.4 - Risk-benefit:**
-Record: Benefit = medium-high (fixes device-unusable bug for real Titan
-Ridge users). Risk = very low (7-line hardware quirk, guarded by a
-device-ID match, cannot affect non-matching devices; already-existing
-`quirk_clx_disable` precedent is in stable). Net: favorable.
+**Step 8.4: Risk/benefit**
+- Benefit: Restores proper USB HS operation on real shipping hardware
+  (ZynqMP + USB3340) — HIGH for affected users, NONE for others.
+- Risk: Writes happen only when vendor+product match exactly →
+  effectively zero regression risk elsewhere. The new code path is well-
+  guarded (`if (!dwc->ulpi) return;` + `if
+  (dwc->enable_usb2_transceiver_delay)`).
+- Scope: +49 lines, 3 files, one driver.
+- Record: Very favorable benefit/risk ratio for the affected population.
 
 ## PHASE 9: FINAL SYNTHESIS
 
-**Step 9.1 - Evidence compiled:**
+**Step 9.1: Evidence compilation**
 
-FOR:
-- Fixes real hardware-exposed bug causing device enumeration failure on
-  TB3 hardware.
-- Hardware-quirk exception category — standard stable-worthy class.
-- Extremely small (7 lines), device-ID guarded, cannot affect non-
-  matching devices.
-- Applied by subsystem maintainer (Mika Westerberg) directly.
-- Direct precedent in stable (7af9da8ce8f9a used same
-  `quirk_clx_disable` pattern, tagged `Cc: stable`).
-- The bug has existed since v5.17 (CLx enabled on Titan Ridge) — broad
-  stable-tree applicability.
+Evidence FOR:
+- Fixes a documented silicon erratum (Microchip 80000645A) with a user-
+  visible symptom (USB stuck in full-speed)
+- Narrowly gated by ULPI vendor+product ID – zero risk to other hardware
+- Well-reviewed (5 versions), Acked by subsystem maintainer, merged by
+  Greg KH
+- Small contained patch (+49 lines, 3 files in one driver)
+- Matches the stable rules' explicit "QUIRKS and WORKAROUNDS" exception
+- Addresses a real shipping platform (AMD/Xilinx ZynqMP) — not
+  theoretical
 
-AGAINST / Concerns:
-- No `Cc: stable`, no `Fixes:`, no Reported-by — maintainer chose not to
-  nominate explicitly.
-- Depends on prerequisite `4573add760b8d` (refactor) to realize the
-  intended firmware-version selectivity. Without it, the commit still
-  fixes the bug but applies the quirk more broadly than intended (loses
-  CLx power savings on new-firmware Titan Ridge DD; not a correctness
-  regression).
+Evidence AGAINST:
+- No Fixes: tag (but: hardware bug, no kernel commit to fix – expected)
+- No Cc: stable (expected for candidate review)
+- Not described with "fix" language in the subject (author framed it as
+  "Support")
+- Adds new infrastructure (`dwc3_ulpi_setup`, `dwc3_ulpi_detect_config`,
+  new quirk flag) rather than a trivial one-line ID add; some consider
+  this "feature-shaped"
+- Requires `num_usb2_ports` (v6.10+) for clean apply to older stable
+  trees
 
-**Step 9.2 - Stable rules checklist:**
-1. Obviously correct and tested? Yes — logic is trivial; tested and
-   applied to thunderbolt tree; build-tested by kernel test robot.
-2. Real bug affecting users? Yes — link disconnects and enumeration
-   failures on affected hardware.
-3. Important issue? Yes — device-unusable issue for affected hardware
-   (HIGH severity for those users).
-4. Small and contained? Yes — 7 lines in one file.
-5. No new features/APIs? Yes — just a quirk-table entry plus a guard.
-6. Applies to stable? The quirks.c hunk itself applies cleanly; the
-   intended semantics require the prerequisite to also be backported.
-   Without the prerequisite the fix degrades gracefully to "always
-   disable CLx on Titan Ridge DD" — still a functional fix.
+Unresolved: None material.
 
-**Step 9.3 - Exception category:**
-Record: Hardware quirk/workaround for buggy firmware/hardware —
-explicitly allowed exception for stable.
+**Step 9.2: Stable rules checklist**
+1. Obviously correct and tested? YES (small, gated by exact
+   vendor/product ID; controller register bit is the vendor-prescribed
+   workaround)
+2. Real bug? YES (documented silicon erratum, real user reports)
+3. Important issue? YES (USB HS broken on affected platforms)
+4. Small/contained? YES (+49 lines, 3 files, one driver)
+5. No new features/APIs? Borderline – it adds a quirk-detection
+   mechanism, but no userspace-visible API or new module parameter;
+   internal-only.
+6. Applies to stable trees? YES for 6.10+; would need trivial adjustment
+   for older
 
-**Step 9.4 - Decision:**
-YES — this is a hardware quirk for a real, device-unusable firmware bug
-on Thunderbolt 3 Titan Ridge DD hardware. It is small, surgical, applied
-by the subsystem maintainer, and has direct precedent (the identical
-`quirk_clx_disable` mechanism was already backported to stable with `Cc:
-stable` for AMD CLx-incompatible hardware). Note for the selection
-pipeline: the prerequisite `4573add760b8d` should also be backported to
-get the intended selective behavior; without it the fix still works but
-applies more broadly than intended.
+**Step 9.3: Exception category**
+- Hardware quirk/workaround for broken device → this is explicitly an
+  allowed exception per the stable rules.
+
+**Step 9.4: Decision**
+This is a hardware-quirk fix for a real, documented silicon erratum
+affecting shipping AMD/Xilinx ZynqMP platforms. The change is strictly
+additive, gated by a specific vendor/product ID match, carries
+essentially zero regression risk for unaffected systems, was reviewed
+through five revisions, and has the DWC3 maintainer's Ack. It directly
+fits the "QUIRKS and WORKAROUNDS" exception in the stable kernel rules.
 
 ## Verification
-- [Phase 1] Parsed tags from `git show 59b03d12b1f6d`: only Signed-off-
-  by (Rene Sapiens, Mika Westerberg). No Fixes:, Cc: stable, Reported-
-  by, Link:.
-- [Phase 2] Diff analysis: confirmed 1 file
-  (`drivers/thunderbolt/quirks.c`) +7/-0. Read current file — confirmed
-  table entry uses `0x8086, PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_BRIDGE`.
-- [Phase 2] Verified `tb_switch_is_titan_ridge()` definition in
-  `drivers/thunderbolt/tb.h:982-993` uses `PCI_VENDOR_ID_INTEL` (0x8086)
-  and matches TITAN_RIDGE 2C/4C/DD bridges — confirms AMD path
-  unaffected.
-- [Phase 2] Verified `PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_BRIDGE` =
-  0x15ef in `drivers/thunderbolt/nhi.h:75`.
-- [Phase 2] Verified test code (`drivers/thunderbolt/test.c:201-202`)
-  uses `sw->config.vendor_id = 0x8086; sw->config.device_id = 0x15ef;`
-  for Titan Ridge DD — confirms quirk-table vendor ID 0x8086 is correct.
-- [Phase 3.1] `git describe --contains 43f977bc60b1c` → v5.17-rc1; `git
-  describe --contains b017a46d486cd` → v6.0-rc1: confirms CLx on Titan
-  Ridge has been in kernel since v5.17.
-- [Phase 3.2] `git show 7af9da8ce8f9a` confirms the `quirk_clx_disable`
-  / `QUIRK_NO_CLX` infrastructure came with explicit `Cc:
-  stable@vger.kernel.org` — direct precedent.
-- [Phase 3.3] `git log --oneline v6.1..v6.6 --
-  drivers/thunderbolt/quirks.c` and `v6.6..v7.0` show low churn and
-  stable structure.
-- [Phase 3.5] Verified prerequisite: `git show 4573add760b8d` confirms
-  `tb_switch_nvm_init()` is a NEW function split off from
-  `tb_switch_nvm_add()` and a new call site was added in
-  `tb_switch_add()` before `tb_check_quirks()`. Verified current `HEAD`
-  (`Linux 7.0`) still has only `tb_switch_nvm_add()` (no
-  `tb_switch_nvm_init()`) — confirms the dependency.
-- [Phase 3.5] Read `switch.c:3297-3407` to confirm ordering:
-  `tb_check_quirks()` at line 3341 runs BEFORE `tb_switch_nvm_add()` at
-  line 3384, so `sw->nvm` is NULL at quirk time without the
-  prerequisite.
-- [Phase 4.1] `b4 dig -c 59b03d12b1f6d` → no match; fell back to
-  yhbt.net/lore search which returned the series (cover + 2 patches +
-  Mika's "Applied" reply + kernel-test-robot build success).
-- [Phase 4.1/4.4] Fetched raw mbox of cover letter
-  (`20260224070150.3320641-1-...`), patch 1/2 (`-2-`), patch 2/2
-  (`-3-`), and Mika's apply-reply
-  (`20260302065244.GP2275908@black.igk.intel.com`) — confirmed only v1
-  was submitted, applied as-is.
-- [Phase 5.2] `rg tb_check_quirks` → single caller `tb_switch_add()`;
-  single definition in quirks.c.
-- [Phase 6.1] Verified `quirk_clx_disable()` and `QUIRK_NO_CLX` came
-  with `7af9da8ce8f9a` tagged `Cc: stable`, so the infrastructure is
-  present in stable trees 6.1.y and later.
-- [Phase 8.3] Failure mode taken directly from commit message: "link
-  disconnect events and the device failing to enumerate."
-- UNVERIFIED: Could not independently confirm the exact user-reporting
-  trail for this bug (the mailing-list thread doesn't reference a
-  specific user report or syzkaller); relied on maintainer and cover-
-  letter wording ("known issue").
-- UNVERIFIED: Could not test whether the commit applies cleanly to each
-  stable branch without actually running `git cherry-pick` on each
-  stable tree (only a HEAD worktree is present).
 
-The commit is a small, targeted hardware quirk that fixes a real device-
-usability bug on Thunderbolt 3 Titan Ridge DD hardware with old
-firmware, applied by the subsystem maintainer, and directly analogous to
-a previously-stable-tagged quirk for AMD CLx-incompatible parts.
+- [Phase 1] Parsed tags and body of commit a28de63356575; confirmed
+  Acked-by: Thinh Nguyen and Signed-off-by: Greg KH; confirmed
+  references to Microchip erratum and Xilinx/AMD forum post.
+- [Phase 2] Read the diff and current
+  `drivers/usb/dwc3/{core.c,core.h,ulpi.c}`; confirmed only-+ scope
+  (+49/0) and gating by `if (!dwc->ulpi)` and `if
+  (dwc->enable_usb2_transceiver_delay)`.
+- [Phase 3] `git log --oneline master -- drivers/usb/dwc3/ulpi.c` showed
+  ULPI infrastructure dates back to v4.16 (`88bc9d194ff69`); `git
+  describe --contains 921e109c62007` = `v6.10-rc1~48^2~50` →
+  `num_usb2_ports` first appeared in 6.10.
+- [Phase 3] `git describe --contains 9accc68b1cf0a` confirmed
+  `dwc3_readl` API rename is only in `next-20260205`/7.0-stream, so
+  older stable trees still use the signature this patch writes.
+- [Phase 4] `b4 dig -c a28de63356575` → found lore thread `https://lore.
+  kernel.org/all/20260305121452.54082-2-ingo.rohloff@lauterbach.com/`.
+- [Phase 4] `b4 dig -c a28de63356575 -a` → listed v1..v5 with lore URLs;
+  v5 is the applied revision.
+- [Phase 4] Read `/tmp/thread.mbox` (saved via `b4 dig -m`): verified
+  Acked-by from Thinh Nguyen (dwc3 maintainer) and the changelog v1→v5
+  switching from DT property to vendor/product-ID autodetection.
+- [Phase 5] Read `dwc3_ulpi_init()` in `drivers/usb/dwc3/ulpi.c` and its
+  caller `dwc3_core_ulpi_init()` at `drivers/usb/dwc3/core.c:651-665`;
+  confirmed reachability from `dwc3_core_init()` only on ULPI-capable
+  HW.
+- [Phase 6] `git branch --contains a28de63356575` shows the commit is in
+  `bus-next` (linux-next branch for 7.1), not yet in `master` (7.0),
+  matching its status as a backport candidate.
+- [Phase 8] Severity HIGH verified via the Microchip erratum title
+  "Device Enumeration Failure with Link IP Systems" cited in commit
+  message and the Xilinx/AMD forum title "USB stuck in full speed mode
+  with USB3340 ULPI PHY".
+- UNVERIFIED: Exact port counts affected on ZynqMP deployments – not
+  needed for decision.
+- UNVERIFIED: Whether the patch has been tested on multiple HW variants
+  – only author's testing environment implied.
+
+The patch is a well-bounded hardware quirk for a documented silicon bug
+on a real, shipping platform; it fits the stable rules' explicit
+quirk/workaround exception, carries essentially zero regression risk to
+unaffected systems, and is maintainer-Acked. For stable branches v6.10
+and newer it should apply cleanly; older branches would need a small
+adjustment to the port-iteration model.
 
 **YES**
 
- drivers/thunderbolt/quirks.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/usb/dwc3/core.c | 20 ++++++++++++++++++++
+ drivers/usb/dwc3/core.h |  4 ++++
+ drivers/usb/dwc3/ulpi.c | 25 +++++++++++++++++++++++++
+ 3 files changed, 49 insertions(+)
 
-diff --git a/drivers/thunderbolt/quirks.c b/drivers/thunderbolt/quirks.c
-index e81de9c30eac9..9f7914ac2f48c 100644
---- a/drivers/thunderbolt/quirks.c
-+++ b/drivers/thunderbolt/quirks.c
-@@ -23,6 +23,9 @@ static void quirk_dp_credit_allocation(struct tb_switch *sw)
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 161a4d58b2cec..6047ae280c602 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -782,6 +782,24 @@ static int dwc3_hs_phy_setup(struct dwc3 *dwc, int index)
+ 	return 0;
+ }
  
- static void quirk_clx_disable(struct tb_switch *sw)
- {
-+	if (tb_switch_is_titan_ridge(sw) && sw->nvm && sw->nvm->major >= 0x65)
++static void dwc3_ulpi_setup(struct dwc3 *dwc)
++{
++	int index;
++	u32 reg;
++
++	/* Don't do anything if there is no ULPI PHY */
++	if (!dwc->ulpi)
 +		return;
 +
- 	sw->quirks |= QUIRK_NO_CLX;
- 	tb_sw_dbg(sw, "disabling CL states\n");
- }
-@@ -61,6 +64,10 @@ static const struct tb_quirk tb_quirks[] = {
- 	/* Dell WD19TB supports self-authentication on unplug */
- 	{ 0x0000, 0x0000, 0x00d4, 0xb070, quirk_force_power_link },
- 	{ 0x0000, 0x0000, 0x00d4, 0xb071, quirk_force_power_link },
++	if (dwc->enable_usb2_transceiver_delay) {
++		for (index = 0; index < dwc->num_usb2_ports; index++) {
++			reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(index));
++			reg |= DWC3_GUSB2PHYCFG_XCVRDLY;
++			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(index), reg);
++		}
++	}
++}
 +
-+	/* Intel Titan Ridge CLx is unstable on early firmware versions */
-+	{ 0x8086, PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_BRIDGE, 0x0000, 0x0000,
-+		  quirk_clx_disable },
- 	/*
- 	 * Intel Goshen Ridge NVM 27 and before report wrong number of
- 	 * DP buffers.
+ /**
+  * dwc3_phy_setup - Configure USB PHY Interface of DWC3 Core
+  * @dwc: Pointer to our controller context structure
+@@ -1363,6 +1381,8 @@ int dwc3_core_init(struct dwc3 *dwc)
+ 		dwc->ulpi_ready = true;
+ 	}
+ 
++	dwc3_ulpi_setup(dwc);
++
+ 	if (!dwc->phys_ready) {
+ 		ret = dwc3_core_get_phy(dwc);
+ 		if (ret)
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index a35b3db1f9f3e..a39bf284c763f 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -302,6 +302,7 @@
+ #define DWC3_GUSB2PHYCFG_SUSPHY		BIT(6)
+ #define DWC3_GUSB2PHYCFG_ULPI_UTMI	BIT(4)
+ #define DWC3_GUSB2PHYCFG_ENBLSLPM	BIT(8)
++#define DWC3_GUSB2PHYCFG_XCVRDLY	BIT(9)
+ #define DWC3_GUSB2PHYCFG_PHYIF(n)	(n << 3)
+ #define DWC3_GUSB2PHYCFG_PHYIF_MASK	DWC3_GUSB2PHYCFG_PHYIF(1)
+ #define DWC3_GUSB2PHYCFG_USBTRDTIM(n)	(n << 10)
+@@ -1161,6 +1162,8 @@ struct dwc3_glue_ops {
+  *	3	- Reserved
+  * @dis_metastability_quirk: set to disable metastability quirk.
+  * @dis_split_quirk: set to disable split boundary.
++ * @enable_usb2_transceiver_delay: Set to insert a delay before the
++ *			assertion of the TxValid signal during a HS Chirp.
+  * @sys_wakeup: set if the device may do system wakeup.
+  * @wakeup_configured: set if the device is configured for remote wakeup.
+  * @suspended: set to track suspend event due to U3/L2.
+@@ -1403,6 +1406,7 @@ struct dwc3 {
+ 	unsigned		dis_metastability_quirk:1;
+ 
+ 	unsigned		dis_split_quirk:1;
++	unsigned		enable_usb2_transceiver_delay:1;
+ 	unsigned		async_callbacks:1;
+ 	unsigned		sys_wakeup:1;
+ 	unsigned		wakeup_configured:1;
+diff --git a/drivers/usb/dwc3/ulpi.c b/drivers/usb/dwc3/ulpi.c
+index 57daad15f502d..a256b7f5d78b4 100644
+--- a/drivers/usb/dwc3/ulpi.c
++++ b/drivers/usb/dwc3/ulpi.c
+@@ -10,10 +10,13 @@
+ #include <linux/delay.h>
+ #include <linux/time64.h>
+ #include <linux/ulpi/regs.h>
++#include <linux/ulpi/driver.h>
+ 
+ #include "core.h"
+ #include "io.h"
+ 
++#define USB_VENDOR_MICROCHIP 0x0424
++
+ #define DWC3_ULPI_ADDR(a) \
+ 		((a >= ULPI_EXT_VENDOR_SPECIFIC) ? \
+ 		DWC3_GUSB2PHYACC_ADDR(ULPI_ACCESS_EXTENDED) | \
+@@ -83,6 +86,26 @@ static const struct ulpi_ops dwc3_ulpi_ops = {
+ 	.write = dwc3_ulpi_write,
+ };
+ 
++static void dwc3_ulpi_detect_config(struct dwc3 *dwc)
++{
++	struct ulpi *ulpi = dwc->ulpi;
++
++	switch (ulpi->id.vendor) {
++	case USB_VENDOR_MICROCHIP:
++		switch (ulpi->id.product) {
++		case 0x0009:
++			/* Microchip USB3340 ULPI PHY */
++			dwc->enable_usb2_transceiver_delay = true;
++			break;
++		default:
++			break;
++		}
++		break;
++	default:
++		break;
++	}
++}
++
+ int dwc3_ulpi_init(struct dwc3 *dwc)
+ {
+ 	/* Register the interface */
+@@ -92,6 +115,8 @@ int dwc3_ulpi_init(struct dwc3 *dwc)
+ 		return PTR_ERR(dwc->ulpi);
+ 	}
+ 
++	dwc3_ulpi_detect_config(dwc);
++
+ 	return 0;
+ }
+ 
 -- 
 2.53.0
 
