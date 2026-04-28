@@ -1,296 +1,508 @@
-Return-Path: <linux-usb+bounces-36612-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36613-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6D7ZMbuH8GnuUQEAu9opvQ
-	(envelope-from <linux-usb+bounces-36612-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:11:07 +0200
+	id QDzYMh6R8GlZVAEAu9opvQ
+	(envelope-from <linux-usb+bounces-36613-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:51:10 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FFFD4824D2
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:11:07 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E212482F4F
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:51:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CDF073098D81
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 10:06:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6ECD930D552A
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 10:42:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33FF23E5ED7;
-	Tue, 28 Apr 2026 10:06:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DBFA3F7870;
+	Tue, 28 Apr 2026 10:41:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="VxgtfnRD";
-	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="3UG81LLy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QAC3yDVz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0014ca01.pphosted.com (mx0a-0014ca01.pphosted.com [208.84.65.235])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BCFF3E276B;
-	Tue, 28 Apr 2026 10:06:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=208.84.65.235
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777370770; cv=fail; b=PqtAXXC3L9XWBlkXyo+aJj4Y3ksERKJn6rlKSfstDrasnrT5v9Kb5pc7zkMjW2POOKaCJjaqahVYldKi1+PyzBBbtDG8BYBlXHIxRmGpd7PllGAPc2XdhygD7By35yElpqJCrKd9hyB7YkmPit2rq++BYd8fQhaVqAAiswjib/E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777370770; c=relaxed/simple;
-	bh=tkvOZdlFCD68SpjhVGIerQnin8XZ05M4cyibyXJbvfs=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=mE6S3r3TXzEqahSItn+orI1vHQKYYHl6urr0V5uVH+qE+4dCNXaodMiwzogNfU7RGe4iqf0cp70jy+ttWufmNEzHkLbAqYBJQqTCJBb+xIeWjjbf8AaC9Jvh8p5xCbIRdc9N7GFIhLAI1kTpxAUVz0E7gnwdurvC3zrN1CFHVfM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cadence.com; spf=pass smtp.mailfrom=cadence.com; dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b=VxgtfnRD; dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b=3UG81LLy; arc=fail smtp.client-ip=208.84.65.235
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cadence.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cadence.com
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-	by mx0a-0014ca01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63S7PAt6454521;
-	Tue, 28 Apr 2026 02:58:47 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=proofpoint;
-	 bh=tkvOZdlFCD68SpjhVGIerQnin8XZ05M4cyibyXJbvfs=; b=VxgtfnRDrJwu
-	nh36S4M0MTlkjYuCpIqjWsYeI/WyL3lsPHAPff5sP+wfjKeB02KWYbKCjITODdzk
-	cR2E6/Svke+b3xM7uyYqj23Q66bKTLWFiNdK3SF72OkT/w7BoW8LzTIoEY3jGOiy
-	+Hp1jWVcAf+cMbFWWXYx6ER3hf7d54wK/qesfGVRxDVfbCHs1KanbKT7KaUfMx+2
-	eBbx0EO/aJOSCpTiJPORTDCpwqYvrLsalbJibrOnKR9UShI5PeBoORKrAL7wTIJN
-	pv/SiNs2soATB6qusHF+AortCOp35+lYyfEw6BoswDuhk1eFcDhkRXaTkSlUdg2U
-	CKx4MMnn/Q==
-Received: from byapr05cu005.outbound.protection.outlook.com (mail-westusazon11010007.outbound.protection.outlook.com [52.101.85.7])
-	by mx0a-0014ca01.pphosted.com (PPS) with ESMTPS id 4drt5rk94f-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 28 Apr 2026 02:58:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kpCCq/Ggj6IIc6BDY1Kv2Np41eDgbNJBXju02CU1qKAJondtP/TUpPilh9dl7l+TegOfNBsrMcZTD6xwi4u7v3BF5WjoXDSiHWfqhXd3/PvXDc2yvUzWPwvG5PokK7y0IllAvqHDFAKBuzniS5pUeHraUc6ZzT6OvZqUvR6H73nnhNO9R8Ye2x0O8ff1qY3bCYWA2LNILuUFtEf67QpIFEHd1VY/FV5Vj2s6OkeFD1z4wGFImkCMUPaAn7n0+5lEZCjsxpVMKjEdCH101DI6X5DnNFkBtz+5RfR4RxAbDyqmA/ECfdK+tV9oTjG7PTSGU4BM76b5sBxTAMbZ1zLvMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tkvOZdlFCD68SpjhVGIerQnin8XZ05M4cyibyXJbvfs=;
- b=LltycHIVok8O8y9WnoNU04ry1w/EjQ+oyWDefYn9EAPHDDKuVK50BuM0AJl3UzRNJj3257tqRYgRrLSXwaD82IxRHEe1CJd2/u5Ytfd3CinkjKV6hvy3BPTk5vUIl9RK/Q8qbmklgJ4ScJKmItBfyB9HHZFRCx+QxW8PLQgToD4u3r17UNz7xJKZrqlHkUm4b9oUgbrAQjydm0xz7/8Av772W5ML87KRIGc2KvrBdHOudQdDYjmD9yOFDNHwCIhhaiwSr5MbX6hZWXKojRhFWM09NQ9rVnE9opGFN6p4SrbCN/8Swf5tRHZ6b6y3aqtzn6JFiWDB7ZzuAWZi1wFK8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tkvOZdlFCD68SpjhVGIerQnin8XZ05M4cyibyXJbvfs=;
- b=3UG81LLy/ou5cOnbno7MiCA6w8lBC+YY2nz9MuXuqA2bOUWAp7Xa9qaJENqj9p/RTeMIWmhhfoAyw7Ne0ybL0hEvHkQDs+EYS0PSC2Vy/iKcJVvSsIK4GnJJ+6fPMLv36V9CxImuOob0yqX0jXO40nAYknVHmqJc9NVGeqjWARiSeeD9o8svHejax1Lgo7/6dnraHsmRMj/bRkVd00tzvyIG+mVYbFGp8NR1SjTmyiEkYE5YapCet6PgLQphm6N2B/j8RuHL8t52CuaeZIyYHhZJaiIMjRzhxmDYU2f1k1IHkOWQTDZMG5motiLUj2jbwKc3+KB2EsL+O18Jrwt9Xg==
-Received: from PH7PR07MB9538.namprd07.prod.outlook.com (2603:10b6:510:203::19)
- by PH5PR07MB11891.namprd07.prod.outlook.com (2603:10b6:510:39e::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.26; Tue, 28 Apr
- 2026 09:58:46 +0000
-Received: from PH7PR07MB9538.namprd07.prod.outlook.com
- ([fe80::9088:4354:91a3:3bbe]) by PH7PR07MB9538.namprd07.prod.outlook.com
- ([fe80::9088:4354:91a3:3bbe%7]) with mapi id 15.20.9846.026; Tue, 28 Apr 2026
- 09:58:46 +0000
-From: Pawel Laszczak <pawell@cadence.com>
-To: Yongchao Wu <yongchao.wu@autochips.com>,
-        "Peter Chen (CIX)"
-	<peter.chen@kernel.org>
-CC: "rogerq@kernel.org" <rogerq@kernel.org>,
-        "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>,
-        "stable@vger.kernel.org"
-	<stable@vger.kernel.org>
-Subject: RE: [PATCH] usb: cdns3: gadget: fix request skipping after clearing
- halt
-Thread-Topic: [PATCH] usb: cdns3: gadget: fix request skipping after clearing
- halt
-Thread-Index: AQHc0zshyXnKL+kJ40WvjjGf2ih8TbXyIjAAgAB5XSCAAPELAIAAEJYAgACnXnA=
-Date: Tue, 28 Apr 2026 09:58:45 +0000
-Message-ID:
- <PH7PR07MB95388984DB7A5265770CEE58DD372@PH7PR07MB9538.namprd07.prod.outlook.com>
-References: <20260423160601.2949010-1-yongchao.wu@autochips.com>
- <ae66WphA+lO6t3rE@nchen-desktop>
- <PH7PR07MB9538E83DB108635EAE7B21E3DD362@PH7PR07MB9538.namprd07.prod.outlook.com>
- <ae/qXIT19Z2zWsDs@nchen-desktop>
- <e963d293-63cd-4124-9a53-8fc16e44ec72@autochips.com>
-In-Reply-To: <e963d293-63cd-4124-9a53-8fc16e44ec72@autochips.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR07MB9538:EE_|PH5PR07MB11891:EE_
-x-ms-office365-filtering-correlation-id: 054dff2b-95ab-494c-13b0-08dea50cbcd9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|38070700021|18002099003|22082099003|56012099003;
-x-microsoft-antispam-message-info:
- lVWwmn3oKoaDkEpb6m7BBdB+mqXIEOP3MeghLDPgBwMl6IDKjDQiUxKJz1ATBOEEvt4IncfpRFAaHjNz1X3IG6HQaqUBOHCPlx0Ay4/DjuPHT5E2sxbchjGPpJwJzA27GiQw76qJwl1DSo4sFfyCMpErJkUzA1Aj29wMWVR8ZoRlZz9NexUjFyIvCZ6UIfJrDy9oCdFdZpG8lT4Sr6E+wWfhm0gFn2jEdUOGyQT/Baro0MtJfDcrx1OROZ7ObEx2r/5U9yfOJxVjMXv5kUwvHQeWgBF8lu3bWVIBLhdyoQwS3bUOPTFq3+XHTVIG6wHpB0IIRduLToUkWyy98v8dQoyBx2oX67xnJsYejbem471WcjvPrOqG7jupv/B9v93yE9wxReGmpeazCuU9PnI0OH8wNO9VQ+PMSkjFURE0DoG/3+kTyHJ5ROcxiCxN9/BJNdnMxJPiZjXQ/lwr3J7aT5wGqDOipdx2MF28GAyKbgYEpCNtIcdERpsMSlE2EDQF2gvsDDDWKdTxBPIVixxad6cRHDkYfW+Fe2c/esbh1ueH31/PEUD7Fx+4jsM1Nov0ZOIUK43XC4da85VgNHA++rIVGFtNrVArGvLbbPdz/xiJaTBEc0H9kGvNmlmIjVw+S+qP4B02ZtLM9Hx9N9g0d8qs8zm1eL6NrIIuz/ox3p+6tFyueIUD/B6BD5yMqHt3Wug6AgLpn5TpjlbmekXs3+4DTMW4j1NoY37vDt52+NVKgbU+HGLNaFSXjtFNUOZ0ABdYdhq1TFy5Of6pBnRGUSrXVdui7WTxpW9QZ5AdnvI=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR07MB9538.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700021)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?eFhyUm53M1pSRzhNRXZVbm1nY3ByT3d1RTlWTmFWTzdjZEJyRG02OWFHeGZj?=
- =?utf-8?B?cDZpK0dJdlZHZEN5Q1dhMmwwUW5pWURReXBsZG9aUloyZFlDL29JUSthMHdw?=
- =?utf-8?B?VWNNdnJZQ0EraUc5MW9hS3pzRzF2am91Q1o4SFkrREJ3dU5RSCtLSndBUlo0?=
- =?utf-8?B?aE1LRHlWMUZxVW9LQzFSalRaajJCMlB5b0ZBUkJGNVZBR1dwbXVvblV0Tlgw?=
- =?utf-8?B?MHAyQVhCM2Irb3Y2RWkvQ1B4U1E0RWE1SmpXUDIxN0cvM0FJUFhWV2xzWElq?=
- =?utf-8?B?VlJPU0VqVjJvM2hEUzJlaXBYd2NuWFI5MVo1SW1kM2RpNFFJOUVlMHVzUWpa?=
- =?utf-8?B?OEIwU2QrMHZOdkFraElkZ0VpS1RETE9ZY0JkcW9hbDJQUVBrc0xwNjB1WFZY?=
- =?utf-8?B?bVJnWTFjSDczM29wQmFjY29lUTRBRDVVSHg2TzlrbGE1VTMrMkhSK3NYVHNs?=
- =?utf-8?B?d0VjbUJhRzRBVzkvNVl1MlFLQ3c1aDhxQnBVRW9hR0ZWalF5bTRyOFpXQTNz?=
- =?utf-8?B?aFI1VXIxRHRTZkYxdFJHem54MloyRHhLUDE2K0o4QzFoYStGL05BK3IxalBU?=
- =?utf-8?B?M2NKZjBHcFhLeWErODRENGNrSndSYlpTNHMwbGRWdGRsN2s3TlhBeDhIeUhC?=
- =?utf-8?B?eEZPaHllL25UUWRBZlRWUHVDWGI1Ymh4bWh6em16NnhxUmhEWWQ5Ly90eWpX?=
- =?utf-8?B?WHIyeFIyOEhpMC9yWWNJeThyRjRXU3dKWjQva2h4V0wrWVlxdXRTMytGT1Ro?=
- =?utf-8?B?MU56elBoOUFqdFY5VlM4ZWVENjBhL2FzVEgxanhKU3ZEeVcweXlJK3BNWE0w?=
- =?utf-8?B?VjhCbzU1NVhjTktxOFAxWURQaWQvNGkybTA1ODJiekIwdTc0TTNDNS9nWE5p?=
- =?utf-8?B?dE5BM3dvaWR2azA2OFc3R2taY0wyUDNPS2dNd0w1RWNjMENtVUtjNWVZZHBa?=
- =?utf-8?B?L3hTQmlNTHhYQTVpTWl0Tlp2SVlJa0p1VjhHWmQrMkpsTmJMK0phbzN4Ukkv?=
- =?utf-8?B?RWpFWGluSHZpcTZZOXRvMk9TTXY1VlR6djM5WlRjRjgvWXJnRFdkdFgxTGc1?=
- =?utf-8?B?RTZMTkhjRHN5azg3Um13R3paWGtmN1I5WmEzUW1CM253NHQwMngvR0F4R0E4?=
- =?utf-8?B?ZTk0a3JseTJnaGRRL0FRSGkyT2trbm9lMlBhTlFHWDV4SlRwNmFGcnF1WVlu?=
- =?utf-8?B?ZzJYdnlabmFpcHBqc0FJQVJnY281V3Zrb0hvOGN0NEZiUWcwQ1NIMGR5cUxQ?=
- =?utf-8?B?YTJLR1VlV0w3Sm5QOXFsb2NodG5PTFZ1QXdyNVBtOE5CWUtQYkRVeEFJQ1FF?=
- =?utf-8?B?VWlNMStaZEVUQmdqR1I0NnV1UERuZUJFSkJEZkVwQlNvYVBId1lLZ2JIcUxi?=
- =?utf-8?B?MmdRcEJ3QmlPN3lWaDFTd2NCSVVsa3dTbEVETGlyT085M2ttSUdJVmxRcG84?=
- =?utf-8?B?MjRxRXJieG8xVVEzWGZQSVRiWHE5cDVLSjRSODBteVF5L016TGtublhWYTBk?=
- =?utf-8?B?YzJZWXRSay9DMkU2VzFidEcwaFJ3QTJ1ejVwcTBUNTEveWJIb1dWaUdYWnFs?=
- =?utf-8?B?VUtvUnB4Ym03QXNzRjRFSFlRL21Uc0ZYbnBwdVdFaWJKWlRVZHNVNHZoS0I0?=
- =?utf-8?B?a3NVTjZFYkJFbXVhenhYR1VkR3JFRHFMSTZQcVBnV1lHRjRaOGU2WXV3dlRS?=
- =?utf-8?B?UE9mNzU4L2FDaE1Ra1lJNmRsQXlqYnNwUGI3SXlKMjFBWlZaVWlBYytMSzgr?=
- =?utf-8?B?MENhMXRYREtBZkpuUllEOHdDT1VRSEN1ZGNzMzNPTk4rZjc0aStEUmh0ZWFs?=
- =?utf-8?B?WkxlSXgrTkNqMnp5c21qTzZqWkJhbUJrcC85NFp1YTd6WVd6VGhmd2EvYWVI?=
- =?utf-8?B?QmVZc2J0RkVwRmQwcFJjK0xsSEpaMVdRaHREUkR0VG1vU25hVjFSUytXellQ?=
- =?utf-8?B?TDRqUm5JRStENkp4SGp1eXVYSE8rM0ZlbVhkUjQrK1pwaGQ4NU5kWlV4VUZH?=
- =?utf-8?B?eWt6aEljRE83NStNMnpqN1BqU01xbUpPK1NSZ0NDdkcwQmZpcitLeUk4Zlkx?=
- =?utf-8?B?ZHRHc2huaWt6MlNNaEE5SnM2dkxISEkzVUFxWnQyckNubkpNeHkySndWblMv?=
- =?utf-8?B?Qy9VaURrQmJ1RW1CVUwrS2N3Q1F0UlNsUFVhd1EvNS8yN3Uyd0o3anl4b0RV?=
- =?utf-8?B?QkJLMitLR2dXK2szeUtjczh5bkUzRHE3VGFTRWY1dVZYNmdqTGNYMEVHY2lz?=
- =?utf-8?B?OCtQRmk2ZzFYalg5RUtSaTd0dEp2L3k1THMyNEladTBZRVd4ZiszUzFVZzY3?=
- =?utf-8?B?d01NNEEyME5BcmJFK3FNSkl1NGJpemgzenpITlBwbnV2TnMweVVidz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A27D3F6612;
+	Tue, 28 Apr 2026 10:41:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777372909; cv=none; b=YnegReBNoF07aacgG1MTi/xIiTaajdGsT96ulUDD4uSA79AeAZTFzizR0Uv8z97Rb56xX6zm+LId0uYYeUM8nxPYcTzsatmcFhXI4e0iKDpiijzdZ9duci9uem8bHRuxWNYAk8au6DvWdOswv38beODi42lzc/zom+l6lCXN+Mg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777372909; c=relaxed/simple;
+	bh=MrijHnSukrGEA7lvsUJDFJZkv206sKWIDXoibZ3pi54=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jcbtUJSLe/o7uNuc6Ulht3rLP0lqLwU6dqAnCPaL39mMzA6zeKMAtgtSSCNa5Vs3P7g0igxSNhh3QNh5ZLs7RtnrBCgEdYtSONF+JVhKZNTR8d7CTcIH5UN/DaQznbHz/XDgl456cAs9DnOd/z2o6rOlXk0AyNP0DHbt7dYvaXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QAC3yDVz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C0DC2BCB6;
+	Tue, 28 Apr 2026 10:41:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777372909;
+	bh=MrijHnSukrGEA7lvsUJDFJZkv206sKWIDXoibZ3pi54=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=QAC3yDVz57Z3meDtVxo9vPLbl/9sjM5vBy7XfSfIKzwluGou1FFgRqXf+k+q+knoZ
+	 /iVDjXrsL2bera6KqRlPa1ej3rS4Qb/8f2jGGnioR2yFCLJ/CkudAlspcUavcgLiCK
+	 tOnX87OGn3jXKh2WLxxKiNEZ1QHeykrAp+4FB7WG31ugkj+P7z0MJnGZS4ovLsn3AE
+	 fSGmQxTiu1YY97kNhLUjeAcyh1O7tiQoDtJYpZVacG0I9gzwArbefGvMOwJQ8teJJD
+	 u3kZgL977QTgGoJ/IXrPnf8OlfpLQZGOg4/Jbxh9ttNndEDHCWb9ydk0XbVany64Nd
+	 g0Z0kJsVg2hig==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Rene Sapiens <rene.sapiens@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Sasha Levin <sashal@kernel.org>,
+	andreas.noever@gmail.com,
+	michael.jamet@intel.com,
+	YehezkelShB@gmail.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH AUTOSEL 7.0-6.1] thunderbolt: Disable CLx on Titan Ridge-based devices with old firmware
+Date: Tue, 28 Apr 2026 06:40:22 -0400
+Message-ID: <20260428104133.2858589-11-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260428104133.2858589-1-sashal@kernel.org>
+References: <20260428104133.2858589-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked:
-	M3iBqqjrt5DX31ADxAX1CTTH1ux3ulEPoL4kAOwxTeP8efiTpC93lCtfh13Htwqy30D4O2C/Tge5T899Mpw/m904cuamuQyTJRM6JFaZZhwWsyLFwrne5rxwtQ9bPMjYsDT0Lx7vgd3B3FM1MMVF6psILfMSdlIHmoJtL3ZlsnGxDmZ4dy7LvvWiduXXxnmhgJ5/nDUewiwtTvncN0uDMAS+R4cDHlcnu4jbOelOkYVCZVeN6bnqyBMyvetpucxpo8zqSmHFRbmfw7XjBogY1HClPcIbZYZEtktK6R0RendssqxY9ye6/Fp7AH9sgGWagNjgPjsc3v3IUXIKOpB1qQ==
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR07MB9538.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 054dff2b-95ab-494c-13b0-08dea50cbcd9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Apr 2026 09:58:45.9135
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7wSBaeEFg5yRQmXC3lyzMitFf0lRbk9QmFs1XO+g1U3OftwCh/hR6QEVNWyASYoPq/OyQmbNnmQ4iyeTKDUAs3/w1jxHJ5Sct2FUdvkxdAc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH5PR07MB11891
-X-Proofpoint-ORIG-GUID: REN38mZYH4685w4QXirn4D9iYHlm99gO
-X-Authority-Analysis: v=2.4 cv=Kr59H2WN c=1 sm=1 tr=0 ts=69f084d7 cx=c_pps
- a=x36oJTDjInEio3y4qvlK/w==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=A5OVakUREuEA:10 a=Zpq2whiEiuAA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=W8fx6O4W8wtO2w6lYej3:22 a=jPItpJ3sizTKmla2ehJN:22 a=eiHxKcPtOXV7QR4ysIcA:9
- a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: REN38mZYH4685w4QXirn4D9iYHlm99gO
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI4MDA4OCBTYWx0ZWRfX6vYAO+Y/kd0N
- m/VVcEvgYQlAullfSyft9JDKZjU+OzeOXqcVz7JnvY3vBtpP/DnNO6KQJgf4HsAu4nDZdSq4+j+
- O/nCG9IDKFg+3bKwgHtewVQiJEZFCQw3MCKUSA7domtk7uU1ArysRVlSjNLGclFWj1449e/qRnU
- qLlK1kmqa2TWf+rXymj8Bbi97c793ymoUNGnoZqW2ZbjkVvb7r9Ha4cSqFmivD+RrASrhgcP9NQ
- v0enX8rM4AUZ9mXhWRTQX8/wjQu5yuQk62sYiYBo9ZmhVgzN/Lu0uqx8wR44TchdwxwvAHGPqVj
- +Xtp3rCiUxGQTC958tUn5nADs8Z2y3Q5QHuRNvpf0Ebg2FK6PdxZzBCIcRRfSQdnOooKtQLD9pR
- 9mqkaRN3UqG6YYv6Glfqv1BK1OZU5MVmywqahC4nxyn4zrUzS17NPFDxmrp/XcLZZtHeoHVS4rG
- hpKW9tV8HHeL5odw+cA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-28_02,2026-04-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check
- score=0 malwarescore=0 priorityscore=1501 bulkscore=0 spamscore=0
- impostorscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604200000
- definitions=main-2604280088
-X-Rspamd-Queue-Id: 7FFFD4824D2
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 7.0.2
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 1E212482F4F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.94 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MIME_BASE64_TEXT_BOGUS(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[cadence.com,reject];
-	R_DKIM_ALLOW(-0.20)[cadence.com:s=proofpoint,cadence.com:s=selector2];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36612-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[linux.intel.com,kernel.org,gmail.com,intel.com,vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-36613-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,cadence.com:dkim,PH7PR07MB9538.namprd07.prod.outlook.com:mid];
-	DKIM_TRACE(0.00)[cadence.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pawell@cadence.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,yhbt.net:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-DQo+DQo+T24gMjYtMDQtMjcgMDk6MDE6NDcsIFBhd2VsIExhc3pjemFrIHdyb3RlOg0KPiA+Pg0K
-PiA+Pg0KPiA+PiBPbiAyNi0wNC0yNCAwMDowNjowMSwgWW9uZ2NoYW8gV3Ugd3JvdGU6DQo+ID4+
-PiBBY2NvcmRpbmcgdG8gdGhlIGNkbnMzIGRhdGFzaGVldCwgdGhlIEVQUlNUIChFbmRwb2ludCBS
-ZXNldCkgY29tbWFuZA0KPj4+PiBjYXVzZXMgdGhlIERNQSBlbmdpbmUgdG8gcmVwb3NpdGlvbiBp
-dHMgaW50ZXJuYWwgcG9pbnRlciB0byB0aGUgbmV4dCAgPj4+DQo+VHJhbnNmZXIgRGVzY3JpcHRv
-ciAoVEQpIGlmIGl0IHdhcyBhbHJlYWR5IHByb2Nlc3Npbmcgb25lLg0KPiA+Pj4NCj4gPj4+IFRo
-aXMgaXNzdWUgaXMgY29uc2lzdGVudGx5IG9ic2VydmVkIGR1cmluZyB0aGUgQURCIGlkZW50aWZp
-Y2F0aW9uICA+Pj4NCj5wcm9jZXNzIG9uIG1hY09TIGhvc3RzLCB3aGVyZSB0aGUgaG9zdCBpc3N1
-ZXMgYSBDbGVhcl9IYWx0LiBBbHRob3VnaCAgPj4+DQo+Y29tbWl0IDRiZjJkZDY1MTM1YSAoInVz
-YjogY2RuczM6IGdhZGdldDogdG9nZ2xlIGN5Y2xlIGJpdCBiZWZvcmUgID4+PiByZXNldA0KPj4+
-PiBlbmRwb2ludCIpIGF0dGVtcHRlZCB0byBhdm9pZCBETUEgYWR2YW5jZSBieSB0b2dnbGluZyB0
-aGUgY3ljbGUgYml0LA0KPj4+PiB0cmFjZSBsb2dzIHNob3cgdGhhdCBvbiBjZXJ0YWluIGhvc3Rz
-IGxpa2UgbWFjT1MsIHRoZSBETUEgcG9pbnRlciAgPj4+DQo+KEVQX1RSQUREUikgc3RpbGwgc2hp
-ZnRzIGFmdGVyIEVQUlNUOg0KPiA+Pj4NCj4gPj4+ICAgY2RuczNfY3RybF9yZXE6IENsZWFyIEVu
-ZHBvaW50IEZlYXR1cmUoSGFsdCBlcDFvdXQpDQo+ID4+PiAgIGNkbnMzX2Rvb3JiZWxsX2VweDog
-ZXAxb3V0LCBlcF90cmJhZGRyIGY5YzA0MDMwICA8LSBTaG91bGQgYmUNCj5mOWMwNDAwMA0KPiA+
-Pj4gICBjZG5zM19nYWRnZXRfZ2l2ZWJhY2s6IGVwMW91dDogcmVxOiAuLi4gbGVuZ3RoOiAxNjM4
-NC8xNjM4NA0KPiA+Pj4NCj4gPj4+IEFzIHNob3duIGFib3ZlLCB0aGUgRE1BIHBvaW50ZXIganVt
-cGVkIHRvIGluZGV4IDMgKG9mZnNldCAweDMwKSwgID4+Pg0KPmNhdXNpbmcgdGhlIGNvbnRyb2xs
-ZXIgdG8gc2tpcCB0aGUgaW5pdGlhbCBUUkJzIG9mIHRoZSByZXF1ZXN0LiBUaGlzICA+Pj4gbGVh
-ZHMgdG8NCj5kYXRhIG1pc2FsaWdubWVudCBhbmQgQURCIHByb3RvY29sIGhhbmdzIG9uIG1hY09T
-Lg0KPiA+Pg0KPiA+PiBQYXdlbCwgSXMgaXQgYSBoYXJkd2FyZSBpc3N1ZT8gVGhlIGN5Y2xlIGJp
-dCBoYXMgYWxyZWFkeSBiZWVuIHRvZ2dsZWQgYmVmb3JlDQo+dGhlICA+PiBlbmRwb2ludCBoYXMg
-YmVlbiByZXNldCwgd2h5IHRoZSBETUEgcG9pbnRlciBzdGlsbCBhZHZhbmNlcz8NCj4gPg0KPiA+
-IFlvbmdjaGFvLCBjb3VsZCB5b3UgY29uZmlybSBpZiB0aGUgVEQgY29uc2lzdHMgb2YgdGhyZWUg
-VFJCcz8NCj5JbiBvdXIgY2FzZSwgZWFjaCBURCBjb25zaXN0cyBvZiA0IFRSQnMuDQo+VGhlIERN
-QSBwb2ludGVyIGFwcGVhcnMgdG8gYWR2YW5jZSB3aXRoaW4gdGhlIHNhbWUgVEQgYWZ0ZXIgRVBS
-U1QuDQo+DQo+RWFjaCAxNktCIHJlcXVlc3QgaXMgc3BsaXQgaW50byA0IFRSQnMgKDRLQiBlYWNo
-KToNCj4tIFRSQjAgLSBUUkIyOiBDSEFJTg0KPi0gVFJCMzogSU9DIChsYXN0IFRSQiBvZiB0aGUg
-VEQpDQo+DQo+QWZ0ZXIgZW5xdWV1ZSwgdGhlIGluaXRpYWwgRVBfVFJBRERSIHBvaW50cyB0byB0
-aGUgZmlyc3QgVFJCOg0KPiAgIEVQX1RSQUREUiA9IDB4ZjljMDQwMDAgKFRSQjApDQo+DQo+QWZ0
-ZXIgQ2xlYXJfSGFsdCAoRVBSU1QpLCBpdCBiZWNvbWVzOg0KPiAgIEVQX1RSQUREUiA9IDB4Zjlj
-MDQwMzAgKFRSQjMpDQo+DQo+U2luY2UgZWFjaCBUUkIgaXMgMTIgYnl0ZXMsIHRoZSBvZmZzZXQg
-MHgzMCBjb3JyZXNwb25kcyB0byA0IFRSQnMuDQo+VGhpcyBpbmRpY2F0ZXMgdGhhdCBhZnRlciBF
-UFJTVCwgdGhlIERNQSBwb2ludGVyIHNraXBwZWQgdGhlIGVudGlyZSBjdXJyZW50DQo+UmVxdWVz
-dCBhbmQganVtcGVkIGRpcmVjdGx5IHRvIHRoZSBzdGFydCBvZiB0aGUgbmV4dCBSZXF1ZXN0IGF0
-IDB4ZjljMDQwMzANCj4NCj5CZWxvdyBpcyB0aGUgcmVsZXZhbnQgdHJhY2UgKHRyaW1tZWQpOg0K
-Pg0KPi8vIGVucXVldWUgcmVxdWVzdCAoMTZLQiAtPiA0IFRSQnMpDQo+Y2RuczNfcHJlcGFyZV90
-cmI6IGRtYSBidWY6IDB4ZjdhYmMwMDAsIHNpemU6IDQwOTYsIGN0cmw6IDB4MDAyMDA0MTUNCj5j
-ZG5zM19wcmVwYXJlX3RyYjogZG1hIGJ1ZjogMHhmN2FiZDAwMCwgc2l6ZTogNDA5NiwgY3RybDog
-MHgwMDAwMDQxNQ0KPmNkbnMzX3ByZXBhcmVfdHJiOiBkbWEgYnVmOiAweGY3YWJlMDAwLCBzaXpl
-OiA0MDk2LCBjdHJsOiAweDAwMDAwNDE1DQo+Y2RuczNfcHJlcGFyZV90cmI6IGRtYSBidWY6IDB4
-ZjdhYmYwMDAsIHNpemU6IDQwOTYsIGN0cmw6IDB4MDAwMDA0MjUNCj4NCj5jZG5zM19kb29yYmVs
-bF9lcHg6IGVwMW91dCwgZXBfdHJiYWRkciBmOWMwNDAwMA0KPg0KPi8vIENsZWFyX0hhbHQNCj5j
-ZG5zM19jdHJsX3JlcTogQ2xlYXIgRW5kcG9pbnQgRmVhdHVyZShIYWx0IGVwMW91dCkNCj5jZG5z
-M19kb29yYmVsbF9lcHg6IGVwMW91dCwgZXBfdHJiYWRkciBmOWMwNDAzMA0KPg0KPlRoaXMgYmVo
-YXZpb3IgaXMgY29uc2lzdGVudGx5IG9ic2VydmVkIG9uIG1hY09TIGhvc3RzIGR1cmluZyBBREIN
-Cj5lbnVtZXJhdGlvbi4NCj4NCj5TbyBldmVuIHRob3VnaCB0aGUgY3ljbGUgYml0IGlzIHRvZ2ds
-ZWQgb24gdGhlIGZpcnN0IFRSQiwgdGhlIGNvbnRyb2xsZXIgc3RpbGwNCj5hcHBlYXJzIHRvIGFk
-dmFuY2UgdGhlIERNQSBwb2ludGVyIHdpdGhpbiB0aGUgc2FtZSBURCBhZnRlciBFUFJTVC4NCj4N
-Cj5QbGVhc2UgbGV0IG1lIGtub3cgaWYgeW91IG5lZWQgbW9yZSBkZXRhaWxlZCBsb2dzIG9yIGEg
-ZnVsbCBUUkIgcmluZyBkdW1wLiBJJ2QNCj5hbHNvIGFwcHJlY2lhdGUgYW55IGluc2lnaHQgaW50
-byBob3cgdGhlIGNvbnRyb2xsZXIgZGV0ZXJtaW5lcyB0aGUgbmV4dA0KPnBvc2l0aW9uIGFmdGVy
-IEVQUlNUIGluIHRoaXMgY2FzZS4NCj4NCg0KQ2FuIHlvdSBjb25maXJtIHdoZXRoZXIgdGhlIGhv
-c3QgaGFkIGFscmVhZHkgc2VudCBzb21lIGRhdGEgZm9yIHRoaXMgVEQgDQpwcmlvciB0byB0aGUg
-ZW5kcG9pbnQgcmVzZXQgb3BlcmF0aW9uPw0KDQpQYXdlbA0KDQo+QmVzdCByZWdhcmRzLA0KPllv
-bmdjaGFvDQo=
+From: Rene Sapiens <rene.sapiens@linux.intel.com>
+
+[ Upstream commit 59b03d12b1f6d14d936a3ebec225f8d914dc3b70 ]
+
+Thunderbolt 3 devices based on Titan Ridge routers with NVM firmware
+version < 0x65 have been observed to become unstable when CL states are
+enabled. This can lead to link disconnect events and the device failing
+to enumerate.
+
+Enable CLx on Titan Ridge only when the running NVM firmware version
+is >= 0x65.
+
+Signed-off-by: Rene Sapiens <rene.sapiens@linux.intel.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+
+LLM Generated explanations, may be completely bogus:
+
+Now I have all the information needed. Let me compile the analysis.
+
+---
+
+# Analysis: thunderbolt: Disable CLx on Titan Ridge-based devices with
+old firmware
+
+## PHASE 1: COMMIT MESSAGE FORENSICS
+
+**Step 1.1 - Subject line parsed:**
+Record: [thunderbolt (subsystem)] [Disable (action verb - indicates a
+bug workaround)] [CLx on Titan Ridge-based devices with old NVM
+firmware]
+
+**Step 1.2 - Tags parsed:**
+Record: Two `Signed-off-by:` tags — Rene Sapiens (author) and Mika
+Westerberg (subsystem maintainer). NO `Fixes:`, NO `Cc: stable`, NO
+`Reported-by:`, NO `Link:`, NO `Reviewed-by:`, NO `Tested-by:`.
+(Expected — that's why this commit needs review.)
+
+**Step 1.3 - Commit body:**
+Record: Bug description: "Thunderbolt 3 devices based on Titan Ridge
+routers with NVM firmware version < 0x65 have been observed to become
+unstable when CL states are enabled." Symptoms: "link disconnect events
+and the device failing to enumerate." Failure mode: link instability,
+device enumeration failure (user-visible — Thunderbolt device doesn't
+work). Author's mechanism: old NVM firmware has a hardware/firmware bug
+triggered when CL (low-power link) states are entered.
+
+**Step 1.4 - Hidden bug fix detection:**
+Record: Not hidden — the commit is clearly a bug-triggered hardware
+workaround/quirk. "Disable" here means "disable the broken low-power
+states on broken hardware/firmware combinations."
+
+## PHASE 2: DIFF ANALYSIS - LINE BY LINE
+
+**Step 2.1 - Inventory:**
+Record: 1 file changed: `drivers/thunderbolt/quirks.c`, +7 / -0.
+Functions modified: `quirk_clx_disable()` (3 lines added); table
+`tb_quirks[]` (1 new entry, 4 lines including blank and comment). Scope:
+single-file surgical fix.
+
+**Step 2.2 - Code flow change:**
+Record:
+- Before: `quirk_clx_disable()` was only invoked from AMD Yellow Carp /
+  Pink Sardine table entries. When invoked, it unconditionally set
+  `QUIRK_NO_CLX`.
+- After: A new table entry matches Intel Titan Ridge DD bridge
+  (0x8086:0x15ef) and invokes `quirk_clx_disable()`. Inside, if the
+  switch is Titan Ridge AND `sw->nvm->major >= 0x65`, the function
+  returns early without applying `QUIRK_NO_CLX`; otherwise it applies it
+  as before. AMD path behavior is preserved
+  (`tb_switch_is_titan_ridge(sw)` returns false for AMD parts).
+
+**Step 2.3 - Bug mechanism:**
+Record: Category (h) Hardware workaround — a vendor-identified firmware
+bug on the device causes link instability under CL states. Fix adds a
+device-specific quirk table entry plus a firmware-version guard.
+
+**Step 2.4 - Fix quality:**
+Record: Small, contained, obviously correct IF `sw->nvm` is populated at
+`tb_check_quirks()` time. The fix itself cannot cause regressions on AMD
+devices or non-Titan-Ridge Intel devices, since the new check is guarded
+by `tb_switch_is_titan_ridge(sw)`. Key concern: whether `sw->nvm` is
+populated when this runs — see Phase 3.5.
+
+## PHASE 3: GIT HISTORY INVESTIGATION
+
+**Step 3.1 - Blame:**
+Record: CLx support on Titan Ridge was introduced by `43f977bc60b1c`
+("thunderbolt: Enable CL0s for Intel Titan Ridge") in v5.17-rc1 and
+expanded by `b017a46d486cd` ("thunderbolt: Add CL1 support for USB4 and
+Titan Ridge routers") in v6.0-rc1. So the bug window (CLx enabled with
+no firmware guard on Titan Ridge DD) is v5.17+.
+
+**Step 3.2 - Fixes: tag:**
+Record: No `Fixes:` tag. Implicit target would be `43f977bc60b1c` /
+`b017a46d486cd` (v5.17 / v6.0). The `QUIRK_NO_CLX` infrastructure itself
+came from `7af9da8ce8f9a` ("thunderbolt: Add quirk to disable CLx") in
+v6.3-rc1 and was explicitly tagged `Cc: stable@vger.kernel.org`.
+
+**Step 3.3 - Related file history:**
+Record: Recent `quirks.c` changes (`a75e0684`, `0c35ac18`, `f2bfa944`,
+`ccdb0900`, `f14d177e`, `f0a57dd3`, `7af9da8c`) are all similar tiny
+additions of hardware quirks/logging — the file has low churn and stable
+structure.
+
+**Step 3.4 - Author context:**
+Record: Rene Sapiens (author) has recent thunderbolt work (margining,
+structure cleanups). Mika Westerberg (co-Signed-off-by) is the
+Thunderbolt subsystem maintainer and applied the patch directly to
+`thunderbolt.git/next`. Strong authority signal.
+
+**Step 3.5 - Dependencies (CRITICAL):**
+Record: This commit is PART 2 of a 2-patch series. The prerequisite is
+commit `4573add760b8d` ("thunderbolt: Read router NVM version before
+applying quirks"). That prerequisite splits `tb_switch_nvm_add()` into
+`tb_switch_nvm_init()` (populates `sw->nvm` / reads version) and
+`tb_switch_nvm_add()` (registers nvmem), and calls
+`tb_switch_nvm_init()` from `tb_switch_add()` BEFORE
+`tb_check_quirks()`. Without the prerequisite, `sw->nvm` is NULL when
+`tb_check_quirks()` runs, so the new guard `sw->nvm && sw->nvm->major >=
+0x65` is always false, and `QUIRK_NO_CLX` is applied to ALL Titan Ridge
+DD devices regardless of firmware version. The commit still fixes the
+bug (pessimistically) but loses power-savings on newer firmware.
+
+## PHASE 4: MAILING LIST AND EXTERNAL RESEARCH
+
+**Step 4.1 - b4 dig:**
+Record: `b4 dig -c 59b03d12b1f6d` could not find a match (lore search
+returned nothing). Manual search via `yhbt.net/lore/linux-usb`
+succeeded: cover letter at
+`20260224070150.3320641-1-mika.westerberg@linux.intel.com`, patch 2/2 at
+`20260224070150.3320641-3-...`, patch 1/2 at
+`20260224070150.3320641-2-...`. Only v1 was submitted — no v2/v3.
+
+**Step 4.2 - Reviewers:**
+Record: CC list: Yehezkel Bernat, Lukas Wunner, Andreas Noever (past
+Thunderbolt co-maintainers), Rene Sapiens (author). Mailing list: linux-
+usb@vger.kernel.org. Mika Westerberg (current Thunderbolt maintainer)
+submitted and applied. No Reviewed-by/Acked-by/Tested-by tags were added
+in the mailing-list discussion before application, but the maintainer
+applied it directly.
+
+**Step 4.3 - Bug report:**
+Record: No public Link: tag. Cover letter: "There is known issue on
+Titan Ridge with older firmware that makes the link unstable if CL
+states are enabled." Phrasing indicates this is a vendor-known hardware
+issue (Intel internal knowledge), not a user-reported bug traceable via
+lore.
+
+**Step 4.4 - Related patches / series:**
+Record: 2-patch series. Patch 1/2 (prerequisite) is `4573add760b8d` —
+refactor making NVM version available early. Patch 2/2 is this commit.
+Both applied as the series by Mika on 2026-03-02.
+
+**Step 4.5 - Stable ML:**
+Record: No prior stable@ discussion found for this fix. No explicit
+stable nomination by reviewers (thread only has cover-letter "Applied"
+reply).
+
+## PHASE 5: CODE SEMANTIC ANALYSIS
+
+**Step 5.1 - Key functions:**
+Record: `quirk_clx_disable()` (modified), and the `tb_quirks[]` table
+(new entry).
+
+**Step 5.2 - Callers:**
+Record: `quirk_clx_disable` is called by `tb_check_quirks()` in
+`drivers/thunderbolt/quirks.c` at line 135 via the table dispatch.
+`tb_check_quirks()` is called once by `tb_switch_add()` at
+`drivers/thunderbolt/switch.c:3341`. `tb_switch_add()` is the mandatory
+router-addition path — reachable on every Thunderbolt device
+enumeration.
+
+**Step 5.3 - Callees:**
+Record: `tb_switch_is_titan_ridge(sw)` (inline predicate on
+vendor/device IDs). Access to `sw->nvm->major`. `tb_sw_dbg()` for the
+debug message. No locking / no allocation / no I/O — safe.
+
+**Step 5.4 - Call chain reachability:**
+Record: User plugs a Thunderbolt device → PCI enumeration →
+`tb_switch_add()` → `tb_check_quirks()` → this quirk. Reachable on every
+plug/unplug and on every boot for integrated routers. Universal trigger
+for affected hardware.
+
+**Step 5.5 - Similar patterns:**
+Record: The same `quirk_clx_disable` is already used for AMD Yellow Carp
+/ Pink Sardine (by `7af9da8ce8f9a`, which was tagged `Cc:
+stable@vger.kernel.org`) — direct precedent of this exact quirk being
+stable-worthy.
+
+## PHASE 6: CROSS-REFERENCING AND STABLE TREE ANALYSIS
+
+**Step 6.1 - Code in stable:**
+Record: `quirks.c` with `quirk_clx_disable()` exists in stable since 6.3
+(7af9da8ce8f9a). Titan Ridge CLx support in tree since 5.17. All active
+stable trees (6.1.y, 6.6.y, 6.12.y, 6.16.y, etc.) have both the CLx-
+enablement code AND the `quirk_clx_disable` infrastructure needed to
+apply this patch.
+
+**Step 6.2 - Backport difficulty:**
+Record: The `quirks.c` hunk will apply cleanly to all modern stable
+trees — the file's structure is unchanged in the surrounding context.
+HOWEVER, the fix depends on `sw->nvm` being populated at
+`tb_check_quirks()` time, which requires the prerequisite
+`4573add760b8d` to be applied as well. If only this commit is
+backported, `sw->nvm` will be NULL and the firmware-version guard will
+always be false, causing the quirk to apply to ALL Titan Ridge DD
+devices (over-aggressive but functionally safe — bug is still fixed for
+affected users).
+
+**Step 6.3 - Related fixes already in stable:**
+Record: No earlier form of this fix exists in stable. The related
+`quirk_clx_disable` for AMD is in stable trees.
+
+## PHASE 7: SUBSYSTEM AND MAINTAINER CONTEXT
+
+**Step 7.1 - Subsystem/criticality:**
+Record: `drivers/thunderbolt/` — PERIPHERAL driver. Affects users with
+Thunderbolt 3 hardware based on Intel Titan Ridge DD bridge (0x15ef).
+Users include many Intel-based laptops, eGPU docks, Thunderbolt 3 AICs
+with older shipped firmware.
+
+**Step 7.2 - Subsystem activity:**
+Record: Thunderbolt is moderately active — regular fixes, hardware
+quirks. Mature enough that a firmware-specific quirk is plausible long-
+term.
+
+## PHASE 8: IMPACT AND RISK ASSESSMENT
+
+**Step 8.1 - Affected users:**
+Record: Hardware-specific — owners of Thunderbolt 3 devices that use the
+Intel Titan Ridge DD bridge (0x15ef) variant with NVM firmware < 0x65.
+Also affected: host controllers that haven't had their NVM updated.
+
+**Step 8.2 - Trigger conditions:**
+Record: Triggered whenever CL states are entered on an affected Titan
+Ridge DD device. Does not require privileges — user just needs to have
+affected hardware plugged in.
+
+**Step 8.3 - Failure mode:**
+Record: "Link disconnect events and the device failing to enumerate."
+Severity: HIGH — the Thunderbolt device becomes unusable. Not a
+crash/security issue, but data-path failure for peripheral connectivity
+(including storage/display/networking that goes over Thunderbolt).
+
+**Step 8.4 - Risk-benefit:**
+Record: Benefit = medium-high (fixes device-unusable bug for real Titan
+Ridge users). Risk = very low (7-line hardware quirk, guarded by a
+device-ID match, cannot affect non-matching devices; already-existing
+`quirk_clx_disable` precedent is in stable). Net: favorable.
+
+## PHASE 9: FINAL SYNTHESIS
+
+**Step 9.1 - Evidence compiled:**
+
+FOR:
+- Fixes real hardware-exposed bug causing device enumeration failure on
+  TB3 hardware.
+- Hardware-quirk exception category — standard stable-worthy class.
+- Extremely small (7 lines), device-ID guarded, cannot affect non-
+  matching devices.
+- Applied by subsystem maintainer (Mika Westerberg) directly.
+- Direct precedent in stable (7af9da8ce8f9a used same
+  `quirk_clx_disable` pattern, tagged `Cc: stable`).
+- The bug has existed since v5.17 (CLx enabled on Titan Ridge) — broad
+  stable-tree applicability.
+
+AGAINST / Concerns:
+- No `Cc: stable`, no `Fixes:`, no Reported-by — maintainer chose not to
+  nominate explicitly.
+- Depends on prerequisite `4573add760b8d` (refactor) to realize the
+  intended firmware-version selectivity. Without it, the commit still
+  fixes the bug but applies the quirk more broadly than intended (loses
+  CLx power savings on new-firmware Titan Ridge DD; not a correctness
+  regression).
+
+**Step 9.2 - Stable rules checklist:**
+1. Obviously correct and tested? Yes — logic is trivial; tested and
+   applied to thunderbolt tree; build-tested by kernel test robot.
+2. Real bug affecting users? Yes — link disconnects and enumeration
+   failures on affected hardware.
+3. Important issue? Yes — device-unusable issue for affected hardware
+   (HIGH severity for those users).
+4. Small and contained? Yes — 7 lines in one file.
+5. No new features/APIs? Yes — just a quirk-table entry plus a guard.
+6. Applies to stable? The quirks.c hunk itself applies cleanly; the
+   intended semantics require the prerequisite to also be backported.
+   Without the prerequisite the fix degrades gracefully to "always
+   disable CLx on Titan Ridge DD" — still a functional fix.
+
+**Step 9.3 - Exception category:**
+Record: Hardware quirk/workaround for buggy firmware/hardware —
+explicitly allowed exception for stable.
+
+**Step 9.4 - Decision:**
+YES — this is a hardware quirk for a real, device-unusable firmware bug
+on Thunderbolt 3 Titan Ridge DD hardware. It is small, surgical, applied
+by the subsystem maintainer, and has direct precedent (the identical
+`quirk_clx_disable` mechanism was already backported to stable with `Cc:
+stable` for AMD CLx-incompatible hardware). Note for the selection
+pipeline: the prerequisite `4573add760b8d` should also be backported to
+get the intended selective behavior; without it the fix still works but
+applies more broadly than intended.
+
+## Verification
+- [Phase 1] Parsed tags from `git show 59b03d12b1f6d`: only Signed-off-
+  by (Rene Sapiens, Mika Westerberg). No Fixes:, Cc: stable, Reported-
+  by, Link:.
+- [Phase 2] Diff analysis: confirmed 1 file
+  (`drivers/thunderbolt/quirks.c`) +7/-0. Read current file — confirmed
+  table entry uses `0x8086, PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_BRIDGE`.
+- [Phase 2] Verified `tb_switch_is_titan_ridge()` definition in
+  `drivers/thunderbolt/tb.h:982-993` uses `PCI_VENDOR_ID_INTEL` (0x8086)
+  and matches TITAN_RIDGE 2C/4C/DD bridges — confirms AMD path
+  unaffected.
+- [Phase 2] Verified `PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_BRIDGE` =
+  0x15ef in `drivers/thunderbolt/nhi.h:75`.
+- [Phase 2] Verified test code (`drivers/thunderbolt/test.c:201-202`)
+  uses `sw->config.vendor_id = 0x8086; sw->config.device_id = 0x15ef;`
+  for Titan Ridge DD — confirms quirk-table vendor ID 0x8086 is correct.
+- [Phase 3.1] `git describe --contains 43f977bc60b1c` → v5.17-rc1; `git
+  describe --contains b017a46d486cd` → v6.0-rc1: confirms CLx on Titan
+  Ridge has been in kernel since v5.17.
+- [Phase 3.2] `git show 7af9da8ce8f9a` confirms the `quirk_clx_disable`
+  / `QUIRK_NO_CLX` infrastructure came with explicit `Cc:
+  stable@vger.kernel.org` — direct precedent.
+- [Phase 3.3] `git log --oneline v6.1..v6.6 --
+  drivers/thunderbolt/quirks.c` and `v6.6..v7.0` show low churn and
+  stable structure.
+- [Phase 3.5] Verified prerequisite: `git show 4573add760b8d` confirms
+  `tb_switch_nvm_init()` is a NEW function split off from
+  `tb_switch_nvm_add()` and a new call site was added in
+  `tb_switch_add()` before `tb_check_quirks()`. Verified current `HEAD`
+  (`Linux 7.0`) still has only `tb_switch_nvm_add()` (no
+  `tb_switch_nvm_init()`) — confirms the dependency.
+- [Phase 3.5] Read `switch.c:3297-3407` to confirm ordering:
+  `tb_check_quirks()` at line 3341 runs BEFORE `tb_switch_nvm_add()` at
+  line 3384, so `sw->nvm` is NULL at quirk time without the
+  prerequisite.
+- [Phase 4.1] `b4 dig -c 59b03d12b1f6d` → no match; fell back to
+  yhbt.net/lore search which returned the series (cover + 2 patches +
+  Mika's "Applied" reply + kernel-test-robot build success).
+- [Phase 4.1/4.4] Fetched raw mbox of cover letter
+  (`20260224070150.3320641-1-...`), patch 1/2 (`-2-`), patch 2/2
+  (`-3-`), and Mika's apply-reply
+  (`20260302065244.GP2275908@black.igk.intel.com`) — confirmed only v1
+  was submitted, applied as-is.
+- [Phase 5.2] `rg tb_check_quirks` → single caller `tb_switch_add()`;
+  single definition in quirks.c.
+- [Phase 6.1] Verified `quirk_clx_disable()` and `QUIRK_NO_CLX` came
+  with `7af9da8ce8f9a` tagged `Cc: stable`, so the infrastructure is
+  present in stable trees 6.1.y and later.
+- [Phase 8.3] Failure mode taken directly from commit message: "link
+  disconnect events and the device failing to enumerate."
+- UNVERIFIED: Could not independently confirm the exact user-reporting
+  trail for this bug (the mailing-list thread doesn't reference a
+  specific user report or syzkaller); relied on maintainer and cover-
+  letter wording ("known issue").
+- UNVERIFIED: Could not test whether the commit applies cleanly to each
+  stable branch without actually running `git cherry-pick` on each
+  stable tree (only a HEAD worktree is present).
+
+The commit is a small, targeted hardware quirk that fixes a real device-
+usability bug on Thunderbolt 3 Titan Ridge DD hardware with old
+firmware, applied by the subsystem maintainer, and directly analogous to
+a previously-stable-tagged quirk for AMD CLx-incompatible parts.
+
+**YES**
+
+ drivers/thunderbolt/quirks.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/thunderbolt/quirks.c b/drivers/thunderbolt/quirks.c
+index e81de9c30eac9..9f7914ac2f48c 100644
+--- a/drivers/thunderbolt/quirks.c
++++ b/drivers/thunderbolt/quirks.c
+@@ -23,6 +23,9 @@ static void quirk_dp_credit_allocation(struct tb_switch *sw)
+ 
+ static void quirk_clx_disable(struct tb_switch *sw)
+ {
++	if (tb_switch_is_titan_ridge(sw) && sw->nvm && sw->nvm->major >= 0x65)
++		return;
++
+ 	sw->quirks |= QUIRK_NO_CLX;
+ 	tb_sw_dbg(sw, "disabling CL states\n");
+ }
+@@ -61,6 +64,10 @@ static const struct tb_quirk tb_quirks[] = {
+ 	/* Dell WD19TB supports self-authentication on unplug */
+ 	{ 0x0000, 0x0000, 0x00d4, 0xb070, quirk_force_power_link },
+ 	{ 0x0000, 0x0000, 0x00d4, 0xb071, quirk_force_power_link },
++
++	/* Intel Titan Ridge CLx is unstable on early firmware versions */
++	{ 0x8086, PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_BRIDGE, 0x0000, 0x0000,
++		  quirk_clx_disable },
+ 	/*
+ 	 * Intel Goshen Ridge NVM 27 and before report wrong number of
+ 	 * DP buffers.
+-- 
+2.53.0
+
 
