@@ -1,186 +1,190 @@
-Return-Path: <linux-usb+bounces-36595-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36596-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kDNmE7sz8Gk2PwEAu9opvQ
-	(envelope-from <linux-usb+bounces-36595-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 06:12:43 +0200
+	id WNruFaU98GncQQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36596-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 06:55:01 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE51347D575
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 06:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CFAE647D6BD
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 06:55:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 315DA3025E57
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 04:12:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 838C6302A1A9
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 04:54:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D99B331AAAF;
-	Tue, 28 Apr 2026 04:12:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F99922423A;
+	Tue, 28 Apr 2026 04:54:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="Gidu5s8F"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Omi+rLiO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2237478;
-	Tue, 28 Apr 2026 04:12:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777349558; cv=none; b=ehmyI4+QtkOh02B1cD+pzT4AkliKHtFFAkZvSmYsXHGgE2bbyNXiT95zAnDo9tqqqPcb+buvI4HNW2pnGA0667mIORo5AdUD4dhJYTNYxtV5ZdNBv7y14EFbdUO3Un895aGEFM+DsGdezeCGtA2ORws1FQgW/oEY4nAUW1zPgIo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777349558; c=relaxed/simple;
-	bh=RdCNYgtTfUx2w+VEsHqK9DmXdFYgykhdOYA8kLFGzXw=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=tYaKE3goSsCx52nsMqrEukp5/Sl/T9Ibc+/8pXRFiLTpZR0LXVzv2g3FtT5D++soLIiCuy7B077tde+Wl2KcvMdP+LnH0nQnsLj+5Jd8EgfH/G1xwWkyak+o70qkqgbAA+5mZ68ma39qoa0aI62HYcvj4ZRnFuy2uYxqoUNPSmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=Gidu5s8F; arc=none smtp.client-ip=162.62.57.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1777349550; bh=1Nt6ugEPShLCYKEr6+BVNpxdhANPlQCmEmONk5oMCbE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Gidu5s8FB3dgC4Y0T8o7Bt6g6MXwJTNjS9D0A7Jlck6mhzAuLqvgWW3BpSPU7WOPF
-	 nwWu6E0xsM06WkpZcd+dOOmyfQueniBr/1PaIaISLvfx2KQp268ySG5xSN6tDrBJB5
-	 H91rv9r50jYxD94gA9H3NffH9IO4f4KZX5ZtOIXg=
-Received: from lxu-ped-host.. ([111.198.231.89])
-	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
-	id 31AAAA9C; Tue, 28 Apr 2026 12:12:26 +0800
-X-QQ-mid: xmsmtpt1777349546tscspmme0
-Message-ID: <tencent_BB7C33EB9EA41B7B4B5F1B8B25C0BA13BB08@qq.com>
-X-QQ-XMAILINFO: MRMtjO3A6C9XhkF96blYDQH0VPzreY9tKY5JuknvLzdgIEAjNqWLdM9Dg8nldw
-	 c62V5Fp7hmu3D5bC+ppaDSTRgBOpo2vrct3aBswas/SwezWrSFP9CEDq7nOZcQkLtcRmsfYkSMBo
-	 Wtrn/I+EMDcmgFnqMcob9yLJ5zkXeaX+DHKmzxPQtVK5dTZDdt+DI3oj+LeUjD6qOdHXGepPVIGz
-	 7VufDrexR9nyOpG33zaRWDLiV3PC2fVQrDlr7ftO+K574ajdU+yhtp8Pgqo4Xah7zl2+UvWaiTOw
-	 cZbOKf4C+RiD7Ysul249AZgSi6xe5R6zRbf3c/E05YQTzGAhSLNLqz4u0fTM9Ew3bo204l7dQVbW
-	 TIptGNFIfSS3P3a6sOfPrrMi7sviIym0DwVCjc11+ezkQQOcVX4wccpKXqTbWk8yA8h0m17KCfKV
-	 iBowgNClmXRYmJXgIcRwmv4Ix2vJTFvCYjAWpkORkTQaqhnHjPKy8OEeyVYZ4Sgs7Jwcxkn8EdWy
-	 SZfhkfRXxEahQc34m3D1Epg/wwkME+gNIA6GLtnHdplkx02pU9T/hyihHDePDhEG0Ymiqo6yRttp
-	 wo5bEcAc3RSTP1PuuUUN+6xEh+hgnicY+wQEFIvvwHzQ1FN+y28tu907vN/gO5+bpATC4w2GZE56
-	 P8yiT+UkeTkJbrlNJrEu2mulRU7sX/I6gv/btBhp9bvhAU907L5PmiUMlT1ez9LrZzMaxIIO/VCZ
-	 i2brY6DLwTD+dPfSsLknwN119rXfSBNzhHIrsRXqoVbNcy28WRYupSGXCsgv6lmPg6+R3LjUy7QG
-	 44A/NHdmpRQIvfMJ0SLXHfCV1dZ32q+jl2p/WkCVS3pzNojihg705GaeKrKaNkiT/JVp3vCjnCOk
-	 qeT4Hkw+Z7qj0O9bIQPpjc9iCCudC9c8qKWfcjy7PqN7mXspeUYksQm4VKb5sOPju3zJAizzHk3p
-	 fjvpBGy3Q8ponppkAd4FdcNZo2BNCUqZEDniMhU0xbLv73FxUCyKjeYW5ZzaAWXNZ56pp4fTV3C4
-	 1rBFje17SQ4ckPz2FIyDGdlRVJiBI=
-X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
-From: Edward Adam Davis <eadavis@qq.com>
-To: syzbot+9eebf5f6544c5e873858@syzkaller.appspotmail.com
-Cc: bentiss@kernel.org,
-	jikos@kernel.org,
-	linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com
-Subject: [PATCH] hwmon: prevent packets from going to driver for probe
-Date: Tue, 28 Apr 2026 12:12:26 +0800
-X-OQ-MSGID: <20260428041225.235251-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <69eed7e0.a00a0220.7773.0026.GAE@google.com>
-References: <69eed7e0.a00a0220.7773.0026.GAE@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11E71F09A5
+	for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 04:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777352074; cv=pass; b=FZSUFfaivlWznbTBmzkndJk0KZin2Df+Du6iko3AxLc9YwcrCvBLYbe+nK6UASWPyEZl3BbWW5WVJjMXQVm7fXOLIonzRYHKPMC00nPNIDPuxFXGwHcs/I7WtgdscABtTciC7s40mk8Z1UGQ/+aU92fwChl8+wWG8VGZlYrhfwo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777352074; c=relaxed/simple;
+	bh=oLlvzt7wQd754o+fNti7yQsWlu8oDJ0/kFO4ahn9mrM=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Hx4YNQFa+aSCcn8/qD+DklrDChRzBaRBekTMQ+6DSGskpWxgaOSCZilXRud2jDgcXtwe9u6vsiVXFUN9uW3gvdIUwQFDBHTZaeVQ8sAAzR3Oq0tUc8XgiaDJL/RBtf7gEl+YEf3OBHMx/65V3FeeGJtY72TeO8nGL0AIUUR5tEQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Omi+rLiO; arc=pass smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-79a535e7c00so118460777b3.3
+        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 21:54:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777352071; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fVhKXH+TQja1dzGdV/Qrp1ftt2ibhHfPlvR7YkhrQlogxtwMFr+sGgZ9/H0UKCtvbT
+         nt2xaiD7z8TH4S75u9iFd5Lci2SgquuL7EmpbD2CVgP7PJgb2oBkq3QXiU2LN/LSgHC5
+         Yy2ZJyJZNfV4UU69/keGbWgQVSMmpZkcKQbSA2sX/BrSc9/AOfrRnDuaBH4aW2+xQ/Qa
+         8+ROdSjoq4uDSimecj1zk8J7bYHmEv3oEcc1yq6vMSpeSfqzw+FKfoFhVH39VUw6+Y80
+         dKS7LTvib1ljXubOIpeaLG4JS9mcJCJDId0bNQkqfIqpOFSjKOFekkxA1o/32FDF59UP
+         W88A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=c5yJ6QtvwIt+J51E0AEX/MTYwYAVQGf1uPUogc5Ssz4=;
+        fh=kmxxZtidsjgy6yfXCItXjxYwJopnyhLzCImGwaShWOA=;
+        b=KrPwd7mAX1EfHbv4YNJHV0fIXLPG2+CRdaDSJHDtgzbUqPsIAN9/p2EkAx9yea/9EF
+         +JiQTaSp6sxB98ffW12B3tTUhrUujuP8SKYoXptk+6DiT1wCuy4lj8feW8TnxF7jeGTe
+         7vUhAbBmfwA3m4RAqquaGS+twHTxI65vN9NEq6DYGagatxPu9TVLgI8pRN0UIHH4x2lq
+         7Vuagzo4zaOWWrOGDsvfnlcDYzKS2QUqk+Vb35pYcxQ5NEs8uyKYhuUzONXyYoVy/0u+
+         kE7SQiHu++03r8HK9ksXv03UJPOyg4cf44GKMAWQPRP9YHSMlCCBXjh8hsiCGl7wQpFE
+         exQg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777352071; x=1777956871; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=c5yJ6QtvwIt+J51E0AEX/MTYwYAVQGf1uPUogc5Ssz4=;
+        b=Omi+rLiOrs9L455c1HWo1rWwss93HxfTcqwPYwGbahbReAWmzX+BNs247Eb0ez2VAN
+         3QE8b7LzHucEZzlqal/MCLerXdZXuX6CUcWCs7ZlgUnDSqL/JOLy6xPtEwKTbQa3hfyE
+         0TO5VOUw95b7bM+xX0I1LEJxcstKvvYcUW2UIfeYiLvVRjddUAjUN7aYOhSp8T2M3vB1
+         6sxiSSdHJLPgzC/OqhjU+sDmN7i5qQVoFx/6wn8W7HQJbUcBsGUl9OiNJieQrcOgYo9n
+         4rZqxfpZzLwsvQKBDCcgg+mDh+w4LeFGAsPTVsQBQb7OsWTH8uR8MZFhBznVjeZW69xH
+         VI7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777352071; x=1777956871;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c5yJ6QtvwIt+J51E0AEX/MTYwYAVQGf1uPUogc5Ssz4=;
+        b=LTYC6gvDLB1nX0d+RPpK+Up4h+5k+KpL72gEfh0grhlVHivA3XQ/HNnKrK7UCpNXxD
+         5PHgB55iEg/BKZMzcP/5ffeAcJFde9LnBJ6uv453uiYfJgPZJIoQQqLpedomOd0CxBZn
+         viMTjGhSuDkFbMYY+t1YymD4NKqjm9tSHyD8vFMx2MLOmfQEfnzJw96I93wxpuc/DbcT
+         clpDQhFI97ZSxikklOyrXTVREo5Uvi6kc4G7vB6nSsvQcUN6B0uvkOPWHaJNmsQRHVxd
+         M5jsOnDWP7OSL93MRqdCWBo69Ik+l9uUQupd4a/5Rje8IAKGU/x+BFx5su4MkffZP08Y
+         /u4g==
+X-Gm-Message-State: AOJu0YxJ7Fmtq3tHj7NEtx8X8Ysdg1iidLGCHGTxSdYtaBTSZh3MKp1X
+	nBbgJnoKPq/347F7UX7YEAl8lLFIKJo+LnPnDj4BghdQw97uc7BqNKBMKxZULFesQyLLSirlcyg
+	igGtoDo4DT/MJ0NpN4vg6WULPj9J64qbEY6mO
+X-Gm-Gg: AeBDiesQ7lXxau2oLMRJar8M+9kNr2o6ZNyxLLXOAZGtHsUW57fNYWf7fKZK+QQ254Z
+	xw0v37iWCuDMil6/sugysZ7ZLhp3PmU1C493YrjfkQqaq+WOY7+Cu0CbnASke1xLsMzidOpNtOY
+	C2C1MK1i4njpW+SjMMum1UK+aBmsyr2vS5wJONKCCBXQZpm4KERFPPaWGeu+DSezdpU0lS1Rq13
+	mJqfZLGk9c6vhecSJkm4bbY9r4b8vw0v60jYWqYG69SiVChfJYR9EbQNqGLtrdos0ApITwAFXl1
+	6FfEWC8lol2Cpm00aeVp
+X-Received: by 2002:a05:690c:4b0c:b0:7b2:9ad9:cd2e with SMTP id
+ 00721157ae682-7bcf50f490fmr15229327b3.14.1777352070977; Mon, 27 Apr 2026
+ 21:54:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: BE51347D575
+From: Ginger <ginger.jzllee@gmail.com>
+Date: Tue, 28 Apr 2026 12:54:22 +0800
+X-Gm-Features: AVHnY4LPN2ibgbkOecF0vz3Ad-wqCGRP853NBhPt6pBq6Axs8UzNIXGeuRy0ETU
+Message-ID: <CAGp+u1YpY=StJYjr0HdYV+uaKBdcaT3iU4jq-9vr3d_a=t_nvQ@mail.gmail.com>
+Subject: [PATCH] usb: misc: yurex: fix ordering of usb_deregister_dev() and usb_set_intfdata()
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Rspamd-Queue-Id: CFAE647D6BD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qq.com,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[qq.com:s=s201512];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36595-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-36596-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[eadavis@qq.com,linux-usb@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[qq.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	TO_DN_NONE(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	FREEMAIL_FROM(0.00)[qq.com];
-	TAGGED_RCPT(0.00)[linux-usb,9eebf5f6544c5e873858];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,qq.com:email,qq.com:dkim,qq.com:mid,appspotmail.com:email,syzkaller.appspot.com:url]
+	FROM_NEQ_ENVFROM(0.00)[gingerjzllee@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
 
-A race condition exists between hid_input_report() and the point
-immediately following the execution of hid_device_io_start() within
-corsairpsu_probe(). If the probe operation fails after "io start" has
-been initiated, this race condition will result in a uaf vulnerability
-[1].
+In yurex_disconnect(), usb_set_intfdata(interface, NULL) was called
+before usb_deregister_dev(interface, &yurex_class).  This opens a race
+window with usb_open() in the USB core:
 
-CPU0				CPU1
-====				====
-corsairpsu_probe()
- hid_device_io_start()
-  ... unlock driver_input_lock 
- hid_hw_stop()
-  kfree(hidraw)			__hid_input_report()
-				 ... acquire driver_input_lock
-				 hid_report_raw_event()
-				  hidraw_report_event()
-				   ... access hidraw's list_lock // trigger uaf
+  T0 (yurex_disconnect)               T1 (usb_open)
+  --------------------------           -------------------------
+  usb_set_intfdata(iface, NULL) [t0]
+                                       fops = usb_minors[minor]  [t1]
+                                       /* fops still valid here */
+  usb_deregister_dev()
+    usb_minors[minor] = NULL   [t2]
+                                       file->f_op->open(inode, file)
+                                         yurex_open()
+                                           dev = usb_get_intfdata() [t3]
+                                           /* dev is NULL */
 
-Consequently, when corsairpsu_probe() fails and hid_hw_stop() needs to
-be executed, the io_started flag is first cleared while holding the
-driver_input_lock to prevent potential race conditions involving input
-reports.
+Because t0 precedes t1 precedes t2 precedes t3, T1 can obtain the
+file_operations pointer for the device (t1, while the minor is still
+registered), then continue into yurex_open() where it calls
+usb_get_intfdata() and gets NULL back, leading to a NULL dereference.
 
-[1]
-BUG: KASAN: slab-use-after-free in rt_spin_lock+0x83/0x400 kernel/locking/spinlock_rt.c:56
-Call Trace:
- hidraw_report_event+0x5d/0x3a0 drivers/hid/hidraw.c:577
- hid_report_raw_event+0x311/0x1730 drivers/hid/hid-core.c:2076
- __hid_input_report drivers/hid/hid-core.c:2152 [inline]
- hid_input_report+0x44e/0x580 drivers/hid/hid-core.c:2174
- hid_irq_in+0x47e/0x6d0 drivers/hid/usbhid/hid-core.c:286
- __usb_hcd_giveback_urb+0x3b3/0x5e0 drivers/usb/core/hcd.c:1657
- dummy_timer+0x8a9/0x47d0 drivers/usb/gadget/udc/dummy_hcd.c:2005
+Fix the race by calling usb_deregister_dev() first, which removes the
+device from usb_minors[] before the interface data pointer is cleared.
+Concurrent usb_open() that arrives after usb_deregister_dev() returns
+will fail to look up the fops and will never reach yurex_open().
 
-Allocated by task 10:
- hidraw_connect+0x57/0x430 drivers/hid/hidraw.c:606
- hid_connect+0x5bf/0x19d0 drivers/hid/hid-core.c:2277
- hid_hw_start+0xa8/0x120 drivers/hid/hid-core.c:2387
- corsairpsu_probe+0xd9/0x3c0 drivers/hwmon/corsair-psu.c:782
-
-Freed by task 10:
- hidraw_disconnect+0x4f/0x60 drivers/hid/hidraw.c:662
- hid_disconnect drivers/hid/hid-core.c:2362 [inline]
- hid_hw_stop+0x101/0x1e0 drivers/hid/hid-core.c:2407
- corsairpsu_probe+0x327/0x3c0 drivers/hwmon/corsair-psu.c:826
- 
-Fixes: d115b51e0e56 ("hwmon: add Corsair PSU HID controller driver")
-Reported-by: syzbot+9eebf5f6544c5e873858@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=9eebf5f6544c5e873858
-Tested-by: syzbot+9eebf5f6544c5e873858@syzkaller.appspotmail.com
-Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+Reported-by: Ginger <ginger.jzllee@gmail.com>
+Closes: https://lore.kernel.org/linux-usb/2026042718-unwieldy-dicing-626f@gregkh
+Signed-off-by: Ginger <ginger.jzllee@gmail.com>
 ---
- drivers/hwmon/corsair-psu.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/misc/yurex.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-index dddbd2463f8d..4e766bf32189 100644
---- a/drivers/hwmon/corsair-psu.c
-+++ b/drivers/hwmon/corsair-psu.c
-@@ -823,6 +823,7 @@ static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id
- fail_and_close:
- 	hid_hw_close(hdev);
- fail_and_stop:
-+	hid_device_io_stop(hdev);
- 	hid_hw_stop(hdev);
- 	return ret;
- }
--- 
-2.43.0
+diff --git a/drivers/usb/misc/yurex.c b/drivers/usb/misc/yurex.c
+index 6d03e689850a..b5484ab77e91 100644
+--- a/drivers/usb/misc/yurex.c
++++ b/drivers/usb/misc/yurex.c
+@@ -310,11 +310,12 @@ static void yurex_disconnect(struct
+usb_interface *interface)
+    int minor = interface->minor;
 
+    dev = usb_get_intfdata(interface);
+-   usb_set_intfdata(interface, NULL);
+
+    /* give back our minor */
+    usb_deregister_dev(interface, &yurex_class);
+
++   usb_set_intfdata(interface, NULL);
++
+    /* prevent more I/O from starting */
+    usb_poison_urb(dev->urb);
+    usb_poison_urb(dev->cntl_urb);
+--
+2.39.5
 
