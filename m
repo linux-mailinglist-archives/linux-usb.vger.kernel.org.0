@@ -1,190 +1,188 @@
-Return-Path: <linux-usb+bounces-36596-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36599-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WNruFaU98GncQQEAu9opvQ
-	(envelope-from <linux-usb+bounces-36596-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 06:55:01 +0200
+	id wGo0Mjhn8GkITAEAu9opvQ
+	(envelope-from <linux-usb+bounces-36599-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 09:52:24 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFAE647D6BD
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 06:55:00 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3339E47F4DC
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 09:52:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 838C6302A1A9
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 04:54:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 13F3E3019517
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 07:28:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F99922423A;
-	Tue, 28 Apr 2026 04:54:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B01C93DC4A7;
+	Tue, 28 Apr 2026 07:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Omi+rLiO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DiWv9p3M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11E71F09A5
-	for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 04:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777352074; cv=pass; b=FZSUFfaivlWznbTBmzkndJk0KZin2Df+Du6iko3AxLc9YwcrCvBLYbe+nK6UASWPyEZl3BbWW5WVJjMXQVm7fXOLIonzRYHKPMC00nPNIDPuxFXGwHcs/I7WtgdscABtTciC7s40mk8Z1UGQ/+aU92fwChl8+wWG8VGZlYrhfwo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777352074; c=relaxed/simple;
-	bh=oLlvzt7wQd754o+fNti7yQsWlu8oDJ0/kFO4ahn9mrM=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Hx4YNQFa+aSCcn8/qD+DklrDChRzBaRBekTMQ+6DSGskpWxgaOSCZilXRud2jDgcXtwe9u6vsiVXFUN9uW3gvdIUwQFDBHTZaeVQ8sAAzR3Oq0tUc8XgiaDJL/RBtf7gEl+YEf3OBHMx/65V3FeeGJtY72TeO8nGL0AIUUR5tEQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Omi+rLiO; arc=pass smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-79a535e7c00so118460777b3.3
-        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2026 21:54:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777352071; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fVhKXH+TQja1dzGdV/Qrp1ftt2ibhHfPlvR7YkhrQlogxtwMFr+sGgZ9/H0UKCtvbT
-         nt2xaiD7z8TH4S75u9iFd5Lci2SgquuL7EmpbD2CVgP7PJgb2oBkq3QXiU2LN/LSgHC5
-         Yy2ZJyJZNfV4UU69/keGbWgQVSMmpZkcKQbSA2sX/BrSc9/AOfrRnDuaBH4aW2+xQ/Qa
-         8+ROdSjoq4uDSimecj1zk8J7bYHmEv3oEcc1yq6vMSpeSfqzw+FKfoFhVH39VUw6+Y80
-         dKS7LTvib1ljXubOIpeaLG4JS9mcJCJDId0bNQkqfIqpOFSjKOFekkxA1o/32FDF59UP
-         W88A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=c5yJ6QtvwIt+J51E0AEX/MTYwYAVQGf1uPUogc5Ssz4=;
-        fh=kmxxZtidsjgy6yfXCItXjxYwJopnyhLzCImGwaShWOA=;
-        b=KrPwd7mAX1EfHbv4YNJHV0fIXLPG2+CRdaDSJHDtgzbUqPsIAN9/p2EkAx9yea/9EF
-         +JiQTaSp6sxB98ffW12B3tTUhrUujuP8SKYoXptk+6DiT1wCuy4lj8feW8TnxF7jeGTe
-         7vUhAbBmfwA3m4RAqquaGS+twHTxI65vN9NEq6DYGagatxPu9TVLgI8pRN0UIHH4x2lq
-         7Vuagzo4zaOWWrOGDsvfnlcDYzKS2QUqk+Vb35pYcxQ5NEs8uyKYhuUzONXyYoVy/0u+
-         kE7SQiHu++03r8HK9ksXv03UJPOyg4cf44GKMAWQPRP9YHSMlCCBXjh8hsiCGl7wQpFE
-         exQg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777352071; x=1777956871; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=c5yJ6QtvwIt+J51E0AEX/MTYwYAVQGf1uPUogc5Ssz4=;
-        b=Omi+rLiOrs9L455c1HWo1rWwss93HxfTcqwPYwGbahbReAWmzX+BNs247Eb0ez2VAN
-         3QE8b7LzHucEZzlqal/MCLerXdZXuX6CUcWCs7ZlgUnDSqL/JOLy6xPtEwKTbQa3hfyE
-         0TO5VOUw95b7bM+xX0I1LEJxcstKvvYcUW2UIfeYiLvVRjddUAjUN7aYOhSp8T2M3vB1
-         6sxiSSdHJLPgzC/OqhjU+sDmN7i5qQVoFx/6wn8W7HQJbUcBsGUl9OiNJieQrcOgYo9n
-         4rZqxfpZzLwsvQKBDCcgg+mDh+w4LeFGAsPTVsQBQb7OsWTH8uR8MZFhBznVjeZW69xH
-         VI7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777352071; x=1777956871;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c5yJ6QtvwIt+J51E0AEX/MTYwYAVQGf1uPUogc5Ssz4=;
-        b=LTYC6gvDLB1nX0d+RPpK+Up4h+5k+KpL72gEfh0grhlVHivA3XQ/HNnKrK7UCpNXxD
-         5PHgB55iEg/BKZMzcP/5ffeAcJFde9LnBJ6uv453uiYfJgPZJIoQQqLpedomOd0CxBZn
-         viMTjGhSuDkFbMYY+t1YymD4NKqjm9tSHyD8vFMx2MLOmfQEfnzJw96I93wxpuc/DbcT
-         clpDQhFI97ZSxikklOyrXTVREo5Uvi6kc4G7vB6nSsvQcUN6B0uvkOPWHaJNmsQRHVxd
-         M5jsOnDWP7OSL93MRqdCWBo69Ik+l9uUQupd4a/5Rje8IAKGU/x+BFx5su4MkffZP08Y
-         /u4g==
-X-Gm-Message-State: AOJu0YxJ7Fmtq3tHj7NEtx8X8Ysdg1iidLGCHGTxSdYtaBTSZh3MKp1X
-	nBbgJnoKPq/347F7UX7YEAl8lLFIKJo+LnPnDj4BghdQw97uc7BqNKBMKxZULFesQyLLSirlcyg
-	igGtoDo4DT/MJ0NpN4vg6WULPj9J64qbEY6mO
-X-Gm-Gg: AeBDiesQ7lXxau2oLMRJar8M+9kNr2o6ZNyxLLXOAZGtHsUW57fNYWf7fKZK+QQ254Z
-	xw0v37iWCuDMil6/sugysZ7ZLhp3PmU1C493YrjfkQqaq+WOY7+Cu0CbnASke1xLsMzidOpNtOY
-	C2C1MK1i4njpW+SjMMum1UK+aBmsyr2vS5wJONKCCBXQZpm4KERFPPaWGeu+DSezdpU0lS1Rq13
-	mJqfZLGk9c6vhecSJkm4bbY9r4b8vw0v60jYWqYG69SiVChfJYR9EbQNqGLtrdos0ApITwAFXl1
-	6FfEWC8lol2Cpm00aeVp
-X-Received: by 2002:a05:690c:4b0c:b0:7b2:9ad9:cd2e with SMTP id
- 00721157ae682-7bcf50f490fmr15229327b3.14.1777352070977; Mon, 27 Apr 2026
- 21:54:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CDA33DA5B5;
+	Tue, 28 Apr 2026 07:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777360938; cv=none; b=pYfgWXTF301X94RoOFj5A9IDGy26ScJUzr+tqpRfJPoTs3Igx599OhyPJKEaJ6Nu1jh/38qlYGYCfvP3wCHfn1zeSCpTYCm2Un0drIwMeYarK6DwFAuZdQYdGHeoImWC3GljSUp/fFRiOG7lH/HG5LUKyraUJqVp/8Ox7SUhSRQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777360938; c=relaxed/simple;
+	bh=wQAPuxovCp2uWQoWCBJfZsiB+eWwZVD72BaGWQWSOe0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QFw9roMY8jAhOGxQ1nz7m59oOpm9VHaJ9M3zl9U+R0xZFkij50COTg9N80rh/xlLg4M3z+2h2YZwYFv6pGdx2AB3Sn8jWBX2YdvthM6hU0bTY9ysYBXRrIJh8dyeVk1T79Zk+sE6B6/JAB8AyPy7NZ0Vyapgp0bjXmTIKsWXX3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DiWv9p3M; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777360936; x=1808896936;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wQAPuxovCp2uWQoWCBJfZsiB+eWwZVD72BaGWQWSOe0=;
+  b=DiWv9p3MMBfTzaHZa7QYFXEt7eCQK1WWO9zXg5yGJIekKnq5JCl3DUey
+   6McEcuRKzV+cgprvrVe74myV1AKk9TaocMipV7y8olZ4YpXuNhFFuZZLg
+   lWDi7bcg2lFgQXlDkpQmWaZxg7DICxEMPCdUQw+UrkfFonLVPvC1Ug0VO
+   9bgirWSf+3gomOJ+CfhhNSfiTfhRJ1o1GTzXCJ0KFJvVHsZXew7OvOpxt
+   xOdPR6SQ9ZG/DQxqvDvyPxSG751kmvnsxGGhe+uEHaSOuORYcsMGFykbY
+   ZYB0Bx/VUXXh9iY/fATqbvtejARk3/cu0vnbgfqNYsuQSf5JuW6kLz/5q
+   w==;
+X-CSE-ConnectionGUID: L0qoLlaLQBekP+m0p29W3Q==
+X-CSE-MsgGUID: 21PP4QN2SEyD3BUKRrXAqA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11769"; a="89720810"
+X-IronPort-AV: E=Sophos;i="6.23,203,1770624000"; 
+   d="scan'208";a="89720810"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2026 00:22:14 -0700
+X-CSE-ConnectionGUID: TWEcvninRYWjL9banI8Pgg==
+X-CSE-MsgGUID: md6I94qMRB+6ZsKaMg72Rg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,203,1770624000"; 
+   d="scan'208";a="238206404"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa004.jf.intel.com with ESMTP; 28 Apr 2026 00:22:11 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id EFCC595; Tue, 28 Apr 2026 09:22:09 +0200 (CEST)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 0/9] thunderbolt: Introduce USB4STREAM
+Date: Tue, 28 Apr 2026 09:22:00 +0200
+Message-ID: <20260428072209.3084930-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Ginger <ginger.jzllee@gmail.com>
-Date: Tue, 28 Apr 2026 12:54:22 +0800
-X-Gm-Features: AVHnY4LPN2ibgbkOecF0vz3Ad-wqCGRP853NBhPt6pBq6Axs8UzNIXGeuRy0ETU
-Message-ID: <CAGp+u1YpY=StJYjr0HdYV+uaKBdcaT3iU4jq-9vr3d_a=t_nvQ@mail.gmail.com>
-Subject: [PATCH] usb: misc: yurex: fix ordering of usb_deregister_dev() and usb_set_intfdata()
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: CFAE647D6BD
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 3339E47F4DC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36596-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[gmail.com,wunner.de,linux.intel.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-36599-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gingerjzllee@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	NEURAL_HAM(-0.00)[-0.998];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,linux.intel.com:mid]
 
-In yurex_disconnect(), usb_set_intfdata(interface, NULL) was called
-before usb_deregister_dev(interface, &yurex_class).  This opens a race
-window with usb_open() in the USB core:
+Hi all,
 
-  T0 (yurex_disconnect)               T1 (usb_open)
-  --------------------------           -------------------------
-  usb_set_intfdata(iface, NULL) [t0]
-                                       fops = usb_minors[minor]  [t1]
-                                       /* fops still valid here */
-  usb_deregister_dev()
-    usb_minors[minor] = NULL   [t2]
-                                       file->f_op->open(inode, file)
-                                         yurex_open()
-                                           dev = usb_get_intfdata() [t3]
-                                           /* dev is NULL */
+This series adds support for a new protocol over USB4/Thunderbolt cable
+called USB4STREAM. The protocol is super-simple and basically just
+transfers raw packets from one host to another. It is documented as part of
+the thunderbolt_stream driver.
 
-Because t0 precedes t1 precedes t2 precedes t3, T1 can obtain the
-file_operations pointer for the device (t1, while the minor is still
-registered), then continue into yurex_open() where it calls
-usb_get_intfdata() and gets NULL back, leading to a NULL dereference.
+The driver exposes /dev/tbstreamX devices on each side of the link that can
+be used to transfer data using regular filesystem operations such as
+read(2) and write(2):
 
-Fix the race by calling usb_deregister_dev() first, which removes the
-device from usb_minors[] before the interface data pointer is cleared.
-Concurrent usb_open() that arrives after usb_deregister_dev() returns
-will fail to look up the fops and will never reach yurex_open().
+  host1 # cat /dev/tbstream0
+  host2 # echo hello > /dev/tbstream0
 
-Reported-by: Ginger <ginger.jzllee@gmail.com>
-Closes: https://lore.kernel.org/linux-usb/2026042718-unwieldy-dicing-626f@gregkh
-Signed-off-by: Ginger <ginger.jzllee@gmail.com>
----
- drivers/usb/misc/yurex.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+This can be useful in cases where network tooling is not available or just
+for existing applications like 'dd' and 'cat' that do not support sockets.
 
-diff --git a/drivers/usb/misc/yurex.c b/drivers/usb/misc/yurex.c
-index 6d03e689850a..b5484ab77e91 100644
---- a/drivers/usb/misc/yurex.c
-+++ b/drivers/usb/misc/yurex.c
-@@ -310,11 +310,12 @@ static void yurex_disconnect(struct
-usb_interface *interface)
-    int minor = interface->minor;
+thunderbolt_stream can be used at the same time with thunderbolt_net so
+they don't rule each other our. 
 
-    dev = usb_get_intfdata(interface);
--   usb_set_intfdata(interface, NULL);
+thunderbolt_stream allows multiple streams to be created, for example one
+stream for control traffic and another for data (there are some limitations
+in the core USB4/Thunderbolt driver due to dedicated flow control scheme
+but this is likely change in the future). Each stream is bi-directional
+tunnel over the fabric.
 
-    /* give back our minor */
-    usb_deregister_dev(interface, &yurex_class);
+There are a couple of additional usage examples in the last patch that adds
+the driver itself.
 
-+   usb_set_intfdata(interface, NULL);
-+
-    /* prevent more I/O from starting */
-    usb_poison_urb(dev->urb);
-    usb_poison_urb(dev->cntl_urb);
---
-2.39.5
+This applies on top of my XDomain improvements series [1].
+
+[1] https://lore.kernel.org/linux-usb/20260427081109.2337731-1-mika.westerberg@linux.intel.com/
+
+Mika Westerberg (9):
+  thunderbolt: Add tb_property_merge_dir()
+  thunderbolt: Add KUnit test for tb_property_merge_dir()
+  thunderbolt: Allow service drivers to specify their own properties
+  thunderbolt / net: Move ring_frame_size() to thunderbolt.h
+  thunderbolt / net: Let the service drivers configure interrupt throttling
+  thunderbolt: Add helper to figure size of the ring
+  thunderbolt: Add tb_ring_flush()
+  thunderbolt: Add support for ConfigFS
+  thunderbolt: Add support for USB4STREAM
+
+ .../ABI/testing/configfs-thunderbolt_stream   |   77 +
+ drivers/net/thunderbolt/main.c                |   23 +-
+ drivers/thunderbolt/Kconfig                   |   15 +
+ drivers/thunderbolt/Makefile                  |    4 +
+ drivers/thunderbolt/configfs.c                |   61 +
+ drivers/thunderbolt/dma_test.c                |    5 +
+ drivers/thunderbolt/domain.c                  |    2 +
+ drivers/thunderbolt/nhi.c                     |   86 +-
+ drivers/thunderbolt/nhi_regs.h                |    3 +-
+ drivers/thunderbolt/property.c                |  154 +-
+ drivers/thunderbolt/stream.c                  | 1693 +++++++++++++++++
+ drivers/thunderbolt/tb.h                      |    8 +
+ drivers/thunderbolt/test.c                    |   82 +
+ drivers/thunderbolt/xdomain.c                 |   95 +-
+ include/linux/thunderbolt.h                   |   44 +-
+ 15 files changed, 2257 insertions(+), 95 deletions(-)
+ create mode 100644 Documentation/ABI/testing/configfs-thunderbolt_stream
+ create mode 100644 drivers/thunderbolt/configfs.c
+ create mode 100644 drivers/thunderbolt/stream.c
+
+-- 
+2.50.1
+
 
