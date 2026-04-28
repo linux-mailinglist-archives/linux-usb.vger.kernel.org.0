@@ -1,158 +1,185 @@
-Return-Path: <linux-usb+bounces-36620-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36621-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kNmeGm+g8GkRWQEAu9opvQ
-	(envelope-from <linux-usb+bounces-36620-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 13:56:31 +0200
+	id AJOXAiaf8GkRWQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36621-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 13:51:02 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D680E4845DD
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 13:56:30 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57CC64843C7
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 13:51:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D56C83088926
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 11:28:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2B9EC31DC59A
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 11:32:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1BE33FD158;
-	Tue, 28 Apr 2026 11:21:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B463AF656;
+	Tue, 28 Apr 2026 11:32:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="E/MBVi/y";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="nTBoLXJt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D44FE3E639B;
-	Tue, 28 Apr 2026 11:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983973ACA6A
+	for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 11:32:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777375287; cv=none; b=rsLv5ksg+pZccawDdmqPDJtrde+qLU4mI+UjlpegBcAMMWRV+pcpyRQdnHPCcQR4zxv9unPXU9QkuPaQjm7B8GoMYylO7ATav9HNfdZZLS3ZV2quCKKN36PvemkmRjlawVOQjlR6tHRs3rWhre5HFI2q9XrRRcFu0VMUyBaPZMw=
+	t=1777375942; cv=none; b=KNm56lYhd36qEfjGhsjjADHB4u4hc3Ls6Y3s13zN9dVRaVulKzieUXI9iRHMx88Nrr5aFvpdod+j9AHSdgs92hgMf0u+PN1CXMaeLl1YJarmDf+oeg9VZVhiJ+cCZXF/s0C1YfpVHEhjWTz1abY5xSN+Y4EZb10RDIC4YtTvdx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777375287; c=relaxed/simple;
-	bh=5DkX/L9B3d/cRrLHprvgAdk9AfWqqBG9xKTQLL8w4bk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ifTVo8zGagZ/MdjS/wuYsnorXKSpevC5JrwBnXijCGbLDkP4n0uhlrMnDm5YbFML5zbc/ed6U1ZpueaIm5J+BoI9Q68K4BirJZ1cHKBEdd09J0VmkeuTJuvVmAyjq1vl2EUPTwOpOaF/9cyCGZ3sr9duv3ZqHA/bN7RVjE4yzSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
-Received: from gate.crashing.org (localhost [127.0.0.1])
-	by gate.crashing.org (8.18.1/8.18.1/Debian-2) with ESMTP id 63SBKIxF1057213;
-	Tue, 28 Apr 2026 06:20:18 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.18.1/8.18.1/Submit) id 63SBKHXo1057211;
-	Tue, 28 Apr 2026 06:20:17 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Tue, 28 Apr 2026 06:20:17 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Yury Norov <ynorov@nvidia.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Laight <david.laight.linux@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>, linux-alpha@vger.kernel.org,
-        Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        dmaengine@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-fsi@lists.ozlabs.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-fsdevel@vger.kernel.org,
-        ocfs2-devel@lists.linux.dev, bpf@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-x25@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        linux-sound@vger.kernel.org, sound-open-firmware@alsa-project.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH v1 7/9] x86: Add unsafe_copy_from_user()
-Message-ID: <afCX8WlnEFUei1y6@gate>
-References: <cover.1777306795.git.chleroy@kernel.org>
- <0ee46bb228d97163fbdc14f2a7c52b93d8bc34ce.1777306795.git.chleroy@kernel.org>
- <ae-j2_QirCySZD02@yury>
- <63a4d0f6-0eb3-48cd-9f98-bf7b223b2606@kernel.org>
- <ae-2yLWSGnfeTvh1@yury>
- <CAHk-=wgPrLy0FR3sEWBYQuNAac1axDASYMnTuPuxEU0WytzL7w@mail.gmail.com>
- <ae_jeJLlVWjJ4sOY@yury>
+	s=arc-20240116; t=1777375942; c=relaxed/simple;
+	bh=Xse++0WKOGWzNQ0Un0Vrv/SV8r+mXu51xVq8Pp5x+Us=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IYdaczxKeAgLVcNQJKnLaz5uE9DO8L/Eux7t61f9ZMVQ0bFy1vTO6cyoOkivD9h72/8+1JQHWlLBwgWwSOSXtb1GI/Hh9cjRLvgh7hhjqD3ChULQAZAqCrqZrFeoQBP6lvEP+h9RXrf0ZEmoTctqOyS2/7cDYj83wDbgSN86q7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=E/MBVi/y; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=nTBoLXJt; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777375939;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EJ1bmtlTWfKzrgrTM5W7n4oGO4POSVvJD8HcAKOOifw=;
+	b=E/MBVi/yUOAal1BoGLC5BMFrWBDJNwNJBoqSYvr9tefcwWY+4IBik/m2gvslf9OMaKxftl
+	XHdM5Hk85lN7YVDwkmMnaENUgfqHt3Y0mnpV/d3b7NHhW1z7lqwsKEDEESaU2XI4p9BBHC
+	qMo8hqBQic8nb42YnSJZBHxC7oZNnx0=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-353-IuY5RTpAMQmqYfGyDgVuvw-1; Tue, 28 Apr 2026 07:32:17 -0400
+X-MC-Unique: IuY5RTpAMQmqYfGyDgVuvw-1
+X-Mimecast-MFC-AGG-ID: IuY5RTpAMQmqYfGyDgVuvw_1777375937
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8ebc7ea2402so1779258085a.0
+        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 04:32:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1777375937; x=1777980737; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EJ1bmtlTWfKzrgrTM5W7n4oGO4POSVvJD8HcAKOOifw=;
+        b=nTBoLXJtnY4wV2F1wf6BphPGvUJOSEibddCUUcnv89I3mtqfhUYEkUppwVslYqB1kU
+         m6+ePP2sIwpbxBE2GM43tDl8pVPKIiw82+EV32SCFZ3pXErlQspaWyr+z3/TrJvm1oOa
+         N2UFGcEzqduyyeyxMc0lnJETpFtSu0/RTZCtSgx36hzguhDRIaXpQdNDG2d+Kui8+kEx
+         8awIqyaT5xErvtTPEg031SLSb5JwrJV/PQDta7tTlxPY7Yd45I+WZU1Z72N1epUhGf+t
+         Pc+YSa45xFSzbV88eYtRjgHzOpWznvmwaKVEUiI34+gNLlhd/o8TKKmv2bZLqk32fH4b
+         S1CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777375937; x=1777980737;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EJ1bmtlTWfKzrgrTM5W7n4oGO4POSVvJD8HcAKOOifw=;
+        b=f5jgshYaW8ict9WOHPxuVPngibgBrWu5DBX3VpQYMqATJiIBVWb0f/3Xax2tg3NleI
+         PkivLQpZJtI5oLJJa7wRlvMeXbmNTtmV/qWBwRXsXMAeoaL/3fmwsMj98xArDxGUy24T
+         NzUQk+fqmdUUQRSaZzBUidG+LbUMGGXsKYPgmcvPuX6kAzkJX2UnSIXFHDjdqEvWltSD
+         KBQhP04y+ytqih3DtiAmzpDjIlnPpvcQVBLwzJgQdoYt7W0aB8cMaUNjTk0ZlYN2SPG+
+         aU8fRfkn69AD836hxd2p7n7/eddBFZWzw7t8ewKGmwEKOm2z7lKwkpYsiGEk5NjgAMy6
+         8jeg==
+X-Forwarded-Encrypted: i=1; AFNElJ85DvsffVGccw+p3Eb5YnJ0l+zjj2R2ZZgPEdkiNcTuvT4KTcj6ViS73w4cz+viMByAUKugWm+upWk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaFg7Qm0ONLVb1WTcZYJtWpRoFxRgOJ0+fvtg3YrOZrnU82pLI
+	RwCAbeOqh5k+lK+l+iFmLOjHUlDH+pi1uPUBR1fRdOXbhKxM5and3sefSEX9KXAIw7ZqJ86oVi+
+	nsBTH/BoE3FtGJ0I0ySm+bXjdo8CFCAxzR31l6ATg6/d4NZ2RO8R86vSS5Kb40g==
+X-Gm-Gg: AeBDietDSDqtS5k2XoLm/NA+cKSZEI9YNkiQgBWrT53IaYZaLxNpqgfZpztqeLsBBl/
+	wsHWktDgqBsrVT2UCXvpOXdb7b4HKwWfm+gNQF1+/UWztFaL2OPGIrY7VNVZ+4gAggRkKEEeLOQ
+	ktvALVuacgwj0sBqjmbRo+OY3DQWuPrk0RXPwPLJKlrHQr5+V9S0PJb3ZUy6nCE1K+3lo90GNvw
+	MLlcl1l+QDZ/lkXgjvMg8VaQ1Ej8Kcrm2fsb94GDYRhCl40EAvzgllDaE1AZ9sGdlLP6ZfzZGHY
+	Hua19t8uUuLzByooKMmWsP296zX5TTMmLefvGtTARqtUtz6n82bA0Yacvx3svAWzG2Rf4d3tfUc
+	A755Y87Y5yXmkzwCQ6btxv3N+HELZP3/gFlSHEEFzdGhBvzlNbQg=
+X-Received: by 2002:a05:620a:7106:b0:8eb:610d:a56d with SMTP id af79cd13be357-8f7d7d17fbcmr325927885a.27.1777375936738;
+        Tue, 28 Apr 2026 04:32:16 -0700 (PDT)
+X-Received: by 2002:a05:620a:7106:b0:8eb:610d:a56d with SMTP id af79cd13be357-8f7d7d17fbcmr325920385a.27.1777375936033;
+        Tue, 28 Apr 2026 04:32:16 -0700 (PDT)
+Received: from [192.168.88.32] ([216.128.9.114])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8f7c19ae61bsm171070385a.0.2026.04.28.04.32.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Apr 2026 04:32:15 -0700 (PDT)
+Message-ID: <f52c81bd-aae3-4d23-ae55-a0b3dd075f4d@redhat.com>
+Date: Tue, 28 Apr 2026 13:32:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ae_jeJLlVWjJ4sOY@yury>
-X-Rspamd-Queue-Id: D680E4845DD
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v2] net: usb: rtl8150: free skb on usb_submit_urb()
+ failure in xmit
+To: Morduan Zang <zhangdandan@uniontech.com>, Jakub Kicinski
+ <kuba@kernel.org>, Petko Manolov <petkan@nucleusys.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
+References: <678BC10BB9E39322+20260421111025.15833-1-zhangdandan@uniontech.com>
+ <E7D3E1C013C5A859+20260424015517.9574-1-zhangdandan@uniontech.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <E7D3E1C013C5A859+20260424015517.9574-1-zhangdandan@uniontech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 57CC64843C7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.54 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linux-foundation.org,kernel.org,gmail.com,linutronix.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org,lists.freedesktop.org,lists.linux.dev,lists.xenproject.org,googlegroups.com,kvack.org,alsa-project.org];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36620-lists,linux-usb=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[crashing.org];
-	RCVD_TLS_LAST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[segher@kernel.crashing.org,linux-usb@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	HAS_XAW(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[redhat.com:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	NEURAL_HAM(-0.00)[-0.877];
-	RCPT_COUNT_GT_50(0.00)[50];
-	TAGGED_RCPT(0.00)[linux-usb];
-	R_DKIM_NA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,nvidia.com:email]
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36621-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pabeni@redhat.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,lunn.ch:email,uniontech.com:email]
 
-Hi!
-
-On Mon, Apr 27, 2026 at 06:30:16PM -0400, Yury Norov wrote:
-> On Mon, Apr 27, 2026 at 02:52:05PM -0700, Linus Torvalds wrote:
-> > On Mon, 27 Apr 2026 at 12:19, Yury Norov <ynorov@nvidia.com> wrote:
-> > >
-> > > This is what Linus said when added x86 implementation for copy_from_user()
-> > > in c512c69187197:
-> > 
-> > Note that some things have happily changed in the six+ years since...
-> > 
-> > >   That's partly because we have no current users of it, but also partly
-> > >   because the copy_from_user() case is slightly different and cannot
-> > >   efficiently be implemented in terms of a unsafe_get_user() loop (because
-> > >   gcc can't do asm goto with outputs).
-> > 
-> > now everybody can do asm goto with outputs.
-> > 
-> > Yes, it's disabled on older versions, so it's not *always* available,
-> > but all modern versions do it. And if you care about performance, you
-> > won't be using an old compiler.
+On 4/24/26 3:55 AM, Morduan Zang wrote:
+> When rtl8150_start_xmit() fails to submit the tx URB, the URB is never
+> handed to the USB core and write_bulk_callback() will not run.  The
+> driver returns NETDEV_TX_OK, which tells the networking stack that the
+> skb has been consumed, but nothing actually frees the skb on this
+> error path:
 > 
-> The minimal GCC version is 8.1, and asm goto with outputs is supported
-> since GCC-11. That would brake the build, if we just switch to using it
-> without "CC_IS_GCC && (GCC_VERSION >= 110100)" guard.
+>   dev->tx_skb = skb;
+>   ...
+>   if ((res = usb_submit_urb(dev->tx_urb, GFP_ATOMIC))) {
+>           ...
+>           /* no kfree_skb here */
+>   }
+>   return NETDEV_TX_OK;
 > 
-> Is it worth to maintain 2 version of the function? I don't know...
+> This leaks the skb on every submit failure and also leaves dev->tx_skb
+> pointing at memory that the driver itself may later free, which is
+> fragile.
+> 
+> Free the skb with dev_kfree_skb_any() in the error path and clear
+> dev->tx_skb so no stale pointer is left behind.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> Signed-off-by: Morduan Zang <zhangdandan@uniontech.com>
 
-GCC 11 was released five years and a day ago.  The last GCC 11 release
-(that of 11.5) is not even two years ago though (but there will be no
-more!)
+Applied (by Jakub, AFAICS the bot did not send out the notification for
+some reason), thanks!
 
-So it would be not conservative at all to require GCC 11 as minimum now,
-some people might even call it a bit aggressive.  But in a year (or
-maybe two) the lay of the land will be rather different.
+/P
 
-
-Segher
 
