@@ -1,49 +1,49 @@
-Return-Path: <linux-usb+bounces-36617-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36618-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CGfOJpKS8GlvVAEAu9opvQ
-	(envelope-from <linux-usb+bounces-36617-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:57:22 +0200
+	id IEbzMumS8GlvVAEAu9opvQ
+	(envelope-from <linux-usb+bounces-36618-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:58:49 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09C3F4831AD
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D0B5483212
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 12:58:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E5D87309741D
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 10:52:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CDC6D30B0C41
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 10:53:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E97FD423A7F;
-	Tue, 28 Apr 2026 10:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC3B1423A83;
+	Tue, 28 Apr 2026 10:43:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eCniSFWe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UWWdGQUp"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A10A3F20E2;
-	Tue, 28 Apr 2026 10:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E303F7A8A;
+	Tue, 28 Apr 2026 10:43:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777372982; cv=none; b=SE/dVi3D3uIdOrxrnQcOdjKQDZ2EkvFI2UIZeRZsFweF4bGlpdVhmsIrnt67+vEcexU2P5ANnPzb+QJNjKsN1plc6rWa6G9caYrirHOjHMw14huQYo9PQPio5IY4iCECkJpYJ/oAi0jV9HAfuaiaHPjYFlTdw3Aw4+cDpZKL34M=
+	t=1777372985; cv=none; b=UVgOPDjQwzI115SJfduqzQS+myqKNTotM/X4WG+Fz+JyOrvsNPJjs8C2fuiaRAztna9oQ7gqTGoNIZpE9IgEjvkOzy6ts5VxIwbHAXQ1Ea+x7YtKzTLa5PnNiW4bP04AhSblttPSwnH3UTEBioJU7KbAeFTEdpNOW5kuajyWnQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777372982; c=relaxed/simple;
-	bh=oxwZ+df9sdj9d8pZqmxa0D9SpL3piJsAkSAjfw5krLE=;
+	s=arc-20240116; t=1777372985; c=relaxed/simple;
+	bh=IXqp27RY7rXo8SpZ9XP8azILoF0q9oEW5FuTsim8Myc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Y4GA66hKwZY8Dwmb2kTASHKbDrgVzO6LkjuqntJDhYbq2t7Lk7w7vMDefhcLvIGZv/NdRadDifR1zAoucSwSPjhfKEynqStoASCM/6Lzs+qAQnDFKVJnx71/cV7WZ84KUOYgyYOVGFjkaGZHwxFRGO41owX5+KtM6sQiu/6jo4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eCniSFWe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A61C2BCAF;
-	Tue, 28 Apr 2026 10:43:00 +0000 (UTC)
+	 MIME-Version:Content-Type; b=ujy+npO3h19VV3x9MaNZ1+L5eDC2EwObfM3r/9q9LKcEnXRBp3IiizejRbjGVB9UXT8ULA/JcDFJ0Vq7rRc90P1WmsjHvYgyrezLr+in2GgRaYQbXaT0cfn7FSnY+cjKjAPrGIAArqmCnx33E6rfq9x0IQSFFGlTHj9+hcTxc1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UWWdGQUp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01C41C2BCB7;
+	Tue, 28 Apr 2026 10:43:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777372981;
-	bh=oxwZ+df9sdj9d8pZqmxa0D9SpL3piJsAkSAjfw5krLE=;
+	s=k20201202; t=1777372985;
+	bh=IXqp27RY7rXo8SpZ9XP8azILoF0q9oEW5FuTsim8Myc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eCniSFWeg71Sju8BiB48e4qO6uz7KBCa3Bw/jjW1QDiMiOSBS8UBmvtafhK5GIjvP
-	 VXOrWbDy0LEtEfTvBhOrTnqjk+4Db6fjRxI8T4BAcIA/l7bqS8wWvjUw1SWet23gy7
-	 3lLyg6oLP5X3SADgbBoHsgYyRQVq/2ctKdq8WBRlbbAVqKtj/pms5D9KxqGV3F+eZw
-	 axc51Rvbb10Rb9cyFiOppuXx2J9ACCPcwZFh46hLI6DImoGpF7iFLJaYZcfoZfjyBv
-	 eaaTmj3T1Cm4iftrEzXhoUnJBZRMK2Xa5n/7lklfSM05Cta1tn6HEuJilbbYnurUc1
-	 R/a1xfdSoT2qQ==
+	b=UWWdGQUp8tcconSH6O8ZDjoTSn/bO4PyxfRLEFjBpPJoAvRGwXCFLzFe1HouoVyEc
+	 Iel1rRlck5P4WUeEfYfsh+cJcdP+5SgM3li9ESrFfejYszi/tefIq2lLJCukh3Hay6
+	 6bRDhI4l4oRo/s/kgbUoKRen03iPy9mEBBuQsaaYlXKBd7WUDscdDjpD5l8cZI70cQ
+	 VfIRSvgRLV0VaV+zEAODkHDhAoSuQLhUi8GTU1T0ve3I80lWotZ+IsLF2+GZ740OIF
+	 vnyUlpulds6U5DHWaPMqexhTRbF43wAuc4bvu4+zslTOcqXh/emCleZwK+gssVFHba
+	 74xAF2gqZNZEw==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -54,9 +54,9 @@ Cc: Kelvin Mbogo <addcontent08@gmail.com>,
 	shuah@kernel.org,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 7.0-5.10] usb: usbip: fix integer overflow in usbip_recv_iso()
-Date: Tue, 28 Apr 2026 06:41:12 -0400
-Message-ID: <20260428104133.2858589-61-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 7.0-5.10] usb: usbip: validate iso frame actual_length in usbip_recv_iso()
+Date: Tue, 28 Apr 2026 06:41:14 -0400
+Message-ID: <20260428104133.2858589-63-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260428104133.2858589-1-sashal@kernel.org>
 References: <20260428104133.2858589-1-sashal@kernel.org>
@@ -71,7 +71,7 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 7.0.2
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 09C3F4831AD
+X-Rspamd-Queue-Id: 4D0B5483212
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.34 / 15.00];
@@ -87,7 +87,7 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	RCVD_COUNT_THREE(0.00)[4];
 	FREEMAIL_CC(0.00)[gmail.com,linuxfoundation.org,kernel.org,vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36617-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-36618-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
@@ -101,370 +101,475 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,lo:url,msgid.link:url]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linuxfoundation.org:email,msgid.link:url]
 
 From: Kelvin Mbogo <addcontent08@gmail.com>
 
-[ Upstream commit 1897852293faca4c2be51e0a19f739622f771623 ]
+[ Upstream commit 591c1d972d8f19862ecd7279c7ef4df48b0a9b33 ]
 
-usbip_recv_iso() computes the iso descriptor buffer size as:
+usbip_recv_iso() sums each frame's actual_length into an int
+accumulator without checking the individual values first:
 
-    int size = np * sizeof(*iso);
+    total_length += urb->iso_frame_desc[i].actual_length;
 
-where np comes straight from the wire (urb->number_of_packets, set by
-usbip_pack_ret_submit() before we get here).  With np = 0x10000001 and
-sizeof(*iso) == 16 the product is 0x100000010 which truncates to 16 on
-a 32-bit int.  kzalloc(16) succeeds but the following receive loop
-writes np * 16 bytes into it - game over.
+A malicious server can send actual_length = 0xFFFFFFFC for one frame
+and a small value for the other, making the signed sum wrap around to
+match urb->actual_length.  The sanity check passes, and usbip_pad_iso()
+later computes a negative actualoffset, feeding it to memmove() as a
+source pointer - reads before the allocation, leaked to userspace via
+USBDEVFS_REAPURB.
 
-USBIP_MAX_ISO_PACKETS (1024) already exists in usbip_common.h for the
-submit path but was never enforced on the receive side.
-
-Clamp np to [1, USBIP_MAX_ISO_PACKETS] and switch to kcalloc() so
-the allocator itself can catch overflows in the future.  Fold the
-existing np == 0 early return into the new bounds check.
-
-usbip_pack_ret_submit() already copied the bogus np into
-urb->number_of_packets before we run, so just returning -EPROTO is
-not enough - processcompl() in the HCD will still iterate that many
-iso_frame_desc entries when it completes the failed URB.  Zero out
-urb->number_of_packets before bailing to prevent that secondary crash
-(confirmed on 6.12.0, processcompl+0x63 with CR2 in unmapped slab).
+Reject any frame whose actual_length exceeds transfer_buffer_length
+(one frame can't carry more data than the whole buffer), and widen the
+accumulator to u32 so that many moderately-large frames can't wrap it
+either.
 
 Signed-off-by: Kelvin Mbogo <addcontent08@gmail.com>
-Link: https://patch.msgid.link/20260325103640.8090-1-addcontent08@gmail.com
+Link: https://patch.msgid.link/20260325103640.8090-2-addcontent08@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-Based on my investigation, I now have enough information to complete the
-analysis.
+I have enough information to make an informed decision. Let me now
+compile the comprehensive analysis.
 
 ## Phase 1: Commit Message Forensics
 
-**Step 1.1 - Subject line parsing:**
-Record: Subsystem `usb: usbip:`, action verb `fix`, summary: "fix
-integer overflow in usbip_recv_iso()"
+**Step 1.1 - Subject Line**
+- Subsystem: `usb: usbip` (USB/IP driver)
+- Action verb: `validate` (strong bug-fix indicator, even without "fix")
+- Record: `[usb/usbip] [validate/harden] ISO frame actual_length in
+  usbip_recv_iso() to prevent integer wraparound and downstream OOB
+  read`
 
-**Step 1.2 - Tags parsed:**
-Record:
+**Step 1.2 - Tags Present**
 - `Signed-off-by: Kelvin Mbogo` (author)
 - `Link:
-  https://patch.msgid.link/20260325103640.8090-1-addcontent08@gmail.com`
-- `Signed-off-by: Greg Kroah-Hartman` (subsystem maintainer applied it)
-- No Fixes: tag, no explicit Cc: stable (but mbox shows v2 "Drop
-  security@kernel.org CC" — the author originally reported this as a
-  security issue)
+  https://patch.msgid.link/20260325103640.8090-2-addcontent08@gmail.com`
+  (patch 2 of a series)
+- `Signed-off-by: Greg Kroah-Hartman` (USB maintainer – strong trust
+  signal)
+- No `Fixes:` tag (expected for pre-git-era code in staging origin)
+- No `Cc: stable` (expected; that's why it's under review)
+- Record: Greg KH SOB confirms maintainer applied it; Link shows this is
+  patch "-2" of the series.
 
-**Step 1.3 - Body analysis:**
-Record: Integer overflow in `size = np * sizeof(*iso)` when `np` (wire-
-supplied `urb->number_of_packets`) is large enough. Example: `np =
-0x10000001 * 16 = 0x100000010` truncates to 16 on 32-bit int. Small
-`kzalloc(16)` is followed by a receive loop that writes `np * 16` bytes
-= massive heap overflow. Also mentions secondary crash reproduced on
-6.12.0 at `processcompl+0x63`.
+**Step 1.3 - Body Analysis**
+- Bug mechanism: `total_length` is `int` (signed) accumulator; per-frame
+  `actual_length` is from the wire (attacker-controlled `unsigned int`)
+- Exploit: server sends `actual_length = 0xFFFFFFFC` + small value;
+  signed sum wraps to match `urb->actual_length`, passing the sanity
+  check
+- Downstream impact: `usbip_pad_iso()` computes negative `actualoffset`
+  → `memmove()` reads before allocation → data leaked to userspace via
+  `USBDEVFS_REAPURB`
+- Fix approach: (1) reject any frame whose `actual_length >
+  transfer_buffer_length`; (2) widen accumulator from `int` to `u32`
+- Record: Concrete, reproducible kernel info-leak from malicious USBIP
+  server; commit body explains both root cause and fix clearly.
 
-**Step 1.4 - Hidden bug fix detection:**
-Record: Not hidden — explicitly labeled "fix integer overflow". Real
-security bug (heap overflow).
+**Step 1.4 - Hidden Fix Detection**
+- "validate" = adds missing input validation = bug fix
+- Record: Not hidden - this is an explicit security hardening fix.
 
 ## Phase 2: Diff Analysis
 
-**Step 2.1 - Inventory:**
-Record: 1 file (`drivers/usb/usbip/usbip_common.c`), +15/-5 lines,
-single function `usbip_recv_iso()`. Classification: surgical single-file
-fix.
+**Step 2.1 - Inventory**
+- Single file: `drivers/usb/usbip/usbip_common.c`
+- +12 / -3 (15 changed lines total)
+- Single function modified: `usbip_recv_iso()`
+- Classification: small, single-file surgical fix
+- Record: Minimal scope; textbook stable-appropriate patch size.
 
-**Step 2.2 - Code flow change:**
-Record: Before: `size = np * sizeof(*iso)` computed before any
-validation, with only `np == 0` check. After: clamp `np` to `[1,
-USBIP_MAX_ISO_PACKETS]` range, zero `urb->number_of_packets` on error
-(prevents processcompl from iterating OOB in `iso_frame_desc[]`), switch
-`kzalloc` to `kcalloc` for overflow-safe allocation.
+**Step 2.2 - Code-Flow Change**
+- Before: `int total_length = 0; ... total_length +=
+  urb->iso_frame_desc[i].actual_length;` then `if (total_length !=
+  urb->actual_length)`
+- After: `u32 total_length = 0;` + per-iteration `if
+  (iso_frame_desc[i].actual_length > transfer_buffer_length) return
+  -EPROTO;` + cast comparison to u32
+- Affected path: RET_SUBMIT handling in vhci-hcd receive path (network-
+  sourced data)
+- Record: Hardens the receive path for untrusted network input.
 
-**Step 2.3 - Bug mechanism:**
-Record: Integer overflow in multiplication → undersized heap allocation
-→ OOB heap write in receive loop (category: buffer overflow / memory
-safety). Also fixes cascading NULL deref in `processcompl()` via
-`urb->number_of_packets` reset.
+**Step 2.3 - Bug Mechanism Category**
+- (d) Memory safety + integer overflow: `u32` widening prevents signed
+  accumulator wrap; bounds check prevents any single-frame value from
+  being > buffer capacity
+- Secondary: (g) Logic correctness — format specifier `%d` → `%u` and
+  explicit `(u32)` cast make the comparison semantically correct
+- Record: Classic "validate untrusted input from the wire" pattern —
+  same class as the 2016 commit `b348d7dddb6c4` in the same file.
 
-**Step 2.4 - Fix quality:**
-Record: Fix is obviously correct. Uses already-existing
-`USBIP_MAX_ISO_PACKETS` (1024) from `usbip_common.h` that was already
-enforced on the submit path in `stub_rx.c:381`. Mirrors existing
-validation pattern. No regression risk: bounds check is strictly tighter
-than kzalloc behavior.
+**Step 2.4 - Fix Quality**
+- Obviously correct: bounds check is simple (`actual_length >
+  transfer_buffer_length → reject`), u32 widening cannot introduce new
+  overflow behavior in a non-negative accumulation
+- No regression risk: rejects only genuinely malformed input; legitimate
+  clients never produce frames larger than the whole buffer
+- Record: High-quality, minimal, safe fix.
 
 ## Phase 3: Git History Investigation
 
-**Step 3.1 - Blame:**
-Record: The buggy code (`int size = np * sizeof(*iso)`) has been in
-`usbip_recv_iso()` since the function was first introduced in commit
-`05a1f28e879e3` ("Staging: USB/IP: add common functions needed",
-2008-07-09). The bug has existed for ~18 years.
+**Step 3.1 - Blame**
+- `usbip_recv_iso()` was introduced by `05a1f28e879e3` ("Staging:
+  USB/IP: add common functions needed", July 2008)
+- Record: Vulnerable code present since 2.6.28 — affects every single
+  active stable tree.
 
-**Step 3.2 - Follow Fixes: tag:**
-Record: No Fixes: tag in the commit (the bug predates git history
-cleanup). Confirmed original buggy introduction in 2008.
+**Step 3.2 - Fixes: Tag**
+- No Fixes: tag present; the buggy pattern dates to the original 2008
+  import (pre-git staging era for USBIP)
+- Record: N/A — but effectively "Fixes: 05a1f28e879e3" which predates
+  all stable branches.
 
-**Step 3.3 - File history:**
-Record: The follow-up series has three related fixes (`1897852293fac`,
-`591c1d972d8f1`, `74a2287209a85`) plus a later independent fix
-`2ab833a16a825` ("usbip: validate number_of_packets in
-usbip_pack_ret_submit()") which carries **explicit `Cc: stable
-<stable@kernel.org>` and `Acked-by: Shuah Khan` (usbip maintainer)**.
-Commit 2ab833a16a825 explicitly references Kelvin Mbogo's series as
-complementary.
+**Step 3.3 - File History**
+Recent commits touching `drivers/usb/usbip/usbip_common.c`:
+- `2ab833a16a825` usbip: validate number_of_packets in
+  usbip_pack_ret_submit() **[has `Cc: stable`]**
+- `74a2287209a85` usb: usbip: fix OOB read/write in usbip_pad_iso()
+  (patch 3/3 of series)
+- `591c1d972d8f1` **← TARGET** (patch 2/3)
+- `1897852293fac` usb: usbip: fix integer overflow in usbip_recv_iso()
+  (patch 1/3)
+- Record: Part of a 3-patch hardening series against malicious USBIP
+  server. Companion patch from Nathan Rebello (`2ab833a16a825`)
+  explicitly has `Cc: stable`, confirming maintainers view this cluster
+  of bugs as stable-worthy.
 
-**Step 3.4 - Author's other commits:**
-Record: Author Kelvin Mbogo submitted a 3-patch security series. Patch
-went through v1→v2 with review from Greg KH (USB maintainer). This
-specific commit is self-contained and standalone.
+**Step 3.4 - Author Context**
+- Kelvin Mbogo: new contributor sending hardening patches; patches
+  vetted by Greg KH with v1→v2 rework
+- Greg KH (USB maintainer) applied all three patches
+- Record: Proper maintainer review chain, v2 addressed review feedback.
 
-**Step 3.5 - Dependencies:**
-Record: Uses `USBIP_MAX_ISO_PACKETS` macro which exists in all stable
-trees (verified in 5.10.y through 6.19.y). No dependencies. Standalone.
+**Step 3.5 - Prerequisite Check**
+- The diff hunks in `591c1d972d8f1` (the target) only touch:
+  1. `int total_length = 0;` → `u32 total_length = 0;`
+  2. Add per-frame actual_length bounds check
+  3. Cast/format the comparison
+- I verified that stable/linux-6.19.y (and all older stable branches)
+  still contain `int total_length = 0;` and the unmodified loop/check —
+  so the patch hunks CAN apply standalone without patch 1/3
+- However, this patch is part of a security cluster; ideally patches
+  1/3, 2/3, 3/3 + Nathan's `2ab833a16a825` all get backported together
+- Record: Patch applies cleanly to stable without dependencies, though
+  full cluster is the complete fix.
 
 ## Phase 4: Mailing List Research
 
-**Step 4.1 - Original discussion (b4 dig):**
-Record:
-- `b4 dig -c 1897852293faca` → found at `https://lore.kernel.org/all/202
-  60325104841.8282-1-addcontent08@gmail.com/`
-- `b4 dig -a` → patch went through v1→v2; v2 is what was applied
-- v2 changelog mentions: "Drop security@kernel.org CC" — proving the
-  author initially reported this through the security channel
+**Step 4.1 - Original Thread (b4 dig)**
+- `b4 dig -c 591c1d972d8f1` found match at `https://lore.kernel.org/all/
+  20260325103640.8090-2-addcontent08@gmail.com/`
+- `b4 dig -a` confirmed series evolution: v1 → v2 (applied version is
+  v2)
+- v2 changes per Kelvin: "Drop Reported-by (author is signer)"
+- Record: v2 is the applied version, v1 received feedback from Greg KH
+  and was refined.
 
-**Step 4.2 - Reviewers:**
-Record: Greg KH (USB maintainer) reviewed and applied; Shuah Khan (usbip
-maintainer) acked the follow-up patch that explicitly mentions this
-series and is marked for stable.
+**Step 4.2 - Reviewers (b4 dig -w)**
+- Originally CC'd: `linux-usb@vger.kernel.org`,
+  `gregkh@linuxfoundation.org`, `skhan@linuxfoundation.org` (USBIP
+  maintainer)
+- Both the USB subsystem maintainer (Greg KH) and the USBIP subsystem
+  maintainer (Shuah Khan) were in loop
+- Record: Proper maintainer review coverage.
 
-**Step 4.3 - Bug report:**
-Record: Multiple independent security researchers have reported related
-usbip vulnerabilities in this area (Kelvin Mbogo, Nathan Rebello,
-Sebastián Alba Vives). Nathan Rebello's patch confirms "KASAN confirmed
-this with kernel 7.0.0-rc5: BUG: KASAN: slab-out-of-bounds in
-usbip_recv_iso+0x46a/0x640, Write of size 4 at addr ffff888106351d40".
-The commit message confirms reproduction on 6.12.0.
+**Step 4.3 - Bug Report**
+- No explicit Reported-by/syzbot on v2 (author is signer)
+- Exploit scenario clearly described in commit message with concrete
+  payload (`0xFFFFFFFC`) and path to userspace via `USBDEVFS_REAPURB`
+- Record: Author-discovered security issue; mechanism is well-documented
+  in commit body.
 
-**Step 4.4 - Related patches:**
-Record: This is patch 1/3 of a series. Patches 2 and 3 have been applied
-as `591c1d972d8f1` and `74a2287209a85`. The companion commit
-`2ab833a16a825` by Nathan Rebello has explicit `Cc: stable`.
+**Step 4.4 - Related Patches**
+- Thread shows all three patches of the series (patches 1/3, 2/3, 3/3 by
+  Kelvin)
+- Companion patch from Nathan Rebello posted in same thread got `Acked-
+  by: Shuah Khan` and `Cc: stable@vger.kernel.org`, submitted separately
+  as `2ab833a16a825`
+- Greg KH explicitly asked Nathan to "submit it separately, on top of
+  that series, to make it easier to review and apply"
+- Record: Maintainers treat this as a coordinated security cluster;
+  Nathan's companion patch explicitly nominated for stable.
 
-**Step 4.5 - Stable list:**
-Record: Sebastián Alba Vives posted this category of issue as
-`[SECURITY]` on the stable mailing list
-(spinics.net/lists/stable/msg928028.html), describing the vulnerability
-as causing "OOB memmove that corrupts kernel heap memory. No
-authentication required."
+**Step 4.5 - Stable List**
+- Not individually discussed on stable list (fix flew under radar of
+  formal stable nomination process for 1/3, 2/3, 3/3 — only the
+  separately-submitted Nathan patch has Cc: stable)
+- Record: This is exactly the kind of fix that SHOULD be caught by
+  autosel review.
 
 ## Phase 5: Code Semantic Analysis
 
-**Step 5.1-5.4 - Callers:**
-Record: `usbip_recv_iso()` is called from:
-- `vhci_rx.c:86` (`vhci_recv_ret_submit` → invoked from the vhci_rx
-  kthread)
-- `stub_rx.c:605`
-- `vudc_rx.c:173`
+**Step 5.1 - Functions Modified**
+- `usbip_recv_iso()` (single function changed)
 
-Call chain from userspace: User creates a VHCI device via sysfs
-(`attach` command), passes a TCP socket, vhci_rx kthread reads PDUs from
-the socket → `vhci_recv_ret_submit()` → `usbip_pack_ret_submit()` copies
-`number_of_packets` from wire → `usbip_recv_iso()` computes size with
-overflow → OOB heap write. **The bug is reachable over the network with
-no authentication.**
+**Step 5.2 - Callers**
+- `drivers/usb/usbip/vhci_rx.c:86` → called from
+  `vhci_recv_ret_submit()` (vhci-hcd RX path, client side)
+- `drivers/usb/usbip/stub_rx.c:605` → stub_rx RET_SUBMIT handling
+  (server side)
+- `drivers/usb/usbip/vudc_rx.c:173` → VUDC receive path
+- Record: Called from every USBIP RET_SUBMIT receive path. Critical path
+  for any USBIP user.
 
-**Step 5.5 - Similar patterns:**
-Record: `stub_rx.c:379-386` already validates `number_of_packets`
-against `USBIP_MAX_ISO_PACKETS` on the CMD_SUBMIT path. This commit
-applies the symmetric validation that was missing on the RET_SUBMIT
-path.
+**Step 5.3 - Callees**
+- `usbip_pack_iso()` — deserialize ISO frame descriptor
+- `usbip_iso_packet_correct_endian()` — byte-order conversion
+- `usbip_recv()` — TCP socket recv
+- Record: Pure data-processing function for wire-format data.
+
+**Step 5.4 - Reachability**
+- Call chain: user runs `usbip attach` (CAP_SYS_ADMIN) → vhci-hcd
+  connects to USBIP server → kernel RX thread `vhci_rx_loop` →
+  `vhci_recv_ret_submit` → `usbip_recv_iso` → on return, `usbip_pad_iso`
+  → memmove into user-readable buffer → userspace `USBDEVFS_REAPURB`
+  reads kernel memory
+- Record: Directly reachable from the network when connected to a
+  malicious USBIP server — all the leaked data then reaches userspace.
+
+**Step 5.5 - Similar Patterns**
+- `usbip_recv_xbuff()` already validates `size >
+  urb->transfer_buffer_length` (from commit `b348d7dddb6c4`, 2016) —
+  this patch applies the same defensive pattern to ISO frames
+- Record: Patch extends an established validation pattern already
+  accepted in the same file.
 
 ## Phase 6: Cross-Referencing Stable Trees
 
-**Step 6.1 - Code exists in stable:**
-Record: Verified identical buggy code in every stable tree:
-`linux-5.10.y`, `linux-5.15.y`, `linux-6.1.y`, `linux-6.6.y`,
-`linux-6.12.y`, `linux-6.18.y`, `linux-6.19.y`. Bug has been present
-since staging era (2008).
+**Step 6.1 - Vulnerable Code in Stable**
+- Verified via `git show
+  stable/linux-6.19.y:drivers/usb/usbip/usbip_common.c` that the
+  unpatched vulnerable code (`int total_length`, no per-frame bounds
+  check) is present
+- Code unchanged since 2008 staging import → present in 5.10.y, 5.15.y,
+  6.1.y, 6.6.y, 6.12.y, 6.17.y (if active), 6.18.y, 6.19.y
+- Record: All active stable trees contain the bug.
 
-**Step 6.2 - Backport complications:**
-Record: `git apply --check --3way` confirms patch applies cleanly to
-current tree. Since all stable branches have identical code, the patch
-will apply cleanly with no conflicts.
+**Step 6.2 - Backport Complications**
+- None of prerequisite patch 1/3 (`1897852293fac`) or companion 3/3
+  (`74a2287209a85`) is in any stable tree yet
+- The specific hunks of this patch do not depend on 1/3 — they modify
+  `int total_length` which exists in all stable trees
+- Expected: clean apply
+- Record: Should apply cleanly to all stable branches; the full security
+  benefit requires also backporting 1/3 and 3/3.
 
-**Step 6.3 - Related fixes in stable:**
-Record: No related fix already in stable. `USBIP_MAX_ISO_PACKETS` exists
-in all stable trees (1024) so the fix uses an already-present constant.
+**Step 6.3 - Related Fixes in Stable**
+- None yet — this entire USBIP security cluster is fresh (March-April
+  2026)
+- Record: No conflicting/duplicate fixes in stable.
 
 ## Phase 7: Subsystem Context
 
-**Step 7.1 - Subsystem:**
-Record: `drivers/usb/usbip/` — USB/IP network-attached USB. Criticality:
-IMPORTANT (network-reachable code path, security-sensitive). Used by
-users with USB-over-IP functionality; enabled in many distros.
+**Step 7.1 - Criticality**
+- `drivers/usb/usbip/` = USB/IP driver (used in VM environments, remote
+  USB access, Android development, CI with USB test devices)
+- Criticality: IMPORTANT (affects users who use USB/IP; not CORE but not
+  obscure)
+- Record: IMPORTANT criticality — specific user population but real
+  attack surface.
 
-**Step 7.2 - Activity:**
-Record: Actively maintained; multiple security fixes in 2026 (this
-series plus independent Nathan Rebello and Sebastián Alba Vives
-contributions).
+**Step 7.2 - Activity**
+- USBIP has periodic maintenance with multiple historical security fixes
+  (race conditions, shift OOB, buffer validation); active subsystem
+- Record: Maintained subsystem with history of similar stable-worthy
+  hardening patches.
 
-## Phase 8: Impact and Risk Assessment
+## Phase 8: Impact & Risk
 
-**Step 8.1 - Who is affected:**
-Record: Any user who runs vhci-hcd (USB/IP client) and attaches to an
-untrusted USB/IP server. Also stub-side and vudc-side code paths.
-Config-dependent on `CONFIG_USBIP_CORE`.
+**Step 8.1 - Who's Affected**
+- Any user who runs `usbip attach` to connect to a remote USBIP server
+  (then connection to a compromised/malicious server exposes the client)
+- Record: USBIP client users — real user population, not a theoretical
+  risk.
 
-**Step 8.2 - Trigger conditions:**
-Record: A malicious USB/IP server sends a RET_SUBMIT PDU with crafted
-`number_of_packets = 0x10000001` or similar. **No authentication
-required — reachable entirely from the network peer.**
+**Step 8.2 - Trigger**
+- Attacker runs malicious USBIP server; user attaches to it; server
+  returns crafted RET_SUBMIT
+- Attach requires privileged operation, but once attached, reading data
+  via `USBDEVFS_REAPURB` is accessible to any process with access to the
+  virtual device
+- Record: Trigger is "connect to malicious USBIP server" — a very
+  realistic scenario (VM escapes, supply-chain USBIP servers,
+  compromised networks).
 
-**Step 8.3 - Failure mode severity:**
-Record: **CRITICAL.** Heap out-of-bounds write with controlled size and
-partially controlled content (iso descriptor bytes received from
-network). Confirmed by KASAN report. The author reproduced a secondary
-NULL deref crash in `processcompl()` at CR2 in unmapped slab. Security
-vulnerability exploitable over network.
+**Step 8.3 - Failure Severity**
+- OOB slab read → kernel memory leaked to userspace = **information
+  disclosure** (potential leak of sensitive data: kernel pointers,
+  credentials, keys)
+- Could be chained with other bugs for KASLR bypass or further
+  exploitation
+- Severity: **HIGH** (info leak, security-relevant)
+- Record: HIGH — kernel info leak to userspace via crafted network
+  input.
 
-**Step 8.4 - Risk/benefit:**
-Record:
-- Benefit: **Very high** — fixes a network-reachable heap overflow;
-  security vulnerability.
-- Risk: **Very low** — 20-line change using an already-existing
-  constant; bounds checks are strictly tighter than existing behavior;
-  no API changes.
-- Ratio: Strongly favorable for backport.
+**Step 8.4 - Risk/Benefit**
+- Benefit: HIGH — closes a security-relevant info leak in untrusted-
+  network parsing path
+- Risk: VERY LOW — adds a bounds check and a type widening; cannot
+  produce false rejections on legitimate data (no legitimate frame can
+  be larger than the whole buffer); u32 widening is semantically
+  equivalent for non-overflowing cases
+- Record: Excellent benefit/risk ratio.
 
 ## Phase 9: Final Synthesis
 
-**Evidence FOR backporting:**
-- Security vulnerability: integer overflow → heap OOB write, reachable
-  from malicious network peer
-- Small, surgical fix (1 file, +15/-5 lines) using existing
-  `USBIP_MAX_ISO_PACKETS` constant
-- Original submission was sent via `security@kernel.org` (per v2
-  changelog)
-- Reviewed and applied by Greg KH (USB maintainer)
-- Companion patch (2ab833a16a825) has explicit `Cc: stable` and `Acked-
-  by: Shuah Khan` (usbip maintainer) and references this series
-- Independent security researchers (Nathan Rebello, Sebastián Alba
-  Vives) confirmed related vulnerabilities via KASAN and manual audit
-- KASAN confirmed heap OOB write in this exact function
-- Author also fixes a cascading NULL deref in `processcompl()` (verified
-  at kernel 6.12.0)
-- Buggy code is identical in every stable tree (5.10.y – 7.0.y)
-- Patch applies cleanly to stable (verified with `git apply --check`)
+**Step 9.1 - Evidence Summary**
 
-**Evidence AGAINST backporting:**
-- None.
+FOR backporting:
+- Security fix: kernel info leak from attacker-controlled network input
+  to userspace
+- Small (+12/-3), single-file, single-function, surgical
+- Obviously correct: simple bounds check + type widening
+- Vulnerable code present since 2008 — every active stable affected
+- Signed off by USB maintainer Greg KH; reviewed through v1→v2 cycle
+- Follows established pattern (`b348d7dddb6c4`, 2016) accepted in same
+  file for `usbip_recv_xbuff`
+- Companion patch in the same security cluster has explicit `Cc: stable`
+- Applies cleanly to stable trees even without prerequisite patch 1/3
 
-**Stable rules checklist:**
-1. Obviously correct and tested? **YES** — clamp to existing limit,
-   kcalloc replaces kzalloc
-2. Real bug affecting users? **YES** — heap OOB write, KASAN-confirmed
-3. Important issue? **YES** — CRITICAL security vulnerability, network-
-   reachable
-4. Small and contained? **YES** — 20 lines in 1 file, 1 function
-5. No new features? **YES** — pure defensive validation
-6. Applies to stable? **YES** — verified clean apply
+AGAINST backporting:
+- Patch 2/3 of a series; ideally 1/3 and 3/3 should also be backported
+  for complete defense-in-depth
+- No explicit `Cc: stable` (but absence is expected — that's the autosel
+  context)
+
+Unresolved:
+- No CVE assigned yet (not a blocker — many pre-CVE security fixes are
+  backported)
+
+**Step 9.2 - Stable Rules Checklist**
+1. Obviously correct? ✅ Yes
+2. Fixes real bug? ✅ Yes (kernel info leak)
+3. Important? ✅ HIGH — security issue
+4. Small & contained? ✅ +12/-3, single function
+5. No new features? ✅ Pure input validation
+6. Applies to stable? ✅ Verified: hunks match stable code
+
+**Step 9.3 - Exception Category**
+- Hardening / security validation of untrusted network input — fits
+  under "fixes a real bug" (not strictly an exception category, but
+  textbook stable material)
+
+**Step 9.4 - Decision**
+YES. The benefit (closing a kernel info-leak attackable by a malicious
+USBIP server) significantly outweighs the risk (near-zero — the change
+is input validation + type widening).
 
 ## Verification
 
-- [Phase 1] `git show 1897852293fac`: confirmed full commit message, no
-  Fixes: tag, no explicit Cc: stable in final version
-- [Phase 2] Read diff in `drivers/usb/usbip/usbip_common.c`: confirmed
-  +15/-5 surgical change in `usbip_recv_iso()`
-- [Phase 3] `git log
-  -L:usbip_recv_iso:drivers/usb/usbip/usbip_common.c`: buggy code traced
-  to original commit `05a1f28e879e3` (2008-07-09, "Staging: USB/IP: add
-  common functions needed")
-- [Phase 3] `git show 2ab833a16a825`: related follow-up has explicit
-  `Cc: stable <stable@kernel.org>` and `Acked-by: Shuah Khan
-  <skhan@linuxfoundation.org>`
-- [Phase 4] `b4 dig -c 1897852293faca`: found lore thread at `https://lo
-  re.kernel.org/all/20260325104841.8282-1-addcontent08@gmail.com/`
-- [Phase 4] `b4 dig -a`: confirmed v1→v2 progression; v2 applied is the
-  latest
-- [Phase 4] mbox thread inspection: v2 changelog says "Drop
-  security@kernel.org CC" — confirming security channel origin; Greg KH
-  reviewed Nathan Rebello's complementary patch
-- [Phase 4] Web search confirmed multiple security researchers (Kelvin
-  Mbogo, Nathan Rebello, Sebastián Alba Vives) reported related
-  vulnerabilities; Nathan's patch cites KASAN slab-out-of-bounds report
-- [Phase 5] `rg usbip_recv_iso`: confirmed 3 call sites (vhci_rx.c,
-  stub_rx.c, vudc_rx.c), all invoked from kthread loops reading network
-  PDUs
-- [Phase 5] Read `vhci_rx.c:vhci_rx_pdu`: confirmed trigger path from
-  TCP socket → `vhci_recv_ret_submit` → `usbip_recv_iso`, no
-  authentication required
-- [Phase 5] `rg USBIP_MAX_ISO_PACKETS`: confirmed constant exists in
-  `usbip_common.h:130` and is used symmetrically in `stub_rx.c:381`
-- [Phase 6] Verified buggy code is identical in stable-
-  push/linux-{5.10.y, 5.15.y, 6.1.y, 6.6.y, 6.12.y, 6.18.y, 6.19.y} and
-  `USBIP_MAX_ISO_PACKETS` exists in all of them
-- [Phase 6] `git apply --check`: patch applies cleanly to current HEAD
-  (stable/linux-7.0.y)
-- [Phase 8] Failure mode verified as heap OOB write, KASAN-confirmed by
-  Nathan Rebello on kernel 7.0.0-rc5; secondary NULL deref in
-  `processcompl()` confirmed on 6.12.0
+- **[Phase 1]** Parsed subject and tags: Verified Link to lore, Greg KH
+  SOB (USB maintainer), absence of Fixes/Cc:stable expected for review
+  candidate.
+- **[Phase 1]** Body analysis: commit explains `0xFFFFFFFC + small =
+  wraparound` mechanism, path to `USBDEVFS_REAPURB` info leak.
+- **[Phase 2]** Ran `git show 591c1d972d8f1`: confirmed +12/-3 in single
+  file, single function `usbip_recv_iso()`.
+- **[Phase 2]** Read `include/linux/usb.h`: verified
+  `iso_frame_desc[i].actual_length` is `unsigned int` (line 1418),
+  `urb->actual_length` is `u32` (line 1655),
+  `urb->transfer_buffer_length` is `u32` (line 1654) — confirms signed-
+  wrap bug is real.
+- **[Phase 3]** `git log --follow` traced `usbip_common.c` back to
+  `05a1f28e879e3` (July 2008, staging import) — bug predates all stable
+  branches.
+- **[Phase 3]** `git log origin/master --
+  drivers/usb/usbip/usbip_common.c`: found the 3-patch series
+  (1897852293fac, 591c1d972d8f1, 74a2287209a85) plus companion
+  `2ab833a16a825` which has `Cc: stable`.
+- **[Phase 3]** Read
+  `stable/linux-6.19.y:drivers/usb/usbip/usbip_common.c`: confirmed
+  unpatched code (`int total_length`, no bounds check) is present.
+- **[Phase 4]** `b4 dig -c 591c1d972d8f1`: found `https://lore.kernel.or
+  g/all/20260325103640.8090-2-addcontent08@gmail.com/`.
+- **[Phase 4]** `b4 dig -c 591c1d972d8f1 -a`: confirmed series went v1 →
+  v2 (applied version is v2 after Greg's feedback).
+- **[Phase 4]** `b4 dig -c 591c1d972d8f1 -w`: confirmed Greg KH and
+  Shuah Khan (USBIP maintainer) were CC'd.
+- **[Phase 4]** Read thread mbox: confirmed Greg KH directed Nathan to
+  submit his companion patch separately, and that companion got `Acked-
+  by: Shuah Khan` + `Cc: stable`.
+- **[Phase 5]** Grep on usbip directory: verified `usbip_recv_iso` is
+  called from `vhci_rx.c:86`, `stub_rx.c:605`, `vudc_rx.c:173`;
+  `usbip_pad_iso` called from `vhci_rx.c:92`.
+- **[Phase 5]** Read `vhci_rx.c`: confirmed the exploit path
+  `usbip_recv_iso → usbip_pad_iso → memmove into transfer_buffer` that
+  later reaches userspace.
+- **[Phase 5]** Verified precedent commit `b348d7dddb6c4` (2016) applied
+  exactly the same "validate untrusted length" pattern to
+  `usbip_recv_xbuff` in the same file.
+- **[Phase 6]** Checked `stable-rc-push/linux-*.y` branches: no USBIP
+  security series patches applied yet.
+- **[Phase 6]** Inspected hunks vs stable code: the three hunks only
+  touch `int total_length = 0`, the iso-decode loop, and the post-loop
+  comparison — all present in all stable trees. Expected clean apply
+  independent of patch 1/3.
+- **[Phase 7]** Context: `drivers/usb/usbip/` — IMPORTANT criticality
+  (VM/remote USB users).
+- **[Phase 8]** Severity: HIGH — kernel slab OOB read → info leak to
+  userspace via USBDEVFS_REAPURB, triggered by crafted USBIP server
+  replies.
+- UNVERIFIED: Exact minor versions of 5.10.y/5.15.y/etc. weren't walked
+  line-by-line, but mainline unpatched state in 6.19.y + unchanged code
+  since 2008 staging import reliably implies bug exists in all active
+  stable branches.
 
-This commit is a textbook YES for stable: it fixes a network-reachable,
-unauthenticated heap buffer overflow present in every supported stable
-tree. The fix is minimal, uses an already-existing constant, was vetted
-by the USB maintainer, and has been reproduced with KASAN by independent
-researchers. The companion patch in the same area explicitly carries
-`Cc: stable`.
+The fix is a small, surgical, obviously-correct validation of attacker-
+controlled network input that prevents a kernel information leak. It
+applies cleanly to all active stable trees, is signed off by the USB
+subsystem maintainer, and follows an established pattern already
+accepted in the same file. The companion fix in the same security
+cluster is already explicitly nominated for stable. This is textbook
+stable material.
 
 **YES**
 
- drivers/usb/usbip/usbip_common.c | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+ drivers/usb/usbip/usbip_common.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
-index 29d776fbeef74..fd620e9600394 100644
+index a2b2da1255dda..29d776fbeef74 100644
 --- a/drivers/usb/usbip/usbip_common.c
 +++ b/drivers/usb/usbip/usbip_common.c
-@@ -662,7 +662,7 @@ int usbip_recv_iso(struct usbip_device *ud, struct urb *urb)
- 	void *buff;
- 	struct usbip_iso_packet_descriptor *iso;
- 	int np = urb->number_of_packets;
--	int size = np * sizeof(*iso);
-+	int size;
+@@ -665,7 +665,7 @@ int usbip_recv_iso(struct usbip_device *ud, struct urb *urb)
+ 	int size = np * sizeof(*iso);
  	int i;
  	int ret;
- 	u32 total_length = 0;
-@@ -670,11 +670,21 @@ int usbip_recv_iso(struct usbip_device *ud, struct urb *urb)
+-	int total_length = 0;
++	u32 total_length = 0;
+ 
  	if (!usb_pipeisoc(urb->pipe))
  		return 0;
+@@ -696,14 +696,23 @@ int usbip_recv_iso(struct usbip_device *ud, struct urb *urb)
+ 	for (i = 0; i < np; i++) {
+ 		usbip_iso_packet_correct_endian(&iso[i], 0);
+ 		usbip_pack_iso(&iso[i], &urb->iso_frame_desc[i], 0);
++		if (urb->iso_frame_desc[i].actual_length >
++				(unsigned int)urb->transfer_buffer_length) {
++			dev_err(&urb->dev->dev,
++				"recv iso: frame actual_length %u exceeds buffer %d\n",
++				urb->iso_frame_desc[i].actual_length,
++				urb->transfer_buffer_length);
++			kfree(buff);
++			return -EPROTO;
++		}
+ 		total_length += urb->iso_frame_desc[i].actual_length;
+ 	}
  
--	/* my Bluetooth dongle gets ISO URBs which are np = 0 */
--	if (np == 0)
--		return 0;
-+	if (np <= 0 || np > USBIP_MAX_ISO_PACKETS) {
-+		dev_err(&urb->dev->dev,
-+			"recv iso: invalid number_of_packets %d\n", np);
-+		/*
-+		 * usbip_pack_ret_submit() already set urb->number_of_packets
-+		 * from the wire.  Zero it so processcompl() does not iterate
-+		 * OOB descriptors on the way out.
-+		 */
-+		urb->number_of_packets = 0;
-+		return -EPROTO;
-+	}
-+
-+	size = np * sizeof(*iso);
+ 	kfree(buff);
  
--	buff = kzalloc(size, GFP_KERNEL);
-+	buff = kcalloc(np, sizeof(*iso), GFP_KERNEL);
- 	if (!buff)
- 		return -ENOMEM;
+-	if (total_length != urb->actual_length) {
++	if (total_length != (u32)urb->actual_length) {
+ 		dev_err(&urb->dev->dev,
+-			"total length of iso packets %d not equal to actual length of buffer %d\n",
++			"total length of iso packets %u not equal to actual length of buffer %d\n",
+ 			total_length, urb->actual_length);
  
+ 		if (ud->side == USBIP_STUB || ud->side == USBIP_VUDC)
 -- 
 2.53.0
 
