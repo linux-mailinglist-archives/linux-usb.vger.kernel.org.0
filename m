@@ -1,198 +1,186 @@
-Return-Path: <linux-usb+bounces-36592-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36595-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +HogMF8u8GkHPgEAu9opvQ
-	(envelope-from <linux-usb+bounces-36592-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 05:49:51 +0200
+	id kDNmE7sz8Gk2PwEAu9opvQ
+	(envelope-from <linux-usb+bounces-36595-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 06:12:43 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4591447D2A7
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 05:49:50 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE51347D575
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 06:12:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F2B85306658B
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 03:47:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 315DA3025E57
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 04:12:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79C7630F7EB;
-	Tue, 28 Apr 2026 03:47:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D99B331AAAF;
+	Tue, 28 Apr 2026 04:12:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="DeA8bs+V";
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="nKUSUSu+"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="Gidu5s8F"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
+Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B593254A9;
-	Tue, 28 Apr 2026 03:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2237478;
+	Tue, 28 Apr 2026 04:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777348059; cv=none; b=gLeSJr4Opz3wYfjalw1rBurBbsbVmNlQpC7TOZ2mscKeTU2b4j94hTZjQLjnKYYVKHRML3tmTmtokWmq9k46OkYwc00M+43fD6UxPJeOgm2uJyY4QLAM8V1PcbpiXZrgUPmPxmmXI6oh3sJhge97xS2I9Ozgxp2ZHMjrEh4TUpw=
+	t=1777349558; cv=none; b=ehmyI4+QtkOh02B1cD+pzT4AkliKHtFFAkZvSmYsXHGgE2bbyNXiT95zAnDo9tqqqPcb+buvI4HNW2pnGA0667mIORo5AdUD4dhJYTNYxtV5ZdNBv7y14EFbdUO3Un895aGEFM+DsGdezeCGtA2ORws1FQgW/oEY4nAUW1zPgIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777348059; c=relaxed/simple;
-	bh=Ue/Yt2sNqpCKF/L65QQ7e6/PWVKVomQsIcdBCjnAhBg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZTu1PHhS/H6ElfpuZWydJMQduLs4rxiYeXRL1d87t1KkBInF0IO7SNLwCh+0bdFSplM2v33blE2hKv5NG50x0sONwF7LFlu78Fbgf+q50HLMRdVX5rh+f5iRVMYzlipAgxOyaJFUMo4AxPq609sonSSUBEFwf048hK8ovcNKYH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=DeA8bs+V; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=nKUSUSu+; arc=none smtp.client-ip=23.88.97.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1777348056;
-	bh=Ue/Yt2sNqpCKF/L65QQ7e6/PWVKVomQsIcdBCjnAhBg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=DeA8bs+V0BwFJSH+slVrBkXgg8xopZrWEnAz1GswLkD79kYDAFdBqQATTB8S4Y12D
-	 RXWIQ4rDkIq1ZUPKb08PgQi/XtVdyFE/QBR4XlNNO30023AJ7LrQneTHMnZMdBRg9X
-	 e36wRWdWHZWep1I7QnY3NA2kaeC6pDvV4x7xKa1TXNkuQ2u4lmdTF3xEWDFXK1m6dq
-	 c3mcfSkJDKM9HnQsjKW5X9hO6S0rEJY5dl1GnoIGjsZnI5BLcmr8xsHcNQgIsfp1KN
-	 jd7D9E4H8wbORL2cFxvvfRtFRzyyO1rtv8ROypw8YNclVo6QBIlRc/PBE9NcLfuItC
-	 hfrRfBaT1sUQg==
-Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
-	id 2BA2147DDE; Tue, 28 Apr 2026 03:47:36 +0000 (UTC)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1777348053;
-	bh=Ue/Yt2sNqpCKF/L65QQ7e6/PWVKVomQsIcdBCjnAhBg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=nKUSUSu+Bq418rAZ7H7gyVQ2wC+QS7eAVZTXTHj7Y428SfRk2vr/lo4Kaj3irdyOK
-	 9PZmHIiUmyrosEoAZYEypEEguG2Qa3tF8OnL7qMiPawmeZqaEN+blTIZUu4NwfHn2P
-	 1r2heINekU13pjBrNZHrQ8+J0hMfBSobLoS6BRiKaU5jDrHChb9D4rhCquKjY7AhQy
-	 CPZMDtBTPe7xL9TrcCwJzck9POBqfYqg9PgnepgHrhKPCowyZmDH2AlQUBd9+ThB/V
-	 J9gAGISGH63aFNllpbloocoWcQ+pMfR2GeCz3fesEIOqBq62cq5+SV7sEinkzX2IOE
-	 QsOLuiTQW9LSw==
-Received: from AMDDesktop.lan (unknown [IPv6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb])
-	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id 3912547DAB;
-	Tue, 28 Apr 2026 03:47:33 +0000 (UTC)
-From: Birger Koblitz <mail@birger-koblitz.de>
-Date: Tue, 28 Apr 2026 05:47:24 +0200
-Subject: [PATCH net-next 4/4] r8152: Add firmware upload capability for
- RTL8157/RTL8159
+	s=arc-20240116; t=1777349558; c=relaxed/simple;
+	bh=RdCNYgtTfUx2w+VEsHqK9DmXdFYgykhdOYA8kLFGzXw=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=tYaKE3goSsCx52nsMqrEukp5/Sl/T9Ibc+/8pXRFiLTpZR0LXVzv2g3FtT5D++soLIiCuy7B077tde+Wl2KcvMdP+LnH0nQnsLj+5Jd8EgfH/G1xwWkyak+o70qkqgbAA+5mZ68ma39qoa0aI62HYcvj4ZRnFuy2uYxqoUNPSmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=Gidu5s8F; arc=none smtp.client-ip=162.62.57.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1777349550; bh=1Nt6ugEPShLCYKEr6+BVNpxdhANPlQCmEmONk5oMCbE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Gidu5s8FB3dgC4Y0T8o7Bt6g6MXwJTNjS9D0A7Jlck6mhzAuLqvgWW3BpSPU7WOPF
+	 nwWu6E0xsM06WkpZcd+dOOmyfQueniBr/1PaIaISLvfx2KQp268ySG5xSN6tDrBJB5
+	 H91rv9r50jYxD94gA9H3NffH9IO4f4KZX5ZtOIXg=
+Received: from lxu-ped-host.. ([111.198.231.89])
+	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
+	id 31AAAA9C; Tue, 28 Apr 2026 12:12:26 +0800
+X-QQ-mid: xmsmtpt1777349546tscspmme0
+Message-ID: <tencent_BB7C33EB9EA41B7B4B5F1B8B25C0BA13BB08@qq.com>
+X-QQ-XMAILINFO: MRMtjO3A6C9XhkF96blYDQH0VPzreY9tKY5JuknvLzdgIEAjNqWLdM9Dg8nldw
+	 c62V5Fp7hmu3D5bC+ppaDSTRgBOpo2vrct3aBswas/SwezWrSFP9CEDq7nOZcQkLtcRmsfYkSMBo
+	 Wtrn/I+EMDcmgFnqMcob9yLJ5zkXeaX+DHKmzxPQtVK5dTZDdt+DI3oj+LeUjD6qOdHXGepPVIGz
+	 7VufDrexR9nyOpG33zaRWDLiV3PC2fVQrDlr7ftO+K574ajdU+yhtp8Pgqo4Xah7zl2+UvWaiTOw
+	 cZbOKf4C+RiD7Ysul249AZgSi6xe5R6zRbf3c/E05YQTzGAhSLNLqz4u0fTM9Ew3bo204l7dQVbW
+	 TIptGNFIfSS3P3a6sOfPrrMi7sviIym0DwVCjc11+ezkQQOcVX4wccpKXqTbWk8yA8h0m17KCfKV
+	 iBowgNClmXRYmJXgIcRwmv4Ix2vJTFvCYjAWpkORkTQaqhnHjPKy8OEeyVYZ4Sgs7Jwcxkn8EdWy
+	 SZfhkfRXxEahQc34m3D1Epg/wwkME+gNIA6GLtnHdplkx02pU9T/hyihHDePDhEG0Ymiqo6yRttp
+	 wo5bEcAc3RSTP1PuuUUN+6xEh+hgnicY+wQEFIvvwHzQ1FN+y28tu907vN/gO5+bpATC4w2GZE56
+	 P8yiT+UkeTkJbrlNJrEu2mulRU7sX/I6gv/btBhp9bvhAU907L5PmiUMlT1ez9LrZzMaxIIO/VCZ
+	 i2brY6DLwTD+dPfSsLknwN119rXfSBNzhHIrsRXqoVbNcy28WRYupSGXCsgv6lmPg6+R3LjUy7QG
+	 44A/NHdmpRQIvfMJ0SLXHfCV1dZ32q+jl2p/WkCVS3pzNojihg705GaeKrKaNkiT/JVp3vCjnCOk
+	 qeT4Hkw+Z7qj0O9bIQPpjc9iCCudC9c8qKWfcjy7PqN7mXspeUYksQm4VKb5sOPju3zJAizzHk3p
+	 fjvpBGy3Q8ponppkAd4FdcNZo2BNCUqZEDniMhU0xbLv73FxUCyKjeYW5ZzaAWXNZ56pp4fTV3C4
+	 1rBFje17SQ4ckPz2FIyDGdlRVJiBI=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+From: Edward Adam Davis <eadavis@qq.com>
+To: syzbot+9eebf5f6544c5e873858@syzkaller.appspotmail.com
+Cc: bentiss@kernel.org,
+	jikos@kernel.org,
+	linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: [PATCH] hwmon: prevent packets from going to driver for probe
+Date: Tue, 28 Apr 2026 12:12:26 +0800
+X-OQ-MSGID: <20260428041225.235251-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <69eed7e0.a00a0220.7773.0026.GAE@google.com>
+References: <69eed7e0.a00a0220.7773.0026.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260428-rtl8159_net_next-v1-4-52d03927b46f@birger-koblitz.de>
-References: <20260428-rtl8159_net_next-v1-0-52d03927b46f@birger-koblitz.de>
-In-Reply-To: <20260428-rtl8159_net_next-v1-0-52d03927b46f@birger-koblitz.de>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Chih Kai Hsu <hsu.chih.kai@realtek.com>, 
- Birger Koblitz <mail@birger-koblitz.de>
-X-Mailer: b4 0.14.2
-X-Rspamd-Queue-Id: 4591447D2A7
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: BE51347D575
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[qq.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[qq.com:s=s201512];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[birger-koblitz.de:+];
-	TAGGED_FROM(0.00)[bounces-36592-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[birger-koblitz.de];
+	TAGGED_FROM(0.00)[bounces-36595-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[eadavis@qq.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[qq.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,birger-koblitz.de:email,birger-koblitz.de:dkim,birger-koblitz.de:mid]
+	NEURAL_HAM(-0.00)[-0.999];
+	TO_DN_NONE(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	FREEMAIL_FROM(0.00)[qq.com];
+	TAGGED_RCPT(0.00)[linux-usb,9eebf5f6544c5e873858];
+	PRECEDENCE_BULK(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,qq.com:email,qq.com:dkim,qq.com:mid,appspotmail.com:email,syzkaller.appspot.com:url]
 
-The RTL8159 requires firmware for its PHY in order to work at
-connection speeds > 5GBit. Add support for uploading firmware for
-the PHYs using the existing rtl8152_apply_firmware() function
-in r8157_hw_phy_cfg() and set up the correct names for the firmware
-files.
+A race condition exists between hid_input_report() and the point
+immediately following the execution of hid_device_io_start() within
+corsairpsu_probe(). If the probe operation fails after "io start" has
+been initiated, this race condition will result in a uaf vulnerability
+[1].
 
-If no firmware is found, both the RTL8157 and the RTL8159 will continue
-to work.
+CPU0				CPU1
+====				====
+corsairpsu_probe()
+ hid_device_io_start()
+  ... unlock driver_input_lock 
+ hid_hw_stop()
+  kfree(hidraw)			__hid_input_report()
+				 ... acquire driver_input_lock
+				 hid_report_raw_event()
+				  hidraw_report_event()
+				   ... access hidraw's list_lock // trigger uaf
 
-Signed-off-by: Birger Koblitz <mail@birger-koblitz.de>
+Consequently, when corsairpsu_probe() fails and hid_hw_stop() needs to
+be executed, the io_started flag is first cleared while holding the
+driver_input_lock to prevent potential race conditions involving input
+reports.
+
+[1]
+BUG: KASAN: slab-use-after-free in rt_spin_lock+0x83/0x400 kernel/locking/spinlock_rt.c:56
+Call Trace:
+ hidraw_report_event+0x5d/0x3a0 drivers/hid/hidraw.c:577
+ hid_report_raw_event+0x311/0x1730 drivers/hid/hid-core.c:2076
+ __hid_input_report drivers/hid/hid-core.c:2152 [inline]
+ hid_input_report+0x44e/0x580 drivers/hid/hid-core.c:2174
+ hid_irq_in+0x47e/0x6d0 drivers/hid/usbhid/hid-core.c:286
+ __usb_hcd_giveback_urb+0x3b3/0x5e0 drivers/usb/core/hcd.c:1657
+ dummy_timer+0x8a9/0x47d0 drivers/usb/gadget/udc/dummy_hcd.c:2005
+
+Allocated by task 10:
+ hidraw_connect+0x57/0x430 drivers/hid/hidraw.c:606
+ hid_connect+0x5bf/0x19d0 drivers/hid/hid-core.c:2277
+ hid_hw_start+0xa8/0x120 drivers/hid/hid-core.c:2387
+ corsairpsu_probe+0xd9/0x3c0 drivers/hwmon/corsair-psu.c:782
+
+Freed by task 10:
+ hidraw_disconnect+0x4f/0x60 drivers/hid/hidraw.c:662
+ hid_disconnect drivers/hid/hid-core.c:2362 [inline]
+ hid_hw_stop+0x101/0x1e0 drivers/hid/hid-core.c:2407
+ corsairpsu_probe+0x327/0x3c0 drivers/hwmon/corsair-psu.c:826
+ 
+Fixes: d115b51e0e56 ("hwmon: add Corsair PSU HID controller driver")
+Reported-by: syzbot+9eebf5f6544c5e873858@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=9eebf5f6544c5e873858
+Tested-by: syzbot+9eebf5f6544c5e873858@syzkaller.appspotmail.com
+Signed-off-by: Edward Adam Davis <eadavis@qq.com>
 ---
- drivers/net/usb/r8152.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ drivers/hwmon/corsair-psu.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 08cc3c1dae0facb2400890ba4d093c97ed56d40b..56e00fe6f32405ce753df3e03e54a7daaf1a29ac 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -4663,10 +4663,11 @@ static bool rtl8152_is_fw_phy_speed_up_ok(struct r8152 *tp, struct fw_phy_speed_
- 	case RTL_VER_11:
- 	case RTL_VER_12:
- 	case RTL_VER_14:
--	case RTL_VER_16:
- 		goto out;
- 	case RTL_VER_13:
- 	case RTL_VER_15:
-+	case RTL_VER_16:
-+	case RTL_VER_17:
- 	default:
- 		break;
- 	}
-@@ -7996,12 +7997,14 @@ static void r8157_hw_phy_cfg(struct r8152 *tp)
- 	data = r8153_phy_status(tp, 0);
- 	switch (data) {
- 	case PHY_STAT_EXT_INIT:
-+		rtl8152_apply_firmware(tp, true);
- 		ocp_reg_clr_bits(tp, 0xa466, BIT(0));
- 		ocp_reg_clr_bits(tp, 0xa468, BIT(3) | BIT(1));
- 		break;
- 	case PHY_STAT_LAN_ON:
- 	case PHY_STAT_PWRDN:
- 	default:
-+		rtl8152_apply_firmware(tp, false);
- 		break;
- 	}
- 
-@@ -9941,6 +9944,8 @@ static int rtl_ops_init(struct r8152 *tp)
- #define FIRMWARE_8153C_1	"rtl_nic/rtl8153c-1.fw"
- #define FIRMWARE_8156A_2	"rtl_nic/rtl8156a-2.fw"
- #define FIRMWARE_8156B_2	"rtl_nic/rtl8156b-2.fw"
-+#define FIRMWARE_8157_1		"rtl_nic/rtl8157-1.fw"
-+#define FIRMWARE_8159_1		"rtl_nic/rtl8159-1.fw"
- 
- MODULE_FIRMWARE(FIRMWARE_8153A_2);
- MODULE_FIRMWARE(FIRMWARE_8153A_3);
-@@ -9949,6 +9954,8 @@ MODULE_FIRMWARE(FIRMWARE_8153B_2);
- MODULE_FIRMWARE(FIRMWARE_8153C_1);
- MODULE_FIRMWARE(FIRMWARE_8156A_2);
- MODULE_FIRMWARE(FIRMWARE_8156B_2);
-+MODULE_FIRMWARE(FIRMWARE_8157_1);
-+MODULE_FIRMWARE(FIRMWARE_8159_1);
- 
- static int rtl_fw_init(struct r8152 *tp)
- {
-@@ -9987,6 +9994,12 @@ static int rtl_fw_init(struct r8152 *tp)
- 		rtl_fw->pre_fw		= r8153b_pre_firmware_1;
- 		rtl_fw->post_fw		= r8153c_post_firmware_1;
- 		break;
-+	case RTL_VER_16:
-+		rtl_fw->fw_name		= FIRMWARE_8157_1;
-+		break;
-+	case RTL_VER_17:
-+		rtl_fw->fw_name		= FIRMWARE_8159_1;
-+		break;
- 	default:
- 		break;
- 	}
-
+diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+index dddbd2463f8d..4e766bf32189 100644
+--- a/drivers/hwmon/corsair-psu.c
++++ b/drivers/hwmon/corsair-psu.c
+@@ -823,6 +823,7 @@ static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id
+ fail_and_close:
+ 	hid_hw_close(hdev);
+ fail_and_stop:
++	hid_device_io_stop(hdev);
+ 	hid_hw_stop(hdev);
+ 	return ret;
+ }
 -- 
-2.47.3
+2.43.0
 
 
