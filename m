@@ -1,214 +1,203 @@
-Return-Path: <linux-usb+bounces-36629-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36630-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mLP0D2y48GlwXgEAu9opvQ
-	(envelope-from <linux-usb+bounces-36629-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 15:38:52 +0200
+	id WJO1HZPR8GnDYwEAu9opvQ
+	(envelope-from <linux-usb+bounces-36630-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 17:26:11 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7AEF48604C
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 15:38:51 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 936AA487CA9
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 17:26:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 715D430F28D6
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 13:23:21 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6F7C531625E8
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 13:55:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3F4043E9D5;
-	Tue, 28 Apr 2026 13:18:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A57E5428859;
+	Tue, 28 Apr 2026 13:55:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n9Q8pzLe"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="X//i7rbC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4863743DA53
-	for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 13:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB953FD12A;
+	Tue, 28 Apr 2026 13:55:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777382311; cv=none; b=R+IZIQ9jrL/jL1nXzkcCr7WeqBXiJmnYg7bTHnXVrF0CLQtfdV5sX8toKIiPclsaXuWWEVvqQez4LxxxLQN+fUTMB3eQoP1OXgJKtuSWhXOpyE38rZNZzZzdnpFUqLjZwcmLwWN9i9TzWXc3BZJSgUmYq+ft5wmuVFzfnjj8Mak=
+	t=1777384536; cv=none; b=mXSfcwpk3ek8mKFNev9LtP64DouXA5tWujLgzDHzIZ2to0XHmVcVirrgaJ77PM1J9hIZRvPbUkbaULeROFbF+qXi7sdc9ibIKTa0bQyXOTu8cLBb4L48LHYLmnIpGR5HqZiPHhiwgJFpu+ge9XlQGOKFEz1jWp0vUiPmKLRL5hA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777382311; c=relaxed/simple;
-	bh=LeBUvx6Pk4t0VrcyfehygjN6ttef5Wj0cz9EoiHhwhM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ucRG3VgMr69jZupDzLKmpzRwqicC/NZ38ItBtdnmd7UxfWEz/bOOiu1ZpUp1W+Bu+1lJXsPNgNWVQ2jdeOfFQvUYcLjBPpBlawrG0ErlCCqo9CZmzV175InEVr6gK/Z3rHnnvbjM6YNZWnDaNwBLu/JW2W6D7VzBe33XjzDX63U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n9Q8pzLe; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c76d797b180so7720751a12.2
-        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 06:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777382310; x=1777987110; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sB0vJ2DhSZYXfYX7V4bF9gYiGIMZ7ekNua2Hrw8Y3V8=;
-        b=n9Q8pzLeRVTofIn5V25m0J90fTq1aQTOdKUJqMZOjrJ+nxzdw+r62LP1cHPN6IzQI2
-         8rZWNuSSmzdLmAoU9qKSBR3ALw7swWgxQKnbHrtDq+4ka9GlyTAt9pRUqH1EMwyr3Vjc
-         TMKAf3lsqGqn0zH9IhB0ZLzUW4zwQxVAEdvntHQtJ/ZwtTpZnmlPMlCNEmxAhvjPeJnK
-         GKkNlVp1el3LmIaSqO/lz5vvEEAFG3pRXjMkuHTtGPg8/BzIGt6wd+0lMFpeDaoHng+U
-         qHxgY9QVEEAyuCbomjFtPMh30cDniTxvcYrdxXIS8/G3mf0CvBaB+zR3qQkpVe5Bzv5x
-         3Thw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777382310; x=1777987110;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sB0vJ2DhSZYXfYX7V4bF9gYiGIMZ7ekNua2Hrw8Y3V8=;
-        b=A1AkMc7s2X+8feZgxn3iVEWQ38dwR4NJHKWOHg0urh/7Q+J8THfv0dMofRdGJPM9/h
-         38BPZXUUSDZhf6v8oVikVRPw0JDa5jP1GUZauYpRPnX7oKAkW8h+47jQXEH54qSMM+Jn
-         1VHtpd1sVbFaddbo+S8zLgqhR0h33LnOZpuu+E6fvDdwXiZgpRGdvnSRc2PPFlIIxT6D
-         FuN2dk9SxGSnKkXH5WJD7env9Z7gXg/8nYSz4z8GnBtX1uwg3pzzKEkBcYW2W1uGGPb7
-         MWFydsCtJkuz9r14aNmAlTRFkA92loTaTNnKXbsthzUOL89OjOMk5G8s7NMHehcBGGot
-         ZTtQ==
-X-Gm-Message-State: AOJu0YyLG5wxf+tOb87ALbtaVWaJRd6lFaTiirwTCtvQqssjR+kcGY4j
-	Pt4/bL9t2nAPjkd56HBgF23BJnBZj7atx7+zumTXSNT3rW+3qGF3j4H8GvR92gGr
-X-Gm-Gg: AeBDieuZWuX8zsBxI0FvRrbnIyVGmEs3od3QZ3w8rCXSBrZzzjb24hBtQfnsOOd9amC
-	2YQ3NYD3vzdiiMLAf2b43iRD23T3G2gI+T6yVq3DeHc2l32PDQL+wVny9Qt0jfKfj9JSZYuLyYj
-	dqSiyxgEsKKeYFkVo6z6SkIg6MSott870E9bVoIgvl8R65sUrRM/ldFtrkCFyKsJM6szToh3FjV
-	4TpcC4v5Mpy8NOq71ABQ4j3lv1C+1bpvGMZXu15PP7GKhisOUZIuTqaeHkhly6f82fcD+gxCr1+
-	QoqVgJ0rVLJmPufcLFiyZUJ0Rvq+MAVmEUmWJ50iyxTlKfOEQNspUneb+nvEf40A2OWLsYBfhKC
-	/erY0zlQz2MkbJksEuXhspqaPLPLBUI3pQtIJPSijtkR1c0QJBFH1yALNlLXRb2JRHoMd2BS4Ws
-	jHM6rQlqI9CL4PE+MVt/Jz8+NGgewwmGUifH+5+06IPjZg5UdSt1wGDmZTbKNbv9HDT6jP0x2pM
-	kYYBTcAF+e7udY1W46gUv00rTARhKk=
-X-Received: by 2002:a05:6a20:e292:b0:39f:24ad:ad00 with SMTP id adf61e73a8af0-3a39bfc3032mr3445348637.7.1777382309385;
-        Tue, 28 Apr 2026 06:18:29 -0700 (PDT)
-Received: from junjungu-PC.localdomain ([223.167.147.125])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c7fc29b1fd5sm3116360a12.9.2026.04.28.06.18.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2026 06:18:28 -0700 (PDT)
-From: Felix Gu <ustc.gu@gmail.com>
-Date: Tue, 28 Apr 2026 21:18:21 +0800
-Subject: [PATCH v2] usb: typec: fusb302: Fix resource leak when
- devm_drm_dp_hpd_bridge_add() fails
+	s=arc-20240116; t=1777384536; c=relaxed/simple;
+	bh=9teX/ayshIKIg1n/txxmxqU6bfzrQyhFSl1fkUIRnaM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TfwNYOLQNDrGU2PLmYkYHuHHA4+xMtgDXCb2fsq808HlQAiv/jITPfcgap+HqNqYco2dLBmjXfCg6yijBiR9N0gZxwqKoN1rDhvMT3grHe5+MmPOGNqPsG0Wl/O4UxIbnSoOHdBXqaZTuiC1+sP6FBloHpRpPaWULSVtp70zCpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=X//i7rbC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 975F7C2BCAF;
+	Tue, 28 Apr 2026 13:55:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1777384535;
+	bh=9teX/ayshIKIg1n/txxmxqU6bfzrQyhFSl1fkUIRnaM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=X//i7rbCW8FPua77hzSpvxjOVUNbdOhUsBIRlImiLxjTrN1Xep/awe8P5UluvZYO5
+	 guIxLpjdU8MLSJoRho4FzvbdVvFVEMHfBcu/KMtNbXhjBZ9Xqf/4a/9NqMwJTiyxFm
+	 jrctQ7fgxsjrB1Fx7nN9DXmEXY2ZPZUbyCQqBPz8=
+Date: Tue, 28 Apr 2026 07:54:51 -0600
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH 9/9] thunderbolt: Add support for USB4STREAM
+Message-ID: <2026042802-bobsled-envy-8e56@gregkh>
+References: <20260428072209.3084930-1-mika.westerberg@linux.intel.com>
+ <20260428072209.3084930-10-mika.westerberg@linux.intel.com>
+ <2026042848-cubical-penalize-807c@gregkh>
+ <20260428120314.GR557136@black.igk.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260428-fusb-v2-1-aa3b5942cabb@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAJyz8GkC/13Myw7CIBCF4VdpZi2GQXrRle9huqAwbSexxYAST
- cO7i126/E9Ovg0iBaYIl2qDQIkj+7WEOlRgZ7NOJNiVBiVVI7VCMb7iICS1sqst6RMaKNdHoJH
- fO3PrS88cnz58djXhb/0DEgoU0pydazS1XT1cp8Xw/Wj9An3O+QtrQL6mmAAAAA==
-X-Change-ID: 20260421-fusb-0e7085ce431a
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Felix Gu <ustc.gu@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777382304; l=2496;
- i=ustc.gu@gmail.com; h=from:subject:message-id;
- bh=LeBUvx6Pk4t0VrcyfehygjN6ttef5Wj0cz9EoiHhwhM=;
- b=19C0Y8GzytK5wgnDOpKqwuDbdWWlmQ/nppLY5KtneqOSiRLPpmDGMUEzIO+DzJldcNM8Ut96c
- 0ThkzsFNa+4AKpGdt7rrWST591pGiphGYLcHBDD7NeGNTvx91OlsnRJ
-X-Developer-Key: i=ustc.gu@gmail.com; a=ed25519;
- pk=fjUXwmjchVN7Ja6KGP55IXOzFeCl9edaHoQIEUA+/hw=
-X-Rspamd-Queue-Id: D7AEF48604C
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260428120314.GR557136@black.igk.intel.com>
+X-Rspamd-Queue-Id: 936AA487CA9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [3.84 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-36629-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36630-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ustcgu@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,wunner.de,linux.intel.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.949];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 
-If devm_drm_dp_hpd_bridge_add() fails during fusb302_probe(), the original
-code returned directly without cleaning up the resources.
+On Tue, Apr 28, 2026 at 02:03:14PM +0200, Mika Westerberg wrote:
+> On Tue, Apr 28, 2026 at 05:57:37AM -0600, Greg KH wrote:
+> > On Tue, Apr 28, 2026 at 09:22:09AM +0200, Mika Westerberg wrote:
+> > > Introduce USB4STREAM protocol and Linux implementation. This allows two
+> > > (or more) hosts to transfer data directly over Thunderbolt/USB4 cable
+> > > through a character device without need to go through the network stack.
+> > > 
+> > > Any application that supports read(2) and write(2) in some form should
+> > > be able to use the device without changes. The data is sent out to the
+> > > other side over a tunnel inside Thunderbolt/USB4 fabric. The character
+> > > device is called /dev/tbstreamX where X is the minor number starting
+> > > from 0.
+> > > 
+> > > All stream devices need to be configured first. This is done through
+> > > ConfigFS interface. There can be multiple streams at the same time (this
+> > > depends on number of DMA rings and available HopIDs) and a single stream
+> > > supports traffic in both directions. For example there could be an
+> > > application that uses one stream as control channel and another one as
+> > > bi-directional data channel.
+> > > 
+> > > A real use-case for this is to take a backup as a part of recovery
+> > > initramfs tooling (no need to setup networking or have ssh or similar
+> > > tooling as part of the initramfs). Say we want to backup the disk of
+> > > host1 to host2. First Thunderbolt/USB4 cable is connected between the
+> > > hosts (there can be devices in the middle too) then the receiving side
+> > > configures the stream:
+> > > 
+> > >   host2 # mkdir /sys/kernel/config/thunderbolt/stream/0-1.0
+> > >   host2 # mkdir /sys/kernel/config/thunderbolt/stream/0-1.0/backup
+> > >   host2 # echo -1 > /sys/kernel/config/thunderbolt/stream/0-1.0/backup/in_hopid
+> > >   host2 # echo -1 > /sys/kernel/config/thunderbolt/stream/0-1.0/backup/out_hopid
+> > > 
+> > > We use automatic HopID allocation (writing -1 to HopIDs) for simplicity.
+> > > >From this point forward the /dev/tbstream0 can be used pretty much as
+> > > regular file:
+> > > 
+> > >   host2 # dd if=/dev/tbstream0 of=/tmp/host1.nvme0n1.backup-$(date +%F) bs=256k
+> > > 
+> > > The host that is being backed up then configures the stream accordingly:
+> > > 
+> > >   host1 # mkdir /sys/kernel/config/thunderbolt/stream/0-503.0
+> > >   host1 # mkdir /sys/kernel/config/thunderbolt/stream/0-503.0/backup
+> > > 
+> > > Here we take advantage of the fact that host2 also announces the active
+> > > streams through XDomain properties so the name "backup" gives us the
+> > > HopIDs. It is also possible to configure them manually in the same way
+> > > we did for host2.
+> > > 
+> > > Then it is just a matter of copying the data over:
+> > > 
+> > >   host1 # dd if=/dev/nvme0n1 of=/dev/tbstream0 bs=256k
+> > > 
+> > > Similarly it is possible to transfer parts of the filesystem. For
+> > > example copy contents of mydir over to the host2:
+> > > 
+> > >   host2 # gunzip < /dev/tbstream0 | tar xf -
+> > >   host1 # tar cf - mydir | gzip > /dev/tbstream0
+> > > 
+> > > Other end of the spectrum use-case is "borrowing" laptop (host1) camera
+> > > to desktop (host2):
+> > > 
+> > >   host2 # gst-launch-1.0 filesrc location=/dev/tbstream0 ! jpegdec ! videoconvert ! \
+> > >                          autovideosink
+> > > 
+> > >   host1 # gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,width=1920,height=1080 ! \
+> > >                          jpegenc quality=90 ! filesink location=/dev/tbstream0
+> > > 
+> > > Once the streams are no longer needed they can be removed:
+> > > 
+> > >   host1 # cd /sys/kernel/config/thunderbolt/stream/
+> > >   host1 # rmdir -p 0-503.0/backup
+> > > 
+> > >   host2 # cd /sys/kernel/config/thunderbolt/stream
+> > >   host2 # rmdir -p 0-1.0/backup
+> > 
+> > Very cool, but shouldn't the above be in some documentation somewhere so
+> > that people know how to use it?
+> 
+> Sure, I can add it part of the Documentation/admin-guide/thunderbolt.rs for
+> example.
+> 
+> > And why do you need a whole major for this, why not just use a misc
+> > device that it dynamically created for every new dev?
+> 
+> We do use this:
+> 
+>        ret = alloc_chrdev_region(&tbstream_devt, 0, TBSTREAM_DEV_MINORS,
+>                                   "tbstream");
+> 
+> that should be dynamically allocated, no?
 
-Move bridge registration before the IRQ is requested and route bridge
-registration failures through the existing TCPM unregister and fwnode
-cleanup path.
+Yes, but you are using up a whole major number for this, and in reality
+there's only going to be 1-2, maybe 4, different devices needed at once,
+right?  So just use the miscdev interface instead?
 
-Fixes: 5d79c525405d ("usb: typec: fusb302: add DRM DP HPD bridge support")
-Signed-off-by: Felix Gu <ustc.gu@gmail.com>
----
-Changes in v2:
-- Fix Heikki's comment.
-- Link to v1: https://lore.kernel.org/r/20260421-fusb-v1-1-0a9dd64e785b@gmail.com
----
- drivers/usb/typec/tcpm/fusb302.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+thanks,
 
-diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-index 889c4c29c1b8..9ab1277b7ed1 100644
---- a/drivers/usb/typec/tcpm/fusb302.c
-+++ b/drivers/usb/typec/tcpm/fusb302.c
-@@ -1751,19 +1751,22 @@ static int fusb302_probe(struct i2c_client *client)
- 
- 	bridge_dev = devm_drm_dp_hpd_bridge_alloc(chip->dev, to_of_node(chip->tcpc_dev.fwnode));
- 	if (IS_ERR(bridge_dev)) {
--		ret = PTR_ERR(bridge_dev);
--		dev_err_probe(chip->dev, ret, "failed to alloc bridge\n");
--		goto destroy_workqueue;
-+		ret = dev_err_probe(chip->dev, PTR_ERR(bridge_dev),
-+				    "failed to alloc bridge\n");
-+		goto fwnode_put;
- 	}
- 
- 	chip->tcpm_port = tcpm_register_port(&client->dev, &chip->tcpc_dev);
- 	if (IS_ERR(chip->tcpm_port)) {
--		fwnode_handle_put(chip->tcpc_dev.fwnode);
- 		ret = dev_err_probe(dev, PTR_ERR(chip->tcpm_port),
- 				    "cannot register tcpm port\n");
--		goto destroy_workqueue;
-+		goto fwnode_put;
- 	}
- 
-+	ret = devm_drm_dp_hpd_bridge_add(chip->dev, bridge_dev);
-+	if (ret)
-+		goto tcpm_unregister_port;
-+
- 	ret = request_threaded_irq(chip->gpio_int_n_irq, NULL, fusb302_irq_intn,
- 				   IRQF_ONESHOT | IRQF_TRIGGER_LOW,
- 				   "fsc_interrupt_int_n", chip);
-@@ -1774,14 +1777,11 @@ static int fusb302_probe(struct i2c_client *client)
- 	enable_irq_wake(chip->gpio_int_n_irq);
- 	i2c_set_clientdata(client, chip);
- 
--	ret = devm_drm_dp_hpd_bridge_add(chip->dev, bridge_dev);
--	if (ret)
--		return ret;
--
--	return ret;
-+	return 0;
- 
- tcpm_unregister_port:
- 	tcpm_unregister_port(chip->tcpm_port);
-+fwnode_put:
- 	fwnode_handle_put(chip->tcpc_dev.fwnode);
- destroy_workqueue:
- 	fusb302_debugfs_exit(chip);
-
----
-base-commit: 97e797263a5e963da3d1e66e743fd518567dfe37
-change-id: 20260421-fusb-0e7085ce431a
-
-Best regards,
--- 
-Felix Gu <ustc.gu@gmail.com>
-
+greg k-h
 
