@@ -1,205 +1,114 @@
-Return-Path: <linux-usb+bounces-36658-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36659-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KCEFG8s+8WmhfAEAu9opvQ
-	(envelope-from <linux-usb+bounces-36658-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 01:12:11 +0200
+	id AA7SKe9B8WlsfQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36659-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 01:25:35 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A2D948CE84
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 01:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F06BB48CFC1
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 01:25:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B1EF5305129C
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 23:11:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F03DD303A5F1
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 23:24:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07576386C03;
-	Tue, 28 Apr 2026 23:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD26338AC9C;
+	Tue, 28 Apr 2026 23:24:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PJtjKkFQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DxGuT5jo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF2733ADAE;
-	Tue, 28 Apr 2026 23:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A03933ADAE;
+	Tue, 28 Apr 2026 23:24:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777417905; cv=none; b=MSgsCB1iShRbCR6wRaOTHb3B+QPvUM3nrtvUIWvO6/MyGs9jPfiVmJ0iks6CDMVRDQxlqWvNUcBw4q2vySTLX5Ga7y7BVsxW+8ITPkcNfYMauqYCarTX9tRK77VBpEoDG/EHNWqZga5nStpUElDURnVatx9RWWG6sBGXpJw72Ts=
+	t=1777418680; cv=none; b=eCXw5R5GdR2MdYXU5b/LZOlLO3ykfn0RUiZrDXvh+TV/GCa4XlMtJV43FOQIGClIri64JrMiYsOUmMoxJBZcNQU++CnvOAlUdRPRhyJXdYPVkAZv49O6xPruzyvyKB9mBnNKMd3AyhsD8t2Dpnpvt16kuZ8e6ylZpb3NhWeaN+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777417905; c=relaxed/simple;
-	bh=mOd1+/pjP+EGTIv5fUtzevodrBcPg1AohOW3V9tki6k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XR52Aix8xWpfF6YTod2WBxUNgokzcS8lIiVsC+W5papvJfDxwvZBhqZ8ra3ErWzlE9y3cbZL9SJvG4EwCPkLo7tn/IhYSj1yCU1gtLaaUW0KdG9tn8U1MVZgwW6/hh25u8M0claRcF2Ptm2uskACFd90gAiHVqeWTOLCNWPtXNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PJtjKkFQ; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777417903; x=1808953903;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mOd1+/pjP+EGTIv5fUtzevodrBcPg1AohOW3V9tki6k=;
-  b=PJtjKkFQGBvbYpqKqA9pWd6ckFB2BMIesRHc6+4DQvuc9t5F3lcCYNDe
-   zMX/dVCvYyCp/7tvMA610rwql2e0Jy54czAJWgHuwFcPE08kMCW2K9Ar+
-   TCgoufGFFRD4JvT45YOHqeB90CaGt/038cfTfwxsPXwyVt3VwUuElrTmy
-   S9RtscIWZxAdUMCEStOXatO7/6Z3/dVJeCxJv3BFU6WBZ3xuz1kIrGS3F
-   uqAditlqstSkt/0Ntf6chJowmEL1bXurArsaaRvTOHlunKqD9T4wQxeWU
-   o1D2Q7n6eNA/K/ndG2peWluuqGNPMqbFmOAWrpmFD8YTju0kjSqSH1AEc
-   A==;
-X-CSE-ConnectionGUID: 23Yg6JYkT4mtwJ++VMy6eg==
-X-CSE-MsgGUID: ppvR8qSiTouBACHDhWe/UA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11770"; a="77506572"
-X-IronPort-AV: E=Sophos;i="6.23,205,1770624000"; 
-   d="scan'208";a="77506572"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2026 16:11:42 -0700
-X-CSE-ConnectionGUID: oJsrIaKiQVyaW2JaRn9r3g==
-X-CSE-MsgGUID: PAPkm0WuQcacjzYfPZAOXQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,205,1770624000"; 
-   d="scan'208";a="233068293"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 28 Apr 2026 16:11:39 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wHraa-00000000ALU-2Aes;
-	Tue, 28 Apr 2026 23:11:36 +0000
-Date: Wed, 29 Apr 2026 07:11:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maxwell Doose <m32285159@gmail.com>, badhri@google.com,
-	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm: replace strcpy with strscpy
-Message-ID: <202604290711.kHqUSJ8v-lkp@intel.com>
-References: <20260419213638.38291-2-m32285159@gmail.com>
+	s=arc-20240116; t=1777418680; c=relaxed/simple;
+	bh=5Xrt7KILIwa+UGYbws9Qz6dlqQ+86xVFwddyb05WyLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dTxbP+suiLiD3E05qsOvIdPjN83sPAGDvTkEwqA22hlhMhTZZdFzEG09dfFWB9zg3y/BdYMpdlE3wzzm9CvyvkaUA5fgHTNpYV04r094aDqaWNuI3jKD7s87pFlz0WHUFeXjJZMzglRMoJfTmY7rdxp7ZMmsSgh0x25BLIZL9vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DxGuT5jo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89B95C2BCAF;
+	Tue, 28 Apr 2026 23:24:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777418680;
+	bh=5Xrt7KILIwa+UGYbws9Qz6dlqQ+86xVFwddyb05WyLg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=DxGuT5joBp58dAE0+NjIz/E2039dgeZPzrItrEhy8MGPTucajnEWEAPxlYvDwiolB
+	 PPfYWaYW8xzD22Nbq/1xELZRbayheCI6lYh0XwLUFv3GpHTqm50K0acr73FhJr9xZU
+	 rMRJzV6eY0RcRsy72x025FVgphcrN4eD4y+h4Thzw6JZbyoKi4B8PffAfD8VotqiQb
+	 hKNF3ejqYhqm/kIRlgRrxddbBx14dfj9fg2sRknspMM6wgWgCbjZkSJedx6fJ5QVc2
+	 mjd6WexSZ2KTZ7zJA0A3hNViMBJx4Duv0vNUYmFBAtZIje7Sc+saOeMrKBrL9eC12t
+	 GeAEt2gbozpyA==
+Date: Tue, 28 Apr 2026 16:24:38 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Morduan Zang <zhangdandan@uniontech.com>, Petko Manolov
+ <petkan@nucleusys.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S .
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH net v2] net: usb: rtl8150: free skb on usb_submit_urb()
+ failure in xmit
+Message-ID: <20260428162438.07633ec9@kernel.org>
+In-Reply-To: <f52c81bd-aae3-4d23-ae55-a0b3dd075f4d@redhat.com>
+References: <678BC10BB9E39322+20260421111025.15833-1-zhangdandan@uniontech.com>
+	<E7D3E1C013C5A859+20260424015517.9574-1-zhangdandan@uniontech.com>
+	<f52c81bd-aae3-4d23-ae55-a0b3dd075f4d@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260419213638.38291-2-m32285159@gmail.com>
-X-Rspamd-Queue-Id: 9A2D948CE84
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: F06BB48CFC1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36658-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-36659-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,google.com,linux.intel.com,linuxfoundation.org];
+	RCVD_COUNT_THREE(0.00)[4];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,01.org:url]
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kuba@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,uniontech.com:email,lunn.ch:email]
 
-Hi Maxwell,
+On Tue, 28 Apr 2026 13:32:13 +0200 Paolo Abeni wrote:
+> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> > Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> > Signed-off-by: Morduan Zang <zhangdandan@uniontech.com>  
+> 
+> Applied (by Jakub, AFAICS the bot did not send out the notification for
+> some reason), thanks!
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on v7.0]
-[cannot apply to usb/usb-testing usb/usb-next usb/usb-linus linus/master next-20260428]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxwell-Doose/usb-typec-tcpm-replace-strcpy-with-strscpy/20260427-011111
-base:   v7.0
-patch link:    https://lore.kernel.org/r/20260419213638.38291-2-m32285159%40gmail.com
-patch subject: [PATCH] usb: typec: tcpm: replace strcpy with strscpy
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260429/202604290711.kHqUSJ8v-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260429/202604290711.kHqUSJ8v-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604290711.kHqUSJ8v-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/usb/typec/tcpm/tcpm.c:728:52: error: expected ';' after expression
-                   strscpy(tmpbuffer, "overflow", sizeof(tmpbuffer))
-                                                                    ^
-                                                                    ;
-   1 error generated.
-
-
-vim +728 drivers/usb/typec/tcpm/tcpm.c
-
-   706	
-   707	__printf(2, 0)
-   708	static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
-   709	{
-   710		char tmpbuffer[LOG_BUFFER_ENTRY_SIZE];
-   711		u64 ts_nsec = local_clock();
-   712		unsigned long rem_nsec;
-   713	
-   714		mutex_lock(&port->logbuffer_lock);
-   715		if (!port->logbuffer[port->logbuffer_head]) {
-   716			port->logbuffer[port->logbuffer_head] =
-   717					kzalloc(LOG_BUFFER_ENTRY_SIZE, GFP_KERNEL);
-   718			if (!port->logbuffer[port->logbuffer_head]) {
-   719				mutex_unlock(&port->logbuffer_lock);
-   720				return;
-   721			}
-   722		}
-   723	
-   724		vsnprintf(tmpbuffer, sizeof(tmpbuffer), fmt, args);
-   725	
-   726		if (tcpm_log_full(port)) {
-   727			port->logbuffer_head = max(port->logbuffer_head - 1, 0);
- > 728			strscpy(tmpbuffer, "overflow", sizeof(tmpbuffer))
-   729		}
-   730	
-   731		if (port->logbuffer_head < 0 ||
-   732		    port->logbuffer_head >= LOG_BUFFER_ENTRIES) {
-   733			dev_warn(port->dev,
-   734				 "Bad log buffer index %d\n", port->logbuffer_head);
-   735			goto abort;
-   736		}
-   737	
-   738		if (!port->logbuffer[port->logbuffer_head]) {
-   739			dev_warn(port->dev,
-   740				 "Log buffer index %d is NULL\n", port->logbuffer_head);
-   741			goto abort;
-   742		}
-   743	
-   744		rem_nsec = do_div(ts_nsec, 1000000000);
-   745		scnprintf(port->logbuffer[port->logbuffer_head],
-   746			  LOG_BUFFER_ENTRY_SIZE, "[%5lu.%06lu] %s",
-   747			  (unsigned long)ts_nsec, rem_nsec / 1000,
-   748			  tmpbuffer);
-   749		port->logbuffer_head = (port->logbuffer_head + 1) % LOG_BUFFER_ENTRIES;
-   750	
-   751	abort:
-   752		mutex_unlock(&port->logbuffer_lock);
-   753	}
-   754	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+my bad, yes, the patch was conflicting with another one, I had to tweak.
+Morduan, please use patch series if you need to submit patches which
+overlap in context.
 
