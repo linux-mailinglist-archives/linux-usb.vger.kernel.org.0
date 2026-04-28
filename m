@@ -1,201 +1,212 @@
-Return-Path: <linux-usb+bounces-36645-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36646-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OBBoE5348GkpbgEAu9opvQ
-	(envelope-from <linux-usb+bounces-36645-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 20:12:45 +0200
+	id uAmIGmQB8WnubgEAu9opvQ
+	(envelope-from <linux-usb+bounces-36646-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 20:50:12 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B180048A827
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 20:12:44 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC0CE48AD81
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 20:50:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 16A39306F952
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 18:11:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8BFE0303BB2E
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2026 18:49:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7736472777;
-	Tue, 28 Apr 2026 18:11:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D952147CC6C;
+	Tue, 28 Apr 2026 18:49:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="FwGdACcE";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PsZGnXFe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VwsIj9q5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from flow-b1-smtp.messagingengine.com (flow-b1-smtp.messagingengine.com [202.12.124.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0722C41C31E;
-	Tue, 28 Apr 2026 18:11:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603A624501D;
+	Tue, 28 Apr 2026 18:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777399892; cv=none; b=IJxJq/Ktbff/h31vaPOoZwIvKRtXM6SU3EYUGkIqqMVEttU39u47QYJCKOhjlp3li5C4uT7englTmt8cPXe8OOw35zjfTp/BwiPiOLE2O5BzNoEXLZZ/qYWFlKK9KooR7FwsOHaYYY6FNJ6VJy797W3F7+dCoPv9nyTVBLNyPVI=
+	t=1777402190; cv=none; b=cvsYQIMtfjZvUBcQ3f7bp1DAkmQPJKHc5dEeQSsJo7giYEUZOOqXCCHabvxP3cQKVELw4WbQZazDd2Yk3g0WiCK8kz+flCGC9YvxlH/uXTVx6zJ3fsk2fpC2C/bjsrRmbhaU0XY2L9ATHxHq3FERN4sm85mDSMnn9psnKZOrPrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777399892; c=relaxed/simple;
-	bh=UWGzQNftb8o8DGBooX3MXOLEiUysLsUT+gtpcYxnW+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mFCFDqcDk0viFU3v5wUq9uLWEGh98NyG68cAGo51jVJznPQlWSKy3LKSsXRelNvQ7AMezC4spjdKlYGDCypaUhML2UW+HlDZd4icabYgCCrWG40ur9/QvtMZ8nmb3hieHtmkDOS8SfXa6I3iVIX9/0qdE9m/yiPUtZVzAkOjzzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=FwGdACcE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PsZGnXFe; arc=none smtp.client-ip=202.12.124.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailflow.stl.internal (Postfix) with ESMTP id 8E7991300E69;
-	Tue, 28 Apr 2026 14:11:28 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-10.internal (MEProxy); Tue, 28 Apr 2026 14:11:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1777399888; x=1777407088; bh=jRVLkUu+1D
-	UdYPI1Lcftxijdj9hZ7OVSGf1XeqNrozw=; b=FwGdACcEnSvrpvbTfrMPjrIkJv
-	KGZnM1oWOaRRCkQleoPFNPOjuvr81vKjEsM0JN3cBwM0QZ6WF3lDJUyCP78R4zJU
-	n22CI18dmi8QrXo+HHkOITi3vOR8iFbIz336VSQxoKPTtfZb+btfSC2KEjvwkZb1
-	3sv0dvqOA8cmdOCIaHmlwmQACPfsFPvm/bJmXQN2KYIPOL7II7hE2EeHOw2bdRbX
-	pSbmKX0HJGWhJSnIao6pf/1c3vNsDXCzQiaSCmkVCi4x+XRDT5rKur1UIt5GlfF2
-	RmieF2OAV0V+slRYE7eCvGZzUUb2u5YgRwX9kHQJzwvzERfGpUzneyOk81IQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1777399888; x=1777407088; bh=jRVLkUu+1DUdYPI1Lcftxijdj9hZ7OVSGf1
-	XeqNrozw=; b=PsZGnXFes5woefYvRPXJpJaG8yvOFbWqe3blOjMVrhiSyLqFIke
-	GUN0VCNI+Ou7ugttxPAEHl/PTycT/s7urY61pBFl6QuANl3nlvdSBPk6vcXOma48
-	amjZ93FthjhsKh/haYkc+NhoTaBmqzOfvlMeNrc7/pIr/5S2267Y9Ce95BFGQUy3
-	ewCGtPrABOOKttw6wgEJcly/+43plKHgRnZnAJAjKDAnO4pjM75x2rUTdC2QDyvX
-	fOcOJHbwwS3xMHuEzorQPyUvUq0NaMOzaQ313jSuZ5UcKui6aPCYvJOyctysnemE
-	CO+6zWu50Xhzw3nXmMFUdGuAaO8m/Zqhczw==
-X-ME-Sender: <xms:T_jwadUn-CtnAXA52Su38s2Y-GWBGVIIiZ4NJdTX2g771iju8LODLA>
-    <xme:T_jwaW6FLAxJv3XHWt2hYvV-RiahdlZVjcIXlGTo1tZEQobYY7Of5AlMkFmx09csG
-    QoxR0sMypny73vXWAR2MQaWeWdp8kfyKCm5yYmZO80fcMEqcA>
-X-ME-Received: <xmr:T_jwaRYND96jaB8GIf45V5HrGQy-G6d8fTwJJh1AvKJKYcfAxe79uzZ7BQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdekvddvgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcumffj
-    uceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvvedvle
-    ejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushhtvghr
-    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtg
-    homhdpnhgspghrtghpthhtohepvdeipdhmohguvgepshhmthhpohhuthdprhgtphhtthho
-    pehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtg
-    hpthhtoheprghnughrvgifsehluhhnnhdrtghhpdhrtghpthhtoheplhhinhhugidquhhs
-    sgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopeihvghhvgiikhgvlhhshh
-    gssehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhukhgrshesfihunhhnvghrrdguvgdp
-    rhgtphhtthhopegrnhgurhgvrghsrdhnohgvvhgvrhesghhmrghilhdrtghomhdprhgtph
-    htthhopegrlhgrnhdrsghorhiivghsiihkohifshhkiheslhhinhhugidrihhnthgvlhdr
-    tghomhdprhgtphhtthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghhpdhrtg
-    hpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvth
-X-ME-Proxy: <xmx:T_jwaaC1gXogkYAn5W4vQEkAKmuBOLPYsnOKJGTZIAPLRAgoMcjvnA>
-    <xmx:T_jwaSq_2YXJRjAt5JB4I03Nnfnp-Jpw6xFNRZ9OVkxrSWfatkW1uA>
-    <xmx:T_jwaYJ4Jf73p5PQ-OvMlVggvks5nyTweNcBm9NrIugF377SQYU_wQ>
-    <xmx:T_jwadQxtT35Qq7TtlR7Qv2MM5bjo_Scwf60rI-sLiDdULwHGwH5Ug>
-    <xmx:UPjwady4iLJk3JhGpGdX5EtIn1d9SuKgZF0tN6pvhnB_9yfj5oo-gnfq>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 28 Apr 2026 14:11:27 -0400 (EDT)
-Date: Tue, 28 Apr 2026 12:10:49 -0600
-From: Greg KH <greg@kroah.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, linux-usb@vger.kernel.org,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH 5/9] thunderbolt / net: Let the service drivers configure
- interrupt throttling
-Message-ID: <2026042827-pep-deeply-edc9@gregkh>
-References: <20260428072209.3084930-1-mika.westerberg@linux.intel.com>
- <20260428072209.3084930-6-mika.westerberg@linux.intel.com>
- <a0d3eec7-4c11-404f-804c-fa46515d25fe@lunn.ch>
- <20260428172629.GW557136@black.igk.intel.com>
+	s=arc-20240116; t=1777402190; c=relaxed/simple;
+	bh=td8J+tGx5+HIccinESQ79TGfcNKXYIqh9Zh45MhdKWc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=pL6zyogKl3wibQjGkUF1gycDd8N6OSBdH8Rj4lgn91UHW8GAJTwexgezol/pu24auzCRzmTFoY7P7uasNDeHpO5f1iILtHWInTZoZka+rgpS5EC5Y5rh8LGcGZ14u9mEqiAEaNEsBOzj/NpOB6N1sZrLhfX84UcE6OojKKL34Kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VwsIj9q5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A9EFC2BCAF;
+	Tue, 28 Apr 2026 18:49:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777402189;
+	bh=td8J+tGx5+HIccinESQ79TGfcNKXYIqh9Zh45MhdKWc=;
+	h=From:Subject:Date:To:Cc:From;
+	b=VwsIj9q5PSDRceXBxZJLcYgiC8FR3xDwk71rDyieMncUe1KW1RUP3DObXn54EF9l8
+	 c85YOB4dl21Ex1NoUv4/C1iXjJnXUmScpRISA3gsjBC+0rgBMTo0ElNWQ7tTrSP5gE
+	 /X0bWbQD73NEkormtwTgzClNFdYp/AagV5UepsoZH38ZLhoyJhO+sOae8Vo2Vq+Ing
+	 UD70uU8Ebd5LCizMJh8F1ZDEB+E0mJnNWjb+8A2QzfjdswionI2h1hzM1gBmx9ILdc
+	 2tBNO1oZCwuUYFtamZaUcMEzjH8NDbLTZPWWZCoiaOOjgsvxw/ET6OzZ08KoZTWrZm
+	 bLKs5apHwlf2A==
+From: Konrad Dybcio <konradybcio@kernel.org>
+Subject: [PATCH v2 0/4] Prepwork for non-PCIe NHI/TBT hosts
+Date: Tue, 28 Apr 2026 20:49:43 +0200
+Message-Id: <20260428-topic-usb4_nonpcie_prepwork-v2-0-452fb9d63f77@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260428172629.GW557136@black.igk.intel.com>
-X-Rspamd-Queue-Id: B180048A827
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/42NQQ6CMBREr0K6tqStCK0r72EIgdLKj9JfW0AN4
+ e5WTuBmkjeTvFlJNAFMJOdsJcEsEAFdAnHIiB5adzMU+sREMFGyI1N0Qg+azrErGofOazCND8a
+ /MNypLKXktipVJy1JhjRYeO/2a514gDhh+OxnC/+1/3kXThntFeO9PFldqeKCMebPuX1oHMc8B
+ am3bfsC/pA7Js0AAAA=
+X-Change-ID: 20260309-topic-usb4_nonpcie_prepwork-86881f769b8f
+To: Andreas Noever <andreas.noever@gmail.com>, 
+ Mika Westerberg <westeri@kernel.org>, 
+ Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ usb4-upstream@oss.qualcomm.com, 
+ Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777402187; l=3870;
+ i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
+ bh=td8J+tGx5+HIccinESQ79TGfcNKXYIqh9Zh45MhdKWc=;
+ b=S7t3SkjRX5itaJzUfxxQX5ee6/5xfDs4YU2pILIZ0KPAED3JanJ2dvAlDVeDxV04Vr7oivRef
+ 5JfEtsPiVNpA9z9jo4brF8A18SJNna91zdjyuuBMtzQqKRcLpRmgLOs
+X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Rspamd-Queue-Id: AC0CE48AD81
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kroah.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[kroah.com:s=fm2,messagingengine.com:s=fm2];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36645-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[lunn.ch,vger.kernel.org,gmail.com,wunner.de,linux.intel.com,davemloft.net,google.com,kernel.org,redhat.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36646-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com,kernel.org];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[greg@kroah.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kroah.com:+,messagingengine.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_NEQ_ENVFROM(0.00)[konradybcio@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,messagingengine.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oss.qualcomm.com:mid,qualcomm.com:email]
 
-On Tue, Apr 28, 2026 at 07:26:29PM +0200, Mika Westerberg wrote:
-> On Tue, Apr 28, 2026 at 04:59:58PM +0200, Andrew Lunn wrote:
-> > On Tue, Apr 28, 2026 at 09:22:05AM +0200, Mika Westerberg wrote:
-> > > Instead of the core driver programming fixed value for throttling let
-> > > the service drivers to specify the interval if they need this. We also
-> > > allow user to tune this through a module parameter if the default is not
-> > > good fit.
-> > > 
-> > > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > > ---
-> > >  drivers/net/thunderbolt/main.c |  7 ++++
-> > >  drivers/thunderbolt/dma_test.c |  5 +++
-> > >  drivers/thunderbolt/nhi.c      | 58 ++++++++++++++++++----------------
-> > >  drivers/thunderbolt/nhi_regs.h |  3 +-
-> > >  include/linux/thunderbolt.h    |  5 +++
-> > >  5 files changed, 50 insertions(+), 28 deletions(-)
-> > > 
-> > > diff --git a/drivers/net/thunderbolt/main.c b/drivers/net/thunderbolt/main.c
-> > > index 49673f7e0055..8771ca807933 100644
-> > > --- a/drivers/net/thunderbolt/main.c
-> > > +++ b/drivers/net/thunderbolt/main.c
-> > > @@ -218,6 +218,10 @@ static bool tbnet_e2e = true;
-> > >  module_param_named(e2e, tbnet_e2e, bool, 0444);
-> > >  MODULE_PARM_DESC(e2e, "USB4NET full end-to-end flow control (default: true)");
-> > >  
-> > > +static unsigned int tbnet_throttling = 128000;
-> > > +module_param_named(throttling, tbnet_throttling, uint, 0444);
-> > > +MODULE_PARM_DESC(throttling, "Interrupt throttling rate in ns (default: 128000)");
-> > 
-> > As i mentioned elsewhere, netdev does not allow module
-> > parameters. They are hard to use, especially when you have lots of
-> > instances of a device, or you need to set it on the kernel command
-> > line because by the time the kernel has booted, it is too late, etc.
-> > And they are undocumented, and every driver does it differently.
-> 
-> Right. This was meant to be a "chicken bit" or "escape hatch" not something
-> used in daily basis.
+Currently, the NHI driver (and other parts of the TBT framework) make
+multiple assumptions about the host router being a PCIe device. This
+series tries to decouple them by moving the 'struct pci_device' out of
+the NHI code and introduce NHI-on-PCIe-specific abstractions where
+necessary (with no functional change).
 
-Put it in configfs if you really want it.
+The intended usage of the new nhi_probe_common() is pretty similar to
+other bus frameworks (I2C, SPI, USB..), i.e.:
 
-You shouldn't need any new module parameters.
+static int foo_bar_probe() {
+        // get SoC-specifc resources (clks, regulators..)
 
-thanks,
+        // power things on
 
-greg k-h
+        // set some implementation-specific registers
+
+        // register NHI and all the sub-devices
+        ret = nhi_probe(&my_usb4->nhi)
+        ...
+
+        // cleanup boilerplate
+}
+
+Instead of the previously-suggested aux/fauxbus, the NHI device remains
+the same 'struct dev' as the PCIe/platform/[...] device that provides
+it. This is in line with some other buses and it makes things easier
+from the PM perspective.
+
+Tested on:
+* Qualcomm X1E80100 CRD (OOT driver)
+ * USB4 (Qualcomm controller)
+ * Connected to a TBT3 ASUS ProArt 27 monitor
+ * Parade PS8830 on-board retimer
+
+Domain 0 Route 0: 0000:0000
+Domain 0 Route 2: 0031:9000 ASUS-Display PA27AC
+
+* Intel Coffee Lake NUC (NUC8i3BEK)
+ * TBT3 (Alpine Ridge 2C 2016 controller)
+ * Connected to a Dell TB16 dock (TBT active cable)
+ * S3 + S2idle sleep
+
+Domain 0 Route 0: 8086:6357 Intel Corporation NUC8BEB
+Domain 0 Route 1: 00d4:b051 Dell Dell Thunderbolt Cable
+Domain 0 Route 301: 00d4:b054 Dell Dell Thunderbolt Dock
+
+* AMD Ryzen 7 PRO 7840U-based Lenovo ThinkPad T14s Gen 4
+ * USB4 ("Pink Sardine" controller)
+ * Connected to a Lenovo ThinkPad Thunderbolt 3 Dock
+ * Parade PS8830 on-board retimer
+ * Only S2idle is present on this platform
+
+Domain 0 Route 0: 0000:0000
+Domain 1 Route 0: 0000:0000
+Domain 1 Route 2: 0108:1630 Lenovo ThinkPad Thunderbolt 3 Dock
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+---
+Changes in v2:
+- Make 'struct tb_nhi_pci' private, strip it of the 'struct pci_dev
+  field since it can be accessed via to_pci_dev(tb_nhi_pci->nhi.dev)
+- Thin out patch 1, move some of its prior contents to patch 2
+- Rename nhi_pci.[ch] to pci.[ch]
+- Rename nhi_probe_common() to nhi_probe()
+- Squash a number of bugs discovered at runtime on x86
+- Add a patch to make ops necessary to drop boilerplate checks
+- Reword the error messages introduced in the last patch
+- Drop RFC/RFT tags
+- Link to v1: https://lore.kernel.org/r/20260309-topic-usb4_nonpcie_prepwork-v1-0-d901d85fc794@oss.qualcomm.com
+
+---
+Konrad Dybcio (4):
+      thunderbolt: Move pci_device out of tb_nhi
+      thunderbolt: Separate out common NHI bits
+      thunderbolt: Require nhi->ops be valid
+      thunderbolt: Add some more descriptive probe error messages
+
+ drivers/thunderbolt/Makefile    |   2 +-
+ drivers/thunderbolt/acpi.c      |  14 +-
+ drivers/thunderbolt/ctl.c       |  14 +-
+ drivers/thunderbolt/domain.c    |   2 +-
+ drivers/thunderbolt/eeprom.c    |   2 +-
+ drivers/thunderbolt/icm.c       |  24 +-
+ drivers/thunderbolt/nhi.c       | 513 +++++++---------------------------------
+ drivers/thunderbolt/nhi.h       |  32 +++
+ drivers/thunderbolt/nhi_ops.c   |  35 ++-
+ drivers/thunderbolt/pci.c       | 507 +++++++++++++++++++++++++++++++++++++++
+ drivers/thunderbolt/pci.h       |  19 ++
+ drivers/thunderbolt/switch.c    |  41 +---
+ drivers/thunderbolt/tb.c        |  76 +-----
+ drivers/thunderbolt/tb.h        |  10 +-
+ drivers/thunderbolt/usb4_port.c |   2 +-
+ include/linux/thunderbolt.h     |   5 +-
+ 16 files changed, 724 insertions(+), 574 deletions(-)
+---
+base-commit: 936c21068d7ade00325e40d82bfd2f3f29d9f659
+change-id: 20260309-topic-usb4_nonpcie_prepwork-86881f769b8f
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+
 
