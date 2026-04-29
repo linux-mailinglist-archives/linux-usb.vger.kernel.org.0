@@ -1,141 +1,147 @@
-Return-Path: <linux-usb+bounces-36687-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36688-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sPt7KDDr8WkLlgEAu9opvQ
-	(envelope-from <linux-usb+bounces-36687-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 13:27:44 +0200
+	id ODZEEafy8WmElwEAu9opvQ
+	(envelope-from <linux-usb+bounces-36688-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 13:59:35 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A4704938B2
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 13:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ADAA9493CE7
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 13:59:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7E6703075BDB
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 11:26:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 24033305C94E
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 11:58:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78EA83F23A3;
-	Wed, 29 Apr 2026 11:26:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02B593C4567;
+	Wed, 29 Apr 2026 11:58:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ejvHWE1z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aGVqKw6O"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA70302750;
-	Wed, 29 Apr 2026 11:26:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4A6340283
+	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 11:58:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777462002; cv=none; b=T4w88c8pfdui+uKTZ/A75N54vv5+ygt6XtOs+c3C834wo0jn3RKHbz8ymm034YMsyjybqeQRh4/Pkv4+hdKrXyhNd6+FeEmf1vc8g4TePtP2zeSpc7qPPwVv/agvMsclMeZvSkFsu2dIiPIE3NOV7HwPXDkT9IpDdJth3Fb3HrQ=
+	t=1777463920; cv=none; b=LldwNe1U6Aed07RfQXYv7rOLbUIAePNjA6lqfenaoiWY8O2PooNC+Ayb7ZnpBY5rop86Y8EuFtywGrIGqyk6e5xCseeVQH6BQIFUsJ4IqcTXyWgsWDKSrTjWQ6d5hZ//Ix+o7dslGwdsefqxDXPdF4RD71aPyPyfNCOfcoLqatM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777462002; c=relaxed/simple;
-	bh=HgV0q/+gZ9n2giWTxhUD6P3yQ6wEmY66ZwCWQHhgQ2g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kKGPImIqofHhHWkrh4obt4PWgAsqITzuUZVnGNDkfXyNLSZcsDoFgpxWWpSmbc5g0edrzTytstBlWuiMROxKCSnCuFDN5vsyWoqKkpkiSdJCcn9sghnNkWFaAx9gXkuVuHeVxtZuU4tcBqXoQ9JIGTcKIDXLTkfHvbQdDMgSy0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ejvHWE1z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 158D1C19425;
-	Wed, 29 Apr 2026 11:26:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777462002;
-	bh=HgV0q/+gZ9n2giWTxhUD6P3yQ6wEmY66ZwCWQHhgQ2g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ejvHWE1zJ0tb1KwQu/gVCMj0KcNhlMqCOjLI4kQmWC01EPIO4HFDTFQg5PpNyMx2F
-	 7OMWgwbyfp16yd5ZKGLwfDDMuBlWK8CK9qcSIqUHZRxyhnWE4iAN+OK+xmr5WBtr4T
-	 BgqmCB7r/rsFvwFu/mT2z67QkDE/mDzOf7GDi68KHsQjYM3r7svy7TXqJDW5kWsfNa
-	 xYHmkznhflijvwvOUJkH6AcM42ZHWo8kZp7k26fwbFC82N/jHC8/F/rL8GlM8z6Ksh
-	 UMOZ5KVH94exo80oAIrmoHKOK/k/qke5mU8V2uOXUW3Mlxuf7JynBO/Edq8wMcfI5M
-	 twwrBSWDcoLLw==
-Date: Wed, 29 Apr 2026 12:26:30 +0100
-From: Will Deacon <will@kernel.org>
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Cc: Yury Norov <ynorov@nvidia.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>, linux-alpha@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-	dmaengine@vger.kernel.org, linux-efi@vger.kernel.org,
-	linux-fsi@lists.ozlabs.org, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-	linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
-	linux-wireless@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-	xen-devel@lists.xenproject.org, linux-fsdevel@vger.kernel.org,
-	ocfs2-devel@lists.linux.dev, bpf@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-mm@kvack.org,
-	linux-x25@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	linux-sound@vger.kernel.org, sound-open-firmware@alsa-project.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linux-sh@vger.kernel.org, linux-arch@vger.kernel.org,
-	catalin.marinas@arm.com
-Subject: Re: [RFC PATCH v1 8/9] arm64: Add unsafe_copy_from_user()
-Message-ID: <afHq5vyNUJzxVwDV@willie-the-truck>
-References: <cover.1777306795.git.chleroy@kernel.org>
- <5b09e58a84c9edcfe5724db5cd57e45d96a96bfa.1777306795.git.chleroy@kernel.org>
+	s=arc-20240116; t=1777463920; c=relaxed/simple;
+	bh=c90d4PqmVoDUH0kv5idJi2WRZJV8iBOWwfAWYe8XA7Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XRqbEKxJT8fur+4uCJDAjmVEDFI4yXcpgOcTbi65Kz3jMMNYmMlcG5WiNZlO6nE0OejXCUkkmnrG4UZ5uvZYENH9xAk1rq6wnkvH2OXSwmj7mmd/y2NFs65cL589NJCmjHr/6FR/lL1aKvrk+8svZ6HXgltRlTgkml0E8Myu7iU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aGVqKw6O; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-38e91b06006so105419661fa.2
+        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 04:58:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777463917; x=1778068717; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+nNvUqAy4XXRGUA6+1vN7MRogr+QCaiHQrcqNazZRbU=;
+        b=aGVqKw6OC8wImfVOZh+4BFbNR35GunDU6tUoRizb0bkMfCOeCZO3mab04/dmPKZpMW
+         LhC7gDHZSes/0a7Oi6SjdMZTNqMElpBpFNbWpGW8OVsq72nbEQLqBmmQKFkWYz6I2zkq
+         gS1Z3StpXqAKMX7H4ZxXqI4VtmpCXlx9I6LW78A82fwm/n/c7O0ilhbruSbWykYoYXfO
+         Ik5L9AXB3x4LeYIXALxJFwgGB0EksGmSYTAQUi73js2Uj2WHdzZrkD9GhQ5drdUM/RVx
+         Bvmt57Us96UCCB7q4I6qy4ZErm6eCWr/bTmX0pyNzQDkh0WC5nvbj/2YiKwMcgUHQ2ea
+         XPuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777463917; x=1778068717;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+nNvUqAy4XXRGUA6+1vN7MRogr+QCaiHQrcqNazZRbU=;
+        b=Wimej4LYWk4FyTiEa36kXx16cpoXzsvIwOXBpTuWMHocncACb/X3veZP7kIAA0BcJH
+         7mLjKZRxoSOIZRXRWaCa2KfpfLd+3sbo1NJUx0OvjLnFeyqFTmU9WeUENWxC4UbikTk0
+         yR4AN16nbzNMmvSZ4hg4hDh2v5eRl5iVXh8PeuEgLzi9oOHwxYOn4YOecIlCwHUP4TOm
+         3dd9upXz0L9ZWTGb73dfnvvthylJSIYxDBkzttC9L47nzEFJAHQvjy0qj6EIBDRwHkL2
+         sV9I7TJGdtaHvLFJeLZRSpVYgRGtFQoP4OtKe9Q5R/Nl9DeqOtELbldWq6+x2PSZQmpR
+         sOrA==
+X-Forwarded-Encrypted: i=1; AFNElJ+exbDgfr0gbe4V9jeNIiBdKfvWUcOkc6j2BmNHEWBucy1K+C9RKyA9OKI+mRCP7rXFDgcb/Lcrf+4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeXjTXA6eL7RXXiY0drcn09fNWVCGTzuCcesnhb3T5Xb3Sve3a
+	3foOZj7xNjgbUNNaJf8lYX//IZLbFDv8qIY9585bWwGx6wtYOb2gfbXvY53Dng==
+X-Gm-Gg: AeBDievMC/GrT5liCwKa8t2FEVP4/hws73EGRT5QMZMrYPgaHM/y1A4JaN0VhcU0wVX
+	2nWoOsO2NuG6fo3WEXY0J2/8VQQz2aUGDz6zFd47d+v1CFbrPlWckJUs8Cb7FQk+ialerooYYBt
+	Aqg+Oz6azq+1QkI3xBVgM+COj8L4kycNN2bbyRSLAikEwzN1qGoyQ5lGrjZwuYt72ixfTjgVg9H
+	Wd8g72ercaFaKEyq/zwW2fjjpACYiogLMAlQzVMfi9Xj02T7lS3Idn0alJodaUYLvBB67u2JO1L
+	xSnDevT46P39SDO6iFggKzoVlFOhqbG2LTdyTkP2aKmsF17d9A7ZPmmGEjngWg7h+m6sTsCseU8
+	1luixhAJsBjsNLWBFcbQNV6ijr6AAGeKnShrZI7qk7pEINI6LCdxG/qJaZ40ayVJJvZHbpowRFw
+	qzKgd9bcSVDlInHyST5IFEASToTdIv7MNZazyZuMF1JvgO4wZM/6LskQ==
+X-Received: by 2002:a05:651c:513:b0:38e:58c7:cd0 with SMTP id 38308e7fff4ca-39240ccfba3mr25555411fa.10.1777463916843;
+        Wed, 29 Apr 2026 04:58:36 -0700 (PDT)
+Received: from foxbook (bfh75.neoplus.adsl.tpnet.pl. [83.28.45.75])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3924f9484f1sm4728281fa.8.2026.04.29.04.58.35
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 29 Apr 2026 04:58:36 -0700 (PDT)
+Date: Wed, 29 Apr 2026 13:58:28 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Brent Page <brentfpage@gmail.com>, linux-usb@vger.kernel.org
+Subject: Re: TT budgeting for EHCI; accommodate 1023-byte full-speed
+ =?UTF-8?B?aXNvY2hyb25vdXPigJNpbg==?= endpoints
+Message-ID: <20260429135828.3e7f0675.michal.pecio@gmail.com>
+In-Reply-To: <20260429113604.2204b646.michal.pecio@gmail.com>
+References: <B66AE752-B09C-49B3-A829-F7ABB36FB250@gmail.com>
+	<32291bf6-0c9d-4fd9-9dd7-489f7e1c9f02@rowland.harvard.edu>
+	<20260429113604.2204b646.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b09e58a84c9edcfe5724db5cd57e45d96a96bfa.1777306795.git.chleroy@kernel.org>
-X-Rspamd-Queue-Id: 1A4704938B2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: ADAA9493CE7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36687-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36688-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[nvidia.com,linux-foundation.org,gmail.com,linutronix.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org,lists.freedesktop.org,lists.linux.dev,lists.xenproject.org,googlegroups.com,kvack.org,alsa-project.org,lists.linux-m68k.org,arm.com];
-	RCVD_COUNT_THREE(0.00)[4];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[50];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[will@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[3];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-[+Catalin]
-
-On Mon, Apr 27, 2026 at 07:13:49PM +0200, Christophe Leroy (CS GROUP) wrote:
-> At the time being, x86 and arm64 are missing unsafe_copy_from_user().
+On Wed, 29 Apr 2026 11:36:04 +0200, Michal Pecio wrote:
+> The host must schedule SSPLITs assuming no bit-stuffing to prevent TT
+> buffer underrun on long OUT packets. Assuming minimum/no packet headers
+> further minimizes downstream idle. TTs are required to buffer this.
 > 
-> Add it.
+> (BTW, periodic transfers should occur before async. Could the TT run
+> out of periodic, do async, then get an unexpected periodic transaction
+> in the next uframe? What happens?)
 > 
-> Signed-off-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
-> ---
->  arch/arm64/include/asm/uaccess.h | 29 ++++++++++++++++++++++++-----
->  1 file changed, 24 insertions(+), 5 deletions(-)
+> Including packet headers for SSPLIT scheduling seems harmless unless
+> overestimated, but apparently it's not required. TTs must cope.
 
-Why?
-
-And please cc the arm64 maintainers on arm64 patches next time. You've
-managed to cc most of the world apart from us.
-
-Will
+Or maybe not, because 11.18.2 states that "budgeting" includes packet
+overhead and think time. And TT must handle gaps in periodic schedule
+due to short transfers and deal with not knowing whether there will be
+periodic transfers in the next uframe till the last moment.
 
