@@ -1,381 +1,226 @@
-Return-Path: <linux-usb+bounces-36700-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36705-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id JuLOAbBA8mkApQEAu9opvQ
-	(envelope-from <linux-usb+bounces-36700-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:32:32 +0200
+	id oCifC51F8mmApQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36705-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:53:33 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4659D4982F4
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:32:31 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A27549857A
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:53:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id AFA84301F4BB
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 17:32:27 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C4E11300F7B5
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 17:53:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04FA540B6CA;
-	Wed, 29 Apr 2026 17:32:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9648038C2C0;
+	Wed, 29 Apr 2026 17:52:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Ip6rWcD3"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="UGSwPo79";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Sbq4CObu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010016.outbound.protection.outlook.com [52.101.201.16])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 116472EAD1C;
-	Wed, 29 Apr 2026 17:32:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777483942; cv=fail; b=jce/ApANmXIBDjJ5WRvGe/hwLnzPS6tbh6wdzwT1iNgdD+hRmYOObJyzwOaoB8Xc8JPI6ZO3FT7/rNt206SHCXmx8fH4+mDdBkxo3+ISEORuKFhES8c+1OgOHUuh4yFoe+CTXTEtSiGthbq7Twe37whCNx3KwfrHNICEFcCr0wQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777483942; c=relaxed/simple;
-	bh=VEgtLeU9bKF+qUL9urxwWfRYu5f0CkOMRFLZukK0r6g=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Xu4LPHyTjzDF6D5zTPcqeX99q68lrcHpXmCRcwcZ4++STQ4pZlYCBjwMTt6Ogak+xf3tnOnZw1sokMdYxSi8PdAUK84S0oSeurgMsQe3hTXTQVE/FZif/Y9hCxJ0/sxG9WMkeBkB+NosoGf8zBettmNdjZEM7fiA3wpLSPWNAFU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Ip6rWcD3; arc=fail smtp.client-ip=52.101.201.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SZR95Kz/gOPlVm8/xP9hTVkceeZKC+VQAljhDcGRMzO8+4sF5QYfuWx9ZsKmCpew4NHaBRhGVBJlWlzZCcRyV4p/F7RQg2wXqF+KBcSUIW5cPn1cq9zMtNVbna4W8pqdNtepOsy90fyP8qIDRPHw6U0fHUJo+8CZCwuzn0xzoThi+osNQH/6dV2pM+WTHLEt5M8zQQO2Is+RNjGqfXXfkv/lA5qcZ2HjkOIr1GnzXrqEBvoALN1Zrn67h1cLt7ZqQCSniSDMtypQsYPUaROYxciubasbic1yHyOivTmnUN6cMotb5bGbfWhhok3zBKOIY+jeLUOyWC+L7iDlUd02Cw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rTm78k3fFETGWViJ721DhEUmbtENttOSBrfkcivcRUM=;
- b=nDqyXOWY8iRHK7I+EBSpjUvQEafFFwfflCamHOBbMDl6HM0/9zo35sU86cY+aRtAMSjZsf04/Lksnrbx9FCj/LT29hFzgv2JUJ5BhWIxIxr0AvDnyLynVfL0+TZ148AptIgUpmbgbneBhwjQq1iTRajE8iXfmbhMVnF0jkabojSG6VcY/AQv35DVCofQmgq0cvtRg7uwdjYXWMEFN/iLs5LHXKRJvilpw8HErNrfScoUHJsw6NTH0z+Zpg45AqQhow7ccGdKMFJFlX4fuCWx5wHQu+Ekt/R+n2htQKD/M5GHKF1xtImsmUQ8It4B4zxr10n3vXKWeBScZmpNirRt+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rTm78k3fFETGWViJ721DhEUmbtENttOSBrfkcivcRUM=;
- b=Ip6rWcD32PquLxcq16Q9bk4vJYW9J2yf2COEQXYNyd2vPq/35c5Ks9m1JfHbNsn7Mm4EiZUY6NlQQGQjBADtbEWX8NhqC+R7uGeuQtQvrgoBC7AENQXquHor0tcT6JvYGBGx/rgeQC/pEc1zx6/H/LdvR8vYIZsgrYy4ks+88nc=
-Received: from SJ0PR05CA0042.namprd05.prod.outlook.com (2603:10b6:a03:33f::17)
- by MW4PR12MB6921.namprd12.prod.outlook.com (2603:10b6:303:208::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.18; Wed, 29 Apr
- 2026 17:32:18 +0000
-Received: from CO1PEPF000066E7.namprd05.prod.outlook.com
- (2603:10b6:a03:33f:cafe::38) by SJ0PR05CA0042.outlook.office365.com
- (2603:10b6:a03:33f::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9870.16 via Frontend Transport; Wed,
- 29 Apr 2026 17:32:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- CO1PEPF000066E7.mail.protection.outlook.com (10.167.249.9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9846.18 via Frontend Transport; Wed, 29 Apr 2026 17:32:17 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Wed, 29 Apr
- 2026 12:31:52 -0500
-Received: from satlexmb08.amd.com (10.181.42.217) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 29 Apr
- 2026 12:31:34 -0500
-Received: from xhdradheys41.xilinx.com (10.180.168.240) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Wed, 29 Apr 2026 12:31:30 -0500
-From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-To: <gregkh@linuxfoundation.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>, <michal.simek@amd.com>, <Thinh.Nguyen@synopsys.com>,
-	<p.zabel@pengutronix.de>
-CC: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<git@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: [PATCH v3 4/4] usb: dwc3: xilinx: Add support to program MMI USB TX deemphasis
-Date: Wed, 29 Apr 2026 23:00:50 +0530
-Message-ID: <20260429173050.1772377-5-radhey.shyam.pandey@amd.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260429173050.1772377-1-radhey.shyam.pandey@amd.com>
-References: <20260429173050.1772377-1-radhey.shyam.pandey@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3413537F6
+	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 17:52:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777485179; cv=none; b=mwn0xClBhjbcIyHAX8t24w/KS6M4+kmLzWAxcXRU3hXDc999uMV22tzd6t3p4KPDOGO1manto3hP9ef8bGqYr/bC5d60AuUVGfeUT+PBZrTUcyVtMkj8hMYaB7+KKSdnLVGNP5jvSiVbVl5anFSDGXQcYcdB1rq+XSkxrnYWXpw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777485179; c=relaxed/simple;
+	bh=9tUvGreN/jzc8dUgMypS7VOK2O0dvFJsYzLLXf7V/X0=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Hnnj5ibpFyEf3pZiQwm2ZLUnfJPdWZhKiae3CIVx3WgKV/A50jb+YeHquXnFiPmaMdJ4LPww6Dpk6q0geR48/VqSiV5ShF5rXytmL4JBP051d41MGzIDAJpmiHajr0USP0BESzVdfuIAtu/zcQg8v9G78m2GkHyod2xB57dYJsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=UGSwPo79; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Sbq4CObu; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63TFHCKj2094140
+	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 17:52:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	eW+nOS0yaVrRDy95sqZ0Yxy8KhK0nrYWKOhmgEMXYf4=; b=UGSwPo791QA9RbNw
+	2Zz7QbO78zN5hCDd5VbvL1F8wZ0Uk8qoWoFJvmPrzEuQW1R3+qKCKNTOPWR7jaeB
+	Pvo2XgTZIe+fmvOsqwn/mbmDsk57EdC2hNrdme358cTKK/Z4vUOJu5EJPdmmHXs9
+	0t2613pKeDnsGGIDn8w0C8r93GhBT5Oj6W8bUxWfExJSfdvc0w67wsdKmhOELUJC
+	9VC7jv0xQw+HpQB/mUmbe2QohGK2xv7+356PhiY8+Hf2c9YIJz5au5xpJpdZr0td
+	wGte7fN0t4mppb78nPb9Ch1T0CkkYzSK0XGq0B/aTh5X5HkntkAL7EPoareS87jn
+	YS4Bfw==
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dudh3tm07-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 17:52:56 +0000 (GMT)
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-2bdf75bc88fso142719eec.0
+        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 10:52:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1777485175; x=1778089975; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eW+nOS0yaVrRDy95sqZ0Yxy8KhK0nrYWKOhmgEMXYf4=;
+        b=Sbq4CObuCUwfIHth9jUT5QYUAaxVFvol2SZvtV9qjm6CLEGL1D3sB81G9WGcL85071
+         aCSj7Ud/3BSKsvgmx4CU8EfnL+ThOK0eW/AJiJ4jLHWsmrGwuGXx86Xr8+ErKOu4HO1u
+         M3CgbvbHHdVhMEaa2/t3QzQ21QmFCgLHWbSeWM9I2XMDIfp85i/9kDOMH+6y46qHjvFL
+         XXfDpXrE1+UHl8yy9HSzSaDFWuRFuh0ME4fxjLPmakg82HsGIk7DfLKUx3A8qvJED1Gy
+         T0DUD5/6iaA42Fe8HtKtfASPIm/qG+/M4oMKsNtK/bS2HTjs6bFibr71ZW9BlfzEMwwr
+         9qgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777485175; x=1778089975;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eW+nOS0yaVrRDy95sqZ0Yxy8KhK0nrYWKOhmgEMXYf4=;
+        b=mPu/SyNFeWLnroi9rvA7G+foQxc801DgXnAOKdEzqbNdi1C5H01sqKdqoV30Hne3uP
+         37xDZMP6IezDuTqY+Cx2QLCLjNKkQ/p59HmbC5Ro4GKTFUFJ95aFuGC1nnUMTdaN5Zj5
+         xmlfjksHcbnxLB3gWg5B0sJBQVLkjOdsgkbVqZaProXzisXBUeMNb5Qy6JFko07Dxk+q
+         Ty5qVQptL9+NizlBPFgIu3L8FNUtYFJzdCQHOZXWYNBm2pEAKQaSYh43Jmu2+4FqaGRE
+         kJfR4orFUrC/ex61/vR0XCqAPblltED2fOOz9dbWjbxCsfpslgwDos9+5ACG1pgto4+1
+         SQag==
+X-Gm-Message-State: AOJu0YyJPOEf2DGlD7u9Ya13WLRLUtAgrTIyOX23rByfbNMfcIe/DeoP
+	196UE1BTdPoY8QWvHMKG+d0/B2aud8H2PrRHlUJsmvMl32BK+1hlglewrHvgcmC7A2yW/NCyrNq
+	BK24yFX0RB406+pHvJC3oe+NwWMAqgHsQ4vAanBh4FGOtpT7mCww3eiwl5TyFV+LOi1J5lWA=
+X-Gm-Gg: AeBDiesiNPV3/vLMG9bmYkSxYK8BRS46af00fByqm4Oxtd5HJUcEKO9kcAROXVe/CWf
+	miQ7KDdcPGXbvYyvEAz0r1zgxNbxZEIg73M+XONmyIhUCQ6a5mfi2v63PqgV7YDgKwUN2+mb1jP
+	dtvHsshKrvkMdkhp4MKKAw/i0NIDe3kMBueM2fzOdmx+DnsCrJ28sALFkzUD8l/aQoeTYK1K3ii
+	aUn0M8KKd4FVaBVxTh/58G3dVAYqdlVPyKcbfJZA/lWsGBGJ2r0MTo1UB/3ABBR2jovh9tp+Nbz
+	e8oM0Tf0xWeeBqgiDQMoD2sFdlVheqGlIxs0RukCwHfTRQRxa8PdjTbfGm8VzHHYj876CZXtiFe
+	27KFWKCv4ym8r1/fEaEabrhL/cBUkYpTHp1iyY+iMBy8WB7UYxyknOGRJNvevkg==
+X-Received: by 2002:a05:7300:fb87:b0:2da:45f8:1b41 with SMTP id 5a478bee46e88-2ed198bf34amr2219526eec.19.1777485174943;
+        Wed, 29 Apr 2026 10:52:54 -0700 (PDT)
+X-Received: by 2002:a05:7300:fb87:b0:2da:45f8:1b41 with SMTP id 5a478bee46e88-2ed198bf34amr2219510eec.19.1777485174404;
+        Wed, 29 Apr 2026 10:52:54 -0700 (PDT)
+Received: from [192.168.1.133] ([70.95.199.79])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ed1bf6d52fsm3149803eec.4.2026.04.29.10.52.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Apr 2026 10:52:53 -0700 (PDT)
+Message-ID: <ed8566ad-2a98-43c1-8d89-d4ddc37e273e@oss.qualcomm.com>
+Date: Wed, 29 Apr 2026 10:52:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-Received-SPF: None (SATLEXMB03.amd.com: radhey.shyam.pandey@amd.com does not
- designate permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000066E7:EE_|MW4PR12MB6921:EE_
-X-MS-Office365-Filtering-Correlation-Id: b2e1c753-b705-4149-3470-08dea61542cd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|82310400026|7416014|376014|1800799024|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	zOaFGPasF7Pnf01XC1Frwd3i5prNaq16T78Xp/S6FwrlsRRY2zlO4xP6CLY2s3GwFDPUkDpcrdJV4pgq+pWf/w9PPvCuB+6Sn+wCtg0J3LGtSf8SFSi4GldbRKLbd+/fo+lQBQWdhMaCjz13tKCs9OVyxWXPJZrYZ6/H3crMg8x2qWWWcyOUm1B0lIhGYAo6ZlfWfsGgc5xanCI3G6AfnXYQB7eEEoeIiZRtqHSPsMh5kBVtM5STo6+eOM3vuecJq3bipcUBLHyUtEXVXXUj9e1NbVa5JMDBiy5qm1cHjO6dmNWUwHzhL2kW0RMTn7eSbqstX/3Zo9lKexSYoB3l1WKYDQLyMRta8A3tAfcSR0BHtBw4NbU4a/mecmkA4CfRQq72zZGe16mIdTxba8JSNwkb565wVtu8be11zimxPEOPwElYcG97s0Wzi3txi17Py0xkvm9bz+9iKCZMRJ71amEyRPYmTnCb7jdvszHUyjxUt4Ak+oD64AhTrKwd1Kj6ukQs/4bAiNVWauhth9LscKlACG5yllZ9kkDxGGOieLLPFV9lJPbUaHQVNjBC2ycONrTSizVP5tyO4toU+xWM+iVNY9jEZQVU150VkmiHayL+Xnd64LtqI4eoWVdTkbb7UjZP54AuLndKczYhvfyWUNZulCdEBAmyfBr4dOPyhc2YB0A0yGlbLZ93MfQZn/xPlCYRgTTbCI5/1IRoCRDI7VEUTR3aN5ddPjw7eqiXSBuH57tPnIUARmQLLWA/UcHjvOywf78bxrTecpSn1W27jA==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(82310400026)(7416014)(376014)(1800799024)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	+B6PkhKMkWEccLbzLvZOEBDa34B9b0aU+uYa/Sx+LWQx8sX67HV3L3dyKy4Z7esdxSNqk5Hpu/dB3zS7T+4khEATp9Ds4wM+hzSQNo89petihZNd14RaCMlo/HT9cn8vqP13wZHws0QcN1Ezl/2mk1qgqqhDaBqyhPrfFVEzW8SRBbYtDhJH0kTfhfajnCUOGmCzoEK++e1aHmqNbuF85NxSbiHT0FjuTrbIr/p84s+xFrtdo/YzuBHK8QYTyYOtce7WjgtXzAG5SZlcyq2sTgijMBPFlvMwEVq48vk8ti4qJdC+5a7sHoyhaIiO+EGtECrfpnkcvzx/0k+bduAzlzR9suHLL1BZ6qyhKU7t0vN7okr1Te+ASxKDA2kK/wvE8GgfZA2SIUKTNyUFkV6WXyGCP2/+jSSKR0/l2nks8CRIY27MUiNN7Sdg8Mlf4tNa
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2026 17:32:17.7645
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2e1c753-b705-4149-3470-08dea61542cd
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000066E7.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6921
-X-Rspamd-Queue-Id: 4659D4982F4
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: dwc3: avoid probe deferral when USB power supply is
+ not available
+From: Elson Serrao <elson.serrao@oss.qualcomm.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack.pham@oss.qualcomm.com, wesley.cheng@oss.qualcomm.com
+References: <20260407232410.4101455-1-elson.serrao@oss.qualcomm.com>
+Content-Language: en-US
+In-Reply-To: <20260407232410.4101455-1-elson.serrao@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: n7YTGDyGSz2vOnuMsm2C7OrdcUgvJ_6T
+X-Authority-Analysis: v=2.4 cv=A4dc+aWG c=1 sm=1 tr=0 ts=69f24578 cx=c_pps
+ a=cFYjgdjTJScbgFmBucgdfQ==:117 a=uHxescsG3rBdxcXwcPaeSg==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=ZpdpYltYx_vBUK5n70dp:22
+ a=EUspDBNiAAAA:8 a=76KTEkCVzLvc39UprA4A:9 a=QEXdDO2ut3YA:10
+ a=scEy_gLbYbu1JhEsrz4S:22
+X-Proofpoint-ORIG-GUID: n7YTGDyGSz2vOnuMsm2C7OrdcUgvJ_6T
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI5MDE4MCBTYWx0ZWRfX4wTgs7NxkLLd
+ q51YahLL4GXQkph8h5n1V1E3R+0qP97j4ZFRUFeC1LOUxhIqk2l6krZst0KkX1oh9oi55fsa729
+ oblh7cX8tCymxBAAcZ6ipZKoVY+9exbpWoiE15WPPodqmeuiZQBCl0j0oheIe9ix//thtD7UGLG
+ TLzqWEcicIHkWRTeu1IQ+W7QcAwQg01OAJAwBb6A8h8WuAEsqfG94Gs+S3tQzrGVzsrLIlfJ63a
+ 4KSqqZUAGSNZDsVbl0dHWgaX6s5iq8UiUCNpELl1J0O492E4ngKUP7U9qUGLV4Kjfbqc4nwx8HL
+ obcRsNNX6S+jKHVzIQi+Ty7Zlq42jcyO4/ovW+75x5O9bazoywJdGmS5eki+3h8soDDSxCO6zu4
+ q8rdEvIyeNoEE/xY0AT8S/e3Fiu0CDayB855dfBOdtiV2u/LQfDCp39l4XpGliCaexkMGwTt9cG
+ 1b1BNgAlaj2GVMCVyqw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-29_01,2026-04-28_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 spamscore=0 suspectscore=0 malwarescore=0 lowpriorityscore=0
+ priorityscore=1501 phishscore=0 bulkscore=0 impostorscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2604290180
+X-Rspamd-Queue-Id: 2A27549857A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36705-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36700-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:dkim,qualcomm.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,oss.qualcomm.com:dkim,oss.qualcomm.com:mid];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[radhey.shyam.pandey@amd.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[elson.serrao@oss.qualcomm.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[amd.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,amd.com:email,amd.com:dkim,amd.com:mid];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[9]
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
 
-Introduces support for programming the 18-bit TX deemphasis value that
-drives the pipe_TxDeemph signal, as defined in the PIPE4 specification.
 
-The configured value is recommended by Synopsys and is intended for
-standard (non-compliance) operation. These Gen2 equalization settings
-have been validated through both internal and external compliance
-testing. By applying this setting, the stability of USB 3.2 enumeration
-is improved and now SuperSpeedPlus devices are consistently recognized as
-USB 3.2 Gen2 by the MMI USB Host controller.
 
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
---
-Changes for v3:
-- Define DWC3_LCSR_TX_DEEMPH(n) and multiport handling. Thinh: Please
-  review on this offset calculation as MMI USB IP support single usb3
-  port.
-- Default set the tx_deemph to the DWC3_LCSR_TX_DEEMPH_UNSPECIFIED.
+On 4/7/2026 4:24 PM, Elson Serrao wrote:
+> The dwc3 driver currently defers probe if the USB power supply is not yet
+> registered. On some platforms, even though charging and power supply
+> functionality is available during normal operation, there may exist
+> minimal booting modes (such as recovery or diagnostic environments) where
+> the relevant USB power supply device is not registered. In such cases,
+> probe deferral prevents USB gadget operation entirely.
+> 
+> USB data functionality for basic operation does not inherently depend on
+> the power supply framework, which is only required for enforcing VBUS
+> current control. The configured VBUS current limit is typically enforced
+> through the charger or PMIC power path. When charging functionality is
+> unavailable, applying a current limit has no practical effect, reducing
+> the benefit of strict probe-time enforcement in these environments.
+> 
+> Instead of deferring probe, register a power supply notifier when the
+> USB power supply is not yet available. Cache the requested VBUS current
+> limit and apply it once the matching power supply becomes available, as
+> notified through the registered callback.
+> 
+> Signed-off-by: Elson Serrao <elson.serrao@oss.qualcomm.com>
+> ---
+>  drivers/usb/dwc3/core.c   | 82 ++++++++++++++++++++++++++++++++-------
+>  drivers/usb/dwc3/core.h   |  4 ++
+>  drivers/usb/dwc3/gadget.c | 10 ++++-
+>  3 files changed, 80 insertions(+), 16 deletions(-)
+> 
 
-Changes for v2:
-- Don't use compatible check for deemphasis programming.
-- Rename property "snps,lcsr_tx_deemph" to "snps,lcsr-tx-deemph"
-  (hyphens per kernel convention).
-- Fix double space in LCSR_TX_DEEMPH register comment.
-- Add blank line between register offset define and "Bit fields" section.
----
- drivers/usb/dwc3/core.c        | 24 ++++++++++++++++++++++++
- drivers/usb/dwc3/core.h        | 14 ++++++++++++++
- drivers/usb/dwc3/dwc3-xilinx.c | 20 +++++++++++++++++---
- 3 files changed, 55 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 58899b1fa96d..426e30563caf 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -646,6 +646,22 @@ static void dwc3_config_soc_bus(struct dwc3 *dwc)
- 		reg |= DWC3_GSBUSCFG0_REQINFO(dwc->gsbuscfg0_reqinfo);
- 		dwc3_writel(dwc, DWC3_GSBUSCFG0, reg);
- 	}
-+
-+	/*
-+	 * The csr_tx_deemph setting is common across the controller and
-+	 * is configured per port using DWC3_LCSR_TX_DEEMPH(port).
-+	 */
-+	if (dwc->csr_tx_deemph_field_1 != DWC3_LCSR_TX_DEEMPH_UNSPECIFIED) {
-+		unsigned int port;
-+		u32 reg;
-+
-+		for (port = 0; port < dwc->num_usb3_ports; port++) {
-+			reg = dwc3_readl(dwc, DWC3_LCSR_TX_DEEMPH(port));
-+			reg &= ~DWC3_LCSR_TX_DEEMPH_MASK(~0);
-+			reg |= DWC3_LCSR_TX_DEEMPH_MASK(dwc->csr_tx_deemph_field_1);
-+			dwc3_writel(dwc, DWC3_LCSR_TX_DEEMPH(port), reg);
-+		}
-+	}
- }
- 
- static int dwc3_core_ulpi_init(struct dwc3 *dwc)
-@@ -1691,6 +1707,7 @@ static void dwc3_core_exit_mode(struct dwc3 *dwc)
- static void dwc3_get_software_properties(struct dwc3 *dwc,
- 					 const struct dwc3_properties *properties)
- {
-+	u32 csr_tx_deemph_field_1;
- 	struct device *tmpdev;
- 	u16 gsbuscfg0_reqinfo;
- 	int ret;
-@@ -1699,6 +1716,7 @@ static void dwc3_get_software_properties(struct dwc3 *dwc,
- 		dwc->needs_full_reinit = true;
- 
- 	dwc->gsbuscfg0_reqinfo = DWC3_GSBUSCFG0_REQINFO_UNSPECIFIED;
-+	dwc->csr_tx_deemph_field_1 = DWC3_LCSR_TX_DEEMPH_UNSPECIFIED;
- 
- 	if (properties->gsbuscfg0_reqinfo !=
- 	    DWC3_GSBUSCFG0_REQINFO_UNSPECIFIED) {
-@@ -1716,6 +1734,12 @@ static void dwc3_get_software_properties(struct dwc3 *dwc,
- 					       &gsbuscfg0_reqinfo);
- 		if (!ret)
- 			dwc->gsbuscfg0_reqinfo = gsbuscfg0_reqinfo;
-+
-+		ret = device_property_read_u32(tmpdev,
-+					       "snps,lcsr-tx-deemph",
-+					       &csr_tx_deemph_field_1);
-+		if (!ret)
-+			dwc->csr_tx_deemph_field_1 = csr_tx_deemph_field_1;
- 	}
- }
- 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index e0dee9d28740..ab68c6d7b021 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -181,6 +181,12 @@
- 
- #define DWC3_LLUCTL(n)		(0xd024 + ((n) * 0x80))
- 
-+/*
-+ * LCSR TX deemphasis register for USB3 port @n.
-+ * Offset stride matches DWC3_LLUCTL.
-+ */
-+#define DWC3_LCSR_TX_DEEMPH(n)		(0xd060 + ((n) * 0x80))
-+
- /* Bit fields */
- 
- /* Global SoC Bus Configuration INCRx Register 0 */
-@@ -198,6 +204,10 @@
- #define DWC3_GSBUSCFG0_REQINFO(n)	(((n) & 0xffff) << 16)
- #define DWC3_GSBUSCFG0_REQINFO_UNSPECIFIED	0xffffffff
- 
-+/* LCSR_TX_DEEMPH Register: setting TX deemphasis used in normal operation in gen2 */
-+#define DWC3_LCSR_TX_DEEMPH_MASK(n)		((n) & 0x3ffff)
-+#define DWC3_LCSR_TX_DEEMPH_UNSPECIFIED		0xffffffff
-+
- /* Global Debug LSP MUX Select */
- #define DWC3_GDBGLSPMUX_ENDBC		BIT(15)	/* Host only */
- #define DWC3_GDBGLSPMUX_HOSTSELECT(n)	((n) & 0x3fff)
-@@ -1185,6 +1195,9 @@ struct dwc3_glue_ops {
-  * @wakeup_pending_funcs: Indicates whether any interface has requested for
-  *			 function wakeup in bitmap format where bit position
-  *			 represents interface_id.
-+ * @csr_tx_deemph_field_1: stores TX deemphasis used in Gen2 operation.
-+ *                         The csr_tx_deemph setting is applied to each
-+ *			   USB3 port.
-  */
- struct dwc3 {
- 	struct work_struct	drd_work;
-@@ -1424,6 +1437,7 @@ struct dwc3 {
- 	struct dentry		*debug_root;
- 	u32			gsbuscfg0_reqinfo;
- 	u32			wakeup_pending_funcs;
-+	u32			csr_tx_deemph_field_1;
- };
- 
- #define INCRX_BURST_MODE 0
-diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
-index b601cca485ed..7c6111a9ca44 100644
---- a/drivers/usb/dwc3/dwc3-xilinx.c
-+++ b/drivers/usb/dwc3/dwc3-xilinx.c
-@@ -25,6 +25,8 @@
- 
- #include <linux/phy/phy.h>
- 
-+#include "core.h"
-+
- /* USB phy reset mask register */
- #define XLNX_USB_PHY_RST_EN			0x001C
- #define XLNX_PHY_RST_MASK			0x1
-@@ -41,12 +43,14 @@
- #define PIPE_CLK_SELECT				0
- #define XLNX_USB_FPD_POWER_PRSNT		0x80
- #define FPD_POWER_PRSNT_OPTION			BIT(0)
-+#define XLNX_MMI_USB_TX_DEEMPH_DEF		0x8c45
- 
- struct dwc3_xlnx;
- 
- struct dwc3_xlnx_config {
- 	int				(*pltfm_init)(struct dwc3_xlnx *data);
- 	bool				no_mem_map;
-+	u32				tx_deemph;
- };
- 
- struct dwc3_xlnx {
-@@ -280,15 +284,18 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
- 
- static const struct dwc3_xlnx_config zynqmp_config = {
- 	.pltfm_init = dwc3_xlnx_init_zynqmp,
-+	.tx_deemph = DWC3_LCSR_TX_DEEMPH_UNSPECIFIED,
- };
- 
- static const struct dwc3_xlnx_config versal_config = {
- 	.pltfm_init = dwc3_xlnx_init_versal,
-+	.tx_deemph = DWC3_LCSR_TX_DEEMPH_UNSPECIFIED,
- };
- 
- static const struct dwc3_xlnx_config versal2_config = {
- 	.pltfm_init = dwc3_xlnx_init_versal2,
- 	.no_mem_map = true,
-+	.tx_deemph = XLNX_MMI_USB_TX_DEEMPH_DEF,
- };
- 
- static const struct of_device_id dwc3_xlnx_of_match[] = {
-@@ -308,10 +315,12 @@ static const struct of_device_id dwc3_xlnx_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, dwc3_xlnx_of_match);
- 
--static int dwc3_set_swnode(struct device *dev)
-+static int dwc3_set_swnode(struct dwc3_xlnx *priv_data)
- {
-+	struct device *dev = priv_data->dev;
-+	const struct dwc3_xlnx_config *config = priv_data->dwc3_config;
- 	struct device_node *np = dev->of_node, *dwc3_np;
--	struct property_entry props[2];
-+	struct property_entry props[3];
- 	int prop_idx = 0, ret = 0;
- 
- 	dwc3_np = of_get_compatible_child(np, "snps,dwc3");
-@@ -325,6 +334,11 @@ static int dwc3_set_swnode(struct device *dev)
- 	if (of_dma_is_coherent(dwc3_np))
- 		props[prop_idx++] = PROPERTY_ENTRY_U16("snps,gsbuscfg0-reqinfo",
- 						       0xffff);
-+
-+	if (config->tx_deemph != DWC3_LCSR_TX_DEEMPH_UNSPECIFIED)
-+		props[prop_idx++] = PROPERTY_ENTRY_U32("snps,lcsr-tx-deemph",
-+						       config->tx_deemph);
-+
- 	of_node_put(dwc3_np);
- 
- 	if (prop_idx)
-@@ -377,7 +391,7 @@ static int dwc3_xlnx_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_clk_put;
- 
--	ret = dwc3_set_swnode(dev);
-+	ret = dwc3_set_swnode(priv_data);
- 	if (ret)
- 		goto err_clk_put;
- 
--- 
-2.43.0
+Hi Thinh,
 
+Just a gentle reminder about this patch.
+Please let me know if any changes are needed.
+
+Thanks,
+Elson
+
+[...]
+
+> +	if (!dwc->usb_psy) {
+> +		spin_unlock_irqrestore(&dwc->lock, flags);
+> +		dev_dbg(dwc->dev, "Stored VBUS draw: %u mA (power supply not ready)\n", mA);
+>  		return -EOPNOTSUPP;
+> +	}
+>  
+> -	dwc->current_limit = mA;
+>  	schedule_work(&dwc->vbus_draw_work);
+> +	spin_unlock_irqrestore(&dwc->lock, flags);
+>  
+>  	return 0;
+>  }
 
