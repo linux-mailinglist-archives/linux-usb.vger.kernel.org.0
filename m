@@ -1,181 +1,152 @@
-Return-Path: <linux-usb+bounces-36668-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36669-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KHG3Ccp88WnohAEAu9opvQ
-	(envelope-from <linux-usb+bounces-36668-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 05:36:42 +0200
+	id eET3BWmB8WlYhQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36669-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 05:56:25 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD41C48EAFC
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 05:36:39 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8044F48EE40
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 05:56:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 786813014694
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 03:36:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1B524306715D
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 03:53:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37F293890E3;
-	Wed, 29 Apr 2026 03:36:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 405603502A4;
+	Wed, 29 Apr 2026 03:52:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="JPuYivBw"
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="oZxOoajT";
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="kWgGRYDo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975C1225A38;
-	Wed, 29 Apr 2026 03:36:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA3F304BDF;
+	Wed, 29 Apr 2026 03:52:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777433795; cv=none; b=iGcp1ATUhvvTOPXoII+fH2/MnkowLG+YbLb5mWwJ+JimVDLrcibQrrAAeTcjwSgCh06HPevAJGe8kPKPAkNYOv/Bv9kuwuDudQuTpT1w6pZTmX5Ipak9DcTIjQcpJ9w2hTEB1MGyb28jdDdwggUO9N8cKbbkOmoHIVbmo3bh7/M=
+	t=1777434777; cv=none; b=Z8GNA9EN6VrCciOsph6SLs7Sapk7X5UyZQPSbVjLgYRKkjBLgnJQ1Kzjmtsf9nEC66b8rdN8jvnAjXYgz94yYXQcC/BBSyZYihGv7JVoH68WGf1TyvuIawS84cXzxhJ8FI3exeZIeeRGkMTvinnLtAM4k5YyJl09yClClqbAv8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777433795; c=relaxed/simple;
-	bh=08OmEsr1hCRDH/YORMa9v5Gjh7FzbFNCu850g0aXVR0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CAOQSMbgqkLRBFrGfWacVAZzvRsDcgcxiHPyMf0fpTnGR2cXlVY6w7e+T+Moqp+5jPGWIwQV4aV4rdG3fsWaeoAAjtZ7sqgWftRl2uIjGBRDXxJhpApPrnfJ1nki6Z6jZrYtx+yR4MxfqVHi1lWKnXa+Sr54NXq/AGgSrdm8yI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=JPuYivBw; arc=none smtp.client-ip=54.206.16.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1777433787;
-	bh=T92eqt1ZCY3opLCeE0wWBQVRlnkO8R7C9G7IEAWn3qQ=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=JPuYivBwwqklvimbNCYnreXxOGB3QWlh1WGdwWJhtCdXB/nST84d6wnrI1JiMnZ5C
-	 Bt2Q/vd5ipxSN9r6KVDJ4sTk2DnvuxOJ3LZhoVQyqICDqfbmTiR7cLqvQRn0BOrxeh
-	 UC/Ryeq3adhXshFvXXcjR3xcnhHpAYDhK8mQBRSg=
-X-QQ-mid: zesmtpip3t1777433780td3efc152
-X-QQ-Originating-IP: OqaDPEAT1Wdwt0z7nXhNiZTObUmblkbnDqWfTxWVa5o=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 29 Apr 2026 11:36:18 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 15583585262135573335
-EX-QQ-RecipientCnt: 13
-From: Haowen Tu <tuhaowen@uniontech.com>
-To: gregkh@linuxfoundation.org,
-	rafael@kernel.org
-Cc: linux-usb@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	laurent.pinchart@ideasonboard.com,
-	hansg@kernel.org,
-	mchehab@kernel.org,
-	pavel@kernel.org,
-	lenb@kernel.org,
-	oneukum@suse.com,
-	kernel@uniontech.com
-Subject: [RFC] USB/PM: should USB interface drivers distinguish hibernation THAW from RESTORE?
-Date: Wed, 29 Apr 2026 11:36:17 +0800
-Message-Id: <20260429033617.1954257-1-tuhaowen@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+	s=arc-20240116; t=1777434777; c=relaxed/simple;
+	bh=B2HX1PM5n3v6UGf6lGhJXaxG5YbV920BqkBbCmtAv4o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F7F7lhP+1k2TM4wAu5xTuGz7NwNzqmdDyTaleDxgzgOs9yvGraaZjiH5mD85IvwW6g8b0Zylm3N44vriXNFkvSxcsn0Hpah1z+B+I3xXsUjrTog6g/fnYEVSk+5XX+DH6pkhqJZ5fQJ1iTJEwirWwxDGMh5sdfVf/nZyhxv/yy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=oZxOoajT; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=kWgGRYDo; arc=none smtp.client-ip=23.88.97.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1777434769;
+	bh=B2HX1PM5n3v6UGf6lGhJXaxG5YbV920BqkBbCmtAv4o=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=oZxOoajT+YOjhYwgFm/dXcpF4GKMHC0dJ7VhdNRwkCfqZ4EaFn+OOGZv3nG6gISma
+	 SZZP51glOz5DbZVc5Y4S9iZxAkaVzmTPpjrL64KB5i32jcyLnb+GHhxpNB9TA8TCQZ
+	 v0QsNyH8Xk3qRdWFpnOibTTY+tcnLFowhG4F359nM9EZO6NemyDQ88Gw6nIU9n+Gva
+	 JfQrnHt6G4Beaf2sBNH/7ycKX6i5Nu805jARpni7bTl19RGzplZSchhT1kvH/DQxBX
+	 MmxBv0nnfsE9u/TU0gY/LW+SsyoaF9Rm5AMAswgcyYsXF0K7pSy5RncWf4yQNZz7m5
+	 b4xJ0OkaDWeMw==
+Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
+	id 41F9047DF8; Wed, 29 Apr 2026 03:52:49 +0000 (UTC)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1777434768;
+	bh=B2HX1PM5n3v6UGf6lGhJXaxG5YbV920BqkBbCmtAv4o=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=kWgGRYDoO7Ge7fBRUGfGegL6TO2Y4W7UcT/wVTyd2U2J4XjJJWuNvoJQb2RA/CVZf
+	 SG5n0IiEEkLO8ZzEOiIP8V0QA0StsZpzC3T0LqEjc++fkZ7AVIadQiD2gy/9TMC0vM
+	 WwKctpjby1qSSCFuOGTCCjZ2Jteb4GXY29xqzJ5g74wM7rpde+Os2aW0+kSJxADo4c
+	 TYEHTq7C5JKSmz/0xCYQIE51sR2y0ZsGyyvzHEUtJpV+yaeeF9RcMYof73nlQJhsib
+	 sd4ODOVjApooJVGolS44ZIN2r/T6YiVaeQuhis6mcbNzCC8lS+yO3dqEA5AGBVHmfL
+	 /87/8WAqQx9aQ==
+Received: from [IPV6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb] (unknown [IPv6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb])
+	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id 5A06646FB3;
+	Wed, 29 Apr 2026 03:52:48 +0000 (UTC)
+Message-ID: <54e5e249-d947-4b0f-915c-e13bc4f6e345@birger-koblitz.de>
+Date: Wed, 29 Apr 2026 05:52:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
-X-QQ-XMAILINFO: M3vv73qU6a4uPXcIldRwK9B4UiSgdQBKdeFslIBdSbWPEUBpzKXLYxLF
-	21s8R3cyHwacTVaXM5Jnf5sCb0X4eIVR7pgT+50uSEzvQkxKSAVE81aLqO0RUs6DR2ZWcox
-	W29QLDWFRtJ5TVMIHohgnbGjoNA5g9z8XIbhrKBqp/GF0pf9+rCfFFcqmbhl5rKybU0IYIx
-	DuZ5VP9i1rCJKfV5j9v3HFzdST4H8jFgum0GihVaSPCPIM/x8YPMr44vi7dGeSfznucXhbP
-	ETCAH2TtPJS/iSM4SSPr3KHGKHRMRjVpmnXJRo8tLQi4x4JnGEW4hyDRL3WwwfYHV+QXwZ8
-	Q9Csv9v6orA17T0AJXkJa7pdRHLLgUDk5PKATRBsQkGGOwOILFyYff3zTVTp5km7XNHzW9o
-	wDUEJizHDv3x+LRibpbCePT3ZOCtUCQn3Ia1ln02/Sldv+qfAIYFL4ra0m6nauD1N2mQpjk
-	FUmIAg+JbqAXHH0gW5DuFQnMFy/1dpMp/jPatEv/phgoUFPqW16B7aL6ZscN4e/Ook+1j3h
-	m4iE7DxxGXlyWo+MHpC2tRTGQRg+5mdsuejJSLxgsb86ZlZYJ2h8g68hbkpoGycY45GkNJ8
-	t7qTqUz0ZvcQQ/90opSmBMxQvFiC1lR9Q0CVWSy86RuwosgedR4mbjY7Tn7/609NAdEey+W
-	x6YTD3wq+4KsX5X+ZrKXHSWNSpdU3rpRvdljSLUbmsysMGSMmAIBEdgBwIQwEEe6cMFxcnc
-	UO4+Fy66kxtnxsPwvArmgsxlttQBd+nkf+xvLDkItTUeqqefuG/WAl7+cLO32qW6gVjkHDA
-	oXVM0f1XRFp/cwaMqFmmmHuuI/9JoaR5hAy3E0+ayTfP/7EFQI5gqs1JghKmYpIRL7r0vPM
-	JCWdfvGd0ORmuoLIDgpj5WAiIXSr23pHBnEle11ijJ7DfCBfYJstxsnsc5PtCGDisuST7yX
-	cNBV/Csh6IeN7lsXdB47nn9q293he0yVuYQBSwj0KmKw5JTd818QD19ZCfVMdZm0RoqLNuv
-	B5yNvLFFLgZRptVyzv
-X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
-X-QQ-RECHKSPAM: 0
-X-Rspamd-Queue-Id: AD41C48EAFC
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 2/4] r8152: Add support for the RTL8159 chip
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Chih Kai Hsu <hsu.chih.kai@realtek.com>
+References: <20260428-rtl8159_net_next-v1-0-52d03927b46f@birger-koblitz.de>
+ <20260428-rtl8159_net_next-v1-2-52d03927b46f@birger-koblitz.de>
+ <3e04d913-693c-44a9-a685-df9d0c9bd95f@lunn.ch>
+From: Birger Koblitz <mail@birger-koblitz.de>
+Content-Language: en-US
+In-Reply-To: <3e04d913-693c-44a9-a685-df9d0c9bd95f@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 8044F48EE40
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	SUBJECT_ENDS_QUESTION(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
+	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36668-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[birger-koblitz.de:+];
+	TAGGED_FROM(0.00)[bounces-36669-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[birger-koblitz.de];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[tuhaowen@uniontech.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[uniontech.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 
-Hi,
+Hi Andrew,
+thanks for reviewing!
+On 29/04/2026 3:52 am, Andrew Lunn wrote:
+>> +	case RTL_VER_17:
+>>   	case RTL_VER_16:
+>>   		ocp_byte_clr_bits(tp, MCU_TYPE_PLA, PLA_CR, CR_RE | CR_TE);
+> 
+> nitpick. The other switch statements seem to be sorted. So 17 should
+> be after 16.
+Will fix in the next version.
 
-I'm looking for feedback on a USB/PM design question that came up while
-investigating a UVC hibernation issue.
+>> +		sram_write_w0w1(tp, 0x81b9, 0xff00, 0xb900);
+>> +		//nomal link TX filter
+> 
+> normal? Please also add a space after the //. netdev also prefers /*
+> */.
+Will fix.
 
-In the hibernation flow, after the memory snapshot has been created, the
-kernel briefly resumes devices in order to write the image to storage.
-On the successful hibernation path, the system is then powered off. For
-a USB camera that was actively streaming before hibernation, this means
-the USB resume path runs during that intermediate THAW phase, even
-though the final RESTORE path has not happened yet.
+>> +		sram2_write_w0w1(tp, 0x84b2, 0xff00, 0x6000);
+>> +		//Training AAGC PAR (with uc2 patch)
+> 
+> space
+Will fix.
 
-From the driver's point of view, that THAW phase is not semantically the
-same as the later RESTORE path after booting from the image.
+>> +	if (tp->version == RTL_VER_17 && r8159_wait_backup_restore(tp))
+>> +		return;
+> 
+> You should probably do something with the return value from
+> r8159_wait_backup_restore(). At minimum a dev_err().
+> 
+I will add a dev_err() message.
 
-The difficulty is that USB interface drivers currently get
-
-    int (*suspend)(struct usb_interface *intf, pm_message_t message);
-
-but resume-side callbacks are only
-
-    int (*resume)(struct usb_interface *intf);
-    int (*reset_resume)(struct usb_interface *intf);
-
-so by the time a USB interface driver's resume path runs, it has no
-direct way to distinguish a hibernation image-write THAW from the later
-RESTORE path.
-
-The immediate trigger here is UVC, where resuming the streaming path
-during that THAW phase can turn the camera LED back on and cause other
-visible device activity even though the system is about to power off.
-More generally, review feedback on that patch was that solving this in
-individual leaf drivers would not scale well if other USB interface
-drivers ever need similar behavior.
-
-So the question is whether USB interface drivers should be able to
-distinguish these two phases, and if so, what the right interface would
-be.
-
-Possible directions could include:
-
-  1. Exposing the phase distinction to USB interface drivers
-  2. Handling it inside usbcore
-  3. Adding a USB-specific callback or other mechanism for this
-     transition
-
-I'm intentionally not proposing a concrete API in this RFC yet. I'd
-first like to understand whether this should be considered a real USB PM
-interface issue, and if so, which direction would be the least
-intrusive and most maintainable.
-
-Thanks,
-Haowen Tu
+Birger
 
