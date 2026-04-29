@@ -1,220 +1,194 @@
-Return-Path: <linux-usb+bounces-36675-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36676-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iKCiKs/E8WkbkQEAu9opvQ
-	(envelope-from <linux-usb+bounces-36675-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 10:43:59 +0200
+	id uDynCWXH8WnnkQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36676-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 10:55:01 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15A354914C7
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 10:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BAC449164F
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 10:55:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6A4213055E8C
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 08:43:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 748BD3040A88
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 08:54:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55E1A3B95F9;
-	Wed, 29 Apr 2026 08:43:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85A863B95FF;
+	Wed, 29 Apr 2026 08:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="f16KYBLM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VYB5me19"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9323B47CD
-	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 08:43:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D781DF25C
+	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 08:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777452186; cv=none; b=fPTy9fpAs0iEjizNO2oXaX1WjLIuT16/x0/HlHjX6nMFqqyupRIOo98nylerZ0J0JO1d2dv1Ws+JNtVPqqH7cksZEoSY/pUf4mgOQ2Uf6YMbbj13zuXkh9zIIHHHxkdyBdhZp9mMAQkyJ2MDgtksYYfRF85wTw8iCW7ivf0lSxY=
+	t=1777452891; cv=none; b=go0Xbu86SJRPc+3+zEX1EnIBW8SaTpOvy4qIE/a2k5gTyvpjJcgG/3LdABvoiqsMIzQ/+0mt2FiWAkC20d6DqhEM02xKrHBPZZfBRx3CVPe3Hjb6zwzHjC9P4s58b+UQRpXOSGWL48MjcPEkO0gPVQWcYygY2HQLX/uo8/H1vMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777452186; c=relaxed/simple;
-	bh=tupiD11ATds5ekAH11VAwc8M0ubbtZCVy5mgO77Hq00=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=unVa1y1sZuY9KLG7rrMJMvZvasHktv2yI8fzAtncbV9oTeh3bJ1/8D0Ru7FWjnqTDJhjIAA5OkVrUbGEZuqnafFwHi1H1b1gSiXuviDCTV5ewnLGx4mcKitPWiGvSc+a6AUMs6Rsdi0cJ+74gMS/vAjRMkZde6q4AGg1IkYbzls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=f16KYBLM; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43d73422431so11404523f8f.2
-        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 01:43:05 -0700 (PDT)
+	s=arc-20240116; t=1777452891; c=relaxed/simple;
+	bh=rFL8zZeALAWX0sL1JjYXAZfdQRS5oB6weeWKXIdZN1I=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=S/xajBip1XMCL2ncV6yAwmvEltBDx/v6qO8Xkk8VOqJE206UHKtWmgYR9NLMeuKXYg9xfqaJvHmrwzbk7zclxixQRdqL4uCQ8vQQ2sCYpYOqFM1WOtOkj3jxgoD90jYhk6E1NpckHTrsHAkt4ruQEEiQL1quEJEdftd3fFwFeeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VYB5me19; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-488ba840146so109921885e9.1
+        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 01:54:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1777452184; x=1778056984; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aEw2E2UxluXLM5FnKmomLkyyPldPWoTTdKM8dvkkUPc=;
-        b=f16KYBLMIzZYLjPY3dRyCZf1zyHDvtBrrzWgpNSuIqO3GcXITs6GeAqF0JvIrgqkOW
-         mX0wW+l86BtExzi1nnlBSa0GbxrigLA/1+FOKxZFU+9c9UjDQr6ZvA9jDjA+uV8fn4ns
-         KhAaNI6HSY1HC8QWkqRRNRXSFzE/UselxsNwC9h3S7iOUnLmRSaczB34jxi7vLGL1oRJ
-         S/dfS4BgGBgZq83+tKaPpycbUtul/xS/tABFk6t9VdkHUqjCWvX0vd7kCJrxNCB/bZD3
-         WhDJ5QXHc+0wBjsqdnj1zCUkp6C/UM6djT04HvAaWIrsdBp8uhA5a4Y7EId83T/DpVc1
-         /8jA==
+        d=gmail.com; s=20251104; t=1777452889; x=1778057689; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d7xnryUCB/v5J0ugmTYtLPymla+7Z+8S1aN3GqJpabw=;
+        b=VYB5me19sIp0z4TNsd/CXFzmCgMNdhmzWP/NFMBQRW5AjO+LV72Sh2LjWpKPetAw7m
+         p3Qs8Hx+HhsOUveX6va00V9APpqyfjWTYgTrVksFklMLNuOh3Budf69FIAsKODa+Ala4
+         E4QV31rvqQzbV1qnmXDpvs1S6LAONzeWnU/o519Gr8RuBbFjWu0lqR71VQ99JdbK4wIx
+         snSrlBj46ruid7Xewtjmgur45c5TlwecZKUJFEApQmpAQYjySiYdXW6SiIcuIDolr4yS
+         WecYo01WHmowYwmdZTnaFwyk5SvBkC1mbbkJ1mr0Pxg8Rjk6fBuDELg0kjXyeNLSqqB4
+         Bpvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777452184; x=1778056984;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aEw2E2UxluXLM5FnKmomLkyyPldPWoTTdKM8dvkkUPc=;
-        b=iz3ACyXnIllVSY7pG4Ll6C4BUGLRRvd6UDbNA7zj9S83kP2+17uPrbNxfRf6H14G9o
-         /Pt9KEOG7IAmM+u82fVzJ1NQnXnMJWIt6xF9NnDVJIi1hJtxJeqxPdLuTsQg368qPO8G
-         glzv3QrjMnf5N8WMDm1D7fam1XlK+UP6vHGIdHguH1VCwfyKI+fQonqUUJWPm5ZT07Zj
-         Ni6g8izwj9hDmGuWHyPt9T20eW9wBI27VE/xVqY5MWW2JemoLFB5+2Do2gUiaFi60Bbf
-         dW+FnN+tJM9EijelZQ/2rElN6VkXBlvHEZQeFyLNVxH1vcq5KqoKUbPt59QDbX6hkOp1
-         lQeA==
-X-Gm-Message-State: AOJu0YzQoMbricvVwPn3f8B0FCODZEzE8rVQ/E8OHQkK9wtLXaUcALB3
-	Tn6ZfI7HNPrnHcIuIh0N2yskzmZWiHGDh19svlGOvE/fvRXK2a69cHY3qNvDwUxDg5E=
-X-Gm-Gg: AeBDietXNHfYNMRsty3sjctPyQ591UHTnuvIdbsyL1NhhMt9Y+jfhTQvLnUUi3r0aQs
-	YdzBaaEbR/35IG0lZXrQE1VLPiMbAcvgjh6wXGUal+3ju2B8AuzR6bM07/LRuNtCvubMtdgDPPx
-	0/qgAqJBhGQmREhNwnTgNotCj1O2/Yewdw7OdXi8y25h6uD494SUA3u3W/2vFTPrWqTJu2xmzHB
-	775ZLJbbIbD/XGnLmafb0YSyV5KCFk3YCpZmm+zcYi1dzO1gvSmggoE/gUWxJXWWkDAei0+dAek
-	onI7jyiNcs8NTUz4+uERNu11BIO0LnfuAue4/486smYKij6DGMfyzRlppzIbZljtJ17N9XYYbGT
-	EucqVkqDquPWIc58D41ltkmN2MMZCML3I/D63lHfqZ8QVTWMpOeQjwNhGE5rdncwTq6h8Meo7w3
-	iBJYUVZgQtxLKbgGHlyLQGvlhiqhVSAuW8PgTheZL0s2rLDjOw/IFYud/NAbyKbzCUMQT+m9s8D
-	0W88w==
-X-Received: by 2002:a5d:5d08:0:b0:43f:e7fe:421f with SMTP id ffacd0b85a97d-44790efd49fmr4716396f8f.40.1777452183598;
-        Wed, 29 Apr 2026 01:43:03 -0700 (PDT)
-Received: from ?IPV6:2001:a61:13a6:c701:bf3c:e2f0:87b2:c525? ([2001:a61:13a6:c701:bf3c:e2f0:87b2:c525])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-447b3d48131sm4260624f8f.3.2026.04.29.01.43.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Apr 2026 01:43:03 -0700 (PDT)
-Message-ID: <6d0f7bdc-bdb8-4d9c-887e-8a5f3d4c6b98@suse.com>
-Date: Wed, 29 Apr 2026 10:42:55 +0200
+        d=1e100.net; s=20251104; t=1777452889; x=1778057689;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=d7xnryUCB/v5J0ugmTYtLPymla+7Z+8S1aN3GqJpabw=;
+        b=GO5/GbxCK93ina6twTz5t2tt5GXDipxm0KtC/p7bE48NbvQakEM4J2oJYjxalusMHw
+         K+YCH+vUktN30ccF/kyCxm+QlIzRAmuDdyTSD/jkc96RJR0xPYFr5iEQbeuefczgEysq
+         /+20HwuGGJsYZTbKM5ALZjIxO8qD4Ud77/1exLRBAby9WycfKLBUzMs4/CLk1Dt2hUfp
+         zAlNe3g0sTg1GO5ElsHBEypkkgoM4D8qsEGJQrRyO+K8+xi92XBsq8RaYqXtgtOYuxQt
+         8BCkWNLxRm0qHSTVg6GfjwWt+Fv+JZ5EgMXuHy7YneySrO+n6Z7eFpCplHKUB9gK8FVY
+         7Imw==
+X-Forwarded-Encrypted: i=1; AFNElJ9GjxqwxdMM4VlQPoeu2ZkNCKuux6lO3ivY3OK7vqr98/03skvyW1ERAGHKFSKa/awVZkT0/ZUE+uc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLS8lcL+7s2MoOHlYJllgtzBr4u8bckjY9nQebJkN3VQlf26Qp
+	MFTFbuSjzZaintvZeCBAZRKiLWsesbsGvQLjKMCiK5EQFvTnd/qCn22J
+X-Gm-Gg: AeBDieuIBo0AdDyKxQvej76/Ncg+5sJaWGFPs4uz42ayLt1pI79Vj0CPTRUQoHCa35V
+	3fI3aik7m6II4QlRFDSyQeCJONz4Ml0BhvKZd/ko5Jmzs0hw96s1a9LpjawMsCZgtbhM5t3Zjh3
+	z6s2saCozGbQutD23ynoR8YInqD59LaF5KMtn28ZJm3WJNjkSSxuKquL7RKKEsHtLU1W2z3Vh1E
+	VS2Hh/VI38HpNBAO8TRi2IRx30T638ne0g3PieP9i3Pmr0f/j6ctUic+EygkxZn9tVw9emkRkCe
+	VBZfzdFPneZfe15HZOE5eK4KJ781q91uMCATxpNgsKxTTd0H4HXTx4TIeU6vGS9Ol4k4+rScH0F
+	U37/5lFSStrfMXsTDOHSWVBzYtWYw3FzXG2BYq47kQbEqkh+KYBFc69vXDCGz1bP2c/UFuckUzN
+	0P0YShaSL64U/z3EUx3EWA7fCbaKfVqi+WhcfmM5idu0m5wlaM0dIFssxfFqcCv9MKfiY0syFv+
+	uw=
+X-Received: by 2002:a05:600c:8582:b0:485:3abe:ab86 with SMTP id 5b1f17b1804b1-48a77af3ddamr73694725e9.4.1777452888461;
+        Wed, 29 Apr 2026 01:54:48 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a7bc7a376sm40747555e9.11.2026.04.29.01.54.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Apr 2026 01:54:48 -0700 (PDT)
+Date: Wed, 29 Apr 2026 09:54:45 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Amit Sunil Dhamne <amitsd@google.com>
+Cc: Maxwell Doose <m32285159@gmail.com>, badhri@google.com,
+ heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: tcpm: replace strcpy with strscpy
+Message-ID: <20260429095445.11b7302e@pumpkin>
+In-Reply-To: <0643586e-e665-4592-b941-2868fca84322@google.com>
+References: <20260419213638.38291-2-m32285159@gmail.com>
+	<0643586e-e665-4592-b941-2868fca84322@google.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC] USB/PM: should USB interface drivers distinguish
- hibernation THAW from RESTORE?
-To: Haowen Tu <tuhaowen@uniontech.com>, gregkh@linuxfoundation.org,
- rafael@kernel.org
-Cc: linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- laurent.pinchart@ideasonboard.com, hansg@kernel.org, mchehab@kernel.org,
- pavel@kernel.org, lenb@kernel.org, oneukum@suse.com, kernel@uniontech.com
-References: <20260429033617.1954257-1-tuhaowen@uniontech.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20260429033617.1954257-1-tuhaowen@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 15A354914C7
+X-Rspamd-Queue-Id: 7BAC449164F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	SUBJECT_ENDS_QUESTION(1.00)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36675-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-36676-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[gmail.com,google.com,linux.intel.com,linuxfoundation.org,vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[davidlaightlinux@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,suse.com:dkim,suse.com:mid]
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-On 29.04.26 05:36, Haowen Tu wrote:
-  
-First, to which extent is the issue specific to USB? I suppose
-you'd see the same issue on a camera connected via PCI.
+On Thu, 23 Apr 2026 12:23:09 -0700
+Amit Sunil Dhamne <amitsd@google.com> wrote:
 
-> In the hibernation flow, after the memory snapshot has been created, the
-> kernel briefly resumes devices in order to write the image to storage.
-
-Yes. But you cannot just restrict the thaw to storage devices.
-You also want
-
-a) displays (to show the user what is going on)
-b) keyboards (sysrq key)
-c) anything used for logging
-d) devices for the visually impaired
-
-> On the successful hibernation path, the system is then powered off. For
-
-Keyword: successful
-
-> a USB camera that was actively streaming before hibernation, this means
-> the USB resume path runs during that intermediate THAW phase, even
-> though the final RESTORE path has not happened yet.
-
-Yes, though it will not happen if the writeout fails.
-
->  From the driver's point of view, that THAW phase is not semantically the
-> same as the later RESTORE path after booting from the image.
-
-That is the key point. In the error case it is.
-  
-> The difficulty is that USB interface drivers currently get
+> Hi Maxwell,
 > 
->      int (*suspend)(struct usb_interface *intf, pm_message_t message);
+> On 4/19/26 2:36 PM, Maxwell Doose wrote:
+> > The function strcpy() is deprecated as it can be used in buffer overflow
+> > attacks. This patch replaces strcpy() with strscpy() to improve
+> > security and stability.
+> >
+> > Signed-off-by: Maxwell Doose <m32285159@gmail.com>
+> > ---
+> >   drivers/usb/typec/tcpm/tcpm.c | 6 +++---
+> >   1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > index 8e0e14a2704e..69574c5e79e1 100644
+> > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > @@ -725,7 +725,7 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
+> >   
+> >   	if (tcpm_log_full(port)) {
+> >   		port->logbuffer_head = max(port->logbuffer_head - 1, 0);
+> > -		strcpy(tmpbuffer, "overflow");
+> > +		strscpy(tmpbuffer, "overflow", sizeof(tmpbuffer))
+> >   	}
+> >   
+> >   	if (port->logbuffer_head < 0 ||
+> > @@ -841,10 +841,10 @@ static void tcpm_log_source_caps(struct tcpm_port *port)
+> >   					  pdo_spr_avs_apdo_15v_to_20v_max_current_ma(pdo),
+> >   					  pdo_spr_avs_apdo_src_peak_current(pdo));
+> >   			else
+> > -				strcpy(msg, "undefined APDO");
+> > +				strscpy(msg, "undefined APDO", sizeof(msg));
+> >   			break;
+> >   		default:
+> > -			strcpy(msg, "undefined");
+> > +			strscpy(msg, "undefined", sizeof(msg));
+> >   			break;
+> >   		}
+> >   		tcpm_log(port, " PDO %d: type %d, %s",  
 > 
-> but resume-side callbacks are only
+> This has already been fixed as part of [1].
+
+It is also 'not a fix'.
+strcpy() is fine for copying literal strings into arrays.
+With the kernel headers you get a compile error from strcpy() if the string
+is too long.
+OTOH strscpy() will truncate overlong strings.
+
+	David
+
 > 
->      int (*resume)(struct usb_interface *intf);
->      int (*reset_resume)(struct usb_interface *intf);
-
-That depends on whether the device has lost state.
-  
-> so by the time a USB interface driver's resume path runs, it has no
-> direct way to distinguish a hibernation image-write THAW from the later
-> RESTORE path.
-
-That is not true. A thaw should call resume(). A restore after STD
-should call reset_resume().
-  
-> The immediate trigger here is UVC, where resuming the streaming path
-> during that THAW phase can turn the camera LED back on and cause other
-> visible device activity even though the system is about to power off.
-> More generally, review feedback on that patch was that solving this in
-> individual leaf drivers would not scale well if other USB interface
-> drivers ever need similar behavior.
-
-Storage and UAS devices need to thaw. As well as the devices listed above.
-
-> So the question is whether USB interface drivers should be able to
-> distinguish these two phases, and if so, what the right interface would
-> be.
+> [1] https://patch.msgid.link/20260310094434.3639602-5-aichao@kylinos.cn
 > 
-> Possible directions could include:
 > 
->    1. Exposing the phase distinction to USB interface drivers
->    2. Handling it inside usbcore
-
-Not possible. Some devices need to be thawed. Writing an image
-to a USB device must work. At the very minimum you need a flag
-and a mechanism to handle a failed writeout.
-
->    3. Adding a USB-specific callback or other mechanism for this
->       transition
+> BR,
 > 
-> I'm intentionally not proposing a concrete API in this RFC yet. I'd
-> first like to understand whether this should be considered a real USB PM
-> interface issue, and if so, which direction would be the least
-> intrusive and most maintainable.
-
-I am sorry, but your basic assumption that all USB devices can be handled
-in the same way is not correct.
-
-	Regards
-		Oliver
-
+> Amit
+> 
+> 
 
 
