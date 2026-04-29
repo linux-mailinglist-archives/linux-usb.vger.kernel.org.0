@@ -1,181 +1,176 @@
-Return-Path: <linux-usb+bounces-36716-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36717-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8CHNAoVk8mm9qgEAu9opvQ
-	(envelope-from <linux-usb+bounces-36716-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 22:05:25 +0200
+	id AERCAdZ/8mnarwEAu9opvQ
+	(envelope-from <linux-usb+bounces-36717-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 00:01:58 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E64F6499FB4
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 22:05:23 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 258D049AC5A
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 00:01:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0006C302FB5A
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 20:05:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3B6403020EF6
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 22:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB3423806C9;
-	Wed, 29 Apr 2026 20:05:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE7133E9580;
+	Wed, 29 Apr 2026 22:01:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rWfFO21Q"
+	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="raqBXhiz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001F828850C
-	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 20:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8473D9DA5
+	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 22:01:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777493109; cv=none; b=eVA5NOqD9Y3wt69KmZlVwqbwEM01YRlnsfbfuisa/XlmNjhfvILXr9DwwxVD6N1+f4Po1Io8F9l6bGXAOENGsYuGVMAHOsGVd/A5LNu6n1pP69ArRey+ui4ffJK9Rr7bm5NhNanxeesagr3XL6iWew7fD5GLHXkdt2Rn5N3/CHc=
+	t=1777500108; cv=none; b=Fo+CHeVly1zh1eb3XKrJ53bKobrt2mQRern2qhhysTwOvH7RyO/PZueM61Uew0FbH5D6VOJqLi/XP+4YGSKLz+35Shz44OVd0PQ5IJfNqu85mUwRQYCc30EyS6FxY+WA7R7DrFk044xYVH6Z1GqP2zrJnEbLbcIqraZx1dETm08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777493109; c=relaxed/simple;
-	bh=ePAVKKP9NcWsrogZLEEbIVVVRuhDzFnU/GbQr4sBfjw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rj1c4ubVJhMSE9RBAG6cJIWjdNsP4860KpCXj4eyvuy+eDaMi7gWjN412EYw8lTWMgtMYzqDzpIjEVwQvql/ZWkA3uvvTaAYmX5XGTWATFVefTHnPB33f6g8VODlk0g/elx6BCFYt2l8nvJGftzD98kvHIYZQK5obdHiWcR/57o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rWfFO21Q; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-3878de20527so1040391fa.3
-        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 13:05:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777493106; x=1778097906; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cI0pCRhpEXFxJjbd7g1dsL6hzDuY/Kz/JfXvRyAIZJ4=;
-        b=rWfFO21Qzl4IpB5ABsziRprf28/Ra5RbmOh/PlLL6RHAc0+cXCq/02uS9pg+/kRTAB
-         uPxP72fiLz4GUVD9lpIGfkoH5YpIuxwg7bn7VR8+8vDWku0/PzRYvJpIbGZBLlFpL6Y4
-         TGX/wKq356Oc8jtVbXO8DBxiqDvugM5jMCWtI6pDcYU2AQjHaXaDd0AVgzoLMI3UrfDQ
-         vVUkXesSUCdiREY6scB22uNOud6jOFwn+A14q/k0EBlHWe8Xj9qjJQhPXAqHQ2wtfODo
-         vvvFVkP3EXIEmKCMhkIHbY+DoAJ0Szq1wZML6eR650qD+IFG/AtDzd7fQE00g6+q6aPy
-         EjBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777493106; x=1778097906;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cI0pCRhpEXFxJjbd7g1dsL6hzDuY/Kz/JfXvRyAIZJ4=;
-        b=N589ScWK00aA0vnqsLcEyK2qaTz8xF+X9o4RBYDR9D6IpTyflYtKSxGATj9ITwQQxq
-         VacblptHPHpx6+S6hI+BvwnpNOkJIfxvT0FX+UoU6k4LowUgXsExVXvRNv21ywDvuU/e
-         DLW4iLbck+5DpIi9e4sBHjKy92G62Q7n3F3v9Ybymf5cB2vStyPbEX6RuyMcBOax4LP9
-         qpx+HE5GQM3mnP+VK61JVDCdgsW0lowpucu0yV4x3zRRsXKreJ1XJ9RPKU0cWV8MPkBu
-         uQr7nkFNj1PY7kcI+TEgCNz9jsCDqoJfOyC7Igj3P1dNFzT1o4Rpt314P6PDxlBhjiHA
-         n0Jw==
-X-Forwarded-Encrypted: i=1; AFNElJ/glyRlufTcMry5s13zTK7gLN5qFYryVU9qt18sl/CsyWhB1e4b0Bd5Jg9sMLTW9uzf1FHceZ1o4aU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9eazi5dzuHd4n1l5iQiCRBebMqMxXcpcGfYMM3VBKmMVinMES
-	1C+tA5uZaZnA4fi8whsaJNfd/9gH7E2damPd9FBaOa2+/s63Pdi09B93/Z7c8g==
-X-Gm-Gg: AeBDiesv7kPXqahg3z/PE2ljJr+lppllGVBx0t3zdIIh+BSFuSBX62iRSdd+XIHKSr1
-	LiAflLis54a0Ur4dKa7eV14DzrszQaIgnxQ+hxUkZ0Pun43kFBGC0N3WlkFw7/v8zk9SmUln8bs
-	uTQhK40PCDvFqmAS47Mle7Cx/LnVotK64O9LTU67XWLRgZTABCHGH2u2CRfNQcPGIFaLgzlRZQQ
-	izyNMC1oXEpiIU5SGjL/HnuLS2EXIFs6eA0CaB2ZLMGGkyMnmt5Fd95P3Ni/GV85fK1st/C06pz
-	L8boscKRK+eZRbqZNkt1nj4YP8wTbSvPmHQ1mO2Xz+v64qV7ilo9kMIcZkZIqMlk8DPqCmQ0BeS
-	362c73bnnFm+RMvh73oFHVqCMyfcRCS3BUbKQuH9v0qJK1Y0kRmSm+TEvGcBYY2ovHnvo5qHB1r
-	z3zE3/mtLd+Ve1Y4pUuMtXDYYVk6yzlP5O/moBOFOv66M=
-X-Received: by 2002:a05:651c:2114:b0:38e:186e:350e with SMTP id 38308e7fff4ca-3934dec7039mr443581fa.7.1777493105766;
-        Wed, 29 Apr 2026 13:05:05 -0700 (PDT)
-Received: from foxbook (bfh75.neoplus.adsl.tpnet.pl. [83.28.45.75])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3924fac8831sm8051901fa.39.2026.04.29.13.05.03
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 29 Apr 2026 13:05:03 -0700 (PDT)
-Date: Wed, 29 Apr 2026 22:04:59 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Brent Page <brentfpage@gmail.com>, linux-usb@vger.kernel.org
-Subject: Re: TT budgeting for EHCI; accommodate 1023-byte full-speed
- =?UTF-8?B?aXNvY2hyb25vdXPigJNpbg==?= endpoints
-Message-ID: <20260429220459.0c304ea6.michal.pecio@gmail.com>
-In-Reply-To: <49a41b4c-34ac-4627-adcb-d0e989470610@rowland.harvard.edu>
-References: <B66AE752-B09C-49B3-A829-F7ABB36FB250@gmail.com>
-	<32291bf6-0c9d-4fd9-9dd7-489f7e1c9f02@rowland.harvard.edu>
-	<20260429113604.2204b646.michal.pecio@gmail.com>
-	<a3176296-bf99-4486-9310-0b70f28c1ba7@rowland.harvard.edu>
-	<20260429212408.299826a4.michal.pecio@gmail.com>
-	<49a41b4c-34ac-4627-adcb-d0e989470610@rowland.harvard.edu>
+	s=arc-20240116; t=1777500108; c=relaxed/simple;
+	bh=II8ohc7sAflHsxrnYUmI1YeNTdEz7x/i9ebrFLATSzw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=utBohEbiI+xYWh1wfc3IPBE/iJWz26gsJTLZjbW3vddrSX3HiSIoETEr/UyRjNJK+pu6oIiGlY3qsEizrSZbFyWVrcc1EApPG1P+qKwOWXYl4syrKd9788p6ZoWKz2nRETzNC1bXlGuOyzDPTQ5EFgdba3Axw4HevHDgN/+QvPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=raqBXhiz; arc=none smtp.client-ip=212.77.101.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
+Received: (wp-smtpd smtp.wp.pl 13658 invoked from network); 30 Apr 2026 00:01:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
+          t=1777500099; bh=gEC+cmPxfUXymzPv1HP4xx1muA0vheqZwmJZV7UsrwM=;
+          h=Subject:To:Cc:From;
+          b=raqBXhizveNI/ME2riBAjXoA78ASWuE2MNh2/eG6jDB5j8ST0etzpSamGqyXvPToP
+           J+f+Ia5HeQkRZtuV8UT7q0XcLLa+/ch3zfEWwsvcgHW8x2nVrn4h8T+8zLvPL3BFzw
+           NoKKnbw9xv6nj6erkko3zykJaK12yXl+jUj6GZhc8pDOHvMF/9mjruwt9+zTNQrL65
+           RydGHTSHIBhfd8yF6djS+IciO9GAAEcfqMnk0rU029HLUkPWS9fvPfcLrWrsncfqlu
+           XOrTBj0SisAU6FwJVO+igof1yKH8ivXZIMPJcs6kSQE+7RG8v/XBKApLyPDVd9khkS
+           KVzEDUQm3GGbw==
+Received: from 83.24.138.167.ipv4.supernova.orange.pl (HELO [192.168.3.203]) (olek2@wp.pl@[83.24.138.167])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with TLS_AES_256_GCM_SHA384 encrypted SMTP
+          for <mail@birger-koblitz.de>; 30 Apr 2026 00:01:39 +0200
+Message-ID: <998ace9a-9f27-4467-b4ab-8581cf37f81e@wp.pl>
+Date: Thu, 30 Apr 2026 00:01:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 0/4] r8152: Add support for the RTL8159 10Gbit
+ USB Ethernet chip
+To: Birger Koblitz <mail@birger-koblitz.de>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Chih Kai Hsu <hsu.chih.kai@realtek.com>,
+ Andrew Lunn <andrew@lunn.ch>
+References: <20260429-rtl8159_net_next-v2-0-bab3cd4e4c66@birger-koblitz.de>
+Content-Language: pl
+From: Aleksander Jan Bajkowski <olek2@wp.pl>
+In-Reply-To: <20260429-rtl8159_net_next-v2-0-bab3cd4e4c66@birger-koblitz.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: E64F6499FB4
+X-WP-MailID: c125cb5f65505aed24f4d9e665418429
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000001 [QeIc]                               
+X-Rspamd-Queue-Id: 258D049AC5A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[wp.pl,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[wp.pl:s=20241105];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36717-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TAGGED_FROM(0.00)[bounces-36716-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[olek2@wp.pl,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[wp.pl:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com]
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	FREEMAIL_FROM(0.00)[wp.pl];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,birger-koblitz.de:email]
 
-On Wed, 29 Apr 2026 15:32:07 -0400, Alan Stern wrote:
-> On Wed, Apr 29, 2026 at 09:24:08PM +0200, Michal Pecio wrote:
-> > Yes, but per spec transfers are budgeted based on wMaxPacketSize and
-> > actual SSPLITs may be shorter, while subsequent transfers may still
-> > remain budgeted into a future uframe.  
-> 
-> The actual SSPLIT will be shorter only if it is a short transfer
-> (that is, shorter than the maxpacket size).  Hence there won't be a
-> subsequent transactions in a future uframe, even if some are budgeted
-> there.
+Hi Birger,
+I ran a few tests on the RTL8157 and RTL8159. The 1/2.5/5/10G link
+establishes correctly. The device also behaves normally under iperf load.
+Everything is working fine so far.
 
-Not for this endpoint, but another one may be budgeted next. Say, two
-isoc endpoints with 188 byte budget each. In Y0 EP1 moves one byte and
-leaves some time unused, near the end of Y0 EP2 SSPLIT arrives for Y1.
-
-Seems legal, so I don't think TT can assume that it has seen the end of
-periodic transfers when its queue runs empty. IDK what it does then.
-
-> > Then I think it doesn't support 1023 byte packets at all.
-> > 1023/188=5.4 and if worst case bit stuffing factor is 7/6 then up
-> > to 6.3 uframes of transfer time. Completion in Y5 or Y6 and CSPLIT
-> > required in Y7.  
-> 
-> For iso-IN, that's right.
-> 
-> > IOW, you play Russian Roulette with bit stuffing if you enable
-> > this.  
-> 
-> The driver is not perfect.  No doubt about it.
-
-This raises question how much sense there is in patches enabling such
-endpoints. Maybe worth it for OUT, if they currently don't work. Or for
-fans of RR, if there are no other side effects :)
-
-> > > Adding support would complicate the driver considerably and yield
-> > > relatively little benefit now that xHCI is so widespread.  
-> > 
-> > Fun fact: not all xHCI supports it either.  
-> 
-> Heh.  I'm a little surprised the xHCI implementors were able to do
-> all this scheduling in hardware in the first place; it's not an easy 
-> problem.
-
-It's firmware on some 8051 or similar monstrosity. Often upgradeable.
-Often upgrades exist, presumably for valid reasons.
-
-Regards,
-Michal
+On 29/04/2026 19:01, Birger Koblitz wrote:
+> Add support for the RTL8159, which is a 10GBit USB-Ethernet adapter
+> chip in the RTL815x family of chips.
+>
+> The RTL8159 re-uses the frame descriptor format and SRAM2 access introduced
+> with the RTL8157 as well as most of the setup and PM logic of the RTL8157.
+>
+> The module was tested with a Lekuo DR59R11 USB-C 10GbE Ethernet Adapter:
+> [ 2502.906947] usb 2-1: new SuperSpeed USB device number 3 using xhci_hcd
+> [ 2502.927859] usb 2-1: New USB device found, idVendor=0bda, idProduct=815a, bcdDevice=30.00
+> [ 2502.927867] usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=7
+> [ 2502.927871] usb 2-1: Product: USB 10/100/1G/2.5G/5G/10G LAN
+> [ 2502.927873] usb 2-1: Manufacturer: Realtek
+> [ 2502.927875] usb 2-1: SerialNumber: 000388C9B3B5XXXX
+> [ 2503.063745] r8152-cfgselector 2-1: reset SuperSpeed USB device number 3 using xhci_hcd
+> [ 2503.123876] r8152 2-1:1.0: Requesting firmware: rtl_nic/rtl8159-1.fw
+> [ 2503.126267] r8152 2-1:1.0: PHY firmware installed 0 to be loaded: 20
+> [ 2503.156265] r8152 2-1:1.0: load rtl8159-1 v1 2026/01/01 successfully
+> [ 2503.270729] r8152 2-1:1.0 eth0: v1.12.13
+> [ 2503.289349] r8152 2-1:1.0 enx88c9b3b5xxxx: renamed from eth0
+> [ 2507.777055] r8152 2-1:1.0 enx88c9b3b5xxxx: carrier on
+>
+> The RTL8159 adapter was tested against an AQC107 PCIe-card supporting
+> 10GBit/s and an RTL8157 5Gbit USB-Ethernet adapter supporting 5GBit/s for
+> performance, link speed and EEE negotiation. Using USB3.2 Gen 2 (20GBit) with
+> the RTL8159 USB adapter and running iperf3 against the AQC107 PCIe
+> card resulted in 8.96 Gbits/sec transfer speed.
+>
+> The code is based on the out-of-tree r8152 driver published by Realtek under
+> the GPL.
+>
+> The RTL8159 requires firmware for the PHY in order to achieve a 10GBit link
+> speed. Without firmware, only 5GBit were achieved. The firmware can be
+> extracted from the out-of-tree r8152 driver-code where it is stored in the
+> ram17 u8-array. Code is added to use the existing firmware upload mechanism
+> of the driver for the RTL8157/9 PHY firmware code. The firmware will be
+> submitted separately to linux-firmware.
+>
+> Signed-off-by: Birger Koblitz <mail@birger-koblitz.de>
+Tested-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+> ---
+> Changes in v2:
+> - Correct formatting of comments
+> - Order case statement values correctly
+> - Add error message when backup-restore fails
+> - Correct commit message of support for firmware upload
+> - Link to v1: https://lore.kernel.org/r/20260428-rtl8159_net_next-v1-0-52d03927b46f@birger-koblitz.de
+>
+> ---
+> Birger Koblitz (4):
+>        r8152: Add support for 10Gbit Link Speeds and EEE
+>        r8152: Add support for the RTL8159 chip
+>        r8152: Add irq mitigation for RTL8157/9
+>        r8152: Add firmware upload capability for RTL8157/RTL8159
+>
+>   drivers/net/usb/r8152.c | 336 ++++++++++++++++++++++++++++++++++++++++++++++--
+>   1 file changed, 324 insertions(+), 12 deletions(-)
+> ---
+> base-commit: 35c2c39832e569449b9192fa1afbbc4c66227af7
+> change-id: 20260427-rtl8159_net_next-4f778a614fa7
+>
+> Best regards,
 
