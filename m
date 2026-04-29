@@ -1,203 +1,219 @@
-Return-Path: <linux-usb+bounces-36698-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36703-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qJVJIyo68mlypAEAu9opvQ
-	(envelope-from <linux-usb+bounces-36698-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:04:42 +0200
+	id UBl0Iu1A8mn7pAEAu9opvQ
+	(envelope-from <linux-usb+bounces-36703-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:33:33 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 167E1497F36
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:04:37 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D02E498332
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:33:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0BF6A307FFD9
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 17:01:54 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 883AF300C3B1
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 17:32:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91DEA413249;
-	Wed, 29 Apr 2026 17:01:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D811C41B360;
+	Wed, 29 Apr 2026 17:32:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="2wO2sW//";
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="ijUiT+bw"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="X3Za39LI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010070.outbound.protection.outlook.com [52.101.46.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F5F7410D1D;
-	Wed, 29 Apr 2026 17:01:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777482107; cv=none; b=WJQh68Aw791560sUOqataWJWD18Wdjyh9XT/HFPGezMuiS+mycZPBzZiklN8BvwETJosjcDxJNdXPx0n1etWHI15qhnDnpBTrSxOePw/kDGph8xi5uip91NIbdTn5rimv8wRzsMZTN+qVI+69S0/STSHPXbVe0UME3rqaupG5Vk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777482107; c=relaxed/simple;
-	bh=eol+1DnsahDPt0HbY+ktrtopC/qEvd8XCdKez3IJQ2A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pJuOQQxq7TI+xSR7X9szLnycGFOH1Fvh37G6uvIqTPPJw+jXQ1+uVh5KDNoKk66Nf5qoEnGTEYS5NZMCKiozdJjp6giEZyZRwuk3Yh2ZDXHEBBE0lwWB8hqmWP7uHGUPZ8DG5WO6xRTiDdKIVz3wTz65pFbLR3jiClzF+Zwxc9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=2wO2sW//; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=ijUiT+bw; arc=none smtp.client-ip=23.88.97.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1777482104;
-	bh=eol+1DnsahDPt0HbY+ktrtopC/qEvd8XCdKez3IJQ2A=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=2wO2sW//jt6UMP6gWHHyrIy47r+HxSwmEeM4ORaNt2cqJOBT5rRGYOisnC6vYdEVq
-	 QlhSAtZhfJYHN10lHEGqo8KrsAhQYLT1o8m34Id9EEZLEbaIP+p3Rh3dJNjd95lsCY
-	 kBYjVD9xFACfVqUkEch6TGsPj6kpvVUtgeLPqygHTBEjSayqHS/6IkngIJa9dq5u5j
-	 xeVSsCYON3VMVnbDI7wlqd6z/C3SLtIqm8a2rmziuUzsFq+G5iEYoBMI/nF0kg/SpK
-	 1QLqmwqtb3sXlJyFAVSrZP3iCivdyUPSSGd783pOf3YIblHMgCkNlX+UNvSJxkmDNd
-	 soojGrT0tpGRQ==
-Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
-	id 2024B481B1; Wed, 29 Apr 2026 17:01:44 +0000 (UTC)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1777482099;
-	bh=eol+1DnsahDPt0HbY+ktrtopC/qEvd8XCdKez3IJQ2A=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ijUiT+bw9ccWDhIFwFxJslyLTldV2dt3yFOkYkkb+P27irR/9srbTv5LeCTKAwRnm
-	 eHdusg2W3SeuZfZM6t6A5CDmEEFa3+Ky32x3AQ2dtEvqzzSw8Wk8aURxDJ3jz+/1wG
-	 WWlM1nnMh84uZ3HyhVMaN7YKyl8s9rIXWcqFvbxp7Eg4VfbtMYk6GogyM6bNaXZDBl
-	 JyukrGI6MrOM1nBrj2fAMYBnC6XS0H0k+5tG1RFsbIpZ1IE7u3PrBlqxHuMudXIX7R
-	 xfCcyrKHrU8BXTclr33p+GA4bAfzaM8J1obGsrmUDrEg8gbbK2zXRVYYhg+m9M9Ja2
-	 mK5usLur71ehA==
-Received: from AMDDesktop.lan (unknown [IPv6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb])
-	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id 895794818A;
-	Wed, 29 Apr 2026 17:01:39 +0000 (UTC)
-From: Birger Koblitz <mail@birger-koblitz.de>
-Date: Wed, 29 Apr 2026 19:01:12 +0200
-Subject: [PATCH net-next v2 4/4] r8152: Add firmware upload capability for
- RTL8157/RTL8159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1162640149B;
+	Wed, 29 Apr 2026 17:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.70
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777483958; cv=fail; b=cQLrgg17/zdo34PbvW/+K1F9D5VbD+fyTRoM/KDSXxaXvQ0S2joHquA2kwC+I5jxIYFjDP/0Dce0LYc5xU+uSUGu4aIh3eGwxTMXNbdK2eNMvLMU2Q4ENHKHcTyd3jY6uJXa2Ft5tLxadc2zDJaLIK1JpBfUi1w6EzlM8EgDzLU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777483958; c=relaxed/simple;
+	bh=Q6s3wM+mm2fCFTJREiNnqOg6uYujHSoblP6JO0dTWyk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=b2RhHjN3UVg1DFiwApZ0BSfVbA+nX9LDM5CbxffvQ3siM5UWLRGnbNgMVW2iVGIioOhqsha9bAbGE/KG5b78DHwJqv3sr+pzBxtoBD1N9G75Q6DZSsKk67odsK40pNnSM4t5en+AiFtwXwU0pbqiKsq8iSn9NDmtL5jSBWpNhRw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=X3Za39LI; arc=fail smtp.client-ip=52.101.46.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=knZSia8ygAlb6SYncaKamonOY4WVgBvXZ3Tj9rlxWtlP46nii9UXhMN62PrRm5H93EpuynAAOhqNUUUjB0qKYHEEaM/BjLIYqrshtktmqBfVJ9qEsBirSIXa/pPvWAH2M+aoKonlFlJi3qyFLrW3iMTkGJHPrjIKG1X93T70T1bRWNJnRlrU11G1Fz6yvAwKY2e7vqm4GJVTLNQs//F6kkVY9GTQvz6BGz5hgJ3H/UKeiTyPq5ER93pQDB5G8kTUJLd2LaNyCacCLZlojAwJ8l6SDnyEp0LVc1jh/ebdvIiWi6djVx7ZHX5nENgAxgMigpjNHkmSEgUACTAGdGWRJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jBP0pVPxiyAdOds3IG7AjgbQI5Veking0yRKpLFLBCg=;
+ b=WGl87VIw30Md27WUB7ir8a93Qhubg0m3GIqKYBgYkga2F0CgsILcFry9J30JRreQENtolzp2ADeGzaKHtJQVF6m84amVW3em1bV6bnWXfdYVW/1ru+6kLgMbs8GtItTO5uO7SVYktBwtV6y8hTWMokpUP5ju7GTOL4ReoZtDMnqrDJl6ZG/jCpNwCBt4PUB8QUZSPAPLQOd7N7aHHrr/n3pznJuErhnF7CckgnrEK2xDpapbrqLZO3/27Ps1pPfmkc6vjZ5agx25t9NKpfISzTPfrXDm7t8nK9tLzW7EkWUgXzQXjEmFsMUNnoRMgmLoXoVR2k/S9ptBLoNerLCMnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jBP0pVPxiyAdOds3IG7AjgbQI5Veking0yRKpLFLBCg=;
+ b=X3Za39LIPb1d6RB2wk7Nrao8V0SQcb4Fq+7RiouN+uvct4iMWJgqJSBN90Z3obQr0/X4WS2sqZ+sPU4F6e/RW2SJbBj2V+rDeyE+mDWXELbSbRLk2+WGfaVurku7Sk7VCV+HPZjDHWkjMub6fajhO46dNu/pX6VU3pkoXeB5aM4=
+Received: from SJ0PR03CA0191.namprd03.prod.outlook.com (2603:10b6:a03:2ef::16)
+ by CY5PR12MB6324.namprd12.prod.outlook.com (2603:10b6:930:f::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.18; Wed, 29 Apr
+ 2026 17:32:29 +0000
+Received: from BY1PEPF0001AE19.namprd04.prod.outlook.com
+ (2603:10b6:a03:2ef:cafe::89) by SJ0PR03CA0191.outlook.office365.com
+ (2603:10b6:a03:2ef::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9846.28 via Frontend Transport; Wed,
+ 29 Apr 2026 17:32:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
+Received: from satlexmb08.amd.com (165.204.84.17) by
+ BY1PEPF0001AE19.mail.protection.outlook.com (10.167.242.101) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9846.18 via Frontend Transport; Wed, 29 Apr 2026 17:32:29 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Wed, 29 Apr
+ 2026 12:31:51 -0500
+Received: from satlexmb08.amd.com (10.181.42.217) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 29 Apr
+ 2026 12:31:09 -0500
+Received: from xhdradheys41.xilinx.com (10.180.168.240) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
+ Transport; Wed, 29 Apr 2026 12:31:06 -0500
+From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+To: <gregkh@linuxfoundation.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>, <michal.simek@amd.com>, <Thinh.Nguyen@synopsys.com>,
+	<p.zabel@pengutronix.de>
+CC: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<git@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Subject: [PATCH v3 0/4] usb: dwc3: xilinx: Add Versal2 MMI USB 3.2 controller support
+Date: Wed, 29 Apr 2026 23:00:46 +0530
+Message-ID: <20260429173050.1772377-1-radhey.shyam.pandey@amd.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260429-rtl8159_net_next-v2-4-bab3cd4e4c66@birger-koblitz.de>
-References: <20260429-rtl8159_net_next-v2-0-bab3cd4e4c66@birger-koblitz.de>
-In-Reply-To: <20260429-rtl8159_net_next-v2-0-bab3cd4e4c66@birger-koblitz.de>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Chih Kai Hsu <hsu.chih.kai@realtek.com>, 
- Birger Koblitz <mail@birger-koblitz.de>
-X-Mailer: b4 0.14.2
-X-Rspamd-Queue-Id: 167E1497F36
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB03.amd.com: radhey.shyam.pandey@amd.com does not
+ designate permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY1PEPF0001AE19:EE_|CY5PR12MB6324:EE_
+X-MS-Office365-Filtering-Correlation-Id: 634d1579-70a4-4e05-d19a-08dea61549b8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|36860700016|7416014|82310400026|1800799024|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	gL423kqDB8An9UrqHLEePA+QwRmz9NHvyK2atae4qhuryQtAUp7fhWlh+apFKaptKges3xxkU3vRJM+Bk8Soh+sMFppQmtODQWSggPQIZAWR/sU+toHFIXNHqTqbtCypeCpzPjg8pkXYZI4BnIBwLaf7oYhNfrF7xT0roEsATyp4zKzmicf75NATVBFfbWY438hZNKRNa7OrFystdLpBg06LXOKOVACCbV/YkVvQymzLWbIDtbPXP/D8lWO/p6idQsM2Leh9XN3XOIeiNgUhAR87BS52JUkHL8zRtsWL/qbZ3G+fUTeDgNIkDlLLDqNUxpkCpbZBuoOcBG96jqv6mgAvWyj6l6ykaLXNc6zI922LH3GpF7awJVtEjp2D+j3PnBoRmjsntRyxBQhhdUuAweGq9CCIGGu+iQ0xs570srNlfdWYpyPS1tlVS/9gHNiv9SZ8djK5uUBF3wb/ZMpBWuXkxSNKSSv73LBo5uNsHi+znjAwbDnCnX4znthK2s/k1t9mVZsSsXrLymmZaJxQ/7+4XSAAmlZzn6L6Wn/hmwCY0dg+6rZR8SddWTVfrAHixtizVUvv1IACwIWearfeNWnhbNhslyOKxXrVcOkdehjBAP1kFx354686cEmsgftaCqcoGFTA80TzYbXM7P9S3VKSbVb2dVTmBfxBekF1PA8kpKxRI/U6i4P9vrZNcNpsoCUYV480TKuP/TFNLYGcw+ePx2aVhaStLMKjqjzfDkuGgYqtO085bxJbiknX7o1XmeArCjbGJi7MdeUbzWJZhA==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700016)(7416014)(82310400026)(1800799024)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	fZGN+3COI72QKWDGXuWRvMFpos4h3QXGHMivq0HTunP+nqTtiNVX7sfkmg0SdmqptjWdYjMWUSNhMmJceXITrFncgoWmWMTkhzfZPteNwEauC8b+PLkBr69enCmBAgsIRTWJEB84/vKIpoPWFmrj8gAjjnFksUuvDBFPOoKVJHHVGECjw9qjXj+PItotrsJ99PxLBxr5oPbDyQMOuIcN2sJCs8DYaeCC5uuSCg2tmMj7KMwTrkme2O0zT5J/GwO0YOfix2M5px0LT3AlfJEbz3SkmDR9aOWLfVxyJEVqRiWipZrNx3DiAuBoh5fXgiREEVEprCCJfqIb83UO3X0u6QY5JWxan6wVMR1eZd4jd/yqtYunIBhaGVzbgNQcWPhQ/yKBJm5FMNOtmVU03Mv4NIgwH2Mo4ct6d61Hi6JixiP1zySVCJBJj1QtwThkcZx2
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2026 17:32:29.3730
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 634d1579-70a4-4e05-d19a-08dea61549b8
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BY1PEPF0001AE19.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6324
+X-Rspamd-Queue-Id: 6D02E498332
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [2.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[birger-koblitz.de:+];
-	TAGGED_FROM(0.00)[bounces-36698-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[birger-koblitz.de];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-36703-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,birger-koblitz.de:email,birger-koblitz.de:dkim,birger-koblitz.de:mid]
+	FROM_NEQ_ENVFROM(0.00)[radhey.shyam.pandey@amd.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[amd.com:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:dkim,amd.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	NEURAL_HAM(-0.00)[-0.998];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[9]
 
-The RTL8159 (RTL_VER_17) requires firmware for its PHY in order to work
-at connection speeds > 5GBit. Add support for uploading firmware for
-the PHY using the existing rtl8152_apply_firmware() function
-in r8157_hw_phy_cfg() and set up the correct names for the firmware
-files.
+This series introduces support for the Multimedia Integrated (MMI) USB
+3.2 Dual-Role Device (DRD) controller on Xilinx Versal2 platforms.
 
-This also adds support for uploading firmware for the RTL8157
-(RTL_VER_16) PHY, for which firmware is however not strictly necessary
-to work. Still, this allows to upload newer versions of the firmware used
-by this chip, e.g. to improve interoperability.
+The controller supports SSP(10-Gbps), SuperSpeed, high-speed, full-speed
+and low-speed operation modes.
 
-If no firmware is found, both the RTL8157 and the RTL8159 will continue
-to work.
+USB2 and USB3 PHY support Physical connectivity via the Type-C
+connectivity. DWC3 wrapper IP IO space is in SLCR so reg is made
+optional.
 
-Signed-off-by: Birger Koblitz <mail@birger-koblitz.de>
----
- drivers/net/usb/r8152.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+The driver is required for the clock, reset and platform specific
+initialization (coherency/TX_DEEMPH etc). In this initial version typec
+reversibility is not implemented and it is assumed that USB3 PHY TCA mux
+programming is done by MMI configuration data object (CDOs) and TI PD
+controller is configured using external tiva programmer on VEK385
+evaluation board.
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 9fcad3dac76f8aa76ef074cabd3b08348dc234bc..8d880afd88c9392cd873a5015a0d7feee538ac7f 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -4663,10 +4663,11 @@ static bool rtl8152_is_fw_phy_speed_up_ok(struct r8152 *tp, struct fw_phy_speed_
- 	case RTL_VER_11:
- 	case RTL_VER_12:
- 	case RTL_VER_14:
--	case RTL_VER_16:
- 		goto out;
- 	case RTL_VER_13:
- 	case RTL_VER_15:
-+	case RTL_VER_16:
-+	case RTL_VER_17:
- 	default:
- 		break;
- 	}
-@@ -7996,12 +7997,14 @@ static void r8157_hw_phy_cfg(struct r8152 *tp)
- 	data = r8153_phy_status(tp, 0);
- 	switch (data) {
- 	case PHY_STAT_EXT_INIT:
-+		rtl8152_apply_firmware(tp, true);
- 		ocp_reg_clr_bits(tp, 0xa466, BIT(0));
- 		ocp_reg_clr_bits(tp, 0xa468, BIT(3) | BIT(1));
- 		break;
- 	case PHY_STAT_LAN_ON:
- 	case PHY_STAT_PWRDN:
- 	default:
-+		rtl8152_apply_firmware(tp, false);
- 		break;
- 	}
- 
-@@ -9949,6 +9952,8 @@ static int rtl_ops_init(struct r8152 *tp)
- #define FIRMWARE_8153C_1	"rtl_nic/rtl8153c-1.fw"
- #define FIRMWARE_8156A_2	"rtl_nic/rtl8156a-2.fw"
- #define FIRMWARE_8156B_2	"rtl_nic/rtl8156b-2.fw"
-+#define FIRMWARE_8157_1		"rtl_nic/rtl8157-1.fw"
-+#define FIRMWARE_8159_1		"rtl_nic/rtl8159-1.fw"
- 
- MODULE_FIRMWARE(FIRMWARE_8153A_2);
- MODULE_FIRMWARE(FIRMWARE_8153A_3);
-@@ -9957,6 +9962,8 @@ MODULE_FIRMWARE(FIRMWARE_8153B_2);
- MODULE_FIRMWARE(FIRMWARE_8153C_1);
- MODULE_FIRMWARE(FIRMWARE_8156A_2);
- MODULE_FIRMWARE(FIRMWARE_8156B_2);
-+MODULE_FIRMWARE(FIRMWARE_8157_1);
-+MODULE_FIRMWARE(FIRMWARE_8159_1);
- 
- static int rtl_fw_init(struct r8152 *tp)
- {
-@@ -9995,6 +10002,12 @@ static int rtl_fw_init(struct r8152 *tp)
- 		rtl_fw->pre_fw		= r8153b_pre_firmware_1;
- 		rtl_fw->post_fw		= r8153c_post_firmware_1;
- 		break;
-+	case RTL_VER_16:
-+		rtl_fw->fw_name		= FIRMWARE_8157_1;
-+		break;
-+	case RTL_VER_17:
-+		rtl_fw->fw_name		= FIRMWARE_8159_1;
-+		break;
- 	default:
- 		break;
- 	}
+Changes for v3:
+- Return -ENODEV from probe if device_get_match_data() is NULL.
+- Replace map_resource with no_mem_map (Versal2 MMI only; others default
+  MMIO map).
+- Add PHY warm-reset assert delay.
+- Loop all num_usb3_ports with one de-emphasis value.
+- Set default as DWC3_LCSR_TX_DEEMPH_UNSPECIFIED default and only set
+  snps,lcsr-tx-deemph when not unspecified.
 
+Changes for v2:
+- DT binding: fix MHz spacing (SI convention), reorder description
+  before $ref in xlnx,usb-syscon, restore zynqmp-dwc3 example and add
+  versal2-mmi-dwc3 example, fix node name for no-reg case, use 1/1
+  address/size configuration and lowercase hex in syscon offsets.
+- Split config struct refactoring (device_get_match_data,dwc3_xlnx_config)
+  into a separate preparatory patch.
+- Fix error message capitalization to lowercase per kernel convention.
+- Rename property snps,lcsr_tx_deemph to snps,lcsr-tx-deemph (hyphens).
+- Fix double space in comment and missing blank line in core.h.
+- Use platform data instead of of_device_is_compatible() check for
+  deemphasis support.
+
+Link: https://lore.kernel.org/all/20251119193036.2666877-1-radhey.shyam.pandey@amd.com/ [v1]
+
+Radhey Shyam Pandey (4):
+  dt-bindings: usb: dwc3-xilinx: Add MMI USB support on Versal Gen2
+    platform
+  usb: dwc3: xilinx: Introduce dwc3_xlnx_config for per-platform data
+  usb: dwc3: xilinx: Add Versal2 MMI USB 3.2 controller support
+  usb: dwc3: xilinx: Add support to program MMI USB TX deemphasis
+
+ .../devicetree/bindings/usb/dwc3-xilinx.yaml  |  70 +++++++++++-
+ drivers/usb/dwc3/core.c                       |  24 ++++
+ drivers/usb/dwc3/core.h                       |  14 +++
+ drivers/usb/dwc3/dwc3-xilinx.c                | 103 +++++++++++++++---
+ 4 files changed, 193 insertions(+), 18 deletions(-)
+
+
+base-commit: 3b3bea6d4b9c162f9e555905d96b8c1da67ecd5b
 -- 
-2.47.3
+2.43.0
 
 
