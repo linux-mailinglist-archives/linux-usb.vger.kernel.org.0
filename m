@@ -1,543 +1,151 @@
-Return-Path: <linux-usb+bounces-36660-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36661-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mFXkNxNR8WmqfwEAu9opvQ
-	(envelope-from <linux-usb+bounces-36660-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 02:30:11 +0200
+	id ICNdCuJb8WlGgQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36661-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 03:16:18 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 778E048DC14
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 02:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0731448DE8B
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 03:16:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DFE8B302BE1F
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 00:30:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C67823051CBF
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 01:15:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416EA1E25F9;
-	Wed, 29 Apr 2026 00:30:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FE90223DC6;
+	Wed, 29 Apr 2026 01:15:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L7+xFqwZ"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="GRq/aaug"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691D41C84D0
-	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 00:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF6181482E8
+	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 01:15:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777422601; cv=none; b=IFGtE+hvAeE0H+8br4SD5/Zgo/dlUZ1xl0SoXLJBsmB96oXZyY0phxOaa1FS21Dq5bcg+8rnyuF6HO9ROKGnamvUvx5Nbjw+KdtMhF+FoeTpwE/h/VA9dMB3LgKH1MRG2BmVk6rDNid3R0+6e4FnQ62LkmcgjJM63ANRrX4zlds=
+	t=1777425356; cv=none; b=Lj6+5G7GWYzT2qYqPRjIw+oFvn+rhZXro29xb8FD1Q7NoW/hYDT5gh+lTm3F+6qCdy1cEs6UuhBq37oYYI3D8KF9dwjuPp1CCDpGKNrvoJ4XwAWGVnN/HSLSEJFzDveWwrV/rnpCztOc09GfPsywujezgf9YioWik6JCUhno9ME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777422601; c=relaxed/simple;
-	bh=9XGL/PuNc3NuUpjzdaXa1S+JKaTCdyoNGlaialB1EgM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oRkIyr/8YdGQZvy3c+Rh1IVriOOu3IaZkhZvC/8R6TsHvNcxrqIwhXtogW7dP+b8pgyEuXopu6jBQilMDdM3EP4+t3QUvytV6/CVvCFatZFdlwPCn7fHAm+iJZYeq2zFXGxqlxv1hb4WGwb1vBGkBS4W+gnJ1Eskh7+fO4lvaF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=L7+xFqwZ; arc=none smtp.client-ip=74.125.82.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2c156c4a9efso16729950eec.1
-        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2026 17:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777422599; x=1778027399; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+Z8qrnrVCeVc0HrgkfQjkwuL6GmTTzRhQcFlk/a/CQc=;
-        b=L7+xFqwZj2BST2eW/d/2zZ06NXocP8XsE46Rn874ZM6xz+Vhap8qoiX3n1L6ANAShT
-         ZaMQlUVtlKy04HE5HP3EI/HHWySTqcJJGathzNQiw2ZW8Hsr0BvaM/ogI37inNOrzi1/
-         sTRkOySGqIh0c9pSuA4+HtWInEaL3aDqNm+0Yy4P5YCES1N3GSIoD+bQCC4eqt7X/FFp
-         BfuWtDDzWADW+JOTsM19c0R1u69xkcjH3vEIHAFl7wTT49TtGkhEi8a9WspcB0sIG702
-         Jrgec4J/SXe+BvlYX691oFm5dZdf7ZNzvCwDMmcqf7yMDB5fWzukD7OLYVcwWjz93tX7
-         CVAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777422599; x=1778027399;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+Z8qrnrVCeVc0HrgkfQjkwuL6GmTTzRhQcFlk/a/CQc=;
-        b=XMR/1V6sHilWsKwibsQp6Y7Sqo6HjN3uOu8qLEf/w2vCDaQeC9SRwcVqgBY+9zjaJc
-         89+0uh24YWNaSC49Y78GZhpXNoy5ihTD6tDeyZ1cHnNbWR8IuIyAM/ky9qYYoWoe+6mC
-         mIqTl/SePc62Hui+mfwnFJPnEXdX6f2w3Elnz79AMAy2d8nCKprXpDpLpKo3lV+iRVq5
-         BK7Bjkoa2yWbQeRrseF/7LE9xKMdQNY+mtmIKjtCThwqvUS1bT3bXxYh+C1OOKik73/6
-         3XOLEan5hLT298WL+iDR4uV6otFNQMotkYTTZyYOUnCOgPmc3WcpYsf/m5VfsO81UDGn
-         Pbiw==
-X-Forwarded-Encrypted: i=1; AFNElJ9KxvV7N8cxbsErrLlKvrzTytjXFXpjOWev760mL1sBZKRNX+QQs3P4dRuh/TnyFHp+QLUNtbpHfsQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHtBoIjoSEkXJNQ6yXwEy3TL9sqlXiXq/uwAN3Dfg/B7IwCF+t
-	IwsUMJVJl+esjsgetlrOARvfBrn0TZEa8/U6MZfgaszIN57c24cRfG60GNYqe3LNlQ==
-X-Gm-Gg: AeBDiet4CyvaRZCWI9TCyPrIiP4X+kATlp4NUEHa6aXEOdR3STJmAp6BQps3JhJ0FGx
-	BahzfPlAOkdR+CQ/Z4zo3H+3IC90VFprkWcLmewYPY0wWCthjkGUpx4noLSJSiKfMY1UviJyLx9
-	ApZ1DOIG/IuCeRIOUfW1IfZkKAQi3TZY9Elqk/Iy89CLBdfbn2dyveb+cfAmAR/CBQOBR2+OE2R
-	GUlOBUxy6LpYav5Nvm0cPvnvmP3NPpbxXM0wp/e3RzJzqo3mka+PgxRtHA5cenzDZEfsbHU6xnx
-	CKk8Uhsmau8LUUQ7JdvxYxLlFxtZ+XmwJl7qdbpUIMLcrVgrGqPB3u+9SoNoeFw4Ze31OG4RczU
-	veZ2vK372+7ZmmldxA5fqUO55/IPPOuwurEy3dSzBUI7RVVCkDv7ajVl6CfymFAdK/KiftvnevD
-	32MRiyAsGMbxwuMyIWzyO8qoS3fwVufDx8dKQ1oYINazrgFBRGOipWhYHXKkXLXl5ZdNJB9Fjcv
-	kgeCQyyYTxlnSfpvj5dJqF0zjTPiu2u9tnXuhJeF54JjSQ=
-X-Received: by 2002:a05:693c:2b01:b0:2dd:8ac2:9f7a with SMTP id 5a478bee46e88-2ed197c14b2mr834939eec.11.1777422597943;
-        Tue, 28 Apr 2026 17:29:57 -0700 (PDT)
-Received: from ?IPV6:2a00:79e0:2e7c:9:fa97:3a7a:b601:9ff8? ([2a00:79e0:2e7c:9:fa97:3a7a:b601:9ff8])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ed1bf8e77bsm412161eec.11.2026.04.28.17.29.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Apr 2026 17:29:57 -0700 (PDT)
-Message-ID: <fc767096-f39d-4088-b3ad-cc85bdedf36c@google.com>
-Date: Tue, 28 Apr 2026 17:29:50 -0700
+	s=arc-20240116; t=1777425356; c=relaxed/simple;
+	bh=S+FNbfKs3zWzpba+7WwK68JDLp3UZ3kapy9H/lK6Gi4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=YvoSnTQeyzVHyKLMfNQjIkMJcyFDgctnVKyfFKNXmYB6PAaIKKgaQHvXbJFwx58x5iFKmVWoLiiNT6cOL6j0ND81BG8g7U+ZeveaRTKz4N8BRowvVP8C0dH/TCa2+b6MKgGUf3hb8bKXkQTqzazwBhfPoc8dERo03uISIdT0D2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=GRq/aaug; arc=none smtp.client-ip=54.254.200.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1777425350;
+	bh=S+FNbfKs3zWzpba+7WwK68JDLp3UZ3kapy9H/lK6Gi4=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=GRq/aaug5EgpnX7KC3HZtYa4R0c5hic/2TbSLwND73Hpq4E+76yNmPePvyzq0LuOW
+	 ZZmtB5ZqzTBMU3VjDLz9uoNhVUkzMuIZQe/OxBBwjdRiqjwR5HuMGKOceYHQVfmzcd
+	 hiu2rsLFe7ByWi/VW8eZ9tz0o1LX7Bml82SZctEA=
+X-QQ-mid: zesmtpip3t1777425346taac8aee5
+X-QQ-Originating-IP: jNQDoEUcLVArnC5uGOzW+T+6J0rgvHPUr5JzTWgQ2yg=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 29 Apr 2026 09:15:43 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 18189464401092096931
+EX-QQ-RecipientCnt: 12
+From: Haowen Tu <tuhaowen@uniontech.com>
+To: laurent.pinchart@ideasonboard.com
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	hansg@kernel.org,
+	mchehab@kernel.org,
+	rafael@kernel.org,
+	lenb@kernel.org,
+	pavel@kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Haowen Tu <tuhaowen@uniontech.com>
+Subject: Re: [PATCH 2/2] media: uvcvideo: skip resume when writing hibernation image
+Date: Wed, 29 Apr 2026 09:15:42 +0800
+Message-Id: <20260429011542.1936211-1-tuhaowen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20260428091356.GF3219146@killaraus.ideasonboard.com>
+References: <20260428091356.GF3219146@killaraus.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 3/6] mfd: max77759: add register bitmasks and modify
- irq configs for charger
-To: Lee Jones <lee@kernel.org>
-Cc: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jagan Sridharan <badhri@google.com>, Mark Brown <broonie@kernel.org>,
- Matti Vaittinen <mazziesaccount@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>, Sebastian Reichel
- <sre@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
- Kyle Tso <kyletso@google.com>
-References: <20260331-max77759-charger-v10-0-76f59233c369@google.com>
- <20260331-max77759-charger-v10-3-76f59233c369@google.com>
- <20260424082639.GI170138@google.com>
-From: Amit Sunil Dhamne <amitsd@google.com>
-Content-Language: en-US
-In-Reply-To: <20260424082639.GI170138@google.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 778E048DC14
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: Npb+f4q7yCDR66IiiM+frrEC8JnTY9/JAUTclIOnOyGlW7tZzTNMApNf
+	R9HcwgRQoTqvdeN1n7O5hdZXVvgUS/ZDdCdHbYE6cLAVMiMtvHs3LKecHoYo7jrNpGltvzN
+	rD7QMhCz2sHcCdDIBT82pUjAFtigF3T7IGczj1G1gmwOM3XKlbp72X5Pefbnw7qMo7WR5Mx
+	kX5b1KXoE5ItkeOl8Zgxo7gYNBsRjaOOkt0TqgSpNt3bTc8oKX4HUuGbiESdn1ebEhX0Szq
+	OMCEaav4lvEGIX2glCp8P20LmV0i8e4MbT1wmusHS2kQqP4g6ql5Mp0r7ZKXOnWgQqCYBG4
+	/VD7TEdvWmvGqErDdaZGejlnQiphuHA2iZ698huZc0etLNYh9R1UBLjxspA+EoabYDlI0Mn
+	nW/qnJ9trgv3rf4uLYsv5nkTZCFXTNfH09AUQY4peB4Myt4lo3VmCshPILqgveJct11Yv+q
+	6HJqTQLYJ0X71hggQuEyL91ADcRpSbWtjLx4PTya/iLfQ5qftds4d5QHYftY1AZEQEQmkmC
+	rk0jQR+lOrQm38SRPGchKOoNAHeZB0lbTkrtBORDAy88aPyT51uuw9sZ0fkIRvbv5g5LyZN
+	7U9Ybl959SfomwptxTTHBf2c4xm5XB0Dj0PdtDqhIrFnLRJYwBzSFO1SdMF9DXG37qiLL02
+	X2hlPz/6v1FS2jHpFhgXwcicLD9Fq3pQWJxA00pbh/7DNePt/pBUILtEAq6sXSvDvf0Nqoe
+	IuB0WZHOsbQDAWYseX95yOdpx0saNP1L/OdBvyl2E5k6YGU9JLdw9arSiZRJxr6bByK19YZ
+	658epNPyaY2NvIjzsfLD63+cZXhVvgwPOnOPqKk7BbltlUdhLc3wNMcKbWrOtzUVPvLVmjC
+	Jz2lGxyHiC8K6SDpJU85xy8hdDPnjcn9VVCQh6vwbIlZOf4xShfWMqeT7e5OlcNqY5U7h5W
+	8ClSkenRGpmpWbo0XgOvSr61UJgoV0lMSWD6CsEsmKJkxeI+jbZ+xuIN/QhuMWYxXgfhB+m
+	8NfiaREzrjzQIpp/9kvbCTvAibJ8fyVTZOZcLFaqkoRnRKYQgrPyw/xo4pdJ0=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+X-QQ-RECHKSPAM: 0
+X-Rspamd-Queue-Id: 0731448DE8B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36660-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linaro.org,kernel.org,linuxfoundation.org,google.com,gmail.com,linux-foundation.org,linux.intel.com,samsung.com,vger.kernel.org,lists.infradead.org];
-	RCPT_COUNT_TWELVE(0.00)[23];
+	TAGGED_FROM(0.00)[bounces-36661-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[amitsd@google.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[google.com:+];
-	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	FROM_NEQ_ENVFROM(0.00)[tuhaowen@uniontech.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[uniontech.com:+];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,uniontech.com:dkim,uniontech.com:mid]
 
-Hi Lee,
+Hi Laurent,
 
+On Tue, Apr 28, 2026 at 12:13:56PM +0300, Laurent Pinchart wrote:
+> Will all leaf drivers need to implement something similar ? How does
+> that scale ?
 
-Thanks for your review.
+Thanks, that's a very valid concern.
 
+If this pattern ends up being needed in multiple USB interface drivers,
+then handling it in each leaf driver would clearly not scale well.
 
-On 4/24/26 1:26 AM, Lee Jones wrote:
-> On Tue, 31 Mar 2026, Amit Sunil Dhamne via B4 Relay wrote:
->
->> From: Amit Sunil Dhamne <amitsd@google.com>
->>
->> Add register bitmasks for charger function.
->> In addition split the charger IRQs further such that each bit represents
->> an IRQ downstream of charger regmap irq chip. In addition populate the
->> ack_base to offload irq ack to the regmap irq chip framework.
-> Please reword this commit messages.
->
-> Using 'In addition' twice in such close proximity reads a little awkwardly.
+My initial motivation was that the UVC streaming resume path is reached
+from usb_driver.resume(), which doesn't expose the hibernation PM
+message. As a result, the driver has no way to distinguish PMSG_THAW
+from PMSG_RESTORE locally.
 
-Thanks for pointing it out. Unfortunately, this commit is already part
-of the linux and linux-next so I am not sure if I could fix the commit
-message retrospectively.
+That said, I agree this points to a USB-level design question rather
+than just a UVC-specific one. I'll revisit the approach with that in
+mind, and will include the USB maintainers and list in the next round.
 
-
->
->> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->> Reviewed-by: André Draszik <andre.draszik@linaro.org>
->> ---
->>  drivers/mfd/max77759.c       |  95 ++++++++++++++++++++++---
->>  include/linux/mfd/max77759.h | 166 +++++++++++++++++++++++++++++++++++--------
->>  2 files changed, 222 insertions(+), 39 deletions(-)
->>
->> diff --git a/drivers/mfd/max77759.c b/drivers/mfd/max77759.c
->> index a7efe233ec8c..9fa6027a92c4 100644
->> --- a/drivers/mfd/max77759.c
->> +++ b/drivers/mfd/max77759.c
->> @@ -201,8 +201,24 @@ static const struct regmap_config max77759_regmap_config_charger = {
->>   *         - SYSUVLO_INT
->>   *         - FSHIP_NOT_RD
->>   *     - CHGR_INT: charger
->> - *       - CHG_INT
->> - *       - CHG_INT2
->> + *       - INT1
->> + *         - AICL
->> + *         - CHGIN
->> + *         - WCIN
->> + *         - CHG
->> + *         - BAT
->> + *         - INLIM
->> + *         - THM2
->> + *         - BYP
->> + *       - INT2
->> + *         - INSEL
->> + *         - SYS_UVLO1
->> + *         - SYS_UVLO2
->> + *         - BAT_OILO
->> + *         - CHG_STA_CC
->> + *         - CHG_STA_CV
->> + *         - CHG_STA_TO
->> + *         - CHG_STA_DONE
->>   */
->>  enum {
->>  	MAX77759_INT_MAXQ,
->> @@ -228,8 +244,22 @@ enum {
->>  };
->>  
->>  enum {
->> -	MAX77759_CHARGER_INT_1,
->> -	MAX77759_CHARGER_INT_2,
->> +	MAX77759_CHGR_INT1_AICL,
->> +	MAX77759_CHGR_INT1_CHGIN,
->> +	MAX77759_CHGR_INT1_WCIN,
->> +	MAX77759_CHGR_INT1_CHG,
->> +	MAX77759_CHGR_INT1_BAT,
->> +	MAX77759_CHGR_INT1_INLIM,
->> +	MAX77759_CHGR_INT1_THM2,
->> +	MAX77759_CHGR_INT1_BYP,
->> +	MAX77759_CHGR_INT2_INSEL,
->> +	MAX77759_CHGR_INT2_SYS_UVLO1,
->> +	MAX77759_CHGR_INT2_SYS_UVLO2,
->> +	MAX77759_CHGR_INT2_BAT_OILO,
->> +	MAX77759_CHGR_INT2_CHG_STA_CC,
->> +	MAX77759_CHGR_INT2_CHG_STA_CV,
->> +	MAX77759_CHGR_INT2_CHG_STA_TO,
->> +	MAX77759_CHGR_INT2_CHG_STA_DONE,
->>  };
->>  
->>  static const struct regmap_irq max77759_pmic_irqs[] = {
->> @@ -256,8 +286,38 @@ static const struct regmap_irq max77759_topsys_irqs[] = {
->>  };
->>  
->>  static const struct regmap_irq max77759_chgr_irqs[] = {
->> -	REGMAP_IRQ_REG(MAX77759_CHARGER_INT_1, 0, GENMASK(7, 0)),
->> -	REGMAP_IRQ_REG(MAX77759_CHARGER_INT_2, 1, GENMASK(7, 0)),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT1_AICL, 0,
->> +		       MAX77759_CHGR_REG_CHG_INT_AICL),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT1_CHGIN, 0,
->> +		       MAX77759_CHGR_REG_CHG_INT_CHGIN),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT1_WCIN, 0,
->> +		       MAX77759_CHGR_REG_CHG_INT_WCIN),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT1_CHG, 0,
->> +		       MAX77759_CHGR_REG_CHG_INT_CHG),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT1_BAT, 0,
->> +		       MAX77759_CHGR_REG_CHG_INT_BAT),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT1_INLIM, 0,
->> +		       MAX77759_CHGR_REG_CHG_INT_INLIM),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT1_THM2, 0,
->> +		       MAX77759_CHGR_REG_CHG_INT_THM2),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT1_BYP, 0,
->> +		       MAX77759_CHGR_REG_CHG_INT_BYP),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT2_INSEL, 1,
->> +		       MAX77759_CHGR_REG_CHG_INT2_INSEL),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT2_SYS_UVLO1, 1,
->> +		       MAX77759_CHGR_REG_CHG_INT2_SYS_UVLO1),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT2_SYS_UVLO2, 1,
->> +		       MAX77759_CHGR_REG_CHG_INT2_SYS_UVLO2),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT2_BAT_OILO, 1,
->> +		       MAX77759_CHGR_REG_CHG_INT2_BAT_OILO),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT2_CHG_STA_CC, 1,
->> +		       MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CC),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT2_CHG_STA_CV, 1,
->> +		       MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CV),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT2_CHG_STA_TO, 1,
->> +		       MAX77759_CHGR_REG_CHG_INT2_CHG_STA_TO),
->> +	REGMAP_IRQ_REG(MAX77759_CHGR_INT2_CHG_STA_DONE, 1,
->> +		       MAX77759_CHGR_REG_CHG_INT2_CHG_STA_DONE),
-> Can I suggest using the 100-char limit to expand and neaten these up a bit.
-
-Sounds good I will send a new "fixes" patch to address this.
-
-
->
->>  };
->>  
->>  static const struct regmap_irq_chip max77759_pmic_irq_chip = {
->> @@ -297,11 +357,12 @@ static const struct regmap_irq_chip max77759_topsys_irq_chip = {
->>  	.num_irqs = ARRAY_SIZE(max77759_topsys_irqs),
->>  };
->>  
->> -static const struct regmap_irq_chip max77759_chrg_irq_chip = {
->> +static const struct regmap_irq_chip max77759_chgr_irq_chip = {
-> This is a sneaky change.  If you're going to bundle fixes like this, at
-> least drop a mention in the commit message.
-
-This wasn't part of the original commit but was pointed out during the
-code review. While I captured this in the changlogs maybe I should have
-added it in the commit msg. 
-
-Unfortunately, this has the same issue as before, i.e., modifying commit
-message after it has been applied.
-
-
->
->>  	.name = "max77759-chgr",
->>  	.domain_suffix = "CHGR",
->>  	.status_base = MAX77759_CHGR_REG_CHG_INT,
->>  	.mask_base = MAX77759_CHGR_REG_CHG_INT_MASK,
->> +	.ack_base = MAX77759_CHGR_REG_CHG_INT,
->>  	.num_regs = 2,
->>  	.irqs = max77759_chgr_irqs,
->>  	.num_irqs = ARRAY_SIZE(max77759_chgr_irqs),
->> @@ -325,8 +386,22 @@ static const struct resource max77759_gpio_resources[] = {
->>  };
->>  
->>  static const struct resource max77759_charger_resources[] = {
->> -	DEFINE_RES_IRQ_NAMED(MAX77759_CHARGER_INT_1, "INT1"),
->> -	DEFINE_RES_IRQ_NAMED(MAX77759_CHARGER_INT_2, "INT2"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT1_AICL,         "AICL"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT1_CHGIN,        "CHGIN"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT1_WCIN,         "WCIN"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT1_CHG,          "CHG"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT1_BAT,          "BAT"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT1_INLIM,        "INLIM"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT1_THM2,         "THM2"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT1_BYP,          "BYP"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT2_INSEL,        "INSEL"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT2_SYS_UVLO1,    "SYS_UVLO1"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT2_SYS_UVLO2,    "SYS_UVLO2"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT2_BAT_OILO,     "BAT_OILO"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT2_CHG_STA_CC,   "CHG_STA_CC"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT2_CHG_STA_CV,   "CHG_STA_CV"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT2_CHG_STA_TO,   "CHG_STA_TO"),
->> +	DEFINE_RES_IRQ_NAMED(MAX77759_CHGR_INT2_CHG_STA_DONE, "CHG_STA_DONE"),
->>  };
->>  
->>  static const struct mfd_cell max77759_cells[] = {
->> @@ -567,7 +642,7 @@ static int max77759_add_chained_charger(struct i2c_client *client,
->>  					    max77759->regmap_charger,
->>  					    MAX77759_INT_CHGR,
->>  					    parent,
->> -					    &max77759_chrg_irq_chip,
->> +					    &max77759_chgr_irq_chip,
->>  					    &irq_chip_data);
->>  	if (ret)
->>  		return ret;
->> diff --git a/include/linux/mfd/max77759.h b/include/linux/mfd/max77759.h
->> index c6face34e385..ec19be952877 100644
->> --- a/include/linux/mfd/max77759.h
->> +++ b/include/linux/mfd/max77759.h
->> @@ -59,35 +59,65 @@
->>  #define MAX77759_MAXQ_REG_AP_DATAIN0            0xb1
->>  #define MAX77759_MAXQ_REG_UIC_SWRST             0xe0
->>  
->> -#define MAX77759_CHGR_REG_CHG_INT               0xb0
->> -#define MAX77759_CHGR_REG_CHG_INT2              0xb1
->> -#define MAX77759_CHGR_REG_CHG_INT_MASK          0xb2
->> -#define MAX77759_CHGR_REG_CHG_INT2_MASK         0xb3
->> -#define MAX77759_CHGR_REG_CHG_INT_OK            0xb4
->> -#define MAX77759_CHGR_REG_CHG_DETAILS_00        0xb5
->> -#define MAX77759_CHGR_REG_CHG_DETAILS_01        0xb6
->> -#define MAX77759_CHGR_REG_CHG_DETAILS_02        0xb7
->> -#define MAX77759_CHGR_REG_CHG_DETAILS_03        0xb8
->> -#define MAX77759_CHGR_REG_CHG_CNFG_00           0xb9
->> -#define MAX77759_CHGR_REG_CHG_CNFG_01           0xba
->> -#define MAX77759_CHGR_REG_CHG_CNFG_02           0xbb
->> -#define MAX77759_CHGR_REG_CHG_CNFG_03           0xbc
->> -#define MAX77759_CHGR_REG_CHG_CNFG_04           0xbd
->> -#define MAX77759_CHGR_REG_CHG_CNFG_05           0xbe
->> -#define MAX77759_CHGR_REG_CHG_CNFG_06           0xbf
->> -#define MAX77759_CHGR_REG_CHG_CNFG_07           0xc0
->> -#define MAX77759_CHGR_REG_CHG_CNFG_08           0xc1
->> -#define MAX77759_CHGR_REG_CHG_CNFG_09           0xc2
->> -#define MAX77759_CHGR_REG_CHG_CNFG_10           0xc3
->> -#define MAX77759_CHGR_REG_CHG_CNFG_11           0xc4
->> -#define MAX77759_CHGR_REG_CHG_CNFG_12           0xc5
->> -#define MAX77759_CHGR_REG_CHG_CNFG_13           0xc6
->> -#define MAX77759_CHGR_REG_CHG_CNFG_14           0xc7
->> -#define MAX77759_CHGR_REG_CHG_CNFG_15           0xc8
->> -#define MAX77759_CHGR_REG_CHG_CNFG_16           0xc9
->> -#define MAX77759_CHGR_REG_CHG_CNFG_17           0xca
->> -#define MAX77759_CHGR_REG_CHG_CNFG_18           0xcb
->> -#define MAX77759_CHGR_REG_CHG_CNFG_19           0xcc
->> +#define MAX77759_CHGR_REG_CHG_INT                      0xb0
->> +#define   MAX77759_CHGR_REG_CHG_INT_AICL               BIT(7)
->> +#define   MAX77759_CHGR_REG_CHG_INT_CHGIN              BIT(6)
->> +#define   MAX77759_CHGR_REG_CHG_INT_WCIN               BIT(5)
->> +#define   MAX77759_CHGR_REG_CHG_INT_CHG                BIT(4)
->> +#define   MAX77759_CHGR_REG_CHG_INT_BAT                BIT(3)
->> +#define   MAX77759_CHGR_REG_CHG_INT_INLIM              BIT(2)
->> +#define   MAX77759_CHGR_REG_CHG_INT_THM2               BIT(1)
->> +#define   MAX77759_CHGR_REG_CHG_INT_BYP                BIT(0)
->> +#define MAX77759_CHGR_REG_CHG_INT2                     0xb1
->> +#define   MAX77759_CHGR_REG_CHG_INT2_INSEL             BIT(7)
->> +#define   MAX77759_CHGR_REG_CHG_INT2_SYS_UVLO1         BIT(6)
->> +#define   MAX77759_CHGR_REG_CHG_INT2_SYS_UVLO2         BIT(5)
->> +#define   MAX77759_CHGR_REG_CHG_INT2_BAT_OILO          BIT(4)
->> +#define   MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CC        BIT(3)
->> +#define   MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CV        BIT(2)
->> +#define   MAX77759_CHGR_REG_CHG_INT2_CHG_STA_TO        BIT(1)
->> +#define   MAX77759_CHGR_REG_CHG_INT2_CHG_STA_DONE      BIT(0)
->> +#define MAX77759_CHGR_REG_CHG_INT_MASK                 0xb2
->> +#define MAX77759_CHGR_REG_CHG_INT2_MASK                0xb3
->> +#define MAX77759_CHGR_REG_CHG_INT_OK                   0xb4
->> +#define MAX77759_CHGR_REG_CHG_DETAILS_00               0xb5
->> +#define   MAX77759_CHGR_REG_CHG_DETAILS_00_CHGIN_DTLS  GENMASK(6, 5)
->> +#define MAX77759_CHGR_REG_CHG_DETAILS_01               0xb6
->> +#define   MAX77759_CHGR_REG_CHG_DETAILS_01_BAT_DTLS    GENMASK(6, 4)
->> +#define   MAX77759_CHGR_REG_CHG_DETAILS_01_CHG_DTLS    GENMASK(3, 0)
->> +#define MAX77759_CHGR_REG_CHG_DETAILS_02               0xb7
->> +#define   MAX77759_CHGR_REG_CHG_DETAILS_02_CHGIN_STS   BIT(5)
->> +#define MAX77759_CHGR_REG_CHG_DETAILS_03               0xb8
->> +#define MAX77759_CHGR_REG_CHG_CNFG_00                  0xb9
->> +#define   MAX77759_CHGR_REG_CHG_CNFG_00_MODE           GENMASK(3, 0)
->> +#define MAX77759_CHGR_REG_CHG_CNFG_01                  0xba
->> +#define MAX77759_CHGR_REG_CHG_CNFG_02                  0xbb
->> +#define   MAX77759_CHGR_REG_CHG_CNFG_02_CHGCC          GENMASK(5, 0)
->> +#define MAX77759_CHGR_REG_CHG_CNFG_03                  0xbc
->> +#define MAX77759_CHGR_REG_CHG_CNFG_04                  0xbd
->> +#define   MAX77759_CHGR_REG_CHG_CNFG_04_CHG_CV_PRM     GENMASK(5, 0)
->> +#define MAX77759_CHGR_REG_CHG_CNFG_05                  0xbe
->> +#define MAX77759_CHGR_REG_CHG_CNFG_06                  0xbf
->> +#define   MAX77759_CHGR_REG_CHG_CNFG_06_CHGPROT        GENMASK(3, 2)
->> +#define MAX77759_CHGR_REG_CHG_CNFG_07                  0xc0
->> +#define MAX77759_CHGR_REG_CHG_CNFG_08                  0xc1
->> +#define MAX77759_CHGR_REG_CHG_CNFG_09                  0xc2
->> +#define   MAX77759_CHGR_REG_CHG_CNFG_09_CHGIN_ILIM     GENMASK(6, 0)
->> +#define MAX77759_CHGR_REG_CHG_CNFG_10                  0xc3
->> +#define MAX77759_CHGR_REG_CHG_CNFG_11                  0xc4
->> +#define MAX77759_CHGR_REG_CHG_CNFG_12                  0xc5
->> +/* Wireless Charging input channel select */
->> +#define   MAX77759_CHGR_REG_CHG_CNFG_12_WCINSEL        BIT(6)
->> +/* CHGIN/USB input channel select */
->> +#define   MAX77759_CHGR_REG_CHG_CNFG_12_CHGINSEL       BIT(5)
-> Should we ensure these comments are formatted as complete sentences with a full
-> stop at the end, to comply with our documentation guidelines?
-
-Sounds good I will add this fix in the new fixes patch.
-
-
->
->> +#define MAX77759_CHGR_REG_CHG_CNFG_13                  0xc6
->> +#define MAX77759_CHGR_REG_CHG_CNFG_14                  0xc7
->> +#define MAX77759_CHGR_REG_CHG_CNFG_15                  0xc8
->> +#define MAX77759_CHGR_REG_CHG_CNFG_16                  0xc9
->> +#define MAX77759_CHGR_REG_CHG_CNFG_17                  0xca
->> +#define MAX77759_CHGR_REG_CHG_CNFG_18                  0xcb
->> +#define   MAX77759_CHGR_REG_CHG_CNFG_18_WDTEN          BIT(0)
->> +#define MAX77759_CHGR_REG_CHG_CNFG_19                  0xcc
->>  
->>  /* MaxQ opcodes for max77759_maxq_command() */
->>  #define MAX77759_MAXQ_OPCODE_MAXLENGTH (MAX77759_MAXQ_REG_AP_DATAOUT32 - \
->> @@ -101,6 +131,84 @@
->>  #define MAX77759_MAXQ_OPCODE_USER_SPACE_READ     0x81
->>  #define MAX77759_MAXQ_OPCODE_USER_SPACE_WRITE    0x82
->>  
->> +/**
->> + * enum max77759_chgr_chgin_dtls_status - Charger Input Status
->> + * @MAX77759_CHGR_CHGIN_DTLS_VBUS_UNDERVOLTAGE:
->> + *     Charger input voltage (Vchgin) < Under Voltage Threshold (Vuvlo)
->> + * @MAX77759_CHGR_CHGIN_DTLS_VBUS_MARGINAL_VOLTAGE:
->> + *     Vchgin > Vuvlo and Vchgin < (Battery Voltage (Vbatt) + system voltage (Vsys))
->> + * @MAX77759_CHGR_CHGIN_DTLS_VBUS_OVERVOLTAGE:
->> + *     Vchgin > Over Voltage threshold (Vovlo)
->> + * @MAX77759_CHGR_CHGIN_DTLS_VBUS_VALID:
->> + *     Vchgin > Vuvlo, Vchgin < Vovlo and Vchgin > (Vsys + Vbatt)
->> + */
->> +enum max77759_chgr_chgin_dtls_status {
->> +	MAX77759_CHGR_CHGIN_DTLS_VBUS_UNDERVOLTAGE,
->> +	MAX77759_CHGR_CHGIN_DTLS_VBUS_MARGINAL_VOLTAGE,
->> +	MAX77759_CHGR_CHGIN_DTLS_VBUS_OVERVOLTAGE,
->> +	MAX77759_CHGR_CHGIN_DTLS_VBUS_VALID,
->> +};
->> +
->> +/**
->> + * enum max77759_chgr_bat_dtls_states - Battery Details
->> + * @MAX77759_CHGR_BAT_DTLS_NO_BATT_CHG_SUSP:	No battery and the charger suspended
->> + * @MAX77759_CHGR_BAT_DTLS_DEAD_BATTERY:	Vbatt < Vtrickle
->> + * @MAX77759_CHGR_BAT_DTLS_BAT_CHG_TIMER_FAULT:	Charging suspended due to timer fault
->> + * @MAX77759_CHGR_BAT_DTLS_BAT_OKAY:		Battery okay and Vbatt > Min Sys Voltage (Vsysmin)
->> + * @MAX77759_CHGR_BAT_DTLS_BAT_UNDERVOLTAGE:	Battery is okay. Vtrickle < Vbatt < Vsysmin
->> + * @MAX77759_CHGR_BAT_DTLS_BAT_OVERVOLTAGE:	Battery voltage > Overvoltage threshold
->> + * @MAX77759_CHGR_BAT_DTLS_BAT_OVERCURRENT:	Battery current exceeds overcurrent threshold
->> + * @MAX77759_CHGR_BAT_DTLS_BAT_ONLY_MODE:	Battery only mode and battery level not available
->> + */
->> +enum max77759_chgr_bat_dtls_states {
->> +	MAX77759_CHGR_BAT_DTLS_NO_BATT_CHG_SUSP,
->> +	MAX77759_CHGR_BAT_DTLS_DEAD_BATTERY,
->> +	MAX77759_CHGR_BAT_DTLS_BAT_CHG_TIMER_FAULT,
->> +	MAX77759_CHGR_BAT_DTLS_BAT_OKAY,
->> +	MAX77759_CHGR_BAT_DTLS_BAT_UNDERVOLTAGE,
->> +	MAX77759_CHGR_BAT_DTLS_BAT_OVERVOLTAGE,
->> +	MAX77759_CHGR_BAT_DTLS_BAT_OVERCURRENT,
->> +	MAX77759_CHGR_BAT_DTLS_BAT_ONLY_MODE,
->> +};
->> +
->> +/**
->> + * enum max77759_chgr_chg_dtls_states - Charger Details
->> + * @MAX77759_CHGR_CHG_DTLS_PREQUAL:		Charger in prequalification mode
->> + * @MAX77759_CHGR_CHG_DTLS_CC:			Charger in fast charge const curr mode
->> + * @MAX77759_CHGR_CHG_DTLS_CV:			Charger in fast charge const voltage mode
->> + * @MAX77759_CHGR_CHG_DTLS_TO:			Charger is in top off mode
->> + * @MAX77759_CHGR_CHG_DTLS_DONE:		Charger is done
->> + * @MAX77759_CHGR_CHG_DTLS_RSVD_1:		Reserved
->> + * @MAX77759_CHGR_CHG_DTLS_TIMER_FAULT:		Charger is in timer fault mode
->> + * @MAX77759_CHGR_CHG_DTLS_SUSP_BATT_THM:	Charger is suspended as battery removal detected
->> + * @MAX77759_CHGR_CHG_DTLS_OFF:			Charger is off. Input invalid or charger disabled
->> + * @MAX77759_CHGR_CHG_DTLS_RSVD_2:		Reserved
->> + * @MAX77759_CHGR_CHG_DTLS_RSVD_3:		Reserved
->> + * @MAX77759_CHGR_CHG_DTLS_OFF_WDOG_TIMER:	Charger is off as watchdog timer expired
->> + * @MAX77759_CHGR_CHG_DTLS_SUSP_JEITA:		Charger is in JEITA control mode
->> + */
->> +enum max77759_chgr_chg_dtls_states {
->> +	MAX77759_CHGR_CHG_DTLS_PREQUAL,
->> +	MAX77759_CHGR_CHG_DTLS_CC,
->> +	MAX77759_CHGR_CHG_DTLS_CV,
->> +	MAX77759_CHGR_CHG_DTLS_TO,
->> +	MAX77759_CHGR_CHG_DTLS_DONE,
->> +	MAX77759_CHGR_CHG_DTLS_RSVD_1,
->> +	MAX77759_CHGR_CHG_DTLS_TIMER_FAULT,
->> +	MAX77759_CHGR_CHG_DTLS_SUSP_BATT_THM,
->> +	MAX77759_CHGR_CHG_DTLS_OFF,
->> +	MAX77759_CHGR_CHG_DTLS_RSVD_2,
->> +	MAX77759_CHGR_CHG_DTLS_RSVD_3,
->> +	MAX77759_CHGR_CHG_DTLS_OFF_WDOG_TIMER,
->> +	MAX77759_CHGR_CHG_DTLS_SUSP_JEITA,
->> +};
->> +
->> +enum max77759_chgr_mode {
->> +	MAX77759_CHGR_MODE_OFF,
->> +	MAX77759_CHGR_MODE_CHG_BUCK_ON = 0x5,
->> +	MAX77759_CHGR_MODE_OTG_BOOST_ON = 0xA,
->> +};
-> Would it be safer to explicitly initialise 'MAX77759_CHGR_MODE_OFF' to 0 here?
-> Relying on implicit zero initialisation whilst explicitly setting other values
-> can sometimes lead to unexpected behaviour if new entries are added.
-
-Sounds good. Will fix.
-
-
-Best Regards,
-
-Amit
-
->
+Thanks,
+Haowen
 
