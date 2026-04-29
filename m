@@ -1,212 +1,198 @@
-Return-Path: <linux-usb+bounces-36679-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36680-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +EboHkPd8WnvkwEAu9opvQ
-	(envelope-from <linux-usb+bounces-36679-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 12:28:19 +0200
+	id yFO2AADh8WlZlAEAu9opvQ
+	(envelope-from <linux-usb+bounces-36680-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 12:44:16 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 236E0492E85
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 12:28:15 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA3DE493150
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 12:44:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CB543304A884
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 10:25:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CD35E3040233
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 10:40:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7D3C3D4129;
-	Wed, 29 Apr 2026 10:25:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0DCE3E8C4F;
+	Wed, 29 Apr 2026 10:40:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="syDuJ2eb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fw+jFTug"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B9C3D171F;
-	Wed, 29 Apr 2026 10:25:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A90E3C0634;
+	Wed, 29 Apr 2026 10:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777458347; cv=none; b=Yd4jv0375oEqgk2TffT6ce+KbK5vUN5fJDzksDchYACegMs1N81whhx9nM9Vfyo73BfQbfd2hrwMrR+volUfmc2PcBoLmeHTzR5sB254mCi3Q65iBh6BiRFRXf7JeQOsyltwCvLHjL3JWnv7phEWn6FYLB7vbALi4GNRwQ7zJS0=
+	t=1777459232; cv=none; b=jsKAvvQKfsPCZJ4yLS7iGr4HH9BEtMjp2/FBRnYMWp8n9/TURlTusBm1UtbQdyiVJfyUYT2NHR6W0HSWuldPh5A/aQlRmZukbz/eWUD8A+Lyn/Ybqbu1iCdpwndBtZzCdRDbG9M0AnX5PlBtjQnMI4D6u09F+cN0UG00o19p8xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777458347; c=relaxed/simple;
-	bh=uKx2BLK4SWtORQ3Y1X9QU+u3JmhryAfpmr007sf8OrM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Okk7xSo1DqiJWQ4y5ORbmodxvUqt3z7zCtusOnpvcI6F+PKzYOfkQFTyBq3bN+8mArFQu4WO1DwLu+GdJknoq6ExMfWw+ey3SzI8ikmr2WKk5gRRAHG4shfZhm7eYpkB/Od0XNzPxS+ybyprXAmLoGJxmb/B8NXg7JdOVW6Hp/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=syDuJ2eb; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777458333;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0ubnPqyEuUH+bb9tWP9+TOUp+n6C5onOR58LCuBDEiw=;
-	b=syDuJ2ebh9z2sjffREH58o0aT6Ajjew8W5I8ReEUtvp2EQkdghmYv8iT9JcU1iX87oMIbX
-	D+xmbMoFNHgWVKDoL6XEe6kPFjJgAeA5FQrv1tK/6uUbSyjmFqItMdxDS/n3eJA5ihtrWC
-	pDy1LXDxeyfrSgRVjezaD0bM6Fa+Scc=
-From: Usama Arif <usama.arif@linux.dev>
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Cc: Usama Arif <usama.arif@linux.dev>,
-	Yury Norov <ynorov@nvidia.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	linux-alpha@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	kvm@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	dmaengine@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-fsi@lists.ozlabs.org,
-	amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org,
-	linux-wpan@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-wireless@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	linux-serial@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	xen-devel@lists.xenproject.org,
-	linux-fsdevel@vger.kernel.org,
-	ocfs2-devel@lists.linux.dev,
-	bpf@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	linux-mm@kvack.org,
-	linux-x25@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	sound-open-firmware@alsa-project.org,
-	linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH v1 7/9] x86: Add unsafe_copy_from_user()
-Date: Wed, 29 Apr 2026 03:25:19 -0700
-Message-ID: <20260429102520.1617327-1-usama.arif@linux.dev>
-In-Reply-To: <0ee46bb228d97163fbdc14f2a7c52b93d8bc34ce.1777306795.git.chleroy@kernel.org>
-References: 
+	s=arc-20240116; t=1777459232; c=relaxed/simple;
+	bh=mMWE0WuEVR18JsXmxqLojKDlsYaU2ziLhr1ctstoqLI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mc1kTn0RpvXzemMvG4C2FxxWXfcH0Xvr6z/yjfsVr0UQJToSoHXXI9cJ+u65Ag7rs6VpiKjejbnp/q2MSBCO0UCNIZ8H946vDOL1Mbi90eTfwyXThAFsjaTWr33faHn2SyW23Nu0SBB0F+EAEvVRQwDYyqPsDeF3VEB/UAQM/Y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fw+jFTug; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777459230; x=1808995230;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mMWE0WuEVR18JsXmxqLojKDlsYaU2ziLhr1ctstoqLI=;
+  b=fw+jFTugIcmeYcyZx/gZYJYGAEUgawzs34lkg3L0Fblud6TRHp8qRaGo
+   PdYp6YdWNknkaLcc1CHNWvwXr3cljAcnZFvh8Q++8jzoLnW335F4KV/p8
+   ETYC8gNMPV8bhrRn2lG8ZFuvuSRpUtz87GSFjSyddBC0FWmD/DRjcQ3gm
+   G1NlDG082+2ttU0GJhN9WXuZRkzHvme5dV4ygLsTxpXRAico7vl6vvp6O
+   0pOya+LBX60cMSfWUUEf+jfQ3c1ihcas23LUtzbpIZ9S7qSPdkvkxBEll
+   A0kdQuBdSSxNu4g/nA0e2l4Ab2RO0cdA0OZwYquBzdOCaNgVQpDJcPTjA
+   g==;
+X-CSE-ConnectionGUID: 3Jn9eaD0RTGFFoh06J7zFA==
+X-CSE-MsgGUID: HjcBY84BStOZoo6G9OWVeg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11770"; a="77550445"
+X-IronPort-AV: E=Sophos;i="6.23,206,1770624000"; 
+   d="scan'208";a="77550445"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2026 03:40:29 -0700
+X-CSE-ConnectionGUID: 6jjohVBrRb+MAox0t8M/iA==
+X-CSE-MsgGUID: K7qJk4BESeurfnH2ZjRo5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,206,1770624000"; 
+   d="scan'208";a="234238819"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa009.jf.intel.com with ESMTP; 29 Apr 2026 03:40:27 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1008)
+	id 6E76595; Wed, 29 Apr 2026 12:40:26 +0200 (CEST)
+Date: Wed, 29 Apr 2026 13:40:13 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Felix Gu <ustc.gu@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: fusb302: Fix resource leak when
+ devm_drm_dp_hpd_bridge_add() fails
+Message-ID: <afHgDbQ4w0Vo_9LH@kuha>
+References: <20260428-fusb-v2-1-aa3b5942cabb@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Rspamd-Queue-Id: 236E0492E85
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260428-fusb-v2-1-aa3b5942cabb@gmail.com>
+X-Rspamd-Queue-Id: AA3DE493150
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
-	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linux.dev,nvidia.com,linux-foundation.org,gmail.com,linutronix.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org,lists.freedesktop.org,lists.linux.dev,lists.xenproject.org,googlegroups.com,kvack.org,alsa-project.org,lists.linux-m68k.org];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36680-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36679-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[3];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[usama.arif@linux.dev,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[linux.dev:+];
-	RCPT_COUNT_GT_50(0.00)[50];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-0.997];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linux.dev:dkim,linux.dev:mid]
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,intel.com:email]
 
-On Mon, 27 Apr 2026 19:13:48 +0200 "Christophe Leroy (CS GROUP)" <chleroy@kernel.org> wrote:
+On Tue, Apr 28, 2026 at 09:18:21PM +0800, Felix Gu wrote:
+> If devm_drm_dp_hpd_bridge_add() fails during fusb302_probe(), the original
+> code returned directly without cleaning up the resources.
+> 
+> Move bridge registration before the IRQ is requested and route bridge
+> registration failures through the existing TCPM unregister and fwnode
+> cleanup path.
+> 
+> Fixes: 5d79c525405d ("usb: typec: fusb302: add DRM DP HPD bridge support")
+> Signed-off-by: Felix Gu <ustc.gu@gmail.com>
 
-> At the time being, x86 and arm64 are missing unsafe_copy_from_user().
-> 
-> Add it.
-> 
-> Signed-off-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
->  arch/x86/include/asm/uaccess.h | 29 ++++++++++++++++++++++++-----
->  1 file changed, 24 insertions(+), 5 deletions(-)
+> Changes in v2:
+> - Fix Heikki's comment.
+> - Link to v1: https://lore.kernel.org/r/20260421-fusb-v1-1-0a9dd64e785b@gmail.com
+> ---
+>  drivers/usb/typec/tcpm/fusb302.c | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
 > 
-> diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-> index 3a0dd3c2b233..10c458ffa399 100644
-> --- a/arch/x86/include/asm/uaccess.h
-> +++ b/arch/x86/include/asm/uaccess.h
-> @@ -598,7 +598,7 @@ _label:									\
->   * We want the unsafe accessors to always be inlined and use
->   * the error labels - thus the macro games.
->   */
-> -#define unsafe_copy_loop(dst, src, len, type, label)				\
-> +#define unsafe_put_loop(dst, src, len, type, label)				\
->  	while (len >= sizeof(type)) {						\
->  		unsafe_put_user(*(type *)(src),(type __user *)(dst),label);	\
->  		dst += sizeof(type);						\
-> @@ -611,10 +611,29 @@ do {									\
->  	char __user *__ucu_dst = (_dst);				\
->  	const char *__ucu_src = (_src);					\
->  	size_t __ucu_len = (_len);					\
-> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
-> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
-> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
-> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
-> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
-> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
-> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
-> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
-> +} while (0)
-> +
-> +#define unsafe_get_loop(dst, src, len, type, label)				\
-> +	while (len >= sizeof(type)) {						\
-> +		unsafe_get_user(*(type __user *)(src),(type *)(dst),label);	\
-
-Hi,
-
-Just wanted to check if src and dst need to be swapped? Same for arm64 patch.
-
-> +		dst += sizeof(type);						\
-> +		src += sizeof(type);						\
-> +		len -= sizeof(type);						\
-> +	}
-> +
-> +#define unsafe_copy_from_user(_dst,_src,_len,label)			\
-> +do {									\
-> +	char *__ucu_dst = (_dst);					\
-> +	const char __user *__ucu_src = (_src);				\
-> +	size_t __ucu_len = (_len);					\
-> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
-> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
-> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
-> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
->  } while (0)
+> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+> index 889c4c29c1b8..9ab1277b7ed1 100644
+> --- a/drivers/usb/typec/tcpm/fusb302.c
+> +++ b/drivers/usb/typec/tcpm/fusb302.c
+> @@ -1751,19 +1751,22 @@ static int fusb302_probe(struct i2c_client *client)
 >  
->  #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
+>  	bridge_dev = devm_drm_dp_hpd_bridge_alloc(chip->dev, to_of_node(chip->tcpc_dev.fwnode));
+>  	if (IS_ERR(bridge_dev)) {
+> -		ret = PTR_ERR(bridge_dev);
+> -		dev_err_probe(chip->dev, ret, "failed to alloc bridge\n");
+> -		goto destroy_workqueue;
+> +		ret = dev_err_probe(chip->dev, PTR_ERR(bridge_dev),
+> +				    "failed to alloc bridge\n");
+> +		goto fwnode_put;
+>  	}
+>  
+>  	chip->tcpm_port = tcpm_register_port(&client->dev, &chip->tcpc_dev);
+>  	if (IS_ERR(chip->tcpm_port)) {
+> -		fwnode_handle_put(chip->tcpc_dev.fwnode);
+>  		ret = dev_err_probe(dev, PTR_ERR(chip->tcpm_port),
+>  				    "cannot register tcpm port\n");
+> -		goto destroy_workqueue;
+> +		goto fwnode_put;
+>  	}
+>  
+> +	ret = devm_drm_dp_hpd_bridge_add(chip->dev, bridge_dev);
+> +	if (ret)
+> +		goto tcpm_unregister_port;
+> +
+>  	ret = request_threaded_irq(chip->gpio_int_n_irq, NULL, fusb302_irq_intn,
+>  				   IRQF_ONESHOT | IRQF_TRIGGER_LOW,
+>  				   "fsc_interrupt_int_n", chip);
+> @@ -1774,14 +1777,11 @@ static int fusb302_probe(struct i2c_client *client)
+>  	enable_irq_wake(chip->gpio_int_n_irq);
+>  	i2c_set_clientdata(client, chip);
+>  
+> -	ret = devm_drm_dp_hpd_bridge_add(chip->dev, bridge_dev);
+> -	if (ret)
+> -		return ret;
+> -
+> -	return ret;
+> +	return 0;
+>  
+>  tcpm_unregister_port:
+>  	tcpm_unregister_port(chip->tcpm_port);
+> +fwnode_put:
+>  	fwnode_handle_put(chip->tcpc_dev.fwnode);
+>  destroy_workqueue:
+>  	fusb302_debugfs_exit(chip);
+> 
+> ---
+> base-commit: 97e797263a5e963da3d1e66e743fd518567dfe37
+> change-id: 20260421-fusb-0e7085ce431a
+> 
+> Best regards,
 > -- 
-> 2.49.0
-> 
-> 
+> Felix Gu <ustc.gu@gmail.com>
+
+-- 
+heikki
 
