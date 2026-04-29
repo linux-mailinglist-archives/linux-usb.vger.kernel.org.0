@@ -1,63 +1,64 @@
-Return-Path: <linux-usb+bounces-36703-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36701-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UBl0Iu1A8mn7pAEAu9opvQ
-	(envelope-from <linux-usb+bounces-36703-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:33:33 +0200
+	id 2ObHD7xA8mkApQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36701-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:32:44 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D02E498332
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:33:31 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C02C5498306
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:32:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 883AF300C3B1
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 17:32:52 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id BCF67300F4D3
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 17:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D811C41B360;
-	Wed, 29 Apr 2026 17:32:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C677219EB;
+	Wed, 29 Apr 2026 17:32:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="X3Za39LI"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="LDs7XLmB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010070.outbound.protection.outlook.com [52.101.46.70])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012059.outbound.protection.outlook.com [40.93.195.59])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1162640149B;
-	Wed, 29 Apr 2026 17:32:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FBF03FE34C;
+	Wed, 29 Apr 2026 17:32:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.59
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777483958; cv=fail; b=cQLrgg17/zdo34PbvW/+K1F9D5VbD+fyTRoM/KDSXxaXvQ0S2joHquA2kwC+I5jxIYFjDP/0Dce0LYc5xU+uSUGu4aIh3eGwxTMXNbdK2eNMvLMU2Q4ENHKHcTyd3jY6uJXa2Ft5tLxadc2zDJaLIK1JpBfUi1w6EzlM8EgDzLU=
+	t=1777483953; cv=fail; b=WGE7yjWJRmg+EgQF6Ho4g2lwds6fl5IqoZTQGs5ThLbY8TsKe3ECSGEWR0LEat3dShsR62FBUedBesTtqBUPIyny2Q78+3qdN5VNrhQtzYLTy1CXLRlLYNFwSCgGu5YBrR8Ak7J7PqZ/sE2qhqW2twdq+jOMS0LASFBaPf3jZbw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777483958; c=relaxed/simple;
-	bh=Q6s3wM+mm2fCFTJREiNnqOg6uYujHSoblP6JO0dTWyk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=b2RhHjN3UVg1DFiwApZ0BSfVbA+nX9LDM5CbxffvQ3siM5UWLRGnbNgMVW2iVGIioOhqsha9bAbGE/KG5b78DHwJqv3sr+pzBxtoBD1N9G75Q6DZSsKk67odsK40pNnSM4t5en+AiFtwXwU0pbqiKsq8iSn9NDmtL5jSBWpNhRw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=X3Za39LI; arc=fail smtp.client-ip=52.101.46.70
+	s=arc-20240116; t=1777483953; c=relaxed/simple;
+	bh=vTkxwYGpQ0WxCaHZV5FVXvTr+P+WEHNOi5whM9m8uj4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=b0RqTZP0y7VtTDz3JvLoL4+BT0IHo4PttkfTMr5B1hSmD+6+8Ax38Tyx3JhvYJLlXJd8lyxAEPoStpmjxy6elZ1gzqv9Et0oHRi2HYEwh/4LZ5j3lHxH+Dw62b4oH86Xb0x1ykZUPaURTpQI/bK2tkLVgxnAtl3So9b5tyFL5Zo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=LDs7XLmB; arc=fail smtp.client-ip=40.93.195.59
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=knZSia8ygAlb6SYncaKamonOY4WVgBvXZ3Tj9rlxWtlP46nii9UXhMN62PrRm5H93EpuynAAOhqNUUUjB0qKYHEEaM/BjLIYqrshtktmqBfVJ9qEsBirSIXa/pPvWAH2M+aoKonlFlJi3qyFLrW3iMTkGJHPrjIKG1X93T70T1bRWNJnRlrU11G1Fz6yvAwKY2e7vqm4GJVTLNQs//F6kkVY9GTQvz6BGz5hgJ3H/UKeiTyPq5ER93pQDB5G8kTUJLd2LaNyCacCLZlojAwJ8l6SDnyEp0LVc1jh/ebdvIiWi6djVx7ZHX5nENgAxgMigpjNHkmSEgUACTAGdGWRJg==
+ b=XZQzPt9478LYgV3+QWUi3VR1JuOPXAL+5zIu5c8D0Y2GZmVDPZkx+AabRz7y+91kxD8Uhz8NG/AJY+pk8nhkq5jjQINhuiA0gSK+rPOs4T3gN/ari0oBO9jsRmnadq9RniVENISnbTj8LK5twv6Ux+qJrHwkVQugDyPqJlORsg8OJVeE00BHEwWEcDVb/9VYwCXsDejNayHI/RLd1MBcOPBRl1xKD2fKIuvwVGhEo7I9GcZJBCS7/tprhMQugM19kf9yBZzYkEpdbCSB+ka+HHSpwrAX1p/n9oZgOirwPaNllbV2se80zONiMR2YzCbtGSv6C1/jTJxHhjCKKxd5Cw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jBP0pVPxiyAdOds3IG7AjgbQI5Veking0yRKpLFLBCg=;
- b=WGl87VIw30Md27WUB7ir8a93Qhubg0m3GIqKYBgYkga2F0CgsILcFry9J30JRreQENtolzp2ADeGzaKHtJQVF6m84amVW3em1bV6bnWXfdYVW/1ru+6kLgMbs8GtItTO5uO7SVYktBwtV6y8hTWMokpUP5ju7GTOL4ReoZtDMnqrDJl6ZG/jCpNwCBt4PUB8QUZSPAPLQOd7N7aHHrr/n3pznJuErhnF7CckgnrEK2xDpapbrqLZO3/27Ps1pPfmkc6vjZ5agx25t9NKpfISzTPfrXDm7t8nK9tLzW7EkWUgXzQXjEmFsMUNnoRMgmLoXoVR2k/S9ptBLoNerLCMnw==
+ bh=dZ1ly6JNLAet6lPuKDyphipBsC3x4Hfva5P+WBERwr4=;
+ b=qrv9dSXv5IcPdoPfVUmljrI0+L7A74QSlwlaz3pNSAlqfVW8jVj1hyGfWkuIUbKDd6T0MvahBb7dZYozKUcpNdZf7FYbP6yjXOAONaoO2JXkXuuNe6dF9M1+lTV3L8KntjFmGq5Jjh0Zq8CrxxNTtSr657I9nUiy3kV94CpqC4hs524k/uJ3p4/UdBXVkJpLtVGhRg1GuglxV2wlUgqRxWn0fR9hynH+t9JlorH4uaOY/g1GH+HCLpqrZO8w5BbLz8zbhPmQaFZh9OQZi+GdLlYjwB/Hb4td7SLOSSoCYfno3ORn5aXnG2OO6h7eOS6M3iWezC+Tu5M16ttFgPZ4Eg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jBP0pVPxiyAdOds3IG7AjgbQI5Veking0yRKpLFLBCg=;
- b=X3Za39LIPb1d6RB2wk7Nrao8V0SQcb4Fq+7RiouN+uvct4iMWJgqJSBN90Z3obQr0/X4WS2sqZ+sPU4F6e/RW2SJbBj2V+rDeyE+mDWXELbSbRLk2+WGfaVurku7Sk7VCV+HPZjDHWkjMub6fajhO46dNu/pX6VU3pkoXeB5aM4=
-Received: from SJ0PR03CA0191.namprd03.prod.outlook.com (2603:10b6:a03:2ef::16)
- by CY5PR12MB6324.namprd12.prod.outlook.com (2603:10b6:930:f::5) with
+ bh=dZ1ly6JNLAet6lPuKDyphipBsC3x4Hfva5P+WBERwr4=;
+ b=LDs7XLmBVlLUpD0R5nhha2zBRKtqeUahNnEbddFXb0ON0OSuHvwzIcOCmlg0R+wcSpAd3NQK2+NikochMTfdrAjRwM6vOYwd7uiG17ZKeVcfNfu18a4h6LeJvjQV+XmOA/2E9RUEFZHKJak3oxPEtrmRubo5aW1fT3nMeS15LxQ=
+Received: from SJ0PR05CA0068.namprd05.prod.outlook.com (2603:10b6:a03:332::13)
+ by PH7PR12MB6883.namprd12.prod.outlook.com (2603:10b6:510:1b9::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.18; Wed, 29 Apr
- 2026 17:32:29 +0000
-Received: from BY1PEPF0001AE19.namprd04.prod.outlook.com
- (2603:10b6:a03:2ef:cafe::89) by SJ0PR03CA0191.outlook.office365.com
- (2603:10b6:a03:2ef::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.20; Wed, 29 Apr
+ 2026 17:32:28 +0000
+Received: from BY1PEPF0001AE1A.namprd04.prod.outlook.com
+ (2603:10b6:a03:332:cafe::c3) by SJ0PR05CA0068.outlook.office365.com
+ (2603:10b6:a03:332::13) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9846.28 via Frontend Transport; Wed,
- 29 Apr 2026 17:32:29 +0000
+ 29 Apr 2026 17:32:28 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -65,20 +66,20 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
 Received: from satlexmb08.amd.com (165.204.84.17) by
- BY1PEPF0001AE19.mail.protection.outlook.com (10.167.242.101) with Microsoft
+ BY1PEPF0001AE1A.mail.protection.outlook.com (10.167.242.102) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9846.18 via Frontend Transport; Wed, 29 Apr 2026 17:32:29 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by satlexmb08.amd.com
+ 15.20.9846.18 via Frontend Transport; Wed, 29 Apr 2026 17:32:27 +0000
+Received: from Satlexmb09.amd.com (10.181.42.218) by satlexmb08.amd.com
  (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Wed, 29 Apr
- 2026 12:31:51 -0500
-Received: from satlexmb08.amd.com (10.181.42.217) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 29 Apr
- 2026 12:31:09 -0500
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 29 Apr
+ 2026 12:31:50 -0500
+Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb09.amd.com
+ (10.181.42.218) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 29 Apr
+ 2026 10:31:13 -0700
 Received: from xhdradheys41.xilinx.com (10.180.168.240) by satlexmb08.amd.com
  (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Wed, 29 Apr 2026 12:31:06 -0500
+ Transport; Wed, 29 Apr 2026 12:31:10 -0500
 From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
 To: <gregkh@linuxfoundation.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
 	<conor+dt@kernel.org>, <michal.simek@amd.com>, <Thinh.Nguyen@synopsys.com>,
@@ -86,10 +87,12 @@ To: <gregkh@linuxfoundation.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
 CC: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
 	<git@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: [PATCH v3 0/4] usb: dwc3: xilinx: Add Versal2 MMI USB 3.2 controller support
-Date: Wed, 29 Apr 2026 23:00:46 +0530
-Message-ID: <20260429173050.1772377-1-radhey.shyam.pandey@amd.com>
+Subject: [PATCH v3 1/4] dt-bindings: usb: dwc3-xilinx: Add MMI USB support on Versal Gen2 platform
+Date: Wed, 29 Apr 2026 23:00:47 +0530
+Message-ID: <20260429173050.1772377-2-radhey.shyam.pandey@amd.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260429173050.1772377-1-radhey.shyam.pandey@amd.com>
+References: <20260429173050.1772377-1-radhey.shyam.pandey@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -98,35 +101,33 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-Received-SPF: None (SATLEXMB03.amd.com: radhey.shyam.pandey@amd.com does not
- designate permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY1PEPF0001AE19:EE_|CY5PR12MB6324:EE_
-X-MS-Office365-Filtering-Correlation-Id: 634d1579-70a4-4e05-d19a-08dea61549b8
+X-MS-TrafficTypeDiagnostic: BY1PEPF0001AE1A:EE_|PH7PR12MB6883:EE_
+X-MS-Office365-Filtering-Correlation-Id: 25126778-b837-44bb-071f-08dea61548d6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|36860700016|7416014|82310400026|1800799024|56012099003|18002099003;
+	BCL:0;ARA:13230040|376014|7416014|36860700016|1800799024|82310400026|18002099003|56012099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	gL423kqDB8An9UrqHLEePA+QwRmz9NHvyK2atae4qhuryQtAUp7fhWlh+apFKaptKges3xxkU3vRJM+Bk8Soh+sMFppQmtODQWSggPQIZAWR/sU+toHFIXNHqTqbtCypeCpzPjg8pkXYZI4BnIBwLaf7oYhNfrF7xT0roEsATyp4zKzmicf75NATVBFfbWY438hZNKRNa7OrFystdLpBg06LXOKOVACCbV/YkVvQymzLWbIDtbPXP/D8lWO/p6idQsM2Leh9XN3XOIeiNgUhAR87BS52JUkHL8zRtsWL/qbZ3G+fUTeDgNIkDlLLDqNUxpkCpbZBuoOcBG96jqv6mgAvWyj6l6ykaLXNc6zI922LH3GpF7awJVtEjp2D+j3PnBoRmjsntRyxBQhhdUuAweGq9CCIGGu+iQ0xs570srNlfdWYpyPS1tlVS/9gHNiv9SZ8djK5uUBF3wb/ZMpBWuXkxSNKSSv73LBo5uNsHi+znjAwbDnCnX4znthK2s/k1t9mVZsSsXrLymmZaJxQ/7+4XSAAmlZzn6L6Wn/hmwCY0dg+6rZR8SddWTVfrAHixtizVUvv1IACwIWearfeNWnhbNhslyOKxXrVcOkdehjBAP1kFx354686cEmsgftaCqcoGFTA80TzYbXM7P9S3VKSbVb2dVTmBfxBekF1PA8kpKxRI/U6i4P9vrZNcNpsoCUYV480TKuP/TFNLYGcw+ePx2aVhaStLMKjqjzfDkuGgYqtO085bxJbiknX7o1XmeArCjbGJi7MdeUbzWJZhA==
+	P/EmZ+GdVXRL+PfL3P/EkWan5i6pVFJa2eVgUWyU6L/9zlR+1KLq1qaILa+Tw3mAQpOz6RL/edfP9kLGWE9oRNvA/DcWIiTXd+ukDLU0m7G9DVIcZ9A6bDGsqP3jh4iwpw9xGFLdpi3PB2d2Wzl+D+ZBgAU6CS5oLmUz58I2/j9k6bG7wCLSiNl9c1ZyKXm6qFfsjGlSe4pkupMBKigwsM0Qzv/KcWw2duz6kCMIk0eXPv6rFdK69xEb4CUPoRxlKN0j9jMVx87zoEciG7ncKPBVEZqLyCuQQ/Fiy4KEqorHI+fRmvSyEWCY1wRQTPTacBkNFcb2gzaZbV0yFCdfdCjINDf2Dy7Jk68MJXBw8F2f8rgOciNMaukDTVfiGcyWoVOAoRuI4u4mzUbGvLL5uymsGQ/uKWeqVnV3jXJesdLu9oLPsQhbRurVrf+Xs5lYeNj0fnwj6IvaEa7EWrzJ2AK1pNCsFzjpm8OPa5BKE6MX+yrLjW9sdsds+p/Gv5lIBPwKlM2LuWFGiMGmGBeNFAgrhZJD6Og5niSw8UsYS2BOLbPZzwLO4m6w3f7Ot8wlBkjjlt3NdhDfzq7ILezmVUZPfyXwUPMwgovD91ByDfu0bmVhn4iSgg8gc+FwJDYWglQhWgJ+1mCgu5YE1+c5pclzmnfgWlFi05tnAtyT9AU8BkFhcS7xWb8/koriH2k+uuZdAKYrnpn9YlGX/bphv6oAeIQq6A3JoGgij0rOulXe+pG3sdDqIDgKEBqNr5+XyZwu8zmxGaWoeDyKoF2QFg==
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700016)(7416014)(82310400026)(1800799024)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700016)(1800799024)(82310400026)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	fZGN+3COI72QKWDGXuWRvMFpos4h3QXGHMivq0HTunP+nqTtiNVX7sfkmg0SdmqptjWdYjMWUSNhMmJceXITrFncgoWmWMTkhzfZPteNwEauC8b+PLkBr69enCmBAgsIRTWJEB84/vKIpoPWFmrj8gAjjnFksUuvDBFPOoKVJHHVGECjw9qjXj+PItotrsJ99PxLBxr5oPbDyQMOuIcN2sJCs8DYaeCC5uuSCg2tmMj7KMwTrkme2O0zT5J/GwO0YOfix2M5px0LT3AlfJEbz3SkmDR9aOWLfVxyJEVqRiWipZrNx3DiAuBoh5fXgiREEVEprCCJfqIb83UO3X0u6QY5JWxan6wVMR1eZd4jd/yqtYunIBhaGVzbgNQcWPhQ/yKBJm5FMNOtmVU03Mv4NIgwH2Mo4ct6d61Hi6JixiP1zySVCJBJj1QtwThkcZx2
+	86oyPuW//RaUiVtZUWQoPjuNLzCF8onscBlMPDuZC5BxxG9D/iamvTqb0NoAfUiJLtkvnkC2Zomfi78keJl45pmvHBvO1GHL4oRfM2vqTuyOJbMM/zegzNfifNO6dpN1gv1HVEWRPxT6lcP9x7rm28GZzE2hS3MDJmXHsMRThmIYs3n53LuBZFHPFUSeAjkKPLzC1hOXC8bXLKCEcaeUCW4sznqVc3J+s+E6C301G6ghNDgGyiwbSqMkkP5o70BYmlgSkWJUVKXuFk62KDf2wgBquJ316Dojh4rZ3LE7Ib/evZw9X7wgsnt6CihYjI1Wkh/NXR7T53zI3cMapedpSyIDsqvoWM9btYxvB9HzYYaZrhe495ZIz1HQgar5EVMusmL4Dhg9IHwluIuMe5DILKf5ktmkqSM9xoxiq8mZb3Z1GZ95UHfBBq97tsT33lOk
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2026 17:32:29.3730
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2026 17:32:27.8984
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 634d1579-70a4-4e05-d19a-08dea61549b8
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25126778-b837-44bb-071f-08dea61548d6
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BY1PEPF0001AE19.namprd04.prod.outlook.com
+	BY1PEPF0001AE1A.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6324
-X-Rspamd-Queue-Id: 6D02E498332
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6883
+X-Rspamd-Queue-Id: C02C5498306
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [2.84 / 15.00];
@@ -136,7 +137,7 @@ X-Spamd-Result: default: False [2.84 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
 	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -144,75 +145,183 @@ X-Spamd-Result: default: False [2.84 / 15.00];
 	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[13];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36703-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-36701-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[radhey.shyam.pandey@amd.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[amd.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:dkim,amd.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,amd.com:email,amd.com:dkim,amd.com:mid];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
-	NEURAL_HAM(-0.00)[-0.998];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.999];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	RCVD_COUNT_SEVEN(0.00)[9]
 
-This series introduces support for the Multimedia Integrated (MMI) USB
-3.2 Dual-Role Device (DRD) controller on Xilinx Versal2 platforms.
+The Versal Gen2 platform includes two distinct USB controllers. The
+versal2-dwc3 device represents a standalone USB 2.0 controller, while
+versal2-mmi-dwc3 represents the Multimedia Integrated (MMI) USB 3.2
+Gen 2x1 Dual-Role (DRD) controller. The MMI controller natively supports
+USB 3.2 host and device operation over type-c, operating in a Gen2x1
+configuration with a maximum data rate of 10 Gbps per direction.
 
-The controller supports SSP(10-Gbps), SuperSpeed, high-speed, full-speed
-and low-speed operation modes.
+Introduce a new compatibility string in <vendor>,<soc>-<subsystem>-<ip>
+format to uniquely distinguish the MMI USB controller. The USB wrapper
+registers reside in the MMI UDH system-level control registers (SLCR)
+block, so instead of a dedicated reg property, add xlnx,usb-syscon
+phandle with four cells specifying register offsets for USB2 PHY, USB3
+PHY, USB DRD, and USB power configuration within the SLCR.
 
-USB2 and USB3 PHY support Physical connectivity via the Type-C
-connectivity. DWC3 wrapper IP IO space is in SLCR so reg is made
-optional.
-
-The driver is required for the clock, reset and platform specific
-initialization (coherency/TX_DEEMPH etc). In this initial version typec
-reversibility is not implemented and it is assumed that USB3 PHY TCA mux
-programming is done by MMI configuration data object (CDOs) and TI PD
-controller is configured using external tiva programmer on VEK385
-evaluation board.
-
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+---
 Changes for v3:
-- Return -ENODEV from probe if device_get_match_data() is NULL.
-- Replace map_resource with no_mem_map (Versal2 MMI only; others default
-  MMIO map).
-- Add PHY warm-reset assert delay.
-- Loop all num_usb3_ports with one de-emphasis value.
-- Set default as DWC3_LCSR_TX_DEEMPH_UNSPECIFIED default and only set
-  snps,lcsr-tx-deemph when not unspecified.
+- Modify commit description to explain that there are two different
+  USB controllers and difference between versal2-dwc3 and
+  versal2-mmi-dwc3. Suggested by Krzysztof.
 
 Changes for v2:
-- DT binding: fix MHz spacing (SI convention), reorder description
-  before $ref in xlnx,usb-syscon, restore zynqmp-dwc3 example and add
-  versal2-mmi-dwc3 example, fix node name for no-reg case, use 1/1
-  address/size configuration and lowercase hex in syscon offsets.
-- Split config struct refactoring (device_get_match_data,dwc3_xlnx_config)
-  into a separate preparatory patch.
-- Fix error message capitalization to lowercase per kernel convention.
-- Rename property snps,lcsr_tx_deemph to snps,lcsr-tx-deemph (hyphens).
-- Fix double space in comment and missing blank line in core.h.
-- Use platform data instead of of_device_is_compatible() check for
-  deemphasis support.
+- Add blank line after compatible as suggested by Krzysztof.
+- Retain the mmi suffix in the compatible string, as this USB 3.2 Gen2
+  IP from Synopsys is part of the dedicated Multimedia Interface. The
+  Versal Gen2 platform also includes a separate USB 2.0 controller,
+  and the mmi suffix uniquely distinguishes between the two USB
+  controllers. MMI is an independent subsystem particularly targeted for
+  deployment in Multi-Media related applications. The MMI block include
+  following submodules: UDH: USB3.2 Gen 2x1 Dual Role Device, DisplayPort
+  Transmit Controller, Security Module (ESM) for DisplayPort and HDMI
+  Controllers, DP AUX-I2C PHY.
+- For MMI USB define parent address space i.e UDH block.
+- Fix inconsistent MHz spacing to use SI convention with spaces.
+- Move description before $ref and items in xlnx,usb-syscon property.
+- Restore original zynqmp-dwc3 example, add new versal2-mmi-dwc3 example.
+- Use 'usb' node name (without unit address) for versal2 example since
+  it has no reg property.
+- Use 1/1 address/size configuration in versal2 example, use lowercase
+  hex in syscon offsets.
+---
+ .../devicetree/bindings/usb/dwc3-xilinx.yaml  | 70 ++++++++++++++++++-
+ 1 file changed, 67 insertions(+), 3 deletions(-)
 
-Link: https://lore.kernel.org/all/20251119193036.2666877-1-radhey.shyam.pandey@amd.com/ [v1]
-
-Radhey Shyam Pandey (4):
-  dt-bindings: usb: dwc3-xilinx: Add MMI USB support on Versal Gen2
-    platform
-  usb: dwc3: xilinx: Introduce dwc3_xlnx_config for per-platform data
-  usb: dwc3: xilinx: Add Versal2 MMI USB 3.2 controller support
-  usb: dwc3: xilinx: Add support to program MMI USB TX deemphasis
-
- .../devicetree/bindings/usb/dwc3-xilinx.yaml  |  70 +++++++++++-
- drivers/usb/dwc3/core.c                       |  24 ++++
- drivers/usb/dwc3/core.h                       |  14 +++
- drivers/usb/dwc3/dwc3-xilinx.c                | 103 +++++++++++++++---
- 4 files changed, 193 insertions(+), 18 deletions(-)
-
-
-base-commit: 3b3bea6d4b9c162f9e555905d96b8c1da67ecd5b
+diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+index d6823ef5f9a7..5e31b961aff7 100644
+--- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
++++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+@@ -15,6 +15,8 @@ properties:
+       - enum:
+           - xlnx,zynqmp-dwc3
+           - xlnx,versal-dwc3
++          - xlnx,versal2-mmi-dwc3
++
+   reg:
+     maxItems: 1
+ 
+@@ -37,8 +39,9 @@ properties:
+       A list of phandle and clock-specifier pairs for the clocks
+       listed in clock-names.
+     items:
+-      - description: Master/Core clock, has to be >= 125 MHz
+-          for SS operation and >= 60MHz for HS operation.
++      - description: Master/Core clock, has to be >= 156.25 MHz in SSP
++          mode, >= 125 MHz for SS operation and >= 60 MHz for HS
++          operation.
+       - description: Clock source to core during PHY power down.
+ 
+   clock-names:
+@@ -79,6 +82,20 @@ properties:
+     description: GPIO used for the reset ulpi-phy
+     maxItems: 1
+ 
++  xlnx,usb-syscon:
++    description:
++      Phandle to the MMI UDH system-level control register (SLCR) syscon
++      node, with four cells specifying the register offsets for USB2 PHY,
++      USB3 PHY, USB DRD, and USB power configuration respectively.
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      - items:
++          - description: phandle to MMI UDH SLCR syscon node
++          - description: USB2 PHY register offset within SLCR
++          - description: USB3 PHY register offset within SLCR
++          - description: USB DRD register offset within SLCR
++          - description: USB power register offset within SLCR
++
+ # Required child node:
+ 
+ patternProperties:
+@@ -87,7 +104,6 @@ patternProperties:
+ 
+ required:
+   - compatible
+-  - reg
+   - "#address-cells"
+   - "#size-cells"
+   - ranges
+@@ -104,6 +120,7 @@ allOf:
+           contains:
+             enum:
+               - xlnx,versal-dwc3
++              - xlnx,versal2-mmi-dwc3
+     then:
+       properties:
+         resets:
+@@ -117,6 +134,26 @@ allOf:
+         reset-names:
+           minItems: 3
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - xlnx,zynqmp-dwc3
++              - xlnx,versal-dwc3
++    then:
++      required:
++        - reg
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: xlnx,versal2-mmi-dwc3
++    then:
++      required:
++        - xlnx,usb-syscon
++
+ additionalProperties: false
+ 
+ examples:
+@@ -156,3 +193,30 @@ examples:
+             };
+         };
+     };
++  - |
++    #include <dt-bindings/power/xlnx-zynqmp-power.h>
++    #include <dt-bindings/reset/xlnx-zynqmp-resets.h>
++    #include <dt-bindings/phy/phy.h>
++    usb {
++        #address-cells = <1>;
++        #size-cells = <1>;
++        compatible = "xlnx,versal2-mmi-dwc3";
++        clocks = <&zynqmp_clk 32>, <&zynqmp_clk 34>;
++        clock-names = "bus_clk", "ref_clk";
++        power-domains = <&zynqmp_firmware PD_USB_0>;
++        resets = <&zynqmp_reset ZYNQMP_RESET_USB1_CORERESET>;
++        reset-names = "usb_crst";
++        phys = <&psgtr 2 PHY_TYPE_USB3 0 2>;
++        phy-names = "usb3-phy";
++        xlnx,usb-syscon = <&udh_slcr 0x005c 0x0070 0x00c4 0x00f8>;
++        ranges;
++
++        usb@fe200000 {
++            compatible = "snps,dwc3";
++            reg = <0xfe200000 0x40000>;
++            interrupt-names = "host", "otg";
++            interrupts = <0 65 4>, <0 69 4>;
++            dr_mode = "host";
++            dma-coherent;
++        };
++    };
 -- 
 2.43.0
 
