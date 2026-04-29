@@ -1,54 +1,54 @@
-Return-Path: <linux-usb+bounces-36661-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36662-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ICNdCuJb8WlGgQEAu9opvQ
-	(envelope-from <linux-usb+bounces-36661-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 03:16:18 +0200
+	id 0AjdKwNc8WlGgQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36662-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 03:16:51 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0731448DE8B
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 03:16:16 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3623C48DEAB
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 03:16:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C67823051CBF
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 01:15:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BC0CD3071865
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 01:16:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FE90223DC6;
-	Wed, 29 Apr 2026 01:15:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D2C7248896;
+	Wed, 29 Apr 2026 01:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="GRq/aaug"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Zmk/UYoz"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF6181482E8
-	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 01:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F311482E8
+	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 01:16:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777425356; cv=none; b=Lj6+5G7GWYzT2qYqPRjIw+oFvn+rhZXro29xb8FD1Q7NoW/hYDT5gh+lTm3F+6qCdy1cEs6UuhBq37oYYI3D8KF9dwjuPp1CCDpGKNrvoJ4XwAWGVnN/HSLSEJFzDveWwrV/rnpCztOc09GfPsywujezgf9YioWik6JCUhno9ME=
+	t=1777425382; cv=none; b=d/3v70kdO76lEqCJiZEsSW8PM8XQFcMuCIxxofhYrqy4KKG0XbyjWOIQ3Eyb8iQKVIegVAP96sF+uMemhVRF6x1a4B3QZ84c0VOnsu7d0wuFf3MbOvnmxVLT3R8mJzl/Tw8BRAlPE13o1p0k38X98377dgKg8mmXe+siysabxu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777425356; c=relaxed/simple;
+	s=arc-20240116; t=1777425382; c=relaxed/simple;
 	bh=S+FNbfKs3zWzpba+7WwK68JDLp3UZ3kapy9H/lK6Gi4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YvoSnTQeyzVHyKLMfNQjIkMJcyFDgctnVKyfFKNXmYB6PAaIKKgaQHvXbJFwx58x5iFKmVWoLiiNT6cOL6j0ND81BG8g7U+ZeveaRTKz4N8BRowvVP8C0dH/TCa2+b6MKgGUf3hb8bKXkQTqzazwBhfPoc8dERo03uISIdT0D2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=GRq/aaug; arc=none smtp.client-ip=54.254.200.92
+	 MIME-Version; b=bepAyDqldUgaU7AUkhQjH8pOs+ImVyE9Yg3igtIaqkAEiynlWUFajIZqi9G7AqMhvy3ZL+Nj+bqAMSn1FsHw5AJL5eoW7831aKr05KaolUSi0SeMaQh5ICoPvM8MNAJK53mfA+ly6Yh7V2/9tOnbx/oylPa0V1r73WN/7m1mpxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Zmk/UYoz; arc=none smtp.client-ip=54.254.200.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1777425350;
+	s=onoh2408; t=1777425378;
 	bh=S+FNbfKs3zWzpba+7WwK68JDLp3UZ3kapy9H/lK6Gi4=;
 	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=GRq/aaug5EgpnX7KC3HZtYa4R0c5hic/2TbSLwND73Hpq4E+76yNmPePvyzq0LuOW
-	 ZZmtB5ZqzTBMU3VjDLz9uoNhVUkzMuIZQe/OxBBwjdRiqjwR5HuMGKOceYHQVfmzcd
-	 hiu2rsLFe7ByWi/VW8eZ9tz0o1LX7Bml82SZctEA=
-X-QQ-mid: zesmtpip3t1777425346taac8aee5
-X-QQ-Originating-IP: jNQDoEUcLVArnC5uGOzW+T+6J0rgvHPUr5JzTWgQ2yg=
+	b=Zmk/UYozO08t3ZIZGbxo0FBEr9SumSHwa3msNi966lVTPM8u7GX9hA0A0ClgetQsv
+	 9qd25c90JCacxxVmC7eeC0s+zVPqdoHwc8unOdZmJ76ozAiq2W+I1LoDLvxuIMLFR+
+	 QcTgKC1UCE085ESexo6tPey8sSPufzU4yB9i3BYo=
+X-QQ-mid: zesmtpip3t1777425373td3ec577c
+X-QQ-Originating-IP: GDJcawdk+BQ6NHO957GYWgpbBB1B8/YjOfUyxDCvAHA=
 Received: from localhost.localdomain ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 29 Apr 2026 09:15:43 +0800 (CST)
+	id ; Wed, 29 Apr 2026 09:16:11 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 18189464401092096931
+X-BIZMAIL-ID: 3897802648851776766
 EX-QQ-RecipientCnt: 12
 From: Haowen Tu <tuhaowen@uniontech.com>
 To: laurent.pinchart@ideasonboard.com
@@ -64,8 +64,8 @@ Cc: gregkh@linuxfoundation.org,
 	linux-kernel@vger.kernel.org,
 	Haowen Tu <tuhaowen@uniontech.com>
 Subject: Re: [PATCH 2/2] media: uvcvideo: skip resume when writing hibernation image
-Date: Wed, 29 Apr 2026 09:15:42 +0800
-Message-Id: <20260429011542.1936211-1-tuhaowen@uniontech.com>
+Date: Wed, 29 Apr 2026 09:16:11 +0800
+Message-Id: <20260429011611.1936498-1-tuhaowen@uniontech.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20260428091356.GF3219146@killaraus.ideasonboard.com>
 References: <20260428091356.GF3219146@killaraus.ideasonboard.com>
@@ -78,25 +78,26 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
-X-QQ-XMAILINFO: Npb+f4q7yCDR66IiiM+frrEC8JnTY9/JAUTclIOnOyGlW7tZzTNMApNf
-	R9HcwgRQoTqvdeN1n7O5hdZXVvgUS/ZDdCdHbYE6cLAVMiMtvHs3LKecHoYo7jrNpGltvzN
-	rD7QMhCz2sHcCdDIBT82pUjAFtigF3T7IGczj1G1gmwOM3XKlbp72X5Pefbnw7qMo7WR5Mx
-	kX5b1KXoE5ItkeOl8Zgxo7gYNBsRjaOOkt0TqgSpNt3bTc8oKX4HUuGbiESdn1ebEhX0Szq
-	OMCEaav4lvEGIX2glCp8P20LmV0i8e4MbT1wmusHS2kQqP4g6ql5Mp0r7ZKXOnWgQqCYBG4
-	/VD7TEdvWmvGqErDdaZGejlnQiphuHA2iZ698huZc0etLNYh9R1UBLjxspA+EoabYDlI0Mn
-	nW/qnJ9trgv3rf4uLYsv5nkTZCFXTNfH09AUQY4peB4Myt4lo3VmCshPILqgveJct11Yv+q
-	6HJqTQLYJ0X71hggQuEyL91ADcRpSbWtjLx4PTya/iLfQ5qftds4d5QHYftY1AZEQEQmkmC
-	rk0jQR+lOrQm38SRPGchKOoNAHeZB0lbTkrtBORDAy88aPyT51uuw9sZ0fkIRvbv5g5LyZN
-	7U9Ybl959SfomwptxTTHBf2c4xm5XB0Dj0PdtDqhIrFnLRJYwBzSFO1SdMF9DXG37qiLL02
-	X2hlPz/6v1FS2jHpFhgXwcicLD9Fq3pQWJxA00pbh/7DNePt/pBUILtEAq6sXSvDvf0Nqoe
-	IuB0WZHOsbQDAWYseX95yOdpx0saNP1L/OdBvyl2E5k6YGU9JLdw9arSiZRJxr6bByK19YZ
-	658epNPyaY2NvIjzsfLD63+cZXhVvgwPOnOPqKk7BbltlUdhLc3wNMcKbWrOtzUVPvLVmjC
-	Jz2lGxyHiC8K6SDpJU85xy8hdDPnjcn9VVCQh6vwbIlZOf4xShfWMqeT7e5OlcNqY5U7h5W
-	8ClSkenRGpmpWbo0XgOvSr61UJgoV0lMSWD6CsEsmKJkxeI+jbZ+xuIN/QhuMWYxXgfhB+m
-	8NfiaREzrjzQIpp/9kvbCTvAibJ8fyVTZOZcLFaqkoRnRKYQgrPyw/xo4pdJ0=
-X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+X-QQ-XMAILINFO: NlVgJxuVJf8StkM1J2ZmG2chZvjRSewUESoZQ46I8zeGzBlp3WQnU/mj
+	uEX4lUUVTXs6dslUHrhQspBnZY1mcnHQBTkC1pjneBLpxu5A5DzJhoKkXh1toujY2fRu574
+	7rx6CqvNdDya39WOpHix9QztHCZU+KYwpKgRjdxHWN0fWho2rfzD1NjGbZ7gPXGRYV45EYt
+	E2vDJWNlzZUka/KCvvUuqxX5dZJ3afwGFKOjvcIVkaJMsx3LT/tfKBw9/PAwlT9WVB9Ve4Y
+	6BVc0pXUWggevr3yTKvo9fW9H9H2LX7d6N2DdGlrPrbCM3OMOQ9twVwX3AXqgBJ8FJjkeA0
+	su7ASgVRTgDZUJVcCFDx80ZBRQ0+fUoAZkLNmLhju9tYOhgwhoPAlz2gqg5HL+nhWOE3FT4
+	iYFmWjrpu1GcTuM8tHuRLdQo1EsNaocYLMeV4aBDuZ7KH6CTz051BbxDvec3Bie1035k/oW
+	lclG0QbF8W0B89EHgky9SLFg4mQM3IOYQQuyWzfjB1wC6u2FcE8T+xdDMa76HUgfK/Ie0kx
+	wuLOZc/ahKVb/6Iqo8t89UwC6535Vlud1jm3uwutTgO02J5gjXovzer1TDz7/0obyPNxIA+
+	YbJkOOI6pXsZRCI7UZlkC6/FehAToTAF57/AIocTk+SIJDh5yl1VvhYNn3KNGzG1WfocAHZ
+	OXq32e0OYnLiALjbxdkGgDPqXVWOpLHNe7F9VdGfHdiyh3V80eFT4BP90Hr+dFzVVzfBDA/
+	BwR1K5jfoKV+n0jt6weWIeKZrfco2SKaddLgi89K8feXUEN2jJeK+yyw49Q1VJGpmubzwQa
+	oMBt45mu8aZq5yz7Kj2zW8WPX2fO3BYN3FQ/S+T+jeCZGIXaVnidb9JQtSAJi9A1lBFi/vy
+	nj7zSOzpIwDSvEF5+VTKOtqRoA7rvV9u+HZn856wJ2yXd0fv0iLsfdFue3NZFHRiHi0q9V0
+	ZuTHqKh+Ke+1CLTh0TZrzgEjwK4eo+jXGcsguYcMXEERat+7Jqr8HfTqfMGFdFp1Bqx8ZTU
+	2K53RUz82DjVJKy/+LxEsEdC5bnhPceqBUtv1Mu3qxdkBmpYuLV3MTSWAPtbULyzJe1zrrX
+	mZcRvbPE/21dAjArcxO0IjCmn7IVhFewU9WmHOzHvu+
+X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
 X-QQ-RECHKSPAM: 0
-X-Rspamd-Queue-Id: 0731448DE8B
+X-Rspamd-Queue-Id: 3623C48DEAB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -104,13 +105,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36661-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-36662-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[12];
@@ -123,7 +124,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,uniontech.com:dkim,uniontech.com:mid]
 
 Hi Laurent,
