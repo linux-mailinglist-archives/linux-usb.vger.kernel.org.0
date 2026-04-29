@@ -1,226 +1,228 @@
-Return-Path: <linux-usb+bounces-36705-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36706-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oCifC51F8mmApQEAu9opvQ
-	(envelope-from <linux-usb+bounces-36705-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:53:33 +0200
+	id OCnXJjpG8mmTpQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36706-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:56:10 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A27549857A
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:53:31 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 060094985DB
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 19:56:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C4E11300F7B5
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 17:53:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7CD1D301F4BA
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 17:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9648038C2C0;
-	Wed, 29 Apr 2026 17:52:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8103038C2A7;
+	Wed, 29 Apr 2026 17:56:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="UGSwPo79";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Sbq4CObu"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="T4aQozMH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3413537F6
-	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 17:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954D9383C83
+	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 17:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777485179; cv=none; b=mwn0xClBhjbcIyHAX8t24w/KS6M4+kmLzWAxcXRU3hXDc999uMV22tzd6t3p4KPDOGO1manto3hP9ef8bGqYr/bC5d60AuUVGfeUT+PBZrTUcyVtMkj8hMYaB7+KKSdnLVGNP5jvSiVbVl5anFSDGXQcYcdB1rq+XSkxrnYWXpw=
+	t=1777485367; cv=none; b=A1w1ttOVdYfQbGPSQTsW/zUqg0GuxC9IDZaPIJvpdILoBnyh8Er08GpkoMHRf1z1e10yPnSqMTm2GfSi5vgr9EPpo/96a/PtqD8h/TtiivEY6apjSTeojwZRr15UGIY9VcXBH02Yxl3JwkGd4GFXrE8e27hRShiJw8zwMPaGxG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777485179; c=relaxed/simple;
-	bh=9tUvGreN/jzc8dUgMypS7VOK2O0dvFJsYzLLXf7V/X0=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Hnnj5ibpFyEf3pZiQwm2ZLUnfJPdWZhKiae3CIVx3WgKV/A50jb+YeHquXnFiPmaMdJ4LPww6Dpk6q0geR48/VqSiV5ShF5rXytmL4JBP051d41MGzIDAJpmiHajr0USP0BESzVdfuIAtu/zcQg8v9G78m2GkHyod2xB57dYJsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=UGSwPo79; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Sbq4CObu; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63TFHCKj2094140
-	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 17:52:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	eW+nOS0yaVrRDy95sqZ0Yxy8KhK0nrYWKOhmgEMXYf4=; b=UGSwPo791QA9RbNw
-	2Zz7QbO78zN5hCDd5VbvL1F8wZ0Uk8qoWoFJvmPrzEuQW1R3+qKCKNTOPWR7jaeB
-	Pvo2XgTZIe+fmvOsqwn/mbmDsk57EdC2hNrdme358cTKK/Z4vUOJu5EJPdmmHXs9
-	0t2613pKeDnsGGIDn8w0C8r93GhBT5Oj6W8bUxWfExJSfdvc0w67wsdKmhOELUJC
-	9VC7jv0xQw+HpQB/mUmbe2QohGK2xv7+356PhiY8+Hf2c9YIJz5au5xpJpdZr0td
-	wGte7fN0t4mppb78nPb9Ch1T0CkkYzSK0XGq0B/aTh5X5HkntkAL7EPoareS87jn
-	YS4Bfw==
-Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dudh3tm07-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 17:52:56 +0000 (GMT)
-Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-2bdf75bc88fso142719eec.0
-        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 10:52:55 -0700 (PDT)
+	s=arc-20240116; t=1777485367; c=relaxed/simple;
+	bh=3oMSdGvhaS5O15idg6mxCFxDso8YAFwXFd0nNSCdQxs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ioIvvPrRExRFjn/yFu3C89fum9+3sLqGxDHuLjeWW9qDpzsSvYbhZtCWAkKZfOOH14mAjctW+a0t69Ut0OCzIkevdiO49FS4QzvN2+/JbHt+/bItne9MC7UwlmlXD6ccFYVZj142T0b8JrmAy/yHd9Cte4NrzqV9oMbOoPSUgRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=T4aQozMH; arc=none smtp.client-ip=209.85.222.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-8d4f78fc9f6so4500985a.3
+        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 10:56:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1777485175; x=1778089975; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=eW+nOS0yaVrRDy95sqZ0Yxy8KhK0nrYWKOhmgEMXYf4=;
-        b=Sbq4CObuCUwfIHth9jUT5QYUAaxVFvol2SZvtV9qjm6CLEGL1D3sB81G9WGcL85071
-         aCSj7Ud/3BSKsvgmx4CU8EfnL+ThOK0eW/AJiJ4jLHWsmrGwuGXx86Xr8+ErKOu4HO1u
-         M3CgbvbHHdVhMEaa2/t3QzQ21QmFCgLHWbSeWM9I2XMDIfp85i/9kDOMH+6y46qHjvFL
-         XXfDpXrE1+UHl8yy9HSzSaDFWuRFuh0ME4fxjLPmakg82HsGIk7DfLKUx3A8qvJED1Gy
-         T0DUD5/6iaA42Fe8HtKtfASPIm/qG+/M4oMKsNtK/bS2HTjs6bFibr71ZW9BlfzEMwwr
-         9qgA==
+        d=rowland.harvard.edu; s=google; t=1777485364; x=1778090164; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=65FJtXCpfqPe4NbCRkdmfcp9Mgki0OBNqzmnPS32nJY=;
+        b=T4aQozMHPuwBEabkvuz9eK+ax8CeaE5UI+L1eraiccVpmu36oO9mpJ9lFFbT3XWeAS
+         7IUZMLR027M4nM+NDl6Sl+lA6EVoxRTVlw67kOe7j51MX77lKm9ih9rucKaLuGiXJEIr
+         rKBexlibRgGf0mvj3V+olhOQD/YhAnFWvKTpSljBKuqqyC8kLVRQ64+fZXfJBOgzmJIh
+         GlfjPU3zOzIQUpm90PhOmJ4IIvGyZbwpsShycrchA239KaMSl5GSCCjZElh5SsaFLrGS
+         munYAbVty48ei9JeHCDDzWYUN4CvFJQtrr5vare9lLoajznk5gR6PGBo02H3zDB42FPq
+         SSUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777485175; x=1778089975;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eW+nOS0yaVrRDy95sqZ0Yxy8KhK0nrYWKOhmgEMXYf4=;
-        b=mPu/SyNFeWLnroi9rvA7G+foQxc801DgXnAOKdEzqbNdi1C5H01sqKdqoV30Hne3uP
-         37xDZMP6IezDuTqY+Cx2QLCLjNKkQ/p59HmbC5Ro4GKTFUFJ95aFuGC1nnUMTdaN5Zj5
-         xmlfjksHcbnxLB3gWg5B0sJBQVLkjOdsgkbVqZaProXzisXBUeMNb5Qy6JFko07Dxk+q
-         Ty5qVQptL9+NizlBPFgIu3L8FNUtYFJzdCQHOZXWYNBm2pEAKQaSYh43Jmu2+4FqaGRE
-         kJfR4orFUrC/ex61/vR0XCqAPblltED2fOOz9dbWjbxCsfpslgwDos9+5ACG1pgto4+1
-         SQag==
-X-Gm-Message-State: AOJu0YyJPOEf2DGlD7u9Ya13WLRLUtAgrTIyOX23rByfbNMfcIe/DeoP
-	196UE1BTdPoY8QWvHMKG+d0/B2aud8H2PrRHlUJsmvMl32BK+1hlglewrHvgcmC7A2yW/NCyrNq
-	BK24yFX0RB406+pHvJC3oe+NwWMAqgHsQ4vAanBh4FGOtpT7mCww3eiwl5TyFV+LOi1J5lWA=
-X-Gm-Gg: AeBDiesiNPV3/vLMG9bmYkSxYK8BRS46af00fByqm4Oxtd5HJUcEKO9kcAROXVe/CWf
-	miQ7KDdcPGXbvYyvEAz0r1zgxNbxZEIg73M+XONmyIhUCQ6a5mfi2v63PqgV7YDgKwUN2+mb1jP
-	dtvHsshKrvkMdkhp4MKKAw/i0NIDe3kMBueM2fzOdmx+DnsCrJ28sALFkzUD8l/aQoeTYK1K3ii
-	aUn0M8KKd4FVaBVxTh/58G3dVAYqdlVPyKcbfJZA/lWsGBGJ2r0MTo1UB/3ABBR2jovh9tp+Nbz
-	e8oM0Tf0xWeeBqgiDQMoD2sFdlVheqGlIxs0RukCwHfTRQRxa8PdjTbfGm8VzHHYj876CZXtiFe
-	27KFWKCv4ym8r1/fEaEabrhL/cBUkYpTHp1iyY+iMBy8WB7UYxyknOGRJNvevkg==
-X-Received: by 2002:a05:7300:fb87:b0:2da:45f8:1b41 with SMTP id 5a478bee46e88-2ed198bf34amr2219526eec.19.1777485174943;
-        Wed, 29 Apr 2026 10:52:54 -0700 (PDT)
-X-Received: by 2002:a05:7300:fb87:b0:2da:45f8:1b41 with SMTP id 5a478bee46e88-2ed198bf34amr2219510eec.19.1777485174404;
-        Wed, 29 Apr 2026 10:52:54 -0700 (PDT)
-Received: from [192.168.1.133] ([70.95.199.79])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ed1bf6d52fsm3149803eec.4.2026.04.29.10.52.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Apr 2026 10:52:53 -0700 (PDT)
-Message-ID: <ed8566ad-2a98-43c1-8d89-d4ddc37e273e@oss.qualcomm.com>
-Date: Wed, 29 Apr 2026 10:52:52 -0700
+        d=1e100.net; s=20251104; t=1777485364; x=1778090164;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=65FJtXCpfqPe4NbCRkdmfcp9Mgki0OBNqzmnPS32nJY=;
+        b=DA/aNXeVjBh/Miw6IZLnc88WBn9c8c2b3ihp5CGNtK/HOG1sErRnNOsNEYkAMxEZwW
+         eU8aDubAPSOaLeS42E7yut8O9l3/oFdnkXSQQLWAED5c2NBP4wh1NZdb8t02yMKMYcqN
+         QJoKl1DD6K16a049OmTFLFYSq9f5LUdWyqAUk2l+WWdKGkgsVJ2LoOcZHMr/m4ukp23k
+         /NUxcmaS0gpsvFQv8S09HJbr66xjatD0FkG3FfTvNodwtLt8ZvERIGrPcndlmpIhA0xV
+         smzaXJItRIHGxwEHT9iDggDYIr5nfxDUHBg+YjoGUR6kr9gbty9ssSuFRLjNL6Qko87w
+         ezjA==
+X-Forwarded-Encrypted: i=1; AFNElJ+bixWUlkCoNpw+lkX6j+jt8btqnk0TMNtP+XS3kKD2MCdSnt+I+ArkdhQUEhR4OlKf21/C6QUK1RY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBukR2g62fH+HuuzQPZrT6ijonieLHsTMyL+w9WS9uAuv6IIjh
+	kuZAdU2yl0NJg0jhFLgis6iqEdipiSFN75wOWqRu6ImoM9t3CZIVAURU+77ESU9M0A==
+X-Gm-Gg: AeBDieuzHy36YcSYGmNdHHce1i6h++buRn451ORQjkut2BjALKxl7d31x4tujBxrcOG
+	GCEhS/VGxJ39F0HefOaCB3a5OShCc7HnI8xoNScW2DoJwTiohMhDjT3YHr/iYoUbQ3sz8vDnprZ
+	QygJENMFhMrWHcYgvnRT6P26p0+XAUCJC0doaSWaBA5GFenF5uKJvt+0GYP7h8PfMHbBTkyUexm
+	8Ov3pB5qeCUa+4OwY/3qg/RHZWZGtb8pfJOdy9zXQT7bJITAjZjMQC4h/3u5zWJylmIYs7DLHDv
+	sEjDCTVdqY2kZQEpgE4ji+zS01lyc+hWQ4vXQdwBUvyK7BVFf8mUV3SfHUepkwy4aWnSIEzyIO/
+	XePHvJDGJuh5zVxcvYmX3YfGoPfgzA75MJ1KjODejQ0xgZK8zWv5kC0SZfCrPvdRKs5+B+nft82
+	y90ZqXfWfaJdJeKvSpE2I8AIX6HEqKtdk1N0WaX8yEKs4nnDv5X7NdD0BukPQWjnGv+WbCfae3X
+	9woNc3YUkQZdXgK
+X-Received: by 2002:a05:620a:2955:b0:8eb:cbf8:85e7 with SMTP id af79cd13be357-8f7d9201d7emr1180541385a.34.1777485364411;
+        Wed, 29 Apr 2026 10:56:04 -0700 (PDT)
+Received: from rowland.harvard.edu ([2607:fb60:1011:2006:349c:f507:d5eb:5d9e])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8f93f582702sm222334585a.29.2026.04.29.10.56.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Apr 2026 10:56:03 -0700 (PDT)
+Date: Wed, 29 Apr 2026 13:56:01 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Brent Page <brentfpage@gmail.com>, linux-usb@vger.kernel.org
+Subject: Re: TT budgeting for EHCI; =?utf-8?Q?accom?=
+ =?utf-8?Q?modate_1023-byte_full-speed_isochronous=E2=80=93in?= endpoints
+Message-ID: <a3176296-bf99-4486-9310-0b70f28c1ba7@rowland.harvard.edu>
+References: <B66AE752-B09C-49B3-A829-F7ABB36FB250@gmail.com>
+ <32291bf6-0c9d-4fd9-9dd7-489f7e1c9f02@rowland.harvard.edu>
+ <20260429113604.2204b646.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: avoid probe deferral when USB power supply is
- not available
-From: Elson Serrao <elson.serrao@oss.qualcomm.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack.pham@oss.qualcomm.com, wesley.cheng@oss.qualcomm.com
-References: <20260407232410.4101455-1-elson.serrao@oss.qualcomm.com>
-Content-Language: en-US
-In-Reply-To: <20260407232410.4101455-1-elson.serrao@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: n7YTGDyGSz2vOnuMsm2C7OrdcUgvJ_6T
-X-Authority-Analysis: v=2.4 cv=A4dc+aWG c=1 sm=1 tr=0 ts=69f24578 cx=c_pps
- a=cFYjgdjTJScbgFmBucgdfQ==:117 a=uHxescsG3rBdxcXwcPaeSg==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=ZpdpYltYx_vBUK5n70dp:22
- a=EUspDBNiAAAA:8 a=76KTEkCVzLvc39UprA4A:9 a=QEXdDO2ut3YA:10
- a=scEy_gLbYbu1JhEsrz4S:22
-X-Proofpoint-ORIG-GUID: n7YTGDyGSz2vOnuMsm2C7OrdcUgvJ_6T
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI5MDE4MCBTYWx0ZWRfX4wTgs7NxkLLd
- q51YahLL4GXQkph8h5n1V1E3R+0qP97j4ZFRUFeC1LOUxhIqk2l6krZst0KkX1oh9oi55fsa729
- oblh7cX8tCymxBAAcZ6ipZKoVY+9exbpWoiE15WPPodqmeuiZQBCl0j0oheIe9ix//thtD7UGLG
- TLzqWEcicIHkWRTeu1IQ+W7QcAwQg01OAJAwBb6A8h8WuAEsqfG94Gs+S3tQzrGVzsrLIlfJ63a
- 4KSqqZUAGSNZDsVbl0dHWgaX6s5iq8UiUCNpELl1J0O492E4ngKUP7U9qUGLV4Kjfbqc4nwx8HL
- obcRsNNX6S+jKHVzIQi+Ty7Zlq42jcyO4/ovW+75x5O9bazoywJdGmS5eki+3h8soDDSxCO6zu4
- q8rdEvIyeNoEE/xY0AT8S/e3Fiu0CDayB855dfBOdtiV2u/LQfDCp39l4XpGliCaexkMGwTt9cG
- 1b1BNgAlaj2GVMCVyqw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-29_01,2026-04-28_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 spamscore=0 suspectscore=0 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 phishscore=0 bulkscore=0 impostorscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2604290180
-X-Rspamd-Queue-Id: 2A27549857A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260429113604.2204b646.michal.pecio@gmail.com>
+X-Rspamd-Queue-Id: 060094985DB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36705-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:dkim,qualcomm.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,oss.qualcomm.com:dkim,oss.qualcomm.com:mid];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[elson.serrao@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-36706-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[3];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,rowland.harvard.edu:dkim,rowland.harvard.edu:mid]
 
+On Wed, Apr 29, 2026 at 11:36:04AM +0200, Michal Pecio wrote:
+> The host must schedule SSPLITs assuming no bit-stuffing to prevent TT
+> buffer underrun on long OUT packets. Assuming minimum/no packet headers
+> further minimizes downstream idle. TTs are required to buffer this.
 
+There's a difference between scheduling and budgeting; it sounds like 
+you are mixing them up.  Roughly speaking, scheduling refers to when 
+transactions actually take place whereas budgeting is concerned with 
+when a full/low-speed transaction's SSPLITs and CSPLITs take place.
 
-On 4/7/2026 4:24 PM, Elson Serrao wrote:
-> The dwc3 driver currently defers probe if the USB power supply is not yet
-> registered. On some platforms, even though charging and power supply
-> functionality is available during normal operation, there may exist
-> minimal booting modes (such as recovery or diagnostic environments) where
-> the relevant USB power supply device is not registered. In such cases,
-> probe deferral prevents USB gadget operation entirely.
+So the host budgets SSPLITs, it doesn't schedule them.  (Well, I suppose 
+it does also schedule them, because we don't want to send too many 
+SSPLITs to too many different hubs and TTs in any one microframe and 
+thereby overload the high-speed bus, but that's not what we're talking 
+about here.)  TT buffer underrun on long OUT transactions doesn't take 
+place, because even if only, say, 10 bytes from the start of a 500-byte 
+isochronous transaction are budgeted for a particular microframe, the 
+host controller will send a full 188 data bytes in the SSPLIT 
+transaction.
+
+> (BTW, periodic transfers should occur before async. Could the TT run
+> out of periodic, do async, then get an unexpected periodic transaction
+> in the next uframe? What happens?)
+
+This can't happen as long as each SSPLIT transfers the smaller of 188 
+bytes or the number of bytes remaining.
+
+> Including packet headers for SSPLIT scheduling seems harmless unless
+> overestimated, but apparently it's not required. TTs must cope.
+
+Again, budgeting not scheduling, but yes.
+
+> Separately, for go/no-go (ENOSPC) decisions, the host should consider
+> all overhead in order to guarantee >10% downstream time for async.
+
+It does.  That's scheduling, not budgeting.  Both have to be taken into 
+account.
+
+> Max payload is still close to 1157 because it may be just two packets.
+
+Well, on the full-speed bus there has to be an OUT packet (3 bytes).  
+Each data packet has to have a PID byte and 2 CRC bytes (another 3).  
+Isochronous transactions don't have handshakes, but interrupt 
+transactions do (one more byte).  Also, each packet has to start with a 
+SYNC field (one byte).  Then there's EOP (End Of Packet) signalling, 
+inter-packet delays, and turnaround delays, which are hard to add up.  
+Plus time required for the SOF packet.  Taking it all together, I don't 
+think you can realistically squeeze more than 1140 periodic data bytes 
+into a frame, probably less.
+
+> That's how I see it.
 > 
-> USB data functionality for basic operation does not inherently depend on
-> the power supply framework, which is only required for enforcing VBUS
-> current control. The configured VBUS current limit is typically enforced
-> through the charger or PMIC power path. When charging functionality is
-> unavailable, applying a current limit has no practical effect, reducing
-> the benefit of strict probe-time enforcement in these environments.
+> > Since the value of stream->ps.tt_usecs calculated in
+> > iso_stream_init() does include the 7/6 bit-stuffing factor, it makes
+> > sense to adjust the us-per-uframe values to reverse that effect for
+> > purposes of budgeting. It would be more in the spirit of the spec to
+> > do the budgeting in terms of bytes rather than microseconds, but
+> > since it's all estimates anyway this shouldn't matter.
 > 
-> Instead of deferring probe, register a power supply notifier when the
-> USB power supply is not yet available. Cache the requested VBUS current
-> limit and apply it once the matching power supply becomes available, as
-> notified through the registered callback.
-> 
-> Signed-off-by: Elson Serrao <elson.serrao@oss.qualcomm.com>
-> ---
->  drivers/usb/dwc3/core.c   | 82 ++++++++++++++++++++++++++++++++-------
->  drivers/usb/dwc3/core.h   |  4 ++
->  drivers/usb/dwc3/gadget.c | 10 ++++-
->  3 files changed, 80 insertions(+), 16 deletions(-)
-> 
+> Not entirely sure about it, *if* these computations are later used to
+> schedule SSPLIT or CSPLIT transactions. That needs to be exact IMO.
 
+The ps.tt_usecs values are the number of microseconds required behind 
+the TT, on the full-speed bus.  They are used for scheduling on that bus 
+and for budgeting, but not for scheduling on the high-speed bus.  See 
+the definition of struct ehci_per_sched in host/ehci.h.
 
-Hi Thinh,
+> Does anyone understand why the previous attempt at enabling 1023 byte
+> isoc IN resulted in isoc OUT corruption?
 
-Just a gentle reminder about this patch.
-Please let me know if any changes are needed.
+I don't know if we ever figured it out.  It probably had to do with 
+running up against the limitations of the implementation in ehci-hcd.
 
-Thanks,
-Elson
+> BTW, does ehci-hcd support scheduling CSPLITs to Y0 of the next frame?
+> It's an edge case which likely won't occur with one 1023 byte endpoint,
+> but it may occur with more periodic endpoints and unlucky bit stuffing
+> or with periodic BW limit carefully increased for testing purposes.
 
-[...]
+It does not support CSPLITs in Y7 of the current frame or Y0 of the next 
+frame.  This is one of those limitations just mentioned.  Adding support 
+would complicate the driver considerably and yield relatively little 
+benefit now that xHCI is so widespread.
 
-> +	if (!dwc->usb_psy) {
-> +		spin_unlock_irqrestore(&dwc->lock, flags);
-> +		dev_dbg(dwc->dev, "Stored VBUS draw: %u mA (power supply not ready)\n", mA);
->  		return -EOPNOTSUPP;
-> +	}
->  
-> -	dwc->current_limit = mA;
->  	schedule_work(&dwc->vbus_draw_work);
-> +	spin_unlock_irqrestore(&dwc->lock, flags);
->  
->  	return 0;
->  }
+And yes, this does mean that there are some loads ehci-hcd simply can't 
+handle even though in theory they ought to work.  A realistic example is 
+having large isochronous transfers going on along with some interrupt 
+transfers; it's not uncommon for audio devices to include both sorts of 
+endpoints.  Ironically, these things work better with an OHCI or UHCI 
+controller than they do with ehci-hcd.
+
+(IMO the USB-IF misjudged the design for split transactions, putting too 
+much of the burden on the host controller driver software instead of the 
+TT hardware.  They could have required TTs to have considerably larger 
+buffers; it would have made things a lot simpler.  But no doubt they 
+were constrained by the hardware's capabilities back then.)
+
+Alan Stern
 
