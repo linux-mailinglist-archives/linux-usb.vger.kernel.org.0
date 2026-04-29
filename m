@@ -1,146 +1,333 @@
-Return-Path: <linux-usb+bounces-36692-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36693-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WD/bGeoq8mlvogEAu9opvQ
-	(envelope-from <linux-usb+bounces-36692-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 17:59:38 +0200
+	id GECNM1gz8mmPowEAu9opvQ
+	(envelope-from <linux-usb+bounces-36693-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 18:35:36 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0D6A4975FE
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 17:59:37 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57675497C2D
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 18:35:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C0D8330807A8
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 15:58:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A03E73030B17
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2026 16:33:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D558383C64;
-	Wed, 29 Apr 2026 15:58:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C871410D08;
+	Wed, 29 Apr 2026 16:33:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="NZdxhF0/";
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="XXroV8/z"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Zb6YMZx7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D80B37EFF4;
-	Wed, 29 Apr 2026 15:58:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39BAC40FDAD;
+	Wed, 29 Apr 2026 16:33:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777478286; cv=none; b=jrYhaHmdWwWddCdG+29/CPgWPud1t298RHmFpdNye5lR0A5QlEf6pZu5ZPOfenKmjfgyn9Xgq6K325UcTFJJwwjrzaz2lWElz8DXXJvJmcdq4b8HFxQkMKpDC37zvMFo+l80e0ec2AXZB2CuqdSLFyKbqinKGoO7NuqvKu956js=
+	t=1777480433; cv=none; b=Dm6JtaheYsK8g6DJDz3QP+tdcIubvMMl/X+TxKHSkLEupWUqHMn05Pt5dgUZmT81yldn84qC0vKO/m3hhyDHBajWGzVVebFqdXx8qC2hs6D95WXZGcwh3293szw/ZeHTM7NOZqSL660Rfa6QEz5HQ5jPjBqYb8CM05jkIvgeJ0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777478286; c=relaxed/simple;
-	bh=PfNXmVfGxA90BsbyUVfnu94ZdIsgKvjsCofoE+mFm9g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FyOdqTrOdPXbHfVo2Rnr48/mFdbtfin1RBCaC5aCinWHe8KxWP91Il/uWqJLRZWBkjDdDDXsIklXwGsmJ8z6q8griWAsQVbHM5pfd9lniM/wfIbzwK7QejHHzbexZVBlFkByg4Sv8V3pAjuU1XOy8GNSKrbgHTOTMjVJjXl/qZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=NZdxhF0/; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=XXroV8/z; arc=none smtp.client-ip=23.88.97.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1777478283;
-	bh=PfNXmVfGxA90BsbyUVfnu94ZdIsgKvjsCofoE+mFm9g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NZdxhF0/l3bT8CSLK8k7fRcIuzoqGTrRbKdu9sj/+Glz3X04NT+DuYq/eAWzY7s8G
-	 RDit3Gp5wYqwNIYLZvC8SBaO1GIBrJoxLnJiO3A+Gi05taDREvf4Ujst7K4RI1akrj
-	 +cMCTy9cD0n361BvrYkYLs2ae9Sh+j5In83riQcFdvRU8OFu8GwJLKzGvNVtkX0XTg
-	 6FqRORLGmgYJ64X14uHMh/C1yDoD3Bq+zWlvculd2zWEZij3XKdAQ6gYpzcWk1yTrv
-	 A6M/u8xFTfZZFWzPe/0wIbHylgvZxnHSZd6uU3J7RToA+jzH6ErSs//u/YywQv0MuW
-	 l96w3LSfuBXQw==
-Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
-	id 1936048196; Wed, 29 Apr 2026 15:58:03 +0000 (UTC)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1777478282;
-	bh=PfNXmVfGxA90BsbyUVfnu94ZdIsgKvjsCofoE+mFm9g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XXroV8/zZZ5arbMn2W0U7wGTt8DvPNqTEib1xJcMqDbidxAsGvtKsJJeX9t+1/UsG
-	 dbQNECnG+s3fBaBQIHpvKdqcZIh7qW8Wt4K1g6Q6kX6DxuIDj3n0GEjr24qt6xd2Yi
-	 wWnuNr9uLfEfdhp0QfpIvZMfmFFtxDtO9QbxDEmTGFZ0+PGUK4N89ISp2CQYDf3iDe
-	 0kFxMju6zI35QipDWAHiyPebaml/nRLM8DlwKSnkMefFiux8/7WHIN9e4oJKezPD2w
-	 arWKT/vCJMVc3NCeUwTgFF4pCVdVfOTLUDUlNRFJwykECxM9mA+lGFMj6huUckY0/E
-	 h3V37WTvZwUGw==
-Received: from [IPV6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb] (unknown [IPv6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb])
-	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id 2802947E37;
-	Wed, 29 Apr 2026 15:58:02 +0000 (UTC)
-Message-ID: <e1c4bffd-47dd-4097-9ff3-f181d21c6999@birger-koblitz.de>
-Date: Wed, 29 Apr 2026 17:58:00 +0200
+	s=arc-20240116; t=1777480433; c=relaxed/simple;
+	bh=TPw9Tlmk/HUNTH+k14Sst3x2LqwRzkqqBfUqJ/gKRhY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QRJRg6R2SgVl+TGjs1QwCC2Nw3HiBgm4qU7Ms3eJL/BkTzUzcs0sNGttQUw3x9DA3S0euVUS44WjKSi/Cg47CLQ3lygwIOlnyhc+lCtFmrrXazFYkUlvlKW5ddcnb7CX5F5ObWNbNFvvenAxuzHBOB1SZn1ZSUI6fI0xuaw3kmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Zb6YMZx7; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1777480428;
+	bh=TPw9Tlmk/HUNTH+k14Sst3x2LqwRzkqqBfUqJ/gKRhY=;
+	h=From:Date:Subject:To:Cc:From;
+	b=Zb6YMZx7hAYDO5yWIAQ6eQid1P98fhIVyxJmcqiH8CgISPnbGcHX9ByAZLcc0LiWP
+	 dX17BzFdelAL/G0Z1cG+RBKC3tkgAD09DWVCZRXPIwu0F8YXLQzxMytv5Gf1nDDc6H
+	 1FGibuCdmAc3oytECwNOrIlqvNuCYs5JLbxHdrKdPx8NC16kyd+tZLUpKXMjh1udRg
+	 MfrkQ1TCBmE5iUSzHvytn3ZeYlLcw2n54uJBMsCXNWHIb/Ok1/1OGf6cv8IBcGhxJh
+	 KBnnCjfr6mpIGFF7k1QtNgjdWAMJ83uveMdhhSpLUDhjbC9OQsdSJmqIH0EYMQQpFj
+	 AnoRuG61j+vkQ==
+Received: from jupiter.universe (unknown [100.64.1.62])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 289D917E12E5;
+	Wed, 29 Apr 2026 18:33:48 +0200 (CEST)
+Received: by jupiter.universe (Postfix, from userid 1000)
+	id DA16E48002C; Wed, 29 Apr 2026 18:33:47 +0200 (CEST)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+Date: Wed, 29 Apr 2026 18:33:32 +0200
+Subject: [PATCH v4] usb: typec: tcpm: improve handling of DISCOVER_MODES
+ failures
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 4/4] r8152: Add firmware upload capability for
- RTL8157/RTL8159
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, Chih Kai Hsu <hsu.chih.kai@realtek.com>
-References: <20260428-rtl8159_net_next-v1-0-52d03927b46f@birger-koblitz.de>
- <20260428-rtl8159_net_next-v1-4-52d03927b46f@birger-koblitz.de>
- <d9d69a5a-be6e-4566-9ec3-e742f745a530@lunn.ch>
- <877f67bd-6bd8-4d61-8f7b-d206b9125eda@birger-koblitz.de>
- <376f2907-55c0-416b-8904-e61888feb3cd@lunn.ch>
-From: Birger Koblitz <mail@birger-koblitz.de>
-Content-Language: en-US
-In-Reply-To: <376f2907-55c0-416b-8904-e61888feb3cd@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: C0D6A4975FE
+Message-Id: <20260429-tcpm-discover-modes-nak-fix-v4-1-75945d0ed30f@collabora.com>
+X-B4-Tracking: v=1; b=H4sIANsy8mkC/43OTQrCMBCG4atI1o5M/ip15T3ERTJNNWibkkhQp
+ Hc37UYRUZfvt3hm7iy56F1im8WdRZd98qEvoZYLRkfTHxz4pjQTKCoUXMKFhg4anyhkF6ELjUv
+ QmxO0/gpY4xqt1aImzYowRFfmWd/tSx99uoR4m49lPq3/uZkDQm3JatNY5dpqS+F8NjZEs6LQs
+ cnO4ulJ/OEJ4KBNJbH8i0KbT5589ervniyeUUqtW02cKv7ujeP4AEtwS49qAQAA
+X-Change-ID: 20260213-tcpm-discover-modes-nak-fix-09070bb529c5
+To: Badhri Jagan Sridharan <badhri@google.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ RD Babiera <rdbabiera@google.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel@collabora.com, stable@vger.kernel.org, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7586;
+ i=sebastian.reichel@collabora.com; h=from:subject:message-id;
+ bh=TPw9Tlmk/HUNTH+k14Sst3x2LqwRzkqqBfUqJ/gKRhY=;
+ b=owJ4nAFtApL9kA0DAAoB2O7X88g7+poByyZiAGnyMut94DhHgxstmZH78bwxYzj8zj0oVfIMx
+ z1v+pwri18TwIkCMwQAAQoAHRYhBO9mDQdGP4tyanlUE9ju1/PIO/qaBQJp8jLrAAoJENju1/PI
+ O/qaJ7QP/iA0uLcT6HreKlWmsvBmRPq2EF0Z6Wmjeb/L/D2d7HjMgZYyFydo3RSBGbrlyIB7Yj9
+ e2GeHXkDdq+e9gdctz9quRY2aq2DB7aPZJBzbWl4vzdQyowPUzU4Xe/wMUyV7S1NRtQQetKyZJY
+ daxbhkL/Ll6z+XpPXQzUDvql2EMxs6rXhQ4i6hNO0TUpsunDFV7aBuDaqmBN0OBhO2bVl6NvjFO
+ g7vyGU9PqKGP8DwxTs5tvY5EmQBGdqPrj+1O/FlyHcF//bVPmkhSAJdG049G7+rVbCTxEw4t2/e
+ p9LDvvXzGr7vUlPtPHZVcjStUckDfdZCb93E+Kthk7wjcH59IbQJs8snj5ERoRVBT6VaIKSf3sO
+ Yh9UZcVRi1e8GWlxv6HAR8ZPdvR1XtYY8bD/jYnjzcr9xsyhz2tu7ePrQLhanXl7tWdZoc9QTqZ
+ uJRtm0rCVaIocZKkD95YTFiNNgnkkG3ShVjh6MG97vSSfNx37iXCATun5es96qJcHpppP5EqjA5
+ EtgHiVT0GpkFL7NOyE1v5+ca6jIIw2HDzBz+SQGv2qqDCVfzYYX5hxx55S3CZxvpp+/+OjnY/Kn
+ DjwKOSXFlIqoYJwXM5QOutTqJK4v/swC209dIY1at86tIhziQCd2baATDafndY2JNzpQCmhstb+
+ lQQeaKH1lpMd6L4QI1kYt5Q==
+X-Developer-Key: i=sebastian.reichel@collabora.com; a=openpgp;
+ fpr=EF660D07463F8B726A795413D8EED7F3C83BFA9A
+X-Rspamd-Queue-Id: 57675497C2D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
+	R_DKIM_ALLOW(-0.20)[collabora.com:s=mail];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[birger-koblitz.de:+];
-	TAGGED_FROM(0.00)[bounces-36692-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[birger-koblitz.de];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[collabora.com:+];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36693-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sebastian.reichel@collabora.com,linux-usb@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,birger-koblitz.de:dkim,birger-koblitz.de:mid]
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,collabora.com:email,collabora.com:dkim,collabora.com:mid]
 
-On 29/04/2026 3:01 pm, Andrew Lunn wrote:
-> On Wed, Apr 29, 2026 at 06:21:58AM +0200, Birger Koblitz wrote:
->> On 29/04/2026 3:57 am, Andrew Lunn wrote:
->>> On Tue, Apr 28, 2026 at 05:47:24AM +0200, Birger Koblitz wrote:
->>>> The RTL8159 requires firmware for its PHY in order to work at
->>>> connection speeds > 5GBit. Add support for uploading firmware for
->>>> the PHYs using the existing rtl8152_apply_firmware() function
->>>> in r8157_hw_phy_cfg() and set up the correct names for the firmware
->>>> files.
-> 
->> No, since the RTL8157 (RTL_VER_16) also works in my experiments as expected
->> without this change, i.e. without any updated firmware, or better the
->> possibility to update the firmware. It is only for the RTL8159 where the
->> firmware is necessary to even get 10GBit performance, at least for the
->> link-partners I use for testing. My understanding of the Realtek "firmware"
->> is that it mainly provides updated calibration constants, possibly better
->> calibration routines for interoperability. Unlike for many other drivers,
->> the firmware is not necessary to make the driver work at all.
-> 
-> O.K. Please could you expand the commit message. Explain why you are
-> adding code for RTL_VER_16 as well as RTL_VER_17.
->I will update the commit message accordingly.
+UGREEN USB-C Multifunction Adapter Model CM512 (AKA "Revodok 107")
+exposes two SVIDs: 0xff01 (DP Alt Mode) and 0x1d5c. The DISCOVER_MODES
+step succeeds for 0xff01 and gets a NAK for 0x1d5c. Currently this
+results in DP Alt Mode not being registered either, since the modes
+are only registered once all of them have been discovered. The NAK
+results in the processing being stopped and thus no Alt modes being
+registered.
 
-Birger
+Improve the situation by handling the NAK gracefully and continue
+processing the other modes.
+
+Before this change, the TCPM log ends like this:
+
+(more log entries before this)
+[    5.028287] AMS DISCOVER_SVIDS finished
+[    5.028291] cc:=4
+[    5.040040] SVID 1: 0xff01
+[    5.040054] SVID 2: 0x1d5c
+[    5.040082] AMS DISCOVER_MODES start
+[    5.040096] PD TX, header: 0x1b6f
+[    5.050946] PD TX complete, status: 0
+[    5.059609] PD RX, header: 0x264f [1]
+[    5.059626] Rx VDM cmd 0xff018043 type 1 cmd 3 len 2
+[    5.059640] AMS DISCOVER_MODES finished
+[    5.059644] cc:=4
+[    5.069994]  Alternate mode 0: SVID 0xff01, VDO 1: 0x000c0045
+[    5.070029] AMS DISCOVER_MODES start
+[    5.070043] PD TX, header: 0x1d6f
+[    5.081139] PD TX complete, status: 0
+[    5.087498] PD RX, header: 0x184f [1]
+[    5.087515] Rx VDM cmd 0x1d5c8083 type 2 cmd 3 len 1
+[    5.087529] AMS DISCOVER_MODES finished
+[    5.087534] cc:=4
+(no further log entries after this point)
+
+After this patch the TCPM log looks exactly the same, but then
+continues like this:
+
+[    5.100222] Skip SVID 0x1d5c (failed to discover mode)
+[    5.101699] AMS DFP_TO_UFP_ENTER_MODE start
+(log goes on as the system initializes DP AltMode)
+
+Cc: stable@vger.kernel.org
+Fixes: 41d9d75344d9 ("usb: typec: tcpm: add discover svids and discover modes support for sop'")
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+Changes in v4:
+- Link to v3: https://lore.kernel.org/r/20260309-tcpm-discover-modes-nak-fix-v3-1-a4447f5c1c61@collabora.com
+- Rebase to v7.1-rc1
+- Collect Reviewed-by from Heikki Krogerus
+
+Changes in v3:
+- Link to v2: https://lore.kernel.org/r/20260303-tcpm-discover-modes-nak-fix-v2-1-5a630070025a@collabora.com
+- Move svdm_consume_modes() out of tcpm_handle_discover_mode() (Heikki Krogerus)
+- Move rlen return pointer argument into proper return code (Heikki Krogerus)
+- Drop multiple tcpm_handle_discover_mode() arguments by re-getting them
+  in the function  (Heikki Krogerus)
+- Restructure if/else branches after these changes to make checkpatch happy
+- Did not pick up R-b tag from Badhri Jagan Sridharan due to the amount
+  of changes
+
+Changes in v2:
+- Link to v1: https://lore.kernel.org/r/20260213-tcpm-discover-modes-nak-fix-v1-0-9bcb5adb4ef6@collabora.com
+- Squash patches (Badhri Jagan Sridharan)
+- Add Fixes tag (Badhri Jagan Sridharan)
+- Move common svdm_consume_modes out of conditional statement (Badhri Jagan Sridharan)
+- Add TCPM log to commit message (Badhri Jagan Sridharan)
+---
+ drivers/usb/typec/tcpm/tcpm.c | 97 +++++++++++++++++++++++++++----------------
+ 1 file changed, 61 insertions(+), 36 deletions(-)
+
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index dfbb94ddc98a..44ab7e0e5d50 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -2142,6 +2142,55 @@ static bool tcpm_cable_vdm_supported(struct tcpm_port *port)
+ 	       tcpm_can_communicate_sop_prime(port);
+ }
+ 
++static int tcpm_handle_discover_mode(struct tcpm_port *port, u32 *response,
++				     enum tcpm_transmit_type rx_sop_type,
++				     enum tcpm_transmit_type *response_tx_sop_type)
++{
++	struct typec_port *typec = port->typec_port;
++	struct pd_mode_data *modep;
++
++	if (rx_sop_type == TCPC_TX_SOP) {
++		modep = &port->mode_data;
++		modep->svid_index++;
++
++		if (modep->svid_index < modep->nsvids) {
++			u16 svid = modep->svids[modep->svid_index];
++			*response_tx_sop_type = TCPC_TX_SOP;
++			response[0] = VDO(svid, 1,
++					  typec_get_negotiated_svdm_version(typec),
++					  CMD_DISCOVER_MODES);
++			return 1;
++		}
++
++		if (tcpm_cable_vdm_supported(port)) {
++			*response_tx_sop_type = TCPC_TX_SOP_PRIME;
++			response[0] = VDO(USB_SID_PD, 1,
++					  typec_get_cable_svdm_version(typec),
++					  CMD_DISCOVER_SVID);
++			return 1;
++		}
++
++		tcpm_register_partner_altmodes(port);
++	} else if (rx_sop_type == TCPC_TX_SOP_PRIME) {
++		modep = &port->mode_data_prime;
++		modep->svid_index++;
++
++		if (modep->svid_index < modep->nsvids) {
++			u16 svid = modep->svids[modep->svid_index];
++			*response_tx_sop_type = TCPC_TX_SOP_PRIME;
++			response[0] = VDO(svid, 1,
++					  typec_get_cable_svdm_version(typec),
++					  CMD_DISCOVER_MODES);
++			return 1;
++		}
++
++		tcpm_register_plug_altmodes(port);
++		tcpm_register_partner_altmodes(port);
++	}
++
++	return 0;
++}
++
+ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+ 			const u32 *p, int cnt, u32 *response,
+ 			enum adev_actions *adev_action,
+@@ -2399,41 +2448,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+ 			}
+ 			break;
+ 		case CMD_DISCOVER_MODES:
+-			if (rx_sop_type == TCPC_TX_SOP) {
+-				/* 6.4.4.3.3 */
+-				svdm_consume_modes(port, p, cnt, rx_sop_type);
+-				modep->svid_index++;
+-				if (modep->svid_index < modep->nsvids) {
+-					u16 svid = modep->svids[modep->svid_index];
+-					*response_tx_sop_type = TCPC_TX_SOP;
+-					response[0] = VDO(svid, 1, svdm_version,
+-							  CMD_DISCOVER_MODES);
+-					rlen = 1;
+-				} else if (tcpm_cable_vdm_supported(port)) {
+-					*response_tx_sop_type = TCPC_TX_SOP_PRIME;
+-					response[0] = VDO(USB_SID_PD, 1,
+-							  typec_get_cable_svdm_version(typec),
+-							  CMD_DISCOVER_SVID);
+-					rlen = 1;
+-				} else {
+-					tcpm_register_partner_altmodes(port);
+-				}
+-			} else if (rx_sop_type == TCPC_TX_SOP_PRIME) {
+-				/* 6.4.4.3.3 */
+-				svdm_consume_modes(port, p, cnt, rx_sop_type);
+-				modep_prime->svid_index++;
+-				if (modep_prime->svid_index < modep_prime->nsvids) {
+-					u16 svid = modep_prime->svids[modep_prime->svid_index];
+-					*response_tx_sop_type = TCPC_TX_SOP_PRIME;
+-					response[0] = VDO(svid, 1,
+-							  typec_get_cable_svdm_version(typec),
+-							  CMD_DISCOVER_MODES);
+-					rlen = 1;
+-				} else {
+-					tcpm_register_plug_altmodes(port);
+-					tcpm_register_partner_altmodes(port);
+-				}
+-			}
++			/* 6.4.4.3.3 */
++			svdm_consume_modes(port, p, cnt, rx_sop_type);
++			rlen = tcpm_handle_discover_mode(port, response,
++							 rx_sop_type,
++							 response_tx_sop_type);
+ 			break;
+ 		case CMD_ENTER_MODE:
+ 			*response_tx_sop_type = rx_sop_type;
+@@ -2476,9 +2495,15 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+ 		switch (cmd) {
+ 		case CMD_DISCOVER_IDENT:
+ 		case CMD_DISCOVER_SVID:
+-		case CMD_DISCOVER_MODES:
+ 		case VDO_CMD_VENDOR(0) ... VDO_CMD_VENDOR(15):
+ 			break;
++		case CMD_DISCOVER_MODES:
++			tcpm_log(port, "Skip SVID 0x%04x (failed to discover mode)",
++				 PD_VDO_SVID_SVID0(p[0]));
++			rlen = tcpm_handle_discover_mode(port, response,
++							 rx_sop_type,
++							 response_tx_sop_type);
++			break;
+ 		case CMD_ENTER_MODE:
+ 			/* Back to USB Operation */
+ 			*adev_action = ADEV_NOTIFY_USB_AND_QUEUE_VDM;
+
+---
+base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
+change-id: 20260213-tcpm-discover-modes-nak-fix-09070bb529c5
+
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
+
 
