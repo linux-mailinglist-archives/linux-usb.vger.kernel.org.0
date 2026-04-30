@@ -1,211 +1,171 @@
-Return-Path: <linux-usb+bounces-36735-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36736-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SFmqDs/68mnxwAEAu9opvQ
-	(envelope-from <linux-usb+bounces-36735-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 08:46:39 +0200
+	id kJ03GHUF82nawgEAu9opvQ
+	(envelope-from <linux-usb+bounces-36736-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 09:32:05 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38EBC49E38C
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 08:46:38 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3948A49EA48
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 09:32:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 2F0323009E0A
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 06:46:35 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id EE9D33009F24
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 07:31:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD12B375AD0;
-	Thu, 30 Apr 2026 06:46:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 727043BA243;
+	Thu, 30 Apr 2026 07:31:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+kJHwIV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TaX2zwS1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0777535A38C
-	for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 06:46:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663B43B7B99
+	for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 07:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777531591; cv=none; b=J1VqxVH6VHq3SeeBqGGUCIgg4TY/TSI0+4jUXZnyvewn1Gppcd10INyvbnb6weQeJ+xULWsEQRphgGr3sWDtGWWS3ueRIBlh/YEzFPFIYToCxp26hOtcK/rbGedT6mh4+PMylo8klGwOm5F3Zo8JuCtGnJGeLQlEQmCxT5Pt5dw=
+	t=1777534315; cv=none; b=OuDgnoj4zPd5F+DYrCIAGvxtY9RwQpGMRoAXGH8i+/ZltSucMwfRAFBfqiDvxpnGp5evfesXhmuXTdd/XKVgP3iEd+sBC4vqH3UEUYAKKKics8GqVU/bkICfe+BqGHELbIlHUe3ubpmTysvdSuDQ9M+54I+FnbALgS2Aukh5PsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777531591; c=relaxed/simple;
-	bh=w0h/4AHYY7fbHcXypqa4xuyiswxnQMtf1P/N5Q+1QXg=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=RSEnX/mK8EaN5FeaVkQOa6R1I14joyVBoR4YbcJ83kklA8VrAtRc9geWvmFB6tIGktlc6Vv64rDEJWNZyg3H+lHRigpWzF/JgbXYTwARMEvTP2Jai3Kuj3fOyVDxfJ9QIubYFQ+IVonkaRCCgTDAiJ2D+4ouio13JhAkSEAcpyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G+kJHwIV; arc=none smtp.client-ip=74.125.82.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1777534315; c=relaxed/simple;
+	bh=oVFFj403nFj2ambn/fwdW0hGSzLSkPVCqm1sTuOSmEk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IFOMK0daDuCmI3/NPJIbViuZWvqrULkeaq2dLVEK4KKyeozS8WFbjncg1ATDdrIoz51yNu0paHhoS9KJe7NtEpKpKm9Pg8zozmmVDAXbdgqCikOBvm2HZiIt8OJ2/EbIX33xIwEQcijVO4U/xGRT/TTqkdE82x5gdfXK5BZnIug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TaX2zwS1; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2d8fa0fadfeso391140eec.1
-        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 23:46:29 -0700 (PDT)
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-8cb5c9ba82bso98741585a.2
+        for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 00:31:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777531589; x=1778136389; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eV5CQ+XE8ATI9LNtwrHAOK02HhjeNMCcT46+biOeiEE=;
-        b=G+kJHwIV/5r8nIlSjZsLD0PBDFyVZ5NdPi/Aw8wxB5qGdkJt7QlixRJm+sN0WKre60
-         2hwLtJ2fH3yiV+5bqLhwFWynJ0l1zrYshjGnsMrbOe2m1ZyTG20YZL8Ujfo7alovUvJS
-         TOd/tDDt0yCOuRIcRfzNyfpmrDkbPuhwcp3yc1L7AfnjGBgrONwzJRMANVnngGxR/yAP
-         y/YMIBT6r31f4nUaQ56rGD7Hyu99A+t9K4FMrt5L7twk+Ezx1jcSQGkJUn+raEVmKaPp
-         o0FSte7ZbXKxxUyCEn73POzYniA3Z5WypAs5IZJobTKEaJtFkNE0Z8ba2ieIsE/YGr8v
-         7GFw==
+        d=gmail.com; s=20251104; t=1777534312; x=1778139112; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=61JvWmfJN4ab2LxNi8kAqsEOa3Evq22JeKeLEg+4URY=;
+        b=TaX2zwS1L5y8ptQGJ6WcRWhnxeXtG7+JSFuO/OdyQWu4aRkRPBOEsWZG5dGHu1PIoR
+         z/Rv8GF8xylqCkpfzw0/nnS4ku+cRQMqDSY931bAif+NJEQs/hFF7aaVtKJ6O953t7WR
+         dlFT70APzzEPUZw6rFrZl2TItkOdkQIa2K6WN8c6yZmoU340FrwgjoUhdsjDjmB8rw58
+         R69ETDGv9Ymi1yaYL3LbEK0N3SB9ruWjKK/JNleS679hoN4zKeAPTEZOURWpzz/QisqZ
+         ligpQ2VXJjV0RVmnedt+ICEfcMphRvTUpatKvQ4DNNj8hzr00xKS4efHJxivmWdorOsl
+         0yIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777531589; x=1778136389;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eV5CQ+XE8ATI9LNtwrHAOK02HhjeNMCcT46+biOeiEE=;
-        b=qH2UysI8SD6uBfjdDlkQJrgBQ+WCoOtalm+c6O1TNGiTlhOsId7Db3X4tjXlcb3hcL
-         P9ziypLyX/VPIg/6dheMQ3u64TGd5KrI+5KiS7Q0GJW50MKZiNPAFOpkJoLxGTAHgFfM
-         DbOgkCDiLGFcGeVRrrUM5hIrv8HIFEdNhmsSeiawXWh4+CdEuG16t098M9bBMqN8rcgw
-         reiQzQFkU6002g8wsYwSLlTyV2HI39g3dgh3OlV2awt374uVQ0R+jqYXZVPoTAWDpXJv
-         EAP2nEDnEwUv9OdN25DRTZrgEQE43KL8FLu8U0PVux/2ryKzcFXzNWVetmzS5kcmI9Jz
-         gvaA==
-X-Forwarded-Encrypted: i=1; AFNElJ+eJFHnZZA8gkfs4tnnjtzftibuzWo76nlj6n027uWKzdMFo//vKrQBnq8K34GqMEr/uFgKwO2O40k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDYDikdSVqJPxcwgSi671qHQK/d/f/1OzJ7V1rEMHZbhxDWJRl
-	NX19v2iZ6ITbyLRgJaEyCXqk1TI2xMBDeDoNhSInbjDyJ70fAc0ns3zp
-X-Gm-Gg: AeBDieu/hmb5zM9ScY/AxwnK8QXn9fXLM0qUlwumMkfAAheTYoYsYtjuDFYoU466+ru
-	GqUfFCSjddLVMoRzBnmDE29+iFvDX+gLmjHnNCSP71zZLeoWQ9glOdXyEiIFvSRKo4BLmqVqDG9
-	TGGtBzbgNT33DLjhwsm5EAatgr7J67v0dSk1ygAOqOSnPO/yP00pctzBrqsMWTKPnqeRIkRuZRi
-	Hb+6ot7+OqTuWahEz4AUnvrj3YO1uR4t0wsDpIH3UX3wioiF2Ec5PnCLJelXb2frqQG6vJDrrCc
-	0JLaD28uB6mVOWcmZj6PtAO9beXShPEnLxGyB5Vqbz5HaligwWYN/9VkJhnTIDTYKBTfAa2u8OT
-	pe5+5nDrXHO66fbUe04pLrDiKO5GN/48p3++BYiZBOaaXiBuqHbztP67O8iWAX6z1+rRh/vz5hF
-	oXYpax+ak4W0bLbgZLSi4WmJZvl9cQOW+Fh1erirJDEoVdbm2GnhVEOz2Bhw==
-X-Received: by 2002:a05:7300:2d24:b0:2e7:190:41d6 with SMTP id 5a478bee46e88-2ed4d51476fmr595009eec.2.1777531588900;
-        Wed, 29 Apr 2026 23:46:28 -0700 (PDT)
-Received: from smtpclient.apple ([2601:644:601:140:201d:a35a:66e8:6eea])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ed1bf8ddaasm5695491eec.7.2026.04.29.23.46.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 Apr 2026 23:46:28 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+        d=1e100.net; s=20251104; t=1777534312; x=1778139112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=61JvWmfJN4ab2LxNi8kAqsEOa3Evq22JeKeLEg+4URY=;
+        b=N3WRIAg4/YFSn/bjg6T88vkBsz6hxgj2ubDaXGSrnQDmXbOiBsKv44ABCeAcWro4+/
+         oMGfy4T/xSt7M9ezB4wbhcPE0gg3dwteAExPlrsT6Msl+ptkrwh9YlcfzvH+6wqCJ/3i
+         Krpq7+qDO26ROHhoZzYDp3m7E1WxDUSiOM5Pd7h/NI+5JmLWzfolKjGpBDr46/D7SDM2
+         fl/trz7hB++bXSf1kTY1fXmhwMJZxKFujvTpMsxzXo5QQxQ7HviH1rpAo0LQDqF2Gsht
+         CFqEYWun2cnvNSCRwkp8Rgzjuaie4ptqawLOfbm3Ph1bi2cEyLqVlHdLoN1RVewCM2o6
+         Xxjw==
+X-Gm-Message-State: AOJu0YzwovDUCG5cWG4+OVTcJuTQppW4z+v1X5d2kmmTUPoxJhLLJ/I5
+	e+z7qlrg0LcQG+/xn90BE6hdDfMESgbY9bMDsQaAumSUR4jVrCXmPSX9
+X-Gm-Gg: AeBDieu13uZ3aZQaG9HDwZyRnSDZ4s/BxWo0sIrEo3SjqYROHzmdTAUBn3NKwH80hnw
+	kMX/rUt6nawSizOV/4KAqvrQNvVh4n99o2BN8+1iIDYuMdA3yF/Vim6V7mFEhdOdK2Hw4gBvB7n
+	H+lN7Hq0pCT7vSbdVHu6MgCWF4PXAEqawyd6RQPBL5VVcqKIjNXndwro2dburiC6DxZ5YlvWElq
+	OEvG0RvH3P+9Nt37esxUDrm7suTwdfK88FTiFzKF2ZIfAivjhyMYImIf4uJ5NPaEKd1ylwwTeY4
+	ZCICQYZNI/+JVfMFKJVsuQdJT4SccaSPnmJrwl9znWQI0XtaazYaZMUdG+7TLux8Qe9CG6nrSHq
+	+qrHqefipnZL4F0fQUjSzRMWaFxpByRKWFIuzgIHkzwCvEaRlZEgYckKf70nQ4kBH/7JQquGodv
+	tVnYATG40L0OGpia9I
+X-Received: by 2002:a05:620a:171e:b0:8cf:d9ce:378b with SMTP id af79cd13be357-8fa864db18dmr282806385a.2.1777534312200;
+        Thu, 30 Apr 2026 00:31:52 -0700 (PDT)
+Received: from localhost ([2001:67c:1562:8007::aac:4468])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8f93fc6967dsm384705585a.36.2026.04.30.00.31.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Apr 2026 00:31:51 -0700 (PDT)
+Sender: AceLan Kao <acelan@gmail.com>
+From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+To: Mika Westerberg <westeri@kernel.org>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/1] thunderbolt: Fix blank external display after HRR on USB4 v2
+Date: Thu, 30 Apr 2026 15:31:42 +0800
+Message-ID: <20260430073145.331419-1-acelan.kao@canonical.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81.1.4\))
-Subject: =?utf-8?Q?Re=3A_TT_budgeting_for_EHCI=3B_accommodate_1023-byte_fu?=
- =?utf-8?Q?ll-speed_isochronous=E2=80=93in_endpoints?=
-From: Brent Page <brentfpage@gmail.com>
-In-Reply-To: <0a09202c-cc15-4fc9-9102-701348050a79@rowland.harvard.edu>
-Date: Wed, 29 Apr 2026 23:46:16 -0700
-Cc: Michal Pecio <michal.pecio@gmail.com>,
- linux-usb@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <EF232958-2AD7-441B-8204-C668BBE75FDD@gmail.com>
-References: <B66AE752-B09C-49B3-A829-F7ABB36FB250@gmail.com>
- <32291bf6-0c9d-4fd9-9dd7-489f7e1c9f02@rowland.harvard.edu>
- <20260429113604.2204b646.michal.pecio@gmail.com>
- <a3176296-bf99-4486-9310-0b70f28c1ba7@rowland.harvard.edu>
- <20260429212408.299826a4.michal.pecio@gmail.com>
- <49a41b4c-34ac-4627-adcb-d0e989470610@rowland.harvard.edu>
- <229BBA08-3CF9-4E01-9621-1BD4A82BCD14@gmail.com>
- <0a09202c-cc15-4fc9-9102-701348050a79@rowland.harvard.edu>
-To: Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: Apple Mail (2.3826.700.81.1.4)
-X-Rspamd-Queue-Id: 38EBC49E38C
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 3948A49EA48
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	DMARC_POLICY_REJECT(2.00)[canonical.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),reject];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	MID_CONTAINS_FROM(1.00)[];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36735-lists,linux-usb=lfdr.de];
 	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36736-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[kernel.org,gmail.com];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brentfpage@gmail.com,linux-usb@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[acelan.kao@canonical.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,harvard.edu:email]
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_FIVE(0.00)[5];
+	FROM_HAS_DN(0.00)[]
 
-> On Apr 29, 2026, at 7:27=E2=80=AFPM, Alan Stern =
-<stern@rowland.harvard.edu> wrote:
->=20
->> an additional csplit should be scheduled in Y0 of the next
->> frame - I'm guessing this is the sort of thing that would require an
->> FSTN?
->=20
-> No; FSTNs are for interrupt transfers.  But it would require extra =
-siTD=20
-> nodes with backpointers, complicating the allocation and deallocation=20=
+Hi,
 
-> algorithms.  That wouldn't be so hard to add, but I have never felt =
-the=20
-> urge to do it.
+On Dell XPS 14 (Panther Lake) with a WD22TB4 Thunderbolt dock and BenQ
+PD2725U external display, the display goes permanently blank on ~50% of
+boots. The only way to recover is a full reboot — re-plugging the
+monitor or dock does not help.
 
-Hmm, I may try to take a crack at it so that my previous proposal to =
-inflate
-the values of max_tt_usecs will always work if the bus just contains one
-1023-byte iso-IN endpoint.  That is, the goal would be to fix
+The root cause is a race between the USB4 v2 Host Router Reset (HRR)
+and the graphics driver initialization:
 
->> Then I think it doesn't support 1023 byte packets at all.
->> 1023/188=3D5.4 and if worst case bit stuffing factor is 7/6 then up
->> to 6.3 uframes of transfer time. Completion in Y5 or Y6 and CSPLIT
->> required in Y7. =20
+  1. nhi_probe() performs HRR at ~t=1s, destroying BIOS-established
+     DP tunnels.
+  2. The Thunderbolt driver re-discovers the dock via hotplug at ~t=4s
+     and attempts to re-create the DP tunnel.
+  3. DPRX negotiation fails because the graphics driver (xe) is not yet
+     ready — the 12-second timeout expires at ~t=18s.
+  4. tb_dp_tunnel_active() permanently removes the DP IN adapter from
+     available resources on the first failure, so the display never
+     recovers.
 
-__________________________
+The fix adds a retry mechanism: on DPRX negotiation failure, the driver
+retries up to 3 times with a 5-second delay, giving the graphics driver
+time to come up.
 
->> The "case 2b"bullet point of 4.12.13.1 of the EHCI-1 spec says that
->> "This case can only occur for a very large isochronous IN... Software
->> must enforce this rule by scheduling the large transaction first. =
-Large
->> is defined to be anything larger than 579 byte maximum packet size."
->> Is this being enforced at the moment in ehci-sched.c?
->=20
-> I don't think so.  Bandwidth is allocated to endpoints as they are=20
-> added, and the driver does not go back and try to rearrange the =
-schedule=20
-> if something doesn't fit right.  It most certainly does not try to=20
-> change the allocation for endpoints that are currently in use.
+Tested with 13 boot cycles on the affected machine:
+  - 6 boots hit the HRR + DPRX race: all recovered via retry, display
+    came online after 3 retry attempts (~58s).
+  - 5 clean boots (no HRR): DP tunnel established immediately.
+  - 2 boots with HRR where DPRX succeeded on first try.
+  - 0 teardowns: the retry mechanism was never exhausted.
 
-It might be easy to do now that the budgeting is done working backwards
-starting with the latest uframe (as of
-https://marc.info/?l=3Dlinux-usb&m=3D131973404328622).  Pretty much, if =
-the
-byte count exceeds 579, see if the transaction can fit starting in
-uframe 0.  If not, because the scheduling worked backwards to begin
-with, there's no way that the schedule could be re-arranged to make the
-large transaction fit while obeying the quoted rule.
+Full dmesg log - https://people.canonical.com/~acelan/bugs/dp-retry-on-hrr/
 
-Clearly, 579 is just about half the 1157
-maximum_periodic_bytes_per_frame mentioned in 11.18.1, but I can't think
-of why that's the threshold for a large transaction.  Sure, the
-threshold guarantees that having 2 large transactions is impossible, but
-that still doesn't seem to be important in the context of the reasoning
-given in EHCI-1: 4.12.13.1.
+Thanks,
+AceLan Kao
 
->> Tangentially, why are there no csplits scheduled for the
->> 458-byte transaction enumerated in
->> https://bugzilla.kernel.org/show_bug.cgi?id=3D218544  ?  Tracing =
-through
->> the ehci-sched.c code, I cannot figure out how you don't get at least
->> 3=3Dceil(458 * 7/6 / 188) 1s in the csplit mask.
->=20
-> Was that an isochronous-OUT transaction?  Those things don't use =
-CSPLITs=20
-> at all.
+Chia-Lin Kao (AceLan) (1):
+  thunderbolt: Retry DP tunnel setup on DPRX negotiation failure
 
-Ah yeah, it was an iso-OUT.
+ drivers/thunderbolt/tb.c | 63 +++++++++++++++++++++++++++++++++-------
+ 1 file changed, 52 insertions(+), 11 deletions(-)
 
-From,
-Brent Page
+-- 
+2.53.0
 
 
