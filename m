@@ -1,264 +1,145 @@
-Return-Path: <linux-usb+bounces-36799-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36800-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2CrIG06Y82nO5AEAu9opvQ
-	(envelope-from <linux-usb+bounces-36799-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 19:58:38 +0200
+	id UOh5EUOg82ly5QEAu9opvQ
+	(envelope-from <linux-usb+bounces-36800-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 20:32:35 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B98644A6AC2
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 19:58:37 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98B0E4A6FCD
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 20:32:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 78BB43064C77
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 17:56:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B7A88302AC07
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 18:32:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2379213E89;
-	Thu, 30 Apr 2026 17:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8A0747CC61;
+	Thu, 30 Apr 2026 18:32:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DCODzT6c"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="BLnDLn+P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE145477E3F
-	for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 17:56:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DB94779A4;
+	Thu, 30 Apr 2026 18:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777571809; cv=none; b=gqkQeG3mT3F9pxh2JB7cGkbCCaKOw5C9nQx5Jbm6Fbh6j7hCokf6I8SRH0SW/RPUjHMJnK/ZPfYmWIHxcv3smOt3fCbNZ+nyixyEbb1n1RV3I39kJSD856M5v6csgR42l9T7Gg6BHWl1HdXMbIaQHSw/bFZggd6ogA5ejvvfzA4=
+	t=1777573936; cv=none; b=g+MIaLtj8DpsB8/Sws65P8jDs7KgS4FAQQh7CrBhBTX5ErqhT8aWG+8985M1aeuF+I7pUeTET+fPSwOXdynsUTvI2caeLlo06hpJrzJcs+8uWraiqz94jW08a0drCSkrUJm6b8ZymnisXONpIgOi5bFXOjqprHJ/QYhwlOU21kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777571809; c=relaxed/simple;
-	bh=9spNfy5mYjSbXGFonhvO2PAbckrLShrX0goMofh2LrA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=l+qedN1bEsX0OmjJJbcgVfYo/ZoBPhADTyMz9q1CZy6Iq/+JwJzAyh7sbrOHfq1NQPF/dML7XzbZbKvPn+ORPk2KH8kHtCyAWQb1nH3Gpny/y//vsBC99lCQQfjX5HYfCmLAyKtF0MElMwV/T8nlrrKOuMJb3nthtarW2hkFDmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DCODzT6c; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-488ba840146so10272505e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 10:56:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777571806; x=1778176606; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LOoGOmEGcJMWKqKQxy0dOYEQAgzeeW+X/nrMaPWt9b8=;
-        b=DCODzT6cG8ZbkdYIYnd8xZU64MNmg7P/I84rKCEpAstL+kA28g47aJb65zBSQrOBkU
-         aUBaZMyDdmUs2P6LuR/p4q+m3TMU3Xqg4bFccGXL9RKjhvtgltS42ccdtBfrJjLwZ0Co
-         CcZlsfTkUglbOlJWw+tJhRiGLX2zuncsRExIjkZzovqon7CpGrLP/Oamonp3a6hGuMrM
-         VbJYhuTVejPnnG76CysWPD95wI8YxDvyFQkcQRvXAKJiBGybbZVCRL88oeLb++mZ67AA
-         VCd/vmZ9+Oe3Yn6CqajQD+MQXb76UslgzdsYl/QikzzFNYe0T328CMUYWBJ8IhtEgdRi
-         4PUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777571806; x=1778176606;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LOoGOmEGcJMWKqKQxy0dOYEQAgzeeW+X/nrMaPWt9b8=;
-        b=VPAdWlgKh5spOO0Ctli3eKFEURqhOOv87JtWY1TdXaaTApRNrLlfD1gN0xDNIAV7Ni
-         OI0dZ+liSq9vKI9MHZqojcn1kuf8G8uWQ0PzNDQeMN/o57nJqBwdiTtOkepBMqdtcHxq
-         KmqTI72mFsY0JX/jkJRteCIWBuodaiWNbeopWkuYLtYSCSe5lGOUnqgU0VHeqrXMLOUN
-         uB/QAcpOgblkTPekqsopufLC3yxwq77UOBDPXfC+9/AvDOaPQUs6E9Na6m5T9khAVanj
-         5lHNDoxsQ1XWfCVJk/WhUIehD0AVN8y8z1rMjII0nQ7IqNR55RphGiVtZVLvPkxFe02P
-         n/Tw==
-X-Gm-Message-State: AOJu0Ywy8oR7SiXb/PvptUNT6XhtPt638UUO59o1MHW45NKHo+JpBRKm
-	yJpKXUGKCvIoM89bdD8XhlXjp60aLuFrAvoSNV9APsKNByiHEPRFtTAbkRTedqIzG/LAew==
-X-Gm-Gg: AeBDietbFPgf4dLesMcAnBI5kflS41VGFMHgv3pPoWUNLP3T5mbrysIrGMRhTH3SlPG
-	lD7apK6OR4pe8IFlhjnmpairk3HNrOef9ub/4QgmIb5Dumj8aohqyH6QGNsYNpNrUxJayLo1xAC
-	f1ynBcY6f5qXINE80S5KrEBcpYqksBjzPD7AXCYEmfkvmqTcNWqZA+USNj7Ga3t4c66fnt0BTW4
-	JFRwsjEFL6ah73kpKl/S9HJ5QV83Wxtf0tIXnO5XTtTylWAOHeZr+LamgNGM/Cnay9PuULUHZU/
-	9m7PYDy+tiFxFAWjgpjkCs8/x0fhM6K9c9oEQGYG998OR6xHOU1dpT3DdqL73KhxHu58TuU8Thv
-	wkE5Aez/TYLmmKqrbC64xZYNeJJZg+hIARTbsziZZ92OU8+qgxQxImb2Vwy4UI6lSp3jpxsQMhC
-	xfEeec07zwq7+s9h0Eydhb6ptXIqzwWXX601Ti74DDpvHB4Qroorox95X50RghRVj59twakOfbk
-	xLa9brveiuTLkrUTmxwm8M/qSiw4SACNaB7BA==
-X-Received: by 2002:a05:600c:1991:b0:488:79a3:f04c with SMTP id 5b1f17b1804b1-48a8445fc76mr58580445e9.27.1777571806038;
-        Thu, 30 Apr 2026 10:56:46 -0700 (PDT)
-Received: from localhost.localdomain ([2a00:a041:e04f:2600:f9d2:9c9e:9a42:5d91])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a8d1a4186sm1109915e9.11.2026.04.30.10.56.44
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 30 Apr 2026 10:56:45 -0700 (PDT)
-From: Kai Aizen <kai.aizen.dev@gmail.com>
-To: linux-usb@vger.kernel.org
-Cc: laurent.pinchart@ideasonboard.com,
-	balbi@kernel.org,
-	gregkh@linuxfoundation.org,
-	w@1wt.eu,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	Kai Aizen <kai.aizen.dev@gmail.com>
-Subject: [PATCH v2] usb: gadget: uvc: hold opts->lock across XU walks in uvc_function_bind
-Date: Thu, 30 Apr 2026 20:56:43 +0300
-Message-ID: <20260430175643.67120-1-kai.aizen.dev@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1777573936; c=relaxed/simple;
+	bh=q3B4lX8WnBeJfC3WXPLuc7GCXjF7pt7gf6jO1l5mGhE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=s+xYRw/lJZT0qY9dVCNtXLb63dpvYGIlT+a0S6HgZoc0bSehAwioBZoCnxdZ3702NeIFxYtwRzK7CK81brFqzO6KCFJQr6MW0Dn0RtwS67Pf8i+8WR8nA//oLB7Ki52LH0T+iWoPDgqDjvz5eNraOH0H6uG70T2CmNd2yH6lf3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=BLnDLn+P; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=In-Reply-To:References:From:Subject:Cc:To:Message-Id:Date:
+	Content-Type:Content-Transfer-Encoding:Mime-Version:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=q3B4lX8WnBeJfC3WXPLuc7GCXjF7pt7gf6jO1l5mGhE=; b=BLnDLn+PYQmsa/BYZke8oFNqy3
+	9LHcdqXG54ki/W1u2pgSsU9JDr1G8tjyvhNlRyARA1tGdEch6msTCoHAQ8ogjJCXwkrQeIRl7rI8i
+	xBMS6EbMV1a9Y0vNTIQmFdLO4TaZ22iJ+wj+sINrmrXL0mMVHYp0zM6ovP+hLNWNoeMcxkHfyteGu
+	BEDs3Stner0x2Hh1NsfhY62uMYUTCg75+4PTbyiblfmeTnTKS0YVpZn9k3pCl0uwNLZ2mY3QvWWHR
+	sG22Vob9dsGuFN/NSSHpMVhawSmScgbTDpq2vSd04fY3wx6hoc7eYNQ8+iTL50ODaWHN0NX1GdEt1
+	A9c35CEg==;
+Received: from 177-136-93-123.vmaxnet.com.br ([177.136.93.123] helo=localhost)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1wIWB9-004Y5E-9r; Thu, 30 Apr 2026 20:32:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: B98644A6AC2
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 30 Apr 2026 15:31:55 -0300
+Message-Id: <DI6PD3MOZAXW.RNUBKGQG1O6M@igalia.com>
+To: "Michal Pecio" <michal.pecio@gmail.com>
+Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <kernel-dev@igalia.com>,
+ <syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com>,
+ <stable@kernel.org>
+Subject: Re: [PATCH v2] usb: usbtmc: reject invalid interrupt endpoints
+From: "Heitor Alves de Siqueira" <halves@igalia.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260423-usbtmc-iin-size-v2-1-31afa4874f71@igalia.com>
+ <20260424002839.5ad25517.michal.pecio@gmail.com>
+ <DI51WD2C7TJF.1X6B12NO0OO4@igalia.com>
+ <20260429001626.2f08b991.michal.pecio@gmail.com>
+In-Reply-To: <20260429001626.2f08b991.michal.pecio@gmail.com>
+X-Rspamd-Queue-Id: 98B0E4A6FCD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [1.64 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	R_DKIM_REJECT(1.00)[igalia.com:s=20170329];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	MV_CASE(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36799-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_FROM(0.00)[bounces-36800-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[ideasonboard.com,kernel.org,linuxfoundation.org,1wt.eu,vger.kernel.org,gmail.com];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kaiaizendev@gmail.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	DKIM_TRACE(0.00)[igalia.com:-];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.939];
 	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.991];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[halves@igalia.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	TAGGED_RCPT(0.00)[linux-usb,abbfd103085885cf16a2];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,igalia.com:mid]
 
-uvc_function_bind() walks &opts->extension_units twice without holding
-opts->lock:
+On Tue Apr 28, 2026 at 7:16 PM -03, Michal Pecio wrote:
+> I'm completely unfamiliar with this class, but my understanding of
+> USBTMC spec is that bNotify1 is mandatory while bNotify2 may have
+> any length, likely including zero, though it's a bit imprecise.
+>
+> The driver only supports notifications defined in the separate USB488
+> spec and for these, bNotify2 should be one byte. It also warns on
+> every unrecognized notification.
+>
+> I think a minimal fix which mostly preserves existing behavior would
+> be adding "urb->actual_length =3D=3D 2" as a requirement for all USB488
+> notifications. Then any truncated message will be ignored and logged.
 
-  - directly, for the iExtension string-descriptor fixup loop;
-  - indirectly, four times via uvc_copy_descriptors() (once per speed),
-    where the helper iterates uvc->desc.extension_units (which aliases
-    &opts->extension_units) to size and emit XU descriptors.
+Yes, that's my understanding as well! Although I don't think bNotify2
+would ever be zero in practice, this sounds like a good approach. I'll
+submit a v3 with this change plus the endpoint check from v2, hopefully
+that'll improve things for these edge cases.
 
-The configfs side (uvcg_extension_make / uvcg_extension_drop, in
-drivers/usb/gadget/function/uvc_configfs.c) takes opts->lock around its
-list_add_tail / list_del operations.  A privileged userspace process
-that holds the configfs subtree open and writes the gadget UDC name
-to bind the function while concurrently rmdir()'ing an extensions
-subdir can race uvcg_extension_drop() against the bind-time list walks
-and dereference a freed struct uvcg_extension.
+> wMaxPacketSize is a separate issue indeed and it seems that a USB488
+> device could legally set it to 1, though it would be crazy. Your v1
+> patch would probably make such devices work, if anyone cares.
 
-Hold opts->lock from the start of the XU string-descriptor fixup
-through the last uvc_copy_descriptors() call, releasing on the
-descriptor-error path via a new error_unlock label that drops the
-lock before falling through to the existing error label.  This
-matches the locking discipline of the configfs callbacks and removes
-the only remaining unsynchronised reader of the XU list during bind.
+Honestly, I'm also more inclined to just reject endpoints with this
+configuration. This seems like a very niche edge-case, I'd be surprised
+if real hardware operated like this (famous last words? heh). I'm not
+sure if this would even be valid/legal, given your previous point on
+bNotify2 being one byte. Considering these devices do not work at all
+currently, checking if wMaxPacketSize and urb->actual_length are big
+enough seems like a saner approach and won't require bigger changes to
+the driver.
 
-Reachability: only privileged processes that can mount configfs and
-write to gadget UDC files can trigger the race, so this is a
-correctness fix rather than a security boundary.
+Thanks for the help, Michal!
 
-Fixes: 0525210c9840 ("usb: gadget: uvc: Allow definition of XUs in configfs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kai Aizen <kai.aizen.dev@gmail.com>
----
-v2: fix From/Signed-off-by to use real name and email address.
-    Drop paulelder@kernel.org (address bounced).
----
- drivers/usb/gadget/function/f_uvc.c | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 8d404d883..73dc7e428 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -768,6 +768,16 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 	uvc_hs_streaming_ep.bEndpointAddress = uvc->video.ep->address;
- 	uvc_ss_streaming_ep.bEndpointAddress = uvc->video.ep->address;
- 
-+	/*
-+	 * Hold opts->lock across both the XU string-descriptor fixup below and
-+	 * the descriptor-copy block further down.  Without this, configfs
-+	 * uvcg_extension_drop() (which takes opts->lock) can race with the
-+	 * list_for_each_entry() walks here and inside uvc_copy_descriptors(),
-+	 * leading to a UAF on a freed struct uvcg_extension.  See
-+	 * drivers/usb/gadget/function/uvc_configfs.c::uvcg_extension_drop().
-+	 */
-+	mutex_lock(&opts->lock);
-+
- 	/*
- 	 * XUs can have an arbitrary string descriptor describing them. If they
- 	 * have one pick up the ID.
-@@ -785,7 +795,7 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 				 ARRAY_SIZE(uvc_en_us_strings));
- 	if (IS_ERR(us)) {
- 		ret = PTR_ERR(us);
--		goto error;
-+		goto error_unlock;
- 	}
- 
- 	uvc_iad.iFunction = opts->iad_index ? cdev->usb_strings[opts->iad_index].id :
-@@ -799,14 +809,14 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 
- 	/* Allocate interface IDs. */
- 	if ((ret = usb_interface_id(c, f)) < 0)
--		goto error;
-+		goto error_unlock;
- 	uvc_iad.bFirstInterface = ret;
- 	uvc_control_intf.bInterfaceNumber = ret;
- 	uvc->control_intf = ret;
- 	opts->control_interface = ret;
- 
- 	if ((ret = usb_interface_id(c, f)) < 0)
--		goto error;
-+		goto error_unlock;
- 	uvc_streaming_intf_alt0.bInterfaceNumber = ret;
- 	uvc_streaming_intf_alt1.bInterfaceNumber = ret;
- 	uvc->streaming_intf = ret;
-@@ -817,30 +827,32 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 	if (IS_ERR(f->fs_descriptors)) {
- 		ret = PTR_ERR(f->fs_descriptors);
- 		f->fs_descriptors = NULL;
--		goto error;
-+		goto error_unlock;
- 	}
- 
- 	f->hs_descriptors = uvc_copy_descriptors(uvc, USB_SPEED_HIGH);
- 	if (IS_ERR(f->hs_descriptors)) {
- 		ret = PTR_ERR(f->hs_descriptors);
- 		f->hs_descriptors = NULL;
--		goto error;
-+		goto error_unlock;
- 	}
- 
- 	f->ss_descriptors = uvc_copy_descriptors(uvc, USB_SPEED_SUPER);
- 	if (IS_ERR(f->ss_descriptors)) {
- 		ret = PTR_ERR(f->ss_descriptors);
- 		f->ss_descriptors = NULL;
--		goto error;
-+		goto error_unlock;
- 	}
- 
- 	f->ssp_descriptors = uvc_copy_descriptors(uvc, USB_SPEED_SUPER_PLUS);
- 	if (IS_ERR(f->ssp_descriptors)) {
- 		ret = PTR_ERR(f->ssp_descriptors);
- 		f->ssp_descriptors = NULL;
--		goto error;
-+		goto error_unlock;
- 	}
- 
-+	mutex_unlock(&opts->lock);
-+
- 	/* Preallocate control endpoint request. */
- 	uvc->control_req = usb_ep_alloc_request(cdev->gadget->ep0, GFP_KERNEL);
- 	uvc->control_buf = kmalloc(UVC_MAX_REQUEST_SIZE, GFP_KERNEL);
-@@ -872,6 +884,8 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 
- 	return 0;
- 
-+error_unlock:
-+	mutex_unlock(&opts->lock);
- v4l2_error:
- 	v4l2_device_unregister(&uvc->v4l2_dev);
- error:
--- 
-2.43.0
-
+Best regards,
+Heitor
 
