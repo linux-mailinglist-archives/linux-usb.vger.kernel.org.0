@@ -1,196 +1,198 @@
-Return-Path: <linux-usb+bounces-36726-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36727-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2GI8FTO+8mlbtwEAu9opvQ
-	(envelope-from <linux-usb+bounces-36726-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 04:28:03 +0200
+	id GNR8DzrO8mnOuQEAu9opvQ
+	(envelope-from <linux-usb+bounces-36727-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 05:36:26 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD44049C553
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 04:28:02 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86F0F49CFFE
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 05:36:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A1CA3300D178
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 02:28:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CD788301CA4F
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 03:36:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F081C282F3C;
-	Thu, 30 Apr 2026 02:28:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D2DA3446C7;
+	Thu, 30 Apr 2026 03:36:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="e+chPlmE"
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="bEkELu4E";
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="2W51MmQB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C8D1A9FA0
-	for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 02:27:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C190033F8B7;
+	Thu, 30 Apr 2026 03:36:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777516080; cv=none; b=ufEpwN2KblhA3Sq30mkgIRC7gNetK3rUXN51xxSlcIyXpVNjrYV8joy0PuxgT7izPEF1ELpo4QQWmcb6X6YpnpvgY/MRw7pU/GXS/217kBKdHlCSCSC+5bywpbiBrtDOlwZN97OTwgbbXVjXx2ys+kRDx6A3+pjXCRGpe/fUv9o=
+	t=1777520171; cv=none; b=FjES8yYN3EajrE4Tfc+M4Lu3r5cSeWQf9d/pnYRkNrc3rEN3DqCt7+xB+Wbk3KgIWZy1C27sPbeEQyqccixhtc31wO4SRhLMwGJ/bI1Bn/2qVay9Zv72Eqju7cahB+ZA2c1Yk09R8Mxh4mpZtQtcAiHc3rfmtmPtippmKagvq88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777516080; c=relaxed/simple;
-	bh=EbEO5+FfZdzoeA5f4yQxaqn5kquB/Hak0dnT/M49Jy0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=quhURdru+9ZLGFh+vTU4d8Liulw6+F4iwAX//763o6NBUAtbPaWGLf/6QqwVe96wUejG5OssJAqm70ZkTd6RpAPrfUzm0EW3xidUQKiCsS7OIz0Q5aZblb3O2hCu3bWjxF7l1P5Zpqgl7BcXqP7moGIiNDbGDWdUA8sutGgLjiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=e+chPlmE; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-89f1e767f92so4564566d6.2
-        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 19:27:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1777516078; x=1778120878; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9RycsSD/UM7/WxXcuZermmSbJDl3rAokz3y+Bl5hWuM=;
-        b=e+chPlmEL1/dsXI8Io5GIT5JeK/J6htS2gIQvKmLjf7Kc031kzpXLOuWWYkWECdJaM
-         3esQroU9k39d62ZycxWZ5UKiK4Ky4Rb+jG5at74cageCw/H9XsAjK0EZnhlW1mLngb1/
-         LDbbJw1ct3a6mRKrLpuQpRGPO6f73wBzCU5WXc/lukTkGtFuq5yPAC+7PNLPFeN39nm6
-         VF88C5UElNMmMc1hZ5dNNHo0vq3TJo471pmtq3LJnZzcJNs2rWMMRCzYX/asAtG1cA0G
-         bqZqpdZW5F1vs0t/U4853jK3n8gmObfr2fqBayNvaWIFEBw/ZtNi1IKnegEVF3bDZe+R
-         gZCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777516078; x=1778120878;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9RycsSD/UM7/WxXcuZermmSbJDl3rAokz3y+Bl5hWuM=;
-        b=P+R7m8AYU3z7os/m1x7+RUxoFr7cxub6+9yLQctwjiWTzFjKQp95a+mJnDOPe+maGp
-         hksOZJlxmbOwozoeTta/0hbCh2r9Y1E0YuFgh3osfFRWjbn1+UqqxD8KeB7uyCIx02rY
-         h22/mm7jHUPZRyf/3t3m6GiF/KbHs4Xck/gj5FikmP1ymEfPZpWR0/9wdSghAmRaRzaz
-         wxaViBobBXR+VKn00OMKirxK/eWJUBgqPi0xHZzQFj6j1idvssXesM2y4Ty3Ms3Y0tUy
-         QFEpmFqZw9b9Wm/jhI9Zv3imPT21WUW54ZFDAq6fQpIdTV4jDRz2DwcI+B+7E+BlK7tQ
-         3o1g==
-X-Forwarded-Encrypted: i=1; AFNElJ+4hPPJGMZqrrWzusslCkc5j5SSFM1HmVxm4XMlo5O2ncvH6nId2u6Isif0HMRsPlpnUOzHKEHIET4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxz/8as+VcEi0VRKLYdQbf1MPst0KVFkpcML9jY1MJLdVFVccTn
-	Ja3BY/GWSKelOLljFx6GPdEGLcNp853bnP9Nc+Oj/OIkLnQS6whM4BComv/PdA7Njw==
-X-Gm-Gg: AeBDieux3eOLWo/dBGPo3ulEYKXs65Ffo3nVrq+zsQm7oGS/pLRaCFh5FvR1Ci1ctTR
-	R7cZZAr3dCk4zWse5TpMOFB8FK4J9eOrJWgivrEmuCHXrdNLRbbUoWOAU89YYLznIS6e9nLGmx7
-	Cb/ulcJynn+vLSNqPIb1rHolUbfxSrreHdV4sGr6tf+yaDLukLjMMR59Z55hnfV96we8n//t2pE
-	N3fuqp3pWATK4u6M1MwVLCpubxLkjo26wbOQv6U8/DR3uw4hl2zZ8156j2PpT4IJTO+0rN632eh
-	07ZxdpO7D1bHIFWVuDxf4AOdcXl8IvfFUexe/0+J7Rn4nLq3VNxrQcrLOAbVlcnfzpdjfEeLu9A
-	6TmKgMsnDh7YwQ7NqJwUk/XH+aIdBVt5eYKJ/Vg6m9Y6AqTc/zCCsC+NAOavwI3dHW282o4i8yn
-	rmMvYbXxc+LymggqGxnP4tSMFufpOiOaNreXM=
-X-Received: by 2002:a05:6214:27e4:b0:8ac:a5bc:a6b4 with SMTP id 6a1803df08f44-8b3fe7daaadmr15788196d6.36.1777516078002;
-        Wed, 29 Apr 2026 19:27:58 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::a0bd])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b3ff4696b8sm5780846d6.37.2026.04.29.19.27.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2026 19:27:57 -0700 (PDT)
-Date: Wed, 29 Apr 2026 22:27:55 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Brent Page <brentfpage@gmail.com>
-Cc: Michal Pecio <michal.pecio@gmail.com>, linux-usb@vger.kernel.org
-Subject: Re: TT budgeting for EHCI; =?utf-8?Q?accom?=
- =?utf-8?Q?modate_1023-byte_full-speed_isochronous=E2=80=93in?= endpoints
-Message-ID: <0a09202c-cc15-4fc9-9102-701348050a79@rowland.harvard.edu>
-References: <B66AE752-B09C-49B3-A829-F7ABB36FB250@gmail.com>
- <32291bf6-0c9d-4fd9-9dd7-489f7e1c9f02@rowland.harvard.edu>
- <20260429113604.2204b646.michal.pecio@gmail.com>
- <a3176296-bf99-4486-9310-0b70f28c1ba7@rowland.harvard.edu>
- <20260429212408.299826a4.michal.pecio@gmail.com>
- <49a41b4c-34ac-4627-adcb-d0e989470610@rowland.harvard.edu>
- <229BBA08-3CF9-4E01-9621-1BD4A82BCD14@gmail.com>
+	s=arc-20240116; t=1777520171; c=relaxed/simple;
+	bh=EIUMW64YKkUisB9NbevCUPaNeOj2VAwAD+WcETLnVtY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=evrXuVTCe9H+gFadMWXHl5geKAkivLcnXUE+Kf2tBsIMArXb3JHOSGUgYQLx4P5/Y4QHCw3k88Bz/tUTYHLS37pDLdUp5SxIZE/h+4PyQNk6lN8YCPX9t+Pm8f9/tx+W8DNzWE/m+bTVwOLMheETUI7vjvBx+xuQXuDThR0+Eh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=bEkELu4E; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=2W51MmQB; arc=none smtp.client-ip=23.88.97.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1777520167;
+	bh=EIUMW64YKkUisB9NbevCUPaNeOj2VAwAD+WcETLnVtY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bEkELu4EAfFMVhP7kv1HqeWUB2ccMDO8x/VrwsNl9MEkn8cFpNR8zN6I6YVxEHl2l
+	 +weKFZdre2ocRFlPHPv6baUZoZ8n+s+WU4HUpl5LFpFLRzDQkr2/JHTj/mJvbk/utk
+	 HVOIihOWkkU+n7YsL1wRp/PlZQ076nH2/lUjAJNo/+5FkUfpTxCHb5kXoWXsn7/111
+	 tNzyQLH/BrMp1CkCWxA+02grTO3GSCMskRxwf2aoOgZXsCr4OWiP/AKFFoQ5xJO8/7
+	 z0DhtWq32RqBc30qfjegI9lXaZ10N6fhaAJ3vk+Dw5dkV/vTnPpgd4QoXuJsM/AfBh
+	 YFq62B/IsyQEg==
+Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
+	id ADFC3481AA; Thu, 30 Apr 2026 03:36:07 +0000 (UTC)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1777520166;
+	bh=EIUMW64YKkUisB9NbevCUPaNeOj2VAwAD+WcETLnVtY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=2W51MmQB8PE+EPxE96FH8+y5vBnVIPc80RmXbBnJ/+8B/sSATeLEddHOzjVqghI2A
+	 BTCddOrifCE1x6VhzoBSzYvBJGwn1VzeeEPUK7VGVeH9tl0e3VlYWWD/6Zzel3iXtO
+	 hZViE5JOGjMO4m2U5iZEazEYutRJzS40dm5VEY3kHZw4KrRZNlV8ORgrQsqW0v8yIg
+	 ErR2NkrDhp3eVh09nX4zb0B3mtVFy7O1ewnRUHmg4r2v4J8RAQNS6wa04Ipuyl0vvE
+	 DUsjnpzpLBw10xOee9oq1ZVCUoT1c18mBx2ngmkC5SmUpvcWhC2OR82YQMSR5vCyTf
+	 QEbsUAVlUFjcQ==
+Received: from [IPV6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb] (unknown [IPv6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb])
+	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id 820E841264;
+	Thu, 30 Apr 2026 03:36:06 +0000 (UTC)
+Message-ID: <4446ad8c-0f5f-4f5a-8166-557ce9cc91b7@birger-koblitz.de>
+Date: Thu, 30 Apr 2026 05:36:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <229BBA08-3CF9-4E01-9621-1BD4A82BCD14@gmail.com>
-X-Rspamd-Queue-Id: BD44049C553
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 3/4] r8152: Add irq mitigation for RTL8157/9
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Chih Kai Hsu <hsu.chih.kai@realtek.com>
+References: <20260428-rtl8159_net_next-v1-0-52d03927b46f@birger-koblitz.de>
+ <20260428-rtl8159_net_next-v1-3-52d03927b46f@birger-koblitz.de>
+ <06a42ba1-b714-45b1-be30-4a793752e495@lunn.ch>
+ <9feb0bc1-b817-46f8-9092-e2beff30ec9d@birger-koblitz.de>
+ <20260429200214.3e8dee67.michal.pecio@gmail.com>
+From: Birger Koblitz <mail@birger-koblitz.de>
+Content-Language: en-US
+In-Reply-To: <20260429200214.3e8dee67.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 86F0F49CFFE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36726-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-36727-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[birger-koblitz.de];
+	FREEMAIL_TO(0.00)[gmail.com];
+	DKIM_TRACE(0.00)[birger-koblitz.de:+];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
+	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,birger-koblitz.de:dkim,birger-koblitz.de:mid]
 
-On Wed, Apr 29, 2026 at 12:52:09PM -0700, Brent Page wrote:
-> > BTW, does ehci-hcd support scheduling CSPLITs to Y0 of the next frame?
-> > It's an edge case which likely won't occur with one 1023 byte endpoint,
-> > but it may occur with more periodic endpoints and unlucky bit stuffing
-> > or with periodic BW limit carefully increased for testing purposes.
+Thanks Michal, for your explanations!
+On 29/04/2026 8:02 pm, Michal Pecio wrote:
+>>> What does interrupt mitigation do?
+>>>
+>>> Is this a different name for interrupt coalescence, where the MAC
+>>> delays interrupts for a period of time so more packets are in the
+>>> receive ring when it does interrupt, so reducing the number of
+>>> interrupts, and bigger bursts of packets are processed at once?
+>>>    
+>>
+>> I do not understand what the mechanism behind this is, there is no
+>> more documentation in the original driver. I experimented with this
+>> for some time and the effect that I see is that it prevents
+>> interrupts after shutdown.
 > 
-> Yes, I am also worried about edge cases that could potentially crop up
-> as a result of my proposed patch.  With the patch, for one 1023-byte
-> isochronous-in endpoint, the CSPLIT mask is 11111100 and the SSPLIT mask
-> is 00000001.  I gleaned these from the debug log "ep 81: reserve iso @
-> 0+8 (0.0+1) [1/21 us] mask fc01".  By all indications, the right-most
-> bit is earliest in time in these masks.  Also, I'm nearly certain that
-> these are in H-frame terms, as opposed to B-frame terms (illustrated in
-> Fig 4-21 of the EHCI-1 spec).
+> What do you mean by "after shutdown", driver unbind? You shouldn't be
+> seeing URB completions then if the disconnect() method unlinks them.
+> And if it doesn't, completions may be using driver data after free.
+> 
+> Or maybe you have pending URBs while calling set_configuration() or
+> set_interface(), which is dodgy too but at least not asking for panic.
+> 
+> Other cause of ESHUTDOWN might be serious host controller failure, but
+> you would likely get other log noise with that, at least with xhci.
+> 
+> What shows up if you repro with this enabled?
+> echo 'module usbcore +p' >/proc/dynamic_debug/control
+> 
 
-Yes for both: little-endian bit order and H-frame terms.
+With shutdown, I meant shutting down the driver: the error happens when 
+unloading the driver using rmmod, e.g. when testing different driver 
+versions. What I see when turning on debugging is this:
+[373042.499758] r8152 2-1:1.0 enx88c9b3b53125: carrier on
+[373104.440114] usbcore: deregistering interface driver r8152
+[373104.440141] xhci_hcd 0000:0c:00.0: shutdown urb 000000005501f8cc 
+ep1in-bulk
+[373104.440146] xhci_hcd 0000:0c:00.0: shutdown urb 0000000066ae4a92 
+ep1in-bulk
+[373104.440148] xhci_hcd 0000:0c:00.0: shutdown urb 00000000e9728025 
+ep1in-bulk
+[373104.440151] xhci_hcd 0000:0c:00.0: shutdown urb 00000000fa874ca0 
+ep1in-bulk
+[373104.440153] xhci_hcd 0000:0c:00.0: shutdown urb 000000006006ed5d 
+ep1in-bulk
+[373104.440156] xhci_hcd 0000:0c:00.0: shutdown urb 00000000a5bee1e7 
+ep1in-bulk
+[373104.440158] xhci_hcd 0000:0c:00.0: shutdown urb 00000000bc3a3ab0 
+ep1in-bulk
+[373104.440160] xhci_hcd 0000:0c:00.0: shutdown urb 0000000080a63692 
+ep1in-bulk
+[373104.440163] xhci_hcd 0000:0c:00.0: shutdown urb 0000000025af4e6e 
+ep1in-bulk
+[373104.440165] xhci_hcd 0000:0c:00.0: shutdown urb 0000000056d7e76e 
+ep1in-bulk
+[373104.440472] xhci_hcd 0000:0c:00.0: shutdown urb 00000000d8814536 
+ep3in-intr
+[373104.440790] r8152 2-1:1.0 enx88c9b3b53125: Stop submitting intr, 
+status -108
+[373104.479779] r8152 2-1:1.0: rtl8153_unload called
+[373104.534682] usbcore: deregistering device driver r8152-cfgselector
+[373104.534704] r8152-cfgselector 2-1: unregistering interface 2-1:1.0
+[373104.534826] r8152-cfgselector 2-1: usb_disable_device nuking non-ep0 
+URBs
 
->  This CSPLIT mask is consistent with the
-> first sentence of 11.18.4.3.c in USB-2, "For isochronous IN full-speed
-> transactions, for each microframe in which the full-speed transaction is
-> budgeted, a complete-split must be scheduled for each following
-> microframe. "  Ceil(1023/188)=6, so the transaction is budgeted to run
-> in uframes 1-6 (0-indexed H_frame terms), and csplits are appropriately
-> scheduled in uframes 2-7.  However, according to paragraph 3 of
-> 11.18.4.3.c, an additional csplit should be scheduled in Y0 of the next
-> frame - I'm guessing this is the sort of thing that would require an
-> FSTN?
+In the past I have also seen the following, but am not able to reproduce it:
+[371283.534041] r8152-cfgselector 2-1: USB disconnect, device number 25
+[371283.534470] r8152 2-1:1.0 enx00e04c680023: Stop submitting intr, 
+status -108
 
-No; FSTNs are for interrupt transfers.  But it would require extra siTD 
-nodes with backpointers, complicating the allocation and deallocation 
-algorithms.  That wouldn't be so hard to add, but I have never felt the 
-urge to do it.
+Also, I only see the issue on slow 5GBit USB-C connections, sometimes 
+with the RTL8157, basically every time with the RTL8159, and so far 
+never on a 20GBit USB-C connection, so the mitigation is probably some 
+kind of interrupt coalescing.
 
->  And maybe not following this rule could lead to problems if there
-> are other transactions in the pipeline?
+Birger
 
-Or if a lot of bit-stuffing is needed.
-
-> There are a few other things that I'm trying to figure out.  The "case 2b"
-> bullet point of 4.12.13.1 of the EHCI-1 spec says that "This case can
-> only occur for a very large isochronous IN... Software must enforce this
-> rule by scheduling the large transaction first. Large is defined to be
-> anything larger than 579 byte maximum packet size."  Is this being
-> enforced at the moment in ehci-sched.c?
-
-I don't think so.  Bandwidth is allocated to endpoints as they are 
-added, and the driver does not go back and try to rearrange the schedule 
-if something doesn't fit right.  It most certainly does not try to 
-change the allocation for endpoints that are currently in use.
-
->  I could see it possibly
-> becoming relevant if ehci-sched.c becomes more permissive towards large
-> transactions.  Tangentially, why are there no csplits scheduled for the
-> 458-byte transaction enumerated in
-> https://bugzilla.kernel.org/show_bug.cgi?id=218544  ?  Tracing through
-> the ehci-sched.c code, I cannot figure out how you don't get at least
-> 3=ceil(458 * 7/6 / 188) 1s in the csplit mask.
-
-Was that an isochronous-OUT transaction?  Those things don't use CSPLITs 
-at all.
-
-Alan Stern
 
