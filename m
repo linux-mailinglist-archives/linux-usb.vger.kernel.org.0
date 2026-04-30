@@ -1,260 +1,230 @@
-Return-Path: <linux-usb+bounces-36728-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36729-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qD4qNQDq8mltvgEAu9opvQ
-	(envelope-from <linux-usb+bounces-36728-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 07:34:56 +0200
+	id iH05OW3s8mltvgEAu9opvQ
+	(envelope-from <linux-usb+bounces-36729-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 07:45:17 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35DC249D9EA
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 07:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 91E4349DABF
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 07:45:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9A363301A38F
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 05:34:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 08DAF301FFA4
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 05:44:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA58C363082;
-	Thu, 30 Apr 2026 05:34:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB67C370D71;
+	Thu, 30 Apr 2026 05:44:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AejIVYUj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jCe3yhRQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79EB5260565
-	for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 05:34:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C2A33031C
+	for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 05:44:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777527291; cv=none; b=cp7k1fvuSdFuJmK2kZilE0vs8y2KSF197LPIY4xforOzp4O/XnOw2IO3UcSSfBsMrm/2zdR24Be3bpDNMfKceZO6PxlFeya2YYrNwE0BqcJWxDLV3F6OjyOwlFOOIDy6Zd1r1ugC0vNYsXO5nuTYS5u1jO4F0ZJA7w3EUbJceKQ=
+	t=1777527889; cv=none; b=f8nbpJKN7sGAbe3+3QMLuflvfjtU7vilGppjRu391m6pzHZstWdZcl2S6/GcCpUoXIkv8kawFGwMoDxGwyXO1/3TJ63jIYLWmIdSPaTjdstw0cIgTIEhdip7xyngkEkAIshMeb61aKmP07/Mlt/HjTaJMG3EwYpfdESmvyVULIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777527291; c=relaxed/simple;
-	bh=GKqaCZ9mJPyPuAJnsh25HKcWTQzmKHugMIf0d4mP48c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=di5d+ZN0C1G7YI5Gb/Sb06yXGL0+ctuqAqMDWFi+hyMFIcQ7M7hLgJGoQLuSPVt0Yn0ORke1zxj4+q+rgF4IIhaceoIEklOuZOisfrkLdoZGHNwddyRgTWCapy1JIqGs3C4ZKpfumVJSKYdfecrjRrk4K6/9t57j9AZwWG8egxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AejIVYUj; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777527289; x=1809063289;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GKqaCZ9mJPyPuAJnsh25HKcWTQzmKHugMIf0d4mP48c=;
-  b=AejIVYUjI+qEJAqviKyiVVguXZuFyeq5Yxabe3T6jwY+otLV9EovJRjr
-   AsxCa00w7fXHaNJ71mq3SiXo0q3ZTABubyQVJtBrnXpEANu/WEvaqxVkf
-   NBibWcHNh66j1tFOhS27WB05vBAdnaIln69nJ+SEbWpkZdKbPL6q2rKsV
-   dHLFi1PtO1e7S7JhtTxaxY0VxF2Gdxu2eDyUiUq5ZlApdAmwzlgXcvv5f
-   96dw3YxpehnTvXNOV0kQjiULNojDnVoOTRsHO/zkUATIMd8lAgA93z9GW
-   ljBaMllC+Gy3K1Gp7fzIX6zK3Rzls+LemJaYfffUAm1BNQhSY4vxQR1bx
-   A==;
-X-CSE-ConnectionGUID: 39P0fTAeSnyXD1TfSTvKyA==
-X-CSE-MsgGUID: /4mZdUWESMCPCaWRF6qnJQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="78493062"
-X-IronPort-AV: E=Sophos;i="6.23,207,1770624000"; 
-   d="scan'208";a="78493062"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2026 22:34:49 -0700
-X-CSE-ConnectionGUID: 1y+mo0MNQBCafKxMU2D69g==
-X-CSE-MsgGUID: wSi5s/68TeWFKnt8MBlLrw==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 29 Apr 2026 22:34:47 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wIK2u-00000000C08-1e1h;
-	Thu, 30 Apr 2026 05:34:44 +0000
-Date: Thu, 30 Apr 2026 13:33:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oliver Neukum <oneukum@suse.com>,
-	syzbot+2afd7e71155c7e241560@syzkaller.appspotmail.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	tiwai@suse.com, Oliver Neukum <oneukum@suse.com>
-Subject: Re: [PATCH] sound: usb: caiaq: fix reference leak in probe error
-Message-ID: <202604301315.U4YJaZc3-lkp@intel.com>
-References: <20260429104527.19927-1-oneukum@suse.com>
+	s=arc-20240116; t=1777527889; c=relaxed/simple;
+	bh=+zOn1HuPz/QRR2c3ttXpLREXaufzwdHeGeeYYsO4oyo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RGk/d1TsPrcMDOlf7apYFbgvpRnhQhp9H/Gs8GER8/8/TmztQ9UeGkwr46o8+hdJabCjYe5R4qv82A4QJ+8IuK4YxqxgIjv2b4lKVw6QtuEECC/xJ3mW+zf3CxRyfDd2pZD2ue6CXRzcNg6YvMY55J43aCmYV2dc4nWdZXLF6i8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jCe3yhRQ; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-38ea6a5a0b3so4607511fa.3
+        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 22:44:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777527886; x=1778132686; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0GzixCwTpQHWHlB65KJEzMOkrrN2puCUVkU1mM/Uivk=;
+        b=jCe3yhRQ9CsLj+T3i0B9yvXKExLa+xO/Y/2rXEgWBKHf3BFuU124JrVO1R7fxe8MiM
+         aOlOYGWQAdRgyKP17rh5ZkY/e47NbePCvv4gUX9uR3bn6uqaWtCxzxJuqRYVxw8tYqk5
+         nc5YYgHgpfVgWrnAU6AzrHWw1zp3iSW6HBsNe/y3uDDZ+IfGkkuQb0N8YZBwNFTOuEy8
+         xO1hRttodc2V2PlLibOOcM2U+0+sXhyieLF4z/fAREu/W0BjmsecRbHq0sTm0T2XhQ6F
+         7YfRHamZygfATL0//VBYVaj9Mp88sAV7vTbXlplmZXcGxBrhXvmFKsmnibQ7wos/VnKZ
+         L7Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777527886; x=1778132686;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0GzixCwTpQHWHlB65KJEzMOkrrN2puCUVkU1mM/Uivk=;
+        b=m7k1COiqwWSVtUvbLUZbHmKeXMfh/gXA9kI8zz+xmOGHELTtBbTFs//wYm3+97sDC4
+         WTzQN0M6Ls5IYMhWGMa2up9ws20YKTEhUF8XPSdtPZTkdAzmPjfDEwAZfG9D8atu3mDg
+         cAcV12rRFXuefxRxM7NTU8wv4E+z2NGNLx40tV4BwzXyn3nIiCrfWmwb+NLxRmuTzMGj
+         E3AKFB3Q0x2+Ty/9kOoaa511cykDReWSKPElrhTa3McCqN4mBRbq/h5d2DB87GwKOVBN
+         M8vUUq47I5HfuowDYKFHeBBx226symfqqACZFtConm2AJeBF+XpVxkDhb2sbks/lw66j
+         clNw==
+X-Forwarded-Encrypted: i=1; AFNElJ/cRJMVIG2IxNXK+Tz9IWw/q+eFviqzDX95F/46rPN9RugQYbJ9ozCO/cF+F7uhgaYsP8S2KaUYQSQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlauBHgvdW8ZPJVdUcJyeT1PbEfSZtQY4OmqEVrF1OiFvZwiVQ
+	cTO2jC39FXdxLvQO+G6OGqjlQBgUVrA+3oiHqOajD83eSEXFBR6dEqH2
+X-Gm-Gg: AeBDiev1kekWaoWDl/NNab1LauvdzuTAd+DI5LIU0ybGqI5DEXdo6mv6QSj9btkNd9a
+	vU7yg3IQH/LVLLs6ZVa/DWTFl9jDg7qCRfDuyn3RDamA+JKTZd2orqtGG7FNgnqoZeCVavIeO3B
+	y6JVmy5ID7CSe9XiRPGFpjqmmtQbcpitenQpVy9UVOIgIeUzN3KfbC3UPXubvPNCcBGuiK23j92
+	7frmFFz07Jw4EQbm8C9CwcxrJ6avQLsKuvwOLQuLPz2O8D+seL0eua7lTEGaCQWdmPwCcQhMDIm
+	a/FU4uQsJsO6ByxjlSWUG7MoobMNyphzAVbokVJcBwkmkQxgoqX7eFkaV5ozrcOe/eBXa7ZiD+L
+	n5Sc0Ehjp2oHQMlVhfbyyo084+STpe/zZF4g1PvDDOs5QiKUtsrpRwTYctJ7wTkblfxW+XnrAzq
+	8svetaNr4BE97Hsaq47Jw/jjxAB/zpdCL03dX8iH59big=
+X-Received: by 2002:a2e:8a87:0:b0:38a:2776:1484 with SMTP id 38308e7fff4ca-3934e30721cmr5154621fa.28.1777527885318;
+        Wed, 29 Apr 2026 22:44:45 -0700 (PDT)
+Received: from foxbook (bfh75.neoplus.adsl.tpnet.pl. [83.28.45.75])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3934f7ad0a6sm2732741fa.1.2026.04.29.22.44.44
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 29 Apr 2026 22:44:44 -0700 (PDT)
+Date: Thu, 30 Apr 2026 07:44:41 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Birger Koblitz <mail@birger-koblitz.de>
+Cc: Andrew Lunn <andrew@lunn.ch>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Chih Kai Hsu <hsu.chih.kai@realtek.com>
+Subject: Re: [PATCH net-next 3/4] r8152: Add irq mitigation for RTL8157/9
+Message-ID: <20260430074441.203192de.michal.pecio@gmail.com>
+In-Reply-To: <4446ad8c-0f5f-4f5a-8166-557ce9cc91b7@birger-koblitz.de>
+References: <20260428-rtl8159_net_next-v1-0-52d03927b46f@birger-koblitz.de>
+	<20260428-rtl8159_net_next-v1-3-52d03927b46f@birger-koblitz.de>
+	<06a42ba1-b714-45b1-be30-4a793752e495@lunn.ch>
+	<9feb0bc1-b817-46f8-9092-e2beff30ec9d@birger-koblitz.de>
+	<20260429200214.3e8dee67.michal.pecio@gmail.com>
+	<4446ad8c-0f5f-4f5a-8166-557ce9cc91b7@birger-koblitz.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260429104527.19927-1-oneukum@suse.com>
-X-Rspamd-Queue-Id: 35DC249D9EA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 91E4349DABF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36728-lists,linux-usb=lfdr.de];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36729-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,2afd7e71155c7e241560];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[01.org:url,intel.com:email,intel.com:dkim,intel.com:mid]
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-Hi Oliver,
+On Thu, 30 Apr 2026 05:36:06 +0200, Birger Koblitz wrote:
+> Thanks Michal, for your explanations!
+> On 29/04/2026 8:02 pm, Michal Pecio wrote:
+> >>> What does interrupt mitigation do?
+> >>>
+> >>> Is this a different name for interrupt coalescence, where the MAC
+> >>> delays interrupts for a period of time so more packets are in the
+> >>> receive ring when it does interrupt, so reducing the number of
+> >>> interrupts, and bigger bursts of packets are processed at once?
+> >>>      
+> >>
+> >> I do not understand what the mechanism behind this is, there is no
+> >> more documentation in the original driver. I experimented with this
+> >> for some time and the effect that I see is that it prevents
+> >> interrupts after shutdown.  
+> > 
+> > What do you mean by "after shutdown", driver unbind? You shouldn't be
+> > seeing URB completions then if the disconnect() method unlinks them.
+> > And if it doesn't, completions may be using driver data after free.
+> > 
+> > Or maybe you have pending URBs while calling set_configuration() or
+> > set_interface(), which is dodgy too but at least not asking for panic.
+> > 
+> > Other cause of ESHUTDOWN might be serious host controller failure, but
+> > you would likely get other log noise with that, at least with xhci.
+> > 
+> > What shows up if you repro with this enabled?
+> > echo 'module usbcore +p' >/proc/dynamic_debug/control
+> >   
+> 
+> With shutdown, I meant shutting down the driver: the error happens when 
+> unloading the driver using rmmod, e.g. when testing different driver 
+> versions.
 
-kernel test robot noticed the following build errors:
+Sorry, I remembered wrong. That UAF problem only applies to control
+URBs on endpoint 0. All other URBs are removed by USB core *before*
+rtl8152_disconnect() is called. So it doesn't need to unlink them
+and it cannot predict when the URBs will be nuked by core.
 
-[auto build test ERROR on tiwai-sound/for-next]
-[also build test ERROR on tiwai-sound/for-linus usb/usb-testing usb/usb-next usb/usb-linus westeri-thunderbolt/next peter-chen-usb/for-usb-next linus/master v7.1-rc1 next-20260429]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> What I see when turning on debugging is this:
+> [373042.499758] r8152 2-1:1.0 enx88c9b3b53125: carrier on
+> [373104.440114] usbcore: deregistering interface driver r8152
+> [373104.440141] xhci_hcd 0000:0c:00.0: shutdown urb 000000005501f8cc 
+> ep1in-bulk
+> [373104.440146] xhci_hcd 0000:0c:00.0: shutdown urb 0000000066ae4a92 
+> ep1in-bulk
+> [373104.440148] xhci_hcd 0000:0c:00.0: shutdown urb 00000000e9728025 
+> ep1in-bulk
+> [373104.440151] xhci_hcd 0000:0c:00.0: shutdown urb 00000000fa874ca0 
+> ep1in-bulk
+> [373104.440153] xhci_hcd 0000:0c:00.0: shutdown urb 000000006006ed5d 
+> ep1in-bulk
+> [373104.440156] xhci_hcd 0000:0c:00.0: shutdown urb 00000000a5bee1e7 
+> ep1in-bulk
+> [373104.440158] xhci_hcd 0000:0c:00.0: shutdown urb 00000000bc3a3ab0 
+> ep1in-bulk
+> [373104.440160] xhci_hcd 0000:0c:00.0: shutdown urb 0000000080a63692 
+> ep1in-bulk
+> [373104.440163] xhci_hcd 0000:0c:00.0: shutdown urb 0000000025af4e6e 
+> ep1in-bulk
+> [373104.440165] xhci_hcd 0000:0c:00.0: shutdown urb 0000000056d7e76e 
+> ep1in-bulk
+> [373104.440472] xhci_hcd 0000:0c:00.0: shutdown urb 00000000d8814536 
+> ep3in-intr
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Neukum/sound-usb-caiaq-fix-reference-leak-in-probe-error/20260429-205539
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-patch link:    https://lore.kernel.org/r/20260429104527.19927-1-oneukum%40suse.com
-patch subject: [PATCH] sound: usb: caiaq: fix reference leak in probe error
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20260430/202604301315.U4YJaZc3-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 15.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604301315.U4YJaZc3-lkp@intel.com/reproduce)
+And that's what happens in the log above, for the reason below:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604301315.U4YJaZc3-lkp@intel.com/
+[  +0,000015]  usb_hcd_flush_endpoint.cold+0xa/0x23 [usbcore]
+[  +0,000050]  usb_disable_endpoint+0x52/0xa0 [usbcore]
+[  +0,000048]  usb_disable_interface.cold+0x3f/0x4e [usbcore]
+[  +0,000038]  usb_unbind_interface+0x138/0x2f0 [usbcore]
+[  +0,000048]  device_release_driver_internal+0x194/0x200
 
-All error/warnings (new ones prefixed by >>):
+> [373104.440790] r8152 2-1:1.0 enx88c9b3b53125: Stop submitting intr, 
+> status -108
 
-   sound/usb/caiaq/device.c: In function 'init_card':
->> sound/usb/caiaq/device.c:534:2: warning: label 'err_dev_put' defined but not used [-Wunused-label]
-     534 |  err_dev_put:
-         |  ^~~~~~~~~~~
->> sound/usb/caiaq/device.c:475:17: error: label 'dev_err_put' used but not defined
-     475 |                 goto dev_err_put;
-         |                 ^~~~
+So this message is harmless. I'm also seeing it with RTL8153 if the
+interface is up at the time of rmmod.
 
+> In the past I have also seen the following, but am not able to reproduce it:
+> [371283.534041] r8152-cfgselector 2-1: USB disconnect, device number 25
+> [371283.534470] r8152 2-1:1.0 enx00e04c680023: Stop submitting intr, 
+> status -108
 
-vim +/dev_err_put +475 sound/usb/caiaq/device.c
+Apparently the disconnect message is logged before calling
+rtl8152_disconnect(), so that's probably harmless too.
 
-   434	
-   435	static int init_card(struct snd_usb_caiaqdev *cdev)
-   436	{
-   437		char *c, usbpath[32];
-   438		struct usb_device *usb_dev = cdev->chip.dev;
-   439		struct snd_card *card = cdev->chip.card;
-   440		struct device *dev = caiaqdev_to_dev(cdev);
-   441		int err, len;
-   442	
-   443		if (usb_set_interface(usb_dev, 0, 1) != 0) {
-   444			dev_err(dev, "can't set alt interface.\n");
-   445			err = -EIO;
-   446			goto dev_err_put;
-   447		}
-   448	
-   449		usb_init_urb(&cdev->ep1_in_urb);
-   450		usb_init_urb(&cdev->midi_out_urb);
-   451	
-   452		usb_fill_bulk_urb(&cdev->ep1_in_urb, usb_dev,
-   453				  usb_rcvbulkpipe(usb_dev, 0x1),
-   454				  cdev->ep1_in_buf, EP1_BUFSIZE,
-   455				  usb_ep1_command_reply_dispatch, cdev);
-   456	
-   457		usb_fill_bulk_urb(&cdev->midi_out_urb, usb_dev,
-   458				  usb_sndbulkpipe(usb_dev, 0x1),
-   459				  cdev->midi_out_buf, EP1_BUFSIZE,
-   460				  snd_usb_caiaq_midi_output_done, cdev);
-   461	
-   462		/* sanity checks of EPs before actually submitting */
-   463		if (usb_urb_ep_type_check(&cdev->ep1_in_urb) ||
-   464		    usb_urb_ep_type_check(&cdev->midi_out_urb)) {
-   465			dev_err(dev, "invalid EPs\n");
-   466			err = -EINVAL;
-   467			goto dev_err_put;
-   468		}
-   469	
-   470		init_waitqueue_head(&cdev->ep1_wait_queue);
-   471		init_waitqueue_head(&cdev->prepare_wait_queue);
-   472	
-   473		if (usb_submit_urb(&cdev->ep1_in_urb, GFP_KERNEL) != 0) {
-   474			err = -EIO;
- > 475			goto dev_err_put;
-   476		}
-   477	
-   478	
-   479		err = snd_usb_caiaq_send_command(cdev, EP1_CMD_GET_DEVICE_INFO, NULL, 0);
-   480		if (err)
-   481			goto err_kill_urb;
-   482	
-   483		if (!wait_event_timeout(cdev->ep1_wait_queue, cdev->spec_received, HZ)) {
-   484			err = -ENODEV;
-   485			goto err_kill_urb;
-   486		}
-   487	
-   488		usb_string(usb_dev, usb_dev->descriptor.iManufacturer,
-   489			   cdev->vendor_name, CAIAQ_USB_STR_LEN);
-   490	
-   491		usb_string(usb_dev, usb_dev->descriptor.iProduct,
-   492			   cdev->product_name, CAIAQ_USB_STR_LEN);
-   493	
-   494		strscpy(card->driver, MODNAME, sizeof(card->driver));
-   495		strscpy(card->shortname, cdev->product_name, sizeof(card->shortname));
-   496		strscpy(card->mixername, cdev->product_name, sizeof(card->mixername));
-   497	
-   498		/* if the id was not passed as module option, fill it with a shortened
-   499		 * version of the product string which does not contain any
-   500		 * whitespaces */
-   501	
-   502		if (*card->id == '\0') {
-   503			char id[sizeof(card->id)];
-   504	
-   505			memset(id, 0, sizeof(id));
-   506	
-   507			for (c = card->shortname, len = 0;
-   508				*c && len < sizeof(card->id) - 1; c++)
-   509				if (*c != ' ')
-   510					id[len++] = *c;
-   511	
-   512			snd_card_set_id(card, id);
-   513		}
-   514	
-   515		usb_make_path(usb_dev, usbpath, sizeof(usbpath));
-   516		scnprintf(card->longname, sizeof(card->longname), "%s %s (%s)",
-   517			       cdev->vendor_name, cdev->product_name, usbpath);
-   518	
-   519		card->private_free = card_free;
-   520		err = setup_card(cdev);
-   521		if (err < 0)
-   522			return err;
-   523	
-   524		return 0;
-   525	
-   526	 err_kill_urb:
-   527		usb_kill_urb(&cdev->ep1_in_urb);
-   528	
-   529		/*
-   530	 	 * private_free has not been set.
-   531		 * Undoing the usb_get_dev() from
-   532		 * create_card()
-   533		 */
- > 534	 err_dev_put:
-   535		usb_put_dev(usb_dev);
-   536		return err;
-   537	}
-   538	
+I'm not sure how tweaking some HW registers prevents it. Maybe it
+causes the HW to complete the URB (but why?) at the right moment so
+that it isn't pending during usb_disable_endpoint(), IDK, weird.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Michal
 
