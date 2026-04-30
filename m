@@ -1,230 +1,159 @@
-Return-Path: <linux-usb+bounces-36729-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36730-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iH05OW3s8mltvgEAu9opvQ
-	(envelope-from <linux-usb+bounces-36729-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 07:45:17 +0200
+	id oI+7ADT58mnxwAEAu9opvQ
+	(envelope-from <linux-usb+bounces-36730-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 08:39:48 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91E4349DABF
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 07:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E63D49E2A3
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 08:39:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 08DAF301FFA4
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 05:44:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2D7B830262E0
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 06:39:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB67C370D71;
-	Thu, 30 Apr 2026 05:44:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AA49371071;
+	Thu, 30 Apr 2026 06:39:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jCe3yhRQ"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="ZLyGElr2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C2A33031C
-	for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 05:44:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA159443
+	for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 06:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777527889; cv=none; b=f8nbpJKN7sGAbe3+3QMLuflvfjtU7vilGppjRu391m6pzHZstWdZcl2S6/GcCpUoXIkv8kawFGwMoDxGwyXO1/3TJ63jIYLWmIdSPaTjdstw0cIgTIEhdip7xyngkEkAIshMeb61aKmP07/Mlt/HjTaJMG3EwYpfdESmvyVULIA=
+	t=1777531183; cv=none; b=l67B9evsF/X/fkjBVCTi62ylCu5ZiqKXqGOpCPSK8AJ7Csn3cl7YRR3ecZ5/TMnDZk5YfmUAuTVUqJWP25cN6DUl5L1ebdERBeCSGBd23Df28+5teLgOjkOObCVL1tdODTtDOyRNZNlwsOFgnnqkI8Bn1iKJJnIouhI5hOXI/E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777527889; c=relaxed/simple;
-	bh=+zOn1HuPz/QRR2c3ttXpLREXaufzwdHeGeeYYsO4oyo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RGk/d1TsPrcMDOlf7apYFbgvpRnhQhp9H/Gs8GER8/8/TmztQ9UeGkwr46o8+hdJabCjYe5R4qv82A4QJ+8IuK4YxqxgIjv2b4lKVw6QtuEECC/xJ3mW+zf3CxRyfDd2pZD2ue6CXRzcNg6YvMY55J43aCmYV2dc4nWdZXLF6i8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jCe3yhRQ; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-38ea6a5a0b3so4607511fa.3
-        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 22:44:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777527886; x=1778132686; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0GzixCwTpQHWHlB65KJEzMOkrrN2puCUVkU1mM/Uivk=;
-        b=jCe3yhRQ9CsLj+T3i0B9yvXKExLa+xO/Y/2rXEgWBKHf3BFuU124JrVO1R7fxe8MiM
-         aOlOYGWQAdRgyKP17rh5ZkY/e47NbePCvv4gUX9uR3bn6uqaWtCxzxJuqRYVxw8tYqk5
-         nc5YYgHgpfVgWrnAU6AzrHWw1zp3iSW6HBsNe/y3uDDZ+IfGkkuQb0N8YZBwNFTOuEy8
-         xO1hRttodc2V2PlLibOOcM2U+0+sXhyieLF4z/fAREu/W0BjmsecRbHq0sTm0T2XhQ6F
-         7YfRHamZygfATL0//VBYVaj9Mp88sAV7vTbXlplmZXcGxBrhXvmFKsmnibQ7wos/VnKZ
-         L7Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777527886; x=1778132686;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0GzixCwTpQHWHlB65KJEzMOkrrN2puCUVkU1mM/Uivk=;
-        b=m7k1COiqwWSVtUvbLUZbHmKeXMfh/gXA9kI8zz+xmOGHELTtBbTFs//wYm3+97sDC4
-         WTzQN0M6Ls5IYMhWGMa2up9ws20YKTEhUF8XPSdtPZTkdAzmPjfDEwAZfG9D8atu3mDg
-         cAcV12rRFXuefxRxM7NTU8wv4E+z2NGNLx40tV4BwzXyn3nIiCrfWmwb+NLxRmuTzMGj
-         E3AKFB3Q0x2+Ty/9kOoaa511cykDReWSKPElrhTa3McCqN4mBRbq/h5d2DB87GwKOVBN
-         M8vUUq47I5HfuowDYKFHeBBx226symfqqACZFtConm2AJeBF+XpVxkDhb2sbks/lw66j
-         clNw==
-X-Forwarded-Encrypted: i=1; AFNElJ/cRJMVIG2IxNXK+Tz9IWw/q+eFviqzDX95F/46rPN9RugQYbJ9ozCO/cF+F7uhgaYsP8S2KaUYQSQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlauBHgvdW8ZPJVdUcJyeT1PbEfSZtQY4OmqEVrF1OiFvZwiVQ
-	cTO2jC39FXdxLvQO+G6OGqjlQBgUVrA+3oiHqOajD83eSEXFBR6dEqH2
-X-Gm-Gg: AeBDiev1kekWaoWDl/NNab1LauvdzuTAd+DI5LIU0ybGqI5DEXdo6mv6QSj9btkNd9a
-	vU7yg3IQH/LVLLs6ZVa/DWTFl9jDg7qCRfDuyn3RDamA+JKTZd2orqtGG7FNgnqoZeCVavIeO3B
-	y6JVmy5ID7CSe9XiRPGFpjqmmtQbcpitenQpVy9UVOIgIeUzN3KfbC3UPXubvPNCcBGuiK23j92
-	7frmFFz07Jw4EQbm8C9CwcxrJ6avQLsKuvwOLQuLPz2O8D+seL0eua7lTEGaCQWdmPwCcQhMDIm
-	a/FU4uQsJsO6ByxjlSWUG7MoobMNyphzAVbokVJcBwkmkQxgoqX7eFkaV5ozrcOe/eBXa7ZiD+L
-	n5Sc0Ehjp2oHQMlVhfbyyo084+STpe/zZF4g1PvDDOs5QiKUtsrpRwTYctJ7wTkblfxW+XnrAzq
-	8svetaNr4BE97Hsaq47Jw/jjxAB/zpdCL03dX8iH59big=
-X-Received: by 2002:a2e:8a87:0:b0:38a:2776:1484 with SMTP id 38308e7fff4ca-3934e30721cmr5154621fa.28.1777527885318;
-        Wed, 29 Apr 2026 22:44:45 -0700 (PDT)
-Received: from foxbook (bfh75.neoplus.adsl.tpnet.pl. [83.28.45.75])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3934f7ad0a6sm2732741fa.1.2026.04.29.22.44.44
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 29 Apr 2026 22:44:44 -0700 (PDT)
-Date: Thu, 30 Apr 2026 07:44:41 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Birger Koblitz <mail@birger-koblitz.de>
-Cc: Andrew Lunn <andrew@lunn.ch>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, Chih Kai Hsu <hsu.chih.kai@realtek.com>
-Subject: Re: [PATCH net-next 3/4] r8152: Add irq mitigation for RTL8157/9
-Message-ID: <20260430074441.203192de.michal.pecio@gmail.com>
-In-Reply-To: <4446ad8c-0f5f-4f5a-8166-557ce9cc91b7@birger-koblitz.de>
-References: <20260428-rtl8159_net_next-v1-0-52d03927b46f@birger-koblitz.de>
-	<20260428-rtl8159_net_next-v1-3-52d03927b46f@birger-koblitz.de>
-	<06a42ba1-b714-45b1-be30-4a793752e495@lunn.ch>
-	<9feb0bc1-b817-46f8-9092-e2beff30ec9d@birger-koblitz.de>
-	<20260429200214.3e8dee67.michal.pecio@gmail.com>
-	<4446ad8c-0f5f-4f5a-8166-557ce9cc91b7@birger-koblitz.de>
+	s=arc-20240116; t=1777531183; c=relaxed/simple;
+	bh=urkfHleBm79trkWUNAakAaq1BNlcM82x8m6Nf9fm+Q4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZaFjCp8CsItqbyN7Ms72TrbmXixenCILyihcowcYWbEtwtzRK+QUGukGKbNTvKSUEb9/SSWpTg5u4SBBnBvSa9ixR/WxWtgfB6mTlgA1zlqD5eNFpDCZrI8UFAQQHRARnYX4weIUbMy9cFwQmkBp3RWeZVoFVkofXGnh1sYI7Qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=ZLyGElr2; arc=none smtp.client-ip=54.92.39.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1777531148;
+	bh=dYYpbWQwS5G2nHPMlQGhRlNT9RZY0V2w3GHnMBlC2KM=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=ZLyGElr2GLnaxvUtX3UAqSf8kvA3bnzwmVrmY2uF85rqOZZlxjMIxhVBeJiUggEs9
+	 otr+tJYZCJOM116I6fRGhKaiCJ1qYGCPDHmkrU4hGf4vh4kNkYJFxFEEeABPOprLZ1
+	 vKXDpC53g30sTlT34XK/DUvgLzHQS48yMw2WlROc=
+X-QQ-mid: zesmtpip2t1777531133t49c0b445
+X-QQ-Originating-IP: DKd2frR7Eja5Tthb/wpyvkE/Xcm/L/DAVFMmiiHwY2M=
+Received: from PEN202512010004 ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 30 Apr 2026 14:38:51 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 8590673320222264445
+EX-QQ-RecipientCnt: 6
+From: Xu Rao <raoxu@uniontech.com>
+To: mathias.nyman@linux.intel.com
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	michal.pecio@gmail.com,
+	niklas.neronin@linux.intel.com,
+	raoxu@uniontech.com
+Subject: [PATCH 0/4] usb: xhci: prepare MSI path for secondary interrupters
+Date: Thu, 30 Apr 2026 14:38:49 +0800
+Message-ID: <30A1A28C68CF9D88+20260430063849.1721157-1-raoxu@uniontech.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 91E4349DABF
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: NDjjYYC84KgIelTLT7Mao/YPJuFMpydkMJPUjnQDR8/htp3LI/HT/zBy
+	vIuS/w/LE+nDYgpi63aybZ7h6xnnnonr2kwABXgWRCY2hqtzOofNif6h2ahLUfjQ8J+sbXe
+	LuGzuafsOV3royEuWEKftFB+i8/IYp+BBycyiKLtrwYOgZr+qnQnuO8EOqsCxf+BDFemB+F
+	WW76VhdnrgXxMArMUg2j1tTazLICHKUZKyTfkqdxJcUK220Q2IwkYjUwcwAMRpfIQ0VHEQI
+	hsWljshMNLGkoNEk9rpt6RWfpeANWswC15VAFse5C0pr7DvzwDq42/vycZJQmAjzxbRQAyD
+	gJjYmUiqrL73DOwGGdEJ0iqhzNdCrJbChOZSygLq7MASD5oeijnEfnD0saillZbpIJP/+W+
+	Q/Xbk8VbH4B2ZeuiodelIarV2L50LiMlAqZyXmK0NCWI6pFvOCWcVr6CdNFtar48T3NQj5/
+	4P2GR8UZKMVJfH073jz2t6n1Ve8vLFy1Ya4CGky532u7WgICPoFxVvvHv9xKvbc/wvsoLCe
+	u8eTNdbzCfPBczdkxU7QKtfO5OabW0363vyTBI2yzts4njK04mkK7YnRC2UZxzs+/d1vtVR
+	QPOtq+PN6uc+9qXOFLDjGGHCq//X+TwxMgp4UtflrMzSTIfjLOdzejlbLCKyOw1y7Kyj1Nb
+	QdVSESk/ij61jEEdtLiy6mgjR4a9sGC868y/EEJIIfOEWrKVD57Dg+LQUwA5b960I9lwrw6
+	cbgEQXaG4sgi4gQdoTNv9cMaRqDYmrLzrZNoxI19Kb1HRVunBvme+wHX2mOYKwBG2xzz/j6
+	gzcfwYLAIoCChxB87hI0lTFVqiWzNkshr7bCI9EipyEgi6Tp4m9sQYu21YCXriBZP6Z585T
+	tobWuL80OwWTl5S7jkqVNW37CgVmeiuKOWqPCoFuhpwrHJUmKhpTM0dd9OVFVgUOXWvEaB9
+	GF1jKGQgNyUfviknMpMCzWVCHADCiU2+k4pGKAa6ZDidDTlQtth+ThUMt37UWhrlZNm5ZTj
+	nOSxW7x4yayqW6EuFb/TWOyNtV7xT9j77iCmShhY2TQrlzQA3V4EP+YgHgbTcReuw9KT+Cc
+	Q==
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+X-QQ-RECHKSPAM: 0
+X-Rspamd-Queue-Id: 5E63D49E2A3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com,linux.intel.com,uniontech.com];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36730-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36729-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[uniontech.com:+];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-0.995];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-On Thu, 30 Apr 2026 05:36:06 +0200, Birger Koblitz wrote:
-> Thanks Michal, for your explanations!
-> On 29/04/2026 8:02 pm, Michal Pecio wrote:
-> >>> What does interrupt mitigation do?
-> >>>
-> >>> Is this a different name for interrupt coalescence, where the MAC
-> >>> delays interrupts for a period of time so more packets are in the
-> >>> receive ring when it does interrupt, so reducing the number of
-> >>> interrupts, and bigger bursts of packets are processed at once?
-> >>>      
-> >>
-> >> I do not understand what the mechanism behind this is, there is no
-> >> more documentation in the original driver. I experimented with this
-> >> for some time and the effect that I see is that it prevents
-> >> interrupts after shutdown.  
-> > 
-> > What do you mean by "after shutdown", driver unbind? You shouldn't be
-> > seeing URB completions then if the disconnect() method unlinks them.
-> > And if it doesn't, completions may be using driver data after free.
-> > 
-> > Or maybe you have pending URBs while calling set_configuration() or
-> > set_interface(), which is dodgy too but at least not asking for panic.
-> > 
-> > Other cause of ESHUTDOWN might be serious host controller failure, but
-> > you would likely get other log noise with that, at least with xhci.
-> > 
-> > What shows up if you repro with this enabled?
-> > echo 'module usbcore +p' >/proc/dynamic_debug/control
-> >   
-> 
-> With shutdown, I meant shutting down the driver: the error happens when 
-> unloading the driver using rmmod, e.g. when testing different driver 
-> versions.
+Hi,
 
-Sorry, I remembered wrong. That UAF problem only applies to control
-URBs on endpoint 0. All other URBs are removed by USB core *before*
-rtl8152_disconnect() is called. So it doesn't need to unlink them
-and it cannot predict when the URBs will be nuked by core.
+This series prepares the xHCI MSI path for secondary interrupters.
 
-> What I see when turning on debugging is this:
-> [373042.499758] r8152 2-1:1.0 enx88c9b3b53125: carrier on
-> [373104.440114] usbcore: deregistering interface driver r8152
-> [373104.440141] xhci_hcd 0000:0c:00.0: shutdown urb 000000005501f8cc 
-> ep1in-bulk
-> [373104.440146] xhci_hcd 0000:0c:00.0: shutdown urb 0000000066ae4a92 
-> ep1in-bulk
-> [373104.440148] xhci_hcd 0000:0c:00.0: shutdown urb 00000000e9728025 
-> ep1in-bulk
-> [373104.440151] xhci_hcd 0000:0c:00.0: shutdown urb 00000000fa874ca0 
-> ep1in-bulk
-> [373104.440153] xhci_hcd 0000:0c:00.0: shutdown urb 000000006006ed5d 
-> ep1in-bulk
-> [373104.440156] xhci_hcd 0000:0c:00.0: shutdown urb 00000000a5bee1e7 
-> ep1in-bulk
-> [373104.440158] xhci_hcd 0000:0c:00.0: shutdown urb 00000000bc3a3ab0 
-> ep1in-bulk
-> [373104.440160] xhci_hcd 0000:0c:00.0: shutdown urb 0000000080a63692 
-> ep1in-bulk
-> [373104.440163] xhci_hcd 0000:0c:00.0: shutdown urb 0000000025af4e6e 
-> ep1in-bulk
-> [373104.440165] xhci_hcd 0000:0c:00.0: shutdown urb 0000000056d7e76e 
-> ep1in-bulk
-> [373104.440472] xhci_hcd 0000:0c:00.0: shutdown urb 00000000d8814536 
-> ep3in-intr
+Instead of using struct usb_hcd as the MSI IRQ dev_id and deriving
+interrupter 0 in the handler, pass struct xhci_interrupter as the IRQ
+dev_id.  This makes the MSI entry path operate on the same object that
+owns the event ring and interrupter registers.
 
-And that's what happens in the log above, for the reason below:
+The primary path remains unchanged.  Interrupter 0 is still the only
+interrupter used by the normal xHCI path, and this series does not
+enable extra vectors, change IRQ affinity, or add any new routing
+policy.
 
-[  +0,000015]  usb_hcd_flush_endpoint.cold+0xa/0x23 [usbcore]
-[  +0,000050]  usb_disable_endpoint+0x52/0xa0 [usbcore]
-[  +0,000048]  usb_disable_interface.cold+0x3f/0x4e [usbcore]
-[  +0,000038]  usb_unbind_interface+0x138/0x2f0 [usbcore]
-[  +0,000048]  device_release_driver_internal+0x194/0x200
+USBSTS.EINT handling is also kept on interrupter 0.  The bit is
+controller-scoped, while IMAN.IP is per interrupter, so secondary
+interrupters should not clear the controller-wide EINT status.
 
-> [373104.440790] r8152 2-1:1.0 enx88c9b3b53125: Stop submitting intr, 
-> status -108
+This is only a preparation step for future secondary interrupter users
+and does not change the current primary xHCI interrupt behaviour.
 
-So this message is harmless. I'm also seeing it with RTL8153 if the
-interface is up at the time of rmmod.
+raoxu (4):
+  usb: xhci: store xhci_hcd pointer in xhci_interrupter
+  usb: xhci: route MSI through interrupter context
+  usb: xhci-pci: use the interrupter entry as MSI dev_id
+  usb: xhci: clear USBSTS EINT only for interrupter 0
 
-> In the past I have also seen the following, but am not able to reproduce it:
-> [371283.534041] r8152-cfgselector 2-1: USB disconnect, device number 25
-> [371283.534470] r8152 2-1:1.0 enx00e04c680023: Stop submitting intr, 
-> status -108
+ drivers/usb/host/xhci-mem.c  |  1 +
+ drivers/usb/host/xhci-pci.c  |  8 ++++----
+ drivers/usb/host/xhci-ring.c | 26 ++++++++++++++++++--------
+ drivers/usb/host/xhci.h      |  1 +
+ 4 files changed, 24 insertions(+), 12 deletions(-)
 
-Apparently the disconnect message is logged before calling
-rtl8152_disconnect(), so that's probably harmless too.
+--
+2.50.1
 
-I'm not sure how tweaking some HW registers prevents it. Maybe it
-causes the HW to complete the URB (but why?) at the right moment so
-that it isn't pending during usb_disable_endpoint(), IDK, weird.
-
-Regards,
-Michal
 
