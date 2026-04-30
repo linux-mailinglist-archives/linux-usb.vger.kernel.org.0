@@ -1,200 +1,206 @@
-Return-Path: <linux-usb+bounces-36804-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36805-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uFmdN7rP82nq7AEAu9opvQ
-	(envelope-from <linux-usb+bounces-36804-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 23:55:06 +0200
+	id aCSHFEPY82nJ7wEAu9opvQ
+	(envelope-from <linux-usb+bounces-36805-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 01 May 2026 00:31:31 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FF404A8683
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 23:55:06 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E37234A891A
+	for <lists+linux-usb@lfdr.de>; Fri, 01 May 2026 00:31:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 39DB930300D8
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 21:55:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6D6193028ECE
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 22:31:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C76CF377EC6;
-	Thu, 30 Apr 2026 21:55:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB23B364038;
+	Thu, 30 Apr 2026 22:31:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p8awkKP+"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ysshwl+f"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C3E2ED843
-	for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 21:54:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83502DF68
+	for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 22:31:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777586101; cv=none; b=P+mL5N+26btnte+Of2qPdUwfzhjRVOqNEY/kykotH1fJ/eIvGrlnE6Q6Rxe2l9LAP7PWa5LHoAlbw65rmP2IwHpONtmQkRUWLVRj2Dx9yVHT3Bew41PlRCWbM84IfJtdmNkeqSJljtIrELWZfs8n4ho/S/2xlWXBxepSi+oK7bc=
+	t=1777588281; cv=none; b=bkjc2oDINC1tkpEFP5HLqLo15lPAPUzsS+oNdZkRh1d9xx1EbjmGbTLtqk+6GmeeP5s3j16O3NW5fUgYMZ069rKbtHvx6Zo69RrsC5c4aKE5X0yaD1TYOMWrALxOVciO37l+tXJVc7TRXfEgK89epGfjGHKNi73Arp18ECXlPkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777586101; c=relaxed/simple;
-	bh=OfOzv1CwKJM9L7Z3x9sYHunCD19yBvZ9TOBl02q92j0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=u8u2/Ck8eXFlLDNbQGJrhvLpwaGPcdR/vtQncqIdU6/XjRFcz7xabi5fukSJnez+AL969tiaQbGvbhjn7MTdcezv6DMxGgTeSQ4rD010ooUFdTXI/g2nagayF/+DHraYOV6Qw79z0n2gjIoFad7vp3CEMXbenr9wqPEXlgk2rMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p8awkKP+; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5a3fcb2c718so1252527e87.0
-        for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 14:54:59 -0700 (PDT)
+	s=arc-20240116; t=1777588281; c=relaxed/simple;
+	bh=UpudR8jzrY6H57LNOMzyrNV2Q4prrwpqdHOpQlDtUwA=;
+	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=ppu7ktTQYCOb5JoJznmqVw0hEXevTZwlOUIt6e+wqPfhs3WEE3vkQXjshlSOeHCVVHEomjLqHcflwIU5JKb2Fsi8j+bso9tXs/hIlFar6usclXJSRLBQN6T+kvPJpFZX3VKY8YhbPlwS8wf2tIyjhffNTnb6w0IA4EEoLBQO584=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ysshwl+f; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43d734223e4so899637f8f.0
+        for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 15:31:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777586098; x=1778190898; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=htONy2JrV9dOzOKD0squdGdFWilpbZGrAvV2FXjkQoA=;
-        b=p8awkKP+xeBPAoUs2/VTBqq0clGHIe1/2oWxk0aGnPcmldlM7HRw4bpK8+dhL/NV1S
-         thOa+/3zBgeuirFZIq7Uh1gR0mieOj0pLALwtJG2H15mm0KKdDgyvaCJwsavOHMzhnln
-         zNTHtVXGjhAgaFm1kTNDwbKf+Bls7FPvECHNvNq8Exv6aP2lqgrLE5LEMrCgh5KCwX9G
-         +8v89JwzdZZt0NMd0jfAt2BwTOWyqjDRhyMP59qq413D2TIajCYlGHNuTBGp07kuRSnM
-         Ytnse9jsk9mQf34i+0M9xf7kS5rsDPIm6GsbZuSAwiyOdqfdDCGdDleWiupAy5EBx++W
-         4Big==
+        d=suse.com; s=google; t=1777588278; x=1778193078; darn=vger.kernel.org;
+        h=subject:from:cc:content-language:to:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=roaP/VSjQxjyZFJtq08el+GGZ/wB3yWLrp0XrbeyZuQ=;
+        b=Ysshwl+fgNZw4XZ0wiuaqjIqkeYhDJoGqssqPMbplOq8d3TEK2hPmCbttdSqiYI6ub
+         VLlUqX2mqRO/vY/GguWrh1s72ji4MRNtnjue/vfNezYiT6fTmYWkJZrmFlFvh8NQll1q
+         A5Bl+UYU3mGmMhuozfHaJRQiUDsj0f+VgtT7d2mPBNTpd6M/TaYnS1erGb3SXaifYnvC
+         ttB5+W0Xi97sAvByEf0Nqp2vMVMW5ZlsCqExh/HaAF28B2R/98gp64ZE8tE4HPC24FUH
+         tnZC/v4LlCEcdNgNHaJVHX0ELrtAGlstwYdcBHK351mI20MLVS/G6PeEJqw/ZA5UfYTm
+         LMNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777586098; x=1778190898;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=htONy2JrV9dOzOKD0squdGdFWilpbZGrAvV2FXjkQoA=;
-        b=FQ/GLQRf+dBZ7g9/z6XdP3Av5GOEjBwjVNreB5h7o00rj6cTgsWWDVT4XFZNTT+RVK
-         MrsalwK4hYGlhBZm7N/8mScc9eezgwcBTSpYm1ALRZmRV2Ucg6uUOFmngGyn4Hc6/NWV
-         XIHywaMGQXlTIr7KwDXgtoVGdRCJk7/dTytOzO0cfol/RhqYOjmG7dprGO6F2RwrwjQB
-         7mF3ID3GGhMnuAkDgzAb8d1dj/f5GraSO5UttX+5fJuyHOgSWg+pjmtUBjFUQhcl1pGQ
-         cai1dxOu1uGLigz21EYxnHgOdZtAEYwx2leuv0tCIeLUzR0UQJjexf8AtMGJsESKurqF
-         1YFQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+J69QoGh5TJC31IOihpxsZgVShVS6bf+s5LXF5Nzy65IepNsXUGS1O8HGXhu/sw2hZCFYJHsoIjNE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUZJryjYOew/5nzPkhWhDCQiaUInE/2G3GcWXRQxpf6oL8RObc
-	A+M6MG1AULpuO6YreqFA4KS7caRq1jvFTB56zYvh6OKHmC07l6ex+YPN
-X-Gm-Gg: AeBDies83Lot4T7uB6oZyT5yB4RW9I3ofUIBcaZ4hfLhKEQnw24cMH+8mKVD7g2JqNy
-	4qsgHwk8Q/0aLmfYNZCTGQflmRGyaTDYSQfhULCqCBsLTcmCqw3a19c/1suzbGfzwbMeL+oN6kJ
-	pAt/WmHpfCweIt5wGmn9GjcwaOMpj01sfJj4tCTwKJUq8EhvJTF5FBfIRxbJ7WSi5Sc8biqlTJD
-	D5y4mKutZ7hkRrsuboW0fHzRY+3pP0PkwyDJZsR909moBxRq06R2U4dPQyDBVQaUxO60hE5d6g0
-	IoO+oatWhteEqkqiSLv23ZjSMFeV5Ksl4XP68S2H/vSKYKASX+2OkuIrtfJjtfdW99/b/8rPcoW
-	XuFmOJwAWtdJWsvdrHLmixO4P4jjMs94z/D3kkH3EGE70qQCFpFV+fo0xgXcA6/OnS+9r2QozjC
-	JdflkcdNJvFoCBhcEXE6v+GM1UJsGctst03WWhJY6Mnyk=
-X-Received: by 2002:a05:6512:3b22:b0:5a3:f305:a50f with SMTP id 2adb3069b0e04-5a8522d9438mr2292840e87.30.1777586097935;
-        Thu, 30 Apr 2026 14:54:57 -0700 (PDT)
-Received: from foxbook (bfh75.neoplus.adsl.tpnet.pl. [83.28.45.75])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a85b18c70esm64646e87.70.2026.04.30.14.54.57
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Thu, 30 Apr 2026 14:54:57 -0700 (PDT)
-Date: Thu, 30 Apr 2026 23:54:53 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Desnes Nunes <desnesn@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- gregkh@linuxfoundation.org, mathias.nyman@intel.com, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: xhci: bound wait command completion to avoid kdump
- deadlock
-Message-ID: <20260430235453.2288c973.michal.pecio@gmail.com>
-In-Reply-To: <CACaw+exdPSVSfdAob7+d-xH=JEjBbPpY_z1cPPU6rzXx4wUZpA@mail.gmail.com>
-References: <20260430014817.2006885-1-desnesn@redhat.com>
-	<20260430104850.352bd946.michal.pecio@gmail.com>
-	<CACaw+exdPSVSfdAob7+d-xH=JEjBbPpY_z1cPPU6rzXx4wUZpA@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1777588278; x=1778193078;
+        h=subject:from:cc:content-language:to:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=roaP/VSjQxjyZFJtq08el+GGZ/wB3yWLrp0XrbeyZuQ=;
+        b=F+lvNyB1uMqgyeIftCBUMmeye3KIE0keNs5wQ3/CaMwUAMK6zSryXhDv7f3AnPen+j
+         DGeC4LCqrukMmqKj43y98pCT7jyY3jOB59Eb6gapDUp9j5ZRN0peWbHT/aNXNfkMRN06
+         rR+qpUCyni7DURz5BdUO2wFxxKHeP2C62HIQVAFQNJiomtGxm5JZG82hZ9EbshfmmVr5
+         5rLnXf3aOPDV7HgsyPTsgDPP3lR5yg2qzdqEOkvbnWclG4zHJF9WjAa5NQT2m3/J1uwC
+         FyXO7tJEqLm5VPNmKmERktTuVnyx75ispFJoiUkJzGTGmFiYeb/sRPSLkApUSTDViPtl
+         myig==
+X-Gm-Message-State: AOJu0YzvCC1rU95AiGsvoyzRAmWjAsqTutBdvJBOktYAQoUEwSF+G9DI
+	sToxWmav8eHtBRyeLQ1KzDtcfYy1QxGbJz/fvR6OB5AK1NjaVCxkuXoY4j+yWw1kuynoe2liw5d
+	g6js0
+X-Gm-Gg: AeBDiesexl4E8SEoEvJF9hHWRrasVoFija9/u20LLMhdB7/TknT+OkrCA2RSTWQlEVa
+	Lrk/UR0FE3ZDkr3iq9EXkRW27y7AqG/fBrDU5t/NFRXJVk5ZnNcg+agG/gwkWkiNCkPc/6M+Abz
+	zu8OStZ2+23kM51+LZOMBFyMAuAk5/KQIIbHLUclzz8443htubGv1ePNL6E49yVQMAc8x9CwtZz
+	s6negruK9elNkznEA/qL5hNlyYdY44IdSnHhDBQqF8PrXzmvlALAL7Z0tyqZ5JrgAG+3TCjkLRw
+	oXqFeRHVR3daBz85c4lVmlSKpfIpN1OaM8y8ZbxsL8UBblLPavXieDB7WJMMH8wsKqWWqcpsgg3
+	04/aBolf5Qxh3Sh5qRwsLHp7teUzpA7AfCoCGqR7kom/dr0zv3EGhCIF0ZrHQG5BxIJh0mthZk1
+	gmIrLktbm3NLUHXRHnlCkbQz2xe1QH8ay3sZHvP0QmhsFjxkZyQXw0UzfHzs5rTG+PQzsRYloJO
+	g4NDQ==
+X-Received: by 2002:a5d:453b:0:b0:44a:83db:423f with SMTP id ffacd0b85a97d-44a83db4280mr499146f8f.19.1777588278350;
+        Thu, 30 Apr 2026 15:31:18 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13b3:7c01:f1f9:97ca:8fa3:c597? ([2001:a61:13b3:7c01:f1f9:97ca:8fa3:c597])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-44a98b76eddsm695506f8f.34.2026.04.30.15.31.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Apr 2026 15:31:17 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------HQqlRmDyN0xptnG676eq70BY"
+Message-ID: <9bb3ac22-b0e4-4ae3-854b-8fac8fda1003@suse.com>
+Date: Fri, 1 May 2026 00:31:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 5FF404A8683
+User-Agent: Mozilla Thunderbird
+To: Alan Stern <stern@rowland.harvard.edu>
+Content-Language: en-US
+Cc: USB list <linux-usb@vger.kernel.org>
+From: Oliver Neukum <oneukum@suse.com>
+Subject: Clear change log now?
+X-Rspamd-Queue-Id: E37234A891A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.06 / 15.00];
+	MIME_BASE64_TEXT_BOGUS(1.00)[];
+	SUBJECT_ENDS_QUESTION(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
+	MIME_BASE64_TEXT(0.10)[];
+	MIME_GOOD(-0.10)[multipart/mixed,text/plain,text/x-patch];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-36805-lists,linux-usb=lfdr.de];
+	TO_DN_ALL(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36804-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWO(0.00)[2];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	HAS_ATTACHMENT(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:+];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.com:dkim,suse.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-On Thu, 30 Apr 2026 14:27:59 -0300, Desnes Nunes wrote:
-> As for how I saw HSE, while testing the patch before submission, since
-> I already had the xhci lock, I just added a read of the usbsts before
-> calling xhci_hc_died(xhci):
-> 
-> ...
-> -       wait_for_completion(command->completion);
-> -       slot_id = command->slot_id;
-> +       if (!wait_for_completion_timeout(command->completion,
-> +                                        msecs_to_jiffies(2 *
-> command->timeout_ms))) {
-> +        spin_lock_irqsave(&xhci->lock, tflags);
-> +        usbsts = readl(&xhci->op_regs->status);
-> +        xhci_err(xhci,
-> +            "TRB_ENABLE_SLOT: no command completion after %lums, USBSTS:%s\n",
-> +            2 * command->timeout_ms,
-> +            xhci_decode_usbsts(ststr, usbsts));
-> +        xhci_hc_died(xhci);
-> +        spin_unlock_irqrestore(&xhci->lock, tflags);
-> +    }
-> ...
-> 
-> This debug version of the patch printed:
-> 
-> [   17.481330] xhci_hcd 0000:80:14.0: TRB_ENABLE_SLOT: no command
-> completion after 10000ms, USBSTS: 0x00000015 HCHalted HSE PCD
+This is a multi-part message in MIME format.
+--------------HQqlRmDyN0xptnG676eq70BY
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-OK, so this chip is busted at that point. But it might still be better
-to improve xhci_handle_command_timeout() to deal with this and complete
-the command, instead of patching here and in other similar places.
+Hi,
 
-> Actually, from the beginning of all my debugging I already had
-> `usbcore.dyndbg=+p xhci_hcd.dyndbg=+p xhci_pci.dyndbg=+p` on the
-> kernel cmdline, as well as on the crashkernel's
-> KDUMP_COMMANDLINE_APPEND at /etc/sysconfig/kdump.
-> 
-> On crashkernel's kexec-dmesg of the unpatched kernel I see multiple
-> doorbell rings stating the HSE:
-> 
-> ...
-> [Thu Apr 30 12:28:22 2026] xhci_hcd 0000:80:14.0: Command timeout,
-> USBSTS: 0x00000015 HCHalted HSE PCD
-> [Thu Apr 30 12:28:22 2026] xhci_hcd 0000:80:14.0: Command timeout on
-> stopped ring
-> [Thu Apr 30 12:28:22 2026] xhci_hcd 0000:80:14.0: Turn aborted command
-> 000000005921b827 to no-op
-> [Thu Apr 30 12:28:22 2026] xhci_hcd 0000:80:14.0: // Ding dong!
-> ...
+does this explanation why the patch is necessary clarify the issue?
 
-Hmm, the "Command timeout on stopped ring" case doesn't obviously lead
-to any immediate command completion, and ringing the command doorbell
-under HSE won't achieve any progress. Maybe that's the bug.
+	Regards
+		Oliver
 
-Could you post full crash kernel dmesg up to that point? Not sure how
-it got to this place.
+--------------HQqlRmDyN0xptnG676eq70BY
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-usb-core-hcd-fix-possible-deadlock-in-rh-control-tra.patch"
+Content-Disposition: attachment;
+ filename*0="0001-usb-core-hcd-fix-possible-deadlock-in-rh-control-tra.pa";
+ filename*1="tch"
+Content-Transfer-Encoding: base64
 
-When xhci_handle_command_timeout() logs USBSTS, does it help to add:
+RnJvbSA0Mjc5OTBhNDM1ODNmM2EwYjQ0M2YxNGVhOTJjNGZmY2RhZmJhNTc4IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29t
+PgpEYXRlOiBUdWUsIDI4IEFwciAyMDI2IDE1OjM4OjE3ICswMjAwClN1YmplY3Q6IFtQQVRD
+SF0gdXNiOiBjb3JlOiBoY2Q6IGZpeCBwb3NzaWJsZSBkZWFkbG9jayBpbiByaCBjb250cm9s
+IHRyYW5zZmVycwoKRnJvbSB3aXRoaW4gdGhlIFNDU0kgZXJyb3IgaGFuZGxlciBtZW1vcnkg
+YWxsb2NhdGlvbnMgbXVzdCBub3QKdHJpZ2dlciBJTy4gSGFuZGxpbmcgZXJyb3JzIGluIFVB
+UyBhbmQgdGhlIHN0b3JhZ2UgZHJpdmVyIG1heQppbnZvbHZlIHJlc2V0dGluZyBhIGRldmlj
+ZS4gVGhlIHRocmVhZCBkb2luZyB0aGUgcmVzZXQgaXRzZWxmCnJlbGllcyBvbiBWTSBtYWdp
+YyB0byBtYWtlIHN1cmUgaXRzIG93biBhbGxvY2F0aW9ucyBkbyBub3QKdHJpZ2dlciBJTy4K
+CkluIGFkZGl0aW9uIHRvIGl0cyBvd24gYWxsb2NhdGlvbnMsIGhvd2V2ZXIsIGEgdGFzayB0
+aGF0CmlzIG5vdCBhbGxvd2VkIHRvIHRyaWdnZXIgSU8gbXVzdCBhbHNvIG5vdCB3YWl0IGZv
+ciBvdGhlciB0YXNrcwp0aGF0IGNhbiB0cmlnZ2VyIElPLiBSZXNldHRpbmcgYSBkZXZpY2Ug
+aW52b2x2ZXMgcmVzdW1pbmcKdGhlIGRldmljZS4gUmVzdW1pbmcgYSBkZXZpY2UgY2FuIHJh
+Y2Ugd2l0aCBvdGhlciB0YXNrcwpkb2luZyBQTSBvcGVyYXRpb25zLiBJbiBzdWNoIGNhc2Vz
+IHRoZSB0YXNrIG11c3Qgd2FpdApmb3IgdGhlIG90aGVyIHRhc2sgdG8gZmluaXNoIGl0cyBQ
+TSBvcGVyYXRpb25zLiBUaGF0IHRhc2sKaXMgbm90IGJlbmVmaXR0aW5nIGZyb20gVk0gbWFn
+aWMuIEhlbmNlIGl0IG5lZWRzIHRvIHVzZQpHRlBfTk9JTyB3aGlsZSBkb2luZyBQTSBvcGVy
+YXRpb25zLgpUaGF0IG1lYW5zIHRoYXQgR0ZQX05PSU8gbXVzdCBiZSBoZWVkZWQgZG9pbmcg
+Y29udHJvbCB0cmFuc2ZlcnMKdG8gcm9vdCBodWJzLCBiZWNhdXNlIFBNIG9wZXJhdGlvbnMg
+aW52b2x2ZSBjb21tYW5kcwp0byByb290IGh1YnMsIGlmIGEgZGV2aWNlIGlzIGRpcmVjdGx5
+IGF0dGFjaGVkIHRvIGEgcm9vdCBodWIuCgpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIgTmV1a3Vt
+IDxvbmV1a3VtQHN1c2UuY29tPgotLS0KIGRyaXZlcnMvdXNiL2NvcmUvaGNkLmMgfCAxNCAr
+KysrKysrKy0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgNiBkZWxl
+dGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9jb3JlL2hjZC5jIGIvZHJpdmVy
+cy91c2IvY29yZS9oY2QuYwppbmRleCA4OTIyMWYxY2U3NjkuLjI5Yzc0ZWQ0MDUyNiAxMDA2
+NDQKLS0tIGEvZHJpdmVycy91c2IvY29yZS9oY2QuYworKysgYi9kcml2ZXJzL3VzYi9jb3Jl
+L2hjZC5jCkBAIC00NDgsNyArNDQ4LDggQEAgcmhfc3RyaW5nKGludCBpZCwgc3RydWN0IHVz
+Yl9oY2QgY29uc3QgKmhjZCwgdTggKmRhdGEsIHVuc2lnbmVkIGxlbikKIAogCiAvKiBSb290
+IGh1YiBjb250cm9sIHRyYW5zZmVycyBleGVjdXRlIHN5bmNocm9ub3VzbHkgKi8KLXN0YXRp
+YyBpbnQgcmhfY2FsbF9jb250cm9sIChzdHJ1Y3QgdXNiX2hjZCAqaGNkLCBzdHJ1Y3QgdXJi
+ICp1cmIpCitzdGF0aWMgaW50IHJoX2NhbGxfY29udHJvbChzdHJ1Y3QgdXNiX2hjZCAqaGNk
+LAorCQlzdHJ1Y3QgdXJiICp1cmIsIGdmcF90IG1lbV9mbGFncykKIHsKIAlzdHJ1Y3QgdXNi
+X2N0cmxyZXF1ZXN0ICpjbWQ7CiAJdTE2CQl0eXBlUmVxLCB3VmFsdWUsIHdJbmRleCwgd0xl
+bmd0aDsKQEAgLTQ4Myw4ICs0ODQsOCBAQCBzdGF0aWMgaW50IHJoX2NhbGxfY29udHJvbCAo
+c3RydWN0IHVzYl9oY2QgKmhjZCwgc3RydWN0IHVyYiAqdXJiKQogCSAqIHRidWYgc2hvdWxk
+IGJlIGF0IGxlYXN0IGFzIGJpZyBhcyB0aGUKIAkgKiBVU0IgaHViIGRlc2NyaXB0b3IuCiAJ
+ICovCi0JdGJ1Zl9zaXplID0gIG1heF90KHUxNiwgc2l6ZW9mKHN0cnVjdCB1c2JfaHViX2Rl
+c2NyaXB0b3IpLCB3TGVuZ3RoKTsKLQl0YnVmID0ga3phbGxvYyh0YnVmX3NpemUsIEdGUF9L
+RVJORUwpOworCXRidWZfc2l6ZSA9IG1heF90KHUxNiwgc2l6ZW9mKHN0cnVjdCB1c2JfaHVi
+X2Rlc2NyaXB0b3IpLCB3TGVuZ3RoKTsKKwl0YnVmID0ga3phbGxvYyh0YnVmX3NpemUsIG1l
+bV9mbGFncyk7CiAJaWYgKCF0YnVmKSB7CiAJCXN0YXR1cyA9IC1FTk9NRU07CiAJCWdvdG8g
+ZXJyX2FsbG9jOwpAQCAtODA5LDEyICs4MTAsMTMgQEAgc3RhdGljIGludCByaF9xdWV1ZV9z
+dGF0dXMgKHN0cnVjdCB1c2JfaGNkICpoY2QsIHN0cnVjdCB1cmIgKnVyYikKIAlyZXR1cm4g
+cmV0dmFsOwogfQogCi1zdGF0aWMgaW50IHJoX3VyYl9lbnF1ZXVlIChzdHJ1Y3QgdXNiX2hj
+ZCAqaGNkLCBzdHJ1Y3QgdXJiICp1cmIpCitzdGF0aWMgaW50IHJoX3VyYl9lbnF1ZXVlKHN0
+cnVjdCB1c2JfaGNkICpoY2QsCisJCXN0cnVjdCB1cmIgKnVyYiwgZ2ZwX3QgbWVtX2ZsYWdz
+KQogewogCWlmICh1c2JfZW5kcG9pbnRfeGZlcl9pbnQoJnVyYi0+ZXAtPmRlc2MpKQogCQly
+ZXR1cm4gcmhfcXVldWVfc3RhdHVzIChoY2QsIHVyYik7CiAJaWYgKHVzYl9lbmRwb2ludF94
+ZmVyX2NvbnRyb2woJnVyYi0+ZXAtPmRlc2MpKQotCQlyZXR1cm4gcmhfY2FsbF9jb250cm9s
+IChoY2QsIHVyYik7CisJCXJldHVybiByaF9jYWxsX2NvbnRyb2woaGNkLCB1cmIsIG1lbV9m
+bGFncyk7CiAJcmV0dXJuIC1FSU5WQUw7CiB9CiAKQEAgLTE1MzUsNyArMTUzNyw3IEBAIGlu
+dCB1c2JfaGNkX3N1Ym1pdF91cmIgKHN0cnVjdCB1cmIgKnVyYiwgZ2ZwX3QgbWVtX2ZsYWdz
+KQogCSAqLwogCiAJaWYgKGlzX3Jvb3RfaHViKHVyYi0+ZGV2KSkgewotCQlzdGF0dXMgPSBy
+aF91cmJfZW5xdWV1ZShoY2QsIHVyYik7CisJCXN0YXR1cyA9IHJoX3VyYl9lbnF1ZXVlKGhj
+ZCwgdXJiLCBtZW1fZmxhZ3MpOwogCX0gZWxzZSB7CiAJCXN0YXR1cyA9IG1hcF91cmJfZm9y
+X2RtYShoY2QsIHVyYiwgbWVtX2ZsYWdzKTsKIAkJaWYgKGxpa2VseShzdGF0dXMgPT0gMCkp
+IHsKLS0gCjIuNTQuMAoK
 
-if (usbsts & STS_FATAL) {
-        xhci_halt(xhci);
-        xhci_hc_died(xhci);
-        goto time_out_completed;
-}
-
-It may not be perfect solution (race conditions?) but it could hint
-that we are on the right track, if it works.
-
-Regards,
-Michal
+--------------HQqlRmDyN0xptnG676eq70BY--
 
