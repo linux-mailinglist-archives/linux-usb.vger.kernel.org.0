@@ -1,182 +1,239 @@
-Return-Path: <linux-usb+bounces-36721-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36722-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iHqoMcu08mmUtgEAu9opvQ
-	(envelope-from <linux-usb+bounces-36721-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 03:47:55 +0200
+	id QDjZK/q08mmUtgEAu9opvQ
+	(envelope-from <linux-usb+bounces-36722-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 03:48:42 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 402A049C166
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 03:47:54 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5317949C16F
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 03:48:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 893803015D11
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 01:47:53 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B4AFD3008C23
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2026 01:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 532D9274FD0;
-	Thu, 30 Apr 2026 01:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84C4527874F;
+	Thu, 30 Apr 2026 01:48:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="snWNAWIQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c3HlZXgI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64BFE2417D1
-	for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 01:47:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D19C21C16A
+	for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 01:48:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777513669; cv=none; b=bRZw1VvkAbvBbXsI4FFfrAVNO8+pWOPTb5PYOumqXLKV3nuj8eFhRXXf3s7/J9YhoJEjsCE+BudcMAzjZmEKLZ3+wx95pkH9H6FTPIs+9bLHEPeAoFVFXxCZ19Otenkubx3zSdYs3qyVtqgV6louxjOCN9o06MZmkIYcFyyNF0A=
+	t=1777513713; cv=none; b=C1N+nZWvb7nHKEI7q33YpPJQH+wgwBwfx+ewOSBRpQTXCxdGVwxZaoAHq6lust8dBJMMyIFOlvIqypXWS8ufA+fG2/N4PSPp9Y2vLFKm+sfMGcY0gp1ICDPiWM3nuuLnq5tSUY3dWI0M9lGtzMrpPBqW6RlUnP7gZmzyWWoQWfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777513669; c=relaxed/simple;
-	bh=cvovMtyWDMzqeEskppJdwizzAhsUuknJVzB+bihHksI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pu3F8VloyfTnx+FnZfkDYchWVCcRKvLzjjjyazpvC2tRAInGVBBPrIH7dXkZWkJVtlnf8LHZKy9Uw0N1osDC41VNBYx+AxgWQsWgeTSwiuAI9bBBSwE6Zb1GPpvVbttCBtpabAUspJ1Gb1jzi7SxBjZNxyTYB+Ofe2B7QDkYAPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=snWNAWIQ; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8dbbc6c16b2so62489885a.0
-        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2026 18:47:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1777513667; x=1778118467; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2pi4A76npk9IqlL+xm9RfY0QlHHuFHSKe9nTljjV5pA=;
-        b=snWNAWIQwNJbF5/ZhT+/3l6DIpzYHYVsClKn7obaBxV8SB5gcM9ZThNyaqsqgM+MHb
-         cqUIg4x7JEP1dNxIVFLGxmqQ40RbPiDHMtUzFO+h5oFccWO4/qnUzm1ZqONy2XpEzI/y
-         GOlstQcJzleIFDNI1CBKaJGDx52seobqRghixQColDUHfyi33ECRzx9ErT5328mqIJxp
-         PWAdkWFHXf77M0fK52JUWfX+aqYTrKvZzPoS15/G+lYQMoaZ/2juNACcqd7Bjezul280
-         EoI2Nvi+OG16YsCZxnLbj8zeARbVTPxDaFiRUf+xj/1QiAAQZQ1tZDW3F1xlgwrnp6Y4
-         p+bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777513667; x=1778118467;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2pi4A76npk9IqlL+xm9RfY0QlHHuFHSKe9nTljjV5pA=;
-        b=rGhl4e7kNOoMNyfiYQCAgV/cQ3hqG1wuKnsiGnp8KgsJ3qcgBFiO49+AWvWQGfDwex
-         STf2bt+eTRyMUnPDexDDN77hcUy0vsDbvKbB0W02reyJ9uBhBV2Lu9zZrLHxl0qhRoJc
-         vvJMYELfeguYnS3P29z2oolsebSqgjAYloijMZZZBQiov3OQI63GtGpTQyb0XSysA+qv
-         WPnwUjju6CID3y6sbnTrkJNDlmpBG0WW4Eza0+hGylheCji/ZWhIDSGWn79mtIYihlbu
-         CSgh8ho31UV99DORplUxvKcmEGZJB7E9zuLapVmerWfMIxVlcuCP2wqm9F9A6p21YyhX
-         5wqg==
-X-Forwarded-Encrypted: i=1; AFNElJ+wSouwGITPku7h5oNJNny3O/4gEx1bP+Jdx/tXTB8Di2O771haYGxFBC8jNmUuqFQsOSTK82lfcWA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUnRKcwXsn2SJOV9+JWuufq5FDyiocoYeqQ/H3htZl1lh+UafR
-	1lKjv1RM+c7iUoagfZH0czjoIcgVXZmhH8CpYRoZ2IkSnur072wwtpp0iBfKg9rQsA==
-X-Gm-Gg: AeBDiesYOn50LnUq4mw33Q0P0xiqeBMWRd8nm4q31KQiXKwu0JtsNmj7FDwtzNzDgfl
-	ax+/Q8yHRueSAZNpaodGXkY5Qd6QrcqQuX8TPhVg5FRjZY4TL+fTbeGOEAO61/44mnnGKURsB7E
-	Sg2UepkxyBFIqS5trAlQkd7pX3/Vka/i46YEpzlYyPQcW2285Dewus/oITW+8RO+VUeqgvfSqrE
-	we17fRAS2QR5bm3nTEFOlhzHAPIV0DxMuzaqCY+Q8pW8VZENQWymN1E4ZFkGAIhEe72I+XZuvPM
-	CTE6V5iNSI754ikKw5FrqnitlGVnpEXEXmx1UNFKQy0Y1AjKBKpYCNRzNLqcbn+pm7iS/6HLFa5
-	mgc8u5zeQbM7AwZy6/Qrz0UfEFPv/6HAAEG8aw/fNuZxbXUtfQrS/e5DAKUgjY7CZyV6T6jyb4A
-	pJ9w7DSBlxgd28qkbA/H0MvFL4eExc7Tjl7Sw=
-X-Received: by 2002:a05:620a:4483:b0:8f0:f1a5:680d with SMTP id af79cd13be357-8fabb6d754bmr70056185a.36.1777513667119;
-        Wed, 29 Apr 2026 18:47:47 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::a0bd])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8f93cd07018sm372409785a.15.2026.04.29.18.47.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2026 18:47:46 -0700 (PDT)
-Date: Wed, 29 Apr 2026 21:47:43 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Brent Page <brentfpage@gmail.com>, linux-usb@vger.kernel.org
-Subject: Re: TT budgeting for EHCI; =?utf-8?Q?accom?=
- =?utf-8?Q?modate_1023-byte_full-speed_isochronous=E2=80=93in?= endpoints
-Message-ID: <7ece08d3-fdec-448b-a2aa-d3bbda1e48d4@rowland.harvard.edu>
-References: <B66AE752-B09C-49B3-A829-F7ABB36FB250@gmail.com>
- <32291bf6-0c9d-4fd9-9dd7-489f7e1c9f02@rowland.harvard.edu>
- <20260429113604.2204b646.michal.pecio@gmail.com>
- <a3176296-bf99-4486-9310-0b70f28c1ba7@rowland.harvard.edu>
- <20260429212408.299826a4.michal.pecio@gmail.com>
- <49a41b4c-34ac-4627-adcb-d0e989470610@rowland.harvard.edu>
- <20260429220459.0c304ea6.michal.pecio@gmail.com>
+	s=arc-20240116; t=1777513713; c=relaxed/simple;
+	bh=wRx/kU3uZwooWfGei4X2naH1Azcjgz7Wi7jS46y0HsQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L8ck/2xTPMJhwotXjQdjwoYkI9NPZb/tgR7KaAzQqWwCpHzDecAhTb5cNnMsFNZlx98Z6xgznySGuTEJbyuXvwCsYSmAIj504Th8UAqPzLzCwv6gSjygsWEGlxXmFZA9g/l2Mj6N9UJ3irThvR9libFGEg6eyfbp8apbz/V5QcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c3HlZXgI; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777513710;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=M2C/l2zeaxgLw1RCdMR5UPmHAGwhFo2arLdU4oZARDQ=;
+	b=c3HlZXgI5NMm/9V258MNv+nS69PN5BjufO+lbfn7y888rUXLmoXrsCB30kMk5KAoyR9Kor
+	gPbFjshHNpRwr1aKT65LyPTjg+Yiyb9s5Y/jyII77Dmy8r98aGmtXP97a9tFL0FeQJrtTG
+	sr/z9tmWtRoges/Mz7QRpyfYJ2V35LM=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-601-TmlbXR7kP_eoh7MLT6CW_g-1; Wed,
+ 29 Apr 2026 21:48:28 -0400
+X-MC-Unique: TmlbXR7kP_eoh7MLT6CW_g-1
+X-Mimecast-MFC-AGG-ID: TmlbXR7kP_eoh7MLT6CW_g_1777513707
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A7CDC195608B;
+	Thu, 30 Apr 2026 01:48:27 +0000 (UTC)
+Received: from desnesn-thinkpadp16vgen1.rmtbr.csb (unknown [10.96.134.8])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9682F1800345;
+	Thu, 30 Apr 2026 01:48:24 +0000 (UTC)
+From: Desnes Nunes <desnesn@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
+	mathias.nyman@intel.com,
+	Desnes Nunes <desnesn@redhat.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] usb: xhci: bound wait command completion to avoid kdump deadlock
+Date: Wed, 29 Apr 2026 22:48:17 -0300
+Message-ID: <20260430014817.2006885-1-desnesn@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260429220459.0c304ea6.michal.pecio@gmail.com>
-X-Rspamd-Queue-Id: 402A049C166
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Rspamd-Queue-Id: 5317949C16F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36721-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,rowland.harvard.edu:dkim,rowland.harvard.edu:mid]
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36722-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[redhat.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[desnesn@redhat.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 
-On Wed, Apr 29, 2026 at 10:04:59PM +0200, Michal Pecio wrote:
-> On Wed, 29 Apr 2026 15:32:07 -0400, Alan Stern wrote:
-> > On Wed, Apr 29, 2026 at 09:24:08PM +0200, Michal Pecio wrote:
-> > > Yes, but per spec transfers are budgeted based on wMaxPacketSize and
-> > > actual SSPLITs may be shorter, while subsequent transfers may still
-> > > remain budgeted into a future uframe.  
-> > 
-> > The actual SSPLIT will be shorter only if it is a short transfer
-> > (that is, shorter than the maxpacket size).  Hence there won't be a
-> > subsequent transactions in a future uframe, even if some are budgeted
-> > there.
-> 
-> Not for this endpoint, but another one may be budgeted next. Say, two
-> isoc endpoints with 188 byte budget each. In Y0 EP1 moves one byte and
-> leaves some time unused, near the end of Y0 EP2 SSPLIT arrives for Y1.
-> 
-> Seems legal, so I don't think TT can assume that it has seen the end of
-> periodic transfers when its queue runs empty. IDK what it does then.
+The following deadlock in the usb subsystem can be triggered during kdump:
 
-It uses the spare time to carry out control/bulk transactions.  Those 
-are limited in size to 64 bytes, so they can't delay the next periodic 
-transaction all that much.
+systemd-udevd[402]: usb3: Worker [419] processing SEQNUM=2194 is taking a long time
+dracut-initqueue[432]: Timed out while waiting for udev queue to empty.
+systemd-udevd[402]: usb3: Worker [419] processing SEQNUM=2194 killed
+systemd-udevd[402]: usb3: Worker [419] terminated by signal 9 (KILL).
+...
+kdump[720]: saving vmcore complete
+...
+systemd-shutdown[1]: Rebooting.
+INFO: task kworker/0:6:76 blocked for more than 122 seconds.
+      Not tainted 6.12.0-223.2443_2475543665.el10.x86_64 #1
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/0:6     state:D stack:0     pid:76    tgid:76    ppid:2      task_flags:0x4208060 flags:0x00004000
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ __schedule+0x2a5/0x630
+ schedule+0x27/0x80
+ schedule_timeout+0xbf/0x100
+ __wait_for_common+0x95/0x1b0
+ ? __pfx_schedule_timeout+0x10/0x10
+ xhci_alloc_dev+0x9e/0x290
+ usb_alloc_dev+0x77/0x3a0
+ hub_port_connect+0x293/0x9a0
+ hub_port_connect_change+0x94/0x260
+ port_event+0x4d1/0x7f0
+ hub_event+0x16f/0x480
+ process_one_work+0x174/0x330
+ worker_thread+0x256/0x3a0
+ ? __pfx_worker_thread+0x10/0x10
+ kthread+0xfa/0x240
+ ? __pfx_kthread+0x10/0x10
+ ret_from_fork+0x31/0x50
+ ? __pfx_kthread+0x10/0x10
+ ret_from_fork_asm+0x1a/0x30
+ </TASK>
+INFO: task systemd-shutdow:1 blocked for more than 122 seconds.
+      Not tainted 6.12.0-223.2443_2475543665.el10.x86_64 #1
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:systemd-shutdow state:D stack:0     pid:1     tgid:1     ppid:0      task_flags:0x400100 flags:0x00000002
+Call Trace:
+ <TASK>
+ __schedule+0x2a5/0x630
+ schedule+0x27/0x80
+ schedule_preempt_disabled+0x15/0x30
+ __mutex_lock.constprop.0+0x497/0x860
+ device_shutdown+0xac/0x190
+ kernel_restart+0x3a/0x70
+ __do_sys_reboot+0x146/0x240
+ do_syscall_64+0x7d/0x160
+ ? devkmsg_write.cold+0x24/0x4a
+ ? update_load_avg+0x7f/0x730
+ ? __dequeue_entity+0x3ec/0x4a0
+ ? update_load_avg+0x7f/0x730
+ ? pick_next_task_fair+0x1e6/0x330
+ ? finish_task_switch.isra.0+0x97/0x2a0
+ ? rseq_get_rseq_cs+0x1d/0x220
+ ? rseq_ip_fixup+0x8d/0x1d0
+ ? arch_exit_to_user_mode_prepare.isra.0+0xa5/0xd0
+ ? syscall_exit_to_user_mode+0x32/0x190
+ ? do_syscall_64+0x89/0x160
+ ? handle_mm_fault+0x110/0x370
+ ? do_user_addr_fault+0x606/0x830
+ ? exc_page_fault+0x7f/0x150
+ entry_SYSCALL_64_after_hwframe+0x76/0x7e
+RIP: 0033:0x7f32517d9917
+RSP: 002b:00007ffc018d4fb8 EFLAGS: 00000206 ORIG_RAX: 00000000000000a9
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f32517d9917
+RDX: 0000000001234567 RSI: 0000000028121969 RDI: 00000000fee1dead
+RBP: 00007ffc018d5130 R08: 0000000000000069 R09: 00000000ffffffff
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000000000
+R13: 0000000000000000 R14: 00007ffc018d5258 R15: 0000000000000000
+ </TASK>
 
-Besides, the spec just says that the HCD has to reserve 90% of the 
-bandwidth for periodic transfers.  It doesn't say that the periodic 
-transfers actually have to use up the entire 90%.
+During crashkernel's boot, hub_event() takes usb_lock_device(hdev) of the
+root hub and keeps it for the whole hub processing loop, since it calls
+hub_port_connect() -> usb_alloc_dev() -> xhci_alloc_dev(). If during kdump
+another device (e.g., a mis-initialized dGPU) hogs interrupts or DMAs, the
+TRB_ENABLE_SLOT command will be blocked from completion in time, moving
+the HC to an unstable condition (e.g., HSE in USBSTS). After vmcore gets
+captured, init calls device_shutdown() trying to shut down the hub device,
+by also trying to take the same lock still held by the hub kworker task.
 
-> > > Then I think it doesn't support 1023 byte packets at all.
-> > > 1023/188=5.4 and if worst case bit stuffing factor is 7/6 then up
-> > > to 6.3 uframes of transfer time. Completion in Y5 or Y6 and CSPLIT
-> > > required in Y7.  
-> > 
-> > For iso-IN, that's right.
-> > 
-> > > IOW, you play Russian Roulette with bit stuffing if you enable
-> > > this.  
-> > 
-> > The driver is not perfect.  No doubt about it.
-> 
-> This raises question how much sense there is in patches enabling such
-> endpoints. Maybe worth it for OUT, if they currently don't work. Or for
-> fans of RR, if there are no other side effects :)
+Avoid the deadlock by adding a 2x timeout for command completion before
+calling xhci_hc_died(). This gives enough time before marking the host un-
+stable, dying and calling xhci_cleanup_command_queue(); which unblocks the
+hub worker into releasing the lock, allowing device_shutdown() to proceed.
 
-Iso-OUT doesn't use CSPLITs, so the problem doesn't arise for them.  But 
-it could come up if a big iso-OUT transfer is followed by a few 
-interrupt transfers.  And of course, it matters for iso-IN.
+Fixes: c311e391a7efd ("xhci: rework command timeout and cancellation,")
+Cc: stable@vger.kernel.org
+Signed-off-by: Desnes Nunes <desnesn@redhat.com>
+---
+ drivers/usb/host/xhci.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-Alan Stern
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index a54f5b57f205..55250fe814c9 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -4219,7 +4219,7 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
+ 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+ 	struct xhci_virt_device *vdev;
+ 	struct xhci_slot_ctx *slot_ctx;
+-	unsigned long flags;
++	unsigned long flags, tflags;
+ 	int ret, slot_id;
+ 	struct xhci_command *command;
+ 
+@@ -4238,9 +4238,14 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
+ 	xhci_ring_cmd_db(xhci);
+ 	spin_unlock_irqrestore(&xhci->lock, flags);
+ 
+-	wait_for_completion(command->completion);
+-	slot_id = command->slot_id;
++	if (!wait_for_completion_timeout(command->completion,
++					 msecs_to_jiffies(2 * command->timeout_ms))) {
++		spin_lock_irqsave(&xhci->lock, tflags);
++		xhci_hc_died(xhci);
++		spin_unlock_irqrestore(&xhci->lock, tflags);
++	}
+ 
++	slot_id = command->slot_id;
+ 	if (!slot_id || command->status != COMP_SUCCESS) {
+ 		xhci_err(xhci, "Error while assigning device slot ID: %s\n",
+ 			 xhci_trb_comp_code_string(command->status));
+-- 
+2.51.0
+
 
