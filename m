@@ -1,211 +1,380 @@
-Return-Path: <linux-usb+bounces-36813-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36814-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EFmMCuhP9Gk/AgIAu9opvQ
-	(envelope-from <linux-usb+bounces-36813-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 01 May 2026 09:02:00 +0200
+	id cPIrEt5Y9GkvAwIAu9opvQ
+	(envelope-from <linux-usb+bounces-36814-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 01 May 2026 09:40:14 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A4044AAC2E
-	for <lists+linux-usb@lfdr.de>; Fri, 01 May 2026 09:01:59 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 501404AB002
+	for <lists+linux-usb@lfdr.de>; Fri, 01 May 2026 09:40:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BCED93011125
-	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2026 07:01:48 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A08283007A59
+	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2026 07:39:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6649A363098;
-	Fri,  1 May 2026 07:01:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F7C136C9F0;
+	Fri,  1 May 2026 07:39:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="Nt5je8PM";
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="DQfrgHBC"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GEJ5aEQO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FEE226FDBF;
-	Fri,  1 May 2026 07:01:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777618907; cv=none; b=pxoXgKICLdaCw6pOTqMitb+SH+qr5z/kCnLGsHnJsBNSqx6sy7F97jsuIVUKVGuuO8i982JIFsmRVMrt3eIY1AXU7/Ww/Skvd4QAH1q1g3JWH143P5JqQLHXPWsOJ43XnmwocZqiqxQUqgsNes1/uZ46+8xV8sTTWQHKRzvJICo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777618907; c=relaxed/simple;
-	bh=mobtKgoIrzuVRGoKZpHynEqRbcV0KIKWQ+NNQDpKrB8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GcuKeM4dKDoymAxCPm4pQwuDGQ3kTYYNU9ofM40VAX/QlttdG4F3rVVPvc3PLGu0iSs8zn3fw9PenH1OF5Bd8U9cutSVGTMx4rtkpo6dnU0G3qpVsrl9TSMhf/uAg/h5x+RXSoQnl3+a2PZVb/gGOcX4iAi4fxegTW4MYGyn+Wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=Nt5je8PM; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=DQfrgHBC; arc=none smtp.client-ip=23.88.97.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1777618903;
-	bh=mobtKgoIrzuVRGoKZpHynEqRbcV0KIKWQ+NNQDpKrB8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Nt5je8PMJXmFymbMQcPawlOoLzRQ6loPGPmbeIjpjPaf1sDCz5FKDucjJK2v92jQI
-	 mtAroSUp6tl0WQ31WcruvVJDgGdY3eVQgFkKI/1WxEY3nb06TGWimwUxXKhK5C31sn
-	 oDpMarWDxYdq2/i50zwUsrCiTLH/SysyVWgLfstSEaJK6kZ3qgMyKv0mKKlBqDSIqk
-	 Kd31PFMpNNBWOqLjn8N6UxGHPPVfx9pz3bLJht9F4+RoO65rNGyhwfCEvtC752COvi
-	 vKBq7K9/8w7tpvJjF3Xea2ApAYbTvLKLE2ieoz1TMcfXd1aQzOlmi3ewQ14arckWtM
-	 1ulJ/wEww8u+A==
-Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
-	id 82F5548272; Fri,  1 May 2026 07:01:43 +0000 (UTC)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1777618902;
-	bh=mobtKgoIrzuVRGoKZpHynEqRbcV0KIKWQ+NNQDpKrB8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DQfrgHBCOoipSBjq8pFL8v2sHPBQXAGJcnzKaEo2Qb/kpdD9wygNzmLP7dzD2V9ty
-	 CjMEG2ZNM5D6ZDBPrI0horNGg/BFzyXWfeTa8GfjtVxl1SZu1dkrNBt7wiKpS/KqgN
-	 tQMBGwzFLTWWigjA3v+cuZhoRVdRVXKwcpQSdNYYH3vY3FnJgqoYI3iQEFNeRlk7X8
-	 bMHMkpt80y0LF+oLWHxsXF6m2euAKteOfjsKxvuJD7uVWAr8ReQtxrrJ7mKOPzB7Co
-	 wZBPvqJKlnSPAqE4zTBd+sEi4au1qrpAYcx9ZV/HDHDhDuE3/Xr5/Fu6YbcNzgKodl
-	 TSfjYpipa2N/Q==
-Received: from [IPV6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb] (unknown [IPv6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb])
-	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id 46B9848207;
-	Fri,  1 May 2026 07:01:42 +0000 (UTC)
-Message-ID: <62fb1f24-b0cb-4310-a155-1f5cce14d83a@birger-koblitz.de>
-Date: Fri, 1 May 2026 09:01:41 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CB9363093
+	for <linux-usb@vger.kernel.org>; Fri,  1 May 2026 07:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777621186; cv=pass; b=iiJjMFoZ4Z6KQNelM8bZQCZPwk0o07QY1Ws0V+GkQQ0O2jQs8MNUZPuKril5gZe7B9fHYlS7wctG4c8yh4QfowXd/iHikgsXF6vqLp7mou7zZ796UawSv+KJ4rLZ2OAJq4wfDdkYqXy/1C2jTE0Mb18h6adQXq1CVeF6gw+KkqU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777621186; c=relaxed/simple;
+	bh=TbLaoWYohHPqj/XG/w1dzsXdf6YqFfSZc9edl1STeRg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AlddusP61vLU7HplXbji44ZBil1O2sIKkJ2F1CvYDPjAXp2scSWOu5/ZLaV21TjkwsMG//ObcB7YQR922zl4wPd9v6u2MG5xmGEtQwQV+ufIElK21TR4QcUsgd1EXZUe/k76TGKRixXEcQ1QAFMmXlgmMUIbIJah0gNhYQ4SrQU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GEJ5aEQO; arc=pass smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-38e7c3a2deaso16027071fa.2
+        for <linux-usb@vger.kernel.org>; Fri, 01 May 2026 00:39:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777621182; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Pxp4JYyw4cJAleiXGnmMEi9PQkGosoJds6EqHvVPMLEduMURAvq3Y82B9NMYJZ64rV
+         vCqjwiEuL1R2bAWRjKwXAiF1RRSpr4jJMUkTazOCQVuuCrFB79/0wJ8aIiXg2iW1fGCA
+         D/mjyZ1083RUS2D11KrB5s4DFlnRyS19ND5gJNuCcNuKk2ykt8M0oK6QITPAWYR0CA5n
+         +UT0PWnnZXXbEEmtqj34qF8EozHJPWrgpWA/7UH1iWUby7/3l9Nk/Nm6j1EYjqxy2VMS
+         WYOpucR4E+cva3HBVUJ0aPVUt5hCgcqCia/M8zO15CmkClgSPeLM0x5wTEBBbYEHbJ+/
+         ZewA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=N5yIG/VNV+70xFszkANHVR8rh10LtJp9VdT7AZQOrpQ=;
+        fh=rL6E8poSdqET8oxHQ4c+o8KXs70vlkp3um9je/6Yyes=;
+        b=R3QAXd0Rf9ivB8JBEeDwt0QMc/FZECb4GzPXX5TFTFyucyt/mW4qZPMx0N3r2TJ5NW
+         YiqwzaYVXvl/ADjw+uFAmqLt+grXbzqU6NhTPFtzUtINlpZwL73GmDmfGhtO39cQspZX
+         NtQtyN1Paea+8aHhtTyPIMb6f+QYXB1sNV3555WEuU9gO1xm4Slvi2XmrAjZeTaeqeNL
+         Cq78k3eYFLpYsHdbwJ/XgtPkOii40DwhQiXd+kohCT94goEhY82/MkELCLWR7k+q7DGe
+         fQGUzKvKFqT0X93FjxFHQmBIQcEytceQFFtuFSRGThRVSry52gghLatCnG8JA1Hl52nz
+         BMJw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777621182; x=1778225982; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=N5yIG/VNV+70xFszkANHVR8rh10LtJp9VdT7AZQOrpQ=;
+        b=GEJ5aEQOu5JLBc6QAEWPXNoNw5rmPtGCkkwJVDi/4RVZt6sP6NLm0N1Lb2skecFh1G
+         L/rEjbj4kT6EpiQjScndF2ADL8GtmfTPVyJjRNj7BchFBe/LNOnOOjsFfv2sEyzNItz3
+         YcSaTJAZSuRs1tR0HNPvdQsXclUK07kLBy97rFTq8tsydXZzpk4HZ3kNVo1/sXrPXk6o
+         b56vqWt8Zq267NZrYGdU8K1sKJ/AS7E8XFXo0i6p0YbFri7CyTs11oATh3kcAJoWbcHj
+         mfl6nOFQrX7qXQvFdUF+AjF+6AOrga66G5QTACPftbBl1PER3WU09VQUXP83j46+7eaz
+         8wgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777621182; x=1778225982;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N5yIG/VNV+70xFszkANHVR8rh10LtJp9VdT7AZQOrpQ=;
+        b=WbM7uBSF3dkFj4OXiesM8NsiHh2dnLakHFW5Shotj+iMe3PbaLACL4n1UHp3pr6w/e
+         MiL6l8gjIiWf++Zzsjf/pKIMyMhLtGnXaHlQHaL0TSEMpPGu5JNCi8pSDg2jafMbjf8+
+         yuFnU50PgFmHine8L7pj/b/MOihAy39X/JtB+cQGG49PSl8Q+2q9bDLuNqaRGtyEBVuy
+         eN0H5TG548XtC7M9Ac9eEXp45L80Zq9CY6hbktUqLHKfY4bsgCHJU3xYQjgHAtMoKt4K
+         ViKZaJG+wHS2MlM5zEhL6BBpY1aALiIRj4VzPylnw/wOv1nxCsXoG9GuNsNQSkz1P/mB
+         L7Pw==
+X-Forwarded-Encrypted: i=1; AFNElJ+mi5O0oIJNJZxiRWzFWiu9CD14UiWFVk2+FCykb5mHaqu2LhNi5FqEJAOinD1QQifSm21KQ4LFM3Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGknuybLrd933iD12hfJr8qxcb0gOdxpLGO0GIOoe7Nw/2WxDn
+	GMITCUQq1xpvDOKbMfyG4j8Uk3y9vDY1zWoQXSQ27pd73TV6Ug70XHisX9EHsN+oOPSsOcrCWmI
+	KIRF3BvYLUju/EgdlRrPKRaDe4BP35VquUafCbA9g
+X-Gm-Gg: AeBDieuBMukLjFo02lmkzBxsV7PHgG3pEPmQ39jU7TCmH97GGn1ag1avYwrVZ3z3mz5
+	Vg1ln4eFkyxFfWDrzn2q2kRKlrImmyCpt6fi3NG8E/BU6wd0yQszIlWr+GF95x0kKVy+89QWcOV
+	bymfAn5uSkDljwjlFxXXC20k92VZX4g8qtbsHbPKSqzC6aWgDVtuTFETd8XemDntdfO6BU0aK1A
+	6jR4BqLCsFjhy0wIFau7LAE/4vDXicTlwJaOaDNGCBrVUZITYxfKAs2tStEb5ZpcAoZ9BebFsOv
+	j6001O7f+sZi4Mos5mAo9HUqqp+NF1enYcW/e4Oqy9ou1sYApwBK6zUGuG3x9j8A1jPd6AZ4DJg
+	wp7LqbI78JVnj9i+mxg==
+X-Received: by 2002:a05:651c:2114:b0:38e:186e:350e with SMTP id
+ 38308e7fff4ca-3934dec7039mr26121991fa.7.1777621181309; Fri, 01 May 2026
+ 00:39:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 3/4] r8152: Add irq mitigation for RTL8157/9
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Michal Pecio <michal.pecio@gmail.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- Chih Kai Hsu <hsu.chih.kai@realtek.com>,
- Michal Pecio <michal.pecio@gmail.com>
-References: <20260428-rtl8159_net_next-v1-0-52d03927b46f@birger-koblitz.de>
- <20260428-rtl8159_net_next-v1-3-52d03927b46f@birger-koblitz.de>
- <06a42ba1-b714-45b1-be30-4a793752e495@lunn.ch>
- <9feb0bc1-b817-46f8-9092-e2beff30ec9d@birger-koblitz.de>
- <20260429200214.3e8dee67.michal.pecio@gmail.com>
- <4446ad8c-0f5f-4f5a-8166-557ce9cc91b7@birger-koblitz.de>
- <fac7da10-a2d3-4c14-9208-8762f38564cd@lunn.ch>
-From: Birger Koblitz <mail@birger-koblitz.de>
-Content-Language: en-US
-In-Reply-To: <fac7da10-a2d3-4c14-9208-8762f38564cd@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 8A4044AAC2E
+References: <20260430-kcov-refactor-common-handle-v1-1-23a0c7a0ba38@google.com>
+In-Reply-To: <20260430-kcov-refactor-common-handle-v1-1-23a0c7a0ba38@google.com>
+From: Dmitry Vyukov <dvyukov@google.com>
+Date: Fri, 1 May 2026 09:39:30 +0200
+X-Gm-Features: AVHnY4LuOCyhbkG_hl8Sa5NNYS1SbIPwYG33VO-fKmuVe5zr0rpNYf2arYcAEvU
+Message-ID: <CACT4Y+ZMJs0-9N+tcAa7Yi9-r5wshy0BAD1cdYRxBBPvOtMpZQ@mail.gmail.com>
+Subject: Re: [PATCH] kcov: refactor common handle ID into kcov_common_handle_id
+To: Jann Horn <jannh@google.com>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>, kasan-dev@googlegroups.com, 
+	Andrew Morton <akpm@linux-foundation.org>, Alexander Potapenko <glider@google.com>, 
+	Valentina Manea <valentina.manea.m@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Hongren Zheng <i@zenithal.me>, linux-usb@vger.kernel.org, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	=?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, kvm@vger.kernel.org, 
+	virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Rspamd-Queue-Id: 501404AB002
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36813-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[birger-koblitz.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,vger.kernel.org,realtek.com];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-36814-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[birger-koblitz.de:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	FREEMAIL_CC(0.00)[gmail.com,googlegroups.com,linux-foundation.org,google.com,kernel.org,linuxfoundation.org,zenithal.me,vger.kernel.org,redhat.com,lists.linux.dev];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dvyukov@google.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[google.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 
-Hi Andrew,
+On Thu, 30 Apr 2026 at 16:15, Jann Horn <jannh@google.com> wrote:
+>
+> Store common handle IDs in "struct kcov_common_handle_id", which consumes
+> no space in non-KCOV builds.
+> This cleanup removes #ifdef boilerplate code from subsystems that
+> integrate with KCOV (in particular in usbip_common.h and skbuff.h, see the
+> diffstat).
+> This should also make it easier to add KCOV remote coverage to more
+> subsystems in the future.
+>
+> Signed-off-by: Jann Horn <jannh@google.com>
 
-thanks a lot for the explanation of the USB-IRQ handling, that was very 
-valuable for my understanding!
-On 30/04/2026 4:19 pm, Andrew Lunn wrote:
->> Also, I only see the issue on slow 5GBit USB-C connections, sometimes with
->> the RTL8157, basically every time with the RTL8159, and so far never on a
->> 20GBit USB-C connection, so the mitigation is probably some kind of
->> interrupt coalescing.
-> 
-> Do you notice any latency changes with this setting in place? Or CPU load.
-> 
-> ping can be a good measure for latency.
-I do not see any differences in latency. I am using 2 desktop machines 
-for testing:
-Machine 1: 6-core, 20GBit USB-C, RTL8159, Completely idle desktop
-Machine 2: 8-core, AQC107 on PCIe5x, Desktop with dev-tools and Browser
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 
-All measurements for CPU-load and timing are done on Machine 1, which 
-runs the iperf3-client and ping against Machine 2. There is a direct 
-10GBit CAT6 link without any switch in between the RTL8159 and AQC107.
+Thanks!
 
-Ping times, WITH mitigation CODE (saying it disables mitigation):
---- 192.168.3.1 ping statistics ---
-100 packets transmitted, 100 received, 0% packet loss, time 101342ms
-rtt min/avg/max/mdev = 0.161/0.411/1.267/0.231 ms
-
-Ping times, WITHOUT mitigation-CODE (saying it disabled mitigation):
---- 192.168.3.1 ping statistics ---
-150 packets transmitted, 150 received, 0% packet loss, time 152451ms
-rtt min/avg/max/mdev = 0.165/0.388/1.048/0.236 ms
-
-Results are identical within statistical errors.
-
-However, there is a big difference in CPU-load when running iperf3, 
-especially with multiple threads:
-
-WITH the CODE saying it disables IRQ mitigation:
-$ iperf3 -c 192.168.3.1
-[  5] 0.00-10.00  sec  10.3 GBytes  8.83 Gbits/sec
-CPU: iperf3 22.5% ksoftirqd 16.6%
-
-$ iperf3 -c 192.168.3.1 -P4
-[SUM]   0.00-10.00  sec  9.36 GBytes  8.04 Gbits/sec
-perf3: 19.3% ksoftirqd 96.7%
-
-
-WITHOUT the CODE saying it disabled IRQ mitigation:
-[  5]   0.00-10.00  sec  10.3 GBytes  8.87 Gbits/sec
-CPU: perf3 19.7% ksoftirqd 12.5%
-
-$ iperf3 -c 192.168.3.1 -P4
-[SUM]   0.00-10.00  sec  10.3 GBytes  8.81 Gbits/sec
-CPU: iperf3 22.0% ksoftirqd 46.5%
-
-> 
-> If this is interrupt coalescing, it normally means don't interrupt as
-> soon as one packet has been received. Delay the interrupt, so there
-> are likely to be more packets in the receive queue. The cost of the
-> interrupt handling is then spread over a number of packets.
-> 
-> If this register setting is disabling coalescing, you should see the
-> latency go down, but the CPU load go up.
-I see the latency staying the same, but the CPU load goes up 
-considerably when these register settings are done.
-
-> 
-> If you are getting interrupts after the device has been disabled, i
-> guess it is because the timer for a delayed interrupt is not cancelled
-> by the firmware. If so you might be able to work around this firmware
-> bug. Disable the receiver, sleep for 10ms but keep processing
-> interrupts, and then continue with the tear down.
-> 
-My undestanding from the first email by Michal is that the behavior with 
-the ESHUTOWN is actually harmless and has been seen in the driver 
-already for the RTL8153.
-
-So, my suggestion is I drop this part of the patch-series and remove the 
-IRQ-mitigation code that says it disables the IRQ mitigation as 
-performance is higher without that code. The issue with ESHUTDOWN in the 
-URB handler is a mostly unrelated issue that is probably harmless and 
-can be solved separately.
-
-Birger
-
+> ---
+>  drivers/usb/usbip/usbip_common.h | 29 +----------------------------
+>  drivers/usb/usbip/vhci_rx.c      |  4 ++--
+>  drivers/usb/usbip/vhci_sysfs.c   |  2 +-
+>  drivers/vhost/vhost.h            |  2 +-
+>  include/linux/kcov.h             | 12 ++++++------
+>  include/linux/skbuff.h           | 14 +++-----------
+>  include/linux/types.h            |  6 ++++++
+>  kernel/kcov.c                    |  6 +++---
+>  8 files changed, 23 insertions(+), 52 deletions(-)
+>
+> diff --git a/drivers/usb/usbip/usbip_common.h b/drivers/usb/usbip/usbip_common.h
+> index 282efca64a01..be4c5e65a7f8 100644
+> --- a/drivers/usb/usbip/usbip_common.h
+> +++ b/drivers/usb/usbip/usbip_common.h
+> @@ -282,9 +282,7 @@ struct usbip_device {
+>                 void (*unusable)(struct usbip_device *);
+>         } eh_ops;
+>
+> -#ifdef CONFIG_KCOV
+> -       u64 kcov_handle;
+> -#endif
+> +       struct kcov_common_handle_id kcov_handle;
+>  };
+>
+>  #define kthread_get_run(threadfn, data, namefmt, ...)                     \
+> @@ -339,29 +337,4 @@ static inline int interface_to_devnum(struct usb_interface *interface)
+>         return udev->devnum;
+>  }
+>
+> -#ifdef CONFIG_KCOV
+> -
+> -static inline void usbip_kcov_handle_init(struct usbip_device *ud)
+> -{
+> -       ud->kcov_handle = kcov_common_handle();
+> -}
+> -
+> -static inline void usbip_kcov_remote_start(struct usbip_device *ud)
+> -{
+> -       kcov_remote_start_common(ud->kcov_handle);
+> -}
+> -
+> -static inline void usbip_kcov_remote_stop(void)
+> -{
+> -       kcov_remote_stop();
+> -}
+> -
+> -#else /* CONFIG_KCOV */
+> -
+> -static inline void usbip_kcov_handle_init(struct usbip_device *ud) { }
+> -static inline void usbip_kcov_remote_start(struct usbip_device *ud) { }
+> -static inline void usbip_kcov_remote_stop(void) { }
+> -
+> -#endif /* CONFIG_KCOV */
+> -
+>  #endif /* __USBIP_COMMON_H */
+> diff --git a/drivers/usb/usbip/vhci_rx.c b/drivers/usb/usbip/vhci_rx.c
+> index a75f4a898a41..a678e7c89837 100644
+> --- a/drivers/usb/usbip/vhci_rx.c
+> +++ b/drivers/usb/usbip/vhci_rx.c
+> @@ -261,9 +261,9 @@ int vhci_rx_loop(void *data)
+>                 if (usbip_event_happened(ud))
+>                         break;
+>
+> -               usbip_kcov_remote_start(ud);
+> +               kcov_remote_start_common(ud->kcov_handle);
+>                 vhci_rx_pdu(ud);
+> -               usbip_kcov_remote_stop();
+> +               kcov_remote_stop();
+>         }
+>
+>         return 0;
+> diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
+> index 5bc8c47788d4..b98d14c43d13 100644
+> --- a/drivers/usb/usbip/vhci_sysfs.c
+> +++ b/drivers/usb/usbip/vhci_sysfs.c
+> @@ -425,7 +425,7 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
+>         vdev->ud.tcp_rx     = tcp_rx;
+>         vdev->ud.tcp_tx     = tcp_tx;
+>         vdev->ud.status     = VDEV_ST_NOTASSIGNED;
+> -       usbip_kcov_handle_init(&vdev->ud);
+> +       vdev->ud.kcov_handle = kcov_common_handle();
+>
+>         spin_unlock(&vdev->ud.lock);
+>         spin_unlock_irqrestore(&vhci->lock, flags);
+> diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
+> index 4fe99765c5c7..0192ade6e749 100644
+> --- a/drivers/vhost/vhost.h
+> +++ b/drivers/vhost/vhost.h
+> @@ -44,7 +44,7 @@ struct vhost_worker {
+>         /* Used to serialize device wide flushing with worker swapping. */
+>         struct mutex            mutex;
+>         struct llist_head       work_list;
+> -       u64                     kcov_handle;
+> +       struct kcov_common_handle_id kcov_handle;
+>         u32                     id;
+>         int                     attachment_cnt;
+>         bool                    killed;
+> diff --git a/include/linux/kcov.h b/include/linux/kcov.h
+> index 0143358874b0..cdb72b3859d8 100644
+> --- a/include/linux/kcov.h
+> +++ b/include/linux/kcov.h
+> @@ -43,11 +43,11 @@ do {                                                \
+>  /* See Documentation/dev-tools/kcov.rst for usage details. */
+>  void kcov_remote_start(u64 handle);
+>  void kcov_remote_stop(void);
+> -u64 kcov_common_handle(void);
+> +struct kcov_common_handle_id kcov_common_handle(void);
+>
+> -static inline void kcov_remote_start_common(u64 id)
+> +static inline void kcov_remote_start_common(struct kcov_common_handle_id id)
+>  {
+> -       kcov_remote_start(kcov_remote_handle(KCOV_SUBSYSTEM_COMMON, id));
+> +       kcov_remote_start(kcov_remote_handle(KCOV_SUBSYSTEM_COMMON, id.val));
+>  }
+>
+>  static inline void kcov_remote_start_usb(u64 id)
+> @@ -99,11 +99,11 @@ static inline void kcov_prepare_switch(struct task_struct *t) {}
+>  static inline void kcov_finish_switch(struct task_struct *t) {}
+>  static inline void kcov_remote_start(u64 handle) {}
+>  static inline void kcov_remote_stop(void) {}
+> -static inline u64 kcov_common_handle(void)
+> +static inline struct kcov_common_handle_id kcov_common_handle(void)
+>  {
+> -       return 0;
+> +       return (struct kcov_common_handle_id){};
+>  }
+> -static inline void kcov_remote_start_common(u64 id) {}
+> +static inline void kcov_remote_start_common(struct kcov_common_handle_id id) {}
+>  static inline void kcov_remote_start_usb(u64 id) {}
+>  static inline void kcov_remote_start_usb_softirq(u64 id) {}
+>  static inline void kcov_remote_stop_softirq(void) {}
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 2bcf78a4de7b..a3fe418f7ced 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -1082,9 +1082,7 @@ struct sk_buff {
+>         __u16                   network_header;
+>         __u16                   mac_header;
+>
+> -#ifdef CONFIG_KCOV
+> -       u64                     kcov_handle;
+> -#endif
+> +       struct kcov_common_handle_id kcov_handle;
+>
+>         ); /* end headers group */
+>
+> @@ -5437,20 +5435,14 @@ static inline void skb_reset_csum_not_inet(struct sk_buff *skb)
+>  }
+>
+>  static inline void skb_set_kcov_handle(struct sk_buff *skb,
+> -                                      const u64 kcov_handle)
+> +                                      struct kcov_common_handle_id kcov_handle)
+>  {
+> -#ifdef CONFIG_KCOV
+>         skb->kcov_handle = kcov_handle;
+> -#endif
+>  }
+>
+> -static inline u64 skb_get_kcov_handle(struct sk_buff *skb)
+> +static inline struct kcov_common_handle_id skb_get_kcov_handle(struct sk_buff *skb)
+>  {
+> -#ifdef CONFIG_KCOV
+>         return skb->kcov_handle;
+> -#else
+> -       return 0;
+> -#endif
+>  }
+>
+>  static inline void skb_mark_for_recycle(struct sk_buff *skb)
+> diff --git a/include/linux/types.h b/include/linux/types.h
+> index 608050dbca6a..93166b0b0617 100644
+> --- a/include/linux/types.h
+> +++ b/include/linux/types.h
+> @@ -224,6 +224,12 @@ struct ustat {
+>         char                    f_fpack[6];
+>  };
+>
+> +struct kcov_common_handle_id {
+> +#ifdef CONFIG_KCOV
+> +       u64 val;
+> +#endif
+> +};
+> +
+>  /**
+>   * struct callback_head - callback structure for use with RCU and task_work
+>   * @next: next update requests in a list
+> diff --git a/kernel/kcov.c b/kernel/kcov.c
+> index 0b369e88c7c9..a43e33a28adb 100644
+> --- a/kernel/kcov.c
+> +++ b/kernel/kcov.c
+> @@ -1083,11 +1083,11 @@ void kcov_remote_stop(void)
+>  EXPORT_SYMBOL(kcov_remote_stop);
+>
+>  /* See the comment before kcov_remote_start() for usage details. */
+> -u64 kcov_common_handle(void)
+> +struct kcov_common_handle_id kcov_common_handle(void)
+>  {
+>         if (!in_task())
+> -               return 0;
+> -       return current->kcov_handle;
+> +               return (struct kcov_common_handle_id){ .val = 0 };
+> +       return (struct kcov_common_handle_id){ .val = current->kcov_handle };
+>  }
+>  EXPORT_SYMBOL(kcov_common_handle);
+>
+>
+> ---
+> base-commit: 57b8e2d666a31fa201432d58f5fe3469a0dd83ba
+> change-id: 20260430-kcov-refactor-common-handle-25178495b2eb
+>
+> --
+> Jann Horn <jannh@google.com>
+>
 
