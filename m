@@ -1,141 +1,183 @@
-Return-Path: <linux-usb+bounces-36810-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36811-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kKZFCxcm9Gnb+gEAu9opvQ
-	(envelope-from <linux-usb+bounces-36810-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 01 May 2026 06:03:35 +0200
+	id mKOEMHsx9GnK/AEAu9opvQ
+	(envelope-from <linux-usb+bounces-36811-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 01 May 2026 06:52:11 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90DAC4AA03D
-	for <lists+linux-usb@lfdr.de>; Fri, 01 May 2026 06:03:34 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2477F4AA668
+	for <lists+linux-usb@lfdr.de>; Fri, 01 May 2026 06:52:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BA937301A90B
-	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2026 04:03:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 678EE3016C92
+	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2026 04:52:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B8452D5925;
-	Fri,  1 May 2026 04:03:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60FF029D294;
+	Fri,  1 May 2026 04:52:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="ixYVRtGg";
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="N0b6FK6+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YOz+xv8o"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BAE91CEAC2;
-	Fri,  1 May 2026 04:03:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB6C92DF132
+	for <linux-usb@vger.kernel.org>; Fri,  1 May 2026 04:51:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777608201; cv=none; b=sD2s/pz2Ve8NnV0qkHtR/YyxSFd+p6UcCadfVDiuGPlkgE7y58h7ZFsFc4nDO4ABona3eUGonhugrwVcTwb9d8LrPknAwaW861o5Ovw1LaTiXKQgVeTq1z/fzROrC0OX1rexEcqv2GJU4W6rr3NL8QlIule6H4ns1AvGRkxm4EM=
+	t=1777611119; cv=none; b=THImvbVUSagVLj9sI9eHSnBDOafjE6ifuXqdK2I+bqbq3M0D5l4XCnc8Ymy5QxPNx7XLo6UNhAA8+0Gxkzv9Z804glZ/4+dimK6a7/8qXVnxOBfzn/tYrd7A5tyD+8I6357svY8KU2x0voIPHwK9UixzCoeWRL2Tyf/KNFh7KSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777608201; c=relaxed/simple;
-	bh=FkIxgPZlZNy64mEA07cC2VpF4xRbXLaoWWOeyCQgk1U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RsckGrt8lBk3YiVGy9GL/Q3ePI01e0xDGoDeewe+8USYxmDVVfH0axck9jUMlWaDkP+oOiUeDj6RInW6bp6+G4jBHcPOrSDWR86AAZoWLkZeZI3nzFirenLH24Hu3OtYrZCbbPRtmoF05XJhh9v5CGAtmpsxgZvzxdQzsDGFRVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=ixYVRtGg; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=N0b6FK6+; arc=none smtp.client-ip=23.88.97.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1777608191;
-	bh=FkIxgPZlZNy64mEA07cC2VpF4xRbXLaoWWOeyCQgk1U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ixYVRtGgkBET00Q4AbEsrUJk9AOdaklU904nO4naDnLvq4HEGt48ZgSY9gLcxYpE8
-	 qCn5Z8EMBRIu4lzcMLBb6GAs5UGLBVNLiaKvD4BISWKil09GyKyY+nxwROAqtVAjn8
-	 gyKwcEXnGkbuQ5oDsad34HovW1DszAemz5e6r5HX4y73NpibOHV/AbkCqPidbju/5c
-	 YNT70hOJ+eBlJZz2JudQoyPSvXZKo6Z1zMk/2AdrBwU/L+MxyMMIyVKpJxnRHbXKCV
-	 8mVODifCq0mITCLiAvxOISerwyvmO7egq+9jhRiXK9GgSEFh3W5JFjvXZDCxIrkl8l
-	 dl1U+1ibk3N5w==
-Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
-	id C24EB4820C; Fri,  1 May 2026 04:03:11 +0000 (UTC)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1777608186;
-	bh=FkIxgPZlZNy64mEA07cC2VpF4xRbXLaoWWOeyCQgk1U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=N0b6FK6+2HOT6vbT0CJcphYs3A3x/ed1irb9MFPYdl5mrF1Ux7r8nUfqgudWHahUA
-	 ula31Ro25Ht52XBGTyepJVSxM6rdIvAMs7GbjhFikwNq4BXTVXW7/WUm8Qh1HAR6rf
-	 6XcQk0onWv5EYyiXMA1oXnIDSQA//vJh8laksMq3I48zXGycTr0UX+krD7D5/v+zDz
-	 ZOFH9dKbuuIXqvyaJ7wA23fZmkz7C4EB+kzs5Ce2V+DsSldLB+HmQxMDdmh9BFKmuo
-	 Vf6z8ZkoWrgj7hGYqu+zvHFmQHE9HOlc9QJ7IHmnDUDKRC55Pay9TWcQxtwrdTLkgt
-	 FU6SNPqj0hq3w==
-Received: from [IPV6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb] (unknown [IPv6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb])
-	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id 1A7294120B;
-	Fri,  1 May 2026 04:03:06 +0000 (UTC)
-Message-ID: <7b3d3fc6-bbed-4a75-ac19-33fa910359c9@birger-koblitz.de>
-Date: Fri, 1 May 2026 06:03:05 +0200
+	s=arc-20240116; t=1777611119; c=relaxed/simple;
+	bh=jK0DLZYUDEjXV1SYTaRYK5ZSUNylecs/sAz231vAZno=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Nvqp3jNDEqQw0K/xKN6C+u/32dd0Zo8pTCq4KxzW+gM1pXZahXtkZxPV9nP+30STZ0MZ2eugj8rL21Dl7pYKfkvmSYJJsy9XX71Z7PVRR6MX3X9wjzlSVKi4It47Qwt4plUqZ7ithK1Nr/+Lv9OWu92kHvVgKsEiNUtkKa2IWnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YOz+xv8o; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-35d95017a68so1311531a91.3
+        for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2026 21:51:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777611118; x=1778215918; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=16cUvY4zBFvfqnNuRIHA1BYN079Aq1HpTRIsih+lka0=;
+        b=YOz+xv8oHLm0Dew9DtLV8F5rKKWNdc1BCsnIviirYEGkL+eUpWbcQjBpE18KgD4qVp
+         3uIEmMBpY8WBig6slS38/+QMrUcnpM0LcTH0svRDKA5qoqrn2LlNokr6wQ9KShgimP1W
+         uE7wYury5KTkoI31K70rzyHzpCJp1R9S/E8GTXS13xNLMvBTVRFbH1elHe0M8oNE3AHS
+         UVtoa03gThZOpFXTlv/X6C5tL5lf0ggKKLHqZSeW6Ke7FBLKWWI6hGL64IpI/vJWgWlS
+         ZwbB+K1+SsWN+YncDQBXkwsTkcuDQdgmQENdjTfc6eJ8eSzNkI1CzV/nCed423RLy4NT
+         r9/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777611118; x=1778215918;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=16cUvY4zBFvfqnNuRIHA1BYN079Aq1HpTRIsih+lka0=;
+        b=XBv4UM5CXMh3hXAF4peQ/9lHTGiC4xDNvhFafiM4vhZWz3oKzPMTr5LbtF+uhZl61V
+         ZnaaTxi8ZMJhpUd0ascql+w+uVwvr1rslpL8wwHzL7jYqZM5Eg5bTN4u04US5JQEZ24z
+         OXtlbAokIen5ynGTY6KwwtNXmaocXgUPrdQn9xo1HhAuK0POt+PC5TzpPpdwqUeBgQJt
+         p6e8ln9mDxn2+k0B/SxCDwLz2d5KLeAk9nkmnHgN6gAJtx0T25Ax/Wd/l2zEtnAfuufj
+         Eo1sMbClwejzgeIRUBmFcIqchMvTUq14nJaJK9HeqmVZjnebI8T184HvFEkdNovxJncI
+         ZJ1Q==
+X-Forwarded-Encrypted: i=1; AFNElJ/5rVrvHnmHP86+oPcE1TiRe8PMN0j4LYnu05MU0RUbNHkAHAP3al7wNSGlkHmn+Kedb6pEz6NcTzI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx29hwwVoIl2qv4zWDxOv3YcXfMyt7lk1GgmYAdkjbR7Y3uuirb
+	TQloIZcc+H69s/9Cm3k4GoU+z0r4WykHRmirZYFZCBALkX6EgUJMhTVR
+X-Gm-Gg: AeBDiet4VQQu+r+9UFvjOnhvu/SH3jRekZxvTkdT3QheDaxwzlkAKS0/649od7pix4s
+	M/zoPKmRRTTlLm0phWDhW2IH+2UWvO4c9qysqsfwZWBWXqmMXwk5vfEvaJITBj6VOPnlEAGbohQ
+	k/MUYUOX7vZlY/P+mI2ghQqnfnoSX+rrbvzaZ3tY+kPY+NI6XNBb3y5wImxPl22wFHMMlug2Zhg
+	xumdcmDgHI4OSWo64gbuv/lHvaNAK8sOPXAM/azYmEJqPQ6LU+FNC4IfdskKTnl5rifO50/G8wR
+	BqninTZRhQhQXCc7mHSbiPyIFMb6b/ajBH8be3BRL7DKg7aBNw6wdVUn/KXwui5OQWoMaVZWGNo
+	svEQTcE+BhIhIO/N7oedhxKi8exvNGbfyiWnna4eMMc2PRS4B5VNsc0gkVmCnRKL8yEZ40ArPNz
+	p/mveFT5L4tmValiFVCvR3GHYV0nSUCxA=
+X-Received: by 2002:a17:90b:4c8c:b0:35f:b69d:7292 with SMTP id 98e67ed59e1d1-364c309c043mr5879421a91.15.1777611117986;
+        Thu, 30 Apr 2026 21:51:57 -0700 (PDT)
+Received: from lgs.. ([223.80.110.53])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c7ffbc6f063sm1088718a12.20.2026.04.30.21.51.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Apr 2026 21:51:57 -0700 (PDT)
+From: Guangshuo Li <lgs201920130244@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guangshuo Li <lgs201920130244@gmail.com>,
+	Kees Cook <kees@kernel.org>,
+	Felipe Balbi <felipe.balbi@linux.intel.com>,
+	Alexey Khoroshilov <khoroshilov@ispras.ru>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
+Subject: [PATCH] usb: gadget: goku_udc: avoid double-free in error path
+Date: Fri,  1 May 2026 12:51:13 +0800
+Message-ID: <20260501045113.484207-1-lgs201920130244@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next] net: usb: r8152: add TRENDnet TUC-ET2G v2.0
-To: Aleksander Jan Bajkowski <olek2@wp.pl>, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, hayeswang@realtek.com, hsu.chih.kai@realtek.com,
- kees@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Andrew Lunn <andrew@lunn.ch>
-References: <20260430213435.21821-1-olek2@wp.pl>
-From: Birger Koblitz <mail@birger-koblitz.de>
-Content-Language: en-US
-In-Reply-To: <20260430213435.21821-1-olek2@wp.pl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 90DAC4AA03D
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 2477F4AA668
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36810-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[wp.pl,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,realtek.com,vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[birger-koblitz.de];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[birger-koblitz.de:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-36811-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[linuxfoundation.org,gmail.com,kernel.org,linux.intel.com,ispras.ru,vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lgs201920130244@gmail.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	MID_RHS_MATCH_FROM(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[wp.pl:email,lunn.ch:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-On 30/04/2026 11:34 pm, Aleksander Jan Bajkowski wrote:
-> The TRENDnet TUC-ET2G V2.0 is an RTL8156B based 2.5G Ethernet controller.
-> 
-> Add the vendor and product ID values to the driver. This makes Ethernet
-> work with the adapter.
-> 
-> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> ---
->   drivers/net/usb/r8152.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 7337bf1b7d6a..1ace1d2398c9 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -10138,6 +10138,7 @@ static const struct usb_device_id rtl8152_table[] = {
->   	{ USB_DEVICE(VENDOR_ID_TRENDNET, 0xe02b) },
-> +	{ USB_DEVICE(VENDOR_ID_TRENDNET, 0xe02c) },
->   
-You may also add my Reviewed-by: Birger Koblitz <mail@birger-koblitz.de>
+goku_probe() allocates struct goku_udc and passes &dev->gadget to
+usb_add_gadget_udc_release() with gadget_release() as the release
+callback. usb_add_gadget_udc_release() initializes the gadget device with
+that release callback before calling usb_add_gadget().
 
-Birger
+If usb_add_gadget() fails, usb_add_gadget_udc_release() calls
+usb_put_gadget(), which invokes gadget_release() and frees dev. The
+current error path then falls through to kfree(dev), freeing the same
+object again.
+
+Set dev to NULL before jumping to the common error path so the explicit
+kfree(dev) is skipped after ownership has already been dropped by the
+gadget core.
+
+This issue was found by a static analysis tool I am developing.
+
+Fixes: 2a334cfaf393 ("usb: gadget: goku_udc: fix memory leak in goku_probe()")
+Cc: stable@vger.kernel.org
+Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
+---
+ drivers/usb/gadget/udc/goku_udc.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/goku_udc.c
+index db42a5e3e805..46a7e0f6541e 100644
+--- a/drivers/usb/gadget/udc/goku_udc.c
++++ b/drivers/usb/gadget/udc/goku_udc.c
+@@ -1819,15 +1819,20 @@ static int goku_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 
+ 	retval = usb_add_gadget_udc_release(&pdev->dev, &dev->gadget,
+ 			gadget_release);
+-	if (retval)
++	if (retval) {
++		/*
++		 * usb_add_gadget_udc_release() calls the gadget release
++		 * function on failure, and gadget_release() frees dev.
++		 */
++		dev = NULL;
+ 		goto err;
++	}
+ 
+ 	return 0;
+ 
+ err:
+ 	if (dev)
+ 		goku_remove (pdev);
+-	/* gadget_release is not registered yet, kfree explicitly */
+ 	kfree(dev);
+ 	return retval;
+ }
+-- 
+2.43.0
+
 
