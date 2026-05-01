@@ -1,380 +1,220 @@
-Return-Path: <linux-usb+bounces-36814-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36815-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cPIrEt5Y9GkvAwIAu9opvQ
-	(envelope-from <linux-usb+bounces-36814-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 01 May 2026 09:40:14 +0200
+	id MC2aEq5m9GmkBAIAu9opvQ
+	(envelope-from <linux-usb+bounces-36815-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 01 May 2026 10:39:10 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 501404AB002
-	for <lists+linux-usb@lfdr.de>; Fri, 01 May 2026 09:40:13 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A16004AB190
+	for <lists+linux-usb@lfdr.de>; Fri, 01 May 2026 10:39:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id A08283007A59
-	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2026 07:39:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 17B9F301BCD3
+	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2026 08:38:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F7C136C9F0;
-	Fri,  1 May 2026 07:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E560636B044;
+	Fri,  1 May 2026 08:38:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GEJ5aEQO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gXxHeq9D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CB9363093
-	for <linux-usb@vger.kernel.org>; Fri,  1 May 2026 07:39:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19E513777E
+	for <linux-usb@vger.kernel.org>; Fri,  1 May 2026 08:38:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777621186; cv=pass; b=iiJjMFoZ4Z6KQNelM8bZQCZPwk0o07QY1Ws0V+GkQQ0O2jQs8MNUZPuKril5gZe7B9fHYlS7wctG4c8yh4QfowXd/iHikgsXF6vqLp7mou7zZ796UawSv+KJ4rLZ2OAJq4wfDdkYqXy/1C2jTE0Mb18h6adQXq1CVeF6gw+KkqU=
+	t=1777624722; cv=pass; b=Y5GIvF7IufDIOcPgaqBYEVNgJEb3Fx7pcweoPy04rPcUrAnnQKFw5sQrnkFap40gqAPkA+V64IBdWnByrN/3DqhTYNorLjpK3AyOaZd3xms6YB7fniQfzEj75Vs1uaqE2lsNapsXH2InCIbbGdmMy8qLgkhsFpzoY5IcEaGBNJs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777621186; c=relaxed/simple;
-	bh=TbLaoWYohHPqj/XG/w1dzsXdf6YqFfSZc9edl1STeRg=;
+	s=arc-20240116; t=1777624722; c=relaxed/simple;
+	bh=/MwKAeqxZ5oj4aK7GraK1ijhDUC3Gz9ljyCvcXTrl4E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AlddusP61vLU7HplXbji44ZBil1O2sIKkJ2F1CvYDPjAXp2scSWOu5/ZLaV21TjkwsMG//ObcB7YQR922zl4wPd9v6u2MG5xmGEtQwQV+ufIElK21TR4QcUsgd1EXZUe/k76TGKRixXEcQ1QAFMmXlgmMUIbIJah0gNhYQ4SrQU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GEJ5aEQO; arc=pass smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-38e7c3a2deaso16027071fa.2
-        for <linux-usb@vger.kernel.org>; Fri, 01 May 2026 00:39:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777621182; cv=none;
+	 To:Content-Type; b=DQ+8aC+DDqyG04XfqxNKr60TObDpATo+wZnoSWzo/R4GvK2o92RItwjPA9yD9EnpirBWowEmlXGDbZtwILaZVyRxfmrCqQHSIRzEuz6X2nSUWahuv0YSt4WRJzm51S2Sku4DxVNW0bGOA0AQ3N8LOUgatGw1K8oC3UOGD1OJHlU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gXxHeq9D; arc=pass smtp.client-ip=74.125.224.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-6501725d888so1483550d50.0
+        for <linux-usb@vger.kernel.org>; Fri, 01 May 2026 01:38:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777624719; cv=none;
         d=google.com; s=arc-20240605;
-        b=Pxp4JYyw4cJAleiXGnmMEi9PQkGosoJds6EqHvVPMLEduMURAvq3Y82B9NMYJZ64rV
-         vCqjwiEuL1R2bAWRjKwXAiF1RRSpr4jJMUkTazOCQVuuCrFB79/0wJ8aIiXg2iW1fGCA
-         D/mjyZ1083RUS2D11KrB5s4DFlnRyS19ND5gJNuCcNuKk2ykt8M0oK6QITPAWYR0CA5n
-         +UT0PWnnZXXbEEmtqj34qF8EozHJPWrgpWA/7UH1iWUby7/3l9Nk/Nm6j1EYjqxy2VMS
-         WYOpucR4E+cva3HBVUJ0aPVUt5hCgcqCia/M8zO15CmkClgSPeLM0x5wTEBBbYEHbJ+/
-         ZewA==
+        b=F73Tr4MuBZ8Hyj7sRiUQAFGDiuOZUof3BlnSgNVi4BeWO05/ik8KdD2lnS4g2UD50g
+         qjQDsclqU+XpaKohUOLF3HIEah0QoI2JTUEcQ66rGpcDLD8SRXjK4Kwla9ZKgrqr0mH0
+         iW+kFVlcSv4/6tHvc56HHAUaTswda0NKnYOZNVylrs+AIqslN+TKXGf2XBOiEl6bXjMP
+         dn+raedNJpzQucNRj0DIy11KHNEKuzoiNDpZOh8K46iOxkv1trarmBoTfaMeFouMgn/8
+         RJjo0rmXildyNgqk1g8+T9rNpgE7a4vXLuuISxEf300R8zOgPGIE2OxCimxPO2QMGnna
+         YpTQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=N5yIG/VNV+70xFszkANHVR8rh10LtJp9VdT7AZQOrpQ=;
-        fh=rL6E8poSdqET8oxHQ4c+o8KXs70vlkp3um9je/6Yyes=;
-        b=R3QAXd0Rf9ivB8JBEeDwt0QMc/FZECb4GzPXX5TFTFyucyt/mW4qZPMx0N3r2TJ5NW
-         YiqwzaYVXvl/ADjw+uFAmqLt+grXbzqU6NhTPFtzUtINlpZwL73GmDmfGhtO39cQspZX
-         NtQtyN1Paea+8aHhtTyPIMb6f+QYXB1sNV3555WEuU9gO1xm4Slvi2XmrAjZeTaeqeNL
-         Cq78k3eYFLpYsHdbwJ/XgtPkOii40DwhQiXd+kohCT94goEhY82/MkELCLWR7k+q7DGe
-         fQGUzKvKFqT0X93FjxFHQmBIQcEytceQFFtuFSRGThRVSry52gghLatCnG8JA1Hl52nz
-         BMJw==;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :dkim-signature;
+        bh=th/5KxEMyktHeD5pvjd6Ekw28jr4W4TCSOTFdFHN2fE=;
+        fh=zUzYV5iv53PdCRarkZLUbyvzn80v2D0pVod7D/v+yEM=;
+        b=jUk0jxyFEUmt9zq/30aISHuEky3IZfZYbiiBupzREsvQSVwG+2JgQJNGDLDgYckM1J
+         stqNebpDHVpW9VqW+r00jiPt4xnpPtfaohz2550d4KlR0yntNWcMhteDJLGQTAQDFOqS
+         aMmzzAELHtJsYPBuf4yC1Df4/kyNNzDhFZwYkI6IccSAuBLtri+imeaPVXNnmsfu/64B
+         XxhOPQF+mqyU6MG397Y2V6o0pE8UcCxnYGfh1nFFGZgnHSam8FdRTOLFnHkdVVVfiZbY
+         T9fE1w/CV+OPs3vr0pXWpZPHds7/n4hBQTbMqr2so20BcOCnnmSaB5WwTrSX/smIZpLK
+         MNmQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777621182; x=1778225982; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=N5yIG/VNV+70xFszkANHVR8rh10LtJp9VdT7AZQOrpQ=;
-        b=GEJ5aEQOu5JLBc6QAEWPXNoNw5rmPtGCkkwJVDi/4RVZt6sP6NLm0N1Lb2skecFh1G
-         L/rEjbj4kT6EpiQjScndF2ADL8GtmfTPVyJjRNj7BchFBe/LNOnOOjsFfv2sEyzNItz3
-         YcSaTJAZSuRs1tR0HNPvdQsXclUK07kLBy97rFTq8tsydXZzpk4HZ3kNVo1/sXrPXk6o
-         b56vqWt8Zq267NZrYGdU8K1sKJ/AS7E8XFXo0i6p0YbFri7CyTs11oATh3kcAJoWbcHj
-         mfl6nOFQrX7qXQvFdUF+AjF+6AOrga66G5QTACPftbBl1PER3WU09VQUXP83j46+7eaz
-         8wgQ==
+        d=gmail.com; s=20251104; t=1777624719; x=1778229519; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=th/5KxEMyktHeD5pvjd6Ekw28jr4W4TCSOTFdFHN2fE=;
+        b=gXxHeq9DfGa7eUKOXE8TROsbiSzfAycrZ7fmB83B4eqjh+nzRRs1MieqfiENsnlLa3
+         T+1zaqk/k1gh1VJEVwcnz32n2fDfRC6J89zr87GqUse6mF/d0wlB7FajZMGTmaA9EBXm
+         zQfKAnWj7uzPASo3/jAE+7K0Z6p7jE/zqSZx/h2uCJlFeSGoy9o9wQ0YCwrMeZbq091u
+         IhcHs/+2GvT5ptAvIxOO42c3tDacNJywsUG3V4TvdYYL0xU5yhrFwzIjaAqZ61ZEPiVw
+         ZGfcLjt0jeJXRWOAIg0QQ2yPGZ8iVIokTbf8uySR8+dWmnMDF50lDuk5YGnyIGvq3q/B
+         UR2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777621182; x=1778225982;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N5yIG/VNV+70xFszkANHVR8rh10LtJp9VdT7AZQOrpQ=;
-        b=WbM7uBSF3dkFj4OXiesM8NsiHh2dnLakHFW5Shotj+iMe3PbaLACL4n1UHp3pr6w/e
-         MiL6l8gjIiWf++Zzsjf/pKIMyMhLtGnXaHlQHaL0TSEMpPGu5JNCi8pSDg2jafMbjf8+
-         yuFnU50PgFmHine8L7pj/b/MOihAy39X/JtB+cQGG49PSl8Q+2q9bDLuNqaRGtyEBVuy
-         eN0H5TG548XtC7M9Ac9eEXp45L80Zq9CY6hbktUqLHKfY4bsgCHJU3xYQjgHAtMoKt4K
-         ViKZaJG+wHS2MlM5zEhL6BBpY1aALiIRj4VzPylnw/wOv1nxCsXoG9GuNsNQSkz1P/mB
-         L7Pw==
-X-Forwarded-Encrypted: i=1; AFNElJ+mi5O0oIJNJZxiRWzFWiu9CD14UiWFVk2+FCykb5mHaqu2LhNi5FqEJAOinD1QQifSm21KQ4LFM3Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGknuybLrd933iD12hfJr8qxcb0gOdxpLGO0GIOoe7Nw/2WxDn
-	GMITCUQq1xpvDOKbMfyG4j8Uk3y9vDY1zWoQXSQ27pd73TV6Ug70XHisX9EHsN+oOPSsOcrCWmI
-	KIRF3BvYLUju/EgdlRrPKRaDe4BP35VquUafCbA9g
-X-Gm-Gg: AeBDieuBMukLjFo02lmkzBxsV7PHgG3pEPmQ39jU7TCmH97GGn1ag1avYwrVZ3z3mz5
-	Vg1ln4eFkyxFfWDrzn2q2kRKlrImmyCpt6fi3NG8E/BU6wd0yQszIlWr+GF95x0kKVy+89QWcOV
-	bymfAn5uSkDljwjlFxXXC20k92VZX4g8qtbsHbPKSqzC6aWgDVtuTFETd8XemDntdfO6BU0aK1A
-	6jR4BqLCsFjhy0wIFau7LAE/4vDXicTlwJaOaDNGCBrVUZITYxfKAs2tStEb5ZpcAoZ9BebFsOv
-	j6001O7f+sZi4Mos5mAo9HUqqp+NF1enYcW/e4Oqy9ou1sYApwBK6zUGuG3x9j8A1jPd6AZ4DJg
-	wp7LqbI78JVnj9i+mxg==
-X-Received: by 2002:a05:651c:2114:b0:38e:186e:350e with SMTP id
- 38308e7fff4ca-3934dec7039mr26121991fa.7.1777621181309; Fri, 01 May 2026
- 00:39:41 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1777624719; x=1778229519;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=th/5KxEMyktHeD5pvjd6Ekw28jr4W4TCSOTFdFHN2fE=;
+        b=STB0bb5/1hvPgkkwf4x7RfcjOM1Z4mFlrxvlCCorUvosGtRXoXAJPkfcd4yvbuoNGm
+         sPGWOEmU5wSIzq0bhXXWkAiPIRsIJnSWCJeQud3uMM61Z+8bNBFzoxmAI37FMDJ2p/vi
+         L3oafo+r9+U1G1q3lJ9dStwybqkEow8oth6FT6N8E36CE3jvMsNBQy4Ig+Re9Q9cDQiC
+         kBmom6Pg3RV4Clm+il78BJvh/zjOzQ0qBIrC+6zdK8WXZF5jtNhsdZdYvQuVzsFgB5Ub
+         liMZxF0g0abLpHHoYq64E/yPtyB9hWD5UA/8wAqLaOYK4AVwEf6lb/ZrEb2p45VgLeys
+         +OMg==
+X-Forwarded-Encrypted: i=1; AFNElJ+EDsJHfjrTRm2ZvV2pOgm3OGisY1IezJwlT8qjBE9Ksn4ick+NF3561qh5h5pHSAJ8FjSPpscaw7E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2bz1LFmO0T81yMWQGOwBH6SVb9/XSCMGqmyxC/NXS/TZsXxiE
+	RccT23ZYGw8XyngCIlq4kGZJZAI9XerjSpsaCEKRKzCFl7sP79IjcE5O1Z4En5bMC5oEEoBxt+T
+	aVUVAeteaICYaV2xgv22+2QK5uiCeRuI=
+X-Gm-Gg: AeBDiet+wf1+s7lOMuBor/Qgq6pueAB9QaSvrRnOP15SBB1SBUT7rK9rcaECa6nlwVx
+	A7VcJEWqSmHis35RPltm1ReDbQ+DXLd1vXn/yz+eeJKWRa8Bvu+8y59+Tx6eocQjk0LxlpCFWtH
+	Eh1Zxx3D6OZBWgn14om63Q9nfl/opGYypNUKlFxQY16buEA210X0wuVFOMYTUur9aQHQKb29Xez
+	rgMp1axRWFFOk8fQ/U7syHvRfTo509TjUf+AQKOp42G1mrKgmRcKhxEsACzuEav9hs4hSE83Tkm
+	D/J7/dqdHQv1jMqm4Q==
+X-Received: by 2002:a05:690e:58a:b0:651:8944:c0ba with SMTP id
+ 956f58d0204a3-65c18fce8c8mr3957316d50.63.1777624718708; Fri, 01 May 2026
+ 01:38:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260430-kcov-refactor-common-handle-v1-1-23a0c7a0ba38@google.com>
-In-Reply-To: <20260430-kcov-refactor-common-handle-v1-1-23a0c7a0ba38@google.com>
-From: Dmitry Vyukov <dvyukov@google.com>
-Date: Fri, 1 May 2026 09:39:30 +0200
-X-Gm-Features: AVHnY4LuOCyhbkG_hl8Sa5NNYS1SbIPwYG33VO-fKmuVe5zr0rpNYf2arYcAEvU
-Message-ID: <CACT4Y+ZMJs0-9N+tcAa7Yi9-r5wshy0BAD1cdYRxBBPvOtMpZQ@mail.gmail.com>
-Subject: Re: [PATCH] kcov: refactor common handle ID into kcov_common_handle_id
-To: Jann Horn <jannh@google.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>, kasan-dev@googlegroups.com, 
-	Andrew Morton <akpm@linux-foundation.org>, Alexander Potapenko <glider@google.com>, 
-	Valentina Manea <valentina.manea.m@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Hongren Zheng <i@zenithal.me>, linux-usb@vger.kernel.org, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
-	=?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, kvm@vger.kernel.org, 
-	virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+References: <20260501045113.484207-1-lgs201920130244@gmail.com>
+In-Reply-To: <20260501045113.484207-1-lgs201920130244@gmail.com>
+From: Guangshuo Li <lgs201920130244@gmail.com>
+Date: Fri, 1 May 2026 16:38:26 +0800
+X-Gm-Features: AVHnY4KH017fOumnkX6bqJdacIeuzBq0p64I5HHnVhrGh-iOMua7TxQHf2z0ttc
+Message-ID: <CANUHTR8b=JN8Q+G+Oi-4V-Yfdut-+MSLNecLVE_k7EcQsFN1vg@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: goku_udc: avoid double-free in error path
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Guangshuo Li <lgs201920130244@gmail.com>, 
+	Kees Cook <kees@kernel.org>, Felipe Balbi <felipe.balbi@linux.intel.com>, 
+	Alexey Khoroshilov <khoroshilov@ispras.ru>, linux-usb@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 501404AB002
+X-Rspamd-Queue-Id: A16004AB190
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36814-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-36815-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[linuxfoundation.org,gmail.com,kernel.org,linux.intel.com,ispras.ru,vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	FREEMAIL_CC(0.00)[gmail.com,googlegroups.com,linux-foundation.org,google.com,kernel.org,linuxfoundation.org,zenithal.me,vger.kernel.org,redhat.com,lists.linux.dev];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dvyukov@google.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[google.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+	FREEMAIL_FROM(0.00)[gmail.com];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lgs201920130244@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
 
-On Thu, 30 Apr 2026 at 16:15, Jann Horn <jannh@google.com> wrote:
+Hi,
+
+Please ignore this patch.
+
+On Fri, 1 May 2026 at 12:51, Guangshuo Li <lgs201920130244@gmail.com> wrote:
 >
-> Store common handle IDs in "struct kcov_common_handle_id", which consumes
-> no space in non-KCOV builds.
-> This cleanup removes #ifdef boilerplate code from subsystems that
-> integrate with KCOV (in particular in usbip_common.h and skbuff.h, see the
-> diffstat).
-> This should also make it easier to add KCOV remote coverage to more
-> subsystems in the future.
+> goku_probe() allocates struct goku_udc and passes &dev->gadget to
+> usb_add_gadget_udc_release() with gadget_release() as the release
+> callback. usb_add_gadget_udc_release() initializes the gadget device with
+> that release callback before calling usb_add_gadget().
 >
-> Signed-off-by: Jann Horn <jannh@google.com>
-
-Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
-
-Thanks!
-
+> If usb_add_gadget() fails, usb_add_gadget_udc_release() calls
+> usb_put_gadget(), which invokes gadget_release() and frees dev. The
+> current error path then falls through to kfree(dev), freeing the same
+> object again.
+>
+> Set dev to NULL before jumping to the common error path so the explicit
+> kfree(dev) is skipped after ownership has already been dropped by the
+> gadget core.
+>
+> This issue was found by a static analysis tool I am developing.
+>
+> Fixes: 2a334cfaf393 ("usb: gadget: goku_udc: fix memory leak in goku_probe()")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
 > ---
->  drivers/usb/usbip/usbip_common.h | 29 +----------------------------
->  drivers/usb/usbip/vhci_rx.c      |  4 ++--
->  drivers/usb/usbip/vhci_sysfs.c   |  2 +-
->  drivers/vhost/vhost.h            |  2 +-
->  include/linux/kcov.h             | 12 ++++++------
->  include/linux/skbuff.h           | 14 +++-----------
->  include/linux/types.h            |  6 ++++++
->  kernel/kcov.c                    |  6 +++---
->  8 files changed, 23 insertions(+), 52 deletions(-)
+>  drivers/usb/gadget/udc/goku_udc.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/usb/usbip/usbip_common.h b/drivers/usb/usbip/usbip_common.h
-> index 282efca64a01..be4c5e65a7f8 100644
-> --- a/drivers/usb/usbip/usbip_common.h
-> +++ b/drivers/usb/usbip/usbip_common.h
-> @@ -282,9 +282,7 @@ struct usbip_device {
->                 void (*unusable)(struct usbip_device *);
->         } eh_ops;
+> diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/goku_udc.c
+> index db42a5e3e805..46a7e0f6541e 100644
+> --- a/drivers/usb/gadget/udc/goku_udc.c
+> +++ b/drivers/usb/gadget/udc/goku_udc.c
+> @@ -1819,15 +1819,20 @@ static int goku_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 >
-> -#ifdef CONFIG_KCOV
-> -       u64 kcov_handle;
-> -#endif
-> +       struct kcov_common_handle_id kcov_handle;
->  };
->
->  #define kthread_get_run(threadfn, data, namefmt, ...)                     \
-> @@ -339,29 +337,4 @@ static inline int interface_to_devnum(struct usb_interface *interface)
->         return udev->devnum;
->  }
->
-> -#ifdef CONFIG_KCOV
-> -
-> -static inline void usbip_kcov_handle_init(struct usbip_device *ud)
-> -{
-> -       ud->kcov_handle = kcov_common_handle();
-> -}
-> -
-> -static inline void usbip_kcov_remote_start(struct usbip_device *ud)
-> -{
-> -       kcov_remote_start_common(ud->kcov_handle);
-> -}
-> -
-> -static inline void usbip_kcov_remote_stop(void)
-> -{
-> -       kcov_remote_stop();
-> -}
-> -
-> -#else /* CONFIG_KCOV */
-> -
-> -static inline void usbip_kcov_handle_init(struct usbip_device *ud) { }
-> -static inline void usbip_kcov_remote_start(struct usbip_device *ud) { }
-> -static inline void usbip_kcov_remote_stop(void) { }
-> -
-> -#endif /* CONFIG_KCOV */
-> -
->  #endif /* __USBIP_COMMON_H */
-> diff --git a/drivers/usb/usbip/vhci_rx.c b/drivers/usb/usbip/vhci_rx.c
-> index a75f4a898a41..a678e7c89837 100644
-> --- a/drivers/usb/usbip/vhci_rx.c
-> +++ b/drivers/usb/usbip/vhci_rx.c
-> @@ -261,9 +261,9 @@ int vhci_rx_loop(void *data)
->                 if (usbip_event_happened(ud))
->                         break;
->
-> -               usbip_kcov_remote_start(ud);
-> +               kcov_remote_start_common(ud->kcov_handle);
->                 vhci_rx_pdu(ud);
-> -               usbip_kcov_remote_stop();
-> +               kcov_remote_stop();
->         }
+>         retval = usb_add_gadget_udc_release(&pdev->dev, &dev->gadget,
+>                         gadget_release);
+> -       if (retval)
+> +       if (retval) {
+> +               /*
+> +                * usb_add_gadget_udc_release() calls the gadget release
+> +                * function on failure, and gadget_release() frees dev.
+> +                */
+> +               dev = NULL;
+>                 goto err;
+> +       }
 >
 >         return 0;
-> diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
-> index 5bc8c47788d4..b98d14c43d13 100644
-> --- a/drivers/usb/usbip/vhci_sysfs.c
-> +++ b/drivers/usb/usbip/vhci_sysfs.c
-> @@ -425,7 +425,7 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
->         vdev->ud.tcp_rx     = tcp_rx;
->         vdev->ud.tcp_tx     = tcp_tx;
->         vdev->ud.status     = VDEV_ST_NOTASSIGNED;
-> -       usbip_kcov_handle_init(&vdev->ud);
-> +       vdev->ud.kcov_handle = kcov_common_handle();
 >
->         spin_unlock(&vdev->ud.lock);
->         spin_unlock_irqrestore(&vhci->lock, flags);
-> diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
-> index 4fe99765c5c7..0192ade6e749 100644
-> --- a/drivers/vhost/vhost.h
-> +++ b/drivers/vhost/vhost.h
-> @@ -44,7 +44,7 @@ struct vhost_worker {
->         /* Used to serialize device wide flushing with worker swapping. */
->         struct mutex            mutex;
->         struct llist_head       work_list;
-> -       u64                     kcov_handle;
-> +       struct kcov_common_handle_id kcov_handle;
->         u32                     id;
->         int                     attachment_cnt;
->         bool                    killed;
-> diff --git a/include/linux/kcov.h b/include/linux/kcov.h
-> index 0143358874b0..cdb72b3859d8 100644
-> --- a/include/linux/kcov.h
-> +++ b/include/linux/kcov.h
-> @@ -43,11 +43,11 @@ do {                                                \
->  /* See Documentation/dev-tools/kcov.rst for usage details. */
->  void kcov_remote_start(u64 handle);
->  void kcov_remote_stop(void);
-> -u64 kcov_common_handle(void);
-> +struct kcov_common_handle_id kcov_common_handle(void);
->
-> -static inline void kcov_remote_start_common(u64 id)
-> +static inline void kcov_remote_start_common(struct kcov_common_handle_id id)
->  {
-> -       kcov_remote_start(kcov_remote_handle(KCOV_SUBSYSTEM_COMMON, id));
-> +       kcov_remote_start(kcov_remote_handle(KCOV_SUBSYSTEM_COMMON, id.val));
+>  err:
+>         if (dev)
+>                 goku_remove (pdev);
+> -       /* gadget_release is not registered yet, kfree explicitly */
+>         kfree(dev);
+>         return retval;
 >  }
->
->  static inline void kcov_remote_start_usb(u64 id)
-> @@ -99,11 +99,11 @@ static inline void kcov_prepare_switch(struct task_struct *t) {}
->  static inline void kcov_finish_switch(struct task_struct *t) {}
->  static inline void kcov_remote_start(u64 handle) {}
->  static inline void kcov_remote_stop(void) {}
-> -static inline u64 kcov_common_handle(void)
-> +static inline struct kcov_common_handle_id kcov_common_handle(void)
->  {
-> -       return 0;
-> +       return (struct kcov_common_handle_id){};
->  }
-> -static inline void kcov_remote_start_common(u64 id) {}
-> +static inline void kcov_remote_start_common(struct kcov_common_handle_id id) {}
->  static inline void kcov_remote_start_usb(u64 id) {}
->  static inline void kcov_remote_start_usb_softirq(u64 id) {}
->  static inline void kcov_remote_stop_softirq(void) {}
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index 2bcf78a4de7b..a3fe418f7ced 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-> @@ -1082,9 +1082,7 @@ struct sk_buff {
->         __u16                   network_header;
->         __u16                   mac_header;
->
-> -#ifdef CONFIG_KCOV
-> -       u64                     kcov_handle;
-> -#endif
-> +       struct kcov_common_handle_id kcov_handle;
->
->         ); /* end headers group */
->
-> @@ -5437,20 +5435,14 @@ static inline void skb_reset_csum_not_inet(struct sk_buff *skb)
->  }
->
->  static inline void skb_set_kcov_handle(struct sk_buff *skb,
-> -                                      const u64 kcov_handle)
-> +                                      struct kcov_common_handle_id kcov_handle)
->  {
-> -#ifdef CONFIG_KCOV
->         skb->kcov_handle = kcov_handle;
-> -#endif
->  }
->
-> -static inline u64 skb_get_kcov_handle(struct sk_buff *skb)
-> +static inline struct kcov_common_handle_id skb_get_kcov_handle(struct sk_buff *skb)
->  {
-> -#ifdef CONFIG_KCOV
->         return skb->kcov_handle;
-> -#else
-> -       return 0;
-> -#endif
->  }
->
->  static inline void skb_mark_for_recycle(struct sk_buff *skb)
-> diff --git a/include/linux/types.h b/include/linux/types.h
-> index 608050dbca6a..93166b0b0617 100644
-> --- a/include/linux/types.h
-> +++ b/include/linux/types.h
-> @@ -224,6 +224,12 @@ struct ustat {
->         char                    f_fpack[6];
->  };
->
-> +struct kcov_common_handle_id {
-> +#ifdef CONFIG_KCOV
-> +       u64 val;
-> +#endif
-> +};
-> +
->  /**
->   * struct callback_head - callback structure for use with RCU and task_work
->   * @next: next update requests in a list
-> diff --git a/kernel/kcov.c b/kernel/kcov.c
-> index 0b369e88c7c9..a43e33a28adb 100644
-> --- a/kernel/kcov.c
-> +++ b/kernel/kcov.c
-> @@ -1083,11 +1083,11 @@ void kcov_remote_stop(void)
->  EXPORT_SYMBOL(kcov_remote_stop);
->
->  /* See the comment before kcov_remote_start() for usage details. */
-> -u64 kcov_common_handle(void)
-> +struct kcov_common_handle_id kcov_common_handle(void)
->  {
->         if (!in_task())
-> -               return 0;
-> -       return current->kcov_handle;
-> +               return (struct kcov_common_handle_id){ .val = 0 };
-> +       return (struct kcov_common_handle_id){ .val = current->kcov_handle };
->  }
->  EXPORT_SYMBOL(kcov_common_handle);
->
->
-> ---
-> base-commit: 57b8e2d666a31fa201432d58f5fe3469a0dd83ba
-> change-id: 20260430-kcov-refactor-common-handle-25178495b2eb
->
 > --
-> Jann Horn <jannh@google.com>
+> 2.43.0
 >
+
+After taking a closer look, this appears to be a false positive. The
+release callback passed to usb_add_gadget_udc_release() is installed on
+the gadget device, so gadget_release() is called with &dev->gadget.dev,
+not with the PCI device &pdev->dev.
+
+goku_probe() only sets driver data on the PCI device via
+pci_set_drvdata(pdev, dev). It does not set driver data on
+&dev->gadget.dev. Therefore, dev_get_drvdata() in gadget_release() is
+not proven to return the allocated struct goku_udc, and the reported
+double-free is not valid.
+
+Sorry for the noise.
+
+Best regards,
+Guangshuo
 
