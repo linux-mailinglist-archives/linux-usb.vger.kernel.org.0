@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-36834-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36835-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OIprHUpB9WluJwIAu9opvQ
-	(envelope-from <linux-usb+bounces-36834-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 02 May 2026 02:11:54 +0200
+	id APskNctF9WngJwIAu9opvQ
+	(envelope-from <linux-usb+bounces-36835-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 02 May 2026 02:31:07 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D44CE4B070C
-	for <lists+linux-usb@lfdr.de>; Sat, 02 May 2026 02:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 380944B07E6
+	for <lists+linux-usb@lfdr.de>; Sat, 02 May 2026 02:31:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 13BBA302D0A9
-	for <lists+linux-usb@lfdr.de>; Sat,  2 May 2026 00:11:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7138D301FA7D
+	for <lists+linux-usb@lfdr.de>; Sat,  2 May 2026 00:30:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AE891A23A4;
-	Sat,  2 May 2026 00:11:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D284220E023;
+	Sat,  2 May 2026 00:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rhfIONGf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z6biZWL2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C73C7155C97;
-	Sat,  2 May 2026 00:11:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CCA81A38F9;
+	Sat,  2 May 2026 00:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777680663; cv=none; b=tHTYQQ2Ena5G+xkNlFgNXa/wtX1G1zCJVn8n58mpI+IfI3CANMTwUCR76pT/NOp1S2Cp+LbCNtzv2mmCpEqnunvGUw+ZCrq+cKFzwjKiHEYJ9AslItlPiRAu5GQq3KnwSLC9CMQFe7gMF2GTm8/fy0t8JLEOFaq7m6Rz91dI3eg=
+	t=1777681853; cv=none; b=kX//EuZ1MwMxEqmr+afMRYQKsQ/+C1XlNSmJy2AYFxI16wa8akaSQBOSoWQH4bRaHJFTcz5cJgWiCDM3shy1yuDk4WtYQcmgQ/88hlfXW6BmVcW7xIDnJxZ2hc2duzDbmsLXcQGTZneOFb1zxQ0IY9eYLfoinP9VPtcMtFwhz6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777680663; c=relaxed/simple;
-	bh=DSjsCTkfWydZI2FV5sUL9ipFi5Z9x92jqoXscoMFLHE=;
+	s=arc-20240116; t=1777681853; c=relaxed/simple;
+	bh=RRtpvL3jARRI6pGEBaCQDlDBnw61LfSgnBrRK+dSWC4=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=JIocJfo4Wd54cXTRbb12QG3VQQVFWejMzE5bOoESuMYzoyv9KzK+4+PE24RLiGbiU6zJUL2sTzFu/DK/S9L8FsLHeWW0nTv3LuLEpH0zSndUj1oRuGHOs0JSMpZRoG4Mk/tUW4ipvvZtZqIJQAbIhc1PLqohyVdQSVntamQZ9fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rhfIONGf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF20C2BCB8;
-	Sat,  2 May 2026 00:11:03 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=F7lk+ySQ0URt5wBfqYuk7r/5yTcg1gQ5XniD6BlyXNwzlQDvf/x2oHYxo8sIS3CmFovRFVfnyGgSfA57Y9lO0Vzsg1DxA/uDinQIYW6+IleSE8AOp2KUqXNLWt7sH8TDeHpcgFEUlMXhk5AE/Vn7MezG5E1Mr2gePhnYDNmUIAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z6biZWL2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC7B6C2BCB4;
+	Sat,  2 May 2026 00:30:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777680663;
-	bh=DSjsCTkfWydZI2FV5sUL9ipFi5Z9x92jqoXscoMFLHE=;
+	s=k20201202; t=1777681853;
+	bh=RRtpvL3jARRI6pGEBaCQDlDBnw61LfSgnBrRK+dSWC4=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=rhfIONGfrubwzmUt50vUgiby1Ynp3HNQzLruZyfmb4f/3cvazo0PHEOn9rvQV/iDy
-	 6kB5OFbZuaUA37r91bxLm5cUEzmWajhGEmxLEQ6dcH2/DMEeF3P97Mp6fQD9TrM3dN
-	 DI+keBXjCvkHJ7gTgUa2Xnwh9djHFII40nsgnTKZDH+PNU862hJQtfrWLkQxmYbzRr
-	 oNJHa6J9yY0PuMqWHXhKaRHNfnALhG5INvmrJ9pu8i3Uv/xom84HhZ/EPQPox7v10r
-	 lWXHwZXeVZiH+C0kLW6aE5NEF/kX1tOWWl6gGyH+Y29moUQQ9OkH0Lf57i+aNdLhDa
-	 neUMg3ewC7dSw==
+	b=Z6biZWL2drJ5hrL/k00EaG5ZTguBHk1v2uttQqFD/qW/XXNqf6/L+kGyZOsyP25JX
+	 vut7fJReY8/7N1c2OLtdrroDNAjTGJ2Pu6vDZb9/ZdvHmVazemjCRigsl3L0tAi1zZ
+	 JZsGoko2r5LlipZQEdQARsB7HviEG4AqpWAhbEU4YgJVURuReaS6B/aPaU6atAIs5o
+	 fL7M8jrXGYLKLJ6Pd3Pty10vj6vrxPJf9q2IiT0lXEjD+SHC5rthe5k6hgOftclnDJ
+	 tSYGE8vrXvpsrgO2RD3TrAR2Xkh65UnRJFHWYKNM3+Yszwd29GE1LgP8dSNiJc0f4k
+	 eHGcTxerrpH4w==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02CC8380CEF5;
-	Sat,  2 May 2026 00:10:18 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FD8D380CEF5;
+	Sat,  2 May 2026 00:30:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -55,20 +55,20 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: usb: r8152: add TRENDnet TUC-ET2G v2.0
+Subject: Re: [PATCH net-next] net: usb: cdc_ncm: add Apple Mac USB-C direct
+ networking quirk
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <177768061679.3667015.16615664630858230517.git-patchwork-notify@kernel.org>
-Date: Sat, 02 May 2026 00:10:16 +0000
-References: <20260430213435.21821-1-olek2@wp.pl>
-In-Reply-To: <20260430213435.21821-1-olek2@wp.pl>
-To: Aleksander Jan Bajkowski <olek2@wp.pl>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, hayeswang@realtek.com,
- hsu.chih.kai@realtek.com, kees@kernel.org, mail@birger-koblitz.de,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, andrew@lunn.ch
-X-Rspamd-Queue-Id: D44CE4B070C
+ <177768180605.3674002.7797567348612816091.git-patchwork-notify@kernel.org>
+Date: Sat, 02 May 2026 00:30:06 +0000
+References: <20260429175739.34426-1-alex@exolabs.net>
+In-Reply-To: <20260429175739.34426-1-alex@exolabs.net>
+To: Alex Cheema <alex@exolabs.net>
+Cc: oliver@neukum.org, bjorn@mork.no, oleavr@frida.re, kuba@kernel.org,
+ pabeni@redhat.com, davem@davemloft.net, edumazet@google.com,
+ andrew+netdev@lunn.ch, netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+X-Rspamd-Queue-Id: 380944B07E6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -80,46 +80,45 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-36835-lists,linux-usb=lfdr.de,netdevbpf];
 	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-usb@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-36834-lists,linux-usb=lfdr.de,netdevbpf];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[wp.pl];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_NO_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	TO_DN_SOME(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[wp.pl:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,lunn.ch:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
 Hello:
 
 This patch was applied to netdev/net.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Thu, 30 Apr 2026 23:34:33 +0200 you wrote:
-> The TRENDnet TUC-ET2G V2.0 is an RTL8156B based 2.5G Ethernet controller.
-> 
-> Add the vendor and product ID values to the driver. This makes Ethernet
-> work with the adapter.
-> 
-> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+On Wed, 29 Apr 2026 18:57:39 +0100 you wrote:
+> Apple Silicon Macs expose two CDC NCM "private" data interfaces over
+> USB-C with VID:PID 0x05ac:0x1905 and product string "Mac". This is the
+> same protocol Apple already ships on iPhone (0x05ac:0x12a8) and iPad
+> (0x05ac:0x12ab) for RemoteXPC since iOS 17 -- both data interfaces lack
+> an interrupt status endpoint, so they rely on the FLAG_LINK_INTR-
+> conditional bind path introduced in commit 3ec8d7572a69 ("CDC-NCM: add
+> support for Apple's private interface").
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next] net: usb: r8152: add TRENDnet TUC-ET2G v2.0
-    https://git.kernel.org/netdev/net/c/f93836b23677
+  - [net-next] net: usb: cdc_ncm: add Apple Mac USB-C direct networking quirk
+    https://git.kernel.org/netdev/net/c/a5148bc2fa27
 
 You are awesome, thank you!
 -- 
