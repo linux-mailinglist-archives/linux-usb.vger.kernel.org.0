@@ -1,206 +1,200 @@
-Return-Path: <linux-usb+bounces-36842-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36844-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kO8iNQaD9WkHMAIAu9opvQ
-	(envelope-from <linux-usb+bounces-36842-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 02 May 2026 06:52:22 +0200
+	id qLMcABXI9Wm8OwIAu9opvQ
+	(envelope-from <linux-usb+bounces-36844-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 02 May 2026 11:47:01 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73C034B0F67
-	for <lists+linux-usb@lfdr.de>; Sat, 02 May 2026 06:52:22 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1FCB4B1906
+	for <lists+linux-usb@lfdr.de>; Sat, 02 May 2026 11:46:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 737423038A6C
-	for <lists+linux-usb@lfdr.de>; Sat,  2 May 2026 04:51:06 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 13497300601E
+	for <lists+linux-usb@lfdr.de>; Sat,  2 May 2026 09:46:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D18C12BEC55;
-	Sat,  2 May 2026 04:51:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F0831064E;
+	Sat,  2 May 2026 09:46:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="Uf+de1L6";
-	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="GEWB0HAS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MP2O6I6U"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC73F2E7BB6;
-	Sat,  2 May 2026 04:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA9E32DC332
+	for <linux-usb@vger.kernel.org>; Sat,  2 May 2026 09:46:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777697461; cv=none; b=rMOgIpv8Oza+t3Cyt2zQICJhDWY+El+PxrrQ9QsV/9DQ6dx9WdOMIxeWRzyEm3dbc5jtMM7y3Gak7qahxSZeUehNCOzamaf0+Q4eLJDgHVnnI/HxSwXUHiB5BIEQGX+1QXzJKwxVA7RNXsO0HSgQfQ1bDqa8LDzuWa8OHjdxLu8=
+	t=1777715215; cv=none; b=fBoJFTgRLUmcp+1pWVkW/hNgQqXFbCQNov+nEtNXI9HWJt6GQe6C8TQvw+u8Iw0UlrZT0vEml01UVQcyIlF161J/X/2l/kJMFe4hnVXvRJE/Q7ABIrNWe/RyUrmUwnwKZ4DC1x5VV1chlD8z9jVrmaXjU0BmmsykiNZle476O3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777697461; c=relaxed/simple;
-	bh=/j+KdgXrFyd32qLGN8tIJdWw4prZxjlLtFjpgrKqngo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pe0cjb1+MnMuBv8KvIOXlBJvUOe6MCNj4DT/qCRPYngzyxgGC96rdIH9ESEf9P6lxw4LuA5ovTujPf39lmixhbswrgbz+qfesap3T49RymUabxdyJvgdszCja3VAjlFYSnpHj+IWaM74OiEEuwrBBtHndOqPtFYe6xMAxHsINp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=Uf+de1L6; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=GEWB0HAS; arc=none smtp.client-ip=23.88.97.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1777697458;
-	bh=/j+KdgXrFyd32qLGN8tIJdWw4prZxjlLtFjpgrKqngo=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Uf+de1L6ba1cmQh5W9u6DHCem3tWhBpH4sLYYXlL4KdxP7mKklgIOHO+JTLj4Myh/
-	 o73nS66zYjiFg79rX3kbVZ1kWwN59WZZ12obQuOH0KIUmQkewsxF0XB8X7BlEnXZjH
-	 ft+820uaxyc8zZwbnEctzRShniHNGDK1JXZsoJl4wxP3HBOD+45vCjB6z9JI79zMmc
-	 d+8cQg1AlhtFBT9xqke9XffCRctm4Rtofek53c11xR0148zbgKQRtWatobAY4TNSQy
-	 ZpJNHyZffM4W8zKvb51WBuPnND3HgeEzghy1zNC/P2tTlAxj8jzWd4+TC2jyCCg3am
-	 B+zcB1Mr4Km2g==
-Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
-	id 6DEC8482C8; Sat,  2 May 2026 04:50:58 +0000 (UTC)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
-	s=default; t=1777697455;
-	bh=/j+KdgXrFyd32qLGN8tIJdWw4prZxjlLtFjpgrKqngo=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=GEWB0HASwP+BopFacHE4eT3xm539NokEuSnTmeTH9BmM/x2tKhQdp1K3tmfA3HI1p
-	 5LQzzLQOQ30jceIzRBe+VWPUBxQCNIOgA6pzEeXaprHpXO2MYCxPtv1ZsKn/XKMf4W
-	 VjyKUvvjPAevdjDdaIhJlK140e4NPstd4NLeI5/PNXMOWgUlO30XObpUYrRpU68ljB
-	 9XBigyayWJgGnQcFS0f1L6molOfxRT+EHd6ycSWWPei5KJKCt4dhS+WI90nYCy/4dJ
-	 RAiv4tFJ3hYIY95NsQyVIEHhbz1KwxPdzkUiFN9hZVbDEXKg7EYKnsu19gj8xZEocA
-	 XpS2rweai0Cvw==
-Received: from AMDDesktop.lan (unknown [IPv6:2a00:6020:47a3:e800:271c:c6c5:9fde:77cb])
-	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id 54241482A2;
-	Sat,  2 May 2026 04:50:55 +0000 (UTC)
-From: Birger Koblitz <mail@birger-koblitz.de>
-Date: Sat, 02 May 2026 06:50:38 +0200
-Subject: [PATCH net-next v3 3/3] r8152: Add firmware upload capability for
- RTL8157/RTL8159
+	s=arc-20240116; t=1777715215; c=relaxed/simple;
+	bh=DPiNTEITt1TPBpjArvFJpFpEyHTx0vdtATFnbHgPgfU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UzlcgR6K0oXzXa6pnofOPUpcN6JYX01nroBbZDaPzHgpqBkw5XEURyVZIpR6fFWfM/3l1kCW2638PMtE+3Ax9UM+SHXKSQRpx4GuTZ0ivkj4h2FmFuUk7OSRRsS3xmBD8KApiwwKGVEtSbSkPJMKrBjQ7NvUzrgRCeKA/WVb/+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MP2O6I6U; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-488ab2db91aso30506835e9.3
+        for <linux-usb@vger.kernel.org>; Sat, 02 May 2026 02:46:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777715211; x=1778320011; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ezmD1eosO8J8L5bV2blwD7uKVAJ5uRnCIe2hKB1QaCg=;
+        b=MP2O6I6UmkMu+yWeLeSdXoUwOAlMSjK4K9IympeZv4SCa8wB4CWZAwZoY/hzIZpP2U
+         OMuXbB3PskdWK3w7ugNJ/lE/Yqj7fOqV4s3R26NigI8nW6srpOCBRv1eSMFHVl7Ptpb3
+         KuOsnHNBNnNMcB9qZqjERcYVNV+uj/9jtgJBe1KQZKtqu3M0+NUaPqk7s9e6/VAwzT14
+         Av57RaZeFOAhskc3eTbOxpe/ZEfBosxnZ399ZYK3Zsy9POuvbnY2OvnxxZdWEi5xiTNd
+         1e3TGxj3pgeHhHQ6iobs/Hi/8McrRTcTpCsSEvgmCcxRXTeYFzOHjpABo1s93sGRH9xC
+         X8Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777715211; x=1778320011;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ezmD1eosO8J8L5bV2blwD7uKVAJ5uRnCIe2hKB1QaCg=;
+        b=V/0cligR8+ooUXI1YiMjEC+SM8qlnUlH3mCnusZvjsF1WUVv6X5BKdHGaS8NNmh9Vc
+         zGgbz442sOCViGm7u+aqMozafCSpahYbqkC56N1xgeW3jzd1xJuSEZjNRqtyGOejNYK4
+         lLE3EBlIQlmpn+PP4naryg4FcL1pofJv1ZA8YD7IW2ZGeoSb4msFjD8JhPCCxIIQMFhV
+         NHyuq3dS9FNrCXN/d9T/HR1Ukjq0qD+XzzZioumbjMO1VARCetARhA6oesEYIEoWiBsP
+         1NYUclygQf8zcAlpUcWOYUWXIgCWMEhCQf1sGe68uNH++C9LXyG50d9XYvVJb8MDjVPF
+         /vXA==
+X-Forwarded-Encrypted: i=1; AFNElJ/pyH3ZDV6+bNgOqbaOQPol6E0RNpBj6cgT81mkENn8+UTf2sQwKaV2CYQbLFx6vVXotH0C162R77M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwotPOQoIWO2lyPXEnMMYl8MJhhbUvbgvkFQVIyEgZcACBQVxpD
+	m4sHN7p2fNAND7LpUUsiZ23YKgXnIrx8hyxx15k6r1fUUSHpkPXzRnAz
+X-Gm-Gg: AeBDietcMi2QhVklnkVz1lqXbaz8ErfUUCOc5kuNuJ9Ff6uqHCmttIwVPJ4vsjSiVeb
+	7vLJOHnz2w02zIrzbm7GrnWnXwRTKA/35mOStwuboTxhXAB9xQTvhpYQYBDfhUfEVbJu8FGrk0U
+	TEm12wGuZzctv3iy4N8OjMCcvARmaTuh/RQGiT5EI1zxpk7/TS4B2+4Wnqi5O3+4yQz25PV1+JF
+	PmLhhYlxl+BmtHp3TXRGCjRJHemgHULY8UBWmp0y36wpfJwgtSb9geAVWy0VX9ZiZk8naFQWKCH
+	V1J7rzzerj9j92Br0AqDhZYAcpD/5vljovuWUmf2fgTUkGwQJcp5x9KeAFnf9VBFMWCepDHTitr
+	1FHLY1QVBJm7jYBXpmMkvQDPmP/Uo7PinwjHjyKI5SiAyObJWSccfRnBKKyA+1yra7kf1US+Gaa
+	p6mm1HCP1D6pbayN4HG75qis0HFL7xJ81AmN8HTQggDdo9yg==
+X-Received: by 2002:a05:6000:40c7:b0:43b:5672:efe with SMTP id ffacd0b85a97d-44bb36d17efmr4004334f8f.9.1777715211096;
+        Sat, 02 May 2026 02:46:51 -0700 (PDT)
+Received: from foxbook (bgt227.neoplus.adsl.tpnet.pl. [83.28.83.227])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-44a8ea7d035sm9943933f8f.5.2026.05.02.02.46.50
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sat, 02 May 2026 02:46:50 -0700 (PDT)
+Date: Sat, 2 May 2026 11:46:44 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Desnes Nunes <desnesn@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ gregkh@linuxfoundation.org, mathias.nyman@intel.com, stable@vger.kernel.org
+Subject: [PATCH RFT RFC] usb: xhci: Kill hosts with HCE or HSE on command
+ timeout
+Message-ID: <20260502114644.76e6b5a3.michal.pecio@gmail.com>
+In-Reply-To: <CACaw+ewwM_5eqyGW5=+THwHsYPs7u3NT096AFQdt6x4E6HcWtA@mail.gmail.com>
+References: <20260430014817.2006885-1-desnesn@redhat.com>
+	<20260430104850.352bd946.michal.pecio@gmail.com>
+	<CACaw+exdPSVSfdAob7+d-xH=JEjBbPpY_z1cPPU6rzXx4wUZpA@mail.gmail.com>
+	<20260430235453.2288c973.michal.pecio@gmail.com>
+	<CACaw+ewwM_5eqyGW5=+THwHsYPs7u3NT096AFQdt6x4E6HcWtA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260502-rtl8159_net_next-v3-3-12c895d46cd6@birger-koblitz.de>
-References: <20260502-rtl8159_net_next-v3-0-12c895d46cd6@birger-koblitz.de>
-In-Reply-To: <20260502-rtl8159_net_next-v3-0-12c895d46cd6@birger-koblitz.de>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Chih Kai Hsu <hsu.chih.kai@realtek.com>, 
- Birger Koblitz <mail@birger-koblitz.de>, 
- Aleksander Jan Bajkowski <olek2@wp.pl>
-X-Mailer: b4 0.14.2
-X-Rspamd-Queue-Id: 73C034B0F67
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: F1FCB4B1906
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[birger-koblitz.de:s=default];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,realtek.com,birger-koblitz.de,wp.pl];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36842-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[birger-koblitz.de];
-	DKIM_TRACE(0.00)[birger-koblitz.de:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36844-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mail@birger-koblitz.de,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,wp.pl:email,birger-koblitz.de:email,birger-koblitz.de:dkim,birger-koblitz.de:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 
-The RTL8159 (RTL_VER_17) requires firmware for its PHY in order to work
-at connection speeds > 5GBit. Add support for uploading firmware for
-the PHY using the existing rtl8152_apply_firmware() function
-in r8157_hw_phy_cfg() and set up the correct names for the firmware
-files.
+On Fri, 1 May 2026 11:09:27 -0300, Desnes Nunes wrote:
+> On Thu, Apr 30, 2026 at 6:55=E2=80=AFPM Michal Pecio <michal.pecio@gmail.=
+com> wrote:
+> > When xhci_handle_command_timeout() logs USBSTS, does it help to add:
+> >
+> > if (usbsts & STS_FATAL) {
+> >         xhci_halt(xhci);
+> >         xhci_hc_died(xhci);
+> >         goto time_out_completed;
+> > }
+> > It may not be perfect solution (race conditions?) but it could hint
+> > that we are on the right track, if it works. =20
+>=20
+> This panicked the system as soon as I hit `echo c > /proc/sysrq-trigger`:
+>=20
+> [  141.683476] sysrq: Trigger a crash
+> [  141.686970] Kernel panic - not syncing: sysrq triggered crash
 
-This also adds support for uploading firmware for the RTL8157
-(RTL_VER_16) PHY, for which firmware is however not strictly necessary
-to work. Still, this allows to upload newer versions of the firmware used
-by this chip, e.g. to improve interoperability.
+Damn, that sucks. Any chance it's not a problem with my proposed change
+but some sort of issue on your side?
 
-If no firmware is found, both the RTL8157 and the RTL8159 will continue
-to work.
+Anyway, I think the patch below might cover it. It works for me in the
+sense that the bus does get killed, without ill effect. I tested on
+VL805 where HSE is easily triggered by disabling XHCI_TRB_OVERFETCH.
+However, the patch isn't necessary here - VL805 doesn't clear CRCR.CRR
+on HSE, so normal abort path is taken and times out, then hc_died().
 
-Signed-off-by: Birger Koblitz <mail@birger-koblitz.de>
-Tested-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+Can somebody serious confirm if this issue actually exists in the first
+place, and whether the patch solves it?
+
+Hello Redhat, anyone alive there? Or only stochastic parrots?
+
+Mathias, do you remember what's the point of the "Command timeout on
+stopped ring" branch? Can it happen in any case other than dead chip?
+
+I also wonder if it wouldn't make sense to just hc_died() on every
+command timeout except Address Device. We rely on Stop Endpoint
+timeouts to kill chips which go unresponsive without setting HCE/HSE,
+because sooner or later somebody loses patience and unlinks an URB,
+but this story (real or hallucinated, but plausible) shows that this
+may not help when there are no devices created yet.
+
 ---
- drivers/net/usb/r8152.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index a2cdd57558c78b025ea61d33b99eca72c19f535f..7efba20de03deb06ac75c3b57a0d0e27b30b8e3a 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -4663,10 +4663,11 @@ static bool rtl8152_is_fw_phy_speed_up_ok(struct r8152 *tp, struct fw_phy_speed_
- 	case RTL_VER_11:
- 	case RTL_VER_12:
- 	case RTL_VER_14:
--	case RTL_VER_16:
- 		goto out;
- 	case RTL_VER_13:
- 	case RTL_VER_15:
-+	case RTL_VER_16:
-+	case RTL_VER_17:
- 	default:
- 		break;
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index e5823650850a..3041deb67b57 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1761,13 +1761,15 @@ void xhci_handle_command_timeout(struct work_struct=
+ *work)
+ 	/* mark this command to be cancelled */
+ 	xhci->current_cmd->status =3D COMP_COMMAND_ABORTED;
+=20
+-	/* Make sure command ring is running before aborting it */
++	/* check for crashed or disconnected chip */
+ 	hw_ring_state =3D xhci_read_64(xhci, &xhci->op_regs->cmd_ring);
+-	if (hw_ring_state =3D=3D ~(u64)0) {
++	if (hw_ring_state =3D=3D ~(u64)0 || usbsts & (STS_FATAL | STS_HCE)) {
++		xhci_info(xhci, "kill the damn thing\n");
+ 		xhci_hc_died(xhci);
+ 		goto time_out_completed;
  	}
-@@ -7982,12 +7983,14 @@ static void r8157_hw_phy_cfg(struct r8152 *tp)
- 	data = r8153_phy_status(tp, 0);
- 	switch (data) {
- 	case PHY_STAT_EXT_INIT:
-+		rtl8152_apply_firmware(tp, true);
- 		ocp_reg_clr_bits(tp, 0xa466, BIT(0));
- 		ocp_reg_clr_bits(tp, 0xa468, BIT(3) | BIT(1));
- 		break;
- 	case PHY_STAT_LAN_ON:
- 	case PHY_STAT_PWRDN:
- 	default:
-+		rtl8152_apply_firmware(tp, false);
- 		break;
- 	}
- 
-@@ -9923,6 +9926,8 @@ static int rtl_ops_init(struct r8152 *tp)
- #define FIRMWARE_8153C_1	"rtl_nic/rtl8153c-1.fw"
- #define FIRMWARE_8156A_2	"rtl_nic/rtl8156a-2.fw"
- #define FIRMWARE_8156B_2	"rtl_nic/rtl8156b-2.fw"
-+#define FIRMWARE_8157_1		"rtl_nic/rtl8157-1.fw"
-+#define FIRMWARE_8159_1		"rtl_nic/rtl8159-1.fw"
- 
- MODULE_FIRMWARE(FIRMWARE_8153A_2);
- MODULE_FIRMWARE(FIRMWARE_8153A_3);
-@@ -9931,6 +9936,8 @@ MODULE_FIRMWARE(FIRMWARE_8153B_2);
- MODULE_FIRMWARE(FIRMWARE_8153C_1);
- MODULE_FIRMWARE(FIRMWARE_8156A_2);
- MODULE_FIRMWARE(FIRMWARE_8156B_2);
-+MODULE_FIRMWARE(FIRMWARE_8157_1);
-+MODULE_FIRMWARE(FIRMWARE_8159_1);
- 
- static int rtl_fw_init(struct r8152 *tp)
- {
-@@ -9969,6 +9976,12 @@ static int rtl_fw_init(struct r8152 *tp)
- 		rtl_fw->pre_fw		= r8153b_pre_firmware_1;
- 		rtl_fw->post_fw		= r8153c_post_firmware_1;
- 		break;
-+	case RTL_VER_16:
-+		rtl_fw->fw_name		= FIRMWARE_8157_1;
-+		break;
-+	case RTL_VER_17:
-+		rtl_fw->fw_name		= FIRMWARE_8159_1;
-+		break;
- 	default:
- 		break;
- 	}
-
--- 
-2.47.3
-
+=20
++	/* Make sure command ring is running before aborting it */
+ 	if ((xhci->cmd_ring_state & CMD_RING_STATE_RUNNING) &&
+ 	    (hw_ring_state & CMD_RING_RUNNING))  {
+ 		/* Prevent new doorbell, and start command abort */
 
