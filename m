@@ -1,167 +1,232 @@
-Return-Path: <linux-usb+bounces-36853-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36855-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SLvyIgJA92k2dwIAu9opvQ
-	(envelope-from <linux-usb+bounces-36853-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 03 May 2026 14:30:58 +0200
+	id 0EpyO4tY92mbgQIAu9opvQ
+	(envelope-from <linux-usb+bounces-36855-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 03 May 2026 16:15:39 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AEBF4B5C4A
-	for <lists+linux-usb@lfdr.de>; Sun, 03 May 2026 14:30:57 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1BD24B5F7D
+	for <lists+linux-usb@lfdr.de>; Sun, 03 May 2026 16:15:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C65DD3013D60
-	for <lists+linux-usb@lfdr.de>; Sun,  3 May 2026 12:24:44 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 47E1430055BF
+	for <lists+linux-usb@lfdr.de>; Sun,  3 May 2026 14:15:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F6BD3B3BFF;
-	Sun,  3 May 2026 12:24:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2197D3CCFCE;
+	Sun,  3 May 2026 14:15:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SyTaNtQr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rOIkYowp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829293B38A9;
-	Sun,  3 May 2026 12:24:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56DE335839C
+	for <linux-usb@vger.kernel.org>; Sun,  3 May 2026 14:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777811082; cv=none; b=DHOlbAHmaDK/kSUJPAkVWOvjFiE+Ym+Lk6IRkgmEmu2JrjmI3hvgiiIvdxWheKVJhjHA+H92uHtH4HYB4QKacGD0NkZbfAG3/rFbKWaw418GQ4FIOrqCeWqtJZrN06c9on0jbAa6B7QmffVh2B9PzWRSliOpD08q4eLoGhOPKBw=
+	t=1777817732; cv=none; b=QHQB9KvJMDTz+19S+uQUr4lknhgZK6Xr5h/4ejzRSlz57uwF6zMBDd+/ln7NRerbh5TcUBxO4d+Sbq/zyKcguw+7TSN/XY6eCQlT48BxmcZn080xFkB5lyg5GWaI2hYGQoKmk/gRnV3VTwzBqrX5MBCxxiOFEoN6ue8B46e0t7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777811082; c=relaxed/simple;
-	bh=xLkCx/1eyekk+G8c4LqqmC6NK6uf9smkFW3ltqCw2M4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=q7E4Dkkn8Nhq4Stk8J01bihyJznEkC200oq5nYLptizbFfzEA/WF/gm1SCWE4stbbKV79yYBP9ISJocaDp9lzElBFY1tMQ8+o0v3iE61d778BJ9dtlk3yi+LGt0jL6OPRsJ2crizJaZ8WrXmUEnv0XZ2Xv93iuGGi1WuBqwJN8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SyTaNtQr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C5CEC2BCB4;
-	Sun,  3 May 2026 12:24:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777811082;
-	bh=xLkCx/1eyekk+G8c4LqqmC6NK6uf9smkFW3ltqCw2M4=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=SyTaNtQrR0IHj4GjpWMDTF7n2/Kc9LlzaC4qLdo4kMYcfUMPGsRsru3AluAM7y7i7
-	 poZFwlNbesqdamsrePzc+SuXZDnzKUCIxVLWL+u0I4gSAE7Q07w+uFXNl8xPLWE17b
-	 8EJpzjGqRdaIP4nS6RUJrBnSpdrlK6j9zZMDlgdt8ac58+hXKqXpc5E5V4Y+nNk6RI
-	 05qucvBBy3tD+/l2XqX0W0UqBcNniji4QDog+AqqjPrdKZUIJ9dPzTPIpDf9FNpT3X
-	 KFhYRitFfVCmq0rwvU+1xfM3ebCDZoN2ZHZP+vPD44+8eN0hqfXi9JDbajH5HcrJ1M
-	 9BepfZiHtqGkw==
-Message-ID: <264c09c9-63c1-4780-8b0a-bc790c643859@kernel.org>
-Date: Sun, 3 May 2026 14:24:37 +0200
+	s=arc-20240116; t=1777817732; c=relaxed/simple;
+	bh=/3d3YUB84LBvSg8RhpQQfhKFPCfmZHQblYjmVcQdYRA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=f1rimYOLYGW0l2GBifup3frRLxnQyALS7d0apDMmN9g9/MIAgkwDc0f9lZljuuQ8RlIiWdkUGrN51aJVMpLW9gAIUexBMPWFlnYeXKFjm1pvaINhbf6f1PLxCaoNXz//klaNdTGTRQWWhGA5zJ/erGR1EpBt9u8h68E4lLtlqbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rOIkYowp; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8d68f702851so382411485a.0
+        for <linux-usb@vger.kernel.org>; Sun, 03 May 2026 07:15:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777817730; x=1778422530; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SPYl+D5Z/0OwSvKuu86ylxC+ZLb/TAcjdwtykkm9EUA=;
+        b=rOIkYowpOoO7Jc3pacQKgnoZRJpVMZesXCTv7xuRmBtGD6z5TCroZvtBC7llf8OL6R
+         cVKXTwkyoDHnXL/lg5GnMtaeYLfSPJpurBqnI7sZt1eNvWK3qCeannswuNKsB+rTAXNY
+         tFFkB/oDfqe/G+0zAXlMWGzfq3IM9N3FCSHCTYTa5Tt9utoXhfTjq0bkvp63aLjH19dX
+         1izhf4+Vd4KRbEsDBzhiT+Kw9nY9ifFbefK0vz6knVzJkSif91vCzVOF5z1tpfDcu7jF
+         /JEcXULktTIaAiDv4YnVgyzm3FnNDs6ezY05BpTgQtwH5wOtGyYV0OeFQi1+XNUZSj0n
+         IQBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777817730; x=1778422530;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=SPYl+D5Z/0OwSvKuu86ylxC+ZLb/TAcjdwtykkm9EUA=;
+        b=F2KHV9qpTJbIJR53VYZ5I3lgdKObcR189NmocRjamlxjYF+Hv1Qra5wMOhqcbodha7
+         9ji27t9nTodtegRSepT4PMdAxNnBJ1lOxd2yG6oaApAZa9Zz3I+OCmTMr/xK3g2yugU5
+         Ex/GoHi4y8nebs/DWfP4tVk47e3o6JjdSednQqpACK51u/m5Naa31uFyOUXKAFn4zn5x
+         23xiRtGGrpEZ7fj86dDNY/w81DABiTHsBM046ZI+mlPR0tuue9nTJ+WMbGlX2Rz6CKej
+         zpIpyEXnNWDP5mDS8J0EQxeSDi7zQFnm6wDd4yvOKeUF8xWDDyJ4SGXbeDI2rwRU4yNq
+         VkMg==
+X-Forwarded-Encrypted: i=1; AFNElJ8eAP2JtGKDLtWr0gZb6zY2MUYB/+pK2IP/Hwg4cVzOswil2tUuWrc1IAqei1vGml/pV+8H8AQdCTA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxs3P07z2KXFWz3ZLYKmfpw0uPkY0V2JasTvuKnSpRiUnnxEdw8
+	4vjBdtShzu1J4DqdARlAU3BjR9cT67dLCajBo+1D5ncDESqQnlGeDATh
+X-Gm-Gg: AeBDieuoGeFG/Ja1gaeTj6yCofn6kBJ7ypuyCtb1t50ifb5RAs1IRTWw7Qd/Oqs9Nsj
+	vrEyIp1ImKxXtRoL8l12P3kc5Smws0Mg5YnG+Aum/agyI9M5Jo+b21iW8/gCsZRAqJfS4k7SIkp
+	STTJECshtCb13jLciJSQDfrOHe7rWra8663Y6w4NgbZwaiKQRjg7BOMU1GsMT+nhsVEVyLErem2
+	If6ZKiT5/Wvfz8XZwkdzYb41xRq0TF6DNgjbWwIvU4XmIZZ6q09wsp7xJpICvMPqhP1ZZL78dbf
+	4UAPchM6CVhLB1s4gNWXhCzbsUOH8kXSDVans2v8rwBUshFgtbd2mqlb46emhq2r3YXPN6pW3g3
+	6VjhIlrCDNgHAKf7mnwf/RDcnpMMTWfZpk14hTx3g2Ds5w2D+0VTsGM8ELQJnBekJvBSQebq8H7
+	IcpqF1QFx8avEbTInwv+MF2GsQUk97IT18GcJ+VnYy3EkvupJ1MADHj6O/FwtYjdg0p4jSRxpcL
+	GgxJjd5q582GwiU16eVn443E/7A2uA=
+X-Received: by 2002:a05:620a:400a:b0:8ee:21b3:2eb5 with SMTP id af79cd13be357-8fd155f2302mr958377685a.6.1777817727083;
+        Sun, 03 May 2026 07:15:27 -0700 (PDT)
+Received: from server1 (c-68-48-65-54.hsd1.mi.comcast.net. [68.48.65.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8fc2938e0b9sm766261985a.9.2026.05.03.07.15.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 May 2026 07:15:26 -0700 (PDT)
+From: Michael Bommarito <michael.bommarito@gmail.com>
+To: Mika Westerberg <westeri@kernel.org>,
+	linux-usb@vger.kernel.org
+Cc: Andreas Noever <andreas.noever@gmail.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH v3 0/4] thunderbolt: harden XDomain property parser
+Date: Sun,  3 May 2026 10:15:04 -0400
+Message-ID: <cover.1777817011.git.michael.bommarito@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260415123221.225149-1-michael.bommarito@gmail.com>
+References: <20260415123221.225149-1-michael.bommarito@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/4] dt-bindings: usb: dwc3-xilinx: Add MMI USB support
- on Versal Gen2 platform
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, michal.simek@amd.com, Thinh.Nguyen@synopsys.com,
- p.zabel@pengutronix.de, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, git@amd.com
-References: <20260429173050.1772377-1-radhey.shyam.pandey@amd.com>
- <20260429173050.1772377-2-radhey.shyam.pandey@amd.com>
- <20260503-enchanted-galago-of-relaxation-dcda7f@quoll>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260503-enchanted-galago-of-relaxation-dcda7f@quoll>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 2AEBF4B5C4A
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: C1BD24B5F7D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36853-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	TAGGED_FROM(0.00)[bounces-36855-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[gmail.com,linux.intel.com,intel.com,linuxfoundation.org,vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	FROM_NEQ_ENVFROM(0.00)[michaelbommarito@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.990];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 
-On 03/05/2026 14:22, Krzysztof Kozlowski wrote:
->> +        compatible = "xlnx,versal2-mmi-dwc3";
-> 
-> I really doubt that DWC3 block comes without addressing space
-> (registers), so either you just misrepresented things, like created a
-> fake block and syscon, or forgot to combine DWC3 with the wrapper.
-> 
-> And if you built with W=1 your DTS you would see errors. How do you see
-> it now? Where do you place it? Wrapper must be outside of soc, but DWC3
-> child must be inside. Did you read submitting patches and writing
-> bindings documents?
-> 
+Caught a few more cases, so this addresses both your cosmetic asks
+on v2 and the more material changes noted in each patch below.
+
+Three independent memory-safety defects in drivers/thunderbolt/property.c
+are reachable when an untrusted Thunderbolt/USB4 XDomain peer responds
+to a PROPERTIES_REQUEST during host-to-host discovery.  The peer
+supplies up to TB_XDP_PROPERTIES_MAX_LENGTH (500) dwords of attacker-
+controlled property block which the local host passes to
+tb_property_parse_dir() as part of the control-plane exchange that
+runs before any tunnels are set up.
+
+Patches 1-3 are one bug per patch: u32 overflow in
+tb_property_entry_valid(), short-dir_len OOB+underflow in
+__tb_property_parse_dir(), and unbounded recursion in the same.
+Patch 4 is three KUnit regression cases exercising all three.
+
+All three defects are OOB-read or DoS at worst.  No controlled OOB
+write is reachable through the parser; parse_dwdata()'s destination
+is a freshly kcalloc'd buffer sized by entry->length.
+
+Operators who do not need XDomain host-to-host discovery can disable
+the path entirely with thunderbolt.xdomain=0 on the kernel command
+line.
+
+Reproduced on v7.0-rc7 + CONFIG_KASAN=y + CONFIG_USB4_KUNIT_TEST=y
+via the KUnit suite in patch 4.  Pre-fix on a v7.0-rc7 + patch 4
+kernel: u32_wrap fails with a KASAN use-after-free trace in
+__tb_property_parse_dir() (the parser reads ~16 GiB past the
+block); recursion fails with KASAN + an Oops on RIP=0 as the
+parser exhausts its guard page.  dir_len_underflow returns NULL
+on pre-fix because the downstream content_len = dir_len - 4
+underflow makes the entry walk bail at tb_property_entry_valid();
+the UUID kmemdup over-read is silent here because KASAN-Generic's
+slab redzones do not flag a 4-byte over-read into the
+kmalloc-chunk tail.  Treat dir_len_underflow as the post-fix
+invariant pin; u32_wrap and recursion are the active pre-fix
+detectors.
+
+Post-fix (all four patches): all three pass cleanly with KASAN
+active.
+
+Changes since v2
+----------------
+
+Material:
+
+  - Patch 2/4: move "dir_len < 4" reject before the UUID kmemdup
+    in the non-root parse path.  v2 placed it after, so a crafted
+    entry with dir_offset near end of block and dir_len in 0..3
+    OOB-read up to 4 dwords past the block before the reject ran
+    (dir_offset=497, dir_len=3, block_len=500 reads
+    block[497..501]).  Both that OOB and the original
+    content_len = dir_len - 4 underflow now hit the same gate.
+
+  - Patch 4/4: tighten dir_len_underflow's buffer (7 dwords,
+    kmalloc-32) and reposition the entry (e->value=4) to focus the
+    UUID kmemdup on the chunk tail.  KASAN-Generic does not flag
+    the 4-byte over-read into the tail, so the test remains a
+    post-fix invariant pin (documented above); v2's wider buffer
+    obscured even the post-fix-pin shape.
+
+  - Patches 1/4, 2/4, 3/4: fix Fixes: SHA.  v2 used e69b6c02b4c3
+    ("net: Add support for networking over Thunderbolt cable"),
+    the wrong commit.  Correct is cdae7c07e3e3 ("thunderbolt: Add
+    support for XDomain properties").
+
+Cosmetic (per v2 review):
+
+  - Lowercase 0xffffff00 in 1/4 and 4/4 commit messages, and 4/4
+    code + comments.
+  - Patch 4/4: hoist the on-wire entry layout into a single shared
+    struct tb_test_property_entry instead of re-declaring an
+    anonymous struct in each of the three tests.
+  - Patch 4/4: use TB_PROPERTY_TYPE_DATA / TB_PROPERTY_TYPE_DIRECTORY
+    constants from <linux/thunderbolt.h> instead of bare 0x64 / 0x44.
+  - Patch 4/4: convert all multi-line block comments to put the
+    opening "/*" on its own line per the thunderbolt subsystem's
+    coding style.
 
 
-Heh, I said it all at v1 and you did not bother even to reply.
+Michael Bommarito (4):
+  thunderbolt: property: reject u32 wrap in tb_property_entry_valid()
+  thunderbolt: property: reject dir_len < 4 to prevent size_t underflow
+  thunderbolt: property: cap recursion depth in
+    __tb_property_parse_dir()
+  thunderbolt: test: add KUnit regression tests for XDomain property
+    parser
 
-NAK, I will be NAKing also future patches without reading, if you just
-keep ignoring feedback like you did at v2 and v3.
+ drivers/thunderbolt/property.c |  32 +++++---
+ drivers/thunderbolt/test.c     | 132 +++++++++++++++++++++++++++++++++
+ 2 files changed, 155 insertions(+), 9 deletions(-)
 
-Best regards,
-Krzysztof
+-- 
+2.53.0
+
 
