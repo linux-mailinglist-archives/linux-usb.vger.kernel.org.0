@@ -1,336 +1,853 @@
-Return-Path: <linux-usb+bounces-36868-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36869-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GHg+DrpA+GnCrwIAu9opvQ
-	(envelope-from <linux-usb+bounces-36868-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 08:46:18 +0200
+	id iMPcDpZC+Gn9rwIAu9opvQ
+	(envelope-from <linux-usb+bounces-36869-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 08:54:14 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D6C14B8FBA
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 08:46:17 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91C144B909B
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 08:54:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 1EB393003702
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 06:46:14 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id BF126300102D
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 06:54:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C1142C027E;
-	Mon,  4 May 2026 06:46:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 564CD2D3739;
+	Mon,  4 May 2026 06:54:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jmV7dOud"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PC2DKX0v"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E971F5825
-	for <linux-usb@vger.kernel.org>; Mon,  4 May 2026 06:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEFF71A7264;
+	Mon,  4 May 2026 06:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777877168; cv=none; b=qtrqI63pbVre36i91cyz5ghfKJ8R+iNE/d/2YI51QkaoCwW+srFixE06+rGC7OOVBTOAPTBFw3jrSaL6hQG1dqHOTwb3gs5q11ahb+8u3Ja92euKDOpThIEnfkb7E5VVxKIoPR3frAVQI1d/qjcHj8t0x3zjpRyTCxKygslZdI8=
+	t=1777877648; cv=none; b=u1gDgqwSgAsNEa13CxeOmRSjvj4XQL/SzkkFiOH8u433nzFuaSQ/lrRoVHsZqTc0cr2ydyyjQSl2hHVaEG0RcaIpjS/o5Ni741Zb7ScJYodTpqLJnZTDJG6VCXY3r/SyiRWPb6oV08OPuOVbJ3mKJwVdZ7joRcOY2Lb+IGaNqoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777877168; c=relaxed/simple;
-	bh=WOUTFRQXY7u4mCgzjAgnVT8wNzDI/PXA4wTabljAAkk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m4t1jQtLXURLorMbMozrWoWnWDFdFoxLBa8Q/3kaYIWi3tZdzUsNPoRsDYs7BOaTmC3nDFGWeYSochqLJkvPxg1CwwafFcqIS26CyKpu2LILKJCLelcYbvWozIGQGFUy/nRxw72HokiCW14eijPqNdkF7gFlIVQn/eeD3unbAP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jmV7dOud; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-43d7645adbdso2217488f8f.1
-        for <linux-usb@vger.kernel.org>; Sun, 03 May 2026 23:46:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1777877165; x=1778481965; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:reply-to:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EOccawuCoFWsjijYdwToilKKz9XDVnegxFTh6EZHPuU=;
-        b=jmV7dOudGI90beUFDyMX3vQJyJCJf8b62/jkvuM0i9UFQQR13b3SU1AmvrK0xM50sC
-         vFPZvy5tC5+XeXznxOXM/LBNdBawkGwjMP5B5J+a9jn/V0ZHxjjzgz3EhFeNOeaxamMq
-         KS202Wwavbvdo48XMjpJ3TZKSOsLA0TvSiOoTEvEXEL7vZAnvriLPw/2QhJ//Nuurhys
-         Hw1YMSfO/YFRMp0lRpk6881pyNk6s93t1TnMDevL5EFFw//mrH4J8MFZj/8GCH5yBqUH
-         faUz1HI7KgOGbbSLvflMCPkGI9EzFzVt9357IzfVB5X46SQ2+NVNhWcxD2a6DsJoJHtn
-         xtoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777877165; x=1778481965;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:reply-to:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EOccawuCoFWsjijYdwToilKKz9XDVnegxFTh6EZHPuU=;
-        b=AW+WKJ/gnwu6atKdAEzeRKhhGt2MIKFUq+/1rGPjioUosx/mO8AdGGUR3StAh/01bI
-         Jt5v+zOSOcvBpU/brbJeAc+A9qK3/wYH67AOU2T0zUSva/uCqRC45r5A1XpzYkU7AWMP
-         j26vyWpjRFjDiDQpMnI5qAQqwJT1cwrC2hlOmSOZkMWE/+XpgaCUsTmPFnEmWLR3euFQ
-         wLh6f5dIfgY/SiYhNZkKIZFLnQv5u5ZQ5aG5r1vvzI2q22vQZLHgF6b2ibY6iuFrZXqs
-         LOsrzjdybu3AB60C+l0eu3/qAvz4XomGNJa41PcZH0bd6dB5w9/tu257sYY0gvIemrtJ
-         12gg==
-X-Forwarded-Encrypted: i=1; AFNElJ+KTp4ZianUp0a1XoKc0FOI9yvbwiBLrc+p7VDXbezrbW0gfLFATm5zyFRtQT39lLbH6Fmo00YKdVU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+P1Hhbb9evHmcLEre+anvWBj5JyJZVlpdyPq/WsyonqNbWF27
-	iYLt7FfGgdYudC+yZcE8IcircAHT+AAXhTQeEfgjLL5k0MdicTZ4Hd+6zWUaJ1M90As=
-X-Gm-Gg: AeBDievpRT6vxvkSUw428dT3LTD+aOGp8fqKBRLxB2gdJ06KZG+c4Ww7yQ6glTXXQWU
-	Hsw/dj/0ipYMGV43zILT5pfR0erwMYNvJrHYz95L7NbnB0vg8v1hyZXvR6xcPKrjad0IeRodgQx
-	fMLc80VhcrqFibUg8f68Eb9+bYHtNJIANxjbpWdF8ZhXwcaMnbXXjgaEhlLJ0UE/Npx5c4UWR1h
-	A//hmmmhANcEz1YIRu++ksFolpHy3PANssYfCJAUg0vTzewg5sHkCSORUEXiV4+rHsF7dFZsg5y
-	glbgGNnVCHvNp8U3OK3lSw3NkOw26loGBzvM7LLl9a54mZMVoAZKlj25meh+Q+a3b8Qm1PPZSqQ
-	3TU6weu3BSQKzThMZYkRWmTNa9Nv8T3AJc/1Tldcpjr7xMuS92aMzYd6x86bV1KUz88X5lr2TMK
-	Lm2n4IYhe+mv1uIU3UiwPdFvRVx4b6WwKqyUXYvsA+rzlwIC/UZH5lDVMLHWqZCQdG3SbK7c0Po
-	QLkOc4RGrIDx7hiKQ==
-X-Received: by 2002:a05:6000:2003:b0:44a:2509:fbf with SMTP id ffacd0b85a97d-44bb63f5834mr12677316f8f.21.1777877165312;
-        Sun, 03 May 2026 23:46:05 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:106d:1080:4245:af61:1735:3752? ([2a01:e0a:106d:1080:4245:af61:1735:3752])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-44a8ef50e59sm22923096f8f.10.2026.05.03.23.46.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 May 2026 23:46:04 -0700 (PDT)
-Message-ID: <d774b2f2-75f8-485f-830f-2a7a5dac1c23@linaro.org>
-Date: Mon, 4 May 2026 08:46:08 +0200
+	s=arc-20240116; t=1777877648; c=relaxed/simple;
+	bh=YT7SuSZKIYRzwSIC772zIe9Rbr4DpvQSRPjAqlHqtTI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MT5ZOiWP1fSkcbGkSpar+eayES4bi3AKjnacUMG6mbwxy9P49YBz6yk4kXCnz3hn2SXYlT3+c4n6jJHTXxOKrrP9Px9pOtA82XcBAwWz0ekQuIq4V3ivWN4xulzctfyDkpTGvYgPgy4pzHwm2y8WEdS2csSHqEWAxCFusFyNYcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PC2DKX0v; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777877647; x=1809413647;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YT7SuSZKIYRzwSIC772zIe9Rbr4DpvQSRPjAqlHqtTI=;
+  b=PC2DKX0vnvltUzTKL8flZEtBvF1lxVfT9xv9RZJ6wG0X3cF+2HiIq5TG
+   YI+EPmepUvtZo9p45wdtZFPYWT0umwZmPo0aDaddCuKAbiZSXUftBeMHq
+   GkAshE4rBa8OLt/xaYt89nPCeTvl3R9atc5GJyLT+1AWqWGVYAAZHs9Jk
+   3Eva3FoO20NkWubsmpzoJYeJiWqTaUWsiBF9GMvTwNem6cYuuTMIL73by
+   E3bFRv/0zgdJurdludABAVrsgfbQz0+k8cO0HGx0m6CKIQf9w2ad+FtOq
+   foC7DPdV+vE77TR0h6Q7wAAXiX1s3yPSdjNaD95qTWPi+VfLEyVqqFedv
+   g==;
+X-CSE-ConnectionGUID: MqTWZYpxTjqa0tRXnR4b+A==
+X-CSE-MsgGUID: R39YNcLpT/OUldM3fWR4Bw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11775"; a="78436582"
+X-IronPort-AV: E=Sophos;i="6.23,215,1770624000"; 
+   d="scan'208";a="78436582"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2026 23:54:07 -0700
+X-CSE-ConnectionGUID: 4fIDrQGiQMehUqh5P8+CxA==
+X-CSE-MsgGUID: XWVP1wWiS+aifHH5tpwXOg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,215,1770624000"; 
+   d="scan'208";a="228938699"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa009.fm.intel.com with ESMTP; 03 May 2026 23:54:03 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 8381A98; Mon, 04 May 2026 08:54:02 +0200 (CEST)
+Date: Mon, 4 May 2026 08:54:02 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	usb4-upstream@oss.qualcomm.com,
+	Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH v2 2/4] thunderbolt: Separate out common NHI bits
+Message-ID: <20260504065402.GB6785@black.igk.intel.com>
+References: <20260428-topic-usb4_nonpcie_prepwork-v2-0-452fb9d63f77@oss.qualcomm.com>
+ <20260428-topic-usb4_nonpcie_prepwork-v2-2-452fb9d63f77@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH] usb: dwc3: qcom: Modify interrupt handling for EUSB2 Phy
- targets
-To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260502095616.666938-1-krishna.kurapati@oss.qualcomm.com>
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <20260502095616.666938-1-krishna.kurapati@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 2D6C14B8FBA
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260428-topic-usb4_nonpcie_prepwork-v2-2-452fb9d63f77@oss.qualcomm.com>
+X-Rspamd-Queue-Id: 91C144B909B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36868-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[linaro.org:+];
+	DKIM_TRACE(0.00)[intel.com:+];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,vger.kernel.org,oss.qualcomm.com,qti.qualcomm.com];
 	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns];
-	MIME_TRACE(0.00)[0:+];
-	HAS_ORG_HEADER(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[neil.armstrong@linaro.org,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-36869-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	HAS_REPLYTO(0.00)[neil.armstrong@linaro.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	REPLYTO_EQ_FROM(0.00)[]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,black.igk.intel.com:mid]
 
 Hi,
 
-On 5/2/26 11:56, Krishna Kurapati wrote:
-> Modify interrupt handling for EUSB2 Phy targets. Enable DP Interrupt
-> when an Low speed device is connnected and enable DM interrupt when
-> a High Speed/ Full Speed device is connected.
+On Tue, Apr 28, 2026 at 08:49:45PM +0200, Konrad Dybcio wrote:
+> + * @pre_nvm_auth: hook to run before TBT3 NVM authentication
 
-Could you explain _why_ and not the content of the patch ?
+Thunderbolt 3 NVM authentication
 
-> 
-> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-> ---
-> Tested remote wakeupon Glymur device by button press from a headset
-> connected to both Type-C and Type-A ports.
-> 
->   drivers/usb/dwc3/dwc3-qcom.c | 63 ++++++++++++++++++++++++++++++------
->   1 file changed, 54 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index f43f73ac36ff..5956821eab45 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -60,6 +60,10 @@ static const u32 pwr_evnt_irq_stat_reg[DWC3_QCOM_MAX_PORTS] = {
->   	0x238,
->   };
->   
-> +struct dwc3_qcom_platform_data {
-> +	bool			uses_eusb2_phy;
+> + * @post_nvm_auth: hook to run after TBT3 NVM authentication
+
+ditto here.
+
+> + * @request_ring_irq: NHI specific interrupt retrieval hook
+> + * @release_ring_irq: NHI specific interrupt release hook
+> + * @is_present: Whether the device is currently present on the parent bus
+> + * @init_interrupts: NHI specific interrupt initialization hook
+>   */
+>  struct tb_nhi_ops {
+>  	int (*init)(struct tb_nhi *nhi);
+> @@ -47,6 +61,12 @@ struct tb_nhi_ops {
+>  	int (*runtime_suspend)(struct tb_nhi *nhi);
+>  	int (*runtime_resume)(struct tb_nhi *nhi);
+>  	void (*shutdown)(struct tb_nhi *nhi);
+> +	void (*pre_nvm_auth)(struct tb_nhi *nhi);
+> +	void (*post_nvm_auth)(struct tb_nhi *nhi);
+> +	int (*request_ring_irq)(struct tb_ring *ring, bool no_suspend);
+> +	void (*release_ring_irq)(struct tb_ring *ring);
+> +	bool (*is_present)(struct tb_nhi *nhi);
+> +	int (*init_interrupts)(struct tb_nhi *nhi);
+>  };
+>  
+>  extern const struct tb_nhi_ops icl_nhi_ops;
+> @@ -101,4 +121,15 @@ extern const struct tb_nhi_ops icl_nhi_ops;
+>  
+>  #define PCI_CLASS_SERIAL_USB_USB4			0x0c0340
+>  
+> +/* Host interface quirks */
+> +#define QUIRK_AUTO_CLEAR_INT	BIT(0)
+> +#define QUIRK_E2E		BIT(1)
+> +
+> +/*
+> + * Minimal number of vectors when we use MSI-X. Two for control channel
+> + * Rx/Tx and the rest four are for cross domain DMA paths.
+> + */
+> +#define MSIX_MIN_VECS		6
+> +#define MSIX_MAX_VECS		16
+> +
+>  #endif
+> diff --git a/drivers/thunderbolt/nhi_ops.c b/drivers/thunderbolt/nhi_ops.c
+> index 8c50066f3411..530337a78322 100644
+> --- a/drivers/thunderbolt/nhi_ops.c
+> +++ b/drivers/thunderbolt/nhi_ops.c
+> @@ -11,6 +11,7 @@
+>  
+>  #include "nhi.h"
+>  #include "nhi_regs.h"
+> +#include "pci.h"
+>  #include "tb.h"
+>  
+>  /* Ice Lake specific NHI operations */
+> @@ -176,6 +177,8 @@ static int icl_nhi_resume(struct tb_nhi *nhi)
+>  
+>  static void icl_nhi_shutdown(struct tb_nhi *nhi)
+>  {
+> +	nhi_pci_shutdown(nhi);
+> +
+>  	icl_nhi_force_power(nhi, false);
+>  }
+>  
+> @@ -186,4 +189,10 @@ const struct tb_nhi_ops icl_nhi_ops = {
+>  	.runtime_suspend = icl_nhi_suspend,
+>  	.runtime_resume = icl_nhi_resume,
+>  	.shutdown = icl_nhi_shutdown,
+> +	.pre_nvm_auth = nhi_pci_start_dma_port,
+> +	.post_nvm_auth = nhi_pci_complete_dma_port,
+> +	.request_ring_irq = nhi_pci_ring_request_msix,
+> +	.release_ring_irq = nhi_pci_ring_release_msix,
+> +	.is_present = nhi_pci_is_present,
+> +	.init_interrupts = nhi_pci_init_msi,
+>  };
+> diff --git a/drivers/thunderbolt/pci.c b/drivers/thunderbolt/pci.c
+> new file mode 100644
+> index 000000000000..400ba88db034
+> --- /dev/null
+> +++ b/drivers/thunderbolt/pci.c
+> @@ -0,0 +1,507 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Thunderbolt driver - PCI NHI driver
+> + *
+> + * Copyright (c) 2014 Andreas Noever <andreas.noever@gmail.com>
+> + * Copyright (C) 2018, Intel Corporation
+> + */
+> +
+> +#include <linux/pm_runtime.h>
+> +#include <linux/slab.h>
+> +#include <linux/errno.h>
+> +#include <linux/pci.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/iommu.h>
+> +#include <linux/module.h>
+> +#include <linux/delay.h>
+> +#include <linux/platform_data/x86/apple.h>
+> +#include <linux/property.h>
+> +#include <linux/string_helpers.h>
+> +
+> +#include "nhi.h"
+> +#include "nhi_regs.h"
+> +#include "pci.h"
+> +#include "tb.h"
+> +
+
+Kernel-doc
+
+> +struct tb_nhi_pci {
+> +	struct tb_nhi nhi;
+> +	struct ida msix_ida;
 > +};
 > +
->   struct dwc3_qcom_port {
->   	int			qusb2_phy_irq;
->   	int			dp_hs_phy_irq;
-> @@ -85,6 +89,7 @@ struct dwc3_qcom {
->   	struct icc_path		*icc_path_apps;
->   
->   	enum usb_role		current_role;
-> +	bool			uses_eusb2_phy;
->   };
->   
->   #define to_dwc3_qcom(d) container_of((d), struct dwc3_qcom, dwc)
-> @@ -272,15 +277,21 @@ static void dwc3_qcom_disable_wakeup_irq(int irq)
->   	disable_irq_nosync(irq);
->   }
->   
-> -static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom_port *port)
-> +static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom *qcom, int i)
->   {
-> +	struct dwc3_qcom_port *port = &qcom->ports[i];
+> +static inline struct tb_nhi_pci *nhi_to_pci(struct tb_nhi *nhi)
+> +{
+> +	return container_of(nhi, struct tb_nhi_pci, nhi);
+> +}
 > +
->   	dwc3_qcom_disable_wakeup_irq(port->qusb2_phy_irq);
->   
->   	if (port->usb2_speed == USB_SPEED_LOW) {
-> -		dwc3_qcom_disable_wakeup_irq(port->dm_hs_phy_irq);
-> +		dwc3_qcom_disable_wakeup_irq(qcom->uses_eusb2_phy ?
-> +					     port->dp_hs_phy_irq :
-> +					     port->dm_hs_phy_irq);
->   	} else if ((port->usb2_speed == USB_SPEED_HIGH) ||
->   			(port->usb2_speed == USB_SPEED_FULL)) {
-> -		dwc3_qcom_disable_wakeup_irq(port->dp_hs_phy_irq);
-> +		dwc3_qcom_disable_wakeup_irq(qcom->uses_eusb2_phy ?
-> +					     port->dm_hs_phy_irq :
-> +					     port->dp_hs_phy_irq);
->   	} else {
->   		dwc3_qcom_disable_wakeup_irq(port->dp_hs_phy_irq);
->   		dwc3_qcom_disable_wakeup_irq(port->dm_hs_phy_irq);
-> @@ -289,8 +300,10 @@ static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom_port *port)
->   	dwc3_qcom_disable_wakeup_irq(port->ss_phy_irq);
->   }
->   
-> -static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom_port *port)
-> +static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom *qcom, int i)
->   {
-> +	struct dwc3_qcom_port *port = &qcom->ports[i];
+> +static void nhi_pci_check_quirks(struct tb_nhi_pci *nhi_pci)
+> +{
+> +	struct tb_nhi *nhi = &nhi_pci->nhi;
+> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
 > +
->   	dwc3_qcom_enable_wakeup_irq(port->qusb2_phy_irq, 0);
->   
->   	/*
-> @@ -303,11 +316,19 @@ static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom_port *port)
->   	 */
->   
->   	if (port->usb2_speed == USB_SPEED_LOW) {
-> -		dwc3_qcom_enable_wakeup_irq(port->dm_hs_phy_irq,
-> +		dwc3_qcom_enable_wakeup_irq(qcom->uses_eusb2_phy ?
-> +					    port->dp_hs_phy_irq :
-> +					    port->dm_hs_phy_irq,
-> +					    qcom->uses_eusb2_phy ?
-> +					    IRQ_TYPE_EDGE_RISING :
->   					    IRQ_TYPE_EDGE_FALLING);
->   	} else if ((port->usb2_speed == USB_SPEED_HIGH) ||
->   			(port->usb2_speed == USB_SPEED_FULL)) {
-> -		dwc3_qcom_enable_wakeup_irq(port->dp_hs_phy_irq,
-> +		dwc3_qcom_enable_wakeup_irq(qcom->uses_eusb2_phy ?
-> +					    port->dm_hs_phy_irq :
-> +					    port->dp_hs_phy_irq,
-> +					    qcom->uses_eusb2_phy ?
-> +					    IRQ_TYPE_EDGE_RISING :
->   					    IRQ_TYPE_EDGE_FALLING);
->   	} else {
->   		dwc3_qcom_enable_wakeup_irq(port->dp_hs_phy_irq,
-> @@ -324,7 +345,7 @@ static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
->   	int i;
->   
->   	for (i = 0; i < qcom->num_ports; i++)
-> -		dwc3_qcom_disable_port_interrupts(&qcom->ports[i]);
-> +		dwc3_qcom_disable_port_interrupts(qcom, i);
->   }
->   
->   static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
-> @@ -332,7 +353,7 @@ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
->   	int i;
->   
->   	for (i = 0; i < qcom->num_ports; i++)
-> -		dwc3_qcom_enable_port_interrupts(&qcom->ports[i]);
-> +		dwc3_qcom_enable_port_interrupts(qcom, i);
->   }
->   
->   static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
-> @@ -609,6 +630,7 @@ struct dwc3_glue_ops dwc3_qcom_glue_ops = {
->   
->   static int dwc3_qcom_probe(struct platform_device *pdev)
->   {
-> +	const struct dwc3_qcom_platform_data *pdata;
->   	struct dwc3_probe_data	probe_data = {};
->   	struct device		*dev = &pdev->dev;
->   	struct dwc3_qcom	*qcom;
-> @@ -624,6 +646,10 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->   
->   	qcom->dev = &pdev->dev;
->   
-> +	pdata = device_get_match_data(dev);
-> +	if (pdata)
-> +		qcom->uses_eusb2_phy = pdata->uses_eusb2_phy;
+> +	if (pdev->vendor == PCI_VENDOR_ID_INTEL) {
+> +		/*
+> +		 * Intel hardware supports auto clear of the interrupt
+> +		 * status register right after interrupt is being
+> +		 * issued.
+> +		 */
+> +		nhi->quirks |= QUIRK_AUTO_CLEAR_INT;
 > +
->   	qcom->resets = devm_reset_control_array_get_optional_exclusive(dev);
->   	if (IS_ERR(qcom->resets)) {
->   		return dev_err_probe(&pdev->dev, PTR_ERR(qcom->resets),
-> @@ -838,8 +864,27 @@ static const struct dev_pm_ops dwc3_qcom_dev_pm_ops = {
->   	.prepare = pm_sleep_ptr(dwc3_qcom_prepare),
->   };
->   
-> +static const struct dwc3_qcom_platform_data dwc3_qcom_pdata = {
-> +	.uses_eusb2_phy = false,
+> +		switch (pdev->device) {
+> +		case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_NHI:
+> +		case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_NHI:
+> +			/*
+> +			 * Falcon Ridge controller needs the end-to-end
+> +			 * flow control workaround to avoid losing Rx
+> +			 * packets when RING_FLAG_E2E is set.
+> +			 */
+> +			nhi->quirks |= QUIRK_E2E;
+> +			break;
+> +		}
+> +	}
+> +}
+> +
+> +static int nhi_pci_check_iommu_pdev(struct pci_dev *pdev, void *data)
+> +{
+> +	if (!pdev->external_facing ||
+> +	    !device_iommu_capable(&pdev->dev, IOMMU_CAP_PRE_BOOT_PROTECTION))
+> +		return 0;
+> +	*(bool *)data = true;
+> +	return 1; /* Stop walking */
+> +}
+> +
+> +static void nhi_pci_check_iommu(struct tb_nhi_pci *nhi_pci)
+> +{
+> +	struct tb_nhi *nhi = &nhi_pci->nhi;
+> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
+> +	struct pci_bus *bus = pdev->bus;
+> +	bool port_ok = false;
+> +
+> +	/*
+> +	 * Ideally what we'd do here is grab every PCI device that
+> +	 * represents a tunnelling adapter for this NHI and check their
+> +	 * status directly, but unfortunately USB4 seems to make it
+> +	 * obnoxiously difficult to reliably make any correlation.
+> +	 *
+> +	 * So for now we'll have to bodge it... Hoping that the system
+> +	 * is at least sane enough that an adapter is in the same PCI
+> +	 * segment as its NHI, if we can find *something* on that segment
+> +	 * which meets the requirements for Kernel DMA Protection, we'll
+> +	 * take that to imply that firmware is aware and has (hopefully)
+> +	 * done the right thing in general. We need to know that the PCI
+> +	 * layer has seen the ExternalFacingPort property which will then
+> +	 * inform the IOMMU layer to enforce the complete "untrusted DMA"
+> +	 * flow, but also that the IOMMU driver itself can be trusted not
+> +	 * to have been subverted by a pre-boot DMA attack.
+> +	 */
+> +	while (bus->parent)
+> +		bus = bus->parent;
+> +
+> +	pci_walk_bus(bus, nhi_pci_check_iommu_pdev, &port_ok);
+> +
+> +	nhi->iommu_dma_protection = port_ok;
+> +	dev_dbg(nhi->dev, "IOMMU DMA protection is %s\n",
+> +		str_enabled_disabled(port_ok));
+> +}
+> +
+> +int nhi_pci_init_msi(struct tb_nhi *nhi)
+> +{
+> +	struct tb_nhi_pci *nhi_pci = nhi_to_pci(nhi);
+> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
+> +	struct device *dev = &pdev->dev;
+> +	int res, irq, nvec;
+> +
+> +	ida_init(&nhi_pci->msix_ida);
+> +
+> +	/*
+> +	 * The NHI has 16 MSI-X vectors or a single MSI. We first try to
+> +	 * get all MSI-X vectors and if we succeed, each ring will have
+> +	 * one MSI-X. If for some reason that does not work out, we
+> +	 * fallback to a single MSI.
+> +	 */
+> +	nvec = pci_alloc_irq_vectors(pdev, MSIX_MIN_VECS, MSIX_MAX_VECS,
+> +				     PCI_IRQ_MSIX);
+> +	if (nvec < 0) {
+> +		nvec = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSI);
+> +		if (nvec < 0)
+> +			return nvec;
+> +
+> +		INIT_WORK(&nhi->interrupt_work, nhi_interrupt_work);
+> +
+> +		irq = pci_irq_vector(pdev, 0);
+> +		if (irq < 0)
+> +			return irq;
+> +
+> +		res = devm_request_irq(&pdev->dev, irq, nhi_msi,
+> +				       IRQF_NO_SUSPEND, "thunderbolt", nhi);
+> +		if (res)
+> +			return dev_err_probe(dev, res, "request_irq failed, aborting\n");
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static bool nhi_pci_imr_valid(struct pci_dev *pdev)
+> +{
+> +	u8 val;
+> +
+> +	if (!device_property_read_u8(&pdev->dev, "IMR_VALID", &val))
+> +		return !!val;
+> +
+> +	return true;
+> +}
+> +
+> +void nhi_pci_start_dma_port(struct tb_nhi *nhi)
+> +{
+> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
+> +	struct pci_dev *root_port;
+> +
+> +	/*
+> +	 * During host router NVM upgrade we should not allow root port to
+> +	 * go into D3cold because some root ports cannot trigger PME
+> +	 * itself. To be on the safe side keep the root port in D0 during
+> +	 * the whole upgrade process.
+> +	 */
+> +	root_port = pcie_find_root_port(pdev);
+> +	if (root_port)
+> +		pm_runtime_get_noresume(&root_port->dev);
+> +}
+> +
+> +void nhi_pci_complete_dma_port(struct tb_nhi *nhi)
+> +{
+> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
+> +	struct pci_dev *root_port;
+> +
+> +	root_port = pcie_find_root_port(pdev);
+> +	if (root_port)
+> +		pm_runtime_put(&root_port->dev);
+> +}
+> +
+> +int nhi_pci_ring_request_msix(struct tb_ring *ring, bool no_suspend)
+> +{
+> +	struct tb_nhi *nhi = ring->nhi;
+> +	struct tb_nhi_pci *nhi_pci = nhi_to_pci(nhi);
+> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
+> +	unsigned long irqflags;
+> +	int ret;
+> +
+> +	if (!pdev->msix_enabled)
+> +		return 0;
+> +
+> +	ret = ida_alloc_max(&nhi_pci->msix_ida, MSIX_MAX_VECS - 1, GFP_KERNEL);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ring->vector = ret;
+> +
+> +	ret = pci_irq_vector(pdev, ring->vector);
+> +	if (ret < 0)
+> +		goto err_ida_remove;
+> +
+> +	ring->irq = ret;
+> +
+> +	irqflags = no_suspend ? IRQF_NO_SUSPEND : 0;
+> +	ret = request_irq(ring->irq, ring_msix, irqflags, "thunderbolt", ring);
+> +	if (ret)
+> +		goto err_ida_remove;
+> +
+> +	return 0;
+> +
+> +err_ida_remove:
+> +	ida_free(&nhi_pci->msix_ida, ring->vector);
+> +
+> +	return ret;
+> +}
+> +
+> +void nhi_pci_ring_release_msix(struct tb_ring *ring)
+> +{
+> +	struct tb_nhi_pci *nhi_pci = nhi_to_pci(ring->nhi);
+> +
+> +	if (ring->irq <= 0)
+> +		return;
+> +
+> +	free_irq(ring->irq, ring);
+> +	ida_free(&nhi_pci->msix_ida, ring->vector);
+> +	ring->vector = 0;
+> +	ring->irq = 0;
+> +}
+> +
+> +void nhi_pci_shutdown(struct tb_nhi *nhi)
+
+Why these are not static?
+
+> +{
+> +	struct tb_nhi_pci *nhi_pci = nhi_to_pci(nhi);
+> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
+> +
+> +	/*
+> +	 * We have to release the irq before calling flush_work. Otherwise an
+> +	 * already executing IRQ handler could call schedule_work again.
+> +	 */
+> +	if (!pdev->msix_enabled) {
+> +		devm_free_irq(nhi->dev, pdev->irq, nhi);
+> +		flush_work(&nhi->interrupt_work);
+> +	}
+> +	ida_destroy(&nhi_pci->msix_ida);
+> +}
+> +
+> +bool nhi_pci_is_present(struct tb_nhi *nhi)
+> +{
+> +	return pci_device_is_present(to_pci_dev(nhi->dev));
+> +}
+> +
+> +static const struct tb_nhi_ops pci_nhi_default_ops = {
+> +	.pre_nvm_auth = nhi_pci_start_dma_port,
+> +	.post_nvm_auth = nhi_pci_complete_dma_port,
+> +	.request_ring_irq = nhi_pci_ring_request_msix,
+> +	.release_ring_irq = nhi_pci_ring_release_msix,
+> +	.shutdown = nhi_pci_shutdown,
+> +	.is_present = nhi_pci_is_present,
+> +	.init_interrupts = nhi_pci_init_msi,
+
+You populate them here so there is no need to expose outside of pci.c.
+
 > +};
 > +
-> +static const struct dwc3_qcom_platform_data dwc3_qcom_glymur_pdata = {
+> +static int nhi_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct tb_nhi_pci *nhi_pci;
+> +	struct tb_nhi *nhi;
+> +	int res;
+> +
+> +	if (!nhi_pci_imr_valid(pdev))
+> +		return dev_err_probe(dev, -ENODEV, "firmware image not valid, aborting\n");
+> +
+> +	res = pcim_enable_device(pdev);
+> +	if (res)
+> +		return dev_err_probe(dev, res, "cannot enable PCI device, aborting\n");
+> +
+> +	nhi_pci = devm_kzalloc(dev, sizeof(*nhi_pci), GFP_KERNEL);
+> +	if (!nhi_pci)
+> +		return -ENOMEM;
+> +
+> +	nhi = &nhi_pci->nhi;
+> +	nhi->dev = dev;
+> +	nhi->ops = (const struct tb_nhi_ops *)id->driver_data ?: &pci_nhi_default_ops;
+> +
+> +	nhi->iobase = pcim_iomap_region(pdev, 0, "thunderbolt");
+> +	res = PTR_ERR_OR_ZERO(nhi->iobase);
+> +	if (res)
+> +		return dev_err_probe(dev, res, "cannot obtain PCI resources, aborting\n");
+> +
+> +	nhi_pci_check_quirks(nhi_pci);
+> +	nhi_pci_check_iommu(nhi_pci);
+> +
+> +	pci_set_master(pdev);
+> +
+> +	res = nhi_probe(&nhi_pci->nhi);
+> +	if (res)
+> +		return dev_err_probe(dev, res, "NHI common probe failed\n");
 
-SM8550 was the first QCom upstream SoC to use eUSB, should it be covered as well like SM8650, X1, ... ?
+You can make nhi_probe() log error so you can just do here
 
-Thanks,
-Neil
+	return nhi_probe(...);
 
-> +	.uses_eusb2_phy = true,
+> +
+> +	return 0;
+> +}
+> +
+> +static void nhi_pci_remove(struct pci_dev *pdev)
+> +{
+> +	struct tb *tb = pci_get_drvdata(pdev);
+> +	struct tb_nhi *nhi = tb->nhi;
+> +
+> +	pm_runtime_get_sync(&pdev->dev);
+> +	pm_runtime_dont_use_autosuspend(&pdev->dev);
+> +	pm_runtime_forbid(&pdev->dev);
+> +
+> +	tb_domain_remove(tb);
+> +	nhi_shutdown(nhi);
+> +}
+> +
+> +/*
+> + * During suspend the Thunderbolt controller is reset and all PCIe
+> + * tunnels are lost. The NHI driver will try to reestablish all tunnels
+> + * during resume. This adds device links between the tunneled PCIe
+> + * downstream ports and the NHI so that the device core will make sure
+> + * NHI is resumed first before the rest.
+> + */
+> +bool tb_apple_add_links(struct tb_nhi *nhi)
+
+Okay you moved it here good. I think we can call it in nhi_pci_probe()
+directly so no need to expose outside.
+
+> +{
+> +	struct pci_dev *nhi_pdev = to_pci_dev(nhi->dev);
+> +	struct pci_dev *upstream, *pdev;
+> +	bool ret;
+> +
+> +	if (!x86_apple_machine)
+> +		return false;
+> +
+> +	switch (nhi_pdev->device) {
+> +	case PCI_DEVICE_ID_INTEL_LIGHT_RIDGE:
+> +	case PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C:
+> +	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_NHI:
+> +	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_NHI:
+> +		break;
+> +	default:
+> +		return false;
+> +	}
+> +
+> +	upstream = pci_upstream_bridge(nhi_pdev);
+> +	while (upstream) {
+> +		if (!pci_is_pcie(upstream))
+> +			return false;
+> +		if (pci_pcie_type(upstream) == PCI_EXP_TYPE_UPSTREAM)
+> +			break;
+> +		upstream = pci_upstream_bridge(upstream);
+> +	}
+> +
+> +	if (!upstream)
+> +		return false;
+> +
+> +	/*
+> +	 * For each hotplug downstream port, create add device link
+> +	 * back to NHI so that PCIe tunnels can be re-established after
+> +	 * sleep.
+> +	 */
+> +	ret = false;
+> +	for_each_pci_bridge(pdev, upstream->subordinate) {
+> +		const struct device_link *link;
+> +
+> +		if (!pci_is_pcie(pdev))
+> +			continue;
+> +		if (pci_pcie_type(pdev) != PCI_EXP_TYPE_DOWNSTREAM ||
+> +		    !pdev->is_pciehp)
+> +			continue;
+> +
+> +		link = device_link_add(&pdev->dev, nhi->dev,
+> +				       DL_FLAG_AUTOREMOVE_SUPPLIER |
+> +				       DL_FLAG_PM_RUNTIME);
+> +		if (link) {
+> +			dev_dbg(nhi->dev, "created link from %s\n",
+> +				dev_name(&pdev->dev));
+> +			ret = true;
+> +		} else {
+> +			dev_warn(nhi->dev, "device link creation from %s failed\n",
+> +				 dev_name(&pdev->dev));
+> +		}
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static struct pci_device_id nhi_ids[] = {
+> +	/*
+> +	 * We have to specify class, the TB bridges use the same device and
+> +	 * vendor (sub)id on gen 1 and gen 2 controllers.
+> +	 */
+> +	{
+> +		.class = PCI_CLASS_SYSTEM_OTHER << 8, .class_mask = ~0,
+> +		.vendor = PCI_VENDOR_ID_INTEL,
+> +		.device = PCI_DEVICE_ID_INTEL_LIGHT_RIDGE,
+> +		.subvendor = 0x2222, .subdevice = 0x1111,
+> +	},
+> +	{
+> +		.class = PCI_CLASS_SYSTEM_OTHER << 8, .class_mask = ~0,
+> +		.vendor = PCI_VENDOR_ID_INTEL,
+> +		.device = PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C,
+> +		.subvendor = 0x2222, .subdevice = 0x1111,
+> +	},
+> +	{
+> +		.class = PCI_CLASS_SYSTEM_OTHER << 8, .class_mask = ~0,
+> +		.vendor = PCI_VENDOR_ID_INTEL,
+> +		.device = PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_NHI,
+> +		.subvendor = PCI_ANY_ID, .subdevice = PCI_ANY_ID,
+> +	},
+> +	{
+> +		.class = PCI_CLASS_SYSTEM_OTHER << 8, .class_mask = ~0,
+> +		.vendor = PCI_VENDOR_ID_INTEL,
+> +		.device = PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_NHI,
+> +		.subvendor = PCI_ANY_ID, .subdevice = PCI_ANY_ID,
+> +	},
+> +
+> +	/* Thunderbolt 3 */
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_NHI) },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_4C_NHI) },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_USBONLY_NHI) },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_LP_NHI) },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_LP_USBONLY_NHI) },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_C_2C_NHI) },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_C_4C_NHI) },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_C_USBONLY_NHI) },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TITAN_RIDGE_2C_NHI) },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_NHI) },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ICL_NHI0),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ICL_NHI1),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	/* Thunderbolt 4 */
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGL_NHI0),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGL_NHI1),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGL_H_NHI0),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGL_H_NHI1),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADL_NHI0),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADL_NHI1),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_RPL_NHI0),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_RPL_NHI1),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_MTL_M_NHI0),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_MTL_P_NHI0),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_MTL_P_NHI1),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_LNL_NHI0),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_LNL_NHI1),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_PTL_M_NHI0),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_PTL_M_NHI1),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_PTL_P_NHI0),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_PTL_P_NHI1),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_WCL_NHI0),
+> +	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_BARLOW_RIDGE_HOST_80G_NHI) },
+> +	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_BARLOW_RIDGE_HOST_40G_NHI) },
+> +
+> +	/* Any USB4 compliant host */
+> +	{ PCI_DEVICE_CLASS(PCI_CLASS_SERIAL_USB_USB4, ~0) },
+> +
+> +	{ 0,}
 > +};
 > +
->   static const struct of_device_id dwc3_qcom_of_match[] = {
-> -	{ .compatible = "qcom,snps-dwc3" },
-> +	{
-> +		.compatible = "qcom,snps-dwc3",
-> +		.data = &dwc3_qcom_pdata,
-> +	},
-> +	{
-> +		.compatible = "qcom,glymur-dwc3",
-> +		.data = &dwc3_qcom_glymur_pdata,
-> +	},
-> +	{
-> +		.compatible = "qcom,glymur-dwc3-mp",
-> +		.data = &dwc3_qcom_glymur_pdata,
-> +	},
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(of, dwc3_qcom_of_match);
+> +MODULE_DEVICE_TABLE(pci, nhi_ids);
+> +MODULE_DESCRIPTION("Thunderbolt/USB4 core driver");
+> +MODULE_LICENSE("GPL");
+> +
+> +static struct pci_driver nhi_driver = {
+> +	.name = "thunderbolt",
+> +	.id_table = nhi_ids,
+> +	.probe = nhi_pci_probe,
+> +	.remove = nhi_pci_remove,
+> +	.shutdown = nhi_pci_remove,
+> +	.driver.pm = &nhi_pm_ops,
+> +};
+> +
+> +static int __init nhi_init(void)
+> +{
+> +	int ret;
+> +
+> +	ret = tb_domain_init();
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = pci_register_driver(&nhi_driver);
+> +	if (ret)
+> +		tb_domain_exit();
+> +
+> +	return ret;
+> +}
+> +
+> +static void __exit nhi_unload(void)
+> +{
+> +	pci_unregister_driver(&nhi_driver);
+> +	tb_domain_exit();
+> +}
+> +
+> +rootfs_initcall(nhi_init);
+> +module_exit(nhi_unload);
+> diff --git a/drivers/thunderbolt/pci.h b/drivers/thunderbolt/pci.h
+> new file mode 100644
+> index 000000000000..8ce272a10661
+> --- /dev/null
+> +++ b/drivers/thunderbolt/pci.h
+> @@ -0,0 +1,19 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+> + */
+> +
+> +#ifndef __TBT_PCI_H
+> +#define __TBT_PCI_H
 
+__TB_PCI_H
+
+> +
+> +#include <linux/types.h>
+> +
+> +void nhi_pci_start_dma_port(struct tb_nhi *nhi);
+> +void nhi_pci_complete_dma_port(struct tb_nhi *nhi);
+> +int nhi_pci_ring_request_msix(struct tb_ring *ring, bool no_suspend);
+> +void nhi_pci_ring_release_msix(struct tb_ring *ring);
+> +bool nhi_pci_is_present(struct tb_nhi *nhi);
+> +void nhi_pci_shutdown(struct tb_nhi *nhi);
+> +int nhi_pci_init_msi(struct tb_nhi *nhi);
+
+And sinse these are already callbacks no need to expose in this header.
+
+> +
+> +#endif
+> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+> index 0680209e349c..9647650ee02d 100644
+> --- a/drivers/thunderbolt/switch.c
+> +++ b/drivers/thunderbolt/switch.c
+> @@ -209,32 +209,6 @@ static int nvm_authenticate_device_dma_port(struct tb_switch *sw)
+>  	return -ETIMEDOUT;
+>  }
+>  
+> -static void nvm_authenticate_start_dma_port(struct tb_switch *sw)
+> -{
+> -	struct pci_dev *pdev = to_pci_dev(sw->tb->nhi->dev);
+> -	struct pci_dev *root_port;
+> -
+> -	/*
+> -	 * During host router NVM upgrade we should not allow root port to
+> -	 * go into D3cold because some root ports cannot trigger PME
+> -	 * itself. To be on the safe side keep the root port in D0 during
+> -	 * the whole upgrade process.
+> -	 */
+> -	root_port = pcie_find_root_port(pdev);
+> -	if (root_port)
+> -		pm_runtime_get_noresume(&root_port->dev);
+> -}
+> -
+> -static void nvm_authenticate_complete_dma_port(struct tb_switch *sw)
+> -{
+> -	struct pci_dev *pdev = to_pci_dev(sw->tb->nhi->dev);
+> -	struct pci_dev *root_port;
+> -
+> -	root_port = pcie_find_root_port(pdev);
+> -	if (root_port)
+> -		pm_runtime_put(&root_port->dev);
+> -}
+> -
+>  static inline bool nvm_readable(struct tb_switch *sw)
+>  {
+>  	if (tb_switch_is_usb4(sw)) {
+> @@ -260,6 +234,7 @@ static inline bool nvm_upgradeable(struct tb_switch *sw)
+>  
+>  static int nvm_authenticate(struct tb_switch *sw, bool auth_only)
+>  {
+> +	struct tb_nhi *nhi = sw->tb->nhi;
+>  	int ret;
+>  
+>  	if (tb_switch_is_usb4(sw)) {
+> @@ -276,7 +251,8 @@ static int nvm_authenticate(struct tb_switch *sw, bool auth_only)
+>  
+>  	sw->nvm->authenticating = true;
+>  	if (!tb_route(sw)) {
+> -		nvm_authenticate_start_dma_port(sw);
+> +		if (nhi->ops && nhi->ops->pre_nvm_auth)
+> +			nhi->ops->pre_nvm_auth(nhi);
+>  		ret = nvm_authenticate_host_dma_port(sw);
+>  	} else {
+>  		ret = nvm_authenticate_device_dma_port(sw);
+> @@ -2745,6 +2721,7 @@ static int tb_switch_set_uuid(struct tb_switch *sw)
+>  
+>  static int tb_switch_add_dma_port(struct tb_switch *sw)
+>  {
+> +	struct tb_nhi *nhi = sw->tb->nhi;
+>  	u32 status;
+>  	int ret;
+>  
+> @@ -2804,8 +2781,10 @@ static int tb_switch_add_dma_port(struct tb_switch *sw)
+>  	 */
+>  	nvm_get_auth_status(sw, &status);
+>  	if (status) {
+> -		if (!tb_route(sw))
+> -			nvm_authenticate_complete_dma_port(sw);
+> +		if (!tb_route(sw)) {
+> +			if (nhi->ops && nhi->ops->post_nvm_auth)
+> +				nhi->ops->post_nvm_auth(nhi);
+> +		}
+>  		return 0;
+>  	}
+>  
+> @@ -2819,8 +2798,10 @@ static int tb_switch_add_dma_port(struct tb_switch *sw)
+>  		return ret;
+>  
+>  	/* Now we can allow root port to suspend again */
+> -	if (!tb_route(sw))
+> -		nvm_authenticate_complete_dma_port(sw);
+> +	if (!tb_route(sw)) {
+> +		if (nhi->ops && nhi->ops->post_nvm_auth)
+> +			nhi->ops->post_nvm_auth(nhi);
+> +	}
+>  
+>  	if (status) {
+>  		tb_sw_info(sw, "switch flash authentication failed\n");
+> 
+> -- 
+> 2.54.0
 
