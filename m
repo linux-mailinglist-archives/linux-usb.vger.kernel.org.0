@@ -1,299 +1,229 @@
-Return-Path: <linux-usb+bounces-36872-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36873-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2HxhHLRS+GnSswIAu9opvQ
-	(envelope-from <linux-usb+bounces-36872-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 10:03:00 +0200
+	id uKx8FMRT+GnSswIAu9opvQ
+	(envelope-from <linux-usb+bounces-36873-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 10:07:32 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CAEB4B9D62
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 10:03:00 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B575A4B9E5F
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 10:07:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0341330488E5
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 07:58:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0108D3012BFA
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 08:07:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 308753161A4;
-	Mon,  4 May 2026 07:57:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4F573161A4;
+	Mon,  4 May 2026 08:07:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="LBxmIe4j"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="RPB6IrUW";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ODLxDJAZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011049.outbound.protection.outlook.com [40.107.130.49])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6B228C2BF;
-	Mon,  4 May 2026 07:57:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30FEE3090D7
+	for <linux-usb@vger.kernel.org>; Mon,  4 May 2026 08:07:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=205.220.168.131
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777881476; cv=fail; b=YYHi7Tq/B0Jnqi8DjvXrzmJQfEUmQg1e9CvFJwNQg10Z+aq3bimjlu8G2oafl5UKxxY09mPjahCozYWtk+VcixNmqF+6J3EVHGP3Qk2+WG8Z0awZBqOdp1TPhLFCHKyRALDN/R3pADM+hrNXFY7Xl1LfCCM6CJvvIFI34eO3Ni0=
+	t=1777882047; cv=pass; b=CkatqacvlI1qnXuD+1if7ZihrKkINQY9vBL6DYgFbkCUL1zJHcDu52PaOvr1/JQZb2hjJgATfrdTfs7msNLlSmdJMXHJg+xsdv7sy6oH8X+8BbLs2UKHp0RNC8P/xZJqQcBWyHDWkJgejF2/ltmDsW8H1Nd8GACxI4RnNN7iuLk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777881476; c=relaxed/simple;
-	bh=FI5XCipd6lQkpvf6m9PRM3D5ko1TWpCFe9sg3srFwz4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=FIyvOZOW5LBRyZQaLTCjV91N9UsXXwxJ+/KATjwWHD4qG+rMN2GocwNILlVY8QwCA8s0Le0Olh7Vn4Px/mPxRBIbYtEnlmxCPKYdd2wH1Ee6BySC+wwacvIIUkFhsyp7/M2XjyqvYLsEp/wanfGgn5CqW+mdXKNHJvWRXm1ydtQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=LBxmIe4j; arc=fail smtp.client-ip=40.107.130.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=pNnSjlgqQ9mu64HM93qhv+j/BPmjKWq06Vw5FUl/MpiJK7O48Y5ZkdGpeDr+RLAsG3bD4m1MQj++jsqYHDhFLmSZ5zpMQ8jqAy3ZTKLMriPOi6faQk2E6kzM96L7OPWSvp+JWM085Q1lmk5RRrQOeSLk0xO4OiU7sqhrtqXPyJv2769muBydBuIzOb+Y2T+yCqqNpX1pq6fqhbmZCdZYovkoMLuMKF4YDRe44t5cNGg4sMDtGk6GXjcFlUhFIQuH5ZRhfaUs/tszMI47wKm5VvrDOVSo3B251R8iTs24txl8YlwZcJss91IFDm1kJbf+3HrOefgLyrqZ3jbW2NXd6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mIyqoNMaqF7PcSsq3Vf4/2r/EknapHaMFFAC23Z0fWk=;
- b=u/5vHVU/ZwWk0vXcfhC+ZvVj8TSqXPilWXe4zkw8nJXsnptXkI4ThoxIr0qjkFcBaQrdNu3mgiq0LeVT7yP8R6450cWoARy9vT0s0FG6X1duwz1EmElLoN4b7Xu2ubhZ5ZVowjf2F2KcMlQlzrG4OQDlFwzRW3vJWVV4e/2+A0jL79gLCNsXVMdUW3e7PHOZzud3P2DXNv59hKBqcDMJDgKnD5ysdtOX27rA7t+RVsOZ0Kllrj/49y6yCyEqm4Faqh0KjsN1o/xAx/+iowsYAG6TSrNh9u/i+qZiOs3lJmEggz4Oxil30mlSG8yW5FEo36P9vhUhX4+fr8ujas7lJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mIyqoNMaqF7PcSsq3Vf4/2r/EknapHaMFFAC23Z0fWk=;
- b=LBxmIe4j4c0f8XCDOmIwHQsDwUevTUlG2XSG5rVjJwhpeujlIC35stBUnSYac3YgUbfWXU/Ium9MufmIzh/C+KhNrkBY1ZDnp4CYpRingmBtEGzB3SfBK52lARJku8VclM7COSg7ZsWfCvgZk2E4fYFebSvxLc+Q/yrR1Gl4kGJAEQloY9aurINdIdFPw0k9ZA36UuM5EBsnJtQcc9n4cbBYLXGLUsYbsmVfktuWW/kofa4hS2LLo7iYd9kWfAeKOQ6906aMVPLLYIP+Mi37NRoNNzDN/ToqimoCrHJ/Jbmdpw03gWsxeJwcgrSHG/XQtN77oHVntlLQXVY5+pxblQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
- by GV2PR04MB11800.eurprd04.prod.outlook.com (2603:10a6:150:2d1::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Mon, 4 May
- 2026 07:57:48 +0000
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9870.023; Mon, 4 May 2026
- 07:57:46 +0000
-Date: Mon, 4 May 2026 10:57:42 +0300
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-To: linux-phy@lists.infradead.org, Bjorn Helgaas <bhelgaas@google.com>
-Cc: Vinod Koul <vkoul@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	linux-can@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-	spacemit@lists.linux.dev, UNGLinuxDriver@microchip.com,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Siddharth Vadapalli <s-vadapalli@ti.com>
-Subject: Re: [PATCH v7 phy-next 08/27] PCI: Remove device links to PHY
-Message-ID: <20260504075742.ixt7phu4cpp433q5@skbuf>
-References: <20260430110652.558622-1-vladimir.oltean@nxp.com>
- <20260430110652.558622-1-vladimir.oltean@nxp.com>
- <20260430110652.558622-9-vladimir.oltean@nxp.com>
- <20260430110652.558622-9-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260430110652.558622-9-vladimir.oltean@nxp.com>
- <20260430110652.558622-9-vladimir.oltean@nxp.com>
-X-ClientProxiedBy: WA2PEPF000008AF.POLP291.PROD.OUTLOOK.COM
- (2603:10a6:1d8::657) To AM9PR04MB8585.eurprd04.prod.outlook.com
- (2603:10a6:20b:438::13)
+	s=arc-20240116; t=1777882047; c=relaxed/simple;
+	bh=nEQz64k/1WoIwQjZRUfr29xgmGc05Cnt8HVAuYsV0aM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i2QN+fRMk4OQ6LNRYPVX8BKVcp2UomPPMUBZhmJ4wCiGSgGVHJjzoQXU2eRMIBDj4VIZpD19cfj3Tvmu0PvroFjwjGNqnj4tV95qCuru6Bw9mSgzJ24v/MPFYw6RXHcdbLbhUr7seLonmQJNXUKfVLLlc1kC1SVYgJsR1PPhLvU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=RPB6IrUW; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ODLxDJAZ; arc=pass smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6446DTV83505366
+	for <linux-usb@vger.kernel.org>; Mon, 4 May 2026 08:07:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	PTOFH2n3dVfEzZk7wWH3keBS96QiA2Aks7uS89gRBH8=; b=RPB6IrUWhMlAldNP
+	e5g6kmXsWPj9jxjm9j8O2VBF/NZHIlrZ1wyASNEQI+H0CXJvB6+/BrRQvoMBGsBj
+	SMPgtdQU6erPAOqdsw5gdC1tI4S9Y0kB7gX+Aos4WJpbYucUxBcL2LeCti+0AC2+
+	Stc/XR1QuMMSLEwhwA0jkF0HvxzuL+fuz8juZD7QyOTH0ma7EMumuRP4pGLlnqgO
+	SxdtlsmTnaD66WKOtwkMKr/LE+DSj9L9bBeY7/LKA8cLRnWwYkaInRLgiX6V8I9p
+	kBJbayC+NoWtwvyw72qA7VbHIoh6CvCgKC7Ata42b9H8+P3kMBtpL4F2p/rT7fYa
+	vi6ThQ==
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com [209.85.128.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dw6yfd5tc-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Mon, 04 May 2026 08:07:25 +0000 (GMT)
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-794d80fea59so69609097b3.1
+        for <linux-usb@vger.kernel.org>; Mon, 04 May 2026 01:07:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777882044; cv=none;
+        d=google.com; s=arc-20240605;
+        b=hZXUNSDyBasajb6hXjm3ACC+/S2cqK6Qw86dJUwMF4ufHXe47sJFAhUtgTAaTIhYw9
+         V5niYqLjRBWFTfbUbgUGRPg1ma9IXWHyIABI0qD6Jl6eL5XKqYEQKwVbUlQAh6LOY0wO
+         GR7oXFsLLfSbeBrDzhP6DjHHEK6t8KdmGbovcYoIno8HpCnACnM383nSyt3rY0qCLAcf
+         3Fupw0I7XlWSXKkTKJYkqTX2bTONzC//QdJelRwM5oZ0S8mA0Ky6xbZi4Jk+tiZD+Mt1
+         4nLAKrHVQ7I63ar3YCbm0fNn+LoNVoRUuEVBgvlppbP06tAeSYdyNsQfYxg1+vqObiIe
+         MKpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=PTOFH2n3dVfEzZk7wWH3keBS96QiA2Aks7uS89gRBH8=;
+        fh=fJU4A8TPqD4q2tb+2/1AIsLGa7MuFqH5MewPX2eB5QM=;
+        b=W26NXDx7j2bmnVFOd3m8rIFceUg9omdnK+BpDo1APTq/cyYODYqOzWL1ABkj2xdxQ6
+         p3So6kxvJQVzCpCncZOSB+dSU/Nhz6OzWGAZvg7XoABlc5ckCdrWKvIaOrbHKnlN8E9X
+         hv0n5my/c0dpi5HDvTgS103DugnnvKLjRSG5bIYv7ldCnJV+cdwam16gPp7DgbkghKF4
+         DAdKoIsb7lYgrzcV0o5uwu98VVqJdP2BBS3OVofaXKuggSKQnSruGfpOqxb6hsIIQkvl
+         BhNZGmkpLmUJMGrTE3uqYCHbJo9o0ytDNlFu6Onf54a5RBW97+Odj0VyLtJ0auIxVG/y
+         rNPA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1777882044; x=1778486844; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PTOFH2n3dVfEzZk7wWH3keBS96QiA2Aks7uS89gRBH8=;
+        b=ODLxDJAZKRmtwh6zpM/gZ2HyeXa59ldvZv5CeA394ZaZoY2dHNdlihaXx/qbM3xFB3
+         IDSob4ORC6cl6vqQZ05GBwKHwa1/j53CzyehniTrpHgOUEf5riSM5yXQPtQY5IZd9vdr
+         FUzPGR5BNQrK5DhegqcRegR4KccJOxX5UI0F4oxcQ5W7l4Uj6SJ+knNbW7YOv0MKRFc7
+         mNcLh/0HHb1LZTWIEZ4+Kv8ts9sH0AN8YuTzWSVAg2hd5qdwQnR7spz5xTPulQS5W1uD
+         TKWFKBz26s+39OzIqmR8USP/SPJScAuT4YXJ6tBZl1NdLYL1131j35ngojR3QzEKsn7r
+         AdtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777882044; x=1778486844;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=PTOFH2n3dVfEzZk7wWH3keBS96QiA2Aks7uS89gRBH8=;
+        b=s3wyN+c8yfhi195VHjlhTIz1oVyIzaf9V4PRZCLEZ0OttQFzOBHAXNxgPi+0RBjTia
+         RxuTskzhnXNQOorBCT6LEGr9sF9wuPI7IQYqUAXbe0KAV+u16kBK+529BgKNJho130Yb
+         UOB0wm+ij0p97mG3B7Ktj6ojbgUWNlI4nCLAqhJOyjltN0x6A1KjmckDH345ZQSQH4XW
+         +V0l3/OwS7LgBp4Ab5O2YAitcpMLX3lbZD7hKWwLwLzNcKRLgx4/Ccjx5p7h/2SFIjmQ
+         QNrAjSr9HMzu5zqtwkiGHSp67wi6IcafTXWDCq3zGqYpghgiPMQgEtX8vvkQDfIeUjZn
+         m5SQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9EhNWdru89hU04nYgHg6cUzQARr+PbDme4J4ThEG+onJ1uwQFX7JO8PdSwIajQA6WjQcDgqhSfiUk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1JzTr8gvwUz2wf+RtDRliWdmVW6oDGQ7hj6NUdE82D/s0tT6J
+	u+ZY6BkZ4dsoY7j7X3GepQnpVmtQRkorWNsLBcJAZGojqR/X+QINXze4Ruu2NTBNs0WiUj3n0ob
+	HkaqiUGilws1QLyZrHebpnX6Sa7RcFAct7jXh10FvIo1w2ZsfUO1V7JwWC9W97w/O7kXyOdvGj0
+	/is82SAHELsFbo0/xMAty2zBRixHS+kCdX18YhbttF08WoDg==
+X-Gm-Gg: AeBDietS1xs68lb0i0HdDXB86SRpGkebecOGkLpShY5byF4DjOdRmZr6Iq+5at0qcb+
+	KWKlr8tNXwdCtZTpTxAW9BSyIHrpyrgX/OrbEMYRUJkX0BmSuuJLOznxl8/tanwsGN6xBLmuPSn
+	yEXbGyYEZGKphc0Hp2E8zT1qpeDyfCwHSCd08zJzxkDUbrVX7jc61FQG/51OVIMMfjJm9XqMXQ7
+	ob1lN8YZNyEhWa0TVt54sgXWEQZs/Xv+OOgn4OakWIL3e9aNN4=
+X-Received: by 2002:a05:690c:6e85:b0:7bd:8752:cdbd with SMTP id 00721157ae682-7bd8752e640mr48818427b3.41.1777882044584;
+        Mon, 04 May 2026 01:07:24 -0700 (PDT)
+X-Received: by 2002:a05:690c:6e85:b0:7bd:8752:cdbd with SMTP id
+ 00721157ae682-7bd8752e640mr48818157b3.41.1777882044236; Mon, 04 May 2026
+ 01:07:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|GV2PR04MB11800:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4c875e1e-ca31-4828-710b-08dea9b2d44c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|19092799006|7416014|376014|10070799003|1800799024|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	HEAXu0UJ9P3VzL00TQ5M3z2crujXl382jiCiUZ8AjCp92Sg3OB/js+tp8eYXGFCwTg4KC58dkU749B4w9rSUDmOeHKbS0d1VunRrO+0OtdmhVfIDbyWfd68zd/UwthW2bRoM12WmYcfW+QITvv60QYEZ3Kg4C9ooCFWab7uNzFwTYCMVln/v4nDI7PA+84MsJRghdBRjtrzVdqUpokYrKrv/vPQ8UdETapxfYG4x02T8oJJuR8rwqlgl1y/1JCDwDYxOrDpVfe+N/b9b2OMuKXyU8kTLFDV2up3MVC5GOnlCnnlwO+8ZalNICpxGxx4yrr9ReK56HR7wQ+EleiGOwqmjXSseI4g7FzN/Bm4ILnOoxXySX1YImvrFAsqP2ONeZCRRLqDcEN2K+zjhQYoc9vIaUwwAH1owrJMiNqLPK1BBMV6XA4WG3u1dohQzwWRk9J6ZB3Mq9zeKK39RKMh7AVi9wOOTuYnE26otczBMnVKu7BD58vY6ONRIqYZiqnt/i1+rsMLaDWvZTybIZj8YOv22IJFCrUZq8pvT2T2vn4k5ykcL4wBm5+ReTtYtHnCrP7+s6kJjJcCVv/9pxQ51KpGJL1D7rMiYVbvAYjGTnZjLEkc3qSGjgZbvixZN6L75/bYZOjGOt6ePctFGSO6QX6HJX8OyaoKsPtRjRZPN33ZGE71bvSFRxzkCOrB5x2Bz
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(7416014)(376014)(10070799003)(1800799024)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?RsEOHz6cOvr61ub/jxNnNVotOrCIljo7elUReRA064caS/5whesT2J9KGG1W?=
- =?us-ascii?Q?0L4rUUrOsc6Ddsc0U9zeiJJ6LTVI5b1GVFb8eTU0+6LuW5h/yQgVUJr1EInh?=
- =?us-ascii?Q?h3qoiM4jWG/uDASftINhtbByfh3a6xoV/kg8gRbeKBjVV2gNyAry3SA5nj4N?=
- =?us-ascii?Q?KCjDY+RNqRFoI4CzsYBaA8Xtc3HoOPpWw4m7TCLeoVjN0SnCPZPUiHzUe0Ku?=
- =?us-ascii?Q?uEdZbRJoc0TSiSmy/v1wQ94hyS0eGVKAgbCemhE32p7jBBUgtIA0m8eTnakr?=
- =?us-ascii?Q?m0cP7Dg2Rgwdxn7Htvb29f2qN+h6gLjG+Z664xypN2PMh3YLasYwpaSw2/TU?=
- =?us-ascii?Q?bw5aX6pbPDj21gqqtcD307swHztnNZfL/1dTTTOyGSIk+QiGf5HJV3w0Mpry?=
- =?us-ascii?Q?JpJarUj9oRVOjrGtKp/vY9tpuo9YY3vnT8M3X+nfOsxTlKWyquIqkJPWpVmz?=
- =?us-ascii?Q?VOavSuUc4gC6hW7c9IcLsof89g+BkZd5zg5T5ERE7Ospd/knF6e9NLD5mTR7?=
- =?us-ascii?Q?jBOgYJoaUrf15GXhmW74pfE25hnfa9hP4J2aVQ5pwuTWEeN0LJqZRS39I129?=
- =?us-ascii?Q?3rIi4E5g5x4hDYkpoRt7001EdShWNGsyOkDcJ9H/+0syBS/du94bxvTKwLPH?=
- =?us-ascii?Q?Q4GnTHTU+7TxqRDrsv1QcAQIzI7jqQ3fT9B11Au82fQ8GuGLcpmBkRg+vut9?=
- =?us-ascii?Q?pH4YLzfQ95YVVl5v0/TYyT1S3CA/lQJ25Yqqug07H0lHJnmtxejGsraBekx5?=
- =?us-ascii?Q?y41Rcf2cbgkltnYu4p1dF0uMYh39FoeWXDtpN+ZIPtfJIwEcmcK2nptUQ4sW?=
- =?us-ascii?Q?3DzsXI4fwDver+dSZUKzoxLnMgBGix83Nz4yP3H591HzSGqCJq4Ahq6aoTwO?=
- =?us-ascii?Q?vdkKRgJFouBysTNrWXm3Dhzk4TnLnT9odECnZdpEQXPDPHJR3IP9bVK+zT1J?=
- =?us-ascii?Q?fLAVSpZnuQEMH5z5QzO/tQlLnYggNWfN/av4tmiEG5CnEop8o28JSu7G4Awa?=
- =?us-ascii?Q?up8YeGzW63waghEtGCWWKM/nzOeGz5zZpKi9SP/1pyp60N4GqqN22qQyhYzp?=
- =?us-ascii?Q?aCKS10hT18/N0yhdpk7jCf4i+yQ6DEEAq2pIERPpC84+uRhnZvl3ORsF/2K7?=
- =?us-ascii?Q?mWhMQBv5m16eu1/7qrqQY/YIG+HpoNDlyao1iUd1MlUjvKA9pYYsn0zBnzEr?=
- =?us-ascii?Q?r1/1FKCk64nnJ3XoYYg1n3aWkPPcrSSmZ/1bVrtxagz/tGXcS/mMFYMiVeag?=
- =?us-ascii?Q?wHnhQh64Gzqb3nJPvIkn36Fh08SWpSAziFlLTy0HZcxRbhHAkSGjGzUhuPYt?=
- =?us-ascii?Q?mGgO74dOzXOaE/PgSGHRsgx+VcvSa9fvXYMfTz4uqunO/H45oI6UyCu3J3ob?=
- =?us-ascii?Q?rYOgwDx7iyA4v/06pCB+/WSx3UQJn6x7h/Lbra8FvBlwTHLti7Tlf768GM91?=
- =?us-ascii?Q?zStbCV1u7IAwq7cFLKsf0tCdwLMzckOHhgor23phsP229u+/oB1kKARQWlsE?=
- =?us-ascii?Q?F4CeMARInjuQNYzC3iRUYHMZwA1WmAc34VPcgN/mRwZXJsRUKcY8Yf8fFdyL?=
- =?us-ascii?Q?1Gg/0tnWaNA7RjxqS5Tx9Ovad5xiHpTKJPEPofz6T7e0SU+svwcatycFidc/?=
- =?us-ascii?Q?HPIpeq7CsTfPh2qupxa/DBLR+lZiUAxA3J4I759eadMjgtywW2aXkJ9oQ5zX?=
- =?us-ascii?Q?7PG6hJ42ZnL1f97rlTIMOg5vJghuNVEfuxia/ORrTh1o5pTLCr87B8hulxXf?=
- =?us-ascii?Q?mpHVVmdt5W3ZcR65RWqjhzxD83ghUIQ56YzAk+fEVJPF4Vwe2/hEMHSwv46x?=
-X-MS-Exchange-AntiSpam-MessageData-1: qAbWhMSQ+tDz/g==
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c875e1e-ca31-4828-710b-08dea9b2d44c
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2026 07:57:46.6958
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MKHLfxUQD4j6O1JnGXUiro3PKaKtFhDedU9fqi7AkBqWytZKCuHAp76HHMA+3Egs5mL1VqDhZ+adhJvqpx+FhQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR04MB11800
-X-Rspamd-Queue-Id: 1CAEB4B9D62
+References: <20260502095616.666938-1-krishna.kurapati@oss.qualcomm.com> <d774b2f2-75f8-485f-830f-2a7a5dac1c23@linaro.org>
+In-Reply-To: <d774b2f2-75f8-485f-830f-2a7a5dac1c23@linaro.org>
+From: Krishna Kurapati PSSNV <krishna.kurapati@oss.qualcomm.com>
+Date: Mon, 4 May 2026 13:37:11 +0530
+X-Gm-Features: AVHnY4Ig_aLpEo-Nqit4pYFKU8Cb6H2Xx8XMnZLH6cUdADQNynWyvQH0888rOIs
+Message-ID: <CAEiyvpp2NseXQGxRi8zmebaONVskPyHDDb0SL11-wttH6Sj1Rg@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3: qcom: Modify interrupt handling for EUSB2 Phy targets
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-ORIG-GUID: G_N_Z4OtRAt8qXCtT2-xYFR6fQaM5fph
+X-Proofpoint-GUID: G_N_Z4OtRAt8qXCtT2-xYFR6fQaM5fph
+X-Authority-Analysis: v=2.4 cv=QY5WeMbv c=1 sm=1 tr=0 ts=69f853bd cx=c_pps
+ a=72HoHk1woDtn7btP4rdmlg==:117 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
+ a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
+ a=eoimf2acIAo5FJnRuUoq:22 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8
+ a=FDDUSfwg_FEBtVg4pJEA:9 a=QEXdDO2ut3YA:10 a=kA6IBgd4cpdPkAWqgNAz:22
+ a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA0MDA4NyBTYWx0ZWRfX8qQoOwpJ9iq/
+ noOK3EVTY67v5/nnRNg3FQMFP/Zo7jmrB4Scs74IZEpQfh4GOwPYcuYyABoljj5BKYGS+BXAmDC
+ xCqUQXtPfij0b5PtpPVzGVJExVkHZ+NnnIUTuayVB06zrj25X0fo+YeK8poA2HpbHMryM1fERn/
+ DpjZdlzOnVpOoLpX5rBqW0W/7KgieAlHY4zdkU7cw64sTlKTvcK7Uu4WaKDSB6zlExL3nS9uZkF
+ mC7JpFVwVPhML7eaXQQnKGc4R3HRxh8PsxGbbkr/MvaluIIAcs5gf70N81tNuNR8r8AdRfr2/7A
+ XAgerlehNshbls8QfDckn61ez4L38RagbND8yQdB7j2Nyx8BJGvPC/vqBiBMieKrOAQ29r66iXf
+ pdTDNbfEdJPXnGxKxoBt6WDImSDTLk2y9WX2AA42053hH4R+qb/NRGYBM48QF9COq4iH7pl5qf5
+ Lpu8K6w0ehkmkhuadyQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-04_03,2026-04-30_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 suspectscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0
+ bulkscore=0 clxscore=1015 adultscore=0 priorityscore=1501 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605040087
+X-Rspamd-Queue-Id: B575A4B9E5F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-36873-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36872-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[31];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[vladimir.oltean@nxp.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[nxp.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:dkim,nxp.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[krishna.kurapati@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,oss.qualcomm.com:dkim,qualcomm.com:dkim,qualcomm.com:email,mail.gmail.com:mid]
 
-Sashiko says:
-> commit e4f495a9118b40f8a77e8dc097821d2c846ed1fc
-> Author: Vladimir Oltean <vladimir.oltean@nxp.com>
-> 
-> PCI: Remove device links to PHY
-> This commit removes device links between the PCIe controllers and PHY
-> providers across several drivers, since the PHY core already creates consumer
-> device links.
-> 
-> > diff --git a/drivers/pci/controller/cadence/pcie-cadence-plat.c b/drivers/pci/controller/cadence/pcie-cadence-plat.c
-> > index b067a3296dd37..fc39c01b79648 100644
-> > --- a/drivers/pci/controller/cadence/pcie-cadence-plat.c
-> > +++ b/drivers/pci/controller/cadence/pcie-cadence-plat.c
-> [ ... ]
-> > @@ -122,9 +121,6 @@ static int cdns_plat_pcie_probe(struct platform_device *pdev)
-> >  	pm_runtime_put_sync(dev);
-> >  	pm_runtime_disable(dev);
-> >  	cdns_pcie_disable_phy(cdns_plat_pcie->pcie);
-> > -	phy_count = cdns_plat_pcie->pcie->phy_count;
-> > -	while (phy_count--)
-> > -		device_link_del(cdns_plat_pcie->pcie->link[phy_count]);
-> >
-> >  	return 0;
-> 
-> This isn't a bug introduced by your patch, but I noticed the error path in
-> cdns_plat_pcie_probe() returns 0.
-> Does this cause the driver core to consider the probe successful even when
-> host or endpoint setup steps fail? It looks like the device would be left
-> in an uninitialized and disabled state while still being bound to the driver.
-> Should this return ret instead?
-> 
+On Mon, May 4, 2026 at 12:17=E2=80=AFPM Neil Armstrong
+<neil.armstrong@linaro.org> wrote:
+>
+> Hi,
+>
+> On 5/2/26 11:56, Krishna Kurapati wrote:
+> > Modify interrupt handling for EUSB2 Phy targets. Enable DP Interrupt
+> > when an Low speed device is connnected and enable DM interrupt when
+> > a High Speed/ Full Speed device is connected.
+>
+> Could you explain _why_ and not the content of the patch ?
+>
 
-The condition does not appear intentional. Commit bd22885aa188 ("PCI:
-cadence: Refactor driver to use as a core library") changed
-cdns_pcie_host_probe() which properly returned ret on error with
-cdns_plat_pcie_probe() which doesn't.
+ACK. Will modify the commit text.
 
-I will add a preparatory patch which replaces "return 0" with "return ret"
-in cdns_plat_pcie_probe(), blaming that commit.
+> >
+> > Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+> > ---
+> > Tested remote wakeupon Glymur device by button press from a headset
+> > connected to both Type-C and Type-A ports.
+> >
 
-> >  }
-> > diff --git a/drivers/pci/controller/dwc/pci-dra7xx.c b/drivers/pci/controller/dwc/pci-dra7xx.c
-> > index cd904659c3216..9c1aef4d0bd1c 100644
-> > --- a/drivers/pci/controller/dwc/pci-dra7xx.c
-> > +++ b/drivers/pci/controller/dwc/pci-dra7xx.c
-> [ ... ]
-> > @@ -852,10 +840,6 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
-> >  	pm_runtime_disable(dev);
-> >  	dra7xx_pcie_disable_phy(dra7xx);
-> >
-> > -err_link:
-> > -	while (--i >= 0)
-> > -		device_link_del(link[i]);
-> > -
-> >  	return ret;
-> >  }
-> 
-> This isn't a bug introduced by your changes, but looking closely at the error
-> path right above this hunk, there is a call to pm_runtime_put(dev) immediately
-> followed by pm_runtime_disable(dev):
-> err_gpio:
-> err_get_sync:
-> 	pm_runtime_put(dev);
-> 	pm_runtime_disable(dev);
-> Does this sequence create a power management race condition? The pending
-> asynchronous idle/suspend work can be abruptly cancelled by
-> pm_runtime_disable(), leaving the hardware in an incorrect or unpredictable
-> power state.
-> Should this use pm_runtime_put_sync() instead?
-> 
-> > diff --git a/drivers/pci/controller/dwc/pci-keystone.c b/drivers/pci/controller/dwc/pci-keystone.c
-> > index fe4836925c4e3..cab9fad212add 100644
-> > --- a/drivers/pci/controller/dwc/pci-keystone.c
-> > +++ b/drivers/pci/controller/dwc/pci-keystone.c
-> [ ... ]
-> > @@ -1337,25 +1321,18 @@ static int ks_pcie_probe(struct platform_device *pdev)
-> >  	pm_runtime_disable(dev);
-> >  	ks_pcie_disable_phy(ks_pcie);
-> >
-> > -err_link:
-> > -	while (--i >= 0 && link[i])
-> > -		device_link_del(link[i]);
-> > -
-> > +err:
-> >  	return ret;
-> >  }
-> >
-> >  static void ks_pcie_remove(struct platform_device *pdev)
-> >  {
-> >  	struct keystone_pcie *ks_pcie = platform_get_drvdata(pdev);
-> > -	struct device_link **link = ks_pcie->link;
-> > -	int num_lanes = ks_pcie->num_lanes;
-> >  	struct device *dev = &pdev->dev;
-> >
-> >  	pm_runtime_put(dev);
-> >  	pm_runtime_disable(dev);
-> 
-> Similar to the question above, is it possible this asynchronous put causes
-> a race when immediately followed by pm_runtime_disable() during removal?
-> 
-> >  	ks_pcie_disable_phy(ks_pcie);
-> > -	while (num_lanes--)
-> > -		device_link_del(link[num_lanes]);
-> >  }
+[...]
 
-It seems plausible that the pm_runtime_put() -> pm_runtime_disable()
-pattern is ineffective, i.e. one of two things can happen: either
-pm_runtime_put() runs to completion by chance, or pm_runtime_disable()
-cancels it. However I am not very familiar with the runtime PM API and
-its effects, and unless a maintainer tells me to, I would prefer leaving
-these code paths alone.
+> > +static const struct dwc3_qcom_platform_data dwc3_qcom_pdata =3D {
+> > +     .uses_eusb2_phy =3D false,
+> > +};
+> > +
+> > +static const struct dwc3_qcom_platform_data dwc3_qcom_glymur_pdata =3D=
+ {
+>
+> SM8550 was the first QCom upstream SoC to use eUSB, should it be covered =
+as well like SM8650, X1, ... ?
+>
+
+Yes, I tested the patch on Glymur, hence sent it only for Glymur for
+now. Will add other targets later.
+
+Regards,
+Krishna,
 
