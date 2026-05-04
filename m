@@ -1,248 +1,299 @@
-Return-Path: <linux-usb+bounces-36871-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36872-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GKuwBFVL+GnusQIAu9opvQ
-	(envelope-from <linux-usb+bounces-36871-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 09:31:33 +0200
+	id 2HxhHLRS+GnSswIAu9opvQ
+	(envelope-from <linux-usb+bounces-36872-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 10:03:00 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 789A64B95C0
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 09:31:32 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CAEB4B9D62
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 10:03:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C3D9C300B3CE
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 07:31:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0341330488E5
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 07:58:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 649AA2EB84E;
-	Mon,  4 May 2026 07:31:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 308753161A4;
+	Mon,  4 May 2026 07:57:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W9ZSuEah"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="LBxmIe4j"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011049.outbound.protection.outlook.com [40.107.130.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590292C2346
-	for <linux-usb@vger.kernel.org>; Mon,  4 May 2026 07:31:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777879887; cv=none; b=Aqr1JC5I1Sbak0ebP3HCPzFs38XR6NlqnWvzO9Oo1jOzQLA4Wsw6lzuN4O0oqMhi+d7nSk/1rdIo60J5zDeWah+uzgBwgVfSgMlleAyQLCr++5D1xEc/IMLsQlJlS65iBy4ScR9kYMwwF6NqQgirp2Uw982ITMZTEr3qUwxVirk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777879887; c=relaxed/simple;
-	bh=YSB5SQmQmqXs7OoK/OoQ5a2W1FhgmfKgwxP5ajgxFU8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Q/NjtNgcI9LmYczAvqsj2dCYc1YFeYQ+cz/4hjQ1gFl+0COqf5A3gWkXF2KcgtGzNl7+bCrfxOcmlv4CFOIoqK5uas1iY4lcwLqb4oW0tDgMLo6IVP7axGUY1nscz0ZZXVH2RyZOLQTNchg/lCRLSPcDj8R8APgoFWzidFb+WZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W9ZSuEah; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48d102471a4so2828955e9.2
-        for <linux-usb@vger.kernel.org>; Mon, 04 May 2026 00:31:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777879885; x=1778484685; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CatfaxbBgZQ3LQXPfEhaZbjDP184rQ7dewMd5HLOFbs=;
-        b=W9ZSuEahfN+B27Yo/Iq8SyYIpXBgHgdkFI1IiU9mGjuWuUnjxqrOyg6Sp/vLNgFv5O
-         euqVDJd7SxJjtUSFuT8hw6rsRgy76NWA0Xv29/1LH+XdChBmyS12v7gTZHw3DkHW7B5F
-         sFMIt0vjOST37CkFyTECbWYSLZxIeOOw/uV8hIksP1bLyp8cDJg6lFA8fwrURCZMENB5
-         zOxNqha0831z7dO1oF1WI3dNB3WJ56rS7ZJfVxZvGVVKxrg+AnZ9dB5kUowqKYDaGP3Y
-         pbgneJXhy5Ri8OhG9BMczOSjDqv9yWfTyKCODqyn8KNvZe0HYjylr0ZLjOQAcsp8nl8F
-         VVcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777879885; x=1778484685;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CatfaxbBgZQ3LQXPfEhaZbjDP184rQ7dewMd5HLOFbs=;
-        b=WG47Fa+8zOJEVMorLJO61PWGt48KYkybK4dRiWxXulP6ZcY7awkwvmKFqXfng7De73
-         dGcJBA4YCRZxxOTTse5Ietmk0zaSUPyLAtn+nXOzqd16kRhNhK9fSwkX3IMoDoLFOPbk
-         9VG94esEioY2OfYEwlvSWtF7v3dBJLgPiRyv+ntrB2ve5ZKEwQDqF0sNfadT8Q0CLKOr
-         4s08B36Wg9canTaJdTHRi5p8tOhpdq5S/+LSRFTK3Acckck1B5DBbHdTg/HFwq9REW5Y
-         S2SznAUlj+Vgg03cN1yJ1rLlFbPhDPHEBksw8V/sZWegFpcBVp8dLvaNkJ7ZwCR4qrnb
-         bJfA==
-X-Forwarded-Encrypted: i=1; AFNElJ8w7KfCGJTGOF7BxJ3slkPNwrXTnYzSf34gToHEHTD2KAJUfU8ngZQ4s5Yjq0RStTKqJJATYArppZQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwATtriX4MwzwFq4oGbPrgb/o6GmFz2pV3rNZ1mYYgLuaXsh4eD
-	iSqWTO0y8lZ9PFx7PRSXzM+iOzfna0nh/UcXu0/2ugfV8O19kq6Vs5bq
-X-Gm-Gg: AeBDieu1dTOxbCOTJP2+NUHb2xryvyG3yDd2Ha5Ooy7zowgXVBEUAaNX+8q+TirCI/z
-	sPDP0pld9HT71e4tXDZZpGUiNwJcTOKkFf32d43lZzl4R9ErcJuSSxbTJNnbyYVQh5pPZiX0Xof
-	BLgY72Fjd3TowRYuf4k/eRGgJfkRmdMsJSfyPO6pzMeRg0IRbUqpIDmAZ4b7l5GH5M3+FNz/hUl
-	K7T6MAqfkr8cRZxb4LBoi6AXPMxGyDkcEUf261IptDRHg1lDfukJCiY8rsxyUZLWW0ZkZdMb8rq
-	mrgyX/wvSJx4t31pOR+a3Tdy9AkOaMmjakyuRi/2Y5IELS+BYIWF/mP3a/ZlyAvgGGv4nZ00dFQ
-	O72Ke6kHvhpAdHriN74Nofpl7LqnsYgA8V24Jfwsn7LqVrBM8BHgEB6oSvgj/wJ9866+O9NjYFi
-	Ju58mhIuEb19It027aYZQ09a82VH8DuGk=
-X-Received: by 2002:a05:600c:4342:b0:485:2a85:e5ec with SMTP id 5b1f17b1804b1-48c6d455f69mr68059795e9.2.1777879884339;
-        Mon, 04 May 2026 00:31:24 -0700 (PDT)
-Received: from foxbook (bgt227.neoplus.adsl.tpnet.pl. [83.28.83.227])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a82308d77sm355839375e9.14.2026.05.04.00.31.23
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 04 May 2026 00:31:24 -0700 (PDT)
-Date: Mon, 4 May 2026 09:31:18 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Desnes Nunes <desnesn@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- gregkh@linuxfoundation.org, mathias.nyman@intel.com, stable@vger.kernel.org
-Subject: Re: [PATCH RFT RFC] usb: xhci: Kill hosts with HCE or HSE on
- command timeout
-Message-ID: <20260504093118.615ff480.michal.pecio@gmail.com>
-In-Reply-To: <20260503213111.117db3a1.michal.pecio@gmail.com>
-References: <20260430014817.2006885-1-desnesn@redhat.com>
-	<20260430104850.352bd946.michal.pecio@gmail.com>
-	<CACaw+exdPSVSfdAob7+d-xH=JEjBbPpY_z1cPPU6rzXx4wUZpA@mail.gmail.com>
-	<20260430235453.2288c973.michal.pecio@gmail.com>
-	<CACaw+ewwM_5eqyGW5=+THwHsYPs7u3NT096AFQdt6x4E6HcWtA@mail.gmail.com>
-	<20260502114644.76e6b5a3.michal.pecio@gmail.com>
-	<CACaw+eyKh7buHDoDyTOe8O65FP5cSXYdzCcQvwqKw=1DwX26oA@mail.gmail.com>
-	<20260502235517.089ba5bf.michal.pecio@gmail.com>
-	<CACaw+ewOTVh49tnkz+cRr0SD_Z-LmYrMWhFUrsik6YF83mPBtA@mail.gmail.com>
-	<20260503071749.6abda137.michal.pecio@gmail.com>
-	<CACaw+ew8uV5g1G-6qZGtVBEYZ3k+fvFrOq3XMyq-Nuhbq5mdnA@mail.gmail.com>
-	<20260503213111.117db3a1.michal.pecio@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6B228C2BF;
+	Mon,  4 May 2026 07:57:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777881476; cv=fail; b=YYHi7Tq/B0Jnqi8DjvXrzmJQfEUmQg1e9CvFJwNQg10Z+aq3bimjlu8G2oafl5UKxxY09mPjahCozYWtk+VcixNmqF+6J3EVHGP3Qk2+WG8Z0awZBqOdp1TPhLFCHKyRALDN/R3pADM+hrNXFY7Xl1LfCCM6CJvvIFI34eO3Ni0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777881476; c=relaxed/simple;
+	bh=FI5XCipd6lQkpvf6m9PRM3D5ko1TWpCFe9sg3srFwz4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=FIyvOZOW5LBRyZQaLTCjV91N9UsXXwxJ+/KATjwWHD4qG+rMN2GocwNILlVY8QwCA8s0Le0Olh7Vn4Px/mPxRBIbYtEnlmxCPKYdd2wH1Ee6BySC+wwacvIIUkFhsyp7/M2XjyqvYLsEp/wanfGgn5CqW+mdXKNHJvWRXm1ydtQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=LBxmIe4j; arc=fail smtp.client-ip=40.107.130.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pNnSjlgqQ9mu64HM93qhv+j/BPmjKWq06Vw5FUl/MpiJK7O48Y5ZkdGpeDr+RLAsG3bD4m1MQj++jsqYHDhFLmSZ5zpMQ8jqAy3ZTKLMriPOi6faQk2E6kzM96L7OPWSvp+JWM085Q1lmk5RRrQOeSLk0xO4OiU7sqhrtqXPyJv2769muBydBuIzOb+Y2T+yCqqNpX1pq6fqhbmZCdZYovkoMLuMKF4YDRe44t5cNGg4sMDtGk6GXjcFlUhFIQuH5ZRhfaUs/tszMI47wKm5VvrDOVSo3B251R8iTs24txl8YlwZcJss91IFDm1kJbf+3HrOefgLyrqZ3jbW2NXd6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mIyqoNMaqF7PcSsq3Vf4/2r/EknapHaMFFAC23Z0fWk=;
+ b=u/5vHVU/ZwWk0vXcfhC+ZvVj8TSqXPilWXe4zkw8nJXsnptXkI4ThoxIr0qjkFcBaQrdNu3mgiq0LeVT7yP8R6450cWoARy9vT0s0FG6X1duwz1EmElLoN4b7Xu2ubhZ5ZVowjf2F2KcMlQlzrG4OQDlFwzRW3vJWVV4e/2+A0jL79gLCNsXVMdUW3e7PHOZzud3P2DXNv59hKBqcDMJDgKnD5ysdtOX27rA7t+RVsOZ0Kllrj/49y6yCyEqm4Faqh0KjsN1o/xAx/+iowsYAG6TSrNh9u/i+qZiOs3lJmEggz4Oxil30mlSG8yW5FEo36P9vhUhX4+fr8ujas7lJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mIyqoNMaqF7PcSsq3Vf4/2r/EknapHaMFFAC23Z0fWk=;
+ b=LBxmIe4j4c0f8XCDOmIwHQsDwUevTUlG2XSG5rVjJwhpeujlIC35stBUnSYac3YgUbfWXU/Ium9MufmIzh/C+KhNrkBY1ZDnp4CYpRingmBtEGzB3SfBK52lARJku8VclM7COSg7ZsWfCvgZk2E4fYFebSvxLc+Q/yrR1Gl4kGJAEQloY9aurINdIdFPw0k9ZA36UuM5EBsnJtQcc9n4cbBYLXGLUsYbsmVfktuWW/kofa4hS2LLo7iYd9kWfAeKOQ6906aMVPLLYIP+Mi37NRoNNzDN/ToqimoCrHJ/Jbmdpw03gWsxeJwcgrSHG/XQtN77oHVntlLQXVY5+pxblQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
+ by GV2PR04MB11800.eurprd04.prod.outlook.com (2603:10a6:150:2d1::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Mon, 4 May
+ 2026 07:57:48 +0000
+Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
+ ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
+ ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9870.023; Mon, 4 May 2026
+ 07:57:46 +0000
+Date: Mon, 4 May 2026 10:57:42 +0300
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: linux-phy@lists.infradead.org, Bjorn Helgaas <bhelgaas@google.com>
+Cc: Vinod Koul <vkoul@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-can@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	spacemit@lists.linux.dev, UNGLinuxDriver@microchip.com,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Siddharth Vadapalli <s-vadapalli@ti.com>
+Subject: Re: [PATCH v7 phy-next 08/27] PCI: Remove device links to PHY
+Message-ID: <20260504075742.ixt7phu4cpp433q5@skbuf>
+References: <20260430110652.558622-1-vladimir.oltean@nxp.com>
+ <20260430110652.558622-1-vladimir.oltean@nxp.com>
+ <20260430110652.558622-9-vladimir.oltean@nxp.com>
+ <20260430110652.558622-9-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260430110652.558622-9-vladimir.oltean@nxp.com>
+ <20260430110652.558622-9-vladimir.oltean@nxp.com>
+X-ClientProxiedBy: WA2PEPF000008AF.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d8::657) To AM9PR04MB8585.eurprd04.prod.outlook.com
+ (2603:10a6:20b:438::13)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 789A64B95C0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|GV2PR04MB11800:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c875e1e-ca31-4828-710b-08dea9b2d44c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|19092799006|7416014|376014|10070799003|1800799024|56012099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	HEAXu0UJ9P3VzL00TQ5M3z2crujXl382jiCiUZ8AjCp92Sg3OB/js+tp8eYXGFCwTg4KC58dkU749B4w9rSUDmOeHKbS0d1VunRrO+0OtdmhVfIDbyWfd68zd/UwthW2bRoM12WmYcfW+QITvv60QYEZ3Kg4C9ooCFWab7uNzFwTYCMVln/v4nDI7PA+84MsJRghdBRjtrzVdqUpokYrKrv/vPQ8UdETapxfYG4x02T8oJJuR8rwqlgl1y/1JCDwDYxOrDpVfe+N/b9b2OMuKXyU8kTLFDV2up3MVC5GOnlCnnlwO+8ZalNICpxGxx4yrr9ReK56HR7wQ+EleiGOwqmjXSseI4g7FzN/Bm4ILnOoxXySX1YImvrFAsqP2ONeZCRRLqDcEN2K+zjhQYoc9vIaUwwAH1owrJMiNqLPK1BBMV6XA4WG3u1dohQzwWRk9J6ZB3Mq9zeKK39RKMh7AVi9wOOTuYnE26otczBMnVKu7BD58vY6ONRIqYZiqnt/i1+rsMLaDWvZTybIZj8YOv22IJFCrUZq8pvT2T2vn4k5ykcL4wBm5+ReTtYtHnCrP7+s6kJjJcCVv/9pxQ51KpGJL1D7rMiYVbvAYjGTnZjLEkc3qSGjgZbvixZN6L75/bYZOjGOt6ePctFGSO6QX6HJX8OyaoKsPtRjRZPN33ZGE71bvSFRxzkCOrB5x2Bz
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(7416014)(376014)(10070799003)(1800799024)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?RsEOHz6cOvr61ub/jxNnNVotOrCIljo7elUReRA064caS/5whesT2J9KGG1W?=
+ =?us-ascii?Q?0L4rUUrOsc6Ddsc0U9zeiJJ6LTVI5b1GVFb8eTU0+6LuW5h/yQgVUJr1EInh?=
+ =?us-ascii?Q?h3qoiM4jWG/uDASftINhtbByfh3a6xoV/kg8gRbeKBjVV2gNyAry3SA5nj4N?=
+ =?us-ascii?Q?KCjDY+RNqRFoI4CzsYBaA8Xtc3HoOPpWw4m7TCLeoVjN0SnCPZPUiHzUe0Ku?=
+ =?us-ascii?Q?uEdZbRJoc0TSiSmy/v1wQ94hyS0eGVKAgbCemhE32p7jBBUgtIA0m8eTnakr?=
+ =?us-ascii?Q?m0cP7Dg2Rgwdxn7Htvb29f2qN+h6gLjG+Z664xypN2PMh3YLasYwpaSw2/TU?=
+ =?us-ascii?Q?bw5aX6pbPDj21gqqtcD307swHztnNZfL/1dTTTOyGSIk+QiGf5HJV3w0Mpry?=
+ =?us-ascii?Q?JpJarUj9oRVOjrGtKp/vY9tpuo9YY3vnT8M3X+nfOsxTlKWyquIqkJPWpVmz?=
+ =?us-ascii?Q?VOavSuUc4gC6hW7c9IcLsof89g+BkZd5zg5T5ERE7Ospd/knF6e9NLD5mTR7?=
+ =?us-ascii?Q?jBOgYJoaUrf15GXhmW74pfE25hnfa9hP4J2aVQ5pwuTWEeN0LJqZRS39I129?=
+ =?us-ascii?Q?3rIi4E5g5x4hDYkpoRt7001EdShWNGsyOkDcJ9H/+0syBS/du94bxvTKwLPH?=
+ =?us-ascii?Q?Q4GnTHTU+7TxqRDrsv1QcAQIzI7jqQ3fT9B11Au82fQ8GuGLcpmBkRg+vut9?=
+ =?us-ascii?Q?pH4YLzfQ95YVVl5v0/TYyT1S3CA/lQJ25Yqqug07H0lHJnmtxejGsraBekx5?=
+ =?us-ascii?Q?y41Rcf2cbgkltnYu4p1dF0uMYh39FoeWXDtpN+ZIPtfJIwEcmcK2nptUQ4sW?=
+ =?us-ascii?Q?3DzsXI4fwDver+dSZUKzoxLnMgBGix83Nz4yP3H591HzSGqCJq4Ahq6aoTwO?=
+ =?us-ascii?Q?vdkKRgJFouBysTNrWXm3Dhzk4TnLnT9odECnZdpEQXPDPHJR3IP9bVK+zT1J?=
+ =?us-ascii?Q?fLAVSpZnuQEMH5z5QzO/tQlLnYggNWfN/av4tmiEG5CnEop8o28JSu7G4Awa?=
+ =?us-ascii?Q?up8YeGzW63waghEtGCWWKM/nzOeGz5zZpKi9SP/1pyp60N4GqqN22qQyhYzp?=
+ =?us-ascii?Q?aCKS10hT18/N0yhdpk7jCf4i+yQ6DEEAq2pIERPpC84+uRhnZvl3ORsF/2K7?=
+ =?us-ascii?Q?mWhMQBv5m16eu1/7qrqQY/YIG+HpoNDlyao1iUd1MlUjvKA9pYYsn0zBnzEr?=
+ =?us-ascii?Q?r1/1FKCk64nnJ3XoYYg1n3aWkPPcrSSmZ/1bVrtxagz/tGXcS/mMFYMiVeag?=
+ =?us-ascii?Q?wHnhQh64Gzqb3nJPvIkn36Fh08SWpSAziFlLTy0HZcxRbhHAkSGjGzUhuPYt?=
+ =?us-ascii?Q?mGgO74dOzXOaE/PgSGHRsgx+VcvSa9fvXYMfTz4uqunO/H45oI6UyCu3J3ob?=
+ =?us-ascii?Q?rYOgwDx7iyA4v/06pCB+/WSx3UQJn6x7h/Lbra8FvBlwTHLti7Tlf768GM91?=
+ =?us-ascii?Q?zStbCV1u7IAwq7cFLKsf0tCdwLMzckOHhgor23phsP229u+/oB1kKARQWlsE?=
+ =?us-ascii?Q?F4CeMARInjuQNYzC3iRUYHMZwA1WmAc34VPcgN/mRwZXJsRUKcY8Yf8fFdyL?=
+ =?us-ascii?Q?1Gg/0tnWaNA7RjxqS5Tx9Ovad5xiHpTKJPEPofz6T7e0SU+svwcatycFidc/?=
+ =?us-ascii?Q?HPIpeq7CsTfPh2qupxa/DBLR+lZiUAxA3J4I759eadMjgtywW2aXkJ9oQ5zX?=
+ =?us-ascii?Q?7PG6hJ42ZnL1f97rlTIMOg5vJghuNVEfuxia/ORrTh1o5pTLCr87B8hulxXf?=
+ =?us-ascii?Q?mpHVVmdt5W3ZcR65RWqjhzxD83ghUIQ56YzAk+fEVJPF4Vwe2/hEMHSwv46x?=
+X-MS-Exchange-AntiSpam-MessageData-1: qAbWhMSQ+tDz/g==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c875e1e-ca31-4828-710b-08dea9b2d44c
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2026 07:57:46.6958
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MKHLfxUQD4j6O1JnGXUiro3PKaKtFhDedU9fqi7AkBqWytZKCuHAp76HHMA+3Egs5mL1VqDhZ+adhJvqpx+FhQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR04MB11800
+X-Rspamd-Queue-Id: 1CAEB4B9D62
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36871-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36872-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[31];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[vladimir.oltean@nxp.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[nxp.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,usbcmd.run:url]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:dkim,nxp.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-On Sun, 3 May 2026 21:31:11 +0200, Michal Pecio wrote:
-> My first wild guess would be that HSE is caused by resetting IOMMU
-> while the xHC is unaware of kexec and continuing to DMA old buffers.
-> Attached patch checks for this and also tries to explicitly clear
-> HSE, although resetting ought to clear it too. But HW has bugs...
+Sashiko says:
+> commit e4f495a9118b40f8a77e8dc097821d2c846ed1fc
+> Author: Vladimir Oltean <vladimir.oltean@nxp.com>
+> 
+> PCI: Remove device links to PHY
+> This commit removes device links between the PCIe controllers and PHY
+> providers across several drivers, since the PHY core already creates consumer
+> device links.
+> 
+> > diff --git a/drivers/pci/controller/cadence/pcie-cadence-plat.c b/drivers/pci/controller/cadence/pcie-cadence-plat.c
+> > index b067a3296dd37..fc39c01b79648 100644
+> > --- a/drivers/pci/controller/cadence/pcie-cadence-plat.c
+> > +++ b/drivers/pci/controller/cadence/pcie-cadence-plat.c
+> [ ... ]
+> > @@ -122,9 +121,6 @@ static int cdns_plat_pcie_probe(struct platform_device *pdev)
+> >  	pm_runtime_put_sync(dev);
+> >  	pm_runtime_disable(dev);
+> >  	cdns_pcie_disable_phy(cdns_plat_pcie->pcie);
+> > -	phy_count = cdns_plat_pcie->pcie->phy_count;
+> > -	while (phy_count--)
+> > -		device_link_del(cdns_plat_pcie->pcie->link[phy_count]);
+> >
+> >  	return 0;
+> 
+> This isn't a bug introduced by your patch, but I noticed the error path in
+> cdns_plat_pcie_probe() returns 0.
+> Does this cause the driver core to consider the probe successful even when
+> host or endpoint setup steps fail? It looks like the device would be left
+> in an uninitialized and disabled state while still being bound to the driver.
+> Should this return ret instead?
+> 
 
-Never mind, here's the smoking gun:
+The condition does not appear intentional. Commit bd22885aa188 ("PCI:
+cadence: Refactor driver to use as a core library") changed
+cdns_pcie_host_probe() which properly returned ret on error with
+cdns_plat_pcie_probe() which doesn't.
 
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: xHCI Host Controller
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: new USB bus
-registered, assigned bus number 3
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: // Halt the HC
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Resetting HCD
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: // Reset the HC
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Wait for controller
-to be ready for doorbell rings
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Reset complete
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Enabling 64-bit DMA addresses.
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Calling HCD init
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Starting xhci_init
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: HCD page size set to 4K
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Device context base
-array address = 0x0x000000100167c000 (DMA), 00000000d042f7e3 (virt)
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Allocated command
-ring at 0000000016f013a6
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: First segment DMA is
-0x0x000000100167d000
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Allocating primary event ring
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Allocating 34
-scratchpad buffers
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Ext Cap
-000000001bef6947, port offset = 1, count = 14, revision = 0x2
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: PSIV:1 PSIE:2 PLT:0
-PFD:0 LP:0 PSIM:12
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: PSIV:2 PSIE:1 PLT:0
-PFD:0 LP:0 PSIM:1500
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: PSIV:3 PSIE:2 PLT:0
-PFD:0 LP:0 PSIM:480
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: xHCI 1.0: support
-USB2 hardware lpm
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Ext Cap
-00000000a5bcc554, port offset = 17, count = 8, revision = 0x3
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: PSIV:4 PSIE:3 PLT:0
-PFD:1 LP:0 PSIM:5
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: PSIV:5 PSIE:3 PLT:0
-PFD:1 LP:1 PSIM:10
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: PSIV:6 PSIE:3 PLT:0
-PFD:1 LP:1 PSIM:10
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: PSIV:7 PSIE:3 PLT:0
-PFD:1 LP:1 PSIM:20
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Found 14 USB 2.0
-ports and 8 USB 3.0 ports.
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: xHC can handle at
-most 64 device slots
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Setting Max device
-slots reg = 0x40
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Setting command ring
-address to 0x100167d001
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Doorbell array is
-located at offset 0x3000 from cap regs base addr
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: // Write event ring
-dequeue pointer, preserving EHB bit
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Finished xhci_init
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Called HCD init
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: hcc params
-0x20007fc1 hci version 0x120 quirks 0x0000000200009810
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Got SBRN 50
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: MWI active
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Finished xhci_pci_reinit
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: supports USB remote wakeup
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: xhci_run
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: ERST deq = 64'h100167e000
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Finished xhci_run for main hcd
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: xHCI Host Controller
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: new USB bus
-registered, assigned bus number 4
-[Fri May  1 09:46:40 2026] xhci_hcd 0000:80:14.0: Host supports USB
-3.2 Enhanced SuperSpeed
-[Fri May  1 09:46:41 2026] xhci_hcd 0000:80:14.0: supports USB remote wakeup
-[Fri May  1 09:46:41 2026] xhci_hcd 0000:80:14.0: Enable interrupts
-[Fri May  1 09:46:41 2026] xhci_hcd 0000:80:14.0: Enable primary interrupter
-[Fri May  1 09:46:41 2026] xhci_hcd 0000:80:14.0: // Turn on HC, cmd = 0x5.
-[Fri May  1 09:46:41 2026] DMAR: DRHD: handling fault status reg 2
-[Fri May  1 09:46:41 2026] DMAR: [DMA Read NO_PASID] Request device
-[80:14.0] fault addr 0x1001680000 [fault reason 0x39] SM: Present bit
-in Root Entry is clear
+I will add a preparatory patch which replaces "return 0" with "return ret"
+in cdns_plat_pcie_probe(), blaming that commit.
 
-The chip IOMMU faults shortly after setting USBCMD.RUN = 1.
-Such fault is expected to cause HSE assertion and usually it does.
-You will probably find that HSE is already set while Enable Slot
-is being queued, even if it was clear in xhci_gen_setup().
+> >  }
+> > diff --git a/drivers/pci/controller/dwc/pci-dra7xx.c b/drivers/pci/controller/dwc/pci-dra7xx.c
+> > index cd904659c3216..9c1aef4d0bd1c 100644
+> > --- a/drivers/pci/controller/dwc/pci-dra7xx.c
+> > +++ b/drivers/pci/controller/dwc/pci-dra7xx.c
+> [ ... ]
+> > @@ -852,10 +840,6 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
+> >  	pm_runtime_disable(dev);
+> >  	dra7xx_pcie_disable_phy(dra7xx);
+> >
+> > -err_link:
+> > -	while (--i >= 0)
+> > -		device_link_del(link[i]);
+> > -
+> >  	return ret;
+> >  }
+> 
+> This isn't a bug introduced by your changes, but looking closely at the error
+> path right above this hunk, there is a call to pm_runtime_put(dev) immediately
+> followed by pm_runtime_disable(dev):
+> err_gpio:
+> err_get_sync:
+> 	pm_runtime_put(dev);
+> 	pm_runtime_disable(dev);
+> Does this sequence create a power management race condition? The pending
+> asynchronous idle/suspend work can be abruptly cancelled by
+> pm_runtime_disable(), leaving the hardware in an incorrect or unpredictable
+> power state.
+> Should this use pm_runtime_put_sync() instead?
+> 
+> > diff --git a/drivers/pci/controller/dwc/pci-keystone.c b/drivers/pci/controller/dwc/pci-keystone.c
+> > index fe4836925c4e3..cab9fad212add 100644
+> > --- a/drivers/pci/controller/dwc/pci-keystone.c
+> > +++ b/drivers/pci/controller/dwc/pci-keystone.c
+> [ ... ]
+> > @@ -1337,25 +1321,18 @@ static int ks_pcie_probe(struct platform_device *pdev)
+> >  	pm_runtime_disable(dev);
+> >  	ks_pcie_disable_phy(ks_pcie);
+> >
+> > -err_link:
+> > -	while (--i >= 0 && link[i])
+> > -		device_link_del(link[i]);
+> > -
+> > +err:
+> >  	return ret;
+> >  }
+> >
+> >  static void ks_pcie_remove(struct platform_device *pdev)
+> >  {
+> >  	struct keystone_pcie *ks_pcie = platform_get_drvdata(pdev);
+> > -	struct device_link **link = ks_pcie->link;
+> > -	int num_lanes = ks_pcie->num_lanes;
+> >  	struct device *dev = &pdev->dev;
+> >
+> >  	pm_runtime_put(dev);
+> >  	pm_runtime_disable(dev);
+> 
+> Similar to the question above, is it possible this asynchronous put causes
+> a race when immediately followed by pm_runtime_disable() during removal?
+> 
+> >  	ks_pcie_disable_phy(ks_pcie);
+> > -	while (num_lanes--)
+> > -		device_link_del(link[num_lanes]);
+> >  }
 
-1001680000 is close to valid addresses like 100167e000 or 100167c000.
-
-Possible causes:
-- xHCI or IOMMU driver bug
-- HW corrupted a pointer
-- HW accessed something out of bounds
-- HW dereferenced a stale pointer from the original kernel
-
-Do you happen to have more of those logs saved, are they all like that?
-Any chance that 1001680000 appears somewhere in the main kernel's log?
-
-If not, I suppose we will have to log every single DMA mapping created
-by the driver and see if this gives any new clues.
-
-Regards,
-Michal
+It seems plausible that the pm_runtime_put() -> pm_runtime_disable()
+pattern is ineffective, i.e. one of two things can happen: either
+pm_runtime_put() runs to completion by chance, or pm_runtime_disable()
+cancels it. However I am not very familiar with the runtime PM API and
+its effects, and unless a maintainer tells me to, I would prefer leaving
+these code paths alone.
 
