@@ -1,326 +1,155 @@
-Return-Path: <linux-usb+bounces-36878-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36879-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MJjkG79d+GnatQIAu9opvQ
-	(envelope-from <linux-usb+bounces-36878-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 10:50:07 +0200
+	id XiPzNkxg+GnKtgIAu9opvQ
+	(envelope-from <linux-usb+bounces-36879-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 11:01:00 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D78FB4BA86B
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 10:50:06 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC9764BAAEA
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 11:00:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6DDEC3030D52
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 08:48:22 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C75D1303B836
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 08:57:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81A6D34EF17;
-	Mon,  4 May 2026 08:47:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07F0D34A783;
+	Mon,  4 May 2026 08:57:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l0k/1KUb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XbxCgF/W"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CEDD3451A9;
-	Mon,  4 May 2026 08:47:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB11318EEE;
+	Mon,  4 May 2026 08:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777884478; cv=none; b=SU18tYhh9+n+AgyjnPYhsQ2NIdCiocf1QtDrOQxiXEnVuPZsz2IQqek4E2PLGuSXpPZhqYi/v9+olI/9CpV6WNf+0q2sOew8SlAVpKXY6fbX46bCU5OYcnuInKYoH8pMKYxfazWD1/49YTyVMOewjZuff1LfEqrCq8nb465R7AM=
+	t=1777885053; cv=none; b=U3tA9nyPBOHv4wvDzusV18fX+9c/Ypc70nEf9KdY7v3VkEdHn2f2x7rveWpTKQ335z+2eluYolXttUA1U/SuJYT6hDcrTMtWdH+EDVbJCz2PHBCHMAllcEMXgJ5cGciQwXABaTKYgqxKyw/1OHikq8711SSXfn79av1e0W7sCkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777884478; c=relaxed/simple;
-	bh=DXYQc7X2AK50Mj+CIjz8BuE9j6+b2UJfrn8B83jW6pg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XFVhJAymrPo4wNBdAQbf3LwD18zQQQ9wx9p/KVKuZYbXD3RjP6QujwOiiWpjSES8eNJzvz1ptXdsVg+ymy4pY8n73+e7kDXcMHkAOY1sLUN2WMckfIUN2pu/5aohJSIley4wJwhownNERYZ1ROGGkPbjdU0Psaz3LsZneYi9f9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l0k/1KUb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACE76C2BCB8;
-	Mon,  4 May 2026 08:47:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777884477;
-	bh=DXYQc7X2AK50Mj+CIjz8BuE9j6+b2UJfrn8B83jW6pg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=l0k/1KUb6RG000H+kGDm7nhsCb421I1oUGeBEVA+tFHRcxDrBra82APpHH3RV2G0Y
-	 EiVgMMfdALzdSpak9bXChuaY/6RXE3Chp1R3o7YoIC1fTW0k6ILvk6ylV1lAhMv8u6
-	 F6UiOz+aYqrlmRC1f5TuMnV+orj3cOj/XEcrOI5nx77b2HE9/k0dwwQJQk2pmrhHNu
-	 2+djzl8+4/G8g400OzvpzQSSZuSsMN+/vGtrMkn8cJKnIiY8uJbpzAJevOJoY5ckng
-	 QT9ZmSI9/9G4KloPow6DnBZuuk73oQafeSaARVXCzq6lUhhQ9It0DM2gScUIeyRHNw
-	 UvqL2OH9CeLWQ==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Mon, 04 May 2026 10:47:25 +0200
-Subject: [PATCH v3 4/4] HID: wacom: use __free(kfree) to clean up temporary
- buffers
+	s=arc-20240116; t=1777885053; c=relaxed/simple;
+	bh=DCB792sBP7heCFPmc4hb1oWEUUSwNd/IGJYThEbOIUM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pqPwnGMcK7N8AcwbRPMF0V6MGlihD5lFXD5rOGh/bDNMkCrxfQdjWoGEfnE3ans6FJjI72BIkegoxNVbkMWDK64TMbTND7T5aNYbTxvAhwyZjW236Or7MwMUbEi28TmI+wAn1kfLGPbl4cKIPeP6l8UyPkyYw6NSPauqh2O2qZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XbxCgF/W; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777885053; x=1809421053;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DCB792sBP7heCFPmc4hb1oWEUUSwNd/IGJYThEbOIUM=;
+  b=XbxCgF/WnvLSLayWKKI+pYFsKeVDTQ10yvUBVCtYeQLvPDfHkYPFZMb4
+   oTKWskrxtkR4M5AZR4JsYcJRTau/bG9SarUJKjJnF3nr1gqt+VeJw8EGR
+   +ZPj06vzVpw8VV7NQhyWM12TdDVayK8NkQQXFTE/4vdB+M/8fvHwzzbqt
+   GI16/5ABOtICQKVP65cDwLm7HqkRohKVKi3HW4JIo9wJMxSPiq2fi9pDF
+   zoCFry5wTfUaLy1mcRM7sKwZICxy9YBRUcODdkumSBNulKxpAN7JvkF7/
+   ni23hpofi4D6EJDMIm8Uv9kaknjyMVwxFicbrEMyXoDtcen2mkKtDfDD3
+   w==;
+X-CSE-ConnectionGUID: ocxmXy4oT5mOEqyJeAASpw==
+X-CSE-MsgGUID: RkbBMY7QSlGUiB93EnnRoQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11775"; a="78789423"
+X-IronPort-AV: E=Sophos;i="6.23,215,1770624000"; 
+   d="scan'208";a="78789423"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2026 01:57:32 -0700
+X-CSE-ConnectionGUID: /bmu3p2XQp2+uo/+vqVLPA==
+X-CSE-MsgGUID: XB/y71JiRH2MlCGRyE4CBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,215,1770624000"; 
+   d="scan'208";a="232814938"
+Received: from hrotuna-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.245.78])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2026 01:57:29 -0700
+Date: Mon, 4 May 2026 11:57:27 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Michael Bommarito <michael.bommarito@gmail.com>
+Cc: Mika Westerberg <westeri@kernel.org>, linux-usb@vger.kernel.org,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] thunderbolt: property: reject u32 wrap in
+ tb_property_entry_valid()
+Message-ID: <afhfd76fx1b3tLup@ashevche-desk.local>
+References: <20260415123221.225149-1-michael.bommarito@gmail.com>
+ <cover.1777817011.git.michael.bommarito@gmail.com>
+ <eeedf1e42fd71d3686b352b402466a70482f8b22.1777817011.git.michael.bommarito@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260504-wip-fix-core-v3-4-ce1f11f4968f@kernel.org>
-References: <20260504-wip-fix-core-v3-0-ce1f11f4968f@kernel.org>
-In-Reply-To: <20260504-wip-fix-core-v3-0-ce1f11f4968f@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, 
- =?utf-8?q?Filipe_La=C3=ADns?= <lains@riseup.net>, 
- Bastien Nocera <hadess@hadess.net>, Ping Cheng <ping.cheng@wacom.com>, 
- Jason Gerecke <jason.gerecke@wacom.com>, Viresh Kumar <vireshk@kernel.org>, 
- Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>
-Cc: Icenowy Zheng <uwu@icenowy.me>, linux-input@vger.kernel.org, 
- linux-kernel@vger.kernel.org, greybus-dev@lists.linaro.org, 
- linux-staging@lists.linux.dev, linux-usb@vger.kernel.org, 
- Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777884459; l=6985;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=DXYQc7X2AK50Mj+CIjz8BuE9j6+b2UJfrn8B83jW6pg=;
- b=JZtCh8p6BoKS4cb3iSfsODBVljPa+P4bPc7keNXAL6OSxZWucSnYuEXncjjidOV597oQrMP5j
- fHh9FhOC4hwCZepPA65Bg3GJsT7OykiU+xZ1GavX8XeXU2p3Ha02Zmw
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
-X-Rspamd-Queue-Id: D78FB4BA86B
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eeedf1e42fd71d3686b352b402466a70482f8b22.1777817011.git.michael.bommarito@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
+X-Rspamd-Queue-Id: DC9764BAAEA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-36879-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36878-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FREEMAIL_TO(0.00)[gmail.com];
+	HAS_ORG_HEADER(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,gmail.com,intel.com,linuxfoundation.org];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bentiss@kernel.org,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,ashevche-desk.local:mid]
 
-This simplifies error handling and protects against memory leaks.
+On Sun, May 03, 2026 at 10:15:05AM -0400, Michael Bommarito wrote:
+> entry->value is u32 and entry->length is u16; the sum is performed in
+> u32 and wraps.  A malicious XDomain peer can pick
+> value = 0xffffff00, length = 0x100 so the sum 0x100000000 wraps to 0
+> and passes the > block_len check.  tb_property_parse() then passes
+> entry->value to parse_dwdata() as a dword offset into the property
+> block, reading attacker-directed memory far past the allocation.
+> 
+> For TEXT-typed entries with the "deviceid" or "vendorid" keys this
+> lands in xd->device_name / xd->vendor_name and is readable back via
+> the per-XDomain device_name / vendor_name sysfs attributes; the leak
+> is NUL-bounded (kstrdup() stops at the first zero byte) and
+> untargeted (the attacker picks a delta, not an absolute address).
+> DATA-typed entries are parsed into property->value.data but not
+> generically surfaced to userspace.
+> 
+> Use check_add_overflow() so a wrapped sum is rejected.
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
----
- drivers/hid/hid-core.c  |  4 ++--
- drivers/hid/wacom_sys.c | 40 +++++++++++++---------------------------
- 2 files changed, 15 insertions(+), 29 deletions(-)
+...
 
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index b3596851c719..7fc20e0405ad 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -2050,8 +2050,8 @@ int hid_report_raw_event(struct hid_device *hid, enum hid_report_type type, u8 *
- 		return 0;
- 
- 	if (unlikely(bsize < csize)) {
--		hid_warn_ratelimited(hid, "Event data for report %d is incorrect (%d vs %ld)\n",
--				     report->id, csize, bsize);
-+		hid_warn_ratelimited(hid, "Event data for report %d is incorrect (%d vs %d)\n",
-+				     report->id, csize, (unsigned int)bsize);
- 		return -EINVAL;
- 	}
- 
-diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
-index a32320b351e3..adb31f54e524 100644
---- a/drivers/hid/wacom_sys.c
-+++ b/drivers/hid/wacom_sys.c
-@@ -70,11 +70,10 @@ static void wacom_wac_queue_flush(struct hid_device *hdev,
- {
- 	while (!kfifo_is_empty(fifo)) {
- 		int size = kfifo_peek_len(fifo);
--		u8 *buf;
- 		unsigned int count;
- 		int err;
- 
--		buf = kzalloc(size, GFP_KERNEL);
-+		u8 *buf __free(kfree) = kzalloc(size, GFP_KERNEL);
- 		if (!buf) {
- 			kfifo_skip(fifo);
- 			continue;
-@@ -87,7 +86,6 @@ static void wacom_wac_queue_flush(struct hid_device *hdev,
- 			// to flush seems reasonable enough, however.
- 			hid_warn(hdev, "%s: removed fifo entry with unexpected size\n",
- 				 __func__);
--			kfree(buf);
- 			continue;
- 		}
- 		err = hid_report_raw_event(hdev, HID_INPUT_REPORT, buf, size, size, false);
-@@ -95,8 +93,6 @@ static void wacom_wac_queue_flush(struct hid_device *hdev,
- 			hid_warn(hdev, "%s: unable to flush event due to error %d\n",
- 				 __func__, err);
- 		}
--
--		kfree(buf);
- 	}
- }
- 
-@@ -311,7 +307,6 @@ static void wacom_feature_mapping(struct hid_device *hdev,
- 	struct wacom_features *features = &wacom->wacom_wac.features;
- 	struct hid_data *hid_data = &wacom->wacom_wac.hid_data;
- 	unsigned int equivalent_usage = wacom_equivalent_usage(usage->hid);
--	u8 *data;
- 	int ret;
- 	u32 n;
- 
-@@ -325,10 +320,11 @@ static void wacom_feature_mapping(struct hid_device *hdev,
- 		/* leave touch_max as is if predefined */
- 		if (!features->touch_max) {
- 			/* read manually */
--			n = hid_report_len(field->report);
--			data = hid_alloc_report_buf(field->report, GFP_KERNEL);
-+			u8 *data __free(kfree) = hid_alloc_report_buf(field->report, GFP_KERNEL);
-+
- 			if (!data)
- 				break;
-+			n = hid_report_len(field->report);
- 			data[0] = field->report->id;
- 			ret = wacom_get_report(hdev, HID_FEATURE_REPORT,
- 					       data, n, WAC_CMD_RETRIES);
-@@ -344,7 +340,6 @@ static void wacom_feature_mapping(struct hid_device *hdev,
- 					 "defaulting to %d\n",
- 					  features->touch_max);
- 			}
--			kfree(data);
- 		}
- 		break;
- 	case HID_DG_INPUTMODE:
-@@ -386,10 +381,11 @@ static void wacom_feature_mapping(struct hid_device *hdev,
- 	case WACOM_HID_WD_OFFSETRIGHT:
- 	case WACOM_HID_WD_OFFSETBOTTOM:
- 		/* read manually */
--		n = hid_report_len(field->report);
--		data = hid_alloc_report_buf(field->report, GFP_KERNEL);
-+		u8 *data __free(kfree) = hid_alloc_report_buf(field->report, GFP_KERNEL);
-+
- 		if (!data)
- 			break;
-+		n = hid_report_len(field->report);
- 		data[0] = field->report->id;
- 		ret = wacom_get_report(hdev, HID_FEATURE_REPORT,
- 					data, n, WAC_CMD_RETRIES);
-@@ -400,7 +396,6 @@ static void wacom_feature_mapping(struct hid_device *hdev,
- 			hid_warn(hdev, "%s: could not retrieve sensor offsets\n",
- 				 __func__);
- 		}
--		kfree(data);
- 		break;
- 	}
- }
-@@ -581,7 +576,6 @@ static int wacom_hid_set_device_mode(struct hid_device *hdev)
- static int wacom_set_device_mode(struct hid_device *hdev,
- 				 struct wacom_wac *wacom_wac)
- {
--	u8 *rep_data;
- 	struct hid_report *r;
- 	struct hid_report_enum *re;
- 	u32 length;
-@@ -595,7 +589,7 @@ static int wacom_set_device_mode(struct hid_device *hdev,
- 	if (!r)
- 		return -EINVAL;
- 
--	rep_data = hid_alloc_report_buf(r, GFP_KERNEL);
-+	u8 *rep_data __free(kfree) = hid_alloc_report_buf(r, GFP_KERNEL);
- 	if (!rep_data)
- 		return -ENOMEM;
- 
-@@ -614,8 +608,6 @@ static int wacom_set_device_mode(struct hid_device *hdev,
- 		 rep_data[1] != wacom_wac->mode_report &&
- 		 limit++ < WAC_MSG_RETRIES);
- 
--	kfree(rep_data);
--
- 	return error < 0 ? error : 0;
- }
- 
-@@ -921,7 +913,6 @@ static int wacom_add_shared_data(struct hid_device *hdev)
- 
- static int wacom_led_control(struct wacom *wacom)
- {
--	unsigned char *buf;
- 	int retval;
- 	unsigned char report_id = WAC_CMD_LED_CONTROL;
- 	int buf_size = 9;
-@@ -940,7 +931,8 @@ static int wacom_led_control(struct wacom *wacom)
- 		report_id = WAC_CMD_WL_INTUOSP2;
- 		buf_size = 51;
- 	}
--	buf = kzalloc(buf_size, GFP_KERNEL);
-+
-+	unsigned char *buf __free(kfree) = kzalloc(buf_size, GFP_KERNEL);
- 	if (!buf)
- 		return -ENOMEM;
- 
-@@ -996,7 +988,6 @@ static int wacom_led_control(struct wacom *wacom)
- 
- 	retval = wacom_set_report(wacom->hdev, HID_FEATURE_REPORT, buf, buf_size,
- 				  WAC_CMD_RETRIES);
--	kfree(buf);
- 
- 	return retval;
- }
-@@ -1004,11 +995,10 @@ static int wacom_led_control(struct wacom *wacom)
- static int wacom_led_putimage(struct wacom *wacom, int button_id, u8 xfer_id,
- 		const unsigned len, const void *img)
- {
--	unsigned char *buf;
- 	int i, retval;
- 	const unsigned chunk_len = len / 4; /* 4 chunks are needed to be sent */
- 
--	buf = kzalloc(chunk_len + 3 , GFP_KERNEL);
-+	unsigned char *buf __free(kfree) = kzalloc(chunk_len + 3, GFP_KERNEL);
- 	if (!buf)
- 		return -ENOMEM;
- 
-@@ -1018,7 +1008,7 @@ static int wacom_led_putimage(struct wacom *wacom, int button_id, u8 xfer_id,
- 	retval = wacom_set_report(wacom->hdev, HID_FEATURE_REPORT, buf, 2,
- 				  WAC_CMD_RETRIES);
- 	if (retval < 0)
--		goto out;
-+		return retval;
- 
- 	buf[0] = xfer_id;
- 	buf[1] = button_id & 0x07;
-@@ -1038,8 +1028,6 @@ static int wacom_led_putimage(struct wacom *wacom, int button_id, u8 xfer_id,
- 	wacom_set_report(wacom->hdev, HID_FEATURE_REPORT, buf, 2,
- 			 WAC_CMD_RETRIES);
- 
--out:
--	kfree(buf);
- 	return retval;
- }
- 
-@@ -1948,10 +1936,9 @@ static int wacom_remote_create_attr_group(struct wacom *wacom, __u32 serial,
- static int wacom_cmd_unpair_remote(struct wacom *wacom, unsigned char selector)
- {
- 	const size_t buf_size = 2;
--	unsigned char *buf;
- 	int retval;
- 
--	buf = kzalloc(buf_size, GFP_KERNEL);
-+	unsigned char *buf __free(kfree) = kzalloc(buf_size, GFP_KERNEL);
- 	if (!buf)
- 		return -ENOMEM;
- 
-@@ -1960,7 +1947,6 @@ static int wacom_cmd_unpair_remote(struct wacom *wacom, unsigned char selector)
- 
- 	retval = wacom_set_report(wacom->hdev, HID_OUTPUT_REPORT, buf,
- 				  buf_size, WAC_CMD_RETRIES);
--	kfree(buf);
- 
- 	return retval;
- }
+> +		if (check_add_overflow(entry->value, (u32)entry->length, &end) ||
+
+Why is casting needed?
+
+> +		    end > block_len)
+>  			return false;
 
 -- 
-2.54.0
+With Best Regards,
+Andy Shevchenko
+
 
 
