@@ -1,140 +1,118 @@
-Return-Path: <linux-usb+bounces-36886-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36887-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UF6zIJRn+GnuuAIAu9opvQ
-	(envelope-from <linux-usb+bounces-36886-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 11:32:04 +0200
+	id mBQFHEFx+GkYuwIAu9opvQ
+	(envelope-from <linux-usb+bounces-36887-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 12:13:21 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D8374BAF39
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 11:32:03 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31C8E4BB817
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 12:13:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 852B53006008
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 09:31:58 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 494813015D0F
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 10:13:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ECC837BE93;
-	Mon,  4 May 2026 09:31:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C3F1390CB5;
+	Mon,  4 May 2026 10:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bTvNNvOy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I/GLT+GK"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB50934CFD6;
-	Mon,  4 May 2026 09:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E350A37D113;
+	Mon,  4 May 2026 10:13:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777887112; cv=none; b=sI/mOremAkVfYGh/a7K/qwjQgxca5FY9a18DMIf9X2HRdQYdN80ZwqlYaYsA/VuyteCR/razdKpqWm8YcbYht+rj7S++lNr2jHZ2uSWbmxNf/0OfQZJiXa7LeRVOsTS5CqOd+P2Vipugkr0G9xzV0HsenRkGnklNG4JXUhUcv/U=
+	t=1777889597; cv=none; b=I3YKyfvguiTuml2Fp4LhJzj4clage+ywCyozy6JhM2cz3ILSjkc/ymJ8Epa68PO+fYLXV89Dnr1QSTvfPnUZnI6fgqxD52aUOZ0utsB1qc87ABU8ItanRT1RiWG6KXEWRaaIyWl+UBzAQimEXiIjoK6IiaY3BS6Ao7kxTFU4v5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777887112; c=relaxed/simple;
-	bh=jK7LX7CZZc6vAL2TRvrSWHbkmr37igAqzuml4yVAFMo=;
+	s=arc-20240116; t=1777889597; c=relaxed/simple;
+	bh=HZUUPBL7Z4E9vSMrCphwJqkVEsdGZieR22pOXMD+3Ps=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cc4/z4+D+DNwlmVaUTpnGsPMGCNSanFL+O36pCyEBjXAvTiU4OI2INXCTcjrA9IQ9kkRrcCY+O6obGIffWBrBp9Uyuz6ZKZqsAVLl1ZLefuc9fDkrCxEC7CRVBS7uz2NgIvvqxbjQWBSNEPOZDxkjmpNy7BCYG3Or0etUiBPiRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bTvNNvOy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44684C2BCB8;
-	Mon,  4 May 2026 09:31:52 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=O4nuyL5Igt4SJueBgxNCOuuIIdaqRv4hEdtp7C91YUmXMOEKEcY8atEknhKx+FuqSQPv0jOUnIx/Q0GzmoBV12+NTOKRVbgc95ueF77WgdN0Tv7obcaK8NC1ofkWRrnh+Nj0y8GTNcEJh5p1CQVcuxv290zC9rlGa5KIl0rBiIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I/GLT+GK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0AFFC2BCB8;
+	Mon,  4 May 2026 10:13:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777887112;
-	bh=jK7LX7CZZc6vAL2TRvrSWHbkmr37igAqzuml4yVAFMo=;
+	s=k20201202; t=1777889596;
+	bh=HZUUPBL7Z4E9vSMrCphwJqkVEsdGZieR22pOXMD+3Ps=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bTvNNvOyUQnDUk9HijCP1jx6eqymW90Q2cpLkrTh1jI6gWBTDeMbyWor3SN0lwKj+
-	 M0h0EugNAbetQIZMYZkAUA4ocRZ811PTHm7lP6IImzjzYLtwtJ0fz4/z9Pz4ESTKv1
-	 HWN/kH9H4IIKCI/6VzEIrk2VwohVB//h70GOr4pgLGbanl7NBwozKCJXdfJiIZDCes
-	 Af55zZ+jcDOHWQ1KeJ/rgnUTrCmLnMLv7txxD+NJkpB2XcbQZkO60AYTbhQv90MvLL
-	 cAlYdDz0D7XYBwnctqLCyYq8Km+tHst7XO5iV2pwfXuSqZBcQlYaD3kf19MqspdZab
-	 YKA+y+CGsEd5Q==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1wJpeX-00000001lnX-2NlD;
-	Mon, 04 May 2026 11:31:49 +0200
-Date: Mon, 4 May 2026 11:31:49 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Jiri Kosina <jikos@kernel.org>,
-	Filipe =?utf-8?B?TGHDrW5z?= <lains@riseup.net>,
-	Bastien Nocera <hadess@hadess.net>,
-	Ping Cheng <ping.cheng@wacom.com>,
-	Jason Gerecke <jason.gerecke@wacom.com>,
-	Viresh Kumar <vireshk@kernel.org>, Alex Elder <elder@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lee Jones <lee@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-	linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] HID: pass the buffer size to hid_report_raw_event
-Message-ID: <afhnhcMVSBLYboEo@hovoldconsulting.com>
-References: <20260504-wip-fix-core-v3-0-ce1f11f4968f@kernel.org>
- <20260504-wip-fix-core-v3-1-ce1f11f4968f@kernel.org>
+	b=I/GLT+GK44wPcHIXfRtvkjC7/q+evcpPHeKcU14aKbUIa/LhFHLk1++/Ao80wicWA
+	 tXs4MMcHFGs5DOTK3l93md3lsGNuPoUcHWrHrAwebu1t0sPhyK+1HJWNKE7u4UIqG1
+	 o4jBLdWknmHNqr9DCd3g+NcYDSIg0TBbgPCpFOidxI5gOPwoeFeitjJkrUikXyu1r1
+	 8aaTAd0ZXwuIA4f7DLcrNZ9e6nyMqPuA8mn7Dlzgj6ITB8tQpEXAlpjNH5uWDxek+w
+	 1YjGBADx58oK9xp3jMuiYMaO5ncUlvKFsrzyybAOaYjBr5WQZX2Ipwh8Ow/34AsiSr
+	 gkVNgTzPwKDWQ==
+Date: Mon, 4 May 2026 12:13:13 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
+	Vinod Koul <vkoul@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, 
+	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Subject: Re: [PATCH 1/5] dt-bindings: usb: qcom,snps-dwc3: Add Shikra
+ compatible
+Message-ID: <20260504-amphibian-cunning-horse-dbb413@quoll>
+References: <20260430-shikra-usb-v1-0-c9c108536fdc@oss.qualcomm.com>
+ <20260430-shikra-usb-v1-1-c9c108536fdc@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260504-wip-fix-core-v3-1-ce1f11f4968f@kernel.org>
-X-Rspamd-Queue-Id: 5D8374BAF39
+In-Reply-To: <20260430-shikra-usb-v1-1-c9c108536fdc@oss.qualcomm.com>
+X-Rspamd-Queue-Id: 31C8E4BB817
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36886-lists,linux-usb=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36887-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 
-On Mon, May 04, 2026 at 10:47:22AM +0200, Benjamin Tissoires wrote:
-> commit 0a3fe972a7cb ("HID: core: Mitigate potential OOB by removing
-> bogus memset()") enforced the provided data to be at least the size of
-> the declared buffer in the report descriptor to prevent a buffer
-> overflow. However, we can try to be smarter by providing both the buffer
-> size and the data size, meaning that hid_report_raw_event() can make
-> better decision whether we should plaining reject the buffer (buffer
-> overflow attempt) or if we can safely memset it to 0 and pass it to the
-> rest of the stack.
+On Thu, Apr 30, 2026 at 05:20:26PM +0530, Komal Bajaj wrote:
+> From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
 > 
-> Fixes: 0a3fe972a7cb ("HID: core: Mitigate potential OOB by removing bogus memset()")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> Introduce the compatible definition for Shikra QCOM SNPS DWC3.
+> 
+> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
 > ---
->  drivers/hid/bpf/hid_bpf_dispatch.c |  6 ++++--
->  drivers/hid/hid-core.c             | 42 +++++++++++++++++++++++++-------------
->  drivers/hid/hid-gfrm.c             |  4 ++--
->  drivers/hid/hid-logitech-hidpp.c   |  2 +-
->  drivers/hid/hid-multitouch.c       |  2 +-
->  drivers/hid/hid-primax.c           |  2 +-
->  drivers/hid/hid-vivaldi-common.c   |  2 +-
->  drivers/hid/wacom_sys.c            |  6 +++---
->  drivers/staging/greybus/hid.c      |  2 +-
+>  Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 
-The Greybus change builds fine now:
+Please do not mix subsystems.
 
-Acked-by: Johan Hovold <johan@kernel.org>
+Best regards,
+Krzysztof
 
->  include/linux/hid.h                |  4 ++--
->  include/linux/hid_bpf.h            | 14 ++++++++-----
->  11 files changed, 53 insertions(+), 33 deletions(-)
-
-Johan
 
