@@ -1,1235 +1,336 @@
-Return-Path: <linux-usb+bounces-36867-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36868-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ELRKD2o/+GmFrwIAu9opvQ
-	(envelope-from <linux-usb+bounces-36867-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 08:40:42 +0200
+	id GHg+DrpA+GnCrwIAu9opvQ
+	(envelope-from <linux-usb+bounces-36868-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 08:46:18 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF6444B8F82
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 08:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D6C14B8FBA
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 08:46:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 9CF1D3002D12
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 06:40:37 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 1EB393003702
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 06:46:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC8662C08A8;
-	Mon,  4 May 2026 06:40:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C1142C027E;
+	Mon,  4 May 2026 06:46:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VyPgzVZM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jmV7dOud"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA0D27FB18;
-	Mon,  4 May 2026 06:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E971F5825
+	for <linux-usb@vger.kernel.org>; Mon,  4 May 2026 06:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777876833; cv=none; b=L1MtV8U/PYu9msIt9OPX20C7q2AapXyogEs9weGwe02Y1FS6INfCxZffs/utsVo6Ip07fowCY1AvRsil7+k9A2kb0WLAELLJaGy0q4RMkCSntm+gRmoCTLR9zi/X3iDVRHJLXSVu3r/Uoc+b9/nBJ/LILmr8cptUhtdpnr/DRbI=
+	t=1777877168; cv=none; b=qtrqI63pbVre36i91cyz5ghfKJ8R+iNE/d/2YI51QkaoCwW+srFixE06+rGC7OOVBTOAPTBFw3jrSaL6hQG1dqHOTwb3gs5q11ahb+8u3Ja92euKDOpThIEnfkb7E5VVxKIoPR3frAVQI1d/qjcHj8t0x3zjpRyTCxKygslZdI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777876833; c=relaxed/simple;
-	bh=BzsglH/yJ5Iynsoy/NR3mpUn8JYhARR5n7ff1vc/EgU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OcmXkzd+csYe8JjCSAlTwREg0OAJk11Kz08CJypxwWcVHg5juYyalsJJPh+JHXUpBw2/eMIBiHvKQkQFe/+2Sn5NpBFJgJv08mBc5uCINF36IQ+anOQnu1g3WimdTUhjuv2Nb43zvygYj5MOIR/cdmCEpMV0reu6zn9Baw2bgIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VyPgzVZM; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777876831; x=1809412831;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BzsglH/yJ5Iynsoy/NR3mpUn8JYhARR5n7ff1vc/EgU=;
-  b=VyPgzVZMC+EdEB0MKlFXzZnUVN837gtDBLpRjhBuvivoBn60FR3KJnrP
-   paA1HMDBnHGWr2AuRSucy8k1C9pG4THIzHWso9L4fzjqLVmSehHhv7GoO
-   cOmTJRqPVPmwvwzn1oxmz//zQPA134nSmWNafMaj7pwAMGeUnO2YFi9zN
-   hyfgxaoA2DneixI3zGBMRA16FngKP9O1sfw74ZtTswjlj9bOeNi91F0Bs
-   dmxU59OWcm1MKpWza7H794DPUfR7+EJQvBt36vqZnQ1pzadw6aRNikcPg
-   F5WbImTL6cWZ1lelON0psW2XvmbY4TQjmpvtGqcl8/3wFFN5wGXmlzqa9
-   Q==;
-X-CSE-ConnectionGUID: 8jshbRNdRWqQfohv5XucJw==
-X-CSE-MsgGUID: mc0O0uc9RIWR8S99LgFaaQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11775"; a="89833211"
-X-IronPort-AV: E=Sophos;i="6.23,215,1770624000"; 
-   d="scan'208";a="89833211"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2026 23:40:23 -0700
-X-CSE-ConnectionGUID: 0aQeTLn2SPqdKgcjKVpZkA==
-X-CSE-MsgGUID: 1i6i3PXDTnCsaamT8WyrSQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,215,1770624000"; 
-   d="scan'208";a="239750449"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa004.jf.intel.com with ESMTP; 03 May 2026 23:40:21 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 456E995; Mon, 04 May 2026 08:40:19 +0200 (CEST)
-Date: Mon, 4 May 2026 08:40:19 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Konrad Dybcio <konradybcio@kernel.org>
-Cc: Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	usb4-upstream@oss.qualcomm.com,
-	Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH v2 1/4] thunderbolt: Move pci_device out of tb_nhi
-Message-ID: <20260504064019.GA6785@black.igk.intel.com>
-References: <20260428-topic-usb4_nonpcie_prepwork-v2-0-452fb9d63f77@oss.qualcomm.com>
- <20260428-topic-usb4_nonpcie_prepwork-v2-1-452fb9d63f77@oss.qualcomm.com>
+	s=arc-20240116; t=1777877168; c=relaxed/simple;
+	bh=WOUTFRQXY7u4mCgzjAgnVT8wNzDI/PXA4wTabljAAkk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m4t1jQtLXURLorMbMozrWoWnWDFdFoxLBa8Q/3kaYIWi3tZdzUsNPoRsDYs7BOaTmC3nDFGWeYSochqLJkvPxg1CwwafFcqIS26CyKpu2LILKJCLelcYbvWozIGQGFUy/nRxw72HokiCW14eijPqNdkF7gFlIVQn/eeD3unbAP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jmV7dOud; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-43d7645adbdso2217488f8f.1
+        for <linux-usb@vger.kernel.org>; Sun, 03 May 2026 23:46:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1777877165; x=1778481965; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EOccawuCoFWsjijYdwToilKKz9XDVnegxFTh6EZHPuU=;
+        b=jmV7dOudGI90beUFDyMX3vQJyJCJf8b62/jkvuM0i9UFQQR13b3SU1AmvrK0xM50sC
+         vFPZvy5tC5+XeXznxOXM/LBNdBawkGwjMP5B5J+a9jn/V0ZHxjjzgz3EhFeNOeaxamMq
+         KS202Wwavbvdo48XMjpJ3TZKSOsLA0TvSiOoTEvEXEL7vZAnvriLPw/2QhJ//Nuurhys
+         Hw1YMSfO/YFRMp0lRpk6881pyNk6s93t1TnMDevL5EFFw//mrH4J8MFZj/8GCH5yBqUH
+         faUz1HI7KgOGbbSLvflMCPkGI9EzFzVt9357IzfVB5X46SQ2+NVNhWcxD2a6DsJoJHtn
+         xtoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777877165; x=1778481965;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EOccawuCoFWsjijYdwToilKKz9XDVnegxFTh6EZHPuU=;
+        b=AW+WKJ/gnwu6atKdAEzeRKhhGt2MIKFUq+/1rGPjioUosx/mO8AdGGUR3StAh/01bI
+         Jt5v+zOSOcvBpU/brbJeAc+A9qK3/wYH67AOU2T0zUSva/uCqRC45r5A1XpzYkU7AWMP
+         j26vyWpjRFjDiDQpMnI5qAQqwJT1cwrC2hlOmSOZkMWE/+XpgaCUsTmPFnEmWLR3euFQ
+         wLh6f5dIfgY/SiYhNZkKIZFLnQv5u5ZQ5aG5r1vvzI2q22vQZLHgF6b2ibY6iuFrZXqs
+         LOsrzjdybu3AB60C+l0eu3/qAvz4XomGNJa41PcZH0bd6dB5w9/tu257sYY0gvIemrtJ
+         12gg==
+X-Forwarded-Encrypted: i=1; AFNElJ+KTp4ZianUp0a1XoKc0FOI9yvbwiBLrc+p7VDXbezrbW0gfLFATm5zyFRtQT39lLbH6Fmo00YKdVU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+P1Hhbb9evHmcLEre+anvWBj5JyJZVlpdyPq/WsyonqNbWF27
+	iYLt7FfGgdYudC+yZcE8IcircAHT+AAXhTQeEfgjLL5k0MdicTZ4Hd+6zWUaJ1M90As=
+X-Gm-Gg: AeBDievpRT6vxvkSUw428dT3LTD+aOGp8fqKBRLxB2gdJ06KZG+c4Ww7yQ6glTXXQWU
+	Hsw/dj/0ipYMGV43zILT5pfR0erwMYNvJrHYz95L7NbnB0vg8v1hyZXvR6xcPKrjad0IeRodgQx
+	fMLc80VhcrqFibUg8f68Eb9+bYHtNJIANxjbpWdF8ZhXwcaMnbXXjgaEhlLJ0UE/Npx5c4UWR1h
+	A//hmmmhANcEz1YIRu++ksFolpHy3PANssYfCJAUg0vTzewg5sHkCSORUEXiV4+rHsF7dFZsg5y
+	glbgGNnVCHvNp8U3OK3lSw3NkOw26loGBzvM7LLl9a54mZMVoAZKlj25meh+Q+a3b8Qm1PPZSqQ
+	3TU6weu3BSQKzThMZYkRWmTNa9Nv8T3AJc/1Tldcpjr7xMuS92aMzYd6x86bV1KUz88X5lr2TMK
+	Lm2n4IYhe+mv1uIU3UiwPdFvRVx4b6WwKqyUXYvsA+rzlwIC/UZH5lDVMLHWqZCQdG3SbK7c0Po
+	QLkOc4RGrIDx7hiKQ==
+X-Received: by 2002:a05:6000:2003:b0:44a:2509:fbf with SMTP id ffacd0b85a97d-44bb63f5834mr12677316f8f.21.1777877165312;
+        Sun, 03 May 2026 23:46:05 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:106d:1080:4245:af61:1735:3752? ([2a01:e0a:106d:1080:4245:af61:1735:3752])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-44a8ef50e59sm22923096f8f.10.2026.05.03.23.46.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 May 2026 23:46:04 -0700 (PDT)
+Message-ID: <d774b2f2-75f8-485f-830f-2a7a5dac1c23@linaro.org>
+Date: Mon, 4 May 2026 08:46:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260428-topic-usb4_nonpcie_prepwork-v2-1-452fb9d63f77@oss.qualcomm.com>
-X-Rspamd-Queue-Id: DF6444B8F82
+User-Agent: Mozilla Thunderbird
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH] usb: dwc3: qcom: Modify interrupt handling for EUSB2 Phy
+ targets
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260502095616.666938-1-krishna.kurapati@oss.qualcomm.com>
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20260502095616.666938-1-krishna.kurapati@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 2D6C14B8FBA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
 	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	FREEMAIL_CC(0.00)[gmail.com,kernel.org,vger.kernel.org,oss.qualcomm.com,qti.qualcomm.com];
+	TAGGED_FROM(0.00)[bounces-36868-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[linaro.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36867-lists,linux-usb=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns];
 	MIME_TRACE(0.00)[0:+];
+	HAS_ORG_HEADER(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[neil.armstrong@linaro.org,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	HAS_REPLYTO(0.00)[neil.armstrong@linaro.org];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,qualcomm.com:email,intel.com:dkim,black.igk.intel.com:mid]
+	MID_RHS_MATCH_FROM(0.00)[];
+	REPLYTO_EQ_FROM(0.00)[]
 
 Hi,
 
-On Tue, Apr 28, 2026 at 08:49:44PM +0200, Konrad Dybcio wrote:
-> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+On 5/2/26 11:56, Krishna Kurapati wrote:
+> Modify interrupt handling for EUSB2 Phy targets. Enable DP Interrupt
+> when an Low speed device is connnected and enable DM interrupt when
+> a High Speed/ Full Speed device is connected.
+
+Could you explain _why_ and not the content of the patch ?
+
 > 
-> Not all USB4/TB implementations are based on a PCIe-attached
-> controller. In order to make way for these, start off with moving the
-> pci_device reference out of the main tb_nhi structure.
-> 
-> Encapsulate the existing struct in a new tb_nhi_pci, that shall also
-> house all properties that relate to the parent bus. Similarly, any
-> other type of controller will be expected to contain tb_nhi as a
-> member.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
 > ---
->  drivers/thunderbolt/acpi.c      |  14 +--
->  drivers/thunderbolt/ctl.c       |  14 +--
->  drivers/thunderbolt/domain.c    |   2 +-
->  drivers/thunderbolt/eeprom.c    |   2 +-
->  drivers/thunderbolt/icm.c       |  24 ++---
->  drivers/thunderbolt/nhi.c       | 212 ++++++++++++++++++++++++++++------------
->  drivers/thunderbolt/nhi.h       |   1 +
->  drivers/thunderbolt/nhi_ops.c   |  26 ++---
->  drivers/thunderbolt/switch.c    |   6 +-
->  drivers/thunderbolt/tb.c        |  69 -------------
->  drivers/thunderbolt/tb.h        |  10 +-
->  drivers/thunderbolt/usb4_port.c |   2 +-
->  include/linux/thunderbolt.h     |   5 +-
->  13 files changed, 209 insertions(+), 178 deletions(-)
+> Tested remote wakeupon Glymur device by button press from a headset
+> connected to both Type-C and Type-A ports.
 > 
-> diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
-> index 45d1415871b4..53546bc477a5 100644
-> --- a/drivers/thunderbolt/acpi.c
-> +++ b/drivers/thunderbolt/acpi.c
-> @@ -28,7 +28,7 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
->  		return AE_OK;
->  
->  	/* It needs to reference this NHI */
-> -	if (dev_fwnode(&nhi->pdev->dev) != fwnode)
-> +	if (dev_fwnode(nhi->dev) != fwnode)
->  		goto out_put;
->  
->  	/*
-> @@ -57,16 +57,16 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
->  		 */
->  		pm_runtime_get_sync(&pdev->dev);
->  
-> -		link = device_link_add(&pdev->dev, &nhi->pdev->dev,
-> +		link = device_link_add(&pdev->dev, nhi->dev,
->  				       DL_FLAG_AUTOREMOVE_SUPPLIER |
->  				       DL_FLAG_RPM_ACTIVE |
->  				       DL_FLAG_PM_RUNTIME);
->  		if (link) {
-> -			dev_dbg(&nhi->pdev->dev, "created link from %s\n",
-> +			dev_dbg(nhi->dev, "created link from %s\n",
->  				dev_name(&pdev->dev));
->  			*(bool *)ret = true;
->  		} else {
-> -			dev_warn(&nhi->pdev->dev, "device link creation from %s failed\n",
-> +			dev_warn(nhi->dev, "device link creation from %s failed\n",
->  				 dev_name(&pdev->dev));
->  		}
->  
-> @@ -93,7 +93,7 @@ bool tb_acpi_add_links(struct tb_nhi *nhi)
->  	acpi_status status;
->  	bool ret = false;
->  
-> -	if (!has_acpi_companion(&nhi->pdev->dev))
-> +	if (!has_acpi_companion(nhi->dev))
->  		return false;
->  
->  	/*
-> @@ -103,7 +103,7 @@ bool tb_acpi_add_links(struct tb_nhi *nhi)
->  	status = acpi_walk_namespace(ACPI_TYPE_DEVICE, ACPI_ROOT_OBJECT, 32,
->  				     tb_acpi_add_link, NULL, nhi, (void **)&ret);
->  	if (ACPI_FAILURE(status)) {
-> -		dev_warn(&nhi->pdev->dev, "failed to enumerate tunneled ports\n");
-> +		dev_warn(nhi->dev, "failed to enumerate tunneled ports\n");
->  		return false;
->  	}
->  
-> @@ -305,7 +305,7 @@ static struct acpi_device *tb_acpi_switch_find_companion(struct tb_switch *sw)
->  		struct tb_nhi *nhi = sw->tb->nhi;
->  		struct acpi_device *parent_adev;
->  
-> -		parent_adev = ACPI_COMPANION(&nhi->pdev->dev);
-> +		parent_adev = ACPI_COMPANION(nhi->dev);
->  		if (parent_adev)
->  			adev = acpi_find_child_device(parent_adev, 0, false);
->  	}
-> diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
-> index b2fd60fc7bcc..a22c8c2a301d 100644
-> --- a/drivers/thunderbolt/ctl.c
-> +++ b/drivers/thunderbolt/ctl.c
-> @@ -56,22 +56,22 @@ struct tb_ctl {
->  
->  
->  #define tb_ctl_WARN(ctl, format, arg...) \
-> -	dev_WARN(&(ctl)->nhi->pdev->dev, format, ## arg)
-> +	dev_WARN((ctl)->nhi->dev, format, ## arg)
->  
->  #define tb_ctl_err(ctl, format, arg...) \
-> -	dev_err(&(ctl)->nhi->pdev->dev, format, ## arg)
-> +	dev_err((ctl)->nhi->dev, format, ## arg)
->  
->  #define tb_ctl_warn(ctl, format, arg...) \
-> -	dev_warn(&(ctl)->nhi->pdev->dev, format, ## arg)
-> +	dev_warn((ctl)->nhi->dev, format, ## arg)
->  
->  #define tb_ctl_info(ctl, format, arg...) \
-> -	dev_info(&(ctl)->nhi->pdev->dev, format, ## arg)
-> +	dev_info((ctl)->nhi->dev, format, ## arg)
->  
->  #define tb_ctl_dbg(ctl, format, arg...) \
-> -	dev_dbg(&(ctl)->nhi->pdev->dev, format, ## arg)
-> +	dev_dbg((ctl)->nhi->dev, format, ## arg)
->  
->  #define tb_ctl_dbg_once(ctl, format, arg...) \
-> -	dev_dbg_once(&(ctl)->nhi->pdev->dev, format, ## arg)
-> +	dev_dbg_once((ctl)->nhi->dev, format, ## arg)
->  
->  static DECLARE_WAIT_QUEUE_HEAD(tb_cfg_request_cancel_queue);
->  /* Serializes access to request kref_get/put */
-> @@ -666,7 +666,7 @@ struct tb_ctl *tb_ctl_alloc(struct tb_nhi *nhi, int index, int timeout_msec,
->  
->  	mutex_init(&ctl->request_queue_lock);
->  	INIT_LIST_HEAD(&ctl->request_queue);
-> -	ctl->frame_pool = dma_pool_create("thunderbolt_ctl", &nhi->pdev->dev,
-> +	ctl->frame_pool = dma_pool_create("thunderbolt_ctl", nhi->dev,
->  					 TB_FRAME_SIZE, 4, 0);
->  	if (!ctl->frame_pool)
->  		goto err;
-> diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
-> index 317780b99992..8e332a9ad625 100644
-> --- a/drivers/thunderbolt/domain.c
-> +++ b/drivers/thunderbolt/domain.c
-> @@ -402,7 +402,7 @@ struct tb *tb_domain_alloc(struct tb_nhi *nhi, int timeout_msec, size_t privsize
->  	if (!tb->ctl)
->  		goto err_destroy_wq;
->  
-> -	tb->dev.parent = &nhi->pdev->dev;
-> +	tb->dev.parent = nhi->dev;
->  	tb->dev.bus = &tb_bus_type;
->  	tb->dev.type = &tb_domain_type;
->  	tb->dev.groups = domain_attr_groups;
-> diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
-> index 5477b9437048..5681c17f82ec 100644
-> --- a/drivers/thunderbolt/eeprom.c
-> +++ b/drivers/thunderbolt/eeprom.c
-> @@ -465,7 +465,7 @@ static void tb_switch_drom_free(struct tb_switch *sw)
->   */
->  static int tb_drom_copy_efi(struct tb_switch *sw, u16 *size)
->  {
-> -	struct device *dev = &sw->tb->nhi->pdev->dev;
-> +	struct device *dev = sw->tb->nhi->dev;
->  	int len, res;
->  
->  	len = device_property_count_u8(dev, "ThunderboltDROM");
-> diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
-> index 9d95bf3ab44c..97c33752a075 100644
-> --- a/drivers/thunderbolt/icm.c
-> +++ b/drivers/thunderbolt/icm.c
-> @@ -1455,6 +1455,7 @@ static struct pci_dev *get_upstream_port(struct pci_dev *pdev)
->  
->  static bool icm_ar_is_supported(struct tb *tb)
->  {
-> +	struct pci_dev *pdev = to_pci_dev(tb->nhi->dev);
->  	struct pci_dev *upstream_port;
->  	struct icm *icm = tb_priv(tb);
->  
-> @@ -1472,7 +1473,7 @@ static bool icm_ar_is_supported(struct tb *tb)
->  	 * Find the upstream PCIe port in case we need to do reset
->  	 * through its vendor specific registers.
->  	 */
-> -	upstream_port = get_upstream_port(tb->nhi->pdev);
-> +	upstream_port = get_upstream_port(pdev);
->  	if (upstream_port) {
->  		int cap;
->  
-> @@ -1508,7 +1509,7 @@ static int icm_ar_get_mode(struct tb *tb)
->  	} while (--retries);
->  
->  	if (!retries) {
-> -		dev_err(&nhi->pdev->dev, "ICM firmware not authenticated\n");
-> +		dev_err(nhi->dev, "ICM firmware not authenticated\n");
->  		return -ENODEV;
->  	}
->  
-> @@ -1674,11 +1675,11 @@ icm_icl_driver_ready(struct tb *tb, enum tb_security_level *security_level,
->  
->  static void icm_icl_set_uuid(struct tb *tb)
->  {
-> -	struct tb_nhi *nhi = tb->nhi;
-> +	struct pci_dev *pdev = to_pci_dev(tb->nhi->dev);
->  	u32 uuid[4];
->  
-> -	pci_read_config_dword(nhi->pdev, VS_CAP_10, &uuid[0]);
-> -	pci_read_config_dword(nhi->pdev, VS_CAP_11, &uuid[1]);
-> +	pci_read_config_dword(pdev, VS_CAP_10, &uuid[0]);
-> +	pci_read_config_dword(pdev, VS_CAP_11, &uuid[1]);
->  	uuid[2] = 0xffffffff;
->  	uuid[3] = 0xffffffff;
->  
-> @@ -1853,7 +1854,7 @@ static int icm_firmware_start(struct tb *tb, struct tb_nhi *nhi)
->  	if (icm_firmware_running(nhi))
->  		return 0;
->  
-> -	dev_dbg(&nhi->pdev->dev, "starting ICM firmware\n");
-> +	dev_dbg(nhi->dev, "starting ICM firmware\n");
->  
->  	ret = icm_firmware_reset(tb, nhi);
->  	if (ret)
-> @@ -1948,7 +1949,7 @@ static int icm_firmware_init(struct tb *tb)
->  
->  	ret = icm_firmware_start(tb, nhi);
->  	if (ret) {
-> -		dev_err(&nhi->pdev->dev, "could not start ICM firmware\n");
-> +		dev_err(nhi->dev, "could not start ICM firmware\n");
->  		return ret;
->  	}
->  
-> @@ -1980,10 +1981,10 @@ static int icm_firmware_init(struct tb *tb)
->  	 */
->  	ret = icm_reset_phy_port(tb, 0);
->  	if (ret)
-> -		dev_warn(&nhi->pdev->dev, "failed to reset links on port0\n");
-> +		dev_warn(nhi->dev, "failed to reset links on port0\n");
->  	ret = icm_reset_phy_port(tb, 1);
->  	if (ret)
-> -		dev_warn(&nhi->pdev->dev, "failed to reset links on port1\n");
-> +		dev_warn(nhi->dev, "failed to reset links on port1\n");
->  
->  	return 0;
->  }
-> @@ -2462,6 +2463,7 @@ static const struct tb_cm_ops icm_icl_ops = {
->  
->  struct tb *icm_probe(struct tb_nhi *nhi)
->  {
-> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
->  	struct icm *icm;
->  	struct tb *tb;
->  
-> @@ -2473,7 +2475,7 @@ struct tb *icm_probe(struct tb_nhi *nhi)
->  	INIT_DELAYED_WORK(&icm->rescan_work, icm_rescan_work);
->  	mutex_init(&icm->request_lock);
->  
-> -	switch (nhi->pdev->device) {
-> +	switch (pdev->device) {
->  	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_NHI:
->  	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_NHI:
->  		icm->can_upgrade_nvm = true;
-> @@ -2579,7 +2581,7 @@ struct tb *icm_probe(struct tb_nhi *nhi)
->  	}
->  
->  	if (!icm->is_supported || !icm->is_supported(tb)) {
-> -		dev_dbg(&nhi->pdev->dev, "ICM not supported on this controller\n");
-> +		dev_dbg(nhi->dev, "ICM not supported on this controller\n");
->  		tb_domain_put(tb);
->  		return NULL;
->  	}
-> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-> index 2bb2e79ca3cb..2d01e698dd65 100644
-> --- a/drivers/thunderbolt/nhi.c
-> +++ b/drivers/thunderbolt/nhi.c
-> @@ -2,7 +2,7 @@
->  /*
->   * Thunderbolt driver - NHI driver
->   *
-> - * The NHI (native host interface) is the pci device that allows us to send and
-> + * The NHI (native host interface) is the device that allows us to send and
->   * receive frames from the thunderbolt bus.
->   *
->   * Copyright (c) 2014 Andreas Noever <andreas.noever@gmail.com>
-> @@ -12,12 +12,12 @@
->  #include <linux/pm_runtime.h>
->  #include <linux/slab.h>
->  #include <linux/errno.h>
-> -#include <linux/pci.h>
->  #include <linux/dma-mapping.h>
->  #include <linux/interrupt.h>
->  #include <linux/iommu.h>
->  #include <linux/module.h>
->  #include <linux/delay.h>
-> +#include <linux/platform_data/x86/apple.h>
->  #include <linux/property.h>
->  #include <linux/string_choices.h>
->  #include <linux/string_helpers.h>
-> @@ -51,6 +51,16 @@ static bool host_reset = true;
->  module_param(host_reset, bool, 0444);
->  MODULE_PARM_DESC(host_reset, "reset USB4 host router (default: true)");
->  
-
-Let's add kernel-doc here.
-
-> +struct tb_nhi_pci {
-> +	struct tb_nhi nhi;
-> +	struct ida msix_ida;
+>   drivers/usb/dwc3/dwc3-qcom.c | 63 ++++++++++++++++++++++++++++++------
+>   1 file changed, 54 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index f43f73ac36ff..5956821eab45 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -60,6 +60,10 @@ static const u32 pwr_evnt_irq_stat_reg[DWC3_QCOM_MAX_PORTS] = {
+>   	0x238,
+>   };
+>   
+> +struct dwc3_qcom_platform_data {
+> +	bool			uses_eusb2_phy;
 > +};
 > +
-> +static inline struct tb_nhi_pci *nhi_to_pci(struct tb_nhi *nhi)
-> +{
-> +	return container_of(nhi, struct tb_nhi_pci, nhi);
-> +}
+>   struct dwc3_qcom_port {
+>   	int			qusb2_phy_irq;
+>   	int			dp_hs_phy_irq;
+> @@ -85,6 +89,7 @@ struct dwc3_qcom {
+>   	struct icc_path		*icc_path_apps;
+>   
+>   	enum usb_role		current_role;
+> +	bool			uses_eusb2_phy;
+>   };
+>   
+>   #define to_dwc3_qcom(d) container_of((d), struct dwc3_qcom, dwc)
+> @@ -272,15 +277,21 @@ static void dwc3_qcom_disable_wakeup_irq(int irq)
+>   	disable_irq_nosync(irq);
+>   }
+>   
+> -static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom_port *port)
+> +static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom *qcom, int i)
+>   {
+> +	struct dwc3_qcom_port *port = &qcom->ports[i];
 > +
->  static int ring_interrupt_index(const struct tb_ring *ring)
->  {
->  	int bit = ring->hop;
-> @@ -139,12 +149,12 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
->  	else
->  		new = old & ~mask;
->  
-> -	dev_dbg(&ring->nhi->pdev->dev,
-> +	dev_dbg(ring->nhi->dev,
->  		"%s interrupt at register %#x bit %d (%#x -> %#x)\n",
->  		active ? "enabling" : "disabling", reg, interrupt_bit, old, new);
->  
->  	if (new == old)
-> -		dev_WARN(&ring->nhi->pdev->dev,
-> +		dev_WARN(ring->nhi->dev,
->  					 "interrupt for %s %d is already %s\n",
+>   	dwc3_qcom_disable_wakeup_irq(port->qusb2_phy_irq);
+>   
+>   	if (port->usb2_speed == USB_SPEED_LOW) {
+> -		dwc3_qcom_disable_wakeup_irq(port->dm_hs_phy_irq);
+> +		dwc3_qcom_disable_wakeup_irq(qcom->uses_eusb2_phy ?
+> +					     port->dp_hs_phy_irq :
+> +					     port->dm_hs_phy_irq);
+>   	} else if ((port->usb2_speed == USB_SPEED_HIGH) ||
+>   			(port->usb2_speed == USB_SPEED_FULL)) {
+> -		dwc3_qcom_disable_wakeup_irq(port->dp_hs_phy_irq);
+> +		dwc3_qcom_disable_wakeup_irq(qcom->uses_eusb2_phy ?
+> +					     port->dm_hs_phy_irq :
+> +					     port->dp_hs_phy_irq);
+>   	} else {
+>   		dwc3_qcom_disable_wakeup_irq(port->dp_hs_phy_irq);
+>   		dwc3_qcom_disable_wakeup_irq(port->dm_hs_phy_irq);
+> @@ -289,8 +300,10 @@ static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom_port *port)
+>   	dwc3_qcom_disable_wakeup_irq(port->ss_phy_irq);
+>   }
+>   
+> -static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom_port *port)
+> +static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom *qcom, int i)
+>   {
+> +	struct dwc3_qcom_port *port = &qcom->ports[i];
+> +
+>   	dwc3_qcom_enable_wakeup_irq(port->qusb2_phy_irq, 0);
+>   
+>   	/*
+> @@ -303,11 +316,19 @@ static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom_port *port)
+>   	 */
+>   
+>   	if (port->usb2_speed == USB_SPEED_LOW) {
+> -		dwc3_qcom_enable_wakeup_irq(port->dm_hs_phy_irq,
+> +		dwc3_qcom_enable_wakeup_irq(qcom->uses_eusb2_phy ?
+> +					    port->dp_hs_phy_irq :
+> +					    port->dm_hs_phy_irq,
+> +					    qcom->uses_eusb2_phy ?
+> +					    IRQ_TYPE_EDGE_RISING :
+>   					    IRQ_TYPE_EDGE_FALLING);
+>   	} else if ((port->usb2_speed == USB_SPEED_HIGH) ||
+>   			(port->usb2_speed == USB_SPEED_FULL)) {
+> -		dwc3_qcom_enable_wakeup_irq(port->dp_hs_phy_irq,
+> +		dwc3_qcom_enable_wakeup_irq(qcom->uses_eusb2_phy ?
+> +					    port->dm_hs_phy_irq :
+> +					    port->dp_hs_phy_irq,
+> +					    qcom->uses_eusb2_phy ?
+> +					    IRQ_TYPE_EDGE_RISING :
+>   					    IRQ_TYPE_EDGE_FALLING);
+>   	} else {
+>   		dwc3_qcom_enable_wakeup_irq(port->dp_hs_phy_irq,
+> @@ -324,7 +345,7 @@ static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
+>   	int i;
+>   
+>   	for (i = 0; i < qcom->num_ports; i++)
+> -		dwc3_qcom_disable_port_interrupts(&qcom->ports[i]);
+> +		dwc3_qcom_disable_port_interrupts(qcom, i);
+>   }
+>   
+>   static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
+> @@ -332,7 +353,7 @@ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
+>   	int i;
+>   
+>   	for (i = 0; i < qcom->num_ports; i++)
+> -		dwc3_qcom_enable_port_interrupts(&qcom->ports[i]);
+> +		dwc3_qcom_enable_port_interrupts(qcom, i);
+>   }
+>   
+>   static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
+> @@ -609,6 +630,7 @@ struct dwc3_glue_ops dwc3_qcom_glue_ops = {
+>   
+>   static int dwc3_qcom_probe(struct platform_device *pdev)
+>   {
+> +	const struct dwc3_qcom_platform_data *pdata;
+>   	struct dwc3_probe_data	probe_data = {};
+>   	struct device		*dev = &pdev->dev;
+>   	struct dwc3_qcom	*qcom;
+> @@ -624,6 +646,10 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>   
+>   	qcom->dev = &pdev->dev;
+>   
+> +	pdata = device_get_match_data(dev);
+> +	if (pdata)
+> +		qcom->uses_eusb2_phy = pdata->uses_eusb2_phy;
+> +
+>   	qcom->resets = devm_reset_control_array_get_optional_exclusive(dev);
+>   	if (IS_ERR(qcom->resets)) {
+>   		return dev_err_probe(&pdev->dev, PTR_ERR(qcom->resets),
+> @@ -838,8 +864,27 @@ static const struct dev_pm_ops dwc3_qcom_dev_pm_ops = {
+>   	.prepare = pm_sleep_ptr(dwc3_qcom_prepare),
+>   };
+>   
+> +static const struct dwc3_qcom_platform_data dwc3_qcom_pdata = {
+> +	.uses_eusb2_phy = false,
+> +};
+> +
+> +static const struct dwc3_qcom_platform_data dwc3_qcom_glymur_pdata = {
 
-You can combine these two lines.
+SM8550 was the first QCom upstream SoC to use eUSB, should it be covered as well like SM8650, X1, ... ?
 
->  					 RING_TYPE(ring), ring->hop,
->  					 str_enabled_disabled(active));
-> @@ -462,19 +472,21 @@ static irqreturn_t ring_msix(int irq, void *data)
->  static int ring_request_msix(struct tb_ring *ring, bool no_suspend)
->  {
->  	struct tb_nhi *nhi = ring->nhi;
-> +	struct tb_nhi_pci *nhi_pci = nhi_to_pci(nhi);
-> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
->  	unsigned long irqflags;
->  	int ret;
->  
-> -	if (!nhi->pdev->msix_enabled)
-> +	if (!pdev->msix_enabled)
->  		return 0;
->  
-> -	ret = ida_alloc_max(&nhi->msix_ida, MSIX_MAX_VECS - 1, GFP_KERNEL);
-> +	ret = ida_alloc_max(&nhi_pci->msix_ida, MSIX_MAX_VECS - 1, GFP_KERNEL);
->  	if (ret < 0)
->  		return ret;
->  
->  	ring->vector = ret;
->  
-> -	ret = pci_irq_vector(ring->nhi->pdev, ring->vector);
-> +	ret = pci_irq_vector(pdev, ring->vector);
->  	if (ret < 0)
->  		goto err_ida_remove;
->  
-> @@ -488,18 +500,20 @@ static int ring_request_msix(struct tb_ring *ring, bool no_suspend)
->  	return 0;
->  
->  err_ida_remove:
-> -	ida_free(&nhi->msix_ida, ring->vector);
-> +	ida_free(&nhi_pci->msix_ida, ring->vector);
->  
->  	return ret;
->  }
->  
->  static void ring_release_msix(struct tb_ring *ring)
->  {
-> +	struct tb_nhi_pci *nhi_pci = nhi_to_pci(ring->nhi);
-> +
->  	if (ring->irq <= 0)
->  		return;
->  
->  	free_irq(ring->irq, ring);
-> -	ida_free(&ring->nhi->msix_ida, ring->vector);
-> +	ida_free(&nhi_pci->msix_ida, ring->vector);
->  	ring->vector = 0;
->  	ring->irq = 0;
->  }
-> @@ -512,7 +526,7 @@ static int nhi_alloc_hop(struct tb_nhi *nhi, struct tb_ring *ring)
->  	if (nhi->quirks & QUIRK_E2E) {
->  		start_hop = RING_FIRST_USABLE_HOPID + 1;
->  		if (ring->flags & RING_FLAG_E2E && !ring->is_tx) {
-> -			dev_dbg(&nhi->pdev->dev, "quirking E2E TX HopID %u -> %u\n",
-> +			dev_dbg(nhi->dev, "quirking E2E TX HopID %u -> %u\n",
->  				ring->e2e_tx_hop, RING_E2E_RESERVED_HOPID);
->  			ring->e2e_tx_hop = RING_E2E_RESERVED_HOPID;
->  		}
-> @@ -543,23 +557,23 @@ static int nhi_alloc_hop(struct tb_nhi *nhi, struct tb_ring *ring)
->  	}
->  
->  	if (ring->hop > 0 && ring->hop < start_hop) {
-> -		dev_warn(&nhi->pdev->dev, "invalid hop: %d\n", ring->hop);
-> +		dev_warn(nhi->dev, "invalid hop: %d\n", ring->hop);
->  		ret = -EINVAL;
->  		goto err_unlock;
->  	}
->  	if (ring->hop < 0 || ring->hop >= nhi->hop_count) {
-> -		dev_warn(&nhi->pdev->dev, "invalid hop: %d\n", ring->hop);
-> +		dev_warn(nhi->dev, "invalid hop: %d\n", ring->hop);
->  		ret = -EINVAL;
->  		goto err_unlock;
->  	}
->  	if (ring->is_tx && nhi->tx_rings[ring->hop]) {
-> -		dev_warn(&nhi->pdev->dev, "TX hop %d already allocated\n",
-> +		dev_warn(nhi->dev, "TX hop %d already allocated\n",
->  			 ring->hop);
->  		ret = -EBUSY;
->  		goto err_unlock;
->  	}
->  	if (!ring->is_tx && nhi->rx_rings[ring->hop]) {
-> -		dev_warn(&nhi->pdev->dev, "RX hop %d already allocated\n",
-> +		dev_warn(nhi->dev, "RX hop %d already allocated\n",
->  			 ring->hop);
->  		ret = -EBUSY;
->  		goto err_unlock;
-> @@ -584,7 +598,7 @@ static struct tb_ring *tb_ring_alloc(struct tb_nhi *nhi, u32 hop, int size,
->  {
->  	struct tb_ring *ring = NULL;
->  
-> -	dev_dbg(&nhi->pdev->dev, "allocating %s ring %d of size %d\n",
-> +	dev_dbg(nhi->dev, "allocating %s ring %d of size %d\n",
->  		transmit ? "TX" : "RX", hop, size);
->  
->  	ring = kzalloc_obj(*ring);
-> @@ -610,7 +624,7 @@ static struct tb_ring *tb_ring_alloc(struct tb_nhi *nhi, u32 hop, int size,
->  	ring->start_poll = start_poll;
->  	ring->poll_data = poll_data;
->  
-> -	ring->descriptors = dma_alloc_coherent(&ring->nhi->pdev->dev,
-> +	ring->descriptors = dma_alloc_coherent(ring->nhi->dev,
->  			size * sizeof(*ring->descriptors),
->  			&ring->descriptors_dma, GFP_KERNEL | __GFP_ZERO);
->  	if (!ring->descriptors)
-> @@ -627,7 +641,7 @@ static struct tb_ring *tb_ring_alloc(struct tb_nhi *nhi, u32 hop, int size,
->  err_release_msix:
->  	ring_release_msix(ring);
->  err_free_descs:
-> -	dma_free_coherent(&ring->nhi->pdev->dev,
-> +	dma_free_coherent(ring->nhi->dev,
->  			  ring->size * sizeof(*ring->descriptors),
->  			  ring->descriptors, ring->descriptors_dma);
->  err_free_ring:
-> @@ -694,10 +708,10 @@ void tb_ring_start(struct tb_ring *ring)
->  	if (ring->nhi->going_away)
->  		goto err;
->  	if (ring->running) {
-> -		dev_WARN(&ring->nhi->pdev->dev, "ring already started\n");
-> +		dev_WARN(ring->nhi->dev, "ring already started\n");
->  		goto err;
->  	}
-> -	dev_dbg(&ring->nhi->pdev->dev, "starting %s %d\n",
-> +	dev_dbg(ring->nhi->dev, "starting %s %d\n",
->  		RING_TYPE(ring), ring->hop);
->  
->  	if (ring->flags & RING_FLAG_FRAME) {
-> @@ -734,11 +748,11 @@ void tb_ring_start(struct tb_ring *ring)
->  			hop &= REG_RX_OPTIONS_E2E_HOP_MASK;
->  			flags |= hop;
->  
-> -			dev_dbg(&ring->nhi->pdev->dev,
-> +			dev_dbg(ring->nhi->dev,
->  				"enabling E2E for %s %d with TX HopID %d\n",
->  				RING_TYPE(ring), ring->hop, ring->e2e_tx_hop);
->  		} else {
-> -			dev_dbg(&ring->nhi->pdev->dev, "enabling E2E for %s %d\n",
-> +			dev_dbg(ring->nhi->dev, "enabling E2E for %s %d\n",
->  				RING_TYPE(ring), ring->hop);
->  		}
->  
-> @@ -772,12 +786,12 @@ void tb_ring_stop(struct tb_ring *ring)
->  {
->  	spin_lock_irq(&ring->nhi->lock);
->  	spin_lock(&ring->lock);
-> -	dev_dbg(&ring->nhi->pdev->dev, "stopping %s %d\n",
-> +	dev_dbg(ring->nhi->dev, "stopping %s %d\n",
->  		RING_TYPE(ring), ring->hop);
->  	if (ring->nhi->going_away)
->  		goto err;
->  	if (!ring->running) {
-> -		dev_WARN(&ring->nhi->pdev->dev, "%s %d already stopped\n",
-> +		dev_WARN(ring->nhi->dev, "%s %d already stopped\n",
->  			 RING_TYPE(ring), ring->hop);
->  		goto err;
->  	}
-> @@ -826,14 +840,14 @@ void tb_ring_free(struct tb_ring *ring)
->  		ring->nhi->rx_rings[ring->hop] = NULL;
->  
->  	if (ring->running) {
-> -		dev_WARN(&ring->nhi->pdev->dev, "%s %d still running\n",
-> +		dev_WARN(ring->nhi->dev, "%s %d still running\n",
->  			 RING_TYPE(ring), ring->hop);
->  	}
->  	spin_unlock_irq(&ring->nhi->lock);
->  
->  	ring_release_msix(ring);
->  
-> -	dma_free_coherent(&ring->nhi->pdev->dev,
-> +	dma_free_coherent(ring->nhi->dev,
->  			  ring->size * sizeof(*ring->descriptors),
->  			  ring->descriptors, ring->descriptors_dma);
->  
-> @@ -841,7 +855,7 @@ void tb_ring_free(struct tb_ring *ring)
->  	ring->descriptors_dma = 0;
->  
->  
-> -	dev_dbg(&ring->nhi->pdev->dev, "freeing %s %d\n", RING_TYPE(ring),
-> +	dev_dbg(ring->nhi->dev, "freeing %s %d\n", RING_TYPE(ring),
->  		ring->hop);
->  
->  	/*
-> @@ -940,7 +954,7 @@ static void nhi_interrupt_work(struct work_struct *work)
->  		if ((value & (1 << (bit % 32))) == 0)
->  			continue;
->  		if (type == 2) {
-> -			dev_warn(&nhi->pdev->dev,
-> +			dev_warn(nhi->dev,
->  				 "RX overflow for ring %d\n",
->  				 hop);
+Thanks,
+Neil
 
-I think here too.
+> +	.uses_eusb2_phy = true,
+> +};
+> +
+>   static const struct of_device_id dwc3_qcom_of_match[] = {
+> -	{ .compatible = "qcom,snps-dwc3" },
+> +	{
+> +		.compatible = "qcom,snps-dwc3",
+> +		.data = &dwc3_qcom_pdata,
+> +	},
+> +	{
+> +		.compatible = "qcom,glymur-dwc3",
+> +		.data = &dwc3_qcom_glymur_pdata,
+> +	},
+> +	{
+> +		.compatible = "qcom,glymur-dwc3-mp",
+> +		.data = &dwc3_qcom_glymur_pdata,
+> +	},
+>   	{ }
+>   };
+>   MODULE_DEVICE_TABLE(of, dwc3_qcom_of_match);
 
->  			continue;
-> @@ -950,7 +964,7 @@ static void nhi_interrupt_work(struct work_struct *work)
->  		else
->  			ring = nhi->rx_rings[hop];
->  		if (ring == NULL) {
-> -			dev_warn(&nhi->pdev->dev,
-> +			dev_warn(nhi->dev,
->  				 "got interrupt for inactive %s ring %d\n",
->  				 type ? "RX" : "TX",
->  				 hop);
-> @@ -1139,16 +1153,18 @@ static int nhi_runtime_resume(struct device *dev)
->  
->  static void nhi_shutdown(struct tb_nhi *nhi)
->  {
-> +	struct tb_nhi_pci *nhi_pci = nhi_to_pci(nhi);
-> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
->  	int i;
->  
-> -	dev_dbg(&nhi->pdev->dev, "shutdown\n");
-> +	dev_dbg(nhi->dev, "shutdown\n");
->  
->  	for (i = 0; i < nhi->hop_count; i++) {
->  		if (nhi->tx_rings[i])
-> -			dev_WARN(&nhi->pdev->dev,
-> +			dev_WARN(nhi->dev,
->  				 "TX ring %d is still active\n", i);
->  		if (nhi->rx_rings[i])
-> -			dev_WARN(&nhi->pdev->dev,
-> +			dev_WARN(nhi->dev,
->  				 "RX ring %d is still active\n", i);
->  	}
->  	nhi_disable_interrupts(nhi);
-> @@ -1156,19 +1172,22 @@ static void nhi_shutdown(struct tb_nhi *nhi)
->  	 * We have to release the irq before calling flush_work. Otherwise an
->  	 * already executing IRQ handler could call schedule_work again.
->  	 */
-> -	if (!nhi->pdev->msix_enabled) {
-> -		devm_free_irq(&nhi->pdev->dev, nhi->pdev->irq, nhi);
-> +	if (!pdev->msix_enabled) {
-> +		devm_free_irq(nhi->dev, pdev->irq, nhi);
->  		flush_work(&nhi->interrupt_work);
->  	}
-> -	ida_destroy(&nhi->msix_ida);
-> +	ida_destroy(&nhi_pci->msix_ida);
->  
->  	if (nhi->ops && nhi->ops->shutdown)
->  		nhi->ops->shutdown(nhi);
->  }
->  
-> -static void nhi_check_quirks(struct tb_nhi *nhi)
-> +static void nhi_check_quirks(struct tb_nhi_pci *nhi_pci)
->  {
-> -	if (nhi->pdev->vendor == PCI_VENDOR_ID_INTEL) {
-> +	struct tb_nhi *nhi = &nhi_pci->nhi;
-> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
-> +
-> +	if (pdev->vendor == PCI_VENDOR_ID_INTEL) {
->  		/*
->  		 * Intel hardware supports auto clear of the interrupt
->  		 * status register right after interrupt is being
-> @@ -1176,7 +1195,7 @@ static void nhi_check_quirks(struct tb_nhi *nhi)
->  		 */
->  		nhi->quirks |= QUIRK_AUTO_CLEAR_INT;
->  
-> -		switch (nhi->pdev->device) {
-> +		switch (pdev->device) {
->  		case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_NHI:
->  		case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_NHI:
->  			/*
-> @@ -1190,7 +1209,7 @@ static void nhi_check_quirks(struct tb_nhi *nhi)
->  	}
->  }
->  
-> -static int nhi_check_iommu_pdev(struct pci_dev *pdev, void *data)
-> +static int nhi_check_iommu_pci_dev(struct pci_dev *pdev, void *data)
->  {
->  	if (!pdev->external_facing ||
->  	    !device_iommu_capable(&pdev->dev, IOMMU_CAP_PRE_BOOT_PROTECTION))
-> @@ -1199,9 +1218,11 @@ static int nhi_check_iommu_pdev(struct pci_dev *pdev, void *data)
->  	return 1; /* Stop walking */
->  }
->  
-> -static void nhi_check_iommu(struct tb_nhi *nhi)
-> +static void nhi_check_iommu(struct tb_nhi_pci *nhi_pci)
->  {
-> -	struct pci_bus *bus = nhi->pdev->bus;
-> +	struct tb_nhi *nhi = &nhi_pci->nhi;
-> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
-> +	struct pci_bus *bus = pdev->bus;
->  	bool port_ok = false;
->  
->  	/*
-> @@ -1224,10 +1245,10 @@ static void nhi_check_iommu(struct tb_nhi *nhi)
->  	while (bus->parent)
->  		bus = bus->parent;
->  
-> -	pci_walk_bus(bus, nhi_check_iommu_pdev, &port_ok);
-> +	pci_walk_bus(bus, nhi_check_iommu_pci_dev, &port_ok);
->  
->  	nhi->iommu_dma_protection = port_ok;
-> -	dev_dbg(&nhi->pdev->dev, "IOMMU DMA protection is %s\n",
-> +	dev_dbg(nhi->dev, "IOMMU DMA protection is %s\n",
->  		str_enabled_disabled(port_ok));
->  }
->  
-> @@ -1242,7 +1263,7 @@ static void nhi_reset(struct tb_nhi *nhi)
->  		return;
->  
->  	if (!host_reset) {
-> -		dev_dbg(&nhi->pdev->dev, "skipping host router reset\n");
-> +		dev_dbg(nhi->dev, "skipping host router reset\n");
->  		return;
->  	}
->  
-> @@ -1253,27 +1274,23 @@ static void nhi_reset(struct tb_nhi *nhi)
->  	do {
->  		val = ioread32(nhi->iobase + REG_RESET);
->  		if (!(val & REG_RESET_HRR)) {
-> -			dev_warn(&nhi->pdev->dev, "host router reset successful\n");
-> +			dev_warn(nhi->dev, "host router reset successful\n");
->  			return;
->  		}
->  		usleep_range(10, 20);
->  	} while (ktime_before(ktime_get(), timeout));
->  
-> -	dev_warn(&nhi->pdev->dev, "timeout resetting host router\n");
-> +	dev_warn(nhi->dev, "timeout resetting host router\n");
->  }
->  
-> -static int nhi_init_msi(struct tb_nhi *nhi)
-> +static int nhi_init_msi(struct tb_nhi_pci *nhi_pci)
->  {
-> -	struct pci_dev *pdev = nhi->pdev;
-> +	struct tb_nhi *nhi = &nhi_pci->nhi;
-> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
->  	struct device *dev = &pdev->dev;
->  	int res, irq, nvec;
->  
-> -	/* In case someone left them on. */
-> -	nhi_disable_interrupts(nhi);
-> -
-> -	nhi_enable_int_throttling(nhi);
-> -
-> -	ida_init(&nhi->msix_ida);
-> +	ida_init(&nhi_pci->msix_ida);
->  
->  	/*
->  	 * The NHI has 16 MSI-X vectors or a single MSI. We first try to
-> @@ -1290,7 +1307,7 @@ static int nhi_init_msi(struct tb_nhi *nhi)
->  
->  		INIT_WORK(&nhi->interrupt_work, nhi_interrupt_work);
->  
-> -		irq = pci_irq_vector(nhi->pdev, 0);
-> +		irq = pci_irq_vector(pdev, 0);
->  		if (irq < 0)
->  			return irq;
->  
-> @@ -1339,6 +1356,7 @@ static struct tb *nhi_select_cm(struct tb_nhi *nhi)
->  static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  {
->  	struct device *dev = &pdev->dev;
-> +	struct tb_nhi_pci *nhi_pci;
->  	struct tb_nhi *nhi;
->  	struct tb *tb;
->  	int res;
-> @@ -1350,11 +1368,12 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (res)
->  		return dev_err_probe(dev, res, "cannot enable PCI device, aborting\n");
->  
-> -	nhi = devm_kzalloc(&pdev->dev, sizeof(*nhi), GFP_KERNEL);
-> -	if (!nhi)
-> +	nhi_pci = devm_kzalloc(dev, sizeof(*nhi_pci), GFP_KERNEL);
-> +	if (!nhi_pci)
->  		return -ENOMEM;
->  
-> -	nhi->pdev = pdev;
-> +	nhi = &nhi_pci->nhi;
-> +	nhi->dev = dev;
->  	nhi->ops = (const struct tb_nhi_ops *)id->driver_data;
->  
->  	nhi->iobase = pcim_iomap_region(pdev, 0, "thunderbolt");
-> @@ -1372,11 +1391,15 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (!nhi->tx_rings || !nhi->rx_rings)
->  		return -ENOMEM;
->  
-> -	nhi_check_quirks(nhi);
-> -	nhi_check_iommu(nhi);
-> +	nhi_check_quirks(nhi_pci);
-> +	nhi_check_iommu(nhi_pci);
->  	nhi_reset(nhi);
->  
-> -	res = nhi_init_msi(nhi);
-> +	/* In case someone left them on. */
-> +	nhi_disable_interrupts(nhi);
-> +	nhi_enable_int_throttling(nhi);
-> +
-> +	res = nhi_init_msi(nhi_pci);
->  	if (res)
->  		return dev_err_probe(dev, res, "cannot enable MSI, aborting\n");
->  
-> @@ -1458,6 +1481,75 @@ static const struct dev_pm_ops nhi_pm_ops = {
->  	.runtime_resume = nhi_runtime_resume,
->  };
->  
-> +/*
-> + * During suspend the Thunderbolt controller is reset and all PCIe
-> + * tunnels are lost. The NHI driver will try to reestablish all tunnels
-> + * during resume. This adds device links between the tunneled PCIe
-> + * downstream ports and the NHI so that the device core will make sure
-> + * NHI is resumed first before the rest.
-> + */
-> +bool tb_apple_add_links(struct tb_nhi *nhi)
-
-This can be moved into pci.c completely, I would think that all USB4 hosts
-use device properties.
-
-> +{
-> +	struct pci_dev *nhi_pdev = to_pci_dev(nhi->dev);
-> +	struct pci_dev *upstream, *pdev;
-> +	bool ret;
-> +
-> +	if (!x86_apple_machine)
-> +		return false;
-> +
-> +	switch (nhi_pdev->device) {
-> +	case PCI_DEVICE_ID_INTEL_LIGHT_RIDGE:
-> +	case PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C:
-> +	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_NHI:
-> +	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_NHI:
-> +		break;
-> +	default:
-> +		return false;
-> +	}
-> +
-> +	upstream = pci_upstream_bridge(nhi_pdev);
-> +	while (upstream) {
-> +		if (!pci_is_pcie(upstream))
-> +			return false;
-> +		if (pci_pcie_type(upstream) == PCI_EXP_TYPE_UPSTREAM)
-> +			break;
-> +		upstream = pci_upstream_bridge(upstream);
-> +	}
-> +
-> +	if (!upstream)
-> +		return false;
-> +
-> +	/*
-> +	 * For each hotplug downstream port, create add device link
-> +	 * back to NHI so that PCIe tunnels can be re-established after
-> +	 * sleep.
-> +	 */
-> +	ret = false;
-> +	for_each_pci_bridge(pdev, upstream->subordinate) {
-> +		const struct device_link *link;
-> +
-> +		if (!pci_is_pcie(pdev))
-> +			continue;
-> +		if (pci_pcie_type(pdev) != PCI_EXP_TYPE_DOWNSTREAM ||
-> +		    !pdev->is_pciehp)
-> +			continue;
-> +
-> +		link = device_link_add(&pdev->dev, nhi->dev,
-> +				       DL_FLAG_AUTOREMOVE_SUPPLIER |
-> +				       DL_FLAG_PM_RUNTIME);
-> +		if (link) {
-> +			dev_dbg(nhi->dev, "created link from %s\n",
-> +				dev_name(&pdev->dev));
-> +			ret = true;
-> +		} else {
-> +			dev_warn(nhi->dev, "device link creation from %s failed\n",
-> +				 dev_name(&pdev->dev));
-> +		}
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  static struct pci_device_id nhi_ids[] = {
->  	/*
->  	 * We have to specify class, the TB bridges use the same device and
-> diff --git a/drivers/thunderbolt/nhi.h b/drivers/thunderbolt/nhi.h
-> index 24ac4246d0ca..efcd119e26f8 100644
-> --- a/drivers/thunderbolt/nhi.h
-> +++ b/drivers/thunderbolt/nhi.h
-> @@ -29,6 +29,7 @@ enum nhi_mailbox_cmd {
->  
->  int nhi_mailbox_cmd(struct tb_nhi *nhi, enum nhi_mailbox_cmd cmd, u32 data);
->  enum nhi_fw_mode nhi_mailbox_mode(struct tb_nhi *nhi);
-> +bool tb_apple_add_links(struct tb_nhi *nhi);
-
-Then this does not need to be in nhi.h.
-
->  
->  /**
->   * struct tb_nhi_ops - NHI specific optional operations
-> diff --git a/drivers/thunderbolt/nhi_ops.c b/drivers/thunderbolt/nhi_ops.c
-> index 96da07e88c52..8c50066f3411 100644
-> --- a/drivers/thunderbolt/nhi_ops.c
-> +++ b/drivers/thunderbolt/nhi_ops.c
-> @@ -24,7 +24,7 @@ static int check_for_device(struct device *dev, void *data)
->  
->  static bool icl_nhi_is_device_connected(struct tb_nhi *nhi)
->  {
-> -	struct tb *tb = pci_get_drvdata(nhi->pdev);
-> +	struct tb *tb = dev_get_drvdata(nhi->dev);
->  	int ret;
->  
->  	ret = device_for_each_child(&tb->root_switch->dev, NULL,
-> @@ -34,6 +34,7 @@ static bool icl_nhi_is_device_connected(struct tb_nhi *nhi)
->  
->  static int icl_nhi_force_power(struct tb_nhi *nhi, bool power)
->  {
-> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
->  	u32 vs_cap;
->  
->  	/*
-> @@ -48,7 +49,7 @@ static int icl_nhi_force_power(struct tb_nhi *nhi, bool power)
->  	 * The actual power management happens inside shared ACPI power
->  	 * resources using standard ACPI methods.
->  	 */
-> -	pci_read_config_dword(nhi->pdev, VS_CAP_22, &vs_cap);
-> +	pci_read_config_dword(pdev, VS_CAP_22, &vs_cap);
->  	if (power) {
->  		vs_cap &= ~VS_CAP_22_DMA_DELAY_MASK;
->  		vs_cap |= 0x22 << VS_CAP_22_DMA_DELAY_SHIFT;
-> @@ -56,7 +57,7 @@ static int icl_nhi_force_power(struct tb_nhi *nhi, bool power)
->  	} else {
->  		vs_cap &= ~VS_CAP_22_FORCE_POWER;
->  	}
-> -	pci_write_config_dword(nhi->pdev, VS_CAP_22, vs_cap);
-> +	pci_write_config_dword(pdev, VS_CAP_22, vs_cap);
->  
->  	if (power) {
->  		unsigned int retries = 350;
-> @@ -64,7 +65,7 @@ static int icl_nhi_force_power(struct tb_nhi *nhi, bool power)
->  
->  		/* Wait until the firmware tells it is up and running */
->  		do {
-> -			pci_read_config_dword(nhi->pdev, VS_CAP_9, &val);
-> +			pci_read_config_dword(pdev, VS_CAP_9, &val);
->  			if (val & VS_CAP_9_FW_READY)
->  				return 0;
->  			usleep_range(3000, 3100);
-> @@ -78,14 +79,16 @@ static int icl_nhi_force_power(struct tb_nhi *nhi, bool power)
->  
->  static void icl_nhi_lc_mailbox_cmd(struct tb_nhi *nhi, enum icl_lc_mailbox_cmd cmd)
->  {
-> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
->  	u32 data;
->  
->  	data = (cmd << VS_CAP_19_CMD_SHIFT) & VS_CAP_19_CMD_MASK;
-> -	pci_write_config_dword(nhi->pdev, VS_CAP_19, data | VS_CAP_19_VALID);
-> +	pci_write_config_dword(pdev, VS_CAP_19, data | VS_CAP_19_VALID);
->  }
->  
->  static int icl_nhi_lc_mailbox_cmd_complete(struct tb_nhi *nhi, int timeout)
->  {
-> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
->  	unsigned long end;
->  	u32 data;
->  
-> @@ -94,7 +97,7 @@ static int icl_nhi_lc_mailbox_cmd_complete(struct tb_nhi *nhi, int timeout)
->  
->  	end = jiffies + msecs_to_jiffies(timeout);
->  	do {
-> -		pci_read_config_dword(nhi->pdev, VS_CAP_18, &data);
-> +		pci_read_config_dword(pdev, VS_CAP_18, &data);
->  		if (data & VS_CAP_18_DONE)
->  			goto clear;
->  		usleep_range(1000, 1100);
-> @@ -104,24 +107,25 @@ static int icl_nhi_lc_mailbox_cmd_complete(struct tb_nhi *nhi, int timeout)
->  
->  clear:
->  	/* Clear the valid bit */
-> -	pci_write_config_dword(nhi->pdev, VS_CAP_19, 0);
-> +	pci_write_config_dword(pdev, VS_CAP_19, 0);
->  	return 0;
->  }
->  
->  static void icl_nhi_set_ltr(struct tb_nhi *nhi)
->  {
-> +	struct pci_dev *pdev = to_pci_dev(nhi->dev);
->  	u32 max_ltr, ltr;
->  
-> -	pci_read_config_dword(nhi->pdev, VS_CAP_16, &max_ltr);
-> +	pci_read_config_dword(pdev, VS_CAP_16, &max_ltr);
->  	max_ltr &= 0xffff;
->  	/* Program the same value for both snoop and no-snoop */
->  	ltr = max_ltr << 16 | max_ltr;
-> -	pci_write_config_dword(nhi->pdev, VS_CAP_15, ltr);
-> +	pci_write_config_dword(pdev, VS_CAP_15, ltr);
->  }
->  
->  static int icl_nhi_suspend(struct tb_nhi *nhi)
->  {
-> -	struct tb *tb = pci_get_drvdata(nhi->pdev);
-> +	struct tb *tb = dev_get_drvdata(nhi->dev);
->  	int ret;
->  
->  	if (icl_nhi_is_device_connected(nhi))
-> @@ -144,7 +148,7 @@ static int icl_nhi_suspend(struct tb_nhi *nhi)
->  
->  static int icl_nhi_suspend_noirq(struct tb_nhi *nhi, bool wakeup)
->  {
-> -	struct tb *tb = pci_get_drvdata(nhi->pdev);
-> +	struct tb *tb = dev_get_drvdata(nhi->dev);
->  	enum icl_lc_mailbox_cmd cmd;
->  
->  	if (!pm_suspend_via_firmware())
-> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> index c2ad58b19e7b..0680209e349c 100644
-> --- a/drivers/thunderbolt/switch.c
-> +++ b/drivers/thunderbolt/switch.c
-> @@ -211,6 +211,7 @@ static int nvm_authenticate_device_dma_port(struct tb_switch *sw)
->  
->  static void nvm_authenticate_start_dma_port(struct tb_switch *sw)
->  {
-> +	struct pci_dev *pdev = to_pci_dev(sw->tb->nhi->dev);
->  	struct pci_dev *root_port;
->  
->  	/*
-> @@ -219,16 +220,17 @@ static void nvm_authenticate_start_dma_port(struct tb_switch *sw)
->  	 * itself. To be on the safe side keep the root port in D0 during
->  	 * the whole upgrade process.
->  	 */
-> -	root_port = pcie_find_root_port(sw->tb->nhi->pdev);
-> +	root_port = pcie_find_root_port(pdev);
->  	if (root_port)
->  		pm_runtime_get_noresume(&root_port->dev);
->  }
->  
->  static void nvm_authenticate_complete_dma_port(struct tb_switch *sw)
->  {
-> +	struct pci_dev *pdev = to_pci_dev(sw->tb->nhi->dev);
->  	struct pci_dev *root_port;
->  
-> -	root_port = pcie_find_root_port(sw->tb->nhi->pdev);
-> +	root_port = pcie_find_root_port(pdev);
->  	if (root_port)
->  		pm_runtime_put(&root_port->dev);
->  }
-> diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-> index c69c323e6952..0126e38d9396 100644
-> --- a/drivers/thunderbolt/tb.c
-> +++ b/drivers/thunderbolt/tb.c
-> @@ -10,7 +10,6 @@
->  #include <linux/errno.h>
->  #include <linux/delay.h>
->  #include <linux/pm_runtime.h>
-> -#include <linux/platform_data/x86/apple.h>
->  
->  #include "tb.h"
->  #include "tb_regs.h"
-> @@ -3295,74 +3294,6 @@ static const struct tb_cm_ops tb_cm_ops = {
->  	.disconnect_xdomain_paths = tb_disconnect_xdomain_paths,
->  };
->  
-> -/*
-> - * During suspend the Thunderbolt controller is reset and all PCIe
-> - * tunnels are lost. The NHI driver will try to reestablish all tunnels
-> - * during resume. This adds device links between the tunneled PCIe
-> - * downstream ports and the NHI so that the device core will make sure
-> - * NHI is resumed first before the rest.
-> - */
-> -static bool tb_apple_add_links(struct tb_nhi *nhi)
-> -{
-> -	struct pci_dev *upstream, *pdev;
-> -	bool ret;
-> -
-> -	if (!x86_apple_machine)
-> -		return false;
-> -
-> -	switch (nhi->pdev->device) {
-> -	case PCI_DEVICE_ID_INTEL_LIGHT_RIDGE:
-> -	case PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C:
-> -	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_NHI:
-> -	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_NHI:
-> -		break;
-> -	default:
-> -		return false;
-> -	}
-> -
-> -	upstream = pci_upstream_bridge(nhi->pdev);
-> -	while (upstream) {
-> -		if (!pci_is_pcie(upstream))
-> -			return false;
-> -		if (pci_pcie_type(upstream) == PCI_EXP_TYPE_UPSTREAM)
-> -			break;
-> -		upstream = pci_upstream_bridge(upstream);
-> -	}
-> -
-> -	if (!upstream)
-> -		return false;
-> -
-> -	/*
-> -	 * For each hotplug downstream port, create add device link
-> -	 * back to NHI so that PCIe tunnels can be re-established after
-> -	 * sleep.
-> -	 */
-> -	ret = false;
-> -	for_each_pci_bridge(pdev, upstream->subordinate) {
-> -		const struct device_link *link;
-> -
-> -		if (!pci_is_pcie(pdev))
-> -			continue;
-> -		if (pci_pcie_type(pdev) != PCI_EXP_TYPE_DOWNSTREAM ||
-> -		    !pdev->is_pciehp)
-> -			continue;
-> -
-> -		link = device_link_add(&pdev->dev, &nhi->pdev->dev,
-> -				       DL_FLAG_AUTOREMOVE_SUPPLIER |
-> -				       DL_FLAG_PM_RUNTIME);
-> -		if (link) {
-> -			dev_dbg(&nhi->pdev->dev, "created link from %s\n",
-> -				dev_name(&pdev->dev));
-> -			ret = true;
-> -		} else {
-> -			dev_warn(&nhi->pdev->dev, "device link creation from %s failed\n",
-> -				 dev_name(&pdev->dev));
-> -		}
-> -	}
-> -
-> -	return ret;
-> -}
-> -
->  struct tb *tb_probe(struct tb_nhi *nhi)
->  {
->  	struct tb_cm *tcm;
-> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-> index 217c3114bec8..4e11060e144b 100644
-> --- a/drivers/thunderbolt/tb.h
-> +++ b/drivers/thunderbolt/tb.h
-> @@ -725,11 +725,11 @@ static inline int tb_port_write(struct tb_port *port, const void *buffer,
->  			    length);
->  }
->  
-> -#define tb_err(tb, fmt, arg...) dev_err(&(tb)->nhi->pdev->dev, fmt, ## arg)
-> -#define tb_WARN(tb, fmt, arg...) dev_WARN(&(tb)->nhi->pdev->dev, fmt, ## arg)
-> -#define tb_warn(tb, fmt, arg...) dev_warn(&(tb)->nhi->pdev->dev, fmt, ## arg)
-> -#define tb_info(tb, fmt, arg...) dev_info(&(tb)->nhi->pdev->dev, fmt, ## arg)
-> -#define tb_dbg(tb, fmt, arg...) dev_dbg(&(tb)->nhi->pdev->dev, fmt, ## arg)
-> +#define tb_err(tb, fmt, arg...) dev_err((tb)->nhi->dev, fmt, ## arg)
-> +#define tb_WARN(tb, fmt, arg...) dev_WARN((tb)->nhi->dev, fmt, ## arg)
-> +#define tb_warn(tb, fmt, arg...) dev_warn((tb)->nhi->dev, fmt, ## arg)
-> +#define tb_info(tb, fmt, arg...) dev_info((tb)->nhi->dev, fmt, ## arg)
-> +#define tb_dbg(tb, fmt, arg...) dev_dbg((tb)->nhi->dev, fmt, ## arg)
->  
->  #define __TB_SW_PRINT(level, sw, fmt, arg...)           \
->  	do {                                            \
-> diff --git a/drivers/thunderbolt/usb4_port.c b/drivers/thunderbolt/usb4_port.c
-> index c32d3516e780..890de530debc 100644
-> --- a/drivers/thunderbolt/usb4_port.c
-> +++ b/drivers/thunderbolt/usb4_port.c
-> @@ -138,7 +138,7 @@ bool usb4_usb3_port_match(struct device *usb4_port_dev,
->  		return false;
->  
->  	/* Check if USB3 fwnode references same NHI where USB4 port resides */
-> -	if (!device_match_fwnode(&nhi->pdev->dev, nhi_fwnode))
-> +	if (!device_match_fwnode(nhi->dev, nhi_fwnode))
->  		return false;
->  
->  	if (fwnode_property_read_u8(usb3_port_fwnode, "usb4-port-number", &usb4_port_num))
-> diff --git a/include/linux/thunderbolt.h b/include/linux/thunderbolt.h
-> index 0ba112175bb3..789cd7f364e1 100644
-> --- a/include/linux/thunderbolt.h
-> +++ b/include/linux/thunderbolt.h
-> @@ -496,12 +496,11 @@ static inline struct tb_xdomain *tb_service_parent(struct tb_service *svc)
->   */
->  struct tb_nhi {
->  	spinlock_t lock;
-> -	struct pci_dev *pdev;
-> +	struct device *dev;
-
-Update kernel-doc.
-
->  	const struct tb_nhi_ops *ops;
->  	void __iomem *iobase;
->  	struct tb_ring **tx_rings;
->  	struct tb_ring **rx_rings;
-> -	struct ida msix_ida;
-
-Ditto.
-
->  	bool going_away;
->  	bool iommu_dma_protection;
->  	struct work_struct interrupt_work;
-> @@ -681,7 +680,7 @@ void tb_ring_poll_complete(struct tb_ring *ring);
->   */
->  static inline struct device *tb_ring_dma_device(struct tb_ring *ring)
->  {
-> -	return &ring->nhi->pdev->dev;
-> +	return ring->nhi->dev;
->  }
->  
->  bool usb4_usb3_port_match(struct device *usb4_port_dev,
-> 
-> -- 
-> 2.54.0
 
