@@ -1,229 +1,183 @@
-Return-Path: <linux-usb+bounces-36873-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36874-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uKx8FMRT+GnSswIAu9opvQ
-	(envelope-from <linux-usb+bounces-36873-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 10:07:32 +0200
+	id 4FF6Azxd+GnatQIAu9opvQ
+	(envelope-from <linux-usb+bounces-36874-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 10:47:56 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B575A4B9E5F
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 10:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B377F4BA79F
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 10:47:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0108D3012BFA
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 08:07:29 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AED2030120E3
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 08:47:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4F573161A4;
-	Mon,  4 May 2026 08:07:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4565345740;
+	Mon,  4 May 2026 08:47:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="RPB6IrUW";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ODLxDJAZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RnsNA/ma"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30FEE3090D7
-	for <linux-usb@vger.kernel.org>; Mon,  4 May 2026 08:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=205.220.168.131
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777882047; cv=pass; b=CkatqacvlI1qnXuD+1if7ZihrKkINQY9vBL6DYgFbkCUL1zJHcDu52PaOvr1/JQZb2hjJgATfrdTfs7msNLlSmdJMXHJg+xsdv7sy6oH8X+8BbLs2UKHp0RNC8P/xZJqQcBWyHDWkJgejF2/ltmDsW8H1Nd8GACxI4RnNN7iuLk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777882047; c=relaxed/simple;
-	bh=nEQz64k/1WoIwQjZRUfr29xgmGc05Cnt8HVAuYsV0aM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i2QN+fRMk4OQ6LNRYPVX8BKVcp2UomPPMUBZhmJ4wCiGSgGVHJjzoQXU2eRMIBDj4VIZpD19cfj3Tvmu0PvroFjwjGNqnj4tV95qCuru6Bw9mSgzJ24v/MPFYw6RXHcdbLbhUr7seLonmQJNXUKfVLLlc1kC1SVYgJsR1PPhLvU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=RPB6IrUW; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ODLxDJAZ; arc=pass smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6446DTV83505366
-	for <linux-usb@vger.kernel.org>; Mon, 4 May 2026 08:07:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	PTOFH2n3dVfEzZk7wWH3keBS96QiA2Aks7uS89gRBH8=; b=RPB6IrUWhMlAldNP
-	e5g6kmXsWPj9jxjm9j8O2VBF/NZHIlrZ1wyASNEQI+H0CXJvB6+/BrRQvoMBGsBj
-	SMPgtdQU6erPAOqdsw5gdC1tI4S9Y0kB7gX+Aos4WJpbYucUxBcL2LeCti+0AC2+
-	Stc/XR1QuMMSLEwhwA0jkF0HvxzuL+fuz8juZD7QyOTH0ma7EMumuRP4pGLlnqgO
-	SxdtlsmTnaD66WKOtwkMKr/LE+DSj9L9bBeY7/LKA8cLRnWwYkaInRLgiX6V8I9p
-	kBJbayC+NoWtwvyw72qA7VbHIoh6CvCgKC7Ata42b9H8+P3kMBtpL4F2p/rT7fYa
-	vi6ThQ==
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com [209.85.128.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dw6yfd5tc-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 04 May 2026 08:07:25 +0000 (GMT)
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-794d80fea59so69609097b3.1
-        for <linux-usb@vger.kernel.org>; Mon, 04 May 2026 01:07:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777882044; cv=none;
-        d=google.com; s=arc-20240605;
-        b=hZXUNSDyBasajb6hXjm3ACC+/S2cqK6Qw86dJUwMF4ufHXe47sJFAhUtgTAaTIhYw9
-         V5niYqLjRBWFTfbUbgUGRPg1ma9IXWHyIABI0qD6Jl6eL5XKqYEQKwVbUlQAh6LOY0wO
-         GR7oXFsLLfSbeBrDzhP6DjHHEK6t8KdmGbovcYoIno8HpCnACnM383nSyt3rY0qCLAcf
-         3Fupw0I7XlWSXKkTKJYkqTX2bTONzC//QdJelRwM5oZ0S8mA0Ky6xbZi4Jk+tiZD+Mt1
-         4nLAKrHVQ7I63ar3YCbm0fNn+LoNVoRUuEVBgvlppbP06tAeSYdyNsQfYxg1+vqObiIe
-         MKpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=PTOFH2n3dVfEzZk7wWH3keBS96QiA2Aks7uS89gRBH8=;
-        fh=fJU4A8TPqD4q2tb+2/1AIsLGa7MuFqH5MewPX2eB5QM=;
-        b=W26NXDx7j2bmnVFOd3m8rIFceUg9omdnK+BpDo1APTq/cyYODYqOzWL1ABkj2xdxQ6
-         p3So6kxvJQVzCpCncZOSB+dSU/Nhz6OzWGAZvg7XoABlc5ckCdrWKvIaOrbHKnlN8E9X
-         hv0n5my/c0dpi5HDvTgS103DugnnvKLjRSG5bIYv7ldCnJV+cdwam16gPp7DgbkghKF4
-         DAdKoIsb7lYgrzcV0o5uwu98VVqJdP2BBS3OVofaXKuggSKQnSruGfpOqxb6hsIIQkvl
-         BhNZGmkpLmUJMGrTE3uqYCHbJo9o0ytDNlFu6Onf54a5RBW97+Odj0VyLtJ0auIxVG/y
-         rNPA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1777882044; x=1778486844; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PTOFH2n3dVfEzZk7wWH3keBS96QiA2Aks7uS89gRBH8=;
-        b=ODLxDJAZKRmtwh6zpM/gZ2HyeXa59ldvZv5CeA394ZaZoY2dHNdlihaXx/qbM3xFB3
-         IDSob4ORC6cl6vqQZ05GBwKHwa1/j53CzyehniTrpHgOUEf5riSM5yXQPtQY5IZd9vdr
-         FUzPGR5BNQrK5DhegqcRegR4KccJOxX5UI0F4oxcQ5W7l4Uj6SJ+knNbW7YOv0MKRFc7
-         mNcLh/0HHb1LZTWIEZ4+Kv8ts9sH0AN8YuTzWSVAg2hd5qdwQnR7spz5xTPulQS5W1uD
-         TKWFKBz26s+39OzIqmR8USP/SPJScAuT4YXJ6tBZl1NdLYL1131j35ngojR3QzEKsn7r
-         AdtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777882044; x=1778486844;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=PTOFH2n3dVfEzZk7wWH3keBS96QiA2Aks7uS89gRBH8=;
-        b=s3wyN+c8yfhi195VHjlhTIz1oVyIzaf9V4PRZCLEZ0OttQFzOBHAXNxgPi+0RBjTia
-         RxuTskzhnXNQOorBCT6LEGr9sF9wuPI7IQYqUAXbe0KAV+u16kBK+529BgKNJho130Yb
-         UOB0wm+ij0p97mG3B7Ktj6ojbgUWNlI4nCLAqhJOyjltN0x6A1KjmckDH345ZQSQH4XW
-         +V0l3/OwS7LgBp4Ab5O2YAitcpMLX3lbZD7hKWwLwLzNcKRLgx4/Ccjx5p7h/2SFIjmQ
-         QNrAjSr9HMzu5zqtwkiGHSp67wi6IcafTXWDCq3zGqYpghgiPMQgEtX8vvkQDfIeUjZn
-         m5SQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9EhNWdru89hU04nYgHg6cUzQARr+PbDme4J4ThEG+onJ1uwQFX7JO8PdSwIajQA6WjQcDgqhSfiUk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1JzTr8gvwUz2wf+RtDRliWdmVW6oDGQ7hj6NUdE82D/s0tT6J
-	u+ZY6BkZ4dsoY7j7X3GepQnpVmtQRkorWNsLBcJAZGojqR/X+QINXze4Ruu2NTBNs0WiUj3n0ob
-	HkaqiUGilws1QLyZrHebpnX6Sa7RcFAct7jXh10FvIo1w2ZsfUO1V7JwWC9W97w/O7kXyOdvGj0
-	/is82SAHELsFbo0/xMAty2zBRixHS+kCdX18YhbttF08WoDg==
-X-Gm-Gg: AeBDietS1xs68lb0i0HdDXB86SRpGkebecOGkLpShY5byF4DjOdRmZr6Iq+5at0qcb+
-	KWKlr8tNXwdCtZTpTxAW9BSyIHrpyrgX/OrbEMYRUJkX0BmSuuJLOznxl8/tanwsGN6xBLmuPSn
-	yEXbGyYEZGKphc0Hp2E8zT1qpeDyfCwHSCd08zJzxkDUbrVX7jc61FQG/51OVIMMfjJm9XqMXQ7
-	ob1lN8YZNyEhWa0TVt54sgXWEQZs/Xv+OOgn4OakWIL3e9aNN4=
-X-Received: by 2002:a05:690c:6e85:b0:7bd:8752:cdbd with SMTP id 00721157ae682-7bd8752e640mr48818427b3.41.1777882044584;
-        Mon, 04 May 2026 01:07:24 -0700 (PDT)
-X-Received: by 2002:a05:690c:6e85:b0:7bd:8752:cdbd with SMTP id
- 00721157ae682-7bd8752e640mr48818157b3.41.1777882044236; Mon, 04 May 2026
- 01:07:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCEF289E13;
+	Mon,  4 May 2026 08:47:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777884463; cv=none; b=UyAYe2YZCK785Kqn3kuDJRKzV07uC4J/kKZiQRHcCyYW7rLetvW773ZZt2equZl/jADp4DYnydkGL08e65DJL+vqgUVhue2ysMFBXNPH7aJG0/qeScHbcsOia6P8dY2uW/JQ/4YABUG0zqVKuwFQx3A9AvM+0Mqzpl3/YmLNjvU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777884463; c=relaxed/simple;
+	bh=b3z35is89oPXeENyhLsF89vCn8J4SZIObLZfQ01bcQA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TTlvadZaChKEjuiJpRKLudYcbZcX8XATQ1sCcaXqRmrlPJCVBr6RLpfudlP4/kiS3iL18TuSLUrJ5OVyefMZ0IkDJ30h298in3mBj0kx4/vFWSK25j34kjToBFm3+EdPVyzhn6STNKIIkOEyRX+G7vTlnLwGJyYOBYiXOgN1M68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RnsNA/ma; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EABCAC2BCB8;
+	Mon,  4 May 2026 08:47:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777884463;
+	bh=b3z35is89oPXeENyhLsF89vCn8J4SZIObLZfQ01bcQA=;
+	h=From:Subject:Date:To:Cc:From;
+	b=RnsNA/makSoQ3GKhXZ7RamY3KP4fb8iU5LMyDvdMQsxTKLLeDPRHlrZSrSPddgJHn
+	 qnq1kwn9KqDwoQ3rotidKz4FMqAI6ZTRFhuT9XUZzFH4fxOChmXwsl4ApBLqUrXmck
+	 6O2PLa1RUlnArZtLAU/ONFSlc7pFJExQ00y7JShaqYdjV/EgEK1I0cDG3b/jslwdHD
+	 OsyJclo1/rt58u3Raq6zeWnDCZI0K/VleAQUmTFfYGf1zkwCvLpiI86wOHkRfSoWlW
+	 j3C+UPWpyUysZ1gN8uaJWq/uZ4NKidN08hpHk2UnDS99U+PWH+5f/Q1FYsllbXKv/q
+	 Xtrum7QyJyacg==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Subject: [PATCH v3 0/4] HID: Proper fix for OOM in hid-core
+Date: Mon, 04 May 2026 10:47:21 +0200
+Message-Id: <20260504-wip-fix-core-v3-0-ce1f11f4968f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260502095616.666938-1-krishna.kurapati@oss.qualcomm.com> <d774b2f2-75f8-485f-830f-2a7a5dac1c23@linaro.org>
-In-Reply-To: <d774b2f2-75f8-485f-830f-2a7a5dac1c23@linaro.org>
-From: Krishna Kurapati PSSNV <krishna.kurapati@oss.qualcomm.com>
-Date: Mon, 4 May 2026 13:37:11 +0530
-X-Gm-Features: AVHnY4Ig_aLpEo-Nqit4pYFKU8Cb6H2Xx8XMnZLH6cUdADQNynWyvQH0888rOIs
-Message-ID: <CAEiyvpp2NseXQGxRi8zmebaONVskPyHDDb0SL11-wttH6Sj1Rg@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: qcom: Modify interrupt handling for EUSB2 Phy targets
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-ORIG-GUID: G_N_Z4OtRAt8qXCtT2-xYFR6fQaM5fph
-X-Proofpoint-GUID: G_N_Z4OtRAt8qXCtT2-xYFR6fQaM5fph
-X-Authority-Analysis: v=2.4 cv=QY5WeMbv c=1 sm=1 tr=0 ts=69f853bd cx=c_pps
- a=72HoHk1woDtn7btP4rdmlg==:117 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
- a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
- a=eoimf2acIAo5FJnRuUoq:22 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8
- a=FDDUSfwg_FEBtVg4pJEA:9 a=QEXdDO2ut3YA:10 a=kA6IBgd4cpdPkAWqgNAz:22
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA0MDA4NyBTYWx0ZWRfX8qQoOwpJ9iq/
- noOK3EVTY67v5/nnRNg3FQMFP/Zo7jmrB4Scs74IZEpQfh4GOwPYcuYyABoljj5BKYGS+BXAmDC
- xCqUQXtPfij0b5PtpPVzGVJExVkHZ+NnnIUTuayVB06zrj25X0fo+YeK8poA2HpbHMryM1fERn/
- DpjZdlzOnVpOoLpX5rBqW0W/7KgieAlHY4zdkU7cw64sTlKTvcK7Uu4WaKDSB6zlExL3nS9uZkF
- mC7JpFVwVPhML7eaXQQnKGc4R3HRxh8PsxGbbkr/MvaluIIAcs5gf70N81tNuNR8r8AdRfr2/7A
- XAgerlehNshbls8QfDckn61ez4L38RagbND8yQdB7j2Nyx8BJGvPC/vqBiBMieKrOAQ29r66iXf
- pdTDNbfEdJPXnGxKxoBt6WDImSDTLk2y9WX2AA42053hH4R+qb/NRGYBM48QF9COq4iH7pl5qf5
- Lpu8K6w0ehkmkhuadyQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-04_03,2026-04-30_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0
- bulkscore=0 clxscore=1015 adultscore=0 priorityscore=1501 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605040087
-X-Rspamd-Queue-Id: B575A4B9E5F
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3WMQQ7CIBBFr2JmLQamBaor72FcKIwt0ZRmMKhpe
+ ndpV2ri8v2f90ZIxIES7FYjMOWQQuwLVOsVuO7UtySCLwwo0chaafEIg7iEp3CRSVjfaNdoZch
+ LKMrAVL4ldzgW7kK6R34t9azm9U8oKyEF+crVrsFKWb2/Evd020RuYS5l/LTNj43FPtMWtZWkD
+ dove5qmN9NKrg3nAAAA
+X-Change-ID: 20260415-wip-fix-core-7d85c8516ed0
+To: Jiri Kosina <jikos@kernel.org>, 
+ =?utf-8?q?Filipe_La=C3=ADns?= <lains@riseup.net>, 
+ Bastien Nocera <hadess@hadess.net>, Ping Cheng <ping.cheng@wacom.com>, 
+ Jason Gerecke <jason.gerecke@wacom.com>, Viresh Kumar <vireshk@kernel.org>, 
+ Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>
+Cc: Icenowy Zheng <uwu@icenowy.me>, linux-input@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, greybus-dev@lists.linaro.org, 
+ linux-staging@lists.linux.dev, linux-usb@vger.kernel.org, 
+ Benjamin Tissoires <bentiss@kernel.org>, stable@vger.kernel.org
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777884459; l=3032;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=b3z35is89oPXeENyhLsF89vCn8J4SZIObLZfQ01bcQA=;
+ b=TQu4P6b/RpFFvIMfL1ijYih/MvkNRh3fGMcO4Ui85Axyhiy6Mph0TvOIA5M5ZUHVq7eeGevLa
+ ZMI+iRgeurEBZPCLqYX6YRidM81bx1IftPpaEpZ8G6P4UNKjQPfQCFz
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+X-Rspamd-Queue-Id: B377F4BA79F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36873-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36874-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krishna.kurapati@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[bentiss@kernel.org,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,oss.qualcomm.com:dkim,qualcomm.com:dkim,qualcomm.com:email,mail.gmail.com:mid]
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 
-On Mon, May 4, 2026 at 12:17=E2=80=AFPM Neil Armstrong
-<neil.armstrong@linaro.org> wrote:
->
-> Hi,
->
-> On 5/2/26 11:56, Krishna Kurapati wrote:
-> > Modify interrupt handling for EUSB2 Phy targets. Enable DP Interrupt
-> > when an Low speed device is connnected and enable DM interrupt when
-> > a High Speed/ Full Speed device is connected.
->
-> Could you explain _why_ and not the content of the patch ?
->
+Commit 0a3fe972a7cb ("HID: core: Mitigate potential OOB by removing
+bogus memset()") enforced the provided data to be at least the size of
+the declared buffer in the report descriptor to prevent a buffer
+overflow.
 
-ACK. Will modify the commit text.
+We only had corner cases of malicious devices exposing the OOM because
+in most cases, the buffer provided by the transport layer needs to be
+allocated at probe time and is large enough to handle all the possible
+reports.
 
-> >
-> > Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-> > ---
-> > Tested remote wakeupon Glymur device by button press from a headset
-> > connected to both Type-C and Type-A ports.
-> >
+However, the patch from above, which enforces the spec a little bit more
+introduced both regressions for devices not following the spec (not
+necesserally malicious), but also a stream of errors for those devices.
 
-[...]
+Let's revert to the old behavior by giving more information to HID core
+to be able to decide whether it can or not memset the rest of the buffer
+to 0 and continue the processing.
 
-> > +static const struct dwc3_qcom_platform_data dwc3_qcom_pdata =3D {
-> > +     .uses_eusb2_phy =3D false,
-> > +};
-> > +
-> > +static const struct dwc3_qcom_platform_data dwc3_qcom_glymur_pdata =3D=
- {
->
-> SM8550 was the first QCom upstream SoC to use eUSB, should it be covered =
-as well like SM8650, X1, ... ?
->
+Note that the first commit makes an API change, but the callers are
+relatively limited, so it should be fine on its own. The second patch
+can't really make the same kind of API change because we have too many
+callers in various subsystems. We can switch them one by one to the safe
+approach when needed.
 
-Yes, I tested the patch on Glymur, hence sent it only for Glymur for
-now. Will add other targets later.
+The last 2 patches are small cleanups I initially put together with the
+2 first patches, but they can be applied on their own and don't need to
+be pulled in stable like the first 2.
 
-Regards,
-Krishna,
+Cheers,
+Benjamin
+
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+---
+Changes in v3:
+- fixed ghib -> ghid in greybus
+- fixed i386 size_t debug size reported by kernel-bot
+- Link to v2: https://lore.kernel.org/r/20260416-wip-fix-core-v2-0-be92570e5627@kernel.org
+
+Changes in v2:
+- added a small blurb explaining the difference between the safe and the
+  non safe version of hid_safe_input_report
+- Link to v1: https://lore.kernel.org/r/20260415-wip-fix-core-v1-0-ed3c4c823175@kernel.org
+
+---
+Benjamin Tissoires (4):
+      HID: pass the buffer size to hid_report_raw_event
+      HID: core: introduce hid_safe_input_report()
+      HID: multitouch: use __free(kfree) to clean up temporary buffers
+      HID: wacom: use __free(kfree) to clean up temporary buffers
+
+ drivers/hid/bpf/hid_bpf_dispatch.c |  6 ++--
+ drivers/hid/hid-core.c             | 67 ++++++++++++++++++++++++++++++--------
+ drivers/hid/hid-gfrm.c             |  4 +--
+ drivers/hid/hid-logitech-hidpp.c   |  2 +-
+ drivers/hid/hid-multitouch.c       | 18 ++++------
+ drivers/hid/hid-primax.c           |  2 +-
+ drivers/hid/hid-vivaldi-common.c   |  2 +-
+ drivers/hid/i2c-hid/i2c-hid-core.c |  7 ++--
+ drivers/hid/usbhid/hid-core.c      | 11 ++++---
+ drivers/hid/wacom_sys.c            | 46 +++++++++-----------------
+ drivers/staging/greybus/hid.c      |  2 +-
+ include/linux/hid.h                |  6 ++--
+ include/linux/hid_bpf.h            | 14 +++++---
+ 13 files changed, 109 insertions(+), 78 deletions(-)
+---
+base-commit: 7df6572f1cb381d6b89ceed58e3b076c233c2cd0
+change-id: 20260415-wip-fix-core-7d85c8516ed0
+
+Best regards,
+-- 
+Benjamin Tissoires <bentiss@kernel.org>
+
 
