@@ -1,260 +1,199 @@
-Return-Path: <linux-usb+bounces-36900-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36901-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WMqoL3vB+Gnt0QIAu9opvQ
-	(envelope-from <linux-usb+bounces-36900-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 17:55:39 +0200
+	id QDmzGezg+GnM2gIAu9opvQ
+	(envelope-from <linux-usb+bounces-36901-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 20:09:48 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5959C4C0FF4
-	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 17:55:39 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D3904C2524
+	for <lists+linux-usb@lfdr.de>; Mon, 04 May 2026 20:09:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id AB7D7300909A
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 15:55:38 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 90520300AD7F
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2026 18:09:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7FED3E1213;
-	Mon,  4 May 2026 15:55:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A7BF3E51F5;
+	Mon,  4 May 2026 18:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mMIzvL8k"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="g41+Js8t"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14CB2BFC7B
-	for <linux-usb@vger.kernel.org>; Mon,  4 May 2026 15:55:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A3C3A5E92
+	for <linux-usb@vger.kernel.org>; Mon,  4 May 2026 18:09:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777910137; cv=none; b=JYk0tf+Per8q+fvqpGtqB8W+LQXB+m7ufGpDcL0s3HAO1f3pxHwdC3EFC3F65x3WtFWgrKk9rrROu1egOn6qFYiuHr8J+FwOQgnH2g1Ao69Ibgq4isYPLwoyeWQq1KiQn4hzIo8xnWY5T6eqSb0pOtMod7sxeAZnMzMA+cI8gHY=
+	t=1777918180; cv=none; b=boMF1kKQjOa6WhVTcd1N5RhnFk991WFCbAlzB+GHtDTJgF9cjGzcAXvbKIy2LNNMhMFgSc2+i5aUa9aJRTpjMEEfIYuti4bSqqrWUCHMOSxxavwJqnpmm/ule92xIuKpBrKWamX8OOd32QZzrffk7VSxhV5IjxOvT0gWbWLe6Fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777910137; c=relaxed/simple;
-	bh=AxBe0Pli9xlS8xkxnpJ1QukNFc97/w4zdD7V42Zjc0o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sxPjfmNLfmZCnoRj5h+bE7pK3OkD9li7fpgXfEpfzr2IgGEaqMLgvNAvpZZBSjKx4MgUB05VVxtXuFo0BYX76HPWHgT8i46s2XwAcuFIwsEzwN+1nrsKZ+RJryXiONbtldiIk5mLRjHD0dF+KAYFm6cIFAYsAcZITMD7k+HPOG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mMIzvL8k; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777910136; x=1809446136;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=AxBe0Pli9xlS8xkxnpJ1QukNFc97/w4zdD7V42Zjc0o=;
-  b=mMIzvL8klJJDl+Qp21eA06sv/Gp97lH3xbhp7cHF82ScVaFTtZ6seOq9
-   6FskiDSi6EXWZ+aYbEbumDt+PEz+TSlHzlDydsKMmaUP7q1JYLGCgfovi
-   vig1ZdpO5wZJTkn6G4hjBWrBbVvh98E+GYpZ9e7issKtb1mI1EWlbmlaU
-   zvz/Bksa5FgDrmcWhY+Dzrs754uXu5B3q6Qr0KAqOgQ/zkTvIVDhHxgXt
-   +gAi7Ab9TSYKMJhvYXbG0we4ChWUomLsE14UPuIyzwF80wxyANopi2W3O
-   e5zpmQyPHXO8qQRaJWzPvYoRpNzICn9/pMqxTmnjxJslioP7INqUqIZey
-   A==;
-X-CSE-ConnectionGUID: +gqYePOyQq6jSc9L5M8v5w==
-X-CSE-MsgGUID: 1X4VBUASS3Wwj+8oL1ll/g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11776"; a="78960686"
-X-IronPort-AV: E=Sophos;i="6.23,215,1770624000"; 
-   d="scan'208";a="78960686"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2026 08:55:35 -0700
-X-CSE-ConnectionGUID: RGqtXx4aSty212Yr8xdNzw==
-X-CSE-MsgGUID: SRXLLebGTrCOXuylfZslEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,215,1770624000"; 
-   d="scan'208";a="273660379"
-Received: from lkp-server01.sh.intel.com (HELO 781826d00641) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 04 May 2026 08:55:33 -0700
-Received: from kbuild by 781826d00641 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wJvdg-000000003or-2yJs;
-	Mon, 04 May 2026 15:55:23 +0000
-Date: Mon, 4 May 2026 23:54:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oliver Neukum <oneukum@suse.com>, hanguidong02@gmail.com,
-	linux-usb@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Oliver Neukum <oneukum@suse.com>
-Subject: Re: [RFT] usb: class: cdc-wdm: switch to kfifo for buffering
-Message-ID: <202605042331.sI8rgflD-lkp@intel.com>
-References: <20260430121859.1018894-1-oneukum@suse.com>
+	s=arc-20240116; t=1777918180; c=relaxed/simple;
+	bh=zrdfpnzV395yK4H9FKGGBZswGo2p1cuxa003EiaAwbM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XQ8ji52D8ueO76R5ubDqup/djSWcmVBUz2zcq9rzRWjpqq5TH3y4taAFTVKQFgZtO/LVykHw1X8EpexhErE/eEXVnoOQYkxO53DjOVUtTDNXhpcr3SDimvO1xwMPZ4EKl1GG40ry4c7fqnEj3aKahBhRdwfAD5Z30DA30KIh5a4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=g41+Js8t; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-799001d73bdso40228567b3.0
+        for <linux-usb@vger.kernel.org>; Mon, 04 May 2026 11:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777918178; x=1778522978; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HDrEC/bbBf8LmPd2aHj2+GbHdkESbtD2hxIp9kN8Yo4=;
+        b=g41+Js8tH0agPoZyJmNqeqlkiwsnw71jXhHLSIWosl+Ks6uXMbTYujUqgjqi1sxFUY
+         J2iMCqtSknetCke0AYogq/sReOdYo2exexmRrvMXjrr/dIPEY/6DfLuk6qwA4urm9zgn
+         k7m4LHXYRAKneNCWvMsVg2NRi5n4Ry4/rVXsgfmWAHJTilbjhZnD9Kc0ZDMeVcQaqnYN
+         Bvq/JPZJnMns90b5Z3JuplwdnTz3uaHNorvIqwK9FTM9D9j/7sQ4dYbWTrSgGlA9Q1ms
+         XDVwpk8cPU9o5ssJ6ndO/13CBq2iUxbYP6ld8Yb6CMO8URNyCqUlt4oGJywZicKrq/3Z
+         KMnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777918178; x=1778522978;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HDrEC/bbBf8LmPd2aHj2+GbHdkESbtD2hxIp9kN8Yo4=;
+        b=tVIKYh2Q8/WD4K4d6IAyZhItQJdA7Y1JRg+iPowkIMqkgiwNLHu+mBOdHHAFnle5kD
+         Upep6Id5AYLeAXxbCL+2bbvzTGbNHqu+3t7fp0BHUia9mhgucpkGSbl6+U1HjesIBZbu
+         j+qqOki54Oa6fNUooM+RM1iMA/MLsaVsyDufkejXmlYSaupUGEigKS9XFntBXreTJ/r+
+         NDn7hZ1I7lS5PFSeyCPuteApc7SdprZtp55S7T+6d4hJjVN3n3YR8s3qG9KQnBRRF1RF
+         BFG4Kp4kckKeA2JxE4C26ZePsJrDutoXDapIr6DPu8cSktl0Ucou0HvJweCYrfkAWx7/
+         7nKg==
+X-Forwarded-Encrypted: i=1; AFNElJ+dnBve84vAnfFIeRBaXhzJYshN3GzD4KYFVJ5TGNjwYONSDUcNjHVngwW3ZD+D0nH2wQTcS0MufE4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHoWwrW/LztPuex9X9UOhv0apJANK8MH7CQiaqK1aQ3UvHq6JA
+	tD9CgM7Y0U1l0ww8lpthfovW7cSuZ+79SnHim0Ctn2JwIVYpR9B610bp7KjITDpekg==
+X-Gm-Gg: AeBDieuPkyfH8eQctdF9/QPqQ9caE8DB3gdb08+XfQV8YM8cLi3CUe0scAbAsTmK3a0
+	Ze0RLs9w1LWm+AUvNlQKIi3x8uRIO8ajIJQuL0RlEQEV66easDHxeck/k4Rua2VR6ROpTomlaEF
+	LA9Tt8u2DAZoWbSsaj/SAOUSjRQX7dofbcXgWkO7YvItFYBu4DoTyZR+xw5l5eoK26Eb+QSysFk
+	7qu/W5vh2eUIrbl3DRtvG39FkUyehja50WSK/RQDh7aQNtzJhAZzswNHiD2NV5Zk+2CI7rYmem9
+	g0OMjvZvgAk12N+kKPCMBQDacxnAZMXS8uBIFCyAAYK9uyLpXAASXzMitcBk/wc7hwphp3wbfXb
+	heAa5xrRGHi9yovy308Fp/IHA/05DDRxolJPgRBszjkN8JofYfgEvzOmbJcYR2Q5YdtP+AHonac
+	VeJQ9MKckDfO21XPvBjFcAgY1Uu6y2N0cZwk9EaP0GkoGbW4s0+66qiGq246Ckg5yJvClobXM++
+	CyL0B+Q+gu8ZOYzld3P
+X-Received: by 2002:a05:690c:a018:b0:7b8:9418:7605 with SMTP id 00721157ae682-7bd7710e854mr105008447b3.38.1777918177380;
+        Mon, 04 May 2026 11:09:37 -0700 (PDT)
+Received: from ?IPV6:2600:1700:4570:89a0:8a86:6cfb:83b6:4f09? ([2600:1700:4570:89a0:8a86:6cfb:83b6:4f09])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd66885907sm53217837b3.43.2026.05.04.11.09.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 May 2026 11:09:36 -0700 (PDT)
+Message-ID: <ad51b3a7-341b-4549-bb14-04260c35f999@google.com>
+Date: Mon, 4 May 2026 11:09:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260430121859.1018894-1-oneukum@suse.com>
-X-Rspamd-Queue-Id: 5959C4C0FF4
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: typec: tcpm: replace strcpy with strscpy
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Maxwell Doose <m32285159@gmail.com>, badhri@google.com,
+ heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260419213638.38291-2-m32285159@gmail.com>
+ <0643586e-e665-4592-b941-2868fca84322@google.com>
+ <20260429095445.11b7302e@pumpkin>
+From: Amit Sunil Dhamne <amitsd@google.com>
+Content-Language: en-US
+In-Reply-To: <20260429095445.11b7302e@pumpkin>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 6D3904C2524
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[gmail.com,google.com,linux.intel.com,linuxfoundation.org,vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36900-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[suse.com,gmail.com,vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[google.com:+];
+	TAGGED_FROM(0.00)[bounces-36901-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[amitsd@google.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.999];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,intel.com:mid,01.org:url,git-scm.com:url]
+	TO_DN_SOME(0.00)[]
 
-Hi Oliver,
+Hi David,
 
-kernel test robot noticed the following build warnings:
+On 4/29/26 1:54 AM, David Laight wrote:
+> On Thu, 23 Apr 2026 12:23:09 -0700
+> Amit Sunil Dhamne <amitsd@google.com> wrote:
+>
+>> Hi Maxwell,
+>>
+>> On 4/19/26 2:36 PM, Maxwell Doose wrote:
+>>> The function strcpy() is deprecated as it can be used in buffer overflow
+>>> attacks. This patch replaces strcpy() with strscpy() to improve
+>>> security and stability.
+>>>
+>>> Signed-off-by: Maxwell Doose <m32285159@gmail.com>
+>>> ---
+>>>   drivers/usb/typec/tcpm/tcpm.c | 6 +++---
+>>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+>>> index 8e0e14a2704e..69574c5e79e1 100644
+>>> --- a/drivers/usb/typec/tcpm/tcpm.c
+>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+>>> @@ -725,7 +725,7 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
+>>>   
+>>>   	if (tcpm_log_full(port)) {
+>>>   		port->logbuffer_head = max(port->logbuffer_head - 1, 0);
+>>> -		strcpy(tmpbuffer, "overflow");
+>>> +		strscpy(tmpbuffer, "overflow", sizeof(tmpbuffer))
+>>>   	}
+>>>   
+>>>   	if (port->logbuffer_head < 0 ||
+>>> @@ -841,10 +841,10 @@ static void tcpm_log_source_caps(struct tcpm_port *port)
+>>>   					  pdo_spr_avs_apdo_15v_to_20v_max_current_ma(pdo),
+>>>   					  pdo_spr_avs_apdo_src_peak_current(pdo));
+>>>   			else
+>>> -				strcpy(msg, "undefined APDO");
+>>> +				strscpy(msg, "undefined APDO", sizeof(msg));
+>>>   			break;
+>>>   		default:
+>>> -			strcpy(msg, "undefined");
+>>> +			strscpy(msg, "undefined", sizeof(msg));
+>>>   			break;
+>>>   		}
+>>>   		tcpm_log(port, " PDO %d: type %d, %s",  
+>> This has already been fixed as part of [1].
+> It is also 'not a fix'.
+> strcpy() is fine for copying literal strings into arrays.
+> With the kernel headers you get a compile error from strcpy() if the string
+> is too long.
+> OTOH strscpy() will truncate overlong strings.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus westeri-thunderbolt/next linus/master v7.1-rc2 next-20260430]
-[cannot apply to peter-chen-usb/for-usb-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Neukum/usb-class-cdc-wdm-switch-to-kfifo-for-buffering/20260504-164851
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20260430121859.1018894-1-oneukum%40suse.com
-patch subject: [RFT] usb: class: cdc-wdm: switch to kfifo for buffering
-config: arm-randconfig-004-20260504 (https://download.01.org/0day-ci/archive/20260504/202605042331.sI8rgflD-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260504/202605042331.sI8rgflD-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605042331.sI8rgflD-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/class/cdc-wdm.c:526:6: warning: variable 'i' set but not used [-Wunused-but-set-variable]
-     526 |         int i = 0;
-         |             ^
-   1 warning generated.
+Thanks for the explanation :) .
 
 
-vim +/i +526 drivers/usb/class/cdc-wdm.c
-
-8dd5cd5395b9007 Bjørn Mork          2013-12-20  521  
-afba937e540c902 Oliver Neukum       2008-05-13  522  static ssize_t wdm_read
-afba937e540c902 Oliver Neukum       2008-05-13  523  (struct file *file, char __user *buffer, size_t count, loff_t *ppos)
-afba937e540c902 Oliver Neukum       2008-05-13  524  {
-055e352971719f8 Oliver Neukum       2026-04-30  525  	int rv, cntr, done;
-afba937e540c902 Oliver Neukum       2008-05-13 @526  	int i = 0;
-afba937e540c902 Oliver Neukum       2008-05-13  527  	struct wdm_device *desc = file->private_data;
-afba937e540c902 Oliver Neukum       2008-05-13  528  
-afba937e540c902 Oliver Neukum       2008-05-13  529  
-e8537bd2c4f325a Bjørn Mork          2012-01-16  530  	rv = mutex_lock_interruptible(&desc->rlock); /*concurrent reads */
-afba937e540c902 Oliver Neukum       2008-05-13  531  	if (rv < 0)
-afba937e540c902 Oliver Neukum       2008-05-13  532  		return -ERESTARTSYS;
-afba937e540c902 Oliver Neukum       2008-05-13  533  
-055e352971719f8 Oliver Neukum       2026-04-30  534  	cntr = kfifo_len(&desc->ubuf);
-711c68b3c0f7a92 Ben Hutchings       2012-02-12  535  	if (cntr == 0) {
-afba937e540c902 Oliver Neukum       2008-05-13  536  		desc->read = 0;
-afba937e540c902 Oliver Neukum       2008-05-13  537  retry:
-7f1dc313d01f5f0 Oliver Neukum       2009-09-09  538  		if (test_bit(WDM_DISCONNECTING, &desc->flags)) {
-7f1dc313d01f5f0 Oliver Neukum       2009-09-09  539  			rv = -ENODEV;
-7f1dc313d01f5f0 Oliver Neukum       2009-09-09  540  			goto err;
-7f1dc313d01f5f0 Oliver Neukum       2009-09-09  541  		}
-c0f5ecee4e74166 Oliver Neukum       2013-03-12  542  		if (test_bit(WDM_OVERFLOW, &desc->flags)) {
-c0f5ecee4e74166 Oliver Neukum       2013-03-12  543  			clear_bit(WDM_OVERFLOW, &desc->flags);
-c0f5ecee4e74166 Oliver Neukum       2013-03-12  544  			rv = -ENOBUFS;
-c0f5ecee4e74166 Oliver Neukum       2013-03-12  545  			goto err;
-c0f5ecee4e74166 Oliver Neukum       2013-03-12  546  		}
-afba937e540c902 Oliver Neukum       2008-05-13  547  		i++;
-7f1dc313d01f5f0 Oliver Neukum       2009-09-09  548  		if (file->f_flags & O_NONBLOCK) {
-7f1dc313d01f5f0 Oliver Neukum       2009-09-09  549  			if (!test_bit(WDM_READ, &desc->flags)) {
-53b7f7b53d83727 Gustavo A. R. Silva 2017-02-14  550  				rv = -EAGAIN;
-7f1dc313d01f5f0 Oliver Neukum       2009-09-09  551  				goto err;
-7f1dc313d01f5f0 Oliver Neukum       2009-09-09  552  			}
-7f1dc313d01f5f0 Oliver Neukum       2009-09-09  553  			rv = 0;
-7f1dc313d01f5f0 Oliver Neukum       2009-09-09  554  		} else {
-afba937e540c902 Oliver Neukum       2008-05-13  555  			rv = wait_event_interruptible(desc->wait,
-afba937e540c902 Oliver Neukum       2008-05-13  556  				test_bit(WDM_READ, &desc->flags));
-7f1dc313d01f5f0 Oliver Neukum       2009-09-09  557  		}
-afba937e540c902 Oliver Neukum       2008-05-13  558  
-7f1dc313d01f5f0 Oliver Neukum       2009-09-09  559  		/* may have happened while we slept */
-17d80d562fd78a0 Oliver Neukum       2008-06-24  560  		if (test_bit(WDM_DISCONNECTING, &desc->flags)) {
-17d80d562fd78a0 Oliver Neukum       2008-06-24  561  			rv = -ENODEV;
-17d80d562fd78a0 Oliver Neukum       2008-06-24  562  			goto err;
-17d80d562fd78a0 Oliver Neukum       2008-06-24  563  		}
-88044202756925a Bjørn Mork          2012-02-10  564  		if (test_bit(WDM_RESETTING, &desc->flags)) {
-88044202756925a Bjørn Mork          2012-02-10  565  			rv = -EIO;
-88044202756925a Bjørn Mork          2012-02-10  566  			goto err;
-88044202756925a Bjørn Mork          2012-02-10  567  		}
-055e352971719f8 Oliver Neukum       2026-04-30  568  		smp_rmb(); /* against wdm_in_callback() */
-055e352971719f8 Oliver Neukum       2026-04-30  569  		if (test_bit(WDM_OVERFLOW, &desc->flags)) {
-055e352971719f8 Oliver Neukum       2026-04-30  570  			clear_bit(WDM_OVERFLOW, &desc->flags);
-055e352971719f8 Oliver Neukum       2026-04-30  571  			rv = -ENOBUFS;
-055e352971719f8 Oliver Neukum       2026-04-30  572  			goto err;
-055e352971719f8 Oliver Neukum       2026-04-30  573  		}
-055e352971719f8 Oliver Neukum       2026-04-30  574  
-17d80d562fd78a0 Oliver Neukum       2008-06-24  575  		usb_mark_last_busy(interface_to_usbdev(desc->intf));
-afba937e540c902 Oliver Neukum       2008-05-13  576  		if (rv < 0) {
-afba937e540c902 Oliver Neukum       2008-05-13  577  			rv = -ERESTARTSYS;
-afba937e540c902 Oliver Neukum       2008-05-13  578  			goto err;
-afba937e540c902 Oliver Neukum       2008-05-13  579  		}
-afba937e540c902 Oliver Neukum       2008-05-13  580  
-afba937e540c902 Oliver Neukum       2008-05-13  581  		spin_lock_irq(&desc->iuspin);
-afba937e540c902 Oliver Neukum       2008-05-13  582  
-afba937e540c902 Oliver Neukum       2008-05-13  583  		if (desc->rerr) { /* read completed, error happened */
-85e8a0b9a3565c8 Oliver Neukum       2015-03-23  584  			rv = usb_translate_errors(desc->rerr);
-afba937e540c902 Oliver Neukum       2008-05-13  585  			desc->rerr = 0;
-afba937e540c902 Oliver Neukum       2008-05-13  586  			spin_unlock_irq(&desc->iuspin);
-afba937e540c902 Oliver Neukum       2008-05-13  587  			goto err;
-afba937e540c902 Oliver Neukum       2008-05-13  588  		}
-afba937e540c902 Oliver Neukum       2008-05-13  589  		/*
-afba937e540c902 Oliver Neukum       2008-05-13  590  		 * recheck whether we've lost the race
-afba937e540c902 Oliver Neukum       2008-05-13  591  		 * against the completion handler
-afba937e540c902 Oliver Neukum       2008-05-13  592  		 */
-afba937e540c902 Oliver Neukum       2008-05-13  593  		if (!test_bit(WDM_READ, &desc->flags)) { /* lost race */
-afba937e540c902 Oliver Neukum       2008-05-13  594  			spin_unlock_irq(&desc->iuspin);
-afba937e540c902 Oliver Neukum       2008-05-13  595  			goto retry;
-afba937e540c902 Oliver Neukum       2008-05-13  596  		}
-c0f5ecee4e74166 Oliver Neukum       2013-03-12  597  
-055e352971719f8 Oliver Neukum       2026-04-30  598  		cntr = kfifo_len(&desc->ubuf);
-afba937e540c902 Oliver Neukum       2008-05-13  599  		spin_unlock_irq(&desc->iuspin);
-afba937e540c902 Oliver Neukum       2008-05-13  600  	}
-afba937e540c902 Oliver Neukum       2008-05-13  601  
-711c68b3c0f7a92 Ben Hutchings       2012-02-12  602  	if (cntr > count)
-711c68b3c0f7a92 Ben Hutchings       2012-02-12  603  		cntr = count;
-055e352971719f8 Oliver Neukum       2026-04-30  604  	rv = kfifo_to_user(&desc->ubuf, buffer, cntr, &done);
-055e352971719f8 Oliver Neukum       2026-04-30  605  	if (rv < 0) {
-afba937e540c902 Oliver Neukum       2008-05-13  606  		rv = -EFAULT;
-afba937e540c902 Oliver Neukum       2008-05-13  607  		goto err;
-afba937e540c902 Oliver Neukum       2008-05-13  608  	}
-afba937e540c902 Oliver Neukum       2008-05-13  609  
-711c68b3c0f7a92 Ben Hutchings       2012-02-12  610  	spin_lock_irq(&desc->iuspin);
-711c68b3c0f7a92 Ben Hutchings       2012-02-12  611  
-87d65e54b6d5ff6 Oliver Neukum       2008-06-19  612  	/* in case we had outstanding data */
-055e352971719f8 Oliver Neukum       2026-04-30  613  	if (kfifo_is_empty(&desc->ubuf)) {
-c1da59dad0ebd3f Robert Foss         2016-08-09  614  		clear_bit(WDM_READ, &desc->flags);
-c1da59dad0ebd3f Robert Foss         2016-08-09  615  		service_outstanding_interrupt(desc);
-c1da59dad0ebd3f Robert Foss         2016-08-09  616  	}
-73e06865ead1bec Greg Suarez         2013-10-29  617  	spin_unlock_irq(&desc->iuspin);
-055e352971719f8 Oliver Neukum       2026-04-30  618  	rv = done;
-afba937e540c902 Oliver Neukum       2008-05-13  619  
-afba937e540c902 Oliver Neukum       2008-05-13  620  err:
-e8537bd2c4f325a Bjørn Mork          2012-01-16  621  	mutex_unlock(&desc->rlock);
-afba937e540c902 Oliver Neukum       2008-05-13  622  	return rv;
-afba937e540c902 Oliver Neukum       2008-05-13  623  }
-afba937e540c902 Oliver Neukum       2008-05-13  624  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 	David
+>
+>> [1] https://patch.msgid.link/20260310094434.3639602-5-aichao@kylinos.cn
+>>
+>>
+>> BR,
+>>
+>> Amit
+>>
+>>
 
