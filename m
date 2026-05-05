@@ -1,172 +1,161 @@
-Return-Path: <linux-usb+bounces-36981-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36982-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4PZlNvIz+mlLKwMAu9opvQ
-	(envelope-from <linux-usb+bounces-36981-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 20:16:18 +0200
+	id cIXbEPY9+mmjLAMAu9opvQ
+	(envelope-from <linux-usb+bounces-36982-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 20:59:02 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 410724D28AE
-	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 20:16:17 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBDA44D2F50
+	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 20:59:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A613C304D25B
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2026 18:15:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F02383054F4C
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2026 18:56:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAB544963B6;
-	Tue,  5 May 2026 18:15:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12AFF4ADD81;
+	Tue,  5 May 2026 18:56:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XFjPsvTQ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Wp7EOrzf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F2431F9BA
-	for <linux-usb@vger.kernel.org>; Tue,  5 May 2026 18:15:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A1E3BED19;
+	Tue,  5 May 2026 18:56:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778004955; cv=none; b=jxg94ovpvUOGggXKg5Ae6/CQ0BS8teF3bFVVo5dzSi4K36XyGn4FsLKQuRi1XDDSl4+dHw6wc2I+JMumf7AH1wHpJoDMf9uRLfc6tjbAuflmBz/dQ5a+CPznlVoCAMzzl2erVK61JpXG5RJocw5X+JASRg0W/xL4NYwUvTb8JiI=
+	t=1778007391; cv=none; b=u6rtTNx6R19FqEUWdEW2LZQBlfQvH/FO2DqcrMWo7vnLb9JwIYH4L4p74Xomrutfmz6UUATdiQyctyS0bfoHU2jMdzZTzEwS9k7MkLiaD1lh++BASZem3npPA3N3WAFeFD1vjf1DweRpQ0g1XpAPrfC+kGJAtkExeS645qrT8ZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778004955; c=relaxed/simple;
-	bh=nLIMB1PdV3eOid1SLb0XX+dckuXtlfeDMJV7ZHeV5YM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NouVXE3kY1HUJaoCK/VK4tNIr93rtXAfhRdLuQ5+DVTEHuAO8spukhrVWuX/rdvlvbu5CrPpedtKUKJav8fpWaTNTP9ZdcojKkwgPaiXWe9V/VgnhifV2o5Y3Xx6qLT5mEnyT1BFHSo1QrktXgbAthcJDC1V4JRmNhAmnev0q2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XFjPsvTQ; arc=none smtp.client-ip=209.85.160.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-409de4132b5so3419903fac.1
-        for <linux-usb@vger.kernel.org>; Tue, 05 May 2026 11:15:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1778004953; x=1778609753; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p4A7BikZMtv/yj3plsfhVEeOjiwdWqagCxXKNIKmazk=;
-        b=XFjPsvTQZ2hFmeCwuntc1QgBNrKOOwbZYRTGyNwLzYksrtQd8xXMOUuM8Q1eItf5k8
-         13eAD5HM5/Zr0JWN/myHhkGY0HCuZ2BN6OAEAV7vhdDqvTZJKphrIGJo8fn2TWQouGrd
-         8VfViCh6Fqz+JbQYJa3xEgHrzczEp5du0Z07o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778004953; x=1778609753;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p4A7BikZMtv/yj3plsfhVEeOjiwdWqagCxXKNIKmazk=;
-        b=lczfkQ3Dva4lkzaObxtzggdDBWgaTQk0g/kG0azgUFRUl+bhLmyQp8mwJLszIrKZDl
-         7wFzEEanicUC3N24XZw20iccKLlV0xEpXH0KbLmrEEHKd3FVfR630iMqVlVbSrLuUORs
-         3U/FMbullgG/11vvNit8/T23fTF8BXvewGs0F+VVGS2ORe+yQCScb4y2uGJW1qRb7cgW
-         A+AB2RNSaGV0aBwIT6U0UyV3FWTP7hU+redRk4EybOcKAZVXoFpfE54b20Dv2lbgDeRK
-         zBilaP9N/GcANPxNtGZLRjdw5j+3Mj0QXWSBSjfHtOrBs2YDPzpA7CDMWWKoR62boFyG
-         5arw==
-X-Forwarded-Encrypted: i=1; AFNElJ9oj08aHuVeiS3M0PF6I/DL49thWgap7TqqWAKkuWRxNF8YIO3dbs8ngneNIcIAlKY9LXrcE3xrVPc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfWuoFXzRtSsX1gU7bX9M8dDU8OTB5SAX4QFN3Ta3/OzjfU9oF
-	1Ra+vuZTNC3fS3Av+PnMOK3a7++blfW+yZ9M+0tPTWPNhf5z6u2Ar7EYwpmXjXaw26c=
-X-Gm-Gg: AeBDietQdoANbGMuxiLLGuYS0gqH29x7jL7lKkkbvywrVzHCac667415KfhtRNVIIkQ
-	iuRQu+cX0SwuH/hS7Om3/HWTCY0TH2+6sCGGt6wMYwYQocW/6NUQ4bn2agr/O6WrWUDZKpNwTEI
-	MatRogGI9UW0fiEb0G+SEFRLaHGKykKKFGt1/OUu1o9LwyaKDtfYImcakqOSFL6E7hDhiZxWvIh
-	TQ1Ku/Z/ZOj8HLjCLJKPsbBm+B2NnLOVmnjNKNp32uF3TM4AoCiVYk6IE1zQ4BPb0vox70KzUVz
-	FUJiyrEIYcABukxke33sLuyhY/oD7tzFi+zm40EGQTmC8zubngLfkeYJ9IAKy09tkHzbqBIU4WU
-	4MUh0NlVt4WutKOZ0E8jSTitwnP4NuihEAIlulbfg1ZEQeDP2leZyvWzxkTB7qLJdYIj4WeMqJK
-	nUIRLeoleNckOJXuUK8rEFUX1UJK77YFQskyWSfvCreg==
-X-Received: by 2002:a05:6870:c201:b0:40e:dcc9:c3a9 with SMTP id 586e51a60fabf-434f56d7d32mr274919fac.3.1778004953077;
-        Tue, 05 May 2026 11:15:53 -0700 (PDT)
-Received: from [192.168.1.14] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-43454cbd8dbsm14446656fac.11.2026.05.05.11.15.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 May 2026 11:15:52 -0700 (PDT)
-Message-ID: <1c8b0149-261a-447c-acd9-4ee62b74adfd@linuxfoundation.org>
-Date: Tue, 5 May 2026 12:15:51 -0600
+	s=arc-20240116; t=1778007391; c=relaxed/simple;
+	bh=EOx5SKBm0fyEIhBa17G/AY4peXZ8ik+xZr5fQwTDBME=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HPNFYMvrpEBICA96HDR7vvTqNHB6/xKnbgYYQ2Bg8AB1zbVtnf750Eg6vyl7+IjtAwnwrAl+uOZcXoyN2/J5f5P0F/ZlEds4kksxFlBceqGdJ8SyUScazN4gleM5Vf8M6RTHyXCciPyX9b2M2gn0eWCvgRDuYPLXs7kJfhCXr6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Wp7EOrzf; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From:Sender:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=ldS96RrKmNNsOD/yzOFPOqOUq9syJBSHCyCE054Ggck=; b=Wp7EOrzfImZsHlqSLMXD3CMB3A
+	Yn+aAh8YPzdKbfe1NVDhC58UIkiw1DUbvQruwHzWAXHiaum66ivu6R9uAZtj9XVYYYNQLIp6pnUFS
+	Xe1FDQnCMzl/7MmNhXqOK2VqvR311JkgdYw/hUSAPe58cpGPvXDY7a35O4J7wjP96tq5/DNBsidOc
+	nzSee+ZnW8beLriBjsrA1D4nY03gOj+hRAm/vwAjRX6CeCFnvjHceihPNkf0NlFL8wA17bLq+R+0x
+	BQZHYYZvGWReSvknTi8U/q3AS1j1A30Ei4CnpMhMUJ61DtdmTFRMBWI2WTiiESyCmHClo66dlVjQ5
+	hb4RBfkw==;
+Received: from 177-136-88-215.vmaxnet.com.br ([177.136.88.215] helo=[192.168.1.54])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1wKKwT-006ZjB-Vr; Tue, 05 May 2026 20:56:25 +0200
+From: Heitor Alves de Siqueira <halves@igalia.com>
+Subject: [PATCH v3 0/2] usb: usbtmc: add sanity checks for interrupt
+ endpoints
+Date: Tue, 05 May 2026 15:56:02 -0300
+Message-Id: <20260505-usbtmc-iin-size-v3-0-a36113f62db7@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usbip: vhci_hcd: reduce CONFIG_USBIP_VHCI_NR_HCS
- upper bound to 32
-To: Adrian Wowk <dev@adrianwowk.com>, valentina.manea.m@gmail.com,
- shuah@kernel.org
-Cc: i@zenithal.me, gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20260414010050.158064-1-dev@adrianwowk.com>
- <20260414010050.158064-3-dev@adrianwowk.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20260414010050.158064-3-dev@adrianwowk.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 410724D28AE
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XNQQ6CMBCF4auQrq2hZQR05T2Mi6G0MEbAtNCoh
+ Lvb4kZjXP7Jm29m5rQl7dghmZnVnhwNfYhskzDVYt9oTnVoJlOZpyAln1w1dooT9dzRU3MjEE0
+ KmCtQLFzdrDZ0X8XT+d1uqi5ajZGJi5bcONjH+tKLuPuve8EF39UKoIKs3CMeqcEr4VYNHYu8l
+ 59A9gvIAGQCDUJZgCnEF7AsywtnugzUAgEAAA==
+X-Change-ID: 20260422-usbtmc-iin-size-f1aaf04a6c4c
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Michal Pecio <michal.pecio@gmail.com>, Dave Penkler <dpenkler@gmail.com>, 
+ Johan Hovold <johan@kernel.org>
+Cc: kernel-dev@igalia.com, linux-usb@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com, stable@kernel.org
+X-Mailer: b4 0.15.2
+X-Rspamd-Queue-Id: BBDA44D2F50
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [1.14 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_REJECT(1.00)[igalia.com:s=20170329];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_FROM(0.00)[bounces-36982-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[linuxfoundation.org,gmail.com,kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[adrianwowk.com,gmail.com,kernel.org];
-	TAGGED_FROM(0.00)[bounces-36981-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_TRACE(0.00)[igalia.com:-];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-0.917];
+	FROM_NEQ_ENVFROM(0.00)[halves@igalia.com,linux-usb@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[skhan@linuxfoundation.org,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	TAGGED_RCPT(0.00)[linux-usb,abbfd103085885cf16a2];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[]
 
-On 4/13/26 19:00, Adrian Wowk wrote:
-> Each VHCI HC instance registers two USB buses (one HS, one SS).
-> USB_MAXBUS in drivers/usb/core/hcd.c is hard-coded to 64, giving an
-> effective maximum of 32 VHCI HC instances (32 * 2 = 64 buses).
-> 
-> The Kconfig range for USBIP_VHCI_NR_HCS currently allows up to 128,
-> which will cause probe failures for any HC instance beyond the 32nd.
-> These probe failures trigger the NULL pointer dereference fixed in the
-> previous commit.
-> 
-> Reduce the upper bound to 32 to reflect the real maximum imposed by
-> USB_MAXBUS. Note that probe failures can still occur below this limit
-> if real hardware has already claimed enough USB bus numbers, making
-> the NULL check fix necessary regardless.
-> 
-> Signed-off-by: Adrian Wowk <dev@adrianwowk.com>
-> ---
->   drivers/usb/usbip/Kconfig | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/usbip/Kconfig b/drivers/usb/usbip/Kconfig
-> index b9f94e2e278..50945b6fae1 100644
-> --- a/drivers/usb/usbip/Kconfig
-> +++ b/drivers/usb/usbip/Kconfig
-> @@ -40,7 +40,7 @@ config USBIP_VHCI_HC_PORTS
->   
->   config USBIP_VHCI_NR_HCS
->   	int "Number of USB/IP virtual host controllers"
-> -	range 1 128
-> +	range 1 32
->   	default 1
->   	depends on USBIP_VHCI_HCD
->   	help
+Dear maintainers,
 
-Looks good to me.
+This is a v3 patch for an out-of-bounds read originally reported by
+syzbot in [0]. After discussion, I've split the original fix into two
+separate patches.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+The first patch is a more conservative check against each URB in the
+usbtmc_interrupt() path, to ensure enough data was transferred to
+include the necessary payload headers. I've tagged this one for stable,
+as it shouldn't impact existing devices besides fixing the out-of-bounds
+read. Devices that eventually raise problematic interrupt notifications
+will be able to try again once the URB is resubmitted.
 
-Greg, Please pick this up.
+The second patch is more strict, as it rejects devices that advertise
+interrupt endpoints with wMaxPacketSize below 2 bytes. This approach was
+suggested during v1 of this series, as these devices are unlikely to
+exist and won't work properly with the current usbtmc driver. This
+approach is also more aligned with the intent of the USB488 spec, as
+interrupt endpoints should ideally be setup with enough space for
+the payload headers.
+While the first patch is sufficient to fix the out-of-bounds read, there
+seems to be little point in having those interrupt endpoints configured
+if the driver will ignore all URBs from it.
 
-thanks,
--- Shuah
+[0] https://syzkaller.appspot.com/bug?extid=abbfd103085885cf16a2
+
+---
+Changes in v3:
+- Split into two patches:
+  - actual_length check in usbtmc_interrupt() for the syzbot fix
+  - wMaxPacketSize check in usbtmc_probe() to reject quirky devices
+- Link to v2: https://patch.msgid.link/20260423-usbtmc-iin-size-v2-1-31afa4874f71@igalia.com
+
+Changes in v2:
+- Instead of ensuring buffer size, reject devices that advertise illegal/invalid interrupt endpoints
+- Link to v1: https://patch.msgid.link/20260422-usbtmc-iin-size-v1-1-5dc44b4389aa@igalia.com
+
+---
+Heitor Alves de Siqueira (2):
+      usb: usbtmc: check URB actual_length for interrupt-IN notifications
+      usb: usbtmc: reject interrupt endpoints with small wMaxPacketSize
+
+ drivers/usb/class/usbtmc.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+---
+base-commit: 70c8a7ec6715b5fb14e501731b5b9210a16684f7
+change-id: 20260422-usbtmc-iin-size-f1aaf04a6c4c
+
+Best regards,
+--  
+Heitor Alves de Siqueira <halves@igalia.com>
+
 
