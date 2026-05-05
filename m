@@ -1,226 +1,418 @@
-Return-Path: <linux-usb+bounces-36929-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36927-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OIzPL0PB+WngDAMAu9opvQ
-	(envelope-from <linux-usb+bounces-36929-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 12:06:59 +0200
+	id MiNaK9C8+WnvCwMAu9opvQ
+	(envelope-from <linux-usb+bounces-36927-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 11:48:00 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 431624CA8EC
-	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 12:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 309A74CA15F
+	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 11:47:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8778B30471ED
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2026 09:59:58 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2735B300E14B
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2026 09:47:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39C2D32548B;
-	Tue,  5 May 2026 09:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 048EF30E0E5;
+	Tue,  5 May 2026 09:47:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bdAUtHoE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RxKsFdly"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8222C21FF
-	for <linux-usb@vger.kernel.org>; Tue,  5 May 2026 09:59:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 859C51DC9B3;
+	Tue,  5 May 2026 09:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777975196; cv=none; b=jKnu2z8UCJKoZwKYvfOrqFfpChuyU3FmbEoFLcMGK+zyVmd2ON9C113TfYHIDwzs7Frm9Hxa/dbvodZR51cYn4hDjWcyCkKj1RoV7t+BtI1aggf9W6BB5VyVjvfdVMki+ykRpUMe+c/2fA4+EWLQS1ZjZ1G+uc5AUXMzLTUdQK0=
+	t=1777974475; cv=none; b=BnMA3g0GxbDgu2XveEd+pHtfbi6zdyZI92Gj1JwupsebAE7YTCShsj3Vu8zm4I3OsnmQcKq4+GKmz1TbmojSn2LdsD4wdBAFzwXaiiQuh6JzgQdYwT6AtjF2Ce0ttrP7JvStEso6mOTnXV33ANBIwRWu7E14FNJOTMSrM2yzSa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777975196; c=relaxed/simple;
-	bh=WHMTyQ94AR3bCZIoJ33hjUrTiaGnhzNpF/OWv1Mvb1w=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GlN+VKnkji3Zp5m47NVuMz/uuL+7v9Kj/ZYC+mJ5Ag2HzQVrTfx8Mj0uuJg82dEHQxtSU1kkTUZ9fp8O/v/bYJBbrKFwtAd7/K4rEJ6L5pLXn9sDNVbmEJJt7TDglGeGlLMjqqJnaQ6owGJ8zQ1rgqgMja1WagNShpy9cmuNH+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bdAUtHoE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 60EC5C2BCC9
-	for <linux-usb@vger.kernel.org>; Tue,  5 May 2026 09:59:56 +0000 (UTC)
+	s=arc-20240116; t=1777974475; c=relaxed/simple;
+	bh=TzTIoYoKoqcKb80KjhGkaAJpLyOlbbESPRQTQJNBbwQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=IzFIu0FFgo7OfxJNYYUCmLezlAwl1WgHO4YObDInImTcsoMvDPTZeHj3spXjRdP/kTZO/faoEV1i8cO33FFe6xHg31nZZkemOYM0KlTkwKSB/ZZN1z4NtrYqttosswd8f9qqxxvD24G6dNWq9cnWI8s5LSUAYEyYWu0+oCyURrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RxKsFdly; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 206F1C2BCC7;
+	Tue,  5 May 2026 09:47:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777975196;
-	bh=WHMTyQ94AR3bCZIoJ33hjUrTiaGnhzNpF/OWv1Mvb1w=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=bdAUtHoEkEVkwv9wvMwMUPE2xTfWuZz2LlF/Fv/n9SPiHljMNhtM06dCMsRL3F8uv
-	 NEKkIGSHVGzM8R+cZ3kf+kjBE3z3Ar/FxEx3o33/A2rWLvwq5poK3I19GED5KiWI7e
-	 xVJZraFLdh0gRw9MviRSBD0GDqBdLZI1fQPjXXeqXq/lGmJBzXLYabrnJKvkXkagST
-	 VaG2he96e7hnUfJxPofX1AdKzAibTT1EgeiRiB3RUl9QlsSeCIvCXXToByzF7zQz/x
-	 WbaiEKJRittSg1g6h8d9XV6FyCkF54xFafgtQHrDiiyVSS4ZIeYJU4F9ui/DWTxcYc
-	 xViuppZOUp71w==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 5ACF1C41612; Tue,  5 May 2026 09:59:56 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220748] usb: xhci_queue_isoc_tx_prepare ignore start_frame and
- always assumes URB_ISO_ASAP is set
-Date: Tue, 05 May 2026 09:59:55 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michal.pecio@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220748-208809-lAJJBzltMC@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220748-208809@https.bugzilla.kernel.org/>
-References: <bug-220748-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1777974475;
+	bh=TzTIoYoKoqcKb80KjhGkaAJpLyOlbbESPRQTQJNBbwQ=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=RxKsFdlyV4ZVVulKt+XP39gSGQhSXrpUX8m0339rMwaoQUoJH1HHZp4Sub7Qpedj6
+	 Ap6cV4suK/BSVwyI95oS4UuXNdzYcz8Gw1oEWafzjyS7R5juPSOTcppUCOJfUNwSCU
+	 mSa6uME2esnpwpiu7wlFXmehC+7RvTPNa5ZaMyts2zednHwBfW1YJiOfE4X6ZeOK9d
+	 Un9zLAVL9zqHA90WaBmT7H67asaWPGBu+D7e9tbMUX41H5TgKobzv/uWMF6dForos5
+	 dFDzrdYTqPR2Yu96vH60D2OJavrHvP2zJaF7El+P6KHSxHafWacw5lWL2zHvjHr5hS
+	 AsBwna2q2XZZg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15FCDCD342F;
+	Tue,  5 May 2026 09:47:55 +0000 (UTC)
+From: Pawel Laszczak via B4 Relay <devnull+pawell.cadence.com@kernel.org>
+Date: Tue, 05 May 2026 12:02:56 +0200
+Subject: [PATCH v2] usb: cdnsp: Add support for device-only configuration
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 431624CA8EC
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260505-device_only_branch_v2-v2-1-98cc19fbd02a@cadence.com>
+X-B4-Tracking: v=1; b=H4sIAE/A+WkC/yXM4QpAMBSG4VvR+W21jkbcirSYgyONNkRy74afT
+ 33fe4Enx+ShiC5wtLPn2QZgHIEZatuT4DYYUGIqlVSiDSNDerbTqRtXWzPoHYVK0hy7BPNMIYT
+ v4qjj4+uW1W+/NSOZ9Y3BfT98wnY2eQAAAA==
+X-Change-ID: 20260505-device_only_branch_v2-53692f329752
+To: Peter Chen <peter.chen@kernel.org>, Roger Quadros <rogerq@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Bjorn Helgaas <bhelgaas@google.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pci@vger.kernel.org, Pawel Laszczak <pawell@cadence.com>
+X-Mailer: b4 0.15.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777975404; l=9953;
+ i=pawell@cadence.com; h=from:subject:message-id;
+ bh=Gk+Ur3rb0vu4TmqjL1PKDsyq1isvGfq6AyCr3o+OfN8=;
+ b=UsZ3qCQ8u7zjM9qNAKCl6Qsxkw8utxSmDi+TZhLQlnPixxlE5WlxsQGhTjJgozJW6fcyt6JSi
+ 0yFhrYzsdVWBjzS9EvmgezEtzy7zyZjr0TodzEXPfMT632LiBoDSiFa
+X-Developer-Key: i=pawell@cadence.com; a=ed25519;
+ pk=EUPBvLO9CDg7j6defeDl2iqi+z5Ivqu4Z46aiqe7dYc=
+X-Endpoint-Received: by B4 Relay for pawell@cadence.com/default with
+ auth_id=707
+X-Original-From: Pawel Laszczak <pawell@cadence.com>
+Reply-To: pawell@cadence.com
+X-Rspamd-Queue-Id: 309A74CA15F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36929-lists,linux-usb=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_FROM(0.00)[bounces-36927-lists,linux-usb=lfdr.de,pawell.cadence.com];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	FROM_NO_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_ONE(0.00)[1];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	HAS_REPLYTO(0.00)[pawell@cadence.com];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220748
+From: Pawel Laszczak <pawell@cadence.com>
 
---- Comment #21 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-Thanks for taking the time to explain.
+This patch introduces support for operating the Cadence USBSSP (cdnsp)
+controller in a peripheral-only mode, bypassing the Dual-Role Device (DRD)
+logic.
 
-(In reply to dylan_robinson from comment #20)
-> The issue, as it relates to the MOTU devices mentioned here, is that after
-> enabling a non-zero alternate setting with usb_set_interface(), once a
-> transfer is sent in a service interval (zero-length or otherwise), there
-> must be a transfer in every subsequent service interval. If, for any reas=
-on,
-> a service interval is missed, the alternate setting must be toggled back =
-to
-> zero and then re-enabled, and the stream restarted.
-That would be something for snd-usb-audio to do.
-Does the same apply to missed service on IN endpoints?
-Or IN endpoints with lost/corrupted packets?
+The change in BAR indexing (from BAR 2 to BAR 1) is a direct
+consequence of switching from 64-bit to 32-bit addressing in the
+Peripheral-only configuration.
 
-And for the record, are you saying there is no hope to predict what the HW
-expects to send and receive in the next interval and handle it right? Users=
- say
-that streams go out of sync but the HW continues to function in some manner.
+Tested on PCI platform with Device-only configuration. Platform-side
+changes are included to support the PCI glue layer's property injection.
 
-> MOTU's drivers on Windows and macOS take advantage of the ability on those
-> platforms to schedule the start frame of isochronous streams sufficiently
-> far into the future to ensure that enough URBs can be submitted before the
-> first URB completes.
->=20
-> On Linux, I have found that with snd-usb-audio, it is fairly typical for
-> streams to "stutter start." Because of the ASAP/SIA behavior discussed
-> above, when the first URB is submitted, it can sometimes complete before
-> subsequent URBs are enqueued. This creates a gap in the stream and causes
-> the device buffers to fall out of sync.
-I remember noticing this tendency to restart streams (unlink and resubmit U=
-RBs)
-during startup with short buffers/low latency, presumably without going thr=
-ough
-altsetting 0. So I can see how this can be a problem. IIRC it was at least
-partly due xhci-hcd scheduling too far into the future. I will try to find =
-some
-time to look into it again.
+Acked-by: Bjorn Helgaas <bhelgaas@google.com> # pci_ids.h
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+---
+This is a resubmission of the previous patch, now based on the restored
+commit e4d7362dc9cd ("usb: cdns3: Add USBSSP platform driver support").
 
-> At one point, I investigated monitoring the start_frame in the completion
-> handler, but on non-CFC controllers it was not reliable (there were many
-> duplicated frame numbers or gaps that did not reflect reality).
-These fields are filled by xhci-hcd so they may be bogus due to bugs.
+Since the "usb: cdns3: Add USBSSP platform driver support" patch  was
+reverted and then re-added, this version (v2) ensures compatibility
+with the latest tree state.
+---
+v2:
+  - Changed otg_irq to be optionali.
+  - Added cdns->no_drd check in cdns_power_is_lost.
+  - Added cdns->no_drd check in cdns_get_id.
+---
+ drivers/usb/cdns3/cdns3-plat.c | 23 ++++++++++++-----------
+ drivers/usb/cdns3/cdnsp-pci.c  | 33 ++++++++++++++++++++++++---------
+ drivers/usb/cdns3/core.c       |  3 ++-
+ drivers/usb/cdns3/core.h       |  3 +++
+ drivers/usb/cdns3/drd.c        | 22 ++++++++++++++++++++--
+ include/linux/pci_ids.h        |  1 +
+ 6 files changed, 62 insertions(+), 23 deletions(-)
 
-For reliable information it's better to log "Frame ID" written to Isoch TDs=
- and
-MFINDEX register in process_isoc_td() (sensitive only to IRQ latency).
+diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
+index 3fe3109a3688..1af19360410e 100644
+--- a/drivers/usb/cdns3/cdns3-plat.c
++++ b/drivers/usb/cdns3/cdns3-plat.c
+@@ -113,21 +113,22 @@ static int cdns3_plat_probe(struct platform_device *pdev)
+ 
+ 	cdns->dev_regs	= regs;
+ 
+-	cdns->otg_irq = platform_get_irq_byname(pdev, "otg");
+-	if (cdns->otg_irq < 0)
+-		return dev_err_probe(dev, cdns->otg_irq,
+-				     "Failed to get otg IRQ\n");
+-
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "otg");
+-	if (!res) {
+-		dev_err(dev, "couldn't get otg resource\n");
+-		return -ENXIO;
++	cdns->otg_irq = platform_get_irq_byname_optional(pdev, "otg");
++
++	if (cdns->otg_irq < 0) {
++		dev_dbg(dev, "Device-only mode: DRD support disabled\n");
++		cdns->no_drd = 1;
++	} else {
++		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "otg");
++		if (!res) {
++			dev_err(dev, "couldn't get otg resource\n");
++			return -ENXIO;
++		}
++		cdns->otg_res = *res;
+ 	}
+ 
+ 	cdns->phyrst_a_enable = device_property_read_bool(dev, "cdns,phyrst-a-enable");
+ 
+-	cdns->otg_res = *res;
+-
+ 	cdns->wakeup_irq = platform_get_irq_byname_optional(pdev, "wakeup");
+ 	if (cdns->wakeup_irq == -EPROBE_DEFER)
+ 		return cdns->wakeup_irq;
+diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
+index 432007cfe695..28e16b094525 100644
+--- a/drivers/usb/cdns3/cdnsp-pci.c
++++ b/drivers/usb/cdns3/cdnsp-pci.c
+@@ -29,10 +29,15 @@ struct cdnsp_wrap {
+ #define RES_HOST_ID		3
+ #define RES_DEV_ID		4
+ #define RES_DRD_ID		5
+-
++/* DRD PCI configuration - 64-bit addressing */
++/* First PCI function */
+ #define PCI_BAR_HOST		0
+-#define PCI_BAR_OTG		0
+ #define PCI_BAR_DEV		2
++/* Second PCI function */
++#define PCI_BAR_OTG		0
++/* Device only PCI configuration - 32-bit addressing */
++/* First PCI function */
++#define PCI_BAR_ONLY_DEV	1
+ 
+ #define PCI_DEV_FN_HOST_DEVICE	0
+ #define PCI_DEV_FN_OTG		1
+@@ -65,6 +70,7 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
+ 	struct cdnsp_wrap *wrap;
+ 	struct resource *res;
+ 	struct pci_dev *func;
++	bool no_drd = false;
+ 	int ret = 0;
+ 
+ 	/*
+@@ -75,11 +81,14 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
+ 		    pdev->devfn != PCI_DEV_FN_OTG))
+ 		return -EINVAL;
+ 
++	if (pdev->device == PCI_DEVICE_ID_CDNS_UDC_USBSSP)
++		no_drd = true;
++
+ 	func = cdnsp_get_second_fun(pdev);
+-	if (!func)
++	if (!func && !no_drd)
+ 		return -EINVAL;
+ 
+-	if (func->class == PCI_CLASS_SERIAL_USB_XHCI ||
++	if ((func && func->class == PCI_CLASS_SERIAL_USB_XHCI) ||
+ 	    pdev->class == PCI_CLASS_SERIAL_USB_XHCI) {
+ 		ret = -EINVAL;
+ 		goto put_pci;
+@@ -93,7 +102,7 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
+ 
+ 	pci_set_master(pdev);
+ 
+-	if (pci_is_enabled(func)) {
++	if (func && pci_is_enabled(func)) {
+ 		wrap = pci_get_drvdata(func);
+ 	} else {
+ 		wrap = kzalloc_obj(*wrap);
+@@ -106,10 +115,12 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
+ 	res = wrap->dev_res;
+ 
+ 	if (pdev->devfn == PCI_DEV_FN_HOST_DEVICE) {
++		int bar_dev = no_drd ? PCI_BAR_ONLY_DEV : PCI_BAR_DEV;
++
+ 		/* Function 0: host(BAR_0) + device(BAR_2). */
+ 		dev_dbg(&pdev->dev, "Initialize Device resources\n");
+-		res[RES_DEV_ID].start = pci_resource_start(pdev, PCI_BAR_DEV);
+-		res[RES_DEV_ID].end = pci_resource_end(pdev, PCI_BAR_DEV);
++		res[RES_DEV_ID].start = pci_resource_start(pdev, bar_dev);
++		res[RES_DEV_ID].end = pci_resource_end(pdev, bar_dev);
+ 		res[RES_DEV_ID].name = "dev";
+ 		res[RES_DEV_ID].flags = IORESOURCE_MEM;
+ 		dev_dbg(&pdev->dev, "USBSSP-DEV physical base addr: %pa\n",
+@@ -145,7 +156,7 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
+ 		wrap->dev_res[RES_IRQ_OTG_ID].flags = IORESOURCE_IRQ;
+ 	}
+ 
+-	if (pci_is_enabled(func)) {
++	if (no_drd || pci_is_enabled(func)) {
+ 		/* set up platform device info */
+ 		pdata.override_apb_timeout = CHICKEN_APB_TIMEOUT_VALUE;
+ 		memset(&plat_info, 0, sizeof(plat_info));
+@@ -185,13 +196,17 @@ static void cdnsp_pci_remove(struct pci_dev *pdev)
+ 	if (wrap->devfn == pdev->devfn)
+ 		platform_device_unregister(wrap->plat_dev);
+ 
+-	if (!pci_is_enabled(func))
++	if (!func || !pci_is_enabled(func))
+ 		kfree(wrap);
+ 
+ 	pci_dev_put(func);
+ }
+ 
+ static const struct pci_device_id cdnsp_pci_ids[] = {
++	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC_USBSSP),
++	  .class = PCI_CLASS_SERIAL_USB_DEVICE },
++	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC_USBSSP),
++	  .class = PCI_CLASS_SERIAL_USB_CDNS },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSSP),
+ 	  .class = PCI_CLASS_SERIAL_USB_DEVICE },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSSP),
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+index 6a8d1fefbc0d..504bdf13ea80 100644
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -70,7 +70,8 @@ static void cdns_role_stop(struct cdns *cdns)
+ static void cdns_exit_roles(struct cdns *cdns)
+ {
+ 	cdns_role_stop(cdns);
+-	cdns_drd_exit(cdns);
++	if (!cdns->no_drd)
++		cdns_drd_exit(cdns);
+ }
+ 
+ /**
+diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
+index bca973b999a4..ef3f50169246 100644
+--- a/drivers/usb/cdns3/core.h
++++ b/drivers/usb/cdns3/core.h
+@@ -84,6 +84,8 @@ struct cdns3_platform_data {
+  *                        value in CHICKEN_BITS_3 will be preserved.
+  * @gadget_init: pointer to gadget initialization function
+  * @host_init: pointer to host initialization function
++ * @no_drd: DRD register block is inaccessible - driver handles only
++ *          device mode.
+  */
+ struct cdns {
+ 	struct device			*dev;
+@@ -124,6 +126,7 @@ struct cdns {
+ 	u32                             override_apb_timeout;
+ 	int (*gadget_init)(struct cdns *cdns);
+ 	int (*host_init)(struct cdns *cdns);
++	bool				no_drd;
+ };
+ 
+ int cdns_hw_role_switch(struct cdns *cdns);
+diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
+index 84fb38a5723a..8e8414c2e994 100644
+--- a/drivers/usb/cdns3/drd.c
++++ b/drivers/usb/cdns3/drd.c
+@@ -87,6 +87,9 @@ int cdns_get_id(struct cdns *cdns)
+ {
+ 	int id;
+ 
++	if (cdns->no_drd)
++		return 0;
++
+ 	id = readl(&cdns->otg_regs->sts) & OTGSTS_ID_VALUE;
+ 	dev_dbg(cdns->dev, "OTG ID: %d", id);
+ 
+@@ -107,7 +110,7 @@ void cdns_clear_vbus(struct cdns *cdns)
+ {
+ 	u32 reg;
+ 
+-	if (cdns->version != CDNSP_CONTROLLER_V2)
++	if (cdns->version != CDNSP_CONTROLLER_V2 || cdns->no_drd)
+ 		return;
+ 
+ 	reg = readl(&cdns->otg_cdnsp_regs->override);
+@@ -120,7 +123,7 @@ void cdns_set_vbus(struct cdns *cdns)
+ {
+ 	u32 reg;
+ 
+-	if (cdns->version != CDNSP_CONTROLLER_V2)
++	if (cdns->version != CDNSP_CONTROLLER_V2 || cdns->no_drd)
+ 		return;
+ 
+ 	reg = readl(&cdns->otg_cdnsp_regs->override);
+@@ -234,6 +237,9 @@ int cdns_drd_gadget_on(struct cdns *cdns)
+ 	u32 ready_bit;
+ 	int ret, val;
+ 
++	if (cdns->no_drd)
++		return 0;
++
+ 	/* switch OTG core */
+ 	writel(OTGCMD_DEV_BUS_REQ | reg, &cdns->otg_regs->cmd);
+ 
+@@ -265,6 +271,9 @@ void cdns_drd_gadget_off(struct cdns *cdns)
+ {
+ 	u32 val;
+ 
++	if (cdns->no_drd)
++		return;
++
+ 	/*
+ 	 * Driver should wait at least 10us after disabling Device
+ 	 * before turning-off Device (DEV_BUS_DROP).
+@@ -392,6 +401,12 @@ int cdns_drd_init(struct cdns *cdns)
+ 	u32 state, reg;
+ 	int ret;
+ 
++	if (cdns->no_drd) {
++		cdns->version  = CDNSP_CONTROLLER_V2;
++		cdns->dr_mode = USB_DR_MODE_PERIPHERAL;
++		return 0;
++	}
++
+ 	regs = devm_ioremap_resource(cdns->dev, &cdns->otg_res);
+ 	if (IS_ERR(regs))
+ 		return PTR_ERR(regs);
+@@ -500,6 +515,9 @@ int cdns_drd_exit(struct cdns *cdns)
+ /* Indicate the cdns3 core was power lost before */
+ bool cdns_power_is_lost(struct cdns *cdns)
+ {
++	if (cdns->no_drd)
++		return false;
++
+ 	if (cdns->version == CDNS3_CONTROLLER_V0) {
+ 		if (!(readl(&cdns->otg_v0_regs->simulate) & BIT(0)))
+ 			return true;
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index 24cb42f66e4b..a6b9b6f6d8cc 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -2424,6 +2424,7 @@
+ #define PCI_DEVICE_ID_CDNS_USBSS	0x0100
+ #define PCI_DEVICE_ID_CDNS_USB		0x0120
+ #define PCI_DEVICE_ID_CDNS_USBSSP	0x0200
++#define PCI_DEVICE_ID_CDNS_UDC_USBSSP	0x0400
+ 
+ #define PCI_VENDOR_ID_ARECA		0x17d3
+ #define PCI_DEVICE_ID_ARECA_1110	0x1110
 
-IIRC, on non-CFC even if things are initially right, they may fall out of s=
-ync
-due to missed service, with the MSE event being the only sign of trouble.
+---
+base-commit: 9d0d467c3572e93c5faa2e5906a8bbcd70b24efd
+change-id: 20260505-device_only_branch_v2-53692f329752
 
-> Although more recent MOTU devices have improved buffer management and won=
-'t
-> fall out of sync due to missed intervals, the ability to specify a start
-> frame is still important for reasoning about the timing relationship betw=
-een
-> IN and OUT streams, which helps guarantee consistent round-trip latency.
-The "Linux way" appears to be guaranteeing two things to drivers:
-- start_frame in completed URBs accurately reflects the time of execution
-- streams are always continuous - even if an interval is missed, the next U=
-RB
-frame reliably completes (or is missed) in the next interval
+Best regards,
+--  
+Pawel Laszczak <pawell@cadence.com>
 
-For continuity, class driver only needs to ensure that the URB is resubmitt=
-ed
-from its completion handler. If that happens several ms later, the URB is
-expected to immediately "complete in the past" with EXDEV.
 
-AFAIK that's how ehci-hcd does it, but xhci-hcd doesn't and maybe should.
-
-Wouldn't this be enough to make IN/OUT synchronization work?
-What's people's experience using MOTU HW and audio in general on ehci-hcd?
-
-> > I wonder if this could be the reason for some weird snd-usb-audio behav=
-ior
-> > reported in the past (repeatedly unlinking and retrying URBs for unclear
-> > reason when running full-duplex with very low latency). But it's just a
-> wild
-> > guess.
->=20
-> This sounds like an issue I just started investigating. I am exploring the
-> possibility that when an isochronous endpoint is restarted quickly on a C=
-FC
-> host (all URBs are killed and immediately then resubmitted), if the new U=
-RBs
-> are submitted before all TRBs have been dequeued, their start_frame values
-> may be set as if they were contiguous with the canceled TRBs. This might =
-be
-> causing the entire batch to fail with missed service intervals. This then
-> happens over and over again.
-IIRC the repeated unlink/resubmit cycles during startup were due to
-snd-usb-audio getting some "xrun" callback from ALSA core for some reason. =
-Then
-it would unlink everything and try again. I didn't know why it happens.
-
-New URBs may be contiguous with past ones if you don't wait for them to
-complete
-after usb_unlink_urb(). OTOH, usb_kill_urb() is synchronous. Once all URBs =
-are
-killed synchronously or completed (including due to unlink) and the queue is
-empty, then submitting a new URB should schedule it far enough into the fut=
-ure
-to ensure no missed service. That's the theory.
-
-See usb_submit_urb() and usb_unlink_urb() comments in drivers/usb/core/urb.c
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
