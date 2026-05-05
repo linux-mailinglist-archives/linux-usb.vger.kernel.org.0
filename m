@@ -1,152 +1,389 @@
-Return-Path: <linux-usb+bounces-36986-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36987-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WMmrMnNC+mlJLgMAu9opvQ
-	(envelope-from <linux-usb+bounces-36986-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 21:18:11 +0200
+	id WFwfO0dI+mmJMAMAu9opvQ
+	(envelope-from <linux-usb+bounces-36987-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 21:43:03 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 463924D3110
-	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 21:18:11 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 852854D3335
+	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 21:43:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 31191304F40F
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2026 19:18:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 30BBA30571AD
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2026 19:42:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D0E3CF692;
-	Tue,  5 May 2026 19:18:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AFBA4A33F0;
+	Tue,  5 May 2026 19:42:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Od4TOvL6"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="eDz1Iv01";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="FokDRdlw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77633AE191
-	for <linux-usb@vger.kernel.org>; Tue,  5 May 2026 19:18:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29FD492182
+	for <linux-usb@vger.kernel.org>; Tue,  5 May 2026 19:42:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778008685; cv=none; b=M12AX2j3LZWam9lucAf+O4tpI0mZU/Nd1jItKD68cSFhCLblAjcSM7a+l9o7P1uowL0b+iv5TQE3IqeHE9btVgInFVyM0Z/S7cmF3cUlTQuY9neTmkzxNKXXSULGzcEF9nCJf+COfQoKkfE77ODrJaDfSXMc3avale9MWwtwat8=
+	t=1778010173; cv=none; b=NHPl9omxsZdUCPmV5781lEnLvQjeLDoU3h6vHw9PVnFmTfc1s39C3RNP98jmM9AUBXSO9gTqyEt4xAvL9kvdDAKGEngquYro8lKSpMfY4pcTck27YHrQf7N7QwksjJdEkdgtD4rt8dosxXRWjF71MTglUaIdU8tuIcrvktWWRrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778008685; c=relaxed/simple;
-	bh=w5rlEyJ4UP2UqrMlSy+67UjvKMoRUIPuhBaIMbf8zOE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mK8k104p7GyNaidprPi0TAVWI/RhAGxz1UoxGhn5V3w6/g5eqMWHPFWTW6c5KpZUD6DDcBjCx5OE0ut2F5mwkm32u+vhb5TQ12/1JLrhkyhJ+EUr/h77Ua5BXayfvuQwRr/DxTBwIFIhf3EtAShtHPLileAWUnBdvfTJ2h1TUzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Od4TOvL6; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-50fb4a7d704so45281381cf.1
-        for <linux-usb@vger.kernel.org>; Tue, 05 May 2026 12:18:03 -0700 (PDT)
+	s=arc-20240116; t=1778010173; c=relaxed/simple;
+	bh=40UCdKruTgVziyXrlrbzoq6cNg08zscmFiF2fNOARAg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tCvtg30mY0fVRwZcFJhjIKbeA8g1tClxs3bj7OnLO/y7ck8RtmsmyqvprBpYWqLE/PsoP46O3sxznk0erhvY5nJfWVE7TqPznCcUHTqYTa0XMP4olrB+2GxjJaGsMcyEWi7ZSHQMD8J6PiNBEF6UFs1+rZqxnvwtpuDakOL0Olg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=eDz1Iv01; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=FokDRdlw; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 645Do5c93475858
+	for <linux-usb@vger.kernel.org>; Tue, 5 May 2026 19:42:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=ciMtM2pPwbAnGSi51q8XNm5t28UySKCH8+3
+	9SEw8mQM=; b=eDz1Iv01xP7+PUD7IDfh5TBRpR5F2gPAZ6OwaCm5q8EXM9X4TVa
+	GQDTydT7kaqgrmsFRdsDft2qIoOuxtQlHLXhKrFCnu1QogP6veJMQWIOVikwOoKF
+	okGsiO+JH6LMQAbhhRrog87Ys3r03chWFKPrFfSvYF0JAY5jlgySGU1BahIZJev1
+	QEQ/LlGmV0rcnTU2ytzizI7s1nsZcyboklCoLNSGRIgvV/7LyGshKWTX6WI/iijQ
+	iyMTkULjAb2xKy7DcebwwJxmm0yDhamdypjexhCUSC4kuk8KSggQ79VT6lWVsu7C
+	BUnH0RowOP8sSPT26fzMHZJKc+irGP4DjzQ==
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dyhsgsfnh-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 05 May 2026 19:42:50 +0000 (GMT)
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b62da7602a0so2776985a12.2
+        for <linux-usb@vger.kernel.org>; Tue, 05 May 2026 12:42:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1778008683; x=1778613483; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o5keH+/MuTo7RgZ50BvSKxaSrsiXOE3iaYjzzu5jCSQ=;
-        b=Od4TOvL6hofo+0tXA8qhyw7qlgMFIzcV+p/sStfl0bbKbIe1gQJ1xqZUJvTLwUo4fX
-         0lpxafV4w3kIIal61/wvIaBYkRnjfXKdV3N1zEPSdFxDIcpWUTbIVLw+XvCGRbOoYMkj
-         rFdaLQ7wlIZqM0sjyx9GM5fpf+vSOVMVYXXdcZ7jaMsVSJ/t4/3ZiaJOZY4qJp5WIo59
-         JErZ5Ki98I1OBmlOOvEP9v6ihUG3iZO9hRo6qv8JjkDJU1aWbVo4WOyzW75I0gMdpqFO
-         2Wm9ogT+y9zTPdF6P6umvPJDScz7+JADoQnhjb5fejii8aySuq541tuZQQ5QJnuzdEE0
-         b5wQ==
+        d=oss.qualcomm.com; s=google; t=1778010170; x=1778614970; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ciMtM2pPwbAnGSi51q8XNm5t28UySKCH8+39SEw8mQM=;
+        b=FokDRdlwoQ2DpaRWL7Z7fFdsRWXWntXxRoK/uB/iNQG8uz2OPSbhKyeH1eCrHJohV8
+         ypWZkkFDOGA4JnKkr/bpYw+7QESEbVrs5qQN0sm1RqXR13xBWCKz9AS+y51AbeYXDDlw
+         LbkC9OoHjWLF/zv3YmAg7Tbd6MkF2UHHhP19y2GcQV0I7Ub2RyIERpyslk92fyEG39uB
+         RDlXQ1TLSCWCZDsn+N+ooGae4VEl+44Prqtmfar6X2zzu4QMjjZur3r1Wtj4A26D0Rqu
+         PmaKgAoUtyF7myCxxyN/iKnCrWv/woFTukI9CKIfjUjbTEWmKmJZTxDDjlLkO1Zs1rm0
+         4rBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778008683; x=1778613483;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o5keH+/MuTo7RgZ50BvSKxaSrsiXOE3iaYjzzu5jCSQ=;
-        b=PphfivkAaZZVkeJ62TXfSF44Hebw/5dP2UhCm23rdP3gK2NbLfU4dZrZt0pSfDqU7b
-         Wwduh82WkZc5614xDnLhmRnuontutzBdfyjU8qafQ9h08fKCyeqCxC4io+N0sKvCQAeJ
-         uk6dvpqoln9U0kCMw/cnIiCaeUN9dOq//gdU7cJwtiG2S71lSLKLnCrqJgZ2ZCf441Ew
-         Rc4NZUfnSNM2QiClcSLEcBtxn4m+Hdh53sBMIPEVGVsnkSfyVw/OlHGHAWmn5LIzvqcQ
-         srJNO/cY08DeDKGBJoAv2oNgN9q+/8O6VLkx6UNJ6FU8dO3/cb/0EgrzOpFVBY1FC5sT
-         b2KA==
-X-Forwarded-Encrypted: i=1; AFNElJ+dyWm2V9KsqHmbbwfrWs+039YclUdusK172jpgCT5moORzKAFUGfa6LTGLUjN+zHw8jS3Cy4ybkKs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnsTSBc9mS5YAOGY0w8pKPNx1vRGxLLEhZXG6vz7PFhJwUNTfn
-	f1z6TgV1y/yAmmUTBnQennQcT1J/oQPATZbA/6rQJaqJ4xe4XmEuQdoZZ3dP7s0lKg==
-X-Gm-Gg: AeBDievp3incClwyLLfR5NcqampsP5Ny8f6B07jAaX+OkVbxdGPv6ktPgv+8GDn1o7Z
-	qy54iglCjxJvvafwQ5zPZncI7jB3Ut7MEF1baubtoFf8nwTmj+Lz/kGYVn3Sjm2Ioqiops2NbzH
-	5bnwOcQdKa/qCDs3ph5RCiS14D5cfn5aG+Cgfom1T7lpzdp3qN5umR7jUsk3k0C5XAmHEYaW+BZ
-	6nB4FOvGJkMrCv5v7CS+m6xWcElHrwgrrvOKf84ktF14XS4ukCOCRqYDewcewIXHmFVm6mWedAJ
-	KISgPNEESwKB/SUq5Yrw31VcTs254QY/XhkKoUoAS9OxSNg/mNfVEv6sT9R0BwPMnHaRdjS9mub
-	kh2avGAYEyqK0y2YBHmfTTFYJGzUPF/xuSPGUkztNbvI2wWmZhIMSvShHGgm0J46EYuruyGgIaP
-	7JLIR7UcHExHIODSQdeoQ4KWvnkFEIgLtuUq+xZeRlQ4m8Lw==
-X-Received: by 2002:a05:622a:1e14:b0:50e:6313:6e12 with SMTP id d75a77b69052e-51461bfe0d6mr6459061cf.16.1778008682531;
-        Tue, 05 May 2026 12:18:02 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::a0bd])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51040b8550esm132885031cf.26.2026.05.05.12.18.00
+        d=1e100.net; s=20251104; t=1778010170; x=1778614970;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ciMtM2pPwbAnGSi51q8XNm5t28UySKCH8+39SEw8mQM=;
+        b=ASN8qe2jQaipANm65AJu0pIhsCrwNXs76wG3rufBd4ReCQSr2FNSGkynNWRNPUfCbX
+         WFv1us1SGIoXuxggHb8vYlk+MdRrul6St7So0s9Zv/7QxR1XDyH9S/gDGjSf0reYdEsi
+         3AClcPmoproWx8KcyJxJrTpye/FdIu/RmtueiPTVX10/I7EhJqv5aF+IaoCqVnXIu6h3
+         15bSuacicjB/+MkaLUGdLO5F7iQDbgSXCWRjRTqiqmW2n/Gi5WbUonZDJ63t1bCtHTpM
+         9ghsViT7CbXdAmqX4DXdtabmm4D0rIwTOIXZgqnWJTvl8GCZTNxjA6iBRh+/SGVMDN6L
+         GCWQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9rYWdDzPVti4BrnomA3hLm/5FrVEEP0O/Ae/BIoZYgH/tL2dCWhDgC7OXUoZM6cGVY5jvgYnUoG8c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTeVcvljMKa/SW0JdG9837Lhq7YLILCnqpNqBqiORoN1utszAU
+	gHWv2T1e5ehWVUTRqO3QkB+oFs7qO72Q2T6xC02B06c3R8XOieX+QVRYHhuiVLmDq9g1Inae/2T
+	BAqBG+Zxlj8EJsCzAp+w2ljp1noWGHHwoJiG6SdPWTpphSynRMSa5dJ92YE1VG98SalEZm3w=
+X-Gm-Gg: AeBDiesZ6PSpvdpr3arjw0MUE/c8UN6AvJ+JTT0ru0Wx6yJUwJ7cylQ/GEOLAkRdikG
+	46X5Rgi7QAO0NquuR+iXj0VgzeKspHlrlaQtuUfXAw2/HuyMq2niQmVkM827KZNzg/4RAMjTVws
+	wsRQIt8EmLZssdovHHqoYywG4GRzNQr17YiCvRMQ4ZER9u9XGuzhS5lbpDHX1eu0SWu5PKfi5lk
+	R6g/VBquYl1pSxuBDsIvZrDFqcjcIyfDss7vGG2go6iPsrT0NPUhyUwW/IS8UxfcC24KXZDgsRg
+	AAwAQppi+fe0aCtW8Sb4DVBYrNkYnJi5t1+n/nE1uW2uv83G6XS96fcI/4ofwSVJ2iaGxZKYNUA
+	cRRA6B4E1PHGBi0S9uSqfHy9tArg20hL77S/wSKW70gIeVZFJl1E0O0MHwOHkrNMqOZx5uWWGzl
+	3ckVXQE60C213/P153J6V3Didyfw==
+X-Received: by 2002:a05:6a20:7289:b0:3a0:cd5:82a6 with SMTP id adf61e73a8af0-3aa5ac8dcf2mr270688637.46.1778010169811;
+        Tue, 05 May 2026 12:42:49 -0700 (PDT)
+X-Received: by 2002:a05:6a20:7289:b0:3a0:cd5:82a6 with SMTP id adf61e73a8af0-3aa5ac8dcf2mr270646637.46.1778010169179;
+        Tue, 05 May 2026 12:42:49 -0700 (PDT)
+Received: from hu-kriskura-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c8242bc1e7dsm23294a12.30.2026.05.05.12.42.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 May 2026 12:18:01 -0700 (PDT)
-Date: Tue, 5 May 2026 15:17:59 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Heitor Alves de Siqueira <halves@igalia.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Michal Pecio <michal.pecio@gmail.com>,
-	Dave Penkler <dpenkler@gmail.com>, Johan Hovold <johan@kernel.org>,
-	kernel-dev@igalia.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com,
-	stable@kernel.org
-Subject: Re: [PATCH v3 1/2] usb: usbtmc: check URB actual_length for
- interrupt-IN notifications
-Message-ID: <fbbcf9c7-b1f6-45d9-bb69-6c9878d3f658@rowland.harvard.edu>
-References: <20260505-usbtmc-iin-size-v3-0-a36113f62db7@igalia.com>
- <20260505-usbtmc-iin-size-v3-1-a36113f62db7@igalia.com>
+        Tue, 05 May 2026 12:42:48 -0700 (PDT)
+From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Subject: [PATCH v2] usb: dwc3: qcom: Modify interrupt handling for eUSB2 Phy targets
+Date: Wed,  6 May 2026 01:12:42 +0530
+Message-Id: <20260505194242.1947891-1-krishna.kurapati@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260505-usbtmc-iin-size-v3-1-a36113f62db7@igalia.com>
-X-Rspamd-Queue-Id: 463924D3110
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: Wq6O8BcBRhdY7RljUFgClWNuSwB6TLHS
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA1MDE5MSBTYWx0ZWRfX0bS8RiEySTyt
+ k9OJZ4K+J3+N24dlNt24LNY9JC0+WCTa6iEt/jrAHW78I/SF9MW2BTuIhzWUwHSnadnnlur1eMf
+ yoBdJMvbH0/RC0javsd4UnATgNpAnIZmGqwHcYgp0JaVxMulnaHXYxgCyesOcFwMGRCDK7g1XfK
+ aJ9NVDhgQ8X9qKpcuYz2aqJY817zuYMgzD4qHjFYEWIa+GJPbJngjrXKj+1ITRwiZ/MYZxjupbb
+ xhY67ZMLFrQo5EHo2kQGLOcJ7kZ+ahuOoXjg/TxXUITVrZkFGQeY+NF/G010CQjAuIQtobxcuDB
+ Fi6uVrTSXztSzv+XBQg0sgpi7IB0DOCyVWWR+nD3P2gmW2iVHRUHAFeCDie3ZAG6GttOzOjwfuJ
+ XToAyvaj/JpxBv1CbB415d7/I/z535CA5fEjp2NKpWjcF8erFdHFWBH84fDzAkXlLWhr4OFsN6q
+ xB3UqwPWx0vrkM3ag4A==
+X-Authority-Analysis: v=2.4 cv=EPU2FVZC c=1 sm=1 tr=0 ts=69fa483a cx=c_pps
+ a=Qgeoaf8Lrialg5Z894R3/Q==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22 a=VwQbUJbxAAAA:8
+ a=EUspDBNiAAAA:8 a=n47XyvxCgL2-tsnZnB4A:9 a=x9snwWr2DeNwDh03kgHS:22
+X-Proofpoint-GUID: Wq6O8BcBRhdY7RljUFgClWNuSwB6TLHS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-05_02,2026-04-30_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 malwarescore=0 impostorscore=0 clxscore=1011 bulkscore=0
+ phishscore=0 suspectscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605050191
+X-Rspamd-Queue-Id: 852854D3335
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,gmail.com,kernel.org,igalia.com,vger.kernel.org,syzkaller.appspotmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36986-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36987-lists,linux-usb=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oss.qualcomm.com:dkim,oss.qualcomm.com:mid,qualcomm.com:dkim,qualcomm.com:email];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[krishna.kurapati@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-0.999];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,abbfd103085885cf16a2];
-	TO_DN_SOME(0.00)[]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[7]
 
-On Tue, May 05, 2026 at 03:56:03PM -0300, Heitor Alves de Siqueira wrote:
-> USBTMC devices can use an optional interrupt endpoint for notification
-> messages. These typically contain two-byte headers indicating the
-> payload format, but the driver does not check if these headers are
-> present before accessing the data buffers. In cases where the URB
-> actual_length is not enough to fit these headers, the driver will either
-> cause an out-of-bounds read, or consume stale leftover data from a
-> previous notification.
-> 
-> Fix by checking if actual_data contains enough bytes for the headers,
-> otherwise resubmit URB to the interrupt endpoint.
+eUSB2 targets handle wakeup interrupts differently depending on device
+speed when operating in host mode.
 
-Would it be simpler to solve this by setting the two header bytes to 0 
-before submitting the URB?  Then if the device did not send enough data, 
-the header values would be 0, which should prevent any reads from being 
-out-of-bounds or getting stale data.
+According to the eUSB2 specification, remote wakeup signaling in host
+mode is detected via different data-line assertions based on the
+connected device speed.
 
-Alan Stern
+When a low-speed device is connected, the host repeater drives eD+ to
+logic '1' upon detecting a K-state on the USB lines during remote wakeup
+(eUSB2 specification, Section 5.5.14).
+
+When a full-speed or high-speed device is connected, the host repeater
+drives eD- to logic '1' upon detecting a K-state on the USB line during
+remote wakeup (eUSB2 specification, Sections 5.5.15 and 5.5.18).
+
+Since the eUSB2 PHY's "DP" and "DM" interrupt lines monitor the eD+ and
+eD- line states, configure the wakeup interrupts accordingly
+
+Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+---
+Changes in v2:
+- Updated commit message
+- added supported eUSB2 targets
+
+Link to v1:
+https://lore.kernel.org/all/20260502095616.666938-1-krishna.kurapati@oss.qualcomm.com/
+
+This patch was tested on Glymur.
+
+ drivers/usb/dwc3/dwc3-qcom.c | 99 ++++++++++++++++++++++++++++++++----
+ 1 file changed, 90 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index f43f73ac36ff..4fc0017c697c 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -60,6 +60,10 @@ static const u32 pwr_evnt_irq_stat_reg[DWC3_QCOM_MAX_PORTS] = {
+ 	0x238,
+ };
+ 
++struct dwc3_qcom_platform_data {
++	bool			uses_eusb2_phy;
++};
++
+ struct dwc3_qcom_port {
+ 	int			qusb2_phy_irq;
+ 	int			dp_hs_phy_irq;
+@@ -85,6 +89,7 @@ struct dwc3_qcom {
+ 	struct icc_path		*icc_path_apps;
+ 
+ 	enum usb_role		current_role;
++	bool			uses_eusb2_phy;
+ };
+ 
+ #define to_dwc3_qcom(d) container_of((d), struct dwc3_qcom, dwc)
+@@ -272,15 +277,21 @@ static void dwc3_qcom_disable_wakeup_irq(int irq)
+ 	disable_irq_nosync(irq);
+ }
+ 
+-static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom_port *port)
++static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom *qcom, int i)
+ {
++	struct dwc3_qcom_port *port = &qcom->ports[i];
++
+ 	dwc3_qcom_disable_wakeup_irq(port->qusb2_phy_irq);
+ 
+ 	if (port->usb2_speed == USB_SPEED_LOW) {
+-		dwc3_qcom_disable_wakeup_irq(port->dm_hs_phy_irq);
++		dwc3_qcom_disable_wakeup_irq(qcom->uses_eusb2_phy ?
++					     port->dp_hs_phy_irq :
++					     port->dm_hs_phy_irq);
+ 	} else if ((port->usb2_speed == USB_SPEED_HIGH) ||
+ 			(port->usb2_speed == USB_SPEED_FULL)) {
+-		dwc3_qcom_disable_wakeup_irq(port->dp_hs_phy_irq);
++		dwc3_qcom_disable_wakeup_irq(qcom->uses_eusb2_phy ?
++					     port->dm_hs_phy_irq :
++					     port->dp_hs_phy_irq);
+ 	} else {
+ 		dwc3_qcom_disable_wakeup_irq(port->dp_hs_phy_irq);
+ 		dwc3_qcom_disable_wakeup_irq(port->dm_hs_phy_irq);
+@@ -289,8 +300,10 @@ static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom_port *port)
+ 	dwc3_qcom_disable_wakeup_irq(port->ss_phy_irq);
+ }
+ 
+-static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom_port *port)
++static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom *qcom, int i)
+ {
++	struct dwc3_qcom_port *port = &qcom->ports[i];
++
+ 	dwc3_qcom_enable_wakeup_irq(port->qusb2_phy_irq, 0);
+ 
+ 	/*
+@@ -303,11 +316,19 @@ static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom_port *port)
+ 	 */
+ 
+ 	if (port->usb2_speed == USB_SPEED_LOW) {
+-		dwc3_qcom_enable_wakeup_irq(port->dm_hs_phy_irq,
++		dwc3_qcom_enable_wakeup_irq(qcom->uses_eusb2_phy ?
++					    port->dp_hs_phy_irq :
++					    port->dm_hs_phy_irq,
++					    qcom->uses_eusb2_phy ?
++					    IRQ_TYPE_EDGE_RISING :
+ 					    IRQ_TYPE_EDGE_FALLING);
+ 	} else if ((port->usb2_speed == USB_SPEED_HIGH) ||
+ 			(port->usb2_speed == USB_SPEED_FULL)) {
+-		dwc3_qcom_enable_wakeup_irq(port->dp_hs_phy_irq,
++		dwc3_qcom_enable_wakeup_irq(qcom->uses_eusb2_phy ?
++					    port->dm_hs_phy_irq :
++					    port->dp_hs_phy_irq,
++					    qcom->uses_eusb2_phy ?
++					    IRQ_TYPE_EDGE_RISING :
+ 					    IRQ_TYPE_EDGE_FALLING);
+ 	} else {
+ 		dwc3_qcom_enable_wakeup_irq(port->dp_hs_phy_irq,
+@@ -324,7 +345,7 @@ static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
+ 	int i;
+ 
+ 	for (i = 0; i < qcom->num_ports; i++)
+-		dwc3_qcom_disable_port_interrupts(&qcom->ports[i]);
++		dwc3_qcom_disable_port_interrupts(qcom, i);
+ }
+ 
+ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
+@@ -332,7 +353,7 @@ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
+ 	int i;
+ 
+ 	for (i = 0; i < qcom->num_ports; i++)
+-		dwc3_qcom_enable_port_interrupts(&qcom->ports[i]);
++		dwc3_qcom_enable_port_interrupts(qcom, i);
+ }
+ 
+ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
+@@ -609,6 +630,7 @@ struct dwc3_glue_ops dwc3_qcom_glue_ops = {
+ 
+ static int dwc3_qcom_probe(struct platform_device *pdev)
+ {
++	const struct dwc3_qcom_platform_data *pdata;
+ 	struct dwc3_probe_data	probe_data = {};
+ 	struct device		*dev = &pdev->dev;
+ 	struct dwc3_qcom	*qcom;
+@@ -624,6 +646,10 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 
+ 	qcom->dev = &pdev->dev;
+ 
++	pdata = device_get_match_data(dev);
++	if (pdata)
++		qcom->uses_eusb2_phy = pdata->uses_eusb2_phy;
++
+ 	qcom->resets = devm_reset_control_array_get_optional_exclusive(dev);
+ 	if (IS_ERR(qcom->resets)) {
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(qcom->resets),
+@@ -838,8 +864,63 @@ static const struct dev_pm_ops dwc3_qcom_dev_pm_ops = {
+ 	.prepare = pm_sleep_ptr(dwc3_qcom_prepare),
+ };
+ 
++static const struct dwc3_qcom_platform_data dwc3_qcom_pdata = {
++	.uses_eusb2_phy = false,
++};
++
++static const struct dwc3_qcom_platform_data dwc3_qcom_glymur_pdata = {
++	.uses_eusb2_phy = true,
++};
++
+ static const struct of_device_id dwc3_qcom_of_match[] = {
+-	{ .compatible = "qcom,snps-dwc3" },
++	{
++		.compatible = "qcom,snps-dwc3",
++		.data = &dwc3_qcom_pdata,
++	},
++	{
++		.compatible = "qcom,eliza-dwc3",
++		.data = &dwc3_qcom_glymur_pdata,
++	},
++	{
++		.compatible = "qcom,glymur-dwc3",
++		.data = &dwc3_qcom_glymur_pdata,
++	},
++	{
++		.compatible = "qcom,glymur-dwc3-mp",
++		.data = &dwc3_qcom_glymur_pdata,
++	},
++	{
++		.compatible = "qcom,glymur-dwc3-mp",
++		.data = &dwc3_qcom_glymur_pdata,
++	},
++	{
++		.compatible = "qcom,kaanapali-dwc3",
++		.data = &dwc3_qcom_glymur_pdata,
++	},
++	{
++		.compatible = "qcom,milos-dwc3",
++		.data = &dwc3_qcom_glymur_pdata,
++	},
++	{
++		.compatible = "qcom,sm8550-dwc3",
++		.data = &dwc3_qcom_glymur_pdata,
++	},
++	{
++		.compatible = "qcom,sm8650-dwc3",
++		.data = &dwc3_qcom_glymur_pdata,
++	},
++	{
++		.compatible = "qcom,sm8750-dwc3",
++		.data = &dwc3_qcom_glymur_pdata,
++	},
++	{
++		.compatible = "qcom,x1e80100-dwc3",
++		.data = &dwc3_qcom_glymur_pdata,
++	},
++	{
++		.compatible = "qcom,x1e80100-dwc3-mp",
++		.data = &dwc3_qcom_glymur_pdata,
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, dwc3_qcom_of_match);
+-- 
+2.34.1
+
 
