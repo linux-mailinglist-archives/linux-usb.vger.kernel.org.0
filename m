@@ -1,154 +1,226 @@
-Return-Path: <linux-usb+bounces-36928-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36929-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mKucEO3A+WlADAMAu9opvQ
-	(envelope-from <linux-usb+bounces-36928-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 12:05:33 +0200
+	id OIzPL0PB+WngDAMAu9opvQ
+	(envelope-from <linux-usb+bounces-36929-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 12:06:59 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5F374CA6BC
-	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 12:05:32 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 431624CA8EC
+	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 12:06:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 29956308CC92
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2026 09:55:43 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8778B30471ED
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2026 09:59:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2643271FD;
-	Tue,  5 May 2026 09:54:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39C2D32548B;
+	Tue,  5 May 2026 09:59:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X2RWe8CZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bdAUtHoE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF1E325491
-	for <linux-usb@vger.kernel.org>; Tue,  5 May 2026 09:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8222C21FF
+	for <linux-usb@vger.kernel.org>; Tue,  5 May 2026 09:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777974839; cv=none; b=dBW1iN0oru3XtCwELgK3Mv0BIYWUDmHMoAY7sZnDDsd3F7yI+ULZ8S0c+B4zTlg9UzvqeLVKgSJaNs+6kNfeSQ+QMbPALDtXSDxxirfT0+xl+58xp1SdRZwd2xRExqEI++o8FdNQrF+pmU9ODTWtZjXlJ1+8CWJtfQj2mBji8bc=
+	t=1777975196; cv=none; b=jKnu2z8UCJKoZwKYvfOrqFfpChuyU3FmbEoFLcMGK+zyVmd2ON9C113TfYHIDwzs7Frm9Hxa/dbvodZR51cYn4hDjWcyCkKj1RoV7t+BtI1aggf9W6BB5VyVjvfdVMki+ykRpUMe+c/2fA4+EWLQS1ZjZ1G+uc5AUXMzLTUdQK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777974839; c=relaxed/simple;
-	bh=MC0wKJONXh2CnkofYYgvL/37beSQ/DGcd4wSx1sGyAc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K8EcstmXgI0gBOmUj7eUDTY3uEwcJ1uWy2Ql5z4HwSCFecS9VSAjhGJuMg7NBUNOa7czZdHhB9nc2luEH39HW8Fs4Ijast8EneRhL+JZmC7CmJtbDBKt+MMxco6lYHugCzouiLJlhQbpgsR/o1tLX3skolriyxGS/ozuCLsevTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X2RWe8CZ; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777974839; x=1809510839;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=MC0wKJONXh2CnkofYYgvL/37beSQ/DGcd4wSx1sGyAc=;
-  b=X2RWe8CZB/HrWm/FdOIsSAubjPGE+aWkCciWEw7Ln1gPZseAbK8sZeEh
-   IGY20N4xLfNjU6xggnKEmlguhK3c+q9Pla2xgHaKjiHP5RIfnfpOqNMNd
-   nm+NKGiKS7O9dM0YxbSPh0s2Z8azloNWJtkfmR9FaLFNB8OpgkhpwGnie
-   T/ao+DM/3eIWdg3Li3TnPukORhFpI5uD5uXquU3rC8wWXP5Cl91WW+TX9
-   TKhVVicueZg583+HsicnuCQTRDDUStiI0WFcBoRcFHsWa/SfqEE4RCWPU
-   KeN3Uu6l37VruS3zwFleONEyG00NJtMQyUG1SLLi/q+Uu09kCBJ2hoYKl
-   g==;
-X-CSE-ConnectionGUID: ZzGg17a7Sn+K+AxPxBu15g==
-X-CSE-MsgGUID: +tSlgMVvS0SQTy6WkHLOuA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11776"; a="96268189"
-X-IronPort-AV: E=Sophos;i="6.23,217,1770624000"; 
-   d="scan'208";a="96268189"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2026 02:53:58 -0700
-X-CSE-ConnectionGUID: BzHoU+0bS5iaS9KQ5XzEfw==
-X-CSE-MsgGUID: WNAMf2cHQEKeTVbkP/A2OA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,217,1770624000"; 
-   d="scan'208";a="273918299"
-Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.246.22.148]) ([10.246.22.148])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2026 02:53:56 -0700
-Message-ID: <131c6e0f-59bc-4d41-9314-3539681f88e0@linux.intel.com>
-Date: Tue, 5 May 2026 12:53:48 +0300
+	s=arc-20240116; t=1777975196; c=relaxed/simple;
+	bh=WHMTyQ94AR3bCZIoJ33hjUrTiaGnhzNpF/OWv1Mvb1w=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=GlN+VKnkji3Zp5m47NVuMz/uuL+7v9Kj/ZYC+mJ5Ag2HzQVrTfx8Mj0uuJg82dEHQxtSU1kkTUZ9fp8O/v/bYJBbrKFwtAd7/K4rEJ6L5pLXn9sDNVbmEJJt7TDglGeGlLMjqqJnaQ6owGJ8zQ1rgqgMja1WagNShpy9cmuNH+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bdAUtHoE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 60EC5C2BCC9
+	for <linux-usb@vger.kernel.org>; Tue,  5 May 2026 09:59:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777975196;
+	bh=WHMTyQ94AR3bCZIoJ33hjUrTiaGnhzNpF/OWv1Mvb1w=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=bdAUtHoEkEVkwv9wvMwMUPE2xTfWuZz2LlF/Fv/n9SPiHljMNhtM06dCMsRL3F8uv
+	 NEKkIGSHVGzM8R+cZ3kf+kjBE3z3Ar/FxEx3o33/A2rWLvwq5poK3I19GED5KiWI7e
+	 xVJZraFLdh0gRw9MviRSBD0GDqBdLZI1fQPjXXeqXq/lGmJBzXLYabrnJKvkXkagST
+	 VaG2he96e7hnUfJxPofX1AdKzAibTT1EgeiRiB3RUl9QlsSeCIvCXXToByzF7zQz/x
+	 WbaiEKJRittSg1g6h8d9XV6FyCkF54xFafgtQHrDiiyVSS4ZIeYJU4F9ui/DWTxcYc
+	 xViuppZOUp71w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 5ACF1C41612; Tue,  5 May 2026 09:59:56 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220748] usb: xhci_queue_isoc_tx_prepare ignore start_frame and
+ always assumes URB_ISO_ASAP is set
+Date: Tue, 05 May 2026 09:59:55 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220748-208809-lAJJBzltMC@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220748-208809@https.bugzilla.kernel.org/>
+References: <bug-220748-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] usb: xhci-pci: use the interrupter entry as MSI
- dev_id
-To: raoxu <raoxu@uniontech.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- mathias.nyman@linux.intel.com, michal.pecio@gmail.com
-References: <30A1A28C68CF9D88+20260430063849.1721157-1-raoxu@uniontech.com>
- <85CC13362072C2B0+20260430064208.1725201-1-raoxu@uniontech.com>
-Content-Language: en-US
-From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-In-Reply-To: <85CC13362072C2B0+20260430064208.1725201-1-raoxu@uniontech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: B5F374CA6BC
+X-Rspamd-Queue-Id: 431624CA8EC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36928-lists,linux-usb=lfdr.de];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,linux.intel.com,gmail.com];
+	TAGGED_FROM(0.00)[bounces-36929-lists,linux-usb=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NO_DN(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	NEURAL_HAM(-0.00)[-0.999];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim]
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_ONE(0.00)[1];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220748
 
+--- Comment #21 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+Thanks for taking the time to explain.
 
-On 30/04/2026 9.42, raoxu wrote:
-> From: Xu Rao <raoxu@uniontech.com>
-> 
-> After routing xhci_msi_irq() through xhci_interrupter, PCI
-> MSI setup still registers the primary vector with usb_hcd as
-> the request_irq() dev_id.
-> 
-> Use &xhci->interrupters[0] instead, pass the same dev_id to
-> free_irq(), and release the IRQ before xhci_stop() tears
-> down the interrupter array.
-> 
-...
-> 
-> @@ -225,10 +225,10 @@ static void xhci_pci_stop(struct usb_hcd *hcd)
->  {
->  	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-> 
-> -	xhci_stop(hcd);
-> -
->  	if (usb_hcd_is_primary_hcd(hcd))
->  		xhci_cleanup_msix(xhci);
-> +
-> +	xhci_stop(hcd);
+(In reply to dylan_robinson from comment #20)
+> The issue, as it relates to the MOTU devices mentioned here, is that after
+> enabling a non-zero alternate setting with usb_set_interface(), once a
+> transfer is sent in a service interval (zero-length or otherwise), there
+> must be a transfer in every subsequent service interval. If, for any reas=
+on,
+> a service interval is missed, the alternate setting must be toggled back =
+to
+> zero and then re-enabled, and the stream restarted.
+That would be something for snd-usb-audio to do.
+Does the same apply to missed service on IN endpoints?
+Or IN endpoints with lost/corrupted packets?
 
-Won't this now free the MSI-X interrupt before it has been disabled?
+And for the record, are you saying there is no hope to predict what the HW
+expects to send and receive in the next interval and handle it right? Users=
+ say
+that streams go out of sync but the HW continues to function in some manner.
 
-Best Regards,
-Niklas
+> MOTU's drivers on Windows and macOS take advantage of the ability on those
+> platforms to schedule the start frame of isochronous streams sufficiently
+> far into the future to ensure that enough URBs can be submitted before the
+> first URB completes.
+>=20
+> On Linux, I have found that with snd-usb-audio, it is fairly typical for
+> streams to "stutter start." Because of the ASAP/SIA behavior discussed
+> above, when the first URB is submitted, it can sometimes complete before
+> subsequent URBs are enqueued. This creates a gap in the stream and causes
+> the device buffers to fall out of sync.
+I remember noticing this tendency to restart streams (unlink and resubmit U=
+RBs)
+during startup with short buffers/low latency, presumably without going thr=
+ough
+altsetting 0. So I can see how this can be a problem. IIRC it was at least
+partly due xhci-hcd scheduling too far into the future. I will try to find =
+some
+time to look into it again.
 
->  }
-> 
->  /* called after powerup, by probe or system-pm "wakeup" */
-> --
-> 2.50.1
-> 
+> At one point, I investigated monitoring the start_frame in the completion
+> handler, but on non-CFC controllers it was not reliable (there were many
+> duplicated frame numbers or gaps that did not reflect reality).
+These fields are filled by xhci-hcd so they may be bogus due to bugs.
 
+For reliable information it's better to log "Frame ID" written to Isoch TDs=
+ and
+MFINDEX register in process_isoc_td() (sensitive only to IRQ latency).
+
+IIRC, on non-CFC even if things are initially right, they may fall out of s=
+ync
+due to missed service, with the MSE event being the only sign of trouble.
+
+> Although more recent MOTU devices have improved buffer management and won=
+'t
+> fall out of sync due to missed intervals, the ability to specify a start
+> frame is still important for reasoning about the timing relationship betw=
+een
+> IN and OUT streams, which helps guarantee consistent round-trip latency.
+The "Linux way" appears to be guaranteeing two things to drivers:
+- start_frame in completed URBs accurately reflects the time of execution
+- streams are always continuous - even if an interval is missed, the next U=
+RB
+frame reliably completes (or is missed) in the next interval
+
+For continuity, class driver only needs to ensure that the URB is resubmitt=
+ed
+from its completion handler. If that happens several ms later, the URB is
+expected to immediately "complete in the past" with EXDEV.
+
+AFAIK that's how ehci-hcd does it, but xhci-hcd doesn't and maybe should.
+
+Wouldn't this be enough to make IN/OUT synchronization work?
+What's people's experience using MOTU HW and audio in general on ehci-hcd?
+
+> > I wonder if this could be the reason for some weird snd-usb-audio behav=
+ior
+> > reported in the past (repeatedly unlinking and retrying URBs for unclear
+> > reason when running full-duplex with very low latency). But it's just a
+> wild
+> > guess.
+>=20
+> This sounds like an issue I just started investigating. I am exploring the
+> possibility that when an isochronous endpoint is restarted quickly on a C=
+FC
+> host (all URBs are killed and immediately then resubmitted), if the new U=
+RBs
+> are submitted before all TRBs have been dequeued, their start_frame values
+> may be set as if they were contiguous with the canceled TRBs. This might =
+be
+> causing the entire batch to fail with missed service intervals. This then
+> happens over and over again.
+IIRC the repeated unlink/resubmit cycles during startup were due to
+snd-usb-audio getting some "xrun" callback from ALSA core for some reason. =
+Then
+it would unlink everything and try again. I didn't know why it happens.
+
+New URBs may be contiguous with past ones if you don't wait for them to
+complete
+after usb_unlink_urb(). OTOH, usb_kill_urb() is synchronous. Once all URBs =
+are
+killed synchronously or completed (including due to unlink) and the queue is
+empty, then submitting a new URB should schedule it far enough into the fut=
+ure
+to ensure no missed service. That's the theory.
+
+See usb_submit_urb() and usb_unlink_urb() comments in drivers/usb/core/urb.c
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
