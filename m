@@ -1,389 +1,169 @@
-Return-Path: <linux-usb+bounces-36987-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36988-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WFwfO0dI+mmJMAMAu9opvQ
-	(envelope-from <linux-usb+bounces-36987-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 21:43:03 +0200
+	id iBekKi1P+mndMAMAu9opvQ
+	(envelope-from <linux-usb+bounces-36988-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 22:12:29 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 852854D3335
-	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 21:43:03 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B79C4D3811
+	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 22:12:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 30BBA30571AD
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2026 19:42:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E9C9730E8FF1
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2026 20:05:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AFBA4A33F0;
-	Tue,  5 May 2026 19:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50B3B3CF683;
+	Tue,  5 May 2026 20:05:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="eDz1Iv01";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="FokDRdlw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N0zz8Kky"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29FD492182
-	for <linux-usb@vger.kernel.org>; Tue,  5 May 2026 19:42:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 518E23D5648
+	for <linux-usb@vger.kernel.org>; Tue,  5 May 2026 20:04:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778010173; cv=none; b=NHPl9omxsZdUCPmV5781lEnLvQjeLDoU3h6vHw9PVnFmTfc1s39C3RNP98jmM9AUBXSO9gTqyEt4xAvL9kvdDAKGEngquYro8lKSpMfY4pcTck27YHrQf7N7QwksjJdEkdgtD4rt8dosxXRWjF71MTglUaIdU8tuIcrvktWWRrQ=
+	t=1778011503; cv=none; b=DnIbIaQsq3U/Buh1N0nHV89KVrd4Ht74JkuTOFzp0/cf6QZheIuhHHfKbSxYgQuouU6MGKyIHmB77TwL9Z8hcGdk9KeyaXWBhtWrKInDb+xySqLcHyFY7+BcuGmaziyFIHM9m8YLQP3DnSmSDX8dM6/2pAStJnnku6Re+jD43Ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778010173; c=relaxed/simple;
-	bh=40UCdKruTgVziyXrlrbzoq6cNg08zscmFiF2fNOARAg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tCvtg30mY0fVRwZcFJhjIKbeA8g1tClxs3bj7OnLO/y7ck8RtmsmyqvprBpYWqLE/PsoP46O3sxznk0erhvY5nJfWVE7TqPznCcUHTqYTa0XMP4olrB+2GxjJaGsMcyEWi7ZSHQMD8J6PiNBEF6UFs1+rZqxnvwtpuDakOL0Olg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=eDz1Iv01; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=FokDRdlw; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 645Do5c93475858
-	for <linux-usb@vger.kernel.org>; Tue, 5 May 2026 19:42:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=ciMtM2pPwbAnGSi51q8XNm5t28UySKCH8+3
-	9SEw8mQM=; b=eDz1Iv01xP7+PUD7IDfh5TBRpR5F2gPAZ6OwaCm5q8EXM9X4TVa
-	GQDTydT7kaqgrmsFRdsDft2qIoOuxtQlHLXhKrFCnu1QogP6veJMQWIOVikwOoKF
-	okGsiO+JH6LMQAbhhRrog87Ys3r03chWFKPrFfSvYF0JAY5jlgySGU1BahIZJev1
-	QEQ/LlGmV0rcnTU2ytzizI7s1nsZcyboklCoLNSGRIgvV/7LyGshKWTX6WI/iijQ
-	iyMTkULjAb2xKy7DcebwwJxmm0yDhamdypjexhCUSC4kuk8KSggQ79VT6lWVsu7C
-	BUnH0RowOP8sSPT26fzMHZJKc+irGP4DjzQ==
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dyhsgsfnh-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 05 May 2026 19:42:50 +0000 (GMT)
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b62da7602a0so2776985a12.2
-        for <linux-usb@vger.kernel.org>; Tue, 05 May 2026 12:42:50 -0700 (PDT)
+	s=arc-20240116; t=1778011503; c=relaxed/simple;
+	bh=HHvtoY5jW5dAPrHiQl1OyWaN9qY30BBJDVffTAyTbwE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Cl/kbcocqaH7hwmohgkvvxSf5hFgvbNNV2zLP3mum95Ev/OsJdV8QpbqdcWroqcn9i4Jr0OH08/AC5zuw+jL99As6zlQPAVvYd+6b/ruOiBXYTnOi5pbg9ulCiC6cWpHM2Osk4idA6g9XRVZ+0Wv62CcBZfHFPOA45MU6Q5wEEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N0zz8Kky; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48984d29fe3so81647845e9.0
+        for <linux-usb@vger.kernel.org>; Tue, 05 May 2026 13:04:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1778010170; x=1778614970; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ciMtM2pPwbAnGSi51q8XNm5t28UySKCH8+39SEw8mQM=;
-        b=FokDRdlwoQ2DpaRWL7Z7fFdsRWXWntXxRoK/uB/iNQG8uz2OPSbhKyeH1eCrHJohV8
-         ypWZkkFDOGA4JnKkr/bpYw+7QESEbVrs5qQN0sm1RqXR13xBWCKz9AS+y51AbeYXDDlw
-         LbkC9OoHjWLF/zv3YmAg7Tbd6MkF2UHHhP19y2GcQV0I7Ub2RyIERpyslk92fyEG39uB
-         RDlXQ1TLSCWCZDsn+N+ooGae4VEl+44Prqtmfar6X2zzu4QMjjZur3r1Wtj4A26D0Rqu
-         PmaKgAoUtyF7myCxxyN/iKnCrWv/woFTukI9CKIfjUjbTEWmKmJZTxDDjlLkO1Zs1rm0
-         4rBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778010170; x=1778614970;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1778011497; x=1778616297; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ciMtM2pPwbAnGSi51q8XNm5t28UySKCH8+39SEw8mQM=;
-        b=ASN8qe2jQaipANm65AJu0pIhsCrwNXs76wG3rufBd4ReCQSr2FNSGkynNWRNPUfCbX
-         WFv1us1SGIoXuxggHb8vYlk+MdRrul6St7So0s9Zv/7QxR1XDyH9S/gDGjSf0reYdEsi
-         3AClcPmoproWx8KcyJxJrTpye/FdIu/RmtueiPTVX10/I7EhJqv5aF+IaoCqVnXIu6h3
-         15bSuacicjB/+MkaLUGdLO5F7iQDbgSXCWRjRTqiqmW2n/Gi5WbUonZDJ63t1bCtHTpM
-         9ghsViT7CbXdAmqX4DXdtabmm4D0rIwTOIXZgqnWJTvl8GCZTNxjA6iBRh+/SGVMDN6L
-         GCWQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9rYWdDzPVti4BrnomA3hLm/5FrVEEP0O/Ae/BIoZYgH/tL2dCWhDgC7OXUoZM6cGVY5jvgYnUoG8c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTeVcvljMKa/SW0JdG9837Lhq7YLILCnqpNqBqiORoN1utszAU
-	gHWv2T1e5ehWVUTRqO3QkB+oFs7qO72Q2T6xC02B06c3R8XOieX+QVRYHhuiVLmDq9g1Inae/2T
-	BAqBG+Zxlj8EJsCzAp+w2ljp1noWGHHwoJiG6SdPWTpphSynRMSa5dJ92YE1VG98SalEZm3w=
-X-Gm-Gg: AeBDiesZ6PSpvdpr3arjw0MUE/c8UN6AvJ+JTT0ru0Wx6yJUwJ7cylQ/GEOLAkRdikG
-	46X5Rgi7QAO0NquuR+iXj0VgzeKspHlrlaQtuUfXAw2/HuyMq2niQmVkM827KZNzg/4RAMjTVws
-	wsRQIt8EmLZssdovHHqoYywG4GRzNQr17YiCvRMQ4ZER9u9XGuzhS5lbpDHX1eu0SWu5PKfi5lk
-	R6g/VBquYl1pSxuBDsIvZrDFqcjcIyfDss7vGG2go6iPsrT0NPUhyUwW/IS8UxfcC24KXZDgsRg
-	AAwAQppi+fe0aCtW8Sb4DVBYrNkYnJi5t1+n/nE1uW2uv83G6XS96fcI/4ofwSVJ2iaGxZKYNUA
-	cRRA6B4E1PHGBi0S9uSqfHy9tArg20hL77S/wSKW70gIeVZFJl1E0O0MHwOHkrNMqOZx5uWWGzl
-	3ckVXQE60C213/P153J6V3Didyfw==
-X-Received: by 2002:a05:6a20:7289:b0:3a0:cd5:82a6 with SMTP id adf61e73a8af0-3aa5ac8dcf2mr270688637.46.1778010169811;
-        Tue, 05 May 2026 12:42:49 -0700 (PDT)
-X-Received: by 2002:a05:6a20:7289:b0:3a0:cd5:82a6 with SMTP id adf61e73a8af0-3aa5ac8dcf2mr270646637.46.1778010169179;
-        Tue, 05 May 2026 12:42:49 -0700 (PDT)
-Received: from hu-kriskura-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c8242bc1e7dsm23294a12.30.2026.05.05.12.42.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 May 2026 12:42:48 -0700 (PDT)
-From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-Subject: [PATCH v2] usb: dwc3: qcom: Modify interrupt handling for eUSB2 Phy targets
-Date: Wed,  6 May 2026 01:12:42 +0530
-Message-Id: <20260505194242.1947891-1-krishna.kurapati@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
+        bh=aj6rzIVcAlG5m5OPFy2pyvos/5GpWy0+8buHD+CQTvo=;
+        b=N0zz8KkyUhqqizIB7bFJqGwOuncCXWba/gmwqWCVDpQcs5IX9TNs0CXaJkWKS4daeT
+         o4CNiRvQU9yDAcucbGCvlHXww9SVKKTx9hnei0LNMmpzEadAv/emNKPfmsy8YwrFlBNw
+         35I0gB75gb+blR9vDXnNMsV3iFq7VpjCRAcXJl8UF5uAE/dkEjPFyXEbhXBPeBaKvBZU
+         2w5ms5Mbdheg/hvTJONsAmuSZfshm/Lx7nJyCjK8IKv+UCJpeIJNcOFPh9mWp+AvCWxT
+         3zZpwVAV0iyTs/ySFRtknuj5A6Tpb/dJFrxEcRFpmpQNQDpgGUr/eK6C3ONA9e9lZ2M1
+         fyoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778011497; x=1778616297;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=aj6rzIVcAlG5m5OPFy2pyvos/5GpWy0+8buHD+CQTvo=;
+        b=mx3KVqtaVwwuOwqFuKh+bV1hwPK4HQ4nkyPpWpjyL7op4Ym7A7YnV+8hImDzNquFHi
+         TlOgmB6x7e2XRFtMiltO4/+IjqvYInkB00r4hciAFImvCuVpuaVQD0QXRlHPDH70bSmb
+         VHwKv8vPrkb+zRyBQ3/xYnqb4Q8ny4hKy7WYYr6j+aEAZoYBcs4NhlIysaR5eUEY8Bck
+         NnKtQGSfFLCOs48yI2QAy23z26UNDIimRyBmDyZe7GuHTjP7oPVuPNMDeTGgmZAEMrzc
+         7a/W/xV5wYxhloOKTzQTycd43RuCYHQQUL+xibbrz2l0c6SQmqK0MZxX+72jMHuhqGh1
+         6HnA==
+X-Forwarded-Encrypted: i=1; AFNElJ/8agQY747YdbPUHYlATUI5gONiRd0AyZeluuQ+7szqy/W7B6ObQrwukG+bxHmmxIuzPj2KPdfhaz4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9YXFX3YLDRT4kPFObXVa0JDxqc7cm6M/ncTdtQ1GYyr9ZOftt
+	wCuHAks1quHIMzEyPdfUh5ZzTpri0mXcZsxEB6ziRhb13RtVx33gWusj
+X-Gm-Gg: AeBDietBm/xn4WQ4pKZRHtdnL6X0mLw8EKWAqDjMk2snjrLyZolckntO98YvhhEiHXv
+	zxTktVOg+s/XMYawc1BcqBHwgcod2/IrH0JPsLoopez1mztKAp7+Yweng0qW/ftHfQk6koD8XeO
+	R90OwbEsP58nmHP/O/2Bm7qSxSdPEHj887fD0ZlpHxUiExsLlZPeWT9uQtOylqTo7DAJPSqOxZv
+	TFEKwNV65Oo0cn69k0f4DR825ydC9c3eDMHK79NUrr/0h80fC0ZOXBFYvAFjT6Y9e8NXYr+APXv
+	BaUMpfAxaSOEMPoOSPyLRAbazY8GLMouqzgEmZP5mBv2VT8ZQ7DlP6VDuw6sNzASLHVMGY0Ba8a
+	JmVXQjwttO5+6KDP3en2qfkEESQG32Lbcve3qD2ltwgIThCapoBWSw3eQQ7NvgnRtJtUcA7t3ed
+	5uDvtdgke5B+LKNXEA9CcU34p06G9MKfrjtnQxiOCVB58JHg==
+X-Received: by 2002:a05:600c:8485:b0:489:1f3e:5f6f with SMTP id 5b1f17b1804b1-48e51f327f0mr10779025e9.12.1778011497382;
+        Tue, 05 May 2026 13:04:57 -0700 (PDT)
+Received: from foxbook (bgt227.neoplus.adsl.tpnet.pl. [83.28.83.227])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e5288f6absm1049955e9.9.2026.05.05.13.04.56
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 05 May 2026 13:04:57 -0700 (PDT)
+Date: Tue, 5 May 2026 22:04:52 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Heitor Alves de Siqueira <halves@igalia.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Dave Penkler <dpenkler@gmail.com>, Johan
+ Hovold <johan@kernel.org>, kernel-dev@igalia.com,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com, stable@kernel.org
+Subject: Re: [PATCH v3 1/2] usb: usbtmc: check URB actual_length for
+ interrupt-IN notifications
+Message-ID: <20260505220452.214dec73.michal.pecio@gmail.com>
+In-Reply-To: <fbbcf9c7-b1f6-45d9-bb69-6c9878d3f658@rowland.harvard.edu>
+References: <20260505-usbtmc-iin-size-v3-0-a36113f62db7@igalia.com>
+	<20260505-usbtmc-iin-size-v3-1-a36113f62db7@igalia.com>
+	<fbbcf9c7-b1f6-45d9-bb69-6c9878d3f658@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: Wq6O8BcBRhdY7RljUFgClWNuSwB6TLHS
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA1MDE5MSBTYWx0ZWRfX0bS8RiEySTyt
- k9OJZ4K+J3+N24dlNt24LNY9JC0+WCTa6iEt/jrAHW78I/SF9MW2BTuIhzWUwHSnadnnlur1eMf
- yoBdJMvbH0/RC0javsd4UnATgNpAnIZmGqwHcYgp0JaVxMulnaHXYxgCyesOcFwMGRCDK7g1XfK
- aJ9NVDhgQ8X9qKpcuYz2aqJY817zuYMgzD4qHjFYEWIa+GJPbJngjrXKj+1ITRwiZ/MYZxjupbb
- xhY67ZMLFrQo5EHo2kQGLOcJ7kZ+ahuOoXjg/TxXUITVrZkFGQeY+NF/G010CQjAuIQtobxcuDB
- Fi6uVrTSXztSzv+XBQg0sgpi7IB0DOCyVWWR+nD3P2gmW2iVHRUHAFeCDie3ZAG6GttOzOjwfuJ
- XToAyvaj/JpxBv1CbB415d7/I/z535CA5fEjp2NKpWjcF8erFdHFWBH84fDzAkXlLWhr4OFsN6q
- xB3UqwPWx0vrkM3ag4A==
-X-Authority-Analysis: v=2.4 cv=EPU2FVZC c=1 sm=1 tr=0 ts=69fa483a cx=c_pps
- a=Qgeoaf8Lrialg5Z894R3/Q==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22 a=VwQbUJbxAAAA:8
- a=EUspDBNiAAAA:8 a=n47XyvxCgL2-tsnZnB4A:9 a=x9snwWr2DeNwDh03kgHS:22
-X-Proofpoint-GUID: Wq6O8BcBRhdY7RljUFgClWNuSwB6TLHS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-05_02,2026-04-30_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 malwarescore=0 impostorscore=0 clxscore=1011 bulkscore=0
- phishscore=0 suspectscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605050191
-X-Rspamd-Queue-Id: 852854D3335
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 4B79C4D3811
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[igalia.com,linuxfoundation.org,gmail.com,kernel.org,vger.kernel.org,syzkaller.appspotmail.com];
+	TAGGED_FROM(0.00)[bounces-36988-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36987-lists,linux-usb=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oss.qualcomm.com:dkim,oss.qualcomm.com:mid,qualcomm.com:dkim,qualcomm.com:email];
+	MIME_TRACE(0.00)[0:+];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[krishna.kurapati@oss.qualcomm.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-0.999];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	BLOCKLISTDE_FAIL(0.00)[172.234.253.10:server fail,83.28.83.227:server fail,100.90.174.1:server fail,209.85.128.43:server fail];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	TAGGED_RCPT(0.00)[linux-usb,abbfd103085885cf16a2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-eUSB2 targets handle wakeup interrupts differently depending on device
-speed when operating in host mode.
+On Tue, 5 May 2026 15:17:59 -0400, Alan Stern wrote:
+> > Fix by checking if actual_data contains enough bytes for the headers,
+> > otherwise resubmit URB to the interrupt endpoint.  
+> 
+> Would it be simpler to solve this by setting the two header bytes to 0 
+> before submitting the URB?  Then if the device did not send enough data, 
+> the header values would be 0, which should prevent any reads from being 
+> out-of-bounds or getting stale data.
 
-According to the eUSB2 specification, remote wakeup signaling in host
-mode is detected via different data-line assertions based on the
-connected device speed.
+This amounts to saying that:
+1. for 0 byte packets, the default notification type is zero
+2. for 1 byte packets, the parameter byte defaults to zero
 
-When a low-speed device is connected, the host repeater drives eD+ to
-logic '1' upon detecting a K-state on the USB lines during remote wakeup
-(eUSB2 specification, Section 5.5.14).
+which would result in:
+1. a warning (similar to this patch)
+2. who knows what, why even worry about such things? ;)
 
-When a full-speed or high-speed device is connected, the host repeater
-drives eD- to logic '1' upon detecting a K-state on the USB line during
-remote wakeup (eUSB2 specification, Sections 5.5.15 and 5.5.18).
 
-Since the eUSB2 PHY's "DP" and "DM" interrupt lines monitor the eD+ and
-eD- line states, configure the wakeup interrupts accordingly
+If anything, I think the new warning isn't truly necessary and it
+is misleading, if vendor specific notifications with zero-length
+bNotify2 field are legal. It would suffice to check actual_length
+before accepting the particular 2-byte long notification types,
+and leave shorter packets unhandled, causing the default warning.
 
-Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
----
-Changes in v2:
-- Updated commit message
-- added supported eUSB2 targets
+Another missing bit of pedantry is that these types should only be
+interpreted this way on bInterfaceProtocol == 1 devices. But as
+long as there are no other protocols defined (are there?), no valid
+device is allowed to use them for anything else.
 
-Link to v1:
-https://lore.kernel.org/all/20260502095616.666938-1-krishna.kurapati@oss.qualcomm.com/
-
-This patch was tested on Glymur.
-
- drivers/usb/dwc3/dwc3-qcom.c | 99 ++++++++++++++++++++++++++++++++----
- 1 file changed, 90 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index f43f73ac36ff..4fc0017c697c 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -60,6 +60,10 @@ static const u32 pwr_evnt_irq_stat_reg[DWC3_QCOM_MAX_PORTS] = {
- 	0x238,
- };
- 
-+struct dwc3_qcom_platform_data {
-+	bool			uses_eusb2_phy;
-+};
-+
- struct dwc3_qcom_port {
- 	int			qusb2_phy_irq;
- 	int			dp_hs_phy_irq;
-@@ -85,6 +89,7 @@ struct dwc3_qcom {
- 	struct icc_path		*icc_path_apps;
- 
- 	enum usb_role		current_role;
-+	bool			uses_eusb2_phy;
- };
- 
- #define to_dwc3_qcom(d) container_of((d), struct dwc3_qcom, dwc)
-@@ -272,15 +277,21 @@ static void dwc3_qcom_disable_wakeup_irq(int irq)
- 	disable_irq_nosync(irq);
- }
- 
--static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom_port *port)
-+static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom *qcom, int i)
- {
-+	struct dwc3_qcom_port *port = &qcom->ports[i];
-+
- 	dwc3_qcom_disable_wakeup_irq(port->qusb2_phy_irq);
- 
- 	if (port->usb2_speed == USB_SPEED_LOW) {
--		dwc3_qcom_disable_wakeup_irq(port->dm_hs_phy_irq);
-+		dwc3_qcom_disable_wakeup_irq(qcom->uses_eusb2_phy ?
-+					     port->dp_hs_phy_irq :
-+					     port->dm_hs_phy_irq);
- 	} else if ((port->usb2_speed == USB_SPEED_HIGH) ||
- 			(port->usb2_speed == USB_SPEED_FULL)) {
--		dwc3_qcom_disable_wakeup_irq(port->dp_hs_phy_irq);
-+		dwc3_qcom_disable_wakeup_irq(qcom->uses_eusb2_phy ?
-+					     port->dm_hs_phy_irq :
-+					     port->dp_hs_phy_irq);
- 	} else {
- 		dwc3_qcom_disable_wakeup_irq(port->dp_hs_phy_irq);
- 		dwc3_qcom_disable_wakeup_irq(port->dm_hs_phy_irq);
-@@ -289,8 +300,10 @@ static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom_port *port)
- 	dwc3_qcom_disable_wakeup_irq(port->ss_phy_irq);
- }
- 
--static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom_port *port)
-+static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom *qcom, int i)
- {
-+	struct dwc3_qcom_port *port = &qcom->ports[i];
-+
- 	dwc3_qcom_enable_wakeup_irq(port->qusb2_phy_irq, 0);
- 
- 	/*
-@@ -303,11 +316,19 @@ static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom_port *port)
- 	 */
- 
- 	if (port->usb2_speed == USB_SPEED_LOW) {
--		dwc3_qcom_enable_wakeup_irq(port->dm_hs_phy_irq,
-+		dwc3_qcom_enable_wakeup_irq(qcom->uses_eusb2_phy ?
-+					    port->dp_hs_phy_irq :
-+					    port->dm_hs_phy_irq,
-+					    qcom->uses_eusb2_phy ?
-+					    IRQ_TYPE_EDGE_RISING :
- 					    IRQ_TYPE_EDGE_FALLING);
- 	} else if ((port->usb2_speed == USB_SPEED_HIGH) ||
- 			(port->usb2_speed == USB_SPEED_FULL)) {
--		dwc3_qcom_enable_wakeup_irq(port->dp_hs_phy_irq,
-+		dwc3_qcom_enable_wakeup_irq(qcom->uses_eusb2_phy ?
-+					    port->dm_hs_phy_irq :
-+					    port->dp_hs_phy_irq,
-+					    qcom->uses_eusb2_phy ?
-+					    IRQ_TYPE_EDGE_RISING :
- 					    IRQ_TYPE_EDGE_FALLING);
- 	} else {
- 		dwc3_qcom_enable_wakeup_irq(port->dp_hs_phy_irq,
-@@ -324,7 +345,7 @@ static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
- 	int i;
- 
- 	for (i = 0; i < qcom->num_ports; i++)
--		dwc3_qcom_disable_port_interrupts(&qcom->ports[i]);
-+		dwc3_qcom_disable_port_interrupts(qcom, i);
- }
- 
- static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
-@@ -332,7 +353,7 @@ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
- 	int i;
- 
- 	for (i = 0; i < qcom->num_ports; i++)
--		dwc3_qcom_enable_port_interrupts(&qcom->ports[i]);
-+		dwc3_qcom_enable_port_interrupts(qcom, i);
- }
- 
- static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
-@@ -609,6 +630,7 @@ struct dwc3_glue_ops dwc3_qcom_glue_ops = {
- 
- static int dwc3_qcom_probe(struct platform_device *pdev)
- {
-+	const struct dwc3_qcom_platform_data *pdata;
- 	struct dwc3_probe_data	probe_data = {};
- 	struct device		*dev = &pdev->dev;
- 	struct dwc3_qcom	*qcom;
-@@ -624,6 +646,10 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 
- 	qcom->dev = &pdev->dev;
- 
-+	pdata = device_get_match_data(dev);
-+	if (pdata)
-+		qcom->uses_eusb2_phy = pdata->uses_eusb2_phy;
-+
- 	qcom->resets = devm_reset_control_array_get_optional_exclusive(dev);
- 	if (IS_ERR(qcom->resets)) {
- 		return dev_err_probe(&pdev->dev, PTR_ERR(qcom->resets),
-@@ -838,8 +864,63 @@ static const struct dev_pm_ops dwc3_qcom_dev_pm_ops = {
- 	.prepare = pm_sleep_ptr(dwc3_qcom_prepare),
- };
- 
-+static const struct dwc3_qcom_platform_data dwc3_qcom_pdata = {
-+	.uses_eusb2_phy = false,
-+};
-+
-+static const struct dwc3_qcom_platform_data dwc3_qcom_glymur_pdata = {
-+	.uses_eusb2_phy = true,
-+};
-+
- static const struct of_device_id dwc3_qcom_of_match[] = {
--	{ .compatible = "qcom,snps-dwc3" },
-+	{
-+		.compatible = "qcom,snps-dwc3",
-+		.data = &dwc3_qcom_pdata,
-+	},
-+	{
-+		.compatible = "qcom,eliza-dwc3",
-+		.data = &dwc3_qcom_glymur_pdata,
-+	},
-+	{
-+		.compatible = "qcom,glymur-dwc3",
-+		.data = &dwc3_qcom_glymur_pdata,
-+	},
-+	{
-+		.compatible = "qcom,glymur-dwc3-mp",
-+		.data = &dwc3_qcom_glymur_pdata,
-+	},
-+	{
-+		.compatible = "qcom,glymur-dwc3-mp",
-+		.data = &dwc3_qcom_glymur_pdata,
-+	},
-+	{
-+		.compatible = "qcom,kaanapali-dwc3",
-+		.data = &dwc3_qcom_glymur_pdata,
-+	},
-+	{
-+		.compatible = "qcom,milos-dwc3",
-+		.data = &dwc3_qcom_glymur_pdata,
-+	},
-+	{
-+		.compatible = "qcom,sm8550-dwc3",
-+		.data = &dwc3_qcom_glymur_pdata,
-+	},
-+	{
-+		.compatible = "qcom,sm8650-dwc3",
-+		.data = &dwc3_qcom_glymur_pdata,
-+	},
-+	{
-+		.compatible = "qcom,sm8750-dwc3",
-+		.data = &dwc3_qcom_glymur_pdata,
-+	},
-+	{
-+		.compatible = "qcom,x1e80100-dwc3",
-+		.data = &dwc3_qcom_glymur_pdata,
-+	},
-+	{
-+		.compatible = "qcom,x1e80100-dwc3-mp",
-+		.data = &dwc3_qcom_glymur_pdata,
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, dwc3_qcom_of_match);
--- 
-2.34.1
-
+Regards,
+Michal
 
