@@ -1,53 +1,52 @@
-Return-Path: <linux-usb+bounces-36920-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36921-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uNTCI9Cx+Wld/AIAu9opvQ
-	(envelope-from <linux-usb+bounces-36920-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 11:01:04 +0200
+	id KOhAHdex+Wld/AIAu9opvQ
+	(envelope-from <linux-usb+bounces-36921-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 11:01:11 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B6584C90C0
-	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 11:00:58 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D11254C90C8
+	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 11:01:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 15DE9303D4DF
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2026 08:55:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B05F1305763A
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2026 08:55:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9039B3DA5D1;
-	Tue,  5 May 2026 08:55:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 435113E023E;
+	Tue,  5 May 2026 08:55:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t76ydVen"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KZpwvvYt"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5543B38A1;
-	Tue,  5 May 2026 08:55:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52B03B38A1;
+	Tue,  5 May 2026 08:55:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777971316; cv=none; b=bbGzfNJcACi0SMy5RdpVaX9dB7g09LQqbntql5iULqBig6r5yzS8ztIVqLmEsoUy9QbzVOsJAft5z8MWZ7+JiSE/1jXzE8B7kgeYNUGTjLb7fcueJlT4R/c5QSnFA/EAp5togYW6JRinaECQkngeHm8SpQSNMdYhk5UxhLuaN50=
+	t=1777971319; cv=none; b=UDr6cZtjjpKW/EPwat1ij5KyHvwP9lh5ue3zfUnGctXTzSdqusw/85zUaURHpS8sQwu+BRL9lIrnko/lNH3gSg4dpWxgQeu4mDCX4sKaqlWnCgVtIymjiJ9zAKZFlwMUCtpKCshDhk3CUe3Z2ew4NZlNiyTbpTh4PjEmQyv7aBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777971316; c=relaxed/simple;
-	bh=ge4pkAOya53sKi420BgmHloYNuYZYRbHmHvB+ihmSUk=;
+	s=arc-20240116; t=1777971319; c=relaxed/simple;
+	bh=QRd2iY8szZT5giyAzvp//9cY5blWqFzY5LFz5fYZY28=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QuvlhcdNRkppuXYP7/ZNtSCcMRh6P7aBoPNK3SIghcUAsKBq2/EWzwtomTYSdbNT3beM39ontmTtAZEGO8lDI/p86cCc+VYKfk61NUEu7COwfqL76fseoxuU1UgvKfhhbLP/INDJHIV9K98qY/t6SMh3C9qJjtYPtTNSg91eB/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t76ydVen; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 563BEC2BCB9;
-	Tue,  5 May 2026 08:55:13 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=VzMjPLS3IguHu+xFUsZ8my6dJ09DmSMhAbHS5ifXetwy2yd08OKvyVPShvjKy8BNQp8bdjO4Lwe4jQsIf4Uuz8NUVftVXUaIQgmiK/+XD6NU2cDP8LzDCN7Oq5CE1PfMID6ayTlXquNN8jXsRAKFz5f/9YTEQsE8lMBmhmoZeVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KZpwvvYt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61EA0C2BCB9;
+	Tue,  5 May 2026 08:55:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777971315;
-	bh=ge4pkAOya53sKi420BgmHloYNuYZYRbHmHvB+ihmSUk=;
+	s=k20201202; t=1777971319;
+	bh=QRd2iY8szZT5giyAzvp//9cY5blWqFzY5LFz5fYZY28=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=t76ydVengSaCK/ow/xm4uBSidHUbsjec3Vfzwa+UTJy8aGS6cWOxjr/JSerBOcusr
-	 LtH4G7hLOraYKRwhIoQSNI2LdeOI4zyM8Qzy6RCrn7hS6FCYaJ1ReAjOuMnasF4nI0
-	 UUmHhlZNOKuxoB0yTB8FL5mmWDKhttRinSYoYl3OzHC/pWg8TZ1+aTTJKyrc5heUxB
-	 f1bS9XYSDWGOcq3/xVTGsVHwb3VgZA5TCNiqM3mU9OMmL3ePsDxpr106wPVLauL3b6
-	 OK+2yXTTZ5yTbFOpyhFUAbec2PUO1fgG4FYtB9sAduy/hpPwJ6JHFBOPd60kRZgjZY
-	 h73cS+WMtvAHg==
+	b=KZpwvvYtibFBP3nplr6Z8ukwM7AsFTmjWRjzkz6wb9wo/hTYW95dKZpfghL7yc3kt
+	 mWpYWf2V4o8oMlomymh3jx5+2GCajILChRQQ8CgqOPU10+JhB9kLF8VRdF7sLlA3Y8
+	 XIf6b9UqhK+rUC2sVrtjJNbR4YVUYJvu/THlM05wr2Sv4FwB7IPcM44GwamdngLYkU
+	 1a7UsgSxKney6JQd28Tf702AA/nbfofzn26OITAbhJv6k0Ak68vSvpTiSyrMugyWcS
+	 TuokHyNHeKcTyXxRuz4JQElfLnaCmQYKdok51bj+6AucUrqFuGyQ7DVSPS1kmh1auC
+	 5Yhtk7F+JLNqQ==
 From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Tue, 05 May 2026 10:55:04 +0200
-Subject: [PATCH 1/2] usb: host: xhci: Allow non-Intel usb_link_tunnel_mode
- reporting
+Date: Tue, 05 May 2026 10:55:05 +0200
+Subject: [PATCH 2/2] usb: dwc3: Notify XHCI core of tunneled status
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,7 +55,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260505-topic-dwc3_tunneling_state-v1-1-4aaa6c3c14cb@oss.qualcomm.com>
+Message-Id: <20260505-topic-dwc3_tunneling_state-v1-2-4aaa6c3c14cb@oss.qualcomm.com>
 References: <20260505-topic-dwc3_tunneling_state-v1-0-4aaa6c3c14cb@oss.qualcomm.com>
 In-Reply-To: <20260505-topic-dwc3_tunneling_state-v1-0-4aaa6c3c14cb@oss.qualcomm.com>
 To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
@@ -68,149 +67,153 @@ Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
  Mika Westerberg <mika.westerberg@linux.intel.com>, 
  Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777971309; l=4304;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777971309; l=3871;
  i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=E5Zkzk+vTBZmmLs94/SV7GnDzfzywTgaRXPrNAY7yVQ=;
- b=vuwob+6aa8lSzvEW7AnJ/MiA77Ae2huI7jHGSJi/lVVm6VCPl8Tr+L6xJgrLHJD3ltQdZq/My
- Vhpx9RgmxvCCZXefBMiqkR8ZOykEEbx0gyPYwysBuWKTokFGtbnIndA
+ bh=Cm9Uwo6XZtB97T5drOJvRuyeGYTlUiuLuWKPUAEW8M0=;
+ b=yHM/wjI8Xf1st9tzPnJ560SnIfcERELAfSKOCaaHQAhviatKhy+b553/oe9EsG/lW0I8GxN5/
+ 0YsA2JVtr35C2gqD1IC9R9kEPARVBiwDTebkZR8Yw36QE7OVJn400Um
 X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Rspamd-Queue-Id: 2B6584C90C0
+X-Rspamd-Queue-Id: D11254C90C8
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36920-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RSPAMD_URIBL_FAIL(0.00)[qualcomm.com:query timed out];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[konradybcio@kernel.org,linux-usb@vger.kernel.org];
-	RSPAMD_EMAILBL_FAIL(0.00)[konrad.dybcio.oss.qualcomm.com:query timed out];
-	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[konradybcio@kernel.org,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-36921-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+]
 
 From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
 The Thunderbolt framework relies on the USB core to create device links
 for tunneled ports, so that the USB3 controller is only kept
-runtime-resumed for the duration of the tunneling.
+runtime-resumed for the duration of the tunneling. This depends on
+first knowing whether a connection is tunneled or native.
 
-Currently, retrieving that information is only possibe on Intel XHCI
-hosts, through a vendor-specific capability. Extend xhci-plat to allow
-plumbing a custom one.
+Add the logic to handle that for DWC3 controllers.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
- drivers/usb/host/xhci-hub.c  | 4 ++--
- drivers/usb/host/xhci-plat.c | 2 ++
- drivers/usb/host/xhci-plat.h | 1 +
- drivers/usb/host/xhci.c      | 6 +++++-
- drivers/usb/host/xhci.h      | 5 ++++-
- 5 files changed, 14 insertions(+), 4 deletions(-)
+ drivers/usb/dwc3/core.c | 12 ++++++++++++
+ drivers/usb/dwc3/core.h | 18 ++++++++++++++++++
+ drivers/usb/dwc3/host.c | 12 ++++++++++++
+ 3 files changed, 42 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index bacd0ddd0d09..09e5da912066 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -750,7 +750,7 @@ static int xhci_exit_test_mode(struct xhci_hcd *xhci)
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 65213896de99..7cec4911e278 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -162,6 +162,18 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode, bool ignore_susphy)
+ }
+ EXPORT_SYMBOL_GPL(dwc3_set_prtcap);
+ 
++enum usb_link_tunnel_mode dwc3_link_tunnel_mode(struct dwc3 *dwc, u8 port)
++{
++	/* Prior versions had no CIO support */
++	if (!DWC3_VER_IS_WITHIN(DWC31, 191A, ANY))
++		return USB_LINK_NATIVE;
++
++	if (dwc3_readl(dwc, DWC3_CIOCTRL(port)) & DWC3_CIOCTRL_CIO_EN)
++		return USB_LINK_TUNNELED;
++
++	return USB_LINK_NATIVE;
++}
++
+ static void __dwc3_set_mode(struct work_struct *work)
+ {
+ 	struct dwc3 *dwc = work_to_dwc(work);
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index e0dee9d28740..9594829de6c7 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -179,6 +179,11 @@
+ #define DWC3_OEVTEN		0xcc0C
+ #define DWC3_OSTS		0xcc10
+ 
++/* CIO regs */
++#define DWC3_CIO_BASE(n)	(0xcd20 + ((n) * 0x30))
++#define DWC3_CIOCTRL(n)		(DWC3_CIO_BASE(n) + 0x00)
++#define DWC3_CIOCTRL_CIO_EN	BIT(0)
++
+ #define DWC3_LLUCTL(n)		(0xd024 + ((n) * 0x80))
+ 
+ /* Bit fields */
+@@ -1309,6 +1314,7 @@ struct dwc3 {
+ #define DWC31_REVISION_170A	0x3137302a
+ #define DWC31_REVISION_180A	0x3138302a
+ #define DWC31_REVISION_190A	0x3139302a
++#define DWC31_REVISION_191A	0x3139312a
+ #define DWC31_REVISION_200A	0x3230302a
+ 
+ #define DWC32_REVISION_ANY	0x0
+@@ -1653,11 +1659,23 @@ static inline void dwc3_pre_run_stop(struct dwc3 *dwc, bool is_on)
+ #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+ int dwc3_host_init(struct dwc3 *dwc);
+ void dwc3_host_exit(struct dwc3 *dwc);
++
++/**
++ * dwc3_link_tunnel_mode - Check whether the link is tunneled over TBT/USB4
++ * @dwc: Pointer to DWC3 controller context
++ * @port: 0-based port index
++ *
++ * Returns: USB_LINK_TUNNELED if tunneled, USB_LINK_NATIVE if not, or
++ *          when the controller does not have USB4 capabilities.
++ */
++enum usb_link_tunnel_mode dwc3_link_tunnel_mode(struct dwc3 *dwc, u8 port);
+ #else
+ static inline int dwc3_host_init(struct dwc3 *dwc)
+ { return 0; }
+ static inline void dwc3_host_exit(struct dwc3 *dwc)
+ { }
++static inline enum usb_link_tunnel_mode dwc3_link_tunnel_mode(struct dwc3 *dwc, u8 port)
++{ return USB_LINK_UNKNOWN; }
+ #endif
+ 
+ #if IS_ENABLED(CONFIG_USB_DWC3_GADGET) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+index 96b588bd08cd..eb03b079696e 100644
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -77,8 +77,20 @@ static void dwc3_xhci_plat_start(struct usb_hcd *hcd)
+ 	dwc3_enable_susphy(dwc, true);
  }
  
- /**
-- * xhci_port_is_tunneled() - Check if USB3 connection is tunneled over USB4
-+ * xhci_port_tunnel_mode() - Check if USB3 connection is tunneled over USB4
-  * @xhci: xhci host controller
-  * @port: USB3 port to be checked.
-  *
-@@ -764,7 +764,7 @@ static int xhci_exit_test_mode(struct xhci_hcd *xhci)
-  * detecting USB3 over USB4 tunnels. USB_LINK_NATIVE or USB_LINK_TUNNELED
-  * otherwise.
-  */
--enum usb_link_tunnel_mode xhci_port_is_tunneled(struct xhci_hcd *xhci,
-+enum usb_link_tunnel_mode xhci_port_tunnel_mode(struct xhci_hcd *xhci,
- 						struct xhci_port *port)
- {
- 	struct usb_hcd *hcd;
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 074d9c731639..dbaca694baa2 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -244,6 +244,8 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
- 		priv = hcd_to_xhci_priv(hcd);
- 		/* Just copy data for now */
- 		*priv = *priv_match;
++static enum usb_link_tunnel_mode dwc3_xhci_tunnel_mode(struct usb_hcd *hcd, int portnum)
++{
++	struct platform_device *pdev;
++	struct dwc3 *dwc;
 +
-+		xhci->tunnel_mode = priv->tunnel_mode;
- 	}
- 
- 	device_set_wakeup_capable(&pdev->dev, true);
-diff --git a/drivers/usb/host/xhci-plat.h b/drivers/usb/host/xhci-plat.h
-index 00751d851831..c5042766a486 100644
---- a/drivers/usb/host/xhci-plat.h
-+++ b/drivers/usb/host/xhci-plat.h
-@@ -22,6 +22,7 @@ struct xhci_plat_priv {
- 	int (*suspend_quirk)(struct usb_hcd *);
- 	int (*resume_quirk)(struct usb_hcd *);
- 	int (*post_resume_quirk)(struct usb_hcd *);
-+	enum usb_link_tunnel_mode (*tunnel_mode)(struct usb_hcd *hcd, int portnum);
++	pdev = to_platform_device(hcd->self.controller);
++	dwc = dev_get_drvdata(pdev->dev.parent);
++
++	return dwc3_link_tunnel_mode(dwc, portnum);
++}
++
+ static const struct xhci_plat_priv dwc3_xhci_plat_quirk = {
+ 	.plat_start = dwc3_xhci_plat_start,
++	.tunnel_mode = dwc3_xhci_tunnel_mode,
  };
  
- #define hcd_to_xhci_priv(h) ((struct xhci_plat_priv *)hcd_to_xhci(h)->priv)
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index a54f5b57f205..90a6751b5c69 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -4754,7 +4754,11 @@ static int xhci_update_device(struct usb_hcd *hcd, struct usb_device *udev)
- 	if (hcd->speed >= HCD_USB3 && !udev->parent->parent) {
- 		port = xhci->usb3_rhub.ports[udev->portnum - 1];
- 
--		udev->tunnel_mode = xhci_port_is_tunneled(xhci, port);
-+		if (xhci->tunnel_mode)
-+			udev->tunnel_mode = xhci->tunnel_mode(hcd, port->hcd_portnum);
-+		else
-+			udev->tunnel_mode = xhci_port_tunnel_mode(xhci, port);
-+
- 		if (udev->tunnel_mode == USB_LINK_UNKNOWN)
- 			dev_dbg(&udev->dev, "link tunnel state unknown\n");
- 		else if (udev->tunnel_mode == USB_LINK_TUNNELED)
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index aeecd301f207..59cc5797d5d2 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1672,6 +1672,9 @@ struct xhci_hcd {
- 	struct list_head	regset_list;
- 
- 	void			*dbc;
-+
-+	enum usb_link_tunnel_mode (*tunnel_mode)(struct usb_hcd *hcd, int portnum);
-+
- 	/* platform-specific data -- must come last */
- 	unsigned long		priv[] __aligned(sizeof(s64));
- };
-@@ -1977,7 +1980,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue, u16 wIndex,
- int xhci_hub_status_data(struct usb_hcd *hcd, char *buf);
- int xhci_find_raw_port_number(struct usb_hcd *hcd, int port1);
- struct xhci_hub *xhci_get_rhub(struct usb_hcd *hcd);
--enum usb_link_tunnel_mode xhci_port_is_tunneled(struct xhci_hcd *xhci,
-+enum usb_link_tunnel_mode xhci_port_tunnel_mode(struct xhci_hcd *xhci,
- 						struct xhci_port *port);
- void xhci_hc_died(struct xhci_hcd *xhci);
- 
+ static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
 
 -- 
 2.54.0
