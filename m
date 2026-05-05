@@ -1,59 +1,59 @@
-Return-Path: <linux-usb+bounces-36982-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36983-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cIXbEPY9+mmjLAMAu9opvQ
-	(envelope-from <linux-usb+bounces-36982-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 20:59:02 +0200
+	id iMgNHws++mmjLAMAu9opvQ
+	(envelope-from <linux-usb+bounces-36983-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 20:59:23 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBDA44D2F50
-	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 20:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DDB904D2F5E
+	for <lists+linux-usb@lfdr.de>; Tue, 05 May 2026 20:59:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F02383054F4C
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2026 18:56:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A9BFA309B1BE
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2026 18:56:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12AFF4ADD81;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E500E4ADDAD;
 	Tue,  5 May 2026 18:56:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Wp7EOrzf"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="mkfstUgh"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A1E3BED19;
-	Tue,  5 May 2026 18:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DF422C15AA;
+	Tue,  5 May 2026 18:56:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778007391; cv=none; b=u6rtTNx6R19FqEUWdEW2LZQBlfQvH/FO2DqcrMWo7vnLb9JwIYH4L4p74Xomrutfmz6UUATdiQyctyS0bfoHU2jMdzZTzEwS9k7MkLiaD1lh++BASZem3npPA3N3WAFeFD1vjf1DweRpQ0g1XpAPrfC+kGJAtkExeS645qrT8ZE=
+	t=1778007392; cv=none; b=L+XwRTuJ/12xRNwtJWsRxqaH8XRg8kAl+BnVIOWdsCiX7vumN37/DxCADB6/zKpHwn1I5u9thKCJy+16+eVb775pxl+mJ8M96tQVPMXt9RO9SZOvxN9iaJXc+EcEWsUSs9yzxc4/2sQSjXjzUv6dfe6F6/FMP84d+rfvPytkFHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778007391; c=relaxed/simple;
-	bh=EOx5SKBm0fyEIhBa17G/AY4peXZ8ik+xZr5fQwTDBME=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HPNFYMvrpEBICA96HDR7vvTqNHB6/xKnbgYYQ2Bg8AB1zbVtnf750Eg6vyl7+IjtAwnwrAl+uOZcXoyN2/J5f5P0F/ZlEds4kksxFlBceqGdJ8SyUScazN4gleM5Vf8M6RTHyXCciPyX9b2M2gn0eWCvgRDuYPLXs7kJfhCXr6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Wp7EOrzf; arc=none smtp.client-ip=213.97.179.56
+	s=arc-20240116; t=1778007392; c=relaxed/simple;
+	bh=gA3TLx/FD/j9Nk85cVEGIDaCVLMIPzWHQozaOn/OvQc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=W/secT3SBDPKjmGFhMGlF0HqI4BPdxFqpIXP/BQXzaA/A03+JFo1vM3ksg6kXr1RUpL9iOoDandQryC12ocHEXEgbD9C1o7LhbzL0a8xRFSYMqR6r9N+Z8yiZcC4HgHuwkV8K2slmfTeCJ83n142PXtLGuuEJmbZnQqwPv2ZgRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=mkfstUgh; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
-	Message-Id:Date:Subject:From:Sender:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=ldS96RrKmNNsOD/yzOFPOqOUq9syJBSHCyCE054Ggck=; b=Wp7EOrzfImZsHlqSLMXD3CMB3A
-	Yn+aAh8YPzdKbfe1NVDhC58UIkiw1DUbvQruwHzWAXHiaum66ivu6R9uAZtj9XVYYYNQLIp6pnUFS
-	Xe1FDQnCMzl/7MmNhXqOK2VqvR311JkgdYw/hUSAPe58cpGPvXDY7a35O4J7wjP96tq5/DNBsidOc
-	nzSee+ZnW8beLriBjsrA1D4nY03gOj+hRAm/vwAjRX6CeCFnvjHceihPNkf0NlFL8wA17bLq+R+0x
-	BQZHYYZvGWReSvknTi8U/q3AS1j1A30Ei4CnpMhMUJ61DtdmTFRMBWI2WTiiESyCmHClo66dlVjQ5
-	hb4RBfkw==;
+	s=20170329; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:Sender:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=U8Ge8W0clsVUZseFV/dvVZuEyWIUtDdNTUV+vBPz5bY=; b=mkfstUghyaYIk0jwIqVj9TirNF
+	11jFUhUElFH7xCHUSecSo1JfGRhAL+/isrUcnZ7+Gi7nnW9BNqzH79mABwqSD83cCMCx9CgV6tInU
+	F1cRWdvfpXP89BA7eVCkoddQgYeKYeClMkDtSURZigC6Sgz8u37Ctxk5zWzCqAHWN3mQm+PUsaNIg
+	9qBnK1bshJey8je2BpNstzeAeVmqMBzrmS7PMjeIHt7SRtuL8a1CLwEOTSD+aYIvl65cxQDdAJySe
+	Eh0bVM4c5ga3LL8MHRDKq0+W6jvz9AoQkP8hQRv8vzpDUcM5erNtX6gOFKmHp61klb06DzfbJp+mK
+	i8wcbITw==;
 Received: from 177-136-88-215.vmaxnet.com.br ([177.136.88.215] helo=[192.168.1.54])
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1wKKwT-006ZjB-Vr; Tue, 05 May 2026 20:56:25 +0200
+	id 1wKKwW-006ZjB-Jz; Tue, 05 May 2026 20:56:28 +0200
 From: Heitor Alves de Siqueira <halves@igalia.com>
-Subject: [PATCH v3 0/2] usb: usbtmc: add sanity checks for interrupt
- endpoints
-Date: Tue, 05 May 2026 15:56:02 -0300
-Message-Id: <20260505-usbtmc-iin-size-v3-0-a36113f62db7@igalia.com>
+Date: Tue, 05 May 2026 15:56:03 -0300
+Subject: [PATCH v3 1/2] usb: usbtmc: check URB actual_length for
+ interrupt-IN notifications
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,11 +62,9 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XNQQ6CMBCF4auQrq2hZQR05T2Mi6G0MEbAtNCoh
- Lvb4kZjXP7Jm29m5rQl7dghmZnVnhwNfYhskzDVYt9oTnVoJlOZpyAln1w1dooT9dzRU3MjEE0
- KmCtQLFzdrDZ0X8XT+d1uqi5ajZGJi5bcONjH+tKLuPuve8EF39UKoIKs3CMeqcEr4VYNHYu8l
- 59A9gvIAGQCDUJZgCnEF7AsywtnugzUAgEAAA==
-X-Change-ID: 20260422-usbtmc-iin-size-f1aaf04a6c4c
+Message-Id: <20260505-usbtmc-iin-size-v3-1-a36113f62db7@igalia.com>
+References: <20260505-usbtmc-iin-size-v3-0-a36113f62db7@igalia.com>
+In-Reply-To: <20260505-usbtmc-iin-size-v3-0-a36113f62db7@igalia.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
  Michal Pecio <michal.pecio@gmail.com>, Dave Penkler <dpenkler@gmail.com>, 
  Johan Hovold <johan@kernel.org>
@@ -74,7 +72,7 @@ Cc: kernel-dev@igalia.com, linux-usb@vger.kernel.org,
  linux-kernel@vger.kernel.org, 
  syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com, stable@kernel.org
 X-Mailer: b4 0.15.2
-X-Rspamd-Queue-Id: BBDA44D2F50
+X-Rspamd-Queue-Id: DDB904D2F5E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.14 / 15.00];
@@ -86,7 +84,7 @@ X-Spamd-Result: default: False [1.14 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36982-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-36983-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FREEMAIL_TO(0.00)[linuxfoundation.org,gmail.com,kernel.org];
@@ -96,7 +94,7 @@ X-Spamd-Result: default: False [1.14 / 15.00];
 	DKIM_TRACE(0.00)[igalia.com:-];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MIME_TRACE(0.00)[0:+];
-	NEURAL_HAM(-0.00)[-0.917];
+	NEURAL_HAM(-0.00)[-0.864];
 	FROM_NEQ_ENVFROM(0.00)[halves@igalia.com,linux-usb@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -106,56 +104,48 @@ X-Spamd-Result: default: False [1.14 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[]
 
-Dear maintainers,
+USBTMC devices can use an optional interrupt endpoint for notification
+messages. These typically contain two-byte headers indicating the
+payload format, but the driver does not check if these headers are
+present before accessing the data buffers. In cases where the URB
+actual_length is not enough to fit these headers, the driver will either
+cause an out-of-bounds read, or consume stale leftover data from a
+previous notification.
 
-This is a v3 patch for an out-of-bounds read originally reported by
-syzbot in [0]. After discussion, I've split the original fix into two
-separate patches.
+Fix by checking if actual_data contains enough bytes for the headers,
+otherwise resubmit URB to the interrupt endpoint.
 
-The first patch is a more conservative check against each URB in the
-usbtmc_interrupt() path, to ensure enough data was transferred to
-include the necessary payload headers. I've tagged this one for stable,
-as it shouldn't impact existing devices besides fixing the out-of-bounds
-read. Devices that eventually raise problematic interrupt notifications
-will be able to try again once the URB is resubmitted.
-
-The second patch is more strict, as it rejects devices that advertise
-interrupt endpoints with wMaxPacketSize below 2 bytes. This approach was
-suggested during v1 of this series, as these devices are unlikely to
-exist and won't work properly with the current usbtmc driver. This
-approach is also more aligned with the intent of the USB488 spec, as
-interrupt endpoints should ideally be setup with enough space for
-the payload headers.
-While the first patch is sufficient to fix the out-of-bounds read, there
-seems to be little point in having those interrupt endpoints configured
-if the driver will ignore all URBs from it.
-
-[0] https://syzkaller.appspot.com/bug?extid=abbfd103085885cf16a2
-
+Fixes: dbf3e7f654c0 ("Implement an ioctl to support the USMTMC-USB488 READ_STATUS_BYTE operation.")
+Reported-by: syzbot+abbfd103085885cf16a2@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=abbfd103085885cf16a2
+Cc: stable@kernel.org
+Suggested-by: Michal Pecio <michal.pecio@gmail.com>
+Signed-off-by: Heitor Alves de Siqueira <halves@igalia.com>
 ---
-Changes in v3:
-- Split into two patches:
-  - actual_length check in usbtmc_interrupt() for the syzbot fix
-  - wMaxPacketSize check in usbtmc_probe() to reject quirky devices
-- Link to v2: https://patch.msgid.link/20260423-usbtmc-iin-size-v2-1-31afa4874f71@igalia.com
+ drivers/usb/class/usbtmc.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Changes in v2:
-- Instead of ensuring buffer size, reject devices that advertise illegal/invalid interrupt endpoints
-- Link to v1: https://patch.msgid.link/20260422-usbtmc-iin-size-v1-1-5dc44b4389aa@igalia.com
+diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+index bd9347804dec..e15efd0c5ca7 100644
+--- a/drivers/usb/class/usbtmc.c
++++ b/drivers/usb/class/usbtmc.c
+@@ -2306,6 +2306,14 @@ static void usbtmc_interrupt(struct urb *urb)
+ 
+ 	switch (status) {
+ 	case 0: /* SUCCESS */
++		/* ensure at least two bytes of headers were transferred */
++		if (urb->actual_length < 2) {
++			dev_warn(dev,
++				"actual length %d not sufficient for interrupt headers\n",
++				urb->actual_length);
++			goto exit;
++		}
++
+ 		/* check for valid STB notification */
+ 		if (data->iin_buffer[0] > 0x81) {
+ 			data->bNotify1 = data->iin_buffer[0];
 
----
-Heitor Alves de Siqueira (2):
-      usb: usbtmc: check URB actual_length for interrupt-IN notifications
-      usb: usbtmc: reject interrupt endpoints with small wMaxPacketSize
-
- drivers/usb/class/usbtmc.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
----
-base-commit: 70c8a7ec6715b5fb14e501731b5b9210a16684f7
-change-id: 20260422-usbtmc-iin-size-f1aaf04a6c4c
-
-Best regards,
---  
-Heitor Alves de Siqueira <halves@igalia.com>
+-- 
+2.54.0
 
 
