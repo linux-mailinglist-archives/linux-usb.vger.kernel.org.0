@@ -1,425 +1,519 @@
-Return-Path: <linux-usb+bounces-36996-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36997-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KLUPMXKp+mmJRAMAu9opvQ
-	(envelope-from <linux-usb+bounces-36996-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 06 May 2026 04:37:38 +0200
+	id iCdtELq1+mk/SAMAu9opvQ
+	(envelope-from <linux-usb+bounces-36997-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 06 May 2026 05:30:02 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63D014D5BA3
-	for <lists+linux-usb@lfdr.de>; Wed, 06 May 2026 04:37:38 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A64284D5E37
+	for <lists+linux-usb@lfdr.de>; Wed, 06 May 2026 05:30:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B1B3B303E4BD
-	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2026 02:36:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0CA47301588A
+	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2026 03:30:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F4EF2D3A75;
-	Wed,  6 May 2026 02:36:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 195102E11B9;
+	Wed,  6 May 2026 03:29:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KdoXtTeY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K/3inPyM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E015D7080D;
-	Wed,  6 May 2026 02:36:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21CF22D8376
+	for <linux-usb@vger.kernel.org>; Wed,  6 May 2026 03:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778034995; cv=none; b=gQrJUXUmJ55oHO3ubRwU09JcBXMicP+74RtahCZcj9E7EC1VDtjgdHx+ZQwqHDmeZyXSjouy0lm6gJbCYH3e98WyXyTBp9ZUXG3la6mEOeFNFS63XrMvidHLvQ1dVv93ccqzLV8fkfM49jiTVWp3hHHiKAlNGaxU0w1zNRWpyzQ=
+	t=1778038195; cv=none; b=dNLv2qOp2KCS93PYq7qTCYYN47wevJ6PMoZMxXBS2uG5c5FuwQYq7dp1AfUt/y4VrEPK0RKtiQo6sM1hC+Vux5fJVaGEf3B63sTh3EMiAxkHkIr7GnpBSv31zF2SYIYLaK/cEPP84lGvKifkUYJRcCYxnPfQhQziXo9jYhO+dxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778034995; c=relaxed/simple;
-	bh=JNW9yjxTwYLk3ZAiuaQzkdjZTR6wNkFJG5hnOuV0meY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gEl7lywdMufcZlMrgy8R0ff7hXXhuImDQPxmazJx5P6VWOIUhLb9LWl078qSI/OB5xCm3oMsCO0aE5WOkZgNxgsAvzDZ+Co6JRRL0hrlL7g6KrxkT6z91rxKFOPhGHHKN1qQTIdYJLdrB+iKDN4cD5dKQxFqdkDxFoTqbm0aQUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KdoXtTeY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45509C2BCB9;
-	Wed,  6 May 2026 02:36:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778034994;
-	bh=JNW9yjxTwYLk3ZAiuaQzkdjZTR6wNkFJG5hnOuV0meY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KdoXtTeY9+YvMzCJd4vIVWletUNOsZfLqdPYvybwpuB5IkLnOsGcRI2D7MsD/5K1I
-	 u4zGVMquEfentnxZc/2Y+vUOlPvBHf7/5lwPp2c5XRGjgxuIC0O32QCy8uLRY9Al7z
-	 BC6/Bm2oVvoIdzIMH8ViuCKBiuuNVfPvj1KJYqtEP47OGFAc/4ZVUby3RYdobN8gQP
-	 3XpiKIboaocM5hpi9vv031HFi0RsDYCcfHgHxmKBrZ03ZILba2jGiGVjIY3wN98Hoa
-	 gmIqmKB+rbTHszrOxGFcYqWuNSt59yESZBBkwlPMgW54uXAYIStjlssNyrn1CBAiwQ
-	 +CYl+9JLhAXQw==
-Date: Wed, 6 May 2026 10:36:30 +0800
-From: "Peter Chen (CIX)" <peter.chen@kernel.org>
-To: pawell@cadence.com
-Cc: Roger Quadros <rogerq@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v2] usb: cdnsp: Add support for device-only configuration
-Message-ID: <afqpLr/BMMuN0pTg@nchen-desktop>
-References: <20260505-device_only_branch_v2-v2-1-98cc19fbd02a@cadence.com>
+	s=arc-20240116; t=1778038195; c=relaxed/simple;
+	bh=JLeENIiXVpGBak/PBcCy92OiqhtAGaFAad178b3I9Rk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WVhqSV6j+WhTdwHkKR6JhHHp0DKcTM32KXlgteBHoyFIPCZ/6LgrqhabGoozIL9ukxW8qD0BzgPZj5fwrYAhnpleNbnPC2oK2FwkIol2pQP/r+X2xCGe5yN2mPxjSLVN7g2wAkGlx/8AtzMb/PWsZQZMo2UxZVrbsDEJdWGKGkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K/3inPyM; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c736261ee8dso1999096a12.1
+        for <linux-usb@vger.kernel.org>; Tue, 05 May 2026 20:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778038193; x=1778642993; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UhPw6WdkvT0vs7g9hPPUu1gtDPktwwVFydoqNcGS+M0=;
+        b=K/3inPyMGoyFovb04Tb+x3X4C7KNIW8GF7EvZOxYOuSEN00ffqTYxG+bZWzzubL5QA
+         bcA4LwnGwd/4ZkMuUkR8JSPZxeweqzuZh39OZOqPlt0FwcovbXBoLxA79ah1Mrw7F5P6
+         Aktfq9Sj4ONO+Pvz0Xdn4y1/0pOsg2Lu4SsyKowe081KTDbc8fEjhD4ceARTLw5uFsDi
+         I+HPbT/6mBe4ltdAz6XNO7etTwP/ILaYmSBRHEMMXCIe00/LHlxWmvMWFzjZEHkchCIs
+         mQcGMtNAARDXvI2Si4bCgu1CyTBMncvwCA2tWHpxVNsICpKjWWpvFJsbuEgrzfxWU+4L
+         YmGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778038193; x=1778642993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UhPw6WdkvT0vs7g9hPPUu1gtDPktwwVFydoqNcGS+M0=;
+        b=gG/BQJahFAIuHXl8MtGNKw6Utl8ww07RX3k18cMNZHGr/uw/koAwuCyxaDiGNJB13j
+         8Q2PHqB85/f6JH9J2vCTdFrxUzSa0kQd4l0skhjVDSL6SaYyz1EePzehArUIJO94lIsO
+         U+qgf1q6veBMVoYbbFuowsZ38ZVSXbHDeHNsfU/slfrh4LOZZsC0Np9mXbHRvtuZEiGz
+         wseDOxgSqOyjQw2MQMGvA08jykll8fnY8QKCq59ulKaOh0BVIWr5lPB5f7EWtOfjuz1M
+         0itjOykMB4OaCFWzU5QmYspjSJ09AAq7H0eXePLXvZq2F8/HygVodxfRmbDEGf05uilo
+         q3Zg==
+X-Forwarded-Encrypted: i=1; AFNElJ+YIf+cmgMGIOZ16EmPx5umYHpgub8/VO8jiuUcoabBy0tiUjUr7RBAywdbhbLG60XU94FM+8cGKfg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPD3skNxgT+n02Nc9kfJMyP3L2OSoIa+7LLecQGPVGPYc7Elil
+	tefzkyh+9sNfeYkE8Oyaqbbkpz9TfL3soY5/08Mn4FWTUzOdc45uZT1c
+X-Gm-Gg: AeBDietp3r6ZPs0vusTHA5hEBn0m2VdIjTw0DeJFTHHjX75vFogAAQY/sCxT9et7b5Q
+	z5nSH1PFsOmaKlcRryO26+SI6WBL5+NBBEOz7V/5A8eKH7Uhp0aoeHud+iSM9dcpWydlhlDAXX/
+	Lzu3rahS9sLzDlazl75sN8v1bnBGSzfpD1vXaR1ckFBlPxfMri7kKwsT7qyyjThU2Whvyyrc81J
+	5cm6gyaHyQwIgjTPZoDcNZmqrGi61AfanRGDWrkdacNJZDU9I1zaX+G6ndSA2tnpEdz9+IIFNXR
+	Kj01Xo8SVJ9GiCaGFmSO+hPbk8+R0xie5kHNetNfRdT0J5TdBRb7iWudzQ/sUrZpRfGqVsKoydi
+	wEAX0UwS0ZJcM3yQyiBD6fQYzHiq7nVxVV8+9i9ySbi/nGgVZb9Q152a9kBXsRtA2wZc9uE7YYM
+	a96OPs7iqCICsb+9zOo3cxWYVPdI74oco=
+X-Received: by 2002:a17:903:4405:b0:2b7:86be:7673 with SMTP id d9443c01a7336-2ba78f50392mr16918435ad.6.1778038193400;
+        Tue, 05 May 2026 20:29:53 -0700 (PDT)
+Received: from mincom1 ([14.67.155.79])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ba7bf330a0sm8053895ad.31.2026.05.05.20.29.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 May 2026 20:29:52 -0700 (PDT)
+From: Jihong Min <hurryman2212@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mathias Nyman <mathias.nyman@intel.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+	Raju Rangoju <Raju.Rangoju@amd.com>,
+	linux-usb@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jihong Min <hurryman2212@gmail.com>
+Subject: [PATCH] usb: xhci: add AMD PROM21 xHCI hwmon support for temperature monitoring
+Date: Wed,  6 May 2026 12:29:39 +0900
+Message-ID: <20260506032939.92351-1-hurryman2212@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260505-device_only_branch_v2-v2-1-98cc19fbd02a@cadence.com>
-X-Rspamd-Queue-Id: 63D014D5BA3
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: A64284D5E37
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-36996-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[roeck-us.net,amd.com,vger.kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-36997-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peter.chen@kernel.org,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[cadence.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	FROM_NEQ_ENVFROM(0.00)[hurryman2212@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 
-On 26-05-05 12:02:56, Pawel Laszczak via B4 Relay wrote:
-> From: Pawel Laszczak <pawell@cadence.com>
-> 
-> This patch introduces support for operating the Cadence USBSSP (cdnsp)
-> controller in a peripheral-only mode, bypassing the Dual-Role Device (DRD)
-> logic.
+AMD PROM21 xHCI controllers expose a temperature byte through a
+vendor-specific index/data register pair in the xHCI PCI MMIO BAR region.
+Add hwmon support for this, limited to temperature monitoring, and
+initialize it from the xHCI PCI driver probe path.
 
-I still debate peripheral-only not equals to no-drd, see below.
+The xhci-pci probe and remove paths call the PROM21 hwmon helpers only for
+AMD 1022:43fd controllers. The hwmon read path selects the temperature
+register through the vendor index register, reads the raw temperature byte
+from the data register, and restores the previous index before returning.
 
-> 
-> The change in BAR indexing (from BAR 2 to BAR 1) is a direct
-> consequence of switching from 64-bit to 32-bit addressing in the
-> Peripheral-only configuration.
-> 
-> Tested on PCI platform with Device-only configuration. Platform-side
-> changes are included to support the PCI glue layer's property injection.
-> 
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com> # pci_ids.h
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> ---
-> This is a resubmission of the previous patch, now based on the restored
-> commit e4d7362dc9cd ("usb: cdns3: Add USBSSP platform driver support").
-> 
-> Since the "usb: cdns3: Add USBSSP platform driver support" patch  was
-> reverted and then re-added, this version (v2) ensures compatibility
-> with the latest tree state.
-> ---
-> v2:
->   - Changed otg_irq to be optionali.
->   - Added cdns->no_drd check in cdns_power_is_lost.
->   - Added cdns->no_drd check in cdns_get_id.
-> ---
->  drivers/usb/cdns3/cdns3-plat.c | 23 ++++++++++++-----------
->  drivers/usb/cdns3/cdnsp-pci.c  | 33 ++++++++++++++++++++++++---------
->  drivers/usb/cdns3/core.c       |  3 ++-
->  drivers/usb/cdns3/core.h       |  3 +++
->  drivers/usb/cdns3/drd.c        | 22 ++++++++++++++++++++--
->  include/linux/pci_ids.h        |  1 +
->  6 files changed, 62 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
-> index 3fe3109a3688..1af19360410e 100644
-> --- a/drivers/usb/cdns3/cdns3-plat.c
-> +++ b/drivers/usb/cdns3/cdns3-plat.c
-> @@ -113,21 +113,22 @@ static int cdns3_plat_probe(struct platform_device *pdev)
->  
->  	cdns->dev_regs	= regs;
->  
-> -	cdns->otg_irq = platform_get_irq_byname(pdev, "otg");
-> -	if (cdns->otg_irq < 0)
-> -		return dev_err_probe(dev, cdns->otg_irq,
-> -				     "Failed to get otg IRQ\n");
-> -
-> -	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "otg");
-> -	if (!res) {
-> -		dev_err(dev, "couldn't get otg resource\n");
-> -		return -ENXIO;
-> +	cdns->otg_irq = platform_get_irq_byname_optional(pdev, "otg");
-> +
-> +	if (cdns->otg_irq < 0) {
-> +		dev_dbg(dev, "Device-only mode: DRD support disabled\n");
+No public AMD register reference is available for this value. The
+conversion formula is derived from observed temperature readings:
 
-Why "Device-only", just no DRD support?
+  temp[C] = raw * 0.9066 - 78.624
 
-> +		cdns->no_drd = 1;
-> +	} else {
-> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "otg");
-> +		if (!res) {
-> +			dev_err(dev, "couldn't get otg resource\n");
-> +			return -ENXIO;
-> +		}
-> +		cdns->otg_res = *res;
->  	}
->  
->  	cdns->phyrst_a_enable = device_property_read_bool(dev, "cdns,phyrst-a-enable");
->  
-> -	cdns->otg_res = *res;
-> -
->  	cdns->wakeup_irq = platform_get_irq_byname_optional(pdev, "wakeup");
->  	if (cdns->wakeup_irq == -EPROBE_DEFER)
->  		return cdns->wakeup_irq;
-> diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
-> index 432007cfe695..28e16b094525 100644
-> --- a/drivers/usb/cdns3/cdnsp-pci.c
-> +++ b/drivers/usb/cdns3/cdnsp-pci.c
-> @@ -29,10 +29,15 @@ struct cdnsp_wrap {
->  #define RES_HOST_ID		3
->  #define RES_DEV_ID		4
->  #define RES_DRD_ID		5
-> -
-> +/* DRD PCI configuration - 64-bit addressing */
-> +/* First PCI function */
->  #define PCI_BAR_HOST		0
-> -#define PCI_BAR_OTG		0
->  #define PCI_BAR_DEV		2
-> +/* Second PCI function */
-> +#define PCI_BAR_OTG		0
-> +/* Device only PCI configuration - 32-bit addressing */
-> +/* First PCI function */
-> +#define PCI_BAR_ONLY_DEV	1
->  
->  #define PCI_DEV_FN_HOST_DEVICE	0
->  #define PCI_DEV_FN_OTG		1
-> @@ -65,6 +70,7 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
->  	struct cdnsp_wrap *wrap;
->  	struct resource *res;
->  	struct pci_dev *func;
-> +	bool no_drd = false;
->  	int ret = 0;
->  
->  	/*
-> @@ -75,11 +81,14 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
->  		    pdev->devfn != PCI_DEV_FN_OTG))
->  		return -EINVAL;
->  
-> +	if (pdev->device == PCI_DEVICE_ID_CDNS_UDC_USBSSP)
-> +		no_drd = true;
-> +
->  	func = cdnsp_get_second_fun(pdev);
-> -	if (!func)
-> +	if (!func && !no_drd)
->  		return -EINVAL;
->  
-> -	if (func->class == PCI_CLASS_SERIAL_USB_XHCI ||
-> +	if ((func && func->class == PCI_CLASS_SERIAL_USB_XHCI) ||
->  	    pdev->class == PCI_CLASS_SERIAL_USB_XHCI) {
->  		ret = -EINVAL;
->  		goto put_pci;
-> @@ -93,7 +102,7 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
->  
->  	pci_set_master(pdev);
->  
-> -	if (pci_is_enabled(func)) {
-> +	if (func && pci_is_enabled(func)) {
->  		wrap = pci_get_drvdata(func);
->  	} else {
->  		wrap = kzalloc_obj(*wrap);
-> @@ -106,10 +115,12 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
->  	res = wrap->dev_res;
->  
->  	if (pdev->devfn == PCI_DEV_FN_HOST_DEVICE) {
-> +		int bar_dev = no_drd ? PCI_BAR_ONLY_DEV : PCI_BAR_DEV;
-> +
->  		/* Function 0: host(BAR_0) + device(BAR_2). */
->  		dev_dbg(&pdev->dev, "Initialize Device resources\n");
-> -		res[RES_DEV_ID].start = pci_resource_start(pdev, PCI_BAR_DEV);
-> -		res[RES_DEV_ID].end = pci_resource_end(pdev, PCI_BAR_DEV);
-> +		res[RES_DEV_ID].start = pci_resource_start(pdev, bar_dev);
-> +		res[RES_DEV_ID].end = pci_resource_end(pdev, bar_dev);
->  		res[RES_DEV_ID].name = "dev";
->  		res[RES_DEV_ID].flags = IORESOURCE_MEM;
->  		dev_dbg(&pdev->dev, "USBSSP-DEV physical base addr: %pa\n",
-> @@ -145,7 +156,7 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
->  		wrap->dev_res[RES_IRQ_OTG_ID].flags = IORESOURCE_IRQ;
->  	}
->  
-> -	if (pci_is_enabled(func)) {
-> +	if (no_drd || pci_is_enabled(func)) {
->  		/* set up platform device info */
->  		pdata.override_apb_timeout = CHICKEN_APB_TIMEOUT_VALUE;
->  		memset(&plat_info, 0, sizeof(plat_info));
-> @@ -185,13 +196,17 @@ static void cdnsp_pci_remove(struct pci_dev *pdev)
->  	if (wrap->devfn == pdev->devfn)
->  		platform_device_unregister(wrap->plat_dev);
->  
-> -	if (!pci_is_enabled(func))
-> +	if (!func || !pci_is_enabled(func))
->  		kfree(wrap);
->  
->  	pci_dev_put(func);
->  }
->  
->  static const struct pci_device_id cdnsp_pci_ids[] = {
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC_USBSSP),
-> +	  .class = PCI_CLASS_SERIAL_USB_DEVICE },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC_USBSSP),
-> +	  .class = PCI_CLASS_SERIAL_USB_CDNS },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSSP),
->  	  .class = PCI_CLASS_SERIAL_USB_DEVICE },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSSP),
-> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> index 6a8d1fefbc0d..504bdf13ea80 100644
-> --- a/drivers/usb/cdns3/core.c
-> +++ b/drivers/usb/cdns3/core.c
-> @@ -70,7 +70,8 @@ static void cdns_role_stop(struct cdns *cdns)
->  static void cdns_exit_roles(struct cdns *cdns)
->  {
->  	cdns_role_stop(cdns);
-> -	cdns_drd_exit(cdns);
-> +	if (!cdns->no_drd)
-> +		cdns_drd_exit(cdns);
->  }
->  
->  /**
-> diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
-> index bca973b999a4..ef3f50169246 100644
-> --- a/drivers/usb/cdns3/core.h
-> +++ b/drivers/usb/cdns3/core.h
-> @@ -84,6 +84,8 @@ struct cdns3_platform_data {
->   *                        value in CHICKEN_BITS_3 will be preserved.
->   * @gadget_init: pointer to gadget initialization function
->   * @host_init: pointer to host initialization function
-> + * @no_drd: DRD register block is inaccessible - driver handles only
-> + *          device mode.
->   */
->  struct cdns {
->  	struct device			*dev;
-> @@ -124,6 +126,7 @@ struct cdns {
->  	u32                             override_apb_timeout;
->  	int (*gadget_init)(struct cdns *cdns);
->  	int (*host_init)(struct cdns *cdns);
-> +	bool				no_drd;
->  };
->  
->  int cdns_hw_role_switch(struct cdns *cdns);
-> diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
-> index 84fb38a5723a..8e8414c2e994 100644
-> --- a/drivers/usb/cdns3/drd.c
-> +++ b/drivers/usb/cdns3/drd.c
-> @@ -87,6 +87,9 @@ int cdns_get_id(struct cdns *cdns)
->  {
->  	int id;
->  
-> +	if (cdns->no_drd)
-> +		return 0;
-> +
->  	id = readl(&cdns->otg_regs->sts) & OTGSTS_ID_VALUE;
->  	dev_dbg(cdns->dev, "OTG ID: %d", id);
->  
-> @@ -107,7 +110,7 @@ void cdns_clear_vbus(struct cdns *cdns)
->  {
->  	u32 reg;
->  
-> -	if (cdns->version != CDNSP_CONTROLLER_V2)
-> +	if (cdns->version != CDNSP_CONTROLLER_V2 || cdns->no_drd)
->  		return;
->  
->  	reg = readl(&cdns->otg_cdnsp_regs->override);
-> @@ -120,7 +123,7 @@ void cdns_set_vbus(struct cdns *cdns)
->  {
->  	u32 reg;
->  
-> -	if (cdns->version != CDNSP_CONTROLLER_V2)
-> +	if (cdns->version != CDNSP_CONTROLLER_V2 || cdns->no_drd)
->  		return;
->  
->  	reg = readl(&cdns->otg_cdnsp_regs->override);
-> @@ -234,6 +237,9 @@ int cdns_drd_gadget_on(struct cdns *cdns)
->  	u32 ready_bit;
->  	int ret, val;
->  
-> +	if (cdns->no_drd)
-> +		return 0;
-> +
->  	/* switch OTG core */
->  	writel(OTGCMD_DEV_BUS_REQ | reg, &cdns->otg_regs->cmd);
->  
-> @@ -265,6 +271,9 @@ void cdns_drd_gadget_off(struct cdns *cdns)
->  {
->  	u32 val;
->  
-> +	if (cdns->no_drd)
-> +		return;
-> +
->  	/*
->  	 * Driver should wait at least 10us after disabling Device
->  	 * before turning-off Device (DEV_BUS_DROP).
-> @@ -392,6 +401,12 @@ int cdns_drd_init(struct cdns *cdns)
->  	u32 state, reg;
->  	int ret;
->  
-> +	if (cdns->no_drd) {
-> +		cdns->version  = CDNSP_CONTROLLER_V2;
-> +		cdns->dr_mode = USB_DR_MODE_PERIPHERAL;
-> +		return 0;
-> +	}
-> +
+This is not implemented as a standalone driver because the temperature
+register belongs to the PROM21 xHCI PCI function, is accessed through the
+xHCI BAR after the host controller is initialized, and should share that
+device's lifetime and runtime PM. Keep the device-specific PROM21 code in a
+separate helper called only from xhci-pci, while linking it into xhci-hcd
+to match the existing xHCI object layout. The xhci-pci remove path
+invalidates the helper before HCD teardown.
 
-I still concern this, CIX SoC has host-only configuration, and it
-needs to use cdns3 driver for low power purpose, eg set D3 mode
-for controller.
+Assisted-by: Codex:gpt-5.5
+Signed-off-by: Jihong Min <hurryman2212@gmail.com>
+---
+ drivers/usb/host/Kconfig             |  10 ++
+ drivers/usb/host/Makefile            |   4 +
+ drivers/usb/host/xhci-pci.c          |   9 +
+ drivers/usb/host/xhci-prom21-hwmon.c | 241 +++++++++++++++++++++++++++
+ drivers/usb/host/xhci-prom21-hwmon.h |  26 +++
+ 5 files changed, 290 insertions(+)
+ create mode 100644 drivers/usb/host/xhci-prom21-hwmon.c
+ create mode 100644 drivers/usb/host/xhci-prom21-hwmon.h
 
->  	regs = devm_ioremap_resource(cdns->dev, &cdns->otg_res);
->  	if (IS_ERR(regs))
->  		return PTR_ERR(regs);
-> @@ -500,6 +515,9 @@ int cdns_drd_exit(struct cdns *cdns)
->  /* Indicate the cdns3 core was power lost before */
->  bool cdns_power_is_lost(struct cdns *cdns)
->  {
-> +	if (cdns->no_drd)
-> +		return false;
-> +
-
-You may not just return false, would you please find one host and one device
-register to compare, we need this feature.
-
-Peter
-
->  	if (cdns->version == CDNS3_CONTROLLER_V0) {
->  		if (!(readl(&cdns->otg_v0_regs->simulate) & BIT(0)))
->  			return true;
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index 24cb42f66e4b..a6b9b6f6d8cc 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -2424,6 +2424,7 @@
->  #define PCI_DEVICE_ID_CDNS_USBSS	0x0100
->  #define PCI_DEVICE_ID_CDNS_USB		0x0120
->  #define PCI_DEVICE_ID_CDNS_USBSSP	0x0200
-> +#define PCI_DEVICE_ID_CDNS_UDC_USBSSP	0x0400
->  
->  #define PCI_VENDOR_ID_ARECA		0x17d3
->  #define PCI_DEVICE_ID_ARECA_1110	0x1110
-> 
-> ---
-> base-commit: 9d0d467c3572e93c5faa2e5906a8bbcd70b24efd
-> change-id: 20260505-device_only_branch_v2-53692f329752
-> 
-> Best regards,
-> --  
-> Pawel Laszczak <pawell@cadence.com>
-> 
-> 
-
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index 0a277a07cf70..da41ebc272b0 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -42,6 +42,16 @@ config USB_XHCI_PCI
+ 	depends on USB_PCI
+ 	default y
+ 
++config USB_XHCI_PCI_PROM21_HWMON
++	bool "AMD PROM21 xHCI temperature sensor support"
++	depends on USB_XHCI_PCI
++	depends on HWMON
++	help
++	  Say Y here to expose the AMD PROM21 xHCI temperature sensor
++	  through the hwmon subsystem. The sensor is accessed through a
++	  vendor-specific index/data register pair in the controller's PCI
++	  MMIO BAR and reports temperature only. If unsure, say N.
++
+ config USB_XHCI_PCI_RENESAS
+ 	tristate "Support for additional Renesas xHCI controller with firmware"
+ 	depends on USB_XHCI_PCI
+diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
+index a07e7ba9cd53..22f141cb2af7 100644
+--- a/drivers/usb/host/Makefile
++++ b/drivers/usb/host/Makefile
+@@ -36,6 +36,10 @@ ifneq ($(CONFIG_USB_XHCI_SIDEBAND),)
+ 	xhci-hcd-y		+= xhci-sideband.o
+ endif
+ 
++ifneq ($(CONFIG_USB_XHCI_PCI_PROM21_HWMON),)
++	xhci-hcd-y += xhci-prom21-hwmon.o
++endif
++
+ obj-$(CONFIG_USB_PCI)	+= pci-quirks.o
+ 
+ obj-$(CONFIG_USB_EHCI_HCD)	+= ehci-hcd.o
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 585b2f3117b0..54713efc931f 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -18,6 +18,7 @@
+ #include "xhci.h"
+ #include "xhci-trace.h"
+ #include "xhci-pci.h"
++#include "xhci-prom21-hwmon.h"
+ 
+ #define SSIC_PORT_NUM		2
+ #define SSIC_PORT_CFG2		0x880c
+@@ -677,6 +678,10 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	if (device_property_read_bool(&dev->dev, "ti,pwron-active-high"))
+ 		pci_clear_and_set_config_dword(dev, 0xE0, 0, 1 << 22);
+ 
++	if (dev->vendor == PCI_VENDOR_ID_AMD &&
++	    dev->device == PCI_DEVICE_ID_AMD_PROM21_XHCI)
++		xhci_prom21_hwmon_init(xhci, dev);
++
+ 	return 0;
+ 
+ put_usb3_hcd:
+@@ -713,6 +718,10 @@ void xhci_pci_remove(struct pci_dev *dev)
+ 	xhci = hcd_to_xhci(pci_get_drvdata(dev));
+ 	set_power_d3 = xhci->quirks & XHCI_SPURIOUS_WAKEUP;
+ 
++	if (dev->vendor == PCI_VENDOR_ID_AMD &&
++	    dev->device == PCI_DEVICE_ID_AMD_PROM21_XHCI)
++		xhci_try_prom21_hwmon_invalidate(dev);
++
+ 	xhci->xhc_state |= XHCI_STATE_REMOVING;
+ 
+ 	if (pci_choose_state(dev, PMSG_SUSPEND) == PCI_D0)
+diff --git a/drivers/usb/host/xhci-prom21-hwmon.c b/drivers/usb/host/xhci-prom21-hwmon.c
+new file mode 100644
+index 000000000000..5f71e72f4a90
+--- /dev/null
++++ b/drivers/usb/host/xhci-prom21-hwmon.c
+@@ -0,0 +1,241 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * AMD PROM21 xHCI Hwmon Implementation
++ * (only temperature monitoring is supported)
++ *
++ * This can be effectively used as the alternative chipset temperature monitor.
++ *
++ * Copyright (C) 2026 Jihong Min <hurryman2212@gmail.com>
++ */
++
++#include <linux/device/devres.h>
++#include <linux/err.h>
++#include <linux/errno.h>
++#include <linux/hwmon.h>
++#include <linux/io.h>
++#include <linux/math.h>
++#include <linux/mutex.h>
++#include <linux/pci.h>
++#include <linux/pm_runtime.h>
++#include <linux/slab.h>
++
++#include "xhci.h"
++#include "xhci-prom21-hwmon.h"
++
++#define XHCI_PROM21_INDEX 0x3000
++#define XHCI_PROM21_DATA 0x3008
++#define XHCI_PROM21_TEMP_REG 0x0001e520
++
++#define XHCI_PROM21_HWMON_NAME "xhci_prom21"
++
++struct xhci_prom21_hwmon {
++	struct pci_dev *pdev;
++	void __iomem *regs;
++	bool removing;
++	struct mutex lock; /* protects removing and the index/data registers */
++};
++
++struct xhci_prom21_hwmon_devres {
++	struct xhci_prom21_hwmon *hwmon;
++};
++
++static void xhci_prom21_hwmon_invalidate(struct xhci_prom21_hwmon *hwmon)
++{
++	mutex_lock(&hwmon->lock);
++	hwmon->removing = true;
++	mutex_unlock(&hwmon->lock);
++}
++
++static void xhci_prom21_hwmon_devres_release(struct device *dev, void *res)
++{
++	struct xhci_prom21_hwmon_devres *devres = res;
++
++	/*
++	 * devm hwmon unregister runs after this lookup record is released.
++	 * Mark the data path closed first so any late sysfs read returns
++	 * without touching xHCI MMIO.
++	 */
++	xhci_prom21_hwmon_invalidate(devres->hwmon);
++}
++
++/*
++ * This is not a pure MMIO read. The PROM21 vendor data register is selected
++ * by temporarily writing XHCI_PROM21_TEMP_REG to the vendor index register.
++ * Keep the sequence short and restore the previous index before returning.
++ */
++static int
++xhci_prom21_read_temp_raw_restore_index(struct xhci_prom21_hwmon *hwmon,
++					u8 *raw)
++{
++	struct device *dev = &hwmon->pdev->dev;
++	u32 index;
++	u32 data;
++	int ret;
++
++	/*
++	 * xhci_try_prom21_hwmon_invalidate() uses the same lock before HCD
++	 * teardown. Keep runtime PM and MMIO inside the critical section so a
++	 * sysfs read cannot use the vendor register pair after remove starts.
++	 */
++	mutex_lock(&hwmon->lock);
++	if (hwmon->removing) {
++		mutex_unlock(&hwmon->lock);
++		return -ENODEV;
++	}
++
++	ret = pm_runtime_resume_and_get(dev);
++	if (ret < 0) {
++		mutex_unlock(&hwmon->lock);
++		return ret;
++	}
++
++	index = readl(hwmon->regs + XHCI_PROM21_INDEX);
++	/* Select the PROM21 temperature register through the vendor index. */
++	writel(XHCI_PROM21_TEMP_REG, hwmon->regs + XHCI_PROM21_INDEX);
++	data = readl(hwmon->regs + XHCI_PROM21_DATA);
++	/* Restore the previous vendor index register value. */
++	writel(index, hwmon->regs + XHCI_PROM21_INDEX);
++	readl(hwmon->regs + XHCI_PROM21_INDEX);
++
++	/* Let xHCI PCI runtime PM coalesce repeated sysfs polling. */
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
++	mutex_unlock(&hwmon->lock);
++
++	*raw = data & 0xff;
++	if (!*raw || *raw == 0xff)
++		return -ENODATA;
++
++	return 0;
++}
++
++static long xhci_prom21_raw_to_millicelsius(u8 raw)
++{
++	/*
++	 * No public AMD register reference is available for this value.
++	 * The scale was derived from observed PROM21 xHCI temperature readings:
++	 *  temp[C] = raw * 0.9066 - 78.624
++	 */
++	return DIV_ROUND_CLOSEST(raw * 9066, 10) - 78624;
++}
++
++static umode_t xhci_prom21_hwmon_is_visible(const void *drvdata,
++					    enum hwmon_sensor_types type,
++					    u32 attr, int channel)
++{
++	if (type != hwmon_temp || channel)
++		return 0;
++
++	switch (attr) {
++	case hwmon_temp_input:
++		return 0444;
++	default:
++		return 0;
++	}
++}
++
++static int xhci_prom21_hwmon_read(struct device *dev,
++				  enum hwmon_sensor_types type, u32 attr,
++				  int channel, long *val)
++{
++	struct xhci_prom21_hwmon *hwmon = dev_get_drvdata(dev);
++	u8 raw;
++	int ret;
++
++	if (type != hwmon_temp || attr != hwmon_temp_input || channel)
++		return -EOPNOTSUPP;
++
++	ret = xhci_prom21_read_temp_raw_restore_index(hwmon, &raw);
++	if (ret)
++		return ret;
++
++	*val = xhci_prom21_raw_to_millicelsius(raw);
++	return 0;
++}
++
++static const struct hwmon_ops xhci_prom21_hwmon_ops = {
++	.is_visible = xhci_prom21_hwmon_is_visible,
++	.read = xhci_prom21_hwmon_read,
++};
++
++static const struct hwmon_channel_info *const xhci_prom21_hwmon_info[] = {
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
++	NULL,
++};
++
++static const struct hwmon_chip_info xhci_prom21_chip_info = {
++	.ops = &xhci_prom21_hwmon_ops,
++	.info = xhci_prom21_hwmon_info,
++};
++
++void xhci_prom21_hwmon_init(struct xhci_hcd *xhci, struct pci_dev *pdev)
++{
++	struct xhci_prom21_hwmon_devres *devres;
++	struct xhci_prom21_hwmon *hwmon;
++	struct usb_hcd *hcd = xhci_to_hcd(xhci);
++	struct device *dev = &pdev->dev;
++	struct device *hwmon_dev;
++
++	if (!hcd->regs || hcd->rsrc_len < XHCI_PROM21_DATA + sizeof(u32)) {
++		dev_err(dev,
++			"AMD PROM21 hwmon unavailable: invalid MMIO resource\n");
++		return;
++	}
++
++	hwmon = devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
++	if (!hwmon) {
++		/* The allocator reports OOM; add PROM21 device context. */
++		dev_err(dev, "AMD PROM21 hwmon state unavailable\n");
++		return;
++	}
++
++	devres = devres_alloc(xhci_prom21_hwmon_devres_release, sizeof(*devres),
++			      GFP_KERNEL);
++	if (!devres) {
++		dev_err(dev, "AMD PROM21 hwmon devres allocation failed\n");
++		return;
++	}
++
++	hwmon->pdev = pdev;
++	hwmon->regs = hcd->regs;
++	mutex_init(&hwmon->lock);
++
++	hwmon_dev = devm_hwmon_device_register_with_info(dev,
++							 XHCI_PROM21_HWMON_NAME,
++							 hwmon,
++							 &xhci_prom21_chip_info,
++							 NULL);
++	if (IS_ERR(hwmon_dev)) {
++		devres_free(devres);
++		dev_err(dev, "AMD PROM21 hwmon registration failed: %pe\n",
++			hwmon_dev);
++		return;
++	}
++
++	/*
++	 * Store a private devres record so the device remove path can find this
++	 * state without adding PROM21-specific part to xhci-pci.
++	 */
++	devres->hwmon = hwmon;
++	devres_add(dev, devres);
++}
++EXPORT_SYMBOL_GPL(xhci_prom21_hwmon_init);
++
++void xhci_try_prom21_hwmon_invalidate(struct pci_dev *pdev)
++{
++	struct xhci_prom21_hwmon_devres *devres;
++
++	/*
++	 * This is called for every xHCI PCI device. Devices without PROM21
++	 * hwmon support simply have no matching helper devres entry.
++	 */
++	devres = devres_find(&pdev->dev, xhci_prom21_hwmon_devres_release, NULL,
++			     NULL);
++	if (!devres) {
++		dev_dbg(&pdev->dev, "AMD PROM21 hwmon state not found\n");
++		return;
++	}
++
++	xhci_prom21_hwmon_invalidate(devres->hwmon);
++}
++EXPORT_SYMBOL_GPL(xhci_try_prom21_hwmon_invalidate);
+diff --git a/drivers/usb/host/xhci-prom21-hwmon.h b/drivers/usb/host/xhci-prom21-hwmon.h
+new file mode 100644
+index 000000000000..eca8db23c0ea
+--- /dev/null
++++ b/drivers/usb/host/xhci-prom21-hwmon.h
+@@ -0,0 +1,26 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (C) 2026 Jihong Min <hurryman2212@gmail.com> */
++
++#ifndef XHCI_PROM21_HWMON_H
++#define XHCI_PROM21_HWMON_H
++
++#define PCI_DEVICE_ID_AMD_PROM21_XHCI 0x43fd
++
++struct pci_dev;
++struct xhci_hcd;
++
++#if IS_ENABLED(CONFIG_USB_XHCI_PCI_PROM21_HWMON)
++void xhci_prom21_hwmon_init(struct xhci_hcd *xhci, struct pci_dev *pdev);
++void xhci_try_prom21_hwmon_invalidate(struct pci_dev *pdev);
++#else
++static inline void xhci_prom21_hwmon_init(struct xhci_hcd *xhci,
++					  struct pci_dev *pdev)
++{
++}
++
++static inline void xhci_try_prom21_hwmon_invalidate(struct pci_dev *pdev)
++{
++}
++#endif
++
++#endif
 -- 
+2.53.0
 
-Best regards,
-Peter
 
