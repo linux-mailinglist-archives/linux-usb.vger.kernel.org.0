@@ -1,196 +1,120 @@
-Return-Path: <linux-usb+bounces-36992-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36993-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qMWWAPmU+mnqPwMAu9opvQ
-	(envelope-from <linux-usb+bounces-36992-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 06 May 2026 03:10:17 +0200
+	id IPTLH0mX+mk3QAMAu9opvQ
+	(envelope-from <linux-usb+bounces-36993-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 06 May 2026 03:20:09 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94B504D528C
-	for <lists+linux-usb@lfdr.de>; Wed, 06 May 2026 03:10:16 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0DC14D5357
+	for <lists+linux-usb@lfdr.de>; Wed, 06 May 2026 03:20:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 51FE43021BD3
-	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2026 01:10:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3C8403033D3E
+	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2026 01:19:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7910B23BCED;
-	Wed,  6 May 2026 01:10:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C989B258EE0;
+	Wed,  6 May 2026 01:19:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=soslab.tu-darmstadt.de header.i=@soslab.tu-darmstadt.de header.b="Jj+1HVRm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="awwUcUyW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from b2682.mx.srv.dfn.de (b2682.mx.srv.dfn.de [194.95.235.80])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC25C2FF;
-	Wed,  6 May 2026 01:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.95.235.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547A41E531;
+	Wed,  6 May 2026 01:19:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778029810; cv=none; b=O4V0wbPindy1qd8F3sD7kIxRUIPO2yVAOZBOmy/C8ylHVzWSgzgIfHZGv9QoS/+SVQuEgGdUgPGkLP3ovB8uIvL6rmVKC/frp7caU7vO0MBWvFvmx0mEsf5IULLA8h/WkSNHfMYFvoIf7ayy7sUH4EguPYS+G6b6hX8tdx7/KeE=
+	t=1778030396; cv=none; b=R0yv6QtFvBml31W/GrrOJb4qzv9FdpabViSIbjqGCIExk3aHLnjIkdu/mKNHcJXh96tI7g6Q2NI9X9G7v/iGZ/Aqc8WOJBksu5g54O96S7BfB/h8vDOWWzInA4Y2jq+aKhanPnRpMeyJ4diu3Bht97xz9v0DC05D5gmGRY9GEsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778029810; c=relaxed/simple;
-	bh=KRBLQQniWdVBGFlggN0DOG8w40a6ggoj4/AvXMfCcMc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sF3+mzpm4glv28+RO6Gt6ywhfXPcItmBXFfnX1veF1YrkoioKkjkzXZT9e8pj2OaFIeHIE44tXxtkrY7MjJiImQ+LbR7yvbO6dHsqv19n1PrAUUZJ5rYnaKyXY6znSH1veoLEfIpLPcOtcop/hONuU/6DqXm7lN+e8RkPLMsk6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soslab.tu-darmstadt.de; spf=pass smtp.mailfrom=soslab.tu-darmstadt.de; dkim=pass (1024-bit key) header.d=soslab.tu-darmstadt.de header.i=@soslab.tu-darmstadt.de header.b=Jj+1HVRm; arc=none smtp.client-ip=194.95.235.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soslab.tu-darmstadt.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soslab.tu-darmstadt.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-	soslab.tu-darmstadt.de; h=content-transfer-encoding:mime-version
-	:message-id:date:date:subject:subject:from:from:received; s=s1;
-	 t=1778029459; x=1779843860; bh=KRBLQQniWdVBGFlggN0DOG8w40a6ggoj
-	4/AvXMfCcMc=; b=Jj+1HVRm8vZmN5SI4kGnjBjN6m4vGjZU9EIG5XmKkQQXzX/G
-	S3nvcnku+i9FDEqCFlFOV8qBQzW2Ha6AYAYjfJrRTwHgl8GzY4lU7xtzMf8qFrJE
-	8OSlDg6NpNpSjhFjwJTf4jFVIbhMBxuqK225hFpp3YU1d0NM5PHw78d2p5M=
-Received: from mail-relay152.hrz.tu-darmstadt.de (mail-relay152.hrz.tu-darmstadt.de [130.83.252.152])
-	by b2682.mx.srv.dfn.de (Postfix) with ESMTPS id BCAC63A0112;
-	Wed,  6 May 2026 03:04:16 +0200 (CEST)
-Received: from smtp.tu-darmstadt.de (mail-relay238.hrz.tu-darmstadt.de [130.83.156.238])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits)
-	 client-signature RSA-PSS (4096 bits))
-	(Client CN "mail-relay238.hrz.tu-darmstadt.de", Issuer "GEANT TLS RSA 1" (not verified))
-	by mail-relay152.hrz.tu-darmstadt.de (Postfix) with ESMTPS id 4g9HG70TbSz442D;
-	Wed,  6 May 2026 03:04:15 +0200 (CEST)
-From: Markus Baier <Markus.Baier@soslab.tu-darmstadt.de>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	Miaoqian Lin <linmq006@gmail.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Markus Baier <Markus.Baier@soslab.tu-darmstadt.de>
-Subject: [PATCH net] net: usb: asix: ax88772: replace usbnet_link_change() with queue_work() and usbnet_unlink_rx_urbs()
-Date: Wed,  6 May 2026 03:03:44 +0200
-Message-ID: <20260506010344.184636-1-Markus.Baier@soslab.tu-darmstadt.de>
+	s=arc-20240116; t=1778030396; c=relaxed/simple;
+	bh=Lo2J3ckp1HHEUc7MJLC2C5rpL8Id65rwctqCEandc1I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mofvg0kYiX9o/v9oiHs9RogteoRKHIaB2kH0xZOOLhXPvqFqpIAu4eQWM5ZW49LjjAqJBTLg7YwtjlLLhRkJ1WGJFAE8vaITgUKVyDvn+Eo2zsE/tEYNM9azat2eBB+1i2MzT1yAHzRWxLozavleBJMs/VZU8bOcW3daead8x3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=awwUcUyW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B88F7C2BCB4;
+	Wed,  6 May 2026 01:19:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778030396;
+	bh=Lo2J3ckp1HHEUc7MJLC2C5rpL8Id65rwctqCEandc1I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=awwUcUyW/UELBpZuRTUrQscWsE2Cg7oiPFXIPoGfTnZHPzN5o8ryEGm0dmTrCRabV
+	 MdPZcjNr8hXmvRmV8j0E4W4f8jHTcbov/b3Ec76PyDbeQi03r18aIXaC71qzUGDpgM
+	 uOfAm1GqEZeIhRXD2xbFwzKrvOU5dyDeyfuoqV/Bfxcyptrc77qE9PatjUr79oomlR
+	 gEmiJ2AKU9AhDKD2gYHiNYvnD4Qdms9SqMltUj5CS675xbiZejsTTtf2O3/4xHOWG7
+	 yTxC2x9LFi+q+iS5g4zsp1SdYwJfApuuGEvZCAGJw6kGuxzVZWVM6J59rp5tVwOurN
+	 fl5U9cFeeUQFQ==
+Date: Tue, 5 May 2026 20:19:25 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Ronak Raheja <ronak.raheja@oss.qualcomm.com>
+Cc: linux-usb@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com,
+	abel.vesa@oss.qualcomm.com, krzysztof.kozlowski@oss.qualcomm.com,
+	linux-kernel@vger.kernel.org, vkoul@kernel.org,
+	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+	gregkh@linuxfoundation.org, conor+dt@kernel.org,
+	konrad.dybcio@oss.qualcomm.com, wesley.cheng@oss.qualcomm.com,
+	linux-arm-msm@vger.kernel.org, krzk+dt@kernel.org,
+	neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/4] dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp-phy: Add
+ Hawi QMP PHY
+Message-ID: <177803036501.245983.2853371804362184732.robh@kernel.org>
+References: <20260427214217.2735240-1-ronak.raheja@oss.qualcomm.com>
+ <20260427214217.2735240-2-ronak.raheja@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Header-TUDa: <X1qhTH9GVSVqlQq3atM0WKFwVN9uDwkBY9TBSEJJNbxcGN2t4lQ1ds1dJw5lITIP7ddAtyOj9zJBY2o2FpFo1I2i6zXYZmJS54q5.1778029456>
-X-TUDa-Umlauf: 1
-X-Rspamd-Queue-Id: 94B504D528C
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260427214217.2735240-2-ronak.raheja@oss.qualcomm.com>
+X-Rspamd-Queue-Id: D0DC14D5357
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[tu-darmstadt.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[soslab.tu-darmstadt.de:s=s1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,armlinux.org.uk,gmail.com,vger.kernel.org,soslab.tu-darmstadt.de];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-36992-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Markus.Baier@soslab.tu-darmstadt.de,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-36993-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[soslab.tu-darmstadt.de:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,tu-darmstadt.de:email]
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email]
 
-Commit 36bdc0e815b4 ("net: usb: asix: ax88772: re-add usbnet_link_change()
-in phylink callbacks") restored the link-change notification that was
-lost during the phylink migration, by calling usbnet_link_change() from
-the phylink mac_link_up() / mac_link_down() callbacks.
 
-While this fixed the original symptom (RX URB submission not being
-initiated after link up), usbnet_link_change() also calls
-netif_carrier_off() on link-down, which is redundant in a phylink-based
-driver because phylink manages the carrier state itself.
+On Mon, 27 Apr 2026 14:42:14 -0700, Ronak Raheja wrote:
+> Document the Hawi compatible string for the QMP combo PHY.
+> 
+> Hawi uses a new QSERDES V10 register layout with a new COM AON module
+> and hardware-specific PHY init sequences compared to previous targets,
+> requiring a dedicated compatible string.
+> 
+> Signed-off-by: Ronak Raheja <ronak.raheja@oss.qualcomm.com>
+> ---
+>  .../devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml  | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-Replace the usbnet_link_change() calls with the minimal operations:
-
-  - In ax88772_mac_link_up(), schedule dev->bh_work directly via
-    queue_work(system_bh_wq, &dev->bh_work). This is the same
-    mechanism usbnet_open() uses to schedule the bottom-half
-    that submits RX URBs.
-
-  - In ax88772_mac_link_down(), call usbnet_unlink_rx_urbs() to
-    return any in-flight RX URBs to the host controller.
-    This releases USB bandwidth and avoids keeping unused buffers
-    queued while the link is down. This is the symmetric
-    counterpart to scheduling new RX URBs on link up.
-
-Tested with the Apple A1277 USB Ethernet Adapter (05ac:1402,
-AX88772A based) on a Banana Pro (Allwinner A20).
-
-Fixes: 36bdc0e815b4 ("net: usb: asix: ax88772: re-add usbnet_link_change() in phylink callbacks")
-Assisted-by: Claude:claude-opus-4-7
-Signed-off-by: Markus Baier <Markus.Baier@soslab.tu-darmstadt.de>
----
-
-Transparency notice: The English formulation of this commit message
-was prepared with AI assistance. The actual system testing and
-verification of the issue were performed manually without AI
-involvement.
-
-This is a follow-up to commit 36bdc0e815b4 (just applied to net.git).
-While that patch correctly restored the missing RX URB submission,
-I realized during further analysis that usbnet_link_change() carries
-side effects (notably calling netif_carrier_off() on link-down) that
-are redundant in a phylink-based driver. After studying how
-usbnet_open() handles the same task (direct queue_work() call), this
-minimal approach better matches the existing usbnet patterns.
-
-I am sending this now rather than waiting, because the previous patch
-just landed and I would like the cleanup to be considered before it
-propagates further into stable kernels via the Fixes: tag.
-
- drivers/net/usb/asix_devices.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index 293ef80c4e30..4230ff611c4b 100644
---- a/drivers/net/usb/asix_devices.c
-+++ b/drivers/net/usb/asix_devices.c
-@@ -756,7 +756,11 @@ static void ax88772_mac_link_down(struct phylink_config *config,
- 	struct usbnet *dev = netdev_priv(to_net_dev(config->dev));
- 
- 	asix_write_medium_mode(dev, 0, 0);
--	usbnet_link_change(dev, false, false);
-+
-+	/* Phylink will call netif_carrier_off(), but we should explicitly
-+	 * stop RX URBs to save USB bandwidth.
-+	 */
-+	usbnet_unlink_rx_urbs(dev);
- }
- 
- static void ax88772_mac_link_up(struct phylink_config *config,
-@@ -787,7 +791,11 @@ static void ax88772_mac_link_up(struct phylink_config *config,
- 		m |= AX_MEDIUM_RFC;
- 
- 	asix_write_medium_mode(dev, m, 0);
--	usbnet_link_change(dev, true, false);
-+
-+	/* Phylink will call netif_carrier_on(), but we need to explicitly
-+	 * kick off RX URB submission in usbnet.
-+	 */
-+	queue_work(system_bh_wq, &dev->bh_work);
- }
- 
- static const struct phylink_mac_ops ax88772_phylink_mac_ops = {
--- 
-2.52.0
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
 
