@@ -1,430 +1,425 @@
-Return-Path: <linux-usb+bounces-36995-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-36996-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sOOcOBum+mm7QwMAu9opvQ
-	(envelope-from <linux-usb+bounces-36995-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 06 May 2026 04:23:23 +0200
+	id KLUPMXKp+mmJRAMAu9opvQ
+	(envelope-from <linux-usb+bounces-36996-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 06 May 2026 04:37:38 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6128B4D5A29
-	for <lists+linux-usb@lfdr.de>; Wed, 06 May 2026 04:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 63D014D5BA3
+	for <lists+linux-usb@lfdr.de>; Wed, 06 May 2026 04:37:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1D4B2302658E
-	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2026 02:23:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B1B3B303E4BD
+	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2026 02:36:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73B0E29AAFA;
-	Wed,  6 May 2026 02:23:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F4EF2D3A75;
+	Wed,  6 May 2026 02:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="LNjvoxPF";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="fO4OcAC7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KdoXtTeY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3DC2848A7
-	for <linux-usb@vger.kernel.org>; Wed,  6 May 2026 02:23:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E015D7080D;
+	Wed,  6 May 2026 02:36:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778034183; cv=none; b=PyDReLNt72VSoQBF1nxTQO/r7Kv4ibX5nkjkwryGpJCzQtiSsRDRgA6Gnd3OFWihTJbXt71d6J98cIhJZREZdLCSjGUQwEIwTV0twV6//HInj5OH55apduve6sz/9uBt85gMgGMS89RV2c9v6169Fdu4sf3M/4ArccCSJDEsR7o=
+	t=1778034995; cv=none; b=gQrJUXUmJ55oHO3ubRwU09JcBXMicP+74RtahCZcj9E7EC1VDtjgdHx+ZQwqHDmeZyXSjouy0lm6gJbCYH3e98WyXyTBp9ZUXG3la6mEOeFNFS63XrMvidHLvQ1dVv93ccqzLV8fkfM49jiTVWp3hHHiKAlNGaxU0w1zNRWpyzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778034183; c=relaxed/simple;
-	bh=bfAA/IYvcibhOQS614NPGEz53CX+MrHJUMuEN9noih0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ddhAbl2Jgbkx1gcX8SHB/gYloWUffuZWAb3vjd0r8HS3RscXggBUJlVFNvBQ4XdZY1Fj9CSwGR8TxIFetwOKt1L1wxL7Q5dtFvqdHywybdWte6gVJYB24TG3jvqAtfGvLakeeIsPdbAKli0NgyUDEs8gf28WJ+1SlDqVVDEuK9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=LNjvoxPF; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=fO4OcAC7; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64603Qj04028270
-	for <linux-usb@vger.kernel.org>; Wed, 6 May 2026 02:23:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	OV3Qj8GhGhQEqya7HaO2NtX34E4ygEIKaVpqk/TFWfY=; b=LNjvoxPFNe6qtzLQ
-	V58ADN4PDOk13DqWL5bottw3Dg2/WDZpjTG8au/aGvhqLvZb5k2RdXoQonH8TaZH
-	Z4rCAuVcAesx8Jta9nJXxBZyIwpqGBZ/7s7LROy9nerzhKPGVtX0TlC790zC4rmx
-	bbtQ8i/OoJJD5mAI6jv4Zytg+M39MEfBWjd3V3RO/ctGZiThwvPaYXAzdC6lUCZ4
-	jplDqTzFR13WXKfwvALbu9urXdsNCZ2//3+jFz6WvkREsFxpvDIMKkOfTl039p2L
-	Qi6b3W1LETQhduGPavkiEpix9ctInicR0e3CcUgTulO4mcLOUV5m5rYyE8Foa1sW
-	OgTjtA==
-Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dydm6uqd2-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 06 May 2026 02:23:00 +0000 (GMT)
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-2f525565b33so843696eec.0
-        for <linux-usb@vger.kernel.org>; Tue, 05 May 2026 19:23:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1778034180; x=1778638980; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OV3Qj8GhGhQEqya7HaO2NtX34E4ygEIKaVpqk/TFWfY=;
-        b=fO4OcAC7VPgjOCtNziJorVtrPuSa2J8g/Hja1Cl6W1LEiKDZrgIjB4d8DHlZ+z/WRA
-         wgkgxY4umTlWnp7mHWSpyY5Ox938ob7eK2Mi9WhcstvP73xYwAcXaaZCSC1zWOBbtbiI
-         lP+LrJTC/7208JKhaA1Hd+FHGPyVMggpE2j+UaFBmLDU48x54qXcT3/4fOEw91EeMT+A
-         cEptTckKl+/SMoVgTuumP7gOfiqLPgJDEVpwzKDUZHnZE7qKocqj6sKcN0dDotUKfXdQ
-         rY5Nf0NT6C6ISBQARC+GRxFSqxYnzrhhPeNt64HP0tHteiElM9l+CnoWB/0mXkBN+vpE
-         OG9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778034180; x=1778638980;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OV3Qj8GhGhQEqya7HaO2NtX34E4ygEIKaVpqk/TFWfY=;
-        b=bwvi6quH5SSxUy7pErDtqLGWZ/5uUyI7CDJqEh+YjL07EyZaDRo6otJngvR5inTGSl
-         tOGx8cD0AYs32zucXGgu5GgQx7PGhVOzoB4S8bhZyOFTq/KhjprO2G65X5VG459rxKck
-         bO9iWA2c7ruEbzm1VN//YF7JrstcqzgeFKlTvVFxvefAJqrG0KHCGFLz1PmzVE2Vm7zd
-         FD7prCsdJGTUhQY/aYlm1OctK7C3AnIJa4LRy/yRRC8JVofniczfX81E+ScXDmrj5wgJ
-         m097KWfNGZoX5iztZbTyCpdSNM+I/8CPlfXbm60+1095SwNprttNbBJe3nvNfYllfyod
-         ifAA==
-X-Forwarded-Encrypted: i=1; AFNElJ/vujXePkPO+rCpr5U88G7PAiFeACMcziTq8vkpHHrW2fSmVs6whmMkz/rURW3gPYS7KG6KZCfOqU8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywkfkxtc4QByY5MOXcuaHz4dE1BGSBTINTS0LTjcyQMZweFdNLp
-	tUTG9OcDLhHZim6IgRg4lf+F48EGtrWPbTZ9aaS4CBB7JE9JfVTV+b5R0kIKwq5Y+ZNTbGA7fFT
-	XtWrFIlH/6HHYGXuHQu9UQbgvlq6c7o2ee5tLvLY3i7ZCJh+4E/6BCKXat41Wg51CCFhpJ5s=
-X-Gm-Gg: AeBDievgS3bwfcIvsf/4aLjyXhkso5UKZMO/c9OkJK5I7fqjFDGYrXXbTXaD7fVlNUB
-	T6VSj5/oG2+8PksI++TBoSgWyyMvhbIZzcNhO2v+8UmJiqKJaWG0H+hzwnZZdITfihlj9c+IhNm
-	CCU8LMRWuJGICwplv+VKegz+COpLo0v7QBJM+0V3Zj4F8cmBiczp+D6LlPqMsrNtp+z3Ye3WZDw
-	Eb1WlIseW1tmONiMzPynD1TS2Lx+LgyMyMU6d/wRDCWRC818JK7kgAL1+8h2maO6NLYvC9L2dtA
-	kCfSu5L0MJ/kJjpoMPpqGLYu9St+TN7jcNzilTEheQvlXGC59iEcKmFiPJcGMZLAnRDZ+p22x8W
-	XT6h+qsFtkgpsWNra2WUBsOTbBCyACAsSkeTGolm6LhEh29L0b2m3jAUwoNVbZ/J5Olcuk5no8T
-	NS1tYi0u1tBJMW1F1Wwru0m2XE
-X-Received: by 2002:a05:7300:dc14:b0:2da:2ec2:64fe with SMTP id 5a478bee46e88-2f55034e591mr766924eec.24.1778034179789;
-        Tue, 05 May 2026 19:22:59 -0700 (PDT)
-X-Received: by 2002:a05:7300:dc14:b0:2da:2ec2:64fe with SMTP id 5a478bee46e88-2f55034e591mr766911eec.24.1778034179168;
-        Tue, 05 May 2026 19:22:59 -0700 (PDT)
-Received: from [192.168.1.2] ([122.177.244.255])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f56cec58efsm1474615eec.2.2026.05.05.19.22.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 May 2026 19:22:58 -0700 (PDT)
-Message-ID: <53d75016-90a6-40e9-b6e9-a8fa35be8d2a@oss.qualcomm.com>
-Date: Wed, 6 May 2026 07:52:52 +0530
+	s=arc-20240116; t=1778034995; c=relaxed/simple;
+	bh=JNW9yjxTwYLk3ZAiuaQzkdjZTR6wNkFJG5hnOuV0meY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gEl7lywdMufcZlMrgy8R0ff7hXXhuImDQPxmazJx5P6VWOIUhLb9LWl078qSI/OB5xCm3oMsCO0aE5WOkZgNxgsAvzDZ+Co6JRRL0hrlL7g6KrxkT6z91rxKFOPhGHHKN1qQTIdYJLdrB+iKDN4cD5dKQxFqdkDxFoTqbm0aQUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KdoXtTeY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45509C2BCB9;
+	Wed,  6 May 2026 02:36:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778034994;
+	bh=JNW9yjxTwYLk3ZAiuaQzkdjZTR6wNkFJG5hnOuV0meY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KdoXtTeY9+YvMzCJd4vIVWletUNOsZfLqdPYvybwpuB5IkLnOsGcRI2D7MsD/5K1I
+	 u4zGVMquEfentnxZc/2Y+vUOlPvBHf7/5lwPp2c5XRGjgxuIC0O32QCy8uLRY9Al7z
+	 BC6/Bm2oVvoIdzIMH8ViuCKBiuuNVfPvj1KJYqtEP47OGFAc/4ZVUby3RYdobN8gQP
+	 3XpiKIboaocM5hpi9vv031HFi0RsDYCcfHgHxmKBrZ03ZILba2jGiGVjIY3wN98Hoa
+	 gmIqmKB+rbTHszrOxGFcYqWuNSt59yESZBBkwlPMgW54uXAYIStjlssNyrn1CBAiwQ
+	 +CYl+9JLhAXQw==
+Date: Wed, 6 May 2026 10:36:30 +0800
+From: "Peter Chen (CIX)" <peter.chen@kernel.org>
+To: pawell@cadence.com
+Cc: Roger Quadros <rogerq@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v2] usb: cdnsp: Add support for device-only configuration
+Message-ID: <afqpLr/BMMuN0pTg@nchen-desktop>
+References: <20260505-device_only_branch_v2-v2-1-98cc19fbd02a@cadence.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: dwc3: qcom: Modify interrupt handling for eUSB2
- Phy targets
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20260505194242.1947891-1-krishna.kurapati@oss.qualcomm.com>
- <afpu6eF9lDy4KfTN@vbox>
-Content-Language: en-US
-From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-In-Reply-To: <afpu6eF9lDy4KfTN@vbox>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA2MDAyMCBTYWx0ZWRfX0ZvoimJj00jn
- yCHFLll5rGTT08/tIAe9BeHePPzGkBICdMBZyyLWUXw1uq+TlWSWMyYmTh5hbbZSjT95esJnl7U
- cssCiUwo3w8Nn49kKIO4WRo73GK8g56OfT1H4iD+NFla+Hwg0TnAIkU+w1sPPzmB81pnkcPhT2o
- W5KU/C4OnLIuI6GqsyKJB6kyCPRNhuibwptkVVTBL1+YtARaJ3S9VKLfIkZFw/IApa2pJtI6b2n
- BuwL2pTQHCTmrsxqrLAcPBH2EA+lC5EZM/Lrw+utrFxIca3O8KIwTcmtrpN9ZKudst/MeZETngV
- sUAW75FEKb/GZ/4M7EId3a/SaTf5GlQuXVzW81uJhe/dtg74b3NE3nWi/WcX8lbcTubuNHDS/tp
- jjcYstr0wZvmVIlp4wmdOcLDvIu03PwZT6S+deEzEZmBAhptVTlxSrDt5TvtgBKhu331kjBjQmn
- uIDAXqFHosWRXVP/R8g==
-X-Authority-Analysis: v=2.4 cv=K4AS2SWI c=1 sm=1 tr=0 ts=69faa604 cx=c_pps
- a=wEP8DlPgTf/vqF+yE6f9lg==:117 a=gcxQrtMV3QalbYpGlDk62A==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=Um2Pa8k9VHT-vaBCBUpS:22
- a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=IwQKT_gaWyQLzjA38ZYA:9 a=QEXdDO2ut3YA:10
- a=bBxd6f-gb0O0v-kibOvt:22
-X-Proofpoint-GUID: 2lJ7Zq57d40b4xCh76pLC379SCUXdQOF
-X-Proofpoint-ORIG-GUID: 2lJ7Zq57d40b4xCh76pLC379SCUXdQOF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-05_02,2026-04-30_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 bulkscore=0 malwarescore=0 phishscore=0 suspectscore=0
- lowpriorityscore=0 adultscore=0 impostorscore=0 spamscore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605060020
-X-Rspamd-Queue-Id: 6128B4D5A29
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260505-device_only_branch_v2-v2-1-98cc19fbd02a@cadence.com>
+X-Rspamd-Queue-Id: 63D014D5BA3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-36995-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[urldefense.com:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:dkim,qualcomm.com:email,oss.qualcomm.com:dkim,oss.qualcomm.com:mid];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krishna.kurapati@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-36996-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[peter.chen@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	REDIRECTOR_URL(0.00)[urldefense.com];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[cadence.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-
-
-On 5/6/2026 4:09 AM, Thinh Nguyen wrote:
-> On Wed, May 06, 2026, Krishna Kurapati wrote:
->> eUSB2 targets handle wakeup interrupts differently depending on device
->> speed when operating in host mode.
->>
->> According to the eUSB2 specification, remote wakeup signaling in host
->> mode is detected via different data-line assertions based on the
->> connected device speed.
->>
->> When a low-speed device is connected, the host repeater drives eD+ to
->> logic '1' upon detecting a K-state on the USB lines during remote wakeup
->> (eUSB2 specification, Section 5.5.14).
->>
->> When a full-speed or high-speed device is connected, the host repeater
->> drives eD- to logic '1' upon detecting a K-state on the USB line during
->> remote wakeup (eUSB2 specification, Sections 5.5.15 and 5.5.18).
->>
->> Since the eUSB2 PHY's "DP" and "DM" interrupt lines monitor the eD+ and
->> eD- line states, configure the wakeup interrupts accordingly
->>
->> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
->> ---
->> Changes in v2:
->> - Updated commit message
->> - added supported eUSB2 targets
->>
->> Link to v1:
->> https://urldefense.com/v3/__https://lore.kernel.org/all/20260502095616.666938-1-krishna.kurapati@oss.qualcomm.com/__;!!A4F2R9G_pg!eraeWXDT_mjR2i_3v-c7MelUNh1b4K59jTy1pNFh-YWpd9JQ3tUBDOC5L8JVTnPN7U_dLDtRB_qUKyyhoqjeEdZmipvmFXs1TO_61w$
->>
->> This patch was tested on Glymur.
->>
->>   drivers/usb/dwc3/dwc3-qcom.c | 99 ++++++++++++++++++++++++++++++++----
->>   1 file changed, 90 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
->> index f43f73ac36ff..4fc0017c697c 100644
->> --- a/drivers/usb/dwc3/dwc3-qcom.c
->> +++ b/drivers/usb/dwc3/dwc3-qcom.c
->> @@ -60,6 +60,10 @@ static const u32 pwr_evnt_irq_stat_reg[DWC3_QCOM_MAX_PORTS] = {
->>   	0x238,
->>   };
->>   
->> +struct dwc3_qcom_platform_data {
->> +	bool			uses_eusb2_phy;
->> +};
->> +
->>   struct dwc3_qcom_port {
->>   	int			qusb2_phy_irq;
->>   	int			dp_hs_phy_irq;
->> @@ -85,6 +89,7 @@ struct dwc3_qcom {
->>   	struct icc_path		*icc_path_apps;
->>   
->>   	enum usb_role		current_role;
->> +	bool			uses_eusb2_phy;
->>   };
->>   
->>   #define to_dwc3_qcom(d) container_of((d), struct dwc3_qcom, dwc)
->> @@ -272,15 +277,21 @@ static void dwc3_qcom_disable_wakeup_irq(int irq)
->>   	disable_irq_nosync(irq);
->>   }
->>   
->> -static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom_port *port)
->> +static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom *qcom, int i)
->>   {
+On 26-05-05 12:02:56, Pawel Laszczak via B4 Relay wrote:
+> From: Pawel Laszczak <pawell@cadence.com>
 > 
-> We should rename i to port_index or something more descriptive.
+> This patch introduces support for operating the Cadence USBSSP (cdnsp)
+> controller in a peripheral-only mode, bypassing the Dual-Role Device (DRD)
+> logic.
 
-ACK.
+I still debate peripheral-only not equals to no-drd, see below.
 
 > 
->> +	struct dwc3_qcom_port *port = &qcom->ports[i];
->> +
->>   	dwc3_qcom_disable_wakeup_irq(port->qusb2_phy_irq);
->>   
->>   	if (port->usb2_speed == USB_SPEED_LOW) {
->> -		dwc3_qcom_disable_wakeup_irq(port->dm_hs_phy_irq);
->> +		dwc3_qcom_disable_wakeup_irq(qcom->uses_eusb2_phy ?
->> +					     port->dp_hs_phy_irq :
->> +					     port->dm_hs_phy_irq);
->>   	} else if ((port->usb2_speed == USB_SPEED_HIGH) ||
->>   			(port->usb2_speed == USB_SPEED_FULL)) {
->> -		dwc3_qcom_disable_wakeup_irq(port->dp_hs_phy_irq);
->> +		dwc3_qcom_disable_wakeup_irq(qcom->uses_eusb2_phy ?
->> +					     port->dm_hs_phy_irq :
->> +					     port->dp_hs_phy_irq);
->>   	} else {
->>   		dwc3_qcom_disable_wakeup_irq(port->dp_hs_phy_irq);
->>   		dwc3_qcom_disable_wakeup_irq(port->dm_hs_phy_irq);
->> @@ -289,8 +300,10 @@ static void dwc3_qcom_disable_port_interrupts(struct dwc3_qcom_port *port)
->>   	dwc3_qcom_disable_wakeup_irq(port->ss_phy_irq);
->>   }
->>   
->> -static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom_port *port)
->> +static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom *qcom, int i)
->>   {
->> +	struct dwc3_qcom_port *port = &qcom->ports[i];
->> +
->>   	dwc3_qcom_enable_wakeup_irq(port->qusb2_phy_irq, 0);
->>   
->>   	/*
->> @@ -303,11 +316,19 @@ static void dwc3_qcom_enable_port_interrupts(struct dwc3_qcom_port *port)
->>   	 */
->>   
->>   	if (port->usb2_speed == USB_SPEED_LOW) {
->> -		dwc3_qcom_enable_wakeup_irq(port->dm_hs_phy_irq,
->> +		dwc3_qcom_enable_wakeup_irq(qcom->uses_eusb2_phy ?
->> +					    port->dp_hs_phy_irq :
->> +					    port->dm_hs_phy_irq,
->> +					    qcom->uses_eusb2_phy ?
->> +					    IRQ_TYPE_EDGE_RISING :
->>   					    IRQ_TYPE_EDGE_FALLING);
->>   	} else if ((port->usb2_speed == USB_SPEED_HIGH) ||
->>   			(port->usb2_speed == USB_SPEED_FULL)) {
->> -		dwc3_qcom_enable_wakeup_irq(port->dp_hs_phy_irq,
->> +		dwc3_qcom_enable_wakeup_irq(qcom->uses_eusb2_phy ?
->> +					    port->dm_hs_phy_irq :
->> +					    port->dp_hs_phy_irq,
->> +					    qcom->uses_eusb2_phy ?
->> +					    IRQ_TYPE_EDGE_RISING :
->>   					    IRQ_TYPE_EDGE_FALLING);
+> The change in BAR indexing (from BAR 2 to BAR 1) is a direct
+> consequence of switching from 64-bit to 32-bit addressing in the
+> Peripheral-only configuration.
 > 
-> I would just use if-else and some local variable here instead of the
-> ternary operator for better readability.
+> Tested on PCI platform with Device-only configuration. Platform-side
+> changes are included to support the PCI glue layer's property injection.
+> 
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com> # pci_ids.h
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+> This is a resubmission of the previous patch, now based on the restored
+> commit e4d7362dc9cd ("usb: cdns3: Add USBSSP platform driver support").
+> 
+> Since the "usb: cdns3: Add USBSSP platform driver support" patch  was
+> reverted and then re-added, this version (v2) ensures compatibility
+> with the latest tree state.
+> ---
+> v2:
+>   - Changed otg_irq to be optionali.
+>   - Added cdns->no_drd check in cdns_power_is_lost.
+>   - Added cdns->no_drd check in cdns_get_id.
+> ---
+>  drivers/usb/cdns3/cdns3-plat.c | 23 ++++++++++++-----------
+>  drivers/usb/cdns3/cdnsp-pci.c  | 33 ++++++++++++++++++++++++---------
+>  drivers/usb/cdns3/core.c       |  3 ++-
+>  drivers/usb/cdns3/core.h       |  3 +++
+>  drivers/usb/cdns3/drd.c        | 22 ++++++++++++++++++++--
+>  include/linux/pci_ids.h        |  1 +
+>  6 files changed, 62 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
+> index 3fe3109a3688..1af19360410e 100644
+> --- a/drivers/usb/cdns3/cdns3-plat.c
+> +++ b/drivers/usb/cdns3/cdns3-plat.c
+> @@ -113,21 +113,22 @@ static int cdns3_plat_probe(struct platform_device *pdev)
+>  
+>  	cdns->dev_regs	= regs;
+>  
+> -	cdns->otg_irq = platform_get_irq_byname(pdev, "otg");
+> -	if (cdns->otg_irq < 0)
+> -		return dev_err_probe(dev, cdns->otg_irq,
+> -				     "Failed to get otg IRQ\n");
+> -
+> -	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "otg");
+> -	if (!res) {
+> -		dev_err(dev, "couldn't get otg resource\n");
+> -		return -ENXIO;
+> +	cdns->otg_irq = platform_get_irq_byname_optional(pdev, "otg");
+> +
+> +	if (cdns->otg_irq < 0) {
+> +		dev_dbg(dev, "Device-only mode: DRD support disabled\n");
+
+Why "Device-only", just no DRD support?
+
+> +		cdns->no_drd = 1;
+> +	} else {
+> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "otg");
+> +		if (!res) {
+> +			dev_err(dev, "couldn't get otg resource\n");
+> +			return -ENXIO;
+> +		}
+> +		cdns->otg_res = *res;
+>  	}
+>  
+>  	cdns->phyrst_a_enable = device_property_read_bool(dev, "cdns,phyrst-a-enable");
+>  
+> -	cdns->otg_res = *res;
+> -
+>  	cdns->wakeup_irq = platform_get_irq_byname_optional(pdev, "wakeup");
+>  	if (cdns->wakeup_irq == -EPROBE_DEFER)
+>  		return cdns->wakeup_irq;
+> diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
+> index 432007cfe695..28e16b094525 100644
+> --- a/drivers/usb/cdns3/cdnsp-pci.c
+> +++ b/drivers/usb/cdns3/cdnsp-pci.c
+> @@ -29,10 +29,15 @@ struct cdnsp_wrap {
+>  #define RES_HOST_ID		3
+>  #define RES_DEV_ID		4
+>  #define RES_DRD_ID		5
+> -
+> +/* DRD PCI configuration - 64-bit addressing */
+> +/* First PCI function */
+>  #define PCI_BAR_HOST		0
+> -#define PCI_BAR_OTG		0
+>  #define PCI_BAR_DEV		2
+> +/* Second PCI function */
+> +#define PCI_BAR_OTG		0
+> +/* Device only PCI configuration - 32-bit addressing */
+> +/* First PCI function */
+> +#define PCI_BAR_ONLY_DEV	1
+>  
+>  #define PCI_DEV_FN_HOST_DEVICE	0
+>  #define PCI_DEV_FN_OTG		1
+> @@ -65,6 +70,7 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
+>  	struct cdnsp_wrap *wrap;
+>  	struct resource *res;
+>  	struct pci_dev *func;
+> +	bool no_drd = false;
+>  	int ret = 0;
+>  
+>  	/*
+> @@ -75,11 +81,14 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
+>  		    pdev->devfn != PCI_DEV_FN_OTG))
+>  		return -EINVAL;
+>  
+> +	if (pdev->device == PCI_DEVICE_ID_CDNS_UDC_USBSSP)
+> +		no_drd = true;
+> +
+>  	func = cdnsp_get_second_fun(pdev);
+> -	if (!func)
+> +	if (!func && !no_drd)
+>  		return -EINVAL;
+>  
+> -	if (func->class == PCI_CLASS_SERIAL_USB_XHCI ||
+> +	if ((func && func->class == PCI_CLASS_SERIAL_USB_XHCI) ||
+>  	    pdev->class == PCI_CLASS_SERIAL_USB_XHCI) {
+>  		ret = -EINVAL;
+>  		goto put_pci;
+> @@ -93,7 +102,7 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
+>  
+>  	pci_set_master(pdev);
+>  
+> -	if (pci_is_enabled(func)) {
+> +	if (func && pci_is_enabled(func)) {
+>  		wrap = pci_get_drvdata(func);
+>  	} else {
+>  		wrap = kzalloc_obj(*wrap);
+> @@ -106,10 +115,12 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
+>  	res = wrap->dev_res;
+>  
+>  	if (pdev->devfn == PCI_DEV_FN_HOST_DEVICE) {
+> +		int bar_dev = no_drd ? PCI_BAR_ONLY_DEV : PCI_BAR_DEV;
+> +
+>  		/* Function 0: host(BAR_0) + device(BAR_2). */
+>  		dev_dbg(&pdev->dev, "Initialize Device resources\n");
+> -		res[RES_DEV_ID].start = pci_resource_start(pdev, PCI_BAR_DEV);
+> -		res[RES_DEV_ID].end = pci_resource_end(pdev, PCI_BAR_DEV);
+> +		res[RES_DEV_ID].start = pci_resource_start(pdev, bar_dev);
+> +		res[RES_DEV_ID].end = pci_resource_end(pdev, bar_dev);
+>  		res[RES_DEV_ID].name = "dev";
+>  		res[RES_DEV_ID].flags = IORESOURCE_MEM;
+>  		dev_dbg(&pdev->dev, "USBSSP-DEV physical base addr: %pa\n",
+> @@ -145,7 +156,7 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
+>  		wrap->dev_res[RES_IRQ_OTG_ID].flags = IORESOURCE_IRQ;
+>  	}
+>  
+> -	if (pci_is_enabled(func)) {
+> +	if (no_drd || pci_is_enabled(func)) {
+>  		/* set up platform device info */
+>  		pdata.override_apb_timeout = CHICKEN_APB_TIMEOUT_VALUE;
+>  		memset(&plat_info, 0, sizeof(plat_info));
+> @@ -185,13 +196,17 @@ static void cdnsp_pci_remove(struct pci_dev *pdev)
+>  	if (wrap->devfn == pdev->devfn)
+>  		platform_device_unregister(wrap->plat_dev);
+>  
+> -	if (!pci_is_enabled(func))
+> +	if (!func || !pci_is_enabled(func))
+>  		kfree(wrap);
+>  
+>  	pci_dev_put(func);
+>  }
+>  
+>  static const struct pci_device_id cdnsp_pci_ids[] = {
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC_USBSSP),
+> +	  .class = PCI_CLASS_SERIAL_USB_DEVICE },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC_USBSSP),
+> +	  .class = PCI_CLASS_SERIAL_USB_CDNS },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSSP),
+>  	  .class = PCI_CLASS_SERIAL_USB_DEVICE },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSSP),
+> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+> index 6a8d1fefbc0d..504bdf13ea80 100644
+> --- a/drivers/usb/cdns3/core.c
+> +++ b/drivers/usb/cdns3/core.c
+> @@ -70,7 +70,8 @@ static void cdns_role_stop(struct cdns *cdns)
+>  static void cdns_exit_roles(struct cdns *cdns)
+>  {
+>  	cdns_role_stop(cdns);
+> -	cdns_drd_exit(cdns);
+> +	if (!cdns->no_drd)
+> +		cdns_drd_exit(cdns);
+>  }
+>  
+>  /**
+> diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
+> index bca973b999a4..ef3f50169246 100644
+> --- a/drivers/usb/cdns3/core.h
+> +++ b/drivers/usb/cdns3/core.h
+> @@ -84,6 +84,8 @@ struct cdns3_platform_data {
+>   *                        value in CHICKEN_BITS_3 will be preserved.
+>   * @gadget_init: pointer to gadget initialization function
+>   * @host_init: pointer to host initialization function
+> + * @no_drd: DRD register block is inaccessible - driver handles only
+> + *          device mode.
+>   */
+>  struct cdns {
+>  	struct device			*dev;
+> @@ -124,6 +126,7 @@ struct cdns {
+>  	u32                             override_apb_timeout;
+>  	int (*gadget_init)(struct cdns *cdns);
+>  	int (*host_init)(struct cdns *cdns);
+> +	bool				no_drd;
+>  };
+>  
+>  int cdns_hw_role_switch(struct cdns *cdns);
+> diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
+> index 84fb38a5723a..8e8414c2e994 100644
+> --- a/drivers/usb/cdns3/drd.c
+> +++ b/drivers/usb/cdns3/drd.c
+> @@ -87,6 +87,9 @@ int cdns_get_id(struct cdns *cdns)
+>  {
+>  	int id;
+>  
+> +	if (cdns->no_drd)
+> +		return 0;
+> +
+>  	id = readl(&cdns->otg_regs->sts) & OTGSTS_ID_VALUE;
+>  	dev_dbg(cdns->dev, "OTG ID: %d", id);
+>  
+> @@ -107,7 +110,7 @@ void cdns_clear_vbus(struct cdns *cdns)
+>  {
+>  	u32 reg;
+>  
+> -	if (cdns->version != CDNSP_CONTROLLER_V2)
+> +	if (cdns->version != CDNSP_CONTROLLER_V2 || cdns->no_drd)
+>  		return;
+>  
+>  	reg = readl(&cdns->otg_cdnsp_regs->override);
+> @@ -120,7 +123,7 @@ void cdns_set_vbus(struct cdns *cdns)
+>  {
+>  	u32 reg;
+>  
+> -	if (cdns->version != CDNSP_CONTROLLER_V2)
+> +	if (cdns->version != CDNSP_CONTROLLER_V2 || cdns->no_drd)
+>  		return;
+>  
+>  	reg = readl(&cdns->otg_cdnsp_regs->override);
+> @@ -234,6 +237,9 @@ int cdns_drd_gadget_on(struct cdns *cdns)
+>  	u32 ready_bit;
+>  	int ret, val;
+>  
+> +	if (cdns->no_drd)
+> +		return 0;
+> +
+>  	/* switch OTG core */
+>  	writel(OTGCMD_DEV_BUS_REQ | reg, &cdns->otg_regs->cmd);
+>  
+> @@ -265,6 +271,9 @@ void cdns_drd_gadget_off(struct cdns *cdns)
+>  {
+>  	u32 val;
+>  
+> +	if (cdns->no_drd)
+> +		return;
+> +
+>  	/*
+>  	 * Driver should wait at least 10us after disabling Device
+>  	 * before turning-off Device (DEV_BUS_DROP).
+> @@ -392,6 +401,12 @@ int cdns_drd_init(struct cdns *cdns)
+>  	u32 state, reg;
+>  	int ret;
+>  
+> +	if (cdns->no_drd) {
+> +		cdns->version  = CDNSP_CONTROLLER_V2;
+> +		cdns->dr_mode = USB_DR_MODE_PERIPHERAL;
+> +		return 0;
+> +	}
+> +
+
+I still concern this, CIX SoC has host-only configuration, and it
+needs to use cdns3 driver for low power purpose, eg set D3 mode
+for controller.
+
+>  	regs = devm_ioremap_resource(cdns->dev, &cdns->otg_res);
+>  	if (IS_ERR(regs))
+>  		return PTR_ERR(regs);
+> @@ -500,6 +515,9 @@ int cdns_drd_exit(struct cdns *cdns)
+>  /* Indicate the cdns3 core was power lost before */
+>  bool cdns_power_is_lost(struct cdns *cdns)
+>  {
+> +	if (cdns->no_drd)
+> +		return false;
+> +
+
+You may not just return false, would you please find one host and one device
+register to compare, we need this feature.
+
+Peter
+
+>  	if (cdns->version == CDNS3_CONTROLLER_V0) {
+>  		if (!(readl(&cdns->otg_v0_regs->simulate) & BIT(0)))
+>  			return true;
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index 24cb42f66e4b..a6b9b6f6d8cc 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -2424,6 +2424,7 @@
+>  #define PCI_DEVICE_ID_CDNS_USBSS	0x0100
+>  #define PCI_DEVICE_ID_CDNS_USB		0x0120
+>  #define PCI_DEVICE_ID_CDNS_USBSSP	0x0200
+> +#define PCI_DEVICE_ID_CDNS_UDC_USBSSP	0x0400
+>  
+>  #define PCI_VENDOR_ID_ARECA		0x17d3
+>  #define PCI_DEVICE_ID_ARECA_1110	0x1110
+> 
+> ---
+> base-commit: 9d0d467c3572e93c5faa2e5906a8bbcd70b24efd
+> change-id: 20260505-device_only_branch_v2-53692f329752
+> 
+> Best regards,
+> --  
+> Pawel Laszczak <pawell@cadence.com>
+> 
 > 
 
-ACK. Will do it for both the enable and disable calls.
+-- 
 
->>   	} else {
->>   		dwc3_qcom_enable_wakeup_irq(port->dp_hs_phy_irq,
->> @@ -324,7 +345,7 @@ static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
->>   	int i;
->>   
->>   	for (i = 0; i < qcom->num_ports; i++)
->> -		dwc3_qcom_disable_port_interrupts(&qcom->ports[i]);
->> +		dwc3_qcom_disable_port_interrupts(qcom, i);
->>   }
->>   
->>   static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
->> @@ -332,7 +353,7 @@ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
->>   	int i;
->>   
->>   	for (i = 0; i < qcom->num_ports; i++)
->> -		dwc3_qcom_enable_port_interrupts(&qcom->ports[i]);
->> +		dwc3_qcom_enable_port_interrupts(qcom, i);
->>   }
->>   
->>   static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
->> @@ -609,6 +630,7 @@ struct dwc3_glue_ops dwc3_qcom_glue_ops = {
->>   
->>   static int dwc3_qcom_probe(struct platform_device *pdev)
->>   {
->> +	const struct dwc3_qcom_platform_data *pdata;
->>   	struct dwc3_probe_data	probe_data = {};
->>   	struct device		*dev = &pdev->dev;
->>   	struct dwc3_qcom	*qcom;
->> @@ -624,6 +646,10 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->>   
->>   	qcom->dev = &pdev->dev;
->>   
->> +	pdata = device_get_match_data(dev);
->> +	if (pdata)
->> +		qcom->uses_eusb2_phy = pdata->uses_eusb2_phy;
->> +
->>   	qcom->resets = devm_reset_control_array_get_optional_exclusive(dev);
->>   	if (IS_ERR(qcom->resets)) {
->>   		return dev_err_probe(&pdev->dev, PTR_ERR(qcom->resets),
->> @@ -838,8 +864,63 @@ static const struct dev_pm_ops dwc3_qcom_dev_pm_ops = {
->>   	.prepare = pm_sleep_ptr(dwc3_qcom_prepare),
->>   };
->>   
->> +static const struct dwc3_qcom_platform_data dwc3_qcom_pdata = {
->> +	.uses_eusb2_phy = false,
->> +};
-> 
-> Do we need this pdata for non-eUSB2 targets?
-> 
->> +
->> +static const struct dwc3_qcom_platform_data dwc3_qcom_glymur_pdata = {
->> +	.uses_eusb2_phy = true,
->> +};
->> +
->>   static const struct of_device_id dwc3_qcom_of_match[] = {
->> -	{ .compatible = "qcom,snps-dwc3" },
->> +	{
->> +		.compatible = "qcom,snps-dwc3",
->> +		.data = &dwc3_qcom_pdata,
->> +	},
->> +	{
->> +		.compatible = "qcom,eliza-dwc3",
->> +		.data = &dwc3_qcom_glymur_pdata,
->> +	},
->> +	{
->> +		.compatible = "qcom,glymur-dwc3",
->> +		.data = &dwc3_qcom_glymur_pdata,
->> +	},
->> +	{
->> +		.compatible = "qcom,glymur-dwc3-mp",
->> +		.data = &dwc3_qcom_glymur_pdata,
->> +	},
->> +	{
->> +		.compatible = "qcom,glymur-dwc3-mp",
->> +		.data = &dwc3_qcom_glymur_pdata,
->> +	},
->> +	{
->> +		.compatible = "qcom,kaanapali-dwc3",
->> +		.data = &dwc3_qcom_glymur_pdata,
->> +	},
->> +	{
->> +		.compatible = "qcom,milos-dwc3",
->> +		.data = &dwc3_qcom_glymur_pdata,
->> +	},
->> +	{
->> +		.compatible = "qcom,sm8550-dwc3",
->> +		.data = &dwc3_qcom_glymur_pdata,
->> +	},
-> 
-> Duplicate copy-paste issue?
-> 
-
-My bad. Yes.
-
->> +	{
->> +		.compatible = "qcom,sm8650-dwc3",
->> +		.data = &dwc3_qcom_glymur_pdata,
->> +	},
->> +	{
->> +		.compatible = "qcom,sm8750-dwc3",
->> +		.data = &dwc3_qcom_glymur_pdata,
->> +	},
->> +	{
->> +		.compatible = "qcom,x1e80100-dwc3",
->> +		.data = &dwc3_qcom_glymur_pdata,
->> +	},
->> +	{
->> +		.compatible = "qcom,x1e80100-dwc3-mp",
->> +		.data = &dwc3_qcom_glymur_pdata,
->> +	},
->>   	{ }
->>   };
->>   MODULE_DEVICE_TABLE(of, dwc3_qcom_of_match);
->> -- 
->> 2.34.1
->>
-> 
-> BR,
-> Thinh
-
+Best regards,
+Peter
 
