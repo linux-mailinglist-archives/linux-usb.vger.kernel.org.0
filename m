@@ -1,240 +1,211 @@
-Return-Path: <linux-usb+bounces-37077-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37078-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iKD9Bqhs/GmMPwAAu9opvQ
-	(envelope-from <linux-usb+bounces-37077-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 12:42:48 +0200
+	id GBtXAoJt/GkQQAAAu9opvQ
+	(envelope-from <linux-usb+bounces-37078-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 12:46:26 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8655C4E6F3E
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 12:42:47 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63FD04E6F9E
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 12:46:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 65AB43063944
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 10:40:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 858BB3020D5A
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 10:46:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E0123EB80D;
-	Thu,  7 May 2026 10:40:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 958FE3C7DEB;
+	Thu,  7 May 2026 10:46:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="aeIiTD85";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="MYXMc1DU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="buFLUTYs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF23D3E928C
-	for <linux-usb@vger.kernel.org>; Thu,  7 May 2026 10:40:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8703264C2
+	for <linux-usb@vger.kernel.org>; Thu,  7 May 2026 10:46:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778150449; cv=none; b=FtvQUNAYv1EeYaRdypW+plm5DHLXFRtA6j+oB7vS+wcfUOvCCYmaqKmQBuQ1K5OoEB53fkiK0YkVNTfOZC76pxjyidgEjH9lAGMdeA8j1cmMaytIK0D4tf4Vn8Bs8OYjAyAts12Iv7VAE3VDFULl7zGJIOTSgKUiJ/OKyhwa4X0=
+	t=1778150773; cv=none; b=aRLyOZ5KLe1pPniRnZxNVfXZR7TXgYPMJaxkrhtfRCddjVDLTXKeDL/O+tfKDaGiEZhZQPwvRjRbF/9e+w5hpw4kW+Oq8actVbvVHroJ4IpyCjrNlobEt1z6T4HJXdCG3R+FsQbOvAo9KkGSHbkreGopAm8u53C6UYT/Hjc+82k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778150449; c=relaxed/simple;
-	bh=3TLtPSGtHME2zaQgYjH2+H7h/lbZgh1MNcLB/MSHzog=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NLKJJKtFMqQgaZvhkVuah76Ls2Q50hikKh8EyXwd9BZ1Aq71QKwaKltW4BhHtbgjav14x7evTINLzXJdjgPqFaHJUAkkQQRdFEHndRz7Ec8viiDkXhrLaljB+elnwSQhIqYOm1EMqu9RKAyLdyw39nhqdq8i8nZcgoIHr+MBpAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=aeIiTD85; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=MYXMc1DU; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6475CQqm3924321
-	for <linux-usb@vger.kernel.org>; Thu, 7 May 2026 10:40:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	PGTevllouHgU5n6pKJsSjzVnRCs5BCktvfEWEgejUNk=; b=aeIiTD85f5iJxByw
-	+O2uXgOSnro7fWdCvtI/TALlGm9sMlZQgOSH1w0arpUJVXJbfVkGyeQQvcLVWLH1
-	NhROP2TR9v8yhVrykYn+qmyZVGoO3Ba0gkn6WE1aId1ab45O4hw3M21+4mWyek9k
-	m2R9oeNPGECqYSszZdm8OxBEKi+F+YerQfWB335phbY/BuESKhFaBLIq1cHvxz2v
-	1kIFeVR4wpX+0CmSH3l9g516+07NHZ+YJmQuX9EVTiTIDYthfRQRJ3CsT4hV9Oud
-	LlY+96mYcnt5c5w2dUJPGKkoGqsCtSz8katN9KNBiNabPzTgGRHl9RCM5ir5m/4F
-	oSuymw==
-Received: from mail-vk1-f198.google.com (mail-vk1-f198.google.com [209.85.221.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e0c88aq2r-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Thu, 07 May 2026 10:40:46 +0000 (GMT)
-Received: by mail-vk1-f198.google.com with SMTP id 71dfb90a1353d-575296be5b1so83606e0c.0
-        for <linux-usb@vger.kernel.org>; Thu, 07 May 2026 03:40:46 -0700 (PDT)
+	s=arc-20240116; t=1778150773; c=relaxed/simple;
+	bh=IpnQCAN2BL5UB6TQUTVwndlNHcb8l5UOE/u4Tph+Dnk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IkMN1y+oqfTDSkfQQanNoyGGjHDWSSMerVXmMScl4WsdQtDqc1e3Ip4BdqqM5bmtoQsd8yRqHSpGxTJXVk+++53w8vxudkNd2cUTbYRNCsOLszY1GkhVrokqyWhgWf41itP4YdzmoUkGgaBI3g4b4Er3rIRtLLoJMXCK+1KO2Nc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=buFLUTYs; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-488a14c31eeso4804755e9.0
+        for <linux-usb@vger.kernel.org>; Thu, 07 May 2026 03:46:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1778150446; x=1778755246; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PGTevllouHgU5n6pKJsSjzVnRCs5BCktvfEWEgejUNk=;
-        b=MYXMc1DUPTUhWqHNUTcbGji5epuKCF9NVn0lBX8dPnOp0O6TdYByrWC970PXEEyC4O
-         ZbRO0aprFiDic4sKPuknLp9weLlJaIKJwSJfBFLqFBbNajHNc65PyuxvgX5bslPHp6aM
-         CPqHKWQyGxxokZ9OGoNH7XFazvrMKc9qRLsTmpztHQMShHa8FLSwaC1jzypSSJ2/0eTV
-         YKnHFuxbqAWaIHkbu+3fNNi2wUe40sWmRg9YKGQmSCCVyCVuHOLkl65L2e/012rkBE3q
-         Q9B9/klgR5POOzgdPQI8B10K6FyYo3UMaRepAw4O3ZIqAwJj/1dH5GVyE4O9ZiHBEbIj
-         uVQg==
+        d=gmail.com; s=20251104; t=1778150770; x=1778755570; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ox+ASz/ygCGbDPlwbrM1KbYJZn86PmGYPGqT1vetcCo=;
+        b=buFLUTYsSGXZquFWkdfXLJH3Ad+OFLlJOdFaAAfFvPGtgieoiu2oeaZlUtB9L28OyI
+         lS9SUKyFxbeekakNnXSm4tu+90UiDzfkLpOIOTf5WJdR08iuI4e0CiTtiPYlPLTIhg1i
+         Fi9yI77KeeLb5rjeUjsamplSibHM2AT0HQ4BOJzSY7t+y1PmLRVMp3dFfAbw2uE0N2Ro
+         HaUTWFtODJMtAmCiRWxrvZrAI0EAgitXmWBdVHdcn3aoXnBYiLngtxw2Hb9wAArtH9jC
+         pv8hBbL+Irv+8zETvFrYIOiXj9UA8Q4JDU+QEM0Yf/TcT3nkc2lFposZL8ELPJn4UemQ
+         Aj+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778150446; x=1778755246;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PGTevllouHgU5n6pKJsSjzVnRCs5BCktvfEWEgejUNk=;
-        b=HyGAyAUEdKwJ16AfGg22l5BA3+mjXCFUgktEGGMNYUuW45sWkdbsCLW8oRz8GdchiK
-         ma/vQvrclOERrsGSI4/gxh+iTXYLRH7N4/e5v39w7l9pKhEZMCRRytHnpEAP6+etBEtS
-         GXaZF65173spYyokkgaxmEhK4V/OSMciuVJFh9iYGSb5lmLv2OSlupma3ZcO/FIn8c5x
-         TMT9J6AEqvbk1rgcA2GnnkmoOCGddzJb/1kYokC2u7QhYwKHuWn84P/k5SZvwO6MxGV/
-         V+BLxYHtyto6PlTPCuux5JP5cUXsqyTnWzPYiKvgG16rKkNMFDF4E2FHM29W792Ub+FO
-         lKdA==
-X-Forwarded-Encrypted: i=1; AFNElJ8mzCvRmwmsruDGK/GO1IweuEoO4upjUQSnVY3wsdMgF+5ZT2Bxv03ox2Wl5cl3grw5KM+WBVpy2yA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4x6/HbWch9GFk1+/JZGpmIV6uIUaSxIEdE4bG2UWgEaz/oU3m
-	/FKBorWfXFL4GtnS2WVY8Bm0gvevwVoo0BR8Schmkr0oWOAZET+5Wb0i9zWNmj8Nl6AEVrAyIa1
-	/B0VV7gSDzDjFU+2GyHQ+KHyuFvjIikScYmnFVbGIMY8toOvLDM4Sk+ePKfC7Wgoh44yoSbA=
-X-Gm-Gg: AeBDievOX4l+NPTaQQ7GbgYTF4MvXXS7SkDtxuRRRMuRdpjtOWtGKECxudihjhuyy5H
-	ibVMle2Fb4Ps87ZMQyRekkzwvh0rtWENVNnzE5D2woNLexGwOtSBN7hPBxhpXm1KlYGiiJTidTB
-	tA4EaxXJFSNW8Ii2ducfHAYogrSB2v1oUxQX/nZ2OFZ9KRAZ3sg/Gw8K6JP1qIArtYVv0rBCA0I
-	k1iBQ4P3VHpikAF2W6Z2czmm17atX7zBcfgesvOcw9ALlZET9VMivdpRBiQgX7K37voUxB9FROt
-	f219EI6Y7A00F7nGAOqs3vjxlj3xuPHaxVC7zwIM98hEPajl4zDc/ul54LXZe18B3fuU3AHkJGO
-	9Fp0J6mBsgCSusihJyb1/lNu0t4n3yOCvaBHvgvg5skhmWcCPYRiKrdF5sswB6Q+fKhezSRRRRF
-	3FXmxGPHsV8nCY1A==
-X-Received: by 2002:a05:6122:6214:b0:56d:baee:40 with SMTP id 71dfb90a1353d-5755cc74085mr1250383e0c.1.1778150446037;
-        Thu, 07 May 2026 03:40:46 -0700 (PDT)
-X-Received: by 2002:a05:6122:6214:b0:56d:baee:40 with SMTP id 71dfb90a1353d-5755cc74085mr1250375e0c.1.1778150445607;
-        Thu, 07 May 2026 03:40:45 -0700 (PDT)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bc833742a54sm65220366b.32.2026.05.07.03.40.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 May 2026 03:40:44 -0700 (PDT)
-Message-ID: <02b4a4ca-c091-47b0-bae7-e38d9fa77850@oss.qualcomm.com>
-Date: Thu, 7 May 2026 12:40:42 +0200
+        d=1e100.net; s=20251104; t=1778150770; x=1778755570;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ox+ASz/ygCGbDPlwbrM1KbYJZn86PmGYPGqT1vetcCo=;
+        b=FbkLAtfA05zmYpEhiYd0/tqV+jjQilGvxNh+eikAfdyQmoP06WFqAdNkurq2VP+L+x
+         C2RgKL8PHQo32NijRYAGWlg5rBKOLuQjHUb6h2jq9LKHWs0vgmBCS2d0RApF4ItXjhNV
+         OSAdvXvdYTaNIsXQFgziKYfX0u93gwxGBZpVdnPH9IAwZcP0KdLmk+vy5R8oe3X2X57+
+         ynl77waxNreZd5qNac7IJ/aRk+o6W2+jOxN5//3k+qrAf35u8UBOEchbn9YitJLh4EeC
+         b/I/Q2woBIfJqWLUnZskxppNRDzLY6N5cgVC9I/Z/jGMrxyAmTLe9geZPXNuStUljPVP
+         jt4Q==
+X-Forwarded-Encrypted: i=1; AFNElJ90ryZrHxGcTCnZBq96nIGYrOSLzgfRbgx5lgPF0yUQfvEK5iupH1WT23cN6ECkKrhvBX+ZCkBsYqk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpNZKXeuNe2UBc2jz4a2MunuW5+0+9dl7zKX+2RCCtPUYRYqhf
+	ILAMlQ7SOd8ovGDgaQr6sexkYsLwMny2IZgB033TRtXGmHtZpTk+GCJx
+X-Gm-Gg: AeBDieuDZwt0HAzA9wFXnteesBJM6CcLAMMdz4rCaYjey12GUdpvHG8xLmTNtc0324a
+	EoB7irYQpVtQi6a3uM0EaoxFno0ETriEPXjF80pAJFyueueKj9b2iARfV391C/Q4z59spaT0s4k
+	VHObPQfEdv7opcYyVSTHQCZsIRjyO9bCtpMxXcoBeJPV+rLNKzk7ae6J/72WbLb5O2cVq2ed1QQ
+	ohfq9rOlrJ2f6K8vza3WdzVXz49ayumrlJhwsGWhmoka3ZvrAhfF2hImU0upLpTndIFynXMy4ul
+	n0aFwmr+oklIiMIuvHgckjxU0djS2pYgcWiq+yzaSsJoHU+f2PzaNNlsSCxLv8X8K+zoQHLOlFv
+	yVCH4CiAISjv5O58svswW8byyh71c6vdxWzFyaJpS+LHawvIUm1Z3Bb/v4hxz5F+WHV47XFmNtf
+	Xa/f5WZPZmq3dVEIQkQrof9TY3LlFeb2Qcs/+V7RNsSh4jyT6AVYMPRx7M0vJJr4oJ3swXpvy11
+	A+0emknxX1QNo0NsemiNHwISlvjYzO+MM6oqPOR4HbIXT3hMGewyfVEGJgpYk6LM7RWO5V2L2Pn
+	dEnADet8
+X-Received: by 2002:a05:600c:8b04:b0:47e:e2eb:bc22 with SMTP id 5b1f17b1804b1-48e51f183demr114547455e9.5.1778150769818;
+        Thu, 07 May 2026 03:46:09 -0700 (PDT)
+Received: from franzs-nb (248.201.173.83.static.wline.lns.sme.cust.swisscom.ch. [83.173.201.248])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e538b6e9bsm197646665e9.10.2026.05.07.03.46.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 May 2026 03:46:09 -0700 (PDT)
+Date: Thu, 7 May 2026 12:46:08 +0200
+From: Franz Schnyder <fra.schnyder@gmail.com>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
+	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
+	festevam@gmail.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, jun.li@nxp.com, 
+	Francesco Dolcini <francesco@dolcini.it>
+Subject: Re: [PATCH v3 3/3] usb: dwc3: imx8mp: disable auto suspend for host
+ role
+Message-ID: <k2sxmwhrv3tivustfnpz54ehuufkcrcruu2uuukuyugqtqljzl@5roxndm5fn5u>
+References: <20260108081433.2119328-1-xu.yang_2@nxp.com>
+ <20260108081433.2119328-3-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] usb: host: xhci: Allow non-Intel usb_link_tunnel_mode
- reporting
-To: Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, usb4-upstream@oss.qualcomm.com,
-        Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>
-References: <20260505-topic-dwc3_tunneling_state-v1-0-4aaa6c3c14cb@oss.qualcomm.com>
- <20260505-topic-dwc3_tunneling_state-v1-1-4aaa6c3c14cb@oss.qualcomm.com>
- <20260505121404.GG6785@black.igk.intel.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20260505121404.GG6785@black.igk.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: DRcP3RfxlomCJML1r8Xd0cuIAO-gQmot
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA3MDEwNiBTYWx0ZWRfXx7beb28gMcFr
- lRJDCRzyQKXt5uMRV79wB0vn+y5CnOjR1zEPTPq/umTRpp57drTVSNpN3pGrix605B1YJ9YRQs/
- G5OAKiAWPuchH0A/vDSihMR1TmbkU1k2uAm8knv1hJpAA99W1rs2oFgftDcSklZ6qXchWtPLN5h
- PMB8zTIwUrhPnva4rc9bUMA8MziudTX1WYJ1tR869mV6I/KH0QpOkTNa1I+9r9liY1vY+x/PVgj
- 4SRNUE9O9vfhcjN/BCflOjKlysTJ/yArzaipHy4lDNYVe2Lo3oJHygA7Xwbm042zvW4NpKwTpQ8
- KT1VQtGHr9vaBHZnmNEzKXYSE+TfzNVBoODXVUhyddq24G4H5nkZ6NgOCQZnCDjzUwVvJDNQlpW
- P8XiS6H3TxVu2XQgI4oHJEnICr7dVmRI/FLiZH+yplHH8zSq7kxwbOk4iztckbsAeo7cXUIovoF
- R67kXW32dt3I2KtFYMQ==
-X-Proofpoint-GUID: DRcP3RfxlomCJML1r8Xd0cuIAO-gQmot
-X-Authority-Analysis: v=2.4 cv=X8Zi7mTe c=1 sm=1 tr=0 ts=69fc6c2e cx=c_pps
- a=1Os3MKEOqt8YzSjcPV0cFA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=yx91gb_oNiZeI1HMLzn7:22
- a=EUspDBNiAAAA:8 a=FtxRuB4QD5ijYHSLzlgA:9 a=QEXdDO2ut3YA:10
- a=hhpmQAJR8DioWGSBphRh:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-06_02,2026-05-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 spamscore=0 adultscore=0 malwarescore=0
- lowpriorityscore=0 clxscore=1015 phishscore=0 priorityscore=1501 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605070106
-X-Rspamd-Queue-Id: 8655C4E6F3E
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260108081433.2119328-3-xu.yang_2@nxp.com>
+X-Rspamd-Queue-Id: 63FD04E6F9E
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,oss.qualcomm.com:dkim,qualcomm.com:email,qualcomm.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37078-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37077-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FREEMAIL_CC(0.00)[synopsys.com,linuxfoundation.org,kernel.org,pengutronix.de,gmail.com,vger.kernel.org,lists.linux.dev,lists.infradead.org,nxp.com,dolcini.it];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[fraschnyder@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,synopsys.com:email,nxp.com:email]
 X-Rspamd-Action: no action
 
-On 5/5/26 2:14 PM, Mika Westerberg wrote:
-> Hi,
+On Thu, Jan 08, 2026 at 04:14:33PM +0800, Xu Yang wrote:
+> Do dwc3 core auto suspend enable for device and disable for host
+> , this can make sure dwc3 core device auto suspend setting is
+> correct all the time, the background of disable dwc3 core device
+> auto suspend is to make its parent device suspend immediately
+> (so wakeup enable can be enabled) after xhci-plat device suspended,
+> for device mode, we keep the dwc3 core device auto suspend is to
+> give some wait for gadget to be enumerated.
 > 
-> On Tue, May 05, 2026 at 10:55:04AM +0200, Konrad Dybcio wrote:
->> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->>
->> The Thunderbolt framework relies on the USB core to create device links
->> for tunneled ports, so that the USB3 controller is only kept
->> runtime-resumed for the duration of the tunneling.
->>
->> Currently, retrieving that information is only possibe on Intel XHCI
->> hosts, through a vendor-specific capability. Extend xhci-plat to allow
->> plumbing a custom one.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->> ---
->>  drivers/usb/host/xhci-hub.c  | 4 ++--
->>  drivers/usb/host/xhci-plat.c | 2 ++
->>  drivers/usb/host/xhci-plat.h | 1 +
->>  drivers/usb/host/xhci.c      | 6 +++++-
->>  drivers/usb/host/xhci.h      | 5 ++++-
->>  5 files changed, 14 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
->> index bacd0ddd0d09..09e5da912066 100644
->> --- a/drivers/usb/host/xhci-hub.c
->> +++ b/drivers/usb/host/xhci-hub.c
->> @@ -750,7 +750,7 @@ static int xhci_exit_test_mode(struct xhci_hcd *xhci)
->>  }
->>  
->>  /**
->> - * xhci_port_is_tunneled() - Check if USB3 connection is tunneled over USB4
->> + * xhci_port_tunnel_mode() - Check if USB3 connection is tunneled over USB4
->>   * @xhci: xhci host controller
->>   * @port: USB3 port to be checked.
->>   *
->> @@ -764,7 +764,7 @@ static int xhci_exit_test_mode(struct xhci_hcd *xhci)
->>   * detecting USB3 over USB4 tunnels. USB_LINK_NATIVE or USB_LINK_TUNNELED
->>   * otherwise.
->>   */
->> -enum usb_link_tunnel_mode xhci_port_is_tunneled(struct xhci_hcd *xhci,
->> +enum usb_link_tunnel_mode xhci_port_tunnel_mode(struct xhci_hcd *xhci,
->>  						struct xhci_port *port)
+> Note: It's a temporary solution until we switch to using the new
+>       flatten model.
 > 
-> I'm wondering if this could be:
-> 
-> bool xhci_port_is_tunneled()
-> 
-> becase if I understand correctly that's the only information we need e.g is
-> it going over tunnel or not.
+> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-It was originally introduced as a tristate enum in:
+Hi Xu,
 
-f46a6e165197 ("usb: Add tunnel_mode parameter to usb device structure")
+We have a kernel issue introduced by this patch on an iMX95, where we 
+use the dwc3 usb as otg. This appears to be due to a race condition that
+occurs during probe, when the parent attempts to access the driver data
+from the dwc3 child. I saw your work on the new flattened model driver 
+for the iMX SoCs and that it will soon be applied to the iMX95 as well. 
+Does this mean that the issue shown below should no longer appear, as 
+there will be no parent/child dependency?
 
-but the usefulness of USB_LINK_UNKNOWN is limited to a dev_dbg() print..
-I don't really have strong opinions either way
+Do you think there are any actions needed on this patch?
 
-Konrad
+Here the warning with decoded trace:
+
+[    6.905882] ------------[ cut here ]------------
+[    6.910518] WARNING: drivers/base/core.c:1640 at device_del+0x2b4/0x384, CPU#4: 5/87
+[    6.919309] Modules linked in: libaes(+) tcpci(+) ulpi tcpm phy_fsl_imx8mq_usb(+) gf128mul snd_soc_simple_card(+) ehci_hcd imx_pc4
+[    6.964627] CPU: 4 UID: 0 PID: 87 Comm: kworker/u24:5 Not tainted 7.0.0-rc1+ #2 PREEMPT
+[    6.972716] Hardware name: Aquila iMX95 on Aquila Development Board (DT)
+[    6.979409] Workqueue: events_unbound deferred_probe_work_func
+[    6.985247] pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    6.992199] pc : device_del (drivers/base/core.c:1640 drivers/base/core.c:3882)
+[    6.996028] lr : device_del (drivers/base/core.c:1634 drivers/base/core.c:3882)
+[    6.999865] sp : ffff800080b339f0
+[    7.003169] x29: ffff800080b339f0 x28: 0000000000000000 x27: 0000000000000000
+[    7.010295] x26: ffff00008004ac28 x25: ffff0001ff067610 x24: ffff00008befdcc0
+[    7.017427] x23: ffff000080ad8810 x22: 0000000004208060 x21: ffffa5bb53ea78f0
+[    7.024560] x20: ffff00008befdc10 x19: ffff00008befdcb8 x18: 0000000000000000
+[    7.031693] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+[    7.038825] x14: 0000000000000004 x13: ffff000080129910 x12: 0000000000000000
+[    7.045958] x11: ffff0000822ac0e8 x10: ffff0000822ac000 x9 : ffff000080129910
+[    7.053090] x8 : ffff0000822ac028 x7 : 0000000000000000 x6 : ffff0000822af458
+[    7.060223] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+[    7.067356] x2 : ffff00008253e580 x1 : 0000000000000003 x0 : ffff0000895d1400
+[    7.074485] Call trace:
+[    7.076923]  device_del (drivers/base/core.c:1640 drivers/base/core.c:3882) (P)
+[    7.080754]  platform_device_del.part.0 (drivers/base/platform.c:794)
+[    7.085458]  platform_device_unregister (drivers/base/platform.c:593 drivers/base/platform.c:835)
+[    7.090164]  of_platform_device_destroy (drivers/of/platform.c:621 drivers/of/platform.c:607)
+[    7.094950]  device_for_each_child_reverse (drivers/base/core.c:4048)
+[    7.099922]  of_platform_depopulate (./include/linux/of.h:208 drivers/of/platform.c:644 drivers/of/platform.c:640)
+[    7.104282] dwc3_imx8mp_probe (drivers/usb/dwc3/dwc3-imx8mp.c:291) dwc3_imx8mp
+[    7.109588]  platform_probe (drivers/base/platform.c:1449)
+[    7.113260]  really_probe (drivers/base/dd.c:583 drivers/base/dd.c:661)
+[    7.116833]  __driver_probe_device (drivers/base/dd.c:803)
+[    7.121199]  driver_probe_device (drivers/base/dd.c:833)
+[    7.125385]  __device_attach_driver (drivers/base/dd.c:962)
+[    7.129831]  bus_for_each_drv (drivers/base/bus.c:500)
+[    7.133663]  __device_attach (drivers/base/dd.c:1035)
+[    7.137494]  device_initial_probe (drivers/base/dd.c:1088)
+[    7.141671]  bus_probe_device (drivers/base/bus.c:576)
+[    7.145502]  deferred_probe_work_func (drivers/base/dd.c:125 (discriminator 14))
+[    7.150035]  process_one_work (kernel/workqueue.c:3286)
+[    7.154047]  worker_thread (kernel/workqueue.c:3352 kernel/workqueue.c:3439)
+[    7.157791]  kthread (kernel/kthread.c:467)
+[    7.161030]  ret_from_fork (arch/arm64/kernel/entry.S:861)
+[    7.164610] ---[ end trace 0000000000000000 ]---
+
+Best regards,
+
+Franz
 
