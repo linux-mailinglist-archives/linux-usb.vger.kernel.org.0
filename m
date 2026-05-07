@@ -1,316 +1,154 @@
-Return-Path: <linux-usb+bounces-37074-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37075-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QEBJJwZc/GkOOwAAu9opvQ
-	(envelope-from <linux-usb+bounces-37074-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 11:31:50 +0200
+	id gE4nAPpi/GkqPgAAu9opvQ
+	(envelope-from <linux-usb+bounces-37075-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 12:01:30 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 910D14E5F37
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 11:31:49 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29C074E6675
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 12:01:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D4495300B8F4
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 09:31:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8CA053028E84
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 10:00:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D183F3C1414;
-	Thu,  7 May 2026 09:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51B803CCFAE;
+	Thu,  7 May 2026 10:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G8CoT6M5"
+	dkim=pass (1024-bit key) header.d=motu.com header.i=@motu.com header.b="GgMM2Co7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36F0175A6E;
-	Thu,  7 May 2026 09:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778146295; cv=none; b=Q93hRvHscN0MHTcVMYqz3jruQZuK6i8iG+EPgKjeoIWvYkHivirLNiJVn/9hyPJd7gD9OlFCFxcPlEvWEjd+R0oiUFbLr8HKU/EIB19orwRY79T2racbXGrW84UlrN+H8h8qtYZCguJqxUpDlAy71RMIpTPhY/Sr26lsGg2cxNE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778146295; c=relaxed/simple;
-	bh=fnl5fISQxFrCK/lisBXUvoXxWWrrbQLIv9INB6mUopQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BUtWia4YISdcG6hfYKK6LBJpNiyQMZTgtNArT268G2vpCH73xKwraecGtxMTCBpDwu+lcDkKSIwUsfGMC9Egc6H9DYAid5DB7tNe9A8XEHkuRMNEufxlHwHqVBLrDL//immbanFo4qIJr41ncsJvLVhB+20LA4VvRplM9IhNZXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G8CoT6M5; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778146294; x=1809682294;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fnl5fISQxFrCK/lisBXUvoXxWWrrbQLIv9INB6mUopQ=;
-  b=G8CoT6M5mhOZwG0BMo1G/n8/+XwOLL7D6s9za2GYDqDpIMsd52Z8I5d5
-   f46JduFonIh4zpdOmri3b5YcTbd0p+thiPBQ42LMAYzbvHkT11rdupywx
-   lzFjOFtIpDezwHZdQofgIjUap/iC9UWyd+DzelgOTL3CpfsQlXdhxibmW
-   TxhNrIurhmx5VWvCliiN4+3quIa4Nb8uB0VBndIXwPuy45MpAyfWjMlgK
-   IWCODWctuA2w4UcZQrM08xUPb9DwfhVDxLX8cWlKWlDI1o7KcvzODx+a2
-   kQXvuSAOaZp2jFP2Q2L0Asp31LqLP/o1K7DzgSndzG134wxHTH2cYRXXN
-   A==;
-X-CSE-ConnectionGUID: m3P1y2DwTTiNGe6d073xxA==
-X-CSE-MsgGUID: +gN0SbMDS3SJTp4idMxw+A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11778"; a="101767607"
-X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
-   d="scan'208";a="101767607"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2026 02:31:33 -0700
-X-CSE-ConnectionGUID: 792qLpIHSgKnVzg2h56TEQ==
-X-CSE-MsgGUID: B+lUKi63TAuujGLUo71Fkg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
-   d="scan'208";a="241410896"
-Received: from smoticic-mobl1.ger.corp.intel.com (HELO [10.245.245.122]) ([10.245.245.122])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2026 02:31:27 -0700
-Message-ID: <a5739875-b8a5-4918-8850-fa4b32d5279d@linux.intel.com>
-Date: Thu, 7 May 2026 12:31:24 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579E638A710
+	for <linux-usb@vger.kernel.org>; Thu,  7 May 2026 10:00:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778148013; cv=pass; b=BpuIK8z8SAUFRoxsQMOxMk1D+GWRmElhA2W7UEYBfKuy8osQvdX9Yn6wOywKDDQ7oxbsVywBxixkfIQ2e91upM3M4o1574nk0BhWokKDcYKjHF4YCydJnJAnfUIby9K8PJdkRNUR3Gs5joxd6eRjaFpfscqkWw+LH9TT1IoSd08=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778148013; c=relaxed/simple;
+	bh=QlDGxLjDsOZ5EjolZWe2BKkRSyRSSY8lNuJdeBbXvxM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FDFnBfOKRKDM2LfxMBAhpCK7MJgfmZtm+Qq64rAfTGS/8cOQ9WqvwIhqxibJP8Yr5FNRVlge1e7uyd0jv+DmtaEKffyxyT+yXpYOxdFKiq1Imp0yANe8ysZNLOcmJ+BZ+s2taVZr3/WHMo1Zv9OJN+Z8nDYD29f1dCMKJL+pX1U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motu.com; spf=pass smtp.mailfrom=motu.com; dkim=pass (1024-bit key) header.d=motu.com header.i=@motu.com header.b=GgMM2Co7; arc=pass smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=motu.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-bc2a455fd55so92177066b.2
+        for <linux-usb@vger.kernel.org>; Thu, 07 May 2026 03:00:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778148008; cv=none;
+        d=google.com; s=arc-20240605;
+        b=gnmuyR/1F7YsggL8lrVHlTRRNRvUz79tZqaHPage17WDZlhTzAFfQAxC6q5GkDfLDA
+         4UKHxlfLESNJ8G/tviVqsqvZfDpkHf8DuzdOMHoqc2w8NkjJarWtB1w2zsEOl7QxwZOQ
+         tiJjE/cDyiB7g64A5rJnJ1RjaJFvOfwJ+LdCfsM0Sngl/5J4GsE/rIduWrly2L3qlQsu
+         xsGKK328MW2G3vTQOTHV1rirrIb0RA6G/fg/awrV29BOqvCcLVpwNn/1U1aNGJCKOEtu
+         EjkomnQDCSuud1ACdRvGt5cF/iky9cMDLaPWhvM7BtBeI2NYi8OL822obGNtA9orlSHq
+         4GKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Mb8RPidwc6UDZFBFH3sV/P+FGD4EdvEXfnRyM3jK0Ok=;
+        fh=ZoSQSHDa6pCwhu6IWEL6dgMruIuRG3DvapuyFqPJO6w=;
+        b=S4D7QyHPO11CZCztjJymT22l9/mCshBUemMaDEr6uDuFYItGpITaNeG8ghVqJ70oAj
+         lBHXm4pC3rKNAsIczEug7yf0U8iboUrpx38A5C3iQGArRLFjTw2U+uijJPhukfHhNDAi
+         oWTJdBtjOq9MqKTiZcgaHZhfA9blEzJZEcvCOv3Lw1x4gau6GVSvhtAdVRT8awV1iisP
+         GSFp/XdoBQ8B0QWtF1YkopeHMSrIRF4L1jo665dUoPkdSD3yBI5acn5OEGypm0VM3czk
+         tvH6pZ9PMYeBwhba53qkVaflq0bJZZ7v6C1zJxWTEUTwIujiiJx4WrRWIBMqblkReb+X
+         zQhA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=motu.com; s=google; t=1778148008; x=1778752808; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mb8RPidwc6UDZFBFH3sV/P+FGD4EdvEXfnRyM3jK0Ok=;
+        b=GgMM2Co7gXoaWmBHj0HnvI+ClGRmaa5qCBvBH1s1foBHIbIdvPb5cf71vPm0/N9VIa
+         CAk3++HAcJkl+jgU+3OKusSXVEM9aczqcCOunLxiD8IUpep414hC76hgeW5f9gm5AGzQ
+         PREVfwSnnJp4SY3XBbY/FAdpuB/b+nOjSKJr0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778148008; x=1778752808;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Mb8RPidwc6UDZFBFH3sV/P+FGD4EdvEXfnRyM3jK0Ok=;
+        b=lR7HpQDcjoYrLEF06nceUfe9JKzMgZCwgT8BY5eCrXYcRAvEDkD+ue5K8X6MXLRYBR
+         4zXCKMthufatcBa7ZcS1OYLT5gV2ZPd0dWeHNPkq9hzbT5hITCsPTzda8cWBVZgp7/rg
+         ASEkolhNnuijaXlpMjOx6U3rcSxffNmSsSPahfc1bdZO4ik2t1bUtv/xI+iynq4OpBCP
+         nTaZJk2hjkKolX2H+MB8JwFav6KaMXgHXfZlZ+P2rLdG2lTDymWLWpomFaJpjBUByDB6
+         R6+bZa34DRISF6VHBqVldgLedtCes+t47hJj8MDWH/uIZ9s+mDgAMIF7V4plbeqHp+Vv
+         uYyw==
+X-Forwarded-Encrypted: i=1; AFNElJ+woLQ4FMuKb6Zn/lYqgPLB35UtLt/TRWNLuSiT0GGZ9OVJVc/B2KGA9nWt6Eluzb6lyWcbaqM6WXw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7HP4+uYj9dFlu+AIQs4DEPzZLHn3ZdCWRju2xn7cPjyCtfjOQ
+	xXDeQiA+1hxc7ts2m9746sANjxhcvlYaW/OXNANICZmbRYrfgO7TduGoYAdh+7hKcaV9LNB+hIE
+	TP/NHxwfEU8mpEWO5Ylni4FHLguNc1xQLIl3efYBPKA==
+X-Gm-Gg: AeBDievNrRQNK2YB6l8P5Ovj0dHWrmhoVCqxAlRNokxnIATdbEdF0mFYl6MjAX83JwA
+	1H6k71vgrnyspXjbHEbxP2DHkb55XhAV9fv6hdyzDH97YhV+Gw8ClL8t+JYJmLsJgs1X4EHyBsJ
+	izDEKjG6WByzMAvNvnLQHYSrSeGMKMm60x9Yex6lh+yRgI8r56bptL/IPBAXoscivMk6XwnT3C7
+	H3nsMgk8Tpzjepp2Ek3BDVsBeahvSV5SiGohN6tNHSNderyO/kqNQkLXILi5T8+LC354yy9j0gY
+	2XSn8nH2fSUseDJLHMzJj3OIlZjj
+X-Received: by 2002:a17:907:7ba6:b0:bc3:d996:684f with SMTP id
+ a640c23a62f3a-bc56dd129famr426813566b.42.1778148006963; Thu, 07 May 2026
+ 03:00:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] usb: xhci-pci: add generic auxiliary device
- interface
-To: Jihong Min <hurryman2212@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1778123510.git.hurryman2212@gmail.com>
- <effa7bd7bef8a8ea28b9e28fe47af6a58e39edf2.1778123510.git.hurryman2212@gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <effa7bd7bef8a8ea28b9e28fe47af6a58e39edf2.1778123510.git.hurryman2212@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 910D14E5F37
+References: <CA+Df+jdFEGGZyceFH_5LRSQjwGa1WCtd79DK1Lywvdw+pkX6fw@mail.gmail.com>
+ <3ea05812-e63a-4562-9ec3-159244b571b4@rowland.harvard.edu>
+In-Reply-To: <3ea05812-e63a-4562-9ec3-159244b571b4@rowland.harvard.edu>
+From: Dylan Robinson <dylan_robinson@motu.com>
+Date: Thu, 7 May 2026 05:59:55 -0400
+X-Gm-Features: AVHnY4IvJDQ46X5rcH5cAgIw02PfRpoSjSKfCUBcR_OjIesl6We8nQmQy6L4P7Q
+Message-ID: <CA+Df+jdRxpOSNZbgUvVuOnvfCDvD5EhVPoVSCAbV87sKvnyCcw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb: xhci: fix isoc silent reschedule creating stream
+ gap on CFC controllers
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: mathias.nyman@linux.intel.com, gregkh@linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	mathias.nyman@intel.com, Michal Pecio <michal.pecio@gmail.com>, 
+	nick83ola <nick83ola@gmail.com>, niklas.neronin@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 29C074E6675
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[motu.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[motu.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37074-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org,intel.com];
 	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[linux.intel.com,linuxfoundation.org,vger.kernel.org,intel.com,gmail.com];
+	TAGGED_FROM(0.00)[bounces-37075-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dylan_robinson@motu.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[motu.com:+];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:dkim,linux.intel.com:mid]
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
 X-Rspamd-Action: no action
 
-On 5/7/26 06:31, Jihong Min wrote:
-> Some xHCI PCI controllers expose controller-specific functionality that is
-> not part of generic xHCI operation and is better handled by optional child
-> drivers in other subsystems. Add a small auxiliary device registration path
-> for selected xHCI PCI controllers.
-> 
-> The initial PCI ID match table lists AMD Promontory 21 (PROM21) 1022:43fd
-> controllers. For matching controllers, xhci-pci creates an auxiliary
-> device and stores it in devres so the remove path destroys it before HCD
-> teardown.
-> 
-> Subsystem-specific child drivers can then bind to those devices through
-> the auxiliary bus and keep their hardware-specific logic outside xhci-pci.
-> 
-> Assisted-by: Codex:gpt-5.5
-> Signed-off-by: Jihong Min <hurryman2212@gmail.com>
-> ---
->   drivers/usb/host/Kconfig    | 10 +++++
->   drivers/usb/host/xhci-pci.c | 83 +++++++++++++++++++++++++++++++++++++
->   2 files changed, 93 insertions(+)
-> 
-> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-> index 0a277a07cf70..e0c2c7ac5c97 100644
-> --- a/drivers/usb/host/Kconfig
-> +++ b/drivers/usb/host/Kconfig
-> @@ -42,6 +42,16 @@ config USB_XHCI_PCI
->   	depends on USB_PCI
->   	default y
->   
-> +config USB_XHCI_PCI_AUXDEV
-> +	bool "xHCI PCI auxiliary device support"
-> +	depends on USB_XHCI_PCI
-> +	select AUXILIARY_BUS
-> +	help
-> +	  This enables xHCI PCI support for registering auxiliary devices
-> +	  for selected controllers. It is used by optional child drivers
-> +	  that bind to xHCI PCI controller-specific functionality through
-> +	  the auxiliary bus.
-> +
->   config USB_XHCI_PCI_RENESAS
->   	tristate "Support for additional Renesas xHCI controller with firmware"
->   	depends on USB_XHCI_PCI
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 585b2f3117b0..618d6840e108 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -8,6 +8,8 @@
->    * Some code borrowed from the Linux EHCI driver.
->    */
->   
-> +#include <linux/auxiliary_bus.h>
-> +#include <linux/device/devres.h>
->   #include <linux/pci.h>
->   #include <linux/slab.h>
->   #include <linux/module.h>
-> @@ -80,6 +82,7 @@
->   #define PCI_DEVICE_ID_AMD_RAVEN_15E1_XHCI		0x15e1
->   #define PCI_DEVICE_ID_AMD_RAVEN2_XHCI			0x15e5
->   #define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
-> +#define PCI_DEVICE_ID_AMD_PROM21_XHCI			0x43fd
->   #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
->   #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
->   #define PCI_DEVICE_ID_AMD_PROMONTORYA_2			0x43bb
-> @@ -103,6 +106,80 @@ static int xhci_pci_run(struct usb_hcd *hcd);
->   static int xhci_pci_update_hub_device(struct usb_hcd *hcd, struct usb_device *hdev,
->   				      struct usb_tt *tt, gfp_t mem_flags);
->   
-> +static const struct pci_device_id pci_ids_have_aux[] = {
-> +	{ PCI_DEVICE_DATA(AMD, PROM21_XHCI, "prom21_hwmon") },
-> +	{ /* end: all zeroes */ }
-> +};
-> +
-> +struct xhci_pci_aux_devres {
-> +	struct auxiliary_device *auxdev;
-> +};
-> +
-> +static const char *xhci_pci_aux_dev_name(struct pci_dev *pdev)
-> +{
-> +	const struct pci_device_id *id;
-> +
-> +	id = pci_match_id(pci_ids_have_aux, pdev);
-> +	if (!id)
-> +		return NULL;
-> +
-> +	return (const char *)id->driver_data;
-> +}
-> +
-> +static void xhci_pci_aux_devres_release(struct device *dev, void *res)
-> +{
-> +	struct xhci_pci_aux_devres *devres = res;
-> +
-> +	if (devres->auxdev)
-> +		auxiliary_device_destroy(devres->auxdev);
-> +}
-> +
-> +static void xhci_pci_try_add_aux_device(struct pci_dev *pdev)
-> +{
-> +	struct xhci_pci_aux_devres *devres;
-> +	struct auxiliary_device *auxdev;
-> +	const char *aux_dev_name;
-> +
-> +	aux_dev_name = xhci_pci_aux_dev_name(pdev);
-> +	if (!aux_dev_name)
-> +		return;
-> +
-> +	devres = devres_alloc(xhci_pci_aux_devres_release, sizeof(*devres),
-> +			      GFP_KERNEL);
-> +	if (!devres) {
-> +		dev_warn(&pdev->dev,
-> +			 "failed to allocate auxiliary device state\n");
-> +		return;
-> +	}
-> +
-> +	auxdev = auxiliary_device_create(&pdev->dev, KBUILD_MODNAME,
-> +					 aux_dev_name, NULL,
-> +					 (pci_domain_nr(pdev->bus) << 16) |
-> +						 pci_dev_id(pdev));
-> +	if (!auxdev) {
-> +		devres_free(devres);
-> +		dev_warn(&pdev->dev, "failed to add %s auxiliary device\n",
-> +			 aux_dev_name);
-> +		return;
-> +	}
-> +
-> +	devres->auxdev = auxdev;
-> +	devres_add(&pdev->dev, devres);
-> +}
-> +
-> +static void xhci_pci_try_remove_aux_device(struct pci_dev *pdev)
-> +{
-> +	struct xhci_pci_aux_devres *devres;
-> +
-> +	devres = devres_find(&pdev->dev, xhci_pci_aux_devres_release, NULL,
-> +			     NULL);
-> +	if (!devres || !devres->auxdev)
-> +		return;
-> +
-> +	auxiliary_device_destroy(devres->auxdev);
-> +	devres->auxdev = NULL;
-> +}
-> +
->   static const struct xhci_driver_overrides xhci_pci_overrides __initconst = {
->   	.reset = xhci_pci_setup,
->   	.start = xhci_pci_run,
-> @@ -677,6 +754,9 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
->   	if (device_property_read_bool(&dev->dev, "ti,pwron-active-high"))
->   		pci_clear_and_set_config_dword(dev, 0xE0, 0, 1 << 22);
->   
-> +	if (IS_ENABLED(CONFIG_USB_XHCI_PCI_AUXDEV))
-> +		xhci_pci_try_add_aux_device(dev);
-> +
->   	return 0;
+On Wed, May 6, 2026 at 10:25=E2=80=AFPM Alan Stern wrote:
+> How can this happen?  The only way for an URB to describe less than a
+> microframe's worth of transactions is if it describes no transactions at
+> all.
+>
+> Did you mean less than a frame's worth?
 
-I think this should be turned around so that the vendor specific code calls the common code.
-xhci-pci-renesas.c does this nicely.
-
-In your case it would be adding something like a xhci-pci-prom21.c pci driver:
-
-xhci_pci_prom21_probe(struct pci_dev *dev, const struct pci_device_id *id)
-{
-	crate_auxiliary_device(dev);
-	return xhci_pci_common_probe(dev, id);
-}
-
-xhci_pci_prom21_remove(struct pci_dev *dev)
-{
-	destroy_auxiliary_device(dev);
-	xhci_pci_remove(dev);
-}
-
-static const struct pci_device_id pci_ids[] = {
-	{ PCI_DEVICE(YOUR_AMD_PCI_VENDOR_ID, YOUR_PROM21_DEVICE_ID) },
-	{ /* end: all zeroes */ }
-};
-MODULE_DEVICE_TABLE(pci, pci_ids);
-
-static struct pci_driver xhci_prom21_pci_driver = {
-	.name =		"xhci-pci-prom21",
-	.id_table =	pci_ids,
-
-	.probe =	xhci_pci_prom21_probe,
-	.remove =	xhci_pci_prom21_remove,
-
-	.shutdown = 	usb_hcd_pci_shutdown,
-	.driver = {
-		.pm = pm_ptr(&usb_hcd_pci_pm_ops),
-	},
-};
-module_pci_driver(xhci_prom21_pci_driver);
-
-MODULE_DESCRIPTION("AMD Promontory 21 xHCI PCI Host Controller Driver");
-MODULE_IMPORT_NS("xhci");
-MODULE_LICENSE("GPL v2");
-
--Mathias
+Sorry for the confusion. Yes, less than a frame=E2=80=99s worth.
 
