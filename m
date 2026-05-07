@@ -1,79 +1,81 @@
-Return-Path: <linux-usb+bounces-37052-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37053-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AGW2DOYH/GlkKAAAu9opvQ
-	(envelope-from <linux-usb+bounces-37052-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 05:32:54 +0200
+	id MOvUCtMH/GlkKAAAu9opvQ
+	(envelope-from <linux-usb+bounces-37053-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 05:32:35 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDF5D4E2A23
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 05:32:53 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CB3C4E29FB
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 05:32:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3885A3028B27
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 03:32:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5C2013024471
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 03:32:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 333B18460;
-	Thu,  7 May 2026 03:32:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3C272D9ED1;
+	Thu,  7 May 2026 03:32:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="luqXzygQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bWGEfUWP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2375B2D876F
-	for <linux-usb@vger.kernel.org>; Thu,  7 May 2026 03:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2DEA2DC792
+	for <linux-usb@vger.kernel.org>; Thu,  7 May 2026 03:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778124743; cv=none; b=fyaPYqFBlRM9O1/eujBWAlabBNxmy9ULuMbVxBf1Vrrmwki3k582hWsyecj8ybCWca9Eb7dxDO1RjfNemLphmnMlqLdWVfXsYGP3ZyOUeSNVKPfSiqJT1OTrZ9JB5ejGUK2JYmA8Bn/ol0tUMg7LsqaXFS7+B8Puzfei/jJxyv4=
+	t=1778124747; cv=none; b=IzsPCF3mbLO4t1kmgYZxvBUuk3s+9Prr4G4WiN2odHxuW9JABEttHPCOAA1DvAYt4IGYyaNhtWAp6ntvg1S700cMxajtl06h5Sh+PMyegYY6uu1IyA5R4eGEvS6JzQkBcS/ydf8RCTIZnAVQde8665MkN+nPV+ETMkKb/wk1z90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778124743; c=relaxed/simple;
-	bh=GXflDZZtOj++0sRst0xKUH830AVIhbrLZYn/7oCG1YI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CJxdZaKvpgqMBvBWtmyl1mPH8aXZz7xt6dhPDSIncuJtB6hu8BOYi3lpd1np25tfVpJl76SHsnXQvFvkrpB8MSrPaRe7OHwub6rQMdWP/ke3QTSLv3GGxSciIAXtJBFZxx6+Ei2Y/ooggKIb0zqVYxdYQs8O74TnrrqF9R2F45w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=luqXzygQ; arc=none smtp.client-ip=209.85.210.179
+	s=arc-20240116; t=1778124747; c=relaxed/simple;
+	bh=yyDfmEPivb0/5E/2IFHBQISFwnPHdmmiGmpkGrnEdrU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sruiOPZrijz+qWPQYpbJSFIuwZOz4LBdM4C47wd1TKm5MXYtJHdZ3Ok7M9RyTPo6KzVZzldBFG5+QYZCyDLzrglqHq/qntoZWyjRHH6c0eQX3pa1FuDy3oVXaJ4eLNXLvpQg1IzeuXW7spACVlveodi6fIb53gHmVAmDU9NKAuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bWGEfUWP; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-837b39eb078so200942b3a.2
-        for <linux-usb@vger.kernel.org>; Wed, 06 May 2026 20:32:21 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8353dfdad62so212654b3a.1
+        for <linux-usb@vger.kernel.org>; Wed, 06 May 2026 20:32:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778124741; x=1778729541; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/VhP1DpEaR3JO7WzlQe2Tdq2/A5+ePt/o60+NrBJM7o=;
-        b=luqXzygQvDDqQO6JKgJeh8+erGDIEh/0uGuXD79oS+mm46+HPKEtLo/P0w8IkuSmY7
-         5lvj1MAcNM8vKTH+km062J07QoupRDeHMcKE/U/yzoX7a0/6PuNlxpDV5j4bwNYiG+XE
-         8ywAqTbAqDAffoI1K3ONp1PNHVzcIq7iIB9Jz8no2uRt0u+dzqcNiJx/4MN1SbJDxDFv
-         7wiKoGphgQXlLh53TEdOAMnYmmRzFLB2ivVIJVHZB6FKAS3EYTb5JS32U/pc92kZrrxK
-         Gmh2WVhf8sUuEOWEJ1bF98JLq8E3j9PhXlCRu025wU4WzQZpemAoX0SbI+FJks/dCUqf
-         TJ9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778124741; x=1778729541;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1778124745; x=1778729545; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/VhP1DpEaR3JO7WzlQe2Tdq2/A5+ePt/o60+NrBJM7o=;
-        b=cvPMVKwoiL8H1t1dsyMMHRkD/izeHQT30U1c4V1v6f8fxNww7o7nnSvrvpavJuX0V1
-         vR4M1B6nSPDcWxhiH11dnCwTeBEGeQG09s/F6HdnqsuTwAOBvsM3ay+PaXz4IvL2FS05
-         oGgNNK9SJJstrfPnkukiqiuV2vbcp32a1/XpzfULYCIK1zRTI9I2G5lU+oXRPJJQohwn
-         yV4+UcEVbDptyT99IpAFzgaVUVsv2FliP6j0eIV7HP5eul+66OhF/Z6sShVFPKmvYUYG
-         zKUPYti+BfU/vinMhefs1h2Cl7O0ythLCunEW55GGktq1fONIiai2l0GxxtKnLViQXJC
-         o3Lw==
-X-Forwarded-Encrypted: i=1; AFNElJ8yr4bfHrosaheDz9zym1DbvYyzpGow7/3U41//+dfuXivX7rk3aMn43CZrWO2+tiTJdz4sYnojxq4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSrBBMlSUMAKAbmNJpcC4S4qyyc1FzaG1/eIgRfyc6SVHY4e7z
-	w+y6Hz3V+TUat22bfiPP1zA5IKuqz8nXprQoX7LYoXTJxy8Q4JZeOLPr
-X-Gm-Gg: AeBDievxu3GGa7FLSYh30ltcxclvI0ZQ7sUYqwxNFdhN2Wp0gMC+eni/3442dgTFzwa
-	FyNv96mIe0Vio73kCdJYjIZkWP/hLikoPfwiGKoRC+ZXp7iQnGaKiOcx9OPTHvfx2aamx8MW94E
-	6gwERTHbzfHDyeUIkgvAyW5ehqPT0dVtaMm7j8P7Aqvgjds7oLohDYlsZ28XT5iKp8myMzLJKke
-	adzyLOl4uvlpcbvvcGM4t3X9kR013tLsOSFtO7yyyVG78XKd1VUQGX3Hxy03uvd85D7hPu3jYJU
-	xeOTfHeZBDQvf+bQJ1eYt/aBMQK77FvPGjuuSPA9jxgDQwstJHJ1EfsWLOwbzJ9L/Qd2Al/EqL4
-	VV43ObpPBPa/Ac2SvJlKiOyJsTW2Mbb6qKrLrcgOej3vW2EYm9IJkWPvjrLl/v+YPXxBUH8sOYG
-	7qhiRCAhdseLom4YtEotokk6lAPibT2CM=
-X-Received: by 2002:a05:6a00:198c:b0:82c:b808:4c59 with SMTP id d2e1a72fcca58-83a5ea3fe9bmr5893529b3a.46.1778124741306;
-        Wed, 06 May 2026 20:32:21 -0700 (PDT)
+        bh=3hz0A98B9puJCvkh6JtrxfTFZ4RXGUWv+B5oj53yvm4=;
+        b=bWGEfUWPB/jRoRnLY91v+qR2cLSCazlrEPzIvGqh5nwOi2iXQ0BwszfXjnm5NuIMpX
+         PL0jQTpnG/F6ti1VdhCmLBr8ad/hKvq7P+iUrT3AMPRnMFxOZhoH0/75l2Fqy/6tcCBN
+         AvkyzkN4kYTdXSKkV5DyIFc40zTxtF1XBebJE+zw/4yqEZhZLK9vm52PYBJlF2xKPPGO
+         zxco1wfLYzsoumKbvyhzMJxkYMZx6OVhKnTuoixIwp5FpDVI1Q1MEUs7fmzqGJw+04Gs
+         pc5gc0Zcw4A+FFx4rFfFoBy5H0tkk3kpabYZuiAHxqf8iljzvPx11EkYJTF9EHSKlgPf
+         3DCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778124745; x=1778729545;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3hz0A98B9puJCvkh6JtrxfTFZ4RXGUWv+B5oj53yvm4=;
+        b=o00bF2Ec+FvUwbi1GpQekLxwJlOPboa7HZJh5Q6EOPkg5rlzDEkIsNDOPksvpbRK/x
+         q77p2esnHvmMXAykrQyrwDas7ndyR6VT+36oWzCrBwgvyeoJrctGZsNt1eUGMODY18/D
+         41JlG//+N52wxnhVQqnKy03M1aWbvTwhLxyX4rw4huBDlJuTkVFoDEI2z2BuXubH9DzS
+         NSnpL9u0TuvotRDvoPAGn9GmXRrtJ2Xyxo6JjaK10d/Ad7v3bwxVZUyMSRErHD+hTf0c
+         GpOFOfvLS/Oh3JLaIGMv8ohGU/ElqvzbdpDE5BwZpXZamyxlj9quwn2Hd8nngIuYRygJ
+         s7LQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8NE4KOHGVshl32gZbySRao2I3vf4RgFMiiHN+o1BvOZjuV5LPjVTzrmXKw6t/mFXmCe/b7jJSm5hw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfrOBCnIldr2LTrWU/T1REqcFBCeTR7Ujp9sCEpNb+MhXr+maI
+	U4bAR1xEfH2grBxI21zzSkJ+49GxuV4yZ+tZ0ykdhBq4vyGw3vCgquPn
+X-Gm-Gg: AeBDies/VACr1uiX/32HZCxIaKXGCxeiS3uPdNuvVQmOkiUY8L498ajt62I65PdcWa4
+	Aev9fzPDafZ1+QIRuMddVxmMPxfhOHOocjpbnwtJ+fPtIWfBvEGLHfFN4FWIZz7yVcCHCXodXQ4
+	iLA0d8HLbkKPPGt0qVXCQ4ZjZvONGiY4A0FMXMqVud4hXcQGkbQr0vglqWzy2lV0ooajjGlKLdR
+	pyO+hwZmeMOqiiD054PoJ57Si+XKaJwS+zdhXnUq5Rfodk4kaZxD8+AErQP02HhrDeshv/vHMIl
+	Nu/810alvZ5DNHwqAkvd7aW9u5aSFuOLXOltt4N9mvkKR1KjoaLfBEoJI7QJgW1fMkLBVOPimt+
+	Ef7LVd8xnsvgCZYFlFcEBwlnVKfSQG18QuUUjYqpHCra0J2Rr1LhwP5ESH0PAOcYGhRK/MIjrWk
+	aTCL0RlfH+/0QS/XFVH5zg7v3olzDwZ+U=
+X-Received: by 2002:a05:6a00:b48:b0:82f:280a:d888 with SMTP id d2e1a72fcca58-83a5bbd5fd8mr6171391b3a.12.1778124745097;
+        Wed, 06 May 2026 20:32:25 -0700 (PDT)
 Received: from mincom1 ([14.67.155.79])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-839682a103esm9171580b3a.51.2026.05.06.20.32.18
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-839682a103esm9171580b3a.51.2026.05.06.20.32.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2026 20:32:20 -0700 (PDT)
+        Wed, 06 May 2026 20:32:24 -0700 (PDT)
 From: Jihong Min <hurryman2212@gmail.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Mathias Nyman <mathias.nyman@intel.com>
@@ -88,10 +90,12 @@ Cc: Guenter Roeck <linux@roeck-us.net>,
 	linux-pci@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Jihong Min <hurryman2212@gmail.com>
-Subject: [PATCH v3 0/2] AMD Promontory 21 xHCI temperature hwmon support
-Date: Thu,  7 May 2026 12:31:57 +0900
-Message-ID: <cover.1778123510.git.hurryman2212@gmail.com>
+Subject: [PATCH v3 1/2] usb: xhci-pci: add generic auxiliary device interface
+Date: Thu,  7 May 2026 12:31:58 +0900
+Message-ID: <effa7bd7bef8a8ea28b9e28fe47af6a58e39edf2.1778123510.git.hurryman2212@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <cover.1778123510.git.hurryman2212@gmail.com>
+References: <cover.1778123510.git.hurryman2212@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -99,7 +103,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: BDF5D4E2A23
+X-Rspamd-Queue-Id: 9CB3C4E29FB
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
@@ -107,18 +111,18 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	FREEMAIL_CC(0.00)[roeck-us.net,lwn.net,linuxfoundation.org,amd.com,vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-37052-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37053-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[13];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[hurryman2212@gmail.com,linux-usb@vger.kernel.org];
@@ -129,60 +133,173 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Hi,
-
-This series adds hwmon support for the temperature sensor exposed by AMD
-Promontory 21 (PROM21) xHCI controllers.
-
-Patch 1 adds a small generic auxiliary-device registration path to xhci-pci
+Some xHCI PCI controllers expose controller-specific functionality that is
+not part of generic xHCI operation and is better handled by optional child
+drivers in other subsystems. Add a small auxiliary device registration path
 for selected xHCI PCI controllers.
 
-Patch 2 adds the PROM21 hwmon driver. The driver binds through the
-auxiliary bus, reads the PROM21 xHCI temperature value through the
-controller MMIO BAR, and exposes it through hwmon.
+The initial PCI ID match table lists AMD Promontory 21 (PROM21) 1022:43fd
+controllers. For matching controllers, xhci-pci creates an auxiliary
+device and stores it in devres so the remove path destroys it before HCD
+teardown.
 
-Changes in v3:
-- Use pci_match_id() with a plain struct pci_device_id table and
-  PCI_DEVICE_DATA() for the auxiliary device name.
-- Remove conditional compilation blocks from xhci-pci.c and guard the
-  auxiliary add/remove call sites with IS_ENABLED().
-- Use the full AMD Promontory 21 name in commit messages, Kconfig help
-  text, and documentation.
-- Document the PROM21 chipset IP relationship to AMD 6xx/8xx series
-  chipsets.
-- Change the default hwmon read behavior to not wake the xHCI PCI device.
-  Return -EPERM when the device is suspended, matching the amdgpu
-  precedent, and keep pm as an opt-in module parameter for runtime PM
-  state changes during device memory access.
-- Keep Documentation/hwmon/index.rst sorted.
-- Small refactoring: remove the duplicate PROM21 PCI ID check from the
-  hwmon driver and use the hwmon device name as the auxiliary device
-  suffix.
+Subsystem-specific child drivers can then bind to those devices through
+the auxiliary bus and keep their hardware-specific logic outside xhci-pci.
 
-v2:
-https://lore.kernel.org/r/cover.1778099627.git.hurryman2212@gmail.com
+Assisted-by: Codex:gpt-5.5
+Signed-off-by: Jihong Min <hurryman2212@gmail.com>
+---
+ drivers/usb/host/Kconfig    | 10 +++++
+ drivers/usb/host/xhci-pci.c | 83 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 93 insertions(+)
 
-v1:
-https://lore.kernel.org/r/20260506032939.92351-1-hurryman2212@gmail.com
-
-Jihong Min (2):
-  usb: xhci-pci: add generic auxiliary device interface
-  hwmon: add AMD Promontory 21 xHCI temperature sensor support
-
- Documentation/hwmon/index.rst        |   1 +
- Documentation/hwmon/prom21-hwmon.rst |  86 ++++++++
- drivers/hwmon/Kconfig                |  11 +
- drivers/hwmon/Makefile               |   1 +
- drivers/hwmon/prom21-hwmon.c         | 293 +++++++++++++++++++++++++++
- drivers/usb/host/Kconfig             |  10 +
- drivers/usb/host/xhci-pci.c          |  83 ++++++++
- 7 files changed, 485 insertions(+)
- create mode 100644 Documentation/hwmon/prom21-hwmon.rst
- create mode 100644 drivers/hwmon/prom21-hwmon.c
-
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index 0a277a07cf70..e0c2c7ac5c97 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -42,6 +42,16 @@ config USB_XHCI_PCI
+ 	depends on USB_PCI
+ 	default y
+ 
++config USB_XHCI_PCI_AUXDEV
++	bool "xHCI PCI auxiliary device support"
++	depends on USB_XHCI_PCI
++	select AUXILIARY_BUS
++	help
++	  This enables xHCI PCI support for registering auxiliary devices
++	  for selected controllers. It is used by optional child drivers
++	  that bind to xHCI PCI controller-specific functionality through
++	  the auxiliary bus.
++
+ config USB_XHCI_PCI_RENESAS
+ 	tristate "Support for additional Renesas xHCI controller with firmware"
+ 	depends on USB_XHCI_PCI
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 585b2f3117b0..618d6840e108 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -8,6 +8,8 @@
+  * Some code borrowed from the Linux EHCI driver.
+  */
+ 
++#include <linux/auxiliary_bus.h>
++#include <linux/device/devres.h>
+ #include <linux/pci.h>
+ #include <linux/slab.h>
+ #include <linux/module.h>
+@@ -80,6 +82,7 @@
+ #define PCI_DEVICE_ID_AMD_RAVEN_15E1_XHCI		0x15e1
+ #define PCI_DEVICE_ID_AMD_RAVEN2_XHCI			0x15e5
+ #define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
++#define PCI_DEVICE_ID_AMD_PROM21_XHCI			0x43fd
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_2			0x43bb
+@@ -103,6 +106,80 @@ static int xhci_pci_run(struct usb_hcd *hcd);
+ static int xhci_pci_update_hub_device(struct usb_hcd *hcd, struct usb_device *hdev,
+ 				      struct usb_tt *tt, gfp_t mem_flags);
+ 
++static const struct pci_device_id pci_ids_have_aux[] = {
++	{ PCI_DEVICE_DATA(AMD, PROM21_XHCI, "prom21_hwmon") },
++	{ /* end: all zeroes */ }
++};
++
++struct xhci_pci_aux_devres {
++	struct auxiliary_device *auxdev;
++};
++
++static const char *xhci_pci_aux_dev_name(struct pci_dev *pdev)
++{
++	const struct pci_device_id *id;
++
++	id = pci_match_id(pci_ids_have_aux, pdev);
++	if (!id)
++		return NULL;
++
++	return (const char *)id->driver_data;
++}
++
++static void xhci_pci_aux_devres_release(struct device *dev, void *res)
++{
++	struct xhci_pci_aux_devres *devres = res;
++
++	if (devres->auxdev)
++		auxiliary_device_destroy(devres->auxdev);
++}
++
++static void xhci_pci_try_add_aux_device(struct pci_dev *pdev)
++{
++	struct xhci_pci_aux_devres *devres;
++	struct auxiliary_device *auxdev;
++	const char *aux_dev_name;
++
++	aux_dev_name = xhci_pci_aux_dev_name(pdev);
++	if (!aux_dev_name)
++		return;
++
++	devres = devres_alloc(xhci_pci_aux_devres_release, sizeof(*devres),
++			      GFP_KERNEL);
++	if (!devres) {
++		dev_warn(&pdev->dev,
++			 "failed to allocate auxiliary device state\n");
++		return;
++	}
++
++	auxdev = auxiliary_device_create(&pdev->dev, KBUILD_MODNAME,
++					 aux_dev_name, NULL,
++					 (pci_domain_nr(pdev->bus) << 16) |
++						 pci_dev_id(pdev));
++	if (!auxdev) {
++		devres_free(devres);
++		dev_warn(&pdev->dev, "failed to add %s auxiliary device\n",
++			 aux_dev_name);
++		return;
++	}
++
++	devres->auxdev = auxdev;
++	devres_add(&pdev->dev, devres);
++}
++
++static void xhci_pci_try_remove_aux_device(struct pci_dev *pdev)
++{
++	struct xhci_pci_aux_devres *devres;
++
++	devres = devres_find(&pdev->dev, xhci_pci_aux_devres_release, NULL,
++			     NULL);
++	if (!devres || !devres->auxdev)
++		return;
++
++	auxiliary_device_destroy(devres->auxdev);
++	devres->auxdev = NULL;
++}
++
+ static const struct xhci_driver_overrides xhci_pci_overrides __initconst = {
+ 	.reset = xhci_pci_setup,
+ 	.start = xhci_pci_run,
+@@ -677,6 +754,9 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	if (device_property_read_bool(&dev->dev, "ti,pwron-active-high"))
+ 		pci_clear_and_set_config_dword(dev, 0xE0, 0, 1 << 22);
+ 
++	if (IS_ENABLED(CONFIG_USB_XHCI_PCI_AUXDEV))
++		xhci_pci_try_add_aux_device(dev);
++
+ 	return 0;
+ 
+ put_usb3_hcd:
+@@ -713,6 +793,9 @@ void xhci_pci_remove(struct pci_dev *dev)
+ 	xhci = hcd_to_xhci(pci_get_drvdata(dev));
+ 	set_power_d3 = xhci->quirks & XHCI_SPURIOUS_WAKEUP;
+ 
++	if (IS_ENABLED(CONFIG_USB_XHCI_PCI_AUXDEV))
++		xhci_pci_try_remove_aux_device(dev);
++
+ 	xhci->xhc_state |= XHCI_STATE_REMOVING;
+ 
+ 	if (pci_choose_state(dev, PMSG_SUSPEND) == PCI_D0)
 -- 
 2.53.0
+
 
