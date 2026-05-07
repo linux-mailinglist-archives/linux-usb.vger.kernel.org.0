@@ -1,53 +1,69 @@
-Return-Path: <linux-usb+bounces-37047-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37048-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wOBdGoHy+2mMJAAAu9opvQ
-	(envelope-from <linux-usb+bounces-37047-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 04:01:37 +0200
+	id mDJ9HLD1+2lNJQAAu9opvQ
+	(envelope-from <linux-usb+bounces-37048-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 04:15:12 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C24454E2258
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 04:01:36 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 193E94E233C
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 04:15:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C551830234E2
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 02:01:07 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 40CC83006698
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 02:15:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23FE0282F31;
-	Thu,  7 May 2026 02:01:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F7F61F3BA2;
+	Thu,  7 May 2026 02:15:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ue19lhf3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uB8rTF/M"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46B1213E9C;
-	Thu,  7 May 2026 02:01:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17E122173D;
+	Thu,  7 May 2026 02:15:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778119265; cv=none; b=MRelCPcaMiRmRaZMZa0+jxowffUJHDzHURmsT399N2r68PGXumCu2Mbf7SMzX9YZNS2MwpW+yAmGLCbEjvWJ4c9cGxQEoHZVzI3WzJ12bLZEd3Ot9S6DO05L3TAzdLId2r6W8YP359thckAT2l8et5s8dIVxorN1WO+oeOAYNRM=
+	t=1778120107; cv=none; b=P3XL22kIuDEV++WlAJgt/AD00wOQlxfUV3VsK4ngs4ECcIDaJ3JtKtyUGkFbMswf9NDWdz63aqLO9dyTe7Ob5/4uLjvBmE2PMA+Vdm+BcxyENw1ZTp8UsIvplcXvYX1eHXq/EE81UaHCIiTCoqOVLlPdgudRB+VXtXK9V3t8mE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778119265; c=relaxed/simple;
-	bh=a40ZyRGxQXRd6QRk2rzSLaT+x+MGE5hs0j2SUEwlOH0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=a1LB5SPc3RXLBal/ABQRyNX3m9AD70pKD20mplf51FBBYDNsgH3NhjpelsAzVtLvVVzF7jx6TUkfLedaLvBed3eVdyLMwYc9gY2km/OnRA2WeMSfziKovKyHvGZk3l3ZD185biNjHB3ixh8yjbcyyD9fFLB+GiK3KWVKmbbZba0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ue19lhf3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D7CDC2BCB0;
-	Thu,  7 May 2026 02:01:05 +0000 (UTC)
+	s=arc-20240116; t=1778120107; c=relaxed/simple;
+	bh=XXnfg3Egf/xizqpxi5tqAsC+JRKwFvCCVuI4f/mTprI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MsTJgBbzXdvcZ25Xmz5lk5IEQStEwr5+wBmRvdnCEda5Eim2WEAPc0bPIpknXqWaA/XjpIZG/HhsOua06TIluHacd8DW/ARaPiP3tHUaIV68FiftulHwntyq2fdMLA0lhP94O5uPkDZ4NA83fjNR5ouXd4DkGrD9rp8QA6ADWhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uB8rTF/M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C263FC2BCB0;
+	Thu,  7 May 2026 02:15:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778119265;
-	bh=a40ZyRGxQXRd6QRk2rzSLaT+x+MGE5hs0j2SUEwlOH0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Ue19lhf3TYarCZyrQHjVx5fYcnhj8cMEih8yZB7EnrUcpSZ7Q4pkKMmaWKwDD3GUa
-	 7aG7hXenRg7FXG+uuwihNzvJAtVehaNR3zZiFj0Qtyqy2oFFfrwrhZYofDoqoYAAgr
-	 esMzM0XlvkB9SlvXQmw6iNFdt5CueqIImMxQlbjL/D3uSSe8d/p4Up09mMfqO3FYQT
-	 +P+xZ9xqRn3IRmlCEABmqyJLSVFVmqjC+msJFa0NIHP9PGgA0H/OSjnXzOIb8LcDhT
-	 /i/v/fAlEDIAwbQhhci7FHpy+Il1jEs8l7TnGzUQmtJySga9NFVMrEBdjSEzYtVciI
-	 WHKOrGk4jK9LQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02CC2393089F;
-	Thu,  7 May 2026 02:00:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1778120107;
+	bh=XXnfg3Egf/xizqpxi5tqAsC+JRKwFvCCVuI4f/mTprI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=uB8rTF/MGtz/7/yNleMg07HFtPXDfF5EoxCB+jKKW3JdihygCHGFa92iSIQvVk+uJ
+	 VPaR0eMEnBoSl8IlWm4pqs/lpq8GTBDPahBuK7sWVQVMkzq2SfxmEZBpdn6ERsDPAP
+	 fvwZ9j25/Zc9g/yeLJBWoaaHYfHVys1lRHdRDljmSgtMIeqsIzihRbV0jaxkC2hMFO
+	 lm3syAM7grYIpU0iAXFWnTHB9SJ0ggarRQKlVdFP7So1Jn5R7r+H/K2IjgIBBCCnB+
+	 7xzAoLxf6gfbbRJLmq9A/PFJMqsKL5od2drfou4EssujfFnoUgX5C7vPkMFemOANfq
+	 adCDQueHdU7PQ==
+From: Jakub Kicinski <kuba@kernel.org>
+To: Markus.Baier@soslab.tu-darmstadt.de
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	o.rempel@pengutronix.de,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	linux@armlinux.org.uk,
+	enelsonmoore@gmail.com,
+	linmq006@gmail.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH net] net: usb: asix: ax88772: replace usbnet_link_change() with queue_work() and usbnet_unlink_rx_urbs()
+Date: Wed,  6 May 2026 19:15:05 -0700
+Message-ID: <20260507021505.2271095-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260506010344.184636-1-Markus.Baier@soslab.tu-darmstadt.de>
+References: <20260506010344.184636-1-Markus.Baier@soslab.tu-darmstadt.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,93 +71,150 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v4 0/3] r8152: Add support for the RTL8159 10Gbit
- USB Ethernet chip
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177811921453.3299821.167480571518572588.git-patchwork-notify@kernel.org>
-Date: Thu, 07 May 2026 02:00:14 +0000
-References: <20260505-rtl8159_net_next-v4-0-1a648a9c4d8d@birger-koblitz.de>
-In-Reply-To: <20260505-rtl8159_net_next-v4-0-1a648a9c4d8d@birger-koblitz.de>
-To: Birger Koblitz <mail@birger-koblitz.de>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- hsu.chih.kai@realtek.com, andrew@lunn.ch, olek2@wp.pl
-X-Rspamd-Queue-Id: C24454E2258
+X-Rspamd-Queue-Id: 193E94E233C
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37047-lists,linux-usb=lfdr.de,netdevbpf];
-	FREEMAIL_CC(0.00)[lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,vger.kernel.org,realtek.com,wp.pl];
-	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,pengutronix.de,lunn.ch,davemloft.net,google.com,redhat.com,armlinux.org.uk,gmail.com,vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_FROM(0.00)[bounces-37048-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FROM_NO_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kuba@kernel.org,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-0.998];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Hello:
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+---
+Subject: net: usb: asix: ax88772: replace usbnet_link_change() with queue_work() and usbnet_unlink_rx_urbs()
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+This patch replaces the usbnet_link_change() calls in the ax88772
+phylink mac_link_up()/mac_link_down() callbacks with direct
+queue_work(system_bh_wq, &dev->bh_work) and usbnet_unlink_rx_urbs(),
+with the stated rationale that phylink already manages the carrier
+state. It is tagged Fixes: 36bdc0e815b4 ("net: usb: asix: ax88772:
+re-add usbnet_link_change() in phylink callbacks").
 
-On Tue, 05 May 2026 17:56:32 +0200 you wrote:
-> Add support for the RTL8159, which is a 10GBit USB-Ethernet adapter
-> chip in the RTL815x family of chips.
-> 
-> The RTL8159 re-uses the frame descriptor format and SRAM2 access introduced
-> with the RTL8157 as well as most of the setup and PM logic of the RTL8157.
-> 
-> The module was tested with a Lekuo DR59R11 USB-C 10GbE Ethernet Adapter:
-> [ 2502.906947] usb 2-1: new SuperSpeed USB device number 3 using xhci_hcd
-> [ 2502.927859] usb 2-1: New USB device found, idVendor=0bda, idProduct=815a, bcdDevice=30.00
-> [ 2502.927867] usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=7
-> [ 2502.927871] usb 2-1: Product: USB 10/100/1G/2.5G/5G/10G LAN
-> [ 2502.927873] usb 2-1: Manufacturer: Realtek
-> [ 2502.927875] usb 2-1: SerialNumber: 000388C9B3B5XXXX
-> [ 2503.063745] r8152-cfgselector 2-1: reset SuperSpeed USB device number 3 using xhci_hcd
-> [ 2503.123876] r8152 2-1:1.0: Requesting firmware: rtl_nic/rtl8159-1.fw
-> [ 2503.126267] r8152 2-1:1.0: PHY firmware installed 0 to be loaded: 20
-> [ 2503.156265] r8152 2-1:1.0: load rtl8159-1 v1 2026/01/01 successfully
-> [ 2503.270729] r8152 2-1:1.0 eth0: v1.12.13
-> [ 2503.289349] r8152 2-1:1.0 enx88c9b3b5xxxx: renamed from eth0
-> [ 2507.777055] r8152 2-1:1.0 enx88c9b3b5xxxx: carrier on
-> 
-> [...]
+> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+> index 293ef80c4e30..4230ff611c4b 100644
+> --- a/drivers/net/usb/asix_devices.c
+> +++ b/drivers/net/usb/asix_devices.c
 
-Here is the summary with links:
-  - [net-next,v4,1/3] r8152: Add support for 10Gbit Link Speeds and EEE
-    https://git.kernel.org/netdev/net-next/c/9774acd5fa5d
-  - [net-next,v4,2/3] r8152: Add support for the RTL8159 chip
-    https://git.kernel.org/netdev/net-next/c/ad2a55b63b41
-  - [net-next,v4,3/3] r8152: Add firmware upload capability for RTL8157/RTL8159
-    https://git.kernel.org/netdev/net-next/c/a51e171e176c
+[ ... mac_link_down hunk snipped, not relevant to the comment below ... ]
 
-You are awesome, thank you!
+> @@ -787,7 +791,11 @@ static void ax88772_mac_link_up(struct phylink_config *config,
+>  		m |= AX_MEDIUM_RFC;
+>  
+>  	asix_write_medium_mode(dev, m, 0);
+> -	usbnet_link_change(dev, true, false);
+> +
+> +	/* Phylink will call netif_carrier_on(), but we need to explicitly
+> +	 * kick off RX URB submission in usbnet.
+> +	 */
+> +	queue_work(system_bh_wq, &dev->bh_work);
+>  }
+
+Can this reintroduce the "no RX until first TX" symptom that commit
+805206e66fab ("net: asix: fix 'can't send until first packet is send'
+issue") and the Fixes: target 36bdc0e815b4 addressed?
+
+Looking at the ordering in phylink_link_up() in drivers/net/phy/phylink.c,
+the mac_link_up() callback is invoked before netif_carrier_on():
+
+	pl->mac_ops->mac_link_up(pl->config, pl->phydev, pl->act_link_an_mode,
+				 pl->cur_interface, speed, duplex,
+				 !!(link_state.pause & MLO_PAUSE_TX), rx_pause);
+
+	if (pl->mac_supports_eee && pl->phy_enable_tx_lpi)
+		phylink_activate_lpi(pl);
+
+	if (ndev)
+		netif_carrier_on(ndev);
+
+So when ax88772_mac_link_up() runs queue_work(system_bh_wq, &dev->bh_work),
+the netdev carrier is still off.
+
+system_bh_wq is a WQ_BH workqueue, so queue_work() on it raises
+TASKLET_SOFTIRQ, which can be serviced on the next hard-IRQ exit (or by
+ksoftirqd) before phylink_link_up() reaches netif_carrier_on().
+
+When bh_work runs, usbnet_bh() in drivers/net/usb/usbnet.c gates RX URB
+submission on netif_carrier_ok():
+
+	} else if (netif_running (dev->net) &&
+		   netif_device_present (dev->net) &&
+		   netif_carrier_ok(dev->net) &&
+		   ...
+		   !test_bit(EVENT_RX_HALT, &dev->flags)) {
+		...
+		if (temp < RX_QLEN(dev)) {
+			if (rx_alloc_submit(dev, GFP_ATOMIC) == -ENOLINK)
+				return;
+			...
+			if (dev->rxq.qlen < RX_QLEN(dev))
+				queue_work(system_bh_wq, &dev->bh_work);
+		}
+
+If carrier is still off when usbnet_bh() runs, the rx_alloc_submit()
+branch is skipped and bh_work does not reschedule itself. Once phylink
+eventually calls netif_carrier_on(), nothing kicks bh_work again: the
+in-flight RX URBs were unlinked by the prior ax88772_mac_link_down(),
+so there are no URB completions to re-queue work either.
+
+Does the previous usbnet_link_change() path avoid this race because
+__handle_link_change() in drivers/net/usb/usbnet.c flips the carrier
+before queuing work?
+
+	if (test_and_clear_bit(EVENT_LINK_CARRIER_ON, &dev->flags))
+		netif_carrier_on(dev->net);
+
+	if (!netif_carrier_ok(dev->net)) {
+		/* kill URBs for reading packets to save bus bandwidth */
+		unlink_urbs(dev, &dev->rxq);
+		...
+	} else {
+		/* submitting URBs for reading packets */
+		queue_work(system_bh_wq, &dev->bh_work);
+	}
+
+Here bh_work only runs after carrier_ok() is already true, so the gate
+in usbnet_bh() cannot close on it.
+
+Given the Fixes: tag targets -stable, is there a concern that this
+patch partly reintroduces the original "RX silent until first TX or
+link bounce" regression?
+
+Would scheduling bh_work from a phylink_resolve() follow-up, or keeping
+the usbnet_link_change() path (which sets EVENT_LINK_CARRIER_ON and
+lets __handle_link_change() order carrier-on before queue_work), be a
+safer sequencing?
+
+As a side note, the comment added by this hunk states "Phylink will
+call netif_carrier_on(), but we need to explicitly kick off RX URB
+submission in usbnet." Should the comment reflect that phylink calls
+netif_carrier_on() after this callback returns, rather than before, so
+the ordering assumption is explicit?
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+pw-bot: cr
 
