@@ -1,183 +1,253 @@
-Return-Path: <linux-usb+bounces-37096-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37097-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0DdWGgPF/Gk8TgAAu9opvQ
-	(envelope-from <linux-usb+bounces-37096-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 18:59:47 +0200
+	id 2GvlAwHL/GmPTwAAu9opvQ
+	(envelope-from <linux-usb+bounces-37097-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 19:25:21 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4FD34EC930
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 18:59:46 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64FE64ECD7F
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 19:25:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 71F5F3019B8A
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 16:58:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 574453048175
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 17:24:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9A263FCB03;
-	Thu,  7 May 2026 16:58:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFB9F2E1F02;
+	Thu,  7 May 2026 17:24:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=motu.com header.i=@motu.com header.b="hrmwK3AQ"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="H7NmzCEr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE402C21C5
-	for <linux-usb@vger.kernel.org>; Thu,  7 May 2026 16:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778173132; cv=pass; b=KJzSwoe80/8SArJCYTNKtGKjmct+cYkECCdwi8p2iHT1GlZRREey3ZIXWLogEkQK0VQIsxhlo/tIfIHP/pCymQL1fIQAkIiOp3LzjIfpbVKwrrSzk2bnhKkpldVSuSiab921kpnfo/9ppNPCShA0Ji/nqcWWdze6BSiUQM+KfDw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778173132; c=relaxed/simple;
-	bh=g7FDcwsGXtXlVfrAGeyj4Y+Olkuw+W69nMSysjG4eQk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i4vfCXwFEZRQzpR00YarPCkqLtxO3OMRIH1pEI+H71+011T1o+Pythjx21tRXSJ5IVb+vyW7bCf4WOu3uQ4bauseFZ+BHlcTN7gkl/J7t1Uyyliv0GAHqffCYqV8obsH5tatBTjKZqodSVO3AOZrU8e9TvFndp4ta2vC2IIn66w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motu.com; spf=pass smtp.mailfrom=motu.com; dkim=pass (1024-bit key) header.d=motu.com header.i=@motu.com header.b=hrmwK3AQ; arc=pass smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=motu.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-67c566cb519so2063184a12.3
-        for <linux-usb@vger.kernel.org>; Thu, 07 May 2026 09:58:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778173129; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aaPt5Kb6PrInDmZpO5QWoYuhJv0r/NdnUyrznSSS7+Ta1gwbFlOogIAvxPdHH885GC
-         2D1xgBB4QPW9ansgQEhzg23idcErNwcd99fZogdxzoWEOjOKyAJ5YgIP+Q/5pdsLheTy
-         fRwTAelbyNSJrhKsXNE5Sp0g7fAHhYYbnqLeewujT9KSyTwWY6kA93OjW6OIRpNIA9UC
-         okRzl7/vr119jz/q0JRyD6N2L/g2M8zzuSmWBSxfXw0CgKcHl0Z16mnRIBttdnNvmVNw
-         d3O22Cl8iVzW5y9cz7vPxmG2keZSvWwsKYsTDL1z6TqzEpjya/QcNMq2oarqJF3D5Pch
-         Q9pw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ff06H19+2f8LP/S5t5dnvzF+qtDGghHwzmVQjHYleLo=;
-        fh=5kVackAqRJRHwbEJvLGyE/u6qIel2R9qk0Y0YQg3/CY=;
-        b=kdZDSvMQunnqL99tH4VIjBd56/x38az8E2AoRipwdh8q9B1f0jXYfFyvWfW4LwSEwz
-         znsfUP0uY+72eM5n5ngnGa9VIJ7AO5fvc8ZS06fLJiyAc9EKZg+sS7IyEyF3Q3W/PHsm
-         5gvdg/64U7PfRdWbGScUXv0swc9O1pkYUWVVEayCMY1T9Tbr+gqJBwWVgplq6PLQoOGy
-         /ztpVSsC24zWhaoL/aWwFzU8nxhUhm6UXhmIsfzf6RqkFlg6Chk1Nvn9IUa4bpiniiyf
-         IuyNqe8rRji5J0V2KCqCmawCks1LtXezZ2/0YPA9EGKEkOxE64q0KReCpMmy+A9nuVeE
-         fNTg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB92C4508E5
+	for <linux-usb@vger.kernel.org>; Thu,  7 May 2026 17:24:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778174686; cv=none; b=Rxja/P5CMBhK5A4vEBh+r3+9+4+Z3wuahcae78wRkwDW7QAYFL4zZYBvK8HMjw1c7hKM4dLHMjnpsQimggFn8LylAise3wZM5k1MxR1EEngDbBqZjzzUQV1gBuV99+IleOjG2pksIrwUn9ft6kvtcbrfCujLi8dQk6ap4pQV92w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778174686; c=relaxed/simple;
+	bh=XwubqFIZNlFXEJH8m0Jcl0x1o23B1H7+XQTwrGKOrec=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=haw4P64VWqOaIz7m6u0b/25WRLPFWZxLqijOIJmvwNeXCcyaB0RumPFDEc+GU9f0vduRqmej5eqlYtnXQgN42Ig2m7XeaLCEsrFp20zrVQ7ZCa4MghHvFgc04Hzj1/tCfEyy3RPqr+N/LNrt7GzYC4KLLF9m788MXUULViq5kqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=H7NmzCEr; arc=none smtp.client-ip=209.85.217.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-62f4c4e6694so701111137.3
+        for <linux-usb@vger.kernel.org>; Thu, 07 May 2026 10:24:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=motu.com; s=google; t=1778173129; x=1778777929; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ff06H19+2f8LP/S5t5dnvzF+qtDGghHwzmVQjHYleLo=;
-        b=hrmwK3AQQWtsOsHYVAwF0NiAYdaYtNKw0GV7rzv2Xa+vOb0SwAC5eAaoNVhVGIGUWF
-         iCI0B734J8ent8w71rJdTa7uLiBSNkp+IlDbU0zL5bUtBNllpyfaPW2tS8Qy6nZDAxBF
-         9LaWYkpvs986jZznRI8OTflVNRudycjD4WUOE=
+        d=rowland.harvard.edu; s=google; t=1778174683; x=1778779483; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=AJpvlgY9+GG81Z09nZa3p3caC80kcYD48JORf0b1wGM=;
+        b=H7NmzCEr3ph8Z9EGyanJjaqtACIBGoiRVNfefgseC7fJI5N4aUoaXwU9JIMwilPE3v
+         HMMI6QcYNYh7eqJ7OS2wKj9WAyDonL40oJD1a3Qyvtd2dvoxye7DH8jujTE4XsChMeFf
+         oLidRlpgEClf8WIwxHWO/lwqhgvC6FunGVByZuactvHIRLfdtqvv77SlPBkAKgAQET05
+         qHyqekNH1gBrhiON5Kw0Qq4VhILZXLF99TeZsoSRbdxu69r10EIZGq7wN4cjZ+lqHB3z
+         QZVQKPrAm6/jgMdqb9a3nZkFZ8Ni3BNSdd26WQ//RkNvZrV4c+LYf7STWHE1g13vVPC2
+         +XBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778173129; x=1778777929;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ff06H19+2f8LP/S5t5dnvzF+qtDGghHwzmVQjHYleLo=;
-        b=XKX3Ov5U1J+PnM/NuH5LmH8RUZtJPGeYbTb0+zyRqRVdWoPAAQgOJBdHqpgok+NN9r
-         T/fUbygdJ8XurL4l81Et4x0ENQa9146B/VCLY5r5imthxpzzpqrcQFTh7ZJ2IARlyQ9o
-         98uS3EruZ7Sx1ABYS8zWn69ubZOuUJ5KneraCwuunUhJfHYMxVywsQdqXlWiCH8UWV22
-         v3bwH+sFfBi/RNhXdhIPaiORIPG2rMoapzMckiLngieYmKexhRQmG0ah6KK1lW7ic7Hd
-         8nb5WfclhhEa2gc/02Fi0aGhl7G274SdLprQkUz4MhFXTgnM6+No6DNVeSpMyQ85qbDe
-         4obQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8EO46Goap28bH09b9Z4mOn954xf50KT4gVCqBbq9s4I8bKMfZeO28RJygZ0Nz7DJSo9jeE2lgSviU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw65Sl9ahm1m4R73GN0MsJt5ZJvGqBDgnubEDZ+1Fr0hW/TVPZi
-	awQ4HRC3zIB/Yz/wLwP9YJwsAylhsn89xYhkPOTg6HTOPlX/sUPd3fQp1i5ozu7tuYLaffwoObk
-	nyLA+QvXrt/hQRIVrbWEGDSUa4BvZPuZ2aMg7m6NrSI3Mnv2xg84S4xHwMg==
-X-Gm-Gg: AeBDievDg/uJ5i3IeyyxQu1YVHBe2YgPV9yYfOg+6IvJadTZALKqI0+9jWN3LRixzfN
-	GWbNNJI7nUfcWAOIpKybLzOCcU1ezux7wBDUe5PQVWM8alIqNZZ7/hcoc9Cj8e6NWk8WrbsnzEV
-	8AG2B/dGhz3IDtdKfa6Qk1ZJsVcDQwuTpzc/A8d675ELxIIiZg/dZxq8JWfMBYSNtV9Yi0QitrO
-	P6ekPC/Yztq3RVuB9C/lZvkWOo94V8zGE3tnx/cBCPKx6vonXXGJPVQ+izSQVkmA1/CZHacS6A8
-	5hweyFaLjjaewDrbI9I=
-X-Received: by 2002:a05:6402:234c:b0:67d:a637:bf77 with SMTP id
- 4fb4d7f45d1cf-67da637cb98mr4769671a12.25.1778173129292; Thu, 07 May 2026
- 09:58:49 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778174683; x=1778779483;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AJpvlgY9+GG81Z09nZa3p3caC80kcYD48JORf0b1wGM=;
+        b=bprhy4dY13j0/72xMxnHd238e1as32XbghuZswxAMcSxsBrggGhMwdEiRarurhMrxJ
+         8vEeP5cb9S67sICfv4Y0JapYV+LGiwAKlMB5SpCI3rtmyN/gZ+O5N0G/jqXlmIbz+faN
+         VPp6lzKlBq8xifSe4imfIbnQmZKNIjBS46jpFpYkrhN9AHxrKq9IipUs2j9Hce2zrbDa
+         ExUhkZb7Py/ZdQMFpppMgLYlbA/H1heoNqB0Y7Cxs3khJ+gd00jtQD6yQhH7Xr8MDUVN
+         3cN1Pjx92qZJ+3qUB9YSsEcnjvZIP5FZ+X7YgF3Yf4w923fCIixYRM97geqsqT7QyM2M
+         dPRg==
+X-Gm-Message-State: AOJu0Yy7WUhp/ITnZYosTqt5PyOoNL71KV5EMVtCz+r9Oq+r7YqcW5/h
+	ExNsrJnhNsFlNEADYvz3L/fwJ2aPmhr/hEJhThdZwKk7/gwGka+KeTuN461oauFWWg==
+X-Gm-Gg: AeBDietI9/jAbHNZNWdEukOMl+q+aKFqENfYYJsLmbfrd6YnOnbMJhR0Yn6qflOgyHP
+	3z1c4jcgVsxZ5OyQr8vPGQ5YtyKl7vglOGHA0d5g0NWHAZtXf3L/CMqlbCjjXSSEUmlYcOjZ/rr
+	iDAw2H2EiCq8DtAYik9Q/yANZd/gC3mzCq6Ihn4qVwPmMzeQMwt197qqoPgt4/Hj8zbNbuz0ePo
+	IBec2r1RcMa7gaGpYe4bfpFs1FGzXwoadvLhls5wi5nF4sqogtTL7UsjQCF7y/NTV08xH+drIHv
+	IL+fW7nkQPA46qnsTJYKHTVjEC/eXlBQFfn4DvnM/XN36T1iTwoUnEp+Cyt+kizI4NbsNQkSDnD
+	t3Bgspj4LAd8EB9NMPWL1fR8QeqFBrcpXDyT79un7sEP+ftcfzZ8+SJMqJDzIr5gUw+Pyfb2/cS
+	D6dRCZL2RkaSxW6AiBxHCKa5L/oS1h0jzhZzZUu/qIXi/labEQ1oACcqIQmF2rvPmcI0o=
+X-Received: by 2002:a05:6102:5045:b0:618:442a:9e76 with SMTP id ada2fe7eead31-630f8ed8eebmr5477831137.10.1778174683472;
+        Thu, 07 May 2026 10:24:43 -0700 (PDT)
+Received: from rowland.harvard.edu ([2607:fb60:1011:2006:349c:f507:d5eb:5d9e])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b5391e34dasm235194116d6.14.2026.05.07.10.24.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 May 2026 10:24:42 -0700 (PDT)
+Date: Thu, 7 May 2026 13:24:40 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Dylan Robinson <dylan_robinson@motu.com>
+Cc: linux-usb@vger.kernel.org, mathias.nyman@intel.com
+Subject: Re: [Bug 220748] usb: xhci_queue_isoc_tx_prepare ignore start_frame
+ and always assumes URB_ISO_ASAP is set
+Message-ID: <87d93b07-be3e-4c36-a6cb-97190560f648@rowland.harvard.edu>
+References: <bug-220748-208809@https.bugzilla.kernel.org/>
+ <bug-220748-208809-eL7PrzeMxr@https.bugzilla.kernel.org/>
+ <fe08eabc-4f92-43fd-89d7-5e9d0e35c979@rowland.harvard.edu>
+ <CA+Df+jdtQrYye85d7uZyT3jirsztKhf7qQes3LvOAPa+9qxSOw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+Df+jdFEGGZyceFH_5LRSQjwGa1WCtd79DK1Lywvdw+pkX6fw@mail.gmail.com>
- <4aa0d528-c911-4537-aa38-6c5b4f9eec75@linux.intel.com>
-In-Reply-To: <4aa0d528-c911-4537-aa38-6c5b4f9eec75@linux.intel.com>
-From: Dylan Robinson <dylan_robinson@motu.com>
-Date: Thu, 7 May 2026 12:58:38 -0400
-X-Gm-Features: AVHnY4LTpCaUocvOnr8HdC0_P4kURLq2uXkv4Lsm91iDO0ID3yaWysx4SuvmqvM
-Message-ID: <CA+Df+jcY4guz0T3oVmy7rG3=+ZWwt+nOBnK2CfHgKBoS50YefQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] usb: xhci: fix isoc silent reschedule creating stream
- gap on CFC controllers
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mathias.nyman@intel.com, 
-	Michal Pecio <michal.pecio@gmail.com>, nick83ola <nick83ola@gmail.com>, 
-	niklas.neronin@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: C4FD34EC930
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+Df+jdtQrYye85d7uZyT3jirsztKhf7qQes3LvOAPa+9qxSOw@mail.gmail.com>
+X-Rspamd-Queue-Id: 64FE64ECD7F
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[motu.com,none];
-	R_DKIM_ALLOW(-0.20)[motu.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,intel.com,gmail.com,linux.intel.com];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-37096-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[motu.com:+];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dylan_robinson@motu.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-37097-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[]
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On Thu, May 7, 2026 at 8:12=E2=80=AFAM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
-> ep->next_frame_id should be used for frame ID calculation after
-> the first URB is enqueued and endpoint running.
+On Thu, May 07, 2026 at 12:17:00PM -0400, Dylan Robinson wrote:
+> On Wed, May 6, 2026 at 10:39 PM Alan Stern wrote:
+> > For one thing, that would be very impractical, as every driver using
+> > isochronous transfers would then have to be modified.
+> 
+> Maybe adding a new flag would make more sense then.
+> 
+> I was confused because the documentation regarding URB_ISO_ASAP
+> describes this behavior.
+> 
+> - For ISO there are two startup behaviors: Specified start_frame or ASAP.
+> - For ASAP set ``URB_ISO_ASAP`` in transfer_flags.
+> 
+> However, it looks like URB_ISO_ASAP actually means something
+> different: that the URB can be delayed. Is that correct?
 
-Agreed.
+Sort of; a more accurate description would be that the URB is scheduled 
+for the next available unexpired time slot (as opposed to the next time 
+slot, regardless of whether it has expired or not).
 
-> Hmm, looks like we are doing way too much checking here.
-> All the above are done with spin_lock_irqsave() held, meaning there
-> shouldn't be any delay by preemptions or interrupts.
->
-> re-reading the MFINDEX (microframe index) register for every TD in this
-> URB looks like a waste of time.
+Also, there is no "specified start_frame" behavior.  The start_frame 
+field is output only.  Some of the documentation is out of date.  The 
+most up-to-date information about isochronous scheduling is in the 
+kerneldoc comments for usb_submit_urb() and usb_unlink_urb() in 
+drivers/usb/core/urb.c.
 
-Ah, I missed the spinlock, but I agree that the current implementation
-involves unnecessary checks.
+> > For another, what's the point?
+> 
+> The point would be to allow the driver to start a stream on a
+> particular frame relative to another stream, ensuring deterministic
+> latency between the two.
 
->    (I'm confident that the non-preemtable loop queuing TRBs
->     does a cycle faster than shortest isoc interval (125us)
+I don't believe that's going to be possible.  Or at least, not possible 
+until someone adds an API for getting an isochronous stream's current 
+schedule information.  Until/unless that happens, the only way to know 
+what frames or microframes the stream will use is to submit an URB and 
+look at the start_frame and interval fields after it completes.
 
-That's good. I think a related issue to watch out for is preemption
-occurring between URB submissions.
+If you take that approach, submitting a few milliseconds worth of 
+innocuous data at the start (or ignoring it in the case of an input 
+stream), you should be able then to synchronize the data for your new 
+stream with the data in another one with little trouble.  You won't be 
+able to change how they are scheduled, but you will know exactly how the 
+two streams' schedules are related.
 
-For example, snd-usb-audio submits multiple 1ms URBs at startup. If
-preemption occurs between these URB submissions the first URB might
-complete before the next one gets enqueued.
+> > In an ongoing stream, all this would
+> > allow the driver to do would be to break the continuity of the stream.
+> 
+> For an ongoing stream I would expect that submitting a start_frame
+> that is discontinuous and in the past would result in either a
+> submission failure or immediate completion with an error status. Such
+> an error would provide useful feedback to the driver because its
+> occurrence would mean the stream is no longer synchronized as the
+> driver expects.
+> 
+> > At the start of a fresh stream, the driver could easily end up
+> > requesting the HCD to put the first transaction in a (micro)frame that
+> > the endpoint isn't scheduled to use or is beyond the end of the HCD's
+> > scheduling window.
+> 
+> If the driver requests a specific start frame, it should be the
+> driver's responsibility to ensure it is a valid frame within the valid
+> scheduling window.
 
-While working on an experimental audio driver to avoid this issue, I
-found that many test systems required the first submitted URB to
-contain more than 10 ms of transfers in order to reliably submit a
-second URB before the stream underruns.
+Not possible, because the driver doesn't know the scheduling window 
+or other parameters supported by the host controller driver.
 
-> Can I ask you to test some additional patches if I write them?
-> I don't have a good setup with frame sensitive usb devices to test this
+>  If the requested start frame is invalid or outside
+> the host controller driver's valid scheduling window, the request
+> should fail. This would be more helpful than silently fixing it upon
+> submission.
 
-I would be happy to test some patches!
+Not if the driver doesn't know what the window is.
 
-Dylan
+> > >  In looking into porting our
+> > > drivers to Linux, we've found the current behavior challenging to accommodate.
+> > In what way?  What is it you want to do that you find challenging?
+> 
+> In order to offer predictable round trip latency though the host, we
+> have to be able to correlate the frame time of transfers on the IN
+> pipe to transfers on the OUT pipe. Therefore, our drivers need to
+> determine the frame in which a transfer occurs.
+> 
+> Currently, with non-CFC host controllers, there is no way to determine
+> which frame a transfer occurs in. This is because without CFC, the
+> start_frame returned in the URB is only approximate.
+
+Is this a deficiency of xhci-hcd, or of some types of xHCI hardware?  
+Other kinds of host controllers don't have these problems.
+
+> > And thereby forcing every URB to contain an integral number of frames'
+> > worth of transactions, at the risk of breaking the stream's continuity?
+> 
+> AFAIK, xHCI doesn't allow scheduling transfers on arbitrary microframe
+> indexes, only on frame boundaries. URBs could still contain a
+> non-integral number of frames by putting the same start_frame in
+> multiple URBs (just like the TDs used by the hardware). Alternatively,
+> the initial frame-aligned URB could have a specific start_frame and
+> the subsequent ones could be submitted as start immediately after.
+
+xhci-hcd is not the only host controller driver in the Linux USB stack.  
+What you're talking about would require changes to all of them (not to 
+mention the changes needed in the class drivers).
+
+> Ultimately, we care about the ability to start a stream on a
+> particular frame and maintain its continuity after starting.
+> 
+> Currently, there is no straightforward way to inform the xhci driver
+> whether a URB represents a stream start or continuation. This makes it
+> difficult to detect missed service intervals or other scheduling
+> discontinuities.
+
+Informing xhci-hcd about this shouldn't be necessary; it should already 
+know.  ehci-hcd does, for example.  In short, if the submission occurs 
+before the last scheduled URB in a stream has completed, it is a 
+continuation.  Otherwise it's a start.
+
+What might be more difficult is distinguishing between a start and a 
+continuation after a gap.  The boundary between those two is pretty 
+subjective.  We deal with this by ignoring the possibility; it's always 
+treated as a new start.
+
+Alan Stern
 
