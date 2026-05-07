@@ -1,194 +1,242 @@
-Return-Path: <linux-usb+bounces-37084-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37085-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6FQwFTeR/Gn3RQAAu9opvQ
-	(envelope-from <linux-usb+bounces-37084-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 15:18:47 +0200
+	id aMQZFKiT/Gn3RQAAu9opvQ
+	(envelope-from <linux-usb+bounces-37085-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 15:29:12 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD7774E91D9
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 15:18:46 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3E4E4E9402
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 15:29:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AF2433036D72
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 13:11:50 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C5054307AD24
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 13:25:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6E3B388E49;
-	Thu,  7 May 2026 13:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 561DF3F7871;
+	Thu,  7 May 2026 13:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QNxVp/YM"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="HcpwqF4b"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013035.outbound.protection.outlook.com [40.93.201.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2CA439FCCC;
-	Thu,  7 May 2026 13:11:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778159507; cv=none; b=b8qpcRTANdRWC6EFJe6QADrY3Zfsx8TdLTznComIfhDiIVfJNw8bOISpnTwPQHAAqFHhcm6//e3++bth6BxN8dbwj7x6aFmgCxyopmOOwcxJqSiYGqGE2vq48eT624YMV1dVFTVLodFG7rl/MlFHJHUm9ADAridQbZnWkESJxY8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778159507; c=relaxed/simple;
-	bh=w6xmi+sEWiUa2hKDyF5vFXyNoINr7k+gla2bppYN4OY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l0TJzTsMYTLsJ51J+HglPBJF0BaSzf3PkgT4ZyFi35JFxAwzHX0Ek/JLwvKq5YDwAd/8v2onpawo/SHwe6YQ7Er928LwL/AB/svtD9YIz9B7GPvl+aIE///tJEwX9vUaQVwrkK53LoOLCyQ26AZdcce4C8JacUqGvFKBPlisFuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QNxVp/YM; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778159505; x=1809695505;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=w6xmi+sEWiUa2hKDyF5vFXyNoINr7k+gla2bppYN4OY=;
-  b=QNxVp/YM8HFqeIJXABt3u4AZsz1pVzUwPnPXlgtPaQ0y92LieEubj2KG
-   U2jJ9XzguPznoBXEpFIWz3D+cfnCIKZDRqugvAxk5WXgpVnS+kyhUvAZO
-   p9Kr6dWBeDMskC2rExPKiEyrwd2aSYt+ROlNhDtkVkGAzxzKDyxKXndqN
-   eybi0KAAFKf7gihcoe7rf+f4rpTLcfxNpsM5ZXRt6a2vAo0FoEJicZss8
-   TgFZvL25w2/9HKhtqNHTGucpiB/44jOyOCekA5ZQMuNE+FVrDfyP6b/2S
-   PU7/JZcWaQxofjJlu8Cdu3CFe4tAz5DcMc8S5RJof5MZLSXQjVqgb9RR6
-   Q==;
-X-CSE-ConnectionGUID: OJH4ZdyXT7GBjDKbstX9ow==
-X-CSE-MsgGUID: YXbcimugTHKhZtLS3sYUmQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11778"; a="89803689"
-X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
-   d="scan'208";a="89803689"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2026 06:11:44 -0700
-X-CSE-ConnectionGUID: EZ9bBbDLRgC/HzquXa49mA==
-X-CSE-MsgGUID: ivcxqGByTwS3+fTT3C/bHA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
-   d="scan'208";a="240441757"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa003.jf.intel.com with ESMTP; 07 May 2026 06:11:41 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 5E74995; Thu, 07 May 2026 15:11:40 +0200 (CEST)
-Date: Thu, 7 May 2026 15:11:40 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, usb4-upstream@oss.qualcomm.com,
-	Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>
-Subject: Re: [PATCH 1/2] usb: host: xhci: Allow non-Intel
- usb_link_tunnel_mode reporting
-Message-ID: <20260507131140.GN6785@black.igk.intel.com>
-References: <20260505-topic-dwc3_tunneling_state-v1-0-4aaa6c3c14cb@oss.qualcomm.com>
- <20260505-topic-dwc3_tunneling_state-v1-1-4aaa6c3c14cb@oss.qualcomm.com>
- <20260505121404.GG6785@black.igk.intel.com>
- <02b4a4ca-c091-47b0-bae7-e38d9fa77850@oss.qualcomm.com>
- <803cc760-93f3-429e-bae3-669f86c07585@linux.intel.com>
- <cf71a13b-dd6d-4234-89f0-42eb6ea117fc@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1023B7779;
+	Thu,  7 May 2026 13:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.35
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778160304; cv=fail; b=KrkNOHkrOj6Mel1sHf0HuCzbIuWAVdClwDxm8SlyXSJGq2XYAcjM4xk2B5mrMM/ZnWlRDcmAUPs9xFgLCW8PjRrVx9CQaichK/5coy6PtaZEbfHgQh818c43WOyVnUD3oapMy7B0CexZk0vfk05ETBeEOcIZ2zMlq1ktFf66u3A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778160304; c=relaxed/simple;
+	bh=liIOX5r3sdb5R9mO+vqMe3VeA+OFdlgsuLj65iW6ZrI=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=FFRSeWvhY8IgzWPm+4pBGtT8TiLb4GrKe+m2wH8UkC39vJInsrfThZavxP+M5LXiGJyk7LWjJiW0NGc01uLA4C+rsPt7rgpNcN46Bh+d77W7zwZW801LGn53p30y5EWfztJC3y5NE6GGvc+9LYyMJC7AJ4a/KKcDaOd0xTu7ccY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=HcpwqF4b; arc=fail smtp.client-ip=40.93.201.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=sRYbgT4lJ/1oZXAY6Rxa4fo4zuFe1b75dinQtlFgKvtXMzv/a6KNNO3KNbxBVtnI3fhVoVmDBpONKeOtvuI1S5TU0UWDnxg5QGkj9ctJIg9NcIF0XbNSE2HsvLT2s1WN5roRAS6aw1T5EDk3svFi9F/v64hB7abr/Cl5cRR5ZAiOSO+2blVYSlMWGNTn+OTLtd1XgPeWPT9xhZtZ1bEAEgSc9Rw8H6BMoxTZYKo+VIuz+eL9aqHbVKTZ6374VaHPxr51XBaw3p1dMXc9O5/LuHf784Q13qSlYxIP6mhzBMB/z1daV6VaVKxs3cTPNxPH9hwGwSo1cD6F+MfZfDQgwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lEtHwCxikqjtueXSmJmqq7dlYH4xc1Avg75aelOpIcI=;
+ b=dbiDKKF3/VWt43T2MV6q0ZhhkHUCAIjM0LfStnGcTCV86mAgOSeVLI+/5K+5Kr5ynZhgL8/VtWvfoLWotdwtC6hn4uWwMNLXdx/RyUUs5zQEHSO+XtvKJ5/AvUdZWEspkCmCz5x9tUuQnInvt17Vg4Ch6oyzmY2yX35NYI/8WydKB05kS2RyvYoo575lwJftfv9XUOkB8Ng/sa50/xpDm+dUBUxc3/jOsZ2MTMBvfoleTRvVXUlHlNwnsvM46FLNb5+sOacxUdwoAlPkVLqSJt49EZlosrmDDkVqY7rSWCwZXTYdyPt8gU5k0mPE4Gv1k/GMX/SLYSYcMyxHnnxntg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lEtHwCxikqjtueXSmJmqq7dlYH4xc1Avg75aelOpIcI=;
+ b=HcpwqF4bAfdlol0XLqoQ2o3SXxu6tvlqCXk/02UVvUFjw3urlYW/S19DgMJg8Nd5a9IcNpeB1FYDPTIxwetuLn/lym8BNfFkwflh3XAGF47yTCNwJwODr0DpUIhUAuxG/3qAB89fiAaYBtp0QbKIzfLZLC7PiM+e4ZOC0OjGuP4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SA0PR12MB4557.namprd12.prod.outlook.com (2603:10b6:806:9d::10)
+ by MN2PR12MB4286.namprd12.prod.outlook.com (2603:10b6:208:199::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.18; Thu, 7 May
+ 2026 13:24:59 +0000
+Received: from SA0PR12MB4557.namprd12.prod.outlook.com
+ ([fe80::885a:79b3:8288:287]) by SA0PR12MB4557.namprd12.prod.outlook.com
+ ([fe80::885a:79b3:8288:287%5]) with mapi id 15.20.9891.017; Thu, 7 May 2026
+ 13:24:59 +0000
+Message-ID: <d1132b52-153f-4451-9aff-ab2545e1a3d0@amd.com>
+Date: Thu, 7 May 2026 08:24:56 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] hwmon: add initial support for AMD PROM21 xHCI
+ temperature sensor
+Content-Language: en-US
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Jihong Min <hurryman2212@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>, Guenter Roeck <linux@roeck-us.net>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260506032939.92351-1-hurryman2212@gmail.com>
+ <cover.1778099627.git.hurryman2212@gmail.com>
+ <2e2ea249b30168a2eab62fc110c226a511f21bf2.1778099627.git.hurryman2212@gmail.com>
+ <20260506233332.664f220c.michal.pecio@gmail.com>
+ <424c4dc4-1810-4ffb-ae93-7ec9f880ec1e@amd.com>
+ <20260507110821.07480da8.michal.pecio@gmail.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20260507110821.07480da8.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR11CA0029.namprd11.prod.outlook.com
+ (2603:10b6:610:54::39) To SA0PR12MB4557.namprd12.prod.outlook.com
+ (2603:10b6:806:9d::10)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cf71a13b-dd6d-4234-89f0-42eb6ea117fc@oss.qualcomm.com>
-X-Rspamd-Queue-Id: AD7774E91D9
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4557:EE_|MN2PR12MB4286:EE_
+X-MS-Office365-Filtering-Correlation-Id: 40f9e01d-962c-425e-e695-08deac3c0936
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	EXyl4e8WafoyYf7ezHLdIzcPyJ7/BIstuhPfdPRF1rGl67fihdpTRIK0HNp5dy1U6T5L28gmJzGgUTLdGlTEN9lYnFpOqNx+9aP0aal7g0liOTcE0WDVM6qIDRCTSJ0T0ZdUl1OgpS1UFLgnSbLgmUGzVLSbIkuwCyd21EvR0Hdf+BOiWrHORcR26+ESRacgpoFALqklu8xOmDRtBPYQNNUwzd6CHpLIf67qttYQlmyH4Ox1yP9yLTzlsBoTlbcdBBULv+yrKaSARV8x7GLVupgG7y2VSOL4/lzNoMTeBrxkcpvGp3w/qSvO906uMOA+BVLAKhWKQkcT4Uv8IDaSB5vIEd1AjH/uLDRbpfiq64/QA038Ph8iL60PQv4KQpSLuQ/cWSHapaks0n6FBhJi1JI7heE63ckspkBoSxbCiT6sTLR0Ex8Ut06ngOhPpRQ/asFIKbJE4PK/nJaKATpBuXFQ3HmeEsSAbpBG4ktlgw7ZjYx9kC5/MUK8bb9hai4O4ZV+Uaa3L4GhkxD+9g1TbeisbvVA1Xj8BWO/WtsXyJ+wlbrqn+zEy9j7naXBvrqP9j2R5BTGHauYpsn+UxNYBgkNCUcPSAf0CQglaFU9rREyVaK0sxTI+cpE8HAhkpjaS36CxiXFpN/C2RKtt2QfYzzSQwWQEC3Rmss/DLYFENTgTihVL8O6ktQ8IT915EUO
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR12MB4557.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MUlkNzhwN3N1UFRiNnlmdjl5aWtVOWxJYzlLVkNrajNVTStiVjIvSTRVd2tQ?=
+ =?utf-8?B?Zkg0b2hRNGpRWkdFOVhaaWJtNmhCdGx2TFZrdDMxZkoxZTdCbVViQXlhQkdR?=
+ =?utf-8?B?SEZ4UDZTL2JoZ3lMM2xOd3RCUmpoT1kzS1pyOVNBeG9HL2MxYWRCc0pab3pQ?=
+ =?utf-8?B?clR3a1pXbzdMS2dQTEFKcEZ5N3ZGSWFoWDJMTWF2b2R2dWVJOXZCbW5nWEZi?=
+ =?utf-8?B?UHdYSGxGNUNFdlFrR2p5VFBOakVxMjdQUEp2VWZNVEtYb0ovWHJTNmg3a2VZ?=
+ =?utf-8?B?ZDFqWDdaNFVYQ2tNVDhkZVdMSXdHb0lrVVRvN3ZvdjloL3B6cnQ0RkowZDBY?=
+ =?utf-8?B?M01vSFZOTFlUdTZkZEtBOEZyNHQrNW9sbzQ0NU1ZTjZIeUJQdXZqRDFidXBG?=
+ =?utf-8?B?WGFQZWFDTUY4cUMyR29sZjIvZXV3S1RYWUo0NkoyMEtzcHdQaXNCQlVib2Zq?=
+ =?utf-8?B?czd1c1dDYWw2ekRoV2s0MzZIdjRrbExoWlQ1NXFFcG9tNnUrU0NxVk05dTN5?=
+ =?utf-8?B?MjlnNk5VOC9Ia3kxRmdzeHBCVnkreS9ybDA0cDJUbjNaeFhmSkxKQnBzZVZO?=
+ =?utf-8?B?US82Vk1kZXBRbHlFQU45QWY2ZUJJaGJWQjVqdGcvY1U4c2tFai9GekJoZnlB?=
+ =?utf-8?B?dmtyUktkb0NPRGk2eXdOeHMyRTJDeW5yb3p3UlFNTzM3V2V2T0hzajVNTkJL?=
+ =?utf-8?B?U2J4bnFIY05ycndEM3Q5TGdUSnNQMERvSFFLeFNYQTZuam8xclNnOStHY1FQ?=
+ =?utf-8?B?eXVCTk84NEttREVOTElaMDE2SFNsOWVBdFl4WWpZU1NZa3dNUUJXeTB3Skor?=
+ =?utf-8?B?amlGRFQ3MHlkbmR2U1hUQnRLbWYvejgrdkZuSFJGeXdDcEJFMXppR3dJSGd6?=
+ =?utf-8?B?a2ZpSkszZUUzZTlQdmcrYVR2dU9SVEF5MTZOUVR5VTdiSnhoTkUxV1NXeHk1?=
+ =?utf-8?B?THBmeXhYZ01LaE1kaUNHRkU5UEhjNGkraDlwQ3JyWGpTa3V2ckJlOEw1TmI5?=
+ =?utf-8?B?RE96eHVRU3MzYndCblpjUVE3WDh5RmZYNmE1WVZ5bmpFbEZDQlNhRWVEUytw?=
+ =?utf-8?B?UGNJT0x2cFNscUhLZWdZSHVqNkozeThrQnIxS3N1UVlpczZkQkRCQ2R6eHVD?=
+ =?utf-8?B?c25FdU5WcXFFb0VSVDJqTGEvcXNlckM5WnRtQStuNzFNN1dqek9SY2ZEZENl?=
+ =?utf-8?B?M1g0YVltcCs3bkc2T3N2WGFkL3FkZVVKNFJLME5OdTV3OW9GaVI3MjFoZ2NI?=
+ =?utf-8?B?Zkc4K2hTRmt0a1RYd3B5VWh6MHBRRVd0YWdMQ3N3NFJqRVNqZy9XSEhrQnhn?=
+ =?utf-8?B?MjREOU9jcW9LUnNKemZVVzI1NE9XOUxqVXp0U3pkUVJoTHh6VWlKK0w2ZlFs?=
+ =?utf-8?B?YkhlMnFiQXZsaHY2bGtvdTRFN1FaUHVDODlaOWxla0VHdUw5MSswMXpVc1Zz?=
+ =?utf-8?B?MW5pU2lRK2ZSU0tDRjMyQmJQeU1vM2x0eU1Pd20zVDd4Z3I5Vnp1MDZ2T1RV?=
+ =?utf-8?B?R2thTUVYWE5kTFJFUHpiaGVXclFvVWl1TmJIR1RsbUhPS081bE5RZWdLcXdE?=
+ =?utf-8?B?dm9GekkxNXZ0WWNmNnhpaTl1Mks3Y004S2gyMXNVZ0NvTUZuL3dWbUZRY3p1?=
+ =?utf-8?B?MFRVN2R5M250Ri9HSFFEdkZQTUJtakNpTCtHbWsyTW5MRG51cXlJQ0dXZFV4?=
+ =?utf-8?B?WlJQR2JodnkvMmZoTE11SVdVSHF4K2hIdGVuV2oxeUgvdTh3S1RLSStOQVg1?=
+ =?utf-8?B?Zk5NY3g4aU1BWTZPYVA0TEtXTjhqZWtmVFBZckhCM29Bbm9BLy9EcnZGVS92?=
+ =?utf-8?B?M2tBblpXQWhScWdLZmRVclFON0l4K3k5dDVvTmxnYzRoWTJnQzVTL0drWWJB?=
+ =?utf-8?B?NG1vTWd5L2FsUXU1M3pXWHRmTllic08xR21QSkJxamFvdkVIK28xbmZuaHAr?=
+ =?utf-8?B?aURSY2FiajJsNGFQcGpHQjhYSnVzeHVPSHhWM1VpK2ljeFdjYXI0ZGtrVVlK?=
+ =?utf-8?B?ZXVhMFNvRlNHQkwwbVpxZmV3RW0wSmlLZit1L1M1Sng3NDBJUXo2SVdUOXEr?=
+ =?utf-8?B?VDhSbjhxdW55bGFqYUh3bXVvTThSZTZmT2NJSm1SM0VHTUdKQUdPRzB1b25V?=
+ =?utf-8?B?bUlocExETndNZ0JvSFp5eWg4bzlJMHdsRlBEbXlPY1pIWTV6Um0yRHlqY3E0?=
+ =?utf-8?B?aHBmYThTbk5Zci9WQms5Q3VueEp5eWR1aDVpTW03bDRUeU13VWlQR21idmt5?=
+ =?utf-8?B?dHI3YmtiSkd0MXU0Sy9yNGF0TjR2WE1sZ3NPRnkvL0NYdWFQV3VhR2Z4MTZj?=
+ =?utf-8?B?c1oxVkZMREVnQ3haajB1S2hTcFBnaFV2djVoR1lkVlR0bUxEcVVuZz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40f9e01d-962c-425e-e695-08deac3c0936
+X-MS-Exchange-CrossTenant-AuthSource: SA0PR12MB4557.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2026 13:24:59.2391
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Pc465BlAHeN0wJfILPlXUw4jz/5J5oV5FDpJGOq6KJYVdeJ36eSs9rsbxA993kub7fqigHte7qyEA13T0V4ICg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4286
+X-Rspamd-Queue-Id: C3E4E4E9402
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37085-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37084-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[gmail.com,linuxfoundation.org,intel.com,roeck-us.net,lwn.net,amd.com,vger.kernel.org];
+	DKIM_TRACE(0.00)[amd.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[mario.limonciello@amd.com,linux-usb@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email,black.igk.intel.com:mid]
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,amd.com:mid,amd.com:dkim]
 X-Rspamd-Action: no action
 
-On Thu, May 07, 2026 at 02:53:22PM +0200, Konrad Dybcio wrote:
-> On 5/7/26 2:48 PM, Mathias Nyman wrote:
-> > On 5/7/26 13:40, Konrad Dybcio wrote:
-> >> On 5/5/26 2:14 PM, Mika Westerberg wrote:
-> >>> Hi,
-> >>>
-> >>> On Tue, May 05, 2026 at 10:55:04AM +0200, Konrad Dybcio wrote:
-> >>>> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> >>>>
-> >>>> The Thunderbolt framework relies on the USB core to create device links
-> >>>> for tunneled ports, so that the USB3 controller is only kept
-> >>>> runtime-resumed for the duration of the tunneling.
-> >>>>
-> >>>> Currently, retrieving that information is only possibe on Intel XHCI
-> >>>> hosts, through a vendor-specific capability. Extend xhci-plat to allow
-> >>>> plumbing a custom one.
-> >>>>
-> >>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> >>>> ---
-> >>>>   drivers/usb/host/xhci-hub.c  | 4 ++--
-> >>>>   drivers/usb/host/xhci-plat.c | 2 ++
-> >>>>   drivers/usb/host/xhci-plat.h | 1 +
-> >>>>   drivers/usb/host/xhci.c      | 6 +++++-
-> >>>>   drivers/usb/host/xhci.h      | 5 ++++-
-> >>>>   5 files changed, 14 insertions(+), 4 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-> >>>> index bacd0ddd0d09..09e5da912066 100644
-> >>>> --- a/drivers/usb/host/xhci-hub.c
-> >>>> +++ b/drivers/usb/host/xhci-hub.c
-> >>>> @@ -750,7 +750,7 @@ static int xhci_exit_test_mode(struct xhci_hcd *xhci)
-> >>>>   }
-> >>>>     /**
-> >>>> - * xhci_port_is_tunneled() - Check if USB3 connection is tunneled over USB4
-> >>>> + * xhci_port_tunnel_mode() - Check if USB3 connection is tunneled over USB4
-> >>>>    * @xhci: xhci host controller
-> >>>>    * @port: USB3 port to be checked.
-> >>>>    *
-> >>>> @@ -764,7 +764,7 @@ static int xhci_exit_test_mode(struct xhci_hcd *xhci)
-> >>>>    * detecting USB3 over USB4 tunnels. USB_LINK_NATIVE or USB_LINK_TUNNELED
-> >>>>    * otherwise.
-> >>>>    */
-> >>>> -enum usb_link_tunnel_mode xhci_port_is_tunneled(struct xhci_hcd *xhci,
-> >>>> +enum usb_link_tunnel_mode xhci_port_tunnel_mode(struct xhci_hcd *xhci,
-> >>>>                           struct xhci_port *port)
-> >>>
-> >>> I'm wondering if this could be:
-> >>>
-> >>> bool xhci_port_is_tunneled()
-> >>>
-> >>> becase if I understand correctly that's the only information we need e.g is
-> >>> it going over tunnel or not.
-> >>
-> >> It was originally introduced as a tristate enum in:
-> >>
-> >> f46a6e165197 ("usb: Add tunnel_mode parameter to usb device structure")
-> >>
-> >> but the usefulness of USB_LINK_UNKNOWN is limited to a dev_dbg() print..
-> >> I don't really have strong opinions either way
-> >>
-> > 
-> > Tunnel detection can be tried other ways if state is USB_LINK_UNKNOWN.
-> > 
-> > For example usb-acpi.c will try to create a tunnel if all the ACPI entries exists
-> > that indicate a tunnel, but the current xHC doesn't support tunnel detection.
-> 
-> Fair, I didn't consider that!
 
-Yeah, I missed it too. Thanks Mathias for explaining.
+
+On 5/7/26 04:08, Michal Pecio wrote:
+> On Wed, 6 May 2026 16:36:49 -0500, Mario Limonciello wrote:
+>>>> The temperature register did not return a valid value while the
+>>>> xHCI PCI function was suspended in testing. Keep the existing
+>>>> behavior by default and allow temperature reads to wake the xHCI
+>>>> PCI device. Add an allow_pm_switch module parameter so users can
+>>>> disable that behavior; when disabled, reads do not wake the
+>>>> device and return -EAGAIN if it is suspended.
+>>>
+>>> Is such behavior useful?
+>>>
+>>> Maybe the driver could just disable runtime PM while it's loaded.
+>>
+>> I'd encourage what we do in amdgpu for dGPUs. The hwmon files will
+>> return an error code (I forget which code) when the device is in
+>> runtime PM when called.  Don't explicitly wake it otherwise.
+>>
+>> This prevents someone installing a sensor monitoring application and
+>> that application "being the only thing" keeping the dGPU awake.  If
+>> it's awake already for other reasons (like being used) then return
+>> valid data to the applications
+> 
+> Well, that's not a dGPU but an xHCI controller embedded in the chipset,
+> which chipset is more or less active all the time (includes bridges to
+> PCIe ports, some SATA controllers and mabe other things I forgot).
+> Is the saving from disabling xHCI significant for a desktop system?
+> 
+> Users may be interested in monitoring chipset temperature even while
+> not actively using USB.
+> 
+> I don't know what are the conditions to put GPUs into runtime suspend,
+> but a USB HC will be going in and out quite randomly, depending on
+> connected devices and their workload. You may end up needing to answer
+> people why their sensor only works when they turn on a webcam :)
+
+Heh.  You have a good point here.  The reason for this policy in dGPUs 
+came from a lot of people using them "headless" (for example plugging in 
+a display to the iGPU on the board) and wondering why randomly their 
+power shot up and fans spun up on the GPU.  It took a while to narrow 
+down that it was specifically sensor software doing it.
+
+For a sensor accessed through registers on XHCI this is a lot less of a 
+big deal for all the reasons you point out.
+
+> 
+> Alternatively, would it be possible to bring a suspendend HC into D0,
+> read the temperature register and then put it back into D3hot without
+> bothering the USB layer to fully resume and suspend xHCI logic?
+> 
+This sounds better to me if it's feasible.
 
