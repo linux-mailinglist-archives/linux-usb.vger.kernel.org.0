@@ -1,179 +1,147 @@
-Return-Path: <linux-usb+bounces-37046-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37047-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yF1IGU7l+2kxHgAAu9opvQ
-	(envelope-from <linux-usb+bounces-37046-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 03:05:18 +0200
+	id wOBdGoHy+2mMJAAAu9opvQ
+	(envelope-from <linux-usb+bounces-37047-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 04:01:37 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D30D54E1CE8
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 03:05:17 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C24454E2258
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 04:01:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F34313022571
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 01:05:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C551830234E2
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 02:01:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6183621D3E4;
-	Thu,  7 May 2026 01:05:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23FE0282F31;
+	Thu,  7 May 2026 02:01:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rrz6HQrg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ue19lhf3"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02381A3172;
-	Thu,  7 May 2026 01:05:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46B1213E9C;
+	Thu,  7 May 2026 02:01:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778115908; cv=none; b=PKjI6i8UiITchcJnrXGVowKVQFaHXuBT5aOi7sxExvzFWT8fGLpWpx4Pbwv4aKf+5rty8CWxCMLDz4FkgxVq28tpL0pnDN56GbWNKevY0m+r+9W+FiK7hXGUAGx5Mj3KcyR4c+SwAXKin0k+g0MxGHQTa8GN9ry/qb6RRwMjwRA=
+	t=1778119265; cv=none; b=MRelCPcaMiRmRaZMZa0+jxowffUJHDzHURmsT399N2r68PGXumCu2Mbf7SMzX9YZNS2MwpW+yAmGLCbEjvWJ4c9cGxQEoHZVzI3WzJ12bLZEd3Ot9S6DO05L3TAzdLId2r6W8YP359thckAT2l8et5s8dIVxorN1WO+oeOAYNRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778115908; c=relaxed/simple;
-	bh=PJbNGrdBKjT819EcGFwgq2f2GXrpGtfZvL5YkIaupN4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BpmzX2ImP2Rw9KbXPNB7QPVzjXVDMQj/imQDQ7QCNHc0qhBgKKZPGbCy++jod15Lt0i5QeZfmdqAQCeniYzZ/AHhYcWKPGqf95dYH+9l5q8ZUfm5C8ebLyPJGbq5CgadzxpQthglsr60dYsAElcM4ZIe4LouNInrPNZBvDXzRTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rrz6HQrg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33234C2BCB0;
-	Thu,  7 May 2026 01:05:06 +0000 (UTC)
+	s=arc-20240116; t=1778119265; c=relaxed/simple;
+	bh=a40ZyRGxQXRd6QRk2rzSLaT+x+MGE5hs0j2SUEwlOH0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=a1LB5SPc3RXLBal/ABQRyNX3m9AD70pKD20mplf51FBBYDNsgH3NhjpelsAzVtLvVVzF7jx6TUkfLedaLvBed3eVdyLMwYc9gY2km/OnRA2WeMSfziKovKyHvGZk3l3ZD185biNjHB3ixh8yjbcyyD9fFLB+GiK3KWVKmbbZba0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ue19lhf3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D7CDC2BCB0;
+	Thu,  7 May 2026 02:01:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778115907;
-	bh=PJbNGrdBKjT819EcGFwgq2f2GXrpGtfZvL5YkIaupN4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Rrz6HQrgkaGmf6XKxEtPpwWUZf8PwaBg88gmZfGcFYA/eSmfppDUv4s9FMjFSXtZg
-	 JncdVBj1uKrtdUmIDxIW03g2Pdv07BKYUfH900McPQwPSOIWacqH+Vh2FzQjaOI9hp
-	 NaCR4Q0IaWbj4LqMrJ3clJDqYV1Qse6AVKYSZ8giehyVDbBF6+L01APOYR2Ks4KylU
-	 sD2x5Aojsi3/qhU6XLFko74mU4Q/Vtj7q1HkrVjBA32zGFyUZRI3ZsDtAI29riVWNX
-	 N9tdvIRdTfCZSn4CHkqp0pPAoWL9XfgtM4iOkNU+U6gcvkBGMVS2ssco+kmUYShAN5
-	 LubU/H8gY5lOA==
-Date: Thu, 7 May 2026 09:05:03 +0800
-From: "Peter Chen (CIX)" <peter.chen@kernel.org>
-To: Pawel Laszczak <pawell@cadence.com>
-Cc: Roger Quadros <rogerq@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: cdnsp: Add support for device-only configuration
-Message-ID: <afvlPzS6tRDcIVAf@nchen-desktop>
-References: <20260505-device_only_branch_v2-v2-1-98cc19fbd02a@cadence.com>
- <afqpLr/BMMuN0pTg@nchen-desktop>
- <PH7PR07MB95380DF4D3F0AB37E28C05CCDD3F2@PH7PR07MB9538.namprd07.prod.outlook.com>
+	s=k20201202; t=1778119265;
+	bh=a40ZyRGxQXRd6QRk2rzSLaT+x+MGE5hs0j2SUEwlOH0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Ue19lhf3TYarCZyrQHjVx5fYcnhj8cMEih8yZB7EnrUcpSZ7Q4pkKMmaWKwDD3GUa
+	 7aG7hXenRg7FXG+uuwihNzvJAtVehaNR3zZiFj0Qtyqy2oFFfrwrhZYofDoqoYAAgr
+	 esMzM0XlvkB9SlvXQmw6iNFdt5CueqIImMxQlbjL/D3uSSe8d/p4Up09mMfqO3FYQT
+	 +P+xZ9xqRn3IRmlCEABmqyJLSVFVmqjC+msJFa0NIHP9PGgA0H/OSjnXzOIb8LcDhT
+	 /i/v/fAlEDIAwbQhhci7FHpy+Il1jEs8l7TnGzUQmtJySga9NFVMrEBdjSEzYtVciI
+	 WHKOrGk4jK9LQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02CC2393089F;
+	Thu,  7 May 2026 02:00:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <PH7PR07MB95380DF4D3F0AB37E28C05CCDD3F2@PH7PR07MB9538.namprd07.prod.outlook.com>
-X-Rspamd-Queue-Id: D30D54E1CE8
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v4 0/3] r8152: Add support for the RTL8159 10Gbit
+ USB Ethernet chip
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177811921453.3299821.167480571518572588.git-patchwork-notify@kernel.org>
+Date: Thu, 07 May 2026 02:00:14 +0000
+References: <20260505-rtl8159_net_next-v4-0-1a648a9c4d8d@birger-koblitz.de>
+In-Reply-To: <20260505-rtl8159_net_next-v4-0-1a648a9c4d8d@birger-koblitz.de>
+To: Birger Koblitz <mail@birger-koblitz.de>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ hsu.chih.kai@realtek.com, andrew@lunn.ch, olek2@wp.pl
+X-Rspamd-Queue-Id: C24454E2258
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-37047-lists,linux-usb=lfdr.de,netdevbpf];
+	FREEMAIL_CC(0.00)[lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,vger.kernel.org,realtek.com,wp.pl];
+	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37046-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NO_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peter.chen@kernel.org,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On 26-05-06 10:31:48, Pawel Laszczak wrote:
-> >I still concern this, CIX SoC has host-only configuration, and it needs to use
-> >cdns3 driver for low power purpose, eg set D3 mode for controller.
-> 
-> If dr_mode is set to 'host' or 'peripheral' and the OTG IRQ is not configured
-> in the DTS, the driver will detect this as no_drd. This may be inconsistent
-> with the actual hardware state, as the DRD component might still exist.
-> It might be safer to revert to the version where no_drd is not detected
-> based on the otg_irq, and instead add a no_drd property in cdnsp_pci.c.
-> If necessary, this can also be added to the DTS.
-> This should fully ensure the correct operation of existing platforms.
-> 
-> With this approach, for the sake of completeness, we could set
-> USB_DR_MODE_HOST or USB_DR_MODE_PERIPHERAL in the condition
-> above based on dr_mode. 
+Hello:
 
-I agree with you that introduce one property for no OTG hardware
-block, and make judgment in driver.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Peter
+On Tue, 05 May 2026 17:56:32 +0200 you wrote:
+> Add support for the RTL8159, which is a 10GBit USB-Ethernet adapter
+> chip in the RTL815x family of chips.
 > 
-> >
-> >>  	regs = devm_ioremap_resource(cdns->dev, &cdns->otg_res);
-> >>  	if (IS_ERR(regs))
-> >>  		return PTR_ERR(regs);
-> >> @@ -500,6 +515,9 @@ int cdns_drd_exit(struct cdns *cdns)
-> >>  /* Indicate the cdns3 core was power lost before */  bool
-> >> cdns_power_is_lost(struct cdns *cdns)  {
-> >> +	if (cdns->no_drd)
-> >> +		return false;
-> >> +
-> >
-> >You may not just return false, would you please find one host and one device
-> >register to compare, we need this feature.
+> The RTL8159 re-uses the frame descriptor format and SRAM2 access introduced
+> with the RTL8157 as well as most of the setup and PM logic of the RTL8157.
 > 
-> Also this condition will be correct for existing platforms.
+> The module was tested with a Lekuo DR59R11 USB-C 10GbE Ethernet Adapter:
+> [ 2502.906947] usb 2-1: new SuperSpeed USB device number 3 using xhci_hcd
+> [ 2502.927859] usb 2-1: New USB device found, idVendor=0bda, idProduct=815a, bcdDevice=30.00
+> [ 2502.927867] usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=7
+> [ 2502.927871] usb 2-1: Product: USB 10/100/1G/2.5G/5G/10G LAN
+> [ 2502.927873] usb 2-1: Manufacturer: Realtek
+> [ 2502.927875] usb 2-1: SerialNumber: 000388C9B3B5XXXX
+> [ 2503.063745] r8152-cfgselector 2-1: reset SuperSpeed USB device number 3 using xhci_hcd
+> [ 2503.123876] r8152 2-1:1.0: Requesting firmware: rtl_nic/rtl8159-1.fw
+> [ 2503.126267] r8152 2-1:1.0: PHY firmware installed 0 to be loaded: 20
+> [ 2503.156265] r8152 2-1:1.0: load rtl8159-1 v1 2026/01/01 successfully
+> [ 2503.270729] r8152 2-1:1.0 eth0: v1.12.13
+> [ 2503.289349] r8152 2-1:1.0 enx88c9b3b5xxxx: renamed from eth0
+> [ 2507.777055] r8152 2-1:1.0 enx88c9b3b5xxxx: carrier on
 > 
-> Does this look correct to you?
-> 
-> Pawel
-> >
-> >Peter
-> >
-> >>  	if (cdns->version == CDNS3_CONTROLLER_V0) {
-> >>  		if (!(readl(&cdns->otg_v0_regs->simulate) & BIT(0)))
-> >>  			return true;
-> >> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h index
-> >> 24cb42f66e4b..a6b9b6f6d8cc 100644
-> >> --- a/include/linux/pci_ids.h
-> >> +++ b/include/linux/pci_ids.h
-> >> @@ -2424,6 +2424,7 @@
-> >>  #define PCI_DEVICE_ID_CDNS_USBSS	0x0100
-> >>  #define PCI_DEVICE_ID_CDNS_USB		0x0120
-> >>  #define PCI_DEVICE_ID_CDNS_USBSSP	0x0200
-> >> +#define PCI_DEVICE_ID_CDNS_UDC_USBSSP	0x0400
-> >>
-> >>  #define PCI_VENDOR_ID_ARECA		0x17d3
-> >>  #define PCI_DEVICE_ID_ARECA_1110	0x1110
-> >>
-> >> ---
-> >> base-commit: 9d0d467c3572e93c5faa2e5906a8bbcd70b24efd
-> >> change-id: 20260505-device_only_branch_v2-53692f329752
-> >>
-> >> Best regards,
-> >> --
-> >> Pawel Laszczak <pawell@cadence.com>
-> >>
-> >>
-> >
-> >--
-> >
-> >Best regards,
-> >Peter
+> [...]
 
+Here is the summary with links:
+  - [net-next,v4,1/3] r8152: Add support for 10Gbit Link Speeds and EEE
+    https://git.kernel.org/netdev/net-next/c/9774acd5fa5d
+  - [net-next,v4,2/3] r8152: Add support for the RTL8159 chip
+    https://git.kernel.org/netdev/net-next/c/ad2a55b63b41
+  - [net-next,v4,3/3] r8152: Add firmware upload capability for RTL8157/RTL8159
+    https://git.kernel.org/netdev/net-next/c/a51e171e176c
+
+You are awesome, thank you!
 -- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Best regards,
-Peter
+
 
