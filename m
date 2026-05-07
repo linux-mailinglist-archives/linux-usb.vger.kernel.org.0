@@ -1,91 +1,89 @@
-Return-Path: <linux-usb+bounces-37049-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37050-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YOh7MQb4+2m4JQAAu9opvQ
-	(envelope-from <linux-usb+bounces-37049-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 04:25:10 +0200
+	id oEBNGEn7+2kRJgAAu9opvQ
+	(envelope-from <linux-usb+bounces-37050-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 04:39:05 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 671CF4E2427
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 04:25:10 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BED864E26DD
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 04:39:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B296B3008D7A
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 02:25:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9445D301E238
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 02:39:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B37128726E;
-	Thu,  7 May 2026 02:25:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DBC32BCF4C;
+	Thu,  7 May 2026 02:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="EgPrw+8G"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="tW5OgtqU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E552762809
-	for <linux-usb@vger.kernel.org>; Thu,  7 May 2026 02:25:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60CE7224234
+	for <linux-usb@vger.kernel.org>; Thu,  7 May 2026 02:39:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778120707; cv=none; b=iiW8gPjCNW2ZcEmkvQaTPIHVPI05KLSJ+7PGGRv5xnsFn+lzVXr7j3AvKQSBQyoLa8KtzNOd0NJzVFH2SxuzdoMbwKSzimlw4iBNLvMOx5lYqn9AsdGv+qTccBnCf/Q9hU0AUBkjCLoogq1cPaSC90MZF03mu8cZx8xcSDyfd5I=
+	t=1778121541; cv=none; b=VSrSVGR6se3RfPj3mszheCiaur/yA2Z4tpRL5bwnfrLsS9VnlzZN5B+6fdwChbFmNeZevVBzFiIiabgUCuf2xnpnYp5T9ByRek4+ZKZz2h6AkqONw+uZ58MrFZsZrWYa2Zl7RygMBDZvH497X2K/IIOey9ZHVnMwJCGXrE0u/bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778120707; c=relaxed/simple;
-	bh=BvQ/9kOE664ZkJ5YRdfXAz0eaVSRtmXR19jJgM7w9+A=;
+	s=arc-20240116; t=1778121541; c=relaxed/simple;
+	bh=FeqZ2pNjyZSw/cxExEKWj7OkwRiXtpt9OIMLpy7lIqM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G6lHgH2PByDMvlwHj/k4sKJe2ypQ74jsuvbdm1N3TE9SJQJ7OIimNgTSVypxaW9VpWnUUctShArVXsfPrRDSf9wtw3DaIDxh0LdPBvdbhQfivzUYoGhsoZPyGwjPi3bIOly86YiEuxSSA+1He1UtZWoWCucnQC/IeG5IOP4UiUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=EgPrw+8G; arc=none smtp.client-ip=209.85.160.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=WB5nINRWfgYnTqfRJqZAfj2cVtzxf7RI+MRiVt/LuNrO8YuXmthaSWqGbqDy6aSI4vIMb7tgC5TF//gqHH6vEt1qqj5zqeueusoHpBse4bKI8WA0NPr9hTSJecVHcoexAI1S/41wenE5pIwgcr/5XvZR3VRDHMjj6p3cFmBJWhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=tW5OgtqU; arc=none smtp.client-ip=209.85.222.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-50fbd79350dso2471041cf.3
-        for <linux-usb@vger.kernel.org>; Wed, 06 May 2026 19:25:05 -0700 (PDT)
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-8f984bddf4eso36930685a.1
+        for <linux-usb@vger.kernel.org>; Wed, 06 May 2026 19:39:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1778120705; x=1778725505; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1778121539; x=1778726339; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ssBQ6MyB1dRFFfzV0hZ6QPeQLWfR2ML/dw8WSpwuV6E=;
-        b=EgPrw+8G/b9JTWKpuphD8ZD+hKRUUj9g2GoOix+dpu5yVBDaI7R2gOXXYlzsk1WmD0
-         tb7t4m7MSU+43YCl1owlUSJB2F4iaAcu323fbsrZc6Bb9eSzhXgYG+sqZFclZIZGsQMa
-         BZafZh2NIjd6kTCvONIbzGpIDr69pHVoT51qG5S86liIk2JN+llFJ0PKre7fDxHUl7rg
-         Yqym0rsk+D75aZbnFPeb/YTzqaa5c2isl+9OAgDRHjfqY/MBFI56D2OYpA2CYVkeq05y
-         wK/e6PUOct267LTlOxfn66MbvoeSeLpWvcWQVy5byel91Ezao/1Ce+SFcb27rvCgoYOE
-         RnZw==
+        bh=javqJm188d2JWKA/o8CgvgiCHsG3n+WEnOmXheLWA+g=;
+        b=tW5OgtqUmducGgW4+ZHpPFZUTcfg9J+Gi4TXDz/ohzL9cDr9upEnorMzx/eJJ39kHQ
+         OatbmzI3iVMpZ3IyOIzJ/etbkinMpz/ZykDC0hL38FhkEEz0jR5hsDkh0kGsQtcGPRu6
+         rlbRpjuE44I2wrMD4eqh1nPXS2l5Ly9MZARX8A6OhL+UwGaXPAClPFDZSXJjFxxzCQnN
+         hxzApj+dX6Pd2peqEh+vMWYUS//IpIbz2DKI1Yg+1pbcxyBSY4vqgOMy+fNLaad/DB/w
+         aCyoHKqniHpTE4g+c3mYKsWshmc1aqr+Eeqru7G74RuowfHeAK6LJ7bXvSg9EcxrJNYW
+         QRtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778120705; x=1778725505;
+        d=1e100.net; s=20251104; t=1778121539; x=1778726339;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ssBQ6MyB1dRFFfzV0hZ6QPeQLWfR2ML/dw8WSpwuV6E=;
-        b=iX6ZHrKOr/U0Fkx1uoGaDpftDLHg3Tk1oDpb2tSmU/n2DoajCNJdbjJafW11r2BzX9
-         jerbgQQIignFY9KTfdybwwTHTQps4ZajOekg9ZeEsmNBPACugDzgnJV/XvAz1SfZ82d3
-         JGlGCVqhEEmpQTm297HSWN9evk2GQgqyOMfZWCDv/9sZWRPhWpM9Trh6H4QwjQ8eut6/
-         U6xdA8dK7B/9v3rFA1IPVQrDuL3dKnwqphiLX0bV2mBGwoizBheJ1hrLMdOwjZmB8PO5
-         b47FfiMMFMILS5kulYD/BcNUjeZl94/UA6ToAMXhucbhq9FcVkoZS8rH3TNxMu0ijIyj
-         9RVQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8OBAlRhWmGocwBZYLxjqKumowHpBRcqvFXQTbgNnWPr8T4+/jZTVf9VVAronL4L1fKQwqB+r1U8J0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxk2YImE+tFCgCXKmMOFeUQS3u3c7HwXqQHKTWAYE12vdl10O77
-	svyMK4H1H+ybsONy4AMU0jQhycYe6LdZGyQyYvd2kzdNgY6CpcaNUF9MsQiydtBqkQ==
-X-Gm-Gg: AeBDiet1htb4PjASx3bUh3Kjk2h3kUXFPZeqJFzyNZ96v2dbtFqPIhdW2bvjucOL/ph
-	h+BYpkue46yT5a2hBPub+CrWhhbl+j/H3OymKkmlPiKvv4Mi3W6hPrqRzdRFZk2UFHGJpN2950I
-	4Yzb7xkEJIz+gTJ0H6j/MkWGsYd5QjaVnFwB+Xo+JKjgG5//4jQIwApxaCftR+dg4Jt6rr+SDGf
-	7QvmcoRU7BaEKD3m6peEovM40XVH4JPI6LlR4KVWox+cthpXRvYTRtJXsk+nJngF9xQbuTzUm/c
-	E4fS9qw6grdBXqd7Yu7T7RjgbrVoZ1tGnN2NWBKSuf2iAuzPlIZGp12feQJQFSStm6W1q0kSNaV
-	U/Kf+I4iyN8AOPyQosbcBZgkzJCZv+lt5D2a0xvfYpyozlJf/kElhW/3WcUvypjWsuufSb6cdSg
-	AfmtmFSkxmYAuYfl56MqijsbUFRQhzW0mw6DzgVB9lNiFueg==
-X-Received: by 2002:a05:622a:114f:b0:50f:be4f:465e with SMTP id d75a77b69052e-514621c7463mr81051011cf.53.1778120704759;
-        Wed, 06 May 2026 19:25:04 -0700 (PDT)
+        bh=javqJm188d2JWKA/o8CgvgiCHsG3n+WEnOmXheLWA+g=;
+        b=XYyMqq531m/uwHJtawqz0iFTUJUDdHMpt8+INQZP2uxO/oDh5dnudJjDcWb9gSYAQ4
+         qovq9YbPKJXdrTmHGnfN4dQCaufqXi9qNoHx26vkwn3Smlzo6xM5WJwCrAFqff+lLMX3
+         D/yjVFWroCk1h1ufyS7bRKG2ZrF2dGVgnYaWeNF71wokmiZciwVabJzOMNb+0n6+dIF6
+         +2K/PZsbrXq8mZG1S/lX3W5bWlFBspT/txJ54mFk/Nd5uB8Z/bXozvJVBnsaBtNRsNfw
+         8vkS70Bfz4ujkGFbxga5UfDwg1EdfTUnpr+aTez+cCKKTNjxxbsv6UQPKFPcTDYaYCwy
+         a7ZQ==
+X-Gm-Message-State: AOJu0Yw1QAVoYIwNnesVsPMt2Q1+OeZB6YEEtXziJ2Zu75t4ttXVQt7M
+	AxV23y1uNQpzL4v16FZ3YQzrNQfhi9eLChuSwHTldkhvrGCBXYuzzE8p4EkCodZEXrZbkE197Py
+	EV6o=
+X-Gm-Gg: AeBDieuw9vjyEY90nIYljHAKq1h1YDppxlxyKct6E/mmZqkiJYx1sV3bfqDRH+ySTf6
+	d3srQVRHq2F9zA0nWGA5XM5QlclNuXwAkVHYwf7+vjIxVlMW0F0p7GLF/LsBDMf62TQMOmhu2UJ
+	K9cEi0nPD2LPVC6lqrOf6B1d3kxcP8yS/hXJgzZPjaOLMOP21ILlpucTjJvfMvUvZI+UHpdkZ9n
+	FzMzzKVff1mel1hgj+PQQbFNejYMlwFjXeXDBEuUhnnbYnkl1rPEz/iUzRkoIbsYO769cjous3A
+	+jRfpAQ+LsxGdTEARDptZqjrdX9xtua6YwYYz710R977+IyJRk61dBD3Sy9+8eL8e6J7Ga4IUM5
+	34OAr7K9sZgc8V25ZcTGhuucQP2/z0ijsq4stFVnJTMfUNyr3MgGaOcgalMSxB9cQXbSQOQMImc
+	V1mOaguwGHXYLm7TtvNpKWB3AkZXVDECVOJRrW4KkW6/9QwA==
+X-Received: by 2002:a05:620a:3191:b0:8eb:ddba:2b6f with SMTP id af79cd13be357-904d40a2f59mr943133785a.5.1778121539255;
+        Wed, 06 May 2026 19:38:59 -0700 (PDT)
 Received: from rowland.harvard.edu ([2601:19b:d01:d210::a0bd])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5104090a381sm189051481cf.8.2026.05.06.19.25.03
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8fc2938d0bcsm1768572885a.4.2026.05.06.19.38.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2026 19:25:04 -0700 (PDT)
-Date: Wed, 6 May 2026 22:25:01 -0400
+        Wed, 06 May 2026 19:38:58 -0700 (PDT)
+Date: Wed, 6 May 2026 22:38:56 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Dylan Robinson <dylan_robinson@motu.com>
-Cc: mathias.nyman@linux.intel.com, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	mathias.nyman@intel.com, Michal Pecio <michal.pecio@gmail.com>,
-	nick83ola <nick83ola@gmail.com>, niklas.neronin@linux.intel.com
-Subject: Re: [PATCH 1/2] usb: xhci: fix isoc silent reschedule creating
- stream gap on CFC controllers
-Message-ID: <3ea05812-e63a-4562-9ec3-159244b571b4@rowland.harvard.edu>
-References: <CA+Df+jdFEGGZyceFH_5LRSQjwGa1WCtd79DK1Lywvdw+pkX6fw@mail.gmail.com>
+To: dylan_robinson@motu.com
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [Bug 220748] usb: xhci_queue_isoc_tx_prepare ignore start_frame
+ and always assumes URB_ISO_ASAP is set
+Message-ID: <fe08eabc-4f92-43fd-89d7-5e9d0e35c979@rowland.harvard.edu>
+References: <bug-220748-208809@https.bugzilla.kernel.org/>
+ <bug-220748-208809-eL7PrzeMxr@https.bugzilla.kernel.org/>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -94,57 +92,68 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+Df+jdFEGGZyceFH_5LRSQjwGa1WCtd79DK1Lywvdw+pkX6fw@mail.gmail.com>
-X-Rspamd-Queue-Id: 671CF4E2427
+In-Reply-To: <bug-220748-208809-eL7PrzeMxr@https.bugzilla.kernel.org/>
+X-Rspamd-Queue-Id: BED864E26DD
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	FREEMAIL_CC(0.00)[linux.intel.com,linuxfoundation.org,vger.kernel.org,intel.com,gmail.com];
-	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37049-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37050-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWO(0.00)[2];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_NONE(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,rowland.harvard.edu:mid,rowland.harvard.edu:dkim,motu.com:email]
 X-Rspamd-Action: no action
 
-On Wed, May 06, 2026 at 03:55:27PM -0400, Dylan Robinson wrote:
-> On 5/5/26 16:32, Mathias Nyman wrote:
-> > Agreed, setting start_frame to start_frame_id + 1 would only make sense for the very first URB, otherwise we create glitches.
-> >
-> > Looks like the whole start_frame_id calculation is incorrect.
+[Taking this side discussion off Bugzilla]
+
+On Wed, May 06, 2026 at 03:03:44PM +0000, bugzilla-daemon@kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=220748
 > 
-> I'd also like to call attention to the fact that index in
-> xhci_get_isoc_frame_id() refers to the isoc packet index within the
-> URB, not the position of the transfer in the overall stream. A driver
-> could (although probably shouldn't) submit multiple URBs, each
-> describing less than a microframe's worth of transfers, ...
+> --- Comment #27 from dylan_robinson@motu.com ---
+> Regarding the start_frame, I want to advocate for treating urb->start_frame as
+> an input parameter when URB_ISO_ASAP is not set.
 
-How can this happen?  The only way for an URB to describe less than a 
-microframe's worth of transactions is if it describes no transactions at 
-all.
+For one thing, that would be very impractical, as every driver using 
+isochronous transfers would then have to be modified.
 
-Did you mean less than a frame's worth?
+For another, what's the point?  In an ongoing stream, all this would 
+allow the driver to do would be to break the continuity of the stream.  
+At the start of a fresh stream, the driver could easily end up 
+requesting the HCD to put the first transaction in a (micro)frame that 
+the endpoint isn't scheduled to use or is beyond the end of the HCD's 
+scheduling window.
+
+>  In looking into porting our
+> drivers to Linux, we've found the current behavior challenging to accommodate.
+In what way?  What is it you want to do that you find challenging?
+
+> As Alan mentioned, different host controllers have different representations of
+> frame numbers. Other platforms address this by only exposing a normalized,
+> frame (not microframe) index, while handling controller-specific conversions in
+> the host controller driver.
+
+And thereby forcing every URB to contain an integral number of frames' 
+worth of transactions, at the risk of breaking the stream's continuity?
 
 Alan Stern
 
