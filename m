@@ -1,186 +1,224 @@
-Return-Path: <linux-usb+bounces-37108-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37109-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AHu9JkoF/WnkWgAAu9opvQ
-	(envelope-from <linux-usb+bounces-37108-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 23:34:02 +0200
+	id 8I2XCCcK/WmdWwAAu9opvQ
+	(envelope-from <linux-usb+bounces-37109-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 23:54:47 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07C9C4EF5B6
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 23:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 762354EF7FC
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 23:54:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3BB6930C1BEA
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 21:30:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A2038303A13E
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 21:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9792347536;
-	Thu,  7 May 2026 21:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EF6D34A794;
+	Thu,  7 May 2026 21:54:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JP+tRaG2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jIB4AaHK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D1530EF88;
-	Thu,  7 May 2026 21:30:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511792F8EBD
+	for <linux-usb@vger.kernel.org>; Thu,  7 May 2026 21:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778189428; cv=none; b=NuOvzp7frk3GgNeRdJNT8Xq6LkUeynhIh0hFKAckeXTdCHEmfs2fwq40KCuN5y5WMziK5AIoSjjgw5IqkAS2Oc7F1ZE1eRcMulYOPhmiP+jv8cQ8JX8LYG5OZ3EVWABcPISvFHWx/BDM+XbhyKByZzGt7oEaXFx0jhWTuLCNCL4=
+	t=1778190880; cv=none; b=HICL3fk1nYG0mDoeMpvabva0TsbofL38P5GBVSoNyUun87unAqCr6+cx0ups8mwbSGHvGHjJ1Y2iao8opn8fJjzX5/2tsUQtA6IrW/7i018qtR2lFEPfO/n9MCPHxcZTnZRfeY8XcLBC7U5/GgXZYcoGU1h8eJYTEDS1DK1HRoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778189428; c=relaxed/simple;
-	bh=7E4rp+S4dqE0OVdstaoROQZLQNR9BomvZCyTiVcToKw=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=tD8iW099RBtNn81zRqNKVobqbtKCfUIxFyljkOWb3sfYMPgeD3WyyHgxY7othUJsIcCJzuRyd/njvBobxn7uMUytAy2pPk9yLtsKF9453iUXFsgj9QAf8IMuiEMmxwadWZv/5IU7Fu3YZkB/zWgolamdfClht7ALzLhJM4kbhp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JP+tRaG2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD30C2BCB2;
-	Thu,  7 May 2026 21:30:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778189427;
-	bh=7E4rp+S4dqE0OVdstaoROQZLQNR9BomvZCyTiVcToKw=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=JP+tRaG2NL8qdE5D6PVSpQ5I6vDQosXt9S2m2W0CXsjlSr61fgsBw3lRkOY6nwgdb
-	 lAhuVEpOL9n+h7bqzbfWCW0GUj4vReohE2r1IoVRn/vZvx6lgxIV/+hd8+HfKTujre
-	 hLmsHYSk0vbcj2jqokpp8rUQ2w7UZprVGEN4ONUcJBIAjb+pWB4efRRM93IjwNMS8D
-	 8SeYJgiqBdZIF4vbGYROv1EahDoxf1wJlCJUlA6LMxJoh52W6DTcjLuv4QmDl2H7xo
-	 IfHOwegNi9DrpP8JSPFkQx44XYkneIdfHWzf5WRgH+GudQdILoxHaNytMrBgR00J+D
-	 4i4mqR6bL8tow==
-Date: Thu, 07 May 2026 16:30:25 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1778190880; c=relaxed/simple;
+	bh=jK61mHBn7S+AWqFrMG32HuSdTyw0gMLsKFNAoT5mEqk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rsuJFwkFpq46x0X2g6PkgOrdfRibI/bi1v1i1g5pdZm0f3GrhJFmkYppTZURiLACD+HNIpCDaJU0lneYOYB/T9i8PHcJdfK46vieBMhKeUUegV/E/sg7lMOwz+xt5Fzrz8GlvBNyY9AnKqjnD3yBlsdzXuCFzYnrEfeQJGIZlCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jIB4AaHK; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-44b330c5cc6so990988f8f.1
+        for <linux-usb@vger.kernel.org>; Thu, 07 May 2026 14:54:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778190878; x=1778795678; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jK61mHBn7S+AWqFrMG32HuSdTyw0gMLsKFNAoT5mEqk=;
+        b=jIB4AaHK+vX0a1Wy2jl85QD6cK9QIPXQwZ/FAqyrD2M4zvoi6hLrh3upqbEYmf8ejB
+         cVIBBv+lj6Wuogw6+sgl7sIXfc6kawdTYfZeYFQPalMZPHGFNcuxQ1OaaL0A/VRkLmi/
+         uwG+jwlTKdnkqNQZs0n5nemU92T3zVzIuVkn/7/G0Qd4VEMEiPBUv6l1dQZPdoBvcvYr
+         HlyIuYAOMPJImaGExyK+w7u3C/X4UDwMqQDE5iYk9y2YMSqSg9SK0dOp7datB2s0M09G
+         ggFab+kuFXl4HO9rmDRJicVsAo0bPEf+f1/ZuVYxRTtGniW7DUPmJvWVtsNb+5ftmWWR
+         Zr+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778190878; x=1778795678;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=jK61mHBn7S+AWqFrMG32HuSdTyw0gMLsKFNAoT5mEqk=;
+        b=Ht7cm0FXTjXEOPdFCV122gmkEdxt2hE0dlC+6ocvc9zKuID38T9gGcGrvNjXoTUZOP
+         xnE4pto1xMfSp34vBmx4cSxXVusa6EDYhrIa5wGsJzRNvpwtRiTueqxaJeZ+zhOXcAV+
+         zdG6qaQm7H6jdxkJJRev5/EYQex3CS6DXD0iLGz4CJEbJdPaoCUkWOEEO5HV4V8iz0WQ
+         f8lTWR9MlZbMoNBBkF/R0TpwwWYhNbsd7R7fWVU7kAJ/AB+6lY50Od0utvRLY38wmuBE
+         JhcSi9Vt6VF5ucFlnRisxxe646Xoy3SXXXRYEMXCTLmc5pSWXBEgqrsSQnM/CK5xVW4p
+         ChUQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8BBMPFSkPLt/lH1XgnuHPq2Xr7jk9+jeUAF5EPzDkeU1V4QTck1hiKoiQp7VsGtyO78jFvDWjbqew=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWQQFsXs1LohQYKuZ5LP1mb06t8U1RwSk8UXu0M4D36xnbobZ/
+	Lg6nQlhLs1z+O0VBwxgyZYHAI/SNy+5f59DmLzXGO+Xht0ditq3igQLhX6Mqzw==
+X-Gm-Gg: Acq92OGGEtLCCXfRlCw4GU+/bmQ8XW+6AN4iZtUx75MOSFa8tdhOtTR1yleQnw9wP3T
+	ORmNfX66MseXFq28PcifZ6kPltzAuVdZxXTMTlv0syYBWIV5ugEgwp47/zthwExJ9SVtAE0BR1D
+	RH7i5BjRg20AVKGbWDvr22yF9q0DKoHW5NC9yaSL7ol+PBPCFttmJvcSKvMtEt8iyHpa8pX32ha
+	cqSjy36nPVKQFubjs6rjlhnQrb3WGXN59bUSEQgSdrbDJTxy8xXZHjqsfTIuCHCXH8FpxgCBZIk
+	76NpFtq1XTIzT8FuDTMhBM4MZMyF+LRMgmv8iHRKlhb2tojxwN5CwU1aVXwe5RJn0RwnyALlUfo
+	+0NDgRWULEjadbDOHKoDlsqaHihW0jlFRpSOaIP8is669lHOkDyI+odw+qvBJlEQsyyP6SGV5Nt
+	Fxpip9TlPxPw7WDncOdcXDiFC5QX6/1Tsxkrk=
+X-Received: by 2002:a05:6000:3107:b0:439:ccd7:cdb6 with SMTP id ffacd0b85a97d-4515b5242c7mr15428693f8f.14.1778190877273;
+        Thu, 07 May 2026 14:54:37 -0700 (PDT)
+Received: from foxbook (bgt227.neoplus.adsl.tpnet.pl. [83.28.83.227])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-454128207cfsm2340747f8f.1.2026.05.07.14.54.36
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Thu, 07 May 2026 14:54:36 -0700 (PDT)
+Date: Thu, 7 May 2026 23:54:32 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Dylan Robinson <dylan_robinson@motu.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+ mathias.nyman@intel.com
+Subject: Re: [Bug 220748] usb: xhci_queue_isoc_tx_prepare ignore start_frame
+ and always assumes URB_ISO_ASAP is set
+Message-ID: <20260507235432.71d28151.michal.pecio@gmail.com>
+In-Reply-To: <CA+Df+jdtQrYye85d7uZyT3jirsztKhf7qQes3LvOAPa+9qxSOw@mail.gmail.com>
+References: <bug-220748-208809@https.bugzilla.kernel.org/>
+	<bug-220748-208809-eL7PrzeMxr@https.bugzilla.kernel.org/>
+	<fe08eabc-4f92-43fd-89d7-5e9d0e35c979@rowland.harvard.edu>
+	<CA+Df+jdtQrYye85d7uZyT3jirsztKhf7qQes3LvOAPa+9qxSOw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Wolfram Sang <wsa+renesas@sang-engineering.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, linux-kernel@vger.kernel.org, 
- linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- devicetree@vger.kernel.org, Johannes Berg <johannes@sipsolutions.net>, 
- Bjorn Andersson <andersson@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
- linux-arm-kernel@lists.infradead.org, Jeff Johnson <jjohnson@kernel.org>, 
- linux-pci@vger.kernel.org, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- linux-usb@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
- ath11k@lists.infradead.org, linux-spi@vger.kernel.org, 
- linux-remoteproc@vger.kernel.org, Ulf Hansson <ulfh@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Andi Shyti <andi.shyti@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, 
- Mathieu Poirier <mathieu.poirier@linaro.org>, 
- Maxime Ripard <mripard@kernel.org>, 
- Sylwester Nawrocki <s.nawrocki@samsung.com>, linux-wireless@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>, linux-sound@vger.kernel.org, 
- linux-i2c@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>, 
- netdev@vger.kernel.org, ath10k@lists.infradead.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-In-Reply-To: <20260507201749.2605365-1-robh@kernel.org>
-References: <20260507201749.2605365-1-robh@kernel.org>
-Message-Id: <177818942584.2803269.2192622854542354589.robh@kernel.org>
-Subject: Re: [PATCH v2] dt-bindings: Fix phandle-array constraints, again
-X-Rspamd-Queue-Id: 07C9C4EF5B6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 762354EF7FC
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37108-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[38];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_COUNT_THREE(0.00)[4];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37109-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,renesas,netdev,dt];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:email,devicetree.org:url]
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
+On Thu, 7 May 2026 12:17:00 -0400, Dylan Robinson wrote:
+> On Wed, May 6, 2026 at 10:39=E2=80=AFPM Alan Stern wrote:
+> > For one thing, that would be very impractical, as every driver using
+> > isochronous transfers would then have to be modified. =20
+>=20
+> Maybe adding a new flag would make more sense then.
 
-On Thu, 07 May 2026 15:16:00 -0500, Rob Herring (Arm) wrote:
-> The unfortunately named 'phandle-array' property type is really a matrix
-> with phandle and fixed arg cells entries. A matrix property should have 2
-> levels of items constraints.
-> 
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
-> v2:
->  - Add proper descriptions for 'qcom,smem-states'. Thanks Krzysztof!
->  - Fix i2c-parent warning
->  - Fix extra blank lines
-> ---
->  .../rockchip/rockchip,rk3399-cdn-dp.yaml       |  2 ++
->  .../bindings/i2c/i2c-demux-pinctrl.yaml        |  1 +
->  .../mmc/hisilicon,hi3798cv200-dw-mshc.yaml     |  7 ++++---
->  .../devicetree/bindings/net/qcom,bam-dmux.yaml | 12 ++++++++++++
->  .../devicetree/bindings/net/qcom,ipa.yaml      | 12 ++++++++++++
->  .../bindings/net/wireless/qcom,ath10k.yaml     |  8 +++++++-
->  .../bindings/net/wireless/qcom,ath11k.yaml     |  8 +++++++-
->  .../net/wireless/qcom,ipq5332-wifi.yaml        | 18 ++++++++++++++++++
->  .../bindings/pci/toshiba,tc9563.yaml           |  5 +++--
->  .../remoteproc/qcom,msm8916-mss-pil.yaml       |  6 ++++++
->  .../remoteproc/qcom,msm8996-mss-pil.yaml       |  7 +++++++
->  .../bindings/remoteproc/qcom,pas-common.yaml   |  6 ++++++
->  .../remoteproc/qcom,qcs404-cdsp-pil.yaml       |  6 ++++++
->  .../remoteproc/qcom,sc7180-mss-pil.yaml        |  6 ++++++
->  .../remoteproc/qcom,sc7280-adsp-pil.yaml       |  6 ++++++
->  .../remoteproc/qcom,sc7280-mss-pil.yaml        |  6 ++++++
->  .../remoteproc/qcom,sc7280-wpss-pil.yaml       |  6 ++++++
->  .../remoteproc/qcom,sdm845-adsp-pil.yaml       |  6 ++++++
->  .../bindings/remoteproc/qcom,wcnss-pil.yaml    |  6 ++++++
->  .../devicetree/bindings/sound/samsung,tm2.yaml |  8 ++++++--
->  .../bindings/spi/st,stm32mp25-ospi.yaml        |  5 +++--
->  .../bindings/usb/chipidea,usb2-common.yaml     |  2 ++
->  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml  |  7 ++++---
->  23 files changed, 142 insertions(+), 14 deletions(-)
-> 
+It would surely need to be optional on per-URB basis, to avoid updating
+all drivers and to enable sub-1ms URBs without gaps on HW like xHCI,
+where we can't request starting frame with microframe granularity.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+I suppose Windows/OSX have to be doing it this way too?
 
-yamllint warnings/errors:
+> I was confused because the documentation regarding URB_ISO_ASAP
+> describes this behavior.
+>=20
+> - For ISO there are two startup behaviors: Specified start_frame or ASAP.
+> - For ASAP set ``URB_ISO_ASAP`` in transfer_flags.
+>=20
+> However, it looks like URB_ISO_ASAP actually means something
+> different: that the URB can be delayed. Is that correct?
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.example.dtb: i2c-mux3 (i2c-demux-pinctrl): i2c-parent:0: [2, 3, 4] is too long
-	from schema $id: http://devicetree.org/schemas/i2c/i2c-demux-pinctrl.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.example.dtb: i2c-mux3 (i2c-demux-pinctrl): i2c-parent: [[2, 3, 4]] is too short
-	from schema $id: http://devicetree.org/schemas/i2c/i2c-demux-pinctrl.yaml
+Yes, there are many errors in Documentation/driver-api/usb. I thought
+about fixing this when the bug was opened, but maybe it's better to
+wait till the dust settles around xhci-hcd.
 
-doc reference errors (make refcheckdocs):
+Alan pointed out that kerneldocs are more up to date, but there is
+still a crucial error there: on ehci-hcd, an URB submitted too late
+completes with -EXDEV instead of the submission failing with -EXDEV.
+And it seems we should strive for the same in xhci-hcd, instead of
+silently rescheduling such URBs to run later.
 
-See https://patchwork.kernel.org/project/devicetree/patch/20260507201749.2605365-1-robh@kernel.org
+> For an ongoing stream I would expect that submitting a start_frame
+> that is discontinuous and in the past would result in either a
+> submission failure or immediate completion with an error status. Such
+> an error would provide useful feedback to the driver because its
+> occurrence would mean the stream is no longer synchronized as the
+> driver expects.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+The idea is that in absence of bugs (which xhci-hcd has plenty), the
+stream is always synchronized as long as all URBs are completing
+successfully and resubmitting before returning from their complete()
+callback. Drivers don't need to "start_frame++" for this to work.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+If an IRQ delay causes resubmission to be late, some or all "frames"
+of the URB will complete with EXDEV.
 
-pip3 install dtschema --upgrade
+Also, I believe such completion should occur in submission order, i.e.
+only after all URBs submitted earlier have completed in some manner.
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+> If the driver requests a specific start frame, it should be the
+> driver's responsibility to ensure it is a valid frame within the valid
+> scheduling window. If the requested start frame is invalid or outside
+> the host controller driver's valid scheduling window, the request
+> should fail. This would be more helpful than silently fixing it upon
+> submission.
 
+There would need to be some convention how to deal with bInterval > 1.
+Such endpoint doesn't use every (micro)frame and can't be scheduled
+into any arbitrary one.
+
+In such cases, xHCI spec only permits the first frame of every ESIT to
+be specified, but the actual transfer will take place anywhere within
+the ESIT, and we don't know when. See 4.11.2.5.
+
+Drivers would need to be aware of such low level details.
+
+> Currently, with non-CFC host controllers, there is no way to determine
+> which frame a transfer occurs in. This is because without CFC, the
+> start_frame returned in the URB is only approximate.
+
+That's partly a bug.
+
+Filling start_frame is only implemented for CFC HCs. On non-CFC we
+could still set start_frame accurately on the first URB and later
+increment it blindly. What we cannot do is ensure that the HW will
+stay in sync after Missed Service. All bets are off after EXDEV.
+
+On non-CFC we would also be forced to ignore any driver-specified
+start_frame except at the beginning of a new stream.
+
+> Currently, there is no straightforward way to inform the xhci driver
+> whether a URB represents a stream start or continuation. This makes it
+> difficult to detect missed service intervals or other scheduling
+> discontinuities.
+
+It's supposed to be implied that submission from a complete() callback
+is a continuation. I believe one of the submitted patches fixes that.
+
+Regards,
+Michal
 
