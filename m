@@ -1,140 +1,183 @@
-Return-Path: <linux-usb+bounces-37095-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37096-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yKSMJN28/GnSTAAAu9opvQ
-	(envelope-from <linux-usb+bounces-37095-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 18:25:01 +0200
+	id 0DdWGgPF/Gk8TgAAu9opvQ
+	(envelope-from <linux-usb+bounces-37096-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 18:59:47 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CE294EC273
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 18:25:00 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4FD34EC930
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 18:59:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E61A33074C4C
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 16:20:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 71F5F3019B8A
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 16:58:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1830A3BE646;
-	Thu,  7 May 2026 16:20:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9A263FCB03;
+	Thu,  7 May 2026 16:58:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="vN9GJ62j"
+	dkim=pass (1024-bit key) header.d=motu.com header.i=@motu.com header.b="hrmwK3AQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 834903A6B6A;
-	Thu,  7 May 2026 16:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778170829; cv=none; b=PzSTYjDEBULKzwlr0HkDsbAvxaeRXzwxUYC8gBvDZHFIaf0MJFLbz9A/FOxmADy9q8ahWDEcJyQw34ibEC4TPcNnVRAzLPu9C/sv7p0LmitBm9Uq+inZnwga9I/didWk0wZJAxxzeSclVD8n9ogbkeQW4oGm7ZyMBXGdTn3HRyE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778170829; c=relaxed/simple;
-	bh=Pzp4bDvhBnVZMc5QbyczfS/iS7C+4RXZkFqCBHC6K+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tm5NuX9huCc5WPeidYgPrClh4+B/N5dunAR0AOzAn0fcYwZhBjjZeQpj8J3Wh+saBl6XIXzBZCtLCQJ4OC6ws1IeXDsTwtL/lhMdYSdB+83M/0OS5AYSbA83eyf2oXNTjxU5DK9DlSApD5v5QVawznm2X9DVmZM+KVf0y0NSRVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=vN9GJ62j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3CA2C2BCB2;
-	Thu,  7 May 2026 16:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1778170829;
-	bh=Pzp4bDvhBnVZMc5QbyczfS/iS7C+4RXZkFqCBHC6K+c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vN9GJ62jrF9Io8FAK0akhncHvm2+1K2x9iHChRKUt0uTU2aXuZPhHQ2DoBHJipSa8
-	 rs+BOmYKyLIT3F3MjhezjuS1Ng8NVMWD/88ReeBzHo0ZNa6Lxs6+RYPwxQGWqV6t57
-	 ZGjkOo5dsQ7bu9oMWdbl6NI+ZndBuC4xv4pU9rYQ=
-Date: Thu, 7 May 2026 18:20:26 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [RFC PATCH] usb: host: Default CONFIG_USB_XHCI_RCAR to module
-Message-ID: <2026050732-discolor-suing-ef2d@gregkh>
-References: <20260507154710.3903732-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE402C21C5
+	for <linux-usb@vger.kernel.org>; Thu,  7 May 2026 16:58:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778173132; cv=pass; b=KJzSwoe80/8SArJCYTNKtGKjmct+cYkECCdwi8p2iHT1GlZRREey3ZIXWLogEkQK0VQIsxhlo/tIfIHP/pCymQL1fIQAkIiOp3LzjIfpbVKwrrSzk2bnhKkpldVSuSiab921kpnfo/9ppNPCShA0Ji/nqcWWdze6BSiUQM+KfDw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778173132; c=relaxed/simple;
+	bh=g7FDcwsGXtXlVfrAGeyj4Y+Olkuw+W69nMSysjG4eQk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i4vfCXwFEZRQzpR00YarPCkqLtxO3OMRIH1pEI+H71+011T1o+Pythjx21tRXSJ5IVb+vyW7bCf4WOu3uQ4bauseFZ+BHlcTN7gkl/J7t1Uyyliv0GAHqffCYqV8obsH5tatBTjKZqodSVO3AOZrU8e9TvFndp4ta2vC2IIn66w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motu.com; spf=pass smtp.mailfrom=motu.com; dkim=pass (1024-bit key) header.d=motu.com header.i=@motu.com header.b=hrmwK3AQ; arc=pass smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=motu.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-67c566cb519so2063184a12.3
+        for <linux-usb@vger.kernel.org>; Thu, 07 May 2026 09:58:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778173129; cv=none;
+        d=google.com; s=arc-20240605;
+        b=aaPt5Kb6PrInDmZpO5QWoYuhJv0r/NdnUyrznSSS7+Ta1gwbFlOogIAvxPdHH885GC
+         2D1xgBB4QPW9ansgQEhzg23idcErNwcd99fZogdxzoWEOjOKyAJ5YgIP+Q/5pdsLheTy
+         fRwTAelbyNSJrhKsXNE5Sp0g7fAHhYYbnqLeewujT9KSyTwWY6kA93OjW6OIRpNIA9UC
+         okRzl7/vr119jz/q0JRyD6N2L/g2M8zzuSmWBSxfXw0CgKcHl0Z16mnRIBttdnNvmVNw
+         d3O22Cl8iVzW5y9cz7vPxmG2keZSvWwsKYsTDL1z6TqzEpjya/QcNMq2oarqJF3D5Pch
+         Q9pw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ff06H19+2f8LP/S5t5dnvzF+qtDGghHwzmVQjHYleLo=;
+        fh=5kVackAqRJRHwbEJvLGyE/u6qIel2R9qk0Y0YQg3/CY=;
+        b=kdZDSvMQunnqL99tH4VIjBd56/x38az8E2AoRipwdh8q9B1f0jXYfFyvWfW4LwSEwz
+         znsfUP0uY+72eM5n5ngnGa9VIJ7AO5fvc8ZS06fLJiyAc9EKZg+sS7IyEyF3Q3W/PHsm
+         5gvdg/64U7PfRdWbGScUXv0swc9O1pkYUWVVEayCMY1T9Tbr+gqJBwWVgplq6PLQoOGy
+         /ztpVSsC24zWhaoL/aWwFzU8nxhUhm6UXhmIsfzf6RqkFlg6Chk1Nvn9IUa4bpiniiyf
+         IuyNqe8rRji5J0V2KCqCmawCks1LtXezZ2/0YPA9EGKEkOxE64q0KReCpMmy+A9nuVeE
+         fNTg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=motu.com; s=google; t=1778173129; x=1778777929; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ff06H19+2f8LP/S5t5dnvzF+qtDGghHwzmVQjHYleLo=;
+        b=hrmwK3AQQWtsOsHYVAwF0NiAYdaYtNKw0GV7rzv2Xa+vOb0SwAC5eAaoNVhVGIGUWF
+         iCI0B734J8ent8w71rJdTa7uLiBSNkp+IlDbU0zL5bUtBNllpyfaPW2tS8Qy6nZDAxBF
+         9LaWYkpvs986jZznRI8OTflVNRudycjD4WUOE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778173129; x=1778777929;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ff06H19+2f8LP/S5t5dnvzF+qtDGghHwzmVQjHYleLo=;
+        b=XKX3Ov5U1J+PnM/NuH5LmH8RUZtJPGeYbTb0+zyRqRVdWoPAAQgOJBdHqpgok+NN9r
+         T/fUbygdJ8XurL4l81Et4x0ENQa9146B/VCLY5r5imthxpzzpqrcQFTh7ZJ2IARlyQ9o
+         98uS3EruZ7Sx1ABYS8zWn69ubZOuUJ5KneraCwuunUhJfHYMxVywsQdqXlWiCH8UWV22
+         v3bwH+sFfBi/RNhXdhIPaiORIPG2rMoapzMckiLngieYmKexhRQmG0ah6KK1lW7ic7Hd
+         8nb5WfclhhEa2gc/02Fi0aGhl7G274SdLprQkUz4MhFXTgnM6+No6DNVeSpMyQ85qbDe
+         4obQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8EO46Goap28bH09b9Z4mOn954xf50KT4gVCqBbq9s4I8bKMfZeO28RJygZ0Nz7DJSo9jeE2lgSviU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw65Sl9ahm1m4R73GN0MsJt5ZJvGqBDgnubEDZ+1Fr0hW/TVPZi
+	awQ4HRC3zIB/Yz/wLwP9YJwsAylhsn89xYhkPOTg6HTOPlX/sUPd3fQp1i5ozu7tuYLaffwoObk
+	nyLA+QvXrt/hQRIVrbWEGDSUa4BvZPuZ2aMg7m6NrSI3Mnv2xg84S4xHwMg==
+X-Gm-Gg: AeBDievDg/uJ5i3IeyyxQu1YVHBe2YgPV9yYfOg+6IvJadTZALKqI0+9jWN3LRixzfN
+	GWbNNJI7nUfcWAOIpKybLzOCcU1ezux7wBDUe5PQVWM8alIqNZZ7/hcoc9Cj8e6NWk8WrbsnzEV
+	8AG2B/dGhz3IDtdKfa6Qk1ZJsVcDQwuTpzc/A8d675ELxIIiZg/dZxq8JWfMBYSNtV9Yi0QitrO
+	P6ekPC/Yztq3RVuB9C/lZvkWOo94V8zGE3tnx/cBCPKx6vonXXGJPVQ+izSQVkmA1/CZHacS6A8
+	5hweyFaLjjaewDrbI9I=
+X-Received: by 2002:a05:6402:234c:b0:67d:a637:bf77 with SMTP id
+ 4fb4d7f45d1cf-67da637cb98mr4769671a12.25.1778173129292; Thu, 07 May 2026
+ 09:58:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260507154710.3903732-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Rspamd-Queue-Id: 0CE294EC273
+References: <CA+Df+jdFEGGZyceFH_5LRSQjwGa1WCtd79DK1Lywvdw+pkX6fw@mail.gmail.com>
+ <4aa0d528-c911-4537-aa38-6c5b4f9eec75@linux.intel.com>
+In-Reply-To: <4aa0d528-c911-4537-aa38-6c5b4f9eec75@linux.intel.com>
+From: Dylan Robinson <dylan_robinson@motu.com>
+Date: Thu, 7 May 2026 12:58:38 -0400
+X-Gm-Features: AVHnY4LTpCaUocvOnr8HdC0_P4kURLq2uXkv4Lsm91iDO0ID3yaWysx4SuvmqvM
+Message-ID: <CA+Df+jcY4guz0T3oVmy7rG3=+ZWwt+nOBnK2CfHgKBoS50YefQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb: xhci: fix isoc silent reschedule creating stream
+ gap on CFC controllers
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mathias.nyman@intel.com, 
+	Michal Pecio <michal.pecio@gmail.com>, nick83ola <nick83ola@gmail.com>, 
+	niklas.neronin@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: C4FD34EC930
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[motu.com,none];
+	R_DKIM_ALLOW(-0.20)[motu.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,intel.com,gmail.com,linux.intel.com];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37095-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-37096-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DKIM_TRACE(0.00)[motu.com:+];
 	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,renesas];
 	MIME_TRACE(0.00)[0:+];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dylan_robinson@motu.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[]
 X-Rspamd-Action: no action
 
-On Thu, May 07, 2026 at 04:47:10PM +0100, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> 
-> On R-Car Gen3 and RZ/G2HMNE SoCs, when CONFIG_USB_XHCI_RCAR is built-in
-> and the system boots with an NFS root filesystem, the xHCI controller
-> probes before firmware becomes available. As a result, the firmware
-> request fails:
-> 
->   xhci-renesas-hcd ee000000.usb: Direct firmware load for
->   r8a779x_usb3_v3.dlmem failed with error -2
-> 
-> Default CONFIG_USB_XHCI_RCAR to module on ARCH_RENESAS so that probing
-> is deferred until after the root filesystem is mounted, ensuring that
-> the firmware is accessible.
-> 
-> Configurations explicitly selecting CONFIG_USB_XHCI_RCAR=y are
-> unaffected.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  drivers/usb/host/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-> index 0a277a07cf70..b70e019cc3ac 100644
-> --- a/drivers/usb/host/Kconfig
-> +++ b/drivers/usb/host/Kconfig
-> @@ -90,7 +90,7 @@ config USB_XHCI_RCAR
->  	tristate "xHCI support for Renesas R-Car SoCs"
->  	depends on USB_XHCI_PLATFORM
->  	depends on ARCH_RENESAS || COMPILE_TEST
-> -	default ARCH_RENESAS
-> +	default m if ARCH_RENESAS
+On Thu, May 7, 2026 at 8:12=E2=80=AFAM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
+> ep->next_frame_id should be used for frame ID calculation after
+> the first URB is enqueued and endpoint running.
 
-The module type here depends on your root filesystem.  If you are using
-nfs for your root, then you always know you need to properly build stuff
-into the kernel for modules that need firmware, this shouldn't be a
-default thing as NFS surely isn't a default system type anymore.
+Agreed.
 
-thanks,
+> Hmm, looks like we are doing way too much checking here.
+> All the above are done with spin_lock_irqsave() held, meaning there
+> shouldn't be any delay by preemptions or interrupts.
+>
+> re-reading the MFINDEX (microframe index) register for every TD in this
+> URB looks like a waste of time.
 
-greg k-h
+Ah, I missed the spinlock, but I agree that the current implementation
+involves unnecessary checks.
+
+>    (I'm confident that the non-preemtable loop queuing TRBs
+>     does a cycle faster than shortest isoc interval (125us)
+
+That's good. I think a related issue to watch out for is preemption
+occurring between URB submissions.
+
+For example, snd-usb-audio submits multiple 1ms URBs at startup. If
+preemption occurs between these URB submissions the first URB might
+complete before the next one gets enqueued.
+
+While working on an experimental audio driver to avoid this issue, I
+found that many test systems required the first submitted URB to
+contain more than 10 ms of transfers in order to reliably submit a
+second URB before the stream underruns.
+
+> Can I ask you to test some additional patches if I write them?
+> I don't have a good setup with frame sensitive usb devices to test this
+
+I would be happy to test some patches!
+
+Dylan
 
