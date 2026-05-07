@@ -1,75 +1,75 @@
-Return-Path: <linux-usb+bounces-37069-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37071-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AAjHK4RQ/GlOOAAAu9opvQ
-	(envelope-from <linux-usb+bounces-37069-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 10:42:44 +0200
+	id OP8HIFxT/GlnOQAAu9opvQ
+	(envelope-from <linux-usb+bounces-37071-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 10:54:52 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86C4F4E500B
-	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 10:42:43 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDAEF4E540A
+	for <lists+linux-usb@lfdr.de>; Thu, 07 May 2026 10:54:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D1BD23009825
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 08:42:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 611F4306BFDE
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2026 08:42:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3593391E74;
-	Thu,  7 May 2026 08:41:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ED3B391842;
+	Thu,  7 May 2026 08:42:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D9NN+4Cq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fs48+bpZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F163630B2
-	for <linux-usb@vger.kernel.org>; Thu,  7 May 2026 08:41:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3404A36C9C1
+	for <linux-usb@vger.kernel.org>; Thu,  7 May 2026 08:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778143311; cv=none; b=Czc0RabFhAZWMhdx/dMl276MeJsLZbada3sKJs88nIn1jGDu9x4smlsKLw5BsZYMac9cCwNUddP5GAKZJ0U2SUM9ay33qKJrST4rRLuh4U/DyyHroeiQAa+7CE31RVvjVFc9fnXzM8+HQJeyCeAuke+gfk7nplpGClADP9pUvY4=
+	t=1778143323; cv=none; b=XjCgIlOI7yG3OA+QdarU4mDd4Q86bEgPO+MAIDVCK/3SU2rtdJo+9YRzwH2VCetjZdtpGG3X/93xc8M1ELArfsuMMRBL9dh28ky0MFjEdIWkvF+G3bj302QwRZ6Mk982PTL8+44/ruHOCJ8y675x/VC7zvULX93knPiy4/ur9/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778143311; c=relaxed/simple;
-	bh=HSi6csZyswRbcCvdldEOiMhpBFS3Ljso9iZCilWAYmE=;
+	s=arc-20240116; t=1778143323; c=relaxed/simple;
+	bh=2P4GsqselYtp4tm1r9yt5qqL/ceHBr2D1cq3v13zd1k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dsjQ6uL0c1J1BWd0WinnnhvnYqUxzfdI4WQjNcQtR+p/ZOEfZqWIsFaggbjRCKAe/djLB6YQTD2aE3t400I1HdzzHNxiPSA+hITKGAk9RPPHijNo5z0R6dYAHXOFljoaF1W+nEN992+y8WJFkvJ8UKuYQkMWrsB4SCbaLE4nlq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D9NN+4Cq; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version; b=jHDz2q8qGLhQlnb3dMx5rgt1IaYPayfatoea3XXWdjyfowFd/r3bbTU804rD6wScKPJBzr263BwBvcR1KMmmw4MC2tXTxRDKW56UtzGf+EXAx01cBdkrSAm1j7MVCk5WHR8ahaEx7Ag/vhVqjtzU5yjbXpNRfCih5tzTRidAwOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fs48+bpZ; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778143305; x=1809679305;
+  t=1778143316; x=1809679316;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=HSi6csZyswRbcCvdldEOiMhpBFS3Ljso9iZCilWAYmE=;
-  b=D9NN+4CqyNXHbVNGxNl58KB0Odjp0GHjoXbaOFqHK1tdxei382TACLno
-   qmAxL6I0p9X70t2DyUtYcNz4PFUHMXU/T94MH6n9K4ubLcnqwuNylOULj
-   3kRiY2OiFCfyggCT56zXnSqbIyBQ9A9KFMb9UXi9gNJzr+OJTczXli5Jd
-   XR1itofJk7A8o+GHJwE8rf1U6ASWMYuPnCc6I+4OyCWNNxBpdcLv2Eg62
-   SOEBAW30fEVJcgalD7qeN+f+PxwrRE7VyPI02JqNGvLcB2Sn3RymOURg3
-   KSfdUjSquRA/ySNVFAtLnH8Qfyv0O8eoC3xxpD4GtPNZuWHPHk3hshHdm
-   Q==;
-X-CSE-ConnectionGUID: gT1aw/0cQwag5uj9A0WJbA==
-X-CSE-MsgGUID: NsHKmZdCRDi5TnRJ63BzKw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11778"; a="79197114"
+  bh=2P4GsqselYtp4tm1r9yt5qqL/ceHBr2D1cq3v13zd1k=;
+  b=fs48+bpZA+yS+YysPTJsLYY5zwcGHsHpiplDQOHl2prrfwdeeO3GcW5s
+   ujf7YpVUYly490gQ/1wNodiIYA0eDfi9B48ee7CnkGbBPvFpU1mT7su5J
+   nQSRQN3VKuhJq7De4GUDiuOb62asWWX/JxbLc41SH7geHHtAgIcNNwh4x
+   RaUgb/RrEXP3nRUjFSJBR16g9ujYMQ5zehRS8M2mtoxXlwojeppsacE2S
+   styr5Av1ir3Wt9lctFSAzNGmB9HR1665UnoLJ6vKgqpQamJbmNTgYHwc5
+   PS6GQ4NbmVx6ju8UwD8+TUM77L9bRpOD8Fxf7P9N19HPe3ZteJ1dIV87R
+   A==;
+X-CSE-ConnectionGUID: t/8on/rdSpq4OrBLHEilVw==
+X-CSE-MsgGUID: ReBT+AQ4TgC+SdT9eARtLw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11778"; a="79104738"
 X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
-   d="scan'208";a="79197114"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2026 01:41:40 -0700
-X-CSE-ConnectionGUID: yQCptER+Ry2rDQrkmcmtsg==
-X-CSE-MsgGUID: R2vXPo7iRsaEjZQhxvUWBQ==
+   d="scan'208";a="79104738"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2026 01:41:53 -0700
+X-CSE-ConnectionGUID: sCdrLqdfTwmzCzRmygcEuw==
+X-CSE-MsgGUID: L+v4C2fTRD2qnZTct4JtAw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
-   d="scan'208";a="266778973"
+   d="scan'208";a="233313598"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa002.jf.intel.com with ESMTP; 07 May 2026 01:41:38 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 07 May 2026 01:41:51 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1058)
-	id DC0E195; Thu, 07 May 2026 10:41:37 +0200 (CEST)
+	id 0886395; Thu, 07 May 2026 10:41:51 +0200 (CEST)
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 To: mathias.nyman@linux.intel.com
 Cc: linux-usb@vger.kernel.org,
 	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [PATCH 1/3] usb: xhci: refactor DCBAA struct
-Date: Thu,  7 May 2026 10:39:43 +0200
-Message-ID: <20260507083945.959370-2-niklas.neronin@linux.intel.com>
+Subject: [PATCH 2/3] usb: xhci: allocate DCBAA based on host controller max slots
+Date: Thu,  7 May 2026 10:39:44 +0200
+Message-ID: <20260507083945.959370-3-niklas.neronin@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260507083945.959370-1-niklas.neronin@linux.intel.com>
 References: <20260507083945.959370-1-niklas.neronin@linux.intel.com>
@@ -80,7 +80,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 86C4F4E500B
+X-Rspamd-Queue-Id: DDAEF4E540A
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
@@ -88,20 +88,20 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-37069-lists,linux-usb=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37071-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
+	RCPT_COUNT_THREE(0.00)[3];
 	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
@@ -109,197 +109,97 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FROM_HAS_DN(0.00)[]
 X-Rspamd-Action: no action
 
-Embed the 'xhci_device_context_array' structure directly within 'xhci_hcd'
-instead of allocating it as a separate block. Only the array of device
-context addresses is now allocated separately.
+Allocate the Device Context Base Address Array (DCBAA) according to the
+maximum number of device slots supported by the host controller, instead
+of always allocating the absolute maximum of 255 entries.
 
-Since the device context addresses are no longer part of an array
-structure, rename 'dev_context_ptrs' to 'ctx_array' for clearer access
-semantics.
+The xHCI specification defines the DCBAA size as (MaxSlotsEnabled + 1)
+entries. In the xhci driver there is currently no distinction between
+MaxSlots and MaxSlotsEnabled, as all available slots are enabled during
+initialization. As a result, 'max_slots' effectively represents both
+values.
 
-Also remove the redundant comment next to the 'ctx_array' allocation;
-using dma_alloc_coherent() for 64-bit * N allocations guarantees both
-physically contiguous and properly aligned for 64-byte boundaries.
-The xHCI section (5.4.6) refers to DCBAAP instead of DCBAA (6.1).
-
-This change does not modify the number of host controller slots but
-simplifies memory management and prepares the driver for a variable number
-of HC slots in the future.
+This change allows the xHCI driver to respect custom slot limits, reduces
+unnecessary memory usage, and removes the obsolete "TODO" comment.
 
 Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 ---
- drivers/usb/host/xhci-mem.c  | 40 ++++++++++++++++++------------------
- drivers/usb/host/xhci-ring.c |  2 +-
- drivers/usb/host/xhci.c      |  6 +++---
- drivers/usb/host/xhci.h      | 13 +++++++-----
- 4 files changed, 32 insertions(+), 29 deletions(-)
+ drivers/usb/host/xhci-mem.c  | 6 +++---
+ drivers/usb/host/xhci-ring.c | 4 ++--
+ drivers/usb/host/xhci.h      | 7 ++-----
+ 3 files changed, 7 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 997fe90f54e5..93c6053dc71b 100644
+index 93c6053dc71b..ac915dacd886 100644
 --- a/drivers/usb/host/xhci-mem.c
 +++ b/drivers/usb/host/xhci-mem.c
-@@ -883,8 +883,8 @@ void xhci_free_virt_device(struct xhci_hcd *xhci, struct xhci_virt_device *dev,
+@@ -1981,7 +1981,7 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
  
- 	/* If device ctx array still points to _this_ device, clear it */
- 	if (dev->out_ctx &&
--	    xhci->dcbaa->dev_context_ptrs[slot_id] == cpu_to_le64(dev->out_ctx->dma))
--		xhci->dcbaa->dev_context_ptrs[slot_id] = 0;
-+	    xhci->dcbaa.ctx_array[slot_id] == cpu_to_le64(dev->out_ctx->dma))
-+		xhci->dcbaa.ctx_array[slot_id] = 0;
- 
- 	trace_xhci_free_virt_device(dev);
- 
-@@ -1022,11 +1022,11 @@ int xhci_alloc_virt_device(struct xhci_hcd *xhci, int slot_id,
- 	dev->udev = udev;
- 
- 	/* Point to output device context in dcbaa. */
--	xhci->dcbaa->dev_context_ptrs[slot_id] = cpu_to_le64(dev->out_ctx->dma);
-+	xhci->dcbaa.ctx_array[slot_id] = cpu_to_le64(dev->out_ctx->dma);
- 	xhci_dbg(xhci, "Set slot id %d dcbaa entry %p to 0x%llx\n",
- 		 slot_id,
--		 &xhci->dcbaa->dev_context_ptrs[slot_id],
--		 le64_to_cpu(xhci->dcbaa->dev_context_ptrs[slot_id]));
-+		 &xhci->dcbaa.ctx_array[slot_id],
-+		 le64_to_cpu(xhci->dcbaa.ctx_array[slot_id]));
- 
- 	trace_xhci_alloc_virt_device(dev);
- 
-@@ -1677,7 +1677,7 @@ static int scratchpad_alloc(struct xhci_hcd *xhci, gfp_t flags)
- 	if (!xhci->scratchpad->sp_buffers)
- 		goto fail_sp3;
- 
--	xhci->dcbaa->dev_context_ptrs[0] = cpu_to_le64(xhci->scratchpad->sp_dma);
-+	xhci->dcbaa.ctx_array[0] = cpu_to_le64(xhci->scratchpad->sp_dma);
- 	for (i = 0; i < num_sp; i++) {
- 		dma_addr_t dma;
- 		void *buf = dma_alloc_coherent(dev, xhci->page_size, &dma,
-@@ -1933,6 +1933,7 @@ void xhci_rh_bw_cleanup(struct xhci_hcd *xhci)
- void xhci_mem_cleanup(struct xhci_hcd *xhci)
- {
- 	struct device	*dev = xhci_to_hcd(xhci)->self.sysdev;
-+	struct xhci_device_context_array *dcbaa;
- 	int i;
- 
- 	cancel_delayed_work_sync(&xhci->cmd_timer);
-@@ -1978,10 +1979,12 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 			"Freed medium stream array pool");
- 
--	if (xhci->dcbaa)
--		dma_free_coherent(dev, sizeof(*xhci->dcbaa),
--				xhci->dcbaa, xhci->dcbaa->dma);
--	xhci->dcbaa = NULL;
-+	dcbaa = &xhci->dcbaa;
-+	if (dcbaa->ctx_array) {
-+		dma_free_coherent(dev, array_size(sizeof(*dcbaa->ctx_array), MAX_HC_SLOTS),
-+				  dcbaa->ctx_array, dcbaa->dma);
-+		dcbaa->ctx_array = NULL;
-+	}
- 
- 	scratchpad_free(xhci);
- 
-@@ -2409,23 +2412,20 @@ EXPORT_SYMBOL_GPL(xhci_create_secondary_interrupter);
- 
- int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- {
--	struct device	*dev = xhci_to_hcd(xhci)->self.sysdev;
--	dma_addr_t	dma;
-+	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
-+	struct xhci_device_context_array *dcbaa = &xhci->dcbaa;
+ 	dcbaa = &xhci->dcbaa;
+ 	if (dcbaa->ctx_array) {
+-		dma_free_coherent(dev, array_size(sizeof(*dcbaa->ctx_array), MAX_HC_SLOTS),
++		dma_free_coherent(dev, array_size(sizeof(*dcbaa->ctx_array), xhci->max_slots + 1),
+ 				  dcbaa->ctx_array, dcbaa->dma);
+ 		dcbaa->ctx_array = NULL;
+ 	}
+@@ -2417,8 +2417,8 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
  
  	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Starting %s", __func__);
  
--	/*
--	 * xHCI section 5.4.6 - Device Context array must be
--	 * "physically contiguous and 64-byte (cache line) aligned".
--	 */
--	xhci->dcbaa = dma_alloc_coherent(dev, sizeof(*xhci->dcbaa), &dma, flags);
--	if (!xhci->dcbaa)
-+	dcbaa->ctx_array =
-+		dma_alloc_coherent(dev, array_size(sizeof(*dcbaa->ctx_array), MAX_HC_SLOTS),
-+				   &dcbaa->dma, flags);
-+	if (!dcbaa->ctx_array)
+-	dcbaa->ctx_array =
+-		dma_alloc_coherent(dev, array_size(sizeof(*dcbaa->ctx_array), MAX_HC_SLOTS),
++	xhci->dcbaa.ctx_array =
++		dma_alloc_coherent(dev, array_size(sizeof(*dcbaa->ctx_array), xhci->max_slots + 1),
+ 				   &dcbaa->dma, flags);
+ 	if (!dcbaa->ctx_array)
  		goto fail;
- 
--	xhci->dcbaa->dma = dma;
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 		       "Device context base array address = %pad (DMA), %p (virt)",
--		       &xhci->dcbaa->dma, xhci->dcbaa);
-+		       &dcbaa->dma, dcbaa->ctx_array);
- 
- 	/*
- 	 * Initialize the ring segment pool.  The ring must be a contiguous
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index e47e644b296e..22f663daf625 100644
+index 22f663daf625..67231741f474 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -1613,7 +1613,7 @@ static void xhci_handle_cmd_disable_slot(struct xhci_hcd *xhci, int slot_id,
- 		/* Delete default control endpoint resources */
- 		xhci_free_device_endpoint_resources(xhci, virt_dev, true);
- 	if (cmd_comp_code == COMP_SUCCESS) {
--		xhci->dcbaa->dev_context_ptrs[slot_id] = 0;
-+		xhci->dcbaa.ctx_array[slot_id] = 0;
- 		xhci->devs[slot_id] = NULL;
+@@ -609,7 +609,7 @@ static struct xhci_virt_ep *xhci_get_virt_ep(struct xhci_hcd *xhci,
+ 					     unsigned int slot_id,
+ 					     unsigned int ep_index)
+ {
+-	if (slot_id == 0 || slot_id >= MAX_HC_SLOTS) {
++	if (slot_id == 0 || slot_id > xhci->max_slots) {
+ 		xhci_warn(xhci, "Invalid slot_id %u\n", slot_id);
+ 		return NULL;
  	}
- }
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index a54f5b57f205..9a471bd72265 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -558,7 +558,7 @@ static void xhci_init(struct usb_hcd *hcd)
- 	xhci_set_cmd_ring_deq(xhci);
+@@ -1804,7 +1804,7 @@ static void handle_cmd_completion(struct xhci_hcd *xhci,
+ 	struct xhci_command *cmd;
+ 	u32 cmd_type;
  
- 	/* Set Device Context Base Address Array pointer */
--	xhci_write_64(xhci, xhci->dcbaa->dma, &xhci->op_regs->dcbaa_ptr);
-+	xhci_write_64(xhci, xhci->dcbaa.dma, &xhci->op_regs->dcbaa_ptr);
- 
- 	/* Set Doorbell array pointer */
- 	xhci_set_doorbell_ptr(xhci);
-@@ -4460,9 +4460,9 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_address,
- 		"Slot ID %d dcbaa entry @%p = %#016llx",
- 		udev->slot_id,
--		&xhci->dcbaa->dev_context_ptrs[udev->slot_id],
-+		&xhci->dcbaa.ctx_array[udev->slot_id],
- 		(unsigned long long)
--		le64_to_cpu(xhci->dcbaa->dev_context_ptrs[udev->slot_id]));
-+		le64_to_cpu(xhci->dcbaa.ctx_array[udev->slot_id]));
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_address,
- 			"Output Context DMA address = %#08llx",
- 			(unsigned long long)virt_dev->out_ctx->dma);
+-	if (slot_id >= MAX_HC_SLOTS) {
++	if (slot_id > xhci->max_slots) {
+ 		xhci_warn(xhci, "Invalid slot_id %u\n", slot_id);
+ 		return;
+ 	}
 diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index aeecd301f207..58d20b8459ec 100644
+index 58d20b8459ec..b467b875eeba 100644
 --- a/drivers/usb/host/xhci.h
 +++ b/drivers/usb/host/xhci.h
-@@ -792,12 +792,15 @@ struct xhci_tt_bw_info {
+@@ -792,7 +792,8 @@ struct xhci_tt_bw_info {
  
  /**
   * struct xhci_device_context_array
-- * @dev_context_ptr	array of 64-bit DMA addresses for device contexts
-+ * @ctx_array:	Pointer to an array of addresses
-+ * @dma:	DMA address to @ctx_array
-+ *
-+ * Device Context Base Address Array (DCBAA) - Section 6.1.
-+ * ctx_array[0]:		Scratchpad Buffer Array Base Address
-+ * ctx_array[1-MaxSlots]:	Device Context Base Address
-  */
- struct xhci_device_context_array {
--	/* 64-bit device addresses; we only write 32-bit addresses */
--	__le64			dev_context_ptrs[MAX_HC_SLOTS];
--	/* private xHCD pointers */
-+	__le64		*ctx_array;
+- * @ctx_array:	Pointer to an array of addresses
++ * @ctx_array:	Pointer to an array of addresses. The array size depends on Max
++ *		Slots read from HCSPARAMS1.
+  * @dma:	DMA address to @ctx_array
+  *
+  * Device Context Base Address Array (DCBAA) - Section 6.1.
+@@ -803,10 +804,6 @@ struct xhci_device_context_array {
+ 	__le64		*ctx_array;
  	dma_addr_t	dma;
  };
- /*
-@@ -1532,7 +1535,7 @@ struct xhci_hcd {
- 	/* optional reset controller */
- 	struct reset_control *reset;
- 	/* data structures */
--	struct xhci_device_context_array *dcbaa;
-+	struct xhci_device_context_array	dcbaa;
- 	struct xhci_interrupter **interrupters;
- 	struct xhci_ring	*cmd_ring;
- 	unsigned int            cmd_ring_state;
+-/*
+- * TODO: change this to be dynamically sized at HC mem init time since the HC
+- * might not be able to handle the maximum number of devices possible.
+- */
+ 
+ 
+ struct xhci_transfer_event {
 -- 
 2.50.1
 
