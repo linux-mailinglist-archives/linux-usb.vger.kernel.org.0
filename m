@@ -1,535 +1,229 @@
-Return-Path: <linux-usb+bounces-37122-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37123-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id APq2NSey/WmlhgAAu9opvQ
-	(envelope-from <linux-usb+bounces-37122-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 11:51:35 +0200
+	id 8HBEKJrC/WkpigAAu9opvQ
+	(envelope-from <linux-usb+bounces-37123-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 13:01:46 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 815704F47B2
-	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 11:51:35 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FF154F56E7
+	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 13:01:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E9D54301AB80
-	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2026 09:51:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 071533041788
+	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2026 10:55:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E9D3CD8DF;
-	Fri,  8 May 2026 09:51:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E90233382E1;
+	Fri,  8 May 2026 10:55:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ui1qPHeN"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="c57m5I1o"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013011.outbound.protection.outlook.com [40.107.162.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A123C554B;
-	Fri,  8 May 2026 09:51:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778233879; cv=none; b=PgpMSEaonbmpAjI1FYox1q8z9QehJ8AkXF+HgJkNm3DJch8HhQYWL3zQT7ke6l02tYJcn6SK20WSEqlNmvpa+8vd9gBqlRRiz7jCkAQL6Y7auy3wbOY41qdLpOu9MXIHdpV7EMGwnu2vhtd7VbLlfIEj0eOCHmqYV+81WVuffGA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778233879; c=relaxed/simple;
-	bh=1mXFFKF1dPf7BWJnw0/0ZdqTCwv+sOJ/6jrp+H/xCgk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=u7w5IDFW5rfa10SydGVkpnxxUHq+ujabGUyMj7KdyCRYyUQxg4qgEJAQi9o6r8qFbYBBi82REvm3m5PIvnyaXQiVOOJSYnlFM+Ai/zGd0olgYD1jKOdph43ZLfYpdBm8UHD9+gdeuMDgVRWVbZ0YlaI4ByJPD1s/NnFSBTm4ubE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ui1qPHeN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2FAABC32786;
-	Fri,  8 May 2026 09:51:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778233878;
-	bh=1mXFFKF1dPf7BWJnw0/0ZdqTCwv+sOJ/6jrp+H/xCgk=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=Ui1qPHeN/SfZ1xTtfY+wjgQNbb0a9t+QMVLjmWBeRze06ubv3G/V6y6BJpbdcvTGK
-	 1SSX1Obz821A89qTksACU9hhXCWThfBWnxdY2t1PoQEQWS6iEo/S3xr0VQUd41Ubi/
-	 /M1RXypkEtQ8YW/ZIW995EhDKe8SObje+vO90EBbwI0IwRcPX2fp61ljZch3lBJhO1
-	 xNIc3zdKtgGa+1nDptX8L2hZBK8814Unza4XrggSDcu/bGSaoQN1MtZNmSnK2NkjPT
-	 wrX6Y8PxB0adLsu1a+gfngH7G+qq26Gdipqz9Ajy53VUDqa06sJQlqtEKtINOVZgcG
-	 i6Xt7RqzOAexA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC8ABCD3447;
-	Fri,  8 May 2026 09:51:17 +0000 (UTC)
-From: Pawel Laszczak via B4 Relay <devnull+pawell.cadence.com@kernel.org>
-Date: Fri, 08 May 2026 12:06:39 +0200
-Subject: [PATCH v3] usb: cdnsp: Add support for device-only configuration
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5BBF32AAA0;
+	Fri,  8 May 2026 10:55:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778237737; cv=fail; b=B+8KhZO/lvqOFPWJoWIRqdvr+Xnfdqpj3FEXTebQIE0eo9A5qmMXN6XzcXtx0KdPPK0yudIZylce2Q70duEq1CtOyBJsAB/zgLcNHau7Ie7S0UHY2e2MV1nEPn+dScBxMBKH53MmEVZLmNju2UtP9vCWA+A7nrlmnoGLujkiukI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778237737; c=relaxed/simple;
+	bh=danX3tVIJJeXo8N9myBmA1Azel+LDkd2lwodrc1uhRw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=qpRyRtgrszgA6BtKnYTdXPotcAEfX3UJbIS39kAqOEkt+a4mZV9+dO6IpqFGgML5hJTU6FEQ74V1wlBEJSvjUuQId7vB8aN7aLV8nLZzFhrJtQuWD0qhpOqpkxQKAxcB/52D9WLwMoZREZNfIXqi9aqF9gMGfmJYXFV5de6uCE4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=c57m5I1o; arc=fail smtp.client-ip=40.107.162.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LmjbK+UjI8otx4r2v9jglwo9Sp7Xax4WXKm4x9qM2N9qyHytYLcb7PZ/dK2+7Tuz3D6CAn7LcjZ40Yfrga8sSy8lOFCRBxO+Hh7PBeA4KkaJw2n6ICxE/jWTZ3cr3uzzR4EKzkO35ttcDeMAIRv0Rf7AZkLRRXcvyStBOmcAWnpx6brm0ftVNsm1nUVXViyCMGoJPWXAPzIY5qwQwW0OmLtndQamtj++83HVqH91Yv3aY/TjFlu7NOqiGUQSxY2sq3+nsg+UBuU68pEEP1QfUPVE1mvxjB3H8dl11mf/isHiiDkw/CGLd9LouglE3mwrK4hYWOn3XfvGMU8bn/y+qQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SjWJnreqtFTxNsZq0wk4jLyvdTxmmVD0C4te3RVc+zs=;
+ b=BOx88kM0V1Qe35TK7llw0Pv2w7gC8uwaba8HKfAsF0hqvs7H3l8NBVaxZWc52E07s+tn/SRfbG8obbe9KpYRVzbvebJcIEJKeDEPd6yvk3XZd/sQ1CqSZmyqRSTGg26vMqnSYLuWpfOl6RX4aTCaqB8CUC9mm0NC1kAfDpl/jmhsHoa0UH4AQKtFTYDsvY2U6E3PAMdTBodgqq6mqwdbVqQ7Fj/50bdxVQsPX+/dqgxuoGjvvVyYrTLGk6lSdw8l5aZzBvJvqoAJfv/xlGHmf7kcLLtW91VzqFeXGLLketO21Z/CBYDlmA6dD9lwWIjPYq7qFa2WTrqxlwvMUCx7mQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SjWJnreqtFTxNsZq0wk4jLyvdTxmmVD0C4te3RVc+zs=;
+ b=c57m5I1ojZnqgkklb19HfxIea9d6tj5entUML+dKkpWLN/xGQic9HiF+LpAa0K8jrpX8njgOHo+0d7YKuk1MS0LjDq+DNoTptgjgVsSVb3ck8uBChscxS3FXIrRSKBJKBealTWPJ1P8lhsJIg6EFfDyX9tdrfAvkkUzHWaFPMhJpya97R/ReGjL+wAUP8Cp3Vq2ymjtwi9m69CS13wYCtaDSDqQqzLn825obB2tSm5CVezzehkCULxN6KXTnppSLZ4vCoSM1zxyy9ZUYJj1/6YIjuMBkJiUZ9g8TDXoEAMBo8ED/oO4F+MB3CnFxOTH4ssUiY7Oux2z4TLexkVCZ8Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by GV2PR04MB11349.eurprd04.prod.outlook.com (2603:10a6:150:29f::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.19; Fri, 8 May
+ 2026 10:55:32 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::c67b:71cd:6338:9dce]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::c67b:71cd:6338:9dce%5]) with mapi id 15.20.9891.008; Fri, 8 May 2026
+ 10:55:32 +0000
+Date: Fri, 8 May 2026 18:54:40 +0800
+From: Xu Yang <xu.yang_2@nxp.com>
+To: Franz Schnyder <fra.schnyder@gmail.com>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
+	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
+	festevam@gmail.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, jun.li@nxp.com, 
+	Francesco Dolcini <francesco@dolcini.it>
+Subject: Re: [PATCH v3 3/3] usb: dwc3: imx8mp: disable auto suspend for host
+ role
+Message-ID: <jjwlrgusucoacaye75uqfuh76a4jhdv3ivzjuemgusw3trwseb@mymuy62cptxp>
+References: <20260108081433.2119328-1-xu.yang_2@nxp.com>
+ <20260108081433.2119328-3-xu.yang_2@nxp.com>
+ <k2sxmwhrv3tivustfnpz54ehuufkcrcruu2uuukuyugqtqljzl@5roxndm5fn5u>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <k2sxmwhrv3tivustfnpz54ehuufkcrcruu2uuukuyugqtqljzl@5roxndm5fn5u>
+X-ClientProxiedBy: FR4P281CA0009.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:c8::11) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260508-no_drd_config-v3-1-0614f5044721@cadence.com>
-X-B4-Tracking: v=1; b=H4sIAK61/WkC/yXMTQ5AMBBA4avIrDUp4ieuIiLVmTIWrbSIRNxds
- fwW710QyDMFaJMLPB0c2NmIIk1Az8pOJBijIZd5JUvZCOsG9DhoZw1PglRdYYamqVUBsVk9GT6
- /X9f/Dvu4kN7eCdz3A3TPUF9xAAAA
-X-Change-ID: 20260508-no_drd_config-ea76d1df87a3
-To: Peter Chen <peter.chen@kernel.org>, Roger Quadros <rogerq@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Bjorn Helgaas <bhelgaas@google.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pci@vger.kernel.org, Pawel Laszczak <pawell@cadence.com>
-X-Mailer: b4 0.15.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778234813; l=13735;
- i=pawell@cadence.com; h=from:subject:message-id;
- bh=eob8YUk5Cc1H/Q9UO05mmC3MRyfXop55OMzN4ymHMIE=;
- b=zcPIuwSdnmA3hiW1fy9l6iHlXNmz5OM+5anpH6hlFxJNaPaXxvP5nojtAsavpMVCoyRyibwZt
- ToNMGUFrbg4Cfip5MpRdRV7KNZBBCESE/zbEj0dEfb5XTG5Uc87oHyV
-X-Developer-Key: i=pawell@cadence.com; a=ed25519;
- pk=EUPBvLO9CDg7j6defeDl2iqi+z5Ivqu4Z46aiqe7dYc=
-X-Endpoint-Received: by B4 Relay for pawell@cadence.com/default with
- auth_id=707
-X-Original-From: Pawel Laszczak <pawell@cadence.com>
-Reply-To: pawell@cadence.com
-X-Rspamd-Queue-Id: 815704F47B2
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|GV2PR04MB11349:EE_
+X-MS-Office365-Filtering-Correlation-Id: b9adceb6-83d8-4ed3-f3b2-08deacf05315
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|52116014|19092799006|376014|366016|38350700014|22082099003|3023799003|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	wuCNAmGJ4v7QMzulnF+e7iTF8omkXg2X1P/4zfqIZHFNXuANDsh9OnlSP6kjFu+7UItu3p9UCMNHFn1/9vOS9WNRtIeZK+bff3ZvWY46S9Q3dYpNYvMoQGfjgeEkrtdHaVHmRKJRuINQxTh9eggTj31KUNhEnkcsGXELn2xKOPv5VvNbaUb4WpjKd4M/7AavDs6z26QLuxyTUIiZHDsrF5qRJtWchzOguuWEm6Get1sfa7uQe8y+yT/ikHC+0eLIMPht7vCHzyNgXmHcg0n3/ZmoOpWSHhM08kp/wwfSboRyJ7kei9dNPaaAONzvlX2XxyQOODJ1fXHcfxTBjLRUtczeGt2yj2j4d28TpX7av5Wt8k3Jnu0SAsC2l8WTIpxuJtwWNw9Ye1yMhr4pPaPpII9c2EcMzV2iFi1ZaKswSNw6UcALeiuNh1YHmR0TPy87sJOJvAGFumor6FdTCAY5l8d51jTJKPSmzuFu4g/DtkJbsgWKZ/wE4tPKb7L7qm+j4CFG09p+ogwGAZEEiZA7qtVUFDU9NGHLjEqHGffLynS45DiDjW9+SrMcfHUsBPdXM2veFzmDdbbBVzoch2WjeOssQaPgvrwcHiF6tbnfq8eToojy8OP7r3zkuElOrh6pmQiJL44dtRFqrtL/OSYDf6ubqN5sF7C1BI7Ny0N/XzGnba7HoiZZ+nhB2MYZyec8UgpUYL49D4Dp4O6oeBDJTW1SX/2anJnwfEh8rfz8DIrTCBB1TkmazDVAmskgVhBz
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(52116014)(19092799006)(376014)(366016)(38350700014)(22082099003)(3023799003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?H6zkeSItdZI3yQyv3guCywfAkS6oMGer/5PNUIHSe3i/QXdo9hstZ2hMamEz?=
+ =?us-ascii?Q?k8GOUlI4hoeET3nqcWq8BrhktM1qeKBoCS5wtjyVi6xliVwwfttpO70l/hNE?=
+ =?us-ascii?Q?OfIhNiHujPJd2TwuUJR33gkJQLyOiHvitSsvTY0Vh8Z+29M4D4cvkmqZmcf9?=
+ =?us-ascii?Q?kTm6mJFsGIbeiHQqSWJXp7hZvxUtt2DoEyV1SF122OP3IHodzDUlUhvYwvcL?=
+ =?us-ascii?Q?KzCUl3HvDhBItSAXAzUWM0CNprbTM3N/RCzKJ54/hCdIDDK5TUO6j5VXkOn2?=
+ =?us-ascii?Q?d0JfY70RJS9F6eJ5h2HMLWJ5FcMwL8hYFnZLeTA2rMN8tusWjkkOSbHo4D5+?=
+ =?us-ascii?Q?by9SaowCoFS+biGPYbJiORWZ4ZCipSTqSm+zUu8hDBF7UKB9RTCX1VpV3J+F?=
+ =?us-ascii?Q?wt+elKFjNqBl/6xk7n0vKRUioqHH3jr663Q+grcEQ1d7pthWLTS8d6SGqll4?=
+ =?us-ascii?Q?92/UuWMOvADHQ80QhExCl8kmPQO/LsrnWGWdxisbeC0vAhvoc6sWjI59aCkm?=
+ =?us-ascii?Q?S4tmRiZaBybJdCmzyaP3lOLnmFyadMdlbNjjfnfmY3f8Hk6X+mXeyFc4ujTf?=
+ =?us-ascii?Q?Ns2mmUudfiiu6C4pKAUd0Rk4uHG4ILoCl5pUiDSHdVZgdnTVPAD5PIB2Ofc6?=
+ =?us-ascii?Q?/m4x5G0xHhdAQbxzZARKpJzc6sDry5ik7coFFYpt64nuMlMEYDDUeMXn9bis?=
+ =?us-ascii?Q?wgMG/rz4eTMioZKq4TFVO8/Eh8047c89HCduxFdzjsZ5PIJFqWUL4zbeammR?=
+ =?us-ascii?Q?dDAroj6IkC4cohHabxKjcuG+42dywgl4lho6mjYxUbPSVR1qjmBxZE//F4pt?=
+ =?us-ascii?Q?i844a3jnWBMvfWovfW9n8fO2NYF6bI11f3NOLAWSeTEnwfG0gSmvTTMhoaw4?=
+ =?us-ascii?Q?mpA25U0Ay9F/t/cT6IGl5CVB1a/2OJReyK17DnFtPioxdRX5e379fuQVxe0v?=
+ =?us-ascii?Q?d9mAVC2nyQ+KTVpRxo96G/yoiu+Jg3OcLkLGoQtoY1Mk09YDscT0ZONv0nrF?=
+ =?us-ascii?Q?3GrRKphO2+io/UrBaccbgZKUOIVULJvJlybPCGRsAh4MIZTJGowJwIedWcv8?=
+ =?us-ascii?Q?p4sBCwt1AGSQOxez8UBhpKtWF2i9C3bXV6by7R6xOno9hsbC6xAfDOqglPzg?=
+ =?us-ascii?Q?Qykr0rDxVwksjt5HJUBCq49UFQGLZ3qe6XTqplYZRA1BxTIzL/oeJmW+YaAK?=
+ =?us-ascii?Q?UXTkIE8CU9VHfur77+7UGY+lzbq0Z+1rALD/RXsdxuah1WhXwM5EfMPJIXyJ?=
+ =?us-ascii?Q?WHoYhFXQiJCffQNViHg/12xAZglWF2czysoBxrEYzS32x+QS52LzSghnsdFh?=
+ =?us-ascii?Q?OdfctogFwjo3NY+95YQUD2WMULD57pMQ9OwqVMZO0zBfY8sx6GXFCFcQoOl0?=
+ =?us-ascii?Q?n3JUecS80MFqUSMSbyurDKPnibNAmbhLddhg9giDU0GqPxfCVzVWCafbkEPS?=
+ =?us-ascii?Q?hg//dEv+jNDejjo7QqZuohz2iMa++nDFoI8iWdhxLqTjlKcpGVNsntmNenvp?=
+ =?us-ascii?Q?NGytmX3727mY9J+4drdnjykQHdUc/+uXYtERuI8djADZ1lKy78lbB4UeGOhQ?=
+ =?us-ascii?Q?XkzzWeHkpedUSwaaYa2qJRhAl9PvZDEhzIifOfRGJ45iHkGGCDxeIt2DGiSE?=
+ =?us-ascii?Q?kyl5os4v/VgJAyvqXj2Z/NECs4jyg6eoTSvhElgxqeoWefBwMWcIuyUTOpKl?=
+ =?us-ascii?Q?4nL5TfM6991dgqeKVKAVx20twV53EjXoCH5N41R78rH+jt7fdpniI7JEt/7w?=
+ =?us-ascii?Q?gWZoxnH3tA=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b9adceb6-83d8-4ed3-f3b2-08deacf05315
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2026 10:55:32.2184
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uPmlIqDqO2G1IVmD0c5EinaJGzZZMz5XG2vIMfh3yKHtmFJNCFTDo7Ip1v0+xYGHbNLAv8oKWx5MniPTwu9V1g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR04MB11349
+X-Rspamd-Queue-Id: 1FF154F56E7
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+X-Spamd-Result: default: False [1.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37122-lists,linux-usb=lfdr.de,pawell.cadence.com];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37123-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[nxp.com:+];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[xu.yang_2@nxp.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[synopsys.com,linuxfoundation.org,kernel.org,pengutronix.de,gmail.com,vger.kernel.org,lists.linux.dev,lists.infradead.org,nxp.com,dolcini.it];
 	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	HAS_REPLYTO(0.00)[pawell@cadence.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,cadence.com:email,cadence.com:mid,cadence.com:replyto]
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,nxp.com:email,nxp.com:dkim,synopsys.com:email]
 X-Rspamd-Action: no action
 
-From: Pawel Laszczak <pawell@cadence.com>
+Hi Franz,
 
-This patch introduces support for the Cadence USBSSP (cdnsp)
-controller in hardware configurations where the Dual-Role Device (DRD)
-register block is not implemented or is inaccessible.
+On Thu, May 07, 2026 at 12:46:08PM +0200, Franz Schnyder wrote:
+> On Thu, Jan 08, 2026 at 04:14:33PM +0800, Xu Yang wrote:
+> > Do dwc3 core auto suspend enable for device and disable for host
+> > , this can make sure dwc3 core device auto suspend setting is
+> > correct all the time, the background of disable dwc3 core device
+> > auto suspend is to make its parent device suspend immediately
+> > (so wakeup enable can be enabled) after xhci-plat device suspended,
+> > for device mode, we keep the dwc3 core device auto suspend is to
+> > give some wait for gadget to be enumerated.
+> > 
+> > Note: It's a temporary solution until we switch to using the new
+> >       flatten model.
+> > 
+> > Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> 
+> Hi Xu,
+> 
+> We have a kernel issue introduced by this patch on an iMX95, where we 
+> use the dwc3 usb as otg. This appears to be due to a race condition that
+> occurs during probe, when the parent attempts to access the driver data
+> from the dwc3 child. I saw your work on the new flattened model driver 
+> for the iMX SoCs and that it will soon be applied to the iMX95 as well. 
+> Does this mean that the issue shown below should no longer appear, as 
+> there will be no parent/child dependency?
+> 
+> Do you think there are any actions needed on this patch?
 
-In such cases, the driver cannot rely on the DRD logic to manage roles
-and must operate exclusively in a fixed peripheral/host mode.
+Thanks for the report.
 
-The change in BAR indexing (from BAR 2 to BAR 1) is a direct
-consequence of the 32-bit addressing used in this specific
-DRD-disabled hardware layout, compared to the 64-bit addressing
-used in DRD-enabled configurations.
+It's strange that link->status is not DL_STATE_DORMANT or DL_STATE_NONE at
+the time which means the device core may not properly unbind consumer devices
+or handle something. The patch does a simple thing so the issue may not come
+from the patch itself.
 
-Tested on a PCI platform with a hardware configuration that lacks
-DRD support. Platform-side changes are included to support the PCI
-glue layer's property injection to handle this specific layout.
+1639:	list_for_each_entry_safe_reverse(link, ln, &dev->links.consumers, s_node) {
+1640:		WARN_ON(link->status != DL_STATE_DORMANT &&
+1641:			link->status != DL_STATE_NONE);
+1642:		__device_link_del(&link->kref);
+1643:	}
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com> # pci_ids.h
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
----
-v3:
-  - Improved descriptions and comments for better clarity.
-  - Introduced the 'no_drd' property to indicate missing DRD register block.
-  - Added support for fixed host-only and device-only configurations.
-  - Ensured cdns_otg_disable_irq is called only when no_drd is false.
-  - Updated cdns_drd_gadget_on/off to ensure PHY mode is correctly 
-    handled even if DRD is disabled.
+Which kernel and dtb are you using? If it's a downstream repo, how do the USB
+controller and related DTS nodes look like?
 
-v2:
-  - Changed otg_irq to be optionali.
-  - Added cdns->no_drd check in cdns_power_is_lost.
-  - Added cdns->no_drd check in cdns_get_id.
----
- drivers/usb/cdns3/cdns3-plat.c | 26 ++++++++++++++----------
- drivers/usb/cdns3/cdnsp-pci.c  | 46 +++++++++++++++++++++++++++++++++---------
- drivers/usb/cdns3/core.c       |  3 ++-
- drivers/usb/cdns3/core.h       |  4 ++++
- drivers/usb/cdns3/drd.c        | 44 ++++++++++++++++++++++++++++++++++++++--
- include/linux/pci_ids.h        |  1 +
- 6 files changed, 101 insertions(+), 23 deletions(-)
+Does the issue easily happen? Does dwc3_imx8mp_probe() eventually succeed?
 
-diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
-index 3fe3109a3688..86c963a072db 100644
---- a/drivers/usb/cdns3/cdns3-plat.c
-+++ b/drivers/usb/cdns3/cdns3-plat.c
-@@ -81,6 +81,7 @@ static int cdns3_plat_probe(struct platform_device *pdev)
- 	if (cdns->pdata && cdns->pdata->override_apb_timeout)
- 		cdns->override_apb_timeout = cdns->pdata->override_apb_timeout;
- 
-+	cdns->no_drd = device_property_read_bool(dev, "no_drd");
- 	platform_set_drvdata(pdev, cdns);
- 
- 	ret = platform_get_irq_byname(pdev, "host");
-@@ -113,21 +114,24 @@ static int cdns3_plat_probe(struct platform_device *pdev)
- 
- 	cdns->dev_regs	= regs;
- 
--	cdns->otg_irq = platform_get_irq_byname(pdev, "otg");
--	if (cdns->otg_irq < 0)
--		return dev_err_probe(dev, cdns->otg_irq,
--				     "Failed to get otg IRQ\n");
--
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "otg");
--	if (!res) {
--		dev_err(dev, "couldn't get otg resource\n");
--		return -ENXIO;
-+	if (!cdns->no_drd) {
-+		cdns->otg_irq = platform_get_irq_byname(pdev, "otg");
-+		if (cdns->otg_irq < 0)
-+			return dev_err_probe(dev, cdns->otg_irq,
-+					     "Failed to get otg IRQ\n");
-+
-+		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "otg");
-+		if (!res) {
-+			dev_err(dev, "couldn't get otg resource\n");
-+			return -ENXIO;
-+		}
-+		cdns->otg_res = *res;
-+	} else {
-+		dev_dbg(dev, "No DRD support\n");
- 	}
- 
- 	cdns->phyrst_a_enable = device_property_read_bool(dev, "cdns,phyrst-a-enable");
- 
--	cdns->otg_res = *res;
--
- 	cdns->wakeup_irq = platform_get_irq_byname_optional(pdev, "wakeup");
- 	if (cdns->wakeup_irq == -EPROBE_DEFER)
- 		return cdns->wakeup_irq;
-diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
-index 432007cfe695..992700479172 100644
---- a/drivers/usb/cdns3/cdnsp-pci.c
-+++ b/drivers/usb/cdns3/cdnsp-pci.c
-@@ -19,6 +19,7 @@
- 
- struct cdnsp_wrap {
- 	struct platform_device *plat_dev;
-+	struct property_entry prop[3];
- 	struct resource dev_res[6];
- 	int devfn;
- };
-@@ -29,10 +30,15 @@ struct cdnsp_wrap {
- #define RES_HOST_ID		3
- #define RES_DEV_ID		4
- #define RES_DRD_ID		5
--
-+/* DRD PCI configuration - 64-bit addressing */
-+/* First PCI function */
- #define PCI_BAR_HOST		0
--#define PCI_BAR_OTG		0
- #define PCI_BAR_DEV		2
-+/* Second PCI function */
-+#define PCI_BAR_OTG		0
-+/* Device only PCI configuration - 32-bit addressing */
-+/* First PCI function */
-+#define PCI_BAR_ONLY_DEV	1
- 
- #define PCI_DEV_FN_HOST_DEVICE	0
- #define PCI_DEV_FN_OTG		1
-@@ -65,6 +71,7 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
- 	struct cdnsp_wrap *wrap;
- 	struct resource *res;
- 	struct pci_dev *func;
-+	bool no_drd = false;
- 	int ret = 0;
- 
- 	/*
-@@ -75,11 +82,14 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
- 		    pdev->devfn != PCI_DEV_FN_OTG))
- 		return -EINVAL;
- 
-+	if (pdev->device == PCI_DEVICE_ID_CDNS_UDC_USBSSP)
-+		no_drd = true;
-+
- 	func = cdnsp_get_second_fun(pdev);
--	if (!func)
-+	if (!func && !no_drd)
- 		return -EINVAL;
- 
--	if (func->class == PCI_CLASS_SERIAL_USB_XHCI ||
-+	if ((func && func->class == PCI_CLASS_SERIAL_USB_XHCI) ||
- 	    pdev->class == PCI_CLASS_SERIAL_USB_XHCI) {
- 		ret = -EINVAL;
- 		goto put_pci;
-@@ -93,7 +103,7 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
- 
- 	pci_set_master(pdev);
- 
--	if (pci_is_enabled(func)) {
-+	if (func && pci_is_enabled(func)) {
- 		wrap = pci_get_drvdata(func);
- 	} else {
- 		wrap = kzalloc_obj(*wrap);
-@@ -106,10 +116,12 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
- 	res = wrap->dev_res;
- 
- 	if (pdev->devfn == PCI_DEV_FN_HOST_DEVICE) {
-+		int bar_dev = no_drd ? PCI_BAR_ONLY_DEV : PCI_BAR_DEV;
-+
- 		/* Function 0: host(BAR_0) + device(BAR_2). */
- 		dev_dbg(&pdev->dev, "Initialize Device resources\n");
--		res[RES_DEV_ID].start = pci_resource_start(pdev, PCI_BAR_DEV);
--		res[RES_DEV_ID].end = pci_resource_end(pdev, PCI_BAR_DEV);
-+		res[RES_DEV_ID].start = pci_resource_start(pdev, bar_dev);
-+		res[RES_DEV_ID].end = pci_resource_end(pdev, bar_dev);
- 		res[RES_DEV_ID].name = "dev";
- 		res[RES_DEV_ID].flags = IORESOURCE_MEM;
- 		dev_dbg(&pdev->dev, "USBSSP-DEV physical base addr: %pa\n",
-@@ -145,9 +157,20 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
- 		wrap->dev_res[RES_IRQ_OTG_ID].flags = IORESOURCE_IRQ;
- 	}
- 
--	if (pci_is_enabled(func)) {
-+	if (no_drd || pci_is_enabled(func)) {
-+		u8 idx = 0;
-+
- 		/* set up platform device info */
- 		pdata.override_apb_timeout = CHICKEN_APB_TIMEOUT_VALUE;
-+
-+		if (no_drd) {
-+			wrap->prop[idx++] = PROPERTY_ENTRY_STRING("dr_mode", "peripheral");
-+			wrap->prop[idx++] = PROPERTY_ENTRY_BOOL("no_drd");
-+		} else {
-+			wrap->prop[idx++] = PROPERTY_ENTRY_STRING("dr_mode", "otg");
-+			wrap->prop[idx++] = PROPERTY_ENTRY_BOOL("usb-role-switch");
-+		}
-+
- 		memset(&plat_info, 0, sizeof(plat_info));
- 		plat_info.parent = &pdev->dev;
- 		plat_info.fwnode = pdev->dev.fwnode;
-@@ -158,6 +181,7 @@ static int cdnsp_pci_probe(struct pci_dev *pdev,
- 		plat_info.dma_mask = pdev->dma_mask;
- 		plat_info.data = &pdata;
- 		plat_info.size_data = sizeof(pdata);
-+		plat_info.properties = wrap->prop;
- 		wrap->devfn = pdev->devfn;
- 		/* register platform device */
- 		wrap->plat_dev = platform_device_register_full(&plat_info);
-@@ -185,13 +209,17 @@ static void cdnsp_pci_remove(struct pci_dev *pdev)
- 	if (wrap->devfn == pdev->devfn)
- 		platform_device_unregister(wrap->plat_dev);
- 
--	if (!pci_is_enabled(func))
-+	if (!func || !pci_is_enabled(func))
- 		kfree(wrap);
- 
- 	pci_dev_put(func);
- }
- 
- static const struct pci_device_id cdnsp_pci_ids[] = {
-+	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC_USBSSP),
-+	  .class = PCI_CLASS_SERIAL_USB_DEVICE },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC_USBSSP),
-+	  .class = PCI_CLASS_SERIAL_USB_CDNS },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSSP),
- 	  .class = PCI_CLASS_SERIAL_USB_DEVICE },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSSP),
-diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-index 6a8d1fefbc0d..504bdf13ea80 100644
---- a/drivers/usb/cdns3/core.c
-+++ b/drivers/usb/cdns3/core.c
-@@ -70,7 +70,8 @@ static void cdns_role_stop(struct cdns *cdns)
- static void cdns_exit_roles(struct cdns *cdns)
- {
- 	cdns_role_stop(cdns);
--	cdns_drd_exit(cdns);
-+	if (!cdns->no_drd)
-+		cdns_drd_exit(cdns);
- }
- 
- /**
-diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
-index bca973b999a4..8c492fda924c 100644
---- a/drivers/usb/cdns3/core.h
-+++ b/drivers/usb/cdns3/core.h
-@@ -84,6 +84,9 @@ struct cdns3_platform_data {
-  *                        value in CHICKEN_BITS_3 will be preserved.
-  * @gadget_init: pointer to gadget initialization function
-  * @host_init: pointer to host initialization function
-+ * @no_drd: DRD register block is inaccessible. The controller is hardwired to
-+ *          single role (host or device) or the logic for role switching is
-+ *          missing.
-  */
- struct cdns {
- 	struct device			*dev;
-@@ -124,6 +127,7 @@ struct cdns {
- 	u32                             override_apb_timeout;
- 	int (*gadget_init)(struct cdns *cdns);
- 	int (*host_init)(struct cdns *cdns);
-+	bool				no_drd;
- };
- 
- int cdns_hw_role_switch(struct cdns *cdns);
-diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
-index 84fb38a5723a..f87cf85cb97a 100644
---- a/drivers/usb/cdns3/drd.c
-+++ b/drivers/usb/cdns3/drd.c
-@@ -87,6 +87,9 @@ int cdns_get_id(struct cdns *cdns)
- {
- 	int id;
- 
-+	if (cdns->no_drd)
-+		return 0;
-+
- 	id = readl(&cdns->otg_regs->sts) & OTGSTS_ID_VALUE;
- 	dev_dbg(cdns->dev, "OTG ID: %d", id);
- 
-@@ -107,7 +110,7 @@ void cdns_clear_vbus(struct cdns *cdns)
- {
- 	u32 reg;
- 
--	if (cdns->version != CDNSP_CONTROLLER_V2)
-+	if (cdns->version != CDNSP_CONTROLLER_V2 || cdns->no_drd)
- 		return;
- 
- 	reg = readl(&cdns->otg_cdnsp_regs->override);
-@@ -120,7 +123,7 @@ void cdns_set_vbus(struct cdns *cdns)
- {
- 	u32 reg;
- 
--	if (cdns->version != CDNSP_CONTROLLER_V2)
-+	if (cdns->version != CDNSP_CONTROLLER_V2 || cdns->no_drd)
- 		return;
- 
- 	reg = readl(&cdns->otg_cdnsp_regs->override);
-@@ -181,6 +184,9 @@ int cdns_drd_host_on(struct cdns *cdns)
- 	u32 val, ready_bit;
- 	int ret;
- 
-+	if (cdns->no_drd)
-+		goto phy_set;
-+
- 	/* Enable host mode. */
- 	writel(OTGCMD_HOST_BUS_REQ | OTGCMD_OTG_DIS,
- 	       &cdns->otg_regs->cmd);
-@@ -197,6 +203,7 @@ int cdns_drd_host_on(struct cdns *cdns)
- 	if (ret)
- 		dev_err(cdns->dev, "timeout waiting for xhci_ready\n");
- 
-+phy_set:
- 	phy_set_mode(cdns->usb2_phy, PHY_MODE_USB_HOST);
- 	phy_set_mode(cdns->usb3_phy, PHY_MODE_USB_HOST);
- 	return ret;
-@@ -210,6 +217,9 @@ void cdns_drd_host_off(struct cdns *cdns)
- {
- 	u32 val;
- 
-+	if (cdns->no_drd)
-+		goto phy_set;
-+
- 	writel(OTGCMD_HOST_BUS_DROP | OTGCMD_DEV_BUS_DROP |
- 	       OTGCMD_DEV_POWER_OFF | OTGCMD_HOST_POWER_OFF,
- 	       &cdns->otg_regs->cmd);
-@@ -218,6 +228,8 @@ void cdns_drd_host_off(struct cdns *cdns)
- 	readl_poll_timeout_atomic(&cdns->otg_regs->state, val,
- 				  !(val & OTGSTATE_HOST_STATE_MASK),
- 				  1, 2000000);
-+
-+phy_set:
- 	phy_set_mode(cdns->usb2_phy, PHY_MODE_INVALID);
- 	phy_set_mode(cdns->usb3_phy, PHY_MODE_INVALID);
- }
-@@ -234,6 +246,9 @@ int cdns_drd_gadget_on(struct cdns *cdns)
- 	u32 ready_bit;
- 	int ret, val;
- 
-+	if (cdns->no_drd)
-+		goto phy_set;
-+
- 	/* switch OTG core */
- 	writel(OTGCMD_DEV_BUS_REQ | reg, &cdns->otg_regs->cmd);
- 
-@@ -251,6 +266,7 @@ int cdns_drd_gadget_on(struct cdns *cdns)
- 		return ret;
- 	}
- 
-+phy_set:
- 	phy_set_mode(cdns->usb2_phy, PHY_MODE_USB_DEVICE);
- 	phy_set_mode(cdns->usb3_phy, PHY_MODE_USB_DEVICE);
- 	return 0;
-@@ -265,6 +281,9 @@ void cdns_drd_gadget_off(struct cdns *cdns)
- {
- 	u32 val;
- 
-+	if (cdns->no_drd)
-+		goto phy_set;
-+
- 	/*
- 	 * Driver should wait at least 10us after disabling Device
- 	 * before turning-off Device (DEV_BUS_DROP).
-@@ -277,6 +296,8 @@ void cdns_drd_gadget_off(struct cdns *cdns)
- 	readl_poll_timeout_atomic(&cdns->otg_regs->state, val,
- 				  !(val & OTGSTATE_DEV_STATE_MASK),
- 				  1, 2000000);
-+
-+phy_set:
- 	phy_set_mode(cdns->usb2_phy, PHY_MODE_INVALID);
- 	phy_set_mode(cdns->usb3_phy, PHY_MODE_INVALID);
- }
-@@ -392,6 +413,19 @@ int cdns_drd_init(struct cdns *cdns)
- 	u32 state, reg;
- 	int ret;
- 
-+	if (cdns->no_drd) {
-+		cdns->dr_mode = usb_get_dr_mode(cdns->dev);
-+		cdns->version = CDNSP_CONTROLLER_V2;
-+
-+		if (cdns->dr_mode != USB_DR_MODE_HOST &&
-+		    cdns->dr_mode != USB_DR_MODE_PERIPHERAL) {
-+			dev_err(cdns->dev, "Incorrect dr_mode\n");
-+			return -EINVAL;
-+		}
-+
-+		return 0;
-+	}
-+
- 	regs = devm_ioremap_resource(cdns->dev, &cdns->otg_res);
- 	if (IS_ERR(regs))
- 		return PTR_ERR(regs);
-@@ -492,6 +526,9 @@ int cdns_drd_init(struct cdns *cdns)
- 
- int cdns_drd_exit(struct cdns *cdns)
- {
-+	if (cdns->no_drd)
-+		return 0;
-+
- 	cdns_otg_disable_irq(cdns);
- 
- 	return 0;
-@@ -500,6 +537,9 @@ int cdns_drd_exit(struct cdns *cdns)
- /* Indicate the cdns3 core was power lost before */
- bool cdns_power_is_lost(struct cdns *cdns)
- {
-+	if (cdns->no_drd)
-+		return false;
-+
- 	if (cdns->version == CDNS3_CONTROLLER_V0) {
- 		if (!(readl(&cdns->otg_v0_regs->simulate) & BIT(0)))
- 			return true;
-diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index 24cb42f66e4b..a6b9b6f6d8cc 100644
---- a/include/linux/pci_ids.h
-+++ b/include/linux/pci_ids.h
-@@ -2424,6 +2424,7 @@
- #define PCI_DEVICE_ID_CDNS_USBSS	0x0100
- #define PCI_DEVICE_ID_CDNS_USB		0x0120
- #define PCI_DEVICE_ID_CDNS_USBSSP	0x0200
-+#define PCI_DEVICE_ID_CDNS_UDC_USBSSP	0x0400
- 
- #define PCI_VENDOR_ID_ARECA		0x17d3
- #define PCI_DEVICE_ID_ARECA_1110	0x1110
+Could you add "#define DEBUG" in the head of drivers/base/core.c, rerun and share the log?
 
----
-base-commit: 17c7841d09ee7d33557fd075562d9289b6018c90
-change-id: 20260508-no_drd_config-ea76d1df87a3
+Yes, if you use the new driver, I think this issue won't happen at all.
 
-Best regards,
---  
-Pawel Laszczak <pawell@cadence.com>
-
-
+Thanks,
+Xu Yang
 
