@@ -1,243 +1,158 @@
-Return-Path: <linux-usb+bounces-37147-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37148-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MK/vHOYV/mkTmwAAu9opvQ
-	(envelope-from <linux-usb+bounces-37147-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 18:57:10 +0200
+	id gECMNQoW/mkTmwAAu9opvQ
+	(envelope-from <linux-usb+bounces-37148-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 18:57:46 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC5784F9A2B
-	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 18:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DE134F9A49
+	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 18:57:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id ABB1F30677AB
-	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2026 16:56:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8F3B33080F87
+	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2026 16:56:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62CF240DFC4;
-	Fri,  8 May 2026 16:56:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE6F5402B84;
+	Fri,  8 May 2026 16:56:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kw5FAJxx"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="mLSdWLvZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outbound.ci.icloud.com (ci-2004k-snip4-3.eps.apple.com [57.103.89.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 540A840F8CC
-	for <linux-usb@vger.kernel.org>; Fri,  8 May 2026 16:56:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA31240FD80
+	for <linux-usb@vger.kernel.org>; Fri,  8 May 2026 16:56:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.89.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778259385; cv=none; b=tw7OCr0MLdvUj4bvV6y1WwDlrNBoveFIZK/4KWiUm/xA8Gj5k4iBtXfDjRT7OBW9CnhthaC4poNppEzqPYnf0QsxK3N1tuJEjhFwxlCMPw4Jt73YApFJkQGH7Q8vjLD/oHYUaceURQAczNnMcYxh0LAUkYx8L0S/TXQJbmHnLzc=
+	t=1778259387; cv=none; b=uo/X3cee8ZIusVKHi05lkr94LAH4tGoU7tri6Zr/m6TuW8PNDxDoP07k5/Iq922bbKvBlfgn5nGM+lTUkwubGviPX+grNoTYiIBpVH6PvRveNErzzTyBq5FlCp+QP9uL7h2lQ+BCrrwk+l4NDumoPEQd/q8CwuXAFX10JZKhBL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778259385; c=relaxed/simple;
-	bh=xAPysj9jqBxnNH9ah7LQXapnO4WlMNmkFCZEkS3PQ8g=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lgJMhSgO2204o6pA/UnwsB5Va5WSyIfWPttIZhvpx0yQ3F/4rXeNParKd4Jzhq5z3HtCmYhgtw0usJtnh8n+LkEe46UtYQEtG3NIipNonM+4HcW/vIp2nb8o1Ck8LySAR6vHZm95naTMuzbIzdCKCmlhFU+CwpIXNTrvCEuf9To=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kw5FAJxx; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-449d6c68ed8so1826198f8f.0
-        for <linux-usb@vger.kernel.org>; Fri, 08 May 2026 09:56:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778259382; x=1778864182; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PNzAhALF+27Ww+LeezAsS+tgg1krlWNQ1vu17boWQ+w=;
-        b=kw5FAJxxTrc/ZN+oumytsllYqCuKDzp0cr7/74A5hSIjqne1WPpfUFJ7/CQbX35Shs
-         w9s1La+dtB5pjlmGAFS+LCpbtRjoq26Ku3yhHWii1dzIl7DDNwzZFa714B6lpUr81ebU
-         O3tp4Gk2iPjJVn3OCYsBXoS4aB09+X/vG9+Vt6dgInzskQZ3Fm+5VJc5uCWLBiyILO0u
-         /l+wPDMBcDAKGnKvuAgqYtqFMeWjh2gfmb4FODClPod6aqEEazJQGrPbQE3EAfgMzOKE
-         7U+ZZUI6Bn6jQ6Pil+DtlttiVqtoHnGpW5lbd3Ysfs5TLNzDmPgp2wbC2WriYsQ2sE9d
-         2wJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778259382; x=1778864182;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=PNzAhALF+27Ww+LeezAsS+tgg1krlWNQ1vu17boWQ+w=;
-        b=iyilnlmCUCih2xabXGXF/gs8uTZTEtbMfIduaN1M/iieZEVGh4wn3TZSZfpF6GyvPX
-         +fdQVhUImp6K04VaZ3bAl3qR/ICZ4AvmjCatAiXaT7rmCvgawdtNn9FzthfUYnaqWj91
-         lyKt1PF3zMgO/Nx2sVWKb63lHN7yg6SCtgiH9q60P3+eoJM9DS89nmTCyEXipCzdNM19
-         eZPlNmZeYkNx6wAWOj7OIwmtAUasXRXtGN4CKVto8wkk6ImNQYq0dG+UBL2hX3lo82AA
-         dZbvTVfOFk0h1hQ7xdyau+SPGJTDCqK4c5gnGUV5xjIx/ht8N2UF6Xt8wLMgFNI+b/P5
-         8eVg==
-X-Forwarded-Encrypted: i=1; AFNElJ8N9fR5/MH+gl1xcD16Yw8Mhz3hxW/UVUJ71AWex5+XKnN+eGqprgxkHCoSk1tOD8UphPNW+UKravg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfrkTwhyaPl7yLknjDvSQRaEMhiqIwglqGCS7qMR9M2Jdf6AN0
-	x2ymgh49E0a79gelprb0p36HQhjZbJyOaq5L8zNrKnfT/TFr4Y3CpyxP
-X-Gm-Gg: Acq92OHTJT+LRgd0sfvmgjq1chS8+WXObrqAnDg/511nSh8VTEt/U04poIYwxI0dxV0
-	KQfcMpSj7aXcQxq4mMXY2u+vShSSIE5d7wo4MXQPjn6htkARTBzXhpGcp63cgIXEp0Lu/az++Qt
-	t5NuJDbYkNkDqS34pAfAL+winiUfHJK2SFGmzed2hXuxnAo6hbopb+QqPzZCfy7PktKsMHRmHms
-	wvnQ6a4k+o7sbQ2dEnwhcqfB0xHhEU5VaiYLCL4CLDJrLJvZgxnq5Shb7ADBQigLLhC8QF3DilO
-	Pt8MVf2jku8Az0QvywLKdqgrV1Ub3VfEWINd2BMrMpU5/mKPk6s/EMc/BTLSF9xFGXr7vEK72se
-	OpY6X3HvgpghLjv/SNsxdP9LggKawG5BOiePWkrqgqf6qM0Svn8o+IILyIjXpx9AUbAg3KHJH9f
-	xko+vGkJxbpp2ridDNlZlREMD4OfWjm5q861E=
-X-Received: by 2002:a05:6000:61e:b0:43d:7e6f:3816 with SMTP id ffacd0b85a97d-4515d9a05b5mr20486633f8f.40.1778259381497;
-        Fri, 08 May 2026 09:56:21 -0700 (PDT)
-Received: from foxbook (bgt227.neoplus.adsl.tpnet.pl. [83.28.83.227])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4548ec6c221sm5430819f8f.13.2026.05.08.09.56.20
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 08 May 2026 09:56:21 -0700 (PDT)
-Date: Fri, 8 May 2026 18:56:17 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Nicola Lunghi <nick83ola@gmail.com>
-Cc: mathias.nyman@intel.com, niklas.neronin@linux.intel.com,
- gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] usb: xhci: fix isoc silent reschedule creating
- stream gap on CFC controllers
-Message-ID: <20260508185617.6bf8a6eb.michal.pecio@gmail.com>
-In-Reply-To: <20260504233143.10242-3-nick83ola@gmail.com>
-References: <20260504233143.10242-2-nick83ola@gmail.com>
-	<20260504233143.10242-3-nick83ola@gmail.com>
+	s=arc-20240116; t=1778259387; c=relaxed/simple;
+	bh=O+Z+iiQS6mOHEHFMXl2jZzyLVpVMQFSe6c0A8tPA/Y0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iYd9I9xhE1wgCDUFBKkFPPvlocDszJ2Cki9M7fMDau4KynqPcLwaVp7W0JHK1m5MEE+rNBY2Rszw2D3fXSLhV/NUZNPxvQbfHSrX/QX4jTLgQb5qEKfJBCSKHpwIAt6TViuQioxlKkoVpYt4ProqpG2eCJi2otEqyLkNWXNmpmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=mLSdWLvZ; arc=none smtp.client-ip=57.103.89.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+Received: from outbound.ci.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-central-1k-100-percent-8 (Postfix) with ESMTPS id 1A45418003AE;
+	Fri, 08 May 2026 16:56:22 +0000 (UTC)
+X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQhJBkMDRQVJF0wBTVIPDxhMCkEUWgpcQgtJAS1eCF4fTBwdDlgGEhZdRVsYRRlLHVgWAV8GWXIZWhRcGFNFUR9UWEEOCloBUFEdXwIKBEcEWxdGA1NFURkXEVABWB5WXloXXk1HH0BNYkkBWhlbHEAXSm5NUw8PGVoUXBhTRVEfVFheBFNWDkAMSwZYUQlWXQ1LAFQaXwcRDVUKCFUNH0RfTwFcA14DQwFAAS1eCF4fTBwdDlgGDFBNAUMICgJRHFYNVw==
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1778259385; x=1780851385; bh=+QLZLsNYf7h9Ce79kOQN7zRPNN2q7F1QoiGbgvgNk78=; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme; b=mLSdWLvZwqNRhNXhUmkJmhVTY7rlx831BK9MA47Ujn6al8NsCzs2vAVcWeuMFjznM2mfiqMfa4WcmoBtLWqWQ1cIVC469vVg4XC8VyCxOwi4HgZQ4JkCml5gB4hnu7FuTuYjEFJHNPi5jFuHZFJtQWNmMAnH9oHV3ZIr9OvyDCgDmz7MRTePhkULARMyFcyCH6OFkzcz2aVfuAWyOQrbIQOWrR7VKaljt3q1UHzG2W1hdajhVA8Up4tJMK2rteIUXOtmpYsHxRRbER1UKg+kfKy08ZGxTCoBCv8t8rWSp2rqP9XK9Ug6y0DrTGZPEa3ul8K4cLTxlGrSYhpJ1JbLUg==
+Received: from [192.168.89.2] (unknown [17.57.156.36])
+	by p00-icloudmta-asmtp-us-central-1k-100-percent-8 (Postfix) with ESMTPSA id BB7C11802090;
+	Fri, 08 May 2026 16:56:19 +0000 (UTC)
+Message-ID: <05355fbd-4339-45a4-9ebf-4f7214513882@icloud.com>
+Date: Sat, 9 May 2026 01:56:17 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: BC5784F9A2B
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] hwmon: add AMD Promontory 21 xHCI temperature
+ sensor support
+To: Mario Limonciello <mario.limonciello@amd.com>,
+ Guenter Roeck <linux@roeck-us.net>, Jihong Min <hurryman2212@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1778123510.git.hurryman2212@gmail.com>
+ <0c35058bb088213397b42fca8d51e9ad0bba5169.1778123510.git.hurryman2212@gmail.com>
+ <35c2436b-d172-4172-a684-a96c4a0dcabe@roeck-us.net>
+ <16c4f7e5-e33d-4271-a7af-5d6c7fca0570@icloud.com>
+ <6745fd21-2001-4e06-af41-96ae63154c02@roeck-us.net>
+ <198ae20f-49c9-4f81-87e2-e16e81053f08@icloud.com>
+ <70035490-eafb-4610-8889-9e04931c8b32@amd.com>
+Content-Language: en-US
+From: Jihong Min <hurryman2212@icloud.com>
+In-Reply-To: <70035490-eafb-4610-8889-9e04931c8b32@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Authority-Info-Out: v=2.4 cv=NfzrFmD4 c=1 sm=1 tr=0 ts=69fe15b7
+ cx=c_apl:c_pps:t_out a=2G65uMN5HjSv0sBfM2Yj2w==:117
+ a=2G65uMN5HjSv0sBfM2Yj2w==:17 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
+ a=x7bEGLp0ZPQA:10 a=5jDBv52wX64A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=c92rfblmAAAA:8 a=pGLkceISAAAA:8 a=NEAV23lmAAAA:8 a=jm6BaUM5yunLdwCpO_4A:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=GvGzcOZaWPEFPQC_NcjD:22
+ a=PgRulw5oR9JgysbTFEid:22 a=MienORt8HT0FiJ1vGQZ6:22
+X-Proofpoint-GUID: zLnn0M4GnOupoLmgccVWtpqh383ISKTu
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDE2OSBTYWx0ZWRfX0oLtkKpTDFo8
+ Q1C3S/9OJHt0gK558mbjbUH+xyYetB1TWRJq3wYHUstKW9SGieVCx64c1+yxTgUzCwao8ZQ7cM3
+ WBLs05D7DOPnYPOyh63Lzf3G4CVkhHLN7OFA1rj5nh0zjLGft3IHygrOOMR8VEiIfGPU8s5SXYG
+ Mc4yCWAhsQFsCE5wHu6bTzrBYSK/Dx5mJrDKarAwAreLC3uNH7DvvdZ0YBMkAe8Wp4C3FOcMpcS
+ kfetB5gt5pLSjWgZFxjXJh9iQFgnVUxnQ2yjI8xqVCOyCoOEd/+jzs6eLyk0+ZuiIsTFVRNi1o4
+ bmp7pUK5BZDHsvIEdSswUJ9sKxnrwm9fwHQHZV5sJqVB5cgWLSeTFJeB16zV1w=
+X-Proofpoint-ORIG-GUID: zLnn0M4GnOupoLmgccVWtpqh383ISKTu
+X-Rspamd-Queue-Id: 3DE134F9A49
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	DMARC_POLICY_ALLOW(-0.50)[icloud.com,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_DKIM_ALLOW(-0.20)[icloud.com:s=1a1hai];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37147-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37148-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_TO(0.00)[amd.com,roeck-us.net,gmail.com];
+	FREEMAIL_FROM(0.00)[icloud.com];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	DKIM_TRACE(0.00)[icloud.com:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[hurryman2212@icloud.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[icloud.com:mid,icloud.com:dkim,sashiko.dev:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On Tue,  5 May 2026 01:31:43 +0200, Nicola Lunghi wrote:
-> xhci_get_isoc_frame_id() silently rescheduled the first TRB to
-> start_frame_id+1 when the requested start frame was out of the valid
-> scheduling window or landed exactly on its boundary. This creates an
-> explicit one-frame hole in the isochronous stream.
->=20
-> Most USB audio devices tolerate a brief gap with a small glitch and
-> recover automatically. However, some devices assume that once
-> isochronous packets start streaming they flow continuously until the
-> stream is explicitly stopped. Any gap causes the device firmware to
-> permanently lose channel synchronization =E2=80=94 subsequent packets are
-> routed to the wrong output channels until the device is reset.
+>
+> Another thing to mention is that you are going too fast between patch 
+> versions.  All your patches show up in a ton of people's inboxes.
+>
+> It's great you've gotten feedback on them but I suggest you give it a 
+> few days or a week between versions to gather more feedback.
+Thanks for the guidance. I understand, and I agree that I have been sending
+new revisions too quickly.
 
-That's not the only problem, we are basically violating documented
-usb_submit_urb() behavior, as Alan points out in Bugzilla.
-=20
-> This was observed with the MOTU 1248 (USB ID 0x07fd:0x0005), where
-> after a gap the 24-channel output stream shifts by a fixed number of
-> channels, mapping audio intended for ch1/ch2 onto ch7/ch8 or other
-> channel pairs depending on timing.
->=20
-> Return -EINVAL instead so the caller falls back to TRB_SIA (Schedule
-> Immediately After)
+I will slow down the revision cadence from now on and wait a few days, or
+until the review discussion settles, before sending the next version.
+>
+> If you haven't already; you should take a look at what Sahiko finds on 
+> your patches too.  Be sure to look at the feedback critically and take 
+> it with a grain of salt; but it often finds a few nuggets that are 
+> worthwhile to consider.
+>
+> Here is the Sahiko link for v4 you can review if you weren't already 
+> looking at it.
+>
+> https://sashiko.dev/#/patchset/20260508143910.14673-1-hurryman2212%40gmail.com 
+>
+>
+I have been checking the Sashiko feedback and have been incorporating the
+actionable issues it found where they made sense. I will continue to review
+it critically before sending future revisions.
 
-That's not what this acronym really means.
+For reference only, and not as a substitute for the mailing-list 
+patches, I am
+keeping my current work-in-progress branch here:
 
-> which lets the hardware place the TRB right after the previous one
-> without introducing a frame-aligned gap.
+   https://github.com/hurryman2212/linux/tree/prom21_hwmon
 
-IIRC, the meaning of "Start Isoch ASAP" is like Linux URB_ISO_ASAP:
-"as soon as possible *and not earlier* than possible".
-
-To guarantee no gaps, we should use SIA=3D0 and incremental Frame IDs
-on chips with CFC (without CFC it's a lost cause).
-
-The reason using SIA=3D1 helped you is because in reality:
-- the start_frame_id calculated here is pessimistic
-- I found that the IST reported by HCs is usually pessimistic too
-
-Therefore, even if this function believes that it's too late to execute
-some transfer (and currently tries to reschedule it for later), the HC
-may actually still execute it immediately without gaps if SIA=3D1.
-
-But the right thing to do is SIA=3D0 and correctly specified Frame ID.
-Setting SIA=3D1 opens the possibility of rescheduling for later (in HW)
-when it *really* is too late. And we don't want that, we want late
-submissions to result in Missed Service Error and EXDEV completion.
-
-Note that the comment in this function is bogus too. In reality:
-
-Software *shall* not schedule past end_frame_id.
-Software *should* not schedule before start_frame_id.
-
-The former is a requirement, the latter a recommendation. And a valid
-one, if we want the URB to execute. But here, we want it to fail :)
-
-Also, I'm not sure if ignoring submissions far into the future and
-turning them into SIA=3D1 is the right action. If a driver submits an
-untinterrupted stream (without URB_ISO_ASAP) going 895ms into the
-future, we should probably stop this madness and error out (TBD).
-
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D220748
-> Assisted-by: Claude:claude-sonnet-4-6 sparse checkpatch
-> Signed-off-by: Nicola Lunghi <nick83ola@gmail.com>
-> ---
->  drivers/usb/host/xhci-ring.c | 20 +++++++++++++-------
->  1 file changed, 13 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/usb/host/xhci-ring.c
-> b/drivers/usb/host/xhci-ring.c index e47e644b296e..03e47db82092 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -4030,15 +4030,21 @@ static int xhci_get_isoc_frame_id(struct
-> xhci_hcd *xhci, ret =3D -EINVAL;
->  	}
-> =20
-> +	/*
-> +	 * If the first TRB's start frame is out of the scheduling window or
-> +	 * lands exactly on its boundary, fall back to SIA (Schedule Immediately
-> +	 * After) rather than forcing start_frame_id+1. A forced +1 creates an
-> +	 * explicit one-frame hole that audio devices with strict continuity
-> +	 * requirements cannot recover from. The caller handles -EINVAL by
-> +	 * leaving sia_frame_id as TRB_SIA.
-> +	 */
->  	if (index =3D=3D 0) {
->  		if (ret =3D=3D -EINVAL || start_frame =3D=3D start_frame_id)
-> {
-> -			start_frame =3D start_frame_id + 1;
-> -			if (urb->dev->speed =3D=3D USB_SPEED_LOW ||
-> -					urb->dev->speed =3D=3D USB_SPEED_FULL)
-> -				urb->start_frame =3D start_frame;
-> -			else
-> -				urb->start_frame =3D start_frame << 3;
-> -			ret =3D 0;
-> +			xhci_dbg(xhci, "isoc: start frame %d %s window [%d, %d], using SIA\n",
-> +				 start_frame,
-> +				 ret =3D=3D -EINVAL ? "behind" : "at boundary of",
-> +				 start_frame_id, end_frame_id);
-
-I'm not very fond of debug prints which can show every microframe.
-
-Even better than a "debuggable" code is one which is right, well tested
-and known to work without worries.
-
-> +			return -EINVAL;
->  		}
->  	}
-> =20
-> --=20
-> 2.51.0
->=20
+Sincerely,
+Jihong Min
 
