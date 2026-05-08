@@ -1,289 +1,300 @@
-Return-Path: <linux-usb+bounces-37113-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37114-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uCxuDIku/WlIYgAAu9opvQ
-	(envelope-from <linux-usb+bounces-37113-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 02:30:01 +0200
+	id MBxkGEVS/WmKagAAu9opvQ
+	(envelope-from <linux-usb+bounces-37114-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 05:02:29 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A7244F07A2
-	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 02:30:00 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1DB04F0F7C
+	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 05:02:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 21DD1303AB64
-	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2026 00:29:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 916BC3017C22
+	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2026 03:02:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC1EB1F63D9;
-	Fri,  8 May 2026 00:29:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99D2329C33F;
+	Fri,  8 May 2026 03:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="icQn8/85";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="DvNtdI3H"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="MYhcYrs/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950191DF736
-	for <linux-usb@vger.kernel.org>; Fri,  8 May 2026 00:28:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95ADD248896
+	for <linux-usb@vger.kernel.org>; Fri,  8 May 2026 03:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778200140; cv=none; b=N7XPRqREStj5UpT/iVs4S+62HLDlFoq7jdGhMit92St01H5Q908u2lp/jXc1kFRI1a8TeVLThd4DcA8PHIg320P/yNv1FT42TalmSLGqkRRCgJu/7NUvFqJOtB/vPYQlmmHQUHnXSSkB8409+1sDvGrPPeGY7YkbyvitPz+q9TI=
+	t=1778209345; cv=none; b=HqXAaX2iL+Bg1rXbMuWrfleNUC8uZBotEM7jLdNwahgz1hsNX0IDQe8R6iyMnq2M/6h6Htc02FRJYlkgM86PO7T9c89zFepigHwDWVjNAGTbYzmNh9rtpiff3MaJYKQVHJorq7We6DORmOZ3I+RXIF/0A6BarCARXfE4NEU+BXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778200140; c=relaxed/simple;
-	bh=hiKCvmGqb1uuPjJp0D/nD0i9zzKH3FlhdURMk/RAc6E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lmp4OVuXwamOcJmXIC9KMkbQuO95kmLpaBH6iotQJVKPTAE+bnQnuPrAKuJWoaDxOZ0GHEgPXoVMhhi2dQcgUdn9aH+2L1JNM0NwmyuPoYE1RRHdj9GGrg4lO30abziIpZxATtaSpmg89Q2hNPqoZjZR/rxu2KsIv9n4AT3dEUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=icQn8/85; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=DvNtdI3H; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 647IBfPC2771025
-	for <linux-usb@vger.kernel.org>; Fri, 8 May 2026 00:28:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	f+n+hrmRjgNwY691mbAUgor0uxE2JHAX2hCfAk8KTi8=; b=icQn8/85KHbZHbe/
-	rXtGshr/drVMDgWTXWTjna6dUR2ppXZ8ZoqeIbtErv5dhvZW8gCOkd/U9e9065Yk
-	tbWk0RNm7SJaC7N9bJvKiEkNFdgCFAZCVjMRZlTwquGUBLp17rWvCb3bObLNHf20
-	ZcaiuH75kUOB03jZ5U1yhFhrmBR4zjSvqgp5hMBdQHPhUxXx0RkQcsyojAXn12JN
-	OAvKGkYvBcysaGa8/ugrg/xLbdquo7jgE7kLJeyI0Q4BGVvLcT5HvZhUfJwlakOf
-	gATIIuWmY209KROEiECGjtEFmMg+JGg4OwQPo/vMhbOjjh3OrPxxxDwoQ/P9X3k/
-	nwzCxw==
-Received: from mail-dl1-f71.google.com (mail-dl1-f71.google.com [74.125.82.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e0yt5h49k-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Fri, 08 May 2026 00:28:57 +0000 (GMT)
-Received: by mail-dl1-f71.google.com with SMTP id a92af1059eb24-12dfb99429bso9366366c88.1
-        for <linux-usb@vger.kernel.org>; Thu, 07 May 2026 17:28:57 -0700 (PDT)
+	s=arc-20240116; t=1778209345; c=relaxed/simple;
+	bh=NlUiKfGPwCMdoNm9BGunRuCcRVUKmRTbm2yCd/dK8D4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WyDpP3addj80gRBvfBIQ7jxFWrD2CkHwj5TyC8DYGF4tdFltAdkN7yJPuFJnCRvVddIeGLkOkMny+EN1a9eNi8Igdu7AK95SGqdoskJcsughRStweJr8hfy2YldSlP6Vx6X5wDWU4PsDBSAqjG2A1D+YJuL5j108lpNPWSKV/A4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=MYhcYrs/; arc=none smtp.client-ip=209.85.222.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-8f0a87e23daso163423285a.1
+        for <linux-usb@vger.kernel.org>; Thu, 07 May 2026 20:02:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1778200136; x=1778804936; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f+n+hrmRjgNwY691mbAUgor0uxE2JHAX2hCfAk8KTi8=;
-        b=DvNtdI3HaKv7L12ql/5F0Q5j6RDfbKpf5x4u44GZsIpsrPi6bo0WA43YShqdqtLlRL
-         DfDfC3+5wMxL/7Tt6Pu066NPwO60cX7yhKmtInfjGAFhPB12FnHYZAUvC6VFORPTQa/c
-         xkP7T0IG3zO6apPdmBeGLRnXgai70JRa6+DEx339Yw+1GA7eyOTIQwF3Gx4fckir1CAR
-         1oLc6j7CmAXEEXEBPFXJUMFjGeaKueGmR3E6IPOIOGDNOltIPnqpeZ62DO4iZ8rd3ox4
-         kS9WfIbGxkEEeGykzdtoo/A4/0RvAnUG6Xdq8QTWMmSVyTb3PZy1H4kSlFW26mW/xX4X
-         OrNw==
+        d=rowland.harvard.edu; s=google; t=1778209342; x=1778814142; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QMh4xBXA3C/oIgogFaZWmW5oZLugsgjcPzBo3G4JBWY=;
+        b=MYhcYrs/IFzH+C/NJ8MrMZIXTT1prC2QepzENQ3PS+JzYjl9DjTvuQ0sprp1+5Tlb8
+         SbJ4FnRBginY1cbhClIdiQIXWh7UVd76S+UTMiYz+CJOvGgdFW1QKGjL49td+KGiBHTE
+         eXee42g0NNSl5UruF1ClP5nktiUBv9Iv26GksagIWmZWGaLvw6Ncckx9+doBWwwoTNoS
+         KBCPDpgjFg04UoqYij6GwH62UZ1xqcz8kk1SDsUoE0xurHrEOvAlpZjoOoUPnNpQlUPP
+         +nxThDdWeNs4v58C+vS/etYmSWgT5mKKSkj1qaRVkpvQMvXjKWNRcPiknY5SuGpoNPtK
+         lu/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778200136; x=1778804936;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f+n+hrmRjgNwY691mbAUgor0uxE2JHAX2hCfAk8KTi8=;
-        b=oPHCQMDPFgoIPNmFkWEYYlD/W1HfuRaPg6Cdu0xwfk/0EiHRyM+xuvotVOweQs2BBd
-         o8EKn3nSL0PoZ57SE0zyVXhnSouWf1f1vUY7JQG5tcn8ZQMobFnoFY3qYUn1jZ+pbdMb
-         7n9MUWeW5GGpBzjxlLcK1AmXPFf10CeRkLERZ0DHmKh/eIOJoQlEfIDVeJcdPRnYpLUD
-         x5McKO304mt68uwQg+D/Bf6mwN/Wxf7a8HSorjwkOHEHvjUcAcxJ0LhijtGxn7W6IK92
-         bhvbBqJ1AIpEkwZdkATxZZK1o72za4euQO2LJbqXHs19gMqZnd1V1s4eVf3jxzNmjtGR
-         /cEQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/QyPhAKNSEY08fQdhFSGjH7EV6f9ggWhTjcWb1yCUgupQJCWO+ApNlEMmYQC2e8U7UT5GNtaa9Bo8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAlvUqDnsJCpe9LgNE6ggEc4ldQekNATkqdMTRDhiRv9xtY1xV
-	P7dxHm6i/JRMkzyQ2ZwY9BdEZb1eFU5IiQf3/liK2Nklfrdz8SFteDHSFY9CI9CjRVDGmoag3u2
-	3c4fhfpFMMz1e3tBZFZKZOZdbBxyS8/Frv4/vja1CUG8cc0lhZYbEJcn3I3emfQA=
-X-Gm-Gg: AeBDietdm8p0z7VZJyGgttr2FsfPyzSDUAGQv/IoARDwMcCeNN4RCVGKa3MwB0eDe1Y
-	Eyd6Gn6kLjLkGqk6fV5vJ8Hn4B53Ll3hjxn6w2IwUrzUMl637+O/4CM6qwlXc/61IrVPNKoAMND
-	/ywpAkLQ9H6GvOoi5mLNjU56Kdnbz1o4F2+fUa8kXC9b4Igw+IhnRmeW0zLPmyww+3YQPDVkv6B
-	JxzJLeVLW3rudjK/CZVTwkz2O7pQR9ZP8/v4+sKR3fZmXY0n4Addl15IpmxDoucU1bGHtPrF4rI
-	+QQdV4yaEjPaJ3Mi4zM8bAqXwjwXO9c2FbULUN9/kFnx8PW6BBD5BkDrQZqcK5zxsOd2NytuNxB
-	EJaSYsmNOMWah3YWk+y41Jh8UTCSZwus2KVXf+V1RH40b03v5gwjK/0zZcFXBdnIDO0jL4HuArj
-	geaaY=
-X-Received: by 2002:a05:7022:3d05:b0:12a:94ab:e20 with SMTP id a92af1059eb24-1318e917636mr5571112c88.20.1778200135791;
-        Thu, 07 May 2026 17:28:55 -0700 (PDT)
-X-Received: by 2002:a05:7022:3d05:b0:12a:94ab:e20 with SMTP id a92af1059eb24-1318e917636mr5571097c88.20.1778200135037;
-        Thu, 07 May 2026 17:28:55 -0700 (PDT)
-Received: from [10.71.182.226] (i-global254.qualcomm.com. [199.106.103.254])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13278210d40sm154352c88.4.2026.05.07.17.28.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 May 2026 17:28:54 -0700 (PDT)
-Message-ID: <e8363dc3-0339-48c6-a7b5-833b2b3ec4f7@oss.qualcomm.com>
-Date: Thu, 7 May 2026 17:28:53 -0700
+        d=1e100.net; s=20251104; t=1778209342; x=1778814142;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QMh4xBXA3C/oIgogFaZWmW5oZLugsgjcPzBo3G4JBWY=;
+        b=a30mCN34Oa0RUFx6Yp66bRyrDw4C7QkSZ5b0uBGdC+0EjWWjhVsjvhrX6rxHMeWRt6
+         awEmpD1k+m1hQVvTotmy8Lt98OwdU0d5RvACOmQttjC7M7ruEvkzHP5d/zSeD9w5+TpG
+         OgqmPmYK6rQNAOx/MbeNt6PHhXwaRTIUbeUeM6k1WGYN7XkeFgZlnVO337Jl17JNoGPH
+         ITFjZFqAQzT1YzMf16toJqNf6HH/ao4MlGDYrdDjA40jQp/9x6fxNgd4ONBHa0eeFv8Q
+         JYNylAItmi3ZAOAofaez33EvjFKzJpc5tz/yhw54SoVspO+Ctu3H+j94FxSgUdBOP4ox
+         q7bw==
+X-Gm-Message-State: AOJu0Yz+EMgszTiam9n3EI0EZr6t1fZv1o8Z0Kp7fjYyptH51whMUyT/
+	0WuMwx1ZEboITyWZtVmbpEFjgtqH3RUv78TnvG29Q2MX4rWqC2W/U9OyW1KW4hK48g==
+X-Gm-Gg: AeBDievcycuv+atQbw7eRaNl/1o4ecZuesQ15CFqDPVnt/xTeDN//hEXRo4xN6N4y4r
+	TkDIAl1TVnHwnnU5DJli183av0iHlEJohTacKw5RDLJEIPwhdHxov87iV4Wf6+AHBmavpLgk5Hq
+	FWHCH83XKoJ7POfeLoR6auCF1Or8LCawVXCuytUCyqXEIhf4uVxzNVujs2L5sYUDvbhoG19DIG1
+	bmB8+rqI4Ze+pFIoCaQbAaOS/4hNFgtEFcTwsLbCbGkWY8guA1DOhJFX6NGxJXbUeOVUX+ZRsRJ
+	3x3ZuSCTysMcybj2CbLQPhjh2ZjC3/Hi3XJ1WiJbACHXWBMXmU/nSxwIzG1u3P9ipx/vbNCAglO
+	29StIJQuOwgFDq8TfbychkuFGci44clGh9GKCKHiTNiUcnfzr70bk+gei/Jen1F3RLDbIWeETRi
+	eS6Etl1z8vTO8zgVD9eCmLy1AO
+X-Received: by 2002:a05:620a:2684:b0:8ee:630e:350a with SMTP id af79cd13be357-904d72c239fmr1577450685a.58.1778209342435;
+        Thu, 07 May 2026 20:02:22 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d01:d210::a0bd])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-907b966f5f1sm70391285a.8.2026.05.07.20.02.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 May 2026 20:02:21 -0700 (PDT)
+Date: Thu, 7 May 2026 23:02:19 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Dylan Robinson <dylan_robinson@motu.com>
+Cc: linux-usb@vger.kernel.org, mathias.nyman@intel.com
+Subject: Re: [Bug 220748] usb: xhci_queue_isoc_tx_prepare ignore start_frame
+ and always assumes URB_ISO_ASAP is set
+Message-ID: <a756038c-270b-455e-9f53-51b1ad6a31d0@rowland.harvard.edu>
+References: <bug-220748-208809@https.bugzilla.kernel.org/>
+ <bug-220748-208809-eL7PrzeMxr@https.bugzilla.kernel.org/>
+ <fe08eabc-4f92-43fd-89d7-5e9d0e35c979@rowland.harvard.edu>
+ <CA+Df+jdtQrYye85d7uZyT3jirsztKhf7qQes3LvOAPa+9qxSOw@mail.gmail.com>
+ <87d93b07-be3e-4c36-a6cb-97190560f648@rowland.harvard.edu>
+ <CA+Df+jfP-idvQqNrGo7Tc7+03ruh6kBa=MOSXE1mwXL2VqLNrw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: avoid probe deferral when USB power supply is
- not available
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jack.pham@oss.qualcomm.com" <jack.pham@oss.qualcomm.com>,
-        "wesley.cheng@oss.qualcomm.com" <wesley.cheng@oss.qualcomm.com>
-References: <20260407232410.4101455-1-elson.serrao@oss.qualcomm.com>
- <afVDFDK_cTO7rH2d@vbox>
- <4db536fd-9b20-49ec-a5f3-1fa3f2876c1e@oss.qualcomm.com>
- <af0WXtFvDwbI9-9-@vbox>
-Content-Language: en-US
-From: Elson Serrao <elson.serrao@oss.qualcomm.com>
-In-Reply-To: <af0WXtFvDwbI9-9-@vbox>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=Dc0nbPtW c=1 sm=1 tr=0 ts=69fd2e49 cx=c_pps
- a=JYo30EpNSr/tUYqK9jHPoA==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=ZpdpYltYx_vBUK5n70dp:22
- a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=QjaDh_2JvBKc0s5STn8A:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=Fk4IpSoW4aLDllm1B1p-:22
-X-Proofpoint-GUID: 2l1zYwLuNwNMuIcgYw-YFvhIXM6tq-eJ
-X-Proofpoint-ORIG-GUID: 2l1zYwLuNwNMuIcgYw-YFvhIXM6tq-eJ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDAwMiBTYWx0ZWRfX1CJ5DkQMFij8
- z+in0YM6Lk/j/ZW5B0e7zDK+U4tzAqobqe5+8goStMoQtgCGfDLkexWBnMFxZ3NVi2GBRA/emeW
- /ENnDkev9tP2mc7XWSjN3FthZ6bGtFw2p+a/zq+Mc8O5tOKR0U/AJCVtv8o6SxcK1gKlzbH4Tbf
- s+O9oIUucs7wGwSV4DKhfy1fPH/TaEzaquNcLAs89ZoD805sn44KF8LJ44to9SOPy737xBM9vbG
- WltQkzuhiiiBY6OUODEBYoJ6JvuUVeL1P4XJm2/1MSdjb+57yEYw5jSPMMWtVqrhKh1EP27Sk5W
- fCNX0MF9RYGgy3t91BFT0D+pPhwZ3fC9VD4QmfIvvuSLJ15kylDU8HT3NuEyKMnylzAelk9jfST
- S8VcLlqtvlgAvw5HZYRoitOwUztEwpW8gz1cmxpG3ahfOkSjpCPPx6/hdvGv0UHpuX0tns61epK
- Hvg1PgtnMUkC6/ejrFw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-07_02,2026-05-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0
- bulkscore=0 priorityscore=1501 phishscore=0 adultscore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605080002
-X-Rspamd-Queue-Id: 8A7244F07A2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+Df+jfP-idvQqNrGo7Tc7+03ruh6kBa=MOSXE1mwXL2VqLNrw@mail.gmail.com>
+X-Rspamd-Queue-Id: B1DB04F0F7C
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37113-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_THREE(0.00)[3];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37114-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[urldefense.com:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[elson.serrao@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	REDIRECTOR_URL(0.00)[urldefense.com];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	TO_DN_SOME(0.00)[]
 X-Rspamd-Action: no action
 
-
-
-On 5/7/2026 4:02 PM, Thinh Nguyen wrote:
-> On Wed, May 06, 2026, Elson Serrao wrote:
->>
->>
->> On 5/1/2026 5:55 PM, Thinh Nguyen wrote:
->>> On Tue, Apr 07, 2026, Elson Serrao wrote:
->>>> The dwc3 driver currently defers probe if the USB power supply is not yet
->>>> registered. On some platforms, even though charging and power supply
->>>> functionality is available during normal operation, there may exist
->>>> minimal booting modes (such as recovery or diagnostic environments) where
->>>> the relevant USB power supply device is not registered. In such cases,
->>>> probe deferral prevents USB gadget operation entirely.
->>>>
->>>> USB data functionality for basic operation does not inherently depend on
->>>> the power supply framework, which is only required for enforcing VBUS
->>>> current control. The configured VBUS current limit is typically enforced
->>>> through the charger or PMIC power path. When charging functionality is
->>>> unavailable, applying a current limit has no practical effect, reducing
->>>> the benefit of strict probe-time enforcement in these environments.
->>>>
->>>> Instead of deferring probe, register a power supply notifier when the
->>>> USB power supply is not yet available. Cache the requested VBUS current
->>>> limit and apply it once the matching power supply becomes available, as
->>>> notified through the registered callback.
->>>>
->>>
->>> This gets a bit cumbersome now that we need to consider some corner
->>> cases around the notifier callback.
->>>
->>>> Signed-off-by: Elson Serrao <elson.serrao@oss.qualcomm.com>
->>>> ---
->>>>  drivers/usb/dwc3/core.c   | 82 ++++++++++++++++++++++++++++++++-------
->>>>  drivers/usb/dwc3/core.h   |  4 ++
->>>>  drivers/usb/dwc3/gadget.c | 10 ++++-
->>>>  3 files changed, 80 insertions(+), 16 deletions(-)
->>>>
->>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>>> index 161a4d58b2ce..20df0b287623 100644
->>>> --- a/drivers/usb/dwc3/core.c
->>>> +++ b/drivers/usb/dwc3/core.c
->>>> @@ -2167,24 +2167,72 @@ static void dwc3_vbus_draw_work(struct work_struct *work)
->>>>  	if (ret < 0)
->>>>  		dev_dbg(dwc->dev, "Error (%d) setting vbus draw (%d mA)\n",
->>>>  			ret, dwc->current_limit);
->>>> +
->>>> +	/* Unregister the psy notifier now that we have the power_supply reference */
->>>> +	if (dwc->psy_nb.notifier_call) {
->>>
->>> Is it possible for dwc3_core_remove() to happen here? If so, should we
->>> do something about it?
->>>
->>
->> Hi Thinh
->>
->> Thanks for the review.
->>
->> Yes dwc3_core_remove() could race with this path.
->>
->> To simplify things, I’m planning to unregister the notifier only
->> from dwc3_core_remove(), so we don’t need to handle this case here
->> and the notifier lifetime remains tied to the device lifecycle.
->>
->> Let me know if you’d prefer a different approach.
->>
+On Thu, May 07, 2026 at 05:16:31PM -0400, Dylan Robinson wrote:
+> > > The point would be to allow the driver to start a stream on a
+> > > particular frame relative to another stream, ensuring deterministic
+> > > latency between the two.
+> >
+> > I don't believe that's going to be possible.  Or at least, not possible
+> > until someone adds an API for getting an isochronous stream's current
+> > schedule information.  Until/unless that happens, the only way to know
+> > what frames or microframes the stream will use is to submit an URB and
+> > look at the start_frame and interval fields after it completes.
 > 
-> That's fine to me. Just make sure to return early if the power supply is
-> registered.
-> 
+> Adding "specified start_frame" behavior is exactly what I am
+> proposing. If it existed, the same driver submitting URBs for both
+> endpoints could track scheduling information internally, no additional
+> API needed. The device's endpoint descriptor determines the interval.
+> Is there additional scheduling information the HCD has that the driver
+> cannot observe?
 
-Ack. I will fix this in v2
+There certainly is!
 
-> <snip>
-> 
->>>> +
->>>> +	dwc->usb_psy = power_supply_get_by_name(dwc->usb_psy_name);
->>>> +	if (!dwc->usb_psy) {
->>>
->>> Is it possible for the power supply to register here?
->>>
->>
->> The power_supply framework introduces a ~10 ms delay [1]
->> before invoking notifiers after registration. So for the race described
->> above to occur, our probe would need to stall for more than that
->> duration between the initial power_supply_get_by_name() call
->> and notifier registration, which seems highly unlikely under normal
->> conditions.
->>
->> That said, there is still a theoretical window where the power
->> supply could register in that gap. If you think it's worth being
->> defensive here, we could re-check power_supply_get_by_name() after
->> registering the notifier and handle the case accordingly.
->>
->> [1] https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/power/supply/power_supply_core.c?h=v7.1-rc2*n40__;Iw!!A4F2R9G_pg!dUiPW6mibrvsk4uGO4MnGVg3R1zR3EmxxIROrw4N-ytHZq7N9q-V6irNAWrBrolUR2HABsAGSQoMPzGnEGQsvWdhzWzcVHOU$ 
->>
-> 
-> For my own sanity, can we have that extra check? Otherwise, every time I
-> scan through this I would need to recall why it wasn't needed.
-> 
+Different HCDs handle periodic transfer scheduling in different ways.  
+In some cases the bandwidth (and corresponding (u)frames) may be 
+reserved when an alternate setting is installed; in others it doesn't 
+happen until the first URB of the new stream is submitted (in which 
+case the interval may be taken from the URB instead of from the 
+endpoint descriptor).
 
-Ack. I will fix this in v2
+Either way, the HCD has to decide how to schedule the isochronous stream 
+based on the constraints of how much bandwidth is already dedicated to 
+other devices and endpoints, and what (u)frames are already in use.  Of 
+course drivers have no way to know this, or to handle it if they did.
 
-Thanks
-Elson
+In addition, when the scheduling decision has been made, the HCD knows 
+not only the interval that has been allocated to the stream but also its 
+phase.  That is, which (u)frames it will use, in cases where the 
+interval is larger than one (u)frame.  This phase information is not 
+provided to the class driver other than implicitly through the 
+start_frame values of completed URBs.
+
+In fact, IIRC the USB spec doesn't require isochronous transfers to 
+occur at uniformly spaced times.  It only requires that there be one 
+transfer somewhere within each interval.
+
+> FWIW, this is what our drivers for Windows and macOS do and they do
+> not require any such API. They just read the current frame and
+> schedule streams to start on a desirable future frame.
+
+Let's say the interval is 8 frames, and the driver requests to start in 
+frame 71.  If that isn't one of the frames in the allocated schedule, 
+presumably the URB submission will fail.  What does the driver do then?  
+Try again with 72, then 73, 74, and so on, until it finds a value that 
+works?  Make random choices?
+
+What if the HCD only supports scheduling up to 256 ms in the future, but 
+the driver asks for a start frame that is 400 ms in the future?
+
+What if the periodic schedule is already full and there is no bandwidth 
+remaining to schedule the new stream?  How will the driver find out?  By 
+getting a different error code from the URB submission?
+
+> > If you take that approach, submitting a few milliseconds worth of
+> > innocuous data at the start (or ignoring it in the case of an input
+> > stream), you should be able then to synchronize the data for your new
+> > stream with the data in another one with little trouble.  You won't be
+> > able to change how they are scheduled, but you will know exactly how the
+> > two streams' schedules are related.
+> 
+> I have tried this. It can work if the frame information returned after
+> submission is accurate. That said, considering endpoint feedback and
+> synchronization realities, an innocuous data transmission may not
+> always be available.
+
+All right.  Something else will be needed for such situations.  Right 
+now I don't know what the requirements are.
+
+> If a host controller cannot accommodate a requested start_frame, we
+> would consider that host controller incompatible with our device. If
+> we wanted to try working anyway, we could always fall back to
+> non-specified scheduling.
+
+In view of my remarks above, doesn't this amount to saying that you 
+consider all host controllers incompatible with your device?
+
+> I don't think it matters if the driver knows what the window is,
+> because ultimately, the host controller can either support the
+> requested start_frame or not. All the driver needs to know is whether
+> its submission worked.
+
+See above.
+
+> > > Currently, with non-CFC host controllers, there is no way to determine
+> > > which frame a transfer occurs in. This is because without CFC, the
+> > > start_frame returned in the URB is only approximate.
+> >
+> > Is this a deficiency of xhci-hcd, or of some types of xHCI hardware?
+> > Other kinds of host controllers don't have these problems.
+> 
+> I believe this is an xhci-hcd deficiency. The xhci-hcd computes a
+> start frame close to the IST, but only uses it if the controller
+> supports CFC and URB_ISO_ASAP is not set, otherwise it uses SIA. All
+> xHCI revisions support specifying a start_frame in the first TD, but
+> controllers without CFC require SIA = '1' for subsequent TDs.
+
+I'm not conversant with all the intricate details of xHCI or the 
+differences between various versions, so I'll take your word for it.
+
+> I understand this would touch more than xhci-hcd, and I'm not
+> proposing every HCD implement it. The minimal change would be for each
+> HCD to advertise whether it supports "specified start_frame," allowing
+> drivers to query that capability.
+
+Then what will you do if your device lies behind a host controller that 
+doesn't support it?  Fall back to unspecified scheduling?  If that is 
+acceptable for such situations, why can't you use the same strategy with 
+xhci-hcd?
+
+> > > Currently, there is no straightforward way to inform the xhci driver
+> > > whether a URB represents a stream start or continuation. This makes it
+> > > difficult to detect missed service intervals or other scheduling
+> > > discontinuities.
+> >
+> > Informing xhci-hcd about this shouldn't be necessary; it should already
+> > know.  ehci-hcd does, for example.  In short, if the submission occurs
+> > before the last scheduled URB in a stream has completed, it is a
+> > continuation.  Otherwise it's a start.
+> 
+> What ultimately matters is the continuity of the stream on the wire.
+> Submitting an URB before the completion of a previous one does not
+> guarantee it was submitted in time to prevent a discontinuity on the
+> wire, which we have observed.
+
+In fact, _nothing_ guarantees that URBs will be submitted in time to 
+prevent a gap in the schedule (except perhaps on some RT systems).  The 
+CPU can get overcommitted at any time, and drivers have to be prepared 
+to handle unpredictable delays.
+
+> > What might be more difficult is distinguishing between a start and a
+> > continuation after a gap.  The boundary between those two is pretty
+> > subjective.  We deal with this by ignoring the possibility; it's always
+> > treated as a new start.
+> 
+> Are you saying it's difficult to distinguish if the gap was intentional?
+
+No, I'm saying that after a gap has occurred it's difficult to tell 
+whether the submitter of the next URB wants it to continue using the 
+same schedule as before and starting from the next upcoming time slot, 
+or to continue using the same schedule as before with some of the URB's 
+packets assigned to the expired time slots (so they never get sent), or 
+to start using a completely new schedule.
+
+The current intention is to make this determination based on whether the 
+next URB is submitted before the last of the previous URBs completes and 
+on whether the next URB has the ISO_ASAP flag set.
+
+> I was talking about having a way for a driver submitting URBs to tell
+> the host controller driver whether they are intended to be continuous,
+> so that an error can be observed if the submitter's indication
+> disagrees with the stream's current state.
+
+Aren't they almost always intended to be continuous?  Particularly if 
+the new URB is submitted by an old URB's completion handler?  About the 
+only unambiguous exception I can think of is the first URB submitted 
+after a Set-Interface request, where there's nothing for it to be 
+continuous with.
+
+It's always possible to observe these errors after the fact (assuming 
+the start_frame values are reliable).  I'm not sure what value there is 
+in observing them when the URB is submitted, however.  What would the 
+driver do differently in these two cases?
+
+Alan Stern
 
