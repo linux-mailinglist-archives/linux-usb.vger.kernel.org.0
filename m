@@ -1,111 +1,145 @@
-Return-Path: <linux-usb+bounces-37132-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37133-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AI4ELArp/WkPkgAAu9opvQ
-	(envelope-from <linux-usb+bounces-37132-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 15:45:46 +0200
+	id UA3JKQTy/WlxlAAAu9opvQ
+	(envelope-from <linux-usb+bounces-37133-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 16:24:04 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FDC44F74B3
-	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 15:45:45 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CBA84F7ACC
+	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 16:24:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3309130ECCDD
-	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2026 13:37:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B916430432D3
+	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2026 14:22:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D18137419B;
-	Fri,  8 May 2026 13:37:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F02B3EDAAC;
+	Fri,  8 May 2026 14:22:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e7lMVD+W"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="NMakjWRh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outbound.st.icloud.com (p-east2-cluster3-host8-snip4-8.eps.apple.com [57.103.77.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CB9937EFE4;
-	Fri,  8 May 2026 13:37:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 441A53EB7FA
+	for <linux-usb@vger.kernel.org>; Fri,  8 May 2026 14:22:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.77.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778247438; cv=none; b=kBavF/NihFS+FXbP8UxZj6TavpbBFV0SP6Os1BamEcP8pc21Je5bZgUom4YsFEkVSS9hvU6ac8fsCHxrDHaSOcK2wtfRWVL3Fpzk5pWtljxgB38CB71hTjZ8Dv45YKMqhC7L1PHh95F0evp+G5kf4Xs+K6Q9hgD0V7n3eW5L6fE=
+	t=1778250125; cv=none; b=mJValoNpQ4FBhoPEdtGynfb6BWAuAuuvfUeSZTo2we0NmYzWqsYFrSJjk5IlR5zJSIdevIPZtHIxO2FbbyUyPPfUoKGKOwzJuTe/of/d+T6aFflK4vcaVVjFn5w3ieVfaXHOJ4yQJXF/NX/0eRhdhguni4cQX0tTxKmzrBpvVvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778247438; c=relaxed/simple;
-	bh=Wcg0OgXuJMdKm3CR/bGkPKmjMN6Bnif6Om6bjkUDSA0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q/W5y1Q/kdk0OM0K/aW+ne4m19/v9JDauuO9FJYuWHIkEgsBwN8kESHzDihmpCOKIpiYGnJXScECd3R+m14Nrsrpf8/0LFG6kZQvsMCgu8sE95OfKHwa098Pmr7aXHCDSKksOs1byywZ/LPCabz1A0ynu/VAjJr3jSERO768YlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e7lMVD+W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D013C2BCB0;
-	Fri,  8 May 2026 13:37:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778247438;
-	bh=Wcg0OgXuJMdKm3CR/bGkPKmjMN6Bnif6Om6bjkUDSA0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e7lMVD+WF2ahivQ+jAwOtNNvlfV8t5KWANbBLWpsLKHJ4deaPoIT6lF/HOZH3QOUk
-	 zFn9MrM3RZGpEe5ovQ60bczf0qyF/zikPxEsKfLEOmCHLWrFBcZa5bucmc1yitLPGf
-	 TvcshGsCCBmF81nrdJ6gYdU0TU54PWVFfulPvmLRW6Ptu8nh7S/nMm+uqKwgEufXwW
-	 0aTksTYabomIkMIu/LGlnVA06oOVlOdU4ZmEMR6rSAWp2yctcGByczQ2xzSn/+PRDs
-	 9pxoPPxqfZosJy7FjGENcZvNytv+7YJnqZWBSpPSfre3XS+P4IsngFSF+5HyWDpsFm
-	 ehoAaJrVicX5Q==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1wLLOG-00000000Bzk-0CSK;
-	Fri, 08 May 2026 15:37:16 +0200
-Date: Fri, 8 May 2026 15:37:16 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Jan Volckaert <janvolck@gmail.com>
-Cc: bjorn@mork.no, gregkh@linuxfoundation.org, netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: NET: usb: qmi_wwan: add MeiG SRM813Q
-Message-ID: <af3nDLa1A1JcTftq@hovoldconsulting.com>
-References: <20260508133159.564206-1-janvolck@gmail.com>
+	s=arc-20240116; t=1778250125; c=relaxed/simple;
+	bh=//1X+x+VpK+x5WtkB588wQ7uWRORnOWeDH9Ld2h5zYY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SPLBMjM45k4dqj8+8ytF5HKhvIlzvyho9tegHe8+MwG8QJLi4UP5rjxwOWbOlDxW626FbbcIDcHl/TG5rSBPYiU3JvI5t+R/L7JW3qzhzbDz4RGST95f9hanqFGM5uY3LaygCsubDweUCrdlo0ncXh9grM/NxQTnN5EqybQMl80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=NMakjWRh; arc=none smtp.client-ip=57.103.77.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+Received: from outbound.st.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-east-1a-100-percent-6 (Postfix) with ESMTPS id DF6751801A95;
+	Fri, 08 May 2026 14:21:59 +0000 (UTC)
+X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQhJBkMDRQVJF0wBTVIPDxhMCkEUWgpcQgtJAS1eCF4fTBwdDlgGEhZdRVsYRRlLHVgWAV8GWXIZWhRcGFNFUR9UWEEOCloBUFEdXwIKBEcEWxdGA1NFQQQXEVABWB5WXloXXk1HH0BNYkkBWhlbHEAXSm5NUw8PGVoUXBhTRVEfVFheBFNWDkEAQFIIBVtUXQ1BUFQaX1RICFULWlJZHxUITlZVBlsHQ19ICy1eCF4fTBwdDlgGDFBNAUMICgJRHFYNVw==
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1778250123; x=1780842123; bh=HY4m+GkqlwRuQ5y8wvkean++EHuF1sIVbF7Ol7ehg2U=; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme; b=NMakjWRhx5/sbK6oUfM8oBUH8kwKDao5HuHpsCIJv8uEvKBr7H7fXZnWu6dv/ElglK5Cf1eqgyDwyH0IbQItmFVe8QgxmReeKtJOmHCBkHq3f3yPiyUh2HwG0cmKt6Wcs7C33aVq+pqEJ0XiAsAbduaYhpHqccBwaHILcKAjknXkJQZ8jlV4zIkvTRYhsyHWC9+w/8mkldShKWnEn7pcPdVO7hvKC4WDBNc/llAdgt6oNSOH03MuWZ3EtDGobr8p1YWerFKzoJZvK/B1VoMnrM7BCF2BdBJy0y4iUNHTsKQM5MCey4Nyug4fOZPUa4wLXHDLDrmwbJ08T7vjc5dbAg==
+Received: from [192.168.89.2] (unknown [17.42.251.67])
+	by p00-icloudmta-asmtp-us-east-1a-100-percent-6 (Postfix) with ESMTPSA id 541801801AA0;
+	Fri, 08 May 2026 14:21:56 +0000 (UTC)
+Message-ID: <198ae20f-49c9-4f81-87e2-e16e81053f08@icloud.com>
+Date: Fri, 8 May 2026 23:21:53 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260508133159.564206-1-janvolck@gmail.com>
-X-Rspamd-Queue-Id: 3FDC44F74B3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] hwmon: add AMD Promontory 21 xHCI temperature
+ sensor support
+To: Guenter Roeck <linux@roeck-us.net>, Jihong Min <hurryman2212@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1778123510.git.hurryman2212@gmail.com>
+ <0c35058bb088213397b42fca8d51e9ad0bba5169.1778123510.git.hurryman2212@gmail.com>
+ <35c2436b-d172-4172-a684-a96c4a0dcabe@roeck-us.net>
+ <16c4f7e5-e33d-4271-a7af-5d6c7fca0570@icloud.com>
+ <6745fd21-2001-4e06-af41-96ae63154c02@roeck-us.net>
+Content-Language: en-US
+From: Jihong Min <hurryman2212@icloud.com>
+In-Reply-To: <6745fd21-2001-4e06-af41-96ae63154c02@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: 3o8xSsRx6xnHW4ChACeWckgSTEKZMm6D
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDE0OSBTYWx0ZWRfXxWeM5aaXZBKr
+ BdcrZtpC4bCFy/GCZFOSzVGuJEXBKyjvR/xcnbEts3V+sVWMSvM4CPEt0mrtzFm0QemYDXGojT/
+ Hw5vi9stJIywc/hmfooeyUUCK856F0wRKD1tl0vgIBHEEx9mRS0YrAFCNx18TLGikm62e0ZK9r+
+ L02CNyJ5WSx7Un5qBQnLOXMvrFq4YpB9/5Kv/IMP08/4uYLOodv4WfzsME7iKkhq03OTJXqlmuY
+ 2YB9yxWguX6LHJh5cfDbGMJz3Z4Qvu1whvBv7ZJomq6osiBGGWOv4+FaPH4dpR/pbiJgfcI0uqB
+ PGAb3rUUxWBvMVJV5svoUC6XFidQWsegMrlvuAIDHPvleEUz5So4v2TT4O37vY=
+X-Authority-Info-Out: v=2.4 cv=Abu83nXG c=1 sm=1 tr=0 ts=69fdf189
+ cx=c_apl:c_pps:t_out a=YrL12D//S6tul8v/L+6tKg==:117
+ a=YrL12D//S6tul8v/L+6tKg==:17 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
+ a=x7bEGLp0ZPQA:10 a=5jDBv52wX64A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=zsq4cwGLRDLkaE-V9JoA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=zZCYzV9kfG8A:10 a=PgRulw5oR9JgysbTFEid:22 a=MienORt8HT0FiJ1vGQZ6:22
+X-Proofpoint-GUID: 3o8xSsRx6xnHW4ChACeWckgSTEKZMm6D
+X-Rspamd-Queue-Id: 0CBA84F7ACC
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[icloud.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[icloud.com:s=1a1hai];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37132-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37133-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[roeck-us.net,gmail.com];
+	FREEMAIL_FROM(0.00)[icloud.com];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	DKIM_TRACE(0.00)[icloud.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hurryman2212@icloud.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,icloud.com:mid,icloud.com:dkim]
 X-Rspamd-Action: no action
 
-On Fri, May 08, 2026 at 03:31:59PM +0200, Jan Volckaert wrote:
-> Add support for the Qualcomm Technology Snapdragon X35-based MeiG SRM813Q module.
+> Yes.
+>
+> Please note that you keep top-posting. I don't mind that much, but
+> top-posting is (sometimes strongly) discouraged for linux kernel 
+> discussions.
 
-> Signed-off-by: Jan Volckaert <janvolck@gmail.com>
-> ---
->  drivers/net/usb/qmi_wwan.c  | 2 ++
->  drivers/usb/serial/option.c | 6 ++++++
->  2 files changed, 8 insertions(+)
+Sorry, this is my first kernel contribution and I was not familiar with the
+mailing list convention around top-posting. I will avoid top-posting and use
+inline replies from now on.
 
-Please split this in two patches as they will go in through different
-trees.
+I have addressed the review comments in v4, including runtime PM behavior,
+temp1_label removal, -ENODATA return, the PROM21-specific xHCI PCI glue 
+split,
+and making the PROM21 PCI glue built-in only when enabled. I also 
+adopted the
+naming scheme discussed above:
 
-Johan
+   - drivers/hwmon/prom21-xhci.c
+   - CONFIG_SENSORS_PROM21_XHCI
+   - hwmon name: prom21_xhci
+
+I will send v4 now.
+
+Sincerely,
+Jihong Min
 
