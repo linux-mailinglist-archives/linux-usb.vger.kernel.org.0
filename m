@@ -1,49 +1,85 @@
-Return-Path: <linux-usb+bounces-37155-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37156-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aAB1GEcn/mmxnQAAu9opvQ
-	(envelope-from <linux-usb+bounces-37155-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 20:11:19 +0200
+	id oBBgK50o/mm9nQAAu9opvQ
+	(envelope-from <linux-usb+bounces-37156-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 20:17:01 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03B654FA6EE
-	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 20:11:18 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 526B24FA77B
+	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 20:17:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 17BF3300E168
-	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2026 18:11:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 362023055C23
+	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2026 18:16:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3095372EFF;
-	Fri,  8 May 2026 18:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B295E37DEB6;
+	Fri,  8 May 2026 18:16:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="nkFuTMQD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NfM8b4LV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from outbound.ms.icloud.com (ms-2001e-snip4-11.eps.apple.com [57.103.73.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50FDB274FDF
-	for <linux-usb@vger.kernel.org>; Fri,  8 May 2026 18:11:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.73.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD477377578
+	for <linux-usb@vger.kernel.org>; Fri,  8 May 2026 18:16:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778263871; cv=none; b=XBT1tZnM8dYUjOFqcf9qpxwan0V7WxAzsTVYRb4o6LMchU0zwN5bjkgmWezxf3daZwIOn99Zsv8YQbIF2yyk8i29pNMbrcJ9dCcnBr11QkRD4cwLFTBscTIAUK95DBuSW6Pxj0AmEGA1tJo5bEOE4EHn/g1Fb0WbiOQZPs9w1yE=
+	t=1778264164; cv=none; b=pvc7SS62V/1slQHyxPbHDiPuK9K2yxtnjwRJey6z3ZrPqHr5ScwC9X+QOGlj3KvFI/XF6REvui2xQk5ygwKVElAFPvck3rdYfyZjHPKS554+9oB4QVI2eQBJ1A3aMs1hJrHW4TOaC9z3ja/79LxVo2MaBimUUFpkMi0KTd5rZtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778263871; c=relaxed/simple;
-	bh=uhoEwFpD0wLLc2f6/ghy4yzGQTrFwfEiWin1DsoyXDg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ihUPhEz/22uDIdgBSDcAfzkLa6W3xo/RK7kuZMvumSajK2Nze1XiTISZ9STv7cIHJC72IdhgVvvs8lKHPPhyMT3ZGFuROQjKtyZDRs3TmoKaWgBH4ucR2kwCuwZAltPZeUvG2q9FbLFUwtaICwgVmeW3CM6gaN2VZqsk4w4a4Zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=nkFuTMQD; arc=none smtp.client-ip=57.103.73.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-Received: from outbound.ms.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-west-3a-100-percent-1 (Postfix) with ESMTPS id D77FE180044B;
-	Fri, 08 May 2026 18:11:06 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQhJBkMDRQVJF0wBTVIPDxhMCkEUWgpcQgtJAS1eCF4fTBwdDlgGEhZdRVsYRRlLHVgWAV8GWXIZWhRcGFNFUR9UWEEOCloBUFEdXwIKBEcEWxdGA1NFXwMXEVABWB5WXloXXk1HH0BNYkkBWhlbHEAXSm5NUw8PGVoUXBhTRVEfVFheBFNWDkIPTQQIBgkFXQhKBQkaX1FEW1ULXQVcH0AISlJbU1hUFlwdAC1eCF4fTBwdDlgGDFBNAUMICgJRHFYNVw==
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1778263869; x=1780855869; bh=0mjrF1GTIkE+Ezcb/ccqXnK0O806odp0Xc3hbwPBEkM=; h=Message-ID:Date:MIME-Version:Subject:From:To:Content-Type:x-icloud-hme; b=nkFuTMQDJ8l08ZZ+Bhzk8a24C9DCGNM2eGCagE5cdFQRV9kjTmLrxMnnxQDHthRPosYB66SdV0fK9KQuiAy1RQdZK6zFGLt582R9nK75+n7zPu1sg1kRpZ8AhenUJzQ9lXBTCEwsWREk3z2XkCNw/L3sGEUUPpFA0l8VnxYWJhX+Qs/7aj5CSJhRJjVHFfokZz1MyP2ZSSXGL+DLbaJEPXWfF+eHezqGiBIr4CAJ+TwBDAlGIQfc4w/3RZybDZlkeWHVW9wun0i5TU6y3zePM35vOsqP424Jpe6L9emveubXnMQRQUgAA8kbuMAsR26aBCFgmC5V/qhPOvNa3c7fSA==
-Received: from [192.168.89.2] (unknown [17.57.154.37])
-	by p00-icloudmta-asmtp-us-west-3a-100-percent-1 (Postfix) with ESMTPSA id E513A1800152;
-	Fri, 08 May 2026 18:11:03 +0000 (UTC)
-Message-ID: <2657e1b7-126d-4c4b-8027-012a6d3ffee3@icloud.com>
-Date: Sat, 9 May 2026 03:11:01 +0900
+	s=arc-20240116; t=1778264164; c=relaxed/simple;
+	bh=LZCGgKEGEvKGeWkO7nM1Ue0hldFHRuium3dlrfRKmow=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VGYcSdt+poy+hCZ9dku6hBU5IGLf9V//Hl8enZPR96ByNYwYwJIOEEGPLVltjxCU8qWlXxXVXGJx4zWbpQzlqmqdd+qpwansDl3g1X5Gk+e4ViRymRpVN4QJH6DxFQkh+lnlTyr9jKlqjwaZ7JvY4iGWyP9ts+jPGNw+XXI59P0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NfM8b4LV; arc=none smtp.client-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2f0d3e07e30so5996110eec.0
+        for <linux-usb@vger.kernel.org>; Fri, 08 May 2026 11:16:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778264162; x=1778868962; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=IM2/rTMkyCbqZ8kLdve8nrdCK1JQ4NVvOGN00DRH8wI=;
+        b=NfM8b4LV2t49DTTjvxGqrkKthY/sXbxZdnIdkye8qwpJiuBMn6vtWpmNJiiHxFdqvZ
+         IrUD0ndyFk3ycgAtUrSi2Gx0LsAhWz7cpVW5MhKsLBLHNvZ8Xt6MSaC9F1wLuWsHanGX
+         hkTAEeTKQyZLOKH2QE20KcXPohgH/OZFZlzOyviKC92CyxMkAnEp8d6qYUYQVOvHm6/G
+         Nc90cZ5pCE2JaUJTCgE7345hyg5xemVB2K7ijH0L2wFCpRz+SdtDK1Rmda/koFywAYul
+         /XLzJyQ6ErUidrEKiKN0ryIw4VbYjrbdn0gw93Ai9MeR8D24EXrvnk6eOP14Wm2DVVb4
+         1+sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778264162; x=1778868962;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IM2/rTMkyCbqZ8kLdve8nrdCK1JQ4NVvOGN00DRH8wI=;
+        b=XuR1iDbR0bF7XuOEc+kVdHn5sQXgJpfKYp71j/P+m+JO/6aiqoZRtNyYFB28il8mkH
+         vJGgI3VeLY4cv/5KIuYQHs3uC/fUYJUw1AJ/+qS7loTj0+t88Zrur1rLQXwUNSxdNEj+
+         DlLlYOJORCIpblNb6iOiqZPIMpU2/AXszON59gSPApuv0SYeW99aWrf/E5q4uXjFSdjq
+         2KQYuxAP3X+GI5THqEwlxhLgk5gC4dxSUWbroKY+VR1RWFg2s/zUuWcTkd/eXknJczDR
+         9WQKCFQhsRPOPinkS8qFz1A+0IlMPWQKoMrn7oSAXn+Bn4e1619ZOFmb8GuN02fMgifK
+         smZQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9kgRDZ4dia58QSribIaJ365L4xl5wocuRaG6LsFtvwPiPv5+P10/+Ubcu9ehttzSED/g0/yB/nTs8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUb2Mr7F/yYC0LHMkMEiuIE8FUkfRO3TU6TDG87YChuVHjp8eO
+	K3iapHjiEo5SRiCDyW1eC5FqZoNs8QyWgr0RwZOZNBuGCqEP84TRxaCy
+X-Gm-Gg: Acq92OHCJY+x2AJs+0kXmFEYCgZFoBJ533tX4IMNv5L/18AS1/wkx5nF4/iG7X4B0RP
+	aa16dq8m62F272BR3PhJocXU5cdqmxyC3rjj04cGV73dNWF5gX66UdOIDP5aocnU9bfSUIBeK0/
+	OWEgISsChGDBjHUgA+Y7Hg2XJQJg2tmr4Aie/VtK3o7KJcTsYVd2BQgurqBrsTsDDlgrm/Ytf7f
+	R83V3lvFvMJwf9YMEsDF/bpgg6dp032FfjwWfTmvp/nIc1hWzD+WOs/druWFsYaINTH2UnR/J36
+	s9KuuG0rBbm7tCiSglMro4fFoMbR2wU/eJwZ/Wdka8ykkPWecaI7c6otyp6r65S/NwAE3PJj+L0
+	iarOuarbBlae5a4SaELM0sNiLpcwllnxqBnwyosFYzLhZ+rQ4dDauqyAjISMIfiMLiGhZBYy4+Z
+	06c6UjM3CQNhq+2cdbjG1KXgVol7C25aWKkq6dGl5h8ztSF904pKYlkIl+oIuaH+voWXODDW+u
+X-Received: by 2002:a05:7301:9f10:b0:2b8:5159:eca5 with SMTP id 5a478bee46e88-2f54948f6ebmr6791259eec.14.1778264161953;
+        Fri, 08 May 2026 11:16:01 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f888d3af4esm3280193eec.25.2026.05.08.11.16.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 May 2026 11:16:01 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <053b019e-9c6a-4eb3-aa69-0c07cd6e7f12@roeck-us.net>
+Date: Fri, 8 May 2026 11:15:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -52,13 +88,12 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
-From: Jihong Min <hurryman2212@icloud.com>
-To: Mario Limonciello <mario.limonciello@amd.com>,
+To: Jihong Min <hurryman2212@icloud.com>,
+ Mario Limonciello <mario.limonciello@amd.com>,
  Jihong Min <hurryman2212@gmail.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Mathias Nyman <mathias.nyman@intel.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
  Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
  linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -68,78 +103,108 @@ References: <20260508143910.14673-1-hurryman2212@gmail.com>
  <0d518d40-e239-4d93-8e71-0d2e140f00ca@icloud.com>
  <966c9e07-10e6-4abe-9cb5-77b974f31302@amd.com>
  <b8372128-c922-4b62-91c5-46f848180bc5@icloud.com>
+ <2657e1b7-126d-4c4b-8027-012a6d3ffee3@icloud.com>
 Content-Language: en-US
-In-Reply-To: <b8372128-c922-4b62-91c5-46f848180bc5@icloud.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <2657e1b7-126d-4c4b-8027-012a6d3ffee3@icloud.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: sl9rJsX7eR6qgLM1qVLBH4gVb3t01cp7
-X-Authority-Info-Out: v=2.4 cv=f79FxeyM c=1 sm=1 tr=0 ts=69fe273c
- cx=c_apl:c_pps:t_out a=qkKslKyYc0ctBTeLUVfTFg==:117 a=IkcTkHD0fZMA:10
- a=NGcC8JguVDcA:10 a=x7bEGLp0ZPQA:10 a=5jDBv52wX64A:10
- a=VkNPw1HP01LnGYTKEx00:22 a=cZtEhlklJ10v6u5TLhAA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: sl9rJsX7eR6qgLM1qVLBH4gVb3t01cp7
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDE4MiBTYWx0ZWRfX+B2wgVjg2Q/r
- RNN4afRGFiweI7ch7aU7gk8wbXXDLe7vpVXTQNRBqgetOdAFvRiXZ9ra0bHEAv7FsvjsFaa52UR
- aMDmjdnMfYNec17kLaG1ZkJqUN3q/IVNmIHbhsVX1ZU1VbAq5oIK2S3EV1HayXWpchk75te3iek
- plxGGzivtAbYTEQ9QV/4SS6r0GMsBeRNOsgYI2E3dmn5U1pQLMutx00UVOdI1hlY9pMjQm2wYef
- Y3inbE7domPmONMWSIDhZTF19tnOM68r5sZ8BBZ6wUOnY66gS0qtQMVSUVPhxlsiBMrB9Idfzww
- LeRFlbox0YGi6iTwrG57y60ahU/owMXgxl98lm/hFHDjG5s184IaQFpHBZHBIg=
-X-Rspamd-Queue-Id: 03B654FA6EE
+X-Rspamd-Queue-Id: 526B24FA77B
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[icloud.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[icloud.com:s=1a1hai];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37155-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37156-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[roeck-us.net];
+	FREEMAIL_TO(0.00)[icloud.com,amd.com,gmail.com,linuxfoundation.org,intel.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[amd.com,gmail.com,linuxfoundation.org,intel.com];
-	FREEMAIL_FROM(0.00)[icloud.com];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	RCPT_COUNT_TWELVE(0.00)[13];
-	DKIM_TRACE(0.00)[icloud.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hurryman2212@icloud.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[linux@roeck-us.net,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,icloud.com:mid,icloud.com:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,roeck-us.net:mid]
 X-Rspamd-Action: no action
 
->> Something else I was thinking about while reviewing this series.
->>
->> Promontory 21 is only on AMD platforms and AMD platforms are only 
->> x86. I think the Kconfig should be conditional on AMD CPU support 
->> being enabled and X86 architecture so that we don't bloat other 
->> architectures with dead code that will never run.
-One related Kconfig question: would it be acceptable to make
-USB_XHCI_PCI_PROM21 default y with the X86 && CPU_SUP_AMD dependency?
+On 5/8/26 11:11, Jihong Min wrote:
+>>> Something else I was thinking about while reviewing this series.
+>>>
+>>> Promontory 21 is only on AMD platforms and AMD platforms are only x86. I think the Kconfig should be conditional on AMD CPU support being enabled and X86 architecture so that we don't bloat other architectures with dead code that will never run.
+> One related Kconfig question: would it be acceptable to make
+> USB_XHCI_PCI_PROM21 default y with the X86 && CPU_SUP_AMD dependency?
+> 
+> This would only default-enable the PROM21 xHCI PCI glue. The hwmon driver
+> would still be controlled separately by SENSORS_PROM21_XHCI and would remain
+> opt-in, so the undocumented temperature register polling would not be enabled
+> by default.
+> 
+> The concern is that, without default y, distribution configs may miss the
+> PROM21 PCI glue and then SENSORS_PROM21_XHCI can not bind even if the hwmon
+> driver itself is enabled or available as a module.
+> 
+> Would you prefer this, or should USB_XHCI_PCI_PROM21 remain explicitly enabled
+> by distributions?
+> 
 
-This would only default-enable the PROM21 xHCI PCI glue. The hwmon driver
-would still be controlled separately by SENSORS_PROM21_XHCI and would remain
-opt-in, so the undocumented temperature register polling would not be 
-enabled
-by default.
+How about "default USB_XHCI_PCI" ?
 
-The concern is that, without default y, distribution configs may miss the
-PROM21 PCI glue and then SENSORS_PROM21_XHCI can not bind even if the hwmon
-driver itself is enabled or available as a module.
-
-Would you prefer this, or should USB_XHCI_PCI_PROM21 remain explicitly 
-enabled
-by distributions?
-
-Sincerely,
-Jihong Min
+Guenter
 
 
