@@ -1,379 +1,148 @@
-Return-Path: <linux-usb+bounces-37119-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37120-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uLnFBJWM/WnWfgAAu9opvQ
-	(envelope-from <linux-usb+bounces-37119-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 09:11:17 +0200
+	id METzBtCr/WlOhgAAu9opvQ
+	(envelope-from <linux-usb+bounces-37120-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 11:24:32 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AE3C4F2D7E
-	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 09:11:16 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 692B94F436C
+	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 11:24:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4BBBE304ABF5
-	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2026 07:05:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4C5C23044806
+	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2026 09:21:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09846317167;
-	Fri,  8 May 2026 07:05:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94C043A5426;
+	Fri,  8 May 2026 09:21:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="dRHlgSxC"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="EvGYKEbf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from outbound.qs.icloud.com (qs-2003k-snip4-11.eps.apple.com [57.103.86.113])
+Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D29037BE71
-	for <linux-usb@vger.kernel.org>; Fri,  8 May 2026 07:05:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.86.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA113A3833;
+	Fri,  8 May 2026 09:21:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778223908; cv=none; b=UetJvwiy2Iz2Eas30oLzI2VIL/y56+v8Ag+NUKE9NwQVjozC4B2EaA/D0dw1B+2+7CRCK6SCZuMDdj9guzi3En/X/JOCh5+NQvB3rjLcEHDIEwVVeE/gTVV7/mP7Hzw87cjJ6iyyAWTX30Ud9TYelH1ya7nJq2xVFsUeI50+ofU=
+	t=1778232082; cv=none; b=jhP20qUM4gZZTkvuYZ1v68OyHir5znLFmPi+VAaXxW+vfcb1Alqj2f+FIT0BeZDfOlz6WFEmnJACNl12S5OjX7ZjYYh3jFGdMJt0R1Ie+LIRtalNtfHT4i0gNfNdrvZqwlEcYgHeKtgwnC0FRSTveyWXDIirxlIVXyG1jWFW2HE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778223908; c=relaxed/simple;
-	bh=FVVww/7ZCIlmqpV3f56A52J55Nootnml61a5paF3DJ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dmnS27fDgXYzKJUvUubbjV8wa2A5+Mv/WaqMV3rMOXaiLLiXIuxsKnH0YtU+lpuq5zcSqDeWllArI3dvC6o+B7rli5dKsN1DGHS9qcqKLMl6qBvPGp/fiJOTVTXMQ5uGSJNcmFBScXfLY40Ln0S4Zjm4O9XuUJrTtL+/1wXQGgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=dRHlgSxC; arc=none smtp.client-ip=57.103.86.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-Received: from outbound.qs.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-2d-60-percent-5 (Postfix) with ESMTPS id 7A33218000B1;
-	Fri, 08 May 2026 07:04:59 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQhJBkMDRQVJF0wBTVIPDxhMCkEUWgpcQgtJAS1eCF4fTBwdDlgGEhZdRVsYRRlLHVgWAV8GWXIZWhRcGFNFUR9UWEEOCloGUFEdXwIKBEcEWxdGA1NFQwMXEVABWB5WXloXXk1HH0BNYkkBWhlbHEAXSm5NUw8PGVoUXBhTRVEfVFheBFNWDhYNT1dUVAgDXVxLCg8aXwNJAFVRXQRaHxUASVFVUlsAEVtJVy1eCF4fTBwdDlgGDFBNAUMICgJRHFYNVw==
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1778223902; x=1780815902; bh=vrmtu3cjU0Q9sWlHRKR3zouF3lZXojOuoaPUVq+EAGk=; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme; b=dRHlgSxCBwoj/Zd/vcadOj/ngR35cjx4kq2GWUFBWRgeElA4mHCfeIPBi5G1ouP/GLoceFsh0RxOsV5vBgNE7aftR3sDWUK2+A0YjxgEkjRmioIm/0JU/zC8dLFUNCynUEZZ6S7N+jH67+wV1ug4KFbLsHgZt8HMi98HSDhvqV6jC2AHYc5fml2vBk2bE8YGP4sWMosGwioKaMn/9KzZ1C0eX5GlrjfsLk6HRE+f2m3pYAhQHzQ3EXjUkxCeighdodgp0aqppCo+qg48cAl1bMydnTprZoA2qf+hpiJ9hfEn8j/mKhK8QQfuA2UiUehi3vuINnWs05+u5guYpzw7uA==
-Received: from [192.168.89.2] (unknown [17.57.155.37])
-	by p00-icloudmta-asmtp-us-east-2d-60-percent-5 (Postfix) with ESMTPSA id 876501800160;
-	Fri, 08 May 2026 07:04:55 +0000 (UTC)
-Message-ID: <f47d9cc1-e39b-4199-b031-e91b8e02ab1d@icloud.com>
-Date: Fri, 8 May 2026 16:04:52 +0900
+	s=arc-20240116; t=1778232082; c=relaxed/simple;
+	bh=l7lhpDECfNT7HqZNFmLcYUZ3ly8Z8qClLJSAliKeA8k=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Vw+IitODriXT5f6YThS2s+vCCS+nePqiOcjcI8GWf+ivVYSP13v4HgAh3mGVA4LtIJzNXIaupGmTqOHyzSq3fKXw6cvSTejEaY+Glqx0E4pHJP1vFFXlmXpNdxLnY75vGP4W98pTPGd2JDZUB3LQQky49k9iFn3S4Wz7/FxMGv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=EvGYKEbf; arc=none smtp.client-ip=113.46.200.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=051ya+EB5ok/BOV5S7k3vyiDHHOZBrGQyJBZSY/e3Vw=;
+	b=EvGYKEbfoiF2r8o3QOz8lNV3xMkmvKUtchBPuhBgOlBv9WuyXxwgeZZDAy0+8vzG+Ym2ufVj5
+	t0pQY757896tqGpDAMinbnySRgUisG+Qg+yme7/vRVQuhe9pcfCvp+rCt097HZLG/rrXiNtsI36
+	h5cUy1I5z+XOhZg140GiNIU=
+Received: from mail.maildlp.com (unknown [172.19.163.15])
+	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4gBk1t4Cr7z1K97g;
+	Fri,  8 May 2026 17:13:38 +0800 (CST)
+Received: from kwepemr500015.china.huawei.com (unknown [7.202.195.162])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3D58240573;
+	Fri,  8 May 2026 17:21:11 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemr500015.china.huawei.com
+ (7.202.195.162) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 8 May
+ 2026 17:21:10 +0800
+From: Hongbo Li <lihongbo22@huawei.com>
+To: <heikki.krogerus@linux.intel.com>, <nathan.c.rebello@gmail.com>
+CC: <gregkh@linuxfoundation.org>, <kyungtae.kim@dartmouth.edu>,
+	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<lihongbo22@huawei.com>
+Subject: [PATCH 6.6 & 5.10] usb: typec: ucsi: validate connector number in ucsi_connector_change
+Date: Fri, 8 May 2026 17:20:26 +0800
+Message-ID: <20260508092026.1364820-1-lihongbo22@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] usb: xhci-pci: add generic auxiliary device
- interface
-To: Mathias Nyman <mathias.nyman@linux.intel.com>,
- Jihong Min <hurryman2212@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1778123510.git.hurryman2212@gmail.com>
- <effa7bd7bef8a8ea28b9e28fe47af6a58e39edf2.1778123510.git.hurryman2212@gmail.com>
- <a5739875-b8a5-4918-8850-fa4b32d5279d@linux.intel.com>
-Content-Language: en-US
-From: Jihong Min <hurryman2212@icloud.com>
-In-Reply-To: <a5739875-b8a5-4918-8850-fa4b32d5279d@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDA2OSBTYWx0ZWRfX3OtCKsrl9iKU
- O0kZio6YZt0+Es+cFbKxRawMpamIQ0z5Zmi33Rr2pkBPoyyqwCgW2jre1TyywphSPIJeLCBDK/P
- yxS39LxuRePCzrmcTwNMsX02Q9Fq2R0K2OhfIBDGJbOwFyMPb4w9UmzbxiNMJy9ZsV6YfxNbeuR
- JUVYM6vpQgpehUnwYJkhdj7SQRQfCBVJ7oBMwqa800CgFo+TIbEBBVi5Z+JKjGMrnsQl3qy1K3j
- HzHPKDXMN1/CORzbjPS1dtBTJsXceHzjsKFUbXo0ex8Qd8iv4JffNfj8WIFBz109EcZH3vclFFZ
- PqYhy5h7dcoeXmrktBwpD3l7uxulVF2S51wAyJXa0g9C87URJvFFXbrSVFTM1o=
-X-Proofpoint-GUID: jxdjthE2mhazQywaLHtx2bDqtk9HS8zs
-X-Authority-Info-Out: v=2.4 cv=IdyKmGqa c=1 sm=1 tr=0 ts=69fd8b1c
- cx=c_apl:c_pps:t_out a=bsP7O+dXZ5uKcj+dsLqiMw==:117
- a=bsP7O+dXZ5uKcj+dsLqiMw==:17 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
- a=x7bEGLp0ZPQA:10 a=5jDBv52wX64A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=pGLkceISAAAA:8 a=L7A7A1ypuKKR8YZ4-2cA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=PgRulw5oR9JgysbTFEid:22 a=oa2-kN79Xhin27rcel9q:22
-X-Proofpoint-ORIG-GUID: jxdjthE2mhazQywaLHtx2bDqtk9HS8zs
-X-Rspamd-Queue-Id: 3AE3C4F2D7E
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemr500015.china.huawei.com (7.202.195.162)
+X-Rspamd-Queue-Id: 692B94F436C
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[icloud.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[icloud.com:s=1a1hai];
+	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37119-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37120-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	TO_DN_NONE(0.00)[];
+	FREEMAIL_TO(0.00)[linux.intel.com,gmail.com];
+	FROM_NEQ_ENVFROM(0.00)[lihongbo22@huawei.com,linux-usb@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[linux.intel.com,gmail.com,linuxfoundation.org,intel.com];
-	FREEMAIL_FROM(0.00)[icloud.com];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	DKIM_TRACE(0.00)[icloud.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hurryman2212@icloud.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[huawei.com:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,icloud.com:mid,icloud.com:dkim]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Hi Mathias,
+Commit d2d8c17ac01a ("usb: typec: ucsi: validate connector
+number in ucsi_notify_common()") and commit 5a1140404cbf ("usb:
+typec: ucsi: skip connector validation before init") add the bounds
+check when do the connector change both in pre-init notification and
+the forward notifications. But they are difficult to backport to
+early stable branch such as LTS 6.6, LTS 5.10 due to many dependencies.
+Instead, we choose to validate connector number in ucsi_connector_change
+directly to avoid out-of-range issue.
 
-I tried the xhci-pci-prom21.c approach you suggested, with a PROM21-specific
-PCI glue driver calling xhci_pci_common_probe() and creating the auxiliary
-hwmon child device from that driver.
+Fixes: bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
+Signed-off-by: Hongbo Li <lihongbo22@huawei.com>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-While doing that I noticed a possible boot-time regression with the module
-case.
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index b88f4e179a7a..4f5a72a1fbd8 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -960,13 +960,20 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+  */
+ void ucsi_connector_change(struct ucsi *ucsi, u8 num)
+ {
+-	struct ucsi_connector *con = &ucsi->connector[num - 1];
++	struct ucsi_connector *con;
+ 
+ 	if (!(ucsi->ntfy & UCSI_ENABLE_NTFY_CONNECTOR_CHANGE)) {
+ 		dev_dbg(ucsi->dev, "Early connector change event\n");
+ 		return;
+ 	}
+ 
++	if (ucsi->cap.num_connectors && num > ucsi->cap.num_connectors) {
++		dev_err(ucsi->dev, "bogus connector number in CCI: %u\n",
++			num);
++		return;
++	}
++	con = &ucsi->connector[num - 1];
++
+ 	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
+ 		schedule_work(&con->work);
+ }
+-- 
+2.34.1
 
-If CONFIG_USB_XHCI_PCI=y and CONFIG_USB_XHCI_PCI_PROM21=m, then generic
-xhci-pci sees CONFIG_USB_XHCI_PCI_PROM21 as enabled and refuses the PROM21
-PCI ID:
-
-     if (IS_ENABLED(CONFIG_USB_XHCI_PCI_PROM21) &&
-         pci_match_id(pci_ids_prom21, dev))
-             return -ENODEV;
-
-That means the PROM21 xHCI controller is handled only by
-xhci-pci-prom21.ko. If that module is not present in the initramfs or is not
-loaded early enough, the PROM21 xHCI controller remains unbound during early
-boot. Devices behind that controller, such as a USB keyboard used for early
-boot or disk unlock, would not work even though the generic xhci-pci 
-driver is
-built in and could otherwise operate the controller.
-
-This seems different from the Renesas case, where the separate PCI driver is
-needed for controller-specific firmware handling. For PROM21, the USB/xHCI
-operation itself is still generic; the only extra function is publishing an
-optional hwmon child device.
-
-So I am not sure what the preferred direction should be:
-
-   1. Keep the separate xhci-pci-prom21.c PCI glue driver and make
-      USB_XHCI_PCI_PROM21 built-in only, or otherwise constrain the 
-Kconfig so
-      the generic xhci-pci handoff cannot break early boot.
-
-   2. Keep PROM21 handled by generic xhci-pci and add only a small
-      PROM21-specific auxiliary-device creation hook in xhci-pci after the
-      common probe succeeds. In that model, failure to create the 
-optional hwmon
-      auxiliary device would not affect USB operation.
-
-   3. Some other split that keeps PROM21-specific sensor code outside
-      xhci-pci, but does not prevent generic xhci-pci from binding the
-      controller when the optional PROM21 glue is not available early.
-
-Do you still prefer the separate xhci-pci-prom21.c PCI driver for this case,
-or would the minimal xhci-pci auxiliary-device hook be more appropriate 
-given
-the built-in xhci-pci / modular PROM21 glue case?
-
-Sincerely,
-Jihong Min
-
-On 5/7/26 18:31, Mathias Nyman wrote:
-> On 5/7/26 06:31, Jihong Min wrote:
->> Some xHCI PCI controllers expose controller-specific functionality 
->> that is
->> not part of generic xHCI operation and is better handled by optional 
->> child
->> drivers in other subsystems. Add a small auxiliary device 
->> registration path
->> for selected xHCI PCI controllers.
->>
->> The initial PCI ID match table lists AMD Promontory 21 (PROM21) 
->> 1022:43fd
->> controllers. For matching controllers, xhci-pci creates an auxiliary
->> device and stores it in devres so the remove path destroys it before HCD
->> teardown.
->>
->> Subsystem-specific child drivers can then bind to those devices through
->> the auxiliary bus and keep their hardware-specific logic outside 
->> xhci-pci.
->>
->> Assisted-by: Codex:gpt-5.5
->> Signed-off-by: Jihong Min <hurryman2212@gmail.com>
->> ---
->>   drivers/usb/host/Kconfig    | 10 +++++
->>   drivers/usb/host/xhci-pci.c | 83 +++++++++++++++++++++++++++++++++++++
->>   2 files changed, 93 insertions(+)
->>
->> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
->> index 0a277a07cf70..e0c2c7ac5c97 100644
->> --- a/drivers/usb/host/Kconfig
->> +++ b/drivers/usb/host/Kconfig
->> @@ -42,6 +42,16 @@ config USB_XHCI_PCI
->>       depends on USB_PCI
->>       default y
->>   +config USB_XHCI_PCI_AUXDEV
->> +    bool "xHCI PCI auxiliary device support"
->> +    depends on USB_XHCI_PCI
->> +    select AUXILIARY_BUS
->> +    help
->> +      This enables xHCI PCI support for registering auxiliary devices
->> +      for selected controllers. It is used by optional child drivers
->> +      that bind to xHCI PCI controller-specific functionality through
->> +      the auxiliary bus.
->> +
->>   config USB_XHCI_PCI_RENESAS
->>       tristate "Support for additional Renesas xHCI controller with 
->> firmware"
->>       depends on USB_XHCI_PCI
->> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
->> index 585b2f3117b0..618d6840e108 100644
->> --- a/drivers/usb/host/xhci-pci.c
->> +++ b/drivers/usb/host/xhci-pci.c
->> @@ -8,6 +8,8 @@
->>    * Some code borrowed from the Linux EHCI driver.
->>    */
->>   +#include <linux/auxiliary_bus.h>
->> +#include <linux/device/devres.h>
->>   #include <linux/pci.h>
->>   #include <linux/slab.h>
->>   #include <linux/module.h>
->> @@ -80,6 +82,7 @@
->>   #define PCI_DEVICE_ID_AMD_RAVEN_15E1_XHCI        0x15e1
->>   #define PCI_DEVICE_ID_AMD_RAVEN2_XHCI            0x15e5
->>   #define PCI_DEVICE_ID_AMD_RENOIR_XHCI            0x1639
->> +#define PCI_DEVICE_ID_AMD_PROM21_XHCI            0x43fd
->>   #define PCI_DEVICE_ID_AMD_PROMONTORYA_4            0x43b9
->>   #define PCI_DEVICE_ID_AMD_PROMONTORYA_3            0x43ba
->>   #define PCI_DEVICE_ID_AMD_PROMONTORYA_2            0x43bb
->> @@ -103,6 +106,80 @@ static int xhci_pci_run(struct usb_hcd *hcd);
->>   static int xhci_pci_update_hub_device(struct usb_hcd *hcd, struct 
->> usb_device *hdev,
->>                         struct usb_tt *tt, gfp_t mem_flags);
->>   +static const struct pci_device_id pci_ids_have_aux[] = {
->> +    { PCI_DEVICE_DATA(AMD, PROM21_XHCI, "prom21_hwmon") },
->> +    { /* end: all zeroes */ }
->> +};
->> +
->> +struct xhci_pci_aux_devres {
->> +    struct auxiliary_device *auxdev;
->> +};
->> +
->> +static const char *xhci_pci_aux_dev_name(struct pci_dev *pdev)
->> +{
->> +    const struct pci_device_id *id;
->> +
->> +    id = pci_match_id(pci_ids_have_aux, pdev);
->> +    if (!id)
->> +        return NULL;
->> +
->> +    return (const char *)id->driver_data;
->> +}
->> +
->> +static void xhci_pci_aux_devres_release(struct device *dev, void *res)
->> +{
->> +    struct xhci_pci_aux_devres *devres = res;
->> +
->> +    if (devres->auxdev)
->> +        auxiliary_device_destroy(devres->auxdev);
->> +}
->> +
->> +static void xhci_pci_try_add_aux_device(struct pci_dev *pdev)
->> +{
->> +    struct xhci_pci_aux_devres *devres;
->> +    struct auxiliary_device *auxdev;
->> +    const char *aux_dev_name;
->> +
->> +    aux_dev_name = xhci_pci_aux_dev_name(pdev);
->> +    if (!aux_dev_name)
->> +        return;
->> +
->> +    devres = devres_alloc(xhci_pci_aux_devres_release, sizeof(*devres),
->> +                  GFP_KERNEL);
->> +    if (!devres) {
->> +        dev_warn(&pdev->dev,
->> +             "failed to allocate auxiliary device state\n");
->> +        return;
->> +    }
->> +
->> +    auxdev = auxiliary_device_create(&pdev->dev, KBUILD_MODNAME,
->> +                     aux_dev_name, NULL,
->> +                     (pci_domain_nr(pdev->bus) << 16) |
->> +                         pci_dev_id(pdev));
->> +    if (!auxdev) {
->> +        devres_free(devres);
->> +        dev_warn(&pdev->dev, "failed to add %s auxiliary device\n",
->> +             aux_dev_name);
->> +        return;
->> +    }
->> +
->> +    devres->auxdev = auxdev;
->> +    devres_add(&pdev->dev, devres);
->> +}
->> +
->> +static void xhci_pci_try_remove_aux_device(struct pci_dev *pdev)
->> +{
->> +    struct xhci_pci_aux_devres *devres;
->> +
->> +    devres = devres_find(&pdev->dev, xhci_pci_aux_devres_release, NULL,
->> +                 NULL);
->> +    if (!devres || !devres->auxdev)
->> +        return;
->> +
->> +    auxiliary_device_destroy(devres->auxdev);
->> +    devres->auxdev = NULL;
->> +}
->> +
->>   static const struct xhci_driver_overrides xhci_pci_overrides 
->> __initconst = {
->>       .reset = xhci_pci_setup,
->>       .start = xhci_pci_run,
->> @@ -677,6 +754,9 @@ int xhci_pci_common_probe(struct pci_dev *dev, 
->> const struct pci_device_id *id)
->>       if (device_property_read_bool(&dev->dev, "ti,pwron-active-high"))
->>           pci_clear_and_set_config_dword(dev, 0xE0, 0, 1 << 22);
->>   +    if (IS_ENABLED(CONFIG_USB_XHCI_PCI_AUXDEV))
->> +        xhci_pci_try_add_aux_device(dev);
->> +
->>       return 0;
->
-> I think this should be turned around so that the vendor specific code 
-> calls the common code.
-> xhci-pci-renesas.c does this nicely.
->
-> In your case it would be adding something like a xhci-pci-prom21.c pci 
-> driver:
->
-> xhci_pci_prom21_probe(struct pci_dev *dev, const struct pci_device_id 
-> *id)
-> {
->     crate_auxiliary_device(dev);
->     return xhci_pci_common_probe(dev, id);
-> }
->
-> xhci_pci_prom21_remove(struct pci_dev *dev)
-> {
->     destroy_auxiliary_device(dev);
->     xhci_pci_remove(dev);
-> }
->
-> static const struct pci_device_id pci_ids[] = {
->     { PCI_DEVICE(YOUR_AMD_PCI_VENDOR_ID, YOUR_PROM21_DEVICE_ID) },
->     { /* end: all zeroes */ }
-> };
-> MODULE_DEVICE_TABLE(pci, pci_ids);
->
-> static struct pci_driver xhci_prom21_pci_driver = {
->     .name =        "xhci-pci-prom21",
->     .id_table =    pci_ids,
->
->     .probe =    xhci_pci_prom21_probe,
->     .remove =    xhci_pci_prom21_remove,
->
->     .shutdown =     usb_hcd_pci_shutdown,
->     .driver = {
->         .pm = pm_ptr(&usb_hcd_pci_pm_ops),
->     },
-> };
-> module_pci_driver(xhci_prom21_pci_driver);
->
-> MODULE_DESCRIPTION("AMD Promontory 21 xHCI PCI Host Controller Driver");
-> MODULE_IMPORT_NS("xhci");
-> MODULE_LICENSE("GPL v2");
->
-> -Mathias
 
