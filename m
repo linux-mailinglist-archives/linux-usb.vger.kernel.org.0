@@ -1,148 +1,161 @@
-Return-Path: <linux-usb+bounces-37120-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37121-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id METzBtCr/WlOhgAAu9opvQ
-	(envelope-from <linux-usb+bounces-37120-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 11:24:32 +0200
+	id +O+gDfmv/WmlhgAAu9opvQ
+	(envelope-from <linux-usb+bounces-37121-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 11:42:17 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 692B94F436C
-	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 11:24:30 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC2BB4F4597
+	for <lists+linux-usb@lfdr.de>; Fri, 08 May 2026 11:42:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4C5C23044806
-	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2026 09:21:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EFF52303DAAC
+	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2026 09:41:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94C043A5426;
-	Fri,  8 May 2026 09:21:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE3A33BA253;
+	Fri,  8 May 2026 09:41:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="EvGYKEbf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fWWIKXj0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA113A3833;
-	Fri,  8 May 2026 09:21:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C823C276E
+	for <linux-usb@vger.kernel.org>; Fri,  8 May 2026 09:41:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778232082; cv=none; b=jhP20qUM4gZZTkvuYZ1v68OyHir5znLFmPi+VAaXxW+vfcb1Alqj2f+FIT0BeZDfOlz6WFEmnJACNl12S5OjX7ZjYYh3jFGdMJt0R1Ie+LIRtalNtfHT4i0gNfNdrvZqwlEcYgHeKtgwnC0FRSTveyWXDIirxlIVXyG1jWFW2HE=
+	t=1778233295; cv=none; b=hYznwcpFHIEuH7PyzYFgoJ50wmnAkiv7Q0MLlWgj77+MMoys4LEHshQ9oheve8iDBxHqjhUsq2TQr+JUkbUUzXbvVkG1rlg/jSSBdo1PvfQubTw2CGqBZoEDmTZ5NnrcpovrIk9EJoByR8A2cbTL3cq7vJpjADp3DEoqzLV7g+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778232082; c=relaxed/simple;
-	bh=l7lhpDECfNT7HqZNFmLcYUZ3ly8Z8qClLJSAliKeA8k=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Vw+IitODriXT5f6YThS2s+vCCS+nePqiOcjcI8GWf+ivVYSP13v4HgAh3mGVA4LtIJzNXIaupGmTqOHyzSq3fKXw6cvSTejEaY+Glqx0E4pHJP1vFFXlmXpNdxLnY75vGP4W98pTPGd2JDZUB3LQQky49k9iFn3S4Wz7/FxMGv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=EvGYKEbf; arc=none smtp.client-ip=113.46.200.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=051ya+EB5ok/BOV5S7k3vyiDHHOZBrGQyJBZSY/e3Vw=;
-	b=EvGYKEbfoiF2r8o3QOz8lNV3xMkmvKUtchBPuhBgOlBv9WuyXxwgeZZDAy0+8vzG+Ym2ufVj5
-	t0pQY757896tqGpDAMinbnySRgUisG+Qg+yme7/vRVQuhe9pcfCvp+rCt097HZLG/rrXiNtsI36
-	h5cUy1I5z+XOhZg140GiNIU=
-Received: from mail.maildlp.com (unknown [172.19.163.15])
-	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4gBk1t4Cr7z1K97g;
-	Fri,  8 May 2026 17:13:38 +0800 (CST)
-Received: from kwepemr500015.china.huawei.com (unknown [7.202.195.162])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3D58240573;
-	Fri,  8 May 2026 17:21:11 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemr500015.china.huawei.com
- (7.202.195.162) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 8 May
- 2026 17:21:10 +0800
-From: Hongbo Li <lihongbo22@huawei.com>
-To: <heikki.krogerus@linux.intel.com>, <nathan.c.rebello@gmail.com>
-CC: <gregkh@linuxfoundation.org>, <kyungtae.kim@dartmouth.edu>,
-	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<lihongbo22@huawei.com>
-Subject: [PATCH 6.6 & 5.10] usb: typec: ucsi: validate connector number in ucsi_connector_change
-Date: Fri, 8 May 2026 17:20:26 +0800
-Message-ID: <20260508092026.1364820-1-lihongbo22@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1778233295; c=relaxed/simple;
+	bh=1g0u+8GxM9IWQW7wW0Sx97FwaLQfmte7AaIvms+3+N4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MPGyVCREpcmter5HObfNsjJzvcCOI2ruki7W9WOxctBs73kgu5cILCWavcAFub1qwSWvfGcELJvprusRUrofnzjfOBz25XU4XSyzGPmJMj3/bOwQ/tu5OvbCj5LPQSnYHcO+ceQrXIZoXoas0z4gTxSDd/IGz+/D5208SrWhEcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fWWIKXj0; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-453903ee4adso1276672f8f.3
+        for <linux-usb@vger.kernel.org>; Fri, 08 May 2026 02:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778233292; x=1778838092; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3VBcF9CvbVf+jNotWmEKGKAtYMBjXrGpjYE3N2Ac9G8=;
+        b=fWWIKXj00fhOFO62QPFfW1clw8a/g9cy8/EB7pJZCwWfQT0Drp2hknxH6m9Cltg41N
+         FonUM8Be+Ae6l/mMCtbPIhtdzxa6iIfmM8iVYt8yax1H6wF15+57/5z5PdI78xYlblls
+         ktqBZfkaCbr/2ZP+koT9jV4rSj4/ayJOkh70aybrN5TxSyBhytfoNf21VK1apt2a6oaH
+         9sr6+ft66KAOUUd1Pwfqwn9KRpjGEpM40//WN9ggDKol/Ev15ErT5oGzBkzguIMsMl/z
+         m2hQ/VT+R8LwDtTqyx5SGIfGsZD1PZpUHRYfJcvaqp0k2gG66WlQD4sJcoEKGCrtXWD8
+         4LbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778233292; x=1778838092;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3VBcF9CvbVf+jNotWmEKGKAtYMBjXrGpjYE3N2Ac9G8=;
+        b=ZYAFjZZOq98cWKjrLNsh+xcu6eN0+RuJGb5eFkL4+MST3sBRZjPCzM6ouyZUgjkpzB
+         w8OzTHfSDU49X8BkE3dF8d9wuIYk4YcQ+ysI7MennVN8sOoafjDhGYzRHnoDbynHtELZ
+         NVKciG3LJqsNsvLPS+Wy+sTEVsCck1tNBW6kLEWuq26PFayKE6RGyjx7jkId9UniYHLe
+         +CQk10qyn/3YuBs797VFnJFRsfL5uHVrVVPwBxCzjP+WhSSBzcA/1atJHAsgXQlUOZRW
+         8S02jxwBLsba1alb3KtkmrMV80bbbmNCSd5I19a5ipupFI1MmtOVeSHWUam3uW2Azuz4
+         AEXA==
+X-Forwarded-Encrypted: i=1; AFNElJ/AGu2vMRZ0mMvd5NmakePJG34YOZvH0Zpcs6VqixYvDrWy7ViTwNBI/TWzeFzyYr/lJKgv/Nhu+Kc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYniasNsUJ7kvR2T+osyB4hftULoYkBR9ZXFFBixRLKNqpik0d
+	tJWnCyygJMXedis8RhgVTb0IIPNe3LmTf2vq1dkp5JxaAWqPivfF9It+
+X-Gm-Gg: Acq92OH4hV7qWGx41Mk/IKXgbTWKpJYICzDDjwoVklrHqZ0C3JFM3uZjpkPjVgUOUrK
+	m5rs6BCsqM7MMlIMlq2oqZuPK/4HY2SZZjuPZcI6zZlN+Ck7MVHjGTWQpGhcQxW9PoFsauczJiD
+	n6wiYla0a6Z+p1joim6zmS3ISTwOgE8NHS4p0ltdP9XYINR6AVUtRghIyCqxcgt9pznsB8syR2r
+	HELb5j4rE2itj2vN8hghZNRcDU3sVPd42vrylcpXWqOzT0gGQm2bpv168aryo0MfitOD4cReIui
+	Rilz6+/t86T3wH5GlEZerXWoWhagq3k4elbbghsMN6wKirkNOWIo4iDawCpEMF+FO9VROVr6l32
+	fywyWst9ICEYCSqwxwRPmIiPQMITeKBvpXqO9RWJF+emIv6f35+G56jQPg3eOf2mOLmZ9AJjl82
+	v3iZote3Tq9K+iSM0foXU+Zzdog7xz3RkRa50=
+X-Received: by 2002:a05:6000:3107:b0:43f:df1b:9e07 with SMTP id ffacd0b85a97d-4515df64297mr18623135f8f.42.1778233291984;
+        Fri, 08 May 2026 02:41:31 -0700 (PDT)
+Received: from foxbook (bgt227.neoplus.adsl.tpnet.pl. [83.28.83.227])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45491304505sm3198483f8f.22.2026.05.08.02.41.31
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Fri, 08 May 2026 02:41:31 -0700 (PDT)
+Date: Fri, 8 May 2026 11:41:26 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Dylan Robinson <dylan_robinson@motu.com>, linux-usb@vger.kernel.org,
+ mathias.nyman@intel.com
+Subject: Re: [Bug 220748] usb: xhci_queue_isoc_tx_prepare ignore start_frame
+ and always assumes URB_ISO_ASAP is set
+Message-ID: <20260508114126.68241973.michal.pecio@gmail.com>
+In-Reply-To: <ee3a6ab4-081e-4d7e-98e6-e39b2c087c4d@rowland.harvard.edu>
+References: <bug-220748-208809@https.bugzilla.kernel.org/>
+	<bug-220748-208809-eL7PrzeMxr@https.bugzilla.kernel.org/>
+	<fe08eabc-4f92-43fd-89d7-5e9d0e35c979@rowland.harvard.edu>
+	<CA+Df+jdtQrYye85d7uZyT3jirsztKhf7qQes3LvOAPa+9qxSOw@mail.gmail.com>
+	<20260507235432.71d28151.michal.pecio@gmail.com>
+	<ee3a6ab4-081e-4d7e-98e6-e39b2c087c4d@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemr500015.china.huawei.com (7.202.195.162)
-X-Rspamd-Queue-Id: 692B94F436C
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: CC2BB4F4597
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37120-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_NONE(0.00)[];
-	FREEMAIL_TO(0.00)[linux.intel.com,gmail.com];
-	FROM_NEQ_ENVFROM(0.00)[lihongbo22@huawei.com,linux-usb@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[huawei.com:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-37121-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Commit d2d8c17ac01a ("usb: typec: ucsi: validate connector
-number in ucsi_notify_common()") and commit 5a1140404cbf ("usb:
-typec: ucsi: skip connector validation before init") add the bounds
-check when do the connector change both in pre-init notification and
-the forward notifications. But they are difficult to backport to
-early stable branch such as LTS 6.6, LTS 5.10 due to many dependencies.
-Instead, we choose to validate connector number in ucsi_connector_change
-directly to avoid out-of-range issue.
+On Thu, 7 May 2026 23:09:18 -0400, Alan Stern wrote:
+> On Thu, May 07, 2026 at 11:54:32PM +0200, Michal Pecio wrote:
+> > Alan pointed out that kerneldocs are more up to date, but there is
+> > still a crucial error there: on ehci-hcd, an URB submitted too late
+> > completes with -EXDEV instead of the submission failing with -EXDEV.  
+> 
+> I don't remember the details exactly, but are you perhaps not taking 
+> care to distinguish between URBs that are partially too late (some of 
+> their packets' time slots have expired but some have not) and URBs that 
+> are entirely too late (all of their packets' time slots are expired)?
+> 
+> As I recall, the first case is supposed to complete with some of the 
+> packet statuses set to -EXDEV, whereas in the second case the entire 
+> submission is supposed to fail with -EXDEV.
 
-Fixes: bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
-Signed-off-by: Hongbo Li <lihongbo22@huawei.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+... which was an artificial distinction requiring drivers to handle
+substantially the same problem in two ways. They didn't, therefore
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index b88f4e179a7a..4f5a72a1fbd8 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -960,13 +960,20 @@ static void ucsi_handle_connector_change(struct work_struct *work)
-  */
- void ucsi_connector_change(struct ucsi *ucsi, u8 num)
- {
--	struct ucsi_connector *con = &ucsi->connector[num - 1];
-+	struct ucsi_connector *con;
- 
- 	if (!(ucsi->ntfy & UCSI_ENABLE_NTFY_CONNECTOR_CHANGE)) {
- 		dev_dbg(ucsi->dev, "Early connector change event\n");
- 		return;
- 	}
- 
-+	if (ucsi->cap.num_connectors && num > ucsi->cap.num_connectors) {
-+		dev_err(ucsi->dev, "bogus connector number in CCI: %u\n",
-+			num);
-+		return;
-+	}
-+	con = &ucsi->connector[num - 1];
-+
- 	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
- 		schedule_work(&con->work);
- }
--- 
-2.34.1
+24f531371de1 USB: EHCI: accept very late isochronous URBs
 
+changed it to EXDEV completion in all cases. AFAIK, this code still
+stands. I can't find the string "EXDEV" anywhere in ehci-hcd source.
+Note: every frame start with this status so in case of missed transfer
+the driver simply leaves it unchanged.
+
+Regards,
+Michal
 
