@@ -1,137 +1,148 @@
-Return-Path: <linux-usb+bounces-37177-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37178-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8M3MLj3a/mmCxQAAu9opvQ
-	(envelope-from <linux-usb+bounces-37177-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 09 May 2026 08:54:53 +0200
+	id yMi2HMnm/mlLzAAAu9opvQ
+	(envelope-from <linux-usb+bounces-37178-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 09 May 2026 09:48:25 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 753C24FE522
-	for <lists+linux-usb@lfdr.de>; Sat, 09 May 2026 08:54:53 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE8E74FE914
+	for <lists+linux-usb@lfdr.de>; Sat, 09 May 2026 09:48:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 77AD63013A6A
-	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2026 06:54:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E13BA301B705
+	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2026 07:48:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F2A1379996;
-	Sat,  9 May 2026 06:54:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38BE53806C7;
+	Sat,  9 May 2026 07:48:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="OsJDSYoq"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KAvTYgOL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from outbound.st.icloud.com (p-east2-cluster4-host4-snip4-9.eps.apple.com [57.103.78.150])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA58317A2F6
-	for <linux-usb@vger.kernel.org>; Sat,  9 May 2026 06:54:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.78.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22A73148D2;
+	Sat,  9 May 2026 07:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778309680; cv=none; b=TPJ70iLEBY29GV6B4holG8dDjfUHHollvgE1SD0SGvGWOB8dsWVSw/E8X3DjR5oqEtGtba31N4ZIP6M/XwQVkGae3Lw5jTzgXb1KMtLSmDsq0rSnCWbdm9ZMts/ouLXF3Hw4etP15uyod8PGvSz0yiTXXamaPa32GJlvZ+fHKO0=
+	t=1778312897; cv=none; b=oHOokmzgjjiAcIXc1T7jf0fW/4Yx6MWx00LulrXu36J5kcy+u+Ej+uPfp+NSKk02uCpyXH6Dfx+yKPXw4N32qGU6oX5LLq3ArWNrPr3KUBiZfvtaHDxqh4AKTx8wMEEjNhfZEVP09WiCqfxRiK5Slgw/g9f29U/iFJ8DVM3zig8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778309680; c=relaxed/simple;
-	bh=7SCitI/IKRgV/RD7FHgYtxomBF96XBJ+ngw6fZeM7l4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S+Ko1fHbfgQaDFz8z5tp+uMBTMKPcx3Uvzbx2lQXz5oCMtan5NRzauYgNQ2dKWBXL1+PVcFs6y5F1DphU5NPfJFchdYyTye+FIArK4btAvbZexvYQNndUbVw2WoIPvbblK7C9G7fFBFmqk+sm/Qq1kb7DdJbMe8prWFfnwSZ170=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=OsJDSYoq; arc=none smtp.client-ip=57.103.78.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-Received: from outbound.st.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-7 (Postfix) with ESMTPS id 22E521800184;
-	Sat, 09 May 2026 06:54:37 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQhJBkMDRQVJF0wBTVIPDxhMCkEUWgpcQgtJAS1eCF4fTBwdDlgGEhZdRVsYRRlLHVgWAV8GWXIZWhRcGFNFUR9UWEEOCloBUFEdXwIKBEcEWxdGA1NFQQQXEVABWB5WXloXXk1HH0BNYkkBWhlbHEAXSm5NUw8PGVoUXBhTRVEfVFheBFNWDkEOGQNYAVlWXVxLVw8aXwtDWlVRDA5YHxYBQQpaUVoERlpAUC1eCF4fTBwdDlgGDFBNAUMICgJRHFYNVw==
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1778309677; x=1780901677; bh=7SCitI/IKRgV/RD7FHgYtxomBF96XBJ+ngw6fZeM7l4=; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme; b=OsJDSYoqykkNO89rAiJ5GTztmHrKOzdzmZPn+1L7U1IbhB6ucPwGIJsYLxYthr8FV0Lp1KiHpglrSgO8lDtbpb/SXd9xIXRDI7FXcq+x41SSS1aC9s6snHtIqXjTPjaH530P+uJ0jbYOazWtkuWYSfxmAhfNoFKYlqR9KXPlecedCnZGuYiiH+vkUo61aeAah9Dwn01hQC/KtsXkYZFQL0rsAqxYoAYOHUZtA1cQ8vsZmsqlzIajafF+o7coqoq17k/tOWPfV5nPIXNxDmj2fIgsrxTIFvr6BNY4tAJVuqfzfY263hhqaGCV2aVCNa1JZOgvGaR7XT5nOBZ6pWFt7g==
-Received: from [192.168.89.2] (unknown [17.42.251.67])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-7 (Postfix) with ESMTPSA id 1C1391800188;
-	Sat, 09 May 2026 06:54:33 +0000 (UTC)
-Message-ID: <17a0562d-e3db-493c-ba93-f8997f166c8c@icloud.com>
-Date: Sat, 9 May 2026 15:54:31 +0900
+	s=arc-20240116; t=1778312897; c=relaxed/simple;
+	bh=+bxuBYXJ2dSaZ5ODbSmVYN7KzsX16xgxp628RjMjAsM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=i29jpiT6wNDsdC8VAyrNgRf4xzlSORWOwToYFFZm3/GtZMaMGBRbTGKJICNiWPyG1ejpjDqwTaJ5ycg/VeBvc9H8FiPg0aHPjcRUHNkKR28kbvfSRtkb8OsRH5OyKeZcmpJikKcoSCtdn+GgJEKB1VOQdd3w0yimJ7rTyiVsh+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KAvTYgOL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3270C2BCB2;
+	Sat,  9 May 2026 07:48:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1778312897;
+	bh=+bxuBYXJ2dSaZ5ODbSmVYN7KzsX16xgxp628RjMjAsM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=KAvTYgOL32X86hDh3CgdjjAG4cqrnN26HhEXGTRU4hIk6eKIRibDf2xXADGhri3V2
+	 IKAJZjeGrIUR1iOqr3yrA3R2zQ/LZpFZtXOBfQ8OCvtWHDLKjk/gnvksAfvSGSTGBh
+	 eVFtYXx1kWpPcRCo/7Pawwfah8+sdKlaC+dwSp8Y=
+Date: Sat, 9 May 2026 09:47:33 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 7.1-rc3
+Message-ID: <af7mlZd5JnKmFqzO@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
-To: Mario Limonciello <mario.limonciello@amd.com>,
- Jihong Min <hurryman2212@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
- Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260508143910.14673-1-hurryman2212@gmail.com>
- <20260508143910.14673-2-hurryman2212@gmail.com>
- <ad41d70b-e9c0-446e-8bd0-4528de75b592@amd.com>
- <0d518d40-e239-4d93-8e71-0d2e140f00ca@icloud.com>
- <966c9e07-10e6-4abe-9cb5-77b974f31302@amd.com>
- <e8c5f5e0-e0d7-4231-8c46-be7a175941f5@icloud.com>
- <93c43962-6aee-45c8-97c0-a4fbf5124ce8@amd.com>
-Content-Language: en-US
-From: Jihong Min <hurryman2212@icloud.com>
-In-Reply-To: <93c43962-6aee-45c8-97c0-a4fbf5124ce8@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA5MDA3MCBTYWx0ZWRfXznzN/avUrUFG
- TBXqyQwcFpJLaybcCXXnJcANONt+o173+h/ivafcP7ulPkrpbqoLyk7lqwWV8Y9VH5z4LauOe0U
- QHKE9QweoV/bFYaGB3FbdZx+Sc5FLNKE6b7kBP89UMyJhNXyh0SQCG9ZBwSiG/KXAX8HStDY3cQ
- qKiLUvCv1bo4WR4Nrva5e2OziqnSHuTA2/FqORvsuExpqkRt4J9CFl0VmtqQSm0iFS/C2fe2sD/
- kon7vxOx6uzuaI//bKCLvVuk2vdT90EsFX9+aoMDR/vmyual6mzEwFu9cqq56cDQclKZV9x5SEG
- 6yGJDNpqy0e1/TE1DGB2xQTqa1cXR9eZiUSNHyuilJdKKE1IOk3V/xjAsb2VNI=
-X-Authority-Info-Out: v=2.4 cv=Sbb6t/Ru c=1 sm=1 tr=0 ts=69feda2d
- cx=c_apl:c_pps:t_out a=YrL12D//S6tul8v/L+6tKg==:117
- a=YrL12D//S6tul8v/L+6tKg==:17 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
- a=x7bEGLp0ZPQA:10 a=5jDBv52wX64A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=AGBWbnDlIYaA8OOaHYkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=PgRulw5oR9JgysbTFEid:22 a=oa2-kN79Xhin27rcel9q:22
-X-Proofpoint-GUID: ApNzMT8qMeyRJFiA37BvS_DBDxNsMqLZ
-X-Proofpoint-ORIG-GUID: ApNzMT8qMeyRJFiA37BvS_DBDxNsMqLZ
-X-Rspamd-Queue-Id: 753C24FE522
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Rspamd-Queue-Id: BE8E74FE914
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[icloud.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[icloud.com:s=1a1hai];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37177-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_FROM(0.00)[bounces-37178-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[amd.com,gmail.com,linuxfoundation.org,intel.com];
-	FREEMAIL_FROM(0.00)[icloud.com];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	DKIM_TRACE(0.00)[icloud.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hurryman2212@icloud.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[icloud.com:mid,icloud.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	TAGGED_RCPT(0.00)[linux-usb];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[]
 X-Rspamd-Action: no action
 
+The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
-On 5/9/26 14:52, Mario Limonciello wrote:
->
-> Fine by me either way.
->
-Thanks. I changed the current branch to:
+  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
 
-   depends on X86
-   default USB_XHCI_PCI
+are available in the Git repository at:
 
-and removed the CPU_SUP_AMD-specific help text.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-7.1-rc3
 
-Sincerely,
-Jihong Min
+for you to fetch changes up to 4fd44d47e8ab760eef11968d093200cce6752d95:
 
+  Merge tag 'usb-serial-7.1-rc3' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2026-05-08 17:18:43 +0200)
+
+----------------------------------------------------------------
+USB driver fixes for 7.1-rc3
+
+Here are some small USB driver fixes for 7.1-rc3 to resolve some
+reported issues, and a new device id.  These are:
+  - usblp driver heap leak fixes
+  - ulpi driver memory leak fix
+  - typec driver fixes
+  - dwc3 driver fix
+  - omap dma driver fix
+  - new option driver device id addition
+
+All of these have been in linux-next for over a week with no reported
+issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Aaro Koskinen (1):
+      USB: omap_udc: DMA: Don't enable burst 4 mode
+
+Amit Sunil Dhamne (1):
+      usb: typec: tcpm: reset internal port states on soft reset AMS
+
+Fabio Porcedda (1):
+      USB: serial: option: add Telit Cinterion LE910Cx compositions
+
+Felix Gu (1):
+      usb: ulpi: fix memory leak on ulpi_register() error paths
+
+Greg Kroah-Hartman (3):
+      usb: usblp: fix heap leak in IEEE 1284 device ID via short response
+      usb: usblp: fix uninitialized heap leak via LPGETSTATUS ioctl
+      Merge tag 'usb-serial-7.1-rc3' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+
+Selvarasu Ganesan (1):
+      usb: dwc3: Move GUID programming after PHY initialization
+
+Xu Yang (1):
+      usb: typec: tcpm: fix debug accessory mode detection for sink ports
+
+ drivers/usb/class/usblp.c         |  3 ++-
+ drivers/usb/common/ulpi.c         |  5 ++++-
+ drivers/usb/dwc3/core.c           | 12 ++++++------
+ drivers/usb/gadget/udc/omap_udc.c |  4 ----
+ drivers/usb/serial/option.c       |  4 ++++
+ drivers/usb/typec/tcpm/tcpm.c     | 27 ++++++++++++++++++---------
+ 6 files changed, 34 insertions(+), 21 deletions(-)
 
