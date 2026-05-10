@@ -1,42 +1,42 @@
-Return-Path: <linux-usb+bounces-37198-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37197-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mGALC5WRAGq+KQEAu9opvQ
-	(envelope-from <linux-usb+bounces-37198-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2026 16:09:25 +0200
+	id 4MKwJJ2RAGq+KQEAu9opvQ
+	(envelope-from <linux-usb+bounces-37197-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2026 16:09:33 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 956DD5048B6
-	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2026 16:09:24 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EF955048CC
+	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2026 16:09:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5583B300A7D0
-	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2026 14:09:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4157C3011862
+	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2026 14:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 216FF39B4B2;
-	Sun, 10 May 2026 14:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 699C139B4B2;
+	Sun, 10 May 2026 14:09:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b="FKgvi+Yc"
+	dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b="Noh5vLOW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m49221.qiye.163.com (mail-m49221.qiye.163.com [45.254.49.221])
+Received: from mail-m127214.xmail.ntesmail.com (mail-m127214.xmail.ntesmail.com [115.236.127.214])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59EB239A81A;
-	Sun, 10 May 2026 14:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC33239B942;
+	Sun, 10 May 2026 14:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.214
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778422161; cv=none; b=a9xoT04yz0XHrH12feV6RRmGXSEhqzqkz6OkWs0mtcv6X2Ey5/X4whPrN8KJWTGQdaCcUDHJS75xFlso2p4MuwUg9v/Kc4GpARCR3iKfx9cO09TvYrVr8nA8hKe977C+onvvA9/F43e0yD8CH9HavNcfs3BFMbcdFW/mqowSY5U=
+	t=1778422160; cv=none; b=bcHe62MtreKequcRgC3cWx2dstBSSSdzrwVED9IM9e8MY5hYAufDeQxbXfvUibUJ4pHHAUP2Aetb4ck3GIylercTT20zRrwHkKoEJGg7Ou7o/PpsAk5FN/JjgPUc/G3u40VzNTu5VA3nD8/NTHwJGuTNxNe2kx0qpx0MoRJVoNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778422161; c=relaxed/simple;
-	bh=wyjBriCJMNye0PeX03QKREfP4l0oxB3LdgwAueLeTKc=;
+	s=arc-20240116; t=1778422160; c=relaxed/simple;
+	bh=raAYF7MixxeMCWJ08DU7j8mwLnHPliRfScS9KLv8L7A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Po7SaDOhM//SflOB2Ib3j7zxJVjtr1xAqyJw5FIfbv2mGf9LWWKHcPiZcAuk1SLrQChCGAhucxMtKCxWb0sYWyXRMsIO5voJ9xqde2rN4OZHpDq0L/XQ6jpY0XtEgR3++b91ovnOApQeSezSpudHuebv3yuiOMJFFJes+kT0p+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=FKgvi+Yc; arc=none smtp.client-ip=45.254.49.221
+	 MIME-Version:Content-Type; b=thUWnqs7N0NjIQ88Cu60RnN5025cds3PHglnhN0eSAK6NQTPJjT/mXK3jsZ3svE884bShCcsjJOcnHXAXkXr2WaIZg+iaA4DFejPfz5k4pJ7PH7MosJ6HVZhKKExsYcNDrN9sZcmnIUrHaz/wN0OTsF/f2IPx5Q5bFa9S3Auq1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=Noh5vLOW; arc=none smtp.client-ip=115.236.127.214
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leap-io-kernel.com
 Received: from server001 (unknown [222.130.22.242])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 3dd2c7004;
-	Sun, 10 May 2026 21:53:51 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 3dd2c7008;
+	Sun, 10 May 2026 21:53:53 +0800 (GMT+08:00)
 From: Kefan Bai <baikefan@leap-io-kernel.com>
 To: linux-usb@vger.kernel.org,
 	si.yanteng@linux.dev
@@ -48,9 +48,9 @@ Cc: gregkh@linuxfoundation.org,
 	skhan@linuxfoundation.org,
 	linux-doc@vger.kernel.org,
 	doubled@leap-io-kernel.com
-Subject: [PATCH v6 5/8] docs/zh_CN: Add dwc3.rst translation
-Date: Sun, 10 May 2026 21:53:36 +0800
-Message-ID: <3c577322de70e143a6e57d60be7199f3b50d8a78.1778415392.git.baikefan@leap-io-kernel.com>
+Subject: [PATCH v6 6/8] docs/zh_CN: Add ehci.rst translation
+Date: Sun, 10 May 2026 21:53:37 +0800
+Message-ID: <39d6d446008a91352ef1b27b32f1b08cc9310271.1778415392.git.baikefan@leap-io-kernel.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <cover.1778415392.git.baikefan@leap-io-kernel.com>
 References: <cover.1778415392.git.baikefan@leap-io-kernel.com>
@@ -62,23 +62,23 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9e122a6f5d09d5kunm9f76e21d35e09a
+X-HM-Tid: 0a9e122a76ca09d5kunm9f76e21d35e0a2
 X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaHRhJVhgdGExLTR1ITE4YTlYVFA
-	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUlVSkhLVUlJVUlPSVlXWRYaDxIVHRRZQVlPQkxVSE
-	pMSEJVS1VKS1kG
+X-HM-Spam-Status: e1kfGhgUHx5ZQUhXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaGBlIVhhKGh1KGk5PTx1NQ1YVFA
+	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUlVSkhLVUlJVUlPSVlXWRYaDxIVHRRZQVlPS0hVSU
+	pCTkhIQ1VPVUpPS0JZBg++
 DKIM-Signature: a=rsa-sha256;
-	b=FKgvi+YcyDLwLB8blYpvD+hePdySQa4TTi8O2W4eLviRtpCMleJ8P5vh6dorHdKQnMAYTE6FRa+XUH2PJrTqnHDNJ3ukpkXKAZqfpROno6RyWe+ZYefKDCqmuqHM5WM+L5SY4iCmf0JAtVDQF54tYruvsDTNHo08JLRZkqf+qIpfoGX+SeeTb1YErE0vujR0cWoaHQ2SWMUFkIK7mz3B5vdvxWHmfYllk+4ZVAAY1TIuPCl7wCulk+cWdlYgd32Fs8vKLvHroGhWvho6lJm++RX2mJAMq6sBx/iOzGE1OxyHSmAkoUGMI3Pki0Gm23HR3pbokEryyYHsiCpBtbi24g==; s=default; c=relaxed/relaxed; d=leap-io-kernel.com; v=1;
-	bh=JcnQv15Zq9vCmnWhCDk2jnbMBx6Lvo45ZM9b20nvvYY=;
+	b=Noh5vLOW+AZONyk9imwQSCAC7sswmEbHr+HYd1/HuwKdp/aNRYUeibFU/fWUeg/SVGR3JfUgScXBig/h72QHETeafTB5WY5niJqip3L1O162yka34PdLr1GCgSdHVvwNFZ3nKeipyUIs9GCA9zbABi0PL4GM8qCql0TTRC+N2i7B2N3Qf2Q0YUXC9A6RKFu+KzM5u57+VB/hzGlVNDTCCiWYzxltGy3BH313c8UxQ9XfzYW64BpCKEWBamMCH/pDts2jSQ4E4ezkQbr8Ln0fdc4Pa+xaurUy4Fz+VRYPPii4qpj9QaLSRPJOqHkdCmULdyTo64woEmFhONpkzyq2gQ==; s=default; c=relaxed/relaxed; d=leap-io-kernel.com; v=1;
+	bh=iET99+5NYL4/2LQcF9HzhvF+jur+ird0CmxFps//bvs=;
 	h=date:mime-version:subject:message-id:from;
-X-Rspamd-Queue-Id: 956DD5048B6
+X-Rspamd-Queue-Id: 2EF955048CC
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-1.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[leap-io-kernel.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[leap-io-kernel.com:s=default];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -87,10 +87,10 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	FREEMAIL_CC(0.00)[linuxfoundation.org,gmail.com,kernel.org,hust.edu.cn,lwn.net,vger.kernel.org,leap-io-kernel.com];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-37198-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37197-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[leap-io-kernel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MIME_TRACE(0.00)[0:+];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[baikefan@leap-io-kernel.com,linux-usb@vger.kernel.org];
@@ -99,32 +99,32 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[10];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[leap-io-kernel.com:email,leap-io-kernel.com:mid,leap-io-kernel.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,cqsoftware.com.cn:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[leap-io-kernel.com:email,leap-io-kernel.com:mid,leap-io-kernel.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,cqsoftware.com.cn:email]
 X-Rspamd-Action: no action
 
-Translate .../usb/dwc3.rst into Chinese
+Translate .../usb/ehci.rst into Chinese
 
-Update the translation through commit ecefae6db042
-("docs: usb: rename files to .rst and add them to drivers-api")
+Update the translation through commit 570eb861243c
+("docs: usb: replace some characters")
 
 Reviewed-by: Yanteng Si <siyanteng@cqsoftware.com.cn>
 Signed-off-by: Kefan Bai <baikefan@leap-io-kernel.com>
 ---
- Documentation/translations/zh_CN/usb/dwc3.rst | 60 +++++++++++++++++++
- .../translations/zh_CN/usb/index.rst          |  2 +-
- 2 files changed, 61 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/translations/zh_CN/usb/dwc3.rst
+ Documentation/translations/zh_CN/usb/ehci.rst | 230 ++++++++++++++++++
+ .../translations/zh_CN/usb/index.rst          |   2 +-
+ 2 files changed, 231 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/translations/zh_CN/usb/ehci.rst
 
-diff --git a/Documentation/translations/zh_CN/usb/dwc3.rst b/Documentation/translations/zh_CN/usb/dwc3.rst
+diff --git a/Documentation/translations/zh_CN/usb/ehci.rst b/Documentation/translations/zh_CN/usb/ehci.rst
 new file mode 100644
-index 000000000000..92108ff8cc80
+index 000000000000..ea1d72f52efd
 --- /dev/null
-+++ b/Documentation/translations/zh_CN/usb/dwc3.rst
-@@ -0,0 +1,60 @@
++++ b/Documentation/translations/zh_CN/usb/ehci.rst
+@@ -0,0 +1,230 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +.. include:: ../disclaimer-zh_CN.rst
 +
-+:Original: Documentation/usb/dwc3.rst
++:Original: Documentation/usb/ehci.rst
 +:翻译:
 +
 + 白钶凡 Kefan Bai <baikefan@leap-io-kernel.com>
@@ -133,70 +133,240 @@ index 000000000000..92108ff8cc80
 +
 +
 +
-+===========
-+DWC3 驱动
-+===========
++=========
++EHCI 驱动
++=========
++
++2002年12月27日
++
++EHCI 驱动用于通过支持 USB 2.0 的主机控制器硬件与高速 USB 2.0 设备通信。
++USB 2.0 兼容 USB 1.1 标准，它定义了三种传输速率：
++
++    - “高速”（High Speed）480 Mbit/sec（60 MByte/sec）
++    - “全速”（Full Speed）12 Mbit/sec（1.5 MByte/sec）
++    - “低速”（Low Speed）1.5 Mbit/sec
++
++USB 1.1 仅支持全速与低速。高速设备可以在 USB 1.1 系统上使用，
++但速度会降到 USB 1.1 的速率。
++
++USB 1.1 设备也可以在 USB 2.0 系统上使用。
++当它们插入 EHCI 控制器时，会被交由 USB 1.1 的伴随（companion）控制器处理，
++该控制器通常是 OHCI 或 UHCI。
++
++当 USB 1.1 设备插入 USB 2.0 集线器时，
++它们通过集线器中的事务转换器（Transaction Translator，TT）与 EHCI 控制器交互，
++该转换器将低速或全速事务转换为高速分割事务，从而避免浪费传输带宽。
++
++截至本文撰写时，该驱动已在以下 EHCI 实现上成功运行（按字母顺序）：
++Intel、NEC、Philips 和 VIA。
++其他供应商的 EHCI 实现正在陆续问世；
++预计该驱动在这些实现上也可正常运行。
++
++自 2001 年年中起，usb-storage 设备就已可用
++（在 2.4 版该驱动上速度相当不错），
++集线器则直到 2001 年底才开始可用，而其他类型的高速设备
++似乎要等到更多系统内置 USB 2.0 后才会出现。
++这类新系统从 2002 年初开始上市，并在 2002 年下半年变得更加常见。
++
++注意，USB 2.0 支持并不只是 EHCI 本身。它还需要对 Linux-USB
++核心 API 作出其他修改，包括 hub 驱动；不过这些修改并不需要真正改变
++暴露给 USB 设备驱动的基本 ``usbcore`` API。
++
++- David Brownell
++  <dbrownell@users.sourceforge.net>
 +
 +
-+待办
-+~~~~~~
++功能
++====
 +
-+阅读时如果想顺手认领点任务，可以从下面挑一项 :)
++该驱动会定期在 x86 硬件上进行测试，也已在 PPC 硬件上使用，
++因此大小端问题应当已经解决。
++因此可以认为，它已经处理好了所有必要的 PCI 细节，
++所以即便在 DMA 映射有些特殊的系统上，I/O 也应能正常运行。
 +
-+- 将中断处理程序改为每个端点各自使用线程化 IRQ
++传输类型
++--------
 +
-+  事实证明，有些 DWC3 命令大约需要 ``~1 ms`` 才能完成。
-+  当前代码会一直自旋等待命令完成，这种设计并不好。
++截至本文撰写时，该驱动应当已经能够很好地处理所有控制传输、批量传输
++和中断传输，包括通过 USB 2.0 集线器中的事务转换器与 USB 1.1 设备通信；
++但仍可能存在 bug。
 +
-+  实现思路：
++高速等时（ISO）传输支持也已可用，但截至本文撰写时，
++还没有 Linux 驱动使用这项支持。
 +
-+  - DWC 核心实现了一个按端点对中断进行解复用的 IRQ 控制器。中断号在
-+    探测（``probe``）阶段分配，并归属于该设备。如果硬件通过 ``MSI`` 为每个端点
-+    提供独立中断，那么这个“虚拟”IRQ 控制器就可以被真实的端点中断取代。
++目前尚不支持通过事务转换器实现全速等时传输。
++需要注意，ISO 传输的 split transaction 支持与高速 ISO 传输
++几乎无法共用代码，因为 EHCI 用不同的数据结构表示它们。
++因此，目前大多数 USB 音频和视频设备还不能通过高速总线连接使用。
 +
-+  - 在调用 ``usb_ep_enable()`` 时请求并分配中断资源，
-+    在调用 ``usb_ep_disable()`` 时释放中断资源。
-+    最坏情况下需要 32 个中断，最少是 ``ep0/1`` 的两个中断。
-+  - ``dwc3_send_gadget_ep_cmd()`` 将在 ``wait_for_completion_timeout()``
-+    中休眠，直到命令完成。
-+  - 中断处理程序分为以下几个部分：
++驱动行为
++--------
 +
-+    - 设备级主中断处理程序
-+      遍历每个事件，并对其调用 ``generic_handle_irq()``。
-+      从 ``generic_handle_irq()`` 返回后，确认事件计数器，使中断最终消失。
++所有类型的传输都可以排队。
++这意味着来自一个接口驱动的控制传输（或通过 usbfs 发出的控制传输）
++不会干扰另一个驱动的控制传输，而且中断传输可以使用 1 帧的周期，
++而不必担心中断处理开销导致的数据丢失。
 +
-+    - 设备级线程化处理程序
-+      无。
 +
-+    - 端点中断的主处理程序
-+      读取事件并尽量处理它。凡是需要睡眠的操作都交给线程处理。
-+      事件保存在每个端点的数据结构中。
-+      还要注意，一旦把某项工作交给线程处理，就不要再在主处理程序里处理它，
-+      以免出现优先级反转之类的问题。
++EHCI 根集线器代码会将 USB 1.1 设备移交给其伴随控制器。
++该驱动不需要了解那些驱动的任何细节；
++一个原本就能正常工作的 OHCI 或 UHCI 驱动，并不会因为 EHCI 驱动也存在而需要更改。
 +
-+    - 端点中断的线程化处理程序
-+      处理剩余的端点工作，这些工作可能会睡眠，例如等待命令完成。
++电源管理方面还有一些问题；当前挂起/恢复的行为还不完全正确。
 +
-+  延迟:
++此外，在调度周期性事务（中断和等时传输）时还采取了一些简化处理。
++这些简化会限制可调度的周期性事务数量，
++并且无法使用小于一帧的轮询间隔。
 +
-+   不应增加延迟，因为中断线程具有较高优先级，会在普通用户态任务之前运行
-+   （除非用户更改了调度优先级）。
++使用方式
++=========
++
++假设有一个 EHCI 控制器（位于 PCI 卡或主板上），并且已将此驱动编译为模块，
++可这样加载::
++
++    # modprobe ehci-hcd
++
++卸载方式::
++
++    # rmmod ehci-hcd
++
++还应加载一个伴随控制器驱动，例如 ``ohci-hcd`` 或 ``uhci-hcd``。
++如果 EHCI 驱动出现任何问题，只需卸载它的模块，
++随后该伴随控制器驱动就会接手此前由 EHCI 驱动处理的所有设备
++（但速度会降低）。
++
++模块参数（传给 ``modprobe``）包括：
++
++    log2_irq_thresh（默认值 0）：
++        默认中断延迟的 log2 值，单位是微帧。默认值 0 表示 1 个微帧
++        （125 微秒）。最大值 6 表示 2^6 = 64 个微帧。
++        该值控制 EHCI 控制器发出中断的频率。
++
++如果在 2.5 内核上使用此驱动，并且启用了 USB 调试支持，
++则会在任一 EHCI 控制器的 ``sysfs`` 目录中看到三个文件：
++
++    ``async``
++        转储异步调度，用于控制传输和批量传输。它会显示每个活动的 ``qh``
++        以及待处理的 ``qtd``，通常每个 ``urb`` 对应一个 ``qtd``。
++        （可以在 ``usb-storage`` 做磁盘 I/O 时看它；顺便观察请求队列！）
++
++    ``periodic``
++        转储周期性调度，用于中断传输和等时传输。不显示 ``qtd``。
++
++    ``registers``
++        显示控制器寄存器状态。
++
++这些文件的内容有助于定位驱动问题。
++
++
++设备驱动通常不需要关心自己是否运行在 EHCI 之上，
++但它们可能想检查 ``usb_device->speed == USB_SPEED_HIGH``。
++高速设备能做到全速（或低速）设备做不到的事，
++例如高带宽的周期性传输（中断或 ISO 传输）。
++另外，设备描述符中的某些值
++（例如周期性传输的轮询间隔）在高速模式下使用不同的编码方式。
++
++不过，一定要让设备驱动经过 USB 2.0 集线器的测试。
++当使用事务转换器时，这些集线器报告某些故障（例如断开连接）的方式会不同；
++已经见过一些驱动在遇到与 OHCI 或 UHCI 所报告的不同故障时表现不佳。
++
++性能
++====
++
++USB 2.0 吞吐量主要受两个因素制约：主机控制器处理请求的速度，
++以及设备响应这些请求的速度。480 Mbit/sec 的“原始传输率”
++对所有设备都成立，但总吞吐量还会受到诸如单个高速包之间的延迟、
++驱动是否足够聪明，以及系统整体负载等因素的影响。
++延迟也是性能考量因素。
++
++批量传输最常用于关注吞吐量的场景。
++需要记住的是，批量传输总是以 512 字节包为单位，
++而一个 USB 2.0 微帧中最多只能容纳 13 个这样的包。
++8 个 USB 2.0 微帧构成一个 USB 1.1 帧；
++一个微帧的时长是 1 毫秒 / 8 = 125 微秒。
++
++因此，只要硬件和设备驱动软件都允许，
++批量传输可提供超过 50 MByte/sec 的带宽。
++周期性传输模式（等时和中断）允许使用更大的包大小，
++从而可以逼近所宣称的 480 Mbit/sec 传输率。
++
++硬件性能
++--------
++
++截至本文撰写时，单个 USB 2.0 设备的最大传输速率通常约为 20 MByte/sec。
++这当然会随着时间改变：一些设备现在更快，一些更慢。
++
++第一代 NEC EHCI 实现似乎存在大约 28 MByte/sec 的硬件瓶颈。
++虽然这对单个 20 MByte/sec 的设备显然已经够用，
++但把三个这样的设备挂到同一总线上，并不能得到 60 MByte/sec。
++问题似乎在于控制器硬件无法并发进行 USB 与 PCI 访问，
++因此它每个微帧只会尝试 6 次（也许是 7 次）USB 事务，而不是 13 次。
++（对一个比其他产品早上市一年的芯片来说，这是个合理的妥协！）
++
++
++预计较新的实现会在这方面做得更好，
++通过投入更多芯片面积来解决这个问题，
++使新的主板芯片组更接近 60 MByte/sec 的目标。
++这既包括 NEC 的更新实现，也包括其他厂商的芯片。
++
++
++主机从 EHCI 控制器收到“请求已完成”中断的最小延迟为一个微帧
++（125 微秒）。该延迟可以调节；驱动提供了一个模块选项。
++默认情况下，``ehci-hcd`` 使用最小延迟，
++这意味着当发出一个控制或批量请求时，
++通常可以在不到 250 微秒内得知它已完成
++（具体取决于传输大小）。
++
++软件性能
++--------
++
++即便只是要达到 20 MByte/sec 的传输速率，Linux-USB 设备驱动
++也必须让 EHCI 队列始终保持满载。
++这意味着要发出较大的请求，或者在需要发出一连串小请求时使用批量请求排队。
++如果驱动未做到这一点，那么会直接从性能结果上表现出来。
++
++
++在典型情况下，使用 ``usb_bulk_msg()`` 以 4 KB 块循环写出，
++会浪费超过一半的 USB 2.0 带宽。
++I/O 完成与驱动发出下一次请求之间的延迟，通常会比一次 I/O 本身耗时更长。
++如果同样的循环改用 16 KB 块，会好一些；若使用一连串 128 KB 块，则浪费会少得多。
++
++
++但与其依赖这么大的 I/O 缓冲区来让同步 I/O 高效，
++不如直接向主机控制器排入多个（批量）请求，然后等待它们全部完成
++（或在出错时取消）。
++这种 URB 排队方式对所有 USB 1.1 主机控制器驱动也同样适用。
++
++
++在 Linux 2.5 内核中，定义了新的 ``usb_sg_*()`` API；
++它们会把 scatterlist 中的所有缓冲区都排入队列。
++它们还使用 scatterlist 的 DMA 映射（其中可能应用 IOMMU）并减少中断次数，
++这些都有助于让高速传输尽可能快地运行。
++
++待办：
++   中断传输和等时（ISO）传输的性能问题。
++   这些周期性传输都是完全调度的，因此，主要问题可能在于如何触发高带宽模式。
++
++待办：
++   通过 ``sysfs`` 中的 ``uframe_periodic_max`` 参数，
++   可以分配超过标准 80% 的周期性带宽。
++   后续将对此进行说明。
 diff --git a/Documentation/translations/zh_CN/usb/index.rst b/Documentation/translations/zh_CN/usb/index.rst
-index 70fe33fc37d9..6d669c41d1cd 100644
+index 6d669c41d1cd..6c8e75d8cfc9 100644
 --- a/Documentation/translations/zh_CN/usb/index.rst
 +++ b/Documentation/translations/zh_CN/usb/index.rst
-@@ -20,10 +20,10 @@ USB 支持
-     acm
+@@ -21,10 +21,10 @@ USB 支持
      authorization
      chipidea
-+    dwc3
+     dwc3
++    ehci
 
  Todolist:
 
--* dwc3
- * ehci
+-* ehci
  * usbmon
  * functionfs
+ * functionfs-desc
 --
 2.54.0
 
