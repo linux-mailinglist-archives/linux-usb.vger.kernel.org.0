@@ -1,458 +1,235 @@
-Return-Path: <linux-usb+bounces-37191-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37192-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cCHgC6RNAGqsGAEAu9opvQ
-	(envelope-from <linux-usb+bounces-37191-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2026 11:19:32 +0200
+	id 4NKiGJB8AGrJJQEAu9opvQ
+	(envelope-from <linux-usb+bounces-37192-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2026 14:39:44 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89F6C5034EA
-	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2026 11:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D8E8A504004
+	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2026 14:39:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9B0013011C5E
-	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2026 09:18:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3E5EF300CBC6
+	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2026 12:39:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3247A36CE14;
-	Sun, 10 May 2026 09:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F6E638236D;
+	Sun, 10 May 2026 12:39:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b="W+CXC9SL"
+	dkim=pass (1024-bit key) header.d=motu.com header.i=@motu.com header.b="ddLWp7xt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134AE1A9FBC;
-	Sun, 10 May 2026 09:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5783806CD
+	for <linux-usb@vger.kernel.org>; Sun, 10 May 2026 12:39:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778404729; cv=pass; b=DJLQhKu1TO0jQ15a6NSFbj7oX58BlZZBMQt7NSLjcjGVoatpzijjZ4UQohYvdCJgk4y1q/AJDyWWZ8u4ohmnCpwqTrflZ16u1/901gga1+RO57Dg/ZNUvs5XHqiMd32U7FTlibMLvGDEkoGAGaDcurWaXwrvJRc7yEHHul9RPro=
+	t=1778416772; cv=pass; b=awk1DI6iOEsR11m29vrqgnNxibjWzCy/5mKbjbc6+E/qnOw01e1BVQTLc4UvbPLEpugU57IKyEKs4MZBYC+/+ltofGazCwT/4zJf5lyk+UvMa9kLkOFyvREZ5FYqHaqBnPPlQ0to4te7JqY9W3ozKItHUTXqiSU1VG6AUWVvzX4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778404729; c=relaxed/simple;
-	bh=4RvJQAtKAEQmYjKPkscFIii3Dot9Cnt6YFZgKaLkjiQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=s8XRCvS/2qTjo5OouxAc+hW0VORhdg9QCsRgl4zQlaQBQTnaRD7TysoG8QvUF3yQcGIWg1EQ1hS2oNNc0ZmOCygrccYILSvyazm40pVPXHn9J/UY6rUV/VkgfZCrHCj13hFAtESOKGAthMd1PSbllpn/8m7gwacdOmbd/mPOTTc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me; spf=pass smtp.mailfrom=icenowy.me; dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b=W+CXC9SL; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icenowy.me
-ARC-Seal: i=1; a=rsa-sha256; t=1778404694; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=NpW9zYa1oHpFoduv/89cZTj3IJVyCerCeDbLG4x9oS+mbTvHFWv6zdqBHGRJ5OuOb9ZnWZp7cpMNNdxkdUVIbgFsVWakmfpjPdOFwMIN+ioghStdyD2qmupZPpSz/F62ANIb6fF3kv6spU/7jt7znzgxrx5RYkNwOQVaBCrmAtg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1778404694; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=pF/MAuFbMXTlizcjlRu52Hks3i0WzgCLalQH82GrqJE=; 
-	b=kmao7xBi/Jn+yysjZJ5vJyg5RB7n0NfMt2IiZtYV7hGiKoLcXkt8h5nOjm/wfdZ6s/PtoBL7Lk5yEZq4EMJ/zvI7HqRKniWiIrynEn4Ahku/pwnyIocrwXUnX5poqs1BekrKaoXXWxRlKABe/p5lqIWubB7Csk43VtOdeWg12rU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=icenowy.me;
-	spf=pass  smtp.mailfrom=uwu@icenowy.me;
-	dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1778404694;
-	s=zmail2; d=icenowy.me; i=uwu@icenowy.me;
-	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-	bh=pF/MAuFbMXTlizcjlRu52Hks3i0WzgCLalQH82GrqJE=;
-	b=W+CXC9SLhWU1ajzYyABpo4ZyrX1N3ffKjJp76YPGw0adafG/X5iUuy1KIWhiGE+c
-	H0ePDR+io+VumZmz43JPYbqg8UQevq+S4uKHMB5XT+N3zw9zJulsTdPw1uhm7ZkbmT/
-	6HgjJDN4iwR42Nu5yYIBlB1pv2+0vbqnze0YvblrQenWFVZ5Wy6ulJFSjXkM+Fqsh5s
-	PauViM9Z4Q3WJHyhpALIpBqCbAvhexklGr4eap6Lrk5JUoy+b6sOjUJaHXRVFN5blYI
-	zik3jsKT1KAUZtnJmTlNKYDrEScscuRe0dztWVS7dzesJJJhP1JmJVOgf5i8KMv8lei
-	Ws7p1QIj0Q==
-Received: by mx.zohomail.com with SMTPS id 1778404691210603.5709819095284;
-	Sun, 10 May 2026 02:18:11 -0700 (PDT)
-Message-ID: <244b01b015ffd8e859ff30101d7743ff1c0fd899.camel@icenowy.me>
-Subject: Re: [PATCH 05/12] phy: add a driver for T-Head TH1520 USB PHY
-From: Icenowy Zheng <uwu@icenowy.me>
-To: Vinod Koul <vkoul@kernel.org>
-Cc: Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei	
- <wefu@redhat.com>, Michael Turquette <mturquette@baylibre.com>, Stephen
- Boyd	 <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski	 <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Neil
- Armstrong	 <neil.armstrong@linaro.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>,  Paul Walmsley	 <pjw@kernel.org>, Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou	 <aou@eecs.berkeley.edu>, Alexandre
- Ghiti <alex@ghiti.fr>, Jisheng Zhang	 <jszhang@kernel.org>, Philipp Zabel
- <p.zabel@pengutronix.de>, 	linux-riscv@lists.infradead.org,
- linux-clk@vger.kernel.org, 	devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, 	linux-gpio@vger.kernel.org,
- linux-phy@lists.infradead.org, 	linux-usb@vger.kernel.org, Han Gao
- <rabenda.cn@gmail.com>, Yao Zi	 <ziyao@disroot.org>
-Date: Sun, 10 May 2026 17:17:59 +0800
-In-Reply-To: <agA3URhGA1u6R7LD@vaman>
-References: <20260507081710.4090814-1-zhengxingda@iscas.ac.cn>
-	 <20260507081710.4090814-6-zhengxingda@iscas.ac.cn> <agA3URhGA1u6R7LD@vaman>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 
+	s=arc-20240116; t=1778416772; c=relaxed/simple;
+	bh=0QEtS4OPVDf1HqYPP+C9FwjWgJ7P/cwSYmMRcmzxN2Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kuISuAQYkEk1ZBy2bsrbpHt8DlPlpNDNOd2/1LWFLhbOHgxTUgXhwt9zcOWLN+e+n3IHPiaTPXqy1bB+G1zo7YVOc58T760myul9sc7TkPWdS8dP7QzCIwP59tMO89aCXlPMOzKoRe95gfFN/sCSr8bg+D+YTN31MAm/P2lE0uU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motu.com; spf=pass smtp.mailfrom=motu.com; dkim=pass (1024-bit key) header.d=motu.com header.i=@motu.com header.b=ddLWp7xt; arc=pass smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=motu.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-67fd8befac7so338659a12.2
+        for <linux-usb@vger.kernel.org>; Sun, 10 May 2026 05:39:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778416767; cv=none;
+        d=google.com; s=arc-20240605;
+        b=bFBtvUMLL1RggDBCKcrou7yhZkCVmOZiPu9dD/KnO+u4hIJ9zOSq9o0LNP1uK76/WP
+         rUU44UBrf+A5mXX8jHD8FejDSuqVP4TjtYANJQyxI8iLeW7gcFU/Lnf+zDFm5I6vYTuX
+         fv2sSkFm3UAHy39pqupMNsWJIvoYH8IgeB/xQso5R5V8I0rWvzCDyiynCG/c05NR5F79
+         gNNeJavPIhPrAqDVYCCrhZGbN2beImdI8MQZJXUQmoFLyZgdO9P7XAry9QfeY/al/NNV
+         +X6znvKMSyoDKip5/EPTTGgea+uP+hzAO0VfydfY9DDHqVcrZcKcyV45c61VXxPGqk28
+         1u1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0QEtS4OPVDf1HqYPP+C9FwjWgJ7P/cwSYmMRcmzxN2Q=;
+        fh=eTBROdqFLSPp7ZQNFIbMatZOADlnPDeHeMWxVn2ubFs=;
+        b=htNS/AyECfiSf3CLAql8GjgchGz5/cqiQrQNCaxt7UpCOGRYK/9m/ovkErcODdNAC9
+         oSQvGgYFcfnhvpG1QkNaSCMtmZOj2cU5B+Eubv67mS7lZc3HgEihbl+snmGwISxguskS
+         60hUdJNxi7E5UOqZwkeWTYWAQZDLn6HcQY9912yk4svJslrf+xpoGU5XQBweaev5WkvG
+         8kDW/RZ+U4CL3AvMNu2TOLlzg+mQy2lAsWfraSLjLkjGktI1bky9KChhm3Y2an1O1HCZ
+         0SaLEEAd6rr3nFQOLXKDVrSPnMyWt4x/HPyCBLIxJQ/CmXnhwHsi8pVOJXgyHIrvMaBG
+         bSfA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=motu.com; s=google; t=1778416767; x=1779021567; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0QEtS4OPVDf1HqYPP+C9FwjWgJ7P/cwSYmMRcmzxN2Q=;
+        b=ddLWp7xtHMRPeruo8qnM6DqKS7DXTATAOKATVVa52qw1wduXep771MrCW5dY1Q0vQ1
+         IeWHh0B9xSHQouFHJRWrF9xlKQdOUDsbXM2e0E7+SKeYjvdLYci3yh++bfd/SjOzMomv
+         uYi5daylHPACKrbx24qm3PZjUkRID483FzaRY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778416767; x=1779021567;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0QEtS4OPVDf1HqYPP+C9FwjWgJ7P/cwSYmMRcmzxN2Q=;
+        b=M/UmIvrZrLwAarSR1rauWrlQyydelaJoXbirITwvAKX/iRSMCdR3kjrMn5Mb6sTb7q
+         7TFNS+aHXrYQfr32g6XrGNoL3WTwOhUasIFBFgwoFpwWXhKaKwmonBcyQy896q6QsIVu
+         tHWntJtadxqw+0cRxYXYEWYfNh/7evbyqPvIjPyJaP0NFfg+8L1vSj9Vk+qIffMlwoRO
+         YHegdkB2xNLkf/5Mtuc8c7jwVo9/lHDI9ulN3zbW4bd1ooX/HAsmi28F2deJGhy8uieP
+         DJ/Uyf/2WxHpornZ8NZEK/7wn0niOopb00CS75bfcT6QFvc1v34FkuLeLW0N+R9vfeEi
+         KnSQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+wh+jtvzpMqUif2zqfwIk+mi7QR6eYeSZ8f39jHpqTMQR2DEkFZ8Gi1WEi0lly0k/1IC4vP5qwypw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9CekatBYqzEx71fMMKdFrSqPYF3aeefe7nUxfen5ypKFmYFhv
+	kSAKjcVXOnRE2OcZLPPT37/PrLBzDwDsCKCRVDX0qGoVYzlRN9vXpIRDBKMqUNFhOyg8ZkT3azz
+	Aj9CfAFyL/NW6OOhYQC7BZfZljobBASoYRJH+4zqfaw==
+X-Gm-Gg: Acq92OHVjea2zNuYxKwA0qq20bwBR4ZkyCffXb+5OcGLNx8FtfR9EbE4VWy82E4KMay
+	x7Tg4tRdpSNiTw86tXBgvzDaJPxWG2syOU3RLKYMsDirtP0dEBxzxaDtJnbwo3qtoEJr4Z05GdT
+	D9LnusoB7amqX01nouVKILhe3i+sL5bDMbjOShZeXsb3kLvrbVOoL8UduB3gFtaVqC/UQH7gzas
+	cPDGHFJ6OrT+2xJz//jhW83zqdcBilRZ55vR2k9ZP/KKhq7sXg0UOg+Mp8Fgp60NL5prmZn3wrb
+	V8TVFlXUVXlUPVudtg==
+X-Received: by 2002:a17:907:94ce:b0:bc3:149d:e9e0 with SMTP id
+ a640c23a62f3a-bc56d1358f7mr1118346366b.23.1778416767370; Sun, 10 May 2026
+ 05:39:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Rspamd-Queue-Id: 89F6C5034EA
+References: <bug-220748-208809@https.bugzilla.kernel.org/> <bug-220748-208809-eL7PrzeMxr@https.bugzilla.kernel.org/>
+ <fe08eabc-4f92-43fd-89d7-5e9d0e35c979@rowland.harvard.edu>
+ <CA+Df+jdtQrYye85d7uZyT3jirsztKhf7qQes3LvOAPa+9qxSOw@mail.gmail.com>
+ <87d93b07-be3e-4c36-a6cb-97190560f648@rowland.harvard.edu>
+ <CA+Df+jfP-idvQqNrGo7Tc7+03ruh6kBa=MOSXE1mwXL2VqLNrw@mail.gmail.com>
+ <a756038c-270b-455e-9f53-51b1ad6a31d0@rowland.harvard.edu>
+ <CA+Df+jf=UaVubKM1Pfu7sgREUMYv=6QMi94mbhhefjhXq8-6uw@mail.gmail.com> <20260510001204.7a4d5faa.michal.pecio@gmail.com>
+In-Reply-To: <20260510001204.7a4d5faa.michal.pecio@gmail.com>
+From: Dylan Robinson <dylan_robinson@motu.com>
+Date: Sun, 10 May 2026 08:39:13 -0400
+X-Gm-Features: AVHnY4LCgcm2Pxnxxbcpl9ySdBzECNl3wFQJHAuoUv5Xevg75y9-vMKNWDSHI5k
+Message-ID: <CA+Df+jeoj_QL6XNzUyP963HF7ngCWoAs0MjqQXPr3Fa6VW3rXw@mail.gmail.com>
+Subject: Re: [Bug 220748] usb: xhci_queue_isoc_tx_prepare ignore start_frame
+ and always assumes URB_ISO_ASAP is set
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org, 
+	mathias.nyman@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: D8E8A504004
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[icenowy.me,none];
-	R_DKIM_ALLOW(-0.20)[icenowy.me:s=zmail2];
+	DMARC_POLICY_ALLOW(-0.50)[motu.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[motu.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37191-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37192-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	HAS_ORG_HEADER(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,redhat.com,baylibre.com,linaro.org,linuxfoundation.org,dabbelt.com,eecs.berkeley.edu,ghiti.fr,pengutronix.de,lists.infradead.org,vger.kernel.org,gmail.com,disroot.org];
-	RCPT_COUNT_TWELVE(0.00)[26];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[uwu@icenowy.me,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[icenowy.me:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dylan_robinson@motu.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[motu.com:+];
+	NEURAL_HAM(-0.00)[-0.999];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,iscas.ac.cn:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid,motu.com:dkim]
 X-Rspamd-Action: no action
 
-=E5=9C=A8 2026-05-10=E6=97=A5=E7=9A=84 13:14 +0530=EF=BC=8CVinod Koul=E5=86=
-=99=E9=81=93=EF=BC=9A
-> On 07-05-26, 16:17, Icenowy Zheng wrote:
-> > The USB PHY on T-Head TH1520 SoC is a Synopsys USB 3.0 FemtoPHY,
-> > with
-> > some PHY parameters exported as another system controller along
-> > with it.
-> >=20
-> > As a few PHY parameters' default value isn't ready to work, add a
-> > driver
-> > configuring them before letting the PHY run, in addition to
-> > clock/reset/regulator management.
->=20
-> Is there any dependency on the rest of series, if not please split
-> up!
+On Sat, May 9, 2026 at 6:12=E2=80=AFPM Michal Pecio wrote:
+> IDK if drivers ever need to know. They better not, because there is
+> no way to get "phase" information out of xHCI, besides timing IRQs.
+> There is also no way to set it. And no way to schedule a new stream
+> not on frame boundary. See xHCI 4.11.2.5.1, the rules are simple.
+>
+> The urb->start_frame you get is the first (u)frame of target interval.
 
-I want to give reviewers a whole view of the implementation, although
-the phy driver doesn't depends on other patches.
+This seems reasonable to me. Drivers should not expect timing
+information with finer granularity than the endpoint service interval.
 
-I am okay to split it out in the next revision.
+> Requests from drivers would need to be rounded, ignored or rejected.
 
->=20
-> Some warnings flagged by sashiko, please check
-> https://sashiko.dev/#/patchset/20260507081710.4090814-1-zhengxingda%40isc=
-as.ac.cn
->=20
->=20
-> >=20
-> > Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
-> > ---
-> > =C2=A0drivers/phy/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> > =C2=A0drivers/phy/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> > =C2=A0drivers/phy/thead/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0 12 ++
-> > =C2=A0drivers/phy/thead/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0=C2=A0 2 +
-> > =C2=A0drivers/phy/thead/phy-th1520-usb.c | 197
-> > +++++++++++++++++++++++++++++
-> > =C2=A05 files changed, 213 insertions(+)
-> > =C2=A0create mode 100644 drivers/phy/thead/Kconfig
-> > =C2=A0create mode 100644 drivers/phy/thead/Makefile
-> > =C2=A0create mode 100644 drivers/phy/thead/phy-th1520-usb.c
-> >=20
-> > diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-> > index 227b9a4c612e8..ea1a52e14b839 100644
-> > --- a/drivers/phy/Kconfig
-> > +++ b/drivers/phy/Kconfig
-> > @@ -164,6 +164,7 @@ source "drivers/phy/st/Kconfig"
-> > =C2=A0source "drivers/phy/starfive/Kconfig"
-> > =C2=A0source "drivers/phy/sunplus/Kconfig"
-> > =C2=A0source "drivers/phy/tegra/Kconfig"
-> > +source "drivers/phy/thead/Kconfig"
-> > =C2=A0source "drivers/phy/ti/Kconfig"
-> > =C2=A0source "drivers/phy/xilinx/Kconfig"
-> > =C2=A0
-> > diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-> > index f49d83f00a3d8..4604522548c91 100644
-> > --- a/drivers/phy/Makefile
-> > +++ b/drivers/phy/Makefile
-> > @@ -48,5 +48,6 @@ obj-$(CONFIG_GENERIC_PHY)		+=3D
-> > allwinner/	\
-> > =C2=A0					=C2=A0=C2=A0 starfive/	\
-> > =C2=A0					=C2=A0=C2=A0 sunplus/	\
-> > =C2=A0					=C2=A0=C2=A0 tegra/	\
-> > +					=C2=A0=C2=A0 thead/	\
-> > =C2=A0					=C2=A0=C2=A0 ti/		\
-> > =C2=A0					=C2=A0=C2=A0 xilinx/
-> > diff --git a/drivers/phy/thead/Kconfig b/drivers/phy/thead/Kconfig
-> > new file mode 100644
-> > index 0000000000000..14012db5973c4
-> > --- /dev/null
-> > +++ b/drivers/phy/thead/Kconfig
-> > @@ -0,0 +1,12 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +config PHY_TH1520_USB
-> > +	tristate "USB PHY driver for T-Head TH1520 SoC"
-> > +	depends on ARCH_THEAD || COMPILE_TEST
-> > +	depends on COMMON_CLK
-> > +	depends on HAS_IOMEM
-> > +	depends on OF
-> > +	depends on RESET_CONTROLLER
-> > +	select GENERIC_PHY
-> > +	default ARCH_THEAD
->=20
-> Why should this be default?
+For the first URB in a stream, I think rounding makes sense if the
+requested start frame falls within the valid scheduling window, while
+requests outside that window should be rejected.
 
-Okay, I will drop the default clause.
+For subsequent URBs submitted as continuations (and therefore able to
+rely on -EXDEV to detect discontinuities), I think the requested start
+frame can be ignored.
 
->=20
-> > +	help
-> > +	=C2=A0 Enable support for the USB PHY on the T-Head TH1520 SoC.
-> > diff --git a/drivers/phy/thead/Makefile
-> > b/drivers/phy/thead/Makefile
-> > new file mode 100644
-> > index 0000000000000..5b459bc7004bd
-> > --- /dev/null
-> > +++ b/drivers/phy/thead/Makefile
-> > @@ -0,0 +1,2 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +obj-$(CONFIG_PHY_TH1520_USB) +=3D phy-th1520-usb.o
-> > diff --git a/drivers/phy/thead/phy-th1520-usb.c
-> > b/drivers/phy/thead/phy-th1520-usb.c
-> > new file mode 100644
-> > index 0000000000000..c87bd779bbb74
-> > --- /dev/null
-> > +++ b/drivers/phy/thead/phy-th1520-usb.c
-> > @@ -0,0 +1,197 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (C) 2026 Institute of Software, Chinese Academy of
-> > Sciences (ISCAS)
-> > + *
-> > + * Authors:
-> > + * Icenowy Zheng <zhengxingda@iscas.ac.cn>
-> > + */
-> > +
-> > +#include <linux/clk.h>
-> > +#include <linux/module.h>
-> > +#include <linux/of.h>
-> > +#include <linux/phy/phy.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/regmap.h>
-> > +#include <linux/regulator/consumer.h>
-> > +#include <linux/reset.h>
-> > +
-> > +#define USB_SYSCON_OFFSET		0xf000
-> > +
-> > +/* All the below registers are in the USB syscon region */
-> > +#define USB_CLK_GATE_STS		0x0
-> > +#define USB_LOGIC_ANALYZER_TRACE_STS0	0x4
-> > +#define USB_LOGIC_ANALYZER_TRACE_STS1	0x8
-> > +#define USB_GPIO			0xc
-> > +#define USB_DEBUG_STS0			0x10
-> > +#define USB_DEBUG_STS1			0x14
-> > +#define USB_DEBUG_STS2			0x18
-> > +#define USBCTL_CLK_CTRL0		0x1c
-> > +#define USBPHY_CLK_CTRL1		0x20
-> > +#define USBPHY_TEST_CTRL0		0x24
-> > +#define USBPHY_TEST_CTRL1		0x28
-> > +#define USBPHY_TEST_CTRL2		0x2c
-> > +#define USBPHY_TEST_CTRL3		0x30
-> > +#define USB_SSP_EN			0x34
-> > +#define USB_HADDR_SEL			0x38
-> > +#define USB_SYS				0x3c
-> > +#define USB_HOST_STATUS			0x40
-> > +#define USB_HOST_CTRL			0x44
-> > +#define USBPHY_HOST_CTRL		0x48
-> > +#define USBPHY_HOST_STATUS		0x4c
-> > +#define USB_TEST_REG0			0x50
-> > +#define USB_TEST_REG1			0x54
-> > +#define USB_TEST_REG2			0x58
-> > +#define USB_TEST_REG3			0x5c
->=20
-> Why do need these test registers, they seem unused?
+> I believe gaps between URBs are not supposed to be happening at all
+> with proper resubmission, according to documented rules, so drivers
+> can detect gaps by watching for EXDEV status in frame_desc, if we
+> manage to bring xhci-hcd into compliance with the rules.
 
-The register list is copied from the SoC manual, although most of them
-are unused.
+This sounds good.
 
-Should I remove all unused registers, as the manual is publicly
-available?
+> As for predicting EXDEV at submission, it's a gable. We can only be
+> 100% sure whether it's too late or not when the interval completes
+> with Missed Service or Success.
+>
+> Admittedly if it fails, the driver unfortunately only learns about
+> it after the end of the whole URB. Short URBs could be better here.
+>
+> We can predict it by looking at the Isochronous Scheduling Threshold
+> reported by the HC, but it's a single number which may not accurately
+> reflect all cases (full-speed devices behind high-speed hubs are a
+> fascinating topic) and IME it's quite pessimistic on many chips - in
+> reality, they can do better than they claim.
+>
+> So being conservative and failing submissions which missed the IST
+> might cause a driver to panic and reset the endpoint when no glitch
+> would actually occur. And of course delaying such URBs (as currently
+> done) has the known effects that this bug is about.
 
-Thanks,
-Icenowy
->=20
-> > +
-> > +#define USB_SYS_COMMONONN		BIT(0)
-> > +
-> > +#define USB_SSP_EN_REF_SSP_EN		BIT(0)
-> > +
-> > +struct th1520_usb_phy {
-> > +	struct platform_device *pdev;
-> > +	struct phy *phy;
-> > +	struct regmap *regmap;
-> > +	struct clk *ref_clk;
-> > +	struct reset_control *phy_reset;
-> > +};
-> > +
-> > +static int th1520_usb_phy_init(struct phy *phy)
-> > +{
-> > +	struct th1520_usb_phy *th1520_phy =3D phy_get_drvdata(phy);
-> > +	int ret;
-> > +
-> > +	ret =3D clk_prepare_enable(th1520_phy->ref_clk);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret =3D reset_control_assert(th1520_phy->phy_reset);
-> > +	if (ret)
-> > +		goto err_disable_clk;
-> > +
-> > +	/*
-> > +	 * Do some initial PHY setup:
-> > +	 * - Set COMMONONN to allow the PHY to automatically power
-> > down.
-> > +	 * - Set REF_SSP_EN to enable feeding reference clock to
-> > SuperSpeed
-> > +	 *=C2=A0=C2=A0 PHY clock PLL.
-> > +	 */
-> > +	regmap_set_bits(th1520_phy->regmap, USB_SYS,
-> > USB_SYS_COMMONONN);
-> > +	regmap_set_bits(th1520_phy->regmap, USB_SSP_EN,
-> > USB_SSP_EN_REF_SSP_EN);
-> > +
-> > +	ret =3D reset_control_deassert(th1520_phy->phy_reset);
-> > +	if (ret)
-> > +		goto err_disable_clk;
-> > +
-> > +	udelay(10);
-> > +
-> > +	return 0;
-> > +
-> > +err_disable_clk:
-> > +	clk_disable_unprepare(th1520_phy->ref_clk);
-> > +	return ret;
-> > +}
-> > +
-> > +static int th1520_usb_phy_exit(struct phy *phy)
-> > +{
-> > +	struct th1520_usb_phy *th1520_phy =3D phy_get_drvdata(phy);
-> > +	int ret;
-> > +
-> > +	ret =3D reset_control_assert(th1520_phy->phy_reset);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	clk_disable_unprepare(th1520_phy->ref_clk);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct phy_ops th1520_usb_phy_ops =3D {
-> > +	.init		=3D th1520_usb_phy_init,
-> > +	.exit		=3D th1520_usb_phy_exit,
-> > +	.owner		=3D THIS_MODULE,
-> > +};
-> > +
-> > +static const struct regmap_config phy_regmap_config =3D {
-> > +	.reg_bits =3D 32,
-> > +	.val_bits =3D 32,
-> > +	.reg_stride =3D 4,
-> > +	.max_register =3D USB_TEST_REG3,
-> > +};
-> > +
-> > +static int th1520_usb_phy_probe(struct platform_device *pdev)
-> > +{
-> > +	struct phy_provider *phy_provider;
-> > +	struct device *dev =3D &pdev->dev;
-> > +	struct th1520_usb_phy *th1520_phy;
-> > +	struct reset_control *bus_reset;
-> > +	void __iomem *base;
-> > +	int ret;
-> > +
-> > +	th1520_phy =3D devm_kzalloc(dev, sizeof(*th1520_phy),
-> > GFP_KERNEL);
-> > +	if (!th1520_phy)
-> > +		return -ENOMEM;
-> > +
-> > +	th1520_phy->pdev =3D pdev;
-> > +
-> > +	base =3D devm_platform_ioremap_resource(pdev, 0);
-> > +	if (IS_ERR(base))
-> > +		return PTR_ERR(base);
-> > +
-> > +	th1520_phy->ref_clk =3D devm_clk_get(dev, "ref");
-> > +	if (IS_ERR(th1520_phy->ref_clk))
-> > +		return PTR_ERR(th1520_phy->ref_clk);
-> > +
-> > +	/* De-assert the bus reset and leave it that way */
-> > +	bus_reset =3D
-> > devm_reset_control_get_exclusive_deasserted(dev, "bus");
-> > +	if (IS_ERR(bus_reset))
-> > +		return PTR_ERR(bus_reset);
-> > +
-> > +	th1520_phy->phy_reset =3D
-> > devm_reset_control_get_exclusive(dev, "phy");
-> > +	if (IS_ERR(th1520_phy->phy_reset))
-> > +		return PTR_ERR(th1520_phy->phy_reset);
-> > +
-> > +	/*
-> > +	 * Schematics of several boards (Lichee Module 4A/Milk-V
-> > Meles)
-> > +	 * describe this power rail as always-on.
-> > +	 */
-> > +	ret =3D devm_regulator_get_enable(dev, "avdd33-usb3");
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	th1520_phy->regmap =3D devm_regmap_init_mmio_clk(dev, "bus",
-> > +						=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 base +
-> > USB_SYSCON_OFFSET,
-> > +						=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
-> > &phy_regmap_config);
-> > +	if (IS_ERR(th1520_phy->regmap))
-> > +		return dev_err_probe(dev, PTR_ERR(th1520_phy-
-> > >regmap),
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 "Failed to init regmap\n");
-> > +
-> > +	th1520_phy->phy =3D devm_phy_create(dev, dev->of_node,
-> > &th1520_usb_phy_ops);
-> > +	if (IS_ERR(th1520_phy->phy)) {
-> > +		dev_err(dev, "failed to create PHY\n");
-> > +		return PTR_ERR(th1520_phy->phy);
-> > +	}
-> > +
-> > +	phy_set_drvdata(th1520_phy->phy, th1520_phy);
-> > +
-> > +	phy_provider =3D devm_of_phy_provider_register(dev,
-> > of_phy_simple_xlate);
-> > +
-> > +	return PTR_ERR_OR_ZERO(phy_provider);
-> > +}
-> > +
-> > +static const struct of_device_id th1520_usb_phy_of_table[] =3D {
-> > +	{ .compatible =3D "thead,th1520-usb-phy" },
-> > +	{ }
-> > +};
-> > +MODULE_DEVICE_TABLE(of, th1520_usb_phy_of_table);
-> > +
-> > +static struct platform_driver th1520_usb_phy_driver =3D {
-> > +	.driver =3D {
-> > +		.name =3D "th1520-usb-phy",
-> > +		.of_match_table =3D th1520_usb_phy_of_table,
-> > +	},
-> > +	.probe =3D th1520_usb_phy_probe,
-> > +};
-> > +
-> > +module_platform_driver(th1520_usb_phy_driver);
-> > +
-> > +MODULE_DESCRIPTION("T-Head TH1520 USB PHY driver");
-> > +MODULE_LICENSE("GPL");
-> > --=20
-> > 2.52.0
+For an established stream, I agree with taking the optimistic approach
+of attempting to append transfers that are only marginally past the
+IST.
+
+For a new stream with a requested start frame, however, I think the
+HCD should, to the extent practical, validate that the request falls
+within the valid scheduling window.
+
+> I wrote some experimental patches to debug and fix this back then,
+> but nobody was commenting on the bug so I dropped this topic because
+> I'm reluctant to submit significant changes without real testing.
+> I can rehash this stuff.
+
+I am happy to help test in whatever way I can.
+
+> The most important question is if actual HW properly handles URBs
+> submitted too late. It would be nice to get testing on various xHCI
+> chips from varous vendors. If there are problems, it could prove
+> necessary to detect late submissions and complete such transfers as
+> EXDEV witout HW involvemnet. Yuck. Maybe it won't come to that.
+
+I would be interested to learn more about how this is handled in reality to=
+o.
+
+I think drivers should, whenever possible, avoid submitting URBs too
+close to the IST. A motivation for having a requested start frame is
+that it allows transfers to be enqueued well in advance of when the
+hardware will actually need them.
+
+In our case, URBs are often submitted tens of milliseconds ahead of
+time, while the transfer buffers themselves are serviced just before
+the data is consumed by the host controller. For audio streaming, this
+still allows low latency while avoiding the need to make submissions
+close to the scheduling threshold.
+
+In practice, we have found it less disruptive to occasionally miss
+copying audio data in time than to lose continuity of the isochronous
+stream itself and have to restart the endpoint.
+
+Dylan
 
