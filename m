@@ -1,245 +1,178 @@
-Return-Path: <linux-usb+bounces-37267-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37268-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WP47HWvxAWpfmgEAu9opvQ
-	(envelope-from <linux-usb+bounces-37267-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 17:10:35 +0200
+	id cPrJL0YCAmrknAEAu9opvQ
+	(envelope-from <linux-usb+bounces-37268-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 18:22:30 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 731EE510E40
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 17:10:34 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36EF7512060
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 18:22:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D73C3301A2E9
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 14:57:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CDB68310F43D
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 16:10:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2718401A07;
-	Mon, 11 May 2026 14:57:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38E3643C05C;
+	Mon, 11 May 2026 16:08:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lV6FuVWC"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="O00BZMgA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012067.outbound.protection.outlook.com [40.107.200.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CE13FE67E;
-	Mon, 11 May 2026 14:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778511447; cv=none; b=nK6qDfAs575YjXZFA/LE22N1vlK7BQAsIv33QT2dqck1oKekFycgysNFtZHDVHF29lHLhj3eILk3m8pX8Gri4jjeTS/tqNFKozhwJDSfK6MrIt1/FELXxpg2HmMFYanwDKgMcP38H9m/EgX7GNPliEpi9Uu6KAY2i1bAi+IfMro=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778511447; c=relaxed/simple;
-	bh=nNUfo11efGl/MFYIWaja0C+rX50U97WOabQI7mfyOII=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A6eeTsIe61rUr4phw1WrUhdnZcyiXU92lndmbtnqscEUISa4P4V0Kk9lF2tKLVM1PYlCxFTIIsI0ttWBjlkIxs7MiW/WFqFx+BCmzX2yjhpDuT7JK2thJ506/SwGA65t849P7wEKxxsD9B3eBSDa33gbsmGi3kAxLd+1q5l4u7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lV6FuVWC; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778511446; x=1810047446;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nNUfo11efGl/MFYIWaja0C+rX50U97WOabQI7mfyOII=;
-  b=lV6FuVWCRW0pC9OO1/GQkVgEntWne5PiTA3fNwwLoMcfoxnVPUA55TLr
-   b87Wm/fpovHG9n5qmIaZxvV7SJ5YQKLM8cAsuos4H+tKjcHHL3UwCWAUe
-   C8orYNapHB3N5uDKAke7tRJm79OFadlYZ99A792CEpECuZjgCOFSUPq72
-   c2Wy/nySBRKa8wWQGZI3q51IkbX8jagztjz9o0yg4f9wDP0L66Oay0Vig
-   IMX05q4kOxjC7PzL+Wsj8WxR6mwtjyG/xY77yfv5ou9S9uagJ/RweYINB
-   iIoyWcK/N4CMK5Ds+PW/z1e9ycQt8awB8+tnNQqJoXSRuzZCmzswCPwwy
-   Q==;
-X-CSE-ConnectionGUID: Yk0Te78ASY6L2kTW72Ouww==
-X-CSE-MsgGUID: mHszQ2HfR9ak+TgVgLe8Nw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="90866654"
-X-IronPort-AV: E=Sophos;i="6.23,229,1770624000"; 
-   d="scan'208";a="90866654"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2026 07:57:25 -0700
-X-CSE-ConnectionGUID: bXEgldawSreuGb/hXVx2rA==
-X-CSE-MsgGUID: 4eej0KSaSeWgxRJM8Z56uQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,229,1770624000"; 
-   d="scan'208";a="237569835"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa009.jf.intel.com with ESMTP; 11 May 2026 07:57:22 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id A5BDF95; Mon, 11 May 2026 16:57:20 +0200 (CEST)
-Date: Mon, 11 May 2026 17:57:18 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: azkali.limited@gmail.com
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	CTCaer <ctcaer@gmail.com>, Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] usb: typec: bm92txx: add Rohm BM92TXX support
-Message-ID: <agHuTtvwnpcjWHEA@kuha>
-References: <20260511-bm92t-v2-0-2145e4f4386b@gmail.com>
- <20260511-bm92t-v2-1-2145e4f4386b@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7F2426EB3;
+	Mon, 11 May 2026 16:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778515728; cv=fail; b=pRh3LoLvnUcY6g2qZPWD5ypG97uDU/CYwKuwBZzqROIbVMWW2UTt7kycDQtpgPZcP7uLC27ec/ceU5xhpNFOtrm6M/UWwHSLUYRE7MQn4yabBiepCQmkPH7hd3IqBKy8TjflraJuHAVvIGZw/a0AjEXYWmXiJsdyNQYSBy7rSTk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778515728; c=relaxed/simple;
+	bh=wg6Bn5YCymQY4oTXY57Wg+7JZ1esTvr2NO1vnN+ppt4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KjlzkIYiKaaJhwl9Dabso14cqS8Rn0i3J7lJ68jHEIxNqlXuwkIdRvNEpQlcYFDf8/fdf/H3sowzgEBnfItiXW3Kf43esXXFCqpfkGxPAo+iIp/BwBPF015J5JPnP9Sk4pnzNvy+ii3HgBplmRG94hdVVTRBvF0GJJ4gIOUgYqg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=O00BZMgA; arc=fail smtp.client-ip=40.107.200.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=p2yjK8A6RPzgx4DqrjgCFIoAHaG/ejWpSiheeoidRAEqA425rYFWHdKF9g1d6HFF5UD28zAa+Yx2GvjckNgeFmeDs9KTUzP20GFKltBwb894VK+XSN92PFAo8f/xJRvwa8yt9AypRsBYxk9W6m7wuJMYXeMvq8/Lyx68LQ/N7WBl2ggV5X4kyIksSb+px0K3uP7XZ4yv2BesMZqprBqwHzXWY68M7R8ImALlMiumtfew1Aa9kAGiUGOJIHZNmtNr0CtRWRTgx4z9GGtIJg7vi4gRC5md26YVhw4Dgy87Ag6HbrI3gWwC8wAy2H2sDDC346f1iIO3jHSBKfyj42VaAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Pmnk1p1wR2u51vF+qf9IlBdMpNuWfADZYy6Kwd9pNfw=;
+ b=arr+rwBQbuxjRtWO6R5qSsOmb64vh4KeE7ZCrA1UB961x6mrbW2c3K7WR417e+Px+exsQOazPtedUCNvPEzFG4BQic4TAnHDW1nD1kTBnVBcVqfAwCZFYMGVjjh6W61wicofm8F2kzN5EuNOymGv1nLj7+QnM629eHpzzWAfkv4+lIr5HD4hpdAIKrufxaxrn91MTwr8FarC4VC4ubkkFM1olvUwMfQCZjnmi0ydKSpHNTlh4QCj+/vSJsHOyZ7N0InHo+V1k76ESkGFE+5MzrtiRW52YsmrD6Qa2vDjeH3c6Cch3oWOp1flldp9n74trYsVbOUX0hMG0DtmXvDgww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=synopsys.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pmnk1p1wR2u51vF+qf9IlBdMpNuWfADZYy6Kwd9pNfw=;
+ b=O00BZMgAyc9b5ZUYCCzZdUz4RT+9Wd5ljwfzkTJMFTd3v2i5+LcCQBx6afpoU69C6OeSP0FEqeq/1MwNLb9g9f/M4LAEeSZy//WS5oIDKUIJ64hM2h4bu07dsVa42ug9OQjeYA2i3xE1KPZjio+VgpIqjhlpxUw8pkJqniR/ih4=
+Received: from SA1P222CA0164.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:3c3::29)
+ by SJ5PPF09E5F035B.namprd12.prod.outlook.com (2603:10b6:a0f:fc02::988) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.21; Mon, 11 May
+ 2026 16:08:40 +0000
+Received: from SA2PEPF00003AE5.namprd02.prod.outlook.com
+ (2603:10b6:806:3c3:cafe::d7) by SA1P222CA0164.outlook.office365.com
+ (2603:10b6:806:3c3::29) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.23 via Frontend Transport; Mon,
+ 11 May 2026 16:08:40 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ SA2PEPF00003AE5.mail.protection.outlook.com (10.167.248.5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.25.13 via Frontend Transport; Mon, 11 May 2026 16:08:40 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.41; Mon, 11 May
+ 2026 11:08:39 -0500
+Received: from satlexmb08.amd.com (10.181.42.217) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 11 May
+ 2026 11:08:38 -0500
+Received: from xhdradheys41.xilinx.com (10.180.168.240) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.41 via Frontend
+ Transport; Mon, 11 May 2026 11:08:35 -0500
+From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+To: <Thinh.Nguyen@synopsys.com>, <gregkh@linuxfoundation.org>,
+	<michal.simek@amd.com>, <p.zabel@pengutronix.de>
+CC: <linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <git@amd.com>, Radhey Shyam Pandey
+	<radhey.shyam.pandey@amd.com>
+Subject: [PATCH 0/3] usb: dwc3: xilinx: minor fixes for dwc3-xilinx glue driver
+Date: Mon, 11 May 2026 21:38:11 +0530
+Message-ID: <20260511160814.2904882-1-radhey.shyam.pandey@amd.com>
+X-Mailer: git-send-email 2.44.4
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260511-bm92t-v2-1-2145e4f4386b@gmail.com>
-X-Rspamd-Queue-Id: 731EE510E40
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB04.amd.com: radhey.shyam.pandey@amd.com does not
+ designate permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00003AE5:EE_|SJ5PPF09E5F035B:EE_
+X-MS-Office365-Filtering-Correlation-Id: ed7c92b9-fbf0-416c-bd3f-08deaf779116
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|376014|82310400026|1800799024|18002099003|11063799003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	SLRvZWB/6nZGvLE7W/RgBtz6RExKGK+fD6XQDdnWeAfhxV0zLVixXoWjUiQi6y8PeNGSoxRklmVAPnFJExq+k8pinGxAyBXHaZ/AngqSXZTFksyU49XHJO/IOH2gItYgZLkFcSqXC3iS0Orf0KfdMt/Js7xLJnQKRu4GatU2HRvWlmKvOv38JFZZcfchEB//sTBd0nbkUAyuroI83oTLEkB5MeLa6UyJYDgnjttu0OzvroPmaxFDFXeqmZN4FTknd4VHRtAbvcX5UjYMygwyxGMcbjAcFPFFR7Py8+oPt5CbxcHATlE9YxHQf68hwJL6k07XjZtuZLWfbJuRQSG7SYYwTOk7JQ0lOHLwXmj3/t5nPv3MoaYP3+y/Det71Wbg56W3KHX0pnxqFNRClrrlzTvSasO1+rVJUd7c8NHRyu4BPpAcXyRMO3r1QLxvSxI1plbNFdfPB8WAJYy2O6Tn82q5V1jjgEkmBtZZS28t1TEOA3fAf2Gfm+jCzQlMkx76KTRzS2srvfnjl+rrVJhc5VpsKwCYkm71I39toDxdPQDFXp2RIBoW82awEW7IBWcrbK7+POQXHkureft8jCGh0ILR8iOCvKfmmYQV7mIe7v/cNbidZfTvcey7jlbKWOuGOtkX7Y43TzcItGPXsMHBgCGLcclHYn9XhBepsj1bq13h3MyL7qrv3co3eXB4u4qRWxw0yA8i1X53mJH0leJhh+dnghdHTdccSYV2Gc365Fo=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(376014)(82310400026)(1800799024)(18002099003)(11063799003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	MF6ApyMTMvqvddThopXUYQpZjF/IQfjwoQm4dqWy3+ksw4gh4tryjFfa+kZH7ls8T4OgUjRdS/p393aWzYsK2oGjLnQ9Fi6l/6KUk5Smcncrz7aBBHtPOSX/o5ZyibIFZwFdcl2Ys0pCGb5nqiGMc7kaOhzmdzt2VmVF6ngtheevCP1hLv6l25X1ZnVoWNXBzeOMym9pgUA/uMfNF++/ilnd6OljtXrciPbNXP/lAJpE7rL6m92BkULC7/x+9DnwguGiKJw196P6OqesfaNCGwR+ouF8lOPQ4Xdt1tcWUf3eS9fH1wHfiTGU+f32yhwDpoQyyMjQu3jqDIE4Lp76jY4X00vL+DlOM1T9VCL5NxIaXu87DLEE5B8//LF+6iNvyguMOcLBNMosKP+WfMu5zJOFzcLFfN8TT+qo6/eozhN2Aveio1NRiJbCWl0n4ju5
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2026 16:08:40.2702
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed7c92b9-fbf0-416c-bd3f-08deaf779116
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF00003AE5.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPF09E5F035B
+X-Rspamd-Queue-Id: 36EF7512060
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37267-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,gmail.com,kernel.org,vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37268-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[amd.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[radhey.shyam.pandey@amd.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,amd.com:mid,amd.com:dkim];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCVD_COUNT_SEVEN(0.00)[9]
 X-Rspamd-Action: no action
 
-Hi Alexandre,
+Minor cleanups and a bug fix for the dwc3-xilinx glue driver:
 
-On Mon, May 11, 2026 at 01:32:09AM +0700, Alexandre Hamamdjian via B4 Relay wrote:
-> From: CTCaer <ctcaer@gmail.com>
-> 
-> Add a driver for the Rohm Semiconductor BM92TXX family of USB Type-C
-> and Power Delivery controllers. The IC integrates an MCU that runs the
-> PD state machine; the host configures it and observes status over I2C
-> and reacts to a level-triggered ALERT interrupt.
-> 
-> The driver exposes the controller through extcon and a USB role switch,
-> manages the VBUS sink, optional VBUS source and battery-charger
-> regulators along with the VCONN-enable GPIO, and applies per-PDO
-> charging current limits (5 V, 9 V, 12 V, 15 V) sourced from device
-> tree. DisplayPort alternate-mode handling and dock LED behaviour are
-> configurable through rohm,* properties so the same driver can serve
-> boards that wire the part up differently. A debugfs interface under
-> bm92txx/ is provided for register dumps and low-level command access
-> when CONFIG_DEBUG_FS is enabled.
+- Fix a comment style violation (missing space before closing delimiter).
+- Use reset_control_reset in versal init.
+- Fix phy resource leak in zynqmp init error paths where phy_init() and
+  phy_power_on() resources were not properly released on failure.
 
-You need to use the USB Type-C framework for everything, not just for
-the switches. The port, the partner when connected, the cable and
-plugs, and all the alternate modes (the port alt modes, the plug
-alt modes, and partner alt modes) need to be registered.
+Radhey Shyam Pandey (3):
+  usb: dwc3: xilinx: fix missing space before closing comment delimiter
+  usb: dwc3: xilinx: use reset_control_reset() in versal init
+  usb: dwc3: xilinx: fix error handling in zynqmp init error paths
 
-All that needs to be exposed properly inside kernel as well in user
-space.
+ drivers/usb/dwc3/dwc3-xilinx.c | 45 +++++++++++++++-------------------
+ 1 file changed, 20 insertions(+), 25 deletions(-)
 
-<snip>
 
-> +/* VDM/VDO */
-> +#define VDM_CMD_RESERVED    0x00
-> +#define VDM_CMD_DISC_ID     0x01
-> +#define VDM_CMD_DISC_SVID   0x02
-> +#define VDM_CMD_DISC_MODE   0x03
-> +#define VDM_CMD_ENTER_MODE  0x04
-> +#define VDM_CMD_EXIT_MODE   0x05
-> +#define VDM_CMD_ATTENTION   0x06
-> +#define VDM_CMD_DP_STATUS   0x10
-> +#define VDM_CMD_DP_CONFIG   0x11
-
-Already defined in include/linux/usb/pd_vdo.h
-
-> +#define VDM_ACK   0x40
-> +#define VDM_NAK   0x80
-> +#define VDM_BUSY  0xC0
-> +#define VDM_UNSTRUCTURED   0x00
-> +#define VDM_STRUCTURED     0x80
-
-Ditto.
-
-> +/* VDM Discover ID */
-> +#define VDO_ID_TYPE_NONE        0
-> +#define VDO_ID_TYPE_PD_HUB      1
-> +#define VDO_ID_TYPE_PD_PERIPH   2
-> +#define VDO_ID_TYPE_PASS_CBL    3
-> +#define VDO_ID_TYPE_ACTI_CBL    4
-> +#define VDO_ID_TYPE_ALTERNATE   5
-> +
-> +/* VDM Discover Mode Caps [From device (UFP_U) to host (DFP_U)] */
-> +#define VDO_DP_UFP_D       BIT(0) /* DisplayPort Sink */
-> +#define VDO_DP_DFP_D       BIT(1) /* DisplayPort Source */
-> +#define VDO_DP_SUPPORT     BIT(2)
-> +#define VDO_DP_RECEPTACLE  BIT(6)
-
-include/linux/usb/typec_dp.h
-
-> +/* VDM DP Configuration [From host (DFP_U) to device (UFP_U)] */
-> +#define VDO_DP_U_DFP_D     BIT(0) /* UFP_U as DisplayPort Source */
-> +#define VDO_DP_U_UFP_D     BIT(1) /* UFP_U as DisplayPort Sink */
-> +#define VDO_DP_SUPPORT     BIT(2)
-> +#define VDO_DP_RECEPTACLE  BIT(6)
-
-Ditto.
-
-> +/* VDM Mode Caps and DP Configuration pins */
-> +#define VDO_DP_PIN_A   BIT(0)
-> +#define VDO_DP_PIN_B   BIT(1)
-> +#define VDO_DP_PIN_C   BIT(2)
-> +#define VDO_DP_PIN_D   BIT(3)
-> +#define VDO_DP_PIN_E   BIT(4)
-> +#define VDO_DP_PIN_F   BIT(5)
-
-Ditto.
-
-> +/* Known VID/SVID */
-> +#define VID_NINTENDO      0x057E
-> +#define PID_NIN_DOCK      0x2003
-> +#define PID_NIN_CHARGER   0x2004
-> +
-> +#define SVID_NINTENDO     VID_NINTENDO
-> +#define SVID_DP           0xFF01
-> 
-> +/* Nintendo dock VDM Commands */
-> +#define VDM_NCMD_LED_CONTROL         0x01 /* Reply size 12 */
-> +#define VDM_NCMD_DEVICE_STATE        0x16 /* Reply size 12 */
-> +#define VDM_NCMD_DP_SIGNAL_DISABLE   0x1C /* Reply size 8 */
-> +#define VDM_NCMD_HUB_RESET           0x1E /* Reply size 8 */
-> +#define VDM_NCMD_HUB_CONTROL         0x20 /* Reply size 8 */
-
-You need a dedicated alternate mode driver for this mode.
-
-It looks like you have a lot of duplication in this code. You really
-have to refactor this whole driver. It probable does not make sense to
-review this any further before that.
-
-Please register all the Type-C (inclide/linux/usb/typec.h) and power
-delivery (include/linux/usb/pd.h) components, and at least try to
-handle the alternate mode VDM communication in the alt mode drivers
-dedicated for each alt mode.
-
-I also really think that that the battery charging information needs
-to be exposed to user space with the power supply device class
-(include/linux/power_supply.h).
-
-Because there is a lot of stuff to be done here, please consider
-splitting this into clear steps. For example, you could start by
-simply registering the port and the partner, and so on.
-
-thanks,
-
+base-commit: 5d6919055dec134de3c40167a490f33c74c12581
 -- 
-heikki
+2.44.4
+
 
