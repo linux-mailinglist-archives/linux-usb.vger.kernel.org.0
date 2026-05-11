@@ -1,387 +1,441 @@
-Return-Path: <linux-usb+bounces-37284-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37285-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CD7qHzBWAmoOrgEAu9opvQ
-	(envelope-from <linux-usb+bounces-37284-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 00:20:32 +0200
+	id MJkPO1JbAmosrgEAu9opvQ
+	(envelope-from <linux-usb+bounces-37285-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 00:42:26 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2055C516B48
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 00:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 908095170AD
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 00:42:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 997EB3021B90
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 22:20:03 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C5EDD301587D
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 22:42:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CA104DBD90;
-	Mon, 11 May 2026 22:19:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7159C35675A;
+	Mon, 11 May 2026 22:42:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D8tvdxdC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OTazBvkh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B269A4DB557;
-	Mon, 11 May 2026 22:19:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505C3383318
+	for <linux-usb@vger.kernel.org>; Mon, 11 May 2026 22:42:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778537984; cv=none; b=iLPA+XNwLavTHtS/n4ymlnpSuEI8MNY5RIZTuSuWnHLiMtqxisANULEQmCttHU1Z+P8A0AV1Fe3r5KbpoFLlSdlipMsOXLQGn+nQzSkIFoSX1Xp7vgwTAEbIfJtV9F0ILAvsFHxiJFroDE4UKoHPEOLBlQWaflK8U+qjXQcW4aA=
+	t=1778539342; cv=none; b=AONBE5X9ldxR3UkcnzyAhRZhZDxp0znDSc6lsJq/u+dJxXQe9fvAcbwHK6ClnPDL1Pra3uE4xy8ZgCRAKHZsW2u+fmyeq1qEY6tk5Ef2yFoG6BINHyhmcBlV5VsppKRB5VviTLDl8Tk6JauOUuBIPdCjynnTHa6qYMQMP31AJtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778537984; c=relaxed/simple;
-	bh=Zn4J0fHdy3xfzUz38tOmseZcZesPxgZvA1MCNOqyk+A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HwyW2wpa+yMp5Q0aTV+tysIlm4qDku3QJpQDMBp8Oc+qGZW5S3CXnsuOo5bS/Y5MOqLyQn4513SqdBqj+bwRPD3/K3N/sXRaMDqj5hx8apnD4twAmDe86qLH5HUmKQEDjjab1MwHljIEezDNetMJ35ZSKv4VSAogoF/jGZD0BwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D8tvdxdC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06E3BC2BCFB;
-	Mon, 11 May 2026 22:19:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778537984;
-	bh=Zn4J0fHdy3xfzUz38tOmseZcZesPxgZvA1MCNOqyk+A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=D8tvdxdCVE2sClqprOzZIp3rsxW2oGu1+aOkFWDgbJy1/0Pk0TarF2GjB6WjnzE10
-	 k/udQWUWRE6qHpG8s67af7Z+m9V/Vw3RvQLFioBEwRx7osTnC8k7ahhg2Cd48yxT1v
-	 MlUIhXPSZppTi/mzj5LfZxMRFk/8MY7Dr8CY+n3P0gS6wYQmICg6m656D10+QzSYHp
-	 fIIVgaNvvRzOeI+Ivw69lPt3OiXXS/sSGGJREdxzGGJjuoyY4veijM1A1nhhA6nJ28
-	 CtkMwGCAcK2oP2luiBzom4V1rS43pZyv+8vcdFRagLmAG9MGyjwzlml05OmnLgzpEz
-	 JNjwqZuuPq9sA==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Aleksander Jan Bajkowski <olek2@wp.pl>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Birger Koblitz <mail@birger-koblitz.de>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 7.0-5.15] net: usb: r8152: add TRENDnet TUC-ET2G v2.0
-Date: Mon, 11 May 2026 18:19:07 -0400
-Message-ID: <20260511221931.2370053-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260511221931.2370053-1-sashal@kernel.org>
-References: <20260511221931.2370053-1-sashal@kernel.org>
+	s=arc-20240116; t=1778539342; c=relaxed/simple;
+	bh=ctNujyrhRB9VaYgO7GXpkJNSXKoQo65DUxw3BwLYxn8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=VytlbI1ivyrLxUTfr8NQJbBE8rg8Qfsw0zirwXM7ovxvYQESKKN1MAZ85N9ipNjQn0v/kl4dvPRB5Herva8zap7RQHS0IS+1IRHh5mP0lnoC0lnTiBeLZm82rcuZwcd8T7R6DGmF2n6aFjoENZNbkXEbD5UU8jjYOht0OnAxTTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OTazBvkh; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778539341; x=1810075341;
+  h=date:from:to:cc:subject:message-id;
+  bh=ctNujyrhRB9VaYgO7GXpkJNSXKoQo65DUxw3BwLYxn8=;
+  b=OTazBvkhOSGZYAZeRsZp25IKVlpWyrTR4OS5hARtW1NiYVCL8s0V+DAJ
+   Jrp6QsxaER4u9xEQwC2wiOyMnwFYJ6PEWecCl07mjERcJAdoVq3WRUCPB
+   8w9Szi1AUhAaOAQaNdpag+wyn9fvqwcTaZYf/DiTk6dDzU0DUxPtM5TRA
+   f88oxOQLDEYlXhR48ni5Q90TYVjdYF/nCcvcrIMwwNhRvUGFLEXF3EIC6
+   ialGs5tYvgkpDiT3uRW/ojClnFk6ufMfij3cocBn3V9RbDj4DKV5AzJwW
+   dVqwIHn9A7IJqcL1S/5qZSng/CFP2ovGRRq4geQujQJF/F+SIORS1B3Rq
+   A==;
+X-CSE-ConnectionGUID: HmXzUjg7Q7Sv+xkzQKV+pw==
+X-CSE-MsgGUID: Uu64JBhvSsiXBL15a6bOHQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="79388690"
+X-IronPort-AV: E=Sophos;i="6.23,229,1770624000"; 
+   d="scan'208";a="79388690"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2026 15:42:21 -0700
+X-CSE-ConnectionGUID: 3nc1IwzDRla6mwUFGVMcHQ==
+X-CSE-MsgGUID: xAGcj0BHQfSgDBKhpJXMAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,229,1770624000"; 
+   d="scan'208";a="237533828"
+Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 11 May 2026 15:42:18 -0700
+Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wMZKK-000000001Ez-058z;
+	Mon, 11 May 2026 22:42:16 +0000
+Date: Tue, 12 May 2026 06:41:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org
+Subject: [westeri-thunderbolt:fixes] BUILD SUCCESS
+ 928abe19fbf0127003abcb1ea69cabc1c897d0ab
+Message-ID: <202605120608.exdSOrrv-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 7.0.6
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 2055C516B48
+X-Rspamd-Queue-Id: 908095170AD
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[wp.pl,lunn.ch,birger-koblitz.de,kernel.org,davemloft.net,google.com,redhat.com,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-37284-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWO(0.00)[2];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37285-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	NEURAL_HAM(-0.00)[-0.987];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lunn.ch:email,msgid.link:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,wp.pl:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:mid,intel.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-From: Aleksander Jan Bajkowski <olek2@wp.pl>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git fixes
+branch HEAD: 928abe19fbf0127003abcb1ea69cabc1c897d0ab  thunderbolt: property: Cap recursion depth in __tb_property_parse_dir()
 
-[ Upstream commit f93836b236773862e9ee268a82e3614caf77ea01 ]
+elapsed time: 786m
 
-The TRENDnet TUC-ET2G V2.0 is an RTL8156B based 2.5G Ethernet controller.
+configs tested: 316
+configs skipped: 3
 
-Add the vendor and product ID values to the driver. This makes Ethernet
-work with the adapter.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Reviewed-by: Birger Koblitz <mail@birger-koblitz.de>
-Link: https://patch.msgid.link/20260430213435.21821-1-olek2@wp.pl
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+tested configs:
+alpha                             allnoconfig    gcc-15.2.0
+alpha                            allyesconfig    gcc-15.2.0
+alpha                               defconfig    gcc-15.2.0
+arc                              allmodconfig    clang-16
+arc                              allmodconfig    gcc-15.2.0
+arc                               allnoconfig    gcc-15.2.0
+arc                              allyesconfig    clang-23
+arc                              allyesconfig    gcc-15.2.0
+arc                                 defconfig    gcc-15.2.0
+arc                   randconfig-001-20260511    gcc-10.5.0
+arc                   randconfig-001-20260512    gcc-11.5.0
+arc                   randconfig-002-20260511    gcc-10.5.0
+arc                   randconfig-002-20260512    gcc-11.5.0
+arm                               allnoconfig    gcc-15.2.0
+arm                              allyesconfig    clang-16
+arm                              allyesconfig    gcc-15.2.0
+arm                                 defconfig    gcc-15.2.0
+arm                          pxa3xx_defconfig    clang-23
+arm                   randconfig-001-20260511    gcc-10.5.0
+arm                   randconfig-001-20260512    gcc-11.5.0
+arm                   randconfig-002-20260511    gcc-10.5.0
+arm                   randconfig-002-20260512    gcc-11.5.0
+arm                   randconfig-003-20260511    gcc-10.5.0
+arm                   randconfig-003-20260512    gcc-11.5.0
+arm                   randconfig-004-20260511    gcc-10.5.0
+arm                   randconfig-004-20260512    gcc-11.5.0
+arm64                            allmodconfig    clang-19
+arm64                            allmodconfig    clang-23
+arm64                             allnoconfig    gcc-15.2.0
+arm64                               defconfig    gcc-15.2.0
+arm64                          randconfig-001    clang-23
+arm64                 randconfig-001-20260511    clang-17
+arm64                 randconfig-001-20260511    clang-23
+arm64                 randconfig-001-20260512    gcc-14.3.0
+arm64                          randconfig-002    clang-23
+arm64                 randconfig-002-20260511    clang-17
+arm64                 randconfig-002-20260511    clang-23
+arm64                 randconfig-002-20260512    gcc-14.3.0
+arm64                          randconfig-003    clang-23
+arm64                 randconfig-003-20260511    clang-17
+arm64                 randconfig-003-20260511    clang-23
+arm64                 randconfig-003-20260512    gcc-14.3.0
+arm64                          randconfig-004    clang-23
+arm64                 randconfig-004-20260511    clang-17
+arm64                 randconfig-004-20260511    clang-23
+arm64                 randconfig-004-20260512    gcc-14.3.0
+csky                             allmodconfig    gcc-15.2.0
+csky                              allnoconfig    gcc-15.2.0
+csky                                defconfig    gcc-15.2.0
+csky                           randconfig-001    clang-23
+csky                  randconfig-001-20260511    clang-17
+csky                  randconfig-001-20260511    clang-23
+csky                  randconfig-001-20260512    gcc-14.3.0
+csky                           randconfig-002    clang-23
+csky                  randconfig-002-20260511    clang-17
+csky                  randconfig-002-20260511    clang-23
+csky                  randconfig-002-20260512    gcc-14.3.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    gcc-15.2.0
+hexagon                           allnoconfig    gcc-15.2.0
+hexagon                             defconfig    gcc-15.2.0
+hexagon               randconfig-001-20260511    gcc-8.5.0
+hexagon               randconfig-001-20260512    gcc-10.5.0
+hexagon               randconfig-002-20260511    gcc-8.5.0
+hexagon               randconfig-002-20260512    gcc-10.5.0
+i386                             allmodconfig    clang-20
+i386                              allnoconfig    gcc-15.2.0
+i386                             allyesconfig    clang-20
+i386        buildonly-randconfig-001-20260511    gcc-14
+i386        buildonly-randconfig-001-20260512    gcc-14
+i386        buildonly-randconfig-002-20260511    gcc-14
+i386        buildonly-randconfig-002-20260512    gcc-14
+i386        buildonly-randconfig-003-20260511    gcc-14
+i386        buildonly-randconfig-003-20260512    gcc-14
+i386        buildonly-randconfig-004-20260511    gcc-14
+i386        buildonly-randconfig-004-20260512    gcc-14
+i386        buildonly-randconfig-005-20260511    gcc-14
+i386        buildonly-randconfig-005-20260512    gcc-14
+i386        buildonly-randconfig-006-20260511    gcc-14
+i386        buildonly-randconfig-006-20260512    gcc-14
+i386                                defconfig    gcc-15.2.0
+i386                  randconfig-001-20260511    gcc-12
+i386                  randconfig-002-20260511    gcc-12
+i386                  randconfig-003-20260511    gcc-12
+i386                  randconfig-004-20260511    gcc-12
+i386                  randconfig-005-20260511    gcc-12
+i386                  randconfig-006-20260511    gcc-12
+i386                  randconfig-007-20260511    gcc-12
+i386                           randconfig-011    clang-20
+i386                  randconfig-011-20260511    clang-20
+i386                  randconfig-011-20260512    clang-20
+i386                           randconfig-012    clang-20
+i386                  randconfig-012-20260511    clang-20
+i386                  randconfig-012-20260512    clang-20
+i386                           randconfig-013    clang-20
+i386                  randconfig-013-20260511    clang-20
+i386                  randconfig-013-20260512    clang-20
+i386                           randconfig-014    clang-20
+i386                  randconfig-014-20260511    clang-20
+i386                  randconfig-014-20260512    clang-20
+i386                           randconfig-015    clang-20
+i386                  randconfig-015-20260511    clang-20
+i386                  randconfig-015-20260512    clang-20
+i386                           randconfig-016    clang-20
+i386                  randconfig-016-20260511    clang-20
+i386                  randconfig-016-20260512    clang-20
+i386                           randconfig-017    clang-20
+i386                  randconfig-017-20260511    clang-20
+i386                  randconfig-017-20260512    clang-20
+loongarch                        allmodconfig    clang-19
+loongarch                        allmodconfig    clang-23
+loongarch                         allnoconfig    gcc-15.2.0
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20260511    gcc-8.5.0
+loongarch             randconfig-001-20260512    gcc-10.5.0
+loongarch             randconfig-002-20260511    gcc-8.5.0
+loongarch             randconfig-002-20260512    gcc-10.5.0
+m68k                             allmodconfig    gcc-15.2.0
+m68k                              allnoconfig    gcc-15.2.0
+m68k                             allyesconfig    clang-16
+m68k                             allyesconfig    gcc-15.2.0
+m68k                                defconfig    clang-19
+microblaze                        allnoconfig    gcc-15.2.0
+microblaze                       allyesconfig    gcc-15.2.0
+microblaze                          defconfig    clang-19
+mips                             allmodconfig    gcc-15.2.0
+mips                              allnoconfig    gcc-15.2.0
+mips                             allyesconfig    gcc-15.2.0
+mips                           jazz_defconfig    clang-17
+mips                    maltaup_xpa_defconfig    gcc-15.2.0
+nios2                            allmodconfig    clang-23
+nios2                             allnoconfig    clang-23
+nios2                               defconfig    clang-19
+nios2                 randconfig-001-20260511    gcc-8.5.0
+nios2                 randconfig-001-20260512    gcc-10.5.0
+nios2                 randconfig-002-20260511    gcc-8.5.0
+nios2                 randconfig-002-20260512    gcc-10.5.0
+openrisc                         allmodconfig    clang-23
+openrisc                          allnoconfig    clang-23
+openrisc                            defconfig    gcc-15.2.0
+parisc                           allmodconfig    gcc-15.2.0
+parisc                            allnoconfig    clang-23
+parisc                           allyesconfig    clang-19
+parisc                           allyesconfig    gcc-15.2.0
+parisc                              defconfig    gcc-15.2.0
+parisc                         randconfig-001    clang-20
+parisc                randconfig-001-20260511    clang-20
+parisc                randconfig-001-20260512    gcc-12.5.0
+parisc                         randconfig-002    clang-20
+parisc                randconfig-002-20260511    clang-20
+parisc                randconfig-002-20260512    gcc-12.5.0
+parisc64                            defconfig    clang-19
+powerpc                          allmodconfig    gcc-15.2.0
+powerpc                           allnoconfig    clang-23
+powerpc                      arches_defconfig    gcc-15.2.0
+powerpc                        randconfig-001    clang-20
+powerpc               randconfig-001-20260511    clang-20
+powerpc               randconfig-001-20260512    gcc-12.5.0
+powerpc                        randconfig-002    clang-20
+powerpc               randconfig-002-20260511    clang-20
+powerpc               randconfig-002-20260512    gcc-12.5.0
+powerpc64                      randconfig-001    clang-20
+powerpc64             randconfig-001-20260511    clang-20
+powerpc64             randconfig-001-20260512    gcc-12.5.0
+powerpc64                      randconfig-002    clang-20
+powerpc64             randconfig-002-20260511    clang-20
+powerpc64             randconfig-002-20260512    gcc-12.5.0
+riscv                            allmodconfig    clang-23
+riscv                             allnoconfig    clang-23
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    gcc-15.2.0
+riscv                          randconfig-001    gcc-12.5.0
+riscv                 randconfig-001-20260511    gcc-12.5.0
+riscv                 randconfig-001-20260512    gcc-15.2.0
+riscv                          randconfig-002    gcc-12.5.0
+riscv                 randconfig-002-20260511    gcc-12.5.0
+riscv                 randconfig-002-20260512    gcc-15.2.0
+s390                             allmodconfig    clang-18
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-23
+s390                             allyesconfig    gcc-15.2.0
+s390                                defconfig    gcc-15.2.0
+s390                           randconfig-001    gcc-12.5.0
+s390                  randconfig-001-20260511    gcc-12.5.0
+s390                  randconfig-001-20260512    gcc-15.2.0
+s390                           randconfig-002    gcc-12.5.0
+s390                  randconfig-002-20260511    gcc-12.5.0
+s390                  randconfig-002-20260512    gcc-15.2.0
+sh                               allmodconfig    gcc-15.2.0
+sh                                allnoconfig    clang-23
+sh                               allyesconfig    clang-19
+sh                               allyesconfig    gcc-15.2.0
+sh                                  defconfig    gcc-14
+sh                             randconfig-001    gcc-12.5.0
+sh                    randconfig-001-20260511    gcc-12.5.0
+sh                    randconfig-001-20260512    gcc-15.2.0
+sh                             randconfig-002    gcc-12.5.0
+sh                    randconfig-002-20260511    gcc-12.5.0
+sh                    randconfig-002-20260512    gcc-15.2.0
+sh                           se7751_defconfig    gcc-15.2.0
+sparc                             allnoconfig    clang-23
+sparc                               defconfig    gcc-15.2.0
+sparc                          randconfig-001    gcc-8.5.0
+sparc                 randconfig-001-20260511    gcc-8.5.0
+sparc                 randconfig-001-20260512    gcc-13.4.0
+sparc                          randconfig-002    gcc-8.5.0
+sparc                 randconfig-002-20260511    gcc-8.5.0
+sparc                 randconfig-002-20260512    gcc-13.4.0
+sparc64                          allmodconfig    clang-23
+sparc64                             defconfig    gcc-14
+sparc64                        randconfig-001    gcc-8.5.0
+sparc64               randconfig-001-20260511    gcc-8.5.0
+sparc64               randconfig-001-20260512    gcc-13.4.0
+sparc64                        randconfig-002    gcc-8.5.0
+sparc64               randconfig-002-20260511    gcc-8.5.0
+sparc64               randconfig-002-20260512    gcc-13.4.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-23
+um                               allyesconfig    gcc-14
+um                               allyesconfig    gcc-15.2.0
+um                                  defconfig    gcc-14
+um                             i386_defconfig    gcc-14
+um                             randconfig-001    gcc-8.5.0
+um                    randconfig-001-20260511    gcc-8.5.0
+um                    randconfig-001-20260512    gcc-13.4.0
+um                             randconfig-002    gcc-8.5.0
+um                    randconfig-002-20260511    gcc-8.5.0
+um                    randconfig-002-20260512    gcc-13.4.0
+um                           x86_64_defconfig    gcc-14
+x86_64                           allmodconfig    clang-20
+x86_64                            allnoconfig    clang-23
+x86_64                           allyesconfig    clang-20
+x86_64               buildonly-randconfig-001    gcc-14
+x86_64      buildonly-randconfig-001-20260511    gcc-14
+x86_64      buildonly-randconfig-001-20260512    gcc-14
+x86_64               buildonly-randconfig-002    gcc-14
+x86_64      buildonly-randconfig-002-20260511    gcc-14
+x86_64      buildonly-randconfig-002-20260512    gcc-14
+x86_64               buildonly-randconfig-003    gcc-14
+x86_64      buildonly-randconfig-003-20260511    gcc-14
+x86_64      buildonly-randconfig-003-20260512    gcc-14
+x86_64               buildonly-randconfig-004    gcc-14
+x86_64      buildonly-randconfig-004-20260511    gcc-14
+x86_64      buildonly-randconfig-004-20260512    gcc-14
+x86_64               buildonly-randconfig-005    gcc-14
+x86_64      buildonly-randconfig-005-20260511    gcc-14
+x86_64      buildonly-randconfig-005-20260512    gcc-14
+x86_64               buildonly-randconfig-006    gcc-14
+x86_64      buildonly-randconfig-006-20260511    gcc-14
+x86_64      buildonly-randconfig-006-20260512    gcc-14
+x86_64                              defconfig    gcc-14
+x86_64                                  kexec    clang-20
+x86_64                         randconfig-001    clang-20
+x86_64                randconfig-001-20260511    clang-20
+x86_64                randconfig-001-20260512    gcc-14
+x86_64                         randconfig-002    clang-20
+x86_64                randconfig-002-20260511    clang-20
+x86_64                randconfig-002-20260512    gcc-14
+x86_64                         randconfig-003    clang-20
+x86_64                randconfig-003-20260511    clang-20
+x86_64                randconfig-003-20260512    gcc-14
+x86_64                         randconfig-004    clang-20
+x86_64                randconfig-004-20260511    clang-20
+x86_64                randconfig-004-20260512    gcc-14
+x86_64                         randconfig-005    clang-20
+x86_64                randconfig-005-20260511    clang-20
+x86_64                randconfig-005-20260512    gcc-14
+x86_64                         randconfig-006    clang-20
+x86_64                randconfig-006-20260511    clang-20
+x86_64                randconfig-006-20260512    gcc-14
+x86_64                         randconfig-011    clang-20
+x86_64                randconfig-011-20260511    clang-20
+x86_64                randconfig-011-20260512    clang-20
+x86_64                         randconfig-012    clang-20
+x86_64                randconfig-012-20260511    clang-20
+x86_64                randconfig-012-20260512    clang-20
+x86_64                         randconfig-013    clang-20
+x86_64                randconfig-013-20260511    clang-20
+x86_64                randconfig-013-20260512    clang-20
+x86_64                         randconfig-014    clang-20
+x86_64                randconfig-014-20260511    clang-20
+x86_64                randconfig-014-20260512    clang-20
+x86_64                         randconfig-015    clang-20
+x86_64                randconfig-015-20260511    clang-20
+x86_64                randconfig-015-20260512    clang-20
+x86_64                         randconfig-016    clang-20
+x86_64                randconfig-016-20260511    clang-20
+x86_64                randconfig-016-20260512    clang-20
+x86_64                randconfig-071-20260511    clang-20
+x86_64                randconfig-071-20260512    clang-20
+x86_64                randconfig-072-20260511    clang-20
+x86_64                randconfig-072-20260512    clang-20
+x86_64                randconfig-073-20260511    clang-20
+x86_64                randconfig-073-20260512    clang-20
+x86_64                randconfig-074-20260511    clang-20
+x86_64                randconfig-074-20260512    clang-20
+x86_64                randconfig-075-20260511    clang-20
+x86_64                randconfig-075-20260512    clang-20
+x86_64                randconfig-076-20260511    clang-20
+x86_64                randconfig-076-20260512    clang-20
+x86_64                               rhel-9.4    clang-20
+x86_64                           rhel-9.4-bpf    gcc-14
+x86_64                          rhel-9.4-func    clang-20
+x86_64                    rhel-9.4-kselftests    clang-20
+x86_64                         rhel-9.4-kunit    gcc-14
+x86_64                           rhel-9.4-ltp    gcc-14
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    clang-23
+xtensa                           allyesconfig    clang-23
+xtensa                          iss_defconfig    gcc-15.2.0
+xtensa                         randconfig-001    gcc-8.5.0
+xtensa                randconfig-001-20260511    gcc-8.5.0
+xtensa                randconfig-001-20260512    gcc-13.4.0
+xtensa                         randconfig-002    gcc-8.5.0
+xtensa                randconfig-002-20260511    gcc-8.5.0
+xtensa                randconfig-002-20260512    gcc-13.4.0
 
-LLM Generated explanations, may be completely bogus:
-
-## Phase 1: Commit Message Forensics
-Step 1.1 Record: Subsystem `net: usb: r8152`; action verb `add`; claimed
-intent: add TRENDnet TUC-ET2G v2.0 USB device ID so the existing `r8152`
-driver binds to the adapter.
-
-Step 1.2 Record: Tags present:
-- `Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>`
-- `Reviewed-by: Andrew Lunn <andrew@lunn.ch>`
-- `Reviewed-by: Birger Koblitz <mail@birger-koblitz.de>`
-- `Link: https://patch.msgid.link/20260430213435.21821-1-olek2@wp.pl`
-- `Signed-off-by: Jakub Kicinski <kuba@kernel.org>`
-
-No `Fixes:`, `Reported-by:`, `Tested-by:`, or `Cc:
-stable@vger.kernel.org` tag was present. Absence of those tags is not a
-negative signal here.
-
-Step 1.3 Record: The body describes a real hardware support failure:
-TRENDnet TUC-ET2G V2.0 is RTL8156B-based, but without its USB
-vendor/product ID in `rtl8152_table`, Ethernet does not work with that
-adapter. No affected kernel versions are named.
-
-Step 1.4 Record: This is not a hidden memory/synchronization bug. It is
-an explicit new USB device ID addition to an existing driver, which is a
-stable exception category.
-
-## Phase 2: Diff Analysis
-Step 2.1 Record: One file changed: `drivers/net/usb/r8152.c`, `+1/-0`.
-No function body changed. The modified object is `rtl8152_table`. Scope:
-single-file surgical device-ID addition.
-
-Step 2.2 Record: Before the change, the table contained TRENDnet
-`0xe02b` but not `0xe02c`, so USB matching would not select `r8152` for
-`20f4:e02c`. After the change, `USB_DEVICE(VENDOR_ID_TRENDNET, 0xe02c)`
-is matched by the driver table used by both `rtl8152_driver.id_table`
-and `rtl8152_cfgselector_driver.id_table`.
-
-Step 2.3 Record: Bug category is hardware enablement / USB device ID
-addition. It does not touch error paths, locking, reference counts,
-memory safety, or public APIs.
-
-Step 2.4 Record: The fix is obviously correct if the ID maps to RTL8156B
-hardware. I verified the device identity externally: WikiDevi lists TUC-
-ET2G v2.0R as USB ID `20f4:e02c` with Realtek RTL8156B, and TRENDnet’s
-own support page confirms the TUC-ET2G v2 product. Regression risk is
-very low; existing devices are unaffected unless another incompatible
-device uses the same exact USB ID.
-
-## Phase 3: Git History Investigation
-Step 3.1 Record: `git blame` around the table showed the existing
-TRENDnet `0xe02b` entry came from `15fba71533bc` and the new `0xe02c`
-line comes from `f93836b23677`. The table terminator dates back to
-`ac718b69301c`. The “bug” is not introduced by a code commit; it is the
-absence of a product-specific ID for existing supported silicon.
-
-Step 3.2 Record: No `Fixes:` tag, so there is no introducing commit to
-follow.
-
-Step 3.3 Record: Recent related history includes `15fba71533bc` adding
-the first TRENDnet TUC-ET2G ID and `dc9c67820f81` adding a TP-Link ID.
-The candidate is standalone on trees that already have
-`VENDOR_ID_TRENDNET`.
-
-Step 3.4 Record: The author has at least one prior `r8152` device-ID
-commit, `848b09d53d92` for Dell Alienware AW1022z. The patch was
-reviewed by Andrew Lunn and Birger Koblitz and applied by Jakub
-Kicinski.
-
-Step 3.5 Record: Dependency found: `VENDOR_ID_TRENDNET` was introduced
-by `15fba71533bc`, and `git merge-base --is-ancestor` confirms that
-commit is an ancestor of `f93836b23677`. Mainline release tags `v5.15`,
-`v6.1`, `v6.6`, `v6.12`, and `v6.19` lack `VENDOR_ID_TRENDNET`, while
-`v7.0-rc3` has it. Older stable backports therefore need either
-`15fba71533bc` first or a small backport adjustment adding `#define
-VENDOR_ID_TRENDNET 0x20f4`.
-
-## Phase 4: Mailing List And External Research
-Step 4.1 Record: `b4 dig -c f93836b23677` found the original patch
-submission by patch-id. `b4 dig -a` reported the accepted one-patch
-submission at `20260430213435.21821-1-olek2@wp.pl`; `b4` also found an
-earlier identical submission from
-`20260426214909.3426105-1-olek2@wp.pl`. The earlier thread had Andrew
-Lunn asking for repost after netdev opened and giving his `Reviewed-by`.
-No NAK or technical objection found.
-
-Step 4.2 Record: `b4 dig -w` showed the patch was sent to netdev
-maintainers/lists and USB networking lists, including Andrew Lunn, David
-Miller, Eric Dumazet, Jakub Kicinski, Paolo Abeni, Realtek contacts,
-`linux-usb`, `netdev`, and `linux-kernel`. `MAINTAINERS` confirms those
-netdev maintainers for `NETWORKING DRIVERS`, and `drivers/net/usb/` is
-under `USB NETWORKING DRIVERS`.
-
-Step 4.3 Record: No separate bug report or `Reported-by` tag. External
-hardware verification found TUC-ET2G v2.0R as `20f4:e02c` / RTL8156B.
-
-Step 4.4 Record: This is a single-patch submission, not a multi-patch
-fix series. The only practical dependency for older trees is the
-TRENDnet vendor define from the prior TUC-ET2G ID commit.
-
-Step 4.5 Record: WebFetch to lore was blocked by Anubis. WebSearch did
-not find stable-specific discussion for `f93836b23677` or the patch
-message ID. No stable objection found.
-
-## Phase 5: Code Semantic Analysis
-Step 5.1 Record: No functions modified. Modified data structure:
-`rtl8152_table`.
-
-Step 5.2 Record: `rtl8152_table` is referenced by
-`MODULE_DEVICE_TABLE(usb, rtl8152_table)`, `rtl8152_driver.id_table`,
-and `rtl8152_cfgselector_driver.id_table`. Matching devices enter the
-normal USB probe path via `rtl8152_probe`.
-
-Step 5.3 Record: The relevant probe path checks vendor-specific
-interface class, `rtl_check_vendor_ok`, `rtl8152_get_version`, then
-calls `rtl8152_probe_once`. The config selector uses `__rtl_get_hw_ver`.
-This patch adds no new calls.
-
-Step 5.4 Record: Reachability is USB device enumeration: plugging in or
-booting with the adapter attached. It is not a remote or syscall-
-triggered security issue.
-
-Step 5.5 Record: Similar pattern exists throughout the same table for
-Realtek, Lenovo, TP-Link, D-Link, Dell, ASUS, and earlier TRENDnet IDs.
-`git log -S'0xe02c'` found no prior `0xe02c` entry in the checked
-history.
-
-## Phase 6: Stable Tree Analysis
-Step 6.1 Record: Checked mainline release tags `v5.15`, `v6.1`, `v6.6`,
-`v6.12`, and `v6.19`: all contain `0x8156` and RTL8156B version
-handling, but not the TRENDnet `0xe02c` ID. This means the supported
-chipset path exists in those releases, but the product-specific match is
-missing.
-
-Step 6.2 Record: Backport difficulty is low. It applies cleanly to trees
-with `VENDOR_ID_TRENDNET` / `0xe02b`; older bases need a minor
-context/define adjustment or the prior TRENDnet ID patch.
-
-Step 6.3 Record: No alternate local fix for `0xe02c` was found. No
-stable-specific replacement fix was verified.
-
-## Phase 7: Subsystem And Maintainer Context
-Step 7.1 Record: Subsystem is `drivers/net/usb`, USB Ethernet networking
-driver. Criticality: driver-specific, important for users of this
-hardware, not core-kernel-wide.
-
-Step 7.2 Record: The file is active, with recent `r8152` feature and fix
-commits, but this change is isolated to the USB ID table and does not
-depend on recent functional refactoring except the vendor
-define/backport context noted above.
-
-## Phase 8: Impact And Risk
-Step 8.1 Record: Affected users are systems with TRENDnet TUC-ET2G V2.0
-and `CONFIG_USB_RTL8152`.
-
-Step 8.2 Record: Trigger is common for affected users: adapter insertion
-or boot with the adapter connected. Not remotely triggerable; physical
-USB access is needed.
-
-Step 8.3 Record: Failure mode is device non-binding / Ethernet
-unavailable. Severity is not crash/security-critical, but it is a real
-user-visible hardware functionality failure.
-
-Step 8.4 Record: Benefit is high for affected stable users because it
-makes the adapter work with an already-supported RTL8156B driver. Risk
-is very low: one table entry, no behavior change for existing IDs.
-
-## Phase 9: Final Synthesis
-Evidence for backporting:
-- New USB device ID for existing driver and already-supported RTL8156B
-  silicon.
-- Fixes a real user-visible failure: Ethernet does not work with this
-  adapter.
-- One-line, single-file, no API or behavior change for existing
-  hardware.
-- Reviewed by Andrew Lunn and Birger Koblitz; applied by Jakub Kicinski.
-- Hardware identity verified as TRENDnet `20f4:e02c` / RTL8156B.
-
-Evidence against backporting:
-- Not a crash, data corruption, security, or deadlock fix.
-- Older stable bases may need the prior `VENDOR_ID_TRENDNET` definition
-  or a tiny backport adjustment.
-
-Unresolved:
-- I did not verify every active stable branch state directly; I verified
-  mainline release tags and the dependency relationship. Lore WebFetch
-  was blocked, but `b4` successfully fetched the thread.
-
-Stable rules checklist:
-1. Obviously correct and tested? Yes, one matching-table entry;
-   reviewed; hardware ID verified.
-2. Fixes a real bug affecting users? Yes, adapter does not bind/work
-   without the ID.
-3. Important issue? Yes under the stable “new device IDs” exception,
-   though not crash/security.
-4. Small and contained? Yes, one insertion in one file.
-5. No new features/APIs? Yes, no API or behavioral change except
-   matching this USB device.
-6. Can apply to stable trees? Yes with low difficulty; older trees may
-   need `VENDOR_ID_TRENDNET`.
-
-Exception category: New USB device ID for an existing driver. This is a
-standard stable-appropriate exception.
-
-## Verification
-- [Phase 1] Parsed commit `f93836b236773862e9ee268a82e3614caf77ea01`
-  with `git show`; confirmed subject, body, tags, and `+1/-0` diff.
-- [Phase 2] Compared `git diff f938^..f938`; confirmed only `{
-  USB_DEVICE(VENDOR_ID_TRENDNET, 0xe02c) }` is added.
-- [Phase 3] Ran `git blame` around `rtl8152_table`; confirmed existing
-  `0xe02b` from `15fba71533bc` and new `0xe02c` from `f93836b23677`.
-- [Phase 3] Ran `git merge-base --is-ancestor 15fba71533bc
-  f93836b23677`; confirmed the vendor define dependency is in the
-  candidate’s ancestry.
-- [Phase 3] Checked release tags `v5.15`, `v6.1`, `v6.6`, `v6.12`,
-  `v6.19`, `v7.0-rc3`, `v7.1-rc3`; confirmed older release tags have
-  RTL8156/RTL_VER_13 support but lack TRENDnet IDs until `v7.0-rc3`.
-- [Phase 4] Ran `b4 dig -c`, `b4 dig -a`, and `b4 dig -w`; confirmed
-  patch-id match, one-patch submission, recipients, and
-  review/application thread.
-- [Phase 4] Read full `b4 mbox` threads; confirmed Andrew Lunn review on
-  repost request, Birger Koblitz review, and patchwork notification that
-  Jakub applied it.
-- [Phase 4] WebFetch to lore was blocked by Anubis; external GitHub
-  commit fetch confirmed the commit metadata and diff.
-- [Phase 4] WebFetch of WikiDevi and TRENDnet pages verified TUC-ET2G v2
-  hardware identity; WikiDevi specifically listed USB ID `20f4:e02c` and
-  RTL8156B.
-- [Phase 5] Searched `rtl8152_table` references; confirmed use by
-  `MODULE_DEVICE_TABLE`, `rtl8152_driver.id_table`, and
-  `rtl8152_cfgselector_driver.id_table`.
-- [Phase 5] Read `rtl8152_probe` and config selector code; confirmed
-  affected path is USB enumeration/probe, with no changed runtime logic.
-- [Phase 7] Checked `MAINTAINERS`; confirmed netdev maintainers and
-  `drivers/net/usb/` list coverage.
-- [Phase 8] Checked `drivers/net/usb/Kconfig`; confirmed affected
-  configuration is `CONFIG_USB_RTL8152`.
-
-This is exactly the kind of low-risk new USB ID addition stable trees
-normally take.
-
-**YES**
-
- drivers/net/usb/r8152.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 0c83bbbea2e7c..0ac2b079e435c 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -10055,6 +10055,7 @@ static const struct usb_device_id rtl8152_table[] = {
- 	{ USB_DEVICE(VENDOR_ID_DELL,    0xb097) },
- 	{ USB_DEVICE(VENDOR_ID_ASUS,    0x1976) },
- 	{ USB_DEVICE(VENDOR_ID_TRENDNET, 0xe02b) },
-+	{ USB_DEVICE(VENDOR_ID_TRENDNET, 0xe02c) },
- 	{}
- };
- 
--- 
-2.53.0
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
