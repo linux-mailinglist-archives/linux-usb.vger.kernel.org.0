@@ -1,98 +1,88 @@
-Return-Path: <linux-usb+bounces-37216-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37218-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UGB3I28SAWq4QQEAu9opvQ
-	(envelope-from <linux-usb+bounces-37216-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 01:19:11 +0200
+	id wFbIDD1CAWpwTAEAu9opvQ
+	(envelope-from <linux-usb+bounces-37218-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 04:43:09 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E91B8506CBE
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 01:19:10 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB080507459
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 04:43:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 950863016EE9
-	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2026 23:17:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D1C893017C17
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 02:42:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41B3F3AEF28;
-	Sun, 10 May 2026 23:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pMbJTZQQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F00DD2FE582;
+	Mon, 11 May 2026 02:42:52 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11022107.outbound.protection.outlook.com [40.107.75.107])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E12253AE70D
-	for <linux-usb@vger.kernel.org>; Sun, 10 May 2026 23:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778455043; cv=none; b=XT3h9kFFvQaXu6BzukO19bIBRB6lpT5TCsT2g8JplCDJBeEOuyYKCqCPVsF7UOcggqdVLnbZdZ0ANFG3Ilo3pfSgV2o4Sg+uG44Cp6fKm3lv7xuldNeMJEzJ/axSESWnLpmkh43BrxPJl5xsBBO8oSbn5YlHCe5xJqKZ9vTrT3Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778455043; c=relaxed/simple;
-	bh=3ZotJzSuzGicOvCuyTT04CpVUaZMCdOlnmm3Sl4A4KQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XQJ7u2PaFNtJpN68FBAVhFLvZBp2IZnAzpMZ56Asq1T84hCcyQ4eupz5fBI2qAH7obvuGMe1PsdNXgLuSLHGpoCwRCaweO6DWPCwUVgjeVBPZcWWVSZ9rqB7Co11/6scO/qat0hT4K8iNkEA8p3kOtsCUKFihcaSoCL101YSvW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pMbJTZQQ; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-8b701756684so45577316d6.1
-        for <linux-usb@vger.kernel.org>; Sun, 10 May 2026 16:17:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778455041; x=1779059841; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PRieg0Nv/MKqd0vc2qdpdsuiA8KS3tu0ewo/5761Poo=;
-        b=pMbJTZQQaBayl1qRlMd7oL8+ZbL6aZX7LSpjMFyjqblfvMZ+O5mIUdEaN7SnEXr6op
-         6/ZHydGLBc29mGeHh7hMf3NH3y3CZf3ZU9qkYnum0BNnAUb7ldiwkBLnisiYriEI9ViT
-         AqZfPVygoHMWtnLC0eSBmlSpT1dt3jlz4LBxhMsKyisQypKuVQbzEy6GkCaGii9Tz7NK
-         jBieCFi8je6ocFTXpVHHAK92q6ogpArPrxc0uSh1ohh4qqG0D9nEiP3i4rd0Sv5Zh7+n
-         fQzkl7kp55jJVsVVT3zPklzcray3Ovh8n6uos/G+pMmJg3e1wX40nxkWif4tNypT+gcR
-         +YGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778455041; x=1779059841;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=PRieg0Nv/MKqd0vc2qdpdsuiA8KS3tu0ewo/5761Poo=;
-        b=GN7BQnQltUrV6HskQaWj91/RBXhNV9bJIWiDxhgXSuCtkSvKcoCXIfJCVRBYVZapPS
-         fEp2O8WkkUjn5iEi6hy6upvsKNm4ZYcxe6uEJbhjQnbBpUG1b7GaUN4ci5SxKShnjl1T
-         hQ3DEQJBtyG+/Xz2WZFm0GxGTermEZqCqk335BXjJZdwcEUsrwGkrCQYoeYP3e8CUBVf
-         yKWGtAcaZmAHh9wN4Du5XURiPmc3nIxrxb+s6X7Uw9qvYnAtiH7WZcLnzOT/94YSN1iB
-         txNdg9L5My8TiG7R3tSvk3VOvP3N37Veh8+j3/kL9Om3TXXTrj/Tw1Vuma67PCk3yM7D
-         WN0A==
-X-Forwarded-Encrypted: i=1; AFNElJ9F+bvjdutgdc/neo1KpxoTK+jFYsMo7Nvuy7SiDQ9rksaVnWNa8iS6hseqY0S9JLk5HxIRyCxCoDE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1Mo9XJ1aah1ldM6dwcK9K5o67bIrsKUkmpwnaE2RmM+jqB9Qx
-	kUGxtxg4wdng66+h0UhdywHW40UsMY2Wbi2rUm5D4ffCNNHp076kU+3v
-X-Gm-Gg: Acq92OFp1PLXeOx6z2yeoQ8y42I24GrrerzWCyJHKFcDhyMvaw4YKR8wm8SL1c27pIu
-	Wv2bL0n2JOWic0zdPQ5hIQ5wuk6EWoAIK9Tvt1HgV9sjjeEVaVAaM9CTG2Tceyy39XkB0tH6sDd
-	+8v+coEiYDAcbklBLUkGbGpjzs1dr6I73Q8DJUD11tYM3cqeYuBkxVY0WoVIknMFaRZb1RyikME
-	IVyM6hyMxtdCjbFfRM+cYPpg7KB6ZqCJ58M8u34nMor51wTNC6HHg48gXHKAQEQMQkwkKWTqwFS
-	ycGBslZhH5azXKotRcwS9LEdGPDt6kegomMYOr+U64cuNMjaZChkgT0FgLF4mrbGoNmtcPiz+6G
-	Onl9TuG2Mby0FlgFBHqA4MQJe1Z4Kbt1qcNNHmDpV2VnaQmVCod1UeZ8NErPAnsEj39sENDzJDK
-	Oop7/3wqtT0iF9ywxsBpOUUuiAZv5qgOpQ3wnr5CYI75fYEMn+cIjZv5dSXjWGYBMyUv42tP6eG
-	gXEY5lKG84dEUSqcQ45wZlyzZl2OmMpvGkJ9Jn6uEs=
-X-Received: by 2002:a05:622a:d5:b0:50e:18f9:b5e2 with SMTP id d75a77b69052e-51475b2acdfmr182856011cf.6.1778455040887;
-        Sun, 10 May 2026 16:17:20 -0700 (PDT)
-Received: from server0.tail6e7dd.ts.net (c-68-48-65-54.hsd1.mi.comcast.net. [68.48.65.54])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5148e830ddfsm75015031cf.27.2026.05.10.16.17.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 May 2026 16:17:20 -0700 (PDT)
-From: Michael Bommarito <michael.bommarito@gmail.com>
-To: Mika Westerberg <westeri@kernel.org>,
-	linux-usb@vger.kernel.org
-Cc: Andreas Noever <andreas.noever@gmail.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4B92F12A1;
+	Mon, 11 May 2026 02:42:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.107
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778467372; cv=fail; b=bv/IhCnR7q8nPstDkGZ+KAvVVj3RjIGaVZ74vew+46eUGnYpXHnLLoz6LY7r+5SKEEcIlD4Px71KORXS1rwJ7mefj+T09nX63YYV8t80Bd7UcsHo54zXxye7AlrrX3SD4bgdOirmouPHtWuaGc/a41HNZUC0arkSVmLhCe+uToE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778467372; c=relaxed/simple;
+	bh=5heUz9QaEOLc/wuqfetbwP/1RkHaRoT78jFhymB/DXo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uL/tWuZ043/WuFahnu7kWI4MWf3dATnlfWimCBdBtYizlsoBWWlH/tQtnikHnVcqVVXPS67jW/nFaMsOrVT626R13ZDF0eZbm1L7//9ae7VOjw09d67/4g8bRqrlCgp6gYOXtaKU72khHe88TL48Lk/35IWC7EtnS3BVGhFJNlI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com; spf=pass smtp.mailfrom=cixtech.com; arc=fail smtp.client-ip=40.107.75.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cixtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YV29aFj1KyoNG5efvlVKY5j06TyJJ3RnKrNCmqhjqte6u53uhtuITcvU1C7i+2B368H+wI/JeMIBLinR6VXur1/1uveo0vyy9Zo4PPCjvhNFyuewdU4mNVt9keweQ3JTJXm1mgKjpKM8kUTDo9+z1oSD610+Owo84UJJocjnqwiqJFlnhAWtWYMMqJ/6RVshRfl4/ru1LOYwQFMZ5wI6LPVHid2qJy8jEbxuPoSmGULrPtgICHe9ViZ5ph4Ku17gl6yusPl6nDzrC8wPOqSp6xHlvrz8Gv2YWjgme4ZRl71gGPeJkGFzgMKuIAoZ8AnjLapvBKbd9QZWZpA8/+mOvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DdkycykB7DdZ/5TmpdCM8Ij0KMR2LHDs8nmH9tVVmY0=;
+ b=CpFqbXT/ZMNNTTrivxrEN7hJxY8VdgsHkBiuQT7wwAp2G56HOFXfg/zkCjT4anMn8ZZCnE3NHB9+jO1B3ez8bsaIKWAuYqYFd9gfaqDAzaoXNAOpk9Y85L728kWwa+OMW1UOdCRSjT7wKpA7eikgG9xI/KsqKXtjenXV+kesFnbUloooZx+w9ouQPvk9acpBfftuUmQ5r/kSSBTQFsyKM45HN9wOcZwwxJ5d+HtTz9a3RTCAeO/RXVaBVXOtKt7z1Gr3LFK0ZMo/AH67rXjOO4oI6d9aqh+8wuoXTD3Qjnmb542Rq6WpeAFl+3OVBvz9qvCZheWonyCSj4VLovRnFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 222.71.101.198) smtp.rcpttodomain=arndb.de smtp.mailfrom=cixtech.com;
+ dmarc=bestguesspass action=none header.from=cixtech.com; dkim=none (message
+ not signed); arc=none (0)
+Received: from TYCP286CA0033.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:29d::7)
+ by KUXPR06MB8560.apcprd06.prod.outlook.com (2603:1096:d10:9f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.22; Mon, 11 May
+ 2026 02:42:46 +0000
+Received: from TY2PEPF0000AB83.apcprd03.prod.outlook.com
+ (2603:1096:400:29d:cafe::2d) by TYCP286CA0033.outlook.office365.com
+ (2603:1096:400:29d::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.22 via Frontend Transport; Mon,
+ 11 May 2026 02:42:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 222.71.101.198)
+ smtp.mailfrom=cixtech.com; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none header.from=cixtech.com;
+Received-SPF: Pass (protection.outlook.com: domain of cixtech.com designates
+ 222.71.101.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=222.71.101.198; helo=smtprelay.cixcomputing.com; pr=C
+Received: from smtprelay.cixcomputing.com (222.71.101.198) by
+ TY2PEPF0000AB83.mail.protection.outlook.com (10.167.253.4) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.25.13 via Frontend Transport; Mon, 11 May 2026 02:42:46 +0000
+Received: from nchen-desktop (unknown [172.16.64.25])
+	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id 20F104126F91;
+	Mon, 11 May 2026 10:42:45 +0800 (CST)
+From: Peter Chen <peter.chen@cixtech.com>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	gregkh@linuxfoundation.org,
+	pawell@cadence.com,
+	rogerq@kernel.org
+Cc: devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v4 4/4] thunderbolt: test: add KUnit regression tests for XDomain property parser
-Date: Sun, 10 May 2026 19:16:59 -0400
-Message-ID: <20260510231715.2215605-4-michael.bommarito@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <cover.v4.git.michael.bommarito@gmail.com>
-References: <20260415123221.225149-1-michael.bommarito@gmail.com> <cover.1777817011.git.michael.bommarito@gmail.com> <cover.v4.git.michael.bommarito@gmail.com>
+	linux-usb@vger.kernel.org,
+	cix-kernel-upstream@cixtech.com,
+	linux-arm-kernel@lists.infradead.org,
+	arnd@arndb.de,
+	Peter Chen <peter.chen@cixtech.com>
+Subject: [PATCH 0/4] Add CIX Sky1 Cadence USB3 support
+Date: Mon, 11 May 2026 10:42:40 +0800
+Message-ID: <20260511024244.981941-1-peter.chen@cixtech.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -100,222 +90,92 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: E91B8506CBE
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TY2PEPF0000AB83:EE_|KUXPR06MB8560:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: ce54aed2-5cfe-4a67-cda1-08deaf06fbcd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700016|82310400026|7416014|376014|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	O9myw0dNZoK6py+f/3vHDNKSdV/EdtACEk5SmpgNJ4MvJdulF0c9KbnsfehZ29mtZBK32XixxGxUQ7qshJ1lD1/+/NE37lqc7lVXMVfMNkrPOqVEb8aJ1tjbkUvF3LYiLKypRB3/JFxU7eteDJPwqT1gtz688rkwZ6E4gFi+nDoo4RKV1j9xBQfS4ZOJ9eqiJCUjFbzWw6RbhXsZys7XOBK9haka9x/9UAabMCoG++m0OcJFLuMpO1qHh341/W2iMu7xVZHyDwPutTQN9Ja0XVjr1O1l6IcRaQJqvpQfOuAbNr3UMRzperwEkj7oKLvY9GnBWit31Xcaw3qPPppqe1YGxzqNT1EVgOA5lzaDgGBohofMycUynZ094wdWUJja0Uq2mc0gB5Ovi/mKhT5kLElNDXIdKQKxC+nuYCWNV8PFLmfJYMcRwBC66TIxi3q1976pxabQhJDxy9zwgM4yAznabfD0M5JpjUWRFM5B/Smkij7NTwlKg4Vu4BXST3IOIR4b2YyvgLl7TuDQbrOylTqvkmxbAOa8yi9iohNKeFKw4Sqnlmfwr5gbuFLrTvK31of7Wj2E8FBt3CyZuDjYp9DEPRN07cQubqGbVG690Dm/5IixzLcFl2Gigge9uMDxvgct7n5AuBHA0aPWQZ+xmp30S0RRMBx4VZu4+UNsuCWjgdCO6mFY+eL2D0xuCaCg
+X-Forefront-Antispam-Report:
+	CIP:222.71.101.198;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtprelay.cixcomputing.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700016)(82310400026)(7416014)(376014)(56012099003)(18002099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	iQ8bU8Z9zTH5y65uIL56mlymib9LpzmG+FaLjU1Z4CNuFzA8J2bYgtX8RJdUfpeB/VML3bp8Yt3RYxQ+374Q6opaG9gfBmmcWNVQe1k6/g0kqsPcE1A3EwGbJg5env8x1M2/blT/QVNnGp/HfQpMCO9MuhbxTMXzyk8YNbcBl705eoQ06/gynMhs4dwDjkoPrMSEJiKfm6WyTulgMiQgjuRvwD7N5EGqwqyj+FNxERtWcdZR6uK5PjHoi+prQq1prkpceRvd8hbwR6a3VeQp1EuX2eOLtDbdqz8NSmq6fMiI62F4fFJJHUB9Wk7FTHOji6G9Vlw1lGziNIEH7Tfb864E9Dhj5J6hjE6Nlxat3bAC95Ky3kSs+9Bv6UuM0s5bT8nECMF2ETAay8NYN6XXs2mdBwWtqcZiEArSkrSuamqLmM7KtdW/fIZR8euLq86g
+X-OriginatorOrg: cixtech.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2026 02:42:46.0016
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce54aed2-5cfe-4a67-cda1-08deaf06fbcd
+X-MS-Exchange-CrossTenant-Id: 0409f77a-e53d-4d23-943e-ccade7cb4811
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0409f77a-e53d-4d23-943e-ccade7cb4811;Ip=[222.71.101.198];Helo=[smtprelay.cixcomputing.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	TY2PEPF0000AB83.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KUXPR06MB8560
+X-Rspamd-Queue-Id: BB080507459
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [3.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37216-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	DMARC_NA(0.00)[cixtech.com];
+	TAGGED_FROM(0.00)[bounces-37218-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[gmail.com,linux.intel.com,intel.com,linuxfoundation.org,vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	NEURAL_SPAM(0.00)[0.297];
 	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michaelbommarito@gmail.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.996];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FROM_NEQ_ENVFROM(0.00)[peter.chen@cixtech.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	R_DKIM_NA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Action: no action
 
-Add three KUnit cases that exercise the defects fixed by the sibling
-commits in this series by feeding crafted XDomain property blocks to
-tb_property_parse_dir():
+This series adds library support for cdns3 platform driver as well as the
+first user CIX Sky1 USB3. It is the follow-up of Arnd's suggestion [1] for
+helping cdns3 module dependencies and new developers working on it.
+The final two patches document the Sky1 binding and describe the USB4/USB5
+controller instances in the Sky1 device tree and enable them on the Radxa
+Orion O6 board.
 
-  tb_test_property_parse_u32_wrap - entry->value = 0xffffff00 and
-    entry->length = 0x100 so their u32 sum 0x100000000 wraps to 0
-    under the block_len guard; without the fix the subsequent
-    parse_dwdata() reads attacker-directed OOB memory.
+[1] https://lore.kernel.org/linux-usb/cb70271c-3ddb-422c-bf24-1cf019473f7e@app.fastmail.com/T/#mf61131099335cdfb6b4264e90b0d3de10cc4abac
 
-  tb_test_property_parse_recursion - two DIRECTORY entries pointing
-    at each other, driving __tb_property_parse_dir() recursion;
-    without the fix the kernel stack is exhausted.
+Peter Chen (4):
+  usb: cdns3: plat: Expose platform core driver as library
+  usb: cdns3: sky1: Add cdnsp-sky1 glue driver
+  dt-bindings: usb: add CIX Sky1 Cadence USB3 controller
+  arm64: dts: cix: add Sky1 USB4 and USB5 controllers
 
-  tb_test_property_parse_dir_len_underflow - a DIRECTORY entry with
-    length < 4 placed near the end of the block so the non-root UUID
-    kmemdup of 4 dwords from dir_offset reads OOB before the later
-    content_len = dir_len - 4 underflow path is reached.
+ .../bindings/usb/cix,sky1-cdns3.yaml          | 151 +++++++++++
+ arch/arm64/boot/dts/cix/sky1-orion-o6.dts     |  30 +++
+ arch/arm64/boot/dts/cix/sky1.dtsi             |  68 +++++
+ drivers/usb/cdns3/Kconfig                     |  13 +
+ drivers/usb/cdns3/Makefile                    |   1 +
+ drivers/usb/cdns3/cdns3-plat.c                | 138 ++++++----
+ drivers/usb/cdns3/cdnsp-sky1.c                | 252 ++++++++++++++++++
+ drivers/usb/cdns3/glue.h                      |  51 ++++
+ 8 files changed, 659 insertions(+), 45 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/cix,sky1-cdns3.yaml
+ create mode 100644 drivers/usb/cdns3/cdnsp-sky1.c
+ create mode 100644 drivers/usb/cdns3/glue.h
 
-Each test asserts tb_property_parse_dir() returns NULL on the
-crafted input.  With CONFIG_KASAN=y, running these on the pre-fix
-kernel produces an oops inside __tb_property_parse_dir or its
-callees: u32_wrap takes a page fault on the KASAN shadow lookup for
-the wild ~16 GiB OOB offset; recursion trips a KASAN out-of-bounds
-report in __unwind_start as the per-task kernel stack is consumed;
-dir_len_underflow trips a KASAN slab-out-of-bounds report in
-kmemdup_noprof reading 16 bytes past the 28-byte block.  Post-fix
-they pass cleanly.
-
-The crafted blocks are populated by writing u32 dwords directly,
-matching the existing root_directory[] style used elsewhere in
-this file rather than imposing a private struct overlay.
-
-Run with:
-  ./tools/testing/kunit/kunit.py run --arch=x86_64 \
-    --kconfig_add CONFIG_PCI=y --kconfig_add CONFIG_NVMEM=y \
-    --kconfig_add CONFIG_USB4=y --kconfig_add CONFIG_USB4_KUNIT_TEST=y \
-    --kconfig_add CONFIG_KASAN=y 'thunderbolt.tb_test_property_parse_*'
-
-Assisted-by: Claude:claude-opus-4-7
-Signed-off-by: Michael Bommarito <michael.bommarito@gmail.com>
----
- drivers/thunderbolt/test.c | 126 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 126 insertions(+)
-
-diff --git a/drivers/thunderbolt/test.c b/drivers/thunderbolt/test.c
-index 1f4318249c22..f41fabf15456 100644
---- a/drivers/thunderbolt/test.c
-+++ b/drivers/thunderbolt/test.c
-@@ -2852,7 +2852,133 @@ static void tb_test_property_copy(struct kunit *test)
- 	tb_property_free_dir(src);
- }
- 
-+/*
-+ * Reproducers for three memory-safety defects in
-+ * drivers/thunderbolt/property.c reached from a crafted XDomain
-+ * PROPERTIES_RESPONSE payload.  Without the fix these trip KASAN or
-+ * smash the kernel stack; with the fix each returns NULL cleanly.
-+ *
-+ * The on-wire entry layout matches struct tb_property_entry in
-+ * property.c (private to that translation unit): u32 key_hi, u32
-+ * key_lo, then a packed u32 = (type << 24) | (reserved << 16) |
-+ * length, then u32 value.  Each entry is 4 dwords.
-+ */
-+
-+static void tb_test_property_parse_u32_wrap(struct kunit *test)
-+{
-+	/*
-+	 * 0x102 dwords: enough for the entry's length field (0x100) to
-+	 * pass the "entry->length > block_len" gate so the wrap check
-+	 * is actually exercised.  parse_dwdata's downstream OOB read
-+	 * lands ~16 GiB past the allocation regardless.
-+	 */
-+	u32 *block = kunit_kzalloc(test, 0x102 * sizeof(u32), GFP_KERNEL);
-+	struct tb_property_dir *dir;
-+
-+	KUNIT_ASSERT_NOT_NULL(test, block);
-+
-+	block[0] = 0x55584401;	/* "UXD" v1 magic */
-+	block[1] = 0x00000004;	/* Root directory length: one entry */
-+
-+	/*
-+	 * DATA entry whose value 0xffffff00 + length 0x100 wrap to 0
-+	 * in u32, passing the sum <= block_len guard even though the
-+	 * real offset is far past the allocation.
-+	 */
-+	block[2] = 0x61616161;	/* key_hi */
-+	block[3] = 0x61616161;	/* key_lo */
-+	block[4] = 0x64000100;	/* type=DATA, reserved=0, length=0x100 */
-+	block[5] = 0xffffff00;	/* value */
-+
-+	dir = tb_property_parse_dir(block, 0x102);
-+	KUNIT_EXPECT_NULL(test, dir);
-+	tb_property_free_dir(dir);
-+}
-+
-+static void tb_test_property_parse_recursion(struct kunit *test)
-+{
-+	/*
-+	 * 10 dwords: rootdir header (2) + parent DIRECTORY entry (4) +
-+	 * the child entry that lives at dir_offset(2) + UUID(4) = 6,
-+	 * occupying block[6..9].  Each recursive level re-reads the
-+	 * same block[6..9] as its first child entry, which is itself
-+	 * a DIRECTORY pointing at offset 2.
-+	 */
-+	u32 *block = kunit_kzalloc(test, 10 * sizeof(u32), GFP_KERNEL);
-+	struct tb_property_dir *dir;
-+
-+	KUNIT_ASSERT_NOT_NULL(test, block);
-+
-+	block[0] = 0x55584401;	/* "UXD" v1 magic */
-+	block[1] = 0x00000004;	/* Root directory length: one entry */
-+
-+	/*
-+	 * DIRECTORY entry pointing at dir_offset = 2 with length = 8.
-+	 * Non-root parse derives content_offset = 6, content_len = 4,
-+	 * nentries = 1.  block[6..9] is read both as the parent's UUID
-+	 * (kmemdup'd into dir->uuid) and as the single child entry --
-+	 * which is itself a DIRECTORY pointing at offset 2, so the
-+	 * recursion never terminates and the kernel stack is exhausted.
-+	 */
-+	block[2] = 0x61616161;	/* key_hi */
-+	block[3] = 0x61616161;	/* key_lo */
-+	block[4] = 0x44000008;	/* type=DIRECTORY, reserved=0, length=8 */
-+	block[5] = 0x00000002;	/* value = dir_offset */
-+
-+	block[6] = 0x62626262;	/* doubles as UUID dword 0 / child key_hi */
-+	block[7] = 0x62626262;	/* doubles as UUID dword 1 / child key_lo */
-+	block[8] = 0x44000008;	/* type=DIRECTORY, reserved=0, length=8 */
-+	block[9] = 0x00000002;	/* value = dir_offset (back at parent) */
-+
-+	dir = tb_property_parse_dir(block, 10);
-+	KUNIT_EXPECT_NULL(test, dir);
-+	tb_property_free_dir(dir);
-+}
-+
-+static void tb_test_property_parse_dir_len_underflow(struct kunit *test)
-+{
-+	/*
-+	 * Allocate exactly 7 dwords (28 bytes) so the kmalloc-32 chunk
-+	 * leaves a 4-byte slab redzone tail that KASAN-Generic can flag.
-+	 * With block_len = 7, dir_offset = 4, dir_len = 3, the non-root
-+	 * UUID kmemdup reads 16 bytes from byte 16, so bytes 28..31 fall
-+	 * in the redzone and trip a KASAN slab-out-of-bounds report on
-+	 * the pre-fix kernel.  Sizing the buffer at a power of two (32,
-+	 * 64, ...) puts the over-read into the slab cache tail where
-+	 * KASAN's generic shadow does not flag it, and the test reduces
-+	 * to the downstream content_len = dir_len - 4 underflow path
-+	 * which also returns NULL.
-+	 */
-+	u32 *block = kunit_kzalloc(test, 7 * sizeof(u32), GFP_KERNEL);
-+	struct tb_property_dir *dir;
-+
-+	KUNIT_ASSERT_NOT_NULL(test, block);
-+
-+	block[0] = 0x55584401;	/* "UXD" v1 magic */
-+	block[1] = 0x00000004;	/* Root directory length: one entry */
-+
-+	/*
-+	 * DIRECTORY entry with length = 3 pointing at dir_offset = 4.
-+	 * tb_property_entry_valid() permits value(4) + length(3) <=
-+	 * block_len(7).  Non-root parse begins with a kmemdup of 4
-+	 * dwords from dir_offset for the UUID; that read runs past the
-+	 * 28-byte allocation before the dir_len < 4 reject would fire.
-+	 */
-+	block[2] = 0x61616161;	/* key_hi */
-+	block[3] = 0x61616161;	/* key_lo */
-+	block[4] = 0x44000003;	/* type=DIRECTORY, reserved=0, length=3 */
-+	block[5] = 0x00000004;	/* value = dir_offset */
-+	/* block[6] is the start of the four UUID dwords; block[7..] is OOB. */
-+
-+	dir = tb_property_parse_dir(block, 7);
-+	KUNIT_EXPECT_NULL(test, dir);
-+	tb_property_free_dir(dir);
-+}
-+
- static struct kunit_case tb_test_cases[] = {
-+	KUNIT_CASE(tb_test_property_parse_u32_wrap),
-+	KUNIT_CASE(tb_test_property_parse_recursion),
-+	KUNIT_CASE(tb_test_property_parse_dir_len_underflow),
- 	KUNIT_CASE(tb_test_path_basic),
- 	KUNIT_CASE(tb_test_path_not_connected_walk),
- 	KUNIT_CASE(tb_test_path_single_hop_walk),
 -- 
-2.53.0
+2.50.1
+
 
