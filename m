@@ -1,238 +1,245 @@
-Return-Path: <linux-usb+bounces-37266-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37267-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sFhMI9LjAWoEmAEAu9opvQ
-	(envelope-from <linux-usb+bounces-37266-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 16:12:34 +0200
+	id WP47HWvxAWpfmgEAu9opvQ
+	(envelope-from <linux-usb+bounces-37267-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 17:10:35 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C5FC50FD5F
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 16:12:33 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 731EE510E40
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 17:10:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 931F030509A2
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 14:05:27 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D73C3301A2E9
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 14:57:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5205C3FB7DE;
-	Mon, 11 May 2026 14:05:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2718401A07;
+	Mon, 11 May 2026 14:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Qd69i+O9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lV6FuVWC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2303FB05D
-	for <linux-usb@vger.kernel.org>; Mon, 11 May 2026 14:05:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778508325; cv=pass; b=L5cMeCrurMThqT4LafigaXOPoKa+AJtSOp2j+akFUJfTIPchKLowu3iwn2+wXrDl+EpvaW2ookeOsR08t6j9CRnLqr2GA2JmIoje51pmHp9gBlgn+JyO+8AAHB4ZptkzKxpOZgVxJNMnJsi8FvSHuwvYhvBHFy68XktlYBTTo7s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778508325; c=relaxed/simple;
-	bh=FyBLSBZ7hNhVkjO/zSnSGEvlOg1Vr2+XpoAgSkY3z8U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cYpG819sxeaMg+NUSTrG7Zz4g5I2VFYcPKzun5+CXH54WQC0ZK7V9XnVd7GltcXs4Ge1jccKwary/12leAtXLrqRaS/lqg+ph1GkazgiRkMV+CF28L2NDM6yyFPXRkNc5BDwCZVY3ahP+ubRMElHQZPw+6LuZFCja2dTFiSN554=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Qd69i+O9; arc=pass smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-7bd5c773ef3so43099397b3.1
-        for <linux-usb@vger.kernel.org>; Mon, 11 May 2026 07:05:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778508323; cv=none;
-        d=google.com; s=arc-20240605;
-        b=C+C1XEBSjwA9y7yZ1VB2NApk3UZMxFDGwoXi5gQIOHHLFLX8sn3H6OZ726Vo13be8+
-         xBhIi5sV5r5TThuTE5rkivFQo4cu+aEqyU4/cG8hD07miqP3FowW2N7IP3WHfB5C9Yi3
-         CJCP+culOeepoy6Sv/xAgj5gmoq2AZT23IJ8aAdxeIGrqmLE6qEgB8k5ZBOBm897j2ez
-         Z0f6tzh8FsHdAQFAtVtNgtYiCj2KD+TU9iww/faJlJltLk905GKcKYSNG5iE7lBZ/08G
-         gT7uDCwTZZyrMRkt7khg4wF8pQ4tdVoDUwH0iRdXd2Y/hWq6BLzPgj5WKJUGEOv9x/EY
-         qtLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=r5NMXAS4+ZKW+xqccXrFy4JcKzWY5f2WjQmSFVnrvmE=;
-        fh=cH23+gLBJ8YC44sOIcFryF5+dvY837FQAMZAvJhTX3o=;
-        b=hKJbcsVCJJV9dt4c2jnPmERBL7an+PqTUaCbNYRhyoX+Ki55wAFMuJmtPx7iI4GvrS
-         0BH2FTID4lu0NFGdJ9BV7VdWkX6zeuUss4glr2Cef99BfFlLsFGBtvq9LkUt6QEdM43e
-         GKbTOG1I+kKbBcRBoE5vgsVJBVJj53jf/jpU/HtF7+6LMn5eSlvdk1jq0Niab2+Yidz9
-         dhjAJIsd4bV0SjlrBP2swSjC5mG7GEU2EjV4uAkiojhKWToeMr+J268QhYim5jWIxXHk
-         YPUCce5o9ssdJbBbHXiHDRh4gIVTkI9SokNbpwdJ3hetV6OlToLCTnRm4rVD5XYeddrU
-         MCbQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1778508323; x=1779113123; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r5NMXAS4+ZKW+xqccXrFy4JcKzWY5f2WjQmSFVnrvmE=;
-        b=Qd69i+O9ADvp32Pxkbh+QuMdpJRyaTf3Un78PZ/s6vWgZ8ug4OhUoTWQ/Utx0c/zII
-         fND6wQzddTvdUz+6onxOWLewONrQAejB1PFF5HTJl5KObGWJnzVlmeM2Rx8IaeTuWK+M
-         wdZzZoV5OwebWsAZ2nCX9CjukmglqF4m1ntgW45RwvG/B7ey/DuYpaevV+lzHei6EJqd
-         12QOcoGtYK6Ay4Crr932oVQG0yyIjed+MnWU+g1MCiORbHtX4cEKuCy13lmCmUtlButd
-         UwB2dgXSCUBZ5u6QiCHZrytVmPryf8He4x/L79AGHBCaR1PAfmjryAzZB7bCmTfyp2ns
-         l5rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778508323; x=1779113123;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r5NMXAS4+ZKW+xqccXrFy4JcKzWY5f2WjQmSFVnrvmE=;
-        b=rcG0nLcngOcK1XO96zVpw959TEbRMahAtNSMp2dTCkqcQxOh1K2RIsjgApl41QP1pP
-         GQyz4HftuYuambRWGM9x4+3ilqCweb8JXdBrn9NbbVRBTnoPU8QYvdwcoW/qLjDjnna5
-         ynICLhhPUYZK+LP/tGQg1nKZE1UjoRoVrTwE9lHgjLr/rS2uA7dN2AW1PSUP2z+ncy++
-         aDWmdtT4VJ8aTws2Om9tR2Uk3ufgRCqTk7p/KpJXNDU46pxH9U17KEuSKOnCga7LZyb1
-         mrGwTJeY8i1O9lS3Zl++rplVgrMX8MTpn4c4Dqh45tK6wys7ceytM3LX26Mw0UY8ev+2
-         jB2w==
-X-Forwarded-Encrypted: i=1; AFNElJ/RAwe9qxGyNo5L4blUSQs1lHoKoAduD7ZILOzRBFHn7s0+2sP85axzPIylWjBn/gOKpzG3Ol3BZX4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTeFqlLlnVt4biE/n1lL7hKVAndoiEwNymqmGbbUuiDkF2QwSf
-	h3nJOKjdmgyVLmOW108vKgvA5oDOvohhI/EOSQk8lLpinD5rVBgomiROCOt2SFydzLJp7K14jvJ
-	QJOQ70rp0cYWSz8L2QcQqTu5BVf07BzxZ3T0V/0GuHQ==
-X-Gm-Gg: Acq92OHfO8ZuR13Zhkcgat+AsBDBAr50lXLW1hXyTD2bMGTH6ZH5/gzLwaf6vrXhQtm
-	Z4GfCyYwDtWomYzkutqI0HmRzpJ06vadWOKl94VVtZCIHOWTPi8A86IrUkedaupbpvxQMJXviea
-	APB+lQpmda9/821muS9SoDyQ8hCCtTexODIRacJABJ4mwVFr6f/qbAR2kUwQ30HRyV2S5YABPcA
-	t+ZJCkGuQsvi20bxJqwQh7i+zCtWkaQ9H2Hxwf2+H01y1ZhE9RgOb7kN1DXKk9XQdnmSX0OSvrN
-	FJYvOv+RyPgNIIuSO+0=
-X-Received: by 2002:a05:690c:660c:b0:7bd:6432:daa with SMTP id
- 00721157ae682-7bdf5e9d4d7mr253386017b3.27.1778508322803; Mon, 11 May 2026
- 07:05:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CE13FE67E;
+	Mon, 11 May 2026 14:57:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778511447; cv=none; b=nK6qDfAs575YjXZFA/LE22N1vlK7BQAsIv33QT2dqck1oKekFycgysNFtZHDVHF29lHLhj3eILk3m8pX8Gri4jjeTS/tqNFKozhwJDSfK6MrIt1/FELXxpg2HmMFYanwDKgMcP38H9m/EgX7GNPliEpi9Uu6KAY2i1bAi+IfMro=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778511447; c=relaxed/simple;
+	bh=nNUfo11efGl/MFYIWaja0C+rX50U97WOabQI7mfyOII=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A6eeTsIe61rUr4phw1WrUhdnZcyiXU92lndmbtnqscEUISa4P4V0Kk9lF2tKLVM1PYlCxFTIIsI0ttWBjlkIxs7MiW/WFqFx+BCmzX2yjhpDuT7JK2thJ506/SwGA65t849P7wEKxxsD9B3eBSDa33gbsmGi3kAxLd+1q5l4u7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lV6FuVWC; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778511446; x=1810047446;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nNUfo11efGl/MFYIWaja0C+rX50U97WOabQI7mfyOII=;
+  b=lV6FuVWCRW0pC9OO1/GQkVgEntWne5PiTA3fNwwLoMcfoxnVPUA55TLr
+   b87Wm/fpovHG9n5qmIaZxvV7SJ5YQKLM8cAsuos4H+tKjcHHL3UwCWAUe
+   C8orYNapHB3N5uDKAke7tRJm79OFadlYZ99A792CEpECuZjgCOFSUPq72
+   c2Wy/nySBRKa8wWQGZI3q51IkbX8jagztjz9o0yg4f9wDP0L66Oay0Vig
+   IMX05q4kOxjC7PzL+Wsj8WxR6mwtjyG/xY77yfv5ou9S9uagJ/RweYINB
+   iIoyWcK/N4CMK5Ds+PW/z1e9ycQt8awB8+tnNQqJoXSRuzZCmzswCPwwy
+   Q==;
+X-CSE-ConnectionGUID: Yk0Te78ASY6L2kTW72Ouww==
+X-CSE-MsgGUID: mHszQ2HfR9ak+TgVgLe8Nw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="90866654"
+X-IronPort-AV: E=Sophos;i="6.23,229,1770624000"; 
+   d="scan'208";a="90866654"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2026 07:57:25 -0700
+X-CSE-ConnectionGUID: bXEgldawSreuGb/hXVx2rA==
+X-CSE-MsgGUID: 4eej0KSaSeWgxRJM8Z56uQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,229,1770624000"; 
+   d="scan'208";a="237569835"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa009.jf.intel.com with ESMTP; 11 May 2026 07:57:22 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1008)
+	id A5BDF95; Mon, 11 May 2026 16:57:20 +0200 (CEST)
+Date: Mon, 11 May 2026 17:57:18 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: azkali.limited@gmail.com
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	CTCaer <ctcaer@gmail.com>, Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] usb: typec: bm92txx: add Rohm BM92TXX support
+Message-ID: <agHuTtvwnpcjWHEA@kuha>
+References: <20260511-bm92t-v2-0-2145e4f4386b@gmail.com>
+ <20260511-bm92t-v2-1-2145e4f4386b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1776080528.git.sean@starlabs.systems> <95a293902585bd43c6857b79bdcdb8be692ff687.1776080528.git.sean@starlabs.systems>
-In-Reply-To: <95a293902585bd43c6857b79bdcdb8be692ff687.1776080528.git.sean@starlabs.systems>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 11 May 2026 16:04:45 +0200
-X-Gm-Features: AVHnY4JEFLkDhtjbzsGFfUGYFgE_s22UpVwHZIgmGXAQCxyohGxow3JwqZ-VRJs
-Message-ID: <CAPDyKFo+wJ3LZ4hFj0WqKpjfcioXkZJ94gtDO_Xbx99=Lyeujg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] rtsx_usb: hold runtime PM during transfers
-To: Sean Rhodes <sean@starlabs.systems>
-Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ricky Wu <ricky_wu@realtek.com>, 
-	Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, linux-usb@vger.kernel.org, 
-	linux-mmc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 0C5FC50FD5F
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260511-bm92t-v2-1-2145e4f4386b@gmail.com>
+X-Rspamd-Queue-Id: 731EE510E40
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37266-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37267-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,gmail.com,kernel.org,vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,linaro.org:dkim,starlabs.systems:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On Mon, 13 Apr 2026 at 13:42, Sean Rhodes <sean@starlabs.systems> wrote:
->
-> Hold a runtime-PM reference across bulk transfers, and mark the device
-> busy afterwards.
+Hi Alexandre,
 
-Why isn't it sufficient to let the mmc host device (child device) and
-its corresponding driver to manage runtime PM reference counting?
+On Mon, May 11, 2026 at 01:32:09AM +0700, Alexandre Hamamdjian via B4 Relay wrote:
+> From: CTCaer <ctcaer@gmail.com>
+> 
+> Add a driver for the Rohm Semiconductor BM92TXX family of USB Type-C
+> and Power Delivery controllers. The IC integrates an MCU that runs the
+> PD state machine; the host configures it and observes status over I2C
+> and reacts to a level-triggered ALERT interrupt.
+> 
+> The driver exposes the controller through extcon and a USB role switch,
+> manages the VBUS sink, optional VBUS source and battery-charger
+> regulators along with the VCONN-enable GPIO, and applies per-PDO
+> charging current limits (5 V, 9 V, 12 V, 15 V) sourced from device
+> tree. DisplayPort alternate-mode handling and dock LED behaviour are
+> configurable through rohm,* properties so the same driver can serve
+> boards that wire the part up differently. A debugfs interface under
+> bm92txx/ is provided for register dumps and low-level command access
+> when CONFIG_DEBUG_FS is enabled.
 
-As soon as the mmc host driver is requested to power-on the card via
-its ->ios() callback (set to sdmmc_set_ios() in
-drivers/mmc/host/rtsx_usb_sdmmc.c, it bumps the runtime PM usage
-count. Therefore, the usb device should be prevented from being
-runtime suspended as long as a card is inserted. Isn't that
-sufficient?
+You need to use the USB Type-C framework for everything, not just for
+the switches. The port, the partner when connected, the cable and
+plugs, and all the alternate modes (the port alt modes, the plug
+alt modes, and partner alt modes) need to be registered.
 
->
-> When runtime PM is already in progress (e.g. from rtsx_usb_suspend()),
-> avoid forcing a runtime resume from within the PM path by using
-> usb_autopm_get_interface_no_resume() unless the interface is already
-> runtime-suspended.
+All that needs to be exposed properly inside kernel as well in user
+space.
 
-Why is this needed? What problem does it solve?
+<snip>
 
->
-> Signed-off-by: Sean Rhodes <sean@starlabs.systems>
+> +/* VDM/VDO */
+> +#define VDM_CMD_RESERVED    0x00
+> +#define VDM_CMD_DISC_ID     0x01
+> +#define VDM_CMD_DISC_SVID   0x02
+> +#define VDM_CMD_DISC_MODE   0x03
+> +#define VDM_CMD_ENTER_MODE  0x04
+> +#define VDM_CMD_EXIT_MODE   0x05
+> +#define VDM_CMD_ATTENTION   0x06
+> +#define VDM_CMD_DP_STATUS   0x10
+> +#define VDM_CMD_DP_CONFIG   0x11
 
-Kind regards
-Uffe
+Already defined in include/linux/usb/pd_vdo.h
 
-> ---
->  drivers/misc/cardreader/rtsx_usb.c | 38 ++++++++++++++++++++++++------
->  1 file changed, 31 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/misc/cardreader/rtsx_usb.c b/drivers/misc/cardreader/rtsx_usb.c
-> index f65acf4d1164..c8badd0db87b 100644
-> --- a/drivers/misc/cardreader/rtsx_usb.c
-> +++ b/drivers/misc/cardreader/rtsx_usb.c
-> @@ -12,6 +12,7 @@
->  #include <linux/usb.h>
->  #include <linux/platform_device.h>
->  #include <linux/mfd/core.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/rtsx_usb.h>
->
->  static int polling_pipe = 1;
-> @@ -65,19 +66,42 @@ static int rtsx_usb_bulk_transfer_sglist(struct rtsx_ucr *ucr,
->  }
->
->  int rtsx_usb_transfer_data(struct rtsx_ucr *ucr, unsigned int pipe,
-> -                             void *buf, unsigned int len, int num_sg,
-> -                             unsigned int *act_len, int timeout)
-> +                                     void *buf, unsigned int len, int num_sg,
-> +                                     unsigned int *act_len, int timeout)
->  {
-> +       int ret;
-> +       struct device *dev = &ucr->pusb_intf->dev;
+> +#define VDM_ACK   0x40
+> +#define VDM_NAK   0x80
+> +#define VDM_BUSY  0xC0
+> +#define VDM_UNSTRUCTURED   0x00
+> +#define VDM_STRUCTURED     0x80
+
+Ditto.
+
+> +/* VDM Discover ID */
+> +#define VDO_ID_TYPE_NONE        0
+> +#define VDO_ID_TYPE_PD_HUB      1
+> +#define VDO_ID_TYPE_PD_PERIPH   2
+> +#define VDO_ID_TYPE_PASS_CBL    3
+> +#define VDO_ID_TYPE_ACTI_CBL    4
+> +#define VDO_ID_TYPE_ALTERNATE   5
 > +
->         if (timeout < 600)
->                 timeout = 600;
->
-> +       /*
-> +        * During runtime suspend/resume callbacks, avoid forcing a runtime resume
-> +        * from within the PM path. The device is still active when
-> +        * rtsx_usb_suspend() runs, but usb_autopm_get_interface() can block when
-> +        * runtime PM is already in progress.
-> +        */
-> +       if (pm_runtime_status_suspended(dev)) {
-> +               ret = usb_autopm_get_interface(ucr->pusb_intf);
-> +       } else {
-> +               usb_autopm_get_interface_no_resume(ucr->pusb_intf);
-> +               ret = 0;
-> +       }
-> +       if (ret)
-> +               return ret;
+> +/* VDM Discover Mode Caps [From device (UFP_U) to host (DFP_U)] */
+> +#define VDO_DP_UFP_D       BIT(0) /* DisplayPort Sink */
+> +#define VDO_DP_DFP_D       BIT(1) /* DisplayPort Source */
+> +#define VDO_DP_SUPPORT     BIT(2)
+> +#define VDO_DP_RECEPTACLE  BIT(6)
+
+include/linux/usb/typec_dp.h
+
+> +/* VDM DP Configuration [From host (DFP_U) to device (UFP_U)] */
+> +#define VDO_DP_U_DFP_D     BIT(0) /* UFP_U as DisplayPort Source */
+> +#define VDO_DP_U_UFP_D     BIT(1) /* UFP_U as DisplayPort Sink */
+> +#define VDO_DP_SUPPORT     BIT(2)
+> +#define VDO_DP_RECEPTACLE  BIT(6)
+
+Ditto.
+
+> +/* VDM Mode Caps and DP Configuration pins */
+> +#define VDO_DP_PIN_A   BIT(0)
+> +#define VDO_DP_PIN_B   BIT(1)
+> +#define VDO_DP_PIN_C   BIT(2)
+> +#define VDO_DP_PIN_D   BIT(3)
+> +#define VDO_DP_PIN_E   BIT(4)
+> +#define VDO_DP_PIN_F   BIT(5)
+
+Ditto.
+
+> +/* Known VID/SVID */
+> +#define VID_NINTENDO      0x057E
+> +#define PID_NIN_DOCK      0x2003
+> +#define PID_NIN_CHARGER   0x2004
 > +
->         if (num_sg)
-> -               return rtsx_usb_bulk_transfer_sglist(ucr, pipe,
-> -                               (struct scatterlist *)buf, num_sg, len, act_len,
-> -                               timeout);
-> +               ret = rtsx_usb_bulk_transfer_sglist(ucr, pipe,
-> +                                                   (struct scatterlist *)buf,
-> +                                                   num_sg, len, act_len,
-> +                                                   timeout);
->         else
-> -               return usb_bulk_msg(ucr->pusb_dev, pipe, buf, len, act_len,
-> -                               timeout);
-> +               ret = usb_bulk_msg(ucr->pusb_dev, pipe, buf, len, act_len,
-> +                                  timeout);
-> +
-> +       usb_mark_last_busy(ucr->pusb_dev);
-> +       usb_autopm_put_interface(ucr->pusb_intf);
-> +       return ret;
->  }
->  EXPORT_SYMBOL_GPL(rtsx_usb_transfer_data);
->
+> +#define SVID_NINTENDO     VID_NINTENDO
+> +#define SVID_DP           0xFF01
+> 
+> +/* Nintendo dock VDM Commands */
+> +#define VDM_NCMD_LED_CONTROL         0x01 /* Reply size 12 */
+> +#define VDM_NCMD_DEVICE_STATE        0x16 /* Reply size 12 */
+> +#define VDM_NCMD_DP_SIGNAL_DISABLE   0x1C /* Reply size 8 */
+> +#define VDM_NCMD_HUB_RESET           0x1E /* Reply size 8 */
+> +#define VDM_NCMD_HUB_CONTROL         0x20 /* Reply size 8 */
+
+You need a dedicated alternate mode driver for this mode.
+
+It looks like you have a lot of duplication in this code. You really
+have to refactor this whole driver. It probable does not make sense to
+review this any further before that.
+
+Please register all the Type-C (inclide/linux/usb/typec.h) and power
+delivery (include/linux/usb/pd.h) components, and at least try to
+handle the alternate mode VDM communication in the alt mode drivers
+dedicated for each alt mode.
+
+I also really think that that the battery charging information needs
+to be exposed to user space with the power supply device class
+(include/linux/power_supply.h).
+
+Because there is a lot of stuff to be done here, please consider
+splitting this into clear steps. For example, you could start by
+simply registering the port and the partner, and so on.
+
+thanks,
+
+-- 
+heikki
 
