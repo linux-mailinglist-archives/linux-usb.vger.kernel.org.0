@@ -1,441 +1,535 @@
-Return-Path: <linux-usb+bounces-37285-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37286-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MJkPO1JbAmosrgEAu9opvQ
-	(envelope-from <linux-usb+bounces-37285-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 00:42:26 +0200
+	id WCOZCdhkAmo6sQEAu9opvQ
+	(envelope-from <linux-usb+bounces-37286-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 01:23:04 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 908095170AD
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 00:42:26 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 774325173EF
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 01:23:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C5EDD301587D
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 22:42:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6703930137A5
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 23:11:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7159C35675A;
-	Mon, 11 May 2026 22:42:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83CD1359A8B;
+	Mon, 11 May 2026 23:11:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OTazBvkh"
+	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="OTQFJk0q";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CfCZr0k/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505C3383318
-	for <linux-usb@vger.kernel.org>; Mon, 11 May 2026 22:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C01356774;
+	Mon, 11 May 2026 23:11:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778539342; cv=none; b=AONBE5X9ldxR3UkcnzyAhRZhZDxp0znDSc6lsJq/u+dJxXQe9fvAcbwHK6ClnPDL1Pra3uE4xy8ZgCRAKHZsW2u+fmyeq1qEY6tk5Ef2yFoG6BINHyhmcBlV5VsppKRB5VviTLDl8Tk6JauOUuBIPdCjynnTHa6qYMQMP31AJtY=
+	t=1778541095; cv=none; b=WrZ+6wjRfV19pmeK+y0Xcxiw0BmDBi+0Ofar2fQ0lLjk/de+9+m3bKz0BJ8Ha7OgkJOxvU405ioFeJlMZV/U8y7C8wT6mncE4iUzLVyQjIWFh4TyFSLFjUgDQNYMip41r1Ko2vIx4r5b5CS3TZl75IyPO9LedDanE5IF/m7+vw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778539342; c=relaxed/simple;
-	bh=ctNujyrhRB9VaYgO7GXpkJNSXKoQo65DUxw3BwLYxn8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=VytlbI1ivyrLxUTfr8NQJbBE8rg8Qfsw0zirwXM7ovxvYQESKKN1MAZ85N9ipNjQn0v/kl4dvPRB5Herva8zap7RQHS0IS+1IRHh5mP0lnoC0lnTiBeLZm82rcuZwcd8T7R6DGmF2n6aFjoENZNbkXEbD5UU8jjYOht0OnAxTTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OTazBvkh; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778539341; x=1810075341;
-  h=date:from:to:cc:subject:message-id;
-  bh=ctNujyrhRB9VaYgO7GXpkJNSXKoQo65DUxw3BwLYxn8=;
-  b=OTazBvkhOSGZYAZeRsZp25IKVlpWyrTR4OS5hARtW1NiYVCL8s0V+DAJ
-   Jrp6QsxaER4u9xEQwC2wiOyMnwFYJ6PEWecCl07mjERcJAdoVq3WRUCPB
-   8w9Szi1AUhAaOAQaNdpag+wyn9fvqwcTaZYf/DiTk6dDzU0DUxPtM5TRA
-   f88oxOQLDEYlXhR48ni5Q90TYVjdYF/nCcvcrIMwwNhRvUGFLEXF3EIC6
-   ialGs5tYvgkpDiT3uRW/ojClnFk6ufMfij3cocBn3V9RbDj4DKV5AzJwW
-   dVqwIHn9A7IJqcL1S/5qZSng/CFP2ovGRRq4geQujQJF/F+SIORS1B3Rq
-   A==;
-X-CSE-ConnectionGUID: HmXzUjg7Q7Sv+xkzQKV+pw==
-X-CSE-MsgGUID: Uu64JBhvSsiXBL15a6bOHQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="79388690"
-X-IronPort-AV: E=Sophos;i="6.23,229,1770624000"; 
-   d="scan'208";a="79388690"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2026 15:42:21 -0700
-X-CSE-ConnectionGUID: 3nc1IwzDRla6mwUFGVMcHQ==
-X-CSE-MsgGUID: xAGcj0BHQfSgDBKhpJXMAQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,229,1770624000"; 
-   d="scan'208";a="237533828"
-Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 11 May 2026 15:42:18 -0700
-Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wMZKK-000000001Ez-058z;
-	Mon, 11 May 2026 22:42:16 +0000
-Date: Tue, 12 May 2026 06:41:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: [westeri-thunderbolt:fixes] BUILD SUCCESS
- 928abe19fbf0127003abcb1ea69cabc1c897d0ab
-Message-ID: <202605120608.exdSOrrv-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1778541095; c=relaxed/simple;
+	bh=G2IpmZHZB++1xDEG0Hq3rULaclH6H09PSm/bU4mBxIQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=e13TAEtWNQWhLn+zpswxlIadv8UDkK9qpzbBSsx/qOvJuaBmkjR+xlAuVWjVk+fwIusJUovIzfHdFWHooaauJp0bO/ZRuB+F9QVB2ac6nAZCFn3rPb2rI+6o5KnCXfSSdPO5qDPyLyG0aPKly7052/+gRR9+az1YIzXcIbWE6eA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=OTQFJk0q; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CfCZr0k/; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=squebb.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id E45FA14000AE;
+	Mon, 11 May 2026 19:11:31 -0400 (EDT)
+Received: from phl-imap-08 ([10.202.2.84])
+  by phl-compute-02.internal (MEProxy); Mon, 11 May 2026 19:11:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1778541091;
+	 x=1778627491; bh=SQpoHsjgNvPeL8fIBzWb/T5JxpmjMmHbEQiwzr9Ymq0=; b=
+	OTQFJk0q0MQmj1eiRsK5YbNstndls6LXz5mrRrCED05tRwx8nfx6LRVGptURYb9G
+	blFiZfmLnfhbGzgSqWxFkqxou5Uy1l/64lghjSMmM1q8Ag0R4F5w8QMKAwERCbR9
+	tLWQaQ1sdpbGcclGc6sP6UWtC1ev197JPrspSBYq7/UBmH4jw+7djHxlYohCEWdP
+	kQGbRVEM0NCJQGbWbd3aBcBamAx5BRs+z+/pBGikR86cbWG6c2tIm/AITFCg/rlx
+	VQpaNMhaTaLnMIibzRE2k6CTHLqo6krllu7xdkJOUZfbWMQCSzqxbmAg0yITx6m3
+	iUtwQjawCqmW2rAEQpzvRA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1778541091; x=
+	1778627491; bh=SQpoHsjgNvPeL8fIBzWb/T5JxpmjMmHbEQiwzr9Ymq0=; b=C
+	fCZr0k/o27APfopJLlu25u+3W5mm7urskNobgATO6eG7M8LfEeyBtOyxY8/wsVZp
+	brN+GeU9w40OUxayMvyqCW5UWcz886vs1U/vLNTHru2C0fQzUaCsVVXLTZVsAn9R
+	RPDIgsFk6CLvr7UDz2RYMU9nedzEoiF5Gxf6nvb/08nbPi/IcT7OYkVeLXu4wcIc
+	29CRRUYYOJn4auXnUTBWEKBrsvtc51xVwkOB0zOk45o7eFzmkLrp54Xsw00/DnOj
+	CiNa3uVVemci74x12s5XT8gUKQBa8pjdx4kKWhu1Dz72y1Ba68fEM5FNtPFdWZG/
+	LWrnpy6kpym/3vSBbqgaQ==
+X-ME-Sender: <xms:I2ICat19TON3HZcJUkiabq6gZ4opc_Ja1BG51HcKu2wPjBvOBt53tw>
+    <xme:I2ICau748AlqZSDcPFFbzSr_PIR-FJbTBdTUGgLwtCl0iopROUi4z1ogYdBCAQGvI
+    5QwCDnOmCQA_1zehbtgIcHf-S8uC16tQKO-8_1pKqrWv2jgla7fmQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdduvddtvdduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedfofgrrhhk
+    ucfrvggrrhhsohhnfdcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtg
+    grqeenucggtffrrghtthgvrhhnpeegvdegueffhfdtleeigfejhffggfeivdejgeelueej
+    uedtudetheejudehtdeitdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhhpvggrrhhsohhn
+    qdhlvghnohhvohesshhquhgvsggsrdgtrgdpnhgspghrtghpthhtohepjedpmhhouggvpe
+    hsmhhtphhouhhtpdhrtghpthhtohephhgrnhhsgheskhgvrhhnvghlrdhorhhgpdhrtghp
+    thhtohephhgvihhkkhhirdhkrhhoghgvrhhusheslhhinhhugidrihhnthgvlhdrtghomh
+    dprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdp
+    rhgtphhtthhopehisehrohhnghdrmhhovgdprhgtphhtthhopehlihhnuhigqdhkvghrnh
+    gvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhushgs
+    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphhlrghtfhhorhhmqdgurh
+    hivhgvrhdqgiekieesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:I2ICapLQq9jkzedCKmmpkfdi0jBvlCz90PkBouSfD3RPoWMwlZiPMQ>
+    <xmx:I2ICavIXDPYDabYaZvHP4fqRw4_ZcW2uwfTOgqJ5a3-jjYFjdXWbng>
+    <xmx:I2ICaoUsALiwzQlIzUKle4KngHIrC4sCjJD3BQOvccTz_8rv1_dafA>
+    <xmx:I2ICaolwZsGexF745iP6mjji5jiTCeSLgevU5FDmSKX57k6Z7pTqww>
+    <xmx:I2ICaosrf1tRQeTzvQ5Z5odIioX9r1Vbk9JcEs5bx8Zri3ucdTmC3ymZ>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 31FAF2CE0078; Mon, 11 May 2026 19:11:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-X-Rspamd-Queue-Id: 908095170AD
+MIME-Version: 1.0
+X-ThreadId: AEdzvOwqgJYJ
+Date: Mon, 11 May 2026 19:11:10 -0400
+From: "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To: "Rong Zhang" <i@rong.moe>, "Greg KH" <gregkh@linuxfoundation.org>
+Cc: "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
+ "Hans de Goede" <hansg@kernel.org>, linux-usb@vger.kernel.org,
+ "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+ linux-kernel@vger.kernel.org
+Message-Id: <06e5005d-8621-4031-b3a3-6fd735cebbd4@app.fastmail.com>
+In-Reply-To: <c1df76ba422eebfc733f1c73655582804d0e2921.camel@rong.moe>
+References: <20260512-ucsi-acpi-broken-devices-v1-1-0f8cd90c35b5@rong.moe>
+ <2026051146-husked-ladybug-0c9f@gregkh>
+ <c1df76ba422eebfc733f1c73655582804d0e2921.camel@rong.moe>
+Subject: Re: [PATCH] usb: typec: ucsi: acpi: Disable on devices with broken firmware
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 774325173EF
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+X-Spamd-Result: default: False [7.35 / 15.00];
+	URIBL_BLACK(7.50)[rong.moe:email];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	BAD_REP_POLICIES(0.10)[];
+	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWO(0.00)[2];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37285-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37286-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	R_DKIM_ALLOW(0.00)[squebb.ca:s=fm1,messagingengine.com:s=fm3];
+	GREYLIST(0.00)[pass,body];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[squebb.ca,none];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-0.987];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
+	NEURAL_HAM(-0.00)[-0.946];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mpearson-lenovo@squebb.ca,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[squebb.ca:+,messagingengine.com:+];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	R_SPF_ALLOW(0.00)[+ip6:2600:3c0a:e001:db::/64:c];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:mid,intel.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Action: no action
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[rong.moe:email,messagingengine.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,app.fastmail.com:mid,squebb.ca:dkim]
+X-Rspamd-Action: add header
+X-Spam: Yes
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git fixes
-branch HEAD: 928abe19fbf0127003abcb1ea69cabc1c897d0ab  thunderbolt: property: Cap recursion depth in __tb_property_parse_dir()
+On Mon, May 11, 2026, at 3:12 PM, Rong Zhang wrote:
+> (+CC Mark Pearson from Lenovo)
+>
+> Hi Greg,
+>
+> On Mon, 2026-05-11 at 20:25 +0200, Greg Kroah-Hartman wrote:
+>> On Tue, May 12, 2026 at 01:59:34AM +0800, Rong Zhang wrote:
+>> > Some Lenovo devices have broken firmware, which reads/writes half-v=
+alid-
+>> > half-garbage values.
+>>=20
+>> How does this work with this firmware on other operating systems? =C2=A0
+>>=20
+>
+> The timeout=C2=A0can hardly reached unless a bunch of events cause mul=
+tiple
+> drivers to compete for the same mutex simultaneously.
+>
+> If other operating systems' UCSI drivers don't send any command during
+> power events, they won't suffer from the mutex acquisition timeout.
+> Also, if other drivers on these operating systems don't touch the mutex
+> on power events at all, their UCSI drivers should work well too.
+>
+> These operating systems' UCSI drivers are powered by undefined behavior
+> (TM) in both cases.
+>
+>> What
+>> is the odds of fixing the firmware?
+>
+> They are not Linux-certified devices, so Lenovo is very unlikely to fix
+> the firmware unless it breaks Windows :(
+>
+> Quoting Mark Pearson's reply to the bugzilla thread:
+>
+>    I can't promise anything - I don't have any official levers to pull=
+ for
+>    this platform I'm afraid (it is better to buy Linux supported/certi=
+fied
+>    systems ;) )
+>
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D221065#c38
+>
+>>=20
+>> > Given that everything is broken, disable ucsi_acpi on these devices=
+. The
+>> > impact of disabling it is minimal, as Lenovo laptops usually have m=
+ost
+>> > USCI commands more or less stubbed, and the EC can always handles U=
+SB-C
+>> > events on its own.
+>> >=20
+>> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D221065#c33
+>> > Signed-off-by: Rong Zhang <i@rong.moe>
+>> > ---
+>> >  drivers/usb/typec/ucsi/ucsi_acpi.c | 91 ++++++++++++++++++++++++++=
+++++++++++++
+>> >  1 file changed, 91 insertions(+)
+>> >=20
+>> > diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec=
+/ucsi/ucsi_acpi.c
+>> > index 6b92f296e985..7632b441d401 100644
+>> > --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
+>> > +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+>> > @@ -155,6 +155,91 @@ static const struct dmi_system_id ucsi_acpi_qu=
+irks[] =3D {
+>> >  	{ }
+>> >  };
+>> > =20
+>> > +static const struct dmi_system_id ucsi_acpi_broken_devices[] =3D {
+>> > +	/* Firmware reads/writes half-valid-half-garbage values. */
+>> > +
+>> > +	/* BIOS: P1CN??WW */
+>> > +	{
+>> > +		.ident =3D "Lenovo IdeaPad 5 2-in-1 14AHP9",
+>> > +		.matches =3D {
+>> > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>> > +			DMI_MATCH(DMI_PRODUCT_NAME, "83DR"),
+>> > +		},
+>> > +	},
+>> > +	{
+>> > +		.ident =3D "Lenovo IdeaPad 5 2-in-1 16AHP9",
+>> > +		.matches =3D {
+>> > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>> > +			DMI_MATCH(DMI_PRODUCT_NAME, "83DS"),
+>> > +		},
+>> > +	},
+>> > +
+>> > +	/* BIOS: R0CN??WW */
+>> > +	{
+>> > +		.ident =3D "Lenovo IdeaPad Slim 5 14AKP10",
+>> > +		.matches =3D {
+>> > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>> > +			DMI_MATCH(DMI_PRODUCT_NAME, "83NJ"),
+>> > +		},
+>> > +	},
+>> > +	{
+>> > +		.ident =3D "Lenovo IdeaPad Slim 5 14AKP10",
+>> > +		.matches =3D {
+>> > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>> > +			DMI_MATCH(DMI_PRODUCT_NAME, "83HX"),
+>> > +		},
+>> > +	},
+>> > +	{
+>> > +		.ident =3D "Lenovo IdeaPad Slim 5 16AKP10",
+>> > +		.matches =3D {
+>> > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>> > +			DMI_MATCH(DMI_PRODUCT_NAME, "83HY"),
+>> > +		},
+>> > +	},
+>> > +
+>> > +	/* BIOS: QXCN??WW */
+>> > +	{
+>> > +		.ident =3D "Lenovo Yoga 7 2-in-1 14AKP10",
+>> > +		.matches =3D {
+>> > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>> > +			DMI_MATCH(DMI_PRODUCT_NAME, "83JR"),
+>> > +		},
+>> > +	},
+>> > +	{
+>> > +		.ident =3D "Lenovo Yoga 7 2-in-1 16AKP10",
+>> > +		.matches =3D {
+>> > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>> > +			DMI_MATCH(DMI_PRODUCT_NAME, "83JU"),
+>> > +		},
+>> > +	},
+>> > +
+>> > +	/* BIOS: LNCN??WW */
+>> > +	{
+>> > +		.ident =3D "Lenovo Yoga Pro 7 14ARP8",
+>> > +		.matches =3D {
+>> > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>> > +			DMI_MATCH(DMI_PRODUCT_NAME, "83AU"),
+>> > +		},
+>> > +	},
+>> > +	{
+>> > +		.ident =3D "Lenovo Slim Pro 7 14ARP8",
+>> > +		.matches =3D {
+>> > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>> > +			DMI_MATCH(DMI_PRODUCT_NAME, "83AX"),
+>> > +		},
+>> > +	},
+>> > +
+>> > +	/* BIOS: PSCN??WW */
+>> > +	{
+>> > +		.ident =3D "Lenovo Yoga Pro 7 14ASP9",
+>> > +		.matches =3D {
+>> > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>> > +			DMI_MATCH(DMI_PRODUCT_NAME, "83HN"),
+>> > +		},
+>> > +	},
+>> > +	{ }
+>> > +};
+>>=20
+>> That is a lot of devices to exclude, are you sure that none of them w=
+ill
+>> ever work properly?
+>
+> Yes. I carefully checked all acpidumps for these devices provided by
+> device owners who replied to the bugzilla thread, and confirmed that
+> they all share the same UCSI-ACPI implementation.
+>
+> 83DR, 83HN, 83HY, 83AU, 83JR are owned by these device owners. Other
+> devices share the same BIOS images (see comments in the match table), =
+so
+> I added them as well.
+>
+> Device owners also reported their dmesg dumps/snips with ucsi_acpi
+> errors.
+>
+> As a reference, buggy ASL methods are shown as below.
+>
+> \_SB.PCI0.LPC0.EC0:
+>                     Method (ECRD, 1, Serialized)
+>                     {
+>                         Local0 =3D Acquire (ECMT, 0x03E8)
+>                         If ((Local0 =3D=3D Zero))
+>                         {
+>                             If (ECAV)
+>                             {
+>                                 Local1 =3D DerefOf (Arg0)
+>                                 Release (ECMT)
+>                                 Return (Local1)
+>                             }
+>                             Else
+>                             {
+>                                 Release (ECMT)
+>                             }
+>                         }
+>
+>                         Return (Zero)
+>                     }
+>
+>                     Method (ECWT, 2, Serialized)
+>                     {
+>                         Local0 =3D Acquire (ECMT, 0x03E8)
+>                         If ((Local0 =3D=3D Zero))
+>                         {
+>                             If (ECAV)
+>                             {
+>                                 Arg1 =3D Arg0
+>                             }
+>
+>                             Release (ECMT)
+>                         }
+>                     }
+>
+> \_SB.UBTC:
+>             Method (ECWR, 0, Serialized)
+>             {
+>                 IO80 =3D 0xD0
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGO0, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGO0))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGO1, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGO1))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGO2, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGO2))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGO3, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGO3))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGO4, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGO4))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGO5, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGO5))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGO6, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGO6))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGO7, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGO7))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGO8, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGO8))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGO9, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGO9))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGOA, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGOA))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGOB, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGOB))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGOC, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGOC))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGOD, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGOD))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGOE, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGOE))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (MGOF, RefOf (\_SB.PCI0.LPC0.E=
+C0.MGOF))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (CTL0, RefOf (\_SB.PCI0.LPC0.E=
+C0.CTL0))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (CTL1, RefOf (\_SB.PCI0.LPC0.E=
+C0.CTL1))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (CTL2, RefOf (\_SB.PCI0.LPC0.E=
+C0.CTL2))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (CTL3, RefOf (\_SB.PCI0.LPC0.E=
+C0.CTL3))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (CTL4, RefOf (\_SB.PCI0.LPC0.E=
+C0.CTL4))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (CTL5, RefOf (\_SB.PCI0.LPC0.E=
+C0.CTL5))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (CTL6, RefOf (\_SB.PCI0.LPC0.E=
+C0.CTL6))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (CTL7, RefOf (\_SB.PCI0.LPC0.E=
+C0.CTL7))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (0xE0, RefOf (\_SB.PCI0.LPC0.E=
+C0.USDC))
+>                 IO80 =3D 0xD1
+>             }
+>
+>             Method (ECRD, 0, Serialized)
+>             {
+>                 IO80 =3D 0xD3
+>                 MGI0 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGI0))
+>                 MGI1 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGI1))
+>                 MGI2 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGI2))
+>                 MGI3 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGI3))
+>                 MGI4 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGI4))
+>                 MGI5 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGI5))
+>                 MGI6 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGI6))
+>                 MGI7 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGI7))
+>                 MGI8 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGI8))
+>                 MGI9 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGI9))
+>                 MGIA =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGIA))
+>                 MGIB =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGIB))
+>                 MGIC =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGIC))
+>                 MGID =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGID))
+>                 MGIE =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGIE))
+>                 MGIF =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.MGIF))
+>                 VER1 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.VER1))
+>                 VER2 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.VER2))
+>                 RSV1 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.RSV1))
+>                 RSV2 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.RSV2))
+>                 CCI0 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.CCI0))
+>                 CCI1 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.CCI1))
+>                 CCI2 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.CCI2))
+>                 CCI3 =3D \_SB.PCI0.LPC0.EC0.ECRD (RefOf (\_SB.PCI0.LPC=
+0.EC0.CCI3))
+>                 \_SB.PCI0.LPC0.EC0.ECWT (0xE1, RefOf (\_SB.PCI0.LPC0.E=
+C0.USGC))
+>                 IO80 =3D 0xD4
+>             }
+>
+>             Method (_DSM, 4, Serialized)  // _DSM: Device-Specific=20
+> Method
+>             {
+>                 If ((Arg0 =3D=3D ToUUID=20
+> ("6f8398c2-7ca4-11e4-ad36-631042b5008f") /* Unknown UUID */))
+>                 {
+>                     If ((ToInteger (Arg2) =3D=3D Zero))
+>                     {
+>                         Return (Buffer (One)
+>                         {
+>                              0x0F                                     =
+ =20
+>       // .
+>                         })
+>                     }
+>                     ElseIf ((ToInteger (Arg2) =3D=3D One))
+>                     {
+>                         ECWR ()
+>                     }
+>                     ElseIf ((ToInteger (Arg2) =3D=3D 0x02))
+>                     {
+>                         ECRD ()
+>                     }
+>                     Else
+>                     {
+>                         Return (Zero)
+>                     }
+>                 }
+>
+>                 Return (Zero)
+>             }
+>         }
+>
+> Thanks,
+> Rong
+>
+>>=20
+>> thanks,
+>>=20
+>> greg k-h
 
-elapsed time: 786m
+My biggest concern with this patch is it stands a chance of growing rapi=
+dly and extensively.
+We've been having a ton of UCSI issues on this years Thinkpad systems. W=
+e'll get them fixed, though it's been slow going.
 
-configs tested: 316
-configs skipped: 3
+I don't understand it yet (and your notes above might be useful for narr=
+owing it down). The FW team says the FW passes all the UCSI tests under =
+Windows, but on Linux it's really bad and I see the same on my HW.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Hopefully once we figure out what is going on with the Thinkpads the oth=
+er platforms will benefit? but flagging that this error is not uncommon.
 
-tested configs:
-alpha                             allnoconfig    gcc-15.2.0
-alpha                            allyesconfig    gcc-15.2.0
-alpha                               defconfig    gcc-15.2.0
-arc                              allmodconfig    clang-16
-arc                              allmodconfig    gcc-15.2.0
-arc                               allnoconfig    gcc-15.2.0
-arc                              allyesconfig    clang-23
-arc                              allyesconfig    gcc-15.2.0
-arc                                 defconfig    gcc-15.2.0
-arc                   randconfig-001-20260511    gcc-10.5.0
-arc                   randconfig-001-20260512    gcc-11.5.0
-arc                   randconfig-002-20260511    gcc-10.5.0
-arc                   randconfig-002-20260512    gcc-11.5.0
-arm                               allnoconfig    gcc-15.2.0
-arm                              allyesconfig    clang-16
-arm                              allyesconfig    gcc-15.2.0
-arm                                 defconfig    gcc-15.2.0
-arm                          pxa3xx_defconfig    clang-23
-arm                   randconfig-001-20260511    gcc-10.5.0
-arm                   randconfig-001-20260512    gcc-11.5.0
-arm                   randconfig-002-20260511    gcc-10.5.0
-arm                   randconfig-002-20260512    gcc-11.5.0
-arm                   randconfig-003-20260511    gcc-10.5.0
-arm                   randconfig-003-20260512    gcc-11.5.0
-arm                   randconfig-004-20260511    gcc-10.5.0
-arm                   randconfig-004-20260512    gcc-11.5.0
-arm64                            allmodconfig    clang-19
-arm64                            allmodconfig    clang-23
-arm64                             allnoconfig    gcc-15.2.0
-arm64                               defconfig    gcc-15.2.0
-arm64                          randconfig-001    clang-23
-arm64                 randconfig-001-20260511    clang-17
-arm64                 randconfig-001-20260511    clang-23
-arm64                 randconfig-001-20260512    gcc-14.3.0
-arm64                          randconfig-002    clang-23
-arm64                 randconfig-002-20260511    clang-17
-arm64                 randconfig-002-20260511    clang-23
-arm64                 randconfig-002-20260512    gcc-14.3.0
-arm64                          randconfig-003    clang-23
-arm64                 randconfig-003-20260511    clang-17
-arm64                 randconfig-003-20260511    clang-23
-arm64                 randconfig-003-20260512    gcc-14.3.0
-arm64                          randconfig-004    clang-23
-arm64                 randconfig-004-20260511    clang-17
-arm64                 randconfig-004-20260511    clang-23
-arm64                 randconfig-004-20260512    gcc-14.3.0
-csky                             allmodconfig    gcc-15.2.0
-csky                              allnoconfig    gcc-15.2.0
-csky                                defconfig    gcc-15.2.0
-csky                           randconfig-001    clang-23
-csky                  randconfig-001-20260511    clang-17
-csky                  randconfig-001-20260511    clang-23
-csky                  randconfig-001-20260512    gcc-14.3.0
-csky                           randconfig-002    clang-23
-csky                  randconfig-002-20260511    clang-17
-csky                  randconfig-002-20260511    clang-23
-csky                  randconfig-002-20260512    gcc-14.3.0
-hexagon                          allmodconfig    clang-17
-hexagon                          allmodconfig    gcc-15.2.0
-hexagon                           allnoconfig    gcc-15.2.0
-hexagon                             defconfig    gcc-15.2.0
-hexagon               randconfig-001-20260511    gcc-8.5.0
-hexagon               randconfig-001-20260512    gcc-10.5.0
-hexagon               randconfig-002-20260511    gcc-8.5.0
-hexagon               randconfig-002-20260512    gcc-10.5.0
-i386                             allmodconfig    clang-20
-i386                              allnoconfig    gcc-15.2.0
-i386                             allyesconfig    clang-20
-i386        buildonly-randconfig-001-20260511    gcc-14
-i386        buildonly-randconfig-001-20260512    gcc-14
-i386        buildonly-randconfig-002-20260511    gcc-14
-i386        buildonly-randconfig-002-20260512    gcc-14
-i386        buildonly-randconfig-003-20260511    gcc-14
-i386        buildonly-randconfig-003-20260512    gcc-14
-i386        buildonly-randconfig-004-20260511    gcc-14
-i386        buildonly-randconfig-004-20260512    gcc-14
-i386        buildonly-randconfig-005-20260511    gcc-14
-i386        buildonly-randconfig-005-20260512    gcc-14
-i386        buildonly-randconfig-006-20260511    gcc-14
-i386        buildonly-randconfig-006-20260512    gcc-14
-i386                                defconfig    gcc-15.2.0
-i386                  randconfig-001-20260511    gcc-12
-i386                  randconfig-002-20260511    gcc-12
-i386                  randconfig-003-20260511    gcc-12
-i386                  randconfig-004-20260511    gcc-12
-i386                  randconfig-005-20260511    gcc-12
-i386                  randconfig-006-20260511    gcc-12
-i386                  randconfig-007-20260511    gcc-12
-i386                           randconfig-011    clang-20
-i386                  randconfig-011-20260511    clang-20
-i386                  randconfig-011-20260512    clang-20
-i386                           randconfig-012    clang-20
-i386                  randconfig-012-20260511    clang-20
-i386                  randconfig-012-20260512    clang-20
-i386                           randconfig-013    clang-20
-i386                  randconfig-013-20260511    clang-20
-i386                  randconfig-013-20260512    clang-20
-i386                           randconfig-014    clang-20
-i386                  randconfig-014-20260511    clang-20
-i386                  randconfig-014-20260512    clang-20
-i386                           randconfig-015    clang-20
-i386                  randconfig-015-20260511    clang-20
-i386                  randconfig-015-20260512    clang-20
-i386                           randconfig-016    clang-20
-i386                  randconfig-016-20260511    clang-20
-i386                  randconfig-016-20260512    clang-20
-i386                           randconfig-017    clang-20
-i386                  randconfig-017-20260511    clang-20
-i386                  randconfig-017-20260512    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                        allmodconfig    clang-23
-loongarch                         allnoconfig    gcc-15.2.0
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20260511    gcc-8.5.0
-loongarch             randconfig-001-20260512    gcc-10.5.0
-loongarch             randconfig-002-20260511    gcc-8.5.0
-loongarch             randconfig-002-20260512    gcc-10.5.0
-m68k                             allmodconfig    gcc-15.2.0
-m68k                              allnoconfig    gcc-15.2.0
-m68k                             allyesconfig    clang-16
-m68k                             allyesconfig    gcc-15.2.0
-m68k                                defconfig    clang-19
-microblaze                        allnoconfig    gcc-15.2.0
-microblaze                       allyesconfig    gcc-15.2.0
-microblaze                          defconfig    clang-19
-mips                             allmodconfig    gcc-15.2.0
-mips                              allnoconfig    gcc-15.2.0
-mips                             allyesconfig    gcc-15.2.0
-mips                           jazz_defconfig    clang-17
-mips                    maltaup_xpa_defconfig    gcc-15.2.0
-nios2                            allmodconfig    clang-23
-nios2                             allnoconfig    clang-23
-nios2                               defconfig    clang-19
-nios2                 randconfig-001-20260511    gcc-8.5.0
-nios2                 randconfig-001-20260512    gcc-10.5.0
-nios2                 randconfig-002-20260511    gcc-8.5.0
-nios2                 randconfig-002-20260512    gcc-10.5.0
-openrisc                         allmodconfig    clang-23
-openrisc                          allnoconfig    clang-23
-openrisc                            defconfig    gcc-15.2.0
-parisc                           allmodconfig    gcc-15.2.0
-parisc                            allnoconfig    clang-23
-parisc                           allyesconfig    clang-19
-parisc                           allyesconfig    gcc-15.2.0
-parisc                              defconfig    gcc-15.2.0
-parisc                         randconfig-001    clang-20
-parisc                randconfig-001-20260511    clang-20
-parisc                randconfig-001-20260512    gcc-12.5.0
-parisc                         randconfig-002    clang-20
-parisc                randconfig-002-20260511    clang-20
-parisc                randconfig-002-20260512    gcc-12.5.0
-parisc64                            defconfig    clang-19
-powerpc                          allmodconfig    gcc-15.2.0
-powerpc                           allnoconfig    clang-23
-powerpc                      arches_defconfig    gcc-15.2.0
-powerpc                        randconfig-001    clang-20
-powerpc               randconfig-001-20260511    clang-20
-powerpc               randconfig-001-20260512    gcc-12.5.0
-powerpc                        randconfig-002    clang-20
-powerpc               randconfig-002-20260511    clang-20
-powerpc               randconfig-002-20260512    gcc-12.5.0
-powerpc64                      randconfig-001    clang-20
-powerpc64             randconfig-001-20260511    clang-20
-powerpc64             randconfig-001-20260512    gcc-12.5.0
-powerpc64                      randconfig-002    clang-20
-powerpc64             randconfig-002-20260511    clang-20
-powerpc64             randconfig-002-20260512    gcc-12.5.0
-riscv                            allmodconfig    clang-23
-riscv                             allnoconfig    clang-23
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    gcc-15.2.0
-riscv                          randconfig-001    gcc-12.5.0
-riscv                 randconfig-001-20260511    gcc-12.5.0
-riscv                 randconfig-001-20260512    gcc-15.2.0
-riscv                          randconfig-002    gcc-12.5.0
-riscv                 randconfig-002-20260511    gcc-12.5.0
-riscv                 randconfig-002-20260512    gcc-15.2.0
-s390                             allmodconfig    clang-18
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-23
-s390                             allyesconfig    gcc-15.2.0
-s390                                defconfig    gcc-15.2.0
-s390                           randconfig-001    gcc-12.5.0
-s390                  randconfig-001-20260511    gcc-12.5.0
-s390                  randconfig-001-20260512    gcc-15.2.0
-s390                           randconfig-002    gcc-12.5.0
-s390                  randconfig-002-20260511    gcc-12.5.0
-s390                  randconfig-002-20260512    gcc-15.2.0
-sh                               allmodconfig    gcc-15.2.0
-sh                                allnoconfig    clang-23
-sh                               allyesconfig    clang-19
-sh                               allyesconfig    gcc-15.2.0
-sh                                  defconfig    gcc-14
-sh                             randconfig-001    gcc-12.5.0
-sh                    randconfig-001-20260511    gcc-12.5.0
-sh                    randconfig-001-20260512    gcc-15.2.0
-sh                             randconfig-002    gcc-12.5.0
-sh                    randconfig-002-20260511    gcc-12.5.0
-sh                    randconfig-002-20260512    gcc-15.2.0
-sh                           se7751_defconfig    gcc-15.2.0
-sparc                             allnoconfig    clang-23
-sparc                               defconfig    gcc-15.2.0
-sparc                          randconfig-001    gcc-8.5.0
-sparc                 randconfig-001-20260511    gcc-8.5.0
-sparc                 randconfig-001-20260512    gcc-13.4.0
-sparc                          randconfig-002    gcc-8.5.0
-sparc                 randconfig-002-20260511    gcc-8.5.0
-sparc                 randconfig-002-20260512    gcc-13.4.0
-sparc64                          allmodconfig    clang-23
-sparc64                             defconfig    gcc-14
-sparc64                        randconfig-001    gcc-8.5.0
-sparc64               randconfig-001-20260511    gcc-8.5.0
-sparc64               randconfig-001-20260512    gcc-13.4.0
-sparc64                        randconfig-002    gcc-8.5.0
-sparc64               randconfig-002-20260511    gcc-8.5.0
-sparc64               randconfig-002-20260512    gcc-13.4.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-23
-um                               allyesconfig    gcc-14
-um                               allyesconfig    gcc-15.2.0
-um                                  defconfig    gcc-14
-um                             i386_defconfig    gcc-14
-um                             randconfig-001    gcc-8.5.0
-um                    randconfig-001-20260511    gcc-8.5.0
-um                    randconfig-001-20260512    gcc-13.4.0
-um                             randconfig-002    gcc-8.5.0
-um                    randconfig-002-20260511    gcc-8.5.0
-um                    randconfig-002-20260512    gcc-13.4.0
-um                           x86_64_defconfig    gcc-14
-x86_64                           allmodconfig    clang-20
-x86_64                            allnoconfig    clang-23
-x86_64                           allyesconfig    clang-20
-x86_64               buildonly-randconfig-001    gcc-14
-x86_64      buildonly-randconfig-001-20260511    gcc-14
-x86_64      buildonly-randconfig-001-20260512    gcc-14
-x86_64               buildonly-randconfig-002    gcc-14
-x86_64      buildonly-randconfig-002-20260511    gcc-14
-x86_64      buildonly-randconfig-002-20260512    gcc-14
-x86_64               buildonly-randconfig-003    gcc-14
-x86_64      buildonly-randconfig-003-20260511    gcc-14
-x86_64      buildonly-randconfig-003-20260512    gcc-14
-x86_64               buildonly-randconfig-004    gcc-14
-x86_64      buildonly-randconfig-004-20260511    gcc-14
-x86_64      buildonly-randconfig-004-20260512    gcc-14
-x86_64               buildonly-randconfig-005    gcc-14
-x86_64      buildonly-randconfig-005-20260511    gcc-14
-x86_64      buildonly-randconfig-005-20260512    gcc-14
-x86_64               buildonly-randconfig-006    gcc-14
-x86_64      buildonly-randconfig-006-20260511    gcc-14
-x86_64      buildonly-randconfig-006-20260512    gcc-14
-x86_64                              defconfig    gcc-14
-x86_64                                  kexec    clang-20
-x86_64                         randconfig-001    clang-20
-x86_64                randconfig-001-20260511    clang-20
-x86_64                randconfig-001-20260512    gcc-14
-x86_64                         randconfig-002    clang-20
-x86_64                randconfig-002-20260511    clang-20
-x86_64                randconfig-002-20260512    gcc-14
-x86_64                         randconfig-003    clang-20
-x86_64                randconfig-003-20260511    clang-20
-x86_64                randconfig-003-20260512    gcc-14
-x86_64                         randconfig-004    clang-20
-x86_64                randconfig-004-20260511    clang-20
-x86_64                randconfig-004-20260512    gcc-14
-x86_64                         randconfig-005    clang-20
-x86_64                randconfig-005-20260511    clang-20
-x86_64                randconfig-005-20260512    gcc-14
-x86_64                         randconfig-006    clang-20
-x86_64                randconfig-006-20260511    clang-20
-x86_64                randconfig-006-20260512    gcc-14
-x86_64                         randconfig-011    clang-20
-x86_64                randconfig-011-20260511    clang-20
-x86_64                randconfig-011-20260512    clang-20
-x86_64                         randconfig-012    clang-20
-x86_64                randconfig-012-20260511    clang-20
-x86_64                randconfig-012-20260512    clang-20
-x86_64                         randconfig-013    clang-20
-x86_64                randconfig-013-20260511    clang-20
-x86_64                randconfig-013-20260512    clang-20
-x86_64                         randconfig-014    clang-20
-x86_64                randconfig-014-20260511    clang-20
-x86_64                randconfig-014-20260512    clang-20
-x86_64                         randconfig-015    clang-20
-x86_64                randconfig-015-20260511    clang-20
-x86_64                randconfig-015-20260512    clang-20
-x86_64                         randconfig-016    clang-20
-x86_64                randconfig-016-20260511    clang-20
-x86_64                randconfig-016-20260512    clang-20
-x86_64                randconfig-071-20260511    clang-20
-x86_64                randconfig-071-20260512    clang-20
-x86_64                randconfig-072-20260511    clang-20
-x86_64                randconfig-072-20260512    clang-20
-x86_64                randconfig-073-20260511    clang-20
-x86_64                randconfig-073-20260512    clang-20
-x86_64                randconfig-074-20260511    clang-20
-x86_64                randconfig-074-20260512    clang-20
-x86_64                randconfig-075-20260511    clang-20
-x86_64                randconfig-075-20260512    clang-20
-x86_64                randconfig-076-20260511    clang-20
-x86_64                randconfig-076-20260512    clang-20
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-14
-x86_64                          rhel-9.4-func    clang-20
-x86_64                    rhel-9.4-kselftests    clang-20
-x86_64                         rhel-9.4-kunit    gcc-14
-x86_64                           rhel-9.4-ltp    gcc-14
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    clang-23
-xtensa                           allyesconfig    clang-23
-xtensa                          iss_defconfig    gcc-15.2.0
-xtensa                         randconfig-001    gcc-8.5.0
-xtensa                randconfig-001-20260511    gcc-8.5.0
-xtensa                randconfig-001-20260512    gcc-13.4.0
-xtensa                         randconfig-002    gcc-8.5.0
-xtensa                randconfig-002-20260511    gcc-8.5.0
-xtensa                randconfig-002-20260512    gcc-13.4.0
+I'd be surprised if this is Lenovo only to be honest. I might be wrong, =
+but there's really not a lot common between an Ideapad and Thinkpad - th=
+ey're completely different FW teams. I would expect the chances that thi=
+s shows up elsewhere to be reasonable, in which case your list will grow=
+ even more.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Can we wait until a bit more investigation has been done on Thinkpad? Ri=
+ght now it's on a small list of gating issues on a few of our platforms =
+- so it is getting a bit more attention. Once we have root cause it migh=
+t be easier to find a better solution?
+
+Mark
 
