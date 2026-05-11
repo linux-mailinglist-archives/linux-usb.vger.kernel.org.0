@@ -1,296 +1,199 @@
-Return-Path: <linux-usb+bounces-37219-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37222-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GErhAjRCAWpwTAEAu9opvQ
-	(envelope-from <linux-usb+bounces-37219-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 04:43:00 +0200
+	id lNH7N/JGAWq3TgEAu9opvQ
+	(envelope-from <linux-usb+bounces-37222-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 05:03:14 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98C0150744B
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 04:42:59 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BC4C507632
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 05:03:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 844E830054DB
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 02:42:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D2C1B300B9E2
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 03:03:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB41A307492;
-	Mon, 11 May 2026 02:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C20D1255F57;
+	Mon, 11 May 2026 03:03:10 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11022137.outbound.protection.outlook.com [40.107.75.137])
+Received: from r9114.ps.combzmail.jp (r9114.ps.combzmail.jp [49.212.47.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E812F1FC7;
-	Mon, 11 May 2026 02:42:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.137
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778467373; cv=fail; b=aF0e3e5y7FzOmHJuxowQftA03NOzYpsvFPYY7r2SLAzGDPTZdLAt19em08dK5EtZ1XYg2d8v/8tR2YjKha1KHiSOM43MTB3dkwZ1UWkuh9vUUDnmqPXTmUagDbi0t30AxBcfpTV0pvQtrxWywi7wr6cw/O3l5xCVQq2C5re9OD0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778467373; c=relaxed/simple;
-	bh=ObGe+2iWOQor1HiS2eQ5wIwMbacz7sOWLhSTlNSifW8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=g9SYgyzez9VM/pYMas7fRjJj6n0WkZylxsOGPyBlBr0orbz90huh4omW493HX9dGEDcFA9epluedivlSIW9ES6CtaVqVfrnsN5OaUgT9i+NSrV4xlNLb2lRgQj3D85NhwSS8+9Xl1t+8O4pdLzOfEy/VlCVl9HC3LLSnbXURFpc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com; spf=pass smtp.mailfrom=cixtech.com; arc=fail smtp.client-ip=40.107.75.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cixtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=F9UHlrm9/LjX912IvByR6UUjElgiIx1l1jJSnT7fDP4J/83LZbM417o/eSDRu8JHAMkM1NvvJBds/vEh4yD/TXPUqiTQcK37HdXLj0iCx4uyB3eWYtBKUNE9uxDZ2o1sjstWoHFd+h+IHZvD5hFQ0M/VkAdGDt60QVNA7G30PKUaaLqjPq4bLv6NZ0zSCcfymBmZnu/QdGBQKnPOk5jW6dooJQo8rG6YV2y7vj3zpTgIdLek/veky/sIhPxaW8/bYNtyZVdF8RzTA1M/eTjKzSI6TWsWZuCk8P8dTmZr22bl9isqXOA0YloDeGBI0eQLt4L9riVwKO5Uz9L0X8JWXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hmUHPYJIwZDjfsYgFoVhdKgoC5ImH9Iy1EdH1fpFJrk=;
- b=XonwnC8FjIEsp3z/yXXQCvrOi/JF6hxzaX4+cBYAb6SHyTnk+/Xk+OAs2jlNBfuyqdjzHaWMMelH/fmaQYMad9Eim9QZ7AwsZthHI/F56xfnAx4rRqnErTjxqm0MGFSX88jReExw7eBP1+mk5S21x0jqWR+9D52VMBX+RNQNZR1Y1jYrbwW3bhl6S9O4HQkcFyyHk2uTSwPF2FOAL00p3s7lf9LlPCGybrsF2VO9Ym+q3HI48uaWE4d79AjBQ9mMEx9LcmdnTd40kBOnzZ+s4CQrPEa1oqHef+f/qx8aePpp2C0I/0rX1+v/w61aP5jRQy+Zu7YPMCxOb5wYQGzCOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 222.71.101.198) smtp.rcpttodomain=arndb.de smtp.mailfrom=cixtech.com;
- dmarc=bestguesspass action=none header.from=cixtech.com; dkim=none (message
- not signed); arc=none (0)
-Received: from SI2PR02CA0005.apcprd02.prod.outlook.com (2603:1096:4:194::6) by
- SG2PR06MB5312.apcprd06.prod.outlook.com (2603:1096:4:1b9::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9891.22; Mon, 11 May 2026 02:42:46 +0000
-Received: from SG2PEPF000B66CC.apcprd03.prod.outlook.com
- (2603:1096:4:194:cafe::de) by SI2PR02CA0005.outlook.office365.com
- (2603:1096:4:194::6) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.22 via Frontend Transport; Mon,
- 11 May 2026 02:42:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 222.71.101.198)
- smtp.mailfrom=cixtech.com; dkim=none (message not signed)
- header.d=none;dmarc=bestguesspass action=none header.from=cixtech.com;
-Received-SPF: Pass (protection.outlook.com: domain of cixtech.com designates
- 222.71.101.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=222.71.101.198; helo=smtprelay.cixcomputing.com; pr=C
-Received: from smtprelay.cixcomputing.com (222.71.101.198) by
- SG2PEPF000B66CC.mail.protection.outlook.com (10.167.240.25) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.25.13 via Frontend Transport; Mon, 11 May 2026 02:42:45 +0000
-Received: from nchen-desktop (unknown [172.16.64.25])
-	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id 5853D4126F95;
-	Mon, 11 May 2026 10:42:45 +0800 (CST)
-From: Peter Chen <peter.chen@cixtech.com>
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	gregkh@linuxfoundation.org,
-	pawell@cadence.com,
-	rogerq@kernel.org
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	cix-kernel-upstream@cixtech.com,
-	linux-arm-kernel@lists.infradead.org,
-	arnd@arndb.de,
-	Peter Chen <peter.chen@cixtech.com>
-Subject: [PATCH 4/4] arm64: dts: cix: add Sky1 USB4 and USB5 controllers
-Date: Mon, 11 May 2026 10:42:44 +0800
-Message-ID: <20260511024244.981941-5-peter.chen@cixtech.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260511024244.981941-1-peter.chen@cixtech.com>
-References: <20260511024244.981941-1-peter.chen@cixtech.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22501B672
+	for <linux-usb@vger.kernel.org>; Mon, 11 May 2026 03:03:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.47.36
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778468590; cv=none; b=B3edNA0jTggPk9eL8MEWYaA3HwBhMRLEn26t/GiNun0LAZ6jEH1txIuVW/+CuWt3KRSW3hN49dSJzJySH1/odLWAmmna4Sl3w1cZUyBTHMQz4qnhD9QcKs3D1vh3iY+IS9iwNw9uDONApZB7FMLFrg7q0MAwbKKPHNRMla2bV4o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778468590; c=relaxed/simple;
+	bh=XaXj8Nv6pEYmKBhhP33sCBIxJfPWW4f4seCFuoGfAbU=;
+	h=To:From:Subject:Mime-Version:Content-Type:Message-Id:Date; b=HAV/mm03gd7b0Ljxu+w/AzL53oJtpoehum/xJdc+59covG/eEFwpf0N9eTD4C1KSvWSoIhz+DkQPpphkAPCVCAONuG6WGcnnjI5SFv7qcbyLFDrdE4aIi3/MKzPr76fQn8CAkmdOjX5OPtmyeU/Cfe6e0cz1mG78Wk0UGfiqrZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ai-skill.tech; spf=pass smtp.mailfrom=magerr.combzmail.jp; arc=none smtp.client-ip=49.212.47.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ai-skill.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=magerr.combzmail.jp
+Received: by r9114.ps.combzmail.jp (Postfix, from userid 99)
+	id E44003058DF; Mon, 11 May 2026 11:48:44 +0900 (JST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 r9114.ps.combzmail.jp E44003058DF
+To: linux-usb@vger.kernel.org
+From: =?ISO-2022-JP?B?GyRCQFBFaBsoQg==?= =?ISO-2022-JP?B?GyRCPFM1KBsoQg==?= <info@ai-skill.tech>
+X-Ip: 519487248264318
+X-Ip-source: k85gj7ft48dnsa51u0p6gd
+Precedence: bulk
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Subject: =?ISO-2022-JP?B?GyRCPFJEOSROSiw/SBsoQkFJ?=
+ =?ISO-2022-JP?B?GyRCJHIhIj11QC42YiRHQU8kaxsoQg==?=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PEPF000B66CC:EE_|SG2PR06MB5312:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: a0a59ca8-a684-4f64-162a-08deaf06fbae
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|36860700016|1800799024|82310400026|56012099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	DEaK1zW2XNt1dZvSrLk5R1iHlcet4ZfFNEwcY4XIKUjBp4NPNoKEh1dB2Bc+AXTovj659dPsAmmIFExt89GhIqgxRJoF6ZyyaCK75F00laq2vwTyb0j4WyFThMuXxNw2vTen9GvWn1B7lcdVcluUsJR//7fiZ7k6DZ5UCRCitDtQN+GEaHAMGm8ACKzD1XJjAR0MFAc5Y5xwpz2EYL8qclqyc8NjgOBykTXNloQ7HribUzGUsczirpdJwgB/tS2hnTxYS4KOUUzbhKZevWdMpaZYs0MPsTpJv+YlF8PFHov94EkGu2WaWVHK0Ug0L2OZAqmGgV2Mlsp9yxgSo4dvVbDhQ81wiokqbO+Vs9MfB5JbpmZ4osaS/FjtrudUvvnm8fpteJxy43VeWUXEHahpmDJyAZTlvrnAx8WA4yzguWhDKZxEdh0wojAOzmPsna7SwYOQR86bHNUKcj8wJswnNzUXbGlaYMc8g9vviXEeRfrUSY3IdBpLMHhiypqPAk8PDLcxYYpceYaV7l1N2uXP9pHejb4m3+aIqUt1k1dpfbjQ0rf3tXhCSzD+R2WkPam7DI5Ycxs4mj+BF4C8TogeSOkS+yaia2lQ4V+O+6w387lEECOc5maUad8worpw0NavCnUbEC6jPciv/QfHYabFuP4yKjqUtd8GYuGNUF52yCP52fonbDMphYgq9vduj3RWXInfa7r9uzA+3XnwNwFmArSxAS928cISL/D5CEp4MjE=
-X-Forefront-Antispam-Report:
-	CIP:222.71.101.198;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtprelay.cixcomputing.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700016)(1800799024)(82310400026)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	l34P4BTKUncrnc9rw9wsFP9bdu5WzhZwLXxPerfYfXGz9YTMn32nQhECxS6Mp0qFdgabEuNe1OY1qhwqAE8mHDeSGa3hLtp3BXEsO95fbsxaiQ7ldkGdwo1OcpNPHySuWZvhSh3ySPYHMVvOWxTX+K8g/IWdOUwoYWOvzIhS1pzB5HdUK17MtUKqvs5AqexSQRI4pi+ajkWyqCYgJUtgq3MCD3QRTcAKD7uv5C/ST+0B+GyBqSg8g61wowUxv6vdaVfyhy41y6HKYoH75ZnYOYFVzEwaqb1oWJr0Zfc6HxmD+A+HBens1KfHOZ14b8GPx4fRAC4tE8b+YktsGAgJWA5d8Vt3LpCHnx/FGS0wPWMcOovw/DVZxzmD/B5sNXS1VgajU32PRgYCN5phMxA5L7uAlVmRlj1zorllhd0GbaSiDLxRjvNYuGYoIBjW7ToW
-X-OriginatorOrg: cixtech.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2026 02:42:45.8730
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0a59ca8-a684-4f64-162a-08deaf06fbae
-X-MS-Exchange-CrossTenant-Id: 0409f77a-e53d-4d23-943e-ccade7cb4811
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0409f77a-e53d-4d23-943e-ccade7cb4811;Ip=[222.71.101.198];Helo=[smtprelay.cixcomputing.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SG2PEPF000B66CC.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB5312
-X-Rspamd-Queue-Id: 98C0150744B
+Mime-Version: 1.0
+Content-Type: text/plain; charset=iso-2022-jp
+Content-Transfer-Encoding: 7bit
+X-MagazineId: ft51
+X-uId: 6764264940486061644255341017
+X-Sender: CombzMailSender
+X-Url: http://www.combzmail.jp/
+Message-Id: <20260511025052.E44003058DF@r9114.ps.combzmail.jp>
+Date: Mon, 11 May 2026 11:48:44 +0900 (JST)
+X-Rspamd-Queue-Id: 0BC4C507632
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [3.54 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+X-Spamd-Result: default: False [-0.96 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MV_CASE(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	DMARC_NA(0.00)[cixtech.com];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-37219-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peter.chen@cixtech.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.626];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	NEURAL_HAM(-0.00)[-0.955];
+	RCPT_COUNT_ONE(0.00)[1];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[info@ai-skill.tech,linux-usb@vger.kernel.org];
+	DMARC_NA(0.00)[ai-skill.tech];
+	TO_DN_NONE(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37222-lists,linux-usb=lfdr.de];
 	R_DKIM_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	FORGED_RECIPIENTS_MAILLIST(0.00)[]
 X-Rspamd-Action: no action
 
-Add the Sky1 USB4 and USB5 Cadence USB3 controller nodes with their
-registers, interrupts, clocks, resets and S5 syscon control. Enable both
-ports on the Orion O6 board in host mode with the required VBUS pinctrl.
+お世話になります。
 
-Signed-off-by: Peter Chen <peter.chen@cixtech.com>
----
- arch/arm64/boot/dts/cix/sky1-orion-o6.dts | 30 ++++++++++
- arch/arm64/boot/dts/cix/sky1.dtsi         | 68 +++++++++++++++++++++++
- 2 files changed, 98 insertions(+)
+ヤフーニュースでも人手不足倒産が過去最多と話題になる中、
+人を増やして会社を回す。という経営モデルに限界を
+感じている経営層の方向けに
 
-diff --git a/arch/arm64/boot/dts/cix/sky1-orion-o6.dts b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
-index e39c87774c12..d1e2afceea15 100644
---- a/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
-+++ b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
-@@ -80,6 +80,22 @@ pins {
- 
- 		};
- 	};
-+
-+	pinctrl_usb4: usb4-power-on-cfg {
-+		pins {
-+			pinmux = <CIX_PAD_GPIO041_FUNC_USB_DRIVE_VBUS4>;
-+			bias-pull-down;
-+			drive-strength = <8>;
-+		};
-+	};
-+
-+	pinctrl_usb5: usb5-power-on-cfg {
-+		pins {
-+			pinmux = <CIX_PAD_GPIO042_FUNC_USB_DRIVE_VBUS5>;
-+			bias-pull-down;
-+			drive-strength = <8>;
-+		};
-+	};
- };
- 
- &pcie_x8_rc {
-@@ -117,3 +133,17 @@ &s5_gpio2 {
- &uart2 {
- 	status = "okay";
- };
-+
-+&usb4 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usb4>;
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
-+&usb5 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usb5>;
-+	dr_mode = "host";
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/cix/sky1.dtsi b/arch/arm64/boot/dts/cix/sky1.dtsi
-index bb5cfb1f2113..9f7d9ad6586c 100644
---- a/arch/arm64/boot/dts/cix/sky1.dtsi
-+++ b/arch/arm64/boot/dts/cix/sky1.dtsi
-@@ -6,6 +6,8 @@
- 
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/cix,sky1.h>
-+#include <dt-bindings/phy/phy.h>
-+#include <dt-bindings/reset/cix,sky1-s5-system-control.h>
- #include "sky1-power.h"
- 
- / {
-@@ -504,6 +506,72 @@ mbox_ap2sfh: mailbox@80a0000 {
- 			cix,mbox-dir = "tx";
- 		};
- 
-+		usb4: usb@91d0000 {
-+			compatible = "cix,sky1-usb3", "cix,cdns-usb3";
-+			reg = <0x00 0x91d0000 0x00 0x4000>,
-+					<0x00 0x91d4000 0x00 0x4000>,
-+					<0x00 0x91d8000 0x00 0x8000>,
-+					<0x00 0x91c0314 0x00 0x4>;
-+			reg-names = "otg", "dev", "xhci", "glue";
-+
-+			interrupts = <GIC_SPI 252 IRQ_TYPE_LEVEL_HIGH 0>,	/* host irq */
-+					<GIC_SPI 252 IRQ_TYPE_LEVEL_HIGH 0>,	/* peripheral irq */
-+					<GIC_SPI 253 IRQ_TYPE_LEVEL_HIGH 0>,	/* otgirq */
-+					<GIC_SPI 252 IRQ_TYPE_LEVEL_HIGH 0>;	/* wakeup irq */
-+			interrupt-names = "host",
-+					"peripheral",
-+					"otg",
-+					"wakeup";
-+
-+			resets = <&s5_syscon SKY1_USBC_SS2_PRST_N>,
-+				<&s5_syscon SKY1_USBC_SS2_RST_N>;
-+			reset-names = "prst", "rst";
-+
-+			clocks = <&scmi_clk CLK_TREE_USB3A_H0_CLK_SOF>,
-+				<&scmi_clk CLK_TREE_USB3A_0_AXI_GATE>,
-+				<&scmi_clk CLK_TREE_USB3A_H0_CLK_LPM>,
-+				<&scmi_clk CLK_TREE_USB3A_0_APB_GATE>;
-+			clock-names = "sof", "aclk", "lpm", "pclk";
-+
-+			cix,syscon-usb = <&s5_syscon>;
-+			dma-coherent;
-+			maximum-speed = "super-speed-plus";
-+			dr_mode = "otg";
-+		};
-+
-+		usb5: usb@91e0000 {
-+			compatible = "cix,sky1-usb3", "cix,cdns-usb3";
-+			reg = <0x00 0x91e0000 0x00 0x4000>,
-+					<0x00 0x91e4000 0x00 0x4000>,
-+					<0x00 0x91e8000 0x00 0x8000>,
-+					<0x00 0x91c0324 0x00 0x4>;
-+			reg-names = "otg", "dev", "xhci", "glue";
-+
-+			interrupts = <GIC_SPI 257 IRQ_TYPE_LEVEL_HIGH 0>,	/* host irq */
-+					<GIC_SPI 257 IRQ_TYPE_LEVEL_HIGH 0>,	/* peripheral irq */
-+					<GIC_SPI 258 IRQ_TYPE_LEVEL_HIGH 0>,	/* otgirq */
-+					<GIC_SPI 257 IRQ_TYPE_LEVEL_HIGH 0>;	/* wakeup irq */
-+			interrupt-names = "host",
-+					"peripheral",
-+					"otg",
-+					"wakeup";
-+
-+			resets = <&s5_syscon SKY1_USBC_SS3_PRST_N>,
-+				<&s5_syscon SKY1_USBC_SS3_RST_N>;
-+			reset-names = "prst", "rst";
-+
-+			clocks = <&scmi_clk CLK_TREE_USB3A_H1_CLK_SOF>,
-+				<&scmi_clk CLK_TREE_USB3A_1_AXI_GATE>,
-+				<&scmi_clk CLK_TREE_USB3A_H1_CLK_LPM>,
-+				<&scmi_clk CLK_TREE_USB3A_1_APB_GATE>;
-+			clock-names = "sof", "aclk", "lpm", "pclk";
-+
-+			cix,syscon-usb = <&s5_syscon>;
-+			dma-coherent;
-+			maximum-speed = "super-speed-plus";
-+			dr_mode = "otg";
-+		};
-+
- 		pcie_x8_rc: pcie@a010000 {
- 			compatible = "cix,sky1-pcie-host";
- 			reg = <0x00 0x0a010000 0x00 0x10000>,
--- 
-2.50.1
+人を雇うのではなく、AIを「社長の分身」のように働かせる方法と
+AIの導入コストを大幅に削減する助成金をお伝えします。
 
+━━━━━━━━━━━━━━━━━━━━━━━
+
+　 　　　　人手不足の倒産を防ぐ
+　　　　　最新のAI経営実践セミナー
+　　〜 助成金、補助金でコストも大幅削減 〜
+
+　　　　　　−ご視聴はこちら−
+　　　 https://ai-skill.tech/260519/
+
+━━━━━━━━━━━━━━━━━━━━━━━
+
+◆概 要
+ [日時] 5/19(火)12:00-13:00
+ [定員] 50名 ※残り9枠
+ [形式] Zoom開催（カメラ・マイクoff　無料）
+
+
+◆コンテンツ
+　1．迫る。人手不足倒産の現実
+　2．AIは推論エンジンである
+　3．AIを経営参謀にする具体策【実践デモ】
+　4．なぜ丸投げでは、組織が変わらないのか？
+　5．AI導入で使える、助成金・補助金の最新情報
+━━━━━━━━━━━━━━━━━━━━━━━
+
+2025年以降、多くの経営者からほぼ必ず聞く言葉があります。
+
+「募集を出しても人が来ない」
+「やっと採用しても、すぐ辞める」
+「結局、社長である自分が現場を回している」
+
+しかし、現場を回しながら会社を守り続けている社長ほど
+すでにお気づきではないでしょうか。
+
+「人を増やして会社を回す」という経営モデル自体が
+限界に近づいているということに。
+
+これは貴社の問題ではありません。
+時代の構造が変わってしまったのです。
+
+そこで最近よく話題になるのが「AI」です。
+ただ、正直に言えば
+「AIは嘘をつく」
+「現場を知らない」
+「本当に経営に使えるのか？」
+
+そう思われるのは当然だと思います。
+
+私自身も、最初は同じ疑問を持っていました。
+
+ですが今、AIは単なる業務効率化ツールではなく
+社長の意思決定を支える“第二の頭脳”として
+使われ始めています。
+
+たとえば、
+・決算書から経営課題を瞬時に整理する
+・新規事業のリスクを徹底的に洗い出す
+・採用面接で「見抜く質問」を設計する
+
+こうした、本来は社長が一人で背負っている“考える仕事”を
+AIが壁打ち相手として支えてくれるのです。
+
+資金も人材も豊富な大企業に対して、
+中小企業が勝てる領域はどこか。
+
+それは「意思決定の質とスピード」だと私は考えています。
+
+もしAIによって、
+社長の判断スピードと視点が数倍に広がるとしたら
+経営の景色は大きく変わります。
+
+そこで今回
+「AIを社長の第二の頭脳（経営参謀）としたAI経営」
+をテーマに、実践セミナーを開催します。
+
+セミナーでは実際にAIを使って、次のようなデモをお見せします。
+
+・決算書から経営課題を瞬時にあぶり出す
+・SWOT分析で新規事業のリスクを洗い出す
+・採用面接の質を底上げする
+
+さらに、AIの導入コストの最大75%の助成や最大450万円の
+補助金を活用できるなど、中小企業のAI導入を支援する制度が
+かつてないほど充実しています。
+
+AI活用から助成金・補助金の最新情報をわかりやすく丁寧に
+お伝えいたしますのでぜひご視聴ください。
+
+＜ご視聴はこちら＞
+https://ai-skill.tech/260519/
+
+
+━━━━━━━━━━━━━━━━━━━━━━
+AI活用セミナー事務局
+TEL ：0120-889-859
+住所：東京都中央区銀座七丁目13番6号
+Mail：info@ai-skill.tech
+※当事務局が今回のセミナーのPRを行っております。
+━━━━━━━━━━━━━━━━━━━━━━
+本メールのご不要な方にはご迷惑をかけしました。
+お手数をおかけしますが、配信の解除をご希望の方は
+下記よりお手続きお願いいたします。
+https://ai-skill.tech/kaijo/
 
