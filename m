@@ -1,204 +1,169 @@
-Return-Path: <linux-usb+bounces-37236-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37237-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4GaoGialAWpKhAEAu9opvQ
-	(envelope-from <linux-usb+bounces-37236-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 11:45:10 +0200
+	id 4uNZBbimAWrlhQEAu9opvQ
+	(envelope-from <linux-usb+bounces-37237-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 11:51:52 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA90B50B33A
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 11:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8307E50B590
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 11:51:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 032E431431DD
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 09:30:04 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9516431014CB
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 09:38:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 589113C5DBF;
-	Mon, 11 May 2026 09:29:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02BEC3BA225;
+	Mon, 11 May 2026 09:37:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="f++Qg5V0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HyUgCP5H"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82D123C1984
-	for <linux-usb@vger.kernel.org>; Mon, 11 May 2026 09:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5249542A9D;
+	Mon, 11 May 2026 09:37:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778491745; cv=none; b=QjI6GSZryoezzwGL56EROZZ3xTip5907+BhpNy5D+cQLI2EMwtRPgGC8AWw0t9Hh40kaT6kFatrXazYeysWt8Hhwf8Lds/B7550g6UsVhdPtYu/1a600KuN1W49sx3kz2TiRpPi+eeEGA0djSQeAHWfRdHr79/5tYKRdGr5n448=
+	t=1778492245; cv=none; b=h2qOC1oInfvFpdglyKx6i50XEzJfhisKFkofcTzgSoC0Uxwv+qvu2Z8bq3vdWnrBD/kwawmvpKAqvGH9PD0L14zMbpv4oj6A9vRv8enbXHTEdsTU6EGr/aNSVSHJX6+xDAQXPdifRIurSWH2Vp5lJ9K2Bmx+dmBX1EJAsNZvgH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778491745; c=relaxed/simple;
-	bh=U1Qm+KKl/AIGh2iSPba1dZ6yy/KwN/3PNFvd/VeLMtM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A2pvtFMg1kDuW9Tgpe62y41PhzOh9dCyRd8qLs4uaHIrbMqJ+i3LWCSYO1sgI7e+ognhkNVpJOb/wtCjeYKgkMWM/aOtHHkYAa89ia86hOBeuXHd8PFrLYJ0B40IkjBis4hwaW5My5yQ0LJtlZSsFj1KbmsifdPyy+cFAYxq+jA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=f++Qg5V0; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488b0046078so33686985e9.1
-        for <linux-usb@vger.kernel.org>; Mon, 11 May 2026 02:29:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1778491742; x=1779096542; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WV7rblNQ4jpJXwaDYZZ+KkXDw9KuCi4SHEk0BK4A9w4=;
-        b=f++Qg5V0Wa1M9jxmceTSJGnCMQCwiMTXauhhz3REkASP1M7pHZnUf1lpED40lrVUDz
-         vfbVbY0YIGxYHj1ojW3Mdrn4fJ49BkYjFt4MPyP7R+pwnTl3KXYOUjs/YzHL3gaaJq3D
-         3WVAEJxUGTFLtGs3ZR8EU3kAMuw7BRJRHptjH+F43AEIXMDj+asejKAYDzOUxScBlHSy
-         RzL3uelkk9oOVx93cK8A1ljtwJv7keIhBwfXpADRgI5earenD4wg4/3CYqSGXxCDGaeh
-         cP90k9zTI86DliGWT+NMSrpLk9RR96ewWLwWqDMsq1XwtJ27PqJSnOzzSD4IfdEMImsC
-         axWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778491742; x=1779096542;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=WV7rblNQ4jpJXwaDYZZ+KkXDw9KuCi4SHEk0BK4A9w4=;
-        b=lRJBr9ww9LFdHbPtvQSnh/BjdXwG+1bFW9dcNB6KDVqi0i0CWMwEez5Bw3Finm3pco
-         11gnvWYS4NesNLr8drdwyA9f9O0l49eclXcQCFUs/Gjv+DWm2v9IlSyyRRQSZo5DnbBd
-         1i/cObZrdpCsovSA5vUjewZSJ5a5iks580oEXQoJA25MRZp0G9jv8UN9jAXIznq7qLQH
-         cnZwDpKFAJeIkuI9ybk2KjOmmShhWyCLyaJV4iaaIGukgtvbIwF+xaUI3bpxJai/43Ez
-         eHRQ5p8da9unqO3mS6qE5vJYFtZBAA4/HHh+4ssobbMO5HyckOGH+rYkfM/So8DxId44
-         CuDQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/XvYs7tP+64v0MPFxui4w9vcISrlKYz3qtX4UUStuZ9FbGyLiQdcdYLpNG6+TpwVEBELiyk4glnG4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfNhd/rhvH+nAe4QWHCnALX5L8JoZ7cjWm7hFxft9oC74/tzgY
-	+CMpdlSHCGlX4HCHOcUTYCHg3oSJ+Ub9Vgfgkcr6dHbfOG+GFrg8xrIbmsXbJlqVal4=
-X-Gm-Gg: Acq92OG8QpwrRyJot3uUc38uZ3HKb37xPGOIntZuNdwm5p1k9BAAT6yqsWfTcuODcck
-	FuaQRsB4afQHIQJV3XdhxVsRwLsWtGoM3gLRRUbl/Aya3HURYeqlrsJwD8RwokUPHi0Mue71Fhq
-	jlyvzYfy8Km6LuK2mOyzHlM5ETPF0e9t0JgWC3rx22Sxt7/2V740cznzIqzy3O32vMO90chAECJ
-	89CK/gw7YFAApMzMmjAYSx+9hcqyybjIY2/ojp1m7YyppHgV06MSQwqbNa3NvofoRfzIavgYLzi
-	DG81FdJIuPdlxAR3ZxUjVhKWbkwZkMLvT35/GKUVMrfuNMXIIq/EQkAENk05BamKXXNMSC6TYPg
-	JyuakTPJoqQEcGRorgDsMddqUEPLhCS0virDU/9CxIn9HONSWaxhMlLbyfFbVDM79rcABsGIyTb
-	zxQybqH6p+8Iqk0fGN6wDK49J5ye5G6lmMbMyb4/ltDr+8WBQ=
-X-Received: by 2002:a05:600c:c11c:b0:488:c078:bfda with SMTP id 5b1f17b1804b1-48e706e0168mr96108715e9.26.1778491741993;
-        Mon, 11 May 2026 02:29:01 -0700 (PDT)
-Received: from localhost.localdomain ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e701e89fbsm157606675e9.4.2026.05.11.02.29.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 02:29:01 -0700 (PDT)
-From: Marco Crivellari <marco.crivellari@suse.com>
-To: linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Marco Crivellari <marco.crivellari@suse.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	linux-usb@vger.kernel.org
-Subject: [RFC PATCH net-next 5/5] r8152: Move long delayed work on system_dfl_long_wq
-Date: Mon, 11 May 2026 11:28:40 +0200
-Message-ID: <20260511092846.120141-6-marco.crivellari@suse.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260511092846.120141-1-marco.crivellari@suse.com>
-References: <20260511092846.120141-1-marco.crivellari@suse.com>
+	s=arc-20240116; t=1778492245; c=relaxed/simple;
+	bh=uE+17b78z0Qiyo76rhPMbN96lTgTv0XUaXKXaGYQnSE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CZs/vSZOvRQR6ilkIcKfJcKQd1QuQZdaT4t2f2fi1mWXd2UlLSxPWiu5McdfSiWY2eK+hWG5YKj/iT0tiTru7xCtvS5/+KlOugSZNKfBIwy1zMfyquIpyBataGENSLsX9b3fos11iD/sJSbQA19yJwgowSvfuLTjVQOnZkr885Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HyUgCP5H; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778492243; x=1810028243;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uE+17b78z0Qiyo76rhPMbN96lTgTv0XUaXKXaGYQnSE=;
+  b=HyUgCP5HukqRmWu5aX2B/Rj0frSd6U9TJe9/o1nUwf9OSaoJu20cT2sQ
+   uSBn9m05ZBcO4OZYHiJ3LS+9JyuKCIHAJ3VfRUNkZwd1aKin/o18YG3xM
+   Oh3GX/DNhmvicqCMsG2trvoLNsOPiNxS0kNjfUxMqhY76patEAJ1VSJXk
+   b8jUDzV1Nqh8MIP+esrX303LpUiiLXcA+O5r1c94GI6ENjpOIIE5yIyqE
+   YaBznalYlBVFakTFO0w95IVkOa0wdemKz0A2wEetYc44+Oi2eHLB3s7Yr
+   zisSMPm1Ayt+XoDGj9fNg1Ghlja1/2U6RjcZslalb8H0vZhJ9W58f7+OJ
+   w==;
+X-CSE-ConnectionGUID: ucTvoYfESs6Rs4BupzlHLQ==
+X-CSE-MsgGUID: MBqA4jRbSeC8NaJ0T+qXPg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11782"; a="79396405"
+X-IronPort-AV: E=Sophos;i="6.23,228,1770624000"; 
+   d="scan'208";a="79396405"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2026 02:37:23 -0700
+X-CSE-ConnectionGUID: w+/odRwTQuOYXFLIjomajg==
+X-CSE-MsgGUID: 9gZVm6/ARIqIgp0Nv32+MQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,228,1770624000"; 
+   d="scan'208";a="236428556"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa006.jf.intel.com with ESMTP; 11 May 2026 02:37:20 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 4EA9B95; Mon, 11 May 2026 11:37:19 +0200 (CEST)
+Date: Mon, 11 May 2026 11:37:19 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Michael Bommarito <michael.bommarito@gmail.com>
+Cc: Mika Westerberg <westeri@kernel.org>, linux-usb@vger.kernel.org,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] thunderbolt: harden XDomain property parser
+Message-ID: <20260511093719.GR6785@black.igk.intel.com>
+References: <20260415123221.225149-1-michael.bommarito@gmail.com>
+ <cover.1777817011.git.michael.bommarito@gmail.com>
+ <cover.v4.git.michael.bommarito@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: BA90B50B33A
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <cover.v4.git.michael.bommarito@gmail.com>
+X-Rspamd-Queue-Id: 8307E50B590
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,linutronix.de,suse.com,lunn.ch,davemloft.net,google.com,redhat.com,vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-37236-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,gmail.com,linux.intel.com,intel.com,linuxfoundation.org];
+	TAGGED_FROM(0.00)[bounces-37237-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[marco.crivellari@suse.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[suse.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,suse.com:email,suse.com:mid,suse.com:dkim]
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[black.igk.intel.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:dkim]
 X-Rspamd-Action: no action
 
-Currently the code enqueue work items using {queue|mod}_delayed_work(),
-using system_long_wq. This workqueue should be used when long works are
-expected and it is a per-cpu workqueue.
+Hi Michael,
 
-The function(s) end up calling __queue_delayed_work(), which set a global
-timer that could fire anywhere, enqueuing the work where the timer fired.
+On Sun, May 10, 2026 at 07:16:55PM -0400, Michael Bommarito wrote:
+> Style cleanups only on top of v3.  Andy's three nits on 1/4, 2/4,
+> 3/4 are applied; Mika's request to drop the duplicated on-wire
+> entry struct in 4/4 is applied.  No behavioural change to any
+> patch; the bug analysis and the gating in patches 1-3 are
+> unchanged.
+> 
+> Three independent memory-safety defects in drivers/thunderbolt/property.c
+> are reachable when an untrusted Thunderbolt/USB4 XDomain peer responds
+> to a PROPERTIES_REQUEST during host-to-host discovery.  The peer
+> supplies up to TB_XDP_PROPERTIES_MAX_LENGTH (500) dwords of attacker-
+> controlled property block which the local host passes to
+> tb_property_parse_dir() as part of the control-plane exchange that
+> runs before any tunnels are set up.
+> 
+> Patches 1-3 are one bug per patch: u32 overflow in
+> tb_property_entry_valid(), short-dir_len OOB+underflow in
+> __tb_property_parse_dir(), and unbounded recursion in the same.
+> Patch 4 is three KUnit regression cases exercising all three.
+> 
+> All three defects are OOB-read or DoS at worst.  No controlled OOB
+> write is reachable through the parser; parse_dwdata()'s destination
+> is a freshly kcalloc'd buffer sized by entry->length.
+> 
+> Operators who do not need XDomain host-to-host discovery can disable
+> the path entirely with thunderbolt.xdomain=0 on the kernel command
+> line.
+> 
+> Reproduced on v7.0-rc7 + CONFIG_KASAN=y + CONFIG_USB4_KUNIT_TEST=y
+> via the KUnit suite in patch 4.  Pre-fix on a v7.0-rc7 + patch 4
+> kernel: u32_wrap fails with a KASAN use-after-free trace in
+> __tb_property_parse_dir() (the parser reads ~16 GiB past the
+> block); recursion fails with KASAN + an Oops on RIP=0 as the
+> parser exhausts its guard page.  dir_len_underflow returns NULL
+> on pre-fix because the downstream content_len = dir_len - 4
+> underflow makes the entry walk bail at tb_property_entry_valid();
+> the UUID kmemdup over-read is silent here because KASAN-Generic's
+> slab redzones do not flag a 4-byte over-read into the
+> kmalloc-chunk tail.  Treat dir_len_underflow as the post-fix
+> invariant pin; u32_wrap and recursion are the active pre-fix
+> detectors.
 
-Unbound works could benefit from scheduler task placement, to optimize
-performance and power consumption. Long work shouldn't stick to a single
-CPU.
-
-Recently, a new unbound workqueue specific for long running work has
-been added:
-
-    c116737e972e ("workqueue: Add system_dfl_long_wq for long unbound works")
-
-Since the workqueue work doesn't rely on per-cpu variables, there is no
-obvious reason that justify the use of a per-cpu workqueue. So change
-system_long_wq with system_dfl_long_wq so that the work may benefit from
-scheduler task placement.
-
-Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
----
- drivers/net/usb/r8152.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 1ace1d2398c9..16c521e3fe0a 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -7050,7 +7050,8 @@ static void rtl_hw_phy_work_func_t(struct work_struct *work)
- 
- 		/* Delay execution in case request_firmware() is not ready yet.
- 		 */
--		queue_delayed_work(system_long_wq, &tp->hw_phy_work, HZ * 10);
-+		queue_delayed_work(system_dfl_long_wq, &tp->hw_phy_work,
-+				   HZ * 10);
- 		goto ignore_once;
- 	}
- 
-@@ -8620,7 +8621,7 @@ static int rtl8152_reset_resume(struct usb_interface *intf)
- 	clear_bit(SELECTIVE_SUSPEND, &tp->flags);
- 	rtl_reset_ocp_base(tp);
- 	tp->rtl_ops.init(tp);
--	queue_delayed_work(system_long_wq, &tp->hw_phy_work, 0);
-+	queue_delayed_work(system_dfl_long_wq, &tp->hw_phy_work, 0);
- 	set_ethernet_addr(tp, true);
- 	return rtl8152_resume(intf);
- }
-@@ -10001,7 +10002,7 @@ static int rtl8152_probe_once(struct usb_interface *intf,
- 	/* Retry in case request_firmware() is not ready yet. */
- 	tp->rtl_fw.retry = true;
- #endif
--	queue_delayed_work(system_long_wq, &tp->hw_phy_work, 0);
-+	queue_delayed_work(system_dfl_long_wq, &tp->hw_phy_work, 0);
- 	set_ethernet_addr(tp, false);
- 
- 	usb_set_intfdata(intf, tp);
--- 
-2.54.0
-
+Applied 1-3 to thunderbolt.git/fixes and the last one to
+thunderbolt.git/next. Thanks a lot!
 
