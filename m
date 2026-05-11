@@ -1,157 +1,313 @@
-Return-Path: <linux-usb+bounces-37256-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37257-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qOLlNETNAWrajwEAu9opvQ
-	(envelope-from <linux-usb+bounces-37256-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 14:36:20 +0200
+	id 8OpzAZTNAWryjwEAu9opvQ
+	(envelope-from <linux-usb+bounces-37257-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 14:37:40 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C64B50DF66
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 14:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6040750DFCD
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 14:37:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E2077303674C
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 12:35:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3118F304815A
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 12:36:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C7A936895D;
-	Mon, 11 May 2026 12:35:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1D9038F25F;
+	Mon, 11 May 2026 12:36:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pj9Kr8nS"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ifB2BmY2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919BE36D510
-	for <linux-usb@vger.kernel.org>; Mon, 11 May 2026 12:35:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01BF52DAFCB;
+	Mon, 11 May 2026 12:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778502942; cv=none; b=OtSvPqLnLDe7mCMIubnUoYOERBje2GYtEV50DppbBKOgguce1xi7Yt9tyU6juyQifF7RdXzET7dCJQlw9UhRKxKsptun+kSHAq37k6krEgJsWeRuNyoVCn93HZzPTDzQ5dk2laMtTKgLhkZAz2fXYCVqY06xmDx0oCH36GixeNU=
+	t=1778502964; cv=none; b=Rsi/eCf+vCbDlZBGILyd7PFPvt5noFVFliYM7oM380W0EHgq2Vf+esY/LIrRWDRxfrt+DmP51MME61UM51l8VnGcFCC2577DdI+kkLHH6PsIgZ7FCC/o+95fbUfmGwQehpgYPtvCk7rqLGhmpLwZXFPaqF1ijowacf/SZUbEUt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778502942; c=relaxed/simple;
-	bh=YiuC223d0U5Qg6+CWRCJHkROXXXKPD5OsF2ncUq9LEw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q9aaHUXwjZ8Dkn0zKV/1uoPd/lUDj4NA4l1a3wIlqLsdy11BC/VjdBFTuZypaK+kDZCZHwTHfcfa3bEzAO3z8wJjdaxqPPuZc6h29W/q4562SDGaIxqDbRaxtK8ei/BS1KfVUm19ngqHKX0UoZWraBrNEGz92f7CVANJtIIX+W0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pj9Kr8nS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCB9C2BCFC
-	for <linux-usb@vger.kernel.org>; Mon, 11 May 2026 12:35:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778502942;
-	bh=YiuC223d0U5Qg6+CWRCJHkROXXXKPD5OsF2ncUq9LEw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Pj9Kr8nStLsVetiOSco2GGCMSl2FIe8q2NUromROd9I4JzycDKico+gTJmU5dWgbQ
-	 nJSl5CbsS1h/lwWigkSdjAzds3TlF/f6u2NaS5ZfxVVM56TSF7sVbksVHgWW45Ooxp
-	 35WnfwL12F9kBL/wRLIMpvhmyZEDf+r5ID78/1xg7DQReYBgiti9gNC6yg/iSKoVWl
-	 ay6pjvtHOifQgiZXelyuziSzYUUkXjk3RvQyxmYnGYRpP3QrKqg0thEM6YcHr+FNap
-	 NbXuxFKxqN+jXll7br8tHcLAD/APQmYz1a4YwUMWe73ydQDeJBpT75As7d2D9J+VrB
-	 fM3cUx0q97FTg==
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-672645dbfeaso4427553a12.0
-        for <linux-usb@vger.kernel.org>; Mon, 11 May 2026 05:35:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ85/oPTJJr3oP+4o68PBZavJ1OxXHPsjss4W88T335MKNvbYOZddf082F0ye0yJxKAU4SWiG7I4luQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw32aUtRiCxw/L1GeNHs5rKRH7AgzAH1N01kCgn6m2bTaET91Qv
-	wQJQnzklEkIzvIyVEFlk+CgzWx3wNbYan5RTNqWwgR5kokUEqJFA3d7wWWVx7sfeSRjrbccK5+M
-	EwlHGcUjdf8jGNvpUO6c8nRtuqCK6iA==
-X-Received: by 2002:a05:6402:518c:b0:66f:93cb:a277 with SMTP id
- 4fb4d7f45d1cf-67d642b9559mr12393090a12.14.1778502940912; Mon, 11 May 2026
- 05:35:40 -0700 (PDT)
+	s=arc-20240116; t=1778502964; c=relaxed/simple;
+	bh=ax4A3f2MzJf5+dZA9M2R501DDz1MaI5ANJ5g95xtr1k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T4a3xbk0MNT6LuO5Cnk7QqrM6c+0Z2H+fEg0AO1c34K5g3gYhkWDWf7vXUVwGrFYMmOEwov1pQ8NEH9PYjma7FICIclEY2ZE7DWnLaWo4nx6EJpXRTqdu8DSjXbJzQBDvIpRoKVuu0zk47UbTWqL8XyYpFfukBTi/ODcJ6U3QqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=ifB2BmY2; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from killaraus.ideasonboard.com (2001-14ba-70f3-e800--a06.rev.dnainternet.fi [IPv6:2001:14ba:70f3:e800::a06])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4C66512EE;
+	Mon, 11 May 2026 14:35:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1778502954;
+	bh=ax4A3f2MzJf5+dZA9M2R501DDz1MaI5ANJ5g95xtr1k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ifB2BmY2tni+HPdOFe/cg/Lvlde9Ra+WDaaFsxl0Mh5dViec3w+zOkPS3HOobP7Lm
+	 jrM9BdYZQ3l8JMJSTfZ3rYcF0oPvi1zLa/yGA6T5SEyipW4XxPWV+zQGoynOMllBic
+	 5+GP9UZhza1fhO45lIOKDBlUqer/d7jYhFmuL5pE=
+Date: Mon, 11 May 2026 15:36:00 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Hans de Goede <hansg@kernel.org>
+Cc: Ricardo Ribalda <ribalda@chromium.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] media: uvcvideo: Introduce allow_privacy_override
+ module parameter
+Message-ID: <20260511123600.GA3095289@killaraus.ideasonboard.com>
+References: <20260316-uvcdynctrl-v3-0-19cd4657e1f3@chromium.org>
+ <20260316-uvcdynctrl-v3-3-19cd4657e1f3@chromium.org>
+ <ad28139c-46b8-4209-9a43-14609763a883@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260511-bm92t-v2-0-2145e4f4386b@gmail.com> <20260511-bm92t-v2-2-2145e4f4386b@gmail.com>
- <177844236182.3519904.11223844313176518441.robh@kernel.org>
-In-Reply-To: <177844236182.3519904.11223844313176518441.robh@kernel.org>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 11 May 2026 07:35:28 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJ-av8qQ2-bUyZj2HBCiyypqTx0iHNSDuTkzDYUkmAcCg@mail.gmail.com>
-X-Gm-Features: AVHnY4K9CD446sGH0M7JjTNmftVBOl39iUIATcxR0y0VQjQonGoPN-OagOQ_Vp4
-Message-ID: <CAL_JsqJ-av8qQ2-bUyZj2HBCiyypqTx0iHNSDuTkzDYUkmAcCg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] dt-bindings: usb: add Rohm BM92TXX Type-C controller
-To: Alexandre Hamamdjian <azkali.limited@gmail.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Linus Walleij <linusw@kernel.org>, linux-usb@vger.kernel.org, 
-	Bartosz Golaszewski <brgl@kernel.org>, Conor Dooley <conor+dt@kernel.org>, CTCaer <ctcaer@gmail.com>, 
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 5C64B50DF66
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ad28139c-46b8-4209-9a43-14609763a883@kernel.org>
+X-Rspamd-Queue-Id: 6040750DFCD
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[ideasonboard.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[ideasonboard.com:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37256-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,gmail.com,linux.intel.com,linuxfoundation.org];
-	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[ideasonboard.com:+];
+	TAGGED_FROM(0.00)[bounces-37257-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-0.996];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[laurent.pinchart@ideasonboard.com,linux-usb@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ideasonboard.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,killaraus.ideasonboard.com:mid]
 X-Rspamd-Action: no action
 
-On Sun, May 10, 2026 at 2:46=E2=80=AFPM Rob Herring (Arm) <robh@kernel.org>=
- wrote:
->
->
-> On Mon, 11 May 2026 01:32:10 +0700, Alexandre Hamamdjian wrote:
-> > Add the device-tree binding documentation for the Rohm BM92TXX family
-> > of USB Type-C and Power Delivery controllers. The device is controlled
-> > over I2C and signals state changes through a dedicated interrupt line.
-> >
-> > Document the rohm,* properties consumed by the driver: the optional
-> > VCONN-enable GPIO, the DisplayPort alternate-mode toggles
-> > (rohm,dp-disable, rohm,dp-alerts-enable, rohm,dp-signal-toggle-on-resum=
-e,
-> > rohm,dp-lanes), the suspend/dock tunables (rohm,led-static-on-suspend,
-> > rohm,dock-power-limit-disable) and the four
-> > rohm,pd-{5,9,12,15}v-current-limit-ma per-PDO charging current limits.
-> > A graph port is required to link the controller to a USB role switch
-> > consumer.
-> >
-> > Signed-off-by: Alexandre Hamamdjian <azkali.limited@gmail.com>
+On Mon, Mar 30, 2026 at 06:02:10PM +0200, Hans de Goede wrote:
+> On 16-Mar-26 14:34, Ricardo Ribalda wrote:
+> > Some camera modules have XU controls that can configure the behaviour of
+> > the privacy LED.
+> > 
+> > Block mapping of those controls, unless the module is configured with
+> > a new parameter: allow_privacy_override.
+> > 
+> > This is just an interim solution. Based on the users feedback, we will
+> > either put the privacy controls behind a CONFIG option, or completely
+> > block them.
+> > 
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> 
+> I realize this patch is not without controversy, but I do believe
+> that this is an important step to safeguard the privacy of Logitech
+> webcam users.
+> 
+> Discussion in this thread has mentioned libusb / usbfs access as
+> a workaround. But that can be used to directly access usb-storage
+> devices directly without going through a filesystem and those
+> pesky filesystem permission checks, yet we do bother with those.
+> 
+> As with all things related to information security it is all
+> about defenense in depth and this just makes it that bit harder
+> for spyware to disable the privacy LED.
+
+Is anyone aware of this being exploited ?
+
+> I do believe that the RFC Kconfig option likely is a bridge
+> too far. As discussed in the thread it will likely be at least
+> a year before many stable distro users actually see the change
+> adding this module parameter, so switching to permanently
+> disabling this by default through Kconfig in a year seems much
+> too soon and depending on the feedback we may end up sticking
+> with the module parameter and never permanently disabling this.
+> 
+> As such while merging this I've removed this paragraph from the commit
+> message:
+> 
+> "This is just an interim solution. Based on the users feedback, we will
+> either put the privacy controls behind a CONFIG option, or completely
+> block them."
+> 
+> and I've also removed the deprecation warning turning this into
+> a regular bool module parameter.
+> 
+> I've pushed this to the uvc git repo for-next branch now,
+> with the discussed changes squashed in.
+> 
 > > ---
-> >  .../devicetree/bindings/usb/rohm,bm92t.yaml        | 128 +++++++++++++=
-++++++++
-> >  MAINTAINERS                                        |   1 +
-> >  2 files changed, 129 insertions(+)
-> >
->
-> My bot found errors running 'make dt_binding_check' on your patch:
->
-> yamllint warnings/errors:
->
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/u=
-sb/rohm,bm92t.yaml: rohm,pd-5v-current-limit-ma: missing type definition
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/u=
-sb/rohm,bm92t.yaml: rohm,pd-9v-current-limit-ma: missing type definition
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/u=
-sb/rohm,bm92t.yaml: rohm,pd-12v-current-limit-ma: missing type definition
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/u=
-sb/rohm,bm92t.yaml: rohm,pd-15v-current-limit-ma: missing type definition
+> >  drivers/media/usb/uvc/uvc_ctrl.c   | 38 ++++++++++++++++++++++++++++++++++++++
+> >  drivers/media/usb/uvc/uvc_driver.c | 20 ++++++++++++++++++++
+> >  drivers/media/usb/uvc/uvc_v4l2.c   |  7 +++++++
+> >  drivers/media/usb/uvc/uvcvideo.h   |  2 ++
+> >  include/linux/usb/uvc.h            |  4 ++++
+> >  5 files changed, 71 insertions(+)
+> > 
+> > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> > index b6e020b41671..3ca108b83f1d 100644
+> > --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> > @@ -3001,6 +3001,35 @@ static int uvc_ctrl_init_xu_ctrl(struct uvc_device *dev,
+> >  	return ret;
+> >  }
+> >  
+> > +bool uvc_ctrl_is_privacy_control(u8 entity[16], u8 selector)
+> > +{
+> > +	/*
+> > +	 * This list is not exhaustive, it is a best effort to block access to
+> > +	 * non documented controls that can affect user's privacy.
+> > +	 */
+> > +	struct privacy_control {
+> > +		u8 entity[16];
+> > +		u8 selector;
+> > +	} privacy_control[] = {
+> > +		{
+> > +			.entity = UVC_GUID_LOGITECH_USER_HW_CONTROL_V1,
+> > +			.selector = 1,
+> > +		},
+> > +		{
+> > +			.entity = UVC_GUID_LOGITECH_PERIPHERAL,
+> > +			.selector = 9,
+> > +		},
+> > +	};
+> > +	int i;
+> > +
+> > +	for (i = 0; i < ARRAY_SIZE(privacy_control); i++)
+> > +		if (!memcmp(entity, privacy_control[i].entity, 16) &&
+> > +		    selector == privacy_control[i].selector)
+> > +			return true;
+> > +
+> > +	return false;
+> > +}
+> > +
+> >  int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
+> >  	struct uvc_xu_control_query *xqry)
+> >  {
+> > @@ -3045,6 +3074,15 @@ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
+> >  		return -ENOENT;
+> >  	}
+> >  
+> > +	if (uvc_ctrl_is_privacy_control(entity->guid, xqry->selector) &&
+> > +	    !uvc_allow_privacy_override_param) {
+> > +		dev_warn_once(&chain->dev->intf->dev,
+> > +			      "Privacy related controls can only be accessed if module parameter allow_privacy_override is true\n");
+> > +		uvc_dbg(chain->dev, CONTROL, "Blocking access to privacy related Control %pUl/%u\n",
+> > +			entity->guid, xqry->selector);
+> > +		return -EACCES;
+> > +	}
+> > +
+> >  	if (mutex_lock_interruptible(&chain->ctrl_mutex))
+> >  		return -ERESTARTSYS;
+> >  
+> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> > index b0ca81d924b6..74c9dea29d36 100644
+> > --- a/drivers/media/usb/uvc/uvc_driver.c
+> > +++ b/drivers/media/usb/uvc/uvc_driver.c
+> > @@ -36,6 +36,7 @@ unsigned int uvc_no_drop_param = 1;
+> >  static unsigned int uvc_quirks_param = -1;
+> >  unsigned int uvc_dbg_param;
+> >  unsigned int uvc_timeout_param = UVC_CTRL_STREAMING_TIMEOUT;
+> > +bool uvc_allow_privacy_override_param;
+> >  
+> >  static struct usb_driver uvc_driver;
+> >  
+> > @@ -2505,6 +2506,25 @@ MODULE_PARM_DESC(trace, "Trace level bitmask");
+> >  module_param_named(timeout, uvc_timeout_param, uint, 0644);
+> >  MODULE_PARM_DESC(timeout, "Streaming control requests timeout");
+> >  
+> > +static int param_set_privacy(const char *val, const struct kernel_param *kp)
+> > +{
+> > +	pr_warn_once("uvcvideo: " DEPRECATED
+> > +		     "allow_privacy_override parameter will be eventually removed.\n");
+> > +	return param_set_bool(val, kp);
+> > +}
+> > +
+> > +static const struct kernel_param_ops param_ops_privacy = {
+> > +	.set = param_set_privacy,
+> > +	.get = param_get_bool,
+> > +};
+> > +
+> > +param_check_bool(allow_privacy_override, &uvc_allow_privacy_override_param);
+> > +module_param_cb(allow_privacy_override, &param_ops_privacy,
+> > +		&uvc_allow_privacy_override_param, 0644);
+> > +__MODULE_PARM_TYPE(allow_privacy_override, "bool");
+> > +MODULE_PARM_DESC(allow_privacy_override,
+> > +		 "Allow access to privacy related controls");
+> > +
+> >  /* ------------------------------------------------------------------------
+> >   * Driver initialization and cleanup
+> >   */
+> > diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+> > index f9049e9c0d3a..6d4f027c8402 100644
+> > --- a/drivers/media/usb/uvc/uvc_v4l2.c
+> > +++ b/drivers/media/usb/uvc/uvc_v4l2.c
+> > @@ -133,6 +133,13 @@ static int uvc_ioctl_xu_ctrl_map(struct uvc_video_chain *chain,
+> >  		return -EINVAL;
+> >  	}
+> >  
+> > +	if (uvc_ctrl_is_privacy_control(xmap->entity, xmap->selector) &&
+> > +	    !uvc_allow_privacy_override_param) {
+> > +		dev_warn_once(&chain->dev->intf->dev,
+> > +			      "Privacy related controls can only be mapped if module parameter allow_privacy_override is true\n");
+> > +		return -EACCES;
+> > +	}
+> > +
+> >  	map = kzalloc_obj(*map);
+> >  	if (map == NULL)
+> >  		return -ENOMEM;
+> > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> > index 8480d65ecb85..362110d58ca3 100644
+> > --- a/drivers/media/usb/uvc/uvcvideo.h
+> > +++ b/drivers/media/usb/uvc/uvcvideo.h
+> > @@ -664,6 +664,7 @@ extern unsigned int uvc_no_drop_param;
+> >  extern unsigned int uvc_dbg_param;
+> >  extern unsigned int uvc_timeout_param;
+> >  extern unsigned int uvc_hw_timestamps_param;
+> > +extern bool uvc_allow_privacy_override_param;
+> >  
+> >  #define uvc_dbg(_dev, flag, fmt, ...)					\
+> >  do {									\
+> > @@ -794,6 +795,7 @@ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
+> >  		      struct uvc_xu_control_query *xqry);
+> >  
+> >  void uvc_ctrl_cleanup_fh(struct uvc_fh *handle);
+> > +bool uvc_ctrl_is_privacy_control(u8 entity[16], u8 selector);
+> >  
+> >  /* Utility functions */
+> >  struct usb_host_endpoint *uvc_find_endpoint(struct usb_host_interface *alts,
+> > diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
+> > index dea23aabbad4..70c2a7d25236 100644
+> > --- a/include/linux/usb/uvc.h
+> > +++ b/include/linux/usb/uvc.h
+> > @@ -49,6 +49,10 @@
+> >  #define UVC_GUID_LOGITECH_PERIPHERAL \
+> >  	{0x21, 0x2d, 0xe5, 0xff, 0x30, 0x80, 0x2c, 0x4e, \
+> >  	 0x82, 0xd9, 0xf5, 0x87, 0xd0, 0x05, 0x40, 0xbd }
+> > +#define UVC_GUID_LOGITECH_USER_HW_CONTROL_V1 \
+> > +	{0x82, 0x06, 0x61, 0x63, 0x70, 0x50, 0xab, 0x49, \
+> > +	 0xb8, 0xcc, 0xb3, 0x85, 0x5e, 0x8d, 0x22, 0x1f }
+> > +
+> >  
+> >  /* https://learn.microsoft.com/en-us/windows-hardware/drivers/stream/uvc-extensions-1-5#222-extension-unit-controls */
+> >  #define UVC_MSXU_CONTROL_FOCUS			0x01
+> > 
+> 
 
-Use a standard unit suffix.
+-- 
+Regards,
 
-Rob
+Laurent Pinchart
 
