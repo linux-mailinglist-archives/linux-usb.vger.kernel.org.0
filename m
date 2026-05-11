@@ -1,236 +1,381 @@
-Return-Path: <linux-usb+bounces-37282-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37283-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mNA0CAFRAmqkrAEAu9opvQ
-	(envelope-from <linux-usb+bounces-37282-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 23:58:25 +0200
+	id cKnxNQtYAmosrgEAu9opvQ
+	(envelope-from <linux-usb+bounces-37283-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 00:28:27 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C5E45168CB
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 23:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B3AC516E74
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 00:28:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7CC123037438
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 21:58:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DDE9730AEB48
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 22:19:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66E594D98FA;
-	Mon, 11 May 2026 21:58:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D5EA4DBD7C;
+	Mon, 11 May 2026 22:19:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kXINmZf0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A9D34DCC7;
-	Mon, 11 May 2026 21:58:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E4440FD94;
+	Mon, 11 May 2026 22:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778536688; cv=none; b=UzqUSLMD8TMm0MISqPpUsvLX9rBo0kehYjiVRKQKYCtmgpNR25RPbyoXH3UE6KsfYTTU4UlAnsooKl9Y8EFbQagb2DN83ifg37epYo6DGQxocDdyA1/SvHScenFMJpnvxApZptdCYe8F5Unle8EbatWlGKxhQWFt5Rk5K/zF+Yk=
+	t=1778537983; cv=none; b=buCydEGNuxJPZFMV0h26JDOplwsjh5pspRZZfOXL/gjRl/f00BvKBmNCFugnbxvpLoqvhDNk/0Fv1CPhpY4TRMgbSDNZsXTnTl2JlORWDeSWDfhRuqw2KTdosNKP2ulVs2W34s+DgLgfCsEgCHVPyxJACzlNj/YoNhVTKgHrM6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778536688; c=relaxed/simple;
-	bh=1i16ZR9qoS3rh0hPKuESzlVsEu+/cQwtoblyv7mL9wI=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To; b=SueOYa0t/zU0PMYKkNR273rhfLCIs5wmPrRo4iC9Jbxq12B9mrKKIDWFYGT9K0zL8SIdOhQb5HkvWYDwC8Jj9tJgsS0n+fehk4cSaSpbTm63nRySFLXjrOKsS89at1iwBVt14nEJnxh0jSmUE/dMeP6YMn6DWaZl0A4XMVx0BtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.192] (ip5f5af765.dynamic.kabel-deutschland.de [95.90.247.101])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 287E54C2C37F00;
-	Mon, 11 May 2026 23:57:34 +0200 (CEST)
-Content-Type: multipart/mixed; boundary="------------ZjKhgj2VAadPB7IkJSUJfcKq"
-Message-ID: <69fa1c3f-3ea9-42cb-a49a-7da39f72806e@molgen.mpg.de>
-Date: Mon, 11 May 2026 23:57:33 +0200
+	s=arc-20240116; t=1778537983; c=relaxed/simple;
+	bh=StSi6BZ9tPFZYFVEtKopTaOMa3/qwblWeYX5FI6jpAc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LWxVONLc6cPpETr+M+VK8bbnctcmfYfXaOXGub66z2hh3aFP+0JI50GcGaOc0NtYj+fX1wJOLkkA0Tfwm2yA1RI4ahyywo7E0lRrxXekVgRG1ZTYURTJXkQO/jtowNOOfDl0aNkC3R4WUjou0Pe/+kSFs64qi2rBYyrAH9gWrvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kXINmZf0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6300CC2BCFA;
+	Mon, 11 May 2026 22:19:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778537982;
+	bh=StSi6BZ9tPFZYFVEtKopTaOMa3/qwblWeYX5FI6jpAc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=kXINmZf0b5Retiynz71082m0rcW37rombmPIAWwzKNJf/K/aWbo9cn8CmxN7I9qrS
+	 jE/dvUpQEMk3cqYCW7LSX5mBT8qYpzwMog4PcWr/OGb2NYUi1KWmK3XL6ocgWmCYQv
+	 wzTDNDK60CGkqKqR1TwABL37KjCJImPMzBYRSJmQ/OR/JcP4+6HKYtzpLMQdYjqAgx
+	 gsYgw86u+xbqjSAu2jp/qFibSBeE39GBciZnEAg7TSG0mabkXY7ofsNpVLMNvfFdEG
+	 +E7C91YglxGzxtLT+fIE1zT9amBNuep2z5tohe6qNj56hHs9ao2fL6qrNjBsQrQDgX
+	 djmWsCEsqnTvQ==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Alex Cheema <alex@exolabs.net>,
+	Simon Horman <horms@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	oliver@neukum.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH AUTOSEL 7.0-6.12] net: usb: cdc_ncm: add Apple Mac USB-C direct networking quirk
+Date: Mon, 11 May 2026 18:19:06 -0400
+Message-ID: <20260511221931.2370053-7-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260511221931.2370053-1-sashal@kernel.org>
+References: <20260511221931.2370053-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: IBM Power S822LC: pci 0021:0d:00.0: xHCI HW did not halt within
- 32000 usec status = 0x0
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, linuxppc-dev@lists.ozlabs.org
-References: <fb68e15d-b8f2-42ac-aa65-0d9fedcfcdbd@molgen.mpg.de>
- <20260506193037.6de9e355.michal.pecio@gmail.com>
-Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20260506193037.6de9e355.michal.pecio@gmail.com>
-X-Rspamd-Queue-Id: 7C5E45168CB
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 7.0.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 3B3AC516E74
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.14 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
-	MIME_BASE64_TEXT(0.10)[];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain,text/x-patch];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_NA(0.00)[mpg.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37283-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37282-lists,linux-usb=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:+];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.934];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pmenzel@molgen.mpg.de,linux-usb@vger.kernel.org];
-	HAS_ATTACHMENT(0.00)[];
-	R_DKIM_NA(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[anthropic.com:email,molgen.mpg.de:mid,mpg.de:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,b:email]
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[exolabs.net:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,msgid.link:url]
 X-Rspamd-Action: no action
 
-This is a multi-part message in MIME format.
---------------ZjKhgj2VAadPB7IkJSUJfcKq
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Alex Cheema <alex@exolabs.net>
 
-[Cc: +linuxppc-dev]
+[ Upstream commit a5148bc2fa27092862ac4b9e7b5c8340d60cff34 ]
 
-Dear Michal,
+Apple Silicon Macs expose two CDC NCM "private" data interfaces over
+USB-C with VID:PID 0x05ac:0x1905 and product string "Mac". This is the
+same protocol Apple already ships on iPhone (0x05ac:0x12a8) and iPad
+(0x05ac:0x12ab) for RemoteXPC since iOS 17 -- both data interfaces lack
+an interrupt status endpoint, so they rely on the FLAG_LINK_INTR-
+conditional bind path introduced in commit 3ec8d7572a69 ("CDC-NCM: add
+support for Apple's private interface").
 
+The id_table currently has entries for iPhone and iPad but not for the
+Mac. Without a match, cdc_ncm falls through to the generic CDC NCM
+class-match entry, which uses the FLAG_LINK_INTR-having cdc_ncm_info
+struct, so bind_common() fails on the missing status endpoint and no
+netdev appears.
 
-Thank you for your reply.
+Add id_table entries for both interface numbers (0 and 2) of the Mac,
+bound to the existing apple_private_interface_info driver_info.
 
-Am 06.05.26 um 19:30 schrieb Michal Pecio:
-> On Wed, 6 May 2026 18:06:20 +0200, Paul Menzel wrote:
+Verified empirically on a Mac Studio M3 Ultra running macOS 26.5: when
+a Mac is connected via USB-C, ioreg shows VID 0x05ac, PID 0x1905,
+product string "Mac", with two NCM data interfaces at numbers 0 and 2.
+The same PID is presented by all current Apple Silicon Mac models
+(MacBook Pro/Air, Mac mini, Mac Studio across the M-series), mirroring
+Apple's single-PID-per-family pattern from iPhone/iPad.
 
->> On the IBM Power S822LC (8335-GCA POWER8), rebooting into Linux 7.1-rc2+
->> with kexec results in the warning below:
->>
->>       [    0.000000] Linux version 7.1.0-rc2+ (x@b) (gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0, GNU ld (GNU Binutils for Ubuntu) 2.37) #3 SMP PREEMPT Wed May  6 08:50:5
->>       […]
->>       [    0.000000] Hardware name: 8335-GCA POWER8 (raw) 0x4d0200 opal:skiboot-5.4.8-5787ad3 PowerNV
->>       […]
->>       [    1.593760] NET: Registered PF_UNIX/PF_LOCAL protocol family
->>       [    1.593859] pci 0021:0d:00.0: enabling device (0140 -> 0142)
->>       [    1.627080] pci 0021:0d:00.0: xHCI HW did not halt within 32000 usec status = 0x0
->>       [    1.627094] pci 0021:0d:00.0: quirk_usb_early_handoff+0x0/0x300 took 32465 usecs
->>       [    1.627123] PCI: CLS 0 bytes, default 128
+After this patch, plugging a Mac into a Linux host running the patched
+kernel produces two enx... interfaces (one per data interface),
+"ip -br link" lists them as UP, and standard userspace networking
+(DHCP, NetworkManager shared mode, etc.) works without any modprobe
+overrides or out-of-tree modules.
 
-> Does it work any better if kexecing other kernel versions?
+Signed-off-by: Alex Cheema <alex@exolabs.net>
+Reviewed-by: Simon Horman <horms@kernel.org>
+Link: https://patch.msgid.link/20260429175739.34426-1-alex@exolabs.net
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
-No, the problem goes as far back as 5.17-rc7. (I didn’t try anything 
-before.)
+LLM Generated explanations, may be completely bogus:
 
-> What if you increase XHCI_MAX_HALT_USEC by 10* or 100* ?
+## Phase Walkthrough
 
-I have to test this.
+### Phase 1: Commit Message Forensics
+Record: Subsystem is `net: usb: cdc_ncm`; action verb is `add`; intent
+is to add an Apple Mac USB-C direct networking quirk/device match.
 
-> Does the controller work normally after this warning?
-It does not look like it. In the log attached to my report, later on 
-there is:
+Record: Tags verified from `git show a5148bc2fa27` and `b4`:
+`Signed-off-by: Alex Cheema <alex@exolabs.net>`, `Reviewed-by: Simon
+Horman <horms@kernel.org>`, `Link:
+https://patch.msgid.link/20260429175739.34426-1-alex@exolabs.net`,
+`Signed-off-by: Jakub Kicinski <kuba@kernel.org>`. No `Fixes:`,
+`Reported-by:`, `Tested-by:`, or `Cc: stable@vger.kernel.org`.
 
-     [    1.739374] xhci_hcd 0021:0d:00.0: xHCI Host Controller
-     [    1.739431] xhci_hcd 0021:0d:00.0: new USB bus registered, 
-assigned bus number 1
-     [    1.794727] Freeing initrd memory: 52928K
-     [    1.801984] xhci_hcd 0021:0d:00.0: Host halt failed, -110
-     [    1.801988] xhci_hcd 0021:0d:00.0: can't setup: -110
-     [    1.802137] xhci_hcd 0021:0d:00.0: USB bus 1 deregistered
-     [    1.802154] xhci_hcd 0021:0d:00.0: init 0021:0d:00.0 fail, -110
-     [    1.802250] xhci_hcd 0021:0d:00.0: probe with driver xhci_hcd 
-failed with error -110
+Record: The body describes a real functional failure: Apple Silicon Macs
+with VID:PID `05ac:1905` expose private CDC NCM interfaces without
+interrupt status endpoints. Without specific IDs, they match the generic
+CDC NCM entry, use `cdc_ncm_info` with `FLAG_LINK_INTR`, fail endpoint
+collection in `cdc_ncm_bind_common()`, and no netdev appears. The author
+reports empirical testing on Mac Studio M3 Ultra.
 
-`lsusb` also does not list the device. But I need to check on hardware.
+Record: This is not a hidden memory-safety bug; it is an explicit
+hardware ID/quirk fix for already-supported Apple private CDC NCM
+handling.
 
+### Phase 2: Diff Analysis
+Record: One file changed: `drivers/net/usb/cdc_ncm.c`, 8 insertions, 0
+deletions. No functions modified; only `cdc_devs[]` gets two entries.
+Scope is single-file, surgical, device-ID style.
 
-Kind regards,
+Record: Before: Mac interfaces could fall through to the generic CDC NCM
+class entry using `cdc_ncm_info`. After: interface numbers `0` and `2`
+for `05ac:1905` bind to existing `apple_private_interface_info`.
 
-Paul
+Record: Bug category is hardware quirk/device ID addition. The local
+code verifies `apple_private_interface_info` omits `FLAG_LINK_INTR`,
+while `cdc_ncm_info` includes it, and `cdc_ncm_bind_common()` rejects
+devices with no status endpoint when `FLAG_LINK_INTR` is set.
 
+Record: Fix quality is high: two exact USB interface-number matches,
+reused existing driver_info, no new code path beyond selecting an
+existing quirk. Regression risk is very low and limited to Apple VID:PID
+`05ac:1905` interfaces `0` and `2`.
 
-PS: Claude Sonnet 4.6 cooked up the attached patch, which does *not* 
-help though, but does get it to the return code 0x10, which Claude 
-replied to with:
+### Phase 3: Git History
+Record: `git blame` shows `apple_private_interface_info` and the
+iPhone/iPad Apple table entries were introduced by `3ec8d7572a69` in
+2024.
 
-> ● The status change 0x0 → 0x10 is meaningful: 0x10 is PCD (Port Change Detect, bit 4),
->   HCHalted=0. The old-kernel reset (from our commit) did take effect …
+Record: No `Fixes:` tag is present, but the commit body references
+`3ec8d7572a69`; `git show` confirms that commit introduced Apple private
+support and the conditional missing-status-endpoint handling.
 
-Please excuse, if I attach/cite hallucinations.
---------------ZjKhgj2VAadPB7IkJSUJfcKq
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-usb-xhci-Reset-controller-on-kexec-to-prevent-stale-.patch"
-Content-Disposition: attachment;
- filename*0="0001-usb-xhci-Reset-controller-on-kexec-to-prevent-stale-.pa";
- filename*1="tch"
-Content-Transfer-Encoding: base64
+Record: Recent `cdc_ncm.c` history shows unrelated
+bounds/filtering/refactor changes; no prerequisite besides the
+referenced Apple private support was found.
 
-RnJvbSBiMTEwZDEyOGViZTY2MmEwMjMxOWFmNjg5OWQ4ZGM1MDc1OWExMTQ3IE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBQYXVsIE1lbnplbCA8cG1lbnplbEBtb2xnZW4ubXBn
-LmRlPgpEYXRlOiBNb24sIDExIE1heSAyMDI2IDE3OjMzOjM1ICswMjAwClN1YmplY3Q6IFtQ
-QVRDSF0gdXNiOiB4aGNpOiBSZXNldCBjb250cm9sbGVyIG9uIGtleGVjIHRvIHByZXZlbnQg
-c3RhbGUgc3RhdGUKIGluIG5leHQga2VybmVsCk1JTUUtVmVyc2lvbjogMS4wCkNvbnRlbnQt
-VHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOApDb250ZW50LVRyYW5zZmVyLUVuY29k
-aW5nOiA4Yml0CgpXaGVuIGtleGVjIGlzIHVzZWQgdG8gYm9vdCBpbnRvIGEgbmV3IExpbnV4
-IGtlcm5lbCwgeGhjaV9zaHV0ZG93bigpIG9ubHkKaGFsdHMgdGhlIHhIQ0kgY29udHJvbGxl
-ciAoQ01EX1JVTj0wLCB3YWl0cyBmb3IgU1RTX0hBTFQpIHdpdGhvdXQKcmVzZXR0aW5nIGl0
-LiAgQWZ0ZXIgaGFsdCwgdGhlIGNvbnRyb2xsZXIgc3RpbGwgaG9sZHMgc3RhbGUgaW50ZXJu
-YWwgc3RhdGUKZnJvbSB0aGUgb2xkIGtlcm5lbDogdGhlIERDQkFBIHBvaW50ZXIsIHNjcmF0
-Y2hwYWQgYnVmZmVyIGFkZHJlc3MsIGV2ZW50CmFuZCBjb21tYW5kIHJpbmcgZGVxdWV1ZSBw
-b2ludGVycywgYW5kIHNvIG9uLCBhbGwgcG9pbnRpbmcgaW50byB0aGUgb2xkCmtlcm5lbCdz
-IG5vdy1pbnZhbGlkIG1lbW9yeS4KCklmIHBsYXRmb3JtIGZpcm13YXJlIChlLmcuIE9QQUwg
-b24gSUJNIFBPV0VSOCkgdGhlbiB0b3VjaGVzIHRoZSBVU0IKY29udHJvbGxlciBkdXJpbmcg
-dGhlIGtleGVjIHRyYW5zaXRpb24g4oCTIGZvciBleGFtcGxlIHRvIHByb3ZpZGUgYSBVU0IK
-a2V5Ym9hcmQgY29uc29sZSDigJMgaXQgbWF5IGF0dGVtcHQgdG8gdXNlIHRob3NlIHN0YWxl
-IHJpbmctYnVmZmVyCnBvaW50ZXJzLiAgVGhpcyBsZWF2ZXMgdGhlIGNvbnRyb2xsZXIgaW4g
-YW4gdW5kZWZpbmVkLCBydW5uaW5nIHN0YXRlCihTVFNfSEFMVD0wKSB3aGVuIHRoZSBuZXcg
-a2VybmVsIGFycml2ZXMuICBUaGUgbmV3IGtlcm5lbCdzIGVhcmx5CnF1aXJrX3VzYl9oYW5k
-b2ZmX3hoY2koKSBmaXh1cCB0aGVuIGZhaWxzIHRvIGhhbHQgdGhlIGNvbnRyb2xsZXIgYW5k
-CnRoZSB4SENJIGRyaXZlciBjYW4gbm8gbG9uZ2VyIGluaXRpYWxpc2UgaXQsIHByb2R1Y2lu
-ZzoKCiAgSUJNIFBvd2VyIFM4MjJMQzogcGNpIDAwMjE6MGQ6MDAuMDogeEhDSSBIVyBkaWQg
-bm90IGhhbHQgd2l0aGluCiAgICAgICAgICAgICAgICAgICAgMzIwMDAgdXNlYyBzdGF0dXMg
-PSAweDAKCkEgUGV0aXRib290LXRvLUxpbnV4IGtleGVjIGNoYWluIHdvcmtzIGNvcnJlY3Rs
-eSBiZWNhdXNlIFBldGl0Ym9vdCwgYXMKdGhlIGFjdGl2ZSBVU0Igb3duZXIsIHByb3Blcmx5
-IGhhbHRlZCB0aGUgY29udHJvbGxlcjsgdGhlIG5ldyBrZXJuZWwKZmluZHMgaXQgY2xlYW5s
-eSBoYWx0ZWQuCgpGaXggdGhpcyBieSBpc3N1aW5nIGEgY29udHJvbGxlciByZXNldCAoQ01E
-X1JFU0VUKSBhZnRlciB0aGUgaGFsdAp3aGVuZXZlciBrZXhlYyBpcyBpbiBwcm9ncmVzcy4g
-IFRoZSByZXNldCBjbGVhcnMgYWxsIGludGVybmFsIHN0YXRlCihEQ0JBQSwgc2NyYXRjaHBh
-ZCwgcmluZyBidWZmZXJzLCBwb3J0IHN0YXRlKSBzbyB0aGF0IGFueSBmaXJtd2FyZSBvcgp0
-aGUgaW5jb21pbmcga2VybmVsIGFsd2F5cyBzdGFydHMgZnJvbSBhIHdlbGwta25vd24sIGlu
-aXRpYWxpc2F0aW9uLXJlYWR5CnN0YXRlLiAgVGhpcyBtaXJyb3JzIHRoZSBhcHByb2FjaCBh
-bHJlYWR5IHVzZWQgZm9yIHRoZQpYSENJX1NQVVJJT1VTX1dBS0VVUCBhbmQgWEhDSV9SRVNF
-VF9UT19ERUZBVUxUIHF1aXJrcy4KCkxpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2Fs
-bC9mYjY4ZTE1ZC1iOGYyLTQyYWMtYWE2NS0wZDlmZWRjZmNkYmRAbW9sZ2VuLm1wZy5kZS8K
-U2lnbmVkLW9mZi1ieTogUGF1bCBNZW56ZWwgPHBtZW56ZWxAbW9sZ2VuLm1wZy5kZT4KQXNz
-aXN0ZWQtYnk6IENsYXVkZSBTb25uZXQgNC42IDxub3JlcGx5QGFudGhyb3BpYy5jb20+Ci0t
-LQogZHJpdmVycy91c2IvaG9zdC94aGNpLmMgfCAxMiArKysrKysrKystLS0KIDEgZmlsZSBj
-aGFuZ2VkLCA5IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy91c2IvaG9zdC94aGNpLmMgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2kuYwppbmRl
-eCBhNTRmNWI1N2YyMDU1Li41NTAzMWQwM2FkNDBlIDEwMDY0NAotLS0gYS9kcml2ZXJzL3Vz
-Yi9ob3N0L3hoY2kuYworKysgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2kuYwpAQCAtOSw2ICs5
-LDcgQEAKICAqLwogCiAjaW5jbHVkZSA8bGludXgvamlmZmllcy5oPgorI2luY2x1ZGUgPGxp
-bnV4L2tleGVjLmg+CiAjaW5jbHVkZSA8bGludXgvcGNpLmg+CiAjaW5jbHVkZSA8bGludXgv
-aW9tbXUuaD4KICNpbmNsdWRlIDxsaW51eC9pb3BvbGwuaD4KQEAgLTc3NSwxMSArNzc2LDE2
-IEBAIHZvaWQgeGhjaV9zaHV0ZG93bihzdHJ1Y3QgdXNiX2hjZCAqaGNkKQogCXhoY2lfaGFs
-dCh4aGNpKTsKIAogCS8qCi0JICogV29ya2Fyb3VuZCBmb3Igc3B1cmlvdXMgd2FrZXBzIGF0
-IHNodXRkb3duIHdpdGggSFNXLCBhbmQgZm9yIGJvb3QKLQkgKiBmaXJtd2FyZSBkZWxheSBp
-biBBREwtUCBQQ0ggaWYgcG9ydCBhcmUgbGVmdCBpbiBVMyBhdCBzaHV0ZG93bgorCSAqIFdv
-cmthcm91bmQgZm9yIHNwdXJpb3VzIHdha2V1cHMgYXQgc2h1dGRvd24gd2l0aCBIU1csIGFu
-ZCBmb3IgYm9vdAorCSAqIGZpcm13YXJlIGRlbGF5IGluIEFETC1QIFBDSCBpZiBwb3J0cyBh
-cmUgbGVmdCBpbiBVMyBhdCBzaHV0ZG93bi4KKwkgKiBBbHNvIHJlc2V0IG9uIGtleGVjIHRv
-IGxlYXZlIHRoZSBjb250cm9sbGVyIGluIGEgY2xlYW4gc3RhdGUgd2l0aAorCSAqIGFsbCBp
-bnRlcm5hbCBzdGF0ZSAoRENCQUEsIHNjcmF0Y2hwYWQsIHJpbmdzKSBjbGVhcmVkLCBzbyB0
-aGUgbmV4dAorCSAqIGtlcm5lbCBjYW4gaW5pdGlhbGl6ZSBpdCB3aXRob3V0IGludGVyZmVy
-ZW5jZSBmcm9tIHN0YWxlIHBvaW50ZXJzCisJICogaW50byB0aGUgb2xkIGtlcm5lbCdzIG1l
-bW9yeS4KIAkgKi8KIAlpZiAoeGhjaS0+cXVpcmtzICYgWEhDSV9TUFVSSU9VU19XQUtFVVAg
-fHwKLQkgICAgeGhjaS0+cXVpcmtzICYgWEhDSV9SRVNFVF9UT19ERUZBVUxUKQorCSAgICB4
-aGNpLT5xdWlya3MgJiBYSENJX1JFU0VUX1RPX0RFRkFVTFQgfHwKKwkgICAga2V4ZWNfaW5f
-cHJvZ3Jlc3MpCiAJCXhoY2lfcmVzZXQoeGhjaSwgWEhDSV9SRVNFVF9TSE9SVF9VU0VDKTsK
-IAogCXNwaW5fdW5sb2NrX2lycSgmeGhjaS0+bG9jayk7Ci0tIAoyLjU0LjAKCg==
+Record: `git log --author="Alex Cheema" -10 -- drivers/net/usb` found no
+prior local subsystem commits by the author. The patch was reviewed by
+Simon Horman and committed by Jakub Kicinski.
 
---------------ZjKhgj2VAadPB7IkJSUJfcKq--
+Record: Dependency found: stable trees must already contain
+`3ec8d7572a69` or an equivalent `apple_private_interface_info`; older
+trees without that support will not take this patch standalone.
+
+### Phase 4: Mailing List And External Research
+Record: `b4 dig -c a5148bc2fa27` found the original submission at the
+patch.msgid.link URL.
+
+Record: `b4 dig -c a5148bc2fa27 -a` found only v1; no later revision.
+
+Record: `b4 dig -c a5148bc2fa27 -w` showed the right net/USB maintainers
+and lists were included, including Oliver Neukum, Bjørn Mork, Jakub
+Kicinski, netdev, and linux-usb.
+
+Record: Full thread via `b4 mbox` had three messages: the patch, Simon
+Horman’s `Reviewed-by`, and patchwork-bot saying Jakub applied it to
+`netdev/net.git` as `a5148bc2fa27`. No NAKs or concerns observed.
+
+Record: WebFetch of lore/stable was blocked by Anubis, so stable-
+specific web discussion could not be independently checked. No stable
+nomination appeared in the fetched thread.
+
+### Phase 5: Code Semantic Analysis
+Record: Modified object is `cdc_devs[]`; no function body changed.
+
+Record: Call/reachability path verified: `cdc_ncm_driver.id_table =
+cdc_devs`, `.probe = usbnet_probe`; `usbnet_probe()` reads
+`prod->driver_info`, sets `dev->driver_info`, then calls `info->bind`,
+which is `cdc_ncm_bind()`, which calls `cdc_ncm_bind_common()`.
+
+Record: Key callees are endpoint discovery and bind setup in
+`cdc_ncm_bind_common()`, especially the verified endpoint check
+requiring status only when `FLAG_LINK_INTR` is set.
+
+Record: User reachability is USB device enumeration/probe when an
+affected Mac is connected to a Linux host. This is not syscall-triggered
+by an unprivileged local user; it is hardware-triggered.
+
+Record: Similar pattern found: existing iPhone/iPad Apple entries
+already bind private interfaces to `apple_private_interface_info`.
+
+### Phase 6: Stable Tree Analysis
+Record: `git merge-base --is-ancestor 3ec8d7572a69 <tag>` verified
+`3ec8d7572a69` is absent from `v5.15`, `v6.1`, `v6.6`, `v6.9`, and
+`v6.10`, but present in `v6.11`, `v6.12`, and `v7.0`.
+
+Record: `git show <tag>:drivers/net/usb/cdc_ncm.c | rg ...` verified
+`v6.11+` have `apple_private_interface_info` and iPhone/iPad Apple
+entries, but not the Mac `0x1905` entries.
+
+Record: `git apply --check` succeeded against the current `7.0.5` tree.
+Backport should be clean for trees with the same Apple-private support;
+older trees need the prerequisite and are not standalone targets.
+
+Record: No alternate related stable fix was found locally.
+
+### Phase 7: Subsystem Context
+Record: Subsystem is USB networking driver code, under
+`drivers/net/usb`. Criticality is important for users of this hardware,
+not core/universal.
+
+Record: `scripts/get_maintainer.pl -f drivers/net/usb/cdc_ncm.c`
+confirmed the patch was sent to the relevant USB CDC Ethernet and
+networking maintainers/lists. Recent `drivers/net/usb` history shows
+active maintenance.
+
+### Phase 8: Impact And Risk
+Record: Affected users are Linux hosts connecting to Apple Silicon Macs
+via USB-C direct CDC NCM networking.
+
+Record: Trigger is plugging in the matching Mac USB device. The failure
+is likely whenever the unsupported `05ac:1905` private interfaces are
+exposed and lack the interrupt status endpoint, based on the commit body
+and verified bind logic.
+
+Record: Failure mode is functional loss: no netdev appears. Severity is
+medium by generic bug severity, but it fits the stable exception for new
+device IDs/hardware quirks.
+
+Record: Benefit is high for affected hardware users: direct networking
+works without overrides/out-of-tree modules. Risk is very low: two
+exact-match USB ID entries selecting existing behavior.
+
+### Phase 9: Final Synthesis
+Evidence for backporting: it is a classic stable-acceptable hardware
+quirk/device ID addition; it fixes a verified bind failure mechanism; it
+is tiny and contained; it reuses existing Apple private CDC NCM support;
+it was reviewed and applied by netdev maintainership; it applies cleanly
+to the current stable-style tree.
+
+Evidence against backporting: it is not a crash/security/data-corruption
+fix, and it is not standalone for stable trees older than `v6.11` unless
+`3ec8d7572a69` is also present.
+
+Stable rules checklist:
+1. Obviously correct and tested: yes; exact ID entries, author-tested,
+   reviewer accepted.
+2. Fixes a real bug: yes; no netdev appears for matching hardware.
+3. Important issue: yes under hardware support/quirk exception, though
+   not critical severity.
+4. Small and contained: yes, 8 insertions in one table.
+5. No new APIs/features: yes, no API or new driver; only IDs for
+   existing behavior.
+6. Applies to stable: yes for trees with Apple private support; older
+   trees need prerequisite handling.
+
+Exception category: new USB device ID / hardware quirk for an existing
+driver path.
+
+## Verification
+- [Phase 1] Parsed `git show a5148bc2fa27`: confirmed subject, body,
+  trailers, reviewed-by, link, and maintainer signoff.
+- [Phase 2] Read `drivers/net/usb/cdc_ncm.c`: confirmed `cdc_ncm_info`
+  has `FLAG_LINK_INTR`, `apple_private_interface_info` does not, and
+  `cdc_ncm_bind_common()` fails missing status endpoints when
+  `FLAG_LINK_INTR` is set.
+- [Phase 3] `git blame` confirmed Apple private support and existing
+  Apple IDs came from `3ec8d7572a69`.
+- [Phase 3] `git show 3ec8d7572a69` confirmed it introduced Apple
+  private CDC NCM support and the conditional endpoint check.
+- [Phase 4] `b4 dig -c a5148bc2fa27`: found the original lore
+  submission.
+- [Phase 4] `b4 dig -a`: only v1 found.
+- [Phase 4] `b4 dig -w`: confirmed relevant maintainers/lists were
+  included.
+- [Phase 4] `b4 mbox`: confirmed Simon Horman review and patchwork
+  application by Jakub Kicinski.
+- [Phase 5] `rg` and `ReadFile` traced `cdc_devs[]` to `usbnet_probe()`
+  to `cdc_ncm_bind()` to `cdc_ncm_bind_common()`.
+- [Phase 6] Tag ancestry checks confirmed prerequisite exists in
+  `v6.11+` but not `v6.10` and older checked tags.
+- [Phase 6] `git apply --check` confirmed clean apply to current tree.
+- UNVERIFIED: Independent confirmation that all current Apple Silicon
+  Macs use PID `0x1905`; this is author-stated in the patch, not
+  independently verified here.
+- UNVERIFIED: Stable mailing-list search via WebFetch was blocked by
+  Anubis; no stable-specific discussion was visible in the fetched `b4`
+  thread.
+
+This should be backported to stable trees that already contain the Apple
+private CDC NCM support, because it is a low-risk hardware ID/quirk fix
+that restores networking for real hardware.
+
+**YES**
+
+ drivers/net/usb/cdc_ncm.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+index bb9929727eb93..0223a172851ec 100644
+--- a/drivers/net/usb/cdc_ncm.c
++++ b/drivers/net/usb/cdc_ncm.c
+@@ -2012,6 +2012,14 @@ static const struct usb_device_id cdc_devs[] = {
+ 		.driver_info = (unsigned long)&apple_private_interface_info,
+ 	},
+ 
++	/* Mac */
++	{ USB_DEVICE_INTERFACE_NUMBER(0x05ac, 0x1905, 0),
++		.driver_info = (unsigned long)&apple_private_interface_info,
++	},
++	{ USB_DEVICE_INTERFACE_NUMBER(0x05ac, 0x1905, 2),
++		.driver_info = (unsigned long)&apple_private_interface_info,
++	},
++
+ 	/* Ericsson MBM devices like F5521gw */
+ 	{ .match_flags = USB_DEVICE_ID_MATCH_INT_INFO
+ 		| USB_DEVICE_ID_MATCH_VENDOR,
+-- 
+2.53.0
+
 
