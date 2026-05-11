@@ -1,174 +1,136 @@
-Return-Path: <linux-usb+bounces-37252-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37253-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mOfAMom4AWocjAEAu9opvQ
-	(envelope-from <linux-usb+bounces-37252-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 13:07:53 +0200
+	id aERpJsPPAWqKkAEAu9opvQ
+	(envelope-from <linux-usb+bounces-37253-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 14:46:59 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 813A250C7A7
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 13:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C4BE50E26B
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 14:46:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A361A30233D5
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 11:07:43 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5E0F0306C4EF
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2026 12:31:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8902366075;
-	Mon, 11 May 2026 11:07:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 893AD401492;
+	Mon, 11 May 2026 12:26:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cfLes43N"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="lWmkcIoE";
+	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="g+AI01c+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3387B364046
-	for <linux-usb@vger.kernel.org>; Mon, 11 May 2026 11:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755EE3FE373;
+	Mon, 11 May 2026 12:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778497662; cv=none; b=sbsEAEYXj1gclJ+wvNGX+bxJBUd8mjZXrs7o7FYxLl0sJ09mkPA7O4TeegrVD7ZlcesIPTCt8FNHjAv+Qg+fnod0qKOSS/yV7JdSMn1PKiDZJv/TxidNsmbBWLSSDF9bDwWKnHuBRu/+w9jwc5eJteLiwHP7L72LClLehMF9DOU=
+	t=1778502417; cv=none; b=nEpoVd3TSCchnht05l/3CKVt+rz/idJCyWtkDhqoIPyHafR/3PS3VdPP9tsHne8LbwFHZTlMCyO5LC7dEg79gnklpmWbBCKRerD/zE/674u4OfVgKh3o3uByrGNmyBOxJuqF/0IT1nv5nMk6aJV9sSK7dgxXJpCRo8MOzcVwq/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778497662; c=relaxed/simple;
-	bh=90QOLWTZRJ9Oe39W7j96XxurzXBxvrEjaFrO1jMy5NE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oRjlMdolxBWg9Iifm5qAbo9wk80EkjIND+e6SKmWFjKJllXvLKDFlXJa7kXUYptdot83A5WAt1Znm0PYRfMKoQpxIYfRKVd/rhlHl5Oy3fsD65U6Hw6P1ULbNKddDIJxX7jqt7+3FKmePlB0UkJGc5D/N/7FDQQEHfxwD3CBj1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cfLes43N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F216EC2BD00
-	for <linux-usb@vger.kernel.org>; Mon, 11 May 2026 11:07:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778497662;
-	bh=90QOLWTZRJ9Oe39W7j96XxurzXBxvrEjaFrO1jMy5NE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cfLes43NLXfZQzhaK9vlw1oPj5oY+gDIRDv058/DACoyLx8HdXKboDKRR3C3SPkfv
-	 rbkrnkxWJLZL9/fYiOAk5DeunD6pg1tXgSaCXC0zHDTicKu0XDHvylM6bNqqKlhe+a
-	 2TNnU48ynm3s4GU6rCPg1H+C0So9uidnbB8aNp5iYavX09cYkp05vtTFaHNelEyjTc
-	 8qUr6ydI37F1H5ogSc+fVvtF3ic4Lsp/MMP9gfQRBTOuwseyZcnCh371JWX7+w7z2+
-	 H9MhEu/zTP/iuT6EyWi1OvICFWCROoeVpQ1hA9FYo4zZIoYPQtdvUbOBTeoV0rWGGV
-	 ZMpcyvfjQyzwA==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-39394e1e8f3so34366221fa.1
-        for <linux-usb@vger.kernel.org>; Mon, 11 May 2026 04:07:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ+Wd3XrVoLw/ysG8ORi3dtTzaY3SLgnHNkmmoQjmOZP4RkrYMXqFmWbnFA2S+MtCEEa45Xeqc/Nors=@vger.kernel.org
-X-Gm-Message-State: AOJu0YweqY3zhRL99pOeMkgUuTlIp4TU+0Xl3xEgqS52vts4jnwh8EqE
-	HXKrHroiTBylSJpkC9Sb8ZuiyNgTA/zctiRJBoUhe/toeNTloiG5XvzsgIfG+kxkCagiVxYQcff
-	iZOSs4tX7KF0Vervw+0kjedSlsjYiN8uUOc4FpelqlQ==
-X-Received: by 2002:a05:651c:41d8:b0:393:d1d4:9d9e with SMTP id
- 38308e7fff4ca-39407e53a62mr29246711fa.0.1778497660612; Mon, 11 May 2026
- 04:07:40 -0700 (PDT)
+	s=arc-20240116; t=1778502417; c=relaxed/simple;
+	bh=tzGSA4xuUafYNRryXRdJZsE6UAMFY0aQHpt/T3G3M08=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I/jmyiPVzANCJY4Svz0sPSeaDOaBCaUD9i7YLjWE0aP6rbM88pYsQRCgS7Yht86P0MBJq55Ft4qNYyCB5Jxz564Htl/cnhUC3B8k83PKmqJ4442FotM7LK2fbBj9b+67Xp0onjCMPjQUSdO7U8LuenlQo5CIR+Qc0L4pzNmNjwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=lWmkcIoE; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=g+AI01c+; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1778502277; bh=9fESPzzh5tkV6zO5hJFJCOe
+	PTtrzHZaB3oLTCyImSzQ=; b=lWmkcIoEzyjy8bvXROoNfwBXyrGhaa20y19zFqK4FM9W2o3bJo
+	bmA17tzwxK6BX9gMc/q/B3BN6mEvDALHtv29xMA4voHdmArQQx1ZnQGBKgJcqsBHShRrPMH6swu
+	85QNS4voQIKOYlPmZ5jPJRDHrddK/H/6fVQ2Wgcit99xlDbUJ8tk3fCq6d3f8mCqwa7vgxEwAq+
+	nw6FhoxdQeHaB+FxOXG3lbGro89NUnFEzRAK6WDLTwykJ21c1qAO6OPpQD1oEc/f3ihTOlNsX7w
+	1yD5/DUb7nJueZ+hjQSeokOfnyyFCx1CzdyuD/55IUIexnOuPB4Dpbf8UcvDQHenBQw==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1778502277; bh=9fESPzzh5tkV6zO5hJFJCOe
+	PTtrzHZaB3oLTCyImSzQ=; b=g+AI01c+rPJNIAUVDnyefuvLXW6/B59JVpnacLJFCStGZIfSEb
+	IsoN6SWkrogA1QaywmUSc0C0W3IOdJvt4BAg==;
+From: vipoll <vipoll@mainlining.org>
+To: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	~postmarketos/upstreaming@lists.sr.ht,
+	Victor Paul <vipoll@mainlining.org>,
+	stable@vger.kernel.org
+Subject: [PATCH] usb: typec: fsa4480: Add chip id read retry loop
+Date: Mon, 11 May 2026 16:22:46 +0400
+Message-ID: <20260511122246.31673-1-vipoll@mainlining.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260511-bm92t-v2-0-2145e4f4386b@gmail.com> <20260511-bm92t-v2-1-2145e4f4386b@gmail.com>
-In-Reply-To: <20260511-bm92t-v2-1-2145e4f4386b@gmail.com>
-From: Bartosz Golaszewski <brgl@kernel.org>
-Date: Mon, 11 May 2026 13:07:28 +0200
-X-Gmail-Original-Message-ID: <CAMRc=MeA240ZeQTycrdpt1-9UL38nmDqgMKP3vrKa7vmsx8W7Q@mail.gmail.com>
-X-Gm-Features: AVHnY4KUAWwOxQE6mN_7EjI9Br-4KEhphWwprxeTnYPRdteZi0IcgsQNw2xtrTk
-Message-ID: <CAMRc=MeA240ZeQTycrdpt1-9UL38nmDqgMKP3vrKa7vmsx8W7Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] usb: typec: bm92txx: add Rohm BM92TXX support
-To: azkali.limited@gmail.com
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, CTCaer <ctcaer@gmail.com>, 
-	Linus Walleij <linusw@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 813A250C7A7
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 1C4BE50E26B
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[mainlining.org,reject];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[mainlining.org:s=202507r,mainlining.org:s=202507e];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37252-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linux.intel.com,linuxfoundation.org,gmail.com,kernel.org,vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37253-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[mainlining.org:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[vipoll@mainlining.org,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mainlining.org:email,mainlining.org:mid,mainlining.org:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On Sun, May 10, 2026 at 8:32=E2=80=AFPM Alexandre Hamamdjian via B4 Relay
-<devnull+azkali.limited.gmail.com@kernel.org> wrote:
->
-> From: CTCaer <ctcaer@gmail.com>
->
-> Add a driver for the Rohm Semiconductor BM92TXX family of USB Type-C
-> and Power Delivery controllers. The IC integrates an MCU that runs the
-> PD state machine; the host configures it and observes status over I2C
-> and reacts to a level-triggered ALERT interrupt.
->
-> The driver exposes the controller through extcon and a USB role switch,
-> manages the VBUS sink, optional VBUS source and battery-charger
-> regulators along with the VCONN-enable GPIO, and applies per-PDO
-> charging current limits (5 V, 9 V, 12 V, 15 V) sourced from device
-> tree. DisplayPort alternate-mode handling and dock LED behaviour are
-> configurable through rohm,* properties so the same driver can serve
-> boards that wire the part up differently. A debugfs interface under
-> bm92txx/ is provided for register dumps and low-level command access
-> when CONFIG_DEBUG_FS is enabled.
->
-> Signed-off-by: CTCaer <ctcaer@gmail.com>
-> Signed-off-by: Alexandre Hamamdjian <azkali.limited@gmail.com>
-> ---
+From: Victor Paul <vipoll@mainlining.org>
 
-...
+The first read attempt may fail on some devices (e.g. Xiaomi Pad 6)
 
-> diff --git a/drivers/usb/typec/bm92txx.c b/drivers/usb/typec/bm92txx.c
-> new file mode 100644
-> index 000000000000..39e20a4394c1
-> --- /dev/null
-> +++ b/drivers/usb/typec/bm92txx.c
-> @@ -0,0 +1,2634 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +/*
-> + * Driver for Rohm BM92TXX USB Type-C and Power Delivery controller
-> + *
-> + * Copyright (c) 2020-2023 CTCaer <ctcaer@gmail.com>
-> + *
-> + * Authors:
-> + *     CTCaer <ctcaer@gmail.com>
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License as published by
-> + * the Free Software Foundation; either version 2 of the License, or
-> + * (at your option) any later version.
-> + *
-> + * This program is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> + * GNU General Public License for more details.
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/i2c.h>
-> +#include <linux/gpio.h>
+Cc: stable@vger.kernel.org
+Signed-off-by: Victor Paul <vipoll@mainlining.org>
+---
+ drivers/usb/typec/mux/fsa4480.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Sorry but I have to NAK this. This is a legacy header (as per it's
-documentation) and must no longer be used in new code. Please refer to
-the kernel docs and use the APIs from linux/gpio/consumer.h instead.
+diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
+index c54e42c7e6a1..ae496c0fa805 100644
+--- a/drivers/usb/typec/mux/fsa4480.c
++++ b/drivers/usb/typec/mux/fsa4480.c
+@@ -256,6 +256,7 @@ static int fsa4480_probe(struct i2c_client *client)
+ 	struct typec_switch_desc sw_desc = { };
+ 	struct typec_mux_desc mux_desc = { };
+ 	struct fsa4480 *fsa;
++	int retries = 5;
+ 	int val = 0;
+ 	int ret;
+ 
+@@ -278,7 +279,12 @@ static int fsa4480_probe(struct i2c_client *client)
+ 	if (ret && ret != -ENODEV)
+ 		return dev_err_probe(dev, ret, "Failed to get regulator\n");
+ 
+-	ret = regmap_read(fsa->regmap, FSA4480_DEVICE_ID, &val);
++	do {
++		ret = regmap_read(fsa->regmap, FSA4480_DEVICE_ID, &val);
++		if (!ret)
++			break;
++		usleep_range(1000, 1200);
++	} while (retries--);
+ 	if (ret)
+ 		return dev_err_probe(dev, -ENODEV, "FSA4480 not found\n");
+ 
+-- 
+2.52.0
 
-Bartosz
 
