@@ -1,246 +1,212 @@
-Return-Path: <linux-usb+bounces-37337-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37338-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6FkgG7UzA2oA1gEAu9opvQ
-	(envelope-from <linux-usb+bounces-37337-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 16:05:41 +0200
+	id 2C86Nr0/A2rO2AEAu9opvQ
+	(envelope-from <linux-usb+bounces-37338-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 16:57:01 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C65F521F12
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 16:05:41 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F62152316C
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 16:57:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id F192C304D172
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 14:01:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D03503201629
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 14:02:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59C933A71AA;
-	Tue, 12 May 2026 14:01:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC85A3A7192;
+	Tue, 12 May 2026 14:02:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZixUqq7R"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kTGzg6Xq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892ED3A59AD
-	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 14:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5CB43A59B7;
+	Tue, 12 May 2026 14:02:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778594502; cv=none; b=Vd9MzCEPjSQM89MDuQPhEMhynqqxeX9KjBnfCFHXNupVLEplWKAQUz1GpV4XXCGAwSE0O+8xwl8GL272lnTEwG1qjgBRDpb+sHsleGx8VYIo+viHzxRcOkD8i+yukHJffcnvuZG4/HzkXZFdOdAO8VFnIa7KN6FwAd5fcLtabSI=
+	t=1778594534; cv=none; b=SMt3PWu4BwrQQIANv2VjeGkiOh2EX3qMNGjh21djphxiXRrBuXkFbiysXvMWwAFTf4Ag/mNZi0YtWfpA8oSmbAr0ApIMCGZnjQLcNl2+nxEY/ma9pvJ/AfZbxalsWqCdcuOf3JP9qsy8e8cCJCQrZRr6geEKr+bv8bd7vebvGNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778594502; c=relaxed/simple;
-	bh=YJcZqzcZioGDd6oNQJk6R3fdx1ohECUjfKesgeMv1Cc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sm5kbw3t7OMrzomi0ydUqzdTvv3nitr8/M0xTj5DZfPzbaiKtJOpkTBlBqPTmP3GZ3DJ4Iw5rCNmQr9Nl7UoG9KCm4Uzdwzc4CXbfUUkuHX7Cs2/2OGZpsIbGAcKXCb6v6yo7nsZkdkSmKosgZ1BT2DXOcZuEnXuU7cwKGrag2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZixUqq7R; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1778594534; c=relaxed/simple;
+	bh=sAD+JEWo3FCqfAWaC6f6Qa6Mg2qjA4rWTa25pm+Acwc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nzu71HCvatECumDiLBF/KDC3Y1Nl9ndaYq+0tNEPVm4AURB0egWV9vMtIlE2q35QbZghANLu/AzjXMcrhsIdQCJbNtTlA62By2K02BNVqL6W9iwfuYCCv8L56QUh3Q3AvS+vW+YmiFc5GYq+p5U3++RTaQuLas6dtlix/1T3dJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kTGzg6Xq; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778594502; x=1810130502;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=YJcZqzcZioGDd6oNQJk6R3fdx1ohECUjfKesgeMv1Cc=;
-  b=ZixUqq7RnYBKZWMA9s9//E6L4kb6AJ1kg/BdGAsDVF4vbTzfdo5UzZNd
-   GEDJlISD8uMH5j349mLvIByl48ASSGCLSS0x29E3/Q+nn9Tq09zIJ26bq
-   zn8k6yhpkN8OjOq6pryATECILVy1mjI8u5rd63EwnQS7I/uWMH3hI9aJL
-   4Tw4/olLUZSUDrsU4zSid2+lD2u3N+1gyR07jtGDeZMdsscw6D/ocOHq0
-   ku1DBXDBpHd814OSgV4UA8FFxBLT5rOa/P4N/FPr48aC6Vy7Zk36Rpqqt
-   E3P47ThB62CcLn9u2ftbYnJI11KpX718Wg61klh89H+AC1GEBXtL94Mdc
-   w==;
-X-CSE-ConnectionGUID: CGauNIcbQMSy7JmEBkfraQ==
-X-CSE-MsgGUID: nf6670UkQumqNgW+0ZaluQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11784"; a="78649494"
+  t=1778594533; x=1810130533;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sAD+JEWo3FCqfAWaC6f6Qa6Mg2qjA4rWTa25pm+Acwc=;
+  b=kTGzg6XqFcPCRQIbCTIzHSeO22HlZr35xnESQ74rV4aQR8pd/GrUOX8q
+   /lA1ViAbQ9Mmo5JLjOMoLWtfWaFywbhR32wyMn5JSvE0NIadHzTSFmhWc
+   guYbP+b+QArmZCYvi0nolXhDY4mIj3aq8J21xzHwjyW5rkklb1Zgvv0h/
+   xdzS0geVT/ZX8Ncxa/Upw6UVyy1pHQfVdhMtrdg8J29UpdW1cg9B3kjnC
+   IS3KV9k7MA4/bplwf0RGzfH8U5qejXhMvgEu5/xr+Me8hI/p1cWnNrd9X
+   iuG+0oImxtjCOSuNxJaU966ue8dHzwCXRdfOTYgmWfhzmN3PGzg59lw5b
+   Q==;
+X-CSE-ConnectionGUID: HHgWwndPTSCYkQ2QQshNvQ==
+X-CSE-MsgGUID: I1zFR2tVQJmZdb+y+3jiBw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11784"; a="82069827"
 X-IronPort-AV: E=Sophos;i="6.23,231,1770624000"; 
-   d="scan'208";a="78649494"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 07:01:41 -0700
-X-CSE-ConnectionGUID: g3QtO69kTremNCHv5BfHHg==
-X-CSE-MsgGUID: Xnaoz2YHQfKpzdNUhvK3Cw==
+   d="scan'208";a="82069827"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 07:02:12 -0700
+X-CSE-ConnectionGUID: i85guJCwQOKSQTkyBj0MfA==
+X-CSE-MsgGUID: hUlFft3ITWONubIPkj/5TA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,231,1770624000"; 
-   d="scan'208";a="239599485"
-Received: from pgcooper-mobl3.ger.corp.intel.com (HELO [10.245.245.165]) ([10.245.245.165])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 07:01:40 -0700
-Message-ID: <fc2d9862-6c46-4161-8fd5-68b9e6c2e8bb@linux.intel.com>
-Date: Tue, 12 May 2026 17:01:37 +0300
+   d="scan'208";a="237864181"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa009.jf.intel.com with ESMTP; 12 May 2026 07:02:10 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 1308898; Tue, 12 May 2026 16:02:09 +0200 (CEST)
+Date: Tue, 12 May 2026 16:02:09 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Konrad Dybcio <konradybcio@kernel.org>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	usb4-upstream@oss.qualcomm.com,
+	Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>
+Subject: Re: [PATCH v2 2/4] thunderbolt: Separate out common NHI bits
+Message-ID: <20260512140209.GE84797@black.igk.intel.com>
+References: <20260428-topic-usb4_nonpcie_prepwork-v2-0-452fb9d63f77@oss.qualcomm.com>
+ <20260428-topic-usb4_nonpcie_prepwork-v2-2-452fb9d63f77@oss.qualcomm.com>
+ <20260504065402.GB6785@black.igk.intel.com>
+ <7aab3f25-7609-499a-b701-8301719b9a82@oss.qualcomm.com>
+ <20260512132008.GC84797@black.igk.intel.com>
+ <80e0bd64-c99d-4dee-9417-3036f72658f2@oss.qualcomm.com>
+ <20260512135433.GD84797@black.igk.intel.com>
+ <253ad0dc-1fc3-4e6f-841b-c7e9fd7320c7@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: xhci_hcd: AMD Raphael/Granite Ridge USB 2.0 xHCI [1022:15b8] dies
- on resume from suspend
-To: Michal Pecio <michal.pecio@gmail.com>,
- Martin Alderson <martinalderson@gmail.com>
-Cc: linux-usb@vger.kernel.org
-References: <CA+_z3hRjPnQOrEp7uXsNsu6wzqQp9O6FT18i=XcSC7k74Xd2QA@mail.gmail.com>
- <20260330020749.18fbe433.michal.pecio@gmail.com>
- <CA+_z3hRTD-QAgv3jZhOZUUPA0sNZ8946jfYwYsZ=RnQJ0LG7cw@mail.gmail.com>
- <20260404152438.582f0451.michal.pecio@gmail.com>
- <CA+_z3hTMfggtv+u_A_SRyb2FRzVjm=Nav5NRCTuhmEthb8x0jw@mail.gmail.com>
- <20260509180603.6f67c9d8.michal.pecio@gmail.com>
- <CA+_z3hT_n09fAszT+DkoTHLzracB7fQZwkiiTxGGBJxhFcD8hg@mail.gmail.com>
- <20260512120334.4eef3d0b.michal.pecio@gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20260512120334.4eef3d0b.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 0C65F521F12
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <253ad0dc-1fc3-4e6f-841b-c7e9fd7320c7@oss.qualcomm.com>
+X-Rspamd-Queue-Id: 4F62152316C
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	DKIM_TRACE(0.00)[intel.com:+];
-	TAGGED_FROM(0.00)[bounces-37337-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,vger.kernel.org,oss.qualcomm.com,qti.qualcomm.com];
 	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37338-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linux.intel.com:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,black.igk.intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On 5/12/26 13:03, Michal Pecio wrote:
-> On Sun, 10 May 2026 17:29:26 +0100, Martin Alderson wrote:
->> 1. The timing is during suspend in every single failure I have logs
->> for. I went back through 7 weeks of persistent journals and pulled the
->> context around every "HC died" event. All 9 failures show the same
->> sequence:
->>
->>    xhci_hcd 0000:0f:00.0: xHCI host not responding to stop endpoint command
->>    xhci_hcd 0000:0f:00.0: xHCI host controller not responding, assume dead
->>    xhci_hcd 0000:0f:00.0: HC died; cleaning up
->>    PM: suspend devices took 5.5--6.1 seconds      <-- elevated
->>    amdgpu 0000:03:00.0: MODE1 reset
->>    ACPI: PM: Preparing to enter system sleep state S3
->>
->> So it's reliably during suspend, before S3 entry, and the elevated
->> "suspend devices took" matches the 5s xHCI stop-endpoint timeout. A
->> clean suspend on the same boot takes ~0.46s.
+On Tue, May 12, 2026 at 03:58:34PM +0200, Konrad Dybcio wrote:
+> On 5/12/26 3:54 PM, Mika Westerberg wrote:
+> > On Tue, May 12, 2026 at 03:43:12PM +0200, Konrad Dybcio wrote:
+> >> On 5/12/26 3:20 PM, Mika Westerberg wrote:
+> >>> On Tue, May 12, 2026 at 03:06:58PM +0200, Konrad Dybcio wrote:
+> >>>> On 5/4/26 8:54 AM, Mika Westerberg wrote:
+> >>>>> Hi,
+> >>
+> >> [...]
+> >>
+> >>>>>> +/*
+> >>>>>> + * During suspend the Thunderbolt controller is reset and all PCIe
+> >>>>>> + * tunnels are lost. The NHI driver will try to reestablish all tunnels
+> >>>>>> + * during resume. This adds device links between the tunneled PCIe
+> >>>>>> + * downstream ports and the NHI so that the device core will make sure
+> >>>>>> + * NHI is resumed first before the rest.
+> >>>>>> + */
+> >>>>>> +bool tb_apple_add_links(struct tb_nhi *nhi)
+> >>>>>
+> >>>>> Okay you moved it here good. I think we can call it in nhi_pci_probe()
+> >>>>> directly so no need to expose outside.
+> >>>>
+> >>>> Yeah that seems like a good idea. It's already there, behind N calls
+> >>>> in the software CM case.
+> >>>>
+> >>>> Do we have to check the CM type though, or do you think it'd be fine
+> >>>> to just call it unconditionally? (either because there are presumably
+> >>>> no Apple machines with ICM or because these devlinks would be harmless?)
+> >>>
+> >>> I think you can call it unconditionally. It only does something for TB1-2
+> >>> Apple systems.
+> >>>
+> >>> For Apple TB3 we used to start ICM firmware but this was changed as the
+> >>> driver learned SW CM. However, we never setup any device links so this
+> >>> would not change anything.
+> >>
+> >> OK. I'm keeping tb_acpi_add_link() as-is, since that's both bus- and
+> >> arch-independent.
+> >>
+> >> However, doing just something like:
+> >>
+> >> diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+> >> index cb5d028de3bc..f5ddc8ddb8bb 100644
+> >> --- a/drivers/thunderbolt/tb.c
+> >> +++ b/drivers/thunderbolt/tb.c
+> >> @@ -3327,7 +3327,7 @@ struct tb *tb_probe(struct tb_nhi *nhi)
+> >>          * before the PCIe/USB stack is resumed so complain here if we
+> >>          * found them missing.
+> >>          */
+> >> -       if (!tb_apple_add_links(nhi) && !tb_acpi_add_links(nhi))
+> >> +       if (!tb_acpi_add_links(nhi))
+> >>                 tb_warn(tb, "device links to tunneled native ports are missing!\n");
+> >>
+> >>
+> >> diff --git a/drivers/thunderbolt/pci.c b/drivers/thunderbolt/pci.c
+> >> index ca50e3584cac..e0abd1d503c5 100644
+> >> --- a/drivers/thunderbolt/pci.c
+> >> +++ b/drivers/thunderbolt/pci.c
+> >> @@ -294,6 +294,8 @@ static int nhi_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> >>  
+> >>         pci_set_master(pdev);
+> >>  
+> >> +       tb_apple_add_links(nhi)
+> >> +
+> >>         return nhi_probe(&nhi_pci->nhi);
+> >>  }
+> >>
+> >>
+> >> Will cause the warning to show up. And adding something like
+> >> `nhi->device_links_done` is a little ugly.. Ideas?
+> > 
+> > Ah in Qualcomm case? We are going to add tb_of_add_links() as well, right (or
+> > something along thoese lines)? Then tb.c does:
+> > 
+> >        if (!tb_acpi_add_links(nhi) && !tb_of_add_links(nhi))
+> >                  tb_warn(tb, "device links to tunneled native ports are missing!\n");
+> > 
+> > In the meantime it is okay to have that warn because we really do want to
+> > have those links in place :)
 > 
-> The S3 state probably doesn't matter, chances are that it would also
-> happen with s2idle or hibernation.
-> 
-> Could you enable dynamic debug before every suspend (or permanently
-> on every boot) and collect a dmesg log of this happening again?
-> And maybe also a snapshot of debugfs directory after resume but before
-> unbinding xhci_hcd. These may contain clues what triggered it.
+> No no, I meant that with the diff above, tb_apple_add_links() failing
+> would not lead to any warning messages, and it would always hit the
+> warning in tb.c
 
-It's possible there is a race between queuing a command and suspend.
-It looks like nothing is preventing a new command from being queued while
-suspend stops the host from running, thus causing commands to timeout.
-
-Suspend isn't checking if there are pending commands, or if command timer
-is running either.
-
-I wrote some debugging code, can be found in my debug_hc_died_cmdring_race branch:
-git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git debug_hc_died_cmdring_race
-https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=debug_hc_died_cmdring_race
-
-If it prints
-   "Can't queue command, xHC not accessible (stopped?)"
-or
-   "Suspending and stopping xHC with pending command(s)!!!"
-Then we have a queue_command - suspend race.
-
-Code below for reference
-Mathias
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index e47e644b296e..50ce4a4a7fe3 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -4353,6 +4353,7 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
-  			 u32 field3, u32 field4, bool command_must_succeed)
-  {
-  	int reserved_trbs = xhci->cmd_ring_reserved_trbs;
-+	struct usb_hcd *hcd = xhci_to_hcd(xhci);
-  	int ret;
-  
-  	if ((xhci->xhc_state & XHCI_STATE_DYING) ||
-@@ -4362,6 +4363,14 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
-  		return -ESHUTDOWN;
-  	}
-  
-+	if (!HCD_HW_ACCESSIBLE(hcd)) {
-+		xhci_err(xhci, "Can't queue command, xHC not accessible (stopped?)\n");
-+		xhci_err(xhci, "called by %pS from %pS\n",
-+			 __builtin_return_address(0),
-+			 __builtin_return_address(1));
-+		return -ESHUTDOWN;
-+	}
-+
-  	if (!command_must_succeed)
-  		reserved_trbs++;
-  
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index a54f5b57f205..04279fbbe1dd 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -949,6 +949,34 @@ static bool xhci_pending_portevent(struct xhci_hcd *xhci)
-  	return false;
-  }
-  
-+static void xhci_dump_ring(struct xhci_hcd *xhci, struct xhci_ring *ring)
-+{
-+	struct xhci_segment	*seg;
-+	union xhci_trb		*trb;
-+	dma_addr_t		dma;
-+	char			str[XHCI_MSG_MAX];
-+	int			i, j;
-+
-+	seg = ring->first_seg;
-+	dma =  xhci_trb_virt_to_dma(ring->deq_seg, ring->dequeue);
-+
-+        xhci_err(xhci, "Dequeue: %pad\n", &dma);
-+
-+	for (i = 0; i < ring->num_segs; i++) {
-+		for (j = 0; j < TRBS_PER_SEGMENT; j++) {
-+			trb = &seg->trbs[j];
-+			dma = seg->dma + j * sizeof(*trb);
-+			xhci_err(xhci, "%pad: %s\n", &dma,
-+				 xhci_decode_trb(str, XHCI_MSG_MAX,
-+						 le32_to_cpu(trb->generic.field[0]),
-+						 le32_to_cpu(trb->generic.field[1]),
-+						 le32_to_cpu(trb->generic.field[2]),
-+						 le32_to_cpu(trb->generic.field[3])));
-+		}
-+		seg = seg->next;
-+	}
-+}
-+
-  /*
-   * Stop HC (not bus-specific)
-   *
-@@ -999,6 +1027,12 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
-  	/* step 1: stop endpoint */
-  	/* skipped assuming that port suspend has done */
-  
-+	/* Check if command ring is empty */
-+	if (!list_empty(&xhci->cmd_list)) {
-+		xhci_err(xhci, "Suspending and stopping xHC with pending command(s)!!!\n");
-+		xhci_dump_ring(xhci, xhci->cmd_ring);
-+	}
-+
-  	/* step 2: clear Run/Stop bit */
-  	command = readl(&xhci->op_regs->command);
-  	command &= ~CMD_RUN;
+Got it. Right. Let's then keep it as is for now (e.g don't move it from
+tb.c).
 
