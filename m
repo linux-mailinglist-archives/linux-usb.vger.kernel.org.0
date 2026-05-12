@@ -1,233 +1,186 @@
-Return-Path: <linux-usb+bounces-37302-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37303-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +ByVLYDcAmrJyAEAu9opvQ
-	(envelope-from <linux-usb+bounces-37302-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 09:53:36 +0200
+	id EO1VFljjAmpEyQEAu9opvQ
+	(envelope-from <linux-usb+bounces-37303-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 10:22:48 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3497B51C3E6
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 09:53:35 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A31E51C9BD
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 10:22:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8B67C30182A6
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 07:51:15 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CBCDB30234F2
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 08:22:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6D81480DE5;
-	Tue, 12 May 2026 07:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57DC436F91E;
+	Tue, 12 May 2026 08:22:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jMRWmgM4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R1MHgwbW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8B036F8FE;
-	Tue, 12 May 2026 07:51:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 875A636F8E9
+	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 08:22:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778572273; cv=none; b=kOQV6q2ro5mBYZRwyGQmz7Malox1h6/3IZzu4mRkzdks0+JGFAkVQAm0LK9/CV2NvGL5lI8qsn7mFRhe2V4RgYbteJdjoW8lJF9pDdoLXZLEU0HBmC/64ACzoQIaqgVPltn7ot8s4QgmEEjKxy0o7mguWutQmnvH3dTcNlpCVrQ=
+	t=1778574161; cv=none; b=NZ7ncwKq+BFe9sk9DTLoKobPSEXYvzoty5bhyrHa5lXbPkGcl5jwhG7jEBgu3vWtQ3QsY8jE8hvzWovRJpt67JGUEjSM17FHx2aQPgvk/3kSRgd3yh7d5lTXyjCSpmmdir76Qitr+DR60G1YvKzcI4FOzcHW4Ii8QeMB44umcqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778572273; c=relaxed/simple;
-	bh=GIepLcHTJURrppAg6CpDxGEX4YxETo5qs9bcQX5fU9g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u44eE8QhFCPwW53v23n801epTQCOEGrngMp1x6Ta3FhJcLAuWg+Ty6sb9FbmaSAKIvb5wmAvIW+eUScayf6AQOV3io0K19hrT7120WLzfSppXkxAaRPhXYpB+QMd573nyIWQvHhX3gFGwgNo2SNsQ/gbzRAYFvuPiXrq/U7ttJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jMRWmgM4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD63C2BCB0;
-	Tue, 12 May 2026 07:51:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778572272;
-	bh=GIepLcHTJURrppAg6CpDxGEX4YxETo5qs9bcQX5fU9g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jMRWmgM4TFh1Xb+dEKyEYsgBNhVzaPuDSi4CMld9Xc58a83X1lERve1GKOFKGOOlM
-	 lclh2p1Cyp8UHep/JRikDLFtYAaIAhEN7MNNF83RuNj9VBxa9HjoL15dC8LHgiCRn6
-	 POYYwA4NSblSpzS/bS6hJXZ6BiLJtrA6jBokTNtCmwsYv5X8ECFQ/JBJQ1YmrBiydz
-	 ZUNaDzq5IjjKeDXyHNHVfFLbR3H79rYP8H/ra8KNgDugQY3Llud74XWQlfODlcpIPR
-	 She2M/Sh1Vldu+LE7kVEn7mjEhO5kBfQ1wU0sCWhqwM24nkczmqARGsHYqrLcq2mgA
-	 aBEaFoIQFA8Aw==
-Date: Tue, 12 May 2026 15:51:06 +0800
-From: "Peter Chen (CIX)" <peter.chen@kernel.org>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Thierry Reding <thierry.reding@kernel.org>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 2/6] usb: chipidea: tegra: Avoid controller/PHY init
- if bus is externally controlled
-Message-ID: <agLb6mgP45jHjvNt@nchen-desktop>
-References: <20260511135703.62470-1-clamor95@gmail.com>
- <20260511135703.62470-3-clamor95@gmail.com>
- <agJ/T8nBGWEoblmd@nchen-desktop>
- <CAPVz0n173syW9rXy7Qt_N=mChe6WBRLvjRDypcJEC50hPL4OMQ@mail.gmail.com>
+	s=arc-20240116; t=1778574161; c=relaxed/simple;
+	bh=peL7JkTs2NS+UYgAKxEwxkAEhJWbw73UVtPsLrM1sHE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Wno+eBdF7LrOzYH++6E8n2s8KukIupNr78L+MAlhu5hHMp9PR3tgrWYnSKpuihJ5eFfpSj43wjBeeLEkZ363XuhG0TOT/WpeKKC6Af9Yw9tluNPXF/BIQ3VbCgVJZ/7jsiGN124uwbvJ76IbRuQBpkMMY57ezWECLpFrIgNHX8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R1MHgwbW; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5a858881ad2so5780060e87.3
+        for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 01:22:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778574159; x=1779178959; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PvJeMgbrCU82xcWyDwUyahfaQJD8+fqAy//y7uYzovo=;
+        b=R1MHgwbWeQpa6Kgm1HVWBhHlNwjeYBMZx8EqZrZ53pql5nhMWD3fX2nUfQtg8WNlhZ
+         cLa/lYUOlaNZiRbZpndSq2wxki7HeE1qVUcKvG2ZoiKx56FyM0T3+hY2G+lFJxdVp1Vt
+         h8iCAqx4i4a7tsYaAlder1B1WK6VT2qYbee8w+SLr4giEool2Rz9dm1ySKfZVYFTuFcN
+         qi0wuKOnUbJNd4CChO4WIkc7TMcvM+MTDRSzDBcr92T8u8sG9vq6mtvQnG0v4yoKog8D
+         oTFMmv9rLPaK+puesAjTZab0CbAK8+tIhmzIwzqguZIfw0SYDvq9JMKKnty8JphB/i17
+         pTGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778574159; x=1779178959;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=PvJeMgbrCU82xcWyDwUyahfaQJD8+fqAy//y7uYzovo=;
+        b=nJt6TMngtJy9kJVn4u8+64pOno93FiYnFSoQ/sFDU+Z4pL8ysmC7wghQB727Ri0hMd
+         y1oQC4H27O4tOZuGghBEyoZ8mkyIyxOJOBwGN5vInM8ziG5hwm8sN/S63j3CnBBZTEba
+         IFngbzW16PyhJBAcAHYicKZBLFhRQSjt6Dw8tQuJsIdgf99OBuMEYVzI0r67znNKe2RD
+         n4Y0LToaYK2MdCDq/RGs3JCUIwXoKWYcF3ofe+c5axq045Otm06+hu7Trjv95eHjizMs
+         X/YjdV2A/6FDrGy8nUa8M0FVK/SrCTw4u9ScuFMWJhVDyWCDzW2BaPKkSy6EV6KHKd3l
+         5D+Q==
+X-Forwarded-Encrypted: i=1; AFNElJ9yLmYZMaDvuhp34hJgdODA7LucPizshLoou/5zMEiL8dx9PfDjMV9rmHaNz4sjhhGF2EQjzTjy+7U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDeDFp32iOBVzo9Dhlr3cz13Jj/35bHqPg6t0EwTICFiMXYJNy
+	xZukKQten1IZY+neTUoMci0u18utkhXU5I95RLXsCgNRMRm7/pnHJ/kN
+X-Gm-Gg: Acq92OEm6N354prtUcB7gJ0eepIgJYou/bNd5jttapab+/YPGIV8EudFFM/mtzB0HBV
+	IbCTtdSXRdFzPSd7zuq1ZToqGphye62nMewnkDYM+EvgphGNlQ7lIsxts8+86/9jKaA9VmzdUbV
+	Ry1fBZSg/0mCbBm13xsNA6WsNS6AYpOHkDLkQ5LNsbwaSlareJBA7AmAQBVAn3nVZmBJofv8Fy7
+	S8zrnhzU/FlHnZv5mmNeZKOqmZVc6ERvyWkUn7ggqjl3ufSAaYNaWCZnz8InRDtlbixWK9KUrZx
+	WEw0VPnm3CRANaHiyotTA3bBU4J7bpMV1rneTFAKdEaVQSHLoge4QWQqFbcsZnCRmJB8GY+U4ws
+	z31s9IA9yFZwIOz8WWyISFNQ/cmOvKHpqbmIWUA6UcmE25+xc9SeipMAyD48Qc8Td/6qtmeOUI1
+	d7bdUTQNu3LIk0MUzYKEqkYcZsUGCw0gcX
+X-Received: by 2002:a05:6512:128d:b0:5a8:6b81:6694 with SMTP id 2adb3069b0e04-5a887ce5e99mr8550473e87.30.1778574158311;
+        Tue, 12 May 2026 01:22:38 -0700 (PDT)
+Received: from foxbook (bgw15.neoplus.adsl.tpnet.pl. [83.28.86.15])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a8a955df99sm3246603e87.45.2026.05.12.01.22.37
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 12 May 2026 01:22:38 -0700 (PDT)
+Date: Tue, 12 May 2026 10:22:33 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, LKML
+ <linux-kernel@vger.kernel.org>, linuxppc-dev@lists.ozlabs.org
+Subject: Re: IBM Power S822LC: pci 0021:0d:00.0: xHCI HW did not halt within
+ 32000 usec status = 0x0
+Message-ID: <20260512102233.290d3665.michal.pecio@gmail.com>
+In-Reply-To: <6106b5b9-17d2-48be-8215-3320f3d1d261@molgen.mpg.de>
+References: <fb68e15d-b8f2-42ac-aa65-0d9fedcfcdbd@molgen.mpg.de>
+	<20260506193037.6de9e355.michal.pecio@gmail.com>
+	<69fa1c3f-3ea9-42cb-a49a-7da39f72806e@molgen.mpg.de>
+	<20260512012006.66aeb0c5.michal.pecio@gmail.com>
+	<6106b5b9-17d2-48be-8215-3320f3d1d261@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPVz0n173syW9rXy7Qt_N=mChe6WBRLvjRDypcJEC50hPL4OMQ@mail.gmail.com>
-X-Rspamd-Queue-Id: 3497B51C3E6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 3A31E51C9BD
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37302-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RCVD_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37303-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peter.chen@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,netdev,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On 26-05-12 09:13:40, Svyatoslav Ryhel wrote:
-> вт, 12 трав. 2026 р. о 04:16 Peter Chen (CIX) <peter.chen@kernel.org> пише:
-> >
-> > On 26-05-11 16:56:57, Svyatoslav Ryhel wrote:
-> > > If the USB controller and PHY are externally controlled, then the
-> > > registration of the controller and the PHY initialization should be
-> > > skipped, since these configurations must be done by the device that
-> > > controls the bus to work correctly.
-> > >
-> >
-> > I find you only control USB controller device add at PHY driver, most of USB drivers
-> > has PHY control, for chipidea, it has PHY control at core.c, would please try to
-> > adapt for it?
-> >
-> 
-> Usually yes, but this is not the case for Tegra unfortunately. As you
-> can see Tegra specific section of Chipidea driver specifically
-> describes why it has to set PHY manually.
-> 
-> /*
->  * USB controller registers shouldn't be touched before PHY is
->  * initialized, otherwise CPU will hang because clocks are gated.
->  * PHY driver controls gating of internal USB clocks on Tegra.
->  */
-> 
-> So in order to provide correct work of USB when set by an external
-> device, both PHY and controller init/add must be skipped.
+On Tue, 12 May 2026 08:17:08 +0200, Paul Menzel wrote:>=20
+> > I honestly don't know what to do with this. I think I would start with
+> > looking whether xhci_shutdown() in the old kernel manages to halt it
+> > successfully or if it also fails, and what's the USBSTS there.
+> >=20
+> > It seems that you can get such information by enabling dynamic debug
+> >=20
+> >    echo 'module xhci_hcd +p' >/proc/dynamic_debug/control
+> >=20
+> > and capturing old kernel's log up to kexec() through a serial cable. =20
+> Unfortunately, nothing is logged over the serial console (BMC SOL) after=
+=20
+> running `sudo kexec -e` or `sudo systemctl reboot`. I just see:
+>=20
+>      [69530.180531343,5] OPAL: Switch to big-endian OS
+>      [69538.407292205,5] OPAL: Switch to little-endian OS
+>=20
+> Which is the OPAL firmware, so it might be involved? No idea, if it=20
+> touches the xHCI controller.
 
-You could call generic PHY APIs at ci_hdrc_tegra.c, after PHY init or power on,
-call controller initialization.
+So some FW involvement is potentially possible.
 
-> 
-> > Peter
-> >
-> > > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> > > ---
-> > >  drivers/usb/chipidea/ci_hdrc_tegra.c | 36 +++++++++++++++++-----------
-> > >  1 file changed, 22 insertions(+), 14 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/chipidea/ci_hdrc_tegra.c b/drivers/usb/chipidea/ci_hdrc_tegra.c
-> > > index 372788f0f970..593390a818d1 100644
-> > > --- a/drivers/usb/chipidea/ci_hdrc_tegra.c
-> > > +++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
-> > > @@ -32,6 +32,7 @@ struct tegra_usb {
-> > >       struct clk *clk;
-> > >
-> > >       bool needs_double_reset;
-> > > +     bool externally_controlled;
-> > >  };
-> > >
-> > >  struct tegra_usb_soc_info {
-> > > @@ -312,20 +313,25 @@ static int tegra_usb_probe(struct platform_device *pdev)
-> > >       if (device_property_present(&pdev->dev, "nvidia,needs-double-reset"))
-> > >               usb->needs_double_reset = true;
-> > >
-> > > +     if (device_property_present(&pdev->dev, "nvidia,external-control"))
-> > > +             usb->externally_controlled = true;
-> > > +
-> > >       err = tegra_usb_reset_controller(&pdev->dev);
-> > >       if (err) {
-> > >               dev_err_probe(&pdev->dev, err, "failed to reset controller");
-> > >               goto fail_power_off;
-> > >       }
-> > >
-> > > -     /*
-> > > -      * USB controller registers shouldn't be touched before PHY is
-> > > -      * initialized, otherwise CPU will hang because clocks are gated.
-> > > -      * PHY driver controls gating of internal USB clocks on Tegra.
-> > > -      */
-> > > -     err = usb_phy_init(usb->phy);
-> > > -     if (err)
-> > > -             goto fail_power_off;
-> > > +     if (!usb->externally_controlled) {
-> > > +             /*
-> > > +              * USB controller registers shouldn't be touched before PHY is
-> > > +              * initialized, otherwise CPU will hang because clocks are gated.
-> > > +              * PHY driver controls gating of internal USB clocks on Tegra.
-> > > +              */
-> > > +             err = usb_phy_init(usb->phy);
-> > > +             if (err)
-> > > +                     goto fail_power_off;
-> > > +     }
-> > >
-> > >       /* setup and register ChipIdea HDRC device */
-> > >       usb->soc = soc;
-> > > @@ -342,12 +348,14 @@ static int tegra_usb_probe(struct platform_device *pdev)
-> > >       if (of_usb_get_phy_mode(pdev->dev.of_node) == USBPHY_INTERFACE_MODE_ULPI)
-> > >               usb->data.flags &= ~CI_HDRC_SUPPORTS_RUNTIME_PM;
-> > >
-> > > -     usb->dev = ci_hdrc_add_device(&pdev->dev, pdev->resource,
-> > > -                                   pdev->num_resources, &usb->data);
-> > > -     if (IS_ERR(usb->dev)) {
-> > > -             err = dev_err_probe(&pdev->dev, PTR_ERR(usb->dev),
-> > > -                                 "failed to add HDRC device");
-> > > -             goto phy_shutdown;
-> > > +     if (!usb->externally_controlled) {
-> > > +             usb->dev = ci_hdrc_add_device(&pdev->dev, pdev->resource,
-> > > +                                           pdev->num_resources, &usb->data);
-> > > +             if (IS_ERR(usb->dev)) {
-> > > +                     err = dev_err_probe(&pdev->dev, PTR_ERR(usb->dev),
-> > > +                                         "failed to add HDRC device");
-> > > +                     goto phy_shutdown;
-> > > +             }
-> > >       }
-> > >
-> > >       return 0;
-> > > --
-> > > 2.51.0
-> > >
-> >
-> > --
-> >
-> > Best regards,
-> > Peter
+BTW, another method of doing kexec is to setup a crash kernel and
+then trigger panic with /proc/sysrq-trigger.
 
--- 
+This probably won't run xhci_shutdown(). Not sure about OPAL FW.
+Is the outcome any different?
 
-Best regards,
-Peter
+> But strangely no xHCI messages are there =E2=80=93  also after booting wi=
+th
+> Petitboot and initialized xHCI controller? No idea, if it points to,
+> that during kexec or shutdown nothing is power off?
+>=20
+> With `sudo systemctl reboot` only the line below are logged:
+>
+>      [  121.811384] libvirt-guests.sh[3366]: Running guests on default UR=
+I:
+>      [  121.811988] libvirt-guests.sh[3376]: no running guests.
+>      [ =E2=80=A6 (systemd service stop notifications)]
+>      [  136.254846] systemd-shutdown[1]: Waiting for process: watch_ldcon=
+fig
+>      [  218.549684] reboot: Restarting system
+>      [69760.484679183,5] OPAL: Reboot request...
+>        3.55778|Ignoring boot flags, incorrect version 0x0
+>        3.59881|ISTEP  6. 3
+
+Only "reboot: Restarting system" looks like it's kernel. Maybe you need
+to tweak loglevel before rebooting or kexecing? Try to get more kernel
+messages showing over serial during operation, then kexec.
+
+Regards,
+Michal
 
