@@ -1,68 +1,68 @@
-Return-Path: <linux-usb+bounces-37326-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37323-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mLBuG4EeA2r10gEAu9opvQ
-	(envelope-from <linux-usb+bounces-37326-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 14:35:13 +0200
+	id ED8eJHYeA2r10gEAu9opvQ
+	(envelope-from <linux-usb+bounces-37323-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 14:35:02 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C78575203E5
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 14:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA4145203D6
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 14:35:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 81504307B65B
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 12:30:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 10499306C7C3
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 12:30:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C51037205A;
-	Tue, 12 May 2026 12:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C206338E8CF;
+	Tue, 12 May 2026 12:30:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Izl+UpS0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bZFKFMQz"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFBD4C0438
-	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 12:30:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE5F360EEA
+	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 12:30:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778589021; cv=none; b=o8dsUxFtcmDflfTaCekd/be2bBTYKBUSIMEqFGe0pqEv9j28YtpaeeEtdkxeQIh0RuGi5mqlHqeVAoW3SceYUJhMwvG4JmG1tKNsabQd2ioxop0ZPSr5tSwvvozR5UXqv47/xuGfyfy7/OYdJVtgkxeSq8OLgJmsgiuF5asi4oM=
+	t=1778589011; cv=none; b=iTm8Fo6GwUZWyOWPF8HuDrJkQ5LDjRwYoOUF4HesT3GOFv5pNuJSkEtP2esopOQ4VXsppo/Tk6W+sRRtq/orD1QEcF+tCQhkX+Nzp+d5OG7I8lDO+p/aDZUGsMzrZ43eAtFQ9FcxT33k87RcPG2aZLkePxGFuWuWXMrYn7jcGMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778589021; c=relaxed/simple;
-	bh=ClcMDxy1MI7W6AfYsBU5vss4O1m8p+ot08e9klWHpbQ=;
+	s=arc-20240116; t=1778589011; c=relaxed/simple;
+	bh=a6OCs22o7mAGrwuBXxOtFDJHnMUqfpCJ8roTLDHCm+c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Avlc9mxOv/kdBly6cX5kjWcp9bZu+JBY5i3d912mJ0Q31ZO8K+8YmWqzSGO1vmXAUyRawZmYxbZJC6EfIc4LVTwgAt+G7203gPEI6L/jYxYAQp8vgNvzaeYftNYec6BFDu0HRdmLARqmaWYDnEHiVFjo+SNdjgtZtNkpbuLy8jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Izl+UpS0; arc=none smtp.client-ip=192.198.163.7
+	 MIME-Version; b=JyK/2PC5BPZ9BNm2LQGVoxWDIG/7H9oMNL6Un6qzZmpGBbDN/do3a1Lfrma960EhxFJhsVeKmvD2dyzhEhHwikjaA/dx8KbF2YtSMlz35k9/QnPS1C0erp+lhvnzAMlSDyLG7lVpL45QvPboQaH41nzWau4pC/7DNI2EijYHmh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bZFKFMQz; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778589015; x=1810125015;
+  t=1778589006; x=1810125006;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ClcMDxy1MI7W6AfYsBU5vss4O1m8p+ot08e9klWHpbQ=;
-  b=Izl+UpS0rSyJndyoEpNDjKv3aFHVAjjYGurxpPUqxPqyu6SkPYjLkkVp
-   Osn90A9+U55X3NkJsNoQS49uwj8bAjZuUrJ1rcG4kLDXBshUdf3Wgycq/
-   zPOpxpo2lOuuHI1ZzKeFFVHitmx9F9KkQcWLLtr1G+L2FOh3lo/RXp2GJ
-   BhtDHGn6pMd3L7RNWJ4YNZIWslvYefoUpTvKn8Mh2Z/OtRLnjqC+DSVfq
-   bcTB5XyADvw1kMUgm0OQ2qvIRWnjA0ikXUe+uaGrXGRw1tvJLIH6G53FE
-   Ekw9KNsG9fzRyq2kx1jgK8Tt9cXWl4a4EVyEWvI0D8s77LNlwGPPD+opU
+  bh=a6OCs22o7mAGrwuBXxOtFDJHnMUqfpCJ8roTLDHCm+c=;
+  b=bZFKFMQzh8I3HHmd7kWoyNX3V/+OQR9wPmveLLgrUEDL283PTs0Y+hVM
+   fQvna/H94WvigL2MBoF0q2lnbzPHbMorprcjBfD4w+0ee0XeT3USOcvln
+   R3Q5u2p7cp4rzvPZEsBne8EltZ8OjMwI64iBiMhBegHJkvP0e/oU52kMr
+   mtOAnRWODEw5wgrIhdm5KGsra9ZdWSMMUd6SI464ZHXR1r23VqufpbJud
+   ccYJWPfv42g562bLWYMi48elSN4b4yUpSmQajcnFWzuPKP8Cf4+bWHuSd
+   q2FJoEOU0c8vCzkVWdOk+nUsq9NrGUYkkAPSIjxsrZG/Mj+uS0nGxC8oG
    Q==;
-X-CSE-ConnectionGUID: I4fGEYBGR4OqYvcMqTRuxA==
-X-CSE-MsgGUID: 43u6hoOARYKh1zxjCm+kjg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="104950600"
+X-CSE-ConnectionGUID: 0fv2CIhtS0KHb2cYcTMsrg==
+X-CSE-MsgGUID: SftBt5FsRjiluhroNvcKoQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="104950589"
 X-IronPort-AV: E=Sophos;i="6.23,230,1770624000"; 
-   d="scan'208";a="104950600"
+   d="scan'208";a="104950589"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
   by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 05:29:59 -0700
-X-CSE-ConnectionGUID: VZ/9U0xxTLqqaGa27r8EAw==
-X-CSE-MsgGUID: 7vfXGvxuQim0f2B8ajmsuw==
+X-CSE-ConnectionGUID: wsEg9BQaQtm9RlluOkkEtQ==
+X-CSE-MsgGUID: H+Te4GgVRSq9W9Hjjy8Pxw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,230,1770624000"; 
-   d="scan'208";a="234692675"
+   d="scan'208";a="234692666"
 Received: from black.igk.intel.com ([10.91.253.5])
   by fmviesa007.fm.intel.com with ESMTP; 12 May 2026 05:29:56 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id BDE419D; Tue, 12 May 2026 14:29:55 +0200 (CEST)
+	id C152B9E; Tue, 12 May 2026 14:29:55 +0200 (CEST)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: linux-usb@vger.kernel.org
 Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -73,9 +73,9 @@ Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Rene Sapiens <rene.sapiens@linux.intel.com>,
 	Gil Fine <gil.fine@linux.intel.com>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 3/8] thunderbolt: Fix lane bonding log when bonding not possible
-Date: Tue, 12 May 2026 14:29:50 +0200
-Message-ID: <20260512122955.271688-4-mika.westerberg@linux.intel.com>
+Subject: [PATCH 4/8] thunderbolt: Activate path hops from source to destination
+Date: Tue, 12 May 2026 14:29:51 +0200
+Message-ID: <20260512122955.271688-5-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260512122955.271688-1-mika.westerberg@linux.intel.com>
 References: <20260512122955.271688-1-mika.westerberg@linux.intel.com>
@@ -86,7 +86,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: C78575203E5
+X-Rspamd-Queue-Id: DA4145203D6
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -99,7 +99,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37326-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37323-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
@@ -115,45 +115,61 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[9];
 	NEURAL_HAM(-0.00)[-0.998];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.intel.com:mid,intel.com:email,intel.com:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,linux.intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
 From: Gil Fine <gil.fine@linux.intel.com>
 
-Currently if lane bonding is not possible or not supported, we continue
-and read the updated number of Total Buffers from lane adapters unnecessarily
-and incorrectly log the bonding as successful.
+Currently, path activation starts from the last hop (destination adapter)
+and iterates backwards to the first hop (source adapter). This does not
+follow the order suggested in the USB4 Connection Manager guide and could
+potentially cause issues with tunnelled protocols.
 
-Fix this by bailing out early when bonding is not possible, avoiding
-the unnecessary read and the misleading log message.
+Reverse the activation order to start from the first hop (source adapter)
+and end at the last hop (destination adapter), as suggested in the
+Connection Manager guide.
+Adjust the rollback in the failure path to deactivate from the first
+hop, since hops are now activated starting at the source.
+
+Fix kernel-doc accordingly.
 
 Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/switch.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/thunderbolt/path.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index ad0ec8f8ee28..f421997c298d 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -2977,14 +2977,14 @@ static int tb_switch_lane_bonding_enable(struct tb_switch *sw)
- 	int ret;
+diff --git a/drivers/thunderbolt/path.c b/drivers/thunderbolt/path.c
+index 0092b2ec7873..b2c322e76b8a 100644
+--- a/drivers/thunderbolt/path.c
++++ b/drivers/thunderbolt/path.c
+@@ -484,7 +484,7 @@ void tb_path_deactivate(struct tb_path *path)
+  * tb_path_activate() - activate a path
+  * @path: Path to activate
+  *
+- * Activate a path starting with the last hop and iterating backwards. The
++ * Activate a path starting with the first hop and ending on the last hop. The
+  * caller must fill path->hops before calling tb_path_activate().
+  *
+  * Return: %0 on success, negative errno otherwise.
+@@ -526,7 +526,7 @@ int tb_path_activate(struct tb_path *path)
+ 	}
  
- 	if (!tb_switch_lane_bonding_possible(sw))
--		return 0;
-+		return -EOPNOTSUPP;
+ 	/* Activate hops. */
+-	for (i = path->path_length - 1; i >= 0; i--) {
++	for (i = 0; i < path->path_length; i++) {
+ 		struct tb_regs_hop hop = { 0 };
  
- 	up = tb_upstream_port(sw);
- 	down = tb_switch_downstream_port(sw);
- 
- 	if (!tb_port_width_supported(up, TB_LINK_WIDTH_DUAL) ||
- 	    !tb_port_width_supported(down, TB_LINK_WIDTH_DUAL))
--		return 0;
-+		return -EOPNOTSUPP;
- 
- 	/*
- 	 * Both lanes need to be in CL0. Here we assume lane 0 already be in
+ 		/* If it is left active deactivate it first */
+@@ -576,7 +576,7 @@ int tb_path_activate(struct tb_path *path)
+ 		res = tb_port_write(path->hops[i].in_port, &hop, TB_CFG_HOPS,
+ 				    2 * path->hops[i].in_hop_index, 2);
+ 		if (res) {
+-			__tb_path_deactivate_hops(path, i);
++			__tb_path_deactivate_hops(path, 0);
+ 			__tb_path_deallocate_nfc(path, 0);
+ 			goto err;
+ 		}
 -- 
 2.50.1
 
