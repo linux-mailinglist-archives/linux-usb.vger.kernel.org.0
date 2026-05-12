@@ -1,230 +1,223 @@
-Return-Path: <linux-usb+bounces-37339-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37340-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yNVRKQU2A2oA1gEAu9opvQ
-	(envelope-from <linux-usb+bounces-37339-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 16:15:33 +0200
+	id GI0ZHoM9A2po2AEAu9opvQ
+	(envelope-from <linux-usb+bounces-37340-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 16:47:31 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24360522204
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 16:15:33 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E71B9522DEE
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 16:47:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 69D68308240F
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 14:15:18 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DBD673195722
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 14:41:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 071AD30E84A;
-	Tue, 12 May 2026 14:15:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A7043C1F50;
+	Tue, 12 May 2026 14:38:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h1bbivam"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UYrcBT9s"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886852DA76F;
-	Tue, 12 May 2026 14:15:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890373B5F5D;
+	Tue, 12 May 2026 14:38:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778595316; cv=none; b=Q67gK03rlTmUYRf06lXH83caSwXebqAKDBCuScTxXcLl1z78hrCU4wX5PSUZZqXaSdfloOskUAz40B54TO/id8UIYt91aYH2/bhjKVor76djbLj0Qeufzcckp9mgI6LEO7Mmmlp/t9A/fy9ywPHiyFtXyK1VTbFvcYgJ+116acg=
+	t=1778596689; cv=none; b=WLWAmjj7EJ9YIeaeYaipdkFuAUcM9YTZDXyAKco5O7Foak+7b78J8Cn+ZnfSg0qW/levV+zD5gEpqzEDCd8AswvRydrQrJtWoKb4X7IIP2N7IWGXQCAvfQazVGs+qlzH8YAR+1tTeeclVnfu6E/wCcVJYO/33LUXQRXMlxiAELA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778595316; c=relaxed/simple;
-	bh=2WkAjgMYKprH3oea5KBYbJRdKM6BKtjX2k7rnkrpqLw=;
+	s=arc-20240116; t=1778596689; c=relaxed/simple;
+	bh=jbLD75OPWL6SVoyShglRzZ8g9b0hfzwobh3zc9lFvnE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dspy7KTNz7Cs8QNCeMA2QZKY/PEi6idFfsQcFdUJLYZlQ+F4GWly+UWYPG1BOBVgWrUP6wBa6tGQCU0vaIwJgqFoknvcohWt+sqCIs9bLMmqYfABhuDGK4m6b0o+pQihe3fUhEKi3JeNUmMP2+rzKs+U6VfTT75IOhITRFCsOjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h1bbivam; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 557A7C2BCB0;
-	Tue, 12 May 2026 14:15:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778595316;
-	bh=2WkAjgMYKprH3oea5KBYbJRdKM6BKtjX2k7rnkrpqLw=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZUIGp18qlKP0DmpYT1hqC10SYbuK2yPm6DaWpZ0N1mmT035NsO1n2E4HkOz6mHRQeYDh2a/OvWKaH+XWVdBPyiJKKLSJyTY4ccRUG3gQ9ZXhOusyo2nsTXqLIbCl9fk8gzcdFIxrzyFacZpMFaBzZesq4OPz+80RAxo68R1Ducs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UYrcBT9s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EB48C2BCB0;
+	Tue, 12 May 2026 14:38:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1778596689;
+	bh=jbLD75OPWL6SVoyShglRzZ8g9b0hfzwobh3zc9lFvnE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=h1bbivamd7B2fX9ORDSXTgYIFoO432Ta39U7q+vTjjnVsQyw+i5Ow+otIBL6rRU5h
-	 w9nm3X9Ct1o/JO31KnZINaKaYTIqChugYgd4sVfAjtKrDEkNB/NPtPGwaEV2kajqsY
-	 NvkbKuisECF+YgofQzRtTTxOrnjbvT712uDcWFgEGk6d78ybIa0wxs6ITDFozIbnm0
-	 UyPWuhnkUAueiZ3K5kJyEUVqDzVgQRCYXBiNIMwU3+BY4lFwU8upcUgifm5OFgw+RG
-	 zKJL2jEsy6a//wcvnsYGaD4gduEy2g5wJhRXzC4eRMc33rpYD00uSxbZO7jMmYdDnY
-	 98jbKxosIdd1A==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1wMntB-00000004C37-46q4;
-	Tue, 12 May 2026 16:15:13 +0200
-Date: Tue, 12 May 2026 16:15:13 +0200
-From: Johan Hovold <johan@kernel.org>
-To: zwq2226404116@163.com
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Wanquan Zhong <wanquan.zhong@fibocom.com>
-Subject: Re: [PATCH] USB: serial: option: add missing RSVD(5) flag for
- Rolling RW135R-GL
-Message-ID: <agM18RiSXmyd3Gt2@hovoldconsulting.com>
-References: <20260512103759.230894-1-zwq2226404116@163.com>
+	b=UYrcBT9sp4yjXzDVwf/vTaxcqAsp3us210SJWzfIb+QqdOZk/kvUVnKrATPK8DA0z
+	 PNiFNzJ7X02hnSki/8k4hI04nvVAbb34hXRdgNCxcAmDdD59VxT2YUh+TnRxitcBBh
+	 ymiC3PJE6dFjsmU1SAgtVBe7rs27CnuI0JOzeVlc=
+Date: Tue, 12 May 2026 16:32:51 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Sebastian EM <mendozayt13@gmail.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: composite: fix integer underflow in WebUSB
+ GET_URL handling
+Message-ID: <2026051237-delicacy-gallon-268c@gregkh>
+References: <20260512014343.3770664-1-mendozayt13@gmail.com>
+ <2026051221-glory-macaroni-dce6@gregkh>
+ <CAD89HyBhwxDsat_JCFFfA-tUYVatxByDj=ikpc9Rxj=kAqn=Sw@mail.gmail.com>
+ <2026051245-kangaroo-matriarch-8eed@gregkh>
+ <CAD89HyCWaa8esENsCip3foXe7c8x34HRx=37+c4MwnTpCbN1oQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260512103759.230894-1-zwq2226404116@163.com>
-X-Rspamd-Queue-Id: 24360522204
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD89HyCWaa8esENsCip3foXe7c8x34HRx=37+c4MwnTpCbN1oQ@mail.gmail.com>
+X-Rspamd-Queue-Id: E71B9522DEE
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37339-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[163.com];
+	TAGGED_FROM(0.00)[bounces-37340-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,fibocom.com:email,hovoldconsulting.com:mid]
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,linuxfoundation.org:dkim]
 X-Rspamd-Action: no action
 
-On Tue, May 12, 2026 at 06:37:59PM +0800, zwq2226404116@163.com wrote:
-> From: Wanquan Zhong <wanquan.zhong@fibocom.com>
+On Tue, May 12, 2026 at 09:12:14AM -0500, Sebastian EM wrote:
+> The WebUSB GET_URL handler in composite_setup() narrows
+> landing_page_length to fit the host-supplied wLength using
 > 
-> The RW135R-GL MBIM interface entry added in commit before was missing
-> the .driver_info = RSVD(5) flag.
+> landing_page_length = w_length
+> - WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH + landing_page_offset;
 > 
-> Without this flag, the option driver binds to the MBIM interface
-> and conflicts with the cdc_mbim driver, causing AT/MBIM communication
-> failures after switching to 43 mode. This matches the handling of
-> other Rolling Wireless MBIM devices.
-
-This doesn't make much sense. The MBIM interfaces are not vendor class
-and will not be bound by this driver. They don't use interface number
-five either.
-
-You probably want this for the ADB interface in the second configuration
-below, but the commit message needs to be updated.
-
->   - VID:PID 33f8:1003, RW135R-GL for laptop debug M.2 cards(with MBIM
-> interface for /Linux/Chrome OS)
-> 0x1003: mbim, diag, AT, pipe
-> Here are the outputs of usb-devices in different mode:
-> T:  Bus=03 Lev=01 Prnt=01 Port=04 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=33f8 ProdID=1003 Rev= 5.15
-> S:  Manufacturer=Rolling Wireless S.a.r.l.
-> S:  Product=Rolling RW135R-GL Module
-> S:  SerialNumber=12345678
-> C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-> E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-> I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> If wLength is smaller than WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH the
+> unsigned subtraction wraps, and the subsequent
 > 
-> - VID:PID 33f8:1003, RW135R-GL for laptop debug M.2 cards(with MBIM
-> interface for /Linux/Chrome OS)
-> 0x1003: mbim, diag, AT, ADB, pipe
-> Here are the outputs of usb-devices:
-> T:  Bus=03 Lev=01 Prnt=01 Port=04 Cnt=02 Dev#=  7 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=33f8 ProdID=1003 Rev= 5.15
-> S:  Manufacturer=Rolling Wireless S.a.r.l.
-> S:  Product=Rolling RW135R-GL Module
-> S:  SerialNumber=12345678
-> C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-> E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-> I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms:
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> memcpy(url_descriptor->URL,
+>       cdev->landing_page + landing_page_offset,
+>       landing_page_length - landing_page_offset);
 > 
-> - VID:PID 33f8:1003, RW135R-GL for laptop debug M.2 cards(with MBIM
-> interface for /Linux/Chrome OS)
-> 0x1003: mbim, pipe
-> Here are the outputs of usb-devices:
-> T:  Bus=03 Lev=01 Prnt=01 Port=04 Cnt=02 Dev#=  9 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=33f8 ProdID=1003 Rev= 5.15
-> S:  Manufacturer=Rolling Wireless S.a.r.l.
-> S:  Product=Rolling RW135R-GL Module
-> S:  SerialNumber=12345678
-> C:* #Ifs= 3 Cfg#= 1 Atr=a0 MxPwr=500mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-> E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-> I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> ends up copying close to UINT_MAX bytes from cdev->landing_page into
+> cdev->req->buf.  KASAN reports a slab-out-of-bounds in composite_setup
+> on the kmalloc-2k gadget_info allocation, and FORTIFY_SOURCE traps the
+> memcpy as a 4294967293-byte field-spanning write into
+> url_descriptor->URL (size 252).
 > 
-> Fixes: 01e8d0f742222f1e68f48180d5480097adf7ae9f ("usb: serial: add support for Rolling Wireless RW135R-GL (33f8:1003)")
-
-Please only use 12 chars for the commit id, and make sure to use the
-summary from the git log, that is:
-
-Fixes: 01e8d0f74222 ("USB: serial: option: add support for Rolling Wireless RW135R-GL")
-
-> Signed-off-by: Wanquan Zhong <wanquan.zhong@fibocom.com>
+> A USB host can reach this from a single SETUP packet against any
+> gadget that has webusb/use=1 and a landingPage configured.
+> 
+> Handle the small-wLength case before the math: when the host requested
+> fewer bytes than the URL descriptor header, only the header is
+> meaningful and no URL bytes need to be copied.  Setting
+> landing_page_length to landing_page_offset makes the existing memcpy a
+> no-op and leaves the descriptor returned to the host unchanged for all
+> larger wLength values.
+> 
+> Fixes: 93c473948c58 ("usb: gadget: add WebUSB landing page support")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jeremy Erazo <mendozayt13@gmail.com>
 > ---
->  drivers/usb/serial/option.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> v2:
+> - Drop the self Reported-by tag.
+> - Add Fixes tag.
+> - Cc stable.
 > 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index c71461893d20..dfec7467b36c 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -2466,7 +2466,8 @@ static const struct usb_device_id option_ids[] = {
->  	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x0302, 0xff) },			/* Rolling RW101R-GL (laptop MBIM) */
->  	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x0802, 0xff),			/* Rolling RW350-GL (laptop MBIM) */
->  	  .driver_info = RSVD(5) },
-> -	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x1003, 0xff) },			/* Rolling RW135R-GL (laptop MBIM) */
-> +	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x1003, 0xff),			/* Rolling RW135R-GL (laptop MBIM) */
-> +	  .driver_info = RSVD(5) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(0x3731, 0x0100, 0xff, 0xff, 0x30) },	/* NetPrisma LCUK54-WWD for Global */
->  	{ USB_DEVICE_AND_INTERFACE_INFO(0x3731, 0x0100, 0xff, 0x00, 0x40) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(0x3731, 0x0100, 0xff, 0xff, 0x40) },
+>  drivers/usb/gadget/composite.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+> index a902184bd..dc3664374 100644
+> --- a/drivers/usb/gadget/composite.c
+> +++ b/drivers/usb/gadget/composite.c
+> @@ -2172,7 +2172,10 @@ composite_setup(struct usb_gadget *gadget, const
+> struct usb_ctrlrequest *ctrl)
+>   sizeof(url_descriptor->URL)
+>   - WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH + landing_page_offset);
+> 
+> - if (w_length < WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH + landing_page_length)
+> + if (w_length < WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH)
+> + landing_page_length = landing_page_offset;
+> + else if (w_length <
+> + WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH + landing_page_length)
+>   landing_page_length = w_length
+>   - WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH + landing_page_offset;
+> 
+> -- 
+> 2.53.0
+> 
+> El mar, 12 may 2026 a las 8:29, Greg Kroah-Hartman (<
+> gregkh@linuxfoundation.org>) escribió:
+> 
+> > On Tue, May 12, 2026 at 06:18:54AM -0500, Sebastian EM wrote:
+> > > Hi Greg,
+> > >
+> > > Thanks for the review.
+> > >
+> > > You are right; the self Reported-by tag does not belong there, so I
+> > dropped
+> > > it in v2.
+> > >
+> > > The introducing commit is:
+> > >
+> > > 93c473948c58 ("usb: gadget: add WebUSB landing page support")
+> > >
+> > > I also added:
+> > >
+> > > Cc: stable@vger.kernel.org
+> > >
+> > > since the issue was introduced with the WebUSB GET_URL handling path and
+> > > the fix is a small bounds/underflow fix suitable for stable kernels.
+> > >
+> > > v2 is attached as a plain patch:
+> > >
+> > >
+> > 0001-v2-usb-gadget-composite-fix-integer-underflow-in-WebUSB-GET_URL-handling.patch
+> >
+> > We can't take patches as attachments, just send this as a normal v2
+> > patch.
+> >
+> > thanks,
+> >
+> > greg k-h
+> >
 
-Johan
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
+  and can not be applied.  Please read the file,
+  Documentation/process/email-clients.rst in order to fix this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
