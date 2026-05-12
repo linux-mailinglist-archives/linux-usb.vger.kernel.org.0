@@ -1,309 +1,225 @@
-Return-Path: <linux-usb+bounces-37305-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37307-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OJSfG4nyAmrpywEAu9opvQ
-	(envelope-from <linux-usb+bounces-37305-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 11:27:37 +0200
+	id mANZC1v5AmokzQEAu9opvQ
+	(envelope-from <linux-usb+bounces-37307-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 11:56:43 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 788A251DA75
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 11:27:36 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2945951E215
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 11:56:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id A9B45306DCBF
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 09:14:24 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 50C4F301ADAE
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 09:55:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23C873B777D;
-	Tue, 12 May 2026 09:14:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A89904C6EEB;
+	Tue, 12 May 2026 09:55:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GSPEDZuu"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="dy37VpQt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013029.outbound.protection.outlook.com [40.107.159.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09383AE6F7
-	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 09:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEDE24C0433;
+	Tue, 12 May 2026 09:54:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.29
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778577257; cv=pass; b=BP39jXqPgh+HZI6iZ72eRFjKfruEjMCWSI2Z9ah0LY9MatsinVsW/3ZJE0adsvFcofvbsuZVn0qVToAbtlaPBj2qFEKOTfEUKPJMR/VXvyUPpa0w/9P5Zd3op2txfcR85VsA/VD5Jik7ok2hflgMkWFOZOdQ439iy5YaqT0p2TI=
+	t=1778579701; cv=fail; b=IIYql2W+/ELRArHKeKKW8EqkUq+m7VCZ+V5OiAerdRBuSNeBzaykkBJfYlYM2w7uUz+c9EGmwpLefa3cl6/+rS+BpEGSzqJWMAgZrzUe9bgtn2O+/jFrxhyZtECdCmOyrzqigNZO/FqqFCigWDXcJ5qOaP/KR4Qebu3DdjF8yaU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778577257; c=relaxed/simple;
-	bh=U5Mj/jS6IBak6dPGMQzKnxIz7rYyqJxSv4wWkZocyPU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LrC2vUjC16Q+cL7DVkIUxXJ50pIQ0M+Ma4BwfC2j+5pCDx8G3P0nd10j3jVxrmzGdLmZ56iWYGmDNNDHGmIVygltX+N6Y/S+sHB3XqYFqcrzlRcDe+uWOu0kvM4/ZITKlLLdz2Pu/lhaUMmcWTFWYL+VoMy0WNl79TAt/PIGIoQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GSPEDZuu; arc=pass smtp.client-ip=74.125.82.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2ef38cf04f0so8049980eec.1
-        for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 02:14:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778577255; cv=none;
-        d=google.com; s=arc-20240605;
-        b=O8S/oLnNhHmCgTvXPXdwSuRA57q/NDxIyyBuQgenfU4u7HSIX2yVhAONH4VaL7sZoZ
-         KscCJ+xKGRfd9ngP1m36OE5NplWVxBrSJ39L6XiAJllR0vT63xih2OUY1F83Z+Q/mS61
-         hI/m75hFudPhZGFyQKL9i29iosG8E7/COqEOgOqRJJ0SqXEUkoSRhuCrz+Y9KQGJHhZP
-         77p+Z9bXIyZKAH/2z1By8Bgf9YMporLTMGky2WLVJ/qt9HJVElwNYTwYEqUJGcUvxEPb
-         8092H3i8qNd8CTghI+JuZtf80uKwoWEvZ63wycK75sXkvL09lPnUczQ4UCrSsuuI49yx
-         sVAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=wLpXl5QYagjlZCBE/xNrRjwHqn2mCjrPyJN9NfCIzLY=;
-        fh=tGH92tF54VE2i99bWPD6itraNb9uJ1plY/K1Lsyxhqw=;
-        b=GY0jhtjp6lmA5P3j5PpUefKRjRfYnosZMtfTl4eckd0TNHcyBC8D7aQTNQ4A0Jn/HA
-         pVMXKGVbwQn3FZy6vxmM7Q2XZpiNlDahkNjUdawKKGa3+d5S4GHz1A5YHGATkqvY84hp
-         zqirLGNZa3ffUDNX7rIfgOc0RKGFye+9HbW4rg0gqdba3PbrAAbrfMPqPEjDhtsfkxLT
-         Azfo4/aaBYhU7wrfCLBbrQH3OaOG+8V1DYHsdnX8tHged7icYIL7e2gQdQLkGz7PzG/d
-         vfLBZ/cFCUefp5cbcvBjT68tHP3h35x1Ydz72bA7fyw1C+kzx/wM8z1xLXiQ8MqBQTV6
-         RjSA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778577255; x=1779182055; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wLpXl5QYagjlZCBE/xNrRjwHqn2mCjrPyJN9NfCIzLY=;
-        b=GSPEDZuuZ31Z+22dTEDRByST0/vCvq68t1D91nerRwYoArdfxg7W5/Mme1qiOlepi6
-         FRLzMnKPG/Tt1+YCHHImv/D0RmhNeMBfJA+SPH2lm2AQx8od/5IOkc1WOOQSXCgCHnrg
-         1W4k710vYtjIOut8/9X6vWP3IUF/jy6semioFVQLKlJFCtnqht/jwnhEojw1Uc0KO5qh
-         9Faqalbmk2+j/2LIIS2sYCblIukJuzBWESC+v/pAVADwfvDL8XmurbTCugzhCXJfSa39
-         AawmXB2O1sSVRGAPCtVNnFmiJL49ZELzH+vIfuxXTjdtp+wWLOLutDHoXOdJqJ8PaQsc
-         dz0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778577255; x=1779182055;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=wLpXl5QYagjlZCBE/xNrRjwHqn2mCjrPyJN9NfCIzLY=;
-        b=sC9b4ltiScCjtwkzhOAEW8NlZyykppiCsiBpHQXhSsFTWc8VaAe3QjD/RINyx/Jli8
-         Skb3D+p3qPJw2YelIE7XntLjnQqdqE/KocfPCdEeil2WIhVMl0Vf2vV7wm84uZFfXxsI
-         bVCe+kwx8rPlvmm5Y1QG1Olks087kuHC+V41RXxZ/KCHZB5HW5Vt6oIa9N7wqLbpvNlL
-         dAYZMt9c+9qnG/pS5J5mu02HgUbfCg610AKZaMDIbIG1gni6KO/hGmSPORA18BbVieMo
-         YVwCjw0HJNAblRhkAYCztNSM3FB3drg+uP5HkCbf06YLO1jyLLZ+bIjCWlnH3ULV1CWD
-         1DBw==
-X-Forwarded-Encrypted: i=1; AFNElJ/TBXAtGk2UaHj8hFF+sm4Ch5pC9nkSaGt2+mcK4SdyiYipIKC5LT66/mnYj+4NSWjqejkng1Fos24=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1G6Gafa3QNNGA8KGNMSxSp7JOp0ymr+jG+xf8vRrstOLSsU6V
-	eQAlMy0cHRD8RyPxQuGv083ryYBftyV1ng4hz8wWk3mc9WyIRqivYzkeYQTkGpDKe6Z7tENRTuF
-	s7XMaUyqtVzRmgce3W00d0/i00tl3DZs=
-X-Gm-Gg: Acq92OEFYCyu+Y0n1mY4mYLxiQi2udAEihjMf/Rg40FAAeRzRQw3um0nhRCHjg9RNZa
-	FWTkwNHG+OfYgILOGwL2IE2W+/J+qZKCxIGgUqm86k0uM+d8x963/T3SRIeJc3qJb976d20yuMu
-	RLg8+qtzTsLvU4y/tQEoepuojkkMjT45ON7kGoSFCldKdD1RIiy7VepoSITeopph7VaUoy+WBSg
-	J3QhNzx8VryI7VupweDx/MV8WuoOMaTGJqN6iZBGukRBWXLUPki2l3cVe7Oh+ttOPAMzQZzwxJa
-	/GNCJ+Ct
-X-Received: by 2002:a05:7300:6da2:b0:2c5:50fe:c795 with SMTP id
- 5a478bee46e88-2fb4bffa2c9mr6829180eec.29.1778577254951; Tue, 12 May 2026
- 02:14:14 -0700 (PDT)
+	s=arc-20240116; t=1778579701; c=relaxed/simple;
+	bh=et4IQM0RaxqlveJsjNtTz0OcHTcLn7vVOUJVTdnJWbE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=UINEkc3dZsRdGYtXTgrA5r377eEGrA+KmAVqGpQzdPsF3GlcJowEgxjRyMWnWTLYUvTn9WbLtdTV/MGkEGxrobLyBodAZhlm6agVFN+B+waffoFM007MLc262CM4W4uE2sWxNaKoEA5QiuRWASHK+foZd7h6ybIYrXfakzcfb4g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=dy37VpQt; arc=fail smtp.client-ip=40.107.159.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=kHRAPIcMrJmN0CIc5MADjsii1nQpdBqvIU9N3Di6Qz+hsqU1fW5RoURthTKqSgzmyHw4yxhvDOts3QvnDnFg4TNqdM6+M3Dw1SgOkcWYfs0qdFZWCZR8xkjVYBsAJiXs7qa0tnAC2z2Q6NdP1B3Yte5qiyXCbsHPz2arOXbcbYdvtnM6QhqA+Fi+R8SL591VY5uLqy1xwn1RftF9WWRvQk2JzAwn4JkDE9JHeKpXAYB/s8Nv4etMdmUsZkvwKpeMmd0PCD1kJCkcT9261kOOdXzJGBMrN1DYBU0a5GL3TeH5Dywee2doJ3tn+MWvhNQz3mv8ORCRuOZUhgsi5aT16g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hHEQybcyh2jXtO4gZAavHtnMdO1WHd/gjEPDaJ0CSR8=;
+ b=Nb7efpmoRKBrhuW7x8hzXvOxUYpb8qGmbB+3TVH0/9Re4YcJzMcxOy47BFWgq/HdjnfD2J6GHPh4NXEfX9EGrFupAxmZ9HN8EtauM1Rcsqg5d1qatPXF9BPYVXEQPEwBC8cBgTT/51q1g/E4vVf+Y18qZp2BxY6UMdcGBbM3EDSLHLO4Uez6O+b7T1E4PwdfVYW6LB5YZ/vWv96bT6c0GBP+ehEuEFR5s9GEFnBU6Ku0u3dCrA3oKD9ogitY/AUOgMb4oOd5bcyEdXDUSlT5VBrVvmKsVCdOwTbscvu7XcMdRSgRJSRHH8lMWTUtzxIQfDTWYhP3ZBDgVEMcAZrkjg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hHEQybcyh2jXtO4gZAavHtnMdO1WHd/gjEPDaJ0CSR8=;
+ b=dy37VpQtTbse5DnlKlBEWm8vuH3g2kn9Os4fFvxJWaEhaicSB8dhVnXHF890pqfKQ4HTmxLkOq0ogtM/KAN8Q3LqC/QcjV9tYH80WMUSu6m+k9zWnjmKiAOoGSXAXEz9nckq6GMkpgOLV4A0jHlN2x85zUjjxGeuX8wlXmgVBxLQB2HsbHbUnVA6e1P8B7sWeESP+91qxRT/CICVJNx9OMw6t0Z+fMsaJMrDyU4HgNwHOIQ4oXGQ3N5vYqBqBB2E6mMA0RP4pNrz8YON+hgt/64MWnvBSKDKYshlV0seuU/WafE/b7+aMke2tVvbIXFNkj4bFr6WvYOAULHCx2tEBA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by AMVPR04MB12673.eurprd04.prod.outlook.com (2603:10a6:20b:775::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.23; Tue, 12 May
+ 2026 09:54:56 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::c67b:71cd:6338:9dce]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::c67b:71cd:6338:9dce%5]) with mapi id 15.20.9891.019; Tue, 12 May 2026
+ 09:54:56 +0000
+Date: Tue, 12 May 2026 17:53:57 +0800
+From: Xu Yang <xu.yang_2@nxp.com>
+To: Franz Schnyder <fra.schnyder@gmail.com>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
+	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
+	festevam@gmail.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, jun.li@nxp.com, 
+	Francesco Dolcini <francesco@dolcini.it>
+Subject: Re: [PATCH v3 3/3] usb: dwc3: imx8mp: disable auto suspend for host
+ role
+Message-ID: <5zz6yhc4ymoccovibmjlse2l2d6y3g3dwu5r5a677rplpfdnwu@fo2ed54hqzeh>
+References: <20260108081433.2119328-1-xu.yang_2@nxp.com>
+ <20260108081433.2119328-3-xu.yang_2@nxp.com>
+ <k2sxmwhrv3tivustfnpz54ehuufkcrcruu2uuukuyugqtqljzl@5roxndm5fn5u>
+ <jjwlrgusucoacaye75uqfuh76a4jhdv3ivzjuemgusw3trwseb@mymuy62cptxp>
+ <hsyy2owzbt7tsljktlrz5g4bnrnecznvcyy6zxt7gfyxb4xvgi@ysko6xe6h2zm>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <hsyy2owzbt7tsljktlrz5g4bnrnecznvcyy6zxt7gfyxb4xvgi@ysko6xe6h2zm>
+X-ClientProxiedBy: AM0PR02CA0192.eurprd02.prod.outlook.com
+ (2603:10a6:20b:28e::29) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260511135703.62470-1-clamor95@gmail.com> <20260511135703.62470-3-clamor95@gmail.com>
- <agJ/T8nBGWEoblmd@nchen-desktop> <CAPVz0n173syW9rXy7Qt_N=mChe6WBRLvjRDypcJEC50hPL4OMQ@mail.gmail.com>
- <agLb6mgP45jHjvNt@nchen-desktop>
-In-Reply-To: <agLb6mgP45jHjvNt@nchen-desktop>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Tue, 12 May 2026 12:14:03 +0300
-X-Gm-Features: AVHnY4Ll14i93n_o4smARXMAmGSl_VWfrjFQ8sVQ8lXsJQoJqBmOJp3dhjRuJ_8
-Message-ID: <CAPVz0n1Cgbik1_HvKO9i7ATr4OkS6yE_bwMw__yY_pNi0gQJNw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/6] usb: chipidea: tegra: Avoid controller/PHY init if
- bus is externally controlled
-To: "Peter Chen (CIX)" <peter.chen@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Vinod Koul <vkoul@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Thierry Reding <thierry.reding@kernel.org>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, netdev@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 788A251DA75
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AMVPR04MB12673:EE_
+X-MS-Office365-Filtering-Correlation-Id: b04fcd20-4669-48f2-e8c2-08deb00c8599
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|19092799006|7416014|376014|52116014|1800799024|18002099003|22082099003|11063799003|38350700014|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	QigG1U1r+OqNOfPlTM2hDfFCoxYnQ1PhUFtrysmSpwnsfdpYqeUtxC9jtQwScScv/twWln6D2X41nrzniEzRsK/gpg8nEx8cbKJy9d2dFmU3r6wKEbtgZmNVsFUfc8Gw3jqJTkd8uU6Efs9bgQRQQ+UM1ZN+pDTska87g3W0RCvMWj9O03m4DbMkEj5HCiywGXJ4S7VYgUPnz1AVTCwFzuGrxNfcjoYaXhNQOuyBWxE0aTAjTbRcPWg05X7tizi3bjnQ8V5C2ajfvwkJUGswId7RwYS02UJsX7PKwF8e8UEkVb2OCzxk45z7o+i0Td0ZOpMW9SNArQCLTTxTvbq1FqB/ctKY9mDWAH6OtSMDuidTtTb5uDqn/Q3n0oucNGXluV44CTbgiUPPsTFISf4Air0dm4eAEUwwjzGehQrSzyDYbap+Ut6H4qdozGrmxHBqMXGYHnvO3BWqPawIj5Ios/CjI36pMlgjPjiLjE3vZZPfm4eD0oUVN+y/0n0E0VCZTuxqlwJ8cpz6ubY+vUj7BEjtIVlbodNR2DiplYC+0K+tXFGUJiaD/i4sHBoJI+ptdNQiXyGZBG5V1mpkBJbvY4UeUz2JHKHopYnqxUWH+wDCriNkFk714NvWaUGvYTQhKoqwYhba7IGqNrH1VbYq2XF75sc/421qtnlV746gVyIvKdLwpTEnLsCU+VuA/fdpJJcZIov5cJo8TuyMBhhjzyllLuBk4l/ZXf5GzlGlo2kYKpeU8MqxOp2wn/mrSK4u
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(7416014)(376014)(52116014)(1800799024)(18002099003)(22082099003)(11063799003)(38350700014)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?vq+3kp6c1I0hoCZnA35Mb4AZUBhtF/jXnFCBxtxPp1Yt5LPKYr71J/a6tEZM?=
+ =?us-ascii?Q?8WoQhKaQCOC60v00T18NpNgpCSqOuAal0CKONqDhsoWdZGRSw9INYFlnVtFE?=
+ =?us-ascii?Q?8SH4C2oYOuvjXfzotYCPRed34enRKkND4/VaOsbwhT6Ew03Rl3St8sC3nP6c?=
+ =?us-ascii?Q?DODezZM4HLmzr6Iz07ISGBsjNZkTxho1ADfi0EXo+JQMNRNHIpNVdEm+QBj0?=
+ =?us-ascii?Q?g2wkkLco4o1kLiCHQkPiCdmdEfSnHw2NT2RRaJn8/REWXM8/2EgCRRzqWkR6?=
+ =?us-ascii?Q?zeDc3LQatczr0LAuYaXXY2PiMQgjS/KMgOAatjJzY8HgoVrItn74GkfMFSE2?=
+ =?us-ascii?Q?LBLgrMvxQapUA9jZSq2Bh64N8x/1QXuVIiy1jL1U7bDgpzO9Nl1JKgdejw3P?=
+ =?us-ascii?Q?zM7E7SHLrL8MmPKU2hspAxWgf0ucjr9xq71d0EKMSqCzlR4sSOyiWryYyTIc?=
+ =?us-ascii?Q?xj1sFks9mp6I9te0oF/D2Udi+4La0QVjIIGSKKXB1xaAsIZBazjrDMLu0aSd?=
+ =?us-ascii?Q?PUEXyDjMqFw8kAybasX2nGEuZZweVkziJOI9yQQuLxdWXwWqS/cXBQvEFCPm?=
+ =?us-ascii?Q?LoBjoQA5ArkFm2XwGJNI53QQv70KyIRowwvyNPMirm2yXBemA69uv02J7dDB?=
+ =?us-ascii?Q?o00iYOYBtu8+Us49Xc8N4LEoPj3wY+A3xuymogcGs2cAypJbVyWVOrI+Dtfj?=
+ =?us-ascii?Q?eN6BXOTKg4Yg5lVg8ZjAWg6e587RsGOWVi40oU8PHw4UFgqHzukPxRK1UHiF?=
+ =?us-ascii?Q?a2XCK7XPz7xf24dsKGQLZsvoPGtYx5lRT329YMDJP83/5usnTXw6GF2mcj1p?=
+ =?us-ascii?Q?2VGMzAG58JGLcVWR6zvxlS0ugWQUU9U3+GKJoKLsSNjumogdvbLQCUoW+bV/?=
+ =?us-ascii?Q?ANW6OYa36ST0xxFktfBiK1p7/bc1s9aLzV+zrPbFVv5a8CaBe3kgWiYpeupk?=
+ =?us-ascii?Q?Q13fv/CiDOPWvj6/DUPF6lUX55yP+HwVExNgB9/P6nVuIeQN8mGoHxnjXudx?=
+ =?us-ascii?Q?Z8iXQI7vasUFbXbrbXnEeK449Z2gSyOE6UMnwWoOuGJIVbj68LT6NlyoQcYw?=
+ =?us-ascii?Q?AH1VitkBVI5TsRmBtb2ucFOGitajALYL+Z0nwEntZ3nQeQu97IiyUd0GWMdJ?=
+ =?us-ascii?Q?p8LTduHXFMenxFb+ucq1P41axXHKcUj0PaFTZeryqdXzB528UbDR8JChW3bR?=
+ =?us-ascii?Q?3GnGIBvoNGNSYA/U7N+Wb/FCJGmjzNXd6OpbwWTScYpy+EBa1PVxtBsAkzGW?=
+ =?us-ascii?Q?2IcHZk8BPnUT/vRpu09Q/tXIY0wzGpXQ8RjH3hDFx1LzG+aj2MGhHy54DwJ0?=
+ =?us-ascii?Q?Dj72aXcIvV+Vrws7Jwcm4ge6eojtVWy6NLunp5XPzFmkfaWZmRTqi4LorgTR?=
+ =?us-ascii?Q?18VHiXzx+Y35zgZ8QJ22VNRMsfEENw7FCt70aFYaRToGguffLKH4Fwy31YZ6?=
+ =?us-ascii?Q?+PDR4hHcxJlQL2sSwFd7xhTKECI7gUcJqrNvQxoT76yylk1sewUB+LAi4qyh?=
+ =?us-ascii?Q?qqnoAi986bNc38R6aIC0qt5mhRd3/KWVh6tVzgwN2CmlsXbSCoZr3uLAu04d?=
+ =?us-ascii?Q?nsk7/SI4jP8yNDX/HAya1QE7WpCvv4elIRe6YGn/Eg7fIHQ6NktUP8nLHBtI?=
+ =?us-ascii?Q?wwPD9xHy++U0R+gG+ljs2JEOH6rZzAiMBOdGXpGSI2pnjb9EVcO4LK0PMvky?=
+ =?us-ascii?Q?mBauz0QooNQq3xr/ifD1YBCO9pqJ0iiJ2W/0nMP5/M3IrMhv1ZVAdY7NiHKM?=
+ =?us-ascii?Q?NHWFl3O+jg=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b04fcd20-4669-48f2-e8c2-08deb00c8599
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2026 09:54:56.3305
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: c7zf61BJ+t5ZndxY6+B3jk6eoTQ1NQ07ufLo3y9sA9AHJqrnU7gp0IKVn0jrjIW4RJ1Zk2xfRNJH/Dv8MgHg7Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AMVPR04MB12673
+X-Rspamd-Queue-Id: 2945951E215
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [1.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37305-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37307-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[20];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[nxp.com:+];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,netdev,dt];
+	FROM_NEQ_ENVFROM(0.00)[xu.yang_2@nxp.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[synopsys.com,linuxfoundation.org,kernel.org,pengutronix.de,gmail.com,vger.kernel.org,lists.linux.dev,lists.infradead.org,nxp.com,dolcini.it];
+	NEURAL_HAM(-0.00)[-0.998];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-=D0=B2=D1=82, 12 =D1=82=D1=80=D0=B0=D0=B2. 2026=E2=80=AF=D1=80. =D0=BE 10:5=
-1 Peter Chen (CIX) <peter.chen@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> On 26-05-12 09:13:40, Svyatoslav Ryhel wrote:
-> > =D0=B2=D1=82, 12 =D1=82=D1=80=D0=B0=D0=B2. 2026=E2=80=AF=D1=80. =D0=BE =
-04:16 Peter Chen (CIX) <peter.chen@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
-> > >
-> > > On 26-05-11 16:56:57, Svyatoslav Ryhel wrote:
-> > > > If the USB controller and PHY are externally controlled, then the
-> > > > registration of the controller and the PHY initialization should be
-> > > > skipped, since these configurations must be done by the device that
-> > > > controls the bus to work correctly.
-> > > >
-> > >
-> > > I find you only control USB controller device add at PHY driver, most=
- of USB drivers
-> > > has PHY control, for chipidea, it has PHY control at core.c, would pl=
-ease try to
-> > > adapt for it?
-> > >
-> >
-> > Usually yes, but this is not the case for Tegra unfortunately. As you
-> > can see Tegra specific section of Chipidea driver specifically
-> > describes why it has to set PHY manually.
-> >
-> > /*
-> >  * USB controller registers shouldn't be touched before PHY is
-> >  * initialized, otherwise CPU will hang because clocks are gated.
-> >  * PHY driver controls gating of internal USB clocks on Tegra.
-> >  */
-> >
-> > So in order to provide correct work of USB when set by an external
-> > device, both PHY and controller init/add must be skipped.
->
-> You could call generic PHY APIs at ci_hdrc_tegra.c, after PHY init or pow=
-er on,
-> call controller initialization.
->
+On Fri, May 08, 2026 at 06:04:49PM +0200, Franz Schnyder wrote:
+> Hi Xu,
+> 
+> On Fri, May 08, 2026 at 06:54:40PM +0800, Xu Yang wrote:
+> > It's strange that link->status is not DL_STATE_DORMANT or DL_STATE_NONE at
+> > the time which means the device core may not properly unbind consumer devices
+> > or handle something. The patch does a simple thing so the issue may not come
+> > from the patch itself.
+> > 
+> > 1639:	list_for_each_entry_safe_reverse(link, ln, &dev->links.consumers, s_node) {
+> > 1640:		WARN_ON(link->status != DL_STATE_DORMANT &&
+> > 1641:			link->status != DL_STATE_NONE);
+> > 1642:		__device_link_del(&link->kref);
+> > 1643:	}
+> > 
+> > Which kernel and dtb are you using? If it's a downstream repo, how do the USB
+> > controller and related DTS nodes look like?
+> 
+> I was using kernel version 7.1-rc2 and noticed it while working on 
+> sending the Aquila iMX95 upstream.
+> https://lore.kernel.org/all/20260506-add-aquila-imx95-v1-2-69c8ee1c5413@toradex.com/
 
-And what it will give? Modem used in Tegra devices exposes its output
-as USB device on an HSIC line. At the same time modem requires a
-precise control when USB should be registered, to be able to register
-and unregister it. This cannot be done by linking modem's phy to usb
-controller, quite the opposite, controller must be linked to modem's
-phy.
+I don't see any special configuration in your DTS. I modified my configuration
+to match yours, but I can't reproduce the issue. I also created some fault points
+during the probe process, but still didn't encounter the issue.
 
+> > 
+> > Does the issue easily happen? Does dwc3_imx8mp_probe() eventually succeed?
+> 
+> I did various boot attempts with the commit reverted and couldn't 
+> reproduce the issue. With the commit I ran into the issue in about one 
+> third of all boot attempts. So most of the time dwc3_imx8mp_prove 
+> actually succeeds.
+
+OK. I mean, does dwc3_imx8mp_probe() still succeed after the kernel dumps
+at the end?
+
+> 
+> > 
+> > Could you add "#define DEBUG" in the head of drivers/base/core.c, rerun and share the log?
 > >
-> > > Peter
-> > >
-> > > > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> > > > ---
-> > > >  drivers/usb/chipidea/ci_hdrc_tegra.c | 36 +++++++++++++++++-------=
-----
-> > > >  1 file changed, 22 insertions(+), 14 deletions(-)
-> > > >
-> > > > diff --git a/drivers/usb/chipidea/ci_hdrc_tegra.c b/drivers/usb/chi=
-pidea/ci_hdrc_tegra.c
-> > > > index 372788f0f970..593390a818d1 100644
-> > > > --- a/drivers/usb/chipidea/ci_hdrc_tegra.c
-> > > > +++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
-> > > > @@ -32,6 +32,7 @@ struct tegra_usb {
-> > > >       struct clk *clk;
-> > > >
-> > > >       bool needs_double_reset;
-> > > > +     bool externally_controlled;
-> > > >  };
-> > > >
-> > > >  struct tegra_usb_soc_info {
-> > > > @@ -312,20 +313,25 @@ static int tegra_usb_probe(struct platform_de=
-vice *pdev)
-> > > >       if (device_property_present(&pdev->dev, "nvidia,needs-double-=
-reset"))
-> > > >               usb->needs_double_reset =3D true;
-> > > >
-> > > > +     if (device_property_present(&pdev->dev, "nvidia,external-cont=
-rol"))
-> > > > +             usb->externally_controlled =3D true;
-> > > > +
-> > > >       err =3D tegra_usb_reset_controller(&pdev->dev);
-> > > >       if (err) {
-> > > >               dev_err_probe(&pdev->dev, err, "failed to reset contr=
-oller");
-> > > >               goto fail_power_off;
-> > > >       }
-> > > >
-> > > > -     /*
-> > > > -      * USB controller registers shouldn't be touched before PHY i=
-s
-> > > > -      * initialized, otherwise CPU will hang because clocks are ga=
-ted.
-> > > > -      * PHY driver controls gating of internal USB clocks on Tegra=
-.
-> > > > -      */
-> > > > -     err =3D usb_phy_init(usb->phy);
-> > > > -     if (err)
-> > > > -             goto fail_power_off;
-> > > > +     if (!usb->externally_controlled) {
-> > > > +             /*
-> > > > +              * USB controller registers shouldn't be touched befo=
-re PHY is
-> > > > +              * initialized, otherwise CPU will hang because clock=
-s are gated.
-> > > > +              * PHY driver controls gating of internal USB clocks =
-on Tegra.
-> > > > +              */
-> > > > +             err =3D usb_phy_init(usb->phy);
-> > > > +             if (err)
-> > > > +                     goto fail_power_off;
-> > > > +     }
-> > > >
-> > > >       /* setup and register ChipIdea HDRC device */
-> > > >       usb->soc =3D soc;
-> > > > @@ -342,12 +348,14 @@ static int tegra_usb_probe(struct platform_de=
-vice *pdev)
-> > > >       if (of_usb_get_phy_mode(pdev->dev.of_node) =3D=3D USBPHY_INTE=
-RFACE_MODE_ULPI)
-> > > >               usb->data.flags &=3D ~CI_HDRC_SUPPORTS_RUNTIME_PM;
-> > > >
-> > > > -     usb->dev =3D ci_hdrc_add_device(&pdev->dev, pdev->resource,
-> > > > -                                   pdev->num_resources, &usb->data=
-);
-> > > > -     if (IS_ERR(usb->dev)) {
-> > > > -             err =3D dev_err_probe(&pdev->dev, PTR_ERR(usb->dev),
-> > > > -                                 "failed to add HDRC device");
-> > > > -             goto phy_shutdown;
-> > > > +     if (!usb->externally_controlled) {
-> > > > +             usb->dev =3D ci_hdrc_add_device(&pdev->dev, pdev->res=
-ource,
-> > > > +                                           pdev->num_resources, &u=
-sb->data);
-> > > > +             if (IS_ERR(usb->dev)) {
-> > > > +                     err =3D dev_err_probe(&pdev->dev, PTR_ERR(usb=
-->dev),
-> > > > +                                         "failed to add HDRC devic=
-e");
-> > > > +                     goto phy_shutdown;
-> > > > +             }
-> > > >       }
-> > > >
-> > > >       return 0;
-> > > > --
-> > > > 2.51.0
-> > > >
-> > >
-> > > --
-> > >
-> > > Best regards,
-> > > Peter
->
-> --
->
-> Best regards,
-> Peter
+> I can provide you with the data next week.
+
+OK. More debug information will be helpful.
+
+Thanks,
+Xu Yang
+
 
