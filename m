@@ -1,254 +1,304 @@
-Return-Path: <linux-usb+bounces-37355-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37356-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WHkIA42gA2p+8QEAu9opvQ
-	(envelope-from <linux-usb+bounces-37355-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 23:50:05 +0200
+	id mMxMEpCsA2oO8wEAu9opvQ
+	(envelope-from <linux-usb+bounces-37356-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 00:41:20 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E7ED52A9D4
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 23:50:04 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBBBD52AFCC
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 00:41:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D3BCF30373DE
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 21:50:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F261C317E8DD
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 22:35:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84F633932CD;
-	Tue, 12 May 2026 21:49:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE9183A254A;
+	Tue, 12 May 2026 22:34:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="OjTBGWk5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LS64GOR3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from outbound.st.icloud.com (p-east2-cluster4-host2-snip4-9.eps.apple.com [57.103.78.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0253386C28
-	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 21:49:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.78.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778622599; cv=none; b=FZUOvDQQUSUpHRsCJIgnNak00bSW2vi5SABwWjBvHWBWoGSrbywVKBu+WAy/Twm5kKcyXW+X6Q16bCKwhxjxgNnC+rsscpjEb7V0WuDAWMtpKagsxTfFFCUN//HdK0PKu50mQ2xLuxHRvG+p2fhhHyiv6TUdeb2NrKHYWBNyGv0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778622599; c=relaxed/simple;
-	bh=LpIMpr0LF4SB+v0flh0pN80bH90pV+XyRBRxCoqwfYg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DKEpQFtKEMWeruYfVs4SNECaxrlQ+hG6AVFzrNBe5XvmcKy3IdYlTvfSPTrkZYnKzBV5LRTj9xcUYB93ygUCVlaBtyySdTe/O1q/NYZEIM5QVb9L2FeBWr60qoNcKw7/3bh6+UtbdZOvZfEvHmb6kMDfIRZPQlaqZwaxoz/Yie0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=OjTBGWk5; arc=none smtp.client-ip=57.103.78.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-Received: from outbound.st.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-1a-60-percent-3 (Postfix) with ESMTPS id AC82D1800FD3;
-	Tue, 12 May 2026 21:49:53 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQtPHV8EWRxCC0gdXAdLVxQEEEYfRRJfEVdKAVwFK1sTVRdGCRkIXR0ZHldQXx5AAkAVUgMFWQNCeRFQAVgeVl5aF15NRQgPQQpYWwhbBA8fTAxRAkIFVl5KDB0EVAddBV1WUAJaS0IES0VoXAVcHEAXSB1faktWFAQRUAFYHlZeWhdeTVoCVk0FHQJbAlMHSV1VCghTCR9EDB4KQA9cUEQUTgpaAA0LRABNBFRVK1sTVRdGCRkIXR0HWEcURw4PGVoUXBhT
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1778622596; x=1781214596; bh=Kppyk8UEPsrLyrcDoqcp3aNUHPA1vxN2Oz1CPm1YMKs=; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme; b=OjTBGWk5pnfPfi/OnGwNrVf36r09bBwk2pEKVGtD05ziHLzyqhesxRmxzNO6ohh7+sRlHpo6nec7Vdsj1n5MP8SQXSsusyKbV6uIVWxE8q18ko3QlUDCbYJy4Jk8ypSQ3bQUL3paZZJ5yVb8r/TQyEO7kR6VjCaKj4l9oEVArXVX6Q3kumBuNPojZbE8fgI0g7cYMal9aDQuFHkFkVXcC0X0G6lu+i5YiHNlfKxqHAnYFYADdTwiBfaoYnsepSElK+EtYfOQjGVPyGa4U75SqsP9FnPrnEqVLNwqUT71/opxl2JlLX0SxZnQdxqmI1VvB/JGGvdWD9yQfLG7Pjp45w==
-Received: from [192.168.89.2] (unknown [17.42.251.67])
-	by p00-icloudmta-asmtp-us-east-1a-60-percent-3 (Postfix) with ESMTPSA id 0B2DA1800106;
-	Tue, 12 May 2026 21:49:49 +0000 (UTC)
-Message-ID: <e165859d-9edb-45f9-87b4-6977f949579b@icloud.com>
-Date: Wed, 13 May 2026 06:49:47 +0900
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5AE3386C28
+	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 22:34:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778625259; cv=pass; b=eY3VbdVrhgJHXaeikfMgOCSowq9pqwNB+Zks8e+AYcEz6GYUB3tNQtNcjA61+KpqNsPd2PYV1INSsp4QkTbuwQl2YIbGDPHVP+ujt8CMl9YmU4qO7XWIsUQ6XxSx0ohtgYq0iQBw+GgQ0AeqULCbfW4pY01fMovFqDNq7VRpcXA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778625259; c=relaxed/simple;
+	bh=GlQv90YSbElQJaWEObiD98i9eEknL47TUsLkA3csEAo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gxycAX6mJxPMZymJqLPeq2Khu34OWz0vARwDSck8s2lt2Cu6jZ5TVptEWlLzf9e636cZoUSJx63AQHQsFMYg9prLIXh/sXuv2fOfcGEbsihcNypIiRmUC/Ulxbl6zLlUOB1s0l1PgbpFsKj/vzDZlgL9v4e2rfu/cmN8klAv3Xo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LS64GOR3; arc=pass smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-3939d2bd7ecso48844151fa.0
+        for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 15:34:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778625256; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ip/js6uRrne6U8XAhwW+WF9tD8/p8qsk8+lOeY3Xah1Z4phq8cHtpXP7iBpXRetE9A
+         +qwRw4eHz/en66CNHJKfylxvSIqDITwdwlGsvSBL+mGbIBXM65Oa7mIgbOrDE6t/57eW
+         9p0KVMIs0HrwA0yZZ4KVCcU6Dm2rpaTCvUto76T77MBS7zEY++TlrTIqCziob+qK2QXL
+         tQQg4YpfHev+vyg6lmYfNh77Wvh1Bc47iN7gbidynk+kYCmUdSj0x29SFKqYH2ivW+hS
+         3KEqaemZU6HN2mJSL/IiWsTkZnfcTpgiJDBWcgs0piuwtu9ZuP8eYbldRxEDw5sSbd3v
+         8G+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=GvLiKcOU8ghsp/wHfwpe98QQO+Pp9AP0rs6a3+QsoMs=;
+        fh=DN19s0ibwwfJeGavrSM1cHit2/YwAmBInLLPIvjttCQ=;
+        b=PQE8kfTIVu0LfMHgb+fpqA90AI1nxAq06KaNMaP9OaL24xqEruPCEaxLDFdfqIc/vm
+         jGi+bVb/dy00bqZbBgAtWUgVRveiH3hnHefJ3n323VckzHsxVNCOx/5hSt1tIgQf0dH3
+         lJuwnFYhcR03jdQIESe5sZVxO+/oTNUXbzoB///TGX6EoPXSSZdXONKqwJitDRBSTBW2
+         cC/Q60XGek4a0fHPB1nEjluBF8+xiYeddqNyWr5FuW6BXo4Bc28im4jIbelVHHsMefcW
+         GBoMSjR5DZZt+l4EmNDygVjbGn26E16G9U9QyZAOZiRxLrWMGj8WQ0WdKMrslcP//tP3
+         p6Cw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778625256; x=1779230056; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GvLiKcOU8ghsp/wHfwpe98QQO+Pp9AP0rs6a3+QsoMs=;
+        b=LS64GOR3AFgFTdRAmiK39sSGq1I6yGYASLnqlxWoaJJnpufza0gq1PT1wVF+B7Sn+r
+         uq9ke0NTP8GAkBA6lGqOcPDqNQ9l5HP+IeeDvQUGndpDPdcTQ6lFwnjfdGM/yK8zW8by
+         a2lqDegag5i7lqpJ/BUrmy9IaIWfMdbsqYsUPshE8I3o6g0nP8VLHbatR564Lm2Xmlsp
+         P2cw2JmCYL5I+M9lBLM655szEhgq8uNcpHGMZHPqnJNZeAaspDBClQCbfpa8stPpzjq1
+         hpxlqdGHYwfCvGxD+vNRwB3+uvFOX9QteGcnmLgcne0kph6b3xPe57H0zgXuaZpZtHY0
+         ifiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778625256; x=1779230056;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GvLiKcOU8ghsp/wHfwpe98QQO+Pp9AP0rs6a3+QsoMs=;
+        b=jg0H8BparCCgK+tvo5pXhixIEsEbMlmhUPfGzqoF0McQhrvtKL5ZE7SHrYAmUCA9YT
+         dn5VdRPjFuuoOrNe62zn9AiHg5XgTUnawvZuCoF5rNJGXLWTorGAxskDJFgqd2bMdnjW
+         M0N7ha9C3dBpiP5NAPiW0kV+f54S8GsWAN8/3s5HbgfYxKY06qvTFmHnusBirXRH/hHC
+         mJ0TjqQDtWe/p0JRLKyfGA0uu0sP+QF8K8p7nuoUUnD7QGjyOgRiHLGWEobDf+S6P1Y+
+         sOvOaV04uYMcFGAt5ZpnW3vb9Ebgr6edwoQy6YNoljChoFLPe3gFHgP1F+KCgMz928+u
+         f6nw==
+X-Gm-Message-State: AOJu0YzgiMsbkZOr7yaEznWPc6lMX2B05pJlkgmmyVL05Jm6NL92A+p6
+	V/AkIhIhpnSOWwchg/ihLd3tdoCff1P1usvk7PXrrshpbksmkLKm1k0y5sLhW7q6n8f+z0oI04E
+	Sr78lWYG2hwSOgmwOyqRENdb70LbYrgyjXy3b
+X-Gm-Gg: Acq92OFiLIt2fzsd6N5VF5eF7W18jhAGs2b99rm6HgiEOL71FYUJsx+42r/9XWrKkHB
+	jVLJnbKyFHd3ME0wE2d2BR5nEijgxR0qBJwvSYFbMNgEXSoI8p0hj8TgcjYgp7C+6i7ciofveXM
+	VJgqhLApoyOmRUY7vez+4ZFQ2E0o8JuX4FHG9YhslxTteKX++4apGVDSToDYCqJO1MpuoP0xO8J
+	nrUD79GHTcD4LhZ5lMbuOoSD7diofXkxiODn9qRdg+DIx0Ur2AQP9RXNA/IzHz2rFSOlT5EVN7f
+	8a+6qlY=
+X-Received: by 2002:a05:651c:3259:b0:38e:94c6:b706 with SMTP id
+ 38308e7fff4ca-394383a1a16mr17073481fa.7.1778625255717; Tue, 12 May 2026
+ 15:34:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/2] AMD Promontory 21 xHCI temperature sensor support
-To: Jihong Min <hurryman2212@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260512213910.871859-1-hurryman2212@gmail.com>
-Content-Language: en-US
-From: Jihong Min <hurryman2212@icloud.com>
-In-Reply-To: <20260512213910.871859-1-hurryman2212@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTEyMDIyNCBTYWx0ZWRfX9r+w2S4MTOg6
- QS94keHT0GwyMXxQcrK52R66hUWbm6hQ/uogWpE+2GQ1CmX93gMwT7Xwh24OwZ0sMtwbzr7PSTN
- e60OKQZ7wzNv4lAyyqjLDvgUSqq58XvI03tu0k902fh6M4LIbDdow1bf8i15/hq0cia70SgUfDN
- TsiCWFeBO6rIWDMg8sOSXVZt5B/v5umvdzXqPrfPX4bY9wRKtl0Wv8p6l2dx1zOMeqsYeatMQu2
- L+dWt0qVTxlune3li7Ulxd2iwXBWFe3qlfE1feR2HVVi/vJQRqa9zeX9l4FFHSZ5T6g88p69GO7
- PYIRDM7eU0n10JGX9JjsHlUonh2wysg2wpQ+xUHtWZaD3accSkU0lWAJKnZDUg=
-X-Authority-Info-Out: v=2.4 cv=aKv9aL9m c=1 sm=1 tr=0 ts=6a03a083
- cx=c_apl:c_pps:t_out a=YrL12D//S6tul8v/L+6tKg==:117
- a=YrL12D//S6tul8v/L+6tKg==:17 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
- a=x7bEGLp0ZPQA:10 a=5jDBv52wX64A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=ueiO3zYk3rD1nXv0G94A:9 a=QEXdDO2ut3YA:10 a=PgRulw5oR9JgysbTFEid:22
- a=a4GWJDV2amYnlPsuj24T:22
-X-Proofpoint-GUID: LQyB5dHg36abhvxfwI6_XNREqIBEcBcA
-X-Proofpoint-ORIG-GUID: LQyB5dHg36abhvxfwI6_XNREqIBEcBcA
-X-Rspamd-Queue-Id: 8E7ED52A9D4
+References: <CAGwGCQ+YFkxxnnbSKbSWC7wsh5ORAT=5riqHJrwsimtqFCuKYw@mail.gmail.com>
+ <20260512122719.51338042.michal.pecio@gmail.com> <CAGwGCQLjcOkjgDZgxmL0gR6uVwmFjxJ22sMzBYRJLXrDtbZZCQ@mail.gmail.com>
+ <20260512190203.5695eb7f.michal.pecio@gmail.com>
+In-Reply-To: <20260512190203.5695eb7f.michal.pecio@gmail.com>
+From: Anders Thomson <andtho888@gmail.com>
+Date: Wed, 13 May 2026 00:34:02 +0200
+X-Gm-Features: AVHnY4KH8bG54UUDtfX0gH0qUrYq_thEiVMjLW3mH-rKwUoLGB4TNaCD6ptahps
+Message-ID: <CAGwGCQJ5eOfuq2dKPSL1yocruT8prwns93sTvzAUVZTJ4CZsyg@mail.gmail.com>
+Subject: Re: renesas 1912:0014 failures
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: BBBBD52AFCC
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[icloud.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[icloud.com:s=1a1hai];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37355-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37356-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org,intel.com];
-	FREEMAIL_FROM(0.00)[icloud.com];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	DKIM_TRACE(0.00)[icloud.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hurryman2212@icloud.com,linux-usb@vger.kernel.org];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andtho888@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
 X-Rspamd-Action: no action
 
-One additional note about AI assistance and authorship:
+Here we go:
+[  469.798260] PM: suspend entry (deep)
+[  470.046476] Filesystems sync: 0.248 seconds
+[  470.048616] Freezing user space processes
+[  470.049453] Freezing user space processes completed (elapsed 0.000 secon=
+ds)
+[  470.049499] OOM killer disabled.
+[  470.049536] Freezing remaining freezable tasks
+[  470.050449] Freezing remaining freezable tasks completed (elapsed
+0.000 seconds)
+[  470.050516] printk: Suspending console(s) (use no_console_suspend to deb=
+ug)
+[  470.051839] xhci-pci-renesas 0000:03:00.0: Get port status 9-1
+read: 0x2a0, return 0x100
+[  470.051866] xhci-pci-renesas 0000:03:00.0: Get port status 9-2
+read: 0x2a0, return 0x100
+[  470.051876] xhci-pci-renesas 0000:03:00.0: Get port status 9-3
+read: 0x2a0, return 0x100
+[  470.051886] xhci-pci-renesas 0000:03:00.0: Get port status 9-4
+read: 0x2a0, return 0x100
+[  470.077248] xhci-pci-renesas 0000:03:00.0: Get port status 10-1
+read: 0x2a0, return 0x2a0
+[  470.077264] xhci-pci-renesas 0000:03:00.0: Get port status 10-2
+read: 0x2a0, return 0x2a0
+[  470.077276] xhci-pci-renesas 0000:03:00.0: Get port status 10-3
+read: 0x2a0, return 0x2a0
+[  470.077292] xhci-pci-renesas 0000:03:00.0: Get port status 10-4
+read: 0x2a0, return 0x2a0
+[  470.077501] sd 7:0:0:0: [sdf] Synchronizing SCSI cache
+[  470.077635] xhci-pci-renesas 0000:03:00.0: config port 10-1 wake
+bits, portsc: 0x2a0, write: 0x202a0
+[  470.077818] xhci-pci-renesas 0000:03:00.0: config port 10-2 wake
+bits, portsc: 0x2a0, write: 0x202a0
+[  470.077825] xhci-pci-renesas 0000:03:00.0: config port 10-3 wake
+bits, portsc: 0x2a0, write: 0x202a0
+[  470.077833] xhci-pci-renesas 0000:03:00.0: config port 10-4 wake
+bits, portsc: 0x2a0, write: 0x202a0
+[  470.077842] xhci-pci-renesas 0000:03:00.0: config port 9-1 wake
+bits, portsc: 0x2a0, write: 0x202a0
+[  470.077847] xhci-pci-renesas 0000:03:00.0: config port 9-2 wake
+bits, portsc: 0x2a0, write: 0x202a0
+[  470.077852] xhci-pci-renesas 0000:03:00.0: config port 9-3 wake
+bits, portsc: 0x2a0, write: 0x202a0
+[  470.077856] xhci-pci-renesas 0000:03:00.0: config port 9-4 wake
+bits, portsc: 0x2a0, write: 0x202a0
+[  470.077859] xhci-pci-renesas 0000:03:00.0: xhci_suspend: stopping
+usb9 port polling.
+[  470.078452] r8169 0000:02:00.0 enp2s0: Link is Down
+[  470.083228] xhci-pci-renesas 0000:03:00.0: Setting command ring
+address to 0x2476001
+[  470.085447] sd 0:0:0:0: [sda] Synchronizing SCSI cache
+[  470.085685] ata1.00: Entering standby power mode
+[  470.089467] sd 3:0:0:0: [sdd] Synchronizing SCSI cache
+[  470.089471] sd 1:0:0:0: [sdb] Synchronizing SCSI cache
+[  470.089498] sd 2:0:0:0: [sdc] Synchronizing SCSI cache
+[  470.089976] ata3.00: Entering standby power mode
+[  471.185801] ata4.00: Entering standby power mode
+[  471.923516] ACPI: PM: Preparing to enter system sleep state S3
+[  471.923767] ACPI: PM: Saving platform NVS memory
+[  471.924004] Disabling non-boot CPUs ...
+[  471.925486] smpboot: CPU 3 is now offline
+[  471.927750] smpboot: CPU 2 is now offline
+[  471.930012] smpboot: CPU 1 is now offline
+[  471.937302] ACPI: PM: Low-level resume complete
+[  471.937330] ACPI: PM: Restoring platform NVS memory
+[  471.937770] Enabling non-boot CPUs ...
+[  471.937814] smpboot: Booting Node 0 Processor 1 APIC 0x1
+[  471.948497] CPU1 is up
+[  471.948526] smpboot: Booting Node 0 Processor 2 APIC 0x2
+[  471.958206] CPU2 is up
+[  471.958233] smpboot: Booting Node 0 Processor 3 APIC 0x3
+[  471.967051] CPU3 is up
+[  471.970459] ACPI: PM: Waking up from system sleep state S3
+[  471.973104] usb usb2: root hub lost power or was reset
+[  471.973129] usb usb4: root hub lost power or was reset
+[  471.973229] usb usb5: root hub lost power or was reset
+[  471.973248] usb usb6: root hub lost power or was reset
+[  471.973325] usb usb7: root hub lost power or was reset
+[  471.973345] usb usb8: root hub lost power or was reset
+[  471.973735] hpet: Lost 1253 RTC interrupts
+[  471.973898] usb usb9: root hub lost power or was reset
+[  471.973901] usb usb10: root hub lost power or was reset
+[  471.973904] xhci-pci-renesas 0000:03:00.0: Stop HCD
+[  471.973906] xhci-pci-renesas 0000:03:00.0: // Halt the HC
+[  471.973917] xhci-pci-renesas 0000:03:00.0: // Reset the HC
+[  500.363392] hpet: Lost 1815 RTC interrupts
+[  500.363631] xhci-pci-renesas 0000:03:00.0: PCI post-resume error -110!
+[  500.363635] xhci-pci-renesas 0000:03:00.0: HC died; cleaning up
+[  500.363715] xhci-pci-renesas 0000:03:00.0: PM: dpm_run_callback():
+pci_pm_resume returns -110
+[  500.363725] xhci-pci-renesas 0000:03:00.0: PM: failed to resume
+async: error -110
+[  500.421723] r8169 0000:02:00.0 enp2s0: Link is Down
+[  500.445507] OOM killer enabled.
+[  500.445548] Restarting tasks: Starting
+[  500.448081] Restarting tasks: Done
+[  500.448138] random: crng reseeded on system resumption
+[  500.448920] PM: suspend exit
+[  500.463568] ata3: SATA link up 3.0 Gbps (SStatus 123 SControl 300)
+[  500.463645] ata6: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
+[  500.463708] ata4: SATA link up 3.0 Gbps (SStatus 123 SControl 300)
+[  500.464152] ata5: SATA link down (SStatus 0 SControl 300)
+[  500.464654] ata1: SATA link up 3.0 Gbps (SStatus 123 SControl 300)
+[  500.464885] ata6.00: configured for UDMA/33
+[  500.465423] sd 0:0:0:0: [sda] Starting disk
+[  500.466188] ata1.00: configured for UDMA/133
+[  500.484215] sd 2:0:0:0: [sdc] Starting disk
+[  500.486246] ata3.00: configured for UDMA/133
+[  500.667575] ata2: SATA link up 3.0 Gbps (SStatus 123 SControl 300)
+[  500.681515] sd 1:0:0:0: [sdb] Starting disk
+[  500.687837] ata2.00: configured for UDMA/133
+[  502.569318] sd 3:0:0:0: [sdd] Starting disk
+[  502.572754] ata4.00: configured for UDMA/133
+[  502.879209] r8169 0000:02:00.0 enp2s0: Link is Up - 1Gbps/Full -
+flow control rx/tx
 
-I am adding this note because this series has been mentioned in some online
-discussions as a newly written Linux driver carrying an AI assistance 
-tag. I do
-not want this to create confusion about authorship or responsibility, so 
-I would
-like to clarify the scope of the AI assistance.
 
-The initial hardware investigation was my work. My starting assumption 
-was that
-the value was exposed through MMIO. I identified the paired MMIO 
-registers, and
-the empirical conversion formula was derived from my own testing, 
-starting from
-the assumption that the raw value could be mapped with a simple linear 
-formula.
-AI assistance was used for writing and refining test scripts around my own
-probing library and existing tools such as pciutils, but the probing 
-approach,
-comparison with an existing tool (HWiNFO64), and interpretation of the 
-results
-were mine.
+No devices attached to any port.
 
-The first hwmon implementation, including the MMIO access sequence, was my
-work. I used AI assistance while figuring out how to integrate the 
-driver with
-the existing xhci-pci infrastructure, especially around managed resource
-handling and lifetime management.
+BR
+Anders
 
-After review feedback, the design moved toward an auxiliary-device 
-model. That
-direction came from the reviewers. Since I did not have prior experience 
-with
-the auxiliary bus, I used AI assistance extensively while implementing and
-iterating on that part. I reviewed and tested the resulting code myself, and
-also used AI-assisted review passes to look for mistakes.
-
-In later revisions, the PROM21-specific PCI glue driver and the 
-platform-data
-handoff between the PCI glue and the hwmon auxiliary driver were implemented
-based on reviewer feedback and my own PCIe driver experience. The runtime PM
-policy was initially chosen by me and later refined through review feedback
-from multiple reviewers. The implementation was structured by me based 
-on that
-feedback, with AI assistance used for additional code review and 
-implementation
-checks.
-
-Runtime testing and validation were done by me, using the methods 
-described in
-the driver documentation. The decisions about which reviewer suggestions to
-accept and how to revise the design were mine.
-
-I am disclosing this because I want to follow the kernel project's 
-guidance on
-AI-assisted work and be transparent about the process. The Signed-off-by 
-tag is
-mine. I understand that this means I am responsible for the submitted 
-code, the
-design choices, the testing claims, and any mistakes in the patch series.
-
-AI assistance was also used to review and polish some of my English email
-replies and documentation wording. I reviewed those texts myself before 
-sending
-them.
-
-
-
-P.S. Thanks to Yaroslav Isakov for testing the series on a B850 system and
-reporting the additional 1022:43fc PCI ID variant.
-
-
-Sincerely,
-Jihong Min
-
-
-On 5/13/26 06:39, Jihong Min wrote:
-> Hi,
+On Tue, May 12, 2026 at 7:02=E2=80=AFPM Michal Pecio <michal.pecio@gmail.co=
+m> wrote:
 >
-> This series adds temperature monitoring for AMD Promontory 21 (PROM21)
-> xHCI PCI functions.
+> On Tue, 12 May 2026 16:40:30 +0200, Anders Thomson wrote:
+> > Adding that quirk to the boot cmdline, caused this on resume:
+> >
+> > [ 1357.247864] usb usb10: root hub lost power or was reset
+> > [ 1385.611310] xhci-pci-renesas 0000:03:00.0: PCI post-resume error -11=
+0!
+> > [ 1385.611438] xhci-pci-renesas 0000:03:00.0: HC died; cleaning up
+> > [ 1385.611491] xhci-pci-renesas 0000:03:00.0: PM: dpm_run_callback():
+> > pci_pm_resume returns -110
+> > [ 1385.611506] xhci-pci-renesas 0000:03:00.0: PM: failed to resume
+> > async: error -110
 >
-> Patch 1 adds a small PROM21-specific xHCI PCI glue driver. USB host
-> operation is delegated to the common xhci-pci code, while the PROM21 glue
-> publishes an auxiliary device for optional sensor support.
+> Looks like the quirk worked, but the chip is still stuck for good.
 >
-> Patch 2 adds an auxiliary-bus hwmon driver that binds to that auxiliary
-> device and exposes the PROM21 xHCI temperature value as temp1_input.
+> Sounds like it happens every time?
+> Does it happen without any connected devices?
 >
-> The hwmon driver reads the sensor through a vendor index/data register pair
-> in the xHCI PCI MMIO BAR. It does not wake the parent PCI device for hwmon
-> reads; if the parent is suspended, the read returns -ENODATA.
+> Any chance that something goes weird already during suspend?
+> Maybe try to collect suspend/resume log with extra debug info:
 >
-> Changes in v5:
-> - Add support for AMD 1022:43fc PROM21 xHCI controllers and document the
->    new PCI ID.
-> - Make USB_XHCI_PCI_PROM21 depend on X86 and default to USB_XHCI_PCI.
-> - Keep the PROM21 PCI glue built-in-only when enabled, while allowing the
->    hwmon sensor driver to be built as a separate module.
-> - Move PROM21 xHCI PCI device IDs to xhci-pci.h so xhci-pci.c and
->    xhci-pci-prom21.c use shared definitions.
-> - Pass the parent PCI device, MMIO base, and resource length to the hwmon
->    driver through platform data defined in a common header, instead of
->    inspecting the parent driver's drvdata from the hwmon driver.
-> - Remove the private hwmon mutex and rely on hwmon core serialization for
->    this driver's callbacks.
-> - Clarify that the driver only serializes its own hwmon callbacks and does
->    not synchronize with firmware, SMM, ACPI AML, or other possible users of
->    the PROM21 vendor index/data register pair.
-> - Use readb() for the temperature data register, validate the value before
->    writing the output pointer, and drop the 0xff invalid-value check.
-> - Use pm_runtime_put() after successful reads with the parent device active
->    so the PM core can re-evaluate the parent device's idle state.
-> - Simplify the documentation and use more precise terminology for the
->    supported device.
+> echo 'module xhci_hcd +p' >/proc/dynamic_debug/control
+> dmesg -W |tee log.txt
+> # suspend and resume
+> echo 'module xhci_hcd -p' >/proc/dynamic_debug/control # disable
+> # stop dmesg, send log.txt
 >
-> Jihong Min (2):
->    usb: xhci-pci: add AMD Promontory 21 PCI glue
->    hwmon: add AMD Promontory 21 xHCI temperature sensor support
+> It's odd, I have a uPD720202 (the 2 port variant) and it never had
+> similar problems. But my card doesn't use the standby supply and
+> hence it fully power cycles the chip during S3 sleep, so it may be
+> apples to oranges if your card keeps aux power applied.
 >
->   Documentation/hwmon/index.rst                 |   1 +
->   Documentation/hwmon/prom21-xhci.rst           | 101 ++++++++
->   drivers/hwmon/Kconfig                         |  10 +
->   drivers/hwmon/Makefile                        |   1 +
->   drivers/hwmon/prom21-xhci.c                   | 238 ++++++++++++++++++
->   drivers/usb/host/Kconfig                      |  20 ++
->   drivers/usb/host/Makefile                     |   1 +
->   drivers/usb/host/xhci-pci-prom21.c            | 123 +++++++++
->   drivers/usb/host/xhci-pci.c                   |  11 +
->   drivers/usb/host/xhci-pci.h                   |   3 +
->   include/linux/platform_data/usb-xhci-prom21.h |  22 ++
->   11 files changed, 531 insertions(+)
->   create mode 100644 Documentation/hwmon/prom21-xhci.rst
->   create mode 100644 drivers/hwmon/prom21-xhci.c
->   create mode 100644 drivers/usb/host/xhci-pci-prom21.c
->   create mode 100644 include/linux/platform_data/usb-xhci-prom21.h
->
+> Regards,
+> Michal
 
