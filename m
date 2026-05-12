@@ -1,270 +1,309 @@
-Return-Path: <linux-usb+bounces-37306-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37305-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WBljNZnyAmrpywEAu9opvQ
-	(envelope-from <linux-usb+bounces-37306-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 11:27:53 +0200
+	id OJSfG4nyAmrpywEAu9opvQ
+	(envelope-from <linux-usb+bounces-37305-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 11:27:37 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9B6351DA8D
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 11:27:52 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 788A251DA75
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 11:27:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 265CD304C6A9
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 09:14:42 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A9B45306DCBF
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 09:14:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE7353B7751;
-	Tue, 12 May 2026 09:14:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23C873B777D;
+	Tue, 12 May 2026 09:14:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="i2j/mbSr";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="HHphshXc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GSPEDZuu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A3F3A9618
-	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 09:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778577273; cv=none; b=bDdsyxlNniFaamTtvkjytn2ah6ime2vuv9wyceLeRzPt/bC2ZoMbPGqmLsUJ9lNnnsLFYMat5YEF/gLGDSXA3uBReGy1pTVllOalPLGLUA5wFkjRCmVChu7zIyMnsFbsgqgWqP1HgOKSiRWRxp2MrYonowL1wJMFBldbzg7d0nk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778577273; c=relaxed/simple;
-	bh=zQaJ2vZQJfhFmn1P3N7/PKoFtdj7eBQEBHycwhVnXgQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TB6dR4rWuVFdFLXXaVryakrdKcuU6hfiab+mA81x8YHq9HYJadNFWP0spHqS2rHQ4lo4s3VxRKs26T4UXuWtmBj6RcEBaC7C7IHx/o7RpLXsqcy3o6QlzNeMJYvEXkhz5AhqU+V3W27DN+RYBFvmymWrkbCq3XoZ1lO4Ght/b7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=i2j/mbSr; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=HHphshXc; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64C5Au0f2172936
-	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 09:14:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=kAPd5R9203QWO/NECWHM00
-	iyZ/Jttw1ctyc4mfSvQQ0=; b=i2j/mbSrI0EogCYTysGfHADumIXjf8yiNtuzTR
-	mSMjQR6iyhG2UIoRoscgsYrpJfGcNVmzZTlL0dGV7eq8lfp+7tzAM2hLPXb0ZvTn
-	Z4gTZlZIsmwvZoLMn6vjW1NR8Qhf3Vi9Nflp/BnvBudpOGv7UTA98YpJ+dU24yzI
-	3d9NbSnW/fVwm28M8OsNxA5ydvGu63iVosWp7QC+zgL30ilKLj6DcmfN9YvBmm7C
-	nGsN4L6/C6jzoPos3LKb8qoXVvMLpNsqiooJovrGu97zuFFnepTs5HqlWWzn0Knr
-	w/E9P5Nqh2mC7yyikrlXIlV6gLlDhbiQ7TaFyx3P3tRTSU4Q==
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e3nvjaf7m-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 09:14:30 +0000 (GMT)
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2ba6fe41283so62031745ad.1
-        for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 02:14:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09383AE6F7
+	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 09:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778577257; cv=pass; b=BP39jXqPgh+HZI6iZ72eRFjKfruEjMCWSI2Z9ah0LY9MatsinVsW/3ZJE0adsvFcofvbsuZVn0qVToAbtlaPBj2qFEKOTfEUKPJMR/VXvyUPpa0w/9P5Zd3op2txfcR85VsA/VD5Jik7ok2hflgMkWFOZOdQ439iy5YaqT0p2TI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778577257; c=relaxed/simple;
+	bh=U5Mj/jS6IBak6dPGMQzKnxIz7rYyqJxSv4wWkZocyPU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LrC2vUjC16Q+cL7DVkIUxXJ50pIQ0M+Ma4BwfC2j+5pCDx8G3P0nd10j3jVxrmzGdLmZ56iWYGmDNNDHGmIVygltX+N6Y/S+sHB3XqYFqcrzlRcDe+uWOu0kvM4/ZITKlLLdz2Pu/lhaUMmcWTFWYL+VoMy0WNl79TAt/PIGIoQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GSPEDZuu; arc=pass smtp.client-ip=74.125.82.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2ef38cf04f0so8049980eec.1
+        for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 02:14:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778577255; cv=none;
+        d=google.com; s=arc-20240605;
+        b=O8S/oLnNhHmCgTvXPXdwSuRA57q/NDxIyyBuQgenfU4u7HSIX2yVhAONH4VaL7sZoZ
+         KscCJ+xKGRfd9ngP1m36OE5NplWVxBrSJ39L6XiAJllR0vT63xih2OUY1F83Z+Q/mS61
+         hI/m75hFudPhZGFyQKL9i29iosG8E7/COqEOgOqRJJ0SqXEUkoSRhuCrz+Y9KQGJHhZP
+         77p+Z9bXIyZKAH/2z1By8Bgf9YMporLTMGky2WLVJ/qt9HJVElwNYTwYEqUJGcUvxEPb
+         8092H3i8qNd8CTghI+JuZtf80uKwoWEvZ63wycK75sXkvL09lPnUczQ4UCrSsuuI49yx
+         sVAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=wLpXl5QYagjlZCBE/xNrRjwHqn2mCjrPyJN9NfCIzLY=;
+        fh=tGH92tF54VE2i99bWPD6itraNb9uJ1plY/K1Lsyxhqw=;
+        b=GY0jhtjp6lmA5P3j5PpUefKRjRfYnosZMtfTl4eckd0TNHcyBC8D7aQTNQ4A0Jn/HA
+         pVMXKGVbwQn3FZy6vxmM7Q2XZpiNlDahkNjUdawKKGa3+d5S4GHz1A5YHGATkqvY84hp
+         zqirLGNZa3ffUDNX7rIfgOc0RKGFye+9HbW4rg0gqdba3PbrAAbrfMPqPEjDhtsfkxLT
+         Azfo4/aaBYhU7wrfCLBbrQH3OaOG+8V1DYHsdnX8tHged7icYIL7e2gQdQLkGz7PzG/d
+         vfLBZ/cFCUefp5cbcvBjT68tHP3h35x1Ydz72bA7fyw1C+kzx/wM8z1xLXiQ8MqBQTV6
+         RjSA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1778577270; x=1779182070; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kAPd5R9203QWO/NECWHM00iyZ/Jttw1ctyc4mfSvQQ0=;
-        b=HHphshXcPqAyD9v8os9/XODIJP+3BySG0a56Rd6vcODQ7OKY3BRcFDdkdGgutXu2F3
-         /IveYd87nLlqcICDrK73c9Qbitix7cEKOVtRmAN4QI6Fe87iYKfO8PJUlDE4r4NO53qF
-         exjeqOg13bPU0ygIf25UzMlod0jKGfJioqbhvnpGPOgDAMLGBMtuZSVBGK+tR/Sj5Jge
-         Z6Jx3uGZFm8t3lKu/P6hV37r22O5KZkz6ZEShTPEhmIXZXcX5Rg1Z3nZUYAW9Vd82D5l
-         pNIRvNcGcj8v5sVu+viCXBCa8l8+VChikUS26hksSBv/0l/splYpkcI0oAZR5+56PAK0
-         8ejA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778577270; x=1779182070;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1778577255; x=1779182055; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kAPd5R9203QWO/NECWHM00iyZ/Jttw1ctyc4mfSvQQ0=;
-        b=NqZjuo0RDe1wqblEDiGdLzSvOWibezxx56KhEtxFFBR2kheJoEUkG6uz/8XZq8BTBA
-         BCDlZ6v5FmUTfp2ufnnN1AIVXi+kR02v17FgAfz6xPaoWb1RNrcMA29lg0P/wHsdEsHL
-         fGdFDvJhV1Boy1srZIK+hb8BCR13c8LW+BO2ki8zANtc5XGcE+6c34pzP+2xnEIgE37f
-         LrBxbSe8FW8yhSEl3OcMR6qwdgJh33XKyNn/Nwc970Rb433L6mh2J2IHgZtXuy2MemMp
-         4B6pITxJOx6pbz1V+ICh1OY8R/+qq2dD0TQM9wXVxGGBcNuzvXR9SovojfNta8CpB6JS
-         aTmQ==
-X-Gm-Message-State: AOJu0Yy1wGcB/Sj5tjXdZ+EJZH/tT0xeiVwCXK9uV3lDfNIjDVdzNv2N
-	ZvXpk6LxulygYf5zZ8R+WRcmaYG8nRO+Zoay+oJSQ6jvZSzPONrSVa8ch1MaD7CttJ5gKfHAjSB
-	C9JoszlkVe45T3LVYgaO9kCPLLsSgflv5whgT5KGlbH3NoEJEcgKhj05kib5EC98=
-X-Gm-Gg: Acq92OGk8fr73/ADOp2YEenptFHCFK/aU3ZWUt57TqSCiggJK+XcerjCrrCggaLm2h2
-	pOOPGx5cGVGH1Qku3T5lE0VvdW73enH6PXg3cALOHZLK0bH8nE3FmtMmJMblzdHizswD9K45cCW
-	SZKp0camxq6zcsfQDPoFZxeP+5UgpiyOFiGTLEHfYi5UY3yVO4fkCpchknJK3ivlv6drxoZeP5A
-	or7KK3hQvckkyH1NUmLGUprKZwmbBald3hxMtBwpAs35XbqBo0oR5UrvJgx6DXEvLsUwF0cPImJ
-	E5KipQKm0mqe6hIv1pfqHADNMzRKRkrmnfUZLQPTNdQ/xG+PZwjcvO30rQAqrK3Re9JiXx021VH
-	7uEgKdYDoNohARAfJvKcwwt7i3ELD6sOcbenrWm0nqKoCbvNoLw==
-X-Received: by 2002:a17:902:cf4c:b0:2b7:88d8:efde with SMTP id d9443c01a7336-2ba78f4e986mr271892435ad.7.1778577269550;
-        Tue, 12 May 2026 02:14:29 -0700 (PDT)
-X-Received: by 2002:a17:902:cf4c:b0:2b7:88d8:efde with SMTP id d9443c01a7336-2ba78f4e986mr271892025ad.7.1778577269020;
-        Tue, 12 May 2026 02:14:29 -0700 (PDT)
-Received: from hu-akakum-hyd.qualcomm.com ([202.46.23.25])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1e359b0sm120292735ad.51.2026.05.12.02.14.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2026 02:14:28 -0700 (PDT)
-From: Akash Kumar <akash.kumar@oss.qualcomm.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: lemans: Enable eud support
-Date: Tue, 12 May 2026 14:39:26 +0530
-Message-ID: <20260512091422.1395490-1-akash.kumar@oss.qualcomm.com>
-X-Mailer: git-send-email 2.43.0
+        bh=wLpXl5QYagjlZCBE/xNrRjwHqn2mCjrPyJN9NfCIzLY=;
+        b=GSPEDZuuZ31Z+22dTEDRByST0/vCvq68t1D91nerRwYoArdfxg7W5/Mme1qiOlepi6
+         FRLzMnKPG/Tt1+YCHHImv/D0RmhNeMBfJA+SPH2lm2AQx8od/5IOkc1WOOQSXCgCHnrg
+         1W4k710vYtjIOut8/9X6vWP3IUF/jy6semioFVQLKlJFCtnqht/jwnhEojw1Uc0KO5qh
+         9Faqalbmk2+j/2LIIS2sYCblIukJuzBWESC+v/pAVADwfvDL8XmurbTCugzhCXJfSa39
+         AawmXB2O1sSVRGAPCtVNnFmiJL49ZELzH+vIfuxXTjdtp+wWLOLutDHoXOdJqJ8PaQsc
+         dz0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778577255; x=1779182055;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=wLpXl5QYagjlZCBE/xNrRjwHqn2mCjrPyJN9NfCIzLY=;
+        b=sC9b4ltiScCjtwkzhOAEW8NlZyykppiCsiBpHQXhSsFTWc8VaAe3QjD/RINyx/Jli8
+         Skb3D+p3qPJw2YelIE7XntLjnQqdqE/KocfPCdEeil2WIhVMl0Vf2vV7wm84uZFfXxsI
+         bVCe+kwx8rPlvmm5Y1QG1Olks087kuHC+V41RXxZ/KCHZB5HW5Vt6oIa9N7wqLbpvNlL
+         dAYZMt9c+9qnG/pS5J5mu02HgUbfCg610AKZaMDIbIG1gni6KO/hGmSPORA18BbVieMo
+         YVwCjw0HJNAblRhkAYCztNSM3FB3drg+uP5HkCbf06YLO1jyLLZ+bIjCWlnH3ULV1CWD
+         1DBw==
+X-Forwarded-Encrypted: i=1; AFNElJ/TBXAtGk2UaHj8hFF+sm4Ch5pC9nkSaGt2+mcK4SdyiYipIKC5LT66/mnYj+4NSWjqejkng1Fos24=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1G6Gafa3QNNGA8KGNMSxSp7JOp0ymr+jG+xf8vRrstOLSsU6V
+	eQAlMy0cHRD8RyPxQuGv083ryYBftyV1ng4hz8wWk3mc9WyIRqivYzkeYQTkGpDKe6Z7tENRTuF
+	s7XMaUyqtVzRmgce3W00d0/i00tl3DZs=
+X-Gm-Gg: Acq92OEFYCyu+Y0n1mY4mYLxiQi2udAEihjMf/Rg40FAAeRzRQw3um0nhRCHjg9RNZa
+	FWTkwNHG+OfYgILOGwL2IE2W+/J+qZKCxIGgUqm86k0uM+d8x963/T3SRIeJc3qJb976d20yuMu
+	RLg8+qtzTsLvU4y/tQEoepuojkkMjT45ON7kGoSFCldKdD1RIiy7VepoSITeopph7VaUoy+WBSg
+	J3QhNzx8VryI7VupweDx/MV8WuoOMaTGJqN6iZBGukRBWXLUPki2l3cVe7Oh+ttOPAMzQZzwxJa
+	/GNCJ+Ct
+X-Received: by 2002:a05:7300:6da2:b0:2c5:50fe:c795 with SMTP id
+ 5a478bee46e88-2fb4bffa2c9mr6829180eec.29.1778577254951; Tue, 12 May 2026
+ 02:14:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: ZRDZDX9GEf6EwPfM8Qee36EXDk6_CqP-
-X-Proofpoint-GUID: ZRDZDX9GEf6EwPfM8Qee36EXDk6_CqP-
-X-Authority-Analysis: v=2.4 cv=H8brBeYi c=1 sm=1 tr=0 ts=6a02ef76 cx=c_pps
- a=cmESyDAEBpBGqyK7t0alAg==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22
- a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8 a=6_3KF195wieaAvOcr7YA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=1OuFwYUASf3TG4hYMiVC:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTEyMDA5MyBTYWx0ZWRfX22SFwKek5ZsJ
- +uUebNElbqWJPUwpZL82DLThpRZ5cNFjm6KBejnTiPMZmNp5qhBZ4h/R4mI32VzUvzh/fvtspRh
- /vn2JmpUKKD88vmj/HHtOZuELkICDvSNVeMC/LRD0rX90+aqWfR+nwLxGNzmHJw8zMFlku0Sh/q
- iYLZ45bRlq0yvgAC24GTUKWTLuZnjxXUFDGeEotXtDRcN8T7yopRHGO7n5EuzCivdzG+qNYfEuh
- 71QnciWX/9g6Eq/6/M+uOWskMqmv/dwdyvWQcQ1VfV5SUdw6WCkXwKS9D31PNfpZQmPzAFJXm1v
- YIuWa/VB6kAEvS9aTbk+4yhcVNlS839iwdnjAkY/5JrCSJNLyhXeqoylHkHKtBqezzoNy8exTyv
- 2AjPbsFizT2OdT3QjgFb4yrpZPAr9s1NuHna2+AlsjwYUraiNif3o/w6QkEsUcgOf8JY349ep0v
- yvd10vk0mAhsDcgTy1g==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-11_05,2026-05-08_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 clxscore=1011 impostorscore=0 malwarescore=0 phishscore=0
- spamscore=0 bulkscore=0 suspectscore=0 priorityscore=1501 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605050000 definitions=main-2605120093
-X-Rspamd-Queue-Id: C9B6351DA8D
+References: <20260511135703.62470-1-clamor95@gmail.com> <20260511135703.62470-3-clamor95@gmail.com>
+ <agJ/T8nBGWEoblmd@nchen-desktop> <CAPVz0n173syW9rXy7Qt_N=mChe6WBRLvjRDypcJEC50hPL4OMQ@mail.gmail.com>
+ <agLb6mgP45jHjvNt@nchen-desktop>
+In-Reply-To: <agLb6mgP45jHjvNt@nchen-desktop>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+Date: Tue, 12 May 2026 12:14:03 +0300
+X-Gm-Features: AVHnY4Ll14i93n_o4smARXMAmGSl_VWfrjFQ8sVQ8lXsJQoJqBmOJp3dhjRuJ_8
+Message-ID: <CAPVz0n1Cgbik1_HvKO9i7ATr4OkS6yE_bwMw__yY_pNi0gQJNw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/6] usb: chipidea: tegra: Avoid controller/PHY init if
+ bus is externally controlled
+To: "Peter Chen (CIX)" <peter.chen@kernel.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Vinod Koul <vkoul@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Thierry Reding <thierry.reding@kernel.org>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 788A251DA75
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	TAGGED_FROM(0.00)[bounces-37306-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37305-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.0:email,qualcomm.com:email,qualcomm.com:url,qualcomm.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,0.0.0.1:email,oss.qualcomm.com:mid,oss.qualcomm.com:dkim,88e4000:email];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[akash.kumar@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[20];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,netdev,dt];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid]
 X-Rspamd-Action: no action
 
-Add the EUD controller node in lemans.dtsi and update the USB HS
-endpoint routing on lemans-evk to pass through EUD instead of linking
-the connector directly to usb_0_dwc3_hs.
+=D0=B2=D1=82, 12 =D1=82=D1=80=D0=B0=D0=B2. 2026=E2=80=AF=D1=80. =D0=BE 10:5=
+1 Peter Chen (CIX) <peter.chen@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On 26-05-12 09:13:40, Svyatoslav Ryhel wrote:
+> > =D0=B2=D1=82, 12 =D1=82=D1=80=D0=B0=D0=B2. 2026=E2=80=AF=D1=80. =D0=BE =
+04:16 Peter Chen (CIX) <peter.chen@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+> > >
+> > > On 26-05-11 16:56:57, Svyatoslav Ryhel wrote:
+> > > > If the USB controller and PHY are externally controlled, then the
+> > > > registration of the controller and the PHY initialization should be
+> > > > skipped, since these configurations must be done by the device that
+> > > > controls the bus to work correctly.
+> > > >
+> > >
+> > > I find you only control USB controller device add at PHY driver, most=
+ of USB drivers
+> > > has PHY control, for chipidea, it has PHY control at core.c, would pl=
+ease try to
+> > > adapt for it?
+> > >
+> >
+> > Usually yes, but this is not the case for Tegra unfortunately. As you
+> > can see Tegra specific section of Chipidea driver specifically
+> > describes why it has to set PHY manually.
+> >
+> > /*
+> >  * USB controller registers shouldn't be touched before PHY is
+> >  * initialized, otherwise CPU will hang because clocks are gated.
+> >  * PHY driver controls gating of internal USB clocks on Tegra.
+> >  */
+> >
+> > So in order to provide correct work of USB when set by an external
+> > device, both PHY and controller init/add must be skipped.
+>
+> You could call generic PHY APIs at ci_hdrc_tegra.c, after PHY init or pow=
+er on,
+> call controller initialization.
+>
 
-Wire the OF graph endpoints between the connector, EUD and DWC3 HS
-controller to enable the EUD path on lemans EVK.
+And what it will give? Modem used in Tegra devices exposes its output
+as USB device on an HSIC line. At the same time modem requires a
+precise control when USB should be registered, to be able to register
+and unregister it. This cannot be done by linking modem's phy to usb
+controller, quite the opposite, controller must be linked to modem's
+phy.
 
-This change is part of series "Improve Qualcomm EUD driver and
-platform support" and has been validated on the Qualcomm Dragonwing platform
-(RB8 board), confirming successful OpenOCD connectivity to the EUD
-interface. For detailed usage instructions, refer to Qualcomm’s Linux
-kernel debugging guide:
-https://docs.qualcomm.com/bundle/publicresource/topics/80-70020-12/debugging_linux_kernel.html#debug-using-openocd
-
-Signed-off-by: Akash Kumar <akakum@qti.qualcomm.com>
----
- arch/arm64/boot/dts/qcom/lemans-evk.dts | 12 ++++++++++--
- arch/arm64/boot/dts/qcom/lemans.dtsi    | 26 +++++++++++++++++++++++++
- 2 files changed, 36 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/lemans-evk.dts b/arch/arm64/boot/dts/qcom/lemans-evk.dts
-index c665db6a4595..96d316867c0e 100644
---- a/arch/arm64/boot/dts/qcom/lemans-evk.dts
-+++ b/arch/arm64/boot/dts/qcom/lemans-evk.dts
-@@ -55,7 +55,7 @@ port@0 {
- 				reg = <0>;
- 
- 				usb0_con_hs_ep: endpoint {
--					remote-endpoint = <&usb_0_dwc3_hs>;
-+					remote-endpoint = <&eud_con>;
- 				};
- 			};
- 
-@@ -510,6 +510,14 @@ queue3 {
- 	};
- };
- 
-+&eud_ep {
-+	remote-endpoint = <&usb_0_dwc3_hs>;
-+};
-+
-+&eud_con {
-+	remote-endpoint = <&usb0_con_hs_ep>;
-+};
-+
- &gpi_dma0 {
- 	status = "okay";
- };
-@@ -985,7 +993,7 @@ &usb_0 {
- };
- 
- &usb_0_dwc3_hs {
--	remote-endpoint = <&usb0_con_hs_ep>;
-+	remote-endpoint = <&eud_ep>;
- };
- 
- &usb_0_dwc3_ss {
-diff --git a/arch/arm64/boot/dts/qcom/lemans.dtsi b/arch/arm64/boot/dts/qcom/lemans.dtsi
-index fe6e76351823..a8ab11681476 100644
---- a/arch/arm64/boot/dts/qcom/lemans.dtsi
-+++ b/arch/arm64/boot/dts/qcom/lemans.dtsi
-@@ -4003,6 +4003,32 @@ opp-384000000 {
- 			};
- 		};
- 
-+		eud: eud@88e1000 {
-+			compatible = "qcom,sc7280-eud", "qcom,eud";
-+			reg = <0 0x88e1000 0 0x2000>,
-+				<0 0x88e3000 0 0x1000>;
-+			interrupts-extended = <&pdc 11 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+			port@0 {
-+					reg = <0>;
-+
-+					eud_ep: endpoint {
-+					};
-+			};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					eud_con: endpoint {
-+					};
-+				};
-+			};
-+		};
-+
- 		usb_0_hsphy: phy@88e4000 {
- 			compatible = "qcom,sa8775p-usb-hs-phy",
- 				     "qcom,usb-snps-hs-5nm-phy";
--- 
-2.43.0
-
-base-commit: https://lore.kernel.org/all/20260501170635.2641748-1-elson.serrao@oss.qualcomm.com/
-change-id: Improve Qualcomm EUD driver and platform support
+> >
+> > > Peter
+> > >
+> > > > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> > > > ---
+> > > >  drivers/usb/chipidea/ci_hdrc_tegra.c | 36 +++++++++++++++++-------=
+----
+> > > >  1 file changed, 22 insertions(+), 14 deletions(-)
+> > > >
+> > > > diff --git a/drivers/usb/chipidea/ci_hdrc_tegra.c b/drivers/usb/chi=
+pidea/ci_hdrc_tegra.c
+> > > > index 372788f0f970..593390a818d1 100644
+> > > > --- a/drivers/usb/chipidea/ci_hdrc_tegra.c
+> > > > +++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
+> > > > @@ -32,6 +32,7 @@ struct tegra_usb {
+> > > >       struct clk *clk;
+> > > >
+> > > >       bool needs_double_reset;
+> > > > +     bool externally_controlled;
+> > > >  };
+> > > >
+> > > >  struct tegra_usb_soc_info {
+> > > > @@ -312,20 +313,25 @@ static int tegra_usb_probe(struct platform_de=
+vice *pdev)
+> > > >       if (device_property_present(&pdev->dev, "nvidia,needs-double-=
+reset"))
+> > > >               usb->needs_double_reset =3D true;
+> > > >
+> > > > +     if (device_property_present(&pdev->dev, "nvidia,external-cont=
+rol"))
+> > > > +             usb->externally_controlled =3D true;
+> > > > +
+> > > >       err =3D tegra_usb_reset_controller(&pdev->dev);
+> > > >       if (err) {
+> > > >               dev_err_probe(&pdev->dev, err, "failed to reset contr=
+oller");
+> > > >               goto fail_power_off;
+> > > >       }
+> > > >
+> > > > -     /*
+> > > > -      * USB controller registers shouldn't be touched before PHY i=
+s
+> > > > -      * initialized, otherwise CPU will hang because clocks are ga=
+ted.
+> > > > -      * PHY driver controls gating of internal USB clocks on Tegra=
+.
+> > > > -      */
+> > > > -     err =3D usb_phy_init(usb->phy);
+> > > > -     if (err)
+> > > > -             goto fail_power_off;
+> > > > +     if (!usb->externally_controlled) {
+> > > > +             /*
+> > > > +              * USB controller registers shouldn't be touched befo=
+re PHY is
+> > > > +              * initialized, otherwise CPU will hang because clock=
+s are gated.
+> > > > +              * PHY driver controls gating of internal USB clocks =
+on Tegra.
+> > > > +              */
+> > > > +             err =3D usb_phy_init(usb->phy);
+> > > > +             if (err)
+> > > > +                     goto fail_power_off;
+> > > > +     }
+> > > >
+> > > >       /* setup and register ChipIdea HDRC device */
+> > > >       usb->soc =3D soc;
+> > > > @@ -342,12 +348,14 @@ static int tegra_usb_probe(struct platform_de=
+vice *pdev)
+> > > >       if (of_usb_get_phy_mode(pdev->dev.of_node) =3D=3D USBPHY_INTE=
+RFACE_MODE_ULPI)
+> > > >               usb->data.flags &=3D ~CI_HDRC_SUPPORTS_RUNTIME_PM;
+> > > >
+> > > > -     usb->dev =3D ci_hdrc_add_device(&pdev->dev, pdev->resource,
+> > > > -                                   pdev->num_resources, &usb->data=
+);
+> > > > -     if (IS_ERR(usb->dev)) {
+> > > > -             err =3D dev_err_probe(&pdev->dev, PTR_ERR(usb->dev),
+> > > > -                                 "failed to add HDRC device");
+> > > > -             goto phy_shutdown;
+> > > > +     if (!usb->externally_controlled) {
+> > > > +             usb->dev =3D ci_hdrc_add_device(&pdev->dev, pdev->res=
+ource,
+> > > > +                                           pdev->num_resources, &u=
+sb->data);
+> > > > +             if (IS_ERR(usb->dev)) {
+> > > > +                     err =3D dev_err_probe(&pdev->dev, PTR_ERR(usb=
+->dev),
+> > > > +                                         "failed to add HDRC devic=
+e");
+> > > > +                     goto phy_shutdown;
+> > > > +             }
+> > > >       }
+> > > >
+> > > >       return 0;
+> > > > --
+> > > > 2.51.0
+> > > >
+> > >
+> > > --
+> > >
+> > > Best regards,
+> > > Peter
+>
+> --
+>
+> Best regards,
+> Peter
 
