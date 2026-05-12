@@ -1,105 +1,68 @@
-Return-Path: <linux-usb+bounces-37336-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37337-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0KnwEiY/A2rO2AEAu9opvQ
-	(envelope-from <linux-usb+bounces-37336-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 16:54:30 +0200
+	id 6FkgG7UzA2oA1gEAu9opvQ
+	(envelope-from <linux-usb+bounces-37337-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 16:05:41 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2A6A523068
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 16:54:29 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C65F521F12
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 16:05:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 97FF8317F613
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 13:59:12 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id F192C304D172
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 14:01:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E4933A59BC;
-	Tue, 12 May 2026 13:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59C933A71AA;
+	Tue, 12 May 2026 14:01:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="l0mTunX1";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Pqa+cs+P"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZixUqq7R"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43673A599D
-	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 13:58:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892ED3A59AD
+	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 14:01:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778594321; cv=none; b=jtq3t14QWYGT/9DuEBsUbcCqw1ZQU4guPFlIKedNyHKPahltlLVu7qQEK82eQWuTAKlbuH+JPRKdOXJUr0SWTOnvJ33H7DK3LYHMC3vTOrufrRi8zW4tQ+2BlPZcC/9gXd58WiO5esrK8SfdfQ/fxmDubFH0PvktwUbL8bGPaA0=
+	t=1778594502; cv=none; b=Vd9MzCEPjSQM89MDuQPhEMhynqqxeX9KjBnfCFHXNupVLEplWKAQUz1GpV4XXCGAwSE0O+8xwl8GL272lnTEwG1qjgBRDpb+sHsleGx8VYIo+viHzxRcOkD8i+yukHJffcnvuZG4/HzkXZFdOdAO8VFnIa7KN6FwAd5fcLtabSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778594321; c=relaxed/simple;
-	bh=J+JMZRqK9ZOguzeozFmWapNCXk2xSTLcc+FBiwf1pUw=;
+	s=arc-20240116; t=1778594502; c=relaxed/simple;
+	bh=YJcZqzcZioGDd6oNQJk6R3fdx1ohECUjfKesgeMv1Cc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TbAZmV+G+G1NPMZE3trwP/GvQIaXG5lZu7/JYYCB1N8JvCIlWIPbch4kbmgriIMgRsqetM4XPmBAifdPhWMM7MPn1F2vVJ7Ro8vl1JwW45xKA7Ru0wDPKEuZKQMpmVONwmM4bbKHSx4BeKEoQZiM4v+JIN/h1AnA3IXRuLd15BA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=l0mTunX1; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Pqa+cs+P; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64CCgsGP1409947
-	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 13:58:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Iy7wYeD/e941NJ/F1ItwLJIww/GpkLrZlGMXR1RDBfc=; b=l0mTunX1SdL/ZcR3
-	z2E4hwalKWkqgMd8hqze3fETLkJDflpbKMC1SmVqfqYMt7hMQVTdJlJLTPJPSaBj
-	To1Zu2n1KFCLIwvqaMQE4L0Xn2dClF5oGWg+KuzokVLKI2lVIodZ7asZaCheqIM9
-	FXrHPh5oXdBY4Cd5kV6/PivVen+eqJUp+qXELZjy6+o3Fetl7IHbGHg6K9TjldU4
-	GEwLwIoUq5y3fzeCBU6EJ424pXW3VejQ9rbEtQUBafZ6x7QKyVamH4l5C3uK8fTI
-	wsM52CYQo18+bYCUSsRoyrWs9Z0xNOg9Q6tDwPgk8x3YWObkTaSZjFcZOxmRQW+I
-	vyd5oA==
-Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com [209.85.221.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e44f308qu-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 13:58:38 +0000 (GMT)
-Received: by mail-vk1-f199.google.com with SMTP id 71dfb90a1353d-573ac60fcc2so488990e0c.0
-        for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 06:58:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1778594318; x=1779199118; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Iy7wYeD/e941NJ/F1ItwLJIww/GpkLrZlGMXR1RDBfc=;
-        b=Pqa+cs+P9kXFRXV4qBov/G1F9NIPhdktdPzoGPA/QzCUeXz9PHl0TiO+5/aoyji9x4
-         DX077PlLqzxcpgc6w2NrIh9c7EsMC9zllyA0qI+uMoQG3ll/jgHpb0PFWleFTKijiUHT
-         7yuH+68lYvyDsexq1SzArEelV0zmub2uHHA/eQW6uwq904xfx5Q+9m2WNpWyG5UL0VXs
-         ZZHqjzV+A7QFQ4oXJ+VX7agqoommArs5uG4gAdDjrgjcKnVqx2BNx62MBr/yIt1lbOt7
-         ubmYb5Z2UfOygGyEHfS1R3q/ZXdbe0YJKBM9MiwZZj2arzb8B5eJwQboXSGHy1SR78s5
-         tTbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778594318; x=1779199118;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Iy7wYeD/e941NJ/F1ItwLJIww/GpkLrZlGMXR1RDBfc=;
-        b=F0k7r2VXgu39qmwpWjfLPCfrh70buGAw3Vz2iqCT/0YN6mMYhi6ocbYJbV+s7JoDZ9
-         j79lPyFs2J2uvvEqIY09bUgKDYHOy+pVIET6Cfke4ZN/RfenHkb7wklKlpyvXSq1StDZ
-         dlLb+ar00YxQb3wydGD1qaTMa3MusCqJY2c8Su+bAOcqPQe6fNw9L5BDzF7geh9Y0niG
-         BWfcRJddVU5+QdO4zsnAX9hXoeGgHVJWvO5bxCOmiShlqh2TABVbORDYTixjtik70Mk5
-         bZxyhjKwTwqBgWx7W4uJ4fI+lQH6V0amtzpds5mFufwG/TbwJNN3Cd6Rr/Ew6wimolmt
-         KtrA==
-X-Forwarded-Encrypted: i=1; AFNElJ+HEEAxYIlo/REjj/KwgASCFjKkchmS5/OZX7R8Yb89jP7qffKJZxN2RuzyvisLP9FXdoE/yCvLRdc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywZ7RvG5X+k2c921WUaBVjUAlubI7/UfW8TQbgV+Xv57VPKhvX
-	z0OeBz0/2enzZhOU82FbyBMSf/L4gqPMWrkQxYHiggkpQEGFE8m7S2ZI86Jdy6Xq5Xfwx3b7O+L
-	J7JcFI6Np11+Lli8ZDqYnFazeXgUaZg+HquKXDe9O1wD3h+fguVDMmSMfieBrh6E=
-X-Gm-Gg: Acq92OEGS34iFOXZOjukX+VpvYxy2qSVNij74rDovKYEAZ5xN5A6q+iw3jS0cLeXTls
-	VyzaMRQd1HzXYi04qx51S4SrJUhK+IEpbJRav2rc/esXuQBG1bo6eXqbv//DMF6/Str7vSSXQnT
-	PNJ3IiyKEEi4USFhteOC2sJBKV4a6E2KVgmSL7Qf3LMDSWMLOH8ZXCWFjGqRpg63UyTYHHOEgAP
-	4/2fxf7nqL9bwC6DX7P93sArNd/NdYx4jENuuWNuaRci7L9/GMK/TF55LU9Tscj5rAyZcNKRkqD
-	zKq9oDNWSBhNROmiocIfYomf0pvzFPBe7uBGkbzuwUlrAHomcNR2gZHNMQfzdD3XJUOstiyPWow
-	i7HeVbvqaptCl7psBOo1/qDzmWJL8CYTB0ZfdCsFDUw0X7J+DpsxHZHnX9antjR2I+PVwQa6Q2V
-	KndUU=
-X-Received: by 2002:a05:6122:3a96:b0:575:1f1f:758d with SMTP id 71dfb90a1353d-5755b0ac2a9mr4561140e0c.0.1778594317862;
-        Tue, 12 May 2026 06:58:37 -0700 (PDT)
-X-Received: by 2002:a05:6122:3a96:b0:575:1f1f:758d with SMTP id 71dfb90a1353d-5755b0ac2a9mr4561137e0c.0.1778594317407;
-        Tue, 12 May 2026 06:58:37 -0700 (PDT)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bcfac35c47asm352195166b.1.2026.05.12.06.58.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 May 2026 06:58:36 -0700 (PDT)
-Message-ID: <253ad0dc-1fc3-4e6f-841b-c7e9fd7320c7@oss.qualcomm.com>
-Date: Tue, 12 May 2026 15:58:34 +0200
+	 In-Reply-To:Content-Type; b=sm5kbw3t7OMrzomi0ydUqzdTvv3nitr8/M0xTj5DZfPzbaiKtJOpkTBlBqPTmP3GZ3DJ4Iw5rCNmQr9Nl7UoG9KCm4Uzdwzc4CXbfUUkuHX7Cs2/2OGZpsIbGAcKXCb6v6yo7nsZkdkSmKosgZ1BT2DXOcZuEnXuU7cwKGrag2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZixUqq7R; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778594502; x=1810130502;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=YJcZqzcZioGDd6oNQJk6R3fdx1ohECUjfKesgeMv1Cc=;
+  b=ZixUqq7RnYBKZWMA9s9//E6L4kb6AJ1kg/BdGAsDVF4vbTzfdo5UzZNd
+   GEDJlISD8uMH5j349mLvIByl48ASSGCLSS0x29E3/Q+nn9Tq09zIJ26bq
+   zn8k6yhpkN8OjOq6pryATECILVy1mjI8u5rd63EwnQS7I/uWMH3hI9aJL
+   4Tw4/olLUZSUDrsU4zSid2+lD2u3N+1gyR07jtGDeZMdsscw6D/ocOHq0
+   ku1DBXDBpHd814OSgV4UA8FFxBLT5rOa/P4N/FPr48aC6Vy7Zk36Rpqqt
+   E3P47ThB62CcLn9u2ftbYnJI11KpX718Wg61klh89H+AC1GEBXtL94Mdc
+   w==;
+X-CSE-ConnectionGUID: CGauNIcbQMSy7JmEBkfraQ==
+X-CSE-MsgGUID: nf6670UkQumqNgW+0ZaluQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11784"; a="78649494"
+X-IronPort-AV: E=Sophos;i="6.23,231,1770624000"; 
+   d="scan'208";a="78649494"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 07:01:41 -0700
+X-CSE-ConnectionGUID: g3QtO69kTremNCHv5BfHHg==
+X-CSE-MsgGUID: Xnaoz2YHQfKpzdNUhvK3Cw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,231,1770624000"; 
+   d="scan'208";a="239599485"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO [10.245.245.165]) ([10.245.245.165])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 07:01:40 -0700
+Message-ID: <fc2d9862-6c46-4161-8fd5-68b9e6c2e8bb@linux.intel.com>
+Date: Tue, 12 May 2026 17:01:37 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -107,166 +70,177 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/4] thunderbolt: Separate out common NHI bits
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Konrad Dybcio <konradybcio@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Mika Westerberg <westeri@kernel.org>,
-        Yehezkel Bernat
- <YehezkelShB@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, usb4-upstream@oss.qualcomm.com,
-        Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>
-References: <20260428-topic-usb4_nonpcie_prepwork-v2-0-452fb9d63f77@oss.qualcomm.com>
- <20260428-topic-usb4_nonpcie_prepwork-v2-2-452fb9d63f77@oss.qualcomm.com>
- <20260504065402.GB6785@black.igk.intel.com>
- <7aab3f25-7609-499a-b701-8301719b9a82@oss.qualcomm.com>
- <20260512132008.GC84797@black.igk.intel.com>
- <80e0bd64-c99d-4dee-9417-3036f72658f2@oss.qualcomm.com>
- <20260512135433.GD84797@black.igk.intel.com>
+Subject: Re: xhci_hcd: AMD Raphael/Granite Ridge USB 2.0 xHCI [1022:15b8] dies
+ on resume from suspend
+To: Michal Pecio <michal.pecio@gmail.com>,
+ Martin Alderson <martinalderson@gmail.com>
+Cc: linux-usb@vger.kernel.org
+References: <CA+_z3hRjPnQOrEp7uXsNsu6wzqQp9O6FT18i=XcSC7k74Xd2QA@mail.gmail.com>
+ <20260330020749.18fbe433.michal.pecio@gmail.com>
+ <CA+_z3hRTD-QAgv3jZhOZUUPA0sNZ8946jfYwYsZ=RnQJ0LG7cw@mail.gmail.com>
+ <20260404152438.582f0451.michal.pecio@gmail.com>
+ <CA+_z3hTMfggtv+u_A_SRyb2FRzVjm=Nav5NRCTuhmEthb8x0jw@mail.gmail.com>
+ <20260509180603.6f67c9d8.michal.pecio@gmail.com>
+ <CA+_z3hT_n09fAszT+DkoTHLzracB7fQZwkiiTxGGBJxhFcD8hg@mail.gmail.com>
+ <20260512120334.4eef3d0b.michal.pecio@gmail.com>
 Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20260512135433.GD84797@black.igk.intel.com>
-Content-Type: text/plain; charset=UTF-8
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20260512120334.4eef3d0b.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: eLeeSI_il7muLe1yflnYDAUHmMMoksN5
-X-Authority-Analysis: v=2.4 cv=SpSgLvO0 c=1 sm=1 tr=0 ts=6a03320e cx=c_pps
- a=+D9SDfe9YZWTjADjLiQY5g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=_K5XuSEh1TEqbUxoQ0s3:22
- a=kj6NfxSqUhuuyZWD8T0A:9 a=QEXdDO2ut3YA:10 a=vmgOmaN-Xu0dpDh8OwbV:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTEyMDE0NiBTYWx0ZWRfX0zSneZU0bNyr
- JeQ6P680ddRHWj4xL4hVErv4Hqk97PSuZAP4MjRGjJZUA2iSYVMVtpBMTlqLWyqzDqt6FW3I11d
- 6RPDv02dSfJwpOzOCa5tOLYNBi8gid85xlU3Z07X4a1pfAUd3daA+bBABzMaVBRo9aYeB4itDmD
- EXaUk9psr3+CPq27bQ5HbJhiNjUpnQgBsDIkTN1bFjGCl40MGa3e39GDNxzfsAq/f1NNtG75SGr
- /OgunJwDSFVGKo/U6rbszyLzpscOCE0gR5CLzH2hIcBUhvkR7zi0ft9PBw6+lerePAo5aZJYkZA
- AYIndB8R/f0mkKnOWC432sV9r5KjZG8N7jKhR/dUW58XNgkHjPUKIJ5ryLsRNVXy4MwJTSU3DYG
- ekb0gVq6BtmjiX0sqSsbuesKrYR4ZljedxbXLQpSaTaHKwRu3HRZtFp2uYnG2nPqa+B5jATL59a
- o9sb6nAqPMvJqs6/R6w==
-X-Proofpoint-GUID: eLeeSI_il7muLe1yflnYDAUHmMMoksN5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-11_05,2026-05-08_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 malwarescore=0 suspectscore=0 impostorscore=0 bulkscore=0
- spamscore=0 phishscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605050000 definitions=main-2605120146
-X-Rspamd-Queue-Id: A2A6A523068
+X-Rspamd-Queue-Id: 0C65F521F12
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,vger.kernel.org,oss.qualcomm.com,qti.qualcomm.com];
+	DKIM_TRACE(0.00)[intel.com:+];
+	TAGGED_FROM(0.00)[bounces-37337-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	TAGGED_FROM(0.00)[bounces-37336-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
+	RCPT_COUNT_THREE(0.00)[3];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linux.intel.com:mid]
 X-Rspamd-Action: no action
 
-On 5/12/26 3:54 PM, Mika Westerberg wrote:
-> On Tue, May 12, 2026 at 03:43:12PM +0200, Konrad Dybcio wrote:
->> On 5/12/26 3:20 PM, Mika Westerberg wrote:
->>> On Tue, May 12, 2026 at 03:06:58PM +0200, Konrad Dybcio wrote:
->>>> On 5/4/26 8:54 AM, Mika Westerberg wrote:
->>>>> Hi,
+On 5/12/26 13:03, Michal Pecio wrote:
+> On Sun, 10 May 2026 17:29:26 +0100, Martin Alderson wrote:
+>> 1. The timing is during suspend in every single failure I have logs
+>> for. I went back through 7 weeks of persistent journals and pulled the
+>> context around every "HC died" event. All 9 failures show the same
+>> sequence:
 >>
->> [...]
+>>    xhci_hcd 0000:0f:00.0: xHCI host not responding to stop endpoint command
+>>    xhci_hcd 0000:0f:00.0: xHCI host controller not responding, assume dead
+>>    xhci_hcd 0000:0f:00.0: HC died; cleaning up
+>>    PM: suspend devices took 5.5--6.1 seconds      <-- elevated
+>>    amdgpu 0000:03:00.0: MODE1 reset
+>>    ACPI: PM: Preparing to enter system sleep state S3
 >>
->>>>>> +/*
->>>>>> + * During suspend the Thunderbolt controller is reset and all PCIe
->>>>>> + * tunnels are lost. The NHI driver will try to reestablish all tunnels
->>>>>> + * during resume. This adds device links between the tunneled PCIe
->>>>>> + * downstream ports and the NHI so that the device core will make sure
->>>>>> + * NHI is resumed first before the rest.
->>>>>> + */
->>>>>> +bool tb_apple_add_links(struct tb_nhi *nhi)
->>>>>
->>>>> Okay you moved it here good. I think we can call it in nhi_pci_probe()
->>>>> directly so no need to expose outside.
->>>>
->>>> Yeah that seems like a good idea. It's already there, behind N calls
->>>> in the software CM case.
->>>>
->>>> Do we have to check the CM type though, or do you think it'd be fine
->>>> to just call it unconditionally? (either because there are presumably
->>>> no Apple machines with ICM or because these devlinks would be harmless?)
->>>
->>> I think you can call it unconditionally. It only does something for TB1-2
->>> Apple systems.
->>>
->>> For Apple TB3 we used to start ICM firmware but this was changed as the
->>> driver learned SW CM. However, we never setup any device links so this
->>> would not change anything.
->>
->> OK. I'm keeping tb_acpi_add_link() as-is, since that's both bus- and
->> arch-independent.
->>
->> However, doing just something like:
->>
->> diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
->> index cb5d028de3bc..f5ddc8ddb8bb 100644
->> --- a/drivers/thunderbolt/tb.c
->> +++ b/drivers/thunderbolt/tb.c
->> @@ -3327,7 +3327,7 @@ struct tb *tb_probe(struct tb_nhi *nhi)
->>          * before the PCIe/USB stack is resumed so complain here if we
->>          * found them missing.
->>          */
->> -       if (!tb_apple_add_links(nhi) && !tb_acpi_add_links(nhi))
->> +       if (!tb_acpi_add_links(nhi))
->>                 tb_warn(tb, "device links to tunneled native ports are missing!\n");
->>
->>
->> diff --git a/drivers/thunderbolt/pci.c b/drivers/thunderbolt/pci.c
->> index ca50e3584cac..e0abd1d503c5 100644
->> --- a/drivers/thunderbolt/pci.c
->> +++ b/drivers/thunderbolt/pci.c
->> @@ -294,6 +294,8 @@ static int nhi_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->>  
->>         pci_set_master(pdev);
->>  
->> +       tb_apple_add_links(nhi)
->> +
->>         return nhi_probe(&nhi_pci->nhi);
->>  }
->>
->>
->> Will cause the warning to show up. And adding something like
->> `nhi->device_links_done` is a little ugly.. Ideas?
+>> So it's reliably during suspend, before S3 entry, and the elevated
+>> "suspend devices took" matches the 5s xHCI stop-endpoint timeout. A
+>> clean suspend on the same boot takes ~0.46s.
 > 
-> Ah in Qualcomm case? We are going to add tb_of_add_links() as well, right (or
-> something along thoese lines)? Then tb.c does:
+> The S3 state probably doesn't matter, chances are that it would also
+> happen with s2idle or hibernation.
 > 
->        if (!tb_acpi_add_links(nhi) && !tb_of_add_links(nhi))
->                  tb_warn(tb, "device links to tunneled native ports are missing!\n");
-> 
-> In the meantime it is okay to have that warn because we really do want to
-> have those links in place :)
+> Could you enable dynamic debug before every suspend (or permanently
+> on every boot) and collect a dmesg log of this happening again?
+> And maybe also a snapshot of debugfs directory after resume but before
+> unbinding xhci_hcd. These may contain clues what triggered it.
 
-No no, I meant that with the diff above, tb_apple_add_links() failing
-would not lead to any warning messages, and it would always hit the
-warning in tb.c
+It's possible there is a race between queuing a command and suspend.
+It looks like nothing is preventing a new command from being queued while
+suspend stops the host from running, thus causing commands to timeout.
 
-(because these two are now checked independently)
+Suspend isn't checking if there are pending commands, or if command timer
+is running either.
 
-Konrad
+I wrote some debugging code, can be found in my debug_hc_died_cmdring_race branch:
+git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git debug_hc_died_cmdring_race
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=debug_hc_died_cmdring_race
+
+If it prints
+   "Can't queue command, xHC not accessible (stopped?)"
+or
+   "Suspending and stopping xHC with pending command(s)!!!"
+Then we have a queue_command - suspend race.
+
+Code below for reference
+Mathias
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index e47e644b296e..50ce4a4a7fe3 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -4353,6 +4353,7 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
+  			 u32 field3, u32 field4, bool command_must_succeed)
+  {
+  	int reserved_trbs = xhci->cmd_ring_reserved_trbs;
++	struct usb_hcd *hcd = xhci_to_hcd(xhci);
+  	int ret;
+  
+  	if ((xhci->xhc_state & XHCI_STATE_DYING) ||
+@@ -4362,6 +4363,14 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
+  		return -ESHUTDOWN;
+  	}
+  
++	if (!HCD_HW_ACCESSIBLE(hcd)) {
++		xhci_err(xhci, "Can't queue command, xHC not accessible (stopped?)\n");
++		xhci_err(xhci, "called by %pS from %pS\n",
++			 __builtin_return_address(0),
++			 __builtin_return_address(1));
++		return -ESHUTDOWN;
++	}
++
+  	if (!command_must_succeed)
+  		reserved_trbs++;
+  
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index a54f5b57f205..04279fbbe1dd 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -949,6 +949,34 @@ static bool xhci_pending_portevent(struct xhci_hcd *xhci)
+  	return false;
+  }
+  
++static void xhci_dump_ring(struct xhci_hcd *xhci, struct xhci_ring *ring)
++{
++	struct xhci_segment	*seg;
++	union xhci_trb		*trb;
++	dma_addr_t		dma;
++	char			str[XHCI_MSG_MAX];
++	int			i, j;
++
++	seg = ring->first_seg;
++	dma =  xhci_trb_virt_to_dma(ring->deq_seg, ring->dequeue);
++
++        xhci_err(xhci, "Dequeue: %pad\n", &dma);
++
++	for (i = 0; i < ring->num_segs; i++) {
++		for (j = 0; j < TRBS_PER_SEGMENT; j++) {
++			trb = &seg->trbs[j];
++			dma = seg->dma + j * sizeof(*trb);
++			xhci_err(xhci, "%pad: %s\n", &dma,
++				 xhci_decode_trb(str, XHCI_MSG_MAX,
++						 le32_to_cpu(trb->generic.field[0]),
++						 le32_to_cpu(trb->generic.field[1]),
++						 le32_to_cpu(trb->generic.field[2]),
++						 le32_to_cpu(trb->generic.field[3])));
++		}
++		seg = seg->next;
++	}
++}
++
+  /*
+   * Stop HC (not bus-specific)
+   *
+@@ -999,6 +1027,12 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
+  	/* step 1: stop endpoint */
+  	/* skipped assuming that port suspend has done */
+  
++	/* Check if command ring is empty */
++	if (!list_empty(&xhci->cmd_list)) {
++		xhci_err(xhci, "Suspending and stopping xHC with pending command(s)!!!\n");
++		xhci_dump_ring(xhci, xhci->cmd_ring);
++	}
++
+  	/* step 2: clear Run/Stop bit */
+  	command = readl(&xhci->op_regs->command);
+  	command &= ~CMD_RUN;
 
