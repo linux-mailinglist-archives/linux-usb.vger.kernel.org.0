@@ -1,361 +1,193 @@
-Return-Path: <linux-usb+bounces-37315-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37316-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YAbLI8QMA2pI0AEAu9opvQ
-	(envelope-from <linux-usb+bounces-37315-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 13:19:32 +0200
+	id QOjfM+IOA2pI0AEAu9opvQ
+	(envelope-from <linux-usb+bounces-37316-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 13:28:34 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 438A551F40D
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 13:19:32 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBA8351F54A
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 13:28:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CAB59303F474
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 11:19:18 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id E5C003002909
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2026 11:28:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDA163859FD;
-	Tue, 12 May 2026 11:19:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EC7047ECDE;
+	Tue, 12 May 2026 11:28:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nnq6+2Yv"
+	dkim=pass (1024-bit key) header.d=moxa.com header.i=@moxa.com header.b="HvZi84cz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11012062.outbound.protection.outlook.com [52.101.126.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C08843ACF07
-	for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 11:19:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EEAF29E0F8;
+	Tue, 12 May 2026 11:28:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.62
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778584756; cv=pass; b=fPwpIySPJ/GjblBPxHk5ZoBn5U0lIEHD5X8wGOs2lbSaVjU8zcxcvuOar14xcV4zd3EL7YfcJWSSljiQAaJq0hoHbn5fpy4Xk3VDJCT5DHB0lUeX3oe1C0nqo+EkonBFd6CU3+cg7N3GEksY7L6p8LcmAbBYeC1TNvE5L/KKvpk=
+	t=1778585309; cv=fail; b=Rf7EQPCm+2OTIzQRSIVMbhbXEphc+NMQE21J/CfQsx5a6Ez1eZXxDm/1cDFq0In0gXyNb8Isjb4Sa8UESt327v0ru3DgD8CMWNSE1ZrUw3zEwxW6Awcn+yJOoWg4GHFqntgMOz66C27NVdewZy9+SN5v4ZoBIZcSS/61mGHYk/E=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778584756; c=relaxed/simple;
-	bh=MIxIHIH3CJAVup1aGyzZP5Vqx3tluLei17C5chffE1g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hUoQ+hCkRqueWuuwuQqRR2LYEbSNDmbFbVIs0kH1UcTd2h+DvQbOu7f7EBCRcQKe4izN1XL29J4SwMdIJoW23fgbXztNnqd9E9aFKHMDB9bUHPvpv0vsDBsdZmuLBYuAjx1t3Gjj6mdJQd0FLsyQsmsGGwyheHxMC9dcdzaVbYA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nnq6+2Yv; arc=pass smtp.client-ip=209.85.161.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-6966d16b978so1748585eaf.3
-        for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 04:19:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778584753; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UNREtQNMC/qRf7OMUVnuDros+rkluYv6FGsfau28JJxFoJ1wv5JO3ZPxtaas02M4f1
-         LfxQbWYscGBPOTmRxc3Ki4ApP+8kklgkcMrswRnuq0yTEvsiyDw7H95Oil9Bx075Amcu
-         5rdMaVXWjqT3LoqGq/6YyT1f7yAVHvMQEFzzcbFdwon01V111HzGgkFkRZ49gnPmesBf
-         DCH0UkMG9lV4iXR2Uds9Nq0eKcrZJKCj4kM3XKes+cKY/BavKQn/VzQd6F8Usl46TGKO
-         tYNhVmbEs7/ZRxHDEy0lIhF7IHKIGhcULjtfQQOIqvBZ27v06DR28Q6OD5PxKUJ6noTk
-         I7qA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=5mtEH2w3LwavrlBiwkdHe6W2Vm7Xq8WeRiZjP7eFhqs=;
-        fh=AkzwKtQZKcMvlNLazi3itoEkR96NzAieYwapawUHCng=;
-        b=Q4aPbJx7CPHigTAb99vCf0NiIL5oUHYhGRuZWK9FenGWfvS3ccqLldYFosE5d92I12
-         BihMhXa/vSMRpvLSlhmFvno3B0bzTmVsYi7lAmWFxX6RN++eB4BdD5zyKc2BSj1Xl84t
-         6ib/5LJc8kUQMkvLlIB8dsVl30DUWv8Xz6HpVE/bcX8XSg8x0IObTpHZGjCYo8HhWM74
-         uGOCXROlHmYLe1h2Mcv9SanTw62lOPtuXZJtDlS7vzSoroIdWiwD6HbKjYJLMy9pDxvZ
-         Xk4bF4arZbHMJSfaUHS8CqpXZCbbtC8pQnnPV9Q73Jb4YBhh7p6tdqbOcB5pDsbqv4K/
-         KIOA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778584753; x=1779189553; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5mtEH2w3LwavrlBiwkdHe6W2Vm7Xq8WeRiZjP7eFhqs=;
-        b=Nnq6+2YvWeaas2ib3YH5a5Zmqwe5C37R2zEiI+dklcWRWq2a15GG4vhb4jiMHiMVgf
-         7v9jbACiLBaMZZQHW5PMNd7GY8wa5/YNrW8KCArqAqRIyRYofYtFd6k/2jJu8YH3+UlH
-         NAu43jWbqeRGU9VP1fKiEC/QAgTUYNfHsZCMY72qCryZT5KhnREXNYwuukzTX12r2bkj
-         TY86yHataWDb9REHlXrSuyB6BgWad7kz0lXNV2zXNV0rrAkb2cmGhsLms7dUyoXZ/ppc
-         nR780kMBPlnLtOcFRH2uUA4MYaKeqFYHfnuvdFkt0ZCDze3s8SZC9xe2pkL0ktOjvp0d
-         Utuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778584753; x=1779189553;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5mtEH2w3LwavrlBiwkdHe6W2Vm7Xq8WeRiZjP7eFhqs=;
-        b=hnGWSwPaif0iY9STZ1ACL6ZxUsKg9aLwQtymHJt6Mh6Z1/miFaG6kt7EGpqhR9opBc
-         pQYZ0DzFVbRgiPtp2Chj5TDtA8Elsl2lmOgNlm6292dlLDHTc3sVxraopdjFzZtU6GWv
-         KKUeIc1tAhmMmacp+3a/njd/n6hQ2AS3SD8WjH04OVN8xEDavVJBrA2AXnCGWh9nuEeN
-         ZHzAPR2iMAAD8g1SkRB1vczeyFulDc9drFqVRRpktfts4DQm4N+KmfvDv9DwxUebyC+4
-         cnIIejzRkmsDqOArnBmDnM2Ksw57caQRjAqr69DZq8ZadUrmIAGVT4682qsbSBYrBSXL
-         7E6w==
-X-Gm-Message-State: AOJu0YwwMRb+GLO+HfTGKu9ai+dFwE8O2GeDaJeDO+PAYivIX/OTqKux
-	fH6h9zJrImJJJjwJXGtrQ3RVLqPswlZa77yO1yro8myrgDh6Mh9NvPPRhlN9h0JH0wqKPg4Sf77
-	/08AcUwe80blHySmms7IiJwRmFlUsTXe0C/YDa62Hvg==
-X-Gm-Gg: Acq92OFEAr/fgG8QaP/BVL7K9dl2Jd8xYYpTCuL9YLKuPpkHcBKWRhkvnU5ur/FmKln
-	dlNkNnhSELNu7VAxcYQW79ZOYD7o1+F0EPJsaEEPGxp+55K9rQD+OX9nLcuvcV8PHyBkYmsv5Mt
-	/eCeLUSmTjHut2KiasiR1AakFuxTVZAMoPJN5dQcMfyEVgux+EI5oA8soh5/eRNxFxxo6LwFOc/
-	TD0u6lOlyoWmTUMJjNtdsTwxbv87UZ11ONOGGzv1FDvvR0lk9PkOPTVLp4W1RBG8h7f/U5wHQmo
-	b/O+jyJ0m9+Yp49r7bVoFsIePxzMZz20+i5XCpvZU/B2wfl/WUCu6FurixkeOn80aDY3
-X-Received: by 2002:a05:6820:4df7:b0:694:9b71:3743 with SMTP id
- 006d021491bc7-69b36ec93d4mr7234995eaf.51.1778584753583; Tue, 12 May 2026
- 04:19:13 -0700 (PDT)
+	s=arc-20240116; t=1778585309; c=relaxed/simple;
+	bh=GVN7mMhutuP23yxfELBSygF+NwMhgX5ytRNpAkdvU8g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=UZHpLk5q0Q3j2fraVpK5slJ7hkCSyzXuXbMk+K9KtR2PyLQxjDbKRfwqtQjAvcBCg95Caa1itQeGkvHMpiR8+eSeWKW97I3pnx2op5ZuOWoAXGBqFtahKLjabQEF0wP4JqLm96RUufifJ+XgSsW8Jp3uHZ0Xo+2f7cCVeT4YQko=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=moxa.com; spf=pass smtp.mailfrom=moxa.com; dkim=pass (1024-bit key) header.d=moxa.com header.i=@moxa.com header.b=HvZi84cz; arc=fail smtp.client-ip=52.101.126.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=moxa.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=moxa.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lPgFwZDfl91eQvjj2PQMOe4XVwNADUEXbBcae1PtSaBSuoQZ/VSd48Jx+P96VYoKsaBcYu3DiApXKaP40g3XMEJTl5rM7vPtyXVr8U84Nq7gvr7V3RkvOJF3HOSnVYxiR7dtQQgYdgyWrIYwPE3PhliEP91C98w/tZ4Ph4KJsC9xZJiHbMzQzE62wSF2s407ZvneC0r+RP6PoUDG3vNIB9E+duQXzvbCnY1t3JJzqO34hsQo/cEj3gko73ARGwXcsQGMvERUVYWENAv9mxH+YNyz0E7zAVbdpjSxhwDbKWhGykC6f4oaR4qs/yP6vsrt+qjRGjjd/HrgllrBmPK2lA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LWkYA2mNtXiVmYnDFqLcIgjl3uitg9515xtu6S8f4mU=;
+ b=ilHdA352HDGIcEtwFKtrcIWXlSOdKSsTFRpkTSxP6jaM5U5o7tSFpMIcGamM9R70tcU2j8iwPZ637X81MaxEwufLVw2CmdK8ehuC6DHLzCEeIVXZ9WKv3GE5Eu7pqhhakNQiE6oAq/HklyYtVM7p3VpPsANXGxP9ZoXnkwtZsLKXAjlkZKAXHHbTYj0NtU6fHGcgUjzC96MPZnnPt4NwW8lOpUHmzWkmjAA0TVgspzCe4GzlfeR6VRiEJIUpFxQ8zdnmMA78T1tbw11/SQl8DU/HlrlD8njo45nQgHjeyOJ+k78onGMOUrN2faQOzd2CG4pNTs+zdIcy4PARpVU8dw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=moxa.com; dmarc=pass action=none header.from=moxa.com;
+ dkim=pass header.d=moxa.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=moxa.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LWkYA2mNtXiVmYnDFqLcIgjl3uitg9515xtu6S8f4mU=;
+ b=HvZi84czr2ZqdExVWTMBBrLO2F+DiX0cyhQSBCFqWxhElHdXm1tfJuRwaGZrzQSSh6qKlZwLk2kU1XxXu0/+iItZmhdDJ0SW1blzLee19mhAuirYDYV1K8XYfzNmbRRe4X53LcbT+89praAHr4eLX3RZUBeomLo5g2wTMAf/G5U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=moxa.com;
+Received: from PUZPR01MB5405.apcprd01.prod.exchangelabs.com
+ (2603:1096:301:115::14) by KL1PR01MB5922.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:11f::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.23; Tue, 12 May
+ 2026 11:28:22 +0000
+Received: from PUZPR01MB5405.apcprd01.prod.exchangelabs.com
+ ([fe80::ae38:e821:cf7d:3717]) by PUZPR01MB5405.apcprd01.prod.exchangelabs.com
+ ([fe80::ae38:e821:cf7d:3717%4]) with mapi id 15.20.9891.021; Tue, 12 May 2026
+ 11:28:22 +0000
+Date: Tue, 12 May 2026 19:28:19 +0800
+From: Crescent Hsieh <crescentcy.hsieh@moxa.com>
+To: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/4] usb: serial: mxuport: add sysfs control for UART
+ FIFO
+Message-ID: <agMO03V9xppAtWjf@moxa-ThinkCentre-M90t>
+References: <20260324035041.352190-1-crescentcy.hsieh@moxa.com>
+ <20260324035041.352190-5-crescentcy.hsieh@moxa.com>
+ <afy2yeDTHiVFkPmy@hovoldconsulting.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <afy2yeDTHiVFkPmy@hovoldconsulting.com>
+X-ClientProxiedBy: TP0P295CA0012.TWNP295.PROD.OUTLOOK.COM
+ (2603:1096:910:2::16) To PUZPR01MB5405.apcprd01.prod.exchangelabs.com
+ (2603:1096:301:115::14)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260512014343.3770664-1-mendozayt13@gmail.com> <2026051221-glory-macaroni-dce6@gregkh>
-In-Reply-To: <2026051221-glory-macaroni-dce6@gregkh>
-From: Sebastian EM <mendozayt13@gmail.com>
-Date: Tue, 12 May 2026 06:18:54 -0500
-X-Gm-Features: AVHnY4LmjCKV23YG8mUs_u94kVase5gG9LFIqjdkQdDi5hMCxypzAWbazOwnxiQ
-Message-ID: <CAD89HyBhwxDsat_JCFFfA-tUYVatxByDj=ikpc9Rxj=kAqn=Sw@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: composite: fix integer underflow in WebUSB
- GET_URL handling
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: multipart/mixed; boundary="00000000000070da2106519d086a"
-X-Rspamd-Queue-Id: 438A551F40D
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PUZPR01MB5405:EE_|KL1PR01MB5922:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f01d9f7-c571-417c-96ca-08deb0199312
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|52116014|1800799024|18002099003|38350700014|56012099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	m4N6SZKnOS2BxC88lVVNYfJuUBa8+uHs37pUhR6yuZXAz377B45ftFc/DRbLiA1y01/WgvaQ0J7PGxDASOq+1wgNuHyjFzREBHLGyfC/jMw/Zt20jPfHqO3pseqxqb3uNyf28E84xFwVuelo6pTqMfNDcgDvizveFwUB0muNaUQQVmNAUvVPZ03sklFiNcH4iFwc7wZBGJxa0MQ2djvf5nYQg/BmCXw/zJ8WujdCWn+dRuLbvZe+mna+LG53wotiTIyB8WiA8PrxntCea+JugrgOJ2t39aHRwoEVS7IjY8cMvvXMO8vq0OSuXkkpqzUd0y+ktjMxn9hg69TUxuNr9e18iu9LmZIl2bfMbF7wdpAN5SvbwaGt+w4ia91XvT8HSo5+ozJYWexsBeHyBU76M6+RUx50UEnxKOKtR7ytdsozcVC30lAelCWguyAIWD7ZxQeqzZGRZRPLZPFMw0o1aZ4AcAgQH+aM68I/GlG5Iu+Ow/aHDjEmhvhpSrd70kthj8PtviYonEYH165GXmi4aeBLGNjLkCPEYeYSU+xIg8CSF43WP9/Idoa7BHggkAeYKLzjk5jOFhboocKOtVyOEOoeEidoKjHOFJJivi1rKqzqPpVli+4JF2rmjK3ob461rwgF8tx5G+gGLUV5Z50Pk26Ssa511mi90zGpvnfcnuGtONNja1yaYjBkTHFWnkGjnk1XGHFhPvl95T10gp9TY6wCVfhwL+nQm4uD1aB7zGPU6ha3QhycuwCfPIXDQ8sN
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR01MB5405.apcprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(52116014)(1800799024)(18002099003)(38350700014)(56012099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Xm7yaIfFE4NZ78jSZDhWaU/717hBmYh+sujSyvHPN4JUUNnjP9lTAa0WtgPH?=
+ =?us-ascii?Q?mQwczb4O3StALpd4dSRq2OLZGe/yZfJ6HWeXgM2xE9hVfKo2u8crE4CNn/00?=
+ =?us-ascii?Q?pDgzDX/6onhTJ8QjFsW4Q4miVaxMfDAbgpAYwg8QGDBAtZgMlTppPspobPQZ?=
+ =?us-ascii?Q?faLZbKcVtC0GbOkGvHAKbv4AZQ7drZCiEZ1Z3w8nKU5M5iPGeK7U30axeWhN?=
+ =?us-ascii?Q?zkVaRMDWoN9X0KMYO/BJrYNijI7GAmGVO+Bv03slZH/clclhAfbbFc+YQlpt?=
+ =?us-ascii?Q?G5c1Gt9yYMZv9pFqigvmomDFgTC2YRSCZED3I9DbXGRkHiq/uHr8MyAmzyL6?=
+ =?us-ascii?Q?4hjVMiUNkOxL1nm17HHkKON7pYdYbn/940T37AQlys4xX+6s1GpJh8hCS+XN?=
+ =?us-ascii?Q?QEbkkk391GY9McaJAp/5ae3quurSAWLSI1z3PuCWhDcPib5QgLk1yfHFrBpX?=
+ =?us-ascii?Q?9ahIH4BECshmXl6DT7Lrz8GhJe3KQriYcpdsG+AEAeOa2mXl1Mk/YBJ2Cm1k?=
+ =?us-ascii?Q?Vbacmtf/GHQMw3cg2ziBp0CqNmmdAR5fLc+st0SlLKOes7wQzy7TGmC8xTvi?=
+ =?us-ascii?Q?9bGPRKIkIJsx5SodYSgOHebqyMyki2SI9nyw4i3Acb2GtMJQTm+4ji8jGSJe?=
+ =?us-ascii?Q?tYDOHjFfqhD98vVlWFhZNYXAs9K+SmvcWAVTRq3B68eJM+lYNrFc9KOP19f7?=
+ =?us-ascii?Q?sTvOLCPsyddwPIk5kSr2rVt12uzxqCDjEt8zFMJR/tlbcURdcgD7xJ2Fl0eL?=
+ =?us-ascii?Q?Sv0/0G+O02c2eVivXdFQVeSN3ujaO0JubASSslfref2sA3VIG1IMeIEupH9t?=
+ =?us-ascii?Q?w1aUN6qTUKaTYYVtd4Sfi89cscvO/DF+WgWMwOQHwnkbQFyOFaw7NrZBQ60n?=
+ =?us-ascii?Q?sspHpLKeDyhZanimVVgBmvMimeKLARnMreMdnY91z1p2bVe73vRPsVv13ckq?=
+ =?us-ascii?Q?oxhDPn240LbAdyTmYDRjDhZVkDY7YMiUgIMab+K9jABI85VXlIxSpXkifOm0?=
+ =?us-ascii?Q?L3wtXa9k66pZnS37Bp+Djzysj6dKSIjOrTi7bCt5kpU2n/xPPkl++qV6Bt9/?=
+ =?us-ascii?Q?DW+TrgziCvuP3/6B7w7AIIsZJ0mHCnD8oas1XAVQ7mIGs2PGjxfYzWaRxsXy?=
+ =?us-ascii?Q?WVIwxsFdsF0sJao3Drjk9BET5tCM9jBnSgANMOW2EsEYEV0VsDtlcU010XDZ?=
+ =?us-ascii?Q?9luppPNlZ/UeE42VguKs5CBrysuz3NmYIorRKNZOb6BkyTp37KRNVGm+BQNw?=
+ =?us-ascii?Q?cg6pG5xDZ8vfBDt1txdwEaBBQnYYRdQtQCXFDmnvLRXMEHhTaG0y6xzD2IQU?=
+ =?us-ascii?Q?RNzyLIZgwzShODkSOtNfzxZnq0kDH/unFzt3J/5JrNNlD0SKCa3qJCDcowNZ?=
+ =?us-ascii?Q?gxxyaH1rbKGGpLg6RR9JmpJpGrCvWYODCULu/fa8033k07esl+oKoQr1fJFI?=
+ =?us-ascii?Q?uV/0zOsrh2CSZ+2XE1feEe5Dxl1nNpZ2kf/u0GszBMI6+vilZwsOdwFaH/C4?=
+ =?us-ascii?Q?SpaL68c6CqgJq+JViQZxRsYS9u1SbYz71E1JK4/XTqdsw0tKBKLvtRnLb2TZ?=
+ =?us-ascii?Q?Mavn0Kh6rrZdfGaEdk2k5J0Js9wUkPjXfIkd+fKGwH+f+TT0cyP9gL/V/3Pc?=
+ =?us-ascii?Q?xWtZkUqR25puMNgSnXl2BTSZJVZtDJUwL4OIoxoKTs/hjkt+L5lvOCoEH5f/?=
+ =?us-ascii?Q?5FSil4HuWiyPVymKw4Q0HkjnA0iNt7Xc69dbqPr7/X5FXHh/gnz5AaG6Ecnt?=
+ =?us-ascii?Q?3yJfFU+VaNSyNVucCI3LIvz9dSfe+LI=3D?=
+X-OriginatorOrg: moxa.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f01d9f7-c571-417c-96ca-08deb0199312
+X-MS-Exchange-CrossTenant-AuthSource: PUZPR01MB5405.apcprd01.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2026 11:28:22.4358
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5571c7d4-286b-47f6-9dd5-0aa688773c8e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6XaaHM77lEyCsjTiEfAmmafamrmwxrg0xund0DK3H+SgMUhZsdwW32j7MTC4UhddncVdwivPi4gVJnh9ZmzVJXPyP45XS8lxHDUtFek3uqc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR01MB5922
+X-Rspamd-Queue-Id: DBA8351F54A
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[moxa.com,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[moxa.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[multipart/mixed,multipart/alternative,text/plain];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37315-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[moxa.com:+];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37316-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+,1:+,2:+,3:~,4:~];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCPT_COUNT_THREE(0.00)[4];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	NEURAL_HAM(-0.00)[-0.984];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mendozayt13@gmail.com,linux-usb@vger.kernel.org];
-	HAS_ATTACHMENT(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[crescentcy.hsieh@moxa.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
---00000000000070da2106519d086a
-Content-Type: multipart/alternative; boundary="00000000000070da2006519d0868"
+On Thu, May 07, 2026 at 05:59:05PM +0200, Johan Hovold wrote:
+> On Tue, Mar 24, 2026 at 11:50:41AM +0800, Crescent Hsieh wrote:
+> > Add a per-port sysfs attribute, uart_fifo, to allow userspace to enable
+> > or disable the UART FIFO at runtime.
+> 
+> Why would you want to do that?
+> 
+> We should try to avoid driver specific sysfs knobs.
 
---00000000000070da2006519d0868
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+The motivation is to allow userspace to choose between lower latency and
+higher throughput at runtime. Some latency-sensitive request/response
+deployments become unreliable if the UART FIFO is enabled due to the
+added buffering delay.
 
-Hi Greg,
+I understand the concern about driver-specific sysfs knobs. UART FIFO
+enable/disable seems more like a common UART capability than a
+device-unique behaviour.
 
-Thanks for the review.
+If a driver-specific sysfs attribute is not the right approach here, do
+you have a suggestion for a better interface?
 
-You are right; the self Reported-by tag does not belong there, so I dropped
-it in v2.
-
-The introducing commit is:
-
-93c473948c58 ("usb: gadget: add WebUSB landing page support")
-
-I also added:
-
-Cc: stable@vger.kernel.org
-
-since the issue was introduced with the WebUSB GET_URL handling path and
-the fix is a small bounds/underflow fix suitable for stable kernels.
-
-v2 is attached as a plain patch:
-
-0001-v2-usb-gadget-composite-fix-integer-underflow-in-WebUSB-GET_URL-handli=
-ng.patch
-
-Thanks,
-Jeremy
-
-El mar, 12 may 2026 a las 0:40, Greg Kroah-Hartman (<
-gregkh@linuxfoundation.org>) escribi=C3=B3:
-
-> On Tue, May 12, 2026 at 01:43:43AM +0000, Jeremy Erazo wrote:
-> > The WebUSB GET_URL handler in composite_setup() narrows
-> > landing_page_length to fit the host-supplied wLength using
-> >
-> >       landing_page_length =3D w_length
-> >               - WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH +
-> landing_page_offset;
-> >
-> > If wLength is smaller than WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH the
-> > unsigned subtraction wraps, and the subsequent
-> >
-> >       memcpy(url_descriptor->URL,
-> >              cdev->landing_page + landing_page_offset,
-> >              landing_page_length - landing_page_offset);
-> >
-> > ends up copying close to UINT_MAX bytes from cdev->landing_page into
-> > cdev->req->buf.  KASAN reports a slab-out-of-bounds in composite_setup
-> > on the kmalloc-2k gadget_info allocation, and FORTIFY_SOURCE traps the
-> > memcpy as a 4294967293-byte field-spanning write into
-> > url_descriptor->URL (size 252).
-> >
-> > A USB host can reach this from a single SETUP packet against any
-> > gadget that has webusb/use=3D1 and a landingPage configured.
-> >
-> > Handle the small-wLength case before the math: when the host requested
-> > fewer bytes than the URL descriptor header, only the header is
-> > meaningful and no URL bytes need to be copied.  Setting
-> > landing_page_length to landing_page_offset makes the existing memcpy a
-> > no-op and leaves the descriptor returned to the host unchanged for all
-> > larger wLength values.
-> >
-> > Reported-by: Jeremy Erazo <mendozayt13@gmail.com>
-> > Signed-off-by: Jeremy Erazo <mendozayt13@gmail.com>
->
-> You don't need a reported-by when you are the author and sign off on
-> something.
->
-> What commit id does this fix?  Why not backport it to stable kernels?
->
-> thanks,
->
-> greg k-h
->
-
---00000000000070da2006519d0868
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><p class=3D"gmail-isSelectedEnd">Hi Greg,=
-</p><p class=3D"gmail-isSelectedEnd">Thanks for the review.</p><p class=3D"=
-gmail-isSelectedEnd">You are right; the self <code dir=3D"ltr">Reported-by<=
-/code> tag does not belong there, so I dropped it in v2.</p><p class=3D"gma=
-il-isSelectedEnd">The introducing commit is:</p><p class=3D"gmail-isSelecte=
-dEnd"><code dir=3D"ltr">93c473948c58 (&quot;usb: gadget: add WebUSB landing=
- page support&quot;)</code></p><p class=3D"gmail-isSelectedEnd">I also adde=
-d:</p><p class=3D"gmail-isSelectedEnd"><code dir=3D"ltr">Cc: <a href=3D"mai=
-lto:stable@vger.kernel.org">stable@vger.kernel.org</a></code></p><p class=
-=3D"gmail-isSelectedEnd">since the issue was introduced with the WebUSB GET=
-_URL handling path and the fix is a small bounds/underflow fix suitable for=
- stable kernels.</p><p class=3D"gmail-isSelectedEnd">v2 is attached as a pl=
-ain patch:</p><p class=3D"gmail-isSelectedEnd"><code dir=3D"ltr">0001-v2-us=
-b-gadget-composite-fix-integer-underflow-in-WebUSB-GET_URL-handling.patch</=
-code></p><p>Thanks,<br>Jeremy</p></div><br><img width=3D"0" height=3D"0" cl=
-ass=3D"mailtrack-img" alt=3D"" style=3D"display:flex" src=3D"https://mailtr=
-ack.io/trace/mail/1d1278f3f46b0425fcef0a2e9a90bcf63807a760.png?u=3D13483695=
-"><div class=3D"gmail_quote gmail_quote_container"><div dir=3D"ltr" class=
-=3D"gmail_attr">El mar, 12 may 2026 a las 0:40, Greg Kroah-Hartman (&lt;<a =
-href=3D"mailto:gregkh@linuxfoundation.org">gregkh@linuxfoundation.org</a>&g=
-t;) escribi=C3=B3:<br></div><blockquote class=3D"gmail_quote" style=3D"marg=
-in:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1e=
-x">On Tue, May 12, 2026 at 01:43:43AM +0000, Jeremy Erazo wrote:<br>
-&gt; The WebUSB GET_URL handler in composite_setup() narrows<br>
-&gt; landing_page_length to fit the host-supplied wLength using<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0landing_page_length =3D w_length<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0- WEBUSB_URL_DES=
-CRIPTOR_HEADER_LENGTH + landing_page_offset;<br>
-&gt; <br>
-&gt; If wLength is smaller than WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH the<br>
-&gt; unsigned subtraction wraps, and the subsequent<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0memcpy(url_descriptor-&gt;URL,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 cdev-&gt;landing_page =
-+ landing_page_offset,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 landing_page_length - =
-landing_page_offset);<br>
-&gt; <br>
-&gt; ends up copying close to UINT_MAX bytes from cdev-&gt;landing_page int=
-o<br>
-&gt; cdev-&gt;req-&gt;buf.=C2=A0 KASAN reports a slab-out-of-bounds in comp=
-osite_setup<br>
-&gt; on the kmalloc-2k gadget_info allocation, and FORTIFY_SOURCE traps the=
-<br>
-&gt; memcpy as a 4294967293-byte field-spanning write into<br>
-&gt; url_descriptor-&gt;URL (size 252).<br>
-&gt; <br>
-&gt; A USB host can reach this from a single SETUP packet against any<br>
-&gt; gadget that has webusb/use=3D1 and a landingPage configured.<br>
-&gt; <br>
-&gt; Handle the small-wLength case before the math: when the host requested=
-<br>
-&gt; fewer bytes than the URL descriptor header, only the header is<br>
-&gt; meaningful and no URL bytes need to be copied.=C2=A0 Setting<br>
-&gt; landing_page_length to landing_page_offset makes the existing memcpy a=
-<br>
-&gt; no-op and leaves the descriptor returned to the host unchanged for all=
-<br>
-&gt; larger wLength values.<br>
-&gt; <br>
-&gt; Reported-by: Jeremy Erazo &lt;<a href=3D"mailto:mendozayt13@gmail.com"=
- target=3D"_blank">mendozayt13@gmail.com</a>&gt;<br>
-&gt; Signed-off-by: Jeremy Erazo &lt;<a href=3D"mailto:mendozayt13@gmail.co=
-m" target=3D"_blank">mendozayt13@gmail.com</a>&gt;<br>
-<br>
-You don&#39;t need a reported-by when you are the author and sign off on<br=
->
-something.<br>
-<br>
-What commit id does this fix?=C2=A0 Why not backport it to stable kernels?<=
-br>
-<br>
-thanks,<br>
-<br>
-greg k-h<br>
-</blockquote></div></div>
-
---00000000000070da2006519d0868--
---00000000000070da2106519d086a
-Content-Type: application/octet-stream; 
-	name="0001-v2-usb-gadget-composite-fix-integer-underflow-in-WebUSB-GET_URL-handling.patch"
-Content-Disposition: attachment; 
-	filename="0001-v2-usb-gadget-composite-fix-integer-underflow-in-WebUSB-GET_URL-handling.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mp2jf6aq0>
-X-Attachment-Id: f_mp2jf6aq0
-
-RnJvbSA0ZDY1ZTM4NmEzMmMyN2MzZWU0NmE5YmYzZjM4MDdmODk4MDViNWIwIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBKZXJlbXkgRXJhem8gPG1lbmRvemF5dDEzQGdtYWlsLmNvbT4K
-RGF0ZTogVHVlLCAxMiBNYXkgMjAyNiAwMTozMToxNiArMDAwMApTdWJqZWN0OiBbUEFUQ0ggdjJd
-IHVzYjogZ2FkZ2V0OiBjb21wb3NpdGU6IGZpeCBpbnRlZ2VyIHVuZGVyZmxvdyBpbiBXZWJVU0IK
-IEdFVF9VUkwgaGFuZGxpbmcKClRoZSBXZWJVU0IgR0VUX1VSTCBoYW5kbGVyIGluIGNvbXBvc2l0
-ZV9zZXR1cCgpIG5hcnJvd3MKbGFuZGluZ19wYWdlX2xlbmd0aCB0byBmaXQgdGhlIGhvc3Qtc3Vw
-cGxpZWQgd0xlbmd0aCB1c2luZwoKCWxhbmRpbmdfcGFnZV9sZW5ndGggPSB3X2xlbmd0aAoJCS0g
-V0VCVVNCX1VSTF9ERVNDUklQVE9SX0hFQURFUl9MRU5HVEggKyBsYW5kaW5nX3BhZ2Vfb2Zmc2V0
-OwoKSWYgd0xlbmd0aCBpcyBzbWFsbGVyIHRoYW4gV0VCVVNCX1VSTF9ERVNDUklQVE9SX0hFQURF
-Ul9MRU5HVEggdGhlCnVuc2lnbmVkIHN1YnRyYWN0aW9uIHdyYXBzLCBhbmQgdGhlIHN1YnNlcXVl
-bnQKCgltZW1jcHkodXJsX2Rlc2NyaXB0b3ItPlVSTCwKCSAgICAgICBjZGV2LT5sYW5kaW5nX3Bh
-Z2UgKyBsYW5kaW5nX3BhZ2Vfb2Zmc2V0LAoJICAgICAgIGxhbmRpbmdfcGFnZV9sZW5ndGggLSBs
-YW5kaW5nX3BhZ2Vfb2Zmc2V0KTsKCmVuZHMgdXAgY29weWluZyBjbG9zZSB0byBVSU5UX01BWCBi
-eXRlcyBmcm9tIGNkZXYtPmxhbmRpbmdfcGFnZSBpbnRvCmNkZXYtPnJlcS0+YnVmLiAgS0FTQU4g
-cmVwb3J0cyBhIHNsYWItb3V0LW9mLWJvdW5kcyBpbiBjb21wb3NpdGVfc2V0dXAKb24gdGhlIGtt
-YWxsb2MtMmsgZ2FkZ2V0X2luZm8gYWxsb2NhdGlvbiwgYW5kIEZPUlRJRllfU09VUkNFIHRyYXBz
-IHRoZQptZW1jcHkgYXMgYSA0Mjk0OTY3MjkzLWJ5dGUgZmllbGQtc3Bhbm5pbmcgd3JpdGUgaW50
-bwp1cmxfZGVzY3JpcHRvci0+VVJMIChzaXplIDI1MikuCgpBIFVTQiBob3N0IGNhbiByZWFjaCB0
-aGlzIGZyb20gYSBzaW5nbGUgU0VUVVAgcGFja2V0IGFnYWluc3QgYW55CmdhZGdldCB0aGF0IGhh
-cyB3ZWJ1c2IvdXNlPTEgYW5kIGEgbGFuZGluZ1BhZ2UgY29uZmlndXJlZC4KCkhhbmRsZSB0aGUg
-c21hbGwtd0xlbmd0aCBjYXNlIGJlZm9yZSB0aGUgbWF0aDogd2hlbiB0aGUgaG9zdCByZXF1ZXN0
-ZWQKZmV3ZXIgYnl0ZXMgdGhhbiB0aGUgVVJMIGRlc2NyaXB0b3IgaGVhZGVyLCBvbmx5IHRoZSBo
-ZWFkZXIgaXMKbWVhbmluZ2Z1bCBhbmQgbm8gVVJMIGJ5dGVzIG5lZWQgdG8gYmUgY29waWVkLiAg
-U2V0dGluZwpsYW5kaW5nX3BhZ2VfbGVuZ3RoIHRvIGxhbmRpbmdfcGFnZV9vZmZzZXQgbWFrZXMg
-dGhlIGV4aXN0aW5nIG1lbWNweSBhCm5vLW9wIGFuZCBsZWF2ZXMgdGhlIGRlc2NyaXB0b3IgcmV0
-dXJuZWQgdG8gdGhlIGhvc3QgdW5jaGFuZ2VkIGZvciBhbGwKbGFyZ2VyIHdMZW5ndGggdmFsdWVz
-LgoKRml4ZXM6IDkzYzQ3Mzk0OGM1OCAoInVzYjogZ2FkZ2V0OiBhZGQgV2ViVVNCIGxhbmRpbmcg
-cGFnZSBzdXBwb3J0IikKQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcKU2lnbmVkLW9mZi1ieTog
-SmVyZW15IEVyYXpvIDxtZW5kb3pheXQxM0BnbWFpbC5jb20+Ci0tLQogZHJpdmVycy91c2IvZ2Fk
-Z2V0L2NvbXBvc2l0ZS5jIHwgNSArKysrLQogMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygr
-KSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9jb21wb3Np
-dGUuYyBiL2RyaXZlcnMvdXNiL2dhZGdldC9jb21wb3NpdGUuYwppbmRleCBhOTAyMTg0YmQuLmRj
-MzY2NDM3NCAxMDA2NDQKLS0tIGEvZHJpdmVycy91c2IvZ2FkZ2V0L2NvbXBvc2l0ZS5jCisrKyBi
-L2RyaXZlcnMvdXNiL2dhZGdldC9jb21wb3NpdGUuYwpAQCAtMjE3Miw3ICsyMTcyLDEwIEBAIGNv
-bXBvc2l0ZV9zZXR1cChzdHJ1Y3QgdXNiX2dhZGdldCAqZ2FkZ2V0LCBjb25zdCBzdHJ1Y3QgdXNi
-X2N0cmxyZXF1ZXN0ICpjdHJsKQogCQkJCXNpemVvZih1cmxfZGVzY3JpcHRvci0+VVJMKQogCQkJ
-CS0gV0VCVVNCX1VSTF9ERVNDUklQVE9SX0hFQURFUl9MRU5HVEggKyBsYW5kaW5nX3BhZ2Vfb2Zm
-c2V0KTsKIAotCQkJaWYgKHdfbGVuZ3RoIDwgV0VCVVNCX1VSTF9ERVNDUklQVE9SX0hFQURFUl9M
-RU5HVEggKyBsYW5kaW5nX3BhZ2VfbGVuZ3RoKQorCQkJaWYgKHdfbGVuZ3RoIDwgV0VCVVNCX1VS
-TF9ERVNDUklQVE9SX0hFQURFUl9MRU5HVEgpCisJCQkJbGFuZGluZ19wYWdlX2xlbmd0aCA9IGxh
-bmRpbmdfcGFnZV9vZmZzZXQ7CisJCQllbHNlIGlmICh3X2xlbmd0aCA8CisJCQkJIFdFQlVTQl9V
-UkxfREVTQ1JJUFRPUl9IRUFERVJfTEVOR1RIICsgbGFuZGluZ19wYWdlX2xlbmd0aCkKIAkJCQls
-YW5kaW5nX3BhZ2VfbGVuZ3RoID0gd19sZW5ndGgKIAkJCQktIFdFQlVTQl9VUkxfREVTQ1JJUFRP
-Ul9IRUFERVJfTEVOR1RIICsgbGFuZGluZ19wYWdlX29mZnNldDsKIAotLSAKMi41My4wCgo=
---00000000000070da2106519d086a--
+---
+Sincerely,
+Crescent Hsieh
 
