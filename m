@@ -1,186 +1,176 @@
-Return-Path: <linux-usb+bounces-37388-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37389-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wF8tMLCNBGoKLgIAu9opvQ
-	(envelope-from <linux-usb+bounces-37388-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 16:41:52 +0200
+	id GLiZBJqaBGqILwIAu9opvQ
+	(envelope-from <linux-usb+bounces-37389-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 17:36:58 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BF0E5354D1
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 16:41:52 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6395D536458
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 17:36:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C193530B6742
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 14:36:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 08E5D336D815
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 14:48:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9136D44E045;
-	Wed, 13 May 2026 14:36:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F1E0387566;
+	Wed, 13 May 2026 14:48:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T58Bmluh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cM/nbQZn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1521844BC90
-	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 14:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11AA720010A;
+	Wed, 13 May 2026 14:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778682959; cv=none; b=gKRIesJ0hn7UTnMxnTW7fvrVUuaYEfLvfHnAgDKfx+o/gwrRfYqxkvDDQJ9vqMrNhXxPlpDOjUY31Z1QSChUT49dSN8HTrY/DgDI/p0+SOKnCUF6Z6Mb8nKFf+rsfqbXCvDsUz75VSu6iLZRRz7Mae3OhDFY6okxiem8nAvEsvI=
+	t=1778683702; cv=none; b=AWP0FkMnLRwyE74o4Ul7kkCLztZsQqJzN1hDHs7v0MZPKcPEReX3/aS+Wgu9fIAh3G5uM3RNAuVw15z674OliBF+WWYMhseMRMoqN4Op6/BzQQBS9QELhXA4NJwAwg1Po5P5pl2XJplTj2QqPQfbktLxk0EKfDDMKIUDibL3fow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778682959; c=relaxed/simple;
-	bh=2JN1saH0xjFfyjaseYlqRMur0ikIkmUCDMiaPChrh5E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TIsZB99MKqrYujQzxTpFh9D2W/hGkAhUnuaIeC+9bV9XICaWX1JCvENwxJw9A9BTCpVcNSPdIzrIgva57Zg3qyFiyVCBgXzpaaCoN4mTgOOjzd5nhosI5IY1mdyOflbKBWv4whjJjEUayLb+MaEhp1jJEiI/Pt0t/i3kPwcnvRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T58Bmluh; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778682956; x=1810218956;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2JN1saH0xjFfyjaseYlqRMur0ikIkmUCDMiaPChrh5E=;
-  b=T58BmluhlcTAEoMKJV9CrYqg9oPq2CtHcbm9iN1gf+/94I9WSQmFs9kb
-   Epfm3F2b+OW2EpluxQmPV51tA4n1xjP5WeryorzGFRDJihyYBtWAmihi6
-   Xf8RCqTYpewGDsUmY/fjUAu/Todaz/fsjQW5hHOhk5zBl8IZ74+PnMXcN
-   3WWtnsCNGGnzICKBtUXtizEbs1VGmrczWO/L6hQtFPaeTRkstfifLGWQP
-   hVgshu+Rur4wpyF3r7cIIXgeA1CMPrmxSEzPIDEupO5RrSLFirwOMpMfa
-   FiAe6tPFNSvUFMwjUC+gHlHEEbU1WK76iYBIVNop1QeL/5MSL0GmpGD7J
-   g==;
-X-CSE-ConnectionGUID: F6saKz/DQnSaOkXYmQukIg==
-X-CSE-MsgGUID: DMF6zEyuRjet8dNZmXaWXQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11784"; a="97180761"
-X-IronPort-AV: E=Sophos;i="6.23,232,1770624000"; 
-   d="scan'208";a="97180761"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 07:35:55 -0700
-X-CSE-ConnectionGUID: aTaCxRMsTGmYtDmPkB86Ug==
-X-CSE-MsgGUID: CnEgIIopR+CS9Cde4vP4xw==
-X-ExtLoop1: 1
-Received: from abityuts-desk.ger.corp.intel.com (HELO mnyman-desk.intel.com) ([10.245.244.109])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 07:35:53 -0700
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: dylan_robinson@motu.com,
-	michal.pecio@gmail.com
-Cc: mathias.nyman@linux.intel.com,
-	linux-usb@vger.kernel.org,
-	mathias.nyman@intel.com,
-	stern@rowland.harvard.edu
-Subject: [RFT PATCHv2 2/2] xhci: Set frame ID field of isoc TRB when starting an isoch stream
-Date: Wed, 13 May 2026 17:35:33 +0300
-Message-ID: <20260513143533.52992-2-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260513143533.52992-1-mathias.nyman@linux.intel.com>
-References: <85f8441d-d6c0-4607-9269-d80b1294afbd@linux.intel.com>
- <20260513143533.52992-1-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1778683702; c=relaxed/simple;
+	bh=nEmiCF6b5LfZ2kHKUKhThiK1MHbozn7yi/GBKke71jQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Zf97vQGICdXNrsV9h7MoMNUyD7Tko+K6Nrf5XhnixckkxSjaDwjy/UwmQt2M3D0V4KXPVU3urcX90J3UbzYeuOOWeL3TRwkdIKGFD+oPwGJD1gcokT3LcfEvFWLrBsQaJj0B9OHK9kxygCSQCSS5SV6cwNdnS0sdJxfBeqeLFAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cM/nbQZn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0142CC19425;
+	Wed, 13 May 2026 14:48:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778683701;
+	bh=nEmiCF6b5LfZ2kHKUKhThiK1MHbozn7yi/GBKke71jQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=cM/nbQZnxhoUBvxlr1XOcfgS13OwM6T6zV6y5h9LOS52MIjJvsxz1bkELetuRrynP
+	 buoOLf9sCIXeM7onQX+aEzf/vZwhofMcQopZR/mfuH6cvmGhkd0DVzC/eKAklpRJe5
+	 y24RrLjap7NeSbZuh7yJR8OgDejSZ2/JrGvgVE9Ekr6hjJCNxRX9G9upIpBjJFVJ6k
+	 xzLrMfpTPM8duhRB2qjAuuV0WsJOh74R40c+i5/nlxaFb1a/4P3NHOsKFKFRRjX5Fh
+	 E9fD1sKAzyNFqrdNv/kpCF4gxaKT41u5c8jEQtJzDx/C7Tylt9vwHO9+zjvSPnoR+O
+	 M5Fur968h7POA==
+Message-ID: <c94e9352-91e3-4bc0-bb29-f522c78b03ab@kernel.org>
+Date: Wed, 13 May 2026 09:48:19 -0500
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 3BF0E5354D1
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 0/2] AMD Promontory 21 xHCI temperature sensor support
+Content-Language: en-US
+To: Jihong Min <hurryman2212@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260512213910.871859-1-hurryman2212@gmail.com>
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <20260512213910.871859-1-hurryman2212@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 6395D536458
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-37388-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[motu.com,gmail.com];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org,intel.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37389-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_NONE(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[superm1@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-The frame id field can be set for the first TD of the first isoc
-URB to schedule the start of an isoc stream even in host doesn't
-support CFC (Contiguous Frame ID Capability)
 
-Set the frame ID TRB field of the first isoc TD unless URB has the
-schedule immediately 'URB_ISO_ASAP' transfer flag set.
 
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-ring.c | 31 ++++++++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 7 deletions(-)
+On 5/12/26 16:39, Jihong Min wrote:
+> Hi,
+> 
+> This series adds temperature monitoring for AMD Promontory 21 (PROM21)
+> xHCI PCI functions.
+> 
+> Patch 1 adds a small PROM21-specific xHCI PCI glue driver. USB host
+> operation is delegated to the common xhci-pci code, while the PROM21 glue
+> publishes an auxiliary device for optional sensor support.
+> 
+> Patch 2 adds an auxiliary-bus hwmon driver that binds to that auxiliary
+> device and exposes the PROM21 xHCI temperature value as temp1_input.
+> 
+> The hwmon driver reads the sensor through a vendor index/data register pair
+> in the xHCI PCI MMIO BAR. It does not wake the parent PCI device for hwmon
+> reads; if the parent is suspended, the read returns -ENODATA.
+> 
+> Changes in v5:
+> - Add support for AMD 1022:43fc PROM21 xHCI controllers and document the
+>    new PCI ID.
+> - Make USB_XHCI_PCI_PROM21 depend on X86 and default to USB_XHCI_PCI.
+> - Keep the PROM21 PCI glue built-in-only when enabled, while allowing the
+>    hwmon sensor driver to be built as a separate module.
+> - Move PROM21 xHCI PCI device IDs to xhci-pci.h so xhci-pci.c and
+>    xhci-pci-prom21.c use shared definitions.
+> - Pass the parent PCI device, MMIO base, and resource length to the hwmon
+>    driver through platform data defined in a common header, instead of
+>    inspecting the parent driver's drvdata from the hwmon driver.
+> - Remove the private hwmon mutex and rely on hwmon core serialization for
+>    this driver's callbacks.
+> - Clarify that the driver only serializes its own hwmon callbacks and does
+>    not synchronize with firmware, SMM, ACPI AML, or other possible users of
+>    the PROM21 vendor index/data register pair.
+> - Use readb() for the temperature data register, validate the value before
+>    writing the output pointer, and drop the 0xff invalid-value check.
+> - Use pm_runtime_put() after successful reads with the parent device active
+>    so the PM core can re-evaluate the parent device's idle state.
+> - Simplify the documentation and use more precise terminology for the
+>    supported device.
+> 
+> Jihong Min (2):
+>    usb: xhci-pci: add AMD Promontory 21 PCI glue
+>    hwmon: add AMD Promontory 21 xHCI temperature sensor support
+> 
+>   Documentation/hwmon/index.rst                 |   1 +
+>   Documentation/hwmon/prom21-xhci.rst           | 101 ++++++++
+>   drivers/hwmon/Kconfig                         |  10 +
+>   drivers/hwmon/Makefile                        |   1 +
+>   drivers/hwmon/prom21-xhci.c                   | 238 ++++++++++++++++++
+>   drivers/usb/host/Kconfig                      |  20 ++
+>   drivers/usb/host/Makefile                     |   1 +
+>   drivers/usb/host/xhci-pci-prom21.c            | 123 +++++++++
+>   drivers/usb/host/xhci-pci.c                   |  11 +
+>   drivers/usb/host/xhci-pci.h                   |   3 +
+>   include/linux/platform_data/usb-xhci-prom21.h |  22 ++
+>   11 files changed, 531 insertions(+)
+>   create mode 100644 Documentation/hwmon/prom21-xhci.rst
+>   create mode 100644 drivers/hwmon/prom21-xhci.c
+>   create mode 100644 drivers/usb/host/xhci-pci-prom21.c
+>   create mode 100644 include/linux/platform_data/usb-xhci-prom21.h
+> 
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index b1318515ae58..55a10d1e70cb 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -3976,6 +3976,23 @@ static int xhci_ist_microframes(struct xhci_hcd *xhci)
- 	return ist;
- }
- 
-+
-+static bool xhci_isoc_td_uses_frame_id(struct xhci_hcd *xhci, struct urb *urb,
-+				       struct xhci_virt_ep *ep, int i)
-+{
-+	if (urb->transfer_flags & URB_ISO_ASAP)
-+		return false;
-+
-+	if (xhci->hcc_params & HCC_CFC)
-+		return true;
-+
-+	/* set frame id for first TD of first URB in stream */
-+	if (ep->next_uframe == -1 && i == 0)
-+		return true;
-+
-+	return false;
-+}
-+
- /*
-  * Check if frame is in the valid frame window, including start and end.
-  * If start > end then assume window wrapped around at a limit the frame
-@@ -4089,7 +4106,6 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 	int i, j;
- 	bool more_trbs_coming;
- 	struct xhci_virt_ep *xep;
--	int frame_id;
- 	int uinterval = urb->interval;
- 	int start_uframe;
- 
-@@ -4145,12 +4161,13 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 		}
- 		td = &urb_priv->td[i];
- 
--		/* use SIA as default, if frame id is used overwrite it */
--		sia_frame_id = TRB_SIA;
--		if (!(urb->transfer_flags & URB_ISO_ASAP) && (xhci->hcc_params & HCC_CFC)) {
--			frame_id = (start_uframe + i * uinterval) / 8;
--			frame_id %= MAX_FRAMES;
--			sia_frame_id = TRB_FRAME_ID(frame_id);
-+
-+		/* Choose SIA of frame ID based scheduling for this TD */
-+		if (xhci_isoc_td_uses_frame_id(xhci, urb, xep, i)) {
-+			sia_frame_id = (start_uframe + i * uinterval) / 8;
-+			sia_frame_id = TRB_FRAME_ID(sia_frame_id % MAX_FRAMES);
-+		} else {
-+			sia_frame_id = TRB_SIA;
- 		}
- 
- 		/*
--- 
-2.43.0
+Thanks for the driver.  I think this looks good now, and thank you 
+especially for documenting your reverse engineering efforts that led to 
+it.  If there are problems in the future I'm supposing it's going to be 
+based upon the calculations with the magic values to scale numbers.
 
+There isn't a lot that can be done in the event that BIOS is accessing 
+the same register pairs, but since you identified that this is exactly 
+how Windows HWInfo64 does it too; this is 'probably' low risk.
+
+Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
 
