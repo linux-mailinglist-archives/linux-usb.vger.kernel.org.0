@@ -1,213 +1,181 @@
-Return-Path: <linux-usb+bounces-37384-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37385-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sLl6KumEBGrVKwIAu9opvQ
-	(envelope-from <linux-usb+bounces-37384-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 16:04:25 +0200
+	id 0AEeEFyUBGqrLgIAu9opvQ
+	(envelope-from <linux-usb+bounces-37385-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 17:10:20 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC74E534A4F
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 16:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F04D535CEB
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 17:10:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D5B0235040A6
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 13:43:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 542FB3319A08
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 14:30:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 618753F411B;
-	Wed, 13 May 2026 13:43:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BB19428821;
+	Wed, 13 May 2026 14:30:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="Ih1ArHji"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mFfdHOS1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E3E3F4135
-	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 13:43:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 494294266BF
+	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 14:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778679804; cv=none; b=OwgWp+ViF7njXQUNBTD3hEsxSldeEGeV06EhasKiHiL0RCczidEXTWRPT9oSdSUPEJnLC17/NhhCW99sNzGUVi6pBWhCHy4FlHxaRK5zVAtysNdBTQBtAEXytN9Q1wEU/7/OPcNoVEfxUP9ZxtebnqxX79uZfye6MgJ7ooOMn6Q=
+	t=1778682619; cv=none; b=tWNECR/cKfRyr2Woh9K4NWa2svmImUY/D7xpWYpllbZ18zCHziG6omeiP5OzlbB7rInTBjagsqyk/pIYLAMfjTrdAe6ssjieeohY6lIHJnH09d3sTFgcohUPOSi/Krk3pgDP8eV2jt5Ld+9oOo3YrONZtSu3H8fWdS0GhF8Sks8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778679804; c=relaxed/simple;
-	bh=tr2ESAIzJ6yhJ/0fE6tII3PLo1xmjUXum+LDUQzpEws=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QuKILt7FWluQ+pl/5yuypWzmqMOz8cNaCs9XZmQPbuGHisXYVcFEF8UM/tFdysjxP32XHSb52LdrogiHSLKB4tRpnQtnrF39BrUWfgGZ51Nz0sLCDylgn397uksVobwAfz61Ysa1Q2uCXe36ow7FWQAJA/3ByJbsJQmXYtpnyDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=Ih1ArHji; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48e8132c6d0so30240325e9.1
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 06:43:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flipper.net; s=google; t=1778679802; x=1779284602; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eW4+ZGhAwVH3SDz4zpFmqSn6d/etYAQ93M+0Gp+S2WE=;
-        b=Ih1ArHjidedUPAqVslcV5PFokuwdWTzrnmGdSHPj/TyDCYephab/a0ErSv7aqlzhgS
-         1nFwmd0/e5bq3xpnHQpYPYxm1TuybITY1h3hngQStlFr5enavafmJpfeqTupEC9NyA2q
-         kTTDSL5oz/EoWhYYeznahdIX6z4Yixv9/s/z7pl3nD4EAECE84hFZBBlkKdIBlutSQ5I
-         vrN0TGM2NW3963zdL/upgNU2JUj9kUmSVdDN9xW0Gxcy4+FAkTU1tJVDW3gKNssr7ct1
-         V+c9NDMjnoEDzpEmhQV1DNxrNg9OoHPgZJPUOr7LIKHaSn5A0r52oso0OqJ1EKVt8h0Z
-         R4wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778679802; x=1779284602;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eW4+ZGhAwVH3SDz4zpFmqSn6d/etYAQ93M+0Gp+S2WE=;
-        b=UyqkV2jPX8JztsF4f5rFbKVnfQtBgU/abWhjOL5PbuZMcD54LTMBZ3N7Euy7nL+5/Z
-         9vIkmduLTOzIowl8ONRvjbDpO/UuOkHAGt4AjGugYwLZF9D/agf31g9PH0HZGG8uM/rv
-         BY9pRW5Yl5o1/Eq6POILco7AJKcCOakmQbqCSBJxxMiX71HOGBOGYrPEQRcjU35RyuTP
-         R4kbES173e8s6oJXc++JhgKw03p/csl870uIWbX8z/ilxEo+wI99PKpCWae+dU6gT4gw
-         OESILP89/D2Y8EHmkwOwlw62w5b0+dyZ4013EMJyG8J20mVhbrauNEpj+bilbj2lsMns
-         cy9Q==
-X-Gm-Message-State: AOJu0Yz3ZGsJz6OkvGh5jtmFVoy5wA1uNeyoAlXvcfXLK6WVAUt2ngaa
-	oXVMs/vMXrLdLPQ5oSvwu+wrWNTqwM/+UGkGeJ3ljOP0G+6oRbRMV9e5y1bsUWRYIxA=
-X-Gm-Gg: Acq92OHdaAIh3MC7gYx+AdpknDf+LRC/lVhcuAc/yMHLk5HNL34s95LG6V3ndoHYO8G
-	q6PNK3e7K4UXSpohO2YTbGFtUojVdL+ZHsUj5mz2irgjFiGqIFuf8urSgvGkgCsUev/CsmNn3yh
-	hsR5+UZ25myz0VTggQYOLRVQKCg9JCULLYc/93BrE2k332Rohyd7jmouEJGrn4Wnkfns7ib8iXz
-	Dl+BC0AZanEW6EvnV9bgAe+xAoS2/Jlq18cGTkvisatQ7Au2oOwnK3HiPRx14Z/HU9mIsa2c30v
-	8bQuE+UoAq2FDhXIFuCfsb4DWNZ4Sjo1s7REmApsINHWASF4aSoolZeGBbiAHWEOuNue4rhos77
-	hmT/ZLcBiVnm+ges2GdrhVeADgfmxzNC2r89R33o4hoD+z2dx7Z+XI1s+hOLWfMzdu4nDnL7Fjl
-	UkSCe1paOuvHdizgXKASjPMKwNQe++HwFJW6p/LfH+alItcrC4UEFsjP01ZOCHAWWm7EGN7qMx7
-	lpATTrI
-X-Received: by 2002:a05:600c:350f:b0:48e:8741:fd4c with SMTP id 5b1f17b1804b1-48fce9ead8fmr42055595e9.18.1778679801732;
-        Wed, 13 May 2026 06:43:21 -0700 (PDT)
-Received: from alchark-surface.localdomain (bba-83-110-135-253.alshamil.net.ae. [83.110.135.253])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fcdf6408bsm55887265e9.3.2026.05.13.06.43.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 06:43:21 -0700 (PDT)
-From: Alexey Charkov <alchark@flipper.net>
-Date: Wed, 13 May 2026 17:43:16 +0400
-Subject: [PATCH] usb: typec: tcpci: add DRM DP HPD bridge support
+	s=arc-20240116; t=1778682619; c=relaxed/simple;
+	bh=iWzffIe6V2emIaCZS06NksYjhzEw8WEeFlExEQJcP5o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HU6WlVc+ohhPvzpo6/Y5PMMPNSIYRJzP/1eS9MO6/mCFOfdMJhWFiZoVZSMpege1OwtqNcAGyxZsGq+1PTP6dCU7XkXhiCZzsl1a5y3wGts+3Kqev7D8W7wBnqPDEA3vjsMv9jhLk63TVII3Cu+vDLDIfwg3ca+Mwky1QQMorhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mFfdHOS1; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778682615; x=1810218615;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iWzffIe6V2emIaCZS06NksYjhzEw8WEeFlExEQJcP5o=;
+  b=mFfdHOS10s3kjNPa7JxeZQuhit4CGnLnFq8mjKllb0lZvtCu1lEgh0Ng
+   8dhXcKiF0Ny2PyXvMdHwDy2tJpHKBWd+PCM3TMmp5gmZJFCHaMff9WUMA
+   96DNdCvnumrNN8fyduHMMSsd5cWc2ebQVgN1NsCFK8j1UUdar/2IkJJkG
+   as8xsJ1thSb8qLfj0zgJV/taNCumTy9HLE5ux37+hWckFmNGYCXO1HCq/
+   tF2fGKvDkC0DJs8m3KpjqNtTptVKyEnzqwm4APKnCfV1Wk/LTWXK4FnnO
+   lbCRYd9ccuMpO7tqjJFD0QCkmFzYpfalHDM4XY/v09yBYXF5gMypYrWwA
+   A==;
+X-CSE-ConnectionGUID: gBBPPkO/QwyAqa1SRHncog==
+X-CSE-MsgGUID: hr536EWJRPOAt1lksP1xZw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11784"; a="82178079"
+X-IronPort-AV: E=Sophos;i="6.23,232,1770624000"; 
+   d="scan'208";a="82178079"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 07:30:14 -0700
+X-CSE-ConnectionGUID: uXdvwtP4Q/GxtSeZ0o8WfQ==
+X-CSE-MsgGUID: Z/CUeuwwTiKiJ1M9naT8Kg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,232,1770624000"; 
+   d="scan'208";a="276206323"
+Received: from abityuts-desk.ger.corp.intel.com (HELO [10.245.244.109]) ([10.245.244.109])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 07:30:13 -0700
+Message-ID: <85f8441d-d6c0-4607-9269-d80b1294afbd@linux.intel.com>
+Date: Wed, 13 May 2026 17:30:03 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFT PATCH] xhci: fix frame id calculation for isoc transfer
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: dylan_robinson@motu.com, linux-usb@vger.kernel.org,
+ mathias.nyman@intel.com, stern@rowland.harvard.edu
+References: <CA+Df+jeoj_QL6XNzUyP963HF7ngCWoAs0MjqQXPr3Fa6VW3rXw@mail.gmail.com>
+ <20260511192105.3756809-1-mathias.nyman@linux.intel.com>
+ <20260512110810.17fbde0a.michal.pecio@gmail.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20260512110810.17fbde0a.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260513-tcpci-drm-bridge-v1-1-1467e770727d@flipper.net>
-X-B4-Tracking: v=1; b=H4sIAPN/BGoC/x2MywqAIBAAfyX2nKDZQ/qV6FDuVnvIYo0IpH9PO
- g7DTIJIwhShLxII3Rz5CBlMWYDfprCSYswMla5a3RirLn96Vii7moUxe3TorauxM0SQs1No4ed
- fDuP7fk97k6ViAAAA
-X-Change-ID: 20260513-tcpci-drm-bridge-d8dc384d71ee
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Badhri Jagan Sridharan <badhri@google.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Alexey Charkov <alchark@flipper.net>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2339; i=alchark@flipper.net;
- h=from:subject:message-id; bh=tr2ESAIzJ6yhJ/0fE6tII3PLo1xmjUXum+LDUQzpEws=;
- b=owGbwMvMwCW2adGNfoHIK0sZT6slMWSx1H+PO/9mql+f3NmEfxvvhmU0rrC6kL1mC8u3Mv20R
- YpqJ44u6JjIwiDGxWAppsgy99sS26lGfLN2eXh8hZnDygQyRFqkgQEIWBj4chPzSo10jPRMtQ31
- DI10jHWMGLg4BWCq93kx/M9OyIq48vv/opVthm98GK/s3MLl0emdrbPTJXz1B19tk4uMDLc32pn
- ztDCpPPvZH+uhrr3y9puiwmcl837bK2/dd0XzIh8A
-X-Developer-Key: i=alchark@flipper.net; a=openpgp;
- fpr=9DF6A43D95320E9ABA4848F5B2A2D88F1059D4A5
-X-Rspamd-Queue-Id: EC74E534A4F
+X-Rspamd-Queue-Id: 8F04D535CEB
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[flipper.net,quarantine];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[flipper.net:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37384-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37385-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[flipper.net:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alchark@flipper.net,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,flipper.net:email,flipper.net:mid,flipper.net:dkim]
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.intel.com:mid]
 X-Rspamd-Action: no action
 
-Add support to use TCPCI based USB-C connectors with the DP AltMode
-helper code on devicetree based platforms.
+On 5/12/26 12:08, Michal Pecio wrote:
+> On Mon, 11 May 2026 22:21:05 +0300, Mathias Nyman wrote:
+>> Always calculate estimated start frame, and set urb->start_frame
+> 
+> This may cause driver developers lots of grey hair when running on old
+> (non-CFC, xHCI 1.0, USB 3.0, "gen 1") HCs where nothing is done to
+> enforce frame number correctness so far.
+> 
+> Writing obviously bogus urb->start_frame at least was obvious :)
 
-Signed-off-by: Alexey Charkov <alchark@flipper.net>
----
- drivers/usb/typec/tcpm/Kconfig |  2 ++
- drivers/usb/typec/tcpm/tcpci.c | 13 +++++++++++++
- 2 files changed, 15 insertions(+)
+v2 writes the TRB frame id field of the first TD of the first URB
+for older non-CFC hosts as well. So urb->start_frame should be
+quite accurate. Its probably more off if URB_ISO_ASAP is set.
 
-diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-index 00baa7503d45..53abde8ebef9 100644
---- a/drivers/usb/typec/tcpm/Kconfig
-+++ b/drivers/usb/typec/tcpm/Kconfig
-@@ -13,7 +13,9 @@ if TYPEC_TCPM
- 
- config TYPEC_TCPCI
- 	tristate "Type-C Port Controller Interface driver"
-+	depends on DRM || DRM=n
- 	depends on I2C
-+	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE && OF
- 	select REGMAP_I2C
- 	help
- 	  Type-C Port Controller driver for TCPCI-compliant controller.
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index 0148b8f50412..e6cccbd377f7 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -5,6 +5,7 @@
-  * USB Type-C Port Controller Interface.
-  */
- 
-+#include <drm/bridge/aux-bridge.h>
- #include <linux/bitfield.h>
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
-@@ -837,6 +838,7 @@ static int tcpci_parse_config(struct tcpci *tcpci)
- 
- struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
- {
-+	struct auxiliary_device *bridge_dev;
- 	struct tcpci *tcpci;
- 	int err;
- 
-@@ -889,12 +891,23 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
- 	if (err < 0)
- 		return ERR_PTR(err);
- 
-+	bridge_dev = devm_drm_dp_hpd_bridge_alloc(tcpci->dev, to_of_node(tcpci->tcpc.fwnode));
-+	if (IS_ERR(bridge_dev))
-+		return ERR_CAST(bridge_dev);
-+
- 	tcpci->port = tcpm_register_port(tcpci->dev, &tcpci->tcpc);
- 	if (IS_ERR(tcpci->port)) {
- 		fwnode_handle_put(tcpci->tcpc.fwnode);
- 		return ERR_CAST(tcpci->port);
- 	}
- 
-+	err = devm_drm_dp_hpd_bridge_add(tcpci->dev, bridge_dev);
-+	if (err < 0) {
-+		tcpm_unregister_port(tcpci->port);
-+		fwnode_handle_put(tcpci->tcpc.fwnode);
-+		return ERR_PTR(err);
-+	}
-+
- 	return tcpci;
- }
- EXPORT_SYMBOL_GPL(tcpci_register_port);
+> 
+>> Fix valid frame window start and end calculation to match xhci
+>> spec 4.11.2.5
+>>
+>> Don't inclease frame id with 1 if a URB mod transfer is queued late.
+>> Queue it with next expected frame ID but print a message if URB is
+>> next expected frame id does not fir valid frame window range (URB mid
+>> transfer is queued late)
+> 
+> Failing to meet the IST is not the same as violating the 895ms limit.
+> The former may (or may not) cause the TD to complete with MSE instead
+> of Success in its interval. The latter is apparently supposed to cause
+> MSE completion when the HC reads the TD, even though the IST was met.
+> 
+> A particularly fascinating case is period > 895ms; it seems that xHCI
+> only allows submitting shortly before interval boundary, or "SIA".
+> 
+> Another nice one is ESIT >= 4096ms - exceeding MFINDEX limit.
+> 
+> That being said, I found that validating end_frame_id before enqueuing
+> doesn't take more effort than generating these warnings, and I think it
+> would be more productive - drivers know that their submission is lost
+> cause, instead of getting bizarre completions later.
 
----
-base-commit: e98d21c170b01ddef366f023bbfcf6b31509fa83
-change-id: 20260513-tcpci-drm-bridge-d8dc384d71ee
+Added last frame of urb < +895ms to v2
 
-Best regards,
--- 
-Alexey Charkov <alchark@flipper.net>
+But only for urbs mid stream, and only print a message if check fails.
+queue it anyways
+
+> 
+> As for ignoring the IST, my ASMedia chips seem to take it well. And
+> they specify absurdly long IST of 2ms, while actually running with
+> 3x0.5ms URBs or less. The "less" tends to be glitchy, but I'm not yet
+> sure if it's xHCI problem or snd-usb-audio / other software problem.
+
+I think it makes sense to only enforce IST for the very first URB when
+starting the endpoint.
+
+Otherwise just print a debug message so that class driver developers
+can notice they use more URBs, queue them sooner, or both.
+
+My v2 is a bit cleaner, fixed a missing "% MAX_UFRAME", and is split
+into 2 patches.
+Can be found in my fix_frame_id branch:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_frame_id
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=fix_frame_id
+
+-Mathias
+
 
 
