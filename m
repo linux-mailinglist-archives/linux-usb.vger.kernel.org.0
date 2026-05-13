@@ -1,148 +1,197 @@
-Return-Path: <linux-usb+bounces-37368-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37370-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gDOYIh82BGoqFgIAu9opvQ
-	(envelope-from <linux-usb+bounces-37368-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 10:28:15 +0200
+	id +GGNIuc1BGoqFgIAu9opvQ
+	(envelope-from <linux-usb+bounces-37370-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 10:27:19 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E379B52FA63
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 10:28:14 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F74A52FA1F
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 10:27:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9AB77300E73D
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 08:20:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1149A30AFFD0
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 08:26:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A76C388385;
-	Wed, 13 May 2026 08:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA5CF1E8332;
+	Wed, 13 May 2026 08:26:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ei6GcqY0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CI6erl1Q"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322913A3E68;
-	Wed, 13 May 2026 08:20:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6733DBD7C;
+	Wed, 13 May 2026 08:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778660425; cv=none; b=C6dlV2wdisdZF+mhWSA9oe7nzqJC5sohejT1r3soXdZBZ6n2CO3Xva+teJcYlN5DuzQ8fXN63KHmfpwU7VR2Ahe1YStOM/fU7AZuWRPBpn3gCFAalTb8BAUdGnW7vhaEus57xIPpR57oYaOKkXrkK2zsSqKIMhAYycekzj3yRU8=
+	t=1778660757; cv=none; b=RGJOzrug/FZDBpsKyuO9ZwCChEXw0uYgS9MIUxPMEhA7Lm8S11Sgahl6Qu9xnPHPbTCzOt9pGVqjo83DAKajKwRpw6+1FzYxXnvg/ZocmEtWljBMvO2b1k9U7BEbdFzdXY7/cx9Q4H17UhHvDcrGHDzTUwal/mC6mGYIvK61bjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778660425; c=relaxed/simple;
-	bh=cmWn83FvGFJ2LtTRIYJCIfSQQtY7T3IYpa+Zi0qlJo0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eD4Xg/ROBST5wRVskRaE8I8mQCyfLMabDLcRPLjNfdh7lImTW8K904KhyQ7JNOraCF5uJJU+oyj8FDQTnCP6WU9G+gH2b3M0gYzipWcTuJwtrCT83xEYHoF5e5Zszi5n2Vx0+HmjGR/28s0LOXcIpI3ruNpOaHdA/umRy1sOQaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ei6GcqY0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34609C2BCB7;
-	Wed, 13 May 2026 08:20:23 +0000 (UTC)
+	s=arc-20240116; t=1778660757; c=relaxed/simple;
+	bh=1zD6x03NDaHsAcKxIsaEJgXum3xkeDGydr1lcBTCjn8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=vDg1sO5Bt39bvwC3ivNLI9wes5j1GvKrZKsq69LShBKWgMF/4qiGu0U3cJNypEaj7L+JUYRAz9AKWPtgUuf0bcOQs6I0KzCEhD1k1xllPLH2fmW9nFhuSya+0ZJP6ZF2m9KGjbxmyosELQGi7dSCt9m5i4HJpD3CGqeGvx7cejc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CI6erl1Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C6896C2BCB7;
+	Wed, 13 May 2026 08:25:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778660423;
-	bh=cmWn83FvGFJ2LtTRIYJCIfSQQtY7T3IYpa+Zi0qlJo0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ei6GcqY0Hpdlx+dpJci69HthqNFoAI/UK6WCIaRJxPDS3YNgyiFJgA4Uzg9ezt4Em
-	 kBrm2tCiOu695oKf6oELPp7eoa3g0PhdDL+q0E9Y/beqod0caXUa1M+xv0nOHsc8YK
-	 78eKNdvBDjw4nDpHlzpYsk7YBxp73HljELnqZ8eHJgaJQT7iGf4/Y1kiEM96KkCmNd
-	 WaS5akkQk5rqtEI53I94CXXsIVKM+Lk+8D+thDdD6s9YnyiFsfWEYq8QQ3eouL8vFO
-	 weN3tIe+b6bkjSliSNDJxW4KQA92KwHJ8kEntZP2CgaYe2/LWCYfeo+iuS4LXRKszl
-	 eY6uHowN0OU1A==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1wN4pJ-00000004JdR-04r6;
-	Wed, 13 May 2026 10:20:21 +0200
-Date: Wed, 13 May 2026 10:20:21 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Crescent Hsieh <crescentcy.hsieh@moxa.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 4/4] usb: serial: mxuport: add sysfs control for UART
- FIFO
-Message-ID: <agQ0RRpE27ComUnV@hovoldconsulting.com>
-References: <20260324035041.352190-1-crescentcy.hsieh@moxa.com>
- <20260324035041.352190-5-crescentcy.hsieh@moxa.com>
- <afy2yeDTHiVFkPmy@hovoldconsulting.com>
- <agMO03V9xppAtWjf@moxa-ThinkCentre-M90t>
+	s=k20201202; t=1778660755;
+	bh=1zD6x03NDaHsAcKxIsaEJgXum3xkeDGydr1lcBTCjn8=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=CI6erl1QblKP5KTBxCrdt9SFN14AnSV411oxLKSgqhXx4shhSrVwdrKbmQKN2xKTB
+	 buZz+HeW585o147aSWcPfl4/Ff+YNoKYlk/GrwsLTj6hKcM8fVEg6Fu6vLox8+g9Dg
+	 eJlWuGHVm5qfC8qOONn7aDcBbmjAuspX7eNifnLboAa6nPp4MiJ43+Jl6UH5bzKFD0
+	 vA//l14ebVfbat58d/bJL18WIjxKGpAHwm6qpqME7YcezvQGAuAf1j4Iw4HLxPk+Nq
+	 F37qvWgpd5VIEYr88pjEKxH7fg/0ZvEdiaDW8emWjAQ5F/kAcqC1JBTOMUYn2ZJaGO
+	 gXoO7sJIyTWJQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B43FFCD4851;
+	Wed, 13 May 2026 08:25:55 +0000 (UTC)
+From: Pawel Laszczak via B4 Relay <devnull+pawell.cadence.com@kernel.org>
+Subject: [PATCH v5 0/2] usb: cdns3: support configurations without DRD
+ block
+Date: Wed, 13 May 2026 10:41:20 +0200
+Message-Id: <20260513-b4-no_drd_config-v5-0-1c633a4b9a29@cadence.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <agMO03V9xppAtWjf@moxa-ThinkCentre-M90t>
-X-Rspamd-Queue-Id: E379B52FA63
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADA5BGoC/32NQQ6CMBBFr0JmbU2LLSIr72EIgekUxsTWtEg0h
+ LsLuHf5kvffnyFRZEpQZTNEmjhx8CuYQwY4tL4nwXZlyGVeSKNy0WnhQ2OjbTB4x71w5iSdcqq
+ wZQvr7BnJ8XtP3uofp1d3Jxy3zmYMnMYQP/vnpDfvT37SQopzp8lYvBSuVFdsLXmkI4YH1Muyf
+ AHAlmOcxAAAAA==
+X-Change-ID: 20260512-b4-no_drd_config-f530f1f16d8a
+To: Peter Chen <peter.chen@kernel.org>, Roger Quadros <rogerq@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Pawel Laszczak <pawell@cadence.com>, 
+ Bjorn Helgaas <bhelgaas@google.com>
+X-Mailer: b4 0.15.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778661701; l=3306;
+ i=pawell@cadence.com; h=from:subject:message-id;
+ bh=1zD6x03NDaHsAcKxIsaEJgXum3xkeDGydr1lcBTCjn8=;
+ b=Wk/I6orvflQoGMiUzWSZ7vSWaiAi7iy85xQ3q9zg/9tzG3aGTpBR4mHOcN7eliwJ2ZNYtNvai
+ apuXyHXni6hB91PIsMx1HLNNi3XHijz7QXtiuXyNo5QhaEU8qd71FTq
+X-Developer-Key: i=pawell@cadence.com; a=ed25519;
+ pk=EUPBvLO9CDg7j6defeDl2iqi+z5Ivqu4Z46aiqe7dYc=
+X-Endpoint-Received: by B4 Relay for pawell@cadence.com/default with
+ auth_id=707
+X-Original-From: Pawel Laszczak <pawell@cadence.com>
+Reply-To: pawell@cadence.com
+X-Rspamd-Queue-Id: 2F74A52FA1F
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_FROM(0.00)[bounces-37370-lists,linux-usb=lfdr.de,pawell.cadence.com];
 	FROM_HAS_DN(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-37368-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	HAS_REPLYTO(0.00)[pawell@cadence.com];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[hovoldconsulting.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On Tue, May 12, 2026 at 07:28:19PM +0800, Crescent Hsieh wrote:
-> On Thu, May 07, 2026 at 05:59:05PM +0200, Johan Hovold wrote:
-> > On Tue, Mar 24, 2026 at 11:50:41AM +0800, Crescent Hsieh wrote:
-> > > Add a per-port sysfs attribute, uart_fifo, to allow userspace to enable
-> > > or disable the UART FIFO at runtime.
-> > 
-> > Why would you want to do that?
-> > 
-> > We should try to avoid driver specific sysfs knobs.
-> 
-> The motivation is to allow userspace to choose between lower latency and
-> higher throughput at runtime. Some latency-sensitive request/response
-> deployments become unreliable if the UART FIFO is enabled due to the
-> added buffering delay.
+usb: cdns3: support configurations without DRD block
 
-Please mention this in the commit message.
+This series adds support for Cadence USBSSP controllers in hardware
+layouts where the Dual-Role Device (DRD) register block is either
+missing or inaccessible.
 
-> I understand the concern about driver-specific sysfs knobs. UART FIFO
-> enable/disable seems more like a common UART capability than a
-> device-unique behaviour.
-> 
-> If a driver-specific sysfs attribute is not the right approach here, do
-> you have a suggestion for a better interface?
+In such configurations, the controller is hardwired to a single role
+(either host or device) and the driver must skip all OTG/DRD register
+accesses to avoid bus errors or incorrect role detection.
 
-We have one USB serial driver and one serial driver using the legacy
-ASYNC_LOW_LATENCY flag (which can be set using setserial) to set the
-lowest rx fifo trigger level.
+The solution introduces a new 'no_drd' property that can be passed
+via DT or software nodes. When set, the driver:
+1. Skips DRD register mapping and IRQ requests.
+2. Uses a different BAR indexing logic for PCI-based configurations
+   (32-bit addressing layout).
+3. Hardwires the role based on 'dr_mode'.
 
-I'm not sure we want to promote further use of it though.
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+---
+Note: This series is based on current linux-next. I am aware of Peter
+Chen's recent refactoring series ("usb: cdns3: plat: Expose platform
+core driver as library"). Although there is a minor conflict in
+cdns3-plat.c, Peter has already provided an Acked-by for this version.
+I am happy to provide a rebased v6 as soon as Peter's changes land in
+linux-next if required.
+---
+v5:
+- Implemented strict conditional validation using if-then-else logic.
+- Enforced 2 register/interrupt items and required 'dr_mode'
+  (host or peripheral) when 'no_drd' is present.
+- Enforced the standard 3 register/interrupt items (otg, host, dev)
+  when 'no_drd' is absent to ensure backward compatibility.
+- Updated 'reg-names' and 'interrupt-names' to use enums in the main
+  properties section to support flexible resource ordering during
+  validation.
 
-We also have a couple of non-documented driver-specific sysfs attributes
-(and a module parameter) and one documented interface for 8250, which may
-be considered the standard way to set the rx fifo trigger level:
+v4:
+  - Added DT binding documentation for the 'no_drd' property.
+  - Relaxed 'reg' and 'interrupts' requirements in the DT schema (minItems 2)
+    to allow configurations where the OTG/DRD register block is missing.
+  - Moved PCI_DEVICE_ID_CDNS_UDC_USBSSP from pci_ids.h to cdnsp-pci.c
+    to keep the global PCI ID list clean.
 
-	/sys/class/tty/ttyS<x>/rx_trig_bytes
+v3:
+  - Improved descriptions and comments for better clarity.
+  - Introduced the 'no_drd' property to indicate missing DRD register block.
+  - Added support for fixed host-only and device-only configurations.
+  - Ensured cdns_otg_disable_irq is called only when no_drd is false.
+  - Updated cdns_drd_gadget_on/off to ensure PHY mode is correctly
+    handled even if DRD is disabled.
 
-I guess something like that could be generalised to mxuport as disabling
-the FIFOs is effectively setting a trigger level of one character.
+v2:
+  - Changed otg_irq to be optional.
+  - Added cdns->no_drd check in cdns_power_is_lost.
+  - Added cdns->no_drd check in cdns_get_id.
 
-What exactly does RQ_VENDOR_SET_FIFO_DISABLE do? Does it really disable
-the TX fifo? That doesn't seem to make much sense, especially since you
-already have the endpoint buffers.
+---
 
-What happens if you flip this switch while the port is in use?
+---
+Pawel Laszczak (2):
+      dt-bindings: usb: cdns3: Add no_drd property
+      usb: cdnsp: Add support for device-only configuration
 
-Johan
+ .../devicetree/bindings/usb/cdns,usb3.yaml         | 67 +++++++++++++++++++---
+ drivers/usb/cdns3/cdns3-plat.c                     | 26 +++++----
+ drivers/usb/cdns3/cdnsp-pci.c                      | 47 ++++++++++++---
+ drivers/usb/cdns3/core.c                           |  3 +-
+ drivers/usb/cdns3/core.h                           |  4 ++
+ drivers/usb/cdns3/drd.c                            | 44 +++++++++++++-
+ 6 files changed, 159 insertions(+), 32 deletions(-)
+---
+base-commit: e98d21c170b01ddef366f023bbfcf6b31509fa83
+change-id: 20260512-b4-no_drd_config-f530f1f16d8a
+
+Best regards,
+--  
+Pawel Laszczak <pawell@cadence.com>
+
+
 
