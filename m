@@ -1,176 +1,202 @@
-Return-Path: <linux-usb+bounces-37382-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37378-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WPdGCk1jBGq6HgIAu9opvQ
-	(envelope-from <linux-usb+bounces-37382-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 13:41:01 +0200
+	id KKv1BJxhBGq6HgIAu9opvQ
+	(envelope-from <linux-usb+bounces-37378-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 13:33:48 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A1AB5326CD
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 13:41:00 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 881D853259B
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 13:33:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 9DAF23041332
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 11:40:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E6E2F3115648
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 11:28:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6445F401480;
-	Wed, 13 May 2026 11:40:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9439B3FE655;
+	Wed, 13 May 2026 11:28:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=starlabs-systems.20251104.gappssmtp.com header.i=@starlabs-systems.20251104.gappssmtp.com header.b="l4CWWQCP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fhYECYfy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800E23FE67A
-	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 11:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071473D3319;
+	Wed, 13 May 2026 11:28:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778672423; cv=none; b=r6bwun70DeKVIPDP3vWxiqjj6ABvN0jB67aNvzUBE06CbSyWdT+zCqIEEZAYY13BEoizKFO4MNQhk/Zr+IjgdzgCkdeIGF4HnhTCC2HmJSdTP3USzJuuYUJGvTIfu1cSErW59sjcEqp6QRC9Z8UCATcs/f/6YDHlXZe13f87CP0=
+	t=1778671725; cv=none; b=KJwizingSQ6Lsyw9TW2yzXcfUmhZuvWSkq/G23PpjOLxSolHM85237eJ1TrhtmemJmvuc23jOVPHHXb66QW685CEd80XyXf+R95LzQuzrubHOK+8EtS8DIayU5g0A3s79WCX9ZIFnpeNSnDxYA6ZkPoHW0vjYD3l2r0Heo6oX78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778672423; c=relaxed/simple;
-	bh=eMf2CLDG44C1jZ2p7u/edjuiS9xo64r85ao5+r/5ux4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jVPKj75xhZkitYH38GC6rB9R2LlLqmFGCUAsS/6SHPZ6X/ziEiIRZb1/XtHGoxa6FDnfjAOpehtJbfPDzwwAryYoViuwE5lX2mmLu4ZQmE6A8oGBFObddnFGFyBWF1meUXlv+yNaLcdTBjquPcJLLwWDRc+G/s1WbhoAY8IYYpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=starlabs.systems; spf=pass smtp.mailfrom=starlabs.systems; dkim=pass (2048-bit key) header.d=starlabs-systems.20251104.gappssmtp.com header.i=@starlabs-systems.20251104.gappssmtp.com header.b=l4CWWQCP; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=starlabs.systems
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starlabs.systems
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48d146705b4so80470255e9.3
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 04:40:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=starlabs-systems.20251104.gappssmtp.com; s=20251104; t=1778672420; x=1779277220; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kQFvj5LmJIGIKjgLPEHd0VQ/ZMItSCOV0/e8nhf5n6k=;
-        b=l4CWWQCPcZu7yzn0CNg+J78xhQ1MJumppuDVdKvB3ZSESP/0igH+6wdDyANWFqrlz/
-         2tg9mrl2rVuy/V2CM9JvJylxKNyzvZEmhQAqxXgbUIZK1sNHBSoXdKwnE0PVOdv36BOP
-         KXjMY3axE/H1eq/LltiRpPLLy3Ry6nr4xUYKK9XSq7H7wjac7Skh02I/NX0H2jehvigN
-         tOOTjAtB2x6MPJZRSa7j0IJ5A/h2IeoVIVCVNtvo/uFTPqoCaYubCzc9SK6rnn0tkQbk
-         Qyb00Cdy5nNpvJ412kE2agc0KrdgZc0bczbd2oAGHu/+6RnJG2QnSfC4ovNaan1dPJce
-         6L+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778672420; x=1779277220;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kQFvj5LmJIGIKjgLPEHd0VQ/ZMItSCOV0/e8nhf5n6k=;
-        b=c3fYMIDCyfNmYOyLW5ZW4y2rL2yCHWDg2w+WZL3fOxa059yTZrCSgZY3pLV9PePPh7
-         tzdZCOEy/i5rNwwm4U6AMLNxBdYC/kz6HkMcHxDG6hAEP6E1woO8eVZY3aT3EvZAD2m7
-         hzMPZdNxyAJDY6Jt2/GDij9JMw9DSMmQbzGMRbjrRPSSq5k2I3XGkmR7K/OR0+VoQ/Wk
-         qQOdbbBCNg/Sy/tQWHa+RKtKiJPC5ylMC6xhZOnw/0eIdws/AzA+JKYkq24wJ4WM1eo9
-         zT4RLsDqDiO2Fpg+4Ms56KLBpMxgIIYQv9fg64k0FA9Gb1rYsFk+4jK8v+cJJPvo/QJV
-         6sow==
-X-Forwarded-Encrypted: i=1; AFNElJ+qt6eLzzQ4aRNrrqz+2WadIyxSDOGmi00Ryhcv0NdnAN8l9RvFVrTKTB2o9pNF4BUqNIWfE/Kcn34=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywc8IRGFIHjvyVhZ2OQLp2FK86ZPEO1Og2bpTzxMZIAPR5W3t9y
-	/qMaO3S5nNKOGzkSi2TirYgu8I74uyAIcHlKfg9LJyV+0C9Y9nJCvcIl1aPWCWGveA==
-X-Gm-Gg: Acq92OGWQiJBEIwjfRAysGefpGZxlsEAbuRdSIa6QaLLYi5Iy9zAvRZwwknqiM5Z1mE
-	cMW+1zGDMSXzC5BVqgpOwsuVGIOI8hLAv6xbBn5PwdN16qKQxmMUAYSDvDnq31VaxovaoMoHOuf
-	b1/AWeQNEl/6gcUEviNTufzciRAl9lKbFry5B0W6vKtWevlKcQefEvGo/y9pFalNtRX10pllkJO
-	Mt7S5ayZ9gFyL5V46NMKCygwwo8DRcm8PEjY6Lq0UV4hxMGTeExK5UwqJ917JjrNaf5z5xdOGdc
-	qGSfc+DN3rdZw2hTDJWXWhKe1qbOK1Kdi3Zg1QorAGUDYWslqEkKjQlLPIpt37ybid3OuQLx7GE
-	eNHc+nZsywbCJYJana8DsF2YMgLdnLWl5TUANmhv1+jo34taca/EvKQNZZPazhGpZtD7al+T+6z
-	SkcsplVDOmaMInR0r/1dz3doSu2XqEStK1nxNP6tqR4ZhHvWhJc37GYf1hGLk/L8JOjmxq
-X-Received: by 2002:a05:600c:6303:b0:48a:592c:e632 with SMTP id 5b1f17b1804b1-48fc9a2b921mr44740155e9.16.1778672419876;
-        Wed, 13 May 2026 04:40:19 -0700 (PDT)
-Received: from horizon.localdomain ([212.105.128.254])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fcdf64013sm53508475e9.2.2026.05.13.04.40.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 04:40:19 -0700 (PDT)
-From: Sean Rhodes <sean@starlabs.systems>
-To: Ulf Hansson <ulfh@kernel.org>
-Cc: Ricky Wu <ricky_wu@realtek.com>,
-	Avri Altman <avri.altman@sandisk.com>,
-	Sean Rhodes <sean@starlabs.systems>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Dan Carpenter <error27@gmail.com>,
-	Binbin Zhou <zhoubinbin@loongson.cn>,
-	linux-mmc@vger.kernel.org,
-	Huacai Chen <chenhuacai@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	gregkh@linuxfoundation.org,
-	arnd@arndb.de,
-	ulf.hansson@linaro.org,
-	adrian.hunter@intel.com,
-	rogerable@realtek.com,
-	matthew.schwartz@linux.dev
-Subject: [RFC PATCH 2/2] mmc: rtsx_usb_sdmmc: start card power-up at 3.3V
-Date: Wed, 13 May 2026 12:40:13 +0100
-Message-ID: <7de637dbc99f1c2dc40cd255b078de9f1efd1ccb.1778672403.git.sean@starlabs.systems>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <cover.1778672403.git.sean@starlabs.systems>
-References: <cover.1778672403.git.sean@starlabs.systems>
+	s=arc-20240116; t=1778671725; c=relaxed/simple;
+	bh=R4JDpEwqyp7vUWVCK1KADNQAmcCo5wwLCVQ4YmtJdts=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ChgYeUjhQUuuyoC4IyM2K3HgZsbOnKtGcGB7MlnflsL93CvhL8oTnbkCHYUsQu9yQr6zg7iApgkBOCq71jeBhRML4qY/B3zM5bErPAMEG+ESCtFtf+6xtDhREuTAvKCsmkYXJpHuMYH5pFI+Bu8hS24Fz2Y5tmj0BSRIgQI2wFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fhYECYfy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B0F19C2BCB8;
+	Wed, 13 May 2026 11:28:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778671724;
+	bh=R4JDpEwqyp7vUWVCK1KADNQAmcCo5wwLCVQ4YmtJdts=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=fhYECYfyHlZ7rk3tUHIlaX4QnN4UhxU/TPqR5F6OcmDLbY/CPkGSzVka1NAyuknpU
+	 vxsbB3YilwoJwZo+hcE8kDRNFQQUkFvwSqnEGjDVfIt4IyqG695lk1nLsGDNZ8jQGZ
+	 YsHIt++w8nXERjHZtwP1uYjOc/a/WsWFPJzpd7zpErQz42EU4WdkCNcjWFJgXwRbmE
+	 wL3DUPnC8xqJIN7zMZIo5t13aZHPWVVnyJHRFK1JE0prLIT7kgPI+aG9eP9DXM3U6C
+	 nLnEf5Y2HO1WwvofimitrnHOhQV+utlMtXrmePpxtEpw/rJMBvc7V5VknORoIj7WPk
+	 LiNXQpeRkulGQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A038FCD4851;
+	Wed, 13 May 2026 11:28:44 +0000 (UTC)
+From: Pawel Laszczak via B4 Relay <devnull+pawell.cadence.com@kernel.org>
+Subject: [PATCH v6 0/2] usb: cdns3: support configurations without DRD
+ block
+Date: Wed, 13 May 2026 13:44:18 +0200
+Message-Id: <20260513-b4-no_drd_config-v6-0-e7789cd0e581@cadence.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 2A1AB5326CD
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABJkBGoC/33N0QrCIBgF4FcJrzOmU9u66j0ihv7+bgZp6BrF2
+ Lu3rZuC6PLAOd8ZScbkMZPDZiQJB599DHNQ2w2BTocWqbdzJrzgqpCMUyNoiI1NtoEYnG+pk2X
+ hmGPKVprMs1tC5x8reTq/c76bC0K/OEuj87mP6bl+DmLp/eEHQQu6NwKlhVq5ih1BWwyAO4hXs
+ hwM8pMofxByJhiostTC1JrX38Q0TS+W8S/IBwEAAA==
+X-Change-ID: 20260512-b4-no_drd_config-f530f1f16d8a
+To: Peter Chen <peter.chen@kernel.org>, Roger Quadros <rogerq@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Pawel Laszczak <pawell@cadence.com>, 
+ Bjorn Helgaas <bhelgaas@google.com>
+X-Mailer: b4 0.15.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778672670; l=3527;
+ i=pawell@cadence.com; h=from:subject:message-id;
+ bh=R4JDpEwqyp7vUWVCK1KADNQAmcCo5wwLCVQ4YmtJdts=;
+ b=r/o2bDuIm3XmuKHFtqGGN403hJHsPUwU4uVVxTPvX7KkOqdsZgMO/YhYJ0tOktmo2pubeXwxy
+ cJpNlbDrgGtD3yTNXLwWlLlyG4+zNvbkzuljKsNjssapdV7pw6RTtJC
+X-Developer-Key: i=pawell@cadence.com; a=ed25519;
+ pk=EUPBvLO9CDg7j6defeDl2iqi+z5Ivqu4Z46aiqe7dYc=
+X-Endpoint-Received: by B4 Relay for pawell@cadence.com/default with
+ auth_id=707
+X-Original-From: Pawel Laszczak <pawell@cadence.com>
+Reply-To: pawell@cadence.com
+X-Rspamd-Queue-Id: 881D853259B
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.06 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[starlabs-systems.20251104.gappssmtp.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[starlabs.systems : SPF not aligned (relaxed), DKIM not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	FREEMAIL_CC(0.00)[realtek.com,sandisk.com,starlabs.systems,kernel.org,gmail.com,loongson.cn,vger.kernel.org,linuxfoundation.org,arndb.de,linaro.org,intel.com,linux.dev];
-	TAGGED_FROM(0.00)[bounces-37382-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37378-lists,linux-usb=lfdr.de,pawell.cadence.com];
+	FROM_HAS_DN(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[starlabs-systems.20251104.gappssmtp.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sean@starlabs.systems,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	HAS_REPLYTO(0.00)[pawell@cadence.com];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[starlabs.systems:email,starlabs.systems:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[cadence.com:email,cadence.com:mid,cadence.com:replyto,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Some tray-based readers keep SD_CD asserted even without a card. The
-rtsx_usb_sdmmc driver now validates insertion with a minimal probe
-sequence. That probe must start with the SD pads in 3.3V mode.
+usb: cdns3: support configurations without DRD block
 
-Like the old rts5139 driver (sd_init_power()), force the SD pads to
-3.3V and tune the SD18 regulator to 3.3V before powering up the card.
-This avoids spurious probe timeouts when the reader is left in 1.8V
-from a previous UHS session.
+This series adds support for Cadence USBSSP controllers in hardware
+layouts where the Dual-Role Device (DRD) register block is either
+missing or inaccessible.
 
-Tested: Realtek RTS5129 (0bda:0129) + tray + Lexar 2TB SDXC
-Tested: cold boot detects mmcblk0 (2026-02-24)
-Tested: hotplug insert enumerates mmcblk0 (2026-02-23)
-Signed-off-by: Sean Rhodes <sean@starlabs.systems>
+In such configurations, the controller is hardwired to a single role
+(either host or device) and the driver must skip all OTG/DRD register
+accesses to avoid bus errors or incorrect role detection.
+
+The solution introduces a new 'no_drd' property that can be passed
+via DT or software nodes. When set, the driver:
+1. Skips DRD register mapping and IRQ requests.
+2. Uses a different BAR indexing logic for PCI-based configurations
+   (32-bit addressing layout).
+3. Hardwires the role based on 'dr_mode'.
+
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 ---
- drivers/mmc/host/rtsx_usb_sdmmc.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Note: This series is based on current linux-next. I am aware of Peter
+Chen's recent refactoring series ("usb: cdns3: plat: Expose platform
+core driver as library"). Although there is a minor conflict in
+cdns3-plat.c, Peter has already provided an Acked-by for this version.
+I am happy to provide a rebased v7 as soon as Peter's changes land in
+linux-next if required.
+---
+v6:
+- Fixed validation error for 'interrupt-names' by correcting
+  the items definition.
+- Adjusted 'minItems'/'maxItems' to properly support the optional
+ 'wakeup' interrupt.
+- Fixed 'too long' schema error in examples.
 
-diff --git a/drivers/mmc/host/rtsx_usb_sdmmc.c b/drivers/mmc/host/rtsx_usb_sdmmc.c
-index ec3eeea78e95..6be98926387d 100644
---- a/drivers/mmc/host/rtsx_usb_sdmmc.c
-+++ b/drivers/mmc/host/rtsx_usb_sdmmc.c
-@@ -1108,6 +1108,11 @@ static int sd_power_on(struct rtsx_usb_sdmmc *host)
- 	}
- 	dev_dbg(sdmmc_dev(host), "%s\n", __func__);
- 	rtsx_usb_init_cmd(ucr);
-+	/* Start SD init at 3.3V, like the old rts5139 driver. */
-+	rtsx_usb_add_cmd(ucr, WRITE_REG_CMD, SD_PAD_CTL,
-+			 SD_IO_USING_1V8, SD_IO_USING_3V3);
-+	rtsx_usb_add_cmd(ucr, WRITE_REG_CMD, LDO_POWER_CFG,
-+			 TUNE_SD18_MASK, TUNE_SD18_3V3);
- 	rtsx_usb_add_cmd(ucr, WRITE_REG_CMD, CARD_SELECT, 0x07, SD_MOD_SEL);
- 	rtsx_usb_add_cmd(ucr, WRITE_REG_CMD, CARD_SHARE_MODE,
- 			CARD_SHARE_MASK, CARD_SHARE_SD);
+v5:
+- Implemented strict conditional validation using if-then-else logic.
+- Enforced 2 register/interrupt items and required 'dr_mode'
+  (host or peripheral) when 'no_drd' is present.
+- Enforced the standard 3 register/interrupt items (otg, host, dev)
+  when 'no_drd' is absent to ensure backward compatibility.
+- Updated 'reg-names' and 'interrupt-names' to use enums in the main
+  properties section to support flexible resource ordering during
+  validation.
+
+v4:
+  - Added DT binding documentation for the 'no_drd' property.
+  - Relaxed 'reg' and 'interrupts' requirements in the DT schema (minItems 2)
+    to allow configurations where the OTG/DRD register block is missing.
+  - Moved PCI_DEVICE_ID_CDNS_UDC_USBSSP from pci_ids.h to cdnsp-pci.c
+    to keep the global PCI ID list clean.
+
+v3:
+  - Improved descriptions and comments for better clarity.
+  - Introduced the 'no_drd' property to indicate missing DRD register block.
+  - Added support for fixed host-only and device-only configurations.
+  - Ensured cdns_otg_disable_irq is called only when no_drd is false.
+  - Updated cdns_drd_gadget_on/off to ensure PHY mode is correctly
+    handled even if DRD is disabled.
+
+v2:
+  - Changed otg_irq to be optional.
+  - Added cdns->no_drd check in cdns_power_is_lost.
+  - Added cdns->no_drd check in cdns_get_id.
+
+---
+Pawel Laszczak (2):
+      dt-bindings: usb: cdns3: Add no_drd property
+      usb: cdnsp: Add support for device-only configuration
+
+ .../devicetree/bindings/usb/cdns,usb3.yaml         | 70 +++++++++++++++++++---
+ drivers/usb/cdns3/cdns3-plat.c                     | 26 ++++----
+ drivers/usb/cdns3/cdnsp-pci.c                      | 47 ++++++++++++---
+ drivers/usb/cdns3/core.c                           |  3 +-
+ drivers/usb/cdns3/core.h                           |  4 ++
+ drivers/usb/cdns3/drd.c                            | 44 +++++++++++++-
+ 6 files changed, 162 insertions(+), 32 deletions(-)
+---
+base-commit: e98d21c170b01ddef366f023bbfcf6b31509fa83
+change-id: 20260512-b4-no_drd_config-f530f1f16d8a
+
+Best regards,
+--  
+Pawel Laszczak <pawell@cadence.com>
+
+
 
