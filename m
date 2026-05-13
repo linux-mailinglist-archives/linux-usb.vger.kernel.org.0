@@ -1,159 +1,307 @@
-Return-Path: <linux-usb+bounces-37409-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37410-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4Jj6BGK3BGqKNQIAu9opvQ
-	(envelope-from <linux-usb+bounces-37409-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 19:39:46 +0200
+	id sIxKFH+5BGplNQIAu9opvQ
+	(envelope-from <linux-usb+bounces-37410-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 19:48:47 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 897F853829E
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 19:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A611B5384BD
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 19:48:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6BCF2319D5A6
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 17:14:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8545C31E144D
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 17:30:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4464D4DBD70;
-	Wed, 13 May 2026 17:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 281A84DC52D;
+	Wed, 13 May 2026 17:30:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NoJk58hK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Myb2qtmm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39894DB56B
-	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 17:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778692466; cv=none; b=Trqo1nX7N2ML7hwKv3kQyXkTjikWSY1OzQb6q8AHaxluh6oYt3Pr2yCDqso+RWt/p94x0l/+1sYy2sm4oORWjrfBkUSJgN5hM8LQrztCcLm/JbTe9p2MNH3CnnAXxhFqOBr8whtdxOw5iGa1VStnSkc9eyZ5o6Yx+yJ8LiWD4CE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778692466; c=relaxed/simple;
-	bh=iKeWzjXgVgJZSlhoA7v8h5tpKEAamJAN9TlarN8/rfc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TKq5Vn0UBT5l02Eyh/bLQfVVCLTFAciDlgxRh5ZrYpO4WPFpThiC+csgIuQQEMnKFDKp+Ooi0X2tpqMh5d4pOGkruoiF3x/8iv8SNo/A44aXdNFH6RLcwUA0XGGNV0XnPB/cVjfk6YoDuWERk61pljPUdRPzic1pgTdTmU8hiQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NoJk58hK; arc=none smtp.client-ip=209.85.219.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 130164DA559
+	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 17:30:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778693425; cv=pass; b=nsYmDwSheDhPZ+WQbBQSi6jUjWBjp15ph9cp4itYuzlyXfOBDcE+3SK9NFrUGsd77OEaumxj5qSKIMnEteiz5WxzddfGnALgaQMTxMT+Klfg+B7KmP421aRNiU1SKe2igVTnZK+ng0+jBlS0dwS0ZAHucseiiyKUPL3QsrLULS8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778693425; c=relaxed/simple;
+	bh=JPLT6FMeldEbFhJ09K/mL4agPV0DXAvQaThe6y1REcc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cPkb6Jp+d5nkCL1vfRLVFIbosJEg5+Jis99Bf1bHOjCm/u/M0Y+60w331GwLIBk06teNf8jvXQFwpTwVxra/fifU0fGkzp8blZENwuK5baJnSQwYVd++c+N3vuHqyWKpjWOkqrVqV5zhBghYgMOQdWkOjkMWUqgsIkk3RjLuqvM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Myb2qtmm; arc=pass smtp.client-ip=74.125.82.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-8acb1f75435so4528096d6.1
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 10:14:23 -0700 (PDT)
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2f0ad52830cso10376530eec.1
+        for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 10:30:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778693422; cv=none;
+        d=google.com; s=arc-20240605;
+        b=k3JSglEh1/U47hVaUi1zowJ30ARRX44NznHRdVLaAv4f7qZkxZ07+eEhaxmEipLoAj
+         A/PUP4Nvbsn4SQO1l4cVvCZyqIEu6f8EiFdw+mdYczLbwJ2C6KMbfsBDpMKSl+ROBN3k
+         qYDrm1eVJGCExMc1lpq8ak9osZKhNZ4ElG9F6u3+0mWQ+lHngM6J78Yxlh2uPNh+ikGC
+         kc6YyJvO9CT1zeAQk2dSyREVOUX3Ib0czm7yXI+3jdyLVT+4GZ1UV4ZHg+V4pqOLjMG/
+         n5MS8n+C1Dvwj4iL0gNRJssTZRch8FR1TjDtDF4GW6ki/hCu+qUowGzE5fbK7f+itdiG
+         7ngg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=YDUAur+XoWH6JFWlom4UBKGDg0H33xYVizwbBkMvANo=;
+        fh=Rx8xaMbPV1meTeUCf2AE5m71Jd/MLQxOoOeMJuMpRRA=;
+        b=MMbd9ieA1CfKJfVaokGBBMeootHxpAystrnbm4gitemk6cLYFnfx8UGm/aHEXyXSvc
+         bjuoit1DVGXasfGZnFRVi6bc5fpxyxagoZqrbRXBvKC8ABAW0NDrFkOLHzY3YW7CAAZR
+         Oiyq08ViVk3aJcPIShu540RDig7krCN9WPQjplGuWKXcNbMqFWHtX4hGeZ06Rm1p0a7s
+         gy/ISGFFs8Q/mQUog+UInLKIRIIHcXUecl7urzQ1b1Y94Dy6l4qFm5ikhCuelSPCT96t
+         aP16g9it2oYEfVyHsMdX8AgQOGv51URO9w8jLDzv4pCeTgw3X0z24i+573hC4yyS2/Oy
+         LZcg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778692461; x=1779297261; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=atyHDLXGzMnMgHFcHtRTpHcYjDNE+LB6RZeNY5wBGB4=;
-        b=NoJk58hKzkbmBXAH4eobR4ZaF5sui4saBrRN9UFlQjB4LFaQcEtGZhz7rb/1p+9pqG
-         lWjyQ7WcHnT2IYZyyKwpsfyyJ92HSA6IxC5K2i75vFd3lO0XBuuGVCSa5605QYKExqTt
-         iHqbXUcau8TikrR5wsm6QINWwAfh4slktkQ4b3FkH74ufbxR95M+DJ779KptuPqdc5un
-         X8PMZhui11vflSZIlWzCToZD3qhwn6/7hOHS+PAJ902uNqhKcbuemFfgTfpGShKjZNLu
-         kKxvkxTopdBX5+cUo6CY+0zm65bPGdjNVMNq4rxotWRcaBGuhThvCcfb36AmkPhSN7mI
-         0bRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778692461; x=1779297261;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1778693422; x=1779298222; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=atyHDLXGzMnMgHFcHtRTpHcYjDNE+LB6RZeNY5wBGB4=;
-        b=mFiGrIrpcHGXdGGzrJwJe0Tq9bk78Et5jb2dxlifyEt6q871qt7TjO5JYH9CF+oX5Q
-         39cnyY6J4stsYmt5jrCvZjdz+et9Wmb8tj5bKx5p0QUvNlF78qdqswsLE9MYfutw/Dxt
-         klKQ67lElHcFjNSswSqvKH1T91yyJhh7E5Fr7R/c9H6KzlNFkYViWtq1xukOdeAC5n/8
-         j3lphaCiWtrinb4vwZpe2p52+4x8k5veVDN/Kf2l8Wj99O8eqh35IVhgHSvTTIMWnZTp
-         bw0eacdl5IM/gH+sN+0Z1eSTth8gfG6XrOyB5ubhSfBVlm2BREo/sGCRXF1sWMMhFaTL
-         DsDA==
-X-Gm-Message-State: AOJu0YwBjEs0szxRmE6HtnQ3w3vi0/D1lVXYeignxc2FHSudLXBp3HMp
-	WTkB6XFDM6HTJg2g5NSwXImuk6CjhQ/cGf7De/yIRkOAp1XdKXPdkrBQ
-X-Gm-Gg: Acq92OFVS5iWKVxdXMgq37Zk790KyDG8+uZ9Ah+qVAH41rhvmCcWrNcEEjA4nm2KoD6
-	iPQmn47FsXsJrNl5MT9SBE2mXI2YlC9kOxNPMrgjDsC344/BwgJNudAufYiKUm08HmLrl4RAkHw
-	KKJiyTr/MblE+3amFVCEq3BYyWKHfrM7bK21gCLdZT+d0ENaLSzejFn1qgYm0xLh27cBmzpDj8a
-	Rw6xBSdyk5xVMAkSbwoNeTdTnkHacwMOB+Dpni5AM/9KuhPZiKDCt75mWXVOfF86I3g3vLwD+yN
-	Jr+CZVDGw6DI7FqpkmayNXXOtCfIkUqTld/Xf3/+T06j3HSDh6tTigjOxfbuJTTWVZyDyPc9d6T
-	EFtb7/cMCDyAt/6BWPgql6w6StwpTet6isMu6h40QmRZRtnWQoN9pcvF0cS59v/jw/H91z5k1cn
-	LOADUYiNvvlmY+PtD3DHkiOFAQTdoS/IJoAk74Hpgwo3fxtWQOHcLufmOUQNhLq136E4MqDHFqF
-	cF5SXmOj10=
-X-Received: by 2002:a05:6214:e45:b0:89a:5129:510f with SMTP id 6a1803df08f44-8c7b5e3804cmr46391166d6.0.1778692461472;
-        Wed, 13 May 2026 10:14:21 -0700 (PDT)
-Received: from debian-t14-gen1-fuhrysteve.fuhry.app (73.sub-97-137-122.myvzw.com. [97.137.122.73])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8c90c35cdb1sm793836d6.46.2026.05.13.10.14.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 10:14:20 -0700 (PDT)
-From: "Stephen J. Fuhry" <fuhrysteve@gmail.com>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Stephen J. Fuhry" <fuhrysteve@gmail.com>
-Subject: [PATCH] USB: quirks: add NO_LPM for Lenovo ThinkPad USB-C Dock Gen2 hub controllers
-Date: Wed, 13 May 2026 13:14:19 -0400
-Message-ID: <20260513171419.44849-1-fuhrysteve@gmail.com>
-X-Mailer: git-send-email 2.47.3
+        bh=YDUAur+XoWH6JFWlom4UBKGDg0H33xYVizwbBkMvANo=;
+        b=Myb2qtmmEWFHOlXmcUwS8JtGLmsuI7inrmcQU+iPTH42mxnoa1ZxH9YLyLmmoPoVac
+         pTB+UbXzRJ9vMcAYAcvh7XMp8mWMm+QAX6m2+HZKbXJk6pSNXB1rA5D5HpHpvI+XMj3Q
+         /Ai7ZLztC6F9LvQUrKNwk11s+jjCqsWpuddo0O+K4vlBS0xLHZu1b4/I9yK8Aj6Hqey2
+         94SKVCluyhtdUv0ezOIkw9yj+cGUpOrs9Zrp3Ut8bo05fMomAOF9qoBpaujprOYUMmtp
+         gI+KIN9inWDtqC9bxQKllgKE0p7uf9EoUCakd48EApwwOBJCCplAWHdiRy/GNfgsk5wd
+         7jyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778693422; x=1779298222;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=YDUAur+XoWH6JFWlom4UBKGDg0H33xYVizwbBkMvANo=;
+        b=D4YV1QlRy25zaaO+pWYkw9UV8CECLwSwVG02/V6xFahaZtUY2i9WWRs2rT85oraUIu
+         hNwbyDJI3hphBnOUjmAhFdfKlMwM7fWoz5nbG2rfUU3S4NUC9Hcut+y3leJryq93HTqu
+         SDfDwQ/ItjLkuLApxfGjh+VEdXfwkqu7UcTjSCTkaQ6m0YAx7+iwgqyx/f7p1r8n1qcw
+         T9pe8LIEEmMiZEGUddb34ZLwnuPq2yanjxgMq4h3ym+QuPmVgUVrnHY8+vkbBP/HzKdE
+         c+y4iTwoki+kFQIaVINyE8yg1doHialpafdZCUpJzmX9auiJdS+ws3yuR90DfcAHOg/h
+         ttfA==
+X-Forwarded-Encrypted: i=1; AFNElJ8oVgnnSnX9QDG+5Y0f9c/IKXiyVxJaC3Ak7wlULZyBajiVFmZuQywzI0NEukgfKwc+KM0lR5CzH0M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEahxrgr/SEJPaqLKPPiyC7GJyMW9dOuazoWUYVTkkw/5GUcQw
+	wHltjTUvlusS5T8GyNCwtZm7OkEe/ORj2fCGSQDpxJ0zxVsow/NBkLwitHfs9ZdXD9dhSu75AL7
+	qKraLJnFWACeThtsbyMULxebZ8x0kyl4=
+X-Gm-Gg: Acq92OHEO58tD8/rdGUabPI4rQ3iylYHF5YSWx4IK4fWtsEoqJJ2t+IralQUrar0TAI
+	e3L8PuoywkeMBiS0JaeVQKIb2YQBV6Xu6KoI07x3w+Y1J8OvNJ2uWqDek3ZILwiu22zUVEiR7/L
+	qUo6gUGnC/PVhUIITCxY8ugNRepI64iXKcX1IB0JDN304WGNiBIQ2txY0Yd0+jnasBxvLfsNZjt
+	AeRflXjI/hHhKz532HhB2l9GQ6e671dc3Zhg0h2e8unQaTlzC4MfvK6Ehygjc3iYtb6f3VJeuML
+	JyDNsAxzcieEDtEYMbE=
+X-Received: by 2002:a05:693c:2b08:b0:2f3:c3d4:382f with SMTP id
+ 5a478bee46e88-301181aa331mr2513866eec.8.1778693422110; Wed, 13 May 2026
+ 10:30:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 897F853829E
+References: <20260511135703.62470-1-clamor95@gmail.com> <20260511135703.62470-3-clamor95@gmail.com>
+ <agJ/T8nBGWEoblmd@nchen-desktop> <CAPVz0n173syW9rXy7Qt_N=mChe6WBRLvjRDypcJEC50hPL4OMQ@mail.gmail.com>
+ <agLb6mgP45jHjvNt@nchen-desktop>
+In-Reply-To: <agLb6mgP45jHjvNt@nchen-desktop>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+Date: Wed, 13 May 2026 20:30:10 +0300
+X-Gm-Features: AVHnY4LbEcLazP490SpFW2HazY7KluRMMma2mmpgzBcW68oL5O3KVQGdtgY1RmI
+Message-ID: <CAPVz0n2yGALm1Z0j0j6_MaqAOZGL+a8EgCWYQpW0QN1YVf96EQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/6] usb: chipidea: tegra: Avoid controller/PHY init if
+ bus is externally controlled
+To: "Peter Chen (CIX)" <peter.chen@kernel.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Vinod Koul <vkoul@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Thierry Reding <thierry.reding@kernel.org>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: A611B5384BD
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37410-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37409-lists,linux-usb=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_THREE(0.00)[4];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[fuhrysteve@gmail.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	RCPT_COUNT_TWELVE(0.00)[20];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,netdev,dt];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
 X-Rspamd-Action: no action
 
-The Lenovo ThinkPad USB-C Dock Gen2 (17ef:a391, 17ef:a392) hub
-controllers exhibit link instability when USB Link Power Management
-is enabled, similar to the dock's Ethernet adapter (17ef:a387) which
-already carries USB_QUIRK_NO_LPM.
+=D0=B2=D1=82, 12 =D1=82=D1=80=D0=B0=D0=B2. 2026=E2=80=AF=D1=80. =D0=BE 10:5=
+1 Peter Chen (CIX) <peter.chen@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On 26-05-12 09:13:40, Svyatoslav Ryhel wrote:
+> > =D0=B2=D1=82, 12 =D1=82=D1=80=D0=B0=D0=B2. 2026=E2=80=AF=D1=80. =D0=BE =
+04:16 Peter Chen (CIX) <peter.chen@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+> > >
+> > > On 26-05-11 16:56:57, Svyatoslav Ryhel wrote:
+> > > > If the USB controller and PHY are externally controlled, then the
+> > > > registration of the controller and the PHY initialization should be
+> > > > skipped, since these configurations must be done by the device that
+> > > > controls the bus to work correctly.
+> > > >
+> > >
+> > > I find you only control USB controller device add at PHY driver, most=
+ of USB drivers
+> > > has PHY control, for chipidea, it has PHY control at core.c, would pl=
+ease try to
+> > > adapt for it?
+> > >
+> >
+> > Usually yes, but this is not the case for Tegra unfortunately. As you
+> > can see Tegra specific section of Chipidea driver specifically
+> > describes why it has to set PHY manually.
+> >
+> > /*
+> >  * USB controller registers shouldn't be touched before PHY is
+> >  * initialized, otherwise CPU will hang because clocks are gated.
+> >  * PHY driver controls gating of internal USB clocks on Tegra.
+> >  */
+> >
+> > So in order to provide correct work of USB when set by an external
+> > device, both PHY and controller init/add must be skipped.
+>
+> You could call generic PHY APIs at ci_hdrc_tegra.c, after PHY init or pow=
+er on,
+> call controller initialization.
+>
 
-When the dock reconnects after a transient disconnect, the hub
-controllers enter LPM states between re-enumeration retries, causing
-repeated disconnect/reconnect cycles lasting up to two minutes.
-Disabling LPM for these devices restores stable enumeration.
+I was tinkering with Chipidea driver for Tegra a bit. If you meant to
+use flag only to control usb controller device init and leave PHY to
+be handled by controller, then yes, that is possible and that is
+better approach.
 
-Signed-off-by: Stephen J. Fuhry <fuhrysteve@gmail.com>
----
- drivers/usb/core/quirks.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 0ffdaefba..87810eff9 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -513,6 +513,10 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	/* Lenovo ThinkPad USB-C Dock Gen2 Ethernet (RTL8153 GigE) */
- 	{ USB_DEVICE(0x17ef, 0xa387), .driver_info = USB_QUIRK_NO_LPM },
- 
-+	/* Lenovo ThinkPad USB-C Dock Gen2 USB 3.1 and USB 2.0 hub controllers */
-+	{ USB_DEVICE(0x17ef, 0xa391), .driver_info = USB_QUIRK_NO_LPM },
-+	{ USB_DEVICE(0x17ef, 0xa392), .driver_info = USB_QUIRK_NO_LPM },
-+
- 	/* BUILDWIN Photo Frame */
- 	{ USB_DEVICE(0x1908, 0x1315), .driver_info =
- 			USB_QUIRK_HONOR_BNUMINTERFACES },
--- 
-2.47.3
-
+> >
+> > > Peter
+> > >
+> > > > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> > > > ---
+> > > >  drivers/usb/chipidea/ci_hdrc_tegra.c | 36 +++++++++++++++++-------=
+----
+> > > >  1 file changed, 22 insertions(+), 14 deletions(-)
+> > > >
+> > > > diff --git a/drivers/usb/chipidea/ci_hdrc_tegra.c b/drivers/usb/chi=
+pidea/ci_hdrc_tegra.c
+> > > > index 372788f0f970..593390a818d1 100644
+> > > > --- a/drivers/usb/chipidea/ci_hdrc_tegra.c
+> > > > +++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
+> > > > @@ -32,6 +32,7 @@ struct tegra_usb {
+> > > >       struct clk *clk;
+> > > >
+> > > >       bool needs_double_reset;
+> > > > +     bool externally_controlled;
+> > > >  };
+> > > >
+> > > >  struct tegra_usb_soc_info {
+> > > > @@ -312,20 +313,25 @@ static int tegra_usb_probe(struct platform_de=
+vice *pdev)
+> > > >       if (device_property_present(&pdev->dev, "nvidia,needs-double-=
+reset"))
+> > > >               usb->needs_double_reset =3D true;
+> > > >
+> > > > +     if (device_property_present(&pdev->dev, "nvidia,external-cont=
+rol"))
+> > > > +             usb->externally_controlled =3D true;
+> > > > +
+> > > >       err =3D tegra_usb_reset_controller(&pdev->dev);
+> > > >       if (err) {
+> > > >               dev_err_probe(&pdev->dev, err, "failed to reset contr=
+oller");
+> > > >               goto fail_power_off;
+> > > >       }
+> > > >
+> > > > -     /*
+> > > > -      * USB controller registers shouldn't be touched before PHY i=
+s
+> > > > -      * initialized, otherwise CPU will hang because clocks are ga=
+ted.
+> > > > -      * PHY driver controls gating of internal USB clocks on Tegra=
+.
+> > > > -      */
+> > > > -     err =3D usb_phy_init(usb->phy);
+> > > > -     if (err)
+> > > > -             goto fail_power_off;
+> > > > +     if (!usb->externally_controlled) {
+> > > > +             /*
+> > > > +              * USB controller registers shouldn't be touched befo=
+re PHY is
+> > > > +              * initialized, otherwise CPU will hang because clock=
+s are gated.
+> > > > +              * PHY driver controls gating of internal USB clocks =
+on Tegra.
+> > > > +              */
+> > > > +             err =3D usb_phy_init(usb->phy);
+> > > > +             if (err)
+> > > > +                     goto fail_power_off;
+> > > > +     }
+> > > >
+> > > >       /* setup and register ChipIdea HDRC device */
+> > > >       usb->soc =3D soc;
+> > > > @@ -342,12 +348,14 @@ static int tegra_usb_probe(struct platform_de=
+vice *pdev)
+> > > >       if (of_usb_get_phy_mode(pdev->dev.of_node) =3D=3D USBPHY_INTE=
+RFACE_MODE_ULPI)
+> > > >               usb->data.flags &=3D ~CI_HDRC_SUPPORTS_RUNTIME_PM;
+> > > >
+> > > > -     usb->dev =3D ci_hdrc_add_device(&pdev->dev, pdev->resource,
+> > > > -                                   pdev->num_resources, &usb->data=
+);
+> > > > -     if (IS_ERR(usb->dev)) {
+> > > > -             err =3D dev_err_probe(&pdev->dev, PTR_ERR(usb->dev),
+> > > > -                                 "failed to add HDRC device");
+> > > > -             goto phy_shutdown;
+> > > > +     if (!usb->externally_controlled) {
+> > > > +             usb->dev =3D ci_hdrc_add_device(&pdev->dev, pdev->res=
+ource,
+> > > > +                                           pdev->num_resources, &u=
+sb->data);
+> > > > +             if (IS_ERR(usb->dev)) {
+> > > > +                     err =3D dev_err_probe(&pdev->dev, PTR_ERR(usb=
+->dev),
+> > > > +                                         "failed to add HDRC devic=
+e");
+> > > > +                     goto phy_shutdown;
+> > > > +             }
+> > > >       }
+> > > >
+> > > >       return 0;
+> > > > --
+> > > > 2.51.0
+> > > >
+> > >
+> > > --
+> > >
+> > > Best regards,
+> > > Peter
+>
+> --
+>
+> Best regards,
+> Peter
 
