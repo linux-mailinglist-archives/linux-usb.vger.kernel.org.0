@@ -1,177 +1,159 @@
-Return-Path: <linux-usb+bounces-37408-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37409-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qBTeLWatBGoSNAIAu9opvQ
-	(envelope-from <linux-usb+bounces-37408-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 18:57:10 +0200
+	id 4Jj6BGK3BGqKNQIAu9opvQ
+	(envelope-from <linux-usb+bounces-37409-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 19:39:46 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BA4B537887
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 18:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 897F853829E
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 19:39:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B60A4330065B
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 16:24:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6BCF2319D5A6
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 17:14:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AAD24CA296;
-	Wed, 13 May 2026 16:23:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4464D4DBD70;
+	Wed, 13 May 2026 17:14:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fvI/jmFN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NoJk58hK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB474CA266;
-	Wed, 13 May 2026 16:23:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39894DB56B
+	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 17:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778689436; cv=none; b=Q1vsHFj2P3Ao2/+6Anxf0yP0iN5gHHUqiU8iN22Z0SLBeoVik0gZf6Qh6wZXgBG8Zno3nkQqwNAQQefoa/BvCNe0fxxqQ1Xsnqdf442OtqjsSt9KyPQ9Os59xBDZ8umAeAEOz8lV8lrhq1ArJgRZlOuQRMU+C8Fm/wegGnTpI9k=
+	t=1778692466; cv=none; b=Trqo1nX7N2ML7hwKv3kQyXkTjikWSY1OzQb6q8AHaxluh6oYt3Pr2yCDqso+RWt/p94x0l/+1sYy2sm4oORWjrfBkUSJgN5hM8LQrztCcLm/JbTe9p2MNH3CnnAXxhFqOBr8whtdxOw5iGa1VStnSkc9eyZ5o6Yx+yJ8LiWD4CE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778689436; c=relaxed/simple;
-	bh=i298VvOeIoBdmUK+OD0uLYAyhZ6aEH4cZba+F0pO2Jk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gNhtI2jGz/3zNjIiaFlL1OVe391RIb2rJlgZzM1PWBZoibB/ZM5JN4wab23XtGv9+E3EdIqZUzGgBR+epJaaJFoBuBBcxE1LEBH978imQMWfyz/ZPSBJ4g8sSACsofIf1nvVXeTdgsXuOU6+x8Aq2ZLTiqHXQG/LypW+yg0sv88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fvI/jmFN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D7EC2BCF5;
-	Wed, 13 May 2026 16:23:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778689436;
-	bh=i298VvOeIoBdmUK+OD0uLYAyhZ6aEH4cZba+F0pO2Jk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=fvI/jmFNBiomrvWOviBrDu1lddn3/2DayBomD+lzpzO+yHx1cJQNgtU6ReIhtDN1S
-	 NjivZbN/xcmTeTR9FU2RYyNtXiZ0Uf5FGqPpFXY6kmkCETBUuzKpSGBdMsZwGTWdyV
-	 bDRqnekvFM0MUWwVPLKy5pKF+qbb3tmA8ZAGCx2jgy9PPercwZhQ7fQ7MbTZQdaLhc
-	 U2MPw/KrBlaF4Z/EbOWrLP8dU1ZmmaCGqPZFFzWMNiJodjj5xkUPZuPxq1qNlNsIS/
-	 IXrP/AC30ZB95KLxfUknIXoACkc4Z/6y9HL4bV+DvoXtQhCpZGVFgSRaQJsgSFrv16
-	 IIrj11/xvXi/Q==
-From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Wed, 13 May 2026 18:23:35 +0200
-Subject: [PATCH v3 4/4] thunderbolt: Add some more descriptive probe error
- messages
+	s=arc-20240116; t=1778692466; c=relaxed/simple;
+	bh=iKeWzjXgVgJZSlhoA7v8h5tpKEAamJAN9TlarN8/rfc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TKq5Vn0UBT5l02Eyh/bLQfVVCLTFAciDlgxRh5ZrYpO4WPFpThiC+csgIuQQEMnKFDKp+Ooi0X2tpqMh5d4pOGkruoiF3x/8iv8SNo/A44aXdNFH6RLcwUA0XGGNV0XnPB/cVjfk6YoDuWERk61pljPUdRPzic1pgTdTmU8hiQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NoJk58hK; arc=none smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-8acb1f75435so4528096d6.1
+        for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 10:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778692461; x=1779297261; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=atyHDLXGzMnMgHFcHtRTpHcYjDNE+LB6RZeNY5wBGB4=;
+        b=NoJk58hKzkbmBXAH4eobR4ZaF5sui4saBrRN9UFlQjB4LFaQcEtGZhz7rb/1p+9pqG
+         lWjyQ7WcHnT2IYZyyKwpsfyyJ92HSA6IxC5K2i75vFd3lO0XBuuGVCSa5605QYKExqTt
+         iHqbXUcau8TikrR5wsm6QINWwAfh4slktkQ4b3FkH74ufbxR95M+DJ779KptuPqdc5un
+         X8PMZhui11vflSZIlWzCToZD3qhwn6/7hOHS+PAJ902uNqhKcbuemFfgTfpGShKjZNLu
+         kKxvkxTopdBX5+cUo6CY+0zm65bPGdjNVMNq4rxotWRcaBGuhThvCcfb36AmkPhSN7mI
+         0bRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778692461; x=1779297261;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=atyHDLXGzMnMgHFcHtRTpHcYjDNE+LB6RZeNY5wBGB4=;
+        b=mFiGrIrpcHGXdGGzrJwJe0Tq9bk78Et5jb2dxlifyEt6q871qt7TjO5JYH9CF+oX5Q
+         39cnyY6J4stsYmt5jrCvZjdz+et9Wmb8tj5bKx5p0QUvNlF78qdqswsLE9MYfutw/Dxt
+         klKQ67lElHcFjNSswSqvKH1T91yyJhh7E5Fr7R/c9H6KzlNFkYViWtq1xukOdeAC5n/8
+         j3lphaCiWtrinb4vwZpe2p52+4x8k5veVDN/Kf2l8Wj99O8eqh35IVhgHSvTTIMWnZTp
+         bw0eacdl5IM/gH+sN+0Z1eSTth8gfG6XrOyB5ubhSfBVlm2BREo/sGCRXF1sWMMhFaTL
+         DsDA==
+X-Gm-Message-State: AOJu0YwBjEs0szxRmE6HtnQ3w3vi0/D1lVXYeignxc2FHSudLXBp3HMp
+	WTkB6XFDM6HTJg2g5NSwXImuk6CjhQ/cGf7De/yIRkOAp1XdKXPdkrBQ
+X-Gm-Gg: Acq92OFVS5iWKVxdXMgq37Zk790KyDG8+uZ9Ah+qVAH41rhvmCcWrNcEEjA4nm2KoD6
+	iPQmn47FsXsJrNl5MT9SBE2mXI2YlC9kOxNPMrgjDsC344/BwgJNudAufYiKUm08HmLrl4RAkHw
+	KKJiyTr/MblE+3amFVCEq3BYyWKHfrM7bK21gCLdZT+d0ENaLSzejFn1qgYm0xLh27cBmzpDj8a
+	Rw6xBSdyk5xVMAkSbwoNeTdTnkHacwMOB+Dpni5AM/9KuhPZiKDCt75mWXVOfF86I3g3vLwD+yN
+	Jr+CZVDGw6DI7FqpkmayNXXOtCfIkUqTld/Xf3/+T06j3HSDh6tTigjOxfbuJTTWVZyDyPc9d6T
+	EFtb7/cMCDyAt/6BWPgql6w6StwpTet6isMu6h40QmRZRtnWQoN9pcvF0cS59v/jw/H91z5k1cn
+	LOADUYiNvvlmY+PtD3DHkiOFAQTdoS/IJoAk74Hpgwo3fxtWQOHcLufmOUQNhLq136E4MqDHFqF
+	cF5SXmOj10=
+X-Received: by 2002:a05:6214:e45:b0:89a:5129:510f with SMTP id 6a1803df08f44-8c7b5e3804cmr46391166d6.0.1778692461472;
+        Wed, 13 May 2026 10:14:21 -0700 (PDT)
+Received: from debian-t14-gen1-fuhrysteve.fuhry.app (73.sub-97-137-122.myvzw.com. [97.137.122.73])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8c90c35cdb1sm793836d6.46.2026.05.13.10.14.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 May 2026 10:14:20 -0700 (PDT)
+From: "Stephen J. Fuhry" <fuhrysteve@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Stephen J. Fuhry" <fuhrysteve@gmail.com>
+Subject: [PATCH] USB: quirks: add NO_LPM for Lenovo ThinkPad USB-C Dock Gen2 hub controllers
+Date: Wed, 13 May 2026 13:14:19 -0400
+Message-ID: <20260513171419.44849-1-fuhrysteve@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260513-topic-usb4_nonpcie_prepwork-v3-4-b87b5e408ac7@oss.qualcomm.com>
-References: <20260513-topic-usb4_nonpcie_prepwork-v3-0-b87b5e408ac7@oss.qualcomm.com>
-In-Reply-To: <20260513-topic-usb4_nonpcie_prepwork-v3-0-b87b5e408ac7@oss.qualcomm.com>
-To: Andreas Noever <andreas.noever@gmail.com>, 
- Mika Westerberg <westeri@kernel.org>, 
- Yehezkel Bernat <YehezkelShB@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
- usb4-upstream@oss.qualcomm.com, 
- Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>, 
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778689422; l=2134;
- i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=pqu2VCWMefuVciX3P7frQNj4MipGgNMMNqP0pkNkivk=;
- b=i0f35biNtskEeG0gWBao486CnObar6Ak77Ys5vZdiIK96KzHHDW/V+1I3tUvQlnwjrejq2Dy7
- 8jVCLsIhrtBBaJLGXiKmRooTC7tIJ/Gh2PmYqs2i2jECXmit2BFKFxM
-X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Rspamd-Queue-Id: 3BA4B537887
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 897F853829E
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37408-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[konradybcio@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oss.qualcomm.com:mid]
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37409-lists,linux-usb=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_THREE(0.00)[4];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[fuhrysteve@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+The Lenovo ThinkPad USB-C Dock Gen2 (17ef:a391, 17ef:a392) hub
+controllers exhibit link instability when USB Link Power Management
+is enabled, similar to the dock's Ethernet adapter (17ef:a387) which
+already carries USB_QUIRK_NO_LPM.
 
-Currently there's a lot of silent error-return paths in various places
-where nhi_probe() can fail. Sprinkle some prints to make it clearer
-where the problem is.
+When the dock reconnects after a transient disconnect, the hub
+controllers enter LPM states between re-enumeration retries, causing
+repeated disconnect/reconnect cycles lasting up to two minutes.
+Disabling LPM for these devices restores stable enumeration.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Signed-off-by: Stephen J. Fuhry <fuhrysteve@gmail.com>
 ---
- drivers/thunderbolt/nhi.c | 4 ++--
- drivers/thunderbolt/tb.c  | 7 ++++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ drivers/usb/core/quirks.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-index 2a8d1b3716c0..2491e08bbd24 100644
---- a/drivers/thunderbolt/nhi.c
-+++ b/drivers/thunderbolt/nhi.c
-@@ -1190,7 +1190,7 @@ int nhi_probe(struct tb_nhi *nhi)
- 	if (nhi->ops->init) {
- 		res = nhi->ops->init(nhi);
- 		if (res)
--			return res;
-+			return dev_err_probe(dev, res, "NHI specific init failed\n");
- 	}
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 0ffdaefba..87810eff9 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -513,6 +513,10 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	/* Lenovo ThinkPad USB-C Dock Gen2 Ethernet (RTL8153 GigE) */
+ 	{ USB_DEVICE(0x17ef, 0xa387), .driver_info = USB_QUIRK_NO_LPM },
  
- 	tb = nhi_select_cm(nhi);
-@@ -1211,7 +1211,7 @@ int nhi_probe(struct tb_nhi *nhi)
- 		tb_domain_put(tb);
- 		wait_for_completion(&nhi->domain_released);
- 		nhi_shutdown(nhi);
--		return res;
-+		return dev_err_probe(dev, res, "failed to add domain\n");
- 	}
- 	dev_set_drvdata(dev, tb);
- 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index e09259b35d40..4fd052e6552e 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -2997,7 +2997,8 @@ static int tb_start(struct tb *tb, bool reset)
- 
- 	tb->root_switch = tb_switch_alloc(tb, &tb->dev, 0);
- 	if (IS_ERR(tb->root_switch))
--		return PTR_ERR(tb->root_switch);
-+		return dev_err_probe(tb->nhi->dev, PTR_ERR(tb->root_switch),
-+				     "failed to allocate host router\n");
- 
- 	/*
- 	 * ICM firmware upgrade needs running firmware and in native
-@@ -3014,14 +3015,14 @@ static int tb_start(struct tb *tb, bool reset)
- 	ret = tb_switch_configure(tb->root_switch);
- 	if (ret) {
- 		tb_switch_put(tb->root_switch);
--		return ret;
-+		return dev_err_probe(tb->nhi->dev, ret, "failed to configure host router\n");
- 	}
- 
- 	/* Announce the switch to the world */
- 	ret = tb_switch_add(tb->root_switch);
- 	if (ret) {
- 		tb_switch_put(tb->root_switch);
--		return ret;
-+		return dev_err_probe(tb->nhi->dev, ret, "failed to add host router\n");
- 	}
- 
- 	/*
-
++	/* Lenovo ThinkPad USB-C Dock Gen2 USB 3.1 and USB 2.0 hub controllers */
++	{ USB_DEVICE(0x17ef, 0xa391), .driver_info = USB_QUIRK_NO_LPM },
++	{ USB_DEVICE(0x17ef, 0xa392), .driver_info = USB_QUIRK_NO_LPM },
++
+ 	/* BUILDWIN Photo Frame */
+ 	{ USB_DEVICE(0x1908, 0x1315), .driver_info =
+ 			USB_QUIRK_HONOR_BNUMINTERFACES },
 -- 
-2.54.0
+2.47.3
 
 
