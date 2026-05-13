@@ -1,299 +1,435 @@
-Return-Path: <linux-usb+bounces-37386-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37387-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oFDHH9OMBGqvLQIAu9opvQ
-	(envelope-from <linux-usb+bounces-37386-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 16:38:11 +0200
+	id sOSmHqyNBGoKLgIAu9opvQ
+	(envelope-from <linux-usb+bounces-37387-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 16:41:48 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DD4B535398
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 16:38:11 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 036055354C0
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 16:41:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0CF24300D4D7
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 14:31:43 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9E1CD30B508D
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 14:36:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80617449EA6;
-	Wed, 13 May 2026 14:31:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0134A44E021;
+	Wed, 13 May 2026 14:36:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="clrZphC1";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="X6Bq21oE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TlnyW6y6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CC343DA42
-	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 14:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD6736C9D0
+	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 14:35:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778682696; cv=none; b=RJk4+YArL2ZA8cjjNxHaDwRt0AMyB4OrsdJqd7Qo02+jwZTIcJ0RsrbU73cR8pzVqL2PqQGvOEUQep71z/zf7ETmdvk8SZEHDFzOhSl1aTHucBE9Qt3b1XVq6J+BRDRUjzuhcYYGTbB4wF6DTJwS99LBkov92sWLbL7tAjdTqGE=
+	t=1778682958; cv=none; b=usa/RGJoTsc1sjSNPV9Jbxv3358KeZVXqnuo7M7ubNgws76mbkBmJ18FaEAjfME9LDf6OaYTB9MB7FgufP4JGCrmoLYdGOOZJT5sImMNINtFHa970AMbfdOw7nqExtLDfzm7b8rnAXTobFIXzx7rXMdr+7WOMQLvkJKAu8uZtDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778682696; c=relaxed/simple;
-	bh=wUc9lMKXkCeotpgFm95ubkEbe9ZQWC+fBE/j+Hm0hDs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NVx5Jsw40bCXYor5jvWoq4W//sddJxHG7ID1ej0rIpmN6YoCNGmMNoerXOJy6zKOpd+JiboGGNzWlEaSHRzOsYk8woYq2Y4TVwiN7c2dvZjsVn5EDMNSISpzY3c0mdAWkSN0h4lBDQ3QvFVJ/5JSKBbtOmEmDbW49vm01KZEBu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=clrZphC1; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=X6Bq21oE; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64DCROTF2965200
-	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 14:31:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	/lRuLzIXlukujnHHTg5x8pIPyqWqQhCl4lFaASY0Pd8=; b=clrZphC1X3MFyXIN
-	AGBmOgAA0apGMkojnBUd0zElQPipNJCE8yCywlJL4G9ICNYp4eJPaQ9owhxfcxwL
-	X3TfbzBBPO2H1710f/an80qFgb7aNQjNRqNyOLJtsrfDkyd6Vxnll3lU3LZDdcw2
-	xH/Dk0roz+cMqEeWnAy/LoszF2YzNfLvZQlFZ5P4Q+z+lTb6RtCojfcMrrOPXnOG
-	aP2ntd/21CVtIiwuAFqBe++LCUCT1bMtQf+k10dngWnotYsIlJX8QqfNcXFKqu8f
-	2GPkkiZdJy+8YQ2ub1R9SSpZgIrASZvyG88dGf3uAHePTE26BgJjUexOPeQYT9c8
-	IxsIQg==
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e4ma59t69-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 14:31:32 +0000 (GMT)
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-7dbc09d4e43so16719635a34.1
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 07:31:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1778682692; x=1779287492; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/lRuLzIXlukujnHHTg5x8pIPyqWqQhCl4lFaASY0Pd8=;
-        b=X6Bq21oELhQ9BkY1DEhVYIc3y9cGSBirt88E2LfsmZaWSppWhm84R5TKBbjmnPiNNC
-         4DfkrNNYyeHwfN+HCfFJfwQ0Ht7PAsnglEDAk/RLv5t9H7VGiLZ+3hPi3x9M1EQviF8+
-         Jpgw3yOoaYagxjy2+1S8KIpguClCu6ZCqo5f0/MLalOwyCiwkPrue3XzsTPBnhZ2pAOD
-         qfV0UaaAJLPGfFF6ZXuBSF67c3dy+L1Ol9FdyZa1EOPgBARfh8MzgbErq6BXktza/oTT
-         c+8J8/m7FJqx6Dria8UH18wd/+oorxhG9fQQxPSbB1GhuFGyVEEc+KM91LHiyekHbzU0
-         oMwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778682692; x=1779287492;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/lRuLzIXlukujnHHTg5x8pIPyqWqQhCl4lFaASY0Pd8=;
-        b=sL8TnXh0dYw5DH4w9xSg5J7RN1FIx4YdZMbcLXWYNCvbXO9WUPXRja7hg+krMfDrwf
-         INFtd9INhyQy+HzceHSeD8WCWYOomZNvH9ufWz5PSB+NKQ0Be+sEEt6Gedi7U5s2Jelm
-         Mq+jh14POxgodTf/DtQuVqwenjSVVB6c32wRiPDTnHaYmdVABn8w+Qgez8cJWcWcOBXk
-         yBGLe2sGZ1wuDNKghap7twv+fVJOc6BEwbe3vPDTraOlKscie8FTUb8IzD+8E1SN/WOj
-         HWV+z8lr5n0T916ESwfmQD0wfNcWpi1x+vnB1vytmJEO7YMPaUnJb/+yOTtY11I9sjh3
-         MWGQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+mZqDH0pWTvKAYXYFn4iAHwW5p0vLnwxMNG+ZtGDIMBjv9jLSTfBdF813yRVX7/Q923vjZVx5b7SM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8kw9LkFBZaFwfJBZZ5gyBQvP6GS0xsN8+pPX/H7pHR79qi7oy
-	19UhtiuQWej4GA3/JHoKLf/DCpVLA1rGchlk3N3rrswF54hVG1zF4qNSUVEbKUfdJsWSEMt3SA9
-	Vu9YNsqTZ+oqL9suxHBeTyrWEiSdtfhItuuChGVToA86kfTUAm49ztKU1t3BRma0=
-X-Gm-Gg: Acq92OHaIHraMZyzzO0OdVUWtvTboBfO9kyeZMlGesW7Rur0LKyXGI6QPqRMoUuh6rZ
-	ISJKPfJ73+ftgDuTc4tObUSPDQHB1M+icBFRu2xI7SxTUb6zOjngezQshSrPeSXn/Nu4tkP94So
-	HJa38WjMAyElczN/5z7nLEL7DocZednjdGsaCGNEhqx9ozRSd5bT3K7+Yow41yEpH39bkXYc2Z7
-	536Mk5AD5kFhJG4OIAc8f7k6lzaQL7M3Kvuz201rwkq8B6Pv1ZZKWbajE6e2uQ2F1w1XjAOOU9j
-	6pKwd8JxXCIx2nTAkBhNOQoyaQQVNfnLQqKsjMirhDJn0QY2ud75TzUfe5iTCQYSXt3TVgf8mOr
-	Dlt0+NBtKDcGnXUrZ+TK8g2oYvloTe5ll7kQ53NLNFvfFqu+26oV7LAzPpG7LX4ctVBY1Pyt++I
-	A5PXeqK5SGoAMCSpUaGpblBUV0Q5hqxt2kTrY=
-X-Received: by 2002:a05:6830:6e89:b0:7dc:cf5d:df17 with SMTP id 46e09a7af769-7e3bd3b5102mr3695432a34.18.1778682691695;
-        Wed, 13 May 2026 07:31:31 -0700 (PDT)
-X-Received: by 2002:a05:6830:6e89:b0:7dc:cf5d:df17 with SMTP id 46e09a7af769-7e3bd3b5102mr3695403a34.18.1778682691234;
-        Wed, 13 May 2026 07:31:31 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a8a9515087sm4106065e87.12.2026.05.13.07.31.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 07:31:30 -0700 (PDT)
-Date: Wed, 13 May 2026 17:31:28 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Akash Kumar <akash.kumar@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: lemans: Enable eud support
-Message-ID: <rwf5xrib7dba5clavznhhmvyqbjejeujy6omotnheisu2ke7de@zpm6ea7f7f46>
-References: <20260512091422.1395490-1-akash.kumar@oss.qualcomm.com>
+	s=arc-20240116; t=1778682958; c=relaxed/simple;
+	bh=0XPOu4XmvqvzIBfjbaHsiqjkyKgMuNYGWJdtSVLP118=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=f6hGZo9ZI9+PjAIWLP4QrsX1GkzBHCTCGasqWqWhXIO/dHim64rFyHMwQve4w7knqMN3069dAGDQA0SjGksdR4ILFJHaPT9BiFGp8OV+j1P4j09ovNadx8k1h9vgpzVGwbc+U3kIvhzAvax6sLJsWS5XIDbedcCwX2/r/umxbXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TlnyW6y6; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778682954; x=1810218954;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0XPOu4XmvqvzIBfjbaHsiqjkyKgMuNYGWJdtSVLP118=;
+  b=TlnyW6y6cyjky1Ys5Q/0JuzoWvCTQEXrfYgFVV4GNOqkZ5JaLlk4kEwr
+   kOtbDn+F3jdSygPGLghfTbI87oUoEhyS14HDLfUUD4xX48JmwUWBNjIbD
+   hJczFBkCN07T8EyWL4gk9/9mHH7jwOTEdhKZX5kTp9WWGVlwV88fIbFun
+   eNInVLTsEuOYZV7xAttnf30cJCP/NJ4Ud+sD+dX+2CkeuhYu3we/hzhmc
+   pslTm3/S8V2jqkbBrg31+S3750dvkT1HDZ8daMrCJR4/n8o5f2VCM1a0h
+   84odqnkJflWSHlpIoAi/jCC57YGysuRZtvYT63vOi6iGTX6AbEtYYPpl5
+   g==;
+X-CSE-ConnectionGUID: LAZREWvlRKS+buWIrbdnvg==
+X-CSE-MsgGUID: yIBcrRUhSja9PFFjf9SLoA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11784"; a="97180754"
+X-IronPort-AV: E=Sophos;i="6.23,232,1770624000"; 
+   d="scan'208";a="97180754"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 07:35:53 -0700
+X-CSE-ConnectionGUID: a45s3Wz6Rpic+dVqxPSZVw==
+X-CSE-MsgGUID: jjABClW9S0+HIkF+1cFNqg==
+X-ExtLoop1: 1
+Received: from abityuts-desk.ger.corp.intel.com (HELO mnyman-desk.intel.com) ([10.245.244.109])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 07:35:51 -0700
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: dylan_robinson@motu.com,
+	michal.pecio@gmail.com
+Cc: mathias.nyman@linux.intel.com,
+	linux-usb@vger.kernel.org,
+	mathias.nyman@intel.com,
+	stern@rowland.harvard.edu
+Subject: [RFT PATCHv2 1/2] xhci: fix frame id calculation and checks for isoc URBs
+Date: Wed, 13 May 2026 17:35:32 +0300
+Message-ID: <20260513143533.52992-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <85f8441d-d6c0-4607-9269-d80b1294afbd@linux.intel.com>
+References: <85f8441d-d6c0-4607-9269-d80b1294afbd@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260512091422.1395490-1-akash.kumar@oss.qualcomm.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTEzMDE0OSBTYWx0ZWRfX5cvjAPrv5Amj
- lAIgjoSb5cPrfcQ2LdhNfGOT8pRZLxCYi9eV4RWlCbMiw41HfsaZT703vvATJl6dPDSZ8bB/nKO
- upfiYLQM2lohJ5jCO9nrR71l71Bb7pYoVDMZ0Wuw/Ow3v+2IruZPFKbvArrtS4Sk4UW6YuMK2z4
- 8zH5n9a1z0RUxGl0BZbYQQwFPsHhrsqUQPrTeH8hIjJVamkulSbrUTAcZ/ahm/wnyRxGACfCKwo
- 3AvCfhiXLwOdRIYu3S6vFW8+SFnNZgWoMLn8vGHMbqe0VYkvQ/8/AQ7bUgJmQLgeEkLCZ96cWhi
- BaZN3c+IIt7CAXzANicn9arnHK5qs52jRK4+bQOrOeLd//OKIesMCveIQUdOrgeljCL/dEtg+Hu
- X3VZmq2NIyJ85EVY9IQKjZvaeDe4i7gBPwBm4GOfg0nLJrtyLcG+TxlTk2kVzaPrzB23mAcXfbC
- 7wvfEVlpcbBXgyhTo1A==
-X-Proofpoint-ORIG-GUID: 2BQY_FmgEHTKzdqtJM9x0ZTOurmhe17E
-X-Authority-Analysis: v=2.4 cv=TJZ1jVla c=1 sm=1 tr=0 ts=6a048b44 cx=c_pps
- a=+3WqYijBVYhDct2f5Fivkw==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=DJpcGTmdVt4CTyJn9g5Z:22 a=EUspDBNiAAAA:8
- a=VwQbUJbxAAAA:8 a=clN1VyBAevDfDM2Nx5IA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=eYe2g0i6gJ5uXG_o6N4q:22
-X-Proofpoint-GUID: 2BQY_FmgEHTKzdqtJM9x0ZTOurmhe17E
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-13_01,2026-05-13_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 suspectscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
- impostorscore=0 spamscore=0 phishscore=0 priorityscore=1501 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605050000 definitions=main-2605130149
-X-Rspamd-Queue-Id: 1DD4B535398
+X-Rspamd-Queue-Id: 036055354C0
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37386-lists,linux-usb=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,qualcomm.com:email,qualcomm.com:url,qualcomm.com:dkim,0.0.0.1:email,0.0.0.0:email];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37387-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[motu.com,gmail.com];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dmitry.baryshkov@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On Tue, May 12, 2026 at 02:39:26PM +0530, Akash Kumar wrote:
-> Add the EUD controller node in lemans.dtsi and update the USB HS
-> endpoint routing on lemans-evk to pass through EUD instead of linking
-> the connector directly to usb_0_dwc3_hs.
-> 
-> Wire the OF graph endpoints between the connector, EUD and DWC3 HS
-> controller to enable the EUD path on lemans EVK.
-> 
-> This change is part of series "Improve Qualcomm EUD driver and
-> platform support" and has been validated on the Qualcomm Dragonwing platform
-> (RB8 board), confirming successful OpenOCD connectivity to the EUD
-> interface. For detailed usage instructions, refer to Qualcomm’s Linux
-> kernel debugging guide:
-> https://docs.qualcomm.com/bundle/publicresource/topics/80-70020-12/debugging_linux_kernel.html#debug-using-openocd
-> 
-> Signed-off-by: Akash Kumar <akakum@qti.qualcomm.com>
-> ---
->  arch/arm64/boot/dts/qcom/lemans-evk.dts | 12 ++++++++++--
->  arch/arm64/boot/dts/qcom/lemans.dtsi    | 26 +++++++++++++++++++++++++
->  2 files changed, 36 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/lemans-evk.dts b/arch/arm64/boot/dts/qcom/lemans-evk.dts
-> index c665db6a4595..96d316867c0e 100644
-> --- a/arch/arm64/boot/dts/qcom/lemans-evk.dts
-> +++ b/arch/arm64/boot/dts/qcom/lemans-evk.dts
-> @@ -55,7 +55,7 @@ port@0 {
->  				reg = <0>;
->  
->  				usb0_con_hs_ep: endpoint {
-> -					remote-endpoint = <&usb_0_dwc3_hs>;
-> +					remote-endpoint = <&eud_con>;
->  				};
->  			};
->  
-> @@ -510,6 +510,14 @@ queue3 {
->  	};
->  };
->  
-> +&eud_ep {
-> +	remote-endpoint = <&usb_0_dwc3_hs>;
-> +};
+Check if the expected frame IDs for a isochronous URB submitted
+mid stream is within the valid frame time window that xHC controller
+is capable of queuing TDs.
 
-If this is a static binding, this should be a part of the lemans.dtsi.
+The range only needs to be checked once per URB as the isoc TDs of an
+URB are queued in one go with spinlock held and interrupts disabled.
 
-> +
-> +&eud_con {
-> +	remote-endpoint = <&usb0_con_hs_ep>;
-> +};
-> +
->  &gpi_dma0 {
->  	status = "okay";
->  };
-> @@ -985,7 +993,7 @@ &usb_0 {
->  };
->  
->  &usb_0_dwc3_hs {
-> -	remote-endpoint = <&usb0_con_hs_ep>;
-> +	remote-endpoint = <&eud_ep>;
+Calculate the valid frame window start and end frame id in frames
+instead of microframes to better match how xhci specification
+section 4.11.2.5 does it.
 
-The same, this should go to lemans.dtsi.
+Don't add frame id gaps or change scheduling to SIA mid stream if
+the start frame is outside the valid frame winow.
+Only print a debug message.
+Some devices can't handle gaps in isochronous transfers.
 
->  };
->  
->  &usb_0_dwc3_ss {
-> diff --git a/arch/arm64/boot/dts/qcom/lemans.dtsi b/arch/arm64/boot/dts/qcom/lemans.dtsi
-> index fe6e76351823..a8ab11681476 100644
-> --- a/arch/arm64/boot/dts/qcom/lemans.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/lemans.dtsi
-> @@ -4003,6 +4003,32 @@ opp-384000000 {
->  			};
->  		};
->  
-> +		eud: eud@88e1000 {
-> +			compatible = "qcom,sc7280-eud", "qcom,eud";
+Calculate a valid start frame for the first URB of a stream, and
+align it to a full frame, or to interval start if interval is longer
+than a frame
 
-There should be a platform-specific compat too. The lemans.dtsi is
-not sc7280.
+Set urb->start_frame value for every URB
 
-> +			reg = <0 0x88e1000 0 0x2000>,
-> +				<0 0x88e3000 0 0x1000>;
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/host/xhci-mem.c  |   1 +
+ drivers/usb/host/xhci-ring.c | 180 +++++++++++++++--------------------
+ drivers/usb/host/xhci.h      |   7 +-
+ 3 files changed, 84 insertions(+), 104 deletions(-)
 
-0x0 instead of just 0.
-
-> +			interrupts-extended = <&pdc 11 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +			port@0 {
-> +					reg = <0>;
-> +
-> +					eud_ep: endpoint {
-> +					};
-> +			};
-
-Incorrect indentation.
-
-> +
-> +				port@1 {
-> +					reg = <1>;
-> +
-> +					eud_con: endpoint {
-> +					};
-> +				};
-> +			};
-> +		};
-> +
->  		usb_0_hsphy: phy@88e4000 {
->  			compatible = "qcom,sa8775p-usb-hs-phy",
->  				     "qcom,usb-snps-hs-5nm-phy";
-> -- 
-> 2.43.0
-> 
-> base-commit: https://lore.kernel.org/all/20260501170635.2641748-1-elson.serrao@oss.qualcomm.com/
-> change-id: Improve Qualcomm EUD driver and platform support
-
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 997fe90f54e5..58714e10773f 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1499,6 +1499,7 @@ int xhci_endpoint_init(struct xhci_hcd *xhci,
+ 		return -ENOMEM;
+ 
+ 	virt_dev->eps[ep_index].skip = false;
++	virt_dev->eps[ep_index].next_uframe = -1;
+ 	ep_ring = virt_dev->eps[ep_index].new_ring;
+ 	xhci_ring_init(xhci, ep_ring);
+ 
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index e47e644b296e..b1318515ae58 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -3977,80 +3977,79 @@ static int xhci_ist_microframes(struct xhci_hcd *xhci)
+ }
+ 
+ /*
+- * Calculates Frame ID field of the isochronous TRB identifies the
+- * target frame that the Interval associated with this Isochronous
+- * Transfer Descriptor will start on. Refer to 4.11.2.5 in 1.1 spec.
++ * Check if frame is in the valid frame window, including start and end.
++ * If start > end then assume window wrapped around at a limit the frame
++ * value won't exceed.
++ */
++static bool xhci_frame_in_range(u32 frame, u32 start, u32 end)
++{
++	/* frame window end wrapped around */
++	if (start > end)
++		return frame >= start || frame <= end;
++
++	return frame >= start && frame <= end;
++}
++
++/*
++ * Set the urb->start_frame of the URB.
+  *
+- * Returns actual frame id on success, negative value on error.
++ * Returns microframe index of first TD
+  */
+-static int xhci_get_isoc_frame_id(struct xhci_hcd *xhci,
+-		struct urb *urb, int index)
++static int xhci_get_isoc_start_frame(struct xhci_hcd *xhci, struct urb *urb,
++				     struct xhci_virt_ep *ep)
+ {
+-	int start_frame, ist, ret = 0;
+-	int start_frame_id, end_frame_id, current_frame_id;
++	u32 curr_frame, start_uframe;
++	u32 urb_start, urb_end;
++	u32 win_start, win_end;
++	bool frame_unit;
++	int uinterval;
++	u32 mfindex;
++	int ist;
+ 
+-	if (urb->dev->speed == USB_SPEED_LOW ||
+-			urb->dev->speed == USB_SPEED_FULL)
+-		start_frame = urb->start_frame + index * urb->interval;
+-	else
+-		start_frame = (urb->start_frame + index * urb->interval) >> 3;
++	/* check if urb uses frame units instead of microframes */
++	frame_unit = (urb->dev->speed == USB_SPEED_FULL ||
++		     urb->dev->speed == USB_SPEED_LOW);
++
++	uinterval = urb->interval;
++	if (frame_unit)
++		uinterval *= 8;
+ 
++	/* get current microframe index and isoc scheduling threshold */
++	mfindex = readl(&xhci->run_regs->microframe_index);
+ 	ist = xhci_ist_microframes(xhci);
+ 
+-	/* Software shall not schedule an Isoch TD with a Frame ID value that
+-	 * is less than the Start Frame ID or greater than the End Frame ID,
+-	 * where:
+-	 *
+-	 * End Frame ID = (Current MFINDEX register value + 895 ms.) MOD 2048
+-	 * Start Frame ID = (Current MFINDEX register value + IST + 1) MOD 2048
+-	 *
+-	 * Both the End Frame ID and Start Frame ID values are calculated
+-	 * in microframes. When software determines the valid Frame ID value;
+-	 * The End Frame ID value should be rounded down to the nearest Frame
+-	 * boundary, and the Start Frame ID value should be rounded up to the
+-	 * nearest Frame boundary.
+-	 */
+-	current_frame_id = readl(&xhci->run_regs->microframe_index);
+-	start_frame_id = roundup(current_frame_id + ist + 1, 8);
+-	end_frame_id = rounddown(current_frame_id + 895 * 8, 8);
++	/* calculate valid frame window, in frame units, see xhci 4.11.2.5 */
++	curr_frame = MFINDEX_TO_FRAME(mfindex);
++	win_start = (curr_frame + DIV_ROUND_UP_POW2(ist, 8) + 1) % MAX_FRAMES;
++	win_end = (curr_frame + 895) % MAX_FRAMES;
+ 
+-	start_frame &= 0x7ff;
+-	start_frame_id = (start_frame_id >> 3) & 0x7ff;
+-	end_frame_id = (end_frame_id >> 3) & 0x7ff;
++	// FIXME, used to check if !list_empty(&ep_ring->td_list)), is that reliable
+ 
+-	if (start_frame_id < end_frame_id) {
+-		if (start_frame > end_frame_id ||
+-				start_frame < start_frame_id)
+-			ret = -EINVAL;
+-	} else if (start_frame_id > end_frame_id) {
+-		if ((start_frame > end_frame_id &&
+-				start_frame < start_frame_id))
+-			ret = -EINVAL;
++	/* Is this the first URB starting the whole isoc transfer */
++	if (ep->next_uframe < 0) {
++		/* align first URB to next interval boundary, or at last to full frame */
++		start_uframe = mfindex + ist + XHCI_CFC_DELAY;
++		start_uframe = roundup(start_uframe, 8);
++		start_uframe = roundup(start_uframe, uinterval) % MAX_UFRAMES;
+ 	} else {
+-			ret = -EINVAL;
+-	}
++		/* URB is mid stream and expected to handle the next frame */
++		start_uframe = ep->next_uframe;
++		urb_start = start_uframe / 8;
++		urb_end = (start_uframe + urb->number_of_packets * uinterval) / 8;
++		urb_end %= MAX_FRAMES;
+ 
+-	if (index == 0) {
+-		if (ret == -EINVAL || start_frame == start_frame_id) {
+-			start_frame = start_frame_id + 1;
+-			if (urb->dev->speed == USB_SPEED_LOW ||
+-					urb->dev->speed == USB_SPEED_FULL)
+-				urb->start_frame = start_frame;
+-			else
+-				urb->start_frame = start_frame << 3;
+-			ret = 0;
+-		}
+-	}
++		if (!xhci_frame_in_range(urb_start, win_start, win_end))
++			xhci_dbg(xhci, "Ill-timed isoc URB %p for start frame %d, range %d-%d\n",
++				 urb, urb_start, win_start, win_end);
+ 
+-	if (ret) {
+-		xhci_warn(xhci, "Frame ID %d (reg %d, index %d) beyond range (%d, %d)\n",
+-				start_frame, current_frame_id, index,
+-				start_frame_id, end_frame_id);
+-		xhci_warn(xhci, "Ignore frame ID field, use SIA bit instead\n");
+-		return ret;
++		if (!xhci_frame_in_range(urb_end, win_start, win_end))
++			xhci_dbg(xhci, "Ill-timed isoc URB %p for end frame %d, range %d-%d\n",
++				 urb, urb_start, win_start, win_end);
+ 	}
++	/* set urb->start_frame */
++	urb->start_frame = frame_unit ? start_uframe / 8 : start_uframe;
+ 
+-	return start_frame;
++	return start_uframe;
+ }
+ 
+ /* Check if we should generate event interrupt for a TD in an isoc URB */
+@@ -4091,6 +4090,8 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+ 	bool more_trbs_coming;
+ 	struct xhci_virt_ep *xep;
+ 	int frame_id;
++	int uinterval = urb->interval;
++	int start_uframe;
+ 
+ 	xep = &xhci->devs[slot_id]->eps[ep_index];
+ 	ep_ring = xhci->devs[slot_id]->eps[ep_index].ring;
+@@ -4106,6 +4107,12 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+ 	start_cycle = ep_ring->cycle_state;
+ 
+ 	urb_priv = urb->hcpriv;
++
++	if (urb->dev->speed == USB_SPEED_FULL || urb->dev->speed == USB_SPEED_LOW)
++		uinterval = urb->interval * 8;
++
++	start_uframe = xhci_get_isoc_start_frame(xhci, urb, xep);
++
+ 	/* Queue the TRBs for each TD, even if they are zero-length */
+ 	for (i = 0; i < num_tds; i++) {
+ 		unsigned int total_pkt_count, max_pkt;
+@@ -4137,14 +4144,15 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+ 			goto cleanup;
+ 		}
+ 		td = &urb_priv->td[i];
++
+ 		/* use SIA as default, if frame id is used overwrite it */
+ 		sia_frame_id = TRB_SIA;
+-		if (!(urb->transfer_flags & URB_ISO_ASAP) &&
+-		    (xhci->hcc_params & HCC_CFC)) {
+-			frame_id = xhci_get_isoc_frame_id(xhci, urb, i);
+-			if (frame_id >= 0)
+-				sia_frame_id = TRB_FRAME_ID(frame_id);
++		if (!(urb->transfer_flags & URB_ISO_ASAP) && (xhci->hcc_params & HCC_CFC)) {
++			frame_id = (start_uframe + i * uinterval) / 8;
++			frame_id %= MAX_FRAMES;
++			sia_frame_id = TRB_FRAME_ID(frame_id);
+ 		}
++
+ 		/*
+ 		 * Set isoc specific data for the first TRB in a TD.
+ 		 * Prevent HW from getting the TRBs by keeping the cycle state
+@@ -4223,9 +4231,7 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+ 		}
+ 	}
+ 
+-	/* store the next frame id */
+-	if (xhci->hcc_params & HCC_CFC)
+-		xep->next_frame_id = urb->start_frame + num_tds * urb->interval;
++	xep->next_uframe = (start_uframe + num_tds * uinterval) % MAX_UFRAMES;
+ 
+ 	if (xhci_to_hcd(xhci)->self.bandwidth_isoc_reqs == 0) {
+ 		if (xhci->quirks & XHCI_AMD_PLL_FIX)
+@@ -4272,11 +4278,9 @@ int xhci_queue_isoc_tx_prepare(struct xhci_hcd *xhci, gfp_t mem_flags,
+ 	struct xhci_virt_device *xdev;
+ 	struct xhci_ring *ep_ring;
+ 	struct xhci_ep_ctx *ep_ctx;
+-	int start_frame;
++	struct xhci_virt_ep *xep;
+ 	int num_tds, num_trbs, i;
+ 	int ret;
+-	struct xhci_virt_ep *xep;
+-	int ist;
+ 
+ 	xdev = xhci->devs[slot_id];
+ 	xep = &xhci->devs[slot_id]->eps[ep_index];
+@@ -4302,38 +4306,8 @@ int xhci_queue_isoc_tx_prepare(struct xhci_hcd *xhci, gfp_t mem_flags,
+ 	 */
+ 	check_interval(urb, ep_ctx);
+ 
+-	/* Calculate the start frame and put it in urb->start_frame. */
+-	if ((xhci->hcc_params & HCC_CFC) && !list_empty(&ep_ring->td_list)) {
+-		if (GET_EP_CTX_STATE(ep_ctx) ==	EP_STATE_RUNNING) {
+-			urb->start_frame = xep->next_frame_id;
+-			goto skip_start_over;
+-		}
+-	}
+-
+-	start_frame = readl(&xhci->run_regs->microframe_index);
+-	start_frame &= 0x3fff;
+-	/*
+-	 * Round up to the next frame and consider the time before trb really
+-	 * gets scheduled by hardare.
+-	 */
+-	ist = xhci_ist_microframes(xhci);
+-	start_frame += ist + XHCI_CFC_DELAY;
+-	start_frame = roundup(start_frame, 8);
+-
+-	/*
+-	 * Round up to the next ESIT (Endpoint Service Interval Time) if ESIT
+-	 * is greate than 8 microframes.
+-	 */
+-	if (urb->dev->speed == USB_SPEED_LOW ||
+-			urb->dev->speed == USB_SPEED_FULL) {
+-		start_frame = roundup(start_frame, urb->interval << 3);
+-		urb->start_frame = start_frame >> 3;
+-	} else {
+-		start_frame = roundup(start_frame, urb->interval);
+-		urb->start_frame = start_frame;
+-	}
+-
+-skip_start_over:
++	if (GET_EP_CTX_STATE(ep_ctx) != EP_STATE_RUNNING)
++		xep->next_uframe = -1;
+ 
+ 	return xhci_queue_isoc_tx(xhci, mem_flags, urb, slot_id, ep_index);
+ }
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index aeecd301f207..bcb7b8c877db 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -287,6 +287,11 @@ struct xhci_run_regs {
+ 	struct xhci_intr_reg	ir_set[1024];
+ };
+ 
++/* Bits [13:3] of the microframe index equals the 1ms frame index */
++#define MFINDEX_TO_FRAME(p)	(((p) >> 3) & 0x7ff)
++#define MAX_FRAMES		2048
++#define MAX_UFRAMES		(MAX_FRAMES * 8)
++
+ /**
+  * struct doorbell_array
+  *
+@@ -696,7 +701,7 @@ struct xhci_virt_ep {
+ 	struct list_head	bw_endpoint_list;
+ 	unsigned long		stop_time;
+ 	/* Isoch Frame ID checking storage */
+-	int			next_frame_id;
++	int			next_uframe;
+ 	/* Use new Isoch TRB layout needed for extended TBC support */
+ 	bool			use_extended_tbc;
+ 	/* set if this endpoint is controlled via sideband access*/
 -- 
-With best wishes
-Dmitry
+2.43.0
+
 
