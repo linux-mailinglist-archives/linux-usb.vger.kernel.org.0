@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-37404-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37405-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6IzkLTatBGoSNAIAu9opvQ
-	(envelope-from <linux-usb+bounces-37404-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 18:56:22 +0200
+	id KC1nNLenBGogMQIAu9opvQ
+	(envelope-from <linux-usb+bounces-37405-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 18:32:55 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0186D537860
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 18:56:21 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 545935371E3
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 18:32:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 32EFE329FC6A
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 16:23:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3A10B3063971
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 16:23:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C6B147B436;
-	Wed, 13 May 2026 16:23:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1F6D4C8FF0;
+	Wed, 13 May 2026 16:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hRWirSsl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nAYTpDZU"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB18E4BC002;
-	Wed, 13 May 2026 16:23:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB9B4C8FEC;
+	Wed, 13 May 2026 16:23:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778689425; cv=none; b=KerrWHV/6Ye+PSGVGmPB5GoVl8Zn0Mkqb0yJZBgXtR4XIch4CNuQKw1AJVIVU2onRgrP2PdV8j6mT0QGzKCbkdNMy/RdqUsy08f5iIfXNjlgBd5FEBHnHrjiHI3AUD7ZIw3ds8R0Xzu0bueqElBX25htPW1ovp0pM0D36uj0hSU=
+	t=1778689429; cv=none; b=nkAHagIcYSPKWcO2Ui+WxoVXb1STru6jtuYZtAsuhju6hdiyIQiZOzKF9vAmaPqtpsH2MAm9OLUeWzR2Qx9E9i8O5tX/PT7Y3xEy8Z+WbP4rinTOVOMwmWw7et9CpY+2sl5r7n1xheqQHLRenVggIHAt+SPzVKnAowUXJp+aTPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778689425; c=relaxed/simple;
-	bh=90yLqcKD/XqPsKXRZXoj3SWGgR+1X6A35CfsQ4oj2zs=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NDGNXXA5Z2Vf7e5nVHeSRlgl4nughRqOTI6jPtMhE2VjHIChMwy21W6iS9LNBwN2fTCBaVPXbP7nvOeS8FqPHxWLutKrviYMycngnwzdD/cTRTmyWApzDPdLCayuwfenmy4b42n4EqoFGWjQPkNbT/+UnqLz67b/n0wTqK5Uubw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hRWirSsl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2D7EC19425;
-	Wed, 13 May 2026 16:23:42 +0000 (UTC)
+	s=arc-20240116; t=1778689429; c=relaxed/simple;
+	bh=J/4S8JlXZ7hofZqo7Zyf31hH/+g0I93mS9IpX7dsziY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=OJsN3+yJlsqdEmzu9fOYlvr2wQ6WDIwlPtn/k872ebq4zJ4Z+SEa6Y3+Ljhf8CF0LUCUle3rXOKlS0strFN3FqSu4iHTn6BaLyxDKdENeaQqanT+h9fz+6uMNNRiF/GJhDHztDYzgpAbrfgXW+rvm/ndEHsOeJApP9svLG4vTh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nAYTpDZU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A279C19425;
+	Wed, 13 May 2026 16:23:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778689425;
-	bh=90yLqcKD/XqPsKXRZXoj3SWGgR+1X6A35CfsQ4oj2zs=;
-	h=From:Subject:Date:To:Cc:From;
-	b=hRWirSslMbFqyx2B88lSI/zYVzP7AgZVvbZ+pgMJVrsD3/Cu0H728dyp/29A1hjkA
-	 2iMzHI8EOgSUFgiqlQLHi75I0CpGMgSqOcnIXktfBdkedBvQKWl0ATYKzGx6JWFVA+
-	 jpUiKAknezZfsI2uCe2VO7LPFXc8JbfkhdFFMf5mSLTmzm4vQzbI/tI13En5y7lluU
-	 R1UDsZEvPgbc6s80nsYu+i3mGY5BMknhKZWUTOevyiZ7nOJcpE6QZJNs87EXKoyqKW
-	 hS/1No5X6SetuBe9X/8HRb/WTd8TxeYjBurcL9F1GmfoFPeXgYKqrpmYeJ5sZ8Mdui
-	 22FtBFNSWXF5A==
+	s=k20201202; t=1778689428;
+	bh=J/4S8JlXZ7hofZqo7Zyf31hH/+g0I93mS9IpX7dsziY=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=nAYTpDZUEnDEM49urObMXJnyU3gR7kJgvHJaaCLI9FEiefHiEv159k5rQMCb2WwRe
+	 b0b9KO/3UcXAJDGc/UpVjpv88zq1fGbSCtP7bMd6N+gT2NJj5I8FilE6yPgjUam6UY
+	 NW2+cwzW79PuVuq7rp0C9DuqTij07uXuBW03VH+tWYLdPf8KQKBC4O//9nzJ2LZ4Ou
+	 +5uvC6rKsKrZ7xAIB+uObTOtSWw8rJWejMJjQLnUYb7suYmLeT+CTodF++wMvE8xMC
+	 k/JVsF+FyD3GPHcmhIy5EXkavRZADEHAwmJDCwg5N8Fg2yXry5vCpiQMgbbJeh83pP
+	 ouFV3IQp3fZoA==
 From: Konrad Dybcio <konradybcio@kernel.org>
-Subject: [PATCH v3 0/4] Prepwork for non-PCIe NHI/TBT hosts
-Date: Wed, 13 May 2026 18:23:31 +0200
-Message-Id: <20260513-topic-usb4_nonpcie_prepwork-v3-0-b87b5e408ac7@oss.qualcomm.com>
+Date: Wed, 13 May 2026 18:23:32 +0200
+Subject: [PATCH v3 1/4] thunderbolt: Move pci_device out of tb_nhi
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,11 +55,9 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/43N3Q6CIBTA8VdpXIdDRIWueo/WnPKRrAQCpZrz3
- UNvummtm7P9z9l+ZwZBei0DOOxm4GXUQVuTotjvAO9bc5FQi9QAI1yhAjE4Wqc5nEJHGmON41o
- 2zkv3sP4KaUVpruqKdVSBJKSD0s9NP51T9zqM1r+2ZzFft/+5MYcICoZyQUvFa0aONoTsPrU3b
- ochSwOsfMQfkmD6m8SJJCVWHRNVoer6C7ksyxsAgL4hIAEAAA==
-X-Change-ID: 20260309-topic-usb4_nonpcie_prepwork-86881f769b8f
+Message-Id: <20260513-topic-usb4_nonpcie_prepwork-v3-1-b87b5e408ac7@oss.qualcomm.com>
+References: <20260513-topic-usb4_nonpcie_prepwork-v3-0-b87b5e408ac7@oss.qualcomm.com>
+In-Reply-To: <20260513-topic-usb4_nonpcie_prepwork-v3-0-b87b5e408ac7@oss.qualcomm.com>
 To: Andreas Noever <andreas.noever@gmail.com>, 
  Mika Westerberg <westeri@kernel.org>, 
  Yehezkel Bernat <YehezkelShB@gmail.com>
@@ -68,32 +66,32 @@ Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
  Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>, 
  Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778689422; l=4462;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778689422; l=34430;
  i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=90yLqcKD/XqPsKXRZXoj3SWGgR+1X6A35CfsQ4oj2zs=;
- b=h+0TSSIzLJqg6eEQ7oVi0YfNRUmjC+ZfX5XTcOnCZ6sizGVYueeCDWmKe+9So2D25CLHSToks
- zLOsjxmuavrDywbWWgIIOZxv52OsULaHbIMdEigJ96GKDtXVkgU6CpF
+ bh=H5oMNrLARddNcxrTuqM4+a427crRhOkf8MSLO+sLGoc=;
+ b=6z7d49OBHNARFwhybdt36cuMtQ03lzkU0FXnsmMNJj419eWUPk5tou9554HHMR2+RlP4m0Dte
+ XFTkO24GDmHCEolChkVeklQgg5GvX2hMBiX6yBKIAnDo7CTEJzMllyV
 X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Rspamd-Queue-Id: 0186D537860
+X-Rspamd-Queue-Id: 545935371E3
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37404-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37405-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_TO(0.00)[gmail.com,kernel.org];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
@@ -103,124 +101,996 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,oss.qualcomm.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Currently, the NHI driver (and other parts of the TBT framework) make
-multiple assumptions about the host router being a PCIe device. This
-series tries to decouple them by moving the 'struct pci_device' out of
-the NHI code and introduce NHI-on-PCIe-specific abstractions where
-necessary (with no functional change).
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-The intended usage of the new nhi_probe_common() is pretty similar to
-other bus frameworks (I2C, SPI, USB..), i.e.:
+Not all USB4/TB implementations are based on a PCIe-attached
+controller. In order to make way for these, start off with moving the
+pci_device reference out of the main tb_nhi structure.
 
-static int foo_bar_probe() {
-        // get SoC-specifc resources (clks, regulators..)
-
-        // power things on
-
-        // set some implementation-specific registers
-
-        // register NHI and all the sub-devices
-        ret = nhi_probe(&my_usb4->nhi)
-        ...
-
-        // cleanup boilerplate
-}
-
-Instead of the previously-suggested aux/fauxbus, the NHI device remains
-the same 'struct dev' as the PCIe/platform/[...] device that provides
-it. This is in line with some other buses and it makes things easier
-from the PM perspective.
-
-Tested on:
-* Qualcomm X1E80100 CRD (OOT driver)
- * USB4 (Qualcomm controller)
- * Connected to a TBT3 ASUS ProArt 27 monitor
- * Parade PS8830 on-board retimer
-
-Domain 0 Route 0: 0000:0000
-Domain 0 Route 2: 0031:9000 ASUS-Display PA27AC
-
-* Intel Coffee Lake NUC (NUC8i3BEK)
- * TBT3 (Alpine Ridge 2C 2016 controller)
- * Connected to a Dell TB16 dock (TBT active cable)
- * S3 + S2idle sleep
-
-Domain 0 Route 0: 8086:6357 Intel Corporation NUC8BEB
-Domain 0 Route 1: 00d4:b051 Dell Dell Thunderbolt Cable
-Domain 0 Route 301: 00d4:b054 Dell Dell Thunderbolt Dock
-
-* AMD Ryzen 7 PRO 7840U-based Lenovo ThinkPad T14s Gen 4
- * USB4 ("Pink Sardine" controller)
- * Connected to a Lenovo ThinkPad Thunderbolt 3 Dock
- * Parade PS8830 on-board retimer
- * Only S2idle is present on this platform
-
-Domain 0 Route 0: 0000:0000
-Domain 1 Route 0: 0000:0000
-Domain 1 Route 2: 0108:1630 Lenovo ThinkPad Thunderbolt 3 Dock
+Encapsulate the existing struct in a new tb_nhi_pci, that shall also
+house all properties that relate to the parent bus. Similarly, any
+other type of controller will be expected to contain tb_nhi as a
+member.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
-Changes in v3:
-- Add missing/update affected kerneldoc
-- Apply naming change suggestions
-- Back out of moving tb_apple_add_links()
-- Drop error log from nhi_pci_probe() calling nhi_probe()
-- Unbreak some lines, touch up some change-adjacent whitespace
-- Rebase on next-20260508
-- Link to v2: https://lore.kernel.org/r/20260428-topic-usb4_nonpcie_prepwork-v2-0-452fb9d63f77@oss.qualcomm.com
-
-Changes in v2:
-- Make 'struct tb_nhi_pci' private, strip it of the 'struct pci_dev
-  field since it can be accessed via to_pci_dev(tb_nhi_pci->nhi.dev)
-- Thin out patch 1, move some of its prior contents to patch 2
-- Rename nhi_pci.[ch] to pci.[ch]
-- Rename nhi_probe_common() to nhi_probe()
-- Squash a number of bugs discovered at runtime on x86
-- Add a patch to make ops necessary to drop boilerplate checks
-- Reword the error messages introduced in the last patch
-- Drop RFC/RFT tags
-- Link to v1: https://lore.kernel.org/r/20260309-topic-usb4_nonpcie_prepwork-v1-0-d901d85fc794@oss.qualcomm.com
-
-To: Andreas Noever <andreas.noever@gmail.com>
-To: Mika Westerberg <westeri@kernel.org>
-To: Yehezkel Bernat <YehezkelShB@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-
----
-Konrad Dybcio (4):
-      thunderbolt: Move pci_device out of tb_nhi
-      thunderbolt: Separate out common NHI bits
-      thunderbolt: Require nhi->ops be valid
-      thunderbolt: Add some more descriptive probe error messages
-
- drivers/thunderbolt/Makefile    |   2 +-
- drivers/thunderbolt/acpi.c      |  14 +-
- drivers/thunderbolt/ctl.c       |  16 +-
+ drivers/thunderbolt/acpi.c      |  14 ++--
+ drivers/thunderbolt/ctl.c       |  16 ++--
  drivers/thunderbolt/domain.c    |   2 +-
  drivers/thunderbolt/eeprom.c    |   2 +-
- drivers/thunderbolt/icm.c       |  24 +-
- drivers/thunderbolt/nhi.c       | 525 +++++++---------------------------------
- drivers/thunderbolt/nhi.h       |  31 +++
- drivers/thunderbolt/nhi_ops.c   |  35 ++-
- drivers/thunderbolt/pci.c       | 439 +++++++++++++++++++++++++++++++++
- drivers/thunderbolt/pci.h       |  19 ++
- drivers/thunderbolt/switch.c    |  41 +---
- drivers/thunderbolt/tb.c        |  18 +-
- drivers/thunderbolt/tb.h        |  10 +-
+ drivers/thunderbolt/icm.c       |  24 +++---
+ drivers/thunderbolt/nhi.c       | 158 +++++++++++++++++++++++-----------------
+ drivers/thunderbolt/nhi_ops.c   |  26 ++++---
+ drivers/thunderbolt/switch.c    |   6 +-
+ drivers/thunderbolt/tb.c        |  11 +--
+ drivers/thunderbolt/tb.h        |  10 +--
  drivers/thunderbolt/usb4_port.c |   2 +-
  include/linux/thunderbolt.h     |   8 +-
- 16 files changed, 667 insertions(+), 521 deletions(-)
----
-base-commit: e98d21c170b01ddef366f023bbfcf6b31509fa83
-change-id: 20260309-topic-usb4_nonpcie_prepwork-86881f769b8f
+ 12 files changed, 155 insertions(+), 124 deletions(-)
 
-Best regards,
---  
-Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
+index 45d1415871b4..53546bc477a5 100644
+--- a/drivers/thunderbolt/acpi.c
++++ b/drivers/thunderbolt/acpi.c
+@@ -28,7 +28,7 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+ 		return AE_OK;
+ 
+ 	/* It needs to reference this NHI */
+-	if (dev_fwnode(&nhi->pdev->dev) != fwnode)
++	if (dev_fwnode(nhi->dev) != fwnode)
+ 		goto out_put;
+ 
+ 	/*
+@@ -57,16 +57,16 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+ 		 */
+ 		pm_runtime_get_sync(&pdev->dev);
+ 
+-		link = device_link_add(&pdev->dev, &nhi->pdev->dev,
++		link = device_link_add(&pdev->dev, nhi->dev,
+ 				       DL_FLAG_AUTOREMOVE_SUPPLIER |
+ 				       DL_FLAG_RPM_ACTIVE |
+ 				       DL_FLAG_PM_RUNTIME);
+ 		if (link) {
+-			dev_dbg(&nhi->pdev->dev, "created link from %s\n",
++			dev_dbg(nhi->dev, "created link from %s\n",
+ 				dev_name(&pdev->dev));
+ 			*(bool *)ret = true;
+ 		} else {
+-			dev_warn(&nhi->pdev->dev, "device link creation from %s failed\n",
++			dev_warn(nhi->dev, "device link creation from %s failed\n",
+ 				 dev_name(&pdev->dev));
+ 		}
+ 
+@@ -93,7 +93,7 @@ bool tb_acpi_add_links(struct tb_nhi *nhi)
+ 	acpi_status status;
+ 	bool ret = false;
+ 
+-	if (!has_acpi_companion(&nhi->pdev->dev))
++	if (!has_acpi_companion(nhi->dev))
+ 		return false;
+ 
+ 	/*
+@@ -103,7 +103,7 @@ bool tb_acpi_add_links(struct tb_nhi *nhi)
+ 	status = acpi_walk_namespace(ACPI_TYPE_DEVICE, ACPI_ROOT_OBJECT, 32,
+ 				     tb_acpi_add_link, NULL, nhi, (void **)&ret);
+ 	if (ACPI_FAILURE(status)) {
+-		dev_warn(&nhi->pdev->dev, "failed to enumerate tunneled ports\n");
++		dev_warn(nhi->dev, "failed to enumerate tunneled ports\n");
+ 		return false;
+ 	}
+ 
+@@ -305,7 +305,7 @@ static struct acpi_device *tb_acpi_switch_find_companion(struct tb_switch *sw)
+ 		struct tb_nhi *nhi = sw->tb->nhi;
+ 		struct acpi_device *parent_adev;
+ 
+-		parent_adev = ACPI_COMPANION(&nhi->pdev->dev);
++		parent_adev = ACPI_COMPANION(nhi->dev);
+ 		if (parent_adev)
+ 			adev = acpi_find_child_device(parent_adev, 0, false);
+ 	}
+diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
+index b2fd60fc7bcc..cd47b627f97b 100644
+--- a/drivers/thunderbolt/ctl.c
++++ b/drivers/thunderbolt/ctl.c
+@@ -56,22 +56,22 @@ struct tb_ctl {
+ 
+ 
+ #define tb_ctl_WARN(ctl, format, arg...) \
+-	dev_WARN(&(ctl)->nhi->pdev->dev, format, ## arg)
++	dev_WARN((ctl)->nhi->dev, format, ## arg)
+ 
+ #define tb_ctl_err(ctl, format, arg...) \
+-	dev_err(&(ctl)->nhi->pdev->dev, format, ## arg)
++	dev_err((ctl)->nhi->dev, format, ## arg)
+ 
+ #define tb_ctl_warn(ctl, format, arg...) \
+-	dev_warn(&(ctl)->nhi->pdev->dev, format, ## arg)
++	dev_warn((ctl)->nhi->dev, format, ## arg)
+ 
+ #define tb_ctl_info(ctl, format, arg...) \
+-	dev_info(&(ctl)->nhi->pdev->dev, format, ## arg)
++	dev_info((ctl)->nhi->dev, format, ## arg)
+ 
+ #define tb_ctl_dbg(ctl, format, arg...) \
+-	dev_dbg(&(ctl)->nhi->pdev->dev, format, ## arg)
++	dev_dbg((ctl)->nhi->dev, format, ## arg)
+ 
+ #define tb_ctl_dbg_once(ctl, format, arg...) \
+-	dev_dbg_once(&(ctl)->nhi->pdev->dev, format, ## arg)
++	dev_dbg_once((ctl)->nhi->dev, format, ## arg)
+ 
+ static DECLARE_WAIT_QUEUE_HEAD(tb_cfg_request_cancel_queue);
+ /* Serializes access to request kref_get/put */
+@@ -666,8 +666,8 @@ struct tb_ctl *tb_ctl_alloc(struct tb_nhi *nhi, int index, int timeout_msec,
+ 
+ 	mutex_init(&ctl->request_queue_lock);
+ 	INIT_LIST_HEAD(&ctl->request_queue);
+-	ctl->frame_pool = dma_pool_create("thunderbolt_ctl", &nhi->pdev->dev,
+-					 TB_FRAME_SIZE, 4, 0);
++	ctl->frame_pool = dma_pool_create("thunderbolt_ctl", nhi->dev,
++					  TB_FRAME_SIZE, 4, 0);
+ 	if (!ctl->frame_pool)
+ 		goto err;
+ 
+diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
+index d83719a37b4c..62dcf24b5f9b 100644
+--- a/drivers/thunderbolt/domain.c
++++ b/drivers/thunderbolt/domain.c
+@@ -405,7 +405,7 @@ struct tb *tb_domain_alloc(struct tb_nhi *nhi, int timeout_msec, size_t privsize
+ 	if (!tb->ctl)
+ 		goto err_destroy_wq;
+ 
+-	tb->dev.parent = &nhi->pdev->dev;
++	tb->dev.parent = nhi->dev;
+ 	tb->dev.bus = &tb_bus_type;
+ 	tb->dev.type = &tb_domain_type;
+ 	tb->dev.groups = domain_attr_groups;
+diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
+index 5477b9437048..5681c17f82ec 100644
+--- a/drivers/thunderbolt/eeprom.c
++++ b/drivers/thunderbolt/eeprom.c
+@@ -465,7 +465,7 @@ static void tb_switch_drom_free(struct tb_switch *sw)
+  */
+ static int tb_drom_copy_efi(struct tb_switch *sw, u16 *size)
+ {
+-	struct device *dev = &sw->tb->nhi->pdev->dev;
++	struct device *dev = sw->tb->nhi->dev;
+ 	int len, res;
+ 
+ 	len = device_property_count_u8(dev, "ThunderboltDROM");
+diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
+index c492995166f7..10fefac3b1d9 100644
+--- a/drivers/thunderbolt/icm.c
++++ b/drivers/thunderbolt/icm.c
+@@ -1466,6 +1466,7 @@ static struct pci_dev *get_upstream_port(struct pci_dev *pdev)
+ 
+ static bool icm_ar_is_supported(struct tb *tb)
+ {
++	struct pci_dev *pdev = to_pci_dev(tb->nhi->dev);
+ 	struct pci_dev *upstream_port;
+ 	struct icm *icm = tb_priv(tb);
+ 
+@@ -1483,7 +1484,7 @@ static bool icm_ar_is_supported(struct tb *tb)
+ 	 * Find the upstream PCIe port in case we need to do reset
+ 	 * through its vendor specific registers.
+ 	 */
+-	upstream_port = get_upstream_port(tb->nhi->pdev);
++	upstream_port = get_upstream_port(pdev);
+ 	if (upstream_port) {
+ 		int cap;
+ 
+@@ -1519,7 +1520,7 @@ static int icm_ar_get_mode(struct tb *tb)
+ 	} while (--retries);
+ 
+ 	if (!retries) {
+-		dev_err(&nhi->pdev->dev, "ICM firmware not authenticated\n");
++		dev_err(nhi->dev, "ICM firmware not authenticated\n");
+ 		return -ENODEV;
+ 	}
+ 
+@@ -1685,11 +1686,11 @@ icm_icl_driver_ready(struct tb *tb, enum tb_security_level *security_level,
+ 
+ static void icm_icl_set_uuid(struct tb *tb)
+ {
+-	struct tb_nhi *nhi = tb->nhi;
++	struct pci_dev *pdev = to_pci_dev(tb->nhi->dev);
+ 	u32 uuid[4];
+ 
+-	pci_read_config_dword(nhi->pdev, VS_CAP_10, &uuid[0]);
+-	pci_read_config_dword(nhi->pdev, VS_CAP_11, &uuid[1]);
++	pci_read_config_dword(pdev, VS_CAP_10, &uuid[0]);
++	pci_read_config_dword(pdev, VS_CAP_11, &uuid[1]);
+ 	uuid[2] = 0xffffffff;
+ 	uuid[3] = 0xffffffff;
+ 
+@@ -1866,7 +1867,7 @@ static int icm_firmware_start(struct tb *tb, struct tb_nhi *nhi)
+ 	if (icm_firmware_running(nhi))
+ 		return 0;
+ 
+-	dev_dbg(&nhi->pdev->dev, "starting ICM firmware\n");
++	dev_dbg(nhi->dev, "starting ICM firmware\n");
+ 
+ 	ret = icm_firmware_reset(tb, nhi);
+ 	if (ret)
+@@ -1961,7 +1962,7 @@ static int icm_firmware_init(struct tb *tb)
+ 
+ 	ret = icm_firmware_start(tb, nhi);
+ 	if (ret) {
+-		dev_err(&nhi->pdev->dev, "could not start ICM firmware\n");
++		dev_err(nhi->dev, "could not start ICM firmware\n");
+ 		return ret;
+ 	}
+ 
+@@ -1993,10 +1994,10 @@ static int icm_firmware_init(struct tb *tb)
+ 	 */
+ 	ret = icm_reset_phy_port(tb, 0);
+ 	if (ret)
+-		dev_warn(&nhi->pdev->dev, "failed to reset links on port0\n");
++		dev_warn(nhi->dev, "failed to reset links on port0\n");
+ 	ret = icm_reset_phy_port(tb, 1);
+ 	if (ret)
+-		dev_warn(&nhi->pdev->dev, "failed to reset links on port1\n");
++		dev_warn(nhi->dev, "failed to reset links on port1\n");
+ 
+ 	return 0;
+ }
+@@ -2477,6 +2478,7 @@ static const struct tb_cm_ops icm_icl_ops = {
+ 
+ struct tb *icm_probe(struct tb_nhi *nhi)
+ {
++	struct pci_dev *pdev = to_pci_dev(nhi->dev);
+ 	struct icm *icm;
+ 	struct tb *tb;
+ 
+@@ -2488,7 +2490,7 @@ struct tb *icm_probe(struct tb_nhi *nhi)
+ 	INIT_DELAYED_WORK(&icm->rescan_work, icm_rescan_work);
+ 	mutex_init(&icm->request_lock);
+ 
+-	switch (nhi->pdev->device) {
++	switch (pdev->device) {
+ 	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_NHI:
+ 	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_NHI:
+ 		icm->can_upgrade_nvm = true;
+@@ -2594,7 +2596,7 @@ struct tb *icm_probe(struct tb_nhi *nhi)
+ 	}
+ 
+ 	if (!icm->is_supported || !icm->is_supported(tb)) {
+-		dev_dbg(&nhi->pdev->dev, "ICM not supported on this controller\n");
++		dev_dbg(nhi->dev, "ICM not supported on this controller\n");
+ 		tb_domain_put(tb);
+ 		return NULL;
+ 	}
+diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+index 1a2051673067..59b261c078b6 100644
+--- a/drivers/thunderbolt/nhi.c
++++ b/drivers/thunderbolt/nhi.c
+@@ -2,7 +2,7 @@
+ /*
+  * Thunderbolt driver - NHI driver
+  *
+- * The NHI (native host interface) is the pci device that allows us to send and
++ * The NHI (native host interface) is the device that allows us to send and
+  * receive frames from the thunderbolt bus.
+  *
+  * Copyright (c) 2014 Andreas Noever <andreas.noever@gmail.com>
+@@ -12,7 +12,6 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/slab.h>
+ #include <linux/errno.h>
+-#include <linux/pci.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/interrupt.h>
+ #include <linux/iommu.h>
+@@ -51,6 +50,21 @@ static bool host_reset = true;
+ module_param(host_reset, bool, 0444);
+ MODULE_PARM_DESC(host_reset, "reset USB4 host router (default: true)");
+ 
++/**
++ * struct tb_nhi_pci - NHI device connected over PCIe
++ * @nhi: NHI device
++ * @msix_ida: Used to allocate MSI-X vectors for rings
++ */
++struct tb_nhi_pci {
++	struct tb_nhi nhi;
++	struct ida msix_ida;
++};
++
++static inline struct tb_nhi_pci *nhi_to_pci(struct tb_nhi *nhi)
++{
++	return container_of(nhi, struct tb_nhi_pci, nhi);
++}
++
+ static int ring_interrupt_index(const struct tb_ring *ring)
+ {
+ 	int bit = ring->hop;
+@@ -139,15 +153,14 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
+ 	else
+ 		new = old & ~mask;
+ 
+-	dev_dbg(&ring->nhi->pdev->dev,
++	dev_dbg(ring->nhi->dev,
+ 		"%s interrupt at register %#x bit %d (%#x -> %#x)\n",
+ 		active ? "enabling" : "disabling", reg, interrupt_bit, old, new);
+ 
+ 	if (new == old)
+-		dev_WARN(&ring->nhi->pdev->dev,
+-					 "interrupt for %s %d is already %s\n",
+-					 RING_TYPE(ring), ring->hop,
+-					 str_enabled_disabled(active));
++		dev_WARN(ring->nhi->dev, "interrupt for %s %d is already %s\n",
++			 RING_TYPE(ring), ring->hop,
++			 str_enabled_disabled(active));
+ 
+ 	if (active)
+ 		iowrite32(new, ring->nhi->iobase + reg);
+@@ -462,19 +475,21 @@ static irqreturn_t ring_msix(int irq, void *data)
+ static int ring_request_msix(struct tb_ring *ring, bool no_suspend)
+ {
+ 	struct tb_nhi *nhi = ring->nhi;
++	struct tb_nhi_pci *nhi_pci = nhi_to_pci(nhi);
++	struct pci_dev *pdev = to_pci_dev(nhi->dev);
+ 	unsigned long irqflags;
+ 	int ret;
+ 
+-	if (!nhi->pdev->msix_enabled)
++	if (!pdev->msix_enabled)
+ 		return 0;
+ 
+-	ret = ida_alloc_max(&nhi->msix_ida, MSIX_MAX_VECS - 1, GFP_KERNEL);
++	ret = ida_alloc_max(&nhi_pci->msix_ida, MSIX_MAX_VECS - 1, GFP_KERNEL);
+ 	if (ret < 0)
+ 		return ret;
+ 
+ 	ring->vector = ret;
+ 
+-	ret = pci_irq_vector(ring->nhi->pdev, ring->vector);
++	ret = pci_irq_vector(pdev, ring->vector);
+ 	if (ret < 0)
+ 		goto err_ida_remove;
+ 
+@@ -488,18 +503,20 @@ static int ring_request_msix(struct tb_ring *ring, bool no_suspend)
+ 	return 0;
+ 
+ err_ida_remove:
+-	ida_free(&nhi->msix_ida, ring->vector);
++	ida_free(&nhi_pci->msix_ida, ring->vector);
+ 
+ 	return ret;
+ }
+ 
+ static void ring_release_msix(struct tb_ring *ring)
+ {
++	struct tb_nhi_pci *nhi_pci = nhi_to_pci(ring->nhi);
++
+ 	if (ring->irq <= 0)
+ 		return;
+ 
+ 	free_irq(ring->irq, ring);
+-	ida_free(&ring->nhi->msix_ida, ring->vector);
++	ida_free(&nhi_pci->msix_ida, ring->vector);
+ 	ring->vector = 0;
+ 	ring->irq = 0;
+ }
+@@ -512,7 +529,7 @@ static int nhi_alloc_hop(struct tb_nhi *nhi, struct tb_ring *ring)
+ 	if (nhi->quirks & QUIRK_E2E) {
+ 		start_hop = RING_FIRST_USABLE_HOPID + 1;
+ 		if (ring->flags & RING_FLAG_E2E && !ring->is_tx) {
+-			dev_dbg(&nhi->pdev->dev, "quirking E2E TX HopID %u -> %u\n",
++			dev_dbg(nhi->dev, "quirking E2E TX HopID %u -> %u\n",
+ 				ring->e2e_tx_hop, RING_E2E_RESERVED_HOPID);
+ 			ring->e2e_tx_hop = RING_E2E_RESERVED_HOPID;
+ 		}
+@@ -543,23 +560,23 @@ static int nhi_alloc_hop(struct tb_nhi *nhi, struct tb_ring *ring)
+ 	}
+ 
+ 	if (ring->hop > 0 && ring->hop < start_hop) {
+-		dev_warn(&nhi->pdev->dev, "invalid hop: %d\n", ring->hop);
++		dev_warn(nhi->dev, "invalid hop: %d\n", ring->hop);
+ 		ret = -EINVAL;
+ 		goto err_unlock;
+ 	}
+ 	if (ring->hop < 0 || ring->hop >= nhi->hop_count) {
+-		dev_warn(&nhi->pdev->dev, "invalid hop: %d\n", ring->hop);
++		dev_warn(nhi->dev, "invalid hop: %d\n", ring->hop);
+ 		ret = -EINVAL;
+ 		goto err_unlock;
+ 	}
+ 	if (ring->is_tx && nhi->tx_rings[ring->hop]) {
+-		dev_warn(&nhi->pdev->dev, "TX hop %d already allocated\n",
++		dev_warn(nhi->dev, "TX hop %d already allocated\n",
+ 			 ring->hop);
+ 		ret = -EBUSY;
+ 		goto err_unlock;
+ 	}
+ 	if (!ring->is_tx && nhi->rx_rings[ring->hop]) {
+-		dev_warn(&nhi->pdev->dev, "RX hop %d already allocated\n",
++		dev_warn(nhi->dev, "RX hop %d already allocated\n",
+ 			 ring->hop);
+ 		ret = -EBUSY;
+ 		goto err_unlock;
+@@ -584,7 +601,7 @@ static struct tb_ring *tb_ring_alloc(struct tb_nhi *nhi, u32 hop, int size,
+ {
+ 	struct tb_ring *ring = NULL;
+ 
+-	dev_dbg(&nhi->pdev->dev, "allocating %s ring %d of size %d\n",
++	dev_dbg(nhi->dev, "allocating %s ring %d of size %d\n",
+ 		transmit ? "TX" : "RX", hop, size);
+ 
+ 	ring = kzalloc_obj(*ring);
+@@ -610,9 +627,9 @@ static struct tb_ring *tb_ring_alloc(struct tb_nhi *nhi, u32 hop, int size,
+ 	ring->start_poll = start_poll;
+ 	ring->poll_data = poll_data;
+ 
+-	ring->descriptors = dma_alloc_coherent(&ring->nhi->pdev->dev,
+-			size * sizeof(*ring->descriptors),
+-			&ring->descriptors_dma, GFP_KERNEL | __GFP_ZERO);
++	ring->descriptors = dma_alloc_coherent(ring->nhi->dev,
++					       size * sizeof(*ring->descriptors),
++					       &ring->descriptors_dma, GFP_KERNEL | __GFP_ZERO);
+ 	if (!ring->descriptors)
+ 		goto err_free_ring;
+ 
+@@ -627,7 +644,7 @@ static struct tb_ring *tb_ring_alloc(struct tb_nhi *nhi, u32 hop, int size,
+ err_release_msix:
+ 	ring_release_msix(ring);
+ err_free_descs:
+-	dma_free_coherent(&ring->nhi->pdev->dev,
++	dma_free_coherent(ring->nhi->dev,
+ 			  ring->size * sizeof(*ring->descriptors),
+ 			  ring->descriptors, ring->descriptors_dma);
+ err_free_ring:
+@@ -694,10 +711,10 @@ void tb_ring_start(struct tb_ring *ring)
+ 	if (ring->nhi->going_away)
+ 		goto err;
+ 	if (ring->running) {
+-		dev_WARN(&ring->nhi->pdev->dev, "ring already started\n");
++		dev_WARN(ring->nhi->dev, "ring already started\n");
+ 		goto err;
+ 	}
+-	dev_dbg(&ring->nhi->pdev->dev, "starting %s %d\n",
++	dev_dbg(ring->nhi->dev, "starting %s %d\n",
+ 		RING_TYPE(ring), ring->hop);
+ 
+ 	if (ring->flags & RING_FLAG_FRAME) {
+@@ -734,11 +751,11 @@ void tb_ring_start(struct tb_ring *ring)
+ 			hop &= REG_RX_OPTIONS_E2E_HOP_MASK;
+ 			flags |= hop;
+ 
+-			dev_dbg(&ring->nhi->pdev->dev,
++			dev_dbg(ring->nhi->dev,
+ 				"enabling E2E for %s %d with TX HopID %d\n",
+ 				RING_TYPE(ring), ring->hop, ring->e2e_tx_hop);
+ 		} else {
+-			dev_dbg(&ring->nhi->pdev->dev, "enabling E2E for %s %d\n",
++			dev_dbg(ring->nhi->dev, "enabling E2E for %s %d\n",
+ 				RING_TYPE(ring), ring->hop);
+ 		}
+ 
+@@ -772,12 +789,12 @@ void tb_ring_stop(struct tb_ring *ring)
+ {
+ 	spin_lock_irq(&ring->nhi->lock);
+ 	spin_lock(&ring->lock);
+-	dev_dbg(&ring->nhi->pdev->dev, "stopping %s %d\n",
++	dev_dbg(ring->nhi->dev, "stopping %s %d\n",
+ 		RING_TYPE(ring), ring->hop);
+ 	if (ring->nhi->going_away)
+ 		goto err;
+ 	if (!ring->running) {
+-		dev_WARN(&ring->nhi->pdev->dev, "%s %d already stopped\n",
++		dev_WARN(ring->nhi->dev, "%s %d already stopped\n",
+ 			 RING_TYPE(ring), ring->hop);
+ 		goto err;
+ 	}
+@@ -826,14 +843,14 @@ void tb_ring_free(struct tb_ring *ring)
+ 		ring->nhi->rx_rings[ring->hop] = NULL;
+ 
+ 	if (ring->running) {
+-		dev_WARN(&ring->nhi->pdev->dev, "%s %d still running\n",
++		dev_WARN(ring->nhi->dev, "%s %d still running\n",
+ 			 RING_TYPE(ring), ring->hop);
+ 	}
+ 	spin_unlock_irq(&ring->nhi->lock);
+ 
+ 	ring_release_msix(ring);
+ 
+-	dma_free_coherent(&ring->nhi->pdev->dev,
++	dma_free_coherent(ring->nhi->dev,
+ 			  ring->size * sizeof(*ring->descriptors),
+ 			  ring->descriptors, ring->descriptors_dma);
+ 
+@@ -841,7 +858,7 @@ void tb_ring_free(struct tb_ring *ring)
+ 	ring->descriptors_dma = 0;
+ 
+ 
+-	dev_dbg(&ring->nhi->pdev->dev, "freeing %s %d\n", RING_TYPE(ring),
++	dev_dbg(ring->nhi->dev, "freeing %s %d\n", RING_TYPE(ring),
+ 		ring->hop);
+ 
+ 	/*
+@@ -940,9 +957,7 @@ static void nhi_interrupt_work(struct work_struct *work)
+ 		if ((value & (1 << (bit % 32))) == 0)
+ 			continue;
+ 		if (type == 2) {
+-			dev_warn(&nhi->pdev->dev,
+-				 "RX overflow for ring %d\n",
+-				 hop);
++			dev_warn(nhi->dev, "RX overflow for ring %d\n", hop);
+ 			continue;
+ 		}
+ 		if (type == 0)
+@@ -950,7 +965,7 @@ static void nhi_interrupt_work(struct work_struct *work)
+ 		else
+ 			ring = nhi->rx_rings[hop];
+ 		if (ring == NULL) {
+-			dev_warn(&nhi->pdev->dev,
++			dev_warn(nhi->dev,
+ 				 "got interrupt for inactive %s ring %d\n",
+ 				 type ? "RX" : "TX",
+ 				 hop);
+@@ -1139,16 +1154,18 @@ static int nhi_runtime_resume(struct device *dev)
+ 
+ static void nhi_shutdown(struct tb_nhi *nhi)
+ {
++	struct tb_nhi_pci *nhi_pci = nhi_to_pci(nhi);
++	struct pci_dev *pdev = to_pci_dev(nhi->dev);
+ 	int i;
+ 
+-	dev_dbg(&nhi->pdev->dev, "shutdown\n");
++	dev_dbg(nhi->dev, "shutdown\n");
+ 
+ 	for (i = 0; i < nhi->hop_count; i++) {
+ 		if (nhi->tx_rings[i])
+-			dev_WARN(&nhi->pdev->dev,
++			dev_WARN(nhi->dev,
+ 				 "TX ring %d is still active\n", i);
+ 		if (nhi->rx_rings[i])
+-			dev_WARN(&nhi->pdev->dev,
++			dev_WARN(nhi->dev,
+ 				 "RX ring %d is still active\n", i);
+ 	}
+ 	nhi_disable_interrupts(nhi);
+@@ -1156,19 +1173,22 @@ static void nhi_shutdown(struct tb_nhi *nhi)
+ 	 * We have to release the irq before calling flush_work. Otherwise an
+ 	 * already executing IRQ handler could call schedule_work again.
+ 	 */
+-	if (!nhi->pdev->msix_enabled) {
+-		devm_free_irq(&nhi->pdev->dev, nhi->pdev->irq, nhi);
++	if (!pdev->msix_enabled) {
++		devm_free_irq(nhi->dev, pdev->irq, nhi);
+ 		flush_work(&nhi->interrupt_work);
+ 	}
+-	ida_destroy(&nhi->msix_ida);
++	ida_destroy(&nhi_pci->msix_ida);
+ 
+ 	if (nhi->ops && nhi->ops->shutdown)
+ 		nhi->ops->shutdown(nhi);
+ }
+ 
+-static void nhi_check_quirks(struct tb_nhi *nhi)
++static void nhi_check_quirks(struct tb_nhi_pci *nhi_pci)
+ {
+-	if (nhi->pdev->vendor == PCI_VENDOR_ID_INTEL) {
++	struct tb_nhi *nhi = &nhi_pci->nhi;
++	struct pci_dev *pdev = to_pci_dev(nhi->dev);
++
++	if (pdev->vendor == PCI_VENDOR_ID_INTEL) {
+ 		/*
+ 		 * Intel hardware supports auto clear of the interrupt
+ 		 * status register right after interrupt is being
+@@ -1176,7 +1196,7 @@ static void nhi_check_quirks(struct tb_nhi *nhi)
+ 		 */
+ 		nhi->quirks |= QUIRK_AUTO_CLEAR_INT;
+ 
+-		switch (nhi->pdev->device) {
++		switch (pdev->device) {
+ 		case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_NHI:
+ 		case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_NHI:
+ 			/*
+@@ -1190,7 +1210,7 @@ static void nhi_check_quirks(struct tb_nhi *nhi)
+ 	}
+ }
+ 
+-static int nhi_check_iommu_pdev(struct pci_dev *pdev, void *data)
++static int nhi_check_iommu_pci_dev(struct pci_dev *pdev, void *data)
+ {
+ 	if (!pdev->external_facing ||
+ 	    !device_iommu_capable(&pdev->dev, IOMMU_CAP_PRE_BOOT_PROTECTION))
+@@ -1199,9 +1219,11 @@ static int nhi_check_iommu_pdev(struct pci_dev *pdev, void *data)
+ 	return 1; /* Stop walking */
+ }
+ 
+-static void nhi_check_iommu(struct tb_nhi *nhi)
++static void nhi_check_iommu(struct tb_nhi_pci *nhi_pci)
+ {
+-	struct pci_bus *bus = nhi->pdev->bus;
++	struct tb_nhi *nhi = &nhi_pci->nhi;
++	struct pci_dev *pdev = to_pci_dev(nhi->dev);
++	struct pci_bus *bus = pdev->bus;
+ 	bool port_ok = false;
+ 
+ 	/*
+@@ -1224,10 +1246,10 @@ static void nhi_check_iommu(struct tb_nhi *nhi)
+ 	while (bus->parent)
+ 		bus = bus->parent;
+ 
+-	pci_walk_bus(bus, nhi_check_iommu_pdev, &port_ok);
++	pci_walk_bus(bus, nhi_check_iommu_pci_dev, &port_ok);
+ 
+ 	nhi->iommu_dma_protection = port_ok;
+-	dev_dbg(&nhi->pdev->dev, "IOMMU DMA protection is %s\n",
++	dev_dbg(nhi->dev, "IOMMU DMA protection is %s\n",
+ 		str_enabled_disabled(port_ok));
+ }
+ 
+@@ -1242,7 +1264,7 @@ static void nhi_reset(struct tb_nhi *nhi)
+ 		return;
+ 
+ 	if (!host_reset) {
+-		dev_dbg(&nhi->pdev->dev, "skipping host router reset\n");
++		dev_dbg(nhi->dev, "skipping host router reset\n");
+ 		return;
+ 	}
+ 
+@@ -1253,27 +1275,23 @@ static void nhi_reset(struct tb_nhi *nhi)
+ 	do {
+ 		val = ioread32(nhi->iobase + REG_RESET);
+ 		if (!(val & REG_RESET_HRR)) {
+-			dev_warn(&nhi->pdev->dev, "host router reset successful\n");
++			dev_warn(nhi->dev, "host router reset successful\n");
+ 			return;
+ 		}
+ 		usleep_range(10, 20);
+ 	} while (ktime_before(ktime_get(), timeout));
+ 
+-	dev_warn(&nhi->pdev->dev, "timeout resetting host router\n");
++	dev_warn(nhi->dev, "timeout resetting host router\n");
+ }
+ 
+-static int nhi_init_msi(struct tb_nhi *nhi)
++static int nhi_init_msi(struct tb_nhi_pci *nhi_pci)
+ {
+-	struct pci_dev *pdev = nhi->pdev;
++	struct tb_nhi *nhi = &nhi_pci->nhi;
++	struct pci_dev *pdev = to_pci_dev(nhi->dev);
+ 	struct device *dev = &pdev->dev;
+ 	int res, irq, nvec;
+ 
+-	/* In case someone left them on. */
+-	nhi_disable_interrupts(nhi);
+-
+-	nhi_enable_int_throttling(nhi);
+-
+-	ida_init(&nhi->msix_ida);
++	ida_init(&nhi_pci->msix_ida);
+ 
+ 	/*
+ 	 * The NHI has 16 MSI-X vectors or a single MSI. We first try to
+@@ -1290,7 +1308,7 @@ static int nhi_init_msi(struct tb_nhi *nhi)
+ 
+ 		INIT_WORK(&nhi->interrupt_work, nhi_interrupt_work);
+ 
+-		irq = pci_irq_vector(nhi->pdev, 0);
++		irq = pci_irq_vector(pdev, 0);
+ 		if (irq < 0)
+ 			return irq;
+ 
+@@ -1339,6 +1357,7 @@ static struct tb *nhi_select_cm(struct tb_nhi *nhi)
+ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ {
+ 	struct device *dev = &pdev->dev;
++	struct tb_nhi_pci *nhi_pci;
+ 	struct tb_nhi *nhi;
+ 	struct tb *tb;
+ 	int res;
+@@ -1350,11 +1369,12 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	if (res)
+ 		return dev_err_probe(dev, res, "cannot enable PCI device, aborting\n");
+ 
+-	nhi = devm_kzalloc(&pdev->dev, sizeof(*nhi), GFP_KERNEL);
+-	if (!nhi)
++	nhi_pci = devm_kzalloc(dev, sizeof(*nhi_pci), GFP_KERNEL);
++	if (!nhi_pci)
+ 		return -ENOMEM;
+ 
+-	nhi->pdev = pdev;
++	nhi = &nhi_pci->nhi;
++	nhi->dev = dev;
+ 	nhi->ops = (const struct tb_nhi_ops *)id->driver_data;
+ 
+ 	nhi->iobase = pcim_iomap_region(pdev, 0, "thunderbolt");
+@@ -1372,11 +1392,15 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	if (!nhi->tx_rings || !nhi->rx_rings)
+ 		return -ENOMEM;
+ 
+-	nhi_check_quirks(nhi);
+-	nhi_check_iommu(nhi);
++	nhi_check_quirks(nhi_pci);
++	nhi_check_iommu(nhi_pci);
+ 	nhi_reset(nhi);
+ 
+-	res = nhi_init_msi(nhi);
++	/* In case someone left them on. */
++	nhi_disable_interrupts(nhi);
++	nhi_enable_int_throttling(nhi);
++
++	res = nhi_init_msi(nhi_pci);
+ 	if (res)
+ 		return dev_err_probe(dev, res, "cannot enable MSI, aborting\n");
+ 
+diff --git a/drivers/thunderbolt/nhi_ops.c b/drivers/thunderbolt/nhi_ops.c
+index 96da07e88c52..8c50066f3411 100644
+--- a/drivers/thunderbolt/nhi_ops.c
++++ b/drivers/thunderbolt/nhi_ops.c
+@@ -24,7 +24,7 @@ static int check_for_device(struct device *dev, void *data)
+ 
+ static bool icl_nhi_is_device_connected(struct tb_nhi *nhi)
+ {
+-	struct tb *tb = pci_get_drvdata(nhi->pdev);
++	struct tb *tb = dev_get_drvdata(nhi->dev);
+ 	int ret;
+ 
+ 	ret = device_for_each_child(&tb->root_switch->dev, NULL,
+@@ -34,6 +34,7 @@ static bool icl_nhi_is_device_connected(struct tb_nhi *nhi)
+ 
+ static int icl_nhi_force_power(struct tb_nhi *nhi, bool power)
+ {
++	struct pci_dev *pdev = to_pci_dev(nhi->dev);
+ 	u32 vs_cap;
+ 
+ 	/*
+@@ -48,7 +49,7 @@ static int icl_nhi_force_power(struct tb_nhi *nhi, bool power)
+ 	 * The actual power management happens inside shared ACPI power
+ 	 * resources using standard ACPI methods.
+ 	 */
+-	pci_read_config_dword(nhi->pdev, VS_CAP_22, &vs_cap);
++	pci_read_config_dword(pdev, VS_CAP_22, &vs_cap);
+ 	if (power) {
+ 		vs_cap &= ~VS_CAP_22_DMA_DELAY_MASK;
+ 		vs_cap |= 0x22 << VS_CAP_22_DMA_DELAY_SHIFT;
+@@ -56,7 +57,7 @@ static int icl_nhi_force_power(struct tb_nhi *nhi, bool power)
+ 	} else {
+ 		vs_cap &= ~VS_CAP_22_FORCE_POWER;
+ 	}
+-	pci_write_config_dword(nhi->pdev, VS_CAP_22, vs_cap);
++	pci_write_config_dword(pdev, VS_CAP_22, vs_cap);
+ 
+ 	if (power) {
+ 		unsigned int retries = 350;
+@@ -64,7 +65,7 @@ static int icl_nhi_force_power(struct tb_nhi *nhi, bool power)
+ 
+ 		/* Wait until the firmware tells it is up and running */
+ 		do {
+-			pci_read_config_dword(nhi->pdev, VS_CAP_9, &val);
++			pci_read_config_dword(pdev, VS_CAP_9, &val);
+ 			if (val & VS_CAP_9_FW_READY)
+ 				return 0;
+ 			usleep_range(3000, 3100);
+@@ -78,14 +79,16 @@ static int icl_nhi_force_power(struct tb_nhi *nhi, bool power)
+ 
+ static void icl_nhi_lc_mailbox_cmd(struct tb_nhi *nhi, enum icl_lc_mailbox_cmd cmd)
+ {
++	struct pci_dev *pdev = to_pci_dev(nhi->dev);
+ 	u32 data;
+ 
+ 	data = (cmd << VS_CAP_19_CMD_SHIFT) & VS_CAP_19_CMD_MASK;
+-	pci_write_config_dword(nhi->pdev, VS_CAP_19, data | VS_CAP_19_VALID);
++	pci_write_config_dword(pdev, VS_CAP_19, data | VS_CAP_19_VALID);
+ }
+ 
+ static int icl_nhi_lc_mailbox_cmd_complete(struct tb_nhi *nhi, int timeout)
+ {
++	struct pci_dev *pdev = to_pci_dev(nhi->dev);
+ 	unsigned long end;
+ 	u32 data;
+ 
+@@ -94,7 +97,7 @@ static int icl_nhi_lc_mailbox_cmd_complete(struct tb_nhi *nhi, int timeout)
+ 
+ 	end = jiffies + msecs_to_jiffies(timeout);
+ 	do {
+-		pci_read_config_dword(nhi->pdev, VS_CAP_18, &data);
++		pci_read_config_dword(pdev, VS_CAP_18, &data);
+ 		if (data & VS_CAP_18_DONE)
+ 			goto clear;
+ 		usleep_range(1000, 1100);
+@@ -104,24 +107,25 @@ static int icl_nhi_lc_mailbox_cmd_complete(struct tb_nhi *nhi, int timeout)
+ 
+ clear:
+ 	/* Clear the valid bit */
+-	pci_write_config_dword(nhi->pdev, VS_CAP_19, 0);
++	pci_write_config_dword(pdev, VS_CAP_19, 0);
+ 	return 0;
+ }
+ 
+ static void icl_nhi_set_ltr(struct tb_nhi *nhi)
+ {
++	struct pci_dev *pdev = to_pci_dev(nhi->dev);
+ 	u32 max_ltr, ltr;
+ 
+-	pci_read_config_dword(nhi->pdev, VS_CAP_16, &max_ltr);
++	pci_read_config_dword(pdev, VS_CAP_16, &max_ltr);
+ 	max_ltr &= 0xffff;
+ 	/* Program the same value for both snoop and no-snoop */
+ 	ltr = max_ltr << 16 | max_ltr;
+-	pci_write_config_dword(nhi->pdev, VS_CAP_15, ltr);
++	pci_write_config_dword(pdev, VS_CAP_15, ltr);
+ }
+ 
+ static int icl_nhi_suspend(struct tb_nhi *nhi)
+ {
+-	struct tb *tb = pci_get_drvdata(nhi->pdev);
++	struct tb *tb = dev_get_drvdata(nhi->dev);
+ 	int ret;
+ 
+ 	if (icl_nhi_is_device_connected(nhi))
+@@ -144,7 +148,7 @@ static int icl_nhi_suspend(struct tb_nhi *nhi)
+ 
+ static int icl_nhi_suspend_noirq(struct tb_nhi *nhi, bool wakeup)
+ {
+-	struct tb *tb = pci_get_drvdata(nhi->pdev);
++	struct tb *tb = dev_get_drvdata(nhi->dev);
+ 	enum icl_lc_mailbox_cmd cmd;
+ 
+ 	if (!pm_suspend_via_firmware())
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index bfcab98faf4b..1817bb7afd33 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -211,6 +211,7 @@ static int nvm_authenticate_device_dma_port(struct tb_switch *sw)
+ 
+ static void nvm_authenticate_start_dma_port(struct tb_switch *sw)
+ {
++	struct pci_dev *pdev = to_pci_dev(sw->tb->nhi->dev);
+ 	struct pci_dev *root_port;
+ 
+ 	/*
+@@ -219,16 +220,17 @@ static void nvm_authenticate_start_dma_port(struct tb_switch *sw)
+ 	 * itself. To be on the safe side keep the root port in D0 during
+ 	 * the whole upgrade process.
+ 	 */
+-	root_port = pcie_find_root_port(sw->tb->nhi->pdev);
++	root_port = pcie_find_root_port(pdev);
+ 	if (root_port)
+ 		pm_runtime_get_noresume(&root_port->dev);
+ }
+ 
+ static void nvm_authenticate_complete_dma_port(struct tb_switch *sw)
+ {
++	struct pci_dev *pdev = to_pci_dev(sw->tb->nhi->dev);
+ 	struct pci_dev *root_port;
+ 
+-	root_port = pcie_find_root_port(sw->tb->nhi->pdev);
++	root_port = pcie_find_root_port(pdev);
+ 	if (root_port)
+ 		pm_runtime_put(&root_port->dev);
+ }
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index a9d26a2ec259..e09259b35d40 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -3307,13 +3307,14 @@ static const struct tb_cm_ops tb_cm_ops = {
+  */
+ static bool tb_apple_add_links(struct tb_nhi *nhi)
+ {
++	struct pci_dev *nhi_pdev = to_pci_dev(nhi->dev);
+ 	struct pci_dev *upstream, *pdev;
+ 	bool ret;
+ 
+ 	if (!x86_apple_machine)
+ 		return false;
+ 
+-	switch (nhi->pdev->device) {
++	switch (nhi_pdev->device) {
+ 	case PCI_DEVICE_ID_INTEL_LIGHT_RIDGE:
+ 	case PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C:
+ 	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_NHI:
+@@ -3323,7 +3324,7 @@ static bool tb_apple_add_links(struct tb_nhi *nhi)
+ 		return false;
+ 	}
+ 
+-	upstream = pci_upstream_bridge(nhi->pdev);
++	upstream = pci_upstream_bridge(nhi_pdev);
+ 	while (upstream) {
+ 		if (!pci_is_pcie(upstream))
+ 			return false;
+@@ -3350,15 +3351,15 @@ static bool tb_apple_add_links(struct tb_nhi *nhi)
+ 		    !pdev->is_pciehp)
+ 			continue;
+ 
+-		link = device_link_add(&pdev->dev, &nhi->pdev->dev,
++		link = device_link_add(&pdev->dev, nhi->dev,
+ 				       DL_FLAG_AUTOREMOVE_SUPPLIER |
+ 				       DL_FLAG_PM_RUNTIME);
+ 		if (link) {
+-			dev_dbg(&nhi->pdev->dev, "created link from %s\n",
++			dev_dbg(nhi->dev, "created link from %s\n",
+ 				dev_name(&pdev->dev));
+ 			ret = true;
+ 		} else {
+-			dev_warn(&nhi->pdev->dev, "device link creation from %s failed\n",
++			dev_warn(nhi->dev, "device link creation from %s failed\n",
+ 				 dev_name(&pdev->dev));
+ 		}
+ 	}
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 229b9e7961fb..f11a131fb6e3 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -725,11 +725,11 @@ static inline int tb_port_write(struct tb_port *port, const void *buffer,
+ 			    length);
+ }
+ 
+-#define tb_err(tb, fmt, arg...) dev_err(&(tb)->nhi->pdev->dev, fmt, ## arg)
+-#define tb_WARN(tb, fmt, arg...) dev_WARN(&(tb)->nhi->pdev->dev, fmt, ## arg)
+-#define tb_warn(tb, fmt, arg...) dev_warn(&(tb)->nhi->pdev->dev, fmt, ## arg)
+-#define tb_info(tb, fmt, arg...) dev_info(&(tb)->nhi->pdev->dev, fmt, ## arg)
+-#define tb_dbg(tb, fmt, arg...) dev_dbg(&(tb)->nhi->pdev->dev, fmt, ## arg)
++#define tb_err(tb, fmt, arg...) dev_err((tb)->nhi->dev, fmt, ## arg)
++#define tb_WARN(tb, fmt, arg...) dev_WARN((tb)->nhi->dev, fmt, ## arg)
++#define tb_warn(tb, fmt, arg...) dev_warn((tb)->nhi->dev, fmt, ## arg)
++#define tb_info(tb, fmt, arg...) dev_info((tb)->nhi->dev, fmt, ## arg)
++#define tb_dbg(tb, fmt, arg...) dev_dbg((tb)->nhi->dev, fmt, ## arg)
+ 
+ #define __TB_SW_PRINT(level, sw, fmt, arg...)           \
+ 	do {                                            \
+diff --git a/drivers/thunderbolt/usb4_port.c b/drivers/thunderbolt/usb4_port.c
+index c32d3516e780..890de530debc 100644
+--- a/drivers/thunderbolt/usb4_port.c
++++ b/drivers/thunderbolt/usb4_port.c
+@@ -138,7 +138,7 @@ bool usb4_usb3_port_match(struct device *usb4_port_dev,
+ 		return false;
+ 
+ 	/* Check if USB3 fwnode references same NHI where USB4 port resides */
+-	if (!device_match_fwnode(&nhi->pdev->dev, nhi_fwnode))
++	if (!device_match_fwnode(nhi->dev, nhi_fwnode))
+ 		return false;
+ 
+ 	if (fwnode_property_read_u8(usb3_port_fwnode, "usb4-port-number", &usb4_port_num))
+diff --git a/include/linux/thunderbolt.h b/include/linux/thunderbolt.h
+index bbdbbc84c999..89e8e374dcdb 100644
+--- a/include/linux/thunderbolt.h
++++ b/include/linux/thunderbolt.h
+@@ -482,12 +482,11 @@ static inline struct tb_xdomain *tb_service_parent(struct tb_service *svc)
+  * struct tb_nhi - thunderbolt native host interface
+  * @lock: Must be held during ring creation/destruction. Is acquired by
+  *	  interrupt_work when dispatching interrupts to individual rings.
+- * @pdev: Pointer to the PCI device
++ * @dev: Device associated with this NHI instance
+  * @ops: NHI specific optional ops
+  * @iobase: MMIO space of the NHI
+  * @tx_rings: All Tx rings available on this host controller
+  * @rx_rings: All Rx rings available on this host controller
+- * @msix_ida: Used to allocate MSI-X vectors for rings
+  * @going_away: The host controller device is about to disappear so when
+  *		this flag is set, avoid touching the hardware anymore.
+  * @iommu_dma_protection: An IOMMU will isolate external-facing ports.
+@@ -499,12 +498,11 @@ static inline struct tb_xdomain *tb_service_parent(struct tb_service *svc)
+  */
+ struct tb_nhi {
+ 	spinlock_t lock;
+-	struct pci_dev *pdev;
++	struct device *dev;
+ 	const struct tb_nhi_ops *ops;
+ 	void __iomem *iobase;
+ 	struct tb_ring **tx_rings;
+ 	struct tb_ring **rx_rings;
+-	struct ida msix_ida;
+ 	bool going_away;
+ 	bool iommu_dma_protection;
+ 	struct work_struct interrupt_work;
+@@ -685,7 +683,7 @@ void tb_ring_poll_complete(struct tb_ring *ring);
+  */
+ static inline struct device *tb_ring_dma_device(struct tb_ring *ring)
+ {
+-	return &ring->nhi->pdev->dev;
++	return ring->nhi->dev;
+ }
+ 
+ bool usb4_usb3_port_match(struct device *usb4_port_dev,
+
+-- 
+2.54.0
 
 
