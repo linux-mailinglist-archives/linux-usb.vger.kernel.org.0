@@ -1,210 +1,283 @@
-Return-Path: <linux-usb+bounces-37424-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37425-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8D2wDZzOBGr0PQIAu9opvQ
-	(envelope-from <linux-usb+bounces-37424-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 21:18:52 +0200
+	id IDBuLcfjBGoNQQIAu9opvQ
+	(envelope-from <linux-usb+bounces-37425-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 22:49:11 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE594539C98
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 21:18:51 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64F6353AA9D
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 22:49:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C36BA309658A
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 19:13:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C0125301F147
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 20:49:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 706CD3A75A0;
-	Wed, 13 May 2026 19:12:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695B337C923;
+	Wed, 13 May 2026 20:49:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tSEh8ebP"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="h0hyRA4L";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="VAHKZ3r+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206793B1009;
-	Wed, 13 May 2026 19:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B49379C25
+	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 20:49:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778699571; cv=none; b=Ik00sltpuJN/T+5P+yjHvQvnLagvsJLQwPbrRQ8TNznLUC7Vitd09ygCfoRQLUK5+y2i8lrJh1+yjdN2/Th8uqaKbfCBuzMMK6Y+OJmfc46IynVA0N6wkgSvex1P7RONzuf0LVqw5lkBbmF4u8i4s8BaiyOgtBnTXeG20BMWgCE=
+	t=1778705345; cv=none; b=Z/+ovN76ZCWUXSWfsgGBMMUICf0NHBwlY3DxTr5EEpl8cUa2IEvDbNMKFSAUA1T6BG17ALdabpUL/qj80PUWolYqozFagWy5minx87BRPKlAqftxqWtxhW9hw759Ynbsnm53Pl64kurieLiIcRpqvq8jiFRmLO66X2izYXOjaI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778699571; c=relaxed/simple;
-	bh=ByO3UDk1bD7UWyiAS+/7bd2l/UItToX1RFnexJVVuBY=;
+	s=arc-20240116; t=1778705345; c=relaxed/simple;
+	bh=6wH2OTj0HYJsPJbcjxhwsoqqOLFXkmHk3AYWmHF52H8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GaH0z1YG5oLL48P5XasSfDIPkKrHq/e4luNUMuq6ogu0KmiEOp48PZbCf/w0kqLN2euyBtyfwrR/2daGWnJLEHTkKXgCqqm4fmQsqLqJXLLkKp9vLtKqT1IYQfoyAu6MyrWh17ZfDiTN9D/eeZCXf887PjsuUMhxBAzhy2tjvvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tSEh8ebP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B321C19425;
-	Wed, 13 May 2026 19:12:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778699570;
-	bh=ByO3UDk1bD7UWyiAS+/7bd2l/UItToX1RFnexJVVuBY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tSEh8ebPPoDvLCOivTGQDD8UQC5ue9skRt3JrfoTA0akFw3dOfbuxpHQCw7HA5Fqt
-	 lB4PhZNnZosJJVyIi32Oy47qxcdy6fjvmotJP6MPAGewetYNPlKleLjLOckHLNRBcj
-	 jB0gmJv0Aj/mvztLiYYFhsLICOmOyJWoOORpYDwaF1VHEDpZRBx9/QUpgU3YKle8Jd
-	 w8e9viTEtG4MmNMGzOOE6TM2Jhg2RuWfnhTV9HnnUQrMNcBBwav16nsRAz16SQA1fZ
-	 xC68DodgS3DpMu/oP9s9VSm5R4fThueU5fl5P4PLFX48E4gk7sSzuQUgqSIWeWlMKy
-	 5T4qGMwQexIXg==
-Date: Wed, 13 May 2026 14:12:46 -0500
-From: Bjorn Andersson <andersson@kernel.org>
-To: Akash Kumar <akash.kumar@oss.qualcomm.com>
-Cc: Elson Serrao <elson.serrao@oss.qualcomm.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: lemans: Enable eud support
-Message-ID: <agTMzwEX1Nw-dZht@baldur>
-References: <20260512091422.1395490-1-akash.kumar@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lLpdvHOSiRZjXqqBsDOeBM1t7IHAJMh5NalWMnF2roRdahaA39pO02eCSmoQf1FaWazueOkXHtQADx1QfJ//sgO82bnX+AddhZbVgEDrbQFdTrudjKw8JazCZ0J+uA7r2oP/Qj8IIInIfMSCI4NqwmjB0apkzRHLRyoV98xbA98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=h0hyRA4L; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=VAHKZ3r+; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64DEsGUm4159972
+	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 20:49:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=Dhsegu5qtxwn6TgrVOys3Q1N
+	IKw+osXSP8fGclK8A64=; b=h0hyRA4LAm2s7fFWaw/+oT58zLK6UIwllFaLZNho
+	S7VdWvxK4MjUB9YwaN27Nmf2Im6R53Km4VwZOLc7MtCnPG5Mp16n7wQ0GNDNn9DA
+	W2SP0bNVjQ9aDkKn8gX1vpkvct0jQeLVUYQ+198eMQFObvIcpFe1XO59HuuIsjzh
+	oHoAl+q1GsoTwoh1EBJUPKJlQvNjHGQfH70y6FiLj0BymHecJ7JUADTijYo7Cj1E
+	aYvkemIJWwtFnJDPt8z4N3xkxTto1SiaOEtXuWj8uhgJ6iXjdO+cRMvSnnPcrHoD
+	fY8MLPXgkoJjM5Ii+ZvPY/XwIZ62k/7OmrXkr0EyJZRJkg==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e4p91tv3h-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 20:49:02 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-515224a8aa0so60296391cf.0
+        for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 13:49:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1778705342; x=1779310142; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dhsegu5qtxwn6TgrVOys3Q1NIKw+osXSP8fGclK8A64=;
+        b=VAHKZ3r+7Bgh6P7xMxijFsEzgOwxxwAlCSOaASII54plXHbGrU64uXTTzd7EtStFy8
+         u37QVMdcmIIHdVLSAeMex6MM+W//mb4fnQMALjOjpFFbZINEisis9fDOFxvrE2FUv7c9
+         jhafIYPL+66U+sAfYCgchKlVfEt8tVV3LULBaETQAvrR1xsJ0OhSCDd2qZGo8MQRegrm
+         1JW01OmlAop7GOYUrFWnxl9bwLA2vEBTxlOIxtCWJr7gy61EkJZHrSlcRHMBD46XHLXX
+         9sfHfnQLODwyPaipzVCVgWAW850esPdn941xycj8p2orv2L+7P6r9+LaI3ni+Gaw+ket
+         Q8VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778705342; x=1779310142;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Dhsegu5qtxwn6TgrVOys3Q1NIKw+osXSP8fGclK8A64=;
+        b=ZMZg1VC8Pn/xgJ2V2A/R/8wmQ3doI/L/Cvi421fklJzI5qSwArclRQhlknjmWGod2A
+         InmlL5CB+BtlFxMY1WC+Q5gFpw0vXfYTXn3KYowoFqWvvDzK15SefpSbGIoruRmjUERp
+         U3xP8r/E2qFJz522AraSPNZX4FE1LaUy4Mbn1X1EYBBPbvjhjRpMT9FoYAW/Fiv1Yoag
+         9u4UqAOOhyi9r+sM2RcAA5wq92wWakuriOjyovTWv2HtnIVRCvrOFu7cW9We1zmUMmcW
+         Cj6xtozZHWeq01mksZn/ENCVh/wQPlrwWiZJ7Z0ZGCN5wgITxDGO8Ch/eyT0MEK4hdI8
+         +j6A==
+X-Forwarded-Encrypted: i=1; AFNElJ8ft9l1NKgAkRvpuj/LFvK/uQDTRVieLRhkiDaZCyMNpVxlQB/Me79rcyIb8+Rrl/49BUfT7+Wrt44=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yye1O+tYv6nyj6NIKY3iKWnC63FbLoiZf9KDTs+iTMJur87/3OD
+	k7btPiBoeUx+kBwQRz7iweOVoYdbuGbk3xTpIXsQFOYtleb4J3QI/mZETF2zG0WG+AZX169jMew
+	mcEq0oj8qyhLDWSSjF8d5GNP028bh0APJ/4CjRUxhVCHUz+b6YBbXYnSgoCJJwn8=
+X-Gm-Gg: Acq92OEieU9Jw3OrE0rU+tEny28Ns9LqsJdONMJJkEBeJceWooo8O8naSy310etgBjK
+	Wzc9jA+ZIoh8UFL01q3npcwrhI6731iO4ptixdMNGXTLvxSDartXCDuLocGf5vHB35MYKXb8TwO
+	NPMR1RmcYBRyFQsV2yWV4etDaDueQ2dNQDKVV4RkMRYdyyTwE0Ox6T/O8qRnWfjKX5X8k0GmVGP
+	KyqqSzPAZY1/sjeq84yAvzZcCpfJjk2z9AzWkDaUCRkmOMLGo+fqZeFNwEix71zKjjo0c7w7orh
+	QcTb9kPE8iLk1ZHuRJo3+6IwYEGsga7tuZCm+OsOSKXnLWAjwEAvHldhmM91R7x6CFdkzrSxoDF
+	cSTIFmgn5AfCwqU+ICb20b28itlzhBh13EJWB9e1Xrk7IX4eUq5Ex1dzZ7RFAYdy0KT71lIPjkv
+	nQ8LCdp3YiOk+DKqDDoNl5vcij+Upe3uhwOzk=
+X-Received: by 2002:ac8:7fc1:0:b0:50e:6054:ba with SMTP id d75a77b69052e-5162f43fbb9mr68221741cf.9.1778705341860;
+        Wed, 13 May 2026 13:49:01 -0700 (PDT)
+X-Received: by 2002:ac8:7fc1:0:b0:50e:6054:ba with SMTP id d75a77b69052e-5162f43fbb9mr68221291cf.9.1778705341325;
+        Wed, 13 May 2026 13:49:01 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a90f10cac1sm39233e87.2.2026.05.13.13.48.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 May 2026 13:49:00 -0700 (PDT)
+Date: Wed, 13 May 2026 23:48:58 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb: dwc3: qcom: Modify interrupt handling for eUSB2
+ Phy targets
+Message-ID: <y4b3qbt4xhnahtfmfw2qx3lazlnogcp5dfrpd2wyicevoc57p5@puqv4wjzcijn>
+References: <20260511094422.3561509-1-krishna.kurapati@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260512091422.1395490-1-akash.kumar@oss.qualcomm.com>
-X-Rspamd-Queue-Id: EE594539C98
+In-Reply-To: <20260511094422.3561509-1-krishna.kurapati@oss.qualcomm.com>
+X-Proofpoint-ORIG-GUID: TSq6RC7fJ4bQDJEtZ4wwyjw5V2Vw1GUo
+X-Proofpoint-GUID: TSq6RC7fJ4bQDJEtZ4wwyjw5V2Vw1GUo
+X-Authority-Analysis: v=2.4 cv=G9Ys1dk5 c=1 sm=1 tr=0 ts=6a04e3be cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=Um2Pa8k9VHT-vaBCBUpS:22 a=VwQbUJbxAAAA:8
+ a=EUspDBNiAAAA:8 a=YMjfxpUAHe4-pisfumMA:9 a=CjuIK1q_8ugA:10
+ a=uxP6HrT_eTzRwkO_Te1X:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTEzMDIwNSBTYWx0ZWRfXyGuYTOreaL2S
+ 91fdCzpsi6ZAVXwI2D/AmgjJqOWKMO1Ho9w+ZBSNSBSlge2UpTFevaNm/xUd97wqrbpRZyy75c7
+ xFfYgl/X6v+59nom99VDmWoZCo6zMZTmRhBFIKrfQmoEERgSvsnIAQu5CKOd5rA0hwvL5nc5X86
+ pHPYqijm6gDPeuyegpRLutFKtPmOkwf3J5ld+4iRQPN13TsHvOxTTJtBMbgAOwRDgH55T6uzOSH
+ 6xSYOvL9k7M1JofOekhWW8X9LlEaiJzyHhaUDlHVof5SMprNf+B+vX73dSRpzhsU8n9K6xAY2pg
+ eTqAvqrp4JhB0mPupN+2iaJBfEUxVDo4vOXAbmFmkQGI28zSOO7ExDTcUF1aSB561PzVazTvMbi
+ xUrpryp2KYKw3K3Og+y5jeyy5ly81Qxk1Qy78YJ8bt7GLqg26ITWr6eCj5juNpuasAiWGgaK7EC
+ egSMzAdfzlH4en6Y2Gw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-13_02,2026-05-13_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 malwarescore=0 adultscore=0 spamscore=0 phishscore=0
+ clxscore=1015 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605050000
+ definitions=main-2605130205
+X-Rspamd-Queue-Id: 64F6353AA9D
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37424-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-37425-lists,linux-usb=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,qualcomm.com:email,qualcomm.com:dkim,oss.qualcomm.com:dkim];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	MISSING_XM_UA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dmitry.baryshkov@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andersson@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.0:email,qualcomm.com:email,qualcomm.com:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,0.0.0.1:email,88e1000:email]
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Action: no action
 
-On Tue, May 12, 2026 at 02:39:26PM +0530, Akash Kumar wrote:
-> Add the EUD controller node in lemans.dtsi and update the USB HS
-> endpoint routing on lemans-evk to pass through EUD instead of linking
-> the connector directly to usb_0_dwc3_hs.
+On Mon, May 11, 2026 at 03:14:22PM +0530, Krishna Kurapati wrote:
+> eUSB2 targets handle wakeup interrupts differently depending on device
+> speed when operating in host mode.
 > 
-> Wire the OF graph endpoints between the connector, EUD and DWC3 HS
-> controller to enable the EUD path on lemans EVK.
+> According to the eUSB2 specification, remote wakeup signaling in host
+> mode is detected via different data-line assertions based on the
+> connected device speed.
 > 
-> This change is part of series "Improve Qualcomm EUD driver and
-> platform support" and has been validated on the Qualcomm Dragonwing platform
-> (RB8 board), confirming successful OpenOCD connectivity to the EUD
-> interface. For detailed usage instructions, refer to Qualcomm’s Linux
-> kernel debugging guide:
-> https://docs.qualcomm.com/bundle/publicresource/topics/80-70020-12/debugging_linux_kernel.html#debug-using-openocd
+> When a low-speed device is connected, the host repeater drives eD+ to
+> logic '1' upon detecting a K-state on the USB lines during remote wakeup
+> (eUSB2 specification, Section 5.5.14).
 > 
-> Signed-off-by: Akash Kumar <akakum@qti.qualcomm.com>
-
-Is this based on the work by Elson at
-https://lore.kernel.org/all/20260501170635.2641748-1-elson.serrao@oss.qualcomm.com/#t
-?
-
-Help Elson to conclude (get merged) his efforts by code reviewing and
-adopting the improved bindings before reposting this.
-
-Regards,
-Bjorn
-
+> When a full-speed or high-speed device is connected, the host repeater
+> drives eD- to logic '1' upon detecting a K-state on the USB line during
+> remote wakeup (eUSB2 specification, Sections 5.5.15 and 5.5.18).
+> 
+> Since the eUSB2 PHY's "DP" and "DM" interrupt lines monitor the eD+ and
+> eD- line states, configure the wakeup interrupts accordingly
+> 
+> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
 > ---
->  arch/arm64/boot/dts/qcom/lemans-evk.dts | 12 ++++++++++--
->  arch/arm64/boot/dts/qcom/lemans.dtsi    | 26 +++++++++++++++++++++++++
->  2 files changed, 36 insertions(+), 2 deletions(-)
+> Changes in v3:
+> - Removed multiple glymur-dwc3-mp pdata entries
+> - Replaced use of ternary operators with if-else
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/lemans-evk.dts b/arch/arm64/boot/dts/qcom/lemans-evk.dts
-> index c665db6a4595..96d316867c0e 100644
-> --- a/arch/arm64/boot/dts/qcom/lemans-evk.dts
-> +++ b/arch/arm64/boot/dts/qcom/lemans-evk.dts
-> @@ -55,7 +55,7 @@ port@0 {
->  				reg = <0>;
->  
->  				usb0_con_hs_ep: endpoint {
-> -					remote-endpoint = <&usb_0_dwc3_hs>;
-> +					remote-endpoint = <&eud_con>;
->  				};
->  			};
->  
-> @@ -510,6 +510,14 @@ queue3 {
->  	};
+> Link to v2:
+> https://lore.kernel.org/all/20260505194242.1947891-1-krishna.kurapati@oss.qualcomm.com/
+> 
+> Changes in v2:
+> - Updated commit message
+> - added supported eUSB2 targets
+> 
+> Link to v1:
+> https://lore.kernel.org/all/20260502095616.666938-1-krishna.kurapati@oss.qualcomm.com/
+> 
+> This patch was tested on Glymur.
+> 
+>  drivers/usb/dwc3/dwc3-qcom.c | 94 +++++++++++++++++++++++++++++++-----
+>  1 file changed, 83 insertions(+), 11 deletions(-)
+
+> @@ -838,8 +866,52 @@ static const struct dev_pm_ops dwc3_qcom_dev_pm_ops = {
+>  	.prepare = pm_sleep_ptr(dwc3_qcom_prepare),
 >  };
 >  
-> +&eud_ep {
-> +	remote-endpoint = <&usb_0_dwc3_hs>;
+> +static const struct dwc3_qcom_platform_data dwc3_qcom_glymur_pdata = {
+> +	.uses_eusb2_phy = true,
 > +};
+
+There is nothing _glymur_ in this pdata. Please name it accordingly.
+
 > +
-> +&eud_con {
-> +	remote-endpoint = <&usb0_con_hs_ep>;
-> +};
-> +
->  &gpi_dma0 {
->  	status = "okay";
+>  static const struct of_device_id dwc3_qcom_of_match[] = {
+> -	{ .compatible = "qcom,snps-dwc3" },
+> +	{ .compatible = "qcom,snps-dwc3", },
+> +	{
+> +		.compatible = "qcom,eliza-dwc3",
+> +		.data = &dwc3_qcom_glymur_pdata,
+> +	},
+> +	{
+> +		.compatible = "qcom,glymur-dwc3",
+> +		.data = &dwc3_qcom_glymur_pdata,
+> +	},
+> +	{
+> +		.compatible = "qcom,glymur-dwc3-mp",
+> +		.data = &dwc3_qcom_glymur_pdata,
+> +	},
+> +	{
+> +		.compatible = "qcom,kaanapali-dwc3",
+> +		.data = &dwc3_qcom_glymur_pdata,
+> +	},
+> +	{
+> +		.compatible = "qcom,milos-dwc3",
+> +		.data = &dwc3_qcom_glymur_pdata,
+> +	},
+> +	{
+> +		.compatible = "qcom,sm8550-dwc3",
+> +		.data = &dwc3_qcom_glymur_pdata,
+> +	},
+> +	{
+> +		.compatible = "qcom,sm8650-dwc3",
+> +		.data = &dwc3_qcom_glymur_pdata,
+> +	},
+> +	{
+> +		.compatible = "qcom,sm8750-dwc3",
+> +		.data = &dwc3_qcom_glymur_pdata,
+> +	},
+> +	{
+> +		.compatible = "qcom,x1e80100-dwc3",
+> +		.data = &dwc3_qcom_glymur_pdata,
+> +	},
+> +	{
+> +		.compatible = "qcom,x1e80100-dwc3-mp",
+> +		.data = &dwc3_qcom_glymur_pdata,
+
+This would result in the list of the platforms keeping on growing.
+Would you mind instead detecting eUSB2 by checking that HS PHY has its
+own phys property?
+
+> +	},
+>  	{ }
 >  };
-> @@ -985,7 +993,7 @@ &usb_0 {
->  };
->  
->  &usb_0_dwc3_hs {
-> -	remote-endpoint = <&usb0_con_hs_ep>;
-> +	remote-endpoint = <&eud_ep>;
->  };
->  
->  &usb_0_dwc3_ss {
-> diff --git a/arch/arm64/boot/dts/qcom/lemans.dtsi b/arch/arm64/boot/dts/qcom/lemans.dtsi
-> index fe6e76351823..a8ab11681476 100644
-> --- a/arch/arm64/boot/dts/qcom/lemans.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/lemans.dtsi
-> @@ -4003,6 +4003,32 @@ opp-384000000 {
->  			};
->  		};
->  
-> +		eud: eud@88e1000 {
-> +			compatible = "qcom,sc7280-eud", "qcom,eud";
-> +			reg = <0 0x88e1000 0 0x2000>,
-> +				<0 0x88e3000 0 0x1000>;
-> +			interrupts-extended = <&pdc 11 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +			port@0 {
-> +					reg = <0>;
-> +
-> +					eud_ep: endpoint {
-> +					};
-> +			};
-> +
-> +				port@1 {
-> +					reg = <1>;
-> +
-> +					eud_con: endpoint {
-> +					};
-> +				};
-> +			};
-> +		};
-> +
->  		usb_0_hsphy: phy@88e4000 {
->  			compatible = "qcom,sa8775p-usb-hs-phy",
->  				     "qcom,usb-snps-hs-5nm-phy";
+>  MODULE_DEVICE_TABLE(of, dwc3_qcom_of_match);
 > -- 
-> 2.43.0
+> 2.34.1
 > 
-> base-commit: https://lore.kernel.org/all/20260501170635.2641748-1-elson.serrao@oss.qualcomm.com/
-> change-id: Improve Qualcomm EUD driver and platform support
+
+-- 
+With best wishes
+Dmitry
 
