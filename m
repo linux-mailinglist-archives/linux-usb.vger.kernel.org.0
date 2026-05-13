@@ -1,314 +1,210 @@
-Return-Path: <linux-usb+bounces-37423-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37424-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AIFiNR/NBGrMPAIAu9opvQ
-	(envelope-from <linux-usb+bounces-37423-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 21:12:31 +0200
+	id 8D2wDZzOBGr0PQIAu9opvQ
+	(envelope-from <linux-usb+bounces-37424-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 21:18:52 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB71C539AE2
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 21:12:30 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE594539C98
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 21:18:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4287130BAB17
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 18:59:22 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C36BA309658A
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 19:13:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFE263A987B;
-	Wed, 13 May 2026 18:59:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 706CD3A75A0;
+	Wed, 13 May 2026 19:12:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K29sOSfe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tSEh8ebP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04603AE199;
-	Wed, 13 May 2026 18:59:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206793B1009;
+	Wed, 13 May 2026 19:12:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778698752; cv=none; b=VlNV9BCEYOOPLhTxXn/uf2zKRcx3kbJOkA82oS4sAo/cMYEJsTMdj5wmAAkCLdJE0xBbA7acpCH5OByPhhVSA+xjQDy8ein0uptougl8tgsY0sZUOEbP03GlzVwXUO8Lt/9nELuFh/sNUsC7/AXpq7lvGgKuiMGEdBE4MJp8tzE=
+	t=1778699571; cv=none; b=Ik00sltpuJN/T+5P+yjHvQvnLagvsJLQwPbrRQ8TNznLUC7Vitd09ygCfoRQLUK5+y2i8lrJh1+yjdN2/Th8uqaKbfCBuzMMK6Y+OJmfc46IynVA0N6wkgSvex1P7RONzuf0LVqw5lkBbmF4u8i4s8BaiyOgtBnTXeG20BMWgCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778698752; c=relaxed/simple;
-	bh=nYOAFJ6m3InYu9vrf4DY7DBLHH+oJwYni2pnsWr7goA=;
+	s=arc-20240116; t=1778699571; c=relaxed/simple;
+	bh=ByO3UDk1bD7UWyiAS+/7bd2l/UItToX1RFnexJVVuBY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BX9Ap97XoVWQzWdRKOAmbKVUPwkFoXLB/nM/5FS7ra0tVUhcUaCGufmFNqo1xoZINCMiH1hPHFCFz2+7D1EC99U+2JguhHaAogrJHbq+uhRhpCqIyfyXhuJI1WviX5ypik81JAAKiMCSyCgXyiE4QtVOynIddyaIdKAqnn2dUpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K29sOSfe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31567C2BCB7;
-	Wed, 13 May 2026 18:59:09 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=GaH0z1YG5oLL48P5XasSfDIPkKrHq/e4luNUMuq6ogu0KmiEOp48PZbCf/w0kqLN2euyBtyfwrR/2daGWnJLEHTkKXgCqqm4fmQsqLqJXLLkKp9vLtKqT1IYQfoyAu6MyrWh17ZfDiTN9D/eeZCXf887PjsuUMhxBAzhy2tjvvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tSEh8ebP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B321C19425;
+	Wed, 13 May 2026 19:12:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778698751;
-	bh=nYOAFJ6m3InYu9vrf4DY7DBLHH+oJwYni2pnsWr7goA=;
+	s=k20201202; t=1778699570;
+	bh=ByO3UDk1bD7UWyiAS+/7bd2l/UItToX1RFnexJVVuBY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=K29sOSfe1dYeyaqa0XwL9xnoPkBU29LFmbyFslrfC8dcczgDL7WMgsK0VYX0tbDwt
-	 yo49TfqL/lRY9alWyg2mOlg945mD3SUEEbviuUwPRd57tCBOBlR49R6POg1yq5F9v5
-	 Z4uCCE3PpEWFGL+a/TJ0P3+IGTvLEgrni6+rfuX7w0zVXv+ahPWVReHXN/LbaYXu9m
-	 H16E5UcZ/dygo8tRFfBFkXSoChsby9XRd7FKqoelOrQbttFNjVT1lKXcanyeyJyVN0
-	 nEU+J/IbOb+Qa5kICUMReohr4MvuvMhvhEG1lAyCArOBaBawV0eUUTwJHLd4XYrcsv
-	 I6wjQwRP/kLGQ==
-Date: Wed, 13 May 2026 19:59:06 +0100
-From: Conor Dooley <conor@kernel.org>
-To: pawell@cadence.com
-Cc: Peter Chen <peter.chen@kernel.org>, Roger Quadros <rogerq@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] dt-bindings: usb: cdns3: Add no_drd property
-Message-ID: <20260513-unhappily-thicken-e6350001c2a1@spud>
-References: <20260513-b4-no_drd_config-v6-0-e7789cd0e581@cadence.com>
- <20260513-b4-no_drd_config-v6-1-e7789cd0e581@cadence.com>
+	b=tSEh8ebPPoDvLCOivTGQDD8UQC5ue9skRt3JrfoTA0akFw3dOfbuxpHQCw7HA5Fqt
+	 lB4PhZNnZosJJVyIi32Oy47qxcdy6fjvmotJP6MPAGewetYNPlKleLjLOckHLNRBcj
+	 jB0gmJv0Aj/mvztLiYYFhsLICOmOyJWoOORpYDwaF1VHEDpZRBx9/QUpgU3YKle8Jd
+	 w8e9viTEtG4MmNMGzOOE6TM2Jhg2RuWfnhTV9HnnUQrMNcBBwav16nsRAz16SQA1fZ
+	 xC68DodgS3DpMu/oP9s9VSm5R4fThueU5fl5P4PLFX48E4gk7sSzuQUgqSIWeWlMKy
+	 5T4qGMwQexIXg==
+Date: Wed, 13 May 2026 14:12:46 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Akash Kumar <akash.kumar@oss.qualcomm.com>
+Cc: Elson Serrao <elson.serrao@oss.qualcomm.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: lemans: Enable eud support
+Message-ID: <agTMzwEX1Nw-dZht@baldur>
+References: <20260512091422.1395490-1-akash.kumar@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="uHLEYBqjqAlPheWS"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260513-b4-no_drd_config-v6-1-e7789cd0e581@cadence.com>
-X-Rspamd-Queue-Id: DB71C539AE2
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260512091422.1395490-1-akash.kumar@oss.qualcomm.com>
+X-Rspamd-Queue-Id: EE594539C98
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.26 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37423-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37424-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andersson@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,cadence.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.0:email,qualcomm.com:email,qualcomm.com:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,0.0.0.1:email,88e1000:email]
 X-Rspamd-Action: no action
 
+On Tue, May 12, 2026 at 02:39:26PM +0530, Akash Kumar wrote:
+> Add the EUD controller node in lemans.dtsi and update the USB HS
+> endpoint routing on lemans-evk to pass through EUD instead of linking
+> the connector directly to usb_0_dwc3_hs.
+> 
+> Wire the OF graph endpoints between the connector, EUD and DWC3 HS
+> controller to enable the EUD path on lemans EVK.
+> 
+> This change is part of series "Improve Qualcomm EUD driver and
+> platform support" and has been validated on the Qualcomm Dragonwing platform
+> (RB8 board), confirming successful OpenOCD connectivity to the EUD
+> interface. For detailed usage instructions, refer to Qualcomm’s Linux
+> kernel debugging guide:
+> https://docs.qualcomm.com/bundle/publicresource/topics/80-70020-12/debugging_linux_kernel.html#debug-using-openocd
+> 
+> Signed-off-by: Akash Kumar <akakum@qti.qualcomm.com>
 
---uHLEYBqjqAlPheWS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Is this based on the work by Elson at
+https://lore.kernel.org/all/20260501170635.2641748-1-elson.serrao@oss.qualcomm.com/#t
+?
 
-On Wed, May 13, 2026 at 01:44:19PM +0200, Pawel Laszczak via B4 Relay wrote:
-> From: Pawel Laszczak <pawell@cadence.com>
->=20
-> Introduce a new boolean property 'no_drd' for Cadence USBSS/USBSSP
-> controllers to support hardware configurations where the Dual-Role
-> Device (DRD) register block is missing or inaccessible.
->=20
-> When 'no_drd' is present:
-> - The 'otg' register and interrupt resources are not required.
-> - The 'reg' and 'interrupts' properties are restricted to 2 items
->   (host and device).
-> - 'dr_mode' must be explicitly set to either 'host' or 'peripheral'.
->=20
-> When 'no_drd' is absent, the binding maintains backward compatibility
-> by requiring all 3 resource sets (otg, host, dev).
->=20
-> To achieve this, the schema is updated with an if-then-else logic
-> and 'reg-names'/'interrupt-names' use enums to allow flexible
-> ordering during validation.
->=20
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+Help Elson to conclude (get merged) his efforts by code reviewing and
+adopting the improved bindings before reposting this.
+
+Regards,
+Bjorn
+
 > ---
-> v6:
-> - Fixed validation error for 'interrupt-names' by correcting
->   the items definition.
-> - Adjusted 'minItems'/'maxItems' to properly support the optional
->  'wakeup' interrupt.
-> - Fixed 'too long' schema error in examples.
->=20
-> v5:
-> - Implemented strict conditional validation using if-then-else logic.
-> - Enforced 2 register/interrupt items and required 'dr_mode'
->   (host or peripheral) when 'no_drd' is present.
-> - Enforced the standard 3 register/interrupt items (otg, host, dev)
->   when 'no_drd' is absent to ensure backward compatibility.
-> - Updated 'reg-names' and 'interrupt-names' to use enums in the main
->   properties section to support flexible resource ordering during
->   validation.
-> ---
-> ---
->  .../devicetree/bindings/usb/cdns,usb3.yaml         | 70 ++++++++++++++++=
-+++---
->  1 file changed, 61 insertions(+), 9 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Docum=
-entation/devicetree/bindings/usb/cdns,usb3.yaml
-> index 2d95fb7321af..717892a05dcd 100644
-> --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-> @@ -20,19 +20,21 @@ properties:
->      const: cdns,usb3
-> =20
->    reg:
-> +    minItems: 2
->      items:
->        - description: OTG controller registers
->        - description: XHCI Host controller registers
->        - description: DEVICE controller registers
-
-This is not accurate anymore, given you're allowing no otg registers for
-the no_drd case. Probably should have both items lists here, one for
-each configuration.
-
-> =20
->    reg-names:
-> +    minItems: 2
->      items:
-> -      - const: otg
-> -      - const: xhci
-> -      - const: dev
-> +      - enum: [ otg, xhci, dev ]
-> +      - enum: [ otg, xhci, dev ]
-> +      - enum: [ otg, xhci, dev ]
-
-If you delete the -, you can get away with only having one instance of
-the enum. You'd need to set maxItems: 3 though.
-
-> =20
->    interrupts:
-> -    minItems: 3
-> +    minItems: 2
->      items:
->        - description: XHCI host controller interrupt
->        - description: Device controller interrupt
-> @@ -41,12 +43,12 @@ properties:
->                       cleared by xhci core, this interrupt is optional
-> =20
->    interrupt-names:
-> -    minItems: 3
-> +    minItems: 2
->      items:
-> -      - const: host
-> -      - const: peripheral
-> -      - const: otg
-> -      - const: wakeup
-> +      - enum: [ host, peripheral, otg, wakeup ]
-> +      - enum: [ host, peripheral, otg, wakeup ]
-> +      - enum: [ host, peripheral, otg, wakeup ]
-> +      - enum: [ host, peripheral, otg, wakeup ]
-
-I don't understand this. otg and wakeup are the ones you're making
-optional, so this list could remain as it was?
-
-> =20
->    port:
->      $ref: /schemas/graph.yaml#/properties/port
-> @@ -79,6 +81,13 @@ properties:
->      description: Enable resetting of PHY if Rx fail is detected
->      type: boolean
-> =20
-> +  no_drd:
-
-On v1, I mistakenly thought this was a common property, but seems to not
-be. In that case, replace the _ with a - and add a vendor prefix.
-
-> +    description:
-> +      Indicates that the Dual-Role Device (DRD) register block is not
-> +      implemented or is inaccessible. In this case, the controller
-> +      must operate in a fixed peripheral or host mode.
-> +    type: boolean
+>  arch/arm64/boot/dts/qcom/lemans-evk.dts | 12 ++++++++++--
+>  arch/arm64/boot/dts/qcom/lemans.dtsi    | 26 +++++++++++++++++++++++++
+>  2 files changed, 36 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/lemans-evk.dts b/arch/arm64/boot/dts/qcom/lemans-evk.dts
+> index c665db6a4595..96d316867c0e 100644
+> --- a/arch/arm64/boot/dts/qcom/lemans-evk.dts
+> +++ b/arch/arm64/boot/dts/qcom/lemans-evk.dts
+> @@ -55,7 +55,7 @@ port@0 {
+>  				reg = <0>;
+>  
+>  				usb0_con_hs_ep: endpoint {
+> -					remote-endpoint = <&usb_0_dwc3_hs>;
+> +					remote-endpoint = <&eud_con>;
+>  				};
+>  			};
+>  
+> @@ -510,6 +510,14 @@ queue3 {
+>  	};
+>  };
+>  
+> +&eud_ep {
+> +	remote-endpoint = <&usb_0_dwc3_hs>;
+> +};
 > +
->  dependencies:
->    port: [ usb-role-switch ]
-> =20
-> @@ -93,6 +102,49 @@ allOf:
->    - $ref: usb-drd.yaml#
->    - $ref: usb-xhci.yaml#
-> =20
-> +  - if:
-
-> +      properties:
-> +        no_drd: true
-
-Drop this, it's not needed. "required: - no_drd" does it for you.
-
-> +      required:
-> +        - no_drd
-
-> +    then:
-> +      required:
-> +        - dr_mode
-
-And drop this too.
-
-pw-bot: changes-requested
-
-Thanks,
-Conor.
-
-> +      properties:
-> +        reg:
-> +          maxItems: 2
-> +        reg-names:
-> +          items:
-> +            - const: xhci
-> +            - const: dev
-> +        interrupts:
-> +          maxItems: 2
-> +        interrupt-names:
-> +          items:
-> +            - const: host
-> +            - const: peripheral
-> +        dr_mode:
-> +          enum: [host, peripheral]
-> +    else:
-> +      properties:
-> +        reg:
-> +          minItems: 3
-> +        reg-names:
-> +          items:
-> +            - const: otg
-> +            - const: xhci
-> +            - const: dev
-> +        interrupts:
-> +          minItems: 3
-> +          maxItems: 4
-> +        interrupt-names:
-> +          minItems: 3
-> +          items:
-> +            - const: host
-> +            - const: peripheral
-> +            - const: otg
-> +            - const: wakeup
+> +&eud_con {
+> +	remote-endpoint = <&usb0_con_hs_ep>;
+> +};
 > +
->  unevaluatedProperties: false
-> =20
->  examples:
->=20
-> --=20
+>  &gpi_dma0 {
+>  	status = "okay";
+>  };
+> @@ -985,7 +993,7 @@ &usb_0 {
+>  };
+>  
+>  &usb_0_dwc3_hs {
+> -	remote-endpoint = <&usb0_con_hs_ep>;
+> +	remote-endpoint = <&eud_ep>;
+>  };
+>  
+>  &usb_0_dwc3_ss {
+> diff --git a/arch/arm64/boot/dts/qcom/lemans.dtsi b/arch/arm64/boot/dts/qcom/lemans.dtsi
+> index fe6e76351823..a8ab11681476 100644
+> --- a/arch/arm64/boot/dts/qcom/lemans.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/lemans.dtsi
+> @@ -4003,6 +4003,32 @@ opp-384000000 {
+>  			};
+>  		};
+>  
+> +		eud: eud@88e1000 {
+> +			compatible = "qcom,sc7280-eud", "qcom,eud";
+> +			reg = <0 0x88e1000 0 0x2000>,
+> +				<0 0x88e3000 0 0x1000>;
+> +			interrupts-extended = <&pdc 11 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +			ports {
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +
+> +			port@0 {
+> +					reg = <0>;
+> +
+> +					eud_ep: endpoint {
+> +					};
+> +			};
+> +
+> +				port@1 {
+> +					reg = <1>;
+> +
+> +					eud_con: endpoint {
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+>  		usb_0_hsphy: phy@88e4000 {
+>  			compatible = "qcom,sa8775p-usb-hs-phy",
+>  				     "qcom,usb-snps-hs-5nm-phy";
+> -- 
 > 2.43.0
->=20
->=20
-
---uHLEYBqjqAlPheWS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCagTJ+gAKCRB4tDGHoIJi
-0nGHAP9q+K7T+MNaJelkERkLriDJbEXTgcSlo31BYB/QhVA4qgEA7IAzc2V4n7Lw
-zUUf2OFHPNboGyobpHA326vODixDqgY=
-=1z7/
------END PGP SIGNATURE-----
-
---uHLEYBqjqAlPheWS--
+> 
+> base-commit: https://lore.kernel.org/all/20260501170635.2641748-1-elson.serrao@oss.qualcomm.com/
+> change-id: Improve Qualcomm EUD driver and platform support
 
