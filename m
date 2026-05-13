@@ -1,131 +1,156 @@
-Return-Path: <linux-usb+bounces-37376-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37373-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CFz+BtxTBGp/HAIAu9opvQ
-	(envelope-from <linux-usb+bounces-37376-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 12:35:08 +0200
+	id T8ZoEkc8BGqsGAIAu9opvQ
+	(envelope-from <linux-usb+bounces-37373-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 10:54:31 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7B2C5315C5
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 12:35:07 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D2B352FFF9
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 10:54:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 10C48303618F
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 10:35:07 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 183D23047554
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 08:53:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B3303BAD96;
-	Wed, 13 May 2026 10:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="kSr94M6Y"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E79163E558E;
+	Wed, 13 May 2026 08:53:19 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11023082.outbound.protection.outlook.com [40.107.44.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A10387347;
-	Wed, 13 May 2026 10:35:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778668502; cv=none; b=bs+0ONbuAvgRK0PrVpSMsRLYnSVnoR0kKOODLyYkHOddaM0hPyZDmhLPndA5SdIxXKT9hu9ciAs4iZ7Y9eaSHw2wmAsHSDWEjnBLuuUOZezapsdqWj6J9n9q7m14rj/8nooSOU02RvlJHEzDS+E4yajLE81Y4QtdyI1+ce+L6V4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778668502; c=relaxed/simple;
-	bh=vJzmSQDI+kPOU4dG6WYjc2WqLxKtDKAaNkpx0gfXFr0=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mvGjo4PGXC7HTIVSZVQgloVXm2hkbxKD/cEWJ76XrYNp1sEzxPY3zgng5CPvmTpRuMgh5+cVDBniuhc9JDOT+cgvP0HldAsHPu6EO68SALXY2iQwHqMU2KceSHMJCUJcc3KRxMKumxiroPKsB4HNuPYOrMfc8oLTE9XJypzmLBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=kSr94M6Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBC07C2BCB7;
-	Wed, 13 May 2026 10:35:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1778668502;
-	bh=vJzmSQDI+kPOU4dG6WYjc2WqLxKtDKAaNkpx0gfXFr0=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=kSr94M6YamK9Oud9Jk2769IHML0qw4O1sgmSzCnAUKAOR/0Tu862ZhukHAPd/XAxf
-	 5IIOqt8BIyIvAXcsr8P0wtVNYVb5MdUkmnb0/LIBjVwoQTwiq9QChFM0+M9HfYwWyA
-	 zk4039LNrxInjph8+Z7BPJjfysXxXcQTtO5WbPCg=
-Date: Wed, 13 May 2026 10:48:59 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Johan Hovold <johan@kernel.org>,
-	Crescent Hsieh <crescentcy.hsieh@moxa.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 4/4] usb: serial: mxuport: add sysfs control for UART
- FIFO
-Message-ID: <2026051321-apply-charting-150e@gregkh>
-References: <20260324035041.352190-1-crescentcy.hsieh@moxa.com>
- <20260324035041.352190-5-crescentcy.hsieh@moxa.com>
- <afy2yeDTHiVFkPmy@hovoldconsulting.com>
- <agMO03V9xppAtWjf@moxa-ThinkCentre-M90t>
- <agQ0RRpE27ComUnV@hovoldconsulting.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB383E51F9
+	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 08:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.82
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778662399; cv=fail; b=ihv1st5L6vXDv6e+QuT0/21/Cybo6AlLHeM+b0oIr875xC3cTyYNdMwANUg52jl8PqMGIvp0n7w8+zEyisFA+otocAlGsLRJs3JbcBYcPBfNBZO5dLKp6p4Zh444LNipjFBMbSlaHClWzP5pYvV5c8rmIpx0wgOuPJ0EjaZgudo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778662399; c=relaxed/simple;
+	bh=iD1BkrtC3cPlcL47Ei6XyIUxtNe/Yel2CrK4PlInklA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VhwIRvh5VPRtOc5P3/pTPjWruqNPVbgpM4eWxeEhD8pRVro3SsdTFJ9/g7R0W4pTj+ANRWpq1ySHtcFBSTPFqXJEQwaeaOgFo8TvIVhWsTve55BjY2THiLNtsV4Y89xIfXW8pdsFyTE1wsUZhVaTA6ksfbbNOHSQVoagKdACdmQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com; spf=pass smtp.mailfrom=cixtech.com; arc=fail smtp.client-ip=40.107.44.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cixtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZI2rJr4r95+N8dCBY0LkzAoQT6yqFsrKJTAWiklaxs3e0P7d8Vq089Jiw4Okxb5VCOOZG52AvDwkIClLKu2jRFrj4gWGrSuiaBKf/ctYOxOn7F6h2xWgokmfsevQZ7S3JeKjkL5nrn1RnVDRwX62X1qseUpKGSem1sv7EE4/xRsWUrwW6nElw+Y/IgivvuP8/ziu30HDPEfeBnlw31BjnKajVWL+dPJZCs/myGZtesdSAccSENwLOZDygLWmqD71ABKKqWu38qIMZWf1XJKrlaw4Rgvno2a1qaeAOoEBBRgMULaH483jB0XdwAXaXzXqWBHgh4CAID4YXyxQQ8s3yA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I8U+3G+krjvEutGJGFMYINw08vy/WZaMRG+q9vWbY1w=;
+ b=QjzB3stWv7axjy2Hj8AssI7Z0DyN3MIXzPomokZfZz8lHokZqBqmV2jNG6fw7JqV759Lrp/GuLyIzkVT/SodrbJ+9i7IKZkrG6eXrJ9aEwiUhqdukz6aiAJCdi1oTtiqLYbAOFQuUZboCIy/83pRv7QNp2NBjuqdoVLupd3GXafIYmPGG90pn2W9o/Q01jXo/CWz2hLHxv8OTGsR+0kylj+qWmwvpYnTX29/cvsXR0ERxYbvLUSjPqL8bjAu/3AG6dh7tsAoXmBia3IhDRWu3WNjlpKfnNTvMWA/cLyqC6Gkz7sGH5USTuVtdZhHDNbm9KIX/TCKaL2ipxzUsWxsTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 222.71.101.198) smtp.rcpttodomain=cadence.com smtp.mailfrom=cixtech.com;
+ dmarc=bestguesspass action=none header.from=cixtech.com; dkim=none (message
+ not signed); arc=none (0)
+Received: from SG2PR01CA0182.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:189::20) by SI4PR06MB8946.apcprd06.prod.outlook.com
+ (2603:1096:4:2b2::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9913.11; Wed, 13 May
+ 2026 08:53:13 +0000
+Received: from SG2PEPF000B66CB.apcprd03.prod.outlook.com
+ (2603:1096:4:189:cafe::d0) by SG2PR01CA0182.outlook.office365.com
+ (2603:1096:4:189::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.25.17 via Frontend Transport; Wed, 13
+ May 2026 08:53:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 222.71.101.198)
+ smtp.mailfrom=cixtech.com; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none header.from=cixtech.com;
+Received-SPF: Pass (protection.outlook.com: domain of cixtech.com designates
+ 222.71.101.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=222.71.101.198; helo=smtprelay.cixcomputing.com; pr=C
+Received: from smtprelay.cixcomputing.com (222.71.101.198) by
+ SG2PEPF000B66CB.mail.protection.outlook.com (10.167.240.24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.25.13 via Frontend Transport; Wed, 13 May 2026 08:53:11 +0000
+Received: from nchen-desktop (unknown [172.16.64.25])
+	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id E0CD74126F80;
+	Wed, 13 May 2026 16:53:10 +0800 (CST)
+From: Peter Chen <peter.chen@cixtech.com>
+To: gregkh@linuxfoundation.org,
+	pawell@cadence.com,
+	rogerq@kernel.org
+Cc: linux-usb@vger.kernel.org,
+	Peter Chen <peter.chen@cixtech.com>
+Subject: [PATCH 0/2] usb: cdns3 fixes for usb-linus
+Date: Wed, 13 May 2026 16:53:08 +0800
+Message-ID: <20260513085310.2217547-1-peter.chen@cixtech.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <agQ0RRpE27ComUnV@hovoldconsulting.com>
-X-Rspamd-Queue-Id: B7B2C5315C5
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PEPF000B66CB:EE_|SI4PR06MB8946:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 7316df70-9c6a-4db2-500b-08deb0cd1036
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|376014|36860700016|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	FsViwMbcXW8qhPVuPLd1+BfekWpMZvMpCKU6AsH6IU9LtGxKY1o3N0G65qi6Ko+HqCWwKdJUrKdsawnpxM8IG58R1Vaw8mA3h5QM/43+Fb8PDuFJPWJtnfor8KSGtrvfC31C8MuIBcRA81LVEW+I95EWjBAjhfKVbT3sshpy+O02nC/scGcr0GjwTFqsPbtozqZFxqMU9AhBBWJRVHEsc9o9E+8lk8ChDs2x6kSmDRaNjqMEa6GveBsz6IrY5WJ7GwPrGjkFszExtVuJl9iFtWkSd26gS8eIGUyhPjNC2Jw5sFS8nw9B/tS4sulWusUW1PtvoiPhSOa8bifDyoHIeMHdJgrFjLp9qX17xIxfTQgQnyhqBzpSVbmtu/JQ92L233pmeRPHc4YKA5Zm2TJn7EveNc2lcGnn2Vw7r5kHGkldZ52Y0V/KShdtOOmvz1b+90hcrPchV5gpPINgiAQX9xznyae43+5964PLFvgjay/F8BPDETvXLz6yGSjEm3S5AGI7geNkbs15bfDLQgmQ7fT/BjqIQB7VjfVSJrkpAZcLmEb6Cr63YFzVk0CABGld2xQmbD9TAbIiQNgSCt44qz6c2FkKkgw/s3rrkrrQ2mbWv/FNVW9lbhRN2OlHJXSGV3m1K41IZF72vecZPb6Ck0o5R5LN5bitbb0rChuDEHqE1s/ApWwWp+bDqpimwg+PsSLFKcvC2oaeT7ZrA5UdZz+X4XZJaIc7AXGAPQ66zzA=
+X-Forefront-Antispam-Report:
+	CIP:222.71.101.198;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtprelay.cixcomputing.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(36860700016)(18002099003)(56012099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	NCp6cnlez4Hzcon6jgeC09geBgQ1vxnzlJdOdMXQz6Cp8/7F43ypdRScA5vqcBjeWQSGYBJvSrCc5rfZb707Yag3Irncfnj5XbOGZWD21YtxnundWEu0tVh0AYoc+Q//ZfzMet4R0bUcXDaUATEUhT4Qh+9QpziTKbczBZ8cFo/TJcSRYMxg9HMCgI+BBwOhC2uzIukY+dWZRLqoZFCTRhpfsm1LTF2VhFirLkNTpxkCrPWRrmBzcrKUZtaT8KY6HC9ktynqa0oyUrfLWu+Yf6kVgoUIkQ0u7bfuI4piLN8cKN59urzWogbU/3vW/Ts1B9wgSBwKgC/gJwaeakl92vlthILJanrnAKFpn2FMv59Rpo+JdHRyv1NrWj59MyZC1bGwBfenc9aoLdlEcbOOQ9APtVekQQje9HbgwtjDjbiVywDfhuqDCOFrOz6Susaw
+X-OriginatorOrg: cixtech.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2026 08:53:11.6019
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7316df70-9c6a-4db2-500b-08deb0cd1036
+X-MS-Exchange-CrossTenant-Id: 0409f77a-e53d-4d23-943e-ccade7cb4811
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0409f77a-e53d-4d23-943e-ccade7cb4811;Ip=[222.71.101.198];Helo=[smtprelay.cixcomputing.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SG2PEPF000B66CB.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI4PR06MB8946
+X-Rspamd-Queue-Id: 3D2B352FFF9
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+X-Spamd-Result: default: False [2.04 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37376-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	NEURAL_HAM(-0.00)[-0.993];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	DMARC_NA(0.00)[cixtech.com];
+	TAGGED_FROM(0.00)[bounces-37373-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[peter.chen@cixtech.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[7];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.978];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On Wed, May 13, 2026 at 10:20:21AM +0200, Johan Hovold wrote:
-> On Tue, May 12, 2026 at 07:28:19PM +0800, Crescent Hsieh wrote:
-> > On Thu, May 07, 2026 at 05:59:05PM +0200, Johan Hovold wrote:
-> > > On Tue, Mar 24, 2026 at 11:50:41AM +0800, Crescent Hsieh wrote:
-> > > > Add a per-port sysfs attribute, uart_fifo, to allow userspace to enable
-> > > > or disable the UART FIFO at runtime.
-> > > 
-> > > Why would you want to do that?
-> > > 
-> > > We should try to avoid driver specific sysfs knobs.
-> > 
-> > The motivation is to allow userspace to choose between lower latency and
-> > higher throughput at runtime. Some latency-sensitive request/response
-> > deployments become unreliable if the UART FIFO is enabled due to the
-> > added buffering delay.
-> 
-> Please mention this in the commit message.
+Two fixes reported by sashiko-bot@kernel.org.
 
-Wait, no one should EVER be relying on USB for latency-sensitive
-situations.  USB does not guarantee this at all, and if you put a uart
-in the way, like you are doing here, that just makes it even worse and
-even more non-determinisitic.
+Peter Chen (2):
+  usb: cdns3: plat: fix leaked usb2_phy initialization on usb3_phy
+    acquisition failure
+  usb: cdns3: plat: fix unbalanced pm_runtime_forbid() call permanently
+    leaks the runtime PM usage counter across bind/unbind cycles
 
-Please don't think that this is even a viable solution, it is not.  And
-no papering over it in the kernel will ever give you the requirements
-that you need, so please do not do this.
+ drivers/usb/cdns3/cdns3-plat.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-Just use a "real" uart on a PCI bus if you expect anything close to
-determinism.
+-- 
+2.50.1
 
-thanks,
-
-greg k-h
 
