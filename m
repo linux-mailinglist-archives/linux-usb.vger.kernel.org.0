@@ -1,89 +1,57 @@
-Return-Path: <linux-usb+bounces-37358-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37359-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UOPnJUTkA2oRAAIAu9opvQ
-	(envelope-from <linux-usb+bounces-37358-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 04:39:00 +0200
+	id +AoLBlfrA2qzAQIAu9opvQ
+	(envelope-from <linux-usb+bounces-37359-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 05:09:11 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2F1F52C4A9
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 04:38:59 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 875B952CA3E
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 05:09:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D85A33038A57
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 02:38:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0E976302B764
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2026 03:08:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D1FD38F931;
-	Wed, 13 May 2026 02:38:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0285B391E7C;
+	Wed, 13 May 2026 03:08:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oes.ch header.i=@oes.ch header.b="oKNVEwJu"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Ku93MUa3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAEB138E8A8
-	for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 02:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9129338887F;
+	Wed, 13 May 2026 03:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778639913; cv=none; b=mT2Cuxlb2ozrxZyOhl61AkR1IQgf3NELdHctuiQZd9Krqiw7D+rRUd8dC1OZHAKBTFfxzG2XILMA5FJ/b47+NYl9Z7G5N0NvN3+SiXxmnSh6dKdX26typMeXlA+57chh/9XspL6KPY7lCkqkkdCnEOk8Kr+O5+Yuepxa4R6whTM=
+	t=1778641703; cv=none; b=BRt4a9Dy4dilziDeiFNUuxuUPi3bokY4L21W7HBG8uQz6cAkIkjWbS75vLeS09RezcEPdlWAC9+NnPRAzftlzMVEZX2bv6rOnk6VHP2vVH3kN/Py/giX7xyo6YaSoFsTUQMBTiEm4xmTfmCiWv2gPRKt6iuNTqPKxu0gCE7jN7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778639913; c=relaxed/simple;
-	bh=PACgyRDHY8+p2IqJDyyFDxhAY/5G5muP957NySbjyv0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X02T51iRUrwMfP6+Ig6OF0F9Or5gnoyGhXQJJ2a9NKk+oyHj81bdBBaPdlnbbjXTp233XXhidX6VbkKuQ6f1eifBGDyxBiNz11E8cJ8SymiEd2Wkor+RC2XsrN/kEeL4pDWTQmuA2GTh45LGkRhWyFgOsiFTeVMzJg9K+3DLsLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oes.ch; spf=pass smtp.mailfrom=oes.ch; dkim=pass (2048-bit key) header.d=oes.ch header.i=@oes.ch header.b=oKNVEwJu; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oes.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oes.ch
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-36523acb0c1so4436010a91.0
-        for <linux-usb@vger.kernel.org>; Tue, 12 May 2026 19:38:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oes.ch; s=google; t=1778639908; x=1779244708; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=s+qUGTPmf2JaFyRhBX/Sm1elkBeMqWvLUvWhaNkiQMI=;
-        b=oKNVEwJuWxGwagbCrak1VETVFdM/Bgga6DS+UDdwiJ7+3yR6YQ0ft0108g38riG8oF
-         J6hkkt69AyAm5SdRcJIF6xaRdgqMiub9+8HD2Po2OiWA6XMSNgXKxRbnlZqIYX1pkexu
-         B6vjnQ8sdkTIfzI11bNg1EAE8ujjyb/A3/GeCCcuwt6dj8dS2KSv7bM7CCV9cDwijX9M
-         KVsvONLgkVQHBXHpH6/+2SM4a3EneSuXIyWrOOXMyrCCOJTtfuMcitXcgrTSZmTZkXTt
-         i7e5zAhmgY/VznhGSo02Pl7leI+9QbwsAx2zWtnwcppOGlgR1qD4eGvenRATaVLCQL+U
-         VmwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778639908; x=1779244708;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s+qUGTPmf2JaFyRhBX/Sm1elkBeMqWvLUvWhaNkiQMI=;
-        b=NdkWpX2ovbcgj5PiHUltEYzWEAZkcz+kWHuAJpfE8fiem+Pe4C79ZyX8xHMDwCEE76
-         lgvoT+zkHshIyhgsWW/phpuPtr9GCw/TqEfHRcKDxXFdccetPaGRycem+D/JEdab5f9H
-         13nYDUQNtn8eS8QKGFovBGptuOU6BcgcIb6Sqv/AuQqT1ozs58ic7Jt+wgeEBdxWAqYg
-         wjMyDsvWPEN/SAqdhQEsBNqECNBjVGVmJYlUXC1FAcgPrB0+RfDmxkyz0HMwPC6CAyHU
-         WSQkY7yeFMneO2Lc06+w+VancRDgJd1mQdMvQo6EyCcPZlGWCb16e7gkiGOPTENADYjv
-         cMMQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8f/2jofgnMnb1cBopiuNYtnfiWaiuNF9SlYsSHBz+gas4jAmRsSCGB4BbdkFlBMRjm5/88lsGC4SA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBqjsb/CSVD3xGFUVp9Cj3lRr/sBTbQZWGiuwBvK/BELTuW85I
-	BzvOtZvTez7MApFQ2YM2NhO5WosBT/Wib0FjsBE9DmA44MUyZpsz4WfFEjhObTYEXw==
-X-Gm-Gg: Acq92OG1FvMtbtfMGQA6GDPYhxkNOZ24lZtfzedmvcwP6cTC0rbzrXBNFOkT+qp4n7h
-	PCZMgzJeINknLwNrfsB+866dXi0MmSPTvT1gmGDHch47mjcN980ae/1YJdqBqhpXGpJ4xrJeujA
-	oYis1je8uKcTFHi68cQOUjOHVGCoyJLhKURbqjHvSb8MzOTmEvEcfRvOWYOcs4kINexpBG7/tKO
-	Gn3W/QE/XTYzPBsvT5aQBL5Q6XZLUhI98JXKAnYazekQz5i4sH3EtJHJZVwFXtU4OmhoB1U8+hF
-	lTt6ePaYDE1cZMukp5M47jSTBqkR3ysdRKNNTp3geTqmTusIZznbdKhDr7xajqTTBX7cw0bkAF5
-	feN3WfEspyau/BARYIqaF3b5E01T3Ggx5JLTI77Kcx0d7S8L41WjTRBoSoA+XtU9sYUTyJdHvxH
-	O2A2wJuc+xPu3WyTif1QNUL+LsPEdwVvBprXBJpfwHlBrrD4gLa7/wK6uepr4WQdOQv6pt+JltA
-	U+vebfJjcN0rafCFWTeu+iKts0eLE90VMDVXSFAmH5U8Q+gOt+4wjk=
-X-Received: by 2002:a17:903:4b03:b0:2ba:99a2:c44e with SMTP id d9443c01a7336-2bd275c6b33mr14897575ad.21.1778639908456;
-        Tue, 12 May 2026 19:38:28 -0700 (PDT)
-Received: from cosinus.tail5d817.ts.net ([118.148.153.235])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bc83101ee1sm116597975ad.79.2026.05.12.19.38.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2026 19:38:27 -0700 (PDT)
-From: Julian Oes <julian@oes.ch>
-To: johan@kernel.org
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
+	s=arc-20240116; t=1778641703; c=relaxed/simple;
+	bh=7VwUSmB+AA49bviSEp9f5sFDDLJ61LTUCnfWPu5R7L0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=W7bhZumeWCWfbBM7IqEYUPB0V4ZRrUyHhyX/eY9p9RDPnDK9XoOT5wsRy5wanslBKtmATaQdGOa8Q5oi0s06Meak00bjxmsVVcVHGykNWuGFUfQqr1JOOSYjS//7wgjXHYp9IjATiB4RYA/I8Aq4QfDWebAaLHoLMqX0KOHpbE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Ku93MUa3; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=6f
+	xVvdmEOqU7RCN1i1l4tcMr9JSD9f0W5y4aKvRNp3g=; b=Ku93MUa3yicTs5ETmM
+	KklaODA7d7mB7yrKjFaYXVK6/kREETt32DNOsvJBfUXPgGPT+r6bjeLA3U1Y/LkZ
+	JwjJFmkZWjQhQd0OoguFftMCYhq9WuAv8C1u2sUESOprCX/inlOlgUusPbrbmk1M
+	J7/AlxkidjSbVZ0XPlTTPJdjY=
+Received: from GHT-5854251031.localdomain (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgA3Zhr86gNq6GNGEQ--.28180S2;
+	Wed, 13 May 2026 11:07:41 +0800 (CST)
+From: zwq2226404116@163.com
+To: johan@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Julian Oes <julian@oes.ch>
-Subject: [PATCH] USB: serial: generic: recover from bulk-in endpoint stall
-Date: Wed, 13 May 2026 14:37:28 +1200
-Message-ID: <20260513023728.55557-1-julian@oes.ch>
+	zwq2226404116@163.com,
+	Wanquan Zhong <wanquan.zhong@fibocom.com>
+Subject: [PATCH] USB: serial: option: add missing RSVD(5) flag for Rolling RW135R-GL
+Date: Wed, 13 May 2026 11:07:37 +0800
+Message-ID: <20260513030737.391775-1-zwq2226404116@163.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -92,152 +60,157 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: F2F1F52C4A9
+X-CM-TRANSID:PSgvCgA3Zhr86gNq6GNGEQ--.28180S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Jw4xuFWfCw45Ar4ktF4fKrg_yoW7ur4rpF
+	4rJaySvrykXFy0qFnxCr1fZFWFgas29r17A3ZrZw4SqFZayrs7Kr1UArySgFnF9r4Fkr4q
+	qayDK3y8Ka4kJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRfM3iUUUUU=
+X-CM-SenderInfo: h2ztjjaswuikqrrwqiywtou0bp/xtbC8x1VrGoD6v2ijgAA3F
+X-Rspamd-Queue-Id: 875B952CA3E
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[oes.ch,quarantine];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[oes.ch:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[163.com,none];
+	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37358-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_FROM(0.00)[bounces-37359-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[163.com];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[julian@oes.ch,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[vger.kernel.org,163.com,fibocom.com];
+	DKIM_TRACE(0.00)[163.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[zwq2226404116@163.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_FIVE(0.00)[6];
 	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[oes.ch:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oes.ch:email,oes.ch:mid,oes.ch:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,j5create.com:url]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NO_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,fibocom.com:email]
 X-Rspamd-Action: no action
 
-A USB-serial device can go permanently silent when its bulk-in
-endpoint gets stalled (-EPIPE).
+From: Wanquan Zhong <wanquan.zhong@fibocom.com>
 
-In my case, disconnecting a CDC ACM device causes my USB hub to stall
-the bulk-in endpoint of an FTDI adapter on a sibling port: the FTDI's
-bulk-in URB completes with -EPIPE and no further data arrives.
-Recovery requires userspace to close and reopen the tty.
+The RW135R-GL MBIM interface entry added in commit before was missing
+the .driver_info = RSVD(5) flag.
 
-usb_serial_generic_read_bulk_callback() treats -EPIPE as fatal and
-abandons the URB. My assumption is that for a halted bulk endpoint,
-recovery is CLEAR_FEATURE(ENDPOINT_HALT) followed by resubmission.
+Without this flag, the option driver binds to the MBIM interface
+and conflicts with the cdc_mbim driver, causing AT/MBIM communication
+failures after switching to 43 mode. This matches the handling of
+other Rolling Wireless MBIM devices.
 
-The fix follows the pattern used in cdc-acm: On -EPIPE, defer recovery
-to the existing per-port work, which clears the endpoint halt and
-resubmits the read URBs.
+  - VID:PID 33f8:1003, RW135R-GL for laptop debug M.2 cards(with MBIM
+interface for /Linux/Chrome OS)
+0x1003: mbim, diag, AT, pipe
+Here are the outputs of usb-devices in different mode:
+T:  Bus=03 Lev=01 Prnt=01 Port=04 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=33f8 ProdID=1003 Rev= 5.15
+S:  Manufacturer=Rolling Wireless S.a.r.l.
+S:  Product=Rolling RW135R-GL Module
+S:  SerialNumber=12345678
+C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-With this patch, data from the FTDI adapter keeps arriving after the
-unrelated CDC ACM device is unplugged.
+- VID:PID 33f8:1003, RW135R-GL for laptop debug M.2 cards(with MBIM
+interface for /Linux/Chrome OS)
+0x1003: mbim, diag, AT, ADB, pipe
+Here are the outputs of usb-devices:
+T:  Bus=03 Lev=01 Prnt=01 Port=04 Cnt=02 Dev#=  7 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=33f8 ProdID=1003 Rev= 5.15
+S:  Manufacturer=Rolling Wireless S.a.r.l.
+S:  Product=Rolling RW135R-GL Module
+S:  SerialNumber=12345678
+C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms:
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Fixes: fc11efe2800f ("USB: serial: continue to read on errors")
-Signed-off-by: Julian Oes <julian@oes.ch>
-Tested-by: Julian Oes <julian@oes.ch>
+- VID:PID 33f8:1003, RW135R-GL for laptop debug M.2 cards(with MBIM
+interface for /Linux/Chrome OS)
+0x1003: mbim, pipe
+Here are the outputs of usb-devices:
+T:  Bus=03 Lev=01 Prnt=01 Port=04 Cnt=02 Dev#=  9 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=33f8 ProdID=1003 Rev= 5.15
+S:  Manufacturer=Rolling Wireless S.a.r.l.
+S:  Product=Rolling RW135R-GL Module
+S:  SerialNumber=12345678
+C:* #Ifs= 3 Cfg#= 1 Atr=a0 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
+Fixes: 01e8d0f74222 ("usb: serial: add support for Rolling Wireless RW135R-GL (33f8:1003)")
+Signed-off-by: Wanquan Zhong <wanquan.zhong@fibocom.com>
 ---
+ drivers/usb/serial/option.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Reproducer hardware:
-- CDC ACM device: PX4 Pixhawk 6X (NuttX, 3185:0035)
-- FTDI device: SiK telemetry radio (FTDI FT231X, 0403:6015)
-- Hub: j5create JUH377 7-port hub.
-       https://info.j5create.com/products/juh377
-
-Tested on Linux 7.1-rc3 on Linux Mint 22.3 x86_64.
-
-Debugging and patch authoring were assisted by AI.
-
-usbmon traces of broken and fixed behaviour available on request.
----
- drivers/usb/serial/generic.c    | 12 ++++++++----
- drivers/usb/serial/usb-serial.c | 13 +++++++++++++
- include/linux/usb/serial.h      |  1 +
- 3 files changed, 22 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/serial/generic.c b/drivers/usb/serial/generic.c
-index 757f0a586ddb..7f58ea55507b 100644
---- a/drivers/usb/serial/generic.c
-+++ b/drivers/usb/serial/generic.c
-@@ -371,6 +371,7 @@ void usb_serial_generic_read_bulk_callback(struct urb *urb)
- 	struct usb_serial_port *port = urb->context;
- 	unsigned char *data = urb->transfer_buffer;
- 	bool stopped = false;
-+	bool stalled = false;
- 	int status = urb->status;
- 	int i;
- 
-@@ -395,9 +396,10 @@ void usb_serial_generic_read_bulk_callback(struct urb *urb)
- 		stopped = true;
- 		break;
- 	case -EPIPE:
--		dev_err(&port->dev, "%s - urb stopped: %d\n",
--							__func__, status);
--		stopped = true;
-+		dev_err(&port->dev, "%s - urb stalled: %d\n",
-+			__func__, status);
-+		set_bit(USB_SERIAL_RX_STALLED, &port->flags);
-+		stalled = true;
- 		break;
- 	default:
- 		dev_dbg(&port->dev, "%s - nonzero urb status: %d\n",
-@@ -420,7 +422,9 @@ void usb_serial_generic_read_bulk_callback(struct urb *urb)
- 	 */
- 	smp_mb__after_atomic();
- 
--	if (stopped)
-+	if (stalled)
-+		schedule_work(&port->work);
-+	if (stopped || stalled)
- 		return;
- 
- 	if (test_bit(USB_SERIAL_THROTTLED, &port->flags))
-diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
-index 0e072fd87c3d..383ff1d2fc35 100644
---- a/drivers/usb/serial/usb-serial.c
-+++ b/drivers/usb/serial/usb-serial.c
-@@ -629,6 +629,19 @@ static void usb_serial_port_work(struct work_struct *work)
- 	struct usb_serial_port *port =
- 		container_of(work, struct usb_serial_port, work);
- 
-+	if (test_and_clear_bit(USB_SERIAL_RX_STALLED, &port->flags)) {
-+		int i;
-+
-+		for (i = 0; i < ARRAY_SIZE(port->read_urbs); ++i)
-+			usb_kill_urb(port->read_urbs[i]);
-+
-+		usb_clear_halt(port->serial->dev,
-+			       usb_rcvbulkpipe(port->serial->dev,
-+					       port->bulk_in_endpointAddress));
-+
-+		usb_serial_generic_submit_read_urbs(port, GFP_KERNEL);
-+	}
-+
- 	tty_port_tty_wakeup(&port->port);
- }
- 
-diff --git a/include/linux/usb/serial.h b/include/linux/usb/serial.h
-index 75b2b763f1ba..64dadb2cb7ea 100644
---- a/include/linux/usb/serial.h
-+++ b/include/linux/usb/serial.h
-@@ -20,6 +20,7 @@
- /* USB serial flags */
- #define USB_SERIAL_WRITE_BUSY	0
- #define USB_SERIAL_THROTTLED	1
-+#define USB_SERIAL_RX_STALLED	2
- 
- /**
-  * usb_serial_port: structure for the specific ports of a device.
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index c71461893d20..dfec7467b36c 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2466,7 +2466,8 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x0302, 0xff) },			/* Rolling RW101R-GL (laptop MBIM) */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x0802, 0xff),			/* Rolling RW350-GL (laptop MBIM) */
+ 	  .driver_info = RSVD(5) },
+-	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x1003, 0xff) },			/* Rolling RW135R-GL (laptop MBIM) */
++	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x1003, 0xff),			/* Rolling RW135R-GL (laptop MBIM) */
++	  .driver_info = RSVD(5) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x3731, 0x0100, 0xff, 0xff, 0x30) },	/* NetPrisma LCUK54-WWD for Global */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x3731, 0x0100, 0xff, 0x00, 0x40) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x3731, 0x0100, 0xff, 0xff, 0x40) },
 -- 
 2.43.0
 
