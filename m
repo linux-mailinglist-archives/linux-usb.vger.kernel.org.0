@@ -1,201 +1,364 @@
-Return-Path: <linux-usb+bounces-37436-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37437-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yEuTDVU4BWq6TQIAu9opvQ
-	(envelope-from <linux-usb+bounces-37436-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2026 04:49:57 +0200
+	id gJPPKzJBBWpDTwIAu9opvQ
+	(envelope-from <linux-usb+bounces-37437-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2026 05:27:46 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1D5053D2B4
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2026 04:49:56 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD37D53D517
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2026 05:27:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 76AAE3054A17
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2026 02:49:36 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B44AD301CF79
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2026 03:27:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BDDB30E834;
-	Thu, 14 May 2026 02:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n2ce3ciL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A70936728C;
+	Thu, 14 May 2026 03:27:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f80.google.com (mail-oo1-f80.google.com [209.85.161.80])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1363224CEEA;
-	Thu, 14 May 2026 02:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB273655E3
+	for <linux-usb@vger.kernel.org>; Thu, 14 May 2026 03:27:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778726970; cv=none; b=pDTCVMmhf90QtYBT9wRgNN2ZYmRGJfqpZiL42u6908PDOXYdKGKY/VADlpndb9Wdw1go24ZEvekMN1UtAtfkqijYU+9V1TLirhugeJAq+Df3LwAA0z3hpotT8DMuHWDq74iMXUaqiKH2B+UDnVvg6oaaIwt5pd8ROKS6h4ez6eM=
+	t=1778729257; cv=none; b=VgsiRzkXYeHn1kyob4XsJ9OyhRn81P/0QNjXfq/lOs0bKvc2KD4ElkP+jvNMHvjBupcyBqgwEjUEDPa20ykLTdRTD44E3auCyyfEKZ2QYXXHKJbKFTGHZ19vjcpQ8AmIPwhJuIZPGaBKTijxpQqK1snMV6B2F0Iah2OsovSpkGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778726970; c=relaxed/simple;
-	bh=k0CIKpkiwdLSwTL1nBN8SsHdbHwx+9+NbeMDdU3KkdI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z+Tq3Q5DYdovUjP5DF8HZzGWlY22bs+8taHhbIrQQBIR/f+tAijuok1CsJeOg1QotR+j2Y/z559+KBiMFmXB0ro+TeIrtDlw3NI56p6IIPCJJGsVCMl0dV8YqKiTKerZOGODHHgg3Zo959NHU0mbdXc3gXiXstggBiIBDPQtiIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n2ce3ciL; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778726968; x=1810262968;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=k0CIKpkiwdLSwTL1nBN8SsHdbHwx+9+NbeMDdU3KkdI=;
-  b=n2ce3ciLeYbzvE85iMzAMTekCtXQ1gEa0UVG/pmIwI3jBfdkU0GDUwMQ
-   /Etkt7drKsEQ9VGyBJ1is9lvubG4GvLYoIQWjOd4KVC6UGcccn7eMKvp0
-   lDmJrDqllOxL9oNlHnQ2VzhrwY/7ATbNeMIF2fQ16W1fUBDWmIZQcNqWZ
-   sKEMJkq0kvAXO6CgpxrXVyVaOfi2ZzYjts6E+KJAAXH8nIaWpcNGRWy5V
-   Ki13cw+lebPpHregISRLHzVy7u632uhVoYea8FH/J9Z2zSpAFcJS9i22W
-   Z95N3cc49UnBSsoI/s56UXEYcBQ0kJntMe6+fCvEdIBYahQMbg8/+3Qcy
-   Q==;
-X-CSE-ConnectionGUID: 9ew85r9zTcGPlgwqNRHC4A==
-X-CSE-MsgGUID: 6Grbjm4KSfqhuIpzhjIgBw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11785"; a="79618299"
-X-IronPort-AV: E=Sophos;i="6.23,233,1770624000"; 
-   d="scan'208";a="79618299"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 19:49:26 -0700
-X-CSE-ConnectionGUID: ZIrULUKFR32/EfWmCtls1g==
-X-CSE-MsgGUID: g4dK7gGxTcuz6mDdjIL7Mw==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 13 May 2026 19:49:23 -0700
-Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wNM8X-000000005hP-08s4;
-	Thu, 14 May 2026 02:49:21 +0000
-Date: Thu, 14 May 2026 10:48:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pawel Laszczak via B4 Relay <devnull+pawell.cadence.com@kernel.org>,
-	Peter Chen <peter.chen@kernel.org>,
-	Roger Quadros <rogerq@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bjorn Helgaas <helgaas@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, Pawel Laszczak <pawell@cadence.com>
-Subject: Re: [PATCH v3] usb: cdnsp: Add support for device-only configuration
-Message-ID: <202605141023.18vWXyw3-lkp@intel.com>
-References: <20260508-no_drd_config-v3-1-0614f5044721@cadence.com>
+	s=arc-20240116; t=1778729257; c=relaxed/simple;
+	bh=Q2BLEVAwWwvI7PKfd9z8YohFBpkOnRtTMrpJyqdzFc8=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=glJ1OwLgOHF+sB0VWfYfmKIMzm4X+HAsblb6m5+XngHthdG37I1Ftg9XWPMihrMmJcwwDh20UJW8y9SycVJhjEo0BqgVBCNMdo60RsNM1PDpUTMb1bFP/ZQGlNdehiE95BM4h5i7/5JRcYN8QLBjM/sdM/hfk2QY30MN3MMwXUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f80.google.com with SMTP id 006d021491bc7-69b4c167215so9116837eaf.0
+        for <linux-usb@vger.kernel.org>; Wed, 13 May 2026 20:27:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778729254; x=1779334054;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZRKMTH/KHD+rN/uhANp7BHRw5GIC3a2QWqwTKhX7er0=;
+        b=ZZVRpgntBRjtiIAvRcxI4qS/AW0npzShR9nRpacEc/JTcwsK+6ZYmosVdt20otMPL4
+         cY3KnIitO8XN4VbNsXzRt5s0lyf1fwSJ7OL9jDeLZ4Vr2n+iD0NP+rR5fyTB18wjQyxE
+         7TXh5/YKswLe4GEKfuT3mZaTn/aZBUHDdyu28lBXuQaCe0fB2mdEvE8STKiYq7GI3o7T
+         zp2TPO0vOt2AoyOS2zJ9GWOS/2Kk3DQf0TYnG7y38Fp6I0bW/efNzk9/uFjFzLa+vwVV
+         3f3lH4v+q7g1GGIZ7T2jsoQxJOCLYr7UqufPJmT4xJsbHiwKds+I4OVeocRKWYkicRkn
+         1bHQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+LtBeBIlCEhpThIr2aDeZiiPfPttX059UNZUVxzJ/FQpRk6ulepv9/F9lUimtHSQWsVMLTRbZzPc0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMGSXIjn9v+DJBH8hqWvACb+dDxb2G3ke84gbz+ZR4X73dozlH
+	ncSxN212+J4O45Al/E3gi8tmXBkLtpHFEmSUxIfZqR/q0FjEcrKmXfhTPHfcXq0uC2yW0mmpMAh
+	SmfL1Oh9EmbnAgY7YnIWq3/EB7mcXe6kM2d58Rq0/Itt+0xspxbMgIZ+yNVQ=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260508-no_drd_config-v3-1-0614f5044721@cadence.com>
-X-Rspamd-Queue-Id: E1D5053D2B4
+X-Received: by 2002:a4a:d10e:0:b0:67e:e9c:63f0 with SMTP id
+ 006d021491bc7-69b8829ab9dmr884756eaf.25.1778729254355; Wed, 13 May 2026
+ 20:27:34 -0700 (PDT)
+Date: Wed, 13 May 2026 20:27:34 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6a054126.170a0220.9c1d9.0786.GAE@google.com>
+Subject: [syzbot] [ext4?] BUG: sleeping function called from invalid context
+ in mempool_alloc_noprof
+From: syzbot <syzbot+9fc0caf33cb36845f9b9@syzkaller.appspotmail.com>
+To: adilger.kernel@dilger.ca, jack@suse.cz, libaokun@linux.alibaba.com, 
+	linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, ojaswin@linux.ibm.com, ritesh.list@gmail.com, 
+	syzkaller-bugs@googlegroups.com, tytso@mit.edu, yi.zhang@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Rspamd-Queue-Id: AD37D53D517
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [1.14 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=afc495310dffaa7c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37436-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FREEMAIL_TO(0.00)[dilger.ca,suse.cz,linux.alibaba.com,vger.kernel.org,linux.ibm.com,gmail.com,googlegroups.com,mit.edu,huawei.com];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37437-lists,linux-usb=lfdr.de,9fc0caf33cb36845f9b9];
+	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[storage.googleapis.com:url,googlegroups.com:email,appspotmail.com:email];
+	REDIRECTOR_URL(0.00)[goo.gl];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,pawell.cadence.com];
+	TAGGED_RCPT(0.00)[linux-usb];
 	RCPT_COUNT_SEVEN(0.00)[11];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,01.org:url,intel.com:email,intel.com:mid,intel.com:dkim]
+	SUBJECT_HAS_QUESTION(0.00)[]
 X-Rspamd-Action: no action
 
-Hi Pawel,
+Hello,
 
-kernel test robot noticed the following build warnings:
+syzbot found the following issue on:
 
-[auto build test WARNING on 17c7841d09ee7d33557fd075562d9289b6018c90]
+HEAD commit:    25bd55f46032 usb: udc: pxa: remove unused platform_data
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=16e2ead2580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=afc495310dffaa7c
+dashboard link: https://syzkaller.appspot.com/bug?extid=9fc0caf33cb36845f9b9
+compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pawel-Laszczak-via-B4-Relay/usb-cdnsp-Add-support-for-device-only-configuration/20260513-191545
-base:   17c7841d09ee7d33557fd075562d9289b6018c90
-patch link:    https://lore.kernel.org/r/20260508-no_drd_config-v3-1-0614f5044721%40cadence.com
-patch subject: [PATCH v3] usb: cdnsp: Add support for device-only configuration
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260514/202605141023.18vWXyw3-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605141023.18vWXyw3-lkp@intel.com/reproduce)
+Unfortunately, I don't have any reproducer for this issue yet.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605141023.18vWXyw3-lkp@intel.com/
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/df4cd244b684/disk-25bd55f4.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/bccb34371b4c/vmlinux-25bd55f4.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d86b0bd5ea58/bzImage-25bd55f4.xz
 
-All warnings (new ones prefixed by >>):
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9fc0caf33cb36845f9b9@syzkaller.appspotmail.com
 
->> drivers/usb/cdns3/drd.c:187:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     187 |         if (cdns->no_drd)
-         |             ^~~~~~~~~~~~
-   drivers/usb/cdns3/drd.c:209:9: note: uninitialized use occurs here
-     209 |         return ret;
-         |                ^~~
-   drivers/usb/cdns3/drd.c:187:2: note: remove the 'if' if its condition is always false
-     187 |         if (cdns->no_drd)
-         |         ^~~~~~~~~~~~~~~~~
-     188 |                 goto phy_set;
-         |                 ~~~~~~~~~~~~
-   drivers/usb/cdns3/drd.c:185:9: note: initialize the variable 'ret' to silence this warning
-     185 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+BUG: sleeping function called from invalid context at ./include/linux/sched/mm.h:323
+in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 50, name: kworker/u8:4
+preempt_count: 0, expected: 0
+RCU nest depth: 1, expected: 0
+4 locks held by kworker/u8:4/50:
+ #0: ffff888100e9d140 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x12d6/0x1980 kernel/workqueue.c:3277
+ #1: ffffc90000537d18 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x973/0x1980 kernel/workqueue.c:3278
+ #2: ffff8881012bc0d8 (&type->s_umount_key#33){.+.+}-{4:4}, at: super_trylock_shared+0x1e/0xf0 fs/super.c:565
+ #3: ffffffff896de8e0 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:300 [inline]
+ #3: ffffffff896de8e0 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:838 [inline]
+ #3: ffffffff896de8e0 (rcu_read_lock){....}-{1:3}, at: unlocked_inode_to_wb_begin include/linux/backing-dev.h:290 [inline]
+ #3: ffffffff896de8e0 (rcu_read_lock){....}-{1:3}, at: folio_clear_dirty_for_io+0x1eb/0x7f0 mm/page-writeback.c:2919
+CPU: 0 UID: 0 PID: 50 Comm: kworker/u8:4 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026
+Workqueue: writeback wb_workfn (flush-8:0)
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x100/0x190 lib/dump_stack.c:120
+ __might_resched.cold+0x1ec/0x232 kernel/sched/core.c:9162
+ might_alloc include/linux/sched/mm.h:323 [inline]
+ might_alloc include/linux/sched/mm.h:315 [inline]
+ mempool_alloc_noprof+0x220/0x310 mm/mempool.c:558
+ bio_alloc_bioset+0x8d5/0x1050 block/bio.c:594
+ bio_alloc include/linux/bio.h:367 [inline]
+ submit_bh_wbc+0x250/0x710 fs/buffer.c:2716
+ __block_write_full_folio+0x77f/0xee0 fs/buffer.c:1830
+ block_write_full_folio+0x3b5/0x4e0 fs/buffer.c:2650
+ blkdev_writepages+0xc7/0x150 block/fops.c:486
+ do_writepages+0x278/0x600 mm/page-writeback.c:2575
+ __writeback_single_inode+0x164/0x1350 fs/fs-writeback.c:1764
+ writeback_sb_inodes+0x766/0x1c60 fs/fs-writeback.c:2056
+ __writeback_inodes_wb+0xf8/0x2d0 fs/fs-writeback.c:2132
+ wb_writeback+0x720/0xb90 fs/fs-writeback.c:2243
+ wb_check_old_data_flush fs/fs-writeback.c:2347 [inline]
+ wb_do_writeback fs/fs-writeback.c:2400 [inline]
+ wb_workfn+0x8dd/0xc00 fs/fs-writeback.c:2428
+ process_one_work+0xa0e/0x1980 kernel/workqueue.c:3302
+ process_scheduled_works kernel/workqueue.c:3385 [inline]
+ worker_thread+0x5ef/0xe50 kernel/workqueue.c:3466
+ kthread+0x370/0x450 kernel/kthread.c:436
+ ret_from_fork+0x69a/0xc80 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+BUG: workqueue leaked atomic, lock or RCU: kworker/u8:4[50]
+     preempt=0x00000000 lock=0->1 RCU=0->1 workfn=wb_workfn
+1 lock held by kworker/u8:4/50:
+ #0: 
+ffffffff896de8e0
+ (
+rcu_read_lock
+){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:300 [inline]
+){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:838 [inline]
+){....}-{1:3}, at: unlocked_inode_to_wb_begin include/linux/backing-dev.h:290 [inline]
+){....}-{1:3}, at: folio_clear_dirty_for_io+0x1eb/0x7f0 mm/page-writeback.c:2919
+CPU: 0 UID: 0 PID: 50 Comm: kworker/u8:4 Tainted: G        W           syzkaller #0 PREEMPT(full) 
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026
+Workqueue: writeback wb_workfn (flush-8:0)
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x100/0x190 lib/dump_stack.c:120
+ process_one_work.cold+0x127/0x306 kernel/workqueue.c:3323
+ process_scheduled_works kernel/workqueue.c:3385 [inline]
+ worker_thread+0x5ef/0xe50 kernel/workqueue.c:3466
+ kthread+0x370/0x450 kernel/kthread.c:436
+ ret_from_fork+0x69a/0xc80 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+
+=============================
+[ BUG: Invalid wait context ]
+syzkaller #0 Tainted: G        W          
+-----------------------------
+kworker/u8:4/50 is trying to lock:
+ffff88811bb071d0 (&ei->i_data_sem){++++}-{4:4}, at: ext4_map_blocks+0x45a/0xd30 fs/ext4/inode.c:823
+other info that might help us debug this:
+context-{5:5}
+4 locks held by kworker/u8:4/50:
+ #0: ffffffff896de8e0 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:300 [inline]
+ #0: ffffffff896de8e0 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:838 [inline]
+ #0: ffffffff896de8e0 (rcu_read_lock){....}-{1:3}, at: unlocked_inode_to_wb_begin include/linux/backing-dev.h:290 [inline]
+ #0: ffffffff896de8e0 (rcu_read_lock){....}-{1:3}, at: folio_clear_dirty_for_io+0x1eb/0x7f0 mm/page-writeback.c:2919
+ #1: ffff888113550940 ((wq_completion)ext4-rsv-conversion){+.+.}-{0:0}, at: process_one_work+0x12d6/0x1980 kernel/workqueue.c:3277
+ #2: ffffc90000537d18 ((work_completion)(&ei->i_rsv_conversion_work)){+.+.}-{0:0}, at: process_one_work+0x973/0x1980 kernel/workqueue.c:3278
+ #3: ffff888116262938 (jbd2_handle){.+.+}-{0:0}, at: start_this_handle+0xfaa/0x13a0 fs/jbd2/transaction.c:444
+stack backtrace:
+CPU: 0 UID: 0 PID: 50 Comm: kworker/u8:4 Tainted: G        W           syzkaller #0 PREEMPT(full) 
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026
+Workqueue: ext4-rsv-conversion ext4_end_io_rsv_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x100/0x190 lib/dump_stack.c:120
+ print_lock_invalid_wait_context kernel/locking/lockdep.c:4830 [inline]
+ check_wait_context kernel/locking/lockdep.c:4902 [inline]
+ __lock_acquire+0xfa4/0x2630 kernel/locking/lockdep.c:5187
+ lock_acquire kernel/locking/lockdep.c:5868 [inline]
+ lock_acquire+0x1b1/0x370 kernel/locking/lockdep.c:5825
+ down_write+0x8b/0x1f0 kernel/locking/rwsem.c:1625
+ ext4_map_blocks+0x45a/0xd30 fs/ext4/inode.c:823
+ ext4_convert_unwritten_extents+0x2a6/0x4d0 fs/ext4/extents.c:5067
+ ext4_convert_unwritten_io_end_vec+0x121/0x280 fs/ext4/extents.c:5107
+ ext4_end_io_end+0xd3/0x4b0 fs/ext4/page-io.c:199
+ ext4_do_flush_completed_IO fs/ext4/page-io.c:290 [inline]
+ ext4_end_io_rsv_work+0x205/0x380 fs/ext4/page-io.c:305
+ process_one_work+0xa0e/0x1980 kernel/workqueue.c:3302
+ process_scheduled_works kernel/workqueue.c:3385 [inline]
+ worker_thread+0x5ef/0xe50 kernel/workqueue.c:3466
+ kthread+0x370/0x450 kernel/kthread.c:436
+ ret_from_fork+0x69a/0xc80 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+BUG: sleeping function called from invalid context at ./include/linux/sched/mm.h:323
+in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 50, name: kworker/u8:4
+preempt_count: 0, expected: 0
+RCU nest depth: 1, expected: 0
+INFO: lockdep is turned off.
+CPU: 0 UID: 0 PID: 50 Comm: kworker/u8:4 Tainted: G        W           syzkaller #0 PREEMPT(full) 
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026
+Workqueue: ext4-rsv-conversion ext4_end_io_rsv_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x100/0x190 lib/dump_stack.c:120
+ __might_resched.cold+0x1ec/0x232 kernel/sched/core.c:9162
+ might_alloc include/linux/sched/mm.h:323 [inline]
+ slab_pre_alloc_hook mm/slub.c:4520 [inline]
+ slab_alloc_node mm/slub.c:4875 [inline]
+ __do_kmalloc_node mm/slub.c:5294 [inline]
+ __kmalloc_noprof+0x55e/0x810 mm/slub.c:5307
+ kmalloc_noprof include/linux/slab.h:954 [inline]
+ kzalloc_noprof include/linux/slab.h:1188 [inline]
+ ext4_find_extent+0x21b/0xa30 fs/ext4/extents.c:918
+ ext4_ext_map_blocks+0x20a/0x5930 fs/ext4/extents.c:4286
+ ext4_map_create_blocks+0xec/0x5e0 fs/ext4/inode.c:631
+ ext4_map_blocks+0x46b/0xd30 fs/ext4/inode.c:824
+ ext4_convert_unwritten_extents+0x2a6/0x4d0 fs/ext4/extents.c:5067
+ ext4_convert_unwritten_io_end_vec+0x121/0x280 fs/ext4/extents.c:5107
+ ext4_end_io_end+0xd3/0x4b0 fs/ext4/page-io.c:199
+ ext4_do_flush_completed_IO fs/ext4/page-io.c:290 [inline]
+ ext4_end_io_rsv_work+0x205/0x380 fs/ext4/page-io.c:305
+ process_one_work+0xa0e/0x1980 kernel/workqueue.c:3302
+ process_scheduled_works kernel/workqueue.c:3385 [inline]
+ worker_thread+0x5ef/0xe50 kernel/workqueue.c:3466
+ kthread+0x370/0x450 kernel/kthread.c:436
+ ret_from_fork+0x69a/0xc80 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+BUG: workqueue leaked atomic, lock or RCU: kworker/u8:4[50]
+     preempt=0x00000000 lock=1->0 RCU=1->1 workfn=ext4_end_io_rsv_work
+INFO: lockdep is turned off.
+CPU: 0 UID: 0 PID: 50 Comm: kworker/u8:4 Tainted: G        W           syzkaller #0 PREEMPT(full) 
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026
+Workqueue: ext4-rsv-conversion ext4_end_io_rsv_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x100/0x190 lib/dump_stack.c:120
+ process_one_work.cold+0x127/0x306 kernel/workqueue.c:3323
+ process_scheduled_works kernel/workqueue.c:3385 [inline]
+ worker_thread+0x5ef/0xe50 kernel/workqueue.c:3466
+ kthread+0x370/0x450 kernel/kthread.c:436
+ ret_from_fork+0x69a/0xc80 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+------------[ cut here ]------------
+Voluntary context switch within RCU read-side critical section!
+WARNING: kernel/rcu/tree_plugin.h:332 at rcu_note_context_switch+0x859/0x19c0 kernel/rcu/tree_plugin.h:332, CPU#0: kworker/u8:4/50
+Modules linked in:
+CPU: 0 UID: 0 PID: 50 Comm: kworker/u8:4 Tainted: G        W           syzkaller #0 PREEMPT(full) 
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026
+Workqueue:  0x0 (ext4-rsv-conversion)
+RIP: 0010:rcu_note_context_switch+0x859/0x19c0 kernel/rcu/tree_plugin.h:332
+Code: c1 ea 03 80 3c 02 00 0f 85 9b 0b 00 00 48 8b 53 28 b9 01 00 00 00 4c 89 ef e8 a3 cf fe ff e9 1d f9 ff ff 48 8d 3d 27 29 59 09 <67> 48 0f b9 3a e9 99 f8 ff ff 48 b8 00 00 00 00 00 fc ff df 48 8d
+RSP: 0018:ffffc90000537c10 EFLAGS: 00010002
+RAX: 0000000000000001 RBX: ffff8881f563a540 RCX: ffffffff81987a21
+RDX: 0000000000000000 RSI: ffffffff87b08ce0 RDI: ffffffff8af21770
+RBP: ffff888103eb8000 R08: 0000000000000000 R09: fffffbfff15e10da
+R10: ffffffff8af086d7 R11: 0000000000000001 R12: 0000000000000000
+R13: ffff888103eb847c R14: ffffffff8cf91680 R15: ffffffff8af09664
+FS:  0000000000000000(0000) GS:ffff8882686a8000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055d53982e008 CR3: 0000000117564000 CR4: 00000000003506f0
+Call Trace:
+ <TASK>
+ __schedule+0x25e/0x4840 kernel/sched/core.c:7043
+ __schedule_loop kernel/sched/core.c:7267 [inline]
+ schedule+0xdd/0x390 kernel/sched/core.c:7282
+ worker_thread+0x53b/0xe50 kernel/workqueue.c:3481
+ kthread+0x370/0x450 kernel/kthread.c:436
+ ret_from_fork+0x69a/0xc80 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	c1 ea 03             	shr    $0x3,%edx
+   3:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   7:	0f 85 9b 0b 00 00    	jne    0xba8
+   d:	48 8b 53 28          	mov    0x28(%rbx),%rdx
+  11:	b9 01 00 00 00       	mov    $0x1,%ecx
+  16:	4c 89 ef             	mov    %r13,%rdi
+  19:	e8 a3 cf fe ff       	call   0xfffecfc1
+  1e:	e9 1d f9 ff ff       	jmp    0xfffff940
+  23:	48 8d 3d 27 29 59 09 	lea    0x9592927(%rip),%rdi        # 0x9592951
+* 2a:	67 48 0f b9 3a       	ud1    (%edx),%rdi <-- trapping instruction
+  2f:	e9 99 f8 ff ff       	jmp    0xfffff8cd
+  34:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  3b:	fc ff df
+  3e:	48                   	rex.W
+  3f:	8d                   	.byte 0x8d
 
 
-vim +187 drivers/usb/cdns3/drd.c
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-   175	
-   176	/**
-   177	 * cdns_drd_host_on - start host.
-   178	 * @cdns: Pointer to controller context structure.
-   179	 *
-   180	 * Returns 0 on success otherwise negative errno.
-   181	 */
-   182	int cdns_drd_host_on(struct cdns *cdns)
-   183	{
-   184		u32 val, ready_bit;
-   185		int ret;
-   186	
- > 187		if (cdns->no_drd)
-   188			goto phy_set;
-   189	
-   190		/* Enable host mode. */
-   191		writel(OTGCMD_HOST_BUS_REQ | OTGCMD_OTG_DIS,
-   192		       &cdns->otg_regs->cmd);
-   193	
-   194		if (cdns->version == CDNSP_CONTROLLER_V2)
-   195			ready_bit = OTGSTS_CDNSP_XHCI_READY;
-   196		else
-   197			ready_bit = OTGSTS_CDNS3_XHCI_READY;
-   198	
-   199		dev_dbg(cdns->dev, "Waiting till Host mode is turned on\n");
-   200		ret = readl_poll_timeout_atomic(&cdns->otg_regs->sts, val,
-   201						val & ready_bit, 1, 100000);
-   202	
-   203		if (ret)
-   204			dev_err(cdns->dev, "timeout waiting for xhci_ready\n");
-   205	
-   206	phy_set:
-   207		phy_set_mode(cdns->usb2_phy, PHY_MODE_USB_HOST);
-   208		phy_set_mode(cdns->usb3_phy, PHY_MODE_USB_HOST);
-   209		return ret;
-   210	}
-   211	
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
