@@ -1,336 +1,492 @@
-Return-Path: <linux-usb+bounces-37524-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37525-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IFDUKeKdB2oD+wIAu9opvQ
-	(envelope-from <linux-usb+bounces-37524-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 16 May 2026 00:27:46 +0200
+	id 0AyoEc6xB2pBCgMAu9opvQ
+	(envelope-from <linux-usb+bounces-37525-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 16 May 2026 01:52:46 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB29E558D74
-	for <lists+linux-usb@lfdr.de>; Sat, 16 May 2026 00:27:44 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF079559724
+	for <lists+linux-usb@lfdr.de>; Sat, 16 May 2026 01:52:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C1CBF30136E1
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 22:23:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B1DA2300E3D2
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 23:52:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E66D3E2AD7;
-	Fri, 15 May 2026 22:23:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 547333ED5C7;
+	Fri, 15 May 2026 23:52:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OA078xnY"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="ZdCHnzVd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE97372ECA
-	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 22:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310C635E1B2;
+	Fri, 15 May 2026 23:52:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778883780; cv=none; b=hI4DrKLFeCon4RpgcsH+qk6x4wWYrBqLt288/mrZyx01q4h6y3en2dFiG358siHJrFkWZJ2aeXOLbgaXKKd66wTL9FqWrGmqBmy2FlPY9CN4F9SvO9oIbPPLodn1R+Zmy/1J5OVFRooByPBTdVuh44Dbsvo1exQ3XmueUAasWwg=
+	t=1778889163; cv=none; b=iGd38/sZ/aEhYMm229NENRgGI2Pu2MpsVhMABhaq8ZCdoTTQ0PiP7HNlnQD2dftr7dy6FBgWEMxTppggACWbOluJIlAHyGVG6YgDvjilM8sN5RG4o6Tj83VuUNc8sXMJG+YLME6YfyH5k5bAbP/TmNZ5kyuWJj+qjH2zqLtboyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778883780; c=relaxed/simple;
-	bh=rDH8B+QqgndpGE3qse8f/2bDTYp/j4uHy9m1Q2rSD20=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XwayAkjojZOJif1z+GqoXwyPHcaKy3iRcehFX1FWP7PBfu1CarX7vN8pTMRo5UVIwMqUmC5T0q532/2Bayxr5uwnBBYdWbx3fzpnT0WdlWlmsZ8ya3RMVrNPd1EEbUdzaM5p1tOjlzR005cgh9J8Wo5dN0e6l9XVIcKaakumebI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OA078xnY; arc=none smtp.client-ip=74.125.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-65e170f1ca5so749768d50.0
-        for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 15:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778883777; x=1779488577; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5m7nm9/acQjAEPOHXxWuk1T8HUQRk5NC7/L7t4zgkds=;
-        b=OA078xnY3CDSdzAvwGg+bjxKcVgDkkAGpYYnYGC3D++Pqb7HvX/XHleyqM9XGCLdL0
-         cBx09u9gaftVwsOOwpEjWPNlNlsi2weSQ2doV6AmnVWgLQ99DvuTaa399chxxMEiR8JV
-         q3RX2Da2Tx8WJII4YLCKqGW7ezdF1iC1ssIDWriwXXVQIHybvMkhJBOV4Bja5uaUiuDY
-         mVUUX+0nXGfYJMvjHfZyFPBuBzs36TM4ZW+OlbfaxhQ9JfjEd0tW8xcg2XPSUHG5Wwt6
-         ACXxc8W8AM0JnThXmMsf7a/thA3oSjuAPva2iKscDlD4K964eSjnyWILPshtg62ni8ZB
-         q+7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778883777; x=1779488577;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5m7nm9/acQjAEPOHXxWuk1T8HUQRk5NC7/L7t4zgkds=;
-        b=RpFqtxAm4ImQtuoXqHiiv5MlsfY7B7/mXKmCGvpAUshLEKpXVy4PouDkhj8gVQbNOM
-         p0I7Q32xRPs4ZVpWn8N71zxor2Ora5liAbyHTlyZHpGzOMnmyMQSiUwB70eNKKmkHCG/
-         AwF1F+gy2JP2S/uc6wjjZ40yPm9Roh5amhGqgtkicyrlwTXYAYtUlmWGw9CVa/HZUimY
-         XVw5DZtWYFFBdBH/TdGwNEho1t9RavuvdSZ0uF+czkzRzDxXbR6TEs5CpoVw3cR0w48P
-         Qnl+uw9sbf13EcN/IiDLhJqgbR+9YViT+TtrciKhQb80TjP3XZxwfmGevBXOkTbLhbGl
-         VniA==
-X-Forwarded-Encrypted: i=1; AFNElJ8mhq5xCh1Q7NNFkd5PGMD1BixuYy9Zn8Cx3vK2lOqZANcPxXDw1Ch9Po5TQ8xe3hHcL6zcS7OMTuM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznYjnmleI+x63/OA4OLU5OwzrzGv6unla8OJA7fIWftGpBcswf
-	ErQlUZHMgGHtFw/AcMX8NlpLPUpFHspknTiYxaTgIgJWKbbf1o4W4CBXCA9qhomi0A==
-X-Gm-Gg: Acq92OFZkdxM559bnkIU71zKzuDZ5M/N0+/ta+6kKkg9gtVpIhBlqPyAwIYZFnTHy+z
-	yOV40cs+kq+6ImqMQo34GSs/GQN+w18USyRLWemo9Z/LRo3FZZkvIgGOlct3D/J7rHfOOMaD7uq
-	ZdNCgqUKnGJoI6M7yDyyIv+FuxG41SwSNLD8YW+CUb/4yrY3M0kO2do3wmRaRdozNBjJ/n0mt+8
-	hGqZIFR+O8dmYy3E2SwhRgLbuTRGW9M0rtldWgIhRtGrbKJ/UXEtZ89u2F/CJbfRub4uTE3Zv1E
-	km/2cE+jmx1ZmfWvTc8WlHWe62CxF2HPVqqrE9NtnPcKKWXEOi/3FvPbW3OxMkbXA9asG0YVevO
-	/ja2qcgUE85KWQ+ab6PMD7DBM97euYftjhQNbOyicMxbuqe7sE6xO72v96DDQITJ8cjywHuj5xz
-	IMzpsmfdOFtn3wG0lLGhRIZZhyuhbEbVmOTwGKB5QtT/JEYYrE1Tf9oGaLH1ck4l5qXAqEye5Qs
-	jhwZAlcxw==
-X-Received: by 2002:a05:690e:4403:b0:65c:2738:c687 with SMTP id 956f58d0204a3-65e2270ef58mr4744685d50.21.1778883776819;
-        Fri, 15 May 2026 15:22:56 -0700 (PDT)
-Received: from ?IPV6:2600:1700:4570:89a0:9ee1:b971:dc61:3e74? ([2600:1700:4570:89a0:9ee1:b971:dc61:3e74])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65e0dbcda4bsm3144803d50.18.2026.05.15.15.22.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 May 2026 15:22:56 -0700 (PDT)
-Message-ID: <14fa7e1b-89e8-498f-90ea-f82586c5d6b9@google.com>
-Date: Fri, 15 May 2026 15:22:54 -0700
+	s=arc-20240116; t=1778889163; c=relaxed/simple;
+	bh=Mcz4V34eTHqjLAAR1Sr2CaV+JdwcCNPQPf4HHOpLnCw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=vBOpIBGznBUOAtznXD2MACwVUTGntWMqPJPqbvU+EH1AHXVaaOEycyTk1jdgLRQMWJLDm40NvSe4AC3tdmnBvAYRj72RyzaeFvuzwMVaEsib1ICVIC3VH65hAIPa1O/emyjkb9RhVNX7w2Bkire5YxFuhtwrjeOFiz+XA7ArGXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=ZdCHnzVd; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Cc:To:Message-Id:Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:Content-Description
+	:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=NL/zC74CGvN+Dwja+bjDgW3wUszQNdUHhaSKFMuMopQ=; b=ZdCHnzVdrVjyv1PS9XA+FeQfk2
+	8fRF27eLS9Nr5CLoHEOvaV4SUfgwiuPLX2CR6toegvVEa8oLPwLHyQeEg1QYCMgso6Fq89fUj7HVB
+	xQV/KWVpwe+fjY72n0ZPYrcHuZ3ebu8tPmErWZKAo+pGYlQ9RMO1nmHQnqo9Q3DkRp3nXzc225yWr
+	dcxjQx9jv5UxlQ8vwEnKnpwoGbmQ0fcxK74tDNAXS2ug1janp6ASG9Gm/sw9g9w3XPkKW8ywTf8K9
+	1lb0TTDGE9si8Z2LHEDg/VySvcEusmwn3b7e+AKLQ77y7Id7uG3MKSUik1cGEBG2BPxENs3KM5UKZ
+	s0PH9X/w==;
+Received: from 186-249-149-153.shared.desktop.com.br ([186.249.149.153] helo=[192.168.1.68])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1wO2KR-000kcp-RU; Sat, 16 May 2026 01:52:28 +0200
+From: Mauricio Faria de Oliveira <mfo@igalia.com>
+Date: Fri, 15 May 2026 20:52:16 -0300
+Subject: [PATCH] usb: atm: ueagle-atm: use synchronous request_firmware()
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] power: supply: max17042: add handler for energy_now
- property
-To: Hans de Goede <hansg@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Krzysztof Kozlowski <krzk@kernel.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
- Purism Kernel Team <kernel@puri.sm>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, =?UTF-8?Q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>,
- Peter Griffin <peter.griffin@linaro.org>, RD Babiera <rdbabiera@google.com>,
- Kyle Tso <kyletso@google.com>
-References: <20260515-batt-status-v1-0-fed6b7d8cea7@google.com>
- <20260515-batt-status-v1-3-fed6b7d8cea7@google.com>
- <17f49974-1f39-4b4c-8577-da33da7f1cc4@kernel.org>
-From: Amit Sunil Dhamne <amitsd@google.com>
-Content-Language: en-US
-In-Reply-To: <17f49974-1f39-4b4c-8577-da33da7f1cc4@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: AB29E558D74
+Message-Id: <20260515-ueagle-atm_req-fw-sync-v1-1-406ca3939e2a@igalia.com>
+X-B4-Tracking: v=1; b=H4sIAK+xB2oC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDU0NT3dLUxPScVN3Ektz4otRC3bRy3eLKvGRdIwMTczPDtEQDCwNLJaD
+ mgqLUtMwKsMHRsbW1AA2MCBpoAAAA
+X-Change-ID: 20260515-ueagle-atm_req-fw-sync-204761fa0809
+To: Matthieu CASTET <castet.matthieu@free.fr>, 
+ Stanislaw Gruszka <stf_xl@wp.pl>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: kernel-dev@igalia.com, linux-atm-general@lists.sourceforge.net, 
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ syzbot+ce1e5a1b4e086b43e56d@syzkaller.appspotmail.com, 
+ syzbot+306212936b13e520679d@syzkaller.appspotmail.com, 
+ Mauricio Faria de Oliveira <mfo@igalia.com>
+X-Mailer: b4 0.14.2
+X-Rspamd-Queue-Id: AF079559724
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [1.14 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	R_DKIM_REJECT(1.00)[igalia.com:s=20170329];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37524-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37525-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[free.fr,wp.pl,linuxfoundation.org];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[google.com:+];
-	RCPT_COUNT_TWELVE(0.00)[17];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.505];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[amitsd@google.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[mfo@igalia.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[igalia.com:-];
 	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,ce1e5a1b4e086b43e56d,306212936b13e520679d];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Hi Hans,
+ueagle-atm uses the asynchronous request_firmware_nowait() in .probe(),
+but does not wait for its completion, not even in .disconnect(); so, if the
+device is unplugged meanwhile, its teardown runs concurrently with that.
 
-Thanks for the review.
+Even though this inconsistency is worth addressing on its own, it has also
+triggered several bug reports in syzbot over the years (some auto-closed)
+where the firmware sysfs fallback mechanism (CONFIG_FW_LOADER_USER_HELPER)
+creates a firmware subdirectory in the device directory during its removal,
+which might hit unexpected conditions in kernfs, apparently, depending at
+which point the add and remove operations raced. (See links.)
 
-On 5/15/26 12:25 AM, Hans de Goede wrote:
-> Hi,
->
-> On 15-May-26 07:48, Amit Sunil Dhamne via B4 Relay wrote:
->> From: Amit Sunil Dhamne <amitsd@google.com>
->>
->> Add handler to report power_supply_prop_energy_now so that users can get
->> current SoC in uWH. Additionally, add helper functions to get avg_vcell
->> and repcap values in uv and uah units respectively to avoid code
->> duplication.
->>
->> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> NACK for multiple reasons:
->
-> 1. We don't want to do this in all drivers which only support
-> charge_now and not energy_now, instead the TCPM driver should
-> convert charge_now to energy_now when necessary itself so that
-> the TCPM code will work with all battery type power-supply drivers
-> not just those which provide energy_now.
+The pattern is:
 
-Got it. I will pivot and update the TCPM driver to fetch charge_now and
-a voltage property (voltage_avg) from the battery power supply,
-performing the energy_now calculation locally.
+usb ?-?: Direct firmware load for ueagle-atm/eagle?.fw failed with error -2
+usb ?-?: Falling back to sysfs fallback for: ueagle-atm/eagle?.fw
+<ERROR>
+Call trace:
+ ...
+ kernfs_create_dir_ns
+ sysfs_create_dir_ns
+ create_dir
+ kobject_add_internal
+ kobject_add_varg
+ kobject_add
+ class_dir_create_and_add
+ get_device_parent
+ device_add
+ fw_load_sysfs_fallback
+ fw_load_from_user_helper
+ firmware_fallback_sysfs
+ _request_firmware
+ request_firmware_work_func
+ ...
 
+While the kernfs side is being looked at, the ueagle-atm side can be fixed
+by converting .probe() to the synchronous request_firmware(), which blocks
+the device directory removal until it is finished, preventing such errors.
 
->
-> 2. Having energy_now without energy_full is problematic and will
-> confuse userspace which prefers energy_* over charge_* since
-> userspace will now miss a reference value for full to report
-> a charging progress percentage. I also wonder how this works
-> on the TCPM side does the  Battery Status response message not
-> have a full value / percentage ?
+This has been tested with a synthetic reproducer to check the error path
+and with a USB gadget (virtual device) to check the firmware upload path.
+(The latter was written by AI/Claude; no other code/text in this commit.)
 
-Only the present state of charge of the battery (in units of 0.1Wh) is
-sent out to the port partner as part of Battery Status response message
-per USB PD spec.
+Links (year first reported):
+ 2025 https://syzbot.org/bug?extid=ce1e5a1b4e086b43e56d
+ 2025 https://syzbot.org/bug?extid=9af8471255ac36e34fd4
+ 2024 https://syzbot.org/bug?extid=306212936b13e520679d
+ 2022 https://syzbot.org/bug?extid=782984d6f1701b526edb
+ 2021 https://syzbot.org/bug?id=f3f221579f4ef7e9691281f3c6f56c05f83e8490
+ 2021 https://syzbot.org/bug?id=84d86f0d71394829df6fc53daf6642c045983881
+ 2021 https://syzbot.org/bug?id=3302dc1c0e2b9c94f2e8edb404eabc9267bc6f90
 
-`energy_full` and `energy_full_design` are sent out as part of Battery
-Capacity response message. I plan to send out the patches to support
-Batt Caps soon.
+Reported-by: syzbot+ce1e5a1b4e086b43e56d@syzkaller.appspotmail.com
+Closes: https://syzbot.org/bug?extid=ce1e5a1b4e086b43e56d
+Reported-by: syzbot+306212936b13e520679d@syzkaller.appspotmail.com
+Closes: https://syzbot.org/bug?extid=306212936b13e520679d
+Fixes: b72458a80c75 ("[PATCH] USB: Eagle and ADI 930 usb adsl modem driver")
+Assisted-by: Claude:claude-sonnet-4.6 # test USB gadget
+Signed-off-by: Mauricio Faria de Oliveira <mfo@igalia.com>
+---
+Testing:
+=======
 
+Firmware upload path:
+--------------------
 
->
-> 3. IIRC userspace (upower) picks either energy_* or charge_*
-> values depending on which are present. I'm not sure if having
-> both will not confuse userspace. As mentioned in 2. having both
-> while one of them has an incomplete set of properties is sure
-> to confuse userspace.
+This has been tested with a USB gadget (virtual device) written by Claude [1].
+It ACKs the firmware upload commands, so the driver considers that successful:
 
-I see.
+  [  296.997194] usb 1-1: [ueagle-atm] firmware uploaded
+  
+Log (blocks separated for clarity):
 
+  # echo 'file drivers/base/firmware_loader/* +p' >/sys/kernel/debug/dynamic_debug/control
 
-I will drop this patch for now.
+  # insmod ueagle_gadget.ko
 
+  [  294.840943] ueagle_gadget gadget.0: [ueagle-gadget] bound: VID=0x1039 PID=0x2101 bcdDev=0x2581
+  [  294.841341] [ueagle-gadget] registered (VID=0x1039 PID=0x2101)
+  
+  [  295.066627] usb 1-1: new full-speed USB device number 4 using dummy_hcd
+  [  295.222302] usb 1-1: New USB device found, idVendor=1039, idProduct=2101, bcdDevice=25.81
+  [  295.222315] usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+  [  295.227343] ueagle_gadget gadget.0: [ueagle-gadget] SET_CONFIGURATION 1
+  [  295.228029] usb 1-1: [ueagle-atm] ADSL device founded vid (0X1039) pid (0X2101) Rev (0X2581): Eagle I
+  
+  [  295.343162] usb 1-1: reset full-speed USB device number 4 using dummy_hcd
+  [  295.482615] ueagle_gadget gadget.0: [ueagle-gadget] SET_CONFIGURATION 1
+  
+  [  295.482682] usb 1-1: [ueagle-atm] pre-firmware device, uploading firmware
+  [  295.482723] firmware_class: __allocate_fw_priv: fw-ueagle-atm/eagleI.fw fw_priv=00000000470f8800
+  [  295.482839] usb 1-1: loading /lib/firmware/updates/7.1.0-rc2-next-20260508-dirty/ueagle-atm/eagleI.fw failed for no such file or directory.
+  [  295.482900] usb 1-1: loading /lib/firmware/updates/ueagle-atm/eagleI.fw failed for no such file or directory.
+  [  295.482960] usb 1-1: loading /lib/firmware/7.1.0-rc2-next-20260508-dirty/ueagle-atm/eagleI.fw failed for no such file or directory.
+  [  295.483037] usb 1-1: Loading firmware from /lib/firmware/ueagle-atm/eagleI.fw
+  [  295.483040] usb 1-1: direct-loading ueagle-atm/eagleI.fw
+  [  295.483065] firmware_class: fw_set_page_data: fw-ueagle-atm/eagleI.fw fw_priv=00000000470f8800 data=00000000c4ccb93b size=10981
+  
+  [  295.483186] usb 1-1: Loaded FW: ueagle-atm/eagleI.fw, sha256: 8c5047be3b02ed4a8b98c22ed03c010afae1782f6056d8bf2f32bbdde834a74a
+  [  295.483191] usb 1-1: [ueagle-atm] loading firmware ueagle-atm/eagleI.fw
+  [  295.487856] ueagle_gadget gadget.0: [ueagle-gadget] LOAD_INTERNAL addr=0x7f92 (F8051_USBCS reset), len=1
+  [  296.997153] ueagle_gadget gadget.0: [ueagle-gadget] LOAD_INTERNAL addr=0x7f92 (F8051_USBCS reset), len=1
+  [  296.997194] usb 1-1: [ueagle-atm] firmware uploaded
+  [  296.997199] firmware_class: __free_fw_priv: fw-ueagle-atm/eagleI.fw fw_priv=00000000470f8800 data=00000000c4ccb93b size=10981
+  
+  # rmmod ueagle_gadget
 
-Thanks,
+  [  362.899931] ueagle_gadget gadget.0: [ueagle-gadget] disconnected
+  [  362.899947] ueagle_gadget gadget.0: [ueagle-gadget] unbound
+  [  362.978201] [ueagle-gadget] unregistered
+  [  363.080344] usb 1-1: USB disconnect, device number 4
+  [  363.085192] firmware_class: fw_name_devm_release: fw_name-ueagle-atm/eagleI.fw devm-0000000037b7f4fe released
 
-Amit
+Error path:
+----------
 
+This has been tested with a synthetic reproducer [2]:
 
->
-> Regards,
->
-> Hans
->
->
->
->
->
->> ---
->>  drivers/power/supply/max17042_battery.c | 60 ++++++++++++++++++++++++++-------
->>  1 file changed, 47 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
->> index 167fb3fb3732..e16eb6985b70 100644
->> --- a/drivers/power/supply/max17042_battery.c
->> +++ b/drivers/power/supply/max17042_battery.c
->> @@ -81,6 +81,7 @@ static enum power_supply_property max17042_battery_props[] = {
->>  	POWER_SUPPLY_PROP_CHARGE_NOW,
->>  	POWER_SUPPLY_PROP_CHARGE_COUNTER,
->>  	POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
->> +	POWER_SUPPLY_PROP_ENERGY_NOW,
->>  	POWER_SUPPLY_PROP_TEMP,
->>  	POWER_SUPPLY_PROP_TEMP_ALERT_MIN,
->>  	POWER_SUPPLY_PROP_TEMP_ALERT_MAX,
->> @@ -95,6 +96,36 @@ static enum power_supply_property max17042_battery_props[] = {
->>  	POWER_SUPPLY_PROP_CURRENT_AVG,
->>  };
->>  
->> +static int max17042_get_repcap_uah(struct max17042_chip *chip, u64 *rep_cap)
->> +{
->> +	u32 data;
->> +	int ret;
->> +
->> +	ret = regmap_read(chip->regmap, MAX17042_RepCap, &data);
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	*rep_cap = data * 5000000ll;
->> +	*rep_cap *= chip->task_period;
->> +	do_div(*rep_cap, MAX17042_DEFAULT_TASK_PERIOD);
->> +	do_div(*rep_cap, chip->pdata->r_sns);
->> +
->> +	return 0;
->> +}
->> +
->> +static int max17042_get_avgvcell_uv(struct max17042_chip *chip, u32 *vcell)
->> +{
->> +	int ret;
->> +
->> +	ret = regmap_read(chip->regmap, MAX17042_AvgVCELL, vcell);
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	*vcell = (*vcell * 625) / 8;
->> +
->> +	return 0;
->> +}
->> +
->>  static int max17042_get_temperature(struct max17042_chip *chip, int *temp)
->>  {
->>  	int ret;
->> @@ -180,14 +211,12 @@ static int max17042_get_battery_health(struct max17042_chip *chip, int *health)
->>  	int temp, vavg, vbatt, ret;
->>  	u32 val;
->>  
->> -	ret = regmap_read(chip->regmap, MAX17042_AvgVCELL, &val);
->> +	ret = max17042_get_avgvcell_uv(chip, &val);
->>  	if (ret < 0)
->>  		goto health_error;
->>  
->> -	/* bits [0-3] unused */
->> -	vavg = val * 625 / 8;
->>  	/* Convert to millivolts */
->> -	vavg /= 1000;
->> +	vavg = val / 1000;
->>  
->>  	ret = regmap_read(chip->regmap, MAX17042_VCELL, &val);
->>  	if (ret < 0)
->> @@ -304,11 +333,10 @@ static int max17042_get_property(struct power_supply *psy,
->>  		val->intval = data * 625 / 8;
->>  		break;
->>  	case POWER_SUPPLY_PROP_VOLTAGE_AVG:
->> -		ret = regmap_read(map, MAX17042_AvgVCELL, &data);
->> +		ret = max17042_get_avgvcell_uv(chip, &data);
->>  		if (ret < 0)
->>  			return ret;
->> -
->> -		val->intval = data * 625 / 8;
->> +		val->intval = data;
->>  		break;
->>  	case POWER_SUPPLY_PROP_VOLTAGE_OCV:
->>  		ret = regmap_read(map, MAX17042_OCVInternal, &data);
->> @@ -350,14 +378,9 @@ static int max17042_get_property(struct power_supply *psy,
->>  		val->intval = data64;
->>  		break;
->>  	case POWER_SUPPLY_PROP_CHARGE_NOW:
->> -		ret = regmap_read(map, MAX17042_RepCap, &data);
->> +		ret = max17042_get_repcap_uah(chip, &data64);
->>  		if (ret < 0)
->>  			return ret;
->> -
->> -		data64 = data * 5000000ll;
->> -		data64 *= chip->task_period;
->> -		do_div(data64, MAX17042_DEFAULT_TASK_PERIOD);
->> -		do_div(data64, chip->pdata->r_sns);
->>  		val->intval = data64;
->>  		break;
->>  	case POWER_SUPPLY_PROP_CHARGE_COUNTER:
->> @@ -370,6 +393,17 @@ static int max17042_get_property(struct power_supply *psy,
->>  		data64 = div_s64(data64, MAX17042_DEFAULT_TASK_PERIOD);
->>  		val->intval = div_s64(data64, chip->pdata->r_sns);
->>  		break;
->> +	case POWER_SUPPLY_PROP_ENERGY_NOW:
->> +		ret = max17042_get_repcap_uah(chip, &data64);
->> +		if (ret < 0)
->> +			return ret;
->> +
->> +		ret = max17042_get_avgvcell_uv(chip, &data);
->> +		if (ret < 0)
->> +			return ret;
->> +
->> +		val->intval = data64 * data / 1000000;
->> +		break;
->>  	case POWER_SUPPLY_PROP_TEMP:
->>  		ret = max17042_get_temperature(chip, &val->intval);
->>  		if (ret < 0)
->>
+  # echo 'file drivers/base/firmware_loader/* +p' >/sys/kernel/debug/dynamic_debug/control
+  # echo 'file drivers/usb/atm/ueagle-atm.c +p' >/sys/kernel/debug/dynamic_debug/control
+  # echo 2 >/sys/module/ueagle_atm/parameters/debug
+  
+  # mv /lib/firmware/ueagle-atm/eagleI.fw \
+       /lib/firmware/ueagle-atm/eagleI.fw.NOT-FOUND
+  
+  # cat ueagle-atm.syzlang
+  syz_usb_connect(0x3, 0x2d, &(0x7f00000002c0)=ANY=[@ANYBLOB="12011003faff82083910012181250102030109021b00028c4400600904"], &(0x7f0000000240)={0x0, 0x0, 0x0, 0x0})
+  
+  # ./syz-execprog -procs=1 -enable='' ueagle-atm.syzlang
+
+Modified: 
+
+  .probe() fails with -ETIMEDOUT from the firmware load timeout of 60 seconds per
+  struct firmware_fallback_config fw_fallback_config = { .loading_timeout = 60, }
+  
+  [  176.023944] usb 1-1: new high-speed USB device number 2 using dummy_hcd
+  ...
+  [  176.158744] usb 1-1: New USB device found, idVendor=1039, idProduct=2101, bcdDevice=25.81
+  ...
+  [  176.363215] usb 1-1: [ueagle-atm vdbg]  entering uea_probe
+  [  176.363221] usb 1-1: [ueagle-atm] ADSL device founded vid (0X1039) pid (0X2101) Rev (0X2581): Eagle I
+  [  177.113140] usb 1-1: [ueagle-atm vdbg]  entering uea_load_firmware
+  [  177.113156] usb 1-1: [ueagle-atm] pre-firmware device, uploading firmware
+  
+  [  177.113194] firmware_class: __allocate_fw_priv: fw-ueagle-atm/eagleI.fw fw_priv=000000005bf63c12
+  [  177.113404] usb 1-1: loading /lib/firmware/updates/7.1.0-rc2-next-20260508-dirty/ueagle-atm/eagleI.fw failed for no such file or directory.
+  [  177.113617] usb 1-1: loading /lib/firmware/updates/ueagle-atm/eagleI.fw failed for no such file or directory.
+  [  177.113775] usb 1-1: loading /lib/firmware/7.1.0-rc2-next-20260508-dirty/ueagle-atm/eagleI.fw failed for no such file or directory.
+  [  177.113905] usb 1-1: loading /lib/firmware/ueagle-atm/eagleI.fw failed for no such file or directory.
+  
+  [  177.113926] usb 1-1: Direct firmware load for ueagle-atm/eagleI.fw failed with error -2
+  [  177.113934] usb 1-1: Falling back to sysfs fallback for: ueagle-atm/eagleI.fw
+  
+  [  177.114706] test kernfs_activate(): sleep 3s
+  [  180.125483] test kernfs_activate(): slept 3s
+  [  180.126005] firmware ueagle-atm!eagleI.fw: firmware: requesting ueagle-atm/eagleI.fw
+  [  242.849608] test __kernfs_remove(): done
+  
+  [  242.849648] firmware_class: __free_fw_priv: fw-ueagle-atm/eagleI.fw fw_priv=000000005bf63c12 data=0000000000000000 size=0
+  [  242.849670] usb 1-1: [UEAGLE-ATM] firmware ueagle-atm/eagleI.fw is not available
+  [  242.849674] usb 1-1: [ueagle-atm vdbg]  leaving  uea_load_firmware
+  [  242.849681] ueagle-atm 1-1:140.0: probe with driver ueagle-atm failed with error -110
+  [  242.854626] usb 1-1: USB disconnect, device number 2
+
+Original:
+
+  [  184.103791] usb 1-1: new high-speed USB device number 2 using dummy_hcd
+  ...
+  [  184.390454] usb 1-1: New USB device found, idVendor=1039, idProduct=2101, bcdDevice=25.81
+  ...
+  [  184.770574] usb 1-1: [ueagle-atm vdbg]  entering uea_probe
+  [  184.770582] usb 1-1: [ueagle-atm] ADSL device founded vid (0X1039) pid (0X2101) Rev (0X2581): Eagle I
+  [  185.526950] usb 1-1: [ueagle-atm vdbg]  entering uea_load_firmware
+  [  185.526967] usb 1-1: [ueagle-atm] pre-firmware device, uploading firmware
+  
+  [  185.527004] usb 1-1: [ueagle-atm] loading firmware ueagle-atm/eagleI.fw
+  [  185.530762] usb 1-1: [ueagle-atm vdbg]  leaving  uea_load_firmware
+  
+  [  185.535543] firmware_class: __allocate_fw_priv: fw-ueagle-atm/eagleI.fw fw_priv=00000000e8499bd6
+  [  185.535677] usb 1-1: loading /lib/firmware/updates/7.1.0-rc2-next-20260508-dirty/ueagle-atm/eagleI.fw failed for no such file or directory.
+  [  185.535743] usb 1-1: loading /lib/firmware/updates/ueagle-atm/eagleI.fw failed for no such file or directory.
+  [  185.535820] usb 1-1: loading /lib/firmware/7.1.0-rc2-next-20260508-dirty/ueagle-atm/eagleI.fw failed for no such file or directory.
+  [  185.535886] usb 1-1: loading /lib/firmware/ueagle-atm/eagleI.fw failed for no such file or directory.
+
+  [  185.535898] usb 1-1: Direct firmware load for ueagle-atm/eagleI.fw failed with error -2
+  [  185.535906] usb 1-1: Falling back to sysfs fallback for: ueagle-atm/eagleI.fw
+
+  [  185.535994] test kernfs_activate(): sleep 3s
+  [  185.542397] usb 1-1: USB disconnect, device number 2
+  [  185.560753] usb 1-1: [ueagle-atm vdbg]  entering uea_disconnect
+  [  185.560766] usb 1-1: [ueagle-atm vdbg]  leaving  uea_disconnect
+  [  185.584851] test __kernfs_remove(): done
+  [  188.566069] test kernfs_activate(): slept 3s
+
+  [  188.566086] ==================================================================
+  [  188.566092] BUG: KASAN: slab-use-after-free in kernfs_root+0x68/0x80
+  [  188.566110] Read of size 8 at addr ffff88800b387a30 by task kworker/0:1/11
+  [  188.566119]
+  [  188.566127] CPU: 0 UID: 0 PID: 11 Comm: kworker/0:1 Not tainted 7.1.0-rc2-next-20260508-dirty #92 PREEMPT_{RT,(lazy)}
+  [  188.566139] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+  [  188.566146] Workqueue: events request_firmware_work_func
+  [  188.566162] Call Trace:
+  [  188.566171]  <TASK>
+  [  188.566177]  dump_stack_lvl+0x64/0x80
+  [  188.566192]  print_report+0xce/0x620
+  [  188.566213]  kasan_report+0xce/0x100
+  [  188.566229]  kernfs_root+0x68/0x80
+  [  188.566236]  kernfs_next_descendant_post+0x1b/0x270
+  [  188.566245]  kernfs_activate+0x79/0x110
+  [  188.566253]  kernfs_add_one+0x267/0x3d0
+  [  188.566262]  kernfs_create_dir_ns+0xcc/0x140
+  [  188.566507]  sysfs_create_dir_ns+0x130/0x280
+  [  188.566556]  kobject_add_internal+0x21b/0x9c0
+  [  188.566564]  kobject_add+0x13a/0x200
+  [  188.566601]  device_add+0x21e/0x1540
+  [  188.566632]  firmware_fallback_sysfs+0x232/0x980
+  [  188.566642]  _request_firmware+0xa53/0x1100
+  [  188.566691]  request_firmware_work_func+0xeb/0x360
+  [  188.566709]  process_one_work+0x610/0x1150
+  [  188.566741]  worker_thread+0x50d/0xd60
+  [  188.566771]  kthread+0x318/0x400
+  [  188.566790]  ret_from_fork+0x447/0x6a0
+  [  188.566853]  ret_from_fork_asm+0x1a/0x30
+  [  188.566866]  </TASK>
+  [  188.566869]
+  [  188.566871] Allocated by task 11:
+  [  188.566876]  kasan_save_stack+0x33/0x60
+  [  188.566884]  kasan_save_track+0x14/0x30
+  [  188.566891]  __kasan_slab_alloc+0x6e/0x70
+  [  188.566898]  kmem_cache_alloc_noprof+0x1a5/0x4d0
+  [  188.566907]  __kernfs_new_node+0xce/0x950
+  [  188.566913]  kernfs_new_node+0xeb/0x170
+  [  188.566920]  kernfs_create_dir_ns+0x2b/0x140
+  [  188.566927]  sysfs_create_dir_ns+0x130/0x280
+  [  188.566935]  kobject_add_internal+0x21b/0x9c0
+  [  188.566941]  kobject_add+0x13a/0x200
+  [  188.566947]  device_add+0x21e/0x1540
+  [  188.566956]  firmware_fallback_sysfs+0x232/0x980
+  [  188.566963]  _request_firmware+0xa53/0x1100
+  [  188.566969]  request_firmware_work_func+0xeb/0x360
+  [  188.566976]  process_one_work+0x610/0x1150
+  [  188.566985]  worker_thread+0x50d/0xd60
+  [  188.566993]  kthread+0x318/0x400
+  [  188.567001]  ret_from_fork+0x447/0x6a0
+  [  188.567007]  ret_from_fork_asm+0x1a/0x30
+  [  188.567015]
+  [  188.567016] Freed by task 20:
+  [  188.567021]  kasan_save_stack+0x33/0x60
+  [  188.567027]  kasan_save_track+0x14/0x30
+  [  188.567032]  kasan_save_free_info+0x3b/0x60
+  [  188.567040]  __kasan_slab_free+0x43/0x70
+  [  188.567046]  kmem_cache_free+0xc3/0x510
+  [  188.567055]  rcu_core+0x5d1/0x1a50
+  [  188.567063]  rcu_cpu_kthread+0x148/0x6f0
+  [  188.567070]  smpboot_thread_fn+0x347/0x8e0
+  [  188.567080]  kthread+0x318/0x400
+  [  188.567087]  ret_from_fork+0x447/0x6a0
+  [  188.567093]  ret_from_fork_asm+0x1a/0x30
+  [  188.567101]
+  [  188.567103] Last potentially related work creation:
+  [  188.567107]  kasan_save_stack+0x33/0x60
+  [  188.567113]  kasan_record_aux_stack+0x8c/0xa0
+  [  188.567121]  __call_rcu_common.constprop.0+0x76/0xa20
+  [  188.567129]  kernfs_put.part.0+0x1aa/0x540
+  [  188.567135]  __kernfs_remove.part.0+0x3f2/0x820
+  [  188.567142]  kernfs_remove+0x9e/0xd0
+  [  188.567149]  __kobject_del+0xc3/0x340
+  [  188.567158]  kobject_del+0x35/0x50
+  [  188.567163]  device_del+0x5ef/0x960
+  [  188.567170]  usb_disconnect+0x504/0x970
+  [  188.567181]  hub_event+0x2898/0x4670
+  [  188.567187]  process_one_work+0x610/0x1150
+  [  188.567196]  worker_thread+0x50d/0xd60
+  [  188.567204]  kthread+0x318/0x400
+  [  188.567212]  ret_from_fork+0x447/0x6a0
+  [  188.567217]  ret_from_fork_asm+0x1a/0x30
+  [  188.567225]
+  [  188.567227] The buggy address belongs to the object at ffff88800b387a28
+  [  188.567227]  which belongs to the cache kernfs_node_cache of size 136
+  [  188.567235] The buggy address is located 8 bytes inside of
+  [  188.567235]  freed 136-byte region [ffff88800b387a28, ffff88800b387ab0)
+  [  188.567243]
+  [  188.567245] The buggy address belongs to the physical page:
+  [  188.567251] page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0xb387
+  [  188.567259] flags: 0x100000000000000(node=0|zone=1)
+  [  188.567267] page_type: f5(slab)
+  [  188.567277] raw: 0100000000000000 ffff888006ead640 dead000000000100 dead000000000122
+  [  188.567284] raw: 0000000000000000 0000000000140014 00000000f5000000 0000000000000000
+  [  188.567288] page dumped because: kasan: bad access detected
+  [  188.567291]
+  [  188.567293] Memory state around the buggy address:
+  [  188.567297]  ffff88800b387900: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+  [  188.567302]  ffff88800b387980: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+  [  188.567308] >ffff88800b387a00: fc fc fc fc fc fa fb fb fb fb fb fb fb fb fb fb
+  [  188.567311]                                      ^
+  [  188.567316]  ffff88800b387a80: fb fb fb fb fb fb fc fc fc fc fc fc fc fc 00 00
+  [  188.567320]  ffff88800b387b00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 fc
+  [  188.567324] ==================================================================
+  [  188.568915] Disabling lock debugging due to kernel taint
+
+References:
+
+[1] https://gist.github.com/mfoliveira/c6b77fbae3d8083be6944477aedbc5d2
+[2] https://gist.github.com/mfoliveira/cd1d78561e2db80dd87103e835e3ebec
+---
+ drivers/usb/atm/ueagle-atm.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/usb/atm/ueagle-atm.c b/drivers/usb/atm/ueagle-atm.c
+index f3ae72feb5bfc313ccfa1ab6a9bb40fcd8f5800a..8f8c63f613cccb7cce29bff62afe82587776f6b5 100644
+--- a/drivers/usb/atm/ueagle-atm.c
++++ b/drivers/usb/atm/ueagle-atm.c
+@@ -597,20 +597,15 @@ static int uea_send_modem_cmd(struct usb_device *usb,
+ 	return (ret == size) ? 0 : -EIO;
+ }
+ 
+-static void uea_upload_pre_firmware(const struct firmware *fw_entry,
+-								void *context)
++static int uea_upload_pre_firmware(const struct firmware *fw_entry,
++				   struct usb_device *usb)
+ {
+-	struct usb_device *usb = context;
+ 	const u8 *pfw;
+ 	u8 value;
+ 	u32 crc = 0;
+ 	int ret, size;
+ 
+ 	uea_enters(usb);
+-	if (!fw_entry) {
+-		uea_err(usb, "firmware is not available\n");
+-		goto err;
+-	}
+ 
+ 	pfw = fw_entry->data;
+ 	size = fw_entry->size;
+@@ -668,9 +663,11 @@ static void uea_upload_pre_firmware(const struct firmware *fw_entry,
+ 
+ err_fw_corrupted:
+ 	uea_err(usb, "firmware is corrupted\n");
++	ret = -EINVAL;
+ err:
+ 	release_firmware(fw_entry);
+ 	uea_leaves(usb);
++	return ret;
+ }
+ 
+ /*
+@@ -680,6 +677,7 @@ static int uea_load_firmware(struct usb_device *usb, unsigned int ver)
+ {
+ 	int ret;
+ 	char *fw_name = EAGLE_FIRMWARE;
++	const struct firmware *firmware;
+ 
+ 	uea_enters(usb);
+ 	uea_info(usb, "pre-firmware device, uploading firmware\n");
+@@ -702,13 +700,13 @@ static int uea_load_firmware(struct usb_device *usb, unsigned int ver)
+ 		break;
+ 	}
+ 
+-	ret = request_firmware_nowait(THIS_MODULE, 1, fw_name, &usb->dev,
+-					GFP_KERNEL, usb,
+-					uea_upload_pre_firmware);
+-	if (ret)
++	ret = request_firmware(&firmware, fw_name, &usb->dev);
++	if (ret) {
+ 		uea_err(usb, "firmware %s is not available\n", fw_name);
+-	else
++	} else {
+ 		uea_info(usb, "loading firmware %s\n", fw_name);
++		ret = uea_upload_pre_firmware(firmware, usb);
++	}
+ 
+ 	uea_leaves(usb);
+ 	return ret;
+
+---
+base-commit: e98d21c170b01ddef366f023bbfcf6b31509fa83
+change-id: 20260515-ueagle-atm_req-fw-sync-204761fa0809
+
+Best regards,
+-- 
+Mauricio Faria de Oliveira <mfo@igalia.com>
+
 
