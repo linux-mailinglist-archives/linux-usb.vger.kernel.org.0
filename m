@@ -1,145 +1,204 @@
-Return-Path: <linux-usb+bounces-37455-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37456-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MC+4BuepBmq8mAIAu9opvQ
-	(envelope-from <linux-usb+bounces-37455-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:06:47 +0200
+	id aJdMLK6rBmq4mQIAu9opvQ
+	(envelope-from <linux-usb+bounces-37456-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:14:22 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C43E549663
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:06:45 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC7045497B8
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:14:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 53E7330779C4
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 05:05:06 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 161AC3018466
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 05:14:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 900243DE45A;
-	Fri, 15 May 2026 05:05:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 339A63D812A;
+	Fri, 15 May 2026 05:14:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VeK8P9KQ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TSod781m"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12681357CE4;
-	Fri, 15 May 2026 05:05:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778821504; cv=none; b=O4vIqD7M2WCXAkbJ1pbAez7+HLQtBomiFbe8s46kCktmw4qm4daY4ybFAAMKgQkTYbK5CN4N2gXvQTNEKk1IAeJrgwCZyMTRWE7HyKyjDCzuCIDNrpM5BmUi+y6zbpLg+gp2Rv01uOOZ+VAp9xLcZ8lB84wYb0A9QQ6HQ3VRZNc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778821504; c=relaxed/simple;
-	bh=BPHwYXFKzew4WRctZUguy9DWMMZjyVHKa9O6MGG45Sw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PDp8OhYpFjM3s03+3DLZXA5d+Kkas7kmlBbhN67zL1ocGaeMW6BnCnsdlv8sfdk7DbB9pQ5ZTZREkRWwWaWtLmuPal8vGZ7yW7IIi/0J9a2Ib/i0nXoh4+1UyFwpOKA9l+aOERUVy42n1S2JYT/yFj+l+kfITGJAXJtnSHvxBgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VeK8P9KQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DBE9C2BCB8;
-	Fri, 15 May 2026 05:05:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1778821503;
-	bh=BPHwYXFKzew4WRctZUguy9DWMMZjyVHKa9O6MGG45Sw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VeK8P9KQihYA3N+ZmEZ3lgEPy2O8x5YrJLxp3qmgYY1gvhYViYXDtpxfjXXT/Cld9
-	 j0ji/FwOgF6JlKJ4jYy9H36Gvm9JOWT3AURowQ424T/Co9QTKxXmZgIOK8++7fdd3O
-	 LPSwsoDpt1ogUv2x20yP8WXnInF0MRDigEriAlH0=
-Date: Fri, 15 May 2026 07:05:08 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Badhri Jagan Sridharan <badhri@google.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	stable <stable@kernel.org>
-Subject: Re: [PATCH 5/8] usb: typec: tcpm: validate VDO count before reading
- Attention status VDO
-Message-ID: <2026051545-compress-flinch-da7f@gregkh>
-References: <2026051347-clustered-deflected-9543@gregkh>
- <2026051350-stimulus-cornflake-d7ae@gregkh>
- <CAPTae5JNa=LxRr_FPcgsVP9CkWRy6Sa8mFiTTsCHppQkqQodBw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBCC3C5DC3
+	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 05:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778822053; cv=pass; b=gKptLcd6BR0hXrULPdvIDzVTu381Xkbo+YPhbgMEoaUh8yDqLETiELgPGz1TJP+rrTYfGHcT8HMxGY6HhXPp11zJeQlacRm1X3bYMyNAkz0MONPAL4MTzRRtF/TQg6wbbJ9O6hVzyRn+2nUDKx9IoVFNHAvDEYpGv0zff7O6ojU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778822053; c=relaxed/simple;
+	bh=0Hr/HWrBph9yrkb3EwjDPV8KtCBWrKjoZzM49F0ygsE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SVvZfZJIlCyjUcvwg69sRdUcyh6IvdpAKG8CCwFgkPl06lzy3tqqV4+zQwQvrDY3gQcqPdkSUrHvaR38w7JUbY3/ndJfjPjoIgtVND77+ev9Q/b6HfM8bFMDy/03e2zX+LMV8+x7l4V6wuGCyD4VKZM743pa8MnNbYxKam2Dzg8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TSod781m; arc=pass smtp.client-ip=209.85.210.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7de7c57b52cso7081729a34.3
+        for <linux-usb@vger.kernel.org>; Thu, 14 May 2026 22:14:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778822051; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MzcC+NqI+Iezk/RZQ5BJ7RrVH421g5GzlvaQGOAFjNBiNdIniygh1s4E7LAVdXjOYJ
+         +ogII0LVE3fJAJ4AVRXe1XqF9t/DMxN3/eZ39pbg+d54UraTpPHOnFH/5Q5NRYzhexr+
+         KuJZwdPhodEP9e1B3hp7d71QJrrH7ziOqAtjVyj4T3uc4Vr2KIaACNJo2c+5hgfTlIiF
+         FeOwsSuSr4PNgplFxF8ZBDa8K2v8ctOf+qoLz9iwN2EXevecxGq8/hvi0lET3NcfzhwY
+         ZrLcucrUc82j1RiWu+PYcya3w6Di8iOVphBjV83EHxvVEUhQ42ivsMHyC+cCU2+ZqPA0
+         dieg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=G3dIANZ4aFT6S3zSRBVQ9ShZn8S6WLuxcizHOjCqjwA=;
+        fh=TdA6/7x1xdw4RBSkJtvSpojpIff9RX3pZ/ghIz+ETfA=;
+        b=LDowPFm19/ugE4LzfDDrsqF1S2iOvA0NefFtDhhpyxDFVk3ZBggPWBYioJ+iCKH7gR
+         lLSsnmPcDguu80GNW2SN9PzL5O7Ti2RyjavFYnE0q+nqeoN0IoAJ2Wai4CoiUh8p4iLx
+         8vqP001YhO2YeMkO65981unXjKfI/+SG2mQuprxYR4Ll7tm28x0JjVHYsB688S85jUga
+         AtSAQoZzjFMyFhaoNT6vWMXBZx9Lgy3Mm/Fm8+iK1Yan/77mqxuIbUerW5kpK4/pIg+m
+         /Z2HFnIsbqoT5DgZotBowKNwpAorqfRl8WzoVmAyzqAIw3tNy+wABW5pQqzR5v2wvFX+
+         ZsQA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778822051; x=1779426851; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G3dIANZ4aFT6S3zSRBVQ9ShZn8S6WLuxcizHOjCqjwA=;
+        b=TSod781m5sPzMMXOaI09ZVcnjdJuCsAynkmk1PhKNqxl7gbb19FnY5w29t0ZpbFyJP
+         uS7h4Hl+henFgy5p6aobzggEC1kgu/YOB8xpnWhMutNxKwqOoV/KkwdIb8Iqc7xxcXtE
+         sXh3yiMIXnNLciEvD1mHZi3iQs6BV3QvqpBE/GqqSO35md28CVwrjPWqhQ+YQBUB6+gH
+         vtlAba3ngtU+MoyUOrR8f91tXUH1eCfjRApZsZBkpzh6aGQrvYr062PZMf6/NxaYLnz3
+         +0u2G7tnv3AWUMnHyGTEQAVkqBLQjJi9wTPhApCu+xDoUXQbDsOvF66Nk2eIm3mNbCDa
+         OfcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778822051; x=1779426851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=G3dIANZ4aFT6S3zSRBVQ9ShZn8S6WLuxcizHOjCqjwA=;
+        b=XofnfX/vOkexIbxueRypEdqPmB8C0j/kfWLsrYg8n3X0LaDB/sX0tW6JD1/tgNxOvt
+         XvjKizfYncavlJ5Ht4zN7kob0MmhHjIQ2nugSI1ngNNRQG/VWWDQzmvTVA+hlIS1n6YV
+         KSBiQhLoE0fDT/r7YkI8UrRvrFOlnJiZzcouwrEy9L7Fgg4MppS9wxJkdUYyOb8l3+um
+         1cC/6wfic0LXT+/XVtL3OuIW8ANkJX6OQX9T06lewQhlI2I7KmaZ7zu+8uM/kdQJVTIL
+         Ya3a4PRGkIVR2MRZCwSV+IagVyVuJKjQBfwwsjpFRKyLDBlmszzSv7NGdyURN//Ut2RY
+         G/mA==
+X-Gm-Message-State: AOJu0YzJsxjFun6I0zUGl69n7BO9g5cNDuZekaVjq6dlJzGk8SFnIDM5
+	9vyTFZ+OKINmRmIuEzbUrh+mrzvxJ0k9+oESXUWHPzvhaIKTUlHVMN8d2RpxFToNp20pX8oBW2+
+	d3G3GeHrjuZqfQFJsoHa8xYj7LOGGhqGiD8hMgiok
+X-Gm-Gg: Acq92OGL+3Z3AUyYWb0rMCWSXMp5uMazyvurS/tAZQcp3das8CThTjFq63rFnqigWfe
+	VbKSU4RVzo/Bvv/XjDQuXnw4/Bygjz9CpSpawM/B7FPIeed0eIE1IwJyAqpPeVYbQU0EdmqTgj8
+	oONGLFdnC3G5EZXcvxA/YYsHmhmioJ7xc8wnG6mzrMAJMJsTooRQqM576HvfIhseG8wbDfedHtr
+	6MLRHUQUfT4o29vzaedjE/AwjPzWPbPGJYoa3e0Fkey84K4fSfQFSn17M/WMzzYcQgS6Pvj89AY
+	axkNaPxhcUCuF+tJNEJmmqH4c7RFkZpj61ORv1G8SPTkvYJQ7ys=
+X-Received: by 2002:a05:6820:16a6:b0:694:8bfa:7819 with SMTP id
+ 006d021491bc7-69c942c4ce5mr1597774eaf.13.1778822050737; Thu, 14 May 2026
+ 22:14:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPTae5JNa=LxRr_FPcgsVP9CkWRy6Sa8mFiTTsCHppQkqQodBw@mail.gmail.com>
-X-Rspamd-Queue-Id: 6C43E549663
+References: <2026051347-clustered-deflected-9543@gregkh> <2026051350-plated-salute-0efe@gregkh>
+In-Reply-To: <2026051350-plated-salute-0efe@gregkh>
+From: Badhri Jagan Sridharan <badhri@google.com>
+Date: Thu, 14 May 2026 22:13:33 -0700
+X-Gm-Features: AVHnY4LgRc3wHEkUPTsm9y9A_dVefQ6vusBPcEsoGl6LSEXYfCnJRnWNec1jsoQ
+Message-ID: <CAPTae5JhhCr+W4xUBWcbrS7j4_BZ9SCxdEbn5quAD5aP7hDx8A@mail.gmail.com>
+Subject: Re: [PATCH 4/8] usb: typec: tcpm: validate VDO count in Discover
+ Identity ACK handlers
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, stable <stable@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: AC7045497B8
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37455-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37456-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.989];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	FROM_NEQ_ENVFROM(0.00)[badhri@google.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[google.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,linuxfoundation.org:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On Thu, May 14, 2026 at 02:55:31PM -0700, Badhri Jagan Sridharan wrote:
-> On Wed, May 13, 2026 at 8:53 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > A broken/malicious device can send the incorrect count for an attention
-> > status VDO, which will cause the kernel to read uninitialized stack data
-> > and send it off elsewhere.
-> >
-> > Fix this up by correctly verifying the count for the attention object.
-> >
-> > Assisted-by: gkh_clanker_t1000
-> > Cc: Badhri Jagan Sridharan <badhri@google.com>
-> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Cc: stable <stable@kernel.org>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >  drivers/usb/typec/tcpm/tcpm.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> > index 44dab6c32c33..2cab74ed71a7 100644
-> > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > @@ -2639,6 +2639,8 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
-> >                         }
-> >                         break;
-> >                 case ADEV_ATTENTION:
-> > +                       if (cnt < 2)
-> > +                               break;
-> >                         if (typec_altmode_attention(adev, p[1]))
-> >                                 tcpm_log(port, "typec_altmode_attention no port partner altmode");
-> >                         break;
-> > --
-> 
-> Hi Greg,
-> 
-> While the `cnt` check helps fix this specific case, I do see multiple
-> other instances in the same function where the validity of p[0] and
-> p[1] seems to be assumed (for instance calls to
-> typec_altmode_vdm(adev, p[0], &p[1], cnt)). To make the patch more
-> complete and robust, shouldn't p also be initialized to 0? This will
-> prevent leaking uninitialized stack data in those instances too.
+On Wed, May 13, 2026 at 8:52=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> Properly validate the count passed from a device when calling
+> svdm_consume_identity() or svdm_consume_identity_sop_prime() as the
+> device-controlled value could index off of the static arrays, which
+> could leak data.
+>
+> Assisted-by: gkh_clanker_t1000
+> Cc: Badhri Jagan Sridharan <badhri@google.com>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: stable <stable@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Good point, we should be checking this for all of these, not just this
-one instance.  I'll fix this up and do a new version, thanks.
+Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
 
-greg k-h
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.=
+c
+> index 55fee96d3342..44dab6c32c33 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -1855,6 +1855,9 @@ static void svdm_consume_identity(struct tcpm_port =
+*port, const u32 *p, int cnt)
+>         u32 vdo =3D p[VDO_INDEX_IDH];
+>         u32 product =3D p[VDO_INDEX_PRODUCT];
+>
+> +       if (cnt <=3D VDO_INDEX_PRODUCT)
+> +               return;
+> +
+>         memset(&port->mode_data, 0, sizeof(port->mode_data));
+>
+>         port->partner_ident.id_header =3D vdo;
+> @@ -1875,6 +1878,9 @@ static void svdm_consume_identity_sop_prime(struct =
+tcpm_port *port, const u32 *p
+>         u32 product =3D p[VDO_INDEX_PRODUCT];
+>         int svdm_version;
+>
+> +       if (cnt <=3D VDO_INDEX_CABLE_1)
+> +               return;
+> +
+>         /*
+>          * Attempt to consume identity only if cable currently is not set
+>          */
+> @@ -1898,7 +1904,7 @@ static void svdm_consume_identity_sop_prime(struct =
+tcpm_port *port, const u32 *p
+>         switch (port->negotiated_rev_prime) {
+>         case PD_REV30:
+>                 port->cable_desc.pd_revision =3D 0x0300;
+> -               if (port->cable_desc.active)
+> +               if (port->cable_desc.active && cnt > VDO_INDEX_CABLE_2)
+>                         port->cable_ident.vdo[1] =3D p[VDO_INDEX_CABLE_2]=
+;
+>                 break;
+>         case PD_REV20:
+> --
+> 2.54.0
+>
 
