@@ -1,316 +1,208 @@
-Return-Path: <linux-usb+bounces-37491-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37492-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KJztJYzmBmoHowIAu9opvQ
-	(envelope-from <linux-usb+bounces-37491-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 11:25:32 +0200
+	id 6DFDOa/nBmpIowIAu9opvQ
+	(envelope-from <linux-usb+bounces-37492-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 11:30:23 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB96554C5E6
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 11:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4390D54C6F8
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 11:30:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A4C5930C23F0
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 09:04:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A7A3432227FD
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 09:08:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B9B44418E6;
-	Fri, 15 May 2026 09:02:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5627642EEC3;
+	Fri, 15 May 2026 09:08:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fpbM0JDu"
+	dkim=pass (1024-bit key) header.d=moxa.com header.i=@moxa.com header.b="KR8t1dSg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11012020.outbound.protection.outlook.com [40.107.75.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9620A441041
-	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 09:02:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778835771; cv=none; b=ckg3k0tCsoFzDR3d+nDz9LuPqlh0+2Une4r/++mOe3EZISe9uNYPqFl2WtIxY/xnN51rtRgmKSR94YAAvUKNL1GhswFf1TO5h+/in4j1GUh9y2erBW2FBJczbMZklvDKbvcHN5f8svG2ntO7eu26zehLV/K21v5gGMuHn5xg1gw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778835771; c=relaxed/simple;
-	bh=hzmFuLfaZehJONSUg8nNmwN5xN2aJspRaBE7HbdGagQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g79ayqzbAShM+B6BIQZJpCkGTB8nP+I6sOonwJAhT2zizDzevl5FP5YHXhzGFRJ+d2V8Us6H7SgRXMW02uJBnYAG9su3cuFNyjv6WINdt7AZDXMScOtHf9C4uaeFaPcUORgbcn03eCniaYCu4Ft5LW2H9Ao8s/mw+nir0c88Xc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=fpbM0JDu; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-367cbac9c37so4729744a91.2
-        for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 02:02:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1778835769; x=1779440569; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pt4T5ObMyYagXPbowM8Wn1tRV9x+5vQ2cef3iU5ynik=;
-        b=fpbM0JDuoHI1reJ6klWr2SLVRJe4FIi6JZOHStuaNlznIkJwajRajT0ocY1Q6F48V6
-         CnuDOr5LT0NMQqVBkqUastLg5gXGbnML6k2FXxP/PGgCqTgWme+2zQe3k5P8v+YJXHIq
-         k6up0xH7SzdepLAfaWrDzOlrTgJeNl4zSvqe0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778835769; x=1779440569;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=pt4T5ObMyYagXPbowM8Wn1tRV9x+5vQ2cef3iU5ynik=;
-        b=a4BzAxZ7YWkdZQr0EvIMEYQ9zdxw/xfOhRV73liHthiGezTr6nVqAqFrGZS2+pB9le
-         BxEWhVNyXZW9gHe6tEGxgq0tJxZ9VcUzw2y+LbdRfDmLLzIRAQPYTJI684uV7guKzGGF
-         eNouYNXayqOzFB1lLtUx4rItg0+r5Bhy64D+p+pzqyQsYrzWeWAdoeSrwHm9qODSk+bY
-         B4KgEBPXj64g6C6gVfcc/dxVwj3kyDaTdIQKwv5yuasDxpEWoDE5x9m8fSwHLkTvJ4XZ
-         Hyf2lNxBTUlGHJiZil1jM4ZsECckWTIWSDsx2/Jid2ArkW1o0N5Ftv9AZ7w+vwdqZuqe
-         id6Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+qz7/o1Yva5KHEgrri/nrutGbpSTuU8ZV6iDlQpFSeGXThEuKds9KIa95BBK6Yu+/w3OGhzlRdCzI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxX77yX3ilSC5ZMXfdtfA60T65kssCKUYBlJVv3ZqHdeXZv5VDP
-	tYhnmWyD+vaR511KHbI9leMysIIsL3YVoYAsUfBjRzKpJ4oYGpd4cf6cim+HCfX3dQ==
-X-Gm-Gg: Acq92OG6fiUX3Jd4JQLQQQ13/Goo93gfE11Vu6xJr+afkgxBhTQKmPjFYWk23VR3Rr3
-	YmuT0H+I1A4nu5sc6QUZkiNTeXNbZEVUh/UJqY/Ze5GLsWEoOspc5h7qBn0JaMrZcT0VXUGZ34k
-	SNapRT4eRtT9t9i538YBGRvooomHoHMA3vQjPv48UnJbn/FekV3SmzL+DW17OsH/vDWkS1+11+W
-	pK8sqEW4BaeKSpMVq87bILtBpxIM7T6nFEzOUVUf/KTRgzg/IvP9rP2fmK9b+JWIsCOKJT1NetT
-	wQOcOuhtA2kg8PfstTh/d5gYIALyuVfNng+My4oBpMG+Kt2ZsCtDYUcFrLi1Tbm7bXG4PrDDNcQ
-	49VngpuRwFHtWE6rfkhUA7scvEWU28CCgxKgN/F5HaF28OQE8AuLQ13e8uPXp7Apgs6TmELaMNB
-	CeolGxFBReFqt/woxfD2MkY1qKrtCSne1S2u3SuY4YSmkF6yw5pm5xhOinZuEIpAEUjycpfASfj
-	a1+90Cs
-X-Received: by 2002:a17:90b:1344:b0:366:4782:138c with SMTP id 98e67ed59e1d1-36951b971ccmr3221579a91.17.1778835768758;
-        Fri, 15 May 2026 02:02:48 -0700 (PDT)
-Received: from wenstp920.tpe.corp.google.com ([2a00:79e0:201d:8:b3d8:e32e:c2fc:c31e])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36951584654sm2076537a91.7.2026.05.15.02.02.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 02:02:48 -0700 (PDT)
-From: Chen-Yu Tsai <wenst@chromium.org>
-To: Bartosz Golaszewski <brgl@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Chen-Yu Tsai <wenst@chromium.org>,
-	linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Manivannan Sadhasivam <mani@kernel.org>
-Subject: [PATCH RFC 12/12] arm64: dts: mediatek: mt8188-geralt: Add WiFi/BT as M.2 E-key slot
-Date: Fri, 15 May 2026 17:01:48 +0800
-Message-ID: <20260515090149.3169406-13-wenst@chromium.org>
-X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-In-Reply-To: <20260515090149.3169406-1-wenst@chromium.org>
-References: <20260515090149.3169406-1-wenst@chromium.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5962242B74A;
+	Fri, 15 May 2026 09:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.20
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778836102; cv=fail; b=GUO7TnhXzos9QBaILl3/n7s+uBKtRcMTaWtobRuNdAtM/F35boEQs9y2SIyNg5kAecPd16+nGs8wtjhCLd/LYPliwqBZGMR//88fRq4/+uPx2+CYLHkV0KVZNc3iBUaWWCcWYY7sq4Wcc9fAsBGRg+PQqDy7Ctdb7nw8dSvyFSY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778836102; c=relaxed/simple;
+	bh=Gy1SOlLSbOwoBFPRsJn+RKuOWu59QMcPoZD+rKTJ7BQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=mV5o82qm32iuEK/tsVD8IdRD43aRkyD18iykTt4puIKqUV2UXlEoXHw+UOQp0uVqdq8j/6rC/KyXQH25bGv46K14CSd4XjEaAmRAlCBs5h1Frrtvk5/QEKfbdfSqoLP5FWMitb3lWiB5xDwG7VzEVFcLVfe4N+QOCcKsSTtKR64=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=moxa.com; spf=pass smtp.mailfrom=moxa.com; dkim=pass (1024-bit key) header.d=moxa.com header.i=@moxa.com header.b=KR8t1dSg; arc=fail smtp.client-ip=40.107.75.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=moxa.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=moxa.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=X4xJYB8jzRZcZQ5eKuOllq5nouwd49XJ5rAiU8ksPoOWb5wRA0KFHvsBvFcj/u+p7eNtPWk3hwdVhbNp3LC6/xN5hLYw4xlaXB/V5LbrpnbuKtE508o+sY6hSdzek8cbkaRuzhH5tHHESclhk+ryQesxWIIOxCmiGYsj/0Pvp0BJkD94v2lisM8gUimkUEcsQL4YF1bx80KsSaCSdb19uKAI2TcARutg0H5+/jrJedYo5ei9U6ZV0t7J7SQzw9bYY4RsDCJ+peCUlsRWEiodheSJDLYv593J0L2ganrhTNtyTigBQZZpnCxjcTLpmq2cFhvbBNpIXgxRiVk1zk+Wlw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wn6+kZpBvApa76aF1EFsaijzAYLOxmcpDaT2wr/dlKo=;
+ b=XTj1/24cVofvjJNUWM17XYTrWU7ExqvXCLD7kP78vNQYuWOw7hGm1CDFwvdEDTrs+m50wvSHroGDD/0VtAMnF9R32TJ88aiJdpXAL3DqZqZd2PG7UyqoKJ/7GCv1w2EOq8Q5gcVtytbit4sNT5q1ZE2JRmMYA3CQi/cPskEGdm+iNZe0F5VmRTHwaJHnNkERMZNgIlzoagoID5YDqEJMhiUVPnQvr+rUEpBnjQMgl9Al62TrJI3TpwlRgc+3yUgTNhoHZY/jnZptf8lj5DqdqOZCxq6Ungyt5iHViIHOGY9w5Xr8WtSVR+5Z93SdB5xZqWTKx26yiVAwB5ztlVnppA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=moxa.com; dmarc=pass action=none header.from=moxa.com;
+ dkim=pass header.d=moxa.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=moxa.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wn6+kZpBvApa76aF1EFsaijzAYLOxmcpDaT2wr/dlKo=;
+ b=KR8t1dSglmmsdO7bHafM8VjJkp47Fp0UMOVl8OLBLy4WK4uP5ApsXn+wVBlK5KTPURX6G33v5CKL4cAviSs3QYfnDmP94X81uJHHT0j0GJP3ews9YweIKryoHDG9TjLJyVosQT6gjOSgK+WWCc+zSjzoywMkVyTLjMDYIdenr4M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=moxa.com;
+Received: from PUZPR01MB5405.apcprd01.prod.exchangelabs.com
+ (2603:1096:301:115::14) by TYUPR01MB5082.apcprd01.prod.exchangelabs.com
+ (2603:1096:400:35b::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.18; Fri, 15 May
+ 2026 09:08:12 +0000
+Received: from PUZPR01MB5405.apcprd01.prod.exchangelabs.com
+ ([fe80::ae38:e821:cf7d:3717]) by PUZPR01MB5405.apcprd01.prod.exchangelabs.com
+ ([fe80::ae38:e821:cf7d:3717%4]) with mapi id 15.21.0025.012; Fri, 15 May 2026
+ 09:08:12 +0000
+Date: Fri, 15 May 2026 17:08:09 +0800
+From: Crescent Hsieh <crescentcy.hsieh@moxa.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/4] usb: serial: mxuport: add sysfs control for UART
+ FIFO
+Message-ID: <agbieSXDX1wUkE4K@moxa-ThinkCentre-M90t>
+References: <20260324035041.352190-1-crescentcy.hsieh@moxa.com>
+ <20260324035041.352190-5-crescentcy.hsieh@moxa.com>
+ <afy2yeDTHiVFkPmy@hovoldconsulting.com>
+ <agMO03V9xppAtWjf@moxa-ThinkCentre-M90t>
+ <agQ0RRpE27ComUnV@hovoldconsulting.com>
+ <2026051321-apply-charting-150e@gregkh>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2026051321-apply-charting-150e@gregkh>
+X-ClientProxiedBy: TPYP295CA0015.TWNP295.PROD.OUTLOOK.COM
+ (2603:1096:7d0:9::10) To PUZPR01MB5405.apcprd01.prod.exchangelabs.com
+ (2603:1096:301:115::14)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: EB96554C5E6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PUZPR01MB5405:EE_|TYUPR01MB5082:EE_
+X-MS-Office365-Filtering-Correlation-Id: 99796b4a-a1da-48ac-f261-08deb2617db2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|376014|366016|1800799024|56012099003|18002099003|22082099003|4143699003|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	H1UH+gwwppxOabQNe9qkbwAe2M7zJ5bKJF284BhzJP3erzQUctRYqiyIxrbvrqxQEBQI96UqleSgPaIzS8ePHs1sLWhKvPvtJRrm3+d5APRKwjvfEe0b82UJ5Psmd0oit9x9XrCIiMCaAkAEzDuYPk62mDSblCmEH/h6yPi+JlvSejrt+xeaHicrzUhIfYZ594OhlUV1gFsuvO8gTOnHLRK1avUbtAIa5grHGHrbnUxdTocBJvmNO0FsHyuOuEMddJiscVpdVL/RAdREEfuLeKzOWjyb/6Q2h7nKnVEJ6QGA1G0EpvEnuaPvm0GYwkauzKGWjNVCnJ6VE3SJ2dSwSZzzmJaTXoEqMctjkXoBBKX/twk2g2mjq9TpRcZr5Wtv4CQJoXzma9bd27XqVIqa+PtkiwP6jBWWWeYtjq3/S2qnYBiJzM7dm/1cU2gpco9bi7ApSGbMp6wlPMYrwZX93hPjWuUX2styd/ai7jrwjmO+d5ZEkUGCEcRgLvJyVjIG36ZbfKGpWgIE26nURcs+JxHRAgZ88cLDC3BI27oafRmkiyPV/5tMEBwK32etartyGRnYPazpYVOsDf8WR5W3pEJC3KlvFtWgLIspsRM13Qp9HaJQQ9iKNEsSIvV6M3cklGA/ZY7u1QqmW68t9KONcFxAYloXtuxke2NM/bt8l5ExEqetCdYtWyPISvutASzm2GFjY4Z2zTKbiDVkMSDHUfGEtEkt6ag4v8cm4wt1Bd9j2522CFOc3P89jw57jfuY
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR01MB5405.apcprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(366016)(1800799024)(56012099003)(18002099003)(22082099003)(4143699003)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?7gkTiZ5thAnAiiOuQENAns+DO2KaNGwboG9zhnCERikzPI92qXF1kwRZfpth?=
+ =?us-ascii?Q?b0S3bVZk1/jW9PVqDkOuVU5ry2CLTKaYOdewokKkylOVjdYUYZ5gKAXfqbRz?=
+ =?us-ascii?Q?eHq74IEt53uoCpDzVRZyxsjc6JdXMjzgwWiL1TF2QRH2TIthPICObY83FbD+?=
+ =?us-ascii?Q?NaQ7NB9iH9MlWRJTACpre8So2+ux+TOTWn/z9SqjM9SGR7GQ2DMlMvfg7l9o?=
+ =?us-ascii?Q?m/HwGyJPFc/r5PpZtIv3VTFo8Gxe6k5vcK3mM7FdzpFZgYZqgenA6UIkT0zn?=
+ =?us-ascii?Q?mS7+zKCPEXPlOiCh0veaUrD0R7Vw2BMjX4L7IaZfSZhVvCJa18jaKcY2Y4N3?=
+ =?us-ascii?Q?T5KXAwyxVAmZvyDKwSeHaZuhW/RCdwhKxCAvZAlAz5lnqsohIqfHOS+hj/Vi?=
+ =?us-ascii?Q?eO7ZOFsHgnKxvmCo/dyRppOEGheng1CZSrzWGAMYvcQJNJo0Gf3ZEOLj/80y?=
+ =?us-ascii?Q?/VUdr5w3yuxlfycKyqmUgO77y0I1Dsnl09522/n30qsw+ZWE/nvZkrCj5GhZ?=
+ =?us-ascii?Q?hpbBd9bPwioWmce8yeMgI+VXMkZh8UmPE0hU78T98i9Vf7aLQGIFX79fqZDE?=
+ =?us-ascii?Q?Sdi0x75WxYhBS7c0VRsIVCB6Liu54qf1LLICUPrSx7E5B9OpfmfxZSajm0LR?=
+ =?us-ascii?Q?SmjsyFtv2dEubWLbyNhioPSAFefIGXPiv7p0aOOpOa8TGpoYciMDtD8MJ/w8?=
+ =?us-ascii?Q?GGJ4CA993zID2R32WssJh+nIp0fhHL3DSYgCEfG9HDDPkMXXKPqMKi3f5//v?=
+ =?us-ascii?Q?KPUqN6uCavY1fxl91j+T0qjpGPMjFOcK2edwmXcUzZm8QE99Cv7LJoeCvVY5?=
+ =?us-ascii?Q?vmenmA/DVaOidv4VPZQT3276GZlgqyeaK+hxxq5gGbkcrjCiMAH4+UORtwzM?=
+ =?us-ascii?Q?l4Iyc+0HOWRek/AcafbToZvZM7lreggNI4vWhOWr2RPA2vRSahX1oS0Fakpt?=
+ =?us-ascii?Q?QmQEt6+Obod4vtWrazuUqSdmTVgZLxI3nW6GJQWjQ/vwduOSFj7cxAVEsETU?=
+ =?us-ascii?Q?5xQ5x6JTNqHd/UTjxCYBmVcQf5PFV+IsJEsbFkeOPAdK1K1isdDSAMyIYllI?=
+ =?us-ascii?Q?XH2X7gvmYsjPKSl1xYRzw4kJYOo4Vq8Bbisr6INcoyQsIfwzwoRifZnblAWn?=
+ =?us-ascii?Q?pRuuXMjkVEIOnYP4of+8U75nsqa6JSweT64aA/YTeq1sV/WhUWfteeFbbzHt?=
+ =?us-ascii?Q?r/wk7Bmk6YwtmVIiXBr1t89koP7umXbOcVRSbc1r6EMxHGq/oPhW7JbUb/zZ?=
+ =?us-ascii?Q?7qCmj8cOolU6aalts0HgxY5W70aOnyapVhes9tJKoF7nKsYYMOtRKE1fihpg?=
+ =?us-ascii?Q?Tz+zRAb4SpDeg1OR+g5okdL0p0lNwUQmHBQq6b/45dE/gtW0Lvpd+IItmM6w?=
+ =?us-ascii?Q?qNQw3t4bnvotzoQzHGpxJmRR5Kl6/23NyeRSN9erAMs2p4gsug39y53Hrjgs?=
+ =?us-ascii?Q?kRVIy2SLXBgRTftDXpHWeeKMv6VBOlWoQHjLxgGJzH1ALBIgspSpmALO6+PQ?=
+ =?us-ascii?Q?uZF+HwWVGKOlvTTHLFLjYfYlYNV3Nyr0oSzg0uRADdlEIOufk57a4GnyD1Rc?=
+ =?us-ascii?Q?LRmUKg2rgOW5wy5t+kC/YM/Ep4Bx3/1G0aiGw4KHOBSCYJ36GfaG1DEP2cmI?=
+ =?us-ascii?Q?TP08RrXA79DQs7uvNvxtV/1b6wlb25kSUkvqZfkqLwnwzr4VPilLGXYdy3fd?=
+ =?us-ascii?Q?MaixKWodC7L1dd0dHtK60UfnxB5jGiE61cQu9HXV418UP2UP232kzu0ItTza?=
+ =?us-ascii?Q?5vCGRkzEyujKfw3hGjpBlE7bylHd6qo=3D?=
+X-OriginatorOrg: moxa.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99796b4a-a1da-48ac-f261-08deb2617db2
+X-MS-Exchange-CrossTenant-AuthSource: PUZPR01MB5405.apcprd01.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2026 09:08:12.6172
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5571c7d4-286b-47f6-9dd5-0aa688773c8e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /H6ZAOG1fC0O4hRNe3IdIlZgds+J7mdISMGMZJLzShRCtkXjeKDeyyk1ZX98BekAHPVRBWxn+KGTGVRFDZAjN3yOi3TATcZ+GOpMkoopfLY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYUPR01MB5082
+X-Rspamd-Queue-Id: 4390D54C6F8
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
-	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[moxa.com,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[moxa.com:s=selector1];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	TAGGED_FROM(0.00)[bounces-37491-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[moxa.com:+];
+	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37492-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	MISSING_XM_UA(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[kernel.org,linuxfoundation.org,gmail.com,collabora.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wenst@chromium.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[chromium.org:+];
+	FROM_NEQ_ENVFROM(0.00)[crescentcy.hsieh@moxa.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_HAS_DN(0.00)[]
+	TO_DN_SOME(0.00)[]
 X-Rspamd-Action: no action
 
-The MT8188 Geralt design features a chip-on-board WiFi/BT solution. This
-is a M.2 E-key WiFi/BT board layout directly inserted into the mainboard
-design. The connections to the rest of the board are almost the same as
-if it were a separate M.2 card. The only addition is the PMU_EN pin on
-the chip; on M.2 cards this would be tied to the primary power source.
+Hi Greg and Johan,
 
-Model the chip-on-board WiFi/BT solution as a M.2 E-key slot with PCIe,
-USB and auxiliary signals. The PMU_EN pin, which enables the internal
-power controls and regulators, is modeled as a regulator fed by the
-pp3300_wlan regulator. Since power sequencing is now correctly modeled
-using the M.2 E-key slot, drop the "regulator-always-on" property one
-pp3300_wlan regulator. Also drop the comment in xhci2 saying "MT7921's
-power is controlled by PCIe".
+I agree that USB-to-serial cannot provide deterministic latency.
+However, the embedded UART used by Moxa UPort has a 512-byte FIFO, so
+its FIFO/trigger configuration still has a measurable effect on the
+typical latency on this hardware.
 
-Also drop the voltage range on the pp3300_wlan regulator. This
-"regulator" is just a load switch and does not provide any regulation.
+RQ_VENDOR_SET_FIFO_DISABLE is a historical name. On the current
+firmware, it does not literally turn the UART FIFO on or off, but
+adjusts the UART RX/TX trigger levels instead. Its semantics are close
+to the trigger-level control I am currently working on for the PCI
+serial cards [1].
 
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+In a 1-byte loopback latency test under the same wiring and host setup,
+with 10,000 samples for each configuration, I measured the following
+results (in us):
+
+       | Enable | Disable |
+--------------------------|
+Min    |    637 |     210 |
+Median |    764 |     235 |
+P95    |    811 |     238 |
+P99    |    820 |     260 |
+Max    |  4,214 |   3,807 |
+Avg    |    744 |     235 |
+--------------------------|
+
+So while this does not make USB deterministic, it does show that this
+setting has a significant effect on the typical latency on this hardware
+and also matters for compatibility with some legacy serial equipment.
+
+[1]
+https://lore.kernel.org/all/20260504084900.22380-16-crescentcy.hsieh@moxa.com
+
 ---
- .../boot/dts/mediatek/mt8188-geralt.dtsi      | 93 ++++++++++++++++++-
- 1 file changed, 89 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt8188-geralt.dtsi b/arch/arm64/boot/dts/mediatek/mt8188-geralt.dtsi
-index 4cb23595d17b..d7b5eb95ba0f 100644
---- a/arch/arm64/boot/dts/mediatek/mt8188-geralt.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8188-geralt.dtsi
-@@ -86,13 +86,11 @@ pp3300_z1: regulator-pp3300-z1 {
- 	pp3300_wlan: regulator-pp3300-wlan {
- 		compatible = "regulator-fixed";
- 		regulator-name = "pp3300_wlan";
--		regulator-always-on;
--		regulator-min-microvolt = <3300000>;
--		regulator-max-microvolt = <3300000>;
- 		enable-active-high;
- 		gpio = <&pio 12 GPIO_ACTIVE_HIGH>;
- 		pinctrl-0 = <&wlan_en>;
- 		pinctrl-names = "default";
-+		/* load switch */
- 		vin-supply = <&pp3300_z1>;
- 	};
- 
-@@ -159,6 +157,17 @@ ppvar_mipi_disp_avee: regulator-ppvar-mipi-disp-avee {
- 		vin-supply = <&pp5000_z1>;
- 	};
- 
-+	/* PMU_EN pin controls internal regulators and power sequence */
-+	wlan_pmu: regulator-wlan-pmu {
-+		compatible = "regulator-fixed";
-+		regulator-name = "wlan-pmu";
-+		enable-active-high;
-+		gpio = <&pio 145 GPIO_ACTIVE_HIGH>;
-+		pinctrl-0 = <&wlan_pmu_en>;
-+		pinctrl-names = "default";
-+		vin-supply = <&pp3300_wlan>;
-+	};
-+
- 	reserved_memory: reserved-memory {
- 		#address-cells = <2>;
- 		#size-cells = <2>;
-@@ -193,6 +202,39 @@ adsp_dma_mem: memory@61000000 {
- 			no-map;
- 		};
- 	};
-+
-+	wifi-bt-connector {
-+		compatible = "pcie-m2-e-connector";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&m2_e_key_kill_pins>;
-+		vpcie1v8-supply = <&mt6359_vcn18_ldo_reg>;
-+		vpcie3v3-supply = <&wlan_pmu>;
-+		w-disable1-gpios = <&pio 13 GPIO_ACTIVE_LOW>;
-+		w-disable2-gpios = <&pio 14 GPIO_ACTIVE_LOW>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			/* PCIe for WiFi */
-+			port@0 {
-+				reg = <0>;
-+
-+				wifi_ep: endpoint {
-+					remote-endpoint = <&pcie_ep>;
-+				};
-+			};
-+
-+			/* USB for Bluetooth */
-+			port@2 {
-+				reg = <2>;
-+
-+				bt_ep: endpoint {
-+					remote-endpoint = <&usb2_ep>;
-+				};
-+			};
-+		};
-+	};
- };
- 
- &adsp {
-@@ -656,6 +698,22 @@ &pcie {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pcie_pins>;
- 	status = "okay";
-+
-+	pcie@0 {
-+		compatible = "pciclass,0604";
-+		reg = <0 0 0 0 0>;
-+		device_type = "pci";
-+		num-lanes = <1>;
-+		#address-cells = <3>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		port {
-+			pcie_ep: endpoint {
-+				remote-endpoint = <&wifi_ep>;
-+			};
-+		};
-+	};
- };
- 
- &pciephy {
-@@ -999,6 +1057,14 @@ pins-bus {
- 		};
- 	};
- 
-+	m2_e_key_kill_pins: m2-e-key-kill-pins {
-+		pins-kill {
-+			pinmux = <PINMUX_GPIO13__FUNC_B_GPIO13>,
-+				 <PINMUX_GPIO14__FUNC_B_GPIO14>;
-+			output-high;
-+		};
-+	};
-+
- 	mipi_disp_avdd_en: mipi-disp-avdd-en-pins {
- 		pins-en-ppvar-mipi-disp {
- 			pinmux = <PINMUX_GPIO3__FUNC_B_GPIO3>;
-@@ -1163,6 +1229,13 @@ pins-bus {
- 		};
- 	};
- 
-+	wlan_pmu_en: wlan-pmu-en-pins {
-+		pins-wlan-pmu-en {
-+			pinmux = <PINMUX_GPIO145__FUNC_B_GPIO145>;
-+			output-low;
-+		};
-+	};
-+
- 	wlan_en: wlan-en-pins {
- 		pins-en-pp3300-wlan {
- 			pinmux = <PINMUX_GPIO12__FUNC_B_GPIO12>;
-@@ -1342,10 +1415,22 @@ vdosys1_ep_ext: endpoint@1 {
- };
- 
- &xhci2 {
--	/* no power supply since MT7921's power is controlled by PCIe */
- 	/* MT7921's USB BT has issues with USB2 LPM */
- 	usb2-lpm-disable;
- 	status = "okay";
-+
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		port@1 {
-+			reg = <1>;
-+
-+			usb2_ep: endpoint {
-+				remote-endpoint = <&bt_ep>;
-+			};
-+		};
-+	};
- };
- 
- #include <arm/cros-ec-keyboard.dtsi>
--- 
-2.54.0.563.g4f69b47b94-goog
-
+Sincerely,
+Crescent Hsieh
 
