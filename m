@@ -1,243 +1,193 @@
-Return-Path: <linux-usb+bounces-37518-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37519-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QOYPM+cwB2oQswIAu9opvQ
-	(envelope-from <linux-usb+bounces-37518-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 16:42:47 +0200
+	id wEVWHMVdB2pa0QIAu9opvQ
+	(envelope-from <linux-usb+bounces-37519-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 19:54:13 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E66B5519D6
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 16:42:47 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7B4A555ADF
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 19:54:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B5D28304C05F
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 14:39:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D1AEA31302BB
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 16:56:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7A7A3B5311;
-	Fri, 15 May 2026 14:39:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A603C4CA26E;
+	Fri, 15 May 2026 16:56:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="r5fzMnjx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xa3pZcmi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B211A3B3C08
-	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 14:39:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BAC03321A2;
+	Fri, 15 May 2026 16:56:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778855951; cv=none; b=TZ1KffCoH0ISTQxNecJ0mIqcHWF9mhFyjhDsEvdTrvQPkv1PnD1x5nQIOYk+ajwtC2w2qTDS51n4L691bdGusspjPfbt4GinGcqZfCp26hSwxqAh0+dG1i3Let9TMyK6QeOt9iZsjPix2CpVbTGkEwjnISeb4yVV1bIn0ddzKvk=
+	t=1778864172; cv=none; b=lVcM39Ox8SGAlLSLZy+Q4bck+VBsG2VQQuXG6u1e1YFnVPooxFjpAoKYISaCYqY6RgApy0XgCOH7m0/IxlQbGH0lPtluB+oZoH7mCq3OvIO07aY4cKT2xQDefuzQo+AkIMYxlp/rqQy9pEY+gr3v37y4Cp0mpNhBte5YdlzX5Ak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778855951; c=relaxed/simple;
-	bh=5ei7fh/Y69tCRQ3kK/dbGYFuojcIwy3an7mcbITipcU=;
+	s=arc-20240116; t=1778864172; c=relaxed/simple;
+	bh=SedbGXwK4aJOlbTTWEI5B8hx7KCD74sgdfit/X5/dJM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HZL1BFqRkidBh7Quue3McenI8PSZKPYOq1zV5io2+Z7zr5hvuobIDv30Drluo1kEJ+O0TPNpMtx54Xo/s+Z69Coor8VZ0h+HEW8VSjtjtQ2ClZ5p2n/Q+MKlFpq3lfErMGTuulDJOC1LcmiLN+BjXC3bAO0Sp8rrBF3jCGD91qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=r5fzMnjx; arc=none smtp.client-ip=209.85.222.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-9568159ee07so5728188241.1
-        for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 07:39:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1778855949; x=1779460749; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BQxJjtW9NoHteCK0AjadT0ZiWp4xMo5S2G7yHBWhKm0=;
-        b=r5fzMnjxo0qn47DQheu+8z2BqVawUayNL19uz+3HNCVkcfleHmePGSySdncjPWRlFL
-         pyzYzWAhxGtYttSooQV6s0iEnztVj8Znl0pLey9ORkA+ry7diHDpSXXziTw4HzbpN+mL
-         5igrMArIrATYGLp9FMEWMoWAwbQRiX7FBxA88r1H74RNRo0QkogWc0Pfy3h0uzfgy2Ow
-         UOJpkHXJo1G9zABJeA/iUcFWpnGwA+3ztUcjxcxYS2KuQDWaMpKQrKJt6fpQyNp5Y1lw
-         oMcuYZtMhxuN9N0/NLYbsqbptZruq8Iv+HICmnHUG1iWpANS/ZrpA6TwTCe6khEjfn+S
-         hMeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778855949; x=1779460749;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BQxJjtW9NoHteCK0AjadT0ZiWp4xMo5S2G7yHBWhKm0=;
-        b=ie/Y/2EeuwXTxcOr4cTI/NbEggYEat+7Q3LFWVJ1pZUIl7jOmWt0NGdnjXxP7406Ou
-         tPR3x5JiqUwVe3C9CzkcQBZQxpUdWi3wPmOr0hFuSI1bnWXPM7yCY6HBsuDG6vkTpk7U
-         l5sbwDcXQ4Jnz6zxYnbs5eO0M+debBIwBumiF7bwhrLbCLZE9LZJulVA/xCeySzJOP71
-         HTiJChQsGK5KXBerKrNISBphAqd+uUi0fx1iPs8AcR6kfri0fGObmwMpdOgKyBUmBOyz
-         zJgx2FJ7ys0l+aLpYS5IyfHd/D09JEiJlxhbOX4qBj65PUJo9gb47CaJ1qMLY4rHl3VG
-         RALA==
-X-Forwarded-Encrypted: i=1; AFNElJ/yWKnzyXoY1+9NNEnItVqnvov5wxYvQr0js+7yT5XaDzu7sH/xXKkzCjPAn6qPNzDXyJ80U1NxGig=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEU0NPTXda3WSQ0b1nxENxkqnhif9fGmilVGpnVv2Yw65HEXmJ
-	+rTNoUhnmJQE3+j5g8Z4D2LM1vuUwEvDAWCqxj+2uvvVOvF2XTj7Xl340HbNURhZqw==
-X-Gm-Gg: Acq92OG9D+Ib4kGmknz/INDPNQ3I9MOCZI6uK+q4e1wFfvfyv86mkzYvVe7eruNAlXS
-	uQs1wZi4LjlRDfAVvcMPe9dxu0S124eqETDzNq8h5JBuUCx2p1ip48J+AMddeZEQOr+xivmxz8Z
-	/nTk0BbAmZ3GyjMeZYzFBmoiiJmj8ocoFVJkYMbz1cSZrjvBgUJxQfOyIE0oqG4AnTVwKkbH+wM
-	kNZUEpMFzPfBgLDXzQtZ2oPCv0ONC9BVGQqt+Lo5Zbdx7YA1dKqtyeRRQHTsWdycL5wuuuncap4
-	fGnTz47o2zsHmdmKECNRKDGEsGWLQAXjjpo7dWZUP6UJ3C6j8x6OLe6zXcapYWD5vNaq2W6AXkl
-	BsG4upQFR7rPis55GAMdp2wkpuuydeZfTUVEUQVQNqVHzHcNJx+Oxuvo/mqlC4g6J5Y2fWhgapt
-	YCF6mK2JsIlniioaFb0ewRVAbp/SlSPPZIY+7UM/PX6RE=
-X-Received: by 2002:a05:6102:e14:b0:633:1fbe:79c8 with SMTP id ada2fe7eead31-63a3f597eb4mr2246407137.23.1778855948736;
-        Fri, 15 May 2026 07:39:08 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210:d62f:1911:f952:16ba])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8c90b3d0bdbsm51850896d6.24.2026.05.15.07.39.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 07:39:08 -0700 (PDT)
-Date: Fri, 15 May 2026 10:39:04 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Bartosz Golaszewski <brgl@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Manivannan Sadhasivam <mani@kernel.org>
-Subject: Re: [PATCH RFC 05/12] usb: hub: Power on connected M.2 E-key
- connectors
-Message-ID: <41260a6d-46fa-4a45-9906-e1bc5e5dd83a@rowland.harvard.edu>
-References: <20260515090149.3169406-1-wenst@chromium.org>
- <20260515090149.3169406-6-wenst@chromium.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=AKiLgIpVNeC4jfAtUKZP+xqOxmIMao/TcRa3SQgJCnOumq5TBeVcuM/p7ptJ6GFKaH3rhlmTAEhp4t0qxT7cqMLIN2gNryuRsbhDgf+8fcPZTHSMC0nmiuzhYh/OOfqZukyIGBD0/ka8leeeG0PEmMx18xHeiPG8Gz3FQp+69i0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xa3pZcmi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 979D9C2BCB0;
+	Fri, 15 May 2026 16:56:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778864172;
+	bh=SedbGXwK4aJOlbTTWEI5B8hx7KCD74sgdfit/X5/dJM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Xa3pZcmiApyLXNIWHocH1qtmaMryAJkTWFgl+rng4s+TItk7aPdEyki3iosuzdkpy
+	 dgMoi/zAjmq1PaylNozIrTBcWx2+miI4B3X/5vpx2wIA4hyWqf/WnNbnV9bsUNJdi0
+	 A2/NaH5AKgVd7c5/xDWZpgPnsQ6J66Ni0O3qxYhlMkyNkAonTG/uiTVDQ9sQ0ismet
+	 gkX84eIz9xXaskpFWuRsmZ01UJ8CUA/lAInYKclnjXLC68dSmjN8pdCc2G31aiAxC0
+	 UucbSO9ecDfCOoB5pNipj0B2O1REqoFub+DwkVlt7VWbjAZx43vX5E1L7xODkNvcyH
+	 ewY6CfpJxGZkg==
+Date: Fri, 15 May 2026 22:25:59 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Thierry Reding <thierry.reding@kernel.org>
+Cc: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Lyude Paul <lyude@redhat.com>, 
+	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Mikko Perttunen <mperttunen@nvidia.com>, Dmitry Osipenko <digetx@gmail.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Mathias Nyman <mathias.nyman@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	linux-ide@vger.kernel.org, linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org, linux-media@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-usb@vger.kernel.org, Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH 5/9] PCI: tegra: Explicitly specify PMC instance to use
+Message-ID: <rt3tpcu7eucylbxurtvraghnyljkv52zau75jwkkbtyfslc2ox@2bjkryjd4nqp>
+References: <20260506-pmc-v1-0-a6de5da7216b@nvidia.com>
+ <20260506-pmc-v1-5-a6de5da7216b@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260515090149.3169406-6-wenst@chromium.org>
-X-Rspamd-Queue-Id: 2E66B5519D6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260506-pmc-v1-5-a6de5da7216b@nvidia.com>
+X-Rspamd-Queue-Id: E7B4A555ADF
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,linuxfoundation.org,gmail.com,collabora.com,vger.kernel.org,lists.infradead.org];
-	TAGGED_FROM(0.00)[bounces-37518-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
+	TAGGED_FROM(0.00)[bounces-37519-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,nvidia.com,redhat.com,linux.intel.com,suse.de,gmail.com,ffwll.ch,google.com,intel.com,linuxfoundation.org,pengutronix.de,vger.kernel.org,lists.freedesktop.org];
+	RCPT_COUNT_TWELVE(0.00)[30];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mani@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,rowland.harvard.edu:mid,rowland.harvard.edu:dkim,intel.com:email]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[nvidia.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On Fri, May 15, 2026 at 05:01:41PM +0800, Chen-Yu Tsai wrote:
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 90ea597d42ae..4165f71e212b 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -31,7 +31,9 @@
->  #include <linux/minmax.h>
->  #include <linux/mutex.h>
->  #include <linux/random.h>
-> +#include <linux/of_graph.h>
->  #include <linux/pm_qos.h>
-> +#include <linux/pwrseq/consumer.h>
->  #include <linux/kobject.h>
+On Wed, May 06, 2026 at 03:41:56PM +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+> 
+> Currently the kernel relies on a global variable to reference the PMC
+> context. Use an explicit lookup for the PMC and pass that to the public
+> PMC APIs.
+> 
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  drivers/pci/controller/pci-tegra.c | 20 +++++++++++++++-----
+>  1 file changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-tegra.c b/drivers/pci/controller/pci-tegra.c
+> index 512309763d1f..2c6c521e6901 100644
+> --- a/drivers/pci/controller/pci-tegra.c
+> +++ b/drivers/pci/controller/pci-tegra.c
+> @@ -340,6 +340,8 @@ struct tegra_pcie {
+>  	struct reset_control *afi_rst;
+>  	struct reset_control *pcie_xrst;
 >  
->  #include <linux/bitfield.h>
-> @@ -888,13 +890,25 @@ int usb_hub_set_port_power(struct usb_device *hdev, struct usb_hub *hub,
->  {
->  	int ret;
->  
-> +	if (set)
-> +		ret = pwrseq_power_on(hub->ports[port1 - 1]->pwrseq);
-> +	else
-> +		ret = pwrseq_power_off(hub->ports[port1 - 1]->pwrseq);
-> +	if (ret)
-> +		return ret;
+> +	struct tegra_pmc *pmc;
 > +
->  	if (set)
->  		ret = set_port_feature(hdev, port1, USB_PORT_FEAT_POWER);
->  	else
->  		ret = usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_POWER);
+>  	bool legacy_phy;
+>  	struct phy *phy;
 >  
-> -	if (ret)
-> +	if (ret) {
-> +		if (set)
-> +			pwrseq_power_off(hub->ports[port1 - 1]->pwrseq);
-> +		else
-> +			pwrseq_power_on(hub->ports[port1 - 1]->pwrseq);
->  		return ret;
-> +	}
+> @@ -1165,7 +1167,7 @@ static void tegra_pcie_power_off(struct tegra_pcie *pcie)
+>  	clk_disable_unprepare(pcie->afi_clk);
 >  
->  	if (set)
->  		set_bit(port1, hub->power_bits);
-> @@ -1867,6 +1881,7 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
->  	struct usb_host_interface *desc;
->  	struct usb_device *hdev;
->  	struct usb_hub *hub;
-> +	int ret;
+>  	if (!dev->pm_domain)
+> -		tegra_powergate_power_off(TEGRA_POWERGATE_PCIE);
+> +		tegra_pmc_powergate_power_off(pcie->pmc, TEGRA_POWERGATE_PCIE);
 >  
->  	desc = intf->cur_altsetting;
->  	hdev = interface_to_usbdev(intf);
-
-This change is totally useless.  Didn't you get a warning from the 
-compiler when you built it?
-
-> diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
-> index 9ebc5ef54a32..6039e5f5dcd7 100644
-> --- a/drivers/usb/core/hub.h
-> +++ b/drivers/usb/core/hub.h
-> @@ -85,6 +85,7 @@ struct usb_hub {
->   * @port_owner: port's owner
->   * @peer: related usb2 and usb3 ports (share the same connector)
->   * @connector: USB Type-C connector
-> + * @pwrseq: power sequencing descriptor for the port
->   * @req: default pm qos request for hubs without port power control
->   * @connect_type: port's connect type
->   * @state: device state of the usb device attached to the port
-> @@ -104,6 +105,7 @@ struct usb_port {
->  	struct usb_dev_state *port_owner;
->  	struct usb_port *peer;
->  	struct typec_connector *connector;
-> +	struct pwrseq_desc *pwrseq;
->  	struct dev_pm_qos_request *req;
->  	enum usb_port_connect_type connect_type;
->  	enum usb_device_state state;
-
-The fact that hub.h uses struct pwrseq_desc indicates that it ought to 
-#include <linux/pwrseq/consumer.h>, instead of making the .c files do 
-so themselves.  Then you wouldn't have to add the #include lines to 
-hub.c and port.c.
-
-> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-> index b1364f0c384c..2d09037fee93 100644
-> --- a/drivers/usb/core/port.c
-> +++ b/drivers/usb/core/port.c
-> @@ -7,11 +7,14 @@
->   * Author: Lan Tianyu <tianyu.lan@intel.com>
->   */
+>  	err = regulator_bulk_disable(pcie->num_supplies, pcie->supplies);
+>  	if (err < 0)
+> @@ -1183,7 +1185,7 @@ static int tegra_pcie_power_on(struct tegra_pcie *pcie)
+>  	reset_control_assert(pcie->pex_rst);
 >  
-> +#include <linux/cleanup.h>
-
-Why is this needed?
-
->  #include <linux/kstrtox.h>
->  #include <linux/slab.h>
->  #include <linux/string_choices.h>
->  #include <linux/sysfs.h>
-> +#include <linux/of_graph.h>
->  #include <linux/pm_qos.h>
-> +#include <linux/pwrseq/consumer.h>
->  #include <linux/component.h>
->  #include <linux/usb/of.h>
+>  	if (!dev->pm_domain)
+> -		tegra_powergate_power_off(TEGRA_POWERGATE_PCIE);
+> +		tegra_pmc_powergate_power_off(pcie->pmc, TEGRA_POWERGATE_PCIE);
 >  
+>  	/* enable regulators */
+>  	err = regulator_bulk_enable(pcie->num_supplies, pcie->supplies);
+> @@ -1191,12 +1193,14 @@ static int tegra_pcie_power_on(struct tegra_pcie *pcie)
+>  		dev_err(dev, "failed to enable regulators: %d\n", err);
+>  
+>  	if (!dev->pm_domain) {
+> -		err = tegra_powergate_power_on(TEGRA_POWERGATE_PCIE);
+> +		err = tegra_pmc_powergate_power_on(pcie->pmc,
+> +						   TEGRA_POWERGATE_PCIE);
+>  		if (err) {
+>  			dev_err(dev, "failed to power ungate: %d\n", err);
+>  			goto regulator_disable;
+>  		}
+> -		err = tegra_powergate_remove_clamping(TEGRA_POWERGATE_PCIE);
+> +		err = tegra_pmc_powergate_remove_clamping(pcie->pmc,
+> +							  TEGRA_POWERGATE_PCIE);
+>  		if (err) {
+>  			dev_err(dev, "failed to remove clamp: %d\n", err);
+>  			goto powergate;
+> @@ -1234,7 +1238,7 @@ static int tegra_pcie_power_on(struct tegra_pcie *pcie)
+>  	clk_disable_unprepare(pcie->afi_clk);
+>  powergate:
+>  	if (!dev->pm_domain)
+> -		tegra_powergate_power_off(TEGRA_POWERGATE_PCIE);
+> +		tegra_pmc_powergate_power_off(pcie->pmc, TEGRA_POWERGATE_PCIE);
+>  regulator_disable:
+>  	regulator_bulk_disable(pcie->num_supplies, pcie->supplies);
+>  
+> @@ -1432,6 +1436,12 @@ static int tegra_pcie_get_resources(struct tegra_pcie *pcie)
+>  		return err;
+>  	}
+>  
+> +	pcie->pmc = devm_tegra_pmc_get(dev);
+> +	if (IS_ERR(pcie->pmc)) {
+> +		dev_err_probe(dev, PTR_ERR(pcie->pmc), "failed to get PMC\n");
+> +		return err;
 
-Alan Stern
+As Sashiko pointed out, you need to return dev_err_probe() directly.
+
+- Mani
+
+-- 
+மணிவண்ணன் சதாசிவம்
 
