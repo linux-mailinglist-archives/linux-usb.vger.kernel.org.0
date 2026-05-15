@@ -1,331 +1,206 @@
-Return-Path: <linux-usb+bounces-37496-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37497-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YPLIFij5BmpoqAIAu9opvQ
-	(envelope-from <linux-usb+bounces-37496-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 12:44:56 +0200
+	id 4G16HsP6BmoKqQIAu9opvQ
+	(envelope-from <linux-usb+bounces-37497-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 12:51:47 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97DCF54D9B7
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 12:44:50 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 151D754DBBF
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 12:51:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 3A1DD30E8B2B
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 10:25:46 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 38C3F3018D55
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 10:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 131223CFF48;
-	Fri, 15 May 2026 10:25:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41EBF46AECD;
+	Fri, 15 May 2026 10:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="CE1/2tgH";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="adFkljcG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11022114.outbound.protection.outlook.com [40.107.75.114])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7C63C3422;
-	Fri, 15 May 2026 10:25:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.114
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778840719; cv=fail; b=niLz/VOe289buy6IdJTtx4E55wORzOG82u3RnivG/Os/xk/Kfl6y9GMg5tZQRxZT+z0bWUIpIKeHnpgJQGIUQ00rO0qcLltTeAruzYqTvspUgavfizfGtBZ4B56m0/wfLBDspUhiRMPamaeRmVGl4DofKElLM9njke85GGDUK90=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778840719; c=relaxed/simple;
-	bh=vv0YIY6uGo2kgyv0Ue6k1k78LtLQw2W1kVQ1nSVlgAY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YI/vVdhCM8QYpBswjr32PeVq1Eb8sBXU1lFlOIYlV8aecN+M8R+eyRcdMb9QLFJ2wO709QR/1i3/6jn6x18kjq8ko+QTubed9z++GhFRX/lUdSLkOpr6B6W0rE2g/Hii1qNkqeU2UbW5WsRHEIIFDn49N5YwG1eI+D7uUHMF96w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com; spf=pass smtp.mailfrom=cixtech.com; arc=fail smtp.client-ip=40.107.75.114
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cixtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NTMlY7mjpmc/5Cdo+yRZ4GZbiWoHUxLncp+LScGI5FMyv1d4VTuhdd4xMAiZAJHCElAGbjGqkT3bV36Fy6UT8+4dQEPbCShxBXKKsPm83iuSQUk7Gfce9+7Mb/k+4lR5D8rRtU0eIBEko7o9mDyBwI6XajaWMQ/6viL1ke0FEB4tSN6N+R6SplBl8/DXzzXICdHNHCR2dMuSoLZ3RSmaW1E5MdTZH5oklk+OUMWQ1ZmvD16/cpwFjB6FttFydX5CoLGjm743236L2b1egRqfJPnpsZazpamLRF7eruHhPPkfO157etF6jm6I0xaHRrBuDNcm8UiLCB7WDIQfbI8bMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0zp67MF0qA+HRNDIwAXgFJZA7RWBkR3JIocNaEiub2g=;
- b=pqNtIxXn4wwfEN1gYPgg1b7srmI24oMpbMyjh9I7rUpwuaz5QSbOSfAg1yHTAjYcCf20Vwshot+g9OEA9Cn3yLJiJS8Kgf3+h5AUi07s5fRlo8AAH+JiGD63cRVdbcrVwtlMaIF5Xsl6XNiUZTZ+lffc1AoFEV6oW2fqIhbX5IxNMlhfduTpp1g7RbnNYy8+RzXPWzr1zYDdkJUgd950r0BpAPEZqr4pgQJN3TTBXRa4ix5zBsy+UvgDhMeSqA2gn8HqsFrxvGPJlviTcsabpJi4IrV4SGlon9ah2O3VWH3R9Uo8DviXQXFl910zGdr1OZv9gXV43gCs5Bd5Sk5D3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 222.71.101.198) smtp.rcpttodomain=arndb.de smtp.mailfrom=cixtech.com;
- dmarc=bestguesspass action=none header.from=cixtech.com; dkim=none (message
- not signed); arc=none (0)
-Received: from PS2PR02CA0037.apcprd02.prod.outlook.com (2603:1096:300:59::25)
- by OS8PR06MB7324.apcprd06.prod.outlook.com (2603:1096:604:28b::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9913.12; Fri, 15 May
- 2026 10:25:13 +0000
-Received: from OSA0EPF000000CD.apcprd02.prod.outlook.com
- (2603:1096:300:59:cafe::bd) by PS2PR02CA0037.outlook.office365.com
- (2603:1096:300:59::25) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9913.13 via Frontend Transport; Fri,
- 15 May 2026 10:25:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 222.71.101.198)
- smtp.mailfrom=cixtech.com; dkim=none (message not signed)
- header.d=none;dmarc=bestguesspass action=none header.from=cixtech.com;
-Received-SPF: Pass (protection.outlook.com: domain of cixtech.com designates
- 222.71.101.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=222.71.101.198; helo=smtprelay.cixcomputing.com; pr=C
-Received: from smtprelay.cixcomputing.com (222.71.101.198) by
- OSA0EPF000000CD.mail.protection.outlook.com (10.167.240.59) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.25.13 via Frontend Transport; Fri, 15 May 2026 10:25:11 +0000
-Received: from nchen-desktop (unknown [172.16.64.25])
-	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id E5E4F4126F80;
-	Fri, 15 May 2026 18:25:10 +0800 (CST)
-Date: Fri, 15 May 2026 18:25:09 +0800
-From: Peter Chen <peter.chen@cixtech.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	gregkh@linuxfoundation.org, pawell@cadence.com, rogerq@kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, cix-kernel-upstream@cixtech.com,
-	linux-arm-kernel@lists.infradead.org, arnd@arndb.de
-Subject: Re: [PATCH 3/4] dt-bindings: usb: add CIX Sky1 Cadence USB3
- controller
-Message-ID: <agb0he7vvbqSIym5@nchen-desktop>
-References: <20260511024244.981941-1-peter.chen@cixtech.com>
- <20260511024244.981941-4-peter.chen@cixtech.com>
- <20260515-dynamic-archetypal-reindeer-dc6dd5@quoll>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB17466B52
+	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 10:47:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778842072; cv=none; b=VXQQO5Wsd9qqRG6v8ASj//iQldvRBrzI4ShGKX/XwO5Hu1sUn10MBiLhsFshSGVnZZnBlqxfLNKPhLobj+LyHQ7PzGWNce/H26DBvf5yPngmMl1I6PgBT6EHsAqKgbXx1PL+ipoI9504KSq9s4bYH1O1cMkwSG9QsjMTD/yJkpo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778842072; c=relaxed/simple;
+	bh=RijDqSjfKJNIL2BYqA6ow9Z5hjliiMofsCwqL8Aqnyk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=BvhEmqGVy8jM8sAzpBYUhkQlS1rrY0iBwRVLUiODkNu2e9THPyKvYc6YEvx/xvIWKt8HXrKmkuBzSzm5LKQhhgGVmM/djfNoStdgt4CjysUg+syyAvo1sNxuJiIDoWWMbzTkq0SGL5H0aX1Ouri7gFMaGI+SKi4uEmbf9eox/XQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=CE1/2tgH; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=adFkljcG; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64F4nTWd3670929
+	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 10:47:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=H/XXsyRxgO0llNZtCTaH5Q
+	dQ6GC0REVLGnyPyOphXoo=; b=CE1/2tgHEt2G7N/4gq2ywgMg2/ZZOrHf3VAgSf
+	IEpkbXyv51RylnXz/PT5dJsKdWxw04hniMQDH9vycr49ahGfAFjUU8vPAtcch91L
+	XmfwKtvMNU3xOLHb590yB7LR5EBBTm3XylbsssbgsToi4HxaW0R7kuqwSmdYSIBJ
+	pxPjggOfptSgZnm2azUIXCDnOwzozd5KGx/kYD5ctJcUFrhv8RUYdgns8OvRWlgZ
+	b20ytJhNC6mnjc//ADbaqTPmY8Q1g2SipzoUDIQFqi33wMYlEHxMgJRP1VA06iQA
+	lP/+29ztZw3GhARRZKsBqb3K1okWBmhMxDDw24VwdH5gJ2+A==
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e5m1s2y51-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 10:47:50 +0000 (GMT)
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-82fd55bf6cdso5859190b3a.3
+        for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 03:47:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1778842070; x=1779446870; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=H/XXsyRxgO0llNZtCTaH5QdQ6GC0REVLGnyPyOphXoo=;
+        b=adFkljcGjWXbAFcGHxlIgshfTwtrMMYgpXt9tfdJepdIinPYB5gpldeJb0AJBk7s4g
+         ELDLuNrwBEpbshZqemLzXj0iYN09owmQ7XLdBP5tktxIk5rys2+oi/0/+2+MWfEYcBrm
+         MzWwPinnivVxtiapqHndJSyGA5ZOXV9n5TaTszDHLt0wQ/F2rn/klZO3ebkURglEM+Cn
+         9zUA+xREGsMYYOrlZt2HOpXNRudQ3WD1jxC+ZR4uMXakXRjQyKokWYMBRm1AZ0aOggk1
+         jW+5QvaLW2lxT6gepmVH2Itt/Bu9OPMdYxQSozlLvgvXqzfG90R7crPO1s8VGmSTcABe
+         1x7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778842070; x=1779446870;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H/XXsyRxgO0llNZtCTaH5QdQ6GC0REVLGnyPyOphXoo=;
+        b=FADOK/b9F7mvPw9i5HO4YINKDSoBbH08h5VL1PFpB8ny7hEU65iNqdbRJZOH+vugkp
+         0GuY4dB7l7OEPDm74NWPIxzBXH0/rAGx2iRHZPEWdeb/gZ6I8z53WRhbbbHxPTKr8FLw
+         KRfDSSRRwD36Zb6TN9spSbOcQCWSYRqB9+WzDPhQ9GgWHUL+7CJNCtg1qHF3sL/23jrO
+         6RGHW7gBj0E9i2D7r/kCSmx8te94vGES9mohavlYG2DayHZ//s3f2IytmlHHjWI1g4cq
+         jZfm1oUC+vsRQqET/4gdcrfhAvI+5Q4vVYP6D2ekQe9a6oMlyf6U82v3RkWTjJJj/UbS
+         y3Pw==
+X-Forwarded-Encrypted: i=1; AFNElJ/QtXX9iptreaU60yTKwpsoN6wvGLB5J8hXEOAvlIC/C9LfDzeLQ+7mIe/oNlsipHmw4QiRfpxVbnM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLwWdlv21A3aq0aT6VB7jHRVYboHWMSyAQnDFuq/WY/k0OXweW
+	omy3B60FTElPT8L7nxwSP9bQ8QXxay/d6Nyl31O6ytOKyj0q6frxnXUXZIoDreEReytdoXpMqXB
+	s7WcWTtgF2KlkgF2GdDbuSqgPCQI/4TdVItXT3EQVKUth1hT5Gu8sj31dTxEDWLY=
+X-Gm-Gg: Acq92OHHHlQLh8cLkcOjpHZxKY5dV5AbYcV446QOtl8hVSCxQeN1pDjrc/3+vhUh+fb
+	kvGC7l6TI1dPEvL7t1r8CGsLxLNarEKA4Zm1Fmj1fmvdnQI8fBkHVjsImhCADdmeDYDZNdk2RRH
+	94XnpFwk6sWsbRXEjOQfnqSe1bzhoSUw1a0+79NSRh3vlyay8g8kx0PNcoX7tdiqQ3IRyebRyJI
+	m8JYzGvNUk7X8DVjPqL2Wh9daibcHQLkEGm61ORTiHlcW1yLNGFAWklx+hoQ6fiv7x3b5AOscJi
+	R6w24HQqjnW2wmkppcvAcQ0j4h78qVtNiC6i2RCpVO1LkITDSS7fzh5SyGeyiHN7r8c6bLYti/t
+	hrKEZUrqe42ZWFYHVvgu4OqZPm6u5hddBjnfKlDVBJge5ctnGn39xeaWk5NFzBmZgRXQLFGj8EJ
+	Jl2OmKp5QP8y6iFMIKq+lqqa0HRN2qDdiHmhU6PU4+9RQjQVPfvDI=
+X-Received: by 2002:a05:6a21:33a3:b0:393:74ed:7de9 with SMTP id adf61e73a8af0-3b22e66471bmr3673864637.3.1778842070106;
+        Fri, 15 May 2026 03:47:50 -0700 (PDT)
+X-Received: by 2002:a05:6a21:33a3:b0:393:74ed:7de9 with SMTP id adf61e73a8af0-3b22e66471bmr3673829637.3.1778842069588;
+        Fri, 15 May 2026 03:47:49 -0700 (PDT)
+Received: from hu-varada-blr.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com. [103.229.18.19])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c82bb1006fbsm4955221a12.21.2026.05.15.03.47.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 May 2026 03:47:49 -0700 (PDT)
+From: Varadarajan Narayanan <varadarajan.narayanan@oss.qualcomm.com>
+Subject: [PATCH 0/5] Enable ipq5210 USB support
+Date: Fri, 15 May 2026 16:17:41 +0530
+Message-Id: <20260515-usb2phy-v1-0-5f8338d466bf@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260515-dynamic-archetypal-reindeer-dc6dd5@quoll>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: OSA0EPF000000CD:EE_|OS8PR06MB7324:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5b45c61e-3c23-4964-6a96-08deb26c3f53
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700016|7416014|1800799024|376014|4143699003|18002099003|22082099003|56012099003|3023799003;
-X-Microsoft-Antispam-Message-Info:
-	SgztvcBHzBuR+P8Bnx447nU1Z+Q/sr5i4VNWpHSmWQZNFn/Thmo5ygT79wVyz1WPBqvzgVQREvCgbcNcgFJ7orFTQxBLxZrY7VMSegh2hlere7kBircOvr5ad7/S1ZOmtPnH1e8lacofzLmEqJqY+l+RnwvvCdrQ/5jkGf/ylE3SFkZiPvAsOQbRMUS8H53R6ZJBh1iw2PqsU7CtBnN4BM3a0aYI9RHb/yX9fMKQ59tlZ+XJZCkwviHY5a1KcYOX6TTaCiD7MB2Weg+KEyFnxQt5fru20hogFNtLZy1FGEVKwy0rPXkESlJCZfD0BIHlQRNJr52jQky4foeaYDLPzV9sj81387R7o57unhhQVPVtwlbUMI1wAmedHUwQ29nFk5hUZ86RDqI/hBGt8AyQOhFz+CZRUuh7OU3RBeaA3EieQkeTkM0fsFuzrzA99bAZrGC5lkIfzjDbrghFw73muESKsn1ojGl4wKsXJlFpeUND13Xlo4pR3DRPszLkblH4wCoHxupsX0sGo36LNbljUp/es5XONmsFt09WK5yFE6dPCdwavAI+EoiWDErHm98vybBMCg9uMCmhPUJvNSvsSt8r7yNk46vOEYFZnBbU8eyTsxSY9rrcy0+twlV+F3gFJheTNAI3nIfqid16msFn/3SgjmYWm3r3vqk/NnYtINLmPGn2UqjIzYzXKcUlbaVEseaiFpodYIjiG2TeEimQSXAP8M94MdZeUIhTNts+rKU=
-X-Forefront-Antispam-Report:
-	CIP:222.71.101.198;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtprelay.cixcomputing.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700016)(7416014)(1800799024)(376014)(4143699003)(18002099003)(22082099003)(56012099003)(3023799003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	UKZg6nyDGfS+exr+DlMZhojIPloRYtKkW1ZloFGGgrw+8BEGU3I2S5PB9Wquskk7BryGnTiqHfwGMdx6it7z9T47b7mCXPO7Rp3ZAPe2TZ2MRUhpBYaeFtth5n7eHiK4vfbDRz5KLO/oGxyNB9DMV3ZCVCmwFUtNeD7gQe/rcniIhktygSIG3JmN7Vm6iQST3Ri6c0+F+Gp55TnQE7Za0Rilxb/t5+wR8UjKbR7TxSNCVn0mria5eWOf3r/oCjo8R5rUZMNSAXjZGaF0nTk3FwmEj+X7qw0gwC3d24X2eNlwhrSsosFhpcF1Pp5dWN1Jh/SgDsBfJa+08eqDu+MwoDkbC0OOMsjxNX4ZriHR5LvbR4xZpRyniR4PH574c39WcWWTvgTBki+lGlb4g/gTMRJ7O3Vs3QnQTDDTe+W4j8m/QXK1j/rFGZD6QmIoT2hN
-X-OriginatorOrg: cixtech.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2026 10:25:11.8203
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b45c61e-3c23-4964-6a96-08deb26c3f53
-X-MS-Exchange-CrossTenant-Id: 0409f77a-e53d-4d23-943e-ccade7cb4811
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0409f77a-e53d-4d23-943e-ccade7cb4811;Ip=[222.71.101.198];Helo=[smtprelay.cixcomputing.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	OSA0EPF000000CD.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS8PR06MB7324
-X-Rspamd-Queue-Id: 97DCF54D9B7
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAM75BmoC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDU0NT3dLiJKOCjErdpBQLU4NUw7Qk45RUJaDqgqLUtMwKsEnRsbW1APe
+ eit9ZAAAA
+X-Change-ID: 20260515-usb2phy-bd850e1fb3de
+To: Vinod Koul <vkoul@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Varadarajan Narayanan <varadarajan.narayanan@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE1MDEwOSBTYWx0ZWRfXy+jqlgLYi16K
+ hJN78P2AA4vEft3FgLvAX3J7NU3XH+egNZjKd3/YedPmhhzKvb9vewxeKoYjG1wf/3MdgFVCbzL
+ mioEzmcvkg3aso35sPc+RFcCLr6Q32/1X6eaT+1avX4SpIZx8BmrZVuDBQ7d7URmtdPkFjUygw3
+ LacFWgCRTocIyGiVQk/y5ZNi2EKAZbxg5FU6vfKWBLothqfQ+sTKtf4rpurkR/6s9iEsGlK+6sJ
+ wfkBwbFsouGMGm2BwwkjHVRkiT4aj/8r8REcUQgE9TKy27TvF3GV0tMfbzw6KpjxKdXmcdR4Ize
+ gvWkCudUwiMzzcSwaEbn5mDjJeqah8qnq/zkZzYpkMSnTSimR0u/qmxx/aANobs6o2y3pzRSfXe
+ fe4Dy4MFsLG6jEZ6Fo6yUa+5OM4T0GbYUIex/rHXhirhHYkDpDWp93937pv3tbhdoOoAkcR+DgE
+ KyCW5vLXcR8OdnFbzYg==
+X-Authority-Analysis: v=2.4 cv=Md5cfZ/f c=1 sm=1 tr=0 ts=6a06f9d6 cx=c_pps
+ a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
+ a=EUspDBNiAAAA:8 a=6L2eJvA39pK3U4l1HDAA:9 a=QEXdDO2ut3YA:10
+ a=OpyuDcXvxspvyRM73sMx:22
+X-Proofpoint-GUID: 7l6DK6BorDbSpkg5-hfuP8Qs9dLtkn_n
+X-Proofpoint-ORIG-GUID: 7l6DK6BorDbSpkg5-hfuP8Qs9dLtkn_n
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-15_02,2026-05-13_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 lowpriorityscore=0 bulkscore=0 priorityscore=1501
+ impostorscore=0 malwarescore=0 adultscore=0 phishscore=0 spamscore=0
+ clxscore=1011 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605130000
+ definitions=main-2605150109
+X-Rspamd-Queue-Id: 151D754DBBF
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.54 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-37497-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37496-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[13];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	DMARC_DNSFAIL(0.00)[cixtech.com : query timed out];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peter.chen@cixtech.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	R_DKIM_NA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[varadarajan.narayanan@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
-	NEURAL_HAM(-0.00)[-0.994];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Action: no action
 
-On 26-05-15 09:54:10, Krzysztof Kozlowski wrote:
-> EXTERNAL EMAIL
-> 
-> On Mon, May 11, 2026 at 10:42:43AM +0800, Peter Chen wrote:
-> > Add a binding for the CIX Sky1 integration of the Cadence USBSSP DRD
-> > controller. The schema documents the glue register window, clocks,
-> > resets, interrupts and S5 system controller phandle.
-> >
-> > Signed-off-by: Peter Chen <peter.chen@cixtech.com>
-> > ---
-> >  .../bindings/usb/cix,sky1-cdns3.yaml          | 151 ++++++++++++++++++
-> 
-> Why are you mixing USB patches with DTS in one patchset? Don't.
+The ipq5210 SoC has both USB2.0 and USB3.0 controllers. The USB3.0
+can connect to either of USB2.0 or USB3.0 phy and operate in the
+respective mode.
 
-In this series, the 1st patch is the IP core driver changes (export APIs for glue layer
-use), and the second glue layer patch is the user for new adding APIs.
-Normally, we combine dt-binding, driver (glue layer) and DTS changes at one patch series.
+Signed-off-by: Varadarajan Narayanan <varadarajan.narayanan@oss.qualcomm.com>
+---
+Varadarajan Narayanan (5):
+      dt-bindings: phy: qcom,qusb2: Document ipq5210 compatible
+      dt-bindings: phy: qcom,qmp-usb: Add ipq5210 USB3 PHY
+      dt-bindings: usb: qcom,dwc3: Add ipq5210 to USB DWC3 bindings
+      phy: qcom: qmp: Enable ipq5210 support
+      phy: qcom-qusb2: add QUSB2 support for ipq5210
 
-It is much like below submission:
-
-https://lore.kernel.org/all/20250318-dwc3-refactor-v5-0-90ea6e5b3ba4@oss.qualcomm.com/
-
-> 
-> >  1 file changed, 151 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/cix,sky1-cdns3.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/cix,sky1-cdns3.yaml b/Documentation/devicetree/bindings/usb/cix,sky1-cdns3.yaml
-> > new file mode 100644
-> > index 000000000000..23d82d8cc9bc
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/cix,sky1-cdns3.yaml
-> 
-> Complete mess of filename. There is no such compatible.
-
-Will rename to cix,sky1-usb3.yaml matching the compatible in v2.
- 
-> 
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - const: cix,sky1-usb3
-> > +      - const: cix,cdns-usb3
-> 
-> I don't understand the fallback compatible. You claim this device is
-> called EXACTLY like vendor cdns? Nope, you SoC specific compatibles.
-
-The intent was to express "this is a Cadence USB3 IP integrated on a CIX
-SoC" but "cix,cdns-usb3" is wrong. Will drop the fallback compatible in
-v2, and there is only one compatible here.
-> 
-> 
-> > +
-> > +  reg:
-> > +    items:
-> > +      - description: OTG controller registers
-> > +      - description: Device controller registers
-> > +      - description: XHCI host controller registers
-> > +      - description: Sky1 USB glue registers
-> > +
-> > +  reg-names:
-> > +    items:
-> > +      - const: otg
-> > +      - const: dev
-> > +      - const: xhci
-> 
-> Wrong order, look at cdns,usb3 schema.
-
-Right, will reorder to match cdns,usb3: otg, xhci, dev in v2.
-
-> 
-> > +      - const: glue
-> > +
-> > +  interrupts:
-> > +    items:
-> > +      - description: XHCI host controller interrupt
-> > +      - description: Device controller interrupt
-> > +      - description: OTG/DRD controller interrupt
-> > +      - description: Wakeup interrupt
-> > +
-> > +  interrupt-names:
-> > +    items:
-> > +      - const: host
-> > +      - const: peripheral
-> > +      - const: otg
-> > +      - const: wakeup
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: Start-of-frame clock
-> > +      - description: AXI bus clock
-> > +      - description: Low-power mode clock
-> > +      - description: APB register interface clock
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: sof
-> > +      - const: aclk
-> > +      - const: lpm
-> > +      - const: pclk
-> > +
-> > +  resets:
-> > +    items:
-> > +      - description: APB register reset
-> > +      - description: Controller reset
-> > +
-> > +  reset-names:
-> > +    items:
-> > +      - const: prst
-> 
-> apb
-> 
-> > +      - const: rst
-> 
-> controller or core
-
-Will rename to: prst -> apb, rst -> core.
-
-> 
-> > +
-> > +  cix,syscon-usb:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description:
-> > +      Phandle to the Sky1 S5 system controller used to program USB mode
-> > +      strap controls.
-> > +
-> > +  dma-coherent: true
-> > +
-> > +  maximum-speed:
-> > +    enum: [super-speed-plus, super-speed, high-speed, full-speed]
-> 
-> Why isn't this deducible from the compatible?
-
-It is the common compatible (Documentation/devicetree/bindings/usb/usb.yaml)
-I will delete it, and add $ref: usb.yaml#.
-
-> 
-> > +
-> > +  phys:
-> > +    minItems: 1
-> > +    maxItems: 2
-> 
-> No, this is not flexible.
-
-At Sky1 SoC, some USB controllers connect to both USB3 and USB2 PHYs, the others
-only connect USB2 PHY for dedicated USB2-only port.
-
-> 
-> > +
-> > +  phy-names:
-> > +    minItems: 1
-> > +    maxItems: 2
-> > +    items:
-> > +      anyOf:
-> > +        - const: cdns3,usb2-phy
-> > +        - const: cdns3,usb3-phy
-> 
-> Drop all this and define standard names.
-
-Will use standard names: usb2-phy, usb3-phy in v2.
-
-> 
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - reg-names
-> > +  - interrupts
-> > +  - interrupt-names
-> > +  - clocks
-> > +  - clock-names
-> > +  - resets
-> > +  - reset-names
-> > +  - cix,syscon-usb
-> 
-> phys should be required, no?
-
-Yes, will add phys and phy-names to required in v2.
-
--- 
+ Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml              | 1 +
+ .../devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        | 1 +
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml                   | 1 +
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c                                | 3 +++
+ drivers/phy/qualcomm/phy-qcom-qusb2.c                                  | 3 +++
+ 5 files changed, 9 insertions(+)
+---
+base-commit: e98d21c170b01ddef366f023bbfcf6b31509fa83
+change-id: 20260515-usb2phy-bd850e1fb3de
 
 Best regards,
-Peter
+-- 
+Varadarajan Narayanan <varadarajan.narayanan@oss.qualcomm.com>
+
 
