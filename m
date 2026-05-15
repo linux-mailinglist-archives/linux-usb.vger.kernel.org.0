@@ -1,80 +1,79 @@
-Return-Path: <linux-usb+bounces-37489-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37490-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SKwzIznjBmrVogIAu9opvQ
-	(envelope-from <linux-usb+bounces-37489-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 11:11:21 +0200
+	id oN6LLEjjBmrVogIAu9opvQ
+	(envelope-from <linux-usb+bounces-37490-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 11:11:36 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3181754C1C7
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 11:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 59AB554C1FB
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 11:11:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 9C0613070D3D
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 09:04:06 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B5143309E7B2
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 09:04:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BC8643E4A6;
-	Fri, 15 May 2026 09:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBAFD42EECA;
+	Fri, 15 May 2026 09:02:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="IntThx1g"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="M2v0VpvA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8882E43DA29
-	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 09:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1716F43E9D6
+	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 09:02:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778835763; cv=none; b=Sdk9fAD/Dn0aSuJOcY8K8cJ/BQVui0Yz9EJqxPeKM+nNroqflJnXyC6SPl4AxSA7xYdFPAlnjn2nrMYAbtrIlHA3NrpV7w8KkyB/6cvfJT/cVhDmyMxKBs3SGMjtd+C7T5eO9ntxBDRWETY17mvLRr6Evz6GmRC/gPLMtAZnZfQ=
+	t=1778835767; cv=none; b=D1dBnvSkYsN/RTdJjPJqd+lx47Ir73NmbzohLdA7HMrukUObhcRvYpkMP5emvXFb4EcXMxz3nkEolOhSd/Hr7BjeINAiP19bcb0IHpV6DvRgumtH0LQEYYrzewCTY5Y8fUYo1OPvJkRMVaMppOBwDkR8CApmSR8sSawxQiRN3LI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778835763; c=relaxed/simple;
-	bh=VrOSzPFrQvicaTFR+8obgla8JultGfpYF5nJAKr0KVE=;
+	s=arc-20240116; t=1778835767; c=relaxed/simple;
+	bh=Gz1BdO2CNIH1WVRh/auvzptyTOFoc+CyHx9t/Lizdxw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H264E17a+l1FZoxtUsvAINAYZ1Cdsks8rjfr74r683NK3MN9xwq2Tv07258A2TOZ033Nl4QgblkXlXIbdKXmudzJWkcnL5W1RqEQWEZzBGWmTwYlq0lhotUWvVf6L6LHyJoO1qIF/Kz3WSMDiRYw/tiOCYn1vbyrCtTpotbcshs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=IntThx1g; arc=none smtp.client-ip=209.85.216.43
+	 MIME-Version; b=EyvTJuGrWT8mwVSLEPehS6WIkCKuP49fAzDxAVWNQDK5J5ACzPX1y1dI5urpGPjI2zDs2FK0Cw75RO90JgpYpSKBIb68C/rON8povYfjhOyh5gO5Vo5LZ3bCVD7G8hKATRhf0VRQmPtvhQVb8bJ2jDE3e5eaCCz+GVQ/3CyQAYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=M2v0VpvA; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-367c26471f5so4883913a91.1
-        for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 02:02:42 -0700 (PDT)
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-36627a0ea23so3731756a91.0
+        for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 02:02:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1778835762; x=1779440562; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1778835765; x=1779440565; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EEzJ+Z0L9sJzo3bRALn/EbUhsV+JTXUM3B754yNkOg8=;
-        b=IntThx1gua/EnZx2ZFe7/kpR6hVhyNyEUOs2k/6V+pNbH5wQM1Vi7TcOx94YenaeSY
-         h8dc7BzpYkhflcnMD0+IHW8dQjWY6vUjw/H2tg1BYRD3D7yKdX2nRejXG944hUODIrJi
-         fp4ZXvqqCF5owqLc0Z0asUAjqMgqW8yYIJJ6c=
+        bh=T2ZaGVux29bB4QztqEVTUE9+3m9wph3XttnIMDbQw7w=;
+        b=M2v0VpvAjlya9oG55Sn6CgaBBDHW5/dZHaKggREN3ATYa9+fAnANphMS+zRZapskTf
+         BeOm2v1MqsAB/2o+441GRo1sjw/VMgch7S0wG5Cd/BpGFDY1wktLy70KpArBtgdORpR7
+         6X5jlTdwuJ02fwq2KqwgyRhZ3WJpS1tU3Wu+w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778835762; x=1779440562;
+        d=1e100.net; s=20251104; t=1778835765; x=1779440565;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=EEzJ+Z0L9sJzo3bRALn/EbUhsV+JTXUM3B754yNkOg8=;
-        b=hIkVU77GSohKvvOtjI7pv0iVABWi7+AHAMZgOLwBQD+1OcNqR4lUelWK/SXKih7KKY
-         e8X9kWWlf+LFvXALAZ4EYO5vhJ+FTjAPtAiU+9iGZCAkIJmwIrRdx6tRSExrs8muGmqB
-         FsHFQNjoSpSwhgKYyMjf9nmB6F/q6DzvOdT+EEROZ7UZDvyTumX0i5RliEKxZg+jgQDR
-         UsVRPanTsPiPLeJnWJVzeL/MLUVKuv5idq9+9wfCyv5g2RSEGdqcoBR5yrig5c1tz6b7
-         T76+SjcSsVPt0mjA8uZf6+NJoY383RBb58+zJfudWt34haRvtgtoFlzm4X6bf6i4j5lm
-         IZGA==
-X-Forwarded-Encrypted: i=1; AFNElJ8d3tD9XOYjoD59klOzvWJKWlbpaHgCEwkagXnbhWqxpj6j8+3yuDJOzSOSBs4Dm5ptvW0E2S1Do0s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySThWUtSuGxbzwxqm3ygfaAx02/CMqkSw68KS59fZvs89d2eu4
-	fWb49lV0lQRkvHvhg2CV1sm60ygCQyH7F0yk9adqCuoM9UJCGeg/f6ro6uOJbiGP82/RRAdWg1q
-	t7PM=
-X-Gm-Gg: Acq92OGnTkkFvDR0AI18ArsIxyqh25adA8Q0OB/CrawfW4xzUVvrq8CaFqdIdmQrkgO
-	DJ3XCOIk8IuPlrOXDMMg/AxCPMp5S7C6EBd9ILL16oZbFsrwR9aNOis5lRA/V/u5U5yAzzfiIkT
-	6QDbKwFdw+G3jsWUhjgO2YiMVBF2wwoJc0RSqUkj/sPDLoE64tQEfEePoIpGKuKLMakYMBiuCVd
-	YzuRAc3q4HxuuK2CrDGNsrKj9gNEkIgoxqFzVRM2TdrcC1HvP0TtEHE9Lkah2femu3uFV4J8GlF
-	Qt2zVoPy46wNDyPHtLBeYy/Z+pLccr6TI50gGsjXAPpp1K5ai10KstxUsb6MYDdFN2ObtJA1AZn
-	cewtLyf2INpWbUFdIy6oZ2C/OXagoMgrzXC3ZBXtxEwKw7SdzJMDeYCEoUpVube7Mhb9sc/nca+
-	VQEMIzWp3fklIc1nTCTy60Y59SoT8eA1jWjlbDysYPtfe14W7Uo7JG2Hnrm1hEl0i8RsnHk4cmC
-	s/g469+
-X-Received: by 2002:a17:90b:544f:b0:35f:b46e:e329 with SMTP id 98e67ed59e1d1-3695189552fmr3108678a91.6.1778835761921;
-        Fri, 15 May 2026 02:02:41 -0700 (PDT)
+        bh=T2ZaGVux29bB4QztqEVTUE9+3m9wph3XttnIMDbQw7w=;
+        b=W58jhK4+ZBl76FDr8bthWu8qlaT8UtZSy+uHMDyx0H7Hjr52IflNlWFgKCo/J3hDlo
+         POvVCOvje3RdZNIkVd9kukGvO6HtPlZF6Kqx+AGeYmwu0XHknEzAGTuTGkSWWNwhNWJp
+         zVfK7574xaO5gU2oe4rhEdnTi/149EilFiCKQCUwpN1RJ2rB/uNA5R5raTmjD9Rw/DKm
+         y6k8gYleV6bgCZ4GZRMpSlJdqU7f5rUp0TN2J9qDucZtj+uwQaG51RXfOZnfFYPZ67k8
+         hsjXnMSlanC7qwezcebo7xH8tJQvgrd8QF4USErlHRGiozIy58HtQKpDOX0bqJA7SoZZ
+         NTkg==
+X-Forwarded-Encrypted: i=1; AFNElJ9iIHOdp8VwNjeChxp386ckCMyxulgesINIf63PBlttg76CCBXuQmEIHEW33/l/NEzrR+shgG1qnXI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2RBvwBeOygrW/t5TJhn2CVL15EfPa5tYImGkokGAmIuHQ6BSG
+	9hW9/q8MbHh35LaML+ry2Wgrvl8CDy557Lju0m3B38b4M4HkveGnlJyMwD/cN8Uw1Q==
+X-Gm-Gg: Acq92OGl1ttO9afUJKUFUuXU+0xBkJJicv2/RIMHmBLMPWwGjypdk5n4fBzNLsWUWzQ
+	vBPbKJcb9vXYD/Z2z0FniG+MBBxE+inuf9GGnViG7sUsjdG8jRY+KkDXYT8NLZJaS6wJXTHJm92
+	zfmLWdDzB6AWoWIe7bU6vcopu7Lrok9EGYrfamkG6MrpdhVcgvFUyE2KrifsbJXpl+Oc2J6bU1J
+	s+zNQ0tpiuKfvPPEDhH94luQvT7ikEmwt5VvVSuqD8lVpRVdlO2uQkQR3XG/6j4vOE1OrAI8c+D
+	DssehDraQChsz3kXiUbfTvd4Msf53Nm7pNh6B8wkdGVrIZE6Q2Gn3Oufm0hW/VebeYru6GW6Her
+	78p4b0UEval4vtX31Lf3l1vRTRYAE8E+6sDo5c/imd5+PgPgNw040XLebBdx18MM8nQiV3yMZfa
+	Y+LLLiobmVQy9V+D0ARFscdK4BT0bUFeStV5O3ngG3v4RdI7DUqKsYfSKn2pB0zbkSFidI+zAOR
+	FJJq65ZMuBWm+p74wo=
+X-Received: by 2002:a17:90b:53cf:b0:366:16d1:6a25 with SMTP id 98e67ed59e1d1-369518b206cmr3162750a91.5.1778835765371;
+        Fri, 15 May 2026 02:02:45 -0700 (PDT)
 Received: from wenstp920.tpe.corp.google.com ([2a00:79e0:201d:8:b3d8:e32e:c2fc:c31e])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36951584654sm2076537a91.7.2026.05.15.02.02.38
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36951584654sm2076537a91.7.2026.05.15.02.02.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 02:02:41 -0700 (PDT)
+        Fri, 15 May 2026 02:02:44 -0700 (PDT)
 From: Chen-Yu Tsai <wenst@chromium.org>
 To: Bartosz Golaszewski <brgl@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -91,9 +90,9 @@ Cc: Chen-Yu Tsai <wenst@chromium.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Manivannan Sadhasivam <mani@kernel.org>
-Subject: [PATCH RFC 10/12] arm64: dts: mediatek: mt8195-cherry: Add M.2 E-key slot
-Date: Fri, 15 May 2026 17:01:46 +0800
-Message-ID: <20260515090149.3169406-11-wenst@chromium.org>
+Subject: [PATCH RFC 11/12] arm64: dts: mediatek: mt8195-cherry: Add USB type-A connector
+Date: Fri, 15 May 2026 17:01:47 +0800
+Message-ID: <20260515090149.3169406-12-wenst@chromium.org>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
 In-Reply-To: <20260515090149.3169406-1-wenst@chromium.org>
 References: <20260515090149.3169406-1-wenst@chromium.org>
@@ -104,7 +103,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 3181754C1C7
+X-Rspamd-Queue-Id: 59AB554C1FB
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -118,7 +117,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCPT_COUNT_TWELVE(0.00)[15];
-	TAGGED_FROM(0.00)[bounces-37489-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37490-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -136,131 +135,116 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FROM_HAS_DN(0.00)[]
 X-Rspamd-Action: no action
 
-The Mt8195 Cherry design features an M.2 E-key slot for WiFi/BT combo
-cards. Only PCIe and USB are wired from the SoC to the slot, along with
-some auxiliary signals.
+The MT8195 Cherry design features a USB type-A connector for external
+devices.
 
-Add the proper representation for it, replacing the PCIe wifi node and
-vpcie3v3-supply property under the PCIe controller, and the vbus-supply
-property under the xhci3 node.
+Add a proper representation for it with a node for the connector and
+OF graph connection to the USB hub behind it.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- .../boot/dts/mediatek/mt8195-cherry.dtsi      | 74 +++++++++++++++++--
- 1 file changed, 69 insertions(+), 5 deletions(-)
+ .../boot/dts/mediatek/mt8195-cherry.dtsi      | 72 ++++++++++++++++++-
+ 1 file changed, 70 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-index ef7afc436aef..c95a54de3567 100644
+index c95a54de3567..b21cbe918c1f 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-@@ -266,6 +266,47 @@ tboard_thermistor2: thermal-sensor-t2 {
- 						120000 51
+@@ -153,7 +153,6 @@ usb_vbus: regulator-5v0-usb-vbus {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "usb-vbus";
+ 		enable-active-high;
+-		regulator-always-on;
+ 		vin-supply = <&pp5000_s5>;
+ 	};
+ 
+@@ -267,6 +266,32 @@ tboard_thermistor2: thermal-sensor-t2 {
  						125000 44>;
  	};
-+
-+	wifi-bt-connector {
-+		compatible = "pcie-m2-e-connector";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&m2_e_key_kill_pins>;
-+		vpcie3v3-supply = <&pp3300_wlan>;
-+		w-disable1-gpios = <&pio 61 GPIO_ACTIVE_LOW>;
-+		w-disable2-gpios = <&pio 59 GPIO_ACTIVE_LOW>;
-+		/* PCIe auxiliary signals wired to controller. */
+ 
++	usb-a-connector {
++		compatible = "usb-a-connector";
++		vbus-supply = <&usb_vbus>;
 +
 +		ports {
 +			#address-cells = <1>;
 +			#size-cells = <0>;
 +
-+			/* PCIe for WiFi */
 +			port@0 {
 +				reg = <0>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
 +
-+				wifi_ep: endpoint@0 {
-+					reg = <0>;
-+					remote-endpoint = <&pcie1_ep>;
++				usb_a_u2_ep: endpoint {
++					remote-endpoint = <&usb2_hub_p3_ep>;
 +				};
 +			};
 +
-+			/* USB for Bluetooth */
-+			port@2 {
-+				reg = <2>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
++			port@1 {
++				reg = <1>;
 +
-+				bt_ep: endpoint@0 {
-+					reg = <0>;
-+					remote-endpoint = <&usb3_ep>;
++				usb_a_u3_ep: endpoint {
++					remote-endpoint = <&usb3_hub_p3_ep>;
 +				};
 +			};
-+
-+			/* SDIO, UART and I2S not implemented */
-+		};
-+	};
- };
- 
- &adsp {
-@@ -791,14 +832,14 @@ pcie@0 {
- 		reg = <0 0 0 0 0>;
- 		device_type = "pci";
- 		num-lanes = <1>;
--		vpcie3v3-supply = <&pp3300_wlan>;
- 		#address-cells = <3>;
- 		#size-cells = <2>;
- 		ranges;
- 
--		wifi@0 {
--			reg = <0 0 0 0 0>;
--			wakeup-source;
-+		port {
-+			pcie1_ep: endpoint {
-+				remote-endpoint = <&wifi_ep>;
-+			};
- 		};
- 	};
- };
-@@ -1085,6 +1126,14 @@ pins-bus {
- 		};
- 	};
- 
-+	m2_e_key_kill_pins: m2-e-key-kill-pins {
-+		pins-kill {
-+			pinmux = <PINMUX_GPIO61__FUNC_GPIO61>,
-+				 <PINMUX_GPIO59__FUNC_GPIO59>;
-+			output-high;
 +		};
 +	};
 +
- 	mmc0_pins_default: mmc0-default-pins {
- 		pins-cmd-dat {
- 			pinmux = <PINMUX_GPIO126__FUNC_MSDC0_DAT0>,
-@@ -1637,9 +1686,24 @@ &xhci2 {
- &xhci3 {
- 	/* MT7921's USB Bluetooth has issues with USB2 LPM */
- 	usb2-lpm-disable;
--	vbus-supply = <&pp3300_wlan>;
+ 	wifi-bt-connector {
+ 		compatible = "pcie-m2-e-connector";
+ 		pinctrl-names = "default";
+@@ -1672,9 +1697,52 @@ vdosys1_ep_ext: endpoint@1 {
+ 
+ &xhci0 {
+ 	rx-fifo-depth = <3072>;
+-	vbus-supply = <&usb_vbus>;
++	#address-cells = <1>;
++	#size-cells = <0>;
  	vusb33-supply = <&mt6359_vusb_ldo_reg>;
  	status = "okay";
 +
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
++	usb3_hub: usb-hub@1 {
++		compatible = "usb5e3,620";
++		reg = <1>;
++		reset-gpios = <&pio 84 GPIO_ACTIVE_LOW>;
++		vdd-supply = <&pp5000_s5>;
++		peer-hub = <&usb2_hub>;
 +
-+		port@1 {
-+			reg = <1>;
++		ports {
 +			#address-cells = <1>;
 +			#size-cells = <0>;
 +
-+			usb3_ep: endpoint@0 {
-+				reg = <0>;
-+				remote-endpoint = <&bt_ep>;
++			port@3 {
++				reg = <3>;
++
++				usb3_hub_p3_ep: endpoint {
++					remote-endpoint = <&usb_a_u3_ep>;
++				};
++			};
++		};
++	};
++
++	usb2_hub: usb-hub@2 {
++		compatible = "usb5e3,610";
++		reg = <2>;
++		reset-gpios = <&pio 84 GPIO_ACTIVE_LOW>;
++		vdd-supply = <&pp5000_s5>;
++		peer-hub = <&usb3_hub>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@3 {
++				reg = <3>;
++
++				usb2_hub_p3_ep: endpoint {
++					remote-endpoint = <&usb_a_u2_ep>;
++				};
 +			};
 +		};
 +	};
  };
  
- #include <arm/cros-ec-keyboard.dtsi>
+ &xhci2 {
 -- 
 2.54.0.563.g4f69b47b94-goog
 
