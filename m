@@ -1,61 +1,61 @@
-Return-Path: <linux-usb+bounces-37469-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37470-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KLs/FObMBmrynwIAu9opvQ
-	(envelope-from <linux-usb+bounces-37469-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 09:36:06 +0200
+	id AOoqMdrRBmqKoAIAu9opvQ
+	(envelope-from <linux-usb+bounces-37470-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 09:57:14 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF0D854AA7F
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 09:36:01 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EE7A54AE45
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 09:57:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4FA7830131CA
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:35:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 653C8306FA69
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:54:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D1C4313E34;
-	Fri, 15 May 2026 07:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EA413F7A84;
+	Fri, 15 May 2026 07:54:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ov7p74U6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OQCUnjVl"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998573CF977;
-	Fri, 15 May 2026 07:35:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5C33AC0F1;
+	Fri, 15 May 2026 07:54:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778830519; cv=none; b=nGXheuYg+15sW40FVAPJupRuRjKK6VhNTi5+3buYouo3LxiDDieWq8a5st2V3uTRGKBnWN5bEz64dXhGbuKjIZExzv9UxSbmzBRpcPBqZRyABTCW/JuSKnk2WYQ8X0a/MAw2Jfzf0OM80oxWKOaL0tvG06tI7Y6TIcDBjde2llA=
+	t=1778831653; cv=none; b=qQ3ACx19J51WqK8MHqPOgWoiAXw96DSJg7LEECAXI+gDF63xAFjf1G2rsAHQV5VhcR7K10uBLjQnFCO0mlpp8BAbReeNfTGH2pqgqika1C7MV3aNokJm83Q1eHuGCf5P0il2tOokU+ReQ5nLbQ3cTuMoGVIG4mutSSra619Zkss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778830519; c=relaxed/simple;
-	bh=scHF2tbVscSWxXlLSa+CK6/V2GGg6wZILgOOgZSjF5A=;
+	s=arc-20240116; t=1778831653; c=relaxed/simple;
+	bh=6ceNaQOsWeuicN4hn04erefEjHrpUzdn7iOlsxG3uV4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=unlR9ZHeGEKxKU/6EoSV5b7hUgLPRzkR7yn5FhzwY/frhLAr1hCRcI8Q1NvaVTKtjISMLiy0r79+alrDdDsxbOsh4zfcOjZIIwkGKP541KHIv4ie6aOJYp6NbDxNt0jCNZ1Cx96aQ4w6LOTcWPOK1+cvFYn0wp7tH7v7bJ/+WUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ov7p74U6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF3E7C2BCB0;
-	Fri, 15 May 2026 07:35:18 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=jfDpW5MECfhCEczDGi8jEFMh6Avb7qLNHCyzzdglHvPkbvfCc8Ht7MvABtVwyUOoB3JMDMX6M6iOpCcuc5B3ImjsAg/kGdYuDhHz9EeVMrYv2Ryf47ueSvg5rk+M8ysxOjeEjsQ1d4fE8UJnJXwSotVjSiZIKdquylwbdhFzac0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OQCUnjVl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33FA7C2BCC7;
+	Fri, 15 May 2026 07:54:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778830519;
-	bh=scHF2tbVscSWxXlLSa+CK6/V2GGg6wZILgOOgZSjF5A=;
+	s=k20201202; t=1778831652;
+	bh=6ceNaQOsWeuicN4hn04erefEjHrpUzdn7iOlsxG3uV4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ov7p74U61tSKJnL6h0N0xEum/8Sb5X8UTZ2LnNonwPqxglDRODH3vwlo2Z5e+0/Gn
-	 DfYxRlNLp/uyfwVjl/tMKhp6q9FP4tJUvu+47mCOBWa0DXD5G8ASnRVn5zZMdyMLkp
-	 QR7QXO24yLGYzONZZ/bGUUvWxqQgj6jYzuh+AmVuEMYzP9lqyRHA6VcunHkBa4LV7E
-	 awubAcDOiRHMdTfnBKZQI/tKZyCNB9NR/MTw3C03mCkI04OTjXo8Fa7CoAPjgscQRe
-	 tuxnGK7AK2ebALsZkcaU0i8hbw0YXjftCv8DcRRym3KIFwgDdDQGYrbmwjhQn8Wus/
-	 kZqt3UdYpiaFQ==
-Date: Fri, 15 May 2026 09:35:17 +0200
+	b=OQCUnjVl95zerEu5idPYQgFx5D1M+KBHFdz6BwSmSbcvV3+ktlYEqSupy6T017Wof
+	 ES3463b/oqdcvR2oGHQqucZl0PtOw2ptAGwcNz63XcWeF1G4/Tm2k+bLVAC5Va18m/
+	 +LNI6hPLN693AfDNkwep6l/L9y8dElHu0paB/sczHAXca2lwT7fsefpvjJ0GMcOlDb
+	 N1TjpZypvaLrz3IsYBnEhQzm5zX3MgoqZUPecakF402Twai+x3ydBubgEgeQFZaWoZ
+	 Dboapk/t353YYcpHvDlXocRN2rx1fHhZ8txKf/FIISCcx9qMdf7HbXcimAZqRY63ze
+	 ewa2ALJACJ9lg==
+Date: Fri, 15 May 2026 09:54:10 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Antony Kurniawan Soemardi <linux@smankusors.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Xu Yang <xu.yang_2@nxp.com>, Peng Fan <peng.fan@nxp.com>, 
-	MINETTE Alexandre <contact@alex-min.fr>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: usb: ci-hdrc-usb2: allow up to 3 clocks for
- qcom,ci-hdrc
-Message-ID: <20260515-annoying-ultraviolet-dinosaur-d8eff7@quoll>
-References: <20260509-qcom-ci-hdrc-clock-fix-v1-1-f52386bf85da@smankusors.com>
+To: Peter Chen <peter.chen@cixtech.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	gregkh@linuxfoundation.org, pawell@cadence.com, rogerq@kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	cix-kernel-upstream@cixtech.com, linux-arm-kernel@lists.infradead.org, arnd@arndb.de
+Subject: Re: [PATCH 3/4] dt-bindings: usb: add CIX Sky1 Cadence USB3
+ controller
+Message-ID: <20260515-dynamic-archetypal-reindeer-dc6dd5@quoll>
+References: <20260511024244.981941-1-peter.chen@cixtech.com>
+ <20260511024244.981941-4-peter.chen@cixtech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,25 +64,25 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260509-qcom-ci-hdrc-clock-fix-v1-1-f52386bf85da@smankusors.com>
-X-Rspamd-Queue-Id: BF0D854AA7F
+In-Reply-To: <20260511024244.981941-4-peter.chen@cixtech.com>
+X-Rspamd-Queue-Id: 2EE7A54AE45
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37469-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37470-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
@@ -91,97 +91,175 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,smankusors.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[devicetree.org:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,cixtech.com:email]
 X-Rspamd-Action: no action
 
-On Sat, May 09, 2026 at 10:17:52AM +0000, Antony Kurniawan Soemardi wrote:
-> Some Qualcomm SoCs such as apq8064 and msm8960 require a third "fs"
-> clock in addition to "iface" and "core", needed to propagate resets
-> through the controller and wrapper logic. Later SoCs such as msm8974
-> dropped this requirement and only use two clocks.
+On Mon, May 11, 2026 at 10:42:43AM +0800, Peter Chen wrote:
+> Add a binding for the CIX Sky1 integration of the Cadence USBSSP DRD
+> controller. The schema documents the glue register window, clocks,
+> resets, interrupts and S5 system controller phandle.
 > 
-> Signed-off-by: Antony Kurniawan Soemardi <linux@smankusors.com>
+> Signed-off-by: Peter Chen <peter.chen@cixtech.com>
 > ---
-> This patch updates the ci-hdrc-usb2 binding to allow up to 3 clocks for
-> qcom,ci-hdrc, to accommodate Qualcomm SoCs that require an additional
-> "fs" clock for reset propagation.
+>  .../bindings/usb/cix,sky1-cdns3.yaml          | 151 ++++++++++++++++++
+
+Why are you mixing USB patches with DTS in one patchset? Don't.
+
+>  1 file changed, 151 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/cix,sky1-cdns3.yaml
 > 
-> This is a prerequisite for the following patch series currently under
-> review:
->   - ARM: dts: qcom: apq8064: Fix USB controller clocks [1]
->   - ARM: dts: qcom: msm8960: add RPM clock controller and fix USB
->     clocks [2]
-> 
-> Without this binding change, those series produce dtbs_check errors
-> due to the 3-clock entries in their respective device tree sources.
-> 
-> [1] https://lore.kernel.org/all/20260427-mainline-send-v1-sending-v2-6-dcaa9178007b@alex-min.fr/
-> [2] https://lore.kernel.org/all/20260414-msm8960-wifi-v1-5-007fda9d6134@smankusors.com/
-> ---
->  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml      | 29 ++++++++++++++++------
->  1 file changed, 21 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> index 691d6cf02c27..5d18d47efaed 100644
-> --- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> @@ -43,14 +43,6 @@ properties:
->                - nxp,s32g3-usb
->            - const: nxp,s32g2-usb
->  
-> -  clocks:
-> -    minItems: 1
-> -    maxItems: 2
-> -
-> -  clock-names:
-> -    minItems: 1
-> -    maxItems: 2
-> -
+> diff --git a/Documentation/devicetree/bindings/usb/cix,sky1-cdns3.yaml b/Documentation/devicetree/bindings/usb/cix,sky1-cdns3.yaml
+> new file mode 100644
+> index 000000000000..23d82d8cc9bc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/cix,sky1-cdns3.yaml
 
-You MUST NOT remove properties from top-level. See writing bindings and
-writing schema docs.
+Complete mess of filename. There is no such compatible.
 
->    operating-points-v2:
->      description: A phandle to the OPP table containing the performance states.
->      $ref: /schemas/types.yaml#/definitions/phandle
-> @@ -91,6 +83,27 @@ allOf:
->    - $ref: chipidea,usb2-common.yaml#
->    - $ref: usb-hcd.yaml#
->    - $ref: usb-drd.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: qcom,ci-hdrc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 1
-> +          maxItems: 3
+> @@ -0,0 +1,151 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/cix,sky1-cdns3.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: CIX Sky1 Cadence USB3 Controller
+> +
+> +maintainers:
+> +  - Peter Chen <peter.chen@cixtech.com>
+> +
+> +description:
+> +  The CIX Sky1 USB3 controller is based on the Cadence USBSSP DRD
+> +  controller. The integration adds glue registers and mode strap controls
+> +  in the Sky1 S5 system controller.
+> +
+> +allOf:
+> +  - $ref: usb-drd.yaml#
+> +  - $ref: usb-xhci.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: cix,sky1-usb3
+> +      - const: cix,cdns-usb3
 
-List the items instead.
-
-> +        clock-names:
-> +          minItems: 1
-> +          maxItems: 3
-
-No, names cannot be flexible. Neither clocks can, BTW, but that's
-problem of existing binding. You need to list the items.
+I don't understand the fallback compatible. You claim this device is
+called EXACTLY like vendor cdns? Nope, you SoC specific compatibles.
 
 
-> +    else:
-> +      properties:
-> +        clocks:
-> +          minItems: 1
-> +          maxItems: 2
-> +        clock-names:
-> +          minItems: 1
-> +          maxItems: 2
+> +
+> +  reg:
+> +    items:
+> +      - description: OTG controller registers
+> +      - description: Device controller registers
+> +      - description: XHCI host controller registers
+> +      - description: Sky1 USB glue registers
+> +
+> +  reg-names:
+> +    items:
+> +      - const: otg
+> +      - const: dev
+> +      - const: xhci
 
-This part is fine.
+Wrong order, look at cdns,usb3 schema.
+
+> +      - const: glue
+> +
+> +  interrupts:
+> +    items:
+> +      - description: XHCI host controller interrupt
+> +      - description: Device controller interrupt
+> +      - description: OTG/DRD controller interrupt
+> +      - description: Wakeup interrupt
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: host
+> +      - const: peripheral
+> +      - const: otg
+> +      - const: wakeup
+> +
+> +  clocks:
+> +    items:
+> +      - description: Start-of-frame clock
+> +      - description: AXI bus clock
+> +      - description: Low-power mode clock
+> +      - description: APB register interface clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: sof
+> +      - const: aclk
+> +      - const: lpm
+> +      - const: pclk
+> +
+> +  resets:
+> +    items:
+> +      - description: APB register reset
+> +      - description: Controller reset
+> +
+> +  reset-names:
+> +    items:
+> +      - const: prst
+
+apb
+
+> +      - const: rst
+
+controller or core
+
+> +
+> +  cix,syscon-usb:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      Phandle to the Sky1 S5 system controller used to program USB mode
+> +      strap controls.
+> +
+> +  dma-coherent: true
+> +
+> +  maximum-speed:
+> +    enum: [super-speed-plus, super-speed, high-speed, full-speed]
+
+Why isn't this deducible from the compatible?
+
+> +
+> +  phys:
+> +    minItems: 1
+> +    maxItems: 2
+
+No, this is not flexible.
+
+> +
+> +  phy-names:
+> +    minItems: 1
+> +    maxItems: 2
+> +    items:
+> +      anyOf:
+> +        - const: cdns3,usb2-phy
+> +        - const: cdns3,usb3-phy
+
+Drop all this and define standard names.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - interrupts
+> +  - interrupt-names
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - reset-names
+> +  - cix,syscon-usb
+
+phys should be required, no?
+
+> +
+> +unevaluatedProperties: false
 
 Best regards,
 Krzysztof
