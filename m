@@ -1,79 +1,79 @@
-Return-Path: <linux-usb+bounces-37481-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37482-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qBBdEvPlBmoHowIAu9opvQ
-	(envelope-from <linux-usb+bounces-37481-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 11:22:59 +0200
+	id AN9qOCfkBmoHowIAu9opvQ
+	(envelope-from <linux-usb+bounces-37482-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 11:15:19 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAD8754C569
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 11:22:58 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A72C54C303
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 11:15:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A72F631C85E6
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 09:02:37 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 19DCF30D7BEF
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 09:02:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBF5442E016;
-	Fri, 15 May 2026 09:02:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB1FE42884E;
+	Fri, 15 May 2026 09:02:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DPnKhZhC"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nmGFmDDh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CC742E004
-	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 09:02:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8BD542E00E
+	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 09:02:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778835739; cv=none; b=GRfz2WVmfKzO7Nmc+IgT6uNs457XMReWlxhhWimHaZSTU/A8Oa8HvZiLUwDvA7cSR8mPTmuq+UklbAH5DM/k3R7bjhu48ZuuaPVhnDKZCnnjX6DjYTwjR3lQmXU3ZcHZziD5hdRwhjOSMtNL4DR8pvZq+Gz/+YvzhWFs+pHfcos=
+	t=1778835740; cv=none; b=tUSEhYkuAAkfYVQ5B6wtI7JS2PnZEkrRrKxSHtkdWOK81Z1q0wiblDUffSeMtGIjyjDHC/IEyKwe7y61k9b4/zhSNEOZQWeuxZEip44A+zbIMVyDsaC7TQojj2DydWnBCrLbB4rc29WyPCjOjssPCopi9jpD+kJUUGUMQumk3Tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778835739; c=relaxed/simple;
-	bh=QIk7JPCunkbKluanxQkxUv0yYQaC75cEo7KnXQQKbys=;
+	s=arc-20240116; t=1778835740; c=relaxed/simple;
+	bh=vOEO0AyQPFcIP5Oepet64iLw7BJ4UcNrPP/hNlqxr94=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YZvQ3FSLtKyhB0EyeERp31OL4yugEeQGH2LvLtvZa+1TN0NMD8oGVecXN2IUKi4YMR0S2agOT5je9Uc8JO1WcAZLWGSwfMF2aO5+rIUB9oZVWWLXmd6HEp85quKCv9imCyNDccFEFlSw55pBeH5tJNaMmfNqJnRWWDMX5aGJv7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=DPnKhZhC; arc=none smtp.client-ip=209.85.216.41
+	 MIME-Version; b=oAzuLFqXLASgSsQD4ZByveApWT4lKptrvYZzpZjtJvx3t89r8XShrGcNcjDpoJ1YxiFKXVG1KUGmgGEH9RiZi1rsTkwJqEnFXY3AgjxgR4mZ/TbJBHeBJvIIWIMgQLgrvk3qqBJMq19RrTZ/g/rJYWbz4I8TAxplIATUCJ3ZaJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=nmGFmDDh; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3664df32e91so7795717a91.3
-        for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 02:02:17 -0700 (PDT)
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3692bf38290so1178348a91.0
+        for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 02:02:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1778835737; x=1779440537; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1778835738; x=1779440538; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+04SKeVBhvRIfsHaTWxnqsLENnjwWESaqrABBm+vFKc=;
-        b=DPnKhZhC5Y83A/rt7Xy0jgw3iNZL/jL2ZLVbssKOTHrXzvVEhcGIHbRsC9C6wTIBMV
-         ExuKaY6V0JcsnTZB5oanONfSbuT8RyWHyDYpbjukDIY2oCkh55PdyoreUEcMFuRt5pg1
-         yWBdSAWq9XnD/mbhJehUWWV5hLvNf0lIWuf3w=
+        bh=lkMXWQOY3SYOq1egH+Z6kUsiL0nTYxohMUH/RmfCF7Q=;
+        b=nmGFmDDhYtbSJbIfmkvcEEz6IMBYLHqawySsgWUdsZ60LRJZjfZowRpT7soor+1YpC
+         1810YBzjQUC+IFoK8fmC4V3+779tnUjc4ha3iYaG7ZaWhl+X7teLvWx83DnJBKG+YNYQ
+         AtZPpE+RLkEiWn9hrpmerbtsRiGy1ebcBHoq8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778835737; x=1779440537;
+        d=1e100.net; s=20251104; t=1778835738; x=1779440538;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+04SKeVBhvRIfsHaTWxnqsLENnjwWESaqrABBm+vFKc=;
-        b=OZqVCWo/5CWS8Wud/QY0rLo6jjbZcFEROzfwVXR+aexK09u/ywkZyrr9MpOZ7GwcxW
-         Gkhi5IldQD83VJWANYRm8jFYaAE8QrtWLyURvyCJfx+BCMW8f+fTPAdDuhJKpxuj5xnJ
-         eIDFTmPLi9gC7qheAm973Av1u3xo2hCS+gp9Sba1gxIZw4JwtnKnFu/4mU74JPwRFgd6
-         OJbGzhFEnHSKw5Zf8N3oUaIS9t4zegO9VGuZFwup+YwfIDCnwcS/oXpCH70rqmt6rTWZ
-         oM3C3Ix1tH9T/B+lufhId0acOAA/LNc5vsS4g9Fj0VpzbQTvFNlIoloAZPiS421CTg9o
-         44tg==
-X-Forwarded-Encrypted: i=1; AFNElJ9V2Nzo1XZiERQ40rJRr3FHY0MPzX8BGTEm+9oI5hKa/w++IjoxF2KwsOYZ6TPc4ZKJbz5/nr093Nc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEsd0512RgMPJvKBhYwhKb+wXawEqApVOYdqiNlLQu+R4XJV4s
-	LAl7cmMiUAMwA8gIzAzXOqnDwppxorMxZaqU0wHP+z8wiDp2s3S8SYXuNsuDgQrjBw==
-X-Gm-Gg: Acq92OEgNgHojnrrXUbqLe/btvwIUfnn8RsIJ9sNpFp5VOXjKbHwBY8H4qI+nAcIpXk
-	7BtdbQj+j3mBer7g++ut5W1HkOkiZApk3/JgjHSyqu6HzeRMGid1EYXHCCCfRN3FoBMur/TGPmx
-	8HDLogCxBvOiLXc/lKcyAvODd8uvYXsCa/ne3lTCnOrDdW2foRhmpnCpBSdlFfim0zyy7rOv4KH
-	x5SjxYhXamVwCIjd+3PbXLCgEfa0L89e/ZodWc6+fJOLgqFVWY5D1xt4TjbCsMj179qjB4pAyUV
-	Yi0detskpzMap5/CWbI6TWIyRCVXpOcteIH9TtnQNHtY9k2IVSm7Nh8U6djVn0NQON+pVko7yuD
-	L8pG9FqmpS0ou4trxnRmwQ6JKcutV0ZfGpQUTsQchIYe1nvH1gfqkiIYOjVAah6OU+M79+xzxjJ
-	gUenS+ZdAAnVA2X2bhvRdh7IbhhHEg1DSK0fYiuHlGNjt9sI7lij8x2tz1k0fw/nIAxyudPTPV1
-	jA1QCp7
-X-Received: by 2002:a17:90b:50d0:b0:367:bb47:9fc2 with SMTP id 98e67ed59e1d1-369518bae79mr3243819a91.2.1778835734722;
-        Fri, 15 May 2026 02:02:14 -0700 (PDT)
+        bh=lkMXWQOY3SYOq1egH+Z6kUsiL0nTYxohMUH/RmfCF7Q=;
+        b=igyF5VrZ3kj78MBzWki4CJULXLbUp3tll33obifnN8Sfg1n1xnJDAC1YiUsJZclnkX
+         IMFzgZ4kHEL4usTe8PxjmPeHBZaOohghLYTM6v0ZL2mhksw95mcUPJYnmf9UpbCWla5Y
+         SMPCwqdm84tXvb5iTjqMYbabxWJOW/cogMIVApPXKip8eef9DLVicB4athUFMzyJODcb
+         /py5GeeW0DbNZY05LJVunRui6/JJtbcqg8haUBpHTxye0OoMvEoGfCPBWhYDej+BAizJ
+         xLoPJPleJeXXcnP+95zfUdEuB2RiOMC77uAP9L7rN9LlEyVdhn6/SL02+okZKV/9ZBjj
+         +ZNg==
+X-Forwarded-Encrypted: i=1; AFNElJ+JSUFO3Vk4TKBnQuMol89ey8p26BwW9y0TrtTbqmTO6jA+iSjzRaFW0ehyzp4Xw9hyQWW7Qmg8VvE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhlHFDXp87ahvFuq6TPxy3bPDbcT4F8Xv8GgceqMVBwkDaH7M9
+	LT7l/G+FOUXTNFcY8U95veGyaGUithq3ovovFSvd4MDhy47+f64HPB/Xgk8XAHs3eQ==
+X-Gm-Gg: Acq92OHhJ75V+cq2INL988oiEqBNj3FPt+jSlu4uXBEZBOHPkR6lQXLuWKsUIC7gnI1
+	cSwYUnQVeNpDeIg2Lb3Q7WwEZdnDN3QB9JDip38Zbzkh5udopkMtSACWCsan0umes/Iwfas1tyG
+	K0xzSv354NARhJqrzUDggx36g/skIzu1CbWRRFIIDDmcQ43dqe3/Emh3Z3KNBL5f8bAkKc0ILFN
+	yy6LRPtgBqiLy62HcIGGfAriMXjE2rQ/bCeCAFuV7t3vrDeQ9qXFTBmDOmpVfjgRA+INdwaqQDD
+	QbACGuvdBKoLGXYQa0NM9SViBGj/PDvqdZkrsLv6b/kfKsJdOB8V0QpimcEe3Ec4kIuyJowbJ3G
+	7eXkxnYPss+YbKob6t5S/LKg07wWLHO0O98OUeojNAiw7rFfKOamdYgz/tcl+raQ8TDl85jmKKf
+	/U5DHmPV2H0nmxE5DqfF2aEaZha11j7f4d+tpmBPc6NRJ1jFLOAFIY6Myr31qkEmCczCNYcxZ0A
+	4hWN8gBQ7VRYPaTapY=
+X-Received: by 2002:a17:90b:5744:b0:366:159a:c17e with SMTP id 98e67ed59e1d1-369518af9c4mr3451493a91.2.1778835738088;
+        Fri, 15 May 2026 02:02:18 -0700 (PDT)
 Received: from wenstp920.tpe.corp.google.com ([2a00:79e0:201d:8:b3d8:e32e:c2fc:c31e])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36951584654sm2076537a91.7.2026.05.15.02.02.11
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36951584654sm2076537a91.7.2026.05.15.02.02.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 02:02:14 -0700 (PDT)
+        Fri, 15 May 2026 02:02:17 -0700 (PDT)
 From: Chen-Yu Tsai <wenst@chromium.org>
 To: Bartosz Golaszewski <brgl@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -90,9 +90,9 @@ Cc: Chen-Yu Tsai <wenst@chromium.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Manivannan Sadhasivam <mani@kernel.org>
-Subject: [PATCH RFC 02/12] power: sequencing: pcie-m2: implement port index matching
-Date: Fri, 15 May 2026 17:01:38 +0800
-Message-ID: <20260515090149.3169406-3-wenst@chromium.org>
+Subject: [PATCH RFC 03/12] power: sequencing: pcie-m2: Add usb and sdio targets for E-key connector
+Date: Fri, 15 May 2026 17:01:39 +0800
+Message-ID: <20260515090149.3169406-4-wenst@chromium.org>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
 In-Reply-To: <20260515090149.3169406-1-wenst@chromium.org>
 References: <20260515090149.3169406-1-wenst@chromium.org>
@@ -103,7 +103,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: DAD8754C569
+X-Rspamd-Queue-Id: 6A72C54C303
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -111,80 +111,144 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	TAGGED_FROM(0.00)[bounces-37481-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_TO(0.00)[kernel.org,linuxfoundation.org,gmail.com,collabora.com];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37482-lists,linux-usb=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[wenst@chromium.org,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[chromium.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_HAS_DN(0.00)[]
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,chromium.org:email,chromium.org:mid,chromium.org:dkim]
 X-Rspamd-Action: no action
 
-For USB connections, the upstream USB (hub) device could be connected to
-multiple M.2 E-key slots (or other power sequencer providers) via
-different downstream USB ports. The provider needs a way to tell the
-different connections apart so that the correct provider is matched.
+The M.2 E-key connector allows either PCIe or SDIO for WiFi and USB or
+UART for BT. Currently the driver only supports PCIe and UART.
 
-In the previous change an index parameter was added for the consumer API
-and the provider matching function. Implement port matching using the
-index parameter. We simply check if the remote endpoint's port number
-matches the index.
+Add power sequencing targets for SDIO and USB. To avoid adding a
+complicated dependency tree, rename the existing power sequencing units
+"pcie" and "uart" to "wifi" and "bt". The existing target names are left
+untouched. The new "sdio" and "usb" targets just point to the renamed
+"wifi" and "bt" units.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/power/sequencing/pwrseq-pcie-m2.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ drivers/power/sequencing/pwrseq-pcie-m2.c | 41 +++++++++++++++--------
+ 1 file changed, 27 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/power/sequencing/pwrseq-pcie-m2.c b/drivers/power/sequencing/pwrseq-pcie-m2.c
-index 16a332f9da7d..c9aed2c02e81 100644
+index c9aed2c02e81..a5585f000ef1 100644
 --- a/drivers/power/sequencing/pwrseq-pcie-m2.c
 +++ b/drivers/power/sequencing/pwrseq-pcie-m2.c
-@@ -165,12 +165,28 @@ static int pwrseq_pcie_m2_match(struct pwrseq_device *pwrseq,
+@@ -62,46 +62,46 @@ static const struct pwrseq_unit_data *pwrseq_pcie_m2_unit_deps[] = {
+ 	NULL
+ };
  
- 	/*
- 	 * Traverse the 'remote-endpoint' nodes and check if the remote node's
--	 * parent matches the OF node of 'dev'.
-+	 * parent matches the OF node of 'dev' and the port number matches
-+	 * 'index'.
- 	 */
- 	for_each_endpoint_of_node(ctx->of_node, endpoint) {
-+		struct device_node *remote_ep __free(device_node) =
-+				of_graph_get_remote_endpoint(endpoint);
- 		struct device_node *remote __free(device_node) =
--				of_graph_get_remote_port_parent(endpoint);
--		if (remote && (remote == dev_of_node(dev)))
-+				of_graph_get_port_parent(remote_ep);
-+		struct of_endpoint ep;
+-static int pwrseq_pci_m2_e_uart_enable(struct pwrseq_device *pwrseq)
++static int pwrseq_pci_m2_e_bt_enable(struct pwrseq_device *pwrseq)
+ {
+ 	struct pwrseq_pcie_m2_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
+ 
+ 	return gpiod_set_value_cansleep(ctx->w_disable2_gpio, 0);
+ }
+ 
+-static int pwrseq_pci_m2_e_uart_disable(struct pwrseq_device *pwrseq)
++static int pwrseq_pci_m2_e_bt_disable(struct pwrseq_device *pwrseq)
+ {
+ 	struct pwrseq_pcie_m2_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
+ 
+ 	return gpiod_set_value_cansleep(ctx->w_disable2_gpio, 1);
+ }
+ 
+-static const struct pwrseq_unit_data pwrseq_pcie_m2_e_uart_unit_data = {
+-	.name = "uart-enable",
++static const struct pwrseq_unit_data pwrseq_pcie_m2_e_bt_unit_data = {
++	.name = "bt-enable",
+ 	.deps = pwrseq_pcie_m2_unit_deps,
+-	.enable = pwrseq_pci_m2_e_uart_enable,
+-	.disable = pwrseq_pci_m2_e_uart_disable,
++	.enable = pwrseq_pci_m2_e_bt_enable,
++	.disable = pwrseq_pci_m2_e_bt_disable,
+ };
+ 
+-static int pwrseq_pci_m2_e_pcie_enable(struct pwrseq_device *pwrseq)
++static int pwrseq_pci_m2_e_wifi_enable(struct pwrseq_device *pwrseq)
+ {
+ 	struct pwrseq_pcie_m2_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
+ 
+ 	return gpiod_set_value_cansleep(ctx->w_disable1_gpio, 0);
+ }
+ 
+-static int pwrseq_pci_m2_e_pcie_disable(struct pwrseq_device *pwrseq)
++static int pwrseq_pci_m2_e_wifi_disable(struct pwrseq_device *pwrseq)
+ {
+ 	struct pwrseq_pcie_m2_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
+ 
+ 	return gpiod_set_value_cansleep(ctx->w_disable1_gpio, 1);
+ }
+ 
+-static const struct pwrseq_unit_data pwrseq_pcie_m2_e_pcie_unit_data = {
+-	.name = "pcie-enable",
++static const struct pwrseq_unit_data pwrseq_pcie_m2_e_wifi_unit_data = {
++	.name = "wifi-enable",
+ 	.deps = pwrseq_pcie_m2_unit_deps,
+-	.enable = pwrseq_pci_m2_e_pcie_enable,
+-	.disable = pwrseq_pci_m2_e_pcie_disable,
++	.enable = pwrseq_pci_m2_e_wifi_enable,
++	.disable = pwrseq_pci_m2_e_wifi_disable,
+ };
+ 
+ static const struct pwrseq_unit_data pwrseq_pcie_m2_m_pcie_unit_data = {
+@@ -123,13 +123,24 @@ static int pwrseq_pcie_m2_e_pwup_delay(struct pwrseq_device *pwrseq)
+ 
+ static const struct pwrseq_target_data pwrseq_pcie_m2_e_uart_target_data = {
+ 	.name = "uart",
+-	.unit = &pwrseq_pcie_m2_e_uart_unit_data,
++	.unit = &pwrseq_pcie_m2_e_bt_unit_data,
+ 	.post_enable = pwrseq_pcie_m2_e_pwup_delay,
+ };
+ 
++static const struct pwrseq_target_data pwrseq_pcie_m2_e_usb_target_data = {
++	.name = "usb",
++	.unit = &pwrseq_pcie_m2_e_bt_unit_data,
++};
 +
-+		if (!remote)
-+			continue;
-+		if (remote != dev_of_node(dev))
-+			continue;
-+		/* For existing users of pwrseq_get(): index = -1 */
-+		if (index < 0)
-+			return PWRSEQ_MATCH_OK;
+ static const struct pwrseq_target_data pwrseq_pcie_m2_e_pcie_target_data = {
+ 	.name = "pcie",
+-	.unit = &pwrseq_pcie_m2_e_pcie_unit_data,
++	.unit = &pwrseq_pcie_m2_e_wifi_unit_data,
++	.post_enable = pwrseq_pcie_m2_e_pwup_delay,
++};
 +
-+		/* Check if the remote endpoint's port matches 'index'. */
-+		if (of_graph_parse_endpoint(remote_ep, &ep) < 0)
-+			continue;
-+		if (ep.port == index)
- 			return PWRSEQ_MATCH_OK;
- 	}
++static const struct pwrseq_target_data pwrseq_pcie_m2_e_sdio_target_data = {
++	.name = "sdio",
++	.unit = &pwrseq_pcie_m2_e_wifi_unit_data,
+ 	.post_enable = pwrseq_pcie_m2_e_pwup_delay,
+ };
+ 
+@@ -140,7 +151,9 @@ static const struct pwrseq_target_data pwrseq_pcie_m2_m_pcie_target_data = {
+ 
+ static const struct pwrseq_target_data *pwrseq_pcie_m2_e_targets[] = {
+ 	&pwrseq_pcie_m2_e_pcie_target_data,
++	&pwrseq_pcie_m2_e_sdio_target_data,
+ 	&pwrseq_pcie_m2_e_uart_target_data,
++	&pwrseq_pcie_m2_e_usb_target_data,
+ 	NULL
+ };
  
 -- 
 2.54.0.563.g4f69b47b94-goog
