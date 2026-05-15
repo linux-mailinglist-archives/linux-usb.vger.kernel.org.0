@@ -1,253 +1,194 @@
-Return-Path: <linux-usb+bounces-37460-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37461-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EEGEDCq1BmqKnAIAu9opvQ
-	(envelope-from <linux-usb+bounces-37460-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:54:50 +0200
+	id sKGhOfq1BmrrnAIAu9opvQ
+	(envelope-from <linux-usb+bounces-37461-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:58:18 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEC2E549C8E
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:54:49 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43295549CFB
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:58:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 18B3830873A7
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 05:51:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CD46C3040FB4
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 05:58:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40C2937646A;
-	Fri, 15 May 2026 05:50:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 453DC372B3C;
+	Fri, 15 May 2026 05:58:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hjC6g/ue"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="untkZfJI"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF00366830;
-	Fri, 15 May 2026 05:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2E2245031
+	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 05:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778824257; cv=none; b=CmdVTXdTl8/kvHU8nhRZBQnWTGM6FRW5PqByN3O9ihzV/7I+eMmVNeq3WKX3XjKNTLynQ3Ryl87leCu5vJnHC/M/N04ESInqmjU+abLSisB1swVuZrF3ol5ILf0ZSNmojyNJ9+4LVzVQx6QGU1bz60t2E/H/PyXAhxNTWdmCzOE=
+	t=1778824693; cv=none; b=uWqAOMYYg3Rq84nUKUQc/oEIj5NoS9+MNz5mcEt+bFWBbHw/uvwtIjN0sPwoRkrADeI6Fv5rJela8Fy8P11gYdz3WmC49rAl6GNdO71GbJsBpzQHBvrO/I9rJ1Rqsr9zE4MvUkbi0YUsuKhs1TGl+Lkr1OAwcWdvvAXKY+Cmr4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778824257; c=relaxed/simple;
-	bh=v0n4iL+ec7ubF7WE3r+09txUZuNOlRfNgY9pxDWbRgY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TENKpT/1cLKj8x58UvLGzRcpaglWXQWp1qLi1KSn5KOIOskMbFpUjFscJkTehWJIc3uMx6C/6nAxijAUkam7wdW0f3lrw3E8uU1/VmPJpyFZQzDakyJ0C2rPWCbYJmlFHmbzrrfYAM1sXECZDiQ6guGQeGbQkvPxZ0MFy0VBXws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hjC6g/ue; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7C94DC2BCFB;
-	Fri, 15 May 2026 05:50:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778824257;
-	bh=v0n4iL+ec7ubF7WE3r+09txUZuNOlRfNgY9pxDWbRgY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=hjC6g/ue5VGk+RAa2i/AZCUGdEKSMNl1UoJc9IAloUNrZ2EPx98qKWurWkR2spxYB
-	 3YBFnZDqrew8K6kX/rfmlds69+6YhcTzNZ2LoiGLomdYOktvc6O0MI3leYuDB8vTUk
-	 kS8cIuu3LhII3J5u/QPu4sWaxINSq6uw+qG1tfmkqK0m7xElyTRqHfXLMb+mgRMZlC
-	 0D/1DWNfRsyDVszpqatmTzminHVzeVe2Y1dhI/Cg6NOQE7txSCVt5bbb+ZUPm7NqBq
-	 qh0tAv/lMOveZuv0QNnv/nEwwgbYMcYkfGL1myfNrX1BUDhonbEB0vbqZZVjeX5tCQ
-	 7XEusK8P1+Gdg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73454CD4851;
-	Fri, 15 May 2026 05:50:57 +0000 (UTC)
-From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
-Date: Fri, 15 May 2026 05:48:41 +0000
-Subject: [PATCH 3/3] power: supply: max17042: add handler for energy_now
- property
+	s=arc-20240116; t=1778824693; c=relaxed/simple;
+	bh=PQofuAc79D4n6VjwJvdQHVwCl/aNuUEUOF+7lSnbD8U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PPpdM2vwNkLt7a4twyX0N7pxbwJ9LKbso1qD2PhZh6EyoKsQ62TBXiuyp/7R4hgpTdtDbva6jHDFUpwZRtE6XvV/2orqlvLZeDZi532shmIh0hFCWf6BUf7MAAVzAEoHSBnz941XuIutA/dQsTcU+3nSssJPrt3hN5vfX/BATwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=untkZfJI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23414C2BCB0;
+	Fri, 15 May 2026 05:58:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1778824693;
+	bh=PQofuAc79D4n6VjwJvdQHVwCl/aNuUEUOF+7lSnbD8U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=untkZfJIzDYtpslna7tdtHmAwWEB0k8EC9wknIMpYm05qLFnv9R8Yw2pcZekMUi9x
+	 snlbP7sAZ/Gx1TT7dTdKW76iDNa2gYux2ZFGGhnNhXUxj5xj6JRGWGBnAwftCOYaOf
+	 dE3FFpRDIi9EwexbOcCFp5Z32McW5iPbsRI2f9Jc=
+Date: Fri, 15 May 2026 07:58:17 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Dave Carey <carvsdriver@gmail.com>
+Cc: linux-usb@vger.kernel.org, oneukum@suse.com, guanwentao@uniontech.com
+Subject: Re: [PATCH] USB: cdc-acm: start bulk-IN polling when
+ ALWAYS_POLL_CTRL is set
+Message-ID: <2026051506-theft-growl-5a79@gregkh>
+References: <CALPvROTsnvWJZVmW6L_gdF5_Pv4ic3gKbAKYyyC_-n0mffmnAg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260515-batt-status-v1-3-fed6b7d8cea7@google.com>
-References: <20260515-batt-status-v1-0-fed6b7d8cea7@google.com>
-In-Reply-To: <20260515-batt-status-v1-0-fed6b7d8cea7@google.com>
-To: Sebastian Reichel <sre@kernel.org>, 
- Badhri Jagan Sridharan <badhri@google.com>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Hans de Goede <hansg@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
- Marek Szyprowski <m.szyprowski@samsung.com>, 
- Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
- Purism Kernel Team <kernel@puri.sm>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-usb@vger.kernel.org, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Peter Griffin <peter.griffin@linaro.org>, RD Babiera <rdbabiera@google.com>, 
- Kyle Tso <kyletso@google.com>, Amit Sunil Dhamne <amitsd@google.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778824256; l=3946;
- i=amitsd@google.com; s=20241031; h=from:subject:message-id;
- bh=rZ4iAk16d2xmYX+iRg9d3aLsjlCGLdVUfG6+D9Nq6hY=;
- b=mP5j13ZK2htM+zjnJ8ThHRPxXR/MqZXaXDsFwNM3MXuPFJnxgRn6pYa1b9P0EF0FZFZ5S6+mj
- ATw1BO4vO+EDPgUyeEPZXs0dSzHVvnkrmOZf/gtkg+HPU+v6ig8qNHs
-X-Developer-Key: i=amitsd@google.com; a=ed25519;
- pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
-X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
- auth_id=262
-X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
-Reply-To: amitsd@google.com
-X-Rspamd-Queue-Id: BEC2E549C8E
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALPvROTsnvWJZVmW6L_gdF5_Pv4ic3gKbAKYyyC_-n0mffmnAg@mail.gmail.com>
+X-Rspamd-Queue-Id: 43295549CFB
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37460-lists,linux-usb=lfdr.de,amitsd.google.com];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37461-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	HAS_REPLYTO(0.00)[amitsd@google.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:dkim]
 X-Rspamd-Action: no action
 
-From: Amit Sunil Dhamne <amitsd@google.com>
+On Thu, May 14, 2026 at 03:42:52PM -0400, Dave Carey wrote:
+> The INGENIC 17EF:6161 touchscreen composite device has a ~55-second
+> watchdog that resets the USB device if the bulk-IN endpoint on the CDC
+> data interface goes unread. The existing ALWAYS_POLL_CTRL quirk keeps
+> the notification endpoint (ctrlurb / EP 0x82) polling continuously, but
+> that alone is insufficient: the firmware monitors bulk-IN activity, not
+> just notification-endpoint activity.
+> 
+> Add acm_submit_read_urbs() calls to the two ALWAYS_POLL_CTRL paths that
+> already restart the ctrlurb:
+> 
+> 1. acm_probe(): start bulk reads at probe time alongside the ctrlurb,
+> so the watchdog is satisfied from first bind without requiring a
+> userspace process to open /dev/ttyACMn.
+> 
+> 2. acm_port_shutdown(): restart bulk reads after port close alongside
+> the ctrlurb restart, so the watchdog keeps running when the last
+> TTY user closes the port.
+> 
+> acm_read_bulk_callback() already resubmits each URB unconditionally on
+> normal completion, so once submitted the reads remain active until an
+> explicit kill (disconnect, suspend). acm_submit_read_urb() is a no-op
+> for URBs that are already in flight (read_urbs_free bit clear), so the
+> existing acm_port_activate() call remains correct and races are avoided.
+> 
+> Tested on Lenovo Yoga Book 9 14IAH10 (83KJ): without this patch the
+> device resets every ~55 s when no TTY is open; with it the device
+> remains stable indefinitely.
+> 
+> Signed-off-by: Dave Carey <carvsdriver@gmail.com>
+> Tested-by: Dave Carey <carvsdriver@gmail.com>
+> ---
+> This follows commit f58752ebcb35 ("USB: CDC-ACM: add INGENIC 17EF:6161
+> quirk for Yoga Book 9 14IAH10"), which added ALWAYS_POLL_CTRL to keep
+> the ctrlurb active. That commit addressed the notification-endpoint
+> watchdog (~20 s). This patch addresses a second watchdog that fires
+> when bulk-IN data goes unread for ~55 s.
+> 
+> This patch is based on top of Wentao Guan's pending fix
+> ("USB: cdc-acm: fix misplaced quirk defines and BIT(9) collision") which
+> moves VENDOR_CLASS_DATA_IFACE and ALWAYS_POLL_CTRL from inside
+> acm_ctrl_msg() to cdc-acm.h and reassigns them to BIT(10)/BIT(11) to
+> avoid the NO_UNION_12 collision. The bulk-IN additions here are
+> independent of that renumbering and apply cleanly to either base, but
+> the combined tree is the correct target once Wentao's fix merges.
+> 
+> drivers/usb/class/cdc-acm.c | 6 ++++++
+> 1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+> --- a/drivers/usb/class/cdc-acm.c
+> +++ b/drivers/usb/class/cdc-acm.c
+> @@ -799,6 +799,9 @@
+> "ctrl polling restart failed after port close\n");
+> /* port_shutdown() cleared DTR/RTS; restore them */
+> acm_set_control(acm, USB_CDC_CTRL_DTR | USB_CDC_CTRL_RTS);
+> + if (acm_submit_read_urbs(acm, GFP_KERNEL))
+> + dev_dbg(&acm->control->dev,
+> + "read urb restart failed after port close\n");
+> }
+> }
+> 
+> @@ -1566,6 +1569,9 @@
+> if (usb_submit_urb(acm->ctrlurb, GFP_KERNEL))
+> dev_warn(&intf->dev,
+> "failed to start persistent ctrl polling\n");
+> + if (acm_submit_read_urbs(acm, GFP_KERNEL))
+> + dev_warn(&intf->dev,
+> + "failed to start persistent bulk read polling\n");
+> }
+> 
+> return 0;
+> --
+> 2.47.0
 
-Add handler to report power_supply_prop_energy_now so that users can get
-current SoC in uWH. Additionally, add helper functions to get avg_vcell
-and repcap values in uv and uah units respectively to avoid code
-duplication.
+Hi,
 
-Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
----
- drivers/power/supply/max17042_battery.c | 60 ++++++++++++++++++++++++++-------
- 1 file changed, 47 insertions(+), 13 deletions(-)
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index 167fb3fb3732..e16eb6985b70 100644
---- a/drivers/power/supply/max17042_battery.c
-+++ b/drivers/power/supply/max17042_battery.c
-@@ -81,6 +81,7 @@ static enum power_supply_property max17042_battery_props[] = {
- 	POWER_SUPPLY_PROP_CHARGE_NOW,
- 	POWER_SUPPLY_PROP_CHARGE_COUNTER,
- 	POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
-+	POWER_SUPPLY_PROP_ENERGY_NOW,
- 	POWER_SUPPLY_PROP_TEMP,
- 	POWER_SUPPLY_PROP_TEMP_ALERT_MIN,
- 	POWER_SUPPLY_PROP_TEMP_ALERT_MAX,
-@@ -95,6 +96,36 @@ static enum power_supply_property max17042_battery_props[] = {
- 	POWER_SUPPLY_PROP_CURRENT_AVG,
- };
- 
-+static int max17042_get_repcap_uah(struct max17042_chip *chip, u64 *rep_cap)
-+{
-+	u32 data;
-+	int ret;
-+
-+	ret = regmap_read(chip->regmap, MAX17042_RepCap, &data);
-+	if (ret < 0)
-+		return ret;
-+
-+	*rep_cap = data * 5000000ll;
-+	*rep_cap *= chip->task_period;
-+	do_div(*rep_cap, MAX17042_DEFAULT_TASK_PERIOD);
-+	do_div(*rep_cap, chip->pdata->r_sns);
-+
-+	return 0;
-+}
-+
-+static int max17042_get_avgvcell_uv(struct max17042_chip *chip, u32 *vcell)
-+{
-+	int ret;
-+
-+	ret = regmap_read(chip->regmap, MAX17042_AvgVCELL, vcell);
-+	if (ret < 0)
-+		return ret;
-+
-+	*vcell = (*vcell * 625) / 8;
-+
-+	return 0;
-+}
-+
- static int max17042_get_temperature(struct max17042_chip *chip, int *temp)
- {
- 	int ret;
-@@ -180,14 +211,12 @@ static int max17042_get_battery_health(struct max17042_chip *chip, int *health)
- 	int temp, vavg, vbatt, ret;
- 	u32 val;
- 
--	ret = regmap_read(chip->regmap, MAX17042_AvgVCELL, &val);
-+	ret = max17042_get_avgvcell_uv(chip, &val);
- 	if (ret < 0)
- 		goto health_error;
- 
--	/* bits [0-3] unused */
--	vavg = val * 625 / 8;
- 	/* Convert to millivolts */
--	vavg /= 1000;
-+	vavg = val / 1000;
- 
- 	ret = regmap_read(chip->regmap, MAX17042_VCELL, &val);
- 	if (ret < 0)
-@@ -304,11 +333,10 @@ static int max17042_get_property(struct power_supply *psy,
- 		val->intval = data * 625 / 8;
- 		break;
- 	case POWER_SUPPLY_PROP_VOLTAGE_AVG:
--		ret = regmap_read(map, MAX17042_AvgVCELL, &data);
-+		ret = max17042_get_avgvcell_uv(chip, &data);
- 		if (ret < 0)
- 			return ret;
--
--		val->intval = data * 625 / 8;
-+		val->intval = data;
- 		break;
- 	case POWER_SUPPLY_PROP_VOLTAGE_OCV:
- 		ret = regmap_read(map, MAX17042_OCVInternal, &data);
-@@ -350,14 +378,9 @@ static int max17042_get_property(struct power_supply *psy,
- 		val->intval = data64;
- 		break;
- 	case POWER_SUPPLY_PROP_CHARGE_NOW:
--		ret = regmap_read(map, MAX17042_RepCap, &data);
-+		ret = max17042_get_repcap_uah(chip, &data64);
- 		if (ret < 0)
- 			return ret;
--
--		data64 = data * 5000000ll;
--		data64 *= chip->task_period;
--		do_div(data64, MAX17042_DEFAULT_TASK_PERIOD);
--		do_div(data64, chip->pdata->r_sns);
- 		val->intval = data64;
- 		break;
- 	case POWER_SUPPLY_PROP_CHARGE_COUNTER:
-@@ -370,6 +393,17 @@ static int max17042_get_property(struct power_supply *psy,
- 		data64 = div_s64(data64, MAX17042_DEFAULT_TASK_PERIOD);
- 		val->intval = div_s64(data64, chip->pdata->r_sns);
- 		break;
-+	case POWER_SUPPLY_PROP_ENERGY_NOW:
-+		ret = max17042_get_repcap_uah(chip, &data64);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = max17042_get_avgvcell_uv(chip, &data);
-+		if (ret < 0)
-+			return ret;
-+
-+		val->intval = data64 * data / 1000000;
-+		break;
- 	case POWER_SUPPLY_PROP_TEMP:
- 		ret = max17042_get_temperature(chip, &val->intval);
- 		if (ret < 0)
+You are receiving this message because of the following common error(s)
+as indicated below:
 
--- 
-2.54.0.563.g4f69b47b94-goog
+- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
+  and can not be applied.  Please read the file,
+  Documentation/process/email-clients.rst in order to fix this.
 
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
+thanks,
+
+greg k-h's patch email bot
 
