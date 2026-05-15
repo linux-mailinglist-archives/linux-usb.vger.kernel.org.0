@@ -1,202 +1,236 @@
-Return-Path: <linux-usb+bounces-37462-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37463-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gMA7OB+2BmrrnAIAu9opvQ
-	(envelope-from <linux-usb+bounces-37462-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:58:55 +0200
+	id yP21MxO3BmrrnAIAu9opvQ
+	(envelope-from <linux-usb+bounces-37463-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 08:02:59 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44B44549D15
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:58:54 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49C70549D6A
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 08:02:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A34FE3046FEC
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 05:58:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 382CD304707C
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 06:02:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C0A537700B;
-	Fri, 15 May 2026 05:58:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F57133688E;
+	Fri, 15 May 2026 06:02:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2byAiGqI"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HIoD/zqW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803CE373C1D;
-	Fri, 15 May 2026 05:58:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7EB30E0EE
+	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 06:02:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778824725; cv=none; b=sjn1UJmEH+ubqlbet0jovhQwI0Z4b0B8GHTR2igspwflauwHGNGOmMCGBcy3TWYnSnjHDhFFxfzsi1thK5jkw7z5qC+8WtjTd00HR1ceWmojqsEAmOjAI3iCbLxKSpnNlecihCEzI39W7eJvwF7BGJ6BgVJ1X1UweQ8vcvCP2xw=
+	t=1778824969; cv=none; b=g2d3q6+S49ZiK+iVHJJvJeOob7gP3gqdEDzBUulkrKWmpO86dDvNX2dZGmpnUY8EazXXf0VhojVi9QgUNjTZEkfaInjpsm3ngAN2ABiUYa+oqx5oEGq5zqGMqt+if2fF4uSWkgXbqiJzAIsUinSQ44JBfLRld4+Eo+47cQOBL+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778824725; c=relaxed/simple;
-	bh=269b3wWzoOha4XQIm1eoCWoA7uhqLMJn2ReZ6kzIhYw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=euE02NVggP2pJhMLyB6rKoJjfJu58f2T+HjW4SHRHLVO2xj2PLRSoffG+H/8LvaOK13qG9wKmDFOxM3OUeHBcaJ1u/AA5Ysgr+BmcnS9YYLBe9AvOXoC3BbmnHHgmBYqwMbbhet3iEFp+hc/ur5Ua9cCzHz6crMWnC4wPKvI1oA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2byAiGqI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA91C2BCB0;
-	Fri, 15 May 2026 05:58:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1778824725;
-	bh=269b3wWzoOha4XQIm1eoCWoA7uhqLMJn2ReZ6kzIhYw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=2byAiGqIcyn0ZeaHrqlT+CXKz31ySstHSBTjPY+HW5sR0kzkxcSeFZ5v7c3/kqYTO
-	 SVKD/PTU7oFG2qMr9i08+vdpIFOXTsMC+xaPlbNtZmYSoFb0YAPY/GmAh/m7jqJQvX
-	 t2fLlHJGwBQybE4glVuCMAPRyz0QSY2qkFhl7PNQ=
-Date: Fri, 15 May 2026 07:58:49 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Elliot Tester <elliotctester1@gmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: legousbtower: remove changelog, tracked in git
-Message-ID: <2026051524-anthill-awoke-d35a@gregkh>
-References: <20260514184706.101545-1-elliotctester1@gmail.com>
+	s=arc-20240116; t=1778824969; c=relaxed/simple;
+	bh=wR7jKA0t4CicrNC69Yqv2+I4dYOHHNscXFwVsJu3sCs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NMwrNBxdwPmX+oDY1WjIihYr3EQxyLzydcktiXclSfLl15wTdhaTFZxQAUVGrn6YmzZdx3YBr8YERbUZGsxBV32n3D9x5P5TPgV8JmkAK9dyVoxwisTF8zU9d4yKsFGn/i5vPk8KIl5sdlQfbbtua60rD+cUs+Fs3+3C8uMPdl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=HIoD/zqW; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-836ebdeb969so4083045b3a.3
+        for <linux-usb@vger.kernel.org>; Thu, 14 May 2026 23:02:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1778824967; x=1779429767; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hBdfbCTSyRrEf51qC6bvgO49tgTiXounMMZECu9Vp8k=;
+        b=HIoD/zqWLfBDlONwYIPKqLxY+V/dz/RAdxdZiMBXdIju6RdQEyfIS0S6JXA5rrqQeX
+         wz3iYjewEnWgcTLRr0BKQjdN90fEUo6qDHEm+LJsUHczDs/nR51QSLa5AApAeo2Fxmpt
+         2rOyjX8+uXkxFaCMBmMHDZIWllm/qTSmGLymQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778824967; x=1779429767;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hBdfbCTSyRrEf51qC6bvgO49tgTiXounMMZECu9Vp8k=;
+        b=hY+oo1ZFx/2ssiC6zEJXF7oKGDmfvrUCYfu9e++SS1rW7ie995tomFjRymuOAICf6Q
+         jpc29pRT7OQSJypKWzPY2S7ivVqd9R5k5LX9cbfjBGk9tuHZCL02ThfcZSFu0Hk8RciP
+         uzEVjC9vzjbbj68tsFvuLe0ZKwwpnOCSz6uMaHqvP+fashAuvfzA7r14f14NL6uyxRko
+         vphFIumQ7ebVKPygUSJkyzvYWyEEOr9JkosBtXwZ9Vg7w2pPrTfwsl4vc2FmjmI1nGHx
+         f4sbzp0djvtJllKOcT58tE0MjKbteK8drxszEQV4KTgCZCPoDumV2nR2sTApKTGBJAWK
+         SlAA==
+X-Forwarded-Encrypted: i=1; AFNElJ+VVuKRXFUvJqoeOe+DCBqJDuGBPy2h/08YWyNetAxIRtIXS1qqLxTa3Vvfl9pMwL3izP7XEE1pRTo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJRFKrj9kvGWjk9dnQFLY269lzAji0GWftI6NMcTc39PMEoOAX
+	khD6JVsbpF76hNTsj0RA/5kviBLBWRorh+DcKiDhUJ3jG9dFw1bq0ZehDH0Dxb/y/g==
+X-Gm-Gg: Acq92OGtdvAlCDN5M4/Z9y69Yyug8kNR6Xq8NcLmhmGHPL1b1drp3eVX1tAwT0TcZsO
+	OKreAXVNCshPT1w24r+XJzjgpS3Pbw9cjwCdZlxokvjx82Dyq9aUhZbdVbIAxYgRWAL3fuokZ9t
+	LkLmUVRh9sD3Pi14MkdH1OZgjZ21Aa4SKkvs1F99RS2cYg2cduB6BQXV5heyzRhIfb0ZZEr/23S
+	ZBx1hRDf+bLWlAapz/6yLlPC1uWOP+XZsUCL0xG+ehMG1JJrgaBZSUPLbbIGn8UeELCEuBK08XV
+	QwM4nKmWL5GoCxtV/A+O23jJy9C1OQKkYNAccVJBbNoIZpZ3UqkI2IjKXbWurcFJDSA4X1dA5H+
+	Cy3cmaVvPtVAwu/rmDBkyqQzhP9xBO5VWZn4hiR2T0ry4egDJGVTKwafUTaMQ/NGDSXA+N+S2gS
+	XzGRLLU5cn7BvwapWC2fsvEIJ4ScPFQeShGuj4ayNgrIN1/S1ibsX0IhJHMeaEZJ5xhAHy/6jc4
+	s4QKuDA/ogRItFi9IVyOoKT
+X-Received: by 2002:a05:6a00:178e:b0:82c:e9cc:f61d with SMTP id d2e1a72fcca58-83f33ba0aa1mr2853552b3a.9.1778824967552;
+        Thu, 14 May 2026 23:02:47 -0700 (PDT)
+Received: from tigerii.tok.corp.google.com ([2a00:79e0:2031:6:68cc:d8b9:b76e:e07e])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83f19c77822sm4985125b3a.41.2026.05.14.23.02.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2026 23:02:46 -0700 (PDT)
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCH] usb: typec: ucsi: split connector lock classes
+Date: Fri, 15 May 2026 15:00:30 +0900
+Message-ID: <20260515060042.136083-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260514184706.101545-1-elliotctester1@gmail.com>
-X-Rspamd-Queue-Id: 44B44549D15
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 49C70549D6A
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37462-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37463-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:dkim,kroah.com:email,uwa.edu.au:email]
+	FROM_NEQ_ENVFROM(0.00)[senozhatsky@chromium.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[chromium.org:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,chromium.org:email,chromium.org:mid,chromium.org:dkim]
 X-Rspamd-Action: no action
 
-On Thu, May 14, 2026 at 08:47:06PM +0200, Elliot Tester wrote:
-> Signed-off-by: Elliot Tester <elliotctester1@gmail.com>
-> ---
->  drivers/usb/misc/legousbtower.c | 61 ---------------------------------
->  1 file changed, 61 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
-> index 052ffc2e7..e34777c68 100644
-> --- a/drivers/usb/misc/legousbtower.c
-> +++ b/drivers/usb/misc/legousbtower.c
-> @@ -8,67 +8,6 @@
->   * derived from USB Skeleton driver - 0.5
->   * Copyright (C) 2001 Greg Kroah-Hartman (greg@kroah.com)
->   *
-> - * History:
-> - *
-> - * 2001-10-13 - 0.1 js
-> - *   - first version
-> - * 2001-11-03 - 0.2 js
-> - *   - simplified buffering, one-shot URBs for writing
-> - * 2001-11-10 - 0.3 js
-> - *   - removed IOCTL (setting power/mode is more complicated, postponed)
-> - * 2001-11-28 - 0.4 js
-> - *   - added vendor commands for mode of operation and power level in open
-> - * 2001-12-04 - 0.5 js
-> - *   - set IR mode by default (by oversight 0.4 set VLL mode)
-> - * 2002-01-11 - 0.5? pcchan
-> - *   - make read buffer reusable and work around bytes_to_write issue between
-> - *     uhci and legusbtower
-> - * 2002-09-23 - 0.52 david (david@csse.uwa.edu.au)
-> - *   - imported into lejos project
-> - *   - changed wake_up to wake_up_interruptible
-> - *   - changed to use lego0 rather than tower0
-> - *   - changed dbg() to use __func__ rather than deprecated __func__
-> - * 2003-01-12 - 0.53 david (david@csse.uwa.edu.au)
-> - *   - changed read and write to write everything or
-> - *     timeout (from a patch by Chris Riesen and Brett Thaeler driver)
-> - *   - added ioctl functionality to set timeouts
-> - * 2003-07-18 - 0.54 davidgsf (david@csse.uwa.edu.au)
-> - *   - initial import into LegoUSB project
-> - *   - merge of existing LegoUSB.c driver
-> - * 2003-07-18 - 0.56 davidgsf (david@csse.uwa.edu.au)
-> - *   - port to 2.6 style driver
-> - * 2004-02-29 - 0.6 Juergen Stuber <starblue@users.sourceforge.net>
-> - *   - fix locking
-> - *   - unlink read URBs which are no longer needed
-> - *   - allow increased buffer size, eliminates need for timeout on write
-> - *   - have read URB running continuously
-> - *   - added poll
-> - *   - forbid seeking
-> - *   - added nonblocking I/O
-> - *   - changed back __func__ to __func__
-> - *   - read and log tower firmware version
-> - *   - reset tower on probe, avoids failure of first write
-> - * 2004-03-09 - 0.7 Juergen Stuber <starblue@users.sourceforge.net>
-> - *   - timeout read now only after inactivity, shorten default accordingly
-> - * 2004-03-11 - 0.8 Juergen Stuber <starblue@users.sourceforge.net>
-> - *   - log major, minor instead of possibly confusing device filename
-> - *   - whitespace cleanup
-> - * 2004-03-12 - 0.9 Juergen Stuber <starblue@users.sourceforge.net>
-> - *   - normalize whitespace in debug messages
-> - *   - take care about endianness in control message responses
-> - * 2004-03-13 - 0.91 Juergen Stuber <starblue@users.sourceforge.net>
-> - *   - make default intervals longer to accommodate current EHCI driver
-> - * 2004-03-19 - 0.92 Juergen Stuber <starblue@users.sourceforge.net>
-> - *   - replaced atomic_t by memory barriers
-> - * 2004-04-21 - 0.93 Juergen Stuber <starblue@users.sourceforge.net>
-> - *   - wait for completion of write urb in release (needed for remotecontrol)
-> - *   - corrected poll for write direction (missing negation)
-> - * 2004-04-22 - 0.94 Juergen Stuber <starblue@users.sourceforge.net>
-> - *   - make device locking interruptible
-> - * 2004-04-30 - 0.95 Juergen Stuber <starblue@users.sourceforge.net>
-> - *   - check for valid udev on resubmitting and unlinking urbs
-> - * 2004-08-03 - 0.96 Juergen Stuber <starblue@users.sourceforge.net>
-> - *   - move reset into open to clean out spurious data
->   */
->  
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> -- 
-> 2.54.0
-> 
+Lockdep detects a possible recursive locking scenario during
+ucsi init:
 
-Hi,
+[    5.418616] ============================================
+[    5.418634] WARNING: possible recursive locking detected
+[    5.418706] --------------------------------------------
+[    5.418725] kworker/4:1/82 is trying to acquire lock:
+[    5.418759] ffff888119a34648 (&con->lock){+.+.}-{3:3}, at: ucsi_init_work+0x1a78/0x2eb0 [typec_ucsi]
+[    5.418801]
+               but task is already holding lock:
+[    5.418835] ffff888119a34080 (&con->lock){+.+.}-{3:3}, at: ucsi_init_work+0x1a78/0x2eb0 [typec_ucsi]
+[    5.418884]
+               other info that might help us debug this:
+[    5.418904]  Possible unsafe locking scenario:
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+[    5.418937]        CPU0
+[    5.418956]        ----
+[    5.418991]   lock(&con->lock);
+[    5.419013]   lock(&con->lock);
+[    5.419033]
+                *** DEADLOCK ***
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+[    5.419387] Call Trace:
+[    5.419406]  <TASK>
+[    5.419425]  dump_stack_lvl+0x61/0xa0
+[    5.419448]  print_deadlock_bug+0x4a6/0x650
+[    5.419483]  __lock_acquire+0x62b6/0x7f50
+[    5.419507]  lock_acquire+0x11b/0x390
+[    5.419654]  __mutex_lock+0xbc/0xcd0
+[    5.419741]  ucsi_init_work+0x1a78/0x2eb0
+[    5.419785]  ? worker_thread+0xf53/0x2bc0
+[    5.419819]  worker_thread+0xff4/0x2bc0
+[    5.419842]  kthread+0x2a7/0x330
+[    5.419863]  ? __pfx_worker_thread+0x10/0x10
+[    5.419896]  ? __pfx_kthread+0x10/0x10
+[    5.419916]  ret_from_fork+0x38/0x70
+[    5.419936]  ? __pfx_kthread+0x10/0x10
+[    5.419969]  ret_from_fork_asm+0x1b/0x30
+[    5.419991]  </TASK>
+[    5.420009] ---[ end trace 0000000000000000 ]---
 
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/process/submitting-patches.rst for what is needed in
-  order to properly describe the change.
+The problem is that all connector locks belong to the same
+lockdep lock class, so the following loop:
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+	for (i = 0; i < ucsi->cap.num_connectors; i++)
+		ucsi_register_port(connector[i])
+			mutex_lock(&connector[i]->lock)
 
-thanks,
+looks like a recursive acquire of the same mutex.  Put each connector
+lock into a dedicated lock class so that lockdep doesn't see it as a
+possible recursion.
 
-greg k-h's patch email bot
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 8 ++++++++
+ drivers/usb/typec/ucsi/ucsi.h | 1 +
+ 2 files changed, 9 insertions(+)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 5b7ad9e99cb9..43da7512dea0 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1642,6 +1642,7 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+ 	INIT_WORK(&con->work, ucsi_handle_connector_change);
+ 	init_completion(&con->complete);
+ 	mutex_init(&con->lock);
++	lockdep_set_class(&con->lock, &con->lock_key);
+ 	INIT_LIST_HEAD(&con->partner_tasks);
+ 	con->ucsi = ucsi;
+ 
+@@ -1887,6 +1888,9 @@ static int ucsi_init(struct ucsi *ucsi)
+ 		goto err_reset;
+ 	}
+ 
++	for (i = 0; i < ucsi->cap.num_connectors; i++)
++		lockdep_register_key(&connector[i].lock_key);
++
+ 	/* Register all connectors */
+ 	for (i = 0; i < ucsi->cap.num_connectors; i++) {
+ 		connector[i].num = i + 1;
+@@ -1916,6 +1920,9 @@ static int ucsi_init(struct ucsi *ucsi)
+ 	return 0;
+ 
+ err_unregister:
++	for (i = 0; i < ucsi->cap.num_connectors; i++)
++		lockdep_unregister_key(&connector[i].lock_key);
++
+ 	for (con = connector; con->port; con++) {
+ 		if (con->wq)
+ 			destroy_workqueue(con->wq);
+@@ -2166,6 +2173,7 @@ void ucsi_unregister(struct ucsi *ucsi)
+ 		usb_power_delivery_unregister(ucsi->connector[i].pd);
+ 		ucsi->connector[i].pd = NULL;
+ 		typec_unregister_port(ucsi->connector[i].port);
++		lockdep_unregister_key(&ucsi->connector[i].lock_key);
+ 	}
+ 
+ 	kfree(ucsi->connector);
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index cff9ddc2ae21..51f6c3c0d365 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -517,6 +517,7 @@ struct ucsi_connector {
+ 
+ 	struct ucsi *ucsi;
+ 	struct mutex lock; /* port lock */
++	struct lock_class_key lock_key;
+ 	struct work_struct work;
+ 	struct completion complete;
+ 	struct workqueue_struct *wq;
+-- 
+2.54.0.563.g4f69b47b94-goog
+
 
