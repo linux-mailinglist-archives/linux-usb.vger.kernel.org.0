@@ -1,243 +1,199 @@
-Return-Path: <linux-usb+bounces-37514-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37515-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wLclIcEZB2rnrgIAu9opvQ
-	(envelope-from <linux-usb+bounces-37514-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 15:04:01 +0200
+	id QGbFNNAkB2oEsQIAu9opvQ
+	(envelope-from <linux-usb+bounces-37515-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 15:51:12 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3030550214
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 15:04:00 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8A53550C67
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 15:51:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4B6C030F87EA
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 12:42:01 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D564E314F20B
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 13:08:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26A6047ECC8;
-	Fri, 15 May 2026 12:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C62A22D0C79;
+	Fri, 15 May 2026 13:07:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="MI4hhL7x"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IHatwiJf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE623F4129;
-	Fri, 15 May 2026 12:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A762C027C
+	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 13:07:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778848912; cv=none; b=LuCTYLYKKcCnVvlWZnQQ+X9bMQt1lZ/TU+dGnZNYrE0/ihkbOVMZ6Q1KQGlQqAJBCBf8lz5bMa5geDnF8FaSDxPe9us22HnI1ezllWUOJ99lKBSMPjH1jBREWvOxTGG7lZaNdvhSA2lcI3Pb3tIJn1a3lJ9tlGfyJFO8bjBvfFY=
+	t=1778850444; cv=none; b=HmNuTAir0fIn78h64b4NQL9namLY7Y4UeHH+8uCdJrV4uu2MdWIVtjT3njxHgArx2IcG+zxaElrAzSL5Qiwcc3qJWwmacW03B2KD14yTaNaIT16fL2w+tCW5XL0DdYEHx3VBwNdBzHE3hr+0ysqnHCuGE/laFC6TnqcbGVCtIes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778848912; c=relaxed/simple;
-	bh=byBYAVDjaoKlALuDppBYnRFz/zySWNjJSefSLftspx0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LkxqRe0cjhU6ypSE8pjo48R7cilIAGihRAojNDJmrKoKtCk5+Zj6YVYBryPwhOCNJjfFkHTlVcTzAJ0xdOZpc1wvgzg3yjhpD21h9eHV9pju2lCLvSYWKBVFNtLctykHcQof43F1EvT3H+ztZXn8s1pFcu4R6b1LN3oA7E/mxo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=MI4hhL7x; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=GmifB1ZCgimZhhcProIdhFi1yPDkpQoTGWkF/PVYbRI=; b=MI4hhL7xpbSSCovw03l08oGGxy
-	4aCxc3/gYL4DWmKHvrrF6Q3sDAUEp7GH6jVoTWzQ3ZvC9YjK2wKVKwr3Y+PWbjqIVs18fBbYSq/MB
-	4I3TwbQ9aH4rXl93K/R7NUuvTjl5CJ7QexImPqsTiO4gx5Ec1kNF8qITUUStvsZVitTE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1wNrrC-0033vB-IM; Fri, 15 May 2026 14:41:34 +0200
-Date: Fri, 15 May 2026 14:41:34 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, linusw@kernel.org, brgl@kernel.org,
-	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org,
-	mkl@pengutronix.de, mailhol@kernel.org,
-	alexandre.belloni@bootlin.com, wim@linux-watchdog.org,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 1/1] mfd: Add Host Interface (HIF) support for Nuvoton
- NCT6694
-Message-ID: <ef9449dc-ef2a-415e-8acc-a15f349bac24@lunn.ch>
-References: <20260515085746.114361-1-a0282524688@gmail.com>
- <20260515085746.114361-2-a0282524688@gmail.com>
+	s=arc-20240116; t=1778850444; c=relaxed/simple;
+	bh=cofI7NJVAquViJ0qiCgIhK+PbsvdfIANKyA1Rgf6hrc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kBqJD4KmvNZkVruQuPeKJ4Ma7fK/yT4wblGzWr8RZwbRliuOR8WS0qZjw9rlTu+4rsHZWxhTs7iYdYa8vpqWwDEGtv7eozDt2cq7F62dSSjfAlQ4dewWx6sNO6+M31a2YDybTogWqTymtEDMJ3R0qOPlA7OTo/IuuN937CU9BX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IHatwiJf; arc=none smtp.client-ip=209.85.217.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-6314adf187fso2595326137.0
+        for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 06:07:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778850442; x=1779455242; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=totgehLncZIaYpY/6W97Pa96WTd7yttCZe+aEfblS7E=;
+        b=IHatwiJfg+fS9vOeOQ7xNi79QERXxxcVHXBbSLshUFlEP6RyJih5mFsAUZkyGBVQVk
+         RKxbBZoM8RwStwhRTBhNpIMmJ2KU7QV3dMz9j5Kx9mgmE7MbA5B3SOuD61jssskMZn58
+         4WcxZyeJAYcMKs91dh5sCarMvcytQS4ZtGhtmg3MA0K0eyfIwf6GiPmR35x+dOT08jlg
+         3fJ9Afcfivgtyxo41he9Tb0IOvFULJw13FNYzRKrr4Ktxd4+v8PNBI02jxR8YIHmjxWQ
+         bYVzW6U/5TybMZWHXGwFOmEHVFpaV15DzX7q2yk8ujNSKQBB6KxwibJv4iOW78j5NNJ9
+         E4fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778850442; x=1779455242;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=totgehLncZIaYpY/6W97Pa96WTd7yttCZe+aEfblS7E=;
+        b=blR6mX29nk6d7b1raipsrp+cwLIhS6j5iVOGBbbbR61PpC1ipApm1Yb6Jvgmel1UoQ
+         OcFqPybP5IGmLxUacaPy1LqqXWlXKpo22nDIzBz7vCxAUkZwcR7sg2a+udyIPZbzMg1E
+         grjX71NODIxNZeHtiI/eOvsMEKfggZv6gf4sQ7JCPLXSWmRsAHnTPdxzDDmHaB4vW9QN
+         Hj2UzqBlF2OkeHCQaZNMaW85n7lTeT5MampYjtyI05XCqev9rJaTNs4s8Qa7riafdGHR
+         mHHA+U66+V1iX34pNFJpW5OTH4YzfN5eJnKX0EJ9KQnjknq8T0nXgZ9WDTmjDcTLsM7K
+         kvmw==
+X-Gm-Message-State: AOJu0Ywd3ejl8qbbUlAtPDktHqdlRc298zS+KBpEQzhCeX0u2NWUAuaZ
+	I/nD0PF2UqJ9PAM6T+z4Cjxj8+rjnNT5kFj2w2w5KQpPX7ZtTZgzI8V6d/ih4ZXY
+X-Gm-Gg: Acq92OEYolOWa0NzUCUkwsxUyTD3BeamQjz6EBE2buuR9YZ0llV+M3QnKrR7mNx1Mco
+	hXrMW/71WDl9g/d+arvLekOXOOvscsivjJuahoXwBokSsTqWQMHMwz+wwGbztisnAiiPkYJehN8
+	DkqeljSjLcJSFEtsuPA6/SCqUOzRySWF75jdxMJm92qYc5kEYvsBqqKRJVTjBekjfTWbJgo3AY0
+	u3UJ6hZm0ZvtGn/6OAE9dXMpAkRT6JsbfHM7yDvYNrER1V9dSyxsw+9ymhlCMmzSXLpc3QxyjFs
+	O37YQQiTK5QNko+PjU0S7kX2F3LDacVczGf9YozLmF5YSCmblmBP275+go2VOQ8vzbFYbyaFKA1
+	eqPfQrq/+rB4DZrRgGj53Yx0udxdBvwjgrs7HFiz23/VJazI9f0ccHYAxQ+Q0NqyQUxp0gX6VHn
+	qE4PIRYK2mbYjf0XLeEmRMuDjZOhYLDJzRecZhJrLM4RRFqAJxNorRWuDfc37scggSa/g8
+X-Received: by 2002:a05:6102:32c1:b0:607:5cd7:d7c0 with SMTP id ada2fe7eead31-63a3e86debemr1656690137.19.1778850441761;
+        Fri, 15 May 2026 06:07:21 -0700 (PDT)
+Received: from fedora (pool-100-11-178-145.phlapa.fios.verizon.net. [100.11.178.145])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-910bc83f926sm547840085a.30.2026.05.15.06.07.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 May 2026 06:07:21 -0700 (PDT)
+From: Dave Carey <carvsdriver@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
+	oneukum@suse.com,
+	guanwentao@uniontech.com,
+	Dave Carey <carvsdriver@gmail.com>
+Subject: [PATCH] USB: cdc-acm: start bulk-IN polling when ALWAYS_POLL_CTRL is set
+Date: Fri, 15 May 2026 09:04:32 -0400
+Message-ID: <20260515130432.714861-1-carvsdriver@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260515085746.114361-2-a0282524688@gmail.com>
-X-Rspamd-Queue-Id: F3030550214
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: D8A53550C67
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[lunn.ch,none];
-	R_DKIM_ALLOW(-0.20)[lunn.ch:s=20171124];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37514-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,suse.com,uniontech.com,gmail.com];
+	TAGGED_FROM(0.00)[bounces-37515-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	DKIM_TRACE(0.00)[lunn.ch:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andrew@lunn.ch,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[20]
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[carvsdriver@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
->  MAINTAINERS                         |   1 +
->  drivers/gpio/gpio-nct6694.c         |   7 -
->  drivers/hwmon/nct6694-hwmon.c       |  21 -
->  drivers/i2c/busses/i2c-nct6694.c    |   7 -
->  drivers/mfd/Kconfig                 |  47 +-
->  drivers/mfd/Makefile                |   3 +-
->  drivers/mfd/nct6694-hif.c           | 663 ++++++++++++++++++++++++++++
->  drivers/mfd/nct6694.c               | 111 +++--
->  drivers/net/can/usb/nct6694_canfd.c |   6 -
+The INGENIC 17EF:6161 touchscreen composite device has a ~55-second
+watchdog that resets the USB device if the bulk-IN endpoint on the CDC
+data interface goes unread.  The existing ALWAYS_POLL_CTRL quirk keeps
+the notification endpoint (ctrlurb / EP 0x82) polling continuously, but
+that alone is insufficient: the firmware monitors bulk-IN activity, not
+just notification-endpoint activity.
 
-The networking change here is very small, so my influence as a
-networking Maintainer should be considered small.
+Add acm_submit_read_urbs() calls to the two ALWAYS_POLL_CTRL paths that
+already restart the ctrlurb:
 
-However, i would say this patch is too big, does too many different
-things at once, making it harder to review. Please could you break it
-up into lots of small patches, each with good commit messages, and
-being obviously correct.
+  1. acm_probe(): start bulk reads at probe time alongside the ctrlurb,
+     so the watchdog is satisfied from first bind without requiring a
+     userspace process to open /dev/ttyACMn.
 
-> +F:	drivers/mfd/nct6694-hif.c
+  2. acm_port_shutdown(): restart bulk reads after port close alongside
+     the ctrlurb restart, so the watchdog keeps running when the last
+     TTY user closes the port.
 
-Maybe move all the usb code into nct6694-usb.c ?
+acm_read_bulk_callback() already resubmits each URB unconditionally on
+normal completion, so once submitted the reads remain active until an
+explicit kill (disconnect, suspend).  acm_submit_read_urb() is a no-op
+for URBs that are already in flight (read_urbs_free bit clear), so the
+existing acm_port_activate() call remains correct and races are avoided.
 
-> - * USB command module type for NCT6694 GPIO controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * GPIO controller over the USB interface.
-> - */
-> -#define NCT6694_GPIO_MOD	0xFF
-> -
->  #define NCT6694_GPIO_VER	0x90
->  #define NCT6694_GPIO_VALID	0x110
->  #define NCT6694_GPI_DATA	0x120
+Tested on Lenovo Yoga Book 9 14IAH10 (83KJ): without this patch the
+device resets every ~55 s when no TTY is open; with it the device
+remains stable indefinitely.
 
-Moving code from one place to another can be a patch. Just moving code
-is quick and easy to review, and it gets it out of more complex
-patches which are harder to review.
+Signed-off-by: Dave Carey <carvsdriver@gmail.com>
+Tested-by: Dave Carey <carvsdriver@gmail.com>
+---
+This follows commit f58752ebcb35 ("USB: CDC-ACM: add INGENIC 17EF:6161
+quirk for Yoga Book 9 14IAH10"), which added ALWAYS_POLL_CTRL to keep
+the ctrlurb active.  That commit addressed the notification-endpoint
+watchdog (~20 s).  This patch addresses a second watchdog that fires
+when bulk-IN data goes unread for ~55 s.
 
-> +static int nct6694_response_err_handling(struct nct6694 *nct6694, unsigned char err_status)
-> +{
-> +	switch (err_status) {
-> +	case NCT6694_NO_ERROR:
-> +		return 0;
-> +	case NCT6694_NOT_SUPPORT_ERROR:
-> +		dev_err(nct6694->dev, "Command is not supported!\n");
-> +		break;
+This patch is based on top of Wentao Guan's pending fix
+("USB: cdc-acm: fix misplaced quirk defines and BIT(9) collision") which
+moves VENDOR_CLASS_DATA_IFACE and ALWAYS_POLL_CTRL from inside
+acm_ctrl_msg() to cdc-acm.h and reassigns them to BIT(10)/BIT(11) to
+avoid the NO_UNION_12 collision.  The bulk-IN additions here are
+independent of that renumbering and apply cleanly to either base, but
+the combined tree is the correct target once Wentao's fix merges.
 
-Maybe EOPNOTSUPP?
+ drivers/usb/class/cdc-acm.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-> +	case NCT6694_NO_RESPONSE_ERROR:
-> +		dev_warn(nct6694->dev, "Command received no response!\n");
-> +		break;
-> +	case NCT6694_TIMEOUT_ERROR:
-> +		dev_warn(nct6694->dev, "Command timed out!\n");
-> +		break;
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -797,6 +797,9 @@ static void acm_port_shutdown(struct tty_port *port)
+ 			"ctrl polling restart failed after port close\n");
+ 		/* port_shutdown() cleared DTR/RTS; restore them */
+ 		acm_set_control(acm, USB_CDC_CTRL_DTR | USB_CDC_CTRL_RTS);
++		if (acm_submit_read_urbs(acm, GFP_KERNEL))
++			dev_dbg(&acm->control->dev,
++				"read urb restart failed after port close\n");
+ 	}
+ }
 
-Maybe ETIMEDOUT?
+@@ -1564,6 +1567,9 @@ static int acm_probe(struct usb_interface *intf,
+ 		if (usb_submit_urb(acm->ctrlurb, GFP_KERNEL))
+ 			dev_warn(&intf->dev,
+ 				 "failed to start persistent ctrl polling\n");
++		if (acm_submit_read_urbs(acm, GFP_KERNEL))
++			dev_warn(&intf->dev,
++				 "failed to start persistent bulk read polling\n");
+ 	}
 
-
-> +	case NCT6694_PENDING:
-> +		dev_err(nct6694->dev, "Command is pending!\n");
-> +		break;
-
-EBUSY?
-
-Having different error codes can make it easier to debug when things
-so wrong. But you also have dev_err(), so it is less important.
-
-> -static int nct6694_response_err_handling(struct nct6694 *nct6694, unsigned char err_status)
-> +static int nct6694_usb_err_handling(struct nct6694 *nct6694,
-> +				    unsigned char err_status)
-
-These renames can happen in one patch. Again, it is quick and easy to
-review.
-
->  
-> -	guard(mutex)(&nct6694->access_lock);
-> +	guard(mutex)(&udata->access_lock);
-
-This change is not obviously correct. Can moving the lock be made of
-patch of its own, with an explanation of why?
-
-> -	nct6694->usb_msg = devm_kzalloc(dev, sizeof(union nct6694_usb_msg), GFP_KERNEL);
-> -	if (!nct6694->usb_msg)
-> +	udata = devm_kzalloc(dev, sizeof(*udata), GFP_KERNEL);
-> +	if (!udata)
->  		return -ENOMEM;
->  
-> -	nct6694->int_buffer = devm_kzalloc(dev, sizeof(*nct6694->int_buffer), GFP_KERNEL);
-> -	if (!nct6694->int_buffer)
-> +	udata->usb_msg = devm_kzalloc(dev, sizeof(*udata->usb_msg), GFP_KERNEL);
-> +	if (!udata->usb_msg)
->  		return -ENOMEM;
->  
-> -	nct6694->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-> -	if (!nct6694->int_in_urb)
-> +	udata->int_buffer = devm_kzalloc(dev, sizeof(*udata->int_buffer), GFP_KERNEL);
-> +	if (!udata->int_buffer)
->  		return -ENOMEM;
->  
-> +	udata->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-> +	if (!udata->int_in_urb)
-> +		return -ENOMEM;
-
-
-In this hunk, diff(1) has done a poor job and made it harder to
-review. If i understand the code correctly, udata contains USB
-specific data? Maybe call it usdata? That also has the same length as
-ntc6694, which has some minor advantages. What you might find is that
-if you have a patch adding only the allocation of usbdata, and then a
-patch moving things into usbdata, diff(1) does a better job, and the
-code is more obviously correct.
-
-> @@ -305,16 +344,15 @@ static int nct6694_usb_probe(struct usb_interface *iface,
->  	}
->  
->  	nct6694->dev = dev;
-> -	nct6694->udev = udev;
-> +
-> +	spin_lock_init(&nct6694->irq_lock);
->  
->  	ida_init(&nct6694->gpio_ida);
->  	ida_init(&nct6694->i2c_ida);
->  	ida_init(&nct6694->canfd_ida);
->  	ida_init(&nct6694->wdt_ida);
->  
-> -	spin_lock_init(&nct6694->irq_lock);
-> -
-
-Why has the spin_lock_init() moved? Having lots of small patches would
-make that stand out, and when you reviewed your own patches, you might
-decided to change it back, because it does not appear to be needed.
-
-Given the size of this patch, i'm finding it hard to see the overall
-structure. Generally, when you have one device with two different
-access mechanisms, you end up with three files, two implementing
-access, and the third with the common code. With one big patch, i
-don't see this common code.
-
-	Andrew
+ 	return 0;
+--
+2.47.0
 
