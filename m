@@ -1,54 +1,53 @@
-Return-Path: <linux-usb+bounces-37461-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37462-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sKGhOfq1BmrrnAIAu9opvQ
-	(envelope-from <linux-usb+bounces-37461-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:58:18 +0200
+	id gMA7OB+2BmrrnAIAu9opvQ
+	(envelope-from <linux-usb+bounces-37462-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:58:55 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43295549CFB
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 44B44549D15
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 07:58:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CD46C3040FB4
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 05:58:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A34FE3046FEC
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 05:58:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 453DC372B3C;
-	Fri, 15 May 2026 05:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C0A537700B;
+	Fri, 15 May 2026 05:58:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="untkZfJI"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2byAiGqI"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2E2245031
-	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 05:58:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803CE373C1D;
+	Fri, 15 May 2026 05:58:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778824693; cv=none; b=uWqAOMYYg3Rq84nUKUQc/oEIj5NoS9+MNz5mcEt+bFWBbHw/uvwtIjN0sPwoRkrADeI6Fv5rJela8Fy8P11gYdz3WmC49rAl6GNdO71GbJsBpzQHBvrO/I9rJ1Rqsr9zE4MvUkbi0YUsuKhs1TGl+Lkr1OAwcWdvvAXKY+Cmr4Y=
+	t=1778824725; cv=none; b=sjn1UJmEH+ubqlbet0jovhQwI0Z4b0B8GHTR2igspwflauwHGNGOmMCGBcy3TWYnSnjHDhFFxfzsi1thK5jkw7z5qC+8WtjTd00HR1ceWmojqsEAmOjAI3iCbLxKSpnNlecihCEzI39W7eJvwF7BGJ6BgVJ1X1UweQ8vcvCP2xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778824693; c=relaxed/simple;
-	bh=PQofuAc79D4n6VjwJvdQHVwCl/aNuUEUOF+7lSnbD8U=;
+	s=arc-20240116; t=1778824725; c=relaxed/simple;
+	bh=269b3wWzoOha4XQIm1eoCWoA7uhqLMJn2ReZ6kzIhYw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PPpdM2vwNkLt7a4twyX0N7pxbwJ9LKbso1qD2PhZh6EyoKsQ62TBXiuyp/7R4hgpTdtDbva6jHDFUpwZRtE6XvV/2orqlvLZeDZi532shmIh0hFCWf6BUf7MAAVzAEoHSBnz941XuIutA/dQsTcU+3nSssJPrt3hN5vfX/BATwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=untkZfJI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23414C2BCB0;
-	Fri, 15 May 2026 05:58:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=euE02NVggP2pJhMLyB6rKoJjfJu58f2T+HjW4SHRHLVO2xj2PLRSoffG+H/8LvaOK13qG9wKmDFOxM3OUeHBcaJ1u/AA5Ysgr+BmcnS9YYLBe9AvOXoC3BbmnHHgmBYqwMbbhet3iEFp+hc/ur5Ua9cCzHz6crMWnC4wPKvI1oA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2byAiGqI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA91C2BCB0;
+	Fri, 15 May 2026 05:58:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1778824693;
-	bh=PQofuAc79D4n6VjwJvdQHVwCl/aNuUEUOF+7lSnbD8U=;
+	s=korg; t=1778824725;
+	bh=269b3wWzoOha4XQIm1eoCWoA7uhqLMJn2ReZ6kzIhYw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=untkZfJIzDYtpslna7tdtHmAwWEB0k8EC9wknIMpYm05qLFnv9R8Yw2pcZekMUi9x
-	 snlbP7sAZ/Gx1TT7dTdKW76iDNa2gYux2ZFGGhnNhXUxj5xj6JRGWGBnAwftCOYaOf
-	 dE3FFpRDIi9EwexbOcCFp5Z32McW5iPbsRI2f9Jc=
-Date: Fri, 15 May 2026 07:58:17 +0200
+	b=2byAiGqIcyn0ZeaHrqlT+CXKz31ySstHSBTjPY+HW5sR0kzkxcSeFZ5v7c3/kqYTO
+	 SVKD/PTU7oFG2qMr9i08+vdpIFOXTsMC+xaPlbNtZmYSoFb0YAPY/GmAh/m7jqJQvX
+	 t2fLlHJGwBQybE4glVuCMAPRyz0QSY2qkFhl7PNQ=
+Date: Fri, 15 May 2026 07:58:49 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Dave Carey <carvsdriver@gmail.com>
-Cc: linux-usb@vger.kernel.org, oneukum@suse.com, guanwentao@uniontech.com
-Subject: Re: [PATCH] USB: cdc-acm: start bulk-IN polling when
- ALWAYS_POLL_CTRL is set
-Message-ID: <2026051506-theft-growl-5a79@gregkh>
-References: <CALPvROTsnvWJZVmW6L_gdF5_Pv4ic3gKbAKYyyC_-n0mffmnAg@mail.gmail.com>
+To: Elliot Tester <elliotctester1@gmail.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: legousbtower: remove changelog, tracked in git
+Message-ID: <2026051524-anthill-awoke-d35a@gregkh>
+References: <20260514184706.101545-1-elliotctester1@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,8 +56,8 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALPvROTsnvWJZVmW6L_gdF5_Pv4ic3gKbAKYyyC_-n0mffmnAg@mail.gmail.com>
-X-Rspamd-Queue-Id: 43295549CFB
+In-Reply-To: <20260514184706.101545-1-elliotctester1@gmail.com>
+X-Rspamd-Queue-Id: 44B44549D15
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [2.34 / 15.00];
 	MID_END_EQ_FROM_USER_PART(4.00)[];
@@ -71,7 +70,7 @@ X-Spamd-Result: default: False [2.34 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37461-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37462-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -79,7 +78,7 @@ X-Spamd-Result: default: False [2.34 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_THREE(0.00)[3];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
@@ -88,83 +87,90 @@ X-Spamd-Result: default: False [2.34 / 15.00];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:dkim,kroah.com:email,uwa.edu.au:email]
 X-Rspamd-Action: no action
 
-On Thu, May 14, 2026 at 03:42:52PM -0400, Dave Carey wrote:
-> The INGENIC 17EF:6161 touchscreen composite device has a ~55-second
-> watchdog that resets the USB device if the bulk-IN endpoint on the CDC
-> data interface goes unread. The existing ALWAYS_POLL_CTRL quirk keeps
-> the notification endpoint (ctrlurb / EP 0x82) polling continuously, but
-> that alone is insufficient: the firmware monitors bulk-IN activity, not
-> just notification-endpoint activity.
-> 
-> Add acm_submit_read_urbs() calls to the two ALWAYS_POLL_CTRL paths that
-> already restart the ctrlurb:
-> 
-> 1. acm_probe(): start bulk reads at probe time alongside the ctrlurb,
-> so the watchdog is satisfied from first bind without requiring a
-> userspace process to open /dev/ttyACMn.
-> 
-> 2. acm_port_shutdown(): restart bulk reads after port close alongside
-> the ctrlurb restart, so the watchdog keeps running when the last
-> TTY user closes the port.
-> 
-> acm_read_bulk_callback() already resubmits each URB unconditionally on
-> normal completion, so once submitted the reads remain active until an
-> explicit kill (disconnect, suspend). acm_submit_read_urb() is a no-op
-> for URBs that are already in flight (read_urbs_free bit clear), so the
-> existing acm_port_activate() call remains correct and races are avoided.
-> 
-> Tested on Lenovo Yoga Book 9 14IAH10 (83KJ): without this patch the
-> device resets every ~55 s when no TTY is open; with it the device
-> remains stable indefinitely.
-> 
-> Signed-off-by: Dave Carey <carvsdriver@gmail.com>
-> Tested-by: Dave Carey <carvsdriver@gmail.com>
+On Thu, May 14, 2026 at 08:47:06PM +0200, Elliot Tester wrote:
+> Signed-off-by: Elliot Tester <elliotctester1@gmail.com>
 > ---
-> This follows commit f58752ebcb35 ("USB: CDC-ACM: add INGENIC 17EF:6161
-> quirk for Yoga Book 9 14IAH10"), which added ALWAYS_POLL_CTRL to keep
-> the ctrlurb active. That commit addressed the notification-endpoint
-> watchdog (~20 s). This patch addresses a second watchdog that fires
-> when bulk-IN data goes unread for ~55 s.
+>  drivers/usb/misc/legousbtower.c | 61 ---------------------------------
+>  1 file changed, 61 deletions(-)
 > 
-> This patch is based on top of Wentao Guan's pending fix
-> ("USB: cdc-acm: fix misplaced quirk defines and BIT(9) collision") which
-> moves VENDOR_CLASS_DATA_IFACE and ALWAYS_POLL_CTRL from inside
-> acm_ctrl_msg() to cdc-acm.h and reassigns them to BIT(10)/BIT(11) to
-> avoid the NO_UNION_12 collision. The bulk-IN additions here are
-> independent of that renumbering and apply cleanly to either base, but
-> the combined tree is the correct target once Wentao's fix merges.
+> diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
+> index 052ffc2e7..e34777c68 100644
+> --- a/drivers/usb/misc/legousbtower.c
+> +++ b/drivers/usb/misc/legousbtower.c
+> @@ -8,67 +8,6 @@
+>   * derived from USB Skeleton driver - 0.5
+>   * Copyright (C) 2001 Greg Kroah-Hartman (greg@kroah.com)
+>   *
+> - * History:
+> - *
+> - * 2001-10-13 - 0.1 js
+> - *   - first version
+> - * 2001-11-03 - 0.2 js
+> - *   - simplified buffering, one-shot URBs for writing
+> - * 2001-11-10 - 0.3 js
+> - *   - removed IOCTL (setting power/mode is more complicated, postponed)
+> - * 2001-11-28 - 0.4 js
+> - *   - added vendor commands for mode of operation and power level in open
+> - * 2001-12-04 - 0.5 js
+> - *   - set IR mode by default (by oversight 0.4 set VLL mode)
+> - * 2002-01-11 - 0.5? pcchan
+> - *   - make read buffer reusable and work around bytes_to_write issue between
+> - *     uhci and legusbtower
+> - * 2002-09-23 - 0.52 david (david@csse.uwa.edu.au)
+> - *   - imported into lejos project
+> - *   - changed wake_up to wake_up_interruptible
+> - *   - changed to use lego0 rather than tower0
+> - *   - changed dbg() to use __func__ rather than deprecated __func__
+> - * 2003-01-12 - 0.53 david (david@csse.uwa.edu.au)
+> - *   - changed read and write to write everything or
+> - *     timeout (from a patch by Chris Riesen and Brett Thaeler driver)
+> - *   - added ioctl functionality to set timeouts
+> - * 2003-07-18 - 0.54 davidgsf (david@csse.uwa.edu.au)
+> - *   - initial import into LegoUSB project
+> - *   - merge of existing LegoUSB.c driver
+> - * 2003-07-18 - 0.56 davidgsf (david@csse.uwa.edu.au)
+> - *   - port to 2.6 style driver
+> - * 2004-02-29 - 0.6 Juergen Stuber <starblue@users.sourceforge.net>
+> - *   - fix locking
+> - *   - unlink read URBs which are no longer needed
+> - *   - allow increased buffer size, eliminates need for timeout on write
+> - *   - have read URB running continuously
+> - *   - added poll
+> - *   - forbid seeking
+> - *   - added nonblocking I/O
+> - *   - changed back __func__ to __func__
+> - *   - read and log tower firmware version
+> - *   - reset tower on probe, avoids failure of first write
+> - * 2004-03-09 - 0.7 Juergen Stuber <starblue@users.sourceforge.net>
+> - *   - timeout read now only after inactivity, shorten default accordingly
+> - * 2004-03-11 - 0.8 Juergen Stuber <starblue@users.sourceforge.net>
+> - *   - log major, minor instead of possibly confusing device filename
+> - *   - whitespace cleanup
+> - * 2004-03-12 - 0.9 Juergen Stuber <starblue@users.sourceforge.net>
+> - *   - normalize whitespace in debug messages
+> - *   - take care about endianness in control message responses
+> - * 2004-03-13 - 0.91 Juergen Stuber <starblue@users.sourceforge.net>
+> - *   - make default intervals longer to accommodate current EHCI driver
+> - * 2004-03-19 - 0.92 Juergen Stuber <starblue@users.sourceforge.net>
+> - *   - replaced atomic_t by memory barriers
+> - * 2004-04-21 - 0.93 Juergen Stuber <starblue@users.sourceforge.net>
+> - *   - wait for completion of write urb in release (needed for remotecontrol)
+> - *   - corrected poll for write direction (missing negation)
+> - * 2004-04-22 - 0.94 Juergen Stuber <starblue@users.sourceforge.net>
+> - *   - make device locking interruptible
+> - * 2004-04-30 - 0.95 Juergen Stuber <starblue@users.sourceforge.net>
+> - *   - check for valid udev on resubmitting and unlinking urbs
+> - * 2004-08-03 - 0.96 Juergen Stuber <starblue@users.sourceforge.net>
+> - *   - move reset into open to clean out spurious data
+>   */
+>  
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> -- 
+> 2.54.0
 > 
-> drivers/usb/class/cdc-acm.c | 6 ++++++
-> 1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> --- a/drivers/usb/class/cdc-acm.c
-> +++ b/drivers/usb/class/cdc-acm.c
-> @@ -799,6 +799,9 @@
-> "ctrl polling restart failed after port close\n");
-> /* port_shutdown() cleared DTR/RTS; restore them */
-> acm_set_control(acm, USB_CDC_CTRL_DTR | USB_CDC_CTRL_RTS);
-> + if (acm_submit_read_urbs(acm, GFP_KERNEL))
-> + dev_dbg(&acm->control->dev,
-> + "read urb restart failed after port close\n");
-> }
-> }
-> 
-> @@ -1566,6 +1569,9 @@
-> if (usb_submit_urb(acm->ctrlurb, GFP_KERNEL))
-> dev_warn(&intf->dev,
-> "failed to start persistent ctrl polling\n");
-> + if (acm_submit_read_urbs(acm, GFP_KERNEL))
-> + dev_warn(&intf->dev,
-> + "failed to start persistent bulk read polling\n");
-> }
-> 
-> return 0;
-> --
-> 2.47.0
 
 Hi,
 
@@ -179,9 +185,11 @@ kernel tree.
 You are receiving this message because of the following common error(s)
 as indicated below:
 
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/process/email-clients.rst in order to fix this.
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what is needed in
+  order to properly describe the change.
 
 If you wish to discuss this problem further, or you have questions about
 how to resolve this issue, please feel free to respond to this email and
