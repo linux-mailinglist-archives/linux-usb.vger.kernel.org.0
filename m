@@ -1,202 +1,243 @@
-Return-Path: <linux-usb+bounces-37517-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37518-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mM8rDV4sB2oLsgIAu9opvQ
-	(envelope-from <linux-usb+bounces-37517-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 16:23:26 +0200
+	id QOYPM+cwB2oQswIAu9opvQ
+	(envelope-from <linux-usb+bounces-37518-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 16:42:47 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CEED5514EE
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 16:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E66B5519D6
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 16:42:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C7BC83021E42
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 14:19:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B5D28304C05F
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2026 14:39:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E8BD37A4B7;
-	Fri, 15 May 2026 14:19:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7A7A3B5311;
+	Fri, 15 May 2026 14:39:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f95WEVgL"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="r5fzMnjx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9863F36DA0F
-	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 14:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B211A3B3C08
+	for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 14:39:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778854789; cv=none; b=rLa25BWDL8jJvRWGfKH+fJY8qytA2F+RQvCIrGdy+mZUq49Avx9D29nY6lse54f91UxW9ZJBhYxHwsp4PWmYYIbWlADLXk3E5T+bSi5C1KZHmBeI6MHFXPFOVx7m7fSJB2drM8lsx6WTQpKyix75W1eaGatgABq7RuRvLvgJ9NY=
+	t=1778855951; cv=none; b=TZ1KffCoH0ISTQxNecJ0mIqcHWF9mhFyjhDsEvdTrvQPkv1PnD1x5nQIOYk+ajwtC2w2qTDS51n4L691bdGusspjPfbt4GinGcqZfCp26hSwxqAh0+dG1i3Let9TMyK6QeOt9iZsjPix2CpVbTGkEwjnISeb4yVV1bIn0ddzKvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778854789; c=relaxed/simple;
-	bh=s3Bj0xMXnNVo2c7UBujGILX0S9OZWkYQOunRlkbzPfg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a5BeMPQPL09GYR3OomWtI5qzzS+fDoZ/6tiWP+cYadFZC8cTwINpqA4uLpO3RMwfj1bGdNcTKY2EUKjsci+ZurHrnIQPh5AA3/bT0kNAVCGAz4VvMHq/5I+QQL0aK1++j/WCMxdMdc1PS1Wqh00h3HZK44O6+k/AIv21TzD7J34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f95WEVgL; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-50e63771d91so89474891cf.0
-        for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 07:19:47 -0700 (PDT)
+	s=arc-20240116; t=1778855951; c=relaxed/simple;
+	bh=5ei7fh/Y69tCRQ3kK/dbGYFuojcIwy3an7mcbITipcU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HZL1BFqRkidBh7Quue3McenI8PSZKPYOq1zV5io2+Z7zr5hvuobIDv30Drluo1kEJ+O0TPNpMtx54Xo/s+Z69Coor8VZ0h+HEW8VSjtjtQ2ClZ5p2n/Q+MKlFpq3lfErMGTuulDJOC1LcmiLN+BjXC3bAO0Sp8rrBF3jCGD91qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=r5fzMnjx; arc=none smtp.client-ip=209.85.222.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-9568159ee07so5728188241.1
+        for <linux-usb@vger.kernel.org>; Fri, 15 May 2026 07:39:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778854786; x=1779459586; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ccRqlRaH5LQNbms+X6SseCmhiMXxNgGnhvBY6ow0no=;
-        b=f95WEVgLTA4nwxcCTLTabyf5bjqtlZ8KxUVect/gWC6wHQAr6+AMNgYNYH67ysR13H
-         f1NMhIiwlR/46KQ3HFdMJxBvp2ORXCJ6mjKrgfm5rJIRKBnNIPTH1xTiFHBwTz4F0Zxt
-         zYjGxQcnw3rA/fl89J1ej6HrqLH5a1Zk4I4+6BWj12/OjXcCgc8pg0wpHmKNhnnMKCCy
-         Xr1L+SFTHtdw2Q7ni20gAf9BOdNbgsayur5j4y24wLUIef4Jcr+vUXzudUjwCzQ/j1lB
-         /nBp6/i0EVmezPBgoEkiy848hgNgenncrnfizIZ4hue+tT8wq81w9JRU7CqNjUmg6He2
-         bj2Q==
+        d=rowland.harvard.edu; s=google; t=1778855949; x=1779460749; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BQxJjtW9NoHteCK0AjadT0ZiWp4xMo5S2G7yHBWhKm0=;
+        b=r5fzMnjxo0qn47DQheu+8z2BqVawUayNL19uz+3HNCVkcfleHmePGSySdncjPWRlFL
+         pyzYzWAhxGtYttSooQV6s0iEnztVj8Znl0pLey9ORkA+ry7diHDpSXXziTw4HzbpN+mL
+         5igrMArIrATYGLp9FMEWMoWAwbQRiX7FBxA88r1H74RNRo0QkogWc0Pfy3h0uzfgy2Ow
+         UOJpkHXJo1G9zABJeA/iUcFWpnGwA+3ztUcjxcxYS2KuQDWaMpKQrKJt6fpQyNp5Y1lw
+         oMcuYZtMhxuN9N0/NLYbsqbptZruq8Iv+HICmnHUG1iWpANS/ZrpA6TwTCe6khEjfn+S
+         hMeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778854786; x=1779459586;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4ccRqlRaH5LQNbms+X6SseCmhiMXxNgGnhvBY6ow0no=;
-        b=GwociaXEGwsdDtqtT/trhNywn/CzhXCMpVwtYjiXQoQwWcB9bB63DgcfQS8Ty+BPPJ
-         IkYz1PJQ7UD8IPA7h3tWxQCu/m/v8kiQC6Yh05cwFyRWanffZyksNrvvApzei7EYHq66
-         CRXowYgGFg9hPMN7TkTjhFKxUS96DWQugpmGUYWMX/BXrAJuKVkTXHe0er+SdBdakBy7
-         4qb6Bt5QCBwsM5O2TNduS+QUCd3NL5YW28YlC+iWDHpBOFipUHGmN8jznzQmXZSjHJAe
-         jprRkMeWlUR/q8Z9A2/G+aDX9YwnfPJJKdVNViDVXnHtZUP9hP+7AzIybsx0vOb9Zs+w
-         m4EQ==
-X-Gm-Message-State: AOJu0YxrvwbQql15NsQ/HGPSYF2DGrNRwAUjt/MAKq1Jxl00RfAZJozT
-	9zu485C2dExJxuBg/dURkzFusOiRUXFCBTIEe3yMppYWnkPiBevFgQK0jlUV5/Kk
-X-Gm-Gg: Acq92OGD77Kcg1Hm9vBALbiSBFVlAD/b50qOmHRYV15ZrVP4YDfnxHPTBkYztuhMR6S
-	wZpdJN8gDwvdw+4A8daF+JjYegDE6/13lfHaQZsgDzv3Aj3g+853Ih8PeVtc9T6pGH3X+Sr+16G
-	OhnQEsznns7fI7XRjTWfzWZO3Bk386i+BgjiqyI51YMcR0f7H31OVZszo7PmHHtjl0opRg1+oao
-	OUcIeRLn5h3giAXj7HWSKKkquIb+a2Zmbwn5HR/jej1kVwQO02MpggPawFq7lsnbblbaZkpFCE5
-	Ehfr9CByE9G9tgkcQOhdRRP05PprNphk91teaMFqXsRS+hgCJZLGpnpfqNJ3rNwJg6LPhrSxREf
-	CgOLEHfYITWFzU+xJQGKRo/LEIxNP5vAly26ZZyNezgkMdJH8Tz2SkUYw5klH5kBokWrt01CeL0
-	LlzOX5Eo6o82jpPSQu/v/dgMHbxnc32sfsUqpE9JY+DSVy9QPlU7AOx4tzPqcJSAqhrHKP+AqQy
-	mbl9gc=
-X-Received: by 2002:ac8:7dc6:0:b0:515:875a:ec22 with SMTP id d75a77b69052e-5165a0022cbmr60213821cf.10.1778854786202;
-        Fri, 15 May 2026 07:19:46 -0700 (PDT)
-Received: from fedora (pool-100-11-178-145.phlapa.fios.verizon.net. [100.11.178.145])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-516456888f6sm48295391cf.3.2026.05.15.07.19.45
+        d=1e100.net; s=20251104; t=1778855949; x=1779460749;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BQxJjtW9NoHteCK0AjadT0ZiWp4xMo5S2G7yHBWhKm0=;
+        b=ie/Y/2EeuwXTxcOr4cTI/NbEggYEat+7Q3LFWVJ1pZUIl7jOmWt0NGdnjXxP7406Ou
+         tPR3x5JiqUwVe3C9CzkcQBZQxpUdWi3wPmOr0hFuSI1bnWXPM7yCY6HBsuDG6vkTpk7U
+         l5sbwDcXQ4Jnz6zxYnbs5eO0M+debBIwBumiF7bwhrLbCLZE9LZJulVA/xCeySzJOP71
+         HTiJChQsGK5KXBerKrNISBphAqd+uUi0fx1iPs8AcR6kfri0fGObmwMpdOgKyBUmBOyz
+         zJgx2FJ7ys0l+aLpYS5IyfHd/D09JEiJlxhbOX4qBj65PUJo9gb47CaJ1qMLY4rHl3VG
+         RALA==
+X-Forwarded-Encrypted: i=1; AFNElJ/yWKnzyXoY1+9NNEnItVqnvov5wxYvQr0js+7yT5XaDzu7sH/xXKkzCjPAn6qPNzDXyJ80U1NxGig=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEU0NPTXda3WSQ0b1nxENxkqnhif9fGmilVGpnVv2Yw65HEXmJ
+	+rTNoUhnmJQE3+j5g8Z4D2LM1vuUwEvDAWCqxj+2uvvVOvF2XTj7Xl340HbNURhZqw==
+X-Gm-Gg: Acq92OG9D+Ib4kGmknz/INDPNQ3I9MOCZI6uK+q4e1wFfvfyv86mkzYvVe7eruNAlXS
+	uQs1wZi4LjlRDfAVvcMPe9dxu0S124eqETDzNq8h5JBuUCx2p1ip48J+AMddeZEQOr+xivmxz8Z
+	/nTk0BbAmZ3GyjMeZYzFBmoiiJmj8ocoFVJkYMbz1cSZrjvBgUJxQfOyIE0oqG4AnTVwKkbH+wM
+	kNZUEpMFzPfBgLDXzQtZ2oPCv0ONC9BVGQqt+Lo5Zbdx7YA1dKqtyeRRQHTsWdycL5wuuuncap4
+	fGnTz47o2zsHmdmKECNRKDGEsGWLQAXjjpo7dWZUP6UJ3C6j8x6OLe6zXcapYWD5vNaq2W6AXkl
+	BsG4upQFR7rPis55GAMdp2wkpuuydeZfTUVEUQVQNqVHzHcNJx+Oxuvo/mqlC4g6J5Y2fWhgapt
+	YCF6mK2JsIlniioaFb0ewRVAbp/SlSPPZIY+7UM/PX6RE=
+X-Received: by 2002:a05:6102:e14:b0:633:1fbe:79c8 with SMTP id ada2fe7eead31-63a3f597eb4mr2246407137.23.1778855948736;
+        Fri, 15 May 2026 07:39:08 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d01:d210:d62f:1911:f952:16ba])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8c90b3d0bdbsm51850896d6.24.2026.05.15.07.39.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 07:19:45 -0700 (PDT)
-From: Dave Carey <carvsdriver@gmail.com>
-To: linux-usb@vger.kernel.org
-Cc: Dave Carey <carvsdriver@gmail.com>,
-	gregkh@linuxfoundation.org,
-	oneukum@suse.com,
-	guanwentao@uniontech.com
-Subject: [PATCH] USB: cdc-acm: start bulk-IN polling when ALWAYS_POLL_CTRL is set
-Date: Fri, 15 May 2026 10:19:40 -0400
-Message-ID: <20260515141940.751397-1-carvsdriver@gmail.com>
-X-Mailer: git-send-email 2.54.0
+        Fri, 15 May 2026 07:39:08 -0700 (PDT)
+Date: Fri, 15 May 2026 10:39:04 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Chen-Yu Tsai <wenst@chromium.org>
+Cc: Bartosz Golaszewski <brgl@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Manivannan Sadhasivam <mani@kernel.org>
+Subject: Re: [PATCH RFC 05/12] usb: hub: Power on connected M.2 E-key
+ connectors
+Message-ID: <41260a6d-46fa-4a45-9906-e1bc5e5dd83a@rowland.harvard.edu>
+References: <20260515090149.3169406-1-wenst@chromium.org>
+ <20260515090149.3169406-6-wenst@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 8CEED5514EE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260515090149.3169406-6-wenst@chromium.org>
+X-Rspamd-Queue-Id: 2E66B5519D6
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[gmail.com,linuxfoundation.org,suse.com,uniontech.com];
-	TAGGED_FROM(0.00)[bounces-37517-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[carvsdriver@gmail.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,linuxfoundation.org,gmail.com,collabora.com,vger.kernel.org,lists.infradead.org];
+	TAGGED_FROM(0.00)[bounces-37518-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,rowland.harvard.edu:mid,rowland.harvard.edu:dkim,intel.com:email]
 X-Rspamd-Action: no action
 
-The INGENIC 17EF:6161 touchscreen composite device has a ~55-second
-watchdog that resets the USB device if the bulk-IN endpoint on the CDC
-data interface goes unread.  The existing ALWAYS_POLL_CTRL quirk keeps
-the notification endpoint (ctrlurb / EP 0x82) polling continuously, but
-that alone is insufficient: the firmware monitors bulk-IN activity, not
-just notification-endpoint activity.
+On Fri, May 15, 2026 at 05:01:41PM +0800, Chen-Yu Tsai wrote:
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 90ea597d42ae..4165f71e212b 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -31,7 +31,9 @@
+>  #include <linux/minmax.h>
+>  #include <linux/mutex.h>
+>  #include <linux/random.h>
+> +#include <linux/of_graph.h>
+>  #include <linux/pm_qos.h>
+> +#include <linux/pwrseq/consumer.h>
+>  #include <linux/kobject.h>
+>  
+>  #include <linux/bitfield.h>
+> @@ -888,13 +890,25 @@ int usb_hub_set_port_power(struct usb_device *hdev, struct usb_hub *hub,
+>  {
+>  	int ret;
+>  
+> +	if (set)
+> +		ret = pwrseq_power_on(hub->ports[port1 - 1]->pwrseq);
+> +	else
+> +		ret = pwrseq_power_off(hub->ports[port1 - 1]->pwrseq);
+> +	if (ret)
+> +		return ret;
+> +
+>  	if (set)
+>  		ret = set_port_feature(hdev, port1, USB_PORT_FEAT_POWER);
+>  	else
+>  		ret = usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_POWER);
+>  
+> -	if (ret)
+> +	if (ret) {
+> +		if (set)
+> +			pwrseq_power_off(hub->ports[port1 - 1]->pwrseq);
+> +		else
+> +			pwrseq_power_on(hub->ports[port1 - 1]->pwrseq);
+>  		return ret;
+> +	}
+>  
+>  	if (set)
+>  		set_bit(port1, hub->power_bits);
+> @@ -1867,6 +1881,7 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
+>  	struct usb_host_interface *desc;
+>  	struct usb_device *hdev;
+>  	struct usb_hub *hub;
+> +	int ret;
+>  
+>  	desc = intf->cur_altsetting;
+>  	hdev = interface_to_usbdev(intf);
 
-Add acm_submit_read_urbs() calls to the two ALWAYS_POLL_CTRL paths that
-already restart the ctrlurb:
+This change is totally useless.  Didn't you get a warning from the 
+compiler when you built it?
 
-  1. acm_probe(): start bulk reads at probe time alongside the ctrlurb,
-     so the watchdog is satisfied from first bind without requiring a
-     userspace process to open /dev/ttyACMn.
+> diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+> index 9ebc5ef54a32..6039e5f5dcd7 100644
+> --- a/drivers/usb/core/hub.h
+> +++ b/drivers/usb/core/hub.h
+> @@ -85,6 +85,7 @@ struct usb_hub {
+>   * @port_owner: port's owner
+>   * @peer: related usb2 and usb3 ports (share the same connector)
+>   * @connector: USB Type-C connector
+> + * @pwrseq: power sequencing descriptor for the port
+>   * @req: default pm qos request for hubs without port power control
+>   * @connect_type: port's connect type
+>   * @state: device state of the usb device attached to the port
+> @@ -104,6 +105,7 @@ struct usb_port {
+>  	struct usb_dev_state *port_owner;
+>  	struct usb_port *peer;
+>  	struct typec_connector *connector;
+> +	struct pwrseq_desc *pwrseq;
+>  	struct dev_pm_qos_request *req;
+>  	enum usb_port_connect_type connect_type;
+>  	enum usb_device_state state;
 
-  2. acm_port_shutdown(): restart bulk reads after port close alongside
-     the ctrlurb restart, so the watchdog keeps running when the last
-     TTY user closes the port.
+The fact that hub.h uses struct pwrseq_desc indicates that it ought to 
+#include <linux/pwrseq/consumer.h>, instead of making the .c files do 
+so themselves.  Then you wouldn't have to add the #include lines to 
+hub.c and port.c.
 
-acm_read_bulk_callback() already resubmits each URB unconditionally on
-normal completion, so once submitted the reads remain active until an
-explicit kill (disconnect, suspend).  acm_submit_read_urb() is a no-op
-for URBs that are already in flight (read_urbs_free bit clear), so the
-existing acm_port_activate() call remains correct and races are avoided.
+> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+> index b1364f0c384c..2d09037fee93 100644
+> --- a/drivers/usb/core/port.c
+> +++ b/drivers/usb/core/port.c
+> @@ -7,11 +7,14 @@
+>   * Author: Lan Tianyu <tianyu.lan@intel.com>
+>   */
+>  
+> +#include <linux/cleanup.h>
 
-Tested on Lenovo Yoga Book 9 14IAH10 (83KJ): without this patch the
-device resets every ~55 s when no TTY is open; with it the device
-remains stable indefinitely.
+Why is this needed?
 
-Signed-off-by: Dave Carey <carvsdriver@gmail.com>
-Tested-by: Dave Carey <carvsdriver@gmail.com>
----
-This follows commit f58752ebcb35 ("USB: CDC-ACM: add INGENIC 17EF:6161
-quirk for Yoga Book 9 14IAH10"), which added ALWAYS_POLL_CTRL to keep
-the ctrlurb active.  That commit addressed the notification-endpoint
-watchdog (~20 s).  This patch addresses a second watchdog that fires
-when bulk-IN data goes unread for ~55 s.
+>  #include <linux/kstrtox.h>
+>  #include <linux/slab.h>
+>  #include <linux/string_choices.h>
+>  #include <linux/sysfs.h>
+> +#include <linux/of_graph.h>
+>  #include <linux/pm_qos.h>
+> +#include <linux/pwrseq/consumer.h>
+>  #include <linux/component.h>
+>  #include <linux/usb/of.h>
+>  
 
-This patch is based on top of Wentao Guan's pending fix
-("USB: cdc-acm: fix misplaced quirk defines and BIT(9) collision") which
-moves VENDOR_CLASS_DATA_IFACE and ALWAYS_POLL_CTRL from inside
-acm_ctrl_msg() to cdc-acm.h and reassigns them to BIT(10)/BIT(11) to
-avoid the NO_UNION_12 collision.  The bulk-IN additions here are
-independent of that renumbering and apply cleanly to either base, but
-the combined tree is the correct target once Wentao's fix merges.
-
- drivers/usb/class/cdc-acm.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 54059e4..0c6cdf5 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -799,6 +799,9 @@ static void acm_port_shutdown(struct tty_port *port)
- 				"ctrl polling restart failed after port close\n");
- 		/* port_shutdown() cleared DTR/RTS; restore them */
- 		acm_set_control(acm, USB_CDC_CTRL_DTR | USB_CDC_CTRL_RTS);
-+		if (acm_submit_read_urbs(acm, GFP_KERNEL))
-+			dev_dbg(&acm->control->dev,
-+				"read urb restart failed after port close\n");
- 	}
- }
- 
-@@ -1566,6 +1569,9 @@ skip_countries:
- 		if (usb_submit_urb(acm->ctrlurb, GFP_KERNEL))
- 			dev_warn(&intf->dev,
- 				 "failed to start persistent ctrl polling\n");
-+		if (acm_submit_read_urbs(acm, GFP_KERNEL))
-+			dev_warn(&intf->dev,
-+				 "failed to start persistent bulk read polling\n");
- 	}
- 
- 	return 0;
--- 
-2.54.0
-
+Alan Stern
 
