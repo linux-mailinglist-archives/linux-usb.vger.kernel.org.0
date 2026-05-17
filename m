@@ -1,572 +1,274 @@
-Return-Path: <linux-usb+bounces-37546-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37548-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ULd3KxC9CWrlnAQAu9opvQ
-	(envelope-from <linux-usb+bounces-37546-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 15:05:20 +0200
+	id 8B9JH0TDCWrZogQAu9opvQ
+	(envelope-from <linux-usb+bounces-37548-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 15:31:48 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2562C561169
-	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 15:05:20 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D8D7561347
+	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 15:31:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 796F93018433
-	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 13:05:01 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id E2C133002905
+	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 13:31:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 699E03806C0;
-	Sun, 17 May 2026 13:04:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7974B3B2FEA;
+	Sun, 17 May 2026 13:31:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XzZgk5L8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vRSDUQlz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7C03803DB
-	for <linux-usb@vger.kernel.org>; Sun, 17 May 2026 13:04:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05FE5305698;
+	Sun, 17 May 2026 13:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779023088; cv=none; b=IeL/Ebs8p9nyr6zHVVr/+oeiHX99KOJXm6KoaFlo2h6vJnGw1PAmRirsMXBb8aJQO0O76jziko6I/mhxVTVPZtzXiMQ3mHYzZdxkL4WeERtWCi8E6HiWOEb/J37yu7Vm/qovWaQfUWUYRTl1VNcpWBXvr0SJ+2rfIbJoYhvHyVI=
+	t=1779024699; cv=none; b=HTH/op72MlzMs/ohjbyKQaL+G7iqWbSj/vWv7JyzzQQlTwo6WY4zIFGwgLAgw2dXzChTwA68LzZnra1+RDi/dMM7sle5Pu5t2iPQkqqijpTiocOoQNe3DKr5FY9E5yfa9fuIUqROvDm/EfI9C2IZEjAEWrAqezSh5jm/308qirI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779023088; c=relaxed/simple;
-	bh=P9UUTz0KPjDaK36GdTPq2adIZXx1n07srA3bOyu4bAY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=b1g1Y0EPoZ3x504bpS1B2WJuu8rSD8d2KZwV3jBYXaXWaAeCiGqOfMPqkAt7VrAhGMnGGl9jy6SvFop5pgwH7cvL3uKKAz/4dWJdGfA/wFP8tahPx1ZgCo3Etjis7HEZZcupLgO1yCYIJNE928GHhUYU3iHnljd60YtyVxh5WRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XzZgk5L8; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8353ca0f1f1so539441b3a.1
-        for <linux-usb@vger.kernel.org>; Sun, 17 May 2026 06:04:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779023069; x=1779627869; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GkI4Tg8ZNhDS+JGp9hFJRIlTHUDV4Po0ZoBGx3Qld6I=;
-        b=XzZgk5L8qO7nyd48/SHAS1+QQ97KWgMe5iufnHqtwHntFxNilG6n9v6tPb4TnTdDny
-         1X2Y4M9N07fBGYHu8yF4nKlkF0ys4COjqrVR25OFJPrX49Wcb89sWZf75VysnhV4yBpa
-         tc8q+eRFGQ4QqI3wr0voq09NuvuoHG2FPE5mbGOB8P8xkEJHTHORnAgBXht/zsTD1qmb
-         8VmUZVvAjcTm9PKdaxoEsrIGynQVVThryaWoMBc6Aqa1xHrN/KpjGeXe3CWnp9o+bBgb
-         HiVOAnJUIHQcnNCGxHsQVnsGlHhgiX5cB3kU8rWbr6Dh0iEtWQq91SvRHsoLlQA3o/iF
-         CZ0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779023069; x=1779627869;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GkI4Tg8ZNhDS+JGp9hFJRIlTHUDV4Po0ZoBGx3Qld6I=;
-        b=Kp3eGt57gVHWJuuVbH0W1ltonpezuf8k09xaC8rM4Kv55WECkAEsyK0rs4/VEOZGdE
-         KxzZVxq838TkwlA3cE1WwG1uE171ivRHL1L0VBRtSNiFQ2eOChD6hKDyfgP3deRtYgsY
-         N/o3q6EWWan3X4fzU9RUBmwbnU45hKj0/gVvWzh7L3E5kaUCTdj514wuwCaKABrlLWK+
-         K2KUpBUlyuZH+P2TvWQpfJRFN6XD8xejaccMgAM9T8LPZ6slu5O6bAWzm6QiezOdoWJU
-         MHMCwFH3w3eiR0KhH0NdKoTH0x6f0XH15k/o5NycB091k4QZNOxCkaUGg6/FnPOSmct6
-         jyig==
-X-Forwarded-Encrypted: i=1; AFNElJ+mNP3Kl+Lr9IambElhAYQG92lwLVYeVF8lUja/D3iqUdF9LaKcPgOPH+nYFGH01tkTTjv7HayHEIg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdA0r9prc/wCn6uitx4qVHzR2Ym9qGlagLLms1oMLUYH1i2jNG
-	gTovuHHcNAwwzOgGDySePBJIgGX8kxPJCvO1jRKwi6eVb4cswwnu1JiQ
-X-Gm-Gg: Acq92OGMR7162t6S234RpKDaH+g7oxGexB0FYmyaVqeQtjkhk1PuDkAILjX9lODVAon
-	idBo0GaqPXfcEU0Cz+qzv2vh3jNyJWdFVLyVu3lrbV7J9ky/E72hPu0rMoRhWEP16Ecs0rilNSq
-	+8t3YDTagmaqT8Lr0uPY6QMuljNm5FCw/B5L5huRnaze2THlZgTILYwAv+AioY4veHYB6V+i8Ig
-	bJxKlINHQnlsHXUnv6pLEPyG4qVxnRiTwhTQgURNaA2ag+OwUvfAwCrwntJQU1pi4D4WL717Rf2
-	CbNlo/u7BGzDddGuN+Ym5NZ47/qq3Gx51gwrEyfdiFvHy3wJyxIVVIlQXGhCiQF3jANSNxuKQ/6
-	lg7DN9s1uoW8KTRpLXMItQvSMZtyQ2e89otxQz+FWrprEOrV/E5RKhMmfJFavHLEDgCuruOzxv5
-	EDFXHs3AC6PKXxAFPS+JFEIA==
-X-Received: by 2002:a05:6a00:ace:b0:829:6f7d:3086 with SMTP id d2e1a72fcca58-83f33b62df1mr8585011b3a.11.1779023069330;
-        Sun, 17 May 2026 06:04:29 -0700 (PDT)
-Received: from mincom1 ([119.214.48.64])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83f19c77822sm11712607b3a.41.2026.05.17.06.04.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 May 2026 06:04:28 -0700 (PDT)
-From: Jihong Min <hurryman2212@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mathias Nyman <mathias.nyman@intel.com>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-	linux-usb@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jihong Min <hurryman2212@gmail.com>,
-	"Mario Limonciello (AMD)" <superm1@kernel.org>,
-	Yaroslav Isakov <yaroslav.isakov@gmail.com>
-Subject: [PATCH v6 2/2] hwmon: add AMD Promontory 21 xHCI temperature sensor support
-Date: Sun, 17 May 2026 22:04:07 +0900
-Message-ID: <20260517130407.795157-3-hurryman2212@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260517130407.795157-1-hurryman2212@gmail.com>
-References: <20260517130407.795157-1-hurryman2212@gmail.com>
+	s=arc-20240116; t=1779024699; c=relaxed/simple;
+	bh=IOITomRVBjW8JyHrXWDU15HH3RUKKw8cqpKEE3tx5+w=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=YC9wOgneNnjMAP39lVA20Xu7nPGbVUGilykDqxX70s86Gr1jiTzGfg0GYTlq64WxjjBw1AGBlwpZbpaZ8cH0Nfv/Tg/qpmNvjKRSpvJ+XclRf6NWejEXqf8FwtVwKWFKeXxOGkspruVHCA+F1+edkVPjRqzof8KWued8VpMro38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vRSDUQlz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FCF9C2BCB0;
+	Sun, 17 May 2026 13:31:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779024698;
+	bh=IOITomRVBjW8JyHrXWDU15HH3RUKKw8cqpKEE3tx5+w=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=vRSDUQlzohHA/FWqGFxnoNCKuAfC3laCZBBCLUUoYSTRVmug4W2ThJTrAHf/06xlG
+	 Hs0XSJ18tDV+NOeDUa+YRFkrgoMpr6OCZSNLZNK88ffkfv3aS6wCuZZ3eMfnj0Y/sA
+	 3JD7SOZiPaWO/tBeooFFo7wVSKPbe2RBIVka+XQQgadg3fWU3mzeo1g2GnBC6l4DsG
+	 JIwthJyXuP2eDJb/Mm02Qg/6HCZyyC7QJIO1s6uXWsNfUMb5tM8A1q0eI9FoEbJY7c
+	 nsnm/utsBSxoLICcy8IqlwNmHsovTLE+IIPfgaFlln75kGedz1Ni8CqmxpRmd9ud0C
+	 vZBsFYQpilMXA==
+Message-ID: <a1264253-ee93-4671-ae3b-3a1bd307f65a@kernel.org>
+Date: Sun, 17 May 2026 15:31:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Sven Peter <sven@kernel.org>
+Subject: Re: [PATCH 2/2] usb: dwc3: Notify XHCI core of tunneled status
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Jack Pham <jack.pham@oss.qualcomm.com>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "usb4-upstream@oss.qualcomm.com" <usb4-upstream@oss.qualcomm.com>,
+ Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>, asahi@lists.linux.dev
+References: <20260505-topic-dwc3_tunneling_state-v1-0-4aaa6c3c14cb@oss.qualcomm.com>
+ <20260505-topic-dwc3_tunneling_state-v1-2-4aaa6c3c14cb@oss.qualcomm.com>
+ <afpyvhadqZw0xfTB@vbox>
+ <1163a026-03b2-4860-a422-eb276920b4aa@oss.qualcomm.com>
+ <afzP+uoUALSji95Q@hu-jackp-lv.qualcomm.com> <af0SM3C5qHc73DM8@vbox>
+ <670f9a9f-54b9-4109-986e-5071caf1dcaf@oss.qualcomm.com>
+ <af5sfCOfBa7mYqPw@vbox>
+ <0431f8ff-545b-4533-8bb3-d4f3d2e30032@oss.qualcomm.com>
+ <551c246d-7ff6-49e5-bb14-3f49f7649e54@kernel.org>
+ <9d8092f2-d04d-4c53-a0da-6da272d3b447@oss.qualcomm.com>
+Content-Language: en-US
+In-Reply-To: <9d8092f2-d04d-4c53-a0da-6da272d3b447@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 2562C561169
+X-Rspamd-Queue-Id: 0D8D7561347
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[roeck-us.net,lwn.net,linuxfoundation.org,amd.com,vger.kernel.org,gmail.com,kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-37546-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37548-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hurryman2212@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sven@kernel.org,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FROM_HAS_DN(0.00)[]
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux.dev:email,0.0.0.1:email]
 X-Rspamd-Action: no action
 
-Add an auxiliary-bus hwmon driver for the temperature sensor exposed by
-AMD Promontory 21 (PROM21) xHCI PCI functions. The driver binds to the
-"hwmon" auxiliary device published by the PROM21 xHCI PCI glue and
-exposes the sensor as temp1_input under the prom21_xhci hwmon device.
+cc: asahi@lists.linux.dev
 
-The sensor is accessed through a PROM21 vendor index/data register pair
-in the xHCI PCI MMIO BAR. The driver consumes parent-provided MMIO data
-from the PROM21 PCI glue instead of inspecting the parent PCI driver's
-drvdata. The read path restores the previous vendor index value after
-sampling and does not runtime-resume the parent PCI device; reads from a
-suspended parent return -ENODATA.
+On 12.05.26 13:56, Konrad Dybcio wrote:
+> On 5/11/26 8:44 PM, Sven Peter wrote:
+>> Hi,
+>>
+>> On 11.05.26 11:06, Konrad Dybcio wrote:
+>>> On 5/9/26 1:31 AM, Thinh Nguyen wrote:
+>>>> On Fri, May 08, 2026, Konrad Dybcio wrote:
+>>>>> On 5/8/26 12:46 AM, Thinh Nguyen wrote:
+>>>>>> On Thu, May 07, 2026, Jack Pham wrote:
+>>>>>>> On Thu, May 07, 2026 at 12:34:50PM +0200, Konrad Dybcio wrote:
+>>>>>>>> On 5/7/26 1:40 AM, Thinh Nguyen wrote:
+>>>>>>>>> On Tue, May 05, 2026, Konrad Dybcio wrote:
+>>>>>>>>>> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> 
+> [...]
+> 
+>>> 4. drivers/phy/qualcomm/phy-qcom-qmp-combo.c reprograms the PHY based
+>>>      on typec_mux events in native cases, or to USB4/TBT mode if the router
+>>>      driver requests it [that last part is not yet upstream]
+>>> 5. [optionally] retimer drivers in between (most often Parade PS883x
+>>>      series via drivers/usb/typec/mux/ps883x.c), which act as an
+>>>      additional typec_mux/switch in the chain
+>>> 6. [not upstream yet] USB4 router driver consumes some typec_mux
+>>>      parameters (orientation, cable and partner capabilities) and sends a
+>>>      command to another MCU to high-speed link establishment. It also sets
+>>>      the aforementioned magic register.
+>>
+>> I'm not sure if mux is the correct framework here. On Apple Silicon we also need an out-of-band notification from the PD controller to the USB4 NHI here but the NHI isn't a mux in the typec sense. And how do you ensure that 4 happens before 6 if you use the typec mux framework or does that not matter for your platform?
+> 
+> Some mux provider drivers (e.g. the PS883x one) call typec_mux_get/set()
+> explicitly, and combining that with the right of_graph things end up
+> working naturally (perhaps to some degree by luck?).
 
-Document the supported device, register access, runtime PM behavior, and
-sysfs lookup method. The documentation also records the observation
-method used to identify the register pair and derive the conversion
-formula.
+It's luck, it was the wrong order for Apple Silicon :-)
+I just don't think it's appropriate to describe the native host 
+interface as a mux (at least on Apple Silicon) since the mux is inside 
+the Type-C PHY even though the mux framework happens to transport almost 
+all the correct information.
+I also don't think it makes sense to describe that thing as a mux inside 
+the device tree.
 
-Assisted-by: Codex:gpt-5.5
-Signed-off-by: Jihong Min <hurryman2212@gmail.com>
-Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
-Tested-by: Yaroslav Isakov <yaroslav.isakov@gmail.com>
----
- Documentation/hwmon/index.rst       |   1 +
- Documentation/hwmon/prom21-xhci.rst | 101 ++++++++++++
- drivers/hwmon/Kconfig               |  10 ++
- drivers/hwmon/Makefile              |   1 +
- drivers/hwmon/prom21-xhci.c         | 239 ++++++++++++++++++++++++++++
- 5 files changed, 352 insertions(+)
- create mode 100644 Documentation/hwmon/prom21-xhci.rst
- create mode 100644 drivers/hwmon/prom21-xhci.c
+> 
+> With the QMPPHY specifically, it already exposes a separate struct phy
+> for the USB3 sub-block and another one for DP. I added a third one for
+> USB4, which when activated, programs it into USB4 mode and de facto
+> blocks the driver from acting as a typec_mux (simply via an early return
+> from mux_set) for the duration of the USB4PHY being in use (the router
+> takes care of lane assignment and orientation, when active).
+> 
+> Making this predictable (and controllable from the router driver) was
+> paramount, as the device will crash if the router is attempted to be
+> brought online at the wrong time, since most of its clocks are derived
+> from the on-PHY PLL. Similarly, the suspend flows also require tight
+> control of the PHY's power state.
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 8b655e5d6b68..324208f1faa2 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -216,6 +216,7 @@ Hardware Monitoring Kernel Drivers
-    pmbus
-    powerz
-    powr1220
-+   prom21-xhci
-    pt5161l
-    pxe1610
-    pwm-fan
-diff --git a/Documentation/hwmon/prom21-xhci.rst b/Documentation/hwmon/prom21-xhci.rst
-new file mode 100644
-index 000000000000..7984fb187bd8
---- /dev/null
-+++ b/Documentation/hwmon/prom21-xhci.rst
-@@ -0,0 +1,101 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver prom21-xhci
-+=========================
-+
-+Supported chips:
-+
-+  * AMD Promontory 21 (PROM21) xHCI USB host controller
-+
-+    Prefix: 'prom21_xhci'
-+
-+    PCI IDs: 1022:43fc, 1022:43fd
-+
-+Author:
-+
-+  - Jihong Min <hurryman2212@gmail.com>
-+
-+Description
-+-----------
-+
-+This driver exposes the temperature sensor in AMD PROM21 xHCI controllers.
-+
-+The driver binds to an auxiliary device created by the xHCI PCI driver for
-+supported controllers. The sensor value is accessed through a vendor-specific
-+index/data register pair in the controller's PCI MMIO BAR.
-+The auxiliary device is created by the ``xhci-pci-prom21`` PCI glue driver.
-+USB host operation is otherwise delegated to the common ``xhci-pci`` code.
-+
-+PROM21 is an AMD chipset IP used in single-chip or daisy-chained configurations
-+to build AMD 6xx/8xx series chipsets. Since the xHCI controllers are
-+integrated in PROM21, this temperature can also be used as a monitor for a
-+temperature close to the AMD chipset temperature.
-+
-+Register access
-+---------------
-+
-+The temperature value is read through a vendor-specific index/data register
-+pair in the xHCI PCI MMIO BAR. The driver uses the following byte offsets from
-+the MMIO BAR base:
-+
-+======================= =====================================================
-+0x3000			Vendor index register
-+0x3008			Vendor data register
-+======================= =====================================================
-+
-+The driver saves the current vendor index register value, writes the
-+temperature selector ``0x0001e520`` to the vendor index register, reads the
-+vendor data register, and restores the previous vendor index value before
-+returning. The raw temperature value is the low 8 bits of the vendor data
-+register value.
-+
-+The hwmon core serializes this driver's callbacks, and the driver restores the
-+previous index value after each read. This does not provide synchronization
-+with firmware, SMM, ACPI AML, or any other user outside this driver.
-+
-+No public AMD reference is available for the register pair or the raw value.
-+The register pair was identified on an X870E system with two PROM21 xHCI
-+controllers. One controller was passed through to a Windows VM, and the same
-+controller's PCI MMIO BAR was observed from the Linux host while HWiNFO64 was
-+reporting the PROM21 xHCI temperature. In the test environment, the reported
-+temperature was very stable at idle and the displayed sensor resolution was
-+low, which made it possible to look for a consistently repeating MMIO response
-+for the same reported temperature. During observation, offset 0x3000 repeatedly
-+contained selector ``0x0001e520``. Writing the same selector to offset 0x3000
-+from Linux and then reading offset 0x3008 reproduced the same raw value, so the
-+offsets are treated as a vendor index/data register pair.
-+
-+The conversion formula was empirically inferred by matching observed raw
-+8-bit values against HWiNFO64's reported PROM21 xHCI temperature for the same
-+controller. The observed mapping is:
-+
-+  temp[C] = raw * 0.9066 - 78.624
-+
-+Runtime PM
-+----------
-+
-+The driver does not wake the xHCI PCI device for hwmon reads. It reads the
-+temperature only when the parent device is already active. A read from a
-+suspended device returns ``-ENODATA``. After a successful read, the driver
-+drops its active-only runtime PM reference and lets the PM core re-evaluate the
-+idle state.
-+
-+Sysfs entries
-+-------------
-+
-+======================= =====================================================
-+temp1_input		Temperature in millidegrees Celsius
-+======================= =====================================================
-+
-+The hwmon device name is ``prom21_xhci``. The sysfs path depends on the hwmon
-+device number assigned by the kernel. Userspace can locate the device by
-+matching the ``name`` attribute:
-+
-+.. code-block:: sh
-+
-+   for hwmon in /sys/class/hwmon/hwmon*; do
-+           [ "$(cat "$hwmon/name")" = "prom21_xhci" ] || continue
-+           cat "$hwmon/temp1_input"
-+   done
-+
-+If the raw register value is invalid, ``temp1_input`` returns ``-ENODATA``.
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 14e4cea48acc..fe0f14e247b5 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -951,6 +951,16 @@ config SENSORS_POWR1220
- 	  This driver can also be built as a module. If so, the module
- 	  will be called powr1220.
- 
-+config SENSORS_PROM21_XHCI
-+	tristate "AMD Promontory 21 xHCI temperature sensor"
-+	depends on USB_XHCI_PCI_PROM21
-+	help
-+	  If you say yes here you get support for the AMD Promontory 21
-+	  (PROM21) xHCI temperature sensor.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called prom21-xhci.
-+
- config SENSORS_LAN966X
- 	tristate "Microchip LAN966x Hardware Monitoring"
- 	depends on SOC_LAN966 || COMPILE_TEST
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 982ee2c6f9de..f833aed890d8 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -196,6 +196,7 @@ obj-$(CONFIG_SENSORS_PC87427)	+= pc87427.o
- obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
- obj-$(CONFIG_SENSORS_POWERZ)	+= powerz.o
- obj-$(CONFIG_SENSORS_POWR1220)  += powr1220.o
-+obj-$(CONFIG_SENSORS_PROM21_XHCI)	+= prom21-xhci.o
- obj-$(CONFIG_SENSORS_PT5161L)	+= pt5161l.o
- obj-$(CONFIG_SENSORS_PWM_FAN)	+= pwm-fan.o
- obj-$(CONFIG_SENSORS_QNAP_MCU_HWMON)	+= qnap-mcu-hwmon.o
-diff --git a/drivers/hwmon/prom21-xhci.c b/drivers/hwmon/prom21-xhci.c
-new file mode 100644
-index 000000000000..d40d0c53ce45
---- /dev/null
-+++ b/drivers/hwmon/prom21-xhci.c
-@@ -0,0 +1,239 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * AMD Promontory 21 xHCI Hwmon Implementation
-+ * (only temperature monitoring is supported)
-+ *
-+ * This can be effectively used as the alternative chipset temperature monitor.
-+ *
-+ * Copyright (C) 2026 Jihong Min <hurryman2212@gmail.com>
-+ */
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/hwmon.h>
-+#include <linux/io.h>
-+#include <linux/math.h>
-+#include <linux/module.h>
-+#include <linux/pci.h>
-+#include <linux/platform_data/usb-xhci-prom21.h>
-+#include <linux/pm_runtime.h>
-+
-+#define PROM21_XHCI_INDEX_OFFSET	0x3000
-+#define PROM21_XHCI_DATA_OFFSET		0x3008
-+#define PROM21_XHCI_TEMP_SELECTOR	0x0001e520
-+
-+struct prom21_xhci {
-+	struct pci_dev *pdev;
-+	struct device *hwmon_dev;
-+	void __iomem *regs;
-+};
-+
-+static int prom21_xhci_pm_get(struct prom21_xhci *hwmon)
-+{
-+	struct device *dev = &hwmon->pdev->dev;
-+	int ret;
-+
-+	/*
-+	 * PROM21 temperature register access does not return a valid value while
-+	 * the parent xHCI PCI function is suspended. Do not wake the device from
-+	 * a hwmon read. On success, hold a usage reference without changing the
-+	 * runtime PM state; if runtime PM is disabled, allow the read unless the
-+	 * device is still marked suspended.
-+	 */
-+	ret = pm_runtime_get_if_active(dev);
-+	if (ret > 0)
-+		return 0;
-+
-+	if (ret == -EINVAL) {
-+		if (pm_runtime_status_suspended(dev))
-+			return -ENODATA;
-+
-+		pm_runtime_get_noresume(dev);
-+		return 0;
-+	}
-+
-+	if (!ret)
-+		return -ENODATA;
-+
-+	return ret;
-+}
-+
-+/*
-+ * This is not a pure MMIO read. The PROM21 vendor data register is selected
-+ * by temporarily writing PROM21_XHCI_TEMP_SELECTOR to the vendor index
-+ * register.
-+ * The hwmon core already serializes this driver's callbacks, so this driver
-+ * does not need an additional private lock. That does not synchronize with
-+ * firmware, SMM, ACPI, or other possible users. Keep the sequence short and
-+ * restore the previous index before returning.
-+ */
-+static int prom21_xhci_read_temp_raw_restore_index(struct prom21_xhci *hwmon,
-+						   u8 *raw)
-+{
-+	struct device *dev = &hwmon->pdev->dev;
-+	u32 index;
-+	u8 data;
-+	int ret;
-+
-+	ret = prom21_xhci_pm_get(hwmon);
-+	if (ret)
-+		return ret;
-+
-+	index = readl(hwmon->regs + PROM21_XHCI_INDEX_OFFSET);
-+	/* Select the PROM21 temperature register through the vendor index. */
-+	writel(PROM21_XHCI_TEMP_SELECTOR,
-+	       hwmon->regs + PROM21_XHCI_INDEX_OFFSET);
-+	/* Use a 32-bit read for PCI MMIO register access. */
-+	data = readl(hwmon->regs + PROM21_XHCI_DATA_OFFSET) & 0xff;
-+	/* Restore the previous vendor index register value. */
-+	writel(index, hwmon->regs + PROM21_XHCI_INDEX_OFFSET);
-+	readl(hwmon->regs + PROM21_XHCI_INDEX_OFFSET);
-+
-+	/*
-+	 * Drop the usage reference taken by prom21_xhci_pm_get(). This is
-+	 * enough because the read path never resumes the device; use the normal
-+	 * put path so the PM core can re-evaluate idle state after the read.
-+	 * Otherwise, a racing xHCI autosuspend attempt can see a nonzero
-+	 * runtime PM usage count and skip autosuspend, and a later
-+	 * pm_runtime_put_noidle(), which does not check for an idle device,
-+	 * would leave the device active.
-+	 */
-+	pm_runtime_put(dev);
-+
-+	if (!data)
-+		return -ENODATA;
-+
-+	*raw = data;
-+	return 0;
-+}
-+
-+static long prom21_xhci_raw_to_millicelsius(u8 raw)
-+{
-+	/*
-+	 * No public AMD reference is available for this value.
-+	 * The scale was derived from observed PROM21 xHCI temperature readings:
-+	 *  temp[C] = raw * 0.9066 - 78.624
-+	 */
-+	return DIV_ROUND_CLOSEST(raw * 9066, 10) - 78624;
-+}
-+
-+static umode_t prom21_xhci_is_visible(const void *drvdata,
-+				      enum hwmon_sensor_types type, u32 attr,
-+				      int channel)
-+{
-+	if (type != hwmon_temp)
-+		return 0;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		return 0444;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int prom21_xhci_read(struct device *dev, enum hwmon_sensor_types type,
-+			    u32 attr, int channel, long *val)
-+{
-+	struct prom21_xhci *hwmon = dev_get_drvdata(dev);
-+	u8 raw;
-+	int ret;
-+
-+	if (type != hwmon_temp || attr != hwmon_temp_input)
-+		return -EOPNOTSUPP;
-+
-+	ret = prom21_xhci_read_temp_raw_restore_index(hwmon, &raw);
-+	if (ret)
-+		return ret;
-+
-+	*val = prom21_xhci_raw_to_millicelsius(raw);
-+	return 0;
-+}
-+
-+static const struct hwmon_ops prom21_xhci_ops = {
-+	.is_visible = prom21_xhci_is_visible,
-+	.read = prom21_xhci_read,
-+};
-+
-+static const struct hwmon_channel_info *const prom21_xhci_info[] = {
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-+	NULL,
-+};
-+
-+static const struct hwmon_chip_info prom21_xhci_chip_info = {
-+	.ops = &prom21_xhci_ops,
-+	.info = prom21_xhci_info,
-+};
-+
-+static int prom21_xhci_probe(struct auxiliary_device *auxdev,
-+			     const struct auxiliary_device_id *id)
-+{
-+	struct device *dev = &auxdev->dev;
-+	const struct prom21_xhci_pdata *pdata = dev_get_platdata(dev);
-+	struct prom21_xhci *hwmon;
-+
-+	if (!pdata)
-+		return dev_err_probe(dev, -ENODEV,
-+				     "platform data unavailable\n");
-+
-+	if (!pdata->regs ||
-+	    pdata->rsrc_len < PROM21_XHCI_DATA_OFFSET + sizeof(u32))
-+		return dev_err_probe(dev, -ENODEV, "invalid MMIO resource\n");
-+
-+	hwmon = devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
-+	if (!hwmon)
-+		return -ENOMEM;
-+
-+	hwmon->pdev = pdata->pdev;
-+	hwmon->regs = pdata->regs;
-+	auxiliary_set_drvdata(auxdev, hwmon);
-+
-+	/*
-+	 * Parent the hwmon device to the PCI function because the temperature
-+	 * value is read from that function's MMIO BAR, and systems may contain
-+	 * multiple PROM21 xHCI functions. This lets userspace identify the PCI
-+	 * endpoint for each reading. The auxiliary driver still owns the hwmon
-+	 * lifetime and unregisters it before HCD teardown.
-+	 */
-+	hwmon->hwmon_dev =
-+		hwmon_device_register_with_info(&pdata->pdev->dev, "prom21_xhci",
-+						hwmon, &prom21_xhci_chip_info,
-+						NULL);
-+	if (IS_ERR(hwmon->hwmon_dev))
-+		return PTR_ERR(hwmon->hwmon_dev);
-+
-+	return 0;
-+}
-+
-+static void prom21_xhci_remove(struct auxiliary_device *auxdev)
-+{
-+	struct prom21_xhci *hwmon = auxiliary_get_drvdata(auxdev);
-+
-+	/*
-+	 * The PROM21 PCI glue destroys the auxiliary device before HCD teardown.
-+	 * Unregister the hwmon device here so sysfs removes the attributes,
-+	 * stops new reads, and drains active hwmon callbacks before the xHCI
-+	 * MMIO mapping is released.
-+	 */
-+	hwmon_device_unregister(hwmon->hwmon_dev);
-+}
-+
-+static const struct auxiliary_device_id prom21_xhci_id_table[] = {
-+	{ .name = "xhci_pci_prom21.hwmon" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(auxiliary, prom21_xhci_id_table);
-+
-+static struct auxiliary_driver prom21_xhci_driver = {
-+	.name = "prom21-xhci",
-+	.probe = prom21_xhci_probe,
-+	.remove = prom21_xhci_remove,
-+	.id_table = prom21_xhci_id_table,
-+};
-+module_auxiliary_driver(prom21_xhci_driver);
-+
-+MODULE_AUTHOR("Jihong Min <hurryman2212@gmail.com>");
-+MODULE_DESCRIPTION("AMD Promontory 21 xHCI temperature sensor driver");
-+MODULE_LICENSE("GPL");
--- 
-2.53.0
+Yeah, that's similar to Apple Silicon except that we drive all the 
+synchronization from the Type-C PD controller because we have even more 
+components that all have to kept in sync on those platforms.
+
+> 
+> 
+> I ended up modeling the router as a mux&switch, since like I mentioned,
+> it needs a number of parameters that already come via these frameworks
+> (cable type/speed, orientation, etc.) and the drivers needs to talk to
+> the MCU immediately after the PHY and retimer are set up, so that only
+> made sense.
+> 
+>> Currently I use [1] and [2] in my work-in-progress tree though I'm not quite happy with it yet.
+> 
+> I took a look at your branch and predictably we faced some common
+> obstacles.. Although I'm jealous of RTKIT..
+> 
+>>> At a glance, 2. seems like a reasonably fitting place to set it, however:
+>>> * it does not have any sort of a handle to the typec_connector (it
+>>> only acts like a mux that sets another mux), and
+>>> * it may be going away in the future
+>>>
+>>> so I'd much prefer to keep this logic somewhere near where this iteration
+>>> of the patch does - I think it'll be useful for more implementations, as
+>>> I'd imagine it'd be fairly commonplace to hardwire CIOCTRL_CIO_EN and
+>>> another part of the pipeline that must logically be online for USB4 to
+>>> be useful
+>>>
+>>> +Sven, on ASi, is CIOCTRL_CIO_EN (dwc3base + (0xcd20 + ((port) * 0x30))
+>>> written to manually?
+>>
+>> I don't think so, but we need a manual out-of-band notification to both PCIe, tunneled DisplayPort and USB3 once the tunnel has been brought upside the NHI (i.e. long after the typec altmode is entered) and all this has to be represented in the device tree as well.
+> 
+> The DP situation in our impl is.. colorful as well.
+> Generally I think we only need to reset the protocol adapters, which
+> happen to live within the router's address space, making it contained
+> within the TBT driver.
+
+Yeah, for us it's separate and there's the display co-processor which 
+has to get an OOB notification for any established USB4/TBT tunnel.
+It's a big mess essentially.
+
+>> DWC3 on Apple platforms is very cursed and has to be fully offline while the Type-C switches modes and must only be brought up then once the tunnel inside the NHI has already been established.
+> 
+>> My current WIP code uses a tbt_oob_notify for all that that I introduced and something like this in the dt to represent the connections:
+>>
+>> /* USB4 */
+>> &usb4_1_acio {
+>>      ports {
+>>          #address-cells = <1>;
+>>          #size-cells = <0>;
+>>
+>>          /* 1: USB4 port */
+>>          port@1 {
+>>              reg = <1>;
+>>              usb4_1_acio_tbt: endpoint {
+>>                  remote-endpoint = <&typec1_con_tbt>;
+>>              };
+>>          };
+>>
+>>          /* 2: unused(?) USB4 port */
+> 
+> Any chance port2 is used for lane bonding?
+
+None, port 2 isn't connected to anything. That (?) is just a leftover. 
+The host router block can probably support two ports with shared 
+bandwidth but Apple instead decided to create a separate host router for 
+each port.
+
+> 
+>>          /* 3: PCIe, TBD */
+>>          /* 4: USB3, TBD */
+>>          /* 5: DP0, TBD */
+>>          /* 6: DP1, TBD */
+>>      };
+>> };
+>>
+>> Still not completely happy with that as well.
+>> Does PCIe tunneling also need additional OOB notifications for you?
+> 
+> No, simply enabling the path works, after which we get the normal hotplug
+> events
+
+Lucky you! We need to enable the PCIe tunnels inside the pcie driver 
+*after* the tunnel is up inside the NHI because otherwise the 
+co-processor firmware will crash. There's also some weirdness going on 
+with PCIe hotplug events below the root bridge that I have yet to figure 
+out. From what I can tell XNU manually injects these events whenever the 
+TBT tunnel changes. We can see that weirdness with long chains like a 
+USB4 hub -> Another TBT dock -> Apple's TBT display -> TBT-to-ethernet 
+adapter.
+I've added generic out-of-bound notifications for that but not quite 
+happy with it yet.
+
+
+Please also cc me on any thunderbolt submissions. If your work goes in 
+first I can just rebase mine on top of your tree and see if we need 
+anything more.
+
+
+Sven
+
 
 
