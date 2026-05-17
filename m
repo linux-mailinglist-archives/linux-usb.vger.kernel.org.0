@@ -1,199 +1,189 @@
-Return-Path: <linux-usb+bounces-37557-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37558-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SAi/LJEHCmqNwAQAu9opvQ
-	(envelope-from <linux-usb+bounces-37557-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 20:23:13 +0200
+	id eC9WFjURCmpRwgQAu9opvQ
+	(envelope-from <linux-usb+bounces-37558-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 21:04:21 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 188055630F8
-	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 20:23:12 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE45356370A
+	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 21:04:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4DC6B301DCD6
-	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 18:19:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 599783025928
+	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 19:03:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59103CD8CA;
-	Sun, 17 May 2026 18:19:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A3B02F7EE0;
+	Sun, 17 May 2026 19:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V7oBhwIl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hoc2xT04"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3872566D3
-	for <linux-usb@vger.kernel.org>; Sun, 17 May 2026 18:19:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779041989; cv=pass; b=J65BlMbth+U0aWasBARosnGaAMKSDNFUTrojANCLm2C0Bkahj2ep/FQdXXporjeSd1cEZoXUV0fx62WfSr6XZLuOpZBAlYsZl8sZRbs4x/rpCxq0nUmLoXZTL+EQ+ifO4rlWyE0JzAIHu9O/6aOkymrL9Vuk60wUHRwI3gU96ks=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779041989; c=relaxed/simple;
-	bh=Nd43E/zmZ6c/afHegFvDIk2Fq1CDykKACE8Mmj+xopg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pxGoaCOYin/fZ1zJP+zA9iw4PVhgiIF+/ElSHRGpxm44G937YNufcFeq4UMdsopZKRrEwmJaQhKZ+4NgXRwGOZvc99bBbGbtvwZLDdIEQKPV03iuRoslHQta/xiysgNsQVvus+nBn/GzOsdWuTOPdpzBzBIuTgq9dC71Feq/3co=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V7oBhwIl; arc=pass smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D0C2777FC
+	for <linux-usb@vger.kernel.org>; Sun, 17 May 2026 19:03:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779044631; cv=none; b=oghJ348aoKyRP0G4vvkvmIeHniZrgWcevwTpHPl7PGtZTd7CWDVbNgdbmGucRKJp3AfT4WGi7dOHRZ1zlBNbmKs/Uw+JJF/2myWVcfm6QOeu/x22oWuYwTgm6Y9v5DYLcNpsAct1gAG78sUSKJFCru2xoSD4OX2qZxr7SOe4eVE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779044631; c=relaxed/simple;
+	bh=ziqj0At9EXqQ/gmwi/EcqSa9SrdgZw/ZW8685V4X7Ls=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PNNHcnUhnk5z7xtA97rW7J4fYzj33ZOFCnV2jopARrPvRyJtaVkcsvtLfS5NACGIPIs2EkAkRYjS1f7bmH3heMFyxBfOM7Yna6Kwu2IIfsIg5YbVdqm/E369P9/Cs6fiavz7WM8Zxiq/h9gIZO4xjwhUcMkQ62VB5Tla9KdlMhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hoc2xT04; arc=none smtp.client-ip=209.85.219.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-48ff4f8ef0dso16814235e9.3
-        for <linux-usb@vger.kernel.org>; Sun, 17 May 2026 11:19:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779041984; cv=none;
-        d=google.com; s=arc-20240605;
-        b=evzDcAzriUaVmdM10uc+yGTaXA97NF/mhjbrw7/IfFSJDxoLio670jC4Ff+x9KKXb6
-         TEdaNdHn7IgQy+sTFhmMLnYHjomdYuln2UwcX/Say40qniS9X/NOdvQzR4dJKPsY0Ayo
-         dXB0g/faSx7zQnxTex3MJzYks0aR6KprRBqWeBGbSSsCEplcXL4CqDCVBcABCSTFzT/m
-         MkZbWB6S4TYiAd08mg2m/Nfc3ZggN/08koqI34I1yVduXxLaX16c35xNjauH0vxBth0c
-         tsrJwYWPddCMAT8zJ6Bx0wbamy6DicO4s8owhm4bsjG/TKO8TMAcXPRvOyEiv+qvLqI4
-         CHiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=+MJxxZUB4Dccd8/YKQFwAFVwBdt+/1w9eYCETuhgmlk=;
-        fh=GJpw3/eeawSL3qQgc0xGyT69Al/fK4TjILdTb7bMZPc=;
-        b=CfCaFheqZJAlZ1OTepA4H1Qd/F1a7DntsjxQkQ8fv9MK9RITuadBsqPykUTqTSadu6
-         +Q90oxQdlcxCV5825RmL20sfgDbfvLsw9xlDpW4t38iArsj7oorN6FPYwcNoa/CEH5Tm
-         A3tdSfNV2dkMGOmk63WdxLly0Vr94JdoDDTX3Ei/0r3swLMMckoRZCbEAQoLguunjPDZ
-         UpPoHcnrRch2cqlclb2RFIbczXAqbk/SIZb+DfmvnKryJfd9aJjTCk7dlPxDBlrallaf
-         sC9AWui8qVA/gF4bNg1TBGnfnhCMw9DXxA66xGnrhohFOHZzTNlogRNI0htBJ/RvZEDB
-         4GGw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-8b59772d441so23308946d6.0
+        for <linux-usb@vger.kernel.org>; Sun, 17 May 2026 12:03:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779041984; x=1779646784; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779044629; x=1779649429; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+MJxxZUB4Dccd8/YKQFwAFVwBdt+/1w9eYCETuhgmlk=;
-        b=V7oBhwIlehLIW3jisjkFIJKqd3T5rLwkkGn6u9DFBOpJ43E0vWhLe8vyEFR4gQhii6
-         vt+KQo56tKwbMz8V6fnyAhtkbxsFmbV2QkZVoZNkR51Jvp9VrUvILcvME+jPi8gqiPZX
-         o4lc/5Baquwrtj70BaIQX7dIcU35tulU0qVOnE7SQiDmA9UwKR9QoLC8qGJ5AbTQEYwn
-         VeIJ1WyCp3wmIk20I6JjEduXNMwlScCZsIuBv7QAn6vdFnUeTQa0S9mR/6Gt+GZ8oFUz
-         xEVYhs75lGIyAkHXqfz+uyeSZ/Zvb9N2r/HzaX1eLakbmgMfBL/C1tiXeEnwa08kuc2R
-         oMdQ==
+        bh=YZN/ui+Ml0Pw2OFTnsTV3BRgvcDhfmwrxLMK2S9Sv/Q=;
+        b=Hoc2xT04OLWwji9TGIJNiVdZs7N/PoUCOZT3r+F6aZjH9o4f+DtUSI5Y/MB92ujbc5
+         NdxBl1uOpuvuCj0+VDgStEqk+kZxYcOE9rh5UQ405gPb99e2M1Fpw3giLfMlDW61fCgo
+         ake5JgFYXxco5oWdoY4BMDnGc/f1yX3y3HH/EPiPHfvKvumzo734V517Aa6QG2Mr1Z2I
+         CxfSpMrg+TurV9ONOzX7YIcfkn9EHR/Mx/SbZsP8jDZOVzoXswZaLmdhTTPz0qI/MbDZ
+         VMP9xtV0ZRhwwiVLk+Rrj0dKseXGtkrUXEcXyTXe6shjBd7RR0v5gvWVEU9WYQQmnk/I
+         ba9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779041984; x=1779646784;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1779044629; x=1779649429;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+MJxxZUB4Dccd8/YKQFwAFVwBdt+/1w9eYCETuhgmlk=;
-        b=IJ9RPj+bGaRjQe9xk/BaIGVnCWEvZXszuOZhvWyGvIcgIuGifIuaAYYVCOrfaYOCiY
-         WvXlh4rf6Mv0NwK8LZrLylUUZ3fSTipQB1oY3sALIwaz1CR9Tr3+Kiq7UoFp2XlzNQUF
-         xwGP2zRIBz5OJanz/Iij8sffepTQSlOgEpGXNpwH2TG7Ca+LXEpnydEBLffEHRlCxU+s
-         yDYjKH/HAU/gBxElj4IIEhjudHQy5CVRHQcCdPb/aR50neKW1lNwPGrOMUl6JdQU9gep
-         aHuVK4BKQuAvAl86AGwfJ7TsiMHpMVvfo7yrA69NF4iIPyxnhiMoO2TFOpxCCvmfyNOK
-         aI2A==
-X-Forwarded-Encrypted: i=1; AFNElJ92rEFTQfaq+DfsMhru0F+E6e4BLilOgpjWYV+dijRuyX/5yK9A5wpdbcoHjiMjuWqS2wVSEtU2mBU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+J1CmpZuvY+wjpTzL+00bh6AForO0Pz60OojhkoUdlcHxqMLV
-	AL+zF18nevKpY2EwhUbx550lYBun6juyEI0yHZ6BwiYFKienLPZmzE/1KEM1S5Qf8xIevD2R2Ll
-	Xn+alL1Z8PO6sQJRoYJS27vNWfrVJzdLASW3/CPk=
-X-Gm-Gg: Acq92OEKLRnlQxdQYw4pj9SrYJqvxsD4v6TzE7qDi59Pc0PVJE6j3IdYnA8IcQRAiI1
-	2ayRvuJFcx333A/ll5o5uvebSyZZTxdid7Km3E+1IYVXWqsiYxXr8/P/J79+dcmqtGrljZioQRk
-	ihUAPixSecNZ4UkoMT1p04nGF/QBst8PXTUohaaewOvwgEYWmPBFBmZ1LUufiYjn5weNbiKNuat
-	1FosnnSQN5GGygLDR2aTWSqrY2q/BvVWvrhkRWqi4frMm8jRIFLNY7JIhevWCIDs6MBhc5B2F85
-	LAhfRCgPUURkP+9O4ZJCnL9JZlEJ8S9/EXpxNFPEQ8q8PfizcTOT
-X-Received: by 2002:a05:600c:c087:b0:48a:7b55:12a6 with SMTP id
- 5b1f17b1804b1-48fe5cb36aamr144412275e9.0.1779041983818; Sun, 17 May 2026
- 11:19:43 -0700 (PDT)
+        bh=YZN/ui+Ml0Pw2OFTnsTV3BRgvcDhfmwrxLMK2S9Sv/Q=;
+        b=gG6wZeh0CCwOHnYmJeNnqTt5FHUhs4L/hOY6d9UQpinjzMO3vXhOElq+FGnHWq/iPq
+         voTXJOSeuah+DS9/+53xGKKSFZq0fLPElGmgXtgDdoV0fYqlrrZeRCuHnR1wFlGW6yKx
+         dlIX/dqjko+aUWz79d60OthYyb5ZYymORyfZaPNmq98rlpqlxkzt4v+kYorYmwJp3wBO
+         Tf49pPvWvHCxkeGEvDrVI64wGBe8KU+mraPVkc9PqpJ47gJi7s49NJdePz5S+1ulGVx9
+         0vkftKb910swFyBoPqQtl8jQlX96RnaXjZELdUJ/YlhUQ+BJ3OBfzrWyGulNH4GBMuOb
+         3NfQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+IMPZr6GkwyLYpzQV9s4i7/fTQhZF2m3lvdUM4AM2UTNC1sEwuyfG/+CRhV9PH1yTdY2RjyfA3PTw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yza0fOV4HBYfFUHs/NodBC2Zy4M/XSjpDbMCXbLpU8VCfOtm5mR
+	wTTrZ/jkBxalZpr8vvXr0a1sABWNwatj3sj6BNsn8rAvvercjPjVr4aW
+X-Gm-Gg: Acq92OECsQoO55WcokyiErhYGNWSJTtNEHuhu9APopqM3YhsCG6NoVc9a/f6gcPa/v6
+	b3P9jK2vWE3bw8AZMwQh6tzOng1jNO5G7Wr7OSajPve0Fd/MNhUudEIGlwisPjlxzwUFM7PZG2F
+	hOGfFHTRFY18lAHBU1omWG4ta/HSXVS40YBRx7t0q+UxaHl2nNrd4EVDSc7AeXTSJDKjFy6FDZ5
+	Cwd/kLU8QcTOQSx5uBWlELhYenPRYPpHFC7mmMnY6KW7+fzMwiHY4YKHn/a3HHZuL7UqSnaIi9Q
+	O4yx32YxeFf2FpbE56/T1EQcZXJBSMpdaFbmWWmUmnORJue25QfcfCyKUFSjmoV76oqWAgow296
+	aXxKoTL4iy5upFE5c3KH7G6c6JHFMDhENt8n4MVmOtO11FNZavt8wVbwTaZ9tlqpR8WuDEdAbfI
+	QpKVcK2WSZvfmMnN1DUtAKwx8Nr482hGAkP58H9fzXhCnG/5N7xIG41JZ4JPGVZMs3hb/6VNE=
+X-Received: by 2002:a05:6214:4519:b0:8ac:b1ad:3a24 with SMTP id 6a1803df08f44-8ca0f6bdb6bmr206516336d6.27.1779044628757;
+        Sun, 17 May 2026 12:03:48 -0700 (PDT)
+Received: from mango-teamkim.. ([129.170.196.20])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ca361b8b10sm30473686d6.46.2026.05.17.12.03.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 May 2026 12:03:47 -0700 (PDT)
+From: pip-izony <eeodqql09@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Seungjin Bae <eeodqql09@gmail.com>,
+	Kyungtae Kim <Kyungtae.Kim@dartmouth.edu>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Kees Cook <kees@kernel.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	David Mosberger <davidm@egauge.net>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/2] usb: host: max3421: Fix shift-out-of-bounds in max3421_hub_control()
+Date: Sun, 17 May 2026 15:03:07 -0400
+Message-ID: <20260517190308.1876316-1-eeodqql09@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260517000145.1868817-2-eeodqql09@gmail.com>
+References: <20260517000145.1868817-2-eeodqql09@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260517000145.1868817-2-eeodqql09@gmail.com> <2026051731-ripeness-wipe-ebf6@gregkh>
-In-Reply-To: <2026051731-ripeness-wipe-ebf6@gregkh>
-From: Seungjin Bae <eeodqql09@gmail.com>
-Date: Sun, 17 May 2026 14:19:07 -0400
-X-Gm-Features: AVHnY4ItOxehoiyNr6n5or_YbkH_aH8Pi0AD2Y0ODwg-EzbjIzwA2rrpMZt81hQ
-Message-ID: <CAAsoPpXhyaWp98Mge3zXz8a9XGJoL=MG-+iL3E=B7GBf_EVRmA@mail.gmail.com>
-Subject: Re: [PATCH] usb: host: max3421: Fix shift-out-of-bounds in max3421_hub_control()
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Kyungtae Kim <Kyungtae.Kim@dartmouth.edu>, Kees Cook <kees@kernel.org>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, David Mosberger <davidm@egauge.net>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 188055630F8
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: AE45356370A
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37557-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[gmail.com,dartmouth.edu,rowland.harvard.edu,kernel.org,linaro.org,egauge.net,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-37558-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[eeodqql09@gmail.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	FREEMAIL_FROM(0.00)[gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-2026=EB=85=84 5=EC=9B=94 17=EC=9D=BC (=EC=9D=BC) =EC=98=A4=EC=A0=84 1:49, G=
-reg Kroah-Hartman <gregkh@linuxfoundation.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=
-=EC=84=B1:
->
-> On Sat, May 16, 2026 at 08:01:46PM -0400, pip-izony wrote:
-> > From: Seungjin Bae <eeodqql09@gmail.com>
-> >
-> > So if a malicious userspace task with access to the root hub via
-> > /dev/bus/usb/.../001 issues a USBDEVFS_CONTROL ioctl with `wValue`
-> > greater than or equal to 32, the left shift operation invokes
-> > shift-out-of-bounds undefined behavior. This results in arbitrary
-> > bit corruption of `port_status`, including the normally-immutable
-> > change bits, which can bypass internal state checks and confuse the
-> > hub status.
-> >
-> > Fix this by rejecting requests whose `value` exceeds the shift width
-> > before performing the shift.
-> >
-> > Fixes: 2d53139f3162 ("Add support for using a MAX3421E chip as a host d=
-river.")
-> > Signed-off-by: Seungjin Bae <eeodqql09@gmail.com>
-> > ---
-> >  drivers/usb/host/max3421-hcd.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-=
-hcd.c
-> > index 0e17c988d36a..3d6b351dcb1a 100644
-> > --- a/drivers/usb/host/max3421-hcd.c
-> > +++ b/drivers/usb/host/max3421-hcd.c
-> > @@ -1694,6 +1694,8 @@ max3421_hub_control(struct usb_hcd *hcd, u16 type=
-_req, u16 value, u16 index,
-> >                                               !pdata->vbus_active_level=
-);
-> >                       fallthrough;
-> >               default:
-> > +                     if (value >=3D 32)
-> > +                             goto error;
->
-> Cool, what tool found this?  I've been running some static checkers and
-> I don't think it turned this one up yet.
->
-> thanks,
->
-> greg k-h
+From: Seungjin Bae <eeodqql09@gmail.com>
 
-Thanks for your interest!
+The `max3421_hub_control()` function handles USB hub class requests
+to the virtual root hub. In the `default` branches of both the
+`ClearPortFeature` and `SetPortFeature` switch statements, it modifies
+`max3421_hcd->port_status` by left shifting 1 by the request's `value`
+parameter. However, it does not validate whether this shift will exceed
+the width of `port_status`.
 
-It's a KLEE-based symbolic execution tool I've been developing for
-kernel drivers. It's still a work in progress, but I'd be happy to
-share more details and the tool itself once it's in better shape.
+So if a malicious userspace task with access to the root hub via
+/dev/bus/usb/.../001 issues a USBDEVFS_CONTROL ioctl with `wValue`
+greater than or equal to 32, the left shift operation invokes
+shift-out-of-bounds undefined behavior. This results in arbitrary
+bit corruption of `port_status`, including the normally-immutable
+change bits, which can bypass internal state checks and confuse the
+hub status.
 
-Seungjin Bae
+Fix this by rejecting requests whose `value` exceeds the shift width
+before performing the shift.
+
+Fixes: 2d53139f3162 ("Add support for using a MAX3421E chip as a host driver.")
+Signed-off-by: Seungjin Bae <eeodqql09@gmail.com>
+---
+ v1 -> v2: Restored a paragraph in the commit message that was truncated.
+ v2 -> v3: No functional changes; reorganized as part of a 2-patch series.
+
+ drivers/usb/host/max3421-hcd.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hcd.c
+index 0e17c988d36a..3d6b351dcb1a 100644
+--- a/drivers/usb/host/max3421-hcd.c
++++ b/drivers/usb/host/max3421-hcd.c
+@@ -1694,6 +1694,8 @@ max3421_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value, u16 index,
+ 						!pdata->vbus_active_level);
+ 			fallthrough;
+ 		default:
++			if (value >= 32)
++				goto error;
+ 			max3421_hcd->port_status &= ~(1 << value);
+ 		}
+ 		break;
+@@ -1747,6 +1749,8 @@ max3421_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value, u16 index,
+ 			max3421_reset_port(hcd);
+ 			fallthrough;
+ 		default:
++			if (value >= 32)
++				goto error;
+ 			if ((max3421_hcd->port_status & USB_PORT_STAT_POWER)
+ 			    != 0)
+ 				max3421_hcd->port_status |= (1 << value);
+-- 
+2.43.0
+
 
