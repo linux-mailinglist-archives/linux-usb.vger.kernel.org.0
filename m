@@ -1,143 +1,135 @@
-Return-Path: <linux-usb+bounces-37617-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37618-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WCshAX4nC2pAEAUAu9opvQ
-	(envelope-from <linux-usb+bounces-37617-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 16:51:42 +0200
+	id aJX0F94mC2pAEAUAu9opvQ
+	(envelope-from <linux-usb+bounces-37618-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 16:49:02 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78C3956F421
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 16:51:40 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0987656F38D
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 16:49:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D04A33085D00
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 14:38:17 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 780F23028EDB
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 14:47:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C342332EA2;
-	Mon, 18 May 2026 14:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCEBD26ED59;
+	Mon, 18 May 2026 14:47:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jybY+wgb"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="AEungQbb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8313148850;
-	Mon, 18 May 2026 14:38:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B39631A3157;
+	Mon, 18 May 2026 14:47:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779115094; cv=none; b=GK3KfqeNCUQjLZoubbJU4puDUKQES2NDICW1iZCPqQ/kyrJ3pSIHLB+4I7oiI9/5M8oMplVFtWfHA9xE1WneE0MYQ/CBx4O+MGI/dNvBM139nU3ww17shvXcuU2lzM2uPvAA0823C1jqpIx5XeCQgNGLaIg/3QZb5GONX0zfVbg=
+	t=1779115622; cv=none; b=t/MrvZ+93FpatY2Y6iH6i5Js2OStfOlqvsiZlIDaB3hNx3etjo5bPDjIGprD1m8JAiJWZfd1DQA3uOzTLN2RiYDsinyh1TAZyP/nTZjCc+KNjWzqMsqu+5wjZJh3pmPwpjLHImNo5Eo2iVyKebylrChW0M/m+CLwnQVbcv5/OVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779115094; c=relaxed/simple;
-	bh=U13AxQTGM+7Ye3teS4TDUAHOJKI686YxwQ4+ThF1HTE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sLp7gxKIGulo20+eV/YIDRJzGRVotd97nJNEtqTcpT1RFE3fw2/IOzSeDp3kxkgM+WUu6A9AEYtZxpDGEC2v2XMBbAsct9GpInmSt2sVoBL6yCEpUWEm9QmNGLYf2sy7ruflykTUrg5dP1qn/gC4ryZIRymt/eetOe+ER3AB3Uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jybY+wgb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75BFEC2BCC6;
-	Mon, 18 May 2026 14:38:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779115094;
-	bh=U13AxQTGM+7Ye3teS4TDUAHOJKI686YxwQ4+ThF1HTE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jybY+wgb9F4GLQrxhgk6wQTwl6D4undXUBOCtXGLlgYAyTv4uXvDrDKZ+uyK4zkQg
-	 uTKFG+RU2c4/awcg0DNV/IruveP1o9Rp3ggJObK/AUJI+OSxX5zn6ghD31AG1deg2C
-	 FLdon8cIksBUCwaXa0oy307i+1z8sNRqrbshcyNo1lvtlNBISV86UrlSiKEdtLuP+T
-	 0SRIPedoUh1OrB8cI0qIP/CIJ5E4mTVV5wnjyHmLxnYOVi3dVo3KU10PvIUqBXeQTd
-	 CXIyt7/IB8IBMstIJaR5Y2wBI0OQsNaDcV5SFm5WBJGwLVXSSTUerrVUbEPHU4zeuY
-	 ijAma1YwfeKqQ==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1wOz6h-00000001Bft-3MNV;
-	Mon, 18 May 2026 16:38:11 +0200
-Date: Mon, 18 May 2026 16:38:11 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Cen Zhang <rollkingzzc@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	zerocling0077@gmail.com, 2045gemini@gmail.com
-Subject: Re: [PATCH] USB: serial: belkin_sa: validate interrupt status length
-Message-ID: <agskU46ts6au5LmQ@hovoldconsulting.com>
-References: <20260516042428.3777524-1-rollkingzzc@gmail.com>
- <agry2e2brte8W7U0@hovoldconsulting.com>
- <CAB7XQsGZg+wrSpCsjLXdZEsw2y9f73eNGOjYkbz_PLAbR1_C8g@mail.gmail.com>
+	s=arc-20240116; t=1779115622; c=relaxed/simple;
+	bh=krJyfzj5VdtS7Bxh0J2mCUhD6MzkZE/FcTmwSDHUg2M=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=YeotD6CQWQYmQL66bPKwucsrrprcfKoz+CH8v/yjyDaOEROOs/F6z+5HNo6WVoe0ozjOJgOB+3L8Hte4QZOcZM23Yq3d5KPCN4O4YHhhpLO3CQI7AT9p5dJWqSlFFB47Ts6JruXogDkO1ttGK5qxozk8GDIST++yppjQ4E/moFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=AEungQbb; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
+	In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=NbSMa48m70Oo2KhjQcOdBtQf0n81su0vOE/YeOaWNNA=; b=AEungQbbT72Qf4G1ZGJcH/jAF6
+	tVjUOm9pnwPfpSKClhMzLTU2Jo0F4WcgLna1iLsck31mEh1ok3mAmJnw5oenICSnKMLbvL6cw32jm
+	SOQSK40jI8GeZcRjHXp2Al0MbmMx6rUr2qd3yE8x0cH3jkC5XAc2u7dBLMK/at1+sSVDeAbM/1j80
+	LWgCbMHPUQQX+jhWTjQEd532DOBilimRobZ29TarShcznnQtVoBVUSOj2/fCT+5IyRYH9hNsedgeR
+	k/YNJ2J2T0TilrAWhrZ3/z24TVXDtYtE1+8IIxl7R0aSdknzZxssUbc7oHiKDgeG5DcK2ngp4BNSv
+	6w23NXUQ==;
+Received: from maestria.local.igalia.com ([192.168.10.14] helo=mail.igalia.com)
+	by fanzine2.igalia.com with esmtps 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1wOzF7-002g9Z-Lh; Mon, 18 May 2026 16:46:53 +0200
+Received: from webmail.service.igalia.com ([192.168.21.45])
+	by mail.igalia.com with esmtp (Exim)
+	id 1wOzF5-004xYy-K0; Mon, 18 May 2026 16:46:53 +0200
+Received: from localhost ([127.0.0.1] helo=webmail.igalia.com)
+	by webmail.service.igalia.com with esmtp (Exim 4.98.2)
+	(envelope-from <mfo@igalia.com>)
+	id 1wOzF4-00000002Azo-3uJJ;
+	Mon, 18 May 2026 16:46:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAB7XQsGZg+wrSpCsjLXdZEsw2y9f73eNGOjYkbz_PLAbR1_C8g@mail.gmail.com>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Date: Mon, 18 May 2026 11:46:51 -0300
+From: Mauricio Faria de Oliveira <mfo@igalia.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Matthieu CASTET <castet.matthieu@free.fr>, Stanislaw Gruszka
+ <stf_xl@wp.pl>, kernel-dev@igalia.com,
+ linux-atm-general@lists.sourceforge.net, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] usb: atm: ueagle-atm: add missing uea_leaves() in
+ uea_probe()
+In-Reply-To: <2026051657-scruffy-embark-45ea@gregkh>
+References: <20260515-ueagle-atm_cosmetic-v1-0-9a15e5e45bd7@igalia.com>
+ <20260515-ueagle-atm_cosmetic-v1-2-9a15e5e45bd7@igalia.com>
+ <2026051657-scruffy-embark-45ea@gregkh>
+Message-ID: <8d7b08e6931e570a984d086f06f07ccb@igalia.com>
+X-Sender: mfo@igalia.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Report: NO, Score=-2.2, Tests=ALL_TRUSTED=-3,BAYES_50=0.8
+X-Spam-Score: -21
+X-Spam-Bar: --
+X-Spamd-Result: default: False [-0.36 / 15.00];
+	R_DKIM_REJECT(1.00)[igalia.com:s=20170329];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37617-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37618-lists,linux-usb=lfdr.de];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FREEMAIL_CC(0.00)[free.fr,wp.pl,igalia.com,lists.sourceforge.net,vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[igalia.com:-];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[mfo@igalia.com,linux-usb@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,hovoldconsulting.com:mid]
-X-Rspamd-Queue-Id: 78C3956F421
+	RCPT_COUNT_SEVEN(0.00)[7];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,igalia.com:mid]
+X-Rspamd-Queue-Id: 0987656F38D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, May 18, 2026 at 09:39:49PM +0800, Cen Zhang wrote:
+On 2026-05-16 04:19, Greg Kroah-Hartman wrote:
+> On Fri, May 15, 2026 at 08:54:13PM -0300, Mauricio Faria de Oliveira wrote:
+>> Pair the existing uea_enters() (function entry debug message) with
+>> a missing uea_leaves() (function exit debug message) in uea_probe().
+> 
+> All of those should also be removed, we have function tracing if people
+> really need/want to see this info.
 
-> On Mon, May 18, 2026 at 01:07:05PM +0200, Johan Hovold wrote:
-> 
-> > How was this issue found? Are you using some kind of static checker or
-> > LLM?
-> 
-> The initial lead came from an LLM-assisted local audit, not from a
-> dedicated static checker. I then checked this path manually and validated
-> the issue under KASAN with a small dummy_hcd/raw_gadget setup.
-> 
-> The reproducer emulates a Belkin 050d:0103-compatible device with one
-> interrupt-in endpoint whose wMaxPacketSize is 3. After belkin_sa bound and
-> ttyUSB0 was opened once, the raw_gadget side completed 3-byte interrupt
-> packets.
-> 
-> The relevant part of the KASAN report as below:
-> 
-> BUG: KASAN: slab-out-of-bounds in belkin_sa_read_int_callback+0xd3/0x290
-> Read of size 1 at addr ffff8881029d2c43
+Agreed. I'll send an updated series based on your feedback. Thanks.
 
-Nice work. But please mention that this found with the help of an LLM in
-the commit message as documented in:
-
- - Documentation/process/submitting-patches.rst ("Using Assisted-by:")
- - Documentation/process/coding-assistants.rst
-
-> > You only need to verify urb->actual_length here (as actual_length <=
-> > transfer_buffer_length).
 > 
-> Agreed, thanks for pointing this out. I will send a v2 with the check
-> reduced to:
+> thanks,
 > 
-> if (urb->actual_length < BELKIN_SA_MSR_INDEX + 1)
-> goto exit;
-> 
-> and update the commit message accordingly.
+> greg k-h
 
-Sounds good, thanks.
-
-Johan
+-- 
+Mauricio
 
