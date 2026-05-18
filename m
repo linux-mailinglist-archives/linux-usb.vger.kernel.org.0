@@ -1,460 +1,248 @@
-Return-Path: <linux-usb+bounces-37561-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37563-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id xAxAOHkxCmpcxgQAu9opvQ
-	(envelope-from <linux-usb+bounces-37561-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 23:22:01 +0200
+	id kNX4Get0Cmq41gQAu9opvQ
+	(envelope-from <linux-usb+bounces-37563-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 04:09:47 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A970563F9F
-	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 23:22:01 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A42E5564ECD
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 04:09:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C39353003634
-	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2026 21:22:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7CCDD301F18F
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 02:09:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 508513101D0;
-	Sun, 17 May 2026 21:21:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p5XZ1M2c"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3102B261B92;
+	Mon, 18 May 2026 02:09:42 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from tpecef21.compal.com (exmail3.compal.com [59.120.207.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FEF2EC0A6
-	for <linux-usb@vger.kernel.org>; Sun, 17 May 2026 21:21:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A5F1F37D3;
+	Mon, 18 May 2026 02:09:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=59.120.207.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779052915; cv=none; b=KYO1ZBnIAtX82YYbuNnwbzp2pwrKQ5Tb9l5qdLED112SxCE8ga+U6EjcxiiI0TR+NP4bSeNhykOYxLMXkPSTs+vCuAvsGnNzlakRIEkw2eWt/jMFd5OSS/2f9j8c6RMV6bdvMEX4zfVZNTgeqC87NyM+ERbzkmG0wkNTMu6k1PY=
+	t=1779070181; cv=none; b=Po0ftrDBmL4/lO0m7Iprnllt4OkhvuSFCJQmR0DfdA/Dfrv9bnV4cBEsV4NNGNjkhIwhCrsDcrVXLHVmBSTlyDTga8JV5FDk2zad2C10usv7Osfl2+342qK+fbQ96QuywCeitNDqyEOlh1qQ4lgaVmOlNPiWcKN7ygBjyHvNtKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779052915; c=relaxed/simple;
-	bh=b6yLdFKopyjDfx4WQ3C6hq8Xo8sq+E0p6lNCXgLfYbQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=D3+H1MnF9y4DL6k45flc7g09L2C0staZKdyVFzk9h0fN5kmE7zLFWlwPXbB2qVfCQRYcfs4Rgz+/DhWq4DhLT2nlkvBGBOz8tcnekxUSU4yNnVQ84XOucFVyVg845Qoeu8CR+3IgXj0hiaJP9ZJn8vGGHiRpd2rPLihnr/wqsm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p5XZ1M2c; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48d146705b4so16719145e9.3
-        for <linux-usb@vger.kernel.org>; Sun, 17 May 2026 14:21:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779052912; x=1779657712; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=47iB118/0PzBRujH61PMBcnpDbponJHAi7Tbqe+j/Zw=;
-        b=p5XZ1M2cULdQiprPiupCg6Lz5TrkXDprEZaPHGSCBum314zmP8JNYrzqfZ6BfTxtSx
-         DGl/gnRMMAFPEbWfUVmdXbh+ZnhDLxN/jW6hMB6d07DAt8efYfqzPyQRPoHuSdqPhQ2k
-         tRH2fpsxPPhynyHJvPAvouXz6KkPuLdHxmfn2IkagG1CStK2u8nF6GXKVFiDUSIeOa+I
-         0741ifzUMb/j6nsRkX0Rqn2tANpvwCGPSxSxHxrvf/2ObZKajf47QZHjguDgpoC+wiaf
-         pJcq80yWCSJ71AcM7UfrQGfFxtxqz/o7Fum9VunE8ZbQBPMTTRimf+unTWnNGOgx2RvI
-         YRdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779052912; x=1779657712;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=47iB118/0PzBRujH61PMBcnpDbponJHAi7Tbqe+j/Zw=;
-        b=gfc94a0mlIiSaXzY3DZKqgbM4d5NC19l9JQO407AwiKxN6LRWVTO9cLmUr4Piivrjz
-         YaOWrZV6+9S9TeSnlZW7z8ROtud2dS8xJD3+FS5lGrh7NHgPau1cSkfub1dsBqhe3Iv+
-         udJxtTBoSp60mTdbsceEc/qM6uglf3TpTLRv8uIXeWNQKpplDxbj1YJrYUWSATuPXped
-         9T9w59WQZ7zQwJztxp2tCtF2ZQ9loFEUHicEiYKRbTJ56VHMR1vResgUDNTnV3o+Bzwv
-         yzwjbMgw7a9JkYijjDRkly+BZoJnLGWHF3PMsEJj35BsuvmynPxWTeWUuurH+f4pYC6K
-         9iJA==
-X-Forwarded-Encrypted: i=1; AFNElJ+CUCCkczRIXaN9nCHs8hl+wR20jx0fkglfSdQCggtv3HdbDtAd3QQiBxY0S+yKSCCAf+PkCg9W9W0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTeiAnt/BZzQJv2dubkHWS6kngFN4O010gExqi5YPsArTea2bL
-	Z0I0QJlGtigulF0RSmxy5WtbkrEp6g202E3e9euBzEbgrsB0X5QJFKOTcnxpqQ==
-X-Gm-Gg: Acq92OH+EdLfAdggMR5QS/xyB/6mxqxqaD4CtO0SzYtcIY1Me2w2O2KzbT7u0ZJP2KT
-	cG9Z64fecXNrYfMxpgcZJKeXivvogwqsh5wIo7lbFe4eYB2N6RHoZJzOXevQEMpHLtUE5a0EKDo
-	Dd6flvNp4IPDBub7zYOBszPfMo3jr3ZCk4QO9Ppr2FONs+uLfnaWh1pFlrvlv+x8wZJoiiAnxV6
-	ok+5PzAy+bDrxEisol+H1RHRRzESNNlxlFRcXBbhASXgU5ONiGALhKU2+ozrwSkeFbYqZRHj59p
-	TNYPy9bXNOWb7SRFmwA9Lyaet2WJsoIIEZEE85L2JLvQ14ZZu0UnVN8i/a1f3y9C8nVvqWunI5+
-	tHHpkk+sxJz5DRZhEv1zxsWjKTRSEnhRWXiUf8y8xcATbMAcYyAbSP9MO9RpmuqJqc2gesrxxn6
-	sIvY+O3X/rKXA7ZLI7k5mNyAZ2WWJariViNTAOSQHII2c=
-X-Received: by 2002:a05:600c:4fc9:b0:48e:706b:53e3 with SMTP id 5b1f17b1804b1-48fe60e51eamr169141375e9.1.1779052912227;
-        Sun, 17 May 2026 14:21:52 -0700 (PDT)
-Received: from foxbook (bfk48.neoplus.adsl.tpnet.pl. [83.28.48.48])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48febf80d04sm66981515e9.36.2026.05.17.14.21.50
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sun, 17 May 2026 14:21:51 -0700 (PDT)
-Date: Sun, 17 May 2026 23:21:47 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Jihong Min <hurryman2212@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Mathias Nyman
- <mathias.nyman@intel.com>, Guenter Roeck <linux@roeck-us.net>, Jonathan
- Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Mario
- Limonciello <mario.limonciello@amd.com>, Basavaraj Natikar
- <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, "Mario Limonciello
- (AMD)" <superm1@kernel.org>, Yaroslav Isakov <yaroslav.isakov@gmail.com>
-Subject: Re: [PATCH v6 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
-Message-ID: <20260517232147.34931718.michal.pecio@gmail.com>
-In-Reply-To: <20260517130407.795157-2-hurryman2212@gmail.com>
-References: <20260517130407.795157-1-hurryman2212@gmail.com>
-	<20260517130407.795157-2-hurryman2212@gmail.com>
+	s=arc-20240116; t=1779070181; c=relaxed/simple;
+	bh=rzoCcBQ8by8M5svA0axYj2TNGJGHdiXTF6Eg5lqDjb4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=I4K96OwVCeI01S5wwQPDnG3+9q6OmoCwyQbcgxqxygufedYqULMNmVztxG9gcmhD85vv52Blwx3TYtlhxVDuTfY5hL4k1AnRAKHVfJA6tN/tocRrENeroKF4uV3KTaJmeNgQV7lHgpuSwwRP18uEszB6wyTnp41EOHkALQSrf9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=compal.com; spf=pass smtp.mailfrom=compal.com; arc=none smtp.client-ip=59.120.207.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=compal.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=compal.com
+X-UUID: 7fdd8e9a525c11f18b9b2d0ef2884acc-20260518
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:deb77c85-37a7-467e-824f-bea035d0ab36,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:8cd37ce1-02d4-4065-accc-97789b7ab0e5,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102|836|850|865|888|898,TC:-5,Conten
+	t:0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,
+	OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 7fdd8e9a525c11f18b9b2d0ef2884acc-20260518
+Received: from sdmg12.sdbg.compal.com [(10.113.168.10)] by tpecef21.compal.com
+	(envelope-from <jackbb_wu@compal.com>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1976489773; Mon, 18 May 2026 09:54:26 +0800
+X-UUID: 7dc523c0525c11f1a42089d3d1632821-20260518
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.3,REQID:3143d83d-4197-4709-aa54-04bce10e0f5c,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:f1326cf,CLOUDID:d8d87ca4-a669-48ac-a1cb-3b38a93be682,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102|836|850|865|888|898,TC:-5,Conten
+	t:0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,
+	OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 7dc523c0525c11f1a42089d3d1632821-20260518
+Received: from sdbmbx12.tpe.compalcomm.com [(10.113.2.136)] by sdmg12.sdbg.compal.com
+	(envelope-from <jackbb_wu@compal.com>)
+	(Compal Mail Service with TLSv1.2 ECDHE-RSA-AES256-SHA 256/256)
+	with ESMTP id 2011231038; Mon, 18 May 2026 09:54:22 +0800
+Received: from SDBMBX13.tpe.compalcomm.com (10.113.2.137) by
+ SDBMBX12.tpe.compalcomm.com (10.113.2.136) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.2.2562.29;
+ Mon, 18 May 2026 09:54:18 +0800
+Received: from SDMR01.tpe.compalcomm.com (10.113.2.107) by
+ SDBMBX13.tpe.compalcomm.com (10.113.2.137) with Microsoft SMTP Server id
+ 15.2.2562.29 via Frontend Transport; Mon, 18 May 2026 09:54:18 +0800
+Received: from localhost ([10.113.70.1]) by SDMR01.tpe.compalcomm.com with Microsoft SMTPSVC(10.0.14393.4169);
+	 Mon, 18 May 2026 09:54:18 +0800
+From: Jack Wu <jackbb_wu@compal.com>
+To: Johan Hovold <johan@kernel.org>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] USB: serial: qcserial: add new usb-id for Dell Wireless DW5826e-m
+Date: Mon, 18 May 2026 09:54:18 +0800
+Message-ID: <20260518015418.327252-1-jackbb_wu@compal.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 7A970563F9F
+Content-Transfer-Encoding: quoted-printable
+X-OriginalArrivalTime: 18 May 2026 01:54:18.0496 (UTC) FILETIME=[3D143000:01DCE669]
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3239-9.1.2019-29950.003
+X-TM-AS-Result: No-10--1.503500-8.000000
+X-TMASE-MatchedRID: RtHHqK+8YWPJ+P2VFrJmrEkXVQaP16N5tGx+miwM7d3dC+Bs3HApSUmp
+	6+bNSfqBh/CVyipgEfZZrmOTQ1vpL63XYtsOH2/QRYNhzuZZjRDn0oaU6WM++yIeU+yFXn+49WS
+	TU5Hd4RnYeXOEzfM22Vztkif7r1iVJU0nG3tpe+D+pgwsOtbJY5K8CvXZ80MHrNSifc7aHXV9Su
+	bnPXCGzr5V40+3FpmWpmcL/Wp+R46LSBmdjXatOd9AsbFExCVPjOYqV6AKVU92dBWxz66y1/hdb
+	kKx5t5FQByVZYibFxpprHDlfzYAbSeCoNkC91GeUG9FuKxZE9E=
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--1.503500-8.000000
+X-TMASE-Version: SMEX-14.0.0.3239-9.1.2019-29950.003
+X-TM-SNTS-SMTP:
+	12807CBA57080A65C920DC2ADDB639E2662AF8F04D30F6D9C19F396EF9DCA7C52000:8
+X-Rspamd-Queue-Id: A42E5564ECD
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [2.04 / 15.00];
+	DMARC_POLICY_REJECT(2.00)[compal.com : SPF not aligned (relaxed), No valid DKIM,reject];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37561-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,intel.com,roeck-us.net,lwn.net,amd.com,vger.kernel.org,kernel.org,gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37563-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	NEURAL_HAM(-0.00)[-0.999];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[jackbb_wu@compal.com,linux-usb@vger.kernel.org];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	RCVD_COUNT_SEVEN(0.00)[8];
+	R_DKIM_NA(0.00)[];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On Sun, 17 May 2026 22:04:06 +0900, Jihong Min wrote:
-> AMD Promontory 21 (PROM21) xHCI controllers use generic xHCI
-> operation, but the PCI function also exposes optional
-> controller-specific sensor functionality. Add a small PROM21 PCI glue
-> driver for AMD 1022:43fc and 1022:43fd controllers.
-> 
-> The driver delegates USB host operation to the common xhci-pci core,
-> collects the parent-provided MMIO resource data, and creates a "hwmon"
-> auxiliary device for optional child drivers. Failure to create the
-> auxiliary device is logged but does not fail the xHCI probe, since the
-> auxiliary device is only needed for sensor support.
-> 
-> Make the PROM21 PCI glue a hidden Kconfig tristate that follows
-> USB_XHCI_PCI. This keeps the glue built in with a built-in xhci-pci core
-> and builds it as a module with a modular xhci-pci core. A built-in
-> xhci-pci core must not hand PROM21 controllers to a PROM21 glue driver
-> that is only available as a module, otherwise USB behind those controllers
-> can be unavailable during initramfs and PROM21 temperature sensor support
-> may not appear until the controller is rebound after the module loads.
-> 
-> Assisted-by: Codex:gpt-5.5
-> Signed-off-by: Jihong Min <hurryman2212@gmail.com>
-> Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
-> Tested-by: Yaroslav Isakov <yaroslav.isakov@gmail.com>
-> ---
->  drivers/usb/host/Kconfig                      |   7 +
->  drivers/usb/host/Makefile                     |   1 +
->  drivers/usb/host/xhci-pci-prom21.c            | 136 ++++++++++++++++++
->  drivers/usb/host/xhci-pci.c                   |  11 ++
->  drivers/usb/host/xhci-pci.h                   |   3 +
->  include/linux/platform_data/usb-xhci-prom21.h |  22 +++
->  6 files changed, 180 insertions(+)
->  create mode 100644 drivers/usb/host/xhci-pci-prom21.c
->  create mode 100644 include/linux/platform_data/usb-xhci-prom21.h
-> 
-> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-> index 0a277a07cf70..89bf262235e1 100644
-> --- a/drivers/usb/host/Kconfig
-> +++ b/drivers/usb/host/Kconfig
-> @@ -42,6 +42,13 @@ config USB_XHCI_PCI
->  	depends on USB_PCI
->  	default y
->  
-> +config USB_XHCI_PCI_PROM21
-> +	tristate
-> +	depends on X86
-> +	depends on USB_XHCI_PCI
-> +	default USB_XHCI_PCI
-> +	select AUXILIARY_BUS
-> +
+Add support for Dell DW5826e-m with USB-id 0x413c:0x81ea & 0x413c:0x81eb.
 
-Instead of the X86 heuristic, would it be possible to build glue
-code if and only if SENSORS_PROM21_XHCI is enabled?
+It is 0x413c:0x81ea
+T:  Bus=3D02 Lev=3D01 Prnt=3D01 Port=3D05 Cnt=3D01 Dev#=3D110 Spd=3D480  Mx=
+Ch=3D 0
+D:  Ver=3D 2.10 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
+P:  Vendor=3D413c ProdID=3D81ea Rev=3D 5.04
+S:  Manufacturer=3DDELL
+S:  Product=3DDW5826e-m Qualcomm Snapdragon X12 Global LTE-A
+S:  SerialNumber=3D358988870177734
+C:* #Ifs=3D 7 Cfg#=3D 1 Atr=3Da0 MxPwr=3D500mA
+A:  FirstIf#=3D12 IfCount=3D 2 Cls=3D02(comm.) Sub=3D0e Prot=3D00
+I:* If#=3D 0 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3D30 Driver=
+=3Dqcserial
+E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+I:* If#=3D 1 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3D42 Prot=3D01 Driver=
+=3Dusbfs
+E:  Ad=3D02(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+E:  Ad=3D82(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+I:* If#=3D 2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D60 Driver=
+=3Dqcserial
+E:  Ad=3D84(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
+E:  Ad=3D83(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+E:  Ad=3D03(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+I:* If#=3D 3 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D40 Driver=
+=3Dqcserial
+E:  Ad=3D86(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
+E:  Ad=3D85(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+E:  Ad=3D04(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+I:* If#=3D 4 Alt=3D 0 #EPs=3D 1 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
+=3D(none)
+E:  Ad=3D87(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D32ms
+I:* If#=3D12 Alt=3D 0 #EPs=3D 1 Cls=3D02(comm.) Sub=3D0e Prot=3D00 Driver=
+=3Dcdc_mbim
+E:  Ad=3D88(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D32ms
+I:  If#=3D13 Alt=3D 0 #EPs=3D 0 Cls=3D0a(data ) Sub=3D00 Prot=3D02 Driver=
+=3Dcdc_mbim
+I:* If#=3D13 Alt=3D 1 #EPs=3D 2 Cls=3D0a(data ) Sub=3D00 Prot=3D02 Driver=
+=3Dcdc_mbim
+E:  Ad=3D8e(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+E:  Ad=3D0f(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
 
-This seems to work:
+It is 0x413c:0x81eb
+T:  Bus=3D02 Lev=3D01 Prnt=3D01 Port=3D05 Cnt=3D01 Dev#=3D109 Spd=3D480  Mx=
+Ch=3D 0
+D:  Ver=3D 2.10 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D64 #Cfgs=3D  1
+P:  Vendor=3D413c ProdID=3D81eb Rev=3D 0.00
+S:  Manufacturer=3DDELL
+S:  Product=3DDW5826e-m Qualcomm Snapdragon X12 Global LTE-A
+S:  SerialNumber=3D358988870177734
+C:* #Ifs=3D 1 Cfg#=3D 1 Atr=3Da0 MxPwr=3D  2mA
+I:* If#=3D 0 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
+=3Dqcserial
+E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
 
- config SENSORS_PROM21_XHCI
-        tristate "AMD Promontory 21 xHCI temperature sensor"
--       depends on USB_XHCI_PCI_PROM21
-+       depends on USB_XHCI_PCI
+Signed-off-by: Jack Wu <jackbb_wu@compal.com>
+---
+v2:
+  -sorted by PID and add the newline separator before the Huawei devices.
+---
+---
+ drivers/usb/serial/qcserial.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- config USB_XHCI_PCI_PROM21
-        tristate
--       depends on X86
-        depends on USB_XHCI_PCI
--       default USB_XHCI_PCI
-+       default USB_XHCI_PCI if SENSORS_PROM21_XHCI != 'n'
-        select AUXILIARY_BUS
+diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+index 1a930dc668e4..bb1647a17066 100644
+--- a/drivers/usb/serial/qcserial.c
++++ b/drivers/usb/serial/qcserial.c
+@@ -186,9 +186,11 @@ static const struct usb_device_id id_table[] =3D {
+        {DEVICE_SWI(0x413c, 0x81d0)},   /* Dell Wireless 5819 */
+        {DEVICE_SWI(0x413c, 0x81d1)},   /* Dell Wireless 5818 */
+        {DEVICE_SWI(0x413c, 0x81d2)},   /* Dell Wireless 5818 */
++       {DEVICE_SWI(0x413c, 0x81ea)},   /* Dell Wireless DW5826e-m */
++       {DEVICE_SWI(0x413c, 0x81eb)},   /* Dell Wireless DW5826e-m QDL */
+        {DEVICE_SWI(0x413c, 0x8217)},   /* Dell Wireless DW5826e */
+        {DEVICE_SWI(0x413c, 0x8218)},   /* Dell Wireless DW5826e QDL */
+-
++
+        /* Huawei devices */
+        {DEVICE_HWI(0x03f0, 0x581d)},   /* HP lt4112 LTE/HSPA+ Gobi 4G Mode=
+m (Huawei me906e) */
 
-I don't know if it's the best way, perhaps it would be preferable for
-the hwmon driver to select the glue, but then I'm not sure how to force
-glue to become 'y' when xhci-pci is 'y'.
+--
+2.34.1
 
->  config USB_XHCI_PCI_RENESAS
->  	tristate "Support for additional Renesas xHCI controller with firmware"
->  	depends on USB_XHCI_PCI
-> diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
-> index a07e7ba9cd53..174580c1281a 100644
-> --- a/drivers/usb/host/Makefile
-> +++ b/drivers/usb/host/Makefile
-> @@ -71,6 +71,7 @@ obj-$(CONFIG_USB_UHCI_HCD)	+= uhci-hcd.o
->  obj-$(CONFIG_USB_FHCI_HCD)	+= fhci.o
->  obj-$(CONFIG_USB_XHCI_HCD)	+= xhci-hcd.o
->  obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o
-> +obj-$(CONFIG_USB_XHCI_PCI_PROM21)	+= xhci-pci-prom21.o
->  obj-$(CONFIG_USB_XHCI_PCI_RENESAS)	+= xhci-pci-renesas.o
->  obj-$(CONFIG_USB_XHCI_PLATFORM) += xhci-plat-hcd.o
->  obj-$(CONFIG_USB_XHCI_HISTB)	+= xhci-histb.o
-> diff --git a/drivers/usb/host/xhci-pci-prom21.c b/drivers/usb/host/xhci-pci-prom21.c
-> new file mode 100644
-> index 000000000000..be0933ca5c62
-> --- /dev/null
-> +++ b/drivers/usb/host/xhci-pci-prom21.c
-> @@ -0,0 +1,136 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * AMD Promontory 21 xHCI host controller PCI Bus Glue.
-> + *
-> + * This does not add any PROM21-specific USB or xHCI operation. It exists only
-> + * to publish an auxiliary device for integrated temperature sensor support.
-> + *
-> + * Copyright (C) 2026 Jihong Min <hurryman2212@gmail.com>
-> + */
-> +
-> +#include <linux/auxiliary_bus.h>
-> +#include <linux/device/devres.h>
-> +#include <linux/errno.h>
-> +#include <linux/idr.h>
-> +#include <linux/module.h>
-> +#include <linux/pci.h>
-> +#include <linux/platform_data/usb-xhci-prom21.h>
-> +#include <linux/usb.h>
-> +#include <linux/usb/hcd.h>
-> +
-> +#include "xhci-pci.h"
-> +
-> +struct prom21_xhci_auxdev {
-> +	struct auxiliary_device *auxdev;
-> +	struct prom21_xhci_pdata pdata;
-> +	int id;
-> +};
-> +
-> +static DEFINE_IDA(prom21_xhci_auxdev_ida);
-> +
-> +static void prom21_xhci_auxdev_release(struct device *dev, void *res)
-> +{
-> +	struct prom21_xhci_auxdev *prom21_auxdev = res;
-> +
-> +	auxiliary_device_destroy(prom21_auxdev->auxdev);
-> +	ida_free(&prom21_xhci_auxdev_ida, prom21_auxdev->id);
-> +}
-> +
-> +static int prom21_xhci_create_auxdev(struct pci_dev *pdev)
-> +{
-> +	struct prom21_xhci_auxdev *prom21_auxdev;
-> +	struct usb_hcd *hcd = pci_get_drvdata(pdev);
-> +
-> +	if (!hcd)
-> +		return -ENODEV;
 
-Shouldn't be necessary after successful xhci_pci_common_probe().
 
-> +
-> +	prom21_auxdev = devres_alloc(prom21_xhci_auxdev_release,
-> +				     sizeof(*prom21_auxdev), GFP_KERNEL);
-> +	if (!prom21_auxdev)
-> +		return -ENOMEM;
-> +
-> +	prom21_auxdev->pdata.pdev = pdev;
-> +	prom21_auxdev->pdata.regs = hcd->regs;
-> +	prom21_auxdev->pdata.rsrc_len = hcd->rsrc_len;
-> +
-> +	prom21_auxdev->id = ida_alloc(&prom21_xhci_auxdev_ida, GFP_KERNEL);
-> +	if (prom21_auxdev->id < 0) {
-> +		int ret = prom21_auxdev->id;
-> +
-> +		devres_free(prom21_auxdev);
-> +		return ret;
-> +	}
-> +
-> +	prom21_auxdev->auxdev = auxiliary_device_create(&pdev->dev,
-> +							KBUILD_MODNAME, "hwmon",
-> +							&prom21_auxdev->pdata,
-> +							prom21_auxdev->id);
-> +	if (!prom21_auxdev->auxdev) {
-> +		ida_free(&prom21_xhci_auxdev_ida, prom21_auxdev->id);
-> +		devres_free(prom21_auxdev);
-> +		return -ENOMEM;
-
-The usual "goto error" pattern could be used instead of increasingly
-long sequences of xxx_free() calls.
-
-> +	}
-> +
-> +	devres_add(&pdev->dev, prom21_auxdev);
-> +	return 0;
-> +}
-> +
-> +static void prom21_xhci_destroy_auxdev(struct pci_dev *pdev)
-> +{
-> +	devres_release(&pdev->dev, prom21_xhci_auxdev_release, NULL, NULL);
-> +}
-> +
-
-It seems that these three functions above are everything that you truly
-want to add; the rest is boilerplate required by this two-module scheme
-to work, plus ID tables which must be duplicated and kept in sync.
-
-I wonder if a separate module is really justified, as opposed to simply
-linking this file into xhci_pci.ko when directed by Kconfig.
-
-The downside would be slightly higher memory usage on systems where the
-hwmon driver is enabled but not needed. OTOH, same systems would likely
-see reduced disk waste.
-
-> +static int prom21_xhci_probe(struct pci_dev *dev,
-> +			     const struct pci_device_id *id)
-> +{
-> +	int retval;
-> +
-> +	retval = xhci_pci_common_probe(dev, id);
-> +	if (retval)
-> +		return retval;
-> +
-> +	retval = prom21_xhci_create_auxdev(dev);
-> +	if (retval) {
-> +		/*
-> +		 * The auxiliary device only provides optional temperature sensor
-> +		 * support. Keep the xHCI controller usable if it fails.
-> +		 */
-> +		dev_err(&dev->dev,
-> +			"failed to create PROM21 hwmon auxiliary device: %d\n",
-> +			retval);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void prom21_xhci_remove(struct pci_dev *dev)
-> +{
-> +	prom21_xhci_destroy_auxdev(dev);
-> +	xhci_pci_remove(dev);
-> +}
-> +
-> +static const struct pci_device_id pci_ids[] = {
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_PROM21_XHCI_43FC) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_PROM21_XHCI_43FD) },
-> +	{ /* end: all zeroes */ }
-> +};
-> +MODULE_DEVICE_TABLE(pci, pci_ids);
-> +
-> +static struct pci_driver prom21_xhci_driver = {
-> +	.name = "xhci-pci-prom21",
-> +	.id_table = pci_ids,
-> +
-> +	.probe = prom21_xhci_probe,
-> +	.remove = prom21_xhci_remove,
-> +
-> +	.shutdown = usb_hcd_pci_shutdown,
-> +	.driver = {
-> +		.pm = pm_ptr(&usb_hcd_pci_pm_ops),
-> +	},
-> +};
-> +module_pci_driver(prom21_xhci_driver);
-> +
-> +MODULE_AUTHOR("Jihong Min <hurryman2212@gmail.com>");
-> +MODULE_DESCRIPTION("AMD Promontory 21 xHCI PCI Host Controller Driver");
-> +MODULE_IMPORT_NS("xhci");
-> +MODULE_LICENSE("GPL");
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 585b2f3117b0..039c26b241d0 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -696,12 +696,23 @@ static const struct pci_device_id pci_ids_renesas[] = {
->  	{ /* end: all zeroes */ }
->  };
->  
-> +/* handled by xhci-pci-prom21 if enabled */
-> +static const struct pci_device_id pci_ids_prom21[] = {
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_PROM21_XHCI_43FC) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_PROM21_XHCI_43FD) },
-> +	{ /* end: all zeroes */ }
-> +};
-> +
->  static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  {
->  	if (IS_ENABLED(CONFIG_USB_XHCI_PCI_RENESAS) &&
->  			pci_match_id(pci_ids_renesas, dev))
->  		return -ENODEV;
->  
-> +	if (IS_ENABLED(CONFIG_USB_XHCI_PCI_PROM21) &&
-> +	    pci_match_id(pci_ids_prom21, dev))
-> +		return -ENODEV;
-> +
->  	return xhci_pci_common_probe(dev, id);
->  }
->  
-> diff --git a/drivers/usb/host/xhci-pci.h b/drivers/usb/host/xhci-pci.h
-> index e87c7d9d76b8..11f435f94322 100644
-> --- a/drivers/usb/host/xhci-pci.h
-> +++ b/drivers/usb/host/xhci-pci.h
-> @@ -4,6 +4,9 @@
->  #ifndef XHCI_PCI_H
->  #define XHCI_PCI_H
->  
-> +#define PCI_DEVICE_ID_AMD_PROM21_XHCI_43FC	0x43fc
-> +#define PCI_DEVICE_ID_AMD_PROM21_XHCI_43FD	0x43fd
-> +
->  int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id);
->  void xhci_pci_remove(struct pci_dev *dev);
->  
-> diff --git a/include/linux/platform_data/usb-xhci-prom21.h b/include/linux/platform_data/usb-xhci-prom21.h
-> new file mode 100644
-> index 000000000000..ee672ad452a8
-> --- /dev/null
-> +++ b/include/linux/platform_data/usb-xhci-prom21.h
-> @@ -0,0 +1,22 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * AMD Promontory 21 xHCI auxiliary device platform data.
-> + *
-> + * Copyright (C) 2026 Jihong Min <hurryman2212@gmail.com>
-> + */
-> +
-> +#ifndef _LINUX_PLATFORM_DATA_USB_XHCI_PROM21_H
-> +#define _LINUX_PLATFORM_DATA_USB_XHCI_PROM21_H
-> +
-> +#include <linux/compiler_types.h>
-> +#include <linux/types.h>
-> +
-> +struct pci_dev;
-> +
-> +struct prom21_xhci_pdata {
-> +	struct pci_dev *pdev;
-> +	void __iomem *regs;
-> +	resource_size_t rsrc_len;
-> +};
-> +
-> +#endif
-> -- 
-> 2.53.0
-> 
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+This message may contain information which is private, privileged or confid=
+ential of Compal Electronics, Inc. If you are not the intended recipient of=
+ this message, please notify the sender and destroy/delete the message. Any=
+ review, retransmission, dissemination or other use of, or taking of any ac=
+tion in reliance upon this information, by persons or entities other than t=
+he intended recipient is prohibited.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
