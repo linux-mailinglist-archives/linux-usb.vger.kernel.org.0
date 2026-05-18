@@ -1,69 +1,69 @@
-Return-Path: <linux-usb+bounces-37586-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37585-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IHT3N1raCmoA8wQAu9opvQ
-	(envelope-from <linux-usb+bounces-37586-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 11:22:34 +0200
+	id iJT3MVHaCmoA8wQAu9opvQ
+	(envelope-from <linux-usb+bounces-37585-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 11:22:25 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F770569951
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 11:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F221B569938
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 11:22:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 068AC304BD81
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 09:19:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 74886304704C
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 09:19:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC0EA3E3146;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 003C23E5594;
 	Mon, 18 May 2026 09:19:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="Hz613ICk"
+	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="gqUkJ+Pj"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819573E3155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818B63E3146
 	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 09:18:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.130.44.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779095942; cv=none; b=ckOQw94mpQRn5C5FyfK2nVx8lHvZ4G0v5M/XPqdZIy4E0VtJSnBaoYqRrZgpND7VsUjc5rco6OgAArJpbNcyLUNqroDgU34+Ym0nklCSgLJv0jxjo5vQ8bV7SHlKE+vkAaIVfmuD6qiWKh4T+3MCP8R4MtDJelwjDwmVyTy9uM4=
+	t=1779095941; cv=none; b=jlrqAN8oI3OVdIeNBt05eRcjssFj9ZsYopPUz5rS96wI6AbT3JvdS1z1UJMdW+aymP2eg8EY0tkzFibwXIcOHhcB68HAEwnAPHYt9gHPzR1qO00bVaGrj1mLRw+10L4qNem/8InCS26aU73bt13XXFFYhT7NBE4TeXy+vvcVQ9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779095942; c=relaxed/simple;
-	bh=qTjf5MEBrsBEeZzbSZRx8h9kU7ecbQL0NIW1Z+mdao0=;
+	s=arc-20240116; t=1779095941; c=relaxed/simple;
+	bh=f/dSgibT8KvEXPmuAwCKh+9fty5IMG3gQFDEWnkedhg=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=odKXiE5rYNdLHtQ2CUWkOD6mqgQHEnEhC8CPxF9j+opyQHnb3dNETpJYtay0nn4v/AVFaOyQcx7bQOXXJ5y8gH5XmcpVQm8OwkGhTqumLWOG6p0W9Ahu1vU2+AUgH5s9iP+1KSl4T8qWgFCs35lzPpwXTBHTeuHDKzyumAxdpuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com; spf=pass smtp.mailfrom=richtek.com; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=Hz613ICk; arc=none smtp.client-ip=220.130.44.152
+	 MIME-Version:Content-Type; b=Bo/cYMVeirK27GwSbpb9RInMBrYnCBxfpODuOcy8OQVNleFn4zVBRbehOVxdUqGLLhksPvii+1tQWyVGipXA1FlFB1//bsh3aqmiPJAoJASZ0R4yZnAT2rO1l59WgQtp6JkwTZ2ILDisgYxHRzzFcmtZTgi428BwQsdWsfukdUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com; spf=pass smtp.mailfrom=richtek.com; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=gqUkJ+Pj; arc=none smtp.client-ip=220.130.44.152
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=richtek.com
 X-MailGates: (SIP:2,PASS,NONE)(compute_score:DELIVER,40,3)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=richtek.com;
 	s=richtek; t=1779095936;
-	bh=b9Xom/yVmQ1rXJdvyFv4DAQzlgu6E3vq/lWxeia0LLU=; l=2442;
+	bh=0xIC587eU99hBfkhpGjvhEkLQJobTcVlEZs/7KP5eAE=; l=1826;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=Hz613ICkhuMgcIAxpGNMulxGhOlnfJ/qgM17vVwoITw2GWtHlc12P6STonGOE0RrZ
-	 hl+4T9n/8PCL6bfYH1kfZCRCnRFNS2RmN3FLQtBYm5X2fRNMP8eAuFeR4YLYOqAdCo
-	 /Nzslh7ZtOE0WYVwR3O7bpz4xFm45HT7G+4KTd+SHQmBPifDxIl/m+XEl0s149XhQ4
-	 k7CzVAHCFYPwSwli73ckBvMPE83hpXJ32nClZc6EBSsn1KRgNZoSO1SNTdusGKuQIz
-	 Dmrz1uK+f3DikjI/Me5asWE0kx5GLI7QAhwWpNVbXR/e4Ybvm4G+zG6aPWzIStZqIO
-	 2a0tNPF8Y+9Wg==
-Received: from 192.168.10.46
-	by mg.richtek.com with MailGates ESMTPS Server V6.0(1227036:0:AUTH_RELAY)
+	b=gqUkJ+PjowMHUTPaEcc4foyCnPwBMwV27GUp2q9VRUxmvS7Cm85mWDAIVJTay+1q3
+	 O8nLy61tVRECey11QHRgVyjQ+CWSKw/Xv9G0+p7x2/d+PzMeUa81vAnkcgNcESiy6h
+	 UNyhORGM/CNEI9V0QghCxDARkTYZ85QUtw8jum8Fyk4Ou6uTsuY72FaVD6u7go8ESB
+	 26sv9M9oBGc9pDnW9FBNi2Mzixiqogpc2jehZ3u86PiwJkMJOJfJOM6/aBIboZ3f5N
+	 /fXijBtoaqgFoKn85gPMcCa3GswtFl+oRME11ezOqTYrs/sLgLTSo5pqvBT+LJ7Nr7
+	 e++/3Ayp2VBuw==
+Received: from 192.168.10.47
+	by mg.richtek.com with MailGates ESMTPS Server V6.0(1227027:0:AUTH_RELAY)
 	(envelope-from <cy_huang@richtek.com>)
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256); Mon, 18 May 2026 17:18:55 +0800 (CST)
-Received: from ex3.rt.l (192.168.10.46) by ex3.rt.l (192.168.10.46) with
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256); Mon, 18 May 2026 17:18:56 +0800 (CST)
+Received: from ex3.rt.l (192.168.10.46) by ex4.rt.l (192.168.10.47) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.26; Mon, 18 May
- 2026 17:18:54 +0800
+ 2026 17:18:56 +0800
 Received: from git-send.richtek.com (192.168.10.154) by ex3.rt.l
  (192.168.10.45) with Microsoft SMTP Server id 15.2.1748.26 via Frontend
- Transport; Mon, 18 May 2026 17:18:54 +0800
+ Transport; Mon, 18 May 2026 17:18:56 +0800
 From: <cy_huang@richtek.com>
 To: <linux-usb@vger.kernel.org>
 CC: <badhri@google.com>, <heikki.krogerus@linux.intel.com>,
 	<gregkh@linuxfoundation.org>, <lucas_tsai@richtek.com>,
 	<cy_huang@richtek.com>, <ren_chen@richtek.com>, <kevin_hung@richtek.com>
-Subject: [PATCH 2/3] usb: typec: tcpci: add low power mode support
-Date: Mon, 18 May 2026 17:15:13 +0800
-Message-ID: <20260518091513.3277975-4-cy_huang@richtek.com>
+Subject: [PATCH 3/3] usb: typec: tcpci_rt1711h: add low power mode support
+Date: Mon, 18 May 2026 17:15:14 +0800
+Message-ID: <20260518091513.3277975-5-cy_huang@richtek.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20260518091513.3277975-2-cy_huang@richtek.com>
 References: <20260518091513.3277975-2-cy_huang@richtek.com>
@@ -75,7 +75,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Rspamd-Queue-Id: 1F770569951
+X-Rspamd-Queue-Id: F221B569938
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
@@ -83,11 +83,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[richtek.com,quarantine];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[richtek.com:s=richtek];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37586-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37585-lists,linux-usb=lfdr.de];
 	FROM_NEQ_ENVFROM(0.00)[cy_huang@richtek.com,linux-usb@vger.kernel.org];
 	TO_DN_NONE(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
@@ -108,64 +108,55 @@ X-Rspamd-Action: no action
 From: Lucas Tsai <lucas_tsai@richtek.com>
 
 Add low power mode support,
-due to no standard about low power mode in TCPCI Spec,
-handle vendor low power mode currently.
+add the op to enter and exit low power mode,
+this mode reduce RT1711H/RT1715 VDD Iq to 1 of 10,
+while disabling VBUS detection and PD BMC
+but keeping CC detection and not affecting DRP toggling.
 
 Signed-off-by: Lucas Tsai <lucas_tsai@richtek.com>
 ---
- drivers/usb/typec/tcpm/tcpci.c | 9 +++++++++
- include/linux/usb/tcpci.h      | 4 ++++
- 2 files changed, 13 insertions(+)
+ drivers/usb/typec/tcpm/tcpci_rt1711h.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index 0148b8f50412..8f6df4c708f5 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -227,6 +227,14 @@ static int tcpci_start_toggling(struct tcpc_dev *tcpc,
- 			    TCPC_CMD_LOOK4CONNECTION);
+diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+index 4b3e4e22a82e..48d6a6823ab9 100644
+--- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
++++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+@@ -20,6 +20,7 @@
+ 
+ #define RT1711H_PHYCTRL1	0x80
+ #define RT1711H_PHYCTRL2	0x81
++#define RT1711H_BMCCTRL		0x90
+ 
+ #define RT1711H_RTCTRL4		0x93
+ /* rx threshold of rd/rp: 1b0 for level 0.4V/0.7V, 1b1 for 0.35V/0.75V */
+@@ -254,6 +255,18 @@ static int rt1711h_start_drp_toggling(struct tcpci *tcpci,
+ 	return 0;
  }
  
-+static void tcpci_set_low_power_mode(struct tcpc_dev *tcpc, bool enable)
++static void rt1711h_set_low_power_mode(struct tcpci *tcpci,
++				       struct tcpci_data *tdata, bool enable)
 +{
-+	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
++	int ret;
++	struct rt1711h_chip *chip = tdata_to_rt1711h(tdata);
 +
-+	if (tcpci->data->set_low_power_mode)
-+		tcpci->data->set_low_power_mode(tcpci, tcpci->data, enable);
++	ret = rt1711h_write8(chip, RT1711H_BMCCTRL, enable ? 0x08 : 0x07);
++	if (ret < 0)
++		dev_err(chip->dev, "%s lpm fail(%d)\n",
++			enable ? "enter" : "exit", ret);
 +}
 +
- static int tcpci_get_cc(struct tcpc_dev *tcpc,
- 			enum typec_cc_status *cc1, enum typec_cc_status *cc2)
+ static irqreturn_t rt1711h_irq(int irq, void *dev_id)
  {
-@@ -857,6 +865,7 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
- 	tcpci->tcpc.set_polarity = tcpci_set_polarity;
- 	tcpci->tcpc.set_vconn = tcpci_set_vconn;
- 	tcpci->tcpc.start_toggling = tcpci_start_toggling;
-+	tcpci->tcpc.set_low_power_mode = tcpci_set_low_power_mode;
- 
- 	tcpci->tcpc.set_pd_rx = tcpci_set_pd_rx;
- 	tcpci->tcpc.set_roles = tcpci_set_roles;
-diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
-index f7f5cfbdef12..0ecf11b7b8f2 100644
---- a/include/linux/usb/tcpci.h
-+++ b/include/linux/usb/tcpci.h
-@@ -177,6 +177,8 @@ struct tcpci;
- /*
-  * @TX_BUF_BYTE_x_hidden:
-  *		optional; Set when TX_BUF_BYTE_x can only be accessed through I2C_WRITE_BYTE_COUNT.
-+ * @set_low_power_mode:
-+ *		Optional; Callback to enter or exit low power mode.
-  * @frs_sourcing_vbus:
-  *		Optional; Callback to perform chip specific operations when FRS
-  *		is sourcing vbus.
-@@ -221,6 +223,8 @@ struct tcpci_data {
- 			 bool enable);
- 	int (*start_drp_toggling)(struct tcpci *tcpci, struct tcpci_data *data,
- 				  enum typec_cc_status cc);
-+	void (*set_low_power_mode)(struct tcpci *tcpci, struct tcpci_data *data,
-+				   bool enable);
- 	int (*set_vbus)(struct tcpci *tcpci, struct tcpci_data *data, bool source, bool sink);
- 	void (*frs_sourcing_vbus)(struct tcpci *tcpci, struct tcpci_data *data);
- 	void (*set_partner_usb_comm_capable)(struct tcpci *tcpci, struct tcpci_data *data,
+ 	int ret;
+@@ -336,6 +349,7 @@ static int rt1711h_probe(struct i2c_client *client)
+ 	chip->data.set_vbus = rt1711h_set_vbus;
+ 	chip->data.set_vconn = rt1711h_set_vconn;
+ 	chip->data.start_drp_toggling = rt1711h_start_drp_toggling;
++	chip->data.set_low_power_mode = rt1711h_set_low_power_mode;
+ 	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
+ 	if (IS_ERR_OR_NULL(chip->tcpci))
+ 		return PTR_ERR(chip->tcpci);
 -- 
 2.43.0
 
