@@ -1,275 +1,278 @@
-Return-Path: <linux-usb+bounces-37582-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37583-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6K4hFe3QCmru8QQAu9opvQ
-	(envelope-from <linux-usb+bounces-37582-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 10:42:21 +0200
+	id qJuRAuPZCmoA8wQAu9opvQ
+	(envelope-from <linux-usb+bounces-37583-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 11:20:35 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB1C8569078
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 10:42:20 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC0035698D7
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 11:20:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B01B0300C58F
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 08:41:39 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 97D4A3078705
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 09:13:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 538FC3E2AD5;
-	Mon, 18 May 2026 08:41:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 585623E51ED;
+	Mon, 18 May 2026 09:13:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NB6gSVWy"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Rc8gMTDY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59FAC3E121A
-	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 08:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60AD93E3C60
+	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 09:13:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.169
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779093698; cv=pass; b=poX6RD4wlS52k+T72bRaqlBU4waU8tdyIUNJw6cyxrfGaFHuS127T6y4o6PE7kMLquU/Zv73O7YU/3Dxu99l1d1MEOlmQ0jjkdcHlbT00NDclvEKAQqG4Uhx+31MKkuG06UtbtIswWMakN1BLH9D7de1yrvuO86r9ZCCmC06PQI=
+	t=1779095620; cv=pass; b=lx6vNzs03FxuyX8GmpyufAZzVBsZfRqryodMGQ4x3jRXQf51hg3EWI21xCjyAabWcId42uiZ4fFSEiXjJTOADCWO0/voESCyiFDc+d+tg3qtjjUoZF+Zow8wpXWdYUM7CyKjuPbgftiWaUhziu6Epnchykz3xBKFV/de1WL806Q=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779093698; c=relaxed/simple;
-	bh=OEeBuM2geI8k9VDeShg+CBoWPAm6ZOz7U4Do6PQeKJU=;
+	s=arc-20240116; t=1779095620; c=relaxed/simple;
+	bh=kw2FaFkRYggKmHsD3zbceTzDrnmQSt6sP83wo4d+5i0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gNjj5hB/eTytJxXQa+T+jdDJlyVKEI7x4mFc28WLUaJ6izEAJeCz9rgJkzZpaI/Ywyux7LcmBBxUqOm37MkycJAwp2yOHfFOYw2vO+vq+Uhp0B3PDwdgIe31taFoFhLkx9l+i1pVwG3FfqTvmURYF0gCv14EgVEQ190vQvLh5X4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NB6gSVWy; arc=pass smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-39556b00a85so19114171fa.0
-        for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 01:41:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779093695; cv=none;
+	 To:Cc:Content-Type; b=f8iWTXnsPGzOJCZZFvim0ut0cF+tAy7BDxkXPsxqIr6aZ4ThbCVH2Kt2CZQe7vZB57c8DpAMfSULEoKrspsGp7W69taoY72e/2w4jDkOkMEC0I0eBk66BjkDYOMvYsKBFe9giq4N1cIytNXbz/TnvZPOxunyxC8iRZM+BT1LyIQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Rc8gMTDY; arc=pass smtp.client-ip=209.85.208.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-393925cb1baso24477171fa.0
+        for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 02:13:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779095618; cv=none;
         d=google.com; s=arc-20240605;
-        b=X54EHIm6U7XgBVzDXUzoSb4kV1EljadpVC0ERltdEnQWPJBBvg3YSkmLCl5lDaDMTB
-         vCpk+UPu4R7AXMXk15SKC9Mz3KTPtTouT1Y/dx0cG5LZGR+lMiKGkpUXFrB5QXvH/AuK
-         LYqfA6AM6UbbF0QCbH0VqIrVQXNb9mNHlztiGXvigli10lcdODfQzfz8bKMSMK2bK7+n
-         lPIL4RpNQCbbWZJZ0Cb8AiojIWumgC5gGlIRFZT2RDX+ikB/oqwJzex/2dp72V90WHj7
-         F+NqHoTUjuYM9SLeS6xZze23BcA5vnTvT/qlAb4CyO8O6k1+uZBJkGRGhR9sjB6hj/7W
-         6Dhw==
+        b=LMCrKaBhzdN5l16B1lvGroBgClyxbwhsnhVwmfY4vHlrnIGi1ui58rwAgPKO9sF2Zh
+         hcaf3Pp7Ay19uzC+DqCdYzgOcL3QbaIw0tnipV6moOlS+oiDxjlsZhk02AvZRxE7L2Qx
+         +9TwkIwOzKjJ1DcTIlycN/Ah9GVHozJw7oMDpZkBFQx4WmKixQ0aBqQimC2MyCaLFhvI
+         WKBQgZxXdPRRgb83DmLBLEoukpZb6bHXuaUE+2VNwY++c27y8I758yjArTkwd5R00UVF
+         Y8IE37Tq8q6rcnpwf2NimCcAMUpR+wbOJH2plgTQvIDC5j82TVI3fVy7P1jD6gSjxykw
+         ssiw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=dKnU3D4N886VKwg6I/DtlPHc3UecmhrAC8tjca7evEA=;
-        fh=DN19s0ibwwfJeGavrSM1cHit2/YwAmBInLLPIvjttCQ=;
-        b=LilhgYfTTkrWR9PZdtYvvlY2ec8lbcdW07nn6uJUWVlDBu4lfOVuFZjwe6lb4ksXiL
-         27qaBSBK6WPsY0zlA+GAkwyPi3FC6fAo/RoAAPrOdR+Rj0wSP8dosQFusSWH80Ew49Er
-         KIO8WzpEtOzrbEXpewrGQ2m+O9IguZTLB5GdYLGWEfXMdKz6Sr0XoFjJplUaP0/NUXUq
-         o5FaFcQiEginmz28/c8ZB7DrErlnX/B0mQ0K4FD337FUj24q7B6vfQdRjarnldqS4k6g
-         5FvKorkZ+ofsHJpEdne7PY86BCsG+w5o5+g6K9ENDBklLFCGQUmao76ZxPcvBxwcac4/
-         vH5w==;
+        bh=Amh+bVXjDqTRNawRkZLKL9MlUJaoVw2UfnFqXJanPVg=;
+        fh=37F5bvaK0VK+AI6Ctpf45agoY7vziZjK6mkcA4uNNeI=;
+        b=WeOXHyylgNOFCWPvRoiqPeMB5ElTTdR9pbZVixwKJtm6Nt1v4zM5Ld432u4ViNZ+r3
+         EVw8MSOKIj5RTyJi8HksICMcZoS0In/mJTOuo+f5RpKG+OyE3EsN/EF8IFj1yWQ4r7ct
+         F0JkAelg9ocBthjcKmTHBcAW81PaCCB8eTBUGq8R7lbYgCuInJsHvUYdF9Zz0SuyAUUA
+         nTUKQDAEqusCqM4Z+l/NHd0/BOuqY4Nwq1WGPbg/8sRB5Ch3gcNT87E7zitFj8gMNJPb
+         sOuHuY47x+Lke8qBVhcwp4HheD0qnfkr+W9F1wLKhaSsEB1csrQFTjOd90ledc07IzQB
+         1c3w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779093695; x=1779698495; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1779095618; x=1779700418; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dKnU3D4N886VKwg6I/DtlPHc3UecmhrAC8tjca7evEA=;
-        b=NB6gSVWyaKMXyeatoaEZ7AeXaHeDRb5lA+jqcI6VmXXHrdRF8mEMIC3PJSea7BHVZ8
-         8QRduL+nxRIvQ6GMxPQi3cXcOk1MKjIhUGG5xIFUUHOElBLjE/bRGYQ9Cwk8ZOz5EOHL
-         eqsha7Oc1R3/cr19ERyl/XsVF0ZPO+LGZH112vIZctVjfL0JfJGSroVO49ZrOZKHVjBC
-         Kj6ESHlSQawAdJSbYzSvfFB+75KJVDjvUYmHWEaGeIOoyKoBRFfr8jBLa9YvDJI+16XF
-         DmjPY+uofjaeRdWe2BrWdt3Eg6WP9ZTAI88A6kMghrFWiFkJh1JFh2h7o0ntIJ2KADx2
-         vusg==
+        bh=Amh+bVXjDqTRNawRkZLKL9MlUJaoVw2UfnFqXJanPVg=;
+        b=Rc8gMTDYJWiN51N2hXBaBljzOuBiK53ip6mgeFN2jwKbqsOHcJPWNgokM1W3qyZcMt
+         rN97B9PALBJGc+z1d9EMjwdS5KOmS1kB1mln+PyuxmXjFxI+my1KaDSTt1CfooM99e9s
+         BbGJyM/7ymRlW0+B3Xt9YrkNfdRTXAOdib3Iw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779093695; x=1779698495;
+        d=1e100.net; s=20251104; t=1779095618; x=1779700418;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=dKnU3D4N886VKwg6I/DtlPHc3UecmhrAC8tjca7evEA=;
-        b=pm0jVa0GnwLZ1g8h7v3fGaCchwbLruiq3wSD+v8cm+aGgFZPMibpEFWgssam/bgDAm
-         rL8QDBTzDj7ZdrzcKusmBpYacURr+pcH1y/PFjGK6HRHQRNX25tZwoi3/ALkKKpJGktr
-         wD2YQaXrE12yv3HpvNJBbyVozATsf42DSg7HfdhcTlLiz8BkwRr+XrVKzbGFb9T1DoHl
-         TmmYSw8Y+275qyPshS5QDtHOzxEA5nJ5rrvOtGyT7dTl7UvMSKSOEg5KnfBax3VNYXox
-         ybwiPL2OQmIIrrKKWxIPlILqS3ffcDvhj6A2n+02oiXy/a+V2zdBpw3tdwJKjFPFnzjb
-         QTLA==
-X-Gm-Message-State: AOJu0YwNzzANq7np5tZt43aoi4P74LznF/gxmGp4DpN94MJqSIhhpAkB
-	NJBkh3GiQdY6hbqffssa23tXhBkCbIwamAjMup64KxJwtGRFUBzbI37ElW0WTUDwU9Ar8cnqyAp
-	NMxginz9pQ/iErtl6axcdXDG2V0MLgGKbulCY
-X-Gm-Gg: Acq92OF+CE+iYjPojzwEQ4w4GKb46pfdjy6vA5aO2F8dkTvZKrfx59xnFkitCU2pi4u
-	omZA0cB5yAS1ixs/+ZaYeIHQhfALxDC2HylreDZ6k/b0hc7lwS7qTNJE/pFV989YysIKwl8qTTJ
-	k6n4Qx6NQeuna07JcerCkbgN1+1ttZwDH3kPp+ARqVScANRM8EisAW/ojQlNbOOzTVgDQUf5Mjf
-	cX872MM3KgU0IC/kqr2kdSNZ86XYeLSG16/3Skq+5pLOytwvQKa2d+cds5MdwW2UOdXOTvmunfp
-	U9fKaS4=
-X-Received: by 2002:a2e:9645:0:b0:393:ba06:158f with SMTP id
- 38308e7fff4ca-39561d877e1mr37464701fa.16.1779093695144; Mon, 18 May 2026
- 01:41:35 -0700 (PDT)
+        bh=Amh+bVXjDqTRNawRkZLKL9MlUJaoVw2UfnFqXJanPVg=;
+        b=p+SBi573DAIrmoY40oX4RZCbhYnUvpUFNS5WHNkD/vhUQbjxWAPMtYISHAOrDpAKId
+         YvMZmTmTjXLGvsY2nsFk1fby5Nhq20wsJ81obfco3mq1s0Sz/DP7A8HawWf5O5DxaG1q
+         oxXKvtDojaNu71rkNcKslK2MNNwJiAF2WQl5s3ZSvjtkU7uxwfm6hrM4E259l8YTzXbn
+         Wxf4R1U+S26ewe581mTC76tCy8LP+3vgZH4VYNU+Bj3Dm2j4FdJj5ijLJ7ZwLcZFAYPs
+         tQZcSFK8+gvtbf44r7WBQX3RAqXpDIfTNh9smTPpuXgaMDI9kRR+bP7240H+EA2/iqKm
+         fOwg==
+X-Forwarded-Encrypted: i=1; AFNElJ9pNio4jy90BAypsq7YuRPTGk4JYZhovjcrW8F+v5d9iqjYypi/gwomWTgru6OkFYkLFEb7E9NmphI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcKV1QxjxMbW8uIUuo3S+PCcrKAs+swBR2zRpFOVXPGUo9VDNX
+	H8oymGOz2Iaew5OL+LVXuj0G8+km31eXJd1PN9gy3c98h5Sn+njjwfQUz39Xj9jL6wAiWQOn4FM
+	IPYTvKCfwbGRXb5IZcyFqgwNJphYaP0SGYq5NABEt
+X-Gm-Gg: Acq92OGo4iBxbYcYCf/zvnS6ITEw+ANbOsdDUGCnUGrnGQZ8SMt5g/dbaswMZ8Y6luS
+	6rYhuqSWYCw/b5yAT+UkxHFfmOfQsmmN/5q/1VKZZQsS/Y56lBuF/snGGi1RajPCiFvVnSsGPQO
+	90GZXTsIv5tpafFqUS3KQE0EhkcPYr8RqVqPikJCGZGvvbqLyyoPBPghOQewKaES5K+/wljZVgQ
+	4q0b8n2stO2bhA3ZvkUF5z/AoJniViFlGQxhKYK5r/ZP49Uz7dGE80CyUBIV1YsJGv7z7XyawoA
+	UsxAbxRVCSuY+aL5EFEOT6nIeZyjvKasMQv3VarC0134Xttt
+X-Received: by 2002:a05:6512:3e14:b0:5a8:9f6f:3212 with SMTP id
+ 2adb3069b0e04-5aa0e741fd0mr3969603e87.34.1779095617441; Mon, 18 May 2026
+ 02:13:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAGwGCQ+YFkxxnnbSKbSWC7wsh5ORAT=5riqHJrwsimtqFCuKYw@mail.gmail.com>
- <20260512122719.51338042.michal.pecio@gmail.com> <CAGwGCQLjcOkjgDZgxmL0gR6uVwmFjxJ22sMzBYRJLXrDtbZZCQ@mail.gmail.com>
- <20260512190203.5695eb7f.michal.pecio@gmail.com> <CAGwGCQJ5eOfuq2dKPSL1yocruT8prwns93sTvzAUVZTJ4CZsyg@mail.gmail.com>
- <20260518084648.00fdc77e.michal.pecio@gmail.com>
-In-Reply-To: <20260518084648.00fdc77e.michal.pecio@gmail.com>
-From: Anders Thomson <andtho888@gmail.com>
-Date: Mon, 18 May 2026 10:41:23 +0200
-X-Gm-Features: AVHnY4JxkjvmAmrNGr6wzCRDJSb8YjI50s3iYqcEPvYQp2LY6II4DfPAeIKbJVk
-Message-ID: <CAGwGCQKyRsyRE_HRCNYgBComN-cZU4SW0j-cq3OwqG=-VH4NKA@mail.gmail.com>
-Subject: Re: renesas 1912:0014 failures
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+References: <20260515090149.3169406-1-wenst@chromium.org> <20260515090149.3169406-6-wenst@chromium.org>
+ <41260a6d-46fa-4a45-9906-e1bc5e5dd83a@rowland.harvard.edu>
+In-Reply-To: <41260a6d-46fa-4a45-9906-e1bc5e5dd83a@rowland.harvard.edu>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Mon, 18 May 2026 17:13:25 +0800
+X-Gm-Features: AVHnY4KWMoq2C1egFaF2o_wZ2pbZmcxOkUhi_AoDtPCF3Cwz3jQrR0zfOzxPPG4
+Message-ID: <CAGXv+5GT8vS87owuNJvMxWBnwCELCV28SbwsUXFr-Ne5O3EgsQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 05/12] usb: hub: Power on connected M.2 E-key connectors
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Bartosz Golaszewski <brgl@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-pm@vger.kernel.org, 
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: AB1C8569078
+X-Rspamd-Queue-Id: BC0035698D7
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37582-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37583-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	NEURAL_HAM(-0.00)[-0.991];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FREEMAIL_CC(0.00)[kernel.org,linuxfoundation.org,gmail.com,collabora.com,vger.kernel.org,lists.infradead.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andtho888@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[wenst@chromium.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[chromium.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid,28.xxx:url]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[chromium.org:dkim,mail.gmail.com:mid,harvard.edu:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email]
 X-Rspamd-Action: no action
 
-On Mon, May 18, 2026 at 8:46=E2=80=AFAM Michal Pecio <michal.pecio@gmail.co=
-m> wrote:
+On Fri, May 15, 2026 at 10:39=E2=80=AFPM Alan Stern <stern@rowland.harvard.=
+edu> wrote:
 >
-> On Wed, 13 May 2026 00:34:02 +0200, Anders Thomson wrote:
-> > Here we go:
-> > [  469.798260] PM: suspend entry (deep)
-> > [  470.046476] Filesystems sync: 0.248 seconds
-> > [  470.048616] Freezing user space processes
-> > [  470.049453] Freezing user space processes completed (elapsed 0.000 s=
-econds)
-> > [  470.049499] OOM killer disabled.
-> > [  470.049536] Freezing remaining freezable tasks
-> > [  470.050449] Freezing remaining freezable tasks completed (elapsed
-> > 0.000 seconds)
-> > [  470.050516] printk: Suspending console(s) (use no_console_suspend to=
- debug)
-> > [  470.051839] xhci-pci-renesas 0000:03:00.0: Get port status 9-1
-> > read: 0x2a0, return 0x100
-> > [  470.051866] xhci-pci-renesas 0000:03:00.0: Get port status 9-2
-> > read: 0x2a0, return 0x100
-> > [  470.051876] xhci-pci-renesas 0000:03:00.0: Get port status 9-3
-> > read: 0x2a0, return 0x100
-> > [  470.051886] xhci-pci-renesas 0000:03:00.0: Get port status 9-4
-> > read: 0x2a0, return 0x100
-> > [  470.077248] xhci-pci-renesas 0000:03:00.0: Get port status 10-1
-> > read: 0x2a0, return 0x2a0
-> > [  470.077264] xhci-pci-renesas 0000:03:00.0: Get port status 10-2
-> > read: 0x2a0, return 0x2a0
-> > [  470.077276] xhci-pci-renesas 0000:03:00.0: Get port status 10-3
-> > read: 0x2a0, return 0x2a0
-> > [  470.077292] xhci-pci-renesas 0000:03:00.0: Get port status 10-4
-> > read: 0x2a0, return 0x2a0
-> > [  470.077501] sd 7:0:0:0: [sdf] Synchronizing SCSI cache
-> > [  470.077635] xhci-pci-renesas 0000:03:00.0: config port 10-1 wake
-> > bits, portsc: 0x2a0, write: 0x202a0
-> > [  470.077818] xhci-pci-renesas 0000:03:00.0: config port 10-2 wake
-> > bits, portsc: 0x2a0, write: 0x202a0
-> > [  470.077825] xhci-pci-renesas 0000:03:00.0: config port 10-3 wake
-> > bits, portsc: 0x2a0, write: 0x202a0
-> > [  470.077833] xhci-pci-renesas 0000:03:00.0: config port 10-4 wake
-> > bits, portsc: 0x2a0, write: 0x202a0
-> > [  470.077842] xhci-pci-renesas 0000:03:00.0: config port 9-1 wake
-> > bits, portsc: 0x2a0, write: 0x202a0
-> > [  470.077847] xhci-pci-renesas 0000:03:00.0: config port 9-2 wake
-> > bits, portsc: 0x2a0, write: 0x202a0
-> > [  470.077852] xhci-pci-renesas 0000:03:00.0: config port 9-3 wake
-> > bits, portsc: 0x2a0, write: 0x202a0
-> > [  470.077856] xhci-pci-renesas 0000:03:00.0: config port 9-4 wake
-> > bits, portsc: 0x2a0, write: 0x202a0
-> > [  470.077859] xhci-pci-renesas 0000:03:00.0: xhci_suspend: stopping
-> > usb9 port polling.
-> > [  470.078452] r8169 0000:02:00.0 enp2s0: Link is Down
-> > [  470.083228] xhci-pci-renesas 0000:03:00.0: Setting command ring
-> > address to 0x2476001
+> On Fri, May 15, 2026 at 05:01:41PM +0800, Chen-Yu Tsai wrote:
+> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > index 90ea597d42ae..4165f71e212b 100644
+> > --- a/drivers/usb/core/hub.c
+> > +++ b/drivers/usb/core/hub.c
+> > @@ -31,7 +31,9 @@
+> >  #include <linux/minmax.h>
+> >  #include <linux/mutex.h>
+> >  #include <linux/random.h>
+> > +#include <linux/of_graph.h>
+> >  #include <linux/pm_qos.h>
+> > +#include <linux/pwrseq/consumer.h>
+> >  #include <linux/kobject.h>
+> >
+> >  #include <linux/bitfield.h>
+> > @@ -888,13 +890,25 @@ int usb_hub_set_port_power(struct usb_device *hde=
+v, struct usb_hub *hub,
+> >  {
+> >       int ret;
+> >
+> > +     if (set)
+> > +             ret =3D pwrseq_power_on(hub->ports[port1 - 1]->pwrseq);
+> > +     else
+> > +             ret =3D pwrseq_power_off(hub->ports[port1 - 1]->pwrseq);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> >       if (set)
+> >               ret =3D set_port_feature(hdev, port1, USB_PORT_FEAT_POWER=
+);
+> >       else
+> >               ret =3D usb_clear_port_feature(hdev, port1, USB_PORT_FEAT=
+_POWER);
+> >
+> > -     if (ret)
+> > +     if (ret) {
+> > +             if (set)
+> > +                     pwrseq_power_off(hub->ports[port1 - 1]->pwrseq);
+> > +             else
+> > +                     pwrseq_power_on(hub->ports[port1 - 1]->pwrseq);
+> >               return ret;
+> > +     }
+> >
+> >       if (set)
+> >               set_bit(port1, hub->power_bits);
+> > @@ -1867,6 +1881,7 @@ static int hub_probe(struct usb_interface *intf, =
+const struct usb_device_id *id)
+> >       struct usb_host_interface *desc;
+> >       struct usb_device *hdev;
+> >       struct usb_hub *hub;
+> > +     int ret;
+> >
+> >       desc =3D intf->cur_altsetting;
+> >       hdev =3D interface_to_usbdev(intf);
 >
-> This looks like normal suspend, no indication that the chip failed
-> to halt or otherwise appeared nonresponsive.
+> This change is totally useless.  Didn't you get a warning from the
+> compiler when you built it?
+
+Apologies. This should have been part of the previous patch.
+
+> > diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+> > index 9ebc5ef54a32..6039e5f5dcd7 100644
+> > --- a/drivers/usb/core/hub.h
+> > +++ b/drivers/usb/core/hub.h
+> > @@ -85,6 +85,7 @@ struct usb_hub {
+> >   * @port_owner: port's owner
+> >   * @peer: related usb2 and usb3 ports (share the same connector)
+> >   * @connector: USB Type-C connector
+> > + * @pwrseq: power sequencing descriptor for the port
+> >   * @req: default pm qos request for hubs without port power control
+> >   * @connect_type: port's connect type
+> >   * @state: device state of the usb device attached to the port
+> > @@ -104,6 +105,7 @@ struct usb_port {
+> >       struct usb_dev_state *port_owner;
+> >       struct usb_port *peer;
+> >       struct typec_connector *connector;
+> > +     struct pwrseq_desc *pwrseq;
+> >       struct dev_pm_qos_request *req;
+> >       enum usb_port_connect_type connect_type;
+> >       enum usb_device_state state;
 >
-> > [  470.085447] sd 0:0:0:0: [sda] Synchronizing SCSI cache
-> > [  470.085685] ata1.00: Entering standby power mode
-> > [  470.089467] sd 3:0:0:0: [sdd] Synchronizing SCSI cache
-> > [  470.089471] sd 1:0:0:0: [sdb] Synchronizing SCSI cache
-> > [  470.089498] sd 2:0:0:0: [sdc] Synchronizing SCSI cache
-> > [  470.089976] ata3.00: Entering standby power mode
-> > [  471.185801] ata4.00: Entering standby power mode
-> > [  471.923516] ACPI: PM: Preparing to enter system sleep state S3
-> > [  471.923767] ACPI: PM: Saving platform NVS memory
-> > [  471.924004] Disabling non-boot CPUs ...
-> > [  471.925486] smpboot: CPU 3 is now offline
-> > [  471.927750] smpboot: CPU 2 is now offline
-> > [  471.930012] smpboot: CPU 1 is now offline
-> > [  471.937302] ACPI: PM: Low-level resume complete
-> > [  471.937330] ACPI: PM: Restoring platform NVS memory
-> > [  471.937770] Enabling non-boot CPUs ...
-> > [  471.937814] smpboot: Booting Node 0 Processor 1 APIC 0x1
-> > [  471.948497] CPU1 is up
-> > [  471.948526] smpboot: Booting Node 0 Processor 2 APIC 0x2
-> > [  471.958206] CPU2 is up
-> > [  471.958233] smpboot: Booting Node 0 Processor 3 APIC 0x3
-> > [  471.967051] CPU3 is up
-> > [  471.970459] ACPI: PM: Waking up from system sleep state S3
-> > [  471.973104] usb usb2: root hub lost power or was reset
-> > [  471.973129] usb usb4: root hub lost power or was reset
-> > [  471.973229] usb usb5: root hub lost power or was reset
-> > [  471.973248] usb usb6: root hub lost power or was reset
-> > [  471.973325] usb usb7: root hub lost power or was reset
-> > [  471.973345] usb usb8: root hub lost power or was reset
-> > [  471.973735] hpet: Lost 1253 RTC interrupts
-> > [  471.973898] usb usb9: root hub lost power or was reset
-> > [  471.973901] usb usb10: root hub lost power or was reset
-> > [  471.973904] xhci-pci-renesas 0000:03:00.0: Stop HCD
-> > [  471.973906] xhci-pci-renesas 0000:03:00.0: // Halt the HC
-> > [  471.973917] xhci-pci-renesas 0000:03:00.0: // Reset the HC
-> > [  500.363392] hpet: Lost 1815 RTC interrupts
-> > [  500.363631] xhci-pci-renesas 0000:03:00.0: PCI post-resume error -11=
-0!
-> > [  500.363635] xhci-pci-renesas 0000:03:00.0: HC died; cleaning up
-> > [  500.363715] xhci-pci-renesas 0000:03:00.0: PM: dpm_run_callback():
-> > pci_pm_resume returns -110
-> > [  500.363725] xhci-pci-renesas 0000:03:00.0: PM: failed to resume
-> > async: error -110
+> The fact that hub.h uses struct pwrseq_desc indicates that it ought to
+> #include <linux/pwrseq/consumer.h>, instead of making the .c files do
+> so themselves.  Then you wouldn't have to add the #include lines to
+> hub.c and port.c.
+
+I couldn't tell if the existing pattern in this file was to include
+the headers or not, as it's missing a whole bunch.
+
+Regardless of whether this header file includes linux/pwrseq/consumer.h
+or has a forward declaration or nothing, I think that if the .c files
+use the API, then they should include the corresponding header file
+directly.
+
+> > diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+> > index b1364f0c384c..2d09037fee93 100644
+> > --- a/drivers/usb/core/port.c
+> > +++ b/drivers/usb/core/port.c
+> > @@ -7,11 +7,14 @@
+> >   * Author: Lan Tianyu <tianyu.lan@intel.com>
+> >   */
+> >
+> > +#include <linux/cleanup.h>
 >
-> I see you still have the quirk, but it doesn't matter, the chip is
-> stuck and doesn't work either way.
+> Why is this needed?
 
-The machine hangs on boot with the quirk. Without quirk i get:
-[    2.293602] cdrom: Uniform CD-ROM driver Revision: 3.20
-[    2.303526] sr 5:0:0:0: Attached scsi CD-ROM sr0
-[    2.303603] sr 5:0:0:0: Attached scsi generic sg4 type 5
-[   28.493779] xhci-pci-renesas 0000:03:00.0: xHCI Host Controller
-[   28.493891] xhci-pci-renesas 0000:03:00.0: new USB bus registered,
-assigned bus number 9
-[   28.499338] xhci-pci-renesas 0000:03:00.0: hcc params 0x014051cf
-hci version 0x100 quirks 0x0000000100000090
+For the __free() in usb_hub_port_pwrseq_get() below:
 
-Those 28.xxx  renesas lines never show up with the quirk applied. The
-machine works (waiting 10 minutes I get a logs from other kernel
-threads), but the boot process is stopped. By the looks of it, no usb
-probing completes.
+    struct device_node *np __free(device_node) =3D NULL;
 
-> I don't know what causes this, looks like a low level problem - in HW
-> or possibly the PCI layer. Maybe Mathias will have other ideas, but
-> I'm not sure that USB subsystem can do anything about it.
 
-It is a pcie 1x card, with no external (molex) power supply, if that helps.
+Thanks
+ChenYu
 
-Regards
-Anders
+
+> >  #include <linux/kstrtox.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/string_choices.h>
+> >  #include <linux/sysfs.h>
+> > +#include <linux/of_graph.h>
+> >  #include <linux/pm_qos.h>
+> > +#include <linux/pwrseq/consumer.h>
+> >  #include <linux/component.h>
+> >  #include <linux/usb/of.h>
+> >
+>
+> Alan Stern
 
