@@ -1,204 +1,279 @@
-Return-Path: <linux-usb+bounces-37579-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37580-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IP/8GqrCCmoI7gQAu9opvQ
-	(envelope-from <linux-usb+bounces-37579-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 09:41:30 +0200
+	id IHkXNlXDCmrR7gQAu9opvQ
+	(envelope-from <linux-usb+bounces-37580-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 09:44:21 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D430567EBF
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 09:41:30 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 526A7568038
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 09:44:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7FBEA307D795
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 07:34:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CE0213049723
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 07:36:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAF563E0C75;
-	Mon, 18 May 2026 07:34:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E9C13E0231;
+	Mon, 18 May 2026 07:36:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I0cMeAlT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WiH1v+NO";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Dt+aJF5U"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 224683DDDD8
-	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 07:34:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AF233D0BE5
+	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 07:36:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779089651; cv=none; b=RA1Usr4TBZrXeYbr1LotfakoFLIshb7CA1X39MugbxpJNlO26C6Qr6iW0K0Ngu0RyA/zO1vtusuMufv07IDJjW937T71fAYAxk7aBSS/RwYvluUBs8U9qsyR+fHYeHdevGX9PMo0Bo/2L9bUqEJ0Rszr1HbAfaugdTVqtfYfqeE=
+	t=1779089797; cv=none; b=sjTz2eyRf5zX1lX+qMtC8fi9/U9ZvjSEFpyPdnaitaumlQwbwloWuJL5OUL9QELYYTJpn3UDhByoE2+T2/oTLWv16um5OkO6JuRBpycWnGWDvJedKCvxmpbgQwsC7Pduz8ksRe0050ordcpQS47TxCBitwzavs5VCCVgIHejC34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779089651; c=relaxed/simple;
-	bh=dANvS/gBKyv4N9UelCDiQXk+Xnfh5orZMtFTpg4cCCo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=U5vO5ysQpFkaaINDWwp8P8z15PnRtQMWWx+tXFW0K9rAx0MLkBVRFf9qFygHfkFtJ25UZop1h5QYaQRfFq2FWDzmx+ccPa/ZpUNCe7FQvOeQ32UcF+nQzWh/gzX6VYUeNlC+PQCGvWaY7jO4bMLnaSbjADAUAGpXhzgmjRbV7/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I0cMeAlT; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-83537a80ab6so1326683b3a.1
-        for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 00:34:09 -0700 (PDT)
+	s=arc-20240116; t=1779089797; c=relaxed/simple;
+	bh=tSY/+9e7Avin2SKeKnn0nYd+uZVQTXgWH36OVAKxF6s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=p/1yfE6Dmbw46un5+2qigbXoCkJgqgEJj6aT2BE0JEkNDjBsrU7O7L5XDWDxafCtH1DJUteBGhnkr6iOi/9JeJDMppMnPJ7V6v+cjCBB3vNg9VoNvXGz8BSeSdnfIGhwzQ7tPJY9EQxTw1ValitStyg7mTfdaw1A6FW/aS1myGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WiH1v+NO; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Dt+aJF5U; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1779089795;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=rxj3hjLS1wMg1dys4oRBWhSMYXGodufeExdNLEthm+k=;
+	b=WiH1v+NOEVGFAVY8y5xn5hCMWDyCkxeHExUrfwE+RxmK4V3nANdT3FnAoKgndh3PiqaB5X
+	sq6RPUrVYkiOuxLEa/XQ40+qPU5FBmINdtXJxd9fZUwrLvx/OJUc1+0/u2T90L3K9jCjbC
+	lgRpbOqck4fKRDpSRHnfiSB2LGdIDgo=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-687-HyBP3NbRMHqwwHqGkZRqeQ-1; Mon, 18 May 2026 03:36:33 -0400
+X-MC-Unique: HyBP3NbRMHqwwHqGkZRqeQ-1
+X-Mimecast-MFC-AGG-ID: HyBP3NbRMHqwwHqGkZRqeQ_1779089792
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-44696b11265so3041706f8f.0
+        for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 00:36:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779089649; x=1779694449; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=feqASc44QbNe6VCpQPPDc88UHJTnZ4FT1o849ySLP3c=;
-        b=I0cMeAlTiGsTQQyL3bp7Tgj7V94i1wy1uIkyrNEPAJeRQ4jI5h0DUVVdEZxqoncQkY
-         a6KUkv4hAuSsXeI+W7MIUTp8sbOZ/KITTYv9fCSThGesWpUrInB02Ws6yAo4g5XEKI+Y
-         G3zoubSLK7Q48uVrPSOVCXxPsQ0P0QRFuUMK9bS3wW36hxffkENN842H3ESynpiCTTZ2
-         WhffX8CP/A1GUB/iwme4FLgVCNtM1PBsqIeyIU+/+OGSJRT2kpZHNPEyDq9UK2sEW3mU
-         EPrnbK3sbhnqzE6E8J+Krz19xrYoHIJRktvlfIQ1rlZhP9nfEyS0LgH2+axGI9h3ouzD
-         p6Rg==
+        d=redhat.com; s=google; t=1779089792; x=1779694592; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=rxj3hjLS1wMg1dys4oRBWhSMYXGodufeExdNLEthm+k=;
+        b=Dt+aJF5UjxvV5wDE4PZ4kyPqHENjwo5krRuKY0PLlfknlH6ABYlNuR5ER0jM6vKz5b
+         xWuQ2te0CKWAzzTdJzEYRex03jr2xEeVwgr4pFDpVoZaZdLqoDbDhPPnfdhoCBM64NWy
+         Azh+1Gvr2Bp1Eh+4GWUQJqfdcgxA1xGyR7+xxB9HpjUaWORnGtsaxuSBj1DnVaCnTpOM
+         1fAnP4iaFIzSKhyqMAwp1+UbLQem6k95IaH5kNaN/Aq0YS9rNnkO9I8cRrG7BS4PKh+i
+         lOXuGvgFDF1b8chnuY3/pUSqbI//c409joHzhX9cfOMZoDjX9YJ7aQshSskrhmAURnVX
+         0TVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779089649; x=1779694449;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1779089792; x=1779694592;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=feqASc44QbNe6VCpQPPDc88UHJTnZ4FT1o849ySLP3c=;
-        b=kyMFs7M+zMoeYhITfUEdadjOfCLDBzJDSNcifxdzJxoCzJp2v8Hz7tbkeNj2NFUUl2
-         jLSljk4qJ+660XIAY+72LfjexaIXHNFTEfuc8UDGHacK+Hud+nvXpwKtZyK9uucbCPVe
-         JvTwpPYB7n6sx8TEPQ9XvgAMss+bAu1QBoJtzhOdpEu5HSmYjmN5XD1fXilG51Xp/0/B
-         Xbjqa+ThJglGqEHUYbKjcOAbGbBAjJMS2BuY3yfLDc7CyAsac6dkM6r2ClV8hlIV0ALT
-         V7/zG6KiY/8GecIDRBuVN7YBtVFEHLKXfR+Q1Z9xf+2NtF1kXMNXgBQTMbw1aCPbYinq
-         eVaQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/2Uku6bd0ggFb2NMBWxB50iNaelYnzTNZjOKTWwQfZeyXHbsEcjPl08+DCU/zt48K+JVCxlKAAuFI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytfVeu+8C2rKAIUtbcTSIDTBaV6iiBv+Tv5ltMAcBAJDCuaJPD
-	wgIcx5Ib7TaqwmcrMtxDJHRkdDoUO2lmCuaB78cX4IX4ZJo/67zgADIh
-X-Gm-Gg: Acq92OE/lk29Jrn5e9RpcAp0uvhByv5WzpyZ4dqpD/Om1Bzerbr/5YkxojQrxCdxwxJ
-	Jtwoxqw2/tBnQM9rEaPv7Q/WLpFL+L1lJBqbZuAWMloFqu++xVgCVOyhQvp18cDgic9zwU3Owp/
-	/ADfoKIfODH8dnNlrmZS1P8o56YMwjHfZxaFZCz83CfX7dgfg9x/9dDbX7OnSZTVvNz97GOKx63
-	IFdYEuJvIP0WY98Xvo8RDIBu3dIZzBAr2U9iIAaJYTSKPajo/Pg9263dzHq3XFyMmy5KO6s/yLf
-	4Fv150OW+o2pI6rifc8kO5vNA0/kGxlL1f5YWTIGNBtqWaf2j5UAgnQ+jo4ZcQq9aW4cDfYh8ct
-	y3fytYkEDMSIFdrdL+e4vPEoScD4tY+/E7NmeKCKew4IndnZCWl5wx/oxsyqnV4nXslhA2IZZ6B
-	8yFUXqOmxZliL/DVt8NDajuCGQN2M7ZzNpbbiQwU8uqHWNBg==
-X-Received: by 2002:a05:6a00:3e22:b0:839:dd77:3501 with SMTP id d2e1a72fcca58-83f33c33546mr13925885b3a.1.1779089649248;
-        Mon, 18 May 2026 00:34:09 -0700 (PDT)
-Received: from csl-conti-dell7858.ntu.edu.sg ([155.69.195.57])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83f19775ca3sm14500746b3a.14.2026.05.18.00.34.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 00:34:08 -0700 (PDT)
-From: Maoyi Xie <maoyixie.tju@gmail.com>
-X-Google-Original-From: Maoyi Xie <maoyi.xie@ntu.edu.sg>
-To: Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Neal Liu <neal_liu@aspeedtech.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@aj.id.au>,
-	linux-aspeed@lists.ozlabs.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: aspeed_udc: avoid past-the-end iterator in dequeue
-Date: Mon, 18 May 2026 15:34:03 +0800
-Message-Id: <20260518073403.1285339-1-maoyi.xie@ntu.edu.sg>
-X-Mailer: git-send-email 2.34.1
+        bh=rxj3hjLS1wMg1dys4oRBWhSMYXGodufeExdNLEthm+k=;
+        b=kuhdn6QQK6SjQyKWlMrzuh8gejohddGIC8Zk3cbxyTCklIn3hQ7agLHgva9eX8M8nZ
+         oRLvQ9JHBx4XKo0TSftFgBIc5zl/qXKO9I3zzlvmddTbcBN9QOFHDodnHHD/h+zJ6aKF
+         qr51sxAyPQ+Sfli1eA0FsEdRgoDCGup3hOUrfVaOJDy5TRdbM6TgK10wjhXSV1v9LS6z
+         ELWObe+MjMPWNkxbBjMfQUJ32BeKxOnDl3b3IZ0B3wy9sEu5GB83mkWOmZIZtAtRVXg2
+         Oob8xEI+ku49+SkCwxlFdcD+4aXMRP0tL2Mp7rCqFkd4G+OI83JtI9EJsCvAG1wqVHKI
+         MbDw==
+X-Gm-Message-State: AOJu0YybhE+aBni/P15lI/tWFWeAhFl7euhvUjgjpqw0+RNXuC5y3IYq
+	ZxqHDZ38/IV6D7u8aw/K6ye0KbwcllSIjfIEz0g4f1DQkNyX2UdgKAR8bYl9TCqRz+mpelqiWjm
+	NKF97aYOsddePWs3iDtvvVjqFGvajM70JmOMnPlT7KaVMZhRMDb6LsgpvlOpKQw==
+X-Gm-Gg: Acq92OFVE+yo4HdSbM5Skg8M3zSTT8cfsdqYC/6voQF5bFR/XZDvVToaFSZm1e/B3k1
+	Mk/VCw447YcirdnPcslvbFHXfd5O11XfN7AjEmrP5ClQ8SeK5hbpwE6nkIWh601DD2jBl5yvX1t
+	9xwEnOjzaJIEJ7tF6TYG51bRpmwmDv6wUp9fux8uuLoognMUflTlEm/5a7Oi2fhgyY94myTewbm
+	2H98pn4MjRG7ct1XIdUGu/TMnx0ro5dUzJpB5O3Y7tI0eKVFkmTC4Dtd9wgcGLIoCL9Y+xE6qsN
+	Tt/OX6oAUf7OvWOkzUJlfD5wZ9AZcKxKZz3lD+4JVViFiVg3/lZDsuuH0XgWOp5dR1scOWBUghk
+	mK8FnTkJiZ7uebqQRm7+IG437RGFkjMgWhWxm2sNloVTKlNwAHMTd2w0=
+X-Received: by 2002:a05:6000:401e:b0:449:c5e2:a8b7 with SMTP id ffacd0b85a97d-45e5c59ec1cmr20788009f8f.30.1779089792178;
+        Mon, 18 May 2026 00:36:32 -0700 (PDT)
+X-Received: by 2002:a05:6000:401e:b0:449:c5e2:a8b7 with SMTP id ffacd0b85a97d-45e5c59ec1cmr20787957f8f.30.1779089791712;
+        Mon, 18 May 2026 00:36:31 -0700 (PDT)
+Received: from [192.168.100.100] (82-64-211-94.subs.proxad.net. [82.64.211.94])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9ec39806sm34279591f8f.9.2026.05.18.00.36.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 May 2026 00:36:31 -0700 (PDT)
+Message-ID: <3550f13e-124c-492f-a5b5-ae6ad95f09f0@redhat.com>
+Date: Mon, 18 May 2026 09:36:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v2] usbnet: limit max_mtu based on device's hard_mtu
+To: Matthias May <matthias.may@westermo.com>
+Cc: linux-usb@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
+ Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+ Stefano Brivio <sbrivio@redhat.com>, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20260119075518.2774373-1-lvivier@redhat.com>
+ <539202f5-43ba-4938-a9b2-393c1bb3e072@westermo.com>
+Content-Language: en-US
+From: Laurent Vivier <lvivier@redhat.com>
+Autocrypt: addr=lvivier@redhat.com; keydata=
+ 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
+In-Reply-To: <539202f5-43ba-4938-a9b2-393c1bb3e072@westermo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 2D430567EBF
+X-Rspamd-Queue-Id: 526A7568038
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37579-lists,linux-usb=lfdr.de];
-	URIBL_MULTI_FAIL(0.00)[ntu.edu.sg:server fail,sto.lore.kernel.org:server fail];
-	PRECEDENCE_BULK(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DKIM_TRACE(0.00)[redhat.com:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37580-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	FROM_NEQ_ENVFROM(0.00)[maoyixietju@gmail.com,linux-usb@vger.kernel.org];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lvivier@redhat.com,linux-usb@vger.kernel.org];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
+	REDIRECTOR_URL(0.00)[urldefense.com];
 	TAGGED_RCPT(0.00)[linux-usb];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,ntu.edu.sg:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,urldefense.com:url,kern.info:url]
 X-Rspamd-Action: no action
 
-From: Maoyi Xie <maoyixie.tju@gmail.com>
+On 5/18/26 09:21, Matthias May wrote:
+> On 19/01/2026 8:55 am, Laurent Vivier wrote:
+>> The usbnet driver initializes net->max_mtu to ETH_MAX_MTU before calling
+>> the device's bind() callback. When the bind() callback sets
+>> dev->hard_mtu based the device's actual capability (from CDC Ethernet's
+>> wMaxSegmentSize descriptor), max_mtu is never updated to reflect this
+>> hardware limitation).
+>>
+>> This allows userspace (DHCP or IPv6 RA) to configure MTU larger than the
+>> device can handle, leading to silent packet drops when the backend sends
+>> packet exceeding the device's buffer size.
+>>
+>> Fix this by limiting net->max_mtu to the device's hard_mtu after the
+>> bind callback returns.
+>>
+>> See https://urldefense.com/v3/__https://gitlab.com/qemu-project/qemu/-/issues/3268__;!! 
+>> I9LPvj3b!H-nIZIscCCh_2FnbJInagPxXTe0XcNu58-8k3NqGYKRdDy8LBOBjWiTIc1E- 
+>> cC2wnv91MtZrak2pu7K-4cU$  and
+>>      https://urldefense.com/v3/__https://bugs.passt.top/attachment.cgi?bugid=189__;!! 
+>> I9LPvj3b!H-nIZIscCCh_2FnbJInagPxXTe0XcNu58-8k3NqGYKRdDy8LBOBjWiTIc1E- 
+>> cC2wnv91MtZrak2pq4lrvZI$
+>>
+>> Fixes: f77f0aee4da4 ("net: use core MTU range checking in USB NIC drivers")
+>> Signed-off-by: Laurent Vivier <lvivier@redhat.com>
+>> Link: https://urldefense.com/v3/__https://bugs.passt.top/show_bug.cgi?id=189__;!! 
+>> I9LPvj3b!H-nIZIscCCh_2FnbJInagPxXTe0XcNu58-8k3NqGYKRdDy8LBOBjWiTIc1E- 
+>> cC2wnv91MtZrak2p8csXaww$
+>> Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
+>> ---
+>>   drivers/net/usb/usbnet.c | 9 ++++++---
+>>   1 file changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+>> index 36742e64cff7..1093c2a412d9 100644
+>> --- a/drivers/net/usb/usbnet.c
+>> +++ b/drivers/net/usb/usbnet.c
+>> @@ -1821,9 +1821,12 @@ usbnet_probe(struct usb_interface *udev, const struct 
+>> usb_device_id *prod)
+>>           if ((dev->driver_info->flags & FLAG_NOARP) != 0)
+>>               net->flags |= IFF_NOARP;
+>> -        /* maybe the remote can't receive an Ethernet MTU */
+>> -        if (net->mtu > (dev->hard_mtu - net->hard_header_len))
+>> -            net->mtu = dev->hard_mtu - net->hard_header_len;
+>> +        if (net->max_mtu > (dev->hard_mtu - net->hard_header_len))
+>> +            net->max_mtu = dev->hard_mtu - net->hard_header_len;
+>> +
+>> +        if (net->mtu > net->max_mtu)
+>> +            net->mtu = net->max_mtu;
+>> +
+>>       } else if (!info->in || !info->out)
+>>           status = usbnet_get_endpoints(dev, udev);
+>>       else {
+> 
+> Hi Laurent
 
-ast_udc_ep_dequeue() declares the loop cursor `req` outside the
-list_for_each_entry(). After the loop it tests `&req->req != _req`
-to decide whether the request was found. If the queue holds no
-match, `req` is past-the-end. It then aliases
-container_of(&ep->queue, struct ast_udc_request, queue) via offset
-cancellation. Whether that synthetic address equals `_req` depends
-on heap layout. The function can return 0 without dequeueing
-anything.
+Hi Matthias,
 
-Use the cursor-vs-result idiom from the sibling aspeed-vhub driver,
-ast_vhub_epn_dequeue() in drivers/usb/gadget/udc/aspeed-vhub/epn.c.
-A separate `iter` walks the list. `req` is set only when a request
-matches. After the loop, `req` is NULL if nothing matched.
+> 
+> This change was backported to 6.6.* and caused a regression with wwan devices via USB when 
+> using a mux.
+> 
+> Tested on a Quectel EM12 running the firmware EM12GPAR01A21M4G_01.300.01.300.
+> 
+> Tue May  5 09:49:35.638 2026 kern.info kernel: [   10.819620] qmi_wwan 1-1.2:1.4: cdc- 
+> wdm0: USB WDM device
+> Tue May  5 09:49:35.638 2026 kern.info kernel: [   10.829601] qmi_wwan 1-1.2:1.4 
+> cellular0: register 'qmi_wwan' at usb-fsl-ehci.0-1.2, WWAN/QMI device, 6a:c3:49:88:47:b1
+> Tue May  5 09:49:35.638 2026 kern.info kernel: [   10.840579] usbcore: registered new 
+> interface driver qmi_wwan
+> 
+> The parent interface (we renamed it "cellular0") requires an MTU of 1504 (4 bytes overhead 
+> from the muxer).
+> The actual wwan0, wwan1 interfaces have an MTU of 1500.
+> 
+> With this change it's no longer possible to set an MTU of 1504 on cellular0.
 
-The same idiom is used by the other UDC drivers in
-drivers/usb/gadget/udc/ (at91_udc, atmel_usba_udc, dummy_hcd,
-fsl_qe_udc, fsl_udc_core, goku_udc, gr_udc, lpc32xx_udc,
-max3420_udc, net2280, omap_udc, pxa25x_udc, pxa27x_udc, udc-xilinx,
-bcm63xx_udc).
+This should be fixed by
 
-Signed-off-by: Maoyi Xie <maoyixie.tju@gmail.com>
----
- drivers/usb/gadget/udc/aspeed_udc.c | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
+55f854dd5bdd ("qmi_wwan: allow max_mtu above hard_mtu to control rx_urb_size") which is in 
+v7.0.
 
---- a/drivers/usb/gadget/udc/aspeed_udc.c
-+++ b/drivers/usb/gadget/udc/aspeed_udc.c
-@@ -692,26 +692,30 @@
- {
- 	struct ast_udc_ep *ep = to_ast_ep(_ep);
- 	struct ast_udc_dev *udc = ep->udc;
--	struct ast_udc_request *req;
-+	struct ast_udc_request *req = NULL, *iter;
- 	unsigned long flags;
- 	int rc = 0;
- 
- 	spin_lock_irqsave(&udc->lock, flags);
- 
- 	/* make sure it's actually queued on this endpoint */
--	list_for_each_entry(req, &ep->queue, queue) {
--		if (&req->req == _req) {
--			list_del_init(&req->queue);
--			ast_udc_done(ep, req, -ESHUTDOWN);
--			_req->status = -ECONNRESET;
--			break;
--		}
-+	list_for_each_entry(iter, &ep->queue, queue) {
-+		if (&iter->req != _req)
-+			continue;
-+		req = iter;
-+		break;
- 	}
- 
--	/* dequeue request not found */
--	if (&req->req != _req)
-+	if (!req) {
- 		rc = -EINVAL;
-+		goto out;
-+	}
-+
-+	list_del_init(&req->queue);
-+	ast_udc_done(ep, req, -ESHUTDOWN);
-+	_req->status = -ECONNRESET;
- 
-+out:
- 	spin_unlock_irqrestore(&udc->lock, flags);
- 
- 	return rc;
--- 
-2.34.1
+Could you have a try?
+
+Thanks,
+Laurent
+
 
