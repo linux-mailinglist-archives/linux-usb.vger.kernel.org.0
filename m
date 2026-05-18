@@ -1,186 +1,143 @@
-Return-Path: <linux-usb+bounces-37615-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37617-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0JpaIT4kC2p5DwUAu9opvQ
-	(envelope-from <linux-usb+bounces-37615-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 16:37:50 +0200
+	id WCshAX4nC2pAEAUAu9opvQ
+	(envelope-from <linux-usb+bounces-37617-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 16:51:42 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id F23FC56EF81
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 16:37:49 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78C3956F421
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 16:51:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 12354307CDAA
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 14:29:30 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D04A33085D00
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 14:38:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 227F648C8AB;
-	Mon, 18 May 2026 14:29:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C342332EA2;
+	Mon, 18 May 2026 14:38:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sgzTHPlF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jybY+wgb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37905404894
-	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 14:29:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8313148850;
+	Mon, 18 May 2026 14:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779114547; cv=none; b=ffLjUXm21fxFIzGZKfrSTp9nRcOImm9vIiIVxCDD00ibdQudSAPMQ3yr1efbhitWvUzgBAhijDRtWF76YRTIGWnSaYPwCM/5bLfWdoMmHFtibBbhgQWDrgMFud2O+uF8r7HU2JO1z+hp9mescJluAQ2IuhLCf/QTtoPwRFqrb/M=
+	t=1779115094; cv=none; b=GK3KfqeNCUQjLZoubbJU4puDUKQES2NDICW1iZCPqQ/kyrJ3pSIHLB+4I7oiI9/5M8oMplVFtWfHA9xE1WneE0MYQ/CBx4O+MGI/dNvBM139nU3ww17shvXcuU2lzM2uPvAA0823C1jqpIx5XeCQgNGLaIg/3QZb5GONX0zfVbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779114547; c=relaxed/simple;
-	bh=jZS0cfoCx0fWKIraDqZnTPmyRkWvp91bnw4H+4AY/W4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aBFUTDIae953NcJIHTKiehbIzevhs1Om+Rlm8Wlr3Zk5jYYSkloYiA6AmJb8VklcdEgkCLhBMqMLHeBaPOi+7Gw6PUDVNLy53NTur0ypNzaKWa1VkkW0vX1J258Q76uRnKLkJVpOrdBJsxIxgnVfEQtbUazQwmCYDDi7lnvejWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sgzTHPlF; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-7bf1eaba464so17000187b3.1
-        for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 07:29:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779114544; x=1779719344; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=InSESvH6SbYX4PPIUX4JXAvnZujlKzjBMLYv/0HgeqA=;
-        b=sgzTHPlF6xeBrYUZ4oFlgbUDzPsHmVY8wZSfnEjI2L8TBcLBMlCUYvN24+/bnI9YC3
-         dZM62AatoZjZ8nJqqBZ1mB6+8gxR7Fh3DrYcFfpg9ilXk/EBIMS1+Uamvj81nJoxkE7X
-         lEJpbcJmcFXn5bzKXfMkGfwu2DFiLgEJWBuEkl2+R8o/vD9PgtVXdqgVkNwtlUhJSa7p
-         d/UX/7rxE/uqEDD3wyQlEgvSF4w8g52LepAW61pvrcarXI5sIhGBWWppFTb/K3N/3Rwd
-         wS8v015TrosoklOd3r47BBswIKFEM+Oel3cjAqaAlsgFmUPNIOT6RQjL9yFHB6sVbQov
-         ipMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779114544; x=1779719344;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=InSESvH6SbYX4PPIUX4JXAvnZujlKzjBMLYv/0HgeqA=;
-        b=oNLVlQ8rt/Ki7A8wehcpTF8I7z96kOYavo8nwrT4vuuJ8PnSE2rUJoXYYloz3funi7
-         n6kjaUT7NEs17bQRj5p9J/1aDWlZ7axVxiVP4Qnl8L0unUvnNL40OtGDyebDR9b8P/vy
-         L9nLIqc2oF8BKOUVSXKToAbFGgf4bSJ+iCPB6yThKRB0/F7r0BPydSITgBIB3+HSu60b
-         xtNtRcryCQAuvtxWjpgzRCSTzyLpq3rE+yVWOSGTYOprbtiihLHTUdPdRVq6sqMLkjax
-         cbmUqSQpmiwnaQ9swXTKTuPzfnwSGK4wSTabRUWyQXXi0WwvzZksEnpx4nA6+X4qb+eq
-         7beQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9I7TvVpnJM5p5qd2alNgueYKOM6931n08USRSuB90bDq2XqoTjj1PYQSWsV94SHH2lapRa/8y4AXg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywco2r6i2N+gTtXpur49ORv8Y6A7P9okz0cGc178DioIAG3aI7X
-	uzR027uF6ZpFFUxyZM43hp+G9PisJybktzRrfEnyEjtaw77PUMbrOcr1
-X-Gm-Gg: Acq92OG2xji9wd3AXOW/G/QtvhqmcX7B/lSeTSUADfaT2rHuy0ASs6hMAlLCYeMcPRD
-	NieND9fRPw66qy2wVsugzq7gAEs08gDPTc8EPMidQngTUjIFWuBIN/ude+Min1V9hk71jiR0Tjo
-	qk5BKnFDqZLe9eRjIGCpol9uNLe9hsfTVNDcHSCOlOCmhchz0RBUVHVXLOoWBLyOEhQq2jIrzPY
-	ZY9fOiuW6EHhNM5XRTDImP9fmLVwcIA2fc6qi8MBIz5jc9QCQH3jPXTdRo9owGqGA0TKn7B02EO
-	pIgY1zoMDucQj5smIz59/Y8qG6xWlUwd9VMsoDUzoFrVVyHonIsx1aPSJSi5BXhzlg2SLMbXeWk
-	Al1yScM6iAJfxHlVUVIfKATBOzWabsx1Iry8NGA+OJxS9n3GlCHAryCNWWobKDlowjOhkyCBcsI
-	tYlCRoi7Ksamb3RqXhn11taxJw7jJWbymAM3Rd/IptxQ==
-X-Received: by 2002:a05:690c:e566:b0:79f:7972:f89a with SMTP id 00721157ae682-7c95bd1b4b8mr135891887b3.28.1779114544188;
-        Mon, 18 May 2026 07:29:04 -0700 (PDT)
-Received: from fsh.attlocal.net ([2600:1702:56e9:4b40:ed8c:6b8b:1fa3:d14b])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7cc997cb156sm22094067b3.18.2026.05.18.07.29.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 07:29:03 -0700 (PDT)
-From: Akash Sukhavasi <akash.sukhavasi@gmail.com>
-To: krzk+dt@kernel.org
-Cc: robh@kernel.org,
-	conor+dt@kernel.org,
-	gregkh@linuxfoundation.org,
-	gene_chen@richtek.com,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: usb: richtek,rt1711h: add missing 'port' property
-Date: Mon, 18 May 2026 09:29:01 -0500
-Message-ID: <20260518142901.1747-3-akash.sukhavasi@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260518142901.1747-1-akash.sukhavasi@gmail.com>
-References: <20260518142901.1747-1-akash.sukhavasi@gmail.com>
+	s=arc-20240116; t=1779115094; c=relaxed/simple;
+	bh=U13AxQTGM+7Ye3teS4TDUAHOJKI686YxwQ4+ThF1HTE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sLp7gxKIGulo20+eV/YIDRJzGRVotd97nJNEtqTcpT1RFE3fw2/IOzSeDp3kxkgM+WUu6A9AEYtZxpDGEC2v2XMBbAsct9GpInmSt2sVoBL6yCEpUWEm9QmNGLYf2sy7ruflykTUrg5dP1qn/gC4ryZIRymt/eetOe+ER3AB3Uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jybY+wgb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75BFEC2BCC6;
+	Mon, 18 May 2026 14:38:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779115094;
+	bh=U13AxQTGM+7Ye3teS4TDUAHOJKI686YxwQ4+ThF1HTE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jybY+wgb9F4GLQrxhgk6wQTwl6D4undXUBOCtXGLlgYAyTv4uXvDrDKZ+uyK4zkQg
+	 uTKFG+RU2c4/awcg0DNV/IruveP1o9Rp3ggJObK/AUJI+OSxX5zn6ghD31AG1deg2C
+	 FLdon8cIksBUCwaXa0oy307i+1z8sNRqrbshcyNo1lvtlNBISV86UrlSiKEdtLuP+T
+	 0SRIPedoUh1OrB8cI0qIP/CIJ5E4mTVV5wnjyHmLxnYOVi3dVo3KU10PvIUqBXeQTd
+	 CXIyt7/IB8IBMstIJaR5Y2wBI0OQsNaDcV5SFm5WBJGwLVXSSTUerrVUbEPHU4zeuY
+	 ijAma1YwfeKqQ==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1wOz6h-00000001Bft-3MNV;
+	Mon, 18 May 2026 16:38:11 +0200
+Date: Mon, 18 May 2026 16:38:11 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Cen Zhang <rollkingzzc@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	zerocling0077@gmail.com, 2045gemini@gmail.com
+Subject: Re: [PATCH] USB: serial: belkin_sa: validate interrupt status length
+Message-ID: <agskU46ts6au5LmQ@hovoldconsulting.com>
+References: <20260516042428.3777524-1-rollkingzzc@gmail.com>
+ <agry2e2brte8W7U0@hovoldconsulting.com>
+ <CAB7XQsGZg+wrSpCsjLXdZEsw2y9f73eNGOjYkbz_PLAbR1_C8g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAB7XQsGZg+wrSpCsjLXdZEsw2y9f73eNGOjYkbz_PLAbR1_C8g@mail.gmail.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37615-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[gmail.com:+];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37617-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[akashsukhavasi@gmail.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_NONE(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,4e:email]
-X-Rspamd-Queue-Id: F23FC56EF81
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,hovoldconsulting.com:mid]
+X-Rspamd-Queue-Id: 78C3956F421
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The schema declares 'additionalProperties: false' but omits the
-top-level 'port' property, which hi3660-hikey960.dts uses to
-describe the role-switch graph endpoint. This causes dtbs_check
-to emit:
+On Mon, May 18, 2026 at 09:39:49PM +0800, Cen Zhang wrote:
 
-  hi3660-hikey960.dtb: rt1711h@4e (richtek,rt1711h): 'port' does
-  not match any of the regexes: '^pinctrl-[0-9]+$'
+> On Mon, May 18, 2026 at 01:07:05PM +0200, Johan Hovold wrote:
+> 
+> > How was this issue found? Are you using some kind of static checker or
+> > LLM?
+> 
+> The initial lead came from an LLM-assisted local audit, not from a
+> dedicated static checker. I then checked this path manually and validated
+> the issue under KASAN with a small dummy_hcd/raw_gadget setup.
+> 
+> The reproducer emulates a Belkin 050d:0103-compatible device with one
+> interrupt-in endpoint whose wMaxPacketSize is 3. After belkin_sa bound and
+> ttyUSB0 was opened once, the raw_gadget side completed 3-byte interrupt
+> packets.
+> 
+> The relevant part of the KASAN report as below:
+> 
+> BUG: KASAN: slab-out-of-bounds in belkin_sa_read_int_callback+0xd3/0x290
+> Read of size 1 at addr ffff8881029d2c43
 
-Add the missing property using /schemas/graph.yaml#/properties/port,
-following the pattern used by realtek,rts5411.yaml and other USB
-controller bindings.
+Nice work. But please mention that this found with the help of an LLM in
+the commit message as documented in:
 
-Update the example accordingly.
+ - Documentation/process/submitting-patches.rst ("Using Assisted-by:")
+ - Documentation/process/coding-assistants.rst
 
-Signed-off-by: Akash Sukhavasi <akash.sukhavasi@gmail.com>
----
- .../devicetree/bindings/usb/richtek,rt1711h.yaml    | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+> > You only need to verify urb->actual_length here (as actual_length <=
+> > transfer_buffer_length).
+> 
+> Agreed, thanks for pointing this out. I will send a v2 with the check
+> reduced to:
+> 
+> if (urb->actual_length < BELKIN_SA_MSR_INDEX + 1)
+> goto exit;
+> 
+> and update the commit message accordingly.
 
-diff --git a/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml b/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
-index 7ded36384..fd7f29179 100644
---- a/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
-+++ b/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
-@@ -52,6 +52,13 @@ properties:
-     description:
-       Properties for usb c connector.
- 
-+  port:
-+    $ref: /schemas/graph.yaml#/properties/port
-+    description:
-+      OF graph port describing the connection to the USB role switch
-+      consumer (e.g., a dwc3 controller with usb-role-switch), used to
-+      convey type-C data-role changes signaled by the TCPC.
-+
- additionalProperties: false
- 
- required:
-@@ -107,6 +114,12 @@ examples:
-               };
-             };
-           };
-+
-+          port {
-+            endpoint {
-+              remote-endpoint = <&usb_role_switch>;
-+            };
-+          };
-         };
-       };
-     };
--- 
-2.54.0
+Sounds good, thanks.
 
+Johan
 
