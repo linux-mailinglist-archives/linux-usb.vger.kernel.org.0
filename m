@@ -1,135 +1,169 @@
-Return-Path: <linux-usb+bounces-37618-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37619-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aJX0F94mC2pAEAUAu9opvQ
-	(envelope-from <linux-usb+bounces-37618-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 16:49:02 +0200
+	id cAN+MbQqC2pAEAUAu9opvQ
+	(envelope-from <linux-usb+bounces-37619-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 17:05:24 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0987656F38D
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 16:49:01 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 629B356F88F
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 17:05:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 780F23028EDB
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 14:47:06 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7A87A30BE603
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 14:56:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCEBD26ED59;
-	Mon, 18 May 2026 14:47:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A74872C21D0;
+	Mon, 18 May 2026 14:56:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="AEungQbb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FIXlrlDz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f193.google.com (mail-lj1-f193.google.com [209.85.208.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B39631A3157;
-	Mon, 18 May 2026 14:47:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779115622; cv=none; b=t/MrvZ+93FpatY2Y6iH6i5Js2OStfOlqvsiZlIDaB3hNx3etjo5bPDjIGprD1m8JAiJWZfd1DQA3uOzTLN2RiYDsinyh1TAZyP/nTZjCc+KNjWzqMsqu+5wjZJh3pmPwpjLHImNo5Eo2iVyKebylrChW0M/m+CLwnQVbcv5/OVs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779115622; c=relaxed/simple;
-	bh=krJyfzj5VdtS7Bxh0J2mCUhD6MzkZE/FcTmwSDHUg2M=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=YeotD6CQWQYmQL66bPKwucsrrprcfKoz+CH8v/yjyDaOEROOs/F6z+5HNo6WVoe0ozjOJgOB+3L8Hte4QZOcZM23Yq3d5KPCN4O4YHhhpLO3CQI7AT9p5dJWqSlFFB47Ts6JruXogDkO1ttGK5qxozk8GDIST++yppjQ4E/moFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=AEungQbb; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
-	In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=NbSMa48m70Oo2KhjQcOdBtQf0n81su0vOE/YeOaWNNA=; b=AEungQbbT72Qf4G1ZGJcH/jAF6
-	tVjUOm9pnwPfpSKClhMzLTU2Jo0F4WcgLna1iLsck31mEh1ok3mAmJnw5oenICSnKMLbvL6cw32jm
-	SOQSK40jI8GeZcRjHXp2Al0MbmMx6rUr2qd3yE8x0cH3jkC5XAc2u7dBLMK/at1+sSVDeAbM/1j80
-	LWgCbMHPUQQX+jhWTjQEd532DOBilimRobZ29TarShcznnQtVoBVUSOj2/fCT+5IyRYH9hNsedgeR
-	k/YNJ2J2T0TilrAWhrZ3/z24TVXDtYtE1+8IIxl7R0aSdknzZxssUbc7oHiKDgeG5DcK2ngp4BNSv
-	6w23NXUQ==;
-Received: from maestria.local.igalia.com ([192.168.10.14] helo=mail.igalia.com)
-	by fanzine2.igalia.com with esmtps 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1wOzF7-002g9Z-Lh; Mon, 18 May 2026 16:46:53 +0200
-Received: from webmail.service.igalia.com ([192.168.21.45])
-	by mail.igalia.com with esmtp (Exim)
-	id 1wOzF5-004xYy-K0; Mon, 18 May 2026 16:46:53 +0200
-Received: from localhost ([127.0.0.1] helo=webmail.igalia.com)
-	by webmail.service.igalia.com with esmtp (Exim 4.98.2)
-	(envelope-from <mfo@igalia.com>)
-	id 1wOzF4-00000002Azo-3uJJ;
-	Mon, 18 May 2026 16:46:51 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3133529B795
+	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 14:56:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.193
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779116188; cv=pass; b=XJoIggPXe7XwA4Q+hlZvb0Kn03kwJK7NrOVd9a655mjb+5oHxLrpu8yTFid363Fv5X+msnX0FgF5hGaCPMAwqilhgUB9g0aXuO3Zcn6O0iPEDBfIV71lGSkcYei+JvEEvMZFPDuEIVw358oc3iOzfmzVVzuP0YoW+AqbgvLwwFE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779116188; c=relaxed/simple;
+	bh=0mTs/w4vxpYjNpeIJS0QWH0SfL36tY50xv2X9s26CYo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BUlhb2PLEtcIbBvm4SogPG7uospFasCv69meBEa5Ucll5ew2fufFadELzW4k7rJYLZsHf+cZqrXTf4EilpdIcamqSMj3nDOJ6D3gb7kCR4QJg4yfYTt2fNafacisQhAbn86ad2Y3LW8QbifjCy2H1LyQLuvdtQgr8HS6GExS1iE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FIXlrlDz; arc=pass smtp.client-ip=209.85.208.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f193.google.com with SMTP id 38308e7fff4ca-39397d63804so31409091fa.2
+        for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 07:56:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779116183; cv=none;
+        d=google.com; s=arc-20240605;
+        b=AVYLXcuT7ymDb6mzcVRM9Od0TP1xc7nbn75rN6DYjBgbBdiYPvujcpYokRPhixI4ZE
+         0+72EFnQRFQTWJQHuTDfy9lYiZXrdDUg5m6hemUwdYNk7YLT+HvrN5bWNqAhTHPGb+qP
+         pvKhIZ3xqsJNKYQKsCdnL+aN5/PZbluYgdgwqVnDybaJ+oOfAKF2aYdNC06H5HVmJacq
+         TpHXqMRXc5x2k8ESN0AR8n3bMCXBcZftBAK5EfkL+r4I0v0ap3iB1iUWE/sGGNgO2xVt
+         +NBli4mxMsendF3Y4WSxcAUKTrXoGaeaU3DBzkPcSkfTQN6WcuBgVGPySlrVUJoUyoMS
+         NqlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=DYFmRZInXkJuwtO+3cn24w4m42t55qgcjnPW5qhsGC0=;
+        fh=2eEAZBXRI+16CJkhdxTfbuWp8+90JnnDkBvtlcSb7EA=;
+        b=PeUxdPr5OyVZ7lvwjhOiRd/zRiPJvwysNTmEWiJHFSbr3kZWrwyjVLb87dYgkqqLSQ
+         0oyO3w0xNWMp71joRrJDjTW7PgTYfjPXCif41EtnC99EYi4xPiAPeScsfb1ADEicax+i
+         /Lsl0y8L8mhLR6m4tDMJCA39kBcQaBW7Hl3mYSdBT8cGVdldKQUL6g/hLz60V5Kh6IUB
+         HPQ+d7uxEueGoj1S1Ao3ldN1nzfk+aK07Jf5ME/t4hd7LzMve3Cfz0buyLzNB7gdBgCc
+         mY9RkLWWUbNr8PhjVikSpBWLt2wmKt/1XBh/mF3I8gb8mM+OeAa/45byCIVK8bHmwSyh
+         M1xA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779116183; x=1779720983; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DYFmRZInXkJuwtO+3cn24w4m42t55qgcjnPW5qhsGC0=;
+        b=FIXlrlDzi2+Yt9mCHlw70pWVoN7DJgq+9EhwOqueWsit9AnstsbKa34mCq8XuAf5ZS
+         9D/cltcvNSGb3F/xYe5T/kHR5COfnZyF1mUsEIUAs2kzQEzrNJ6IMH9IMxwBZCYK7saO
+         OS2AtU8X9Pnpu/8wa5wvnJ8jpzeUCzIHfucXDS0CGbtHA9p4ix9Sg0CaZY8eIA6vhm4w
+         2iqR6I0d4Fl69wMBTja/tJjGp5H4F/4eBrjBYUcx/8CdrwBZkatPK3EKrd0/87vtSN4t
+         o7ISZFbKR9g2xNTHKYPPbmdnikicuO4OWcFP0CNq9GuP/v9gzCf2sOAQWV9uOkSMj1dv
+         wGiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779116183; x=1779720983;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=DYFmRZInXkJuwtO+3cn24w4m42t55qgcjnPW5qhsGC0=;
+        b=HVnkqbWW34zhF6+E7vcMeUK9wf6Ux3wCWbU+VyAe4cpN2eaLh8U4pV0tgvhxRQVMWN
+         VEI2HSclV4wul2mQ7VlmM1uWnJGkrlNo2EAsj7btShi/Ux7d9GsQY+OMkMMKCzYyl6K/
+         xsBqRZX7CdeeLxiWWcPJ1bpO5QkzX2NtBZhtyxfMRxznV4jSYIgAJqHlVUNA+hqlYXaj
+         GcfKW0Kx4vmGD7wdYaMtI70sQODyes1nKSjR48HEWlO3xac+S3FgeInhD958MZdy1v3v
+         h3fuS70cDz9Qb4+vdYE3DLDdU4P85gnx4s07CCP3EL2ydORySqatlJ3+a2n3pBUZca2X
+         chPQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9Ekm3q3Ag2rwB4DJnO0PKXLh3GdLWCk8GboyV8dN+KzVOmRYiO+CCdG5OM2o5R/qeILjBgszfN1R4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJWr7jKrXc7j7GcTts9Am22vTk+w2fflFUhXUQIZqNzDAGlBLE
+	EpCMVwQPi0UoiRLGq8tNMIlkpq9KWfkMmQjz6VaKSBUBuiaXjBENKvcePV2a9fbVvM3KIfudlqP
+	eMsNpM45uDdO+y/SZ3e4H9EfKHOfngZM=
+X-Gm-Gg: Acq92OFaVNCWKI9yVjZsz0Tbv+SvCsrwlXctQOyXOx639DD+a/SmRcMCmAFgoz2iVum
+	wgYqP70/vQIlzHrvVPry3IbZ6kaOzWch5CUfxk+i5sdz0RdPmsHKPf80DSpDvvDWazwFzxdF2/A
+	GXioTwcDch4/iSFNSa5pwRnLhuns8ckhSIH8dnXu8aS7TkjJpFW8Yr33am2SOWc/w9HdrmJgAUx
+	YifSkAO/CsCVbS2uG4dsY0TRDqYBYF8d17aDuONasP9414HtQ2uifEyq9wmz+cdmGpsAvJiofeL
+	ATvTrIW694LbgToBQAPOEA7mP3yUZQ==
+X-Received: by 2002:a05:651c:515:b0:394:5c9a:f315 with SMTP id
+ 38308e7fff4ca-39561fa5006mr44886361fa.14.1779116182771; Mon, 18 May 2026
+ 07:56:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 18 May 2026 11:46:51 -0300
-From: Mauricio Faria de Oliveira <mfo@igalia.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Matthieu CASTET <castet.matthieu@free.fr>, Stanislaw Gruszka
- <stf_xl@wp.pl>, kernel-dev@igalia.com,
- linux-atm-general@lists.sourceforge.net, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: atm: ueagle-atm: add missing uea_leaves() in
- uea_probe()
-In-Reply-To: <2026051657-scruffy-embark-45ea@gregkh>
-References: <20260515-ueagle-atm_cosmetic-v1-0-9a15e5e45bd7@igalia.com>
- <20260515-ueagle-atm_cosmetic-v1-2-9a15e5e45bd7@igalia.com>
- <2026051657-scruffy-embark-45ea@gregkh>
-Message-ID: <8d7b08e6931e570a984d086f06f07ccb@igalia.com>
-X-Sender: mfo@igalia.com
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Report: NO, Score=-2.2, Tests=ALL_TRUSTED=-3,BAYES_50=0.8
-X-Spam-Score: -21
-X-Spam-Bar: --
-X-Spamd-Result: default: False [-0.36 / 15.00];
-	R_DKIM_REJECT(1.00)[igalia.com:s=20170329];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+References: <20260516042428.3777524-1-rollkingzzc@gmail.com>
+ <agry2e2brte8W7U0@hovoldconsulting.com> <CAB7XQsGZg+wrSpCsjLXdZEsw2y9f73eNGOjYkbz_PLAbR1_C8g@mail.gmail.com>
+ <agskU46ts6au5LmQ@hovoldconsulting.com>
+In-Reply-To: <agskU46ts6au5LmQ@hovoldconsulting.com>
+From: Cen Zhang <rollkingzzc@gmail.com>
+Date: Mon, 18 May 2026 22:56:10 +0800
+X-Gm-Features: AVHnY4LqqEiqOisajDaFmyV3aOvbRRk07wOaPCtjupiylQc1NG-NYm5HhgvSsJc
+Message-ID: <CAB7XQsGxxax-WaR_B3EmUUUYDg3Nnw75rmwkYuMHwUJ5eQ7doA@mail.gmail.com>
+Subject: Re: [PATCH] USB: serial: belkin_sa: validate interrupt status length
+To: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, zerocling0077@gmail.com, 2045gemini@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37618-lists,linux-usb=lfdr.de];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FREEMAIL_CC(0.00)[free.fr,wp.pl,igalia.com,lists.sourceforge.net,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-37619-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[igalia.com:-];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	FROM_NEQ_ENVFROM(0.00)[mfo@igalia.com,linux-usb@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,igalia.com:mid]
-X-Rspamd-Queue-Id: 0987656F38D
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rollkingzzc@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 629B356F88F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 2026-05-16 04:19, Greg Kroah-Hartman wrote:
-> On Fri, May 15, 2026 at 08:54:13PM -0300, Mauricio Faria de Oliveira wrote:
->> Pair the existing uea_enters() (function entry debug message) with
->> a missing uea_leaves() (function exit debug message) in uea_probe().
-> 
-> All of those should also be removed, we have function tracing if people
-> really need/want to see this info.
+Hi Johan,
 
-Agreed. I'll send an updated series based on your feedback. Thanks.
+Thanks for your guidence.
 
-> 
-> thanks,
-> 
-> greg k-h
+Johan Hovold <johan@kernel.org> =E4=BA=8E2026=E5=B9=B45=E6=9C=8818=E6=97=A5=
+=E5=91=A8=E4=B8=80 22:38=E5=86=99=E9=81=93=EF=BC=9A
 
--- 
-Mauricio
+>
+> Nice work. But please mention that this found with the help of an LLM in
+> the commit message as documented in:
+>
+>  - Documentation/process/submitting-patches.rst ("Using Assisted-by:")
+>  - Documentation/process/coding-assistants.rst
+
+I will add an Assisted-by trailer in v2 and also use the Assisted-by traile=
+r for
+future kernel patches where an LLM materially helped find or develop the fi=
+x,
+following the documented process.
+
+Best regards,
+Zhang Cen
 
