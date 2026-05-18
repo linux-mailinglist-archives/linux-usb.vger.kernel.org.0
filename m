@@ -1,191 +1,175 @@
-Return-Path: <linux-usb+bounces-37639-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37640-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4I54E+2LC2p1IwUAu9opvQ
-	(envelope-from <linux-usb+bounces-37639-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 00:00:13 +0200
+	id CIg9HiqLC2p1IwUAu9opvQ
+	(envelope-from <linux-usb+bounces-37640-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 23:56:58 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFAB45742E4
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 00:00:10 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DD30574288
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 23:56:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 676CE304E40E
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 21:54:30 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7680D3017E4E
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 21:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E11239B947;
-	Mon, 18 May 2026 21:54:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2073339D6D2;
+	Mon, 18 May 2026 21:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="CHtdgU17"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yNrFffrh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10E3399015
-	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 21:54:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09DE039B4BB
+	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 21:56:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779141269; cv=none; b=QnyCcD/Zmlw3Ik2gmh8MXHjVJkFxwaNU0kZxnJRWPo+SYb9uQ84K0pPiCWwPtYNbGvItdXMFghXO4fNVNIrOs9+u3HADDWM/huoN8e18gak7MWhZsUW16szh0bav9iYqoqoBo0PZDzha1sV6Q53jhSOY/wM5u7+ExzhLnjJOwd4=
+	t=1779141412; cv=none; b=E2fH05XyNthVwzJWJqU0fL4Z9FQhjsHHwBnCLK8KtnEsmTPCa9T9WTkifDSKIPF8RnbvkqMvMiP66W+bX3gkgtHcTOV2xwxcEEZPXJzz7WWoJS+IATwVHT+beIAdecEp4PI1Oei1gHI90dpahFf5/mCOg9bw2ialC/gZeSZWsaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779141269; c=relaxed/simple;
-	bh=QL3k29rAvR2xNsgHCe6ZsHOzX8Bl8P0IRFycyNMvTTg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qdz2Qt6ZiD6bm8vXNiUBGp5Je49CJ3QYLEElGVK8jJEEbbPe3u1U3+ngIb+golLJuDwWypcFVeIyF20FfuRHBWXUz+/AkvAWYy7lT1VtJ7awSXuroChLhLQblgZlSlYPQVI36gZHvs1PUceJ1Je4OXbc5WIVtMsKCed3Uex4iJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=CHtdgU17; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-50d87610513so36921721cf.3
-        for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 14:54:27 -0700 (PDT)
+	s=arc-20240116; t=1779141412; c=relaxed/simple;
+	bh=Izd+ajGb6hhShbhE86/HUzaqPbJZjDWmI8YZcDks5uU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FgWIgsNQnV2nqcImaVnwl9aV1DZBWvN/b2J+F9+XLA2NcPtFx4NT3puWo/Jf8Pc2ntBViVX23WHO2XJX3YdCsRqneV7UXYf0etk7CbKmnQTDkM6MT0Cuhrh9nWt6Zjw/OZXLcjJqz1CVsE/eLLmd3Ac7kIotXUyvHIYi5NC/NZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yNrFffrh; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-44dd5cb0f81so2554353f8f.0
+        for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 14:56:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1779141267; x=1779746067; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xqk9vBawcFaV4OMn7N1td+kO+tZlE2hfUob5M/7FxBk=;
-        b=CHtdgU17OSJVdEk+5FVXyDW0LhoNaX5YKX/ZguPMS/UUNkEng3RVa0eJ60dVnK1wTD
-         beB3ibDfWmHScFfqCk+ydLuzd/6gLXt5tiB3Q+WBm9kI223LvPjQqr9/P86M6gJNyo/N
-         uUH4ElewSf5N72ZW8mTvIcuidRlB4rWu+4+lZ6UI4M0NsK9ahXKLrR/JD79O62wXDYLu
-         I5DnaAbF0Yc9eDPp+WxwbDCpnJXkVkoEOZQ0zsAHBI0JrJVfxFM/NnYBDY35hZDfpt2j
-         cJBQbOBBE8+N/BwmWXFcd8rVmswawlbAl3XqwJ+BStuxt5MALvFS2te5pc/0ZQwGTQ7K
-         NxLg==
+        d=linaro.org; s=google; t=1779141409; x=1779746209; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NJv2EIPjGK3glu7utsDpkLohNn1a3Ary13YAALySZ3c=;
+        b=yNrFffrhTQicJDkxQNZjHKD7cPqdOo1u2a043wNdE5j9BJmW2kpOahJJcZ8FBrHzfb
+         qdB0KaCS5m4kBY7RDrUZOGgHMZrgqNZCU2LxEAT/mDKJ678HSqlzagaE576fZOPFlaeU
+         K0XPQrXT/xxqFfzoaAkVnpaZkkCFbhJX6yXym7EMKORwLi8g4+QtEw/vPhh9mQt+CkK1
+         nQ0T+eOaJaqUil+fYfu2Fcvmxeoq/I7B+xITtwZ6v3gW9btGQ5xnJcnn4kZ58bs8tYPY
+         sBvvqoKY+A5w15z2ay2xpscwe2Jm1LTgJLluwJomAQvBCvVfcJ0rWGye7A2/t60uakKK
+         SBFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779141267; x=1779746067;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xqk9vBawcFaV4OMn7N1td+kO+tZlE2hfUob5M/7FxBk=;
-        b=Hbxqtt1CSbtNf3S46GOD9eUHHdLE3o0lVWH8yN90PK/jUuPvjqcvkbuwRB4TLTwfsG
-         bXEhrDIEYG+sSy0dJ6Aq9tqe/3Pd28HVrpXajK2xaBsHSZDijI1VyHt67tIcfzWg1dcS
-         WWfkUEZAF3uo9vPi+kCNvy+z7y/i//XGDQqPbS99KvPtd9H9n6EAm0CoYFjJ3udRhZ54
-         heIOstGVQOoeRMjGPj1UlQYXBbnkoO39hQPtZCCuJbgn4/zzN8QY+pFEhrzHE6+xAYXu
-         POAMBo0cvCOXR3laNA0vNSwmXGdunBrJT8jcKu6xjQYpw69SHso5ZPrLKZEwZHJk5B4L
-         ZltQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/KbjxAD55s/+MrWmAow8+ppx/j1lBj+ABclTMbh0zU1Ns4z5a/iGw7RdzJauBTWbm62Sya6ky0CY8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxT9+ZZQwMBAQi1BgQmY0BKUCC7RyCjX6AqWcWU2JxsvJvGrhG
-	MYCy+HL9rFcdANRoIN25AYTNTIFZfDHeZwqLyCzhSDMhwD/2V7o6CZ+Z9QKC3/eXypVu+uVktYj
-	YdFE=
-X-Gm-Gg: Acq92OEUxxYoNI16k7h3LJe4B0ko8IFcbt3AptTeJ4NDbQfm1NiNLbxDrN2f6i9R5KE
-	gLAs+pjrjhN9GNnDOEOS5XECa6IphaLv1xqEc+9ebTchfWEeZshmq2RpdANEXR7vrfFg/A3wzXN
-	ITEqh/uJTL0DkQO7Xsc1I4HZGWELcg0S8hwCyWn6LlSBPKVRM4c5h2eNnfwBqLPbZEbJRBAUQ+F
-	UuXplhAPEhoQUmn/o4Qp84+GrJbmj2Dfi32j5WDoQCiefQT78P9+JT+fmS3DHJV5Mbv6zQ0Oh0i
-	8OlEs2IboQy++lmoUD2rJbM3n0TYBsnkqmVtH2dpEzmyrqQTSDH3KLUjpul+TotOzCpdTQXzpLJ
-	tQ4F39xjjG3QFavsOHppYD+Z1mpO2fivIIeQObWle64a0gxCqpJ+xxXVQMkTeOfJNU9TuBgKTpG
-	gINydfsrzNOW2FarDWKLykIeoX01Owu2rw+uVs56STIu8=
-X-Received: by 2002:ac8:578f:0:b0:50f:9c32:509d with SMTP id d75a77b69052e-5165a286f00mr234843941cf.60.1779141266677;
-        Mon, 18 May 2026 14:54:26 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210:d62f:1911:f952:16ba])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5164581f1eesm141238591cf.25.2026.05.18.14.54.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 14:54:26 -0700 (PDT)
-Date: Mon, 18 May 2026 17:54:23 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: pip-izony <eeodqql09@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kyungtae Kim <Kyungtae.Kim@dartmouth.edu>,
-	Kees Cook <kees@kernel.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	David Mosberger <davidm@egauge.net>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] usb: host: max3421: Reject hub port requests for
- non-existent ports
-Message-ID: <a5b4720d-e91b-4a81-b2b6-e04835e1826b@rowland.harvard.edu>
-References: <20260517000145.1868817-2-eeodqql09@gmail.com>
- <20260517190308.1876316-1-eeodqql09@gmail.com>
- <20260517190308.1876316-2-eeodqql09@gmail.com>
+        d=1e100.net; s=20251104; t=1779141409; x=1779746209;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NJv2EIPjGK3glu7utsDpkLohNn1a3Ary13YAALySZ3c=;
+        b=TauFXLTcx8uwpI24ZRO+RKrrh6dAszLGez1+olByhAa9A/TiR3kKLmwYVd9UoZIIzX
+         47kG2qXZj3B7fHsV9AkochqQZMG9gRKmH753hv2NlyLnVAnEq9ffrxfjpXAAqaujfve5
+         Vk5/o3dntMxj8esoNohFRFeeL8EUk2fjvu5R2v+2OnKAMF7YVdxntNtutUOA4IteqGLy
+         4ZNoFsuU/O8DTjgs+vHLFHPiXEebRL0vxANNo7z02KJGhBrR9IiEf++gzIXnsr2yfils
+         9zaQwI8/FKfHFrfdfEf5NiFYMhND0L5l11LBSiZVXiDVdErAiVmVeDzVS+Fa+MzIlsUx
+         RNFw==
+X-Forwarded-Encrypted: i=1; AFNElJ+aVWTUnyk/aa7pnNq/jcqeCVmKZt8jBBjmYmSCfx0x5qAc3DHbgJ8m8b8/ZpsEOmPzgh+uUbo2weM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhNNQ9fiRsRvH7J1tYjXYwusd4nksOcGLbuodI0yG8r3Hh1WSd
+	GKZ+7N42DoHR+2Tx3g6P2DK6O/64oOjqpJ4QF/BB093ExLLdx7KcBS+tTB/dWpVoIaM=
+X-Gm-Gg: Acq92OGNxXJZpNsC07wtEJ7jGcTcSpqtrePqGfTbGjG6LjGwyzhOHZbC6P0OPcM4LE7
+	xKg7627ZeYjhoUkWiA4DiNTnAa3UMUzpOC9m8ROPoPWjJVrLOUnReYxQ/9AMUCrkB3+V5vkJ2hp
+	7P/oYWxAz320ddEz0cgOSWJno4Ag1Mic/9wFGH4cZ+P/g2Nv4fSVySZ/vBqTej4g6Pg/fyiTiMY
+	jYFIejs0P3HfIMqsJYJY0E8BsuP5yZaC5eGNy/V9K9mtSv4YeDys22YbqHDg+Lx0BfVE8gnYyk3
+	hQ3rEVeqSxaGCKhmcV9yJQXDluen4GyqZzxGLTlZDoTz0BIPKw+zA6GUxW0zco4cfA9gpqv8OdE
+	a5nshC42lM3/4kOnuK6BkaoMKaaJbIhKoD5uLEAT/XpxYVnmz4cqTL+cD56nAdkC0LftL9YqjBL
+	1+A6sDlQ8I5MMizsI21ZZ76KPAuarT5aYa
+X-Received: by 2002:a05:6000:22c1:b0:43d:7606:5a47 with SMTP id ffacd0b85a97d-45e5b73a043mr28591671f8f.2.1779141409371;
+        Mon, 18 May 2026 14:56:49 -0700 (PDT)
+Received: from [192.168.0.35] ([64.43.40.255])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9e768c4fsm40379314f8f.8.2026.05.18.14.56.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 May 2026 14:56:48 -0700 (PDT)
+Message-ID: <3170e034-5780-4b85-9d25-f55126f4a2cb@linaro.org>
+Date: Mon, 18 May 2026 22:56:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260517190308.1876316-2-eeodqql09@gmail.com>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/6] dt-bindings: regulator: qcom,usb-vbus-regulator: add
+ PMI8998
+To: taygoth <taygoth@gmail.com>, linux-arm-msm@vger.kernel.org,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Wesley Cheng <quic_wcheng@quicinc.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Casey Connolly <casey.connolly@linaro.org>
+References: <cover.1779127507.git.taygoth@gmail.com>
+ <2a3c65bbfb85d944110b14b40ef375f238ca3932.1779127507.git.taygoth@gmail.com>
+Content-Language: en-US
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <2a3c65bbfb85d944110b14b40ef375f238ca3932.1779127507.git.taygoth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37639-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37640-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,quicinc.com,linuxfoundation.org,linux.intel.com,linaro.org];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[bryan.odonoghue@linaro.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linaro.org:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,harvard.edu:email,rowland.harvard.edu:mid,rowland.harvard.edu:dkim]
-X-Rspamd-Queue-Id: CFAB45742E4
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,linaro.org:email,linaro.org:mid,linaro.org:dkim]
+X-Rspamd-Queue-Id: 1DD30574288
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sun, May 17, 2026 at 03:03:08PM -0400, pip-izony wrote:
-> From: Seungjin Bae <eeodqql09@gmail.com>
+On 18/05/2026 21:22, taygoth wrote:
+> The Qualcomm PMI8998 PMIC integrates a USB OTG VBUS boost converter
+> inside its SMB2 charger block at offset 0x1100. The OTG control
+> register layout (CMD_OTG at +0x40, OTG_CURRENT_LIMIT_CFG at +0x52,
+> OTG_CFG at +0x53) matches the PM8150B SMB5 block, so the existing
+> qcom_usb_vbus-regulator driver can drive it without code changes via
+> compatible cascade.
 > 
-> The `max3421_hub_control()` function handles USB hub class requests
-> to the virtual root hub. The `GetPortStatus` case correctly rejects
-> requests with `index != 1`, since the virtual root hub has only a
-> single port. However, the `ClearPortFeature` and `SetPortFeature`
-> cases lack the same check.
+> Verified by inspecting the downstream qpnp-smb2 driver and reading
+> live register values on a OnePlus 6T (sdm845-oneplus-fajita) running
+> mainline Linux.
 > 
-> Fix this by extending the `index != 1` rejection to both cases,
-> matching the existing behavior of `GetPortStatus`.
-> 
-> Fixes: 2d53139f3162 ("Add support for using a MAX3421E chip as a host driver.")
-> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Seungjin Bae <eeodqql09@gmail.com>
+> Signed-off-by: taygoth <taygoth@gmail.com>
 > ---
-
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-
-Heh, this made me go back and look at dummy-hcd.c.  It's missing the 
-same check in the same places!
-
-Would you like to submit a patch to fix that driver as well?  If not, 
-I'll take care of it.
-
-Alan Stern
-
->  v3: New patch in v3, suggested by Alan Stern.
+>   .../devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml   | 1 +
+>   1 file changed, 1 insertion(+)
 > 
->  drivers/usb/host/max3421-hcd.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hcd.c
-> index 3d6b351dcb1a..73e76d0e6973 100644
-> --- a/drivers/usb/host/max3421-hcd.c
-> +++ b/drivers/usb/host/max3421-hcd.c
-> @@ -1685,6 +1685,8 @@ max3421_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value, u16 index,
->  	case ClearHubFeature:
->  		break;
->  	case ClearPortFeature:
-> +		if (index != 1)
-> +			goto error;
->  		switch (value) {
->  		case USB_PORT_FEAT_SUSPEND:
->  			break;
-> @@ -1728,6 +1730,8 @@ max3421_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value, u16 index,
->  		break;
->  
->  	case SetPortFeature:
-> +		if (index != 1)
-> +			goto error;
->  		switch (value) {
->  		case USB_PORT_FEAT_LINK_STATE:
->  		case USB_PORT_FEAT_U1_TIMEOUT:
-> -- 
-> 2.43.0
-> 
+> diff --git a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+> index fcefc722ee2a..9e2e2c8f9539 100644
+> --- a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+> @@ -28,6 +28,7 @@ properties:
+>                 - qcom,pm6150-vbus-reg
+>                 - qcom,pm7250b-vbus-reg
+>                 - qcom,pmi632-vbus-reg
+> +              - qcom,pmi8998-vbus-reg
+>             - const: qcom,pm8150b-vbus-reg
+>   
+>     reg:
+
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+
+---
+bod
 
