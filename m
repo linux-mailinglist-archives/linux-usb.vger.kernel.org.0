@@ -1,279 +1,275 @@
-Return-Path: <linux-usb+bounces-37580-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37582-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IHkXNlXDCmrR7gQAu9opvQ
-	(envelope-from <linux-usb+bounces-37580-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 09:44:21 +0200
+	id 6K4hFe3QCmru8QQAu9opvQ
+	(envelope-from <linux-usb+bounces-37582-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 10:42:21 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 526A7568038
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 09:44:21 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB1C8569078
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 10:42:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CE0213049723
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 07:36:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B01B0300C58F
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 08:41:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E9C13E0231;
-	Mon, 18 May 2026 07:36:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 538FC3E2AD5;
+	Mon, 18 May 2026 08:41:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WiH1v+NO";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Dt+aJF5U"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NB6gSVWy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AF233D0BE5
-	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 07:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779089797; cv=none; b=sjTz2eyRf5zX1lX+qMtC8fi9/U9ZvjSEFpyPdnaitaumlQwbwloWuJL5OUL9QELYYTJpn3UDhByoE2+T2/oTLWv16um5OkO6JuRBpycWnGWDvJedKCvxmpbgQwsC7Pduz8ksRe0050ordcpQS47TxCBitwzavs5VCCVgIHejC34=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779089797; c=relaxed/simple;
-	bh=tSY/+9e7Avin2SKeKnn0nYd+uZVQTXgWH36OVAKxF6s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p/1yfE6Dmbw46un5+2qigbXoCkJgqgEJj6aT2BE0JEkNDjBsrU7O7L5XDWDxafCtH1DJUteBGhnkr6iOi/9JeJDMppMnPJ7V6v+cjCBB3vNg9VoNvXGz8BSeSdnfIGhwzQ7tPJY9EQxTw1ValitStyg7mTfdaw1A6FW/aS1myGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WiH1v+NO; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Dt+aJF5U; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1779089795;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=rxj3hjLS1wMg1dys4oRBWhSMYXGodufeExdNLEthm+k=;
-	b=WiH1v+NOEVGFAVY8y5xn5hCMWDyCkxeHExUrfwE+RxmK4V3nANdT3FnAoKgndh3PiqaB5X
-	sq6RPUrVYkiOuxLEa/XQ40+qPU5FBmINdtXJxd9fZUwrLvx/OJUc1+0/u2T90L3K9jCjbC
-	lgRpbOqck4fKRDpSRHnfiSB2LGdIDgo=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-687-HyBP3NbRMHqwwHqGkZRqeQ-1; Mon, 18 May 2026 03:36:33 -0400
-X-MC-Unique: HyBP3NbRMHqwwHqGkZRqeQ-1
-X-Mimecast-MFC-AGG-ID: HyBP3NbRMHqwwHqGkZRqeQ_1779089792
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-44696b11265so3041706f8f.0
-        for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 00:36:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59FAC3E121A
+	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 08:41:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779093698; cv=pass; b=poX6RD4wlS52k+T72bRaqlBU4waU8tdyIUNJw6cyxrfGaFHuS127T6y4o6PE7kMLquU/Zv73O7YU/3Dxu99l1d1MEOlmQ0jjkdcHlbT00NDclvEKAQqG4Uhx+31MKkuG06UtbtIswWMakN1BLH9D7de1yrvuO86r9ZCCmC06PQI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779093698; c=relaxed/simple;
+	bh=OEeBuM2geI8k9VDeShg+CBoWPAm6ZOz7U4Do6PQeKJU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gNjj5hB/eTytJxXQa+T+jdDJlyVKEI7x4mFc28WLUaJ6izEAJeCz9rgJkzZpaI/Ywyux7LcmBBxUqOm37MkycJAwp2yOHfFOYw2vO+vq+Uhp0B3PDwdgIe31taFoFhLkx9l+i1pVwG3FfqTvmURYF0gCv14EgVEQ190vQvLh5X4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NB6gSVWy; arc=pass smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-39556b00a85so19114171fa.0
+        for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 01:41:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779093695; cv=none;
+        d=google.com; s=arc-20240605;
+        b=X54EHIm6U7XgBVzDXUzoSb4kV1EljadpVC0ERltdEnQWPJBBvg3YSkmLCl5lDaDMTB
+         vCpk+UPu4R7AXMXk15SKC9Mz3KTPtTouT1Y/dx0cG5LZGR+lMiKGkpUXFrB5QXvH/AuK
+         LYqfA6AM6UbbF0QCbH0VqIrVQXNb9mNHlztiGXvigli10lcdODfQzfz8bKMSMK2bK7+n
+         lPIL4RpNQCbbWZJZ0Cb8AiojIWumgC5gGlIRFZT2RDX+ikB/oqwJzex/2dp72V90WHj7
+         F+NqHoTUjuYM9SLeS6xZze23BcA5vnTvT/qlAb4CyO8O6k1+uZBJkGRGhR9sjB6hj/7W
+         6Dhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=dKnU3D4N886VKwg6I/DtlPHc3UecmhrAC8tjca7evEA=;
+        fh=DN19s0ibwwfJeGavrSM1cHit2/YwAmBInLLPIvjttCQ=;
+        b=LilhgYfTTkrWR9PZdtYvvlY2ec8lbcdW07nn6uJUWVlDBu4lfOVuFZjwe6lb4ksXiL
+         27qaBSBK6WPsY0zlA+GAkwyPi3FC6fAo/RoAAPrOdR+Rj0wSP8dosQFusSWH80Ew49Er
+         KIO8WzpEtOzrbEXpewrGQ2m+O9IguZTLB5GdYLGWEfXMdKz6Sr0XoFjJplUaP0/NUXUq
+         o5FaFcQiEginmz28/c8ZB7DrErlnX/B0mQ0K4FD337FUj24q7B6vfQdRjarnldqS4k6g
+         5FvKorkZ+ofsHJpEdne7PY86BCsG+w5o5+g6K9ENDBklLFCGQUmao76ZxPcvBxwcac4/
+         vH5w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1779089792; x=1779694592; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=rxj3hjLS1wMg1dys4oRBWhSMYXGodufeExdNLEthm+k=;
-        b=Dt+aJF5UjxvV5wDE4PZ4kyPqHENjwo5krRuKY0PLlfknlH6ABYlNuR5ER0jM6vKz5b
-         xWuQ2te0CKWAzzTdJzEYRex03jr2xEeVwgr4pFDpVoZaZdLqoDbDhPPnfdhoCBM64NWy
-         Azh+1Gvr2Bp1Eh+4GWUQJqfdcgxA1xGyR7+xxB9HpjUaWORnGtsaxuSBj1DnVaCnTpOM
-         1fAnP4iaFIzSKhyqMAwp1+UbLQem6k95IaH5kNaN/Aq0YS9rNnkO9I8cRrG7BS4PKh+i
-         lOXuGvgFDF1b8chnuY3/pUSqbI//c409joHzhX9cfOMZoDjX9YJ7aQshSskrhmAURnVX
-         0TVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779089792; x=1779694592;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779093695; x=1779698495; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rxj3hjLS1wMg1dys4oRBWhSMYXGodufeExdNLEthm+k=;
-        b=kuhdn6QQK6SjQyKWlMrzuh8gejohddGIC8Zk3cbxyTCklIn3hQ7agLHgva9eX8M8nZ
-         oRLvQ9JHBx4XKo0TSftFgBIc5zl/qXKO9I3zzlvmddTbcBN9QOFHDodnHHD/h+zJ6aKF
-         qr51sxAyPQ+Sfli1eA0FsEdRgoDCGup3hOUrfVaOJDy5TRdbM6TgK10wjhXSV1v9LS6z
-         ELWObe+MjMPWNkxbBjMfQUJ32BeKxOnDl3b3IZ0B3wy9sEu5GB83mkWOmZIZtAtRVXg2
-         Oob8xEI+ku49+SkCwxlFdcD+4aXMRP0tL2Mp7rCqFkd4G+OI83JtI9EJsCvAG1wqVHKI
-         MbDw==
-X-Gm-Message-State: AOJu0YybhE+aBni/P15lI/tWFWeAhFl7euhvUjgjpqw0+RNXuC5y3IYq
-	ZxqHDZ38/IV6D7u8aw/K6ye0KbwcllSIjfIEz0g4f1DQkNyX2UdgKAR8bYl9TCqRz+mpelqiWjm
-	NKF97aYOsddePWs3iDtvvVjqFGvajM70JmOMnPlT7KaVMZhRMDb6LsgpvlOpKQw==
-X-Gm-Gg: Acq92OFVE+yo4HdSbM5Skg8M3zSTT8cfsdqYC/6voQF5bFR/XZDvVToaFSZm1e/B3k1
-	Mk/VCw447YcirdnPcslvbFHXfd5O11XfN7AjEmrP5ClQ8SeK5hbpwE6nkIWh601DD2jBl5yvX1t
-	9xwEnOjzaJIEJ7tF6TYG51bRpmwmDv6wUp9fux8uuLoognMUflTlEm/5a7Oi2fhgyY94myTewbm
-	2H98pn4MjRG7ct1XIdUGu/TMnx0ro5dUzJpB5O3Y7tI0eKVFkmTC4Dtd9wgcGLIoCL9Y+xE6qsN
-	Tt/OX6oAUf7OvWOkzUJlfD5wZ9AZcKxKZz3lD+4JVViFiVg3/lZDsuuH0XgWOp5dR1scOWBUghk
-	mK8FnTkJiZ7uebqQRm7+IG437RGFkjMgWhWxm2sNloVTKlNwAHMTd2w0=
-X-Received: by 2002:a05:6000:401e:b0:449:c5e2:a8b7 with SMTP id ffacd0b85a97d-45e5c59ec1cmr20788009f8f.30.1779089792178;
-        Mon, 18 May 2026 00:36:32 -0700 (PDT)
-X-Received: by 2002:a05:6000:401e:b0:449:c5e2:a8b7 with SMTP id ffacd0b85a97d-45e5c59ec1cmr20787957f8f.30.1779089791712;
-        Mon, 18 May 2026 00:36:31 -0700 (PDT)
-Received: from [192.168.100.100] (82-64-211-94.subs.proxad.net. [82.64.211.94])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9ec39806sm34279591f8f.9.2026.05.18.00.36.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 May 2026 00:36:31 -0700 (PDT)
-Message-ID: <3550f13e-124c-492f-a5b5-ae6ad95f09f0@redhat.com>
-Date: Mon, 18 May 2026 09:36:29 +0200
+        bh=dKnU3D4N886VKwg6I/DtlPHc3UecmhrAC8tjca7evEA=;
+        b=NB6gSVWyaKMXyeatoaEZ7AeXaHeDRb5lA+jqcI6VmXXHrdRF8mEMIC3PJSea7BHVZ8
+         8QRduL+nxRIvQ6GMxPQi3cXcOk1MKjIhUGG5xIFUUHOElBLjE/bRGYQ9Cwk8ZOz5EOHL
+         eqsha7Oc1R3/cr19ERyl/XsVF0ZPO+LGZH112vIZctVjfL0JfJGSroVO49ZrOZKHVjBC
+         Kj6ESHlSQawAdJSbYzSvfFB+75KJVDjvUYmHWEaGeIOoyKoBRFfr8jBLa9YvDJI+16XF
+         DmjPY+uofjaeRdWe2BrWdt3Eg6WP9ZTAI88A6kMghrFWiFkJh1JFh2h7o0ntIJ2KADx2
+         vusg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779093695; x=1779698495;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=dKnU3D4N886VKwg6I/DtlPHc3UecmhrAC8tjca7evEA=;
+        b=pm0jVa0GnwLZ1g8h7v3fGaCchwbLruiq3wSD+v8cm+aGgFZPMibpEFWgssam/bgDAm
+         rL8QDBTzDj7ZdrzcKusmBpYacURr+pcH1y/PFjGK6HRHQRNX25tZwoi3/ALkKKpJGktr
+         wD2YQaXrE12yv3HpvNJBbyVozATsf42DSg7HfdhcTlLiz8BkwRr+XrVKzbGFb9T1DoHl
+         TmmYSw8Y+275qyPshS5QDtHOzxEA5nJ5rrvOtGyT7dTl7UvMSKSOEg5KnfBax3VNYXox
+         ybwiPL2OQmIIrrKKWxIPlILqS3ffcDvhj6A2n+02oiXy/a+V2zdBpw3tdwJKjFPFnzjb
+         QTLA==
+X-Gm-Message-State: AOJu0YwNzzANq7np5tZt43aoi4P74LznF/gxmGp4DpN94MJqSIhhpAkB
+	NJBkh3GiQdY6hbqffssa23tXhBkCbIwamAjMup64KxJwtGRFUBzbI37ElW0WTUDwU9Ar8cnqyAp
+	NMxginz9pQ/iErtl6axcdXDG2V0MLgGKbulCY
+X-Gm-Gg: Acq92OF+CE+iYjPojzwEQ4w4GKb46pfdjy6vA5aO2F8dkTvZKrfx59xnFkitCU2pi4u
+	omZA0cB5yAS1ixs/+ZaYeIHQhfALxDC2HylreDZ6k/b0hc7lwS7qTNJE/pFV989YysIKwl8qTTJ
+	k6n4Qx6NQeuna07JcerCkbgN1+1ttZwDH3kPp+ARqVScANRM8EisAW/ojQlNbOOzTVgDQUf5Mjf
+	cX872MM3KgU0IC/kqr2kdSNZ86XYeLSG16/3Skq+5pLOytwvQKa2d+cds5MdwW2UOdXOTvmunfp
+	U9fKaS4=
+X-Received: by 2002:a2e:9645:0:b0:393:ba06:158f with SMTP id
+ 38308e7fff4ca-39561d877e1mr37464701fa.16.1779093695144; Mon, 18 May 2026
+ 01:41:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v2] usbnet: limit max_mtu based on device's hard_mtu
-To: Matthias May <matthias.may@westermo.com>
-Cc: linux-usb@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
- Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
- Stefano Brivio <sbrivio@redhat.com>, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20260119075518.2774373-1-lvivier@redhat.com>
- <539202f5-43ba-4938-a9b2-393c1bb3e072@westermo.com>
-Content-Language: en-US
-From: Laurent Vivier <lvivier@redhat.com>
-Autocrypt: addr=lvivier@redhat.com; keydata=
- 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
-In-Reply-To: <539202f5-43ba-4938-a9b2-393c1bb3e072@westermo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 526A7568038
+References: <CAGwGCQ+YFkxxnnbSKbSWC7wsh5ORAT=5riqHJrwsimtqFCuKYw@mail.gmail.com>
+ <20260512122719.51338042.michal.pecio@gmail.com> <CAGwGCQLjcOkjgDZgxmL0gR6uVwmFjxJ22sMzBYRJLXrDtbZZCQ@mail.gmail.com>
+ <20260512190203.5695eb7f.michal.pecio@gmail.com> <CAGwGCQJ5eOfuq2dKPSL1yocruT8prwns93sTvzAUVZTJ4CZsyg@mail.gmail.com>
+ <20260518084648.00fdc77e.michal.pecio@gmail.com>
+In-Reply-To: <20260518084648.00fdc77e.michal.pecio@gmail.com>
+From: Anders Thomson <andtho888@gmail.com>
+Date: Mon, 18 May 2026 10:41:23 +0200
+X-Gm-Features: AVHnY4JxkjvmAmrNGr6wzCRDJSb8YjI50s3iYqcEPvYQp2LY6II4DfPAeIKbJVk
+Message-ID: <CAGwGCQKyRsyRE_HRCNYgBComN-cZU4SW0j-cq3OwqG=-VH4NKA@mail.gmail.com>
+Subject: Re: renesas 1912:0014 failures
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: AB1C8569078
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-37582-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-37580-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	NEURAL_HAM(-0.00)[-0.991];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lvivier@redhat.com,linux-usb@vger.kernel.org];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
-	REDIRECTOR_URL(0.00)[urldefense.com];
+	FROM_NEQ_ENVFROM(0.00)[andtho888@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,urldefense.com:url,kern.info:url]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid,28.xxx:url]
 X-Rspamd-Action: no action
 
-On 5/18/26 09:21, Matthias May wrote:
-> On 19/01/2026 8:55 am, Laurent Vivier wrote:
->> The usbnet driver initializes net->max_mtu to ETH_MAX_MTU before calling
->> the device's bind() callback. When the bind() callback sets
->> dev->hard_mtu based the device's actual capability (from CDC Ethernet's
->> wMaxSegmentSize descriptor), max_mtu is never updated to reflect this
->> hardware limitation).
->>
->> This allows userspace (DHCP or IPv6 RA) to configure MTU larger than the
->> device can handle, leading to silent packet drops when the backend sends
->> packet exceeding the device's buffer size.
->>
->> Fix this by limiting net->max_mtu to the device's hard_mtu after the
->> bind callback returns.
->>
->> See https://urldefense.com/v3/__https://gitlab.com/qemu-project/qemu/-/issues/3268__;!! 
->> I9LPvj3b!H-nIZIscCCh_2FnbJInagPxXTe0XcNu58-8k3NqGYKRdDy8LBOBjWiTIc1E- 
->> cC2wnv91MtZrak2pu7K-4cU$  and
->>      https://urldefense.com/v3/__https://bugs.passt.top/attachment.cgi?bugid=189__;!! 
->> I9LPvj3b!H-nIZIscCCh_2FnbJInagPxXTe0XcNu58-8k3NqGYKRdDy8LBOBjWiTIc1E- 
->> cC2wnv91MtZrak2pq4lrvZI$
->>
->> Fixes: f77f0aee4da4 ("net: use core MTU range checking in USB NIC drivers")
->> Signed-off-by: Laurent Vivier <lvivier@redhat.com>
->> Link: https://urldefense.com/v3/__https://bugs.passt.top/show_bug.cgi?id=189__;!! 
->> I9LPvj3b!H-nIZIscCCh_2FnbJInagPxXTe0XcNu58-8k3NqGYKRdDy8LBOBjWiTIc1E- 
->> cC2wnv91MtZrak2p8csXaww$
->> Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
->> ---
->>   drivers/net/usb/usbnet.c | 9 ++++++---
->>   1 file changed, 6 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
->> index 36742e64cff7..1093c2a412d9 100644
->> --- a/drivers/net/usb/usbnet.c
->> +++ b/drivers/net/usb/usbnet.c
->> @@ -1821,9 +1821,12 @@ usbnet_probe(struct usb_interface *udev, const struct 
->> usb_device_id *prod)
->>           if ((dev->driver_info->flags & FLAG_NOARP) != 0)
->>               net->flags |= IFF_NOARP;
->> -        /* maybe the remote can't receive an Ethernet MTU */
->> -        if (net->mtu > (dev->hard_mtu - net->hard_header_len))
->> -            net->mtu = dev->hard_mtu - net->hard_header_len;
->> +        if (net->max_mtu > (dev->hard_mtu - net->hard_header_len))
->> +            net->max_mtu = dev->hard_mtu - net->hard_header_len;
->> +
->> +        if (net->mtu > net->max_mtu)
->> +            net->mtu = net->max_mtu;
->> +
->>       } else if (!info->in || !info->out)
->>           status = usbnet_get_endpoints(dev, udev);
->>       else {
-> 
-> Hi Laurent
+On Mon, May 18, 2026 at 8:46=E2=80=AFAM Michal Pecio <michal.pecio@gmail.co=
+m> wrote:
+>
+> On Wed, 13 May 2026 00:34:02 +0200, Anders Thomson wrote:
+> > Here we go:
+> > [  469.798260] PM: suspend entry (deep)
+> > [  470.046476] Filesystems sync: 0.248 seconds
+> > [  470.048616] Freezing user space processes
+> > [  470.049453] Freezing user space processes completed (elapsed 0.000 s=
+econds)
+> > [  470.049499] OOM killer disabled.
+> > [  470.049536] Freezing remaining freezable tasks
+> > [  470.050449] Freezing remaining freezable tasks completed (elapsed
+> > 0.000 seconds)
+> > [  470.050516] printk: Suspending console(s) (use no_console_suspend to=
+ debug)
+> > [  470.051839] xhci-pci-renesas 0000:03:00.0: Get port status 9-1
+> > read: 0x2a0, return 0x100
+> > [  470.051866] xhci-pci-renesas 0000:03:00.0: Get port status 9-2
+> > read: 0x2a0, return 0x100
+> > [  470.051876] xhci-pci-renesas 0000:03:00.0: Get port status 9-3
+> > read: 0x2a0, return 0x100
+> > [  470.051886] xhci-pci-renesas 0000:03:00.0: Get port status 9-4
+> > read: 0x2a0, return 0x100
+> > [  470.077248] xhci-pci-renesas 0000:03:00.0: Get port status 10-1
+> > read: 0x2a0, return 0x2a0
+> > [  470.077264] xhci-pci-renesas 0000:03:00.0: Get port status 10-2
+> > read: 0x2a0, return 0x2a0
+> > [  470.077276] xhci-pci-renesas 0000:03:00.0: Get port status 10-3
+> > read: 0x2a0, return 0x2a0
+> > [  470.077292] xhci-pci-renesas 0000:03:00.0: Get port status 10-4
+> > read: 0x2a0, return 0x2a0
+> > [  470.077501] sd 7:0:0:0: [sdf] Synchronizing SCSI cache
+> > [  470.077635] xhci-pci-renesas 0000:03:00.0: config port 10-1 wake
+> > bits, portsc: 0x2a0, write: 0x202a0
+> > [  470.077818] xhci-pci-renesas 0000:03:00.0: config port 10-2 wake
+> > bits, portsc: 0x2a0, write: 0x202a0
+> > [  470.077825] xhci-pci-renesas 0000:03:00.0: config port 10-3 wake
+> > bits, portsc: 0x2a0, write: 0x202a0
+> > [  470.077833] xhci-pci-renesas 0000:03:00.0: config port 10-4 wake
+> > bits, portsc: 0x2a0, write: 0x202a0
+> > [  470.077842] xhci-pci-renesas 0000:03:00.0: config port 9-1 wake
+> > bits, portsc: 0x2a0, write: 0x202a0
+> > [  470.077847] xhci-pci-renesas 0000:03:00.0: config port 9-2 wake
+> > bits, portsc: 0x2a0, write: 0x202a0
+> > [  470.077852] xhci-pci-renesas 0000:03:00.0: config port 9-3 wake
+> > bits, portsc: 0x2a0, write: 0x202a0
+> > [  470.077856] xhci-pci-renesas 0000:03:00.0: config port 9-4 wake
+> > bits, portsc: 0x2a0, write: 0x202a0
+> > [  470.077859] xhci-pci-renesas 0000:03:00.0: xhci_suspend: stopping
+> > usb9 port polling.
+> > [  470.078452] r8169 0000:02:00.0 enp2s0: Link is Down
+> > [  470.083228] xhci-pci-renesas 0000:03:00.0: Setting command ring
+> > address to 0x2476001
+>
+> This looks like normal suspend, no indication that the chip failed
+> to halt or otherwise appeared nonresponsive.
+>
+> > [  470.085447] sd 0:0:0:0: [sda] Synchronizing SCSI cache
+> > [  470.085685] ata1.00: Entering standby power mode
+> > [  470.089467] sd 3:0:0:0: [sdd] Synchronizing SCSI cache
+> > [  470.089471] sd 1:0:0:0: [sdb] Synchronizing SCSI cache
+> > [  470.089498] sd 2:0:0:0: [sdc] Synchronizing SCSI cache
+> > [  470.089976] ata3.00: Entering standby power mode
+> > [  471.185801] ata4.00: Entering standby power mode
+> > [  471.923516] ACPI: PM: Preparing to enter system sleep state S3
+> > [  471.923767] ACPI: PM: Saving platform NVS memory
+> > [  471.924004] Disabling non-boot CPUs ...
+> > [  471.925486] smpboot: CPU 3 is now offline
+> > [  471.927750] smpboot: CPU 2 is now offline
+> > [  471.930012] smpboot: CPU 1 is now offline
+> > [  471.937302] ACPI: PM: Low-level resume complete
+> > [  471.937330] ACPI: PM: Restoring platform NVS memory
+> > [  471.937770] Enabling non-boot CPUs ...
+> > [  471.937814] smpboot: Booting Node 0 Processor 1 APIC 0x1
+> > [  471.948497] CPU1 is up
+> > [  471.948526] smpboot: Booting Node 0 Processor 2 APIC 0x2
+> > [  471.958206] CPU2 is up
+> > [  471.958233] smpboot: Booting Node 0 Processor 3 APIC 0x3
+> > [  471.967051] CPU3 is up
+> > [  471.970459] ACPI: PM: Waking up from system sleep state S3
+> > [  471.973104] usb usb2: root hub lost power or was reset
+> > [  471.973129] usb usb4: root hub lost power or was reset
+> > [  471.973229] usb usb5: root hub lost power or was reset
+> > [  471.973248] usb usb6: root hub lost power or was reset
+> > [  471.973325] usb usb7: root hub lost power or was reset
+> > [  471.973345] usb usb8: root hub lost power or was reset
+> > [  471.973735] hpet: Lost 1253 RTC interrupts
+> > [  471.973898] usb usb9: root hub lost power or was reset
+> > [  471.973901] usb usb10: root hub lost power or was reset
+> > [  471.973904] xhci-pci-renesas 0000:03:00.0: Stop HCD
+> > [  471.973906] xhci-pci-renesas 0000:03:00.0: // Halt the HC
+> > [  471.973917] xhci-pci-renesas 0000:03:00.0: // Reset the HC
+> > [  500.363392] hpet: Lost 1815 RTC interrupts
+> > [  500.363631] xhci-pci-renesas 0000:03:00.0: PCI post-resume error -11=
+0!
+> > [  500.363635] xhci-pci-renesas 0000:03:00.0: HC died; cleaning up
+> > [  500.363715] xhci-pci-renesas 0000:03:00.0: PM: dpm_run_callback():
+> > pci_pm_resume returns -110
+> > [  500.363725] xhci-pci-renesas 0000:03:00.0: PM: failed to resume
+> > async: error -110
+>
+> I see you still have the quirk, but it doesn't matter, the chip is
+> stuck and doesn't work either way.
 
-Hi Matthias,
+The machine hangs on boot with the quirk. Without quirk i get:
+[    2.293602] cdrom: Uniform CD-ROM driver Revision: 3.20
+[    2.303526] sr 5:0:0:0: Attached scsi CD-ROM sr0
+[    2.303603] sr 5:0:0:0: Attached scsi generic sg4 type 5
+[   28.493779] xhci-pci-renesas 0000:03:00.0: xHCI Host Controller
+[   28.493891] xhci-pci-renesas 0000:03:00.0: new USB bus registered,
+assigned bus number 9
+[   28.499338] xhci-pci-renesas 0000:03:00.0: hcc params 0x014051cf
+hci version 0x100 quirks 0x0000000100000090
 
-> 
-> This change was backported to 6.6.* and caused a regression with wwan devices via USB when 
-> using a mux.
-> 
-> Tested on a Quectel EM12 running the firmware EM12GPAR01A21M4G_01.300.01.300.
-> 
-> Tue May  5 09:49:35.638 2026 kern.info kernel: [   10.819620] qmi_wwan 1-1.2:1.4: cdc- 
-> wdm0: USB WDM device
-> Tue May  5 09:49:35.638 2026 kern.info kernel: [   10.829601] qmi_wwan 1-1.2:1.4 
-> cellular0: register 'qmi_wwan' at usb-fsl-ehci.0-1.2, WWAN/QMI device, 6a:c3:49:88:47:b1
-> Tue May  5 09:49:35.638 2026 kern.info kernel: [   10.840579] usbcore: registered new 
-> interface driver qmi_wwan
-> 
-> The parent interface (we renamed it "cellular0") requires an MTU of 1504 (4 bytes overhead 
-> from the muxer).
-> The actual wwan0, wwan1 interfaces have an MTU of 1500.
-> 
-> With this change it's no longer possible to set an MTU of 1504 on cellular0.
+Those 28.xxx  renesas lines never show up with the quirk applied. The
+machine works (waiting 10 minutes I get a logs from other kernel
+threads), but the boot process is stopped. By the looks of it, no usb
+probing completes.
 
-This should be fixed by
+> I don't know what causes this, looks like a low level problem - in HW
+> or possibly the PCI layer. Maybe Mathias will have other ideas, but
+> I'm not sure that USB subsystem can do anything about it.
 
-55f854dd5bdd ("qmi_wwan: allow max_mtu above hard_mtu to control rx_urb_size") which is in 
-v7.0.
+It is a pcie 1x card, with no external (molex) power supply, if that helps.
 
-Could you have a try?
-
-Thanks,
-Laurent
-
+Regards
+Anders
 
