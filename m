@@ -1,169 +1,234 @@
-Return-Path: <linux-usb+bounces-37619-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37621-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cAN+MbQqC2pAEAUAu9opvQ
-	(envelope-from <linux-usb+bounces-37619-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 17:05:24 +0200
+	id iIowDUo5C2qWEwUAu9opvQ
+	(envelope-from <linux-usb+bounces-37621-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 18:07:38 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 629B356F88F
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 17:05:24 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF19A570991
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 18:07:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7A87A30BE603
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 14:56:41 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 6BAF4302F9EB
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 15:56:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A74872C21D0;
-	Mon, 18 May 2026 14:56:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6A433BD224;
+	Mon, 18 May 2026 15:56:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FIXlrlDz"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="dm4ZRMxa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f193.google.com (mail-lj1-f193.google.com [209.85.208.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011053.outbound.protection.outlook.com [52.101.57.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3133529B795
-	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 14:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5E2480DCD;
+	Mon, 18 May 2026 15:56:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779116188; cv=pass; b=XJoIggPXe7XwA4Q+hlZvb0Kn03kwJK7NrOVd9a655mjb+5oHxLrpu8yTFid363Fv5X+msnX0FgF5hGaCPMAwqilhgUB9g0aXuO3Zcn6O0iPEDBfIV71lGSkcYei+JvEEvMZFPDuEIVw358oc3iOzfmzVVzuP0YoW+AqbgvLwwFE=
+	t=1779119785; cv=fail; b=QzLUHT/d/rzCvJ7T4d/fVJFd7GJm0g80WeCslSAmA9VFghAC5X0aJD3wCagahHMdmVLlHpfm4gVeIEOteIb+NK8d6wL99tltEhJEWnlFOA16YmqU6pLNB2uxzTTjAtd8LGhIaSXD5/xpz5pGV5OB4EDyXWjZtxk+TscWPk9/V1Q=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779116188; c=relaxed/simple;
-	bh=0mTs/w4vxpYjNpeIJS0QWH0SfL36tY50xv2X9s26CYo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BUlhb2PLEtcIbBvm4SogPG7uospFasCv69meBEa5Ucll5ew2fufFadELzW4k7rJYLZsHf+cZqrXTf4EilpdIcamqSMj3nDOJ6D3gb7kCR4QJg4yfYTt2fNafacisQhAbn86ad2Y3LW8QbifjCy2H1LyQLuvdtQgr8HS6GExS1iE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FIXlrlDz; arc=pass smtp.client-ip=209.85.208.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f193.google.com with SMTP id 38308e7fff4ca-39397d63804so31409091fa.2
-        for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 07:56:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779116183; cv=none;
-        d=google.com; s=arc-20240605;
-        b=AVYLXcuT7ymDb6mzcVRM9Od0TP1xc7nbn75rN6DYjBgbBdiYPvujcpYokRPhixI4ZE
-         0+72EFnQRFQTWJQHuTDfy9lYiZXrdDUg5m6hemUwdYNk7YLT+HvrN5bWNqAhTHPGb+qP
-         pvKhIZ3xqsJNKYQKsCdnL+aN5/PZbluYgdgwqVnDybaJ+oOfAKF2aYdNC06H5HVmJacq
-         TpHXqMRXc5x2k8ESN0AR8n3bMCXBcZftBAK5EfkL+r4I0v0ap3iB1iUWE/sGGNgO2xVt
-         +NBli4mxMsendF3Y4WSxcAUKTrXoGaeaU3DBzkPcSkfTQN6WcuBgVGPySlrVUJoUyoMS
-         NqlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=DYFmRZInXkJuwtO+3cn24w4m42t55qgcjnPW5qhsGC0=;
-        fh=2eEAZBXRI+16CJkhdxTfbuWp8+90JnnDkBvtlcSb7EA=;
-        b=PeUxdPr5OyVZ7lvwjhOiRd/zRiPJvwysNTmEWiJHFSbr3kZWrwyjVLb87dYgkqqLSQ
-         0oyO3w0xNWMp71joRrJDjTW7PgTYfjPXCif41EtnC99EYi4xPiAPeScsfb1ADEicax+i
-         /Lsl0y8L8mhLR6m4tDMJCA39kBcQaBW7Hl3mYSdBT8cGVdldKQUL6g/hLz60V5Kh6IUB
-         HPQ+d7uxEueGoj1S1Ao3ldN1nzfk+aK07Jf5ME/t4hd7LzMve3Cfz0buyLzNB7gdBgCc
-         mY9RkLWWUbNr8PhjVikSpBWLt2wmKt/1XBh/mF3I8gb8mM+OeAa/45byCIVK8bHmwSyh
-         M1xA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779116183; x=1779720983; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DYFmRZInXkJuwtO+3cn24w4m42t55qgcjnPW5qhsGC0=;
-        b=FIXlrlDzi2+Yt9mCHlw70pWVoN7DJgq+9EhwOqueWsit9AnstsbKa34mCq8XuAf5ZS
-         9D/cltcvNSGb3F/xYe5T/kHR5COfnZyF1mUsEIUAs2kzQEzrNJ6IMH9IMxwBZCYK7saO
-         OS2AtU8X9Pnpu/8wa5wvnJ8jpzeUCzIHfucXDS0CGbtHA9p4ix9Sg0CaZY8eIA6vhm4w
-         2iqR6I0d4Fl69wMBTja/tJjGp5H4F/4eBrjBYUcx/8CdrwBZkatPK3EKrd0/87vtSN4t
-         o7ISZFbKR9g2xNTHKYPPbmdnikicuO4OWcFP0CNq9GuP/v9gzCf2sOAQWV9uOkSMj1dv
-         wGiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779116183; x=1779720983;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=DYFmRZInXkJuwtO+3cn24w4m42t55qgcjnPW5qhsGC0=;
-        b=HVnkqbWW34zhF6+E7vcMeUK9wf6Ux3wCWbU+VyAe4cpN2eaLh8U4pV0tgvhxRQVMWN
-         VEI2HSclV4wul2mQ7VlmM1uWnJGkrlNo2EAsj7btShi/Ux7d9GsQY+OMkMMKCzYyl6K/
-         xsBqRZX7CdeeLxiWWcPJ1bpO5QkzX2NtBZhtyxfMRxznV4jSYIgAJqHlVUNA+hqlYXaj
-         GcfKW0Kx4vmGD7wdYaMtI70sQODyes1nKSjR48HEWlO3xac+S3FgeInhD958MZdy1v3v
-         h3fuS70cDz9Qb4+vdYE3DLDdU4P85gnx4s07CCP3EL2ydORySqatlJ3+a2n3pBUZca2X
-         chPQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9Ekm3q3Ag2rwB4DJnO0PKXLh3GdLWCk8GboyV8dN+KzVOmRYiO+CCdG5OM2o5R/qeILjBgszfN1R4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJWr7jKrXc7j7GcTts9Am22vTk+w2fflFUhXUQIZqNzDAGlBLE
-	EpCMVwQPi0UoiRLGq8tNMIlkpq9KWfkMmQjz6VaKSBUBuiaXjBENKvcePV2a9fbVvM3KIfudlqP
-	eMsNpM45uDdO+y/SZ3e4H9EfKHOfngZM=
-X-Gm-Gg: Acq92OFaVNCWKI9yVjZsz0Tbv+SvCsrwlXctQOyXOx639DD+a/SmRcMCmAFgoz2iVum
-	wgYqP70/vQIlzHrvVPry3IbZ6kaOzWch5CUfxk+i5sdz0RdPmsHKPf80DSpDvvDWazwFzxdF2/A
-	GXioTwcDch4/iSFNSa5pwRnLhuns8ckhSIH8dnXu8aS7TkjJpFW8Yr33am2SOWc/w9HdrmJgAUx
-	YifSkAO/CsCVbS2uG4dsY0TRDqYBYF8d17aDuONasP9414HtQ2uifEyq9wmz+cdmGpsAvJiofeL
-	ATvTrIW694LbgToBQAPOEA7mP3yUZQ==
-X-Received: by 2002:a05:651c:515:b0:394:5c9a:f315 with SMTP id
- 38308e7fff4ca-39561fa5006mr44886361fa.14.1779116182771; Mon, 18 May 2026
- 07:56:22 -0700 (PDT)
+	s=arc-20240116; t=1779119785; c=relaxed/simple;
+	bh=4TskTQeTxk9734xgpN+0xFQyZw0yGyFDBDNx4Aj4HXc=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=THY7uGubrBo1UrN7xOBV4LhuxDyqWctyuGxgX7dOq3aA5lJyRh4arNEfL02DflRasdT+fQifEMVBk02cZ8cTpAqAZDdv3MOcRHViedWauJFlw/s81vQOjy06wLHm7AsIBMOL/U4ktRyttfKHFc0TNwvngVGJiEu5GaUy27Jo3zY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=dm4ZRMxa; arc=fail smtp.client-ip=52.101.57.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=eezy7MDHhKiQ+o7NyjgfiwHUbYzLSVbUWsik4G0sBn8V6cDZu24DAasHxzZFVpoaFEcBlOF5n2ZfNUzTV27gQnCOsKLrLkGTeocpC8hu8u3ju8M/3eIqaLqD+Xg+FeisOL5wsCyNIFc/b/+cYamx9JIDRtqw7CKvpHD+Wfs4rxEJvAdyCaGKcamVvY/2QboCrZQoqWl7/MmccsoWQpqiKdj9uuCL4d7ZBY7rxTgrVXvaKW37zfir/PkZXJF6KqVvY3HjkHY6ynv+87Cf1P5Xcvr+zrjC32HD9hNsqSYxUyNqRTGNOb9SHZlieuKVmh0YLGPliFhu9aaAmo/1ouSZtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zhfV5ir0SJhT8DfFg5oUAc1bzem1tYs5ArOjVbyyVNw=;
+ b=PrGf/y44dUZuEgy0ReEEHi1Dn34h9zadqS1m3aTvqRQ1MotRugaiLFU8+SOEHe/msS/EkEW+M4lb+hmJp2T5W3+Y0tYJeRmLdYEW/nUBlprpW/kYBitWgKeY7zdfjPqHEht1MWU2B5kCwHDshDcgjw00FFRI5i8mJ1+qKBT9BS5V9dc36PsK3Cv8uEM5PTqY2cK+q9vaLUubWCEFLeXenyZ6h1q0fgUt2Qq+Qh+cZTHWbNBFpNpZNeRZQFZV/oFJHupOqZTC7EhydkYbt31jB4qpLUKq8FG530q0vKuZj0FXcgZxXD5G1qRRQfRydZ1pKk3Bt5noGxHCd5Fz4UJ3oA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zhfV5ir0SJhT8DfFg5oUAc1bzem1tYs5ArOjVbyyVNw=;
+ b=dm4ZRMxabtjFpP1+dTPsNt2SRY99qo40pjEZ2pzwNQ7QlhzeZexwbn/nOw9rInOn7hYDLoo7Y7tmkJk9qoWSx9TckWNJPeA+X/UJxzoYRh8QyfC+0yVsfzKWAcxW0n+vWa9BlWM9T+kvc8VuzHM82R5+vLRLIqqrWfIlB0I/eQQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CY1PR12MB9697.namprd12.prod.outlook.com (2603:10b6:930:107::6)
+ by DM4PR12MB6640.namprd12.prod.outlook.com (2603:10b6:8:8f::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.23; Mon, 18 May
+ 2026 15:54:06 +0000
+Received: from CY1PR12MB9697.namprd12.prod.outlook.com
+ ([fe80::3a41:55a0:8203:596d]) by CY1PR12MB9697.namprd12.prod.outlook.com
+ ([fe80::3a41:55a0:8203:596d%5]) with mapi id 15.21.0025.022; Mon, 18 May 2026
+ 15:54:06 +0000
+Message-ID: <a80587a6-7833-4af0-a882-1748cd6cad7e@amd.com>
+Date: Mon, 18 May 2026 21:23:58 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] usb: typec: tipd: add error message for vendor ID
+ read failure
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, git@amd.com
+References: <20260513182850.165349-1-radhey.shyam.pandey@amd.com>
+ <20260513182850.165349-2-radhey.shyam.pandey@amd.com> <agrnlRSyW7_A0AiS@kuha>
+Content-Language: en-US
+From: "Pandey, Radhey Shyam" <radheys@amd.com>
+In-Reply-To: <agrnlRSyW7_A0AiS@kuha>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN2PR01CA0175.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:26::30) To CY1PR12MB9697.namprd12.prod.outlook.com
+ (2603:10b6:930:107::6)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260516042428.3777524-1-rollkingzzc@gmail.com>
- <agry2e2brte8W7U0@hovoldconsulting.com> <CAB7XQsGZg+wrSpCsjLXdZEsw2y9f73eNGOjYkbz_PLAbR1_C8g@mail.gmail.com>
- <agskU46ts6au5LmQ@hovoldconsulting.com>
-In-Reply-To: <agskU46ts6au5LmQ@hovoldconsulting.com>
-From: Cen Zhang <rollkingzzc@gmail.com>
-Date: Mon, 18 May 2026 22:56:10 +0800
-X-Gm-Features: AVHnY4LqqEiqOisajDaFmyV3aOvbRRk07wOaPCtjupiylQc1NG-NYm5HhgvSsJc
-Message-ID: <CAB7XQsGxxax-WaR_B3EmUUUYDg3Nnw75rmwkYuMHwUJ5eQ7doA@mail.gmail.com>
-Subject: Re: [PATCH] USB: serial: belkin_sa: validate interrupt status length
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, zerocling0077@gmail.com, 2045gemini@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY1PR12MB9697:EE_|DM4PR12MB6640:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5acf247f-e661-4540-8b9d-08deb4f5b0a7
+X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|366016|11063799003|4143699003|22082099003|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	bwjRYWVDWIOEaVLH84chE54xnO9eOKzWdk6hAuEiV+bnH23+s+unO2lPvZSxIlNwXjrj9rylUHdYH6LOHF2ZWB7S4v7hBq8i0I/7GAIbejSbBxlDxkm8wHdkqDlkwA7Y+/8TOBq/YYCpkl95BjN26Atl4ronxoktri5aIV+723d6hPM5fxDl6vtz+U5NUOjAdQ7PWqf9PKIytuxaEiiwCefq0zGgFMZpMjHgoDjaLSNJxPmQ/ND/qkTnCtPpIjRGR4BaRFlR1OQvSr1myLiLdOJex3tYOCMJPZ6k7Bo7VrObbx6SkwU6kNQuOgnLLVPtKtbfkjqH8kbDV4Iy7Fj0QgQRVW2vZQctxUFN41YMIK115oZbW/HSl6NJj48DCzVzfzv40thnidqaDDGFVPpMFojMzdEfxJmTfTDHiDy5bFW7XNw6dI9hdUHuUSgUhFgV2XMA8oy/e4bY8xZ5NuStMPIzQcBG/CFp7/IDEqkP6rjhpHbvqpZ8hyqreqF4WFkw4i17fMihVTzSg5AGCilvDdNv6oSsDQ2c6E8C930JNNsKJkV4e+wahoD2vK0GgAv3YYk98w20XaIyiZ3eDyO6iiu1UJm8TuBeH2+PDA/2AaPuMPa5cqMS1W7aXcnTkxX5kWEX1U6oSX2r45r9uC62FrGRlSxSHTLosn+xhulsRB0mUkoz4p6l3vzLfjrbiF+P
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY1PR12MB9697.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(11063799003)(4143699003)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?M0ZNbTNRS3hhWUF5MWpSdTN2L1NpYitjdUFsVHhIaXZEeDNJdGtidXBvMlQy?=
+ =?utf-8?B?emtMWCs3dWcxTGlZNEp4UjNGYXVVbUdqV0NhUUtCL3dKM2FLVGZORyt1Z2h1?=
+ =?utf-8?B?U3c1bGc1OTRER0NYRHQ1VGZXTW1zL0VHVTZzR3dZM0ljQXlXcHN0alJ5eXJB?=
+ =?utf-8?B?S01SYzVsSFpSb3JvQUlucW52REhNb2VoWVo1Wjg3RXN3WFlaNks3TFFETVFr?=
+ =?utf-8?B?ck5DOTFrZmN6a2ZiYzE4enBsQVVCQzRCTGY4WU5aMGJzVG45UGJSZi9hL3hN?=
+ =?utf-8?B?QXQrRW93Q2VNV002QTdGSWVtQUNOdHcvNWxBQVMycyt5N2tYZlNhdTFKZk9q?=
+ =?utf-8?B?azlXbUV0YndGd041YklnVjhWVWlyYjhwM0h4SG5JNnlJK2dpRERVMFF3YWdk?=
+ =?utf-8?B?QUdac1d4VWxiUHNCQWRyb0xSdWtob0J3MFhPb0lPSHNBYXFNTVMyTk5KcHV5?=
+ =?utf-8?B?RlNnekVhOENIb2JZZCtRV0Zmd2pWY1BPL3d6QW9mYjg4VTd0NHRYeHU2SDU4?=
+ =?utf-8?B?aGNLTWVKWnpGT3NpaUJkaENmRXNTQ0FablVjd2tSTGZLQjR1eWg1V0I5WW5v?=
+ =?utf-8?B?VjRqMFc2aEptSEZRN0dhZnJBVFlIdjJ1ZTZjYjFIbDUxSjhSbjNoYXZtQ2Rz?=
+ =?utf-8?B?ZVRZN3gzZ2FKU1Y5L0ZWU3phQVRjUDlSd1V3QlduY1dYVWZsRHlPazlxTnhJ?=
+ =?utf-8?B?NmlXdTZOYTJ4eWJkZW9rK1ZieXZVVys4aDYwSFlhZG5oVmg5WEhZSkE4b3Qr?=
+ =?utf-8?B?b3JvdW40TEIwVFBOWHlDdFI3a0h5c0plRUUxTjlYRWJlcklZVldUOHpjdzRK?=
+ =?utf-8?B?ekZodUNhWjFjOFh0ZC9WZFR4S1gwcEw1MTkxYS8xZUNLMjhpZUR5ZW9hTkhz?=
+ =?utf-8?B?c1JzWjFQaDlEOTRvSXBJTkRtaXFlRDZ0dkwyazkwYmo5b0JVd3dFejZVVmNy?=
+ =?utf-8?B?czZ3dGhqZENWTFdYZkF0b1UrM0R0SFcwWlhtYXFySjZrTnJtbEtXeHZBdlFC?=
+ =?utf-8?B?WEZ4bDF4b0gyQUJ5NGlXUEppOUNLUDMrcGFNMGpsMUpmeENCMlYzNkxCYmtO?=
+ =?utf-8?B?ZmRNMHRTUTZRRmF0cFgrRWY5ekkvOXZYcWJMMGcwd1ptOVpNYjNPazNZNi9Q?=
+ =?utf-8?B?QTZaSFNqc0J3c09yMjhabXFQenVlVXZXRkZmYmZGL2NTRzRTSzdxSXNNQWNz?=
+ =?utf-8?B?NHl5ejNpUEV1M2N2L1Z6STk3cVJkdERXZGQ2K21ZckhMNjEyN3A2andiRWRK?=
+ =?utf-8?B?TG5BM2tjNDBJVzFjYkhlRTBkUDdtVCtnakRTUUNHYUsxZmNwb1Jxd2xtRkdF?=
+ =?utf-8?B?TXd4bWtBOHR3VkJScU1YYWhOYjJRWExQQ3RLRzEwcFBCcW9rbElzelg4NUNR?=
+ =?utf-8?B?cEp3N1UwR2JUR1pzSUtnczNpcS91VGwvR2toU3ZXc0pUK0dsUnQyVXRQL3BR?=
+ =?utf-8?B?bkpQRGIyQ3diZmVyVUpsaUhHbGxpQ1JDR3dTRnR2TzZtaWRaZDBVaXpwbVd0?=
+ =?utf-8?B?ajJyZGdhMGhQaGtTMDRhTklISTA4RWVZK0NUclNlRjg1eWJyL0VHTGR3Nm1T?=
+ =?utf-8?B?Yk1YSTdPMDE1UTBpK0FyZUJKWXZuSjEvOWZsR0h5ZmN0TkJkWm1kd25hVHVE?=
+ =?utf-8?B?dm5PV2JZVThlRysyWkw1VjhUektIbkM4T0N0S2NCWFNQaCtCN1VzOUtoZ3V0?=
+ =?utf-8?B?NTBlOTYyYmVVaVRTVFRKN3FIYjFqdXhCakNjbU51a0tUN3l5dGY3bVduYThO?=
+ =?utf-8?B?aGdvdWwzb0hQRkV2WWdTR0pFY3lOcEJTNTJUNXh3TlV2dFlxQ3grZXUyeEVl?=
+ =?utf-8?B?VmpoTFUwVGozWSsxQm10SmtyK0JUZ05TQ2h1bXUyVUREdDVuWk1hRmF4NUpz?=
+ =?utf-8?B?dnhHUktJTkxWTkZYQlRtTGRmWmsxSkZxVUNJeG9ETnB1ZnZ0RjVrdHo1RnNS?=
+ =?utf-8?B?THhReGxodU1ST2VBTTZZd0szOUxzOWc2QlBvaG5VRHg1TnBQVFFWMEswdGlN?=
+ =?utf-8?B?NHNSZnlwYUtMNmttcXRMWkx5SGNhdXJRcTliTERVS0VhemVaQWV3RWRxaDFH?=
+ =?utf-8?B?OG1SMTRZRGhVMkdZeWdPcXJBUVRXbm1yejV2bE1rcGVZcW5yUzVncjgzN2pz?=
+ =?utf-8?B?a0JIZytwREVLQkFjeGk2eEtIOXdDQkppM0luQmdjV2IrQ1NMbnFBWU1zVzdn?=
+ =?utf-8?B?bU4vWFZhVGxkZ09nUGk1QkpJZzhWamtRa1g4RGM3Wk5LQW50cnNrRkFpUWgy?=
+ =?utf-8?B?WVk1aTRyMWcyRm5pWXdEVUpCYktsQ3FlZ2UxR1V4SC9yOUF5N0R4UnlqakZw?=
+ =?utf-8?B?QnNRVFdPbktDZ1J3NFJnRm1mdUpINnVYanhoWVFzOTRsak5qeUpLdz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5acf247f-e661-4540-8b9d-08deb4f5b0a7
+X-MS-Exchange-CrossTenant-AuthSource: CY1PR12MB9697.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2026 15:54:06.0818
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: coGZ41BcQl3qQ0BHumcvaw97BxfAH6Ifv/wHXi8cp/uMedhwFxJP8qHBl5saTqlb
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6640
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	PRECEDENCE_BULK(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37619-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,amd.com:email,amd.com:mid,amd.com:dkim];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rollkingzzc@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 629B356F88F
+	TAGGED_FROM(0.00)[bounces-37621-lists,linux-usb=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[radheys@amd.com,linux-usb@vger.kernel.org];
+	RCVD_COUNT_FIVE(0.00)[5];
+	DKIM_TRACE(0.00)[amd.com:+]
+X-Rspamd-Queue-Id: CF19A570991
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Johan,
+On 5/18/2026 3:49 PM, Heikki Krogerus wrote:
+> On Wed, May 13, 2026 at 11:58:48PM +0530, Radhey Shyam Pandey wrote:
+>> Log when the vendor ID read fails or returns zero, including the I2C error
+>> code and register value, to ease probe diagnostics.
+>>
+>> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+>> ---
+>>   drivers/usb/typec/tipd/core.c | 7 +++++--
+>>   1 file changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+>> index 43faec794b95..b282366b5326 100644
+>> --- a/drivers/usb/typec/tipd/core.c
+>> +++ b/drivers/usb/typec/tipd/core.c
+>> @@ -1744,7 +1744,7 @@ static int tps6598x_probe(struct i2c_client *client)
+>>   	struct tps6598x *tps;
+>>   	struct fwnode_handle *fwnode;
+>>   	u32 status;
+>> -	u32 vid;
+>> +	u32 vid = 0;
+> 
+> Why is this necessary?
 
-Thanks for your guidence.
+Thanks for the review.
 
-Johan Hovold <johan@kernel.org> =E4=BA=8E2026=E5=B9=B45=E6=9C=8818=E6=97=A5=
-=E5=91=A8=E4=B8=80 22:38=E5=86=99=E9=81=93=EF=BC=9A
+When ret < 0, tps6598x_read32() → tps6598x_block_read() returns on
+error before writing *val. So vid is never set; passing it to
+dev_err with %#x would read an uninitialized u32(random log noise).
 
->
-> Nice work. But please mention that this found with the help of an LLM in
-> the commit message as documented in:
->
->  - Documentation/process/submitting-patches.rst ("Using Assisted-by:")
->  - Documentation/process/coding-assistants.rst
+ret captures if I2C/regmap path reported an error and vid tells what
+came back when the transport layer did not fail. Hope that clarifies.
 
-I will add an Assisted-by trailer in v2 and also use the Assisted-by traile=
-r for
-future kernel patches where an LLM materially helped find or develop the fi=
-x,
-following the documented process.
+Thanks,
+Radhey
+> 
+>>   	int ret;
+>>   
+>>   	data = i2c_get_match_data(client);
+>> @@ -1772,8 +1772,11 @@ static int tps6598x_probe(struct i2c_client *client)
+>>   
+>>   	if (!device_is_compatible(tps->dev, "ti,tps25750")) {
+>>   		ret = tps6598x_read32(tps, TPS_REG_VID, &vid);
+>> -		if (ret < 0 || !vid)
+>> +		if (ret < 0 || !vid) {
+>> +			dev_err(tps->dev, "failed to read vendor ID: %d, vid: %#x\n",
+>> +				ret, vid);
+>>   			return -ENODEV;
+>> +		}
+>>   	}
+>>   
+>>   	/*
+>> -- 
+>> 2.44.4
+> 
 
-Best regards,
-Zhang Cen
 
